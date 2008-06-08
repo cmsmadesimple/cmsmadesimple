@@ -1465,6 +1465,48 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		return (count($this->validation_errors) > 0);
 	}
 	
+	/**
+	 * Begins a ADODB "smart" transaction.  These are nestable
+	 * and further calls to this will be ignored until the 
+	 * complete_transaction is called.
+	 *
+	 * @author Ted Kulp
+	 **/
+	public function begin_transaction()
+	{
+		cms_db()->SetTransactionMode("REPEATABLE READ");
+		return cms_db()->StartTrans();
+	}
+	
+	/**
+	 * Completed an ADODB "smart" transaction.  Depending on 
+	 * the errors coming from the various SQL calls while
+	 * in the transaction, this will smartly commit or rollback
+	 * as necessary.
+	 *
+	 * @param boolean Set to false if a rollback should occur no matter what
+	 * @return boolean Whether or not the commit was successful or rolled back
+	 * @author Ted Kulp
+	 **/
+	public function complete_transaction($auto_complete = true)
+	{
+		$result = cms_db()->CompleteTrans($auto_complete);
+		cms_db()->SetTransactionMode("");
+		return $result;
+	}
+	
+	/**
+	 * Call this method to making the current transaction fail when
+	 * complete_transaction is called.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public function fail_transaction()
+	{
+		return cms_db()->FailTrans();
+	}
+	
 	public function __toString()
 	{
 		$id_field = $this->id_field;

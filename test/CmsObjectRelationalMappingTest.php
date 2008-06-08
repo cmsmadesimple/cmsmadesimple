@@ -273,6 +273,30 @@ class CmsObjectRelationalMappingTest extends PHPUnit_Framework_TestCase
 		$result = cms_orm('test_orm_table')->find_all();
 		$this->assertEquals(2, count($result));
 	}
+	
+	public function testBadTransactionsShouldFail()
+	{
+		$cms_db_prefix = CMS_DB_PREFIX;
+		$db = cms_db();
+		cms_orm('test_orm_table')->begin_transaction();
+		$db->Execute("INSERT INTO {$cms_db_prefix}test_orm_table (test_field, another_test_field, some_int, some_float, create_date, modified_date) VALUES ('test good', 'blah', 5, 5.501, now() - 10, now() - 10)"); //Good SQL
+		try {
+			@$db->Execute("INSERT INTO {$cms_db_prefix}test_orm_table (test_field, another_test_field, some_int, some_float, create_date, modified_date) VALUES ('test bad', 'blah', 5, 5.501, now() - 10, now() - 10, 'kjk')"); //Bad SQL
+		}
+		catch (Exception $e) {}
+		$this->assertFalse(cms_orm('test_orm_table')->complete_transaction());
+		$this->assertNull(cms_orm('test_orm_table')->find_by_test_field('test good'));
+	}
+	
+	public function testGoodTransactionsShouldWork()
+	{
+		$cms_db_prefix = CMS_DB_PREFIX;
+		$db = cms_db();
+		cms_orm('test_orm_table')->begin_transaction();
+		$db->Execute("INSERT INTO {$cms_db_prefix}test_orm_table (test_field, another_test_field, some_int, some_float, create_date, modified_date) VALUES ('test good', 'blah', 5, 5.501, now() - 10, now() - 10)"); //Good SQL
+		$this->assertTrue(cms_orm('test_orm_table')->complete_transaction());
+		$this->assertNotNull(cms_orm('test_orm_table')->find_by_test_field('test good'));
+	}
 
 }
 

@@ -165,7 +165,7 @@ class CmsDatabase extends CmsObject
 	public static function create_table($table, $fields)
 	{	
 		$dbdict = NewDataDictionary(self::get_instance());
-		$taboptarray = array('mysql' => 'TYPE=MyISAM');
+		$taboptarray = array('mysql' => 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
 
 		$sqlarray = $dbdict->CreateTableSQL(self::get_prefix().$table, $fields, $taboptarray);
 		if (count($sqlarray))

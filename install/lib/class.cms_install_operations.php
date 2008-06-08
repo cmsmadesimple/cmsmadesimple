@@ -28,7 +28,7 @@ class CmsInstallOperations extends CmsObject
 	static function create_table($db, $table, $fields)
 	{	
 		$dbdict = NewDataDictionary($db);
-		$taboptarray = array('mysql' => 'TYPE=MyISAM');
+		$taboptarray = array('mysql' => 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
 
 		$sqlarray = $dbdict->CreateTableSQL(CmsDatabase::get_prefix().$table, $fields, $taboptarray);
 		if (count($sqlarray))
@@ -137,10 +137,13 @@ class CmsInstallOperations extends CmsObject
 	static function get_loaded_database_modules()
 	{
 		$which = array();
-		if (extension_loaded('mysql'))
-			$which[] = 'mysql';
+
+		//We want one or the other
 		if (extension_loaded('mysqli'))
 			$which[] = 'mysqli';
+		else if (extension_loaded('mysql'))
+			$which[] = 'mysql';
+
 		if (extension_loaded('pgsql'))
 			$which[] = 'pgsql';
 		if (extension_loaded('SQLite'))
