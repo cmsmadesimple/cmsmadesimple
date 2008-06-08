@@ -933,7 +933,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				}
 		
 				$this->dirty = false;
-				$this->after_save_caller();
+				$this->after_save_caller($result);
 			}
 			
 			return $result;
