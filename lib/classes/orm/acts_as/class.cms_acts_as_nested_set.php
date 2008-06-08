@@ -37,11 +37,18 @@ class CmsActsAsNestedSet extends CmsActsAs
 		parent::__construct();
 	}
 	
+	function after_save(&$obj, &$result)
+	{
+		$result = $obj->complete_transaction();
+	}
+	
 	function before_save(&$obj)
 	{
 		//$this->prop_names = implode(',', $this->get_loaded_property_names());
 		$db = cms_db();
 		$table_name = $obj->get_table();
+		
+		$obj->begin_transaction();
 
 		if ($obj->id == -1)
 		{			

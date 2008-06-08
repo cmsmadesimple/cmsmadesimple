@@ -852,8 +852,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				{
 					$this->dirty = false;
 					CmsProfiler::get_instance()->mark('Dirty Bit Reset');
-					$this->after_save_caller();
 				}
+				
+				$this->after_save_caller($result);
 				
 				return $result;
 			}
@@ -1287,7 +1288,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 **/
-	protected function after_save()
+	protected function after_save(&$result)
 	{
 	}
 	
@@ -1299,13 +1300,13 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 */
-	protected function after_save_caller()
+	protected function after_save_caller(&$result)
 	{
 		foreach (cms_orm()->get_acts_as($this) as $one_acts_as)
 		{
-			$one_acts_as->after_save($this);
+			$one_acts_as->after_save($this, $result);
 		}
-		$this->after_save();
+		$this->after_save($result);
 	}
 	
 	/**

@@ -65,7 +65,7 @@ class CmsActsAs extends CmsObject
 		
 	}
 	
-	public function after_save(&$obj)
+	public function after_save(&$obj, &$result)
 	{
 		
 	}
