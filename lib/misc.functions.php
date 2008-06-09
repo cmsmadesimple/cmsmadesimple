@@ -1522,5 +1522,39 @@ function cms_move_uploaded_file( $tmpfile, $destination )
    return true;
 }
 
+function csscache_csvfile_to_hash($filename)
+{
+  if( !is_readable($filename) ) return false;
+  $tmp = @file($filename);
+  if( !is_array($tmp) || !count($tmp) ) return false;
+
+  $result = array();
+  foreach( $tmp as $one )
+    {
+      $vals = explode(',',trim($one));
+      $result[$vals[0]] = $vals[1];
+    }
+  return $result;
+}
+
+function csscache_hash_to_csvfile($filename,$hash)
+{
+  $fh = @fopen($filename,'w');
+  if( !$fh ) return false;
+  foreach( $hash as $key => $val )
+    {
+      $key = trim($key); $val = trim($val);
+      $line = "$key,$val\n";
+      fwrite($fh,$line);
+    }
+  fclose($fh);
+}
+
+function css_cache_clear($filename)
+{
+  @unlink($filename);
+}
+
+
 # vim:ts=4 sw=4 noet
 ?>

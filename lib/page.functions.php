@@ -35,7 +35,7 @@
 function check_login($no_redirect = false)
 {
 	global $gCms;
-	$config = $gCms->config;
+	$config = $gCms->GetConfig();
 
 	//Handle a current login if one is in queue in the SESSION
 	if (isset($_SESSION['login_user_id']))
@@ -1015,8 +1015,9 @@ function wysiwyg_form_submit()
  * @since 0.4
  */
 function cms_db_prefix() {
-	global $config;
-	return $config["db_prefix"];
+  global $gCms;
+  $config =& $gCms->GetConfig();
+  return $config["db_prefix"];
 }
 
 # vim:ts=4 sw=4 noet

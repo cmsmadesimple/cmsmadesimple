@@ -101,9 +101,9 @@ function get_encoding($charset='', $defaultoverrides=true)
 {
 	global $nls;
 	global $current_language;
-	global $config;
 	global $gCms;
 	$variables =& $gCms->variables;
+	$config =& $gCms->GetConfig();
 
 	if ($charset != '')
 	{

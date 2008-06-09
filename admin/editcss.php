@@ -165,6 +165,15 @@ if ($access)
 			
 			$result = $onestylesheet->Save();
 
+			// Update the css hash
+			$config =& $gCms->GetConfig();
+			$hashfile = cms_join_path($config['root_path'],'tmp','cache','csshash.dat');
+			$md5sum = md5($css_text);
+			$csshash = $csscache_cssfile_to_hash($hashfile);
+			$csshash[$css_id] = $md5sum;
+			$csscache_hash_to_csvfile($filename,$hash);
+			
+			
 			if ($result)
 			{
 				#Start using new name, just in case this is an apply

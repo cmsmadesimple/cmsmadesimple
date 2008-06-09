@@ -18,46 +18,61 @@
 
 function smarty_cms_function_stylesheet($params, &$smarty)
 {
-	global $gCms;
-	$config = &$gCms->config;
-	$pageinfo = &$gCms->variables['pageinfo'];
-
-	$stylesheet = '';
-	
-	if (isset($params['name']) && $params['name'] != '')
+  global $gCms;
+  $config = &$gCms->config;
+  $pageinfo = &$gCms->variables['pageinfo'];
+  $db =& $gCms->GetDb();
+  
+  $stylesheet = '';
+  
+  if (isset($params['name']) && $params['name'] != '')
+    {
+      $query = 'SELECT css_id FROM '.cms_db_prefix().'css 
+                     WHERE name = ?';
+      $cssid = $db->GetOne( $query, array($params['name']));
+      if( $cssid )
 	{
-		$stylesheet .= '<link rel="stylesheet" type="text/css" ';
-		if (isset($params['media']) && $params['media'] != '')
-		{
-			$stylesheet .= 'media="' . $params['media'] . '" ';
-		}
-		$stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?name='.$params['name'];
-		$stylesheet .= "\" />\n"; 
+	  $stylesheet .= '<link rel="stylesheet" type="text/css" ';
+	  if (isset($params['media']) && $params['media'] != '')
+	    {
+	      $stylesheet .= 'media="' . $params['media'] . '" ';
+	    }
+	  $stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?cssid='.$cssid;
+	  $stylesheet .= "\" />\n"; 
 	}
-	else
+    }
+  else
+    {
+      $query = 'SELECT DISTINCT A.css_id,A.media_type 
+                      FROM '.cms_db_prefix().'css A, '.cms_db_prefix().'css_assoc B
+                     WHERE A.css_id = B.assoc_css_id
+                       AND B.assoc_type = ?
+                       AND B.assoc_to_id = ?';
+      $res = $db->GetArray($query,array('template',$pageinfo->template_id));
+      $fmt1 = '<link rel="stylesheet" type="text/css" media="%s" href="%s" />';
+      $fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
+      foreach( $res as $one )
 	{
-		foreach (get_stylesheet_media_types($pageinfo->template_id) as $media)
-		{
-			$stylesheet .= '<link rel="stylesheet" type="text/css" ';
-			if ($media != '')
-			{
-				$stylesheet .= 'media="'.$media.'" ';
-			}
-			$stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?templateid='.$pageinfo->template_id;
-			if ($media != '')
-			{
-				$stylesheet .= '&amp;mediatype='.urlencode($media);
-			}
-			$stylesheet .= "\" />\n"; 
-		}
+	  $url = $config['root_url'].'/stylesheet.php?cssid='.$one['css_id'];
+	  if( isset($one['media_type']) && !empty($one['media_type']) )
+	    {
+	      $url .= '&amp;mediatype='.urlencode($one['media_type']);
+	      $stylesheet .= sprintf($fmt1,$one['media_type'],$url);
+	    }
+	  else
+	    {
+	      $stylesheet .= sprintf($fmt2,$url);
+	    }
+	  $stylesheet .= "\n";
 	}
-
-	if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-	{
-		$stylesheet = ereg_replace("\{\/?php\}", "", $stylesheet);
-	}
-
-	return $stylesheet;
+    }
+  
+  if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+    {
+      $stylesheet = ereg_replace("\{\/?php\}", "", $stylesheet);
+    }
+  
+  return $stylesheet;
 }
 
 function smarty_cms_help_function_stylesheet() {
