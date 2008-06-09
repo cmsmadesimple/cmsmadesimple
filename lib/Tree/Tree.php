@@ -621,11 +621,14 @@ class Tree_Node
 	  foreach( $this->nodes->nodes as $onenode )
 	    {
 	      $contentobj =& $onenode->getContent();
-	      if( $contentobj->Active() && $contentobj->ShowInMenu() )
-		{
-		  $result = true;
-		  break;
-		}
+	      if( is_object($contentobj) )
+                {
+	          if( $contentobj->Active() && $contentobj->ShowInMenu() )
+		  {
+		    $result = true;
+		    break;
+		  }
+               }
 	    }
 
 	  return $result;
