@@ -77,7 +77,7 @@ class CmsAjax extends CmsObject
 			$result .= 'function cms_ajax_' . $function . '(){ return cms_ajax_call("' . $function . '", arguments, 1); }' . "\n";
 		}
 		
-		return "<script type=\"text/javascript\">\n<!--\n" . $result . "-->\n</script>\n<script type=\"text/javascript\" src=\"" . CmsConfig::get('root_url') . "/lib/js/cms_ajax.js\"></script>\n";
+		return "<script type=\"text/javascript\">\n<!--\n" . $result . "-->\n</script>\n<script type=\"text/javascript\" src=\"" . CmsRequest::get_calculated_url_base() . "/lib/js/cms_ajax.js\"></script>\n";
 	}
 }
 

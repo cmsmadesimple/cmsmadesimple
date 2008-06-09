@@ -224,6 +224,38 @@ class CmsRequest extends CmsObject
 		
 		return $result;
 	}
+	
+	public static function get_request_filename()
+	{
+		if (isset($_SERVER['PATH_TRANSLATED']))
+		{
+		     return str_replace('\\\\', '\\', $_SERVER('PATH_TRANSLATED'));
+		}
+		else if (isset($_ENV['PATH_TRANSLATED']))
+		{
+		     return str_replace('\\\\', '\\', $_ENV('PATH_TRANSLATED'));
+		}
+		else
+		{
+			return $_SERVER['SCRIPT_FILENAME'];
+		}
+	}
+	
+	public static function get_calculated_url_base()
+	{
+		$cur_url_dir = dirname(self::get_requested_uri());
+		$cur_file_dir = dirname(self::get_request_filename());
+		$root_file_dir = dirname(dirname(dirname(__FILE__)));
+
+		//Get the difference in number of characters between the root
+		//and the requested file
+		$len = strlen($cur_file_dir) - strlen($root_file_dir);
+		
+		//Now substract that # from the currently requested uri
+		$result = substr($cur_url_dir, 0, strlen($cur_url_dir) - $len);
+
+		return $result;
+	}
 
 	/**
 	 * Strips the slashes from all incoming superglobals,
