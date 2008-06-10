@@ -463,7 +463,7 @@ function get_site_preference($prefname, $defaultvalue = '') {
 	$value = $defaultvalue;
 
 	global $gCms;
-	$siteprefs = $gCms->siteprefs;
+	$siteprefs =& $gCms->siteprefs;
 	
 	if (count($siteprefs) == 0)
 	{

@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['help_css_max_age'] = 'This parameter should be set relatively high for static sites, and should be set to 0 for site development';
+$lang['admin']['css_max_age'] = 'Maximum amount of time (seconds) stylesheets can be cached in the browser';
 $lang['admin']['error'] = 'Error';
 $lang['admin']['clear_version_check_cache'] = 'Clear any cached version check information on submit';
 $lang['admin']['new_version_available'] = '<em>Notice:</em> A new version of CMS Made Simple is available.  Please notify your administrator.';

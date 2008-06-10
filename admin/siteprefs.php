@@ -89,6 +89,9 @@ if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
 $sitename = '';
 if (isset($_POST['sitename'])) $sitename = $_POST['sitename'];
 
+$css_max_age = 0;
+if (isset($_POST['css_max_age'])) $css_max_age = (int)$_POST['css_max_age'];
+
 #$useadvancedcss = "1";
 #if (isset($_POST["useadvancedcss"])) $useadvancedcss = $_POST["useadvancedcss"];
 
@@ -209,6 +212,7 @@ else if (isset($_POST["editsiteprefs"]))
 #set_site_preference('useadvancedcss', $useadvancedcss);
       set_site_preference('logintheme', $logintheme);
       set_site_preference('metadata', $metadata);
+      set_site_preference('css_max_age',$css_max_age);
       set_site_preference('sitename', $sitename);
       set_site_preference('disablesafemodewarning',$disablesafemodewarning);
       set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
@@ -238,6 +242,7 @@ else if (isset($_POST["editsiteprefs"]))
   #$useadvancedcss = get_site_preference('useadvancedcss');
   $logintheme = get_site_preference('logintheme', 'default');
   $metadata = get_site_preference('metadata', '');
+  $css_max_age = (int)get_site_preference('css_max_age',0);
   $sitename = get_site_preference('sitename', 'CMSMS Site');
   $disablesafemodewarning = get_site_preference('disablesafemodewarning',0);
   $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',0);
@@ -307,6 +312,12 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
   <p class="pagetext"><?php echo lang('results')?></p>
   <p class="pageinput"><strong><?php echo $testresults ?></strong></p>
 		</div>
+
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('css_max_age')?>:</p>
+  <p class="pageinput"><input type="text" class="pagesmalltextarea" name="css_max_age" size="10" maxlength="10" value="<?php echo $css_max_age ?>" />&nbsp;<?php echo lang('help_css_max_age') ?></p>
+		</div>
+
 		<div class="pageoverflow">
                    <p class="pagetext"><?php echo lang('frontendlang')?>:</p>
 	              <select name="frontendlang" style="vertical-align: middle;">

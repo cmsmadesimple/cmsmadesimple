@@ -55,17 +55,6 @@ else if( isset($_SERVER['HTTP_IF_NONE_MATCH']) )
     $etag = trim($etag,'"');
   }
 
-// connect to the database
-require(dirname(__FILE__).DIRECTORY_SEPARATOR.'version.php');
-require(dirname(__FILE__).DIRECTORY_SEPARATOR.'fileloc.php');
-require(cms_join_path(dirname(__FILE__),'lib','config.functions.php'));
-require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
-require(cms_join_path(dirname(__FILE__),'lib','classes','class.global.inc.php'));
-require(cms_join_path(dirname(__FILE__),'lib','adodb.functions.php'));
-$gCms =& new CmsObject();
-load_adodb();
-$db =& adodb_connect();
-
 //echo "DEBUG: cssid = $cssid, hashval = \"{$hash[$cssid]}\" etag = \"$etag\" \n";
 //echo "DEBUG: ".strcmp($hash[$cssid],$etag)."\n";
 //if( $hash[$cssid] != $etag ) die('uhoh');
@@ -85,6 +74,21 @@ if( isset($hash[$cssid]) && strcmp($hash[$cssid],$etag) == 0 &&
 // or the hash is out of date
 // so get the styesheets, 
 //
+
+// connect to the database
+require(dirname(__FILE__).DIRECTORY_SEPARATOR.'version.php');
+require(dirname(__FILE__).DIRECTORY_SEPARATOR.'fileloc.php');
+require(cms_join_path(dirname(__FILE__),'lib','config.functions.php'));
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
+require(cms_join_path(dirname(__FILE__),'lib','classes','class.global.inc.php'));
+require(cms_join_path(dirname(__FILE__),'lib','adodb.functions.php'));
+
+$gCms =& new CmsObject();
+load_adodb();
+$db =& $gCms->GetDb();
+
+require(cms_join_path(dirname(__FILE__),'lib','page.functions.php'));
+
 
 // extract the stylesheet(s)
 $sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_id = ".$db->qstr($cssid);
@@ -121,9 +125,14 @@ if ($stripbackground)
   $css = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $css);
 }
 
+$max_age = (int)get_site_preference('css_max_age',0);
 header("Content-Type: text/css; charset=$encoding");
 header("Last-Modified: ".gmdate('D, d M Y H:i:s', $hashmtime - 5).' GMT');
-header("Cache-Control: max-age=3600, s-max-age=3600, must-revalidate");
+if( $max_age > 0 )
+  {
+    // no caching?
+    header("Cache-Control: max-age=$max_age, s-max-age=$max_age, must-revalidate");
+  }
 header('Etag: "'.$etag.'"');
 echo $css;
 
