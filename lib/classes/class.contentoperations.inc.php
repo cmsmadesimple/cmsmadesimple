@@ -157,13 +157,14 @@ class ContentOperations
      */
 	/*private*/ function &LoadMultipleFromId($ids, $loadProperties = false)
 	{
-		global $gCms, $config, $sql_queries, $debug_errors;
+		global $gCms, $sql_queries, $debug_errors;
 		$cpt = count($ids);
 		$contents=array();
 		if ($cpt==0) 
 		{
 			return $contents;
 		}
+		$config = &$gCms->GetConfig();
 		$db = &$gCms->GetDb();
 		$id_list = '(';
 		for ($i=0;$i<$cpt;$i++) 
@@ -253,13 +254,14 @@ class ContentOperations
      */
 	/*private*/function &LoadMultipleFromAlias($ids, $loadProperties = false)
 	{
-		global $gCms, $config, $sql_queries, $debug_errors;
+		global $gCms, $sql_queries, $debug_errors;
 		$contents=array();
 		if (!is_array($ids) || count($ids) == 0)
 		{
 			return $contents;
 		}
 		$db = &$gCms->GetDb();
+		$config =& $gCms->GetConfig();
 
 		$param_qs = array();
 		for ($i=0; $i<count($ids); $i++) 

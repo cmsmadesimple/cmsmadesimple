@@ -575,7 +575,6 @@ class ContentBase
 			$tolower = true;
 			$alias = munge_string_to_url($alias, $tolower);
 			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
-			global $gCms;
 			$contentops =& $gCms->GetContentOperations();
 			$error = $contentops->CheckAliasError($alias);
 			if ($error !== FALSE)
@@ -726,8 +725,9 @@ class ContentBase
      */
 	function LoadFromId($id, $loadProperties = false)
 	{
-		global $gCms, $config, $sql_queries, $debug_errors;
+		global $gCms, $sql_queries, $debug_errors;
 		$db = &$gCms->GetDb();
+		$config =& $gCms->GetConfig();
 
 		$result = false;
 
@@ -834,7 +834,8 @@ class ContentBase
      */
 	function LoadFromData($data, $loadProperties = false)
 	{
-		global $config, $debug_errors;
+	  global $gCms; $debug_errors;
+	  $config =& $gCms->GetConfig();
 
 		$result = true;
 
@@ -966,8 +967,9 @@ class ContentBase
     # :TODO: This function should return something
 	function Update()
 	{
-		global $gCms, $config, $sql_queries, $debug_errors;
+		global $gCms, $sql_queries, $debug_errors;
 		$db = &$gCms->GetDb();
+		$config =& $gCms->GetConfig();
 
 		$result = false;
 
@@ -1072,8 +1074,9 @@ class ContentBase
     # :TODO: Figure out proper item_order
 	function Insert()
 	{
-		global $gCms, $config, $sql_queries, $debug_errors;
+		global $gCms, $sql_queries, $debug_errors;
 		$db = &$gCms->GetDb();
+		$config =& $gCms->GetConfig();
 
 		$result = false;
 
@@ -1184,7 +1187,8 @@ class ContentBase
     # :TODO: This function should return something
 	function Delete()
 	{
-		global $gCms, $config, $sql_queries, $debug_errors;
+		global $gCms, $sql_queries, $debug_errors;
+		$config =& $gCms->GetConfig();
 
 		foreach($gCms->modules as $key=>$value)
 		{
@@ -1428,8 +1432,9 @@ class ContentBase
 				return false;
 			}
 
-		global $gCms, $config, $sql_queries, $debug_errors;
+		global $gCms, $sql_queries, $debug_errors;
 		$db = &$gCms->GetDb();
+		$config =& $gCms->GetConfig();
 
 		$result = false;
 
@@ -1619,7 +1624,7 @@ class ContentProperties
 		debug_buffer('load properties called');
 		if (count($this->mPropertyNames) > 0)
 		{
-			global $gCms, $config, $sql_queries, $debug_errors;
+			global $gCms, $sql_queries, $debug_errors;
 			$db = &$gCms->GetDb();
 
 			$query = "SELECT * FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
@@ -1648,9 +1653,10 @@ class ContentProperties
 	{
 		if (count($this->mPropertyValues) > 0)
 		{
-			global $gCms, $config, $sql_queries, $debug_errors;
+			global $gCms, $sql_queries, $debug_errors;
 			
 			$db        =& $gCms->GetDb();
+			$config    =& $gCms->GetConfig();
 			$concat    =  '';
 			$timestamp =  $db->DBTimeStamp(time());
 
@@ -1717,7 +1723,7 @@ class ContentProperties
     {
 	if (count($this->mPropertyValues) > 0)
 	{
-	    global $gCms, $config, $sql_queries, $debug_errors;
+	    global $gCms, $sql_queries, $debug_errors;
 	    $db = &$gCms->GetDb();
 
 	    $query = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
