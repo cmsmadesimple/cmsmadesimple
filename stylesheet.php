@@ -52,7 +52,8 @@ $db =& adodb_connect();
 //echo "DEBUG: cssid = $cssid, hashval = \"{$hash[$cssid]}\" etag = \"$etag\" \n";
 //echo "DEBUG: ".strcmp($hash[$cssid],$etag)."\n";
 //if( $hash[$cssid] != $etag ) die('uhoh');
-if( isset($hash[$cssid]) && strcmp($hash[$cssid],$etag) == 0 )
+if( isset($hash[$cssid]) && strcmp($hash[$cssid],$etag) == 0 && 
+    $config['debug'] != true )
   {
     // we have a value
     // and it's fine
@@ -104,8 +105,8 @@ if ($stripbackground)
 }
 
 header("Content-Type: text/css; charset=$encoding");
-header("Cache-Control: max-age:3600, must-revalidate");
-header("Last-Modified: ".gmdate('D, d M Y H:i:s', $hashmtime));
+header("Last-Modified: ".gmdate('D, d M Y H:i:s', $hashmtime).' GMT');
+header("Cache-Control: max-age=3600, must-revalidate");
 header('Etag: "'.$etag.'"');
 echo $css;
 
