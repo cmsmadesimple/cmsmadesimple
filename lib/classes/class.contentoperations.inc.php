@@ -347,7 +347,11 @@ class ContentOperations
 
 	function & GetDefaultContent()
 	{
-		global $gCms;
+	  global $gCms;
+	  if( isset($gCms->variableles['default_content_id']) )
+	    {
+	      return $gCms->variables['default_content_id'];
+	    }
 		$db =& $gCms->GetDb();
 
 		$result = -1;
@@ -369,6 +373,7 @@ class ContentOperations
 			}
 		}
 
+		$gCms->variables['default_content_id'] = $result;
 		return $result;
 	}
 
@@ -720,7 +725,13 @@ class ContentOperations
     // function to get the id of the default page
 	function GetDefaultPageID()
 	{
-		global $gCms;
+	  
+	  global $gCms;
+	  if( isset($gCms->variables['default_content_id']) )
+	    {
+	      return $gCms->variables['default_content_id'];
+	    }
+
 		$db = &$gCms->GetDb();
 
 		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE default_content = 1";
@@ -729,6 +740,7 @@ class ContentOperations
 		{
 			return false;
 		}
+		$gCms->variables['default_content_id'] = $row['content_id'];
 		return $row['content_id'];
 	}
 
