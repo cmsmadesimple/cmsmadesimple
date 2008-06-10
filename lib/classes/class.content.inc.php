@@ -834,7 +834,7 @@ class ContentBase
      */
 	function LoadFromData($data, $loadProperties = false)
 	{
-	  global $gCms; $debug_errors;
+	  global $gCms, $debug_errors;
 	  $config =& $gCms->GetConfig();
 
 		$result = true;
