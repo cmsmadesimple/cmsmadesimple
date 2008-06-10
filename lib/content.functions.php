@@ -410,7 +410,7 @@ class Smarty_CMS extends Smarty {
 		  $tpl_source = $templateobj->content;
 
 		  $pos = stripos($tpl_source,'</head>');
-		  if( $stripos === FALSE )
+		  if( $pos === FALSE )
 		    {
 		      return false;
 		    }
@@ -447,7 +447,7 @@ class Smarty_CMS extends Smarty {
 		  $tpl_source = $templateobj->content;
 
 		  $pos = stripos($tpl_source,'</head>');
-		  if( $stripos === FALSE )
+		  if( $pos === FALSE )
 		    {
 		      return false;
 		    }
