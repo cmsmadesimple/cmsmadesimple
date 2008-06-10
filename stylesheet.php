@@ -1,8 +1,21 @@
 <?php
 
-require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'include.php');
-// require_once('config.php');
-// require_once($config['root_path'].DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
+// Parse pretty URLS
+$url = substr($_SERVER['REQUEST_URI'],strlen($_SERVER['SCRIPT_NAME']));
+$url = rtrim($url,'/');
+$matches = array();
+if( preg_match('+^/[0-9]*/.*?$+',$url,$matches) )
+  {
+    $tmp = substr($url,1);
+    list($_GET['cssid'],$_GET['mediatype']) = explode('/',$tmp);
+  }
+else if( preg_match('+^/[0-9]*$+',$url,$matches) )
+  {
+    $_GET['cssid'] = (int)substr($url,1);
+  }
+
+require('config.php');
+require($config['root_path'].DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 
 $mediatype = '';
 if (isset($_GET["mediatype"])) $mediatype = $_GET["mediatype"];
@@ -43,10 +56,14 @@ else if( isset($_SERVER['HTTP_IF_NONE_MATCH']) )
   }
 
 // connect to the database
-// require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'version.php');
-// require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
-// require_once(cms_join_path(dirname(__FILE__),'lib','adodb.functions.php'));
-//load_adodb();
+require(dirname(__FILE__).DIRECTORY_SEPARATOR.'version.php');
+require(dirname(__FILE__).DIRECTORY_SEPARATOR.'fileloc.php');
+require(cms_join_path(dirname(__FILE__),'lib','config.functions.php'));
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
+require(cms_join_path(dirname(__FILE__),'lib','classes','class.global.inc.php'));
+require(cms_join_path(dirname(__FILE__),'lib','adodb.functions.php'));
+$gCms =& new CmsObject();
+load_adodb();
 $db =& adodb_connect();
 
 //echo "DEBUG: cssid = $cssid, hashval = \"{$hash[$cssid]}\" etag = \"$etag\" \n";
@@ -105,8 +122,8 @@ if ($stripbackground)
 }
 
 header("Content-Type: text/css; charset=$encoding");
-header("Last-Modified: ".gmdate('D, d M Y H:i:s', $hashmtime).' GMT');
-header("Cache-Control: max-age=3600, must-revalidate");
+header("Last-Modified: ".gmdate('D, d M Y H:i:s', $hashmtime - 5).' GMT');
+header("Cache-Control: max-age=3600, s-max-age=3600, must-revalidate");
 header('Etag: "'.$etag.'"');
 echo $css;
 

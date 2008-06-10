@@ -227,13 +227,16 @@ class Content extends ContentBase
 	    foreach($this->additionalContentBlocks as $blockName => $blockNameId)
 	    {
 		if (empty($blockName)) continue; 
+		$data = $this->GetPropertyValue($blockNameId['id']);
+		if( empty($data) ) $data = $blockNameId['default'];
 		if ($blockNameId['oneline'] == 'true')
 		{
-		    $ret[]= array(ucwords($blockName).':','<input type="text" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($this->GetPropertyValue($blockNameId['id']), ENT_NOQUOTES, get_encoding('')).'" />');
+			
+		    $ret[]= array(ucwords($blockName).':','<input type="text" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />');
 		}
 		else
 		{
-		    $ret[]= array(ucwords($blockName).':',create_textarea(($blockNameId['usewysiwyg'] == 'false'?false:true), $this->GetPropertyValue($blockNameId['id']), $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet));
+		    $ret[]= array(ucwords($blockName).':',create_textarea(($blockNameId['usewysiwyg'] == 'false'?false:true), $data, $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet));
 		}
 	    }
 	}
@@ -399,6 +402,7 @@ class Content extends ContentBase
 			    $name = '';
 			    $usewysiwyg = 'true';
 			    $oneline = 'false';
+			    $value = '';
 
 			    foreach ($keyval as $key=>$val)
 			    {
@@ -419,7 +423,9 @@ class Content extends ContentBase
 				    case 'oneline':
 					$oneline = $val;
 					break;
-				    default:
+				    case 'default':
+					$value = $val;
+				default:
 					break;
 				}
 			    }
@@ -427,6 +433,7 @@ class Content extends ContentBase
 			    $this->additionalContentBlocks[$name]['id'] = $id;
 			    $this->additionalContentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
 			    $this->additionalContentBlocks[$name]['oneline'] = $oneline;
+			    $this->additionalContentBlocks[$name]['default'] = $value;
 					
 			}
 		    }

@@ -18,6 +18,40 @@
 
 function smarty_cms_function_stylesheet($params, &$smarty)
 {
+  function get_stylesheet_tag($cssid,$media='')
+  {
+    global $gCms;
+    $config = &$gCms->config;
+    
+    $str = '';
+    $url = '';
+    if( $config['internal_pretty_urls'] == true || $config['assume_mod_rewrite'] == true )
+      {
+	$url = $config['root_url'].'/stylesheet.php/'.$cssid;
+	if( !empty($media) )
+	  {
+	    $url .= '/'.urlencode($media);
+	  }
+      }
+    else
+      {
+	$url = $config['root_url'].'/stylesheet.php?cssid='.$cssid;
+	if( !empty($media) )
+	  {
+	    $url .= '&amp;mediatype='.urlencode($media);
+	  }
+      }
+
+    $str = '<link rel="stylesheet" type="text/css" ';
+    if( !empty($media) )
+      {
+	$str .= 'media="'.urlencode($media).'" ';
+      }
+    $str .= 'href="'.$url.'" />';
+
+    return $str;
+  }
+
   global $gCms;
   $config = &$gCms->config;
   $pageinfo = &$gCms->variables['pageinfo'];
@@ -32,13 +66,8 @@ function smarty_cms_function_stylesheet($params, &$smarty)
       $cssid = $db->GetOne( $query, array($params['name']));
       if( $cssid )
 	{
-	  $stylesheet .= '<link rel="stylesheet" type="text/css" ';
-	  if (isset($params['media']) && $params['media'] != '')
-	    {
-	      $stylesheet .= 'media="' . $params['media'] . '" ';
-	    }
-	  $stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?cssid='.$cssid;
-	  $stylesheet .= "\" />\n"; 
+	  $stylesheet .= get_stylesheet_tag($cssid,isset($params['media'])?$params['media']:'');
+	  $stylesheet .= "\n";
 	}
     }
   else
@@ -53,16 +82,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
       $fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
       foreach( $res as $one )
 	{
-	  $url = $config['root_url'].'/stylesheet.php?cssid='.$one['css_id'];
-	  if( isset($one['media_type']) && !empty($one['media_type']) )
-	    {
-	      $url .= '&amp;mediatype='.urlencode($one['media_type']);
-	      $stylesheet .= sprintf($fmt1,$one['media_type'],$url);
-	    }
-	  else
-	    {
-	      $stylesheet .= sprintf($fmt2,$url);
-	    }
+	  $stylesheet .= get_stylesheet_tag($one['css_id'],$one['media_type']);
 	  $stylesheet .= "\n";
 	}
     }
