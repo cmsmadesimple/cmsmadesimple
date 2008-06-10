@@ -22,7 +22,6 @@
 		</ul>
 		<div id="content">
 			{html_hidden id='serialized_content' name='serialized_content' value=$serialized_object}
-			{html_hidden id='serialized_permissions_list' name='serialized_permissions_list' value=$serialized_permissions_list}
 			{html_hidden id='serialized_permissions_defns' name='serialized_permissions_defns' value=$serialized_permissions_defns}
 			{html_hidden id='orig_page_type' name='orig_page_type' value=$orig_page_type}
 			{html_hidden id='orig_current_language' name='orig_current_language' value=$orig_current_language}

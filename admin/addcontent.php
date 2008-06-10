@@ -44,6 +44,7 @@ $smarty->assign('language', $language);
 $smarty->assign('action', 'addcontent.php');
 
 //See if some variables are returned
+$start_tab = coalesce_key($_REQUEST, 'start_tab', isset($_REQUEST['permission_add_submit']) ? '3' : '1');
 $page_type = coalesce_key($_REQUEST, 'page_type', 'content');
 $orig_page_type = coalesce_key($_POST, 'orig_page_type', 'content');
 $current_language = coalesce_key($_POST, 'current_language', $language);
@@ -207,8 +208,146 @@ function ajaxpreview($params)
 	return $resp->get_result();
 }
 
+function load_permissions($params, $page_object, &$start_tab)
+{
+	$smarty = cms_smarty();
+
+	$permission_defns = CmsAcl::get_permission_definitions('Core', 'Page');
+	$custom_permission_defns = CmsAcl::get_permission_definitions('Core', 'Page');
+	$permission_list = array();
+
+	if (isset($params["serialized_permissions_defns"]))
+	{
+		$custom_permission_defns = unserialize_object($params["serialized_permissions_defns"]);
+
+		if (isset($params['permission_add_submit']))
+		{
+			for ($x = 0; $x < count($custom_permission_defns); $x++)
+			{
+				if ($params['permission_id'] == $custom_permission_defns[$x]['id'])
+				{
+					$add_me = true;
+
+					$group_id = -1;
+					$gorup_name = _('Everyone');
+					
+					if (isset($params['group_id']) && $params['group_id'] > -1)
+					{
+						$group = cms_orm()->cms_group->find_by_id($params['group_id']);
+						if ($group)
+						{
+							$group_id = $group->id;
+							$group_name = $group->name;
+						}
+						else
+						{
+							$add_me = false;
+						}
+					}
+					
+					if ($group_id == -1)
+					{
+						$group_name = _('Everyone');
+					}
+					
+					$custom_permission_defns[$x]['entries'][] = array('has_access' => $params['permission_allow'] == 1 ? lang('true') : lang('false'), 'object_name' => $page_object->get_property_value('menu_text', $current_language) . ' - ' . $page_object->hierarchy, 'group_id' => $group_id, 'group_name' => $group_name, 'object_id' => $page_object->id);
+				}
+			}
+		}
+		else
+		{
+			foreach ($params as $k=>$v)
+			{
+				if (starts_with($k, 'delete_permission'))
+				{
+					$start_tab = '3';
+
+					list($blah, $group_id, $permission_id) = explode('-', $k);
+
+					if ($group_id == '')
+						$group_id = -1;
+
+					if ($group_id && $permission_id)
+					{
+						for ($x = 0; $x < count($custom_permission_defns); $x++)
+						{
+							if ($permission_id == $custom_permission_defns[$x]['id'])
+							{
+								for ($y = 0; $y < count($custom_permission_defns[$x]['entries']); $y++)
+								{
+									if ($custom_permission_defns[$x]['entries'][$y]['group_id'] == $group_id)
+									{
+										unset($custom_permission_defns[$x]['entries'][$y]);
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	for ($x = 0; $x < count($permission_defns); $x++)
+	{
+		$permission_list[$permission_defns[$x]['id']] = $permission_defns[$x]['name'];
+		$entries = CmsAcl::get_permissions('Core', 'Page', $permission_defns[$x]['name'], $page_object->id > -1 ? $page_object->id : $page_object->parent_id, true);
+		if (isset($custom_permission_defns[$x]['entries']))
+		{
+			foreach ($custom_permission_defns[$x]['entries'] as $custom_entry)
+			{
+				$entries[] = $custom_entry;
+			}
+		}
+		
+		foreach ($entries as &$oneentry)
+		{
+			$oneentry['object_name'] = '';
+			if ($oneentry['object_id'] == 1)
+			{
+				$oneentry['object_name'] = lang('root');
+			}
+			else
+			{
+				$content = cms_orm()->content->find_by_id($oneentry['object_id']);
+				if ($content != null)
+				{
+					$oneentry['object_name'] = $content->get_property_value('menu_text', $current_language) . ' - ' . $content->hierarchy;
+				}
+			}
+		}
+		$permission_defns[$x]['entries'] = $entries;
+	}
+	
+	$smarty->assign('permission_defns', $permission_defns);
+	$smarty->assign('permission_list', $permission_list);
+	$smarty->assign("serialized_permissions_defns", serialize_object($custom_permission_defns));
+	
+	return $permission_defns;
+}
+
+function save_permissions($params, $page_object, $permission_defns)
+{
+	for ($x = 0; $x < count($permission_defns); $x++)
+	{
+		$dfn = $permission_defns[$x];
+		for ($y = 0; $y < count($permission_defns[$x]['entries']); $y++)
+		{
+			$perm = $permission_defns[$x]['entries'][$y];
+			if ($perm['object_id'] == $page_object->id)
+			{
+				CmsAcl::set_permission('Core', 'Page', $dfn['name'], $page_object->id, $perm['group_id'], $perm['has_access'] == 'True' ? 1 : 0);
+			}
+		}
+	}
+}
+
 //Get a working page object
 $page_object = get_page_object($page_type, $orig_page_type, $userid, $_REQUEST, $orig_current_language);
+
+//Load permissions (from db or serialized versions) and put them into smarty for dispaly on the template
+$permission_defns = load_permissions($_REQUEST, $page_object, $start_tab);
 
 //Preview?
 $smarty->assign('showpreview', false);
@@ -231,6 +370,7 @@ else if ($access)
 		if ($page_object->save())
 		{
 			$contentops->SetAllHierarchyPositions();
+			save_permissions($params, $page_object, $permission_defns);
 			if ($submit)
 			{
 				audit($page_object->id, $page_object->name, 'Added Content');
@@ -266,10 +406,12 @@ $smarty->assign('selected_page_type', $page_type);
 
 //Set the parent dropdown
 $smarty->assign('show_parent_dropdown', $access);
-$smarty->assign('parent_dropdown', $contentops->CreateHierarchyDropdown('', $page_object->parent_id, 'content[parent_id]'));
+$smarty->assign('parent_dropdown', $contentops->CreateHierarchyDropdown('', $page_object->parent_id, 'content[parent_id]', "onchange='document.contentform.submit();'"));
 
 //Se the template dropdown
 $smarty->assign('template_names', $templateops->TemplateDropdown('content[template_id]', $page_object->template_id, 'onchange="document.contentform.submit()"'));
+
+$smarty->assign('group_dropdown', CmsGroup::get_groups_for_dropdowm(true));
 
 //Set the users
 $userops = $gCms->GetUserOperations();
@@ -285,6 +427,8 @@ $smarty->assign('include_templates', $page_object->add_template($smarty, $curren
 
 //Other fields that aren't easily done with smarty
 $smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, 'content[metadata]', 'pagesmalltextarea', 'content_metadata', '', '', '80', '6'));
+
+$smarty->assign('start_tab', $start_tab);
 
 $smarty->assign('attribute_defns', cms_orm('CmsAttributeDefinition')->find_all_by_module_and_extra_attr('Core', 'Content'));
 

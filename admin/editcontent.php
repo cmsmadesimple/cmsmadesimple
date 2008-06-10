@@ -115,6 +115,8 @@ function &get_page_object(&$page_type, &$orig_page_type, $userid, $content_id, $
 		//Do this first -- so alias gets set
 		$page_object->set_property_value('name', $_REQUEST['name'], $lang);
 		$page_object->set_property_value('menu_text', $_REQUEST['menu_text'], $lang);
+		
+		var_dump($params['content']);
 
 		$page_object->update_parameters($params['content'], $lang, get_magic_quotes_gpc());
 		if (strtolower(get_class($page_object)) != $page_type)
@@ -134,28 +136,28 @@ function &get_page_object(&$page_type, &$orig_page_type, $userid, $content_id, $
 	return $page_object;
 }
 
-function load_permissions($params, $page_object)
+function load_permissions($params, $page_object, &$start_tab)
 {
 	$smarty = cms_smarty();
 
 	$permission_defns = CmsAcl::get_permission_definitions('Core', 'Page');
+	$custom_permission_defns = CmsAcl::get_permission_definitions('Core', 'Page');
 	$permission_list = array();
 
-	if (isset($params["serialized_permissions_list"]))
+	if (isset($params["serialized_permissions_defns"]))
 	{
-		$permission_list = unserialize_object($params["serialized_permissions_list"]);
-		$permission_defns = unserialize_object($params["serialized_permissions_defns"]);
+		$custom_permission_defns = unserialize_object($params["serialized_permissions_defns"]);
 
 		if (isset($params['permission_add_submit']))
 		{
-			for ($x = 0; $x < count($permission_defns); $x++)
+			for ($x = 0; $x < count($custom_permission_defns); $x++)
 			{
-				if ($params['permission_id'] == $permission_defns[$x]['id'])
+				if ($params['permission_id'] == $custom_permission_defns[$x]['id'])
 				{
 					$add_me = true;
 
 					$group_id = -1;
-					$gorup_name = lang('Everyone');
+					$gorup_name = _('Everyone');
 					
 					if (isset($params['group_id']) && $params['group_id'] > -1)
 					{
@@ -171,7 +173,12 @@ function load_permissions($params, $page_object)
 						}
 					}
 					
-					$permission_defns[$x]['entries'][] = array('has_access' => $params['permission_allow'] == 1 ? lang('true') : lang('false'), 'object_name' => $page_object->get_property_value('menu_text', $current_language) . ' - ' . $page_object->hierarchy, 'group_id' => $group_id, 'group_name' => $group_name, 'object_id' => $page_object->id);
+					if ($group_id == -1)
+					{
+						$group_name = _('Everyone');
+					}
+					
+					$custom_permission_defns[$x]['entries'][] = array('has_access' => $params['permission_allow'] == 1 ? lang('true') : lang('false'), 'object_name' => $page_object->get_property_value('menu_text', $current_language) . ' - ' . $page_object->hierarchy, 'group_id' => $group_id, 'group_name' => $group_name, 'object_id' => $page_object->id);
 				}
 			}
 		}
@@ -181,18 +188,24 @@ function load_permissions($params, $page_object)
 			{
 				if (starts_with($k, 'delete_permission'))
 				{
+					$start_tab = '3';
+
 					list($blah, $group_id, $permission_id) = explode('-', $k);
+
+					if ($group_id == '')
+						$group_id = -1;
+
 					if ($group_id && $permission_id)
 					{
-						for ($x = 0; $x < count($permission_defns); $x++)
+						for ($x = 0; $x < count($custom_permission_defns); $x++)
 						{
-							if ($permission_id == $permission_defns[$x]['id'])
+							if ($permission_id == $custom_permission_defns[$x]['id'])
 							{
-								for ($y = 0; $y < count($permission_defns[$x]['entries']); $y++)
+								for ($y = 0; $y < count($custom_permission_defns[$x]['entries']); $y++)
 								{
-									if ($permission_defns[$x]['entries'][$y]['group_id'] == $group_id)
+									if ($custom_permission_defns[$x]['entries'][$y]['group_id'] == $group_id)
 									{
-										unset($permission_defns[$x]['entries'][$y]);
+										unset($custom_permission_defns[$x]['entries'][$y]);
 										break;
 									}
 								}
@@ -207,32 +220,52 @@ function load_permissions($params, $page_object)
 	{
 		for ($x = 0; $x < count($permission_defns); $x++)
 		{
-			$permission_list[$permission_defns[$x]['id']] = $permission_defns[$x]['name'];
-			$entries = CmsAcl::get_permissions('Core', 'Page', $permission_defns[$x]['name'], $page_object->id, true);
-			foreach ($entries as &$oneentry)
+			$custom_permission_defns[$x]['entries'] = CmsAcl::get_permissions('Core', 'Page', $permission_defns[$x]['name'], $page_object->id, true);
+		}
+	}
+	
+	for ($x = 0; $x < count($permission_defns); $x++)
+	{
+		$permission_list[$permission_defns[$x]['id']] = $permission_defns[$x]['name'];
+		$entries = CmsAcl::get_permissions('Core', 'Page', $permission_defns[$x]['name'], $page_object->parent_id, true);
+		if (isset($custom_permission_defns[$x]['entries']))
+		{
+			foreach ($custom_permission_defns[$x]['entries'] as $custom_entry)
 			{
-				$oneentry['object_name'] = '';
-				if ($oneentry['object_id'] == 1)
+				$add = true;
+				foreach ($entries as $orig_entry)
 				{
-					$oneentry['object_name'] = lang('root');
+					if ($orig_entry['id'] == $custom_entry['id'] && $orig_entry['group_id'] == $custom_entry['group_id'])
+						$add = false;
 				}
-				else
+				
+				if ($add)
+					$entries[] = $custom_entry;
+			}
+		}
+		
+		foreach ($entries as &$oneentry)
+		{
+			$oneentry['object_name'] = '';
+			if ($oneentry['object_id'] == 1)
+			{
+				$oneentry['object_name'] = lang('root');
+			}
+			else if ($oneentry['object_id'] != $page_object->id)
+			{
+				$content = cms_orm()->content->find_by_id($oneentry['object_id']);
+				if ($content != null)
 				{
-					$content = cms_orm()->content->find_by_id($oneentry['object_id']);
-					if ($content != null)
-					{
-						$oneentry['object_name'] = $content->get_property_value('menu_text', $current_language) . ' - ' . $content->hierarchy;
-					}
+					$oneentry['object_name'] = $content->get_property_value('menu_text', $current_language) . ' - ' . $content->hierarchy;
 				}
 			}
-			$permission_defns[$x]['entries'] = $entries;
 		}
+		$permission_defns[$x]['entries'] = $entries;
 	}
 	
 	$smarty->assign('permission_defns', $permission_defns);
 	$smarty->assign('permission_list', $permission_list);
-	$smarty->assign("serialized_permissions_list", serialize_object($permission_list));
-	$smarty->assign("serialized_permissions_defns", serialize_object($permission_defns));
+	$smarty->assign("serialized_permissions_defns", serialize_object($custom_permission_defns));
 	
 	return $permission_defns;
 }
@@ -335,7 +368,7 @@ function ajaxpreview($params)
 $page_object = get_page_object($page_type, $orig_page_type, $userid, $content_id, $_REQUEST, $orig_current_language);
 
 //Load permissions (from db or serialized versions) and put them into smarty for dispaly on the template
-$permission_defns = load_permissions($_REQUEST, $page_object);
+$permission_defns = load_permissions($_REQUEST, $page_object, $start_tab);
 
 //Preview?
 $smarty->assign('showpreview', false);
@@ -391,7 +424,7 @@ $smarty->assign('selected_page_type', $page_type);
 
 //Set the parent dropdown
 $smarty->assign('show_parent_dropdown', $access);
-$smarty->assign('parent_dropdown', $contentops->CreateHierarchyDropdown($page_object->id, $page_object->parent_id, 'content[parent_id]'));
+$smarty->assign('parent_dropdown', $contentops->CreateHierarchyDropdown($page_object->id, $page_object->parent_id, 'content[parent_id]', "onchange='document.contentform.submit();'"));
 
 //Se the template dropdown
 $smarty->assign('template_names', $templateops->TemplateDropdown('content[template_id]', $page_object->template_id, 'onchange="document.contentform.submit()"'));

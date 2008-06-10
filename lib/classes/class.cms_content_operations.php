@@ -313,9 +313,14 @@ class CmsContentOperations extends CmsObject
 		return CmsContentOperations::get_all_content($loadprops);
 	}
 
-	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id')
+	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $addt_content = '')
 	{
-		$result = '<select name="'.$name.'">';
+		$result = '<select name="'.$name.'"';
+		if ($addt_content != '')
+		{
+			$result .= ' ' . $addt_content;
+		}
+		$result .= '>';
 		$result .= '<option value="1">None</option>';
 
 		$allcontent = cmsms()->GetContentOperations()->GetAllContent(false);
