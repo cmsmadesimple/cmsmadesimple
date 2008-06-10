@@ -247,7 +247,9 @@ else
 		$smarty->caching = false;
 		$smarty->compile_check = true;
 		($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
-		$html = $smarty->fetch('template:'.$pageinfo->template_id) . "\n";
+		$body = $smarty->fetch('tpl_body:'.$pageinfo->template_id);
+		$head = $smarty->fetch('tpl_head:'.$pageinfo->template_id);
+		$html = $head.$body;
 	}
 }
 

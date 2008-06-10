@@ -94,6 +94,14 @@ class Smarty_CMS extends Smarty {
 						       "template_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
+		$this->register_resource("tpl_head", array(&$this, "template_head_get_template",
+						       "template_get_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
+		$this->register_resource("tpl_body", array(&$this, "template_body_get_template",
+						       "template_get_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
 		$this->register_resource("htmlblob", array(&$this, "global_content_get_template",
 						       "global_content_get_timestamp",
 						       "db_get_secure",
@@ -374,6 +382,80 @@ class Smarty_CMS extends Smarty {
 	{
 		$tpl_timestamp = time();
 		return true;
+	}
+
+	function template_head_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	{
+	  global $gCms;
+	  $config =& $gCms->GetConfig();
+	  
+	  if (get_site_preference('enablesitedownmessage') == "1")
+	    {
+	      $tpl_source = '';
+	      return true;
+	    }
+	  else
+	    {
+	      if ($tpl_name == 'notemplate')
+		{
+		  $tpl_source = '';
+		  return true;
+		}
+
+	      $pageinfo = $gCms->variables['pageinfo'];
+	      $templateops =& $gCms->GetTemplateOperations();
+	      $templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
+	      if (isset($templateobj) && $templateobj !== FALSE)
+		{
+		  $tpl_source = $templateobj->content;
+
+		  $pos = stripos($tpl_source,'</head>');
+		  if( $stripos === FALSE )
+		    {
+		      return false;
+		    }
+		  $tpl_source = substr($tpl_source,0,$pos+7);
+		  return true;
+		}
+	    }
+	  return false;
+	}
+
+	function template_body_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	{
+	  global $gCms;
+	  $config =& $gCms->GetConfig();
+	  
+	  if (get_site_preference('enablesitedownmessage') == "1")
+	    {
+	      $tpl_source = get_site_preference('sitedownmessage');
+	      return true;
+	    }
+	  else
+	    {
+	      if ($tpl_name == 'notemplate')
+		{
+		  $tpl_source = '{content}';
+		  return true;
+		}
+
+	      $pageinfo = $gCms->variables['pageinfo'];
+	      $templateops =& $gCms->GetTemplateOperations();
+	      $templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
+	      if (isset($templateobj) && $templateobj !== FALSE)
+		{
+		  $tpl_source = $templateobj->content;
+
+		  $pos = stripos($tpl_source,'</head>');
+		  if( $stripos === FALSE )
+		    {
+		      return false;
+		    }
+		  $tpl_source = substr($tpl_source,$pos+7);
+		  return true;
+		}
+	    }
+	  return false;
 	}
 
 	function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
