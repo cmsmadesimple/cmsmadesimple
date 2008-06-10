@@ -37,7 +37,7 @@ require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_object.php');
 require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_config.php');
 require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_cache.php');
 
-set_error_handler('cms_warning_handler', E_WARNING | E_USER_WARNING);
+//set_error_handler('cms_warning_handler', E_WARNING | E_USER_WARNING);
 
 /**
  * The one and only autoload function for the system.  This basically allows us 

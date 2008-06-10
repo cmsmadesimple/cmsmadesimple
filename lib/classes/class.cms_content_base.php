@@ -101,26 +101,29 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	}
 	
 	function before_save()
-	{		
+	{
 		CmsEvents::send_event('Core', 'ContentEditPre', array('content' => &$this));
 	}
 	
-	function after_save()
+	function after_save(&$result)
 	{
-		$concat = '';
-		foreach ($this->mProperties as &$prop)
+		if ($result)
 		{
-			if ($prop->content_id != $this->id)
-				$prop->content_id = $this->id;
-			$prop->save();
-			$concat .= $prop->content;
+			$concat = '';
+			foreach ($this->mProperties as &$prop)
+			{
+				if ($prop->content_id != $this->id)
+					$prop->content_id = $this->id;
+				$prop->save();
+				$concat .= $prop->content;
+			}
+		
+			if ($concat != '')
+				CmsContentOperations::do_cross_reference($this->id, 'content', $concat);
+		
+			CmsEvents::send_event('Core', 'ContentEditPost', array('content' => &$this));
+			CmsCache::clear();
 		}
-		
-		if ($concat != '')
-			CmsContentOperations::do_cross_reference($this->id, 'content', $concat);
-		
-		CmsEvents::send_event('Core', 'ContentEditPost', array('content' => &$this));
-		CmsCache::clear();
 	}
 	
 	function validate()

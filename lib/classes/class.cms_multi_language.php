@@ -75,6 +75,22 @@ class CmsMultiLanguage extends CmsObject
 		return explode(',', CmsApplication::get_preference('enabled_languages', 'en_US'));
 	}
 	
+	public static function get_user_default_language($user)
+	{
+		$user_pref = $user->get_preference('default_cms_language', '');
+		if ($user_pref == '')
+		{
+			return self::get_default_language();
+		}
+		
+		if (in_array($user_pref, self::get_enabled_languages()))
+		{
+			return $user_pref;
+		}
+		
+		return self::get_default_language();
+	}
+	
 	public static function get_enabled_languages_as_hash()
 	{
 		$enabled = CmsMultiLanguage::get_enabled_languages();

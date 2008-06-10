@@ -35,8 +35,9 @@ $templateops =& $gCms->GetTemplateOperations();
 #Make sure we're logged in and get that user id
 check_login();
 $userid = get_userid();
+$user = CmsLogin::get_current_user();
 
-$language = get_preference($userid, 'default_cms_language', 'en_US');
+$language = CmsMultiLanguage::get_user_default_language($user);
 $smarty->assign('language', $language);
 
 //Need to know where we're submitting to

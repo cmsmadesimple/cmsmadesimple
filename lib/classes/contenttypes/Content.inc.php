@@ -113,7 +113,7 @@ class Content extends CmsContentBase
 				}
 				else
 				{
-					throw Exception("Unknown block type");
+					throw new Exception("Unknown block type");
 				}
 			}
 			catch (Exception $e)

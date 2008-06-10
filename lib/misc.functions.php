@@ -247,7 +247,7 @@ function showmem($string = '')
 function munge_string_to_url($alias, $tolower = false)
 {
 	// replacement.php is encoded utf-8 and must be the first modification of alias
-	include(dirname(__FILE__) . '/replacement.php');
+	//include(dirname(__FILE__) . '/replacement.php');
 	$alias = str_replace($toreplace, $replacement, $alias);
 	
 	// lowercase only on empty aliases

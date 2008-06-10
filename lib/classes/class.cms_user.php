@@ -171,6 +171,16 @@ class CmsUser extends CmsObjectRelationalMapping
 	{
 		return $this->firstname . ' ' . $this->lastname;
 	}
+	
+	public function get_preference($prefname, $default = '')
+	{
+		return get_preference($this->id, $prefname, $default);
+	}
+	
+	function set_preference($userid, $prefname, $value)
+	{
+		return set_preference($this->id, $prefname, $value);
+	}
 }
 
 /**
