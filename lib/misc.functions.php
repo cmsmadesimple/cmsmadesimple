@@ -1159,6 +1159,13 @@ if (!function_exists('array_walk_recursive'))
 	}
 }
 
+if (!function_exists("stripos")) {
+  function stripos($str,$needle,$offset=0)
+  {
+      return strpos(strtolower($str),strtolower($needle),$offset);
+  }
+}
+
 /*
  * Sanitize input to prevent against XSS and other nasty stuff.
  * Taken from cakephp (http://cakephp.org)
