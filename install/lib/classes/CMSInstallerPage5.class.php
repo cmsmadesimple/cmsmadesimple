@@ -175,6 +175,9 @@ class CMSInstallerPage5 extends CMSInstallerPage
 	
 			foreach ($gCms->modules as $modulename=>$value)
 			{
+			  // only deal with system modules
+			  if( !in_array($modulename,$gCms->cmssystemmodules) ) continue;
+
 				if ($gCms->modules[$modulename]['object']->AllowAutoInstall() == true)
 				{
 				$query = "SELECT * FROM ".cms_db_prefix()."modules WHERE module_name = ?";
