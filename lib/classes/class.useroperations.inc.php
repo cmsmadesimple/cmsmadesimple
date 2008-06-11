@@ -345,7 +345,7 @@ class UserOperations
 	{
 	  global $gCms;
 	  if( isset($gCms->variables['user_in_group']) && 
-	      isset($gCms->variables['user_in_group']['$uid.','.$gid])
+	      isset($gCms->variables['user_in_group'][$uid.','.$gid]) )
 	    {
 	      // us cached result.
 	      return $gCms->variables['user_in_group'][$uid.','.$gid];
