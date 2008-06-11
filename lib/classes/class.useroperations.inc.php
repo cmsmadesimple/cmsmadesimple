@@ -197,6 +197,11 @@ class UserOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
+		// check for conflict in username
+		$query = 'SELECT user_id FROM '.cms_db_prefix().'users WHERE username = ?';
+		$tmp = $db->GetOne($query,array($user->username));
+		if( $tmp ) return $result;
+		  
 		$time = $db->DBTimeStamp(time());
 		$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,".$time.",".$time.")";
@@ -224,6 +229,11 @@ class UserOperations
 
 		global $gCms;
 		$db = &$gCms->GetDb();
+
+		// check for username conflict
+		$query = 'SELECT user_id FROM '.cms_db_prefix().'users WHERE username = ? and user_id != ?';
+		$tmp = $db->GetOne($query,array($user->username,$user->id));
+		if( $tmp ) return $result;
 
 		$time = $db->DBTimeStamp(time());
 		$query = "UPDATE ".cms_db_prefix()."users SET username = ?, password = ?, active = ?, modified_date = ".$time.", first_name = ?, last_name = ?, email = ?, admin_access = ? WHERE user_id = ?";
