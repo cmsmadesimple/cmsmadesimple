@@ -33,7 +33,10 @@ there will be no other way to login to your CMS Made Simple admin system without
 {if $mail_function_exists == true}
 	<tr class="row1">
 		<td>E-Mail Account Information</td>
-		<td><input type="checkbox" name="email_accountinfo" value="1" {if $values.email_accountinfo == 1} checked="checked"{/if} /></td>
+		<td>
+                   <input type="checkbox" name="email_accountinfo" value="1" {if $values.email_accountinfo == 1} checked="checked"{/if} />
+                   <br/><br/><p class="row1"><strong>Note:</strong> This function uses the php's mail function.  If you don't receive this email, it may be an indication that your server is not properly configured and that you should contact your host administrator.</p>
+                </td>
 	</tr>
 {/if}
 </table>

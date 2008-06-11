@@ -145,10 +145,12 @@ class CMSInstallerPage5 extends CMSInstallerPage
 				echo "Error: Could not remove the tmp/cache/SITEDOWN file. Please remove manually.";
 			}
 		}
-	
+
+		#Make sure $gCms->db is set
 		#Do module installation
 		if (isset($_POST["createtables"]))
 		{
+			global $DONT_SET_DB;
 			echo '<p>Updating hierarchy positions...';
 	
 			include_once cms_join_path(CMS_BASE, 'include.php');
@@ -159,6 +161,9 @@ class CMSInstallerPage5 extends CMSInstallerPage
 			$db->SetFetchMode(ADODB_FETCH_ASSOC);
 			#$db->debug = true;
 			$gCms->db =& $db;
+			unset($GLOBALS['DONT_SET_DB']);
+			unset($DONT_SET_DB);
+			      
 	
 			$contentops =& $gCms->GetContentOperations();
 			$contentops->SetAllHierarchyPositions();
@@ -192,7 +197,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
 						if (!isset($result) || $result === FALSE)
 						{
 							$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active, admin_only) VALUES (".$db->qstr($modulename).",".$db->qstr($modinstance->GetVersion()).",'installed',1,".($modinstance->IsAdminOnly()==true?1:0).")";
-							$db->Execute($query);
+						       $db->Execute($query);
 							$gCms->modules[$modulename]['installed'] = true;
 							$gCms->modules[$modulename]['active'] = true;
 							
