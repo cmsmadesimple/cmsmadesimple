@@ -247,9 +247,21 @@ else
 		$smarty->caching = false;
 		$smarty->compile_check = true;
 		($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
-		$body = $smarty->fetch('tpl_body:'.$pageinfo->template_id);
-		$head = $smarty->fetch('tpl_head:'.$pageinfo->template_id);
-		$html = $head.$body;
+
+		// we allow backward compatibility (for a while)
+		// for people that have hacks for setting page title
+		// or header variables by capturing a modules output
+		// to a smarty variable, and then displaying it later.
+		if( !isset($config['process_whole_template']) )
+		  {
+		    $body = $smarty->fetch('tpl_body:'.$pageinfo->template_id);
+		    $head = $smarty->fetch('tpl_head:'.$pageinfo->template_id);
+		    $html = $head.$body;
+		  }
+		else
+		  {
+		    $head = $smarty->fetch('template:'.$pageinfo->template_id);
+		  }
 	}
 }
 
