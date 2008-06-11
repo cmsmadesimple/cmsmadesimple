@@ -193,7 +193,7 @@ if (CmsConfig::get('debug'))
 	echo CmsProfiler::get_instance()->report();
 }
 
-if (CmsApplication::get_preference('enablesitedownmessage') == "1" || $config['debug'] == true)
+if (CmsApplication::get_preference('enablesitedownmessage') == "1" || CmsConfig::get('debug') == true)
 {
 	cms_smarty()->clear_compiled_tpl();
 }
