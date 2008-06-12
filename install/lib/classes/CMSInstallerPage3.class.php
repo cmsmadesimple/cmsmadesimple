@@ -45,8 +45,8 @@ class CMSInstallerPage3 extends CMSInstallerPage
 		$databases = array(
 			array('name' => 'mysql', 'title' => 'MySQL'),
 			array('name' => 'mysqli', 'title' => 'MySQL (4.1+)'),
-			array('name' => 'postgres7', 'title' => 'PostgreSQL 7/8', 'extension' => 'pgsql'),
-			array('name' => 'sqlite', 'title' => 'SQLite')
+			array('name' => 'postgres7', 'title' => 'PostgreSQL 7/8', 'extension' => 'pgsql')
+			// array('name' => 'sqlite', 'title' => 'SQLite')
 		);
 		$dbms_options = array();
 		foreach ($databases as $db)
