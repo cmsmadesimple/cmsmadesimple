@@ -171,7 +171,7 @@ if ($access)
 			$md5sum = md5($css_text);
 			$csshash = csscache_csvfile_to_hash($hashfile);
 			$csshash[$css_id] = $md5sum;
-			$csscache_hash_to_csvfile($filename,$hash);
+			csscache_hash_to_csvfile($filename,$hash);
 			
 			
 			if ($result)
