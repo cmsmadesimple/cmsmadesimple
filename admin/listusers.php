@@ -72,7 +72,7 @@ if (isset($_GET["toggleactive"]))
 
       if ($result)
          {
-           audit($user_id, $thisuser->username, 'Edited User');
+           audit($userid, $thisuser->username, 'Edited User');
            #Perform the edituser_post callback
            foreach($gCms->modules as $key=>$value)
                   {
