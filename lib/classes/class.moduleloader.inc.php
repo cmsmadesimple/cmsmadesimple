@@ -82,10 +82,22 @@ class ModuleLoader
 		if (isset($db))
 		{
 			$query = '';
+			$where = array();
 			if ($noadmin)
-			$query = "SELECT * FROM ".cms_db_prefix()."modules WHERE admin_only = 0 ORDER BY module_name";
-			else
-			$query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
+			  {
+			    $where[] = 'admin_only = 0';
+			  }
+			if( $loadall != true )
+			  {
+			    $where[] = 'active = 1';
+			  }
+			$query = 'SELECT * FROM '.cms_db_prefix().'modules ';
+			if( count($where) )
+			  {
+			    $query.= 'WHERE '.implode(' AND ',$where);
+			  }
+                        $query .= ' ORDER by module_name';
+
 			$result = &$db->Execute($query);
 			while ($result && !$result->EOF)
 			{
