@@ -1,9 +1,18 @@
 #!/bin/sh
 
+# Setup
 _this=`basename $0`
 _svn=http://svn.cmsmadesimple.org/svn/cmsmadesimple/branches/1.2.x
 _workdir=/tmp/$_this.$$
 _owd=`pwd`
+
+# Check for config file
+if [ -r ~/.$_this ]; then
+. ~/.$_this
+fi
+
+# Process command line arguments
+
 
 echo "Export CMS Source"
 echo "=================="
@@ -56,15 +65,20 @@ case $ans in
    ;;
 esac
 
-# Create the full package
+# Clean up permissions
 echo
+echo "Cleaning Permissions"
+find . -type f -exec chmod 644 {} \;
+find . -type d -exec chmod 755 {} \;
+
+# Create the full package
 echo "Creating full package"
 mkdir $_destdir
 tar zcf $_destdir/cmsmadesimple-$_version-full.tar.gz .
 
 # run the create_lang_packs script
 echo "Creating language packs"
-./scripts/create_lang_packs.sh -s ${_workdir} -d $_destdir >/dev/null
+sh ./scripts/create_lang_packs.sh -s ${_workdir} -d $_destdir >/dev/null
 
 # Create the lite package
 echo "Creating lite package"
