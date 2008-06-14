@@ -73,6 +73,8 @@ if (check_permission($userid, 'Modify Site Preferences'))
 }
 
 ?>
+<a href="systeminfo.php"><?php echo lang('systeminfo')?></a>
+<a href="adminlog.php"><?php echo lang('adminlog')?></a>
 <a href="adminlog.php"><?php echo lang('adminlog')?></a>
 <a href="<?php
 

@@ -5,6 +5,9 @@ _this=`basename $0`
 _svn=http://svn.cmsmadesimple.org/svn/cmsmadesimple/branches/1.2.x
 _workdir=/tmp/$_this.$$
 _owd=`pwd`
+# nohtaccess (if set, disable htaccess generation)
+# noperms    (if set, disable permissions adjusting)
+# noclean    (if set, don't cleanup)
 
 # Check for config file
 if [ -r ~/.$_this ]; then
@@ -25,9 +28,11 @@ case $ans in
    ;;
 
  *)
-   echo "Cleaning up"
-   cd $_owd
-   rm -rf $_workdir
+   if [ ${noclean:-notset} != notset ];
+     echo "Cleaning up"
+     cd $_owd
+     rm -rf $_workdir
+   fi
    echo "Exiting..."
    exit;
    ;;
@@ -57,9 +62,11 @@ case $ans in
    ;;
 
  *)
-   echo "Cleaning up"
-   cd $_owd
-   rm -rf $_workdir
+   if [ ${noclean:-notset} != notset ];
+     echo "Cleaning up"
+     cd $_owd
+     rm -rf $_workdir
+   fi
    echo "Exiting..."
    exit;
    ;;
@@ -67,9 +74,11 @@ esac
 
 # Clean up permissions
 echo
-echo "Cleaning Permissions"
-find . -type f -exec chmod 644 {} \;
-find . -type d -exec chmod 755 {} \;
+if [ ${noperms:-notset} != notset ];
+  echo "Cleaning Permissions"
+  find . -type f -exec chmod 644 {} \;
+  find . -type d -exec chmod 755 {} \;
+fi
 
 # Create the full package
 echo "Creating full package"
@@ -81,12 +90,16 @@ echo "Creating language packs"
 sh ./scripts/create_lang_packs.sh -s ${_workdir} -d $_destdir >/dev/null
 
 # Create the lite package
+# it is created after the langpacks are created, because the langpack
+# generation removes files from the working directory.
 echo "Creating lite package"
 tar zcf $_destdir/cmsmadesimple-$_version-lite.tar.gz .
 
 # cleanup
-echo "Cleaning up"
-cd $_owd
-rm -rf $_workdir
+if [ ${noclean:-notset} != notset ];
+  echo "Cleaning up"
+  cd $_owd
+  rm -rf $_workdir
+fi
 
 echo "Done: All release files should be in $_destdir";
