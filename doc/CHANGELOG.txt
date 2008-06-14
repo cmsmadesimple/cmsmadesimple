@@ -8,6 +8,8 @@ Version 1.4-beta1 "Jamaica"
   (split the head and body apart, process the body through smarty,
    then the head, and then glue them back together)
 - Memory optimizations, and query optimizations
+- Massive improvement in stylesheet handling
+  (it's now possible to allow or deny browser stylesheet caching)
 
 
 Version 1.3 "Cuba" -- June 7, 2008
