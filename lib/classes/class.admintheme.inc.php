@@ -675,7 +675,10 @@ class AdminTheme
     	$this->menuItems = array(
     	    // base main menu ---------------------------------------------------------
             'main'=>array('url'=>'index.php','parent'=>-1,
-                    'title'=>$this->FixSpaces(lang('main')),
+			  'title'=>'CMS',
+			  'description'=>'','show_in_menu'=>true),
+             'logout'=>array('url'=>'logout.php','parent'=>'main',
+                    'title'=>$this->FixSpaces(lang('logout')),
                     'description'=>'','show_in_menu'=>true),
 	    'home'=>array('url'=>'home.php','parent'=>'main',
 		    'title'=>$this->FixSpaces(lang('home')),
@@ -833,10 +836,6 @@ class AdminTheme
             'viewsite'=>array('url'=>'../','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('viewsite')),
                     'description'=>'','show_in_menu'=>true, 'target'=>'_blank'),
-             // base logout menu ---------------------------------------------------------
-             'logout'=>array('url'=>'logout.php','parent'=>-1,
-                    'title'=>$this->FixSpaces(lang('logout')),
-                    'description'=>'','show_in_menu'=>true),
     	);
 
 	// add in all of the 'system' modules todo
