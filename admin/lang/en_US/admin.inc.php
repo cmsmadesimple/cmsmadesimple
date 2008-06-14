@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['view_page'] = 'View this page in a new window';
 $lang['admin']['off'] = 'Off';
 $lang['admin']['on'] = 'On';
 $lang['admin']['permission_information'] = 'Permission Information';
