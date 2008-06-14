@@ -9,6 +9,7 @@ $lang['admin']['server_software'] = 'Server Software';
 $lang['admin']['server_information'] = 'Server Information';
 $lang['admin']['session_save_path'] = 'Session Save Path';
 $lang['admin']['max_execution_time'] = 'Maximum Execution Time';
+$lang['admin']['gd_version'] = 'GD version';
 $lang['admin']['upload_max_filesize'] = 'Maximum Upload Size';
 $lang['admin']['post_max_size'] = 'Maximum Post Size';
 $lang['admin']['memory_limit'] = 'PHP Memory Limit';

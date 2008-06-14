@@ -29,7 +29,7 @@
     {else}
     <div class="pageoverflow" style="color: {$one[1]};">
       <p class="pagetext">{$key}: {si_lang a=$key}</p>
-      <p class="pageinput">{$one[0]}</p>
+      <p class="pageinput">{$one[0]} <img src="{$one[1]}.png" alt="{$one[1]}" /></p>
     </div>
     {/if}
   {else}
@@ -54,6 +54,16 @@
 <fieldset>
 <legend><strong>{si_lang a=permission_information}</strong>: </legend>
 {foreach from=$permission_info key='key' item='one'}
+  <div class="pageoverflow">
+    <p class="pagetext">{$key}:</p>
+    <p class="pageinput">{$one}</p>
+  </div>
+{/foreach}
+</fieldset>
+
+<fieldset>
+<legend><strong>{si_lang a=config_information}</strong>: </legend>
+{foreach from=$config_info key='key' item='one'}
   <div class="pageoverflow">
     <p class="pagetext">{$key}:</p>
     <p class="pageinput">{$one}</p>

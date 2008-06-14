@@ -22,6 +22,8 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 include_once("header.php");
+include_once("systeminfo.function.php");
+
 
 check_login();
 
@@ -43,6 +45,8 @@ function systeminfo_lang($params,&$smarty)
     }
 }
 
+
+
 global $gCms;
 $smarty =& $gCms->GetSmarty();
 $smarty->register_function('si_lang','systeminfo_lang');
@@ -50,6 +54,7 @@ $db = &$gCms->GetDb();
 $config = &$gCms->config;
 
 echo '<div class="pagecontainer">';
+echo '<p class="pageshowrows"><a href="systeminfo.php?cleanreport=1">Click here for copy/paste in forum posting</a></p>';
 echo $themeObject->ShowHeader('systeminfo');
 echo '<div class="pageoverflow">';
 
@@ -58,16 +63,34 @@ $query = "SELECT * FROM ".cms_db_prefix()."modules WHERE active=1";
 $modules = $db->GetArray($query);
 $smarty->assign('installed_modules',$modules);
 
+
 $tmp = array();
 $safe_mode = ini_get_boolean('safe_mode');
 $tmp['safe_mode'] = array(($safe_mode?lang('on'):lang('off')), ($safe_mode)?'red':'');
-$tmp['phpversion'] = phpversion();
-$tmp['memory_limit'] = get_cfg_var('memory_limit');
-$tmp['post_max_size'] = get_cfg_var('post_max_size');
-$tmp['upload_max_filesize'] = get_cfg_var('upload_max_filesize');
-$tmp['max_execution_time'] = get_cfg_var('max_execution_time');
-$tmp2 = session_save_path();
-$tmp['session_save_path'] = array($tmp2, empty($tmp2)?'red':'');
+
+$_phpversion = phpversion();
+$tmp['phpversion'] = array($_phpversion, systeminfo_check_php($range_phpversion));
+
+$_memory_limit = get_cfg_var('memory_limit'); //return nnM
+$_memory_limit = substr($_memory_limit,0,-1);
+$tmp['memory_limit'] = array($_memory_limit, systeminfo_check_range($_memory_limit, $range_memory_limit));
+
+$_post_max_size = get_cfg_var('post_max_size');
+$tmp['post_max_size'] = array($_post_max_size, systeminfo_check_range($_post_max_size, $range_post_max_size));
+
+$_upload_max_filesize = get_cfg_var('upload_max_filesize');
+$tmp['upload_max_filesize'] = array($_upload_max_filesize, systeminfo_check_range($_upload_max_filesize, $range_upload_max_filesize));
+
+$_max_execution_time = get_cfg_var('max_execution_time');
+$tmp['max_execution_time'] = array($_max_execution_time, systeminfo_check_range($_max_execution_time, $range_max_execution_time));
+
+$_gd_version = systeminfo_gd_version();
+$tmp['gd_version'] = array($_gd_version, systeminfo_check_range($_gd_version, $range_gd_version));
+
+$_session_save_path = session_save_path(); //Can be 5;/tmp
+if(strpos($_session_save_path, ";") !== false) $_session_save_path = substr($_session_save_path, strpos($_session_save_path, ";")+1);
+$tmp['session_save_path'] = array($_session_save_path, systeminfo_session_save_path($_session_save_path));
+
 $smarty->assign('php_information',$tmp);
 
 
@@ -78,11 +101,13 @@ $smarty->assign('php_information',$tmp);
 // nrow(lang('mysql_server_version'),mysql_get_server_info());
 // echo "</fieldset><br/>\n";
 
+
 $tmp = array();
 $tmp['server_software'] = $_SERVER['SERVER_SOFTWARE'];
 $tmp['server_api'] = PHP_SAPI;
 $tmp['server_os'] = PHP_OS.' v '.php_uname('r').' '.lang('on').' '.php_uname('m');
 $smarty->assign('server_info',$tmp);
+
 
 clearstatcache();
 $tmp = array();
@@ -93,7 +118,20 @@ $tmp['uploads'] = substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_
 $tmp['modules'] = substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'modules')), -4);
 $smarty->assign('permission_info',$tmp);
 
-echo $smarty->fetch('systeminfo.tpl');
+
+$tmp = array();
+$tmp['max_upload_size'] = $config['max_upload_size'];
+$tmp['default_upload_permission'] = $config['default_upload_permission'];
+$tmp['use_smarty_php_tags'] = (true == $config['use_smarty_php_tags']) ? 'true' : 'false';
+$tmp['assume_mod_rewrite'] = (true == $config['assume_mod_rewrite']) ? 'true' : 'false';
+$tmp['page_extension'] = $config['page_extension'];
+$tmp['internal_pretty_urls'] = (true == $config['internal_pretty_urls']) ? 'true' : 'false';
+$tmp['use_hierarchy'] = (true == $config['use_hierarchy']) ? 'true' : 'false';
+$smarty->assign('config_info',$tmp);
+
+
+if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) echo $smarty->fetch('systeminfo.txt.tpl');
+else echo $smarty->fetch('systeminfo.tpl');
 
 // Done
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
