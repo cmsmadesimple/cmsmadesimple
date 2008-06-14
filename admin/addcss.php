@@ -213,7 +213,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
-			<p class="pageinput">
+			<div class="pageinput">
 <?php
 		   $existingtypes = array("all",
 					  "aural",
@@ -234,7 +234,7 @@ else
         foreach ($existingtypes as $onetype)
           {
 	    $i++;
-            $types .= '<input name="media_type['.$i.']" type="checkbox" value="'.$onetype.'"';
+            $types .= '<input id="media_type_'.$i.'" name="media_type['.$i.']" type="checkbox" value="'.$onetype.'"';
 
             if (is_array($media_type)) {
               if (in_array($onetype, $media_type) )
@@ -243,7 +243,7 @@ else
                 }
             }
             $types .= " />\n\n";
-            $types .= '<label for="media_type['.$i.']">'. lang("mediatype_".$onetype) ."</label>\n<br />";
+            $types .= '<label for="media_type_'.$i.'">'. lang("mediatype_".$onetype) ."</label>\n<br />";
 
           }
         $types .= "</fieldset>";
@@ -252,7 +252,7 @@ else
 ?>
 
 
-			</p>
+			</div>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>

@@ -288,6 +288,7 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
+  // <![CDATA[
 window.Edit_CSS_Apply = function(button)
 {
 	$addlScriptSubmit
@@ -325,11 +326,11 @@ window.Edit_CSS_Apply = function(button)
 				var htmlShow = '';
 				if (response == 'Success')
 				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '</p></div>';
+					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
 				}
 				else
 				{
-					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details + '</div>';
+					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details + '<\/div>';
 				}
 				$('Edit_CSS_Result').innerHTML = htmlShow;
 			}
@@ -341,6 +342,7 @@ window.Edit_CSS_Apply = function(button)
 	);
 	return false;
 }
+  // ]]>
 </script>
 EOSCRIPT;
 
@@ -392,7 +394,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
-			<p class="pageinput">
+			<div class="pageinput">
 <?php
 
 #open up the list to array
@@ -421,7 +423,7 @@ $existingtypes = array("all",
 	foreach ($existingtypes as $onetype)
 	  {
 	    $i++;
-	    $types .= '<input name="media_type['.$i.']" type="checkbox" value="'.$onetype.'"';
+	    $types .= '<input id="media_type_'.$i.'" name="media_type['.$i.']" type="checkbox" value="'.$onetype.'"';
 
 	    if (is_array($media_type)) {
 	      if (in_array($onetype, $media_type) )
@@ -430,7 +432,7 @@ $existingtypes = array("all",
 		}
 	    }
 	    $types .= " />\n\n";
-	    $types .= '<label for="media_type">'. lang("mediatype_".$onetype) .'</label><br />'."\n";
+	    $types .= '<label for="media_type_'.$i.'">'. lang("mediatype_".$onetype) .'</label><br />'."\n";
 	  }
 	$types .= "</fieldset>";
 
@@ -438,7 +440,7 @@ $existingtypes = array("all",
 ?>
 
 
-			</p>
+			</div>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
