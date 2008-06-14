@@ -3,6 +3,3 @@
   order deny,allow                                                                                                            
   deny from all                                                                                                               
 </Files>  
-
-# To deny everything
-deny from all

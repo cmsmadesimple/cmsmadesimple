@@ -50,3 +50,13 @@
   </div>
 {/foreach}
 </fieldset>
+
+<fieldset>
+<legend><strong>{si_lang a=permission_information}</strong>: </legend>
+{foreach from=$permission_info key='key' item='one'}
+  <div class="pageoverflow">
+    <p class="pagetext">{$key}:</p>
+    <p class="pageinput">{$one}</p>
+  </div>
+{/foreach}
+</fieldset>

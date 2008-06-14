@@ -1,4 +1,20 @@
 <?php
+$lang['admin']['permission_information'] = 'Permission Information';
+$lang['admin']['server_os'] = 'Server Operating System';
+$lang['admin']['server_api'] = 'Server API';
+$lang['admin']['server_software'] = 'Server Software';
+$lang['admin']['server_information'] = 'Server Information';
+$lang['admin']['session_save_path'] = 'Session Save Path';
+$lang['admin']['max_execution_time'] = 'Maximum Execution Time';
+$lang['admin']['upload_max_filesize'] = 'Maximum Upload Size';
+$lang['admin']['post_max_size'] = 'Maximum Post Size';
+$lang['admin']['memory_limit'] = 'PHP Memory Limit';
+$lang['admin']['phpversion'] = 'Current PHP Version';
+$lang['admin']['safe_mode'] = 'PHP Safe Mode';
+$lang['admin']['php_information'] = 'PHP Information';
+$lang['admin']['cms_install_information'] = 'CMS Install Information';
+$lang['admin']['cms_version'] = 'CMS Version';
+$lang['admin']['installed_modules'] = 'Installed Modules';
 $lang['admin']['help_systeminformation'] = <<<EOT
 The information displayed below is collected from a variety of locations, and summarized here so that you may be able to conveniently find some of the information required when trying to diagnose a problem or request help with your CMS Made Simple installation.
 EOT;

@@ -33,8 +33,7 @@ function systeminfo_lang($params,&$smarty)
       foreach( $params as $k=>$v)
 	{
 	  $tmp[] = $v;
-	}
-      
+	}      
       
       $str = $tmp[0];
       $tmp2 = array();
@@ -47,53 +46,6 @@ function systeminfo_lang($params,&$smarty)
 global $gCms;
 $smarty =& $gCms->GetSmarty();
 $smarty->register_function('si_lang','systeminfo_lang');
-
-function nrow($prompt, $text = '',$color = '')
-{
-  if( !empty($color) )
-    {
-      $tpl = '<div class="pageoverflow"><p class="pagetext">%s</p><p class="pageinput" style="color: %s;">%s</p></div>';
-      printf( $tpl."\n", $prompt, $color, $text );
-    }
-  else
-    {
-      $tpl = '<div class="pageoverflow"><p class="pagetext">%s</p><p class="pageinput">%s</p></div>';
-      printf( $tpl."\n", $prompt, $text );
-    }
-}
-
-function ntable(&$data,$columns)
-{
-  if( !is_array($data) || count($data) == 0 || 
-      !is_array($columns) || count($columns) == 0 )
-    {
-      return;
-    }
-
-  echo '<table class="pagetable" cellspacing="0" width="50%">'."\n";
-  echo '<thead>'."\n";
-  echo "  <tr>\n";
-  foreach( $columns as $key => $prompt )
-    {
-      echo "    <th>$prompt</th>\n";
-    }
-  echo "  </tr>\n";
-  echo '</thead>'."\n";
-  echo "<tbody>\n";
-  foreach( $data as $row )
-    {
-      echo "  <tr>\n";
-      foreach( $columns as $key => $prompt )
-	{
-	  echo "    <td>{$row[$key]}</td>\n";
-	}
-      echo "  </tr>\n";
-    }
-  echo "</tbody>\n";
-  echo '</table>'."\n";
-}
-
-global $gCms;
 $db = &$gCms->GetDb();
 $config = &$gCms->config;
 
@@ -109,11 +61,11 @@ $smarty->assign('installed_modules',$modules);
 $tmp = array();
 $safe_mode = ini_get_boolean('safe_mode');
 $tmp['safe_mode'] = array(($safe_mode?lang('on'):lang('off')), ($safe_mode)?'red':'');
-$tmp['current_php_version'] = phpversion();
-$tmp['php_memory_limit'] = get_cfg_var('memory_limit');
-$tmp['maximum_post_size'] = get_cfg_var('post_max_size');
-$tmp['maximum_upload_size'] = get_cfg_var('upload_max_filesize');
-$tmp['php_max_execution_time'] = get_cfg_var('max_execution_time');
+$tmp['phpversion'] = phpversion();
+$tmp['memory_limit'] = get_cfg_var('memory_limit');
+$tmp['post_max_size'] = get_cfg_var('post_max_size');
+$tmp['upload_max_filesize'] = get_cfg_var('upload_max_filesize');
+$tmp['max_execution_time'] = get_cfg_var('max_execution_time');
 $tmp2 = session_save_path();
 $tmp['session_save_path'] = array($tmp2, empty($tmp2)?'red':'');
 $smarty->assign('php_information',$tmp);
@@ -131,17 +83,17 @@ $tmp['server_software'] = $_SERVER['SERVER_SOFTWARE'];
 $tmp['server_api'] = PHP_SAPI;
 $tmp['server_os'] = PHP_OS.' v '.php_uname('r').' '.lang('on').' '.php_uname('m');
 $smarty->assign('server_info',$tmp);
-echo $smarty->fetch('systeminfo.tpl'); exit;
 
 clearstatcache();
+$tmp = array();
+$tmp['tmp'] = substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'tmp')), -4);
+$tmp['tmp/cache'] = substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'tmp/cache')), -4);
+$tmp['tmp/templates_c'] = substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'tmp/templates_c')), -4);
+$tmp['uploads'] = substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'uploads')), -4);
+$tmp['modules'] = substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'modules')), -4);
+$smarty->assign('permission_info',$tmp);
 
-echo "<fieldset>\n";
-echo "<legend><strong>".lang('permissions_checks')."</strong>: </legend>\n";
-nrow('tmp/cache',substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'tmp/cache')), -4));
-nrow('tmp/templates_c',substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'tmp/templates_c')), -4));
-nrow('uploads',substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'uploads')), -4));
-nrow('modules',substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'modules')), -4));
-echo "</fieldset><br/>\n";
+echo $smarty->fetch('systeminfo.tpl');
 
 // Done
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
