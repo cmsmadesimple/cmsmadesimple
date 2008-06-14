@@ -39,10 +39,19 @@ class Smarty_CMS extends Smarty {
 	function Smarty_CMS(&$config)
 	{
 		$this->Smarty();
+		global $CMS_ADMIN_PAGE;
 
-		$this->template_dir = $config["root_path"].'/tmp/templates/';
+		if( isset($CMS_ADMIN_PAGE) && $CMS_ADMIN_PAGE == 1 )
+		{
+		  $this->template_dir = $config["root_path"].'/'.$config['admin_dir'].'/templates/';
+		  $this->config_dir = $config["root_path"].'/'.$config['admin_dir'].'/configs/';
+		}
+		else
+		{
+		  $this->template_dir = $config["root_path"].'/tmp/templates/';
+		  $this->config_dir = $config["root_path"].'/tmp/configs/';
+		}
 		$this->compile_dir = TMP_TEMPLATES_C_LOCATION;
-		$this->config_dir = $config["root_path"].'/tmp/configs/';
 		$this->cache_dir = TMP_CACHE_LOCATION;
 		#$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins',$config["root_path"].'/plugins',$config["root_path"].'/plugins/cache');
 		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins',$config["root_path"].'/plugins');
@@ -73,7 +82,6 @@ class Smarty_CMS extends Smarty {
 			$this->force_compile = true;
 		}
 
-		global $CMS_ADMIN_PAGE;
 		if (isset($CMS_ADMIN_PAGE) && $CMS_ADMIN_PAGE == 1)
 		{
 			$this->caching = false;
