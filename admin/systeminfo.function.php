@@ -1,5 +1,5 @@
 <?php
-$range_phpversion = array('minimum'=> '4.3.0', 'recommended'=> '5');
+$range_phpversion = array('minimum'=> '4.3.0', 'recommended'=> '5.2');
 $range_memory_limit = array('minimum'=> 16, 'recommended'=> 24);
 $range_post_max_size = array('minimum'=> 2, 'recommended'=> 5);
 $range_upload_max_filesize = array('minimum'=> 2, 'recommended'=> 5);
