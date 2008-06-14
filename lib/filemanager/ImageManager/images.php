@@ -5,7 +5,7 @@
  * @version $Id$
  * @package ImageManager
  */
-
+//LOCAL: lib/filemanager/ImageManager/images.php
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/include.php');
 check_login();
 $userid = get_userid();
@@ -63,7 +63,7 @@ function drawFiles($list, &$manager, $i)
                 if ($i==1) { echo "<tr>";}
                 ?>
                 <td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
-                        <a href="<?php echo "{$manager->config['base_url']}{$file['relative']}";?>" TARGET="_blank" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php
+                        <a href="<?php echo "{$manager->config['base_url']}{$file['relative']}";?>" target="_blank" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php
 
         if (function_exists('imagecreate'))
         {
@@ -269,7 +269,7 @@ function drawErrorBase(&$manager)
 /*]]>*/
 </script>
 <script type="text/javascript" src="assets/images.js"></script>
-<script language="javascript">
+<script type="text/javascript">
 </script>
 
 </head>
