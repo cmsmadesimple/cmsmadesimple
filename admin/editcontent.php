@@ -356,6 +356,8 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 
 $headtext .= <<<EOSCRIPT
 <script type="text/javascript">
+  // <![CDATA[
+
 window.Edit_Content_Apply = function(button)
 {
 	$addlScriptSubmit
@@ -394,11 +396,11 @@ window.Edit_Content_Apply = function(button)
 				var htmlShow = '';
 				if (response == 'Success')
 				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '</p></div>';
+					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
 				}
 				else
 				{
-					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details + '</ul></div>';
+					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details + '<\/ul><\/div>';
 				}
 				$('Edit_Content_Result').innerHTML = htmlShow;
 			}
@@ -411,6 +413,7 @@ window.Edit_Content_Apply = function(button)
 
 	return false;
 }
+  // ]]>
 </script>
 EOSCRIPT;
 include_once("header.php");

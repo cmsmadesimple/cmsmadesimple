@@ -160,6 +160,12 @@ if (FALSE == empty($error)) {
                     echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
 		            }
+					//added
+					else
+				    {
+					echo "<td>&nbsp;</td>\n";
+					}
+					//end
         		echo "</tr>\n";
 
 				($currow=="row1"?$currow="row2":$currow="row1");

@@ -1,12 +1,27 @@
+#
 #php_flag magic_quotes_gpc Off
 #php_flag register_globals Off
 #php_flag session.use_trans_sid Off
-
-# Make sure you have Options FollowSymLinks
-# and Allow on
-RewriteEngine On
-
-#Rewrites page.shtml as index.php?page
-RewriteCond %{REQUEST_FILENAME} !-f [NC]
-RewriteCond %{REQUEST_FILENAME} !-d [NC]
+#
+Options -Indexes
+ServerSignature Off
+Options +FollowSymLinks
+#
+<IfModule mod_rewrite.c>
+RewriteEngine on
+#
+#Sub-dir e.g: /cmsms/
+RewriteBase /
+#
+# 301 Redirect all requests that don't contain a dot or trailing slash to
+# include a trailing slash
+RewriteCond %{REQUEST_URI} !/$
+RewriteCond %{REQUEST_URI} !\.
+RewriteRule ^(.*) %{REQUEST_URI}/ [R=301,L]
+# Rewrites urls in the form of /parent/child/
+# but only rewrites if the requested URL is not a file or directory
+#
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)$ index.php?page=$1 [QSA]
+</IfModule>
