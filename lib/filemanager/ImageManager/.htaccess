@@ -1,0 +1,5 @@
+# To deny PHPs
+<Files ~ "(images)\.php$">                                                                              
+  order allow, deny
+  allow from all
+</Files>  
