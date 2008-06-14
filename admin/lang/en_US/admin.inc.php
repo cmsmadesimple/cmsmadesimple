@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['off'] = 'Off';
+$lang['admin']['on'] = 'On';
 $lang['admin']['permission_information'] = 'Permission Information';
 $lang['admin']['server_os'] = 'Server Operating System';
 $lang['admin']['server_api'] = 'Server API';
