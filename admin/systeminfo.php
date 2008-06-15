@@ -74,9 +74,9 @@ $tmp['safe_mode'] = array(($safe_mode?lang('on'):lang('off')), ($safe_mode)?'red
 $_phpversion = phpversion();
 $tmp['phpversion'] = array($_phpversion, systeminfo_check_php($range_phpversion));
 
-$_memory_limit = get_cfg_var('memory_limit'); //return nnM
-$_memory_limit = substr($_memory_limit,0,-1);
-$tmp['memory_limit'] = array($_memory_limit, systeminfo_check_range($_memory_limit, $range_memory_limit));
+$_memory_limit = get_cfg_var('memory_limit');
+$_memory_limit2 = substr($_memory_limit,0,-1); //there is nnM
+$tmp['memory_limit'] = array($_memory_limit, systeminfo_check_range($_memory_limit2, $range_memory_limit));
 
 $_post_max_size = get_cfg_var('post_max_size');
 $tmp['post_max_size'] = array($_post_max_size, systeminfo_check_range($_post_max_size, $range_post_max_size));
