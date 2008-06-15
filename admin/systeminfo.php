@@ -54,7 +54,10 @@ $db = &$gCms->GetDb();
 $config = &$gCms->config;
 
 echo '<div class="pagecontainer">';
-echo '<p class="pageshowrows"><a href="systeminfo.php?cleanreport=1">Click here for copy/paste in forum posting</a></p>';
+//hardcoded: copy from adminlog. Text only or icon link also and here or under System Information (in ShowHeader('systeminfo'))?
+if(empty($_GET['cleanreport'])) {
+	echo '<p class="pageshowrows"><a href="systeminfo.php?cleanreport=1">Click here for copy/paste in forum posting</a></p>';
+}
 echo $themeObject->ShowHeader('systeminfo');
 echo '<div class="pageoverflow">';
 

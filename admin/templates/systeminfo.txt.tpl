@@ -1,5 +1,5 @@
 <p class="pageoverflow">
-Please copy and paste this info into your forum posting.
+{si_lang a=systeminfo_copy_paste}
 </p><hr/>
 
 <div id="copy_paste_in_forum">
