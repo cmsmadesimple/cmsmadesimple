@@ -44,7 +44,11 @@ class CMSInstallerPage1 extends CMSInstallerPage
 	{
 		$settings = array('required' => array(), 'recommended' => array());
 		
-		$settings['required'][] = $this->testBoolean(1, 'Checking for PHP version 4.3+', (@version_compare(phpversion(), '4.3.0') > -1));
+		$settings['required'][] = 
+		  $this->versionTestRange(true, 'Checking for PHP version 4.3+', 
+					  phpversion(), '4.3.0', '5.2.5',
+					  'CMS Made Simple requires a php version of 4.3 or greater, but PHP 5.2.5 or greater is recommended to ensure maximum compatibility with third party addons');					  
+			     (@version_compare(phpversion(), '4.3.0', '5.2.5')));
 		$settings['required'][] = $this->testBoolean(1, 'Checking for Session Functions', function_exists('session_start'));
 		$settings['required'][] = $this->testBoolean(1, 'Checking for md5 Function', function_exists('md5'));
 		
@@ -151,6 +155,43 @@ class CMSInstallerPage1 extends CMSInstallerPage
 		return $this->testBoolean($required, $title, $result, $message);
 	}
 	
+	/**
+	 * @return object 
+	 * @var boolean $required
+	 * @var string  $title
+	 * @var mixed   $value
+	 * @var mixed   $minimum
+	 * @var mixed   $recommended
+	 * @var string  $message
+	 * @var boolean $test_as_bytes
+	*/
+	function & versionTestRange($required, $title, $value, $minimum, $recommended, $message = '')
+	{
+		$test =& new StdClass();
+		
+		$test->title = $title .  " (min $minimum, recommend $recommended)";
+		$test->value = $value;
+		
+		if (version_compare($minimum,$value) < 0)
+		{
+			$test->resultimage = $this->images['red'];
+			$required == true ? $this->continueon = false : $this->special_failed = true;
+			$test->message = $message;
+		}
+		elseif (version_compare($value,$recommended) < 0 )
+		{
+			$test->resultimage = $this->images['yellow'];
+			$test->message = $message;
+		}
+		else
+		{
+			$test->resultimage = $this->images['green'];
+		}
+		
+		return $test;
+	}
+
+
 	/**
 	 * @return object 
 	 * @var boolean $required
