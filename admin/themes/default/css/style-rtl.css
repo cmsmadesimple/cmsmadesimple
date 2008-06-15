@@ -887,3 +887,10 @@ margin-left:20px;
 padding: 0px 2px 2px 10px;
 display:block;
 }
+/*ICONS SYSINFO*/
+.icon-extra{
+padding-left:10px;
+clear:left;
+margin:4px 0 0 10px;
+display:inline;
+}
