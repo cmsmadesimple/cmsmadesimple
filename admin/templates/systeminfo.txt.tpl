@@ -21,11 +21,7 @@
 <ul>
 {foreach from=$php_information key='key' item='one'}
   {if is_array($one)}
-    {if empty($one[1])}
-     <li>{si_lang a=$key} ({$key}): {$one[0]}</li>
-    {else}
-     <li>{$key}: {si_lang a=$key}: {$one[0]}</li>
-    {/if}
+   <li>{si_lang a=$key} ({$key}): {$one[0]}</li>
   {else}
    <li>{si_lang a=$key} ({$key}): {$one}</li>
   {/if}
