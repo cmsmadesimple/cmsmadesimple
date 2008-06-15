@@ -47,8 +47,7 @@ class CMSInstallerPage1 extends CMSInstallerPage
 		$settings['required'][] = 
 		  $this->versionTestRange(true, 'Checking for PHP version 4.3+', 
 					  phpversion(), '4.3.0', '5.2.5',
-					  'CMS Made Simple requires a php version of 4.3 or greater, but PHP 5.2.5 or greater is recommended to ensure maximum compatibility with third party addons');					  
-			     (@version_compare(phpversion(), '4.3.0', '5.2.5')));
+					  'CMS Made Simple requires a php version of 4.3 or greater (you have '.phpversion().'), but PHP 5.2.5 or greater is recommended to ensure maximum compatibility with third party addons');					  
 		$settings['required'][] = $this->testBoolean(1, 'Checking for Session Functions', function_exists('session_start'));
 		$settings['required'][] = $this->testBoolean(1, 'Checking for md5 Function', function_exists('md5'));
 		
@@ -172,7 +171,7 @@ class CMSInstallerPage1 extends CMSInstallerPage
 		$test->title = $title .  " (min $minimum, recommend $recommended)";
 		$test->value = $value;
 		
-		if (version_compare($minimum,$value) < 0)
+		if (version_compare($value,$minimum) < 0)
 		{
 			$test->resultimage = $this->images['red'];
 			$required == true ? $this->continueon = false : $this->special_failed = true;
