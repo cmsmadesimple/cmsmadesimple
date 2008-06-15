@@ -130,6 +130,31 @@ function cms_config_text($config)
 #after making any changes to path or url related options
 
 #-----------------
+#Behaviour Settings
+#-----------------
+
+# These settings will effect the overall behaviour of the CMS application, please
+# use extreme caution when editing these.  Additionally, some settings may have 
+# no effect on servers with significantly restricted configurability.
+
+# If you are experiencing propblems with php memory limit errors, then you may
+# want to try enabling and/or adjusting this setting.  
+# Note: Your server may not allow the application to override memory limits.
+#$config['php_memory_limit'] = '32M';
+
+# In versions of CMS Made Simple prior to version 1.4, the page template was processed
+# in it's entirety.  This behaviour was later changed to process the head portion of the
+# page template after the body.  If you are working with a highly configured site that
+# relies significantly on the old order of smarty processing, you may want to try
+# uncommenting this parameter.
+#$config['process_whole_template'] = true
+
+# CMSMS Debug Mode?  Turn it on to get a better error when you
+# see {nocache} errors, or to allow seeing php notices, warnings, and errors in the html output.
+# This setting will also disable browser css caching.
+\$config['debug'] = ${$config['debug']?'true':'false'};
+
+#-----------------
 #Database Settings
 #-----------------
 
@@ -201,10 +226,6 @@ if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
 
 #Allow smarty {php} tags?  These could be dangerous if you don't trust your users.
 \$config['use_smarty_php_tags'] = ${$config['use_smarty_php_tags']?'true':'false'};
-
-#CMSMS Debug Mode?  Turn it on to get a better error when you
-#see {nocache} errors.
-\$config['debug'] = ${$config['debug']?'true':'false'};
 
 #Automatically assign alias based on page title?
 \$config['auto_alias_content'] = ${$config['auto_alias_content']?'true':'false'};
