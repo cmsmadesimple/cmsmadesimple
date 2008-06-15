@@ -8,7 +8,7 @@
   <p class="pagetext">{si_lang a=cms_version}</p>
   <p class="pageinput">{$cms_version}</p>
 </div>
-<h4>{si_lang a=installed_modules}</h4>
+  <h4 class="pagetext">{si_lang a=installed_modules}</h4>   
 {foreach from=$installed_modules item='module'}
   <div class="pageoverflow">
     <p class="pagetext">{$module.module_name}</p>
