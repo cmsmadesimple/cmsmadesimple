@@ -1,8 +1,8 @@
 <?php
 $range_phpversion = array('minimum'=> '4.3.0', 'recommended'=> '5.2');
 $range_memory_limit = array('minimum'=> 16, 'recommended'=> 24);
-$range_post_max_size = array('minimum'=> 2, 'recommended'=> 5);
-$range_upload_max_filesize = array('minimum'=> 2, 'recommended'=> 5);
+$range_post_max_size = array('minimum'=> 2, 'recommended'=> 10);
+$range_upload_max_filesize = array('minimum'=> 2, 'recommended'=> 10);
 $range_max_execution_time = array('minimum'=> 30, 'recommended'=> 60);
 $range_gd_version = array('minimum'=> 2, 'recommended'=> 2);
 
@@ -46,20 +46,19 @@ function systeminfo_check_php( $range )
 	}
 }
 
-function systeminfo_session_save_path( $dir, $file='this_is_a_test', $sess_data = 'this is a test' )
+function systeminfo_session_save_path( $dir, $file='file_test', $data='this is a test' )
 {
 	if(empty($dir)) return 'red';
-	$sess_file = "$dir/file";
-	if ($fp = @fopen($sess_file, "w")) {
+	$test_file = "$dir/$file";
+	if ($fp = @fopen($test_file, "w")) {
 		flock($fp,LOCK_EX);
-		$return = fwrite($fp, $sess_data);
+		$return = @fwrite($fp, $data);
 		flock($fp,LOCK_UN);
 		fclose($fp);
+		@unlink($test_file);
 		if(!empty($return)) return 'green';
-		return 'red';
-	} else {
-		return 'red';
 	}
+	return 'red';
 }
 
 function systeminfo_gd_version()
