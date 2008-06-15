@@ -753,7 +753,7 @@ class AdminTheme
             'adduser'=>array('url'=>'adduser.php','parent'=>'users',
                     'title'=>$this->FixSpaces(lang('adduser')),
                     'description'=>lang('adduser'),'show_in_menu'=>false),
-            'edituser'=>array('url'=>'edituser.php','parent'=>'users',
+            'edituser'=>array('url'=>'adminedituser.php','parent'=>'users',
                     'title'=>$this->FixSpaces(lang('edituser')),
                     'description'=>lang('edituser'),'show_in_menu'=>false),
             'groups'=>array('url'=>'listgroups.php','parent'=>'usersgroups',
