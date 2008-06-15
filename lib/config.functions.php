@@ -34,6 +34,8 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 
 	#Set some defaults, just in case the config file is corrupted or
 	#we're coming from an upgrade
+	$config['php_memory_limit'] = '';
+	$config['process_whole_template'] = false;
 	$config["dbms"] = "mysql";
 	$config["db_hostname"] = "localhost";
 	$config["db_username"] = "cms";
@@ -140,14 +142,14 @@ function cms_config_text($config)
 # If you are experiencing propblems with php memory limit errors, then you may
 # want to try enabling and/or adjusting this setting.  
 # Note: Your server may not allow the application to override memory limits.
-#$config['php_memory_limit'] = '32M';
+\$config['php_memory_limit'] = '{$config['php_memory_limit']}';
 
 # In versions of CMS Made Simple prior to version 1.4, the page template was processed
 # in it's entirety.  This behaviour was later changed to process the head portion of the
 # page template after the body.  If you are working with a highly configured site that
 # relies significantly on the old order of smarty processing, you may want to try
 # uncommenting this parameter.
-#$config['process_whole_template'] = true
+\$config['process_whole_template'] = ${$config['process_whole_template']?'true':'false'};
 
 # CMSMS Debug Mode?  Turn it on to get a better error when you
 # see {nocache} errors, or to allow seeing php notices, warnings, and errors in the html output.
