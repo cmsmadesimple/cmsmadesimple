@@ -29,7 +29,7 @@
     {else}
     <div class="pageoverflow" style="color: {$one[1]};">
       <p class="pagetext">{$key}: {si_lang a=$key}</p>
-      <p class="pageinput">{$one[0]} <img src="{$one[1]}.png" alt="{$one[1]}" /></p>
+      <p class="pageinput"><b>{$one[0]}</b> </p><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" />
     </div>
     {/if}
   {else}
