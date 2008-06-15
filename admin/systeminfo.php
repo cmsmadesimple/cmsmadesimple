@@ -79,10 +79,12 @@ $_memory_limit2 = substr($_memory_limit,0,-1); //there is nnM
 $tmp['memory_limit'] = array($_memory_limit, systeminfo_check_range($_memory_limit2, $range_memory_limit));
 
 $_post_max_size = get_cfg_var('post_max_size');
-$tmp['post_max_size'] = array($_post_max_size, systeminfo_check_range($_post_max_size, $range_post_max_size));
+$_post_max_size2 = substr($_post_max_size,0,-1); //there is nnM
+$tmp['post_max_size'] = array($_post_max_size, systeminfo_check_range($_post_max_size2, $range_post_max_size));
 
 $_upload_max_filesize = get_cfg_var('upload_max_filesize');
-$tmp['upload_max_filesize'] = array($_upload_max_filesize, systeminfo_check_range($_upload_max_filesize, $range_upload_max_filesize));
+$_upload_max_filesize2 = substr($_upload_max_filesize,0,-1); //there is nnM
+$tmp['upload_max_filesize'] = array($_upload_max_filesize, systeminfo_check_range($_upload_max_filesize2, $range_upload_max_filesize));
 
 $_max_execution_time = get_cfg_var('max_execution_time');
 $tmp['max_execution_time'] = array($_max_execution_time, systeminfo_check_range($_max_execution_time, $range_max_execution_time));
@@ -90,8 +92,8 @@ $tmp['max_execution_time'] = array($_max_execution_time, systeminfo_check_range(
 $_gd_version = systeminfo_gd_version();
 $tmp['gd_version'] = array($_gd_version, systeminfo_check_range($_gd_version, $range_gd_version));
 
-$_session_save_path = session_save_path(); //Can be 5;/tmp
-if(strpos($_session_save_path, ";") !== false) $_session_save_path = substr($_session_save_path, strpos($_session_save_path, ";")+1);
+$_session_save_path = session_save_path(); //Can be 5;0700;/tmp
+if(strrpos($_session_save_path, ";") !== false) $_session_save_path = substr($_session_save_path, strrpos($_session_save_path, ";")+1);
 $tmp['session_save_path'] = array($_session_save_path, systeminfo_session_save_path($_session_save_path));
 
 $smarty->assign('php_information',$tmp);
