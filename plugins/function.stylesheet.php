@@ -77,7 +77,8 @@ function smarty_cms_function_stylesheet($params, &$smarty)
                       FROM '.cms_db_prefix().'css A, '.cms_db_prefix().'css_assoc B
                      WHERE A.css_id = B.assoc_css_id
                        AND B.assoc_type = ?
-                       AND B.assoc_to_id = ?';
+                       AND B.assoc_to_id = ?
+                     ORDER BY B.assoc_order';
       $res = $db->GetArray($query,array('template',$pageinfo->template_id));
       $fmt1 = '<link rel="stylesheet" type="text/css" media="%s" href="%s" />';
       $fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
