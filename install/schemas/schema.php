@@ -263,7 +263,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		assoc_css_id I,
 		assoc_type C(80),
 		create_date DT,
-		modified_date DT
+		modified_date DT,
+                assoc_order I
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css_assoc", $flds, $taboptarray);
