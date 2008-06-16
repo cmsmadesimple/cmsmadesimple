@@ -6,74 +6,82 @@
 
 <p>----------------------------------------------</p>
 
-<p><strong>{si_lang a=cms_version}</strong>: {$cms_version}</p>
-
-<p><strong>{si_lang a=installed_modules}</strong>:</p>
+<p><strong>{'cms_version'|replace:'_':' '|ucwords}</strong>: {$cms_version}</p>
+<p><strong>{'installed_modules'|replace:'_':' '|ucwords}</strong>:</p>
 <ul>
 {foreach from=$installed_modules item='module'}
   <li>{$module.module_name}: {$module.version}</li>
 {/foreach}
 </ul>
-
 <br />
-
-<p><strong>{si_lang a=php_information}</strong>:</p>
-<ul>
-{foreach from=$php_information key='view' item='tmp'}
-  {if $view < 1}
-    {foreach from=$tmp key='key' item='one'}
-      {if is_array($one)}
-      <li>{si_lang a=$key} ({$key}): {$one[0]}</li>
-      {else}
-      <li>{si_lang a=$key} ({$key}): {$one}</li>
-      {/if}
-    {/foreach}
-  {/if}
-{/foreach}
-</ul>
-
+{if $count_config_info > 1}
+  <p><strong>{'config_information'|replace:'_':' '|ucwords}</strong>:</p>
+  <ul>
+  {foreach from=$config_info key='view' item='tmp'}
+    {if $view < 1}
+      {foreach from=$tmp key='key' item='one'}
+      <li>{$key}: {$one}</li>
+      {/foreach}
+    {/if}
+  {/foreach}
+  </ul>
 <br />
+{/if}
 
-<p><strong>{si_lang a=server_information}</strong>:</p>
-<ul>
-{foreach from=$server_info key='view' item='tmp'}
-  {if $view < 1}
-    {foreach from=$tmp key='key' item='one'}
-      {if is_array($one)}
-      <li>{si_lang a=$key}: {$one[0]}</li>
-      {else}
-      <li>{si_lang a=$key}: {$one}</li>
-      {/if}
-    {/foreach}
-  {/if}
-{/foreach}
-</ul>
 
+
+{if $count_php_information > 1}
+  <p><strong>{'php_information'|replace:'_':' '|ucwords}</strong>:</p>
+  <ul>
+  {foreach from=$php_information key='view' item='tmp'}
+    {if $view < 1}
+      {foreach from=$tmp key='key' item='one'}
+        {if is_array($one)}
+        <li>{$key}: {$one[0]}</li>
+        {else}
+        <li>{$key}: {$one}</li>
+        {/if}
+      {/foreach}
+    {/if}
+  {/foreach}
+  </ul>
 <br />
+{/if}
 
-<p><strong>{si_lang a=permission_information}</strong>:</p>
-<ul>
-{foreach from=$permission_info key='view' item='tmp'}
-  {if $view < 1}
-    {foreach from=$tmp key='key' item='one'}
-    <li>{$key}: {$one}</li>
-    {/foreach}
-  {/if}
-{/foreach}
-</ul>
 
+{if $count_server_info > 1}
+  <p><strong>{'server_information'|replace:'_':' '|ucwords}</strong>:</p>
+  <ul>
+  {foreach from=$server_info key='view' item='tmp'}
+    {if $view < 1}
+      {foreach from=$tmp key='key' item='one'}
+        {if is_array($one)}
+        <li>{$key|replace:'_':' '|ucwords}: {$one[0]}</li>
+        {else}
+        <li>{$key|replace:'_':' '|ucwords}: {$one}</li>
+        {/if}
+      {/foreach}
+    {/if}
+  {/foreach}
+  </ul>
 <br />
-
-<p><strong>{si_lang a=config_information}</strong>:</p>
-<ul>
-{foreach from=$config_info key='view' item='tmp'}
-  {if $view < 1}
-    {foreach from=$tmp key='key' item='one'}
-    <li>{$key}: {$one}</li>
-    {/foreach}
-  {/if}
-{/foreach}
-</ul>
+{/if}
+{if $count_permission_info > 1}
+  <p><strong>{'permission_information'|replace:'_':' '|ucwords}</strong>:</p>
+  <ul>
+  {foreach from=$permission_info key='view' item='tmp'}
+    {if $view < 1}
+      {foreach from=$tmp key='key' item='one'}
+        {if is_array($one)}
+        <li>{$key}: {$one[0]}</li>
+        {else}
+        <li>{$key}: {$one}</li>
+        {/if}
+      {/foreach}
+    {/if}
+  {/foreach}
+  </ul>
+{/if}
 
 <p>----------------------------------------------</p>
 

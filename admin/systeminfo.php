@@ -46,7 +46,6 @@ function systeminfo_lang($params,&$smarty)
 }
 
 
-
 global $gCms;
 $smarty =& $gCms->GetSmarty();
 $smarty->register_function('si_lang','systeminfo_lang');
@@ -61,16 +60,44 @@ if(empty($_GET['cleanreport'])) {
 echo $themeObject->ShowHeader('systeminfo');
 echo '<div class="pageoverflow">';
 
+
+
+/* CMS Install Information */
+
 $smarty->assign('cms_version',$GLOBALS['CMS_VERSION']);
+
 $query = "SELECT * FROM ".cms_db_prefix()."modules WHERE active=1";
 $modules = $db->GetArray($query);
 $smarty->assign('installed_modules',$modules);
 
+clearstatcache();
+$tmp = array();
+$tmp[0]['php_memory_limit'] = $config['php_memory_limit'];
+$tmp[0]['process_whole_template'] = (true == $config['process_whole_template']) ? 'true' : 'false';
+$tmp[1]['root_url'] = $config['root_url'];
+$tmp[1]['root_path'] = array($config['root_path'].' ('.substr(sprintf('%o', fileperms($config['root_path'])), -4).')', systeminfo_dir_write($config['root_path']));
+$tmp[1]['previews_path'] = array($config['previews_path'].' ('.substr(sprintf('%o', fileperms($config['previews_path'])), -4).')', systeminfo_dir_write($config['previews_path']));
+$tmp[1]['uploads_path'] = array($config['uploads_path'].' ('.substr(sprintf('%o', fileperms($config['uploads_path'])), -4).')', systeminfo_dir_write($config['uploads_path']));
+$tmp[1]['uploads_url'] = $config['uploads_url'];
+$tmp[1]['image_uploads_path'] = array($config['image_uploads_path'].' ('.substr(sprintf('%o', fileperms($config['image_uploads_path'])), -4).')', systeminfo_dir_write($config['image_uploads_path']));
+$tmp[1]['image_uploads_url'] = $config['image_uploads_url'];
+$tmp[1]['debug'] = (true == $config['debug']) ? 'true' : 'false';
+$tmp[1]['locale'] = $config['locale'];
+$tmp[1]['default_encoding'] = $config['default_encoding'];
+$tmp[1]['admin_encoding'] = $config['admin_encoding'];
+$tmp[0]['max_upload_size'] = $config['max_upload_size'];
+$tmp[0]['default_upload_permission'] = $config['default_upload_permission'];
+$tmp[0]['use_smarty_php_tags'] = (true == $config['use_smarty_php_tags']) ? 'true' : 'false';
+$tmp[0]['assume_mod_rewrite'] = (true == $config['assume_mod_rewrite']) ? 'true' : 'false';
+$tmp[0]['page_extension'] = $config['page_extension'];
+$tmp[0]['internal_pretty_urls'] = (true == $config['internal_pretty_urls']) ? 'true' : 'false';
+$tmp[0]['use_hierarchy'] = (true == $config['use_hierarchy']) ? 'true' : 'false';
+$smarty->assign('count_config_info',count($tmp[0]));
+$smarty->assign('config_info',$tmp);
 
-//Note:
-//$tmp[0][] display on all templates
-//$tmp[1][] display on systemtype.tpl only
 
+
+/* PHP Information */
 
 $tmp = array();
 $safe_mode = ini_get_boolean('safe_mode');
@@ -101,14 +128,17 @@ $_session_save_path = session_save_path(); //Can be 5;0777;/tmp
 if(strrpos($_session_save_path, ";") !== false) $_session_save_path = substr($_session_save_path, strrpos($_session_save_path, ";")+1);
 $tmp[0]['session_save_path'] = array($_session_save_path.' ('.substr(sprintf('%o', fileperms($_session_save_path)), -4).')', systeminfo_dir_write($_session_save_path));
 
+$smarty->assign('count_php_information',count($tmp[0]));
 $smarty->assign('php_information',$tmp);
 
 
 
+/* Server Information */
+
 $tmp = array();
-$tmp[0]['server_software'] = $_SERVER['SERVER_SOFTWARE'];
+$tmp[1]['server_software'] = $_SERVER['SERVER_SOFTWARE'];
 $tmp[0]['server_api'] = PHP_SAPI;
-$tmp[0]['server_os'] = PHP_OS.' v '.php_uname('r').' '.lang('on').' '.php_uname('m');
+$tmp[1]['server_os'] = PHP_OS.' v '.php_uname('r').' '.lang('on').' '.php_uname('m');
 
 switch($config['dbms']) //workaroud: ServerInfo() is unsupported in adodblite
 {
@@ -124,41 +154,19 @@ switch($config['dbms']) //workaroud: ServerInfo() is unsupported in adodblite
 					$tmp[0]['server_db_version'] = array($_server_db, systeminfo_version_compare($_server_db, $range_mysqlversion));
 					break;
 }
+$smarty->assign('count_server_info',count($tmp[0]));
 $smarty->assign('server_info',$tmp);
 
-
-clearstatcache();
 $tmp = array();
-$tmp[0]['tmp'] = substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'tmp')), -4);
-$tmp[0]['tmp/cache'] = substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'tmp/cache')), -4);
-$tmp[0]['tmp/templates_c'] = substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'tmp/templates_c')), -4);
-$tmp[0]['uploads'] = substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'uploads')), -4);
-$tmp[0]['modules'] = substr(sprintf('%o', fileperms($config['root_path'].DIRECTORY_SEPARATOR.'modules')), -4);
+$_dir_tmp = $config['root_path'].DIRECTORY_SEPARATOR.'tmp';
+$tmp[1]['tmp'] = array($_dir_tmp.' ('.substr(sprintf('%o', fileperms($_dir_tmp)), -4).')', systeminfo_dir_write($_dir_tmp));
+$_dir_tmp_templates_c = $config['root_path'].DIRECTORY_SEPARATOR.'tmp/templates_c';
+$tmp[1]['tmp/templates_c'] = array($_dir_tmp_templates_c.' ('.substr(sprintf('%o', fileperms($_dir_tmp_templates_c)), -4).')', systeminfo_dir_write($_dir_tmp_templates_c));
+$_dir_modules = $config['root_path'].DIRECTORY_SEPARATOR.'modules';
+$tmp[1]['modules'] = array($_dir_modules.' ('.substr(sprintf('%o', fileperms($_dir_modules)), -4).')', systeminfo_dir_write($_dir_modules));
+$smarty->assign('count_permission_info',count($tmp[0]));
 $smarty->assign('permission_info',$tmp);
 
-
-$tmp = array();
-$tmp[0]['php_memory_limit'] = $config['php_memory_limit'];
-$tmp[0]['process_whole_template'] = (true == $config['process_whole_template']) ? 'true' : 'false';
-$tmp[1]['root_url'] = $config['root_url'];
-$tmp[1]['root_path'] = array($config['root_path'].' ('.substr(sprintf('%o', fileperms($config['root_path'])), -4).')', systeminfo_dir_write($config['root_path']));
-$tmp[1]['previews_path'] = array($config['previews_path'].' ('.substr(sprintf('%o', fileperms($config['previews_path'])), -4).')', systeminfo_dir_write($config['previews_path']));
-$tmp[1]['uploads_path'] = array($config['uploads_path'].' ('.substr(sprintf('%o', fileperms($config['uploads_path'])), -4).')', systeminfo_dir_write($config['uploads_path']));
-$tmp[1]['uploads_url'] = $config['uploads_url'];
-$tmp[1]['image_uploads_path'] = array($config['image_uploads_path'].' ('.substr(sprintf('%o', fileperms($config['image_uploads_path'])), -4).')', systeminfo_dir_write($config['image_uploads_path']));
-$tmp[1]['image_uploads_url'] = $config['image_uploads_url'];
-$tmp[1]['debug'] = (true == $config['debug']) ? 'true' : 'false';
-$tmp[1]['locale'] = $config['locale'];
-$tmp[1]['default_encoding'] = $config['default_encoding'];
-$tmp[1]['admin_encoding'] = $config['admin_encoding'];
-$tmp[0]['max_upload_size'] = $config['max_upload_size'];
-$tmp[0]['default_upload_permission'] = $config['default_upload_permission'];
-$tmp[0]['use_smarty_php_tags'] = (true == $config['use_smarty_php_tags']) ? 'true' : 'false';
-$tmp[0]['assume_mod_rewrite'] = (true == $config['assume_mod_rewrite']) ? 'true' : 'false';
-$tmp[0]['page_extension'] = $config['page_extension'];
-$tmp[0]['internal_pretty_urls'] = (true == $config['internal_pretty_urls']) ? 'true' : 'false';
-$tmp[0]['use_hierarchy'] = (true == $config['use_hierarchy']) ? 'true' : 'false';
-$smarty->assign('config_info',$tmp);
 
 
 if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) echo $smarty->fetch('systeminfo.txt.tpl');
