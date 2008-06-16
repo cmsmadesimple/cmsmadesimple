@@ -19,54 +19,91 @@
 
 <fieldset>
 <legend><strong>{si_lang a=php_information}</strong>: </legend>
-{foreach from=$php_information key='key' item='one'}
-  {if is_array($one)}
-    {if empty($one[1])}
+{foreach from=$php_information key='view' item='tmp'}
+  {foreach from=$tmp key='key' item='one'}
+    {if is_array($one)}
+      {if empty($one[1])}
+      <div class="pageoverflow">
+        <p class="pagetext">{si_lang a=$key} ({$key}):</p>
+        <p class="pageinput">{$one[0]}</p>
+      </div>
+      {else}
+      <div class="pageoverflow" style="color: {$one[1]};">
+        <p class="pagetext">{si_lang a=$key} ({$key}):</p>
+        <p class="pageinput"><b>{$one[0]}</b> </p><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" />
+      </div>
+      {/if}
+    {else}
     <div class="pageoverflow">
       <p class="pagetext">{si_lang a=$key} ({$key}):</p>
-      <p class="pageinput">{$one[0]}</p>
-    </div>
-    {else}
-    <div class="pageoverflow" style="color: {$one[1]};">
-      <p class="pagetext">{$key}: {si_lang a=$key}</p>
-      <p class="pageinput"><b>{$one[0]}</b> </p><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" />
+      <p class="pageinput">{$one}</p>
     </div>
     {/if}
-  {else}
-  <div class="pageoverflow">
-    <p class="pagetext">{si_lang a=$key} ({$key}):</p>
-    <p class="pageinput">{$one}</p>
-  </div>
-  {/if}
+  {/foreach}
 {/foreach}
 </fieldset>
 
 <fieldset>
 <legend><strong>{si_lang a=server_information}</strong>: </legend>
-{foreach from=$server_info key='key' item='one'}
-  <div class="pageoverflow">
-    <p class="pagetext">{si_lang a=$key}:</p>
-    <p class="pageinput">{$one}</p>
-  </div>
+{foreach from=$server_info key='view' item='tmp'}
+  {foreach from=$tmp key='key' item='one'}
+    {if is_array($one)}
+      {if empty($one[1])}
+      <div class="pageoverflow">
+        <p class="pagetext">{si_lang a=$key} ({$key}):</p>
+        <p class="pageinput">{$one[0]}</p>
+      </div>
+      {else}
+      <div class="pageoverflow" style="color: {$one[1]};">
+        <p class="pagetext">{si_lang a=$key}</p>
+        <p class="pageinput"><b>{$one[0]}</b> </p><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" />
+      </div>
+      {/if}
+    {else}
+    <div class="pageoverflow">
+      <p class="pagetext">{si_lang a=$key}:</p>
+      <p class="pageinput">{$one}</p>
+    </div>
+    {/if}
+  {/foreach}
 {/foreach}
 </fieldset>
 
 <fieldset>
 <legend><strong>{si_lang a=permission_information}</strong>: </legend>
-{foreach from=$permission_info key='key' item='one'}
-  <div class="pageoverflow">
-    <p class="pagetext">{$key}:</p>
-    <p class="pageinput">{$one}</p>
-  </div>
+{foreach from=$permission_info key='view' item='tmp'}
+  {foreach from=$tmp key='key' item='one'}
+    <div class="pageoverflow">
+      <p class="pagetext">{$key}:</p>
+      <p class="pageinput">{$one}</p>
+    </div>
+  {/foreach}
 {/foreach}
 </fieldset>
 
 <fieldset>
 <legend><strong>{si_lang a=config_information}</strong>: </legend>
-{foreach from=$config_info key='key' item='one'}
-  <div class="pageoverflow">
-    <p class="pagetext">{$key}:</p>
-    <p class="pageinput">{$one}</p>
-  </div>
+{foreach from=$config_info key='view' item='tmp'}
+  {foreach from=$tmp key='key' item='one'}
+    {if is_array($one)}
+      {if empty($one[1])}
+      <div class="pageoverflow">
+        <p class="pagetext">{$key}:</p>
+        <p class="pageinput">{$one[0]}</p>
+      </div>
+      {else}
+      <div class="pageoverflow" style="color: {$one[1]};">
+        <p class="pagetext">{$key}:</p>
+        <p class="pageinput"><b>{$one[0]}</b> </p><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" />
+      </div>
+      {/if}
+    {else}
+    <div class="pageoverflow">
+      <p class="pagetext">{$key}:</p>
+      <p class="pageinput">{$one}</p>
+    </div>
+    {/if}
+  {/foreach}
 {/foreach}
 </fieldset>
+

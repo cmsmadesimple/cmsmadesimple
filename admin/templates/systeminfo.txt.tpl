@@ -11,7 +11,7 @@
 <p><strong>{si_lang a=installed_modules}</strong>:</p>
 <ul>
 {foreach from=$installed_modules item='module'}
- <li>{$module.module_name}: {$module.version}</li>
+  <li>{$module.module_name}: {$module.version}</li>
 {/foreach}
 </ul>
 
@@ -19,11 +19,15 @@
 
 <p><strong>{si_lang a=php_information}</strong>:</p>
 <ul>
-{foreach from=$php_information key='key' item='one'}
-  {if is_array($one)}
-   <li>{si_lang a=$key} ({$key}): {$one[0]}</li>
-  {else}
-   <li>{si_lang a=$key} ({$key}): {$one}</li>
+{foreach from=$php_information key='view' item='tmp'}
+  {if $view < 1}
+    {foreach from=$tmp key='key' item='one'}
+      {if is_array($one)}
+      <li>{si_lang a=$key} ({$key}): {$one[0]}</li>
+      {else}
+      <li>{si_lang a=$key} ({$key}): {$one}</li>
+      {/if}
+    {/foreach}
   {/if}
 {/foreach}
 </ul>
@@ -32,8 +36,16 @@
 
 <p><strong>{si_lang a=server_information}</strong>:</p>
 <ul>
-{foreach from=$server_info key='key' item='one'}
- <li>{si_lang a=$key}: {$one}</li>
+{foreach from=$server_info key='view' item='tmp'}
+  {if $view < 1}
+    {foreach from=$tmp key='key' item='one'}
+      {if is_array($one)}
+      <li>{si_lang a=$key}: {$one[0]}</li>
+      {else}
+      <li>{si_lang a=$key}: {$one}</li>
+      {/if}
+    {/foreach}
+  {/if}
 {/foreach}
 </ul>
 
@@ -41,8 +53,12 @@
 
 <p><strong>{si_lang a=permission_information}</strong>:</p>
 <ul>
-{foreach from=$permission_info key='key' item='one'}
- <li>{$key}: {$one}</li>
+{foreach from=$permission_info key='view' item='tmp'}
+  {if $view < 1}
+    {foreach from=$tmp key='key' item='one'}
+    <li>{$key}: {$one}</li>
+    {/foreach}
+  {/if}
 {/foreach}
 </ul>
 
@@ -50,8 +66,12 @@
 
 <p><strong>{si_lang a=config_information}</strong>:</p>
 <ul>
-{foreach from=$config_info key='key' item='one'}
- <li>{$key}: {$one}</li>
+{foreach from=$config_info key='view' item='tmp'}
+  {if $view < 1}
+    {foreach from=$tmp key='key' item='one'}
+    <li>{$key}: {$one}</li>
+    {/foreach}
+  {/if}
 {/foreach}
 </ul>
 

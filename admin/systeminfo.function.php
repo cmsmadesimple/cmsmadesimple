@@ -5,12 +5,12 @@ $range_post_max_size = array('minimum'=> 2, 'recommended'=> 10);
 $range_upload_max_filesize = array('minimum'=> 2, 'recommended'=> 10);
 $range_max_execution_time = array('minimum'=> 30, 'recommended'=> 60);
 $range_gd_version = array('minimum'=> 2, 'recommended'=> 2);
+$range_mysqlversion = array('minimum'=> '3.23', 'recommended'=> '4.1');
+$range_pgsqlversion = array('minimum'=> '7.4', 'recommended'=> '8');
 
 
 
-
-
-function systeminfo_check_range( $value, $range )
+function systeminfo_range_numeric( $value, $range )
 {
 	$value = intval($value);
 	if(empty($value)) return 'red'; //Can be 0 in our case?
@@ -30,13 +30,13 @@ function systeminfo_check_range( $value, $range )
 	}
 }
 
-function systeminfo_check_php( $range )
+function systeminfo_version_compare( $value, $range )
 {
-	if (version_compare(PHP_VERSION, $range['minimum'], '<'))
+	if (version_compare($value, $range['minimum'], '<'))
 	{
 		return 'red';
 	}
-	elseif (version_compare(PHP_VERSION, $range['recommended'], '<'))
+	elseif (version_compare($value, $range['recommended'], '<'))
 	{
 		return 'yellow';
 	}
@@ -46,7 +46,7 @@ function systeminfo_check_php( $range )
 	}
 }
 
-function systeminfo_session_save_path( $dir, $file='file_test', $data='this is a test' )
+function systeminfo_dir_write( $dir, $file='file_test', $data='this is a test' )
 {
 	if(empty($dir)) return 'red';
 	$test_file = "$dir/$file";
