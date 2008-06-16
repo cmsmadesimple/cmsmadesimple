@@ -115,14 +115,19 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 			}
 		}
 
+		# get the next access_order
+		$query = "SELECT max(assoc_order)+1 FROM cms_css_assoc where assoc_to_id = ?";
+		$nextord = $db->GetOne($query,array($id));
+		if( !$nextord ) $doadd = false;
+
 		# everything is ok, we can insert the element.
 		if ($doadd)
 		{
 			$time = $db->DBTimeStamp(time());
 			$query = "INSERT INTO ".cms_db_prefix().
-                "css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date)" .
-				" VALUES (?,?,?,".$time.",".$time.")";
-			$result = $db->Execute($query, array($id,$css_id,$type));
+                "css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date,assoc_order)" .
+				" VALUES (?,?,?,".$time.",".$time.",?)";
+			$result = $db->Execute($query, array($id,$css_id,$type,$nextord));
 
 			if ($result)
 			{

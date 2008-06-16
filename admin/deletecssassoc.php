@@ -58,75 +58,89 @@ $dodelete = true;
 if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 {
 
-	# we get the parameters
-	$css_id = $_GET["css_id"];
-	$id = $_GET["id"];
-	$type = $_GET["type"];
-
-	# we check the permissions
-	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Stylesheet Assoc');
-
+  # we get the parameters
+  $css_id = $_GET["css_id"];
+  $id = $_GET["id"];
+  $type = $_GET["type"];
+  
+  # we check the permissions
+  $userid = get_userid();
+  $access = check_permission($userid, 'Remove Stylesheet Assoc');
+  
 #******************************************************************************
 # the user has the right to delete association, we can go on
 #******************************************************************************
-	if ($access)
+  if ($access)
+    {
+      
+      #******************************************************************************
+      # we first have to get the name of the element the CSS is linked to
+      # this is for logging of actions
+      #******************************************************************************
+      if ($type == 'template')
 	{
-
-#******************************************************************************
-# we first have to get the name of the element the CSS is linked to
-# this is for logging of actions
-#******************************************************************************
-		if ($type == 'template')
-		{
-			# first we get the name of the template for logging
-			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
-			$result = $db->Execute($query,array($id));
-
-			if ($result && $result->RecordCount())
-			{
-				$line = $result->FetchRow();
-				$name = $line['template_name'];
-			}
-			else
-			{
-				$dodelete = false;
-				$error = lang('errorgettingtemplatename');
-			}
-		}
-
-#******************************************************************************
-# everythings look ok, we can delete
-#******************************************************************************
-		if ($dodelete)
-		{
-			$query = "DELETE FROM ".cms_db_prefix()."css_assoc where assoc_css_id = ? AND assoc_type = ? AND assoc_to_id = ?";
-			$result = $db->Execute($query, array($css_id,$type, $id));
-
-			if ($result)
-			{
-				audit($id, (isset($name)?$name:""), 'Deleted Stylesheet Association');
-
-				# now updating template
-				if ("template" == $type)
-				{
-					$time = $db->DBTimeStamp(time());
-					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$time." WHERE template_id = ?";
-					$tplresult = $db->Execute($tplquery, array($id));
-				}
-			}
-			else
-			{
-				$dodelete = false;
-				$error = lang('errordeletingassociation');
-			}
-		}
-	} # end of if access
-	else
-	{
-		$dodelete = false;
-		$error = lang('noaccessto', array(lang('removecssassociation')));
+          # first we get the name of the template for logging
+	  $query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+	  $result = $db->Execute($query,array($id));
+	  
+	  if ($result && $result->RecordCount())
+	    {
+	      $line = $result->FetchRow();
+	      $name = $line['template_name'];
+	    }
+	  else
+	    {
+	      $dodelete = false;
+	      $error = lang('errorgettingtemplatename');
+	    }
 	}
+
+      #******************************************************************************
+      # everythings look ok, we can delete
+      #******************************************************************************
+      if ($dodelete)
+	{
+	  $query = 'SELECT assoc_order FROM '.cms_db_prefix().'css_assoc
+                     WHERE assoc_css_id = ? AND assoc_type = ? AND assoc_to_id = ?';
+	  $ord = $db->GetOne($query,array($css_id,$type,$id));
+
+	  $query = "DELETE FROM ".cms_db_prefix()."css_assoc where assoc_css_id = ? AND assoc_type = ? AND assoc_to_id = ?";
+	  $result = $db->Execute($query, array($css_id,$type, $id));
+	  
+	  if ($result)
+	    {
+	      if( $ord )
+		{
+		  // now we have to re-position all of the subsequent stylesheets.
+		  $query = 'UPDATE '.cms_db_prefix().'css_assoc 
+                               SET assoc_order = assoc_order - 1
+                             WHERE assoc_type = ? AND assoc_to_id = ?
+                                   AND assoc_order > ?';
+		  $res = $db->Execute($query,array($type,$id,$ord));
+		}
+
+	      audit($id, (isset($name)?$name:""), 'Deleted Stylesheet Association');
+	      
+              # now updating template
+	      if ("template" == $type)
+		{
+		  $time = $db->DBTimeStamp(time());
+		  $tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$time." WHERE template_id = ?";
+		  $tplresult = $db->Execute($tplquery, array($id));
+		}
+	    }
+	  else
+	    {
+	      $dodelete = false;
+	      $error = lang('errordeletingassociation');
+	    }
+	}
+    } # end of if access
+  else
+    {
+      $dodelete = false;
+      $error = lang('noaccessto', array(lang('removecssassociation')));
+    }
 } # end of if params
 else
 {
@@ -139,11 +153,11 @@ else
 #******************************************************************************
 if ($dodelete)
 {
-	redirect("listcssassoc.php?id=$id&type=$type");
+  redirect("listcssassoc.php?id=$id&type=$type");
 }
 else
 {
-	redirect("listcssassoc.php?id=$id&type=$type&message=$error");
+  redirect("listcssassoc.php?id=$id&type=$type&message=$error");
 }
 
 # vim:ts=4 sw=4 noet

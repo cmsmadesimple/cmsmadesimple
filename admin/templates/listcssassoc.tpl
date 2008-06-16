@@ -7,8 +7,7 @@
 <table cellspacing="0" class="pagetable">
   <thead>
     <th>{$text_title}</th>
-    <th class="pageicon">&nbsp;{* move up *}</th>
-    <th class="pageicon">&nbsp;{* move down *}</th>
+    <th class="pageicon" colspan="2">{$text_move}</th>
     <th class="pageicon">&nbsp;{* edit *}</th>
     <th class="pageicon">&nbsp;{* delete *}</th>
   </thead>
@@ -16,8 +15,8 @@
   {foreach from=$cssassoc item='one'}
     <tr class="{$currow}" onmouseover="this.className='{$currow}.hover';" onmouseout="this.className='{$currow}';">
       <td>{$one.editlink}</td>
-      <td>{if isset($one.uplink)}{$one.uplink}{/if}</td>
       <td>{if isset($one.downlink)}{$one.downlink}{/if}</td>
+      <td>{if isset($one.uplink)}{$one.uplink}{/if}</td>
       <td>{$one.editimg}</td>
       <td>{if isset($one.deletelink)}{$one.deletelink}{/if}</td>
     </tr>

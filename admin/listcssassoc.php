@@ -33,8 +33,6 @@
  * @author	calexico
  */
 
-
-
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
@@ -64,16 +62,17 @@ $name = '';
 #******************************************************************************
 
 # getting variables
-if (isset($_GET["type"])) $type	= $_GET["type"] ;
+if (isset($_GET["type"])) $type	= trim($_GET["type"]) ;
 else $error = lang('typenotvalid');
 
-if (isset($_GET["id"]))	$id	= $_GET["id"] ;
+if (isset($_GET["id"]))	$id	= (int)$_GET["id"] ;
 else $error = lang('idnotvalid');
+
+if( isset($_GET['cssid'])) $cssid = (int)$_GET['cssid'];
 
 # if type is template, we get the name
 if (isset($type) && "template" == $type) 
 {
-
 	$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
 	$result = $db->Execute($query, array($id));
 
@@ -91,14 +90,69 @@ if (isset($type) && "template" == $type)
 #******************************************************************************
 # first getting all user permissions
 #******************************************************************************
-	$userid = get_userid();
+$userid = get_userid();
 
-	$modify  = check_permission($userid, 'Modify Stylesheet Assoc');
-	$delasso = check_permission($userid, 'Remove Stylesheet Assoc');
-	$addasso = check_permission($userid, 'Add Stylesheet Assoc');
+$modify  = check_permission($userid, 'Modify Stylesheet Assoc');
+$delasso = check_permission($userid, 'Remove Stylesheet Assoc');
+$addasso = check_permission($userid, 'Add Stylesheet Assoc');
 
-	$query = "SELECT assoc_css_id, css_name, assoc_order FROM ".cms_db_prefix()."css_assoc ca INNER JOIN ".cms_db_prefix()."css ON assoc_css_id = css_id WHERE assoc_type=? AND assoc_to_id = ? ORDER BY ca.assoc_order";
-	$result = $db->Execute($query, array($type, $id));
+#******************************************************************************
+# Handle moving of entries
+#******************************************************************************
+if( isset($_GET['dir']) && $modify )
+  {
+    switch(trim($_GET['dir'])) 
+      {
+      case 'up':
+	{
+	  // get the ord id for this item
+	  $q1 = 'SELECT assoc_order FROM '.cms_db_prefix().'css_assoc 
+                  WHERE assoc_to_id = ? AND assoc_css_id = ?';
+	  $ord = $db->GetOne($q1,array($id,$cssid));
+
+	  if( $ord > 0 )
+	    {
+	      // get the item with the prev ord id
+	      $q2 = 'SELECT assoc_css_id FROM '.cms_db_prefix().'css_assoc
+                     WHERE assoc_to_id = ? AND assoc_order = ?';
+	      $other_css = $db->GetOne($q2,array($id,$ord-1));
+	      if( $other_css )
+		{
+		  // swap em
+		  $q3 = 'UPDATE '.cms_db_prefix().'css_assoc
+                         SET assoc_order = ? WHERE
+                             assoc_to_id = ? AND assoc_css_id = ?';
+		  $db->Execute($q3,array($ord,$id,$other_css));
+		  $db->Execute($q3,array($ord-1,$id,$cssid));
+		}
+	    }
+	}
+	break;
+
+      case 'down':
+	{
+	  // get the ord id for this item
+	  $q1 = 'SELECT assoc_order FROM '.cms_db_prefix().'css_assoc 
+                  WHERE assoc_to_id = ? AND assoc_css_id = ?';
+	  $ord = $db->GetOne($q1,array($id,$cssid));
+
+	  // get the item with the prev ord id
+	  $q2 = 'SELECT assoc_css_id FROM '.cms_db_prefix().'css_assoc
+                     WHERE assoc_to_id = ? AND assoc_order = ?';
+	  $other_css = $db->GetOne($q2,array($id,$ord+1));
+	  if( $other_css )
+	    {
+	      // swap em
+	      $q3 = 'UPDATE '.cms_db_prefix().'css_assoc
+                         SET assoc_order = ? WHERE
+                             assoc_to_id = ? AND assoc_css_id = ?';
+	      $db->Execute($q3,array($ord,$id,$other_css));
+	      $db->Execute($q3,array($ord+1,$id,$cssid));
+	    }
+	}
+	break;
+      }
+  }
 
 #******************************************************************************
 # displaying errors if any
@@ -121,8 +175,12 @@ if (isset($_GET["message"])) {
 #******************************************************************************
 else {
 
+  $query = "SELECT assoc_css_id, css_name, assoc_order FROM ".cms_db_prefix()."css_assoc ca INNER JOIN ".cms_db_prefix()."css ON assoc_css_id = css_id WHERE assoc_type=? AND assoc_to_id = ? ORDER BY ca.assoc_order";
+  $result = $db->Execute($query, array($type, $id));
+
   global $gcms;
   $smarty =& $gCms->GetSmarty();
+  $smarty->assign('text_move',lang('move'));
   $smarty->assign('text_template',lang('template'));
   $smarty->assign('text_title',lang('title'));
   $smarty->assign('edittemplate_link','<a href="edittemplate.php?template_id='.$_GET['id'].'"  name="edittemplate">'.(isset($name)?$name:"").'</a>');
@@ -137,17 +195,21 @@ else {
       $url = "editcss.php?css_id=".$row['assoc_css_id']."&amp;from=templatecssassoc&amp;templateid=".$id;
       $tmp['editlink'] = '<a href="'.$url.'">'.$row['css_name'].'</a>';
       $tmp['editimg'] = '<a href="'.$url.'">'.$themeObject->DisplayImage('icons/system/edit.gif',lang('editcss'),'','','systemicon').'</a>';
-      $downurl = 'listcssassoc.php?action=down&cssid='.$row['assoc_css_id'];
-      $upurl = 'listcssassoc.php?action=upn&cssid='.$row['assoc_css_id'];
-      if( $idx > 0 )
+
+      if( $modify )
 	{
-	  $tmp['uplink'] = '<a href="'.$upurl.'">'.$themeObject->DisplayImage('icons/system/arrow-u.gif',lang('moveup'),'','','systemicon').'</a>';
+	  $downurl = 'listcssassoc.php?dir=down&cssid='.$row['assoc_css_id'].'&id='.$id.'&type=template';
+	  $upurl = 'listcssassoc.php?dir=up&cssid='.$row['assoc_css_id'].'&id='.$id.'&type=template';
+	  if( $idx > 0 )
+	    {
+	      $tmp['uplink'] = '<a href="'.$upurl.'">'.$themeObject->DisplayImage('icons/system/arrow-u.gif',lang('up'),'','','systemicon').'</a>';
+	    }
+	  if( $idx + 1 < $count )
+	    {
+	      $tmp['downlink'] = '<a href="'.$downurl.'">'.$themeObject->DisplayImage('icons/system/arrow-d.gif',lang('down'),'','','systemicon').'</a>';
+	    }
+	  $idx++;
 	}
-      if( $idx + 1 < $count )
-	{
-	  $tmp['downlink'] = '<a href="'.$downurl.'">'.$themeObject->DisplayImage('icons/system/arrow-d.gif',lang('movedown'),'','','systemicon').'</a>';
-	}
-      $idx++;
 	  
       if( $delasso )
 	{
