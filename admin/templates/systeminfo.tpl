@@ -11,7 +11,9 @@
   <p class="pageinput">{$cms_version}</p>
 </div>
 <br />
-<h4 class="pagetext">{si_lang a=installed_modules}</h4>   
+<div class="pageoverflow">
+<h4 class="h-inside">{si_lang a=installed_modules}</h4> 
+ </div>  
 {foreach from=$installed_modules item='module'}
   <div class="pageoverflow">
     <p class="pagetext">{$module.module_name}</p>
@@ -19,7 +21,9 @@
   </div>
 {/foreach}
 <br />
-<h4 class="pagetext">{si_lang a=config_information}</h4>
+<div class="pageoverflow">
+<h4 class="h-inside">{si_lang a=config_information}</h4>
+</div>
 {foreach from=$config_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='one'}
     {if is_array($one)}
@@ -31,7 +35,7 @@
       {else}
       <div class="pageoverflow" style="color: {$one[1]};">
         <p class="pagetext">{$key}:</p>
-        <p class="pageinput"><b>{$one[0]}</b> </p><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" />
+        <p class="pageinput"><b>{$one[0]}</b><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" /></p>
       </div>
       {/if}
     {else}
@@ -61,7 +65,7 @@
       {else}
       <div class="pageoverflow" style="color: {$one[1]};">
         <p class="pagetext">{si_lang a=$key} ({$key}):</p>
-        <p class="pageinput"><b>{$one[0]}</b> </p><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" />
+        <p class="pageinput"><b>{$one[0]}</b><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" /></p>
       </div>
       {/if}
     {else}
@@ -91,7 +95,7 @@
       {else}
       <div class="pageoverflow" style="color: {$one[1]};">
         <p class="pagetext">{si_lang a=$key}:</p>
-        <p class="pageinput"><b>{$one[0]}</b> </p><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" />
+        <p class="pageinput"><b>{$one[0]}</b><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" /></p>
       </div>
       {/if}
     {else}
@@ -103,7 +107,9 @@
   {/foreach}
 {/foreach}
 <br />
-<h4 class="pagetext">{si_lang a=permission_information}</h4>
+<div class="pageoverflow">
+<h4 class="h-inside">{si_lang a=permission_information}</h4>
+</div>
 {foreach from=$permission_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='one'}
     {if is_array($one)}
@@ -115,7 +121,7 @@
       {else}
       <div class="pageoverflow" style="color: {$one[1]};">
         <p class="pagetext">{$key}:</p>
-        <p class="pageinput"><b>{$one[0]}</b> </p><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" />
+        <p class="pageinput"><b>{$one[0]}</b><img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$one[1]}.gif" title="{$one[1]}" alt="{$one[1]}" /></p>
       </div>
       {/if}
     {else}
