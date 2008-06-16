@@ -677,11 +677,14 @@ class AdminTheme
             'main'=>array('url'=>'index.php','parent'=>-1,
 			  'title'=>'CMS',
 			  'description'=>'','show_in_menu'=>true),
-             'logout'=>array('url'=>'logout.php','parent'=>'main',
-                    'title'=>$this->FixSpaces(lang('logout')),
-                    'description'=>'','show_in_menu'=>true),
 	    'home'=>array('url'=>'home.php','parent'=>'main',
 		    'title'=>$this->FixSpaces(lang('home')),
+                    'description'=>'','show_in_menu'=>true),
+            'viewsite'=>array('url'=>'../','parent'=>'main',
+                    'title'=>$this->FixSpaces(lang('viewsite')),
+                    'description'=>'','show_in_menu'=>true, 'target'=>'_blank'),
+             'logout'=>array('url'=>'logout.php','parent'=>'main',
+                    'title'=>$this->FixSpaces(lang('logout')),
                     'description'=>'','show_in_menu'=>true),
             // base content menu ---------------------------------------------------------
             'content'=>array('url'=>'topcontent.php','parent'=>-1,
@@ -832,10 +835,6 @@ class AdminTheme
             'editbookmark'=>array('url'=>'editbookmark.php','parent'=>'myprefs',
                     'title'=>$this->FixSpaces(lang('editbookmark')),
                     'description'=>lang('editbookmark'),'show_in_menu'=>false),
-             // base view site menu ---------------------------------------------------------
-            'viewsite'=>array('url'=>'../','parent'=>-1,
-                    'title'=>$this->FixSpaces(lang('viewsite')),
-                    'description'=>'','show_in_menu'=>true, 'target'=>'_blank'),
     	);
 
 	// add in all of the 'system' modules todo
