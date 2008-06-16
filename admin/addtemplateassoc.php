@@ -116,8 +116,8 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
 
 		# get the next access_order
 		$query = "SELECT max(assoc_order)+1 FROM cms_css_assoc where assoc_to_id = ?";
-		$nextord = $db->GetOne($query,array($id));
-		if( !$nextord ) $doadd = false;
+		$nextord = $db->GetOne($query,array($template_id));
+		if( !$nextord ) $nextord = 1;
 
 		# everything is ok, we can insert the element.
 		if ($doadd)
