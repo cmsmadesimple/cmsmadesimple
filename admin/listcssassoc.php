@@ -97,11 +97,11 @@ if (isset($type) && "template" == $type)
 	$delasso = check_permission($userid, 'Remove Stylesheet Assoc');
 	$addasso = check_permission($userid, 'Add Stylesheet Assoc');
 
-	$query = "SELECT assoc_css_id, css_name FROM ".cms_db_prefix()."css_assoc ca INNER JOIN ".cms_db_prefix()."css ON assoc_css_id = css_id WHERE assoc_type=? AND assoc_to_id = ? ORDER BY ca.create_date";
+	$query = "SELECT assoc_css_id, css_name, assoc_order FROM ".cms_db_prefix()."css_assoc ca INNER JOIN ".cms_db_prefix()."css ON assoc_css_id = css_id WHERE assoc_type=? AND assoc_to_id = ? ORDER BY ca.assoc_order";
 	$result = $db->Execute($query, array($type, $id));
 
 #******************************************************************************
-# displaying erros if any
+# displaying errors if any
 #******************************************************************************
 if (isset($_GET["message"])) {
 	$message = preg_replace('/\</','',$_GET['message']);
@@ -120,116 +120,97 @@ if (isset($_GET["message"])) {
 # now really starting
 #******************************************************************************
 else {
-?>
 
-<div class="pagecontainer">
-	<?php echo $themeObject->ShowHeader('currentassociations'); ?>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('template')?> :</p>
-		        <p class="pageinput"><?php echo '<a href="edittemplate.php?template_id='.$_GET['id'].'"  name="edittemplate">'.(isset($name)?$name:"").'</a>';?></p>
-		</div>
+  global $gcms;
+  $smarty =& $gCms->GetSmarty();
+  $smarty->assign('text_template',lang('template'));
+  $smarty->assign('text_title',lang('title'));
+  $smarty->assign('edittemplate_link','<a href="edittemplate.php?template_id='.$_GET['id'].'"  name="edittemplate">'.(isset($name)?$name:"").'</a>');
+  $cssassoc = array();
+  $count = $result->RecordCount();
+  $idx = 0;
+  while( $result && $row = $result->FetchRow() )
+    {
+      $csslist[] = $row["assoc_css_id"];
 
-<?php
-
-	# if any css was found.
-	if ($result && $result->RecordCount() > 0)
+      $tmp = array();
+      $url = "editcss.php?css_id=".$row['assoc_css_id']."&amp;from=templatecssassoc&amp;templateid=".$id;
+      $tmp['editlink'] = '<a href="'.$url.'">'.$row['css_name'].'</a>';
+      $tmp['editimg'] = '<a href="'.$url.'">'.$themeObject->DisplayImage('icons/system/edit.gif',lang('editcss'),'','','systemicon').'</a>';
+      $downurl = 'listcssassoc.php?action=down&cssid='.$row['assoc_css_id'];
+      $upurl = 'listcssassoc.php?action=upn&cssid='.$row['assoc_css_id'];
+      if( $idx > 0 )
 	{
-		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-		echo '<thead>';
-		echo "<tr>\n";
-		echo "<th>".lang('title')."</th>\n";
-		echo "<th class=\"pageicon\">&nbsp;</th>\n";
-		echo "</tr>\n";
-		echo '</thead>';
-		echo '<tbody>';
+	  $tmp['uplink'] = '<a href="'.$upurl.'">'.$themeObject->DisplayImage('icons/system/arrow-u.gif',lang('moveup'),'','','systemicon').'</a>';
+	}
+      if( $idx + 1 < $count )
+	{
+	  $tmp['downlink'] = '<a href="'.$downurl.'">'.$themeObject->DisplayImage('icons/system/arrow-d.gif',lang('movedown'),'','','systemicon').'</a>';
+	}
+      $idx++;
+	  
+      if( $delasso )
+	{
+	  $tmp['deletelink'] = "<a href=\"deletecssassoc.php?id=$id&amp;css_id=".$row["assoc_css_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteassociationconfirm', $row["css_name"])."');\">".$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon')."</a>";
+	}
 
-		# this var is used to show each line with different color
-		$currow = "row1";
-
-		# now showing each line
-		while ($one = $result->FetchRow())
-		{
-
-			# we store ids of css found for them not to appear in the dropdown
-			$csslist[] = $one["assoc_css_id"];
-		 
-			echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";		 
-			echo "<td><a href=\"editcss.php?css_id=".$one["assoc_css_id"]."&amp;from=templatecssassoc&amp;templateid=".$id."\">".$one["css_name"]."</a></td>\n";
-
-			# if user has right to delete
-			if ($delasso)
-			{
-				echo "<td><a href=\"deletecssassoc.php?id=$id&amp;css_id=".$one["assoc_css_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteassociationconfirm', $one["css_name"])."');\">";
-                echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                echo "</a></td>\n";
-			}
-			else
-			{
-				echo "<td>&nbsp;</td>";
-			}
-
-			echo "</tr>\n";
-
-			("row1" == $currow) ? $currow="row2" : $currow="row1";
-
-		} ## foreach
-
-		echo '</tbody>';
-		echo "</table>\n";
-
-	} # end of if result
+      $cssassoc[] = $tmp;
+    }
+  if( count($cssassoc) )
+    {
+      $smarty->assign('cssassoc',$cssassoc);
+    }
 	
-	# this var is used to store the css ids that should not appear in the
-	# dropdown
-	$notinto = "";
-
-	foreach($csslist as $key)
+  # this var is used to store the css ids that should not appear in the
+  # dropdown
+  $notinto = "";
+  
+  foreach($csslist as $key)
+    {
+      $notinto .= "$key,";
+    }
+  $notinto = substr($notinto, 0, strlen($notinto) - 1);
+  
+  # this var contains the dropdown
+  $dropdown = "";
+  $result = '';
+  
+  # we generate the dropdown
+  if ("" == $notinto)
+    {
+      $query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
+    }
+  else
+    {
+      $query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN (".$notinto.") ORDER BY css_name";
+    }
+  $result = $db->Execute($query);
+  
+  if ($result && $result->RecordCount() > 0)
+    {
+      $smarty->assign('formstart',"<form action=\"addcssassoc.php\" method=\"post\">");
+      $dropdown = "<select name=\"css_id\">\n";
+      while ($line = $result->FetchRow())
 	{
-		$notinto .= "$key,";
+	  $dropdown .= "<option value=\"".$line["css_id"]."\">".$line["css_name"]."</option>\n";
 	}
-	$notinto = substr($notinto, 0, strlen($notinto) - 1);
+      $dropdown .= "</select>";
+      $smarty->assign('dropdown',$dropdown);
 
-	# this var contains the dropdown
-	$dropdown = "";
-	$result = '';
+      $hidden = '<input type="hidden" name="id" value="'.$id.'" />';
+      $hidden .= '<input type="hidden" name="type" value="'.$type.'" />';
+      $smarty->assign('hidden',$hidden);
 
-	# we generate the dropdown
-	if ("" == $notinto)
-	{
-		$query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
-	}
-	else
-	{
-		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN (".$notinto.") ORDER BY css_name";
-	}
-	$result = $db->Execute($query);
+      $submit = '<input type="submit" value="'.lang('addcss').' class="pagebutton" onmouseover="this.className=\'pagebuttonhover\';" onmouseout="this.className=\'pagebutton\';" />';
+      $smarty->assign('submit',$submit);
 
-	if ($result && $result->RecordCount() > 0)
-	{
-		$form = "<form action=\"addcssassoc.php\" method=\"post\">";
-	
-		$dropdown = "<select name=\"css_id\">\n";
-		while ($line = $result->FetchRow())
-		{
-			$dropdown .= "<option value=\"".$line["css_id"]."\">".$line["css_name"]."</option>\n";
-		}
-		$dropdown .= "</select>";
-
-		echo $form.'<div class="pageoverflow"><p class="pageoptions">'.$dropdown.' ';
-?>
-		<input type="hidden" name="id" value="<?php echo $id?>" />
-		<input type="hidden" name="type" value="<?php echo $type?>" />
-		<input type="submit" value="<?php echo lang('addcss')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover';" onmouseout="this.className='pagebutton';" />
-		</p>
-		</div>
-		</form>
-
-<?php
-		} # end of showing form
-	echo '</div>';
+    } # end of showing form
 }
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
+# begin output
+echo '<div class="pagecontainer">'.$themeObject->ShowHeader('currentassociations');
+echo $smarty->fetch('listcssassoc.tpl');
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
