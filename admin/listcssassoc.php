@@ -266,7 +266,7 @@ else {
       $hidden .= '<input type="hidden" name="type" value="'.$type.'" />';
       $smarty->assign('hidden',$hidden);
 
-      $submit = '<input type="submit" value="'.lang('addcss').' class="pagebutton" onmouseover="this.className=\'pagebuttonhover\';" onmouseout="this.className=\'pagebutton\';" />';
+      $submit = '<input type="submit" value="'.lang('addcss').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\';" onmouseout="this.className=\'pagebutton\';" />';
       $smarty->assign('submit',$submit);
 
     } # end of showing form
