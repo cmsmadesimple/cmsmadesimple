@@ -13,6 +13,7 @@
   </thead>
   <tbody>
   {foreach from=$cssassoc item='one'}
+    {cycle values='row1,row2' assign='currow'}
     <tr class="{$currow}" onmouseover="this.className='{$currow}.hover';" onmouseout="this.className='{$currow}';">
       <td>{$one.editlink}</td>
       <td>{if isset($one.downlink)}{$one.downlink}{/if}</td>
