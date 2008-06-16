@@ -157,18 +157,21 @@ if( isset($_GET['dir']) && $modify )
 #******************************************************************************
 # displaying errors if any
 #******************************************************************************
-if (isset($_GET["message"])) {
-	$message = preg_replace('/\</','',$_GET['message']);
+if (isset($_GET["message"])) 
+  {
+    $message = trim(preg_replace('/\</','',$_GET['message']));
+    if( !empty($message) )
+      {
 	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
-}
-	if ("" != $error)
-	{
-		echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".$error."</p></div>";
-	}
-
-	if (!$addasso) {
-		echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addcssassociation')))."</p></div>";
-	}
+      }
+  }
+if ("" != $error)
+  {
+    echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".$error."</p></div>";
+  }
+if (!$addasso) {
+  echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addcssassociation')))."</p></div>";
+ }
 
 #******************************************************************************
 # now really starting
