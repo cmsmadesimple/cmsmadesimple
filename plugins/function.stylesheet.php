@@ -18,6 +18,7 @@
 
 function smarty_cms_function_stylesheet($params, &$smarty)
 {
+  if( !function_exists('get_stylesheet_tag') ) {
   function get_stylesheet_tag($cssid,$media='')
   {
     global $gCms;
@@ -51,6 +52,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
     $str .= 'href="'.$url.'" />';
 
     return $str;
+  }
   }
 
   global $gCms;
