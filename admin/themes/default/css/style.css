@@ -19,9 +19,9 @@ a.move_up {
 
 .pagecontainer a:hover, .breadcrumbs a:hover, .pageback a:hover, .MainMenu a:hover, .itemmenucontainer a:hover  {
 	text-decoration: none;
-	background: #385C72;
-	color: #fff;
-}
+	/*background: #385C72;*/
+	color: #385C72;
+	}
 
 a:hover img {
 	background: transparent;
@@ -648,7 +648,6 @@ table.pagetable th  {
    }
    
 table.pagetable th a { 
-    display:block;
 	background: #385C72; 
 	color: #fff; 
 	text-decoration: underline;
@@ -673,7 +672,6 @@ table.pagetable td  {
 
 table.pagetable a  {
    color: #384654;
-   display:block;
    }
 
 th.pagepos  {
