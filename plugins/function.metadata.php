@@ -28,6 +28,9 @@ function smarty_cms_function_metadata($params, &$smarty)
 	
 	#Show a base tag unless showbase is false in config.php
 	#It really can't hinder, only help.
+	if( isset($config['showbase']))  $showbase = $config['showbase'];
+
+        # but allow a parameter to override it.
 	if (isset($params['showbase']))
 	{
 		if ($params['showbase'] == 'false')
