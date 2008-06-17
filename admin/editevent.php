@@ -319,9 +319,9 @@ if ($access)
 	echo "<option value=\"$value\">$key</option>\n";
 	}
 	echo "</select>\n";
-	echo "<input type=\"hidden\" name=\"module\" value=\"$module\">\n";
-	echo "<input type=\"hidden\" name=\"event\" value=\"$event\">\n";
-	echo "<input type=\"submit\" name=\"add\" value=\"".lang('add')."\">";
+	echo "<input type=\"hidden\" name=\"module\" value=\"$module\" />\n";
+	echo "<input type=\"hidden\" name=\"event\" value=\"$event\" />\n";
+	echo "<input type=\"submit\" name=\"add\" value=\"".lang('add')."\" />";
 	echo "</form>\n";
 	echo "<p class=\"pageback\"><a class=\"pageback\" href=\"".$themeObject->BackUrl()."\">&#171; ".lang('back')."</a></p>\n";
 	
