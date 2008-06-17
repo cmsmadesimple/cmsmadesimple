@@ -640,6 +640,9 @@ table.pagetable  {
    margin-bottom: 5px;
    border: solid 1px #c6c3bd;
    width: 97%;
+     /* sugest - #241*/
+   border-spacing:0px;
+     /* end*/
    }
 
 table.pagetable th  {
@@ -727,7 +730,10 @@ tr.row1  {
 tr.row2  {
    background-color: #ececec;
    }
-   
+  /* sugest - #241*/
+ tr.row1:hover { background: #dddddd; }
+ tr.row2:hover { background: #dddddd; }  
+   /* end*/
 tr.row1hover  {
    background-color: #ddd;
    }
