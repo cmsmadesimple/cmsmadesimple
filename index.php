@@ -315,7 +315,7 @@ if ($config["debug"] == true)
 	echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
 }
 
-echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." -->\n";
+echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." -->\n";
 #echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple (".$cached."cached) using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
 #echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
 
