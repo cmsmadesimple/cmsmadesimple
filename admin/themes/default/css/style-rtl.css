@@ -522,6 +522,7 @@ div.pageerrorinstalldir  {
    border: solid 1px #666;
    width: 45em;
    color: #fff;
+   height:1%;/*IE6*/
    }
 
 div.pagemcontainer  {
