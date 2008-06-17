@@ -214,16 +214,26 @@ class Smarty_CMS extends Smarty {
 
 		$db = &$gCms->GetDb();
 		$config = $gCms->config;
+		if( isset($gCms->variables['module_template_cache']) )
+		  {
+		    $tpl_timestamp = $gCms->variables['module_template_cache'][$tpl_name];
+		    return true;
+		  }
+		
+		$query = "SELECT module_name,template_name,modified_date 
+                            FROM ".cms_db_prefix()."module_templates";
+		$results = $db->GetArray($query);
 
-		$query = "SELECT modified_date from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-		$row = $db->GetRow($query, split(';', $tpl_name));
-		if ($row)
-		{
-			$tpl_timestamp = $db->UnixTimeStamp($row['modified_date']);
-			return true;
-		}
+		if( !count($results) ) return false;
 
-		return false;
+		$tmp = array();
+		foreach( $results as $row )
+		  {
+		    $tmp[$row['module_name'].';'.$row['template_name']] = $db->UnixTimeStamp($row['modified_date']);
+		  }
+		$gCms->variables['module_template_cache'] = $tmp;
+		$tpl_timestamp = $gCms->variables['module_template_cache'][$tpl_name];
+		return true;
 	}
 
 	function global_content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
