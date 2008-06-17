@@ -19,7 +19,7 @@
 			<td class="col2">{$test->resultimage}</td>
 		</tr>
 {/foreach}
-	<tbody>
+	</tbody>
 </table>
 
 <table class="settings" border="0">
@@ -44,7 +44,7 @@
 {if isset($test->message)}
 				<p>
 					<em>{$test->message}</em>
-				<p>
+				</p>
 {/if}
 			</td>
 			<td class="col2">{$test->resultimage}</td>
@@ -106,3 +106,4 @@
 	<p class="failure" align="center">One or more tests have failed. Please correct the problem and click the button below to recheck.</p>
 	<p class="continue" align="center"><input type="Submit" value="Try Again" /></p>
 {/if}
+</form>
