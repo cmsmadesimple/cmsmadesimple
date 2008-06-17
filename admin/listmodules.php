@@ -498,6 +498,7 @@ else
 			if (!isset($dbm[$key])) #Not installed, lets put up the install button
 			{
 				$brokendeps = 0;
+				$xmlcol = "&nbsp;";
 
 				$dependencies = $modinstance->GetDependencies();
 
@@ -545,6 +546,7 @@ else
 						 $dbm[$key]['Version']) == 1) 
                            #Check for an upgrade
 			{
+			        $xmlcol = "&nbsp;";
 				$versioncol = $dbm[$key]['Version'];
 				$statuscol[]  = '<span class="important">'.lang('needupgrade').'</span>';
 				$activecol  = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
