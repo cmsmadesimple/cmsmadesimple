@@ -308,8 +308,15 @@ if ($access)
 	
 		$idx++;
 		}
-		echo "</tbody>\n";
+
 	}
+    else{
+    	echo "<tbody>\n";
+        echo "<tr>\n";
+        echo "<td>&nbsp;</td>";
+        echo "</tr>\n";
+    }
+    echo "</tbody>\n";
 	echo "</table>\n";
 	
 	echo "<br/><form action=\"editevent.php?action=create\" method=\"post\">\n";
