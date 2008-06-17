@@ -101,7 +101,7 @@ switch( $action )
 	{
 		$events = Events::ListEvents();
 
-		echo '<br /><p><form action="eventhandlers.php" method="get">'.lang('filterbymodule').': <select name="modulefilter">' . "\n";
+		echo '<br /><form action="eventhandlers.php" method="get">'.lang('filterbymodule').': <select name="modulefilter">' . "\n";
 		echo '<option value="">'.lang('showall').'</option>';
 		$modlist = array();
 		if( is_array($events) )
@@ -122,7 +122,7 @@ switch( $action )
 				echo '>'.$onemod.'</option>';
 			}
 		}
-		echo "</select> <input type=\"submit\" value=\"".lang('submit')."\" /></form></p>\n\n";
+		echo "</select> <input type=\"submit\" value=\"".lang('submit')."\" /></form>\n\n";
 
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo "<thead>\n";
