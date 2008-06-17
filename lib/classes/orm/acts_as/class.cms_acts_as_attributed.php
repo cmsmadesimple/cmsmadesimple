@@ -49,6 +49,30 @@ class CmsActsAsAttributed extends CmsActsAs
 		return cms_orm('CmsAttributeDefinition')->find_all_by_module_and_extra_attr($obj->attr_module, $obj->attr_extra);
 	}
 	
+	function set_attribute_definition(&$obj, $name, $type = 'text', $optional = false, $user_generated = false)
+	{
+		$this->check_variables_are_set($obj);
+		
+		//See if it exists -- return true
+		foreach ($this->get_attribute_defnitions(&$obj) as $one_def)
+		{
+			if ($one_def->name == $name)
+			{
+				return true;
+			}
+		}
+		
+		//Create the new one
+		$def = new CmsAttributeDefinition();
+		$def->module = $obj->attr_module;
+		$def->extra_attr = $obj->attr_extra;
+		$def->name = $name;
+		$def->attribute_type = $type;
+		$def->optional = $optional;
+		$def->user_generated = $user_generated;
+		return $def->save();
+	}
+	
 	function get_attribute_by_name(&$obj, $attribute_name)
 	{
 		$this->check_variables_are_set($obj);
