@@ -6,10 +6,12 @@
 {if isset($cssassoc)}
 <table cellspacing="0" class="pagetable">
   <thead>
+  <tr>
     <th>{$text_title}</th>
     <th class="pageicon" colspan="2">{$text_move}</th>
     <th class="pageicon">&nbsp;{* edit *}</th>
     <th class="pageicon">&nbsp;{* delete *}</th>
+ </tr>
   </thead>
   <tbody>
   {foreach from=$cssassoc item='one'}

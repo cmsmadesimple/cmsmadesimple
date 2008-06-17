@@ -201,8 +201,8 @@ else {
 
       if( $modify )
 	{
-	  $downurl = 'listcssassoc.php?dir=down&cssid='.$row['assoc_css_id'].'&id='.$id.'&type=template';
-	  $upurl = 'listcssassoc.php?dir=up&cssid='.$row['assoc_css_id'].'&id='.$id.'&type=template';
+	  $downurl = 'listcssassoc.php?dir=down&amp;cssid='.$row['assoc_css_id'].'&amp;id='.$id.'&amp;type=template';
+	  $upurl = 'listcssassoc.php?dir=up&amp;cssid='.$row['assoc_css_id'].'&amp;id='.$id.'&amp;type=template';
 	  if( $idx > 0 )
 	    {
 	      $tmp['uplink'] = '<a href="'.$upurl.'">'.$themeObject->DisplayImage('icons/system/arrow-u.gif',lang('up'),'','','systemicon').'</a>';
@@ -216,7 +216,7 @@ else {
 	  
       if( $delasso )
 	{
-	  $tmp['deletelink'] = "<a href=\"deletecssassoc.php?id=$id&amp;css_id=".$row["assoc_css_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteassociationconfirm', $row["css_name"])."');\">".$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon')."</a>";
+	  $tmp['deletelink'] = "<a href=\"deletecssassoc.php?id=$id&amp;amp;css_id=".$row["assoc_css_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteassociationconfirm', $row["css_name"])."');\">".$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon')."</a>";
 	}
 
       $cssassoc[] = $tmp;
@@ -275,6 +275,7 @@ else {
 # begin output
 echo '<div class="pagecontainer">'.$themeObject->ShowHeader('currentassociations');
 echo $smarty->fetch('listcssassoc.tpl');
+echo '</div>';
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
