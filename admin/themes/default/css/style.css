@@ -648,6 +648,7 @@ table.pagetable th  {
    }
    
 table.pagetable th a { 
+    display:block;
 	background: #385C72; 
 	color: #fff; 
 	text-decoration: underline;
@@ -672,6 +673,7 @@ table.pagetable td  {
 
 table.pagetable a  {
    color: #384654;
+   display:block;
    }
 
 th.pagepos  {
