@@ -895,3 +895,35 @@ clear:left;
 margin:4px 0 0 10px;
 display:inline;
 }
+/*ICONS VIEW SITE AND LOGOUT ADMIN*/
+
+ul#nav-icons
+{
+	margin:2px 4px 0 0;
+	float:right;
+	list-style-type: none;
+	padding:0px;
+	text-indent: -999em;
+}
+ul#nav-icons li
+{
+	padding:0px;
+	float:left;
+	height: 1%;	/*IE6*/
+	margin-right:5px;
+	}
+ul#nav-icons li.viewsite-icon a
+{
+	display:block;
+	padding:1px 0;
+	width: 35px;
+	background: transparent url(themes/default/images/icons/extra/view.gif) no-repeat  0px 0px ;
+	
+}
+ul#nav-icons li.logout-icon a
+{
+	display:block;
+	padding:1px 0;
+	width: 35px;
+	background: transparent url(themes/default/images/icons/extra/logout.gif) no-repeat  0px 0px ;	
+	}
