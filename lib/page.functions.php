@@ -123,7 +123,6 @@ function check_passhash($userid, $checksum)
 	$db =& $gCms->GetDb();
 	$config =& $gCms->GetConfig();
 
-	global $gCms;
 	$userops =& $gCms->GetUserOperations();
 	$oneuser =& $userops->LoadUserByID($userid);
 
@@ -149,7 +148,6 @@ function generate_user_object($userid)
 	$db =& $gCms->GetDb();
 	$config =& $gCms->GetConfig();
 
-	global $gCms;
 	$userops =& $gCms->GetUserOperations();
 	$oneuser =& $userops->LoadUserByID($userid);
 

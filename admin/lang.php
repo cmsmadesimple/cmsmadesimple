@@ -110,7 +110,7 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE)
 	@include(dirname(__FILE__) . DIRECTORY_SEPARATOR . "lang" . DIRECTORY_SEPARATOR . 'en_US' . DIRECTORY_SEPARATOR . "admin.inc.php");
 	
 	#Now load the real file
-	if ($lang != 'en_US')
+	if ($current_language != 'en_US')
 	{
 	    $file = dirname(__FILE__) . "/lang/ext/" . $current_language . "/admin.inc.php";
 		if (!is_file($file))
