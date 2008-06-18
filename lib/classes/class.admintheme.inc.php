@@ -1489,7 +1489,7 @@ class AdminTheme
     function ShowHeader($title_name, $extra_lang_param=array(), $link_text = '', $module_help_type = FALSE)
     {
       $cms = $this->cms;
-      $config = $cms->GetConfig();             
+      $config =& $cms->GetConfig();             
       $header  = '<div class="pageheader">';
       if (FALSE != $module_help_type)
 	{
