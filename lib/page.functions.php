@@ -35,7 +35,7 @@
 function check_login($no_redirect = false)
 {
 	global $gCms;
-	$config = $gCms->GetConfig();
+	$config =& $gCms->GetConfig();
 
 	//Handle a current login if one is in queue in the SESSION
 	if (isset($_SESSION['login_user_id']))
@@ -315,8 +315,8 @@ function author_pages($userid)
 {
 	global $gCms;
 	$db =& $gCms->GetDb();
-	$userops = $gCms->GetUserOperations();
-    $variables = &$gCms->variables;
+	$userops =& $gCms->GetUserOperations();
+        $variables = &$gCms->variables;
 	if (!isset($variables['authorpages']))
 	{
 		$db = &$gCms->GetDb();
