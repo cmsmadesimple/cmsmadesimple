@@ -270,7 +270,8 @@ if ($message != "") {
 }
 
 // Make sure cache folder is writable
-if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'cache'))
+if (FALSE == is_writable(TMP_CACHE_LOCATION) || 
+    FALSE == is_writable(TMP_TEMPLATES_C_LOCATION) )
 {
   echo $themeObject->ShowErrors(lang('cachenotwritable'));
 }
