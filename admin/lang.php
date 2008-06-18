@@ -22,7 +22,7 @@
 $current_language = isset($frontendlang) ? $frontendlang : 'en_US';
 
 #Only do language stuff for admin pages
-if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
+if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE))
 {
 	$nls = array();
 	$lang = array();
