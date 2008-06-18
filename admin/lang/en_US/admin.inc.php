@@ -1,4 +1,8 @@
 <?php
+$lang['admin']['start_upgrade_process'] = 'Start Upgrade Process';
+$lang['admin']['warning_upgrade'] = '<em><strong>Warning:</strong></em> CMSMS is in need of an upgrade.';
+$lang['admin']['warning_upgrade_info1'] = 'You are now running schema version %s. and you need to be upgraded to version %s';
+$lang['admin']['warning_upgrade_info2'] = 'Please click the following link: %s.';
 $lang['admin']['warning_mail_settings'] = <<<EOT
 Your mail settings have not been configured.  This could interfere with the ability of your website to send email mssages.  You should go to <a href="moduleinterface.php?module=CMSMailer">Extensions &gt;&gt; CMSMailer</a> and configure the mail settings with the information provided by your host.
 EOT;
