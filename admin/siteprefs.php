@@ -373,7 +373,8 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('globalmetadata')?>:</p>
-			<p class="pageinput"><textarea class="pagesmalltextarea" name="metadata" cols="" rows=""><?php echo $metadata?></textarea></p>
+			<p class="pageinput"><textarea class="pagesmalltextarea" name="metadata" cols="80" rows="20"><?php echo $metadata?></textarea>
+		  </p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('enablecustom404') ?>:</p>
@@ -381,7 +382,8 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('custom404')?>:</p>
-			<p class="pageinput"><textarea class="pagesmalltextarea" name="custom404" cols="" rows=""><?php echo $custom404?></textarea></p>
+			<p class="pageinput"><textarea class="pagesmalltextarea" name="custom404" cols="80" rows="20"><?php echo $custom404?></textarea>
+		  </p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('template')?>:</p>
@@ -407,7 +409,8 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('sitedownmessage')?>:</p>
-			<p class="pageinput"><textarea class="pagesmalltextarea" name="sitedownmessage" cols="" rows=""><?php echo cms_htmlentities($sitedownmessage) ?></textarea></p>
+			<p class="pageinput"><textarea class="pagesmalltextarea" name="sitedownmessage" cols="80" rows="10"><?php echo cms_htmlentities($sitedownmessage) ?></textarea>
+		  </p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('urlcheckversion') ?>:</p>

@@ -141,14 +141,14 @@ if ($message != "") {
         <div class="pageoverflow">
 	  <p class="pagetext"><?php echo lang('metadata')?>:</p>
           <p class="pageinput">
-	    <textarea class="pagesmalltextarea" name="page_metadata" cols="" rows=""><?php echo $page_metadata?></textarea>
+	    <textarea class="pagesmalltextarea" name="page_metadata" cols="80" rows="20"><?php echo $page_metadata?></textarea>
           </p>
         </div>
 
         <div class="pageoverflow">
 	  <p class="pagetext"><?php echo lang('content')?>:</p>
           <p class="pageinput">
-	    <textarea class="pagesmalltextarea" name="page_defaultcontent" cols="" rows=""><?php echo $page_defaultcontent?></textarea>
+	    <textarea class="pagesmalltextarea" name="page_defaultcontent" cols="80" rows="20"><?php echo $page_defaultcontent?></textarea>
           </p>
         </div>
 
