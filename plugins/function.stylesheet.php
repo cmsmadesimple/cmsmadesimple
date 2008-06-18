@@ -75,7 +75,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
     }
   else
     {
-      $query = 'SELECT DISTINCT A.css_id,A.media_type 
+      $query = 'SELECT DISTINCT A.css_id,A.media_type,B.assoc_order 
                       FROM '.cms_db_prefix().'css A, '.cms_db_prefix().'css_assoc B
                      WHERE A.css_id = B.assoc_css_id
                        AND B.assoc_type = ?
