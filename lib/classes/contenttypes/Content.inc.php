@@ -64,7 +64,7 @@ class Content extends CmsContentBase
 			{
 				$class_name = camelize('block_' . $type);
 				$class = new $class_name;
-				$content = $class->get_index_content($this, $block_name, $lang);
+				$content .= $class->get_index_content($this, $block_name, $lang);
 			}
 			catch (Exception $e)
 			{
