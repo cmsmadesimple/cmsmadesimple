@@ -14,8 +14,10 @@ else if( preg_match('+^/[0-9]*$+',$url,$matches) )
     $_GET['cssid'] = (int)substr($url,1);
   }
 
-require('config.php');
-require($config['root_path'].DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
+//require('config.php');//default
+require('fileloc.php');
+//require(CONFIG_FILE_LOCATION);
+require(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 
 $mediatype = '';
 if (isset($_GET["mediatype"])) $mediatype = $_GET["mediatype"];
@@ -32,7 +34,8 @@ if (isset($_GET["stripbackground"])) $stripbackground = true;
 if ($name == '' && $cssid == '') return '';
 
 // Get the hash filename
-$hashfile = $config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.'csshash.dat';
+//$hashfile = $config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.'csshash.dat';
+$hashfile = TMP_CACHE_LOCATION . DIRECTORY_SEPARATOR . 'csshash.dat';
 
 // Get the cache
 $hashmtime = @filemtime($hashfile);
@@ -77,7 +80,7 @@ if( isset($hash[$cssid]) && strcmp($hash[$cssid],$etag) == 0 &&
 
 // connect to the database
 require(dirname(__FILE__).DIRECTORY_SEPARATOR.'version.php');
-require(dirname(__FILE__).DIRECTORY_SEPARATOR.'fileloc.php');
+//require(dirname(__FILE__).DIRECTORY_SEPARATOR.'fileloc.php'); //is included in top now
 require(cms_join_path(dirname(__FILE__),'lib','config.functions.php'));
 require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 require(cms_join_path(dirname(__FILE__),'lib','classes','class.global.inc.php'));
