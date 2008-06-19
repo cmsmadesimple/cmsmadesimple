@@ -1,8 +1,15 @@
-#
+# Attempt to override some php settings, these settings may be helpful on some hosts if your
+# default configuration does not meet CMS's minimum requirements, and your host
+# has given your account appropriate permissions
+#php_value upload_max_filesize "10M"
+#php_value session_save_path "tmp/cache"
+
 #php_flag magic_quotes_gpc Off
 #php_flag register_globals Off
 #php_flag session.use_trans_sid Off
 #
+
+
 Options -Indexes
 ServerSignature Off
 Options +FollowSymLinks
