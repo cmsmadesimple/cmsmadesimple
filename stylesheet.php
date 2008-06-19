@@ -14,10 +14,12 @@ else if( preg_match('+^/[0-9]*$+',$url,$matches) )
     $_GET['cssid'] = (int)substr($url,1);
   }
 
+
 //require('config.php');//default
 require('fileloc.php');
-//require(CONFIG_FILE_LOCATION);
+require(CONFIG_FILE_LOCATION);
 require(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
+
 
 $mediatype = '';
 if (isset($_GET["mediatype"])) $mediatype = $_GET["mediatype"];
