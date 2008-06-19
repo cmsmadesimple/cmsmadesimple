@@ -481,17 +481,18 @@ function get_site_preference($prefname, $defaultvalue = '') {
  *
  * @param string Preference name to remove
  */
-function remove_site_preference($prefname,$regexp=false)
+function remove_site_preference($prefname,$uselike=false)
 {
 	global $gCms;
 	$db =& $gCms->GetDb();
-
+$db->debug = true;
 	$siteprefs = &$gCms->siteprefs;
 
 	$query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ?";
-	if( $regexp == true )
+	if( $uselike == true )
 	  {
-	    $query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name REGEXP ?";
+	    $query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name LIKE ?";
+		$prefname .= '%';
 	  }
 	$result = $db->Execute($query, array($prefname));
 

@@ -2276,7 +2276,7 @@ class CMSModule
 	{
 	  if( $preference_name == '' )
 	    {
-	      return remove_site_preference("^".$this->GetName()."_mapi_pref_",true);
+	      return remove_site_preference($this->GetName()."_mapi_pref_",true);
 	    }
 	  return remove_site_preference($this->GetName() . "_mapi_pref_" . $preference_name);
 	}
