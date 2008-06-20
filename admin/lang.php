@@ -46,7 +46,7 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE)
 		{
 			setcookie("cms_language", '', time() - 3600);
 		}
-		else
+		else if (isset($_POST["change_cms_lang"]))
 		{
 			setcookie("cms_language", $_POST["change_cms_lang"]);
 		}
