@@ -44,20 +44,22 @@ class ModuleLoader
 
 		if ($loadall == true)
 		{
-			$handle=opendir($dir);
-			while ($file = readdir($handle))
+			if ($handle = @opendir($dir))
 			{
-				if (@is_file("$dir/$file/$file.module.php"))
+				while (($file = readdir($handle)) !== false)
 				{
-					include("$dir/$file/$file.module.php");
+					if (@is_file("$dir/$file/$file.module.php"))
+					{
+						include("$dir/$file/$file.module.php");
+					}
+					else
+					{
+						unset($cmsmodules[$file]);
+					}
 				}
-				else
-				{
-					unset($cmsmodules[$file]);
-				}
+				closedir($handle);
 			}
-			closedir($handle);
-			
+
 			//Find modules and instantiate them
 			$allmodules = $this->FindModules();
 			foreach ($allmodules as $onemodule)
