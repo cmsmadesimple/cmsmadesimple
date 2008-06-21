@@ -902,23 +902,31 @@ margin:4px 0 0 10px;
 display:inline;
 }
 /*ICONS VIEW SITE AND LOGOUT ADMIN*/
-
-ul#nav-icons
+div#nav-icons_all
 {
-	margin:2px 4px 0 0;
+	margin:0px;
+	padding:0px;
 	float:right;
+	width:95px;
+	height:auto;
+	/*background:red;*//*debug*/
+}
+div#nav-icons_all ul#nav-icons
+{
+	margin:0;
 	list-style-type: none;
 	padding:0px;
 	text-indent: -999em;
 }
-ul#nav-icons li
+div#nav-icons_all ul#nav-icons li
 {
 	padding:0px;
 	float:left;
 	height: 1%;	/*IE6*/
-	margin-right:5px;
+	margin-left:10px;
+	margin-top:2px;
 	}
-ul#nav-icons li.viewsite-icon a
+div#nav-icons_all ul#nav-icons li.viewsite-icon a
 {
 	display:block;
 	padding:1px 0;
@@ -926,7 +934,7 @@ ul#nav-icons li.viewsite-icon a
 	background: transparent url(themes/default/images/icons/extra/view.gif) no-repeat  0px 0px ;
 	
 }
-ul#nav-icons li.logout-icon a
+div#nav-icons_all ul#nav-icons li.logout-icon a
 {
 	display:block;
 	padding:1px 0;

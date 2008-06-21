@@ -125,11 +125,11 @@ class defaultTheme extends AdminTheme
         }
         echo "\n\t</ul>\n";
 		//ICON VIEW SITE
-		echo "\n\t<ul id=\"nav-icons\">\n";
+		echo "\n\t<div id=\"nav-icons_all\"><ul id=\"nav-icons\">\n";
 		echo "\n\t<li class=\"viewsite-icon\"><a  rel=\"external\" title=\"".lang('viewsite')."\"  href=\"../\">".lang('viewsite')."</a></li>\n";
 		//ICON LAGOUT
 		echo "\n\t<li class=\"logout-icon\"><a  title=\"".lang('logout')."\"  href=\"logout.php\">".lang('logout')."</a></li>\n";
-		echo "\n\t</ul>\n";
+		echo "\n\t</ul></div>\n";
 		//END ICONS
 		echo "\t<div class=\"clearb\"></div>\n";
 		echo "</div>\n";
