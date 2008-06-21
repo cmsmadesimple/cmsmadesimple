@@ -82,6 +82,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
                        AND B.assoc_to_id = ?
                      ORDER BY B.assoc_order';
       $res = $db->GetArray($query,array('template',$pageinfo->template_id));
+      if( $res ) {
       $fmt1 = '<link rel="stylesheet" type="text/css" media="%s" href="%s" />';
       $fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
       foreach( $res as $one )
@@ -89,6 +90,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 	  $stylesheet .= get_stylesheet_tag($one['css_id'],$one['media_type']);
 	  $stylesheet .= "\n";
 	}
+      }
     }
   
   if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))

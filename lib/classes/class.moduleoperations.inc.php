@@ -142,7 +142,7 @@ class ModuleOperations
 	// first make sure that we can actually write to the module directory
 	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
 
-	if( !is_writable( $dir ) && $brief != 0 )
+	if( !is_writable( $dir ) && $brief == 0 )
 	  {
 	    // directory not writable
 	    ModuleOperations::SetError( lang( 'errordirectorynotwritable' ) );
