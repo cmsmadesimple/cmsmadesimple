@@ -16,8 +16,11 @@ $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."crossref", $flds, $taboptarray);
 $dbdict->ExecuteSQLArray($sqlarray);
 
-$db->Execute("ALTER TABLE ".cms_db_prefix()."crossref ADD INDEX (child_type, child_id)");
-$db->Execute("ALTER TABLE ".cms_db_prefix()."crossref ADD INDEX (parent_type, parent_id)");
+$db->Execute("CREATE INDEX ".cms_db_prefix()."index_child_type_and_id ON ".cms_db_prefix().
+	"crossref (child_type, child_id)");
+
+$db->Execute("CREATE INDEX ".cms_db_prefix()."index_parent_type_and_id ON ".cms_db_prefix().
+	"crossref (parent_type, parent_id)");
 
 echo '[done]</p>';
 

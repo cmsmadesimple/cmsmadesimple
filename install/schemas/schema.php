@@ -115,7 +115,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_bookmarks", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."admin_bookmarks ADD INDEX (user_id)");
+//	$db->Execute("ALTER TABLE ".$db_prefix."admin_bookmarks ADD INDEX (user_id)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_admin_bookmarks_by_user_id ON ".$db_prefix."admin_bookmarks (user_id)");
 
 	echo '[done]</p>';
 
@@ -187,9 +188,14 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (content_alias, active)");
-	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (default_content)");
-	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (parent_id)");
+//	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (content_alias, active)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_content_by_content_alias_active ON ".$db_prefix."content (content_alias, active)");
+
+//	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (default_content)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_content_by_default_content ON ".$db_prefix."content (default_content)");
+
+//	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (parent_id)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_content_by_parent_id ON ".$db_prefix."content (parent_id)");
 
 	echo "[done]</p>";
 
@@ -211,7 +217,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content_props", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."content_props ADD INDEX (content_id)");
+//	$db->Execute("ALTER TABLE ".$db_prefix."content_props ADD INDEX (content_id)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_content_props_by_content_id ON ".$db_prefix."content_props (content_id)");
 
 	echo "[done]</p>";
 	
@@ -231,8 +238,11 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."crossref", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."crossref ADD INDEX (child_type, child_id)");
-	$db->Execute("ALTER TABLE ".$db_prefix."crossref ADD INDEX (parent_type, parent_id)");
+//	$db->Execute("ALTER TABLE ".$db_prefix."crossref ADD INDEX (child_type, child_id)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_crossref_by_child_type_child_id ON ".$db_prefix."crossref (child_type, child_id)");
+
+//	$db->Execute("ALTER TABLE ".$db_prefix."crossref ADD INDEX (parent_type, parent_id)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_crossref_by_parent_type_parent_id ON ".$db_prefix."crossref (parent_type, parent_id)");
 
 	echo '[done]</p>';
 
@@ -251,7 +261,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."css ADD INDEX (css_name)");
+//	$db->Execute("ALTER TABLE ".$db_prefix."css ADD INDEX (css_name)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_css_by_css_name ON ".$db_prefix."css (css_name)");
 
 	echo "[done]</p>";
 
@@ -270,8 +281,11 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css_assoc", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."css_assoc ADD INDEX (assoc_to_id)");
-	$db->Execute("ALTER TABLE ".$db_prefix."css_assoc ADD INDEX (assoc_css_id)");
+//	$db->Execute("ALTER TABLE ".$db_prefix."css_assoc ADD INDEX (assoc_to_id)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_css_assoc_by_assoc_to_id ON ".$db_prefix."css_assoc (assoc_to_id)");
+
+//	$db->Execute("ALTER TABLE ".$db_prefix."css_assoc ADD INDEX (assoc_css_id)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_css_assoc_by_assoc_css_id ON ".$db_prefix."css_assoc (assoc_css_id)");
 
 	echo "[done]</p>";
 	
@@ -328,7 +342,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."group_perms", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."group_perms ADD INDEX (group_id, permission_id)");
+//	$db->Execute("ALTER TABLE ".$db_prefix."group_perms ADD INDEX (group_id, permission_id)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_group_perms_by_group_id_permission_id ON ".$db_prefix."group_perms (group_id, permission_id)");
 
 	echo "[done]</p>";
 
@@ -363,7 +378,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."htmlblobs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."htmlblobs ADD INDEX (htmlblob_name)");
+//	$db->Execute("ALTER TABLE ".$db_prefix."htmlblobs ADD INDEX (htmlblob_name)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_htmlblobs_by_htmlblob_name ON ".$db_prefix."htmlblobs (htmlblob_name)");
 
 	echo "[done]</p>";
 
@@ -395,7 +411,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."modules", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."modules ADD INDEX (module_name)");
+//	$db->Execute("ALTER TABLE ".$db_prefix."modules ADD INDEX (module_name)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_modules_by_module_name ON ".$db_prefix."modules (module_name)");
 
 	echo "[done]</p>";
 
@@ -429,7 +446,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_templates", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."module_templates ADD INDEX (module_name, template_name)");
+//	$db->Execute("ALTER TABLE ".$db_prefix."module_templates ADD INDEX (module_name, template_name)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_module_templates_by_module_name_template_name ON ".$db_prefix."module_templates (module_name, template_name)");
+
 
 	echo "[done]</p>";
 
@@ -482,7 +501,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."templates", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."templates ADD INDEX (template_name)");
+//	$db->Execute("ALTER TABLE ".$db_prefix."templates ADD INDEX (template_name)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_templates_by_template_name ON ".$db_prefix."templates (template_name)");
 
 	echo "[done]</p>";
 
@@ -514,7 +534,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."userprefs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."userprefs ADD INDEX (user_id)");
+//	$db->Execute("ALTER TABLE ".$db_prefix."userprefs ADD INDEX (user_id)");
+	$db->Execute("CREATE INDEX ".$db_prefix."index_userprefs_by_user_id ON ".$db_prefix."userprefs (user_id)");
 
 	echo "[done]</p>";
 

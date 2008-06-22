@@ -12,7 +12,7 @@ if ($timestamp[0] != "'")
 }
 $query ="
     INSERT INTO 
-        `$table`
+        $table
     (permission_id, permission_name, permission_text, create_date, modified_date) 
         VALUES
     ('$perm_id', '$name', '$name', $timestamp, $timestamp)
@@ -24,7 +24,7 @@ if ($result)
     $table  = cms_db_prefix() . 'group_perms'; 
     $query = "
         INSERT INTO 
-            `$table` 
+            $table 
         (group_perm_id, group_id, permission_id, create_date, modified_date) 
             VALUES 
         ('$groupperm_id', 1, $perm_id, $timestamp, $timestamp)
