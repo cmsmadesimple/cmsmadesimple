@@ -430,7 +430,8 @@ class Smarty_CMS extends Smarty {
 		  $pos = stripos($tpl_source,'</head>');
 		  if( $pos === FALSE )
 		    {
-		      return false;
+		      // return the whole template
+		      return $tpl_source;
 		    }
 		  $tpl_source = substr($tpl_source,0,$pos+7);
 		  return true;
