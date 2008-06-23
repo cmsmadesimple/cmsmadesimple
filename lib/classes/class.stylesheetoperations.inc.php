@@ -58,12 +58,24 @@ class StylesheetOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
+		$query = 'SELECT max(assoc_order) FROM '.cms_db_prefix().'css_assoc 
+                           WHERE templateid = ?';
+		$order = $db->GetOne($query,array($templateid));
+		if( $order )
+		  {
+		    $order++;
+		  }
+		else
+		  {
+		    $order = 1;
+		  }
+
 		$time = $db->DBTimeStamp(time());
-		$query = 'INSERT INTO '.cms_db_prefix().'css_assoc VALUES (?,?,?,'.$time.','.$time.')';
-		$dbresult = $db->Execute( $query, array( $templateid, 
-			$stylesheetid,
-			'template'));
-			return ($dbresult != false);
+		$query = 'INSERT INTO '.cms_db_prefix().'css_assoc VALUES (?,?,?,'.$time.','.$time.',?)';
+		$dbresult = $db->Execute( $query, 
+					  array( $templateid, $stylesheetid,
+						 'template', $order));
+		return ($dbresult != false);
 	}
 
 
