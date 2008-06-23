@@ -7,4 +7,8 @@
 
 3) Icons and login have pach for default theme (report ted an calguy1000)
 
-4) ...
+4) Style the new context menu 
+
+5) Ajust all html stuff
+
+6) ...
