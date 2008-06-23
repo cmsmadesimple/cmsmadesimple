@@ -368,7 +368,7 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('globalmetadata')?>:</p>
-			<p class="pageinput"><textarea class="pagesmalltextarea" name="metadata" cols="80" rows="20"><?php echo $metadata?></textarea>
+			  <p class="pageinput"><textarea class="pagesmalltextarea" name="metadata" cols="80" rows="20"><?php echo $metadata?></textarea>
 		  </p>
 		</div>
 		<div class="pageoverflow">
@@ -377,7 +377,7 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('custom404')?>:</p>
-			<p class="pageinput"><textarea class="pagesmalltextarea" name="custom404" cols="80" rows="20"><?php echo $custom404?></textarea>
+																			 <p class="pageinput"><?php echo create_textarea(true,$custom404,'custom404','pagesmalltextarea'); ?>
 		  </p>
 		</div>
 		<div class="pageoverflow">
@@ -404,7 +404,7 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('sitedownmessage')?>:</p>
-			<p class="pageinput"><textarea class="pagesmalltextarea" name="sitedownmessage" cols="80" rows="10"><?php echo cms_htmlentities($sitedownmessage) ?></textarea>
+			  <p class="pageinput"><?php echo create_textarea(true,$sitedownmessage,'sitedownmessage','pagesmalltextarea'); ?>
 		  </p>
 		</div>
 		<div class="pageoverflow">
