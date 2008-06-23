@@ -1,0 +1,14 @@
+
+
+{admin_input type='select'.... }
+
+################################
+CORRECT OUTPUT
+
+<select name="foo" id="foo">
+
+
+#################################
+NOT CORRECTOUTPUT
+
+ <select name="foo" -->type="select"<-- id="foo">
