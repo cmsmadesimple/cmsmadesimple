@@ -1,4 +1,10 @@
-<div id="logocontainer"><img src="themes/NCleanGrey2/images/logoCMS.png" alt="{$adminpaneltitle}" title="{$adminpaneltitle}" /><div class="logotext">{$adminpaneltitle}</div></div>
+<div id="logocontainer"><img src="themes/NCleanGrey2/images/logoCMS.png" alt="{$adminpaneltitle}" title="{$adminpaneltitle}" /><div class="logotext">{$adminpaneltitle}
+
+<br />{tr}welcome_user{/tr}: (TODO - var)
+
+
+
+</div></div>
 
 
 {if $root_node->has_children()}
@@ -24,7 +30,14 @@
       {/foreach}
   
     </ul>
-    
+    <!-- ICONS-->
+    <div id="nav-icons_all">
+    <ul id="nav-icons">
+	<li class="viewsite-icon"><a  rel="external" title="{tr}viewsite{/tr}"  href="../">{tr}viewsite{/tr}</a></li>
+	<li class="logout-icon"><a  title="{tr}logout{/tr}"  href="logout.php">{tr}logout{/tr}</a></li>
+	</ul>
+    </div><!--end nav-icons_all-->
+        
     <div class="clearb"></div>
   </div>
   
