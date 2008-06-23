@@ -10,7 +10,7 @@
 					<th>{tr}name{/tr}</th>
 					<th>{tr}version{/tr}</th>
 					<th>{tr}status{/tr}</th>
-					<th>{tr}active{/tr}</th>
+					<th class="pagepos">{tr}active{/tr}</th>
 					<th>{tr}action{/tr}</th>
 					<th>{tr}help{/tr}</th>
 					<th>{tr}about{/tr}</th>

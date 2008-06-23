@@ -1128,7 +1128,15 @@ tr.row1  {
 tr.row2  {
 	background: #EDF2F3;
    }
-   
+/* //////////*/
+ tr.row1:hover  {
+	background:  #D5E2E3;
+   }
+
+tr.row2:hover   {
+	background: #D5E2E3;
+   }
+/*/////////// */ 
 tr.row1hover  {
 	background: #E4ECED;
    }
