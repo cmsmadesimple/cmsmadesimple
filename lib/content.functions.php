@@ -102,6 +102,10 @@ class Smarty_CMS extends Smarty {
 						       "template_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
+		$this->register_resource("tpl_top", array(&$this, "template_top_get_template",
+						       "template_get_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
 		$this->register_resource("tpl_head", array(&$this, "template_head_get_template",
 						       "template_get_timestamp",
 						       "db_get_secure",
@@ -396,10 +400,58 @@ class Smarty_CMS extends Smarty {
 		return true;
 	}
 
+
 	function preview_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
 		$tpl_timestamp = time();
 		return true;
+	}
+
+
+	function template_top_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	{
+	  global $gCms;
+	  $config =& $gCms->GetConfig();
+	  
+	  if (get_site_preference('enablesitedownmessage') == "1")
+	    {
+	      $tpl_source = '';
+	      return true;
+	    }
+	  else
+	    {
+	      if ($tpl_name == 'notemplate')
+		{
+		  $tpl_source = '';
+		  return true;
+		}
+
+	      if( isset($gCms->variables['template']) )
+		{
+		  $tpl_source = $gCms->variables['template'];
+		}
+	      else
+		{
+		  $pageinfo = $gCms->variables['pageinfo'];
+		  $templateops =& $gCms->GetTemplateOperations();
+		  $templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
+		  if (isset($templateobj) && $templateobj !== FALSE)
+		    {
+		      $tpl_source = $templateobj->content;
+		      $gCms->variables['template'] = $tpl_source;
+		    }
+		}
+		 
+	      $pos = stripos($tpl_source,'<head>');
+	      if( $pos === FALSE )
+		{
+		  // return the whole template
+		  return true;
+		}
+	      $tpl_source = substr($tpl_source,0,$pos);
+	      return true;
+	    }
+	  return false;
 	}
 
 	function template_head_get_template($tpl_name, &$tpl_source, &$smarty_obj)
@@ -420,25 +472,37 @@ class Smarty_CMS extends Smarty {
 		  return true;
 		}
 
-	      $pageinfo = $gCms->variables['pageinfo'];
-	      $templateops =& $gCms->GetTemplateOperations();
-	      $templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
-	      if (isset($templateobj) && $templateobj !== FALSE)
+	      if( isset($gCms->variables['template']) )
 		{
-		  $tpl_source = $templateobj->content;
-
-		  $pos = stripos($tpl_source,'</head>');
-		  if( $pos === FALSE )
+		  $tpl_source = $gCms->variables['template'];
+		}
+	      else
+		{
+		  $pageinfo = $gCms->variables['pageinfo'];
+		  $templateops =& $gCms->GetTemplateOperations();
+		  $templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
+		  if (isset($templateobj) && $templateobj !== FALSE)
 		    {
-		      // return the whole template
-		      return $tpl_source;
+		      $tpl_source = $templateobj->content;
+		      $gCms->variables['template'] = $tpl_source;
 		    }
-		  $tpl_source = substr($tpl_source,0,$pos+7);
+		}
+		 
+	      $pos1 = stripos($tpl_source,'<head>');
+	      $pos2 = stripos($tpl_source,'</head>');
+	      if( $pos1 === FALSE || $pos2 === FALSE )
+		{
+		  // return an empty string
+		  // assume it was processed in the top
+		  $tpl_source = '';
 		  return true;
 		}
+	      $tpl_source = substr($tpl_source,$pos1,$pos2-$pos1+7);
+	      return true;
 	    }
 	  return false;
 	}
+
 
 	function template_body_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
@@ -458,25 +522,35 @@ class Smarty_CMS extends Smarty {
 		  return true;
 		}
 
-	      $pageinfo = $gCms->variables['pageinfo'];
-	      $templateops =& $gCms->GetTemplateOperations();
-	      $templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
-	      if (isset($templateobj) && $templateobj !== FALSE)
+	      if( isset($gCms->variables['template']) )
 		{
-		  $tpl_source = $templateobj->content;
-
-		  $pos = stripos($tpl_source,'</head>');
-		  if( $pos === FALSE )
+		  $tpl_source = $gCms->variables['template'];
+		}
+	      else
+		{
+		  $pageinfo = $gCms->variables['pageinfo'];
+		  $templateops =& $gCms->GetTemplateOperations();
+		  $templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
+		  if (isset($templateobj) && $templateobj !== FALSE)
 		    {
-		      // this probably means it's not an html template
-		      // just return an empty string
-		      // and assume that the tpl_head stuff
-		      // returned the entire template
-		      return '';
+		      $tpl_source = $templateobj->content;
+		      $gCms->variables['template'] = $tpl_source;
 		    }
-		  $tpl_source = substr($tpl_source,$pos+7);
+		}
+	      
+	      $pos = stripos($tpl_source,'</head>');
+	      if( $pos === FALSE )
+		{
+		  // this probably means it's not an html template
+		  // just return an empty string
+		  // and assume that the tpl_head stuff
+		  // returned the entire template
+		  $tpl_source = '';
 		  return true;
 		}
+
+	      $tpl_source = substr($tpl_source,$pos+7);
+	      return true;
 	    }
 	  return false;
 	}

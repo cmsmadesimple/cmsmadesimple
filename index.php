@@ -254,9 +254,10 @@ else
 		// to a smarty variable, and then displaying it later.
 		if( isset($config['process_whole_template']) && $config['process_whole_template'] === false )
 		  {
+		    $top  = $smarty->fetch('tpl_top:'.$pageinfo->template_id);
 		    $body = $smarty->fetch('tpl_body:'.$pageinfo->template_id);
 		    $head = $smarty->fetch('tpl_head:'.$pageinfo->template_id);
-		    $html = $head.$body;
+		    $html = $top.$head.$body;
 		  }
 		else
 		  {
@@ -315,7 +316,7 @@ if ($config["debug"] == true)
 	echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
 }
 
-if( isset($config['hide_performance_info']) )
+if( !isset($config['hide_performance_info']) )
 {
 echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." -->\n";
 #echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple (".$cached."cached) using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";

@@ -602,7 +602,8 @@ $lang['admin']['help_function_global_content'] = <<<EOT
 	<p>Just insert the tag into your template/page like: <code>{global_content name='myblob'}</code>, where name is the name given to the block when it was created.</p>
 	<h3>What parameters does it take?</h3>
 	<ul>
-		<li>name - The name of the global content block to display.</li>
+  	  <li>name - The name of the global content block to display.</li>
+          <li><em>(optional)</em> assign - The name of a smarty variable that the global content block should be assigned to.</li>
 	</ul>
 EOT;
 $lang['admin']['help_function_get_template_vars'] = <<<EOT

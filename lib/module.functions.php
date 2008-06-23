@@ -134,6 +134,12 @@ function cms_module_plugin($params,&$smarty)
 					}
 					$modresult = @ob_get_contents();
 					@ob_end_clean();
+
+					if( isset($params['assign']) )
+					  {
+					    $smarty->assign(trim($params['assign']),$modresult);
+					    return;
+					  }
 					return $modresult;
 
 				}

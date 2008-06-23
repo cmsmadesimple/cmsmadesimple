@@ -18,7 +18,13 @@
 
 function smarty_cms_function_global_content($params, &$smarty)
 {
-	return $smarty->fetch('globalcontent:'.$params['name']);
+  $txt = $smarty->fetch('globalcontent:'.$params['name']);
+  if( isset($params['assign']) )
+    {
+      $smarty->assign(trim($params['assign']),$txt);
+      return;
+    }
+  return $txt;
 }
 
 function smarty_cms_help_function_global_content() {
