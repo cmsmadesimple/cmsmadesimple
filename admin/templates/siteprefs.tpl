@@ -60,7 +60,7 @@
 					<tbody>
 						{foreach from=$lang_list item='v' key='k'}
 							<tr>
-								<td><img src="../{$v.flag_image}" /></td>
+								<td><img alt="{$k}" title="{$k}" src="../{$v.flag_image}" /></td>
 								<td>{$k}</td>
 								<td>{$v.name}</td>
 								<td>{html_checkbox name=$v.checkbox_name selected=$v.enabled full_toggle=false}</td>
