@@ -5,10 +5,10 @@
 
 2) Fix All Form's vs Styles (wow much work)
 
-3) Icons and login have pach for default theme (report ted an calguy1000)
+3) Icons and login have pach for default theme (report ted and calguy1000)
 
 4) Style the new context menu 
 
-5) Ajust all html stuff
+5) Ajust all html stuff and smarty
 
 6) ...
