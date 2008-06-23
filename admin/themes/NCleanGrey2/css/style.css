@@ -313,14 +313,15 @@ code, tt, pre
 	
 	}
 /* Top - logo - text */	
-.logotext  {
+div.logotext  {
    	color: #fff;
 	font-weight: bold;
-	font-size: 1.2em;
+	font-size: 1.0em;
 	text-align: right;
 	margin-right: 10px;
-	padding: 50px 20px 10px 10px;
+	padding: 40px 10px 10px 10px;
 	width:auto;
+	
    }
 
 /* Login - Clean  */
@@ -495,8 +496,8 @@ div.topmenucontainer  {
 	height:1%;
 	width:auto;
 	border-top: 1px solid #3F565C;  /*height:50px;*/
-	/*padding-top:10px;
-	padding-left:10px;*/
+	 margin: 0;
+     padding: 0;
 	   }
 
 ul#nav, ul#nav ul  {
@@ -538,8 +539,9 @@ ul#nav li:hover, ul#nav li.cssHover, ul#nav a.module:hover, ul#nav a.first_modul
  color: #fff;
    } 
 ul#nav li a.selected  {
-   	background:  url(../images/layout/nav.png) repeat-x left 0px;
+	background:  url(../images/layout/nav.png) repeat-x left 0px;
 	color: #000000;
+	font-weight: bold;	
 	/*border-right: 1px solid #F2F5F7;
 	border-left: 1px solid #F2F5F7;*/
    }
@@ -569,6 +571,8 @@ ul#nav li ul  {
 	z-index:999;
 	border-top: 1px solid #FFFFFF;
 	border-bottom: 1px solid #374B51;
+	opacity:0.95;
+	/*-moz-opacity: 0.90;*/
 }
 
 ul#nav li li  {
