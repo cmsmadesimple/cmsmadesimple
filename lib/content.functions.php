@@ -442,7 +442,7 @@ class Smarty_CMS extends Smarty {
 		    }
 		}
 		 
-	      $pos = stripos($tpl_source,'<head>');
+	      $pos = stripos($tpl_source,'<head');
 	      if( $pos === FALSE )
 		{
 		  // return the whole template
@@ -488,7 +488,7 @@ class Smarty_CMS extends Smarty {
 		    }
 		}
 		 
-	      $pos1 = stripos($tpl_source,'<head>');
+	      $pos1 = stripos($tpl_source,'<head');
 	      $pos2 = stripos($tpl_source,'</head>');
 	      if( $pos1 === FALSE || $pos2 === FALSE )
 		{
