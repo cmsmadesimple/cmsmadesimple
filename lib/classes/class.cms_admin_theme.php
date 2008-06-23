@@ -731,7 +731,7 @@ class CmsAdminTheme extends CmsObject
 		echo "<div class=\"DashboardCallout\">\n";
 		if (file_exists($file))
 		{
-			echo '<p>'.$message.'</p>';
+			echo "<div class=\"pageerrorinstalldir\"><p class=\"pageerror\">".$message."</p></div>";
 		}
 		echo "</div> <!-- end DashboardCallout -->\n";
 	}
