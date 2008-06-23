@@ -2,10 +2,26 @@
 <menu>
   <node>
     <name>main</name>
-    <title>main</title>
+    <title>CMS</title>
     <url>index.php</url>
     <description></description>
+	<children>
+	  <node>
+    <name>viewsite</name>
+    <title>viewsite</title>
+    <url>../</url>
+    <description></description>
+    <target>_blank</target>
+       </node>
+   <node>
+    <name>logout</name>
+    <title>logout</title>
+    <url>logout.php</url>
+    <description></description>
   </node>
+   </children>
+      </node>
+
   <node>
     <name>content</name>
     <title>content</title>
@@ -299,7 +315,8 @@
       </node>
     </children>
   </node>
-  <node>
+<!-- 
+<node>
     <name>viewsite</name>
     <title>viewsite</title>
     <url>../</url>
@@ -312,4 +329,5 @@
     <url>logout.php</url>
     <description></description>
   </node>
+  /-->
 </menu>
