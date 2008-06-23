@@ -94,7 +94,7 @@ if (isset($cmsmodules))
     
     foreach ($cmsmodules as $key=>$value)
       {
-	if (strtolower($modulename) == strtolower($key))
+	if (!strcasecmp($modulename,$key))
 	  {
 	    $modulename = $key;
 	  }

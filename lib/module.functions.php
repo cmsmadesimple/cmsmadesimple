@@ -82,7 +82,7 @@ function cms_module_plugin($params,&$smarty)
 	  // we're handling an action
 	  $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
 	  $mactmodulename = (isset($ary[0])?$ary[0]:'');
-	  if (strtolower($mactmodulename) == strtolower($params['module']))
+	  if (!strcasecmp($mactmodulename,$params['module']))
 	    {
 	      $checkid = (isset($ary[1])?$ary[1]:'');
 	      $mactaction = (isset($ary[2])?$ary[2]:'');
@@ -110,10 +110,10 @@ function cms_module_plugin($params,&$smarty)
 
 		foreach ($cmsmodules as $key=>$value)
 		{
-			if (strtolower($modulename) == strtolower($key))
-			{
-				$modulename = $key;
-			}
+		  if (!strcasecmp($modulename,$key))
+		    {
+		      $modulename = $key;
+		    }
 		}
 
 		if (isset($modulename))
