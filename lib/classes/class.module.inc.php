@@ -664,13 +664,12 @@ class CMSModule
 
 		$result = false;
 
-		$query = "SELECT * FROM ".cms_db_prefix()."module_deps WHERE parent_module = ?";
-		$dbresult = $db->Execute($query, array($this->GetName()));
-
-		if ($dbresult && $dbresult->RecordCount() > 0)
-		{
-			$result = true;
-		}
+		$query = "SELECT child_module FROM ".cms_db_prefix()."module_deps WHERE parent_module = ? LIMIT 1";
+		$tmp = $db->GetOne($query,array($this->GetName()));
+		if( $tmp ) 
+		  {
+		    $result = true;
+		  }
 
 		return $result;
 	}
