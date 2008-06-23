@@ -1,10 +1,10 @@
 <div class="pagecontainer">
 	<div class="pageoverflow">
-	{$header_name}
+	<p class="pageheader">Debug-title: {$header_name}</p>
 	</div><!-- pageoverflow -->
 
-	<div id="modulelist">
-		<table cellpadding="2" cellspacing="0" border="1">
+	
+		<table class="pagetable">
 			<thead>
 				<tr>
 					<th>{tr}name{/tr}</th>
@@ -25,7 +25,7 @@
 						<td colspan="3">{$module.status}</td>
 					{else}
 						<td>{$module.status}</td>
-						<td>{$module.active}</td>
+						<td class="pagepos">{$module.active}</td>
 						<td>{$module.action}</td>
 					{/if}
 					<td>{$module.helplink}</td>
@@ -34,7 +34,7 @@
 			{/foreach}
 			</tbody>
 		</table>
-	</div>
+
 </div>
 
 <p class="pageback"><a class="pageback" href="{$back_url}">&#171; {lang string='back'}</a></p>
