@@ -1028,6 +1028,9 @@ table.pagetable  {
 	width: 100%;
 	margin-right: auto;
 	margin-left: auto;
+	 /* sugest - #241*/
+   border-spacing:0px;
+     /* end*/
    }
 
 table.pagetable th  {
@@ -1046,14 +1049,17 @@ table.pagetable th a {
 	}
 	
 table.pagetable th.active { 
-	color: #E6A2FF;
+	color: #C6D5D9;
 	}
 	
 table.pagetable th.active a { 
-	color: #E6A2FF; 
+	color: #C6D5D9;
 	text-decoration: underline;
 	}
-
+table.pagetable th a:hover { 
+	color: #fff;
+	text-decoration: underline;
+	}
 table.pagetable tr  {
 	height: 2.5em;
 	
@@ -1069,7 +1075,7 @@ table.pagetable a  {
    color: #384654;
    }
 
-th.pagepos  {
+table.pagetable th.pagepos  {
    text-align: center;
    }
 
@@ -1253,7 +1259,77 @@ ul.sortableList li li li li li {
  color: red;
  font-weight: normal;
 }
-
+/*FILEMANGER MESSAGES*/
+span.fm-messages{
+margin-left:20px;
+padding: 0px 2px 2px 10px;
+display:block;
+}
+/*ICONS SYSINFO*/
+.icon-extra{
+padding-left:10px;
+clear:left;
+margin:-6px 0 0 10px;
+}
+/*h2, 3, 4, etc  inside*/
+div.pagecontainer .h-inside{
+	float: left;
+	padding-top: 8px;
+	padding-right: 1em;
+	margin-left: 10%;
+	width: 18em;
+	margin-bottom: 0.5em;
+	text-align:right;
+}
+/*ICONS VIEW SITE AND LOGOUT ADMIN*/
+div#nav-icons_all
+{
+	margin:0px;
+	padding:0px;
+	float:right;
+	width:95px;
+	height:auto;
+	/*background:red;*//*debug*/
+}
+div#nav-icons_all ul#nav-icons
+{
+	margin:0px;
+	list-style-type: none;
+	padding:0px;
+	text-indent: -999em;
+}
+div#nav-icons_all ul#nav-icons li
+{
+	padding:0px;
+	float:left;
+	height: 1%;	/*IE6*/
+	margin-left:10px;
+}
+div#nav-icons_all ul#nav-icons li.viewsite-icon a
+{
+	display:block;
+	padding: 10px 0;
+	width: 35px;
+	background: transparent url(../images/icons/extra/nav-icons.gif) no-repeat  0px 0px ;
+	
+}
+div#nav-icons_all ul#nav-icons li.logout-icon a
+{
+	display:block;
+	padding: 10px 0;
+	width: 35px;
+	background: transparent url(../images/icons/extra/nav-icons.gif) no-repeat  -45px 0px ;	
+}
+/*hover*/
+div#nav-icons_all ul#nav-icons li.viewsite-icon a:hover
+{
+	background-position:  0px -37px ;
+	
+}
+div#nav-icons_all ul#nav-icons li.logout-icon a:hover
+{
+	background-position:   -45px -37px ;	
+}   
 
 /*context_menu*/
 .placeholder-class
