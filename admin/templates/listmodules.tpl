@@ -18,7 +18,8 @@
 			</thead>
 			<tbody>
 			{foreach from=$modules item=module}
-				<tr>
+             {cycle values='row1,row2' assign='currow'}
+				<tr class="{$currow}">
 					<td>{$module.name}</td>
 					<td>{$module.version}</td>
 					{if $module.use_span}
