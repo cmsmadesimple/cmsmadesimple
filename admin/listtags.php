@@ -32,7 +32,8 @@ $action = "";
 if (isset($_GET["action"])) $action = cms_htmlentities($_GET["action"]);
 
 $userid = get_userid();
-$access = check_permission($userid, "Modify Modules");
+$access = check_permission($userid, "View Tag Help");
+if( !$access ) return;
 
 #$smarty = new Smarty_CMS($gCms->config);
 

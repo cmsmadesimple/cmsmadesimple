@@ -349,9 +349,11 @@ class AdminTheme
         $this->perms['codeBlockPerms'] = check_permission($this->userid, 'Modify User-defined Tags');
         $this->perms['modulePerms'] = check_permission($this->userid, 'Modify Modules');
         $this->perms['eventPerms'] = check_permission($this->userid, 'Modify Events');
+	$this->perms['taghelpPerms'] = check_permission($this->userid, 'View Tag Help');
         $this->perms['extensionsPerms'] = $this->perms['codeBlockPerms'] |
             $this->perms['modulePerms'] |
 	    $this->perms['eventPerms'] |
+	    $this->perms['taghelpPerms'] |
             (isset($this->sectionCount['extensions']) && $this->sectionCount['extensions'] > 0);
     }
     
@@ -783,7 +785,7 @@ class AdminTheme
                     'description'=>lang('moduledescription'),'show_in_menu'=>$this->HasPerm('modulePerms')),
             'tags'=>array('url'=>'listtags.php','parent'=>'extensions',
                     'title'=>$this->FixSpaces(lang('tags')),
-                    'description'=>lang('tagdescription'),'show_in_menu'=>true),
+			  'description'=>lang('tagdescription'),'show_in_menu'=>$this->HasPerm('taghelpPerms')),
             'eventhandlers'=>array('url'=>'eventhandlers.php','parent'=>'extensions',
                     'title'=>$this->FixSpaces(lang('eventhandlers')),
                     'description'=>lang('eventhandlerdescription'),'show_in_menu'=>$this->HasPerm('eventPerms')),
