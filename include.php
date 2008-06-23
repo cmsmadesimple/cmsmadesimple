@@ -70,7 +70,6 @@ $config =& $gCms->GetConfig();
 #Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  )
   {
-    die('got here');
     ini_set('memory_limit',trim($config['php_memory_limit']));
   }
 
