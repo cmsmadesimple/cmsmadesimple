@@ -14,12 +14,11 @@
     
     
 	 <link rel="stylesheet" href="{$root}/admin/themes/NCleanGrey2/css/style.css" type="text/css" />
-     <!--[if IE]>
-		<script src="{$root}/themes/NCleanGrey2/includes/ie7-standard-p.js" type="text/javascript">
-	</script>
+        <!--[if IE]>
+		 <script type="text/javascript" src="{$root}/admin/themes/NCleanGrey2/includes/ie7-standard-p.js"></script>
 	<![endif]-->	
-
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/jquery.js"></script>
+   
+    <script language="javascript" type="text/javascript" src="{$root}/lib/jquery/jquery.js"></script>
 	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/jquery.color.js"></script>
 	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/jquery.jcontext.1.0.js"></script>
 	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.tabs.js"></script>
@@ -27,7 +26,7 @@
 	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.mouse.js"></script>
 	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.draggable.js"></script>
 	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.droppable.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.sortable.js"></script>
+	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.sortable.js"></script>	
 	
 	{literal}	
 	<script type="text/javascript">//<![CDATA[
@@ -121,8 +120,9 @@
 	<div id="HelpContent"></div>	
 
 </div><!-- end MainContent -->
+
 <div id="footer"><a rel="external" href="http://www.cmsmadesimple.org"><b>CMS Made Simple</b></a> {cms_version} "{cms_versionname}"<br /><b>CMS Made Simple</b> is free software released under the General Public Licence.<br />Theme designed by <a rel="external" href="http://www.criacaoweb.net"><b>Nuno Costa</b></a>&nbsp;&nbsp; Icons by <a rel="external" href="http://www.vistaico.com">VistaICO.com</a> </div>
-		</div><!--end clean-container-->
+		<!--</div>--><!--end clean-container-->
         
         
 </body>
