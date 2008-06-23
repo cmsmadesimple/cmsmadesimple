@@ -32,7 +32,10 @@ if (isset($_GET['action'])) $action = $_GET['action'];
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Modules');
-
+if (!$access) {
+	die('Permission Denied');
+return;
+}
 $smarty = new Smarty_CMS($gCms->config);
 
 include_once("header.php");

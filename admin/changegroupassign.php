@@ -40,7 +40,10 @@ if (isset($_POST["cancel"])) {
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Group Assignments');
-
+if(!$access)
+{
+die('Permission Denied');
+}
 $message = '';
 
 include_once("header.php");
@@ -48,11 +51,12 @@ include_once("header.php");
 global $gCms;
 $db =& $gCms->GetDb();
 
+/*
 if (!$access) {
 	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('modifygrouppermissions')))."</p></div>";
-}
+	}
 else {
-
+*/
 ?>
 
 <div class="pagecontainer">
@@ -153,7 +157,7 @@ else {
         echo '<p class="pageheader">'.lang('assignmentchanged').'</p>';
         }
 echo '</div>';
-}
+/*}*/
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
