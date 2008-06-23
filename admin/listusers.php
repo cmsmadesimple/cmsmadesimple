@@ -24,6 +24,12 @@ require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
 
 check_login();
+$userid = get_userid();
+$access = check_permission($userid, "Modify Users") || check_permission($userid, "Remove Users") || check_permission($userid, "Add Users");
+if (!$access) {
+	die('Permission Denied');
+return;
+}
 
 include_once("header.php");
 global $gCms;
