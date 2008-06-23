@@ -468,7 +468,11 @@ class Smarty_CMS extends Smarty {
 		  $pos = stripos($tpl_source,'</head>');
 		  if( $pos === FALSE )
 		    {
-		      return false;
+		      // this probably means it's not an html template
+		      // just return an empty string
+		      // and assume that the tpl_head stuff
+		      // returned the entire template
+		      return '';
 		    }
 		  $tpl_source = substr($tpl_source,$pos+7);
 		  return true;
