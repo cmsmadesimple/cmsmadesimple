@@ -56,7 +56,10 @@ function smarty_function_html_select($params, &$smarty)
             case 'selected':
                 $$_key = array_map('strval', array_values((array)$_val));
                 break;
-                
+
+            case 'type':
+                break;
+
             default:
                 if(!is_array($_val)) {
                     $extra .= ' '.$_key.'="'.smarty_function_escape_special_chars($_val).'"';
