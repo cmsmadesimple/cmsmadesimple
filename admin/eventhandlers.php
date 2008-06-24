@@ -39,11 +39,15 @@ require_once("../include.php");
 //   $text .= '</select>';
 //   return $text;
 // }
-
+check_login();
 $userid = get_userid();
 $access = check_permission($userid, "Modify Events");
 
-check_login();
+if (!$access) {
+	die('Permission Denied');
+return;
+}
+
 
 // here we'll handle setting $action based on _POST['action']
 $action = "";
