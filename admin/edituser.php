@@ -60,6 +60,11 @@ else if (isset($_GET["user_id"])) $user_id = cleanValue($_GET["user_id"]);
 
 global $gCms;
 $userops =& $gCms->GetUserOperations();
+$groupops =& $gCms->GetGroupOperations();
+$group_list = $groupops->LoadGroups();
+$db =& $gCms->GetDb();
+
+
 $thisuser = $userops->LoadUserByID($user_id);
 if (strlen($thisuser->username) > 0)
     {
@@ -70,6 +75,8 @@ if (strlen($thisuser->username) > 0)
 $access_perm = check_permission($userid, 'Modify Users');
 $access_user = ($userid == $user_id);
 $access = $access_perm | $access_user;
+
+$assign_group_perm = check_permission($userid,'Modify Group Assignments');
 
 $use_wysiwyg = "";
 #if (isset($_POST["use_wysiwyg"])){$use_wysiwyg = $_POST["use_wysiwyg"];}
@@ -133,6 +140,21 @@ if ($access) {
 
 
 				$result = $thisuser->save();
+				
+				if (isset($_POST['groups']))
+               {
+               $dquery = "delete from ".cms_db_prefix()."user_groups where user_id=?";
+               $iquery = "insert into ".cms_db_prefix().
+                  "user_groups (user_id,group_id) VALUES (?,?)";
+               $result = $db->Execute($dquery,array($thisuser->id));
+               foreach($group_list as $thisGroup)
+                  {
+                  if (isset($_POST['g'.$thisGroup->id]) && $_POST['g'.$thisGroup->id] == 1)
+                     {
+                     $result = $db->Execute($iquery,array($thisuser->id,$thisGroup->id));
+                     }
+                  }
+               }
 			}
 
 			if ($result)
@@ -226,6 +248,41 @@ else {
 	   } else {
 			echo '<input type="hidden" name="active" value="'.$active.'" />';
 	   }
+
+      if ($assign_group_perm)
+      {
+      ?>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('groups')?>:</p>
+			<p class="pageinput">
+      <?php
+	     $query = "SELECT group_id FROM ".cms_db_prefix()."user_groups where user_id=?";
+
+	     $result = $db->Execute($query,array($user_id));
+        $groups=array();
+	     while($result && $row = $result->FetchRow())
+            {
+            $groups[$row['group_id']] = 1;
+            }
+
+	     echo '<div class="group_memberships"><input type="hidden" name="groups" value="1" />';
+        foreach($group_list as $thisGroup)
+            {
+            echo '<div class="group"><input type="checkbox" name="g'.$thisGroup->id.'" id="g'.$thisGroup->id.
+               '" value="1" ';
+            if (isset($groups[$thisGroup->id]) && $groups[$thisGroup->id] == 1)
+               {
+               echo 'checked="checked"';
+               }
+            echo '/><label for="g'.$thisGroup->id.'">'.$thisGroup->name.'</label></div>';
+            }
+        echo '</div>';
+      ?>
+         </p>
+		</div>
+
+      <?php
+      }
            ?>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
