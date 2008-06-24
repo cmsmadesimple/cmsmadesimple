@@ -187,9 +187,12 @@ class CmsAdminTheme extends CmsObject
 		//Now that it's all done, send out an event telling everyone
 		CmsEventOperations::send_event('Core', 'AdminDisplayFinish');
 		
-		echo '<div id="_DebugFooter">';
-		echo CmsProfiler::get_instance()->report();
-		echo '</div> <!-- end DebugFooter -->';
+		if (CmsConfig::get('debug'))
+		{
+			echo '<div id="_DebugFooter">';
+			echo CmsProfiler::get_instance()->report();
+			echo '</div> <!-- end DebugFooter -->';
+		}
 	}
 	
 	static public function inject_header_text($text)
