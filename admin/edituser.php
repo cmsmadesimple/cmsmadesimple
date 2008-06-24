@@ -141,7 +141,7 @@ if ($access) {
 
 				$result = $thisuser->save();
 				
-				if (isset($_POST['groups']))
+				if ($assign_group_perm && isset($_POST['groups']))
                {
                $dquery = "delete from ".cms_db_prefix()."user_groups where user_id=?";
                $iquery = "insert into ".cms_db_prefix().
