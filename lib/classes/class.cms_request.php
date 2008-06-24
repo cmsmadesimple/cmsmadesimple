@@ -243,7 +243,7 @@ class CmsRequest extends CmsObject
 	
 	public static function get_calculated_url_base()
 	{
-		$cur_url_dir = dirname(self::get_requested_uri());
+		$cur_url_dir = isset($_SERVER['SCRIPT_NAME']) ? dirname($_SERVER['SCRIPT_NAME']) : dirname($_SERVER['SCRIPT_NAME']);
 		$cur_file_dir = dirname(self::get_request_filename());
 		$root_file_dir = dirname(dirname(dirname(__FILE__)));
 

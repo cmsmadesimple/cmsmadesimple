@@ -117,7 +117,7 @@ class CmsConfig extends CmsObject implements ArrayAccess
 		$config["db_password"] = "cms";
 		$config["db_name"] = "cms";
 		$config["db_prefix"] = "cms_";
-		$config["root_url"] = "http://www.something.com";
+		$config["root_url"] = CmsRequest::get_calculated_url_base();
 		$config["root_path"] = dirname(dirname(__FILE__));
 		$config["query_var"] = "page";
 		$config["use_bb_code"] = false;
@@ -257,16 +257,15 @@ class CmsConfig extends CmsObject implements ArrayAccess
 
 #Document root as seen from the webserver.  No slash at the end
 #If page is requested with https use https as root url
-#e.g. http://blah.com
-\$config['root_url'] = '{$config['root_url']}';
-if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
-{
-  \$config['root_url'] = str_replace('http','https',\$config['root_url']);
-}
+#e.g. http://blah.com.  Only override this if you are having issues
+#with the url calculation routine, which could be caused by strange
+#web server configurations.
+#\$config['root_url'] = '{$config['root_url']}';
 
 #Path to document root. This should be the directory this file is in.
-#e.g. /var/www/localhost
-\$config['root_path'] = '{$config['root_path']}';
+#e.g. /var/www/localhost.  Only override this if PHP is for some reason
+#calculating a bad path.
+#\$config['root_path'] = '{$config['root_path']}';
 
 #Name of the admin directory
 \$config['admin_dir'] = '{$config['admin_dir']}';
