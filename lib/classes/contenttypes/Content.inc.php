@@ -26,7 +26,7 @@ class Content extends ContentBase
     function Content()
     {
 	$this->ContentBase();
-	$this->mProperties->SetAllowedPropertyNames(array('content_en'));
+	$this->mProperties->SetAllowedPropertyNames(array('content_en','target'));
 	$this->additionalContentBlocks = array();
 	$this->addtContentBlocksLoaded = false;
     }
@@ -38,7 +38,8 @@ class Content extends ContentBase
 
     function SetProperties()
     {
-	$this->mProperties->Add("string", "content_en"); //For later language support
+	$this->mProperties->Add('string', 'content_en'); //For later language support
+	$this->mProperties->Add('string', 'target');
 
 	#Turn on preview
 	$this->mPreview = true;
@@ -65,7 +66,7 @@ class Content extends ContentBase
 
 	if (isset($params))
 	{
-	    $parameters = array('content_en');
+  	    $parameters = array('content_en','target');
 
 	    //pick up the template id before we do parameters
 	    if (isset($params['template_id']))
@@ -91,6 +92,11 @@ class Content extends ContentBase
 		    $this->SetPropertyValue($oneparam, $params[$oneparam]);
 		}
 	    }
+            # make sure target keeps empty even with the new dropdown value
+	    if (isset($_POST['target']) && $_POST['target'] == "---")
+	    {
+	    	$this->SetPropertyValue('target', '');
+            } 
 	    if (isset($params['title']))
 	    {
 		$this->mName = $params['title'];
@@ -246,6 +252,13 @@ class Content extends ContentBase
 	    $ret[]= array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
 	    $ret[]= array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 	    $ret[]= array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
+
+	    $text = '<option value="---">'.lang('none').'</option>';
+	    $text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
+	    $text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
+	    $text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
+	    $text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
+	    $ret[]= array(lang('target').':','<select name="target">'.$text.'</select>');
 	  }
 	  else
 	    {
