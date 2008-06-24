@@ -35,19 +35,6 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
-$userid = get_userid();
-$access = check_permission($userid, "Modify Stylesheets")
-||
-check_permission($userid, "Add Stylesheets")
-||
-check_permission($userid, "Remove Stylesheets");
-
-
-if (!$access) {
-	die('Permission Denied');
-return;
-}
-
 
 include_once("header.php");
 global $gCms;

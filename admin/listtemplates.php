@@ -24,19 +24,6 @@ require_once("../include.php");
 require_once("../lib/classes/class.template.inc.php");
 
 check_login();
-$userid = get_userid();
-$access = check_permission($userid, "Add Templates")
-||
-check_permission($userid, "Modify Templates")
-||
-check_permission($userid, "Remove Templates");
-
-
-if (!$access) {
-	die('Permission Denied');
-return;
-}
-
 
 include_once("header.php");
 global $gCms;

@@ -258,7 +258,7 @@ include_once("header.php");
 // AJAX result container is below the apply buttons, in this case (no top apply button)
 
 if (!$access) {
-	echo '<div class="pageerrorcontainer"><p class="pageerror">'.lang('noaccessto', array(lang('addusertag'))).'</p></div>';
+	echo '<div class=\"pageerrorcontainer\"><p class="pageerror">'.lang('noaccessto', array(lang('addusertag'))).'</p></div>';
 }
 else {
 	if (FALSE == empty($error)) {

@@ -25,22 +25,6 @@ require_once("../lib/classes/class.group.inc.php");
 
 check_login();
 
-$userid = get_userid();
-$access = check_permission($userid, "Modify Permissions")
-||
-check_permission($userid, "Modify Group Assignments")
-||
-check_permission($userid, "Modify Groups")
-||
-check_permission($userid, "Remove Groups");
-
-if (!$access) {
-	die('Permission Denied');
-return;
-}
-
-
-
 include_once("header.php");
 
 ?>

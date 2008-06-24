@@ -41,10 +41,6 @@ $autoinstallupgrade = 0; // keep this here for a bit, just incase
 
 $userid = get_userid();
 $access = check_permission($userid, "Modify Modules");
-if (!$access) {
-	die('Permission Denied');
-return;
-}
 
 $smarty = new Smarty_CMS($gCms->config);
 $db =& $gCms->GetDb();
