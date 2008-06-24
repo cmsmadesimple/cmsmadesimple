@@ -33,7 +33,10 @@ Version 1.4-beta1 "Jamaica"
   templates.
 - A new permission that controls access to the Tags page so that
   editors, etc. can see the help there.
-
+- Add assign parameter to numerous plugins (including all module plugins)
+- adds the image_url plugin (thanks Nuno)
+- Now use a wysiwyg for the sitedown message and the custom404 message.
+- Added the target option to the 'content' content type.
 
 Version 1.3 "Cuba" -- June 7, 2008
 -----------------
