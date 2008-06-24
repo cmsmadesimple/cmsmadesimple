@@ -85,7 +85,7 @@
 </script>
 {/literal}
 
-<form>
+<form method="post" action="">
 	{$selectgroup}:	<select id="groupsel" onchange="set_group()">
 		{foreach from=$group_list item=thisgroup}
 			<option value="{$thisgroup->id}">{$thisgroup->name}</option>
@@ -110,7 +110,7 @@
 		{foreach from=$group_list item=thisgroup}
 			{if $thisgroup->id != -1}
 			{assign var="gid" value=`$thisgroup->id`}
-			<td class="g{$thisgroup->id}"><input type="checkbox" name="pg_{$perm->id}_{$gid}" value="1"{if isset($perm->group[$gid]) || $gid == 1} checked="checked"{/if} {if $gid == 1} disabled{/if} /></td>
+			<td class="g{$thisgroup->id}"><input type="checkbox" name="pg_{$perm->id}_{$gid}" value="1"{if isset($perm->group[$gid]) || $gid == 1} checked="checked"{/if} {if $gid == 1} disabled="disabled"{/if} /></td>
 			{/if}
 		{/foreach}
     </tr>
