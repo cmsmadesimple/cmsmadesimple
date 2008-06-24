@@ -25,6 +25,13 @@ require_once("../lib/classes/class.user.inc.php");
 
 check_login();
 $userid = get_userid();
+$access = check_permission($userid, 'Add Users');
+$assign_group_perm = check_permission($userid,'Modify Group Assignments');
+
+global $gCms;
+$db =& $gCms->GetDb();
+$groupops =& $gCms->GetGroupOperations();
+$group_list = $groupops->LoadGroups();
 
 $error = "";
 
@@ -138,6 +145,20 @@ if (isset($_POST["adduser"]))
 			set_preference($userid, 'bookmarks', get_preference($adminid, 'bookmarks'));
 			set_preference($userid, 'recent', get_preference($adminid, 'recent'));
 
+			if ($assign_group_perm && isset($_POST['groups']))
+            {
+            $iquery = "insert into ".cms_db_prefix().
+               "user_groups (user_id,group_id) VALUES (?,?)";
+            foreach($group_list as $thisGroup)
+               {
+               if (isset($_POST['g'.$thisGroup->id]) && $_POST['g'.$thisGroup->id] == 1)
+                  {
+                  $result = $db->Execute($iquery,array($userid,$thisGroup->id));
+                  }
+               }
+            }
+
+
 			audit($newuser->id, $newuser->username, 'Added User');
 			redirect("listusers.php");
 		}
@@ -148,8 +169,6 @@ if (isset($_POST["adduser"]))
 	}
 }
 
-$userid = get_userid();
-$access = check_permission($userid, 'Add Users');
 
 include_once("header.php");
 
@@ -195,6 +214,29 @@ else {
 			<p class="pagetext"><?php echo lang('active')?>:</p>
 			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
 		</div>
+		<?php
+      if ($assign_group_perm)
+      {
+      ?>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('groups')?>:</p>
+			<p class="pageinput">
+      <?php
+	     echo '<div class="group_memberships"><input type="hidden" name="groups" value="1" />';
+        foreach($group_list as $thisGroup)
+            {
+            echo '<div class="group"><input type="checkbox" name="g'.$thisGroup->id.'" id="g'.$thisGroup->id.
+               '" value="1" /><label for="g'.$thisGroup->id.'">'.$thisGroup->name.'</label></div>';
+            }
+        echo '</div>';
+      ?>
+         </p>
+		</div>
+
+      <?php
+      }
+      ?>
+		
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
