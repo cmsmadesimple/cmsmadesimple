@@ -23,15 +23,10 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
-$group_id= - 1;
-if (isset($_POST["group_id"])) $group_id = $_POST["group_id"];
-else if (isset($_GET["group_id"])) $group_id = $_GET["group_id"];
 
 $submitted= - 1;
 if (isset($_POST["submitted"])) $submitted = $_POST["submitted"];
 else if (isset($_GET["submitted"])) $submitted = $_GET["submitted"];
-
-$group_name="";
 
 if (isset($_POST["cancel"])) {
 	redirect("topusers.php");
@@ -40,121 +35,110 @@ if (isset($_POST["cancel"])) {
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Permissions');
-
+$group_name = '';
 $message = '';
 
 include_once("header.php");
 global $gCms;
 $db =& $gCms->GetDb();
+$smarty =& $gCms->GetSmarty();
 
 if (!$access) {
 	die('permission denied');
 }
 else {
-
-?>
-
-<div class="pagecontainer">
-<?php
-	echo $themeObject->ShowHeader('grouppermissions',array($group_name));
-
-  if( $group_id == 1 )
-    {
-      echo $themeObject->ShowErrors(lang('adminspecialgroup'));
-    }
-
-    // always display the group pulldown
+    // always display the group pull down
 	global $gCms;
 	$groupops =& $gCms->GetGroupOperations();
-    $groups = $groupops->LoadGroups();
-    if (count($groups) > 0)
-        {
-        echo '<form id="groupname" method="post" action="changegroupperm.php">';
-        echo '<div class="pageoverflow">';
-        echo '<p class="pagetext">'.lang('groupname').':</p>';
-        echo '<p class="pageinput">';
-        echo '<select name="group_id"';
-        echo '><option value="-1">'.lang('selectgroup').'</option>';
-        foreach ($groups as $onegroup)
-            {
-            echo '<option value="'.$onegroup->id.'"';
-            if ($onegroup->id == $group_id)
-                {
-                echo ' selected="selected"';
-                }
-            echo '>'.$onegroup->name.'</option>';
-            }
-        echo '</select>';
-        echo '<input id="groupsubmit" type="submit" value="'.lang('selectgroup').'" /></p>';
-        echo '</div></form>';
-        }
-    if ($group_id != -1 && $submitted == -1)
-        {
-        // a group has been selected
-        echo '<form method="post" action="changegroupperm.php">';
-        $query = "SELECT p.permission_id, p.permission_text, up.group_id FROM ".
-        	cms_db_prefix()."permissions p LEFT JOIN ".cms_db_prefix().
-        	"group_perms up ON p.permission_id = up.permission_id and group_id = ? ORDER BY p.permission_name";
+	$allgroups = new stdClass();
+	$allgroups->name = lang('all_groups');
+	$allgroups->id=-1;
+    $groups = array($allgroups);
 
-        $result = $db->Execute($query,array($group_id));
-		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-		echo '<thead>';
-		echo "<tr>\n";
-		echo "<th>".lang('permission')."</th>\n";
-		echo "<th class=\"pagew10\">&nbsp;</th>\n";
-		echo "</tr>\n";
-		echo '</thead>';
-		echo '<tbody>';
-		$currow = "row1";
-        while($result && $row = $result->FetchRow())
-            {
-			echo "<tr class=\"".$currow."\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-            echo '<td>'.$row['permission_text'].'</td>'."\n";
-			echo '<td><input class="pagecheckbox" type="checkbox" name="permission-'.$row['permission_id'].'" value="1" '.(isset($row['group_id'])?" checked=\"checked\"":"").'/></td>'."\n";
-			echo "</tr>\n";
+	$group_list = $groupops->LoadGroups();
+	$groups = array_merge($groups,$group_list);
+	$smarty->assign_by_ref('group_list',$groups);
 
-			($currow=="row1"?$currow="row2":$currow="row1");	
-			}
-		?>
-		</tbody>
-		</table>
-		<div class="pageoptions">
-			<p class="pageoptions">
-				<input type="hidden" name="group_id" value="<?php echo $group_id?>" />
-				<input type="hidden" name="submitted" value="1" />
-				<input type="submit" name="changeperm" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			</p>
-		</div>
-		</form>
-		<?php
-        }
-    else if ($group_id != -1 && $submitted != -1)
-        {
-        // we have group permissions
-		$query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE group_id = ?";
-		$result = $db->Execute($query, array($group_id));
+	// because it's easier in PHP than Javascript:
+	$groupidlist = array();
+	foreach ($groups as $thisGroup)
+		{
+		array_push($groupidlist,$thisGroup->id);
+		}
+	$smarty->assign('groupidlist',implode(',',$groupidlist));
+    if ($submitted == 1)
+		{
+      	// we have group permissions
+		$query = "DELETE FROM ".cms_db_prefix()."group_perms";
+		$result = $db->Execute($query);
 		foreach ($_POST as $key=>$value)
 			{
-			if (strpos($key,"permission-") == 0 && strpos($key,"permission-") !== false)
+			if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false)
 				{
-				$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-				$query = "INSERT INTO ".cms_db_prefix().
-					"group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".
-                	$new_id.", ".$db->qstr($group_id).", ".$db->qstr(substr($key,11)).", ".
-                	$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
-                $result = $db->Execute($query);
+				$keyparts = explode('_',$key);
+				if ($keyparts[2] != '1' && $value == '1')
+					{
+					$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
+					$query = "INSERT INTO ".cms_db_prefix().
+						"group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".
+                		$new_id.", ".(integer)($keyparts[2]).", ".(integer)($keyparts[1]).", ".
+                		$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+                	$result = $db->Execute($query);
+					}
 				}
 			}
 
-		audit($group_id, 'Group ID', lang('permissionschanged'));
-        echo '<p class="pageheader">'.lang('permissionschanged').'</p>';
+		audit($userid, 'Group ID', lang('permissionschanged'));
+        $smarty->assign('message',lang('permissionschanged'));
         }
+
+	$query = "SELECT p.permission_id, p.permission_text, up.group_id FROM ".
+       	cms_db_prefix()."permissions p LEFT JOIN ".cms_db_prefix().
+       	"group_perms up ON p.permission_id = up.permission_id ORDER BY p.permission_name";
+
+	$result = $db->Execute($query);
+
+	$perm_struct = array();
+
+	while($result && $row = $result->FetchRow())
+		{
+		if (isset($perm_struct[$row['permission_id']]))
+			{
+			$str = &$perm_struct[$row['permission_id']];
+			$str->group[$row['group_id']]=1;
+			}
+		else
+			{
+			$thisPerm = new stdClass();
+			$thisPerm->group = array();
+			if (!empty($row['group_id']))
+				{
+				$thisPerm->group[$row['group_id']] = 1;
+				}
+			$thisPerm->id = $row['permission_id'];
+			$thisPerm->name = $row['permission_text'];
+			$perm_struct[$row['permission_id']] = $thisPerm;
+			}
+		}
+	$smarty->assign_by_ref('perms',$perm_struct);		
+$smarty->assign('admin_group_warning',$themeObject->ShowErrors(lang('adminspecialgroup')));
+$smarty->assign('form_start','<form id="groupname" method="post" action="changegroupperm.php">');
+$smarty->assign('form_end','</form>');
+$smarty->assign('title_permission',lang('permission'));
+$smarty->assign('selectgroup',lang('selectgroup'));
+$smarty->assign('hidden','<input type="hidden" name="submitted" value="1" />');
+$smarty->assign('submit','<input type="submit" name="changeperm" value="'.lang('submit').
+	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');
+$smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('cancel').
+	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');
+
+
+# begin output
+echo '<div class="pagecontainer">'.$themeObject->ShowHeader('grouppermissions',array($group_name));
+echo $smarty->fetch('changegroupperm.tpl');
 echo '</div>';
-}
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
-
 include_once("footer.php");
-
+}
 # vim:ts=4 sw=4 noet
 ?>

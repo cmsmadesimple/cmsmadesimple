@@ -1742,4 +1742,5 @@ $lang['admin']['permissions'] = 'Permissions';
 $lang['admin']['unknown'] = 'Unknown';
 $lang['admin']['download'] = 'Download';
 $lang['admin']['frontendwysiwygtouse']="Frontend wysiwyg";
+$lang['admin']['all_groups'] = 'All Groups'; //needs translation
 ?>
