@@ -220,7 +220,7 @@ else {
       ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('groups')?>:</p>
-			<p class="pageinput">
+			<div class="pageinput">
       <?php
 	     echo '<div class="group_memberships"><input type="hidden" name="groups" value="1" />';
         foreach($group_list as $thisGroup)
@@ -230,7 +230,7 @@ else {
             }
         echo '</div>';
       ?>
-         </p>
+         </div>
 		</div>
 
       <?php
