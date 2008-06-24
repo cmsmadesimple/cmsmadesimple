@@ -941,3 +941,4 @@ div#nav-icons_all ul#nav-icons li.logout-icon a
 	width: 35px;
 	background: transparent url(themes/default/images/icons/extra/logout.gif) no-repeat  0px 0px ;	
 	}
+.group {float: left; padding-right: 25px;}
