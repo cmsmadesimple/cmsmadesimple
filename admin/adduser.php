@@ -219,10 +219,10 @@ else {
       {
       ?>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('groups')?>:</p>
+			<div class="pagetext"><b><?php echo lang('groups')?>:</b></div>
 			<div class="pageinput">
       <?php
-	     echo '<div class="group_memberships"><input type="hidden" name="groups" value="1" />';
+	     echo '<div class="group_memberships clear"><input type="hidden" name="groups" value="1" />';
         foreach($group_list as $thisGroup)
             {
             echo '<div class="group"><input type="checkbox" name="g'.$thisGroup->id.'" id="g'.$thisGroup->id.
