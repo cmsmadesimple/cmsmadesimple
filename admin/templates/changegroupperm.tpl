@@ -84,14 +84,19 @@
 	/* ]]> */
 </script>
 {/literal}
-
-<form method="post" action="">
-	{$selectgroup}:	<select id="groupsel" onchange="set_group()">
+<div class="pageoverflow">
+  <div class="pagetext">{$selectgroup}:</div>
+    <div class="pageinput">
+    <form method="post" action="">
+		<select id="groupsel" onchange="set_group()">
 		{foreach from=$group_list item=thisgroup}
 			<option value="{$thisgroup->id}">{$thisgroup->name}</option>
 		{/foreach}
 	</select>
 </form>
+ </div> 
+</div>
+
 {$form_start}
 <table cellspacing="0" class="pagetable" id="permtable">
   <thead>
