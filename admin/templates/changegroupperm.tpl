@@ -68,7 +68,7 @@
             {
             if(ths[j].className==css_class)
                {
-               ths[j].style.display = (show?'block':'none');
+               ths[j].style.display = (show?'':'none');
                }
             }
          var tds =document.body.getElementsByTagName('td');
@@ -76,7 +76,7 @@
             {
             if(tds[j].className==css_class)
                {
-               tds[j].style.display = (show?'block':'none');
+               tds[j].style.display = (show?'':'none');
                }
             }
       }
