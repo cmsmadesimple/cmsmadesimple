@@ -53,7 +53,7 @@ else {
 	$allgroups = new stdClass();
 	$allgroups->name = lang('all_groups');
 	$allgroups->id=-1;
-    $groups = array($allgroups);
+   $groups = array($allgroups);
 
 	$group_list = $groupops->LoadGroups();
 	$groups = array_merge($groups,$group_list);
@@ -68,9 +68,13 @@ else {
 	$smarty->assign('groupidlist',implode(',',$groupidlist));
     if ($submitted == 1)
 		{
-      	// we have group permissions
+      // we have group permissions
 		$query = "DELETE FROM ".cms_db_prefix()."group_perms";
 		$result = $db->Execute($query);
+		$iquery = "INSERT INTO ".cms_db_prefix().
+			"group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (?,?,?,?,?)";
+
+
 		foreach ($_POST as $key=>$value)
 			{
 			if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false)
@@ -79,11 +83,8 @@ else {
 				if ($keyparts[2] != '1' && $value == '1')
 					{
 					$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-					$query = "INSERT INTO ".cms_db_prefix().
-						"group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".
-                		$new_id.", ".(integer)($keyparts[2]).", ".(integer)($keyparts[1]).", ".
-                		$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
-                	$result = $db->Execute($query);
+               $result = $db->Execute($iquery, array($new_id,$keyparts[2],$keyparts[1],
+                        $db->DBTimeStamp(time()),$db->DBTimeStamp(time())));
 					}
 				}
 			}

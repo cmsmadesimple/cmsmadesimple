@@ -1,4 +1,3 @@
-
 <div id="admin_group_warning" style="display:none">
 {$admin_group_warning}
 </div>
@@ -78,38 +77,33 @@
 	/* ]]> */
 </script>
 {/literal}
-<div class="pageoverflow">
-  <div class="pagetext">{$selectgroup}:</div>
-    <div class="pageinput">
-    <form method="post" action="">
-		<select id="groupsel" onchange="set_group()">
+
+<form method="post" action="">
+	{$selectgroup}:	<select id="groupsel" onchange="set_group()">
 		{foreach from=$group_list item=thisgroup}
 			<option value="{$thisgroup->id}">{$thisgroup->name}</option>
 		{/foreach}
 	</select>
 </form>
- </div> 
-</div>
-
 {$form_start}
 <table cellspacing="0" class="pagetable" id="permtable">
   <thead>
   <tr>
-    <th>{$title_permission}</th>
+    <th>{$title_group}</th>
 	{foreach from=$group_list item=thisgroup}
 		{if $thisgroup->id != -1}<th class="g{$thisgroup->id}">{$thisgroup->name}</th>{/if}
 	{/foreach}
  </tr>
   </thead>
   <tbody>
-  {foreach from=$perms item=perm}
+  {foreach from=$users item=user}
     {cycle values='row1,row2' assign='currow'}
     <tr class="{$currow}" onmouseover="this.className='{$currow}.hover';" onmouseout="this.className='{$currow}';">
- 		<td>{$perm->name}</td>
+ 		<td>{$user->name}</td>
 		{foreach from=$group_list item=thisgroup}
 			{if $thisgroup->id != -1}
 			{assign var="gid" value=`$thisgroup->id`}
-			<td class="g{$thisgroup->id}"><input type="checkbox" name="pg_{$perm->id}_{$gid}" value="1"{if isset($perm->group[$gid]) || $gid == 1} checked="checked"{/if} {if $gid == 1} disabled="disabled"{/if} /></td>
+			<td class="g{$thisgroup->id}"><input type="checkbox" name="ug_{$user->id}_{$gid}" value="1"{if isset($user->group[$gid]) || $gid == 1} checked="checked"{/if}  /></td>
 			{/if}
 		{/foreach}
     </tr>
