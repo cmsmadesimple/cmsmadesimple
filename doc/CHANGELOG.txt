@@ -5,12 +5,15 @@ Version 1.4-beta1 "Jamaica"
   (though not much other than modules is using it.)
   (this may break pisearch plugin, etc)
 - A completely new way of template processing.
-  We split the template into three pieces
+  * We split the template into three pieces
     a) Any text ontop of <head>
     b) The <head> section
     c) the rest of the template (the body)
-  We then process the top section through smarty, then the body, and finall
-  the head.  Then we glue it back together.
+  * We then process the top section through smarty, then the body, and finally
+    the head.  Then we glue it back together.
+  * This may break sites that have used some of my tricks to 
+    change the page title based on news or other modules content
+    so it will be off by default after release, and on for the beta
 - Memory optimizations, and query optimizations
   (We've done a few checks, and improved a few things here and there
   that will provide a modest boost in performance.)
