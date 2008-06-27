@@ -52,6 +52,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["uploads_url"] = '/uploads'; 
 	$config["max_upload_size"] = 1000000;
 	$config["debug"] = false;
+        $config['output_compression'] = false;
 	$config["assume_mod_rewrite"] = false;
 	$config['internal_pretty_urls'] = false;
 	$config['use_hierarchy'] = false;
@@ -155,6 +156,14 @@ function cms_config_text($config)
 # see {nocache} errors, or to allow seeing php notices, warnings, and errors in the html output.
 # This setting will also disable browser css caching.
 \$config['debug'] = ${$config['debug']?'true':'false'};
+
+# Output compression?
+# Turn this on to allow CMS to do output compression
+# this is not needed for apache servers that have mod_deflate enabled
+# and possibly other servers.  But may provide significant performance
+# increases on some sites.  Use caution when using this as there have
+# been reports of incompatibilities with some browsers.
+\$config['output_compression'] = ${$config['output_compression']?'true':'false'};
 
 #-----------------
 #Database Settings

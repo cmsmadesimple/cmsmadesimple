@@ -32,7 +32,15 @@ require_once($dirname.'/fileloc.php');
 
 $starttime = microtime();
 
-@ob_start();
+// optionally enable output compression (as long as debug mode isn't on)
+if( isset($config['output_compression']) && $config['debug'] != true )
+  {
+    @ob_start('ob_gzhandler');
+  }
+else
+  {
+    @ob_start();
+  }
 
 clearstatcache();
 

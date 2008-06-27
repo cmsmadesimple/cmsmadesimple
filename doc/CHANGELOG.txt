@@ -23,11 +23,19 @@ Version 1.4-beta1 "Jamaica"
 - Updates to the admin menu structure
   (Main is now called CMS, and the logout and view site links are under there)
 - Theme Improvements
-  New icons for view site and logout
+  - Many thanks to Nuno
+  - New icons for view site and logout
 - Cleaned up and improved Module Manager
   It should be much faster now.
 - Improvements to CMSMailer
 - Improvements to the Installer
+  - Many thanks to Alby
+  - The installer is now fully translatable, so you can choose what
+    language you want the installer pages to appear in
+  - Many more checks have been added and re-organized to hopefully
+    solve some of the issues people have with installation.
+- We now ship a full distribution as well as an english only version
+  and several 'language packs'.
 - NCleanGrey is now the default admin theme.
 - you can now specify default text for additional content blocks in page
   templates.
@@ -37,6 +45,11 @@ Version 1.4-beta1 "Jamaica"
 - adds the image_url plugin (thanks Nuno)
 - Now use a wysiwyg for the sitedown message and the custom404 message.
 - Added the target option to the 'content' content type.
+- A general review of security checks in admin methods (thanks Nuno)
+- Modifications to the group permissions, and user creation forms
+  makes managing users, groups, and permissions much simpler.
+  - Many thanks to _SjG_
+
 
 Version 1.3 "Cuba" -- June 7, 2008
 -----------------

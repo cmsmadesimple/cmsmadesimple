@@ -169,19 +169,8 @@ function microtime_diff($a, $b) {
  */
 function cms_join_path()
 {
- 	$num_args = func_num_args();
 	$args = func_get_args();
-	$path = $args[0];
-
-	if( $num_args > 1 )
-	{
-		for ($i = 1; $i < $num_args; $i++)
-		{
-			$path .= DIRECTORY_SEPARATOR.$args[$i];
-		}
-	}
-
-	return $path;
+	return implode(DIRECTORY_SEPARATOR,$args);
 }
 
 

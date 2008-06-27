@@ -130,7 +130,7 @@ if ($stripbackground)
   $css = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $css);
 }
 
-if( isset($config['enable_gz_compression']) )
+if( isset($config['output_compression']) && $config['debug'] != true )
   {
     @ob_start('ob_gzhandler');
   }
