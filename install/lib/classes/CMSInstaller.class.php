@@ -15,6 +15,8 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id$
 
 /**
  * Uses the CMSInstallerPage class
@@ -49,42 +51,41 @@ class CMSInstaller
 	function CMSInstaller()
 	{
 		$this->numberOfPages = 5;
-		$this->currentPage = isset($_POST['page']) && (int) $_POST['page'] <= $this->numberOfPages ? (int) $_POST['page'] : 1;
+		$this->currentPage = (isset($_POST['page']) && (int) $_POST['page'] <= $this->numberOfPages) ? (int) $_POST['page'] : 1;
 
 		$this->smarty   = NULL;
 		$this->errors   = array();
 	}
-	
+
 	/**
-	 * Loads smarty
-	 * @return boolean whether loading succeeded
+	 * Load language dropdown
 	 */
-	function loadSmarty()
+	function dropdown_lang()
 	{
-		if (! is_readable(cms_join_path(CMS_BASE, 'lib', 'smarty', 'Smarty.class.php')))
+		$base = CMS_INSTALL_BASE . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR;
+		$languages = array();
+
+		if ($handle = @opendir($base . 'ext' . DIRECTORY_SEPARATOR))
 		{
-			$this->showErrorPage(cms_join_path(CMS_BASE, 'lib', 'smarty', 'Smarty.class.php') . 'cannot be found, exiting');
-			return false;
+			while (false !== ($dir = readdir($handle)))
+			{
+				if ( ($dir != '..') && ($dir != '.') && (is_dir($base . 'ext' . DIRECTORY_SEPARATOR . $dir)) )
+				{
+					$languages[] = $dir;
+				}
+			}
+			closedir($handle);
 		}
-		require_once cms_join_path(CMS_BASE, 'lib', 'smarty', 'Smarty.class.php');
-		$smarty =& new Smarty();
-		
-		$smarty->compile_dir = cms_join_path(CMS_BASE, 'tmp', 'templates_c');
-		if (! is_writable($smarty->compile_dir))
+		natsort($languages);
+
+		if (is_readable($base . DIRECTORY_SEPARATOR . 'en_US.php'))
 		{
-			$this->showErrorPage($smarty->compile_dir . ' is not writable, exiting');
-			return false;
+			array_unshift($languages, 'en_US');
 		}
-		$smarty->cache_dir = cms_join_path(CMS_BASE, 'tmp', 'cache');
-		if (! is_writable($smarty->cache_dir))
-		{
-			$this->showErrorPage($smarty->cache_dir . ' is not writable, exiting');
-			return false;
-		}
-		$this->smarty =& $smarty;
-		return true;
+
+		return $languages;
 	}
-	
+
 	/**
 	 * Shows an error page (without use of Smarty)
 	 * @var string $error
@@ -95,51 +96,40 @@ class CMSInstaller
 		echo '<p class="error">' . $error . '</p>';
 		include cms_join_path(CMS_INSTALL_BASE, 'templates', 'installer_end.tpl');
 	}
-	
+
 	/**
 	 * Runs the installer
 	 */
 	function run()
 	{
-		// Load smarty, exit if failed
-		if (! $this->loadSmarty())
-		{
-			return;
-		}
-		
+		global $gCms;
+
+		$this->smarty = &$gCms->GetSmarty();
+		$this->smarty->template_dir = CMS_INSTALL_BASE . DIRECTORY_SEPARATOR . 'templates';
+		$this->smarty->caching = false;
+		$this->smarty->force_compile = true;
+
 		// Process submitted data
 		$db = $this->processSubmit();
-		
-		// Test for sessions on the first page
-		if ($this->currentPage == 1)
-		{
-			@session_start();
-			if (! isset($_GET['sessiontest']))
-			{
-				$_SESSION['test'] = TRUE;
-				$scheme = ((! isset($_SERVER['HTTPS'])) || strtolower($_SERVER['HTTPS']) != 'on') ? 'http' : 'https';
-				$redirect = $scheme . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . '?sessiontest=1&' . SID;
-				header("Location: $redirect");
-			}
-		}
-		
+
 		// Create the (current) page object
 		require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'classes', 'CMSInstallerPage' . $this->currentPage . '.class.php');
 		$classname = 'CMSInstallerPage' . $this->currentPage;
 		$page =& new $classname($this->smarty, $this->errors);
-		
-		// Assign smarty variables (used in header)
+
+		// Assign smarty variables
 		$this->smarty->assign('number_of_pages', $this->numberOfPages);
 		$this->smarty->assign('current_page', $this->currentPage);
-		
+		$this->smarty->assign('cms_version', CMS_VERSION);
+		$this->smarty->assign('cms_version_name', CMS_VERSION_NAME);
+
 		// Output HTML
-		$this->smarty->display('installer_start.tpl'); // display page start
 		$this->smarty->display('header.tpl');          // display header
 		$page->preContent($db);		                   // pre-content
 		$page->displayContent();                       // display page content
 		$this->smarty->display('installer_end.tpl');   // display page end
 	}
-	
+
 	/**
 	 * Processes submitted forms, redirects to previous page if needed
 	 * @return mixed Returns a ADOdb Connection object (for re-use) if created
@@ -157,54 +147,54 @@ class CMSInstaller
 			case 3:
 				if (trim($_POST['adminusername']) == '')
 				{
-					$this->errors[] = 'Username not given!';
-					$this->currentPage = 2;
+					$this->errors[] = lang('test_username_not_given');
 				}
 				else if ( !preg_match( "/^[a-zA-Z0-9]+$/", trim($_POST['adminusername']) ) )
 				{
-					$this->errors[] = 'Username contains illegal characters!';
-					$this->currentPage = 2;
+					$this->errors[] = lang('test_username_illegal');
 				}
 				elseif (trim($_POST['adminpassword']) == '' || trim($_POST['adminpasswordagain']) == '')
 				{
-					$this->errors[] = 'Not both password fields given!';
-					$this->currentPage = 2;
+					$this->errors[] = lang('test_not_both_passwd');
 				}
 				elseif ($_POST['adminpassword'] != $_POST['adminpasswordagain'])
 				{
-					$this->errors[] = 'Password fields do not match!';
-					$this->currentPage = 2;	
+					$this->errors[] = lang('test_passwd_not_match');
 				}
 				if (isset($_POST['email_accountinfo']) && trim($_POST['adminemail'] == ''))
 				{
-					$this->errors[] = 'E-mail accountinfo selected, but no E-mail address given!';
-					$this->currentPage = 2;	
+					$this->errors[] = lang('test_email_accountinfo');
+				}
+
+				if (count($this->errors) > 0)
+				{
+					$this->currentPage = 2;
 				}
 				break;
 			case 4:
-				if( isset($_POST['prefix']) 
-				    && $_POST['prefix'] != '' 
+				if( isset($_POST['prefix'])
+				    && $_POST['prefix'] != ''
 				    && !preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST['prefix'])) )
 				{
-				  $this->errors[] = 'Database prefix contains invalid characters'; 
+				  $this->errors[] = lang('test_database_prefix');
 				  $this->currentPage = 3;
 				}
 				if ($_POST['dbms'] == '')
 				{
-					$this->errors[] = 'No dbms selected!';
+					$this->errors[] = lang('test_no_dbms');
 					$this->currentPage = 3;
 					return;
 				}
-				
+
 				$db =& ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
 				$result = $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
 				if (! $result)
 				{
-					$this->errors[] = 'Could not connect to the database. Verify that username and password are correct, and that the user has access to the given database.';
+					$this->errors[] = lang('test_could_not_connect_db');
 					$this->currentPage = 3;
 					return;
 				}
-				
+
 				//Try to create and drop a dummy table (with appropriate prefix)
 				$db_prefix = $_POST['prefix'];
 				@$db->Execute('DROP TABLE ' . $db_prefix . 'dummyinstall');
@@ -215,7 +205,7 @@ class CMSInstaller
 					if (!$result)
 					{
 						//could not drop table
-						$this->errors[] = 'Could not drop a table.  Verify that the user has privileges to drop tables in the given database.';
+						$this->errors[] = lang('test_could_not_drop_table');
 						$this->currentPage = 3;
 						return;
 					}
@@ -223,7 +213,7 @@ class CMSInstaller
 				else
 				{
 					//could not create table
-					$this->errors[] = 'Could not create a table.  Verify that the user has privileges to create tables in the given database.';
+					$this->errors[] = lang('test_could_not_create_table');
 					$this->currentPage = 3;
 					return;
 				}
@@ -233,5 +223,4 @@ class CMSInstaller
 		return NULL;
 	}
 }
-
 ?>

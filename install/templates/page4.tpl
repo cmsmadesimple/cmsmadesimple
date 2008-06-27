@@ -1,22 +1,23 @@
 {foreach from=$errors item=error}
 <p class="error">{$error}</p>
 {/foreach}
-<p>Now let's continue to setup your configuration file, we already have most of the stuff we need. Chances are you can leave all these values alone, so when you are ready, click Continue.</p>
+
+<p>{lang_install a=install_admin_setup}</p>
+
 <form action="index.php" method="post" name="page4form" id="page4form">
 <table cellpadding="2" border="1" class="regtable">
 	<tr class="row1">
-		<td>CMS Document root (as seen from the webserver)</td>
+		<td>{lang_install a=install_admin_docroot}</td>
 		<td><input type="text" name="docroot" value="{$docroot}" size="50" maxlength="100" /></td>
 	</tr>
 	<tr class="row2">
-		<td>Path to the Document root</td>
+		<td>{lang_install a=install_admin_docroot_path}</td>
 		<td><input type="text" name="docpath" value="{$docpath}" size="50" maxlength="100" /></td>
 	</tr>
 	<tr class="row1">
-		<td>Query string (leave this alone unless you have trouble, then edit config.php by hand)</td>
+		<td>{lang_install a=install_admin_querystring}</td>
 		<td>
 			<input type="text" name="querystr" value="page" size="20" maxlength="20" />
-			<input type="hidden" name="page" value="5" />
 			<input type="hidden" name="host" value="{$values.db.host}" />
 			<input type="hidden" name="dbms" value="{$values.db.dbms}" />
 			<input type="hidden" name="database" value="{$values.db.database}" />
@@ -31,5 +32,10 @@
 		</td>
 	</tr>
    </table>
-   <p align="center" class="continue"><input type="submit" value="Continue" /></p>
+
+	<p align="center" class="continue">
+		<input type="hidden" name="page" value="5" />
+		<input type="hidden" name="default_cms_lang" value="{$default_cms_lang}" />
+		<input type="submit" value="{lang_install a=install_continue}" />
+	</p>
 </form>

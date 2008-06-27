@@ -85,44 +85,48 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 
 }
 
+
+
 if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
-	echo "<p>Creating additional_users table...";
 
 	$dbdict = NewDataDictionary($db);
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+
+
+	echo lang('install_creating_table', 'additional_users');
+
 	$flds = "
 		additional_users_id I KEY,
 		user_id I,
 		page_id I,
 		content_id I
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_users", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Adding admin_bookmarks table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'admin_bookmarks');
+
 	$flds = "
 		bookmark_id I KEY,
 		user_id I,
 		title C(255),
 		url C(255)
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_bookmarks", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 //	$db->Execute("ALTER TABLE ".$db_prefix."admin_bookmarks ADD INDEX (user_id)");
 	$db->Execute("CREATE INDEX ".$db_prefix."index_admin_bookmarks_by_user_id ON ".$db_prefix."admin_bookmarks (user_id)");
 
-	echo '[done]</p>';
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating adminlog table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'adminlog');
+
 	$flds = "
 		timestamp I,
 		user_id I,
@@ -131,15 +135,14 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		item_name C(50),
 		action C(255)
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."adminlog", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Adding admin_recent_pages table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'admin_recent_pages');
+
 	$flds = "
 		id I KEY,
 		user_id I,
@@ -147,15 +150,14 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		url C(255),
 		access_time DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_recent_pages", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo '[done]</p>';
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating content table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'content');
+
 	$flds = "
 		content_id I KEY,
 		content_name C(255),
@@ -184,7 +186,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -197,11 +198,11 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 //	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (parent_id)");
 	$db->Execute("CREATE INDEX ".$db_prefix."index_content_by_parent_id ON ".$db_prefix."content (parent_id)");
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating content_props table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'content_props');
+
 	$flds = "
 		content_id I,
 		type C(25),
@@ -213,18 +214,17 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content_props", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 //	$db->Execute("ALTER TABLE ".$db_prefix."content_props ADD INDEX (content_id)");
 	$db->Execute("CREATE INDEX ".$db_prefix."index_content_props_by_content_id ON ".$db_prefix."content_props (content_id)");
 
-	echo "[done]</p>";
-	
-	echo "<p>Adding crossref table...";
+	echo " [" . lang('done') . "]</p>";
 
-	$dbdict = NewDataDictionary($db);
+
+	echo lang('install_creating_table', 'crossref');
+
 	$flds = '
 		child_type C(100),
 		child_id I,
@@ -234,7 +234,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date DT
 	';
 
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."crossref", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -244,11 +243,11 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 //	$db->Execute("ALTER TABLE ".$db_prefix."crossref ADD INDEX (parent_type, parent_id)");
 	$db->Execute("CREATE INDEX ".$db_prefix."index_crossref_by_parent_type_parent_id ON ".$db_prefix."crossref (parent_type, parent_id)");
 
-	echo '[done]</p>';
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating css table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'css');
+
 	$flds = "
 		css_id I KEY,
 		css_name C(255),
@@ -257,18 +256,17 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 //	$db->Execute("ALTER TABLE ".$db_prefix."css ADD INDEX (css_name)");
 	$db->Execute("CREATE INDEX ".$db_prefix."index_css_by_css_name ON ".$db_prefix."css (css_name)");
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating css_assoc table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'css_assoc');
+
 	$flds = "
 		assoc_to_id I,
 		assoc_css_id I,
@@ -277,7 +275,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date DT,
                 assoc_order I
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css_assoc", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -287,11 +284,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 //	$db->Execute("ALTER TABLE ".$db_prefix."css_assoc ADD INDEX (assoc_css_id)");
 	$db->Execute("CREATE INDEX ".$db_prefix."index_css_assoc_by_assoc_css_id ON ".$db_prefix."css_assoc (assoc_css_id)");
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 	
-	echo "<p>Creating event_handlers table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'event_handlers');
 
 	$flds = "
 	          event_id      I,
@@ -302,13 +298,13 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	          handler_id    I KEY
 	        ";
 
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."event_handlers", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
-	
-	echo "[done]</p>";
-	
-	echo "<p>Creating events table...";
+
+	echo " [" . lang('done') . "]</p>";
+
+
+	echo lang('install_creating_table', 'events');
 
 	$flds = "
 	          originator   c(200) NOTNULL,
@@ -316,7 +312,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	          event_id     I KEY
 	        ";
 
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."events", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 	
@@ -326,11 +321,11 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateIndexSQL('event_name', $db_prefix."events", 'event_name');
 	$dbdict->ExecuteSQLArray($sqlarray);
 	
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 	
-	echo "<p>Creating group_perms table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'group_perms');
+
 	$flds = "
 		group_perm_id I KEY,
 		group_id I,
@@ -338,18 +333,17 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."group_perms", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 //	$db->Execute("ALTER TABLE ".$db_prefix."group_perms ADD INDEX (group_id, permission_id)");
 	$db->Execute("CREATE INDEX ".$db_prefix."index_group_perms_by_group_id_permission_id ON ".$db_prefix."group_perms (group_id, permission_id)");
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating groups table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'groups');
+
 	$flds = "
 		group_id I KEY,
 		group_name C(25),
@@ -357,15 +351,14 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."groups", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating htmlblobs table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'htmlblobs');
+
 	$flds = "
 		htmlblob_id I KEY,
 		htmlblob_name C(255),
@@ -374,32 +367,30 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."htmlblobs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 //	$db->Execute("ALTER TABLE ".$db_prefix."htmlblobs ADD INDEX (htmlblob_name)");
 	$db->Execute("CREATE INDEX ".$db_prefix."index_htmlblobs_by_htmlblob_name ON ".$db_prefix."htmlblobs (htmlblob_name)");
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating additional_htmlblob_users table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'additional_htmlblob_users');
+
 	$flds = "
 		additional_htmlblob_users_id I KEY,
 		user_id I,
 		htmlblob_id I
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_htmlblob_users", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating modules table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'modules');
+
 	$flds = "
 		module_name C(255),
 		status C(255),
@@ -407,18 +398,17 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		admin_only I1 DEFAULT 0,
 		active I1
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."modules", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 //	$db->Execute("ALTER TABLE ".$db_prefix."modules ADD INDEX (module_name)");
 	$db->Execute("CREATE INDEX ".$db_prefix."index_modules_by_module_name ON ".$db_prefix."modules (module_name)");
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo '<p>Creating module_deps table...';
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'module_deps');
+
 	$flds = "
 		parent_module C(25),
 		child_module C(25),
@@ -426,15 +416,14 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_deps", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo '[done]</p>';
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Adding module_templates table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'module_templates');
+
 	$flds = "
 		module_name C(200),
 		template_name C(200),
@@ -442,19 +431,17 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_templates", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 //	$db->Execute("ALTER TABLE ".$db_prefix."module_templates ADD INDEX (module_name, template_name)");
 	$db->Execute("CREATE INDEX ".$db_prefix."index_module_templates_by_module_name_template_name ON ".$db_prefix."module_templates (module_name, template_name)");
 
+	echo " [" . lang('done') . "]</p>";
 
-	echo "[done]</p>";
 
-	echo "<p>Creating permissions table...";
+	echo lang('install_creating_table', 'permissions');
 
-	$dbdict = NewDataDictionary($db);
 	$flds = "
 		permission_id I KEY,
 		permission_name C(255),
@@ -462,30 +449,28 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."permissions", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating siteprefs table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'siteprefs');
+
 	$flds = "
 		sitepref_name C(255) KEY,
 		sitepref_value text,
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."siteprefs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating templates table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'templates');
+
 	$flds = "
 		template_id I KEY,
 		template_name C(255),
@@ -497,51 +482,48 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."templates", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 //	$db->Execute("ALTER TABLE ".$db_prefix."templates ADD INDEX (template_name)");
 	$db->Execute("CREATE INDEX ".$db_prefix."index_templates_by_template_name ON ".$db_prefix."templates (template_name)");
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating user_groups table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'user_groups');
+
 	$flds = "
 		group_id I,
 		user_id I,
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."user_groups", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating userprefs table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'userprefs');
+
 	$flds = "
 		user_id I,
 		preference C(50),
 		value X,
 		type C(25)
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."userprefs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 //	$db->Execute("ALTER TABLE ".$db_prefix."userprefs ADD INDEX (user_id)");
 	$db->Execute("CREATE INDEX ".$db_prefix."index_userprefs_by_user_id ON ".$db_prefix."userprefs (user_id)");
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating users table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'users');
+
 	$flds = "
 		user_id I KEY,
 		username C(25),
@@ -554,15 +536,14 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."users", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating userplugins table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'userplugins');
+
 	$flds = "
 		userplugin_id I KEY,
 		userplugin_name C(255),
@@ -570,28 +551,26 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."userplugins", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 
-	echo "<p>Creating version table...";
 
-	$dbdict = NewDataDictionary($db);
+	echo lang('install_creating_table', 'version');
+
 	$flds = "
 		version I
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."version", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo "[done]</p>";
-	
-	/*
-	echo "<p>Creating sequence table...";
+	echo " [" . lang('done') . "]</p>";
 
-	$dbdict = NewDataDictionary($db);
+
+	/*
+	echo lang('install_creating_table', 'sequence');
+
 	$flds = "
 		sequence_id I KEY,
 		sequence_name C(25),
@@ -601,11 +580,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date DT,
 		modified_date DT
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."sequence", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	echo "[done]</p>";
+	echo " [" . lang('done') . "]</p>";
 	*/
 }
 

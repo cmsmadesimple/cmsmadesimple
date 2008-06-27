@@ -15,6 +15,8 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id$
 
 class CMSInstallerPage2 extends CMSInstallerPage
 {
@@ -25,18 +27,17 @@ class CMSInstallerPage2 extends CMSInstallerPage
 	{
 		$this->CMSInstallerPage(2, $smarty, $errors);
 	}
-	
+
 	function assignVariables()
 	{
 		$values = array();
 		$values['username'] = isset($_POST['adminusername']) ? $_POST['adminusername'] : '';
 		$values['email'] = isset($_POST['adminemail']) ? $_POST['adminemail'] : '';
 		$values['email_accountinfo'] = isset($_POST['email_accountinfo']) ? $_POST['email_accountinfo'] : false;
-		
+
 		$this->smarty->assign('errors', $this->errors);
 		$this->smarty->assign('values', $values);
 		$this->smarty->assign('mail_function_exists', function_exists('mail'));
 	}
 }
-
 ?>

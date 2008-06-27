@@ -15,6 +15,8 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id$
 
 /**
  * CMS Made Simple installer page base class
@@ -24,7 +26,7 @@ class CMSInstallerPage
 	var $number;
 	var $smarty;
 	var $errors;
-	
+
 	/**
 	 * Class constructor
 	*/
@@ -34,7 +36,7 @@ class CMSInstallerPage
 		$this->smarty =& $smarty;
 		$this->errors = $errors;
 	}
-	
+
 	/**
 	 * Displays the page content, assigns smarty variables and displays the template
 	*/
@@ -43,23 +45,22 @@ class CMSInstallerPage
 		$this->assignVariables();
 		$this->smarty->display('page' . $this->number . '.tpl');
 	}
-	
+
 	/**
 	 * Should be overridden by subpages - used to assing Smarty variables
 	*/
 	function assignVariables()
 	{
-		
+
 	}
-	
+
 	/**
 	 * Should be overridden by subpages - executed before the page smarty content is displayed
 	 * @param mixed ADOdb object when created in CMSInstaller::processSubmit or NULL
 	*/
 	function preContent(&$db)
 	{
-		
+
 	}
 }
-
 ?>

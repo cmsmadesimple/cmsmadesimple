@@ -15,6 +15,8 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id$
 
 class CMSInstallerPage5 extends CMSInstallerPage
 {
@@ -25,7 +27,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
 	{
 		$this->CMSInstallerPage(5, $smarty, $errors);
 	}
-	
+
 	function assignVariables()
 	{
 		$values = array();
@@ -33,15 +35,15 @@ class CMSInstallerPage5 extends CMSInstallerPage
 		$values['admininfo']['email'] = $_POST['adminemail'];
 		$values['admininfo']['password'] = $_POST['adminpassword'];
 		$link = str_replace(" ", "%20", $_POST['docroot']);
-				
+
 		$this->smarty->assign('values', $values);
 		$this->smarty->assign('base_url', $link);
 		$this->smarty->assign('errors', $this->errors);
-		
+
 		global $gCms;
 		$this->smarty->assign('modman_installed', isset($gCms->modules['ModuleManager']));
 	}
-	
+
 	function preContent()
 	{
 		global $gCms;
@@ -54,10 +56,10 @@ class CMSInstallerPage5 extends CMSInstallerPage
 		
 		if (! $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']))
 		{
-			$this->errors[] = 'Could not connect to the database. Verify that username and password are correct, and that the user has access to the given database.';
+			$this->errors[] = lang('could_not_connect_db');
 			return;
 		}
-	
+
 		$newconfig = cms_config_load();
 	
 		$newconfig['dbms'] = $_POST['dbms'];
@@ -75,7 +77,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
 		$newconfig["uploads_path"] = $newconfig['root_path'] . DIRECTORY_SEPARATOR . "uploads";
 			// Note: leave the / slashes for the URLs
 		$newconfig["uploads_url"] = "/uploads";	
-		$newconfig["image_uploads_path"] = $newconfig['root_path'] . DIRECTORY_SEPARATOR . "uploads".DIRECTORY_SEPARATOR."images";
+		$newconfig["image_uploads_path"] = $newconfig['root_path'] . DIRECTORY_SEPARATOR . "uploads" . DIRECTORY_SEPARATOR . "images";
 			// Note: leave the / slashes for the URLs
 		$newconfig["image_uploads_url"] = "/uploads/images";
 		$maxFileSize = ini_get('upload_max_filesize');
@@ -131,18 +133,18 @@ class CMSInstallerPage5 extends CMSInstallerPage
 	
 		if ((file_exists($configfile) && is_writable($configfile)) || !file_exists($configfile)) {
 			cms_config_save($newconfig);
-		} 
+		}
 		else 
 		{
-			echo "Error: Cannot write to $config.<br />\n";
+			echo lang('cannot_write_config', $configfile);
 			exit;
 		}
-	
+
 		if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
 		{
 			if (!unlink(TMP_CACHE_LOCATION.'/SITEDOWN'))
 			{
-				echo "Error: Could not remove the tmp/cache/SITEDOWN file. Please remove manually.";
+				echo lang('install_admin_sitedown');
 			}
 		}
 
@@ -151,33 +153,35 @@ class CMSInstallerPage5 extends CMSInstallerPage
 		if (isset($_POST["createtables"]))
 		{
 			global $DONT_SET_DB;
-			echo '<p>Updating hierarchy positions...';
-	
+			echo '<p>' . lang('install_admin_update_hierarchy');
+
 			include_once cms_join_path(CMS_BASE, 'include.php');
-			
+
 			#Set $gCms->config - somehow it doesn't get set by include.php
 			$gCms->config = $newconfig;
-	
+
 			$db->SetFetchMode(ADODB_FETCH_ASSOC);
 			#$db->debug = true;
 			$gCms->db =& $db;
 			unset($GLOBALS['DONT_SET_DB']);
 			unset($DONT_SET_DB);
-			      
-	
+
+
 			$contentops =& $gCms->GetContentOperations();
 			$contentops->SetAllHierarchyPositions();
-	
-			echo "[done]</p>";
-			
-			echo '<p>Setting up core events...';
-			
+
+			echo " [" . lang('done') . "]</p>";
+
+
+			echo '<p>' . lang('install_admin_set_core_event');
+
 			Events::SetupCoreEvents();
-			
-			echo "[done]</p>";
-	
-			echo '<p>Installing modules...';
-	
+
+			echo " [" . lang('done') . "]</p>";
+
+
+			echo '<p>' . lang('install_admin_install_modules');
+
 			foreach ($gCms->modules as $modulename=>$value)
 			{
 			  // only deal with system modules
@@ -192,15 +196,15 @@ class CMSInstallerPage5 extends CMSInstallerPage
 					{
 						$modinstance =& $gCms->modules[$modulename]['object'];
 						$result = $modinstance->Install();
-	
+
 						#now insert a record
 						if (!isset($result) || $result === FALSE)
 						{
 							$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active, admin_only) VALUES (".$db->qstr($modulename).",".$db->qstr($modinstance->GetVersion()).",'installed',1,".($modinstance->IsAdminOnly()==true?1:0).")";
-						       $db->Execute($query);
+							$db->Execute($query);
 							$gCms->modules[$modulename]['installed'] = true;
 							$gCms->modules[$modulename]['active'] = true;
-							
+
 							/*
 							#and insert any dependancies
 							if (count($modinstance->GetDependencies()) > 0) #Check for any deps
@@ -213,7 +217,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
 									$db->Execute($query, array($onedepkey, $module, $onedepvalue));
 								}
 							}
-	
+
 							#and show the installpost if necessary...
 							if ($modinstance->InstallPostMessage() != FALSE)
 							{
@@ -228,34 +232,36 @@ class CMSInstallerPage5 extends CMSInstallerPage
 								echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 								include_once("footer.php");
 								exit;
-								
+
 							}
 							*/
 						}
 					}
 				}
 			}
-			echo "[done]</p>";
-			
+			echo " [" . lang('done') . "]</p>";
+
+
 			if (isset($gCms->modules['Search']) && isset($gCms->modules['Search']['object']))
 			{
-				echo '<p>Index Search...';
-				
+				echo '<p>' . lang('install_admin_index_search');
+
 				$modinstance =& $gCms->modules['Search']['object'];
 				@$modinstance->Reindex();
-	
-				echo "[done]</p>";
+
+				echo " [" . lang('done') . "]</p>";
 			}
-			echo '<p>Clearing site cache (if any)...';
+
+			echo '<p>' . lang('install_admin_clear_cache');
 					$contentops->ClearCache();
-			echo "[done]</p>";
+			echo " [" . lang('done') . "]</p>";
 		}
-	
+
 		$link = str_replace(" ", "%20", $_POST['docroot']);
 
-		if (isset($_POST['email_accountinfo']) && $_POST['email_accountinfo'] == true) 
+		if (isset($_POST['email_accountinfo']) && $_POST['email_accountinfo'] == true)
 		{
-			echo "<p>E-mailing admin account information...";
+			echo '<p>' . lang('install_admin_emailing');
 			$to      = $_POST['adminemail'];
 			$subject = 'CMS Made Simple Admin Account Information';
 			$message = <<<EOF
@@ -269,13 +275,12 @@ Log into the site admin here: $link/admin/
 EOF;
 			echo (
 				@mail($to, $subject, $message)
-				? '[done]'
-				: '<strong>[failed]</strong>'
+				? " [" . lang('done') . "]"
+				: "<strong>[" . lang('failed') . "]</strong>"
 			);
 			echo "</p>";
 
 		}
 	}
 }
-
 ?>

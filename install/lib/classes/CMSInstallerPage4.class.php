@@ -15,6 +15,8 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id$
 
 class CMSInstallerPage4 extends CMSInstallerPage
 {
@@ -25,7 +27,7 @@ class CMSInstallerPage4 extends CMSInstallerPage
 	{
 		$this->CMSInstallerPage(4, $smarty, $errors);
 	}
-	
+
 	function assignVariables()
 	{
 		$values = array();
@@ -41,13 +43,12 @@ class CMSInstallerPage4 extends CMSInstallerPage
 		$values['admininfo']['email_accountinfo'] = $_POST['email_accountinfo'];
 		$values['createtables'] = isset($_POST['createtables']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
 		$this->smarty->assign('docroot', 'http://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - 18));
-		$this->smarty->assign('docpath', CMS_BASE); 
-		
+		$this->smarty->assign('docpath', CMS_BASE);
+
 		$this->smarty->assign('errors', $this->errors);
 		$this->smarty->assign('values', $values);
-		
 	}
-	
+
 	function preContent(&$db)
 	{
 		$db_prefix = $_POST['prefix'];
@@ -58,22 +59,22 @@ class CMSInstallerPage4 extends CMSInstallerPage
 
 			$CMS_INSTALL_DROP_TABLES=1;
 			$CMS_INSTALL_CREATE_TABLES=1;
-			
+
 			include_once(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'schema.php'));
-			
-			echo "<p>Importing sample data...";
-			
-					$handle = '';
+
+			echo "<p>" . lang('install_admin_importing');
+
+			$handle = '';
 
 			if (isset($_POST["createextra"]))
 			{
-				$handle = fopen(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'extra.sql'), 'r');
+				$handle = @fopen(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'extra.sql'), 'r');
 			}
 			else
 			{
-				$handle = fopen(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'initial.sql'), 'r');
+				$handle = @fopen(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'initial.sql'), 'r');
 			}
-	
+
 			if ($handle) {
 				while (!feof($handle)) {
 					set_magic_quotes_runtime(false);
@@ -85,36 +86,62 @@ class CMSInstallerPage4 extends CMSInstallerPage
 						$s = str_replace('\\"', '"', $s);
 						$result = $db->Execute($s);
 						if (!$result) {
-							die("Invalid query: $s");
-						} ## if
+							die(lang('invalid_query', $s));
+						}
 					}
 				}
+				fclose($handle);
+				echo " [" . lang('done') . "]</p>";
 			}
-	
-			fclose($handle);
-	
-			echo "[done]</p>";
-	
-			echo "<p>Setting admin account information...";
-	
+			else
+			{
+				echo lang('install_admin_error_schema') . "</p>";
+			}
+
+
+			echo "<p>" . lang('install_admin_set_account');
+
+			$sql_error = false;
+
 			$sql = 'UPDATE ' . $db_prefix . 'users SET username = ?, password = ?, email = ? WHERE user_id = 1';
-			$db->Execute($sql, array($_POST['adminusername'], md5($_POST['adminpassword']), $_POST['adminemail']));
-	
-			echo "[done]</p>";
-			
-			echo "<p>Setting sitename...";
-	
+			$dbresult = $db->Execute($sql, array($_POST['adminusername'], md5($_POST['adminpassword']), $_POST['adminemail']));
+			if (!$dbresult)
+			{
+				echo lang('invalid_query', $sql) ."</p>";
+				$sql_error = true;
+			}
+			else
+			{
+				echo " [" . lang('done') . "]</p>";
+			}
+
+			echo "<p>" . lang('install_admin_set_sitename');
+
 			$query = "INSERT INTO ". $db_prefix ."siteprefs (sitepref_name, sitepref_value) VALUES (?,?)";
-			$db->Execute($query, array('sitename', htmlentities($_POST['sitename'])));
-	
-			echo "[done]</p>";
-	
+			$dbresult = $db->Execute($query, array('sitename', htmlentities($_POST['sitename'])));
+			if (!$dbresult)
+			{
+				echo lang('invalid_query', $sql) ."</p>";
+				$sql_error = true;
+			}
+			else
+			{
+				echo " [" . lang('done') . "]</p>";
+			}
+
 			include_once(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'createseq.php'));
-	
+
 			$db->Close();
-			echo '<p class="success">Success!</p>';
+
+			if (!$sql_error)
+			{
+				echo '<p class="success">' . lang('success') . '!</p>';
+			}
+			else
+			{
+				echo '<p class="error">' . lang('invalid_querys') . '!</p>';
+			}
 		}
 	}
 }
-
 ?>

@@ -1,9 +1,11 @@
 {foreach from=$errors item=error}
 <p class="error">{$error}</p>
 {/foreach}
+
 {if empty($errors)}
-<h4>Congratulations, you are all setup - here is your <a href="{$base_url}/">CMS site</a></h4>
+<h4>{lang_install a=install_admin_congratulations 1=$base_url}</h4>
 {/if}
+
 {if $modman_installed}
 <form action="{$base_url}/admin/login.php" method="post">
 	<input type="submit" value="Install additional modules">

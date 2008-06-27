@@ -1,41 +1,39 @@
 {foreach from=$errors item=error}
 <p class="error">{$error}</p>
 {/foreach}
-<h3>Admin Account Information</h3>
-<p>
-Select the username, password and email address for your admin account.  Please make sure you record this password somewhere, as
-there will be no other way to login to your CMS Made Simple admin system without it.
-</p>
+
+<h3>{lang_install a=install_admin_header}</h3>
+
+<p>{lang_install a=install_admin_info}</p>
 
 <form action="index.php" method="post" name="page2form" id="page2form">
 
 <table border="0" class="adminaccount">
-
 	<tr class="row1">
-		<td>Username</td>
+		<td>{lang_install a=username}</td>
 		<td><input class="defaultfocus" type="text" name="adminusername" value="{$values.username}" size="20" maxlength="50" /></td>
 	</tr>
 
 	<tr class="row2">
-		<td>E-mail Address</td>
+		<td>{lang_install a=install_admin_email}</td>
 		<td><input type="text" name="adminemail" value="{$values.email}" size="20" maxlength="50" /></td>
 	</tr>
 
 	<tr class="row1">
-		<td>Password</td>
+		<td>{lang_install a=password}</td>
 		<td><input type="password" name="adminpassword" value="" size="20" maxlength="50" /></td>
 	</tr>
 
 	<tr class="row2">
-		<td>Password Again</td>
+		<td>{lang_install a=passwordagain}</td>
 		<td><input type="password" name="adminpasswordagain" value="" size="20" maxlength="50" /></td>
 	</tr>
 {if $mail_function_exists == true}
 	<tr class="row1">
-		<td>E-Mail Account Information</td>
+		<td>{lang_install a=install_admin_email_info}</td>
 		<td>
                    <input type="checkbox" name="email_accountinfo" value="1" {if $values.email_accountinfo == 1} checked="checked"{/if} />
-                   <br/><br/><p class="row1"><strong>Note:</strong> This function uses the php's mail function.  If you don't receive this email, it may be an indication that your server is not properly configured and that you should contact your host administrator.</p>
+                   <br/><br/><p class="row1">{lang_install a=install_admin_email_note}</p>
                 </td>
 	</tr>
 {/if}
@@ -43,7 +41,8 @@ there will be no other way to login to your CMS Made Simple admin system without
 
 <p align="center" class="continue">
 	<input type="hidden" name="page" value="3" />
-	<input type="submit" value="Continue" />
+	<input type="hidden" name="default_cms_lang" value="{$default_cms_lang}" />
+	<input type="submit" value="{lang_install a=install_continue}" />
 </p>
 
 </form>
