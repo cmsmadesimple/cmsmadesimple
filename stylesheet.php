@@ -1,7 +1,7 @@
 <?php
 
 // Parse pretty URLS
-$url = substr($_SERVER['REQUEST_URI'],strlen($_SERVER['SCRIPT_NAME']));
+$url = substr($_SERVER['REQUEST_URI'],strlen($_SERVER['PHP_SELF']));
 $url = rtrim($url,'/');
 $matches = array();
 if( preg_match('+^/[0-9]*/.*?$+',$url,$matches) )
@@ -130,13 +130,21 @@ if ($stripbackground)
   $css = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $css);
 }
 
+if( isset($config['enable_gz_compression']) )
+  {
+    @ob_start('ob_gzhandler');
+  }
 $max_age = (int)get_site_preference('css_max_age',0);
 header("Content-Type: text/css; charset=$encoding");
-header("Last-Modified: ".gmdate('D, d M Y H:i:s', $hashmtime - 5).' GMT');
+$datestr = gmdate('D, d M Y H:i:s',$hashmtime).' GMT';
+header("Last-Modified: ".$datestr);
 if( $max_age > 0 )
   {
+    $datestr = gmdate('D, d M Y H:i:s',$hashmtime+$max_age).' GMT';
+    header("Expires: ".$datestr);
+    header("Cache-Control: must-revalidate");
     // no caching?
-    header("Cache-Control: max-age=$max_age, s-max-age=$max_age, must-revalidate");
+    //header("Cache-Control: max-age=$max_age, s-max-age=$max_age, must-revalidate");
   }
 header('Etag: "'.$etag.'"');
 echo $css;
