@@ -67,18 +67,18 @@ class CMSInstaller
 
 		if ($handle = @opendir($base . 'ext' . DIRECTORY_SEPARATOR))
 		{
-			while (false !== ($dir = readdir($handle)))
+			while (false !== ($file = readdir($handle)))
 			{
-				if ( ($dir != '..') && ($dir != '.') && (is_dir($base . 'ext' . DIRECTORY_SEPARATOR . $dir)) )
+				if ( ($file != '..') && ($file != '.') && (is_file($base . 'ext' . DIRECTORY_SEPARATOR . $file)) )
 				{
-					$languages[] = $dir;
+					$languages[] = basename($file, '.php');
 				}
 			}
 			closedir($handle);
 		}
 		natsort($languages);
 
-		if (is_readable($base . DIRECTORY_SEPARATOR . 'en_US.php'))
+		if (is_readable($base . 'en_US.php'))
 		{
 			array_unshift($languages, 'en_US');
 		}

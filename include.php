@@ -212,7 +212,7 @@ if ($config['debug'] == true)
 	$smarty->debugging = true;
 	$smarty->error_reporting = 'E_ALL';
 }
-if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE))
+if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 {
     include_once(cms_join_path($dirname,$config['admin_dir'],'lang.php'));
 

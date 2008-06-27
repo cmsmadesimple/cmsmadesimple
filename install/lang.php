@@ -77,7 +77,7 @@ if (isset($CMS_INSTALL_PAGE))
 
 	#First load the english one so that we have strings to fall back on
 	$base_lang = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR;
-	@include($base_lang . DIRECTORY_SEPARATOR . 'en_US.php');
+	@include($base_lang . 'en_US.php');
 
 	#Now load the real file
 	if ($current_language != 'en_US')
