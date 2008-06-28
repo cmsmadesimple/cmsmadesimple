@@ -52,6 +52,7 @@ Version 1.4-beta1 "Jamaica"
 - Modifications to the group permissions, and user creation forms
   makes managing users, groups, and permissions much simpler.
   - Many thanks to _SjG_
+- Updates to the embed plugin
 
 
 Version 1.3 "Cuba" -- June 7, 2008
