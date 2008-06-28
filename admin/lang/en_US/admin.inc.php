@@ -620,17 +620,21 @@ $lang['admin']['help_function_embed'] = <<<EOT
 	This implementation is using IFRAMES so older browsers can have problems. Sorry bu this is the only known way 
 	that works without modifing the embeded application.</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{embed url=http://www.google.com/}</code><br></p>
+        <ul>
+        <li>a) Add <code>{embed header=true}</code> into the head section of your page template, or into the metadata section in the options tab of a content page.  This will ensure that the required javascript gets included.   If you insert this tag into the metadata section in the options tab of a content page you must ensure that <code>{metadata}</code> is in your page template.</li>
+        <li>b) Add <code>{embed url="http://www.google.com"}</code> into your page content or in the body of your page template.</li>
+        </ul>
+        <br/>
         <h4>Example to make the iframe larger</h4>
 	<p>Add the following to your style sheet:</p>
         <pre>#myframe { height: 600px; }</pre>
+        <br/>
         <h3>What parameters does it take?</h3>
         <ul>
-               <li><em>(required)</em>url - the url to be included 
-               <li><em>(optional)</em>header=true - this will generate the header code for good resizing of the IFRAME.</li>
-
+            <li><em>(required)</em>url - the url to be included 
+            <li><em>(required)</em>header=true - this will generate the header code for good resizing of the IFRAME.</li>
+            <li>(optional)name - an optional name to use for the iframe (instead of myframe).<p>If this option is used, it must be used identically in both calls, i.e: {embed header=true name=foo} and {embed name=foo url=http://www.google.com} calls.</p>
         </ul>
-       <p>You must include in your page content {embed url=..} and in the "Metadata:" section (advanced tab) you must put {embed header=true}. Also be sure to put this in between the "head" tags of your template: {metadata}</p>
 EOT;
 $lang['admin']['help_function_edit'] = <<<EOT
 	<h3>What does this do?</h3>

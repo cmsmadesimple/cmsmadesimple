@@ -19,11 +19,17 @@
 #Author: Sorin Sbarnea / INTERSOL SRL
 function smarty_cms_function_embed($params, &$smarty)
 {
-	global $gCms;
+  global $gCms;
 
-	if(!empty($params['header']))
-	{
-		$code = <<<IFRAMECODE
+  $name = 'myframe';
+  if(isset($params['name']) )
+    {
+      $name = trim($params['name']);
+    }
+
+  if(isset($params['header']))
+    {
+      $code = <<<IFRAMECODE
 <script type="text/javascript">
 
 /***********************************************
@@ -34,7 +40,11 @@ function smarty_cms_function_embed($params, &$smarty)
 
 //Input the IDs of the IFRAMES you wish to dynamically resize to match its content height:
 //Separate each ID with a comma. Examples: ["myframe1", "myframe2"] or ["myframe"] or [] for none:
-var iframeids=["myframe"]
+
+IFRAMECODE;
+      // and add the name.
+      $code .= 'var iframeids=["'.$name.'"]'."\n";
+      $tmp = <<<IFRAMECODE
 
 //Should script hide iframe from browsers that don't support this script (non IE5+/NS6+ browsers. Recommended):
 var iframehide="yes"
@@ -93,23 +103,29 @@ window.onload=resizeCaller
 
 </script>
 IFRAMECODE;
-	return $code;
-	}
-
-	if (!empty($params['url']))
-	{
-		$url = $params['url'];
-	} else return "<pre>Invalid call for embed function.<pre>";
-
-//	$params['height']='200%';
-//	$params['width']='100%';
-	//
-//	return '<iframe width="'.$params['width'].
-//		'" scrolling="yes" height="'.$params['height'].
-//		'" frameborder="0" marginwidth="0" marginheight="0" src="http://www2.romanianoffice.ro/forum/index.php"></iframe>';
- 
-	return   "<iframe id='myframe' src='$url' scrolling='no' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' style='overflow:visible; width:99%; display:none'></iframe>";
-
+ $code .= $tmp;
+ return $code;
+    }
+  
+  if (isset($params['url']))
+    {
+      $url = trim($params['url']);
+    } 
+  else if( isset($params['src']) )
+    {
+      $url = trim($params['src']);
+    }
+  else return "<pre>Invalid call for embed function.<pre>";
+  
+  //	$params['height']='200%';
+  //	$params['width']='100%';
+  //
+  //	return '<iframe width="'.$params['width'].
+  //		'" scrolling="yes" height="'.$params['height'].
+  //		'" frameborder="0" marginwidth="0" marginheight="0" src="http://www2.romanianoffice.ro/forum/index.php"></iframe>';
+  
+  return   "<iframe id='{$name}' name='{$name}' src='$url' scrolling='no' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' style='overflow:visible; width:99%; display:none'></iframe>";
+  
 }
 
 function smarty_cms_help_function_embed() {
