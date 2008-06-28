@@ -107,8 +107,15 @@ debug_buffer('loading content functions');
 require_once(cms_join_path($dirname,'lib','content.functions.php'));
 debug_buffer('loading pageinfo functions');
 require_once(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
-debug_buffer('loading translation functions');
-require_once(cms_join_path($dirname,'lib','translation.functions.php'));
+if (isset($CMS_INSTALL_PAGE))
+{
+	require_once cms_join_path(CMS_INSTALL_BASE, 'translation.functions.php');
+}
+else
+{
+	debug_buffer('loading translation functions');
+	require_once(cms_join_path($dirname,'lib','translation.functions.php'));
+}
 debug_buffer('loading events functions');
 require_once(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 debug_buffer('loading php4 entity decode functions');
