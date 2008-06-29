@@ -179,11 +179,16 @@ function & testIniBoolean($required, $title, $varname, $message = '', $negative_
  * @var mixed   $recommended
  * @var string  $message
 */
-function & testVersionRange($required, $title, $value, $minimum, $recommended, $message = '')
+function & testVersionRange($required, $title, $value, $minimum, $recommended, $message = '',$plus = 0)
 {
 	$test =& new StdClass();
 
+	echo "DEBUG: $recommended,$message - $plus<br/>";
 	$test->title = $title . sprintf(' '.lang('test_min_recommend'), $minimum, $recommended);
+	if( $plus > 0 )
+	  {
+	    $test->title = $title . sprintf(' '.lang('test_min_recommend_plus'), $minimum, $recommended);
+	  }
 	$test->value = $value;
 
 	if (version_compare($value,$minimum) < 0)

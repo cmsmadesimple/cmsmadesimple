@@ -855,6 +855,9 @@ class ContentOperations
 		{
 			unlink(TMP_CACHE_LOCATION . '/contentcache.php');
 		}
+
+		@touch(cms_join_path(TMP_CACHE_LOCATION,'index.html'));
+		@touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
 	}
 
 	function CreateFriendlyHierarchyPosition($position)
