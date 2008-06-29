@@ -106,7 +106,7 @@ $tmp[0]['safe_mode'] = array(($safe_mode?lang('on'):lang('off')), ($safe_mode)?'
 $_phpversion = phpversion();
 $tmp[0]['phpversion'] = array($_phpversion, systeminfo_version_compare($_phpversion, $range_phpversion));
 
-$_memory_limit = get_cfg_var('memory_limit');
+$_memory_limit = ini_get('memory_limit');
 $_memory_limit2 = substr($_memory_limit,0,-1); //there is nnM
 $tmp[0]['memory_limit'] = array($_memory_limit, systeminfo_range_numeric($_memory_limit2, $range_memory_limit));
 
