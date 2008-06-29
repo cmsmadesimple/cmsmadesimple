@@ -220,8 +220,9 @@ class AdminTheme
      */
     function SetModuleAdminInterfaces()
     {
+      global $gCms;
     	# Are there any modules with an admin interface?
-        $cmsmodules = $this->cms->modules;
+        $cmsmodules =& $gCms->modules;
 		reset($cmsmodules);
 		while (list($key) = each($cmsmodules))
 		{
