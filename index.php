@@ -322,13 +322,14 @@ $db =& $gCms->GetDb();
 
 $memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $memory = $memory - $orig_memory;
+$memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
 if ($config["debug"] == true)
 {
-  echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and {$memory} bytes of memory</p>";
+  echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and {$memory} bytes of memory (peak memory usage was {$memory_peak}</p>";
 }
 else if( !isset($config['hide_performance_info']) )
 {
-echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} -->\n";
+echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak} -->\n";
 
 }
 
