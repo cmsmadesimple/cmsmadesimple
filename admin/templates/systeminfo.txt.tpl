@@ -19,8 +19,8 @@
   <ul>
   {foreach from=$config_info key='view' item='tmp'}
     {if $view < 1}
-      {foreach from=$tmp key='key' item='one'}
-      <li>{$key}: {$one}</li>
+      {foreach from=$tmp key='key' item='test'}
+      <li>{$key}: {$test->res}</li>
       {/foreach}
     {/if}
   {/foreach}
@@ -35,12 +35,8 @@
   <ul>
   {foreach from=$php_information key='view' item='tmp'}
     {if $view < 1}
-      {foreach from=$tmp key='key' item='one'}
-        {if is_array($one)}
-        <li>{$key}: {$one[0]}</li>
-        {else}
-        <li>{$key}: {$one}</li>
-        {/if}
+      {foreach from=$tmp key='key' item='test'}
+      <li>{$key}: {$test->value}</li>
       {/foreach}
     {/if}
   {/foreach}
@@ -54,12 +50,8 @@
   <ul>
   {foreach from=$server_info key='view' item='tmp'}
     {if $view < 1}
-      {foreach from=$tmp key='key' item='one'}
-        {if is_array($one)}
-        <li>{$key|replace:'_':' '|ucwords}: {$one[0]}</li>
-        {else}
-        <li>{$key|replace:'_':' '|ucwords}: {$one}</li>
-        {/if}
+      {foreach from=$tmp key='key' item='test'}
+      <li>{$key|replace:'_':' '|ucwords}: {$test->value}</li>
       {/foreach}
     {/if}
   {/foreach}
@@ -71,12 +63,8 @@
   <ul>
   {foreach from=$permission_info key='view' item='tmp'}
     {if $view < 1}
-      {foreach from=$tmp key='key' item='one'}
-        {if is_array($one)}
-        <li>{$key}: {$one[0]}</li>
-        {else}
-        <li>{$key}: {$one}</li>
-        {/if}
+      {foreach from=$tmp key='key' item='test'}
+      <li>{$key}: {$test->value}</li>
       {/foreach}
     {/if}
   {/foreach}

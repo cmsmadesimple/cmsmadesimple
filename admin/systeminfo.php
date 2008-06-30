@@ -22,159 +22,171 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 include_once("header.php");
-include_once("systeminfo.function.php");
+include_once("../lib/test.functions.php");
 
 
 check_login();
 
 function systeminfo_lang($params,&$smarty)
 {
-  if( count($params) )
-    {
-      $tmp = array();
-      foreach( $params as $k=>$v)
+	if( count($params) )
 	{
-	  $tmp[] = $v;
-	}      
+		$tmp = array();
+		foreach( $params as $k=>$v)
+		{
+			$tmp[] = $v;
+		}      
       
-      $str = $tmp[0];
-      $tmp2 = array();
-      for( $i = 1; $i < count($tmp); $i++ )
-	$tmp2[] = $params[$i];
-      return lang($str,$tmp2);
-    }
+		$str = $tmp[0];
+		$tmp2 = array();
+		for( $i = 1; $i < count($tmp); $i++ )
+			$tmp2[] = $params[$i];
+		return lang($str,$tmp2);
+	}
 }
-
 
 global $gCms;
 $smarty =& $gCms->GetSmarty();
 $smarty->register_function('si_lang','systeminfo_lang');
+$smarty->caching = false;
+$smarty->force_compile = true;
 $db = &$gCms->GetDb();
-$config = &$gCms->config;
 
-echo '<div class="pagecontainer">';
-//hardcoded: copy from adminlog. Text only or icon link also and here or under System Information (in ShowHeader('systeminfo'))?
-if(empty($_GET['cleanreport'])) {
-	echo '<p class="pageshowrows"><a href="systeminfo.php?cleanreport=1">Click here for copy/paste in forum posting</a></p>';
-}
-echo $themeObject->ShowHeader('systeminfo');
-echo '<div class="pageoverflow">';
+
+
+//smartyfier
+$smarty->assign('showheader', $themeObject->ShowHeader('systeminfo'));
+$smarty->assign('backurl', $themeObject->BackUrl());
 
 
 
 /* CMS Install Information */
 
-$smarty->assign('cms_version',$GLOBALS['CMS_VERSION']);
+$smarty->assign('cms_version', $GLOBALS['CMS_VERSION']);
+
 
 $query = "SELECT * FROM ".cms_db_prefix()."modules WHERE active=1";
 $modules = $db->GetArray($query);
-$smarty->assign('installed_modules',$modules);
+$smarty->assign('installed_modules', $modules);
+
 
 clearstatcache();
 $tmp = array(0=>array(), 1=>array());
-$tmp[0]['php_memory_limit'] = (!empty($config['php_memory_limit'])) ? $config['php_memory_limit'] : '';
-$tmp[0]['process_whole_template'] = (isset($config['process_whole_template']) && (true === $config['process_whole_template'])) ? 'true' : 'false';
-$tmp[1]['root_url'] = $config['root_url'];
-$tmp[1]['root_path'] = array($config['root_path'].' ('.substr(sprintf('%o', fileperms($config['root_path'])), -4).')', systeminfo_dir_write($config['root_path']));
-$tmp[1]['previews_path'] = array($config['previews_path'].' ('.substr(sprintf('%o', fileperms($config['previews_path'])), -4).')', systeminfo_dir_write($config['previews_path']));
-$tmp[1]['uploads_path'] = array($config['uploads_path'].' ('.substr(sprintf('%o', fileperms($config['uploads_path'])), -4).')', systeminfo_dir_write($config['uploads_path']));
-$tmp[1]['uploads_url'] = $config['uploads_url'];
-$tmp[1]['image_uploads_path'] = array($config['image_uploads_path'].' ('.substr(sprintf('%o', fileperms($config['image_uploads_path'])), -4).')', systeminfo_dir_write($config['image_uploads_path']));
-$tmp[1]['image_uploads_url'] = $config['image_uploads_url'];
-$tmp[1]['debug'] = (true === $config['debug']) ? 'true' : 'false';
-$tmp[1]['locale'] = (!empty($config['locale'])) ? $config['locale'] : '';
-$tmp[1]['default_encoding'] = (!empty($config['default_encoding'])) ? $config['default_encoding'] : '';
-$tmp[1]['admin_encoding'] = (!empty($config['admin_encoding'])) ? $config['admin_encoding'] : '';
-$tmp[0]['max_upload_size'] = $config['max_upload_size'];
-$tmp[0]['default_upload_permission'] = $config['default_upload_permission'];
-$tmp[0]['use_smarty_php_tags'] = (true === $config['use_smarty_php_tags']) ? 'true' : 'false';
-$tmp[0]['assume_mod_rewrite'] = (true === $config['assume_mod_rewrite']) ? 'true' : 'false';
-$tmp[0]['page_extension'] = (!empty($config['page_extension'])) ? $config['page_extension'] : '';
-$tmp[0]['internal_pretty_urls'] = (true == $config['internal_pretty_urls']) ? 'true' : 'false';
-$tmp[0]['use_hierarchy'] = (true == $config['use_hierarchy']) ? 'true' : 'false';
-$smarty->assign('count_config_info',count($tmp[0]));
-$smarty->assign('config_info',$tmp);
+
+$tmp[0]['php_memory_limit'] = testConfig('php_memory_limit', 'php_memory_limit');
+$tmp[0]['process_whole_template'] = testConfig('process_whole_template', 'process_whole_template');
+$tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
+$tmp[0]['default_upload_permission'] = testConfig('default_upload_permission', 'default_upload_permission');
+$tmp[0]['use_smarty_php_tags'] = testConfig('use_smarty_php_tags', 'use_smarty_php_tags');
+$tmp[0]['assume_mod_rewrite'] = testConfig('assume_mod_rewrite', 'assume_mod_rewrite');
+$tmp[0]['page_extension'] = testConfig('page_extension', 'page_extension');
+$tmp[0]['internal_pretty_urls'] = testConfig('internal_pretty_urls', 'internal_pretty_urls');
+$tmp[0]['use_hierarchy'] = testConfig('use_hierarchy', 'use_hierarchy');
+
+$tmp[1]['root_url'] = testConfig('root_url', 'root_url');
+$tmp[1]['root_path'] = testConfig('root_path', 'root_path', 'testDirWrite');
+$tmp[1]['previews_path'] = testConfig('previews_path', 'previews_path', 'testDirWrite');
+$tmp[1]['uploads_path'] = testConfig('uploads_path', 'uploads_path', 'testDirWrite');
+$tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
+$tmp[1]['image_uploads_path'] = testConfig('image_uploads_path', 'image_uploads_path', 'testDirWrite');
+$tmp[1]['image_uploads_url'] = testConfig('image_uploads_url', 'image_uploads_url');
+$tmp[1]['debug'] = testConfig('debug', 'debug');
+$tmp[1]['locale'] = testConfig('locale', 'locale');
+$tmp[1]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
+$tmp[1]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
+
+$smarty->assign('count_config_info', count($tmp[0]));
+$smarty->assign('config_info', $tmp);
 
 
 
 /* PHP Information */
 
 $tmp = array(0=>array(), 1=>array());
-$safe_mode = ini_get_boolean('safe_mode');
-$tmp[0]['safe_mode'] = array(($safe_mode?lang('on'):lang('off')), ($safe_mode)?'red':'');
 
-$_phpversion = phpversion();
-$tmp[0]['phpversion'] = array($_phpversion, systeminfo_version_compare($_phpversion, $range_phpversion));
+$tmp[0]['safe_mode'] = testIniBoolean(0, 'safe_mode', 'safe_mode', '', true);
 
-$_memory_limit = ini_get('memory_limit');
-$_memory_limit2 = substr($_memory_limit,0,-1); //there is nnM
-$tmp[0]['memory_limit'] = array($_memory_limit, systeminfo_range_numeric($_memory_limit2, $range_memory_limit));
+list($minimum, $recommended) = getTestValues('phpversion');
+$tmp[0]['phpversion'] = testVersionRange(0, 'phpversion', phpversion(), $minimum, $recommended);
 
-$_post_max_size = get_cfg_var('post_max_size');
-$_post_max_size2 = substr($_post_max_size,0,-1); //there is nnM
-$tmp[0]['post_max_size'] = array($_post_max_size, systeminfo_range_numeric($_post_max_size2, $range_post_max_size));
+list($minimum, $recommended) = getTestValues('memory_limit');
+$tmp[0]['memory_limit'] = testIniRange(0, 'memory_limit', 'memory_limit', $minimum, $recommended);
 
-$_upload_max_filesize = get_cfg_var('upload_max_filesize');
-$_upload_max_filesize2 = substr($_upload_max_filesize,0,-1); //there is nnM
-$tmp[1]['upload_max_filesize'] = array($_upload_max_filesize, systeminfo_range_numeric($_upload_max_filesize2, $range_upload_max_filesize));
+list($minimum, $recommended) = getTestValues('post_max_size');
+$tmp[0]['post_max_size'] = testIniRange(0, 'post_max_size', 'post_max_size', $minimum, $recommended);
 
-$_max_execution_time = get_cfg_var('max_execution_time');
-$tmp[0]['max_execution_time'] = array($_max_execution_time, systeminfo_range_numeric($_max_execution_time, $range_max_execution_time));
+list($minimum, $recommended) = getTestValues('upload_max_filesize');
+$tmp[1]['upload_max_filesize'] = testIniRange(0, 'upload_max_filesize', 'upload_max_filesize', $minimum, $recommended);
 
-$_gd_version = systeminfo_gd_version();
-$tmp[0]['gd_version'] = array($_gd_version, systeminfo_range_numeric($_gd_version, $range_gd_version));
+list($minimum, $recommended) = getTestValues('max_execution_time');
+$tmp[0]['max_execution_time'] = testIniRange(0, 'max_execution_time', 'max_execution_time', $minimum, $recommended);
 
-$_session_save_path = session_save_path(); //Can be 5;0777;/tmp
-if(strrpos($_session_save_path, ";") !== false) $_session_save_path = substr($_session_save_path, strrpos($_session_save_path, ";")+1);
-$tmp[0]['session_save_path'] = array($_session_save_path.' ('.substr(sprintf('%o', fileperms($_session_save_path)), -4).')', systeminfo_dir_write($_session_save_path));
+list($minimum, $recommended) = getTestValues('gd_version');
+$tmp[0]['gd_version'] = testGDVersion(0, 'gd_version', $minimum);
 
-$smarty->assign('count_php_information',count($tmp[0]));
-$smarty->assign('php_information',$tmp);
+$dir = ini_get('session.save_path');
+if ( (ini_get('session.save_handler') == 'files') && (empty($dir)) )
+{
+	$tmp[0]['session_save_path'] = testDummy('session_save_path', '', 'yellow');
+}
+else
+{
+	if (strrpos($dir, ";") !== false) $dir = substr($dir, strrpos($dir, ";")+1); //Can be 5;777;/tmp
+	$tmp[0]['session_save_path'] = testDirWrite(0, $dir, $dir);
+}
+
+$smarty->assign('count_php_information', count($tmp[0]));
+$smarty->assign('php_information', $tmp);
 
 
 
 /* Server Information */
 
 $tmp = array(0=>array(), 1=>array());
-$tmp[1]['server_software'] = $_SERVER['SERVER_SOFTWARE'];
-$tmp[0]['server_api'] = PHP_SAPI;
-$tmp[1]['server_os'] = PHP_OS.' v '.php_uname('r').' '.lang('on').' '.php_uname('m');
+
+$tmp[1]['server_software'] = testDummy('', $_SERVER['SERVER_SOFTWARE'], '');
+$tmp[0]['server_api'] = testDummy('', PHP_SAPI, '');
+$tmp[1]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('on') .' '. php_uname('m'), '');
 
 switch($config['dbms']) //workaroud: ServerInfo() is unsupported in adodblite
 {
-	case 'postgres7': $tmp[0]['server_db_type'] = 'PostgreSQL ('.$config['dbms'].')';
+	case 'postgres7': $tmp[0]['server_db_type'] = testDummy('', 'PostgreSQL ('.$config['dbms'].')', '');
 					$v = pg_version();
 					$_server_db = (isset($v['server_version'])) ? $v['server_version'] : $v['client'];
-					$tmp[0]['server_db_version'] = array($_server_db, systeminfo_version_compare($_server_db, $range_pgsqlversion));
+					list($minimum, $recommended) = getTestValues('pgsqlversion');
+					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, $minimum, $recommended);
 					break;
 	case 'mysqli':	$v = $db->connectionId->server_info;
 	case 'mysql':	if(!isset($v)) $v = mysql_get_server_info();
-					$tmp[0]['server_db_type'] = 'MySQL ('.$config['dbms'].')';
+					$tmp[0]['server_db_type'] = testDummy('', 'MySQL ('.$config['dbms'].')', '');
 					$_server_db = (false === strpos($v, "-")) ? $v : substr($v, 0, strpos($v, "-"));
-					$tmp[0]['server_db_version'] = array($_server_db, systeminfo_version_compare($_server_db, $range_mysqlversion));
+					list($minimum, $recommended) = getTestValues('mysqlversion');
+					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, $minimum, $recommended);
 					break;
 }
-$smarty->assign('count_server_info',count($tmp[0]));
-$smarty->assign('server_info',$tmp);
+$smarty->assign('count_server_info', count($tmp[0]));
+$smarty->assign('server_info', $tmp);
 
 $tmp = array(0=>array(), 1=>array());
-$_dir_tmp = $config['root_path'].DIRECTORY_SEPARATOR.'tmp';
-$tmp[1]['tmp'] = array($_dir_tmp.' ('.substr(sprintf('%o', fileperms($_dir_tmp)), -4).')', systeminfo_dir_write($_dir_tmp));
-$_dir_tmp_templates_c = $config['root_path'].DIRECTORY_SEPARATOR.'tmp/templates_c';
-$tmp[1]['tmp/templates_c'] = array($_dir_tmp_templates_c.' ('.substr(sprintf('%o', fileperms($_dir_tmp_templates_c)), -4).')', systeminfo_dir_write($_dir_tmp_templates_c));
-$_dir_modules = $config['root_path'].DIRECTORY_SEPARATOR.'modules';
-$tmp[1]['modules'] = array($_dir_modules.' ('.substr(sprintf('%o', fileperms($_dir_modules)), -4).')', systeminfo_dir_write($_dir_modules));
-$smarty->assign('count_permission_info',count($tmp[0]));
-$smarty->assign('permission_info',$tmp);
+
+$dir = $config['root_path'] . DIRECTORY_SEPARATOR . 'tmp';
+$tmp[1]['tmp'] = testDirWrite(0, $dir, $dir);
+
+$dir = TMP_TEMPLATES_C_LOCATION;
+$tmp[1]['templates_c'] = testDirWrite(0, $dir, $dir);
+
+$dir = $config['root_path'] . DIRECTORY_SEPARATOR . 'modules';
+$tmp[1]['modules'] = testDirWrite(0, $dir, $dir);
+
+$smarty->assign('count_permission_info', count($tmp[0]));
+$smarty->assign('permission_info', $tmp);
 
 
 
 if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) echo $smarty->fetch('systeminfo.txt.tpl');
 else echo $smarty->fetch('systeminfo.tpl');
 
-// Done
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
-echo "</div></div>";
+
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

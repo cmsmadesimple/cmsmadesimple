@@ -109,12 +109,49 @@ function & testDummy($title, $value, $return, $message = '')
 
 /**
  * @return object
+ * @var string  $title
+ * @var string  $value
+ * @var string  $testfunc
+*/
+function & testConfig($title, $value, $testfunc = '')
+{
+	global $gCms;
+	$config = &$gCms->config;
+
+	$test =&new StdClass();
+	$test->title = $title;
+	$test->value = $value;
+
+	if ( (isset($config[$value])) && (is_bool($config[$value])) )
+	{
+		$test->res = (true === $config[$value]) ? 'true' : 'false';
+	}
+	else if (! empty($config[$value]))
+	{
+		$test->res = $config[$value];
+	}
+	else
+	{
+		$test->res = '';
+	}
+
+	if(! empty($testfunc))
+	{
+		$test->result = $testfunc(0, $title, $config[$value]);
+	}
+
+	return $test;
+}
+
+/**
+ * @return object
  * @var boolean $required
  * @var string  $title
  * @var boolean $result
  * @var string  $message
+ * @var boolean $negative_test
 */
-function & testBoolean($required, $title, $result, $message = '')
+function & testBoolean($required, $title, $result, $message = '', $negative_test = false)
 {
 	$test =&new StdClass();
 	$test->title = $title;
@@ -127,6 +164,7 @@ function & testBoolean($required, $title, $result, $message = '')
 			$test->message = $message;
 		}
 
+		$test->value = $negative_test ? lang('on') : lang('off');
 		if ($required)
 		{
 			$test->res = 'false';
@@ -140,6 +178,7 @@ function & testBoolean($required, $title, $result, $message = '')
 	}
 	else
 	{
+		$test->value = $negative_test ? lang('off') : lang('on');
 		if ($required)
 		{
 			$test->res = 'true';
@@ -167,7 +206,7 @@ function & testIniBoolean($required, $title, $varname, $message = '', $negative_
 {
 	$str = ini_get($varname);
 	$result = $negative_test ? (! (bool) $str) : (bool) $str;
-	return testBoolean($required, $title, $result, $message);
+	return testBoolean($required, $title, $result, $message, $negative_test);
 }
 
 /**
@@ -179,15 +218,15 @@ function & testIniBoolean($required, $title, $varname, $message = '', $negative_
  * @var mixed   $recommended
  * @var string  $message
 */
-function & testVersionRange($required, $title, $value, $minimum, $recommended, $message = '',$plus = 0)
+function & testVersionRange($required, $title, $value, $minimum, $recommended, $message = '', $plus = 0)
 {
 	$test =& new StdClass();
 
 	$test->title = $title . sprintf(' '.lang('test_min_recommend'), $minimum, $recommended);
 	if( $plus > 0 )
-	  {
-	    $test->title = $title . sprintf(' '.lang('test_min_recommend_plus'), $minimum, $recommended);
-	  }
+	{
+		$test->title = $title . sprintf(' '.lang('test_min_recommend_plus'), $minimum, $recommended);
+	}
 	$test->value = $value;
 
 	if (version_compare($value,$minimum) < 0)
@@ -332,9 +371,10 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
 	$test =& new StdClass();
 
 	$test->title = $title;
+	$test->dir = $dir;
 	if (is_dir($dir))
 	{
-		$test->value = substr(sprintf('%o', fileperms($dir)), -4);
+		$test->value = '(' . substr(sprintf('%o', fileperms($dir)), -4) . ')';
 	}
 
 	$return = '';

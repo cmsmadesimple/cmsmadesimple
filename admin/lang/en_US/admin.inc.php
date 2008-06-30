@@ -9,6 +9,7 @@ EOT;
 $lang['admin']['view_page'] = 'View this page in a new window';
 $lang['admin']['off'] = 'Off';
 $lang['admin']['on'] = 'On';
+$lang['admin']['copy_paste_forum'] = 'Click here for copy/paste in forum posting';
 $lang['admin']['permission_information'] = 'Permission Information';
 $lang['admin']['server_os'] = 'Server Operating System';
 $lang['admin']['server_api'] = 'Server API';
