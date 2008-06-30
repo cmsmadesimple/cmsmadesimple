@@ -18,6 +18,7 @@
 #
 #$Id$
 
+$orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $dirname = dirname(__FILE__);
 require_once($dirname.'/fileloc.php');
 
@@ -319,16 +320,16 @@ $endtime = microtime();
 
 $db =& $gCms->GetDb();
 
+$memory = (function_exists('memory_get_usage')?memory_get_usage():0);
+$memory = $memory - $orig_memory;
 if ($config["debug"] == true)
 {
-	echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
+  echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and {$memory} bytes of memory</p>";
 }
-
-if( !isset($config['hide_performance_info']) )
+else if( !isset($config['hide_performance_info']) )
 {
-echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." -->\n";
-#echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple (".$cached."cached) using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
-#echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
+echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} -->\n";
+
 }
 
 if (get_site_preference('enablesitedownmessage') == "1" || $config['debug'] == true)
