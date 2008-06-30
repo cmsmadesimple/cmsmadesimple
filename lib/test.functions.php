@@ -183,7 +183,6 @@ function & testVersionRange($required, $title, $value, $minimum, $recommended, $
 {
 	$test =& new StdClass();
 
-	echo "DEBUG: $recommended,$message - $plus<br/>";
 	$test->title = $title . sprintf(' '.lang('test_min_recommend'), $minimum, $recommended);
 	if( $plus > 0 )
 	  {
