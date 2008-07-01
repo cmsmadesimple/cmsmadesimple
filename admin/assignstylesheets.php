@@ -83,6 +83,22 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'remove' && $modify_lay
 	}
 }
 
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'move' && $modify_layout)
+{
+	$assoc = cms_orm('template_stylesheet_association')->find_by_id($_REQUEST['assoc_id']);
+	if ($assoc != null)
+	{
+		if (isset($_REQUEST['dir']) && $_REQUEST['dir'] == 'up')
+		{
+			$assoc->move_up();
+		}
+		else if (isset($_REQUEST['dir']) && $_REQUEST['dir'] == 'down')
+		{
+			$assoc->move_down();
+		}
+	}
+}
+
 include_once("header.php");
 
 $smarty = cms_smarty();
@@ -123,7 +139,7 @@ function local_setup_smarty($page, $modify_layout, $type)
 			$all_stylesheets = cms_orm('stylesheet')->find_all(array('order' => 'name ASC'));
 			$unassigned_stylesheets = array_udiff($all_stylesheets, $assigned_stylesheets->children, 'orm_array_udiff_compare');
 			
-			$smarty->assign('assigned', $assigned_stylesheets);
+			$smarty->assign('assigned', $template->stylesheet_associations);
 			$smarty->assign('all', $all_stylesheets);
 			
 			//Generate stuff for dropdown
@@ -146,7 +162,7 @@ function local_setup_smarty($page, $modify_layout, $type)
 			$all_templates = cms_orm('template')->find_all(array('order' => 'name ASC'));
 			$unassigned_templates = array_udiff($all_templates, $assigned_templates->children, 'orm_array_udiff_compare');
 			
-			$smarty->assign('assigned', $assigned_templates);
+			$smarty->assign('assigned', $stylesheet->template_associations);
 			$smarty->assign('all', $all_templates);
 			
 			//Generate stuff for dropdown

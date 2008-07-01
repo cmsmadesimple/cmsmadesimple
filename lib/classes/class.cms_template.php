@@ -37,6 +37,7 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	
 	public function setup()
 	{
+		$this->create_has_many_association('stylesheet_associations', 'template_stylesheet_association', 'template_id', array('order' => 'order_num ASC'));
 		$this->create_has_and_belongs_to_many_association('stylesheets', 'stylesheet', 'stylesheet_template_assoc', 'stylesheet_id', 'template_id', array('order' => 'order_num ASC'));
 		$this->create_has_and_belongs_to_many_association('active_stylesheets', 'stylesheet', 'stylesheet_template_assoc', 'stylesheet_id', 'template_id', array('order' => 'order_num ASC', 'conditions' => 'stylesheets.active = 1'));
 	}
@@ -90,30 +91,36 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	
 	public function assign_stylesheet_by_id($stylesheet_id)
 	{
-		$current_date = cms_db()->DbTimeStamp(time());
-		$cms_db_prefix = CMS_DB_PREFIX;
-
-		$row = cms_db()->GetRow("SELECT * FROM {$cms_db_prefix}stylesheet_template_assoc WHERE template_id = ? AND stylesheet_id = ?", array($this->id, $stylesheet_id));
-		if (!$row)
+		$exists = false;
+		$cur_stylesheets = $this->stylesheets;
+		foreach ($cur_stylesheets as $one_stylesheet)
 		{
-			$max_order_num = cms_db()->GetOne("SELECT max(order_num) as order_num FROM {$cms_db_prefix}stylesheet_template_assoc WHERE template_id = ?", array($this->id));
-			if ($max_order_num == null)
-				$max_order_num = 0;
-
-			cms_db()->Execute("INSERT INTO {$cms_db_prefix}stylesheet_template_assoc (stylesheet_id, template_id, order_num, create_date, modified_date) VALUES (?, ?, ?, {$current_date}, {$current_date})", array($stylesheet_id, $this->id, $max_order_num + 1));
+			if ($one_stylesheet->stylesheet_id == $stylesheet_id)
+			{
+				$exists = true;
+				break;
+			}
+		}
+		
+		if (!$exists)
+		{
+			$new_assoc = new CmsTemplateStylesheetAssociation;
+			$new_assoc->template_id = $this->id;
+			$new_assoc->stylesheet_id = $stylesheet_id;
+			$new_assoc->save();
 		}
 	}
 	
 	public function remove_assigned_stylesheet_by_id($stylesheet_id)
 	{
-		$cms_db_prefix = CMS_DB_PREFIX;
-		$current_date = cms_db()->DbTimeStamp(time());
-		
-		$order_num = cms_db()->GetOne("SELECT order_num FROM {$cms_db_prefix}stylesheet_template_assoc WHERE template_id = ? AND stylesheet_id = ?", array($this->id, $stylesheet_id));
-		if ($order_num != null)
+		$cur_stylesheets = $this->stylesheet_associations;
+		foreach ($cur_stylesheets as $one_stylesheet)
 		{
-			cms_db()->Execute("DELETE FROM {$cms_db_prefix}stylesheet_template_assoc WHERE template_id = ? AND stylesheet_id = ?", array($this->id, $stylesheet_id));
-			cms_db()->Execute("UPDATE {$cms_db_prefix}stylesheet_template_assoc SET order_num = order_num - 1, modified_date = {$current_date} WHERE template_id = ? AND order_num > ?", array($this->id, $order_num));
+			if ($one_stylesheet->stylesheet_id == $stylesheet_id)
+			{
+				$one_stylesheet->delete();
+				break;
+			}
 		}
 	}
 	

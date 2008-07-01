@@ -272,6 +272,7 @@ CmsInstallOperations::create_table($db, 'stylesheets', "
 CmsInstallOperations::create_index($db, 'stylesheets', 'name', 'name');
 
 CmsInstallOperations::create_table($db, 'stylesheet_template_assoc', "
+	id I KEY AUTO,
 	stylesheet_id I,
 	template_id I,
 	order_num I,

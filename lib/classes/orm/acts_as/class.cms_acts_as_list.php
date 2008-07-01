@@ -51,17 +51,23 @@ class CmsActsAsList extends CmsActsAs
 		}
 	}
 	
+	public function can_move_up(&$obj)
+	{
+		$field_name = $this->get_order_field($obj);
+		return $obj[$field_name] > 1;
+	}
+	
 	public function move_up(&$obj)
 	{
 		$field_name = $this->get_order_field($obj);
 		$table_name = $obj->get_table();
-		$id_field = $obj->id_field;
 
 		if (!isset($obj->$field_name))
 		{
-			$original_place = $obj[$field_name];
-			if ($original_place > 1)
+			if ($this->can_move_up($obj))
 			{
+				$original_place = $obj[$field_name];
+
 				$new_place = $original_place - 1;
 				$new_map = array_flip($obj->field_maps);
 				if (array_key_exists($field_name, $new_map)) $field_name = $new_map[$field_name];
@@ -79,6 +85,13 @@ class CmsActsAsList extends CmsActsAs
 		return false;
 	}
 	
+	public function can_move_down(&$obj)
+	{
+		$field_name = $this->get_order_field($obj);
+		$count = $obj->find_count();
+		return $obj[$field_name] < $count;
+	}
+	
 	public function move_down(&$obj)
 	{
 		$field_name = $this->get_order_field($obj);
@@ -87,9 +100,10 @@ class CmsActsAsList extends CmsActsAs
 
 		if (!isset($obj->$field_name))
 		{
-			$original_place = $obj[$field_name];
-			//if ($original_place > 1)
-			//{
+			if ($this->can_move_down($obj))
+			{
+				$original_place = $obj[$field_name];
+
 				$new_place = $original_place + 1;
 				$new_map = array_flip($obj->field_maps);
 				if (array_key_exists($field_name, $new_map)) $field_name = $new_map[$field_name];
@@ -101,7 +115,7 @@ class CmsActsAsList extends CmsActsAs
 				$obj->$field_name = $new_place;
 
 				return $obj->save();
-			//}
+			}
 		}
 
 		return false;
@@ -111,8 +125,7 @@ class CmsActsAsList extends CmsActsAs
 	{
 		$field_name = $this->get_order_field($obj);
 		$table_name = $obj->get_table();
-		$id_field = $obj->id_field;
-
+		
 		if (!isset($obj->$field_name))
 		{
 			$original_place = $obj[$field_name];

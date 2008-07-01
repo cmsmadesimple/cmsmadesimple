@@ -69,8 +69,9 @@ class CmsStylesheet extends CmsObjectRelationalMapping
 	
 	public function setup()
 	{
-		$this->create_has_and_belongs_to_many_association('templates', 'template', 'stylesheet_template_assoc', 'template_id', 'stylesheet_id', array('order' => 'order_num ASC'));
-		$this->create_has_and_belongs_to_many_association('active_templates', 'template', 'stylesheet_template_assoc', 'template_id', 'stylesheet_id', array('order' => 'order_num ASC', 'conditions' => 'templates.active = 1'));
+		$this->create_has_many_association('template_associations', 'template_stylesheet_association', 'stylesheet_id');
+		$this->create_has_and_belongs_to_many_association('templates', 'template', 'stylesheet_template_assoc', 'template_id', 'stylesheet_id');
+		$this->create_has_and_belongs_to_many_association('active_templates', 'template', 'stylesheet_template_assoc', 'template_id', 'stylesheet_id', array('conditions' => 'templates.active = 1'));
 	}
 	
 	public function assign_template_by_id($template_id)

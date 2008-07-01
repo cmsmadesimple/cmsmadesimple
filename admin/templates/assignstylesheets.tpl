@@ -22,19 +22,28 @@
 						{cycle values='row1,row2' assign='currow'}
 						<tr class="{$currow}" onouseover="this.className='{$currow}hover';" onmouseout="this.className='{$currow}';">
 							<td>
-								{$current->name}
+								{if $type eq 'template'}
+									{$current->stylesheet->name}
+								{else}
+									{$current->template->name}
+								{/if}
 							</td>
 							{if $modify_layout eq true}
 								{if $type eq 'template'}
 								<td class="icons_wide">
-									order goes here
+									{if $current->can_move_up()}
+										<a href="assignstylesheets.php?action=move&amp;assoc_id={$current->id}&amp;dir=up&amp;type=template&amp;template_id={$template_id}">{adminicon icon='arrow-u.gif' alt_lang='Move Up'}</a>
+									{/if}
+									{if $current->can_move_down()}
+										<a href="assignstylesheets.php?action=move&amp;assoc_id={$current->id}&amp;dir=down&amp;type=template&amp;template_id={$template_id}">{adminicon icon='arrow-d.gif' alt_lang='Move Down'}</a>
+									{/if}
 								</td>
 								{/if}
 								<td class="icons_wide">
 									{if $type eq 'template'}
-										<a href="assignstylesheets.php?action=remove&amp;type={$type}&amp;template_id={$template_id}&amp;stylesheet_id={$current->id}" onclick="return confirm('{tr}deleteconfirm{/tr} - {$current->name} - ?');">{adminicon icon='delete.gif' alt_lang='delete'}</a>
+										<a href="assignstylesheets.php?action=remove&amp;type={$type}&amp;template_id={$template_id}&amp;stylesheet_id={$current->stylesheet_id}" onclick="return confirm('{tr}deleteconfirm{/tr} - {$current->stylesheet->name} - ?');">{adminicon icon='delete.gif' alt_lang='delete'}</a>
 									{elseif $type eq 'stylesheet'}
-										<a href="assignstylesheets.php?action=remove&amp;type={$type}&amp;template_id={$current->id}&amp;stylesheet_id={$stylesheet_id}" onclick="return confirm('{tr}deleteconfirm{/tr} - {$current->name} - ?');">{adminicon icon='delete.gif' alt_lang='delete'}</a>
+										<a href="assignstylesheets.php?action=remove&amp;type={$type}&amp;template_id={$current->template_id}&amp;stylesheet_id={$stylesheet_id}" onclick="return confirm('{tr}deleteconfirm{/tr} - {$current->template->name} - ?');">{adminicon icon='delete.gif' alt_lang='delete'}</a>
 									{/if}
 								</td>
 							{/if}
