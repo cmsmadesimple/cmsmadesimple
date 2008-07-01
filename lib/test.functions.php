@@ -54,6 +54,24 @@ function getTestValues($property)
 }
 
 /**
+ * @return string
+ * @var string  $return
+*/
+function getTestReturn($return)
+{
+	switch($return)
+	{
+		case 'true':	return lang('success'); break;
+		case 'green':	return lang('success'); break;
+		case 'yellow':	return lang('caution'); break;
+		case 'false':	return lang('failure'); break;
+		case 'red':		return lang('failure'); break;
+	}
+
+	return '';
+}
+
+/**
  * @return array
  * @var boolean $result
  * @var boolean $set
@@ -92,17 +110,13 @@ function & testDummy($title, $value, $return, $message = '')
 	$test =&new StdClass();
 	$test->title = $title;
 	$test->value = $value;
-	$test->message = $message;
+	if (trim($message) != '')
+	{
+		$test->message = $message;
+	}
 
 	$test->res = $return;
-	switch($return)
-	{
-		case 'true':	$test->res_text = lang('success'); break;
-		case 'green':	$test->res_text = lang('success'); break;
-		case 'yellow':	$test->res_text = lang('caution'); break;
-		case 'false':	$test->res_text = lang('failure'); break;
-		case 'red':	$test->res_text = lang('failure'); break;
-	}
+	$test->res_text = getTestReturn($return);
 
 	return $test;
 }
@@ -110,34 +124,36 @@ function & testDummy($title, $value, $return, $message = '')
 /**
  * @return object
  * @var string  $title
- * @var string  $value
+ * @var string  $varname
  * @var string  $testfunc
 */
-function & testConfig($title, $value, $testfunc = '')
+function & testConfig($title, $varname, $testfunc = '')
 {
 	global $gCms;
-	$config = &$gCms->config;
+	$config = $gCms->config;
 
-	$test =&new StdClass();
-	$test->title = $title;
-	$test->value = $value;
-
-	if ( (isset($config[$value])) && (is_bool($config[$value])) )
+	if ( (isset($config[$varname])) && (is_bool($config[$varname])) )
 	{
-		$test->res = (true === $config[$value]) ? 'true' : 'false';
+		$value = (true == $config[$varname]) ? 'true' : 'false';
 	}
-	else if (! empty($config[$value]))
+	else if (! empty($config[$varname]))
 	{
-		$test->res = $config[$value];
+		$value = $config[$varname];
+		if (! empty($testfunc))
+		{
+			$test = $testfunc(0, $title, $value);
+		}
 	}
 	else
 	{
-		$test->res = '';
+		$value = '';
 	}
 
-	if(! empty($testfunc))
+	if (! isset($test))
 	{
-		$test->result = $testfunc(0, $title, $config[$value]);
+		$test =&new StdClass();
+		$test->title = $title;
+		$test->value = $value;
 	}
 
 	return $test;
@@ -164,30 +180,30 @@ function & testBoolean($required, $title, $result, $message = '', $negative_test
 			$test->message = $message;
 		}
 
-		$test->value = $negative_test ? lang('on') : lang('off');
+		$test->secondvalue = $negative_test ? lang('on') : lang('off');
 		if ($required)
 		{
 			$test->res = 'false';
-			$test->res_text = lang('failure');
+			$test->res_text = getTestReturn($test->res);
 		}
 		else
 		{
 			$test->res = 'yellow';
-			$test->res_text = lang('caution');
+			$test->res_text = getTestReturn($test->res);
 		}
 	}
 	else
 	{
-		$test->value = $negative_test ? lang('off') : lang('on');
+		$test->secondvalue = $negative_test ? lang('off') : lang('on');
 		if ($required)
 		{
 			$test->res = 'true';
-			$test->res_text = lang('success');
+			$test->res_text = getTestReturn($test->res);
 		}
 		else
 		{
 			$test->res = 'green';
-			$test->res_text = lang('success');
+			$test->res_text = getTestReturn($test->res);
 		}
 	}
 
@@ -198,15 +214,15 @@ function & testBoolean($required, $title, $result, $message = '', $negative_test
  * @return object
  * @var boolean $required
  * @var string  $title
- * @var boolean $result
+ * @var boolean $varname
  * @var string  $message
  * @var boolean $negative_test
 */
 function & testIniBoolean($required, $title, $varname, $message = '', $negative_test = false)
 {
 	$str = ini_get($varname);
-	$result = $negative_test ? (! (bool) $str) : (bool) $str;
-	return testBoolean($required, $title, $result, $message, $negative_test);
+	$value = $negative_test ? (! (bool) $str) : (bool) $str;
+	return testBoolean($required, $title, $value, $message, $negative_test);
 }
 
 /**
@@ -218,34 +234,36 @@ function & testIniBoolean($required, $title, $varname, $message = '', $negative_
  * @var mixed   $recommended
  * @var string  $message
 */
-function & testVersionRange($required, $title, $value, $minimum, $recommended, $message = '', $plus = 0)
+function & testVersionRange($required, $title, $value, $minimum, $recommended, $message = '')
 {
 	$test =& new StdClass();
 
-	$test->title = $title . sprintf(' '.lang('test_min_recommend'), $minimum, $recommended);
-	if( $plus > 0 )
-	{
-		$test->title = $title . sprintf(' '.lang('test_min_recommend_plus'), $minimum, $recommended);
-	}
+	$test->title = $title;
 	$test->value = $value;
 
 	if (version_compare($value,$minimum) < 0)
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
-		$test->res_text = lang('failure');
-		$test->message = $message;
+		$test->res_text = getTestReturn($test->res);
+		if (trim($message) != '')
+		{
+			$test->message = $message;
+		}
 	}
 	elseif (version_compare($value,$recommended) < 0 )
 	{
 		$test->res = 'yellow';
-		$test->res_text = lang('caution');
-		$test->message = $message;
+		$test->res_text = getTestReturn($test->res);
+		if (trim($message) != '')
+		{
+			$test->message = $message;
+		}
 	}
 	else
 	{
 		$test->res = 'green';
-		$test->res_text = lang('success');
+		$test->res_text = getTestReturn($test->res);
 	}
 
 	return $test;
@@ -266,7 +284,7 @@ function & testRange($required, $title, $value, $minimum, $recommended, $message
 {
 	$test =& new StdClass();
 
-	$test->title = $title . sprintf(' '.lang('test_min_recommend'), $minimum, $recommended);
+	$test->title = $title;
 	$test->value = $value;
 
 	if ($test_as_bytes)
@@ -280,17 +298,17 @@ function & testRange($required, $title, $value, $minimum, $recommended, $message
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
-		$test->res_text = lang('failure');
+		$test->res_text = getTestReturn($test->res);
 	}
 	elseif ($value < $recommended)
 	{
 		$test->res = 'yellow';
-		$test->res_text = lang('caution');
+		$test->res_text = getTestReturn($test->res);
 	}
 	else
 	{
 		$test->res = 'green';
-		$test->res_text = lang('success');
+		$test->res_text = getTestReturn($test->res);
 	}
 
 	if ($value < $recommended && trim($message) != '')
@@ -360,8 +378,8 @@ function returnBytes($val)
 /**
  * @return object
  * @var boolean $required
- * @var string  $dir
  * @var string  $title
+ * @var string  $dir
  * @var string  $message
  * @var string  $file
  * @var string  $data
@@ -371,11 +389,11 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
 	$test =& new StdClass();
 
 	$test->title = $title;
-	$test->dir = $dir;
 	if (is_dir($dir))
 	{
-		$test->value = '(' . substr(sprintf('%o', fileperms($dir)), -4) . ')';
+		$test->value = substr(sprintf('%o', fileperms($dir)), -4);
 	}
+	$test->secondvalue = $dir;
 
 	$return = '';
 	$test_file = "$dir/$file";
@@ -386,18 +404,21 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
 		fclose($fp);
 		@unlink($test_file);
 
-		if (!empty($return))
+		if (! empty($return))
 		{
 			$test->res = 'green';
-			$test->res_text = lang('success');
+			$test->res_text = getTestReturn($test->res);
 			return $test;
 		}
 	}
 
 	list($test->continueon, $test->special_failed) = testGlobal($required);
 	$test->res = 'red';
-	$test->res_text = lang('failure');
-	$test->message = $message;
+	$test->res_text = getTestReturn($test->res);
+	if (trim($message) != '')
+	{
+		$test->message = $message;
+	}
 
 	return $test;
 }
@@ -422,13 +443,16 @@ function testGDVersion($required, $title, $minimum, $message = '')
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
-		$test->res_text = lang('failure');
-		$test->message = $message;
+		$test->res_text = getTestReturn($test->res);
+		if (trim($message) != '')
+		{
+			$test->message = $message;
+		}
 	}
 	else
 	{
 		$test->res = 'green';
-		$test->res_text = lang('success');
+		$test->res_text = getTestReturn($test->res);
 	}
 
 	return $test;
@@ -460,4 +484,5 @@ function GDVersion()
 
 	return $gd_version_number;
 }
+# vim:ts=4 sw=4 noet
 ?>

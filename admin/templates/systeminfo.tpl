@@ -38,15 +38,15 @@
 </div>
 {foreach from=$config_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
-	{if isset($test->result)}
-	<div class="pageoverflow" style="color: {$test->result->res};">
-		<p class="pagetext">{$test->result->title}:</p>
-		<p class="pageinput"><b>{$test->res}</b> {$test->result->value} <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->result->res}.gif" title="{$test->result->res_text}" alt="{$test->result->res_text}" /></p>
+	{if isset($test->secondvalue)}
+	<div class="pageoverflow" style="color: {$test->res};">
+		<p class="pagetext">{$test->title}:</p>
+		<p class="pageinput"><b>{$test->secondvalue}</b> {if isset($test->value)}({$test->value}){/if} <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
 	</div>
     {else}
 	<div class="pageoverflow">
 		<p class="pagetext">{$test->title}:</p>
-		<p class="pageinput">{$test->res}</p>
+		<p class="pageinput">{$test->value}</p>
 	</div>
     {/if}
   {/foreach}
@@ -61,10 +61,10 @@
 
 {foreach from=$php_information key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
-	{if isset($test->res)}
+	{if isset($test->secondvalue)}
 	<div class="pageoverflow" style="color: {$test->res};">
 		<p class="pagetext">{si_lang a=$key} ({$key}):</p>
-		<p class="pageinput">{if isset($test->dir)}<b>{$test->dir}</b>{/if} {$test->value} <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
+		<p class="pageinput"><b>{$test->secondvalue}</b> {if isset($test->value)}({$test->value}){/if} <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
 	</div>
     {else}
 	<div class="pageoverflow">
@@ -84,10 +84,10 @@
 
 {foreach from=$server_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
-	{if isset($test->res)}
+	{if isset($test->secondvalue)}
 	<div class="pageoverflow" style="color: {$test->res};">
 		<p class="pagetext">{si_lang a=$key} ({$key}):</p>
-		<p class="pageinput">{if isset($test->dir)}<b>{$test->dir}</b>{/if} {$test->value} <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
+		<p class="pageinput"><b>{$test->secondvalue}</b> {if isset($test->value)}({$test->value}){/if} <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
 	</div>
     {else}
 	<div class="pageoverflow">
@@ -104,10 +104,10 @@
 </div>
 {foreach from=$permission_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
-	{if isset($test->res)}
+	{if isset($test->secondvalue)}
 	<div class="pageoverflow" style="color: {$test->res};">
 		<p class="pagetext">{$key}:</p>
-		<p class="pageinput">{if isset($test->dir)}<b>{$test->dir}</b>{/if} {$test->value} <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
+		<p class="pageinput"><b>{$test->secondvalue}</b> {if isset($test->value)}({$test->value}){/if} <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
 	</div>
     {else}
 	<div class="pageoverflow">

@@ -178,6 +178,8 @@ $tmp[1]['templates_c'] = testDirWrite(0, $dir, $dir);
 $dir = $config['root_path'] . DIRECTORY_SEPARATOR . 'modules';
 $tmp[1]['modules'] = testDirWrite(0, $dir, $dir);
 
+//$tmp[1]['config'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FILE_LOCATION)), -4), '');
+
 $smarty->assign('count_permission_info', count($tmp[0]));
 $smarty->assign('permission_info', $tmp);
 
