@@ -223,7 +223,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	function get_property_value($name, $lang = 'en_US')
 	{
 		$default_lang = CmsMultiLanguage::get_default_language();
-
+		
 		//See if it exists...
 		if ($this->has_property($name))
 		{	

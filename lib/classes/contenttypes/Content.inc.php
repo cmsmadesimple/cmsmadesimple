@@ -45,7 +45,7 @@ class Content extends CmsContentBase
 		$content = '';
 		$blocks = CmsTemplateOperations::parse_content_blocks_from_template($this->template);
 		
-		foreach ($blocks as $block)
+		foreach ($blocks as $block_name=>$block)
 		{
 			$type = 'html';
 			if ($this->has_property($block_name . '-block-type'))
@@ -64,7 +64,7 @@ class Content extends CmsContentBase
 			{
 				$class_name = camelize('block_' . $type);
 				$class = new $class_name;
-				$content .= $class->get_index_content($this, $block_name, $lang);
+				$content .= $class->get_index_content($this, $block_name, '');
 			}
 			catch (Exception $e)
 			{
