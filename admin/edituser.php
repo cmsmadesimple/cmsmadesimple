@@ -253,7 +253,7 @@ else {
       {
       ?>
 		<div class="pageoverflow">
-			<div class="pagetext"><?php echo lang('groups')?>:</div>
+			<div class="pagetext"><b><?php echo lang('groups')?>:</b></div>
 			<div class="pageinput">
       <?php
 	     $query = "SELECT group_id FROM ".cms_db_prefix()."user_groups where user_id=?";
