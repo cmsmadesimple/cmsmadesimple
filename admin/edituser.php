@@ -253,8 +253,8 @@ else {
       {
       ?>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('groups')?>:</p>
-			<p class="pageinput">
+			<div class="pagetext"><?php echo lang('groups')?>:</div>
+			<div class="pageinput">
       <?php
 	     $query = "SELECT group_id FROM ".cms_db_prefix()."user_groups where user_id=?";
 
@@ -265,7 +265,7 @@ else {
             $groups[$row['group_id']] = 1;
             }
 
-	     echo '<div class="group_memberships"><input type="hidden" name="groups" value="1" />';
+	     echo '<div class="group_memberships clear"><input type="hidden" name="groups" value="1" />';
         foreach($group_list as $thisGroup)
             {
             echo '<div class="group"><input type="checkbox" name="g'.$thisGroup->id.'" id="g'.$thisGroup->id.
@@ -278,20 +278,20 @@ else {
             }
         echo '</div>';
       ?>
-         </p>
+         </div>
 		</div>
 
       <?php
       }
            ?>
 		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
+			<div class="pagetext">&nbsp;</div>
+			<div class="pageinput">
 				<input type="hidden" name="user_id" value="<?php echo $user_id?>" />
 				<input type="hidden" name="edituser" value="true" />
 				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('submit')?>" />
 				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
-			</p>
+			</div>
 		</div>
 	</form>
 </div>
