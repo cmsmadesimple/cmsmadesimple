@@ -269,7 +269,6 @@ function & testVersionRange($required, $title, $value, $minimum, $recommended, $
 	return $test;
 }
 
-
 /**
  * @return object
  * @var boolean $required
@@ -379,6 +378,151 @@ function returnBytes($val)
  * @return object
  * @var boolean $required
  * @var string  $title
+ * @var octect  $umask
+ * @var string  $message
+ * @var string  $dir
+ * @var string  $file
+ * @var string  $data
+ */
+function testUmask($required, $title, $umask, $message = '', $dir = '', $file = 'file_test', $data = 'this is a test')
+{
+	$test =& new StdClass();
+
+	$test->title = $title;
+
+	if (empty($dir))
+	{
+		$dir = TMP_CACHE_LOCATION;
+	}
+	$test->dir = $dir;
+
+	if( (!is_dir($dir)) || (!is_writable($dir)) )
+	{
+		list($test->continueon, $test->special_failed) = testGlobal($required);
+		$test->res = 'red';
+		$test->res_text = getTestReturn($test->res);
+		$test->error = lang('errordirectorynotwritable') .' ('. $dir . ')';
+		if (trim($message) != '')
+		{
+			$test->message = $message;
+		}
+		return $test;
+	}
+
+	@umask(octdec($umask));
+
+	$test_file = $dir . DIRECTORY_SEPARATOR . $file;
+	if ($fp = @fopen($test_file, "w"))
+	{
+		$return = @fwrite($fp, $data);
+		fclose($fp);
+
+		$mode = fileperms($test_file);
+		$test->permsdec = substr(sprintf('%o', $mode), -4);
+		$test->permsstr = permission_octal2string($mode);
+		clearstatcache();
+
+		$filestat = stat($test_file);
+		if ( $filestat == FALSE )
+		{
+			list($test->continueon, $test->special_failed) = testGlobal($required);
+			$test->res = 'red';
+			$test->res_text = getTestReturn($test->res);
+			$test->error = lang('errorcantcreatefile') .' ('. $test_file . ')';
+			if (trim($message) != '')
+			{
+				$test->message = $message;
+			}
+			return $test;
+		}
+
+		if ( (function_exists('posix_getpwuid')) && (function_exists('posix_getgrgid')) ) //functions not available on WAMP systems
+		{
+			$userinfo = @posix_getpwuid($filestat[4]);
+			$test->username = isset($userinfo['name']) ? $userinfo['name'] : lang('unknown');
+			$groupinfo = @posix_getgrgid($filestat[5]);
+			$test->usergroup = isset($groupinfo['name']) ? $groupinfo['name'] : lang('unknown');
+		}
+		else
+		{
+			$test->username = 'N/A';
+			$test->usergroup = 'N/A';
+		}
+
+		@unlink($test_file);
+		if (! empty($return))
+		{
+			$test->res = 'green';
+			$test->res_text = getTestReturn($test->res);
+			return $test;
+		}
+	}
+
+	list($test->continueon, $test->special_failed) = testGlobal($required);
+	$test->res = 'red';
+	$test->res_text = getTestReturn($test->res);
+	$test->error = lang('errorcantcreatefile') .' ('. $test_file .')';
+	return $test;
+}
+
+/**
+ * @var octal $mode
+ * @return string
+ */
+function permission_octal2string($mode)
+{
+	if (($mode & 0xC000) === 0xC000) {
+		$type = 's';
+	} elseif (($mode & 0xA000) === 0xA000) {
+		$type = 'l';
+	} elseif (($mode & 0x8000) === 0x8000) {
+		$type = '-';
+	} elseif (($mode & 0x6000) === 0x6000) {
+		$type = 'b';
+	} elseif (($mode & 0x4000) === 0x4000) {
+		$type = 'd';
+	} elseif (($mode & 0x2000) === 0x2000) {
+		$type = 'c';
+	} elseif (($mode & 0x1000) === 0x1000) {
+		$type = 'p';
+	} else {
+		$type = '?';
+	}
+
+	$owner  = ($mode & 00400) ? 'r' : '-';
+	$owner .= ($mode & 00200) ? 'w' : '-';
+	if ($mode & 0x800) {
+		$owner .= ($mode & 00100) ? 's' : 'S';
+	} else {
+		$owner .= ($mode & 00100) ? 'x' : '-';
+	}
+
+	$group  = ($mode & 00040) ? 'r' : '-';
+	$group .= ($mode & 00020) ? 'w' : '-';
+	if ($mode & 0x400) {
+		$group .= ($mode & 00010) ? 's' : 'S';
+	} else {
+		$group .= ($mode & 00010) ? 'x' : '-';
+	}
+
+	$other  = ($mode & 00004) ? 'r' : '-';
+	$other .= ($mode & 00002) ? 'w' : '-';
+	if ($mode & 0x200) {
+		$other .= ($mode & 00001) ? 't' : 'T';
+	} else {
+		$other .= ($mode & 00001) ? 'x' : '-';
+	}
+
+	return $type . $owner . $group . $other;
+}
+
+
+
+
+/**
+ * @return object
+ * @var boolean $required
+ * @var string  $title
  * @var string  $dir
  * @var string  $message
  * @var string  $file
@@ -396,8 +540,9 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
 	$test->secondvalue = $dir;
 
 	$return = '';
-	$test_file = "$dir/$file";
-	if ($fp = @fopen($test_file, "w")) {
+	$test_file = $dir . DIRECTORY_SEPARATOR . $file;
+	if ($fp = @fopen($test_file, "w"))
+	{
 //		flock($fp, LOCK_EX); //no on NFS filesystem
 		$return = @fwrite($fp, $data);
 //		flock($fp, LOCK_UN);
@@ -415,6 +560,7 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
 	list($test->continueon, $test->special_failed) = testGlobal($required);
 	$test->res = 'red';
 	$test->res_text = getTestReturn($test->res);
+	$test->error = lang('errorcantcreatefile').' ('.$test_file.')';
 	if (trim($message) != '')
 	{
 		$test->message = $message;
