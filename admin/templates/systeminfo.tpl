@@ -105,7 +105,31 @@
 	</div>
   {/foreach}
 {/foreach}
+<br />
 
+<!--
+<div class="pageoverflow">
+<h4 class="h-inside">{si_lang a=ids_information}</h4>
+</div>
+{foreach from=$ids_info key='view' item='tmp'}
+  {foreach from=$tmp key='key' item='test'}
+	<div class="pageoverflow">
+		<p class="pagetext">{$key}:</p>
+	{if isset($test->secondvalue)}
+		<p class="pageinput"><strong>{$test->value}</strong> ({$test->secondvalue}) <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /><br />
+	  {if isset($test->opt)}
+		{si_lang a=current_file_timestamp}: {$test->opt.current_file_timestamp}<br />
+		{si_lang a=current_db_timestamp}: {$test->opt.current_db_timestamp}<br />
+	  {/if}
+		</p>
+	{elseif isset($test->value)}
+		<p class="pageinput"><strong>{$test->value}</strong></p>
+    {/if}
+	</div>
+  {/foreach}
+{/foreach}
+<br />
+-->
 
 </fieldset>
 

@@ -1,4 +1,9 @@
 <?php
+$lang['admin']['ids_information'] = 'Simple Intrusion detection';
+$lang['admin']['sha1_not_match'] = 'File sha1 hash not match with DB record';
+$lang['admin']['current_file_timestamp'] = 'Current file timestamp';
+$lang['admin']['current_db_timestamp'] = 'Current DB file timestamp';
+$lang['admin']['nodifferencefound'] = 'No differences found';
 $lang['admin']['start_upgrade_process'] = 'Start Upgrade Process';
 $lang['admin']['warning_upgrade'] = '<em><strong>Warning:</strong></em> CMSMS is in need of an upgrade.';
 $lang['admin']['warning_upgrade_info1'] = 'You are now running schema version %s. and you need to be upgraded to version %s';

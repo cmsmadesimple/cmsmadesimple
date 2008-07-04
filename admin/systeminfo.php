@@ -22,7 +22,9 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 include_once("header.php");
-include_once("../lib/test.functions.php");
+
+define('CMS_BASE', dirname(dirname(__FILE__)));
+require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 
 
 check_login();
@@ -167,6 +169,7 @@ switch($config['dbms']) //workaroud: ServerInfo() is unsupported in adodblite
 $smarty->assign('count_server_info', count($tmp[0]));
 $smarty->assign('server_info', $tmp);
 
+
 $tmp = array(0=>array(), 1=>array());
 
 $dir = $config['root_path'] . DIRECTORY_SEPARATOR . 'tmp';
@@ -186,6 +189,19 @@ $tmp[1]['config_file'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FIL
 $smarty->assign('count_permission_info', count($tmp[0]));
 $smarty->assign('permission_info', $tmp);
 
+/*
+Simple IDS
+$tmp = array(0=>array(), 1=>array());
+
+$tmp[1]['index_file'] = testFileSha1(0, '', cms_join_path(CMS_BASE, 'index.php'), get_site_preference('file_index_sha1file', ''), get_site_preference('file_index_timestamp', ''));
+
+$tmp[1]['include_file'] = testFileSha1(0, '', cms_join_path(CMS_BASE, 'include.php'), get_site_preference('file_include_sha1file', ''), get_site_preference('file_include_timestamp', ''));
+
+$tmp[1]['config_diff'] = testFileDiff(0, '', CONFIG_FILE_LOCATION, unserialize(get_site_preference('file_config_content', '')));
+
+$smarty->assign('count_ids_info', count($tmp[0]));
+$smarty->assign('ids_info', $tmp);
+*/
 
 
 if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) echo $smarty->fetch('systeminfo.txt.tpl');
