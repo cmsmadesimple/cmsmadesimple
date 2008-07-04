@@ -445,8 +445,8 @@ function testUmask($required, $title, $umask, $message = '', $dir = '', $file = 
 		}
 		else
 		{
-			$test->username = 'N/A';
-			$test->usergroup = 'N/A';
+			$test->username = lang('unknown');
+			$test->usergroup = lang('unknown');
 		}
 
 		@unlink($test_file);
