@@ -1,8 +1,6 @@
 <p class="pageoverflow">
-{si_lang a=systeminfo_copy_paste}
-</p><hr/>
-
-{$showheader}
+{si_lang a=systeminfo_copy_paste}<br />
+</p><hr />
 
 <div class="pageoverflow">
 
@@ -10,11 +8,11 @@
 
 <p>----------------------------------------------</p>
 
-<p><strong>{'cms_version'|replace:'_':' '|ucwords}</strong>: {$cms_version}</p>
+<p><strong>{'cms_version'|replace:'_':' '|ucwords}</strong>: [b]{$cms_version}[/b]</p>
 <p><strong>{'installed_modules'|replace:'_':' '|ucwords}</strong>:</p>
 <ul>
 {foreach from=$installed_modules item='module'}
-	<li>{$module.module_name}: {$module.version}</li>
+	<li>{$module.module_name}: [b]{$module.version}[/b]</li>
 {/foreach}
 </ul>
 <br />
@@ -24,7 +22,10 @@
 	{foreach from=$config_info key='view' item='tmp'}
 		{if $view < 1}
 			{foreach from=$tmp key='key' item='test'}
-	<li>{$key}: {$test->value}</li>
+	<li>{$key}:
+				{if isset($test->value)}[b]{$test->value}[/b]
+				{/if}
+	</li>
 			{/foreach}
 		{/if}
 	{/foreach}
@@ -39,11 +40,11 @@
 	{foreach from=$php_information key='view' item='tmp'}
 		{if $view < 1}
 			{foreach from=$tmp key='key' item='test'}
-				{if isset($test->secondvalue)}
-	<li>{$key}: {$test->secondvalue}</li>
-				{else}
-	<li>{$key}: {$test->value}</li>
+	<li>{$key}:
+				{if isset($test->secondvalue)}[b]{$test->value}[/b] ({$test->secondvalue})
+				{elseif isset($test->value)}[b]{$test->value}[/b]
 				{/if}
+	</li>
 			{/foreach}
 		{/if}
 	{/foreach}
@@ -58,7 +59,10 @@
 	{foreach from=$server_info key='view' item='tmp'}
 		{if $view < 1}
 			{foreach from=$tmp key='key' item='test'}
-	<li>{$key|replace:'_':' '|ucwords}: {$test->value}</li>
+	<li>{$key|replace:'_':' '|ucwords}:
+				{if isset($test->value)}[b]{$test->value}[/b]
+				{/if}
+	</li>
 			{/foreach}
 		{/if}
 	{/foreach}
@@ -71,7 +75,11 @@
 	{foreach from=$permission_info key='view' item='tmp'}
 		{if $view < 1}
 			{foreach from=$tmp key='key' item='test'}
-	<li>{$key}: {$test->value}</li>
+	<li>{$key}:
+				{if isset($test->secondvalue)}[b]{$test->value}[/b] ({$test->secondvalue})
+				{elseif isset($test->value)}[b]{$test->value}[/b]
+				{/if}
+	</li>
 			{/foreach}
 		{/if}
 	{/foreach}
@@ -97,9 +105,9 @@
 		window.getSelection().addRange(range);
 		}
 	}
-		
+
 	function fnDeSelect() {
-		if (document.selection) document.selection.empty(); 
+		if (document.selection) document.selection.empty();
 		else if (window.getSelection)
                 window.getSelection().removeAllRanges();
 	}

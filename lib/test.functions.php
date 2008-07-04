@@ -110,6 +110,7 @@ function & testDummy($title, $value, $return, $message = '')
 	$test =&new StdClass();
 	$test->title = $title;
 	$test->value = $value;
+	$test->secondvalue = null;
 	if (trim($message) != '')
 	{
 		$test->message = $message;
@@ -154,6 +155,7 @@ function & testConfig($title, $varname, $testfunc = '')
 		$test =&new StdClass();
 		$test->title = $title;
 		$test->value = $value;
+		$test->secondvalue = null;
 	}
 
 	return $test;
@@ -180,7 +182,8 @@ function & testBoolean($required, $title, $result, $message = '', $negative_test
 			$test->message = $message;
 		}
 
-		$test->secondvalue = $negative_test ? lang('on') : lang('off');
+		$test->value = $negative_test ? lang('on') : lang('off');
+		$test->secondvalue = $negative_test ? lang('true') : lang('false');
 		if ($required)
 		{
 			$test->res = 'false';
@@ -194,7 +197,8 @@ function & testBoolean($required, $title, $result, $message = '', $negative_test
 	}
 	else
 	{
-		$test->secondvalue = $negative_test ? lang('off') : lang('on');
+		$test->value = $negative_test ? lang('off') : lang('on');
+		$test->secondvalue = $negative_test ? lang('false') : lang('true');
 		if ($required)
 		{
 			$test->res = 'true';
@@ -240,6 +244,7 @@ function & testVersionRange($required, $title, $value, $minimum, $recommended, $
 
 	$test->title = $title;
 	$test->value = $value;
+	$test->secondvalue = null;
 
 	if (version_compare($value,$minimum) < 0)
 	{
@@ -285,6 +290,7 @@ function & testRange($required, $title, $value, $minimum, $recommended, $message
 
 	$test->title = $title;
 	$test->value = $value;
+	$test->secondvalue = null;
 
 	if ($test_as_bytes)
 	{
@@ -394,8 +400,6 @@ function testUmask($required, $title, $umask, $message = '', $dir = '', $file = 
 	{
 		$dir = TMP_CACHE_LOCATION;
 	}
-	$test->dir = $dir;
-
 	if( (!is_dir($dir)) || (!is_writable($dir)) )
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
@@ -408,6 +412,8 @@ function testUmask($required, $title, $umask, $message = '', $dir = '', $file = 
 		}
 		return $test;
 	}
+	$test->value = $dir;
+	$test->secondvalue = substr(sprintf('%o', fileperms($dir)), -4);
 
 	@umask(octdec($umask));
 
@@ -416,11 +422,6 @@ function testUmask($required, $title, $umask, $message = '', $dir = '', $file = 
 	{
 		$return = @fwrite($fp, $data);
 		fclose($fp);
-
-		$mode = fileperms($test_file);
-		$test->permsdec = substr(sprintf('%o', $mode), -4);
-		$test->permsstr = permission_octal2string($mode);
-		clearstatcache();
 
 		$filestat = stat($test_file);
 		if ( $filestat == FALSE )
@@ -436,17 +437,21 @@ function testUmask($required, $title, $umask, $message = '', $dir = '', $file = 
 			return $test;
 		}
 
+		clearstatcache();
+		$mode = fileperms($test_file);
+		$test->opt['permsdec'] = substr(sprintf('%o', $mode), -4);
+		$test->opt['permsstr'] = permission_octal2string($mode);
 		if ( (function_exists('posix_getpwuid')) && (function_exists('posix_getgrgid')) ) //functions not available on WAMP systems
 		{
 			$userinfo = @posix_getpwuid($filestat[4]);
-			$test->username = isset($userinfo['name']) ? $userinfo['name'] : lang('unknown');
+			$test->opt['username'] = isset($userinfo['name']) ? $userinfo['name'] : lang('unknown');
 			$groupinfo = @posix_getgrgid($filestat[5]);
-			$test->usergroup = isset($groupinfo['name']) ? $groupinfo['name'] : lang('unknown');
+			$test->opt['usergroup'] = isset($groupinfo['name']) ? $groupinfo['name'] : lang('unknown');
 		}
 		else
 		{
-			$test->username = lang('unknown');
-			$test->usergroup = lang('unknown');
+			$test->opt['username'] = lang('unknown');
+			$test->opt['usergroup'] = lang('unknown');
 		}
 
 		@unlink($test_file);
@@ -516,9 +521,6 @@ function permission_octal2string($mode)
 	return $type . $owner . $group . $other;
 }
 
-
-
-
 /**
  * @return object
  * @var boolean $required
@@ -533,11 +535,26 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
 	$test =& new StdClass();
 
 	$test->title = $title;
-	if (is_dir($dir))
+
+	if (empty($dir))
 	{
-		$test->value = substr(sprintf('%o', fileperms($dir)), -4);
+		$dir = TMP_CACHE_LOCATION;
 	}
-	$test->secondvalue = $dir;
+	if( (!is_dir($dir)) || (!is_writable($dir)) )
+	{
+		list($test->continueon, $test->special_failed) = testGlobal($required);
+		$test->res = 'red';
+		$test->res_text = getTestReturn($test->res);
+		$test->error = lang('errordirectorynotwritable') .' ('. $dir . ')';
+		if (trim($message) != '')
+		{
+			$test->message = $message;
+		}
+		return $test;
+	}
+
+	$test->value = $dir;
+	$test->secondvalue = substr(sprintf('%o', fileperms($dir)), -4);
 
 	$return = '';
 	$test_file = $dir . DIRECTORY_SEPARATOR . $file;
@@ -584,6 +601,7 @@ function testGDVersion($required, $title, $minimum, $message = '')
 
 	$gd_version_number = GDVersion();
 	$test->value = $gd_version_number;
+	$test->secondvalue = null;
 
 	if ($gd_version_number < $minimum)
 	{
