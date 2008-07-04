@@ -77,7 +77,6 @@ $tmp[0]['php_memory_limit'] = testConfig('php_memory_limit', 'php_memory_limit')
 $tmp[0]['process_whole_template'] = testConfig('process_whole_template', 'process_whole_template');
 $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
 $tmp[0]['default_upload_permission'] = testConfig('default_upload_permission', 'default_upload_permission');
-$tmp[0]['use_smarty_php_tags'] = testConfig('use_smarty_php_tags', 'use_smarty_php_tags');
 $tmp[0]['assume_mod_rewrite'] = testConfig('assume_mod_rewrite', 'assume_mod_rewrite');
 $tmp[0]['page_extension'] = testConfig('page_extension', 'page_extension');
 $tmp[0]['internal_pretty_urls'] = testConfig('internal_pretty_urls', 'internal_pretty_urls');
@@ -90,6 +89,7 @@ $tmp[1]['uploads_path'] = testConfig('uploads_path', 'uploads_path', 'testDirWri
 $tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
 $tmp[1]['image_uploads_path'] = testConfig('image_uploads_path', 'image_uploads_path', 'testDirWrite');
 $tmp[1]['image_uploads_url'] = testConfig('image_uploads_url', 'image_uploads_url');
+$tmp[1]['use_smarty_php_tags'] = testConfig('use_smarty_php_tags', 'use_smarty_php_tags');
 $tmp[1]['debug'] = testConfig('debug', 'debug');
 $tmp[1]['locale'] = testConfig('locale', 'locale');
 $tmp[1]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
@@ -113,7 +113,7 @@ list($minimum, $recommended) = getTestValues('memory_limit');
 $tmp[0]['memory_limit'] = testIniRange(0, 'memory_limit', 'memory_limit', $minimum, $recommended);
 
 list($minimum, $recommended) = getTestValues('post_max_size');
-$tmp[0]['post_max_size'] = testIniRange(0, 'post_max_size', 'post_max_size', $minimum, $recommended);
+$tmp[1]['post_max_size'] = testIniRange(0, 'post_max_size', 'post_max_size', $minimum, $recommended);
 
 list($minimum, $recommended) = getTestValues('upload_max_filesize');
 $tmp[1]['upload_max_filesize'] = testIniRange(0, 'upload_max_filesize', 'upload_max_filesize', $minimum, $recommended);
