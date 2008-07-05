@@ -357,8 +357,8 @@ function & testIniRange($required, $title, $varname, $minimum, $recommended, $me
 }
 
 /**
- * @var string $val
  * @return int
+ * @var string $val
  */
 function returnBytes($val)
 {
@@ -593,10 +593,11 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
  * @var string  $title
  * @var string  $file1
  * @var string  $file2
- * @var string  $timestamp2
+ * @var int     $timestamp2
  * @var string  $message
+ * @var string  $formattime
 */
-function & testFileSha1($required, $title, $file1, $file2, $timestamp2 = null, $message = '')
+function & testFileSha1($required, $title, $file1, $file2, $timestamp2 = 0, $message = '', $formattime = '%c')
 {
 	$test =& new StdClass();
 
@@ -608,12 +609,12 @@ function & testFileSha1($required, $title, $file1, $file2, $timestamp2 = null, $
 		$file1_sha1 = @sha1_file($file1);
 		$file1_time = @filemtime($file1);
 
-		if ( (file_exists($file2)) && (is_null($timestamp2)) )
+		if ( (file_exists($file2)) && (empty($timestamp2)) )
 		{
 			$file2_sha1 = @sha1_file($file2);
 			$file2_time = @filemtime($file2);
 		}
-		elseif (!is_null($timestamp2))
+		elseif (!empty($timestamp2)) // Not file but get everywhere
 		{
 			$file2_sha1 = $file2;
 			$file2_time = $timestamp2;
@@ -621,7 +622,9 @@ function & testFileSha1($required, $title, $file1, $file2, $timestamp2 = null, $
 
 		if ( ($file1_sha1 == $file2_sha1) && ($file1_time == $file2_time) )
 		{
-			$test->secondvalue = strftime('%c', $file2_time);
+			$test->secondvalue = lang('sha1_match');
+			$test->opt['current_file_timestamp'] = $file1_time;
+			$test->opt['format_timestamp'] = $formattime;
 			$test->res = 'green';
 			$test->res_text = getTestReturn($test->res);
 			return $test;
@@ -629,8 +632,9 @@ function & testFileSha1($required, $title, $file1, $file2, $timestamp2 = null, $
 	}
 
 	$test->secondvalue = lang('sha1_not_match');
-	$test->opt['current_file_timestamp'] = strftime('%c', $file1_time);
-	$test->opt['current_db_timestamp'] = strftime('%c', $file2_time);
+	$test->opt['current_file_timestamp'] = $file1_time;
+	$test->opt['current_db_timestamp'] = $file2_time;
+	$test->opt['format_timestamp'] = $formattime;
 
 	list($test->continueon, $test->special_failed) = testGlobal($required);
 	$test->res = 'red';
@@ -707,20 +711,25 @@ function GDVersion()
 }
 
 /**
+ * Changed from http://www.phpclasses.org/browse/package/2302.html - TODO: smartyfier output
+ *
  * @return object
  * @var boolean $required
  * @var string  $title
  * @var string  $file1
  * @var string  $file2
+ * @var int     $timestamp2
+ * @var string  $message
+ * @var string  $formattime
  * @var boolean $caseInsensitive
 */
-function testFileDiff($required, $title, $file1, $file2, $caseInsensitive = true)
+function testFileDiff($required, $title, $file1, $file2, $timestamp2 = 0, $message = '', $formattime = '%c', $caseInsensitive = true)
 {
 	$test =& new StdClass();
 
 	$test->title = $title;
+	$test->value  = $file1;
 
-	// check if files exist or not
 	if (!file_exists($file1))
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
@@ -736,15 +745,19 @@ function testFileDiff($required, $title, $file1, $file2, $caseInsensitive = true
 	else
 	{
 		$rFile1	= @file($file1);
+		$file1_time = @filemtime($file1);
 	}
 
-	if (!file_exists($file2))
+	if (!file_exists($file2)) // Not file but get everywhere
 	{
 		$rFile2	= $file2;
+		$file2 = lang('stored');
+		$file2_time = $timestamp2;
 	}
 	else
 	{
-		$rFile1	= @file($file1);
+		$rFile2	= @file($file2);
+		$file2_time = @filemtime($file2);
 	}
 	
 	// how many rows read
@@ -754,16 +767,15 @@ function testFileDiff($required, $title, $file1, $file2, $caseInsensitive = true
 	$diffCounter = 0;
 
 	// the output string
-	$fDiffResult	= "";
+	$fDiffResult = "";
 
 	// start layout
-	// used real/fake name
-	$fDiffResult	.= "<table border=0 cellpadding=1 cellspacing=1 align=\"center\">\n";
-	$fDiffResult	.= "	<tr>\n";
-	$fDiffResult	.= "		<td bgcolor=\"#DADADA\" width=20><strong>#</strong></td>
-									<td width=490 bgcolor=\"#DADADA\"><strong>".$file1."</strong></td>
-									<td width=490 bgcolor=\"#DADADA\"><strong>".$file2."</strong></td>\n";
-	$fDiffResult	.= "</tr>";
+	$fDiffResult .= "<table border=0 cellpadding=1 cellspacing=1 align=\"center\">\n";
+	$fDiffResult .= "<tr>\n";
+	$fDiffResult .= "	<td width=20 bgcolor=\"#DADADA\"><strong>#</strong></td>
+							<td width=430 bgcolor=\"#DADADA\"><strong>".$file1."</strong></td>
+							<td width=430 bgcolor=\"#DADADA\"><strong>".$file2."</strong></td>\n";
+	$fDiffResult .= "</tr>";
 
 	// read 1st array and chech for diff
 	$comments		= "";
@@ -771,7 +783,7 @@ function testFileDiff($required, $title, $file1, $file2, $caseInsensitive = true
 	$commentsOpen	= 0;
 	foreach ($rFile1 as $k=>$v)
 	{
-		//	COMMENTS PATCH ( /* ... */ )
+		// COMMENTS PATCH ( /* ... */ )
 		if ($comments != "" || stristr($v,"/*") != "")
 		{
 			$commentsOpen	= 1;
@@ -787,7 +799,7 @@ function testFileDiff($required, $title, $file1, $file2, $caseInsensitive = true
 			$comments2		= "";
 		}
 
-		$check	= ($caseInsensitive) ? stristr($v,$rFile2[$k]) : strstr($v,$rFile2[$k]);
+		$check = ($caseInsensitive) ? stristr($v,$rFile2[$k]) : strstr($v,$rFile2[$k]);
 		if ($check != $v)
 		{
 			$diffCounter++;
@@ -802,16 +814,15 @@ function testFileDiff($required, $title, $file1, $file2, $caseInsensitive = true
 		}
 	}
 
-	// check if 2nd file is longer than the 1st.
-	// if so, then show missing code in the 1st file
+	// check if 2nd file is longer than the 1st. If so, then show missing code in the 1st file
 	if ($fCount2 > $fCount1)
 	{
-		for($i=$fCount1;$i<$fCount2;$i++)
+		for ($i=$fCount1; $i<$fCount2; $i++)
 		{
 			$diffCounter++;
 			$fDiffResult	.= "<tr>\n<td>".($i+1)."</td>\n";
 			$fDiffResult	.= "<td><font color=\"#ff0000\">missing</font></td>\n
-									<td>".highlight_string($rFile2[$i],true)."</td>\n</tr>\n";
+									<td>".highlight_string($rFile2[$i], true)."</td>\n</tr>\n";
 		}
 	}
 
@@ -824,21 +835,23 @@ function testFileDiff($required, $title, $file1, $file2, $caseInsensitive = true
 		return $test;
 	}
 
-	// close layout
 	$fDiffResult .= "</table>";
 	$test->value  = $fDiffResult;
 
 	return $test;
 }
 
-// Syntax Highlight
+/**
+ * @return string
+ * @var string $string
+ */
 function _highlightString($string)
 {
 	$string = "<?php ".$string." ?>";
 	$string = highlight_string($string,true);
 	//$string = "<code>".$string."</code>";
-	$string = str_replace("&lt;?php","",$string);
-	$string = str_replace("?&gt;","",$string);
+	$string = str_replace("&lt;?php", "", $string);
+	$string = str_replace("?&gt;", "", $string);
 	// re-edit the closing comment
 	//$string = ($comments == 1) ? str_replace("*/","",$string) : $string;
 

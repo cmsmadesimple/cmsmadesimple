@@ -114,12 +114,12 @@
 {foreach from=$ids_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
 	<div class="pageoverflow">
-		<p class="pagetext">{$key}:</p>
+		<p class="pagetext">{$test->title}:</p>
 	{if isset($test->secondvalue)}
 		<p class="pageinput"><strong>{$test->value}</strong> ({$test->secondvalue}) <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /><br />
 	  {if isset($test->opt)}
-		{si_lang a=current_file_timestamp}: {$test->opt.current_file_timestamp}<br />
-		{si_lang a=current_db_timestamp}: {$test->opt.current_db_timestamp}<br />
+		{si_lang a=current_file_timestamp}: {$test->opt.current_file_timestamp|date_format:$test->opt.format_timestamp}<br />
+		{si_lang a=current_db_timestamp}: {$test->opt.current_db_timestamp|date_format:$test->opt.format_timestamp}<br />
 	  {/if}
 		</p>
 	{elseif isset($test->value)}

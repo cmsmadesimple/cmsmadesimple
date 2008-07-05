@@ -193,11 +193,11 @@ $smarty->assign('permission_info', $tmp);
 Simple IDS
 $tmp = array(0=>array(), 1=>array());
 
-$tmp[1]['index_file'] = testFileSha1(0, '', cms_join_path(CMS_BASE, 'index.php'), get_site_preference('file_index_sha1file', ''), get_site_preference('file_index_timestamp', ''));
+$tmp[1]['index_file'] = testFileSha1(0, lang('check_index_file'), cms_join_path(CMS_BASE, 'index.php'), get_site_preference('file_index_sha1file', ''), get_site_preference('file_index_timestamp', ''), '', get_site_preference('defaultdateformat', '%c'));
 
-$tmp[1]['include_file'] = testFileSha1(0, '', cms_join_path(CMS_BASE, 'include.php'), get_site_preference('file_include_sha1file', ''), get_site_preference('file_include_timestamp', ''));
+$tmp[1]['include_file'] = testFileSha1(0, lang('check_include_file'), cms_join_path(CMS_BASE, 'include.php'), get_site_preference('file_include_sha1file', ''), get_site_preference('file_include_timestamp', ''), '', get_site_preference('defaultdateformat', '%c'));
 
-$tmp[1]['config_diff'] = testFileDiff(0, '', CONFIG_FILE_LOCATION, unserialize(get_site_preference('file_config_content', '')));
+$tmp[1]['config_diff'] = testFileDiff(0, lang('check_config_file'), CONFIG_FILE_LOCATION, unserialize(get_site_preference('file_config_content', '')));
 
 $smarty->assign('count_ids_info', count($tmp[0]));
 $smarty->assign('ids_info', $tmp);

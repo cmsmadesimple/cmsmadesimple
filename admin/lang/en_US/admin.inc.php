@@ -1,9 +1,17 @@
 <?php
+//DELETE FOR DROP SIMPLE IDS
 $lang['admin']['ids_information'] = 'Simple Intrusion detection';
+$lang['admin']['check_index_file'] = 'Check difference from stored and file index.php';
+$lang['admin']['check_include_file'] = 'Check difference from stored and file include.php';
+$lang['admin']['check_config_file'] = 'Check difference from stored and config.php';
 $lang['admin']['sha1_not_match'] = 'File sha1 hash not match with DB record';
+  $lang['admin']['sha1_match'] = 'File match with DB record';
+  $lang['admin']['stored'] = 'File stored';
 $lang['admin']['current_file_timestamp'] = 'Current file timestamp';
 $lang['admin']['current_db_timestamp'] = 'Current DB file timestamp';
 $lang['admin']['nodifferencefound'] = 'No differences found';
+//DELETE
+
 $lang['admin']['start_upgrade_process'] = 'Start Upgrade Process';
 $lang['admin']['warning_upgrade'] = '<em><strong>Warning:</strong></em> CMSMS is in need of an upgrade.';
 $lang['admin']['warning_upgrade_info1'] = 'You are now running schema version %s. and you need to be upgraded to version %s';
