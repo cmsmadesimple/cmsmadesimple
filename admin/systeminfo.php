@@ -182,7 +182,7 @@ $dir = $config['root_path'] . DIRECTORY_SEPARATOR . 'modules';
 $tmp[1]['modules'] = testDirWrite(0, $dir, $dir);
 
 $global_umask = get_site_preference('global_umask', '022');
-$tmp[1]['umask'] = testUmask(0, lang('global_umask'), $global_umask);
+$tmp[1][lang('global_umask')] = testUmask(0, lang('global_umask'), $global_umask);
 
 $tmp[1]['config_file'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FILE_LOCATION)), -4), '');
 

@@ -455,9 +455,9 @@ else
 		$image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
 		$image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
 
-		foreach($gCms->modules as $key=>&$value)
+		foreach($gCms->modules as $key=>$value)
 		{
-			$modinstance = $value['object'];
+			$modinstance =& $value['object'];
 			$is_sysmodule = (array_search( $key, $gCms->cmssystemmodules ) !== FALSE);
 			$namecol = $key;
 			$versioncol = "&nbsp;";
