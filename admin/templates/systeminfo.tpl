@@ -41,7 +41,7 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{$test->title}:</p>
 	{if isset($test->secondvalue)}
-		<p class="pageinput"><strong>{$test->value}</strong> ({$test->secondvalue}) <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
+		<p class="pageinput"><strong>{$test->value}</strong> ({$test->secondvalue}) <img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
 	{elseif isset($test->value)}
 		<p class="pageinput"><strong>{$test->value}</strong></p>
     {/if}
@@ -61,7 +61,7 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{si_lang a=$key} ({$key}):</p>
 	{if isset($test->secondvalue)}
-		<p class="pageinput"><strong>{$test->value}</strong> ({$test->secondvalue}) <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
+		<p class="pageinput"><strong>{$test->value}</strong> ({$test->secondvalue}) <img class="icon-extra" src="themes/{$thememane}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
 	{elseif isset($test->value)}
 		<p class="pageinput"><strong>{$test->value}</strong></p>
     {/if}
@@ -81,7 +81,7 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{si_lang a=$key} ({$key}):</p>
 	{if isset($test->secondvalue)}
-		<p class="pageinput"><strong>{$test->value}</strong> ({$test->secondvalue}) <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
+		<p class="pageinput"><strong>{$test->value}</strong> ({$test->secondvalue}) <img class="icon-extra" src="themes/{$thememane}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
 	{elseif isset($test->value)}
 		<p class="pageinput"><strong>{$test->value}</strong></p>
     {/if}
@@ -98,7 +98,7 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{$key}:</p>
 	{if isset($test->secondvalue)}
-		<p class="pageinput"><strong>{$test->value}</strong> ({$test->secondvalue}) <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
+		<p class="pageinput"><strong>{$test->value}</strong> ({$test->secondvalue}) <img class="icon-extra" src="themes/{$thememane}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /></p>
 	{elseif isset($test->value)}
 		<p class="pageinput"><strong>{$test->value}</strong></p>
     {/if}
@@ -116,7 +116,7 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{$test->title}:</p>
 	{if isset($test->secondvalue)}
-		<p class="pageinput"><strong>{$test->value}</strong> ({$test->secondvalue}) <img class="icon-extra" src="themes/NCleanGrey/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /><br />
+		<p class="pageinput"><strong>{$test->value}</strong> ({$test->secondvalue}) <img class="icon-extra" src="themes/{$thememane}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" /><br />
 	  {if isset($test->opt)}
 		{si_lang a=current_file_timestamp}: {$test->opt.current_file_timestamp|date_format:$test->opt.format_timestamp}<br />
 		{si_lang a=current_db_timestamp}: {$test->opt.current_db_timestamp|date_format:$test->opt.format_timestamp}<br />
