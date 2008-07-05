@@ -21,6 +21,8 @@ build_file_list()
   for onefile in $_files1 ; do
     if [ `echo $onefile | grep -c admin/lang` = 1 ]; then
       _files="$onefile $_files" 
+    elif [ `echo $onefile | grep -c install/lang` = 1 ]; then
+      _files="$onefile $_files"
     else
       for coremod in $_coremodules ; do
         if [ `echo $onefile | grep -c $coremod` = 1 ]; then

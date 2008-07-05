@@ -16,6 +16,7 @@ _svn=http://svn.cmsmadesimple.org/svn/cmsmadesimple/branches/1.2.x
 _workdir=/tmp/$_this.$$
 _owd=`pwd`
 _rmfiles='CHECKLIST scripts build config.php autogen.sh mpd.sql mysql.sql makedoc.sh cleardb.sh generatedump.php images/cms/*.svg svn-propset* find-mime admin/lang/*sh admin/lang/*pl admin/editconfig.php lib/adodb lib/preview.functions.php';
+# basedir    (if set, specify the base directory to put generated releases).
 # nohtaccess (if set, disable htaccess generation)
 # noremove   (if set, disable removal of files that shouldn't be shipped with the distribution)
 # noindex    (if set, disable index.html creation)
@@ -54,7 +55,7 @@ clear
 echo "Export CMS Source"
 echo "=================="
 echo "SVN URL: $_svn"
-echo "Is this correct? (yes/no)";
+echo -n "Is this correct? (yes/no) ";
 read ans
 case $ans in
  y|Y|yes|YES|Yes)
@@ -77,10 +78,14 @@ echo
 echo "Exporting: $_svn";
 svn export $_svn $_workdir >/dev/null
  
+if [ ${basedir:-notset} = notset ]; then
+  basedir='/tmp'
+fi
+
 # Get the version
 cd $_workdir
 _version=`grep '^\$CMS_VERSION' version.php | grep -v _NAME | cut -d\" -f2`
-_destdir=/tmp/cmsmadesimple-$_version
+_destdir=${basedir}/cmsmadesimple-$_version
 
 echo "Create CMS Release"
 echo "=================="
@@ -96,7 +101,7 @@ if [ ${noindex:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
 echo -n "DO POST Processing cleanup? ";
 if [ ${noindex:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
 echo
-echo "Is this correct? (yes/no)";
+echo -n "Is this correct? (yes/no) ";
 read ans
 case $ans in
  y|Y|yes|YES|Yes)
