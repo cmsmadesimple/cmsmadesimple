@@ -1,5 +1,7 @@
 #!/bin/sh
 
+_txt='`<!-- dummy index.html -->';
+
 if [ ! -r $1/index.php ]; then 
-  touch $1/index.html
+  echo $_txt > $1/index.html
 fi

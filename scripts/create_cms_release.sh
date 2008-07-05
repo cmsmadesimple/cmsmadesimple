@@ -34,7 +34,16 @@ if [ -x ./create_lang_packs.sh ]; then
 fi
 unset _t
 
-# Check for config file
+# Check for config file(s)
+# search /etc/create_cms_release.sh first
+# then /usr/local/etc/create_cms_release.sh
+# then ~/.create_cms_release.sh
+if [ -r /etc/$this ]; then
+. /etc/$this
+fi
+if [ -r /usr/local/etc/$this ]; then
+. /usr/local/etc/$this
+fi
 if [ -r ~/.$_this ]; then
 . ~/.$_this
 fi
@@ -78,6 +87,14 @@ echo "=================="
 echo "VERSION: $_version"
 echo "DESTDIR: $_destdir"
 echo "SVN URL: $_svn"
+echo -n "CREATE htaccess files? ";
+if [ ${nohtaccess:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
+echo -n "REMOVE system utility files? ";
+if [ ${noremove:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
+echo -n "CREATE index.html files? ";
+if [ ${noindex:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
+echo -n "DO POST Processing cleanup? ";
+if [ ${noindex:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
 echo
 echo "Is this correct? (yes/no)";
 read ans
