@@ -587,6 +587,54 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
 	return $test;
 }
 
+
+/**
+ * @return object
+ * @var boolean $required
+ * @var string  $title
+ * @var string  $dir
+ * @var string  $message
+*/
+function testRemoteFile($required, $title, $url, $message = '')
+{
+	$test =& new StdClass();
+
+	$test->title = $title;
+
+	if (empty($url))
+	{
+		$url = 'http://dev.cmsmadesimple.org/latest_version.php';
+	}
+
+	$test->value = $url;
+
+	if ($handle = @fopen($url, 'rb'))
+	{
+		while (!feof($handle))
+		{
+			$content = @fgets($handle, 4096);
+			if (false !== strpos($content, 'cmsmadesimple'))
+			{
+				fclose($handle);
+				$test->res = 'green';
+				$test->res_text = getTestReturn($test->res);
+				return $test;				
+			}
+		}
+		fclose($handle);
+	}
+
+	list($test->continueon, $test->special_failed) = testGlobal($required);
+	$test->res = 'red';
+	$test->res_text = getTestReturn($test->res);
+	if (trim($message) != '')
+	{
+		$test->message = $message;
+	}
+
+	return $test;
+}
+
 /**
  * @return object
  * @var boolean $required
