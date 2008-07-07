@@ -23,7 +23,7 @@ class PageLink extends ContentBase
 
     function PageLink() {
         $this->ContentBase();
-        $this->mProperties->SetAllowedPropertyNames(array('page', 'params', 'target'));
+        $this->mProperties->SetAllowedPropertyNames(array('page', 'params', 'target','extra1','extra2','extra3'));
     }
 	
     function FriendlyName()
@@ -36,6 +36,9 @@ class PageLink extends ContentBase
 		$this->mProperties->Add('int', 'page');
 		$this->mProperties->add('string', 'params');
 		$this->mProperties->Add('string', 'target');
+		$this->mProperties->Add('string', 'extra1');
+		$this->mProperties->Add('string', 'extra2');
+		$this->mProperties->Add('string', 'extra3');
 		
 		//Turn off caching
 		$this->mCachable = false;
@@ -45,7 +48,7 @@ class PageLink extends ContentBase
     {
 		if (isset($params))
 			{
-				$parameters = array('page', 'params','target');
+			  $parameters = array('page', 'params','target','extra1','extra2','extra3');
 				foreach ($parameters as $oneparam)
 					{
 						if (isset($params[$oneparam]))
@@ -59,6 +62,18 @@ class PageLink extends ContentBase
 					{
 						$this->SetPropertyValue('target', '');
 					} 
+				if (isset($params['extra1']) )
+				  {
+				    $this->SetPropertyValue('extra1',trim($_POST['extra1']));
+				  }
+				if (isset($params['extra2']) )
+				  {
+				    $this->SetPropertyValue('extra2',trim($_POST['extra2']));
+				  }
+				if (isset($params['extra3']) )
+				  {
+				    $this->SetPropertyValue('extra3',trim($_POST['extra3']));
+				  }
 				if (isset($params['title']))
 					{
 						$this->mName = $params['title'];
@@ -188,6 +203,9 @@ class PageLink extends ContentBase
 	$ret[]= array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
 	$ret[]= array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />');
 	$ret[]= array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+	$ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
+	$ret[]= array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
+	$ret[]= array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
 
 	if (!$adding && $showadmin)
 	{

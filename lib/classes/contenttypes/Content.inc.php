@@ -101,18 +101,6 @@ class Content extends ContentBase
 	    {
 	    	$this->SetPropertyValue('target', '');
             } 
-	    if (isset($_POST['extra1']) && !empty($_POST['extra1']))
-	    {
-	      $this->SetPropertyValue('extra1', trim($_POST['extra1']));
-            } 
-	    if (isset($_POST['extra2']) && !empty($_POST['extra2']))
-	    {
-	      $this->SetPropertyValue('extra2', trim($_POST['extra2']));
-            } 
-	    if (isset($_POST['extra3']) && !empty($_POST['extra3']))
-	    {
-	      $this->SetPropertyValue('extra3', trim($_POST['extra3']));
-            } 
 	    if (isset($params['title']))
 	    {
 		$this->mName = $params['title'];

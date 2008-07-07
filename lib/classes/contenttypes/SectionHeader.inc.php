@@ -23,7 +23,7 @@ class SectionHeader extends ContentBase
 
     function SectionHeader() {
         $this->ContentBase();
-        $this->mProperties->SetAllowedPropertyNames(array());
+        $this->mProperties->SetAllowedPropertyNames(array('extra1','extra2','extra3'));
     }
 
     function FriendlyName()
@@ -33,6 +33,10 @@ class SectionHeader extends ContentBase
 
     function SetProperties()
     {
+	$this->mProperties->Add('string', 'extra1'); 
+	$this->mProperties->Add('string', 'extra2'); 
+	$this->mProperties->Add('string', 'extra3'); 
+
 	#Turn off caching
 	$this->mCachable = false;
     }
@@ -46,6 +50,18 @@ class SectionHeader extends ContentBase
     {
 	if (isset($params))
 	{
+	  if( isset($params['extra1']) )
+	    {
+	      $this->SetPropertyValue('extra1',trim($params['extra1']));
+	    }
+	  if( isset($params['extra2']) )
+	    {
+	      $this->SetPropertyValue('extra2',trim($params['extra2']));
+	    }
+	  if( isset($params['extra3']) )
+	    {
+	      $this->SetPropertyValue('extra3',trim($params['extra3']));
+	    }
 	    if (isset($params['title']))
 	    {
 		$this->mName = $params['title'];
@@ -126,6 +142,9 @@ class SectionHeader extends ContentBase
     }
 	$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />') ;
 	$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+	$ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
+	$ret[]= array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
+	$ret[]= array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
 
 	if (!$adding && $showadmin)
 	{
