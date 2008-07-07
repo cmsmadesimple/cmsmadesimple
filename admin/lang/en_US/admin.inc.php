@@ -1,5 +1,8 @@
 <?php
 //DELETE FOR DROP SIMPLE IDS
+$lang['admin']['extra1'] = 'Extra Page Attribute 1';
+$lang['admin']['extra2'] = 'Extra Page Attribute 2';
+$lang['admin']['extra3'] = 'Extra Page Attribute 3';
 $lang['admin']['ids_information'] = 'Simple Intrusion detection';
 $lang['admin']['check_index_file'] = 'Check difference from stored and file index.php';
 $lang['admin']['check_include_file'] = 'Check difference from stored and file include.php';
