@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['files_failed'] = 'Files failed md5sum check';
+$lang['admin']['files_not_found'] = 'Files Not found';
 $lang['admin']['info_generate_cksum_file'] = <<<EOT
 This function will allow you to generate a checksum file and save it on your local computer for later validation.  This should be done just prior to rolling out the website, and/or after any upgrades, or major modifications.
 EOT;

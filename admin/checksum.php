@@ -51,7 +51,6 @@ function check_checksum_data(&$report)
   $fh = fopen($_FILES['cksumdat']['tmp_name'],'r');
   if( !$fh )
     {
-      die('test');
       return lang('error_uploadproblem');
     }
   
