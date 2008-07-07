@@ -219,7 +219,7 @@ else {
       {
       ?>
 		<div class="pageoverflow">
-			<div class="pagetext"><b><?php echo lang('groups')?>:</b></div>
+			<div class="pagetext"><?php  echo $themeObject->DisplayImage('icons/system/permissions.gif', lang('permissions'),'','','icon-extra');?><b><?php echo lang('groups')?>:</b></div>
 			<div class="pageinput">
       <?php
 	     echo '<div class="group_memberships clear"><input type="hidden" name="groups" value="1" />';
