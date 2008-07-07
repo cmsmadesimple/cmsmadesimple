@@ -1,5 +1,16 @@
 <?php
 //DELETE FOR DROP SIMPLE IDS
+$lang['admin']['info_generate_cksum_file'] = <<<EOT
+This function will allow you to generate a checksum file and save it on your local computer for later validation.  This should be done just prior to rolling out the website, and/or after any upgrades, or major modifications.
+EOT;
+$lang['admin']['info_validation'] = <<<EOT
+This function will compare the checksums found in the uploaded file with the files on the current installation.  It can assist in finding problems with uploads, or exactly what files were modified if your system has been hacked.  A checksum file is generated for each release of CMS Made simple from version 1.4 on.
+EOT;
+$lang['admin']['download_cksum_file'] = 'Download Checksum File';
+$lang['admin']['perform_validation'] = 'Perform Validation';
+$lang['admin']['upload_cksum_file'] = 'Upload Checksum File';
+$lang['admin']['checksumdescription'] = 'Validate the integrity of CMS files by comparing against known checksums';
+$lang['admin']['system_verification'] = 'System Verification';
 $lang['admin']['extra1'] = 'Extra Page Attribute 1';
 $lang['admin']['extra2'] = 'Extra Page Attribute 2';
 $lang['admin']['extra3'] = 'Extra Page Attribute 3';
