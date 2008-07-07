@@ -253,8 +253,8 @@ else {
       {
       ?>
 		<div class="pageoverflow">
-			<div class="pagetext"><b><?php echo lang('groups')?>: </b>
-			<?php  echo $themeObject->DisplayImage('icons/system/permissions.gif', lang('permissions'),'','','icon-extra');?>
+			<div class="pagetext"><?php  echo $themeObject->DisplayImage('icons/system/permissions.gif', lang('permissions'),'','','icon-extra');?><b><?php echo lang('groups')?>: </b>
+			
             </div>
 			<div class="pageinput">
       <?php
