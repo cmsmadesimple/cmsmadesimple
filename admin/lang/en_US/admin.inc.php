@@ -1,5 +1,4 @@
 <?php
-//DELETE FOR DROP SIMPLE IDS
 $lang['admin']['info_generate_cksum_file'] = <<<EOT
 This function will allow you to generate a checksum file and save it on your local computer for later validation.  This should be done just prior to rolling out the website, and/or after any upgrades, or major modifications.
 EOT;
@@ -15,17 +14,10 @@ $lang['admin']['extra1'] = 'Extra Page Attribute 1';
 $lang['admin']['extra2'] = 'Extra Page Attribute 2';
 $lang['admin']['extra3'] = 'Extra Page Attribute 3';
 $lang['admin']['ids_information'] = 'Simple Intrusion detection';
-$lang['admin']['check_index_file'] = 'Check difference from stored and file index.php';
-$lang['admin']['check_include_file'] = 'Check difference from stored and file include.php';
-$lang['admin']['check_config_file'] = 'Check difference from stored and config.php';
-$lang['admin']['sha1_not_match'] = 'File sha1 hash not match with DB record';
-  $lang['admin']['sha1_match'] = 'File match with DB record';
-  $lang['admin']['stored'] = 'File stored';
-$lang['admin']['current_file_timestamp'] = 'Current file timestamp';
-$lang['admin']['current_db_timestamp'] = 'Current DB file timestamp';
-$lang['admin']['nodifferencefound'] = 'No differences found';
-//DELETE
-
+$lang['admin']['checksum_match'] = 'Current File checksum match';
+$lang['admin']['checksum_not_match'] = 'Current File checksum not match';
+$lang['admin']['file1_timestamp'] = 'Current File timestamp';
+$lang['admin']['file2_timestamp'] = 'File match timestamp';
 $lang['admin']['start_upgrade_process'] = 'Start Upgrade Process';
 $lang['admin']['warning_upgrade'] = '<em><strong>Warning:</strong></em> CMSMS is in need of an upgrade.';
 $lang['admin']['warning_upgrade_info1'] = 'You are now running schema version %s. and you need to be upgraded to version %s';

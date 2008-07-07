@@ -190,19 +190,30 @@ $tmp[1]['config_file'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FIL
 $smarty->assign('count_permission_info', count($tmp[0]));
 $smarty->assign('permission_info', $tmp);
 
-/*
-Simple IDS
+
+// Simple IDS
 $tmp = array(0=>array(), 1=>array());
 
-$tmp[1]['index_file'] = testFileSha1(0, lang('check_index_file'), cms_join_path(CMS_BASE, 'index.php'), get_site_preference('file_index_sha1file', ''), get_site_preference('file_index_timestamp', ''), '', get_site_preference('defaultdateformat', '%c'));
-
-$tmp[1]['include_file'] = testFileSha1(0, lang('check_include_file'), cms_join_path(CMS_BASE, 'include.php'), get_site_preference('file_include_sha1file', ''), get_site_preference('file_include_timestamp', ''), '', get_site_preference('defaultdateformat', '%c'));
-
-$tmp[1]['config_diff'] = testFileDiff(0, lang('check_config_file'), CONFIG_FILE_LOCATION, unserialize(get_site_preference('file_config_content', '')));
+$config = $gCms->GetConfig();
+$result = array();
+if ($handle = fopen(getcwd() . DIRECTORY_SEPARATOR . 'checksum.dat', 'rb'))
+{
+	while (!feof($handle))
+	{
+		$content = fgets($handle, 4096);
+		if (! empty($content))
+		{
+			list($md5, $file) = explode(' ', $content);
+			$file1 = $config['root_path'] . str_replace('/', DIRECTORY_SEPARATOR, substr($file, 2));
+			$tmp[1][] = testOptimizedLoopFileChecksum($file1, $md5);
+		}
+	}
+	fclose($handle);
+}
 
 $smarty->assign('count_ids_info', count($tmp[0]));
 $smarty->assign('ids_info', $tmp);
-*/
+
 
 
 if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) echo $smarty->fetch('systeminfo.txt.tpl');
