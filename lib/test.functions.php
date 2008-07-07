@@ -597,43 +597,68 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
  * @var string  $message
  * @var string  $formattime
 */
-function & testFileSha1($required, $title, $file1, $file2, $timestamp2 = 0, $message = '', $formattime = '%c')
+function & testFileChecksum($required, $title, $file1, $file2, $timestamp2 = 0, $message = '', $formattime = '%c')
 {
 	$test =& new StdClass();
 
 	$test->title = $title;
 	$test->value = $file1;
 
-	if (file_exists($file1))
+	if (!file_exists($file1))
 	{
-		$file1_sha1 = @sha1_file($file1);
-		$file1_time = @filemtime($file1);
-
-		if ( (file_exists($file2)) && (empty($timestamp2)) )
+		list($test->continueon, $test->special_failed) = testGlobal($required);
+		$test->res = 'red';
+		$test->res_text = getTestReturn($test->res);
+		$test->error = lang('nofiles') .' ('. $file1 . ')';
+		if (trim($message) != '')
 		{
-			$file2_sha1 = @sha1_file($file2);
-			$file2_time = @filemtime($file2);
+			$test->message = $message;
 		}
-		elseif (!empty($timestamp2)) // Not file but get everywhere
-		{
-			$file2_sha1 = $file2;
-			$file2_time = $timestamp2;
-		}
-
-		if ( ($file1_sha1 == $file2_sha1) && ($file1_time == $file2_time) )
-		{
-			$test->secondvalue = lang('sha1_match');
-			$test->opt['current_file_timestamp'] = $file1_time;
-			$test->opt['format_timestamp'] = $formattime;
-			$test->res = 'green';
-			$test->res_text = getTestReturn($test->res);
-			return $test;
-		}
+		return $test;
 	}
 
-	$test->secondvalue = lang('sha1_not_match');
-	$test->opt['current_file_timestamp'] = $file1_time;
-	$test->opt['current_db_timestamp'] = $file2_time;
+	$file1_checksum = @md5_file($file1);
+	$file1_time = @filemtime($file1);
+
+	if (file_exists($file2))
+	{
+		$file2_checksum = @md5_file($file2);
+		$file2_time = @filemtime($file2);
+	}
+	elseif (!empty($timestamp2)) // Not file but get data (and modification time) everywhere
+	{
+		$file2_checksum = $file2;
+		$file2_time = $timestamp2;
+	}
+	else // Not file but get everywhere, not modification time
+	{
+		$file2_checksum = $file2;
+	}
+
+	if ($file1_checksum == $file2_checksum)
+	{
+		$test->secondvalue = lang('checksum_match');
+		$test->opt['file1_timestamp'] = $file1_time;
+		$test->res = 'green';
+		$test->res_text = getTestReturn($test->res);
+
+		if ( (isset($file2_time)) && ($file1_time <> $file2_time) )
+		{
+			$test->opt['file2_timestamp'] = $file2_time;
+			$test->opt['format_timestamp'] = $formattime;
+			$test->res = 'yellow';
+			$test->res_text = getTestReturn($test->res);
+		}
+
+		return $test;
+	}
+
+	$test->secondvalue = lang('checksum_not_match');
+	$test->opt['file1_timestamp'] = $file1_time;
+	if ( (isset($file2_time)) && ($file1_time <> $file2_time) )
+	{
+		$test->opt['file2_timestamp'] = $file2_time;
+	}
 	$test->opt['format_timestamp'] = $formattime;
 
 	list($test->continueon, $test->special_failed) = testGlobal($required);
@@ -645,6 +670,49 @@ function & testFileSha1($required, $title, $file1, $file2, $timestamp2 = 0, $mes
 	}
 
 	return $test;
+}
+
+/**
+ * @return object
+ * @var string  $file1
+ * @var string  $checksum
+ * @var string  $formattime
+*/
+function & testOptimizedLoopFileChecksum($file1, $checksum, $formattime = '%c')
+{
+	static $result = array();
+
+	if (!file_exists($file1))
+	{
+		$test =& new StdClass();
+		$test->value = $file1;
+		$test->secondvalue = lang('nofiles') .' ('. $file1 . ')';
+
+		$test->res = 'red';
+		$test->res_text = getTestReturn($test->res);
+
+		$result[] = $test;
+	}
+
+	$file1_checksum = @md5_file($file1);
+
+	if ($file1_checksum != $checksum)
+	{
+		$test =& new StdClass();
+		$test->value = $file1;
+		$test->secondvalue = lang('checksum_not_match');
+
+		$test->res = 'red';
+		$test->res_text = getTestReturn($test->res);
+
+		$file1_time = @filemtime($file1);
+		$test->opt['file1_timestamp'] = $file1_time;
+		$test->opt['format_timestamp'] = $formattime;
+
+		$result[] = $test;
+	}
+
+	return $result;
 }
 
 /**
@@ -708,154 +776,6 @@ function GDVersion()
 	}
 
 	return $gd_version_number;
-}
-
-/**
- * Changed from http://www.phpclasses.org/browse/package/2302.html - TODO: smartyfier output
- *
- * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $file1
- * @var string  $file2
- * @var int     $timestamp2
- * @var string  $message
- * @var string  $formattime
- * @var boolean $caseInsensitive
-*/
-function testFileDiff($required, $title, $file1, $file2, $timestamp2 = 0, $message = '', $formattime = '%c', $caseInsensitive = true)
-{
-	$test =& new StdClass();
-
-	$test->title = $title;
-	$test->value  = $file1;
-
-	if (!file_exists($file1))
-	{
-		list($test->continueon, $test->special_failed) = testGlobal($required);
-		$test->res = 'red';
-		$test->res_text = getTestReturn($test->res);
-		$test->error = lang('nofiles') .' ('. $file1 . ')';
-		if (trim($message) != '')
-		{
-			$test->message = $message;
-		}
-		return $test;
-	}
-	else
-	{
-		$rFile1	= @file($file1);
-		$file1_time = @filemtime($file1);
-	}
-
-	if (!file_exists($file2)) // Not file but get everywhere
-	{
-		$rFile2	= $file2;
-		$file2 = lang('stored');
-		$file2_time = $timestamp2;
-	}
-	else
-	{
-		$rFile2	= @file($file2);
-		$file2_time = @filemtime($file2);
-	}
-	
-	// how many rows read
-	$fCount1 = count($rFile1);
-	$fCount2 = count($rFile2);
-	// diff counter
-	$diffCounter = 0;
-
-	// the output string
-	$fDiffResult = "";
-
-	// start layout
-	$fDiffResult .= "<table border=0 cellpadding=1 cellspacing=1 align=\"center\">\n";
-	$fDiffResult .= "<tr>\n";
-	$fDiffResult .= "	<td width=20 bgcolor=\"#DADADA\"><strong>#</strong></td>
-							<td width=430 bgcolor=\"#DADADA\"><strong>".$file1."</strong></td>
-							<td width=430 bgcolor=\"#DADADA\"><strong>".$file2."</strong></td>\n";
-	$fDiffResult .= "</tr>";
-
-	// read 1st array and chech for diff
-	$comments		= "";
-	$comments2		= "";
-	$commentsOpen	= 0;
-	foreach ($rFile1 as $k=>$v)
-	{
-		// COMMENTS PATCH ( /* ... */ )
-		if ($comments != "" || stristr($v,"/*") != "")
-		{
-			$commentsOpen	= 1;
-			$comments		.= $v;
-			$comments2		.= $rFile2[$k];
-		}
-		if (stristr($v,"*/") != "")
-		{
-			$commentsOpen	= 0;
-			$v				= $comments;
-			$rFile2[$k]		= $comments2;
-			$comments		= "";
-			$comments2		= "";
-		}
-
-		$check = ($caseInsensitive) ? stristr($v,$rFile2[$k]) : strstr($v,$rFile2[$k]);
-		if ($check != $v)
-		{
-			$diffCounter++;
-			$fDiffResult	.= "<tr>\n<td valign=\"top\">".($k+1)."</td>\n";
-			if ($commentsOpen == 0)
-			{
-				$v			= _highlightString($v);
-				$rFile2[$k]	= _highlightString($rFile2[$k]);
-				$fDiffResult	.= "<td valign=\"top\">".$v."</td><td valign=\"top\">".$rFile2[$k]."</td>\n</tr>\n";
-			}
-
-		}
-	}
-
-	// check if 2nd file is longer than the 1st. If so, then show missing code in the 1st file
-	if ($fCount2 > $fCount1)
-	{
-		for ($i=$fCount1; $i<$fCount2; $i++)
-		{
-			$diffCounter++;
-			$fDiffResult	.= "<tr>\n<td>".($i+1)."</td>\n";
-			$fDiffResult	.= "<td><font color=\"#ff0000\">missing</font></td>\n
-									<td>".highlight_string($rFile2[$i], true)."</td>\n</tr>\n";
-		}
-	}
-
-	// no difference found
-	if ($diffCounter <=0 )
-	{
-		$test->value  = lang('nodifferencefound');
-		$test->res = 'green';
-		$test->res_text = getTestReturn($test->res);
-		return $test;
-	}
-
-	$fDiffResult .= "</table>";
-	$test->value  = $fDiffResult;
-
-	return $test;
-}
-
-/**
- * @return string
- * @var string $string
- */
-function _highlightString($string)
-{
-	$string = "<?php ".$string." ?>";
-	$string = highlight_string($string,true);
-	//$string = "<code>".$string."</code>";
-	$string = str_replace("&lt;?php", "", $string);
-	$string = str_replace("?&gt;", "", $string);
-	// re-edit the closing comment
-	//$string = ($comments == 1) ? str_replace("*/","",$string) : $string;
-
-	return $string;
 }
 # vim:ts=4 sw=4 noet
 ?>

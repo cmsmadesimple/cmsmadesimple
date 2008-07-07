@@ -108,8 +108,7 @@
 <br />
 
 
-{if (!empty($ids_info))}
-{
+<!--
 <div class="pageoverflow">
 <h4 class="h-inside">{si_lang a=ids_information}</h4>
 </div>
@@ -126,7 +125,7 @@
 	{/foreach}
   {/foreach}
 <br />
-}
+-->
 
 
 </fieldset>

@@ -196,11 +196,11 @@ $tmp = array(0=>array(), 1=>array());
 
 $config = $gCms->GetConfig();
 $result = array();
-if ($handle = fopen(getcwd() . DIRECTORY_SEPARATOR . 'checksum.dat', 'rb'))
+if ($handle = @fopen(getcwd() . DIRECTORY_SEPARATOR . 'checksum.dat', 'rb'))
 {
 	while (!feof($handle))
 	{
-		$content = fgets($handle, 4096);
+		$content = @fgets($handle, 4096);
 		if (! empty($content))
 		{
 			list($md5, $file) = explode(' ', $content);
