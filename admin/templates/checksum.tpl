@@ -1,7 +1,15 @@
 <div class="pagecontainer">
 {* checksum verification template *}
 
-<form action="{$smarty.server.PHP_SELF}&action=upload" method="post" enctype="multipart/form-data">
+{if isset($message)}
+<div class="pageerrorcontainer">
+ <div class="pageoverflow">
+   <p class="pageerror">{$message}</p>
+ </div>
+</div>
+{/if}
+
+<form action="{$smarty.server.PHP_SELF}?action=upload" method="post" enctype="multipart/form-data">
 <fieldset>
   <legend>{lang key='perform_validation'}</legend>
   <div class="pageoverflow">
@@ -19,7 +27,7 @@
 </form>
 
 <br/>
-<form action="{$smarty.server.PHP_SELF}&action=download" method="post" enctype="multipart/form-data">
+<form action="{$smarty.server.PHP_SELF}?action=download" method="post" enctype="multipart/form-data">
 <fieldset>
   <legend>{lang key='download_cksum_file'}</legend>
   <div class="pageoverflow">

@@ -37,6 +37,121 @@ function checksum_lang($params,&$smarty)
 // check for login
 check_login();
 
+function check_checksum_data(&$report)
+{
+  if( (!isset($_FILES['cksumdat'])) || empty($_FILES['cksumdat']['name']) )
+    {
+      return lang('error_nofileuploaded');
+    }
+  else if( $_FILES['cksumdat']['error'] > 0 )
+    {
+      return lang('error_uploadproblem');
+    }
+  
+  $fh = fopen($_FILES['cksumdat']['tmp_name'],'r');
+  if( !$fh )
+    {
+      die('test');
+      return lang('error_uploadproblem');
+    }
+  
+  global $gCms;
+  $config =& $gCms->GetConfig();
+  $filenotfound = array();
+  $notreadable = 0;
+  $md5failed = 0;
+  $filesfailed = array();
+  while( !feof($fh) )
+    {
+      // get a line
+      $line = fgets($fh,4096);
+
+      // strip out comments
+      $pos = strpos($line,'#');
+      if( $pos )
+	{
+	  $line = substr($line,0,$pos);
+	}
+
+      // trim the line
+      $line = trim($line);
+
+      // skip empty line
+      if( empty($line) ) continue;
+
+      // split it into fields
+      list($md5sum,$file) = explode(' *',$line,2);
+      $md5sum = trim($md5sum);
+      $file = trim($file);
+
+      $fn = cms_join_path($config['root_path'],$file);
+      if( !file_exists( $fn ) )
+	{
+	  $filenotfound[] = $file;
+	  continue;
+	}
+
+      if( !is_readable( $fn ) )
+	{
+	  $notreadable++;
+	  continue;
+	}
+
+      $md5 = md5_file($fn);
+      if( !$md5 )
+	{
+	  $md5failed++;
+	  continue;
+	}
+
+      if( $md5sum != $md5 )
+	{
+	  $filesfailed[] = $file;
+	}
+    }
+  fclose($fh);
+
+  if( count($filenotfound) || $notreadable || $md5failed || count($filesfailed) )
+    {
+      // build the error report
+      $tmp2 = array();
+      if( count($filenotfound) )
+	{
+	  $tmp2[] = sprintf("%d %s",count($filenotfound),lang('files_not_found'));
+	}
+      if( $notreadable )
+	{
+	  $tmp2[] = sprintf("%d %s",$notreadable,lang('files_not_readable'));
+	}
+      if( $md5failed )
+	{
+	  $tmp2[] = sprintf("%d %s",$md5failed,lang('files_checksum_failed'));
+	}
+      $tmp = implode( "<br/>", $tmp2 );
+      if( count($filenotfound) )
+	{
+	  $tmp .= "<br/>".lang('files_not_found').':';
+	  $tmp .= "<br/>".implode("<br/>",$filenotfound)."<br/>";
+	}
+      if( count($filesfailed) )
+	{
+	  $tmp .= "<br/>".count($filesfailed).' '.lang('files_failed').':';
+	  $tmp .= "<br/>".implode("<br/>",$filesfailed)."<br/>";
+	}
+      
+      $report = $tmp;
+      return false;
+    }
+
+  return true;
+}
+
+
+function generate_checksum_file()
+{
+  echo 'GENERATE';
+}
+
 // Get ready
 global $gCms;
 $smarty =& $gCms->GetSmarty();
@@ -45,7 +160,26 @@ $smarty->caching = false;
 $smarty->force_compile = true;
 $db = &$gCms->GetDb();
 
+// Handle output
+$res = '';
+$report = '';
+if( isset($_GET['action']) )
+  {
+    switch($_GET['action'])
+      {
+      case 'upload':
+	$res = check_checksum_data($report);
+	break;
+      case 'download':
+	$res = generate_checksum_file($report);
+	break;
+      }
+  }
 
+if( !$res )
+  {
+    $smarty->assign('message',$report);
+  }
 // Display the output
 echo $smarty->fetch('checksum.tpl');
 include_once("footer.php");
