@@ -173,6 +173,7 @@ function & testBoolean($required, $title, $result, $message = '', $negative_test
 {
 	$test =&new StdClass();
 	$test->title = $title;
+	$test->result = $result ? 'on' : 'off';
 
 	if ((bool) $result == false)
 	{
@@ -594,34 +595,85 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
  * @var string  $title
  * @var string  $dir
  * @var string  $message
+ * @var string  $search
 */
-function testRemoteFile($required, $title, $url, $message = '')
+function testRemoteFile($required, $title, $url, $message = '', $search = 'cmsmadesimple')
 {
-	$test =& new StdClass();
-
-	$test->title = $title;
-
 	if (empty($url))
 	{
 		$url = 'http://dev.cmsmadesimple.org/latest_version.php';
 	}
 
-	$test->value = $url;
+	$test =& new StdClass();
 
-	if ($handle = @fopen($url, 'rb'))
+	$test->title = $title;
+	$test->value = $url;
+	if (!$url_info = parse_url($url))
 	{
+		// Relative or invalid URL?
+		$test->res = 'yellow';
+		$test->res_text = getTestReturn($test->res);
+		return $test;
+	}
+
+	$result = testIniBoolean(0, '', 'allow_url_fopen', lang('test_allow_url_fopen_failed'), false);
+	if ($result == 'on') // Primary test with fopen
+	{
+		$test->secondvalue = lang('use_fopen');
+		$handle = @fopen($url, 'rb');
+	}
+	else // Test with fsockopen
+	{
+		switch ($url_info['scheme'])
+		{
+			case 'https':
+				$scheme = 'ssl://';
+				$port = (isset($url_info['port'])) ? $url_info['port'] : 443;
+				break;
+			case 'http':
+			default:
+				$scheme = '';
+				$port = (isset($url_info['port'])) ? $url_info['port'] : 80;
+		}
+
+		$test->secondvalue = lang('use_fsockopen');
+		$complete_url  = (isset($url_info['path'])) ? $url_info['path'] : '/';
+		$complete_url .= (isset($url_info['query'])) ? '?'.$url_info['query'] : '';
+		$handle = @fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, 30);
+		if (false !== $handle)
+		{
+			$out  = "GET " . $complete_url . " HTTP/1.1\r\n";
+			$out .= "Host: " . $url_info['host'] . "\r\n";
+			$out .= "Connection: Close\r\n\r\n";
+			fwrite($handle, $out);
+		}
+		else
+		{
+			$test->error = lang('use_fsockopen_error', $errno, $errstr);
+		}
+	}
+
+	if (false !== $handle)
+	{
+		$content = '';
 		while (!feof($handle))
 		{
-			$content = @fgets($handle, 4096);
-			if (false !== strpos($content, 'cmsmadesimple'))
-			{
-				fclose($handle);
-				$test->res = 'green';
-				$test->res_text = getTestReturn($test->res);
-				return $test;				
-			}
+			$content .= @fgets($handle, 128);
 		}
 		fclose($handle);
+
+		if ( (! empty($search)) && (false !== strpos($content, $search)) )
+		{
+			$test->res = 'green';
+			$test->res_text = getTestReturn($test->res);
+			return $test;
+		}
+		elseif (false !== strpos($content, '200 OK'))
+		{
+			$test->res = 'yellow';
+			$test->res_text = getTestReturn($test->res);
+			return $test;
+		}
 	}
 
 	list($test->continueon, $test->special_failed) = testGlobal($required);
