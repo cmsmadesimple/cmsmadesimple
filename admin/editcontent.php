@@ -544,8 +544,8 @@ $submit_buttons .= '</p></div>';
 				echo $submit_buttons;
 				?>
 				<div class="pageoverflow">
-					<p class="pagetext"><?php echo lang('contenttype'); ?>:</p>
-					<p class="pageinput"><?php echo $typesdropdown; ?></p>
+					<div class="pagetext"><?php echo lang('contenttype'); ?>:</div>
+					<div class="pageinput"><?php echo $typesdropdown; ?></div>
 				</div>
 				<?php
 			}
@@ -555,8 +555,8 @@ $submit_buttons .= '</p></div>';
 			{
 				?>
 				<div class="pageoverflow">
-					<p class="pagetext"><?php echo $contentarray[$i][0]; ?></p>
-					<p class="pageinput"><?php echo $contentarray[$i][1]; ?></p>
+					<div class="pagetext"><?php echo $contentarray[$i][0]; ?></div>
+					<div class="pageinput"><?php echo $contentarray[$i][1]; ?></div>
 				</div>
 				<?php
 			}
