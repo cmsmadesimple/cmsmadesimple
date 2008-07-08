@@ -59,7 +59,7 @@ class StylesheetOperations
 		$db = &$gCms->GetDb();
 
 		$query = 'SELECT max(assoc_order) FROM '.cms_db_prefix().'css_assoc 
-                           WHERE templateid = ?';
+                           WHERE assoc_to_id = ?';
 		$order = $db->GetOne($query,array($templateid));
 		if( $order )
 		  {
