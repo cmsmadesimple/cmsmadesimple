@@ -53,6 +53,11 @@ Version 1.4-beta1 "Jamaica"
   makes managing users, groups, and permissions much simpler.
   - Many thanks to _SjG_
 - Updates to the embed plugin
+- FileManager gained recursive chmodding, custom sorting and saner 
+  permission handling in windows
+- Printing updated to latest TCPDF release 4.0 including rewritten html 
+  rendering code
+- TinyMCE got updated and some css-related issues were fixed
 
 
 Version 1.3 "Cuba" -- June 7, 2008
