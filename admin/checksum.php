@@ -190,7 +190,7 @@ $smarty->force_compile = true;
 $db = &$gCms->GetDb();
 
 // Handle output
-$res = '';
+$res = true;
 $report = '';
 if( isset($_GET['action']) )
   {
@@ -200,7 +200,7 @@ if( isset($_GET['action']) )
 	$res = check_checksum_data($report);
 	break;
       case 'download':
-	$res = generate_checksum_file($report);
+	generate_checksum_file($report);
 	break;
       }
   }
