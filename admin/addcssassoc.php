@@ -95,11 +95,14 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 		{
 			$error = lang('associationexists');
 			$doadd = false;
+			
 		}
 
 		# we get the name of the element (for logging)
+		
 		if ("template" == $type && $doadd)
 		{
+			
 			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
 			$result = $db->Execute($query, array($id));
 			
@@ -110,19 +113,21 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 			}
 			else
 			{
+				
 				$doadd = false;
 				$error = lang('invalidtemplate');
 			}
 		}
 
 		# get the next access_order
-		$query = "SELECT max(assoc_order)+1 FROM cms_css_assoc where assoc_to_id = ?";
+		$query = "SELECT max(assoc_order)+1 FROM ".cms_db_prefix()."css_assoc where assoc_to_id = ?";
 		$nextord = $db->GetOne($query,array($id));
 		if( !$nextord ) $doadd = false;
 
 		# everything is ok, we can insert the element.
 		if ($doadd)
 		{
+			
 			$time = $db->DBTimeStamp(time());
 			$query = "INSERT INTO ".cms_db_prefix().
                 "css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date,assoc_order)" .
@@ -131,6 +136,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 
 			if ($result)
 			{
+				
 				audit($id, (isset($name)?$name:""), 'Added Stylesheet Association');
 
 				if ("template" == $type)
@@ -145,19 +151,24 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 			{
 				$doadd = false;
 				$error = lang('errorcreatingassociation');
+				
 			}
 		} # enf od adding query to db
+		
+		
 	} # end of "if has access"
 	
 	# user does not have the right to create association
 	else
 	{
+			
 		$doadd = false;
 		$error = lang('noaccessto', array(lang('addcss')));
 	}
 } # end if vars are set
 else
 {
+
 	$doadd = false;
 	$error = lang('informationmissing');
 }
