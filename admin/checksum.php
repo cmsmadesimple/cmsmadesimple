@@ -126,6 +126,8 @@ function check_checksum_data(&$report)
 	{
 	  $tmp2[] = sprintf("%d %s",$md5failed,lang('files_checksum_failed'));
 	}
+      if( !empty($tmp) ) $tmp .= "<br/>";
+
       $tmp = implode( "<br/>", $tmp2 );
       if( count($filenotfound) )
 	{
@@ -146,9 +148,37 @@ function check_checksum_data(&$report)
 }
 
 
-function generate_checksum_file()
+function generate_checksum_file(&$report)
 {
-  echo 'GENERATE';
+  @set_time_limit(9999); // this may not work on all hosts
+  global $gCms;
+  $config =& $gCms->GetConfig();
+  $output = '';
+
+  $excludes = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^uploads$', 
+                    '^tmp$', '^captchas$' );
+  $tmp = get_recursive_file_list( $config['root_path'], $excludes);
+  foreach( $tmp as $file )
+    {
+      if( is_dir($file) ) continue;
+      $md5sum = md5_file($file);
+      $file = str_replace($config['root_path'],'.',$file);
+      $output .= "$md5sum *$file\n";
+    }
+
+  $handlers = ob_list_handlers(); 
+  for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+  header('Pragma: public');
+  header('Expires: 0');
+  header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+  header('Cache-Control: private',false);
+  header('Content-Description: File Transfer');
+  header('Content-Type: text/plain');
+  header("Content-Disposition: attachment; filename=\"checksum.dat\"" );
+  header('Content-Transfer-Encoding: binary');
+  header('Content-Length: ' . count($output));
+  echo $output;
+  exit();
 }
 
 // Get ready

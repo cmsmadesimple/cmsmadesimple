@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['error_uploadproblem'] = 'An error occurred in the upload';
+$lang['admin']['error_nofileuploaded'] = 'No File has been uploaded';
 $lang['admin']['files_failed'] = 'Files failed md5sum check';
 $lang['admin']['files_not_found'] = 'Files Not found';
 $lang['admin']['info_generate_cksum_file'] = <<<EOT

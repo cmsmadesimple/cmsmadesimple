@@ -863,6 +863,7 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 function filespec_is_excluded( $file, $excludes )
 {
   // strip the path from the file
+  if( empty($excludes) ) return false;
   foreach( $excludes as $excl )
     {
       if( @preg_match( "/".$excl."/i", basename($file) ) )
@@ -944,17 +945,16 @@ function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "
    {
        while ( false !== ( $file = readdir ( $handle ) ) )
        {
-	   $excluded = filespec_is_excluded( $file, $excludes );
-           if ( $file != '.' && $file != '..' && $excluded == false )
-           {
-               $file = $path . $file ;
-               if ( ! @is_dir ( $file ) ) { if ( $mode != "DIRS" ) { $dirlist[] = $file ; } }
-               elseif ( $d >=0 && ($d < $maxdepth || $maxdepth < 0) )
-               {
-		   $result = get_recursive_file_list ( $file . '/' , $excludes, $maxdepth , $mode , $d + 1 ) ;
-                   $dirlist = array_merge ( $dirlist , $result ) ;
-               }
-       }
+	 if( $file == '.' || $file == '..' ) continue;
+	 if( filespec_is_excluded( $file, $excludes ) ) continue;
+
+	 $file = $path . $file ;
+	 if ( ! @is_dir ( $file ) ) { if ( $mode != "DIRS" ) { $dirlist[] = $file ; } }
+	 elseif ( $d >=0 && ($d < $maxdepth || $maxdepth < 0) )
+	   {
+	     $result = get_recursive_file_list ( $file . '/' , $excludes, $maxdepth , $mode , $d + 1 ) ;
+	     $dirlist = array_merge ( $dirlist , $result ) ;
+	   }
        }
        closedir ( $handle ) ;
    }
