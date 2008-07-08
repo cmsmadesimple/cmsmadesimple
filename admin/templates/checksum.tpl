@@ -3,7 +3,7 @@
 
 {if isset($message)}
 <div class="pageerrorcontainer">
- <div c lass="pageoverflow">
+ <div class="pageoverflow">
    <p class="pageerror">{$message}</p>
  </div>
 </div>
