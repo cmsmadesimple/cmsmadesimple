@@ -1,6 +1,9 @@
-<p class="pageoverflow">
-{si_lang a=systeminfo_copy_paste}<br />
-</p><hr />
+<div class="pagecontainer">
+<div class="pageoverflow">
+<h2>{si_lang a=systeminfo_copy_paste}</h2>
+<br />
+</div>
+<hr />
 
 <div class="pageoverflow">
 
@@ -118,5 +121,6 @@
 <p class="pageback"><a class="pageback" href="{$backurl}">&#171; {si_lang a=back}</a></p>
 
 </div>
-
 </div>
+
+
