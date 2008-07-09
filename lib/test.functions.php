@@ -104,8 +104,9 @@ function testGlobal($result, $set = false)
  * @var string  $value
  * @var string  $return
  * @var string  $message
+ * @var string  $error
 */
-function & testDummy($title, $value, $return, $message = '')
+function & testDummy($title, $value, $return, $message = '', $error = '')
 {
 	$test =&new StdClass();
 	$test->title = $title;
@@ -114,6 +115,10 @@ function & testDummy($title, $value, $return, $message = '')
 	if (trim($message) != '')
 	{
 		$test->message = $message;
+	}
+	if (trim($error) != '')
+	{
+		$test->error = $error;
 	}
 
 	$test->res = $return;
@@ -127,8 +132,9 @@ function & testDummy($title, $value, $return, $message = '')
  * @var string  $title
  * @var string  $varname
  * @var string  $testfunc
+ * @var string  $message
 */
-function & testConfig($title, $varname, $testfunc = '')
+function & testConfig($title, $varname, $testfunc = '', $message = '')
 {
 	global $gCms;
 	$config = $gCms->config;
@@ -156,6 +162,10 @@ function & testConfig($title, $varname, $testfunc = '')
 		$test->title = $title;
 		$test->value = $value;
 		$test->secondvalue = null;
+		if (trim($message) != '')
+		{
+			$test->message = $message;
+		}
 	}
 
 	return $test;
@@ -173,7 +183,6 @@ function & testBoolean($required, $title, $result, $message = '', $negative_test
 {
 	$test =&new StdClass();
 	$test->title = $title;
-	$test->result = $result ? 'on' : 'off';
 
 	if ((bool) $result == false)
 	{
@@ -183,7 +192,7 @@ function & testBoolean($required, $title, $result, $message = '', $negative_test
 			$test->message = $message;
 		}
 
-		$test->value = $negative_test ? lang('on') : lang('off');
+		$test->value = $negative_test ? 'On' : 'Off';
 		$test->secondvalue = $negative_test ? lang('true') : lang('false');
 		if ($required)
 		{
@@ -198,7 +207,7 @@ function & testBoolean($required, $title, $result, $message = '', $negative_test
 	}
 	else
 	{
-		$test->value = $negative_test ? lang('off') : lang('on');
+		$test->value = $negative_test ? 'Off' : 'On';
 		$test->secondvalue = $negative_test ? lang('false') : lang('true');
 		if ($required)
 		{
@@ -242,7 +251,6 @@ function & testIniBoolean($required, $title, $varname, $message = '', $negative_
 function & testVersionRange($required, $title, $value, $minimum, $recommended, $message = '')
 {
 	$test =& new StdClass();
-
 	$test->title = $title;
 	$test->value = $value;
 	$test->secondvalue = null;
@@ -288,7 +296,6 @@ function & testVersionRange($required, $title, $value, $minimum, $recommended, $
 function & testRange($required, $title, $value, $minimum, $recommended, $message = '', $test_as_bytes = false)
 {
 	$test =& new StdClass();
-
 	$test->title = $title;
 	$test->value = $value;
 	$test->secondvalue = null;
@@ -394,7 +401,6 @@ function returnBytes($val)
 function testUmask($required, $title, $umask, $message = '', $dir = '', $file = 'file_test', $data = 'this is a test')
 {
 	$test =& new StdClass();
-
 	$test->title = $title;
 
 	if (empty($dir))
@@ -535,13 +541,15 @@ function permission_octal2string($mode)
 function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test', $data = 'this is a test')
 {
 	$test =& new StdClass();
-
 	$test->title = $title;
 
 	if (empty($dir))
 	{
 		$dir = TMP_CACHE_LOCATION;
 	}
+	$test->value = $dir;
+	$test->secondvalue = substr(sprintf('%o', fileperms($dir)), -4);
+
 	if( (!is_dir($dir)) || (!is_writable($dir)) )
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
@@ -554,9 +562,6 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
 		}
 		return $test;
 	}
-
-	$test->value = $dir;
-	$test->secondvalue = substr(sprintf('%o', fileperms($dir)), -4);
 
 	$return = '';
 	$test_file = $dir . DIRECTORY_SEPARATOR . $file;
@@ -605,13 +610,14 @@ function testRemoteFile($required, $title, $url, $message = '', $search = 'cmsma
 	}
 
 	$test =& new StdClass();
-
 	$test->title = $title;
 	$test->value = $url;
+
 	if (!$url_info = parse_url($url))
 	{
 		// Relative or invalid URL?
-		$test->res = 'yellow';
+		$test->error = lang('invalid_test');
+		$test->res = 'red';
 		$test->res_text = getTestReturn($test->res);
 		return $test;
 	}
@@ -619,7 +625,6 @@ function testRemoteFile($required, $title, $url, $message = '', $search = 'cmsma
 	$result = testIniBoolean(0, '', 'allow_url_fopen', lang('test_allow_url_fopen_failed'), false);
 	if ($result == 'on') // Primary test with fopen
 	{
-		$test->secondvalue = lang('use_fopen');
 		$handle = @fopen($url, 'rb');
 	}
 	else // Test with fsockopen
@@ -636,7 +641,7 @@ function testRemoteFile($required, $title, $url, $message = '', $search = 'cmsma
 				$port = (isset($url_info['port'])) ? $url_info['port'] : 80;
 		}
 
-		$test->secondvalue = lang('use_fsockopen');
+		$test->message = lang('use_fsockopen');
 		$complete_url  = (isset($url_info['path'])) ? $url_info['path'] : '/';
 		$complete_url .= (isset($url_info['query'])) ? '?'.$url_info['query'] : '';
 		$handle = @fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, 30);
@@ -662,13 +667,13 @@ function testRemoteFile($required, $title, $url, $message = '', $search = 'cmsma
 		}
 		fclose($handle);
 
-		if ( (! empty($search)) && (false !== strpos($content, $search)) )
+		if ( (!empty($search)) && (false !== strpos($content, $search)) && (empty($test->message)) )
 		{
 			$test->res = 'green';
 			$test->res_text = getTestReturn($test->res);
 			return $test;
 		}
-		elseif (false !== strpos($content, '200 OK'))
+		elseif ( (false !== strpos($content, '200 OK')) || (empty($test->message)) )
 		{
 			$test->res = 'yellow';
 			$test->res_text = getTestReturn($test->res);
@@ -700,7 +705,6 @@ function testRemoteFile($required, $title, $url, $message = '', $search = 'cmsma
 function & testFileChecksum($required, $title, $file1, $file2, $timestamp2 = 0, $message = '', $formattime = '%c')
 {
 	$test =& new StdClass();
-
 	$test->title = $title;
 	$test->value = $file1;
 
@@ -825,7 +829,6 @@ function & testOptimizedLoopFileChecksum($file1, $checksum, $formattime = '%c')
 function testGDVersion($required, $title, $minimum, $message = '')
 {
 	$test =& new StdClass();
-
 	$test->title = $title;
 
 	$gd_version_number = GDVersion();

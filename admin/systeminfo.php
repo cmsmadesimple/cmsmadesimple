@@ -57,7 +57,7 @@ $db = &$gCms->GetDb();
 
 
 //smartyfier
-$smarty->assign('themename',$themeObject->themeName);
+$smarty->assign('themename', $themeObject->themeName);
 $smarty->assign('showheader', $themeObject->ShowHeader('systeminfo'));
 $smarty->assign('backurl', $themeObject->BackUrl());
 
@@ -185,34 +185,10 @@ $tmp[1]['modules'] = testDirWrite(0, $dir, $dir);
 $global_umask = get_site_preference('global_umask', '022');
 $tmp[1][lang('global_umask')] = testUmask(0, lang('global_umask'), $global_umask);
 
-$tmp[1]['config_file'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FILE_LOCATION)), -4), '');
+$tmp[1]['config_file'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FILE_LOCATION)), -4), (is_writable(CONFIG_FILE_LOCATION) ? 'red' : 'green') );
 
 $smarty->assign('count_permission_info', count($tmp[0]));
 $smarty->assign('permission_info', $tmp);
-
-
-// Simple IDS
-$tmp = array(0=>array(), 1=>array());
-
-$config = $gCms->GetConfig();
-$result = array();
-if ($handle = @fopen(getcwd() . DIRECTORY_SEPARATOR . 'checksum.dat', 'rb'))
-{
-	while (!feof($handle))
-	{
-		$content = @fgets($handle, 4096);
-		if (! empty($content))
-		{
-			list($md5, $file) = explode(' ', $content);
-			$file1 = $config['root_path'] . str_replace('/', DIRECTORY_SEPARATOR, substr($file, 2));
-			$tmp[1][] = testOptimizedLoopFileChecksum($file1, $md5);
-		}
-	}
-	fclose($handle);
-}
-
-$smarty->assign('count_ids_info', count($tmp[0]));
-$smarty->assign('ids_info', $tmp);
 
 
 
