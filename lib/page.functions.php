@@ -767,7 +767,7 @@ function & stripslashes_deep(&$value)
         return $value;
 }
 	
-function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15',$forcewysiwyg='',$wantedsyntax='')
+function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
 {
 	global $gCms;
 	$result = '';
@@ -791,17 +791,17 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 					  //get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway					  
 				    if ($gCms->modules[$key]['object']->GetName()==get_site_preference('frontendwysiwyg')) {
 				      
-					    $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
+				      $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
 					  }					  
 				  } else {
 				    
 				    if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(false), 'wysiwyg')) {
-						  $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
+				      $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
 					  }
 				  }	 
 				} else {
 					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
-						$result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
+					  $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
 					}
 				}
 			}
@@ -821,11 +821,11 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 				if ($forcewysiwyg=='') {
 					//get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway
 					if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(false), 'syntaxhighlighter')) {
-						$result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text);
+					  $result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
 					}
 				} else {
 					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
-						$result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text);
+					  $result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
 					}
 				}
 			}
@@ -843,6 +843,11 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 		{
 			$result .= ' id="'.$id.'"';
 		}
+		if( !empty( $addtext ) )
+		  {
+		    $result .= ' '.$addtext;
+		  }
+		    
 		$result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
 	}
 

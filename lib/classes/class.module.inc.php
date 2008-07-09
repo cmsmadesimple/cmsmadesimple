@@ -1349,10 +1349,10 @@ class CMSModule
 	 * @param string Content to show in the textarea
 	 * @param string Stylesheet for content, if available
 	 */
-	function SyntaxTextarea($name='textarea',$syntax='html',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='')
+	  function SyntaxTextarea($name='textarea',$syntax='html',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='')
 	{
 		$this->syntaxactive=true;
-		return '<textarea name="'.$name.'" cols="'.$columns.'" rows="'.$rows.'">'.$content.'</textarea>';
+		return '<textarea name="'.$name.'" cols="'.$columns.'" rows="'.$rows.'" '.$addtext.' >'.$content.'</textarea>';
 	}
 
 	/**
@@ -1439,10 +1439,10 @@ class CMSModule
 	 * @param string Content to show in the textarea
 	 * @param string Stylesheet for content, if available
 	 */
-	function WYSIWYGTextarea($name='textarea',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='')
+	  function WYSIWYGTextarea($name='textarea',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='')
 	{
 		$this->wysiwygactive=true;
-		return '<textarea name="'.$name.'" cols="'.$columns.'" rows="'.$rows.'">'.$content.'</textarea>';
+		return '<textarea name="'.$name.'" cols="'.$columns.'" rows="'.$rows.'" '.$addtext.' >'.$content.'</textarea>';
 	}
 
 	/**
