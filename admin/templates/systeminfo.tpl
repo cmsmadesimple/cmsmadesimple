@@ -8,9 +8,9 @@
 <div class="pageoverflow">
 
 
-<p class="pageoverflow">
+<div class="pageoverflow">
 {si_lang a=help_systeminformation}
-</p><hr/>
+</div><hr/>
 
 
 <fieldset>

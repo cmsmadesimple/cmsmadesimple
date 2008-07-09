@@ -6,7 +6,7 @@
  <div class="pageoverflow">
    <p class="pageerror">{$message}</p>
  </div>
-</div>
+ </div>
 {/if}
 
 <form action="{$smarty.server.PHP_SELF}?action=upload" method="post" enctype="multipart/form-data">
@@ -14,7 +14,7 @@
   <legend>{lang key='perform_validation'}</legend>
   <div class="pageoverflow">
     <p>{lang key='info_validation'}</p>
-  <div>
+  </div>
   <div class="pageoverflow">
     <p class="pagetext">{lang key='upload_cksum_file'}</p>
     <p class="pageinput"><input type="file" name="cksumdat" size="30" maxlength="255" /></p>
@@ -32,7 +32,7 @@
   <legend>{lang key='download_cksum_file'}</legend>
   <div class="pageoverflow">
     <p>{lang key='info_generate_cksum_file'}</p>
-  <div>
+  </div>
   <div class="pageoverflow">
     <p class="pagetext">&nbsp;</p>
     <p class="pageinput"><input type="submit" name="submit" value="{lang key='submit'}" /></p>
