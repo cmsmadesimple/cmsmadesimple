@@ -611,7 +611,7 @@ function testRemoteFile($required, $title, $url, $message = '', $search = 'cmsma
 
 	$test =& new StdClass();
 	$test->title = $title;
-	$test->value = $url;
+	//$test->value = $url;
 
 	if (!$url_info = parse_url($url))
 	{
