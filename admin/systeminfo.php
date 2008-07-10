@@ -21,13 +21,21 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+
+check_login();
+$userid = get_userid();
+$access = check_permission($userid, "Modify Site Preferences");
+if (!$access) {
+	die('Permission Denied');
+return;
+}
+
 include_once("header.php");
 
 define('CMS_BASE', dirname(dirname(__FILE__)));
 require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 
 
-check_login();
 
 function systeminfo_lang($params,&$smarty)
 {
