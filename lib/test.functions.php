@@ -622,16 +622,18 @@ function testRemoteFile($required, $title, $url, $message = '', $search = 'cmsma
 		return $test;
 	}
 
+	$handle = false;
 	$result = testIniBoolean(0, '', 'allow_url_fopen', lang('test_allow_url_fopen_failed'), false);
-	if ($result == 'on') // Primary test with fopen
+	if ($result->value == 'On') // Primary test with fopen
 	{
 		$handle = @fopen($url, 'rb');
 	}
-	else // Test with fsockopen
+
+	if ( ($result->value == 'Off') || (false === $handle) ) // Test with fsockopen
 	{
 		switch ($url_info['scheme'])
 		{
-			case 'https':
+			case 'https': // Check for 4.3.7 minimum?
 				$scheme = 'ssl://';
 				$port = (isset($url_info['port'])) ? $url_info['port'] : 443;
 				break;
