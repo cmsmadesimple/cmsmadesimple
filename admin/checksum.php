@@ -21,6 +21,13 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+
+$userid = get_userid();
+$access = check_permission($userid, "Modify Site Preferences");
+if (!$access) {
+	die('Permission Denied');
+return;
+}
 include_once("header.php");
 
 define('CMS_BASE', dirname(dirname(__FILE__)));
@@ -34,8 +41,7 @@ function checksum_lang($params,&$smarty)
     }
 }
 
-// check for login
-check_login();
+
 
 function check_checksum_data(&$report)
 {
