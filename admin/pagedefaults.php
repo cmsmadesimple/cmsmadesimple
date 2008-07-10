@@ -27,6 +27,10 @@ require_once("../include.php");
 check_login();
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Site Preferences');
+if (!$access) {
+	die('Permission Denied');
+return;
+}
 global $gCms;
 $db =& $gCms->GetDb();
 
