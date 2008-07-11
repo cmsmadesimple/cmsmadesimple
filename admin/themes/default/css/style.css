@@ -582,7 +582,7 @@ div.pagecontainer .pageheader  {
    margin-bottom: 10px;
    }
 
-div.pagecontainer p.pagetext  {
+div.pagecontainer .pagetext  {
    color: #384654;
    float: left;
    padding-top: 5px;
@@ -598,7 +598,7 @@ div.pagecontainer span.helptext {
 	padding: 2px;
 	}
 	
-div.pagecontainer p.pageinput  {
+div.pagecontainer .pageinput  {
    color: #384654;
    float: left;
    padding-top: 5px;
@@ -609,7 +609,7 @@ p.pageinputwysiwyg  {
    padding-top: 5px;
    }
 
-div.pagecontainer p.pagemessage  {
+div.pagecontainer .pagemessage  {
    margin-bottom: 0;
    }
 
