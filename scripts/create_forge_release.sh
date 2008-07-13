@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 _owd=`pwd`
 _this=`basename $0`
@@ -7,7 +7,7 @@ _othertype=9999
 _txttype=8100
 _processor=8000
 
-_project=portal
+_project=cmsmadesimple
 _stable_package=1
 _unstable_package=26
 _srcdir=/tmp/cmsmadesimple-1.4-beta1
@@ -21,8 +21,8 @@ fi
 if [ -r /usr/local/etc/$_this ]; then
   . /usr/local/etc/$_this
 fi
-if [ -r ~/.$this ]; then
-  . /etc/$_this
+if [ -r ~/.$_this ]; then
+  . ~/.$_this
 fi
 
 
@@ -31,30 +31,54 @@ fi
 #
 
 #
-# Interactive portion
-#
-
-#
 # Checks
 #
 if [ ${_username:-notset} = notset -o {$_password:-notset} = notset ]; then
-  echo "FATAL: username and/or password not set
+  echo "FATAL: username and/or password not set"
   exit
 fi
 if [ !-d $_srcdir ]; then
   echo "FATAL: source directory doesn't exist"
   exit
 fi
-
-# Get the version number
 _version=`basename $_srcdir | cut -d- -f2-`
-if [ $_version == '' ]; then
+if [ ${_version:-notset} = notset ]; then
   echo "FATAL: could not get version number"
   exit
 fi
 
-# override package number
-_package=607
+#
+# Interactive portion
+#
+clear
+_done=0
+while [ $_done = 0 ]; do
+  echo -n "Is this a (S)table or (U)nstable Release? "
+  read ans;
+  if [ $ans = 's' -o $ans = 'S' ]; then
+    _package=$_stable
+    _done=1
+  elif [ $ans = 'u' -o $ans = 'U' ]; then
+    _package=$_unstable
+    _done=1
+  else
+    echo
+  fi
+done
+
+# Double check the version number
+_done=0
+while [ $_done = 0 ]; do
+  echo -n "Please enter version number ($_version): "
+  read ans
+  if [ ${ans:-notset} = notset ]; then
+    _done=1
+  else
+    _version=$ans
+    _done=1
+  fi
+done
+
 
 #
 # Begin Processing
