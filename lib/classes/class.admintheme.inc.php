@@ -683,7 +683,7 @@ class AdminTheme
 	    'home'=>array('url'=>'home.php','parent'=>'main',
 		    'title'=>$this->FixSpaces(lang('home')),
                     'description'=>'','show_in_menu'=>true),
-            'viewsite'=>array('url'=>'../','parent'=>'main',
+            'viewsite'=>array('url'=>'../index.php','parent'=>'main',
                     'title'=>$this->FixSpaces(lang('viewsite')),
                     'description'=>'','show_in_menu'=>true, 'target'=>'_blank'),
              'logout'=>array('url'=>'logout.php','parent'=>'main',
