@@ -37,8 +37,8 @@ if [ ${_username:-notset} = notset -o {$_password:-notset} = notset ]; then
   echo "FATAL: username and/or password not set"
   exit
 fi
-if [ !-d $_srcdir ]; then
-  echo "FATAL: source directory doesn't exist"
+if [ ! -d $_srcdir ]; then
+  echo "FATAL: source directory $_srcdir doesn't exist"
   exit
 fi
 _version=`basename $_srcdir | cut -d- -f2-`
