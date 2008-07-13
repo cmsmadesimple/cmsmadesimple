@@ -56,10 +56,10 @@ while [ $_done = 0 ]; do
   echo -n "Is this a (S)table or (U)nstable Release? "
   read ans;
   if [ $ans = 's' -o $ans = 'S' ]; then
-    _package=$_stable
+    _package=$_stable_package
     _done=1
   elif [ $ans = 'u' -o $ans = 'U' ]; then
-    _package=$_unstable
+    _package=$_unstable_package
     _done=1
   else
     echo
