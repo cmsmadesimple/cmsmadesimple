@@ -4,7 +4,7 @@ Version 1.4-beta1 "Jamaica"
 - Smarty now works as you would expect in the admin
   (though not much other than modules is using it.)
   (this may break pisearch plugin, etc)
-- A completely new way of template processing.
+- A completely new way of page template processing.
   * We split the template into three pieces
     a) Any text ontop of <head>
     b) The <head> section
@@ -30,7 +30,7 @@ Version 1.4-beta1 "Jamaica"
   - New icons for view site and logout
 - Cleaned up and improved Module Manager
   It should be much faster now.
-- Improvements to CMSMailer
+- Minor improvements to CMSMailer
 - Improvements to the Installer
   - Many thanks to Alby
   - The installer is now fully translatable, so you can choose what
@@ -53,11 +53,17 @@ Version 1.4-beta1 "Jamaica"
   makes managing users, groups, and permissions much simpler.
   - Many thanks to _SjG_
 - Updates to the embed plugin
+- Add three new page attributes to content, PageLink, Link, and SectionHeader 
+  content types
+- Modify the menu manager to export the new page attributes.  This will be useful
+  for permissions, or meta data or other tags.
 - FileManager gained recursive chmodding, custom sorting and saner 
   permission handling in windows
 - Printing updated to latest TCPDF release 4.0 including rewritten html 
   rendering code
 - TinyMCE got updated and some css-related issues were fixed
+- Minor performance tweaks to Search Re-indexing
+- Now remind the user to configure their mail settings
 
 
 Version 1.3 "Cuba" -- June 7, 2008
