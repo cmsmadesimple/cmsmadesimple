@@ -15,7 +15,7 @@ _this=`basename $0`
 _svn=http://svn.cmsmadesimple.org/svn/cmsmadesimple/branches/1.2.x
 _workdir=/tmp/$_this.$$
 _owd=`pwd`
-_rmfiles='CHECKLIST scripts build config.php autogen.sh mpd.sql mysql.sql makedoc.sh cleardb.sh generatedump.php images/cms/*.svg svn-propset* find-mime admin/lang/*sh admin/lang/*pl admin/editconfig.php lib/adodb lib/preview.functions.php';
+_rmfiles='CHECKLIST scripts build config.php autogen.sh mpd.sql mysql.sql makedoc.sh cleardb.sh generatedump.php images/cms/*.svg svn-propset* find-mime admin/lang/*sh admin/lang/*pl admin/editconfig.php lib/adodb lib/preview.functions.php plugins/cache';
 # basedir    (if set, specify the base directory to put generated releases).
 # nohtaccess (if set, disable htaccess generation)
 # noremove   (if set, disable removal of files that shouldn't be shipped with the distribution)
