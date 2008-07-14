@@ -130,7 +130,7 @@ echo
 if [ ${notag:-notset} = notset ]; then
   echo "Create CMS Tag cmsmadesimple/tags/version-$_version"
   _desturl=${_cmsurl}/tags/version-${_version}
-  svn copy -m "version-$_version" $_svn $_desturl >/dev/null
+  svn import -m "--Release: $_version --" $_desturl --no-auto-props >/dev/null
 fi
 
 # Clean up files that are not distributed
@@ -143,7 +143,8 @@ fi
 
 # Create necessary files
 echo "Create necessary files"
-mkdir -p tmp/cache tmp/templates_c
+mkdir -p tmp/cache tmp/templates_c tmp/configs
+touch tmp/cache/SITEDOWN
 if [ ${noindex:-notset} = notset ]; then
   find * -type d -exec create_index_html.sh {} \;
 fi

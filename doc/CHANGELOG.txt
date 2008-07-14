@@ -1,9 +1,10 @@
 Version 1.4-beta1 "Jamaica"
 -----------------
 - Includes a new system information page in the admin
+  * Many thanks to Alby, and others
 - Smarty now works as you would expect in the admin
-  (though not much other than modules is using it.)
-  (this may break pisearch plugin, etc)
+  * Any new or rewritten pages in the admin are using this
+  * This may break pisearch plugin, etc
 - A completely new way of page template processing.
   * We split the template into three pieces
     a) Any text ontop of <head>
@@ -14,57 +15,43 @@ Version 1.4-beta1 "Jamaica"
   * This may break sites that have used some of my tricks to 
     change the page title based on news or other modules content
     so it will be off by default after release, and on for the beta
-- Memory optimizations, and query optimizations
-  (We've done a few checks, and improved a few things here and there
-  that will provide a modest boost in performance.)
-  - FileManager is now an admin only module
-  - nuSOAP is now an admin only module (for most sites).
-  - more in memory caching
-- Massive improvement in stylesheet handling
-  (it's now possible to allow or deny browser stylesheet caching)
-  (stylesheets are now re-orderable)
-- Updates to the admin menu structure
-  (Main is now called CMS, and the logout and view site links are under there)
+- Memory optimizations, and query optimizations: We've done a few checks, and improved a few things here and there that will provide a modest boost in performance.
+  * FileManager is now an admin only module
+  * nuSOAP is now an admin only module (for most sites).
+  * more in memory caching
+- Massive improvement in stylesheet handling: It is now possible to allow or deny browser stylesheet caching. Stylesheets are now re-orderable
+- Updates to the admin menu structure: Main is now called CMS, and the logout and view site links are under there.
 - Theme Improvements
-  - Many thanks to Nuno
-  - New icons for view site and logout
-- Cleaned up and improved Module Manager
-  It should be much faster now.
+  * Many thanks to Nuno
+  * New icons for view site and logout
+- Cleaned up and improved Module Manager.  It should be much faster and leaner now.
 - Minor improvements to CMSMailer
 - Improvements to the Installer
-  - Many thanks to Alby
-  - The installer is now fully translatable, so you can choose what
+  * Many thanks to Alby
+  * The installer is now fully translatable, so you can choose what
     language you want the installer pages to appear in
-  - Many more checks have been added and re-organized to hopefully
+  * Many more checks have been added and re-organized to hopefully
     solve some of the issues people have with installation.
-- We now ship a full distribution as well as an english only version
-  and several 'language packs'.
+- We now ship a full distribution as well as an english only version and several 'language packs'.
 - NCleanGrey is now the default admin theme.
-- you can now specify default text for additional content blocks in page
-  templates.
-- A new permission that controls access to the Tags page so that
-  editors, etc. can see the help there.
+- you can now specify default text for additional content blocks in page templates.
+- A new permission that controls access to the Tags page so that editors, etc. can see the help there.
 - Add assign parameter to numerous plugins (including all module plugins)
 - adds the image_url plugin (thanks Nuno)
 - Now use a wysiwyg for the sitedown message and the custom404 message.
 - Added the target option to the 'content' content type.
 - A general review of security checks in admin methods (thanks Nuno)
-- Modifications to the group permissions, and user creation forms
-  makes managing users, groups, and permissions much simpler.
-  - Many thanks to _SjG_
+- Modifications to the group permissions, and user creation forms makes managing users, groups, and permissions much simpler.
+  * Many thanks to _SjG_
 - Updates to the embed plugin
-- Add three new page attributes to content, PageLink, Link, and SectionHeader 
-  content types
-- Modify the menu manager to export the new page attributes.  This will be useful
-  for permissions, or meta data or other tags.
-- FileManager gained recursive chmodding, custom sorting and saner 
-  permission handling in windows
-- Printing updated to latest TCPDF release 4.0 including rewritten html 
-  rendering code
+- Add three new page attributes to content, PageLink, Link, and SectionHeader content types
+- Modify the menu manager to export the new page attributes.  This will be useful for permissions, or meta data or other tags.
+- FileManager gained recursive chmodding, custom sorting and saner permission handling in windows
+- Printing updated to latest TCPDF release 4.0 including rewritten html rendering code
 - TinyMCE got updated and some css-related issues were fixed
 - Minor performance tweaks to Search Re-indexing
 - Now remind the user to configure their mail settings
-
+- A new admin function to check the current install against either a release-generated checksum file or a previously downloaded checksum file.  This will help to find upload errors, or to find files that have been modified since the last known good state, to aid in detecting hacks.
 
 Version 1.3 "Cuba" -- June 7, 2008
 -----------------
