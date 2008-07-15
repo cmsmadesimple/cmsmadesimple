@@ -529,6 +529,40 @@ function permission_octal2string($mode)
 	return $type . $owner . $group . $other;
 }
 
+
+function testCreateDirAndFile($required,$title,$message='')
+{
+  $test =& new StdClass();
+  $test->title = $title;
+  $dir = cms_join_path(TMP_CACHE_LOCATION,'_test_');
+  $file = cms_join_path($dir,'test.dat');
+
+  @mkdir($dir);
+  @touch($file);
+  $result = file_exists($file);
+  //@unlink($file);
+  //@rmdir($dir);
+
+  list($test->continueon, $test->special_failed) = testGlobal($required);
+  if( !$result )
+    {
+      $test->continueon = false;
+      $test->special_failed = true;
+      $test->res = 'false';
+      if( trim($message) != '' )
+	{
+	  $test->message = $message;
+	}
+    }
+  else
+    {
+      $test->res = 'true';
+    }
+  $test->res_text = getTestReturn($test->res);
+  return $test;
+}
+
+
 /**
  * @return object
  * @var boolean $required
@@ -656,7 +690,7 @@ function testRemoteFile($required, $title, $url, $message = '', $search = 'cmsma
 		}
 		else
 		{
-			$test->error = lang('use_fsockopen_error', $errno, $errstr);
+		  $test->error = lang('use_fsockopen_error');
 		}
 	}
 
