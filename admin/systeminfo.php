@@ -94,7 +94,7 @@ $tmp[0]['internal_pretty_urls'] = testConfig('internal_pretty_urls', 'internal_p
 $tmp[0]['use_hierarchy'] = testConfig('use_hierarchy', 'use_hierarchy');
 
 $tmp[1]['root_url'] = testConfig('root_url', 'root_url');
-$tmp[1]['root_path'] = testConfig('root_path', 'root_path', 'testDirWrite');
+$tmp[1]['root_path'] = testConfig('root_path', 'root_path');
 $tmp[1]['previews_path'] = testConfig('previews_path', 'previews_path', 'testDirWrite');
 $tmp[1]['uploads_path'] = testConfig('uploads_path', 'uploads_path', 'testDirWrite');
 $tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
