@@ -10,7 +10,7 @@ _processor=8000
 _project=cmsmadesimple
 _stable_package=1
 _unstable_package=26
-_srcdir=/tmp/cmsmadesimple-1.4-beta1
+_basedir=/tmp
 
 #
 # Read config file
@@ -29,6 +29,32 @@ fi
 #
 # Process command line argument
 #
+
+#
+# Find the source dir
+#
+cd $_basedir
+_dirs=`ls -dt cmsmadesimple* | head -10`
+_suspect=`ls -dt cmsmadesimple* | head -1`
+clear
+_done=0
+while [ $_done = 0 ]; do
+  echo "Possible Releases:";
+  for _d in $_dirs ; do
+    echo "   $_d"
+  done
+  echo -n "Please choose a release: ($_suspect)? ";
+  read ans
+  if [ ${ans:-notset} = notset ]; then
+    _done=1
+    _srcdir=$_basedir/$_suspect
+  else
+    if [ -d $_basedir/$ans ]; then
+      _done=1
+      _srcdir=$basedir/$ans
+    fi
+  fi
+done
 
 #
 # Checks
@@ -50,7 +76,8 @@ fi
 #
 # Interactive portion
 #
-clear
+echo
+echo "Create forge release for $_srcdir";
 _done=0
 while [ $_done = 0 ]; do
   echo -n "Is this a (S)table or (U)nstable Release? "
