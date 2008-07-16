@@ -10,8 +10,7 @@ Version 1.4-beta1 "Jamaica"
     a) Any text ontop of <head>
     b) The <head> section
     c) the rest of the template (the body)
-  * We then process the top section through smarty, then the body, and finally
-    the head.  Then we glue it back together.
+  * We then process the top section through smarty, then the body, and finally the head.  Then we glue it back together.  This will allow variables set in page content or in various module templates to be used in the head section to effect such things as meta tags, and page titles.
   * This may break sites that have used some of my tricks to 
     change the page title based on news or other modules content
     so it will be off by default after release, and on for the beta
@@ -52,6 +51,11 @@ Version 1.4-beta1 "Jamaica"
 - Minor performance tweaks to Search Re-indexing
 - Now remind the user to configure their mail settings
 - A new admin function to check the current install against either a release-generated checksum file or a previously downloaded checksum file.  This will help to find upload errors, or to find files that have been modified since the last known good state, to aid in detecting hacks.
+- News has had minor tweaks
+  * Now handle the old pretty urls as well as the new ones
+    i.e;  News/<newsid>/<pageid> will work just as well as 
+          News/<newsid>/<pageid>/<article-title>
+  * A new icon for rss feeds
 
 Version 1.3 "Cuba" -- June 7, 2008
 -----------------
