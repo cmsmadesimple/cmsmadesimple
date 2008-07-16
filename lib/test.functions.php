@@ -543,9 +543,9 @@ function testCreateDirAndFile($required,$title,$message='')
   //@unlink($file);
   //@rmdir($dir);
 
-  list($test->continueon, $test->special_failed) = testGlobal($required);
   if( !$result )
     {
+      list($test->continueon, $test->special_failed) = testGlobal($required);
       $test->continueon = false;
       $test->special_failed = true;
       $test->res = 'false';
@@ -604,7 +604,7 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
 //		flock($fp, LOCK_EX); //no on NFS filesystem
 		$return = @fwrite($fp, $data);
 //		flock($fp, LOCK_UN);
-		fclose($fp);
+		@fclose($fp);
 		@unlink($test_file);
 
 		if (! empty($return))
