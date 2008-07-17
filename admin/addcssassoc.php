@@ -71,7 +71,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 
 	# we get the arguments as local vars (easier)
 	$css_id = $_POST["css_id"];
-	$id		= $_POST["id"];
+	$id	= $_POST["id"];
 	$type	= $_POST["type"];
 
 	# we then check permissions
@@ -95,14 +95,12 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 		{
 			$error = lang('associationexists');
 			$doadd = false;
-			
+			$result->Close();
 		}
 
-		# we get the name of the element (for logging)
-		
+		# we get the name of the element (for logging)		
 		if ("template" == $type && $doadd)
 		{
-			
 			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
 			$result = $db->Execute($query, array($id));
 			
@@ -110,6 +108,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 			{
 				$line = $result->FetchRow();
 				$name = $line["template_name"];
+				$result->Close();
 			}
 			else
 			{
@@ -122,12 +121,11 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 		# get the next access_order
 		$query = "SELECT max(assoc_order)+1 FROM ".cms_db_prefix()."css_assoc where assoc_to_id = ?";
 		$nextord = $db->GetOne($query,array($id));
-		if( !$nextord ) $doadd = false;
+		if( !$nextord ) $nextord = 1;
 
 		# everything is ok, we can insert the element.
 		if ($doadd)
 		{
-			
 			$time = $db->DBTimeStamp(time());
 			$query = "INSERT INTO ".cms_db_prefix().
                 "css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date,assoc_order)" .
