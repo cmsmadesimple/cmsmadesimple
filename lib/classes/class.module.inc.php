@@ -370,7 +370,8 @@ class CMSModule
 
 	function CreateParameter($param, $defaultval='', $helpstring='', $optional=true)
 	{
-		array_unshift($this->params, array(
+		//was: array_unshift(
+		array_push($this->params, array(
 			'name' => $param,
 			'default' => $defaultval,
 			'help' => $helpstring,
