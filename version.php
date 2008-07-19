@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.4-beta1";
+$CMS_VERSION = "1.4-beta2";
 $CMS_VERSION_NAME = "Jamaica";
 $CMS_SCHEMA_VERSION = "31";
 
