@@ -31,6 +31,7 @@ Version 1.4-beta1 "Jamaica"
     language you want the installer pages to appear in
   * Many more checks have been added and re-organized to hopefully
     solve some of the issues people have with installation.
+    - Safe mode is still a warning, however we do a required check to see if the httpd server process can create a file within a directory it created.  This should help track problems with safe mode enabled when php is running as an apache module (which we do not support).
 - We now ship a full distribution as well as an english only version and several 'language packs'.
 - NCleanGrey is now the default admin theme.
 - you can now specify default text for additional content blocks in page templates.
@@ -48,7 +49,10 @@ Version 1.4-beta1 "Jamaica"
 - FileManager gained recursive chmodding, custom sorting and saner permission handling in windows
 - Printing updated to latest TCPDF release 4.0 including rewritten html rendering code
 - TinyMCE got updated and some css-related issues were fixed
-- Minor performance tweaks to Search Re-indexing
+- Search Improvements 
+  * Minor performance tweaks to Search Re-indexing
+  * Now escape any characters that have special importance in regular expressions before performing the search
+  * Restore the template to it's pre-1.5 behavior whils till retaining the new functionality.
 - Now remind the user to configure their mail settings
 - A new admin function to check the current install against either a release-generated checksum file or a previously downloaded checksum file.  This will help to find upload errors, or to find files that have been modified since the last known good state, to aid in detecting hacks.
 - News has had minor tweaks
