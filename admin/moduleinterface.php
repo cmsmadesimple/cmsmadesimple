@@ -78,9 +78,13 @@ else if( isset( $_REQUEST['disable_theme'] ))
 {
 	$USE_THEME = false;
 }
-if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->GetHeaderHTML() != false)
+if (isset($gCms->modules[$module]['object']) )
   {
-    $headtext =  $gCms->modules[$module]['object']->GetHeaderHTML();
+    $txt = $gCms->modules[$module]['object']->GetHeaderHTML();
+    if( $txt !== false )
+      {
+	$headtext = $txt;
+      }
   }
  else
    {

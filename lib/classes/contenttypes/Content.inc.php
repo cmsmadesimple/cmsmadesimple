@@ -26,7 +26,7 @@ class Content extends ContentBase
     function Content()
     {
 	$this->ContentBase();
-	$this->mProperties->SetAllowedPropertyNames(array('content_en','target','extra1','extra2','extra3'));
+	$this->mProperties->SetAllowedPropertyNames(array('content_en','target','pagedata','extra1','extra2','extra3'));
 	$this->additionalContentBlocks = array();
 	$this->addtContentBlocksLoaded = false;
     }
@@ -40,6 +40,7 @@ class Content extends ContentBase
     {
 	$this->mProperties->Add('string', 'content_en'); //For later language support
 	$this->mProperties->Add('string', 'target');
+	$this->mProperties->Add('string', 'pagedata'); 
 	$this->mProperties->Add('string', 'extra1'); 
 	$this->mProperties->Add('string', 'extra2'); 
 	$this->mProperties->Add('string', 'extra3'); 
@@ -69,7 +70,7 @@ class Content extends ContentBase
 
 	if (isset($params))
 	{
-	  $parameters = array('content_en','target','extra1','extra2','extra3');
+	  $parameters = array('content_en','target','pagedata','extra1','extra2','extra3');
 
 	    //pick up the template id before we do parameters
 	    if (isset($params['template_id']))
@@ -287,11 +288,12 @@ class Content extends ContentBase
 	  else {
             $ret[]= array(lang('pagealias').':','<input type="text" disabled name="alias" value="'.$this->mAlias.'" />');
 	  }
-	    $ret[]= array(lang('metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
+	    $ret[]= array(lang('page_metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
 
 	    $ret[]= array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
 	    $ret[]= array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />');
 	    $ret[]= array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+	    $ret[]= array(lang('pagedata_codeblock').':',create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','pagedata','','','80','6'));
 	    $ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
 	    $ret[]= array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
 	    $ret[]= array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');

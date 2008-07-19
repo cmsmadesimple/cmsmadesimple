@@ -1,4 +1,18 @@
 <?php
+$lang['admin']['help_function_process_pagedata'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin will process the data in the &quot;pagedata&quot; block of content pages through smarty.  It allows you to specify page specific data to smarty without changing the template for each page.</p>
+<h3>How do I use it?</h3>
+<ol>
+  <li>Insert smarty assign variables and other smarty logic into the pagedata field of some of your content pages.</li>
+  <li>Insert the <code>{process_pagedata}</code> tag into the very top of your page template.</li>
+</ol>
+<br/>
+<h3>What parameters does it take?</h3>
+<p>None at this time</p>
+EOT;
+$lang['admin']['page_metadata'] = 'Page Specific Metadata';
+$lang['admin']['pagedata_codeblock'] = 'Smarty data or logic that is specific to this page';
 $lang['admin']['error_uploadproblem'] = 'An error occurred in the upload';
 $lang['admin']['error_nofileuploaded'] = 'No File has been uploaded';
 $lang['admin']['files_failed'] = 'Files failed md5sum check';
