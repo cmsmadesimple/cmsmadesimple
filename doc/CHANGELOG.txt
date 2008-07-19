@@ -11,6 +11,10 @@ Version 1.4-beta1 "Jamaica"
     b) The <head> section
     c) the rest of the template (the body)
   * We then process the top section through smarty, then the body, and finally the head.  Then we glue it back together.  This will allow variables set in page content or in various module templates to be used in the head section to effect such things as meta tags, and page titles.
+  * A new text area in the options tab of content pages allows specifying page specific data (as opposed to putting page specific data into the metadata section of the page)
+  * A new plugin {process_pagedata} processes the page specific data through
+    smarty.  It should be at the very top of all page templates
+  * On new install, all page templates have {process_pagedata} at the very top.
   * This may break sites that have used some of my tricks to 
     change the page title based on news or other modules content
     so it will be off by default after release, and on for the beta
