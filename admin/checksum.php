@@ -193,7 +193,7 @@ function generate_checksum_file(&$report)
   header('Content-Type: text/plain');
   header("Content-Disposition: attachment; filename=\"checksum.dat\"" );
   header('Content-Transfer-Encoding: binary');
-  header('Content-Length: ' . count($output));
+  header('Content-Length: ' . strlen($output));
   echo $output;
   exit();
 }
