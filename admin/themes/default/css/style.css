@@ -569,7 +569,7 @@ a.pageback  {
    color: #384654;
    }
 
-p.pageback  {
+.pageback  {
    margin-left: 10px;
    }
 
@@ -613,7 +613,8 @@ div.pagecontainer .pagemessage  {
    margin-bottom: 0;
    }
 
-p.pageshowrows  {
+.pageshowrows  {
+   width:50%;
    color: #384654;
    text-align: right;
    float: right;

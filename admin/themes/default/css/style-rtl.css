@@ -613,7 +613,8 @@ div.pagecontainer p.pagemessage  {
    margin-bottom: 0;
    }
 
-p.pageshowrows  {
+.pageshowrows  {
+   width:50%;
    color: #384654;
    text-align: left;
    float: left;

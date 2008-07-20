@@ -1,6 +1,6 @@
 <div class="pagecontainer">
 {if empty($smarty.get.cleanreport)}
-	<p class="pageshowrows"><a href="systeminfo.php?cleanreport=1">{si_lang a=copy_paste_forum}</a></p>
+	<div class="pageshowrows"><a href="systeminfo.php?cleanreport=1">{si_lang a=copy_paste_forum}</a></div>
 {/if}
 
 {$showheader}
@@ -83,7 +83,7 @@
 		<p class="pageinput">
 	{if isset($test->value)}<strong>{$test->value}</strong>{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue}){/if}
-	{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res|default:"space"}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}
+	{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}
 		</p>
 	</div>
   {/foreach}
