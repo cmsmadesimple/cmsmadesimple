@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['error_retrieving_file_list'] = 'Error retrieving file list';
 $lang['admin']['files_checksum_failed'] = 'Files could not be checksummed';
 $lang['admin']['failure'] = 'Failure';
 $lang['admin']['help_function_process_pagedata'] = <<<EOT

@@ -166,6 +166,12 @@ function generate_checksum_file(&$report)
   $excludes = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^uploads$', 
                     '^tmp$', '^captchas$' );
   $tmp = get_recursive_file_list( $config['root_path'], $excludes);
+  if( count($tmp) <= 1 )
+  {
+    $report = lang('error_retrieving_file_list');
+    return false;
+  }
+  
   foreach( $tmp as $file )
     {
       if( is_dir($file) ) continue;
@@ -208,7 +214,7 @@ if( isset($_GET['action']) )
 	$res = check_checksum_data($report);
 	break;
       case 'download':
-	generate_checksum_file($report);
+	$res = generate_checksum_file($report);
 	break;
       }
   }
