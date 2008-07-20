@@ -47,17 +47,20 @@ function check_checksum_data(&$report)
 {
   if( (!isset($_FILES['cksumdat'])) || empty($_FILES['cksumdat']['name']) )
     {
-      return lang('error_nofileuploaded');
+        $report = lang('error_nofileuploaded');
+	return false;
     }
   else if( $_FILES['cksumdat']['error'] > 0 )
     {
-      return lang('error_uploadproblem');
+        $report = lang('error_uploadproblem');
+	return false;
     }
   
   $fh = fopen($_FILES['cksumdat']['tmp_name'],'r');
   if( !$fh )
     {
-      return lang('error_uploadproblem');
+        $report = lang('error_uploadproblem');
+	return false;
     }
   
   global $gCms;
