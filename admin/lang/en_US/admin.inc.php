@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['files_checksum_failed'] = 'Files could not be checksummed';
+$lang['admin']['failure'] = 'Failure';
 $lang['admin']['help_function_process_pagedata'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This plugin will process the data in the &quot;pagedata&quot; block of content pages through smarty.  It allows you to specify page specific data to smarty without changing the template for each page.</p>
