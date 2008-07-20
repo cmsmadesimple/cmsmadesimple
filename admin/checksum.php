@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+@set_time_limit(9999); // this may not work on all hosts
 
 $userid = get_userid();
 $access = check_permission($userid, "Modify Site Preferences");
@@ -161,7 +162,6 @@ function check_checksum_data(&$report)
 
 function generate_checksum_file(&$report)
 {
-  @set_time_limit(9999); // this may not work on all hosts
   global $gCms;
   $config =& $gCms->GetConfig();
   $output = '';
