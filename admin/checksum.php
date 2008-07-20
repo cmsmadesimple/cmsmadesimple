@@ -215,6 +215,10 @@ if( isset($_GET['action']) )
       {
       case 'upload':
 	$res = check_checksum_data($report);
+	if( $res === true )
+	  {
+	    $smarty->assign('message',lang('checksum_passed'));
+	  }
 	break;
       case 'download':
 	$res = generate_checksum_file($report);
@@ -224,7 +228,7 @@ if( isset($_GET['action']) )
 
 if( !$res )
   {
-    $smarty->assign('message',$report);
+    $smarty->assign('error',$report);
   }
 // Display the output
 echo $smarty->fetch('checksum.tpl');
