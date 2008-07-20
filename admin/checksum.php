@@ -96,6 +96,8 @@ function check_checksum_data(&$report)
 	  continue;
 	}
 
+      if( is_dir( $fn ) ) continue;
+
       if( !is_readable( $fn ) )
 	{
 	  $notreadable++;
