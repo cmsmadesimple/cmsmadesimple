@@ -64,6 +64,7 @@ Version 1.4-beta1 "Jamaica"
     i.e;  News/<newsid>/<pageid> will work just as well as 
           News/<newsid>/<pageid>/<article-title>
   * A new icon for rss feeds
+- Though it's not really a 1.4 issue, the Translation center has been fixed (many many thanks to the regex guro _SjG_) so that links will work in translated files.  We essentially translate all quotes inside of <a> tags to a special string, then do the html entity stuff, then translate that special string back to quotes.  Translators need to go through and update ALL translations.
 
 Version 1.3 "Cuba" -- June 7, 2008
 -----------------
