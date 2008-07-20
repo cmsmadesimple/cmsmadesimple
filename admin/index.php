@@ -132,7 +132,9 @@ if ($current_version < $CMS_SCHEMA_VERSION)
 }
 
 # Display a warning about mail settings.
-if( get_site_preference('mail_is_set',0) == 0 )
+if( isset($gCms->modules['CMSMailer']) && 
+    isset($gCms->modules['CMSMailer']['object']) &&
+    get_site_preference('mail_is_set',0) == 0 )
   {
     echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">'.lang('warning_mail_settings').'</p></div></div>';
   }
