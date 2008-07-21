@@ -32,7 +32,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 	$url = $config['root_url'].'/stylesheet.php/'.$cssid;
 	if( !empty($media) )
 	  {
-	    $url .= '/'.urlencode($media);
+	    $url .= '/'.$media;
 	  }
       }
     else
@@ -40,14 +40,14 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 	$url = $config['root_url'].'/stylesheet.php?cssid='.$cssid;
 	if( !empty($media) )
 	  {
-	    $url .= '&amp;mediatype='.urlencode($media);
+	    $url .= '&amp;mediatype='.$media;
 	  }
       }
 
     $str = '<link rel="stylesheet" type="text/css" ';
     if( !empty($media) )
       {
-	$str .= 'media="'.urlencode($media).'" ';
+	$str .= 'media="'.$media.'" ';
       }
     $str .= 'href="'.$url.'" />';
 
@@ -87,7 +87,8 @@ function smarty_cms_function_stylesheet($params, &$smarty)
       $fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
       foreach( $res as $one )
 	{
-	  $stylesheet .= get_stylesheet_tag($one['css_id'],$one['media_type']);
+          $tmp = str_replace(' ','',$one['media_type']);
+	  $stylesheet .= get_stylesheet_tag($one['css_id'],$tmp);
 	  $stylesheet .= "\n";
 	}
       }
