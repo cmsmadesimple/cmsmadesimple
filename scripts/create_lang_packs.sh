@@ -14,7 +14,9 @@ build_file_list()
   _files_1=`find . -name $_x 2>/dev/null | grep -v .svn`
   _x="$slang.js";
   _files_2=`find . -name $_x 2>/dev/null | grep -v .svn`
-  _files1="$_files_1 $_files_2"
+  _x="${slang}_dlg.js"
+  _files_3=`find . -name $_x 2>/dev/null | grep -v .svn`
+  _files1="$_files_1 $_files_2 $_files_3"
 
   # preprocess the files
   _files=''
