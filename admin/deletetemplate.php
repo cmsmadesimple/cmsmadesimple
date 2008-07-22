@@ -94,7 +94,7 @@ if ($dodelete)
 }
 else
 {
-  redirect($from."message=".lang('errortemplateinuse'));
+  redirect($from."?message=".lang('errortemplateinuse'));
 }
 
 # vim:ts=4 sw=4 noet
