@@ -572,7 +572,7 @@ function testCreateDirAndFile($required,$title,$message='')
  * @var string  $file
  * @var string  $data
 */
-function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test', $data = 'this is a test')
+function testDirWrite($required, $title, $dir, $message = '', $quick = 1, $file = 'file_test', $data = 'this is a test')
 {
 	$test =& new StdClass();
 	$test->title = $title;
@@ -596,6 +596,15 @@ function testDirWrite($required, $title, $dir, $message = '', $file = 'file_test
 		}
 		return $test;
 	}
+
+	if( $quick )
+	  {
+	    // we're only doing the quick test
+	    // which sucks
+	    $test->res = 'green';
+	    $test->res_text = getTestReturn($test->res);
+	    return $test;
+	  }
 
 	$return = '';
 	$test_file = $dir . DIRECTORY_SEPARATOR . $file;
