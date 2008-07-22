@@ -8,6 +8,15 @@ create_checksum_file()
     find . -type f -exec md5sum -b {} \; >$1 2>/dev/null
 }
 
+cleanup()
+{
+    if [ ${noclean:-notset} = notset ]; then
+	echo "Cleaning up"
+	cd $_owd
+	rm -rf $_workdir
+    fi
+}
+
 #
 # Setup
 #
@@ -15,7 +24,7 @@ _this=`basename $0`
 _svn=http://svn.cmsmadesimple.org/svn/cmsmadesimple/branches/1.2.x
 _workdir=/tmp/$_this.$$
 _owd=`pwd`
-_rmfiles='CHECKLIST scripts build config.php autogen.sh mpd.sql mysql.sql makedoc.sh cleardb.sh generatedump.php images/cms/*.svg svn-propset* find-mime admin/lang/*sh admin/lang/*pl admin/editconfig.php lib/adodb lib/preview.functions.php plugins/cache release-cleanup.sh';
+_rmfiles='CHECKLIST scripts build config.php autogen.sh mpd.sql mysql.sql makedoc.sh cleardb.sh generatedump.php images/cms/*.svg svn-propset* find-mime admin/lang/*sh admin/lang/*.bat admin/lang/*pl admin/editconfig.php lib/adodb lib/preview.functions.php plugins/cache release-cleanup.sh';
 _cmsurl='http://svn.cmsmadesimple.org/svn/cmsmadesimple';
 # basedir    (if set, specify the base directory to put generated releases).
 # nohtaccess (if set, disable htaccess generation)
@@ -41,22 +50,61 @@ unset _t
 # search /etc/create_cms_release.sh first
 # then /usr/local/etc/create_cms_release.sh
 # then ~/.create_cms_release.sh
-if [ -r /etc/$this ]; then
-. /etc/$this
+if [ -r /etc/$_this ]; then
+. /etc/$_this
 fi
-if [ -r /usr/local/etc/$this ]; then
-. /usr/local/etc/$this
+if [ -r /usr/local/etc/$_this ]; then
+. /usr/local/etc/$_this
 fi
 if [ -r ~/.$_this ]; then
 . ~/.$_this
 fi
 if [ -r ~/.${_this}.stat ]; then
-. ~/.${_this}.stat
+_svn=`cat ~/.${_this}.stat`
 fi
 
 #
 # Process command line arguments
 #
+while [ $# -gt 0 ]; do
+  case $1 in
+    '--notag' )
+      notag=1
+      shift 1
+      continue
+      ;;
+    '--noclean' )
+      noclean=1
+      shift 1
+      continue
+      ;;
+    '--noindex' )
+      noindex=1
+      shift 1
+      continue
+      ;;
+    '--noremove' )
+      noremove=1
+      shift 1
+      continue
+      ;;
+    '--nohtaccess' )
+      noremove=1
+      shift 1
+      continue
+      ;;
+    '--noperms' )
+      noperms=1
+      shift 1
+      continue
+      ;;
+    '--basedir' )
+      basedir=$2
+      shift 2
+      continue
+      ;;
+  esac
+done
 
 #
 # Ask for the root url to export
@@ -102,7 +150,7 @@ if [ ${noremove:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
 echo -n "CREATE index.html files? ";
 if [ ${noindex:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
 echo -n "DO POST Processing cleanup? ";
-if [ ${noindex:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
+if [ ${noclean:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
 echo -n "CREATE CMS TAG ${_cmsurl}/tags/version-$_version? ";
 if [ ${notag:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
 
@@ -121,6 +169,7 @@ case $ans in
      rm -rf $_workdir
    fi
    echo "Exiting..."
+   cleanup;
    exit;
    ;;
 esac
@@ -142,10 +191,10 @@ if [ ${noremove:-notset} = notset ]; then
 fi
 
 # Create necessary files
-echo "Create necessary files"
 mkdir -p tmp/cache tmp/templates_c tmp/configs
 touch tmp/cache/SITEDOWN
 if [ ${noindex:-notset} = notset ]; then
+  echo "Create index.html files"
   find * -type d -exec create_index_html.sh {} \;
 fi
 
@@ -184,11 +233,7 @@ cd $_destdir
 md5sum -b * >cmsmadesimple-$_version-checksums.dat 2>/dev/null
 
 # cleanup
-if [ ${noclean:-notset} != notset ]; then
-  echo "Cleaning up"
-  cd $_owd
-  rm -rf $_workdir
-  echo $_svn > ~/.${_this}.stat
-fi
+cleanup
 
+echo $_svn > ~/.${_this}.stat
 echo "Done: All release files should be in $_destdir";
