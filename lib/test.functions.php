@@ -572,7 +572,7 @@ function testCreateDirAndFile($required,$title,$message='')
  * @var string  $file
  * @var string  $data
 */
-function testDirWrite($required, $title, $dir, $message = '', $quick = 1, $file = 'file_test', $data = 'this is a test')
+function testDirWrite($required, $title, $dir, $message = '', $quick = 0, $file = 'file_test', $data = 'this is a test')
 {
 	$test =& new StdClass();
 	$test->title = $title;
