@@ -582,7 +582,7 @@ function testDirWrite($required, $title, $dir, $message = '', $quick = 0, $file 
 		$dir = TMP_CACHE_LOCATION;
 	}
 	$test->value = $dir;
-	$test->secondvalue = substr(sprintf('%o', fileperms($dir)), -4);
+	$test->secondvalue = substr(sprintf('%o', @fileperms($dir)), -4);
 
 	if( (!is_dir($dir)) || (!is_writable($dir)) )
 	{
