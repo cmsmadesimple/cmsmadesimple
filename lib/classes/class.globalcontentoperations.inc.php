@@ -69,7 +69,7 @@ class GlobalContentOperations
 		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs ORDER BY htmlblob_name";
 		$dbresult = &$db->Execute($query);
 
-		while (isset($dbresult) && !$dbresult->EOF)
+		while (is_object($dbresult) && !$dbresult->EOF)
 		{
 			$oneblob = new GlobalContent();
 			$oneblob->id = $dbresult->fields['htmlblob_id'];
