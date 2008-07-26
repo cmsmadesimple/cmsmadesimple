@@ -1,4 +1,4 @@
-Version 1.4-beta1 "Jamaica"
+Version 1.4 "Jamaica"
 -----------------
 - Includes a new system information page in the admin
   * Many thanks to Alby, and others

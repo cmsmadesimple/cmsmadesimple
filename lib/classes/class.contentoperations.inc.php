@@ -670,7 +670,7 @@ class ContentOperations
 		return $contentcache;
 	}
 
-	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id')
+	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0)
 	{
 		$result = '';
 
@@ -684,26 +684,33 @@ class ContentOperations
 			$curhierarchy = '';
 
 			foreach ($allcontent as $one)
-			{
+ 			{
+			  $value = $one->Id();
 				if ($one->Id() == $current)
 				{
 					#Grab hierarchy just in case we need to check children
 					#(which will always be after)
 					$curhierarchy = $one->Hierarchy();
 
-					#Then jump out.  We don't want ourselves in the list.
-					continue;
+					if( !$allowcurrent )
+					  {
+					    // Then jump out.  We don't want ourselves in the list.
+					    continue;
+					  }
+					$value = -1;
 				}
+
 				#If it's a child of the current, we don't want to show it as it
 				#could cause a deadlock.
-				if ($curhierarchy != '' && strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.')
+				if (!$allowcurrent && $curhierarchy != '' && strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.')
 				{
 					continue;
 				}
+
 				#Don't include content types that do not want children either...
 				if ($one->WantsChildren() == true)
-				{
-					$result .= '<option value="'.$one->Id().'"';
+				  {
+					$result .= '<option value="'.$value.'"';
 
 					#Select current parent if it exists
 					if ($one->Id() == $parent)
@@ -711,7 +718,14 @@ class ContentOperations
 						$result .= ' selected="selected"';
 					}
 
-					$result .= '>'.$one->Hierarchy().'. - '.$one->Name().'</option>';
+					if( $value == -1 )
+					  {
+					    $result .= '>'.$one->Hierarchy().'. - '.$one->Name().' ('.lang('invalid').')</option>';
+					  }
+					else
+					  {
+					    $result .= '>'.$one->Hierarchy().'. - '.$one->Name().'</option>';
+					  }
 				}
 			}
 

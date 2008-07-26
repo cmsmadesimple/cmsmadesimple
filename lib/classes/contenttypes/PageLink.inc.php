@@ -178,12 +178,12 @@ class PageLink extends ContentBase
 		$ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
 		if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
 			{
-				$ret[]= array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
+			  $ret[]= array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
 			}
 
 		$ret[]= array(lang('destination_page').':', 
 					  $contentops->CreateHierarchyDropdown($this->mId, 
-									       $this->GetPropertyValue('page'), 'page'));
+									       $this->GetPropertyValue('page'), 'page', 1));
 		
  		$ret[]= array(lang('additional_params').':','<input type="text" name="params" size="80" value="'.cms_htmlentities($this->GetPropertyValue('params')).'" />');
 		

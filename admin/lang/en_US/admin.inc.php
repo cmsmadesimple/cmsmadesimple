@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['invalid'] = 'Invalid';
 $lang['admin']['checksum_passed'] = 'All checksums match those in the uploaded file';
 $lang['admin']['error_retrieving_file_list'] = 'Error retrieving file list';
 $lang['admin']['files_checksum_failed'] = 'Files could not be checksummed';
