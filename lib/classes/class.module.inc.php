@@ -108,6 +108,7 @@ class CMSModule
 		#$smarty = new CMSModuleSmarty($config, $this->GetName());
 		$this->smarty = &$gCms->GetSmarty();
 
+		$this->SetParameterType('assign',CLEAN_STRING);
 		$this->SetParameterType('module',CLEAN_STRING);
 		$this->SetParameterType('lang',CLEAN_STRING);
 		$this->SetParameterType('returnid',CLEAN_INT);
@@ -1509,20 +1510,28 @@ class CMSModule
 				       !$this->restrict_unknown_params);
 	    }
 
-		if (isset($params['lang']))
-		{
-			$this->curlang = $params['lang'];
-			$this->langhash = array();
-		}
-		if( !isset($params['action']) )
-		{
-			$params['action'] = $name;
-		}
-		$params['action'] = cms_htmlentities($params['action']);
-		$returnid = cms_htmlentities($returnid);
-		$id = cms_htmlentities($id);
-		$name = cms_htmlentities($name);
-		return $this->DoAction($name, $id, $params, $returnid);
+	  if (isset($params['lang']))
+	    {
+	      $this->curlang = $params['lang'];
+	      $this->langhash = array();
+	    }
+	  if( !isset($params['action']) )
+	    {
+	      $params['action'] = $name;
+	    }
+	  $params['action'] = cms_htmlentities($params['action']);
+	  $returnid = cms_htmlentities($returnid);
+	  $id = cms_htmlentities($id);
+	  $name = cms_htmlentities($name);
+	  $output = $this->DoAction($name, $id, $params, $returnid);
+	  if( isset($params['assign']) )
+	    {
+	      global $gCms;
+	      $smarty =& $gCms->GetSmarty();
+	      $smarty->assign(cms_htmlentities($params['assign']),$output);
+	      return;
+	    }
+	  return $output;
 	}
 
 
