@@ -42,7 +42,7 @@ $tmpl = '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pag
 $cms_is_uptodate = 1;
 $do_getpref = 0;
 $url = strtolower(trim(get_site_preference('urlcheckversion','')));
-if( $url != 'none' &&
+if( $url != 'none' && !empty($url) &&
     ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
   {
     // check forced
