@@ -51,7 +51,11 @@ if (get_preference($userid, 'use_wysiwyg') == "1") {
     $use_javasyntax = true;
 }
 */
-$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
+$gcb_wysiwyg = (get_site_preference('nogcbwysiwyg','0') == '0') ? 1 : 0;
+if( $gcb_wysiwyg )
+  {
+    $gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
+  }
 
 
 if ($access) {
