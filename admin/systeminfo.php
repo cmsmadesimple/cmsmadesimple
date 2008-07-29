@@ -117,6 +117,8 @@ $tmp = array(0=>array(), 1=>array());
 
 $tmp[0]['safe_mode'] = testIniBoolean(0, 'safe_mode', 'safe_mode', '', true);
 
+$tmp[0]['open_basedir'] = testIniValue(0, 'open_basedir', 'open_basedir', '');
+
 list($minimum, $recommended) = getTestValues('phpversion');
 $tmp[0]['phpversion'] = testVersionRange(0, 'phpversion', phpversion(), $minimum, $recommended);
 
@@ -130,7 +132,7 @@ list($minimum, $recommended) = getTestValues('upload_max_filesize');
 $tmp[1]['upload_max_filesize'] = testIniRange(0, 'upload_max_filesize', 'upload_max_filesize', $minimum, $recommended);
 
 list($minimum, $recommended) = getTestValues('max_execution_time');
-$tmp[0]['max_execution_time'] = testIniRange(0, 'max_execution_time', 'max_execution_time', $minimum, $recommended);
+$tmp[0]['max_execution_time'] = testIniRange(0, 'max_execution_time', 'max_execution_time', $minimum, $recommended, '', false, 0);
 
 list($minimum, $recommended) = getTestValues('gd_version');
 $tmp[0]['gd_version'] = testGDVersion(0, 'gd_version', $minimum);

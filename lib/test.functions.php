@@ -247,15 +247,16 @@ function & testIniBoolean($required, $title, $varname, $message = '', $negative_
  * @var mixed   $minimum
  * @var mixed   $recommended
  * @var string  $message
+ * @var int     $unlimited
 */
-function & testVersionRange($required, $title, $value, $minimum, $recommended, $message = '')
+function & testVersionRange($required, $title, $value, $minimum, $recommended, $message = '', $unlimited = null)
 {
 	$test =& new StdClass();
 	$test->title = $title;
 	$test->value = $value;
 	$test->secondvalue = null;
 
-	if (version_compare($value,$minimum) < 0)
+	if ( (is_null($unlimited)) && (version_compare($value,$minimum) < 0) )
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
@@ -265,7 +266,7 @@ function & testVersionRange($required, $title, $value, $minimum, $recommended, $
 			$test->message = $message;
 		}
 	}
-	elseif (version_compare($value,$recommended) < 0 )
+	elseif ( (is_null($unlimited)) && (version_compare($value,$recommended) < 0) )
 	{
 		$test->res = 'yellow';
 		$test->res_text = getTestReturn($test->res);
@@ -278,6 +279,10 @@ function & testVersionRange($required, $title, $value, $minimum, $recommended, $
 	{
 		$test->res = 'green';
 		$test->res_text = getTestReturn($test->res);
+		if (! is_null($unlimited))
+		{
+			$test->value = lang('unlimited');
+		}
 	}
 
 	return $test;
@@ -292,8 +297,9 @@ function & testVersionRange($required, $title, $value, $minimum, $recommended, $
  * @var mixed   $recommended
  * @var string  $message
  * @var boolean $test_as_bytes
+ * @var int     $unlimited
 */
-function & testRange($required, $title, $value, $minimum, $recommended, $message = '', $test_as_bytes = false)
+function & testRange($required, $title, $value, $minimum, $recommended, $message = '', $test_as_bytes = false, $unlimited = null)
 {
 	$test =& new StdClass();
 	$test->title = $title;
@@ -307,13 +313,13 @@ function & testRange($required, $title, $value, $minimum, $recommended, $message
 		$recommended = returnBytes($recommended);
 	}
 
-	if ($value < $minimum)
+	if ( (is_null($unlimited)) && ($value < $minimum) )
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
 		$test->res_text = getTestReturn($test->res);
 	}
-	elseif ($value < $recommended)
+	elseif ( (is_null($unlimited)) && ($value < $recommended) )
 	{
 		$test->res = 'yellow';
 		$test->res_text = getTestReturn($test->res);
@@ -322,6 +328,10 @@ function & testRange($required, $title, $value, $minimum, $recommended, $message
 	{
 		$test->res = 'green';
 		$test->res_text = getTestReturn($test->res);
+		if (! is_null($unlimited))
+		{
+			$test->value = lang('unlimited');
+		}
 	}
 
 	if ($value < $recommended && trim($message) != '')
@@ -341,8 +351,9 @@ function & testRange($required, $title, $value, $minimum, $recommended, $message
  * @var string  $recommended
  * @var string  $message
  * @var boolean $test_as_bytes
+ * @var int     $unlimited
 */
-function & testIniRange($required, $title, $varname, $minimum, $recommended, $message = '', $test_as_bytes = true)
+function & testIniRange($required, $title, $varname, $minimum, $recommended, $message = '', $test_as_bytes = true, $unlimited = null)
 {
 	$str = ini_get($varname);
 	if ($str == '')
@@ -355,7 +366,68 @@ function & testIniRange($required, $title, $varname, $minimum, $recommended, $me
 			$error .= lang('displaying_the_value_originally');
 		}
 	}
-	$test =& testRange($required, $title, $str, $minimum, $recommended, $message, $test_as_bytes);
+	$test =& testRange($required, $title, $str, $minimum, $recommended, $message, $test_as_bytes, $unlimited);
+	if (isset($error))
+	{
+		$test->error = $error;
+	}
+
+	return $test;
+}
+
+/**
+ * @return object
+ * @var boolean $required
+ * @var string  $title
+ * @var string  $varname
+ * @var string  $message
+ * @var boolean $negative_test
+*/
+function & testIniValue($required, $title, $varname, $message = '', $negative_test = false)
+{
+	$test =& new StdClass();
+	$test->title = $title;
+
+	$test->value = ini_get($varname);
+	$test->secondvalue = null;
+
+	if (empty($test->value))
+	{
+		if ((string) get_cfg_var($varname) != '')
+		{
+			$test->value = (string) get_cfg_var($varname);
+		}
+		else
+		{
+			$test->value = $negative_test ? 'On' : 'Off';
+			$test->secondvalue = $negative_test ? lang('true') : lang('false');
+			if ($required)
+			{
+				list($test->continueon, $test->special_failed) = testGlobal($required);
+				$test->res = 'false';
+				$test->res_text = getTestReturn($test->res);
+				return $test;
+			}
+		}
+	}
+
+	if ( ($required) || (! $negative_test) )
+	{
+		list($test->continueon, $test->special_failed) = testGlobal($required);
+		$test->res = 'false';
+		$test->res_text = getTestReturn($test->res);
+		return $test;
+	}
+	else
+	{
+		$test->res = 'green';
+		$test->res_text = getTestReturn($test->res);
+	}
+
+	if (trim($message) != '')
+	{
+		$test->message = $message;
+	}
 	if (isset($error))
 	{
 		$test->error = $error;
@@ -398,7 +470,7 @@ function returnBytes($val)
  * @var string  $file
  * @var string  $data
  */
-function testUmask($required, $title, $umask, $message = '', $dir = '', $file = 'file_test', $data = 'this is a test')
+function & testUmask($required, $title, $umask, $message = '', $dir = '', $file = 'file_test', $data = 'this is a test')
 {
 	$test =& new StdClass();
 	$test->title = $title;
@@ -407,7 +479,7 @@ function testUmask($required, $title, $umask, $message = '', $dir = '', $file = 
 	{
 		$dir = TMP_CACHE_LOCATION;
 	}
-	if( (!is_dir($dir)) || (!is_writable($dir)) )
+	if( (! @is_dir($dir)) || (! @is_writable($dir)) )
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
@@ -420,7 +492,7 @@ function testUmask($required, $title, $umask, $message = '', $dir = '', $file = 
 		return $test;
 	}
 	$test->value = $dir;
-	$test->secondvalue = substr(sprintf('%o', fileperms($dir)), -4);
+	$test->secondvalue = substr(sprintf('%o', @fileperms($dir)), -4);
 
 	@umask(octdec($umask));
 
@@ -428,7 +500,7 @@ function testUmask($required, $title, $umask, $message = '', $dir = '', $file = 
 	if ($fp = @fopen($test_file, "w"))
 	{
 		$return = @fwrite($fp, $data);
-		fclose($fp);
+		@fclose($fp);
 
 		$filestat = stat($test_file);
 		if ( $filestat == FALSE )
@@ -445,7 +517,7 @@ function testUmask($required, $title, $umask, $message = '', $dir = '', $file = 
 		}
 
 		clearstatcache();
-		$mode = fileperms($test_file);
+		$mode = @fileperms($test_file);
 		$test->opt['permsdec'] = substr(sprintf('%o', $mode), -4);
 		$test->opt['permsstr'] = permission_octal2string($mode);
 		// functions not available on WAMP systems
@@ -529,39 +601,43 @@ function permission_octal2string($mode)
 	return $type . $owner . $group . $other;
 }
 
-
-function testCreateDirAndFile($required,$title,$message='')
+/**
+ * @return object
+ * @var boolean $required
+ * @var string  $title
+ * @var string  $message
+*/
+function & testCreateDirAndFile($required, $title, $message='')
 {
-  $test =& new StdClass();
-  $test->title = $title;
-  $dir = cms_join_path(TMP_CACHE_LOCATION,'_test_');
-  $file = cms_join_path($dir,'test.dat');
+	$test =& new StdClass();
+	$test->title = $title;
+	$dir = cms_join_path(TMP_CACHE_LOCATION, '_test_');
+	$file = cms_join_path($dir, 'test.dat');
 
-  @mkdir($dir);
-  @touch($file);
-  $result = file_exists($file);
-  //@unlink($file);
-  //@rmdir($dir);
+	@mkdir($dir);
+	@touch($file);
+	$result = file_exists($file);
+	@unlink($file);
+	@rmdir($dir);
 
-  if( !$result )
-    {
-      list($test->continueon, $test->special_failed) = testGlobal($required);
-      $test->continueon = false;
-      $test->special_failed = true;
-      $test->res = 'false';
-      if( trim($message) != '' )
+	if( !$result )
 	{
-	  $test->message = $message;
+		list($test->continueon, $test->special_failed) = testGlobal($required);
+		$test->continueon = false;
+		$test->special_failed = true;
+		$test->res = 'false';
+		if (trim($message) != '')
+		{
+			$test->message = $message;
+		}
 	}
-    }
-  else
-    {
-      $test->res = 'true';
-    }
-  $test->res_text = getTestReturn($test->res);
-  return $test;
+	else
+	{
+		$test->res = 'true';
+	}
+	$test->res_text = getTestReturn($test->res);
+	return $test;
 }
-
 
 /**
  * @return object
@@ -569,10 +645,11 @@ function testCreateDirAndFile($required,$title,$message='')
  * @var string  $title
  * @var string  $dir
  * @var string  $message
+ * @var boolean $quick
  * @var string  $file
  * @var string  $data
 */
-function testDirWrite($required, $title, $dir, $message = '', $quick = 0, $file = 'file_test', $data = 'this is a test')
+function & testDirWrite($required, $title, $dir, $message = '', $quick = 0, $file = 'file_test', $data = 'this is a test')
 {
 	$test =& new StdClass();
 	$test->title = $title;
@@ -584,7 +661,7 @@ function testDirWrite($required, $title, $dir, $message = '', $quick = 0, $file 
 	$test->value = $dir;
 	$test->secondvalue = substr(sprintf('%o', @fileperms($dir)), -4);
 
-	if( (!is_dir($dir)) || (!is_writable($dir)) )
+	if( (! @is_dir($dir)) || (! @is_writable($dir)) )
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
@@ -598,13 +675,13 @@ function testDirWrite($required, $title, $dir, $message = '', $quick = 0, $file 
 	}
 
 	if( $quick )
-	  {
-	    // we're only doing the quick test
-	    // which sucks
-	    $test->res = 'green';
-	    $test->res_text = getTestReturn($test->res);
-	    return $test;
-	  }
+	{
+		// we're only doing the quick test
+		// which sucks
+		$test->res = 'green';
+		$test->res_text = getTestReturn($test->res);
+		return $test;
+	}
 
 	$return = '';
 	$test_file = $dir . DIRECTORY_SEPARATOR . $file;
@@ -695,7 +772,7 @@ function testRemoteFile($required, $title, $url, $message = '', $search = 'cmsma
 			$out  = "GET " . $complete_url . " HTTP/1.1\r\n";
 			$out .= "Host: " . $url_info['host'] . "\r\n";
 			$out .= "Connection: Close\r\n\r\n";
-			fwrite($handle, $out);
+			@fwrite($handle, $out);
 		}
 		else
 		{
@@ -710,7 +787,7 @@ function testRemoteFile($required, $title, $url, $message = '', $search = 'cmsma
 		{
 			$content .= @fgets($handle, 128);
 		}
-		fclose($handle);
+		@fclose($handle);
 
 		if ( (!empty($search)) && (false !== strpos($content, $search)) && (empty($test->message)) )
 		{
@@ -753,7 +830,7 @@ function & testFileChecksum($required, $title, $file1, $file2, $timestamp2 = 0, 
 	$test->title = $title;
 	$test->value = $file1;
 
-	if (!file_exists($file1))
+	if (! file_exists($file1))
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
@@ -831,7 +908,7 @@ function & testOptimizedLoopFileChecksum($file1, $checksum, $formattime = '%c')
 {
 	static $result = array();
 
-	if (!file_exists($file1))
+	if (! file_exists($file1))
 	{
 		$test =& new StdClass();
 		$test->value = $file1;
@@ -871,7 +948,7 @@ function & testOptimizedLoopFileChecksum($file1, $checksum, $formattime = '%c')
  * @var string  $minimum
  * @var string  $message
 */
-function testGDVersion($required, $title, $minimum, $message = '')
+function & testGDVersion($required, $title, $minimum, $message = '')
 {
 	$test =& new StdClass();
 	$test->title = $title;

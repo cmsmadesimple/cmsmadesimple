@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['unlimited'] = 'Unlimited';
+$lang['admin']['open_basedir'] = 'PHP Open Basedir';
 $lang['admin']['invalid'] = 'Invalid';
 $lang['admin']['checksum_passed'] = 'All checksums match those in the uploaded file';
 $lang['admin']['error_retrieving_file_list'] = 'Error retrieving file list';
