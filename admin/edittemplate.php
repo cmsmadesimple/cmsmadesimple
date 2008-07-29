@@ -359,15 +359,14 @@ else
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('edittemplate'); ?>
 	<form id="Edit_Template" method="post" action="edittemplate.php">
-		<p class="pageshowrows">
-			<a href="listcssassoc.php?type=template&amp;id=<?php echo $onetemplate->id ?>" target="_blank">
-				<?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>
-			</a>
-		</p>
-		<div class="pageoverflow">
+			<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 			      <?php echo $submitbtns; ?>
+                  
+                  <a href="listcssassoc.php?type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external">
+				<?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>
+			</a><?php echo "[" . lang('new_window') . "]" ;?>
                         </p>
                 </div>
 		<div class="pageoverflow">
