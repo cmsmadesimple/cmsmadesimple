@@ -362,13 +362,9 @@ else
 			<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
-			      <?php echo $submitbtns; ?>
-                  
-                  <a href="listcssassoc.php?type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external">
-				<?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>
-			</a><?php echo "[" . lang('new_window') . "]" ;?>
-                        </p>
-                </div>
+			      <?php echo $submitbtns; ?><a href="listcssassoc.php?type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>
+			</a><?php echo " [" . lang('new_window') . "]" ;?></p>
+            </div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" class="name" name="template" maxlength="255" value="<?php echo $template?>" /></p>
@@ -405,8 +401,7 @@ else
 				<input type="hidden" name="from" value="<?php echo $from?>" />
 				<input type="hidden" name="cssid" value="<?php echo $cssid?>" />
 				<input type="hidden" name="edittemplate" value="true" />
-			      <?php echo $submitbtns; ?>
-			</p>
+			      <?php echo $submitbtns; ?><a href="listcssassoc.php?type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?></a><?php echo " [" . lang('new_window') . "]" ;?></p>
 		</div>
 	</form>
 </div>
