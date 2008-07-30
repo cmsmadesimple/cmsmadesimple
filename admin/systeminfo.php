@@ -117,7 +117,9 @@ $tmp = array(0=>array(), 1=>array());
 
 $tmp[0]['safe_mode'] = testIniBoolean(0, 'safe_mode', 'safe_mode', '', true);
 
-$tmp[0]['open_basedir'] = testIniValue(0, 'open_basedir', 'open_basedir', '');
+$tmp[1]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
+
+$tmp[1]['open_basedir'] = testIniValue(0, 'open_basedir', 'open_basedir', '');
 
 list($minimum, $recommended) = getTestValues('phpversion');
 $tmp[0]['phpversion'] = testVersionRange(0, 'phpversion', phpversion(), $minimum, $recommended);
@@ -138,7 +140,12 @@ list($minimum, $recommended) = getTestValues('gd_version');
 $tmp[0]['gd_version'] = testGDVersion(0, 'gd_version', $minimum);
 
 $dir = ini_get('session.save_path');
+$open_basedir = ini_get('open_basedir');
 if ( (ini_get('session.save_handler') == 'files') && (empty($dir)) )
+{
+	$tmp[0]['session_save_path'] = testDummy('session_save_path', '', 'yellow');
+}
+elseif (! empty($open_basedir))
 {
 	$tmp[0]['session_save_path'] = testDummy('session_save_path', '', 'yellow');
 }

@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['create_dir_and_file'] = 'Checking if the httpd process can create a file inside of a directory it created';
 $lang['admin']['unlimited'] = 'Unlimited';
 $lang['admin']['open_basedir'] = 'PHP Open Basedir';
 $lang['admin']['invalid'] = 'Invalid';
