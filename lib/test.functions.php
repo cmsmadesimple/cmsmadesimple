@@ -256,7 +256,13 @@ function & testVersionRange($required, $title, $value, $minimum, $recommended, $
 	$test->value = $value;
 	$test->secondvalue = null;
 
-	if ( (is_null($unlimited)) && (version_compare($value,$minimum) < 0) )
+	if ( (! is_null($unlimited)) && ((string) $value == (string) $unlimited) )
+	{
+		$test->res = 'green';
+		$test->res_text = getTestReturn($test->res);
+		$test->value = lang('unlimited');
+	}
+	elseif (version_compare($value,$minimum) < 0)
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
@@ -266,7 +272,7 @@ function & testVersionRange($required, $title, $value, $minimum, $recommended, $
 			$test->message = $message;
 		}
 	}
-	elseif ( (is_null($unlimited)) && (version_compare($value,$recommended) < 0) )
+	elseif (version_compare($value,$recommended) < 0)
 	{
 		$test->res = 'yellow';
 		$test->res_text = getTestReturn($test->res);
@@ -279,10 +285,6 @@ function & testVersionRange($required, $title, $value, $minimum, $recommended, $
 	{
 		$test->res = 'green';
 		$test->res_text = getTestReturn($test->res);
-		if (! is_null($unlimited))
-		{
-			$test->value = lang('unlimited');
-		}
 	}
 
 	return $test;
@@ -313,7 +315,7 @@ function & testRange($required, $title, $value, $minimum, $recommended, $message
 	$test->value = $value;
 	$test->secondvalue = null;
 
-	if (! is_null($unlimited) && ($value == $unlimited) )
+	if ( (! is_null($unlimited)) && ((string) $value == (string) $unlimited) )
 	{
 		$test->res = 'green';
 		$test->res_text = getTestReturn($test->res);
@@ -368,6 +370,7 @@ function & testIniRange($required, $title, $varname, $minimum, $recommended, $me
 			$error .= lang('displaying_the_value_originally');
 		}
 	}
+
 	$test =& testRange($required, $title, $str, $minimum, $recommended, $message, $test_as_bytes, $unlimited);
 	if (isset($error))
 	{
