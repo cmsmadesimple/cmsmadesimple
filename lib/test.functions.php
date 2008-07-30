@@ -303,8 +303,6 @@ function & testRange($required, $title, $value, $minimum, $recommended, $message
 {
 	$test =& new StdClass();
 	$test->title = $title;
-	$test->value = $value;
-	$test->secondvalue = null;
 
 	if ($test_as_bytes)
 	{
@@ -312,14 +310,22 @@ function & testRange($required, $title, $value, $minimum, $recommended, $message
 		$minimum = returnBytes($minimum);
 		$recommended = returnBytes($recommended);
 	}
+	$test->value = $value;
+	$test->secondvalue = null;
 
-	if ( (is_null($unlimited)) && ($value < $minimum) )
+	if (! is_null($unlimited) && ($value == $unlimited) )
+	{
+		$test->res = 'green';
+		$test->res_text = getTestReturn($test->res);
+		$test->value = lang('unlimited');
+	}
+	elseif ($value < $minimum)
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
 		$test->res_text = getTestReturn($test->res);
 	}
-	elseif ( (is_null($unlimited)) && ($value < $recommended) )
+	elseif ($value < $recommended)
 	{
 		$test->res = 'yellow';
 		$test->res_text = getTestReturn($test->res);
@@ -328,10 +334,6 @@ function & testRange($required, $title, $value, $minimum, $recommended, $message
 	{
 		$test->res = 'green';
 		$test->res_text = getTestReturn($test->res);
-		if (! is_null($unlimited))
-		{
-			$test->value = lang('unlimited');
-		}
 	}
 
 	if ($value < $recommended && trim($message) != '')
