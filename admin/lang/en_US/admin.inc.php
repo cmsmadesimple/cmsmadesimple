@@ -1,7 +1,9 @@
 <?php
 $lang['admin']['create_dir_and_file'] = 'Checking if the httpd process can create a file inside of a directory it created';
+$lang['admin']['os_session_save_path'] = 'No check because OS path';
 $lang['admin']['unlimited'] = 'Unlimited';
 $lang['admin']['open_basedir'] = 'PHP Open Basedir';
+$lang['admin']['open_basedir_active'] = 'No check because open basedir active';
 $lang['admin']['invalid'] = 'Invalid';
 $lang['admin']['checksum_passed'] = 'All checksums match those in the uploaded file';
 $lang['admin']['error_retrieving_file_list'] = 'Error retrieving file list';

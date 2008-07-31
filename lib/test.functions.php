@@ -173,18 +173,70 @@ function & testConfig($title, $varname, $testfunc = '', $message = '')
 
 /**
  * @return object
+ * @var object  $test
+ * @var string  $varname
+ * @var string  $type
+*/
+function & testIni(&$test, $varname, $type)
+{
+	$error = null;
+	$str = ini_get($varname);
+
+	switch($type)
+	{
+		case 'boolean':
+			$str = (bool) $str;
+			break;
+		case 'integer':
+		case 'string':
+			$str = (string) $str;
+			if (empty($str))
+			{
+				#$error = lang('could_not_retrieve_a_value');
+				if ((string) get_cfg_var($varname) != '')
+				{
+					$str = (string) get_cfg_var($varname);
+					#$error .= lang('displaying_the_value_originally');
+				}
+			}
+
+			if ($type == 'integer')
+			{
+				$str = (int) $str;
+			}
+			break;
+	}
+
+	$test->ini_val = $str;
+	$test->error = $error;
+	return true;
+}
+
+/**
+ * @return object
  * @var boolean $required
  * @var string  $title
- * @var boolean $result
+ * @var mixed   $var
  * @var string  $message
+ * @var boolean $ini
  * @var boolean $negative_test
 */
-function & testBoolean($required, $title, $result, $message = '', $negative_test = false)
+function & testBoolean($required, $title, $var, $message = '', $ini = true, $negative_test = false)
 {
 	$test =&new StdClass();
 	$test->title = $title;
 
-	if ((bool) $result == false)
+	if ($ini)
+	{
+		testIni(&$test, $var, 'boolean');
+	}
+	else
+	{
+		$test->ini_val = $var;
+	}
+	$test->ini_val = $negative_test ? (! (bool) $test->ini_val) : (bool) $test->ini_val;
+
+	if ($test->ini_val == false)
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		if (trim($message) != '')
@@ -228,41 +280,42 @@ function & testBoolean($required, $title, $result, $message = '', $negative_test
  * @return object
  * @var boolean $required
  * @var string  $title
- * @var boolean $varname
+ * @var mixed   $var
  * @var string  $message
- * @var boolean $negative_test
-*/
-function & testIniBoolean($required, $title, $varname, $message = '', $negative_test = false)
-{
-	$str = ini_get($varname);
-	$value = $negative_test ? (! (bool) $str) : (bool) $str;
-	return testBoolean($required, $title, $value, $message, $negative_test);
-}
-
-/**
- * @return object
- * @var boolean $required
- * @var string  $title
- * @var mixed   $value
  * @var mixed   $minimum
  * @var mixed   $recommended
- * @var string  $message
+ * @var boolean $ini
  * @var int     $unlimited
 */
-function & testVersionRange($required, $title, $value, $minimum, $recommended, $message = '', $unlimited = null)
+function & testVersionRange($required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $unlimited = null)
 {
 	$test =& new StdClass();
 	$test->title = $title;
-	$test->value = $value;
+
+	if ($ini)
+	{
+		testIni(&$test, $var, 'string');
+		if (isset($test->error))
+		{
+			$required = false;
+		}
+	}
+	else
+	{
+		$test->ini_val = $var;
+	}
+
+	$test->value = $test->ini_val;
 	$test->secondvalue = null;
 
-	if ( (! is_null($unlimited)) && ((string) $value == (string) $unlimited) )
+
+	if ( (! is_null($unlimited)) && ($test->ini_val == (string) $unlimited) )
 	{
 		$test->res = 'green';
 		$test->res_text = getTestReturn($test->res);
 		$test->value = lang('unlimited');
 	}
-	elseif (version_compare($value,$minimum) < 0)
+	elseif (version_compare($test->ini_val, $minimum) < 0)
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
@@ -272,7 +325,7 @@ function & testVersionRange($required, $title, $value, $minimum, $recommended, $
 			$test->message = $message;
 		}
 	}
-	elseif (version_compare($value,$recommended) < 0)
+	elseif (version_compare($test->ini_val, $recommended) < 0)
 	{
 		$test->res = 'yellow';
 		$test->res_text = getTestReturn($test->res);
@@ -294,40 +347,55 @@ function & testVersionRange($required, $title, $value, $minimum, $recommended, $
  * @return object
  * @var boolean $required
  * @var string  $title
- * @var mixed   $value
+ * @var mixed   $var
+ * @var string  $message
  * @var mixed   $minimum
  * @var mixed   $recommended
- * @var string  $message
+ * @var boolean $ini
  * @var boolean $test_as_bytes
  * @var int     $unlimited
 */
-function & testRange($required, $title, $value, $minimum, $recommended, $message = '', $test_as_bytes = false, $unlimited = null)
+function & testRange($required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $test_as_bytes = false, $unlimited = null)
 {
 	$test =& new StdClass();
 	$test->title = $title;
+
+	if ($ini)
+	{
+		testIni(&$test, $var, 'string');
+		if (isset($test->error))
+		{
+			$required = false;
+		}
+	}
+	else
+	{
+		$test->ini_val = $var;
+	}
+
+	$test->value = $test->ini_val;
+	$test->secondvalue = null;
 
 	if ($test_as_bytes)
 	{
-		$value = returnBytes($value);
+		$test->ini_val = returnBytes($test->ini_val);
 		$minimum = returnBytes($minimum);
 		$recommended = returnBytes($recommended);
 	}
-	$test->value = $value;
-	$test->secondvalue = null;
 
-	if ( (! is_null($unlimited)) && ((string) $value == (string) $unlimited) )
+	if ( (! is_null($unlimited)) && ((int) $test->ini_val == (int) $unlimited) )
 	{
 		$test->res = 'green';
 		$test->res_text = getTestReturn($test->res);
 		$test->value = lang('unlimited');
 	}
-	elseif ($value < $minimum)
+	elseif ((int) $test->ini_val < $minimum)
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
 		$test->res_text = getTestReturn($test->res);
 	}
-	elseif ($value < $recommended)
+	elseif ((int) $test->ini_val < $recommended)
 	{
 		$test->res = 'yellow';
 		$test->res_text = getTestReturn($test->res);
@@ -338,104 +406,9 @@ function & testRange($required, $title, $value, $minimum, $recommended, $message
 		$test->res_text = getTestReturn($test->res);
 	}
 
-	if ($value < $recommended && trim($message) != '')
+	if ((int) $test->ini_val < $recommended && trim($message) != '')
 	{
 		$test->message = $message;
-	}
-
-	return $test;
-}
-
-/**
- * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $varname
- * @var string  $minimum
- * @var string  $recommended
- * @var string  $message
- * @var boolean $test_as_bytes
- * @var int     $unlimited
-*/
-function & testIniRange($required, $title, $varname, $minimum, $recommended, $message = '', $test_as_bytes = true, $unlimited = null)
-{
-	$str = ini_get($varname);
-	if ($str == '')
-	{
-		$error = lang('could_not_retrieve_a_value');
-		$required = false;
-		if ((string) get_cfg_var($varname) != '')
-		{
-			$str = (string) get_cfg_var($varname);
-			$error .= lang('displaying_the_value_originally');
-		}
-	}
-
-	$test =& testRange($required, $title, $str, $minimum, $recommended, $message, $test_as_bytes, $unlimited);
-	if (isset($error))
-	{
-		$test->error = $error;
-	}
-
-	return $test;
-}
-
-/**
- * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $varname
- * @var string  $message
- * @var boolean $negative_test
-*/
-function & testIniValue($required, $title, $varname, $message = '', $negative_test = false)
-{
-	$test =& new StdClass();
-	$test->title = $title;
-
-	$test->value = ini_get($varname);
-	$test->secondvalue = null;
-
-	if (empty($test->value))
-	{
-		if ((string) get_cfg_var($varname) != '')
-		{
-			$test->value = (string) get_cfg_var($varname);
-		}
-		else
-		{
-			$test->value = $negative_test ? 'On' : 'Off';
-			$test->secondvalue = $negative_test ? lang('true') : lang('false');
-			if ($required)
-			{
-				list($test->continueon, $test->special_failed) = testGlobal($required);
-				$test->res = 'false';
-				$test->res_text = getTestReturn($test->res);
-				return $test;
-			}
-		}
-	}
-
-	if ( ($required) || (! $negative_test) )
-	{
-		list($test->continueon, $test->special_failed) = testGlobal($required);
-		$test->res = 'false';
-		$test->res_text = getTestReturn($test->res);
-		return $test;
-	}
-	else
-	{
-		$test->res = 'green';
-		$test->res_text = getTestReturn($test->res);
-	}
-
-	if (trim($message) != '')
-	{
-		$test->message = $message;
-	}
-	if (isset($error))
-	{
-		$test->error = $error;
 	}
 
 	return $test;
@@ -450,7 +423,7 @@ function returnBytes($val)
 	if (is_string($val) && $val != '')
 	{
 		$val = trim($val);
-		$last = strtolower($val{strlen($val)-1});
+		$last = strtolower(substr($val, strlen($val/1), 1));
 		switch($last)
 		{
 			case 'g':
@@ -748,7 +721,7 @@ function testRemoteFile($required, $title, $url, $message = '', $search = 'cmsma
 	}
 
 	$handle = false;
-	$result = testIniBoolean(0, '', 'allow_url_fopen', lang('test_allow_url_fopen_failed'), false);
+	$result = testBoolean(0, '', 'allow_url_fopen', lang('test_allow_url_fopen_failed'), false, false);
 	if ($result->value == 'On') // Primary test with fopen
 	{
 		$handle = @fopen($url, 'rb');

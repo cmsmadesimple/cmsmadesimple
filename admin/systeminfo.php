@@ -109,45 +109,55 @@ $tmp[1]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
 $smarty->assign('count_config_info', count($tmp[0]));
 $smarty->assign('config_info', $tmp);
 
+ini_set('max_execution_time', 0);
 
 
 /* PHP Information */
 
 $tmp = array(0=>array(), 1=>array());
 
-$tmp[0]['safe_mode'] = testIniBoolean(0, 'safe_mode', 'safe_mode', '', true);
+$session_save_path = ini_get('session.save_path');
+$open_basedir = ini_get('open_basedir');
+
+
+$tmp[0]['safe_mode'] = testBoolean(0, 'safe_mode', 'safe_mode', '', true, true);
 
 $tmp[1]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
 
-$tmp[1]['open_basedir'] = testIniValue(0, 'open_basedir', 'open_basedir', '');
-
 list($minimum, $recommended) = getTestValues('phpversion');
-$tmp[0]['phpversion'] = testVersionRange(0, 'phpversion', phpversion(), $minimum, $recommended);
+$tmp[0]['phpversion'] = testVersionRange(0, 'phpversion', phpversion(), '', $minimum, $recommended, false);
 
 list($minimum, $recommended) = getTestValues('memory_limit');
-$tmp[0]['memory_limit'] = testIniRange(0, 'memory_limit', 'memory_limit', $minimum, $recommended);
+$tmp[0]['memory_limit'] = testRange(0, 'memory_limit', 'memory_limit', '', $minimum, $recommended, true, true);
+
+if (! empty($open_basedir))
+{
+	$tmp[1]['open_basedir'] = testDummy('open_basedir', $open_basedir, 'red');
+}
+else
+{
+	$tmp[1]['open_basedir'] = testDummy('open_basedir', $open_basedir, 'green');
+}
 
 list($minimum, $recommended) = getTestValues('post_max_size');
-$tmp[1]['post_max_size'] = testIniRange(0, 'post_max_size', 'post_max_size', $minimum, $recommended);
+$tmp[1]['post_max_size'] = testRange(0, 'post_max_size', 'post_max_size', '', $minimum, $recommended, true, true);
 
 list($minimum, $recommended) = getTestValues('upload_max_filesize');
-$tmp[1]['upload_max_filesize'] = testIniRange(0, 'upload_max_filesize', 'upload_max_filesize', $minimum, $recommended);
+$tmp[1]['upload_max_filesize'] = testRange(0, 'upload_max_filesize', 'upload_max_filesize', '', $minimum, $recommended, true, true);
 
 list($minimum, $recommended) = getTestValues('max_execution_time');
-$tmp[0]['max_execution_time'] = testIniRange(0, 'max_execution_time', 'max_execution_time', $minimum, $recommended, '', false, 0);
+$tmp[0]['max_execution_time'] = testRange(0, 'max_execution_time', 'max_execution_time', '', $minimum, $recommended, true, false, 0);
 
 list($minimum, $recommended) = getTestValues('gd_version');
 $tmp[0]['gd_version'] = testGDVersion(0, 'gd_version', $minimum);
 
-$dir = ini_get('session.save_path');
-$open_basedir = ini_get('open_basedir');
-if ( (ini_get('session.save_handler') == 'files') && (empty($dir)) )
+if ( (ini_get('session.save_handler') == 'files') && (empty($session_save_path)) )
 {
-	$tmp[0]['session_save_path'] = testDummy('session_save_path', '', 'yellow');
+	$tmp[0]['session_save_path'] = testDummy('session_save_path', lang('os_session_save_path'), 'yellow');
 }
 elseif (! empty($open_basedir))
 {
-	$tmp[0]['session_save_path'] = testDummy('session_save_path', '', 'yellow');
+	$tmp[0]['session_save_path'] = testDummy('session_save_path', lang('open_basedir_active'), 'yellow');
 }
 else
 {
@@ -174,14 +184,14 @@ switch($config['dbms']) //workaroud: ServerInfo() is unsupported in adodblite
 					$v = pg_version();
 					$_server_db = (isset($v['server_version'])) ? $v['server_version'] : $v['client'];
 					list($minimum, $recommended) = getTestValues('pgsqlversion');
-					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, $minimum, $recommended);
+					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
 					break;
 	case 'mysqli':	$v = $db->connectionId->server_info;
 	case 'mysql':	if(!isset($v)) $v = mysql_get_server_info();
 					$tmp[0]['server_db_type'] = testDummy('', 'MySQL ('.$config['dbms'].')', '');
 					$_server_db = (false === strpos($v, "-")) ? $v : substr($v, 0, strpos($v, "-"));
 					list($minimum, $recommended) = getTestValues('mysqlversion');
-					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, $minimum, $recommended);
+					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
 					break;
 }
 $smarty->assign('count_server_info', count($tmp[0]));
