@@ -294,7 +294,7 @@ function & testVersionRange($required, $title, $var, $message = '', $minimum, $r
 
 	if ($ini)
 	{
-		testIni(&$test, $var, 'string');
+		testIni($test, $var, 'string');
 		if (isset($test->error))
 		{
 			$required = false;
@@ -362,7 +362,7 @@ function & testRange($required, $title, $var, $message = '', $minimum, $recommen
 
 	if ($ini)
 	{
-		testIni(&$test, $var, 'string');
+		testIni($test, $var, 'string');
 		if (isset($test->error))
 		{
 			$required = false;
