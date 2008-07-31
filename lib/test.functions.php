@@ -228,7 +228,7 @@ function & testBoolean($required, $title, $var, $message = '', $ini = true, $neg
 
 	if ($ini)
 	{
-		testIni(&$test, $var, 'boolean');
+		testIni($test, $var, 'boolean');
 	}
 	else
 	{
