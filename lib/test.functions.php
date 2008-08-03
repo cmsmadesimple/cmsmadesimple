@@ -172,12 +172,12 @@ function & testConfig($title, $varname, $testfunc = '', $message = '')
 }
 
 /**
- * @return object
+ * @return boolean
  * @var object  $test
  * @var string  $varname
  * @var string  $type
 */
-function & testIni(&$test, $varname, $type)
+function testIni(&$test, $varname, $type)
 {
 	$error = null;
 	$str = ini_get($varname);
