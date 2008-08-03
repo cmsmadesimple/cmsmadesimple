@@ -35,7 +35,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	#Set some defaults, just in case the config file is corrupted or
 	#we're coming from an upgrade
 	$config['php_memory_limit'] = '';
-	$config['process_whole_template'] = false;
+	$config['process_whole_template'] = true;
 	$config["dbms"] = "mysql";
 	$config["db_hostname"] = "localhost";
 	$config["db_username"] = "cms";
