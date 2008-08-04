@@ -65,7 +65,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
   if (isset($params['name']) && $params['name'] != '')
     {
       $query = 'SELECT css_id FROM '.cms_db_prefix().'css 
-                     WHERE name = ?';
+                     WHERE css_name = ?';
       $cssid = $db->GetOne( $query, array($params['name']));
       if( $cssid )
 	{
