@@ -1,6 +1,6 @@
 <div class="pagecontainer">
 {if empty($smarty.get.cleanreport)}
-	<div class="pageshowrows"><a href="systeminfo.php?cleanreport=1">{si_lang a=copy_paste_forum}</a></div>
+	<p class="pageshowrows"><a href="systeminfo.php?cleanreport=1">{si_lang a=copy_paste_forum}</a></p>
 {/if}
 
 {$showheader}
@@ -61,7 +61,7 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{si_lang a=$key} ({$key}):</p>
 		<p class="pageinput">
-	{if isset($test->value)}<strong>{$test->value}</strong>{/if}
+	{if isset($test->value)}<strong>&nbsp;{$test->value}</strong>{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue}){/if}
 	{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}
 		</p>
