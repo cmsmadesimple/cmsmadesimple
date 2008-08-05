@@ -103,7 +103,7 @@
 		{foreach from=$group_list item=thisgroup}
 			{if $thisgroup->id != -1}
 			{assign var="gid" value=`$thisgroup->id`}
-			<td class="g{$thisgroup->id}"><input type="checkbox" name="ug_{$user->id}_{$gid}" value="1"{if isset($user->group[$gid]) || $gid == 1} checked="checked"{/if}  /></td>
+			<td class="g{$thisgroup->id}"><input type="checkbox" name="ug_{$user->id}_{$gid}" value="1"{if isset($user->group[$gid])} checked="checked"{/if}  /></td>
 			{/if}
 		{/foreach}
     </tr>
