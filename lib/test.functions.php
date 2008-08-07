@@ -476,6 +476,7 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
 		}
 	}
 
+
 	if(! $_test)
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
@@ -490,6 +491,7 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
 	}
 	$_test = true;
 
+	clearstatcache();
 	$test->value = $dir;
 	$test->secondvalue = substr(sprintf('%o', @fileperms($dir)), -4);
 
@@ -511,11 +513,11 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
 	{
 		$_return = '';
 		if(! $debug) $_return = @fwrite($fp, $data);
-		else        $_return = fwrite($fp, $data);
+		else         $_return = fwrite($fp, $data);
 		@fclose($fp);
 
-		$filestat = stat($test_file);
-		if($filestat == false)
+		$_opt = permission_stat($test_file, $debug);
+		if($_opt == false)
 		{
 			list($test->continueon, $test->special_failed) = testGlobal($required);
 			$test->res = 'red';
@@ -528,35 +530,10 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
 			return $test;
 		}
 
-		clearstatcache();
-		if(! $debug) $mode = @fileperms($test_file);
-		else        $mode = fileperms($test_file);
-		$test->opt['permsdec'] = substr(sprintf('%o', $mode), -4);
-		$test->opt['permsstr'] = permission_octal2string($mode);
-		// functions not available on WAMP systems
-		if( (function_exists('posix_getpwuid')) && (function_exists('posix_getgrgid')) )
-		{
-			if(! $debug)
-			{
-				$userinfo = @posix_getpwuid($filestat[4]);
-				$groupinfo = @posix_getgrgid($filestat[5]);
-			}
-			else
-			{
-				$userinfo = posix_getpwuid($filestat[4]);
-				$groupinfo = posix_getgrgid($filestat[5]);
-			}
-			$test->opt['username'] = isset($userinfo['name']) ? $userinfo['name'] : lang('unknown');
-			$test->opt['usergroup'] = isset($groupinfo['name']) ? $groupinfo['name'] : lang('unknown');
-		}
-		else
-		{
-			$test->opt['username'] = lang('unknown');
-			$test->opt['usergroup'] = lang('unknown');
-		}
+		$test->opt = $_opt;
 
 		if(! $debug) @unlink($test_file);
-		else         unlink($test_file);
+		else          unlink($test_file);
 		if(! empty($_return))
 		{
 			$test->res = 'green';
@@ -570,6 +547,54 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
 	$test->res_text = getTestReturn($test->res);
 	$test->error = lang('errorcantcreatefile') .' ('. $test_file .')';
 	return $test;
+}
+
+
+
+/**
+ * @return array
+ * @var string  $file
+ * @var boolean $debug
+ */
+function permission_stat($file, $debug = false)
+{
+	clearstatcache();
+	$filestat = stat($file);
+	if($filestat == false)
+	{
+		return false;
+	}
+
+	clearstatcache();
+	if(! $debug) $mode = @fileperms($file);
+	else         $mode = fileperms($file);
+
+	$opt['permsdec'] = substr(sprintf('%o', $mode), -4);
+	$opt['permsstr'] = permission_octal2string($mode);
+
+	// functions not available on WAMP systems
+	if( (function_exists('posix_getpwuid')) && (function_exists('posix_getgrgid')) )
+	{
+		if(! $debug)
+		{
+			$userinfo = @posix_getpwuid($filestat[4]);
+			$groupinfo = @posix_getgrgid($filestat[5]);
+		}
+		else
+		{
+			$userinfo = posix_getpwuid($filestat[4]);
+			$groupinfo = posix_getgrgid($filestat[5]);
+		}
+		$opt['username'] = isset($userinfo['name']) ? $userinfo['name'] : lang('unknown');
+		$opt['usergroup'] = isset($groupinfo['name']) ? $groupinfo['name'] : lang('unknown');
+	}
+	else
+	{
+		$opt['username'] = lang('unknown');
+		$opt['usergroup'] = lang('unknown');
+	}
+
+	return $opt;
 }
 
 /**
@@ -653,7 +678,7 @@ function & testCreateDirAndFile($required, $title, $message='', $debug = false, 
 	else
 	{
 		if(! mkdir($dir)) $test->error = lang('errordirectorynotwritable') .' ('. $dir . ')';
-		if(! touch($file)) $test->error = lang('errorcantcreatefile') .' ('. $test_file . ')';
+		if(! touch($file)) $test->error = lang('errorcantcreatefile') .' ('. $file . ')';
 		$_test = file_exists($file);
 	}
 
@@ -742,13 +767,13 @@ function & testDirWrite($required, $title, $dir, $message = '', $quick = 0, $deb
 	if(file_exists($test_file)) @unlink($test_file);
 
 	if(! $debug) $fp = @fopen($test_file, "w");
-	else        $fp = fopen($test_file, "w");
+	else         $fp = fopen($test_file, "w");
 	if($fp !== false)
 	{
 		$_return = '';
 //		flock($fp, LOCK_EX); //no on NFS filesystem
 		if(! $debug) $_return = @fwrite($fp, $data);
-		else        $_return = fwrite($fp, $data);
+		else         $_return = fwrite($fp, $data);
 //		flock($fp, LOCK_UN);
 		@fclose($fp);
 
@@ -809,7 +834,7 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
 	if($result->value == 'On') // Primary test with fopen
 	{
 		if(! $debug) $handle = @fopen($url, 'rb');
-		else        $handle = fopen($url, 'rb');
+		else         $handle = fopen($url, 'rb');
 	}
 
 	if( ($result->value == 'Off') || (false === $handle) ) // Test with fsockopen
