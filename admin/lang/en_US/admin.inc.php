@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['caution'] = 'Caution';
 $lang['admin']['create_dir_and_file'] = 'Checking if the httpd process can create a file inside of a directory it created';
 $lang['admin']['os_session_save_path'] = 'No check because OS path';
 $lang['admin']['unlimited'] = 'Unlimited';
