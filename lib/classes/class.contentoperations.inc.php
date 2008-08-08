@@ -348,7 +348,7 @@ class ContentOperations
 	function & GetDefaultContent()
 	{
 	  global $gCms;
-	  if( isset($gCms->variableles['default_content_id']) )
+	  if( isset($gCms->variables['default_content_id']) )
 	    {
 	      return $gCms->variables['default_content_id'];
 	    }
