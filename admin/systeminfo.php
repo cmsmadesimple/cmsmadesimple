@@ -132,7 +132,7 @@ $tmp[0]['memory_limit'] = testRange(0, 'memory_limit', 'memory_limit', '', $mini
 
 if (! empty($open_basedir))
 {
-	$tmp[1]['open_basedir'] = testDummy('open_basedir', $open_basedir, 'red');
+	$tmp[1]['open_basedir'] = testDummy('open_basedir', $open_basedir, 'yellow', lang('test_check_open_basedir_failed'));
 }
 else
 {

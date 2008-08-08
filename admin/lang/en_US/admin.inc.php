@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['test_check_open_basedir_failed'] = 'Open basedir restrictions are in effect. You may have difficulty with some addon functionality with this restriction';
 $lang['admin']['caution'] = 'Caution';
 $lang['admin']['create_dir_and_file'] = 'Checking if the httpd process can create a file inside of a directory it created';
 $lang['admin']['os_session_save_path'] = 'No check because OS path';
