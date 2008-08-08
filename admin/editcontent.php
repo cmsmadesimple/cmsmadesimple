@@ -283,7 +283,8 @@ if ($access)
 
 		if ($error === FALSE)
 		{
-			$contentobj->Save();
+		  $contentobj->SetLastModifiedBy(get_userid());
+		  $contentobj->Save();
 			global $gCms;
 			$contentops =& $gCms->GetContentOperations();
 			$contentops->SetAllHierarchyPositions();
@@ -325,7 +326,7 @@ if ($access)
 		$contentops =& $gCms->GetContentOperations();
 		$contentobj = $contentops->LoadContentFromId($content_id);
 		$content_type = $contentobj->Type();
-		$contentobj->SetLastModifiedBy($userid);
+		//$contentobj->SetLastModifiedBy($userid);
 	}
 	else
 	{
