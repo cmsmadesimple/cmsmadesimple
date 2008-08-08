@@ -1,3 +1,9 @@
+Version 1.4.1 "Spring Garden"
+-----------------------------
+- Fixes an issue with the "name" parameter being broken on the stylesheet tag
+- Fixes an issue with changing group permissons on windows hosts
+- Fixes an issue with group assignment
+
 Version 1.4 "Jamaica"
 -----------------
 - Includes a new system information page in the admin
