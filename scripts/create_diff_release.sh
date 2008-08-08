@@ -240,4 +240,8 @@ done
 cd $_workdir/full_diff
 tar zcf ${basedir}/${_to}/cmsmadesimple-full-diff-${_fromver}-${_tover}.tar.gz .
 
+echo "Cleaning up"
+cd $_owd
+rm -rf $_workdir
+
 echo "Done"

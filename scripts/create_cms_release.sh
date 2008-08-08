@@ -175,19 +175,20 @@ case $ans in
 esac
 echo
 
-# Create CMS tag
-if [ ${notag:-notset} = notset ]; then
-  echo "Create CMS Tag cmsmadesimple/tags/version-$_version"
-  _desturl=${_cmsurl}/tags/version-${_version}
-  svn import -m "--Release: $_version --" $_desturl --no-auto-props >/dev/null
-fi
-
 # Clean up files that are not distributed
+# or don't need to be in the release
 if [ ${noremove:-notset} = notset ]; then
   echo "Clean un-necessary files"
   for _f in $_rmfiles ; do
     rm -rf $_f >/dev/null 2>&1
   done
+fi
+
+# Create CMS tag
+if [ ${notag:-notset} = notset ]; then
+  echo "Create CMS Tag cmsmadesimple/tags/version-$_version"
+  _desturl=${_cmsurl}/tags/version-${_version}
+  svn import -m "--Release: $_version --" $_desturl --no-auto-props >/dev/null
 fi
 
 # Create necessary files
