@@ -1,6 +1,10 @@
 <?php
 
 // Parse pretty URLS
+if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
+{
+  $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+}
 $url = substr($_SERVER['REQUEST_URI'],strlen($_SERVER['PHP_SELF']));
 $url = rtrim($url,'/');
 $matches = array();
