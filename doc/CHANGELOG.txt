@@ -3,6 +3,8 @@ Version 1.4.1 "Spring Garden"
 - Fixes an issue with the "name" parameter being broken on the stylesheet tag
 - Fixes an issue with changing group permissons on windows hosts
 - Fixes an issue with group assignment
+- Fixes a hard-coded table prefix in the css associations stuff
+- Fixes a problem with REQUEST_URI not being set on IIS hosts (stupid windows)
 
 Version 1.4 "Jamaica"
 -----------------
