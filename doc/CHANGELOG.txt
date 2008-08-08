@@ -5,6 +5,8 @@ Version 1.4.1 "Spring Garden"
 - Fixes an issue with group assignment
 - Fixes a hard-coded table prefix in the css associations stuff
 - Fixes a problem with REQUEST_URI not being set on IIS hosts (stupid windows)
+- TinyMCE: Fixed problem with cmslinker not allowing to select parentpages 
+           Fixed a small bug which could cause invalid relative urls to be generated
 
 Version 1.4 "Jamaica"
 -----------------
