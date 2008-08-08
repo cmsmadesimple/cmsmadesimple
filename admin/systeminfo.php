@@ -119,7 +119,6 @@ $tmp = array(0=>array(), 1=>array());
 $session_save_path = ini_get('session.save_path');
 $open_basedir = ini_get('open_basedir');
 
-
 $tmp[0]['safe_mode'] = testBoolean(0, 'safe_mode', 'safe_mode', '', true, true);
 
 $tmp[1]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
@@ -161,8 +160,11 @@ elseif (! empty($open_basedir))
 }
 else
 {
-	if (strrpos($dir, ";") !== false) $dir = substr($dir, strrpos($dir, ";")+1); //Can be 5;777;/tmp
-	$tmp[0]['session_save_path'] = testDirWrite(0, $dir, $dir);
+	if (strrpos($session_save_path, ";") !== false)
+	{
+		$session_save_path = substr($session_save_path, strrpos($session_save_path, ";")+1); //Can be 5;777;/tmp
+	}
+	$tmp[0]['session_save_path'] = testDirWrite(0, $session_save_path, $session_save_path);
 }
 
 $smarty->assign('count_php_information', count($tmp[0]));
