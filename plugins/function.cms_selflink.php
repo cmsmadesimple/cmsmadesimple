@@ -46,7 +46,7 @@ if ( isset($params['ext']) ) {
 
    $external_text = '(external link)';
    if ( isset($params['ext_info']) ) {
-      $external_text ='( '.$ext_info.' )';
+      $external_text ='( '.$params['ext_info'].' )';
    }
 
 
