@@ -12,13 +12,17 @@ function smarty_cms_modifier_cms_date_format($string, $format = '',
 	{
 	  $format = '%b %e, %Y';
 	}
-      $uid = get_userid(false);
-      if( $uid )
-	{
-	  $tmp = get_preference($uid,'date_format_string');
-	  if( $tmp != '' )
+      global $gCms;
+      if( !isset($gCms->variables['page_id']) )
+        {
+	  $uid = get_userid(false);
+	  if( $uid )
 	    {
-	      $format = $tmp;
+	      $tmp = get_preference($uid,'date_format_string');
+	      if( $tmp != '' )
+		{
+		  $format = $tmp;
+		}
 	    }
 	}
     }
