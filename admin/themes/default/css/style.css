@@ -910,7 +910,7 @@ div#nav-icons_all
 	float:right;
 	width:95px;
 	height:auto;
-	/*background:red;*//*debug*/
+	
 }
 div#nav-icons_all ul#nav-icons
 {
@@ -924,7 +924,7 @@ div#nav-icons_all ul#nav-icons li
 	padding:0px;
 	float:left;
 	height: 1%;	/*IE6*/
-	margin-left:10px;
+	margin-left:8px;
 	margin-top:2px;
 	}
 div#nav-icons_all ul#nav-icons li.viewsite-icon a
