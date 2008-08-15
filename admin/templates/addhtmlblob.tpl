@@ -1,5 +1,8 @@
 {validation_errors for=$gcb_object}
-{$header_name}
+<div class="pagecontainer">
+  <div class="pageoverflow">
+    {$header_name}
+  </div><!-- pageoverflow -->
 <form method="post" name="gcbform" id="cssform" action="{$action}">
 	<div id="page_tabs">
 		<ul>
@@ -22,7 +25,7 @@
 	<input type="hidden" name="addhtmlblob" value="true" />
 	{include file='elements/buttons.tpl'}	
 </form>
-
+</div>
 <script type="text/javascript">
 <!--
 	$('#page_tabs').tabs({$start_tab});

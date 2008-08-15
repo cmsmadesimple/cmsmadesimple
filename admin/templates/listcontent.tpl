@@ -1,8 +1,7 @@
 <div class="pagecontainer">
-
   <div class="pageoverflow">
     {$header_name}
-  </div>
+  </div><!-- pageoverflow -->
 
   <div id="contentlist">
     {$content_list}

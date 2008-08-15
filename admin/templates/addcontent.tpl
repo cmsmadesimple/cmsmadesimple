@@ -1,5 +1,8 @@
 {validation_errors for=$page_object}
-{$header_name}
+<div class="pagecontainer">
+  <div class="pageoverflow">
+    {$header_name}
+  </div><!-- pageoverflow -->
 {if $error_msg}
 	<div class="error">
 		<p>{$error_msg}</p>
@@ -185,7 +188,7 @@
 	</div> <!-- End tabs -->
 	{include file='elements/buttons.tpl'}
 </form>
-
+</div>
 
 <script type="text/javascript">
 <!--

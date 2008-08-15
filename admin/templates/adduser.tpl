@@ -1,5 +1,8 @@
 {validation_errors for=$user_object}
-{$header_name}
+<div class="pagecontainer">
+  <div class="pageoverflow">
+    {$header_name}
+  </div><!-- pageoverflow -->
 <form method="post" action="{$action}">		
 {if $user_object->id > 0}
 	<input type="hidden" name="user_id" value="{$user_object->id}" />
@@ -21,6 +24,7 @@
 	</div>
 	{include file='elements/buttons.tpl'}	
 </form>
+</div>
 <script type="text/javascript">
 <!--
 	$('#page_tabs').tabs('account');

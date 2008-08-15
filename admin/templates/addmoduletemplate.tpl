@@ -1,5 +1,9 @@
 {validation_errors for=$template_object}
-{$header_name}
+<div class="pagecontainer">
+  <div class="pageoverflow">
+    {$header_name}
+  </div><!-- pageoverflow -->
+
 <form method="post" name="tempalteform" id="tempalteform" action="{$action}">
 
 	{admin_input type='input' label='name' id='css_name' name='template[name]' value=$template_object->name}
@@ -17,3 +21,4 @@
 	{include file='elements/buttons.tpl'}
 
 </form>
+</div>
