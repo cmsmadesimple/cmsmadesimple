@@ -46,8 +46,8 @@ require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_cache.php');
  */
 function cms_autoload($class_name)
 {
-	//$files = scan_classes();
-	$files = CmsCache::get_instance()->call('scan_classes');
+	$files = scan_classes();
+	//$files = CmsCache::get_instance()->call('scan_classes');
 	
 	//Fix references to older classes
 	if ($class_name == 'CMSModule')

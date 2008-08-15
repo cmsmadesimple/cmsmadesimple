@@ -54,7 +54,7 @@ class CmsActsAsAttributed extends CmsActsAs
 		$this->check_variables_are_set($obj);
 		
 		//See if it exists -- return true
-		foreach ($this->get_attribute_defnitions(&$obj) as $one_def)
+		foreach ($this->get_attribute_defnitions($obj) as $one_def)
 		{
 			if ($one_def->name == $name)
 			{
