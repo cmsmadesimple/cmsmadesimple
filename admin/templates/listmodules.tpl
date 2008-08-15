@@ -1,6 +1,6 @@
 <div class="pagecontainer">
 	<div class="pageoverflow">
-	<p class="pageheader">Debug-title: {$header_name}</p>
+	<!--<p class="pageheader">Debug-title: -->{$header_name}<!--</p>-->
 	</div><!-- pageoverflow -->
 
 	

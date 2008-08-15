@@ -31,7 +31,10 @@ include_once("header.php");
 $action = coalesce_key($_REQUEST, 'action', '');
 $module = coalesce_key($_REQUEST, 'module', '');
 $plugin = coalesce_key($_REQUEST, 'plugin', '');
-
+//NUNO
+// Assign the header
+$smarty->assign('header_name', $themeObject->ShowHeader('modules'));
+// END NUNO
 $show_list = true;
 
 if ($action == 'install' && $module != '')

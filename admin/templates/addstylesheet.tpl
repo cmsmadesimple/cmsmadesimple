@@ -1,5 +1,8 @@
 {validation_errors for=$stylesheet_object}
+<div class="pagecontainer">
+<div class="pageoverflow">
 {$header_name}
+</div><!-- pageoverflow -->
 <form method="post" name="cssform" id="cssform" action="{$action}">
 	<div id="page_tabs">
 		<ul>
@@ -32,7 +35,7 @@
 	{/if}
 	{include file='elements/buttons.tpl'}	
 </form>
-
+</div>
 <script type="text/javascript">
 <!--
 	$('#page_tabs').tabs({$start_tab});

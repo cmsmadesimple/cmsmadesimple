@@ -310,6 +310,10 @@ if ($error != "") {
 if ($message != "") {
 	echo $themeObject->ShowMessage($message);
 }
+//NUNO
+// Assign the header
+$smarty->assign('header_name', $themeObject->ShowHeader('siteprefs'));
+// END NUNO
 
 // Make sure cache folder is writable
 if (FALSE == is_writable(cms_join_path(CmsConfig::get('root_path'),'tmp','cache')))

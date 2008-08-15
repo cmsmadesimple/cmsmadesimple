@@ -24,14 +24,14 @@ function smarty_function_validation_errors($params, &$smarty)
 			is_array($params['for']->validation_errors) &&
 			count($params['for']->validation_errors) > 0)
 		{
-			echo '<div class="pageerrorcontainer pageoverflow"><p class="pageerror">';
+			echo '<div class="pageerrorcontainer"><div class="pageerror">';
 			echo '<ul class="pageerror">';
 			foreach ($params['for']->validation_errors as $err)
 			{
 				echo '<li>' . $err . '</li>';
 			}
 			echo '</ul>';
-			echo '</p></div>';
+			echo '</div></div>';
 		}
 	}
 }

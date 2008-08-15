@@ -13,8 +13,9 @@
 	{/if}
 
 	<div class="pageoverflow">
-		{$header_name}
-	</div>
+		{$header_name} 
+     </div><!-- pageoverflow -->
+	
 
 	<div id="page_tabs">
 
@@ -111,4 +112,4 @@
 		</div>
 	</div>
 </div>
-{literal}<script>$('#page_tabs').tabs({fxAutoHeight: false});</script>{/literal}
+{literal}<script type="text/javascript">$('#page_tabs').tabs({fxAutoHeight: false});</script>{/literal}

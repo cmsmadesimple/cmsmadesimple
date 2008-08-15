@@ -1,5 +1,9 @@
-{$header_name}
-	<form method="post" action="editprefs.php" name="prefsform">
+<div class="pagecontainer">
+<div class="pageoverflow">
+{$header_name} 
+  </div><!-- pageoverflow -->
+	
+<form method="post" action="editprefs.php" name="prefsform">
 	<div id="page_tabs">
 		<ul>
 			<li><a href="#content"><span>Admin Panel</span></a></li>
@@ -28,4 +32,4 @@
 <!--
 	$('#page_tabs').tabs({$start_tab});
 //-->
-</script>
+</script></div>
