@@ -986,37 +986,37 @@ div.pagecontainer span.helptext {
 	
 	}
 	
-div.pagecontainer p.pageinput  {
+div.pagecontainer .pageinput  {
    color: #384654;
    float: left;
    padding-top: 5px;
    margin-bottom: 0.5em;
    }
 
-p.pageinputwysiwyg  {
+.pageinputwysiwyg  {
    padding-top: 5px;
    }
 
- p.pagemessage  {
+ .pagemessage  {
 	margin-bottom: 0;
 	padding: 5px;
 	font-weight: bold;	/*background: #D6E4C5;*/
    }
 
-p.pageshowrows  {
+.pageshowrows  {
    color: #384654;
    text-align: right;
    float: right;
    margin-right: 5px;
    }
 
-p.pagesubtitle  {
+.pagesubtitle  {
    color: #384654;
    font-weight: bold;
    padding-top: 5px;
    }
 
-p.pageoptions  {
+.pageoptions  {
    color: #384654;
    padding-top: 5px;
    }
@@ -1205,15 +1205,16 @@ textarea.pageheadtags  {
    }
 
 ul.pageerror  {
-   margin: 5px 0 10px 0;
+   margin: 0;
    padding-left: 10px;
-   }
+     }
+
 ul.pageerror li {
-	padding-left: 5px;
-	margin-left: 15px;
-   list-style-image: url("../images/icons/system/stop.gif");
+	padding: 10px 10px 10px 35px;
+	margin-left: 5px;
+	background: url(../images/icons/system/stop.gif) no-repeat left center;
    }
-div.pageerrorcontainer a {
+   div.pageerrorcontainer a {
 	color: #fff;
 	}
 .clearb  {
@@ -1299,7 +1300,7 @@ div#nav-icons_all
 	margin:0px;
 	padding:0px;
 	float:right;
-	width:95px;
+	width:100px;
 	height:auto;
 	/*background:red;*//*debug*/
 }
@@ -1322,8 +1323,7 @@ div#nav-icons_all ul#nav-icons li.viewsite-icon a
 	display:block;
 	padding: 10px 0;
 	width: 35px;
-	background: transparent url(../images/icons/extra/nav-icons.gif) no-repeat  0px 0px ;
-	
+	background: transparent url(../images/icons/extra/nav-icons.gif) no-repeat  0px 0px ;	
 }
 div#nav-icons_all ul#nav-icons li.logout-icon a
 {
@@ -1335,13 +1335,13 @@ div#nav-icons_all ul#nav-icons li.logout-icon a
 /*hover*/
 div#nav-icons_all ul#nav-icons li.viewsite-icon a:hover
 {
-	background-position:  0px -37px ;
-	
+	background-position:  0px -37px ;	
 }
 div#nav-icons_all ul#nav-icons li.logout-icon a:hover
 {
 	background-position:   -45px -37px ;	
-}   
+}  
+
 
 /*context_menu*/
 .placeholder-class
