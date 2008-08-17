@@ -837,7 +837,7 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
 		else         $handle = fopen($url, 'rb');
 	}
 
-	if( ($result->value == 'Off') || (false === $handle) ) // Test with fsockopen
+	if( ($result->value == 'Off') || (false == $handle) ) // Test with fsockopen
 	{
 		switch($url_info['scheme'])
 		{
@@ -868,7 +868,7 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
 		}
 	}
 
-	if(false !== $handle)
+	if(false != $handle)
 	{
 		$content = '';
 		while(!feof($handle))
@@ -906,24 +906,31 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
  * @return object
  * @var boolean $required
  * @var string  $title
- * @var string  $file1
- * @var string  $file2
- * @var int     $timestamp2
+ * @var string  $file
+ * @var string  $checksum
  * @var string  $message
  * @var string  $formattime
 */
-function & testFileChecksum($required, $title, $file1, $file2, $timestamp2 = 0, $message = '', $formattime = '%c')
+function & testFileChecksum($required, $title, $file, $checksum, $message = '', $formattime = '%c')
 {
 	$test =& new StdClass();
 	$test->title = $title;
-	$test->value = $file1;
+	$test->value = $file;
 
-	if(! file_exists($file1))
+	if(is_dir($file))
+	{
+		$test->res = 'yellow';
+		$test->res_text = getTestReturn($test->res);
+		$test->error = lang('is_directory') .' ('. $file . ')';
+		return $test;
+	}
+
+	if(! file_exists($file))
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
 		$test->res_text = getTestReturn($test->res);
-		$test->error = lang('nofiles') .' ('. $file1 . ')';
+		$test->error = lang('nofiles') .' ('. $file . ')';
 		if(trim($message) != '')
 		{
 			$test->message = $message;
@@ -931,48 +938,34 @@ function & testFileChecksum($required, $title, $file1, $file2, $timestamp2 = 0, 
 		return $test;
 	}
 
-	$file1_checksum = @md5_file($file1);
-	$file1_time = @filemtime($file1);
-
-	if(file_exists($file2))
+	if(!is_readable($file))
 	{
-		$file2_checksum = @md5_file($file2);
-		$file2_time = @filemtime($file2);
-	}
-	elseif(!empty($timestamp2)) // Not file but get data (and modification time) everywhere
-	{
-		$file2_checksum = $file2;
-		$file2_time = $timestamp2;
-	}
-	else // Not file but get everywhere, not modification time
-	{
-		$file2_checksum = $file2;
+		$test->res = 'yellow';
+		$test->res_text = getTestReturn($test->res);
+		$test->error = lang('is_readable_false') .' ('. $file . ')';
+		return $test;
 	}
 
-	if($file1_checksum == $file2_checksum)
+
+	$file_checksum = @md5_file($file);
+	if(false == $file_checksum)
+	{
+		$test->res = 'yellow';
+		$test->res_text = getTestReturn($test->res);
+		$test->error = lang('not_checksum') .' ('. $file . ')';
+		return $test;
+	}
+
+	if($file_checksum == $checksum)
 	{
 		$test->secondvalue = lang('checksum_match');
-		$test->opt['file1_timestamp'] = $file1_time;
 		$test->res = 'green';
 		$test->res_text = getTestReturn($test->res);
-
-		if( (isset($file2_time)) && ($file1_time <> $file2_time) )
-		{
-			$test->opt['file2_timestamp'] = $file2_time;
-			$test->opt['format_timestamp'] = $formattime;
-			$test->res = 'yellow';
-			$test->res_text = getTestReturn($test->res);
-		}
-
 		return $test;
 	}
 
 	$test->secondvalue = lang('checksum_not_match');
-	$test->opt['file1_timestamp'] = $file1_time;
-	if( (isset($file2_time)) && ($file1_time <> $file2_time) )
-	{
-		$test->opt['file2_timestamp'] = $file2_time;
-	}
+	$test->opt['file_timestamp'] = @filemtime($file);
 	$test->opt['format_timestamp'] = $formattime;
 
 	list($test->continueon, $test->special_failed) = testGlobal($required);
@@ -984,49 +977,6 @@ function & testFileChecksum($required, $title, $file1, $file2, $timestamp2 = 0, 
 	}
 
 	return $test;
-}
-
-/**
- * @return object
- * @var string  $file1
- * @var string  $checksum
- * @var string  $formattime
-*/
-function & testOptimizedLoopFileChecksum($file1, $checksum, $formattime = '%c')
-{
-	static $result = array();
-
-	if(! file_exists($file1))
-	{
-		$test =& new StdClass();
-		$test->value = $file1;
-		$test->secondvalue = lang('nofiles') .' ('. $file1 . ')';
-
-		$test->res = 'red';
-		$test->res_text = getTestReturn($test->res);
-
-		$result[] = $test;
-	}
-
-	$file1_checksum = @md5_file($file1);
-
-	if($file1_checksum != $checksum)
-	{
-		$test =& new StdClass();
-		$test->value = $file1;
-		$test->secondvalue = lang('checksum_not_match');
-
-		$test->res = 'red';
-		$test->res_text = getTestReturn($test->res);
-
-		$file1_time = @filemtime($file1);
-		$test->opt['file1_timestamp'] = $file1_time;
-		$test->opt['format_timestamp'] = $formattime;
-
-		$result[] = $test;
-	}
-
-	return $result;
 }
 
 /**

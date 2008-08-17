@@ -183,6 +183,10 @@ if(! file_exists($checksum_file))
 {
 	$error = lang('no_checksum_file');
 }
+elseif(! is_readable($checksum_file))
+{
+	$error = lang('checksum_file_no_readable');
+}
 else
 {
 	$handle = @fopen($checksum_file, 'rb');
