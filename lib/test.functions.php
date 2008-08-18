@@ -921,6 +921,7 @@ function & testFileChecksum($required, $title, $file, $checksum, $message = '', 
 	{
 		$test->res = 'yellow';
 		$test->res_text = getTestReturn($test->res);
+		$test->secondvalue = lang('is_directory');
 		$test->error = lang('is_directory') .' ('. $file . ')';
 		return $test;
 	}
@@ -930,6 +931,7 @@ function & testFileChecksum($required, $title, $file, $checksum, $message = '', 
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
 		$test->res_text = getTestReturn($test->res);
+		$test->secondvalue = lang('nofiles');
 		$test->error = lang('nofiles') .' ('. $file . ')';
 		if(trim($message) != '')
 		{
@@ -942,6 +944,7 @@ function & testFileChecksum($required, $title, $file, $checksum, $message = '', 
 	{
 		$test->res = 'yellow';
 		$test->res_text = getTestReturn($test->res);
+		$test->secondvalue = lang('is_readable_false');
 		$test->error = lang('is_readable_false') .' ('. $file . ')';
 		return $test;
 	}
@@ -952,25 +955,27 @@ function & testFileChecksum($required, $title, $file, $checksum, $message = '', 
 	{
 		$test->res = 'yellow';
 		$test->res_text = getTestReturn($test->res);
+		$test->secondvalue = lang('not_checksum');
 		$test->error = lang('not_checksum') .' ('. $file . ')';
 		return $test;
 	}
 
 	if($file_checksum == $checksum)
 	{
-		$test->secondvalue = lang('checksum_match');
 		$test->res = 'green';
 		$test->res_text = getTestReturn($test->res);
+		$test->secondvalue = lang('checksum_match');
 		return $test;
 	}
 
-	$test->secondvalue = lang('checksum_not_match');
 	$test->opt['file_timestamp'] = @filemtime($file);
 	$test->opt['format_timestamp'] = $formattime;
 
 	list($test->continueon, $test->special_failed) = testGlobal($required);
 	$test->res = 'red';
 	$test->res_text = getTestReturn($test->res);
+	$test->secondvalue = lang('checksum_not_match');
+	$test->error = lang('checksum_not_match');
 	if(trim($message) != '')
 	{
 		$test->message = $message;
