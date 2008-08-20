@@ -332,6 +332,15 @@ function cms_config_save($config)
 	$newfilename = CONFIG_FILE_LOCATION;
 	if (is_writable($newfilename) || is_writable($newfiledir))
 	{
+		// try to backup
+		$oldconfig = @file_get_contents($newfilename);
+		$handle = @fopen($newfilename .'.bakupg', "w");
+		if ($handle)
+		{
+			@fwrite($handle, $oldconfig);
+			fclose($handle);
+		}
+
 		$handle = fopen($newfilename, "w");
 		if ($handle)
 		{
@@ -341,8 +350,10 @@ function cms_config_save($config)
 			fclose($handle);
 			
 			cms_config_upgrade();
+			return true;
 		}
 	}
+	return false;
 }
 
 /**
