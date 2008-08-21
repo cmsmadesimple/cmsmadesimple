@@ -1742,10 +1742,6 @@ class AdminTheme
 		{
 		  continue;
 		}
-	      if( $sectionKey == 'viewsite' )
-		{
-		  continue;
-		}
 	      
 	      $opts[$menuItem['title']] = $menuItem['url'];
 
@@ -1754,7 +1750,7 @@ class AdminTheme
 		{
 		  foreach( $menuItem['children'] as $thisChild )
 		    {
-		      if( $thisChild == 'home' )
+		      if( $thisChild == 'home' || $thisChild == 'logout' )
 			{
 			  continue;
 			}
@@ -1765,7 +1761,7 @@ class AdminTheme
 			  continue;
 			}
 
-		      
+		 
 		      $opts['&nbsp;&nbsp;'.$menuChild['title']] = $menuChild['url'];
 
 		    }
