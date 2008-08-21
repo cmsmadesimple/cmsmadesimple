@@ -461,19 +461,13 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
 	}
 
 	$_test = true;
-	if(! $debug)
+	if($debug)
 	{
-		if( (! @is_dir($dir)) || (! @is_writable($dir)) )
-		{
-			$_test = false;
-		}
+		if( (! is_dir($dir)) || (! is_writable($dir)) ) $_test = false;
 	}
 	else
 	{
-		if( (! is_dir($dir)) || (! is_writable($dir)) )
-		{
-			$_test = false;
-		}
+		if( (! @is_dir($dir)) || (! @is_writable($dir)) ) $_test = false;
 	}
 
 
@@ -498,22 +492,22 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
 	$test_file = $dir . DIRECTORY_SEPARATOR . $file;
 	if(file_exists($test_file)) @unlink($test_file);
 
-	if(! $debug)
-	{
-		@umask(octdec($umask));
-		$fp = @fopen($test_file, "w");
-	}
-	else
+	if($debug)
 	{
 		umask(octdec($umask));
 		$fp = fopen($test_file, "w");
+	}
+	else
+	{
+		@umask(octdec($umask));
+		$fp = @fopen($test_file, "w");
 	}
 
 	if($fp !== false)
 	{
 		$_return = '';
-		if(! $debug) $_return = @fwrite($fp, $data);
-		else         $_return = fwrite($fp, $data);
+		if($debug) $_return = fwrite($fp, $data);
+		else       $_return = @fwrite($fp, $data);
 		@fclose($fp);
 
 		$_opt = permission_stat($test_file, $debug);
@@ -532,8 +526,8 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
 
 		$test->opt = $_opt;
 
-		if(! $debug) @unlink($test_file);
-		else          unlink($test_file);
+		if($debug) unlink($test_file);
+		else      @unlink($test_file);
 		if(! empty($_return))
 		{
 			$test->res = 'green';
@@ -566,8 +560,8 @@ function permission_stat($file, $debug = false)
 	}
 
 	clearstatcache();
-	if(! $debug) $mode = @fileperms($file);
-	else         $mode = fileperms($file);
+	if($debug) $mode = fileperms($file);
+	else       $mode = @fileperms($file);
 
 	$opt['permsdec'] = substr(sprintf('%o', $mode), -4);
 	$opt['permsstr'] = permission_octal2string($mode);
@@ -575,15 +569,15 @@ function permission_stat($file, $debug = false)
 	// functions not available on WAMP systems
 	if( (function_exists('posix_getpwuid')) && (function_exists('posix_getgrgid')) )
 	{
-		if(! $debug)
-		{
-			$userinfo = @posix_getpwuid($filestat[4]);
-			$groupinfo = @posix_getgrgid($filestat[5]);
-		}
-		else
+		if($debug)
 		{
 			$userinfo = posix_getpwuid($filestat[4]);
 			$groupinfo = posix_getgrgid($filestat[5]);
+		}
+		else
+		{
+			$userinfo = @posix_getpwuid($filestat[4]);
+			$groupinfo = @posix_getgrgid($filestat[5]);
 		}
 		$opt['username'] = isset($userinfo['name']) ? $userinfo['name'] : lang('unknown');
 		$opt['usergroup'] = isset($groupinfo['name']) ? $groupinfo['name'] : lang('unknown');
@@ -664,22 +658,25 @@ function & testCreateDirAndFile($required, $title, $message='', $debug = false, 
 	$dir = cms_join_path(TMP_CACHE_LOCATION, $dir);
 	$file = cms_join_path($dir, $file);
 
-	if(file_exists($file)) @unlink($file);
-	if( (is_dir($dir)) && (false !== strpos($dir, dirname(dirname(__FILE__)))) ) @rmdir($dir);
-
-	if(! $debug)
+	if($debug)
 	{
+		if(file_exists($file)) unlink($file);
+		if( (is_dir($dir)) && (false !== strpos($dir, dirname(dirname(__FILE__)))) ) rmdir($dir);
+
+		if(! mkdir($dir)) $test->error = lang('errordirectorynotwritable') .' ('. $dir . ')';
+		if(! touch($file)) $test->error = lang('errorcantcreatefile') .' ('. $file . ')';
+		$_test = file_exists($file);
+	}
+	else
+	{
+		if(file_exists($file)) @unlink($file);
+		if( (@is_dir($dir)) && (false !== strpos($dir, dirname(dirname(__FILE__)))) ) @rmdir($dir);
+
 		@mkdir($dir);
 		@touch($file);
 		$_test = file_exists($file);
 		@unlink($file);
 		@rmdir($dir);
-	}
-	else
-	{
-		if(! mkdir($dir)) $test->error = lang('errordirectorynotwritable') .' ('. $dir . ')';
-		if(! touch($file)) $test->error = lang('errorcantcreatefile') .' ('. $file . ')';
-		$_test = file_exists($file);
 	}
 
 	if(! $_test)
@@ -725,19 +722,13 @@ function & testDirWrite($required, $title, $dir, $message = '', $quick = 0, $deb
 	$test->secondvalue = substr(sprintf('%o', @fileperms($dir)), -4);
 
 	$_test = true;
-	if(! $debug)
+	if($debug)
 	{
-		if( (! @is_dir($dir)) || (! @is_writable($dir)) )
-		{
-			$_test = false;
-		}
+		if( (! is_dir($dir)) || (! is_writable($dir)) ) $_test = false;
 	}
 	else
 	{
-		if( (! is_dir($dir)) || (! is_writable($dir)) )
-		{
-			$_test = false;
-		}
+		if( (! @is_dir($dir)) || (! @is_writable($dir)) ) $_test = false;
 	}
 
 	if(! $_test)
@@ -764,16 +755,20 @@ function & testDirWrite($required, $title, $dir, $message = '', $quick = 0, $deb
 	}
 
 	$test_file = $dir . DIRECTORY_SEPARATOR . $file;
-	if(file_exists($test_file)) @unlink($test_file);
+	if(file_exists($test_file))
+	{
+		if($debug) unlink($test_file);
+		else      @unlink($test_file);
+	}
 
-	if(! $debug) $fp = @fopen($test_file, "w");
-	else         $fp = fopen($test_file, "w");
+	if($debug) $fp = fopen($test_file, "w");
+	else       $fp = @fopen($test_file, "w");
 	if($fp !== false)
 	{
 		$_return = '';
 //		flock($fp, LOCK_EX); //no on NFS filesystem
-		if(! $debug) $_return = @fwrite($fp, $data);
-		else         $_return = fwrite($fp, $data);
+		if($debug) $_return = fwrite($fp, $data);
+		else       $_return = @fwrite($fp, $data);
 //		flock($fp, LOCK_UN);
 		@fclose($fp);
 
@@ -833,8 +828,8 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
 	$result = testBoolean(0, '', 'allow_url_fopen', lang('test_allow_url_fopen_failed'), false, false);
 	if($result->value == 'On') // Primary test with fopen
 	{
-		if(! $debug) $handle = @fopen($url, 'rb');
-		else         $handle = fopen($url, 'rb');
+		if($debug) $handle = fopen($url, 'rb');
+		else       $handle = @fopen($url, 'rb');
 	}
 
 	if( ($result->value == 'Off') || (false == $handle) ) // Test with fsockopen
@@ -854,13 +849,15 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
 		$test->message = lang('use_fsockopen');
 		$complete_url  = (isset($url_info['path'])) ? $url_info['path'] : '/';
 		$complete_url .= (isset($url_info['query'])) ? '?'.$url_info['query'] : '';
-		$handle = @fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, 30);
+		if($debug) $handle = fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, 30);
+		else       $handle = @fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, 30);
 		if(false !== $handle)
 		{
 			$out  = "GET " . $complete_url . " HTTP/1.1\r\n";
 			$out .= "Host: " . $url_info['host'] . "\r\n";
 			$out .= "Connection: Close\r\n\r\n";
-			@fwrite($handle, $out);
+			if($debug) fwrite($handle, $out);
+			else      @fwrite($handle, $out);
 		}
 		else
 		{
@@ -873,7 +870,8 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
 		$content = '';
 		while(!feof($handle))
 		{
-			$content .= @fgets($handle, 128);
+			if($debug) $content .= fgets($handle, 128);
+			else       $content .= @fgets($handle, 128);
 		}
 		@fclose($handle);
 
@@ -910,8 +908,9 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
  * @var string  $checksum
  * @var string  $message
  * @var string  $formattime
+ * @var boolean $debug
 */
-function & testFileChecksum($required, $title, $file, $checksum, $message = '', $formattime = '%c')
+function & testFileChecksum($required, $title, $file, $checksum, $message = '', $formattime = '%c', $debug = false)
 {
 	$test =& new StdClass();
 	$test->title = $title;
@@ -940,7 +939,9 @@ function & testFileChecksum($required, $title, $file, $checksum, $message = '', 
 		return $test;
 	}
 
-	if(!is_readable($file))
+	if($debug) $_test = is_readable($file);
+	else       $_test = @is_readable($file);
+	if(! $_test)
 	{
 		$test->res = 'yellow';
 		$test->res_text = getTestReturn($test->res);
@@ -950,7 +951,8 @@ function & testFileChecksum($required, $title, $file, $checksum, $message = '', 
 	}
 
 
-	$file_checksum = @md5_file($file);
+	if($debug) $file_checksum = md5_file($file);
+	else       $file_checksum = @md5_file($file);
 	if(false == $file_checksum)
 	{
 		$test->res = 'yellow';
@@ -968,7 +970,8 @@ function & testFileChecksum($required, $title, $file, $checksum, $message = '', 
 		return $test;
 	}
 
-	$test->opt['file_timestamp'] = @filemtime($file);
+	if($debug) $test->opt['file_timestamp'] = filemtime($file);
+	else       $test->opt['file_timestamp'] = @filemtime($file);
 	$test->opt['format_timestamp'] = $formattime;
 
 	list($test->continueon, $test->special_failed) = testGlobal($required);
