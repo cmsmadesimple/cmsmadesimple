@@ -856,7 +856,12 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 		$db->Execute($query);
 	}
 	
-	if ($result) $result->Close();
+	if ($result)
+	{
+		$result->Close();
+		return true;
+	}
+	return false;
 }
 
 
