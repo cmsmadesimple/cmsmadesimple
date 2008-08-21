@@ -1750,7 +1750,8 @@ class AdminTheme
 		{
 		  foreach( $menuItem['children'] as $thisChild )
 		    {
-		      if( $thisChild == 'home' || $thisChild == 'logout' )
+		      if( $thisChild == 'home' || $thisChild == 'logout' ||
+			  $thisChild == 'viewsite')
 			{
 			  continue;
 			}
