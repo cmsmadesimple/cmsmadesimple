@@ -48,7 +48,7 @@ class CmsDatabase extends CmsObject
 	
 	static public function close()
 	{
-		if (self::$instance != NULL)
+		if (self::$instance !== null)
 		{
 			if (self::$instance->IsConnected())
 			{
@@ -59,7 +59,7 @@ class CmsDatabase extends CmsObject
 	
 	static public function get_prefix()
 	{
-		if (self::$prefix == NULL)
+		if (self::$prefix === null)
 		{
 			self::$prefix = CmsConfig::get('db_prefix');
 			define('CMS_DB_PREFIX', self::$prefix);
