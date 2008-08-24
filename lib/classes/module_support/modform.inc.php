@@ -226,7 +226,7 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
 	global $gCms;
 	$config =& $gCms->GetConfig();
 
-	$text = '<input name="'.$id.$name.'" value="'.$value.'" type=';
+	$text = '<input name="'.$id.$name.'" value="'.$id.$value.'" type=';
 
 	if ($image != '')
 	{
