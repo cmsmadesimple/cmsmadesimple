@@ -28,10 +28,25 @@ global $gCms;
 
 function GetCoreDashboardOutput($priority=2) {
 	$output="";
+	global $gCms;
 	require_once("../lib/classes/class.user.inc.php");
 	if ($priority>1) {
-		global $gCms;
 		$output.="Welcome ".$gCms->variables['username'].", and you have userid ".get_userid();
+		
+		$db =& $gCms->GetDb();
+
+		$variables = &$gCms->variables;
+		$variables['ownerpages'] = array();
+
+		$query = "SELECT timestamp FROM ".cms_db_prefix()."adminlog WHERE user_id=? AND action=? ORDER BY timestamp DESC";
+		//echo $query;
+		$result = &$db->Execute($query, array(get_userid(),"User Login"));
+		if ($result && $result->RecordCount()>2) {
+			$row=$result->FetchRow();
+			$row=$result->FetchRow();
+			$sincelogin=time()-$row["timestamp"];
+			$output.="<br/>It's been ".$sincelogin." seconds since your last login";
+		}				
 	}
 	return $output;
 }
