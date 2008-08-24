@@ -511,6 +511,9 @@ class Smarty_CMS extends Smarty {
 	  
 	  if (get_site_preference('enablesitedownmessage') == "1")
 	    {
+	      header('HTTP/1.0 503 Service Unavailable');
+	      header('Status: 503 Service Unavailable');
+
 	      $tpl_source = get_site_preference('sitedownmessage');
 	      return true;
 	    }
