@@ -324,7 +324,11 @@ function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $se
   $size = cms_htmlentities($size);
   $multiple = cms_htmlentities($multiple);
 
-	$text = '<select name="'.$id.$name.'"';
+  if( strstr($name,'[]') === FALSE && $multiple === true )
+    {
+      $name.='[]';
+    }
+  $text = '<select name="'.$id.$name.'"';
 	if ($addttext != '')
 	{
 		$text .= ' ' . $addttext;
