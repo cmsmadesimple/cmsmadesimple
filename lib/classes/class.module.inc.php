@@ -2496,9 +2496,11 @@ class CMSModule
 	/**
 	 *  States whether the module has output fit for the dashboard
 	 * 
+	 * @param integer The $priority of the wanted output. 1 urgent output, 2 more common output
+	 * 
 	 * @returns boolean
 	 */
-	function HasDashboardOutput() 
+	function HasDashboardOutput($priority=2) 
 	{
 		return false;		
 	}
@@ -2508,7 +2510,7 @@ class CMSModule
 	 * 
 	 * @returns dashboard-content
 	 */
-	function GetDashboardOutput() {
+	function GetDashboardOutput($priority=2) {
 		return '';
 	}
 }
