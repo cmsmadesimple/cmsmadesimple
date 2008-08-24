@@ -2493,6 +2493,24 @@ class CMSModule
 	}
 
 	
+	/**
+	 *  States whether the module has output fit for the dashboard
+	 * 
+	 * @returns boolean
+	 */
+	function HasDashboardOutput() 
+	{
+		return false;		
+	}
+	
+	/**
+	 * Returns the output the module wants displayed in the dashboard
+	 * 
+	 * @returns dashboard-content
+	 */
+	function GetDashboardOutput() {
+		return '';
+	}
 }
 
 # vim:ts=4 sw=4 noet
