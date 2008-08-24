@@ -28,34 +28,38 @@ $db =& $gCms->GetDb();
 $error = "";
 
 if (isset($_SESSION['logout_user_now']))
-  {
-    debug_buffer("Logging out.  Clearning cookies and session variables.");
-    unset($_SESSION['logout_user_now']);
-    unset($_SESSION['cms_admin_user_id']);
-    setcookie('cms_admin_user_id', '', time() - 3600);
-    setcookie('cms_passhash', '', time() - 3600);
-  }
- else
-   {
-     $no_redirect = true;
-     $is_logged_in = check_login($no_redirect);
-     if (true == $is_logged_in)
-       {
-	 $userid = get_userid();
-	 $dest = $config['root_url'].'/'.$config['admin_dir'];
-	 $homepage = get_preference($userid,'homepage');
-	 if( $homepage == '' )
-	   {
-	     $homepage = 'index.php';
-	   }
-	 {
-	   $tmp = explode('?',$homepage);
-	   if( !file_exists($tmp[0]) ) $homepage = 'index.php';
-	 }
-	 $dest = $dest.'/'.$homepage;
-	 redirect($dest);
-       }
-   }
+{
+	debug_buffer("Logging out.  Clearning cookies and session variables.");
+	unset($_SESSION['logout_user_now']);
+	unset($_SESSION['cms_admin_user_id']);
+	setcookie('cms_admin_user_id', '', time() - 3600);
+	setcookie('cms_passhash', '', time() - 3600);
+}
+else
+{
+	$_SESSION["t_redirect_url"] = $_SESSION["redirect_url"];
+	$no_redirect = true;
+	$is_logged_in = check_login($no_redirect);
+	$_SESSION["redirect_url"] = $_SESSION["t_redirect_url"];
+	unset($_SESSION["t_redirect_url"]);
+
+	if (true == $is_logged_in)
+	{
+		$userid = get_userid();
+		$dest = $config['root_url'].'/'.$config['admin_dir'];
+		$homepage = get_preference($userid,'homepage');
+		if( $homepage == '' )
+		{
+			$homepage = 'index.php';
+		}
+		{
+			$tmp = explode('?',$homepage);
+			if( !file_exists($tmp[0]) ) $homepage = 'index.php';
+		}
+		$dest = $dest.'/'.$homepage;
+		redirect($dest);
+	}
+}
 if (isset($_POST["logincancel"]))
 {
 	debug_buffer("Login cancelled.  Returning to content.");
