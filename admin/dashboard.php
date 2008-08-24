@@ -16,22 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: editcss.php 4631 2008-06-14 18:03:26Z nuno $
-
-/**
- * This page is both the interface of the CSS editing, and used for actually
- * updating the CSS in the DB. The first part checks that all parameters are
- * valids, and then insert into the DB and redirect.
- *
- * The second part show the form to edit the CSS
- *
- * It takes one argument when called externally :
- * - $css_id : the id of the css to edit
- *
- * @since	0.6
- * @author	calexico
- */
-
+#$Id: dashboard.php 4631 2008-06-14 18:03:26Z nuno $
 
 $CMS_ADMIN_PAGE=1;
 
@@ -41,7 +26,14 @@ check_login();
 
 global $gCms;
 
-function GetCoreDashboardOutput() {
-	echo "This is core-output relevant for dashboard";
+function GetCoreDashboardOutput($priority=2) {
+	$output="";
+	require_once("../lib/classes/class.user.inc.php");
+	if ($priority>1) {
+		global $gCms;
+		$output.="Welcome ".$gCms->variables['username'].", and you have userid ".get_userid();
+	}
+	return $output;
 }
+
 ?>
