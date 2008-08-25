@@ -115,8 +115,6 @@ function &get_page_object(&$page_type, &$orig_page_type, $userid, $content_id, $
 		//Do this first -- so alias gets set
 		$page_object->set_property_value('name', $_REQUEST['name'], $lang);
 		$page_object->set_property_value('menu_text', $_REQUEST['menu_text'], $lang);
-		
-		var_dump($params['content']);
 
 		$page_object->update_parameters($params['content'], $lang, get_magic_quotes_gpc());
 		if (strtolower(get_class($page_object)) != $page_type)

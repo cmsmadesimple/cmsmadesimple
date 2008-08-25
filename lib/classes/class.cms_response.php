@@ -118,7 +118,7 @@ class CmsResponse extends CmsObject
 	            echo "<a href=\"".$to."\">".$to."</a><br />";
 
 				echo '<pre>';
-				debug_print_backtrace();
+				echo CmsProfiler::get_instance()->report();
 				echo '</pre>';
 	
 	            exit();
