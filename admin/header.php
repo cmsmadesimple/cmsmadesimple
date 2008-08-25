@@ -76,6 +76,15 @@ else
 	    }
 	}
 
+      // if the install directory still exists
+      // add a priority 1 dashboard item
+      if( file_exists(dirname(dirname(__FILE__)).'/install') )
+	{
+	  $themeObject->AddToDashboard(1,'Core',
+				       lang('installdirwarning'));
+	}
+
+      // and display the dashboard.
       $themeObject->DisplayDashboard();
 
       // we've removed the Recent Pages stuff, but other things could go in this box
