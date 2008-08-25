@@ -128,7 +128,7 @@ class CmsConfig extends CmsObject implements ArrayAccess
 		$config["max_upload_size"] = 1000000;
 		$config["debug"] = false;
 		$config["assume_mod_rewrite"] = false;
-		$config['internal_pretty_urls'] = false;
+		$config['internal_pretty_urls'] = true;
 		$config["auto_alias_content"] = true;
 		$config["image_manipulation_prog"] = "GD";
 		$config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
