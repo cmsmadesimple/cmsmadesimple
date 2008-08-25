@@ -62,6 +62,12 @@ if (isset($_POST["allowparamcheckwarnings"]))
     $allowparamcheckwarnings = 1;
   }
 
+$enablenotifications = 1;
+if (!isset($_POST["enablenotifications"])) 
+  {
+    $enablenotifications = 0;
+  }
+
 $enablecustom404 = "0";
 if (isset($_POST["enablecustom404"])) $enablecustom404 = "1";
 
@@ -216,6 +222,7 @@ else if (isset($_POST["editsiteprefs"]))
       set_site_preference('sitename', $sitename);
       set_site_preference('disablesafemodewarning',$disablesafemodewarning);
       set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
+      set_site_preference('enablenotifications',$enablenotifications);
       audit(-1, '', 'Edited Site Preferences');
       //redirect("siteprefs.php");
       //return;
@@ -246,6 +253,7 @@ else if (isset($_POST["editsiteprefs"]))
   $sitename = get_site_preference('sitename', 'CMSMS Site');
   $disablesafemodewarning = get_site_preference('disablesafemodewarning',0);
   $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',0);
+  $enablenotifications = get_site_preference('enablenotifications',1);
  }
 
 
@@ -481,6 +489,10 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 			<p class="pagetext"><?php echo lang('date_format_string')?>:</p>
 																		     <p class="pageinput"><input class="pagenb" type="text" name="defaultdateformat" size="20" maxlength="255" value="<?php echo $defaultdateformat; ?>"/>&nbsp;<?php echo lang('date_format_string_help'); ?></p>
                 </div>
+          <div class="pageoverflow">
+			  <p class="pagetext"><?php echo lang('admin_enablenotifications')?>:</p>
+																		     <p class="pageinput"><input class="pagenb" type="checkbox" name="enablenotifications" <?php if($enablenotifications) echo "checked=\"checked\""?> /></p>
+          </div>
 
 	<?php if ($access) { ?>
 	<div class="pageoverflow">

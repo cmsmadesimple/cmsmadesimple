@@ -45,6 +45,9 @@ if (isset($_POST['hide_help_links'])) $hide_help_links = $_POST['hide_help_links
 $indent = 0;
 if (isset($_POST['indent'])) $indent = $_POST['indent'];
 
+$enablenotifications = 1;
+if (!isset($_POST['enablenotifications'])) $enablenotifications = 0;
+
 $paging = 0;
 if (isset($_POST['paging'])) $paging = $_POST['paging'];
 
@@ -79,6 +82,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'bookmarks', $bookmarks);
 	set_preference($userid, 'hide_help_links', $hide_help_links);
 	set_preference($userid, 'indent', $indent);
+	set_preference($userid, 'enablenotifications',$enablenotifications);
 	set_preference($userid, 'paging', $paging);
 	set_preference($userid, 'date_format_string', $date_format_string);
 	set_preference($userid, 'homepage', $homepage );
@@ -95,6 +99,7 @@ if (isset($_POST["submit_form"])) {
 	$admintheme = get_preference($userid, 'admintheme');
 	$bookmarks = get_preference($userid, 'bookmarks');
 	$indent = get_preference($userid, 'indent', true);
+	$enablenotifications = get_preference($userid, 'enablenotifications', 1);
 	$paging = get_preference($userid, 'paging', 0);
 	$date_format_string = get_preference($userid, 'date_format_string','%x %X');
 	$homepage = get_preference($userid,'homepage');
@@ -256,6 +261,13 @@ if (FALSE == empty($page_message)) {
 					<input class="pagenb" type="checkbox" name="indent" <?php if ($indent) echo "checked=\"checked\""; ?> /><?php echo lang('indent') ?>
 				</p>
 			</div>
+
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('enablenotifications'); ?>:</p>
+				<p class="pageinput">
+					<input class="pagenb" type="checkbox" name="indent" <?php if ($enablenotifications) echo "checked=\"checked\""; ?> /></p>
+			</div>
+
 			<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">

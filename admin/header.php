@@ -45,47 +45,51 @@ else
       $themeObject->DoTopMenu();
       $themeObject->DisplayMainDivStart();
 
-      // Display dashboard stuff from modules
+      // Display notification stuff from modules
       // should be controlled by preferences or something
-      foreach( $gCms->modules as $modulename => $ext )
+      if( get_site_preference('enablenotifications',1) &&
+	  get_preference($userid,'enablenotifications',1) )
 	{
-	  $mod =& $gCms->modules[$modulename]['object'];
-	  if( !is_object($mod) ) continue;
-
-	  $data = $mod->GetDashboardOutput(2); // todo, priority preference
-	  if( empty($data) ) continue;
-	  if( is_object($data) )
+	  foreach( $gCms->modules as $modulename => $ext )
 	    {
-	      $themeObject->AddToDashboard($data->priority,
-					   $mod->GetName(),
-					   $data->html);
-	    }
-	    else
-	    {
-	      // we have more than one item
-	      // for the dashboard from this module
-	      if( is_array($data) )
+	      $mod =& $gCms->modules[$modulename]['object'];
+	      if( !is_object($mod) ) continue;
+	      
+	      $data = $mod->GetNotificationOutput(2); // todo, priority user preference
+	      if( empty($data) ) continue;
+	      if( is_object($data) )
 		{
-		  foreach( $data as $item )
+		  $themeObject->AddNotification($data->priority,
+						$mod->GetName(),
+						$data->html);
+		}
+	      else
+		{
+		  // we have more than one item
+		  // for the dashboard from this module
+		  if( is_array($data) )
 		    {
-		      $themeObject->AddToDashboard($item->priority,
-						   $mod->GetName(),
-						   $item->html);
+		      foreach( $data as $item )
+			{
+			  $themeObject->AddNotification($item->priority,
+						       $mod->GetName(),
+						       $item->html);
+			}
 		    }
 		}
 	    }
-	}
 
-      // if the install directory still exists
-      // add a priority 1 dashboard item
-      if( file_exists(dirname(dirname(__FILE__)).'/install') )
-	{
-	  $themeObject->AddToDashboard(1,'Core',
-				       lang('installdirwarning'));
+	  // if the install directory still exists
+	  // add a priority 1 dashboard item
+	  if( file_exists(dirname(dirname(__FILE__)).'/install') )
+	    {
+	      $themeObject->AddNotification(1,'Core',
+					    lang('installdirwarning'));
+	    }
 	}
 
       // and display the dashboard.
-      $themeObject->DisplayDashboard();
+      $themeObject->DisplayNotifications();
 
       // we've removed the Recent Pages stuff, but other things could go in this box
       // so I'll leave some of the logic there. We can remove it later if it makes sense. SjG

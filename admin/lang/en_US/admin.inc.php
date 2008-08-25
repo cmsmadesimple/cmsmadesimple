@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['enable_enablenotifications'] = 'Allow users to view notifications on each admin page';
+$lang['admin']['enablenotifications'] = 'Enable user notifications in the admin section';
 $lang['admin']['test_check_open_basedir_failed'] = 'Open basedir restrictions are in effect. You may have difficulty with some addon functionality with this restriction';
 $lang['admin']['caution'] = 'Caution';
 $lang['admin']['create_dir_and_file'] = 'Checking if the httpd process can create a file inside of a directory it created';
