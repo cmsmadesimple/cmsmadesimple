@@ -67,7 +67,7 @@ class CmsDatabase extends CmsObject
 		return self::$prefix;
 	}
 	
-	static function connect($dbms = '', $hostname = '', $username = '', $password = '', $dbname = '', $debug = false, $die = true, $prefix = '', $make_global = true)
+	static function connect($dbms = '', $hostname = '', $username = '', $password = '', $dbname = '', $debug = false, $die = true, $prefix = null, $make_global = true)
 	{
 		$gCms = cmsms();
 		$persistent = false;
@@ -84,7 +84,7 @@ class CmsDatabase extends CmsObject
 			$persistent = $config['persistent_db_conn'];
 		}
 		
-		if ($prefix != '')
+		if ($prefix !== null)
 		{
 			self::$prefix = $prefix;
 		}

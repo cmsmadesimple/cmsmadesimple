@@ -229,11 +229,11 @@ class CmsRequest extends CmsObject
 	{
 		if (isset($_SERVER['PATH_TRANSLATED']))
 		{
-		     return str_replace('\\\\', '\\', $_SERVER('PATH_TRANSLATED'));
+		     return str_replace('\\\\', '\\', $_SERVER['PATH_TRANSLATED']);
 		}
 		else if (isset($_ENV['PATH_TRANSLATED']))
 		{
-		     return str_replace('\\\\', '\\', $_ENV('PATH_TRANSLATED'));
+		     return str_replace('\\\\', '\\', $_ENV['PATH_TRANSLATED']);
 		}
 		else
 		{
