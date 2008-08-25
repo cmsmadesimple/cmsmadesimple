@@ -44,6 +44,40 @@ else
       $themeObject->DisplayBodyTag();
       $themeObject->DoTopMenu();
       $themeObject->DisplayMainDivStart();
+
+      // Display dashboard stuff from modules
+      // should be controlled by preferences or something
+      foreach( $gCms->modules as $modulename => $ext )
+	{
+	  $mod =& $gCms->modules[$modulename]['object'];
+	  if( !is_object($mod) ) continue;
+
+	  $data = $mod->GetDashboardOutput(2); // todo, priority preference
+	  if( empty($data) ) continue;
+	  if( is_object($data) )
+	    {
+	      $themeObject->AddToDashboard($data->priority,
+					   $mod->GetName(),
+					   $data->html);
+	    }
+	    else
+	    {
+	      // we have more than one item
+	      // for the dashboard from this module
+	      if( is_array($data) )
+		{
+		  foreach( $data as $item )
+		    {
+		      $themeObject->AddToDashboard($item->priority,
+						   $mod->GetName(),
+						   $item->html);
+		    }
+		}
+	    }
+	}
+
+      $themeObject->DisplayDashboard();
+
       // we've removed the Recent Pages stuff, but other things could go in this box
       // so I'll leave some of the logic there. We can remove it later if it makes sense. SjG
       $marks = get_preference($userid, 'bookmarks');

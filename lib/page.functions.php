@@ -847,7 +847,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 		  {
 		    $result .= ' '.$addtext;
 		  }
-		    
+
 		$result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
 	}
 

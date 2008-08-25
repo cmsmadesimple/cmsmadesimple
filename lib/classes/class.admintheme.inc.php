@@ -101,6 +101,11 @@ class AdminTheme
      */
     var $breadcrumbs;
 
+    /**
+     * Dashboard Items
+     */
+    var $_dashboarditems;
+
 	/**
 	 * Generic constructor.  Runs the SetInitialValues fuction.
 	 */
@@ -1407,6 +1412,45 @@ class AdminTheme
         echo "</div>\n";
     }
 
+
+    /**
+     * AddToDashboard
+     */
+    function AddToDashboard($priority,$module,$html)
+    {
+      if( !is_array($this->_dashboarditems) )
+	{
+	  $this->_dashboarditems = array(array(),array(),array());
+	}
+      if( $priority < 1 ) $priority = 1;
+      if( $priority > 3 ) $priority = 3;
+
+      $this->_dashboarditems[$priority][] = array($module,$html);
+    }
+
+    function DisplayDashboard($priority=2)
+    {
+      if( !is_array($this->_dashboarditems) ) return;
+      echo '<div class="DashboardCallout">'."\n";
+      for( $i = 1; $i <= $priority; $i++ )
+	{
+	  echo '<div class="DashBoardLabel">'."\n";
+	  echo 'Priority: '.$i;
+	  echo "</div>\n";
+	  foreach( $this->_dashboarditems[$i] as $data )
+	    {
+	      echo '<div class="DashBoardItem">'."\n";
+	      echo '<span class="DashBoardItemModuleName">'."\n";
+	      echo $data[0]."\n";
+	      echo "</span>\n";
+	      echo '<span class="DashBoardItemData">'."\n";
+	      echo "</span>\n";
+	      echo $data[1]."\n";
+	      echo "</div>\n";
+	    }
+	}
+      echo "</div><!-- DashboardCallout -->\n";
+    }
 
     /**
      * DisplayDashboardCallout
