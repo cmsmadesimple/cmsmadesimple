@@ -55,7 +55,7 @@ else
 	      $mod =& $gCms->modules[$modulename]['object'];
 	      if( !is_object($mod) ) continue;
 	      
-	      $data = $mod->GetNotificationOutput(2); // todo, priority user preference
+	      $data = $mod->GetNotificationOutput(3); // todo, priority user preference
 	      if( empty($data) ) continue;
 	      if( is_object($data) )
 		{
@@ -89,7 +89,7 @@ else
 	}
 
       // and display the dashboard.
-      $themeObject->DisplayNotifications();
+      $themeObject->DisplayNotifications(3); // todo, a preference.
 
       // we've removed the Recent Pages stuff, but other things could go in this box
       // so I'll leave some of the logic there. We can remove it later if it makes sense. SjG
