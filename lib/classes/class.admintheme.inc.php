@@ -1431,7 +1431,8 @@ class AdminTheme
     function DisplayDashboard($priority=2)
     {
       if( !is_array($this->_dashboarditems) ) return;
-      echo '<div class="DashboardCallout">'."\n";
+       echo '<div class="full-Dashboard">'."\n";
+	   echo '<div class="DashboardCallout">'."\n";
       for( $i = 1; $i <= $priority; $i++ )
 	{
 	  echo '<div class="DashBoardLabel">'."\n";
@@ -1444,12 +1445,13 @@ class AdminTheme
 	      echo $data[0]."\n";
 	      echo "</span>\n";
 	      echo '<span class="DashBoardItemData">'."\n";
-	      echo "</span>\n";
 	      echo $data[1]."\n";
+		  echo "</span>\n";
 	      echo "</div>\n";
 	    }
 	}
       echo "</div><!-- DashboardCallout -->\n";
+	  echo "</div><!-- full-Dashboard -->\n";
     }
 
     /**
@@ -1469,6 +1471,7 @@ class AdminTheme
 	       echo '<p>'.$message.'</p>';
         }
         echo "</div> <!-- end DashboardCallout -->\n";
+		
     }
 
     /**
