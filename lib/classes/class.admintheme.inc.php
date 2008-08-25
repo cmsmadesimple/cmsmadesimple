@@ -1431,7 +1431,7 @@ class AdminTheme
     function DisplayDashboard($priority=2)
     {
       if( !is_array($this->_dashboarditems) ) return;
-       echo '<div class="full-Dashboard">'."\n";
+       echo '<div class="full-Dashboard clear">'."\n";
 	   echo '<div class="DashboardCallout">'."\n";
       for( $i = 1; $i <= $priority; $i++ )
 	{
