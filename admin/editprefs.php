@@ -289,12 +289,6 @@ if (FALSE == empty($page_message)) {
 			</div>
 
 			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('enablenotifications'); ?>:</p>
-				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="enablenotifications" <?php if ($enablenotifications) echo "checked=\"checked\""; ?> /></p>
-			</div>
-
-			<div class="pageoverflow">
 			  <p class="pagetext"><?php echo lang('ignorenotificationsfrommodules'); ?>:</p>
 			  <p class="pageinput">
 			  <?php

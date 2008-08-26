@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['dashboard'] = 'View Dashboard';
 $lang['admin']['ignorenotificationsfrommodules'] = 'Ignore notifications from these modules';
 $lang['admin']['admin_enablenotifications'] = 'Allow users to view notifications on each admin page';
 $lang['admin']['enablenotifications'] = 'Enable user notifications in the admin section';
