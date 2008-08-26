@@ -47,11 +47,13 @@ else
 
       // Display notification stuff from modules
       // should be controlled by preferences or something
+      $ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
       if( get_site_preference('enablenotifications',1) &&
 	  get_preference($userid,'enablenotifications',1) )
 	{
 	  foreach( $gCms->modules as $modulename => $ext )
 	    {
+	      if( in_array($modulename,$ignoredmodules) ) continue;
 	      $mod =& $gCms->modules[$modulename]['object'];
 	      if( !is_object($mod) ) continue;
 	      

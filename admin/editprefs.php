@@ -66,12 +66,30 @@ if (isset($_POST['gcb_wysiwyg'])) $gcb_wysiwyg = 1;
 $date_format_string = '%x %X';
 if (isset($_POST['date_format_string'])) $date_format_string = $_POST['date_format_string'];
 
+$ignoredmodules = array();
+if (isset($_POST['ignoredmodules']) )
+  {
+    $ignoredmodules = $_POST['ignoredmodules'];
+  }
+
 $userid = get_userid();
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php");
 	return;
 }
+
+$modules = array();
+foreach($gCms->modules as $key=>$value)
+{
+  if ($gCms->modules[$key]['installed'] == true &&
+      $gCms->modules[$key]['active'] == true)
+    {
+      $obj =& $gCms->modules[$key]['object'];
+      $modules[$obj->GetFriendlyName()] = $obj->GetName();
+    }
+}
+
 
 if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'gcb_wysiwyg', $gcb_wysiwyg);
@@ -86,6 +104,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'paging', $paging);
 	set_preference($userid, 'date_format_string', $date_format_string);
 	set_preference($userid, 'homepage', $homepage );
+	set_preference($userid, 'ignoredmodules', implode(',',$ignoredmodules));
 	audit(-1, '', 'Edited User Preferences');
 	$page_message = lang('prefsupdated');
 	#redirect("index.php");
@@ -104,6 +123,7 @@ if (isset($_POST["submit_form"])) {
 	$date_format_string = get_preference($userid, 'date_format_string','%x %X');
 	$homepage = get_preference($userid,'homepage');
 	$hide_help_links = get_preference($userid, 'hide_help_links');
+	$ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
 }
 
 include_once("header.php");
@@ -269,6 +289,30 @@ if (FALSE == empty($page_message)) {
 			</div>
 
 			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('enablenotifications'); ?>:</p>
+				<p class="pageinput">
+					<input class="pagenb" type="checkbox" name="enablenotifications" <?php if ($enablenotifications) echo "checked=\"checked\""; ?> /></p>
+			</div>
+
+			<div class="pageoverflow">
+			  <p class="pagetext"><?php echo lang('ignorenotificationsfrommodules'); ?>:</p>
+			  <p class="pageinput">
+			  <?php
+			  $txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
+                          foreach( $modules as $key => $value )
+                          {
+                            $txt .= '<option value="'.$value.'"';
+                            if( in_array($value,$ignoredmodules) )
+			      {
+				$txt .= ' selected="selected"';
+			      }
+                            $txt .= ">{$key}</option>\n";
+                          }
+                          $txt .= "</select>\n";
+                          echo $txt;
+                          ?>
+			  </p>
+                        </div>
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />

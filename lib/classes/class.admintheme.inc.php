@@ -1425,7 +1425,7 @@ class AdminTheme
       if( $priority < 1 ) $priority = 1;
       if( $priority > 3 ) $priority = 3;
 
-      $this->_notificationitems[$priority][] = array($module,$html);
+      $this->_notificationitems[$priority-1][] = array($module,$html);
     }
 
     function DisplayNotifications($priority=2)
@@ -1435,11 +1435,13 @@ class AdminTheme
 	  // echo '<div class="NotificationsCallout">'."\n";
       for( $i = 1; $i <= $priority; $i++ )
 	{
+	  if( count($this->_notificationitems) < $i ) break;
+	  if( count($this->_notificationitems[$i-1]) == 0 ) continue;
 	  echo '<div class="NotificationsCallout">'."\n";
 	  echo '<div class="NotificationsLabel">'."\n";
 	  echo 'Priority: '.$i;
 	  echo "</div>\n";
-	  foreach( $this->_notificationitems[$i] as $data )
+	  foreach( $this->_notificationitems[$i-1] as $data )
 	    {
 	      echo '<div class="NotificationsItem">'."\n";
 	      echo '<span class="NotificationsItemModuleName">'."\n";
