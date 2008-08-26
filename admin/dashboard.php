@@ -39,14 +39,13 @@ $themeObject->DisplayDashboardPageItem("start");
 
 $output="";
 
+/******* Core Information Output ********/
+
 require_once("../lib/classes/class.user.inc.php");
 
 $output.="Welcome ".$gCms->variables['username'].", and you have userid ".get_userid();
 
 $db =& $gCms->GetDb();
-
-$variables = &$gCms->variables;
-$variables['ownerpages'] = array();
 
 $query = "SELECT timestamp FROM ".cms_db_prefix()."adminlog WHERE user_id=? AND action=? ORDER BY timestamp DESC";
 //echo $query;
@@ -59,6 +58,25 @@ if ($result && $result->RecordCount()>2) {
 }
 
 $themeObject->DisplayDashboardPageItem("core","Core information",$output);
+
+/******* ModuleInformation Output ********/
+
+foreach ($gCms->modules as $module) {
+	if (!$module["installed"]) continue;
+	if (!$module["active"]) continue;
+	//if ($this->GetPreference(get_userid()."_show_".$module["object"]->GetName(),"1")!="1") continue;
+	
+	$output=$module["object"]->GetDashboardOutput();
+	if ($output!="") {
+    $themeObject->DisplayDashboardPageItem("module",$module["object"]->GetFriendlyName(),$output);		
+	}
+	
+}
+
+
+
+
+
 
 $themeObject->DisplayDashboardPageItem("end");
 
