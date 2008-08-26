@@ -1,7 +1,7 @@
 <?php
 $lang['admin']['dashboard'] = 'View Dashboard';
 $lang['admin']['ignorenotificationsfrommodules'] = 'Ignore notifications from these modules';
-$lang['admin']['admin_enablenotifications'] = 'Allow users to view notifications on each admin page';
+$lang['admin']['admin_enablenotifications'] = 'Allow users to view notifications<br/><em>(notifications will be displayed on all admin pages)';
 $lang['admin']['enablenotifications'] = 'Enable user notifications in the admin section';
 $lang['admin']['test_check_open_basedir_failed'] = 'Open basedir restrictions are in effect. You may have difficulty with some addon functionality with this restriction';
 $lang['admin']['caution'] = 'Caution';
