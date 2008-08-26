@@ -1431,32 +1431,26 @@ class AdminTheme
     function DisplayNotifications($priority=2)
     {
       if( !is_array($this->_notificationitems) ) return;
-       echo '<div class="full-Notifications clear">'."\n";
-	  // echo '<div class="NotificationsCallout">'."\n";
+      echo '<div class="full-Notifications clear">'."\n";
+      echo "<ul>\n";
       for( $i = 1; $i <= $priority; $i++ )
 	{
 	  if( count($this->_notificationitems) < $i ) break;
 	  if( count($this->_notificationitems[$i-1]) == 0 ) continue;
-	  echo '<div class="NotificationsCallout">'."\n";
-	  echo '<div class="NotificationsLabel">'."\n";
-	  echo 'Priority: '.$i;
-	  echo "</div>\n";
 	  foreach( $this->_notificationitems[$i-1] as $data )
 	    {
-	      echo '<div class="NotificationsItem">'."\n";
+              echo '<li class="NotificationsItem NotificationsPriority'.$i.'">';
 	      echo '<span class="NotificationsItemModuleName">'."\n";
 	      echo $data[0]."\n";
 	      echo "</span>\n";
 	      echo '<span class="NotificationsItemData">'."\n";
 	      echo $data[1]."\n";
-		  echo "</span>\n";
-	      echo "</div>\n";
-		  
+	      echo "</span>\n";
+	      echo '</li>';		  
 	    }
-		echo "</div><!-- NotificationsCallout -->\n";
 	}
-      //echo "</div><!-- NotificationsCallout -->\n";
-	  echo "</div><!-- full-Notifications -->\n";
+      echo "</ul>";
+      echo "</div><!-- full-Notifications -->\n";
     }
 
     /**
