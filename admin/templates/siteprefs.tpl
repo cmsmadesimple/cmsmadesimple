@@ -25,10 +25,12 @@
 			<li><a href="#languages"><span>{tr}Languages{/tr}</span></a></li>
 			<li><a href="#mail"><span>{tr}Mail Settings{/tr}</span></a></li>
 		</ul>
+        
+
 
 		<div id="general" class="fragment">
-
-			<form method="post" name="generalform" id="generalform" action="siteprefs.php">
+<br />
+			<form id="generalform" method="post" action="siteprefs.php">
 				{admin_input type='submit' label='Clear Cache' id='clearcache' name='clearcache' value='Clear'}
 				{admin_input type='input' label='Site Name' name='sitename' id='sitename' value=$sitename}
 				{admin_input type='input' label='File Creation Mask (umask)' name='global_umask' id='global_umask' value=$global_umask size='4'}
@@ -40,9 +42,11 @@
 				{admin_input type='textarea' class='smalltext' label='Site Down Message' name='sitedownmessage' id='sitedownmessage' value=$sitedownmessage}
 	
 			        
+       
         
-        <div class="input-hidden">
-        <input type="hidden" name="editsiteprefs" value="true" />
+        <div class="input-hidden"> 
+        {admin_input type='hidden' label='noneLabel' name='editsiteprefs' id='editsiteprefs' value='true'}
+        <!--<input type="hidden" name="editsiteprefs" value="true" />-->
         </div> <!--input-hidden-->
 				{include file='elements/buttons.tpl'}
                
@@ -52,7 +56,7 @@
 
 		<div id="languages" class="fragment">
 
-			<form method="post" name="languagesform" id="languagesform" action="siteprefs.php">
+			<form id="languagesform" method="post"  action="siteprefs.php">
 				<table border="0" cellspacing="0" cellpadding="3">
 					<thead>
 						<tr>
@@ -81,7 +85,7 @@
 		</div>
 
 		<div id="mail" class="fragment">
-			<form method="post" name="mailform" id="mailform" action="siteprefs.php">
+        <form id="mailform" method="post"   action="siteprefs.php">
 				<p>{lang string='mail_settings_short_help'}</p>
 				{assign var='tmp1' value=','|explode:"mail,sendmail,smtp"}
 				{assign var='tmp2' value=','|explode:"Mail,Sendmail,Smtp"}
