@@ -70,6 +70,10 @@ $ignoredmodules = array();
 if (isset($_POST['ignoredmodules']) )
   {
     $ignoredmodules = $_POST['ignoredmodules'];
+    if( in_array('**none**',$ignoredmodules) )
+      {
+	$ignoredmodules = array();
+      }
   }
 
 $userid = get_userid();
@@ -80,6 +84,8 @@ if (isset($_POST["cancel"])) {
 }
 
 $modules = array();
+$modules[ucwords(lang('none'))] = '**none**';
+$modules['---'] = '**none**';
 foreach($gCms->modules as $key=>$value)
 {
   if ($gCms->modules[$key]['installed'] == true &&
