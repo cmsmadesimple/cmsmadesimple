@@ -943,3 +943,35 @@ div#nav-icons_all ul#nav-icons li.logout-icon a
 	background: transparent url(themes/default/images/icons/extra/logout.gif) no-repeat  0px 0px ;	
 	}
 .group {float: left; padding-right: 25px;}
+
+
+/* ########### Notifications #################*/
+.full-Notifications
+{
+clear:both;
+margin-top:5px 0 10px 0;
+
+/*TODO*/
+}
+
+.full-Notifications ul
+{
+/*TODO*/
+}
+
+.NotificationsItem
+{
+/*TODO*/
+} 
+.NotificationsPriority1
+{
+/*TODO*/
+} 
+.NotificationsPriority2
+{
+/*TODO*/
+} 
+.NotificationsPriority3
+{
+/*TODO*/
+} 
