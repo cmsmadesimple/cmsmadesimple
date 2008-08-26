@@ -1458,7 +1458,7 @@ class AdminTheme
      * Outputs warning if the install directory is still there.
      *
      * @param file file or dir to check for
-	 * @param message to display if it does exist
+	   * @param message to display if it does exist
      */
     function DisplayDashboardCallout($file, $message = '')
     {
@@ -1471,6 +1471,27 @@ class AdminTheme
         }
         echo "</div> <!-- end DashboardCallout -->\n";
 		
+    }
+    
+    /**
+     * DisplayDashboardPageItem
+     * Outputs an item on the dashboard page
+     *
+     * @param itemtype to display, start/end/core/module
+	   * @param output to display
+     */
+    function DisplayDashboardPageItem($item="module", $title='', $content = '')
+    {
+    	switch ($item) {
+    		case "start" : return;
+    		case "end" : return;
+    		case "core" :
+    		case "module" : {
+    			echo "<div class='dashboardpageitem'>";
+    			echo "<h3>".$title."</h3>";
+    			echo $content."</div>";
+    		}
+    	}
     }
 
     /**
