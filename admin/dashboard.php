@@ -31,6 +31,9 @@ include_once("header.php");
 
 <div class="pagecontainer">
 <div class="pageoverflow">
+<div class="pageheader">
+<?php echo lang('dashboard'); ?>
+</div>
 <?php 
 global $gCms;
 
@@ -43,7 +46,7 @@ $output="";
 
 require_once("../lib/classes/class.user.inc.php");
 
-$output.="Welcome ".$gCms->variables['username'].", and you have userid ".get_userid();
+$output.= lang('welcome_user') . " <b>".$gCms->variables['username']."</b>, and you have userid <b>".get_userid() ."</b>";
 
 $db =& $gCms->GetDb();
 
