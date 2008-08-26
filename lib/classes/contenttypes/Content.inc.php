@@ -318,7 +318,9 @@ class Content extends ContentBase
 		  $ret[]= $this->ShowAdditionalEditors();
 		}
 	    }
-	    $ret[]=array(lang('last_modified_at').':', strftime( get_preference(get_userid(),'date_format_string','%x %X') , strtotime($this->mModifiedDate) ) );
+	    $tmp = get_preference(get_userid(),'date_format_string','%x %X');
+	    if( empty($tmp) ) $tmp = '%x %X';
+	    $ret[]=array(lang('last_modified_at').':', strftime($tmp, strtotime($this->mModifiedDate) ) );
 	    $modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);
 	    $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
 	}
