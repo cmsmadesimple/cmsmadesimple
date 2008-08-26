@@ -1387,4 +1387,9 @@ font:11px Tahoma;
 font-weight:bold;
 text-decoration:none;
 }
-/* context_menu */
+/* end */
+
+.input-hidden
+{
+display:none;
+}
