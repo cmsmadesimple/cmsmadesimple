@@ -291,11 +291,11 @@ class CmsAdminTheme extends CmsObject
 				{
 					$module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php?action=showmodulehelp&amp;module='.$module_name;
 					$header .= '<span class="helptext"><a href="'.$module_help_link.'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('help').'</a> | ';
-					$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('wikihelp').'</a>  ('.lang('new_window').')</span>';
+					$header .= '<a href="'.$wikiUrl.'" rel="external">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" rel="external">'.lang('wikihelp').'</a>  ('.lang('new_window').')</span>';
 				}
 				else
 				{
-					$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
+					$header .= '<span class="helptext"><a href="'.$wikiUrl.'" rel="external">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" rel="external">'.lang('help').'</a> ('.lang('new_window').')</span>';
 				}
 			}
 		}
@@ -866,7 +866,7 @@ class CmsAdminTheme extends CmsObject
 			}
 		}
 		$wikiUrl .= '/Troubleshooting';
-		$wikiLink = ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a>';
+		$wikiLink = ' <a href="'.$wikiUrl.'" rel="external">'.lang('troubleshooting').'</a>';
 		if (FALSE != is_array($errors))
 		{
 			$output = '<ul class="pageerrorcontainer">';

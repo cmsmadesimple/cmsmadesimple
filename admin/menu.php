@@ -102,7 +102,7 @@ else
 	echo "../index.php";
 }
 
-?>" target="_blank"><?php echo lang('showsite')?></a>
+?>" rel="external"><?php echo lang('showsite')?></a>
 <a href="editprefs.php"><?php echo lang('userprefs')?></a>
 <a href="logout.php"><?php echo lang('logout')?></a>
 

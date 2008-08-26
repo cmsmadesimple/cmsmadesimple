@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
@@ -15,21 +14,24 @@
     
 	 <link rel="stylesheet" href="{$root}/admin/themes/NCleanGrey2/css/style.css" type="text/css" />
         <!--[if IE]>
-		 <script type="text/javascript" src="{$root}/admin/themes/NCleanGrey2/includes/ie7-standard-p.js"></script>
+		  <script type="text/javascript" src="{$root}/admin/themes/NCleanGrey2/includes/ie7-standard-p.js"></script>
 	<![endif]-->	
-   
-    <script language="javascript" type="text/javascript" src="{$root}/lib/jquery/jquery.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/jquery.color.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/jquery.jcontext.1.0.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.tabs.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.accordion.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.mouse.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.draggable.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.droppable.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.sortable.js"></script>	
+    <script type="text/javascript"  src="{$root}/admin/themes/NCleanGrey2/includes/standard.js"></script>
+
+
+    <script type="text/javascript" src="{$root}/lib/jquery/jquery.js"></script>
+	 <script type="text/javascript"  src="{$root}/lib/jquery/jquery.color.js"></script>
+	 <script type="text/javascript"  src="{$root}/lib/jquery/jquery.jcontext.1.0.js"></script>
+	 <script type="text/javascript"  src="{$root}/lib/jquery/ui/ui.tabs.js"></script>
+	 <script type="text/javascript"  src="{$root}/lib/jquery/ui/ui.accordion.js"></script>
+	 <script type="text/javascript"  src="{$root}/lib/jquery/ui/ui.mouse.js"></script>
+	 <script type="text/javascript"  src="{$root}/lib/jquery/ui/ui.draggable.js"></script>
+	 <script type="text/javascript"  src="{$root}/lib/jquery/ui/ui.droppable.js"></script>
+	 <script type="text/javascript"  src="{$root}/lib/jquery/ui/ui.sortable.js"></script>	
 	
 	{literal}	
-	<script type="text/javascript">//<![CDATA[
+	 <script type="text/javascript">
+    //<![CDATA[
 		// form handling stuff
 		$(document).ready(function() {
 			// disable all buttons

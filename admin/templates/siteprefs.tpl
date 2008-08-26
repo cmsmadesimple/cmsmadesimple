@@ -39,8 +39,13 @@
 				{admin_input type='checkbox' label='Enable Site Down Message' name='enablesitedownmessage' id='enablesitedownmessage' value=$enablesitedownmessage}				
 				{admin_input type='textarea' class='smalltext' label='Site Down Message' name='sitedownmessage' id='sitedownmessage' value=$sitedownmessage}
 	
-				<input type="hidden" name="editsiteprefs" value="true" />
+			        
+        
+        <div class="input-hidden">
+        <input type="hidden" name="editsiteprefs" value="true" />
+        </div> <!--input-hidden-->
 				{include file='elements/buttons.tpl'}
+               
 			</form>
 
 		</div>
@@ -98,7 +103,12 @@
 			    {admin_input type='input' label='Default From Address' name='mail_from' id='mail_from' value=$mail_from}
 			    {admin_input type='input' label='Default From Name' name='mail_fromname' id='mail_fromname' value=$mail_fromname}
 		
-				<input type="hidden" name="mailsettings" value="true" />
+				<div class="input-hidden">
+       <input type="hidden" name="mailsettings" value="true" />
+        </div> <!--input-hidden-->
+        
+              
+        
 				{include file='elements/buttons.tpl'}
 
 				<fieldset>

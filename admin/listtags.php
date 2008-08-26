@@ -67,7 +67,7 @@ if ($action == "showpluginhelp")
 
 			$image_help = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
 			$image_help_external = $themeObject->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
-			$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
+			$header .= '<span class="helptext"><a href="'.$wikiUrl.'" rel="external">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" rel="external">'.lang('help').'</a> ('.lang('new_window').')</span>';
 		}
 
 		$header .= '</div>';
