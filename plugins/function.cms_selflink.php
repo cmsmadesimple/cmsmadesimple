@@ -63,15 +63,17 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 	/* LeisureLarry - Changed if statement */
 	if (isset($params['page']) or isset($params['href']))
 	{
-		$page = $params['page'];
-		$name = $params['page']; //mbv - 21-06-2005
-
 		/* LeisureLarry - Begin */
 		if (isset($params['href']))
 		{
 			$page = $params['href'];
 		}
 		/* LeisureLarry - End */
+		else
+		{
+			$page = $params['page'];
+		}
+		$name = $page;
 
 		# check if the page exists in the db
 		$manager =& $gCms->GetHierarchyManager();
