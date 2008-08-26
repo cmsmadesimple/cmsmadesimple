@@ -35,8 +35,9 @@ function smarty_function_admin_input($params, &$smarty)
 	// Give a default value of text if no type is specified
 	if(!isset($params['type']))
 		$params['type'] = 'input';
-
-	// Set the label to the name if we didn't pass the label and the name is set
+		
+		
+		// Set the label to the name if we didn't pass the label and the name is set
 	if((!isset($params['label'])) && (isset($params['name'])))
 		$params['label'] = $params['name'];
 
@@ -55,6 +56,14 @@ function smarty_function_admin_input($params, &$smarty)
 				$params['onmouseover'] = "this.className='pagebuttonhover'";
 				$params['onmouseout'] = "this.className='pagebutton'";
 			}
+		break;
+		case "hidden":
+		
+		// Set the label "noneLabel" if we want't output label
+		if(isset($params['label']) == 'noneLabel')
+		{
+         $params['label'] = "&nbsp;";
+        }
 		break;
 	}
 
