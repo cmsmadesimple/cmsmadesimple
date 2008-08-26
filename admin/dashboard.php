@@ -30,7 +30,8 @@ include_once("header.php");
 ?>
 
 <div class="pagecontainer">
-<div class="pageoverflow"><?php 
+<div class="pageoverflow">
+<?php 
 global $gCms;
 
 $themeObject->DisplayDashboardPageItem("start");
@@ -57,6 +58,13 @@ if ($result && $result->RecordCount()>2) {
 	$output.="<br/>It's been ".$sincelogin." seconds since your last login";
 }
 
+$themeObject->DisplayDashboardPageItem("core","Core information",$output);
 
+$themeObject->DisplayDashboardPageItem("end");
+
+?></div></div>
+<?php 
+
+include_once("footer.php");
 
 ?>

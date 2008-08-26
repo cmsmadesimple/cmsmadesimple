@@ -2491,26 +2491,13 @@ class CMSModule
 	{
 		Events::SendEvent($this->GetName(), $eventname, $params);
 	}
-
-	
-	/**
-	 *  States whether the module has output fit for the dashboard
-	 * 
-	 * @param integer The $priority of the wanted output. 1 urgent output, 2 more common output
-	 * 
-	 * @returns boolean
-	 */
-	function HasDashboardOutput($priority=2) 
-	{
-		return false;		
-	}
 	
 	/**
 	 * Returns the output the module wants displayed in the dashboard
 	 * 
 	 * @returns dashboard-content
 	 */
-	function GetDashboardOutput($priority=2) {
+	function GetDashboardOutput() {
 		return '';
 	}
 
@@ -2524,7 +2511,9 @@ class CMSModule
 	function GetNotificationOutput($priority=2) {
 		return '';
 	}
+
 }
+
 
 # vim:ts=4 sw=4 noet
 ?>
