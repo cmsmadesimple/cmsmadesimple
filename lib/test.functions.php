@@ -988,6 +988,49 @@ function & testFileChecksum($required, $title, $file, $checksum, $message = '', 
 }
 
 /**
+ * @return string
+ * @var string  $sess_path
+*/
+function testSessionSavePath($sess_path)
+{
+	if(empty($sess_path))
+	{
+		$sess_path = ini_get('session.save_path');
+	}
+
+	if('files' == ini_get('session.save_handler'))
+	{
+		if(empty($sess_path))
+		{
+			if(! function_exists('sys_get_temp_dir'))
+			{
+				if(! empty($_ENV['TMP'])) return realpath($_ENV['TMP']);
+				if(! empty($_ENV['TMPDIR'])) return realpath( $_ENV['TMPDIR']);
+				if(! empty($_ENV['TEMP'])) return realpath( $_ENV['TEMP']);
+				if( ('1' != ini_get('safe_mode')) && ($tempfile = tempnam('', 'cms')) )
+				{
+					if(file_exists($tempfile))
+					{
+						@unlink($tempfile);
+						return realpath(dirname($tempfile));
+					}
+				}
+			}
+			else
+			{
+				return rtrim(sys_get_temp_dir(), '\\/');
+			}
+		}
+		else
+		{
+			return substr($sess_path, strrpos($sess_path, ";")+1); //Can be 5;777;/tmp
+		}
+	}
+
+	return '';
+}
+
+/**
  * @return object
  * @var boolean $required
  * @var string  $title
