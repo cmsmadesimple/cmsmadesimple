@@ -107,11 +107,6 @@ if( $cms_is_uptodate == 0 ||
     printf($tmpl,lang('new_version_available'));
   }
 
-// Display a warning if safe mode is enabled
-if( ini_get_boolean('safe_mode') && get_site_preference('disablesafemodewarning',0) == 0 )
-  {
-    echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">'.lang('warning_safe_mode').'</p></div></div>';
-  }
 
 // Display a warning if CMSMS needs upgrading
 $current_version = $CMS_SCHEMA_VERSION;
@@ -130,15 +125,6 @@ if ($current_version < $CMS_SCHEMA_VERSION)
 			'<a href="'.$config['root_url'].'/install/upgrade.php">'.lang('start_upgrade_process').'</a>').'</p>';
 	echo '</div></div>';
 }
-
-# Display a warning about mail settings.
-if( isset($gCms->modules['CMSMailer']) && 
-    isset($gCms->modules['CMSMailer']['object']) &&
-	isset($gCms->modules['CMSMailer']['installed']) &&
-    get_site_preference('mail_is_set',0) == 0 )
-  {
-    echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">'.lang('warning_mail_settings').'</p></div></div>';
-  }
 
 $themeObject->ShowShortcuts();
 $themeObject->DisplaySectionMenuDivStart();

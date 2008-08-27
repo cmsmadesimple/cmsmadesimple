@@ -85,9 +85,23 @@ else
 	  // add a priority 1 dashboard item
 	  if( file_exists(dirname(dirname(__FILE__)).'/install') )
 	    {
-	      $themeObject->AddNotification(1,'Core',
-					    lang('installdirwarning'));
+	       $themeObject->AddNotification(1,'Core', lang('installdirwarning'));
 	    }
+
+          // Display a warning if safe mode is enabled
+          if( ini_get_boolean('safe_mode') && get_site_preference('disablesafemodewarning',0) == 0 )
+            {
+               $themeObject->AddNotification(1,'Core',lang('warning_safe_mode'));
+            }
+
+          // Display a warning about mail settings.
+          if( isset($gCms->modules['CMSMailer']) && 
+              isset($gCms->modules['CMSMailer']['object']) &&
+	      isset($gCms->modules['CMSMailer']['installed']) &&
+              get_site_preference('mail_is_set',0) == 0 )
+            {
+               $themeObject->AddNotification(1,'Core',lang('warning_mail_settings'));
+            }
 	}
 
       // and display the dashboard.
