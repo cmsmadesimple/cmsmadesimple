@@ -1434,9 +1434,16 @@ class AdminTheme
     function DisplayNotifications($priority=2)
     {
       if( !is_array($this->_notificationitems) ) return;
+      
+      // count the total number of notifications
+      $count=0;
+      for( $i = 1; $i <= $priority; $i++ )
+      {
+        $count += count($this->_notificationitems[$i-1]);
+      }
       echo '<div class="full-Notifications clear">'."\n";
-	   echo '<div class="Notifications-title">' . lang('notifications') . '</div>'."\n";
-      echo "<ul>\n";
+      echo '<div class="Notifications-title">' . lang('notifications_to_handle',$count) . '&nbsp;<img class="Notifications-arrow" src="themes/'.$this->themeName.'/images/icons/system/sort_down.gif" alt="here" onclick="togglecollapse(\'Notifications-area\'); return false;" /></div>'."\n";
+      echo "<ul id=\"Notifications-area\">\n";
       for( $i = 1; $i <= $priority; $i++ )
 	{
 	  if( count($this->_notificationitems) < $i ) break;
