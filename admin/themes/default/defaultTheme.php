@@ -240,7 +240,43 @@ class defaultTheme extends AdminTheme
 		echo "</div> <!-- end DashboardCallout -->\n";
         }
     }
+	function DisplayDashboardPageItem($item="module", $title='', $content = '')
+    {
+    	switch ($item) {
+    		case "start" : {
+    			echo "\n<div class=\"full-content clear-db\">\n";
+    			break;;
+    		}
+    		case "end" : {
+    			echo "</div><!--full-content clear-db-->\n";
+    			break;
+    		}
+    		case "core" : {
+    			echo "<div class=\"coredashboardcontent\">\n";
+    			echo "  <div class=\"dashboardheader-core\">\n";
+    			echo $title;
+    			echo "  </div>\n";
+    			echo "  <div class=\"dashboardcontent-core\">\n";
+    			echo $content;
+    			echo "  </div>\n";
+    			echo "</div>\n";
+    			break;
+    		}
+    		case "module" : {
+    			echo "<div class=\"moduledashboardcontent\">\n"; 
+    			echo "  <div class=\"dashboardheader\">\n";
+    			echo $title;
+    			echo "  </div>\n";
+    			echo "  <div class=\"dashboardcontent\">\n";
+    			echo $content;
+    			echo "  </div>\n";
+    			echo "</div>\n";
+    			break;
+    		}
+    	}
+    	
 	
+    }
     function DisplayAllSectionPages()
     {
       foreach ($this->menuItems as $thisSection=>$menuItem)

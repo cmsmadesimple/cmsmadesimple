@@ -949,29 +949,143 @@ div#nav-icons_all ul#nav-icons li.logout-icon a
 .full-Notifications
 {
 clear:both;
-margin:5px 0 10px 0;
-
-/*TODO*/
+margin:10px 10px 0 10px;
+width:auto;
+}
+.full-Notifications a, .full-Notifications a:visited
+{
+	color: #042B3E;
+	text-decoration: none;
+	font-weight: bold;
+}
+.full-Notifications a:hover, .full-Notifications a:active
+{
+	color: #577782;
+	text-decoration: underline;
 }
 
-.full-Notifications ul
+a.Notifications-arrow
 {
-/*TODO*/
+	background: url(themes/default/images/icons/Notifications/arrow.gif) no-repeat left top;
+	text-indent:-999em;
+	display:block;
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0 5px
+}
+.Notifications-title
+{
+	margin: 0;
+	font:  1.0em Arial, Helvetica, sans-serif;
+	color: #666666;
+	padding: 0px 0px 1px;	
+	float:left;
+	height:10px;
+	height:1%; /*IE*/
+	}
+
+.full-Notifications ul#Notifications-area
+{
+	display: none;
+	margin: 17px 0px 0px -28px;
+	padding: 0px;
+	height: 1%;/*IE*/
+	width: auto;
+	float:left;
+	border-top: 1px solid #EAEAEA;
+	list-style: none;
 }
 
 .NotificationsItem
 {
-/*TODO*/
+	margin: 5px 5px 5px 10px;
+	padding:2px 0px 2px 30px;
+	height: 1%;/*IE*/
+	width: auto;
 } 
 .NotificationsPriority1
 {
-/*TODO*/
+	background: url(themes/default/images/icons/Notifications/1.gif) no-repeat left top;
 } 
 .NotificationsPriority2
 {
-/*TODO*/
+	background: url(themes/default/images/icons/Notifications/2.gif) no-repeat left top;
 } 
 .NotificationsPriority3
 {
-/*TODO*/
+background: url(themes/default/images/icons/Notifications/3.gif) no-repeat left top;
 } 
+
+/* ########### Dashboard page! #################*/
+
+.clear-db:after {content: ".";
+display: block;
+height: 0;
+clear: both;
+visibility: hidden;
+} 
+* html .clear-db {height: 1%;} 
+.clear-db {display: block;} 
+
+
+.full-content
+{
+margin:7px 0;
+padding:0;
+}
+
+/*CORE*/
+
+.coredashboardcontent 
+{
+	padding:0px 1px;
+	border:1px solid #93AEB7;
+	width:98%;
+	margin:5px 1% 5px 1%;
+}
+.dashboardheader-core
+ {
+	background: #385C72;
+    color:#fff;
+	width:auto;
+	font-size: 1.2em;
+	font-weight: bold;
+	padding:4px;
+ }
+.dashboardcontent-core
+ {
+	color:black;
+	width:auto;
+	background: #F8F8F8;
+	padding:10px 5px;
+ }
+
+/*NOT CORE*/
+.moduledashboardcontent 
+ {
+padding:0px 1px;
+  border:1px solid #AAC0C6;
+   width:48%; 
+  float:left;
+  margin:5px 0 5px 1%;
+ /* background:red; debug*/
+ }
+
+
+.dashboardheader
+ {
+	background: #4A7A97;
+	color:black;
+	width:auto;
+	font-size: 1.2em;
+	font-weight: bold;
+	padding:4px;
+ }
+.dashboardcontent
+ {
+	color:black;
+	width:auto;
+	background: #fff;
+	padding:5px;
+ }
