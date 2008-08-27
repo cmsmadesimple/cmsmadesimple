@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['notifications_to_handle'] = 'You have %d unhandled notifications';
 $lang['admin']['notifications'] = 'Notifications';
 $lang['admin']['dashboard'] = 'View Dashboard';
 $lang['admin']['ignorenotificationsfrommodules'] = 'Ignore notifications from these modules';
