@@ -1442,7 +1442,11 @@ class AdminTheme
         $count += count($this->_notificationitems[$i-1]);
       }
       echo '<div class="full-Notifications clear">'."\n";
-      echo '<div class="Notifications-title">' . lang('notifications_to_handle',$count) . '&nbsp;<img class="Notifications-arrow" src="themes/'.$this->themeName.'/images/icons/system/sort_down.gif" alt="here" onclick="togglecollapse(\'Notifications-area\'); return false;" /></div>'."\n";
+      echo '<div class="Notifications-title">' . lang('notifications_to_handle',$count) . '</div>'."\n";
+	   echo "<a title='Notifications' class=\"Notifications-arrow\" href=\"#\" onclick=\"togglecollapse('Notifications-area'); return false;\" >" .lang('notifications_to_handle',$count) ."</a>\n";
+	 
+	  
+	  
       echo "<ul id=\"Notifications-area\">\n";
       for( $i = 1; $i <= $priority; $i++ )
 	{
@@ -1462,6 +1466,7 @@ class AdminTheme
 	}
       echo "</ul>";
       echo "</div><!-- full-Notifications -->\n";
+	   echo "<div class=\"clearb\">&nbsp;</div>\n";
     }
 
     /**
