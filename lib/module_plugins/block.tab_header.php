@@ -1,6 +1,6 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -16,16 +16,25 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_mod_label($params, &$smarty)
+function smarty_cms_block_tab_header($params, $content, &$smarty, &$repeat)
 {
 	$module =& $smarty->get_template_vars('cms_mapi_module');
 	$id = $smarty->get_template_vars('cms_mapi_id');
-	$translate = coalesce_key($params, 'translate', true, FILTER_VALIDATE_BOOLEAN);
+	$return_id = $smarty->get_template_vars('cms_mapi_return_id');
 
-	$value = ($translate === true) ? $module->lang($params['value']) : $params['value'];
-	
-	return $module->create_label_for_input($id, $params['name'], $value, coalesce_key($params, 'addttext', ''), coalesce_key($params, 'id', ''));
+	if (!$repeat)
+	{
+		if (isset($content))
+		{
+        	$active = false;
+        	if ($smarty->get_template_vars('active_tab_for_modules') != null && $params['name'] == $smarty->get_template_vars('active_tab_for_modules'))
+        	{
+        		$active = true;
+        	}
+
+        	return CmsModuleTabs::set_tab_header($params['name'], $content, $active);
+        }
+    }
 }
 
-# vim:ts=4 sw=4 noet
 ?>
