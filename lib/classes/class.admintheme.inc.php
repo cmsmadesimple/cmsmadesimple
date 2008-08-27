@@ -1435,6 +1435,7 @@ class AdminTheme
     {
       if( !is_array($this->_notificationitems) ) return;
       echo '<div class="full-Notifications clear">'."\n";
+	   echo '<div class="Notifications-title">' . lang('notifications') . '</div>'."\n";
       echo "<ul>\n";
       for( $i = 1; $i <= $priority; $i++ )
 	{
