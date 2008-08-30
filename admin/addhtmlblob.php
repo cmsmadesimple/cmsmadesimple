@@ -132,17 +132,24 @@ include_once("header.php");
 
 global $gCms; $db =& $gCms->GetDb();
 
+// fill out additional users array
 $addt_users = "";
-
 $query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> ? ORDER BY username";
 $result = $db->Execute($query, array($userid));
-
 if ($result && $result->RecordCount() > 0) {
-	while($row = $result->FetchRow()) {
+  while($row = $result->FetchRow()) {
+    if( $row['user_id'] == 1 ) continue;
 		$addt_users .= "<option value=\"".$row["user_id"]."\">".$row["username"]."</option>";
 	}
 }else{
 	$addt_users = "<option>&nbsp;</option>";
+}
+$groupops =& $gCms->GetGroupOperations();
+$groups = $groupops->LoadGroups();
+foreach( $groups as $onegroup )
+{
+  if( $onegroup->id == 1 ) continue;
+  $addt_users .= "<option value=\"".($onegroup->id*-1)."\">".lang('group').":&nbsp;{$onegroup->name}</option>";
 }
 
 if (!$access)
@@ -169,7 +176,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>
-			<p class="pageinput"><select name="additional_editors[]" multiple="multiple" size="3"><?php echo $addt_users?></select></p>
+			<p class="pageinput"><select name="additional_editors[]" multiple="multiple" size="6"><?php echo $addt_users?></select></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>

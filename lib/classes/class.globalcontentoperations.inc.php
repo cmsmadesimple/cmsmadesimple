@@ -32,6 +32,7 @@ class GlobalContentOperations
 
 	/**
 	 * Prepares an array with the list of the html blobs $userid is an author of 
+	 * or is authorized to edit.
 	 *
 	 * @returns an array in whose elements are the IDs of the blobs  
 	 * @since 0.11
@@ -40,20 +41,45 @@ class GlobalContentOperations
 	{
 		global $gCms;
 		$db = &$gCms->GetDb();
-	    $variables = &$gCms->variables;
+		$variables = &$gCms->variables;
 		if (!isset($variables['authorblobs']))
 		{
 			$db = &$gCms->GetDb();
 			$variables['authorblobs'] = array();
 
+			// get the list of html blobs where this user is a direct owner
+			// todo.
+
+			// get the list of html blobs where this user is a direct additional editor.
 			$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ?";
 			$result = &$db->Execute($query, array($userid));
-
 			while ($result && !$result->EOF)
 			{
 				$variables['authorblobs'][] = $result->fields['htmlblob_id'];
 				$result->MoveNext();
 			}
+			if( $result ) $result->Close();
+
+			// get the list of html blobs where this users member groups are listed as an additional editor
+			// in additional_htmlblob_users groupid's are indicated with a negative value.
+			$query = 'SELECT group_id FROM '.cms_db_prefix().'user_groups WHERE user_id = ?';
+			$result = &$db->Execute($query, array($userid));
+			$tmp = array();
+			while ($result && !$result->EOF)
+			  {
+			    $tmp[] = $result->fields['group_id'] * -1;
+			    $result->MoveNext();
+			  }
+			if( $result ) $result->Close();
+			$query = 'SELECT htmlblob_id FROM '.cms_db_prefix().'additional_htmlblob_users WHERE user_id IN (';
+			$query .= implode(',',$tmp).')';
+			$result = &$db->Execute($query);
+			while ($result && !$result->EOF)
+			  {
+			    $variables['authorblobs'][] = $result->fields['htmlblob_id'];
+			    $result->MoveNext();
+			  }
+			if( $result ) $result->Close();
 		}
 
 		return $variables['authorblobs'];
@@ -80,7 +106,7 @@ class GlobalContentOperations
 			$result[] = $oneblob;
 			$dbresult->MoveNext();
 		}
-
+		if( $dbresult ) $dbresult->Close();
 		return $result;
 	}
 
@@ -247,19 +273,21 @@ class GlobalContentOperations
 
 	function CheckAuthorship($id, $user_id)
 	{		
-		global $gCms;
-		$db = &$gCms->GetDb();
-		$result = false;
+// 		global $gCms;
+// 		$db = &$gCms->GetDb();
+// 		$result = false;
 
-		$query = "SELECT additional_htmlblob_users_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ? AND user_id = ?";
-		$row = &$db->GetRow($query, array($id, $user_id));
+		$myblobs = $this->AuthorBlobs($user_id);
+		return quick_check_authorship($id,$myblobs);
+// 		$query = "SELECT additional_htmlblob_users_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ? AND user_id = ?";
+// 		$row = &$db->GetRow($query, array($id, $user_id));
 
-		if ($row)
-		{
-			$result = true;
-		}
+// 		if ($row)
+// 		{
+// 			$result = true;
+// 		}
 
-		return $result;
+// 		return $result;
 	}
 
 	function ClearAdditionalEditors($id)

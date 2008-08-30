@@ -57,8 +57,8 @@ $gcbops =& $gCms->GetGlobalContentOperations();
 
 $userid = get_userid();
 $adminaccess = check_permission($userid, 'Modify Global Content Blocks');
-$access = check_permission($userid, 'Modify Global Content Blocks') || $gcbops->CheckOwnership($htmlblob_id, $userid) ||
-$gcbops->CheckAuthorship($htmlblob_id, $userid);
+$isowner = $gcbops->CheckOwnership($htmlblob_id,$userid);
+$access = $adminaccess || $isowner || $gcbops->CheckAuthorship($htmlblob_id, $userid);
 
 /*
 $htmlarea_flag = false;
@@ -110,6 +110,7 @@ if ($access)
 						$blobobj->AddAuthor($addt_user_id);
 					}
 			}
+			// add this user as an additional editor? why?
 			$blobobj->AddAuthor($userid);
 
 			#Perform the edithtmlblob_pre callback
@@ -279,38 +280,60 @@ print '<div id="Edit_Blob_Result"></div>';
 global $gCms;
 $db =& $gCms->GetDb();
 
-$owners = "<select name=\"owner_id\">";
 
-$query = "SELECT user_id, username FROM ".cms_db_prefix()."users ORDER BY username";
-$result = $db->Execute($query);
-
-while($result && $row = $result->FetchRow())
+// get the current list of additional users
+$query = 'SELECT user_id FROM '.cms_db_prefix().'additional_htmlblob_users WHERE htmlblob_id = ?';
+$cur_addt_users = $db->GetArray($query,array($htmlblob_id));
 {
-	$owners .= "<option value=\"".$row["user_id"]."\"";
-	if ($row["user_id"] == $owner_id)
-	{
-		$owners .= " selected=\"selected\"";
-	}
-	$owners .= ">".$row["username"]."</option>";
+  $tmp = array();
+  foreach( $cur_addt_users as $one )
+    {
+      $tmp[] = $one['user_id'];
+    }
+  $cur_addt_users = $tmp;
 }
 
+// Get the list of all users
+$query = "SELECT user_id, username FROM ".cms_db_prefix()."users ORDER BY username";
+$users = $db->GetArray($query);
+
+// Build the owners list
+$owners = "<select name=\"owner_id\">";
+foreach( $users as $row )
+{
+  $owners .= "<option value=\"".$row["user_id"]."\"";
+  if ($row["user_id"] == $owner_id)
+    {
+      $owners .= " selected=\"selected\"";
+    }
+  $owners .= ">".$row["username"]."</option>";
+}
 $owners .= "</select>";
 
+// Build the additional users list
 $addt_users = "";
-
-$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> ? ORDER BY username";
-$result = $db->Execute($query,array($userid));
-
-while($result && $row = $result->FetchRow())
+foreach( $users as $row )
 {
-	$addt_users .= "<option value=\"".$row["user_id"]."\"";
-	$query = "SELECT * from ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ".$row["user_id"]." AND htmlblob_id = ?";
-	$newresult = $db->Execute($query,array($htmlblob_id));
-	if ($newresult && $newresult->RecordCount() > 0)
-	{
-		$addt_users .= " selected=\"true\"";
-	}
-	$addt_users .= ">".$row["username"]."</option>";
+  if( $row['user_id'] == 1 ) continue;
+  if( $row['user_id'] == $userid ) continue;
+  $addt_users .= "<option value=\"".$row["user_id"]."\"";
+  if( in_array( $row['user_id'], $cur_addt_users ) )
+    {
+      $addt_users .= "selected=\"selected\"";
+    }
+  $addt_users .= ">".$row["username"]."</option>";
+}
+$groupops =& $gCms->GetGroupOperations();
+$groups = $groupops->LoadGroups();
+foreach( $groups as $onegroup )
+{
+  if( $onegroup->id == 1 ) continue;
+  $addt_users .= "<option value=\"".($onegroup->id*-1)."\"";
+  if( in_array($onegroup->id * -1, $cur_addt_users) )
+    {
+      $addt_users .= "selected=\"selected\"";
+    }
+  $addt_users .= '>'.lang('group').":&nbsp;{$onegroup->name}</option>";
 }
 
 if (!$access)
@@ -351,10 +374,10 @@ else
 			<p class="pageinput"><?php echo $owners?></p>
 		</div>
 	<?php } ?>
-	<?php if ($addt_users != '') { ?>
+        <?php if ($adminaccess || $isowner && ($addt_users != '')) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>
-			<p class="pageinput"><select name="additional_editors[]" multiple="multiple" size="3"><?php echo $addt_users?></select></p>
+			<p class="pageinput"><select name="additional_editors[]" multiple="multiple" size="6"><?php echo $addt_users?></select></p>
 		</div>
 	<?php } ?>
 		<div class="pageoverflow">
