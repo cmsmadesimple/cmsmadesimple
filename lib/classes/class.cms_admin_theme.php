@@ -506,25 +506,27 @@ class CmsAdminTheme extends CmsObject
 				&& $cmsmodules[$key]['object']->has_admin()
 				&& $cmsmodules[$key]['object']->visible_to_admin_user())
 			{
-				$section = $cmsmodules[$key]['object']->get_admin_section();
-				if (! isset($this->section_count[$section]))
+				foreach ($cmsmodules[$key]['object']->get_admin_menu_items() as $one_item)
 				{
-					$this->section_count[$section] = 0;
+					$section = $one_item[3];
+					if (! isset($this->section_count[$section]))
+					{
+						$this->section_count[$section] = 0;
+					}
+					$this->modules_by_section[$section][$this->section_count[$section]]['key'] = $key;
+					$this->modules_by_section[$section][$this->section_count[$section]]['name'] = $key;
+					$this->modules_by_section[$section][$this->section_count[$section]]['action'] = $one_item[2];
+					$this->modules_by_section[$section][$this->section_count[$section]]['title'] = $one_item[0];
+					if ($one_item[1] != '')
+					{
+						$this->modules_by_section[$section][$this->section_count[$section]]['description'] = $one_item[1];
+					}
+					else
+					{
+						$this->modules_by_section[$section][$this->section_count[$section]]['description'] = "";
+					}
+					$this->section_count[$section]++;
 				}
-				$this->modules_by_section[$section][$this->section_count[$section]]['key'] = $key;
-				$this->modules_by_section[$section][$this->section_count[$section]]['name'] = $key;
-				$this->modules_by_section[$section][$this->section_count[$section]]['title'] = 
-					$value['object']->get_friendly_name();
-				if ($cmsmodules[$key]['object']->get_admin_description() != '')
-				{
-					$this->modules_by_section[$section][$this->section_count[$section]]['description'] =
-					$cmsmodules[$key]['object']->get_admin_description();
-				}
-				else
-				{
-					$this->modules_by_section[$section][$this->section_count[$section]]['description'] = "";
-				}
-				$this->section_count[$section]++;
 			}
 		}
 	}
@@ -554,8 +556,7 @@ class CmsAdminTheme extends CmsObject
 
 			foreach($this->modules_by_section[$section] as $sectionModule)
 			{
-				$modList[$sectionModule['key']]['url'] = "moduleinterface.php?module=".
-				$sectionModule['key'];
+				$modList[$sectionModule['key']]['url'] = "moduleinterface.php?mact={$sectionModule['key']},m1_,{$sectionModule['action']},0";
 				$modList[$sectionModule['key']]['description'] = $sectionModule['description'];
 				$modList[$sectionModule['key']]['name'] = $sectionModule['name'];
 				$modList[$sectionModule['key']]['title'] = $sectionModule['title'];

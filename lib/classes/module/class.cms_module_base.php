@@ -202,6 +202,30 @@ abstract class CmsModuleBase extends CmsObject
 	{
 		return false;
 	}
+	
+	/**
+	 * Returns which admin section this module belongs to.
+	 * this is used to place the module in the appropriate admin navigation
+	 * section. Valid options are currently:
+	 *
+	 * content, layout, files, usersgroups, extensions, preferences, admin
+	 *
+	 */
+	function get_admin_section()
+	{
+		return 'extensions';
+	}
+	
+	/**
+	 * Returns a list of the menu items and their respective actions.  By default,
+	 * we return the module's friendly name, it's default admin description, points 
+	 * it to "defaultadmin" and uses the admin section defined in get_admin_section.
+	 */
+	function get_admin_menu_items()
+	{
+		$default = array($this->get_friendly_name(), $this->get_admin_description(), 'defaultadmin', $this->get_admin_section());
+		return array($default);
+	}
 
 	/**
 	 * Should we use output buffering in the admin for this module?
@@ -223,19 +247,6 @@ abstract class CmsModuleBase extends CmsObject
 	function get_forge_project_name()
 	{
 		return '';
-	}
-	
-	/**
-	 * Returns which admin section this module belongs to.
-	 * this is used to place the module in the appropriate admin navigation
-	 * section. Valid options are currently:
-	 *
-	 * content, layout, files, usersgroups, extensions, preferences, admin
-	 *
-	 */
-	function get_admin_section()
-	{
-		return 'extensions';
 	}
 
 	/**
