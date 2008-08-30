@@ -94,6 +94,76 @@ else
                $themeObject->AddNotification(1,'Core',lang('warning_safe_mode'));
             }
 
+          // Display an upgrade notification 
+          // but only do a check once per day
+          $timelastchecked = get_site_preference('lastcmsversioncheck',0);
+          $tmpl = '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">%s</p></div></div>';
+          $cms_is_uptodate = 1;
+          $do_getpref = 0;
+          $url = strtolower(trim(get_site_preference('urlcheckversion','')));
+          if( $url != 'none' && !empty($url) &&
+              ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
+            {
+                // check forced
+                // get the url
+                    $do_getpref = 1;
+                $goodtest = false;
+                if( empty($url) )
+                {
+                  $url = CMS_DEFAULT_VERSIONCHECK_URL;
+                }
+                if( $url == 'none')
+                {
+                  $cms_is_uptodate = 1;
+                  $do_getpref = 0;
+                }
+                else
+                {
+                    // we have a 'theoretically' valid url
+                        $txt = @file_get_contents($url);
+                    if( $txt !== FALSE )
+                    {
+                        // the url worked
+                        // do a version check
+                            $goodtest = true;
+                        $parts = explode(':',$txt);
+                        if( is_array( $parts ) && 
+                            strtolower($parts[0]) == 'cmsmadesimple' )
+                        {
+                          $ver = $parts[1];
+                          $res = version_compare( CMS_VERSION, $ver );
+                          if( $res < 0 )
+                          {
+                                // new version available
+                                    $cms_is_uptodate = 0;
+                                set_site_preference('cms_is_uptodate',0);
+                          }
+                          else
+                          {
+                                // the version is valid.
+                                    set_site_preference('cms_is_uptodate',1);
+                          }
+                        } // if
+                    } // if
+                } // if
+
+                // update the last check time
+                // to midnight of the current day
+                    if( $goodtest )
+                {
+                  set_site_preference('lastcmsversioncheck',
+                                      strtotime("23:59:55"));
+                }
+            }
+
+            if( $cms_is_uptodate == 0 || 
+                  ($do_getpref == 1 && get_site_preference('cms_is_uptodate',1) == 0) )
+              {
+                // it wasn't up-to-date last time either
+                  $themeObject->AddNotification(1,'Core',lang('new_version_available'));
+              }
+
+
           // Display a warning about mail settings.
           if( isset($gCms->modules['CMSMailer']) && 
               isset($gCms->modules['CMSMailer']['object']) &&
