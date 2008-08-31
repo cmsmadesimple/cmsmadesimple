@@ -1,3 +1,7 @@
+{*
+standart "skeleton" TPL for new pages stuff in admin side
+*}
+
 {validation_errors for=$foo_object}
 <div class="pagecontainer">
 	<div class="pageoverflow">
