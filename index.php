@@ -120,6 +120,7 @@ else
 $page = rtrim($page, '/');
 if (strpos($page, '/') !== FALSE)
 {
+
 	$routes =& $gCms->variables['routes'];
 	
 	$matched = false;
@@ -211,6 +212,11 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	  set_encoding($pageinfo->template_encoding);
 	}
 
+	$manager =& $gCms->GetHierarchyManager();
+	$node =& $manager->sureGetNodeById($pageinfo->content_id);
+	$contentobj =& $node->GetContent();
+	
+
 	$gCms->variables['content_id'] = $pageinfo->content_id;
 	$gCms->variables['page'] = $page;
 	$gCms->variables['page_id'] = $page;
@@ -220,7 +226,8 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	global $gCms;
 	$contentops =& $gCms->GetContentOperations();
 	$gCms->variables['friendly_position'] = $contentops->CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
-	
+
+	$smarty->assign('content_obj',$contentobj);	
 	$smarty->assign('content_id', $pageinfo->content_id);
 	$smarty->assign('page', $page);
 	$smarty->assign('page_id', $page);
