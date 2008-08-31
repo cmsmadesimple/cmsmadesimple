@@ -35,8 +35,9 @@ if (isset($_SESSION['logout_user_now']))
 	setcookie('cms_admin_user_id', '', time() - 3600);
 	setcookie('cms_passhash', '', time() - 3600);
 }
-else
+else if ( isset($_SESSION['redirect_url']) )
 {
+	
 	$_SESSION["t_redirect_url"] = $_SESSION["redirect_url"];
 	$no_redirect = true;
 	$is_logged_in = check_login($no_redirect);
