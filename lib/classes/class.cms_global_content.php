@@ -60,7 +60,8 @@ class CmsGlobalContent extends CmsObjectRelationalMapping
 	
 	public function setup()
 	{
-		$this->assign_acts_as('MultiLanguage');
+		//$this->assign_acts_as('MultiLanguage');
+		$this->assign_acts_as('Versioned');
 	}
 
 	function IsOwner($user_id)

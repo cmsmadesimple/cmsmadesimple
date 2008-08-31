@@ -28,17 +28,18 @@ class CmsObjectRelationalMappingTest extends PHPUnit_Framework_TestCase
 	{
 		CmsCache::clear();
 		@CmsDatabase::drop_table('test_orm_table');
+		$cms_db_prefix = CMS_DB_PREFIX;
+		cms_db()->Execute("DELETE FROM {$cms_db_prefix}serialized_versions");
 		CmsDatabase::create_table('test_orm_table', "
 			id I KEY AUTO,
 			test_field C(255),
 			another_test_field C(255),
 			some_int I,
 			some_float F,
+			version I,
 			create_date T,
 			modified_date T
 		");
-		
-		$cms_db_prefix = CMS_DB_PREFIX;
 		cms_db()->Execute("INSERT INTO {$cms_db_prefix}test_orm_table (test_field, another_test_field, some_int, some_float, create_date, modified_date) VALUES ('test', 'blah', 5, 5.501, now() - 10, now() - 10)");
 		cms_db()->Execute("INSERT INTO {$cms_db_prefix}test_orm_table (test_field, create_date, modified_date) VALUES ('test2', now(), now())");
 		cms_db()->Execute("INSERT INTO {$cms_db_prefix}test_orm_table (test_field, create_date, modified_date) VALUES ('test3', now(), now())");
@@ -48,6 +49,7 @@ class CmsObjectRelationalMappingTest extends PHPUnit_Framework_TestCase
 			id I KEY AUTO,
 			parent_id I,
 			some_other_field C(255),
+			version I,
 			create_date T,
 			modified_date T
 		");
@@ -71,7 +73,7 @@ class CmsObjectRelationalMappingTest extends PHPUnit_Framework_TestCase
 	public function testGetColumnsInTableShouldWork()
 	{
 		$result = cms_orm('test_orm_table')->get_columns_in_table();
-		$this->assertEquals(7, count($result));
+		$this->assertEquals(8, count($result));
 		$this->assertEquals('int', $result['id']->type);
 		$this->assertEquals('varchar', $result['test_field']->type);
 		$this->assertEquals('datetime', $result['create_date']->type);
@@ -297,6 +299,20 @@ class CmsObjectRelationalMappingTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(cms_orm('test_orm_table')->complete_transaction());
 		$this->assertNotNull(cms_orm('test_orm_table')->find_by_test_field('test good'));
 	}
+	
+	public function testVersioningShouldWorkCorrectly()
+	{
+		$obj = cms_orm('test_orm_table')->find_by_test_field('test');
+		$this->assertNotNull($obj);
+		$obj->another_test_field = 'blah';
+		$obj->save();
+		$obj->another_test_field = 'blah';
+		$obj->save();
+		$obj->another_test_field = 'blah';
+		$obj->save();
+		$this->assertEquals(count($obj->get_versions()), 2);
+		$this->assertEquals($obj->version, 3);
+	}
 
 }
 
@@ -307,6 +323,7 @@ class TestOrmTable extends CmsObjectRelationalMapping
 	public function setup()
 	{
 		$this->create_has_many_association('children', 'TestOrmTableChild', 'parent_id');
+		$this->assign_acts_as('Versioned');
 	}
 
 	public function validate()
