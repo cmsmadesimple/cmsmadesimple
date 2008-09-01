@@ -439,9 +439,11 @@ p.itemicon {
 }
 img.itemicon {
 	border:0px none;
-	height:32px;
-	width:32px;
+	background-color:#ECECEC;
+	/*height:32px;
+	width:32px;*/
 }
+
 p.itemtext {
 	float:left;
 	width:39em;
