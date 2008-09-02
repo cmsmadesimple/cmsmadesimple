@@ -946,14 +946,11 @@ class CmsAdminTheme extends CmsObject
 	function display_all_section_pages()
 	{
 		$smarty = cms_smarty();
-		#########TODO fix me########
-          	global $gCms;
-			$bookops =& $gCms->GetBookmarkOperations();
-			$marks = array_reverse($bookops->LoadBookmarks($this->userid));
-			$marks = array_reverse($marks);
-		    $smarty->assign('show_admin_shortcuts',get_preference($this->userid, 'bookmarks'));
-            $smarty->assign('marks', $marks);
-          #########end ########
+		 #bookmarks
+         $marks = CmsBookmarkOperations::load_bookmarks($this->userid);
+         $smarty->assign('show_admin_shortcuts',get_preference($this->userid, 'bookmarks'));
+         $smarty->assign('marks', $marks);
+         #end
 		$root_node = CmsAdminTree::get_instance()->get_root_node();
 
 		$smarty->assign('subitems', lang('subitems'));
@@ -988,14 +985,12 @@ class CmsAdminTheme extends CmsObject
 		}
 		
 		$smarty = cms_smarty();
-		#########TODO fix me########
-          	global $gCms;
-			$bookops =& $gCms->GetBookmarkOperations();
-			$marks = array_reverse($bookops->LoadBookmarks($this->userid));
-			$marks = array_reverse($marks);
-		    $smarty->assign('show_admin_shortcuts',get_preference($this->userid, 'bookmarks'));
-            $smarty->assign('marks', $marks);
-           #########end ########
+		 #bookmarks
+         $marks = CmsBookmarkOperations::load_bookmarks($this->userid);
+         $smarty->assign('show_admin_shortcuts',get_preference($this->userid, 'bookmarks'));
+         $smarty->assign('marks', $marks);
+         #end
+		   
 		$smarty->assign_by_ref('top_node', $node);
 		$smarty->display(self::get_instance()->theme_template_dir . 'sectiontop.tpl');
 	}

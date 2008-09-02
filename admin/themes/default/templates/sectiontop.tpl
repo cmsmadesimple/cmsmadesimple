@@ -5,11 +5,11 @@
 		<div class="itemoverflow">
 			<h2>{tr}bookmarks{/tr}</h2>
 			<p><a href="listbookmarks.php">{tr}managebookmarks{/tr}</a></p>
-			{if (FALSE == empty($marks))}   
+			{if count($marks) gt 0}  
                 <h3 style="margin:0">{tr}user_created{/tr}</h3>
 				<ul style="margin:0">
                {foreach from=$marks item=mark name=mark}
-					<li><a href="{$mark->url}">{$mark->title} NC</a></li>
+					<li><a href="{$mark->url}">{$mark->title}</a></li>
                  {/foreach}
 				</ul>
 			{/if}
