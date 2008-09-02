@@ -71,6 +71,7 @@ $smarty->assign('backurl', $themeObject->BackUrl());
 
 
 
+
 /* CMS Install Information */
 
 $smarty->assign('cms_version', $GLOBALS['CMS_VERSION']);
@@ -109,7 +110,7 @@ $tmp[1]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
 $smarty->assign('count_config_info', count($tmp[0]));
 $smarty->assign('config_info', $tmp);
 
-ini_set('max_execution_time', 0);
+
 
 
 /* PHP Information */
@@ -119,15 +120,26 @@ $tmp = array(0=>array(), 1=>array());
 $session_save_path = ini_get('session.save_path');
 $open_basedir = ini_get('open_basedir');
 
+list($minimum, $recommended) = getTestValues('phpversion');
+$tmp[0]['phpversion'] = testVersionRange(0, 'phpversion', phpversion(), '', $minimum, $recommended, false);
+
+
+list($minimum, $recommended) = getTestValues('memory_limit');
+$tmp[0]['memory_limit'] = testRange(0, 'memory_limit', 'memory_limit', '', $minimum, $recommended, true, true);
+
+
+list($minimum, $recommended) = getTestValues('max_execution_time');
+$tmp[0]['max_execution_time'] = testRange(0, 'max_execution_time', 'max_execution_time', '', $minimum, $recommended, true, false, 0);
+
+
+list($minimum, $recommended) = getTestValues('gd_version');
+$tmp[0]['gd_version'] = testGDVersion(0, 'gd_version', $minimum);
+
+
 $tmp[0]['safe_mode'] = testBoolean(0, 'safe_mode', 'safe_mode', '', true, true);
 
 $tmp[1]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
 
-list($minimum, $recommended) = getTestValues('phpversion');
-$tmp[0]['phpversion'] = testVersionRange(0, 'phpversion', phpversion(), '', $minimum, $recommended, false);
-
-list($minimum, $recommended) = getTestValues('memory_limit');
-$tmp[0]['memory_limit'] = testRange(0, 'memory_limit', 'memory_limit', '', $minimum, $recommended, true, true);
 
 if (! empty($open_basedir))
 {
@@ -138,17 +150,18 @@ else
 	$tmp[1]['open_basedir'] = testDummy('open_basedir', $open_basedir, 'green');
 }
 
+
+$tmp[1]['md5_function'] = testBoolean(0, 'md5_function', function_exists('md5'), '', false);
+
+$tmp[1]['xml_function'] = testBoolean(0, 'xml_function', extension_loaded_or('xml'), '', false, false);
+
+$tmp[1]['file_uploads'] = testBoolean(0, 'file_uploads', 'file_uploads', '', true, false);
+
 list($minimum, $recommended) = getTestValues('post_max_size');
 $tmp[1]['post_max_size'] = testRange(0, 'post_max_size', 'post_max_size', '', $minimum, $recommended, true, true);
 
 list($minimum, $recommended) = getTestValues('upload_max_filesize');
 $tmp[1]['upload_max_filesize'] = testRange(0, 'upload_max_filesize', 'upload_max_filesize', '', $minimum, $recommended, true, true);
-
-list($minimum, $recommended) = getTestValues('max_execution_time');
-$tmp[0]['max_execution_time'] = testRange(0, 'max_execution_time', 'max_execution_time', '', $minimum, $recommended, true, false, 0);
-
-list($minimum, $recommended) = getTestValues('gd_version');
-$tmp[0]['gd_version'] = testGDVersion(0, 'gd_version', $minimum);
 
 if ( (ini_get('session.save_handler') == 'files') && (empty($session_save_path)) )
 {
@@ -167,8 +180,22 @@ else
 	$tmp[0]['session_save_path'] = testDirWrite(0, $session_save_path, $session_save_path);
 }
 
+$tmp[0]['magic_quotes_runtime'] = testBoolean(0, 'magic_quotes_runtime', 'magic_quotes_runtime', lang('magic_quotes_runtime_on'), true, true);
+
+$tmp[0]['magic_quotes_gpc'] = testBoolean(0, 'magic_quotes_gpc', 'magic_quotes_gpc', lang('magic_quotes_gpc_on'), true, true);
+
+$tmp[1]['file_get_contents'] = testBoolean(0, 'file_get_contents', function_exists('file_get_contents'), '', false);
+
+$tmp[1]['test_remote_url'] = testRemoteFile(0, 'test_remote_url', '', lang('test_remote_url_failed'));
+
+$_log_errors_max_len = (ini_get('log_errors_max_len')) ? ini_get('log_errors_max_len').'0' : '99';
+ini_set('log_errors_max_len', $_log_errors_max_len);
+$result = (ini_get('log_errors_max_len') == $_log_errors_max_len);
+$tmp[1]['check_ini_set'] = testBoolean(0, 'check_ini_set', $result, lang('check_ini_set_off'), false);
+
 $smarty->assign('count_php_information', count($tmp[0]));
 $smarty->assign('php_information', $tmp);
+
 
 
 

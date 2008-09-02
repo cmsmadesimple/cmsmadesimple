@@ -1,4 +1,19 @@
 <?php
+$lang['admin']['md5_function'] = 'md5 function';
+$lang['admin']['xml_function'] = 'Basic XML (expat) support';
+$lang['admin']['magic_quotes_gpc'] = 'Magic quotes for Get/Post/Cookie operations';
+$lang['admin']['magic_quotes_gpc_on'] = 'Single-quote, double quote and backslash are escaped automatically. You can to have problems in save templates';
+$lang['admin']['magic_quotes_runtime'] = 'Magic quotes in runtime';
+$lang['admin']['magic_quotes_runtime_on'] = 'Most functions that return data will have quotes escaped with a backslash. You can to have problems';
+$lang['admin']['file_get_contents'] = 'Test file_get_contents';
+$lang['admin']['check_ini_set'] = 'Test ini_set';
+$lang['admin']['check_ini_set_off'] = 'You may have difficulty with some functionality without this capability. This test may fail if safe_mode is enabled';
+$lang['admin']['file_uploads'] = 'File uploads';
+$lang['admin']['test_remote_url'] = 'Test for remote URL';
+$lang['admin']['test_remote_url_failed'] = 'You will probably not be able to open a file on a remote web server.';
+$lang['admin']['search_string_find'] = 'Connection ok!';
+$lang['admin']['connection_failed'] = 'Connection failed!';
+
 $lang['admin']['notifications_to_handle'] = 'You have <b>%d</b> unhandled notifications';
 $lang['admin']['notifications'] = 'Notifications';
 $lang['admin']['dashboard'] = 'View Dashboard';

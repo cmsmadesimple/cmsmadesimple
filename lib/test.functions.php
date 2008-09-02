@@ -55,6 +55,17 @@ function getTestValues($property)
 }
 
 /**
+ * @return boolean
+ * @var string  $test
+*/
+function extension_loaded_or($test)
+{
+	$a = extension_loaded(strtolower($test));
+	$b = extension_loaded(strtoupper($test));
+	return (bool)($a | $b);
+}
+
+/**
  * @return string
  * @var string  $return
 */
@@ -946,7 +957,7 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
 			$test->opt['fopen']['ok'] = 2;
 			$test->opt['fopen']['res'] = 'red';
 			$test->opt['fopen']['res_text'] = getTestReturn($test->opt['fopen']['res']);
-			$test->opt['fopen']['message'] = lang('fopen_failed');
+			$test->opt['fopen']['message'] = lang('connection_failed');
 		}
 		else
 		{

@@ -66,6 +66,11 @@
 	{if isset($test->secondvalue)}({$test->secondvalue}){/if}
 	{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}
 	{if isset($test->message)}<br /><strong>{$test->message}</strong>{/if}
+	{if isset($test->opt)}
+		{foreach from=$test->opt key='key' item='opt'}
+			<br />{$key}: {$opt.message} <img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$opt.res}.gif" alt="{$opt.res_text}" title="{$opt.res_text}" />
+		{/foreach}
+	{/if}
 		</p>
 	</div>
   {/foreach}
