@@ -6,6 +6,7 @@ $lang['admin']['ignorenotificationsfrommodules'] = 'Ignore notifications from th
 $lang['admin']['admin_enablenotifications'] = 'Allow users to view notifications<br/><em>(notifications will be displayed on all admin pages)</em>';
 $lang['admin']['enablenotifications'] = 'Enable user notifications in the admin section';
 $lang['admin']['test_check_open_basedir_failed'] = 'Open basedir restrictions are in effect. You may have difficulty with some addon functionality with this restriction';
+$lang['admin']['config_writable'] = 'config.php writable. It\'s safety if you change permission to read-only';
 $lang['admin']['caution'] = 'Caution';
 $lang['admin']['create_dir_and_file'] = 'Checking if the httpd process can create a file inside of a directory it created';
 $lang['admin']['os_session_save_path'] = 'No check because OS path';

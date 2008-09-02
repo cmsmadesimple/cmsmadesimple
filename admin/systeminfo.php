@@ -214,7 +214,7 @@ $tmp[1]['modules'] = testDirWrite(0, $dir, $dir);
 $global_umask = get_site_preference('global_umask', '022');
 $tmp[1][lang('global_umask')] = testUmask(0, lang('global_umask'), $global_umask);
 
-$tmp[1]['config_file'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FILE_LOCATION)), -4), (is_writable(CONFIG_FILE_LOCATION) ? 'red' : 'green') );
+$tmp[1]['config_file'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FILE_LOCATION)), -4), (is_writable(CONFIG_FILE_LOCATION) ? 'red' : 'green'), lang('config_writable') );
 
 $smarty->assign('count_permission_info', count($tmp[0]));
 $smarty->assign('permission_info', $tmp);

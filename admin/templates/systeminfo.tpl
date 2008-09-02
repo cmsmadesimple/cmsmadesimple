@@ -44,6 +44,7 @@
 	{if isset($test->value)}<strong>{$test->value|default:"&nbsp;"}</strong>{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue|default:"&nbsp;"}){/if}
 	{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}
+	{if isset($test->message)}<br /><strong>{$test->message}</strong>{/if}
 		</p>
 	</div>
   {/foreach}
@@ -85,6 +86,7 @@
 	{if isset($test->value)}<strong>{$test->value}</strong>{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue}){/if}
 	{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res|default:"space"}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}
+	{if isset($test->message)}<br /><strong>{$test->message}</strong>{/if}
 		</p>
 	</div>
   {/foreach}
@@ -102,6 +104,7 @@
 	{if isset($test->value)}<strong>{$test->value}</strong>{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue}){/if}
 	{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}
+	{if isset($test->message)}<br /><strong>{$test->message}</strong>{/if}
 		</p>
 	</div>
   {/foreach}
