@@ -681,6 +681,7 @@ class CmsAdminTheme extends CmsObject
      * DoBookmarks
      * Method for displaying admin bookmarks (shortcuts) & help links.
      */
+	 #########TODO fix me########
 	public function show_shortcuts()
 	{
 		if (get_preference($this->userid, 'bookmarks'))
@@ -719,7 +720,7 @@ class CmsAdminTheme extends CmsObject
 	{
 		return $this->show_shortcuts();
 	}
-	
+	#########end ########
     /**
      * DisplayDashboardCallout
      * Outputs warning if the install directory is still there.
@@ -945,7 +946,14 @@ class CmsAdminTheme extends CmsObject
 	function display_all_section_pages()
 	{
 		$smarty = cms_smarty();
-		
+		#########TODO fix me########
+          	global $gCms;
+			$bookops =& $gCms->GetBookmarkOperations();
+			$marks = array_reverse($bookops->LoadBookmarks($this->userid));
+			$marks = array_reverse($marks);
+		    $smarty->assign('show_admin_shortcuts',get_preference($this->userid, 'bookmarks'));
+            $smarty->assign('marks', $marks);
+          #########end ########
 		$root_node = CmsAdminTree::get_instance()->get_root_node();
 
 		$smarty->assign('subitems', lang('subitems'));
@@ -980,7 +988,14 @@ class CmsAdminTheme extends CmsObject
 		}
 		
 		$smarty = cms_smarty();
-		
+		#########TODO fix me########
+          	global $gCms;
+			$bookops =& $gCms->GetBookmarkOperations();
+			$marks = array_reverse($bookops->LoadBookmarks($this->userid));
+			$marks = array_reverse($marks);
+		    $smarty->assign('show_admin_shortcuts',get_preference($this->userid, 'bookmarks'));
+            $smarty->assign('marks', $marks);
+           #########end ########
 		$smarty->assign_by_ref('top_node', $node);
 		$smarty->display(self::get_instance()->theme_template_dir . 'sectiontop.tpl');
 	}

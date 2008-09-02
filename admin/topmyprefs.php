@@ -25,7 +25,7 @@ require_once("../include.php");
 check_login();
 
 include_once("header.php");
-$themeObject->ShowShortcuts();
+#$themeObject->ShowShortcuts();
 $themeObject->display_section_pages('myprefs');
 include_once("footer.php");
 

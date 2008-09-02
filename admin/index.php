@@ -67,7 +67,7 @@ if ($current_version < $CMS_SCHEMA_VERSION)
 {
 	echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror"><em><strong>Warning:</strong></em> CMSMS is in need of an upgrade.</p><p>You are now running schema version '.$current_version." and you need to be upgraded to version ".$CMS_SCHEMA_VERSION.'.</p><p>Please click the following link: <a href="'.$config['root_url'].'/install/upgrade.php">Start upgrade process</a>.</p></div></div>';
 }
-$themeObject->ShowShortcuts();
+#$themeObject->ShowShortcuts();
 $themeObject->display_all_section_pages();
 include_once("footer.php");
 

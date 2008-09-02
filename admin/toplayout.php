@@ -25,7 +25,7 @@ require_once("../include.php");
 check_login();
 
 include_once("header.php");
-$themeObject->ShowShortcuts();
+#$themeObject->ShowShortcuts();
 $themeObject->display_section_pages('layout');
 include_once("footer.php");
 # vim:ts=4 sw=4 noet
