@@ -1,7 +1,7 @@
 <?php
 $lang['admin']['md5_function'] = 'md5 function';
 $lang['admin']['xml_function'] = 'Basic XML (expat) support';
-$lang['admin']['magic_quotes_gpc'] = 'Magic quotes for Get/Post/Cookie operations';
+$lang['admin']['magic_quotes_gpc'] = 'Magic quotes for Get/Post/Cookie';
 $lang['admin']['magic_quotes_gpc_on'] = 'Single-quote, double quote and backslash are escaped automatically. You can to have problems in save templates';
 $lang['admin']['magic_quotes_runtime'] = 'Magic quotes in runtime';
 $lang['admin']['magic_quotes_runtime_on'] = 'Most functions that return data will have quotes escaped with a backslash. You can to have problems';
@@ -21,7 +21,7 @@ $lang['admin']['ignorenotificationsfrommodules'] = 'Ignore notifications from th
 $lang['admin']['admin_enablenotifications'] = 'Allow users to view notifications<br/><em>(notifications will be displayed on all admin pages)</em>';
 $lang['admin']['enablenotifications'] = 'Enable user notifications in the admin section';
 $lang['admin']['test_check_open_basedir_failed'] = 'Open basedir restrictions are in effect. You may have difficulty with some addon functionality with this restriction';
-$lang['admin']['config_writable'] = 'config.php writable. It\'s safety if you change permission to read-only';
+$lang['admin']['config_writable'] = 'config.php writable. It is more safe if you change permission to read-only';
 $lang['admin']['caution'] = 'Caution';
 $lang['admin']['create_dir_and_file'] = 'Checking if the httpd process can create a file inside of a directory it created';
 $lang['admin']['os_session_save_path'] = 'No check because OS path';
