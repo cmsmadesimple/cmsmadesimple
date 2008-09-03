@@ -46,7 +46,7 @@ $output="";
 
 require_once("../lib/classes/class.user.inc.php");
 
-$output.= lang('welcome_user') . " <b>".$gCms->variables['username']."</b>, and you have userid <b>".get_userid() ."</b>";
+$output.= lang('welcome_user') . " <b>".$gCms->variables['username']."</b>";
 
 $db =& $gCms->GetDb();
 
@@ -55,9 +55,33 @@ $query = "SELECT timestamp FROM ".cms_db_prefix()."adminlog WHERE user_id=? AND 
 $result = &$db->Execute($query, array(get_userid(),"User Login"));
 if ($result && $result->RecordCount()>2) {
 	$row=$result->FetchRow();
-	$row=$result->FetchRow();
+	$row=$result->FetchRow(); //Pick the previous, not the current
 	$sincelogin=time()-$row["timestamp"];
-	$output.="<br/>It's been ".$sincelogin." seconds since your last login";
+	if ($sincelogin>(60*60*24)) {
+		$sincelogin=ceil($sincelogin/(60*60*24));
+		if ($sincelogin==1) {
+			$sincelogin.=" ".lang("day");
+		} else {
+			$sincelogin.=" ".lang("days");
+		}
+	} elseif ($sincelogin>(60*60)) {
+	  $sincelogin=ceil($sincelogin/(60*60));
+		if ($sincelogin==1) {
+			$sincelogin.=" ".lang("hour");
+		} else {
+			$sincelogin.=" ".lang("hours");
+		}
+	} else {
+	  $sincelogin=ceil($sincelogin/(60));
+		if ($sincelogin==1) {
+			$sincelogin.=" ".lang("minute");
+		} else {
+			$sincelogin.=" ".lang("minutes");
+		}
+	}
+	$output.="<br/>";
+	$output.=lang('itsbeensincelogin',$sincelogin);
+	//$output.="<br/>It's been ".$sincelogin." seconds since your last login";
 }
 
 $themeObject->DisplayDashboardPageItem("core","Core information",$output);
