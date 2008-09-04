@@ -25,7 +25,7 @@ require_once("../include.php");
 check_login();
 $page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
-$limit = 3; // test
+$limit = 2; 
 	
 include_once("header.php");
 $smarty = cms_smarty();
@@ -36,77 +36,19 @@ $userid = get_userid();
 	
 	if (count($marklist) > $limit)
 	{
-		//echo "<p class=\"pageshowrows\">".pagination($page, count($marklist), $limit)."</p>";
 		$smarty->assign('pagination', pagination($page, count($marklist), $limit));
 	}
-	//echo $themeObject->ShowHeader('bookmarks').'</div>';
-    $smarty->assign('header_name', $themeObject->ShowHeader('bookmarks'));
+	    $smarty->assign('header_name', $themeObject->ShowHeader('bookmarks'));
 
-	//if (count($marklist) > 0) {
 
-		/*echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-		echo '<thead>';
-		echo "<tr>\n";
-		echo "<th class=\"pagew60\">".lang('name')."</th>\n";
-		echo "<th class=\"pagepos\">".lang('url')."</th>\n";
-		echo "<th class=\"pageicon\">&nbsp;</th>\n";
-		echo "<th class=\"pageicon\">&nbsp;</th>\n";
-		echo "</tr>\n";
-		echo '</thead>';
-		echo '<tbody>';
-
-		$currow = "row1";
-*/
-		// construct true/false button images
-      /*  $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');*/
-
-		$counter=0;
-		//foreach ($marklist as $onemark){
-			//if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-					
-			
+		    $counter=0;
 			$smarty->assign('counter', $counter);
 			$smarty->assign('page', $page);
-            $smarty->assign('limit', $limit) ;
-			 
-			 
-				/*echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->id."\">".$onemark->title."</a></td>\n";
-				echo "<td>".$onemark->url."</td>\n";
-				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->id."\">";
-                echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-                echo "</a></td>\n";
-				echo "<td><a href=\"deletebookmark.php?bookmark_id=".$onemark->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onemark->title)."');\">";
-                echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                echo "</a></td>\n";
-				echo "</tr>\n";*/
-				//($currow == "row1"?$currow="row2":$currow="row1");
-			//}
-			//$counter++;
-		//}
-
-	/*	echo '</tbody>';
-		echo "</table>\n";*/
-
-	//}
-?>
-	<!--<div class="pageoptions">
-		<p class="pageoptions">
-			<a href="addbookmark.php">-->
-				<?php 
-					/*echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addbookmark'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="addbookmark.php">'.lang("addbookmark");*/
-				?>
-		<!--	</a>
-		</p>
-	</div>
-</div>-->
-<?php
+            $smarty->assign('limit', $limit);
 
 $smarty->display('listbookmarks.tpl');
-include_once("footer.php");
 
+include_once("footer.php");
 # vim:ts=4 sw=4 noet
 ?>
 

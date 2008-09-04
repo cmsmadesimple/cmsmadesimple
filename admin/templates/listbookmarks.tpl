@@ -1,11 +1,12 @@
 <div class="pagecontainer">
 	<div class="pageoverflow">
-	 <p class="pageshowrows">{$pagination}</p>
+	
      		{$header_name}
 	</div><!-- pageoverflow -->
  
 
-{if count($marklist) gt 0}   
+{if count($marklist) gt 0} 
+<p class="pageshowrows">{$pagination}</p>
 <table class="pagetable">
 		<thead>
 		<tr>
@@ -35,12 +36,13 @@
 				</tr>
 				 
 		 {/if}
-          {$counter++} 
+          {capture assign='junk'}{$counter++}{/capture}
 			
             {/foreach}
 
 		</tbody>
 		</table>
+<p class="pageshowrows">{$pagination}</p>
 
 {/if}   		
 
