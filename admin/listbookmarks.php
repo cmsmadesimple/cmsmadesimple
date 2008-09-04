@@ -25,7 +25,7 @@ require_once("../include.php");
 check_login();
 $page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
-$limit = 2; 
+$limit = 20; 
 	
 include_once("header.php");
 $smarty = cms_smarty();
