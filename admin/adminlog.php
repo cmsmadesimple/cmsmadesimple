@@ -24,9 +24,9 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
+$gCms = cmsms();
+$db = cms_db();
 $smarty = cms_smarty();
-global $gCms;
-$db =& $gCms->GetDb();
 
 $dateformat = get_preference(get_userid(),'date_format_string','%x %X');
 

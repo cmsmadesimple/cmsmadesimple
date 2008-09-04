@@ -23,9 +23,9 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
+$gCms = cmsms();
+$db = cms_db();
 $smarty = cms_smarty();
-global $gCms;
-$db =& $gCms->GetDb();
 
 $error = "";
 
