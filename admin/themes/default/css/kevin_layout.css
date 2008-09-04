@@ -250,6 +250,7 @@ table.pagetable {
 	width:95%;
 	margin:auto;
 	border:1px solid #CCCCCC;
+	  border-spacing:0px;
 	}
 	table.pagetable tr {
 		}
@@ -278,8 +279,8 @@ table.pagetable {
 	table.pagetable tr.row1 {
 		background-color:#FFFFFF;
 	}
-	table.pagetable tr.row1hover td,
-	table.pagetable tr.row2hover td {
+	table.pagetable tr.row1:hover td,
+	table.pagetable tr.row2:hover td {
 		background-color:#D5E7F3;
 	}
 	table.pagetable tr.row2 td {
