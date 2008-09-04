@@ -45,6 +45,7 @@ $userid = get_userid();
 			$smarty->assign('counter', $counter);
 			$smarty->assign('page', $page);
             $smarty->assign('limit', $limit);
+			$smarty->assign('back_url', $themeObject->BackUrl());
 
 $smarty->display('listbookmarks.tpl');
 

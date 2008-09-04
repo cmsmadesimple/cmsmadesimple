@@ -23,6 +23,7 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
+$smarty = cms_smarty();
 
 $error = "";
 
@@ -45,9 +46,17 @@ if (isset($_POST["addbookmark"]))
 
 	if ($title == "")
 	{
-		$error .= lang('nofieldgiven', array('addbookmark'));
+		$error .= "<li>". lang('nofieldgiven', array('addbookmark')) . "</li>" ;
+		
 		$validinfo = false;
 	}
+	
+	if ($url == "")
+	{
+		$error .=  "<li>". lang('nofieldgiven', array('url')) . "</li>";
+		$validinfo = false;
+	}
+	
 
 	if ($validinfo)
 	{
@@ -65,38 +74,23 @@ if (isset($_POST["addbookmark"]))
 		}
 		else
 		{
-			$error .= lang('errorinsertingbookmark');
+			$error .=  "<li>" . lang('errorinsertingbookmark'). "</li>";
 		}
 	}
 }
-
 include_once("header.php");
 
-if ($error != "")
-{
-	echo '<div class="pageerrorcontainer"><p class="pageerror">'.$error.'</p></div>';
-}
-?>
+		
+		    $smarty->assign('header_name', $themeObject->ShowHeader('addbookmark'));
+	        $smarty->assign('title', $title);
+			$smarty->assign('url', $url);
+			$smarty->assign('error_msg', $error);
+			$smarty->assign('back_url', $themeObject->BackUrl());
+			
 
-		<?php echo $themeObject->ShowHeader('addbookmark'); ?>
-		<form method="post" action="addbookmark.php">
-			<div class="row">
-				<label><?php echo lang('title')?>:</label>
-				<input type="text" name="title" maxlength="255" value="<?php echo $title?>" />
-			</div>
-			<div class="row">
-				<label><?php echo lang('url')?>:</label>
-				<input type="text" name="url" maxlength="255" value="<?php echo $url ?>" class="standard" />
-			</div>
-			<input type="hidden" name="addbookmark" value="true" />
-		<div class="submitrow">
-			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
-			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
-		</div>
-		</form>
-<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
+$smarty->display('addbookmark.tpl');
 
-<?php
+
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

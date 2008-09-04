@@ -23,6 +23,7 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
+$smarty = cms_smarty();
 global $gCms;
 $db =& $gCms->GetDb();
 
@@ -96,31 +97,17 @@ if (strlen($title) > 0)
 
 include_once("header.php");
 
-if ($error != "")
-{
-	echo '<div class="pageerrorcontainer"><p class="pageerror">'.$error.'</p></div>';
-}
-?>
+            $smarty->assign('header_name', $themeObject->ShowHeader('editbookmark'));
+	        $smarty->assign('title', $title);
+			$smarty->assign('url', $url);
+			$smarty->assign('error_msg', $error);
+			// input hidden
+			$smarty->assign('bookmark_id', $bookmark_id);
+			$smarty->assign('userid', $userid);
+			
+			$smarty->assign('back_url', $themeObject->BackUrl());
+			$smarty->display('editbookmark.tpl');
 
-	<?php echo $themeObject->ShowHeader('editbookmark'); ?>
-	<form method="post" action="editbookmark.php">
-		<div class="row">
-			<label><?php echo lang('title')?>:</label>
-			<input type="text" name="title" maxlength="255" value="<?php echo $title?>" />
-		</div>
-		<div class="row">
-			<label><?php echo lang('url')?>:</label>
-			<input type="text" name="url" maxlength="255" value="<?php echo $url ?>" />
-		</div>
-		<input type="hidden" name="bookmark_id" value="<?php echo $bookmark_id?>" /><input type="hidden" name="editbookmark" value="true" /><input type="hidden" name="userid" value="<?php echo $userid?>" />
-		<div class="submitrow">
-			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
-			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
-		</div>
-	</form>
-<?php
-
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
