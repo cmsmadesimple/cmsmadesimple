@@ -23,32 +23,28 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
-
+$page = 1;
+	if (isset($_GET['page'])) $page = $_GET['page'];
+$limit = 3; // test
+	
 include_once("header.php");
-
-?>
-<div class="pagecontainer">
-	<div class="pageoverflow">
-
-<?php
-
-	$userid = get_userid();
+$smarty = cms_smarty();
+$userid = get_userid();
 	
 	$marklist = cmsms()->bookmark->find_all_by_user_id($userid);
-
-	$page = 1;
-	if (isset($_GET['page'])) $page = $_GET['page'];
-	$limit = 20;
+    $smarty->assign('marklist', $marklist) ;
 	
 	if (count($marklist) > $limit)
 	{
-		echo "<p class=\"pageshowrows\">".pagination($page, count($marklist), $limit)."</p>";
+		//echo "<p class=\"pageshowrows\">".pagination($page, count($marklist), $limit)."</p>";
+		$smarty->assign('pagination', pagination($page, count($marklist), $limit));
 	}
-	echo $themeObject->ShowHeader('bookmarks').'</div>';
+	//echo $themeObject->ShowHeader('bookmarks').'</div>';
+    $smarty->assign('header_name', $themeObject->ShowHeader('bookmarks'));
 
-	if (count($marklist) > 0) {
+	//if (count($marklist) > 0) {
 
-		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+		/*echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
 		echo "<th class=\"pagew60\">".lang('name')."</th>\n";
@@ -60,15 +56,22 @@ include_once("header.php");
 		echo '<tbody>';
 
 		$currow = "row1";
-
+*/
 		// construct true/false button images
-        $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
+      /*  $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');*/
 
 		$counter=0;
-		foreach ($marklist as $onemark){
-			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+		//foreach ($marklist as $onemark){
+			//if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
+					
+			
+			$smarty->assign('counter', $counter);
+			$smarty->assign('page', $page);
+            $smarty->assign('limit', $limit) ;
+			 
+			 
+				/*echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->id."\">".$onemark->title."</a></td>\n";
 				echo "<td>".$onemark->url."</td>\n";
 				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->id."\">";
@@ -77,32 +80,33 @@ include_once("header.php");
 				echo "<td><a href=\"deletebookmark.php?bookmark_id=".$onemark->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onemark->title)."');\">";
                 echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                 echo "</a></td>\n";
-				echo "</tr>\n";
-				($currow == "row1"?$currow="row2":$currow="row1");
-			}
-			$counter++;
-		}
+				echo "</tr>\n";*/
+				//($currow == "row1"?$currow="row2":$currow="row1");
+			//}
+			//$counter++;
+		//}
 
-		echo '</tbody>';
-		echo "</table>\n";
+	/*	echo '</tbody>';
+		echo "</table>\n";*/
 
-	}
+	//}
 ?>
-	<div class="pageoptions">
+	<!--<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="addbookmark.php">
+			<a href="addbookmark.php">-->
 				<?php 
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addbookmark'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="addbookmark.php">'.lang("addbookmark");
+					/*echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addbookmark'),'','','systemicon').'</a>';
+					echo ' <a class="pageoptions" href="addbookmark.php">'.lang("addbookmark");*/
 				?>
-			</a>
+		<!--	</a>
 		</p>
 	</div>
-</div>
+</div>-->
 <?php
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
+$smarty->display('listbookmarks.tpl');
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
 ?>
+
