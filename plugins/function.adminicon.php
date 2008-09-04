@@ -51,7 +51,7 @@ function smarty_cms_function_adminicon($params, &$smarty)
       $class = $params['class'];
     }
   
-  $file = cms_join_path( $path, $file );
+  $file = $path . '/' . $file;
   return $themeObject->display_image( $file, $alt, $width, $height, $class );
 }
 
