@@ -283,6 +283,21 @@ CmsInstallOperations::create_index($db, 'stylesheet_template_assoc', 'stylesheet
 CmsInstallOperations::create_index($db, 'stylesheet_template_assoc', 'template_id', 'template_id');
 CmsInstallOperations::create_index($db, 'stylesheet_template_assoc', 'stylesheet_id_template_id', 'stylesheet_id,template_id');
 
+CmsInstallOperations::create_table($db, 'tags', "
+	id I KEY AUTO,
+	name C(255),
+	create_date T,
+	modified_date T
+");
+CmsInstallOperations::create_index($db, 'tags', 'tag_name', 'name');
+
+CmsInstallOperations::create_table($db, 'tag_objects', "
+	tag_id I,
+	type C(25),
+	object_id I
+");
+CmsInstallOperations::create_index($db, 'tag_objects', 'tag_object_name', 'name');
+
 CmsInstallOperations::create_table($db, 'templates', "
 	id I KEY AUTO,
 	template_name C(255),
