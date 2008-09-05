@@ -94,9 +94,9 @@ function linksExternal()	{
 }
 
 //use <input class="defaultfocus" ...>
-function defaultFocus() {
+/* function defaultFocus() {
 
-   if (!document.getElementsByTagName) {
+  if (!document.getElementsByTagName) {
         return;
    }
 
@@ -124,3 +124,4 @@ function defaultFocus() {
         }
    }
 }
+*/

@@ -16,6 +16,9 @@
         <!--[if IE]>
 		  <script type="text/javascript" src="{$root}/admin/themes/NCleanGrey2/includes/ie7-standard-p.js"></script>
 	<![endif]-->	
+    <!--[if IE]>
+		
+	<![endif]-->
     <script type="text/javascript"  src="{$root}/admin/themes/NCleanGrey2/includes/standard.js"></script>
 
 
@@ -81,26 +84,8 @@
   {$admin_topmenu}
 
 	<div id="MainContent">
-		<div class="navt_menu">
-			<div id="navt_display" class="navt_show" onclick="change('navt_display', 'navt_hide', 'navt_show'); change('navt_container', 'invisible', 'visible');"></div>
-			<div id="navt_container" class="invisible">
-				<div id="navt_tabs">
-					<div id="navt_bookmarks">Shortcuts</div>
-				</div>
-
-				<div style="clear: both;"></div>
-				<div id="navt_content">
-					<div id="navt_bookmarks_c">
-						<a href="makebookmark.php?title=Tags">1. Add Shortcut</a><br />
-						<a href="listbookmarks.php">2. Manage Shortcuts</a><br />
-					</div>
-				</div>
-			</div>
-			<div style="clear: both;"></div>
-		</div>
-
-		<div>
-			{if $theme_object->has_errors()}
+		
+{if $theme_object->has_errors()}
 				<p class="errors">
 					{foreach from=$theme_object->errors item='one_error'}
 						{$one_error}<br />
@@ -116,15 +101,15 @@
 			{/if}
 			{$admin_content}
 			<div class="clearb"></div>
-		</div>
+		
 
-	</div>
+
 	<div id="HelpContent"></div>	
 
 </div><!-- end MainContent -->
 
-<div id="footer"><a rel="external" href="http://www.cmsmadesimple.org"><b>CMS Made Simple</b></a> {cms_version} "{cms_versionname}"<br /><b>CMS Made Simple</b> is free software released under the General Public Licence.<br />Theme designed by <a rel="external" href="http://www.criacaoweb.net"><b>Nuno Costa</b></a>&nbsp;&nbsp; Icons by <a rel="external" href="http://www.vistaico.com">VistaICO.com</a> </div>
-		<!--</div>--><!--end clean-container-->
+<div id="footer"><a rel="external" href="http://www.cmsmadesimple.org"><b>CMS Made Simple</b></a> {cms_version} "{cms_versionname}"<br /><b>CMS Made Simple</b> is free software released under the General Public Licence.</div>
+</div><!--end clean-container-->
         
         
 </body>

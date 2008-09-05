@@ -1,3 +1,6 @@
+{*Bookmarks Box*}
+{$admin_bookmarks}
+{*end*} 
 {if $root_node->has_children()}
 
   <div class="MainMenu">
