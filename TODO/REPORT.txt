@@ -1,3 +1,18 @@
-NOT GRAB THE ICONS FOR THEME USERS
+1 - NOT GRAB THE ICONS FOR THEME USERS
 
-WRONG OUTPUT ON SELECT INPUT'S   admin/plugins/...
+2 - WRONG OUTPUT ON SELECT INPUT'S   admin/plugins/...
+
+reproduced in html: e.g. 
+
+<div id="somediv">
+<select name="wysiwyg" label="wysiwygtouse" id="wysiwyg">
+<option label="nenhum" value="0" selected="selected">nenhum</option>
+</select>
+</div>
+
+
+////////////////
+label="wysiwygtouse"
+label="nenhum"
+//////////////
+can't not out in pure-html! RIGHT?
