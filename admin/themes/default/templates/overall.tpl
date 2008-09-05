@@ -10,20 +10,25 @@
 	<title>{sitename} - {$admin_theme->title}</title>
 	<link rel="stylesheet" href="{$root}/admin/themes/default/css/kevin_layout.css" type="text/css" />
 	<link rel="stylesheet" href="{$root}/admin/themes/default/css/kevin_tabs.css" type="text/css" />
-	<!--[if IE]>
-		<script src="{$root}/themes/default/includes/ie7-standard-p.js" type="text/javascript">
-	</script>
-	<![endif]-->	
+    
+    <!--<script type="text/javascript" src="../includes/standard.js"></script>-->
 
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/jquery.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/jquery.color.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/jquery.jcontext.1.0.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.tabs.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.accordion.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.mouse.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.draggable.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.droppable.js"></script>
-	<script language="javascript" type="text/javascript" src="{$root}/lib/jquery/ui/ui.sortable.js"></script>	
+    
+    
+<!--[if IE]>
+		 <script type="text/javascript" src="{$root}/themes/default/includes/ie7-standard-p.js"></script>
+	<![endif]-->	
+<!--[if IE]>NADA -  just my stupid eddor are crazy<![endif]-->
+
+	 <script type="text/javascript" src="{$root}/lib/jquery/jquery.js"></script>
+	 <script type="text/javascript" src="{$root}/lib/jquery/jquery.color.js"></script>
+	 <script type="text/javascript" src="{$root}/lib/jquery/jquery.jcontext.1.0.js"></script>
+	 <script type="text/javascript" src="{$root}/lib/jquery/ui/ui.tabs.js"></script>
+	 <script type="text/javascript" src="{$root}/lib/jquery/ui/ui.accordion.js"></script>
+	 <script type="text/javascript" src="{$root}/lib/jquery/ui/ui.mouse.js"></script>
+	 <script type="text/javascript" src="{$root}/lib/jquery/ui/ui.draggable.js"></script>
+	 <script type="text/javascript" src="{$root}/lib/jquery/ui/ui.droppable.js"></script>
+	 <script type="text/javascript" src="{$root}/lib/jquery/ui/ui.sortable.js"></script>	
 	
 	{literal}	
 	<script type="text/javascript">//<![CDATA[
@@ -76,25 +81,7 @@
   {$admin_topmenu}
 
 	<div id="MainContent">
-		<div class="navt_menu">
-			<div id="navt_display" class="navt_show" onclick="change('navt_display', 'navt_hide', 'navt_show'); change('navt_container', 'invisible', 'visible');"></div>
-			<div id="navt_container" class="invisible">
-				<div id="navt_tabs">
-					<div id="navt_bookmarks">Shortcuts</div>
-				</div>
-
-				<div style="clear: both;"></div>
-				<div id="navt_content">
-					<div id="navt_bookmarks_c">
-						<a href="makebookmark.php?title=Tags">1. Add Shortcut</a><br />
-						<a href="listbookmarks.php">2. Manage Shortcuts</a><br />
-					</div>
-				</div>
-			</div>
-			<div style="clear: both;"></div>
-		</div>
-
-		<div>
+		
 			{if $theme_object->has_errors()}
 				<p class="errors">
 					{foreach from=$theme_object->errors item='one_error'}
@@ -113,7 +100,7 @@
 			<div class="clearb"></div>
 		</div>
 
-	</div>
+	
 	<div id="HelpContent"></div>	
 
 </div><!-- end MainContent -->

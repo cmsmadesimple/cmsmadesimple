@@ -1,6 +1,6 @@
-{*  Bookmarks BOX  *}
- {$admin_bookmarks}
-{* end *} 
+{*Bookmarks Box*}
+{$admin_bookmarks}
+{*end*} 
 {if $root_node->has_children()}
 
 

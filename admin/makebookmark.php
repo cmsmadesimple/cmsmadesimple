@@ -25,7 +25,7 @@ include_once("header.php");
 check_login();
 $link = $_SERVER['HTTP_REFERER'];
 
-$newmark = new Bookmark();
+$newmark = new CmsBookmark();
 $newmark->user_id = get_userid();
 $newmark->url = $link;
 $newmark->title = $_GET['title'];

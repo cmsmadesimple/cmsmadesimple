@@ -680,6 +680,7 @@ class CmsAdminTheme extends CmsObject
     /**
      * DoBookmarks
      * Method for displaying admin bookmarks (shortcuts) & help links.
+	 * Smarty call in indexcontent.tpl {$admin_bookmarks}
      */
 	 function show_bookmarks()
 			{	
@@ -688,7 +689,7 @@ class CmsAdminTheme extends CmsObject
          	 $smarty->assign('show_admin_shortcuts',get_preference($this->userid, 'bookmarks'));
              $smarty->assign_by_ref('marks', $marks);
 			 $smarty->display(self::get_instance()->theme_template_dir . 'bookmarks.tpl');
-	}
+	         }
     /**
      * DisplayDashboardCallout
      * Outputs warning if the install directory is still there.
@@ -959,7 +960,7 @@ class CmsAdminTheme extends CmsObject
 		self::get_instance()->show_bookmarks();
 		$bookmarks = @ob_get_clean();
 		$smarty->assign('admin_bookmarks', $bookmarks);
-		#end
+		  #end
 		   
 		$smarty->assign_by_ref('top_node', $node);
 		$smarty->display(self::get_instance()->theme_template_dir . 'sectiontop.tpl');
@@ -981,21 +982,8 @@ class CmsAdminTheme extends CmsObject
 		$smarty->display(self::get_instance()->theme_template_dir . 'topmenu.tpl');
 	}
 	
-	function StartRighthandColumn()
-	{
-		echo '<div class="navt_menu">'."\n";
-		echo '<div id="navt_display" class="navt_show" onclick="change(\'navt_display\', \'navt_hide\', \'navt_show\'); change(\'navt_container\', \'invisible\', \'visible\');"></div>'."\n";
-		echo '<div id="navt_container" class="invisible">'."\n";
-		echo '<div id="navt_tabs">'."\n";
-		if (get_preference($this->userid, 'bookmarks'))
-		{
-			echo '<div id="navt_bookmarks">'.lang('bookmarks').'</div>'."\n";
-		}
-		echo '</div>'."\n";
-		echo '<div style="clear: both;"></div>'."\n";
-		echo '<div id="navt_content">'."\n";
-	}
-
+	
+    #TODO is in use? (Nuno ask!)
 	function DisplayRecentPages()
 	{
 		if (get_preference($this->userid, 'recent'))
@@ -1010,27 +998,6 @@ class CmsAdminTheme extends CmsObject
 		}
 	}
 
-	function DisplayBookmarks($marks)
-	{
-		if (get_preference($this->userid, 'bookmarks'))
-		{	
-			echo '<div id="navt_bookmarks_c">'."\n";
-			$counter = 0;
-			foreach($marks as $mark)
-			{
-				echo "<a href=\"". $mark->url."\">".++$counter.'. '.$mark->title."</a><br />"."\n";
-			}
-			echo '</div>'."\n";
-		}
-	}	 
-
-	function EndRighthandColumn()
-	{
-		echo '</div>'."\n";
-		echo '</div>'."\n";
-		echo '<div style="clear: both;"></div>'."\n";
-		echo '</div>'."\n";
-	}
 
 	/* Functions that we want dont want the standard output from */
 	function OutputFooterJavascript() {}
