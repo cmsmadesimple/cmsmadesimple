@@ -62,7 +62,7 @@ class CmsAcl extends CmsObject
 			//Return true if we're the #1 account
 			if ($userid == 1)
 				return true;
-			//Sil was here below $user->$userid
+			//Sil was here below was $user, now $userid
 			if (is_int(intval($userid)))
 			{
 				$user = cms_orm('CmsUser')->find_by_id($userid);
