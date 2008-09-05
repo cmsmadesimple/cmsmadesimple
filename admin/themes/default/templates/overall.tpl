@@ -11,13 +11,9 @@
 	<link rel="stylesheet" href="{$root}/admin/themes/default/css/kevin_layout.css" type="text/css" />
 	<link rel="stylesheet" href="{$root}/admin/themes/default/css/kevin_tabs.css" type="text/css" />
     
-    <!--<script type="text/javascript" src="../includes/standard.js"></script>-->
-
-    
-    
-<!--[if IE]>
-		 <script type="text/javascript" src="{$root}/themes/default/includes/ie7-standard-p.js"></script>
-	<![endif]-->	
+  <!--[if IE]><script type="text/javascript" src="{$root}/admin/themes/default/includes/ie7-standard-p.js"></script><![endif]-->
+	 <script type="text/javascript"  src="{$root}/admin/themes/default/includes/standard.js"></script>
+ 
 <!--[if IE]>NADA -  just my stupid eddor are crazy<![endif]-->
 
 	 <script type="text/javascript" src="{$root}/lib/jquery/jquery.js"></script>
