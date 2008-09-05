@@ -1,0 +1,4 @@
+1 - which files that are not necessary in /admin/* .php  ?
+
+2 - what is this exactly?  {validation_errors for=$foo_object}   and in php $foo_object()
+
