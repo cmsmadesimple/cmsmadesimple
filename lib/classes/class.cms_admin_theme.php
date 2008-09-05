@@ -681,46 +681,14 @@ class CmsAdminTheme extends CmsObject
      * DoBookmarks
      * Method for displaying admin bookmarks (shortcuts) & help links.
      */
-	 #########TODO fix me########
-	public function show_shortcuts()
-	{
-		if (get_preference($this->userid, 'bookmarks'))
-		{
-			echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
-			echo '<div class="itemoverflow">';
-			echo '<h2>'.lang('bookmarks').'</h2>';
-			echo '<p><a href="listbookmarks.php">'.lang('managebookmarks').'</a></p>';
-			global $gCms;
-			$bookops =& $gCms->GetBookmarkOperations();
-			$marks = array_reverse($bookops->LoadBookmarks($this->userid));
-			$marks = array_reverse($marks);
-			if (FALSE == empty($marks))
-			{
-				echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
-				echo '<ul style="margin:0">';
-				foreach($marks as $mark)
-				{
-					echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
-				}
-				echo "</ul>\n";
-			}
-			echo '<h3 style="margin:0;">'.lang('help').'</h3>';
-			echo '<ul style="margin:0;">';
-			echo '<li><a href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
-			echo '<li><a href="http://wiki.cmsmadesimple.org/">'.lang('wiki').'</a></li>';
-			echo '<li><a href="http://cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
-			echo '<li><a href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Extensions/Modules">'.lang('module_help').'</a></li>';
-			echo '</ul>';
-			echo '</div>';
-			echo '</div>';
-		}
+	 function show_bookmarks()
+			{	
+			 $smarty = cms_smarty();
+		     $marks = CmsBookmarkOperations::load_bookmarks($this->userid);
+         	 $smarty->assign('show_admin_shortcuts',get_preference($this->userid, 'bookmarks'));
+             $smarty->assign_by_ref('marks', $marks);
+			 $smarty->display(self::get_instance()->theme_template_dir . 'bookmarks.tpl');
 	}
-	
-	public function ShowShortcuts()
-	{
-		return $this->show_shortcuts();
-	}
-	#########end ########
     /**
      * DisplayDashboardCallout
      * Outputs warning if the install directory is still there.
@@ -946,11 +914,12 @@ class CmsAdminTheme extends CmsObject
 	function display_all_section_pages()
 	{
 		$smarty = cms_smarty();
-		 #bookmarks
-         $marks = CmsBookmarkOperations::load_bookmarks($this->userid);
-         $smarty->assign('show_admin_shortcuts',get_preference($this->userid, 'bookmarks'));
-         $smarty->assign('marks', $marks);
-         #end
+		 #Bookmark
+		 @ob_start();
+		self::get_instance()->show_bookmarks();
+		$bookmarks = @ob_get_clean();
+		$smarty->assign('admin_bookmarks', $bookmarks);
+		#end
 		$root_node = CmsAdminTree::get_instance()->get_root_node();
 
 		$smarty->assign('subitems', lang('subitems'));
@@ -985,11 +954,12 @@ class CmsAdminTheme extends CmsObject
 		}
 		
 		$smarty = cms_smarty();
-		 #bookmarks
-         $marks = CmsBookmarkOperations::load_bookmarks($this->userid);
-         $smarty->assign('show_admin_shortcuts',get_preference($this->userid, 'bookmarks'));
-         $smarty->assign('marks', $marks);
-         #end
+		  #Bookmark
+		 @ob_start();
+		self::get_instance()->show_bookmarks();
+		$bookmarks = @ob_get_clean();
+		$smarty->assign('admin_bookmarks', $bookmarks);
+		#end
 		   
 		$smarty->assign_by_ref('top_node', $node);
 		$smarty->display(self::get_instance()->theme_template_dir . 'sectiontop.tpl');
