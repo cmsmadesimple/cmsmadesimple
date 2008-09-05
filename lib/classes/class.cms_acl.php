@@ -62,8 +62,8 @@ class CmsAcl extends CmsObject
 			//Return true if we're the #1 account
 			if ($userid == 1)
 				return true;
-
-			if (is_int(intval($user)))
+			//Sil was here below $user->$userid
+			if (is_int(intval($userid)))
 			{
 				$user = cms_orm('CmsUser')->find_by_id($userid);
 			}
@@ -103,8 +103,8 @@ class CmsAcl extends CmsObject
 		$defn = self::get_permission_definition($module, $extra_attr, $permission);
 		
 		$result = false;
-		
-		if ($defn['hierarchical'])
+		//Sil was here below
+		if (isset($defn['hierarchical']) && $defn['hierarchical'])
 		{
 			$query = "SELECT max(gp.has_access)
 						FROM {$cms_db_prefix}{$defn['link_table']} c
@@ -127,8 +127,12 @@ class CmsAcl extends CmsObject
 						FROM {$cms_db_prefix}group_permissions gp 
 						INNER JOIN {$cms_db_prefix}permission_defns pd ON pd.id = gp.permission_defn_id 
 						WHERE gp.object_id = ? AND pd.id = ? {$groupids}";
-					
-			$result = cms_db()->GetOne($query, array($object_id, $defn['id']));
+
+			//Sil was here below
+			if (isset($defn['id'])) 
+			{
+			  $result = cms_db()->GetOne($query, array($object_id, $defn['id']));
+			}
 		}
 
 		//Make sure we get a real boolean...  php is so weird sometimes
