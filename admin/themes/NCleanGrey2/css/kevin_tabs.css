@@ -70,24 +70,24 @@
 	margin-left: 1px;
 	font-weight: bold;
 }
-.ui-tabs-nav .ui-tabs-selected a, 
+/*.ui-tabs-nav .ui-tabs-selected a, 
 .ui-tabs-nav a:focus, 
 .ui-tabs-nav a:active {
-    background-position: left -95px;
-	background-color: #fff ;
+     background: #fff url(../images/layout/tabs.png) repeat-x left -95px;
 	border-right: 1px solid #666;
 	border-left: 1px solid #666;
-	/*	outline: 0;*/
-}
-.ui-tabs-nav a:hover {
-    background-position: left -45px;
-	background-color: #fff ;
+	
+}*/
+.ui-tabs-nav li a:hover {
+ background: transparent url(../images/layout/tabs.png) repeat-x left -45px;
+ 
+
 	outline:0;
 	text-decoration: none;
 }
-.ui-tabs-nav a, .ui-tabs-nav .ui-tabs-disabled a:hover, .ui-tabs-nav .ui-tabs-disabled a:focus, .ui-tabs-nav .ui-tabs-disabled a:active {
+/*.ui-tabs-nav a, .ui-tabs-nav .ui-tabs-disabled a:hover, .ui-tabs-nav .ui-tabs-disabled a:focus, .ui-tabs-nav .ui-tabs-disabled a:active {
     background: #F9F9F9 url(../images/layout/tabs.png) repeat-x left -45px;	
-}
+}*/
 .ui-tabs-nav a span {
    /* width: 64px;
     min-width: 64px;
