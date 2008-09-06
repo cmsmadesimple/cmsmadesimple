@@ -975,6 +975,11 @@ class CmsAdminTheme extends CmsObject
 	function display_top_menu()
 	{
 		$smarty = cms_smarty();
+		###inject current user in top
+		$current_user = CmsLogin::get_current_user();
+		$username = $current_user->username;
+		$smarty->assign('its_me',$username);
+        #end
 		$root_node = CmsAdminTree::get_instance()->get_root_node();
 		$smarty->assign('admin_panel_title', lang('admin_panel_title'));
 		$smarty->assign_by_ref('root_node', $root_node);
@@ -982,23 +987,6 @@ class CmsAdminTheme extends CmsObject
 		$smarty->display(self::get_instance()->theme_template_dir . 'topmenu.tpl');
 	}
 	
-	
-    #TODO is in use? (Nuno ask!)
-	function DisplayRecentPages()
-	{
-		if (get_preference($this->userid, 'recent'))
-		{	
-			echo '<div id="navt_recent_pages_c">'."\n";
-			$counter = 0;
-			foreach($this->recent as $pg)
-			{
-				echo "<a href=\"". $pg->url."\">".++$counter.'. '.$pg->title."</a><br />"."\n";
-			}
-			echo '</div>'."\n";
-		}
-	}
-
-
 	/* Functions that we want dont want the standard output from */
 	function OutputFooterJavascript() {}
 }

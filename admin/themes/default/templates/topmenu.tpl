@@ -1,5 +1,7 @@
 <div id="header">
-	<h1>{$adminpaneltitle}</h1>
+	<h1>{$adminpaneltitle} | {tr}welcome_user{/tr}:  {$its_me}</h1>
+   
+   
 
 {if $root_node->has_children()}
 

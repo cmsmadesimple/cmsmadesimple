@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['welcome_user'] = 'Welcome';
 $lang['admin']['moduletemplates'] = 'Module Templates';
 $lang['admin']['test_email_subject'] = 'CMS Made Simple Test Message';
 $lang['admin']['test_email_body'] = 'This is a test message.  If you received this message it probably means that the email settings you have selected have worked.  Keep up the good work!';

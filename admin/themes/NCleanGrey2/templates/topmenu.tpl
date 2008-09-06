@@ -1,7 +1,6 @@
 <div id="logocontainer"><img src="themes/NCleanGrey2/images/logoCMS.png" alt="{$adminpaneltitle}" title="{$adminpaneltitle}" /><div class="logotext">{$adminpaneltitle}
 
-<br />{tr}welcome_user{/tr}: (TODO - var)
-
+<br />{tr}welcome_user{/tr}:  {$its_me} 
 
 
 </div></div>
