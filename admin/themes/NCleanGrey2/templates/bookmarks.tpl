@@ -15,7 +15,7 @@
                     <a href="makebookmark.php?title={$admin_theme->title|escape:"url"}">Add Shortcut</a><br />
 						
                     {if count($marks) gt 0}   
-                     <a href="listbookmarks.php">Manage Shortcuts</a><br />
+                     <a href="listbookmarks.php">Manage Shortcuts</a><br /><br />
                     {foreach from=$marks item=mark name=mark}
                     <a href="{$mark->url}">{$mark->title}</a><br />
                      {/foreach}

@@ -126,4 +126,5 @@
 		</div>
 	</div>
 </div>
+<p class="pageback"><a class="pageback" href="{$back_url}">&#171; {lang string='back'}</a></p>
 {literal}<script type="text/javascript">$('#page_tabs').tabs({fxAutoHeight: false});</script>{/literal}

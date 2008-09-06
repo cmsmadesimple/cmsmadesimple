@@ -33,7 +33,7 @@ $module = coalesce_key($_REQUEST, 'module', '');
 $plugin = coalesce_key($_REQUEST, 'plugin', '');
 
 $smarty->assign('header_name', $themeObject->ShowHeader('modules'));
-
+$smarty->assign('back_url', $themeObject->BackUrl());
 $show_list = true;
 
 if ($action == 'install' && $module != '')
