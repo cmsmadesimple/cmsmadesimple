@@ -977,7 +977,7 @@ class CmsAdminTheme extends CmsObject
 		$smarty = cms_smarty();
 		###inject current user in top
 		$current_user = CmsLogin::get_current_user();
-		$username = $current_user->username;
+		$username = $current_user->name;
 		$smarty->assign('its_me',$username);
         #end
 		$root_node = CmsAdminTree::get_instance()->get_root_node();
