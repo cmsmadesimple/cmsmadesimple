@@ -293,6 +293,7 @@ CmsInstallOperations::create_index($db, 'tags', 'tag_name', 'name');
 
 CmsInstallOperations::create_table($db, 'tag_objects', "
 	tag_id I,
+	name C(255),
 	type C(25),
 	object_id I
 ");
