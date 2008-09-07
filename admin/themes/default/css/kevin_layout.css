@@ -566,3 +566,76 @@ font-weight:bold;
 text-decoration:none;
 }
 /* end context_menu */
+
+/* ########### Dashboard page! #################*/
+
+.clear-db:after
+ {
+content: ".";
+display: block;
+height: 0;
+clear: both;
+visibility: hidden;
+} 
+* html .clear-db
+{
+height: 1%;
+} 
+.clear-db {display: block;
+} 
+
+.full-content
+{
+margin:7px 0;
+padding:0;
+}
+/*CORE*/
+.coredashboardcontent 
+{
+	padding:0px 1px;
+	border:1px solid #93AEB7;
+	width:98%;
+	margin:5px 1% 5px 1%;
+}
+.dashboardheader-core
+ {
+	background: #ccc;
+    color:#fff;
+	width:auto;
+	font-size: 1.2em;
+	font-weight: bold;
+	padding:4px;
+ }
+.dashboardcontent-core
+ {
+	color:black;
+	width:auto;
+	background: #F8F8F8;
+	padding:10px 5px;
+ }
+/*NOT CORE*/
+.moduledashboardcontent 
+ {
+padding:0px 1px;
+  border:1px solid #AAC0C6;
+   width:48%; 
+  float:left;
+  margin:5px 0 5px 1%;
+ }
+.dashboardheader
+ {
+	background: #ccc ;
+	color:black;
+	width:auto;
+	font-size: 1.2em;
+	font-weight: bold;
+	padding:4px;
+ }
+.dashboardcontent
+ {
+	color:black;
+	width:auto;
+	background: #fff;
+	padding:5px;
+ }
+
