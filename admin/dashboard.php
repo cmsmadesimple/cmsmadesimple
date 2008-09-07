@@ -29,7 +29,7 @@ $smarty = cms_smarty();
 
 include_once("header.php");
 
-global $gCms;
+$gCms = cmsms();
 
 
 
@@ -39,8 +39,11 @@ $output="";
 /******* Core Information Output ********/
 
 //require_once("../lib/classes/class.user.inc.php");
-
-$output.= lang('welcome_user') . " <b>".$gCms->variables['username']."</b>";
+$current_user = CmsLogin::get_current_user();
+$username = $current_user->name;
+		
+		
+$output.= lang('welcome_user') . " <b>".$username."</b>";
 
 $db =& $gCms->GetDb();
 
