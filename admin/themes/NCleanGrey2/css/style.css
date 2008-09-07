@@ -1426,7 +1426,7 @@ padding:0;
 }
 .dashboardheader-core
  {
-	background: #fff url(themes/NCleanGrey/images/layout/nav.png) repeat-x 0px -50px;
+	background: #fff url(../images/layout/nav.png) repeat-x 0px -50px;
     color:#fff;
 	width:auto;
 	font-size: 1.2em;
@@ -1451,7 +1451,7 @@ padding:0px 1px;
  }
 .dashboardheader
  {
-	background: #fff url(themes/NCleanGrey/images/layout/nav.png) repeat-x 0px 0px;
+	background: #fff url(../images/layout/nav.png) repeat-x 0px 0px;
 	color:black;
 	width:auto;
 	font-size: 1.2em;
