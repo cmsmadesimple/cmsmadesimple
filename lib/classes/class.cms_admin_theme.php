@@ -697,17 +697,26 @@ class CmsAdminTheme extends CmsObject
      * @param file file or dir to check for
 	 * @param message to display if it does exist
      */
-	function DisplayDashboardCallout($file, $message = '')
+	 function DisplayDashboardCallout()
 	{
-		if ($message == '')
-			$message = lang('installdirwarning');
-
-		echo "<div class=\"DashboardCallout\">\n";
-		if (file_exists($file))
-		{
-			echo "<div class=\"pageerrorinstalldir\"><p class=\"pageerror\">".$message."</p></div>";
-		}
-		echo "</div> <!-- end DashboardCallout -->\n";
+			$smarty = cms_smarty();
+			
+			$install_file = dirname(dirname(dirname(__FILE__))) . '/install';
+			$sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';
+			
+			$sitedown_message = lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN');
+			$smarty->assign('sitedown_message', $sitedown_message);
+			
+			if (file_exists($install_file))
+			{
+				$smarty->assign('install_warning', $install_file);
+					
+			}
+			if (file_exists($sitedown_file))
+			{
+				$smarty->assign('sitedownwarning', $sitedown_file);
+			}
+		
 	}
 
     /**
@@ -905,6 +914,18 @@ class CmsAdminTheme extends CmsObject
 	{
 		return $this->show_message($message, $get_var);
 	}
+	 /**
+     * Display a warning if safe mode is enabled
+     *
+	 * @return void
+	 * @author Ted Kulp
+     */
+    function safe_mode()
+	{
+		$smarty = cms_smarty();
+		$safe_mode = ini_get_boolean('safe_mode') && CmsApplication::get_preference('disablesafemodewarning',0) == 0;
+		$smarty->assign('safe_mode', $safe_mode);
+	}
 
     /**
      * Displays the list of sections and subitems for the main menu.
@@ -912,7 +933,7 @@ class CmsAdminTheme extends CmsObject
 	 * @return void
 	 * @author Ted Kulp
      */
-	function display_all_section_pages()
+    function display_all_section_pages()
 	{
 		$smarty = cms_smarty();
 		 #Bookmark
@@ -920,9 +941,14 @@ class CmsAdminTheme extends CmsObject
 		self::get_instance()->show_bookmarks();
 		$bookmarks = @ob_get_clean();
 		$smarty->assign('admin_bookmarks', $bookmarks);
-		#end
+		#DisplayDashboardCallout
+		self::get_instance()->DisplayDashboardCallout();
+		#safe_mode
+		self::get_instance()->safe_mode();
+		
+  
+  
 		$root_node = CmsAdminTree::get_instance()->get_root_node();
-
 		$smarty->assign('subitems', lang('subitems'));
 		$smarty->assign_by_ref('root_node', $root_node);
 		$smarty->display(self::get_instance()->theme_template_dir . 'indexcontent.tpl');

@@ -27,11 +27,8 @@ $CMS_EXCLUDE_FROM_RECENT=1;
 require_once("../include.php");
 
 check_login();
-global $gCms;
-$db = $gCms->GetDb();
-
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = cms_db();
 
 include_once("header.php");
 // Display a warning if CMSMS needs upgrading
@@ -46,14 +43,6 @@ if ($current_version < $CMS_SCHEMA_VERSION)
 {
 	echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror"><em><strong>Warning:</strong></em> CMSMS is in need of an upgrade.</p><p>You are now running schema version '.$current_version." and you need to be upgraded to version ".$CMS_SCHEMA_VERSION.'.</p><p>Please click the following link: <a href="'.$config['root_url'].'/install/upgrade.php">Start upgrade process</a>.</p></div></div>';
 }
-$themeObject->DisplayDashboardCallout(dirname(dirname(__FILE__)) . '/install');
-$themeObject->DisplayDashboardCallout(TMP_CACHE_LOCATION . '/SITEDOWN', lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN'));
-
-// Display a warning if safe mode is enabled
-if( ini_get_boolean('safe_mode') && CmsApplication::get_preference('disablesafemodewarning',0) == 0 )
-  {
-    echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">'.lang('warning_safe_mode').'</p></div></div>';
-  }
 
 // Display a warning if CMSMS needs upgrading
 $current_version = $CMS_SCHEMA_VERSION;
