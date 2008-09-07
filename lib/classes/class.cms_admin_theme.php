@@ -914,6 +914,7 @@ class CmsAdminTheme extends CmsObject
 	{
 		return $this->show_message($message, $get_var);
 	}
+	
 	 /**
      * Display a warning if safe mode is enabled
      *

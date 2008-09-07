@@ -2631,7 +2631,7 @@ class CmsModule extends CmsModuleBase
 		Events::SendEvent($this->GetName(), $eventname, $params);
 	}
 
-		 /* Returns the output the module wants displayed in the dashboard
+	/** Returns the output the module wants displayed in the dashboard
 	 * 
 	 * @returns dashboard-content
 	 */
