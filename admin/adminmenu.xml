@@ -13,6 +13,12 @@
     <description></description>
     <target>_blank</target>
        </node>
+	    <node>
+    <name>dashboard</name>
+    <title>dashboard</title>
+    <url>dashboard.php</url>
+    <description></description>
+  </node>
    <node>
     <name>logout</name>
     <title>logout</title>
