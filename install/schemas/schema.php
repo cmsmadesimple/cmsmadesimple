@@ -290,7 +290,7 @@ CmsInstallOperations::create_table($db, 'tags', "
 	modified_date T
 ");
 CmsInstallOperations::create_index($db, 'tags', 'tag_name', 'name');
-
+// hope this make sence 
 CmsInstallOperations::create_table($db, 'tag_objects', "
 	tag_id I,
 	name C(255),
