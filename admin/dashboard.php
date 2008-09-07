@@ -26,13 +26,10 @@ require_once("../include.php");
 
 check_login();
 $smarty = cms_smarty();
+$gCms = cmsms();
+$db = cms_db();
 
 include_once("header.php");
-
-$gCms = cmsms();
-
-
-
 
 $output="";
 
@@ -45,7 +42,7 @@ $username = $current_user->name;
 		
 $output.= lang('welcome_user') . " <b>".$username."</b>";
 
-$db =& $gCms->GetDb();
+
 
 $query = "SELECT timestamp FROM ".cms_db_prefix()."adminlog WHERE user_id=? AND action=? ORDER BY timestamp DESC";
 //echo $query;
