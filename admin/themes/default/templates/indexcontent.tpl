@@ -1,3 +1,22 @@
+{*install_warning*}
+{if isset($install_warning)}
+<div class="DashboardCallout">
+<div class="pageerrorinstalldir"><p class="pageerror">{tr}installdirwarning{/tr} </p></div>
+</div>
+{/if}
+{*sitedownwarning*}
+{if isset($sitedownwarning)}
+<div class="DashboardCallout">
+<div class="pageerrorinstalldir"><p class="pageerror">{$sitedown_message}</p></div>
+</div> 
+{/if}
+{*safe_mode*}
+{if $safe_mode}
+<div class="DashboardCallout">
+<div class="pageerrorinstalldir"><p class="pageerror">{tr}warning_safe_mode{/tr}</p></div>
+</div> 
+{/if}
+<!-- end DashboardCallout -->
 {*Bookmarks Box*}
 {$admin_bookmarks}
 {*end*} 
