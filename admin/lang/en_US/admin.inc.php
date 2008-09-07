@@ -1,4 +1,10 @@
 <?php
+$lang['admin']['notifications_to_handle'] = 'You have <b>%d</b> unhandled notifications';
+$lang['admin']['notifications'] = 'Notifications';
+$lang['admin']['dashboard'] = 'View Dashboard';
+$lang['admin']['ignorenotificationsfrommodules'] = 'Ignore notifications from these modules';
+$lang['admin']['admin_enablenotifications'] = 'Allow users to view notifications<br/><em>(notifications will be displayed on all admin pages)</em>';
+$lang['admin']['enablenotifications'] = 'Enable user notifications in the admin section';
 $lang['admin']['welcome_user'] = 'Welcome';
 $lang['admin']['moduletemplates'] = 'Module Templates';
 $lang['admin']['test_email_subject'] = 'CMS Made Simple Test Message';
