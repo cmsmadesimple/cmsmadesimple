@@ -30,7 +30,7 @@
 		</tr>
 		</thead>
 		<tbody>
-     {section name=i loop=$username}
+     {section name=i loop=$timestamp}
      
      {cycle values='row1,row2' assign='currow'} 
   <tr class="{$currow}">

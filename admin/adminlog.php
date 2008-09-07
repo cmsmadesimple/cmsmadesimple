@@ -89,7 +89,8 @@ $result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog ORDER BY t
 
        while ($row = $result->FetchRow()) {
 		   
-		      $username[]=$row["username"]; 
+		      $timestamp[]=$row["timestamp"]; 
+			  $username[]=$row["username"]; 
 			  $item_id[] =($row["item_id"]!=-1?$row["item_id"]:"&nbsp;"); 
 			  $item_name[]=$row["item_name"];
 			  $action[] = $row["action"]; 
@@ -97,11 +98,11 @@ $result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog ORDER BY t
 			   $date[]= date("D M j, Y G:i:s", $row["timestamp"]); 
 			  
 			  
-			  
+			  $smarty->assign('timestamp', $timestamp); 
               $smarty->assign('username', $username); 
 			  $smarty->assign('item_id', $item_id); 
 			  $smarty->assign('item_name', $item_name); 
-			  $smarty->assign('action"', $action); 
+			  $smarty->assign('action', $action); 
 			  $smarty->assign('dateformats', $dateformats); 
 		      $smarty->assign('date', $date); 
  }

@@ -1,4 +1,12 @@
 <?php
+
+$lang['admin']['itsbeensincelogin'] = 'It has been %s since you last login';
+$lang['admin']['days'] = 'days';
+$lang['admin']['day'] = 'day';
+$lang['admin']['hours'] = 'hours';
+$lang['admin']['hour'] = 'hour';
+$lang['admin']['minutes'] = 'minutes';
+$lang['admin']['minute'] = 'minute';
 $lang['admin']['notifications_to_handle'] = 'You have <b>%d</b> unhandled notifications';
 $lang['admin']['notifications'] = 'Notifications';
 $lang['admin']['dashboard'] = 'View Dashboard';
