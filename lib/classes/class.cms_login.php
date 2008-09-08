@@ -195,7 +195,7 @@ class CmsLogin extends CmsObject
 				}
 				else
 				{
-					$error .= _('Username or password incorrect');
+					$error .= lang('usernameincorrect');
 				}
 			}
 			else if ($username != '' && $password != '' && isset($_POST['loginsubmit']))
@@ -231,12 +231,12 @@ class CmsLogin extends CmsObject
 				}
 				else
 				{
-					$error .= _('Username or password incorrect');
+					$error .= lang('usernameincorrect');
 				}
 			}
 			else
 			{
-				$error .= _('Username or password incorrect');
+				$error .= lang('usernameincorrect');
 			}
 		}
 	}
