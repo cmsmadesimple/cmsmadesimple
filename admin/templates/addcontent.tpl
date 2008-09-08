@@ -44,20 +44,21 @@
 			{if $page_object->field_used('menu_text')}
 				{admin_input type='input' label='menutext' id='content_menu_text' name='menu_text' value=$menu_text useentities='true'}					  
 			{/if}
-
-			<div id="page_content_blocks">
-				{section name=onefile loop=$include_templates}
-					{include file=$include_templates[onefile]}
-				{/section}
-			</div>
-   
-			{* Parent Dropdown *}
+            
+	        {* Parent Dropdown *}
 			{if $show_parent_dropdown eq true}
 			  <div class="row">
 				<label>{lang string='parent'}:</label>
 			  	  {$parent_dropdown}
 			  </div>
 			{/if}
+			<div id="page_content_blocks">
+				{section name=onefile loop=$include_templates}
+					{include file=$include_templates[onefile]}
+				{/section}
+			</div>
+   
+			
 		</div> <!-- End content -->
 
 		<div id="advanced">
