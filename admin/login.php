@@ -33,7 +33,7 @@ if (isset($_SESSION['logout_user_now']))
 
 if (isset($_POST['logincancel']))
 {
-	//redirect(CmsConfig::get('root_url') . '/index.php', true);
+	redirect(CmsConfig::get('root_url') . '/index.php', true);
 }
 
 $redirect_url = CmsConfig::get('root_url') . '/' . CmsConfig::get('admin_dir') . '/index.php';
@@ -42,11 +42,14 @@ $openid = '';
 $error = '';
 CmsLogin::handle_login_request($redirect_url, $username, $openid, $error, true);
 
+/*
+TODO we need this were?
+
+
 CmsAdminTheme::start(true);
-
 $themeObject = CmsAdminTheme::get_instance(true);
-
 cmsms()->variables['admintheme'] =& $themeObject;
+*/
 
 $theme=
 CmsApplication::get_preference('logintheme', 'default');
