@@ -50,51 +50,90 @@ $error = "";
 $message = "";
 
 $disablesafemodewarning = 0;
-if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = 1;
+if (isset($_POST["disablesafemodewarning"]))
+{
+ 	$disablesafemodewarning = $_POST["disablesafemodewarning"];
+}
 
 $allowparamcheckwarnings = 0;
 if (isset($_POST["allowparamcheckwarnings"])) 
 {
-	$allowparamcheckwarnings = 1;
+	$allowparamcheckwarnings = $_POST["allowparamcheckwarnings"];
 }
 
 $enablecustom404 = "0";
-if (isset($_POST["enablecustom404"])) $enablecustom404 = "1";
+if (isset($_POST["enablecustom404"])) 
+{
+	$enablecustom404 = $_POST["enablecustom404"];
+}
 
 $xmlmodulerepository = "";
-if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
+if (isset($_POST["xmlmodulerepository"])) 
+{
+	$xmlmodulerepository = $_POST["xmlmodulerepository"];
+}
 
 $custom404 = "<p>Page not found<//p>";
-if (isset($_POST["custom404"])) $custom404 = $_POST["custom404"];
+if (isset($_POST["custom404"])) 
+{
+	$custom404 = $_POST["custom404"];
+}
 
 $custom404template = "-1";
-if (isset($_POST["custom404template"])) $custom404template = $_POST["custom404template"];
+if (isset($_POST["custom404template"])) 
+{
+	$custom404template = $_POST["custom404template"];
+}
 
 $enablesitedownmessage = "0";
-if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage = "1";
+if (isset($_POST["enablesitedownmessage"])) 
+{
+	$enablesitedownmessage = $_POST["enablesitedownmessage"];
+}
 
 $sitedownmessage = "<p>Site is current down.  Check back later.</p>";
-if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
+if (isset($_POST["sitedownmessage"])) 
+{
+	$sitedownmessage = $_POST["sitedownmessage"];
+}
 
 $defaultpagecontent = '';
-if (isset($_POST['defaultpagecontent'])) $defaultpagecontent = $_POST['defaultpagecontent'];
+if (isset($_POST['defaultpagecontent'])) 
+{
+	$defaultpagecontent = $_POST['defaultpagecontent'];
+}
 
 $sitedownmessagetemplate = "-1";
-if (isset($_POST["sitedownmessagetemplate"])) $sitedownmessagetemplate = $_POST["sitedownmessagetemplate"];
+if (isset($_POST["sitedownmessagetemplate"])) 
+{
+	$sitedownmessagetemplate = $_POST["sitedownmessagetemplate"];
+}
 
 $metadata = '';
-if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
+if (isset($_POST['metadata'])) 
+{
+	$metadata = $_POST['metadata'];
+}
 
-if (isset($_POST['parent_id'])) $default_parent_page = $_POST['parent_id'];
+if (isset($_POST['parent_id'])) 
+{
+	$default_parent_page = $_POST['parent_id'];
+}
 
 $sitename = '';
-if (isset($_POST['sitename'])) $sitename = $_POST['sitename'];
+if (isset($_POST['sitename'])) 
+{
+	$sitename = $_POST['sitename'];
+}
 
 #$useadvancedcss = "1";
 #if (isset($_POST["useadvancedcss"])) $useadvancedcss = $_POST["useadvancedcss"];
 
 $frontendlang = '';
-if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
+if (isset($_POST['frontendlang'])) 
+{
+	$frontendlang = $_POST['frontendlang'];
+}
 
 $global_umask = '022';
 if (isset($_POST['global_umask'])) 
@@ -103,7 +142,10 @@ if (isset($_POST['global_umask']))
 }
 
 $logintheme = "default";
-if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
+if (isset($_POST["logintheme"])) 
+{
+	$logintheme = $_POST["logintheme"];
+}
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Site Preferences');

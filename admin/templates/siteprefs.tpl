@@ -35,10 +35,10 @@
 				{admin_input type='input' label='Site Name' name='sitename' id='sitename' value=$sitename}
 				{admin_input type='input' label='File Creation Mask (umask)' name='global_umask' id='global_umask' value=$global_umask size='4'}
 				{admin_input type='textarea' class='smalltext' label='Global Metadata' name='metadata' id='metadata' value=$metadata}
-				{admin_input type='checkbox' label='Enable Custom 404 Message' name='enablecustom404' id='enablecustom404' value=$enablecustom404}				
+				{admin_input type='checkbox' label='Enable Custom 404 Message' name='enablecustom404' id='enablecustom404' value=$enablecustom404 selected=$enablecustom404}				
 				{admin_input type='textarea' class='smalltext' label='Custom 404 Error Message' name='custom404' id='custom404' value=$custom404}
 				{admin_input type='select' label='Template' name='custom404template' id='custom404template' options=$templates selected=$custom404template}				
-				{admin_input type='checkbox' label='Enable Site Down Message' name='enablesitedownmessage' id='enablesitedownmessage' value=$enablesitedownmessage}				
+				{admin_input type='checkbox' label='Enable Site Down Message' name='enablesitedownmessage' id='enablesitedownmessage' value=$enablesitedownmessage	selected=$enablesitedownmessage}			
 				{admin_input type='textarea' class='smalltext' label='Site Down Message' name='sitedownmessage' id='sitedownmessage' value=$sitedownmessage}
 	
 			        
@@ -95,7 +95,7 @@
 				  <p>{lang string='smtp_short_help'}</p>
 				  {admin_input type='input' label='SMTP Host' name='mail_host' id='mail_host' value=$mail_host}
 				  {admin_input type='input' label='SMTP Port' name='mail_port' id='mail_port' value=$mail_port}
-				  {admin_input type='checkbox' label='Use SMTP Auth' name='mail_smtpauth' id='mail_smtpauth' value=$mail_smtpauth}				
+				  {admin_input type='checkbox' label='Use SMTP Auth' name='mail_smtpauth' id='mail_smtpauth' value=$mail_smtpauth selected=$mail_smtpauth}				
 				  {admin_input type='input' label='SMTP Auth Username' name='mail_smtpauthuser' id='mail_smtpauthuser' value=$mail_smtpauthuser}
 				  {admin_input type='input' label='SMTP Auth Password' name='mail_smtpauthpw' id='mail_smtpauthpw' value=$mail_smtpauthpw}
                 </fieldset>
