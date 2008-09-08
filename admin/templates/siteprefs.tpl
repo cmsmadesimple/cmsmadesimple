@@ -40,6 +40,9 @@
 				{admin_input type='select' label='Template' name='custom404template' id='custom404template' options=$templates selected=$custom404template}				
 				{admin_input type='checkbox' label='Enable Site Down Message' name='enablesitedownmessage' id='enablesitedownmessage' value=$enablesitedownmessage	selected=$enablesitedownmessage}			
 				{admin_input type='textarea' class='smalltext' label='Site Down Message' name='sitedownmessage' id='sitedownmessage' value=$sitedownmessage}
+                
+                {admin_input type='select' label='Login Theme' name='logintheme' id='logintheme' options=$admintheme_options selected=$logintheme}	
+                
 	
 			        
        

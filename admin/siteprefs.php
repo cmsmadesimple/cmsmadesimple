@@ -73,7 +73,7 @@ if (isset($_POST["xmlmodulerepository"]))
 	$xmlmodulerepository = $_POST["xmlmodulerepository"];
 }
 
-$custom404 = "<p>Page not found<//p>";
+$custom404 = "<p>Page not found</p>";
 if (isset($_POST["custom404"])) 
 {
 	$custom404 = $_POST["custom404"];
@@ -318,6 +318,19 @@ $smarty->assign('custom404template', $custom404template);
 $smarty->assign('enablesitedownmessage', $enablesitedownmessage);
 $smarty->assign('sitedownmessage', $sitedownmessage);
 $smarty->assign('xmlmodulerepository', $xmlmodulerepository);
+
+
+// Assign the admin theme options
+$admintheme_options = array();
+if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
+	while (($file = readdir($dir)) !== false) {
+		if (@is_dir("themes/".$file) && ( $file[0] != '.')) {
+			$admintheme_options[$file] = $file;
+		}
+	}
+}
+$smarty->assign('admintheme_options', $admintheme_options);
+
 $smarty->assign('logintheme', $logintheme);
 $smarty->assign('metadata', $metadata);
 $smarty->assign('sitename', $sitename);
