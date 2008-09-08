@@ -458,7 +458,7 @@ div.login-fields  {
 div.login-fields input.loginsubmit  {
 margin-top: 5px;
  }
-div.formcontainer #lbpassword, div.formcontainer #lbusername   {
+div.formcontainer #lbpassword, div.formcontainer #lbusername  ,div.formcontainer #openid {
    margin-top: 5px;
    width:120px;
 }
@@ -477,14 +477,14 @@ p.lbpass  {
    margin-top: 10px;
    }
 /*  openId */
-   p.lbopenid  {
+   .lbopenid  {
    color: #555555;
    font-size: 1.2em;
-   margin-top: 13px;
+   margin-top: 17px;
    }
 
 #openid {
-	background: #FFFFFF url('../images/cms/openid-icon-small.gif') no-repeat scroll 0pt 50%;
+	background: url(../../../../images/cms/openid-icon-small.gif) no-repeat scroll 0pt 50%;
 	padding-left: 18px;
 }
  /*layout is in cache now (the importants images)*/

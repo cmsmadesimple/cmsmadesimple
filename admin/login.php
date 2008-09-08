@@ -48,6 +48,11 @@ $themeObject = CmsAdminTheme::get_instance(true);
 
 cmsms()->variables['admintheme'] =& $themeObject;
 
+$theme=
+CmsApplication::get_preference('logintheme', 'default');
+
+$theme_template_dir_login = dirname(dirname(__FILE__)) . '/' . CmsConfig::get('admin_dir') . '/themes/' . $theme . '/templates/';
+
 $smarty = cms_smarty();
 
 $smarty->assign('base_url', CmsConfig::get('root_url') . '/' . CmsConfig::get('admin_dir') . '/');
@@ -59,7 +64,7 @@ $smarty->assign('username', $username);
 $smarty->assign('error', $error);
 $smarty->assign('openid', $openid);
 
-$smarty->display($themeObject->theme_template_dir . 'login.tpl');
+$smarty->display($theme_template_dir_login . 'login.tpl');
 
 ?>
 
