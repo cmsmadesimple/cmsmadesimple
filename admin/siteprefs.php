@@ -61,10 +61,10 @@ if (isset($_POST["allowparamcheckwarnings"]))
 	$allowparamcheckwarnings = $_POST["allowparamcheckwarnings"];
 }
 
-$enablenotifications = 1;
-if (!isset($_POST["enablenotifications"])) 
+$enablenotifications = 0;
+if (isset($_POST["enablenotifications"])) 
   {
-    $enablenotifications = 0;
+    $enablenotifications = $_POST["enablenotifications"];
   }
   
 $enablecustom404 = "0";
