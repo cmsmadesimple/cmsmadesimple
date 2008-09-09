@@ -23,7 +23,8 @@ div.submitrow
 div.row {
 	clear:left;
 	overflow:hidden;
-	margin:0.5em;
+	margin:1em 0.5em;
+	height:1%;
 	}
 	div.row label {
 	float:left;
@@ -31,6 +32,7 @@ div.row {
 	text-align:right;
 	margin-right:0.5em;
 	font-weight: bold;
+	color: #333333;
 	}
 	div.row input,
 	div.row textarea,

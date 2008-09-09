@@ -32,7 +32,11 @@ $themeObject = CmsAdminTheme::get_instance();
 
 cmsms()->variables['admintheme'] = CmsAdminTheme::get_instance();
 
-
+/*
+$current_user = CmsLogin::get_current_user();
+$userid = $current_user->id;
+ echo $userid ;
+ */
 
 
       // Display notification stuff from modules

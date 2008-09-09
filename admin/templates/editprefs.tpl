@@ -20,10 +20,10 @@
 			{admin_input type='checkbox' label='adminindent' id='indent' name='indent' selected=$indent tooltip='indent'}	
             
             	
-                {admin_input type='checkbox' label='Enable user notifications in the admin section' id='enablenotifications' name='enablenotifications' selected=$enablenotifications}
+                {admin_input type='checkbox' label='Enable user notifications in the admin section' id='enablenotifications' name='enablenotifications'  selected=$enablenotifications}
            
         <div class="row">
-        <label for="{tr}enablenotifications{/tr}"> {tr}enablenotifications{/tr} </label>
+        <label for="ignorenotificationsfrommodules"> {tr}enablenotifications{/tr} </label>
        {$txt}
        </div>
          

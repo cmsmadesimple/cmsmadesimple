@@ -59,11 +59,10 @@ if (isset($_POST['indent']))
 	$indent = $_POST['indent'];
 }
 
-
-$enablenotifications = 1;
-if (!isset($_POST['enablenotifications']))
-{   
-	$enablenotifications = 0;
+$enablenotifications = 0;
+if (isset($_POST['enablenotifications'])) 
+{
+$enablenotifications = $_POST['enablenotifications'];
 }
 
 $paging = 0;
@@ -221,7 +220,7 @@ if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at a
 $smarty->assign('admintheme_options', $admintheme_options);
 
 
- $txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
+ $txt = '<select id="ignorenotificationsfrommodules" name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
                           foreach( $modules as $key => $value )
                           {
                             $txt .= '<option value="'.$value.'"';
