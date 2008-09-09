@@ -340,7 +340,6 @@ if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at a
 	}
 }
 $smarty->assign('admintheme_options', $admintheme_options);
-$smarty->assign('admintheme_options', $admintheme_options);
 $smarty->assign('enablenotifications', $enablenotifications);
 $smarty->assign('metadata', $metadata);
 $smarty->assign('sitename', $sitename);
