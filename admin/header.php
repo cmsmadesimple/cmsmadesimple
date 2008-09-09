@@ -97,6 +97,9 @@ $userid = $current_user->id;
 				 $themeObject->AddNotification(1,'Core',$sitedown_message);
 			}
 			
+			
+			/*  ################  STANDBY - NC
+			
           // Display an upgrade notification 
           // but only do a check once per day
           $timelastchecked = CmsApplication::get_preference('lastcmsversioncheck',0);
@@ -165,16 +168,22 @@ $userid = $current_user->id;
                 // it wasn't up-to-date last time either
                   $themeObject->AddNotification(1,'Core',lang('new_version_available'));
               }
-
+			  
+               */
 
           // Display a warning about mail settings.
-          if( isset($gCms->modules['CMSMailer']) && 
+       
+	    /*  ################  STANDBY - NC
+		
+		 if( isset($gCms->modules['CMSMailer']) && 
               isset($gCms->modules['CMSMailer']['object']) &&
 	      isset($gCms->modules['CMSMailer']['installed']) &&
               get_site_preference('mail_is_set',0) == 0 )
             {
                $themeObject->AddNotification(1,'Core',lang('warning_mail_settings'));
             }
+			
+			*/
 	}
 
       // and display the dashboard.
