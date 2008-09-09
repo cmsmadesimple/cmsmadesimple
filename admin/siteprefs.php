@@ -272,7 +272,8 @@ else if (isset($_POST["editsiteprefs"]))
 else if( isset($_POST['mailsettings']) )
 {
   if( $access )
-	{
+	{  
+	  CmsApplication::set_preference('mail_is_set',1);
 	  $mail_mailer       = coalesce_key($_POST,'mail_mailer','mail');
 	  $mail_host         = coalesce_key($_POST,'mail_host','');
 	  $mail_port         = coalesce_key($_POST,'mail_port','');
