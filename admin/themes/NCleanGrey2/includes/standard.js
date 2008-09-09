@@ -93,6 +93,11 @@ function linksExternal()	{
 	}
 }
 
+
+function togglecollapse(cid)
+{
+  document.getElementById(cid).style.display=(document.getElementById(cid).style.display!="block")? "block" : "none";
+}
 //use <input class="defaultfocus" ...>
 /* function defaultFocus() {
 

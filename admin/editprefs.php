@@ -36,40 +36,97 @@ check_login();
 $smarty = cms_smarty();
 
 $admintheme = 'default';
-if (isset($_POST['admintheme'])) $admintheme = $_POST['admintheme'];
-
+if (isset($_POST['admintheme'])) 
+{   
+	$admintheme = $_POST['admintheme'];
+}
 $bookmarks = 0;
-if (isset($_POST['bookmarks'])) $bookmarks = $_POST['bookmarks'];
+if (isset($_POST['bookmarks'])) 
+{  
+	$bookmarks = $_POST['bookmarks'];
+}
 
 $hide_help_links = 0;
-if (isset($_POST['hide_help_links'])) $hide_help_links = $_POST['hide_help_links'];
+if (isset($_POST['hide_help_links'])) 
+{ 
+	$hide_help_links = $_POST['hide_help_links'];
+}
+
 
 $indent = 0;
-if (isset($_POST['indent'])) $indent = $_POST['indent'];
+if (isset($_POST['indent'])) 
+{ 
+	$indent = $_POST['indent'];
+}
+
+
+$enablenotifications = 1;
+if (!isset($_POST['enablenotifications']))
+{   
+	$enablenotifications = 0;
+}
 
 $paging = 0;
-if (isset($_POST['paging'])) $paging = $_POST['paging'];
-
-
+if (isset($_POST['paging'])) 
+{ 
+	$paging = $_POST['paging'];
+ }
+ 
 $page_message = '';
 
 $wysiwyg = '';
-if (isset($_POST["wysiwyg"])) $wysiwyg = $_POST["wysiwyg"];
+if (isset($_POST["wysiwyg"])) 
+{
+	$wysiwyg = $_POST["wysiwyg"];
+}
 
 $syntaxhighlighter = '';
-if (isset($_POST["syntaxhighlighter"])) $syntaxhighlighter = $_POST["syntaxhighlighter"];
+if (isset($_POST["syntaxhighlighter"])) 
+{
+	$syntaxhighlighter = $_POST["syntaxhighlighter"];
+}
 
 $gcb_wysiwyg = 0;
-if (isset($_POST['gcb_wysiwyg'])) $gcb_wysiwyg = $_POST['gcb_wysiwyg'];
+if (isset($_POST['gcb_wysiwyg'])) 
+{
+	$gcb_wysiwyg = $_POST['gcb_wysiwyg'];
+}
 
 $date_format_string = '%x %X';
-if (isset($_POST['date_format_string'])) $date_format_string = $_POST['date_format_string'];
+if (isset($_POST['date_format_string'])) 
+{
+	$date_format_string = $_POST['date_format_string'];
+}
 
+$ignoredmodules = array();
+if (isset($_POST['ignoredmodules']) )
+  {
+    $ignoredmodules = $_POST['ignoredmodules'];
+    if( in_array('**none**',$ignoredmodules) )
+      {
+	$ignoredmodules = array();
+      }
+  }
+  
+  
 $userid = get_userid();
 
 if (isset($_POST["cancel"])) {
 	redirect("topmyprefs.php");
 	return;
+}
+
+$modules = array();
+$modules[ucwords(lang('none'))] = '**none**';
+$modules['---'] = '**none**';
+foreach(cmsms()->modules as $key=>$value)
+{
+  if (cmsms()->modules[$key]['installed'] == true &&
+      cmsms()->modules[$key]['active'] == true)
+    {
+      $obj =& cmsms()->modules[$key]['object'];
+      $modules[$obj->get_name()] = $obj->get_name();
+    }
 }
 
 if (isset($_POST["submit_form"])) {
@@ -81,6 +138,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'bookmarks', $bookmarks);
 	set_preference($userid, 'hide_help_links', $hide_help_links);
 	set_preference($userid, 'indent', $indent);
+	set_preference($userid, 'enablenotifications', $enablenotifications);
 	set_preference($userid, 'paging', $paging);
 	set_preference($userid, 'date_format_string', $date_format_string);
 	audit(-1, '', 'Edited User Preferences');
@@ -96,6 +154,7 @@ if (isset($_POST["submit_form"])) {
 	$smarty->assign('admintheme', get_preference($userid, 'admintheme'));
 	$smarty->assign('bookmarks', get_preference($userid, 'bookmarks'));
 	$smarty->assign('indent', get_preference($userid, 'indent', true));
+	$smarty->assign('enablenotifications', get_preference($userid, 'enablenotifications', 1));
 	$smarty->assign('paging', get_preference($userid, 'paging', 0));
 	$smarty->assign('date_format_string', get_preference($userid, 'date_format_string','%x %X'));
 	$smarty->assign('hide_help_links', get_preference($userid, 'hide_help_links'));
@@ -158,8 +217,28 @@ if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at a
 		}
 	}
 }
+
 $smarty->assign('admintheme_options', $admintheme_options);
 
+
+ $txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
+                          foreach( $modules as $key => $value )
+                          {
+                            $txt .= '<option value="'.$value.'"';
+                            if( in_array($value,$ignoredmodules) )
+			      {
+				$txt .= ' selected="selected"';
+			      }
+                            $txt .= ">{$key}</option>\n";
+                          }
+                          $txt .= "</select>\n";
+				
+				
+				$smarty->assign('txt', $txt);
+                          //echo $txt;
+						  
+						  
+						  
 // Display the template
 $smarty->display('editprefs.tpl');
 

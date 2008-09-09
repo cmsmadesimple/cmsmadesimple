@@ -41,7 +41,6 @@ $username = '';
 $openid = '';
 $error = '';
 CmsLogin::handle_login_request($redirect_url, $username, $openid, $error, true);
-
 /*
 TODO we need this were?
 
@@ -51,8 +50,7 @@ $themeObject = CmsAdminTheme::get_instance(true);
 cmsms()->variables['admintheme'] =& $themeObject;
 */
 
-$theme=
-CmsApplication::get_preference('logintheme', 'default');
+$theme = CmsApplication::get_preference('logintheme', 'default');
 
 $theme_template_dir_login = dirname(dirname(__FILE__)) . '/' . CmsConfig::get('admin_dir') . '/themes/' . $theme . '/templates/';
 

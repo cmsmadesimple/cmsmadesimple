@@ -943,9 +943,9 @@ class CmsAdminTheme extends CmsObject
 		$bookmarks = @ob_get_clean();
 		$smarty->assign('admin_bookmarks', $bookmarks);
 		#DisplayDashboardCallout
-		self::get_instance()->DisplayDashboardCallout();
+		//self::get_instance()->DisplayDashboardCallout();
 		#safe_mode
-		self::get_instance()->safe_mode();
+		//self::get_instance()->safe_mode();
 		
   
   
@@ -1014,6 +1014,65 @@ class CmsAdminTheme extends CmsObject
 		$smarty->display(self::get_instance()->theme_template_dir . 'topmenu.tpl');
 	}
 	
+	
+	###############################################################	
+	/**
+     * AddToDashboard
+     */
+    function AddNotification($priority,$module,$html)
+    {
+      if( !is_array($this->_notificationitems) )
+	{
+	  $this->_notificationitems = array(array(),array(),array());
+	}
+      if( $priority < 1 ) $priority = 1;
+      if( $priority > 3 ) $priority = 3;
+
+      $this->_notificationitems[$priority-1][] = array($module,$html);
+    }
+
+    function DisplayNotifications($priority=2)
+    {
+      if( !is_array($this->_notificationitems) ) return;
+      
+      // count the total number of notifications
+      $count=0;
+      for( $i = 1; $i <= $priority; $i++ )
+      {
+        $count += count($this->_notificationitems[$i-1]);
+      }
+      echo '<div class="full-Notifications clear">'."\n";
+      echo '<div class="Notifications-title">' . lang('notifications_to_handle',$count) . '</div>'."\n";
+	  echo "<a title='Notifications' class=\"Notifications-arrow\" href=\"#\" onclick=\"togglecollapse('Notifications-area'); return false;\" >" .lang('notifications_to_handle',$count) ."</a>\n";
+	 
+	  
+	  
+      echo "<ul id=\"Notifications-area\">\n";
+      for( $i = 1; $i <= $priority; $i++ )
+	{
+	  if( count($this->_notificationitems) < $i ) break;
+	  if( count($this->_notificationitems[$i-1]) == 0 ) continue;
+	  foreach( $this->_notificationitems[$i-1] as $data )
+	    {
+              echo '<li class="NotificationsItem NotificationsPriority'.$i.'">';
+	      echo '<span class="NotificationsItemModuleName">'."\n";
+	      echo $data[0]."\n";
+	      echo "</span>\n";
+	      echo '<span class="NotificationsItemData">'."\n";
+	      echo $data[1]."\n";
+	      echo "</span>\n";
+	      echo '</li>';		  
+	    }
+	}
+      echo "</ul>";
+      echo "</div><!-- full-Notifications -->\n";
+	   echo "<div class=\"clearb\">&nbsp;</div>\n";
+    }
+
+   
+	
+	
+	###############################################################
 	/* Functions that we want dont want the standard output from */
 	function OutputFooterJavascript() {}
 }

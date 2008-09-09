@@ -1467,3 +1467,72 @@ padding:0px 1px;
 	background: #fff;
 	padding:5px;
  }
+ 
+/* ########### Notifications #################*/
+.full-Notifications
+{
+clear:both;
+margin:10px 10px 0 15px;
+}
+.full-Notifications a, .full-Notifications a:visited
+{
+	color: #042B3E;
+	text-decoration: none;
+	font-weight: bold;
+}
+.full-Notifications a:hover, .full-Notifications a:active
+{
+	color: #577782;
+	text-decoration: underline;
+}
+
+a.Notifications-arrow
+{
+	background: url(../images/icons/Notifications/arrow.gif) no-repeat left top;
+	text-indent:-999em;
+	display:block;
+	width:16px;
+	height:16px;
+	float:left;
+	margin:0 5px
+}
+.Notifications-title
+{
+	margin: 0;
+	font:  1.0em Arial, Helvetica, sans-serif;
+	color: #333;
+	padding: 0px 0px 1px;	
+	float:left;
+	height:10px;
+}
+.full-Notifications ul#Notifications-area
+{
+	display: none;
+	margin: 17px 0px 0px -5px;
+	padding: 0 5px 0 0;
+	height: 1%;/*IE*/
+	float:left;
+	border-top: 1px solid #EAEAEA;
+	list-style: none;
+	
+}
+
+.NotificationsItem
+{
+	margin: 5px 5px 5px 0px;
+	padding:2px 0px 2px 30px;
+	height: 1%;/*IE*/
+	width: auto;
+} 
+.NotificationsPriority1
+{
+	background: url(../images/icons/Notifications/1.gif) no-repeat left top;
+} 
+.NotificationsPriority2
+{
+	background: url(../images/icons/Notifications/2.gif) no-repeat left top;
+} 
+.NotificationsPriority3
+{
+background: url(../images/icons/Notifications/3.gif) no-repeat left top;
+} 

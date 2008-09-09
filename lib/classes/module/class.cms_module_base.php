@@ -2019,6 +2019,24 @@ abstract class CmsModuleBase extends CmsObject
 		$usertagops =& $gCms->GetUserTagOperations();
 		return $usertagops->CallUserTag($name, $params);
 	}
+	/** Returns the output the module wants displayed in the dashboard
+	 * 
+	 * @returns dashboard-content
+	 */
+	function GetDashboardOutput() {
+		return '';
+	}
+
+
+	/**
+	 * Returns the output the module wants displayed in the notification area
+	 * 
+	 * @returns a stdClass object with two properties.... priority (1->3)... and
+	 * html, which indicates the text to display for the Notification.
+	 */
+	function GetNotificationOutput($priority=2) {
+		return '';
+	}
 }
 
 # vim:ts=4 sw=4 noet

@@ -61,6 +61,12 @@ if (isset($_POST["allowparamcheckwarnings"]))
 	$allowparamcheckwarnings = $_POST["allowparamcheckwarnings"];
 }
 
+$enablenotifications = 1;
+if (!isset($_POST["enablenotifications"])) 
+  {
+    $enablenotifications = 0;
+  }
+  
 $enablecustom404 = "0";
 if (isset($_POST["enablecustom404"])) 
 {
@@ -249,6 +255,8 @@ else if (isset($_POST["editsiteprefs"]))
 		#CmsApplication::set_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
 		#CmsApplication::set_preference('useadvancedcss', $useadvancedcss);
 		CmsApplication::set_preference('logintheme', $logintheme);
+		CmsApplication::set_preference('enablenotifications', $enablenotifications);
+		
 		CmsApplication::set_preference('metadata', $metadata);
 		CmsApplication::set_preference('sitename', $sitename);
 		audit(-1, '', 'Edited Site Preferences');
@@ -306,6 +314,7 @@ else if (!isset($_POST["submit"]))
 	#$sitedownmessagetemplate = get_preference('sitedownmessagetemplate');
 	#$useadvancedcss = get_preference('useadvancedcss');
 	$logintheme = CmsApplication::get_preference('logintheme', 'default');
+	$enablenotifications = CmsApplication::set_preference('enablenotifications', $enablenotifications);
 	$metadata = CmsApplication::get_preference('metadata', '');
 	$sitename = CmsApplication::get_preference('sitename', 'CMSMS Site');
 }
@@ -330,8 +339,8 @@ if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at a
 	}
 }
 $smarty->assign('admintheme_options', $admintheme_options);
-
-$smarty->assign('logintheme', $logintheme);
+$smarty->assign('admintheme_options', $admintheme_options);
+$smarty->assign('enablenotifications', $enablenotifications);
 $smarty->assign('metadata', $metadata);
 $smarty->assign('sitename', $sitename);
 

@@ -3,7 +3,7 @@
 {$header_name} 
   </div><!-- pageoverflow -->
 	
-<form method="post" action="editprefs.php" name="prefsform">
+<form method="post" action="editprefs.php">
 	<div id="page_tabs">
 		<ul>
 			<li><a href="#content"><span>Admin Panel</span></a></li>
@@ -17,7 +17,18 @@
 			{admin_input type='select' label='admintheme' id='admintheme' name='admintheme' options=$admintheme_options selected=$admintheme}			
 			{admin_input type='checkbox' label='admincallout' id='bookmarks' name='bookmarks' selected=$bookmarks tooltip='showbookmarks'}						
 			{admin_input type='checkbox' label='hide_help_links' id='hide_help_links' name='hide_help_links' selected=$hide_help_links tooltip='hide_help_links_help'}									
-			{admin_input type='checkbox' label='adminindent' id='indent' name='indent' selected=$indent tooltip='indent'}									
+			{admin_input type='checkbox' label='adminindent' id='indent' name='indent' selected=$indent tooltip='indent'}	
+            
+            	
+                {admin_input type='checkbox' label='Enable user notifications in the admin section' id='enablenotifications' name='enablenotifications' selected=$enablenotifications}
+           
+        <div class="row">
+        <label for="{tr}enablenotifications{/tr}"> {tr}enablenotifications{/tr} </label>
+       {$txt}
+       </div>
+         
+        
+            								
 		<input type="hidden" name="edituserprefs" value="true" />
 		<input type="hidden" name="submit_form" value="true" />		
 		<input type="hidden" name="old_default_cms_lang" value="{$old_default_cms_lang}" />

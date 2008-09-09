@@ -35,7 +35,6 @@ $output="";
 
 /******* Core Information Output ********/
 
-//require_once("../lib/classes/class.user.inc.php");
 $current_user = CmsLogin::get_current_user();
 $username = $current_user->name;
 		
@@ -44,9 +43,9 @@ $output.= lang('welcome_user') . " <b>".$username."</b>";
 
 
 
-$query = "SELECT timestamp FROM ".cms_db_prefix()."adminlog WHERE user_id=? AND action=? ORDER BY timestamp DESC";
+$query = "SELECT timestamp FROM ".cms_db_prefix()."adminlog WHERE user_id=? AND action=? ORDER BY timestamp ASC";
 //echo $query;
-$result = &$db->Execute($query, array(get_userid(),"User Login"));
+$result = &$db->Execute($query, array(get_userid(),"User Logout"));
 if ($result && $result->RecordCount()>2) {
 	$row=$result->FetchRow();
 	$row=$result->FetchRow(); //Pick the previous, not the current
@@ -79,6 +78,7 @@ if ($result && $result->RecordCount()>2) {
 }
 $smarty->assign("coreoutput",$output);
 
+//get_preference($userid,'ignoredmodules')
 
 /******* ModuleInformation Output ********/
 $dashboarditems=array();
@@ -86,7 +86,7 @@ foreach ($gCms->modules as $module) {
 	
 	if (!$module["installed"]) continue;
 	if (!$module["active"]) continue;
-	//if ($this->GetPreference(get_userid()."_show_".$module["object"]->GetName(),"1")!="1") continue;
+	if (CmsApplication::get_preference(get_userid()."_show_".$module["object"]->get_name(),"1")!="1") continue;
 	$dashboarditem=array();
 	$output="";
 	if (method_exists($module["object"],"GetDashboardOutput")) {
@@ -94,7 +94,7 @@ foreach ($gCms->modules as $module) {
 	}
 	if ($output!="") {
 		$dashboarditem["output"]=$output;
-		$dashboarditem["title"]=$module["object"]->GetFriendlyName();
+		$dashboarditem["title"]=$module["object"]->get_name();
    // $themeObject->DisplayDashboardPageItem("module",$module["object"]->GetFriendlyName(),$output);
     $dashboarditems[]=$dashboarditem;
 	}

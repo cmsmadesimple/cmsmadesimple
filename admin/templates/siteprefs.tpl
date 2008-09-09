@@ -43,7 +43,9 @@
                 
                 {admin_input type='select' label='Login Theme' name='logintheme' id='logintheme' options=$admintheme_options selected=$logintheme}	
                 
-	
+	{admin_input type='checkbox' label='admin_enablenotifications' name='enablenotifications' id='enablenotifications' value=$enablenotifications	selected=$enablenotifications}			
+    
+   
 			        
        
         
