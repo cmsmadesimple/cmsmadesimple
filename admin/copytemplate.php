@@ -101,7 +101,7 @@ if ($access)
 				//Copy attached CSS templates as well...
 				$db = &$gCms->GetDb();
 
-				$query = "SELECT assoc_css_id, assoc_type, css_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css WHERE assoc_to_id = " . $db->qstr($template_id) . " AND assoc_css_id = css_id";
+				$query = "SELECT assoc_css_id, assoc_type, css_name, assoc_order FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css WHERE assoc_to_id = " . $db->qstr($template_id) . " AND assoc_css_id = css_id";
 				debug_buffer($query);
 				$result2 = $db->Execute($query);
 				debug_buffer($result2);
@@ -111,7 +111,7 @@ if ($access)
 				{
 					while ($row = $result2->FetchRow())
 					{
-						$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date) VALUES ('".$onetemplate->id."','".$row['assoc_css_id']."','".$row['assoc_type']."',".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+						$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date,assoc_order) VALUES ('".$onetemplate->id."','".$row['assoc_css_id']."','".$row['assoc_type']."',".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).",'".$row['assoc_order']."')";
 						debug_buffer($query);
 						$db->Execute($query);
 					}
