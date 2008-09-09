@@ -59,7 +59,7 @@ if (isset($_POST['indent']))
 	$indent = $_POST['indent'];
 }
 
-$enablenotifications = 0;
+$enablenotifications = 1;
 if (isset($_POST['enablenotifications'])) 
 {
 $enablenotifications = $_POST['enablenotifications'];

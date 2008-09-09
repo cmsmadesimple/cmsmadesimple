@@ -61,7 +61,7 @@ if (isset($_POST["allowparamcheckwarnings"]))
 	$allowparamcheckwarnings = $_POST["allowparamcheckwarnings"];
 }
 
-$enablenotifications = 0;
+$enablenotifications = 1;
 if (isset($_POST["enablenotifications"])) 
   {
     $enablenotifications = $_POST["enablenotifications"];
