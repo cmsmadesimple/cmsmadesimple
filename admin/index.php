@@ -33,7 +33,7 @@ $db =& $gCms->GetDb();
 
 include_once("header.php");
 //$themeObject->DisplayDashboardCallout(dirname(dirname(__FILE__)).'/install');
-$themeObject->DisplayDashboardCallout(TMP_CACHE_LOCATION . '/SITEDOWN', lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN'));
+//$themeObject->DisplayDashboardCallout(TMP_CACHE_LOCATION . '/SITEDOWN', lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN'));
 
 // Display a warning if CMSMS needs upgrading
 $current_version = $CMS_SCHEMA_VERSION;

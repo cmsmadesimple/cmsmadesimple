@@ -93,7 +93,14 @@ else
             {
                $themeObject->AddNotification(1,'Core',lang('warning_safe_mode'));
             }
-
+               
+			    // Display a warning sitedownwarning
+			 	$sitedown_message = lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN');
+				$sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';
+				if (file_exists($sitedown_file))
+			{
+				$themeObject->AddNotification(1,'Core',$sitedown_message);
+			}
           // Display an upgrade notification 
           // but only do a check once per day
           $timelastchecked = get_site_preference('lastcmsversioncheck',0);
