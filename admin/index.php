@@ -32,26 +32,6 @@ global $gCms;
 $db =& $gCms->GetDb();
 
 include_once("header.php");
-//$themeObject->DisplayDashboardCallout(dirname(dirname(__FILE__)).'/install');
-//$themeObject->DisplayDashboardCallout(TMP_CACHE_LOCATION . '/SITEDOWN', lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN'));
-
-// Display a warning if CMSMS needs upgrading
-$current_version = $CMS_SCHEMA_VERSION;
-$query = "SELECT version from ".cms_db_prefix()."version";
-$row = $db->GetRow($query);
-if ($row)
-{
-	$current_version = $row["version"];
-}
-if ($current_version < $CMS_SCHEMA_VERSION)
-{
-	echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">'
-	  .lang('warning_upgrade').'</p>';
-	echo '<p>'.lang('warning_upgrade_info1',$current_version,$CMS_SCHEMA_VERSION).'</p>';
-	echo '<p>'.lang('warning_upgrade_info2',
-			'<a href="'.$config['root_url'].'/install/upgrade.php">'.lang('start_upgrade_process').'</a>').'</p>';
-	echo '</div></div>';
-}
 
 $themeObject->ShowShortcuts();
 $themeObject->DisplaySectionMenuDivStart();

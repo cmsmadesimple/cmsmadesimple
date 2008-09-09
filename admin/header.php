@@ -101,6 +101,29 @@ else
 			{
 				$themeObject->AddNotification(1,'Core',$sitedown_message);
 			}
+			
+				// Display a warning if CMSMS needs upgrading
+				$current_version = $CMS_SCHEMA_VERSION;
+				$query = "SELECT version from ".cms_db_prefix()."version";
+				$row = $db->GetRow($query);
+				if ($row)
+				{
+					$current_version = $row["version"];
+				}
+				
+				$warning_upgrade = 
+				lang('warning_upgrade') . "<br />" . lang('warning_upgrade_info1',$current_version,  
+				$CMS_SCHEMA_VERSION) . "<br /> " . lang('warning_upgrade_info2',
+				'<a href="'.$config['root_url'].'/install/upgrade.php">'.lang('start_upgrade_process').'</a>')
+				;
+				
+				 
+				if ($current_version < $CMS_SCHEMA_VERSION)
+				{
+					$themeObject->AddNotification(1,'Core', $warning_upgrade);
+	            }
+
+
           // Display an upgrade notification 
           // but only do a check once per day
           $timelastchecked = get_site_preference('lastcmsversioncheck',0);
