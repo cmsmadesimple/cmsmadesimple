@@ -765,26 +765,7 @@ EOT;
 
 $lang['admin']['help_function_contact_form'] = <<<EOT
   <h2>NOTE: This plugin is deprecated</h2>
-    <p>This smarty plugin is deprecated, and may not be included with further versions of CMS Made Simple.  We recommend you use the formbuilder module and it's included contact form.</p>
-	<h3>What does this do?</h3>
-	<p>Display's a contact form. This can be used to allow others to send an email message to the address specified.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{contact_form email="yourname@yourdomain.com"}</code><br>
-	<br>
-	If you would like to send an email to multiple adresses, seperate each address with a comma.</p>
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li>email - The email address that the message will be sent to.</li>
-		<li><em>(optional)</em>style - true/false, use the predefined styles. Default is true.</li>
-		<li><em>(optional)</em>subject_get_var - string, allows you to specify which _GET var to use as the default value for subject.
-               <p>Example:</p>
-               <pre>{contact_form email="yourname@yourdomain.com" subject_get_var="subject"}</pre>
-             <p>Then call the page with the form on it like this: /index.php?page=contact&subject=test+subject</p>
-             <p>And the following will appear in the "Subject" box: "test subject"
-           </li>
-		<li><em>(optional)</em>captcha - true/false, use Captcha response test (Captcha module must be installed). Default is false.</li>
-	</ul>
-	</p>
+  <h3>This plugin has been removed as of CMS made simple version 1.5</h3>
 EOT;
 
 $lang['admin']['help_function_cms_versionname'] = <<<EOT
