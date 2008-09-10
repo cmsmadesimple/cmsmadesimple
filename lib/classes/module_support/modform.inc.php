@@ -363,7 +363,8 @@ function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $se
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
   $selectedvalue = cms_htmlentities($selectedvalue);
-  $delimiter = cms_htmlentities($delimiter);
+  
+  //$delimiter = cms_htmlentities($delimiter); //Doesn't work with stuff like <br/>!
 
 	$text = '';
 	$counter = 0;
