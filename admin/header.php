@@ -32,11 +32,9 @@ $themeObject = CmsAdminTheme::get_instance();
 
 cmsms()->variables['admintheme'] = CmsAdminTheme::get_instance();
 
-/*
-$current_user = CmsLogin::get_current_user();
+$gCms = cmsms();
 $userid = $current_user->id;
- echo $userid ;
- */
+// echo $userid ;
 
 
       // Display notification stuff from modules
@@ -172,18 +170,12 @@ $userid = $current_user->id;
                */
 
           // Display a warning about mail settings.
-       
-	    /*  ################  STANDBY - NC
-		
-		 if( isset($gCms->modules['CMSMailer']) && 
-              isset($gCms->modules['CMSMailer']['object']) &&
-	      isset($gCms->modules['CMSMailer']['installed']) &&
-              get_site_preference('mail_is_set',0) == 0 )
+            if(CmsApplication::get_preference('mail_is_set') == 0 )
             {
                $themeObject->AddNotification(1,'Core',lang('warning_mail_settings'));
+			   //echo "DEBUG:" . CmsApplication::get_preference('mail_is_set');
             }
-			
-			*/
+
 	}
 
       // and display the dashboard.

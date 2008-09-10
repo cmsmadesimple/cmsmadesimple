@@ -41,9 +41,9 @@
 				{admin_input type='checkbox' label='Enable Site Down Message' name='enablesitedownmessage' id='enablesitedownmessage' value=$enablesitedownmessage	selected=$enablesitedownmessage}			
 				{admin_input type='textarea' class='smalltext' label='Site Down Message' name='sitedownmessage' id='sitedownmessage' value=$sitedownmessage}
                 
-                {admin_input type='select' label='Login Theme' name='logintheme' id='logintheme' options=$admintheme_options selected=$logintheme}	
+                {admin_input type='select' label='Login Theme' name='logintheme' id='logintheme' options=$admintheme selected=$logintheme}	
                 
-	{admin_input type='checkbox' label='admin_enablenotifications' name='enablenotifications' id='enablenotifications' 	selected=$enablenotifications}			
+	{admin_input type='checkbox' label='admin_enablenotifications' name='enablenotifications' id='enablenotifications' 	selected=$enablenotifications}	
     
    
 			        

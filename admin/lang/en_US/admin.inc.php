@@ -1,5 +1,7 @@
 <?php
-
+$lang['admin']['warning_mail_settings'] = <<<EOT
+Your mail settings have not been configured.  This could interfere with the ability of your website to send email messages.  You should go to <a href="moduleinterface.php?module=CMSMailer">Extensions &gt;&gt; CMSMailer</a> and configure the mail settings with the information provided by your host.
+EOT;
 $lang['admin']['itsbeensincelogin'] = 'It has been %s since you last login';
 $lang['admin']['days'] = 'days';
 $lang['admin']['day'] = 'day';

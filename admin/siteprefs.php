@@ -61,11 +61,6 @@ if (isset($_POST["allowparamcheckwarnings"]))
 	$allowparamcheckwarnings = $_POST["allowparamcheckwarnings"];
 }
 
-$enablenotifications = 1;
-if (isset($_POST["enablenotifications"])) 
-  {
-    $enablenotifications = $_POST["enablenotifications"];
-  }
   
 $enablecustom404 = "0";
 if (isset($_POST["enablecustom404"])) 
@@ -103,6 +98,21 @@ if (isset($_POST["sitedownmessage"]))
 	$sitedownmessage = $_POST["sitedownmessage"];
 }
 
+$logintheme = "default";
+if (isset($_POST["logintheme"])) 
+{
+	$logintheme = $_POST["logintheme"];
+}
+
+
+$enablenotifications = 1;
+if (isset($_POST["enablenotifications"])) 
+  {
+    $enablenotifications = $_POST["enablenotifications"];
+  }
+  
+
+  
 $defaultpagecontent = '';
 if (isset($_POST['defaultpagecontent'])) 
 {
@@ -147,11 +157,6 @@ if (isset($_POST['global_umask']))
 	$global_umask = $_POST['global_umask'];
 }
 
-$logintheme = "default";
-if (isset($_POST["logintheme"])) 
-{
-	$logintheme = $_POST["logintheme"];
-}
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Site Preferences');
@@ -315,9 +320,10 @@ else if (!isset($_POST["submit"]))
 	#$sitedownmessagetemplate = get_preference('sitedownmessagetemplate');
 	#$useadvancedcss = get_preference('useadvancedcss');
 	$logintheme = CmsApplication::get_preference('logintheme', 'default');
-	$enablenotifications = CmsApplication::set_preference('enablenotifications', $enablenotifications);
+	$enablenotifications = CmsApplication::get_preference('enablenotifications', 1);
 	$metadata = CmsApplication::get_preference('metadata', '');
 	$sitename = CmsApplication::get_preference('sitename', 'CMSMS Site');
+	
 }
 
 $smarty->assign('global_umask', $global_umask);
@@ -339,7 +345,9 @@ if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at a
 		}
 	}
 }
-$smarty->assign('admintheme_options', $admintheme_options);
+$smarty->assign('admintheme', $admintheme_options);
+$smarty->assign('logintheme', $logintheme);
+
 $smarty->assign('enablenotifications', $enablenotifications);
 $smarty->assign('metadata', $metadata);
 $smarty->assign('sitename', $sitename);
