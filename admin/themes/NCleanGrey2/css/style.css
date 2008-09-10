@@ -1397,7 +1397,7 @@ text-decoration:none;
 display:none;
 }
 
-* ########### Dashboard page! #################*/
+/* ########### Dashboard page! #################*/
 
 .clear-db:after
  {
@@ -1516,6 +1516,7 @@ a.Notifications-arrow
 	float:left;
 	border-top: 1px solid #EAEAEA;
 	list-style: none;
+	width:550px;
 	
 }
 
