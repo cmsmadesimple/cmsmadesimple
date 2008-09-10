@@ -103,6 +103,7 @@ else
 			}
 			
 				// Display a warning if CMSMS needs upgrading
+				$db =& $gCms->GetDb();
 				$current_version = $CMS_SCHEMA_VERSION;
 				$query = "SELECT version from ".cms_db_prefix()."version";
 				$row = $db->GetRow($query);
