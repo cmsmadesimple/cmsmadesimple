@@ -114,7 +114,7 @@
 <div class="pageoverflow">
   <p class="pageoptions">
     {$hidden}
-    {$cancel} {$submit}
+    {$submit} {$cancel} 
   </p>
 </div>
 </form>
