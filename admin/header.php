@@ -37,66 +37,90 @@ $userid = $current_user->id;
 // echo $userid ;
 
 
-      // Display notification stuff from modules
-      // should be controlled by preferences or something
-      $ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
-      if( CmsApplication::get_preference('enablenotifications',1) &&
-	  get_preference($userid,'enablenotifications',1) )
-	{
-	  foreach( $gCms->modules as $modulename => $ext )
-	    {
-	      if( in_array($modulename,$ignoredmodules) ) continue;
-	      $mod =& $gCms->modules[$modulename]['object'];
-	      if( !is_object($mod) ) continue;
+			  // Display notification stuff from modules
+			  // should be controlled by preferences or something
+			  $ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
+			  if( CmsApplication::get_preference('enablenotifications',1) &&
+			  get_preference($userid,'enablenotifications',1) )
+			  {
+			  foreach( $gCms->modules as $modulename => $ext )
+				{
+				  if( in_array($modulename,$ignoredmodules) ) continue;
+				  $mod =& $gCms->modules[$modulename]['object'];
+				  if( !is_object($mod) ) continue;
+		
+				  $data = $mod->GetNotificationOutput(3); // todo, priority user preference
+				  if( empty($data) ) continue;
+				  if( is_object($data) )
+				{
+				  $themeObject->AddNotification($data->priority,
+								$mod->get_name(),
+								$data->html);
+				}
+				  else
+				{
+				  // we have more than one item
+				  // for the dashboard from this module
+				  if( is_array($data) )
+					{
+					  foreach( $data as $item )
+					{
+					  $themeObject->AddNotification($item->priority,
+									   $mod->get_name(),
+									   $item->html);
+					}
+					}
+				}
+				}
 
-	      $data = $mod->GetNotificationOutput(3); // todo, priority user preference
-	      if( empty($data) ) continue;
-	      if( is_object($data) )
-		{
-		  $themeObject->AddNotification($data->priority,
-						$mod->get_name(),
-						$data->html);
-		}
-	      else
-		{
-		  // we have more than one item
-		  // for the dashboard from this module
-		  if( is_array($data) )
-		    {
-		      foreach( $data as $item )
-			{
-			  $themeObject->AddNotification($item->priority,
-						       $mod->get_name(),
-						       $item->html);
-			}
-		    }
-		}
-	    }
+				// if the install directory still exists
+				// add a priority 1 dashboard item
+			  if( file_exists(dirname(dirname(__FILE__)).'/install') )
+				{
+				   $themeObject->AddNotification(1,'Core', lang('installdirwarning'));
+				}
 
-	  // if the install directory still exists
-	  // add a priority 1 dashboard item
-	  if( file_exists(dirname(dirname(__FILE__)).'/install') )
-	    {
-	       $themeObject->AddNotification(1,'Core', lang('installdirwarning'));
-	    }
-
-          // Display a warning if safe mode is enabled
-          if( ini_get_boolean('safe_mode') && CmsApplication::get_preference('disablesafemodewarning',0) == 0 )
-            {
-               $themeObject->AddNotification(1,'Core',lang('warning_safe_mode'));
-            }
+			    // Display a warning if safe mode is enabled
+			  if( ini_get_boolean('safe_mode') && CmsApplication::get_preference('disablesafemodewarning',0) == 0 )
+				{
+				   $themeObject->AddNotification(1,'Core',lang('warning_safe_mode'));
+				}
 			
-			 // Display a warning sitedownwarning
-			 	$sitedown_message = lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN');
-				$sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';
-				if (file_exists($sitedown_file))
-			{
-				//$smarty->assign('sitedownwarning', $sitedown_file);
-				 $themeObject->AddNotification(1,'Core',$sitedown_message);
-			}
+				 // Display a warning sitedownwarning
+					$sitedown_message = lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN');
+					$sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';
+					if (file_exists($sitedown_file))
+				{
+					//$smarty->assign('sitedownwarning', $sitedown_file);
+					 $themeObject->AddNotification(1,'Core',$sitedown_message);
+				}
 			
-			
-			/*  ################  STANDBY - NC
+		         	// Display a warning if CMSMS needs upgrading
+				$current_version = $CMS_SCHEMA_VERSION;
+				$query = "SELECT version from ".cms_db_prefix()."version";
+				$row = $db->GetRow($query);
+				if ($row)
+				{
+					$current_version = $row["version"];
+				} 
+				
+				$upgrade_message = '<em><strong>Warning:</strong></em> CMSMS is in need of an upgrade.<br />You are now running schema version '.$current_version." and you need to be upgraded to version ".$CMS_SCHEMA_VERSION.'.<br />Please click the following link: <a href="'.$config['root_url'].'/install/upgrade.php">Start upgrade process</a>.';
+				
+				if ($current_version < $CMS_SCHEMA_VERSION)
+				{
+				   $themeObject->AddNotification(1,'Core',$upgrade_message);
+				}
+				
+				 // Display a warning about mail settings.
+				if(CmsApplication::get_preference('mail_is_set') == 0 )
+				{
+				   $themeObject->AddNotification(1,'Core',lang('warning_mail_settings'));
+				   //echo "DEBUG:" . CmsApplication::get_preference('mail_is_set');
+				}
+				
+				
+				
+			/*  ################  STANDBY - NC 1x stuff
 			
           // Display an upgrade notification 
           // but only do a check once per day
@@ -169,12 +193,7 @@ $userid = $current_user->id;
 			  
                */
 
-          // Display a warning about mail settings.
-            if(CmsApplication::get_preference('mail_is_set') == 0 )
-            {
-               $themeObject->AddNotification(1,'Core',lang('warning_mail_settings'));
-			   //echo "DEBUG:" . CmsApplication::get_preference('mail_is_set');
-            }
+        
 
 	}
 
