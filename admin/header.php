@@ -33,6 +33,7 @@ $themeObject = CmsAdminTheme::get_instance();
 cmsms()->variables['admintheme'] = CmsAdminTheme::get_instance();
 
 $gCms = cmsms();
+$db = cms_db();
 $userid = $current_user->id;
 // echo $userid ;
 
