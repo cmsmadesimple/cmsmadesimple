@@ -30,7 +30,7 @@
 				{if count($stylesheets) gt 0}
 				{foreach from=$stylesheets item='current'}
 				{cycle values='row1,row2' assign='currow'}
-				<tr class="{$currow}" onouseover="this.className='{$currow}hover';" onmouseout="this.className='{$currow}';">
+				<tr class="{$currow}">
 					<td>
 						{if $modify_layout eq true}
 						<a href="editstylesheet.php?css_id={$current->id}">

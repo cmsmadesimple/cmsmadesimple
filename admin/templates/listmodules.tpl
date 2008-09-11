@@ -1,10 +1,8 @@
 <div class="pagecontainer">
 	<div class="pageoverflow">
-	<!--<p class="pageheader">Debug-title: -->{$header_name}<!--</p>-->
-	</div><!-- pageoverflow -->
-
-	
-		<table class="pagetable">
+	{$header_name}
+	</div>
+         <table class="pagetable">
 			<thead>
 				<tr>
 					<th>{tr}name{/tr}</th>

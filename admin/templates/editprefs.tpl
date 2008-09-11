@@ -28,11 +28,11 @@
        </div>
          
         
-            								
+        <div class="input-hidden"> 								
 		<input type="hidden" name="edituserprefs" value="true" />
 		<input type="hidden" name="submit_form" value="true" />		
 		<input type="hidden" name="old_default_cms_lang" value="{$old_default_cms_lang}" />
-	
+	    </div>
 			
 		</div>
 	</div>

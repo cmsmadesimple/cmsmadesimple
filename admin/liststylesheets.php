@@ -46,6 +46,7 @@ include_once("header.php");
 
 $smarty = cms_smarty();
 $smarty->assign('header_name',$themeObject->ShowHeader('currentstylesheets'));
+$smarty->assign('back_url', $themeObject->BackUrl());
 local_setup_smarty($page);
 $smarty->display('liststylesheets.tpl');
 

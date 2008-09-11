@@ -5,7 +5,9 @@
   </div><!-- pageoverflow -->
 <form method="post" action="{$action}">		
 {if $user_object->id > 0}
+ <div class="input-hidden"> 
 	<input type="hidden" name="user_id" value="{$user_object->id}" />
+ </div>
 {/if}
 	<div id="page_tabs">
 		<ul>

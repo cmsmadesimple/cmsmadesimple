@@ -7,7 +7,7 @@
   </p>
 </div><!-- pageoverflow -->
 
-<table cellspacing="0" class="pagetable">
+<table class="pagetable">
   <thead>
     <tr>
       <th class="pagew60">{tr}name{/tr}</th>

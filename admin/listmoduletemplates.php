@@ -44,7 +44,7 @@ else if (isset($_REQUEST['delete_template']))
 }
 
 $smarty->assign('templates', CmsModuleTemplate::get_all_templates());
-
+$smarty->assign('back_url', $themeObject->BackUrl());
 $smarty->display('listmoduletemplates.tpl');
 
 include_once("footer.php");

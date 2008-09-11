@@ -1,6 +1,6 @@
 {foreach from=$groups item='current'}
   {cycle values='row1,row2' assign='currow'}
-  <tr class="{$currow}" onouseover="this.className='{$currow}hover';" onmouseout="this.className='{$currow}';">
+  <tr class="{$currow}">
     <td>
       {if $modify_groups eq true}
         <a href="editgroup.php?group_id={$current->id}">
