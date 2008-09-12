@@ -21,7 +21,7 @@
 
 function smarty_cms_function_contact_form($params, &$smarty) 
 {
-   echo '<!-- the {contact_form} plugin is no longer valid. -->'
+   echo '<!-- the {contact_form} plugin is no longer valid. -->';
 }
 
 function smarty_cms_help_function_contact_form() {
