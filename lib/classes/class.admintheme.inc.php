@@ -1441,10 +1441,13 @@ class AdminTheme
       {
         $count += count($this->_notificationitems[$i-1]);
       }
+	  
+	  // remove html tags like <b>2</b>
+	  $no_html_tags = preg_replace('/(<\/?)(\w+)([^>]*>)/e','',lang('notifications_to_handle',$count));
+	  
       echo '<div class="full-Notifications clear">'."\n";
       echo '<div class="Notifications-title">' . lang('notifications_to_handle',$count) . '</div>'."\n";
-	  
-	   echo '<div id="notifications-display" class="notifications-show" onclick="change(\'notifications-display\', \'notifications-hide\', \'notifications-show\'); change(\'notifications-container\', \'invisible\', \'visible\');"></div>'."\n";
+	  echo '<div title="'.$no_html_tags.'" id="notifications-display" class="notifications-show" onclick="change(\'notifications-display\', \'notifications-hide\', \'notifications-show\'); change(\'notifications-container\', \'invisible\', \'visible\');"></div>'."\n";
 	   
 	 /*  echo "<div title='Notifications' class=\"Notifications-arrow\" href=\"#\" onclick=\"togglecollapse('Notifications-area'); return false;\" >""</div>\n";*/
 	 
