@@ -1041,12 +1041,12 @@ class CmsAdminTheme extends CmsObject
       {
         $count += count($this->_notificationitems[$i-1]);
       }
+	   $no_html_tags = preg_replace('/(<\/?)(\w+)([^>]*>)/e','',lang('notifications_to_handle',$count));
       echo '<div class="full-Notifications clear">'."\n";
       echo '<div class="Notifications-title">' . lang('notifications_to_handle',$count) . '</div>'."\n";
-	  echo "<a title='Notifications' class=\"Notifications-arrow\" href=\"#\" onclick=\"togglecollapse('Notifications-area'); return false;\" >" .lang('notifications_to_handle',$count) ."</a>\n";
-	 
+	  echo '<div title="'.$no_html_tags.'" id="notifications-display" class="notifications-show" onclick="change(\'notifications-display\', \'notifications-hide\', \'notifications-show\'); change(\'notifications-container\', \'invisible\', \'visible\');"></div>'."\n";
 	  
-	  
+	  echo '<div id="notifications-container" class="invisible">'."\n";
       echo "<ul id=\"Notifications-area\">\n";
       for( $i = 1; $i <= $priority; $i++ )
 	{
@@ -1065,6 +1065,7 @@ class CmsAdminTheme extends CmsObject
 	    }
 	}
       echo "</ul>";
+	  echo "</div><!-- notifications-container -->\n";
       echo "</div><!-- full-Notifications -->\n";
 	   echo "<div class=\"clearb\">&nbsp;</div>\n";
     }
