@@ -1443,9 +1443,12 @@ class AdminTheme
       }
       echo '<div class="full-Notifications clear">'."\n";
       echo '<div class="Notifications-title">' . lang('notifications_to_handle',$count) . '</div>'."\n";
-	   echo "<a title='Notifications' class=\"Notifications-arrow\" href=\"#\" onclick=\"togglecollapse('Notifications-area'); return false;\" >" .lang('notifications_to_handle',$count) ."</a>\n";
-	 
 	  
+	   echo '<div id="notifications-display" class="notifications-show" onclick="change(\'notifications-display\', \'notifications-hide\', \'notifications-show\'); change(\'notifications-container\', \'invisible\', \'visible\');"></div>'."\n";
+	   
+	 /*  echo "<div title='Notifications' class=\"Notifications-arrow\" href=\"#\" onclick=\"togglecollapse('Notifications-area'); return false;\" >""</div>\n";*/
+	 
+	  echo '<div id="notifications-container" class="invisible">'."\n";
 	  
       echo "<ul id=\"Notifications-area\">\n";
       for( $i = 1; $i <= $priority; $i++ )
@@ -1465,6 +1468,7 @@ class AdminTheme
 	    }
 	}
       echo "</ul>";
+	   echo "</div><!-- notifications-container -->\n";
       echo "</div><!-- full-Notifications -->\n";
 	   echo "<div class=\"clearb\">&nbsp;</div>\n";
     }
