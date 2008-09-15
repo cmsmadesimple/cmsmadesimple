@@ -1,0 +1,72 @@
+<div class="pagecontainer">
+
+  {$showheader}
+
+  <fieldset>
+    <legend><strong>{$lang_copyfrom}:</strong></legend>
+
+    <div class="pageoverflow">
+      <p class="pagetext">{$lang_pageid}:</p>
+      <p class="pageinput">{$fromid}
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext">{$lang_pagealias}:</p>
+      <p class="pageinput">{$fromobj->Alias()}</p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext">{$lang_pagetitle}:</p>
+      <p class="pageinput">{$fromobj->Name()}</p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext">{$lang_pagemenutext}:</p>
+      <p class="pageinput">{$fromobj->MenuText()}</p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext">{$lang_pagetype}:</p>
+      <p class="pageinput">{$fromobj->FriendlyName()}</p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext">{$lang_pageparent}:</p>
+      <p class="pageinput">{$parentinfo}</p>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend><strong>{$lang_copyto}:</strong></legend>
+    <form action="copycontent.php">
+    <div><input type="hidden" name="content_id" value="{$fromid}"></div>
+
+    <div class="pageoverflow">
+      <p class="pagetext">{$lang_pagealias}:</p>
+      <p class="pageinput"><input type="text" name="to_alias" size="40" maxlength="40" value="{$fromobj->Alias()}"></p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext">{$lang_pagetitle}:</p>
+      <p class="pageinput"><input type="text" name="to_title" size="40" maxlength="40" value="{$fromobj->Name()}"></p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext">{$lang_pagemenutext}:</p>
+      <p class="pageinput"><input type="text" name="to_menutext" size="40" maxlength="40" value="{$fromobj->MenuText()}"></p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext">{$lang_pageparent}:</p>
+      <p class="pageinput">{$input_parentdropdown}</p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext">&nbsp;</p>
+      <p class="pageinput"><input type="submit" name="submit" value="{$lang_submit}"><input type="submit" name="cancel" value="{$lang_cancel}"></p>
+    </div>
+    </form>
+  </fieldset>
+
+</div>

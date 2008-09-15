@@ -30,7 +30,12 @@ class Content extends ContentBase
 	$this->additionalContentBlocks = array();
 	$this->addtContentBlocksLoaded = false;
     }
-	
+
+    function IsCopyable()
+    {
+        return TRUE;
+    }
+
     function FriendlyName()
     {
       return lang('contenttype_content');

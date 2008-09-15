@@ -567,7 +567,7 @@ function check_children(&$root, &$mypages, &$userid)
 	return $result;
 }
 
-function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages, &$page)
+function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$copyImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages, &$page)
 {
     global $currow;
     global $config;
@@ -777,12 +777,29 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         {
             if ($display == 'edit')
             {
+	      // copy link
+	      if( $one->IsCopyable() )
+		{
+		  $thelist .= '<td class="pagepos"><a href="copycontent.php?content_id='.$one->Id().'">';
+		  $thelist .= $copyImg;
+		  $thelist .= "</a></td>\n";
+		}
+	      else
+		{
+		  $thelist .= '<td class="pagepos">&nbsp;&nbsp;</td>'."\n";
+		}
+              
+              // edit link
                 $thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
                 $thelist .= $editImg;
                 $thelist .= "</a></td>\n";
             }
 	    else
 	    {
+	      // copy link
+	      $thelist .= '<td class="pagepos">&nbsp;&nbsp;</td>'."\n";
+
+	      // edit link
 	      $thelist .= "<td class=\"pagepos\">";
 	      $thelist .= "&nbsp;&nbsp;";
 	      $thelist .= "</td>\n";
@@ -832,7 +849,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
     {
         foreach ($children as $child)
         { 
-            display_hierarchy($child, $userid, $modifyall, $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages, $page);
+            display_hierarchy($child, $userid, $modifyall, $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page);
         }
     }
 } // function display_hierarchy
@@ -870,6 +887,7 @@ function display_content_list($themeObject = null)
 	$upImg = $themeObject->DisplayImage('icons/system/arrow-u.gif', lang('up'),'','','systemicon');
 	$viewImg = $themeObject->DisplayImage('icons/system/view.gif', lang('view'),'','','systemicon');
 	$editImg = $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+	$copyImg = $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
 	$deleteImg = $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 
 	$counter = 0;
@@ -906,7 +924,7 @@ function display_content_list($themeObject = null)
 		$pagelist = array();
 		foreach ($hierarchy->getChildren() as $child)
 		{ 
-			display_hierarchy($child, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages, $page);
+			display_hierarchy($child, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page);
 		}
 		#display_hierarchy($hierarchy, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages, $page);
 		foreach ($pagelist as $item)
@@ -969,6 +987,7 @@ function display_content_list($themeObject = null)
 		$headoflist .= "<th class=\"move\">".lang('move')."</th>\n";
 		$headoflist .= "<th class=\"pagepos invisible\">".lang('order')."</th>\n";
 	}
+	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";

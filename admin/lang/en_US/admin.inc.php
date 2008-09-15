@@ -1,4 +1,7 @@
 <?php
+$lang['admin']['copy_from'] = 'Copy From';
+$lang['admin']['copy_to'] = 'Copy To';
+$lang['admin']['copycontent'] = 'Copy Content Item';
 $lang['admin']['md5_function'] = 'md5 function';
 $lang['admin']['xml_function'] = 'Basic XML (expat) support';
 $lang['admin']['magic_quotes_gpc'] = 'Magic quotes for Get/Post/Cookie';

@@ -693,6 +693,14 @@ class ContentBase
 	return true;
     }
 
+    /**
+     * Is this content type copyable ?
+     */
+    function IsCopyable()
+    {
+      return FALSE;
+    }
+
     /************************************************************************/
     /* The rest																*/
     /************************************************************************/

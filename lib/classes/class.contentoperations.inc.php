@@ -67,7 +67,7 @@ class ContentOperations
     /**
      * Determine proper type of object, load it and return it
      */
-	function &LoadContentFromId($id,$loadprops=true)
+	function &LoadContentFromId($id,$loadprops=false)
 	{
 		$result = FALSE;
 
@@ -85,7 +85,7 @@ class ContentOperations
 				$contentobj =& ContentOperations::CreateNewContent($classtype);
 				if ($contentobj)
 				{
-					$contentobj->LoadFromData($row, FALSE);
+					$contentobj->LoadFromData($row, $loadprops);
 				}
 				return $contentobj;
 			}
