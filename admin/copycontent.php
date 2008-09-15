@@ -32,6 +32,7 @@ $fromid = (int)$_GET['content_id'];
 global $gCms;
 $contentops =& $gCms->GetContentOperations();
 $fromobj = $contentops->LoadContentFromId($fromid,true);
+$fromobj->GetAdditionalEditors();
 $parentobj = $contentops->LoadContentFromId($fromobj->ParentId());
 
 // handle form submission
