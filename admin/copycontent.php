@@ -93,7 +93,7 @@ $smarty->assign('fromobj',$fromobj);
 if( is_object($parentobj) )
 {
   $smarty->assign('parentinfo',
-    sprintf("%s (%s - %d)",$parentobj->Name(),$parentObj->Alias(),$parentobj->Id()));
+    sprintf("%s (%s - %d)",$parentobj->Name(),$parentobj->Alias(),$parentobj->Id()));
 }
 else
 {
