@@ -62,29 +62,43 @@ if( isset($_GET['submit']) )
       $to_parentid = (int)$_GET['to_parentid'];
     }
 
+  //
   // Now do the copy
-  //$tmpobj = $contentops->CreateNewContent($fromobj->Type());
+  //
   $tmpobj = $fromobj;
-  $tmpobj->FillParams($_GET);
+
+  // trick some of the variables to handle
+  // an insert properly.
   $tmpobj->SetId(-1); // force new object
   $tmpobj->SetItemOrder(-1);
   $tmpobj->SetOldItemOrder(-1);
+
+  // Stuff that needs to be changed
+  $tmpobj->SetAlias($to_alias);
+  $tmpobj->mOldAlias = ''; // no method for this.
   $tmpobj->SetName($to_title);
   $tmpobj->SetParentId($to_parentid);
   $tmpobj->SetOldParentId($to_parentid);
-  $tmpobj->SetDefaultContent(0);
-  $tmpobj->mAlias = $to_alias;
-  $tmpobj->mOldAlias = '';
   $tmpobj->SetMenuText($to_menutext);
-  $tmpobj->SetOwner($fromobj->Owner());
+  $tmpobj->SetDefaultContent(0);
+  $tmpobj->SetOwner(get_userid());
+  $tmpobj->SetLastModifiedBy(get_userid());
+
+  // This shouldn't be needed because the object was copied
   $tmpobj->SetShowInMenu($fromobj->ShowInMenu());
   $tmpobj->SetAdditionalEditors($fromobj->GetAdditionalEditors());
   $tmpobj->SetActive($fromobj->Active());
+
+  // Now make sure everything is okay, and move forward.
   $res = $tmpobj->ValidateData();
   if( $res === FALSE )
     {
+      // everything is okay... save it
+      // and make sure the hierarchy stuff works.
       $tmpobj->Save();
       $contentops->SetAllHierarchyPositions();
+
+      // and redirect
       redirect('listcontent.php');
     }
   else
