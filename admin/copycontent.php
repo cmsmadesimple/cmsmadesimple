@@ -98,6 +98,9 @@ if( isset($_GET['submit']) )
       $tmpobj->Save();
       $contentops->SetAllHierarchyPositions();
 
+      // something for the audit log
+      audit($fromobj->Id(),$fromobj->Alias(),'Content Item Copied to '.$tmpobj->Alias());
+
       // and redirect
       redirect('listcontent.php');
     }

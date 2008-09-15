@@ -26,6 +26,11 @@ class Link extends ContentBase
         $this->mProperties->SetAllowedPropertyNames(array('url', 'target','extra1','extra2','extra3'));
     }
 
+    function IsCopyable()
+    {
+        return TRUE;
+    }
+
     function FriendlyName()
     {
       return lang('contenttype_link');

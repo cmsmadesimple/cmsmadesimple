@@ -26,6 +26,11 @@ class PageLink extends ContentBase
         $this->mProperties->SetAllowedPropertyNames(array('page', 'params', 'target','extra1','extra2','extra3'));
     }
 	
+    function IsCopyable()
+    {
+        return TRUE;
+    }
+
     function FriendlyName()
     {
       return lang('contenttype_pagelink');
