@@ -74,17 +74,23 @@ if( isset($_GET['submit']) )
   $tmpobj->SetOldParentId($to_parentid);
   $tmpobj->SetDefaultContent(0);
   $tmpobj->mAlias = $to_alias;
+  $tmpobj->mOldAlias = '';
   $tmpobj->SetMenuText($to_menutext);
   $tmpobj->SetOwner($fromobj->Owner());
-  $tmpobj->SetActive($fromobj->Active());
   $tmpobj->SetShowInMenu($fromobj->ShowInMenu());
   $tmpobj->SetAdditionalEditors($fromobj->GetAdditionalEditors());
-  $tmpobj->Save();
-
-  $contentops->SetAllHierarchyPositions();
-  redirect('listcontent.php');
-//   print_r( $_GET );
-//   die();
+  $tmpobj->SetActive($fromobj->Active());
+  $res = $tmpobj->ValidateData();
+  if( $res === FALSE )
+    {
+      $tmpobj->Save();
+      $contentops->SetAllHierarchyPositions();
+      redirect('listcontent.php');
+    }
+  else
+    {
+      echo $themeObject->ShowErrors($res);
+    }
 }
 
 // and give it to smarty
