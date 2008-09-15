@@ -385,7 +385,15 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
-			<p class="pageinput"><?php echo strftime( get_preference(get_userid(),'date_format_string','%x %X') ,$lastedited); ?></p>
+			<p class="pageinput">
+			<?php 
+				$dateformat = trim(get_preference(get_userid(),'date_format_string','%x %X')); 
+					if( empty($dateformat) )
+					{
+					 $dateformat = '%x %X';
+					}
+				    echo strftime( $dateformat ,$lastedited); 
+             ?></p>
 		</div>
 		<?php if( $encoding != "" ){ ?>
 		<div class="pageoverflow">

@@ -42,9 +42,11 @@ check_login();
 global $gCms;
 $styleops =& $gCms->GetStylesheetOperations();
 $db =& $gCms->GetDb();
-
-$dateformat = get_preference(get_userid(),'date_format_string','%x %X');
-
+$dateformat = trim(get_preference(get_userid(),'date_format_string','%x %X')); 
+		  if( empty($dateformat) )
+		   {
+			 $dateformat = '%x %X';
+		   }
 #******************************************************************************
 # Definition of global vars
 #******************************************************************************
@@ -444,7 +446,7 @@ $existingtypes = array("all",
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
-			<p class="pageinput"><?php echo  strftime( get_preference(get_userid(),'date_format_string','%x %X') , strtotime($lastmodified) )  ?></p>
+			<p class="pageinput"><?php echo  strftime( $dateformat , strtotime($lastmodified) )  ?></p>
 		</div>		
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
