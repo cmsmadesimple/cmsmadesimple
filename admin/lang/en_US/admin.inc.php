@@ -23,6 +23,7 @@ $lang['admin']['search_string_find'] = 'Connection ok!';
 $lang['admin']['connection_failed'] = 'Connection failed!';
 
 $lang['admin']['notifications_to_handle'] = 'You have <b>%d</b> unhandled notifications';
+$lang['admin']['notification_to_handle'] = 'You have <b>%d</b> unhandled notification';
 $lang['admin']['notifications'] = 'Notifications';
 $lang['admin']['dashboard'] = 'View Dashboard';
 $lang['admin']['ignorenotificationsfrommodules'] = 'Ignore notifications from these modules';
