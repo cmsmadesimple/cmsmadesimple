@@ -107,6 +107,7 @@ function DoContent(&$list, &$node, $checkdefault = true, $checkchildren = true)
 		}
 	}
 }
+
 $reorder_error = FALSE;
 if (isset($_POST['idlist']))
 {
@@ -135,7 +136,7 @@ else
 			{
 				if ($action == 'inactive')
 					DoContent($nodelist, $node, true, false);
-				else if ($action == 'active')
+				else if ($action == 'active' || $action == 'settemplate' || $action == 'setcachable' || $action == 'setnoncachable')
 					DoContent($nodelist, $node, false, false);
 				else if ($action == 'delete')
  				  DoContent($nodelist, $node, false, true);
@@ -250,6 +251,44 @@ else
 			redirect('listcontent.php');
 		}
 	}
+        else if ($action == 'settemplate')
+	  {
+	    $pages = array();
+	    $idlist = array();
+	    foreach( $nodelist as $one )
+	      {
+		$pages[] = array('name'=>$one->Name(),'hierarchy'=>$one->Hierarchy());
+		$idlist[] = $one->Id();
+	      }
+	    $templateops =& $gCms->GetTemplateOperations();
+	    $smarty->assign('input_template',$templateops->TemplateDropdown());
+	    $smarty->assign('pages',$pages);
+	    $smarty->assign('idlist',$idlist);
+	    $smarty->assign('text_settemplate',lang('text_settemplate'));
+	    $smarty->assign('text_pages',lang('pages'));
+	    $smarty->assign('text_template',lang('template'));
+            $smarty->assign('text_submit',lang('submit'));
+	    $smarty->assign('text_cancel',lang('cancel'));
+	    echo $smarty->fetch('multicontent_template.tpl');
+	  }
+        else if ($action == 'dosettemplate')
+	  {
+	    $template_id = (int)$_POST['template_id'];
+	    foreach( $nodelist as $node )
+	      {
+		$permission = ($modifyall || check_ownership($userid, $node->Id()) || 
+			       check_authorship($userid, $node->Id()) || 
+			       check_persmission($userid, 'Modify Page Structure'));
+
+		if( $permission )
+		  {
+		    $node->SetTemplateId($template_id);
+		    $node->Save();
+		  }
+	      }
+
+	    redirect('listcontent.php');
+	  }
 	else if ($action == 'dodelete')
 	{
 		$userid = get_userid();
@@ -344,6 +383,28 @@ else
 		}
 		redirect("listcontent.php");
 	}
+        else if ($action == 'setcachable' || $action == 'setnoncachable')
+        {
+                $flag = ($action == 'setcachable')?true:false;
+
+		$userid = get_userid();
+		$modifyall = check_permission($userid, 'Modify Any Page');
+
+		foreach ($nodelist as $node)
+		{
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Modify Page Structure'));
+
+			if ($permission)
+			{
+				if (!$node->Active())
+				{
+					$node->SetCachable($flag);
+					$node->Save();
+				}
+			}
+		}
+		redirect("listcontent.php");
+        }
 	else if ($action == 'reorder')
 	{
 	  if (FALSE == $reorder_error)

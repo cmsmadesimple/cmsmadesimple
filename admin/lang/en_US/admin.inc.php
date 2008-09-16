@@ -1,4 +1,8 @@
 <?php
+$lang['admin']['settemplate'] = 'Set Template';
+$lang['admin']['text_settemplate'] = 'Set Selected Pages to a different Template';
+$lang['admin']['cachable'] = 'Cachable';
+$lang['admin']['noncachable'] = 'Non Cachable';
 $lang['admin']['copy_from'] = 'Copy From';
 $lang['admin']['copy_to'] = 'Copy To';
 $lang['admin']['copycontent'] = 'Copy Content Item';
@@ -1045,7 +1049,7 @@ $lang['admin']['adminlogempty'] = 'The Admin Log is empty';
 $lang['admin']['adminsystemtitle'] = 'CMS Admin System';
 $lang['admin']['adminpaneltitle'] = 'CMS Made Simple Admin Console'; // needs translation
 $lang['admin']['advanced'] = 'Advanced';
-$lang['admin']['aliasalreadyused'] = 'Alias has already been used on another page. Change "Page Alias" in the "Options" tab to something else.';
+$lang['admin']['aliasalreadyused'] = 'The supplied "Page Alias" is already in use on another page.  Change the "Page Alias" to something else.';
 $lang['admin']['aliasmustbelettersandnumbers'] = 'Alias must be all letters and numbers';
 $lang['admin']['aliasnotaninteger'] = 'Alias cannot be an integer';
 $lang['admin']['allpagesmodified'] = 'All pages modified!';

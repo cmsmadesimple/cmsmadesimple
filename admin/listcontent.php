@@ -1008,6 +1008,9 @@ function display_content_list($themeObject = null)
 			<option value="delete"><?php echo lang('delete') ?></option>
 			<option value="active"><?php echo lang('active') ?></option>
 			<option value="inactive"><?php echo lang('inactive') ?></option>
+                        <option value="setcachable"><?php echo lang('cachable') ?></option>
+                        <option value="setnoncachable"><?php echo lang('noncachable') ?></option>
+                        <option value="settemplate"><?php echo lang('settemplate') ?></option>
 			</select>
 			<input type="submit" value="<?php echo lang('submit') ?>" />
 			</div>
