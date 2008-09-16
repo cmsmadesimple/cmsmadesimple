@@ -137,7 +137,8 @@ else
 			{
 				if ($action == 'inactive')
 					DoContent($nodelist, $node, true, false);
-				else if ($action == 'active' || $action == 'settemplate' || $action == 'setcachable' || $action == 'setnoncachable')
+				else if ($action == 'active' || $action == 'settemplate' || $action == 'setcachable' || $action == 'setnoncachable'
+                                         || $action == 'showinmenu' || $action == 'hidefrommenu')
 					DoContent($nodelist, $node, false, false);
 				else if ($action == 'delete')
  				  DoContent($nodelist, $node, false, true);
@@ -398,6 +399,25 @@ else
 			if ($permission)
 			{
 			   $node->SetCachable($flag);
+			   $node->Save();
+			}
+		}
+		redirect("listcontent.php");
+        }
+        else if ($action == 'showinmenu' || $action == 'hidefrommenu')
+        {
+                $flag = ($action == 'showinmenu')?true:false;
+
+		$userid = get_userid();
+		$modifyall = check_permission($userid, 'Modify Any Page');
+
+		foreach ($nodelist as $node)
+		{
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Modify Page Structure'));
+
+			if ($permission)
+			{
+			   $node->SetShowInMenu($flag);
 			   $node->Save();
 			}
 		}

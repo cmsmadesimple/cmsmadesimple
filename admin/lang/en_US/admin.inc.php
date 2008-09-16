@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['hidefrommenu'] = 'Hide From Menu';
 $lang['admin']['settemplate'] = 'Set Template';
 $lang['admin']['text_settemplate'] = 'Set Selected Pages to a different Template';
 $lang['admin']['cachable'] = 'Cachable';
