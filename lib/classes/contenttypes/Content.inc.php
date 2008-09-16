@@ -237,23 +237,37 @@ class Content extends ContentBase
 			
 	    $ret[]= array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"'));
     }
-	    $ret[]= array(lang('content').':',create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet));
+
+	    $this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
+            {
+              $label = lang('content');
+              $wysiwyg = true;
+              if( isset($this->additionalContentBlocks['**default**']) )
+              { 
+                $tmp =& $this->additionalContentBlocks['**default**'];
+                $wysiwyg = ($tmp['usewysiwyg'] == 'false')?false:true;
+                if( !empty($tmp['label']) ) $label = $tmp['label'];
+              }
+
+	      $ret[]= array($label.':',create_textarea($wysiwyg, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet));
+            }
 
 	    // add additional content blocks if required
-	    $this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
 	    foreach($this->additionalContentBlocks as $blockName => $blockNameId)
 	    {
-		if (empty($blockName)) continue; 
+		if (empty($blockName) || $blockName == '**default**') continue; 
+                $label = ucwords($blockName);
 		$data = $this->GetPropertyValue($blockNameId['id']);
 		if( empty($data) ) $data = $blockNameId['default'];
+                if( !empty($blockNameId['label']) ) $label = $blockNameId['label'];
 		if ($blockNameId['oneline'] == 'true')
 		{
 			
-		    $ret[]= array(ucwords($blockName).':','<input type="text" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />');
+		    $ret[]= array($label.':','<input type="text" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />');
 		}
 		else
 		{
-		    $ret[]= array(ucwords($blockName).':',create_textarea(($blockNameId['usewysiwyg'] == 'false'?false:true), $data, $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet));
+		    $ret[]= array($label.':',create_textarea(($blockNameId['usewysiwyg'] == 'false'?false:true), $data, $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet));
 		}
 	    }
 	}
@@ -433,6 +447,7 @@ class Content extends ContentBase
 			    $usewysiwyg = 'true';
 			    $oneline = 'false';
 			    $value = '';
+                            $label = '';
 
 			    foreach ($keyval as $key=>$val)
 			    {
@@ -453,17 +468,23 @@ class Content extends ContentBase
 				    case 'oneline':
 					$oneline = $val;
 					break;
+                                    case 'label':
+                                        $label = $val;
+                                        break;
 				    case 'default':
 					$value = $val;
+                                        break;
 				default:
 					break;
 				}
 			    }
 
+                            if( empty($name) ) $name = '**default**';
 			    $this->additionalContentBlocks[$name]['id'] = $id;
 			    $this->additionalContentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
 			    $this->additionalContentBlocks[$name]['oneline'] = $oneline;
 			    $this->additionalContentBlocks[$name]['default'] = $value;
+			    $this->additionalContentBlocks[$name]['label'] = $label;
 					
 			}
 		    }
