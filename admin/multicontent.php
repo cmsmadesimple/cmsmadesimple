@@ -26,6 +26,7 @@ if (isset($_POST['cancel']))
 	redirect('listcontent.php');
 
 check_login();
+$userid = get_userid();
 
 $action = '';
 if (isset($_POST['multiaction'])) $action = $_POST['multiaction'];
@@ -396,11 +397,8 @@ else
 
 			if ($permission)
 			{
-				if (!$node->Active())
-				{
-					$node->SetCachable($flag);
-					$node->Save();
-				}
+			   $node->SetCachable($flag);
+			   $node->Save();
 			}
 		}
 		redirect("listcontent.php");
