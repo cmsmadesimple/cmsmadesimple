@@ -1442,11 +1442,22 @@ class AdminTheme
         $count += count($this->_notificationitems[$i-1]);
       }
 	  
+	  // Define that is singular or plural
+	  $singular_or_plural = $count;
+	  
+	  if($singular_or_plural > 1)
+	  {
+	  $notifications = lang('notifications_to_handle',$count);
+	  }
+	  else
+	  {
+	  $notifications .= lang('notification_to_handle',$count);
+	  } 
 	  // remove html tags like <b>2</b>
-	  $no_html_tags = preg_replace('/(<\/?)(\w+)([^>]*>)/e','',lang('notifications_to_handle',$count));
+	  $no_html_tags = preg_replace('/(<\/?)(\w+)([^>]*>)/e','',$notifications);
 	  
       echo '<div class="full-Notifications clear">'."\n";
-      echo '<div class="Notifications-title">' . lang('notifications_to_handle',$count) . '</div>'."\n";
+      echo '<div class="Notifications-title">' . $notifications . '</div>'."\n";
 	  echo '<div title="'.$no_html_tags.'" id="notifications-display" class="notifications-show" onclick="change(\'notifications-display\', \'notifications-hide\', \'notifications-show\'); change(\'notifications-container\', \'invisible\', \'visible\');"></div>'."\n";
 	   
 	 /*  echo "<div title='Notifications' class=\"Notifications-arrow\" href=\"#\" onclick=\"togglecollapse('Notifications-area'); return false;\" >""</div>\n";*/
