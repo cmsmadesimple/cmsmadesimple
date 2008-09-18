@@ -1192,6 +1192,85 @@ function testSessionSavePath($sess_path)
 
 /**
  * @return object
+ * @var string  $inputname
+*/
+function & testFileUploads($inputname)
+{
+	$_errors = array(
+		UPLOAD_ERR_INI_SIZE => lang('upload_err_ini_size'),
+		UPLOAD_ERR_FORM_SIZE => lang('upload_err_form_size'),
+		UPLOAD_ERR_PARTIAL => lang('upload_err_partial'),
+		UPLOAD_ERR_NO_FILE => lang('upload_err_no_file'),
+		UPLOAD_ERR_NO_TMP_DIR => lang('upload_err_no_tmp_dir'), //at least PHP 4.3.10 or PHP 5.0.3
+		UPLOAD_ERR_CANT_WRITE => lang('upload_err_cant_write'), //at least PHP 5.1.0
+		UPLOAD_ERR_EXTENSION => lang('upload_err_extension'), //at least PHP 5.2.0
+	);
+
+	function orderFiles(&$file_upl)
+	{
+		$_ary = array();
+		$_count = count($file_upl['name']);
+		$_keys = array_keys($file_upl);
+		for($i=0; $i<$_count; $i++)
+		{
+			foreach($_keys as $key) $_ary[$i][$key] = $file_upl[$key][$i];
+		}
+
+		return $_ary;
+	}
+
+	$test =& new StdClass();
+	$test->files = array();
+
+	$_file_uploads = testBoolean(0, '', 'file_uploads', '', true, false);
+	if($_file_uploads->value == 'Off')
+	{
+		$test->error = lang('function_file_uploads_off');
+		return $test;
+	}
+
+	if(! isset($_FILES['cksumdat']))
+	{
+		$test->error = lang('error_nofileuploaded');
+		return $test;
+	}
+
+	$_files = array();
+	if(is_array($_FILES["$inputname"]['name'])) $_files = orderFiles($_FILES["$inputname"]);
+	else $_files[] = $_FILES["$inputname"];
+
+	foreach($_files as $i=>$_file)
+	{
+		$_data = $_file;
+
+		if( (! is_uploaded_file($_file['tmp_name'])) || ($_file['error'] !== UPLOAD_ERR_OK) )
+		{
+			if(isset($_errors[$_file['error']]))
+			{
+				$_data['error_string'] = $_errors[$_file['error']];
+			}
+			elseif($_file['size'] == 0)
+			{
+				$_data['error_string'] = lang('upload_err_empty');
+			}
+			elseif(! is_readable($_file['tmp_name']))
+			{
+				$_data['error_string'] = lang('upload_file_no_readable');
+            }
+			else
+			{
+				$_data['error_string'] = lang('upload_err_unknown');
+			}
+		}
+
+		$test->files["$i"] = $_data;
+	}
+
+	return $test;
+}
+
+/**
+ * @return object
  * @var boolean $required
  * @var string  $title
  * @var string  $minimum
