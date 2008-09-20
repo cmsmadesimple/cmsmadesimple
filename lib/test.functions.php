@@ -742,51 +742,102 @@ function & testDirWrite($required, $title, $dir, $message = '', $quick = 0, $deb
 		if( (! @is_dir($dir)) || (! @is_writable($dir)) ) $_test = false;
 	}
 
-	if(! $_test)
+
+	if($_test)
 	{
-		list($test->continueon, $test->special_failed) = testGlobal($required);
-		$test->res = 'red';
-		$test->res_text = getTestReturn($test->res);
-		$test->error = lang('errordirectorynotwritable') .' ('. $dir . ')';
-		if(trim($message) != '')
+		if($quick)
 		{
-			$test->message = $message;
+			// we're only doing the quick test which sucks
+			$test->res = 'green';
+			$test->res_text = getTestReturn($test->res);
+			return $test;
 		}
-		return $test;
-	}
-	$_test = true;
 
-	if($quick)
-	{
-		// we're only doing the quick test
-		// which sucks
-		$test->res = 'green';
-		$test->res_text = getTestReturn($test->res);
-		return $test;
-	}
-
-	$test_file = $dir . DIRECTORY_SEPARATOR . $file;
-	if(file_exists($test_file))
-	{
-		if($debug) unlink($test_file);
-		else      @unlink($test_file);
-	}
-
-	if($debug) $fp = fopen($test_file, "w");
-	else       $fp = @fopen($test_file, "w");
-	if($fp !== false)
-	{
-		$_return = '';
-//		flock($fp, LOCK_EX); //no on NFS filesystem
-		if($debug) $_return = fwrite($fp, $data);
-		else       $_return = @fwrite($fp, $data);
-//		flock($fp, LOCK_UN);
-		@fclose($fp);
-
-		if(! $debug) @unlink($test_file);
-
-		if(! empty($_return))
+		$test_file = $dir . DIRECTORY_SEPARATOR . $file;
+		if(file_exists($test_file))
 		{
+			if($debug) unlink($test_file);
+			else      @unlink($test_file);
+		}
+
+		if($debug) $fp = fopen($test_file, "w");
+		else       $fp = @fopen($test_file, "w");
+		if($fp !== false)
+		{
+			$_return = '';
+//			flock($fp, LOCK_EX); //no on NFS filesystem
+			if($debug) $_return = fwrite($fp, $data);
+			else       $_return = @fwrite($fp, $data);
+//			flock($fp, LOCK_UN);
+			@fclose($fp);
+
+			if(! $debug) @unlink($test_file);
+
+			if(! empty($_return))
+			{
+				$test->res = 'green';
+				$test->res_text = getTestReturn($test->res);
+				return $test;
+			}
+		}
+	}
+
+	list($test->continueon, $test->special_failed) = testGlobal($required);
+	$test->res = 'red';
+	$test->res_text = getTestReturn($test->res);
+	$test->error = lang('errordirectorynotwritable') .' ('. $dir . ')';
+	if(trim($message) != '')
+	{
+		$test->message = $message;
+	}
+
+	return $test;
+}
+
+/**
+ * @return object
+ * @var boolean $required
+ * @var string  $title
+ * @var string  $file
+ * @var string  $message
+ * @var boolean $debug
+*/
+function & testFileWritable($required, $title, $file, $message = '', $debug = false)
+{
+	$test =& new StdClass();
+	$test->title = $title;
+
+	if(empty($file))
+	{
+		$test->error = lang('errorfilenot');
+		return $test;
+	}
+
+	$test->value = $file;
+	$test->secondvalue = substr(sprintf('%o', @fileperms($file)), -4);
+
+	$_test = true;
+	if($debug)
+	{
+		if( (! is_file($file)) || (! is_writable($file)) ) $_test = false;
+	}
+	else
+	{
+		if( (! @is_file($file)) || (! @is_writable($file)) ) $_test = false;
+	}
+
+
+	if($_test)
+	{
+		$_test = file_exists($file);
+
+		if($debug) $fp = fopen($file, "a");
+		else       $fp = @fopen($file, "a");
+		if($fp !== false)
+		{
+			@fclose($fp);
+			if(! $_test) @unlink($file);
+
 			$test->res = 'green';
 			$test->res_text = getTestReturn($test->res);
 			return $test;
@@ -796,7 +847,7 @@ function & testDirWrite($required, $title, $dir, $message = '', $quick = 0, $deb
 	list($test->continueon, $test->special_failed) = testGlobal($required);
 	$test->res = 'red';
 	$test->res_text = getTestReturn($test->res);
-	$test->error = lang('errorcantcreatefile') .' ('. $test_file . ')';
+	$test->error = lang('errorfilenotwritable') .' ('. $file . ')';
 	if(trim($message) != '')
 	{
 		$test->message = $message;
@@ -804,7 +855,6 @@ function & testDirWrite($required, $title, $dir, $message = '', $quick = 0, $deb
 
 	return $test;
 }
-
 
 /**
  * @return object

@@ -107,11 +107,7 @@ debug_buffer('loading content functions');
 require_once(cms_join_path($dirname,'lib','content.functions.php'));
 debug_buffer('loading pageinfo functions');
 require_once(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
-if (isset($CMS_INSTALL_PAGE))
-{
-	require_once cms_join_path(CMS_INSTALL_BASE, 'translation.functions.php');
-}
-else
+if (! isset($CMS_INSTALL_PAGE))
 {
 	debug_buffer('loading translation functions');
 	require_once(cms_join_path($dirname,'lib','translation.functions.php'));
