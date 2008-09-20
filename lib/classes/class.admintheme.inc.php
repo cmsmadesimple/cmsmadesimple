@@ -1451,7 +1451,7 @@ class AdminTheme
 	  }
 	  else
 	  {
-	  $notifications .= lang('notification_to_handle',$count);
+	  $notifications = lang('notification_to_handle',$count);
 	  } 
 	  // remove html tags like <b>2</b>
 	  $no_html_tags = preg_replace('/(<\/?)(\w+)([^>]*>)/e','',$notifications);
