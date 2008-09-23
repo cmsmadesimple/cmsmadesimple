@@ -561,14 +561,12 @@ class CMSModule
 		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.uninstall.php';
 		if (@is_file($filename))
 		{
-			{
-				global $gCms;
-				$db =& $gCms->GetDb();
-				$config =& $gCms->GetConfig();
-				$smarty =& $gCms->GetSmarty();
-
-				include($filename);
-			}
+		  global $gCms;
+		  $db =& $gCms->GetDb();
+		  $config =& $gCms->GetConfig();
+		  $smarty =& $gCms->GetSmarty();
+		  
+		  include($filename);
 		}
 		else
 		{
@@ -2497,23 +2495,9 @@ class CMSModule
 	 * 
 	 * @returns dashboard-content
 	 */
-	function GetDashboardOutput() {
-	  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.dashboard.php';
-	  if (@is_file($filename))
-	    {
-	      {
-		global $gCms;
-		$db =& $gCms->GetDb();
-		$config =& $gCms->GetConfig();
-		$smarty =& $gCms->GetSmarty();
-		
-		include($filename);
-	      }
-	    }
-	  else
-	    {
-	      return '';
-	    }
+	function GetDashboardOutput() 
+        {
+	  return '';
 	}
 
 
@@ -2523,23 +2507,9 @@ class CMSModule
 	 * @returns a stdClass object with two properties.... priority (1->3)... and
 	 * html, which indicates the text to display for the Notification.
 	 */
-	function GetNotificationOutput($priority=2) {
-	  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.notifications.php';
-	  if (@is_file($filename))
-	    {
-	      {
-		global $gCms;
-		$db =& $gCms->GetDb();
-		$config =& $gCms->GetConfig();
-		$smarty =& $gCms->GetSmarty();
-		
-		include($filename);
-	      }
-	    }
-	  else
-	    {
-	      return '';
-	    }
+	function GetNotificationOutput($priority=2) 
+        {
+	  return '';
 	}
 
 }
