@@ -2498,7 +2498,22 @@ class CMSModule
 	 * @returns dashboard-content
 	 */
 	function GetDashboardOutput() {
-		return '';
+	  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.dashboard.php';
+	  if (@is_file($filename))
+	    {
+	      {
+		global $gCms;
+		$db =& $gCms->GetDb();
+		$config =& $gCms->GetConfig();
+		$smarty =& $gCms->GetSmarty();
+		
+		include($filename);
+	      }
+	    }
+	  else
+	    {
+	      return '';
+	    }
 	}
 
 
@@ -2509,7 +2524,22 @@ class CMSModule
 	 * html, which indicates the text to display for the Notification.
 	 */
 	function GetNotificationOutput($priority=2) {
-		return '';
+	  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.notifications.php';
+	  if (@is_file($filename))
+	    {
+	      {
+		global $gCms;
+		$db =& $gCms->GetDb();
+		$config =& $gCms->GetConfig();
+		$smarty =& $gCms->GetSmarty();
+		
+		include($filename);
+	      }
+	    }
+	  else
+	    {
+	      return '';
+	    }
 	}
 
 }
