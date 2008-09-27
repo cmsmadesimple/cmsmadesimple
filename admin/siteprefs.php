@@ -329,6 +329,7 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 
 		<div class="pageoverflow">
                    <p class="pagetext"><?php echo lang('frontendlang')?>:</p>
+                   <p class="pageinput">
 	              <select name="frontendlang" style="vertical-align: middle;">
                       <option value=""><?php echo lang('nodefault'); ?></option>
 		      <?php
@@ -347,6 +348,7 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 			}
                       ?>
 		      </select>
+              </p>
 		      <br />
 		</div>
 		
