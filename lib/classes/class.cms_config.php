@@ -111,6 +111,7 @@ class CmsConfig extends CmsObject implements ArrayAccess
 
 		#Set some defaults, just in case the config file is corrupted or
 		#we're coming from an upgrade
+		$config['php_memory_limit'] = '';
 		$config["dbms"] = "mysql";
 		$config["db_hostname"] = "localhost";
 		$config["db_username"] = "cms";
@@ -122,8 +123,8 @@ class CmsConfig extends CmsObject implements ArrayAccess
 		$config["query_var"] = "page";
 		$config["use_bb_code"] = false;
 		$config["smarty_security"] = false;
-		$config["previews_path"] = $config["root_path"] . "/tmp/cache";
-		$config["uploads_path"] = $config["root_path"] . "/uploads";
+		$config["previews_path"] = TMP_CACHE_LOCATION;
+		$config["uploads_path"] = cms_join_path($config["root_path"], 'uploads');
 		$config["uploads_url"] = $config["root_url"] . "/uploads";
 		$config["max_upload_size"] = 1000000;
 		$config["debug"] = false;
@@ -131,9 +132,9 @@ class CmsConfig extends CmsObject implements ArrayAccess
 		$config['internal_pretty_urls'] = true;
 		$config["auto_alias_content"] = true;
 		$config["image_manipulation_prog"] = "GD";
-		$config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
+		$config["image_transform_lib_path"] = ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) ? 'C:/Program Files/VisualMagick/bin/' : '/usr/bin/ImageMagick/';
 		$config["use_Indite"] = true;
-		$config["image_uploads_path"] = $config["root_path"] . "/uploads/images";
+		$config["image_uploads_path"] = cms_join_path($config["uploads_path"], 'images');
 		$config["image_uploads_url"] = $config["root_url"] . "/uploads/images";
 		$config["default_encoding"] = "";
 		$config["disable_htmlarea_translation"] = false;
@@ -191,7 +192,7 @@ class CmsConfig extends CmsObject implements ArrayAccess
 		}
 		
 		// Begin Multisite Modifications
-		$subsite_config = $config['root_path'].DIRECTORY_SEPARATOR.'sites'.DIRECTORY_SEPARATOR.$_SERVER['HTTP_HOST'].DIRECTORY_SEPARATOR.'config.php';
+		$subsite_config = cms_join_path($config['root_path'], 'sites', $_SERVER['HTTP_HOST'], 'config.php');
 		if(file_exists($subsite_config))
 		{
 			include $subsite_config;
@@ -229,6 +230,11 @@ class CmsConfig extends CmsObject implements ArrayAccess
 #CMS Made Simple Configuration File
 #Please clear the cache (Site Admin->Global Settings in the admin panel)
 #after making any changes to path or url related options
+
+# If you are experiencing problems with php memory limit errors, then you may
+# want to try enabling and/or adjusting this setting.  
+# Note: Your server may not allow the application to override memory limits.
+\$config['php_memory_limit'] = '{$config['php_memory_limit']}';
 
 #-----------------
 #Database Settings

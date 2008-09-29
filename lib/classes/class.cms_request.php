@@ -344,16 +344,22 @@ class CmsRequest extends CmsObject
 		return $string;
 	}
 	
-	public static function has($name)
+	public static function has($name, $session = false)
 	{
-		return array_key_exists($name, $_REQUEST);
+		if ($session)
+			$_ARR = array_merge($_SESSION, $_REQUEST);
+		else
+			$_ARR = $_REQUEST;
+		return array_key_exists($name, $_ARR);
 	}
 	
-	public static function get($name, $clean = true)
+	public static function get($name, $clean = true, $session = false)
 	{
 		$value = '';
 		if (array_key_exists($name, $_REQUEST))
 			$value = $_REQUEST[$name];
+		if ( ($session) && (array_key_exists($name, $_SESSION)))
+			$value = $_SESSION[$name];
 		if ($clean)
 			$value = self::clean_value($value);
 		return $value;

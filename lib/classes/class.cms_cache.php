@@ -39,7 +39,7 @@ class CmsCache extends CmsObject
 
 		// Set a few options
 		$options = array(
-		    'cacheDir' => cms_join_path(ROOT_DIR, 'tmp', 'cache/'),
+		    'cacheDir' => cms_join_path(ROOT_DIR, 'tmp', 'cache'.DS),
 		    'lifeTime' => 300
 		);
 
