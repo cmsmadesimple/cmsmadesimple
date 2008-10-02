@@ -24,49 +24,13 @@ class CmsInstallOperations extends CmsObject
 	{
 		parent::__construct();
 	}
-	
-	static function create_table($db, $table, $fields)
-	{	
-		$dbdict = NewDataDictionary($db);
-		$taboptarray = array('mysql' => 'ENGINE=InnoDB DEFAULT CHARSET=utf8', 'mysqli' => 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
 
-		$sqlarray = $dbdict->CreateTableSQL(CmsDatabase::get_prefix().$table, $fields, $taboptarray);
-		if (count($sqlarray))
-		{
-#			$sqlarray[0] .= "\n/*!40100 DEFAULT CHARACTER SET UTF8 */";
-		}
-		$_return = $dbdict->ExecuteSQLArray($sqlarray);
-		$_ado_ret = ($_return == 2) ? lang('done') : lang('failed');
 
-		return lang('install_creating_table', $table, $_ado_ret);
-	}
-	
-	static function create_index($db, $table, $name, $field)
-	{	
-		$dbdict = NewDataDictionary($db);
-
-		$sqlarray = $dbdict->CreateIndexSQL($name, CmsDatabase::get_prefix().$table, $field);
-		$_return = $dbdict->ExecuteSQLArray($sqlarray);
-		$_ado_ret = ($_return == 2) ? lang('done') : lang('failed');
-
-		return lang('install_creating_index', $table, $_ado_ret);
-	}
-	
-	static function drop_table($db, $table)
+	/* LANGUAGES */
+	static function _()
 	{
-		$dbdict = NewDataDictionary($db);
-
-		$sqlarray = $dbdict->DropTableSQL(CmsDatabase::get_prefix().$table);
-		$_return = $dbdict->ExecuteSQLArray($sqlarray);
-		$_ado_ret = ($_return == 2) ? lang('done') : lang('failed');
-
-		return lang('install_creating_index', $table, $_ado_ret);
-	}
-	
-	static function get_action()
-	{
-		$value = CmsRequest::get('action');
-		return $value != '' ? $value : 'intro';
+		$args = func_get_args();
+		return count($args[0]) > 0 ? $args[0] : '';
 	}
 
 	static function get_language_list()
@@ -87,12 +51,122 @@ class CmsInstallOperations extends CmsObject
 		}
 		return $value != '' ? $value : 'en_US';
 	}
-	
-	static function set_language_cookie($value)
-	{
-		CmsRequest::set_cookie('cms_install_lang', $value);
+
+
+	/* SQL */
+	static function create_table($db, $table, $fields)
+	{	
+		$dbdict = NewDataDictionary($db);
+		$taboptarray = array('mysql' => 'ENGINE=InnoDB DEFAULT CHARSET=utf8', 'mysqli' => 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+
+		$sqlarray = $dbdict->CreateTableSQL(CmsDatabase::get_prefix().$table, $fields, $taboptarray);
+		if (count($sqlarray))
+		{
+#			$sqlarray[0] .= "\n/*!40100 DEFAULT CHARACTER SET UTF8 */";
+		}
+		$_return = $dbdict->ExecuteSQLArray($sqlarray);
+		$_ado_ret = ($_return == 2) ? lang('done') : lang('failed');
+
+		return lang('install_creating_table', $table, $_ado_ret);
 	}
-	
+
+	static function create_index($db, $table, $name, $field)
+	{	
+		$dbdict = NewDataDictionary($db);
+
+		$sqlarray = $dbdict->CreateIndexSQL($name, CmsDatabase::get_prefix().$table, $field);
+		$_return = $dbdict->ExecuteSQLArray($sqlarray);
+		$_ado_ret = ($_return == 2) ? lang('done') : lang('failed');
+
+		return lang('install_creating_index', $table, $_ado_ret);
+	}
+
+	static function drop_table($db, $table)
+	{
+		$dbdict = NewDataDictionary($db);
+
+		$sqlarray = $dbdict->DropTableSQL(CmsDatabase::get_prefix().$table);
+		$_return = $dbdict->ExecuteSQLArray($sqlarray);
+		$_ado_ret = ($_return == 2) ? lang('done') : lang('failed');
+
+		return lang('install_creating_index', $table, $_ado_ret);
+	}
+
+
+	/* DISPLAY */
+	static function show_error_msg($error)
+	{
+		include cms_join_path(CMS_INSTALL_BASE, 'templates', 'installer_start.tpl');
+		echo '<p class="error">' . $error . '</p>';
+		include cms_join_path(CMS_INSTALL_BASE, 'templates', 'installer_end.tpl');
+		exit;
+	}
+
+	static function displayContent($process, $current_page, $number_of_pages, $debug = '')
+	{
+		$smarty = CmsSmarty::get_instance(false);
+		$smarty->compile_dir = TMP_TEMPLATES_C_LOCATION;
+		$smarty->cache_dir = TMP_CACHE_LOCATION;
+		$smarty->template_dir = cms_join_path(CMS_INSTALL_BASE, 'templates'.DS);
+		$smarty->caching = false;
+		$smarty->debugging = false;
+		$smarty->force_compile = true;
+		$smarty->plugins_dir = array(cms_join_path(CMS_BASE, 'lib', 'smarty', 'plugins'.DS), cms_join_path(CMS_INSTALL_BASE, 'plugins'.DS));
+
+		if(! empty($current_page))
+		{
+			if( (CmsRequest::get('check')) || (CmsRequest::get('recheck')) )
+				$current_page--;
+
+			// Assign smarty variables
+			$smarty->assign('number_of_pages', $number_of_pages);
+			$smarty->assign('current_page', $current_page);
+			$smarty->assign('cms_version', CMS_VERSION);
+			$smarty->assign('cms_version_name', CMS_VERSION_NAME);
+
+			require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'class.cms_'.$process.'page'.$current_page.'.php');
+			$errors = CmsInstallPage::process_content($smarty, $debug);
+			$smarty->assign_by_ref('errors', $errors);
+
+			$xajax = new CmsAjax();
+			$xajax->register_function('test_connection');
+			$xajax->process_requests();
+			$smarty->assign('xajax_header', $xajax->get_javascript());
+
+			$smarty->assign('include_file', $process.$current_page.'.tpl');
+			$smarty->display($process . 'page.tpl');
+		}
+		else
+		{
+			$smarty->assign('languages', self::get_language_list());
+			$smarty->assign('selected_language', self::get_language_cookie());
+			$smarty->display('installer_start.tpl');
+			$smarty->display('installer_body.tpl');
+			$smarty->display('installer_end.tpl');
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	static function get_action()
+	{
+		$value = CmsRequest::get('action');
+		return $value != '' ? $value : 'intro';
+	}
+
 	static function required_setting_output($bool)
 	{
 		return $bool ? '<span class="yes">'.self::_('Yes').'</span>' : '<span class="no">'.self::_('No').'</span>';
@@ -103,80 +177,7 @@ class CmsInstallOperations extends CmsObject
 		return $state ? '<span class="yes">'.(!$opposite ? self::_('On') : self::_('Off')).'</span>' : '<span class="no">'.(!$opposite ? self::_('Off') : self::_('On')).'</span>';
 	}
 
-	static function show_error_msg($error)
-	{
-		include cms_join_path(CMS_INSTALL_BASE, 'templates', 'installer_start.tpl');
-		echo '<p class="error">' . $error . '</p>';
-		include cms_join_path(CMS_INSTALL_BASE, 'templates', 'installer_end.tpl');
-		exit;
-	}
-
-
-
-
-
-
-
-
-
-
-
-	static function required_checks()
-	{
-		$result = array();
-		
-		$result['php_version'] = version_compare(phpversion(), "5.0.4", ">=");
-		$result['has_database'] = count(self::get_loaded_database_modules()) > 0;
-		$result['which_database'] = self::_('No Drivers Loaded');
-		if ($result['has_database'])
-		{
-			$result['which_database'] = implode(',', self::get_loaded_database_modules());
-		}
-		$result['has_xml'] = extension_loaded('xml');
-		$result['has_simplexml'] = extension_loaded('SimpleXML');
-		$result['canwrite_templates'] = is_writable(cms_join_path(dirname(dirname(dirname(__FILE__))),'tmp','templates_c'));
-		$result['canwrite_cache'] = is_writable(cms_join_path(dirname(dirname(dirname(__FILE__))),'tmp','cache'));
-		
-		$count = count(array_keys($result, true, true));
-		$result['failure'] = ((count($result) - 1) != $count);
-		
-		return $result;
-	}
 	
-	static function recommended_checks()
-	{
-		$result = array();
-
-		$result['file_uploads'] = (ini_get('file_uploads') == '1');
-		$result['safe_mode'] = (ini_get('safe_mode') != '1');
-		$result['magic_quotes_runtime'] = (ini_get('magic_quotes_runtime') != '1');
-		$result['register_globals'] = (ini_get('register_globals') != '1');
-		$result['output_buffering'] = (ini_get('output_buffering') != '1');
-		$result['canwrite_uploads'] = is_writable(cms_join_path(dirname(dirname(dirname(__FILE__))),'uploads'));
-		$result['canwrite_modules'] = is_writable(cms_join_path(dirname(dirname(dirname(__FILE__))),'modules'));
-		
-		$count = count(array_keys($result, true, true));
-		$result['failure'] = (count($result) != $count);
-		
-		return $result;
-	}
-	
-	static function get_loaded_database_modules()
-	{
-		$which = array();
-
-		//We want one or the other
-		if (extension_loaded('mysqli'))
-			$which[] = 'mysqli';
-		else if (extension_loaded('mysql'))
-			$which[] = 'mysql';
-
-		if (extension_loaded('pgsql'))
-			$which[] = 'pgsql';
-		if (extension_loaded('SQLite'))
-			$which[] = 'sqlite';
-		return $which;
-	}
 	
 	static function test_database_connection($driver = '', $hostname = '', $username = '', $password = '', $dbname = '')
 	{
@@ -370,12 +371,6 @@ class CmsInstallOperations extends CmsObject
 		}
 	}
 	
-	static function _()
-	{
-		$args = func_get_args();
-		return count($args[0]) > 0 ? $args[0] : '';
-	}
 }
-
 # vim:ts=4 sw=4 noet
 ?>

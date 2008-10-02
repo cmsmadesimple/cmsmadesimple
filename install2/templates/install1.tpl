@@ -1,7 +1,3 @@
-{foreach from=$errors item=error}
-<div class="error">{$error}</div>
-{/foreach}
-
 <h3>{tr}Check your installation{/tr}</h3>
 
 <form action="{$smarty.server.PHP_SELF}" method="post" name="page1form" id="page1form" enctype="multipart/form-data">
@@ -50,7 +46,7 @@
 <div class="msg-botton">
 	{tr}You can validate the integrity of your CMS files by comparing against original CMS checksum. It can assist in finding problems with uploads.{/tr}<br /><br />
 	<input type="file" name="cksumdat" id="cksumdat" maxlength="255" /><br />
-	<input type="submit" name="recheck" value="{tr}Test{/tr}" />
+	<input type="submit" name="check" value="{tr}Test{/tr}" />
 </div>
 <div class="continue">
 	<input type="hidden" name="page" value="2" />

@@ -35,7 +35,13 @@
 			</tr>
 		</table>
 
-		{include file=$include_file}
+{foreach from=$errors item=error}
+		<div class="error">{$error}</div>
+{/foreach}
+
+
+{include file=$include_file}
+
 
 	</div>
 </div>

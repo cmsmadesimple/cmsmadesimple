@@ -1,7 +1,7 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -19,28 +19,41 @@
 #$Id$
 
 /**
- * Handles test functions
+ * Handles test functions and values for CMSMS
  *
  * @package CMS
  */
 
 /**
+ * Array with PHP driver => DB server
+ *
  * @return array
- * @var string  $property
+*/
+function getSupportedDBDriver()
+{
+	return array('mysqli'=>'mysql', 'mysql'=>'mysql', 'pgsql'=>'pgsql', 'sqlite'=>'sqlite');
+}
+
+/**
+ * Array with minimum and recommended for property
+ *
+ * @return array
+ * @var string $property
 */
 function getTestValues($property)
 {
 	$range = array(
-		'phpversion'			=> array('minimum'=>'4.3.0', 'recommended'=>'5.0.4'),
+		'phpversion'			=> array('minimum'=>'5.1.2', 'recommended'=>'5.2.0'),
 		'gd_version'			=> array('minimum'=>2),
 		'memory_limit'			=> array('minimum'=>'16M', 'recommended'=>'24M'),
 		'max_execution_time'	=> array('minimum'=>30, 'recommended'=>60),
 		'post_max_size'			=> array('minimum'=>'2M', 'recommended'=>'10M'),
 		'upload_max_filesize'	=> array('minimum'=>'2M', 'recommended'=>'10M'),
-		'mysqlversion'			=> array('minimum'=>'3.23', 'recommended'=>'4.1'),
-		'pgsqlversion'			=> array('minimum'=>'7.4', 'recommended'=>'8'),
-	);
 
+		'mysql_version'			=> array('minimum'=>'4.0', 'recommended'=>'4.1'),
+		'pgsql_version'			=> array('minimum'=>'7.4', 'recommended'=>'8'),
+		'sqlite_version'		=> array('minimum'=>'2.5', 'recommended'=>'3.0'),
+	);
 
 	if(array_key_exists($property, $range))
 	{
@@ -56,7 +69,7 @@ function getTestValues($property)
 
 /**
  * @return boolean
- * @var string  $test
+ * @var string $test
 */
 function extension_loaded_or($test)
 {
@@ -67,7 +80,7 @@ function extension_loaded_or($test)
 
 /**
  * @return string
- * @var string  $return
+ * @var string $return
 */
 function getTestReturn($return)
 {
@@ -112,11 +125,132 @@ function testGlobal($result, $set = false)
 
 /**
  * @return object
+ * @var boolean $required
  * @var string  $title
- * @var string  $value
- * @var string  $return
+ * @var string  $db
  * @var string  $message
- * @var string  $error
+*/
+function & testSupportedDatabase($required, $title, $db = false, $message = '')
+{
+	$drivers = getSupportedDBDriver();
+
+//TODO
+	if($db)
+	{
+		$serverInfo = $db->ServerInfo();
+		$test = testConfig('', 'dbms');
+		if(! empty($test->value))
+		{
+			$dbms = $test->value;
+			list($minimum, $recommended) = getTestValues($drivers[$dbms].'_version');
+			$test = testVersionRange(0, '', $serverInfo['version'], '', $minimum, $recommended, false);
+		}
+		$serverInfo['description'];
+		return $test;
+	}
+//TODO
+
+	$test =&new StdClass();
+	$test->title = $title;
+
+	if(count($drivers) > 0)
+	{
+		$return = array();
+		foreach($drivers as $driver=>$server)
+		{
+			$_test = testBoolean(0, '', extension_loaded_or($driver), '', false, false);
+			if($_test->res == 'green')
+			{
+				$return[] = $driver;
+			}
+		}
+
+		$test->value = implode(',', $return);
+		$test->secondvalue = $return;
+		if($required)
+		{
+			$test->res = 'true';
+			$test->res_text = getTestReturn($test->res);
+		}
+		else
+		{
+			$test->res = 'green';
+			$test->res_text = getTestReturn($test->res);
+		}
+	}
+	else
+	{
+		list($test->continueon, $test->special_failed) = testGlobal($required);
+		$test->res = 'red';
+		$test->res_text = getTestReturn($test->res);
+		if(trim($message) != '')
+		{
+			$test->message = $message;
+		}
+	}
+
+	return $test;
+}
+
+/**
+ * @return string
+ * @var integer $info
+*/
+function getEmbedPhpInfo($info = INFO_ALL)
+{
+	/**
+	 * callback function to eventually add an extra space in passed <td class="v">...</td>
+	 * after a ";" or "@" char to let the browser split long lines nicely
+	 */
+	function _sysinfo_phpinfo_v_callback($matches)
+	{
+		$matches[2] = preg_replace('%(?<!\s)([;@])(?!\s)%', "$1 ", $matches[2]);
+		return $matches[1].$matches[2].$matches[3];
+	}
+
+	ob_start();
+	phpinfo($info);
+	$output = preg_replace(array('/^.*<body[^>]*>/is', '/<\/body[^>]*>.*$/is'), '', ob_get_clean(), 1);
+
+	$output = preg_replace('/width="[0-9]+"/i', 'width="85%"', $output);
+    $output = str_replace('<table border="0" cellpadding="3" width="85%">', '<table class="phpinfo">', $output);
+	$output = str_replace('<hr />', '', $output);
+	$output = str_replace('<tr class="h">', '<tr>', $output);
+	$output = str_replace('<a name=', '<a id=', $output);
+	$output = str_replace('<font', '<span', $output);
+	$output = str_replace('</font', '</span', $output);
+
+	// match class "v" td cells an pass them to callback function
+	return preg_replace_callback('%(<td class="v">)(.*?)(</td>)%i', '_sysinfo_phpinfo_v_callback', $output);
+}
+
+/**
+ * @return mixed
+ * @var string $module
+*/
+function getApacheModules($module = false)
+{
+	if(function_exists('apache_get_modules'))
+	{
+		$modules = apache_get_modules();
+		if($module)
+		{
+			if(in_array($module, $modules)) return true;
+			else return false;
+		}
+		return $modules;
+	}
+
+	return false;
+}
+
+/**
+ * @return object
+ * @var string $title
+ * @var string $value
+ * @var string $return
+ * @var string $message
+ * @var string $error
 */
 function & testDummy($title, $value, $return, $message = '', $error = '')
 {
@@ -141,10 +275,10 @@ function & testDummy($title, $value, $return, $message = '', $error = '')
 
 /**
  * @return object
- * @var string  $title
- * @var string  $varname
- * @var string  $testfunc
- * @var string  $message
+ * @var string $title
+ * @var string $varname
+ * @var string $testfunc
+ * @var string $message
 */
 function & testConfig($title, $varname, $testfunc = '', $message = '')
 {
@@ -185,9 +319,9 @@ function & testConfig($title, $varname, $testfunc = '', $message = '')
 
 /**
  * @return boolean
- * @var object  $test
- * @var string  $varname
- * @var string  $type
+ * @var object $test
+ * @var string $varname
+ * @var string $type
 */
 function testIni(&$test, $varname, $type)
 {
@@ -222,6 +356,67 @@ function testIni(&$test, $varname, $type)
 	$test->ini_val = $str;
 	$test->error = $error;
 	return true;
+}
+
+/**
+ * @return object
+ * @var boolean $required
+ * @var string  $title
+ * @var mixed   $var
+ * @var string  $message
+ * @var boolean $ini
+ * @var boolean $not_empty
+*/
+function & testString($required, $title, $var, $message = '', $ini = true, $not_empty = 'yellow')
+{
+	$test =&new StdClass();
+	$test->title = $title;
+
+	if($ini)
+	{
+		testIni($test, $var, 'string');
+	}
+	else
+	{
+		$test->ini_val = $var;
+	}
+
+	if(empty($test->ini_val))
+	{
+		$test->value = '';
+		if($required)
+		{
+			$test->res = 'true';
+			$test->res_text = getTestReturn($test->res);
+		}
+		else
+		{
+			$test->res = 'green';
+			$test->res_text = getTestReturn($test->res);
+		}
+	}
+	else
+	{
+		list($test->continueon, $test->special_failed) = testGlobal($required);
+		if(trim($message) != '')
+		{
+			$test->message = $message;
+		}
+
+		$test->value = $test->ini_val;
+		if($required)
+		{
+			$test->res = 'false';
+			$test->res_text = getTestReturn($test->res);
+		}
+		else
+		{
+			$test->res = $not_empty;
+			$test->res_text = getTestReturn($test->res);
+		}
+	}
+
+	return $test;
 }
 
 /**
@@ -563,6 +758,7 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
  */
 function permission_stat($file, $debug = false)
 {
+	$opt = array();
 	clearstatcache();
 	$filestat = stat($file);
 	if($filestat == false)
@@ -603,8 +799,8 @@ function permission_stat($file, $debug = false)
 }
 
 /**
- * @var octal $mode
  * @return string
+ * @var octal $mode
  */
 function permission_octal2string($mode)
 {
@@ -724,10 +920,6 @@ function & testDirWrite($required, $title, $dir, $message = '', $quick = 0, $deb
 {
 	$test =& new StdClass();
 	$test->title = $title;
-
-if($debug) $test->val['truedebug'] = 1;
-if(! $debug) $test->val['falsedebug'] = 1;
-
 
 	if(empty($dir))
 	{
@@ -1199,7 +1391,7 @@ function & testFileChecksum($required, $title, $file, $checksum, $message = '', 
 
 /**
  * @return string
- * @var string  $sess_path
+ * @var string $sess_path
 */
 function testSessionSavePath($sess_path)
 {
@@ -1246,7 +1438,7 @@ function testSessionSavePath($sess_path)
 
 /**
  * @return object
- * @var string  $inputname
+ * @var string $inputname
 */
 function & testFileUploads($inputname)
 {

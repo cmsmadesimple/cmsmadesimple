@@ -1,26 +1,39 @@
-	  .callout fieldset {
-	    width: 670px;
-	    margin: 10px;
-	  }
-	  .callout fieldset p {
-	    padding-left: 10px;
-	    width: 650px;
-	    clear: both;
-	  }
-	  .go_left {
-	    float: left;
-	    padding-bottom: 2px;
-	  }
-	  .go_right {
-	    float: right;
-      padding-bottom: 2px;
-	  }
-	  .yes {
-      color: green;
-	  }
-	  .no {
-	    color: red;
-	  }
+	.callout fieldset {
+		width: auto;
+		margin: 7px;
+	}
+	.callout fieldset p {
+		padding-left: 7px;
+		width: 650px;
+		clear: both;
+	}
+	.go_left {
+		float: left;
+		padding-bottom: 2px;
+	}
+	.go_right {
+		float: right;
+		padding-bottom: 2px;
+	}
+	.yes {
+		color: green;
+	}
+	.no {
+		color: red;
+	}
+
+	table.phpinfo {
+		width: 90%;
+		margin: 0;
+		padding: 0.3em;
+		border: 0;
+	}
+
+
+
+
+
+
 
 
 

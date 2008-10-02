@@ -34,7 +34,7 @@ require_once cms_join_path(CMS_INSTALL_BASE, 'test.functions.php');
 
 
 /* Check SESSION */
-if(! extension_loaded_or('session') )
+if(! extension_loaded_or('session'))
 {
 	CmsInstallOperations::show_error_msg("SESSION module is disabled or missing in your PHP, you have problem with some modules and functionality! Ask your provider, exiting");
 }
@@ -54,7 +54,7 @@ $getSessionTest = CmsRequest::get('sessiontest');
 
 
 
-/* UNDOCUMENTED features... if this values are set in the session */
+/* UNDOCUMENTED features... if this values are set */
 /* Set DEBUG */
 $getDebug = CmsRequest::get('debug', true, true);
 if(! empty($getDebug))
@@ -75,7 +75,7 @@ if(CmsRequest::get('allowsafemode'))
 {
 	$_SESSION['allowsafemode'] = 1;
 }
-/* Skip blocking test. For advanced users ONLY */
+/* Skip blocking test. FOR advanced users ONLY */
 if(CmsRequest::get('advanceduser'))
 {
 	$_SESSION['advanceduser'] = 1;
@@ -84,13 +84,13 @@ if(CmsRequest::get('advanceduser'))
 
 
 // Initial Tests
-if(empty($getSessionTest) && (empty($postPage)) )
+if( (empty($getSessionTest)) && (empty($postPage)) )
 {
 	// Test for session
 	$_SESSION['test'] = true;
 
 	// Tests for smarty
-	if(! extension_loaded_or('tokenizer') )
+	if(! extension_loaded_or('tokenizer'))
 	{
 		CmsInstallOperations::show_error_msg('Not having the tokenizer extension could cause pages to render as purely white. We required you have this installed! Check your installation, exiting');
 	}
@@ -113,20 +113,7 @@ if(empty($getSessionTest) && (empty($postPage)) )
 	}
 
 	// Smarty tests ok
-	$smarty = CmsSmarty::get_instance(false);
-	$smarty->compile_dir = TMP_TEMPLATES_C_LOCATION;
-	$smarty->cache_dir = TMP_CACHE_LOCATION;
-	$smarty->template_dir = cms_join_path(CMS_INSTALL_BASE,'templates'.DS);
-	$smarty->caching = false;
-	$smarty->debugging = false;
-	$smarty->force_compile = true;
-	$smarty->plugins_dir = array(cms_join_path(CMS_BASE,'lib','smarty','plugins'.DS), cms_join_path(CMS_INSTALL_BASE,'plugins'.DS));
-
-	$smarty->assign('languages', CmsInstallOperations::get_language_list());
-	$smarty->assign('selected_language', CmsInstallOperations::get_language_cookie());
-	$smarty->display('installer_start.tpl');
-	$smarty->display('installer_body.tpl');
-	$smarty->display('installer_end.tpl');
+	CmsInstallOperations::displayContent($thisProcess, 0, $numberOfPages, $getDebug);
 	exit;
 }
 else if(! isset($_SESSION['test']))
@@ -137,36 +124,7 @@ else if(! isset($_SESSION['test']))
 
 
 // First checks ok
-$smarty = CmsSmarty::get_instance(false);
-$smarty->compile_dir = TMP_TEMPLATES_C_LOCATION;
-$smarty->cache_dir = TMP_CACHE_LOCATION;
-$smarty->template_dir = cms_join_path(CMS_INSTALL_BASE,'templates'.DS);
-$smarty->caching = false;
-$smarty->debugging = false;
-$smarty->force_compile = true;
-$smarty->plugins_dir = array(cms_join_path(CMS_BASE,'lib','smarty','plugins'.DS), cms_join_path(CMS_INSTALL_BASE,'plugins'.DS));
-
-$xajax = new CmsAjax();
-$xajax->register_function('test_connection');
-$xajax->process_requests();
-
-// Assign smarty variables
-$smarty->assign('xajax_header', $xajax->get_javascript());
-$smarty->assign('number_of_pages', $numberOfPages);
-$smarty->assign('current_page', $postPage);
-$smarty->assign('cms_version', CMS_VERSION);
-$smarty->assign('cms_version_name', CMS_VERSION_NAME);
-
-if(! empty($postPage))
-{
-	$smarty->assign('page', $postPage);
-	$smarty->assign('include_file', $thisProcess . $postPage . '.tpl');
-	$smarty->display($thisProcess . 'page.tpl');
-}
-else
-{
-	CmsInstallOperations::show_error_msg('Don\'t find page variable! Exiting.');
-}
+CmsInstallOperations::displayContent($thisProcess, $postPage, $numberOfPages, $getDebug);
 
 # vim:ts=4 sw=4 noet
 ?>
