@@ -120,7 +120,7 @@ $tmp = array(0=>array(), 1=>array());
 $session_save_path = ini_get('session.save_path');
 $open_basedir = ini_get('open_basedir');
 
-list($minimum, $recommended) = getTestValues('phpversion');
+list($minimum, $recommended) = getTestValues('php_version');
 $tmp[0]['phpversion'] = testVersionRange(0, 'phpversion', phpversion(), '', $minimum, $recommended, false);
 
 
@@ -212,14 +212,14 @@ switch($config['dbms']) //workaroud: ServerInfo() is unsupported in adodblite
 	case 'postgres7': $tmp[0]['server_db_type'] = testDummy('', 'PostgreSQL ('.$config['dbms'].')', '');
 					$v = pg_version();
 					$_server_db = (isset($v['server_version'])) ? $v['server_version'] : $v['client'];
-					list($minimum, $recommended) = getTestValues('pgsqlversion');
+					list($minimum, $recommended) = getTestValues('pgsql_version');
 					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
 					break;
 	case 'mysqli':	$v = $db->connectionId->server_info;
 	case 'mysql':	if(!isset($v)) $v = mysql_get_server_info();
 					$tmp[0]['server_db_type'] = testDummy('', 'MySQL ('.$config['dbms'].')', '');
 					$_server_db = (false === strpos($v, "-")) ? $v : substr($v, 0, strpos($v, "-"));
-					list($minimum, $recommended) = getTestValues('mysqlversion');
+					list($minimum, $recommended) = getTestValues('mysql_version');
 					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
 					break;
 }
