@@ -45,6 +45,7 @@ class CmsAdminTheme extends CmsObject
 	public $themeName = '';
 	public $errors = array();
 	public $messages = array();
+	private $_notificationitems;
 
 	function __construct($userid, $theme_name = 'default')
 	{
