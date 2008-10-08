@@ -6,7 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="install.css" />
 	<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
 	<script type="text/javascript" src="../lib/jquery/interface/interface.js"></script>
-	{$xajax_header}
+	{if isset($xajax_header)}{$xajax_header}{/if}
 </head>
 
 <body>

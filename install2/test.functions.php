@@ -43,7 +43,7 @@ function getSupportedDBDriver()
 function getTestValues($property)
 {
 	$range = array(
-		'phpversion'			=> array('minimum'=>'5.1.2', 'recommended'=>'5.2.0'),
+		'php_version'			=> array('minimum'=>'5.1.2', 'recommended'=>'5.2.0'),
 		'gd_version'			=> array('minimum'=>2),
 		'memory_limit'			=> array('minimum'=>'16M', 'recommended'=>'24M'),
 		'max_execution_time'	=> array('minimum'=>30, 'recommended'=>60),
@@ -138,14 +138,24 @@ function & testSupportedDatabase($required, $title, $db = false, $message = '')
 	if($db)
 	{
 		$serverInfo = $db->ServerInfo();
-		$test = testConfig('', 'dbms');
-		if(! empty($test->value))
+		$_test = testConfig('', 'dbms');
+		if(! empty($_test->value))
 		{
-			$dbms = $test->value;
+			$dbms = $_test->value;
 			list($minimum, $recommended) = getTestValues($drivers[$dbms].'_version');
-			$test = testVersionRange(0, '', $serverInfo['version'], '', $minimum, $recommended, false);
+			$test = testVersionRange(0, $title, $serverInfo['version'], $message, $minimum, $recommended, false);
+			$test->opt = $serverInfo['description'];
+			return $test;
 		}
-		$serverInfo['description'];
+		$test =&new StdClass();
+		$test->title = $title;
+		list($test->continueon, $test->special_failed) = testGlobal($required);
+		$test->res = 'red';
+		$test->res_text = getTestReturn($test->res);
+		if(trim($message) != '')
+		{
+			$test->message = $message;
+		}
 		return $test;
 	}
 //TODO
@@ -213,7 +223,7 @@ function getEmbedPhpInfo($info = INFO_ALL)
 	$output = preg_replace(array('/^.*<body[^>]*>/is', '/<\/body[^>]*>.*$/is'), '', ob_get_clean(), 1);
 
 	$output = preg_replace('/width="[0-9]+"/i', 'width="85%"', $output);
-    $output = str_replace('<table border="0" cellpadding="3" width="85%">', '<table class="phpinfo">', $output);
+	$output = str_replace('<table border="0" cellpadding="3" width="85%">', '<table class="phpinfo">', $output);
 	$output = str_replace('<hr />', '', $output);
 	$output = str_replace('<tr class="h">', '<tr>', $output);
 	$output = str_replace('<a name=', '<a id=', $output);

@@ -188,7 +188,7 @@
 
 <form action="{$smarty.server.PHP_SELF}?sessiontest=1" method="post" name="page2form" id="page2form">
 	<div class="continue">
-		<input type="reset" name="phpinfo" value="{tr}Display PHPInfo{/tr}" onclick="$('#phpinfo').show();" />
+		<input type="reset" name="phpinfo" value="{tr}Toggle PHPInfo display{/tr}" onclick="$('#phpinfo').toggle();" />
 		<input type="hidden" name="page" value="3" />
 	</div>
 	<div class="callout">

@@ -12,7 +12,7 @@
 				<tbody>
 					<tr>
 						<td align="center">
-							<select id="select_language" name="select_language" onchange="this.form.submit();">
+							<select id="select_language" name="select_language">
 {foreach from=$languages item=lang}
 								<option value="{$lang}">{$lang}</option>
 {/foreach}

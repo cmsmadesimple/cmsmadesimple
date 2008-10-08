@@ -52,7 +52,7 @@ class CmsInstallPage extends CmsObject
 		/*
 		 * Required Settings
 		 */
-		list($minimum, $recommended) = getTestValues('phpversion');
+		list($minimum, $recommended) = getTestValues('php_version');
 		$settings['required'][] =
 			testVersionRange(true, lang('test_check_php', $minimum) .'<br />'. lang('test_min_recommend', $minimum, $recommended),
 				phpversion(), lang('test_requires_php_version', phpversion(), $recommended), $minimum, $recommended, false);
