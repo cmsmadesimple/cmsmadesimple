@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['error_udt_name_chars'] = 'A valid UDT name starts with a letter or underscore, followed by any number of letters, numbers, or underscores.';
 $lang['admin']['errorupdatetemplateallpages'] = 'Template is not active';
 $lang['admin']['hidefrommenu'] = 'Hide From Menu';
 $lang['admin']['settemplate'] = 'Set Template';
