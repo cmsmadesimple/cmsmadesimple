@@ -389,12 +389,12 @@ $lang['admin']['help_function_oldprint'] = <<<EOT
         </ul>
 EOT;
 $lang['admin']['login_info_title'] = 'Information';
-$lang['admin']['login_info'] = 'From this point should take into consideration the following parameters';
+$lang['admin']['login_info'] = 'For the Admin console to work properly';
 $lang['admin']['login_info_params'] = <<<EOT
 <ol> 
-  <li>Cookies enabled in your browser</li> 
-  <li>Javascript enabled in your browser </li> 
-  <li>Windows popup active to the following address:</li> 
+  <li>Cookies must be enabled in your browser</li> 
+  <li>Javascript must be enabled in your browser</li> 
+  <li>Popup windows must be allowed for the following address:</li> 
 </ol>
 EOT;
 
