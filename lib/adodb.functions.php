@@ -89,11 +89,19 @@ function & adodb_connect()
 
 function adodb_error($dbtype, $function_performed, $error_number, $error_message, $host, $database, &$connection_obj)
 {
-	echo "<strong>Database Connection Failed</strong><br />";
-	echo "Error: {$error_message} ({$error_number})<br />";
-	echo "Function Performed: {$function_performed}<br />";
-	echo "Host/DB: {$host}/{$database}<br />";
-	echo "Database Type: {$dbtype}<br />";
+	if(file_exists(cms_join_path(dirname(CONFIG_FILE_LOCATION), 'db_error.html')))
+	{
+		include_once cms_join_path(dirname(CONFIG_FILE_LOCATION), 'db_error.html');
+		exit;
+	}
+	else
+	{
+		echo "<strong>Database Connection Failed</strong><br />";
+		echo "Error: {$error_message} ({$error_number})<br />";
+		echo "Function Performed: {$function_performed}<br />";
+		echo "Host/DB: {$host}/{$database}<br />";
+		echo "Database Type: {$dbtype}<br />";
+	}
 }
 
 ?>
