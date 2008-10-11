@@ -99,7 +99,7 @@ $metadata = '';
 if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
 
 $sitename = '';
-if (isset($_POST['sitename'])) $sitename = $_POST['sitename'];
+if (isset($_POST['sitename'])) $sitename = cms_htmlentities($_POST['sitename']);
 
 $css_max_age = 0;
 if (isset($_POST['css_max_age'])) $css_max_age = (int)$_POST['css_max_age'];
