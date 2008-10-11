@@ -65,7 +65,10 @@ if (isset($_GET["message"])) {
 	$templateops =& $gCms->GetTemplateOperations();
 
 	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
-		if (isset($_GET["template_id"])) {
+		if( (isset($_GET["template_id"])) && (is_numeric($_GET["template_id"])) ) {
+			$thetemplate = $templateops->LoadTemplateByID($_GET["template_id"]);
+			if ($thetemplate->active == 1)
+			{
 			$query = "UPDATE ".cms_db_prefix()."content SET template_id = ?";
 			$result = $db->Execute($query, array($_GET['template_id']));
 			if ($result) {
@@ -74,6 +77,9 @@ if (isset($_GET["message"])) {
 				echo '<div class="pagemcontainer"><div class="pagemessage">' .$themeObject->DisplayImage('icons/system/accept.gif', lang('allpagesmodified'),'','','systemicon') . '&nbsp;' .  lang('allpagesmodified'). '</div></div>';
 			} else {
 				echo '<div class="pageerrorcontainer"><div class="pageoverflow">'.lang('errorupdatingpages').'</div></div>';
+			}
+			} else {
+				echo '<p class="error">'.lang('errorupdatetemplateallpages').'</p>';
 			}
 		}
 	}
