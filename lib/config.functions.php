@@ -52,7 +52,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["uploads_url"] = '/uploads'; 
 	$config["max_upload_size"] = 1000000;
 	$config["debug"] = false;
-        $config['output_compression'] = false;
+	$config['output_compression'] = false;
 	$config["assume_mod_rewrite"] = false;
 	$config['internal_pretty_urls'] = false;
 	$config['use_hierarchy'] = false;
@@ -332,13 +332,15 @@ function cms_config_save($config)
 	$newfilename = CONFIG_FILE_LOCATION;
 	if (is_writable($newfilename) || is_writable($newfiledir))
 	{
-		// try to backup
+		// try to backup config file
 		$oldconfig = @file_get_contents($newfilename);
+		$bakupg = false;
 		$handle = @fopen($newfilename .'.bakupg', "w");
 		if ($handle)
 		{
 			@fwrite($handle, $oldconfig);
 			fclose($handle);
+			$bakupg = true;
 		}
 
 		$handle = fopen($newfilename, "w");
@@ -348,8 +350,18 @@ function cms_config_save($config)
 			fwrite($handle, cms_config_text($config));
 			fwrite($handle, "\n?>");
 			fclose($handle);
-			
-			cms_config_upgrade();
+
+			$new_config = cms_config_upgrade();
+			if ( ($new_config) && ($bakupg) )
+			{
+				@unlink($newfilename .'.bakupg');
+			}
+			elseif ($bakupg)
+			{
+				// failed, restore old config file (usefull in upgrade)
+				@copy($newfilename .'.bakupg', $newfilename);
+				@unlink($newfilename .'.bakupg');
+			}
 			return true;
 		}
 	}
@@ -401,13 +413,13 @@ function cms_config_upgrade()
 						$newline .= "\n";
 					}
 					fwrite($handle, $newline);
-					
-					
 				}
 				fclose($handle);
+				return true;
 			}
 		}
 	}
+	return false;
 }
 
 # vim:ts=4 sw=4 noet
