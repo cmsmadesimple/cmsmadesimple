@@ -105,7 +105,11 @@ $htmlresult = str_replace('##INLINESUBMITSTUFFGOESHERE##', ' '.$formsubmittext, 
 $htmlresult = str_replace('##BODYSUBMITSTUFFGOESHERE##', ' '.$bodytext, $htmlresult);
 
 echo $htmlresult;
-
+$endtime = microtime();
+$memory = (function_exists('memory_get_usage')?memory_get_usage():0);
+$memory = $memory - $orig_memory;
+$memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
+echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak} -->\n";
 #var_dump(memory_get_usage());
 
 # vim:ts=4 sw=4 noet

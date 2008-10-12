@@ -1,10 +1,11 @@
 <?php
 
+$orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
+$starttime = microtime();
 if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 {
   @ob_start();
 }
-
 include_once("../lib/classes/class.admintheme.inc.php");
 
 if (isset($USE_THEME) && $USE_THEME == false)
