@@ -53,6 +53,8 @@ if (isset($_REQUEST["cssid"])) $cssid = $_REQUEST["cssid"];
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["edittemplate"])) $active = 0;
 
+$default = false;
+
 $ajax = false;
 if (isset($_POST['ajax']) and $_POST['ajax']) $ajax = true;
 
@@ -215,6 +217,7 @@ if ($access)
 		$content = $onetemplate->content;
 		$stylesheet = $onetemplate->stylesheet;
 		$encoding = $onetemplate->encoding;
+		$default = $onetemplate->default;
 		$active = $onetemplate->active;
 		$lastedited = $onetemplate->modified_date;
 	}
@@ -378,11 +381,12 @@ else
 			<p class="pagetext"><?php echo lang('stylesheet')?>:</p>
 			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagebigtextarea', '', $encoding, '', '80', '15','','css')?></p>
 		</div>
-		<?php } ?>
+	        <?php } if ($default == 0 ) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
 			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"") ?> /> </p>
 		</div>
+	        <?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
 			<p class="pageinput">
