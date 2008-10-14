@@ -153,7 +153,7 @@ $smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('canc
 
 
 # begin output
-echo '<div class="pagecontainer">'.$themeObject->ShowHeader('grouppermissions',array($group_name));
+echo '<div class="pagecontainer">'.$themeObject->ShowHeader('groupassignments',array($group_name));
 echo $smarty->fetch('changeusergroup.tpl');
 echo '</div>';
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';

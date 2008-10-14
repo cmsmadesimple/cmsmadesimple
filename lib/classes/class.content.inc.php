@@ -1509,6 +1509,7 @@ class ContentBase
 		  }
 		foreach ($allgroups as $onegroup)
 		  {
+		    if( $onegroup->id == 1 ) continue;
 		    $val = $onegroup->id*-1;
 		    $text .= '<option value="'.$val.'"';
 		    if( in_array($val,$addteditors) )
