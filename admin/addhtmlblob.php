@@ -134,6 +134,13 @@ global $gCms; $db =& $gCms->GetDb();
 
 // fill out additional users array
 $addt_users = "";
+$groupops =& $gCms->GetGroupOperations();
+$groups = $groupops->LoadGroups();
+foreach( $groups as $onegroup )
+{
+  if( $onegroup->id == 1 ) continue;
+  $addt_users .= "<option value=\"".($onegroup->id*-1)."\">".lang('group').":&nbsp;{$onegroup->name}</option>";
+}
 $query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> ? ORDER BY username";
 $result = $db->Execute($query, array($userid));
 if ($result && $result->RecordCount() > 0) {
@@ -143,13 +150,6 @@ if ($result && $result->RecordCount() > 0) {
 	}
 }else{
 	$addt_users = "<option>&nbsp;</option>";
-}
-$groupops =& $gCms->GetGroupOperations();
-$groups = $groupops->LoadGroups();
-foreach( $groups as $onegroup )
-{
-  if( $onegroup->id == 1 ) continue;
-  $addt_users .= "<option value=\"".($onegroup->id*-1)."\">".lang('group').":&nbsp;{$onegroup->name}</option>";
 }
 
 if (!$access)

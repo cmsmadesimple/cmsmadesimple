@@ -312,17 +312,6 @@ $owners .= "</select>";
 
 // Build the additional users list
 $addt_users = "";
-foreach( $users as $row )
-{
-  if( $row['user_id'] == 1 ) continue;
-  if( $row['user_id'] == $userid ) continue;
-  $addt_users .= "<option value=\"".$row["user_id"]."\"";
-  if( in_array( $row['user_id'], $cur_addt_users ) )
-    {
-      $addt_users .= "selected=\"selected\"";
-    }
-  $addt_users .= ">".$row["username"]."</option>";
-}
 $groupops =& $gCms->GetGroupOperations();
 $groups = $groupops->LoadGroups();
 foreach( $groups as $onegroup )
@@ -334,6 +323,17 @@ foreach( $groups as $onegroup )
       $addt_users .= "selected=\"selected\"";
     }
   $addt_users .= '>'.lang('group').":&nbsp;{$onegroup->name}</option>";
+}
+foreach( $users as $row )
+{
+  if( $row['user_id'] == 1 ) continue;
+  if( $row['user_id'] == $userid ) continue;
+  $addt_users .= "<option value=\"".$row["user_id"]."\"";
+  if( in_array( $row['user_id'], $cur_addt_users ) )
+    {
+      $addt_users .= "selected=\"selected\"";
+    }
+  $addt_users .= ">".$row["username"]."</option>";
 }
 
 if (!$access)
