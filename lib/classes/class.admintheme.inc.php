@@ -647,9 +647,9 @@ class AdminTheme
      */
     function FixSpaces($str)
     {
-		$_ret = preg_replace('/\s+/u',"&nbsp;",$str);
-		if(!empty($_ret)) return $_ret;
-		else return preg_replace('/\s+/',"&nbsp;",$str); //bad utf8
+		$tmp = preg_replace('/\s+/u',"&nbsp;",$str); // PREG UTF8
+		if(!empty($tmp)) return $tmp;
+		else return preg_replace('/\s+/',"&nbsp;",$str); // bad UTF8
     }
     /**
      * UnFixSpaces
