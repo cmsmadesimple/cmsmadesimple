@@ -943,7 +943,7 @@ function is_directory_writable( $path )
 function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true)
 {
 
-  $dh = opendir($dir);
+  $dh = @opendir($dir);
   if( !$dh ) return false;
 
   if( !empty($extensions) )

@@ -271,6 +271,10 @@ class Content extends ContentBase
 		      if( !empty($blockNameId['dir']) ) $optprefix .= '/'.$blockNameId['dir'];
 		      $dropdown = create_file_dropdown($blockNameId['id'],$dir,$data,'jpg,jpeg,png,gif',
 						       $optprefix,true);
+		      if( $dropdown === false )
+			{
+			  $dropdown = lang('error_retrieving_file_list');
+			}
 		      // for now create a simple dummy text field
 		      $ret[]= array($label.':',$dropdown);
 		    }
