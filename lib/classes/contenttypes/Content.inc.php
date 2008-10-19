@@ -87,6 +87,8 @@ class Content extends ContentBase
 		$this->mTemplateId = $params['template_id'];
 	    }
 
+	    // could add file upload handling here.
+
 	    // add additional content blocks
 	    $this->GetAdditionalContentBlocks();
 	    foreach($this->additionalContentBlocks as $blockName => $blockNameId)
@@ -268,7 +270,7 @@ class Content extends ContentBase
 		      $optprefix = 'uploads';
 		      if( !empty($blockNameId['dir']) ) $optprefix .= '/'.$blockNameId['dir'];
 		      $dropdown = create_file_dropdown($blockNameId['id'],$dir,$data,'jpg,jpeg,png,gif',
-						       $optprefix);
+						       $optprefix,true);
 		      // for now create a simple dummy text field
 		      $ret[]= array($label.':',$dropdown);
 		    }

@@ -1024,12 +1024,21 @@ function cms_db_prefix() {
   return $config["db_prefix"];
 }
 
-function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='',$extratext='')
+function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='',$allownone=false,$extratext='')
 {
+  $files = array();
   $files = get_matching_files($dir,$allowed_extensions);
   if( $files === false ) return false;
-  
   $out = "<select name=\"{$name}\" {$extratext}>\n";
+  if( $allownone )
+    {
+      $txt = '';
+      if( empty($value) )
+	{
+	  $txt = 'selected="selected"';
+	}
+      $out .= "  <option value=\"-1\" $txt>--- ".lang('none')." ---</option>\n";
+    }
   foreach( $files as $file )
     {
       $txt = '';

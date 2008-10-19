@@ -33,7 +33,9 @@ function smarty_cms_function_content_image($params,&$smarty)
       $smarty->caching = $oldvalue;
     }
   $img = _smarty_cms_function_content_return($result, $params, $smarty);
-  
+  if( $img == -1 )
+    return;
+
   $name = $params['block'];
   $alt = '';
   $width = '';
