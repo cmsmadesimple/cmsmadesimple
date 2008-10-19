@@ -93,7 +93,7 @@ function smarty_cms_function_content($params, &$smarty)
 							$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
 							if ($result !== FALSE)
 							{
-								echo $result;
+							  echo $result;
 							}
 							$modresult = @ob_get_contents();
 							@ob_end_clean();

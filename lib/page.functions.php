@@ -1024,5 +1024,29 @@ function cms_db_prefix() {
   return $config["db_prefix"];
 }
 
+function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='',$extratext='')
+{
+  $files = get_matching_files($dir,$allowed_extensions);
+  if( $files === false ) return false;
+  
+  $out = "<select name=\"{$name}\" {$extratext}>\n";
+  foreach( $files as $file )
+    {
+      $txt = '';
+      if( $file == $value )
+	{
+	  $txt = 'selected="selected"';
+	}
+      $opt = $file;
+      if( !empty($optprefix) )
+	{
+	  $opt = $optprefix.'/'.$file;
+	}
+      $out .= "  <option value=\"{$opt}\" {$txt}>{$file}</option>\n";
+    }
+  $out .= "</select>";
+  return $out;
+}
+
 # vim:ts=4 sw=4 noet
 ?>

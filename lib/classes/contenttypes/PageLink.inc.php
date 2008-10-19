@@ -35,7 +35,12 @@ class PageLink extends ContentBase
     {
       return lang('contenttype_pagelink');
     }
-	
+
+    function HasUsableLink()
+    {
+      return false;
+    }
+
     function SetProperties()
     {
 		$this->mProperties->Add('int', 'page');

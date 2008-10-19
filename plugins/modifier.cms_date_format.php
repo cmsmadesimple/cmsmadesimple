@@ -3,8 +3,7 @@
 function smarty_cms_modifier_cms_date_format($string, $format = '',
 					     $default_date = '')
 {
-
-
+  global $gCms;
   if( $format == '' )
     {
       $format = get_site_preference('defaultdateformat');
@@ -12,7 +11,6 @@ function smarty_cms_modifier_cms_date_format($string, $format = '',
 	{
 	  $format = '%b %e, %Y';
 	}
-      global $gCms;
       if( !isset($gCms->variables['page_id']) )
         {
 	  $uid = get_userid(false);
@@ -27,7 +25,6 @@ function smarty_cms_modifier_cms_date_format($string, $format = '',
 	}
     }
 
-  global $gCms;
   $smarty =& $gCms->GetSmarty();
   $config =& $gCms->GetConfig();
   $fn = cms_join_path($config['root_path'],'lib','smarty','plugins','modifier.date_format.php');

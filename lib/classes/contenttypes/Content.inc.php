@@ -260,15 +260,32 @@ class Content extends ContentBase
 		$data = $this->GetPropertyValue($blockNameId['id']);
 		if( empty($data) ) $data = $blockNameId['default'];
                 if( !empty($blockNameId['label']) ) $label = $blockNameId['label'];
-		if ($blockNameId['oneline'] == 'true')
-		{
+		switch($blockNameId['type'])
+		  {
+		  case 'image':
+		    {
+		      $dir = cms_join_path($config['uploads_path'],$blockNameId['dir']);
+		      $optprefix = 'uploads';
+		      if( !empty($blockNameId['dir']) ) $optprefix .= '/'.$blockNameId['dir'];
+		      $dropdown = create_file_dropdown($blockNameId['id'],$dir,$data,'jpg,jpeg,png,gif',
+						       $optprefix);
+		      // for now create a simple dummy text field
+		      $ret[]= array($label.':',$dropdown);
+		    }
+		    break;
+
+		  case 'text':
+		  default:
+		    if ($blockNameId['oneline'] == 'true')
+		      {
 			
-		    $ret[]= array($label.':','<input type="text" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />');
-		}
-		else
-		{
-		    $ret[]= array($label.':',create_textarea(($blockNameId['usewysiwyg'] == 'false'?false:true), $data, $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet));
-		}
+			$ret[]= array($label.':','<input type="text" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />');
+		      }
+		    else
+		      {
+			$ret[]= array($label.':',create_textarea(($blockNameId['usewysiwyg'] == 'false'?false:true), $data, $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet));
+		      }
+		  }
 	    }
 	}
 	if ($tab == 1)
@@ -424,7 +441,8 @@ class Content extends ContentBase
 	    {
 		$content = $template->content;
 				
-		$pattern = '/{content([^}]*)}/';
+		// read text content blocks
+		$pattern = '/{content\s([^}]*)}/';
 		$pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
 		$matches = array();
 		$result = preg_match_all($pattern, $content, $matches);
@@ -480,6 +498,7 @@ class Content extends ContentBase
 			    }
 
                             if( empty($name) ) $name = '**default**';
+			    $this->additionalContentBlocks[$name]['type'] = 'text';
 			    $this->additionalContentBlocks[$name]['id'] = $id;
 			    $this->additionalContentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
 			    $this->additionalContentBlocks[$name]['oneline'] = $oneline;
@@ -494,7 +513,80 @@ class Content extends ContentBase
 
 		    $result = true;
 		}
+
+		// read image content blocks
+		$pattern = '/{content_image\s([^}]*)}/';
+		$pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
+		$matches = array();
+		$result = preg_match_all($pattern, $content, $matches);
+		if ($result && count($matches[1]) > 0)
+		{
+		    foreach ($matches[1] as $wholetag)
+		    {
+			$morematches = array();
+			$result2 = preg_match_all($pattern2, $wholetag, $morematches);
+			if ($result2)
+			{
+			    $keyval = array();
+			    for ($i = 0; $i < count($morematches[1]); $i++)
+			    {
+				$keyval[$morematches[1][$i]] = $morematches[2][$i];
+			    }
+
+			    $id = '';
+			    $name = '';
+			    $value = '';
+			    $upload = true;
+			    $dir = ''; // default to uploads path
+                            $label = '';
+
+			    foreach ($keyval as $key=>$val)
+			    {
+			      switch($key)
+				{
+				case 'block':
+				  $id = str_replace(' ', '_', $val);
+				  $name = $val;
+				  
+				  if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
+				    {
+				      $this->mProperties->Add("string", $id);
+				    }
+				  break;
+				case 'label':
+				  $label = $val;
+				  break;
+				case 'upload':
+				  $upload = $val;
+				  break;
+				case 'dir':
+				  $dir = $val;
+				  break;
+				case 'default':
+				  $value = $val;
+				  break;
+				default:
+				  break;
+				}
+			    }
+
+                            if( empty($name) ) $name = '**default**';
+			    $this->additionalContentBlocks[$name]['type'] = 'image';
+			    $this->additionalContentBlocks[$name]['id'] = $id;
+			    $this->additionalContentBlocks[$name]['upload'] = $upload;
+			    $this->additionalContentBlocks[$name]['dir'] = $dir;
+			    $this->additionalContentBlocks[$name]['default'] = $value;
+			    $this->additionalContentBlocks[$name]['label'] = $label;					
+			}
+		    }
+
+		    // force a load 
+		    $this->mProperties->Load($this->mId);
+
+		    $result = true;
+		}
 	    }
+
 	    $this->addtContentBlocksLoaded = true;
 	}
 	return $result;
