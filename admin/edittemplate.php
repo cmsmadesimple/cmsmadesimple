@@ -386,7 +386,9 @@ else
 			<p class="pagetext"><?php echo lang('active')?>:</p>
 			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"") ?> /> </p>
 		</div>
-	        <?php } ?>
+   	        <?php } else { ?>
+	          <div><input type="hidden" name="active" value="<?php echo $active; ?>">
+  	        <?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
 			<p class="pageinput">
