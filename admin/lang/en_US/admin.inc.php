@@ -1,4 +1,38 @@
 <?php
+$lang['admin']['help_function_content_image'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin allows template designers to prompt users to select an image file when editing the content of a page. It behaves similarly to the content plugin, for additional content blocks.</p>
+<h3>How do I use it?</h3>
+<p>Just insert the tag into your page template like: <code>{content_image block='image1'}</code>.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+  <li><strong>(required)</strong></em> block - The name for this additional content block.
+  <p>Example:</p>
+  <pre>{content_image block='image1'}</pre>
+  </li>
+
+  <li><em>(optional)</em> label - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
+ 
+  <li><em>(optional)</em> dir - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the uploads directory will be used.
+  <p>Example:</p>
+  <pre>{content_image block='image1' dir='images'}</pre>
+  </li>
+
+  <li><em>(optional)</em> class - The css class name to use on the img tag in frontend display.</li>
+
+  <li><em>(optional)</em> id - The id name to use on the img tag in frontend display.</li> 
+
+  <li><em>(optional)</em> name - The tag name to use on the img tag in frontend display.</li> 
+
+  <li><em>(optional)</em> width - The desired width of the image.</li>
+
+  <li><em>(optional)</em> height - The desired height of the image.</li>
+
+  <li><em>(optional)</em> alt - Alternative text if the image cannot be found.</li>
+
+
+</ul>
+EOT;
 $lang['admin']['error_udt_name_chars'] = 'A valid UDT name starts with a letter or underscore, followed by any number of letters, numbers, or underscores.';
 $lang['admin']['errorupdatetemplateallpages'] = 'Template is not active';
 $lang['admin']['hidefrommenu'] = 'Hide From Menu';

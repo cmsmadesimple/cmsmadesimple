@@ -81,5 +81,22 @@ function smarty_cms_function_content_image($params,&$smarty)
   return $out;
 }
 
+function smarty_cms_help_function_content_image()
+{
+  echo lang('help_function_content_image');
+}
+
+function smarty_cms_about_function_content_image()
+{
+	?>
+	<p>Author: Robert Campbell&lt;calguy1000@cmsmadesimple.org&gt;</p>
+	<p>Version: 1.0</p>
+	<p>
+	Change History:<br/>
+	1.0 - Initial version
+	</p>
+	<?php
+}
+
 # vim:ts=4 sw=4 noet
 ?>
