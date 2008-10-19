@@ -1039,17 +1039,18 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
 	}
       $out .= "  <option value=\"-1\" $txt>--- ".lang('none')." ---</option>\n";
     }
+
   foreach( $files as $file )
     {
       $txt = '';
-      if( $file == $value )
-	{
-	  $txt = 'selected="selected"';
-	}
       $opt = $file;
       if( !empty($optprefix) )
 	{
 	  $opt = $optprefix.'/'.$file;
+	}
+      if( $opt == $value )
+	{
+	  $txt = 'selected="selected"';
 	}
       $out .= "  <option value=\"{$opt}\" {$txt}>{$file}</option>\n";
     }
