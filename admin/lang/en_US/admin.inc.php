@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['searchable'] = 'This page is searchable';
 $lang['admin']['help_function_content_image'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This plugin allows template designers to prompt users to select an image file when editing the content of a page. It behaves similarly to the content plugin, for additional content blocks.</p>
@@ -8,14 +9,14 @@ $lang['admin']['help_function_content_image'] = <<<EOT
 <ul>
   <li><strong>(required)</strong></em> block - The name for this additional content block.
   <p>Example:</p>
-  <pre>{content_image block='image1'}</pre>
+  <pre>{content_image block='image1'}</pre><br/>
   </li>
 
   <li><em>(optional)</em> label - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
  
   <li><em>(optional)</em> dir - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the uploads directory will be used.
-  <p>Example:</p>
-  <pre>{content_image block='image1' dir='images'}</pre>
+  <p>Example: use images from the uploads/image directory.</p>
+  <pre>{content_image block='image1' dir='images'}</pre><br/>
   </li>
 
   <li><em>(optional)</em> class - The css class name to use on the img tag in frontend display.</li>

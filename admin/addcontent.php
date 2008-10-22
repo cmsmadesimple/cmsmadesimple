@@ -267,6 +267,14 @@ else
 	$contentobj->SetMetadata($metadata);
 	$contentobj->SetPropertyValue('content_en', get_site_preference('defaultpagecontent'));
 	if ($parent_id!=-1) $contentobj->SetParentId($parent_id);
+	$contentobj->SetPropertyValue('searchable',
+				      get_site_preference('page_searchable',1));
+	$contentobj->SetPropertyValue('extra1',
+				      get_site_preference('page_extra1',''));
+	$contentobj->SetPropertyValue('extra2',
+				      get_site_preference('page_extra2',''));
+	$contentobj->SetPropertyValue('extra3',
+				      get_site_preference('page_extra3',''));
 }
 
 if ($access)

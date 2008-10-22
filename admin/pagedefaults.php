@@ -48,6 +48,10 @@ if (isset($_POST["cancel"])) {
 #
 $page_active = get_site_preference('page_active',"1");
 $page_showinmenu = get_site_preference('page_showinmenu',"1");
+$page_extra1 = get_site_preference('page_extra1','');
+$page_extra2 = get_site_preference('page_extra2','');
+$page_extra3 = get_site_preference('page_extra3','');
+$page_searchable = get_site_preference('page_searchable','1');
 $page_cachable = get_site_preference('page_cachable',"1");
 $page_metadata = get_site_preference('page_metadata',
 	           "<!-- ".lang('msg_defaultmetadata')." -->");
@@ -71,6 +75,10 @@ if( isset( $_POST['submit'] ) )
       {
 	$additional_editors = implode(',',$_POST['additional_editors']);
       }
+    $page_searchable = (isset($_POST['page_searchable'])?"1":"0");
+    $page_extra1 = $_POST['page_extra1'];
+    $page_extra2 = $_POST['page_extra2'];
+    $page_extra3 = $_POST['page_extra3'];
 
     //
     // Store preferences
@@ -82,6 +90,10 @@ if( isset( $_POST['submit'] ) )
     set_site_preference( 'defaultpagecontent', $page_defaultcontent );
     set_site_preference( 'default_parent_page', $page_defaultparent );
     set_site_preference( 'additional_editors', $additional_editors );
+    set_site_preference( 'page_searchable', $page_searchable );
+    set_site_preference( 'page_extra1', $page_extra1 );
+    set_site_preference( 'page_extra2', $page_extra2 );
+    set_site_preference( 'page_extra3', $page_extra3 );
   }
 
 //
@@ -153,6 +165,35 @@ if ($message != "") {
 	  <p class="pagetext"><?php echo lang('content')?>:</p>
           <p class="pageinput">
 	    <textarea class="pagesmalltextarea" name="page_defaultcontent" cols="80" rows="20"><?php echo $page_defaultcontent?></textarea>
+          </p>
+        </div>
+
+        <div class="pageoverflow">
+	  <p class="pagetext"><?php echo lang('searchable')?>:</p>
+          <p class="pageinput">
+	    <input class="pagenb" type="checkbox" name="page_searchable" <?php if($page_searchable == "1") echo "checked=\"checked\""?> />
+          </p>
+        </div>
+
+
+        <div class="pageoverflow">
+	  <p class="pagetext"><?php echo lang('extra1')?>:</p>
+          <p class="pageinput">
+	      <input class="pagenb" type="text" name="page_extra1" value="<?php echo $page_extra1 ?>" size="50" maxlength="255" />
+          </p>
+        </div>
+
+        <div class="pageoverflow">
+	  <p class="pagetext"><?php echo lang('extra2')?>:</p>
+          <p class="pageinput">
+	      <input class="pagenb" type="text" name="page_extra2" value="<?php echo $page_extra2 ?>" size="50" maxlength="255" />
+          </p>
+        </div>
+
+        <div class="pageoverflow">
+	  <p class="pagetext"><?php echo lang('extra3')?>:</p>
+          <p class="pageinput">
+	      <input class="pagenb" type="text" name="page_extra3" value="<?php echo $page_extra3 ?>" size="50" maxlength="255" />
           </p>
         </div>
 

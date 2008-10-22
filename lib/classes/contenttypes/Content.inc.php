@@ -26,7 +26,7 @@ class Content extends ContentBase
     function Content()
     {
 	$this->ContentBase();
-	$this->mProperties->SetAllowedPropertyNames(array('content_en','target','pagedata','extra1','extra2','extra3'));
+	$this->mProperties->SetAllowedPropertyNames(array('content_en','target','pagedata','extra1','extra2','extra3','searchable'));
 	$this->additionalContentBlocks = array();
 	$this->addtContentBlocksLoaded = false;
     }
@@ -49,6 +49,7 @@ class Content extends ContentBase
 	$this->mProperties->Add('string', 'extra1'); 
 	$this->mProperties->Add('string', 'extra2'); 
 	$this->mProperties->Add('string', 'extra3'); 
+	$this->mProperties->Add('string', 'searchable'); 
 
 	#Turn on preview
 	$this->mPreview = true;
@@ -75,7 +76,8 @@ class Content extends ContentBase
 
 	if (isset($params))
 	{
-	  $parameters = array('content_en','target','pagedata','extra1','extra2','extra3');
+	  $parameters = array('content_en','target','pagedata','extra1','extra2','extra3',
+			      'searchable');
 
 	    //pick up the template id before we do parameters
 	    if (isset($params['template_id']))
@@ -260,10 +262,23 @@ class Content extends ContentBase
 		if (empty($blockName) || $blockName == '**default**') continue; 
                 $label = ucwords($blockName);
 		$data = $this->GetPropertyValue($blockNameId['id']);
-		if( empty($data) ) $data = $blockNameId['default'];
+		if( empty($data) && isset($blockNameId['default']) ) $data = $blockNameId['default'];
                 if( !empty($blockNameId['label']) ) $label = $blockNameId['label'];
 		switch($blockNameId['type'])
 		  {
+		  case 'module':
+		    {
+		      if( !isset($blockNameId['module']) ) continue;
+		      if( !isset($gCms->modules[$blockNameId['module']]['object']) ) continue;
+		      $module =& $gCms->modules[$blockNameId['module']]['object'];
+		      if( !is_object($module) ) continue;
+		      if( $module->HasContentBlocks() === FALSE ) continue;
+		      $tmp = $module->GetContentBlockInputBase($blockName,$blockNameId['blocktype'],$blockNameId['params']);
+		      if( $tmp === FALSE ) continue;
+		      $ret[]= array($label.':',$tmp);
+		    }
+		    break;
+
 		  case 'image':
 		    {
 		      $dir = cms_join_path($config['uploads_path'],$blockNameId['dir']);
@@ -275,7 +290,6 @@ class Content extends ContentBase
 			{
 			  $dropdown = lang('error_retrieving_file_list');
 			}
-		      // for now create a simple dummy text field
 		      $ret[]= array($label.':',$dropdown);
 		    }
 		    break;
@@ -336,6 +350,9 @@ class Content extends ContentBase
 	    $ret[]= array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />');
 	    $ret[]= array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
 	    $ret[]= array(lang('pagedata_codeblock').':',create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','pagedata','','','80','6'));
+	    $ret[]= array(lang('searchable').':',
+			  '<div><input type="hidden" name="searchable" value="0"></div>
+                           <input type="checkbox" name="searchable" value="1" '.($this->GetPropertyValue('searchable')==1?'checked="checked"':'').'>');
 	    $ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
 	    $ret[]= array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
 	    $ret[]= array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
@@ -429,124 +446,124 @@ class Content extends ContentBase
 
     function GetAdditionalContentBlocks()
     {
-	$result = false;
-	global $gCms;
-	$templateops =& $gCms->GetTemplateOperations();
-	if ($this->addtContentBlocksLoaded == false)
+      $result = false;
+      global $gCms;
+      $templateops =& $gCms->GetTemplateOperations();
+      if ($this->addtContentBlocksLoaded == false)
 	{
-	    $this->additionalContentBlocks = array();
-	    if ($this->TemplateId() && $this->TemplateId() > -1)
+	  $this->additionalContentBlocks = array();
+	  if ($this->TemplateId() && $this->TemplateId() > -1)
 	    {
-		$template = $templateops->LoadTemplateByID($this->TemplateId()); /* @var $template Template */
+	      $template = $templateops->LoadTemplateByID($this->TemplateId()); /* @var $template Template */
 	    }
-	    else
+	  else
 	    {
-		$template = $templateops->LoadDefaultTemplate();
+	      $template = $templateops->LoadDefaultTemplate();
 	    }
-	    if($template !== false)
+	  if($template !== false)
 	    {
-		$content = $template->content;
-				
-		// read text content blocks
-		$pattern = '/{content\s([^}]*)}/';
-		$pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
-		$matches = array();
-		$result = preg_match_all($pattern, $content, $matches);
-		if ($result && count($matches[1]) > 0)
+	      $content = $template->content;
+	      
+	      // read text content blocks
+	      $pattern = '/{content\s([^}]*)}/';
+	      $pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
+	      $matches = array();
+	      $result = preg_match_all($pattern, $content, $matches);
+	      if ($result && count($matches[1]) > 0)
 		{
-		    foreach ($matches[1] as $wholetag)
+		  foreach ($matches[1] as $wholetag)
 		    {
-			$morematches = array();
-			$result2 = preg_match_all($pattern2, $wholetag, $morematches);
-			if ($result2)
+		      $morematches = array();
+		      $result2 = preg_match_all($pattern2, $wholetag, $morematches);
+		      if ($result2)
 			{
-			    $keyval = array();
-			    for ($i = 0; $i < count($morematches[1]); $i++)
+			  $keyval = array();
+			  for ($i = 0; $i < count($morematches[1]); $i++)
 			    {
-				$keyval[$morematches[1][$i]] = $morematches[2][$i];
+			      $keyval[$morematches[1][$i]] = $morematches[2][$i];
 			    }
-
-			    $id = '';
-			    $name = '';
-			    $usewysiwyg = 'true';
-			    $oneline = 'false';
-			    $value = '';
-                            $label = '';
-
-			    foreach ($keyval as $key=>$val)
+			  
+			  $id = '';
+			  $name = '';
+			  $usewysiwyg = 'true';
+			  $oneline = 'false';
+			  $value = '';
+			  $label = '';
+			  
+			  foreach ($keyval as $key=>$val)
 			    {
-				switch($key)
+			      switch($key)
 				{
-				    case 'block':
-					$id = str_replace(' ', '_', $val);
-					$name = $val;
-
-					if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
-					{
-					    $this->mProperties->Add("string", $id);
-					}
-					break;
-				    case 'wysiwyg':
-					$usewysiwyg = $val;
-					break;
-				    case 'oneline':
-					$oneline = $val;
-					break;
-                                    case 'label':
-                                        $label = $val;
-                                        break;
-				    case 'default':
-					$value = $val;
-                                        break;
+				case 'block':
+				  $id = str_replace(' ', '_', $val);
+				  $name = $val;
+				  
+				  if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
+				    {
+				      $this->mProperties->Add("string", $id);
+				    }
+				  break;
+				case 'wysiwyg':
+				  $usewysiwyg = $val;
+				  break;
+				case 'oneline':
+				  $oneline = $val;
+				  break;
+				case 'label':
+				  $label = $val;
+				  break;
+				case 'default':
+				  $value = $val;
+				  break;
 				default:
-					break;
+				  break;
 				}
 			    }
 
-                            if( empty($name) ) $name = '**default**';
-			    $this->additionalContentBlocks[$name]['type'] = 'text';
-			    $this->additionalContentBlocks[$name]['id'] = $id;
-			    $this->additionalContentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
-			    $this->additionalContentBlocks[$name]['oneline'] = $oneline;
-			    $this->additionalContentBlocks[$name]['default'] = $value;
-			    $this->additionalContentBlocks[$name]['label'] = $label;
-					
+			  if( empty($name) ) $name = '**default**';
+			  $this->additionalContentBlocks[$name]['type'] = 'text';
+			  $this->additionalContentBlocks[$name]['id'] = $id;
+			  $this->additionalContentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
+			  $this->additionalContentBlocks[$name]['oneline'] = $oneline;
+			  $this->additionalContentBlocks[$name]['default'] = $value;
+			  $this->additionalContentBlocks[$name]['label'] = $label;
+			  
 			}
 		    }
-
-		    // force a load 
-		    $this->mProperties->Load($this->mId);
-
-		    $result = true;
+		  
+		  // force a load 
+		  $this->mProperties->Load($this->mId);
+		  
+		  $result = true;
 		}
-
-		// read image content blocks
-		$pattern = '/{content_image\s([^}]*)}/';
-		$pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
-		$matches = array();
-		$result = preg_match_all($pattern, $content, $matches);
-		if ($result && count($matches[1]) > 0)
+	      
+	      // read image content blocks
+	      $pattern = '/{content_image\s([^}]*)}/';
+	      $pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
+	      $matches = array();
+	      $result = preg_match_all($pattern, $content, $matches);
+	      if ($result && count($matches[1]) > 0)
 		{
-		    foreach ($matches[1] as $wholetag)
+		  foreach ($matches[1] as $wholetag)
 		    {
-			$morematches = array();
-			$result2 = preg_match_all($pattern2, $wholetag, $morematches);
-			if ($result2)
+		      $morematches = array();
+		      $result2 = preg_match_all($pattern2, $wholetag, $morematches);
+		      if ($result2)
 			{
-			    $keyval = array();
-			    for ($i = 0; $i < count($morematches[1]); $i++)
+			  $keyval = array();
+			  for ($i = 0; $i < count($morematches[1]); $i++)
 			    {
-				$keyval[$morematches[1][$i]] = $morematches[2][$i];
+			      $keyval[$morematches[1][$i]] = $morematches[2][$i];
 			    }
-
-			    $id = '';
-			    $name = '';
-			    $value = '';
-			    $upload = true;
-			    $dir = ''; // default to uploads path
-                            $label = '';
-
-			    foreach ($keyval as $key=>$val)
+			  
+			  $id = '';
+			  $name = '';
+			  $value = '';
+			  $upload = true;
+			  $dir = ''; // default to uploads path
+			  $label = '';
+			  
+			  foreach ($keyval as $key=>$val)
 			    {
 			      switch($key)
 				{
@@ -575,29 +592,105 @@ class Content extends ContentBase
 				  break;
 				}
 			    }
-
-                            if( empty($name) ) $name = '**default**';
-			    $this->additionalContentBlocks[$name]['type'] = 'image';
-			    $this->additionalContentBlocks[$name]['id'] = $id;
-			    $this->additionalContentBlocks[$name]['upload'] = $upload;
-			    $this->additionalContentBlocks[$name]['dir'] = $dir;
-			    $this->additionalContentBlocks[$name]['default'] = $value;
-			    $this->additionalContentBlocks[$name]['label'] = $label;					
+			  
+			  if( empty($name) ) $name = '**default**';
+			  $this->additionalContentBlocks[$name]['type'] = 'image';
+			  $this->additionalContentBlocks[$name]['id'] = $id;
+			  $this->additionalContentBlocks[$name]['upload'] = $upload;
+			  $this->additionalContentBlocks[$name]['dir'] = $dir;
+			  $this->additionalContentBlocks[$name]['default'] = $value;
+			  $this->additionalContentBlocks[$name]['label'] = $label;					
 			}
 		    }
-
-		    // force a load 
-		    $this->mProperties->Load($this->mId);
-
-		    $result = true;
+		  
+		  // force a load 
+		  $this->mProperties->Load($this->mId);
+		  
+		  $result = true;
 		}
-	    }
 
-	    $this->addtContentBlocksLoaded = true;
+	      /* 
+	       * disable this for now 
+	       *
+	      // match module content tags
+	      $pattern = '/{content_module\s([^}]*)}/';
+	      $pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
+	      $matches = array();
+	      $result = preg_match_all($pattern, $content, $matches);
+	      if ($result && count($matches[1]) > 0)
+		{
+		  foreach ($matches[1] as $wholetag)
+		    {
+		      $morematches = array();
+		      $result2 = preg_match_all($pattern2, $wholetag, $morematches);
+		      if ($result2)
+			{
+			  $keyval = array();
+			  for ($i = 0; $i < count($morematches[1]); $i++)
+			    {
+			      $keyval[$morematches[1][$i]] = $morematches[2][$i];
+			    }
+			  
+			  $id = '';
+			  $name = '';
+			  $module = '';
+			  $label = '';
+			  $blocktype = '';
+			  $parms = array();
+			  
+			  foreach ($keyval as $key=>$val)
+			    {
+			      switch($key)
+				{
+				case 'block':
+				  $id = str_replace(' ', '_', $val);
+				  $name = $val;
+				  
+				  if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
+				    {
+				      $this->mProperties->Add("string", $id);
+				    }
+				  break;
+				case 'label':
+				  $label = $val;
+				  break;
+				case 'module':
+				  $module = $val;
+				  break;
+				case 'type':
+				  $blocktype = $val;
+				  break;
+				default:
+				  $parms[$key] = $val;
+				  break;
+				}
+			    }
+			  
+			  if( empty($name) ) $name = '**default**';
+			  $this->additionalContentBlocks[$name]['type'] = 'module';
+			  $this->additionalContentBlocks[$name]['blocktype'] = $blocktype;
+			  $this->additionalContentBlocks[$name]['id'] = $id;
+			  $this->additionalContentBlocks[$name]['module'] = $module;
+			  $this->additionalContentBlocks[$name]['params'] = $parms;
+			}
+		    }
+		  
+		  // force a load 
+		  $this->mProperties->Load($this->mId);
+		  
+		  $result = true;
+		}
+		*
+		* end disabled code
+		*/
+	      
+	      $this->addtContentBlocksLoaded = true;
+	    }
+	  return $result;
 	}
-	return $result;
     }
 	
+
     function ContentPreRender($tpl_source)
     {
 	// check for additional content blocks
