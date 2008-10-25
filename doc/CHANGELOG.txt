@@ -1,3 +1,18 @@
+Version 1.5
+-----------------------------
+- A new notification system in the admin
+- A new dashboard page in the admin
+- The ability to copy content pages has been added
+- More bulk actions have been added to the list content page
+- A searchable attribute has been added to the edit content page
+  to mark a page as searchable
+- Default content settings have been improved.
+- Installer improvements
+- The complete content object is now available to smarty on each page request
+- The {content_image} tag has been added allowing numerous images to be attached to each page
+  (no upload capabilities at the moment)
+- TinyMCE changes
+
 Version 1.4.1 "Spring Garden"
 -----------------------------
 - Fixes an issue with the "name" parameter being broken on the stylesheet tag
