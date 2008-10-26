@@ -470,6 +470,55 @@ class CMSModule
 
 	/**
 	 * ------------------------------------------------------------------
+	 * Content Block Related Functions
+	 * ------------------------------------------------------------------
+	 */
+	
+	/**
+	 * Does this module support a content block type or more
+	 */
+	function HasContentBlocks()
+	{
+	  return FALSE;
+	}
+
+	/**
+	 * Base function for getting content blocks
+	 */
+	function GetContentBlockInputBase($blockname,$type,$value = '',$params = array())
+	{
+	  if( empty($blockname) || empty($type) )
+	    {
+	      return FALSE;
+	    }
+
+	  $id = $blockname.'_'.$type;
+	  @ob_start();
+	  $tmp = $this->GetContentBlockInput($id,$type,'',$blockname,$value,$params);
+	  $tmp = @ob_get_contents();
+	  @ob_end_clean();
+	  return $tmp;
+	}
+
+	/**
+	 * Get an input field for a specific content block type
+	 */
+	function GetContentBlockInput($id,$type,$returnid,$blockName,$value,$params)
+	{
+	  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/contentblock.'.$type.'.php';
+	  if( !@is_file($filename) ) return FALSE;
+
+	  global $gCms;
+	  $db =& $gCms->GetDb();
+	  $config =& $gCms->GetConfig();
+	  $smarty =& $gCms->GetSmarty();
+
+	  include($filename);
+	}
+
+
+	/**
+	 * ------------------------------------------------------------------
 	 * Content Type Related Functions
 	 * ------------------------------------------------------------------
 	 */
@@ -1522,6 +1571,7 @@ class CMSModule
 	  $id = cms_htmlentities($id);
 	  $name = cms_htmlentities($name);
 	  $output = $this->DoAction($name, $id, $params, $returnid);
+
 	  if( isset($params['assign']) )
 	    {
 	      global $gCms;
@@ -1836,9 +1886,32 @@ class CMSModule
 	 * @param string The wysiwyg-system to be forced even if the user has chosen another one
 	 * @param string The language the content should be syntaxhightlighted as
 	 */
-	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='80', $rows='15',$forcewysiwyg="",$wantedsyntax="",$addtext='')
+	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='80', $rows='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
 	{
 	  return create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet, $cols, $rows,$forcewysiwyg,$wantedsyntax,$addtext);
+	}
+
+
+	/**
+	 * Returns the xhtml equivalent of a textarea.	Also takes Syntax hilighter preference 
+         * into consideration if it's called from the admin side.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The text to display in the textarea's content
+	 * @param string The html name of the textarea
+	 * @param string The CSS class to associate this textarea to
+	 * @param string The html id to give to this textarea
+	 * @param string The encoding to use for the content
+	 * @param string The text of the stylesheet associated to this content.	 Only used for certain WYSIWYGs
+	 * @param string The number of characters wide (columns) the resulting textarea should be
+	 * @param string The number of characters high (rows) the resulting textarea should be
+	 * @param string Additional text for the text area tag.
+	 */
+	function CreateSyntaxArea($id,$text,$name,$classname='',$htmlid='',$encoding='',
+				  $stylesheet='',$cols='80',$rows='15',$addtext='')
+	{
+	  return create_textarea(false,$text,$id.$name,$classname,$htmlid, $encoding, $stylesheet,
+				 $cols,$rows,'','html',$addtext);
 	}
 
 	/**
