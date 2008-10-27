@@ -7,7 +7,7 @@ $lang['admin']['help_function_content_image'] = <<<EOT
 <p>Just insert the tag into your page template like: <code>{content_image block='image1'}</code>.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-  <li><strong>(required)</strong></em> block - The name for this additional content block.
+  <li><strong>(required)</strong> block - The name for this additional content block.
   <p>Example:</p>
   <pre>{content_image block='image1'}</pre><br/>
   </li>
