@@ -1,0 +1,89 @@
+Please modify this file as you complete changes for a file
+put the word 'completed' or 'problem' under the status
+and your nickname in the completd by field.
+
+Commit this file to svn when you commit your changes.
+
+When everything is complete, and this file has been tested
+I'll remove it from svn.
+
+File                         Status         Completed By
+--------------------------------------------------------
+addbookmark.php
+addcontent.php
+addcssassoc.php
+addcss.php
+addgroup.php
+addhtmlblob.php
+addtemplateassoc.php
+addtemplate.php
+adduser.php
+adduserplugin.php
+adminlog.php
+changegroupassign.php
+changegroupperm.php
+checksum.php
+copycontent.php
+copystylesheet.php
+copytemplate.php
+dashboard.php
+deletebookmark.php
+deletecssassoc.php
+deletecss.php
+deletegroup.php
+deletehtmlblob.php
+deletetemplateassoc.php
+deletetemplate.php
+deleteuser.php
+deleteuserplugin.php
+editbookmark.php
+editcontent.php
+editcss.php
+editevent.php
+editgroup.php
+edithtmlblob.php
+editprefs.php
+edittemplate.php
+edituser.php
+edituserplugin.php
+eventhandlers.php
+files.php
+footer.php
+header.php
+home.php
+imagefiles.php
+index.php
+lang.php
+listbookmarks.php
+listcontent.php
+listcssassoc.php
+listcss.php
+listgroups.php
+listhtmlblobs.php
+listmodules.php
+listtags.php
+listtemplates.php          completed     calguy1000
+listusers.php
+listusertags.php
+login.php
+loginstyle.php
+logout.php
+makebookmark.php
+menu.php
+moduleinterface.php
+multicontent.php
+multistylesheet.php
+multitemplate.php
+myedituser.php
+pagedefaults.php
+siteprefs.php
+style.php
+systeminfo.php
+tab.php
+templatecss.php
+topadmin.php
+topcontent.php
+topextensions.php
+toplayout.php
+topmyprefs.php
+topusers.php
