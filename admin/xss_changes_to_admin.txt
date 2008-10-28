@@ -55,14 +55,14 @@ imagefiles.php
 index.php
 lang.php
 listbookmarks.php
-listcontent.php
+listcontent.php            completed      calguy1000
 listcssassoc.php
 listcss.php
 listgroups.php
 listhtmlblobs.php
 listmodules.php
 listtags.php
-listtemplates.php          completed     calguy1000
+listtemplates.php          completed      calguy1000
 listusers.php
 listusertags.php
 login.php

@@ -24,6 +24,8 @@ require_once("../include.php");
 
 check_login();
 $userid = get_userid();
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+$thisurl=basename(__FILE__).$urlext;
 
 include_once("../lib/classes/class.admintheme.inc.php");
 
@@ -569,6 +571,8 @@ function check_children(&$root, &$mypages, &$userid)
 
 function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$copyImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages, &$page)
 {
+  global $thisurl;
+  global $urlext;
     global $currow;
     global $config;
     global $page;
@@ -622,13 +626,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         {
             if (!in_array($one->Id(),$openedArray))
             {
-                $thelist .= "<a href=\"listcontent.php?content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'false'); return false;\">";
+                $thelist .= "<a href=\"{$thisurl}&amp;content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'false'); return false;\">";
                 $thelist .= $expandImg;
                 $thelist .= "</a>";
             }
             else
             {
-                $thelist .= "<a href=\"listcontent.php?content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'true'); return false;\">";
+                $thelist .= "<a href=\"{$thisurl}&amp;content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'true'); return false;\">";
                 $thelist .= $contractImg;
                 $thelist .= "</a>";
             }
@@ -662,7 +666,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         } ## if indent
 
         if ($display == 'edit')
-            $thelist .= '<a href="editcontent.php?content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($one->mMenuText, '', '', true) . '</a></td>'. "\n";
+            $thelist .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($one->mMenuText, '', '', true) . '</a></td>'. "\n";
         else
             $thelist .= cms_htmlentities($one->mMenuText, '', '', true) . "</td>\n";
 
@@ -676,7 +680,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	    if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name &&
 		check_permission($userid,'Modify Templates'))
 	      {
-		$thelist .= "<td><a href=\"edittemplate.php?template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($templates[$one->TemplateId()]->name, '', '', true)."</a></td>\n";
+		$thelist .= "<td><a href=\"edittemplate.php".$urlext."&amp;template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($templates[$one->TemplateId()]->name, '', '', true)."</a></td>\n";
 	      }
 	    else
 	      {
@@ -700,11 +704,11 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
             {
                 if($one->Active())
                 {
-                    $thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\" onclick=\"xajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>")."</td>\n";
+                    $thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;setinactive=".$one->Id()."\" onclick=\"xajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>")."</td>\n";
                 }
                 else
                 {
-                    $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?setactive=".$one->Id()."\" onclick=\"xajax_content_setactive(".$one->Id().");return false;\">".$image_set_true."</a></td>\n";
+                    $thelist .= "<td class=\"pagepos\"><a href=\"{$thisurl}&amp;setactive=".$one->Id()."\" onclick=\"xajax_content_setactive(".$one->Id().");return false;\">".$image_set_true."</a></td>\n";
                 }
             }
             else
@@ -716,7 +720,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		{
 			if ($one->IsDefaultPossible() && ($display == 'edit' || $display == 'structure'))
 			{
-				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_htmlentities(lang("confirmdefault", $one->mName), '', '', true)."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
+				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_htmlentities(lang("confirmdefault", $one->mName), '', '', true)."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
 			}
 			else
 			{
@@ -736,21 +740,21 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 {
                     if (($one->ItemOrder() - 1)==0) #first
                     { 
-                        $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
                         $thelist .= $downImg;
                         $thelist .= "</a>";
                     }
                     else if (($one->ItemOrder() - 1) == $sameLevel-1) #last
                     {
-                        $thelist .= "&nbsp;<a class=\"move_up\" onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= "&nbsp;<a class=\"move_up\" onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
                         $thelist .= $upImg;
                         $thelist .= "</a>";
                     }
                     else #middle
                     {
-                        $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
                         $thelist .= $downImg;
-                        $thelist .= "</a>&nbsp;<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= "</a>&nbsp;<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
                         $thelist .= $upImg;
                         $thelist .= "</a>";
                     }
@@ -780,7 +784,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	      // copy link
 	      if( $one->IsCopyable() )
 		{
-		  $thelist .= '<td class="pagepos"><a href="copycontent.php?content_id='.$one->Id().'">';
+		  $thelist .= '<td class="pagepos"><a href="copycontent.php'.$urlext.'&amp;content_id='.$one->Id().'">';
 		  $thelist .= $copyImg;
 		  $thelist .= "</a></td>\n";
 		}
@@ -790,7 +794,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		}
               
               // edit link
-                $thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
+                $thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php".$urlext."&amp;content_id=".$one->Id()."\">";
                 $thelist .= $editImg;
                 $thelist .= "</a></td>\n";
             }
@@ -811,7 +815,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 				//var_dump($one->ChildCount());
                 if ($root->getChildrenCount() == 0 && (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages')))
                 {
-                    $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_htmlentities(lang('deleteconfirm', $one->mName), '', '', true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
+                    $thelist .= "<td class=\"pagepos\"><a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_htmlentities(lang('deleteconfirm', $one->mName), '', '', true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
                     $thelist .= $deleteImg;
                     $thelist .= "</a></td>\n";
                 }
@@ -857,6 +861,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 function display_content_list($themeObject = null)
 {
 	global $gCms;
+	global $thisurl;
+	global $urlext;
 
 	check_login();
 	$userid = get_userid();
@@ -945,18 +951,18 @@ function display_content_list($themeObject = null)
 	$headoflist .= '<div class="pageoverflow"><p class="pageoptions">';
 	if (check_permission($userid, 'Add Pages'))
 	{
-		$headoflist .=  '<a href="addcontent.php" class="pageoptions">';
+		$headoflist .=  '<a href="addcontent.php'.$urlext.'" class="pageoptions">';
         $headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
-        $headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a>';
+        $headoflist .= ' <a class="pageoptions" href="addcontent.php'.$urlext.'">'.lang("addcontent").'</a>';
 	}
 	if (check_permission($userid, 'Add Pages') || check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
 	{
           if (check_permission($userid, 'Modify Page Structure'))      {
             if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
             {
-                $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="listcontent.php?error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">';
+                $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">';
                 $headoflist .= $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon').'</a>';
-                $headoflist .= ' <a href="listcontent.php?error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
+                $headoflist .= ' <a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
             }
           }
 	}
@@ -1025,29 +1031,29 @@ function display_content_list($themeObject = null)
 	if (check_permission($userid, 'Add Pages'))
 	{
 ?>
-			<a href="addcontent.php" class="pageoptions">
+			<a href="addcontent.php<?php echo $urlext ?>" class="pageoptions">
 <?php 
             echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
-            echo ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent");
+            echo ' <a class="pageoptions" href="addcontent.php'.$urlext.'">'.lang("addcontent");
 ?>
 			</a>
 <?php 
     } 
 ?>
-		<a style="margin-left: 10px;" href="listcontent.php?expandall=1" onclick="xajax_content_expandall(); return false;">
+		<a style="margin-left: 10px;" href="'.$thisurl.'&amp;expandall=1" onclick="xajax_content_expandall(); return false;">
 <?php 
 			echo $themeObject->DisplayImage('icons/system/expandall.gif', lang('expandall'),'','','systemicon').'</a>';
-		echo ' <a class="pageoptions" href="listcontent.php?expandall=1" onclick="xajax_content_expandall(); return false;">'.lang("expandall");
+		echo ' <a class="pageoptions" href="'.$thisurl.'&amp;expandall=1" onclick="xajax_content_expandall(); return false;">'.lang("expandall");
 ?>
 			</a>&nbsp;&nbsp;&nbsp;
-		<a href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">
+		<a href="<?php echo $thisurl ?>&collapseall=1" onclick="xajax_content_collapseall(); return false;">
 <?php 
 			echo $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
-		echo ' <a class="pageoptions" href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall").'</a>';
+		echo ' <a class="pageoptions" href="'.$thisurl.'&amp;collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall").'</a>';
 		if (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure'))
 		{
 			$image_reorder = $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon');
-			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="listcontent.php?error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.'</a> <a class="pageoptions" href="listcontent.php?error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
+			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="'.$thisurl.'&amp;error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.'</a> <a class="pageoptions" href="'.$thisurl.'&amp;error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
 		}
 ?>
 			</div>
@@ -1073,7 +1079,7 @@ $hierManager =& $gCms->GetHierarchyManager();
 if (isset($_GET["makedefault"]))
 {
 	setdefault($_GET['makedefault']);
-	redirect('listcontent.php');
+	redirect($thisurl);
 }
 
 // check if we're activating a page
@@ -1101,7 +1107,7 @@ if (isset($_GET['collapseall']))
 if (isset($_GET['deletecontent']))
 {
 	deletecontent($_GET['deletecontent']);
-	redirect('listcontent.php');
+	redirect($thisurl);
 }
 
 if (isset($_GET['direction']))
