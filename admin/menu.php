@@ -1,10 +1,11 @@
 <div id="navcontainer">
 
 <?php
-
+die('this file is not used');
 $userid = get_userid();
 global $gCms;
 $db =& $gCms->GetDb();
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 ?>
 
