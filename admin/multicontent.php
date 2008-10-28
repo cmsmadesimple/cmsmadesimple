@@ -21,11 +21,13 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+check_login();
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+$thisurl=basename(__FILE__).$urlext;
 
 if (isset($_POST['cancel']))
-	redirect('listcontent.php');
+	redirect('listcontent.php'.$urlext);
 
-check_login();
 $userid = get_userid();
 
 $action = '';
@@ -203,7 +205,7 @@ else
 
 if (count($nodelist) == 0 && 'reorder' != $action)
 {
-	redirect("listcontent.php");
+	redirect("listcontent.php".$urlext);
 }
 else
 {
@@ -218,14 +220,14 @@ else
             check_permission($userid, 'Modify Page Structure'));
 		if ($access)
 		{
-			echo '<form method="post" action="multicontent.php">' . "\n";
+			echo '<form method="post" action="{$thisurl}">' . "\n";
 			echo '<p>'.lang('deletepages').'</p><p>' . "\n";
 			$idlist = array();
 			foreach ($nodelist as $node)
 			{
 			  if ($node->DefaultContent())
 			    {
-			      redirect('listcontent.php?error=error_delete_default_parent');
+			      redirect('listcontent.php'.$urlext.'&amp;error=error_delete_default_parent');
 			    }
 
 				echo $node->Name() . ' (' . $node->Hierarchy() . ')' . '<br />' . "\n";
@@ -250,7 +252,7 @@ else
 		}
 		else
 		{
-			redirect('listcontent.php');
+			redirect('listcontent.php'.$urlext);
 		}
 	}
         else if ($action == 'settemplate')
@@ -271,6 +273,7 @@ else
 	    $smarty->assign('text_template',lang('template'));
             $smarty->assign('text_submit',lang('submit'));
 	    $smarty->assign('text_cancel',lang('cancel'));
+	    $smarty->assign('formurl',$thisurl);
 	    echo $smarty->fetch('multicontent_template.tpl');
 	  }
         else if ($action == 'dosettemplate')
@@ -289,7 +292,7 @@ else
 		  }
 	      }
 
-	    redirect('listcontent.php');
+	    redirect('listcontent.php'.$urlext);
 	  }
 	else if ($action == 'dodelete')
 	{
@@ -343,7 +346,7 @@ else
 			ContentManager::SetAllHierarchyPositions();
 		}
 		//include_once("footer.php");
-		redirect("listcontent.php");
+		redirect("listcontent.php".$urlext);
 	}
 	else if ($action == 'inactive')
 	{
@@ -363,7 +366,7 @@ else
 				}
 			}
 		}
-		redirect("listcontent.php");
+		redirect("listcontent.php".$urlext);
 	}
 	else if ($action == 'active')
 	{
@@ -383,7 +386,7 @@ else
 				}
 			}
 		}
-		redirect("listcontent.php");
+		redirect("listcontent.php".$urlext);
 	}
         else if ($action == 'setcachable' || $action == 'setnoncachable')
         {
@@ -402,7 +405,7 @@ else
 			   $node->Save();
 			}
 		}
-		redirect("listcontent.php");
+		redirect("listcontent.php".$urlext);
         }
         else if ($action == 'showinmenu' || $action == 'hidefrommenu')
         {
@@ -421,22 +424,22 @@ else
 			   $node->Save();
 			}
 		}
-		redirect("listcontent.php");
+		redirect("listcontent.php".$urlext);
         }
 	else if ($action == 'reorder')
 	{
 	  if (FALSE == $reorder_error)
 	    {
-	      redirect('listcontent.php?message=pages_reordered');
+	      redirect('listcontent.php'.$urlext.'&amp;message=pages_reordered');
 	    }
 	  else
 	    {
-	      redirect('listcontent.php?error='.$reorder_error);
+	      redirect('listcontent.php'.$urlext.'&amp;error='.$reorder_error);
 	    }
 	}
 	else
 	{
-		redirect('listcontent.php');
+		redirect('listcontent.php'.$urlext);
 	}
 }
 

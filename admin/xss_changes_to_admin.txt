@@ -47,40 +47,40 @@ edittemplate.php
 edituser.php
 edituserplugin.php
 eventhandlers.php
-files.php
-footer.php                 not needed     calguy1000
-header.php                 not needed     calguy1000
-home.php                   completed      calguy1000
+files.php                   not needed    calguy1000
+footer.php                  not needed    calguy1000
+header.php                  not needed    calguy1000
+home.php                    completed     calguy1000
 imagefiles.php
-index.php                  not needed     calguy1000
-lang.php                   not needed     calguy1000
+index.php                   not needed    calguy1000
+lang.php                    not needed    calguy1000
 listbookmarks.php
-listcontent.php            completed      calguy1000
+listcontent.php             completed     calguy1000
 listcssassoc.php
-listcss.php
+listcss.php                 completed     calguy1000
 listgroups.php
 listhtmlblobs.php
 listmodules.php
 listtags.php
-listtemplates.php          completed      calguy1000
+listtemplates.php           completed     calguy1000
 listusers.php
 listusertags.php
 login.php
 loginstyle.php
 logout.php
 makebookmark.php
-menu.php                   remove me      calguy1000
+menu.php                    remove me     calguy1000
 moduleinterface.php
-multicontent.php
+multicontent.php            completed     calguy1000
 multistylesheet.php
 multitemplate.php
 myedituser.php
-pagedefaults.php
-siteprefs.php
-style.php
+pagedefaults.php            completed     calguy1000
+siteprefs.php               completed     calguy1000
+style.php                   not needed    calguy1000
 systeminfo.php
 tab.php                     not needed    calguy1000
-templatecss.php
+templatecss.php             completed     calguy1000
 topadmin.php		    not needed    calguy1000
 topcontent.php              not needed    calguy1000
 topextensions.php           not needed    calguy1000

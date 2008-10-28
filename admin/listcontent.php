@@ -968,6 +968,7 @@ function display_content_list($themeObject = null)
 	}
 	$headoflist .='</p></div>';
 	$headoflist .= '<form action="multicontent.php" method="post">';
+	$headoflist .= '<div><input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'"/></div>'."\n";
 	$headoflist .= '<table cellspacing="0" class="pagetable">'."\n";
 	$headoflist .= '<thead>';
 	$headoflist .= "<tr>\n";

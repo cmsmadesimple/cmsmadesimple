@@ -23,6 +23,7 @@ $CMS_TOP_MENU='admin';
 $CMS_ADMIN_TITLE='pagedefaults';
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
@@ -38,7 +39,7 @@ $error = "";
 $message = "";
 
 if (isset($_POST["cancel"])) {
-	redirect("index.php");
+	redirect("index.php".$urlext);
 	return;
 }
 
@@ -111,7 +112,7 @@ if ($message != "") {
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('pagedefaults'); ?>
     <?php if( $access) { ?>
-	<form id="pagedefaultsform" method="post" action="pagedefaults.php">
+	<form id="pagedefaultsform" method="post" action="pagedefaults.php<? echo $urlext ?>">
 
         <!-- the submit/cancel buttons -->
         <div class="pageoverflow">

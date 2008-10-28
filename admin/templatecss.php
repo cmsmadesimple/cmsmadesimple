@@ -38,6 +38,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -154,12 +155,12 @@ else {
 			$csslist[] = $one["assoc_to_id"];
 		 
 			echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-			echo "<td><a href=\"edittemplate.php?template_id=".$one["assoc_to_id"]."&amp;from=cssassoc&amp;cssid=".$id."\">".$one["template_name"]."</a></td>\n";
+			echo "<td><a href=\"edittemplate.php".$urlext."&amp;template_id=".$one["assoc_to_id"]."&amp;from=cssassoc&amp;cssid=".$id."\">".$one["template_name"]."</a></td>\n";
 
 			# if user has right to delete
 			if ($delasso)
 			{
-				echo "<td><a href=\"deletetemplateassoc.php?id=".$id."&amp;template_id=".$one["assoc_to_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteassociationconfirm',$one['template_name'] )."');\">";
+				echo "<td><a href=\"deletetemplateassoc.php".$urlext."&amp;id=".$id."&amp;template_id=".$one["assoc_to_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteassociationconfirm',$one['template_name'] )."');\">";
                 echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                 echo "</a></td>\n";
 			}
@@ -206,7 +207,7 @@ else {
 
 	if ($result && $result->RecordCount() > 0)
 	{
-		echo "<form action=\"addtemplateassoc.php\" method=\"post\">";
+		echo "<form action=\"addtemplateassoc.php{$urlext}\" method=\"post\">";
 		echo '<div class="pageoverflow"><p class="pageoptions">';
 		echo "<select name=\"template_id\">\n";
 		while ($line = $result->FetchRow())

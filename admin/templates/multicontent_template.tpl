@@ -1,7 +1,7 @@
 <div class="pagecontainer">
    <h3>{$text_settemplate}</h3>
        
-   <form method="post" action="multicontent.php">
+   <form method="post" action="{$formurl}">
    <div>
       <input type="hidden" name="multiaction" value="dosettemplate" />
       <input type="hidden" name="idlist" value="{":"|implode:$idlist}" />

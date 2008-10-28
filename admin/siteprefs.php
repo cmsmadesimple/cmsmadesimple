@@ -23,6 +23,8 @@ $CMS_TOP_MENU='admin';
 $CMS_ADMIN_TITLE='preferences';
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+$thisurl=basename(__FILE__).$urlext;
 
 function siteprefs_display_permissions($permsarr)
 {
@@ -132,7 +134,7 @@ $userid = get_userid();
 $access = check_permission($userid, 'Modify Site Preferences');
 
 if (isset($_POST["cancel"])) {
-	redirect("index.php");
+	redirect("index.php".$urlext);
 	return;
 }
 
@@ -224,8 +226,6 @@ else if (isset($_POST["editsiteprefs"]))
       set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
       set_site_preference('enablenotifications',$enablenotifications);
       audit(-1, '', 'Edited Site Preferences');
-      //redirect("siteprefs.php");
-      //return;
       $message .= lang('prefsupdated');
     }
   else
@@ -288,7 +288,7 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('siteprefs'); ?>
-	<form id="siteprefform" method="post" action="siteprefs.php">
+	<form id="siteprefform" method="post" action="<?php echo $thisurl ?>">
 	<?php if ($access) { ?>
 	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>
