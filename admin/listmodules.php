@@ -24,6 +24,7 @@ $LOAD_ALL_MODULES=1;
 require_once("../include.php");
 
 check_login();
+$thisurl=basename(__FILE__).'?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 $module = "";
 if (isset($_GET["module"])) $module = $_GET["module"];
@@ -66,7 +67,7 @@ if ($access)
 		}
 		else
 		{
-			redirect("listmodules.php");
+			redirect($thisurl);
 		}
 	}
 
@@ -125,25 +126,8 @@ if ($access)
 			else if( $autoinstallupgrade == 0 )
 			{
 				// no auto install or upgrade
-				redirect("listmodules.php");
+				redirect($thisurl);
 			}
-			// note, wishy, when you dig in here next, everything below here
-			// can probably go.
-			/*
-			else if( !isset( $gCms->modules[$result['name']] ) )
-			{
-				// looks like we're installing this module
-				redirect("listmodules.php?action=install&module=".$result['name']);
-			}
-			else 
-			{ 
-				// allow the auto upgrade stuff to do it's thing
-				// need new version and old version
-				$oldversion = $gCms->modules[$result['name']]['object']->GetVersion();
-				$newversion = $result['version'];
-				redirect("listmodules.php?action=upgrade&module=".$result['name']."&oldversion=".$oldversion."&newversion=".$newversion);
-			}
-			*/
 		}  
 	}
 
@@ -157,7 +141,7 @@ if ($access)
 			echo '<p class="pageheader">'.lang('moduleerrormessage', $module).'</p>';					
 			echo $result[1];
 			echo "</div>";
-			echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+			echo '<p class="pageback"><a class="pageback" href="{$thisurl}">&#171; '.lang('back').'</a></p>';
 			include_once("footer.php");
 			exit;
 		}
@@ -167,10 +151,10 @@ if ($access)
 			if( $content != FALSE )
 			{
 				//Redirect right away so that the installed module shows in the menu
-				redirect('listmodules.php?action=showpostinstall&module='.$module);
+				redirect($thisurl.'&amp;action=showpostinstall&amp;module='.$module);
 			}
 			// all is good, but no postinstall message
-			redirect("listmodules.php");
+			redirect($thisurl);
 		}
 	}
 
@@ -201,12 +185,12 @@ if ($access)
 			echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
 			echo lang('cantremovefiles');
 			echo "</div>";
-			echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+			echo '<p class="pageback"><a class="pageback" href="'.$thisurl.'">&#171; '.lang('back').'</a></p>';
 			include_once("footer.php");
 		}
 		else
 		{
-			redirect("listmodules.php");
+			redirect($thisurl);
 		}
 	}
 
@@ -222,7 +206,7 @@ if ($access)
 			@ob_end_clean();
 			echo $themeObject->ShowErrors(lang('moduleupgradeerror'));
 		}
-		redirect("listmodules.php");
+		redirect($thisurl);
 	}
 
 
@@ -250,7 +234,7 @@ if ($access)
 				if ($modinstance->UninstallPostMessage() != FALSE)
 				{
 					//Redirect right away so that the uninstalled module is removed from the menu
-					redirect('listmodules.php?action=showpostuninstall&module='.$module);
+					redirect($thisurl.'&amp;action=showpostuninstall&amp;module='.$module);
 				}
 			}
 			else
@@ -259,7 +243,7 @@ if ($access)
 			}
 		}
 
-		redirect("listmodules.php");
+		redirect($thisurl);
 	}
 
 	if ($action == 'showpostuninstall')
@@ -283,14 +267,14 @@ if ($access)
 	{
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
 		$db->Execute($query, array(1,$module));
-		redirect("listmodules.php");
+		redirect($thisurl);
 	}
 
 	if ($action == "setfalse")
 	{
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
 		$db->Execute($query, array(0,$module));
-		redirect("listmodules.php");
+		redirect($thisurl);
 	}
 }
 
@@ -303,7 +287,7 @@ if ($action == "showmoduleabout")
 		echo $gCms->modules[$module]['object']->GetAbout();
 		echo "</div>";
 	}
-	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+	echo '<p class="pageback"><a class="pageback" href="'.$thisurl.'">&#171; '.lang('back').'</a></p>';
 }
 else if ($action == "showmodulehelp")
 {
@@ -349,7 +333,7 @@ else if ($action == "showmodulehelp")
 		echo "</div>";
 	}
 
-	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+	echo '<p class="pageback"><a class="pageback" href="'.$thisurl.'">&#171; '.lang('back').'</a></p>';
 }
 else if ($action == 'missingdeps')
 {
@@ -393,7 +377,7 @@ else if ($action == 'missingdeps')
 	echo '</tbody>';
 	echo '</table>';
 	echo '</div>';
-	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+	echo '<p class="pageback"><a class="pageback" href="'.$thisurl.'">&#171; '.lang('back').'</a></p>';
 }
 else
 {
@@ -470,12 +454,12 @@ else
 
 			$xmlcol = "&nbsp;";
 
-			$xmlcol = '<a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'" /></a>';
+			$xmlcol = '<a href="'.$thisurl.'&amp;action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'" /></a>';
 
 			//Is there help?
 			if ($modinstance->GetHelp() != '')
 			{
-				$namecol = "<a href=\"listmodules.php?action=showmodulehelp&amp;module=".$key."\">".$key."</a>";
+				$namecol = "<a href=\"{$thisurl}&amp;action=showmodulehelp&amp;module=".$key."\">".$key."</a>";
 			}
 
 			// check these modules permissions to see if we can uninstall this thing
@@ -526,11 +510,11 @@ else
 
 				if ($brokendeps > 0)
 				{
-					$actioncol[] = '<a href="listmodules.php?action=missingdeps&amp;module='.$key.'">'.lang('missingdependency').'</a>';
+					$actioncol[] = '<a href="'.$thisurl.'&amp;action=missingdeps&amp;module='.$key.'">'.lang('missingdependency').'</a>';
 				}
 				else if( $maxverok == 1)
 				{
-					$actioncol[] = "<a href=\"listmodules.php?action=install&amp;module=".$key."\">".lang('install')."</a>";
+					$actioncol[] = "<a href=\"{$thisurl}&amp;action=install&amp;module=".$key."\">".lang('install')."</a>";
 					$xmlcol = '&nbsp;';
 				}
 
@@ -538,11 +522,11 @@ else
 				{
 					if( $permsok )
 					{
-						$actioncol[] .= "<a href=\"listmodules.php?action=remove&amp;module=".$key."\" onclick=\"return confirm('".lang('removeconfirm')."');\">".lang('remove')."</a>";
+						$actioncol[] .= "<a href=\"{$thisurl}&amp;action=remove&amp;module=".$key."\" onclick=\"return confirm('".lang('removeconfirm')."');\">".lang('remove')."</a>";
 					}
 					else
 					{
-						$actioncol[] = "<a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
+						$actioncol[] = "<a href=\"{$thisurl}&amp;action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
 					}
 				}
 			}
@@ -553,10 +537,10 @@ else
 			        $xmlcol = "&nbsp;";
 				$versioncol = $dbm[$key]['Version'];
 				$statuscol[]  = '<span class="important">'.lang('needupgrade').'</span>';
-				$activecol  = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
+				$activecol  = ($dbm[$key]['Active']==true?"<a href='{$thisurl}&amp;action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='{$thisurl}&amp;action=settrue&amp;module=".$key."'>".$image_false."</a>");
 			  if( $maxverok == 1)
 			    {
-				$actioncol[]  = "<a href=\"listmodules.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a>";
+				$actioncol[]  = "<a href=\"{$thisurl}&amp;action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a>";
 			    }
 			  $xmlcol = '&nbsp;';
 			}
@@ -569,8 +553,8 @@ else
 				#Can't be removed if it has a dependency...
 				if (!$modinstance->CheckForDependents())
 				{
-					$activecol = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
-					$actioncol[] = "<a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->UninstallPreMessage() !== FALSE? cms_utf8entities($modinstance->UninstallPreMessage()):lang('uninstallconfirm').' '.$key)."');\">".lang('uninstall')."</a>";
+					$activecol = ($dbm[$key]['Active']==true?"<a href='{$thisurl}&amp;action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='{$thisurl}&amp;action=settrue&amp;module=".$key."'>".$image_false."</a>");
+					$actioncol[] = "<a href=\"{$thisurl}&amp;action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->UninstallPreMessage() !== FALSE? cms_utf8entities($modinstance->UninstallPreMessage()):lang('uninstallconfirm').' '.$key)."');\">".lang('uninstall')."</a>";
 				}
 				else
 				{
@@ -583,7 +567,7 @@ else
 						$dependentof[$row['child_module']] = "";
 					}
 					$str = implode(array_keys($dependentof),", ");
-					$activecol = ($dbm[$key]['Active']==true?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
+					$activecol = ($dbm[$key]['Active']==true?$image_true:"<a href='{$thisurl}&amp;action=settrue&amp;module=".$key."'>".$image_false."</a>");
 					$statuscol[] = lang('hasdependents')." (<strong>$str</strong>)";
 					// END HAS DEPENDENTS ===========
 				}
@@ -591,18 +575,18 @@ else
 				if( !$permsok )
 				{
 					$statuscol[] = lang('cantremove');
-					$actioncol[] = "<a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
+					$actioncol[] = "<a href=\"{$thisurl}&amp;action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
 				}
 			}
 
 			//Is there help?
 			if ($modinstance->GetHelp() != '')
 			{
-				$helpcol = "<a href=\"listmodules.php?action=showmodulehelp&amp;module=".$key."\">".lang('help')."</a>";
+				$helpcol = "<a href=\"{$thisurl}&amp;action=showmodulehelp&amp;module=".$key."\">".lang('help')."</a>";
 			}
 
 			//About is constructed from other details now
-			$aboutcol = "<a href=\"listmodules.php?action=showmoduleabout&amp;module=".$key."\">".lang('about')."</a>";
+			$aboutcol = "<a href=\"{$thisurl}&amp;action=showmoduleabout&amp;module=".$key."\">".lang('about')."</a>";
 
 			// row output
 			echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
@@ -640,7 +624,7 @@ else
 		else
 		  {
 			?>
-			<form method="post" action="listmodules.php?action=importxml" enctype="multipart/form-data">
+			<form method="post" action="<?php echo $thisurl?>&amp;action=importxml" enctype="multipart/form-data">
 			<fieldset>
 			<legend><?php echo lang('uploadxmlfile')?></legend>
 			<div class="pageoverflow">

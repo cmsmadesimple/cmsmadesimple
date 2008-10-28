@@ -85,11 +85,27 @@ function check_login($no_redirect = false)
 			return false;
 		}
 	}
-	else
-	{
-		debug_buffer('Session found.  Moving on...');
-		return true;
-	}
+
+	debug_buffer('Session found.  Moving on...');
+
+	global $CMS_ADMIN_PAGE;
+	if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE))
+	  {
+	    // now we've got to check the request
+	    // and make sure it matches the session key
+	    if( !isset($_SESSION[CMS_USER_KEY]) || 
+		!isset($_REQUEST[CMS_SECURE_PARAM_NAME]) ||
+		($_REQUEST[CMS_SECURE_PARAM_NAME] != $_SESSION[CMS_USER_KEY]))
+	      {
+		debug_buffer('Session key mismatch problem... redirect to login');
+		if (false == $no_redirect)
+		  {
+		    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+		  }
+		return false;
+	      }
+	  }
+	return true;
 }
 
 /**

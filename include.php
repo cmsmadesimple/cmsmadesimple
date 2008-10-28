@@ -21,6 +21,10 @@
 $dirname = dirname(__FILE__);
 require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 
+define('CMS_DEFAULT_VERSIONCHECK_URL','http://dev.cmsmadesimple.org/latest_version.php');
+define('CMS_SECURE_PARAM_NAME','_s_');
+define('CMS_USER_KEY','cmsuserkey');
+
 $session_key = substr(md5($dirname), 0, 8);
 
 #Setup session with different id and start it
@@ -33,6 +37,15 @@ if(!@session_id())
     @ini_set('url_rewriter.tags', '');
     @ini_set('session.use_trans_sid', 0);
     @session_start();
+    if( isset($CMS_ADMIN_PAGE) )
+      {
+	if( !isset($_SESSION[CMS_USER_KEY]) )
+	  {
+	    // maybe change this algorithm.
+	    $key = substr(md5($dirname.time().session_id()),-8);
+	    $_SESSION[CMS_USER_KEY] = $key;
+	  }
+      }
 }
 
 /**
@@ -156,8 +169,6 @@ closedir($handle);
 if (!defined('SMARTY_DIR')) {
     define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
 }
-
-define('CMS_DEFAULT_VERSIONCHECK_URL','http://dev.cmsmadesimple.org/latest_version.php');
 
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())

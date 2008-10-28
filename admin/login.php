@@ -58,6 +58,7 @@ else if ( isset($_SESSION['redirect_url']) )
 			if( !file_exists($tmp[0]) ) $homepage = 'index.php';
 		}
 		$dest = $dest.'/'.$homepage;
+		$dest .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 		redirect($dest);
 	}
 }
@@ -168,6 +169,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			    $tmp = explode('?',$homepage);
 			    if( !file_exists($tmp[0]) ) $homepage = 'index.php';
 			  }
+			  $homepage .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			  redirect($homepage);
 			}
 		}

@@ -207,7 +207,7 @@ class AdminTheme
 
             foreach($this->modulesBySection[$section] as $sectionModule)
 	      {
-                $modList[$sectionModule['key']]['url'] = "moduleinterface.php?module=".
+                $modList[$sectionModule['key']]['url'] = "moduleinterface.php?".CMS_SECURE_PARAM_NAME."=".$_SESSION[CMS_USER_KEY]."&module=".
 		  $sectionModule['key'];
                 $modList[$sectionModule['key']]['description'] = $sectionModule['description'];
                 $modList[$sectionModule['key']]['name'] = $sectionModule['name'];
@@ -697,8 +697,8 @@ class AdminTheme
                     'title'=>$this->FixSpaces(lang('viewsite')),
                     'description'=>'','show_in_menu'=>true, 'target'=>'_blank'),
              'logout'=>array('url'=>'logout.php','parent'=>'main',
-                    'title'=>$this->FixSpaces(lang('logout')),
-                    'description'=>'','show_in_menu'=>true),
+			     'title'=>$this->FixSpaces(lang('logout')),
+			     'description'=>'','show_in_menu'=>true),
             // base content menu ---------------------------------------------------------
             'content'=>array('url'=>'topcontent.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('content')),
@@ -835,8 +835,8 @@ class AdminTheme
                     'description'=>lang('adminlogdescription'),'show_in_menu'=>$this->HasPerm('adminPerms')),
              // base my prefs menu ---------------------------------------------------------
             'myprefs'=>array('url'=>'topmyprefs.php','parent'=>-1,
-                    'title'=>$this->FixSpaces(lang('myprefs')),
-                    'description'=>lang('myprefsdescription'),'show_in_menu'=>true),
+			     'title'=>$this->FixSpaces(lang('myprefs')),
+			     'description'=>lang('myprefsdescription'),'show_in_menu'=>true),
             'myaccount'=>array('url'=>'myedituser.php','parent'=>'myprefs',
                     'title'=>$this->FixSpaces(lang('myaccount')),
                     'description'=>lang('myaccountdescription'),'show_in_menu'=>true),
@@ -854,7 +854,18 @@ class AdminTheme
                     'description'=>lang('editbookmark'),'show_in_menu'=>false),
     	);
 
-	// add in all of the 'system' modules todo
+
+	// adjust all the urls to include the session key
+	foreach( $this->menuItems as $sectionKey => $sectionArray )
+	  {
+	    if( isset($sectionArray['url']) )
+	      {
+		$this->menuItems[$sectionKey]['url'] .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+	      }
+	  }
+
+
+	// add in all of the 'system' modules too
 	global $gCms;
         foreach ($this->menuItems as $sectionKey=>$sectionArray)
 	  {
@@ -937,7 +948,7 @@ class AdminTheme
 		  }
 	      }
 	  }
-	
+
 	// resolve the tree to be doubly-linked,
 	// and make sure the selections are selected            
         foreach ($this->menuItems as $sectionKey=>$sectionArray)

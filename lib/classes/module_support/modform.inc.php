@@ -61,31 +61,28 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	{
 		$text .= ' enctype="'.$enctype.'"';
 	}
-	/*
-	$text .= '><div class="hidden"><input type="hidden" name="module" value="'.$this->GetName().'" /><input type="hidden" name="id" value="'.$id.'" />';
-	if ($action != '')
-	{
-		$text .= '<input type="hidden" name="'.$id.'action" value="'.$action.'" />';
-	}
-	*/
 	if ($extra != '')
 	{
 		$text .= ' '.$extra;
 	}
-	$text .= '><div class="hidden"><input type="hidden" name="mact" value="'.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).'" />';
+	$text .= '>'."\n".'<div class="hidden">'."\n".'<input type="hidden" name="mact" value="'.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).'" />'."\n";
 	if ($returnid != '')
 	{
-		$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />';
+		$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />'."\n";
 		if ($inline)
 		{
-			$text .= '<input type="hidden" name="'.$modinstance->cms->config['query_var'].'" value="'.$returnid.'" />';
+			$text .= '<input type="hidden" name="'.$modinstance->cms->config['query_var'].'" value="'.$returnid.'" />'."\n";
 		}
 	}
+	else
+	  {
+	    $text .= '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />'."\n";
+	  }
 	foreach ($params as $key=>$value)
 	{
 	  $value = cms_htmlentities($value);
 	  if ($key != 'module' && $key != 'action' && $key != 'id')
-	    $text .= '<input type="hidden" name="'.$id.$key.'" value="'.$value.'" />';
+	    $text .= '<input type="hidden" name="'.$id.$key.'" value="'.$value.'" />'."\n";
 	}
 	$text .= "</div>\n";
 
@@ -430,8 +427,13 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 			$text .= '/'.$config['admin_dir'];
 		}
 
-		#$text .= '/'.$goto.'?module='.$modinstance->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-		$text .= '/'.$goto.'?mact='.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0);
+		$secureparam = '';
+		if( $returnid == '' )
+		  {
+		    $secureparam='&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		  }
+		#$text .= '/'.$goto.'?module='.$modinstance->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action.$secureparam;
+		$text .= '/'.$goto.'?mact='.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).$secureparam;
 
 		foreach ($params as $key=>$value)
 		{

@@ -64,6 +64,10 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
 	{
 		$text .= '&'.$id.'returnid='.$returnid;
 	}
+	else
+	  {
+	    $text .= '&'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+	  }
 	foreach ($params as $key=>$value)
 	{
 		$text .= '&'.$id.$key.'='.rawurlencode($value);
