@@ -50,7 +50,7 @@ eventhandlers.php
 files.php
 footer.php
 header.php
-home.php
+home.php                   completed      calguy1000
 imagefiles.php
 index.php
 lang.php

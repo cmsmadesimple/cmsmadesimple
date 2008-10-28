@@ -23,6 +23,7 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 check_login();
 
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 $userid = get_userid();
 $homepage = get_preference($userid,'homepage');
 if( $homepage == '' )
@@ -33,6 +34,7 @@ if( $homepage == '' )
   $tmp = explode('?',$homepage);
   if( !file_exists($tmp[0]) ) $homepage = 'index.php';
 }
+$homepage .= $urlext;
 redirect($homepage);
 
 ?>
