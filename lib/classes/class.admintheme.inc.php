@@ -860,7 +860,7 @@ class AdminTheme
 	// adjust all the urls to include the session key
 	foreach( $this->menuItems as $sectionKey => $sectionArray )
 	  {
-	    if( isset($sectionArray['url']) )
+	    if( isset($sectionArray['url']) && $sectionKey != 'viewsite' )
 	      {
 		$this->menuItems[$sectionKey]['url'] .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	      }

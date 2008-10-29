@@ -1483,7 +1483,7 @@ $lang['admin']['inactive'] = 'Inactive';
 $lang['admin']['deletetemplates'] = 'Delete Templates';
 $lang['admin']['templatestodelete'] = 'These templates will be deleted';
 $lang['admin']['wontdeletetemplateinuse'] = 'These templates are in use and will not be deleted';
-$lang['admin']['deletetemplate'] = 'Delete Stylesheets';
+$lang['admin']['deletetemplate'] = 'Delete Templates';
 $lang['admin']['stylesheetstodelete'] = 'These stylesheets will be deleted';
 $lang['admin']['sitename'] = 'Site Name';
 // Only used by admintheme::ShowHeader

@@ -74,7 +74,7 @@ else
 	{
 		?>
 		<div class="pagecontainer">
-			<p class="pageheader"><?php echo lang('deletetemplate') ?></p><br />
+			<p class="pageheader"><?php echo lang('deletetemplates') ?></p><br />
 		<?php
 		$userid = get_userid();
 		$access = check_permission($userid, 'Remove Templates');
