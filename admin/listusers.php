@@ -153,7 +153,7 @@ if (FALSE == empty($error)) {
 				echo "<td class=\"pagepos\"><a href=\"listusers.php".$urlext."&amp;toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
 				if ($edit || $userid == $oneuser->id)
 				    {
-					echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">";
+					echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">";
                     echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
                     }
@@ -189,7 +189,7 @@ if (check_permission($userid, 'Add Users')) {
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="adduser.php">
+			<a href="adduser.php<?php echo $urlext ?>">
 				<?php 
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('adduser'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="adduser.php'.$urlext.'">'.lang("adduser");

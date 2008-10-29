@@ -112,7 +112,10 @@ if ($message != "") {
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('pagedefaults'); ?>
     <?php if( $access) { ?>
-	<form id="pagedefaultsform" method="post" action="pagedefaults.php<? echo $urlext ?>">
+	<form id="pagedefaultsform" method="post" action="pagedefaults.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 
         <!-- the submit/cancel buttons -->
         <div class="pageoverflow">

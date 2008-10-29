@@ -288,7 +288,10 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('siteprefs'); ?>
-	<form id="siteprefform" method="post" action="<?php echo $thisurl ?>">
+	<form id="siteprefform" method="post" action="siteprefs.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 	<?php if ($access) { ?>
 	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>

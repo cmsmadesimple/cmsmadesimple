@@ -247,7 +247,7 @@ if ($add) {
 	<div class="pageoptions">
 		<p class="pageoptions">
 			<span style="float: left;">
-				<a href="addtemplate.php">
+				<a href="addtemplate.php<?php echo $urlext ?>">
 					<?php 
 						echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addtemplate'),'','','systemicon').'</a>';
 						echo ' <a class="pageoptions" href="addtemplate.php'.$urlext.'">'.lang("addtemplate");
