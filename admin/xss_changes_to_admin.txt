@@ -62,8 +62,8 @@ listgroups.php
 listhtmlblobs.php
 listmodules.php
 listtags.php
-listtemplates.php           
-listusers.php
+listtemplates.php           completed     silmarillion
+listusers.php               completed     silmarillion
 listusertags.php
 login.php
 loginstyle.php

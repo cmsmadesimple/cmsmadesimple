@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
@@ -148,8 +149,8 @@ if (FALSE == empty($error)) {
 		foreach ($userlist as $oneuser){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
   			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-				echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
-				echo "<td class=\"pagepos\"><a href=\"listusers.php?toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
+				echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
+				echo "<td class=\"pagepos\"><a href=\"listusers.php".$urlext."&amp;toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
 				if ($edit || $userid == $oneuser->id)
 				    {
 					echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">";
@@ -162,7 +163,7 @@ if (FALSE == empty($error)) {
 					}
 				if ($remove && $oneuser->id != 1)
 				    {
-					echo "<td><a href=\"deleteuser.php?user_id=".$oneuser->id."\" onclick=\"return confirm('".lang('deleteconfirm', $oneuser->username)."');\">";
+					echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".lang('deleteconfirm', $oneuser->username)."');\">";
                     echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
 		            }
@@ -191,7 +192,7 @@ if (check_permission($userid, 'Add Users')) {
 			<a href="adduser.php">
 				<?php 
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('adduser'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="adduser.php">'.lang("adduser");
+					echo ' <a class="pageoptions" href="adduser.php'.$urlext.'">'.lang("adduser");
 				?>
 			</a>
 		</p>
