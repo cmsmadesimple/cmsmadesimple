@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
@@ -38,7 +39,7 @@ $parentobj = $contentops->LoadContentFromId($fromobj->ParentId());
 // handle form submission
 if( isset($_GET['cancel']) )
 {
-   redirect('listcontent.php');
+   redirect('listcontent.php'.$urlext);
 }
 if( isset($_GET['submit']) )
 {
@@ -103,7 +104,7 @@ if( isset($_GET['submit']) )
       audit($fromobj->Id(),$fromobj->Alias(),'Content Item Copied to '.$tmpobj->Alias());
 
       // and redirect
-      redirect('listcontent.php');
+      redirect('listcontent.php'.$urlext);
     }
   else
     {
@@ -125,6 +126,8 @@ else
 }
 
 // build the output
+$smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
+$smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('showheader', $themeObject->ShowHeader('copycontent'));
 $smarty->assign('lang_pageid',lang('itemid'));
 $smarty->assign('lang_copyfrom',lang('copy_from'));

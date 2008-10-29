@@ -40,6 +40,9 @@
   <fieldset>
     <legend><strong>{$lang_copyto}:</strong></legend>
     <form action="copycontent.php">
+    <div>
+      <input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
+    </div>
     <div><input type="hidden" name="content_id" value="{$fromid}"></div>
 
     <div class="pageoverflow">
