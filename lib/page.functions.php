@@ -100,7 +100,6 @@ function check_login($no_redirect = false)
 		debug_buffer('Session key mismatch problem... redirect to login');
 		if (false == $no_redirect)
 		  {
-		    print_r( $_REQUEST ); die();
 		    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
 		  }
 		return false;
