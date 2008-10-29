@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
@@ -147,7 +148,7 @@ if (count($gCms->modules) > 0)
 	}
 	else
 	{
-		redirect("index.php");
+		redirect("index.php".$urlext);
 	}
 }
 
