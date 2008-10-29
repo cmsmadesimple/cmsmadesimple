@@ -38,6 +38,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -139,11 +140,11 @@ else
 #******************************************************************************
 if ($dodelete)
 {
-	redirect("templatecss.php?id=$id&type=$type");
+	redirect("templatecss.php".$urlext."&id=$id&type=$type");
 }
 else
 {
-	redirect("templatecss.php?id=$id&type=$type&message=$error");
+	redirect("templatecss.php".$urlext."&id=$id&type=$type&message=$error");
 }
 
 # vim:ts=4 sw=4 noet

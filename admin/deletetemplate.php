@@ -22,13 +22,14 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.template.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
-$from = 'listtemplates.php';
+$from = 'listtemplates.php'.$urlext;
 if (isset($_GET['from']) )
   {
-    $from = 'moduleinterface.php?module='.$_GET['from'];
+    $from = 'moduleinterface.php'.$urlext.'&module='.$_GET['from'];
   }
 
 
@@ -94,7 +95,7 @@ if ($dodelete)
 }
 else
 {
-  redirect($from."?message=".lang('errortemplateinuse'));
+  redirect($from.$urlext."&message=".lang('errortemplateinuse'));
 }
 
 # vim:ts=4 sw=4 noet

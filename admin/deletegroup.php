@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.group.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -33,7 +34,7 @@ if (isset($_GET["group_id"]))
 	if( $group_id == 1 )
 	  {
 	    // can't delete this group
-	    redirect("listgroups.php");
+	    redirect("listgroups.php".$urlext);
 	  }
 
 	$group_name = "";
@@ -85,7 +86,7 @@ if (isset($_GET["group_id"]))
 	}
 }
 
-redirect("listgroups.php");
+redirect("listgroups.php".$urlext);
 
 # vim:ts=4 sw=4 noet
 ?>

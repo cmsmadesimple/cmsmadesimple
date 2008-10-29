@@ -30,10 +30,10 @@ dashboard.php                not needed     silmarillion
 deletebookmark.php
 deletecssassoc.php           complete       calguy1000
 deletecss.php                complete       calguy1000
-deletegroup.php
+deletegroup.php              complete       calguy1000
 deletehtmlblob.php           complete       calguy1000
-deletetemplateassoc.php
-deletetemplate.php
+deletetemplateassoc.php      complete       calguy1000
+deletetemplate.php           complete       calguy1000
 deleteuser.php
 deleteuserplugin.php
 editbookmark.php
@@ -41,7 +41,7 @@ editcontent.php
 editcss.php
 editevent.php
 editgroup.php
-edithtmlblob.php
+edithtmlblob.php              complete      calguy1000
 editprefs.php                 complete      calguy1000
 edittemplate.php              complete      calguy1000
 edituser.php                  complete      calguy1000
