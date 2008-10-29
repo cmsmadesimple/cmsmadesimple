@@ -62,7 +62,7 @@ listgroups.php
 listhtmlblobs.php
 listmodules.php
 listtags.php
-listtemplates.php           completed     calguy1000
+listtemplates.php           
 listusers.php
 listusertags.php
 login.php
