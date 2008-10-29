@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.template.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 global $gCms;
@@ -75,16 +76,16 @@ if (isset($_POST["cancel"])) {
   switch($from)
     {
     case 'content':
-      redirect("listcontent.php");
+      redirect("listcontent.php".$urlext);
       break;
     case 'cssassoc':
-      redirect('templatecss.php?id='.$cssid.'&type=template');
+      redirect('templatecss.php'.$urlext.'&id='.$cssid.'&type=template');
       break;
     case 'module_TemplateManager':
-      redirect('moduleinterface.php?module=TemplateManager');
+      redirect('moduleinterface.php'.$urlext.'&module=TemplateManager');
       break;
     default:
-      redirect("listtemplates.php");
+      redirect("listtemplates.php".$urlext);
       break;
     }
 }
@@ -170,16 +171,16 @@ if ($access)
 				  switch($from)
 				    {
 				    case 'content':
-				      redirect("listcontent.php");
+				      redirect("listcontent.php".$urlext);
 				      break;
 				    case 'cssassoc':
-				      redirect('templatecss.php?id='.$cssid.'&type=template');
+				      redirect('templatecss.php'.$urlext.'&id='.$cssid.'&type=template');
 				      break;
 				    case 'module_TemplateManager':
-				      redirect('moduleinterface.php?module=TemplateManager');
+				      redirect('moduleinterface.php'.$urlext.'&module=TemplateManager');
 				      break;
 				    default:
-				      redirect("listtemplates.php");
+				      redirect("listtemplates.php".$urlext);
 				      break;
 				    }
 				}
@@ -362,10 +363,13 @@ else
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('edittemplate'); ?>
 	<form id="Edit_Template" method="post" action="edittemplate.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 			<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
-			      <?php echo $submitbtns; ?><a href="listcssassoc.php?type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>
+			      <?php echo $submitbtns; ?><a href="listcssassoc.php<?php echo $urlext ?>&amp;type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>
 			</a><?php echo " [" . lang('new_window') . "]" ;?></p>
             </div>
 		<div class="pageoverflow">
@@ -415,7 +419,7 @@ else
 				<input type="hidden" name="from" value="<?php echo $from?>" />
 				<input type="hidden" name="cssid" value="<?php echo $cssid?>" />
 				<input type="hidden" name="edittemplate" value="true" />
-			      <?php echo $submitbtns; ?><a href="listcssassoc.php?type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?></a><?php echo " [" . lang('new_window') . "]" ;?></p>
+			      <?php echo $submitbtns; ?><a href="listcssassoc.php<?php echo $urlext ?>&amp;type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?></a><?php echo " [" . lang('new_window') . "]" ;?></p>
 		</div>
 	</form>
 </div>

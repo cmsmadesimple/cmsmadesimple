@@ -43,7 +43,7 @@ editevent.php
 editgroup.php
 edithtmlblob.php
 editprefs.php                 complete      calguy1000
-edittemplate.php
+edittemplate.php              complete      calguy1000
 edituser.php
 edituserplugin.php            complete      calguy1000
 eventhandlers.php             complete      calguy1000
