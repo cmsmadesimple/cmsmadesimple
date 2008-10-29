@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.template.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -36,10 +37,10 @@ else if (isset($_GET["template_id"])) $template_id = $_GET["template_id"];
 
 if (isset($_REQUEST["template_name"])) { $template_name = $_REQUEST["template_name"]; }
 
-$from = 'listtemplates.php';
+$from = 'listtemplates.php'.$urlext;
 if (isset($_GET['from']) )
   {
-    $from = 'moduleinterface.php?module='.$_GET['from'];
+    $from = 'moduleinterface.php'.$urlext.'&amp;module='.$_GET['from'];
   }
 else if( isset( $_POST['from'] ) )
   {
@@ -149,6 +150,9 @@ else
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang('copytemplate')?></p>
 	<form method="post" action="copytemplate.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('template'); ?>:</p>
 			<p class="pageinput"><?php echo $template_name; ?></p>
@@ -172,7 +176,7 @@ else
 
 }
 
-echo '<p class="pageback"><a class="pageback" href="listtemplates.php">&#171; '.lang('back').'</a></p>';
+echo '<p class="pageback"><a class="pageback" href="listtemplates.php'.$urlext.'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 

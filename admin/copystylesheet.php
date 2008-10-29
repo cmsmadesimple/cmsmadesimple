@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -38,7 +39,7 @@ if (isset($_REQUEST["stylesheet_name"])) { $stylesheet_name = $_REQUEST["stylesh
 
 if (isset($_POST["cancel"]))
 {
-	redirect("listcss.php");
+	redirect("listcss.php".$urlext);
 	return;
 }
 
@@ -76,7 +77,7 @@ if ($access)
 			if ($result)
 			{
 				audit($onestylesheet->id, $onestylesheet->name, 'Copied Stylesheet');
-				redirect("listcss.php");
+				redirect("listcss.php".$urlext);
 				return;
 			}
 			else
@@ -107,6 +108,9 @@ else
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang('copystylesheet')?></p>
 	<form method="post" action="copystylesheet.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('stylesheet'); ?>:</p>
 			<p class="pageinput"><?php echo $stylesheet_name; ?></p>
@@ -130,7 +134,7 @@ else
 
 }
 
-echo '<p class="pageback"><a class="pageback" href="listcss.php">&#171; '.lang('back').'</a></p>';
+echo '<p class="pageback"><a class="pageback" href="listcss.php'.$urlext.'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 
