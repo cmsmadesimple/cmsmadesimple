@@ -451,19 +451,20 @@ class AdminTheme
      */
     function DoBookmarks()
     {
-		global $gCms;
-		$bookops =& $gCms->GetBookmarkOperations();
-        $marks = array_reverse($bookops->LoadBookmarks($this->userid));
-        $tmpMark = new Bookmark();
-        $tmpMark->title = lang('addbookmark');
-        $tmpMark->url = 'makebookmark.php?title='. urlencode($this->title);
-        $marks[] = $tmpMark;
-        $marks = array_reverse($marks);
-        $tmpMark = new Bookmark();
-        $tmpMark->title = lang('managebookmarks');
-        $tmpMark->url = 'listbookmarks.php';
-        $marks[] = $tmpMark;
-        $this->DisplayBookmarks($marks);
+      global $gCms;
+      $bookops =& $gCms->GetBookmarkOperations();
+      $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+      $marks = array_reverse($bookops->LoadBookmarks($this->userid));
+      $tmpMark = new Bookmark();
+      $tmpMark->title = lang('addbookmark');
+      $tmpMark->url = 'makebookmark.php'.$urlext.'&amp;title='. urlencode($this->title);
+      $marks[] = $tmpMark;
+      $marks = array_reverse($marks);
+      $tmpMark = new Bookmark();
+      $tmpMark->title = lang('managebookmarks');
+      $tmpMark->url = 'listbookmarks.php'.$urlext;
+      $marks[] = $tmpMark;
+      $this->DisplayBookmarks($marks);
     }
 
 
@@ -474,10 +475,11 @@ class AdminTheme
     function ShowShortcuts()
     {
       if (get_preference($this->userid, 'bookmarks')) {
+	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
 	echo '<div class="itemoverflow">';
 	echo '<h2>'.lang('bookmarks').'</h2>';
-	echo '<p><a href="listbookmarks.php">'.lang('managebookmarks').'</a></p>';
+	echo '<p><a href="listbookmarks.php'.$urlext.'">'.lang('managebookmarks').'</a></p>';
 	global $gCms;
 	$bookops =& $gCms->GetBookmarkOperations();
 	$marks = array_reverse($bookops->LoadBookmarks($this->userid));

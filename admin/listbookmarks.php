@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -71,12 +72,12 @@ include_once("header.php");
 		foreach ($marklist as $onemark){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->bookmark_id."\">".$onemark->title."</a></td>\n";
+				echo "<td><a href=\"editbookmark.php".$urlext."&amp;bookmark_id=".$onemark->bookmark_id."\">".$onemark->title."</a></td>\n";
 				echo "<td>".$onemark->url."</td>\n";
-				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->bookmark_id."\">";
+				echo "<td><a href=\"editbookmark.php".$urlext."&amp;bookmark_id=".$onemark->bookmark_id."\">";
                 echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
-				echo "<td><a href=\"deletebookmark.php?bookmark_id=".$onemark->bookmark_id."\" onclick=\"return confirm('".lang('deleteconfirm', $onemark->title)."');\">";
+				echo "<td><a href=\"deletebookmark.php".$urlext."&amp;bookmark_id=".$onemark->bookmark_id."\" onclick=\"return confirm('".lang('deleteconfirm', $onemark->title)."');\">";
                 echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                 echo "</a></td>\n";
 				echo "</tr>\n";
@@ -92,10 +93,10 @@ include_once("header.php");
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="addbookmark.php">
+			<a href="addbookmark.php<? echo $urlext ?>">
 				<?php 
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addbookmark'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="addbookmark.php">'.lang("addbookmark");
+					echo ' <a class="pageoptions" href="addbookmark.php'.$urlext.'">'.lang("addbookmark");
 				?>
 			</a>
 		</p>
