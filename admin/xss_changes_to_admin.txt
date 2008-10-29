@@ -65,7 +65,7 @@ listtags.php
 listtemplates.php             completed     silmarillion
 listusers.php                 completed     silmarillion
 listusertags.php
-login.php
+login.php		      completed	    calguy1000
 loginstyle.php
 logout.php
 makebookmark.php
