@@ -36,6 +36,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -62,13 +63,13 @@ $name = '';
 #******************************************************************************
 
 # getting variables
-if (isset($_GET["type"])) $type	= trim($_GET["type"]) ;
+if (isset($_REQUEST["type"])) $type	= trim($_REQUEST["type"]) ;
 else $error = lang('typenotvalid');
 
-if (isset($_GET["id"]))	$id	= (int)$_GET["id"] ;
+if (isset($_REQUEST["id"]))	$id	= (int)$_REQUEST["id"] ;
 else $error = lang('idnotvalid');
 
-if( isset($_GET['cssid'])) $cssid = (int)$_GET['cssid'];
+if( isset($_REQUEST['cssid'])) $cssid = (int)$_REQUEST['cssid'];
 
 # if type is template, we get the name
 if (isset($type) && "template" == $type) 
@@ -99,9 +100,9 @@ $addasso = check_permission($userid, 'Add Stylesheet Assoc');
 #******************************************************************************
 # Handle moving of entries
 #******************************************************************************
-if( isset($_GET['dir']) && $modify )
+if( isset($_REQUEST['dir']) && $modify )
   {
-    switch(trim($_GET['dir'])) 
+    switch(trim($_REQUEST['dir'])) 
       {
       case 'up':
 	{
@@ -157,9 +158,9 @@ if( isset($_GET['dir']) && $modify )
 #******************************************************************************
 # displaying errors if any
 #******************************************************************************
-if (isset($_GET["message"])) 
+if (isset($_REQUEST["message"])) 
   {
-    $message = trim(preg_replace('/\</','',$_GET['message']));
+    $message = trim(preg_replace('/\</','',$_REQUEST['message']));
     if( !empty($message) )
       {
 	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
@@ -186,7 +187,7 @@ else {
   $smarty->assign('text_move',lang('move'));
   $smarty->assign('text_template',lang('template'));
   $smarty->assign('text_title',lang('title'));
-  $smarty->assign('edittemplate_link','<a href="edittemplate.php?template_id='.$_GET['id'].'"  name="edittemplate">'.(isset($name)?$name:"").'</a>');
+  $smarty->assign('edittemplate_link','<a href="edittemplate.php'.$urlext.'&amp;template_id='.$_REQUEST['id'].'"  name="edittemplate">'.(isset($name)?$name:"").'</a>');
   $cssassoc = array();
   $count = $result->RecordCount();
   $idx = 0;
@@ -195,14 +196,14 @@ else {
       $csslist[] = $row["assoc_css_id"];
 
       $tmp = array();
-      $url = "editcss.php?css_id=".$row['assoc_css_id']."&amp;from=templatecssassoc&amp;templateid=".$id;
+      $url = "editcss.php".$urlext."&amp;css_id=".$row['assoc_css_id']."&amp;from=templatecssassoc&amp;templateid=".$id;
       $tmp['editlink'] = '<a href="'.$url.'">'.$row['css_name'].'</a>';
       $tmp['editimg'] = '<a href="'.$url.'">'.$themeObject->DisplayImage('icons/system/edit.gif',lang('editcss'),'','','systemicon').'</a>';
 
       if( $modify )
 	{
-	  $downurl = 'listcssassoc.php?dir=down&amp;cssid='.$row['assoc_css_id'].'&amp;id='.$id.'&amp;type=template';
-	  $upurl = 'listcssassoc.php?dir=up&amp;cssid='.$row['assoc_css_id'].'&amp;id='.$id.'&amp;type=template';
+	  $downurl = 'listcssassoc.php'.$urlext.'&amp;dir=down&amp;cssid='.$row['assoc_css_id'].'&amp;id='.$id.'&amp;type=template';
+	  $upurl = 'listcssassoc.php'.$urlext.'&amp;dir=up&amp;cssid='.$row['assoc_css_id'].'&amp;id='.$id.'&amp;type=template';
 	  if( $idx > 0 )
 	    {
 	      $tmp['uplink'] = '<a href="'.$upurl.'">'.$themeObject->DisplayImage('icons/system/arrow-u.gif',lang('up'),'','','systemicon').'</a>';
@@ -216,7 +217,7 @@ else {
 	  
       if( $delasso )
 	{
-	  $tmp['deletelink'] = "<a href=\"deletecssassoc.php?id=$id&amp;css_id=".$row["assoc_css_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteassociationconfirm', $row["css_name"])."');\">".$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon')."</a>";
+	  $tmp['deletelink'] = "<a href=\"deletecssassoc.php".$urlext."&amp;id=$id&amp;css_id=".$row["assoc_css_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteassociationconfirm', $row["css_name"])."');\">".$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon')."</a>";
 	}
 
       $cssassoc[] = $tmp;
@@ -264,6 +265,7 @@ else {
 
       $hidden = '<input type="hidden" name="id" value="'.$id.'" />';
       $hidden .= '<input type="hidden" name="type" value="'.$type.'" />';
+      $hidden .= '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />';
       $smarty->assign('hidden',$hidden);
 
       $submit = '<input type="submit" value="'.lang('addcss').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\';" onmouseout="this.className=\'pagebutton\';" />';

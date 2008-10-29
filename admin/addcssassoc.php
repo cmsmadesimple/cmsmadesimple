@@ -66,9 +66,9 @@ $doadd = true;
 #******************************************************************************
 # start of the treatment
 #******************************************************************************
+print_r( $_POST );
 if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 {
-
 	# we get the arguments as local vars (easier)
 	$css_id = $_POST["css_id"];
 	$id	= $_POST["id"];
@@ -176,11 +176,11 @@ else
 #******************************************************************************
 if ($doadd)
 {
-	redirect("listcssassoc.php".$urlext."&amp;id=$id&type=$type");
+	redirect("listcssassoc.php".$urlext."&id=$id&type=$type");
 }
 else
 {
-	redirect("listcssassoc.php".$urlext."&amp;id=$id&type=$type&message=$error");
+	redirect("listcssassoc.php".$urlext."&id=$id&type=$type&message=$error");
 }
 
 # vim:ts=4 sw=4 noet

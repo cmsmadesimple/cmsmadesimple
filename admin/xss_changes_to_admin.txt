@@ -28,7 +28,7 @@ copystylesheet.php           complete	    calguy1000
 copytemplate.php             complete       calguy1000
 dashboard.php                not needed     silmarillion
 deletebookmark.php
-deletecssassoc.php
+deletecssassoc.php           complete       calguy1000
 deletecss.php                complete       calguy1000
 deletegroup.php
 deletehtmlblob.php
@@ -56,7 +56,7 @@ index.php                     not needed    calguy1000
 lang.php                      not needed    calguy1000
 listbookmarks.php
 listcontent.php               completed     calguy1000
-listcssassoc.php
+listcssassoc.php	      completed     calguy1000
 listcss.php                   completed     calguy1000
 listgroups.php
 listhtmlblobs.php

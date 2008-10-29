@@ -33,7 +33,7 @@
 <div class="pageoverflow">
   <p class="pageoptions">
     {$dropdown}
-    {$hidden}
+    <div>{$hidden}</div>
     {$submit}
   </p>
 </div>
