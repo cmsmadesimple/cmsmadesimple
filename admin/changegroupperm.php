@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -29,7 +30,7 @@ if (isset($_POST["submitted"])) $submitted = $_POST["submitted"];
 else if (isset($_GET["submitted"])) $submitted = $_GET["submitted"];
 
 if (isset($_POST["cancel"])) {
-	redirect("topusers.php");
+	redirect("topusers.php".$urlext);
 	return;
 }
 
@@ -125,6 +126,9 @@ else {
 			}
 		}
 	$smarty->assign_by_ref('perms',$perm_struct);		
+
+$smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
+$smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('admin_group_warning',$themeObject->ShowErrors(lang('adminspecialgroup')));
 $smarty->assign('form_start','<form id="groupname" method="post" action="changegroupperm.php">');
 $smarty->assign('form_end','</form>');

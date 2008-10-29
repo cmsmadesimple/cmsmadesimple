@@ -20,8 +20,8 @@ addtemplate.php              complete       silmarillion
 adduser.php                  complete       silmarillion
 adduserplugin.php            complete       calguy1000
 adminlog.php                 complete       silmarillion
-changegroupassign.php
-changegroupperm.php
+changegroupassign.php        complete       calguy1000
+changegroupperm.php          complete       calguy1000
 checksum.php                 complete       calguy1000
 copycontent.php              complete       calguy1000
 copystylesheet.php           complete	    calguy1000

@@ -92,6 +92,8 @@
 </div>
 
 {$form_start}
+<div>
+  <input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
 <table cellspacing="0" class="pagetable" id="permtable">
   <thead>
   <tr>

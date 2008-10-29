@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $group_id= - 1;
@@ -34,7 +35,7 @@ else if (isset($_GET["submitted"])) $submitted = $_GET["submitted"];
 $group_name="";
 
 if (isset($_POST["cancel"])) {
-	redirect("topusers.php");
+	redirect("topusers.php".$urlext);
 	return;
 }
 
@@ -140,6 +141,8 @@ $db =& $gCms->GetDb();
 	$smarty->assign_by_ref('users',$user_struct);
 
 
+$smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
+$smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('admin_group_warning',$themeObject->ShowErrors(lang('adminspecialgroup')));
 $smarty->assign('form_start','<form id="groupname" method="post" action="changegroupassign.php">');
 $smarty->assign('form_end','</form>');
