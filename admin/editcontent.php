@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
@@ -39,7 +40,7 @@ $headtext = $xajax->getJavascript('../lib/xajax')."\n";
 
 if (isset($_POST["cancel"]))
 {
-	redirect("listcontent.php");
+	redirect("listcontent.php".$urlext);
 }
 
 $error = FALSE;
@@ -85,7 +86,7 @@ function ajaxpreview($params)
 	}
 	updatecontentobj($contentobj, true, $params);
 	$tmpfname = createtmpfname($contentobj);
-	$url = $config["root_url"].'/preview.php?tmpfile='.urlencode(basename($tmpfname));
+	$url = $config["root_url"].'/preview.php'.$urlext.'&amp;tmpfile='.urlencode(basename($tmpfname));
 	
 	$objResponse = new xajaxResponse();
 	$objResponse->addAssign("previewframe", "src", $url);
@@ -291,7 +292,7 @@ if ($access)
 			audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
 			if ($submit)
 			{
-				redirect("listcontent.php?page=".$pagelist_id.'&message=contentupdated');
+				redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&message=contentupdated');
 			}
 		}
 
@@ -503,10 +504,13 @@ $tabnames = $contentobj->TabNames();
 	</div>
 	<div style="clear: both;"></div>
 	<form method="post" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
-<input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
-<input type="hidden" name="content_id" value="<?php echo $content_id?>" />
-<input type="hidden" name="page" value="<?php echo $pagelist_id; ?>" />
-<input type="hidden" name="orig_content_type" value="<?php echo $cur_content_type ?>" />
+<div>
+  <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+  <input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
+  <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
+  <input type="hidden" name="page" value="<?php echo $pagelist_id; ?>" />
+  <input type="hidden" name="orig_content_type" value="<?php echo $cur_content_type ?>" />
+</div>
 <div id="page_content">
 <?php
 $submit_buttons = '<div class="pageoverflow">
@@ -571,7 +575,7 @@ $submit_buttons .= '</p></div>';
 		{
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>
-					<iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"<?php } ?>></iframe>
+					<iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo $config["root_url"] ?>/preview.php<?php echo $urlext ?>&amp;tmpfile=<?php echo urlencode(basename($tmpfname))?>"<?php } ?>></iframe>
 				<?php
 			echo '</div></div>';
 			echo '<div style="clear: both;"></div>';

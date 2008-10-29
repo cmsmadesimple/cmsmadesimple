@@ -34,10 +34,10 @@ deletegroup.php              complete       calguy1000
 deletehtmlblob.php           complete       calguy1000
 deletetemplateassoc.php      complete       calguy1000
 deletetemplate.php           complete       calguy1000
-deleteuser.php
-deleteuserplugin.php
+deleteuser.php               complete       calguy1000
+deleteuserplugin.php         complete       calguy1000
 editbookmark.php
-editcontent.php
+editcontent.php              complete	    calguy1000
 editcss.php                  complete       calguy1000
 editevent.php                complete       calguy1000
 editgroup.php                complete       calguy1000

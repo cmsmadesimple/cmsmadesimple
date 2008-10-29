@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -56,7 +57,7 @@ if (isset($_GET["userplugin_id"])) {
 	}
 }
 
-redirect('listusertags.php?message=usertagdeleted');
+redirect('listusertags.php'.$urlext.'&amp;message=usertagdeleted');
 
 # vim:ts=4 sw=4 noet
 ?>

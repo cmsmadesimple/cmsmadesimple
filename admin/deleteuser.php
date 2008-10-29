@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -82,11 +83,11 @@ if (isset($_GET["user_id"]))
 
 if ($dodelete == true)
 {
-	redirect("listusers.php");
+	redirect("listusers.php".$urlext);
 }
 else
 {
-	redirect("listusers.php?message=".lang('erroruserinuse'));
+	redirect("listusers.php".$urlext."&amp;message=".lang('erroruserinuse'));
 }
 
 # vim:ts=4 sw=4 noet
