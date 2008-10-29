@@ -32,6 +32,7 @@ if (isset($_SESSION['logout_user_now']))
 	debug_buffer("Logging out.  Clearning cookies and session variables.");
 	unset($_SESSION['logout_user_now']);
 	unset($_SESSION['cms_admin_user_id']);
+	unset($_SESSION[CMS_USER_KEY]);
 	setcookie('cms_admin_user_id', '', time() - 3600);
 	setcookie('cms_passhash', '', time() - 3600);
 }

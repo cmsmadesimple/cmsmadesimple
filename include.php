@@ -42,7 +42,7 @@ if(!@session_id())
 	if( !isset($_SESSION[CMS_USER_KEY]) )
 	  {
 	    // maybe change this algorithm.
-	    $key = substr(md5($dirname.time().session_id()),-8);
+	    $key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
 	    $_SESSION[CMS_USER_KEY] = $key;
 	  }
       }
