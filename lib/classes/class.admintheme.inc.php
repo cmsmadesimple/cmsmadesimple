@@ -1044,14 +1044,18 @@ class AdminTheme
     function BackUrl()
      {
      	$count = count($this->breadcrumbs) - 2;
+	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
      	if ($count > -1)
-     	    {
-     	    return $this->breadcrumbs[$count]['url'];
-     	    }
+	  {
+     	    $txt = $this->breadcrumbs[$count]['url'];
+	    return $txt.$urlext;
+	  }
         else
-            {
-     	    return '';
-     	    }
+	  {
+	    // rely on base href to redirect back to the
+	    // admin home page
+     	    return 'index.php'.$urlext;
+	  }
      }
 
     /**
@@ -1681,13 +1685,13 @@ class AdminTheme
 	      {
 		$help_title = lang('help_external');
 	      }
-	    $image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
-	    $image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
+	    $image_help = $this->DisplayImage('icons/system/info.gif', lang('module_help'),'','','systemicon');
+	    $image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('wikihelp'),'','','systemicon');		
 	    if ('both' == $module_help_type)
 	      {
 		$module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php?action=showmodulehelp&amp;module='.$module_name;
-		$header .= '<span class="helptext"><a href="'.$module_help_link.'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('help').'</a> | ';
-		$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('wikihelp').'</a>  ('.lang('new_window').')</span>';
+		$header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a> | ';
+		$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank" title="'.lang('wikihelp').'">'.lang('wikihelp').'</a>  ('.lang('new_window').')</span>';
 	      }
 	    else
 	      {

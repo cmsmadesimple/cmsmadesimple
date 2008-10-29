@@ -37,6 +37,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -74,7 +75,7 @@ if (isset($_POST['media_type'])) $media_type = $_POST['media_type'];
 #******************************************************************************
 if (isset($_POST["cancel"]))
 {
-	redirect("listcss.php");
+	redirect("listcss.php".$urlext);
 	return;
 }
 
@@ -159,7 +160,7 @@ if ($access)
 				audit($newstylesheet->id, $css_name, 'Added CSS');
 
 				# and goes back to the css list
-				redirect("listcss.php");
+				redirect("listcss.php".$urlext);
 				return;
 			}
 			else
@@ -200,6 +201,9 @@ else
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('addstylesheet'); ?>
 		<form method="post" action="addcss.php">
+		<div>
+                  <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+                </div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" class="name" name="css_name" maxlength="255" value="<?php echo $css_name?>" /></p>

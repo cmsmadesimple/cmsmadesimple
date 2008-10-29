@@ -10,9 +10,9 @@ I'll remove it from svn.
 File                         Status         Completed By
 --------------------------------------------------------
 addbookmark.php
-addcontent.php
+addcontent.php               incomplete
 addcssassoc.php
-addcss.php
+addcss.php                   complete       calguy1000
 addgroup.php
 addhtmlblob.php
 addtemplateassoc.php
@@ -29,7 +29,7 @@ copytemplate.php
 dashboard.php
 deletebookmark.php
 deletecssassoc.php
-deletecss.php
+deletecss.php                complete       calguy1000
 deletegroup.php
 deletehtmlblob.php
 deletetemplateassoc.php

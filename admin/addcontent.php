@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
@@ -35,7 +36,7 @@ $headtext = $xajax->getJavascript('../lib/xajax')."\n";
 
 if (isset($_POST["cancel"]))
 {
-	redirect("listcontent.php");
+	redirect("listcontent.php".$urlext);
 }
 
 require_once("header.php");
@@ -90,7 +91,7 @@ function ajaxpreview($params)
 	}
 	updatecontentobj($contentobj, true, $params);
 	$tmpfname = createtmpfname($contentobj);
-	$url = $config["root_url"].'/preview.php?tmpfile='.urlencode(basename($tmpfname));
+	$url = $config["root_url"].'/preview.php'.$urlext.'&amp;tmpfile='.urlencode(basename($tmpfname));
 	
 	$objResponse = new xajaxResponse();
 	$objResponse->addAssign("previewframe", "src", $url);
@@ -306,7 +307,7 @@ if ($access)
 			if ($submit)
 			{
 				audit($contentobj->Id(), $contentobj->Name(), 'Added Content');
-				redirect('listcontent.php?message=contentadded');
+				redirect('listcontent.php'.$urlext.'&amp;message=contentadded');
 			}
 		}
 	}
@@ -369,7 +370,7 @@ else if ($preview)
 <!--
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang('preview')?></p>
-	<iframe name="previewframe" class="preview" src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
+	<iframe name="previewframe" class="preview" src="<?php echo $config["root_url"] ?>/preview.php<?php echo $urlext ?>&amp;tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
 </div>
 -->
 <?php
@@ -416,8 +417,11 @@ $tabnames = $contentobj->TabNames();
 		?>
 	</div>
 	<div style="clear: both;"></div>
-	<form method="post" action="addcontent.php" name="contentform" enctype="multipart/form-data" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
-	<input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />			
+	<form method="post" action="addcontent.php<?php echo $urlext ?>" name="contentform" enctype="multipart/form-data" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
+        <div>
+        <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+	<input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
+        </div>
 	<div id="page_content">
 		<div class="pageoverflow">	
 		<?php
@@ -475,7 +479,7 @@ $tabnames = $contentobj->TabNames();
 		{
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>
-					<iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"<?php } ?>></iframe>
+					<iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo $config["root_url"] ?>/preview.php<?php echo $urlext ?>&amp;tmpfile=<?php echo urlencode(basename($tmpfname))?>"<?php } ?>></iframe>
 				<?php
 			echo '<div style="clear: both;"></div>';
 		}
