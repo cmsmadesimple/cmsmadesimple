@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 $CMS_LOAD_ALL_PLUGINS=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -88,7 +89,7 @@ if ($action == "showpluginhelp")
 
 		echo $content;
 		echo "</div>";
-		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
+		echo '<p class="pageback"><a class="pageback" href="listtags.php'.$urlext.'">&#171; '.lang('back').'</a></p>';
 	}
 	else
 	{
@@ -96,7 +97,7 @@ if ($action == "showpluginhelp")
 		echo '<p class="pageheader">'.lang('pluginhelp', array($plugin)).'</p>';
 		echo '<P>No help text available for this plugin.</P>';
 		echo "</div>";
-		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
+		echo '<p class="pageback"><a class="pageback" href="listtags.php'.$urlext.'">&#171; '.lang('back').'</a></p>';
 	}
 }
 else if ($action == "showpluginabout")
@@ -111,7 +112,7 @@ else if ($action == "showpluginabout")
 		echo '<p class="pageheader">'.lang('pluginabout', array($plugin)).'</p>';
 		echo $content;
 		echo "</div>";
-		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
+		echo '<p class="pageback"><a class="pageback" href="listtags.php'.$urlext.'">&#171; '.lang('back').'</a></p>';
 	}
 	else
 	{
@@ -119,7 +120,7 @@ else if ($action == "showpluginabout")
 		echo '<p class="pageheader">'.lang('pluginhelp', array($plugin)).'</p>';
 		echo '<P>No help text available for this plugin.</P>';
 		echo "</div>";
-		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
+		echo '<p class="pageback"><a class="pageback" href="listtags.php'.$urlext.'">&#171; '.lang('back').'</a></p>';
 	}
 }
 else
@@ -148,7 +149,7 @@ else
 
 				if (function_exists('smarty_cms_help_function_'.$oneplugin))
 				{
-					echo "<td><a href=\"listtags.php?action=showpluginhelp&amp;plugin=".$oneplugin."\">".$oneplugin."</a></td>";
+					echo "<td><a href=\"listtags.php".$urlext."&amp;action=showpluginhelp&amp;plugin=".$oneplugin."\">".$oneplugin."</a></td>";
 				}
 				else
 				{
@@ -156,7 +157,7 @@ else
 				}
 				if (function_exists('smarty_cms_help_function_'.$oneplugin))
 				{
-					echo "<td><a href=\"listtags.php?action=showpluginhelp&amp;plugin=".$oneplugin."\">".lang('help')."</a></td>";
+					echo "<td><a href=\"listtags.php".$urlext."&amp;action=showpluginhelp&amp;plugin=".$oneplugin."\">".lang('help')."</a></td>";
 				}
 				else
 				{
@@ -164,7 +165,7 @@ else
 				}
 				if (function_exists('smarty_cms_about_function_'.$oneplugin))
 				{
-					echo "<td><a href=\"listtags.php?action=showpluginabout&amp;plugin=".$oneplugin."\">".lang('about')."</a></td>";
+					echo "<td><a href=\"listtags.php".$urlext."&amp;action=showpluginabout&amp;plugin=".$oneplugin."\">".lang('about')."</a></td>";
 				}
 				else
 				{

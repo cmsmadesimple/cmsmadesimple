@@ -61,7 +61,7 @@ listcss.php                   completed     calguy1000
 listgroups.php
 listhtmlblobs.php
 listmodules.php               completed     calguy1000
-listtags.php
+listtags.php                  completed     calguy1000
 listtemplates.php             completed     silmarillion
 listusers.php                 completed     silmarillion
 listusertags.php              completed     calguy1000
