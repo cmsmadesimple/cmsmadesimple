@@ -937,6 +937,7 @@ function display_login_form()
  */
  function pagination($page, $totalrows, $limit)
  {
+   $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	$page_string = "";
 	$from = ($page * $limit) - $limit;
 	$numofpages = (int)($totalrows / $limit);
@@ -946,8 +947,8 @@ function display_login_form()
 		if($page != 1)
 		{
 			$pageprev = $page-1;
-			$page_string .= '<a href="'.$_SERVER['PHP_SELF'].'?page=1">'.lang('first').'</a>&nbsp;';
-			$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$pageprev\">".lang('previous')."</a>&nbsp;";
+			$page_string .= '<a href="'.$_SERVER['PHP_SELF'].$urlext.'&amp;page=1">'.lang('first').'</a>&nbsp;';
+			$page_string .= "<a href=\"".$_SERVER['PHP_SELF'].$urlext."&amp;page=$pageprev\">".lang('previous')."</a>&nbsp;";
 		}
 		else
 		{
@@ -984,8 +985,8 @@ function display_login_form()
 		if(($totalrows - ($limit * $page)) > 0)
 		{
 			$pagenext = $page+1;
-			$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$pagenext\">".lang('next')."</a>&nbsp;";
-			$page_string .= '<a href="'.$_SERVER['PHP_SELF'].'?page='.$numofpages.'">'.lang('last').'</a>';
+			$page_string .= "<a href=\"".$_SERVER['PHP_SELF'].$urlext."&amp;page=$pagenext\">".lang('next')."</a>&nbsp;";
+			$page_string .= '<a href="'.$_SERVER['PHP_SELF'].$urlext.'&amp;page='.$numofpages.'">'.lang('last').'</a>';
 		}
 		else
 		{
