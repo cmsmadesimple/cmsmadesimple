@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 $CMS_LOAD_ALL_PLUGINS=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 // function eventhandler_usertag_dropdown( $name, $selitem, $usertags )
 // {
@@ -105,7 +106,10 @@ switch( $action )
 	{
 		$events = Events::ListEvents();
 
-		echo '<br /><form action="eventhandlers.php" method="get">'.lang('filterbymodule').': <select name="modulefilter">' . "\n";
+		echo '<br /><form action="eventhandlers.php" method="get">';
+		echo '<div><input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" /></div>';
+
+		echo lang('filterbymodule').': <select name="modulefilter">' . "\n";
 		echo '<option value="">'.lang('showall').'</option>';
 		$modlist = array();
 		if( is_array($events) )
@@ -162,7 +166,7 @@ switch( $action )
 					echo "    <td>";
 if ($access) 
 {
-					echo "<a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">";
+					echo "<a href=\"editevent.php".$urlext."&amp;action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">";
 }
 					echo $oneevent['event_name'];
 if ($access) 
@@ -171,10 +175,10 @@ if ($access)
 }
 					echo "</td>\n";
 					echo "    <td>".$desctext."</td>\n";
-					echo "    <td class=\"icons_wide\"><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
+					echo "    <td class=\"icons_wide\"><a href=\"eventhandlers.php".$urlext."&amp;action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
 if ($access) 
 {
-					echo "    <td class=\"icons_wide\"><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
+					echo "    <td class=\"icons_wide\"><a href=\"editevent.php".$urlext."&amp;action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
 }
 					echo "  </tr>\n";
 					($curclass=="row1"?$curclass="row2":$curclass="row1");

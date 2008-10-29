@@ -45,8 +45,8 @@ edithtmlblob.php
 editprefs.php                 complete      calguy1000
 edittemplate.php
 edituser.php
-edituserplugin.php
-eventhandlers.php
+edituserplugin.php            complete      calguy1000
+eventhandlers.php             complete      calguy1000
 files.php                     not needed    calguy1000
 footer.php                    not needed    calguy1000
 header.php                    not needed    calguy1000

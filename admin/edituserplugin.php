@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 global $gCms;
@@ -42,7 +43,7 @@ $code= "";
 if (isset($_POST["code"])) $code = $_POST["code"];
 
 if (isset($_POST["cancel"])) {
-	redirect("listusertags.php");
+	redirect("listusertags.php".$urlext);
 	return;
 }
 
@@ -125,7 +126,7 @@ if ($access) {
 
 				if( !isset( $_POST['apply'] ) )
 				  {
-				    redirect("listusertags.php?message=usertagupdated");
+				    redirect("listusertags.php".$urlext."&amp;message=usertagupdated");
 				    return;
 				  }
 			}
@@ -270,6 +271,9 @@ else {
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('editusertag'); ?>
 		<form id="Edit_UserPlugin" enctype="multipart/form-data" action="edituserplugin.php" method="post">
+		   <div>
+		   <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+		   </div>
 			<div class="pageoverflow">
 				<p class="pagetext">*<?php echo lang('name')?>:</p>
 				<p class="pageinput"><input type="text" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" /></p>
