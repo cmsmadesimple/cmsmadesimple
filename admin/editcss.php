@@ -36,6 +36,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -95,9 +96,9 @@ if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
 if (isset($_POST["cancel"]))
 {
 	if ($from == 'templatecssassoc')
-		redirect("listcssassoc.php?type=template&id=" . $templateid);
+		redirect("listcssassoc.php".$urlext."&type=template&id=" . $templateid);
 	else
-		redirect("listcss.php");
+		redirect("listcss.php".$urlext);
 	return;
 }
 
@@ -207,9 +208,9 @@ if ($access)
 				if (!isset($_POST["apply"]))
 				{
 					if ($from == 'templatecssassoc')
-						redirect("listcssassoc.php?type=template&id=" . $templateid);
+						redirect("listcssassoc.php".$urlext."&type=template&id=" . $templateid);
 					else
-						redirect("listcss.php");
+						redirect("listcss.php".$urlext);
 					return;
 				}
 			}
@@ -372,6 +373,9 @@ else
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('editstylesheet'); ?>
 	<form id="Edit_CSS" method="post" action="editcss.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">

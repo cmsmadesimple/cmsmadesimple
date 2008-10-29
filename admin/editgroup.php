@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.group.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 global $gCms;
@@ -42,7 +43,7 @@ if (isset($_POST["group_id"])) $group_id = $_POST["group_id"];
 else if (isset($_GET["group_id"])) $group_id = $_GET["group_id"];
 
 if (isset($_POST["cancel"])) {
-	redirect("listgroups.php");
+	redirect("listgroups.php".$urlext);
 	return;
 }
 
@@ -96,7 +97,7 @@ if ($access) {
 				Events::SendEvent('Core', 'EditGroupPost', array('group' => &$groupobj));
 
 				audit($groupobj->id, $groupobj->name, 'Edited Group');
-				redirect("listgroups.php");
+				redirect("listgroups.php".$urlext);
 				return;
 			}
 			else {
@@ -134,6 +135,9 @@ else {
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('editgroup'); ?>
 	<form method="post" action="editgroup.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" name="group" maxlength="25" value="<?php echo $group?>" /></p>

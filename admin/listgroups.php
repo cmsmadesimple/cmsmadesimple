@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.group.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -102,21 +103,21 @@ include_once("header.php");
 		foreach ($grouplist as $onegroup){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-				echo "<td><a href=\"editgroup.php?group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
+				echo "<td><a href=\"editgroup.php".$urlext."&amp;group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
 				echo "<td class=\"pagepos\">".($onegroup->active == 1?$image_true:$image_false)."</td>\n";
 				if ($perm)
-					echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupperm.php?group_id=".$onegroup->id."\">".$image_permissions."</a></td>\n";
+					echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupperm.php".$urlext."&amp;group_id=".$onegroup->id."\">".$image_permissions."</a></td>\n";
 				if ($assign)
-					echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
+					echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupassign.php".$urlext."&amp;group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
 				if ($edit)
 				    {
-					echo "<td class=\"icons_wide\"><a href=\"editgroup.php?group_id=".$onegroup->id."\">";
+					echo "<td class=\"icons_wide\"><a href=\"editgroup.php".$urlext."&amp;group_id=".$onegroup->id."\">";
                     echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
                     }
 				if ($remove && $onegroup->id != 1)
 				    {
-				      echo "<td class=\"icons_wide\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onegroup->name)."');\">";
+				      echo "<td class=\"icons_wide\"><a href=\"deletegroup.php".$urlext."&amp;group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onegroup->name)."');\">";
 				      echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 				      echo "</a></td>\n";
 				    }
@@ -140,10 +141,10 @@ if (check_permission($userid, 'Add Groups')) {
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="addgroup.php">
+			<a href="addgroup.php<?php echo $urlext ?>">
 				<?php 
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addgroup'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="addgroup.php">'.lang("addgroup");
+					echo ' <a class="pageoptions" href="addgroup.php'.$urlext.'">'.lang("addgroup");
 				?>
 			</a>
 		</p>

@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 global $gCms;
 $db =& $gCms->GetDb();
 
@@ -273,7 +274,7 @@ if ($access)
 	{
 		echo "<tbody>\n";
 		$idx = 0;
-		$url = "editevent.php?module=".$module."&amp;event=".$event;
+		$url = "editevent.php".$urlext."&amp;module=".$module."&amp;event=".$event;
 		foreach( $handlers as $onehandler )
 		{
 		echo "<tr class=\"$rowclass\">\n";
@@ -319,7 +320,11 @@ if ($access)
     echo "</tbody>\n";
 	echo "</table>\n";
 	
-	echo "<br/><form action=\"editevent.php?action=create\" method=\"post\">\n";
+	echo "<br/><form action=\"editevent.php\" method=\"post\">\n";
+        echo "<div>\n";
+        echo '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />'."\n";
+	echo '<input type="hidden" name="action" value="create" />'."\n";
+        echo "</div>\n";
 	echo "<select name=\"handler\">\n";
 	foreach( $allhandlers as $key => $value )
 	{
