@@ -21,9 +21,10 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 if (isset($_POST['cancel']))
-	redirect('listcss.php');
+	redirect('listcss.php'.$urlext);
 
 check_login();
 
@@ -60,7 +61,7 @@ include_once("header.php");
 
 if (count($nodelist) == 0)
 {
-	redirect("listcss.php");
+	redirect("listcss.php".$urlext);
 }
 else
 {
@@ -75,6 +76,10 @@ else
 		if ($access)
 		{
 			echo '<form method="post" action="multistylesheet.php">' . "\n";
+			echo "<div>\n";
+			echo '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />'."\n";
+			echo "</div>\n";
+
 			$idlist = array();
 			if (count($nodelist) > 0)
 			{
@@ -104,7 +109,7 @@ else
 		}
 		else
 		{
-			redirect('listcss.php');
+			redirect('listcss.php'.$urlext);
 		}
 	}
 	else if ($action == 'dodelete')
@@ -121,11 +126,11 @@ else
 				audit($id, $title, 'Deleted Stylesheet');
 			}
 		}
-		redirect("listcss.php");
+		redirect("listcss.php".$urlext);
 	}
 	else
 	{
-		redirect("listcss.php");
+		redirect("listcss.php".$urlext);
 	}
 }
 

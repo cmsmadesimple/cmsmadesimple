@@ -51,7 +51,7 @@ files.php                     not needed    calguy1000
 footer.php                    not needed    calguy1000
 header.php                    not needed    calguy1000
 home.php                      completed     calguy1000
-imagefiles.php
+imagefiles.php		      completed	    calguy1000
 index.php                     not needed    calguy1000
 lang.php                      not needed    calguy1000
 listbookmarks.php             completed     calguy1000
@@ -72,8 +72,8 @@ makebookmark.php
 menu.php                      remove me     calguy1000
 moduleinterface.php           completed     calguy1000
 multicontent.php              completed     calguy1000
-multistylesheet.php
-multitemplate.php
+multistylesheet.php           completed     calguy1000
+multitemplate.php             completed     calguy1000
 myedituser.php                not needed    calguy1000
 pagedefaults.php              completed     calguy1000
 siteprefs.php                 completed     calguy1000

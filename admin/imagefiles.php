@@ -24,6 +24,7 @@ $CMS_ADMIN_PAGE=1;
 require_once(dirname(dirname(__FILE__))."/lib/filemanager/filetypes.inc.php");
 require_once(dirname(dirname(__FILE__))."/lib/file.functions.php");
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -232,7 +233,7 @@ echo '<div class="pagecontainer">';
 echo $themeObject->ShowHeader('imagemanagement');
 
 ?>
-<iframe class="imageframe" src="../lib/filemanager/ImageManager/images.php?dir=<?php echo "$reldir" ?>" name="imgManager" title="Image Selection"></iframe>
+<iframe class="imageframe" src="../lib/filemanager/ImageManager/images.php<?php echo $urlext ?>&dir=<?php echo "$reldir" ?>" name="imgManager" title="Image Selection"></iframe>
 
 <?php
 
@@ -240,7 +241,10 @@ if ($access)
 {
 ?>
 
-<form enctype="multipart/form-data" action="imagefiles.php" method="post" name="uploader">
+<form enctype="multipart/form-data" action="imagefiles.php<?php echo $urlext ?>" method="post" name="uploader">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 	<div class="pageoverflow">
 		<p class="pagetext"><?php echo lang('uploadfile')?>:</p>
 		<p class="pageinput">

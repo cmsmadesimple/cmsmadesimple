@@ -21,9 +21,10 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 if (isset($_POST['cancel']))
-	redirect('listtemplates.php');
+	redirect('listtemplates.php'.$urlext);
 
 check_login();
 
@@ -65,7 +66,7 @@ include_once("header.php");
 
 if (count($nodelist) == 0 && count($badlist) == 0)
 {
-	redirect("listtemplates.php");
+	redirect("listtemplates.php".$urlext);
 }
 else
 {
@@ -80,6 +81,10 @@ else
 		if ($access)
 		{
 			echo '<form method="post" action="multitemplate.php">' . "\n";
+			echo "<div>\n";
+			echo '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />'."\n";
+			echo "</div>\n";
+
 			$idlist = array();
 			if (count($nodelist) > 0)
 			{
@@ -119,7 +124,7 @@ else
 		}
 		else
 		{
-			redirect('listtemplates.php');
+			redirect('listtemplates.php'.$urlext);
 		}
 	}
 	else if ($action == 'dodelete')
@@ -136,7 +141,7 @@ else
 				audit($id, $title, 'Deleted Template');
 			}
 		}
-		redirect("listtemplates.php");
+		redirect("listtemplates.php".$urlext);
 	}
 	else if ($action == 'inactive')
 	{
@@ -154,7 +159,7 @@ else
 				}
 			}
 		}
-		redirect("listtemplates.php");
+		redirect("listtemplates.php".$urlext);
 	}
 	else if ($action == 'active')
 	{
@@ -172,11 +177,11 @@ else
 				}
 			}
 		}
-		redirect("listtemplates.php");
+		redirect("listtemplates.php".$urlext);
 	}
 	else
 	{
-		redirect("listtemplates.php");
+		redirect("listtemplates.php".$urlext);
 	}
 }
 
