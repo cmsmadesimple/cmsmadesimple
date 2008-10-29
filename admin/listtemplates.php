@@ -51,6 +51,9 @@ if (isset($_GET["message"])) {
 ?>
 
 <form action="multitemplate.php<?php echo $urlext?>" method="post">
+<div>
+  <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+</div>
 <div class="pagecontainer">
 	<div class="pageoverflow">
 

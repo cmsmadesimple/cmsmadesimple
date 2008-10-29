@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
@@ -61,7 +62,7 @@ if (!isset($_POST["adminaccess"]) && isset($_POST["adduser"])) $adminaccess = 0;
 
 if (isset($_POST["cancel"]) || !check_permission($userid, 'Add Users'))
 {
-	redirect("listusers.php");
+	redirect("listusers.php".$urlext);
 	return;
 }
 
@@ -160,7 +161,7 @@ if (isset($_POST["adduser"]))
 
 
 			audit($newuser->id, $newuser->username, 'Added User');
-			redirect("listusers.php");
+			redirect("listusers.php".$urlext);
 		}
 		else
 		{
@@ -185,7 +186,10 @@ else {
 
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('adduser'); ?>
-	<form method="post" action="adduser.php">		
+	<form method="post" action="adduser.php">
+  <div>
+  <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+  </div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" name="user" maxlength="255" value="<?php echo $user?>" /></p>

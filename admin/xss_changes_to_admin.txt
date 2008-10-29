@@ -17,7 +17,7 @@ addgroup.php                 complete      silmarillion
 addhtmlblob.php              complete      silmarillion
 addtemplateassoc.php         complete      silmarillion
 addtemplate.php              complete      silmarillion
-adduser.php
+adduser.php                  complete      silmarillion
 adduserplugin.php
 adminlog.php
 changegroupassign.php
@@ -26,7 +26,7 @@ checksum.php
 copycontent.php
 copystylesheet.php
 copytemplate.php
-dashboard.php
+dashboard.php               not needed      silmarillion
 deletebookmark.php
 deletecssassoc.php
 deletecss.php                complete       calguy1000

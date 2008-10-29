@@ -39,7 +39,6 @@ global $gCms;
 
 $themeObject->DisplayDashboardPageItem("start");
 
-
 $output="";
 
 /******* Core Information Output ********/
@@ -97,7 +96,6 @@ foreach ($gCms->modules as $module) {
 	if ($output!="") {
     $themeObject->DisplayDashboardPageItem("module",$module["object"]->GetFriendlyName(),$output);		
 	}
-	
 }
 
 
