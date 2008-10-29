@@ -52,7 +52,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 
 #******************************************************************************
@@ -176,11 +176,11 @@ else
 #******************************************************************************
 if ($doadd)
 {
-	redirect("listcssassoc.php?id=$id&type=$type");
+	redirect("listcssassoc.php".$urlext."&amp;id=$id&type=$type");
 }
 else
 {
-	redirect("listcssassoc.php?id=$id&type=$type&message=$error");
+	redirect("listcssassoc.php".$urlext."&amp;id=$id&type=$type&message=$error");
 }
 
 # vim:ts=4 sw=4 noet

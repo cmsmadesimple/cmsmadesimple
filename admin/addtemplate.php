@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.template.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -76,10 +77,10 @@ if (isset($_POST["preview"])) $preview = true;
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addsection"])) $active = 0;
 
-$from='listtemplates.php';
+$from='listtemplates.php'.$urlext;
 if( isset($_GET['from'] ) )
   {
-    $from = "moduleinterface.php?module=".$_GET['from'];
+    $from = "moduleinterface.php".$urlext."&amp;module=".$_GET['from'];
   }
 else if( isset($_REQUEST['from']) ) 
   {
@@ -227,6 +228,9 @@ else
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('addtemplate'); ?>
 	<form method="post" action="addtemplate.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('name')?>:</p>
 			<p class="pageinput"><input class="name" type="text" name="template" maxlength="255" value="<?php echo $template?>" /></p>

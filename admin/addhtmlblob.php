@@ -23,6 +23,7 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 //require_once("../lib/classes/class.htmlblob.inc.php");
 require_once("../lib/classes/class.template.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -35,7 +36,7 @@ $content = "";
 if (isset($_POST['content'])) $content = $_POST['content'];
 
 if (isset($_POST["cancel"])) {
-	redirect("listhtmlblobs.php");
+	redirect("listhtmlblobs.php".$urlext);
 	return;
 }
 
@@ -118,7 +119,7 @@ if ($access) {
 				
 				Events::SendEvent('Core', 'AddGlobalContentPost', array('global_content' => &$blobobj));
 
-				redirect("listhtmlblobs.php");
+				redirect("listhtmlblobs.php".$urlext);
 				return;
 			}
 			else {
@@ -166,6 +167,9 @@ else
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('addhtmlblob'); ?>
 	<form method="post" action="addhtmlblob.php">
+          <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>

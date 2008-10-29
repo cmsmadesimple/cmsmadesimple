@@ -84,6 +84,9 @@ if ($error != "")
 	<div class="pageoverflow">
 			<?php echo $themeObject->ShowHeader('addbookmark'); ?>
 			<form method="post" action="addbookmark.php<?php echo $urlext?>">
+       <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 				<div class="pageoverflow">
 					<p class="pagetext"><?php echo lang('title')?>:</p>
 					<p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title?>" /></p>

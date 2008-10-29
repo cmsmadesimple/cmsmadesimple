@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.group.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -34,7 +35,7 @@ $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addgroup"])) $active = 0;
 
 if (isset($_POST["cancel"])) {
-	redirect("listgroups.php");
+	redirect("listgroups.php".$urlext);
 	return;
 }
 
@@ -86,7 +87,7 @@ if ($access)
 				}
 				Events::SendEvent('Core', 'AddGroupPost', array('group' => &$groupobj));
 				audit($groupobj->id, $groupobj->name, 'Added Group');
-				redirect("listgroups.php");
+				redirect("listgroups.php".$urlext);
 				return;
 			}
 			else
@@ -114,6 +115,9 @@ else
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('addgroup'); ?>
 	<form method="post" action="addgroup.php">
+          <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" name="group" maxlength="255" value="<?php echo $group?>" /></p>

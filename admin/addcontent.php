@@ -417,7 +417,7 @@ $tabnames = $contentobj->TabNames();
 		?>
 	</div>
 	<div style="clear: both;"></div>
-	<form method="post" action="addcontent.php<?php echo $urlext ?>" name="contentform" enctype="multipart/form-data" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
+	<form method="post" action="addcontent.php" name="contentform" enctype="multipart/form-data" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
         <div>
         <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
 	<input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />

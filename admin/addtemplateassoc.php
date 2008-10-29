@@ -163,11 +163,11 @@ else
 #******************************************************************************
 if ($doadd)
 {
-	redirect("templatecss.php?id=$id&type=$type");
+	redirect("templatecss.php".$urlext."&amp;id=$id&type=$type");
 }
 else
 {
-	redirect("templatecss.php?id=$id&type=$type&message=$error");
+	redirect("templatecss.php".$urlext."&amp;id=$id&type=$type&message=$error");
 }
 
 # vim:ts=4 sw=4 noet
