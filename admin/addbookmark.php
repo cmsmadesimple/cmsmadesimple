@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -32,7 +33,7 @@ $url = "";
 if (isset($_POST["url"])) $url = $_POST["url"];
 
 if (isset($_POST["cancel"])) {
-	redirect("listbookmarks.php");
+	redirect("listbookmarks.php".$urlext);
 	return;
 }
 
@@ -61,7 +62,7 @@ if (isset($_POST["addbookmark"]))
 
 		if ($result)
 			{
-			redirect("listbookmarks.php");
+			redirect("listbookmarks.php".$urlext);
 			return;
 			}
 		else
@@ -82,7 +83,7 @@ if ($error != "")
 <div class="pagecontainer">
 	<div class="pageoverflow">
 			<?php echo $themeObject->ShowHeader('addbookmark'); ?>
-			<form method="post" action="addbookmark.php">
+			<form method="post" action="addbookmark.php<?php echo $urlext?>">
 				<div class="pageoverflow">
 					<p class="pagetext"><?php echo lang('title')?>:</p>
 					<p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title?>" /></p>

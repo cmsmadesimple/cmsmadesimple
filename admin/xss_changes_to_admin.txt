@@ -9,7 +9,7 @@ I'll remove it from svn.
 
 File                         Status         Completed By
 --------------------------------------------------------
-addbookmark.php
+addbookmark.php              complete      silmarillion
 addcontent.php               incomplete
 addcssassoc.php
 addcss.php                   complete       calguy1000
@@ -78,10 +78,10 @@ myedituser.php
 pagedefaults.php            completed     calguy1000
 siteprefs.php               completed     calguy1000
 style.php                   not needed    calguy1000
-systeminfo.php
+systeminfo.php              not needed    silmarillion
 tab.php                     not needed    calguy1000
 templatecss.php             completed     calguy1000
-topadmin.php		    not needed    calguy1000
+topadmin.php                not needed    calguy1000
 topcontent.php              not needed    calguy1000
 topextensions.php           not needed    calguy1000
 toplayout.php               not needed    calguy1000

@@ -50,7 +50,7 @@ if (isset($_GET["message"])) {
 
 ?>
 
-<form action="multitemplate.php" method="post">
+<form action="multitemplate.php<?php echo $urlext?>" method="post">
 <div class="pagecontainer">
 	<div class="pageoverflow">
 
