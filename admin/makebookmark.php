@@ -19,23 +19,24 @@
 #$Id$ 
 
 require_once('../include.php');
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 include_once("header.php");
 
 check_login();
-$link = $_SERVER['HTTP_REFERER'];
+$origlink = $_SERVER['HTTP_REFERER'];
+$link = str_replace($urlext,'[SECURITYTAG]',$origlink);
 
 $newmark = new Bookmark();
 $newmark->user_id = get_userid();
 $newmark->url = $link;
 $newmark->title = $_GET['title'];
-
 $result = $newmark->save();
 
 if ($result)
 	{
 	header('HTTP_REFERER: '.$config['root_url'].'/'.$config['admin_dir'].'/index.php');
-	redirect($link);
+	redirect($origlink);
 	}
 else
 	{

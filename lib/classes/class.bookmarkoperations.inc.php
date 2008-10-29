@@ -36,6 +36,7 @@ class BookmarkOperations
 	 */
 	function LoadBookmarks($user_id)
 	{
+	  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 		global $gCms;
 		$db = &$gCms->GetDb();
 
@@ -49,7 +50,8 @@ class BookmarkOperations
 			$onemark = new Bookmark();
 			$onemark->bookmark_id = $row['bookmark_id'];
 			$onemark->user_id = $row['user_id'];
-			$onemark->url = $row['url'];
+			$onemark->url = str_replace('[SECURITYTAG]',
+						    $urlext,$row['url']);
 			$onemark->title = $row['title'];
 			$result[] = $onemark;
 		}
