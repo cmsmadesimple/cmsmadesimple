@@ -31,6 +31,9 @@ if ($default_cms_lang != '')
 	$_POST['change_cms_lang'] = $default_cms_lang;
 }
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+$thisurl=basename(__FILE__).$urlext;
+
 check_login();
 
 $admintheme = 'default';
@@ -142,8 +145,11 @@ if (FALSE == empty($page_message)) {
 
 <div class="pagecontainer">
 	<div class="pageoverflow">
-		<?php echo $themeObject->ShowHeader('userprefs'); ?>
-		<form method="post" action="editprefs.php" name="prefsform">
+	<?php echo $themeObject->ShowHeader('userprefs'); ?>
+	<form method="post" action="editprefs.php" name="prefsform">
+            <div>
+	    <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+            <div>
 			<div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</p>
 				<p class="pageinput">
