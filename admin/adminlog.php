@@ -21,7 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 
 global $gCms;
@@ -89,7 +89,7 @@ if (check_permission($userid, 'Modify Site Preferences'))
 		$page_string = pagination($page, $totalrows, $limit);
 		echo "<p class=\"pageshowrows\">".$page_string."</p>";
 		echo $themeObject->ShowHeader('adminlog').'</div>';
-		echo '<a href="adminlog.php?download=1">'.lang('download').'</a>';
+		echo '<a href="adminlog.php'.$urlext.'&amp;download=1">'.lang('download').'</a>';
 
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
@@ -131,9 +131,9 @@ if (check_permission($userid, 'Modify Site Preferences'))
 	if ($access && $result && $result->RecordCount() > 0) {
 		echo '<div class="pageoptions">';
 		echo '<p class="pageoptions">';
-		echo '<a href="adminlog.php?clear=true">';
+		echo '<a href="adminlog.php'.$urlext.'&amp;clear=true">';
 		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon').'</a>';
-		echo '<a class="pageoptions" href="adminlog.php?clear=true">'.lang('clearadminlog').'</a>';
+		echo '<a class="pageoptions" href="adminlog.php'.$urlext.'&amp;clear=true">'.lang('clearadminlog').'</a>';
 		echo '</p>';
 		echo '</div>';
 	}

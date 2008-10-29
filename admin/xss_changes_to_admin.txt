@@ -19,7 +19,7 @@ addtemplateassoc.php         complete      silmarillion
 addtemplate.php              complete      silmarillion
 adduser.php                  complete      silmarillion
 adduserplugin.php
-adminlog.php
+adminlog.php                complete      silmarillion
 changegroupassign.php
 changegroupperm.php
 checksum.php
