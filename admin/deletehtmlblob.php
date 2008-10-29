@@ -21,8 +21,8 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-//require_once("../lib/classes/class.htmlblob.inc.php");
 require_once("../lib/classes/class.template.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -81,7 +81,7 @@ if (isset($_GET["htmlblob_id"]))
 	}
 }
 
-redirect("listhtmlblobs.php");
+redirect("listhtmlblobs.php".$urlext);
 
 # vim:ts=4 sw=4 noet
 ?>

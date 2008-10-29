@@ -21,7 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-//require_once("../lib/classes/class.htmlblob.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -75,12 +75,12 @@ if (isset($_GET["message"])) {
             if ($modifyall ||  quick_check_authorship($onehtmlblob->id, $myblobs))
 				{
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
+				echo "<td><a href=\"edithtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
 				echo "<td>{global_content name='".$onehtmlblob->name."'}</td>\n";
-				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">";
+				echo "<td><a href=\"edithtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\">";
                 echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
-				echo "<td><a href=\"deletehtmlblob.php?htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onehtmlblob->name)."');\">";
+				echo "<td><a href=\"deletehtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onehtmlblob->name)."');\">";
                 echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                 echo "</a></td>\n";
 				echo "</tr>\n";
@@ -101,10 +101,10 @@ if (check_permission($userid, 'Add Global Content Blocks'))
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="addhtmlblob.php">
+			<a href="addhtmlblob.php<?php echo $urlext ?>">
 				<?php 
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addhtmlblob'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="addhtmlblob.php">'.lang("addhtmlblob");
+					echo ' <a class="pageoptions" href="addhtmlblob.php'.$urlext.'">'.lang("addhtmlblob");
 				?>
 			</a>
 		</p>		

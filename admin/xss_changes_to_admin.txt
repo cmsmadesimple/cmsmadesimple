@@ -31,7 +31,7 @@ deletebookmark.php
 deletecssassoc.php           complete       calguy1000
 deletecss.php                complete       calguy1000
 deletegroup.php
-deletehtmlblob.php
+deletehtmlblob.php           complete       calguy1000
 deletetemplateassoc.php
 deletetemplate.php
 deleteuser.php
@@ -44,7 +44,7 @@ editgroup.php
 edithtmlblob.php
 editprefs.php                 complete      calguy1000
 edittemplate.php              complete      calguy1000
-edituser.php
+edituser.php                  complete      calguy1000
 edituserplugin.php            complete      calguy1000
 eventhandlers.php             complete      calguy1000
 files.php                     not needed    calguy1000
@@ -59,7 +59,7 @@ listcontent.php               completed     calguy1000
 listcssassoc.php	      completed     calguy1000
 listcss.php                   completed     calguy1000
 listgroups.php
-listhtmlblobs.php
+listhtmlblobs.php             complted      calguy1000
 listmodules.php               completed     calguy1000
 listtags.php                  completed     calguy1000
 listtemplates.php             completed     silmarillion

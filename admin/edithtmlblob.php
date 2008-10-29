@@ -21,8 +21,8 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-//require_once("../lib/classes/class.htmlblob.inc.php");
 require_once("../lib/classes/class.template.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -48,7 +48,7 @@ if (isset($_POST["htmlblob_id"])) $htmlblob_id = $_POST["htmlblob_id"];
 else if (isset($_GET["htmlblob_id"])) $htmlblob_id = $_GET["htmlblob_id"];
 
 if (isset($_POST["cancel"])) {
-	redirect("listhtmlblobs.php");
+	redirect("listhtmlblobs.php".$urlext);
 	return;
 }
 
@@ -149,7 +149,7 @@ if ($access)
 				Events::SendEvent('Core', 'EditGlobalContentPost', array('global_content' => &$blobobj));
 
 				if (!isset($_POST['apply'])) {
-					redirect('listhtmlblobs.php');
+					redirect('listhtmlblobs.php'.$urlext);
 					return;
 				}
 			}
@@ -352,6 +352,9 @@ else
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('edithtmlblob'); ?>
 	<form id="Edit_Blob" method="post" action="edithtmlblob.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">

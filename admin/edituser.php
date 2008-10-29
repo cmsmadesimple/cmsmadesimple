@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -85,7 +86,7 @@ $use_wysiwyg = "";
 if ($access) {
 
 	if (isset($_POST["cancel"])) {
-		redirect("listusers.php");
+		redirect("listusers.php".$urlext);
 		return;
 	}
 
@@ -175,11 +176,11 @@ if ($access) {
 				
                 if ($access_perm)
                     {
-				    redirect("listusers.php");
+				    redirect("listusers.php".$urlext);
 				    }
 				else
 				    {
-                    redirect("topmyprefs.php");
+                    redirect("topmyprefs.php".$urlext);
                     }
 
 			}
@@ -213,6 +214,9 @@ else {
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('edituser'); ?>
 	<form method="post" action="edituser.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" name="user" maxlength="25" value="<?php echo $user?>" class="standard" /></p>
