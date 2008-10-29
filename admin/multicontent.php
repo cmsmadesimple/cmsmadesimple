@@ -220,7 +220,11 @@ else
             check_permission($userid, 'Modify Page Structure'));
 		if ($access)
 		{
-			echo '<form method="post" action="{$thisurl}">' . "\n";
+			echo '<form method="post" action="multicontent.php">' . "\n";
+      echo '<div>
+          <input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />
+        </div>';
+      
 			echo '<p>'.lang('deletepages').'</p><p>' . "\n";
 			$idlist = array();
 			foreach ($nodelist as $node)
