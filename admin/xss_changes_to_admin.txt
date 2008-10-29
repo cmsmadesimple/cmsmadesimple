@@ -64,17 +64,17 @@ listmodules.php
 listtags.php
 listtemplates.php             completed     silmarillion
 listusers.php                 completed     silmarillion
-listusertags.php
+listusertags.php              completed     calguy1000
 login.php		      completed	    calguy1000
-loginstyle.php
-logout.php
-makebookmark.php
+loginstyle.php                not needed    calguy1000
+logout.php                    not needed    calguy1000
+makebookmark.php 
 menu.php                      remove me     calguy1000
 moduleinterface.php
 multicontent.php              completed     calguy1000
 multistylesheet.php
 multitemplate.php
-myedituser.php
+myedituser.php                not needed    calguy1000
 pagedefaults.php              completed     calguy1000
 siteprefs.php                 completed     calguy1000
 style.php                     not needed    calguy1000

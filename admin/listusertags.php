@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -64,11 +65,11 @@ foreach($gCms->cmsplugins as $oneplugin)
 	if (array_key_exists($oneplugin, $gCms->userplugins))
 	{
 		echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
-		echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">$oneplugin</a></td>\n";
-		echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
+		echo "<td><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">$oneplugin</a></td>\n";
+		echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
 		echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 		echo "</a></td>\n";
-		echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm', $oneplugin)."');\">";
+		echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm', $oneplugin)."');\">";
 		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 		echo "</a></td>\n";
 
@@ -83,10 +84,10 @@ foreach($gCms->cmsplugins as $oneplugin)
 </table>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="adduserplugin.php">
+			<a href="adduserplugin.php<?php echo $urlext; ?>">
 				<?php
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addusertag'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="adduserplugin.php">'.lang("addusertag");
+					echo ' <a class="pageoptions" href="adduserplugin.php'.$urlext.'">'.lang("addusertag");
 				?>
 			</a>
 		</p>
