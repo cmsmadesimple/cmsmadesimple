@@ -86,7 +86,7 @@ function ajaxpreview($params)
 	}
 	updatecontentobj($contentobj, true, $params);
 	$tmpfname = createtmpfname($contentobj);
-	$url = $config["root_url"].'/preview.php'.$urlext.'&amp;tmpfile='.urlencode(basename($tmpfname));
+	$url = $config["root_url"].'/preview.php'.$urlext.'&tmpfile='.urlencode(basename($tmpfname));
 	
 	$objResponse = new xajaxResponse();
 	$objResponse->addAssign("previewframe", "src", $url);
@@ -522,7 +522,7 @@ if (isset($contentobj->mPreview) && $contentobj->mPreview == true)
   {
     $submit_buttons .= ' <input type="submit" name="previewbutton" value="'.lang('preview').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('previewdescription').'" onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;" />';
   }
-*/
+/
 $submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
 $submit_buttons .= ' <input type="submit" onclick="return window.Edit_Content_Apply(this);" name="applybutton" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
  if( $content_type == 'content' ) {
@@ -575,7 +575,7 @@ $submit_buttons .= '</p></div>';
 		{
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>
-					<iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo $config["root_url"] ?>/preview.php<?php echo $urlext ?>&amp;tmpfile=<?php echo urlencode(basename($tmpfname))?>"<?php } ?>></iframe>
+					<iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo $config["root_url"] ?>/preview.php<?php echo $urlext ?>&tmpfile=<?php echo urlencode(basename($tmpfname))?>"<?php } ?>></iframe>
 				<?php
 			echo '</div></div>';
 			echo '<div style="clear: both;"></div>';

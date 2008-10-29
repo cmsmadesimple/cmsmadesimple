@@ -70,6 +70,7 @@ $contentobj = '';
 function ajaxpreview($params)
 {
 	global $gCms;
+	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	$config =& $gCms->GetConfig();
 	$contentops =& $gCms->GetContentOperations();
 
@@ -91,8 +92,8 @@ function ajaxpreview($params)
 	}
 	updatecontentobj($contentobj, true, $params);
 	$tmpfname = createtmpfname($contentobj);
-	$url = $config["root_url"].'/preview.php'.$urlext.'&amp;tmpfile='.urlencode(basename($tmpfname));
-	
+	$url = $config["root_url"].'/preview.php'.$urlext.'&tmpfile='.urlencode(basename($tmpfname));
+
 	$objResponse = new xajaxResponse();
 	$objResponse->addAssign("previewframe", "src", $url);
 	$objResponse->addAssign("serialized_content", "value", SerializeObject($contentobj));
@@ -370,7 +371,7 @@ else if ($preview)
 <!--
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang('preview')?></p>
-	<iframe name="previewframe" class="preview" src="<?php echo $config["root_url"] ?>/preview.php<?php echo $urlext ?>&amp;tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
+	<iframe name="previewframe" class="preview" src="<?php echo $config["root_url"] ?>/preview.php<?php echo $urlext ?>&tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
 </div>
 -->
 <?php
@@ -430,9 +431,11 @@ $tabnames = $contentobj->TabNames();
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">';
 		$submit_buttons .= ' <input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />';
+/*
 		if (isset($contentobj->mPreview) && $contentobj->mPreview == true) {
 			$submit_buttons .= ' <input type="submit" name="previewbutton" value="'.lang('preview').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;" />';
 		}
+*/
 		$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" /></p>';
 		
 		$numberoftabs = count($tabnames);
