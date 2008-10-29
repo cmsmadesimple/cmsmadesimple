@@ -12,21 +12,21 @@ File                         Status         Completed By
 addbookmark.php              complete      silmarillion
 addcontent.php               complete      silmarillion
 addcssassoc.php              complete      silmarillion
-addcss.php                   complete       calguy1000
+addcss.php                   complete      calguy1000
 addgroup.php                 complete      silmarillion
 addhtmlblob.php              complete      silmarillion
 addtemplateassoc.php         complete      silmarillion
 addtemplate.php              complete      silmarillion
 adduser.php                  complete      silmarillion
-adduserplugin.php
-adminlog.php                complete      silmarillion
+adduserplugin.php            complete      calguy1000
+adminlog.php                 complete      silmarillion
 changegroupassign.php
 changegroupperm.php
 checksum.php
 copycontent.php
 copystylesheet.php
 copytemplate.php
-dashboard.php               not needed      silmarillion
+dashboard.php                not needed      silmarillion
 deletebookmark.php
 deletecssassoc.php
 deletecss.php                complete       calguy1000

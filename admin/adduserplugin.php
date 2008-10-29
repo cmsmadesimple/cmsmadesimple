@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -33,7 +34,7 @@ $code= "";
 if (isset($_POST["code"])) $code = $_POST["code"];
 
 if (isset($_POST["cancel"])) {
-	redirect("listusertags.php");
+	redirect("listusertags.php".$urlext);
 	return;
 }
 
@@ -120,7 +121,7 @@ if ($access) {
 			if ($result) {
 				Events::SendEvent('Core', 'AddUserDefinedTagPost', array('id' => $new_usertag_id, 'name' => &$plugin_name, 'code' => &$code));
 				audit($new_usertag_id, $plugin_name, 'Added User Defined Tag');
-				redirect("listusertags.php?message=usertagadded");
+				redirect("listusertags.php".$urlext."&amp;message=usertagadded");
 				return;
 			}
 			else {
@@ -144,6 +145,9 @@ else {
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('addusertag'); ?>
 	<form enctype="multipart/form-data" action="adduserplugin.php" method="post">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('name')?>:</p>
 			<p class="pageinput">
