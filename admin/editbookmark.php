@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 global $gCms;
@@ -39,7 +40,7 @@ if (isset($_POST["bookmark_id"])) $bookmark_id = $_POST["bookmark_id"];
 else if (isset($_GET["bookmark_id"])) $bookmark_id = $_GET["bookmark_id"];
 
 if (isset($_POST["cancel"])) {
-	redirect("listbookmarks.php");
+	redirect("listbookmarks.php".$urlext);
 	return;
 }
 
@@ -73,7 +74,7 @@ if (isset($_POST["editbookmark"]))
 
 		if ($result)
 			{
-			redirect("listbookmarks.php");
+			redirect("listbookmarks.php".$urlext);
 			return;
 			}
 		else
@@ -110,6 +111,9 @@ if ($error != "")
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('editbookmark'); ?>
 	<form method="post" action="editbookmark.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('title')?>:</p>
 			<p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title?>" /></p>

@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 @set_time_limit(9999); // this may not work on all hosts
 
 $userid = get_userid();
@@ -231,6 +232,9 @@ if( !$res )
     $smarty->assign('error',$report);
   }
 // Display the output
+$smarty->assign('urlext',$urlext);
+$smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
+$smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 echo $smarty->fetch('checksum.tpl');
 include_once("footer.php");
 

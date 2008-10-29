@@ -22,6 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.bookmark.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -43,7 +44,7 @@ if (isset($_GET["bookmark_id"]))
 
 }
 
-redirect("listbookmarks.php");
+redirect("listbookmarks.php".$urlext);
 
 # vim:ts=4 sw=4 noet
 ?>

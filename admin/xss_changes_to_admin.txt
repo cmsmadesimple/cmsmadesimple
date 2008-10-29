@@ -22,12 +22,12 @@ adduserplugin.php            complete       calguy1000
 adminlog.php                 complete       silmarillion
 changegroupassign.php
 changegroupperm.php
-checksum.php
+checksum.php                 complete       calguy1000
 copycontent.php              complete       calguy1000
 copystylesheet.php           complete	    calguy1000
 copytemplate.php             complete       calguy1000
 dashboard.php                not needed     silmarillion
-deletebookmark.php
+deletebookmark.php           complete       calguy1000
 deletecssassoc.php           complete       calguy1000
 deletecss.php                complete       calguy1000
 deletegroup.php              complete       calguy1000
@@ -36,7 +36,7 @@ deletetemplateassoc.php      complete       calguy1000
 deletetemplate.php           complete       calguy1000
 deleteuser.php               complete       calguy1000
 deleteuserplugin.php         complete       calguy1000
-editbookmark.php
+editbookmark.php             complete       calguy1000
 editcontent.php              complete	    calguy1000
 editcss.php                  complete       calguy1000
 editevent.php                complete       calguy1000

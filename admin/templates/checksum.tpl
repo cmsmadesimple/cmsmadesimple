@@ -17,7 +17,11 @@
  </div>
 {/if}
 
-<form action="{$smarty.server.PHP_SELF}?action=upload" method="post" enctype="multipart/form-data">
+<form action="{$smarty.server.PHP_SELF}" method="post" enctype="multipart/form-data">
+<div>
+  <input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
+  <input type="hidden" name="action" value="download" />
+</div>
 <fieldset>
   <legend>{lang key='perform_validation'}</legend>
   <div class="pageoverflow">
@@ -35,7 +39,11 @@
 </form>
 
 <br/>
-<form action="{$smarty.server.PHP_SELF}?action=download" method="post" enctype="multipart/form-data">
+<form action="{$smarty.server.PHP_SELF}" method="post" enctype="multipart/form-data">
+<div>
+  <input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
+  <input type="hidden" name="action" value="download" />
+</div>
 <fieldset>
   <legend>{lang key='download_cksum_file'}</legend>
   <div class="pageoverflow">
