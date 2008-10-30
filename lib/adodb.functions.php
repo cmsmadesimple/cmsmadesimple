@@ -60,6 +60,7 @@ function & adodb_connect()
 	$dbinstance =& ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
 	$dbinstance->raiseErrorFn = "adodb_error";
 	$conn_func = (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true) ? 'PConnect' : 'Connect';
+	if(!empty($config['db_port'])) $dbinstance->port = $config['db_port'];
 	$connect_result = $dbinstance->$conn_func($config['db_hostname'], $config['db_username'], $config['db_password'], $config['db_name']);
 	
 	if (FALSE == $connect_result)
