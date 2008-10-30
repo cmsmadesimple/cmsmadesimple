@@ -74,6 +74,7 @@ if ($preview || $apply)
 function ajaxpreview($params)
 {
 	global $gCms;
+	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	$config =& $gCms->GetConfig();
 	$contentops =& $gCms->GetContentOperations();
 
