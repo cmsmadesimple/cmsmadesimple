@@ -24,7 +24,7 @@ function smarty_function_cms_root_url($params, &$smarty)
 }
 
 function smarty_cms_help_function_root_url() {
-  echo lang('help_root_url');
+  echo lang('help_function_root_url');
 }
 
 function smarty_cms_about_function_root_url() {
