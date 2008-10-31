@@ -207,9 +207,14 @@ else {
 
 	if ($result && $result->RecordCount() > 0)
 	{
-		echo "<form action=\"addtemplateassoc.php{$urlext}\" method=\"post\">";
-		echo '<div class="pageoverflow"><p class="pageoptions">';
-		echo "<select name=\"template_id\">\n";
+		?>
+    <form action="addtemplateassoc.php" method="post">
+     <div>
+       <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+     </div>
+    <div class="pageoverflow"><p class="pageoptions">
+		<select name="template_id">
+    <?php
 		while ($line = $result->FetchRow())
 		{
 			echo "<option value=\"".$line["template_id"]."\">".$line["template_name"]."</option>\n";
