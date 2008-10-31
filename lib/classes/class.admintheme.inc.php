@@ -207,7 +207,7 @@ class AdminTheme
 
             foreach($this->modulesBySection[$section] as $sectionModule)
 	      {
-                $modList[$sectionModule['key']]['url'] = "moduleinterface.php?".CMS_SECURE_PARAM_NAME."=".$_SESSION[CMS_USER_KEY]."&module=".
+                $modList[$sectionModule['key']]['url'] = "moduleinterface.php?".CMS_SECURE_PARAM_NAME."=".$_SESSION[CMS_USER_KEY]."&mmp;odule=".
 		  $sectionModule['key'];
                 $modList[$sectionModule['key']]['description'] = $sectionModule['description'];
                 $modList[$sectionModule['key']]['name'] = $sectionModule['name'];
