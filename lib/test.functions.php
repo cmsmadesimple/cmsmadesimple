@@ -260,8 +260,9 @@ function getApacheModules($module = false)
  * @var string $return
  * @var string $message
  * @var string $error
+ * @var string $error_fragment
 */
-function & testDummy($title, $value, $return, $message = '', $error = '')
+function & testDummy($title, $value, $return, $message = '', $error = '', $error_fragment='')
 {
 	$test =&new StdClass();
 	$test->title = $title;
@@ -274,6 +275,7 @@ function & testDummy($title, $value, $return, $message = '', $error = '')
 	if(trim($error) != '')
 	{
 		$test->error = $error;
+		if(trim($error_fragment) != '') $test->error_fragment = $error_fragment;
 	}
 
 	$test->res = $return;
@@ -692,6 +694,7 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
 		$test->res = 'red';
 		$test->res_text = getTestReturn($test->res);
 		$test->error = lang('errordirectorynotwritable') .' ('. $dir . ')';
+		$test->error_fragment = 'Directory_not_writable';
 		if(trim($message) != '')
 		{
 			$test->message = $message;
@@ -732,6 +735,7 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
 			$test->res = 'red';
 			$test->res_text = getTestReturn($test->res);
 			$test->error = lang('errorcantcreatefile') .' ('. $test_file . ')';
+			$test->error_fragment = 'Can.27t_create_file';
 			if(trim($message) != '')
 			{
 				$test->message = $message;
@@ -755,6 +759,7 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
 	$test->res = 'red';
 	$test->res_text = getTestReturn($test->res);
 	$test->error = lang('errorcantcreatefile') .' ('. $test_file .')';
+	$test->error_fragment = 'Can.27t_create_file';
 	return $test;
 }
 
@@ -991,6 +996,7 @@ function & testDirWrite($required, $title, $dir, $message = '', $quick = 0, $deb
 	$test->res = 'red';
 	$test->res_text = getTestReturn($test->res);
 	$test->error = lang('errordirectorynotwritable') .' ('. $dir . ')';
+	$test->error_fragment = 'Directory_not_writable';
 	if(trim($message) != '')
 	{
 		$test->message = $message;
@@ -1053,6 +1059,7 @@ function & testFileWritable($required, $title, $file, $message = '', $debug = fa
 	$test->res = 'red';
 	$test->res_text = getTestReturn($test->res);
 	$test->error = lang('errorfilenotwritable') .' ('. $file . ')';
+	$test->error_fragment = 'File_not_writable';
 	if(trim($message) != '')
 	{
 		$test->message = $message;
@@ -1156,6 +1163,7 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->error = lang('connection_error');
+		$test->error_fragment = 'Connection_error';
 		$test->res = 'red';
 		$test->res_text = getTestReturn($test->res);
 		return $test;
@@ -1481,6 +1489,7 @@ function & testFileUploads($inputname)
 	if($_file_uploads->value == 'Off')
 	{
 		$test->error = lang('function_file_uploads_off');
+		$test->error_fragment = 'Function_file_uploads_disabled';
 		return $test;
 	}
 
