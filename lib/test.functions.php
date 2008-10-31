@@ -40,7 +40,7 @@ function getSupportedDBDriver()
  * @return array
  * @var string $property
 */
-function getTestValues($property)
+function getTestValues( $property )
 {
 	$range = array(
 		'php_version'			=> array('minimum'=>'4.3.0', 'recommended'=>'5.0.4'),
@@ -70,7 +70,7 @@ function getTestValues($property)
  * @return boolean
  * @var string $test
 */
-function extension_loaded_or($test)
+function extension_loaded_or( $test )
 {
 	$a = extension_loaded(strtolower($test));
 	$b = extension_loaded(strtoupper($test));
@@ -81,7 +81,7 @@ function extension_loaded_or($test)
  * @return string
  * @var string $return
 */
-function getTestReturn($return)
+function getTestReturn( $return )
 {
 	switch($return)
 	{
@@ -100,7 +100,7 @@ function getTestReturn($return)
  * @var boolean $result
  * @var boolean $set
 */
-function testGlobal($result, $set = false)
+function testGlobal( $result, $set = false )
 {
 	static $continueon = true;
 	static $special_failed = false;
@@ -129,7 +129,7 @@ function testGlobal($result, $set = false)
  * @var string  $db
  * @var string  $message
 */
-function & testSupportedDatabase($required, $title, $db = false, $message = '')
+function & testSupportedDatabase( $required, $title, $db = false, $message = '' )
 {
 	$drivers = getSupportedDBDriver();
 
@@ -192,6 +192,7 @@ function & testSupportedDatabase($required, $title, $db = false, $message = '')
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
 		$test->res_text = getTestReturn($test->res);
+		$test->error_fragment = 'DB_driver_missing';
 		if(trim($message) != '')
 		{
 			$test->message = $message;
@@ -205,7 +206,7 @@ function & testSupportedDatabase($required, $title, $db = false, $message = '')
  * @return string
  * @var integer $info
 */
-function getEmbedPhpInfo($info = INFO_ALL)
+function getEmbedPhpInfo( $info = INFO_ALL )
 {
 	/**
 	 * callback function to eventually add an extra space in passed <td class="v">...</td>
@@ -237,7 +238,7 @@ function getEmbedPhpInfo($info = INFO_ALL)
  * @return mixed
  * @var string $module
 */
-function getApacheModules($module = false)
+function getApacheModules( $module = false )
 {
 	if(function_exists('apache_get_modules'))
 	{
@@ -262,7 +263,7 @@ function getApacheModules($module = false)
  * @var string $error
  * @var string $error_fragment
 */
-function & testDummy($title, $value, $return, $message = '', $error = '', $error_fragment='')
+function & testDummy( $title, $value, $return, $message = '', $error = '', $error_fragment = '' )
 {
 	$test =&new StdClass();
 	$test->title = $title;
@@ -275,7 +276,10 @@ function & testDummy($title, $value, $return, $message = '', $error = '', $error
 	if(trim($error) != '')
 	{
 		$test->error = $error;
-		if(trim($error_fragment) != '') $test->error_fragment = $error_fragment;
+	}
+	if(trim($error_fragment) != '')
+	{
+		$test->error_fragment = $error_fragment;
 	}
 
 	$test->res = $return;
@@ -291,7 +295,7 @@ function & testDummy($title, $value, $return, $message = '', $error = '', $error
  * @var string $testfunc
  * @var string $message
 */
-function & testConfig($title, $varname, $testfunc = '', $message = '')
+function & testConfig( $title, $varname, $testfunc = '', $message = '' )
 {
 	global $gCms;
 	$config = $gCms->config;
@@ -334,7 +338,7 @@ function & testConfig($title, $varname, $testfunc = '', $message = '')
  * @var string $varname
  * @var string $type
 */
-function testIni(&$test, $varname, $type)
+function testIni( &$test, $varname, $type )
 {
 	$error = null;
 	$str = ini_get($varname);
@@ -377,8 +381,9 @@ function testIni(&$test, $varname, $type)
  * @var string  $message
  * @var boolean $ini
  * @var boolean $not_empty
+ * @var string  $error_fragment
 */
-function & testString($required, $title, $var, $message = '', $ini = true, $not_empty = 'yellow')
+function & testString( $required, $title, $var, $message = '', $ini = true, $not_empty = 'yellow', $error_fragment = '' )
 {
 	$test =&new StdClass();
 	$test->title = $title;
@@ -409,6 +414,10 @@ function & testString($required, $title, $var, $message = '', $ini = true, $not_
 	else
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
+		if(trim($error_fragment) != '')
+		{
+			$test->error_fragment = $error_fragment;
+		}
 		if(trim($message) != '')
 		{
 			$test->message = $message;
@@ -438,8 +447,9 @@ function & testString($required, $title, $var, $message = '', $ini = true, $not_
  * @var string  $message
  * @var boolean $ini
  * @var boolean $negative_test
+ * @var string $error_fragment
 */
-function & testBoolean($required, $title, $var, $message = '', $ini = true, $negative_test = false)
+function & testBoolean( $required, $title, $var, $message = '', $ini = true, $negative_test = false, $error_fragment = '' )
 {
 	$test =&new StdClass();
 	$test->title = $title;
@@ -460,6 +470,10 @@ function & testBoolean($required, $title, $var, $message = '', $ini = true, $neg
 		if(trim($message) != '')
 		{
 			$test->message = $message;
+		}
+		if(trim($error_fragment) != '')
+		{
+			$test->error_fragment = $error_fragment;
 		}
 
 		$test->value = $negative_test ? 'On' : 'Off';
@@ -504,8 +518,9 @@ function & testBoolean($required, $title, $var, $message = '', $ini = true, $neg
  * @var mixed   $recommended
  * @var boolean $ini
  * @var int     $unlimited
+ * @var string  $error_fragment
 */
-function & testVersionRange($required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $unlimited = null)
+function & testVersionRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $unlimited = null, $error_fragment='' )
 {
 	$test =& new StdClass();
 	$test->title = $title;
@@ -538,6 +553,10 @@ function & testVersionRange($required, $title, $var, $message = '', $minimum, $r
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
 		$test->res_text = getTestReturn($test->res);
+		if(trim($error_fragment) != '')
+		{
+			$test->error_fragment = $error_fragment;
+		}
 		if(trim($message) != '')
 		{
 			$test->message = $message;
@@ -547,6 +566,10 @@ function & testVersionRange($required, $title, $var, $message = '', $minimum, $r
 	{
 		$test->res = 'yellow';
 		$test->res_text = getTestReturn($test->res);
+		if(trim($error_fragment) != '')
+		{
+			$test->error_fragment = $error_fragment;
+		}
 		if(trim($message) != '')
 		{
 			$test->message = $message;
@@ -572,8 +595,9 @@ function & testVersionRange($required, $title, $var, $message = '', $minimum, $r
  * @var boolean $ini
  * @var boolean $test_as_bytes
  * @var int     $unlimited
+ * @var string  $error_fragment
 */
-function & testRange($required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $test_as_bytes = false, $unlimited = null)
+function & testRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $test_as_bytes = false, $unlimited = null, $error_fragment = '' )
 {
 	$test =& new StdClass();
 	$test->title = $title;
@@ -612,11 +636,19 @@ function & testRange($required, $title, $var, $message = '', $minimum, $recommen
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
 		$test->res_text = getTestReturn($test->res);
+		if(trim($error_fragment) != '')
+		{
+			$test->error_fragment = $error_fragment;
+		}
 	}
 	elseif((int) $test->ini_val < $recommended)
 	{
 		$test->res = 'yellow';
 		$test->res_text = getTestReturn($test->res);
+		if(trim($error_fragment) != '')
+		{
+			$test->error_fragment = $error_fragment;
+		}
 	}
 	else
 	{
@@ -636,7 +668,7 @@ function & testRange($required, $title, $var, $message = '', $minimum, $recommen
  * @return int
  * @var string $val
  */
-function returnBytes($val)
+function returnBytes( $val )
 {
 	if(is_string($val) && $val != '')
 	{
@@ -667,7 +699,7 @@ function returnBytes($val)
  * @var string  $file
  * @var string  $data
  */
-function & testUmask($required, $title, $umask, $message = '', $debug = false, $dir = '', $file = '_test_umask_', $data = 'this is a test')
+function & testUmask( $required, $title, $umask, $message = '', $debug = false, $dir = '', $file = '_test_umask_', $data = 'this is a test' )
 {
 	$test =& new StdClass();
 	$test->title = $title;
@@ -770,7 +802,7 @@ function & testUmask($required, $title, $umask, $message = '', $debug = false, $
  * @var string  $file
  * @var boolean $debug
  */
-function permission_stat($file, $debug = false)
+function permission_stat( $file, $debug = false )
 {
 	$opt = array();
 	clearstatcache();
@@ -816,7 +848,7 @@ function permission_stat($file, $debug = false)
  * @return string
  * @var octal $mode
  */
-function permission_octal2string($mode)
+function permission_octal2string( $mode )
 {
 	if(($mode & 0xC000) === 0xC000) {
 		$type = 's';
@@ -872,7 +904,7 @@ function permission_octal2string($mode)
  * @var string  $dir
  * @var string  $file
 */
-function & testCreateDirAndFile($required, $title, $message='', $debug = false, $dir = '_test_dir_file_', $file = '_test_dir_file_')
+function & testCreateDirAndFile( $required, $title, $message = '', $debug = false, $dir = '_test_dir_file_', $file = '_test_dir_file_' )
 {
 	$test =& new StdClass();
 	$test->title = $title;
@@ -906,6 +938,7 @@ function & testCreateDirAndFile($required, $title, $message='', $debug = false, 
 		$test->continueon = false;
 		$test->special_failed = true;
 		$test->res = 'false';
+		$test->error_fragment = 'Can.27t_create_file';
 		if(trim($message) != '')
 		{
 			$test->message = $message;
@@ -930,7 +963,7 @@ function & testCreateDirAndFile($required, $title, $message='', $debug = false, 
  * @var string  $file
  * @var string  $data
 */
-function & testDirWrite($required, $title, $dir, $message = '', $quick = 0, $debug = false, $file = '_test_dir_write_', $data = 'this is a test')
+function & testDirWrite( $required, $title, $dir, $message = '', $quick = 0, $debug = false, $file = '_test_dir_write_', $data = 'this is a test' )
 {
 	$test =& new StdClass();
 	$test->title = $title;
@@ -1013,7 +1046,7 @@ function & testDirWrite($required, $title, $dir, $message = '', $quick = 0, $deb
  * @var string  $message
  * @var boolean $debug
 */
-function & testFileWritable($required, $title, $file, $message = '', $debug = false)
+function & testFileWritable( $required, $title, $file, $message = '', $debug = false )
 {
 	$test =& new StdClass();
 	$test->title = $title;
@@ -1078,7 +1111,7 @@ function & testFileWritable($required, $title, $file, $message = '', $debug = fa
  * @var int     $timeout
  * @var string  $search
 */
-function & testRemoteFile($required, $title, $url = '', $message = '', $debug = false, $timeout = 10, $search = 'cmsmadesimple')
+function & testRemoteFile( $required, $title, $url = '', $message = '', $debug = false, $timeout = 10, $search = 'cmsmadesimple' )
 {
 	if(empty($url))
 	{
@@ -1163,7 +1196,6 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->error = lang('connection_error');
-		$test->error_fragment = 'Connection_error';
 		$test->res = 'red';
 		$test->res_text = getTestReturn($test->res);
 		return $test;
@@ -1304,11 +1336,13 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
 		case 3:
 				$test->res = 'yellow';
 				$test->res_text = getTestReturn($test->res);
+				$test->error_fragment = 'Connection_error';
 				break;
 		default:
 				list($test->continueon, $test->special_failed) = testGlobal($required);
 				$test->res = 'red';
 				$test->res_text = getTestReturn($test->res);
+				$test->error_fragment = 'Connection_error';
 				if(trim($message) != '')
 				{
 					$test->message = $message;
@@ -1329,7 +1363,7 @@ function & testRemoteFile($required, $title, $url = '', $message = '', $debug = 
  * @var string  $formattime
  * @var boolean $debug
 */
-function & testFileChecksum($required, $title, $file, $checksum, $message = '', $formattime = '%c', $debug = false)
+function & testFileChecksum( $required, $title, $file, $checksum, $message = '', $formattime = '%c', $debug = false )
 {
 	$test =& new StdClass();
 	$test->title = $title;
@@ -1410,7 +1444,7 @@ function & testFileChecksum($required, $title, $file, $checksum, $message = '', 
  * @return string
  * @var string $sess_path
 */
-function testSessionSavePath($sess_path)
+function testSessionSavePath( $sess_path )
 {
 	if(empty($sess_path))
 	{
@@ -1457,7 +1491,7 @@ function testSessionSavePath($sess_path)
  * @return object
  * @var string $inputname
 */
-function & testFileUploads($inputname)
+function & testFileUploads( $inputname )
 {
 	$_errors = array(
 		UPLOAD_ERR_INI_SIZE => lang('upload_err_ini_size'),
@@ -1539,8 +1573,9 @@ function & testFileUploads($inputname)
  * @var string  $title
  * @var string  $minimum
  * @var string  $message
+ * @var string  $error_fragment
 */
-function & testGDVersion($required, $title, $minimum, $message = '')
+function & testGDVersion( $required, $title, $minimum, $message = '', $error_fragment = '' )
 {
 	$test =& new StdClass();
 	$test->title = $title;
