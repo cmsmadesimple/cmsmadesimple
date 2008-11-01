@@ -179,19 +179,16 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 		if($required)
 		{
 			$test->res = 'true';
-			$test->res_text = getTestReturn($test->res);
 		}
 		else
 		{
 			$test->res = 'green';
-			$test->res_text = getTestReturn($test->res);
 		}
 	}
 	else
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
-		$test->res_text = getTestReturn($test->res);
 		$test->error_fragment = 'DB_driver_missing';
 		if(trim($message) != '')
 		{
@@ -199,6 +196,7 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 		}
 	}
 
+	$test->res_text = getTestReturn($test->res);
 	return $test;
 }
 
@@ -284,7 +282,6 @@ function & testDummy( $title, $value, $return, $message = '', $error = '', $erro
 
 	$test->res = $return;
 	$test->res_text = getTestReturn($return);
-
 	return $test;
 }
 
@@ -349,6 +346,8 @@ function testIni( &$test, $varname, $type )
 			$str = (bool) $str;
 			break;
 		case 'integer':
+			$str = (int) $str;
+			break;
 		case 'string':
 			$str = (string) $str;
 			if(empty($str))
@@ -360,17 +359,78 @@ function testIni( &$test, $varname, $type )
 					#$error .= lang('displaying_the_value_originally');
 				}
 			}
-
-			if($type == 'integer')
-			{
-				$str = (int) $str;
-			}
 			break;
 	}
 
 	$test->ini_val = $str;
 	$test->error = $error;
 	return true;
+}
+
+/**
+ * @return object
+ * @var boolean $required
+ * @var string  $title
+ * @var mixed   $var
+ * @var string  $message
+ * @var boolean $ini
+ * @var boolean $empty_ok
+ * @var string  $error_fragment
+*/
+function & testInteger( $required, $title, $var, $message = '', $ini = true, $empty_ok = true, $error_fragment = '' )
+{
+	$test =&new StdClass();
+	$test->title = $title;
+
+	if($var === '')
+	{
+		if($empty_ok) $test->value = 1;
+		else $test->value = 0;
+
+		$test->ini_val = '';
+	}
+	else
+	{
+		if($ini)
+		{
+			testIni($test, $var, 'integer');
+		}
+		else
+		{
+			$test->ini_val = $var;
+		}
+
+		$test->value = $test->ini_val;
+	}
+
+	if($test->value > 0)
+	{
+		$test->res = 'green';
+	}
+	else
+	{
+		list($test->continueon, $test->special_failed) = testGlobal($required);
+		if(trim($error_fragment) != '')
+		{
+			$test->error_fragment = $error_fragment;
+		}
+		if(trim($message) != '')
+		{
+			$test->message = $message;
+		}
+
+		if($required)
+		{
+			$test->res = 'red';
+		}
+		else
+		{
+			$test->res = 'yellow';
+		}
+	}
+
+	$test->res_text = getTestReturn($test->res);
+	return $test;
 }
 
 /**
@@ -403,12 +463,10 @@ function & testString( $required, $title, $var, $message = '', $ini = true, $not
 		if($required)
 		{
 			$test->res = 'true';
-			$test->res_text = getTestReturn($test->res);
 		}
 		else
 		{
 			$test->res = 'green';
-			$test->res_text = getTestReturn($test->res);
 		}
 	}
 	else
@@ -427,15 +485,14 @@ function & testString( $required, $title, $var, $message = '', $ini = true, $not
 		if($required)
 		{
 			$test->res = 'false';
-			$test->res_text = getTestReturn($test->res);
 		}
 		else
 		{
 			$test->res = $not_empty;
-			$test->res_text = getTestReturn($test->res);
 		}
 	}
 
+	$test->res_text = getTestReturn($test->res);
 	return $test;
 }
 
@@ -481,12 +538,10 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
 		if($required)
 		{
 			$test->res = 'false';
-			$test->res_text = getTestReturn($test->res);
 		}
 		else
 		{
 			$test->res = 'yellow';
-			$test->res_text = getTestReturn($test->res);
 		}
 	}
 	else
@@ -496,15 +551,14 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
 		if($required)
 		{
 			$test->res = 'true';
-			$test->res_text = getTestReturn($test->res);
 		}
 		else
 		{
 			$test->res = 'green';
-			$test->res_text = getTestReturn($test->res);
 		}
 	}
 
+	$test->res_text = getTestReturn($test->res);
 	return $test;
 }
 
@@ -541,18 +595,15 @@ function & testVersionRange( $required, $title, $var, $message = '', $minimum, $
 	$test->value = $test->ini_val;
 	$test->secondvalue = null;
 
-
 	if( (! is_null($unlimited)) && ($test->ini_val == (string) $unlimited) )
 	{
 		$test->res = 'green';
-		$test->res_text = getTestReturn($test->res);
 		$test->value = lang('unlimited');
 	}
 	elseif(version_compare($test->ini_val, $minimum) < 0)
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
-		$test->res_text = getTestReturn($test->res);
 		if(trim($error_fragment) != '')
 		{
 			$test->error_fragment = $error_fragment;
@@ -565,7 +616,6 @@ function & testVersionRange( $required, $title, $var, $message = '', $minimum, $
 	elseif(version_compare($test->ini_val, $recommended) < 0)
 	{
 		$test->res = 'yellow';
-		$test->res_text = getTestReturn($test->res);
 		if(trim($error_fragment) != '')
 		{
 			$test->error_fragment = $error_fragment;
@@ -578,9 +628,9 @@ function & testVersionRange( $required, $title, $var, $message = '', $minimum, $
 	else
 	{
 		$test->res = 'green';
-		$test->res_text = getTestReturn($test->res);
 	}
 
+	$test->res_text = getTestReturn($test->res);
 	return $test;
 }
 
@@ -628,14 +678,12 @@ function & testRange( $required, $title, $var, $message = '', $minimum, $recomme
 	if( (! is_null($unlimited)) && ((int) $test->ini_val == (int) $unlimited) )
 	{
 		$test->res = 'green';
-		$test->res_text = getTestReturn($test->res);
 		$test->value = lang('unlimited');
 	}
 	elseif((int) $test->ini_val < $minimum)
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
-		$test->res_text = getTestReturn($test->res);
 		if(trim($error_fragment) != '')
 		{
 			$test->error_fragment = $error_fragment;
@@ -644,7 +692,6 @@ function & testRange( $required, $title, $var, $message = '', $minimum, $recomme
 	elseif((int) $test->ini_val < $recommended)
 	{
 		$test->res = 'yellow';
-		$test->res_text = getTestReturn($test->res);
 		if(trim($error_fragment) != '')
 		{
 			$test->error_fragment = $error_fragment;
@@ -653,7 +700,6 @@ function & testRange( $required, $title, $var, $message = '', $minimum, $recomme
 	else
 	{
 		$test->res = 'green';
-		$test->res_text = getTestReturn($test->res);
 	}
 
 	if((int) $test->ini_val < $recommended && trim($message) != '')
@@ -661,6 +707,7 @@ function & testRange( $required, $title, $var, $message = '', $minimum, $recomme
 		$test->message = $message;
 	}
 
+	$test->res_text = getTestReturn($test->res);
 	return $test;
 }
 
@@ -948,6 +995,7 @@ function & testCreateDirAndFile( $required, $title, $message = '', $debug = fals
 	{
 		$test->res = 'true';
 	}
+
 	$test->res_text = getTestReturn($test->res);
 	return $test;
 }
@@ -1329,19 +1377,16 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 	{
 		case 0:
 				$test->res = 'green';
-				$test->res_text = getTestReturn($test->res);
 				break;
 		case 1:
 		case 2:
 		case 3:
 				$test->res = 'yellow';
-				$test->res_text = getTestReturn($test->res);
 				$test->error_fragment = 'Connection_error';
 				break;
 		default:
 				list($test->continueon, $test->special_failed) = testGlobal($required);
 				$test->res = 'red';
-				$test->res_text = getTestReturn($test->res);
 				$test->error_fragment = 'Connection_error';
 				if(trim($message) != '')
 				{
@@ -1349,6 +1394,7 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 				}
 	}
 
+	$test->res_text = getTestReturn($test->res);
 	return $test;
 }
 
@@ -1588,7 +1634,6 @@ function & testGDVersion( $required, $title, $minimum, $message = '', $error_fra
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->res = 'red';
-		$test->res_text = getTestReturn($test->res);
 		if(trim($message) != '')
 		{
 			$test->message = $message;
@@ -1597,9 +1642,9 @@ function & testGDVersion( $required, $title, $minimum, $message = '', $error_fra
 	else
 	{
 		$test->res = 'green';
-		$test->res_text = getTestReturn($test->res);
 	}
 
+	$test->res_text = getTestReturn($test->res);
 	return $test;
 }
 
