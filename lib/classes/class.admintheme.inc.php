@@ -689,14 +689,15 @@ class AdminTheme
             'main'=>array('url'=>'index.php','parent'=>-1,
 			  'title'=>'CMS',
 			  'description'=>'','show_in_menu'=>true),
-	    'home'=>array('url'=>'home.php','parent'=>'main',
+	    'home'=>array('url'=>'index.php','parent'=>'main',
 		    'title'=>$this->FixSpaces(lang('home')),
                     'description'=>'','show_in_menu'=>true),
 	    'dashboard'=>array('url'=>'dashboard.php','parent'=>'main',
 			       'title'=>$this->FixSpaces(lang('dashboard')),
 			       'description'=>'','show_in_menu'=>true),
             'viewsite'=>array('url'=>'../index.php','parent'=>'main',
-                    'title'=>$this->FixSpaces(lang('viewsite')),
+			      'title'=>$this->FixSpaces(lang('viewsite')),
+			      'type'=>'external',
                     'description'=>'','show_in_menu'=>true, 'target'=>'_blank'),
              'logout'=>array('url'=>'logout.php','parent'=>'main',
 			     'title'=>$this->FixSpaces(lang('logout')),
@@ -860,7 +861,8 @@ class AdminTheme
 	// adjust all the urls to include the session key
 	foreach( $this->menuItems as $sectionKey => $sectionArray )
 	  {
-	    if( isset($sectionArray['url']) && $sectionKey != 'viewsite' )
+	    if( isset($sectionArray['url']) && 
+		(!isset($sectionArray['type']) || $sectionArray['type'] != 'external' ))
 	      {
 		$this->menuItems[$sectionKey]['url'] .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	      }
@@ -988,7 +990,8 @@ class AdminTheme
 		    $this->menuItems[$sectionKey]['selected'] = false;
 		  }
 	      }
-            else if (strstr($sectionArray['url'],$this->script) !== FALSE)
+            else if (strstr($sectionArray['url'],$this->script) !== FALSE &&
+		     (!isset($sectionArray['type']) || $sectionArray['type'] != 'external'))
 	      {
             	$this->menuItems[$sectionKey]['selected'] = true;
             	$this->title .= $sectionArray['title'];
