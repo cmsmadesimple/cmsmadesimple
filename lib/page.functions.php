@@ -91,6 +91,14 @@ function check_login($no_redirect = false)
 	global $CMS_ADMIN_PAGE;
 	if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE))
 	  {
+	    if( !isset($_SESSION[CMS_USER_KEY]) )
+	      {
+		// it's not in the session, try to grab something from cookies
+		if( isset($_COOKIE[CMS_SECURE_PARAM_NAME]) )
+		  {
+		    $_SESSION[CMS_USER_KEY] = $_COOKIE[CMS_SECURE_PARAM_NAME];
+		  }
+	      }
 	    // now we've got to check the request
 	    // and make sure it matches the session key
 	    if( !isset($_SESSION[CMS_USER_KEY]) || 
