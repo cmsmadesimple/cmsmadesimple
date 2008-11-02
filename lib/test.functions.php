@@ -346,6 +346,7 @@ function testIni( &$test, $varname, $type )
 			$str = (bool) $str;
 			break;
 		case 'integer':
+			if($str === '') break;
 			$str = (int) $str;
 			break;
 		case 'string':
@@ -382,32 +383,26 @@ function & testInteger( $required, $title, $var, $message = '', $ini = true, $em
 	$test =&new StdClass();
 	$test->title = $title;
 
-	if($var === '')
+	if($ini)
 	{
-		if($empty_ok) $test->value = 1;
-		else $test->value = 0;
-
-		$test->ini_val = '';
+		testIni($test, $var, 'integer');
 	}
 	else
 	{
-		if($ini)
-		{
-			testIni($test, $var, 'integer');
-		}
-		else
-		{
-			$test->ini_val = $var;
-		}
+		$test->ini_val = $var;
+	}
 
+	if($test->ini_val === '')
+	{
+		if($empty_ok) $test->value = lang('on');
+		else $test->value = 0;
+	}
+	else
+	{
 		$test->value = $test->ini_val;
 	}
 
-	if($test->value > 0)
-	{
-		$test->res = 'green';
-	}
-	else
+	if(empty($test->value))
 	{
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		if(trim($error_fragment) != '')
@@ -427,6 +422,10 @@ function & testInteger( $required, $title, $var, $message = '', $ini = true, $em
 		{
 			$test->res = 'yellow';
 		}
+	}
+	else
+	{
+		$test->res = 'green';
 	}
 
 	$test->res_text = getTestReturn($test->res);
