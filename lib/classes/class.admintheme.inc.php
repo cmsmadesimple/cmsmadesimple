@@ -1026,10 +1026,12 @@ class AdminTheme
 	if ($count > 0)
 	  {
 	    // and fix up the last breadcrumb...
-	    if ($this->query != '' && strpos($this->breadcrumbs[$count-1]['url'],'?') === false)
+	    if ($this->query != '' && strpos($this->breadcrumbs[$count-1]['url'],'&amp;') === false)
 	      {
 		$this->query = preg_replace('/\&/','&amp;',$this->query);
-		$this->breadcrumbs[$count-1]['url'] .= '?'.$this->query;
+		$pos = strpos($this->breadcrumbs[$count-1]['url'],'?');
+		$tmp = substr($this->breadcrumbs[$count-1]['url'],0,$pos).'?'.$this->query;
+		$this->breadcrumbs[$count-1]['url'] = $tmp;
 	      }
 	    if ($this->subtitle != '')
 	      {
@@ -1050,7 +1052,7 @@ class AdminTheme
      	if ($count > -1)
 	  {
      	    $txt = $this->breadcrumbs[$count]['url'];
-	    return $txt.$urlext;
+	    return $txt;
 	  }
         else
 	  {
