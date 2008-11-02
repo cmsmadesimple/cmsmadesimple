@@ -1,6 +1,6 @@
 <div class="pagecontainer">
 {if empty($smarty.get.cleanreport)}
-	<p class="pageshowrows"><a href="systeminfo.php?cleanreport=1">{si_lang a=copy_paste_forum}</a></p>
+	<p class="pageshowrows"><a href="{$systeminfo_cleanreport}">{si_lang a=copy_paste_forum}</a></p>
 {/if}
 
 {$showheader}
