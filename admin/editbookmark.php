@@ -120,7 +120,7 @@ if ($error != "")
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('url')?>:</p>
-			<p class="pageinput"><input type="text" name="url" maxlength="255" value="<?php echo $myurl ?>" /></p>
+			<p class="pageinput"><input type="text" name="url" size="80" maxlength="255" value="<?php echo $myurl ?>" /></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
