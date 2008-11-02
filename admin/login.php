@@ -53,11 +53,11 @@ else if ( isset($_SESSION['redirect_url']) )
 		$homepage = get_preference($userid,'homepage');
 		if( $homepage == '' )
 		{
-			$homepage = 'index.php';
+		  $homepage = 'index.php';
 		}
 		{
-			$tmp = explode('?',$homepage);
-			if( !file_exists($tmp[0]) ) $homepage = 'index.php';
+		  $tmp = explode('?',$homepage);
+		  if( !file_exists($tmp[0]) ) $homepage = 'index.php';
 		}
 		$dest = $dest.'/'.$homepage;
 		$dest .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
@@ -167,11 +167,19 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			    {
 			      $homepage = 'index.php';
 			    }
-			  {
-			    $tmp = explode('?',$homepage);
-			    if( !file_exists($tmp[0]) ) $homepage = 'index.php';
-			  }
-			  $homepage .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+			  $tmp = explode('?',$homepage);
+			  echo "DEBUG: before cut homepage = $homepage<br/>";
+			  if( !file_exists($tmp[0]) ) $homepage = 'index.php';
+			  $pos = strpos($homepage,CMS_SECURE_PARAM_NAME);
+			  if( $pos !== FALSE )
+			    {
+			      $str = substr($homepage,$pos-1,strlen(CMS_SECURE_PARAM_NAME)+strlen($_SESSION[CMS_USER_KEY])+2);
+			      $rep = '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+			      $homepage = str_replace($str,$rep,$homepage);
+			    }
+			  echo "DEBUG: after cut homepage = $homepage<br/>";
+			  $homepage = html_entity_decode($homepage);
+			  echo "DEBUG: final homepage = $homepage<br/>";
 			  redirect($homepage);
 			}
 		}

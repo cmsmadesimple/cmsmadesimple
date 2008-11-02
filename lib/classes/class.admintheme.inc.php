@@ -1889,9 +1889,7 @@ class AdminTheme
 			  continue;
 			}
 
-		 
-		      $opts['&nbsp;&nbsp;'.$menuChild['title']] = $menuChild['url'];
-
+		      $opts['&nbsp;&nbsp;'.$menuChild['title']] = cms_htmlentities($menuChild['url']);
 		    }
 		}
 	    }
