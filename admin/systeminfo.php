@@ -38,6 +38,11 @@ define('CMS_BASE', dirname(dirname(__FILE__)));
 require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 
 
+function installerHelpLanguage( $lang, $default_null=null )
+{
+        if( (!is_null($default_null)) && ($default_null == $lang) ) return '';
+        return substr($lang, 0, 2);
+}
 
 function systeminfo_lang($params,&$smarty)
 {
@@ -71,8 +76,10 @@ $smarty->assign('themename', $themeObject->themeName);
 $smarty->assign('showheader', $themeObject->ShowHeader('copycontent'));
 $smarty->assign('backurl', $themeObject->BackUrl());
 $smarty->assign('systeminfo_cleanreport', 'systeminfo.php'.$urlext.'&amp;cleanreport=1');
-$smarty->assign('cms_install_help_url', 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Installation/Install_Process');
 
+$help_lang = installerHelpLanguage(get_preference($userid, 'default_cms_language', 'en_US'), 'en_US');
+$help_lang = (empty($help_lang)) ? '' : '/'.$help_lang;
+$smarty->assign('cms_install_help_url', 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Installation/Install_Process'. $help_lang);
 
 
 /* CMS Install Information */
