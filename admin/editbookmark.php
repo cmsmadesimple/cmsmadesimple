@@ -32,8 +32,8 @@ $error = "";
 $title = "";
 if (isset($_POST["title"])) $title = $_POST["title"];
 
-$url = "";
-if (isset($_POST["url"])) $url = $_POST["url"];
+$myurl = "";
+if (isset($_POST["url"])) $myurl = $_POST["url"];
 
 $bookmark_id = -1;
 if (isset($_POST["bookmark_id"])) $bookmark_id = $_POST["bookmark_id"];
@@ -54,7 +54,7 @@ if (isset($_POST["editbookmark"]))
 		$validinfo = false;
 		$error .= "<li>".lang('nofieldgiven', array(lang('title')))."</li>";
 		}
-	if ($url == "")
+	if ($myurl == "")
 		{
 		$validinfo = false;
 		$error .= "<li>".lang('nofieldgiven', array(lang('url')))."</li>";
@@ -67,7 +67,7 @@ if (isset($_POST["editbookmark"]))
 		$markobj =& new Bookmark();
 		$markobj->bookmark_id = $bookmark_id;
 		$markobj->title = $title;
-		$markobj->url = $url;
+		$markobj->url = $myurl;
 		$markobj->user_id = $userid;
 
 		$result = $markobj->save();
@@ -91,14 +91,14 @@ else if ($bookmark_id != -1)
 	
 	$row = $result->FetchRow();
 
-	$url = $row["url"];
+	$myurl = $row["url"];
 	$title = $row["title"];
 	}
 
 if (strlen($title) > 0)
-    {
+  {
     $CMS_ADMIN_SUBTITLE = $title;
-    }
+  }
 
 include_once("header.php");
 
@@ -120,7 +120,7 @@ if ($error != "")
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('url')?>:</p>
-			<p class="pageinput"><input type="text" name="url" maxlength="255" value="<?php echo $url ?>" /></p>
+			<p class="pageinput"><input type="text" name="url" maxlength="255" value="<?php echo $myurl ?>" /></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
