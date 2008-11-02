@@ -71,6 +71,7 @@ $smarty->assign('themename', $themeObject->themeName);
 $smarty->assign('showheader', $themeObject->ShowHeader('copycontent'));
 $smarty->assign('backurl', $themeObject->BackUrl());
 $smarty->assign('systeminfo_cleanreport', 'systeminfo.php'.$urlext.'&amp;cleanreport=1');
+$smarty->assign('cms_install_help_url', 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Installation/Install_Process');
 
 
 
@@ -89,6 +90,9 @@ $tmp = array(0=>array(), 1=>array());
 
 $tmp[0]['php_memory_limit'] = testConfig('php_memory_limit', 'php_memory_limit');
 $tmp[0]['process_whole_template'] = testConfig('process_whole_template', 'process_whole_template');
+$tmp[1]['debug'] = testConfig('debug', 'debug');
+$tmp[1]['output_compression'] = testConfig('output_compression', 'output_compression');
+
 $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
 $tmp[0]['default_upload_permission'] = testConfig('default_upload_permission', 'default_upload_permission');
 $tmp[0]['assume_mod_rewrite'] = testConfig('assume_mod_rewrite', 'assume_mod_rewrite');
@@ -104,7 +108,6 @@ $tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
 $tmp[1]['image_uploads_path'] = testConfig('image_uploads_path', 'image_uploads_path', 'testDirWrite');
 $tmp[1]['image_uploads_url'] = testConfig('image_uploads_url', 'image_uploads_url');
 $tmp[1]['use_smarty_php_tags'] = testConfig('use_smarty_php_tags', 'use_smarty_php_tags');
-$tmp[1]['debug'] = testConfig('debug', 'debug');
 $tmp[1]['locale'] = testConfig('locale', 'locale');
 $tmp[1]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
 $tmp[1]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
@@ -119,81 +122,76 @@ $smarty->assign('config_info', $tmp);
 
 $tmp = array(0=>array(), 1=>array());
 
+$safe_mode = ini_get('safe_mode');
 $session_save_path = ini_get('session.save_path');
 $open_basedir = ini_get('open_basedir');
+
 
 list($minimum, $recommended) = getTestValues('php_version');
 $tmp[0]['phpversion'] = testVersionRange(0, 'phpversion', phpversion(), '', $minimum, $recommended, false);
 
-
-list($minimum, $recommended) = getTestValues('memory_limit');
-$tmp[0]['memory_limit'] = testRange(0, 'memory_limit', 'memory_limit', '', $minimum, $recommended, true, true);
-
-
-list($minimum, $recommended) = getTestValues('max_execution_time');
-$tmp[0]['max_execution_time'] = testRange(0, 'max_execution_time', 'max_execution_time', '', $minimum, $recommended, true, false, 0);
-
+$tmp[0]['md5_function'] = testBoolean(0, 'md5_function', function_exists('md5'), '', false, false, 'Function_md5_disabled');
 
 list($minimum, $recommended) = getTestValues('gd_version');
-$tmp[0]['gd_version'] = testGDVersion(0, 'gd_version', $minimum);
+$tmp[0]['gd_version'] = testGDVersion(0, 'gd_version', $minimum, '', 'min_GD_version');
 
+$tmp[0]['tempnam_function'] = testBoolean(0, 'tempnam_function', function_exists('tempnam'), '', false, false, 'Function_tempnam_disabled');
 
-$tmp[0]['safe_mode'] = testBoolean(0, 'safe_mode', 'safe_mode', '', true, true);
+$tmp[0]['magic_quotes_runtime'] = testBoolean(0, 'magic_quotes_runtime', 'magic_quotes_runtime', lang('magic_quotes_runtime_on'), true, true, 'magic_quotes_runtime_On');
 
 $tmp[1]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
 
 
-if (! empty($open_basedir))
-{
-	$tmp[1]['open_basedir'] = testDummy('open_basedir', $open_basedir, 'yellow', lang('test_check_open_basedir_failed'));
-}
-else
-{
-	$tmp[1]['open_basedir'] = testDummy('open_basedir', $open_basedir, 'green');
-}
+list($minimum, $recommended) = getTestValues('memory_limit');
+$tmp[0]['memory_limit'] = testRange(0, 'memory_limit', 'memory_limit', '', $minimum, $recommended, true, true, null, 'memory_limit_range');
 
+list($minimum, $recommended) = getTestValues('max_execution_time');
+$tmp[0]['max_execution_time'] = testRange(0, 'max_execution_time', 'max_execution_time', '', $minimum, $recommended, true, false, 0, 'max_execution_time_range');
 
-$tmp[1]['md5_function'] = testBoolean(0, 'md5_function', function_exists('md5'), '', false);
+$tmp[1]['register_globals'] = testBoolean(0, lang('register_globals'), 'register_globals', '', true, true, 'register_globals_enabled');
 
-$tmp[1]['xml_function'] = testBoolean(0, 'xml_function', extension_loaded_or('xml'), '', false, false);
+$tmp[1]['output_buffering'] = testInteger(0, lang('output_buffering'), 'output_buffering', '', true, true, 'output_buffering_disabled');
 
-$tmp[1]['file_uploads'] = testBoolean(0, 'file_uploads', 'file_uploads', '', true, false);
+$tmp[1]['disable_functions'] = testString(0, lang('disable_functions'), 'disable_functions', '', true, 'yellow', 'disable_functions_not_empty');
+
+$tmp[0]['safe_mode'] = testBoolean(0, 'safe_mode', 'safe_mode', '', true, true);
+
+$tmp[1]['open_basedir'] = testString(0, lang('open_basedir'), $open_basedir, '', false, 'yellow', 'open_basedir_enabled');
+
+$tmp[1]['test_remote_url'] = testRemoteFile(0, 'test_remote_url', '', lang('test_remote_url_failed'));
+
+$tmp[1]['file_uploads'] = testBoolean(0, 'file_uploads', 'file_uploads', '', true, false, 'Function_file_uploads_disabled');
 
 list($minimum, $recommended) = getTestValues('post_max_size');
-$tmp[1]['post_max_size'] = testRange(0, 'post_max_size', 'post_max_size', '', $minimum, $recommended, true, true);
+$tmp[1]['post_max_size'] = testRange(0, 'post_max_size', 'post_max_size', '', $minimum, $recommended, true, true, null, 'min_post_max_size');
 
 list($minimum, $recommended) = getTestValues('upload_max_filesize');
 $tmp[1]['upload_max_filesize'] = testRange(0, 'upload_max_filesize', 'upload_max_filesize', '', $minimum, $recommended, true, true);
 
-if ( (ini_get('session.save_handler') == 'files') && (empty($session_save_path)) )
+$session_save_path = testSessionSavePath('');
+if(empty($session_save_path))
 {
-	$tmp[0]['session_save_path'] = testDummy('session_save_path', lang('os_session_save_path'), 'yellow');
+	$tmp[0]['session_save_path'] = testDummy('session_save_path', lang('os_session_save_path'), 'yellow', '', '', 'session_save_path_empty');
 }
 elseif (! empty($open_basedir))
 {
-	$tmp[0]['session_save_path'] = testDummy('session_save_path', lang('open_basedir_active'), 'yellow');
+	$tmp[0]['session_save_path'] = testDummy('session_save_path', lang('open_basedir_active'), 'yellow', '', '', 'No_check_session_save_path_with_open_basedir');
 }
 else
 {
-	if (strrpos($session_save_path, ";") !== false)
-	{
-		$session_save_path = substr($session_save_path, strrpos($session_save_path, ";")+1); //Can be 5;777;/tmp
-	}
-	$tmp[0]['session_save_path'] = testDirWrite(0, $session_save_path, $session_save_path);
+	$tmp[0]['session_save_path'] = testDirWrite(0, lang('session_save_path'), $session_save_path, '', $session_save_path, 1);
 }
 
-$tmp[0]['magic_quotes_runtime'] = testBoolean(0, 'magic_quotes_runtime', 'magic_quotes_runtime', lang('magic_quotes_runtime_on'), true, true);
+$tmp[1]['xml_function'] = testBoolean(0, 'xml_function', extension_loaded_or('xml'), '', false, false, 'Function_xml_disabled');
 
-$tmp[0]['magic_quotes_gpc'] = testBoolean(0, 'magic_quotes_gpc', 'magic_quotes_gpc', lang('magic_quotes_gpc_on'), true, true);
+$tmp[1]['file_get_contents'] = testBoolean(0, 'file_get_contents', function_exists('file_get_contents'), '', false, 'Function_file_get_content_disabled');
 
-$tmp[1]['file_get_contents'] = testBoolean(0, 'file_get_contents', function_exists('file_get_contents'), '', false);
-
-$tmp[1]['test_remote_url'] = testRemoteFile(0, 'test_remote_url', '', lang('test_remote_url_failed'));
+$tmp[0]['magic_quotes_gpc'] = testBoolean(0, 'magic_quotes_gpc', 'magic_quotes_gpc', lang('magic_quotes_gpc_on'), true, true, 'magic_quotes_gpc_On');
 
 $_log_errors_max_len = (ini_get('log_errors_max_len')) ? ini_get('log_errors_max_len').'0' : '99';
 ini_set('log_errors_max_len', $_log_errors_max_len);
 $result = (ini_get('log_errors_max_len') == $_log_errors_max_len);
-$tmp[1]['check_ini_set'] = testBoolean(0, 'check_ini_set', $result, lang('check_ini_set_off'), false);
+$tmp[1]['check_ini_set'] = testBoolean(0, 'check_ini_set', $result, lang('check_ini_set_off'), false, false, 'ini_set_disabled');
 
 $smarty->assign('count_php_information', count($tmp[0]));
 $smarty->assign('php_information', $tmp);
@@ -244,6 +242,7 @@ $global_umask = get_site_preference('global_umask', '022');
 $tmp[1][lang('global_umask')] = testUmask(0, lang('global_umask'), $global_umask);
 
 $result = is_writable(CONFIG_FILE_LOCATION);
+#$tmp[1]['config_file'] = testFileWritable(0, lang('config_writable'), CONFIG_FILE_LOCATION, '');
 $tmp[1]['config_file'] = testDummy('', substr(sprintf('%o', fileperms(CONFIG_FILE_LOCATION)), -4), (($result) ? 'red' : 'green'), (($result) ? lang('config_writable') : ''));
 
 $smarty->assign('count_permission_info', count($tmp[0]));
