@@ -32,7 +32,6 @@ global $gCms;
 $db =& $gCms->GetDb();
 
 include_once("header.php");
-
 $themeObject->ShowShortcuts();
 $themeObject->DisplaySectionMenuDivStart();
 $themeObject->DisplayAllSectionPages();

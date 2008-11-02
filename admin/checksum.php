@@ -210,9 +210,9 @@ $db = &$gCms->GetDb();
 // Handle output
 $res = true;
 $report = '';
-if( isset($_GET['action']) )
+if( isset($_POST['action']) )
   {
-    switch($_GET['action'])
+    switch($_POST['action'])
       {
       case 'upload':
 	$res = check_checksum_data($report);
