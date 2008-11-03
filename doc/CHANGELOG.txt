@@ -11,7 +11,10 @@ Version 1.5
 - The complete content object is now available to smarty on each page request
 - The {content_image} tag has been added allowing numerous images to be attached to each page
   (no upload capabilities at the moment)
-- TinyMCE changes
+- TinyMCE changes: Updated to latest Tiny-core
+                   Static option for some installations where config-file could not be generated onthefly
+                   Pretty url improvements
+                   General bugfixes and smaller feature additions and improvements
 - Apply buttons on GCB's and UDT's
 - Groups as additional editors on GCB's 
 - Add 'image' and 'thumbnail' attributes to applicable content types
@@ -36,6 +39,7 @@ Version 1.5
   very old) being fixed, or closed.  There are way too many of them to describe, but
   the result should be a much more stable, much more solid application.
   
+
 
 Version 1.4.1 "Spring Garden"
 -----------------------------
