@@ -1049,10 +1049,11 @@ function cms_db_prefix() {
   return $config["db_prefix"];
 }
 
-function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='',$allownone=false,$extratext='')
+function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='',$allownone=false,$extratext='',
+			      $fileprefix='',$excludefiles=1)
 {
   $files = array();
-  $files = get_matching_files($dir,$allowed_extensions);
+  $files = get_matching_files($dir,$allowed_extensions,true,true,$fileprefix,$excludefiles);
   if( $files === false ) return false;
   $out = "<select name=\"{$name}\" {$extratext}>\n";
   if( $allownone )

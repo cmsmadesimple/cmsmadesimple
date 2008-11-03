@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['image'] = 'Image';
+$lang['admin']['thumbnail'] = 'Thumbnail';
 $lang['admin']['searchable'] = 'This page is searchable';
 $lang['admin']['help_function_content_image'] = <<<EOT
 <h3>What does this do?</h3>

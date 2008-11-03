@@ -940,7 +940,8 @@ function is_directory_writable( $path )
  * @param extensions - include only files matching these extensions 
  *                     case insensitive, comma delimited
  */
-function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true)
+function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true,
+			    $fileprefix='',$excludefiles=1)
 {
 
   $dh = @opendir($dir);
@@ -956,6 +957,11 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
       if( $file == '.' || $file == '..' ) continue;
       if( startswith($file,'.') && $excludedot ) continue;
       if( is_dir(cms_join_path($dir,$file)) && $excludedir ) continue;
+      if( !empty($fileprefix) )
+	{
+	  if( $excludefiles == 1 && startswith($file,$fileprefix) ) continue;
+	  if( $excludefiles == 0 && !startswith($file,$fileprefix) ) continue;
+	}
 
       $ext = strtolower(substr($file,strrpos($file,'.')+1));
       if( !in_array($ext,$extensions) ) continue;

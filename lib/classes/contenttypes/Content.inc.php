@@ -26,7 +26,8 @@ class Content extends ContentBase
     function Content()
     {
 	$this->ContentBase();
-	$this->mProperties->SetAllowedPropertyNames(array('content_en','target','pagedata','extra1','extra2','extra3','searchable'));
+	$this->mProperties->SetAllowedPropertyNames(array('content_en','target','pagedata',
+							  'extra1','extra2','extra3','searchable','image','thumbnail'));
 	$this->additionalContentBlocks = array();
 	$this->addtContentBlocksLoaded = false;
     }
@@ -49,6 +50,8 @@ class Content extends ContentBase
 	$this->mProperties->Add('string', 'extra1'); 
 	$this->mProperties->Add('string', 'extra2'); 
 	$this->mProperties->Add('string', 'extra3'); 
+	$this->mProperties->Add('string', 'image'); 
+	$this->mProperties->Add('string', 'thumbnail'); 
 	$this->mProperties->Add('string', 'searchable'); 
 
 	#Turn on preview
@@ -77,7 +80,7 @@ class Content extends ContentBase
 	if (isset($params))
 	{
 	  $parameters = array('content_en','target','pagedata','extra1','extra2','extra3',
-			      'searchable');
+			      'image','thumbnail','searchable');
 
 	    //pick up the template id before we do parameters
 	    if (isset($params['template_id']))
@@ -217,15 +220,25 @@ class Content extends ContentBase
 	}
 	if ($tab == 0)
 	{
-	    $ret[]= array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
-	    $ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
-	    if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
-        {
-			$contentops =& $gCms->GetContentOperations();
-            $ret[]= array(lang('parent').':',$contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
-        }
+	  $ret[]= array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
+	  $ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
+	  if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
+	    {
+	      $contentops =& $gCms->GetContentOperations();
+	      $ret[]= array(lang('parent').':',$contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
+	    }
 
-    if( check_permission(get_userid(), 'Modify Page Structure') || $adding ) {
+	  $dir = cms_join_path($config['uploads_path'],'images');
+	  $optprefix = 'images';
+	  $data = $this->GetPropertyValue('image');
+	  $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
+	  $ret[] = array(lang('image').':',$dropdown);
+	  
+	  $data = $this->GetPropertyValue('thumbnail');
+	  $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
+	  $ret[] = array(lang('thumbnail').':',$dropdown);
+
+	  if( check_permission(get_userid(), 'Modify Page Structure') || $adding ) {
 	      $additionalcall = '';
 	    foreach($gCms->modules as $key=>$value)
 	    {
@@ -344,23 +357,23 @@ class Content extends ContentBase
 	  else {
             $ret[]= array(lang('pagealias').':','<input type="text" disabled name="alias" value="'.$this->mAlias.'" />');
 	  }
-	    $ret[]= array(lang('page_metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
+	  $ret[]= array(lang('page_metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
 
-	    $ret[]= array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
-	    $ret[]= array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />');
-	    $ret[]= array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
-	    $ret[]= array(lang('pagedata_codeblock').':',create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','pagedata','','','80','6'));
-	    $ret[]= array(lang('searchable').':',
-			  '<div><input type="hidden" name="searchable" value="0"></div>
+	  $ret[]= array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
+	  $ret[]= array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />');
+	  $ret[]= array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+	  $ret[]= array(lang('pagedata_codeblock').':',create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','pagedata','','','80','6'));
+	  $ret[]= array(lang('searchable').':',
+			'<div><input type="hidden" name="searchable" value="0"></div>
                            <input type="checkbox" name="searchable" value="1" '.($this->GetPropertyValue('searchable')==1?'checked="checked"':'').'>');
-	    $ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
-	    $ret[]= array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
-	    $ret[]= array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
-
-	    $userops =& $gCms->GetUserOperations();
-	    if (!$adding && $showadmin)
+	  $ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
+	  $ret[]= array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
+	  $ret[]= array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
+	  
+	  $userops =& $gCms->GetUserOperations();
+	  if (!$adding && $showadmin)
 	    {
-			$ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
+	      $ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
 	    }
 
 	    if ($adding || $showadmin)

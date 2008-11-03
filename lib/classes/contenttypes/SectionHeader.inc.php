@@ -23,7 +23,8 @@ class SectionHeader extends ContentBase
 
     function SectionHeader() {
         $this->ContentBase();
-        $this->mProperties->SetAllowedPropertyNames(array('extra1','extra2','extra3'));
+        $this->mProperties->SetAllowedPropertyNames(array('extra1','extra2','extra3',
+							  'image','thumbnail'));
     }
 
     function FriendlyName()
@@ -36,6 +37,8 @@ class SectionHeader extends ContentBase
 	$this->mProperties->Add('string', 'extra1'); 
 	$this->mProperties->Add('string', 'extra2'); 
 	$this->mProperties->Add('string', 'extra3'); 
+	$this->mProperties->Add('string', 'image'); 
+	$this->mProperties->Add('string', 'thumbnail'); 
 
 	#Turn off caching
 	$this->mCachable = false;
@@ -61,6 +64,14 @@ class SectionHeader extends ContentBase
 	  if( isset($params['extra3']) )
 	    {
 	      $this->SetPropertyValue('extra3',trim($params['extra3']));
+	    }
+	  if( isset($params['image']) )
+	    {
+	      $this->SetPropertyValue('image',trim($params['image']));
+	    }
+	  if( isset($params['thumbnail']) )
+	    {
+	      $this->SetPropertyValue('thumbnail',trim($params['thumbnail']));
 	    }
 	    if (isset($params['title']))
 	    {
@@ -140,6 +151,19 @@ class SectionHeader extends ContentBase
 		$contentops =& $gCms->GetContentOperations();
     	$ret[]= array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
     }
+
+      global $gCms;
+      $config =& $gCms->GetConfig();
+      $dir = cms_join_path($config['uploads_path'],'images');
+      $optprefix = 'images';
+      $data = $this->GetPropertyValue('image');
+      $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
+      $ret[] = array(lang('image').':',$dropdown);
+      
+      $data = $this->GetPropertyValue('thumbnail');
+      $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
+      $ret[] = array(lang('thumbnail').':',$dropdown);
+
 	$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />') ;
 	$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 	$ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');

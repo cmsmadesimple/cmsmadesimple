@@ -23,7 +23,8 @@ class PageLink extends ContentBase
 
     function PageLink() {
         $this->ContentBase();
-        $this->mProperties->SetAllowedPropertyNames(array('page', 'params', 'target','extra1','extra2','extra3'));
+        $this->mProperties->SetAllowedPropertyNames(array('page', 'params', 'target','extra1','extra2','extra3',
+							  'image', 'thumbnail'));
     }
 	
     function IsCopyable()
@@ -49,6 +50,8 @@ class PageLink extends ContentBase
 		$this->mProperties->Add('string', 'extra1');
 		$this->mProperties->Add('string', 'extra2');
 		$this->mProperties->Add('string', 'extra3');
+		$this->mProperties->Add('string', 'image');
+		$this->mProperties->Add('string', 'thumbnail');
 		
 		//Turn off caching
 		$this->mCachable = false;
@@ -58,7 +61,8 @@ class PageLink extends ContentBase
     {
 		if (isset($params))
 			{
-			  $parameters = array('page', 'params','target','extra1','extra2','extra3');
+			  $parameters = array('page', 'params','target','extra1','extra2','extra3',
+					      'image','thumbnail');
 				foreach ($parameters as $oneparam)
 					{
 						if (isset($params[$oneparam]))
@@ -83,6 +87,14 @@ class PageLink extends ContentBase
 				if (isset($params['extra3']) )
 				  {
 				    $this->SetPropertyValue('extra3',trim($_POST['extra3']));
+				  }
+				if (isset($params['image']) )
+				  {
+				    $this->SetPropertyValue('image',trim($_POST['image']));
+				  }
+				if (isset($params['thumbnail']) )
+				  {
+				    $this->SetPropertyValue('thumbnail',trim($_POST['thumbnail']));
 				  }
 				if (isset($params['title']))
 					{
@@ -201,6 +213,18 @@ class PageLink extends ContentBase
 // 	$text .= $this->directoryToSelect($gCms->config['uploads_path'], true, $gCms->config['uploads_path'], $this->GetPropertyValue('url'));
 // 	$ret[]= array(lang('file_url').':','<select name="file_url">'.$text.'</select>');
 	
+      global $gCms;
+      $config =& $gCms->GetConfig();
+      $dir = cms_join_path($config['uploads_path'],'images');
+      $optprefix = 'images';
+      $data = $this->GetPropertyValue('image');
+      $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
+      $ret[] = array(lang('image').':',$dropdown);
+      
+      $data = $this->GetPropertyValue('thumbnail');
+      $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
+      $ret[] = array(lang('thumbnail').':',$dropdown);
+
 	$text = '<option value="---">'.lang('none').'</option>';
 	$text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
 	$text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
