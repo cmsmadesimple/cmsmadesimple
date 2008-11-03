@@ -130,7 +130,14 @@ if (isset($_POST["submit_form"])) {
 	$enablenotifications = get_preference($userid, 'enablenotifications', 1);
 	$paging = get_preference($userid, 'paging', 0);
 	$date_format_string = get_preference($userid, 'date_format_string','%x %X');
+
 	$homepage = get_preference($userid,'homepage');
+	$to = '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+	$pos = strpos($homepage,'?'.CMS_SECURE_PARAM_NAME);
+	$from = substr($homepage,$pos,strlen($to));
+	$homepage = str_replace($from,$to,$homepage);
+	$homepage = str_replace('&','&amp;',$homepage);
+
 	$hide_help_links = get_preference($userid, 'hide_help_links');
 	$ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
 }
