@@ -93,7 +93,7 @@ if ($error != "")
 				</div>
 				<div class="pageoverflow">
 					<p class="pagetext"><?php echo lang('url')?>:</p>
-					<p class="pageinput"><input type="text" name="url" maxlength="255" value="<?php echo $url ?>" class="standard" /></p>
+					<p class="pageinput"><input type="text" name="url" size="50" maxlength="255" value="<?php echo $url ?>" class="standard" /></p>
 				</div>
 				<div class="pageoverflow">
 					<p class="pagetext">&nbsp;</p>
