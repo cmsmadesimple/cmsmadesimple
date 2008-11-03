@@ -63,6 +63,11 @@ if( isset($_GET['submit']) )
     {
       $to_parentid = (int)$_GET['to_parentid'];
     }
+  $to_accesskey = '';
+  if( isset($_GET['to_accesskey']) ) 
+    {
+      $to_accesskey = trim($_GET['to_accesskey']);
+    }
 
   //
   // Now do the copy
@@ -82,6 +87,8 @@ if( isset($_GET['submit']) )
   $tmpobj->SetParentId($to_parentid);
   $tmpobj->SetOldParentId($to_parentid);
   $tmpobj->SetMenuText($to_menutext);
+  $tmpobj->SetAccessKey($to_accesskey);
+  
   $tmpobj->SetDefaultContent(0);
   $tmpobj->SetOwner(get_userid());
   $tmpobj->SetLastModifiedBy(get_userid());
@@ -137,6 +144,7 @@ $smarty->assign('lang_pagetitle',lang('title'));
 $smarty->assign('lang_pagealias',lang('pagealias'));
 $smarty->assign('lang_pageparent',lang('parent'));
 $smarty->assign('lang_pagemenutext',lang('menutext'));
+$smarty->assign('lang_pageaccesskey',lang('accesskey'));
 $smarty->assign('lang_submit',lang('submit'));
 $smarty->assign('lang_cancel',lang('cancel'));
 $smarty->assign('input_parentdropdown',$contentops->CreateHierarchyDropdown($fromobj->Id(),$fromobj->ParentId(),'to_parentid'));

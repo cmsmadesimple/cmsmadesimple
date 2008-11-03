@@ -66,6 +66,11 @@
     </div>
 
     <div class="pageoverflow">
+      <p class="pagetext">{$lang_pageaccesskey}:</p>
+      <p class="pageinput"><input type="text" name="to_accesskey" size="5" maxlength="5" value="{$fromobj->AccessKey()}"></p>
+    </div>
+
+    <div class="pageoverflow">
       <p class="pagetext">&nbsp;</p>
       <p class="pageinput"><input type="submit" name="submit" value="{$lang_submit}"><input type="submit" name="cancel" value="{$lang_cancel}"></p>
     </div>
