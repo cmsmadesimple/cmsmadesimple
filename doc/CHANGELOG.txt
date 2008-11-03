@@ -12,6 +12,21 @@ Version 1.5
 - The {content_image} tag has been added allowing numerous images to be attached to each page
   (no upload capabilities at the moment)
 - TinyMCE changes
+- Apply buttons on GCB's and UDT's
+- Groups as additional editors on GCB's 
+- Add 'image' and 'thumbnail' attributes to applicable content types
+  (we don't permit uploading, just selecting a previously uploaded file)
+- MenuManager 1.5.3
+  Add raw_menutext field to the node
+  Add image and thumbnail fields to the node (if they are set)
+  Support syntax hilighter when editing templates
+- Add 'image' and 'thumbnail' attributes to applicable content types
+  (we don't permit uploading, just selecting a previously uploaded file)
+- News 2.9
+  - Support syntax hilighter when editing templates
+  - Support the notification area
+  - Remove all RSS Capabilities
+  
 
 Version 1.4.1 "Spring Garden"
 -----------------------------
