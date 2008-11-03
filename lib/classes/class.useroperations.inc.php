@@ -131,9 +131,9 @@ class UserOperations
 		if ($activeonly == true)
 		{
 		  $joins[] = cms_db_prefix()."user_groups ug ON u.user_id = ug.user_id";
-		  $joins[] = cms_db_prefix()."groups g ON ug.group_id = g.group_id";
+		  //$joins[] = cms_db_prefix()."groups g ON ug.group_id = g.group_id";
 		  $where[] = "u.active = 1";	
-		  $where[] = "g.active = 1";
+		  //$where[] = "g.active = 1";
 		}
 
 		if ($adminaccessonly == true)
