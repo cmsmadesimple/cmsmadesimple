@@ -1,14 +1,16 @@
 Developers Past and Present
 ---------------------------
 - Ted Kulp <wishy [AT] cmsmadesimple [DOT] org>
-- Samuel Goldstein <cmsmadesimple [AT] fogbound [DOT] net>
 - Robert Campbell <calguy1000 [AT] cmsmadesimple [DOT] org>
 - Morten Poulsen <morten [AT] poulsen [DOT] org>
+- Nuno Costa <nuno [AT] criacaoweb [DOT] net>
+- Dr. Alberto Benati <alberto [DOT] benati [AT] gmail [DOT] com>
+- Samuel Goldstein <cmsmadesimple [AT] fogbound [DOT] net>
 - Tatu Wikman <tsw [AT] cmsmadesimple [DOT] org>
-- Alexander Endresen <alexander [AT] endresen [DOT] org>
-- Daniel Westergren <daniel [AT] wproductions [DOT] se>
-- Patricia Brun <cmsms [AT] virtuaza [DOT] net>
 
+- Alexander Endresen <alexander [AT] endresen [DOT] org>
+- Patricia Brun <cmsms [AT] virtuaza [DOT] net>
+- Daniel Westergren <daniel [AT] wproductions [DOT] se>
 - Greg Froese <heavy_g [AT] users.sf [DOT] net>
 - Rob Allen <rob [AT] akrabat [DOT] com>
 - Simon Brown <simon [AT] uptoeleven [DOT] ws>
@@ -18,6 +20,7 @@ Developers Past and Present
 - Julien Lancien <calexico [AT] cmsmadesimple [DOT] org>
 - Christian Page <christian [AT] localdesert [DOT] com>
 - Darren Landrum <consul [AT] studioconsul [DOT] net>
+
  
 Translators
 -----------
@@ -33,6 +36,7 @@ Danish: Morten Poulsen <morten [AT] poulsen [DOT] org>
 
 Dutch: Sjaak <sjaak [AT] nlweb [DOT] net>
        Jesca Z <jesca [AT] zweijtzer [DOT] nl>
+       Ronny Krijt <r [DOT] krijt [AT] gmail [DOT] com>
 
 French: Herve Commowick <daycom [AT] daycom [DOT] net>,
         Patricia Brun <cmsms [AT] virtuaza [DOT] net>
@@ -52,11 +56,14 @@ Japanese: Victor Alexander Debuque <victor [AT] nuspace.net [DOT] au>
 
 Lituanian: Tomas Paplauskas <tmzsegardc [AT] accessatc [DOT] net>
 
-Norwegian: Jon A Holm <jaholm [AT] start [DOT] no>,
-        Alexander Endresen <alexander [AT] endresen [DOT] org>, 
-        Bjorn Are Solstad <basicus [AT] gmail [DOT] com>
+Norwegian: Reneh Helminsen <renehelminsen [AT] gmail [DOT] com>,
+           Jon A Holm <jaholm [AT] start [DOT] no>,
+           Alexander Endresen <alexander [AT] endresen [DOT] org>,
+           Bjorn Are Solstad <basicus [AT] gmail [DOT] com>
 
 Polish: Piotr Tarnowski <drfugazi [AT] drfugazi.eu [DOT] org>
+
+Portuguese: Nuno Costa <nuno [AT] criacaoweb [DOT] net>
 
 Russian: Tyaga Alex Pool <webmaste [AT] superhonda [DOT] ru>
 
