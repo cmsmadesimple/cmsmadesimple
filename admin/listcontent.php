@@ -1047,7 +1047,7 @@ function display_content_list($themeObject = null)
 		echo ' <a class="pageoptions" href="'.$thisurl.'&amp;expandall=1" onclick="xajax_content_expandall(); return false;">'.lang("expandall");
 ?>
 			</a>&nbsp;&nbsp;&nbsp;
-		<a href="<?php echo $thisurl ?>&collapseall=1" onclick="xajax_content_collapseall(); return false;">
+		<a href="<?php echo $thisurl ?>&amp;collapseall=1" onclick="xajax_content_collapseall(); return false;">
 <?php 
 			echo $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
 		echo ' <a class="pageoptions" href="'.$thisurl.'&amp;collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall").'</a>';
