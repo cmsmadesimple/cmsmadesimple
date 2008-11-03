@@ -493,7 +493,7 @@ $lang['admin']['help_function_last_modified_by'] = <<<EOT
                 <li><em>(optional)</em>format - id, username, fullname</li>
         </ul>
 EOT;
-$lang['admin']['help_function_iamge'] = <<<EOT
+$lang['admin']['help_function_image'] = <<<EOT
   <h3>What does this do?</h3>
   <p>Creates an image tag to an image stored within your images directory</p>
   <h3>How do I use it?</h3>
