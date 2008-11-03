@@ -177,6 +177,11 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			      $rep = '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			      $homepage = str_replace($str,$rep,$homepage);
 			    }
+				else
+				{
+					$homepage .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+				}
+
 			  echo "DEBUG: after cut homepage = $homepage<br/>";
 			  $homepage = html_entity_decode($homepage);
 			  echo "DEBUG: final homepage = $homepage<br/>";
