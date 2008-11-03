@@ -115,33 +115,44 @@ class UserOperations
 		$db = &$gCms->GetDb();
 
 		$params = array();
+		$where = array();
+		$joins = array();
 
-		$query = "SELECT user_id FROM ".cms_db_prefix()."users WHERE username = ?";
+		$query = "SELECT u.user_id FROM ".cms_db_prefix()."users u";
+		$where[] = 'username = ?';
 		$params[] = $username;
 
 		if ($password != '')
 		{
-			$query .= " AND password = ?";
-			$params[] = md5($password);
+		  $where[] = 'password = ?';
+		  $params[] = md5($password);
 		}
 
 		if ($activeonly == true)
 		{
-			$query .= " AND active = 1";
+		  $joins[] = cms_db_prefix()."user_groups ug ON u.user_id = ug.user_id";
+		  $joins[] = cms_db_prefix()."groups g ON ug.group_id = g.group_id";
+		  $where[] = "g.active = 1";
 		}
 
 		if ($adminaccessonly == true)
 		{
-			$query .= " AND admin_access = 1";
+		  $where[] = "admin_access = 1";
 		}
 
-		$dbresult = $db->Execute($query, $params);
+		if( !empty($joins) )
+		  {
+		    $query .= ' LEFT JOIN '.implode(' LEFT JOIN ',$joins);
+		  }
+		if( !empty($where) )
+		  {
+		    $query .= ' WHERE '.implode(' AND ',$where);
+		  }
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
+		$id = $db->GetOne($query,$params);
+		if( $id )
 		{
-			$row = $dbresult->FetchRow();
-			$id = $row['user_id'];
-			$result =& UserOperations::LoadUserByID($id);
+		  $result =& UserOperations::LoadUserByID($id);
 		}
 
 		return $result;
