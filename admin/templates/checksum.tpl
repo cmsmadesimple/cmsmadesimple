@@ -20,7 +20,7 @@
 <form action="{$smarty.server.PHP_SELF}" method="post" enctype="multipart/form-data">
 <div>
   <input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
-  <input type="hidden" name="action" value="download" />
+  <input type="hidden" name="action" value="upload" />
 </div>
 <fieldset>
   <legend>{lang key='perform_validation'}</legend>
