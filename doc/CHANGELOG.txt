@@ -20,8 +20,6 @@ Version 1.5
   Add raw_menutext field to the node
   Add image and thumbnail fields to the node (if they are set)
   Support syntax hilighter when editing templates
-- Add 'image' and 'thumbnail' attributes to applicable content types
-  (we don't permit uploading, just selecting a previously uploaded file)
 - News 2.9
   - Support syntax hilighter when editing templates
   - Support the notification area
@@ -33,6 +31,10 @@ Version 1.5
     admin section.  
   - This modification will now prevent the administrator from creating bookarms in his
     web browser to various actions in the CMS Made Simple admin console.
+- Numerous bug fixes
+  The CMS Made Simple Geek Moot in august this year resulted in many bugs (some of them
+  very old) being fixed, or closed.  There are way too many of them to describe, but
+  the result should be a much more stable, much more solid application.
   
 
 Version 1.4.1 "Spring Garden"
