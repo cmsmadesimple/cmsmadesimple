@@ -4,7 +4,7 @@ Developers Past and Present
 - Robert Campbell <calguy1000 [AT] cmsmadesimple [DOT] org>
 - Morten Poulsen <morten [AT] poulsen [DOT] org>
 - Nuno Costa <nuno [AT] criacaoweb [DOT] net>
-- Dr. Alberto Benati <alberto [DOT] benati [AT] gmail [DOT] com>
+- Alberto Benati <alberto [DOT] benati [AT] gmail [DOT] com>
 - Samuel Goldstein <cmsmadesimple [AT] fogbound [DOT] net>
 - Tatu Wikman <tsw [AT] cmsmadesimple [DOT] org>
 
