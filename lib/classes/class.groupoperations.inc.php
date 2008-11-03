@@ -81,6 +81,13 @@ class GroupOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
+		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ?';
+		$tmp = $db->GetOne($query,array($group->name));
+		if( $tmp )
+		  {
+		    return $result;
+		  }
+
 		$new_group_id = $db->GenID(cms_db_prefix()."groups_seq");
 		$time = $db->DBTimeStamp(time());
 		$query = "INSERT INTO ".cms_db_prefix()."groups (group_id, group_name, active, create_date, modified_date) VALUES (?,?,?,".$time.", ".$time.")";
@@ -99,6 +106,13 @@ class GroupOperations
 
 		global $gCms;
 		$db = &$gCms->GetDb();
+
+		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ? AND group_id != ?';
+		$tmp = $db->GetOne($query,array($group->name,$group->id));
+		if( $tmp )
+		  {
+		    return $result;
+		  }
 
 		$time = $db->DBTimeStamp(time());
 		$query = "UPDATE ".cms_db_prefix()."groups SET group_name = ?, active = ?, modified_date = ".$time." WHERE group_id = ?";
