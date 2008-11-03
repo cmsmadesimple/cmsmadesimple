@@ -26,6 +26,13 @@ Version 1.5
   - Support syntax hilighter when editing templates
   - Support the notification area
   - Remove all RSS Capabilities
+- Extensive modifications were made to add a session key to each and every
+  URL in the admin console.  This prevents a medium level cross site scripting
+  vulnerability.
+  - This modification will break any existing bookmarks that you have created in your
+    admin section.  
+  - This modification will now prevent the administrator from creating bookarms in his
+    web browser to various actions in the CMS Made Simple admin console.
   
 
 Version 1.4.1 "Spring Garden"
