@@ -38,6 +38,8 @@ Version 1.5
   The CMS Made Simple Geek Moot in august this year resulted in many bugs (some of them
   very old) being fixed, or closed.  There are way too many of them to describe, but
   the result should be a much more stable, much more solid application.
+- It is now a requirement inorder for an administrator to be able to login
+  that they be a member of at least one active group.
   
 
 
