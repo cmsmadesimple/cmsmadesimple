@@ -18,6 +18,10 @@ CMS uses the smarty template engine in various places.  Their license and
 various documentation files are located in the smarty subdirectory of this 
 distribution.  Their website is located at: http://smarty.php.net
 
+CMS uses the adodb_lite database abstraction library.  It is released
+under the LGPGL license and is located at:
+http://adodblite.sourceforge.net/index.php
+
 CMS includes the XML-RPC library written by Keith Devens.  It is released 
 under the Artistic license and can be found at:
 http://keithdevens.com/software/xmlrpc
@@ -25,3 +29,4 @@ http://keithdevens.com/software/xmlrpc
 CMS includes the xajax library written by Jared White & J. Max Wilson.  It 
 is released under the LGPL license and is located at: 
 http://www.xajaxproject.org/
+
