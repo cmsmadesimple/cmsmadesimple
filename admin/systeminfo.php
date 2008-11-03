@@ -77,9 +77,18 @@ $smarty->assign('showheader', $themeObject->ShowHeader('copycontent'));
 $smarty->assign('backurl', $themeObject->BackUrl());
 $smarty->assign('systeminfo_cleanreport', 'systeminfo.php'.$urlext.'&amp;cleanreport=1');
 
-$help_lang = installerHelpLanguage(get_preference($userid, 'default_cms_language', 'en_US'), 'en_US');
+$help_lang = get_preference($userid, 'default_cms_language');
+if(empty($help_lang))
+{
+	if(! empty($_COOKIE['cms_language'])) $help_lang = installerHelpLanguage($_COOKIE['cms_language'], 'en_US');
+}
+else
+{
+	$help_lang = installerHelpLanguage($help_lang, 'en_US');
+}
 $help_lang = (empty($help_lang)) ? '' : '/'.$help_lang;
 $smarty->assign('cms_install_help_url', 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Installation/Install_Process'. $help_lang);
+
 
 
 /* CMS Install Information */
