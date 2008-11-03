@@ -168,7 +168,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			      $homepage = 'index.php';
 			    }
 			  $tmp = explode('?',$homepage);
-			  echo "DEBUG: before cut homepage = $homepage<br/>";
 			  if( !file_exists($tmp[0]) ) $homepage = 'index.php';
 			  $pos = strpos($homepage,CMS_SECURE_PARAM_NAME);
 			  if( $pos !== FALSE )
@@ -182,9 +181,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 					$homepage .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 				}
 
-			  echo "DEBUG: after cut homepage = $homepage<br/>";
 			  $homepage = html_entity_decode($homepage);
-			  echo "DEBUG: final homepage = $homepage<br/>";
 			  redirect($homepage);
 			}
 		}
