@@ -10,6 +10,8 @@ _processor=8000
 _project=cmsmadesimple
 _stable_package=1
 _unstable_package=26
+_tr_stable_package=618
+_tr_unstable_package=26
 _basedir=/tmp
 
 #
@@ -84,9 +86,11 @@ while [ $_done = 0 ]; do
   read ans;
   if [ $ans = 's' -o $ans = 'S' ]; then
     _package=$_stable_package
+    _tr_package=$_tr_stable_package;
     _done=1
   elif [ $ans = 'u' -o $ans = 'U' ]; then
     _package=$_unstable_package
+    _tr_package=$_tr_unstable_package;
     _done=1
   else
     echo
@@ -116,6 +120,9 @@ gforge login --username=${_username} --password=${_password} --project=${_projec
 
 # add a release to the designated package
 _id=`gforge frs addrelease --package=${_package} --name=${_version} | tail -3 | head -1 | cut -d" " -f2`
+if [ $_tr_package ne $_package ]; then
+  _tr_id=`gforge frs addrelease --package=${_tr_package} --name=${_version} | tail -3 | head -1 | cut -d" " -f2`
+fi
 
 _now=`date +%Y-%m-%d`
 cd $_srcdir
@@ -123,13 +130,18 @@ for file in * ; do
   echo "INFO: Uploading $file"
   _isgz=`echo $file | grep -ce 'gz$'`
   _isdat=`echo $file | grep -ce 'dat$'`
+  _islang=`echo $file | grep -c 'langpack'`
 
-  if [ ${_isgz} = 1 ]; then
-    gforge frs addfile --package=${_package} --release=${_id} --file=$file --type=${_gztype} --date=${_now} >/dev/null
-  elif [ $_isdat = 1 ]; then
-    gforge frs addfile --package=${_package} --release=${_id} --file=$file --type=${_txttype} --date=${_now} >/dev/null
+  if [ $_islang = 1 ]; then
+    gforge frs addfile --package=${_tr_package} --release={$_tr_id} --file=$file --type=${_gztype} --date=${_now} >/dev/null
   else
-    gforge frs addfile --package=${_package} --release=${_id} --file=$file --type=${_othertype} --date=${_now} >/dev/null
+    if [ ${_isgz} = 1 ]; then
+      gforge frs addfile --package=${_package} --release=${_id} --file=$file --type=${_gztype} --date=${_now} >/dev/null
+    elif [ $_isdat = 1 ]; then
+      gforge frs addfile --package=${_package} --release=${_id} --file=$file --type=${_txttype} --date=${_now} >/dev/null
+    else
+      gforge frs addfile --package=${_package} --release=${_id} --file=$file --type=${_othertype} --date=${_now} >/dev/null
+    fi
   fi
 done
 
