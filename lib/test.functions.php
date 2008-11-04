@@ -97,26 +97,31 @@ function getTestReturn( $return )
 
 /**
  * @return array
- * @var boolean $result
+ * @var mixed   $result
  * @var boolean $set
 */
 function testGlobal( $result, $set = false )
 {
 	static $continueon = true;
 	static $special_failed = false;
+
 	if( ($set) && (is_array($result)) )
 	{
-		$return = array($continueon, $special_failed);
 		list($continueon, $special_failed) = $result;
-		return $return;
+		return array($continueon, $special_failed);
 	}
-	if($result == true)
+
+	if($result === '')
+	{
+		return array($continueon, $special_failed);
+	}
+	elseif($result == true)
 	{
 		$continueon = false;
 	}
 	elseif($result == false)
 	{
-		$special_failed = true;
+		$special_failed= true;
 	}
 
 	return array($continueon, $special_failed);
@@ -167,7 +172,7 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 		$return = array();
 		foreach($drivers as $driver=>$server)
 		{
-			$_test = testBoolean(0, '', extension_loaded_or($driver), '', false, false);
+			$_test = testBoolean('', '', extension_loaded_or($driver), '', false, false);
 			if($_test->res == 'green')
 			{
 				$return[] = $driver;
@@ -1253,37 +1258,34 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 		if( (! empty($search)) && (false !== strpos($content_fsockopen, $search)) )
 		{
 			$test->opt['fsockopen']['res'] = 'green';
-			$test->opt['fsockopen']['res_text'] = getTestReturn($test->opt['fsockopen']['res']);
 			$test->opt['fsockopen']['message'] = lang('search_string_find');
 		}
 		elseif(false !== strpos($content_fsockopen, '200 OK'))
 		{
 			$test->opt['fsockopen']['ok'] = 1;
 			$test->opt['fsockopen']['res'] = 'yellow';
-			$test->opt['fsockopen']['res_text'] = getTestReturn($test->opt['fsockopen']['res']);
 			$test->opt['fsockopen']['message'] = lang('remote_response_ok');
 		}
 		elseif(false !== strpos($content_fsockopen, '404 Not Found'))
 		{
 			$test->opt['fsockopen']['ok'] = 1;
 			$test->opt['fsockopen']['res'] = 'yellow';
-			$test->opt['fsockopen']['res_text'] = getTestReturn($test->opt['fsockopen']['res']);
 			$test->opt['fsockopen']['message'] = lang('remote_response_404');
 		}
 		else
 		{
 			$test->opt['fsockopen']['ok'] = 2;
 			$test->opt['fsockopen']['res'] = 'red';
-			$test->opt['fsockopen']['res_text'] = getTestReturn($test->opt['fsockopen']['res']);
 			$test->opt['fsockopen']['message'] = lang('remote_response_error');
 		}
+		$test->opt['fsockopen']['res_text'] = getTestReturn($test->opt['fsockopen']['res']);
 	}
 
 
 
 	// TEST FOPEN
 	$test->opt['fopen']['ok'] = 2;
-	$result = testBoolean(0, '', 'allow_url_fopen', lang('test_allow_url_fopen_failed'), false, false);
+	$result = testBoolean('', '', 'allow_url_fopen', lang('test_allow_url_fopen_failed'), false, false);
 	if($result->value == 'Off')
 	{
 		$test->opt['fopen']['res'] = 'red';
@@ -1344,30 +1346,27 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 		if( (! empty($search)) && (false !== strpos($content_fopen, $search)) )
 		{
 			$test->opt['fopen']['res'] = 'green';
-			$test->opt['fopen']['res_text'] = getTestReturn($test->opt['fopen']['res']);
 			$test->opt['fopen']['message'] = lang('search_string_find');
 		}
 		elseif(false !== strpos($content_fopen, '200 OK'))
 		{
 			$test->opt['fopen']['ok'] = 1;
 			$test->opt['fopen']['res'] = 'yellow';
-			$test->opt['fopen']['res_text'] = getTestReturn($test->opt['fopen']['res']);
 			$test->opt['fopen']['message'] = lang('remote_response_ok');
 		}
 		elseif(false !== strpos($content_fopen, '404 Not Found'))
 		{
 			$test->opt['fopen']['ok'] = 1;
 			$test->opt['fopen']['res'] = 'yellow';
-			$test->opt['fopen']['res_text'] = getTestReturn($test->opt['fopen']['res']);
 			$test->opt['fopen']['message'] = lang('remote_response_404');
 		}
 		else
 		{
 			$test->opt['fopen']['ok'] = 2;
 			$test->opt['fopen']['res'] = 'red';
-			$test->opt['fopen']['res_text'] = getTestReturn($test->opt['fopen']['res']);
 			$test->opt['fopen']['message'] = lang('remote_response_error');
 		}
+		$test->opt['fopen']['res_text'] = getTestReturn($test->opt['fopen']['res']);
 	}
 
 
@@ -1564,7 +1563,7 @@ function & testFileUploads( $inputname )
 	$test =& new StdClass();
 	$test->files = array();
 
-	$_file_uploads = testBoolean(0, '', 'file_uploads', '', true, false);
+	$_file_uploads = testBoolean('', '', 'file_uploads', '', true, false);
 	if($_file_uploads->value == 'Off')
 	{
 		$test->error = lang('function_file_uploads_off');
