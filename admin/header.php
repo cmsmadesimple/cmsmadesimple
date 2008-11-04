@@ -202,7 +202,8 @@ else
 	      isset($gCms->modules['CMSMailer']['installed']) &&
               get_site_preference('mail_is_set',0) == 0 )
             {
-               $themeObject->AddNotification(1,'Core',lang('warning_mail_settings'));
+		$urlCMSMailer = 'moduleinterface.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&module=CMSMailer';
+		$themeObject->AddNotification(1,'Core',lang('warning_mail_settings', $urlCMSMailer));
             }
 	}
 

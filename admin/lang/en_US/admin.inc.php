@@ -122,7 +122,7 @@ $lang['admin']['warning_upgrade'] = '<em><strong>Warning:</strong></em> CMSMS is
 $lang['admin']['warning_upgrade_info1'] = 'You are now running schema version %s. and you need to be upgraded to version %s';
 $lang['admin']['warning_upgrade_info2'] = 'Please click the following link: %s.';
 $lang['admin']['warning_mail_settings'] = <<<EOT
-Your mail settings have not been configured.  This could interfere with the ability of your website to send email messages.  You should go to <a href="moduleinterface.php?module=CMSMailer">Extensions &gt;&gt; CMSMailer</a> and configure the mail settings with the information provided by your host.
+Your mail settings have not been configured.  This could interfere with the ability of your website to send email messages.  You should go to <a href="%s">Extensions >> CMSMailer</a> and configure the mail settings with the information provided by your host.
 EOT;
 $lang['admin']['view_page'] = 'View this page in a new window';
 $lang['admin']['off'] = 'Off';
