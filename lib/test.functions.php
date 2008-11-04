@@ -85,10 +85,8 @@ function getTestReturn( $return )
 {
 	switch($return)
 	{
-		case 'true':	return lang('success'); break;
 		case 'green':	return lang('success'); break;
 		case 'yellow':	return lang('caution'); break;
-		case 'false':	return lang('failure'); break;
 		case 'red':		return lang('failure'); break;
 	}
 
@@ -107,8 +105,9 @@ function testGlobal( $result, $set = false )
 
 	if( ($set) && (is_array($result)) )
 	{
+		$return = array($continueon, $special_failed);
 		list($continueon, $special_failed) = $result;
-		return array($continueon, $special_failed);
+		return $return;
 	}
 
 	if($result === '')
@@ -182,10 +181,6 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 		$test->value = implode(',', $return);
 		$test->secondvalue = $return;
 		if($required)
-		{
-			$test->res = 'true';
-		}
-		else
 		{
 			$test->res = 'green';
 		}
@@ -311,7 +306,7 @@ function & testConfig( $title, $varname, $testfunc = '', $message = '' )
 		$value = $config[$varname];
 		if(! empty($testfunc))
 		{
-			$test = $testfunc(0, $title, $value);
+			$test = $testfunc('', $title, $value);
 		}
 	}
 	else
@@ -466,10 +461,6 @@ function & testString( $required, $title, $var, $message = '', $ini = true, $not
 		$test->value = '';
 		if($required)
 		{
-			$test->res = 'true';
-		}
-		else
-		{
 			$test->res = 'green';
 		}
 	}
@@ -488,7 +479,7 @@ function & testString( $required, $title, $var, $message = '', $ini = true, $not
 		$test->value = $test->ini_val;
 		if($required)
 		{
-			$test->res = 'false';
+			$test->res = 'red';
 		}
 		else
 		{
@@ -541,7 +532,7 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
 		$test->secondvalue = $negative_test ? lang('true') : lang('false');
 		if($required)
 		{
-			$test->res = 'false';
+			$test->res = 'red';
 		}
 		else
 		{
@@ -553,10 +544,6 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
 		$test->value = $negative_test ? 'Off' : 'On';
 		$test->secondvalue = $negative_test ? lang('false') : lang('true');
 		if($required)
-		{
-			$test->res = 'true';
-		}
-		else
 		{
 			$test->res = 'green';
 		}
@@ -988,7 +975,7 @@ function & testCreateDirAndFile( $required, $title, $message = '', $debug = fals
 		list($test->continueon, $test->special_failed) = testGlobal($required);
 		$test->continueon = false;
 		$test->special_failed = true;
-		$test->res = 'false';
+		$test->res = 'red';
 		$test->error_fragment = 'Can.27t_create_file';
 		if(trim($message) != '')
 		{
@@ -997,7 +984,7 @@ function & testCreateDirAndFile( $required, $title, $message = '', $debug = fals
 	}
 	else
 	{
-		$test->res = 'true';
+		$test->res = 'green';
 	}
 
 	$test->res_text = getTestReturn($test->res);
