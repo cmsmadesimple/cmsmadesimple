@@ -42,7 +42,6 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["db_password"] = "cms";
 	$config["db_name"] = "cms";
 	$config["db_port"] = '';
-	$config["db_socket"] = '';
 	$config["db_prefix"] = "cms_";
 	$config["root_url"] = "http://www.something.com";
 	$config["root_path"] = dirname(dirname(__FILE__));
@@ -179,9 +178,8 @@ function cms_config_text($config)
 \$config['db_username'] = '{$config['db_username']}';
 \$config['db_password'] = '{$config['db_password']}';
 \$config['db_name'] = '{$config['db_name']}';
-#Change this params only if you know what you are doing
+#Change this param only if you know what you are doing
 \$config["db_port"] = '{$config['db_port']}';
-\$config["db_socket"] = '{$config['db_socket']}';
 
 
 #If app needs to coexist with other tables in the same db,
