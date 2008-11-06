@@ -1625,13 +1625,14 @@ class AdminTheme
       $header  = '<div class="pageheader">';
       if (FALSE != $module_help_type)
 	{
-	  if( isset($_GET['module']) )
+          $module = '';
+	  if( isset($_REQUEST['module']) )
 	    {
-	      $module = $_GET['module'];
+	      $module = $_REQUEST['module'];
 	    }
-	  else if( isset($_GET['mact']) )
+	  else if( isset($_REQUEST['mact']) )
 	    {
-	      $tmp = explode(',',$_GET['mact']);
+	      $tmp = explode(',',$_REQUEST['mact']);
 	      $module = $tmp[0];
 	    }
 	  $icon = "modules/{$module}/images/icon.gif";
