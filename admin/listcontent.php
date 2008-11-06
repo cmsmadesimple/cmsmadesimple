@@ -1000,7 +1000,7 @@ function display_content_list($themeObject = null)
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	if (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages') )
 	  {
-	    $headoflist .= "<th class=\"checkbox\"><input type=\"checkbox\" onclick=\"selectall();\" /></th>\n"; // checkbox column
+	    $headoflist .= "<th class=\"checkbox\"><input id=\"selectall\" type=\"checkbox\" onclick=\"select_all();\" /></th>\n"; // checkbox column
 	  }
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';
@@ -1130,10 +1130,11 @@ echo '<div id="contentlist">'.display_content_list($themeObject).'</div>';
 		<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 		<script type="text/javascript">
 		//<![CDATA[
-		function selectall()
+		function select_all()
 		{
 	        checkboxes = document.getElementsByTagName("input");
-		state = checkboxes[0].checked;
+                elem = document.getElementById('selectall');
+		state = elem.checked;
 	        for (i=0; i<checkboxes.length ; i++)
 	        {
 	                if (checkboxes[i].type == "checkbox") 
