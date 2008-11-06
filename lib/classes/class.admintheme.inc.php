@@ -1625,6 +1625,21 @@ class AdminTheme
       $header  = '<div class="pageheader">';
       if (FALSE != $module_help_type)
 	{
+	  if( isset($_GET['module']) )
+	    {
+	      $module = $_GET['module'];
+	    }
+	  else if( isset($_GET['mact']) )
+	    {
+	      $tmp = explode(',',$_GET['mact']);
+	      $module = $tmp[0];
+	    }
+	  $icon = "modules/{$module}/images/icon.gif";
+	  $path = cms_join_path($this->cms->config['root_path'],$icon);
+	  if( file_exists($path) )
+	    {
+	      $header .= "<img src=\"{$this->cms->config['root_url']}/{$icon}\" class=\"itemicon\">&nbsp;";
+	    }
 	  $header .= $title_name;
 	}
       else
