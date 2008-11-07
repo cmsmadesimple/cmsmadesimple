@@ -66,6 +66,7 @@ $doadd = true;
 #******************************************************************************
 # start of the treatment
 #******************************************************************************
+#print_r( $_POST );
 if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 {
 	# we get the arguments as local vars (easier)

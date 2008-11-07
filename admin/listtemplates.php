@@ -189,7 +189,7 @@ if (isset($_GET["message"])) {
 
 				# set template to all content
 				if ($all)
-					echo "<td class=\"pagepos\"><a href=\"listtemplates.php".$urlext."&amp;action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('setallcontentconfirm')."');\">".lang('setallcontent')."</a></td>\n";
+					echo "<td class=\"pagepos\"><a href=\"listtemplates.php".$urlext."&amp;action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".cms_htmlentities(lang('setallcontentconfirm'))."');\">".lang('setallcontent')."</a></td>\n";
 
 				# view css association
 				echo "<td class=\"icons_wide\"><a href=\"listcssassoc.php".$urlext."&amp;type=template&amp;id=".$onetemplate->id."\">";
@@ -222,7 +222,7 @@ if (isset($_GET["message"])) {
 					}
 					else
 					{
-						echo "<a href=\"deletetemplate.php".$urlext."&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onetemplate->name)."');\">";
+						echo "<a href=\"deletetemplate.php".$urlext."&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".cms_htmlentities(lang('deleteconfirm', $onetemplate->name))."');\">";
 						echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 						echo "</a>";
 					}

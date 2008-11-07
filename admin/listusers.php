@@ -170,7 +170,7 @@ if (FALSE == empty($error)) {
 					}
 				if ($remove && $oneuser->id != 1)
 				    {
-					echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".lang('deleteconfirm', $oneuser->username)."');\">";
+					echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".cms_htmlentities(lang('deleteconfirm', $oneuser->username))."');\">";
                     echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
 		            }
