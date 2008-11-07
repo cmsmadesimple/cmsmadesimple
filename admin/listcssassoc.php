@@ -217,7 +217,7 @@ else {
 	  
       if( $delasso )
 	{
-	  $tmp['deletelink'] = "<a href=\"deletecssassoc.php".$urlext."&amp;id=$id&amp;css_id=".$row["assoc_css_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteassociationconfirm', $row["css_name"])."');\">".$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon')."</a>";
+	  $tmp['deletelink'] = "<a href=\"deletecssassoc.php".$urlext."&amp;id=$id&amp;css_id=".$row["assoc_css_id"]."&amp;type=$type\" onclick=\"return confirm('".cms_htmlentities(lang('deleteassociationconfirm', $row["css_name"]))."');\">".$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon')."</a>";
 	}
 
       $cssassoc[] = $tmp;
