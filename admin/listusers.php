@@ -18,6 +18,9 @@
 #
 #$Id$
 
+/* TEST - ALBY */
+require_once("./html_entity_decode_utf8.php");
+
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
@@ -170,7 +173,7 @@ if (FALSE == empty($error)) {
 					}
 				if ($remove && $oneuser->id != 1)
 				    {
-					echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".cms_htmlentities(lang('deleteconfirm', $oneuser->username))."');\">";
+					echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneuser->username),true)."');\">";
                     echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
 		            }

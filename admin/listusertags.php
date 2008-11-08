@@ -18,6 +18,9 @@
 #
 #$Id$
 
+/* TEST - ALBY */
+require_once("./html_entity_decode_utf8.php");
+
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
@@ -69,7 +72,7 @@ foreach($gCms->cmsplugins as $oneplugin)
 		echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
 		echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 		echo "</a></td>\n";
-		echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".cms_htmlentities(lang('deleteconfirm', $oneplugin))."');\">";
+		echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneplugin),true)."');\">";
 		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 		echo "</a></td>\n";
 

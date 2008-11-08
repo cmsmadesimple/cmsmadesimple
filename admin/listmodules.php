@@ -18,6 +18,9 @@
 #
 #$Id$
 
+/* TEST - ALBY */
+require_once("./html_entity_decode_utf8.php");
+
 $CMS_ADMIN_PAGE=1;
 $LOAD_ALL_MODULES=1;
 
@@ -522,11 +525,11 @@ else
 				{
 					if( $permsok )
 					{
-						$actioncol[] .= "<a href=\"{$thisurl}&amp;action=remove&amp;module=".$key."\" onclick=\"return confirm('".cms_htmlentities(lang('removeconfirm'))."');\">".lang('remove')."</a>";
+						$actioncol[] .= "<a href=\"{$thisurl}&amp;action=remove&amp;module=".$key."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('removeconfirm'),true)."');\">".lang('remove')."</a>";
 					}
 					else
 					{
-						$actioncol[] = "<a href=\"{$thisurl}&amp;action=chmod&amp;module=".$key."\" onclick=\"return confirm('".cms_htmlentities(lang('changepermissionsconfirm'))."');\">".lang('changepermissions')."</a>";
+						$actioncol[] = "<a href=\"{$thisurl}&amp;action=chmod&amp;module=".$key."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('changepermissionsconfirm'),true)."');\">".lang('changepermissions')."</a>";
 					}
 				}
 			}
@@ -540,7 +543,7 @@ else
 				$activecol  = ($dbm[$key]['Active']==true?"<a href='{$thisurl}&amp;action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='{$thisurl}&amp;action=settrue&amp;module=".$key."'>".$image_false."</a>");
 			  if( $maxverok == 1)
 			    {
-				$actioncol[]  = "<a href=\"{$thisurl}&amp;action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".cms_htmlentities(lang('upgradeconfirm'))."');\">".lang('upgrade')."</a>";
+				$actioncol[]  = "<a href=\"{$thisurl}&amp;action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('upgradeconfirm'),true)."');\">".lang('upgrade')."</a>";
 			    }
 			  $xmlcol = '&nbsp;';
 			}
@@ -575,7 +578,7 @@ else
 				if( !$permsok )
 				{
 					$statuscol[] = lang('cantremove');
-					$actioncol[] = "<a href=\"{$thisurl}&amp;action=chmod&amp;module=".$key."\" onclick=\"return confirm('".cms_htmlentities(lang('changepermissionsconfirm'))."');\">".lang('changepermissions')."</a>";
+					$actioncol[] = "<a href=\"{$thisurl}&amp;action=chmod&amp;module=".$key."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('changepermissionsconfirm'),true)."');\">".lang('changepermissions')."</a>";
 				}
 			}
 

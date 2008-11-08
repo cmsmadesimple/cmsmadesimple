@@ -18,6 +18,9 @@
 #
 #$Id$
 
+/* TEST - ALBY */
+require_once("./html_entity_decode_utf8.php");
+
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
@@ -117,7 +120,7 @@ include_once("header.php");
                     }
 				if ($remove && $onegroup->id != 1)
 				    {
-				      echo "<td class=\"icons_wide\"><a href=\"deletegroup.php".$urlext."&amp;group_id=".$onegroup->id."\" onclick=\"return confirm('".cms_htmlentities(lang('deleteconfirm', $onegroup->name))."');\">";
+				      echo "<td class=\"icons_wide\"><a href=\"deletegroup.php".$urlext."&amp;group_id=".$onegroup->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $onegroup->name),true)."');\">";
 				      echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 				      echo "</a></td>\n";
 				    }

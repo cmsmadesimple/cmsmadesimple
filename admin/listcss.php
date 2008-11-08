@@ -28,6 +28,8 @@
  * @author	calexico
  */
 
+/* TEST - ALBY */
+require_once("./html_entity_decode_utf8.php");
 
 
 $CMS_ADMIN_PAGE=1;
@@ -146,7 +148,7 @@ if (isset($_GET["message"])) {
 				# if user has right to delete
 				if ($delcss)
 				{
-					echo "<td class=\"icons_wide\"><a href=\"deletecss.php".$urlext."&amp;css_id=".$one["css_id"]."\" onclick=\"return confirm('".cms_htmlentities(lang('deleteconfirm', $one['css_name']))."');\">";
+					echo "<td class=\"icons_wide\"><a href=\"deletecss.php".$urlext."&amp;css_id=".$one["css_id"]."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one['css_name']),true)."');\">";
                     echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
 				}

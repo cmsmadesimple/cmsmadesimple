@@ -33,6 +33,9 @@
  * @author	calexico
  */
 
+/* TEST - ALBY */
+require_once("./html_entity_decode_utf8.php");
+
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
@@ -217,7 +220,7 @@ else {
 	  
       if( $delasso )
 	{
-	  $tmp['deletelink'] = "<a href=\"deletecssassoc.php".$urlext."&amp;id=$id&amp;css_id=".$row["assoc_css_id"]."&amp;type=$type\" onclick=\"return confirm('".cms_htmlentities(lang('deleteassociationconfirm', $row["css_name"]))."');\">".$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon')."</a>";
+	  $tmp['deletelink'] = "<a href=\"deletecssassoc.php".$urlext."&amp;id=$id&amp;css_id=".$row["assoc_css_id"]."&amp;type=$type\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteassociationconfirm', $row["css_name"]),true)."');\">".$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon')."</a>";
 	}
 
       $cssassoc[] = $tmp;
