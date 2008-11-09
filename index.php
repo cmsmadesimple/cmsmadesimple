@@ -212,10 +212,12 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	  set_encoding($pageinfo->template_encoding);
 	}
 
-	$manager =& $gCms->GetHierarchyManager();
-	$node =& $manager->sureGetNodeById($pageinfo->content_id);
-	$contentobj =& $node->GetContent();
-	
+	if($pageinfo->content_id > 0)
+	{
+		$manager =& $gCms->GetHierarchyManager();
+		$node =& $manager->sureGetNodeById($pageinfo->content_id);
+		$contentobj =& $node->GetContent();
+	}
 
 	$gCms->variables['content_id'] = $pageinfo->content_id;
 	$gCms->variables['page'] = $page;
