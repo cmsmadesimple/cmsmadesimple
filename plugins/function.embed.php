@@ -124,7 +124,7 @@ IFRAMECODE;
   //		'" scrolling="yes" height="'.$params['height'].
   //		'" frameborder="0" marginwidth="0" marginheight="0" src="http://www2.romanianoffice.ro/forum/index.php"></iframe>';
   
-  return   "<iframe id='{$name}' name='{$name}' src='$url' scrolling='no' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' style='overflow:visible; width:99%; display:none'></iframe>";
+  return   "<iframe id='{$name}' name='{$name}' src='$url' scrolling='no' marginwidth='0' marginheight='0' frameborder='0' style='overflow:visible; width:99%; display:none'></iframe>";
   
 }
 
