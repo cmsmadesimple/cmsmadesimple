@@ -31,6 +31,8 @@ function smarty_cms_function_embed($params, &$smarty)
     {
       $code = <<<IFRAMECODE
 <script type="text/javascript">
+  // <![CDATA[
+
 
 /***********************************************
 * IFrame SSI script II- S Dynamic Drive DHTML code library (http://www.dynamicdrive.com)
@@ -100,7 +102,7 @@ else if (window.attachEvent)
 window.attachEvent("onload", resizeCaller)
 else
 window.onload=resizeCaller
-
+  // ]]>
 </script>
 IFRAMECODE;
  $code .= $tmp;
