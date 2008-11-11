@@ -192,6 +192,9 @@ else {
   $smarty->assign('text_title',lang('title'));
   $smarty->assign('edittemplate_link','<a href="edittemplate.php'.$urlext.'&amp;template_id='.$_REQUEST['id'].'"  name="edittemplate">'.(isset($name)?$name:"").'</a>');
   $cssassoc = array();
+
+  if ($result && $result->RecordCount() > 0)
+  {
   $count = $result->RecordCount();
   $idx = 0;
   while( $result && $row = $result->FetchRow() )
@@ -225,6 +228,12 @@ else {
 
       $cssassoc[] = $tmp;
     }
+  }
+  else
+  {
+	redirect('listtemplates.php'.$urlext.'&message='.lang('sqlerror', 'listcssassoc.php'));
+  }
+
   if( count($cssassoc) )
     {
       $smarty->assign('cssassoc',$cssassoc);

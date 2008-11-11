@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['sqlerror'] = 'SQL error in %s';
 $lang['admin']['image'] = 'Image';
 $lang['admin']['thumbnail'] = 'Thumbnail';
 $lang['admin']['searchable'] = 'This page is searchable';
