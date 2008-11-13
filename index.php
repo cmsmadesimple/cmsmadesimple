@@ -216,7 +216,11 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
 		$manager =& $gCms->GetHierarchyManager();
 		$node =& $manager->sureGetNodeById($pageinfo->content_id);
-		$contentobj =& $node->GetContent();
+		if(is_object($node))
+		{
+			$contentobj =& $node->GetContent();
+			$smarty->assign('content_obj',$contentobj);
+		}
 	}
 
 	$gCms->variables['content_id'] = $pageinfo->content_id;
@@ -229,7 +233,6 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	$contentops =& $gCms->GetContentOperations();
 	$gCms->variables['friendly_position'] = $contentops->CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
 
-	$smarty->assign('content_obj',$contentobj);	
 	$smarty->assign('content_id', $pageinfo->content_id);
 	$smarty->assign('page', $page);
 	$smarty->assign('page_id', $page);
