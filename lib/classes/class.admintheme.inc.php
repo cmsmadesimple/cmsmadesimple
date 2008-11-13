@@ -1639,7 +1639,7 @@ class AdminTheme
 	  $path = cms_join_path($this->cms->config['root_path'],$icon);
 	  if( file_exists($path) )
 	    {
-	      $header .= "<img src=\"{$this->cms->config['root_url']}/{$icon}\" class=\"itemicon\">&nbsp;";
+	      $header .= "<img src=\"{$this->cms->config['root_url']}/{$icon}\" class=\"itemicon\" />&nbsp;";
 	    }
 	  $header .= $title_name;
 	}
