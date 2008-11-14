@@ -141,10 +141,17 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			}
 			else
 			{
-				#echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url='.$_SESSION["redirect_url"].'"></head><body>Logging in and redirecting to <a href="'.$_SESSION["redirect_url"].'">'.$_SESSION["redirect_url"].'</a>, one moment please...</body></html>');
-				$tmp = $_SESSION["redirect_url"];
-				unset($_SESSION["redirect_url"]);
-				redirect($tmp);
+			  // attempt to redirect to the originally requested page
+			  $tmp = $_SESSION["redirect_url"];
+			  unset($_SESSION["redirect_url"]);
+			  
+			  if( !strstr('.php',$tmp) || endswith($tmp,'/') )
+			    {
+			      // force the url to go to index.php
+			      $tmp = $config['root_url'].'/'.$config['admin_dir'].
+				'/index.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+			    }
+			  redirect($tmp);
 			}
 			unset($_SESSION["redirect_url"]);
 		}
@@ -152,16 +159,16 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		{
 			if (isset($config) and $config['debug'] == true)
 			{
-				echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
-				echo "<a href=\"index.php\">index.php</a><br />";
-				foreach ($gCms->errors as $globalerror)
-				{
-					echo $globalerror;
-				}
+			  $url = 'index.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+			  echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
+			  echo "<a href=\"{$url}\">{$url}</a><br />";
+			  foreach ($gCms->errors as $globalerror)
+			    {
+			      echo $globalerror;
+			    }
 			}
 			else
 			{
-				#echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./index.php"></head><body>Logging in and redirecting to <a href="./index.php">index.php</a>, one moment please...</body></html>');
 			  $homepage = get_preference($oneuser->id,'homepage');
 			  if( $homepage == '' )
 			    {
@@ -176,10 +183,10 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			      $rep = '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			      $homepage = str_replace($str,$rep,$homepage);
 			    }
-				else
-				{
-					$homepage .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-				}
+			  else
+			    {
+			      $homepage .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+			    }
 
 			  $homepage = html_entity_decode($homepage);
 			  redirect($homepage);
