@@ -117,7 +117,7 @@ $tmp[0]['internal_pretty_urls'] = testConfig('internal_pretty_urls', 'internal_p
 $tmp[0]['use_hierarchy'] = testConfig('use_hierarchy', 'use_hierarchy');
 
 $tmp[1]['root_url'] = testConfig('root_url', 'root_url');
-$tmp[1]['root_path'] = testConfig('root_path', 'root_path');
+$tmp[1]['root_path'] = testConfig('root_path', 'root_path', 'testDirWrite');
 $tmp[1]['previews_path'] = testConfig('previews_path', 'previews_path', 'testDirWrite');
 $tmp[1]['uploads_path'] = testConfig('uploads_path', 'uploads_path', 'testDirWrite');
 $tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
@@ -168,11 +168,11 @@ $tmp[1]['register_globals'] = testBoolean(0, lang('register_globals'), 'register
 
 $tmp[1]['output_buffering'] = testInteger(0, lang('output_buffering'), 'output_buffering', '', true, true, 'output_buffering_disabled');
 
-$tmp[1]['disable_functions'] = testString(0, lang('disable_functions'), 'disable_functions', '', true, 'yellow', 'disable_functions_not_empty');
+$tmp[1]['disable_functions'] = testString(0, lang('disable_functions'), 'disable_functions', '', true, 'green', 'yellow', 'disable_functions_not_empty');
 
-$tmp[0]['safe_mode'] = testBoolean(0, 'safe_mode', 'safe_mode', '', true, true);
+$tmp[0]['safe_mode'] = testBoolean(0, 'safe_mode', 'safe_mode', '', true, true, 'safe_mode_enabled');
 
-$tmp[1]['open_basedir'] = testString(0, lang('open_basedir'), $open_basedir, '', false, 'yellow', 'open_basedir_enabled');
+$tmp[1]['open_basedir'] = testString(0, lang('open_basedir'), $open_basedir, '', false, 'green', 'yellow', 'open_basedir_enabled');
 
 $tmp[1]['test_remote_url'] = testRemoteFile(0, 'test_remote_url', '', lang('test_remote_url_failed'));
 
@@ -182,27 +182,25 @@ list($minimum, $recommended) = getTestValues('post_max_size');
 $tmp[1]['post_max_size'] = testRange(0, 'post_max_size', 'post_max_size', '', $minimum, $recommended, true, true, null, 'min_post_max_size');
 
 list($minimum, $recommended) = getTestValues('upload_max_filesize');
-$tmp[1]['upload_max_filesize'] = testRange(0, 'upload_max_filesize', 'upload_max_filesize', '', $minimum, $recommended, true, true);
+$tmp[1]['upload_max_filesize'] = testRange(0, 'upload_max_filesize', 'upload_max_filesize', '', $minimum, $recommended, true, true, null, 'min_upload_max_filesize');
 
 $session_save_path = testSessionSavePath('');
 if(empty($session_save_path))
 {
-	$tmp[0]['session_save_path'] = testDummy('session_save_path', lang('os_session_save_path'), 'yellow', '', '', 'session_save_path_empty');
+	$tmp[0]['session_save_path'] = testDummy('session_save_path', lang('os_session_save_path'), 'yellow', '', 'session_save_path_empty', '');
 }
 elseif (! empty($open_basedir))
 {
-	$tmp[0]['session_save_path'] = testDummy('session_save_path', lang('open_basedir_active'), 'yellow', '', '', 'No_check_session_save_path_with_open_basedir');
+	$tmp[0]['session_save_path'] = testDummy('session_save_path', lang('open_basedir_active'), 'yellow', '', 'No_check_session_save_path_with_open_basedir', '');
 }
 else
 {
-	$tmp[0]['session_save_path'] = testDirWrite(0, lang('session_save_path'), $session_save_path, '', $session_save_path, 1);
+	$tmp[0]['session_save_path'] = testDirWrite(0, lang('session_save_path'), $session_save_path, $session_save_path, 1);
 }
 
 $tmp[1]['xml_function'] = testBoolean(0, 'xml_function', extension_loaded_or('xml'), '', false, false, 'Function_xml_disabled');
 
-$tmp[1]['file_get_contents'] = testBoolean(0, 'file_get_contents', function_exists('file_get_contents'), '', false, 'Function_file_get_content_disabled');
-
-$tmp[0]['magic_quotes_gpc'] = testBoolean(0, 'magic_quotes_gpc', 'magic_quotes_gpc', lang('magic_quotes_gpc_on'), true, true, 'magic_quotes_gpc_On');
+$tmp[1]['file_get_contents'] = testBoolean(0, 'file_get_contents', function_exists('file_get_contents'), '', false, false, 'Function_file_get_content_disabled');
 
 $_log_errors_max_len = (ini_get('log_errors_max_len')) ? ini_get('log_errors_max_len').'0' : '99';
 ini_set('log_errors_max_len', $_log_errors_max_len);

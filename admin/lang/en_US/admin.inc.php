@@ -63,8 +63,14 @@ $lang['admin']['check_ini_set_off'] = 'You may have difficulty with some functio
 $lang['admin']['file_uploads'] = 'File uploads';
 $lang['admin']['test_remote_url'] = 'Test for remote URL';
 $lang['admin']['test_remote_url_failed'] = 'You will probably not be able to open a file on a remote web server.';
+$lang['admin']['test_allow_url_fopen_failed'] = 'When allow url fopen is disabled you will not be able to accessing URL object like file using the ftp or http protocol.';
+$lang['admin']['connection_error'] = 'Outgoing http connections do not appear to work! There is a firewall or some ACL for external connections?. This will result in module manager, and potentially other functionality failing.';
+$lang['admin']['remote_connection_timeout'] = 'Connection Timed Out!';
 $lang['admin']['search_string_find'] = 'Connection ok!';
 $lang['admin']['connection_failed'] = 'Connection failed!';
+$lang['admin']['remote_response_ok'] = 'Remote response: ok!';
+$lang['admin']['remote_response_404'] = 'Remote response: not found!';
+$lang['admin']['remote_response_error'] = 'Remote response: error!';
 
 $lang['admin']['notifications_to_handle'] = 'You have <b>%d</b> unhandled notifications';
 $lang['admin']['notification_to_handle'] = 'You have <b>%d</b> unhandled notification';
