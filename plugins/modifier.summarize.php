@@ -17,6 +17,7 @@ $stringarray = explode(" ",$string);
 
 //=While loop to add int ($numwords) words to the summary string ($returnstring)
 $i = 0;
+$returnstring = '';
 while($i < $numwords){
     $returnstring .= " ".$stringarray[$i];
     $i++;
@@ -26,7 +27,7 @@ while($i < $numwords){
 $returnstring .= $etc;
 
 //Return the summary!
-return $returnstring;
+return trim($returnstring);
     
 }//end of function
 ?>
