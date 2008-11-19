@@ -18,12 +18,10 @@
 #
 #$Id$
 
-/* TEST - ALBY */
-require_once("./html_entity_decode_utf8.php");
-
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
 require_once("../lib/classes/class.user.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 

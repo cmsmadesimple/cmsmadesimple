@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
 
 check_login();
 $userid = get_userid();
@@ -720,7 +721,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		{
 			if ($one->IsDefaultPossible() && ($display == 'edit' || $display == 'structure'))
 			{
-				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_htmlentities(lang("confirmdefault", $one->mName), '', '', true)."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
+				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_html_entity_decode_utf8(lang("confirmdefault", $one->mName), true)."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
 			}
 			else
 			{
@@ -815,7 +816,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 				//var_dump($one->ChildCount());
                 if ($root->getChildrenCount() == 0 && (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages')))
                 {
-                    $thelist .= "<td class=\"pagepos\"><a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_htmlentities(lang('deleteconfirm', $one->mName), '', '', true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
+                    $thelist .= "<td class=\"pagepos\"><a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
                     $thelist .= $deleteImg;
                     $thelist .= "</a></td>\n";
                 }
