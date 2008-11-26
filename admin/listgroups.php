@@ -105,7 +105,22 @@ include_once("header.php");
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"editgroup.php".$urlext."&amp;group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
-				echo "<td class=\"pagepos\">".($onegroup->active == 1?$image_true:$image_false)."</td>\n";
+				echo "<td class=\"pagepos\">";
+				if( $onegroup->id == 1 ) 
+				  {
+				    echo '&nbsp;';
+				  }
+				else {
+				  if( $onegroup->active == 1 )
+				    {
+				      echo $image_true;
+				    }
+				  else
+				    {
+				      echo $image_false;
+				    }
+				}
+				echo "</td>\n";
 				if ($perm)
 					echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupperm.php".$urlext."&amp;group_id=".$onegroup->id."\">".$image_permissions."</a></td>\n";
 				if ($assign)

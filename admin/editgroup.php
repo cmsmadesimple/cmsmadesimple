@@ -35,12 +35,12 @@ $dropdown = "";
 $group = "";
 if (isset($_POST["group"])) $group = $_POST["group"];
 
-$active = 1;
-if (!isset($_POST["active"]) && isset($_POST["editgroup"])) $active = 0;
-
 $group_id = -1;
 if (isset($_POST["group_id"])) $group_id = $_POST["group_id"];
 else if (isset($_GET["group_id"])) $group_id = $_GET["group_id"];
+
+$active = 1;
+if (!isset($_POST["active"]) && isset($_POST["editgroup"]) && $group_id != 1) $active = 0;
 
 if (isset($_POST["cancel"])) {
 	redirect("listgroups.php".$urlext);
@@ -142,10 +142,12 @@ else {
 			<p class="pagetext"><?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" name="group" maxlength="25" value="<?php echo $group?>" /></p>
 		</div>
+        <?php if( $group_id != 1 ) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
 			<p class="pageinput"><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
 		</div>
+        <?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
