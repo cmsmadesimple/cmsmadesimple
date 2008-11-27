@@ -100,12 +100,12 @@ class Content extends ContentBase
 	    {
 		$parameters[] = $blockNameId['id'];
 	    }
-			
+		
 	    foreach ($parameters as $oneparam)
 	    {
 		if (isset($params[$oneparam]))
 		{
-		    $this->SetPropertyValue($oneparam, $params[$oneparam]);
+		  $this->SetPropertyValue($oneparam, $params[$oneparam]);
 		}
 	    }
 

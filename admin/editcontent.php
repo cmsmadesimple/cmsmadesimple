@@ -260,6 +260,7 @@ if ($access)
 	if ($submit || $apply)
 	{
 		#Fill contentobj with parameters
+                $contentobj->SetProperties();
 		$contentobj->FillParams($_POST);
 		$error = $contentobj->ValidateData();
 

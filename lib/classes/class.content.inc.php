@@ -1693,6 +1693,10 @@ class ContentProperties
 //				{
 					$delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = ? AND prop_name = ?";
 					$dbresult = $db->Execute($delquery, array($content_id, $key));
+					if (true == $config["debug"])
+					  {
+					    $sql_queries .= "<p>".$db->sql."</p>\n";
+					  }
 					
 					$sql_vars = array(
 						$content_id,
@@ -1701,14 +1705,12 @@ class ContentProperties
 						$this->mPropertyValues[$key]
 					);
 					$dbresult = $db->Execute($insquery, $sql_vars);
+					if (true == $config["debug"])
+					  {
+					    $sql_queries .= "<p>".$db->sql."</p>\n";
+					  }
 
 					$concat .= $this->mPropertyValues[$key];
-
-					# debug mode
-					if (true == $config["debug"])
-					{
-						$sql_queries .= "<p>$delquery</p>\n<p>$insquery</p>\n";
-					}
 
 					if (! $dbresult)
 					{
