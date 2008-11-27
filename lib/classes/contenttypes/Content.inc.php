@@ -228,14 +228,13 @@ class Content extends ContentBase
 	      $ret[]= array(lang('parent').':',$contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
 	    }
 
-	  $dir = cms_join_path($config['uploads_path'],'images');
-	  $optprefix = 'images';
+	  $dir = $config['image_uploads_path'];
 	  $data = $this->GetPropertyValue('image');
-	  $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif',$optprefix,true,'','thumb_');
+	  $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
 	  $ret[] = array(lang('image').':',$dropdown);
 	  
 	  $data = $this->GetPropertyValue('thumbnail');
-	  $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif',$optprefix,true,'','thumb_',0);
+	  $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
 	  $ret[] = array(lang('thumbnail').':',$dropdown);
 
 	  if( check_permission(get_userid(), 'Modify Page Structure') || $adding ) {

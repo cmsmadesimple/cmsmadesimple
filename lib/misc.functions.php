@@ -964,7 +964,7 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
 	}
 
       $ext = strtolower(substr($file,strrpos($file,'.')+1));
-      if( !in_array($ext,$extensions) ) continue;
+      if( is_array($extensions) && count($extensions) && !in_array($ext,$extensions) ) continue;
 
       $results[] = $file;
     }
