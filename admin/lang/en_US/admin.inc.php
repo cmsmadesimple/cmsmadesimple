@@ -1,4 +1,18 @@
 <?php
+$lang['admin']['help_function_dump'] = <<<EOT
+<h3>What does this do?</h3>
+  <p>This tag can be used to dump the contents of any smarty variable in a more readable format.  This is useful for debugging, and editing templates, to know the format and types of data available.</p>
+<h3>How do I use it?</h3>
+<p>Insert the tag in the template like <code>{dump item='the_smarty_variable_to_dump'}</code>.</p>
+<h3>What parameters does it take</h3>
+<ul>
+<li><strong>item (required)</strong> - The smarty variable to dump the contents of.</li>
+<li>maxlevel - The maximum number of levels to recurse (applicable only if recurse is also supplied.  The default value for this parameter is 3</li>
+<li>nomethods - Skip output of methods from objects.</li>
+<li>novars - Skip output of object members.</li>
+<li>recurse - Recurse a maximum number of levels through the objects providing verbose output for each item until the maximum number of levels is reached.</li>
+</ul>
+EOT;
 $lang['admin']['sqlerror'] = 'SQL error in %s';
 $lang['admin']['image'] = 'Image';
 $lang['admin']['thumbnail'] = 'Thumbnail';

@@ -21,19 +21,23 @@ function smarty_cms_function_get_template_vars($params, &$smarty)
 	global $gCms;
 	
 	$tpl_vars = $gCms->smarty->get_template_vars();
-	$str = '';
+	$str = '<pre>';
 	foreach( $tpl_vars as $key => $value )
 	  {
-	    if( !is_object($value) )
-             {
-	       $str .= "$key = $value<br/>";
-             }
-            else
+	    if( is_object($value) )
              {
                $str .= "$key = Object<br/>";
              }
+	    else if( is_array($value) )
+             {
+               $str .= "$key = Array (".count($value).")<br/>";
+             }
+            else
+             {
+	       $str .= "$key = ".cms_htmlentities(trim($value))."<br/>";
+             }
 	  }
-	return $str;
+	return $str.'</pre>';
 }
 
 function smarty_cms_help_function_get_template_vars() {
