@@ -363,9 +363,14 @@ class Content extends ContentBase
 	  $ret[]= array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />');
 	  $ret[]= array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
 	  $ret[]= array(lang('pagedata_codeblock').':',create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','pagedata','','','80','6'));
+	  $searchable = $this->GetPropertyValue('searchable');
+	  if( empty($searchable) )
+	    {
+	      $searchable = 1;
+	    }
 	  $ret[]= array(lang('searchable').':',
 			'<div><input type="hidden" name="searchable" value="0"></div>
-                           <input type="checkbox" name="searchable" value="1" '.($this->GetPropertyValue('searchable')==1?'checked="checked"':'').'>');
+                           <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').'>');
 	  $ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
 	  $ret[]= array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
 	  $ret[]= array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
