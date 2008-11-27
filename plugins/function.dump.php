@@ -77,7 +77,7 @@ function smarty_cms_function_dump($params, &$smarty)
 		$type = gettype($value);
 		if( $type == 'object' )
 		  {
-		    $str .= str_repeat('  ',$level).'- '."<u>$name: Object</u> ($".$acc.")<br/>";
+		    $str .= str_repeat('  ',$level).'- '.'<u>'.$name.': Object</u> <em>{$'.$acc.'}</em><br/>';
 		    if( isset($params['recurse']) )
 		      {
 			$str .= dump_object($params,$value,$level+1,$ignore,$acc);
@@ -85,7 +85,7 @@ function smarty_cms_function_dump($params, &$smarty)
 		  }
 		else if( $type == 'array' )
 		  {
-		    $str .= str_repeat('  ',$level).'- '."<u>$name: Array (".count($value).")</u> ($".$acc.")<br/>";
+		    $str .= str_repeat('  ',$level).'- '.'<u>'.$name.': Array ('.count($value).')</u> <em>{$'.$acc.'}</em><br/>';
 		    if( isset($params['recurse']) )
 		      {
 			$str .= dump_array($params,$value,$level+1,$ignore,$acc);
@@ -93,11 +93,11 @@ function smarty_cms_function_dump($params, &$smarty)
 		  }
 		else if( $type == 'NULL' )
 		  {
-		    $str .= str_repeat('  ',$level).'- '."$name: NULL ($".$acc.")<br/>";
+		    $str .= str_repeat('  ',$level).'- '.$name.': NULL <em>{$'.$acc.'}</em><br/>';
 		  }
 		else
 		  {
-		    $str .= str_repeat('  ',$level).'- '.$name.' = '.cms_htmlentities($value)." ($".$acc.")<br/>";
+		    $str .= str_repeat('  ',$level).'- '.$name.' = '.cms_htmlentities($value).' <em>{$'.$acc.'}</em><br/>';
 		  }
 	      }
 	  }
@@ -123,7 +123,7 @@ function smarty_cms_function_dump($params, &$smarty)
 	$type = gettype($value);
 	if( is_object($value) )
 	  {
-	    $str .= str_repeat('  ',$level)."- <u>$key = Object</u> ($".$acc.")<br/>";
+	    $str .= str_repeat('  ',$level).'- <u>'.$key.' = Object</u> <em>{$'.$acc.'}</em><br/>';
 	    if( isset($params['recurse']) )
 	      {
 		$str .= dump_object($params,$value,$level+1,$ignore,$acc);
@@ -131,7 +131,7 @@ function smarty_cms_function_dump($params, &$smarty)
 	  }
 	else if( is_array($value) )
 	  {
-	    $str .= str_repeat('  ',$level)."- <u>$key = Array (".count($value).")</u> ($".$acc.")<br/>";
+	    $str .= str_repeat('  ',$level)."- <u>$key = Array (".count($value).')</u> <em>{$'.$acc.'}</em><br/>';
 	    if( isset($params['recurse']) )
 	      {
 		$str .= dump_array($params,$value,$level+1,$ignore,$acc);
@@ -139,11 +139,11 @@ function smarty_cms_function_dump($params, &$smarty)
 	  }
 	else if( $type == 'NULL' )
 	  {
-	    $str .= str_repeat('  ',$level).'- '."$name: NULL ($".$acc.")<br/>";
+	    $str .= str_repeat('  ',$level).'- '.$name.': NULL <em>{$'.$acc.'\}</em><br/>';
 	  }
 	else
 	  {
-	    $str .= str_repeat('  ',$level)."- $key = ".cms_htmlentities($value)." ($".$acc.")<br/>";
+	    $str .= str_repeat('  ',$level)."- $key = ".cms_htmlentities($value).' {$'.$acc.'}<br/>';
 	  }
       }
     return $str;
