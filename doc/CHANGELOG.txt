@@ -7,7 +7,7 @@ Version 1.5
 - A searchable attribute has been added to the edit content page
   to mark a page as searchable
 - Default content settings have been improved.
-- Installer improvements
+- Numerous improvements to the installer
 - The complete content object is now available to smarty on each page request
 - The {content_image} tag has been added allowing numerous images to be attached to each page
   (no upload capabilities at the moment)
@@ -26,7 +26,7 @@ Version 1.5
 - News 2.9
   - Support syntax hilighter when editing templates
   - Support the notification area
-  - Remove all RSS Capabilities
+  - Remove all RSS Capabilities (now supplied by the addon module CGFeedMaker)
 - Extensive modifications were made to add a session key to each and every
   URL in the admin console.  This prevents a medium level cross site scripting
   vulnerability.
@@ -40,8 +40,11 @@ Version 1.5
   the result should be a much more stable, much more solid application.
 - It is now a requirement inorder for an administrator to be able to login
   that they be a member of at least one active group.
+- An improved {get_template_vars} plugin
+- A new plugin {dump} to provide a report about the contents of a single smarty variable.
+- A fixed {embed} plugin
+- Much much more.
   
-
 
 Version 1.4.1 "Spring Garden"
 -----------------------------
@@ -52,6 +55,7 @@ Version 1.4.1 "Spring Garden"
 - Fixes a problem with REQUEST_URI not being set on IIS hosts (stupid windows)
 - TinyMCE: Fixed problem with cmslinker not allowing to select parentpages 
            Fixed a small bug which could cause invalid relative urls to be generated
+
 
 Version 1.4 "Jamaica"
 -----------------
