@@ -104,10 +104,20 @@
     <tr class="{$currow}" onmouseover="this.className='{$currow}.hover';" onmouseout="this.className='{$currow}';">
  		<td>{$user->name}</td>
 		{foreach from=$group_list item=thisgroup}
+                    {if $user->id == $user_id}
+                       <td>--</td>
+                    {else}
 			{if $thisgroup->id != -1}
-			{assign var="gid" value=`$thisgroup->id`}
-			<td class="g{$thisgroup->id}"><input type="checkbox" name="ug_{$user->id}_{$gid}" value="1"{if isset($user->group[$gid])} checked="checked"{/if}  /></td>
-			{/if}
+                          {if ($thisgroup->id == 1 && $user->id == 1)}
+  			    <td class="g{$thisgroup->id}">&nbsp;</td>
+                          {else}
+			    {assign var="gid" value=`$thisgroup->id`}
+			    <td class="g{$thisgroup->id}">
+                              <input type="checkbox" name="ug_{$user->id}_{$gid}" value="1"{if isset($user->group[$gid])} checked="checked"{/if}  />
+                            </td>
+			  {/if}
+                        {/if}
+                     {/if}
 		{/foreach}
     </tr>
   {/foreach}

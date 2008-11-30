@@ -25,6 +25,7 @@ require_once("../lib/classes/class.group.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
+
 global $gCms;
 $db =& $gCms->GetDb();
 
@@ -49,6 +50,8 @@ if (isset($_POST["cancel"])) {
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Groups');
+$userops =& $gCms->GetUserOperations();
+$useringroup = $userops->UserInGroup($userid,$group_id);
 
 if ($access) {
 
@@ -142,12 +145,14 @@ else {
 			<p class="pagetext"><?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" name="group" maxlength="25" value="<?php echo $group?>" /></p>
 		</div>
-        <?php if( $group_id != 1 ) { ?>
+	   <?php if( !$useringroup && ($group_id != 1) ) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
 			<p class="pageinput"><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
 		</div>
-        <?php } ?>
+ 	   <?php } else { ?>
+                <div><input type="hidden" name="active" value="<?php echo $active ?>"/></div>
+           <?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">

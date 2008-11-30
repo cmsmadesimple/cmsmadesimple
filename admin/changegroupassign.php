@@ -43,8 +43,10 @@ $userid = get_userid();
 $access = check_permission($userid, 'Modify Group Assignments');
 if (!$access) {
 	die('Permission Denied');
-return;
+	return;
 }
+$userops =& $gCms->GetUserOperations();
+$adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
 $message = '';
 
 include_once("header.php");
@@ -57,14 +59,21 @@ $db =& $gCms->GetDb();
 	global $gCms;
 	$groupops =& $gCms->GetGroupOperations();
 	$userops =& $gCms->GetUserOperations();
-   $groups = $groupops->LoadGroups();
+        $groups = $groupops->LoadGroups();
 	$allgroups = new stdClass();
 	$allgroups->name = lang('all_groups');
 	$allgroups->id=-1;
-   $groups = array($allgroups);
+        $groups = array($allgroups);
 
 	$group_list = $groupops->LoadGroups();
-	$groups = array_merge($groups,$group_list);
+        foreach( $group_list as $onegroup )
+        {
+          if( $onegroup->id == 1 && $adminuser == false )
+            {
+              continue;
+            }
+          $groups[] = $onegroup;
+        }
 	$smarty->assign_by_ref('group_list',$groups);
 
 	// because it's easier in PHP than Javascript:
@@ -141,6 +150,8 @@ $db =& $gCms->GetDb();
 	$smarty->assign_by_ref('users',$user_struct);
 
 
+if( $adminuser ) $smarty->assign('adminuser',1);
+$smarty->assign('user_id',$userid);
 $smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
 $smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('admin_group_warning',$themeObject->ShowErrors(lang('adminspecialgroup')));

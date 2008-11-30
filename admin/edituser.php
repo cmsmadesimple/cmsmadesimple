@@ -242,7 +242,7 @@ else {
 			<p class="pageinput"><input type="text" name="email" maxlength="255" value="<?php echo $email?>" class="standard" /></p>
 		</div>
 	   <?php
-	   if( $access_perm && !$access_user ) {
+  	   if( $access_perm && !$access_user && ($user_id != 1) ) {
            ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
@@ -253,7 +253,7 @@ else {
 			echo '<input type="hidden" name="active" value="'.$active.'" />';
 	   }
 
-      if ($assign_group_perm)
+      if ($assign_group_perm && !$access_user && ($user_id != 1))
       {
       ?>
 		<div class="pageoverflow">

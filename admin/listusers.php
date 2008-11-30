@@ -151,7 +151,7 @@ if (FALSE == empty($error)) {
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
   			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
-				if( $oneuser->id != 1 )
+				if( $oneuser->id != 1 && $oneuser->id != $userid )
 				  {
 				    echo "<td class=\"pagepos\"><a href=\"listusers.php".$urlext."&amp;toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
 				  }
