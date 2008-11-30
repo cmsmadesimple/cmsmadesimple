@@ -24,6 +24,7 @@ require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
+$cur_userid = get_userid();
 
 $dodelete = true;
 
@@ -35,7 +36,7 @@ if (isset($_GET["user_id"]))
 	$userid = get_userid();
 	$access = check_permission($userid, 'Remove Users');
 
-	if ($access)
+	if ($access && $user_id != $cur_userid)
 	{
 		global $gCms;
 		$userops =& $gCms->GetUserOperations();
