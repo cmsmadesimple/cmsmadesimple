@@ -60,7 +60,17 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE)
 	}
 	else if (isset($_COOKIE["cms_language"]))
 	{
-		$current_language = $_COOKIE["cms_language"];
+		$tmp = $_COOKIE["cms_language"];
+		$file = dirname(__FILE__) . "/lang/" . $tmp . "/admin.inc.php";
+		if( !file_exists($file) )
+		  {
+		    $file = dirname(__FILE__) . "/lang/ext/" . $tmp . "/admin.inc.php";
+		    if( !file_exists($file) )
+		      {
+			$$tmp = '';
+		      }
+		  }
+		$current_language = $tmp;
 	}
 
 	if ($current_language == '')
