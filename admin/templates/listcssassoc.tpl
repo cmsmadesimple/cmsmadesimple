@@ -4,6 +4,7 @@
 </div>
 
 {if isset($cssassoc)}
+<div class=pageoverflow">
 <table cellspacing="0" class="pagetable">
   <thead>
   <tr>
@@ -26,16 +27,20 @@
   {/foreach}
   </tbody>
 </table>
+</div>
 {/if}
 
 {if isset($formstart)}
 {$formstart}
 <div class="pageoverflow">
-  <p class="pageoptions">
+  <p class="pageinput">
     {$dropdown}
-    <div>{$hidden}</div>
-    {$submit}
   </p>
 </div>
+<div class="pageoverflow">
+  <div>{$hidden}</div>
+  <p class="pageinput">
+    {$submit}
+  </p>
 </form>
 {/if}

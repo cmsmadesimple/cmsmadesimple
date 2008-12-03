@@ -191,7 +191,8 @@ else {
   $smarty->assign('edittemplate_link','<a href="edittemplate.php'.$urlext.'&amp;template_id='.$_REQUEST['id'].'"  name="edittemplate">'.(isset($name)?$name:"").'</a>');
   $cssassoc = array();
 
-  if ($result && $result->RecordCount() > 0)
+  //if ($result && $result->RecordCount() > 0)
+  if ($result)
   {
   $count = $result->RecordCount();
   $idx = 0;
