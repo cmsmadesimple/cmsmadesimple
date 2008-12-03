@@ -24,15 +24,16 @@ function smarty_cms_function_edit($params, &$smarty)
 	    && !quick_check_authorship($gCms->variables['content_id'],
 				       author_pages(get_userid(false))))
 	  return;
-
+    
+	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	$text = isset($params['text']) ? $params['text']:'Edit This Page';
 	if (isset($params["showbutton"]))
 	{
-		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php?content_id='.$gCms->variables['content_id'].'"><img src="'.$gCms->config['root_url'].'/images/cms/editbutton.png" alt="'.$text.'"/></a>';
+		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php'.$urlext.'&amp;content_id='.$gCms->variables['content_id'].'"><img src="'.$gCms->config['root_url'].'/images/cms/editbutton.png" alt="'.$text.'"/></a>';
 	}
 	else
 	{
-		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php?content_id='.$gCms->variables['content_id'].'">'.$text.'</a>';
+		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php'.$urlext.'&amp;content_id='.$gCms->variables['content_id'].'">'.$text.'</a>';
 	}
 	/*
 	global $gCms;
