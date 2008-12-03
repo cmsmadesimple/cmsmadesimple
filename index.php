@@ -33,16 +33,6 @@ require_once($dirname.'/fileloc.php');
 
 $starttime = microtime();
 
-// optionally enable output compression (as long as debug mode isn't on)
-if( isset($config['output_compression']) && $config['debug'] != true )
-  {
-    @ob_start('ob_gzhandler');
-  }
-else
-  {
-    @ob_start();
-  }
-
 clearstatcache();
 
 if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
@@ -77,6 +67,18 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 }
 
 require_once($dirname.'/include.php'); #Makes gCms object
+
+
+// optionally enable output compression (as long as debug mode isn't on)
+if( isset($config['output_compression']) && $config['debug'] != true )
+  {
+    @ob_start('ob_gzhandler');
+  }
+else
+  {
+    @ob_start();
+  }
+
 
 $params = array_merge($_GET, $_POST);
 
@@ -176,6 +178,7 @@ if (strpos($page, '/') !== FALSE)
 			}
 
 			$_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
+
 			$page = $matches['returnid'];
 			$smarty->id = $matches['id'];
 
@@ -188,7 +191,6 @@ if (strpos($page, '/') !== FALSE)
 		$page = substr($page, strrpos($page, '/') + 1);
 	}
 }
-
 if ($page == '')
 {
 	global $gCms;
