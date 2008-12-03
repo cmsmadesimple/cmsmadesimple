@@ -1,4 +1,12 @@
-Version 1.5
+Version 1.5.1 - San Juan
+-----------------------------
+- News 2.9.1
+  - Fixes to permissions checks
+- Fix sql error in listcssassoc
+- Fix missing username in admin header on login of new session.
+- Fix to expand all/collapse all icons in listcontent.
+
+Version 1.5 - Puerto Rico
 -----------------------------
 - A new notification system in the admin
 - A new dashboard page in the admin

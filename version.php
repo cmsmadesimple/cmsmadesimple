@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.5";
-$CMS_VERSION_NAME = "Puerto Rico";
+$CMS_VERSION = "1.5.1";
+$CMS_VERSION_NAME = "San Juan";
 $CMS_SCHEMA_VERSION = "31";
 
 define('CMS_VERSION', $CMS_VERSION);
