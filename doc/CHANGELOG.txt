@@ -5,6 +5,7 @@ Version 1.5.1 - San Juan
 - Fix sql error in listcssassoc
 - Fix missing username in admin header on login of new session.
 - Fix to expand all/collapse all icons in listcontent.
+- Fix Edit tag to XSS admin link
 
 Version 1.5 - Puerto Rico
 -----------------------------
