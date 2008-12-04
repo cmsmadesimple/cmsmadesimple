@@ -101,10 +101,10 @@ function check_login($no_redirect = false)
 	      }
 	    // now we've got to check the request
 	    // and make sure it matches the session key
-	    if( !isset($config['stupidly_ignore_xss_vulnerability']) || 
-		!isset($_SESSION[CMS_USER_KEY]) || 
+	    if( !isset($config['stupidly_ignore_xss_vulnerability']) && 
+		(!isset($_SESSION[CMS_USER_KEY]) || 
 		!isset($_REQUEST[CMS_SECURE_PARAM_NAME]) ||
-		($_REQUEST[CMS_SECURE_PARAM_NAME] != $_SESSION[CMS_USER_KEY]))
+		 ($_REQUEST[CMS_SECURE_PARAM_NAME] != $_SESSION[CMS_USER_KEY])))
 	      {
 		debug_buffer('Session key mismatch problem... redirect to login');
 		if (false == $no_redirect)
