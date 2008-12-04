@@ -99,19 +99,32 @@ function check_login($no_redirect = false)
 		    $_SESSION[CMS_USER_KEY] = $_COOKIE[CMS_SECURE_PARAM_NAME];
 		  }
 	      }
+
 	    // now we've got to check the request
 	    // and make sure it matches the session key
-	    if( !isset($config['stupidly_ignore_xss_vulnerability']) && 
-		(!isset($_SESSION[CMS_USER_KEY]) || 
-		!isset($_REQUEST[CMS_SECURE_PARAM_NAME]) ||
-		 ($_REQUEST[CMS_SECURE_PARAM_NAME] != $_SESSION[CMS_USER_KEY])))
+	    if( !isset($_SESSION[CMS_USER_KEY]) || 
+		!isset($_GET[CMS_SECURE_PARAM_NAME]) ||
+                !isset($_POST[CMS_SECURE_PARAM_NAME]) )
 	      {
-		debug_buffer('Session key mismatch problem... redirect to login');
-		if (false == $no_redirect)
+		$v = '<no$!tgonna!$happen>';
+		if( isset($_GET[CMS_SECURE_PARAM_NAME]) )
 		  {
-		    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+		    $v = $_GET[CMS_SECURE_PARAM_NAME];
 		  }
-		return false;
+		else if( isset($_POST[CMS_SECURE_PARAM_NAME]) )
+		  {
+		    $v = $_POST[CMS_SECURE_PARAM_NAME];
+		  }
+
+		if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) )
+		  {
+		    debug_buffer('Session key mismatch problem... redirect to login');
+		    if (false == $no_redirect)
+		      {
+			redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+		      }
+		    return false;
+		  }
 	      }
 	  }
 	return true;
