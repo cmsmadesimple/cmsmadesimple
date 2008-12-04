@@ -88,7 +88,7 @@ if ($dodelete == true)
 }
 else
 {
-	redirect("listusers.php".$urlext."&amp;message=".lang('erroruserinuse'));
+	redirect("listusers.php".$urlext."&message=".lang('erroruserinuse'));
 }
 
 # vim:ts=4 sw=4 noet
