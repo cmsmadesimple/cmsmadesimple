@@ -831,6 +831,7 @@ class CmsAdminTheme extends CmsObject
      */
 	function show_errors($errors, $get_var='')
 	{
+		// todo: this should use a template in the admin theme
 		global $gCms;
 		$config =& $gCms->GetConfig();
 		$wikiUrl = $config['wiki_url'];
@@ -1022,7 +1023,7 @@ class CmsAdminTheme extends CmsObject
      */
     function AddNotification($priority,$module,$html)
     {
-      if( !is_array($this->_notificationitems) )
+		if( !is_array($this->_notificationitems) )
 	{
 	  $this->_notificationitems = array(array(),array(),array());
 	}

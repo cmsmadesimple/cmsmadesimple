@@ -1,4 +1,8 @@
 <?php
+$lang['admin']['ftp_test_passed'] = 'FTP connection test succeeded';
+$lang['admin']['ftp_settings_short_help'] = <<<EOT
+These settings are used to upload modules, themes and other files via ftp to your server.  Please enter the correct information in these fields and click the test button below.
+EOT;
 $lang['admin']['warning_mail_settings'] = <<<EOT
 Your mail settings have not been configured.  This could interfere with the ability of your website to send email messages.  You should go to <a href="moduleinterface.php?module=CMSMailer">Extensions &gt;&gt; CMSMailer</a> and configure the mail settings with the information provided by your host.
 EOT;
@@ -186,7 +190,7 @@ $lang['admin']['errorgettingcssname'] = 'Error getting Stylesheet name';
 $lang['admin']['errorgettingtemplatename'] = 'Error getting template name';
 $lang['admin']['errorincompletexml'] = 'XML File is incomplete or invalid';
 $lang['admin']['uploadxmlfile'] = 'Install module via XML file';
-$lang['admin']['cachenotwritable'] = 'Cache folder is not writable. Clearing cache will not work. Please make the tmp/cache folder have full read/write/execute permissions (chmod 777).  You may also have to disable safe mode.';
+$lang['admin']['cachenotwritable'] = 'Cache folder is not writable. Clearing cache will not work. Please make the tmp/cache folder has full read/write/execute permissions (chmod 777).  You may also have to disable safe mode.';
 $lang['admin']['modulesnotwritable'] = 'The modules folder is not writable, if you would like to install modules by uploading an XML file you need to make the modules folder have full read/write/execute permissions (chmod 777).  Safe mode may also be in effect.';
 $lang['admin']['noxmlfileuploaded'] = 'No file was uploaded. To install a module via XML you must choose and upload an module .xml file from your computer.';
 $lang['admin']['errorinsertingcss'] = 'Error inserting Stylesheet';

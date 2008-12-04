@@ -46,8 +46,15 @@ $db =& $gCms->GetDb();
 
 $smarty = cms_smarty();
 
-$error = "";
+$errors = array();
 $message = "";
+
+// Make sure cache folder is writable
+$tmp = cms_join_path(CmsConfig::get('root_path'),'tmp','cache');
+if (FALSE === is_writable($tmp))
+{
+  $errors[] = lang('cachenotwritable').' '.$tmp;
+}
 
 $disablesafemodewarning = 0;
 if (isset($_POST["disablesafemodewarning"]))
@@ -271,7 +278,7 @@ else if (isset($_POST["editsiteprefs"]))
 	}
 	else
 	{
-		$error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
+	  $errors[] .= lang('noaccessto', array('Modify Site Permissions'));
 	}
 }
 else if( isset($_POST['mailsettings']) )
@@ -303,7 +310,91 @@ else if( isset($_POST['mailsettings']) )
 	}
   else
 	{
-		$error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
+	  $errors[] = lang('noaccessto', array('Modify Site Permissions'));
+	}
+}
+else if (isset($_POST['ftpsettings']) )
+{
+  if( !$access )
+	{
+	  $errors[] = lang('noaccessto', array('Modify Site Permissions'));
+	}
+  else if( isset($_POST['submitbutton']) )
+	{
+	  $ftp_host = trim(coalesce_key($_POST,'ftp_host',''));
+	  $ftp_port = (int)coalesce_key($_POST,'ftp_port',22);
+	  $ftp_username = trim(coalesce_key($_POST,'ftp_username',''));
+	  $ftp_password = trim(coalesce_key($_POST,'ftp_password',''));
+	  $ftp_path = trim(coalesce_key($_POST,'ftp_path',''));
+	  
+	  if( empty($ftp_host) )
+		{
+		  $errors[] = lang('nofieldgiven',lang('hostname'));
+		}
+	  if( empty($ftp_username) )
+		{
+		  $errors[] = lang('nofieldgiven',lang('username'));
+		}
+	  if( empty($ftp_password) )
+		{
+		  $errors[] = lang('nofieldgiven',lang('password'));
+		}
+	  if( empty($ftp_path) )
+		{
+		  $errors[] = lang('nofieldgiven',lang('path'));
+		}
+	  if( !count($errors) )
+		{
+		  CmsApplication::set_preference('ftp_host',$ftp_host);
+		  CmsApplication::set_preference('ftp_port',$ftp_port);
+		  CmsApplication::set_preference('ftp_username',$ftp_username);
+		  CmsApplication::set_preference('ftp_password',$ftp_password);
+		  CmsApplication::set_preference('ftp_path',$ftp_path);
+		}
+	  $smarty->assign('active_tab','ftpsettings');
+	}
+  else if( isset($_POST['ftptest']) )
+	{
+	  $ftp_host = CmsApplication::get_preference('ftp_host');
+	  $ftp_port = CmsApplication::get_preference('ftp_port');
+	  $ftp_username = CmsApplication::get_preference('ftp_username');
+	  $ftp_password = CmsApplication::get_preference('ftp_password');
+	  $ftp_path = CmsApplication::get_preference('ftp_path');
+
+	  $ftp = new CmsFtp;
+	  $ftp->set_verbose();
+	  if( !$ftp->set_server($ftp_host,$ftp_port) )
+		{
+		  $errors[] = lang('error_ftp_setserver').implode('<br/>',$ftp->get_messages());
+		}
+	  if( !count($errors) )
+		{
+		  if( !$ftp->connect() )
+			{
+			  $errors[] = lang('error_ftp_connect').implode('<br/>',$ftp->get_messages());
+			}
+		}
+	  if( !count($errors) )
+		{
+		  if( !$ftp->login($ftp_username,$ftp_password) )
+			{
+			  $ftp->quit();
+			  $errors[] = lang('error_ftp_login').implode('<br/>',$ftp->get_messages());
+			}
+		}
+	  if( !count($errors) )
+		{
+		  if( !$ftp->chdir($ftp_path) )
+			{
+			  $ftp->quit();
+			  $errors[] = lang('error_ftp_chdir');
+			}
+		}
+	  if( !count($errors) )
+		{
+		  $ftp->quit();
+		  $message = lang('ftp_test_passed');
+		}
 	}
 }
 else if (!isset($_POST["submit"]))
@@ -361,6 +452,11 @@ $smarty->assign('mail_smtpauthpw',CmsApplication::get_preference('mail_smtpauthp
 $smarty->assign('mail_sendmail',CmsApplication::get_preference('mail_sendmail',''));
 $smarty->assign('mail_from',CmsApplication::get_preference('mail_from',''));
 $smarty->assign('mail_fromuser',CmsApplication::get_preference('mail_fromuser',''));
+$smarty->assign('ftp_host',CmsApplication::get_preference('ftp_host',''));
+$smarty->assign('ftp_port',CmsApplication::get_preference('ftp_port',22));
+$smarty->assign('ftp_username',CmsApplication::get_preference('ftp_username',''));
+$smarty->assign('ftp_password',CmsApplication::get_preference('ftp_password',''));
+$smarty->assign('ftp_path',CmsApplication::get_preference('ftp_path',''));
 
 $templates = array();
 $templates['-1'] = 'None';
@@ -376,8 +472,9 @@ $smarty->assign('templates', $templates);
 
 include_once("header.php");
 
-if ($error != "") {
-	echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";	
+if (count($errors)) {
+  echo $themeObject->ShowErrors($errors);
+  //	echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";	
 }
 if ($message != "") {
 	echo $themeObject->ShowMessage($message);
@@ -385,12 +482,6 @@ if ($message != "") {
 // Assign the header
 $smarty->assign('header_name', $themeObject->ShowHeader('siteprefs'));
 
-
-// Make sure cache folder is writable
-if (FALSE == is_writable(cms_join_path(CmsConfig::get('root_path'),'tmp','cache')))
-{
-	echo $themeObject->ShowErrors(lang('cachenotwritable'));
-}
 
 $lang_list = CmsLanguage::get_language_list();
 $enabled_languages = explode(',', CmsApplication::get_preference('enabled_languages', 'en_US'));
@@ -413,7 +504,8 @@ foreach ($lang_list as $k=>$v)
 }
 $smarty->assign('lang_list', $lang_list);
 $smarty->assign('back_url', $themeObject->BackUrl());
-$smarty->display('siteprefs.tpl');
+$smarty->assign('template_name','siteprefs.tpl');
+$smarty->display('admin_page_contents.tpl');
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
