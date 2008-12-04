@@ -82,8 +82,8 @@ if (isset($_POST['ignoredmodules']) )
 $userid = get_userid();
 
 if (isset($_POST["cancel"])) {
-	redirect("index.php");
-	return;
+  redirect("index.php?".CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY]);
+  return;
 }
 
 $modules = array();
