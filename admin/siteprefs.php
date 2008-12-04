@@ -502,10 +502,8 @@ foreach ($lang_list as $k=>$v)
 	$v['default'] = '<input type="radio" name="default_language" value="'.$k.'"' . ($default_language == $k ? ' checked="checked"' : '') . $enabled_html .' />';
 	$lang_list[$k] = $v;
 }
-$smarty->assign('lang_list', $lang_list);
-$smarty->assign('back_url', $themeObject->BackUrl());
-$smarty->assign('template_name','siteprefs.tpl');
-$smarty->display('admin_page_contents.tpl');
+
+$smarty->display('siteprefs.tpl');
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

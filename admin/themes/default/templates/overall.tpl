@@ -92,7 +92,13 @@
 					{/foreach}
 				</p>
 			{/if}
+                        <div class="pagecontainer">
 			{$admin_content}
+                        </div>
+			<p class="pageback">
+				<a class="pageback" href="{$theme_object->BackURL()}">&#171; {lang string='back'}</a>
+			</p>
+			{literal}<script type="text/javascript">$('#page_tabs').tabs({fxAutoHeight: false});</script>{/literal}
 			<div class="clearb"></div>
 		</div>
 
