@@ -89,7 +89,8 @@ function check_login($no_redirect = false)
 	debug_buffer('Session found.  Moving on...');
 
 	global $CMS_ADMIN_PAGE;
-	if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE))
+	if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE)
+	    && !isset($config['stupidly_ignore_xss_vulnerability']) )
 	  {
 	    if( !isset($_SESSION[CMS_USER_KEY]) )
 	      {
