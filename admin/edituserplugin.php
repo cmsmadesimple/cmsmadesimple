@@ -126,7 +126,7 @@ if ($access) {
 
 				if( !isset( $_POST['apply'] ) )
 				  {
-				    redirect("listusertags.php".$urlext."&amp;message=usertagupdated");
+				    redirect("listusertags.php".$urlext."&message=usertagupdated");
 				    return;
 				  }
 			}

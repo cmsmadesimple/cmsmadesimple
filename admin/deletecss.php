@@ -146,7 +146,7 @@ if ($dodelete)
 }
 else
 {
-	redirect("listcss.php".$urlext."&amp;message=$error");
+	redirect("listcss.php".$urlext."&message=$error");
 }
 
 # vim:ts=4 sw=4 noet

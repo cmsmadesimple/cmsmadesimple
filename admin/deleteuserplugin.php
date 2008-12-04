@@ -57,7 +57,7 @@ if (isset($_GET["userplugin_id"])) {
 	}
 }
 
-redirect('listusertags.php'.$urlext.'&amp;message=usertagdeleted');
+redirect('listusertags.php'.$urlext.'&message=usertagdeleted');
 
 # vim:ts=4 sw=4 noet
 ?>

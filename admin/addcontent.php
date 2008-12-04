@@ -308,7 +308,7 @@ if ($access)
 			if ($submit)
 			{
 				audit($contentobj->Id(), $contentobj->Name(), 'Added Content');
-				redirect('listcontent.php'.$urlext.'&amp;message=contentadded');
+				redirect('listcontent.php'.$urlext.'&message=contentadded');
 			}
 		}
 	}
