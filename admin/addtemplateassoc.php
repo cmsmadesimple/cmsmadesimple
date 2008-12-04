@@ -115,7 +115,7 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
 		}
 
 		# get the next access_order
-		$query = "SELECT max(assoc_order)+1 FROM '.cms_db_prefix().'css_assoc where assoc_to_id = ?";
+		$query = "SELECT max(assoc_order)+1 FROM ".cms_db_prefix()."css_assoc where assoc_to_id = ?";
 		$nextord = $db->GetOne($query,array($template_id));
 		if( !$nextord ) $nextord = 1;
 
@@ -161,7 +161,6 @@ else
 #******************************************************************************
 # end of treatment, we redirect
 #******************************************************************************
-
 if ($doadd)
 {
 	redirect("templatecss.php".$urlext."&id=$id&type=$type");
