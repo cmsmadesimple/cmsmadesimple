@@ -95,11 +95,11 @@ while [ $_done = 0 ]; do
   echo "---"
   echo -n "Select From and to Version (syntax f=## t=##), q to quit, or d for done ";
   read ans
-  if [ $ans = 'q' -o $ans = 'quit' -o $ans == 'Q' -o $ans = 'QUIT' ]; then
+  if [ $ans = 'q' -o $ans = 'quit' -o $ans = 'Q' -o $ans = 'QUIT' ]; then
     echo "Exiting..."
     exit
   fi
-  if [ $ans = 'd' -o $ans = 'done' -o $ans == 'D' -o $ans = 'DONE' ]; then
+  if [ $ans = 'd' -o $ans = 'done' -o $ans = 'D' -o $ans = 'DONE' ]; then
     _done=1
   fi
   
