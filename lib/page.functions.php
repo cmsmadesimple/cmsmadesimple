@@ -89,8 +89,7 @@ function check_login($no_redirect = false)
 	debug_buffer('Session found.  Moving on...');
 
 	global $CMS_ADMIN_PAGE;
-	if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE)
-	    && !isset($config['stupidly_ignore_xss_vulnerability']) )
+	if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE) )
 	  {
 	    if( !isset($_SESSION[CMS_USER_KEY]) )
 	      {
@@ -102,7 +101,8 @@ function check_login($no_redirect = false)
 	      }
 	    // now we've got to check the request
 	    // and make sure it matches the session key
-	    if( !isset($_SESSION[CMS_USER_KEY]) || 
+	    if( !isset($config['stupidly_ignore_xss_vulnerability']) || 
+		!isset($_SESSION[CMS_USER_KEY]) || 
 		!isset($_REQUEST[CMS_SECURE_PARAM_NAME]) ||
 		($_REQUEST[CMS_SECURE_PARAM_NAME] != $_SESSION[CMS_USER_KEY]))
 	      {
