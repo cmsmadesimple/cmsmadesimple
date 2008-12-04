@@ -133,8 +133,9 @@ else
           $cms_is_uptodate = 1;
           $do_getpref = 0;
           $url = strtolower(trim(get_site_preference('urlcheckversion','')));
-          if( $url != 'none' && !empty($url) &&
-              ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
+          //if( $url != 'none' && !empty($url) &&
+          //    ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
+	  if( $url != 'none' && ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
             {
                 // check forced
                 // get the url
