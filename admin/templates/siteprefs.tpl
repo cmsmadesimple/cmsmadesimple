@@ -107,7 +107,7 @@
 				{admin_input type='input' label='Hostname' name='ftp_host' id='ftp_host value=$ftp_host}
 				{admin_input type='input' label='Port' name='ftp_port' id='ftp_host value=$ftp_port size="4" maxlength="5"}
 				{admin_input type='input' label='Username' name='ftp_username' id='ftp_host value=$ftp_username}
-				{admin_input type='input' label='Password' name='ftp_password' id='ftp_host value=$ftp_password}
+				{admin_input type='password' label='Password' name='ftp_password' id='ftp_host value=$ftp_password}
 				{admin_input type='input' label='Path' name='ftp_path' id='ftp_host value=$ftp_path}
 				{include file='elements/buttons.tpl'}
 			</fieldset>

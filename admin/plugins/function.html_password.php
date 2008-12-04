@@ -23,6 +23,8 @@ function smarty_function_html_password($params, &$smarty)
 		echo ' id="'.$params['id'].'"';
 	if (isset($params['name']))
 		echo ' name="'.$params['name'].'"';
+	if (isset($params['value']))
+		echo ' value="'.$params['value'].'"';
 	if (isset($params['size']))
 		echo ' size="'.$params['size'].'"';
 	if (isset($params['maxlength']))

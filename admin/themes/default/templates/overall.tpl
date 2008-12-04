@@ -77,7 +77,6 @@
   {$admin_topmenu}
 
 	<div id="MainContent">
-		
 			{if $theme_object->has_errors()}
 				<p class="errors">
 					{foreach from=$theme_object->errors item='one_error'}
