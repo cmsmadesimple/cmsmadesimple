@@ -17,11 +17,11 @@
 #
 #$Id: default_theme.php 4093 2007-08-27 00:44:25Z wishy $
 
-class NCleanGrey2Theme extends CmsAdminTheme
+class DefaultTheme extends CmsAdminTheme
 {	
-	function __construct($userid, $theme_name = 'NCleanGrey2')
+	function __construct($userid, $theme_name = 'Default')
 	{
-		parent::__construct($userid, $theme_name = 'NCleanGrey2');
+		parent::__construct($userid, $theme_name = 'Default');
 	}
 }
 ?>
