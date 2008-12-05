@@ -30,7 +30,7 @@
  **/
 class CmsFtp extends CmsObject
 {
-  private var $_ftp; // ftp class object
+  private $_ftp; // ftp class object
 
   public function __construct()
   {
