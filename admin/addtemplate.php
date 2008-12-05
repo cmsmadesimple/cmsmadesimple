@@ -100,8 +100,8 @@ else if ($access)
 		{
 			if ($submit)
 			{
-				audit($template_object->id, $template_object->name, 'Added Template');
-				redirect("listtemplates.php");
+				$themeObject->add_message(_("Template Added"), true);
+				CmsResponse::redirect("listtemplates.php");
 			}
 		}
 	}

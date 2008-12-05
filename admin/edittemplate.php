@@ -98,7 +98,10 @@ else if ($access)
 		{
 			audit($template_object->id, $template_object->name, 'Edited Template');
 			if ($submit)
+			{
+				$themeObject->add_message(_("Template Updated"), true);
 				CmsResponse::redirect("listtemplates.php");
+			}
 		}
 	}
 }

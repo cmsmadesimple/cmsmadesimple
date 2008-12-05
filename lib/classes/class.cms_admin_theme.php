@@ -51,6 +51,28 @@ class CmsAdminTheme extends CmsObject
 	{
 		parent::__construct();
 		
+		//Pull any errors out of the session and load them so they'll display when they get the chance
+		if (isset($_SESSION['errors']))
+		{
+			foreach ($_SESSION['errors'] as $one_error)
+			{
+				$this->errors[] = $one_error;
+			}
+			
+			$_SESSION['errors'] = array();
+		}
+		
+		//Pull any messages out of the session and load them so they'll display when they get the chance
+		if (isset($_SESSION['messages']))
+		{
+			foreach ($_SESSION['messages'] as $one_message)
+			{
+				$this->messages[] = $one_message;
+			}
+			
+			$_SESSION['messages'] = array();
+		}
+		
 		$this->theme_name = $theme_name;
 		
 		$this->url = $_SERVER['SCRIPT_NAME'];
@@ -801,9 +823,25 @@ class CmsAdminTheme extends CmsObject
 		}
 	}
 	
-	public function add_error($error_string)
+	/**
+	 * Add error for display next time header is shown.  If flash is true,
+	 * this will display after a redirect.
+	 *
+	 * @param string The error message to display
+	 * @param boolean Whether or not the message should persist after a redirect
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public function add_error($error_string, $flash = false)
 	{
-		$this->errors[] = $error_string;
+		if ($flash)
+		{
+			if (!isset($_SESSION['errors']))
+				$_SESSION['errors'] = array();
+			$_SESSION['errors'][] = $error_string;
+		}
+		else
+			$this->errors[] = $error_string;
 	}
 	
 	public function has_errors()
@@ -811,9 +849,25 @@ class CmsAdminTheme extends CmsObject
 		return count($this->errors) > 0;
 	}
 	
-	public function add_message($message_string)
+	/**
+	 * Add message for display next time header is shown.  If flash is true,
+	 * this will display after a redirect.
+	 *
+	 * @param string The message to display
+	 * @param boolean Whether or not the message should persist after a redirect
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public function add_message($message_string, $flash = false)
 	{
-		$this->messages[] = $message_string;
+		if ($flash)
+		{
+			if (!isset($_SESSION['messages']))
+				$_SESSION['messages'] = array();
+			$_SESSION['messages'][] = $message_string;
+		}
+		else
+			$this->messages[] = $message_string;
 	}
 	
 	public function has_messages()
