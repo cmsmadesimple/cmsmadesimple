@@ -332,6 +332,12 @@ function lang()
 	return call_user_func_array(array('CmsLanguage', 'translate'), $ary);
 }
 
+function __()
+{
+	$ary = func_get_args();
+	return call_user_func_array(array('CmsLanguage', 'translate'), $ary);
+}
+
 /**
  * Returns the currently configured database prefix.
  *

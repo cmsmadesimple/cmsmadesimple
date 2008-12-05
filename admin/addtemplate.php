@@ -100,7 +100,7 @@ else if ($access)
 		{
 			if ($submit)
 			{
-				$themeObject->add_message(_("Template Added"), true);
+				$themeObject->add_message(__("Template Added"), true);
 				CmsResponse::redirect("listtemplates.php");
 			}
 		}
