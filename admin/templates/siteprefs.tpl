@@ -122,8 +122,7 @@
 				<input type="hidden" name="ftpsettings" value="true" />
 			</div> <!--input-hidden-->
 		</form>
-	</div>
-	{* ftp tab *}<div>
+	</div>{* ftp tab *}
 
 </div>{* page tabs *}
 <script type='text/javascript'>
