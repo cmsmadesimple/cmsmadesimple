@@ -1,3 +1,8 @@
+<div class="pagecontainer">
+  <div class="pageoverflow">
+    {$header_name}
+  </div><!-- pageoverflow -->
+
 <div id="page_tabs">
 	{* tab headers *}
         <div id="module_page_tabs">
@@ -125,6 +130,7 @@
 	</div>{* ftp tab *}
 
 </div>{* page tabs *}
+</div>
 <script type='text/javascript'>
    <!--
      $('#module_page_tabs > ul').tabs();

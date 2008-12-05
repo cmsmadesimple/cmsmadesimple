@@ -1,4 +1,4 @@
-<div id="logocontainer"><img src="themes/NCleanGrey2/images/logoCMS.png" alt="{$adminpaneltitle}" title="{$adminpaneltitle}" /><div class="logotext">{$adminpaneltitle}
+<div id="logocontainer"><img src="themes/default/images/logoCMS.png" alt="{$adminpaneltitle}" title="{$adminpaneltitle}" /><div class="logotext">{$adminpaneltitle}
 
 <br />{tr}welcome_user{/tr}:  {$its_me} 
 
