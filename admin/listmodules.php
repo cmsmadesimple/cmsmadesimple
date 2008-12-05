@@ -204,6 +204,7 @@ foreach (CmsModuleOperations::get_all_modules() as $k => $v)
 		$module['helplink'] = '<a href="listmodules.php?action=show_help&amp;module=' . $k . '">' . lang('help') . '</a>';
 	}
 	$module['aboutlink'] = '<a href="listmodules.php?action=show_about&amp;module=' . $k . '">' . lang('about') . '</a>';
+	$module['exportlink'] = '<a href="exportmodule.php?module='.$k.'">'.$themeObject->display_image('icons/system/accept.gif',lang('export'),'','','systemicon').'</a>';
 	$module_list[] = $module;
 }
 

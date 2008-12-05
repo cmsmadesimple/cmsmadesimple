@@ -12,6 +12,7 @@
 					<th>{tr}action{/tr}</th>
 					<th>{tr}help{/tr}</th>
 					<th>{tr}about{/tr}</th>
+                                        <th class="pageicon">&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -29,6 +30,7 @@
 					{/if}
 					<td>{$module.helplink}</td>
 					<td>{$module.aboutlink}</td>
+                                        <td>{$module.exportlink}</td>
 				</tr>
 			{/foreach}
 			</tbody>

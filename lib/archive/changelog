@@ -1,0 +1,12 @@
+TAR/GZIP/BZIP2/ZIP ARCHIVE CLASSES ChangeLog
+
+Version 2.1
+13-Aug-2005
+- Added new option "followlinks".
+- Added support for symbolic links.
+- Fixed encoding of headers in tar files.
+- Fixed headers in download_file.
+- Fixed tar_file so that two zero blocks are added.
+- Improved ordering of files in tar archives.
+- Removed attempt at character set translation in create_zip.
+- Updated extract_files to set modification date.
