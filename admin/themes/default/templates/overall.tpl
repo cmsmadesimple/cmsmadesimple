@@ -2,24 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-	<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-2008 Ted Kulp. All rights reserved." />
+	<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-2009 Ted Kulp. All rights reserved." />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	{cms_config var='root_url' assign='root'}
 	<title>{sitename} - {$admin_theme->title}</title>
    
 	<!--<link rel="stylesheet" href="{$root}/admin/themes/NCleanGrey2/css/kevin_layout.css" type="text/css" />-->
-	<link rel="stylesheet" href="{$root}/admin/themes/NCleanGrey2/css/kevin_tabs.css" type="text/css" />
+	<link rel="stylesheet" href="{$root}/admin/themes/default/css/kevin_tabs.css" type="text/css" />
     
     
-	 <link rel="stylesheet" href="{$root}/admin/themes/NCleanGrey2/css/style.css" type="text/css" />
+	 <link rel="stylesheet" href="{$root}/admin/themes/default/css/style.css" type="text/css" />
         <!--[if IE]>
-		  <script type="text/javascript" src="{$root}/admin/themes/NCleanGrey2/includes/ie7-standard-p.js"></script>
+		  <script type="text/javascript" src="{$root}/admin/themes/default/includes/ie7-standard-p.js"></script>
 	<![endif]-->	
     <!--[if IE]>
 		
 	<![endif]-->
-    <script type="text/javascript"  src="{$root}/admin/themes/NCleanGrey2/includes/standard.js"></script>
+    <script type="text/javascript"  src="{$root}/admin/themes/default/includes/standard.js"></script>
 
 
     <script type="text/javascript" src="{$root}/lib/jquery/jquery.js"></script>

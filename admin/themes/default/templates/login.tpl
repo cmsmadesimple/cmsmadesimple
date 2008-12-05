@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>CMS Login</title>
-<link rel="stylesheet" type="text/css" media="screen, projection" href="themes/NCleanGrey2/css/style.css" />
+<link rel="stylesheet" type="text/css" media="screen, projection" href="themes/default/css/style.css" />
 <base href="{$base_url}" />
 </head>
 
