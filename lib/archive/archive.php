@@ -418,7 +418,9 @@ class tar_file extends archive
 					'magic' => $temp['magic'],
 				);
 				if ($file['checksum'] == 0x00000000)
-					break;
+				  {
+				    break;
+				  }
 				else if (substr($file['magic'], 0, 5) != "ustar")
 				{
 					$this->error[] = "This script does not support extracting this type of tar file.";
@@ -433,10 +435,13 @@ class tar_file extends archive
 
 				if ($this->options['inmemory'] == 1)
 				{
-					$file['data'] = fread($fp, $file['stat'][7]);
-					fread($fp, (512 - $file['stat'][7] % 512) == 512 ? 0 : (512 - $file['stat'][7] % 512));
-					unset ($file['checksum'], $file['magic']);
-					$this->files[] = $file;
+				  if( $file['type'] != 5 && $file['type'] != 2)
+					{
+					  $file['data'] = @fread($fp, $file['stat'][7]);
+					  @fread($fp, (512 - $file['stat'][7] % 512) == 512 ? 0 : (512 - $file['stat'][7] % 512));
+					}
+				  unset ($file['checksum'], $file['magic']);
+				  $this->files[] = $file;
 				}
 				else if ($file['type'] == 5)
 				{
@@ -455,19 +460,22 @@ class tar_file extends archive
 				}
 				else if ($new = @fopen($file['name'], "wb"))
 				{
-					fwrite($new, fread($fp, $file['stat'][7]));
-					fread($fp, (512 - $file['stat'][7] % 512) == 512 ? 0 : (512 - $file['stat'][7] % 512));
+					fwrite($new, @fread($fp, $file['stat'][7]));
+					@fread($fp, (512 - $file['stat'][7] % 512) == 512 ? 0 : (512 - $file['stat'][7] % 512));
 					fclose($new);
-					chmod($file['name'], $file['stat'][2]);
+					@chmod($file['name'], $file['stat'][2]);
 				}
 				else
 				{
 					$this->error[] = "Could not open {$file['name']} for writing.";
 					continue;
 				}
-				chown($file['name'], $file['stat'][4]);
-				chgrp($file['name'], $file['stat'][5]);
-				touch($file['name'], $file['stat'][9]);
+				if ($this->options['inmemory'] == 0)
+				  {
+				    @chown($file['name'], $file['stat'][4]);
+				    @chgrp($file['name'], $file['stat'][5]);
+				    @touch($file['name'], $file['stat'][9]);
+				  }
 				unset ($file);
 			}
 		}
@@ -538,7 +546,7 @@ class bzip_file extends tar_file
 		{
 			$pwd = getcwd();
 			chdir($this->options['basedir']);
-			if ($fp = bzopen($this->options['name'], "wb"))
+			if ($fp = bzopen($this->options['name'], "w"))
 			{
 				fseek($this->archive, 0);
 				while ($temp = fread($this->archive, 1048576))

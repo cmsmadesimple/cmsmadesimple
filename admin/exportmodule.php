@@ -62,6 +62,10 @@ if( !is_dir($module_dir) )
 //
 // Copy the module to a tmp directory
 //
+if( is_dir($tmpdir) )
+  {
+    recursive_delete($tmpdir);
+  }
 @mkdir($tmpdir);
 copyr($module_dir,$tmpdir);
 
@@ -78,32 +82,35 @@ $depends = implode('::DEPEND::',$module->get_dependencies());
 //
 // Create the archive
 // 
+if( file_exists($destfn) )
+  {
+    @unlink($destfn);
+  }
 $archive = new CmsArchive($destfn);
-$archive->set_basedir($module_dir2);
+$archive->set_basedir($module_dir2); // directory above the module files
 $archive->set_recursive();
-$archive->set_exclude_patterns(array('\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' ));
+$archive->set_exclude_patterns(array('\.git', '\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' ));
 $archive->add_files(array($module->get_name()));
 $archive->create();
 
 //
 // Send the file
 //
+
 $handlers = ob_list_handlers(); 
 for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 header('Content-Description: File Transfer');
 header('Content-Type: application/force-download');
 header('Content-Disposition: attachment; filename='.$fname);
 echo @file_get_contents($destfn);
-exit();
 
 //
 // Cleanup
 //
-recursive_delete($tmpdir);
-@unlink($destfn);
+#recursive_delete($tmpdir);
+#@unlink($destfn);
+exit();
 
-redirect('listmodules.php');
-include_once("footer.php");
 #
 #
 # vim:ts=4 sw=4 noet

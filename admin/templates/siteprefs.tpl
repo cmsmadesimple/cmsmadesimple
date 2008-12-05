@@ -1,11 +1,13 @@
 <div id="page_tabs">
 	{* tab headers *}
+        <div id="module_page_tabs">
 	<ul class="anchors">
 		<li><a href="#general"><span>{tr}General{/tr}</span></a></li>
 		<li><a href="#languages"><span>{tr}Languages{/tr}</span></a></li>
 		<li><a href="#mail"><span>{tr}Mail Settings{/tr}</span></a></li>
 		<li><a href="#ftpsettings"><span>{tr}File Upload Settings{/tr}</span></a></li>
 	</ul>
+        </div>
 
     {* general tab *}        
 	<div id="general" class="fragment">
@@ -124,3 +126,8 @@
 	{* ftp tab *}<div>
 
 </div>{* page tabs *}
+<script type='text/javascript'>
+   <!--
+     $('#module_page_tabs > ul').tabs();
+   //-->
+   </script>

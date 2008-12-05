@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['nofileuploaded'] = 'No file was uploaded';
+$lang['admin']['info_upload_cmsmod'] = 'Upload a .cmsmod file to preview its contents and read the appropriate documentation before installing it into your system';
 $lang['admin']['ftp_test_passed'] = 'FTP connection test succeeded';
 $lang['admin']['ftp_settings_short_help'] = <<<EOT
 These settings are used to upload modules, themes and other files via ftp to your server.  Please enter the correct information in these fields and click the test button below.

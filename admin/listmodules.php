@@ -33,7 +33,6 @@ $module = coalesce_key($_REQUEST, 'module', '');
 $plugin = coalesce_key($_REQUEST, 'plugin', '');
 
 $smarty->assign('header_name', $themeObject->ShowHeader('modules'));
-$smarty->assign('back_url', $themeObject->BackUrl());
 $show_list = true;
 
 if ($action == 'install' && $module != '')
@@ -125,6 +124,28 @@ else if ($action == 'show_help' && $module != '')
 {
 	echo cmsms()->modules[$module]['object']->get_help_page();
 	$show_list = false;
+}
+else if( isset($_POST['uploadmodule']) )
+{
+  if( !isset($_FILES['upload']) )
+    {
+      $themeObject->add_error(lang('nofileuploaded'));
+    }
+  else if( $_FILES['upload']['size'] == 0 || $_FILES['upload']['error'] != 0 )
+    {
+      $themeObject->add_error(lang('error_fileupload'));
+    }
+
+  // now try to get open the archive
+  // and get a list of files
+  $archive = new CmsArchive($_FILES['upload']['tmp_name']);
+  $archive->set_inmemory();
+  $archive->extract();
+  $files = $archive->get_files();
+  foreach( $files as $one )
+    {
+      echo 'FILE: '.$one['name'].' has size of '.$one['stat'][7].' bytes<br/>';
+    }
 }
 
 $image_true = $themeObject->display_image('icons/system/true.gif', lang('true'), '', '', 'systemicon');

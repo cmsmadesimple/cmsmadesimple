@@ -74,33 +74,32 @@
 	
 <div>
 
-  {$admin_topmenu}
+	{$admin_topmenu}
 
 	<div id="MainContent">
-			{if $theme_object->has_errors()}
-				<p class="errors">
-					{foreach from=$theme_object->errors item='one_error'}
-						{$one_error}<br />
-					{/foreach}
-				</p>
-			{/if}
-			{if $theme_object->has_messages()}
-				<p class="messages">
-					{foreach from=$theme_object->messages item='one_message'}
-						{$one_message}<br />
-					{/foreach}
-				</p>
-			{/if}
-                        <div class="pagecontainer">
-			{$admin_content}
-                        </div>
-			<p class="pageback">
-				<a class="pageback" href="{$theme_object->BackURL()}">&#171; {lang string='back'}</a>
+		{if $theme_object->has_errors()}
+			<p class="errors">
+				{foreach from=$theme_object->errors item='one_error'}
+					{$one_error}<br />
+				{/foreach}
 			</p>
-			{literal}<script type="text/javascript">$('#page_tabs').tabs({fxAutoHeight: false});</script>{/literal}
-			<div class="clearb"></div>
+		{/if}
+		{if $theme_object->has_messages()}
+			<p class="messages">
+				{foreach from=$theme_object->messages item='one_message'}
+					{$one_message}<br />
+				{/foreach}
+			</p>
+		{/if}
+		<div class="pagecontainer">
+			{$admin_content}
 		</div>
-
+		<p class="pageback">
+			<a class="pageback" href="{$theme_object->BackURL()}">&#171; {lang string='back'}</a>
+		</p>
+		{literal}<script type="text/javascript">$('#page_tabs').tabs({fxAutoHeight: false});</script>{/literal}
+		<div class="clearb"></div>
+	</div>
 	
 	<div id="HelpContent"></div>	
 

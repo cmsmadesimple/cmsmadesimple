@@ -51,27 +51,27 @@ class CmsArchive extends CmsObject
 
     if( empty($filename) )
       {
-	throw new Exception('invalid parameter');
+		  throw new Exception('invalid parameter');
       }
 
     if( empty($type) )
       {
-	$type = CmsArchive::ARCHIVE_GZIP;
+		  $type = CmsArchive::ARCHIVE_GZIP;
       }
 
     switch($type)
       {
       case CmsArchive::ARCHIVE_TAR:
-	$this->_obj = new tar_file($filename);
-	break;
+		  $this->_obj = new tar_file($filename);
+		  break;
       case CmsArchive::ARCHIVE_GZIP:
-	$this->_obj = new gzip_file($filename);
-	break;
+		  $this->_obj = new gzip_file($filename);
+		  break;
       case CmsArchive::ARCHIVE_BZIP:
-	$this->_obj = new bzip_file($filename);
-	break;
+		  $this->_obj = new bzip_file($filename);
+		  break;
       default:
-	throw new Exception('Invalid archive type');
+		  throw new Exception('Invalid archive type');
       }
 
     $this->set_compression(5);
@@ -323,5 +323,10 @@ class CmsArchive extends CmsObject
 	  }
       }
     $this->_obj->files = $tmp;
+  }
+
+  public function get_files()
+  {
+	  return $this->_obj->files;
   }
 } // end of class
