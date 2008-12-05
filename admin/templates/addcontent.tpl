@@ -161,24 +161,24 @@
 				</table>
 				<hr />
 		{/section}
-			
+		
 		<br />
-			
-			<fieldset>
-				<legend>Add Permission</legend>
-				<div class="row">
-					<label>Group:</label>
-					<select name="group_id">{html_options options=$group_dropdown}</select>
-				</div>
-				{admin_input type='select' label='Permission' id='permission_id' name='permission_id'  options=$permission_list}
-				<div class="row">
-					<label for="permission_allow">Allow:</label>
-					<input type="hidden" name="permission_allow" value="0" /><input type="checkbox" class="checkbox" id="permission_allow" name="permission_allow" value="1" /><br />
-				</div>
-				<input type="submit" name="permission_add_submit" value="Submit" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'"  />
-			</fieldset>
-			
-		</div> <!-- End permissions -->
+		
+		<fieldset>
+			<legend>Add Permission</legend>
+			<div class="row">
+				<label>Group:</label>
+				<select name="group_id">{html_options options=$group_dropdown}</select>
+			</div>
+			{admin_input type='select' label='Permission' id='permission_id' name='permission_id'  options=$permission_list}
+			<div class="row">
+				<label for="permission_allow">Allow:</label>
+				<input type="hidden" name="permission_allow" value="0" /><input type="checkbox" class="checkbox" id="permission_allow" name="permission_allow" value="1" /><br />
+			</div>
+			<input type="submit" name="permission_add_submit" value="Submit" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'"  />
+		</fieldset>
+		
+	</div> <!-- End permissions -->
 
 		{if $can_preview eq true}
 		<div id="preview">

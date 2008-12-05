@@ -56,6 +56,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	{
 		$this->create_belongs_to_association('template', 'cms_template', 'template_id');
 		$this->assign_acts_as('NestedSet');
+		$this->assign_acts_as('Acl');
 	}
 	
 	/*
