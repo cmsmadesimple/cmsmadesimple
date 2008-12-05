@@ -103,6 +103,8 @@ class CmsModuleLoader extends CmsObject
 				{
 					$cmsmodules[$modulename]['installed'] = true;
 					$cmsmodules[$modulename]['active'] = ($result->fields['active'] == 1?true:false);
+					if ($cmsmodules[$modulename]['active'])
+						$cmsmodules[$modulename]['object']->setup();
 				}
 			}
 			else
@@ -134,9 +136,10 @@ class CmsModuleLoader extends CmsObject
 							#Check to see if version in db matches file version
 							if ($dbversion == $newmodule->get_version() && version_compare($newmodule->minimum_core_version(), CMS_VERSION) != 1)
 							{
+								$newmodule->setup();
 								$cmsmodules[$name]['object'] = $newmodule;
 								$cmsmodules[$name]['installed'] = true;
-								$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
+								$cmsmodules[$name]['active'] = true;
 							}
 							else
 							{
@@ -168,6 +171,28 @@ class CmsModuleLoader extends CmsObject
 	public static function LoadModules($loadall = false, $noadmin = false)
 	{
 		return CmsModuleLoader::load_modules($loadall, $noadmin);
+	}
+
+	public static function is_installed($module_name)
+	{
+		$gCms = cmsms();
+		$cmsmodules = &$gCms->modules;
+		var_dump($module_name, $gCms->modules);
+		if (isset($gCms->modules[$module_name]))
+		{
+			return $gCms->modules[$module_name]['installed'] == true;
+		}
+		return false;
+	}
+	
+	public static function is_active($module_name)
+	{
+		$gCms = cmsms();
+		if (isset($gCms->modules[$module_name]))
+		{
+			return $gCms->modules[$module_name]['active'] == true;
+		}
+		return false;
 	}
 
 	/**

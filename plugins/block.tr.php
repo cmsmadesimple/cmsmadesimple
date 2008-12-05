@@ -28,7 +28,7 @@ function smarty_cms_block_tr($params, $content, &$smarty)
 	}
 	else
 	{
-		$txt = $module->Lang(trim($content));
+		$txt = $module->lang(trim($content));
 	}
 
 	if (isset($params['assign']))

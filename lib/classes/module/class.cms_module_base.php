@@ -55,8 +55,6 @@ abstract class CmsModuleBase extends CmsObject
 		$this->create_parameter('returnid', FILTER_SANITIZE_NUMBER_INT);
 		$this->create_parameter('action', FILTER_SANITIZE_STRING);
 		$this->create_parameter('showtemplate', FILTER_SANITIZE_STRING);
-		
-		$this->setup();
 	}
 
 	/**
@@ -1967,12 +1965,21 @@ abstract class CmsModuleBase extends CmsObject
 	public function process_template($template_name, $id, $return_id, $designation = '', $cache_id = '')
 	{
 		$smarty = cms_smarty();
+		
+		$old_module = null;
+		if ($smarty->get_template_vars('cms_mapi_module') != null)
+			$old_module = $smarty->get_template_vars('cms_mapi_module');
 
 		$smarty->assign_by_ref('cms_mapi_module', $this);
 		$smarty->assign('cms_mapi_id', $id);
 		$smarty->assign('cms_mapi_return_id', $return_id);
 
-		return $smarty->fetch('module_file_tpl:'.$this->get_name() . ';' . $template_name, $cache_id, ($designation != '' ? $designation : $this->get_name()));
+		$result = $smarty->fetch('module_file_tpl:'.$this->get_name() . ';' . $template_name, $cache_id, ($designation != '' ? $designation : $this->get_name()));
+		
+		if ($old_module != null)
+			$smarty->assign_by_ref('cms_mapi_module', $old_module);
+		
+		return $result;
 	}
 
 	public function is_database_template_cached($template_type, $template_name, $designation = '', $timestamp = '', $cache_id = '')
@@ -1983,12 +1990,21 @@ abstract class CmsModuleBase extends CmsObject
 	public function process_template_from_database($id, $return_id, $template_type, $template_name = '', $designation = '', $cache_id = '')
 	{
 		$smarty = cms_smarty();
+		
+		$old_module = null;
+		if ($smarty->get_template_vars('cms_mapi_module') != null)
+			$old_module = $smarty->get_template_vars('cms_mapi_module');
 
 		$smarty->assign_by_ref('cms_mapi_module', $this);
 		$smarty->assign('cms_mapi_id', $id);
 		$smarty->assign('cms_mapi_return_id', $return_id);
 
-		return $smarty->fetch('module_db_tpl:' . $this->get_name() . ';' . $template_type . ';' . $template_name, $cache_id, ($designation != '' ? $designation : $this->get_name()));
+		$result = $smarty->fetch('module_db_tpl:' . $this->get_name() . ';' . $template_type . ';' . $template_name, $cache_id, ($designation != '' ? $designation : $this->get_name()));
+		
+		if ($old_module != null)
+			$smarty->assign_by_ref('cms_mapi_module', $old_module);
+		
+		return $result;
 	}
 	
 	/**

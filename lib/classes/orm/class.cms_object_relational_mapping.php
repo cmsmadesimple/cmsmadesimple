@@ -1149,9 +1149,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		try
 		{
 			$cols = cms_db()->MetaColumns($table);
-			foreach ($cols as $k=>$v)
+			if (is_array($cols) && count(array_keys($cols)) > 0)
 			{
-				$fields[$v->name] = $v;
+				foreach ($cols as $k=>$v)
+				{
+					$fields[$v->name] = $v;
+				}
 			}
 		}
 		catch (Exception $e)
