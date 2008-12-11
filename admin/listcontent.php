@@ -413,6 +413,7 @@ function deletecontent($contentid)
 function show_h(&$root, &$sortableLists, &$listArray, &$output)
 {
 	$content = &$root->getContent();
+	if( !is_object($content) ) return;
 
 	global $gCms;
 	$contentops =& $gCms->GetContentOperations();
