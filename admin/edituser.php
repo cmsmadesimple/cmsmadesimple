@@ -75,7 +75,7 @@ if (strlen($thisuser->username) > 0)
 // this is now always true... but we may want to change how things work, so I'll leave it
 $access_perm = check_permission($userid, 'Modify Users');
 $access_user = ($userid == $user_id);
-$access = $access_perm | $access_user;
+$access = $access_perm || $access_user;
 
 $assign_group_perm = check_permission($userid,'Modify Group Assignments');
 
@@ -86,7 +86,7 @@ $use_wysiwyg = "";
 if ($access) {
 
 	if (isset($_POST["cancel"])) {
-		redirect("listusers.php".$urlext);
+		redirect("topmyprefs.php".$urlext);
 		return;
 	}
 
@@ -132,6 +132,7 @@ if ($access) {
 				{
 					if ($gCms->modules[$key]['installed'] == true &&
 						$gCms->modules[$key]['active'] == true)
+
 					{
 						$gCms->modules[$key]['object']->EditUserPre($thisuser);
 					}
