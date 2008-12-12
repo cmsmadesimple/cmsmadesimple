@@ -152,7 +152,7 @@ if ($access)
 			if( $content != FALSE )
 			{
 				//Redirect right away so that the installed module shows in the menu
-				redirect($thisurl.'&amp;action=showpostinstall&amp;module='.$module);
+				redirect($thisurl.'&action=showpostinstall&module='.$module);
 			}
 			// all is good, but no postinstall message
 			redirect($thisurl);
@@ -235,7 +235,7 @@ if ($access)
 				if ($modinstance->UninstallPostMessage() != FALSE)
 				{
 					//Redirect right away so that the uninstalled module is removed from the menu
-					redirect($thisurl.'&amp;action=showpostuninstall&amp;module='.$module);
+					redirect($thisurl.'&action=showpostuninstall&module='.$module);
 				}
 			}
 			else
