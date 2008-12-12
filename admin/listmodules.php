@@ -43,10 +43,10 @@ $autoinstallupgrade = 0; // keep this here for a bit, just incase
 
 $userid = get_userid();
 $access = check_permission($userid, "Modify Modules");
-if (!$access) {
+/*if (!$access) {
 	die('Permission Denied');
 return;
-}
+}*/
 
 $smarty = new Smarty_CMS($gCms->config);
 $db =& $gCms->GetDb();
@@ -277,7 +277,7 @@ if ($access)
 		$db->Execute($query, array(0,$module));
 		redirect($thisurl);
 	}
-}
+} // if access
 
 if ($action == "showmoduleabout")
 {
@@ -382,11 +382,8 @@ else if ($action == 'missingdeps')
 }
 else
 {
-
-	if ($action != "" && !$access) {
-		echo "<p class=\"error\">".lang('needpermissionto', array('Modify Modules'))."</p>";
-	}
-
+    if ($access) {
+	
 	if (count($gCms->modules) > 0) {
 
 		$query = "SELECT * from ".cms_db_prefix()."modules";
@@ -525,6 +522,7 @@ else
 					{
 						$actioncol[] .= "<a href=\"{$thisurl}&amp;action=remove&amp;module=".$key."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('removeconfirm'),true)."');\">".lang('remove')."</a>";
 					}
+
 					else
 					{
 						$actioncol[] = "<a href=\"{$thisurl}&amp;action=chmod&amp;module=".$key."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('changepermissionsconfirm'),true)."');\">".lang('changepermissions')."</a>";
@@ -652,6 +650,21 @@ else
 		}
 		echo '</div>';
 	}
+}//end if access
+	else {
+		//now print the menssage
+		echo "
+		        <div class=\"pageerrorcontainer\">
+				<div class=\"pageoverflow\">
+				<div class=\"pageerror\">".lang('needpermissionto', array('Modify Modules'))."
+				</div>
+				</div>
+				</div>
+				";
+	  }
+	
+	
+	
 	echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 }
 
