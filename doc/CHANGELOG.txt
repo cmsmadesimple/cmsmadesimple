@@ -1,11 +1,22 @@
+Version 1.5.2 - Caguas
+-----------------------------
+- Fixes (I think) a long standing page-reorder bug
+  that could be caused by 
+  a) two users simultaneously re-ordering pages 
+     or
+  b) moving a second page while ajax hasn't finished moving the first.
+- Numerous small bug fixes.
+
+
 Version 1.5.1 - San Juan
 -----------------------------
 - News 2.9.1
   - Fixes to permissions checks
+  - Additional help about the dateformat and formatpostdate stuff being removed
 - Fix sql error in listcssassoc
 - Fix missing username in admin header on login of new session.
 - Fix to expand all/collapse all icons in listcontent.
-- Fix Edit tag to XSS admin link
+- Fix to the edit tag.
 
 Version 1.5 - Puerto Rico
 -----------------------------
