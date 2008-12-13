@@ -7,6 +7,8 @@ Version 1.5.2 - Caguas
   b) moving a second page while ajax hasn't finished moving the first.
 - Numerous small bug fixes.
 
+- Fixes #2739 , 2744 and some encoding issues in URLS admin side.
+
 
 Version 1.5.1 - San Juan
 -----------------------------
