@@ -294,6 +294,10 @@ function content_move($contentid, $parentid, $direction)
 
 function movecontent($contentid, $parentid, $direction = 'down')
 {
+  static $in_movecontent = 0;
+  if( $in_movecontent == 1 ) return;
+  $in_movecontent = 1;
+
 	global $gCms;
 	$db =& $gCms->GetDb();
 	$userid = get_userid();
@@ -331,11 +335,13 @@ function movecontent($contentid, $parentid, $direction = 'down')
 			$db->Execute($query, array($contentid, $parentid));
 		}
 
-		global $gCms;
 		$contentops =& $gCms->GetContentOperations();
 		$contentops->SetAllHierarchyPositions();
 		$contentops->ClearCache();
 	}
+
+   // reset the static
+   $in_movecontent = 0;
 }
 
 function deletecontent($contentid)
