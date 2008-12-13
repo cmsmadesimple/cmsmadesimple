@@ -154,12 +154,12 @@ if (FALSE == empty($page_message)) {
 	<div class="pageoverflow">
 	<?php echo $themeObject->ShowHeader('userprefs'); ?>
 	<form method="post" action="editprefs.php" name="prefsform">
-            <div>
-	    <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+            <div class="invisible">
+	    <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" /></div>
             <div>
 			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</p>
-				<p class="pageinput">
+				<div class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</div>
+				<div class="pageinput">
 					<select name="wysiwyg">
 					<option value=""><?php echo lang('none'); ?></option>
 					<?php
@@ -179,11 +179,11 @@ if (FALSE == empty($page_message)) {
 						}
 					?>
 					</select>
-				</p>
+				</div>
 			</div>
 			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('syntaxhighlightertouse'); ?>:</p>
-				<p class="pageinput">
+				<div class="pagetext"><?php echo lang('syntaxhighlightertouse'); ?>:</div>
+				<div class="pageinput">
 					<select name="syntaxhighlighter">
 					<option value=""><?php echo lang('none'); ?></option>
 					<?php
@@ -203,17 +203,17 @@ if (FALSE == empty($page_message)) {
 						}
 					?>
 					</select>
-				</p>
+				</div>
 			</div>
 			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('gcb_wysiwyg'); ?>:</p>
-				<p class="pageinput">
+				<div class="pagetext"><?php echo lang('gcb_wysiwyg'); ?>:</div>
+				<div class="pageinput">
   <input class="pagenb" type="checkbox" name="gcb_wysiwyg" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; if( get_site_preference('nogcbwysiwyg') == '1' ) echo "disabled=\"disabled\""; ?> /><?php echo lang('gcb_wysiwyg_help') ?>
-				</p>
+				</div>
 			</div>
 				<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('language'); ?>:</p>
-				<p class="pageinput">
+				<div class="pagetext"><?php echo lang('language'); ?>:</div>
+				<div class="pageinput">
 					<select name="default_cms_lang" style="vertical-align: middle;">
 					<option value=""><?php echo lang('nodefault'); ?></option>
 					<?php
@@ -232,17 +232,17 @@ if (FALSE == empty($page_message)) {
 						}
 					?>
 					</select>
-				</p>
+				</div>
 			</div>
 	    <div class="pageoverflow">
-		<p class="pagetext"><?php echo lang('date_format_string'); ?>:</p>
-		<p class="pageinput">
+		<div class="pagetext"><?php echo lang('date_format_string'); ?>:</div>
+		<div class="pageinput">
 		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="20" /><?php echo lang('date_format_string_help') ?>
-		</p>
+		</div>
 	    </div>
             <div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('admintheme');  ?>:</p>
-				<p class="pageinput">
+				<div class="pagetext"><?php echo lang('admintheme');  ?>:</div>
+				<div class="pageinput">
 					<?php
 						if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
 								echo '<select name="admintheme">';
@@ -257,26 +257,26 @@ if (FALSE == empty($page_message)) {
 								echo '</select>';
 						}
 					?>	
-				</p>					
+				</div>					
 			</div>
 			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('admincallout'); ?>:</p>
-				<p class="pageinput">
+				<div class="pagetext"><?php echo lang('admincallout'); ?>:</div>
+				<div class="pageinput">
 					<input class="pagenb" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><?php echo lang('showbookmarks') ?>
-				</p>
+				</div>
 			</div>
 			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('hide_help_links'); ?>:</p>
-				<p class="pageinput">
+				<div class="pagetext"><?php echo lang('hide_help_links'); ?>:</div>
+				<div class="pageinput">
 					<input class="pagenb" type="checkbox" name="hide_help_links" <?php if ($hide_help_links) echo "checked=\"checked\""; ?> /><?php echo lang('hide_help_links_help') ?>
-				</p>
+				</div>
 			</div>
 
 			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('homepage'); ?>:</p>
-				<p class="pageinput">
+				<div class="pagetext"><?php echo lang('homepage'); ?>:</div>
+				<div class="pageinput">
 						  <?php echo $themeObject->GetAdminPageDropdown('homepage',$homepage); ?>
-				</p>
+				</div>
 			</div>
 
 			<!--
@@ -296,21 +296,21 @@ if (FALSE == empty($page_message)) {
 			</div>
 			-->
 			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('adminindent'); ?>:</p>
-				<p class="pageinput">
+				<div class="pagetext"><?php echo lang('adminindent'); ?>:</div>
+				<div class="pageinput">
 					<input class="pagenb" type="checkbox" name="indent" <?php if ($indent) echo "checked=\"checked\""; ?> /><?php echo lang('indent') ?>
-				</p>
+				</div>
 			</div>
 
 			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('enablenotifications'); ?>:</p>
-				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="enablenotifications" <?php if ($enablenotifications) echo "checked=\"checked\""; ?> /></p>
+				<div class="pagetext"><?php echo lang('enablenotifications'); ?>:</div>
+				<div class="pageinput">
+					<input class="pagenb" type="checkbox" name="enablenotifications" <?php if ($enablenotifications) echo "checked=\"checked\""; ?> /></div>
 			</div>
 
 			<div class="pageoverflow">
-			  <p class="pagetext"><?php echo lang('ignorenotificationsfrommodules'); ?>:</p>
-			  <p class="pageinput">
+			  <div class="pagetext"><?php echo lang('ignorenotificationsfrommodules'); ?>:</div>
+			  <div class="pageinput">
 			  <?php
 			  $txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
                           foreach( $modules as $key => $value )
@@ -325,14 +325,17 @@ if (FALSE == empty($page_message)) {
                           $txt .= "</select>\n";
                           echo $txt;
                           ?>
-			  </p>
+			  </div>
                         </div>
 			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-				<input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
+			<div class="pageinput">
+            <div class="invisible">
+				<input type="hidden" name="edituserprefs" value="true" />
+                <input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
+                </div>
 				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="submit_form" value="<?php echo lang('submit'); ?>" />
 				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" />
-			</p>
+			</div>
 			</div>			
 		</form>
 	</div>
