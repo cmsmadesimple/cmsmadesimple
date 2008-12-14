@@ -18,10 +18,9 @@
 
 function smarty_cms_function_mod_hidden($params, &$smarty)
 {
-	$module =& $smarty->get_template_vars('cms_mapi_module');
-	$id = $smarty->get_template_vars('cms_mapi_id');
+	$request =& $smarty->get_template_vars('request');
 
-	return $module->create_input_hidden($id, $params['name'], coalesce_key($params, 'value', ''), coalesce_key($params, 'addttext', ''), coalesce_key($params, 'id', ''));
+	return $request->create_input_hidden($params);
 }
 
 ?>

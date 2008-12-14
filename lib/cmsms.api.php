@@ -314,6 +314,62 @@ function remove_keys($array, $keys_to_remove)
 }
 
 /**
+ * Check to see if all keys in the given hash exist
+ * in the check array.  If there are any extra, it will
+ * return false.
+ *
+ * @param array The hash to check
+ * @param array The hash to test against
+ * @return boolean Returns false if there are extra keys
+ * @author Ted Kulp
+ **/
+function are_all_keys_valid($array, $valid_keys)
+{
+	return invalid_key($array, $valid_keys) == null;
+}
+
+/**
+ * Check to see if all keys in the given hash exist
+ * in the check array.  If there are any extra, it will
+ * return the name of the first extra one.
+ *
+ * @param array The hash to check
+ * @param array The hash to test against
+ * @return string The name of the extra key, if any.  If there are none, it returns null.
+ * @author Ted Kulp
+ **/
+function invalid_key($array, $valid_keys)
+{
+	if (array_keys($valid_keys) != $valid_keys)
+		$valid_keys = array_keys($valid_keys);
+
+	foreach (array_keys($array) as $one_key)
+	{
+		if (!in_array($one_key, $valid_keys))
+		{
+			return $one_key;
+		}
+	}
+	
+	return null;
+}
+
+function array_search_keys($array, $keys_to_search)
+{
+	$result = array();
+
+	foreach ($array as $k=>$v)
+	{
+		if (in_array($k, $keys_to_search))
+		{
+			$result[$key] = $value;
+		}
+	}
+	
+	return $result;
+}
+
+/**
  * Global wrapper for CmsResponse::redirect()
  *
  * @param $to The url to redirect to

@@ -18,27 +18,13 @@
 
 function smarty_cms_block_mod_form($params, $content, &$smarty, &$repeat)
 {
-	$module =& $smarty->get_template_vars('cms_mapi_module');
-	$id = $smarty->get_template_vars('cms_mapi_id');
-	$return_id = $smarty->get_template_vars('cms_mapi_return_id');
+	$request =& $smarty->get_template_vars('request');
 	
 	if (!$repeat)
 	{
 		if (isset($content))
 		{
-			return $module->create_form_start(
-				$id,
-				coalesce_key($params, 'action', 'default'),
-				$return_id, 
-				coalesce_key($params, 'method', 'post'),
-				coalesce_key($params, 'enctype', ''), 
-				coalesce_key($params, 'inline', false),
-				coalesce_key($params, 'id_suffix', ''), 
-				coalesce_key($params, 'params', array()),
-				coalesce_key($params, 'extra', ''),
-				coalesce_key($params, 'id', ''),
-				coalesce_key($params, 'use_current_page_as_action', false)) . 
-				$content . $module->create_form_end();
+			return $request->create_form_start($params) . $content . $request->create_form_end();
 		}
 	}
 }

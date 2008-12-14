@@ -898,81 +898,6 @@ abstract class CmsModuleBase extends CmsObject
 	
 	/**
 	 * ------------------------------------------------------------------
-	 * Navigation Related Methods
-	 * ------------------------------------------------------------------
-	 */
-
-	/**
-	 * Used for navigation between "pages" of a module.	 Forms and links should
-	 * pass an action with them so that the module will know what to do next.
-	 * By default, DoAction will be passed 'default' and 'defaultadmin',
-	 * depending on where the module was called from.  If being used as a module
-	 * or content type, 'default' will be passed.  If the module was selected
-	 * from the list on the admin menu, then 'defaultadmin' will be passed.
-	 *
-	 * @param string Name of the action to perform
-	 * @param string The ID of the module
-	 * @param string The parameters targeted for this module
-	 */
-	public function do_action($action_name, $id, $params, $returnid='')
-	{
-		$return_id = $returnid; //avoid confusion
-
-		if ($action_name != '')
-		{
-			$filename = cms_join_path($this->get_module_path(), 'action.' . $action_name . '.php');
-
-			if (@is_file($filename))
-			{
-				{
-					$gCms = cmsms(); //Backwards compatibility
-					$db = cms_db();
-					$config = cms_config();
-					$smarty = cms_smarty();
-
-					$smarty->assign('module_action',$action_name);
-
-					include($filename);
-
-				}
-			}
-		}
-	}
-
-	public function do_action_base($name, $id, $incoming_params, $returnid = '')
-	{
-		if ($returnid != '')
-		{
-			if (!$this->restrict_unknown_params && CmsApplication::get_preference('allowparamcheckwarnings', 0))
-			{
-				trigger_error('WARNING: '.$this->get_name().' is not properly cleaning input params.', E_USER_WARNING);
-			}
-			// used to try to avert XSS flaws, this will
-			// clean as many parameters as possible according
-			// to a map specified with the SetParameterType metods.
-			$incoming_params = $this->clean_param_hash($incoming_params, !$this->restrict_unknown_params);
-		}
-
-		if (isset($incoming_params['lang']))
-		{
-			$this->curlang = $incoming_params['lang'];
-			$this->langhash = array();
-		}
-
-		if (!isset($incoming_params['action']))
-		{
-			$incoming_params['action'] = $name;
-		}
-
-		$incoming_params['action'] = cms_htmlentities($incoming_params['action']);
-		$returnid = cms_htmlentities($returnid);
-		$id = cms_htmlentities($id);
-		$name = cms_htmlentities($name);
-		return $this->do_action($name, $id, $incoming_params, $returnid);
-	}
-	
-	/**
-	 * ------------------------------------------------------------------
 	 * Web Service Methods
 	 * ------------------------------------------------------------------
 	 */
@@ -1012,71 +937,6 @@ abstract class CmsModuleBase extends CmsObject
 		return '</fieldset>'."\n";
 	}
 
-
-	/**
-	 * Returns the start of a module form, optimized for frontend use
-	 *
-	 * @param string The id given to the module on execution
-	 * @param string The id to eventually return to when the module is finished it's task
-	 * @param string The action that this form should do when the form is submitted
-	 * @param string Method to use for the form tag.  Defaults to 'post'
-	 * @param string Optional enctype to use, Good for situations where files are being uploaded
-	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
-	 * @param string Text to append to the end of the id and name of the form
-	 * @param array Extra parameters to pass along when the form is submitted
-	 */
-	public function create_frontend_form_start($id, $returnid, $action='default', $method='post', $enctype='', $inline=true, $idsuffix='', $params=array())
-	{
-		return $this->create_form_start($id,$action,$returnid,$method,$enctype,$inline,$idsuffix,$params);
-	}
-
-
-	/**
-	 * Returns the start of a module form
-	 *
-	 * @param string The id given to the module on execution
-	 * @param string The action that this form should do when the form is submitted
-	 * @param string The id to eventually return to when the module is finished it's task
-	 * @param string Method to use for the form tag.  Defaults to 'post'
-	 * @param string Optional enctype to use, Good for situations where files are being uploaded
-	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
-	 * @param string Text to append to the end of the id and name of the form
-	 * @param array Extra parameters to pass along when the form is submitted
-	 * @param string Text to append to the <form>-statement, for instanse for javascript-validation code
-	 * @param boolean A flag to determine if the action should just redirect back to this exact page
-	 */
-	public function create_form_start($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='', $html_id = '', $use_current_page_as_action = false)
-	{
-		$this->load_form_methods();
-		return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra, $html_id, $use_current_page_as_action);
-	}
-
-	/**
-	 * Returns the end of the a module form.  This is basically just a wrapper around </form>, but
-	 * could be extended later on down the road.  It's here mainly for consistency.
-	 */
-	public function create_form_end()
-	{
-		return '</form>'."\n";
-	}
-
-	/**
-	 * Returns the xhtml equivalent of an input textbox.  This is basically a nice little wrapper
-	 * to make sure that id's are placed in names and also that it's xhtml compliant.
-	 *
-	 * @param string The id given to the module on execution
-	 * @param string The html name of the textbox
-	 * @param string The predefined value of the textbox, if any
-	 * @param string The number of columns wide the textbox should be displayed
-	 * @param string The maximum number of characters that should be allowed to be entered
-	 * @param string Any additional text that should be added into the tag when rendered
-	 */
-	public function create_input_text($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $html_id = '')
-	{
-		$this->load_form_methods();
-		return cms_module_CreateInputText($this, $id, $name, $value, $size, $maxlength, $addttext, $html_id);
-	}
-
 	/**
 	 * Returns the xhtml equivalent of an label for input field.  This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
@@ -1090,25 +950,6 @@ abstract class CmsModuleBase extends CmsObject
 	{
 		$this->load_form_methods();
 		return cms_module_CreateLabelForInput($this, $id, $name, $labeltext, $addttext, $html_id);
-	}
-
-	/**
-	 * Returns the xhtml equivalent of an input textbox with label.  This is basically a nice little wrapper
-	 * to make sure that id's are placed in names and also that it's xhtml compliant.
-	 *
-	 * @param string The id given to the module on execution
-	 * @param string The html name of the textbox
-	 * @param string The predefined value of the textbox, if any
-	 * @param string The number of columns wide the textbox should be displayed
-	 * @param string The maximum number of characters that should be allowed to be entered
-	 * @param string Any additional text that should be added into the tag when rendered
-	 * @param string The text for label 
-	 * @param string Any additional text that should be added into the tag when rendered
-	 */
-	public function create_input_text_with_label($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='', $html_id = '')
-	{
-		$this->load_form_methods();
-		return cms_module_CreateInputTextWithLabel($this, $id, $name, $value, $size, $maxlength, $addttext, $label, $labeladdtext, $html_id);
 	}
 
 	/**
@@ -1126,71 +967,6 @@ abstract class CmsModuleBase extends CmsObject
 		$this->load_form_methods();
 		return cms_module_CreateInputFile($this, $id, $name, $accept, $size, $addttext,$html_id);
 	}
-
-	/**
-	 * Returns the xhtml equivalent of an input password-box.  This is basically a nice little wrapper
-	 * to make sure that id's are placed in names and also that it's xhtml compliant.
-	 *
-	 * @param string The id given to the module on execution
-	 * @param string The html name of the textbox
-	 * @param string The predefined value of the textbox, if any
-	 * @param string The number of columns wide the textbox should be displayed
-	 * @param string The maximum number of characters that should be allowed to be entered
-	 * @param string Any additional text that should be added into the tag when rendered
-	 */
-	public function create_input_password($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $html_id = '')
-	{
-		$this->load_form_methods();
-		return cms_module_CreateInputPassword($this, $id, $name, $value, $size, $maxlength, $addttext, $html_id);
-	}
-
-	/**
-	 * Returns the xhtml equivalent of a hidden field.	This is basically a nice little wrapper
-	 * to make sure that id's are placed in names and also that it's xhtml compliant.
-	 *
-	 * @param string The id given to the module on execution
-	 * @param string The html name of the hidden field
-	 * @param string The predefined value of the field, if any
-	 * @param string Any additional text that should be added into the tag when rendered
-	 */
-	public function create_input_hidden($id, $name, $value='', $addttext='', $html_id = '')
-	{
-		$this->load_form_methods();
-		return cms_module_CreateInputHidden($this, $id, $name, $value, $addttext, $html_id);
-	}
-
-	/**
-	 * Returns the xhtml equivalent of a checkbox.	This is basically a nice little wrapper
-	 * to make sure that id's are placed in names and also that it's xhtml compliant.
-	 *
-	 * @param string The id given to the module on execution
-	 * @param string The html name of the checkbox
-	 * @param string The predefined value of the field, if any
-	 * @param string Any additional text that should be added into the tag when rendered
-	 */
-	public function create_input_checkbox($id, $name, $selected = false, $addttext='', $html_id = '')
-	{
-		$id = cms_htmlentities($id);
-		$name = cms_htmlentities($name);
-
-		if ($html_id == '')
-			$html_id = CmsResponse::make_dom_id($id . $name);
-
-		$text = '<input type="hidden" name="'.$id.$name.'" value="0" />';
-		$text .= '<input type="checkbox" name="'.$id.$name.'" id="'.$html_id.'" value="1"';
-		if ($selected)
-		{
-			$text .= ' checked="checked"';
-		}
-		if ($addttext != '')
-		{
-			$text .= ' '.$addttext;
-		}
-		$text .= " />\n";
-
-		return $text;
-	}
-
 
 	/**
 	 * Returns the xhtml equivalent of a submit button.	 This is basically a nice little wrapper
@@ -2052,6 +1828,11 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	function GetNotificationOutput($priority=2) {
 		return '';
+	}
+	
+	function create_request_instance($id, $return_id = '')
+	{
+		return new CmsModuleRequest($this, $id, $return_id);
 	}
 }
 

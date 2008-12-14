@@ -129,7 +129,8 @@ if (count($gCms->modules) > 0)
 		}
 		$id = 'm1_';
 		$params = GetModuleParameters($id);
-		echo $gCms->modules[$module]['object']->do_action_base($action, $id, $params);
+		$request = $gCms->modules[$module]['object']->create_request_instance($id);
+		echo $request->do_action_base($action, $params);
 		if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 		{
 			$content = @ob_get_contents();
