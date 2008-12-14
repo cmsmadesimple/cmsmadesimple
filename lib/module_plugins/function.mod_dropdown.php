@@ -20,7 +20,7 @@ function smarty_cms_function_mod_dropdown($params, &$smarty)
 {
 	$request =& $smarty->get_template_vars('request');
 
-	return $request->create_input_dropdown($params);
+	return $request->create_input_select($params) . $request->create_input_options($params) . $request->create_end_tag('select');
 }
 
 ?>

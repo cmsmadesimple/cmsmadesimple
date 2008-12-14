@@ -437,7 +437,8 @@ abstract class CmsModuleBase extends CmsObject
 					{
 						@ob_start();
 
-						$result = $cmsmodules[$modulename]['object']->do_action_base($action, $id, $params, $returnid);
+						$request = $cmsmodules[$modulename]['object']->create_request_instance($id, $returnid);
+						$result = $request->do_action_base($action, $params);
 						if ($result !== FALSE)
 						{
 							echo $result;
@@ -980,24 +981,6 @@ abstract class CmsModuleBase extends CmsObject
 	{
 		$this->load_form_methods();
 		return cms_module_CreateFileUploadInput($this, $id, $name, $addttext, $html_id);
-	}
-
-	/**
-	 * Returns the xhtml equivalent of a multi-select list.	 This is basically a nice little wrapper
-	 * to make sure that id's are placed in names and also that it is xhtml compliant.
-	 *
-	 * @param string The id given to the module on execution
-	 * @param string The html name of the select list
-	 * @param string An array of items to put into the list... they should be $key=>$value pairs
-	 * @param string An array of items in the list that should default to selected.
-	 * @param string The number of rows to be visible in the list (before scrolling).
-	 * @param string Any additional text that should be added into the tag when rendered
-	 * @param boolean indicates wether multiple selections are allowed (defaults to true)
-	 */
-	public function create_input_select_list($id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true, $html_id = '')
-	{
-		$this->load_form_methods();
-		return cms_module_CreateInputSelectList($this, $id, $name, $items, $selecteditems, $size, $addttext, $multiple, $html_id);
 	}
 
 	/**

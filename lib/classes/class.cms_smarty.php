@@ -449,7 +449,7 @@ class CmsSmarty extends Smarty {
 		return true;
 	}
 	
-	function module_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
+	function module_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		global $gCms;
 		$pageinfo =& $gCms->variables['pageinfo'];
@@ -468,7 +468,8 @@ class CmsSmarty extends Smarty {
 			{
 				$action = $params['action'];
 			}
-			echo $gCms->modules[$tpl_name]['object']->DoActionBase($action, $id, $params, isset($pageinfo)?$pageinfo->content_id:'');
+			$request = $gCms->modules[$tpl_name]['object']->create_request_instance($id, isset($pageinfo)?$pageinfo->content_id:'');
+			echo $request->do_action_base($action, $params);
 			$modoutput = @ob_get_contents();
 			@ob_end_clean();
 

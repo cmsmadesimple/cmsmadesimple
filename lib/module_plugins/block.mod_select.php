@@ -16,14 +16,17 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_mod_password($params, &$smarty)
+function smarty_cms_block_mod_select($params, $content, &$smarty, &$repeat)
 {
 	$request =& $smarty->get_template_vars('request');
-
-	if (!isset($params['password']))
-		$params['password'] = true;
-
-	return $request->create_input_text($params);
+	
+	if (!$repeat)
+	{
+		if (isset($content))
+		{
+			return $request->create_input_select($params) . $content . $request->create_end_tag('select');
+		}
+	}
 }
 
 ?>

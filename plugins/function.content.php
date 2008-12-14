@@ -114,7 +114,8 @@ function smarty_cms_function_content($params, &$smarty)
 							{
 								$returnid = $pageinfo->content_id;
 							}
-							$result = $cmsmodules[$modulename]['object']->do_action_base($action, $id, $params, $returnid);
+							$request = $gCms->modules[$modulename]['object']->create_request_instance($id, $returnid);
+							echo $request->do_action_base($action, $params);
 							if ($result !== FALSE)
 							{
 								echo $result;
