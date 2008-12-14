@@ -969,37 +969,6 @@ abstract class CmsModuleBase extends CmsObject
 	}
 
 	/**
-	 * Returns the xhtml equivalent of a submit button.	 This is basically a nice little wrapper
-	 * to make sure that id's are placed in names and also that it's xhtml compliant.
-	 *
-	 * @param string The id given to the module on execution
-	 * @param string The html name of the button
-	 * @param string The predefined value of the button, if any
-	 * @param string Any additional text that should be added into the tag when rendered
-	 * @param string Use an image instead of a regular button
-	 */
-	public function create_input_submit($id, $name, $value='', $addttext='', $image='', $confirmtext='', $html_id = '')
-	{
-		$this->load_form_methods();
-		return cms_module_CreateInputSubmit($this, $id, $name, $value, $addttext, $image, $confirmtext, $html_id);
-	}
-
-	/**
-	 * Returns the xhtml equivalent of a reset button.	This is basically a nice little wrapper
-	 * to make sure that id's are placed in names and also that it's xhtml compliant.
-	 *
-	 * @param string The id given to the module on execution
-	 * @param string The html name of the button
-	 * @param string The predefined value of the button, if any
-	 * @param string Any additional text that should be added into the tag when rendered
-	 */
-	public function create_input_reset($id, $name, $value='Reset', $addttext='', $html_id = '')
-	{
-		$this->load_form_methods();
-		return cms_module_CreateInputReset($this, $id, $name, $value, $addttext, $html_id);
-	 }
-
-	/**
 	 * Returns the xhtml equivalent of a file upload input.	 This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
@@ -1011,24 +980,6 @@ abstract class CmsModuleBase extends CmsObject
 	{
 		$this->load_form_methods();
 		return cms_module_CreateFileUploadInput($this, $id, $name, $addttext, $html_id);
-	}
-	
-	/**
-	 * Returns the xhtml equivalent of a dropdown list.	 This is basically a nice little wrapper
-	 * to make sure that id's are placed in names and also that it is xhtml compliant.
-	 *
-	 * @param string The id given to the module on execution
-	 * @param string The html name of the dropdown list
-	 * @param string An array of items to put into the dropdown list... they should be $key=>$value pairs
-	 * @param string The default selected index of the dropdown list.  Setting to -1 will result in the first choice being selected
-	 * @param string The default selected value of the dropdown list.  Setting to '' will result in the first choice being selected
-	 * @param string Any additional text that should be added into the tag when rendered
-	 * @param string Whether or not the array should be flipped (keys and values of has have opposite meanings)
-	 */
-	public function create_input_dropdown($id, $name, $items, $selected_index = -1, $selected_value = '', $additional_text = '', $flip_array = false, $html_id = '')
-	{
-		$this->load_form_methods();
-		return cms_module_create_input_dropdown($this, $id, $name, $items, $selected_index, $selected_value, $additional_text, $flip_array, $html_id);
 	}
 
 	/**
