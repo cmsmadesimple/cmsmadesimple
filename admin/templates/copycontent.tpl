@@ -47,17 +47,17 @@
 
     <div class="pageoverflow">
       <p class="pagetext">{$lang_pagealias}:</p>
-      <p class="pageinput"><input type="text" name="to_alias" size="40" maxlength="40" value="{$fromobj->Alias()}"></p>
+      <p class="pageinput"><input type="text" name="to_alias" size="50" maxlength="255" value="{$fromobj->Alias()}"></p>
     </div>
 
     <div class="pageoverflow">
       <p class="pagetext">{$lang_pagetitle}:</p>
-      <p class="pageinput"><input type="text" name="to_title" size="40" maxlength="40" value="{$fromobj->Name()}"></p>
+      <p class="pageinput"><input type="text" name="to_title" size="50" maxlength="255" value="{$fromobj->Name()}"></p>
     </div>
 
     <div class="pageoverflow">
       <p class="pagetext">{$lang_pagemenutext}:</p>
-      <p class="pageinput"><input type="text" name="to_menutext" size="40" maxlength="40" value="{$fromobj->MenuText()}"></p>
+      <p class="pageinput"><input type="text" name="to_menutext" size="50" maxlength="255" value="{$fromobj->MenuText()}"></p>
     </div>
 
     <div class="pageoverflow">
