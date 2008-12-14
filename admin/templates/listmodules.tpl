@@ -63,7 +63,7 @@
 		</div>
 	</div>{* install tab *}
 
-</div>(* page tabs *}
+</div>{* page tabs *}
 <script type='text/javascript'>
    <!--
      $('#module_page_tabs > ul').tabs();
