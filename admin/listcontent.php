@@ -750,7 +750,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 $sameLevel = $root->getSiblingCount();
                 if ($sameLevel>1)
                 {
-                    if (($one->ItemOrder() - 1)==0) #first
+                    if (($one->ItemOrder() - 1) <= 0) #first
                     { 
                         $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
                         $thelist .= $downImg;
