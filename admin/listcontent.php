@@ -327,7 +327,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 			#echo $query, $content_id, $parent_id;
 			$db->Execute($query, array($contentid, $parentid));
 		}
-		else if ($direction == "up")
+		else if ( ($direction == "up") && ($order > 1) )
 		{
 			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
 			#echo $query;
