@@ -294,9 +294,11 @@ function content_move($contentid, $parentid, $direction)
 
 function movecontent($contentid, $parentid, $direction = 'down')
 {
-  static $in_movecontent = 0;
-  if( $in_movecontent == 1 ) return;
-  $in_movecontent = 1;
+	#$filename = cms_join_path(TMP_CACHE_LOCATION,'__check_admin_movecontent__.dat'); //investigate why file is erased in cache
+	$filename = cms_join_path(dirname(__FILE__), '__check_admin_movecontent__.dat');
+
+	if( file_exists($filename) ) return;
+	if( FALSE === @touch($filename) ) die('could not create '.$filename.' or another process update content, waiting and retry'); //notification in admin?
 
 	global $gCms;
 	$db =& $gCms->GetDb();
@@ -335,13 +337,15 @@ function movecontent($contentid, $parentid, $direction = 'down')
 			$db->Execute($query, array($contentid, $parentid));
 		}
 
+		sleep(15); //waiting for updating DB. Better 5 but 15 is good for testing concurrent processes and work!
 		$contentops =& $gCms->GetContentOperations();
 		$contentops->SetAllHierarchyPositions();
 		$contentops->ClearCache();
 	}
 
-   // reset the static
-   $in_movecontent = 0;
+	// reset
+	@unlink($filename);
+	if( file_exists($filename) ) die('file still exists: '.$filename); //notification in admin?
 }
 
 function deletecontent($contentid)
