@@ -28,7 +28,7 @@
 		<div id="centerLogin" class="formcontainer">
 				{$debug_buffer}
 					{if !empty($error)}
-						<div  class="loginerror">{$error}</div >
+						<div  class="erroLogin">{$error}</div >
 					{/if}
                     <div class="lbfieldstext">
 					<p class="lbuser">{tr}username{/tr}:</p>
