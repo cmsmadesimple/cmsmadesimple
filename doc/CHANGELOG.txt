@@ -1,16 +1,17 @@
 Version 1.5.2 - Caguas
 -----------------------------
-- Fixes (I think) a long standing page-reorder bug
-  that could be caused by 
-  a) two users simultaneously re-ordering pages 
-     or
-  b) moving a second page while ajax hasn't finished moving the first.
-- Numerous small bug fixes.
-           #2739 
-           #2744 
-           some encoding issues in URLS admin side.
-
-
+- Fixes of several bugs:
+  - #2406 Re-order pages causes hierarchy to be incorrect (longstanding), which could be caused by:
+		a) two users simultaneously re-ordering pages or,
+		b) moving a second page while ajax hasn't finished moving the first.
+  - #2709 Install and uninstall post messages not shown.
+  - #2717 Text inputs too short in page-copy-mode.
+  - #2739 Permission Denied user type Editor or Designer.
+  - #2744 Edit prefs missing div layout bug.
+  
+- Feature requests that are included:
+  #2649 Notifications when deleting Stylesheets in use by templates.
+  
 Version 1.5.1 - San Juan
 -----------------------------
 - News 2.9.1
