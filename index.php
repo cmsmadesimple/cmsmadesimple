@@ -70,7 +70,7 @@ require_once($dirname.'/include.php'); #Makes gCms object
 
 
 // optionally enable output compression (as long as debug mode isn't on)
-if( isset($config['output_compression']) && $config['debug'] != true )
+if( isset($config['output_compression']) && ($config['output_compression']) && $config['debug'] != true )
   {
     @ob_start('ob_gzhandler');
   }

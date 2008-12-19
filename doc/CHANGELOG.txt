@@ -8,6 +8,7 @@ Version 1.5.2 - Caguas
   - #2717 Text inputs too short in page-copy-mode.
   - #2739 Permission Denied user type Editor or Designer.
   - #2744 Edit prefs missing div layout bug.
+  - Setting output_compression to false in config.php still sent compressed data
   
 - Feature requests that are included:
   #2649 Notifications when deleting Stylesheets in use by templates.
