@@ -8,11 +8,15 @@ Version 1.5.2 - Caguas
   - #2717 Text inputs too short in page-copy-mode.
   - #2739 Permission Denied user type Editor or Designer.
   - #2744 Edit prefs missing div layout bug.
-  - #2789 message usertagdeleted not shown because of wrong url
-  - Setting output_compression to false in config.php still sent compressed data
+  - #2789 message usertagdeleted not shown because of wrong url.
+  - #2791 News Module Pagination translation label. 
+ - Setting output_compression to false in config.php still sent compressed data.
   
 - Feature requests that are included:
-  #2649 Notifications when deleting Stylesheets in use by templates.
+  - #2045 Allow search to find expired news articles.
+  - #2649 Notifications when deleting Stylesheets in use by templates.
+  
+ 
   
 Version 1.5.1 - San Juan
 -----------------------------
