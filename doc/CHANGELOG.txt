@@ -15,6 +15,7 @@ Version 1.5.2 - Caguas
 - Feature requests that are included:
   - #2045 Allow search to find expired news articles.
   - #2649 Notifications when deleting Stylesheets in use by templates.
+  - Showall parameter added to News, to show all news-entries, regardless of end-date.
   
  
   
