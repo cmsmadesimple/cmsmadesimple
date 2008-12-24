@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['pagelink_circular'] = 'A page link cannot list another page link as its destination';
+$lang['admin']['destinationnotfound'] = 'The selected page could not be found or is invalid';
 $lang['admin']['help_function_dump'] = <<<EOT
 <h3>What does this do?</h3>
   <p>This tag can be used to dump the contents of any smarty variable in a more readable format.  This is useful for debugging, and editing templates, to know the format and types of data available.</p>

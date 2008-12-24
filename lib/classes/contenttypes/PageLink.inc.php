@@ -150,6 +150,8 @@ class PageLink extends ContentBase
 
     function ValidateData()
     {
+      global $gCms;
+      $contentops =& $gCms->GetContentOperations();
 		$errors = array();
 		
 		if ($this->mName == '')
@@ -166,8 +168,6 @@ class PageLink extends ContentBase
 		
 		if ($this->mAlias != $this->mOldAlias || $this->mAlias == '') #Should only be empty if auto alias is false
 			{
-				global $gCms;
-				$contentops =& $gCms->GetContentOperations();
 				$error = $contentops->CheckAliasError($this->mAlias, $this->mId);
 				if ($error !== FALSE)
 					{
@@ -176,11 +176,24 @@ class PageLink extends ContentBase
 					}
 			}
 		
-		if ($this->GetPropertyValue('page') == '-1')
-			{
-				$errors[]= lang('nofieldgiven',array(lang('page')));
-				$result = false;
-			}
+		$page = $this->GetPropertyValue('page');
+		if ($page == '-1')
+		  {
+		    $errors[]= lang('nofieldgiven',array(lang('page')));
+		    $result = false;
+		  }
+		// get the content type of page.
+		$destobj =& $contentops->LoadContentFromID($page);
+		if( !is_object($destobj) )
+		  {
+		    $errors[] = lang('destinationnotfound');
+		    $result = false;
+		  }
+		if( $destobj->Type() == 'pagelink' )
+		  {
+		    $errors[] = lang('pagelink_circular');
+		    $result = false;
+		  }
 		
 		return (count($errors) > 0?$errors:FALSE);
     }
