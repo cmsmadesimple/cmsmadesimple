@@ -47,6 +47,25 @@ if (isset($_GET["userplugin_id"])) {
 		}
 
 		Events::SendEvent('Core', 'DeleteUserDefinedTagPre', array('id' => $userplugin_id, 'name' => &$userplugin_name));
+
+		$query = 'SELECT event_id,handler_id,handler_order FROM '.cms_db_prefix().'event_handlers 
+                           WHERE tag_name = ?'; 
+		$handlers = $db->GetArray($query,array($userplugin_name));
+		if( is_array($handlers) && count($handlers) > 0 )
+		  {
+		    $q1 = 'DELETE FROM '.cms_db_prefix().'event_handlers WHERE handler_id = ?';
+		    $q2 = 'UPDATE '.cms_db_prefix().'event_handlers SET handler_order = (handler_order - 1)
+                            WHERE handler_order > ? AND event_id = ?';
+		    foreach( $handlers as $tmp )
+		      {
+			$hid = $tmp['handler_id'];
+			$eid = $tmp['event_id'];
+
+			$db->Execute($q1,array($hid));
+			$db->Execute($q2,array($tmp['handler_order'],$eid));
+		      }
+		  }
+
 		$query = "DELETE FROM ".cms_db_prefix()."userplugins where userplugin_id = ?";
 		$result = $db->Execute($query,array($userplugin_id));
 		if ($result)

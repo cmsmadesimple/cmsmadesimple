@@ -84,95 +84,100 @@ if ($access)
 	}
 	else
 	{
-		$cur_order = -1;
+	  $cur_order = -1;
 	
-		// we're processing an up/down or delete
-		if( isset( $_GET['action'] ) && $_GET['action'] != '' )
+	  // we're processing an up/down or delete
+	  if( isset( $_GET['action'] ) && $_GET['action'] != '' )
+	    {
+	      $action = $_GET['action'];
+	    }
+	  if( isset( $_GET['module'] ) && $_GET['module'] != '' )
+	    {
+	      $module = $_GET['module'];
+	    }
+	  if( isset( $_GET['event'] ) && $_GET['event'] != '' )
+	    {
+	      $event = $_GET['event'];
+	    }
+	  if( isset( $_GET['handler'] ) && $_GET['handler'] != '' )
+	    {
+	      $handler = $_GET['handler'];
+	    }
+	  if( isset( $_GET['order'] ) && $_GET['order'] != '' )
+	    {
+	      $cur_order = $_GET['order'];
+	    }
+	  
+	  switch( $action )
+	    {
+	    case 'up':
+	      // move an item up (decrease the order)
+	      // increases the previous order, and decreases the current handler id
+	      if( $handler == "" || $module == "" || $event == "" || $action == "" ||
+		  ($cur_order == "" && $action != "delete") )
 		{
-		$action = $_GET['action'];
+		  display_error( lang("missingparams" ) );
 		}
-		if( isset( $_GET['module'] ) && $_GET['module'] != '' )
+	      
+	      // Get the event id
+	      $q = "SELECT event_id FROM ".cms_db_prefix().'event_handlers WHERE handler_id = ?';
+	      $event_id = $db->GetOne($q,array($handler));
+
+	      // Get the previous handler id
+	      $q = 'SELECT handler_id FROM '.cms_db_prefix().'event_handlers WHERE handler_order = ?
+                    AND event_id = ?';
+	      $prev_id = $db->GetOne($q,array($cur_order -1,$event_id));
+
+	      if( $prev_id )
 		{
-		$module = $_GET['module'];
+		  $q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order - 1)
+					where handler_id = ?";
+		  $db->Execute( $q, array( $handler ) );
+		  
+		  $q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order + 1)
+					where handler_id = ?";
+		  $db->Execute( $q, array( $prev_id ) );
 		}
-		if( isset( $_GET['event'] ) && $_GET['event'] != '' )
+	      break;
+	      
+	    case 'down':
+	      // move an item down (increase the order)
+	      // move an item up (decrease the order)
+	      // increases the previous order, and decreases the current handler id
+	      if( $handler == "" || $module == "" || $event == "" || $action == "" ||
+		  ($cur_order == "" && $action != "delete") )
 		{
-		$event = $_GET['event'];
+		  display_error( lang("missingparams" ) );
 		}
-		if( isset( $_GET['handler'] ) && $_GET['handler'] != '' )
+	      
+	      // Get the event id
+	      $q = "SELECT event_id FROM ".cms_db_prefix().'event_handlers WHERE handler_id = ?';
+	      $event_id = $db->GetOne($q,array($handler));
+
+	      // Get the next handler id
+	      $q = 'SELECT handler_id FROM '.cms_db_prefix().'event_handlers WHERE handler_order = ?
+                    AND event_id = ?';
+	      $next_id = $db->GetOne($q,array($cur_order + 1,$event_id));
+	      if( $next_id )
 		{
-		$handler = $_GET['handler'];
+		  $q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order + 1)
+					where handler_id = ?";
+		  $db->Execute( $q, array( $handler ) );
+		  
+		  $q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order - 1)
+					where handler_id = ?";
+		  $db->Execute( $q, array( $next_id ) );
 		}
-		if( isset( $_GET['order'] ) && $_GET['order'] != '' )
-		{
-		$cur_order = $_GET['order'];
-		}
-	
-		switch( $action )
-		{
-		case 'up':
-		// move an item up (decrease the order)
-		// increases the previous order, and decreases the current handler id
+	      break;
+	      
+	    case 'delete':
+	      {
 		if( $handler == "" || $module == "" || $event == "" || $action == "" ||
-			($cur_order == "" && $action != "delete") )
-		{
-			display_error( lang("missingparams" ) );
-		}
-	
-		$q = "SELECT handler_id FROM ".cms_db_prefix()."event_handlers WHERE handler_order = ?";
-		$dbresult = $db->Execute( $q, array($cur_order - 1) );
-		$row = $dbresult->FetchRow();
-		$prev_id = -1;
-		if( isset( $row['handler_id'] ) )
-		{
-			$prev_id = $row['handler_id'];
-	
-			$q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order - 1)
-					where handler_id = ?";
-			$db->Execute( $q, array( $handler ) );
-	
-			$q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order + 1)
-					where handler_id = ?";
-			$db->Execute( $q, array( $prev_id ) );
-		}
-		break;
-			
-		case 'down':
-		// move an item down (increase the order)
-		// move an item up (decrease the order)
-		// increases the previous order, and decreases the current handler id
-		if( $handler == "" || $module == "" || $event == "" || $action == "" ||
-			($cur_order == "" && $action != "delete") )
-		{
-			display_error( lang("missingparams" ) );
-		}
-	
-		$q = "SELECT handler_id FROM ".cms_db_prefix()."event_handlers WHERE handler_order = ?";
-		$dbresult = $db->Execute( $q, array($cur_order + 1) );
-		$row = $dbresult->FetchRow();
-		$next_id = -1;
-		if( isset( $row['handler_id'] ) )
-		{
-			$next_id = $row['handler_id'];
-	
-			$q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order + 1)
-					where handler_id = ?";
-			$db->Execute( $q, array( $handler ) );
-	
-			$q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order - 1)
-					where handler_id = ?";
-			$db->Execute( $q, array( $next_id ) );
-		}
-		break;
-			
-		case 'delete':
-		{
-		if( $handler == "" || $module == "" || $event == "" || $action == "" ||
-			($cur_order == "" && $action != "delete") )
-			{
-			display_error( lang("missingparams" ) );
-			}
-	
+		    ($cur_order == "" && $action != "delete") )
+		  {
+		    display_error( lang("missingparams" ) );
+		  }
+		
 		// get the details about the handler
 		$q = "SELECT * FROM ".cms_db_prefix()."event_handlers WHERE
 						handler_id = ?";
