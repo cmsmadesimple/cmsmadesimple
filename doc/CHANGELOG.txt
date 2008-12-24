@@ -10,6 +10,9 @@ Version 1.5.2 - Caguas
   - #2744 Edit prefs missing div layout bug.
   - #2789 message usertagdeleted not shown because of wrong url.
   - #2791 News Module Pagination translation label. 
+  - #2804 Re-ordering in Events 
+  - #2805 Deleting of an UDT attached to an Event 
+  
  - Setting output_compression to false in config.php still sent compressed data.
   
 - Feature requests that are included:
