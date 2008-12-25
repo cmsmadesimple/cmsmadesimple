@@ -338,15 +338,15 @@ class Content extends ContentBase
 	    {
 	      if( $this->mActive )
 		{
-		  $ret[]= array('','<input type="hidden" name="active" value="1"/>');
+		  $ret[]= array('','<input type="hidden" name="active" value="1" />');
 		}
 	      if( $this->mShowInMenu )
 		{
-		  $ret[]= array('','<input type="hidden" name="showinmenu" value="1"/>');
+		  $ret[]= array('','<input type="hidden" name="showinmenu" value="1" />');
 		}
 	      if( $this->mCachable )
 		{
-		  $ret[] = array('','<input type="hidden" name="cachable" value="1"/>');
+		  $ret[] = array('','<input type="hidden" name="cachable" value="1" />');
 		}
 	    }
 
@@ -368,8 +368,8 @@ class Content extends ContentBase
 	      $searchable = 1;
 	    }
 	  $ret[]= array(lang('searchable').':',
-			'<div><input type="hidden" name="searchable" value="0"></div>
-                           <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').'>');
+			'<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
+                           <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />');
 	  $ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
 	  $ret[]= array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
 	  $ret[]= array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');

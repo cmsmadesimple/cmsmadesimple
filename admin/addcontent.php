@@ -419,7 +419,7 @@ $tabnames = $contentobj->TabNames();
 	</div>
 	<div style="clear: both;"></div>
 	<form method="post" action="addcontent.php" name="contentform" enctype="multipart/form-data" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
-        <div>
+        <div class="hidden">
         <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
 	<input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
         </div>
@@ -428,15 +428,15 @@ $tabnames = $contentobj->TabNames();
 		<?php
 		
 		$submit_buttons = '
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">';
+			<div class="pagetext">&nbsp;</div>
+			<div class="pageinput">';
 		$submit_buttons .= ' <input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />';
 /*
 		if (isset($contentobj->mPreview) && $contentobj->mPreview == true) {
 			$submit_buttons .= ' <input type="submit" name="previewbutton" value="'.lang('preview').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;" />';
 		}
 */
-		$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" /></p>';
+		$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" /></div>';
 		
 		$numberoftabs = count($tabnames);
 		$showtabs = 1;
@@ -472,7 +472,7 @@ $tabnames = $contentobj->TabNames();
 				</div>
 				<?php
 			}
-			echo '<input type="hidden" name="firsttime" value="0" /><input type="hidden" name="orig_content_type" value="'.$cur_content_type.'" />';
+			echo '<div class="hidden" ><input type="hidden" name="firsttime" value="0" /><input type="hidden" name="orig_content_type" value="'.$cur_content_type.'" /></div>';
 					?>
 			</div>
 			<div style="clear: both;"></div>
@@ -484,20 +484,19 @@ $tabnames = $contentobj->TabNames();
 				?>
 					<iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo $config["root_url"] ?>/preview.php<?php echo $urlext ?>&amp;tmpfile=<?php echo urlencode(basename($tmpfname))?>"<?php } ?>></iframe>
 				<?php
-			echo '<div style="clear: both;"></div>';
+			echo '<div style="clear: both;"></div></div></div>';
 		}
 ?>
-</div>
 </div>
 <div class="pageoverflow">
 <?php
 echo $submit_buttons;
 ?>
-</div>
-</div>
-</div>
+
+</div></div>
 </form>
 </div>
+
 <?php
 }
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
