@@ -754,11 +754,11 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                     { 
                         $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
                         $thelist .= $downImg;
-                        $thelist .= "</a>";
+                        $thelist .= "</a>&nbsp;&nbsp;";
                     }
                     else if (($one->ItemOrder() - 1) == $sameLevel-1) #last
                     {
-                        $thelist .= "&nbsp;<a class=\"move_up\" onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= "&nbsp;&nbsp;<a class=\"move_up\" onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
                         $thelist .= $upImg;
                         $thelist .= "</a>";
                     }
@@ -773,7 +773,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 }
             //}
             $thelist .= "</td>";
-            $thelist .= '<td class="invisible" style="text-align: center;"><input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."</td>\n";
+            $thelist .= '<td class="invisible"><input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."</td>\n";
         }
         // end of move code
 
@@ -980,7 +980,7 @@ function display_content_list($themeObject = null)
 	}
 	$headoflist .='</p></div>';
 	$headoflist .= '<form action="multicontent.php" method="post">';
-	$headoflist .= '<div><input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'"/></div>'."\n";
+	$headoflist .= '<div class="hidden" ><input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'"/></div>'."\n";
 	$headoflist .= '<table cellspacing="0" class="pagetable">'."\n";
 	$headoflist .= '<thead>';
 	$headoflist .= "<tr>\n";
