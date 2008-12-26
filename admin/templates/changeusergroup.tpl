@@ -77,16 +77,18 @@
 	/* ]]> */
 </script>
 {/literal}
-
+<br />
+<div class="pageoverflow">
 <form method="post" action="">
-	{$selectgroup}:	<select id="groupsel" onchange="set_group()">
+	<b>{$selectgroup}:</b>	<select id="groupsel" onchange="set_group()">
 		{foreach from=$group_list item=thisgroup}
 			<option value="{$thisgroup->id}">{$thisgroup->name}</option>
 		{/foreach}
 	</select>
 </form>
+</div><br />
 {$form_start}
-<div>
+<div class="hidden">
   <input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
 </div>
 <table cellspacing="0" class="pagetable" id="permtable">

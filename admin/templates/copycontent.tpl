@@ -43,21 +43,21 @@
     <div>
       <input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
     </div>
-    <div><input type="hidden" name="content_id" value="{$fromid}"></div>
+    <div class="hidden"><input type="hidden" name="content_id" value="{$fromid}" /></div>
 
     <div class="pageoverflow">
       <p class="pagetext">{$lang_pagealias}:</p>
-      <p class="pageinput"><input type="text" name="to_alias" size="50" maxlength="255" value="{$fromobj->Alias()}"></p>
+      <p class="pageinput"><input type="text" name="to_alias" size="50" maxlength="255" value="{$fromobj->Alias()}" /></p>
     </div>
 
     <div class="pageoverflow">
       <p class="pagetext">{$lang_pagetitle}:</p>
-      <p class="pageinput"><input type="text" name="to_title" size="50" maxlength="255" value="{$fromobj->Name()}"></p>
+      <p class="pageinput"><input type="text" name="to_title" size="50" maxlength="255" value="{$fromobj->Name()}" /></p>
     </div>
 
     <div class="pageoverflow">
       <p class="pagetext">{$lang_pagemenutext}:</p>
-      <p class="pageinput"><input type="text" name="to_menutext" size="50" maxlength="255" value="{$fromobj->MenuText()}"></p>
+      <p class="pageinput"><input type="text" name="to_menutext" size="50" maxlength="255" value="{$fromobj->MenuText()}" /></p>
     </div>
 
     <div class="pageoverflow">
@@ -67,12 +67,12 @@
 
     <div class="pageoverflow">
       <p class="pagetext">{$lang_pageaccesskey}:</p>
-      <p class="pageinput"><input type="text" name="to_accesskey" size="5" maxlength="5" value="{$fromobj->AccessKey()}"></p>
+      <p class="pageinput"><input type="text" name="to_accesskey" size="5" maxlength="5" value="{$fromobj->AccessKey()}" /></p>
     </div>
 
     <div class="pageoverflow">
       <p class="pagetext">&nbsp;</p>
-      <p class="pageinput"><input type="submit" name="submit" value="{$lang_submit}"><input type="submit" name="cancel" value="{$lang_cancel}"></p>
+      <p class="pageinput"><input type="submit" name="submit" value="{$lang_submit}" /><input type="submit" name="cancel" value="{$lang_cancel}" /></p>
     </div>
     </form>
   </fieldset>

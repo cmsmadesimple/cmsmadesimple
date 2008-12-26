@@ -125,9 +125,8 @@ else {
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('currentassociations'); ?>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('stylesheet')?> :</p>
-			<p class="pageinput"><?php echo (isset($name)?$name:"")?></p>
-		</div>
+			<?php echo '<b>'.lang('stylesheet').'</b>'?>: <?php echo (isset($name)?$name:"")?>
+		</div><br />
 
 <?php
 
