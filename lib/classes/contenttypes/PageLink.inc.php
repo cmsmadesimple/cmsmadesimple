@@ -189,7 +189,12 @@ class PageLink extends ContentBase
 		    $errors[] = lang('destinationnotfound');
 		    $result = false;
 		  }
-		if( $destobj->Type() == 'pagelink' )
+		else if( $destobj->Type() == 'pagelink' )
+		  {
+		    $errors[] = lang('pagelink_circular');
+		    $result = false;
+		  }
+		else if( $destobj->Alias() == $this->mAlias )
 		  {
 		    $errors[] = lang('pagelink_circular');
 		    $result = false;
