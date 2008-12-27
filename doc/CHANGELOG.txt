@@ -4,6 +4,7 @@ Version 1.5.2 - Caguas
   - #2406 Re-order pages causes hierarchy to be incorrect (longstanding), which could be caused by:
 		a) two users simultaneously re-ordering pages or,
 		b) moving a second page while ajax hasn't finished moving the first.
+  - #2476 cyclic internal linking is possible and causes listcontent to time-out
   - #2709 Install and uninstall post messages not shown.
   - #2717 Text inputs too short in page-copy-mode.
   - #2739 Permission Denied user type Editor or Designer.
