@@ -14,12 +14,15 @@ Version 1.5.2 - Caguas
   - #2804 Re-ordering in Events 
   - #2805 Deleting of an UDT attached to an Event 
   - Setting output_compression to false in config.php still sent compressed data.
+  - Many fixes in html - Validations in admin side.
   
 - Feature requests that are included:
   - #2045 Allow search to find expired news articles.
   - #2649 Notifications when deleting Stylesheets in use by templates.
   - Showall parameter added to News, to show all news-entries, regardless of end-date.
-  
+
+- Tiny
+  - #2815 CMSLink don't have '$config['page_extension']' suffix.
  
   
 Version 1.5.1 - San Juan
