@@ -17,7 +17,7 @@ Options +FollowSymLinks
 <IfModule mod_rewrite.c>
 RewriteEngine on
 #
-#Sub-dir e.g: /cmsms/
+#Sub-dir e.g: /cmsms
 RewriteBase /
 #
 # 301 Redirect all requests that don't contain a dot or trailing slash to
