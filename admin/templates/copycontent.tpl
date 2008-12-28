@@ -7,7 +7,7 @@
 
     <div class="pageoverflow">
       <p class="pagetext">{$lang_pageid}:</p>
-      <p class="pageinput">{$fromid}
+      <p class="pageinput">{$fromid}</p>
     </div>
 
     <div class="pageoverflow">
