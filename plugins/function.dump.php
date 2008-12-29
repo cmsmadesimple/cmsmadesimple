@@ -179,10 +179,6 @@ function smarty_cms_function_dump($params, &$smarty)
   $baseobj =& $smarty->get_template_vars($str);
   $obj =& $baseobj;
 
-//   $tmp = '$obj =& $'.$str.';';
-//   echo "DEBUG: eval $tmp<br/>";
-//   eval($tmp);
-
   $str = '$baseobj';
   $done = false;
   $tmpobj =& $baseobj->modules['Album'];
