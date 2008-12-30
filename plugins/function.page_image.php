@@ -36,6 +36,7 @@ function smarty_cms_function_page_image($params, &$smarty)
       if( is_object($node) )
 	{
 	  $result = $contentobj->GetPropertyValue($propname);
+          if( $result == -1 ) $result = '';
 	}
     }
 
