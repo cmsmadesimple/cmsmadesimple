@@ -124,6 +124,11 @@ class AdminTheme
 		$this->cms = $cms;
 		$this->url = $_SERVER['SCRIPT_NAME'];
 		$this->query = (isset($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:'');
+		if( $this->query == '' && isset($_POST['mact']) )
+		  {
+		    $tmp = explode(',',$_POST['mact']);
+		    $this->query = 'module='.$tmp[0];
+		  }
 		if ($this->query == '' && isset($_POST['module']) && $_POST['module'] != '')
 		  {
 		  $this->query = 'module='.$_POST['module'];
