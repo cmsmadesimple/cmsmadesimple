@@ -363,7 +363,7 @@ class Content extends ContentBase
 	  $ret[]= array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
 	  $ret[]= array(lang('pagedata_codeblock').':',create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','pagedata','','','80','6'));
 	  $searchable = $this->GetPropertyValue('searchable');
-	  if( empty($searchable) )
+	  if( $searchable == '' )
 	    {
 	      $searchable = 1;
 	    }
