@@ -1,4 +1,14 @@
 <?php
+$lang['admin']['help_function_page_title'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This tag can be used to return the value of the image or thumbnail fields of a certain page.</p>
+<h3>How do I use it?</h3>
+<p>Insert the tag into the template like: <code>{page_image}</code>.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+  <li>thumbnail - Optionally display the value of the thumbnail property instead of the image property.</li>
+</ul>
+EOT;
 $lang['admin']['pagelink_circular'] = 'A page link cannot list another page link as its destination';
 $lang['admin']['destinationnotfound'] = 'The selected page could not be found or is invalid';
 $lang['admin']['help_function_dump'] = <<<EOT
@@ -6,7 +16,7 @@ $lang['admin']['help_function_dump'] = <<<EOT
   <p>This tag can be used to dump the contents of any smarty variable in a more readable format.  This is useful for debugging, and editing templates, to know the format and types of data available.</p>
 <h3>How do I use it?</h3>
 <p>Insert the tag in the template like <code>{dump item='the_smarty_variable_to_dump'}</code>.</p>
-<h3>What parameters does it take</h3>
+<h3>What parameters does it take?</h3>
 <ul>
 <li><strong>item (required)</strong> - The smarty variable to dump the contents of.</li>
 <li>maxlevel - The maximum number of levels to recurse (applicable only if recurse is also supplied.  The default value for this parameter is 3</li>
