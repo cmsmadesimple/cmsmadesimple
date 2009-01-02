@@ -339,7 +339,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 			$db->Execute($query, array($contentid, $parentid));
 		}
 
-		sleep(15); //waiting for updating DB. Better 5 but 15 is good for testing concurrent processes and work!
+		//sleep(15); //waiting for updating DB. Better 5 but 15 is good for testing concurrent processes and work!
 		$contentops =& $gCms->GetContentOperations();
 		$contentops->SetAllHierarchyPositions();
 		$contentops->ClearCache();
