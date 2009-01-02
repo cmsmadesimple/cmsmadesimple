@@ -294,11 +294,13 @@ function content_move($contentid, $parentid, $direction)
 
 function movecontent($contentid, $parentid, $direction = 'down')
 {
-	#$filename = cms_join_path(TMP_CACHE_LOCATION,'__check_admin_movecontent__.dat'); //investigate why file is erased in cache
-	$filename = cms_join_path(dirname(__FILE__), '__check_admin_movecontent__.dat');
-
+	$filename = cms_join_path(TMP_CACHE_LOCATION,'__check_admin_movecontent__.dat'); //investigate why file is erased in cache
 	if( file_exists($filename) ) return;
-	if( FALSE === @touch($filename) ) die('could not create '.$filename.' or another process update content, waiting and retry'); //notification in admin?
+	if( FALSE === @touch($filename) )
+	  {
+	    // should audit and return
+	    die('could not create '.$filename.' or another process update content, waiting and retry'); //notification in admin?
+	  }
 
 	global $gCms;
 	$db =& $gCms->GetDb();
@@ -345,7 +347,10 @@ function movecontent($contentid, $parentid, $direction = 'down')
 
 	// reset
 	@unlink($filename);
-	if( file_exists($filename) ) die('file still exists: '.$filename); //notification in admin?
+	if( file_exists($filename) ) 
+	  {
+	    die('file still exists: '.$filename); //notification in admin?
+	  }
 }
 
 function deletecontent($contentid)
