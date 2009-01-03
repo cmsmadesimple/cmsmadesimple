@@ -294,13 +294,9 @@ function content_move($contentid, $parentid, $direction)
 
 function movecontent($contentid, $parentid, $direction = 'down')
 {
-	$filename = cms_join_path(TMP_CACHE_LOCATION,'__check_admin_movecontent__.dat'); //investigate why file is erased in cache
-	if( file_exists($filename) ) return;
-	if( FALSE === @touch($filename) )
-	  {
-	    // should audit and return
-	    die('could not create '.$filename.' or another process update content, waiting and retry'); //notification in admin?
-	  }
+  // set lock so that hopefully there will be no collisions with moving content.
+  if( get_site_preference('__listcontent_lock__',0) != 0 ) return;
+  set_site_preference('__listcontent_lock__',1);
 
 	global $gCms;
 	$db =& $gCms->GetDb();
@@ -345,12 +341,8 @@ function movecontent($contentid, $parentid, $direction = 'down')
 		$contentops->ClearCache();
 	}
 
-	// reset
-	@unlink($filename);
-	if( file_exists($filename) ) 
-	  {
-	    die('file still exists: '.$filename); //notification in admin?
-	  }
+	// reset lock
+	set_site_preference('__listcontent_lock__',0);
 }
 
 function deletecontent($contentid)
