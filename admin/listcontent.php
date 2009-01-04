@@ -283,21 +283,28 @@ function setactive($contentid, $active = true)
 
 function content_move($contentid, $parentid, $direction)
 {
-	$objResponse = new xajaxResponse();
+  $objResponse = new xajaxResponse();
+
+  $time = time();
+  $tmp = get_site_preference('__listcontent_timelock__',0);
+  if( (time() - $tmp) < 3 )
+    {
+      return $objResponse->getXML(); // delay between requests
+    }
+  set_site_preference('__listcontent_timelock__',$time);
 	
 	movecontent($contentid, $parentid, $direction);
 
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
 	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
-	return $objResponse->getXML();
+
+  // reset lock
+  return $objResponse->getXML();
+
 }
 
 function movecontent($contentid, $parentid, $direction = 'down')
 {
-  // set lock so that hopefully there will be no collisions with moving content.
-  if( get_site_preference('__listcontent_lock__',0) != 0 ) return;
-  set_site_preference('__listcontent_lock__',1);
-
 	global $gCms;
 	$db =& $gCms->GetDb();
 	$userid = get_userid();
@@ -305,6 +312,14 @@ function movecontent($contentid, $parentid, $direction = 'down')
 	if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
 	{
 		$order = 1;
+
+// 		#Detect duplicate item orders, and abort
+// 		$query = "SELECT count(*) AS num FROM cms_content 
+//                            WHERE parent_id=? 
+//                           GROUP BY item_order,parent_id 
+//                           HAVING count(*) > 1";
+// 		$tmp = $db->GetOne($query,array($parentid));
+// 		if( $tmp > 0 ) return;
 
 		#Grab necessary info for fixing the item_order
 		$query = "SELECT item_order FROM ".cms_db_prefix()."content WHERE content_id = ?";
@@ -341,8 +356,6 @@ function movecontent($contentid, $parentid, $direction = 'down')
 		$contentops->ClearCache();
 	}
 
-	// reset lock
-	set_site_preference('__listcontent_lock__',0);
 }
 
 function deletecontent($contentid)
