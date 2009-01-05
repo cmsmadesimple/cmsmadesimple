@@ -40,7 +40,9 @@ $access = check_permission($userid, "Modify Stylesheets")
 ||
 check_permission($userid, "Add Stylesheets")
 ||
-check_permission($userid, "Remove Stylesheets");
+check_permission($userid, "Remove Stylesheets")
+||
+check_permission($userid, "Modify Stylesheet Assoc");
 
 
 if (!$access) {
@@ -72,11 +74,12 @@ if (isset($_GET["message"])) {
 # first getting all permission : we only display elements the user has access
 # too
 #******************************************************************************
-	$userid = get_userid();
+	$userid       = get_userid();
 
-	$modify = check_permission($userid, 'Modify Stylesheets');
-	$addcss = check_permission($userid, 'Add Stylesheets');
-	$delcss = check_permission($userid, 'Remove Stylesheets');
+	$modify       = check_permission($userid, 'Modify Stylesheets');
+	$addcss       = check_permission($userid, 'Add Stylesheets');
+	$delcss       = check_permission($userid, 'Remove Stylesheets');
+	$modifyAssoc  = check_permission($userid, 'Modify Stylesheet Assoc');
 
 	$query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
 	$result = $db->Execute($query);
@@ -114,10 +117,16 @@ if (isset($_GET["message"])) {
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"editcss.php".$urlext."&amp;css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";
+					if ($modifyAssoc)
+				{
 				echo "<td class=\"icons_wide\"><a href=\"templatecss.php".$urlext."&amp;id=".$one["css_id"]."&amp;type=template\">";
                 echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachtotemplate'),'','','systemicon');
                 echo "</a></td>\n";
-
+                }
+				else
+				{
+					echo "<td>&nbsp;</td>";
+				}
 				# if user has right to add (copy)
 				if ($addcss)
 				{
@@ -153,7 +162,14 @@ if (isset($_GET["message"])) {
 				{
 					echo "<td>&nbsp;</td>";
 				}
+				if ($delcss)
+				{
 				echo '<td><input type="checkbox" name="multistylesheet-'.$one['css_id'].'" /></td>';
+					}
+				else
+				{
+					echo "<td>&nbsp;</td>";
+				}
 				echo "</tr>\n";
 
 				("row1" == $currow) ? $currow="row2" : $currow="row1";
