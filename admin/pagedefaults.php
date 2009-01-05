@@ -76,6 +76,10 @@ if( isset( $_POST['submit'] ) )
       {
 	$additional_editors = implode(',',$_POST['additional_editors']);
       }
+    else
+      {
+	$additional_editors = '';
+      }
     $page_searchable = (isset($_POST['page_searchable'])?"1":"0");
     $page_extra1 = $_POST['page_extra1'];
     $page_extra2 = $_POST['page_extra2'];
