@@ -1,5 +1,5 @@
 <?php
-$lang['admin']['help_function_page_title'] = <<<EOT
+$lang['admin']['help_function_page_image'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This tag can be used to return the value of the image or thumbnail fields of a certain page.</p>
 <h3>How do I use it?</h3>
