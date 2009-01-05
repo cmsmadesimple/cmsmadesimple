@@ -1522,7 +1522,7 @@ class ContentBase
 
 		foreach ($allusers as $oneuser)
 		{
-			if ($oneuser->id != $this->Owner())
+			if ($oneuser->id != $this->Owner() && $oneuser->id != 1)
 			{
 				$text .= '<option value="'.$oneuser->id.'"';
 				if (in_array($oneuser->id, $addteditors))
