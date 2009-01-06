@@ -108,7 +108,7 @@
 		{foreach from=$group_list item=thisgroup}
                     {if $user->id == $user_id}
     		      {if $thisgroup->id != -1}
-                        <td>--</td>
+                        <td class="g{$thisgroup->id}">--</td>
                       {/if}
                     {else}
 			{if $thisgroup->id != -1}
