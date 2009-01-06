@@ -37,17 +37,16 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 $userid = get_userid();
 $access = check_permission($userid, "Modify Stylesheets")
-||
-check_permission($userid, "Add Stylesheets")
-||
-check_permission($userid, "Remove Stylesheets")
-||
-check_permission($userid, "Modify Stylesheet Assoc");
+  || check_permission($userid, "Add Stylesheets")
+  || check_permission($userid, "Remove Stylesheets")
+  || check_permission($userid, "Modify Stylesheet Assoc")
+  || check_permission($userid, "Add Stylesheet Assoc")
+  || check_permission($userid, "Remove Stylesheet Assoc");
 
 
 if (!$access) {
-	die('Permission Denied');
-return;
+  echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('listcss')))."</p></div>";
+  return;
 }
 
 
@@ -80,6 +79,8 @@ if (isset($_GET["message"])) {
 	$addcss       = check_permission($userid, 'Add Stylesheets');
 	$delcss       = check_permission($userid, 'Remove Stylesheets');
 	$modifyAssoc  = check_permission($userid, 'Modify Stylesheet Assoc');
+	$addAssoc  = check_permission($userid, 'Add Stylesheet Assoc');
+	$delAssoc  = check_permission($userid, 'Remove Stylesheet Assoc');
 
 	$query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
 	$result = $db->Execute($query);
@@ -114,88 +115,106 @@ if (isset($_GET["message"])) {
 		# we now show each line
 		$counter = 0;
 		while ($one = $result->FetchRow()){
-			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-				echo "<td><a href=\"editcss.php".$urlext."&amp;css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";
-					if ($modifyAssoc)
-				{
-				echo "<td class=\"icons_wide\"><a href=\"templatecss.php".$urlext."&amp;id=".$one["css_id"]."&amp;type=template\">";
-                echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachtotemplate'),'','','systemicon');
-                echo "</a></td>\n";
-                }
-				else
-				{
-					echo "<td>&nbsp;</td>";
-				}
-				# if user has right to add (copy)
-				if ($addcss)
-				{
-					echo '<td class="icons_wide"><a href="copystylesheet.php'.$urlext.'&amp;stylesheet_id=' . $one['css_id'] . '&amp;stylesheet_name=' . urlencode($one['css_name']) . '">';
-                    echo $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
-                    echo "</a></td>\n";
-				}
-				else
-				{
-					echo "<td>&nbsp;</td>";
-				}
+		  if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
+		    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+		    if( $modify )
+		      {
+			echo "<td><a href=\"editcss.php".$urlext."&amp;css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";
+		      }
+		    else
+		      {
+			echo "<td>".$one["css_name"]."</td>\n";
+		      }
 
-				# if user has right to edit
-				if ($modify)
-				{
-					echo "<td class=\"icons_wide\"><a href=\"editcss.php".$urlext."&amp;css_id=".$one["css_id"]."\">";
-                    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-                    echo "</a></td>\n";
-				}
-				else
-				{
-					echo "<td>&nbsp;</td>";
-				}
+		    if( $modifyAssoc || $delAssoc || $addAssoc )
+		      {
+			echo "<td class=\"icons_wide\"><a href=\"templatecss.php".$urlext."&amp;id=".$one["css_id"]."&amp;type=template\">";
+			echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachtotemplate'),'','','systemicon');
+			echo "</a></td>\n";
+		      }
+		    else
+		      {
+			echo "<td>&nbsp;</td>";
+		      }
 
-				# if user has right to delete
-				if ($delcss)
-				{
-					echo "<td class=\"icons_wide\"><a href=\"deletecss.php".$urlext."&amp;css_id=".$one["css_id"]."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one['css_name']),true)."');\">";
-                    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                    echo "</a></td>\n";
-				}
-				else
-				{
-					echo "<td>&nbsp;</td>";
-				}
-				if ($delcss)
-				{
-				echo '<td><input type="checkbox" name="multistylesheet-'.$one['css_id'].'" /></td>';
-					}
-				else
-				{
-					echo "<td>&nbsp;</td>";
-				}
-				echo "</tr>\n";
+                    // if user has right to add (copy)
+		    if ($addcss)
+		      {
+			echo '<td class="icons_wide"><a href="copystylesheet.php'.$urlext.'&amp;stylesheet_id=' . $one['css_id'] . '&amp;stylesheet_name=' . urlencode($one['css_name']) . '">';
+			echo $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
+			echo "</a></td>\n";
+		      }
+		    else
+		      {
+			echo "<td>&nbsp;</td>";
+		      }
 
-				("row1" == $currow) ? $currow="row2" : $currow="row1";
-			}
-			$counter++;
+		    // if user has right to edit
+		    if ($modify)
+		      {
+			echo "<td class=\"icons_wide\"><a href=\"editcss.php".$urlext."&amp;css_id=".$one["css_id"]."\">";
+			echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+			echo "</a></td>\n";
+		      }
+		    else
+		      {
+			echo "<td>&nbsp;</td>";
+		      }
+
+                    // if user has right to delete
+		    if ($delcss)
+		      {
+			echo "<td class=\"icons_wide\"><a href=\"deletecss.php".$urlext."&amp;css_id=".$one["css_id"]."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one['css_name']),true)."');\">";
+			echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+			echo "</a></td>\n";
+		      }
+		    else
+		      {
+			echo "<td>&nbsp;</td>";
+		      }
+
+		    if( $delcss )
+		      {
+			echo '<td><input type="checkbox" name="multistylesheet-'.$one['css_id'].'" /></td>';
+		      }
+		    else
+		      {
+			echo '<td></td>';
+		      }
+		    echo "</tr>\n";
+
+		    ("row1" == $currow) ? $currow="row2" : $currow="row1";
+		  }
+		  $counter++;
 		} ## foreach
 
 		echo '</tbody>';
 		echo "</table>\n";
-
+		
 	} # end if result
 
-	# if user can add css
-	if ($addcss)
-	{
+// this bottom stuff is ugly
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<span style="float: left;">
-				<a href="addcontent.php<?php echo $urlext ?>">
-					<?php 
-						echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addstylesheet'),'','','systemicon').'</a>';
-						echo ' <a class="pageoptions" href="addcss.php'.$urlext.'">'.lang("addstylesheet");
-					?>
-				</a>
-			</span>
+<?php
+	# if user can add css
+	if ($addcss)
+	  {
+?>
+	    <span style="float: left;">
+	    <a href="addcontent.php<?php echo $urlext ?>">
+	    <?php 
+	    echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addstylesheet'),'','','systemicon').'</a>';
+	    echo ' <a class="pageoptions" href="addcss.php'.$urlext.'">'.lang("addstylesheet");
+	    ?>
+	    </a>
+	    </span>
+<?php
+	  }
+        if ($delcss)
+	  {
+?>
 			<span style="margin-right: 30px; float: right; text-align: right">
 				<?php echo lang("selecteditems"); ?>: <select name="multiaction">
 				<option value="delete"><?php echo lang('delete') ?></option>
@@ -207,6 +226,9 @@ if (isset($_GET["message"])) {
 				<input type="submit" value="<?php echo lang('submit') ?>" />
 			</span>
 			<br />
+<?php
+  	 }
+?>
 		</p>
 	</div>
 </div>
@@ -215,8 +237,6 @@ if (isset($_GET["message"])) {
 <p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 
 <?php
-	} # end if add css
-
 
 include_once("footer.php");
 

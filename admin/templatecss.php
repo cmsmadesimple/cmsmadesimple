@@ -92,6 +92,7 @@ if (isset($type) && "template" == $type)
 	$userid = get_userid();
 
 	$modify  = check_permission($userid, 'Modify Stylesheet Assoc');
+        $modifytpl = check_permission($userid,'Modify Templates');
 	$delasso = check_permission($userid, 'Remove Stylesheet Assoc');
 	$addasso = check_permission($userid, 'Add Stylesheet Assoc');
 
@@ -111,7 +112,7 @@ if ("" != $error)
 	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".$error."</p></div>";
 }
 
-if (!$addasso) {
+if (!$addasso && !$modify && !$delasso) {
 		echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addcssassociation')))."</p></div>";
 }
 
@@ -153,10 +154,17 @@ else {
 			$csslist[] = $one["assoc_to_id"];
 		 
 			echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-			echo "<td><a href=\"edittemplate.php".$urlext."&amp;template_id=".$one["assoc_to_id"]."&amp;from=cssassoc&amp;cssid=".$id."\">".$one["template_name"]."</a></td>\n";
+			if( $modifytpl )
+			  {
+			    echo "<td><a href=\"edittemplate.php".$urlext."&amp;template_id=".$one["assoc_to_id"]."&amp;from=cssassoc&amp;cssid=".$id."\">".$one["template_name"]."</a></td>\n";
+			  }
+			else
+			  {
+			    echo "<td>".$one['template_name']."</td>\n";
+			  }
 
 			# if user has right to delete
-			if ($delasso)
+			if ($modify || $delasso)
 			{
 				echo "<td><a href=\"deletetemplateassoc.php".$urlext."&amp;id=".$id."&amp;template_id=".$one["assoc_to_id"]."&amp;type=$type\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteassociationconfirm',$one['template_name']),true)."');\">";
                 echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
@@ -178,7 +186,8 @@ else {
 
 	} # end of if result
 	
-
+  if( $modify || $addasso )
+    {
 	# this var is used to store the css ids that should not appear in the
 	# dropdown
 	$notinto = "";
@@ -228,6 +237,7 @@ else {
 		</div>
 <?php
 	} # end of showing form
+    }
 }
 
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';

@@ -76,7 +76,8 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
 
 	# we then check permissions
 	$userid = get_userid();
-	$access = check_permission($userid, 'Add Stylesheet Assoc');
+	$access = check_permission($userid, 'Add Stylesheet Assoc')
+	  || check_permission($userid,'Modify Stylesheet Assoc');
 
 #******************************************************************************
 # the user has permissions, and vars are set, we can go on

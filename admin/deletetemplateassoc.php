@@ -66,7 +66,8 @@ if (isset($_GET["template_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 
 	# we check the permissions
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Stylesheet Assoc');
+	$access = check_permission($userid, 'Remove Stylesheet Assoc') 
+	  || check_permission($userid,'Modify Stylesheet Assoc');
 
 #******************************************************************************
 # the user has the right to delete association, we can go on
