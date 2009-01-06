@@ -33,7 +33,7 @@
 					{
 					if (groupids[i] != '')
 						{
-                  cell_class_toggle('g'+i,true);
+                  cell_class_toggle('g'+groupids[i],true);
 						}
 					}
 				}
@@ -41,13 +41,13 @@
 				{
 				for (var i=0;i<groupids.length;i++)
 					{
-					if (groupids[i] != '' && i == gid)
-                  {
-                  cell_class_toggle('g'+i,true);
+						if (groupids[i]  == gid)
+	                    {
+    	                  cell_class_toggle('g'+groupids[i],true);
 						}
-					else if (groupids[i] != '' && i != gid)
+						else
 						{
-						cell_class_toggle('g'+i,false);
+	  					  cell_class_toggle('g'+groupids[i],false);
 						}
 					}
 				}
