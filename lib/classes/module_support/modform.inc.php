@@ -46,7 +46,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	if ($idsuffix == '')
 		$idsuffix = $formcount;
 
-	$goto = ($returnid==''?'moduleinterface.php':'index.php');
+	$goto = ($returnid==''?'action="moduleinterface.php"':'');
 	#$goto = 'moduleinterface.php';
 	if ($inline && $returnid != '')
 	{
@@ -56,7 +56,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 		#$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
 	}
 	//$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" name="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
-	$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
+	$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'"'.$goto;
 	if ($enctype != '')
 	{
 		$text .= ' enctype="'.$enctype.'"';
