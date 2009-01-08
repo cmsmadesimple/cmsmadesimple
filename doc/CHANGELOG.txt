@@ -24,6 +24,9 @@ Version 1.5.2 - Caguas
 
 - Tiny
   - #2815 CMSLink don't have '$config['page_extension']' suffix.
+
+- Module-API
+  - Added HasCapability and GetModulesWithCapability for a more general way of checking what a module can do.
  
   
 Version 1.5.1 - San Juan
