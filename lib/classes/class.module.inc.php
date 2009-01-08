@@ -1321,7 +1321,22 @@ class CMSModule
 	{
 	}
 
+  /**
+	 * ------------------------------------------------------------------
+	 * Module capabilities, a new way of checking what a module can do
+	 * ------------------------------------------------------------------
+	 */
 	
+  /**
+	 * Returns true if the modules thinks it has the capability specified
+	 *
+	 * @param an id specifying which capability to check for, could be "wysiwyg" etc.
+	 * @param associative array further params to get more detailed info about the capabilities. Should be syncronized with other modules of same type
+	 */
+  function HasCapability($capability, $params=array())
+  {
+    return false;
+  }
 	
 	/**
 	 * ------------------------------------------------------------------
