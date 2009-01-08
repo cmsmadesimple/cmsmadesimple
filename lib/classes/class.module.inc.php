@@ -2063,6 +2063,29 @@ class CMSModule
 		return $tmp;
 	}
 
+  /**
+	 * Returns an array of modulenames with the specified capability
+	 * and which are installed and enabled, of course
+	 *
+   * @param an id specifying which capability to check for, could be "wysiwyg" etc.
+	 * @param associative array further params to get more detailed info about the capabilities. Should be syncronized with other modules of same type
+	*/
+  function GetModulesWithCapability($capability, $params=array())
+	{
+		global $gCms;
+    $result=array();
+    foreach ($gCms->modules as $module)
+    {
+		  if ($gCms->modules[$module]['installed'] == true &&
+			  $gCms->modules[$module]['active'] == true &&
+        $gCms->modules[$module]['object']->HasCapability($capability,$params))
+		  {
+			  $result[]=$module;
+		  }
+    }
+    return $result;
+	}
+
 	/**
 	 * ------------------------------------------------------------------
 	 * Language Functions
