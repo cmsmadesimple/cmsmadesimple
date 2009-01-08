@@ -2074,7 +2074,7 @@ class CMSModule
 	{
 		global $gCms;
     $result=array();
-    foreach ($gCms->modules as $module)
+    foreach ($gCms->modules as $module=>$values)
     {
 		  if ($gCms->modules[$module]['installed'] == true &&
 			  $gCms->modules[$module]['active'] == true &&
