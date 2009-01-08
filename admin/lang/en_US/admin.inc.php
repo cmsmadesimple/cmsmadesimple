@@ -607,7 +607,7 @@ good for most people :) </p>
 		<em>The Default is "name".</em></li>
 
 		<li><strong>thumbPicAltTag</strong><br/>
-		<em>Is the same as bigPicAltTag, but for the small thumbnail images.<em></li>
+		<em>Is the same as bigPicAltTag, but for the small thumbnail images.</em></li>
 
 		<li><strong>thumbPicTitleTag *</strong><br/>
 		<em>Is the same as bigPicTitleTag but for the small thumbnail images.<br/>
