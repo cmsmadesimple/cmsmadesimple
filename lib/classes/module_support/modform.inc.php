@@ -25,6 +25,18 @@
  * @package		CMS
  */
 
+function __curPageURL() {
+ $pageURL = 'http';
+ if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+ $pageURL .= "://";
+ if ($_SERVER["SERVER_PORT"] != "80") {
+  $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+ } else {
+  $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+ }
+ return $pageURL;
+}
+
 function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 {
 	global $gCms;
@@ -46,7 +58,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	if ($idsuffix == '')
 		$idsuffix = $formcount;
 
-	$goto = ($returnid==''?'action="moduleinterface.php"':'');
+	$goto = " action=\"".($returnid==''?'moduleinterface.php':__curPageURL()).'"';
 	#$goto = 'moduleinterface.php';
 	if ($inline && $returnid != '')
 	{
