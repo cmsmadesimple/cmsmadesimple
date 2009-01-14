@@ -95,7 +95,8 @@ if ($dodelete)
 }
 else
 {
-  redirect($from.$urlext."&message=".lang('errortemplateinuse'));
+  $url = $from."&message=".lang('errortemplateinuse');
+  redirect($url);
 }
 
 # vim:ts=4 sw=4 noet
