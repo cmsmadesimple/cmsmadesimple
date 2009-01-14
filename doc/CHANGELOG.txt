@@ -14,6 +14,7 @@ Version 1.5.2 - Caguas
   - #2804 Re-ordering in Events. 
   - #2805 Deleting of an UDT attached to an Event. 
   - #2808 Page found by search, with "page is searchable" flag unchecked.
+  - #2872 Login page showing, after deleting a template which is still in use.
   - Setting output_compression to false in config.php still sent compressed data.
   - Many fixes in html - Validations in admin side.
   
