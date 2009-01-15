@@ -26,6 +26,13 @@ $CMS_EXCLUDE_FROM_RECENT=1;
 
 require_once("../include.php");
 
+// if this page was accessed directly, and the secure param name is not in the URL
+// but it is in the session, assume it is correct.
+if( isset($_SESSION[CMS_USER_KEY]) && !isset($_GET[CMS_SECURE_PARAM_NAME]) )
+  {
+    $_GET[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
+  }
+
 check_login();
 
 global $gCms;
