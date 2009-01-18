@@ -94,9 +94,10 @@ function cms_module_CreatePagination(&$modinstance, $id, $action, $returnid, $pa
 	$goto = 'index.php';
 	if ($returnid == '')
 	{
-		$goto = 'moduleinterface.php';
+	  $urlext = '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+	  $goto = 'moduleinterface.php'.$urlext;
 	}
-	$link = '<a href="'.$goto.'?module='.$modinstance->GetName().'&amp;'.$id.'returnid='.$id.$returnid.'&amp;'.$id.'action=' . $action .'&amp;'.$id.'page=';
+	$link = '<a href="'.$goto.'&amp;module='.$modinstance->GetName().'&amp;'.$id.'returnid='.$id.$returnid.'&amp;'.$id.'action=' . $action .'&amp;'.$id.'page=';
 	if ($inline)
 	{
 		$link .= '&amp;'.$config['query_var'].'='.$returnid;
