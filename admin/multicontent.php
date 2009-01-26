@@ -287,7 +287,7 @@ else
 	      {
 		$permission = ($modifyall || check_ownership($userid, $node->Id()) || 
 			       check_authorship($userid, $node->Id()) || 
-			       check_persmission($userid, 'Modify Page Structure'));
+			       check_permission($userid, 'Modify Page Structure'));
 
 		if( $permission )
 		  {
