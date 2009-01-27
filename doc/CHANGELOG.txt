@@ -4,6 +4,7 @@ Version 1.X - after release of 1.5.2
   - #2706 CreatePagination() does not include Session Key. 
   - #2915 Typo in multicontent.php throwing errors.
   - #2941 (News) Extra-field not showing in detail-view.
+  - #2925 User not exist in sample content.
 
 Version 1.5.2 - Caguas
 -----------------------------

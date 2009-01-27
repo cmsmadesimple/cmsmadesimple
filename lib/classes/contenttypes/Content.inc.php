@@ -398,7 +398,7 @@ class Content extends ContentBase
 	    if( empty($tmp) ) $tmp = '%x %X';
 	    $ret[]=array(lang('last_modified_at').':', strftime($tmp, strtotime($this->mModifiedDate) ) );
 	    $modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);
-	    $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
+	    if($modifiedbyuser) $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
 	}
 	return $ret;
     }
