@@ -237,7 +237,7 @@ if (FALSE == empty($page_message)) {
 	    <div class="pageoverflow">
 		<div class="pagetext"><?php echo lang('date_format_string'); ?>:</div>
 		<div class="pageinput">
-		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="20" /><?php echo lang('date_format_string_help') ?>
+		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="255" /><?php echo lang('date_format_string_help') ?>
 		</div>
 	    </div>
             <div class="pageoverflow">
