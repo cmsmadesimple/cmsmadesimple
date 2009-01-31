@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.5.2";
+$CMS_VERSION = "1.5.3-alpha-1";
 $CMS_VERSION_NAME = "Caguas";
 $CMS_SCHEMA_VERSION = "31";
 
