@@ -35,6 +35,9 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 $thisurl=basename(__FILE__).$urlext;
 
 check_login();
+$userid = get_userid();
+$access = check_permission($userid, 'Modify Site Preferences');
+
 
 $admintheme = 'default';
 if (isset($_POST['admintheme'])) $admintheme = $_POST['admintheme'];
@@ -301,7 +304,9 @@ if (FALSE == empty($page_message)) {
 					<input class="pagenb" type="checkbox" name="indent" <?php if ($indent) echo "checked=\"checked\""; ?> /><?php echo lang('indent') ?>
 				</div>
 			</div>
-
+               <?php  if ($access) 
+					  {
+					  ?>
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('enablenotifications'); ?>:</div>
 				<div class="pageinput">
@@ -311,8 +316,9 @@ if (FALSE == empty($page_message)) {
 			<div class="pageoverflow">
 			  <div class="pagetext"><?php echo lang('ignorenotificationsfrommodules'); ?>:</div>
 			  <div class="pageinput">
-			  <?php
-			  $txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
+				 <?php
+					  
+					   $txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
                           foreach( $modules as $key => $value )
                           {
                             $txt .= '<option value="'.$value.'"';
@@ -324,9 +330,10 @@ if (FALSE == empty($page_message)) {
                           }
                           $txt .= "</select>\n";
                           echo $txt;
-                          ?>
+                         ?>
 			  </div>
-                        </div>
+                        </div> 
+                <?php }?>
 			<p class="pagetext">&nbsp;</p>
 			<div class="pageinput">
             <div class="invisible">
