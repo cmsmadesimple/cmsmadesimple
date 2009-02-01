@@ -228,15 +228,6 @@ class Content extends ContentBase
 	      $ret[]= array(lang('parent').':',$contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
 	    }
 
-	  $dir = $config['image_uploads_path'];
-	  $data = $this->GetPropertyValue('image');
-	  $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
-	  $ret[] = array(lang('image').':',$dropdown);
-	  
-	  $data = $this->GetPropertyValue('thumbnail');
-	  $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
-	  $ret[] = array(lang('thumbnail').':',$dropdown);
-
 	  if( check_permission(get_userid(), 'Modify Page Structure') || $adding ) {
 	      $additionalcall = '';
 	    foreach($gCms->modules as $key=>$value)
@@ -356,6 +347,16 @@ class Content extends ContentBase
 	  else {
             $ret[]= array(lang('pagealias').':','<input type="text" disabled name="alias" value="'.$this->mAlias.'" />');
 	  }
+	  
+  	  $dir = $config['image_uploads_path'];
+	  $data = $this->GetPropertyValue('image');
+	  $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
+	  $ret[] = array(lang('image').':',$dropdown);
+	  
+	  $data = $this->GetPropertyValue('thumbnail');
+	  $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
+	  $ret[] = array(lang('thumbnail').':',$dropdown);
+
 	  $ret[]= array(lang('page_metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
 
 	  $ret[]= array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');

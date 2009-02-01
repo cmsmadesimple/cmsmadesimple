@@ -1,4 +1,4 @@
-Version 1.X - after release of 1.5.2
+Version 1.5.3
 -----------------------------
 - Fixes of several bugs:
   - #2516 Javascript script errors in admin listcontent.php panel.
@@ -7,8 +7,11 @@ Version 1.X - after release of 1.5.2
   - #2925 User not exist in sample content.
   - #2940 Field-length dateformat in UserPrefs shorter than in GlobaSettings.
   - #2941 (News) Extra-field not showing in detail-view.
-  - Notice error in modform.inc.php
-  - Fix a minor premission issue on editpref.php
+  - Notice error in modform.inc.php.
+  
+  - Fix a minor premission issue on editpref.php.
+  - (Tiny) Fixed working of force-cleanup-on-paste.
+  - Moved Image/Thumbnail in content-page to options-tab.
 
 
 Version 1.5.2 - Caguas
