@@ -9,10 +9,12 @@ Version 1.5.3
   - #2941 (News) Extra-field not showing in detail-view.
   - Notice error in modform.inc.php.
   
+- Feature requests that are included:
+  - #1231 Make default templates use uploads/images/logo1.gif instead of images/cms/logo1.gif.  
+  - #2897 Moved Image/Thumbnail in content-page to options-tab.
+  
   - Fix a minor premission issue on editpref.php.
   - (Tiny) Fixed working of force-cleanup-on-paste.
-  - Moved Image/Thumbnail in content-page to options-tab.
-
 
 Version 1.5.2 - Caguas
 -----------------------------
