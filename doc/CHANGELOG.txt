@@ -7,14 +7,14 @@ Version 1.5.3
   - #2925 User not exist in sample content.
   - #2940 Field-length dateformat in UserPrefs shorter than in GlobaSettings.
   - #2941 (News) Extra-field not showing in detail-view.
-  - Notice error in modform.inc.php.
+  - Notice error in modform.inc.php.  
+  - Fix a minor premission issue on editpref.php.
+  - (Tiny) Fixed working of force-cleanup-on-paste.
   
 - Feature requests that are included:
   - #1231 Make default templates use uploads/images/logo1.gif instead of images/cms/logo1.gif.  
   - #2897 Moved Image/Thumbnail in content-page to options-tab.
-  
-  - Fix a minor premission issue on editpref.php.
-  - (Tiny) Fixed working of force-cleanup-on-paste.
+
 
 Version 1.5.2 - Caguas
 -----------------------------
@@ -46,7 +46,7 @@ Version 1.5.2 - Caguas
 
 - Module-API
   - Added HasCapability and GetModulesWithCapability for a more general way of checking what a module can do.
- 
+
   
 Version 1.5.1 - San Juan
 -----------------------------
