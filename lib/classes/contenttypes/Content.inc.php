@@ -248,9 +248,8 @@ class Content extends ContentBase
             {
               $label = lang('content');
 			  $wysiwyg = true;
-			  $allow_wysiwyg = false;
 			  
-			  $wysiwyg = ($this->GetPropertyValue('allow_wysiwyg','0') == '0') ? 0 : 1;
+			  $wysiwyg = ($this->GetPropertyValue('allow_wysiwyg','0') == '0')?false:true;
 			  if( isset($this->additionalContentBlocks['**default**']) )
               { 
                 $tmp =& $this->additionalContentBlocks['**default**'];
@@ -375,7 +374,8 @@ class Content extends ContentBase
 	  $ret[]= array(lang('searchable').':',
 			'<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
                            <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />');
-	  $allow_wysiwyg = $this->GetPropertyValue('allow_wysiwyg');
+
+						   $allow_wysiwyg = $this->GetPropertyValue('allow_wysiwyg');
 	  if( $allow_wysiwyg == '' )
 	    {
 	      $allow_wysiwyg = 1;
