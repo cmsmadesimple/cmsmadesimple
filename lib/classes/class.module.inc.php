@@ -1557,7 +1557,6 @@ class CMSModule
 
 	function DoActionBase($name, $id, $params, $returnid='')
 	{
-	  
 	  if( $returnid != '' )
 	    {
 	      if( !$this->restrict_unknown_params && 

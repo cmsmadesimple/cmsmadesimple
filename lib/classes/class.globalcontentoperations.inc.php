@@ -71,15 +71,17 @@ class GlobalContentOperations
 			    $result->MoveNext();
 			  }
 			if( $result ) $result->Close();
-			$query = 'SELECT htmlblob_id FROM '.cms_db_prefix().'additional_htmlblob_users WHERE user_id IN (';
-			$query .= implode(',',$tmp).')';
-			$result = &$db->Execute($query);
-			while ($result && !$result->EOF)
-			  {
-			    $variables['authorblobs'][] = $result->fields['htmlblob_id'];
-			    $result->MoveNext();
-			  }
-			if( $result ) $result->Close();
+                        if( count($tmp) > 0 ) {
+			  $query = 'SELECT htmlblob_id FROM '.cms_db_prefix().'additional_htmlblob_users WHERE user_id IN (';
+			  $query .= implode(',',$tmp).')';
+			  $result = &$db->Execute($query);
+			  while ($result && !$result->EOF)
+			    {
+			      $variables['authorblobs'][] = $result->fields['htmlblob_id'];
+			      $result->MoveNext();
+			    }
+			  if( $result ) $result->Close();
+                        }
 		}
 
 		return $variables['authorblobs'];
