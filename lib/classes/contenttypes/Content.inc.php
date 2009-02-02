@@ -27,7 +27,7 @@ class Content extends ContentBase
     {
 	$this->ContentBase();
 	$this->mProperties->SetAllowedPropertyNames(array('content_en','target','pagedata',
-							  'extra1','extra2','extra3','searchable','image','thumbnail'));
+							  'extra1','extra2','extra3','searchable','image','thumbnail','disable_wysiwyg'));
 	$this->additionalContentBlocks = array();
 	$this->addtContentBlocksLoaded = false;
     }
@@ -53,7 +53,7 @@ class Content extends ContentBase
 	$this->mProperties->Add('string', 'image'); 
 	$this->mProperties->Add('string', 'thumbnail'); 
 	$this->mProperties->Add('string', 'searchable'); 
-
+    $this->mProperties->Add('string', 'disable_wysiwyg');
 	#Turn on preview
 	$this->mPreview = true;
     }
@@ -80,7 +80,7 @@ class Content extends ContentBase
 	if (isset($params))
 	{
 	  $parameters = array('content_en','target','pagedata','extra1','extra2','extra3',
-			      'image','thumbnail','searchable');
+			      'image','thumbnail','searchable','disable_wysiwyg');
 
 	    //pick up the template id before we do parameters
 	    if (isset($params['template_id']))
@@ -237,25 +237,29 @@ class Content extends ContentBase
 		    $gCms->modules[$key]['active'] == true &&
 		    $gCms->modules[$key]['object']->IsWYSIWYG() &&
 		    $gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'wysiwyg'))
-		{
+			{
 		    $additionalcall = $gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
-		}
+			}
 	    }
 			
 	    $ret[]= array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"'));
     }
-
-	    $this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
+		$this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
             {
               $label = lang('content');
-              $wysiwyg = true;
-              if( isset($this->additionalContentBlocks['**default**']) )
+			  $wysiwyg = true;
+			  $disable_wysiwyg = false;
+			  
+			  $wysiwyg = ($this->GetPropertyValue('disable_wysiwyg','0') == '0') ? 0 : 1;
+			  if( isset($this->additionalContentBlocks['**default**']) )
               { 
                 $tmp =& $this->additionalContentBlocks['**default**'];
-                $wysiwyg = ($tmp['usewysiwyg'] == 'false')?false:true;
-                if( !empty($tmp['label']) ) $label = $tmp['label'];
+				if ($wysiwyg)
+				{
+				$wysiwyg = ($tmp['usewysiwyg'] == 'false')?false:true;
+				}
+        		if( !empty($tmp['label']) ) $label = $tmp['label'];
               }
-
 	      $ret[]= array($label.':',create_textarea($wysiwyg, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet));
             }
 
@@ -305,8 +309,8 @@ class Content extends ContentBase
 			$ret[]= array($label.':','<input type="text" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />');
 		      }
 		    else
-		      {
-			$ret[]= array($label.':',create_textarea(($blockNameId['usewysiwyg'] == 'false'?false:true), $data, $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet));
+		      {  
+				$ret[]= array($label.':',create_textarea(($blockNameId['usewysiwyg'] == 'false'?false:true), $data, $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet));
 		      }
 		  }
 	    }
@@ -371,6 +375,15 @@ class Content extends ContentBase
 	  $ret[]= array(lang('searchable').':',
 			'<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
                            <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />');
+	  $disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
+	  if( $disable_wysiwyg == '' )
+	    {
+	      $disable_wysiwyg = 1;
+	    }
+	  $ret[]= array(lang('disable_wysiwyg').':',
+			'<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" onclick="this.form.submit()"/></div>
+                           <input type="checkbox" name="disable_wysiwyg" value="1"  onclick="this.form.submit()"'.($disable_wysiwyg==1?'checked="checked"':'').' />');
+
 	  $ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
 	  $ret[]= array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
 	  $ret[]= array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
