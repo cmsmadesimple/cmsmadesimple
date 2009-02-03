@@ -309,7 +309,15 @@ class Content extends ContentBase
 		      }
 		    else
 		      { 
-				$ret[]= array($label.':',create_textarea(($blockNameId['usewysiwyg'] == 'false'?false:true), $data, $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet));
+			    $block_wysiwyg = true;
+			    $block_wysiwyg = $this->GetPropertyValue('show_wysiwyg');
+				
+				if ($block_wysiwyg)
+				{
+				$block_wysiwyg = $blockNameId['usewysiwyg'] == 'false'?false:true;
+				}
+				
+				$ret[]= array($label.':',create_textarea($block_wysiwyg, $data, $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet));
 		      }
 		  }
 	    }
