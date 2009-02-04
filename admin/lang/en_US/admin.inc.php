@@ -1,5 +1,5 @@
 <?php
-$lang['admin']['show_wysiwyg'] = 'WYSIWYG is allowed for this page. Toggling selecting does automatic submit';
+$lang['admin']['disable_wysiwyg'] = 'WYSIWYG not allowed for this page. Toggling selecting does automatic submit';
 $lang['admin']['help_function_page_image'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This tag can be used to return the value of the image or thumbnail fields of a certain page.</p>

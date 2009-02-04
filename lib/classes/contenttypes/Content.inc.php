@@ -27,7 +27,7 @@ class Content extends ContentBase
     {
 	$this->ContentBase();
 	$this->mProperties->SetAllowedPropertyNames(array('content_en','target','pagedata',
-							  'extra1','extra2','extra3','searchable','image','thumbnail','show_wysiwyg'));
+							  'extra1','extra2','extra3','searchable','image','thumbnail','disable_wysiwyg'));
 	$this->additionalContentBlocks = array();
 	$this->addtContentBlocksLoaded = false;
     }
@@ -53,7 +53,7 @@ class Content extends ContentBase
 	$this->mProperties->Add('string', 'image'); 
 	$this->mProperties->Add('string', 'thumbnail'); 
 	$this->mProperties->Add('string', 'searchable'); 
-    $this->mProperties->Add('string', 'show_wysiwyg');
+    $this->mProperties->Add('string', 'disable_wysiwyg');
 	#Turn on preview
 	$this->mPreview = true;
     }
@@ -80,7 +80,7 @@ class Content extends ContentBase
 	if (isset($params))
 	{
 	  $parameters = array('content_en','target','pagedata','extra1','extra2','extra3',
-			      'image','thumbnail','searchable','show_wysiwyg');
+			      'image','thumbnail','searchable','disable_wysiwyg');
 
 	    //pick up the template id before we do parameters
 	    if (isset($params['template_id']))
@@ -248,8 +248,13 @@ class Content extends ContentBase
             {
               $label = lang('content');
 			  $wysiwyg = true;
+			  $hide_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
+			  if ($hide_wysiwyg)
+				{
+				$wysiwyg = false;
+				}
 			  
-			  $wysiwyg = $this->GetPropertyValue('show_wysiwyg');
+			  
 			  if( isset($this->additionalContentBlocks['**default**']) )
               { 
                 $tmp =& $this->additionalContentBlocks['**default**'];
@@ -310,9 +315,13 @@ class Content extends ContentBase
 		    else
 		      { 
 			    $block_wysiwyg = true;
-			    $block_wysiwyg = $this->GetPropertyValue('show_wysiwyg');
+			    $hide_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
 				
-				if ($block_wysiwyg)
+				if ($hide_wysiwyg)
+				{
+				$block_wysiwyg = false;
+				}
+				else
 				{
 				$block_wysiwyg = $blockNameId['usewysiwyg'] == 'false'?false:true;
 				}
@@ -383,14 +392,14 @@ class Content extends ContentBase
 			'<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
                            <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />');
 
-	  $show_wysiwyg = $this->GetPropertyValue('show_wysiwyg');
-	  if( $show_wysiwyg == '' )
+	  $disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
+	  if( $disable_wysiwyg == '' )
 	    {
-	      $show_wysiwyg = 1;
+	      $disable_wysiwyg = 0;
 	    }
-	  $ret[]= array(lang('show_wysiwyg').':',
-			'<div class="hidden" ><input type="hidden" name="show_wysiwyg" value="0" /></div>
-             <input type="checkbox" name="show_wysiwyg" value="1"  '.($show_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
+	  $ret[]= array(lang('disable_wysiwyg').':',
+			'<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
+             <input type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
 
 	  $ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
 	  $ret[]= array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
