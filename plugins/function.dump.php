@@ -20,20 +20,22 @@ function smarty_cms_function_dump($params, &$smarty)
 {
   $ignore = array('cms','smarty','db','config','params','param_map','langhash','xml_exclude_files','xmldtd');
 
-  function build_accessor($parent_str,$parent_type,$childname)
-  {
-    $str = $parent_str;
-    if( $parent_type == 'object' )
+  if( !function_exists('build_accessor') )
+    {
+      function build_accessor($parent_str,$parent_type,$childname)
       {
-	$str .= '-&gt;';
+	$str = $parent_str;
+	if( $parent_type == 'object' )
+	  {
+	    $str .= '-&gt;';
+	  }
+	else if( $parent_type == 'array' )
+	  {
+	    $str .= '.';
+	  }
+	$str .= $childname;
+	return $str;
       }
-    else if( $parent_type == 'array' )
-      {
-	$str .= '.';
-      }
-    $str .= $childname;
-    return $str;
-  }
 
   function dump_object($params,&$obj,$level=1,$ignore=array(),$accessor)
   {
@@ -148,6 +150,7 @@ function smarty_cms_function_dump($params, &$smarty)
       }
     return $str;
   }
+    }
 
 
   global $gCms;
