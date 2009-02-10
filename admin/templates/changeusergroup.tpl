@@ -3,7 +3,7 @@
 </div>
 
 {if isset($message)}
-<p class="pageheader">{$message}</p>
+<p class="pagemessage">{$message}</p>
 {/if}
 
 {literal}

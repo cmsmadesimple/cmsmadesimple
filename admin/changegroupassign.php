@@ -55,99 +55,100 @@ global $gCms;
 $db =& $gCms->GetDb();
 
 
-    // always display the group pulldown
-	global $gCms;
-	$groupops =& $gCms->GetGroupOperations();
-	$userops =& $gCms->GetUserOperations();
-        $groups = $groupops->LoadGroups();
-	$allgroups = new stdClass();
-	$allgroups->name = lang('all_groups');
-	$allgroups->id=-1;
-        $groups = array($allgroups);
+// always display the group pulldown
+global $gCms;
+$groupops =& $gCms->GetGroupOperations();
+$userops =& $gCms->GetUserOperations();
+$allgroups = new stdClass();
+$allgroups->name = lang('all_groups');
+$allgroups->id=-1;
+$groups = array($allgroups);
 
-	$group_list = $groupops->LoadGroups();
-        foreach( $group_list as $onegroup )
-        {
-          if( $onegroup->id == 1 && $adminuser == false )
-            {
-              continue;
-            }
-          $groups[] = $onegroup;
-        }
-	$smarty->assign_by_ref('group_list',$groups);
+$group_list = $groupops->LoadGroups();
+foreach( $group_list as $onegroup )
+{
+  if( $onegroup->id == 1 && $adminuser == false )
+    {
+      continue;
+    }
+  $groups[] = $onegroup;
+}
+$smarty->assign_by_ref('group_list',$groups);
 
-	// because it's easier in PHP than Javascript:
-	$groupidlist = array();
-	foreach ($groups as $thisGroup)
-		{
-		array_push($groupidlist,$thisGroup->id);
-		}
-	$smarty->assign('groupidlist',implode(',',$groupidlist));
+// because it's easier in PHP than Javascript:
+$groupidlist = array();
+foreach ($groups as $thisGroup)
+{
+  array_push($groupidlist,$thisGroup->id);
+}
+$smarty->assign('groupidlist',implode(',',$groupidlist));
 
-    if ($submitted == 1)
-        {
-        
-        foreach($groups as $thisGroup)
-            {
-		      #Send the ChangeGroupAssignPre event
-		      Events::SendEvent('Core', 'ChangeGroupAssignPre',
-               array('group' => $thisGroup,
-               'users' => $userops->LoadUsersInGroup($thisGroup->id)));
-		      $query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = ?";
-		      $result = $db->Execute($query, array($thisGroup->id));
-            $iquery = "INSERT INTO ".cms_db_prefix().
-               "user_groups (group_id, user_id, create_date, modified_date) VALUES (?,?,?,?)";
+if ($submitted == 1)
+  {
+    
+    foreach($groups as $thisGroup)
+      {
+	if( $thisGroup->id <= 0 ) continue;
 
-		      foreach ($_POST as $key=>$value)
-			      {
-			      if (strpos($key,"ug") == 0 && strpos($key,"ug") !== false)
-				     {
-				     $keyparts = explode('_',$key);
-				     if ($keyparts[2] == $thisGroup->id && $value == '1')
-					    {
-    			        $result = $db->Execute($iquery, array($thisGroup->id,
-                        $keyparts[1],$db->DBTimeStamp(time()),$db->DBTimeStamp(time())));
-					    }
-				     }
-			      }
+	// Send the ChangeGroupAssignPre event
+	Events::SendEvent('Core', 'ChangeGroupAssignPre',
+			  array('group' => $thisGroup,
+				'users' => $userops->LoadUsersInGroup($thisGroup->id)));
+	$query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = ? AND user_id != ?";
+	$result = $db->Execute($query, array($thisGroup->id,$userid));
+	$iquery = "INSERT INTO ".cms_db_prefix().
+	  "user_groups (group_id, user_id, create_date, modified_date) VALUES (?,?,?,?)";
+	
+	foreach ($_POST as $key=>$value)
+	  {
+	    if (strpos($key,"ug") == 0 && strpos($key,"ug") !== false)
+	      {
+		$keyparts = explode('_',$key);
+		if ($keyparts[2] == $thisGroup->id && $value == '1')
+		  {
+		    $result = $db->Execute($iquery, array($thisGroup->id,
+							  $keyparts[1],$db->DBTimeStamp(time()),$db->DBTimeStamp(time())));
+		  }
+	      }
+	  }
+	
+	Events::SendEvent('Core', 'ChangeGroupAssignPost',
+			  array('group' => $thisGroup,
+				'users' => $userops->LoadUsersInGroup($thisGroup->id)));
+	audit($group_id, 'Group ID', lang('assignmentchanged'));
+      }
+    
+    $smarty->assign('message',lang('assignmentchanged'));
+  }
+$query = "SELECT u.user_id, u.username, ug.group_id FROM ".
+  cms_db_prefix()."users u LEFT JOIN ".cms_db_prefix().
+  "user_groups ug ON u.user_id = ug.user_id ORDER BY u.username";
 
-		       Events::SendEvent('Core', 'ChangeGroupAssignPost',
-                array('group' => $thisGroup,
-                'users' => $userops->LoadUsersInGroup($thisGroup->id)));
-		       audit($group_id, 'Group ID', lang('assignmentchanged'));
-            }
+$result = $db->Execute($query);
 
-        $smarty->assign('message',lang('assignmentchanged'));
-        }
-	$query = "SELECT u.user_id, u.username, ug.group_id FROM ".
-       	cms_db_prefix()."users u LEFT JOIN ".cms_db_prefix().
-       	"user_groups ug ON u.user_id = ug.user_id ORDER BY u.username";
+$user_struct = array();
 
-	$result = $db->Execute($query);
-
-	$user_struct = array();
-
-	while($result && $row = $result->FetchRow())
-		{
-		if (isset($user_struct[$row['user_id']]))
-			{
-			$str = &$user_struct[$row['user_id']];
-			$str->group[$row['group_id']]=1;
-			}
-		else
-			{
-			$thisUser = new stdClass();
-			$thisUser->group = array();
-			if (!empty($row['group_id']))
-				{
-				$thisUser->group[$row['group_id']] = 1;
-				}
-			$thisUser->id = $row['user_id'];
-			$thisUser->name = $row['username'];
-			$user_struct[$row['user_id']] = $thisUser;
-			}
-		}
-	$smarty->assign_by_ref('users',$user_struct);
+while($result && $row = $result->FetchRow())
+  {
+    if (isset($user_struct[$row['user_id']]))
+      {
+	$str = &$user_struct[$row['user_id']];
+	$str->group[$row['group_id']]=1;
+      }
+    else
+      {
+	$thisUser = new stdClass();
+	$thisUser->group = array();
+	if (!empty($row['group_id']))
+	  {
+	    $thisUser->group[$row['group_id']] = 1;
+	  }
+	$thisUser->id = $row['user_id'];
+	$thisUser->name = $row['username'];
+	$user_struct[$row['user_id']] = $thisUser;
+      }
+  }
+$smarty->assign_by_ref('users',$user_struct);
 
 
 if( $adminuser ) $smarty->assign('adminuser',1);
