@@ -22,7 +22,7 @@ function smarty_cms_function_html_blob($params, &$smarty)
 }
 
 function smarty_cms_help_function_html_blob() {
-  echo lang('help_function_html_blob.php');
+  echo lang('help_function_html_blob');
 }
 
 function smarty_cms_about_function_html_blob() {
