@@ -19,7 +19,7 @@
 #$Id$
 
 $CMS_VERSION = "1.5.3-alpha-1";
-$CMS_VERSION_NAME = "Caguas";
+$CMS_VERSION_NAME = "Arecibo";
 $CMS_SCHEMA_VERSION = "31";
 
 define('CMS_VERSION', $CMS_VERSION);
