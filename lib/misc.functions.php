@@ -1258,8 +1258,8 @@ define('CLEAN_NONE','CLEAN_NONE');
 define('CLEAN_STRING','CLEAN_STRING');
 define('CLEAN_REGEXP','regexp:');
 define('CLEAN_FILE','CLEAN_FILE');
-function cleanParamHash($data,$map = false,
-						$allow_unknown = false,$clean_keys = true)
+function cleanParamHash($modulename,$data,$map = false,
+			$allow_unknown = false,$clean_keys = true)
 {
   $mappedcount = 0;
   $result = array();
@@ -1344,7 +1344,7 @@ function cleanParamHash($data,$map = false,
 
 	  if( !$mapped && !$allow_unknown )
 		{
-		  trigger_error('Parameter '.$key.' is not known... dropped',E_USER_WARNING);
+		  trigger_error('Parameter '.$key.' is not known by module '.$modulename.' dropped',E_USER_WARNING);
 		  continue;
 		}
 	  $result[$key]=$value;

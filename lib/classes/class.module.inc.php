@@ -1567,7 +1567,7 @@ class CMSModule
 	      // used to try to avert XSS flaws, this will
 	      // clean as many parameters as possible according
 	      // to a map specified with the SetParameterType metods.
-	      $params = cleanParamHash($params,$this->param_map,
+	      $params = cleanParamHash($this->GetName(),$params,$this->param_map,
 				       !$this->restrict_unknown_params);
 	    }
 
