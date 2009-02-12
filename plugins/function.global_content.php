@@ -18,6 +18,7 @@
 
 function smarty_cms_function_global_content($params, &$smarty)
 {
+  $smarty->assign('gcb_params',$params);
   $txt = $smarty->fetch('globalcontent:'.$params['name']);
   if( isset($params['assign']) )
     {
