@@ -9,6 +9,8 @@ Version 1.5.3 - Arecibo
   - #2941 (News) Extra-field not showing in detail-view.
   - #2995 Group assignments bug.
   - #2996 Language string missing.
+  - #3034 Searching for words in the footer expose all pagenames on my site.
+  - #3027 field definitions not deletable when entry is made using fesubmit.
   
   - Notice error in modform.inc.php.  
   - Fixed a minor premission issue on editpref.php.
