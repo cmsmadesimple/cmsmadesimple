@@ -29,7 +29,8 @@ Version 1.5.3 - Arecibo
   - Added option to show actual thumbnail-files
   - Fixed filetype icons in FilePicker
   - Implemented | as seperator in toolbars
-  - Fixed working of force-cleanup-on-paste.
+  - Fixed working of force-cleanup-on-paste
+  - Fixed toolbars for frontend-usage
 
 
 Version 1.5.2 - Caguas
