@@ -14,14 +14,20 @@ Version 1.5.3 - Arecibo
   
   - Notice error in modform.inc.php.  
   - Fixed a minor premission issue on editpref.php.
-  - Added an option to disable the wysiwyg for a content-page.  
-  - (Tiny) Fixed working of force-cleanup-on-paste.
+  - Added an option to disable the wysiwyg for a content-page.    
   - Fixed (hopefully) problem with pseudo-random logouts when there is inactivity in the admin section.
   
 - Feature requests that are included:
   - #1231 Make default templates use uploads/images/logo1.gif instead of images/cms/logo1.gif.  
   - #2897 Moved Image/Thumbnail in content-page to options-tab.
   - #3035 link from admin backend to the forge.
+
+ - TinyMCE
+  - Added support for configuring the third toolbar
+  - Added option to show actual thumbnail-files
+  - Fixed filetype icons in FilePicker
+  - Implemented | as seperator in toolbars
+  - Fixed working of force-cleanup-on-paste.
 
 
 Version 1.5.2 - Caguas
