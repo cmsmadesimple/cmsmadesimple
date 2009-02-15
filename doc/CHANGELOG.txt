@@ -21,8 +21,8 @@ Version 1.5.3 - Arecibo
 - Feature requests that are included:
   - #1231 Make default templates use uploads/images/logo1.gif instead of images/cms/logo1.gif.  
   - #2897 Moved Image/Thumbnail in content-page to options-tab.
+  - #3025 News: new parameter, action="detail", which can be used to show a specific entry in detail-mode directly.
   - #3035 link from admin backend to the forge.
-  - NEWS: new parameter, action="detail", which can be used to show a specific entry in detail-mode directly.
   
  - TinyMCE
   - Added support for configuring the third toolbar
