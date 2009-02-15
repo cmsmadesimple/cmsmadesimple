@@ -467,6 +467,11 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		 */
 	}
 
+	if( isset($params['assign']) )
+	  {
+	    $smarty->assign($params['assign'],$result);
+	    return;
+	  }
 	return $result;
 }
 
