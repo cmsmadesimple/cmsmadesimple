@@ -32,7 +32,14 @@ function __curPageURL() {
  if ($_SERVER["SERVER_PORT"] != "80") {
   $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
  } else {
-  $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+   $str = $_SERVER['REQUEST_URI'];
+   $pos = strpos($str,'?');
+   if( $pos !== FALSE )
+     {
+       $str = substr($str,0,$pos);
+     }
+   $pageURL .= $_SERVER["SERVER_NAME"].$str;
+   //$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"];
  }
  return $pageURL;
 }
