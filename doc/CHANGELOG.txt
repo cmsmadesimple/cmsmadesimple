@@ -16,12 +16,14 @@ Version 1.5.3 - Arecibo
   - Fixed a minor permission issue on editpref.php.
   - Added an option to disable the wysiwyg for a content-page.    
   - Fixed (hopefully) problem with pseudo-random logouts when there is inactivity in the admin section.
+  - Put 'canonical' logic in the default templates. 
   
 - Feature requests that are included:
   - #1231 Make default templates use uploads/images/logo1.gif instead of images/cms/logo1.gif.  
   - #2897 Moved Image/Thumbnail in content-page to options-tab.
   - #3035 link from admin backend to the forge.
-
+  - NEWS: new parameter, action="detail", which can be used to show a specific entry in detail-mode directly.
+  
  - TinyMCE
   - Added support for configuring the third toolbar
   - Added option to show actual thumbnail-files
