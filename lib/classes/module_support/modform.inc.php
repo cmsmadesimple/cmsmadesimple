@@ -272,15 +272,14 @@ function cms_module_CreateInputReset(&$modinstance, $id, $name, $value='Reset', 
 {
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
-  $value = cms_htmlentities($value);
 
-	$text = '<input type="reset" name="'.$id.$name.'" value="'.$value.'"';
-	if ($addttext != '')
-	{
-		$text .= ' '.$addttext;
-	}
-	$text .= ' />';
-	return $text . "\n";
+  $text = '<input type="reset" name="'.$id.$name.'" value="'.$value.'"';
+  if ($addttext != '')
+    {
+      $text .= ' '.$addttext;
+    }
+  $text .= ' />';
+  return $text . "\n";
 }
 
 function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='', $size='10',
