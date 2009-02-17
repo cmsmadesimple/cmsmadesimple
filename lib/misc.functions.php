@@ -1118,6 +1118,18 @@ function munge_string_to_url($alias, $tolower = false)
 	return $alias;
 }
 
+if (!function_exists('file_put_contents')) {
+    function file_put_contents($filename, $data) {
+        $f = @fopen($filename, 'w');
+        if (!$f) {
+            return false;
+        } else {
+            $bytes = fwrite($f, $data);
+            fclose($f);
+            return $bytes;
+        }
+    }
+}
 
 if(!function_exists("file_get_contents"))
 {
