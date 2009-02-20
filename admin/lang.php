@@ -134,6 +134,17 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE)
 	    }
 	}
 	
+	#
+	# and override it, if desired
+	#
+	$ofile = dirname(__FILE__) . DIRECTORY_SEPARATOR . "custom" .
+      DIRECTORY_SEPARATOR . "lang" . DIRECTORY_SEPARATOR . $current_language .
+      DIRECTORY_SEPARATOR . "admin.inc.php";
+	if (is_file($ofile))
+      {
+      include ($ofile);
+      }
+	
 	$nls['direction'] = (isset($nls['direction']) && $nls['direction'] == 'rtl') ? 'rtl' : 'ltr';
 
 	global $gCms;
