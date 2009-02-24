@@ -1,4 +1,14 @@
 <?php
+$lang['admin']['help_function_page_attr'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This tag can be used to return the value of the attributes of a certain page.</p>
+<h3>How do I use it?</h3>
+<p>Insert the tag into the template like: <code>{page_attr key="extra1"}</code>.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+  <li><strong>key [required]</strong> The key to return the attribute of.</li>
+</ul>
+EOT;
 $lang['admin']['forge'] = 'Forge';
 $lang['admin']['disable_wysiwyg'] = 'WYSIWYG not allowed for this page';
 $lang['admin']['help_function_page_image'] = <<<EOT

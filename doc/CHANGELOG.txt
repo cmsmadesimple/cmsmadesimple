@@ -24,6 +24,7 @@ Version 1.5.3 - Arecibo
   - #2897 Moved Image/Thumbnail in content-page to options-tab.
   - #3025 News: new parameter, action="detail", which can be used to show a specific entry in detail-mode directly.
   - #3035 link from admin backend to the forge.
+  - #3068 New plugin; page_attr that returns attributes of a page.
   
  - TinyMCE
   - Added support for configuring the third toolbar
