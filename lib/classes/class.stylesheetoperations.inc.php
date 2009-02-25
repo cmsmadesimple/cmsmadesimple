@@ -87,7 +87,7 @@ class StylesheetOperations
 		$db = &$gCms->GetDb();
 
 		$query = 'SELECT assoc_css_id FROM '.cms_db_prefix().'css_assoc WHERE
-		           assoc_type = ? AND assoc_to_id = ?';
+		           assoc_type = ? AND assoc_to_id = ? ORDER BY assoc_order';
 		$dbresult = $db->Execute($query, array('template', $templateid));
 
 		$result = array();
