@@ -33,7 +33,7 @@ function smarty_cms_function_content_image($params,&$smarty)
       $smarty->caching = $oldvalue;
     }
   $img = _smarty_cms_function_content_return($result, $params, $smarty);
-  if( $img == -1 )
+  if( $img == -1 || empty($img) )
     return;
 
   $name = $params['block'];
