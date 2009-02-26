@@ -35,7 +35,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	#Set some defaults, just in case the config file is corrupted or
 	#we're coming from an upgrade
 	$config['php_memory_limit'] = '';
-	$config['process_whole_template'] = true;
+	$config['process_whole_template'] = false;
 	$config["dbms"] = "mysql";
 	$config["db_hostname"] = "localhost";
 	$config["db_username"] = "cms";
@@ -150,7 +150,7 @@ function cms_config_text($config)
 # in it's entirety.  This behaviour was later changed to process the head portion of the
 # page template after the body.  If you are working with a highly configured site that
 # relies significantly on the old order of smarty processing, you may want to try
-# uncommenting this parameter.
+# setting this parameter to false.
 \$config['process_whole_template'] = ${$config['process_whole_template']?'true':'false'};
 
 # CMSMS Debug Mode?  Turn it on to get a better error when you
