@@ -10,7 +10,7 @@ $lang['admin']['help_function_page_attr'] = <<<EOT
 </ul>
 EOT;
 $lang['admin']['forge'] = 'Forge';
-$lang['admin']['disable_wysiwyg'] = 'Disable all WYSIWYG editors on this page (regardless of template or user settings)';
+$lang['admin']['disable_wysiwyg'] = 'Disable WYSIWYG editor on this page (regardless of template or user settings)';
 $lang['admin']['help_function_page_image'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This tag can be used to return the value of the image or thumbnail fields of a certain page.</p>
