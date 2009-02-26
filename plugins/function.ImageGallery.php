@@ -44,6 +44,7 @@ if(isset($params['sortByOrder'])) $sortByOrder = $params['sortByOrder'];
 //Read Image Folder
 $selfA = explode('/', $_SERVER["PHP_SELF"]);
 $self = $selfA[sizeOf($selfA)-1] . '?page=' . $_GET['page'];
+if( !is_dir($dir) || !is_readable($dir) ) return;
 $picDir = dir($picFolder);
 $liste = array();
 while($check = $picDir->read()) {
