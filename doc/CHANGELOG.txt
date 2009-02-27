@@ -6,11 +6,8 @@ Version 1.5.3 - Arecibo
   - #2915 Typo in multicontent.php throwing errors.
   - #2925 User not exist in sample content.
   - #2940 Field-length dateformat in UserPrefs shorter than in GlobaSettings.
-  - #2941 (News) Extra-field not showing in detail-view.
   - #2995 Group assignments bug.
   - #2996 Language string missing.
-  - #3034 Searching for words in the footer expose all pagenames on my site.
-  - #3027 field definitions not deletable when entry is made using fesubmit.
   
   - Notice error in modform.inc.php.  
   - Fixed a minor permission issue on editpref.php.
@@ -18,6 +15,12 @@ Version 1.5.3 - Arecibo
   - Fixed (hopefully) problem with pseudo-random logouts when there is inactivity in the admin section.
   - Put 'canonical' logic in the default templates. 
   - Made 'NCleanGrey' the default theme, in an install without default content installed as well.
+
+- Search 1.5.3
+  - #3034 Searching for words in the footer expose all pagenames on my site.
+  - Now remove event handlers when uninstalling the module
+  - Dont return page results for non searchable pages, even if the result was found in the template.
+  - Make changes to convert search results to entities on output to help with validation.
   
 - Feature requests that are included:
   - #1231 Make default templates use uploads/images/logo1.gif instead of images/cms/logo1.gif.  
@@ -33,6 +36,13 @@ Version 1.5.3 - Arecibo
   - Implemented | as seperator in toolbars
   - Fixed working of force-cleanup-on-paste
   - Fixed toolbars for frontend-usage
+
+- News 2.9.3
+  - Minor improvements to the articles tab in the admin
+  - Now output a canonical URL in detail view
+  - Changes to default templates
+  - #3027 field definitions not deletable when entry is made using fesubmit.
+  - #2941 (News) Extra-field not showing in detail-view.
 
 
 Version 1.5.2 - Caguas
