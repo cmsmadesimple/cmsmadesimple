@@ -56,7 +56,7 @@ Japanese: Victor Alexander Debuque <victor [AT] nuspace.net [DOT] au>
 
 Lituanian: Tomas Paplauskas <tmzsegardc [AT] accessatc [DOT] net>
 
-Norwegian: Reneh Helminsen <renehelminsen [AT] gmail [DOT] com>,
+Norwegian: Rene Helminsen <renehelminsen [AT] gmail [DOT] com>,
            Jon A Holm <jaholm [AT] start [DOT] no>,
            Alexander Endresen <alexander [AT] endresen [DOT] org>,
            Bjorn Are Solstad <basicus [AT] gmail [DOT] com>
