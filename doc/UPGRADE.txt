@@ -8,9 +8,6 @@ OR
       - cd DOCUMENT_ROOT
       - tar xvfz cmsmadesimple-diff-<prev_version>-<version>.tar.gz
       ** Validate that the prev_version number matches your current version **
-OR
-    check out the latest version from subversion
-        - svn co http://svn.cmsmadesimple.org/cms/branches/1.2.x
 
 3.  Copy all of the files over top of your existing installation
 
