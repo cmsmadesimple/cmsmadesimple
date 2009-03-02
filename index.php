@@ -315,7 +315,8 @@ reset($gCms->modules);
 while (list($key) = each($gCms->modules))
 {
 	$value =& $gCms->modules[$key];
-	if ($gCms->modules[$key]['installed'] == true &&
+	if ( isset($gCms->modules[$key]['installed']) &&
+	     $gCms->modules[$key]['installed'] == true &&
 		$gCms->modules[$key]['active'] == true)
 	{
 		$gCms->modules[$key]['object']->ContentPostRender($html);

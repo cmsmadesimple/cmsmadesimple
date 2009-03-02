@@ -21,6 +21,7 @@ Version 1.5.3 - Arecibo
   - Now remove event handlers when uninstalling the module
   - Dont return page results for non searchable pages, even if the result was found in the template.
   - Make changes to convert search results to entities on output to help with validation.
+  - Now search for the 'stop phrase' in the base addwords function, allowing optionally excluding specific module records from being indexed.
   
 - Feature requests that are included:
   - #1231 Make default templates use uploads/images/logo1.gif instead of images/cms/logo1.gif.  
@@ -43,6 +44,7 @@ Version 1.5.3 - Arecibo
   - Changes to default templates
   - #3027 field definitions not deletable when entry is made using fesubmit.
   - #2941 (News) Extra-field not showing in detail-view.
+  - Draft news articles are not indexed in the search module.
 
 
 Version 1.5.2 - Caguas
