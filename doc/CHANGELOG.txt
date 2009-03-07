@@ -1,3 +1,17 @@
+Version 1.6 - New Caledinia
+-----------------------------
+- Fixes of several bugs: 
+  - TODO 
+
+
+- Libs Updates: 
+  - Smarty
+  - xAjax 0.5
+  - script.aculo.us 1.8.2 (included  Update to Prototype 1.6.0.3)
+
+
+
+
 Version 1.5.3 - Arecibo
 -----------------------------
 - Fixes of several bugs:
