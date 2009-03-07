@@ -31,23 +31,23 @@ $thisurl=basename(__FILE__).$urlext;
 include_once("../lib/classes/class.admintheme.inc.php");
 
 define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
-require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
+
+
+require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax_core/xajax.inc.php');
 $xajax = new xajax();
-$xajax->registerFunction('content_list_ajax');
-$xajax->registerFunction('content_setactive');
-$xajax->registerFunction('content_setinactive');
-$xajax->registerFunction('content_setdefault');
-$xajax->registerFunction('content_expandall');
-$xajax->registerFunction('content_collapseall');
-$xajax->registerFunction('content_toggleexpand');
-$xajax->registerFunction('content_move');
-$xajax->registerFunction('content_delete');
-$xajax->registerFunction('reorder_display_list');
-$xajax->registerFunction('reorder_process');
-
-$xajax->processRequests();
+$xajax->register(XAJAX_FUNCTION,'content_list_ajax');
+$xajax->register(XAJAX_FUNCTION,'content_setactive');
+$xajax->register(XAJAX_FUNCTION,'content_setinactive');
+$xajax->register(XAJAX_FUNCTION,'content_setdefault');
+$xajax->register(XAJAX_FUNCTION,'content_expandall');
+$xajax->register(XAJAX_FUNCTION,'content_collapseall');
+$xajax->register(XAJAX_FUNCTION,'content_toggleexpand');
+$xajax->register(XAJAX_FUNCTION,'content_move');
+$xajax->register(XAJAX_FUNCTION,'content_delete');
+$xajax->register(XAJAX_FUNCTION,'reorder_display_list');
+$xajax->register(XAJAX_FUNCTION,'reorder_process');
+$xajax->processRequest();
 $headtext = $xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n";
-
 include_once("header.php");
 
 //echo '<a onclick="xajax_reorder_display_list();">Test</a>';
@@ -55,9 +55,9 @@ include_once("header.php");
 function content_list_ajax()
 {
 	$objResponse = new xajaxResponse();
-	$objResponse->addClear("contentlist", "innerHTML");
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	return $objResponse->getXML();
+	$objResponse->clear("contentlist", "innerHTML");
+	$objResponse->assign("contentlist", "innerHTML", display_content_list());
+	return $objResponse;
 }
 
 function check_modify_all($userid)
@@ -132,9 +132,9 @@ function content_setdefault($contentid)
 	
 	setdefault($contentid);
 
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
-	return $objResponse->getXML();
+	$objResponse->assign("contentlist", "innerHTML", display_content_list());
+	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
+	return $objResponse;
 }
 
 function content_setactive($contentid)
@@ -143,9 +143,9 @@ function content_setactive($contentid)
 	
 	setactive($contentid);
 
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
-	return $objResponse->getXML();
+	$objResponse->assign("contentlist", "innerHTML", display_content_list());
+	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
+	return $objResponse;
 }
 
 function content_setinactive($contentid)
@@ -154,9 +154,9 @@ function content_setinactive($contentid)
 	
 	setactive($contentid, false);
 
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
-	return $objResponse->getXML();
+	$objResponse->assign("contentlist", "innerHTML", display_content_list());
+	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
+	return $objResponse;
 }
 
 function content_expandall()
@@ -165,8 +165,8 @@ function content_expandall()
 	
 	expandall();
 
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	return $objResponse->getXML();
+	$objResponse->assign("contentlist", "innerHTML", display_content_list());
+	return $objResponse;
 }
 
 function content_collapseall()
@@ -175,8 +175,8 @@ function content_collapseall()
 	
 	collapseall();
 
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	return $objResponse->getXML();
+	$objResponse->assign("contentlist", "innerHTML", display_content_list());
+	return $objResponse;
 }
 
 function expandall()
@@ -208,9 +208,9 @@ function content_toggleexpand($contentid, $collapse)
 	
 	toggleexpand($contentid, $collapse=='true'?true:false);
 
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
-	return $objResponse->getXML();
+	$objResponse->assign("contentlist", "innerHTML", display_content_list());
+	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
+	return $objResponse;
 }
 
 function content_delete($contentid)
@@ -219,8 +219,8 @@ function content_delete($contentid)
 	
 	deletecontent($contentid);
 
-	$objResponse->addScript("new Effect.Fade('tr_$contentid', { afterFinish:function() { xajax_content_list_ajax(); } });");
-	return $objResponse->getXML();
+	$objResponse->script("new Effect.Fade('tr_$contentid', { afterFinish:function() { xajax_content_list_ajax(); } });");
+	return $objResponse;
 }
 
 function toggleexpand($contentid, $collapse = false)
@@ -289,17 +289,17 @@ function content_move($contentid, $parentid, $direction)
   $tmp = get_site_preference('__listcontent_timelock__',0);
   if( (time() - $tmp) < 3 )
     {
-      return $objResponse->getXML(); // delay between requests
+      return $objResponse; // delay between requests
     }
   set_site_preference('__listcontent_timelock__',$time);
 	
 	movecontent($contentid, $parentid, $direction);
 
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
+	$objResponse->assign("contentlist", "innerHTML", display_content_list());
+	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
 
   // reset lock
-  return $objResponse->getXML();
+  return $objResponse;
 
 }
 
@@ -501,10 +501,10 @@ function reorder_display_list()
 	$script = ob_get_contents();
 	ob_end_clean();
 	
-	$objResponse->addAssign("contentlist", "innerHTML", $contents);
-	$objResponse->addScript($script);
+	$objResponse->assign("contentlist", "innerHTML", $contents);
+	$objResponse->script($script);
 
-	return $objResponse->getXML();
+	return $objResponse;
 }
 
 function reorder_process($get)
@@ -566,8 +566,8 @@ function reorder_process($get)
 		}
 	}
 	
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	return $objResponse->getXML();
+	$objResponse->assign("contentlist", "innerHTML", display_content_list());
+	return $objResponse;
 }
 
 function check_children(&$root, &$mypages, &$userid)

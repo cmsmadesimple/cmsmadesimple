@@ -31,11 +31,10 @@ include_once("../lib/classes/class.admintheme.inc.php");
 $dateformat = get_preference(get_userid(),'date_format_string','%x %X');
 
 define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
-require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
+require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax_core/xajax.inc.php');
 $xajax = new xajax();
-$xajax->registerFunction('ajaxpreview');
-
-$xajax->processRequests();
+$xajax->register(XAJAX_FUNCTION,'ajaxpreview');
+$xajax->processRequest();
 $headtext = $xajax->getJavascript('../lib/xajax')."\n";
 
 if (isset($_POST["cancel"]))
@@ -90,16 +89,16 @@ function ajaxpreview($params)
 	$url = $config["root_url"].'/preview.php'.$urlext.'&tmpfile='.urlencode(basename($tmpfname));
 	
 	$objResponse = new xajaxResponse();
-	$objResponse->addAssign("previewframe", "src", $url);
-	$objResponse->addAssign("serialized_content", "value", SerializeObject($contentobj));
+	$objResponse->assign("previewframe", "src", $url);
+	$objResponse->assign("serialized_content", "value", SerializeObject($contentobj));
 	$count = 0;
 	foreach ($contentobj->TabNames() as $tabname)
 	{
-		$objResponse->addScript("Element.removeClassName('editab".$count."', 'active');Element.removeClassName('editab".$count."_c', 'active');$('editab".$count."_c').style.display = 'none';");
+		$objResponse->script("Element.removeClassName('editab".$count."', 'active');Element.removeClassName('editab".$count."_c', 'active');$('editab".$count."_c').style.display = 'none';");
 		$count++;
 	}
-	$objResponse->addScript("Element.addClassName('edittabpreview', 'active');Element.addClassName('edittabpreview_c', 'active');$('edittabpreview_c').style.display = '';");
-	return $objResponse->getXML();
+	$objResponse->script("Element.addClassName('edittabpreview', 'active');Element.addClassName('edittabpreview_c', 'active');$('edittabpreview_c').style.display = '';");
+	return $objResponse;
 }
 
 function updatecontentobj(&$contentobj, $preview, $params = null)
