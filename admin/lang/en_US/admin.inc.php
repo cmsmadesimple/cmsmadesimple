@@ -71,6 +71,7 @@ $lang['admin']['help_function_content_image'] = <<<EOT
   <li><em>(optional)</em> height - The desired height of the image.</li>
 
   <li><em>(optional)</em> alt - Alternative text if the image cannot be found.</li>
+   <li><em>(optional)</em> urlonly - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</ul>
 
 
 </ul>
