@@ -354,7 +354,15 @@ class Smarty_CMS extends Smarty {
 		header("Content-Type: text/html; charset=" . (isset($data['encoding']) && $data['encoding'] != ''?$data['encoding']:get_encoding()));
 
 		$content = $data["content"];
-		 
+
+		$hm =& $gCms->GetHierarchyManager();
+		$curnode =& $hm->getNodeById($data['content_id']);
+		if(is_object($curnode))
+		{
+			$contentobj =& $curnode->GetContent();
+			$smarty_obj->assign('content_obj',$contentobj);
+		}
+
 		reset($gCms->modules);
 		while (list($key) = each($gCms->modules))
 		{
