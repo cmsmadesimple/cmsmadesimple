@@ -44,7 +44,8 @@ if(isset($params['sortByOrder'])) $sortByOrder = $params['sortByOrder'];
 //Read Image Folder
 $selfA = explode('/', $_SERVER["PHP_SELF"]);
 $self = $selfA[sizeOf($selfA)-1] . '?page=' . $_GET['page'];
-if( !is_dir($dir) || !is_readable($dir) ) return;
+if( !is_dir($picFolder) || !is_readable($picFolder) ) return;
+
 $picDir = dir($picFolder);
 $liste = array();
 while($check = $picDir->read()) {
@@ -76,6 +77,7 @@ $liste = $tmp['file'];
 //Output
 $count = 1;
 $output = '';
+
 
  if($type=="popup") {
    $output .= generate_javascript();
