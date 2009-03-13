@@ -284,238 +284,98 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
   echo $themeObject->ShowErrors(lang('cachenotwritable'));
 }
 
-?>
+# give everything to smarty
+$tmp = array_keys($gCms->modules);
+$firstmod = $tmp[0];
+echo "DEBUG: firstmod = $firstmod<br/>";
+$smarty->assign_by_ref('mod',$gCms->modules[$firstmod]['object']);
+asort($nls["language"]);
+$tmp = array(''=>lang('nodefault'));
+foreach( $nls['language'] as $key=>$value )
+{
+  if( isset($nls['englishlang'][$key]) )
+    {
+      $value .= ' ('.$nls['englishlang'][$key].')';
+    }
+  $tmp[$key] = $value;
+}
+$smarty->assign('languages',$tmp);
+$smarty->assign('templates',$templates);
+if ($dir=opendir(dirname(__FILE__)."/themes/")) 
+{ 
+  $themes = array();
+  while (($file = readdir($dir)) !== false )
+    {
+      if( @is_dir("themes/".$file) && ($file[0]!='.') &&
+	  @is_readable("themes/{$file}/{$file}Theme.php"))
+	{
+	  $themes[$file] = $file;
+	}
+    }
+  $smarty->assign('themes',$themes);
+  $smarty->assign('logintheme',get_site_preference('logintheme','default'));
+}
 
-<div class="pagecontainer">
-	<?php echo $themeObject->ShowHeader('siteprefs'); ?>
-	<form id="siteprefform" method="post" action="siteprefs.php">
-        <div>
-          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
-        </div>
-	<?php if ($access) { ?>
-	<div class="pageoverflow">
-		<p class="pagetext">&nbsp;</p>
-		<p class="pageinput">
-			<input type="hidden" name="editsiteprefs" value="true" />
-			<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-		</p>
-	</div>
-	<?php } ?>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('clearcache') ?>:</p>
-			<p class="pageinput">
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="clearcache" value="<?php echo lang('clear') ?>" />
-			</p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('sitename')?>:</p>
-			<p class="pageinput"><input type="text" class="pagesmalltextarea" name="sitename" size="30" value="<?php echo $sitename?>" /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('global_umask')?>:</p>
-			<p class="pageinput"><input type="text" class="pagesmalltextarea" name="global_umask" size="4" value="<?php echo $global_umask?>" /></p>
-		</div>
-		<div class="pageoverflow">
-  <p class="pagetext">&nbsp;</p>
-  <p class="pageinput"><input type="submit" name="testumask" value="<?php echo lang('test')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" /></p>
-		</div>
-  <div class="pageoverflow">
-  <p class="pagetext"><?php echo lang('results')?></p>
-  <p class="pageinput"><strong><?php echo $testresults ?></strong></p>
-		</div>
 
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('css_max_age')?>:</p>
-  <p class="pageinput"><input type="text" class="pagesmalltextarea" name="css_max_age" size="10" maxlength="10" value="<?php echo $css_max_age ?>" />&nbsp;<?php echo lang('help_css_max_age') ?></p>
-		</div>
+$smarty->assign('SECURE_PARAM_NAME',CMS_SECURE_PARAM_NAME);
+$smarty->assign('CMS_USER_KEY',$_SESSION[CMS_USER_KEY]);
+$smarty->assign('sitename',$sitename);
+$smarty->assign('global_umask',$global_umask);
+$smarty->assign('css_max_age',$css_max_age);
+$smarty->assign('testresult',$testresults);
+$smarty->assign('frontendwysiwyg',$frontendwysiwyg);
+$smarty->assign('nogcbwysiwyg',$nogcbwysiwyg);
+$smarty->assign('metadata',$metadata);
+$smarty->assign('enablecustom404',$enablecustom404);
+$smarty->assign('textarea_custom404',create_textarea(true,$custom404,'custom404','pagesmalltextarea'));
+$smarty->assign('custom404template',$custom404template);
+$smarty->assign('enablesitedownmessage',$enablesitedownmessage);
+$smarty->assign('textarea_sitedownmessage',create_textarea(true,$sitedownmessage,'sitedownmessage','pagesmalltextarea'));
+$smarty->assign('urlcheckversion',$urlcheckversion);
+$smarty->assign('disablesafemodewarning',$disablesafemodewarning);
+$smarty->assign('allowparamcheckwarnings',$allowparamcheckwarnings);
+$smarty->assign('defaultdateformat',$defaultdateformat);
+$smarty->assign('enablenotifications',$enablenotifications);
 
-		<div class="pageoverflow">
-                   <p class="pagetext"><?php echo lang('frontendlang')?>:</p>
-                   <p class="pageinput">
-	              <select name="frontendlang" style="vertical-align: middle;">
-                      <option value=""><?php echo lang('nodefault'); ?></option>
-		      <?php
-		        asort($nls["language"]);
-                        foreach ($nls["language"] as $key=>$val) {
-			  echo "<option value=\"$key\"";
-			  if ($frontendlang == $key) {
-			    echo " selected=\"selected\"";
-			  }
-			  echo ">$val";
-			  if (isset($nls["englishlang"][$key]))
-			    {
-			      echo " (".$nls["englishlang"][$key].")";
-			    }
-			  echo "</option>\n";
-			}
-                      ?>
-		      </select>
-              </p>
-		      <br />
-		</div>
-		
-		<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('frontendwysiwygtouse'); ?>:</p>
-				<p class="pageinput">
-					<select name="frontendwysiwyg">
-					<option value=""><?php echo lang('none'); ?></option>
-					<?php
-						foreach($gCms->modules as $key=>$value)
-						{
-							if ($gCms->modules[$key]['installed'] == true &&
-								$gCms->modules[$key]['active'] == true &&
-								$gCms->modules[$key]['object']->IsWYSIWYG())
-							{
-								echo '<option value="'.$key.'"';
-								if ($frontendwysiwyg == $key)
-								{
-									echo ' selected="selected"';
-								}
-								echo '>'.$key.'</option>';
-							}
-						}
-					?>
-					</select>
-				</p>
-			</div>
-		
-		
-		<div class="pageoverflow">
-			  <p class="pagetext"><?php echo lang('nogcbwysiwyg')?>:</p>
-					<p class="pageinput"><input class="pagenb" type="checkbox" name="nogcbwysiwyg" <?php if ($nogcbwysiwyg == "1") echo "checked=\"checked\""?> /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('globalmetadata')?>:</p>
-			  <p class="pageinput"><textarea class="pagesmalltextarea" name="metadata" cols="80" rows="20"><?php echo $metadata?></textarea>
-		  </p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('enablecustom404') ?>:</p>
-			<p class="pageinput"><input class="pagenb" type="checkbox" name="enablecustom404" <?php if ($enablecustom404 == "1") echo "checked=\"checked\""?> /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('custom404')?>:</p>
-																			 <p class="pageinput"><?php echo create_textarea(true,$custom404,'custom404','pagesmalltextarea'); ?>
-		  </p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('template')?>:</p>
-			<p class="pageinput">
-				<select name="custom404template">
-				<?php
-					foreach ($templates as $key=>$value)
-					{
-						echo "<option value=\"".$key."\"";
-						if ($key == $custom404template)
-						{
-							echo " selected=\"selected\"";
-						}
-						echo ">".$value."</option>";
-					}
-				?>
-				</select>
-			</p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('enablesitedown')?>:</p>
-			<p class="pageinput"><input class="pagenb" type="checkbox" name="enablesitedownmessage" <?php if ($enablesitedownmessage == "1") echo "checked=\"checked\""?> /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('sitedownmessage')?>:</p>
-			  <p class="pageinput"><?php echo create_textarea(true,$sitedownmessage,'sitedownmessage','pagesmalltextarea'); ?>
-		  </p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('urlcheckversion') ?>:</p>
-			  <p class="pageinput"><input class="pagenb" type="text" name="urlcheckversion" size="80" maxlength="255" value="<?php echo $urlcheckversion; ?>"/><br/><?php echo lang('info_urlcheckversion'); ?></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('clear_version_check_cache') ?>:</p>
-			  <p class="pageinput"><input class="pagenb" type="checkbox" name="clear_vc_cache" /></p>
-		</div>
-		<!--
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('xmlmodulerepository') ?>:</p>
-			<p class="pageinput"><input class="pagenb" type="text" name="xmlmodulerepository" size="80" maxlength="255" value="<?php echo $xmlmodulerepository; ?>"/></p>
-		</div>
-		-->
-		<!--
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('template')?>:</p>
-			<p class="pageinput">
-			<select>
-			<?php
-				foreach ($templates as $key=>$value)
-				{
-					echo "<option value=\"".$key."\"";
-					if ($key == $sitedownmessagetemplate)
-					{
-						echo " selected=\"selected\"";
-					}
-					echo ">".$value."</option>";
-				}
-			?>
-			</select>
-			</p>
-		</div>
-		-->
-  <?php
-	if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
-	?>
-	<div class="pageoverflow">
-		<p class="pagetext"><?php echo lang('master_admintheme') ?>:</p>
-		<p class="pageinput">
-		<select name="logintheme">
-			<?php
-			  while (($file = readdir($dir)) !== false) {
-			    if (@is_dir("themes/".$file) && ($file[0]!='.') &&
-				@is_readable("themes/{$file}/{$file}Theme.php")) {
-			?>
-		  		<option value="<?php echo $file?>"<?php echo (get_site_preference('logintheme', 'default')==$file?" selected=\"selected\"":"")?>><?php echo $file?></option>				  
-				  <?php
-		  	}
-		  }
-				?>				
-			</select>
-		</p>
-	</div>
-	<?php }?>
-	
-                <div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('disablesafemodewarning')?>:</p>
-			<p class="pageinput"><input class="pagenb" type="checkbox" name="disablesafemodewarning" <?php if($disablesafemodewarning) echo "checked=\"checked\""?> /></p>
-                </div>
-                <div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('allowparamcheckwarnings')?>:</p>
-			<p class="pageinput"><input class="pagenb" type="checkbox" name="allowparamcheckwarnings" <?php if($allowparamcheckwarnings) echo "checked=\"checked\""?> /></p>
-                </div>
+$smarty->assign('lang_general',lang('general_settings'));
+$smarty->assign('lang_sitedown',lang('sitedown_settings'));
+$smarty->assign('lang_handle404',lang('handle_404'));
+$smarty->assign('lang_cancel',lang('cancel'));
+$smarty->assign('lang_submit',lang('submit'));
+$smarty->assign('lang_clearcache',lang('clearcache'));
+$smarty->assign('lang_clear',lang('clear'));
+$smarty->assign('lang_setup',lang('setup'));
+$smarty->assign('lang_sitename',lang('sitename'));
+$smarty->assign('lang_global_umask',lang('global_umask'));
+$smarty->assign('lang_test',lang('test'));
+$smarty->assign('lang_css_max_age',lang('css_max_age'));
+$smarty->assign('lang_help_css_max_age',lang('help_css_max_age'));
+$smarty->assign('lang_results',lang('results'));
+$smarty->assign('lang_frontendlang',lang('frontendlang'));
+$smarty->assign('lang_nogcbwysiwyg',lang('nogcbwysiwyg'));
+$smarty->assign('lang_globalmetadata',lang('globalmetadata'));
+$smarty->assign('lang_enablecustom404',lang('enablecustom404'));
+$smarty->assign('lang_custom404',lang('custom404'));
+$smarty->assign('lang_template',lang('template'));
+$smarty->assign('lang_enablesitedown',lang('enablesitedown'));
+$smarty->assign('lang_sitedownmessage',lang('sitedownmessage'));
+$smarty->assign('lang_urlcheckversion',lang('urlcheckversion'));
+$smarty->assign('lang_info_urlcheckversion',lang('info_urlcheckversion'));
+$smarty->assign('lang_clear_version_check_cache',lang('clear_version_check_cache'));
+$smarty->assign('lang_logintheme',lang('master_admintheme'));
+$smarty->assign('lang_disablesafemodewarning',lang('disablesafemodewarning'));
+$smarty->assign('lang_allowparamcheckwarnings',lang('allowparamcheckwarnings'));
+$smarty->assign('lang_date_format_string',lang('date_format_string'));
+$smarty->assign('lang_date_format_string_help',lang('date_format_string_help'));
+$smarty->assign('lang_admin_enablenotifications',lang('admin_enablenotifications'));
 
-                <div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('date_format_string')?>:</p>
-																		     <p class="pageinput"><input class="pagenb" type="text" name="defaultdateformat" size="20" maxlength="255" value="<?php echo $defaultdateformat; ?>"/>&nbsp;<?php echo lang('date_format_string_help'); ?></p>
-                </div>
-          <div class="pageoverflow">
-			  <p class="pagetext"><?php echo lang('admin_enablenotifications')?>:</p>
-																		     <p class="pageinput"><input class="pagenb" type="checkbox" name="enablenotifications" <?php if($enablenotifications) echo "checked=\"checked\""?> /></p>
-          </div>
-
-	<?php if ($access) { ?>
-	<div class="pageoverflow">
-		<p class="pagetext">&nbsp;</p>
-		<p class="pageinput">
-			<input type="hidden" name="editsiteprefs" value="true" />
-			<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-		</p>
-	</div>
-	<?php } ?>
-	</form>
-</div>
-
-<?php
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+# begin output
+echo '<div class="pagecontainer">'.$themeObject->ShowHeader('siteprefs')."\n";
+echo $smarty->fetch('siteprefs.tpl');
+echo '</div>'."\n";
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>'."\n";
 include_once("footer.php");
+
 
 # vim:ts=4 sw=4 noet
 ?>
