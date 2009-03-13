@@ -187,8 +187,7 @@ if (isset($_POST["testumask"]))
 	}	
     }
   }
-
-if (isset($_POST['clearcache']))
+else if (isset($_POST['clearcache']))
 {
 	global $gCms;
 	$contentops =& $gCms->GetContentOperations();
@@ -287,7 +286,6 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 # give everything to smarty
 $tmp = array_keys($gCms->modules);
 $firstmod = $tmp[0];
-echo "DEBUG: firstmod = $firstmod<br/>";
 $smarty->assign_by_ref('mod',$gCms->modules[$firstmod]['object']);
 asort($nls["language"]);
 $tmp = array(''=>lang('nodefault'));
@@ -322,7 +320,7 @@ $smarty->assign('CMS_USER_KEY',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('sitename',$sitename);
 $smarty->assign('global_umask',$global_umask);
 $smarty->assign('css_max_age',$css_max_age);
-$smarty->assign('testresult',$testresults);
+$smarty->assign('testresults',$testresults);
 $smarty->assign('frontendwysiwyg',$frontendwysiwyg);
 $smarty->assign('nogcbwysiwyg',$nogcbwysiwyg);
 $smarty->assign('metadata',$metadata);

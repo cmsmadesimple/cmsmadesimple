@@ -1,4 +1,8 @@
 <?php
+$lang['admin']['setup'] = 'Advanced Setup';
+$lang['admin']['handle_404'] = 'Custom 404 Handling';
+$lang['admin']['sitedown_settings'] = 'Sitedown Settings';
+$lang['admin']['general_settings'] = 'General Settings';
 $lang['admin']['help_function_page_attr'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This tag can be used to return the value of the attributes of a certain page.</p>
