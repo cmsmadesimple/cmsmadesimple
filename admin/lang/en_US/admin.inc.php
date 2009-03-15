@@ -1,4 +1,11 @@
 <?php
+$lang['admin']['sitedownexcludes'] = 'Exclude these Addresses from Sitedown Messages';
+$lang['admin']['info_sitedownexcludes'] = <<<EOT
+This parameter allows listing a comma separated list of ip addresses or networks that should not be subject to the sitedown mechanism.  This allows administrators to work on a site whilst anonymous visitors receive a sitedown message.<br/><br/>Addresses can be specified in the following formats:<br/>
+1. xxx.xxx.xxx.xxx -- (exact IP address)<br/>
+2. xxx.xxx.xxx.[yyy-zzz] -- (IP address range)<br/>
+3. xxx.xxx.xxx.xxx/nn -- (nnn = number of bits, cisco style.  i.e:  192.168.0.100/24 = entire 192.168.0 class C subnet)
+EOT;
 $lang['admin']['setup'] = 'Advanced Setup';
 $lang['admin']['handle_404'] = 'Custom 404 Handling';
 $lang['admin']['sitedown_settings'] = 'Sitedown Settings';

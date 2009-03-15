@@ -76,7 +76,7 @@ class Smarty_CMS extends Smarty {
 			$this->debugging = true;
 		}
 
-		if (get_site_preference('enablesitedownmessage') == "1")
+		if (is_sitedown())
 		{
 			$this->caching = false;
 			$this->force_compile = true;
@@ -421,7 +421,7 @@ class Smarty_CMS extends Smarty {
 	  global $gCms;
 	  $config =& $gCms->GetConfig();
 	  
-	  if (get_site_preference('enablesitedownmessage') == "1")
+	  if (is_sitedown())
 	    {
 	      $tpl_source = '';
 	      return true;
@@ -467,7 +467,7 @@ class Smarty_CMS extends Smarty {
 	  global $gCms;
 	  $config =& $gCms->GetConfig();
 	  
-	  if (get_site_preference('enablesitedownmessage') == "1")
+	  if (is_sitedown())
 	    {
 	      $tpl_source = '';
 	      return true;
@@ -517,7 +517,7 @@ class Smarty_CMS extends Smarty {
 	  global $gCms;
 	  $config =& $gCms->GetConfig();
 	  
-	  if (get_site_preference('enablesitedownmessage') == "1")
+	  if (is_sitedown())
 	    {
 	      header('HTTP/1.0 503 Service Unavailable');
 	      header('Status: 503 Service Unavailable');
@@ -571,7 +571,7 @@ class Smarty_CMS extends Smarty {
 		global $gCms;
 		$config =& $gCms->GetConfig();
 
-		if (get_site_preference('enablesitedownmessage') == "1")
+		if (is_sitedown())
 		{
 			$tpl_source = get_site_preference('sitedownmessage');
 			return true;
@@ -645,7 +645,7 @@ class Smarty_CMS extends Smarty {
 	{
 		global $gCms;
 
-		if (get_site_preference('enablesitedownmessage') == "1" || $tpl_name == 'notemplate')
+		if (is_sitedown() || $tpl_name == 'notemplate')
 		{
 			$tpl_timestamp = time();
 			return true;
@@ -1033,6 +1033,20 @@ function global_content_regex_callback($matches)
 		return "<!-- Html blob has no name parameter -->";
 	}
 }
+
+
+function is_sitedown()
+{
+  if( get_site_preference('enablesitedownmessage') !== '1' ) return FALSE;
+  $excludes = get_site_preference('sitedownexcludes','');
+  if( !isset($_SERVER['REMOTE_ADDR']) ) return TRUE;
+  if( empty($excludes) ) return TRUE;
+  
+  $ret = cms_ipmatches($_SERVER['REMOTE_ADDR'],$excludes);
+  if( $ret ) return FALSE;
+  return TRUE;
+}
+
 
 # vim:ts=4 sw=4 noet
 ?>

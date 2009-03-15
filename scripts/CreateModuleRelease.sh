@@ -152,6 +152,14 @@ if [ $_svn = 1 ]; then
   svn update >/dev/null 2>&1
 fi
 
+# create dummy index.html files in each directory
+#_dirs=`find . -type d | grep -v \.svn`
+#for i in $_dirs ; do
+#  if [ ! -f $i/index.php ]; then
+#    echo '<!-- dummy -->' > ${i}/index.html
+#  fi
+#done
+
 # make a temporary file of all the stuff we don't want in the archive
 for i in $_excludes ; do
   echo $i >> $_tmpfile

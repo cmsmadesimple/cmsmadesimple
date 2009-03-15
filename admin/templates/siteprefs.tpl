@@ -73,6 +73,14 @@
   <p class="pagetext">{$lang_sitedownmessage}:</p>
   <p class="pageinput">{$textarea_sitedownmessage}</p>
 </div>
+<div class="pageoverflow">
+  <p class="pagetext">{$lang_sitedownexcludes}:</p>
+  <p class="pageinput">
+     <input type="text" name="sitedownexcludes" size="50" maxlength="255" value="{$sitedownexcludes}"/>
+     <br/>
+     {$lang_info_sitedownexcludes}
+  </p>
+</div>
 {$mod->EndTab()}
 
 

@@ -803,6 +803,14 @@ class CMSModule
 	}
 
 	/**
+	 * Returns true if the module may support lazy loading in the front end
+	 */
+	function SupportsLazyLoading()
+	{
+	  return false;
+	}
+
+	/**
 	 * ------------------------------------------------------------------
 	 * Login Related Functions
 	 * ------------------------------------------------------------------

@@ -69,6 +69,11 @@ if (!isset($_POST["enablenotifications"]))
   {
     $enablenotifications = 0;
   }
+$sitedownexcludes = '';
+if( isset($_POST['sitedownexcludes']) )
+  {
+    $sitedownexcludes = trim($_POST['sitedownexcludes']);
+  }
 
 $enablecustom404 = "0";
 if (isset($_POST["enablecustom404"])) $enablecustom404 = "1";
@@ -224,6 +229,7 @@ else if (isset($_POST["editsiteprefs"]))
       set_site_preference('disablesafemodewarning',$disablesafemodewarning);
       set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
       set_site_preference('enablenotifications',$enablenotifications);
+      set_site_preference('sitedownexcludes',$sitedownexcludes);
       audit(-1, '', 'Edited Site Preferences');
       $message .= lang('prefsupdated');
     }
@@ -253,6 +259,7 @@ else if (isset($_POST["editsiteprefs"]))
   $disablesafemodewarning = get_site_preference('disablesafemodewarning',0);
   $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',0);
   $enablenotifications = get_site_preference('enablenotifications',1);
+  $sitedownexcludes = get_site_preference('sitedownexcludes','');
  }
 
 
@@ -334,6 +341,7 @@ $smarty->assign('disablesafemodewarning',$disablesafemodewarning);
 $smarty->assign('allowparamcheckwarnings',$allowparamcheckwarnings);
 $smarty->assign('defaultdateformat',$defaultdateformat);
 $smarty->assign('enablenotifications',$enablenotifications);
+$smarty->assign('sitedownexcludes',$sitedownexcludes);
 
 $smarty->assign('lang_general',lang('general_settings'));
 $smarty->assign('lang_sitedown',lang('sitedown_settings'));
@@ -366,6 +374,8 @@ $smarty->assign('lang_allowparamcheckwarnings',lang('allowparamcheckwarnings'));
 $smarty->assign('lang_date_format_string',lang('date_format_string'));
 $smarty->assign('lang_date_format_string_help',lang('date_format_string_help'));
 $smarty->assign('lang_admin_enablenotifications',lang('admin_enablenotifications'));
+$smarty->assign('lang_sitedownexcludes',lang('sitedownexcludes'));
+$smarty->assign('lang_info_sitedownexcludes',lang('info_sitedownexcludes'));
 
 # begin output
 echo '<div class="pagecontainer">'.$themeObject->ShowHeader('siteprefs')."\n";

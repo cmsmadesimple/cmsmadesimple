@@ -348,7 +348,7 @@ echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?
 
 }
 
-if (get_site_preference('enablesitedownmessage') == "1" || $config['debug'] == true)
+if( is_sitedown() || $config['debug'] == true)
 {
 	$smarty->clear_compiled_tpl();
 	#$smarty->clear_all_cache();

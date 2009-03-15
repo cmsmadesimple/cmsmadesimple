@@ -1609,6 +1609,77 @@ function css_cache_clear($filename)
   @unlink($filename);
 }
 
+function cms_ipmatches($ip,$checklist)
+{
+  if( !function_exists('__testip') ) {
+  function __testip($range,$ip) 
+  {
+    $result = 1;
+    
+    // IP Pattern Matcher
+    // J.Adams <jna@retina.net>
+    //
+    // Matches:
+    //
+    // xxx.xxx.xxx.xxx        (exact)
+    // xxx.xxx.xxx.[yyy-zzz]  (range)
+    // xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
+    //
+    // Does not match:
+    // xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets not supported)
+    
+    if (ereg("([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/([0-9]+)",$range,$regs)) {
+      // perform a mask match
+      $ipl = ip2long($ip);
+      $rangel = ip2long($regs[1] . "." . $regs[2] . "." . $regs[3] . "." . $regs[4]);
+      
+      $maskl = 0;
+      
+      for ($i = 0; $i< 31; $i++) {
+	if ($i < $regs[5]-1) {
+	  $maskl = $maskl + pow(2,(30-$i));
+	}
+      }
+      
+      if (($maskl & $rangel) == ($maskl & $ipl)) {
+	return 1;
+      } else {
+	return 0;
+      }
+    } else {
+      // range based
+      $maskocts = split("\.",$range);
+      $ipocts = split("\.",$ip);
+      
+      // perform a range match
+      for ($i=0; $i<4; $i++) {
+	if (ereg("\[([0-9]+)\-([0-9]+)\]",$maskocts[$i],$regs)) {
+	  if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) {
+	    $result = 0;
+	  }
+	}
+	else
+	  {
+	    if ($maskocts[$i] <> $ipocts[$i]) {
+	      $result = 0;
+	    }
+	  }
+      }
+    }
+    return $result;
+  } // __testip
+  } // if
+
+  if( !is_array($checklist) )
+    {
+      $checklist = explode(',',$checklist);
+    }
+  foreach( $checklist as $one )
+    {
+      if( __testip(trim($one),$ip) ) return TRUE;
+    }
+  return FALSE;
+}
 
 # vim:ts=4 sw=4 noet
 ?>
