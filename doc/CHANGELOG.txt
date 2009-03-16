@@ -3,6 +3,8 @@ Version 1.6 - New Caledinia
 - Fixes of several bugs: 
   - Add a few logic in preview
 
+- News 
+  - #3163 Typo in News module
 
 - Libs Updates: 
   - Smarty
