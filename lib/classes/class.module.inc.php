@@ -1606,7 +1606,7 @@ class CMSModule
 
 
   /**
-	 * Returns the xhtml equivalent of a tooltip help link. 
+	 * Returns the xhtml equivalent of a tooltip help link.
 	 *
 	 * @param string The help text to be shown on mouse over
 	 * @param string The text to be shown as the link, default to a simple question mark
@@ -1614,12 +1614,29 @@ class CMSModule
    * @param string An alternative classname for the a-link of the tooltip
 	 */
   
-  function CreateTooltip($helptext, $linktext="?", $forcewidth="", $classname="admin-tooltip")
+  function CreateTooltip($helptext, $linktext="?", $forcewidth="", $classname="admin-tooltip admin-tooltip-box", $href="#")
   {
-    $result='<a class="'.$classname.'" href="#">'.$linktext.'<span';
+    $result='<a class="'.$classname.'" href="'.$href.'">'.$linktext.'<span';
     if ($forcewidth!="" && is_numeric($forcewidth)) $result.=' style="width:'.$forcewidth.'px"';
     $result.='>'.htmlentities($helptext)."</span></a>\n";
     return $result;
+  }
+
+  /**
+	 * Returns the xhtml equivalent of a tooltip-enabled href link	 This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The action that this form should do when the link is clicked
+	 * @param string The id to eventually return to when the module is finished it's task
+	 * @param string The text that will have to be clicked to follow the link
+   * @param string The helptext to be shown as tooltip-popup
+	 * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
+	 */
+
+  function CreateTooltipLink($id, $action, $returnid, $contents, $tooltiptext, $params=array())
+  {
+    return $this->CreateTooltip($tooltiptext,$contents,"","admin-tooltip",$this->CreateLink($id,$action,$returnid,"admin-tooltip",$params,"",true) );
   }
 
    /**
