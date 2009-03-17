@@ -2,6 +2,8 @@ Version 1.6 - New Caledinia
 -----------------------------
 - Fixes of several bugs: 
   - Add a few logic in preview
+  - #3123 installer overly restricts account names
+  - In installer drop all assign_by_ref
 
 - News 
   - #3163 Typo in News module
