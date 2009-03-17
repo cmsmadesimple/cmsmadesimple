@@ -2,8 +2,9 @@ Version 1.6 - New Caledinia
 -----------------------------
 - Fixes of several bugs: 
   - Add a few logic in preview
-  - #3123 installer overly restricts account names
-  - In installer drop all assign_by_ref
+  - #3123 Installer overly restricts account names
+  - #2831 Upgrade process continue even if database is empty
+  - Drop all assign_by_ref in Installer
 
 - News 
   - #3163 Typo in News module
