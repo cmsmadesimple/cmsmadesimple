@@ -1605,7 +1605,24 @@ class CMSModule
 	}
 
 
-        /**
+  /**
+	 * Returns the xhtml equivalent of a tooltip help link. 
+	 *
+	 * @param string The help text to be shown on mouse over
+	 * @param string The text to be shown as the link, default to a simple question mark
+   * @param string Forces another width of the popupbox than the one set in admin css
+   * @param string An alternative classname for the a-link of the tooltip
+	 */
+  
+  function CreateTooltip($helptext, $linktext="?", $forcewidth="", $classname="admin-tooltip")
+  {
+    $result='<a class="'.$classname.'" href="#">'.$linktext.'<span';
+    if ($forcewidth!="" && is_numeric($forcewidth)) $result.=' style="width:'.$forcewidth.'px"';
+    $result.='>'.htmlentities($helptext)."</span></a>\n";
+    return $result;
+  }
+
+   /**
 	 * Returns the xhtml equivalent of an fieldset and legend.  This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
