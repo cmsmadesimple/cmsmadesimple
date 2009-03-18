@@ -414,11 +414,11 @@ $lang['admin']['help_function_sitename'] = <<<EOT
 EOT;
 $lang['admin']['help_function_search'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=Search">Search module</a> to make the tag syntax easier. 
+	<p>This is actually just a wrapper tag for the Search module to make the tag syntax easier. 
 	Instead of having to use <code>{cms_module module='Search'}</code> you can now just use <code>{search}</code> to insert the module in a template.
 	</p>
 	<h3>How do I use it?</h3>
-	<p>Just put <code>{search}</code> in a template where you want the search input box to appear. For help about the Search module, please refer to the <a href="listmodules.php?action=showmodulehelp&module=Search">Search module help</a>.
+	<p>Just put <code>{search}</code> in a template where you want the search input box to appear. For help about the Search module, please refer to the Search module help.
 EOT;
 $lang['admin']['help_function_root_url'] = <<<EOT
 	<h3>What does this do?</h3>
@@ -457,11 +457,11 @@ $lang['admin']['help_function_recently_updated'] = <<<EOT
 EOT;
 $lang['admin']['help_function_print'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=Printing">Printing module</a> to make the tag syntax easier. 
+	<p>This is actually just a wrapper tag for the Printing module to make the tag syntax easier. 
 	Instead of having to use <code>{cms_module module='Printing'}</code> you can now just use <code>{print}</code> to insert the module on pages and templates.
 	</p>
 	<h3>How do I use it?</h3>
-	<p>Just put <code>{print}</code> on a page or in a template. For help about the Printing module, what parameters it takes etc., please refer to the <a href="listmodules.php?action=showmodulehelp&module=Printing">Printing module help</a>.
+	<p>Just put <code>{print}</code> on a page or in a template. For help about the Printing module, what parameters it takes etc., please refer to the Printing module help.
 EOT;
 $lang['admin']['help_function_oldprint'] = <<<EOT
 	<h3>What does this do?</h3>
@@ -498,11 +498,11 @@ EOT;
 
 $lang['admin']['help_function_news'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=News">News module</a> to make the tag syntax easier. 
+	<p>This is actually just a wrapper tag for the News module to make the tag syntax easier. 
 	Instead of having to use <code>{cms_module module='News'}</code> you can now just use <code>{news}</code> to insert the module on pages and templates.
 	</p>
 	<h3>How do I use it?</h3>
-	<p>Just put <code>{news}</code> on a page or in a template. For help about the News module, what parameters it takes etc., please refer to the <a href="listmodules.php?action=showmodulehelp&module=News">News module help</a>.
+	<p>Just put <code>{news}</code> on a page or in a template. For help about the News module, what parameters it takes etc., please refer to the News module help.
 EOT;
 $lang['admin']['help_function_modified_date'] = <<<EOT
         <h3>What does this do?</h3>
@@ -534,11 +534,11 @@ $lang['admin']['help_function_menu_text'] = <<<EOT
 EOT;
 $lang['admin']['help_function_menu'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module</a> to make the tag syntax easier. 
+	<p>This is actually just a wrapper tag for the Menu Manager module to make the tag syntax easier. 
 	Instead of having to use <code>{cms_module module='MenuManager'}</code> you can now just use <code>{menu}</code> to insert the module on pages and templates.
 	</p>
 	<h3>How do I use it?</h3>
-	<p>Just put <code>{menu}</code> on a page or in a template. For help about the Menu Manager module, what parameters it takes etc., please refer to the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module help</a>.
+	<p>Just put <code>{menu}</code> on a page or in a template. For help about the Menu Manager module, what parameters it takes etc., please refer to the Menu Manager module help.
 EOT;
 $lang['admin']['help_function_last_modified_by'] = <<<EOT
         <h3>What does this do?</h3>
@@ -1055,9 +1055,9 @@ EOT;
 
 $lang['admin']['help_function_site_mapper'] = <<<EOT
 <h3>What does this do?</h3>
-  <p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module</a> to make the tag syntax easier, and to simplify creating a sitemap.</p>
+  <p>This is actually just a wrapper tag for the Menu Manager module to make the tag syntax easier, and to simplify creating a sitemap.</p>
 <h3>How do I use it?</h3>
-  <p>Just put <code>{site_mapper}</code> on a page or in a template. For help about the Menu Manager module, what parameters it takes etc., please refer to the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module help</a>.</p>
+  <p>Just put <code>{site_mapper}</code> on a page or in a template. For help about the Menu Manager module, what parameters it takes etc., please refer to the Menu Manager module help.</p>
   <p>By default, if no template option is specified the minimal_menu.tpl file will be used.</p>
   <p>Any parameters used in the tag are available in the menumanager template as <code>{\$menuparams.paramname}</code></p>
 EOT;
