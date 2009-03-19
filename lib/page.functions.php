@@ -195,6 +195,7 @@ function generate_user_object($userid)
 		$_SESSION['cms_admin_username'] = $oneuser->username;
 		setcookie('cms_admin_user_id', $oneuser->id);
 		setcookie('cms_passhash', md5(md5($config['root_path'] . '--' . $oneuser->password)));
+		setcookie(CMS_SECURE_PARAM_NAME, '', time() - 3600);
 	}
 }
 
