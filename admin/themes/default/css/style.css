@@ -1107,6 +1107,7 @@ a.admin-tooltip-box {
   padding: 2px;
   margin: 2px;
   border: 1px solid #aaaaaa;
+    cursor: help;
 }
 
 a.admin-tooltip:hover {
