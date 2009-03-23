@@ -1614,9 +1614,11 @@ class CMSModule
    * @param string An alternative classname for the a-link of the tooltip
 	 */
   
-  function CreateTooltip($helptext, $linktext="?", $forcewidth="", $classname="admin-tooltip admin-tooltip-box", $href="#")
+  function CreateTooltip($helptext, $linktext="?", $forcewidth="", $classname="admin-tooltip admin-tooltip-box", $href="")
   {
-    $result='<a class="'.$classname.'" href="'.$href.'">'.$linktext.'<span';
+    $result='<a class="'.$classname.'" name=""';
+    if ($href!='') $result.=' href="'.$href.'"';
+    $result.='>'.$linktext.'<span';
     if ($forcewidth!="" && is_numeric($forcewidth)) $result.=' style="width:'.$forcewidth.'px"';
     $result.='>'.htmlentities($helptext)."</span></a>\n";
     return $result;
