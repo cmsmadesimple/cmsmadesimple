@@ -1616,7 +1616,7 @@ class CMSModule
   
   function CreateTooltip($helptext, $linktext="?", $forcewidth="", $classname="admin-tooltip admin-tooltip-box", $href="")
   {
-    $result='<a class="'.$classname.'" name=""';
+    $result='<a class="'.$classname.'"';
     if ($href!='') $result.=' href="'.$href.'"';
     $result.='>'.$linktext.'<span';
     if ($forcewidth!="" && is_numeric($forcewidth)) $result.=' style="width:'.$forcewidth.'px"';
