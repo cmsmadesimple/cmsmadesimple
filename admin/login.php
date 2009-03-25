@@ -35,7 +35,7 @@ if (isset($_SESSION['logout_user_now']))
 	unset($_SESSION[CMS_USER_KEY]);
 	setcookie('cms_admin_user_id', '', time() - 3600);
 	setcookie('cms_passhash', '', time() - 3600);
-        setcookie('sec'.CMS_SECURE_PARAM_NAME','',time()-3600);
+        setcookie('sec'.CMS_SECURE_PARAM_NAME,'',time()-3600);
 }
 else if ( isset($_SESSION['redirect_url']) )
 {
