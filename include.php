@@ -31,22 +31,18 @@ $session_key = substr(md5($dirname), 0, 8);
 @session_name('CMSSESSID' . $session_key);
 @ini_set('url_rewriter.tags', '');
 @ini_set('session.use_trans_sid', 0);
-if(!@session_id())
-{
-    #Trans SID sucks also...
-    @ini_set('url_rewriter.tags', '');
-    @ini_set('session.use_trans_sid', 0);
-    @session_start();
-    if( isset($CMS_ADMIN_PAGE) )
-      {
-	if( !isset($_SESSION[CMS_USER_KEY]) )
-	  {
-	    // maybe change this algorithm.
-	    $key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
-	    $_SESSION[CMS_USER_KEY] = $key;
-	  }
-      }
-}
+if(!@session_id()) session_start();
+
+if( isset($CMS_ADMIN_PAGE) )
+  {
+     if( !isset($_SESSION[CMS_USER_KEY]) )
+       {
+          // maybe change this algorithm.
+	  $key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
+	  $_SESSION[CMS_USER_KEY] = $key;
+	  setcookie('sec'.CMS_SECURE_PARAM_NAME, $key);
+       }
+  }
 
 /**
  * This file is included in every page.  It does all seutp functions including
