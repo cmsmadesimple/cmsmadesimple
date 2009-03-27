@@ -37,10 +37,17 @@ if( isset($CMS_ADMIN_PAGE) )
   {
      if( !isset($_SESSION[CMS_USER_KEY]) )
        {
-          // maybe change this algorithm.
-	  $key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
-	  $_SESSION[CMS_USER_KEY] = $key;
-	  setcookie('sec'.CMS_SECURE_PARAM_NAME, $key);
+	 if( isset($_COOKIE['sec'.CMS_SECURE_PARAM_NAME]) )
+	   {
+	     $_SESSION[CMS_USER_KEY] = $_COOKIE['sec'.CMS_SECURE_PARAM_NAME];
+	   }
+	 else
+	   {
+	     // maybe change this algorithm.
+	     $key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
+	     $_SESSION[CMS_USER_KEY] = $key;
+	     setcookie('sec'.CMS_SECURE_PARAM_NAME, $key);
+	   }
        }
   }
 
