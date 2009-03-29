@@ -29,7 +29,7 @@
   <p class="pagetext">{$lang_frontendlang}</p>
   <p class="pageinput">
     <select name="frontendlang" style="vertical-align: middle;">
-       {html_options options=$languages selected=$frontendwysiwyg}
+       {html_options options=$languages selected=$frontendlang}
     </select>
   </p>
 </div>

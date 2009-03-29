@@ -328,6 +328,7 @@ $smarty->assign('sitename',$sitename);
 $smarty->assign('global_umask',$global_umask);
 $smarty->assign('css_max_age',$css_max_age);
 $smarty->assign('testresults',$testresults);
+$smarty->assign('frontendlang',$frontendlang);
 $smarty->assign('frontendwysiwyg',$frontendwysiwyg);
 $smarty->assign('nogcbwysiwyg',$nogcbwysiwyg);
 $smarty->assign('metadata',$metadata);

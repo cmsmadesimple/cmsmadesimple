@@ -6,6 +6,7 @@ Version 1.6 - New Caledinia
   - #3123 Installer overly restricts account names
   - #3190 Error with link rel="canonical"
   - Drop all assign_by_ref in Installer
+  - Missing $frontendlang in siteprefs, thanks to jce76350
 
 - News 
   - #3163 Typo in News module
