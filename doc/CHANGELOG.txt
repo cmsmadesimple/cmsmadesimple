@@ -8,6 +8,11 @@ Version 1.6 - New Caledinia
   - Drop all assign_by_ref in Installer
   - Missing $frontendlang in siteprefs, thanks to jce76350
 
+- Core additions:
+  - Ability to set a page as the 404 error page.  Replaces
+    the existing custom 404 stuff to allow for more
+    flexibility.
+
 - News 
   - #3163 Typo in News module
 
