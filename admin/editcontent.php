@@ -86,7 +86,9 @@ function ajaxpreview($params)
 	}
 	updatecontentobj($contentobj, true, $params);
 	$tmpfname = createtmpfname($contentobj);
-	$url = $config["root_url"].'/preview.php'.$urlext.'&tmpfile='.urlencode(basename($tmpfname));
+	$_SESSION['cms_preview'] = $tmpfname;
+	$tmpvar = substr(str_shuffle(md5($tmpfname)),-3);
+	$url = $config["root_url"].'/index.php?'.$config['query_var']."=__CMS_PREVIEW_PAGE__&r=$tmpvar"; // temporary
 	
 	$objResponse = new xajaxResponse();
 	$objResponse->assign("previewframe", "src", $url);
@@ -179,6 +181,7 @@ function createtmpfname(&$contentobj)
 	$templateops =& $gCms->GetTemplateOperations();
 
 	$data["content_id"] = $contentobj->Id();
+	$data['content_type'] = $contentobj->Type();
 	$data["title"] = $contentobj->Name();
 	$data["menutext"] = $contentobj->MenuText();
 	$data["content"] = $contentobj->Show();
@@ -190,7 +193,7 @@ function createtmpfname(&$contentobj)
 
 	$stylesheetobj = get_stylesheet($contentobj->TemplateId());
 	$data['encoding'] = $stylesheetobj['encoding'];
-	// $data['stylesheet'] = $stylesheetobj['stylesheet'];
+	$data['serialized_content'] = serialize($contentobj);
 
 	$tmpfname = '';
 	if (is_writable($config["previews_path"]))
@@ -498,7 +501,7 @@ $tabnames = $contentobj->TabNames();
 		#Make a preview tab
 		if ($contentobj->mPreview)
 		{
-			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;">'.lang('preview').'</div>';
+			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\')); return false;">'.lang('preview').'</div>';
 		}
 
 		?>
@@ -576,7 +579,7 @@ $submit_buttons .= '</p></div>';
 		{
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>
-					<iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo $config["root_url"] ?>/preview.php<?php echo $urlext ?>&tmpfile=<?php echo urlencode(basename($tmpfname))?>"<?php } ?>></iframe>
+			  <iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo "{$config['root_url']}/index.php?{$config['query_var']}=__CMS_PREVIEW_PAGE__"; } ?></iframe>
 				<?php
 			echo '</div></div>';
 			echo '<div style="clear: both;"></div>';

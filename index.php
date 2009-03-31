@@ -202,8 +202,42 @@ else
     $page = preg_replace('/\</','',$page);
 }
 
-$pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
+$pageinfo = '';
+if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
+  {
+    $tpl_name = trim($_SESSION['cms_preview']);
+    $fname = '';
+    if (is_writable($config["previews_path"]))
+      {
+	$fname = cms_join_path($config["previews_path"] , $tpl_name);
+      }
+    else
+      {
+	$fname = cms_join_path(TMP_CACHE_LOCATION , $tpl_name);
+      }
+    $fname = $tpl_name;
+    if( !file_exists($fname) )
+      {
+	die('error preview temp file not found: '.$fname);
+	return false;
+      }
 
+    // build pageinfo
+    $fh = fopen($fname,'r');
+    $_SESSION['cms_preview_data'] = unserialize(fread($fh,filesize($fname)));
+    fclose($fh);
+    unset($_SESSION['cms_preview']);
+
+    $pageinfo = PageInfoOperations::LoadPageInfoFromSerializedData($_SESSION['cms_preview_data']);
+    $pageinfo->content_id = '__CMS_PREVIEW_PAGE__';
+  }
+
+if( !is_object($pageinfo) )
+  {
+    $pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
+  }
+
+// $page cannot be empty here
 if (isset($pageinfo) && $pageinfo !== FALSE)
 {
 	$gCms->variables['pageinfo'] =& $pageinfo;
@@ -370,5 +404,9 @@ if ( !is_sitedown() && $config["debug"] == true)
 	}
 }
 
+if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
+  {
+    unset($_SESSION['cms_preview']);
+  }
 # vim:ts=4 sw=4 noet
 ?>

@@ -92,6 +92,22 @@ class PageInfo
  */
 class PageInfoOperations
 {
+
+  function LoadPageInfoFromSerializedData($data)
+  {
+    $pi = new PageInfo();
+    $pi->SetInitialValues();
+    $pi->content_id = $data['content_id'];
+    $pi->content_title = $data['title'];
+    $pi->content_menutext = $data['menutext'];
+    $pi->content_hierarchy = $data['hierarchy'];
+    $pi->template_id = $data['template_id'];
+    $pi->template_encoding = $data['encoding'];
+    $pi->cachable = false;
+
+    return $pi;
+  }
+
 	function LoadPageInfoByContentAlias($alias)
 	{
 		$result = false;

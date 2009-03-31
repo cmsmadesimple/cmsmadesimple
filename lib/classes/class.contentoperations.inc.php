@@ -50,6 +50,18 @@ class ContentOperations
 		return false;
 	}
 
+	function &LoadContentFromSerializedData(&$data)
+	{
+	  if( !isset($data['content_type']) && !isset($data['serialized_content']) ) return FALSE;
+
+	  $contenttype = 'content';
+	  if( isset($data['content_type']) ) $contenttype = $data['content_type'];
+
+	  $contentobj =& ContentOperations::CreateNewContent($contenttype);
+	  $contentobj = unserialize($data['serialized_content']);
+	  return $contentobj;
+	}
+
 	function &CreateNewContent($type)
 	{
 		$type = strtolower($type);
@@ -138,12 +150,12 @@ class ContentOperations
 			}
 			else
 			{
-				return FALSE;
+			  $tmp = NULL; return $tmp;
 			}
 		}
 		else
 		{
-			return FALSE;
+		  $tmp = NULL; return $tmp;
 		}
 	}
 
