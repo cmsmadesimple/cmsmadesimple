@@ -144,7 +144,19 @@ class PageInfoOperations
 		{
 			#Page isn't found.  Should we setup an alternate page?
 			#if (get_site_preference('custom404template') > 0 && get_site_preference('enablecustom404') == "1")
-			if (get_site_preference('enablecustom404') == "1")
+			//First check if there is an error page set -- this overrides the enablecustom404 setting
+			if ($alias == 'error404')
+				return null;
+			
+			$result = self::LoadPageInfoByContentAlias('error404');
+			
+			if ($result != null)
+			{
+				//Change header to 404
+				header("HTTP/1.0 404 Not Found");
+				header("Status: 404 Not Found");
+			}
+			else if (get_site_preference('enablecustom404') == "1")
 			{
 				$onepageinfo = new PageInfo();
 				$onepageinfo->cachable = false;

@@ -1913,4 +1913,8 @@ $lang['admin']['unknown'] = 'Unknown';
 $lang['admin']['download'] = 'Download';
 $lang['admin']['frontendwysiwygtouse']="Frontend wysiwyg";
 $lang['admin']['all_groups'] = 'All Groups'; //needs translation
+$lang['admin']['error_type'] = 'Error Type';
+$lang['admin']['contenttype_errorpage'] = 'Error Page';
+$lang['admin']['errorpagealreadyinuse'] = 'Error Code Already in Use';
+$lang['admin']['404description'] = 'Page Not Found';
 ?>

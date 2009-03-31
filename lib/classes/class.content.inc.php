@@ -556,7 +556,7 @@ class ContentBase
 		$this->mLastModifiedBy = $lastmodifiedby;
 	}
 	
-	function SetAlias($alias)
+	function SetAlias($alias, $doAutoAliasIfEnabled = true)
 	{
 		$this->DoReadyForEdit();
 		global $gCms;
@@ -564,7 +564,7 @@ class ContentBase
 
 		$tolower = false;
 
-		if ($alias == '' && $config['auto_alias_content'] == true)
+		if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true)
 		{
 			$alias = trim($this->mMenuText);
 			if ($alias == '')

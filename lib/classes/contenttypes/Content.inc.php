@@ -1,6 +1,6 @@
 <?php
 # CMS - CMS Made Simple
-# (c)2004 by Ted Kulp (tedkulp@users.sf.net)
+# (c)2004-2009 by Ted Kulp (ted@cmsmadesimple.org)
 # This project's homepage is: http://cmsmadesimple.org
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,8 @@ class Content extends ContentBase
 {
     var $additionalContentBlocks;
     var $addtContentBlocksLoaded;
+	var $doAliasCheck;
+	var $doAutoAliasIfEnabled;
 	
     function Content()
     {
@@ -30,6 +32,8 @@ class Content extends ContentBase
 							  'extra1','extra2','extra3','searchable','image','thumbnail','disable_wysiwyg'));
 	$this->additionalContentBlocks = array();
 	$this->addtContentBlocksLoaded = false;
+	$this->doAliasCheck = true;
+	$this->doAutoAliasIfEnabled = true;
     }
 
     function IsCopyable()
@@ -140,7 +144,7 @@ class Content extends ContentBase
 	    }
 	    if (isset($params['alias']))
 	    {
-		$this->SetAlias(trim($params['alias']));
+		$this->SetAlias(trim($params['alias']), $this->doAutoAliasIfEnabled);
 	    }
 	    if (isset($params['parent_id']))
 	    {
@@ -465,16 +469,19 @@ class Content extends ContentBase
 	    }
 	}
 		
-	if ($this->mAlias != $this->mOldAlias || $this->mAlias == '') #Should only be empty if auto alias is false
+	if ($doAliasCheck)
 	{
-		global $gCms;
-		$contentops =& $gCms->GetContentOperations();
-	    $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
-	    if ($error !== FALSE)
-	    {
-		$errors[]= $error;
-		$result = false;
-	    }
+		if ($this->mAlias != $this->mOldAlias || $this->mAlias == '') #Should only be empty if auto alias is false
+		{
+			global $gCms;
+			$contentops =& $gCms->GetContentOperations();
+			$error = $contentops->CheckAliasError($this->mAlias, $this->mId);
+			if ($error !== FALSE)
+			{
+				$errors[]= $error;
+				$result = false;
+			}
+		}
 	}
 
 	if ($this->mTemplateId == '')
