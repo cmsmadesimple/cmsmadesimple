@@ -469,7 +469,7 @@ class Content extends ContentBase
 	    }
 	}
 		
-	if ($doAliasCheck)
+	if ($this->doAliasCheck)
 	{
 		if ($this->mAlias != $this->mOldAlias || $this->mAlias == '') #Should only be empty if auto alias is false
 		{
