@@ -314,12 +314,14 @@ $tabnames = $contentobj->TabNames();
 			$contentarray = $contentobj->EditAsArray(true, $currenttab, $access);
 			for($i=0;$i<count($contentarray);$i++)
 			{
+			  if( is_array($contentarray[$i]) ) {
 				?>
 				<div class="pageoverflow">
 					<div class="pagetext"><?php echo $contentarray[$i][0]; ?></div>
 					<div class="pageinput"><?php echo $contentarray[$i][1]; ?></div>
 				</div>
 				<?php
+		            }
 			}
 			echo '<div class="hidden" ><input type="hidden" name="firsttime" value="0" /><input type="hidden" name="orig_content_type" value="'.$cur_content_type.'" /></div>';
 					?>
