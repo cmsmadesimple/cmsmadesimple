@@ -28,6 +28,7 @@ $userid = get_userid();
 
 define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax_core/xajax.inc.php');
+require_once(dirname(__FILE__).'/editcontent_extra.php');
 $xajax = new xajax();
 $xajax->register(XAJAX_FUNCTION,'ajaxpreview');
 $xajax->processRequest();
@@ -65,157 +66,6 @@ $parent_id = get_site_preference('default_parent_page', -1);
 if (isset($_GET["parent_id"])) $parent_id = $_GET["parent_id"];
 
 $contentobj = '';
-
-function ajaxpreview($params)
-{
-	global $gCms;
-	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-	$config =& $gCms->GetConfig();
-	$contentops =& $gCms->GetContentOperations();
-
-	$contentobj = '';
-	if (isset($params["serialized_content"]) && $params["serialized_content"] != '')
-	{
-		$content_type = $params['content_type'];
-		$contentops->LoadContentType($content_type);
-		$contentobj = UnserializeObject($params["serialized_content"]);
-		if (strtolower(get_class($contentobj)) != strtolower($content_type))
-		{
-			copycontentobj($contentobj, $content_type, $params);
-		}
-	}
-	else
-	{
-		$content_type = $params['content_type'];
-		$contentobj = $contentops->CreateNewContent($content_type);
-	}
-	updatecontentobj($contentobj, true, $params);
-	$tmpfname = createtmpfname($contentobj);
-	$url = $config["root_url"].'/preview.php'.$urlext.'&tmpfile='.urlencode(basename($tmpfname));
-
-	$objResponse = new xajaxResponse();
-	$objResponse->assign("previewframe", "src", $url);
-	$objResponse->assign("serialized_content", "value", SerializeObject($contentobj));
-	$count = 0;
-	foreach ($contentobj->TabNames() as $tabname)
-	{
-		$objResponse->script("Element.removeClassName('editab".$count."', 'active');Element.removeClassName('editab".$count."_c', 'active');$('editab".$count."_c').style.display = 'none';");
-		$count++;
-	}
-	$objResponse->script("Element.addClassName('edittabpreview', 'active');Element.addClassName('edittabpreview_c', 'active');$('edittabpreview_c').style.display = '';");
-	return $objResponse;
-}
-
-function updatecontentobj(&$contentobj, $preview, $params = null)
-{
-	if ($params == null)
-		$params = $_POST;
-
-	$userid = get_userid();
-	$adminaccess = (
-        check_ownership($userid, $contentobj->Id()) ||
-        check_permission($userid, 'Modify Any Page') || 
-        check_permission($userid, 'Modify Page Structure')
-	);
-		
-	#Fill contentobj with parameters
-	$contentobj->FillParams($params);
-	if ($preview)
-	{
-		$error = $contentobj->ValidateData();
-	}
-
-	if (isset($params["ownerid"]))
-	{
-		$contentobj->SetOwner($params["ownerid"]);
-	}
-
-	$contentobj->SetLastModifiedBy($userid);
-
-	#Fill Additional Editors (kind of kludgy)
-	if (isset($params["additional_editors"]))
-	{
-		$addtarray = array();
-		foreach ($params["additional_editors"] as $addt_user_id)
-		{
-			$addtarray[] = $addt_user_id;
-		}
-		$contentobj->SetAdditionalEditors($addtarray);
-	}
-	else if ($adminaccess)
-	{
-		$contentobj->SetAdditionalEditors(array());
-	}
-}
-
-function copycontentobj(&$contentobj, $content_type, $params = null)
-{
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	
-	if ($params == null)
-		$params = $_POST;
-
-	$newcontenttype = strtolower($content_type);
-	$contentops->LoadContentType($newcontenttype);
-	$contentobj->FillParams($params);
-	$tmpobj = $contentops->CreateNewContent($newcontenttype);
-	$tmpobj->SetId($contentobj->Id());
-	$tmpobj->SetName($contentobj->Name());
-	$tmpobj->SetMenuText($contentobj->MenuText());
-	$tmpobj->SetTemplateId($contentobj->TemplateId());
-	$tmpobj->SetParentId($contentobj->ParentId());
-	$tmpobj->SetOldParentId($contentobj->OldParentId());
-	$tmpobj->SetAlias($contentobj->Alias());
-	$tmpobj->SetOwner($contentobj->Owner());
-	$tmpobj->SetActive($contentobj->Active());
-	$tmpobj->SetItemOrder($contentobj->ItemOrder());
-	$tmpobj->SetOldItemOrder($contentobj->OldItemOrder());
-	$tmpobj->SetShowInMenu($contentobj->ShowInMenu());
-	//Some content types default to false for a reason... don't override it
-	if (!(!$tmpobj->mCachable && $contentobj->Cachable()))
-		$tmpobj->SetCachable($contentobj->Cachable());
-	$tmpobj->SetHierarchy($contentobj->Hierarchy());
-	$tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
-	$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
-	$contentobj = $tmpobj;
-}
-
-function createtmpfname(&$contentobj)
-{
-	global $gCms;
-	$config =& $gCms->GetConfig();
-	$templateops =& $gCms->GetTemplateOperations();
-
-	$data["content_id"] = $contentobj->Id();
-	$data["title"] = $contentobj->Name();
-	$data["menutext"] = $contentobj->MenuText();
-	$data["content"] = $contentobj->Show();
-	$data["template_id"] = $contentobj->TemplateId();
-	$data["hierarchy"] = $contentobj->Hierarchy();
-	
-	$templateobj = $templateops->LoadTemplateById($contentobj->TemplateId());
-	$data['template'] = $templateobj->content;
-
-	$stylesheetobj = get_stylesheet($contentobj->TemplateId());
-	$data['encoding'] = $stylesheetobj['encoding'];
-	// $data['stylesheet'] = $stylesheetobj['stylesheet'];
-
-	$tmpfname = '';
-	if (is_writable($config["previews_path"]))
-	{
-		$tmpfname = tempnam($config["previews_path"], "cmspreview");
-	}
-	else
-	{
-		$tmpfname = tempnam(TMP_CACHE_LOCATION, "cmspreview");
-	}
-	$handle = fopen($tmpfname, "w");
-	fwrite($handle, serialize($data));
-	fclose($handle);
-	
-	return $tmpfname;
-}
 
 #Get current userid and make sure they have permission to add something
 $access = (check_permission($userid, 'Add Pages') || check_permission($userid, 'Modify Page Structure'));
@@ -370,7 +220,7 @@ else if ($preview)
 <!--
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang('preview')?></p>
-	<iframe name="previewframe" class="preview" src="<?php echo $config["root_url"] ?>/preview.php<?php echo $urlext ?>&tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
+	<iframe name="previewframe" class="preview" src="<?php echo $config["root_url"] ?>/index.php?<?php echo $config['query_var'] ?>=__CMS_PREVIEW_PAGE__"></iframe>
 </div>
 -->
 <?php
@@ -481,7 +331,7 @@ $tabnames = $contentobj->TabNames();
 		{
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>
-					<iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo $config["root_url"] ?>/preview.php<?php echo $urlext ?>&amp;tmpfile=<?php echo urlencode(basename($tmpfname))?>"<?php } ?>></iframe>
+					<iframe name="previewframe" class="preview" id="previewframe" src="<?php echo $config["root_url"] ?>/index.php?<?php echo $config['query_var'] ?>=__CMS_PREVIEW_PAGE__"></iframe>
 				<?php
 			echo '<div style="clear: both;"></div></div></div>';
 		}
