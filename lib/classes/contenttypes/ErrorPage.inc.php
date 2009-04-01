@@ -47,6 +47,14 @@ class ErrorPage extends Content
 		return false;
 	}
 	
+
+	function SetProperties()
+	{
+	  $this->mProperties->Add('string', 'content_en'); //For later language support
+	  //Turn on preview
+	  $this->mPreview = true;
+	}
+
 	function FillParams($params)
 	{
 		parent::FillParams($params);
@@ -74,13 +82,25 @@ class ErrorPage extends Content
 				}
 				
 				$dropdown = array(lang('error_type').':', '<select name="alias">'.$dropdownopts.'</select>');
-				$ret[2] = $dropdown;
+
+				$tmp = array();
+				$tmp[] = $ret[0];
+				$tmp[] = $dropdown;
+				for( $i = 3; $i < count($ret); $i++ )
+				  {
+				    $tmp[] = $ret[$i];
+				  }
+				$ret = $tmp;
 			}
 			else if ($tab == '1')
 			{
-				$ret[1] = array('', '<input type="hidden" name="showinmenu" value="0" />');
-				$ret[2] = array('', '<input type="hidden" name="cachable" value="0" />');
-				unset($ret[4]);
+			  $tmp = array();
+			  $tmp[] = $ret[0];
+			  $tmp[] = array('', '<input type="hidden" name="showinmenu" value="0" />');
+			  $ret[] = array('', '<input type="hidden" name="cachable" value="0" />');
+			  $tmp[] = $ret[7];
+			  $tmp[] = $ret[8];
+			  $ret = $tmp;
 			}
 		}
 		return $ret;

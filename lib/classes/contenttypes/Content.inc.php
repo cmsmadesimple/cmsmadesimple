@@ -57,7 +57,7 @@ class Content extends ContentBase
 	$this->mProperties->Add('string', 'image'); 
 	$this->mProperties->Add('string', 'thumbnail'); 
 	$this->mProperties->Add('string', 'searchable'); 
-    $this->mProperties->Add('string', 'disable_wysiwyg');
+	$this->mProperties->Add('string', 'disable_wysiwyg');
 	#Turn on preview
 	$this->mPreview = true;
     }
