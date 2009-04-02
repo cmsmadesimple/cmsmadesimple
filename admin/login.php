@@ -49,7 +49,7 @@ else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['loginsubmit']))
 		}
 		else if (send_recovery_email($_REQUEST['forgottenusername']))
 		{
-			$error = lang('recoveryemailsent');
+			$acceptLogin = lang('recoveryemailsent');
 		}
 		else
 		{
