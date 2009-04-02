@@ -17,7 +17,7 @@ Version 1.6 - New Caledinia
   - #3163 Typo in News module
 
 - Libs Updates: 
-  - Smarty 2.6.23-dev
+  - Smarty
   - xAjax 0.5
   - script.aculo.us 1.8.2 (included  Update to Prototype 1.6.0.3)
 
