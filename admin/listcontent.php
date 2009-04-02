@@ -722,7 +722,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         }
         if (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Modify Any Page'))
         {
-            if ($display == 'edit' || $display == 'structure')
+	  if (($display == 'edit' || $display == 'structure'))
             {
                 if($one->Active())
                 {
@@ -833,9 +833,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 			
             if ($one->DefaultContent() != true)
             {
-                //if ($one->ChildCount() == 0 && !in_array($one->Id(),$openedArray))
-				//var_dump($one->ChildCount());
-                if ($root->getChildrenCount() == 0 && (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages')))
+                if ($root->getChildrenCount() == 0 && (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages')) )
                 {
                     $thelist .= "<td class=\"pagepos\"><a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
                     $thelist .= $deleteImg;
@@ -845,7 +843,9 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 {
                     $thelist .= '<td>&nbsp;</td>' . "\n";
                 }
-                if (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages') )
+
+                if ((check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages'))
+		    && $one->IsCopyable() )
                 {
                     $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
                 }
