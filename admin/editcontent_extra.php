@@ -16,7 +16,8 @@ function ajaxpreview($params)
 	}
 	updatecontentobj($contentobj, true, $params);
 	$tmpfname = createtmpfname($contentobj);
-	$_SESSION['cms_preview'] = $tmpfname;
+	// str_replace is because of stupid windows machines.... when will they die.
+	$_SESSION['cms_preview'] = str_replace('\\','/',$tmpfname);
 	$tmpvar = substr(str_shuffle(md5($tmpfname)),-3);
 	$url = $config["root_url"].'/index.php?'.$config['query_var']."=__CMS_PREVIEW_PAGE__&r=$tmpvar"; // temporary
 	
@@ -137,7 +138,7 @@ function createtmpfname(&$contentobj)
 	$handle = fopen($tmpfname, "w");
 	fwrite($handle, serialize($data));
 	fclose($handle);
-	
+
 	return $tmpfname;
 }
 
