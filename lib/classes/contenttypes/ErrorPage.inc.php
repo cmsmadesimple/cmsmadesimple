@@ -37,6 +37,16 @@ class ErrorPage extends Content
 		return lang('contenttype_errorpage');
 	}
 	
+	function IsCopyable()
+	{
+	  return FALSE;
+	}
+
+	function IsDefaultPossible()
+	{
+	  return FALSE;
+	}
+
 	function HasUsableLink()
 	{
 		return false;
