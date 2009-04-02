@@ -37,29 +37,36 @@ if ((isset($_REQUEST['forgotpwform']) || isset($_REQUEST['forgotpwchangeform']))
 }
 else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['loginsubmit']))
 {
-	if (check_user_for_recovery($_REQUEST['forgottenusername']))
+	global $gCms;
+	$userops =& $gCms->GetUserOperations();
+	$oneuser = $userops->LoadUserByUsername($_REQUEST['forgottenusername']);
+	
+	if ($oneuser != null)
 	{
-		if (send_recovery_email($_REQUEST['forgottenusername']))
+		if ($oneuser->email == '')
 		{
-			$forgotmessage = 'Sent.  Please check you email.';
+			$error = lang('nopasswordforrecovery');
+		}
+		else if (send_recovery_email($_REQUEST['forgottenusername']))
+		{
+			$error = lang('recoveryemailsent');
 		}
 		else
 		{
-			$error = 'There was a problem sending the mail.  Better figger out that password.  Think, baby, think!';
+			$error = lang('errorsendingemail');
 		}
 	}
 	else
 	{
-		$error = "User wasn't found.  Now what, Sherlock?";
+		$error = lang('usernotfound');
 	}
-	$_REQUEST['forgotpw'] = '1';
 }
 else if ($_REQUEST['recoverme'])
 {
 	$user = find_recovery_user($_REQUEST['recoverme']);
 	if ($user == null)
 	{
-		$error = "Invalid recovery hash.  Sorry, buddy.";
+		$error = lang('usernotfound');
 	}
 	else
 	{
@@ -71,7 +78,7 @@ else if ($_REQUEST['forgotpwchangeform'])
 	$user = find_recovery_user($_REQUEST['changepwhash']);
 	if ($user == null)
 	{
-		$error = "Invalid recovery hash.  Sorry, buddy.";
+		$error = lang('usernotfound');
 	}
 	else
 	{
@@ -81,18 +88,18 @@ else if ($_REQUEST['forgotpwchangeform'])
 			{
 				$user->password = md5($_REQUEST['password']);
 				$user->Save();
-				$error = "Password changed.  Please log in using the new credentials.";
+				$error = lang('passwordchangedlogin');
 				$changepwhash = '';
 			}
 			else
 			{
-				$error = "Passwords do not match";
+				$error = lang('nopasswordmatch');
 				$changepwhash = $_REQUEST['changepwhash'];
 			}
 		}
 		else
 		{
-			$error = "Password cannot be blank";
+			$error = lang('nofieldgiven', array(lang('password')));
 			$changepwhash = $_REQUEST['changepwhash'];
 		}
 	}

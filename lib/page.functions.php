@@ -199,15 +199,6 @@ function generate_user_object($userid)
 	}
 }
 
-function check_user_for_recovery($username)
-{
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
-	$oneuser = $userops->LoadUserByUsername($username);
-	
-	return $oneuser != null;
-}
-
 function send_recovery_email($username)
 {
 	global $gCms;
@@ -230,10 +221,10 @@ function send_recovery_email($username)
 	}
 	
 	$obj->AddAddress($user->email, $firstname . ' ' . $lastname);
-	$obj->SetSubject('[CMS Made Simple] Forgot your password');
+	$obj->SetSubject(lang('lostpwemailsubject'));
 	
-	$body = "Blah blah blah\n\n\n";
-	$body .= "Click here: " . $config['root_url'] . '/' . $config['admin_dir'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
+	$url = $config['root_url'] . '/' . $config['admin_dir'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
+	$body = lang('lostpwemail', $user->username, $url);
 	
 	$obj->SetBody($body);
 	
