@@ -61,7 +61,7 @@ else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['loginsubmit']))
 		$error = lang('usernotfound');
 	}
 }
-else if ($_REQUEST['recoverme'])
+else if (isset($_REQUEST['recoverme']) && $_REQUEST['recoverme'])
 {
 	$user = find_recovery_user($_REQUEST['recoverme']);
 	if ($user == null)
@@ -73,7 +73,7 @@ else if ($_REQUEST['recoverme'])
 		$changepwhash = $_REQUEST['recoverme'];
 	}
 }
-else if ($_REQUEST['forgotpwchangeform'])
+else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform'])
 {
 	$user = find_recovery_user($_REQUEST['changepwhash']);
 	if ($user == null)
