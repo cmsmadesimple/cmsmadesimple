@@ -26,6 +26,77 @@ global $gCms;
 $db =& $gCms->GetDb();
 
 $error = "";
+$forgotmessage = "";
+$changepwhash = "";
+
+//Redirect to the normal login screen if we hit cancel on the forgot pw one
+//Otherwise, see if we have a forgotpw hit
+if ((isset($_REQUEST['forgotpwform']) || isset($_REQUEST['forgotpwchangeform'])) && isset($_REQUEST['logincancel']))
+{
+	redirect('login.php');
+}
+else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['loginsubmit']))
+{
+	if (check_user_for_recovery($_REQUEST['forgottenusername']))
+	{
+		if (send_recovery_email($_REQUEST['forgottenusername']))
+		{
+			$forgotmessage = 'Sent.  Please check you email.';
+		}
+		else
+		{
+			$error = 'There was a problem sending the mail.  Better figger out that password.  Think, baby, think!';
+		}
+	}
+	else
+	{
+		$error = "User wasn't found.  Now what, Sherlock?";
+	}
+	$_REQUEST['forgotpw'] = '1';
+}
+else if ($_REQUEST['recoverme'])
+{
+	$user = find_recovery_user($_REQUEST['recoverme']);
+	if ($user == null)
+	{
+		$error = "Invalid recovery hash.  Sorry, buddy.";
+	}
+	else
+	{
+		$changepwhash = $_REQUEST['recoverme'];
+	}
+}
+else if ($_REQUEST['forgotpwchangeform'])
+{
+	$user = find_recovery_user($_REQUEST['changepwhash']);
+	if ($user == null)
+	{
+		$error = "Invalid recovery hash.  Sorry, buddy.";
+	}
+	else
+	{
+		if ($_REQUEST['password'] != '')
+		{
+			if ($_REQUEST['password'] == $_REQUEST['passwordagain'])
+			{
+				$user->password = md5($_REQUEST['password']);
+				$user->Save();
+				$error = "Password changed.  Please log in using the new credentials.";
+				$changepwhash = '';
+			}
+			else
+			{
+				$error = "Passwords do not match";
+				$changepwhash = $_REQUEST['changepwhash'];
+			}
+		}
+		else
+		{
+			$error = "Password cannot be blank";
+			$changepwhash = $_REQUEST['changepwhash'];
+		}
+	}
+}
 
 if (isset($_SESSION['logout_user_now']))
 {

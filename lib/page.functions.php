@@ -199,6 +199,64 @@ function generate_user_object($userid)
 	}
 }
 
+function check_user_for_recovery($username)
+{
+	global $gCms;
+	$userops =& $gCms->GetUserOperations();
+	$oneuser = $userops->LoadUserByUsername($username);
+	
+	return $oneuser != null;
+}
+
+function send_recovery_email($username)
+{
+	global $gCms;
+	$config =& $gCms->GetConfig();
+	$userops =& $gCms->GetUserOperations();
+	$user = $userops->LoadUserByUsername($username);
+	
+	//Grab CMSMailer -- *cough* hack
+	$obj = null;
+	if (isset($gCms->modules['CMSMailer']) &&
+		$gCms->modules['CMSMailer']['installed'] == true &&
+		$gCms->modules['CMSMailer']['active'] == true)
+	{
+		$obj = $gCms->modules['CMSMailer']['object'];
+	}
+	
+	if ($obj == null)
+	{
+		return false;
+	}
+	
+	$obj->AddAddress($user->email, $firstname . ' ' . $lastname);
+	$obj->SetSubject('[CMS Made Simple] Forgot your password');
+	
+	$body = "Blah blah blah\n\n\n";
+	$body .= "Click here: " . $config['root_url'] . '/' . $config['admin_dir'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
+	
+	$obj->SetBody($body);
+	
+	return $obj->Send();
+}
+
+function find_recovery_user($hash)
+{
+	global $gCms;
+	$config =& $gCms->GetConfig();
+	$userops =& $gCms->GetUserOperations();
+	
+	foreach ($userops->LoadUsers() as $user)
+	{
+		if ($hash == md5(md5($config['root_path'] . '--' . $user->username . md5($user->password))))
+		{
+			return $user;
+		}
+	}
+	
+	return null;
+}
+
 /**
  * Loads all permissions for a particular user into a global variable so we don't hit the db for every one.
  *
