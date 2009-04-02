@@ -1924,7 +1924,7 @@ $lang['admin']['passwordchangedlogin'] = 'Password changed.  Please log in using
 $lang['admin']['nopasswordforrecovery'] = 'No email address set for this user.  Password recovery is not possible.  Please contact your administrator.';
 $lang['admin']['lostpwemailsubject'] = '[CMS Made Simple] Password Recovery';
 $lang['admin']['lostpwemail'] = <<<EOT
-You are recieving this e-mail because a request has been made to change the CMS Made Simple password associated with this user account (%s).  If you would like to reset the password for this account simply click on the link below or paste it into the url field on your favorite browser:
+You are recieving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the link below or paste it into the url field on your favorite browser:
 %s
 
 If you feel this is incorrect or made in error, simply ignore the email and nothing will change.

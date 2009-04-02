@@ -224,7 +224,7 @@ function send_recovery_email($username)
 	$obj->SetSubject(lang('lostpwemailsubject'));
 	
 	$url = $config['root_url'] . '/' . $config['admin_dir'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
-	$body = lang('lostpwemail', $user->username, $url);
+	$body = lang('lostpwemail',$gCms->siteprefs['sitename'], $user->username, $url);
 	
 	$obj->SetBody($body);
 	
