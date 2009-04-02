@@ -57,6 +57,10 @@ class ErrorPage extends Content
 		return false;
 	}
 	
+	function IsSystemPage()
+	{
+		return true;
+	}
 
 	function SetProperties()
 	{
