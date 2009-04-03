@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['info_preview_notice'] = 'Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previwed page.  However, if you do that, you may experience unexpected behaviour.  If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab.  When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.';
 $lang['admin']['sitedownexcludes'] = 'Exclude these Addresses from Sitedown Messages';
 $lang['admin']['info_sitedownexcludes'] = <<<EOT
 This parameter allows listing a comma separated list of ip addresses or networks that should not be subject to the sitedown mechanism.  This allows administrators to work on a site whilst anonymous visitors receive a sitedown message.<br/><br/>Addresses can be specified in the following formats:<br/>

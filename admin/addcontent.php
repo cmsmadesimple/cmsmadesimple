@@ -333,6 +333,7 @@ $tabnames = $contentobj->TabNames();
 		{
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>
+			  <div class="pagewarning"><?php echo lang('info_preview_notice') ?></div>
 					<iframe name="previewframe" class="preview" id="previewframe" src="<?php echo $config["root_url"] ?>/index.php?<?php echo $config['query_var'] ?>=__CMS_PREVIEW_PAGE__"></iframe>
 				<?php
 			echo '<div style="clear: both;"></div></div></div>';
