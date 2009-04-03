@@ -49,7 +49,7 @@ else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['loginsubmit']))
 		}
 		else if (send_recovery_email($_REQUEST['forgottenusername']))
 		{
-			$acceptLogin = lang('recoveryemailsent');
+			$warningLogin = lang('recoveryemailsent');
 		}
 		else
 		{
@@ -88,7 +88,7 @@ else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform
 			{
 				$user->password = md5($_REQUEST['password']);
 				$user->Save();
-				$error = lang('passwordchangedlogin');
+				$acceptLogin = lang('passwordchangedlogin');
 				$changepwhash = '';
 			}
 			else
