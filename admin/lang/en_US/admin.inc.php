@@ -1923,6 +1923,7 @@ $lang['admin']['recoveryemailsent'] = 'Email sent to recorded address.  Please c
 $lang['admin']['errorsendingemail'] = 'There was an error sending the email.  Contact your administrator.';
 $lang['admin']['passwordchangedlogin'] = 'Password changed.  Please log in using the new credentials.';
 $lang['admin']['nopasswordforrecovery'] = 'No email address set for this user.  Password recovery is not possible.  Please contact your administrator.';
+$lang['admin']['lostpw'] = 'Forgot your password?';
 $lang['admin']['lostpwemailsubject'] = '[%s] Password Recovery';
 $lang['admin']['lostpwemail'] = <<<EOT
 You are recieving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the link below or paste it into the url field on your favorite browser:
