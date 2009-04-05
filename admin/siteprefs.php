@@ -306,6 +306,20 @@ foreach( $nls['language'] as $key=>$value )
 }
 $smarty->assign('languages',$tmp);
 $smarty->assign('templates',$templates);
+
+$tmp = array(''=>lang('none'));
+
+foreach($gCms->modules as $key=>$value)
+{
+	if ($gCms->modules[$key]['installed'] == true &&
+		$gCms->modules[$key]['active'] == true &&
+		$gCms->modules[$key]['object']->IsWYSIWYG())
+		{
+			$tmp[$key] .= $key;
+		}
+}
+$smarty->assign('wysiwyg',$tmp);
+
 if ($dir=opendir(dirname(__FILE__)."/themes/")) 
 { 
   $themes = array();
@@ -359,6 +373,7 @@ $smarty->assign('lang_css_max_age',lang('css_max_age'));
 $smarty->assign('lang_help_css_max_age',lang('help_css_max_age'));
 $smarty->assign('lang_results',lang('results'));
 $smarty->assign('lang_frontendlang',lang('frontendlang'));
+$smarty->assign('lang_frontendwysiwygtouse',lang('frontendwysiwygtouse'));
 $smarty->assign('lang_nogcbwysiwyg',lang('nogcbwysiwyg'));
 $smarty->assign('lang_globalmetadata',lang('globalmetadata'));
 $smarty->assign('lang_enablecustom404',lang('enablecustom404'));

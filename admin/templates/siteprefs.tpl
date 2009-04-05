@@ -33,6 +33,16 @@
     </select>
   </p>
 </div>
+
+<div class="pageoverflow">
+	<p class="pagetext">{$lang_frontendwysiwygtouse}:</p>
+	<p class="pageinput">
+		<select name="frontendwysiwyg">
+		{html_options options=$wysiwyg selected=$frontendwysiwyg}
+		</select>
+	</p>
+</div>
+
 <div class="pageoverflow">
   <p class="pagetext">{$lang_nogcbwysiwyg}:</p>
   <p class="pageinput"><input class="pagenb" type="checkbox" name="nogcbwysiwyg" {if $nogcbwysiwyg == "1"}checked="checked"{/if} /></p>
