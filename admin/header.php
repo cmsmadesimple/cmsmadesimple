@@ -154,7 +154,7 @@ else
 			else
 			{
 				include_once(cms_join_path($config['root_path'], 'lib', 'test.functions.php'));
-				$remote_test = testRemoteFile(0, lang('test_remote_url'), '', lang('test_remote_url_failed'), $config['debug']);
+				$remote_test = testRemoteFile(0, lang('test_remote_url'), $url, lang('test_remote_url_failed'), $config['debug']);
 				if ($remote_test->continueon)
 				{
 					// we have a 'theoretically' valid url
