@@ -22,7 +22,7 @@ $dirname = dirname(__FILE__);
 require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 
 define('CMS_DEFAULT_VERSIONCHECK_URL','http://dev.cmsmadesimple.org/latest_version.php');
-define('CMS_SECURE_PARAM_NAME','_s_');
+define('CMS_SECURE_PARAM_NAME','sp_');
 define('CMS_USER_KEY','cmsuserkey');
 
 $session_key = substr(md5($dirname), 0, 8);
@@ -37,16 +37,16 @@ if( isset($CMS_ADMIN_PAGE) )
   {
      if( !isset($_SESSION[CMS_USER_KEY]) )
        {
-	 if( isset($_COOKIE['sec'.CMS_SECURE_PARAM_NAME]) )
+	 if( isset($_COOKIE[CMS_SECURE_PARAM_NAME]) )
 	   {
-	     $_SESSION[CMS_USER_KEY] = $_COOKIE['sec'.CMS_SECURE_PARAM_NAME];
+	     $_SESSION[CMS_USER_KEY] = $_COOKIE[CMS_SECURE_PARAM_NAME];
 	   }
 	 else
 	   {
 	     // maybe change this algorithm.
 	     $key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
 	     $_SESSION[CMS_USER_KEY] = $key;
-	     setcookie('sec'.CMS_SECURE_PARAM_NAME, $key);
+	     setcookie(CMS_SECURE_PARAM_NAME, $key);
 	   }
        }
   }
