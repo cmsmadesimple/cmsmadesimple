@@ -315,7 +315,7 @@ foreach($gCms->modules as $key=>$value)
 		$gCms->modules[$key]['active'] == true &&
 		$gCms->modules[$key]['object']->IsWYSIWYG())
 		{
-			$tmp[$key] .= $key;
+			if (isset($tmp[$key])) $tmp[$key].= $key; else $tmp[$key]=$key;
 		}
 }
 $smarty->assign('wysiwyg',$tmp);
