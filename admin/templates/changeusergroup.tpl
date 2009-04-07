@@ -94,7 +94,7 @@
 <table cellspacing="0" class="pagetable" id="permtable">
   <thead>
   <tr>
-    <th>{$title_group}</th>
+    <th>{if isset($title_group)}{$title_group}{/if}</th>
 	{foreach from=$group_list item=thisgroup}
 		{if $thisgroup->id != -1}<th class="g{$thisgroup->id}">{$thisgroup->name}</th>{/if}
 	{/foreach}
