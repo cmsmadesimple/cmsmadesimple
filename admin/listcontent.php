@@ -790,7 +790,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         $url = $one->GetURL();
         if ($url != '' && $url != '#' && $one->Type() != 'pagelink' && $one->Type() != 'link' && $one->Type() != 'sectionheader')
         {
-            $thelist .= "<td class=\"pagepos\"><a href=\"".$url."\" rel=\"external\">";
+            $thelist .= "<td class=\"pagepos\"><a href=\"".$url."\" rel=\"external\" target=\"_blank\">";
             $thelist .= $viewImg;
             $thelist .= "</a></td>\n";
         }
