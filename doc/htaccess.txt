@@ -22,9 +22,9 @@ RewriteBase /
 #
 # 301 Redirect all requests that don't contain a dot or trailing slash to
 # include a trailing slash
-RewriteCond %{REQUEST_URI} !/$
-RewriteCond %{REQUEST_URI} !\.
-RewriteRule ^(.*) %{REQUEST_URI}/ [R=301,L]
+#RewriteCond %{REQUEST_URI} !/$
+#RewriteCond %{REQUEST_URI} !\.
+#RewriteRule ^(.*) %{REQUEST_URI}/ [R=301,L]
 # Rewrites urls in the form of /parent/child/
 # but only rewrites if the requested URL is not a file or directory
 #
