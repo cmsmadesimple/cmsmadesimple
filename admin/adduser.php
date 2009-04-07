@@ -227,8 +227,15 @@ else {
 			<div class="pageinput">
       <?php
 	     echo '<div class="group_memberships clear"><input type="hidden" name="groups" value="1" />';
+
+		$userops =& $gCms->GetUserOperations();
+		$adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
         foreach($group_list as $thisGroup)
             {
+			if( $thisGroup->id == 1 && $adminuser == false )
+			  {
+				continue;
+			  }
             echo '<div class="group"><input type="checkbox" name="g'.$thisGroup->id.'" id="g'.$thisGroup->id.
                '" value="1" /><label for="g'.$thisGroup->id.'">'.$thisGroup->name.'</label></div>';
             }
