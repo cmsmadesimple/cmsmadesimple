@@ -212,7 +212,7 @@ else if (isset($_POST["editsiteprefs"]))
       set_site_preference('urlcheckversion', $urlcheckversion);
       if( isset($_POST["clear_vc_cache"])) 
 	{
-	  set_site_preference('lastchsversioncheck',0);
+	  set_site_preference('lastcmsversioncheck',0);
 	}
 
       set_site_preference('defaultdateformat', $defaultdateformat);
