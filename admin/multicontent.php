@@ -206,7 +206,7 @@ else
 
 if (count($nodelist) == 0 && 'reorder' != $action)
 {
-	redirect("listcontent.php".$urlext.'&amp;message=no_bulk_performed');
+	redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
 }
 else
 {
@@ -257,7 +257,7 @@ else
 		}
 		else
 		{
-			redirect('listcontent.php'.$urlext.'&amp;error=no_permission');
+			redirect('listcontent.php'.$urlext.'&error=no_permission');
 		}
 	}
         else if ($action == 'settemplate')
@@ -297,7 +297,7 @@ else
 		    $node->Save();
 		  }
 	      }
-	    redirect('listcontent.php'.$urlext.'&amp;message=bulk_success');
+	    redirect('listcontent.php'.$urlext.'&message=bulk_success');
 	  }
 	else if ($action == 'dodelete')
 	{
@@ -354,9 +354,9 @@ else
 		//include_once("footer.php");
 		if(! $bulk)
 		{
-			redirect("listcontent.php".$urlext.'&amp;message=no_bulk_performed');
+			redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
 		}
-		redirect("listcontent.php".$urlext.'&amp;message=bulk_success');
+		redirect("listcontent.php".$urlext.'&message=bulk_success');
 	}
 	else if ($action == 'inactive')
 	{
@@ -379,9 +379,9 @@ else
 		}
 		if(! $bulk)
 		{
-			redirect("listcontent.php".$urlext.'&amp;message=no_bulk_performed');
+			redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
 		}
-		redirect("listcontent.php".$urlext.'&amp;message=bulk_success');
+		redirect("listcontent.php".$urlext.'&message=bulk_success');
 	}
 	else if ($action == 'active')
 	{
@@ -404,9 +404,9 @@ else
 		}
 		if(! $bulk)
 		{
-			redirect("listcontent.php".$urlext.'&amp;message=no_bulk_performed');
+			redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
 		}
-		redirect("listcontent.php".$urlext.'&amp;message=bulk_success');
+		redirect("listcontent.php".$urlext.'&message=bulk_success');
 	}
         else if ($action == 'setcachable' || $action == 'setnoncachable')
         {
@@ -425,7 +425,7 @@ else
 			   $node->Save();
 			}
 		}
-		redirect("listcontent.php".$urlext.'&amp;message=bulk_success');
+		redirect("listcontent.php".$urlext.'&message=bulk_success');
         }
         else if ($action == 'showinmenu' || $action == 'hidefrommenu')
         {
@@ -444,7 +444,7 @@ else
 			   $node->Save();
 			}
 		}
-		redirect("listcontent.php".$urlext.'&amp;message=bulk_success');
+		redirect("listcontent.php".$urlext.'&message=bulk_success');
         }
 	else if ($action == 'reorder')
 	{
@@ -459,7 +459,7 @@ else
 	}
 	else
 	{
-		redirect('listcontent.php'.$urlext.'&amp;message=no_bulk_performed');
+		redirect('listcontent.php'.$urlext.'&message=no_bulk_performed');
 	}
 }
 
