@@ -15,6 +15,7 @@ Version 1.6 - New Caledinia
 
 - Feature Requests:
   - #2605 adding a 'forgot password' submission on the login panel  
+  - #3048 News: Only show expiration-date when checkbox is set
   
 - Core additions:
   - Ability to set a page as the 404 error page.  Replaces
