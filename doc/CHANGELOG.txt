@@ -2,10 +2,11 @@ Version 1.6 - New Caledinia
 -----------------------------
 - Fixes of several bugs: 
   - Add a few logic in preview
+  - #2786 Bulk page changes don't show messages
   - #2831 Upgrade process continue even if database is empty
   - #3040 no external view after moving pages up and down (and deleting pages) in listcontent
-  - #3179 Ability to show when news items were last updated
   - #3123 Installer overly restricts account names
+  - #3179 Ability to show when news items were last updated
   - #3189 check if udt exists
   - #3190 Error with link rel="canonical"
   - #3257 Non-admin users can create admin users

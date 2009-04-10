@@ -41,6 +41,7 @@ $db =& $gCms->GetDb();
 $hm =& $gCms->GetHierarchyManager();
 
 $nodelist = array();
+$bulk = false;
 
 function toggleexpand($contentid, $collapse = false)
 {
@@ -205,7 +206,7 @@ else
 
 if (count($nodelist) == 0 && 'reorder' != $action)
 {
-	redirect("listcontent.php".$urlext);
+	redirect("listcontent.php".$urlext.'&amp;message=no_bulk_performed');
 }
 else
 {
@@ -256,7 +257,7 @@ else
 		}
 		else
 		{
-			redirect('listcontent.php'.$urlext);
+			redirect('listcontent.php'.$urlext.'&amp;error=no_permission');
 		}
 	}
         else if ($action == 'settemplate')
@@ -283,6 +284,7 @@ else
         else if ($action == 'dosettemplate')
 	  {
 	    $template_id = (int)$_POST['template_id'];
+		$modifyall = check_permission($userid, 'Modify Any Page');
 	    foreach( $nodelist as $node )
 	      {
 		$permission = ($modifyall || check_ownership($userid, $node->Id()) || 
@@ -295,8 +297,7 @@ else
 		    $node->Save();
 		  }
 	      }
-
-	    redirect('listcontent.php'.$urlext);
+	    redirect('listcontent.php'.$urlext.'&amp;message=bulk_success');
 	  }
 	else if ($action == 'dodelete')
 	{
@@ -348,9 +349,14 @@ else
 				audit($id, $title, 'Deleted Content');
 			}
 			ContentManager::SetAllHierarchyPositions();
+			$bulk = true;
 		}
 		//include_once("footer.php");
-		redirect("listcontent.php".$urlext);
+		if(! $bulk)
+		{
+			redirect("listcontent.php".$urlext.'&amp;message=no_bulk_performed');
+		}
+		redirect("listcontent.php".$urlext.'&amp;message=bulk_success');
 	}
 	else if ($action == 'inactive')
 	{
@@ -365,12 +371,17 @@ else
 			{
 				if ($node->Active())
 				{
+					$bulk = true;
 					$node->SetActive(false);
 					$node->Save();
 				}
 			}
 		}
-		redirect("listcontent.php".$urlext);
+		if(! $bulk)
+		{
+			redirect("listcontent.php".$urlext.'&amp;message=no_bulk_performed');
+		}
+		redirect("listcontent.php".$urlext.'&amp;message=bulk_success');
 	}
 	else if ($action == 'active')
 	{
@@ -387,10 +398,15 @@ else
 				{
 					$node->SetActive(true);
 					$node->Save();
+					$bulk = true;
 				}
 			}
 		}
-		redirect("listcontent.php".$urlext);
+		if(! $bulk)
+		{
+			redirect("listcontent.php".$urlext.'&amp;message=no_bulk_performed');
+		}
+		redirect("listcontent.php".$urlext.'&amp;message=bulk_success');
 	}
         else if ($action == 'setcachable' || $action == 'setnoncachable')
         {
@@ -409,7 +425,7 @@ else
 			   $node->Save();
 			}
 		}
-		redirect("listcontent.php".$urlext);
+		redirect("listcontent.php".$urlext.'&amp;message=bulk_success');
         }
         else if ($action == 'showinmenu' || $action == 'hidefrommenu')
         {
@@ -428,7 +444,7 @@ else
 			   $node->Save();
 			}
 		}
-		redirect("listcontent.php".$urlext);
+		redirect("listcontent.php".$urlext.'&amp;message=bulk_success');
         }
 	else if ($action == 'reorder')
 	{
@@ -443,7 +459,7 @@ else
 	}
 	else
 	{
-		redirect('listcontent.php'.$urlext);
+		redirect('listcontent.php'.$urlext.'&amp;message=no_bulk_performed');
 	}
 }
 
