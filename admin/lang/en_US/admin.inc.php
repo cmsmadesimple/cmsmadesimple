@@ -1,5 +1,5 @@
 <?php
-$lang['admin']['no_permission'] = 'You have bot permission to perform that function.';
+$lang['admin']['no_permission'] = 'You have not permission to perform that function.';
 $lang['admin']['bulk_success'] = 'Bulk operation was successfully updated.';
 $lang['admin']['no_bulk_performed'] = 'No bulk operation performed.';
 $lang['admin']['info_preview_notice'] = 'Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour. If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab. When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.';
