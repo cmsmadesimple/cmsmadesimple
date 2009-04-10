@@ -22,6 +22,7 @@ Version 1.6 - New Caledinia
     flexibility.
 
 - News 
+  - #2620 Extra fields are not displayed in the print template
   - #3163 Typo in News module
 
 - Libs Updates: 
