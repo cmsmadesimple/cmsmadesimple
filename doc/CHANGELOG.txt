@@ -1,4 +1,4 @@
-Version 1.6 - New Caledinia
+Version 1.6 - New Caledonia
 -----------------------------
 - Fixes of several bugs: 
   - Add a few logic in preview
