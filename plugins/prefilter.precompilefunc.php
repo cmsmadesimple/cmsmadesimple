@@ -23,6 +23,8 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 	$result = explode(':', $smarty->_current_file);
 	if (count($result) > 1)
 	{
+	  if( startswith($result[0],'tmp_') ) $result[0] = 'template';
+
 		switch ($result[0])
 		{
 			case "content":
