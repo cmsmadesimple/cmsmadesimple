@@ -663,7 +663,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         $thelist .= "</td><td>";
         $thelist .= $one->Hierarchy();
         $thelist .= "</td>\n";
-
+		
+		$thelist .= "<td>";
         if ($indent)
         {
             for ($i=0;$i < $root->getLevel();$i++)
@@ -672,7 +673,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
             }
         } ## if indent
 
-        $thelist .= "<td>";
+        // $thelist .= "<td>";
         if ($display == 'edit')
             $thelist .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($one->mMenuText, '', '', true) . '</a>'. "\n";
         else
