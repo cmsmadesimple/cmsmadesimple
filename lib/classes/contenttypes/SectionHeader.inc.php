@@ -149,7 +149,8 @@ class SectionHeader extends ContentBase
     if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
     {
       $contentops =& $gCms->GetContentOperations();
-      $ret[]= array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1));
+      $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
+      if( !empty($tmp) ) $ret[]= array(lang('parent').':',$tmp);
     }
 
       global $gCms;

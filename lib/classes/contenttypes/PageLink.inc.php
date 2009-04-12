@@ -220,7 +220,8 @@ class PageLink extends ContentBase
 		    || ($adding == true && check_permission(get_userid(), 'Add Pages'))
 		    || check_authorship(get_userid(),$this->Id()) )
 			{
-			  $ret[]= array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1));
+			  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
+			  if( !empty($tmp) ) $ret[]= array(lang('parent').':',$tmp);
 			}
 
 		$ret[]= array(lang('destination_page').':', 

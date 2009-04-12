@@ -695,7 +695,6 @@ class ContentOperations
 				{
 					$userid = get_userid();
 				}
-			$result .= '<select name="'.$name.'">';
 			if( $userid > 0 && check_permission($userid,'Modify Page Structure') )
 				{
 					$result .= '<option value="-1">'.lang('none').'</option>';
@@ -735,12 +734,12 @@ class ContentOperations
 							{
 								continue;
 							}
-					}
-				
+					}				
 
 				#Don't include content types that do not want children either...
-				if ($one->WantsChildren() == true)
-				  {
+				if (!$one->WantsChildren()) continue;
+
+				{
 					$result .= '<option value="'.$value.'"';
 
 					#Select current parent if it exists
@@ -760,8 +759,12 @@ class ContentOperations
 				}
 			}
 
-			$result .= '</select>';
 		}
+
+		if( !empty($result) )
+			{
+				$result .= '<select name="'.$name.'">'.$result.'</select>';
+			}
 
 		return $result;
 	}
