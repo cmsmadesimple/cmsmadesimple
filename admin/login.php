@@ -254,6 +254,14 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			    }
 			  $tmp = explode('?',$homepage);
 			  if( !file_exists($tmp[0]) ) $homepage = 'index.php';
+
+			  // quick hack to remove old secure param name from homepage url
+			  $pos = strpos($homepage,'?_s_');
+			  if( $pos !== FALSE )
+			    {
+			      $homepage = substr($homepage,0,$pos);
+			    }
+
 			  $pos = strpos($homepage,CMS_SECURE_PARAM_NAME);
 			  if( $pos !== FALSE )
 			    {
