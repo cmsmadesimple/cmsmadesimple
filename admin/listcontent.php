@@ -659,25 +659,10 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 $thelist .= "</a>";
             }
         }
+
         $thelist .= "</td><td>";
-        /*
-        if (check_modify_all($userid))
-        {
-            $pos = strrpos($one->Hierarchy(), '.');
-            if ($pos != false)
-            {
-            $thelist .= substr($one->Hierarchy(), 0, $pos)."\n";
-            }
-            
-            $thelist .= '<input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."\n";
-        }
-        else
-        {
-            */
         $thelist .= $one->Hierarchy();
-        //}
         $thelist .= "</td>\n";
-        $thelist .= "<td>";
 
         if ($indent)
         {
@@ -687,10 +672,12 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
             }
         } ## if indent
 
+        $thelist .= "<td>";
         if ($display == 'edit')
-            $thelist .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($one->mMenuText, '', '', true) . '</a></td>'. "\n";
+            $thelist .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($one->mMenuText, '', '', true) . '</a>'. "\n";
         else
-            $thelist .= cms_htmlentities($one->mMenuText, '', '', true) . "</td>\n";
+	  $thelist .= cms_htmlentities($one->mMenuText, '', '', true);
+	$thelist .= "</td>\n";
 
 
 	if( $one->Type() == 'pagelink' || $one->Type() == 'link' || $one->Type() == 'sectionheader' )
@@ -720,6 +707,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         {
             $thelist .= "<td>&nbsp;</td>\n";
         }
+
         if (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Modify Any Page'))
         {
 	  if (($display == 'edit' || $display == 'structure'))
@@ -738,6 +726,12 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 $thelist .= "<td>&nbsp;</td>\n";
             }
         }
+	else
+	  {
+	    $thelist .= "<td>&nbsp;</td>\n";
+	  }
+
+
 		if (check_modify_all($userid))
 		{
 			if ($one->IsDefaultPossible() && ($display == 'edit' || $display == 'structure'))
