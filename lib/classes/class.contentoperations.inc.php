@@ -682,16 +682,24 @@ class ContentOperations
 		return $contentcache;
 	}
 
-	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0)
+	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, $use_perms = 0)
 	{
 		$result = '';
+		$userid = -1;
 
 		$allcontent =& ContentOperations::GetAllContent();
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{
+			if( $use_perms )
+				{
+					$userid = get_userid();
+				}
 			$result .= '<select name="'.$name.'">';
-			$result .= '<option value="-1">'.lang('none').'</option>';
+			if( $userid > 0 && check_permission($userid,'Modify Page Structure') )
+				{
+					$result .= '<option value="-1">'.lang('none').'</option>';
+				}
 
 			$curhierarchy = '';
 
@@ -718,6 +726,17 @@ class ContentOperations
 				{
 					continue;
 				}
+
+				#If we have a valid userid... only include pages where this user
+				#has write access... or is an admin user... or has appropriate permission.
+				if( $userid > 0 )
+					{
+						if( !check_permission($userid,'Modify Page Structure') && !check_authorship($userid,$one->Id()) )
+							{
+								continue;
+							}
+					}
+				
 
 				#Don't include content types that do not want children either...
 				if ($one->WantsChildren() == true)

@@ -363,21 +363,6 @@ function check_authorship($userid, $contentid = '')
 	if (!isset($gCms->variables['authorpages']))
 	{
 	  author_pages($userid);
-// 		$db =& $gCms->GetDb();
-
-// 		$variables = &$gCms->variables;
-// 		$variables['authorpages'] = array();
-
-// 		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
-// 		$result = &$db->Execute($query, array($userid));
-
-// 		while ($result && !$result->EOF)
-// 		{
-// 			$variables['authorpages'][] =& $result->fields['content_id'];
-// 			$result->MoveNext();
-// 		}
-		
-// 		if ($result) $result->Close();
 	}
 
 	if (isset($gCms->variables['authorpages']))

@@ -89,10 +89,12 @@ class Separator extends ContentBase
 	
 	$ret = array();
 
-    if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
+    if (check_permission(get_userid(), 'Modify Page Structure') 
+	|| ($adding == true && check_permission(get_userid(), 'Add Pages'))
+	|| check_authorship(get_userid(),$this->Id()) )
     {
 		$contentops =& $gCms->GetContentOperations();
-    	$ret[] = array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
+		$ret[] = array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1));
     }
 	$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
 	$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');

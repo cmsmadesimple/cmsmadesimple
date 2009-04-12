@@ -148,8 +148,8 @@ class SectionHeader extends ContentBase
 	$ret[]= array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
     if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
     {
-		$contentops =& $gCms->GetContentOperations();
-    	$ret[]= array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
+      $contentops =& $gCms->GetContentOperations();
+      $ret[]= array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1));
     }
 
       global $gCms;

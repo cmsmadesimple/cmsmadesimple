@@ -226,10 +226,12 @@ class Content extends ContentBase
 	{
 	  $ret[]= array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
 	  $ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
-	  if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
+	  if (check_permission(get_userid(), 'Modify Page Structure') || 
+	      ($adding == true && check_permission(get_userid(), 'Add Pages')) ||
+	      check_authorship(get_userid(),$this->Id()) )
 	    {
 	      $contentops =& $gCms->GetContentOperations();
-	      $ret[]= array(lang('parent').':',$contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
+	      $ret[]= array(lang('parent').':',$contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1));
 	    }
 
 	  if( check_permission(get_userid(), 'Modify Page Structure') || $adding ) {
