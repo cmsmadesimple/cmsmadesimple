@@ -181,6 +181,9 @@ class ContentBase
     var $mAdditionalEditors;
 	
     var $mReadyForEdit;
+
+    var $_attributes;
+
     /************************************************************************/
     /* Constructor related													*/
     /************************************************************************/
@@ -192,8 +195,23 @@ class ContentBase
     {
 	$this->SetInitialValues();
 	$this->SetProperties();
+
+	// set allowed property names
+	if( is_array($this->_attributes ) ) 
+	  {
+	    $tmp = array();
+	    
+	    foreach( $this->_attributes as $one )
+	      {
+		$tmp[] = $one[0];
+	      }
+	    $this->mProperties->SetAllowedPropertyNames($tmp);
+	  }
+
 	$this->mPropertiesLoaded = false;
 	$this->mReadyForEdit = false;
+	//$this->_attributes = array('active','showinmenu','alias','target','image','thumbnail','titleattribute','accesskey','extra1','extra2','extra3');
+
     }
 
     /**
@@ -240,6 +258,22 @@ class ContentBase
      */
     function SetProperties()
     {
+      $this->AddContentProperty('target',10);
+      $this->AddBaseProperty('title',1,1);
+      $this->AddBaseProperty('menutext',2,1);
+      $this->AddBaseProperty('parent',3,1);
+      $this->AddBaseProperty('active',5);
+      $this->AddBaseProperty('showinmenu',5);
+      $this->AddBaseProperty('alias',10);
+      $this->AddBaseProperty('image',50);
+      $this->AddBaseProperty('thumbnail',50);
+      $this->AddBaseProperty('titleattribute',55);
+      $this->AddBaseProperty('accesskey',55);
+      $this->AddContentProperty('extra1',80);
+      $this->AddContentProperty('extra2',80);
+      $this->AddContentProperty('extra3',80);
+      $this->AddBaseProperty('owner',90);
+      $this->AddBaseProperty('additionaleditors',91);
     }
 
     
@@ -1547,6 +1581,273 @@ class ContentBase
 	{
 		return FALSE;
 	}
+
+	/* private */
+	function RemoveProperty($name)
+	{
+	  if( !is_array($this->_attributes) ) return;
+	  $tmp = array();
+	  for( $i = 0; $i < count($this->_attributes); $i++ )
+	    {
+	      if( is_array($this->_attributes[$i]) && $this->_attributes[$i][0] == $name )
+		{
+		  continue;
+		}
+	      $tmp[] = $this->_attributes[$i];
+	    }
+	  $this->_attributes = $tmp;
+	}
+
+	/* private */
+	function AddBaseProperty($name,$priority,$is_required = 0,$type = 'string')
+	{
+	  if( !is_array($this->_attributes) )
+	    {
+	      $this->_attributes = array();
+	    }
+
+	  $this->_attributes[] = array($name,$priority,$is_required);
+	}
+
+
+	/* private */
+	function AddContentProperty($name,$priority,$is_required = 0,$type = 'string')
+	{
+	  if( !is_array($this->_attributes) )
+	    {
+	      $this->_attributes = array();
+	    }
+	  $this->mProperties->add($type,$name);
+	  $this->_attributes[] = array($name,$priority,$is_required);
+	}
+
+	/* private */
+	function display_attributes($adding,$negative = 0)
+	{
+	  // get our required attributes
+	  $basic_attributes = array();
+	  foreach( $this->_attributes as $one )
+	    {
+	      if( $one[2] == 1 ) $basic_attributes[] = $one;
+	    }
+
+	  // merge in preferred basic attributes
+	  $tmp = get_site_preference('basic_attributes');
+	  if( !empty($tmp) )
+	    {
+	      $tmp = explode(',',$tmp);
+	      foreach( $this->_attributes as $one )
+		{
+		  foreach( $tmp as $basic )
+		    {
+		      if( $one[0] == $basic ) {
+			$basic_attributes[] = $one;
+		      }
+		    }
+		}
+	    }
+
+	  $attrs = $basic_attributes;
+	  if( $negative )
+	    {
+	      // build a new list of all properties... except those in the basic_attributes
+	      $attrs = array();
+	      foreach( $this->_attributes as $one )
+		{
+		  $found = 0;
+		  foreach( $basic_attributes as $basic )
+		    {
+		      if( $basic[0] == $one[0] )
+			{
+			  $found = 1;
+			}
+		    }
+
+		  if( !$found )
+		    {
+		      $attrs[] = $one;
+		    }
+		}
+	    }
+
+	  // sort the attributes on the 2nd element...
+	  $fn = create_function('$a,$b','if( $a[1] < $b[1] ) return -1; else if( $a[1] == $b[1] ) return 0; else return $b;');
+	  usort($attrs,$fn);
+
+	  $tmp = $this->display_admin_attributes($attrs,$adding);
+	  return $tmp;
+	}
+
+	/* private */
+	function display_admin_attributes($attributelist,$adding)
+	{
+	  // sort the attributes
+
+	  $ret = array();
+	  foreach( $attributelist as $one )
+	    {
+	      $ret[] = $this->display_single_element($one[0],$adding);
+	    }
+	  return $ret;
+	}
+
+	/* private */
+	function display_single_element($one,$adding)
+	{
+	  global $gCms;
+	  $config =& $gCms->GetConfig();
+
+	  switch( $one )
+	    {
+	    case 'title':
+	      {
+		return array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
+	      }
+	      break;
+	      
+	    case 'menutext':
+	      {
+		return array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
+	      }
+	      break;
+	      
+	    case 'parent':
+	      if (check_permission(get_userid(), 'Modify Page Structure') || 
+		  ($adding == true && check_permission(get_userid(), 'Add Pages')) ||
+		  check_authorship(get_userid(),$this->Id()) )
+		{
+		  $contentops =& $gCms->GetContentOperations();
+		  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
+		  if( !empty($tmp) ) return array(lang('parent').':',$tmp);
+		}
+	      break;
+
+	    case 'active':
+	      if( check_permission(get_userid(),'Modify Page Structure') || $adding ) {
+		return array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
+	      }
+	      else if( $this->mAtive ) {
+		return array('','<input type="hidden" name="active" value="1" />');
+	      }
+	      break;
+	      
+	    case 'showinmenu':
+	      if( check_permission(get_userid(),'Modify Page Structure') || $adding ) {
+		return array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+	      }
+	      else if( $this->mShowInMenu ) {
+		return array('','<input type="hidden" name="showinmenu" value="1" />');
+	      }
+	      break;
+	      
+	    case 'target':
+	      {
+		$text = '<option value="---">'.lang('none').'</option>';
+		$text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
+		$text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
+		$text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
+		$text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
+		return array(lang('target').':','<select name="target">'.$text.'</select>');
+		
+	      }
+	      break;
+	      
+	    case 'alias':
+	      if( check_permission(get_userid(),'Modify Page Structure') || $adding == true) {
+		return array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
+	      }
+	      else {
+		return array(lang('pagealias').':','<input type="text" disabled name="alias" value="'.$this->mAlias.'" />');
+	      }
+	      break;
+	      
+	    case 'image':
+	      {
+		$dir = $config['image_uploads_path'];
+		$data = $this->GetPropertyValue('image');
+		$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
+		return array(lang('image').':',$dropdown);
+	      }
+	      break;
+	      
+	    case 'thumbnail':
+	      {
+		$dir = $config['image_uploads_path'];
+		$data = $this->GetPropertyValue('thumbnail');
+		$dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
+		return array(lang('thumbnail').':',$dropdown);
+	      }
+	      break;
+	      
+	    case 'titleattribute':
+	      {
+		return array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
+	      }
+	      break;
+	      
+	    case 'accesskey':
+	      {
+		return array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+	      }
+	      break;
+	      
+	    case 'extra1':
+	      {
+		return array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
+	      }
+	      break;
+	      
+	    case 'extra2':
+	      {
+		return array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
+	      }
+	      break;
+	      
+	    case 'extra3':
+	      {
+		return array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
+	      }
+	      break;
+
+	    case 'owner':
+	      {
+		$showadmin = check_ownership(get_userid(), $this->Id()) || 
+		  check_permission(get_userid(), 'Modify Any Page');
+		$userops =& $gCms->GetUserOperations();
+		if (!$adding && $showadmin)
+		  {
+		    return array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
+		  }
+	      }
+	      break;
+
+	    case 'additionaleditors':
+	      {
+		// do owner/additional-editor stuff
+		$showadmin = check_ownership(get_userid(), $this->Id()) || 
+		  check_permission(get_userid(), 'Modify Any Page');
+		if ($adding || $showadmin)
+		  {
+		    $addteditors = array();
+		    if( $adding )
+		      {
+			$addeditors = get_site_preference('additional_editors','');
+			$addteditors = explode(",",$addeditors);
+			return $this->ShowAdditionalEditors($addteditors);
+		      }
+		    else
+		      {
+			return $this->ShowAdditionalEditors();
+		      }
+		  }
+	      }
+	      break;
+
+	    default:
+	      die('unknown property '.$one);
+	    }
+	}
+
 }
 
 /**

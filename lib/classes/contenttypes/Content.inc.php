@@ -22,18 +22,18 @@ class Content extends ContentBase
 {
     var $additionalContentBlocks;
     var $addtContentBlocksLoaded;
-	var $doAliasCheck;
-	var $doAutoAliasIfEnabled;
+    var $doAliasCheck;
+    var $doAutoAliasIfEnabled;
+    var $stylesheet;
 	
     function Content()
     {
 	$this->ContentBase();
-	$this->mProperties->SetAllowedPropertyNames(array('content_en','target','pagedata',
-							  'extra1','extra2','extra3','searchable','image','thumbnail','disable_wysiwyg'));
 	$this->additionalContentBlocks = array();
 	$this->addtContentBlocksLoaded = false;
 	$this->doAliasCheck = true;
 	$this->doAutoAliasIfEnabled = true;
+	//$this->_attributes = array_merge($this->_attributes,array('template','cachable','magemetadata','pagedata','searchable'));
     }
 
     function IsCopyable()
@@ -48,18 +48,17 @@ class Content extends ContentBase
 
     function SetProperties()
     {
-	$this->mProperties->Add('string', 'content_en'); //For later language support
-	$this->mProperties->Add('string', 'target');
-	$this->mProperties->Add('string', 'pagedata'); 
-	$this->mProperties->Add('string', 'extra1'); 
-	$this->mProperties->Add('string', 'extra2'); 
-	$this->mProperties->Add('string', 'extra3'); 
-	$this->mProperties->Add('string', 'image'); 
-	$this->mProperties->Add('string', 'thumbnail'); 
-	$this->mProperties->Add('string', 'searchable'); 
-	$this->mProperties->Add('string', 'disable_wysiwyg');
-	#Turn on preview
-	$this->mPreview = true;
+      parent::SetProperties();
+      $this->AddBaseProperty('template',10);
+      $this->AddBaseProperty('cachable',6);
+      $this->AddContentProperty('content_en',4,1);
+      $this->AddContentProperty('searchable',4);
+      $this->AddBaseProperty('pagemetadata',20);
+      $this->AddContentProperty('pagedata',25);
+      $this->AddContentProperty('disable_wysiwyg',60);
+
+      #Turn on preview
+      $this->mPreview = true;
     }
 
     /**
@@ -198,7 +197,12 @@ class Content extends ContentBase
 
     function TabNames()
     {
-	return array(lang('main'), lang('options'));
+      $res = array(lang('main'));
+      if( check_permission(get_userid(),'Modify Page Structure') )
+	{
+	  $res[] = lang('options');
+	}
+      return $res;
     }
 
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
@@ -208,10 +212,10 @@ class Content extends ContentBase
 	$config = $gCms->GetConfig();
 	$templateops =& $gCms->GetTemplateOperations();
 	$ret = array();
-	$stylesheet = '';
+	$this->stylesheet = '';
 	if ($this->TemplateId() > 0)
 	{
-	    $stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
+	    $this->stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
 	}
 	else
 	{
@@ -219,60 +223,45 @@ class Content extends ContentBase
 	    if (isset($defaulttemplate))
 	    {
 		$this->mTemplateId = $defaulttemplate->id;
-		$stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
+		$this->stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
 	    }
 	}
 	if ($tab == 0)
 	{
-	  $ret[]= array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
-	  $ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
-	  if (check_permission(get_userid(), 'Modify Page Structure') || 
-	      ($adding == true && check_permission(get_userid(), 'Add Pages')) ||
-	      check_authorship(get_userid(),$this->Id()) )
+	  // now do basic attributes
+	  $tmp = $this->display_attributes($adding);
+	  if( !empty($tmp) )
 	    {
-	      $contentops =& $gCms->GetContentOperations();
-	      $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
-	      if( !empty($tmp) ) $ret[]= array(lang('parent').':',$tmp);
+	      foreach( $tmp as $one ) {
+		$ret[] = $one;
+	      }
 	    }
 
-	  if( check_permission(get_userid(), 'Modify Page Structure') || $adding ) {
-	      $additionalcall = '';
-	    foreach($gCms->modules as $key=>$value)
-	    {
-		if (get_preference(get_userid(), 'wysiwyg')!="" && 
-		    $gCms->modules[$key]['installed'] == true &&
-		    $gCms->modules[$key]['active'] == true &&
-		    $gCms->modules[$key]['object']->IsWYSIWYG() &&
-		    $gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'wysiwyg'))
-			{
-		    $additionalcall = $gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
-			}
-	    }
-			
-	    $ret[]= array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"'));
-    }
-		$this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
+	  // and the content blocks
+	  $this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
+	  /*
             {
               $label = lang('content');
-			  $wysiwyg = true;
-			  $hide_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
-			  if ($hide_wysiwyg)
-				{
-				$wysiwyg = false;
-				}
-			  
-			  
-			  if( isset($this->additionalContentBlocks['**default**']) )
+	      $wysiwyg = true;
+	      $hide_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
+	      if ($hide_wysiwyg)
+		{
+		  $wysiwyg = false;
+		}
+	      
+	      
+	      if( isset($this->additionalContentBlocks['**default**']) )
               { 
                 $tmp =& $this->additionalContentBlocks['**default**'];
-				if ($wysiwyg)
-				{
-				$wysiwyg = ($tmp['usewysiwyg'] == 'false')?false:true;
-				}
-        		if( !empty($tmp['label']) ) $label = $tmp['label'];
-			  }
-	      $ret[]= array($label.':',create_textarea($wysiwyg, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet));
+		if ($wysiwyg)
+		  {
+		    $wysiwyg = ($tmp['usewysiwyg'] == 'false')?false:true;
+		  }
+		if( !empty($tmp['label']) ) $label = $tmp['label'];
+	      }
+	      $ret[]= array($label.':',create_textarea($wysiwyg, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $this->stylesheet));
             }
+	  */
 
 	    // add additional content blocks if required
 	    foreach($this->additionalContentBlocks as $blockName => $blockNameId)
@@ -333,108 +322,26 @@ class Content extends ContentBase
 				$block_wysiwyg = $blockNameId['usewysiwyg'] == 'false'?false:true;
 				}
 				
-				$ret[]= array($label.':',create_textarea($block_wysiwyg, $data, $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet));
+				$ret[]= array($label.':',create_textarea($block_wysiwyg, $data, $blockNameId['id'], '', $blockNameId['id'], '', $this->stylesheet));
 		      }
 		  }
 	    }
 	}
 	if ($tab == 1)
 	{
-	  if( check_permission(get_userid(),'Modify Page Structure') || $adding ) {
-	    $ret[]= array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
-	    $ret[]= array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
-	    $ret[]= array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
-
-	    $text = '<option value="---">'.lang('none').'</option>';
-	    $text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
-	    $text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
-	    $text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
-	    $text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
-	    $ret[]= array(lang('target').':','<select name="target">'.$text.'</select>');
-	  }
-	  else
+	  // now do advanced attributes
+	  $tmp = $this->display_attributes($adding,1);
+	  if( !empty($tmp) )
 	    {
-	      if( $this->mActive )
-		{
-		  $ret[]= array('','<input type="hidden" name="active" value="1" />');
-		}
-	      if( $this->mShowInMenu )
-		{
-		  $ret[]= array('','<input type="hidden" name="showinmenu" value="1" />');
-		}
-	      if( $this->mCachable )
-		{
-		  $ret[] = array('','<input type="hidden" name="cachable" value="1" />');
-		}
+	      foreach( $tmp as $one ) {
+		$ret[] = $one;
+	      }
 	    }
 
-	  if( check_permission(get_userid(),'Modify Page Structure') || $adding == true) {
-	    $ret[]= array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
-	  }
-	  else {
-            $ret[]= array(lang('pagealias').':','<input type="text" disabled name="alias" value="'.$this->mAlias.'" />');
-	  }
-	  
-  	  $dir = $config['image_uploads_path'];
-	  $data = $this->GetPropertyValue('image');
-	  $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
-	  $ret[] = array(lang('image').':',$dropdown);
-	  
-	  $data = $this->GetPropertyValue('thumbnail');
-	  $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
-	  $ret[] = array(lang('thumbnail').':',$dropdown);
-
-	  $ret[]= array(lang('page_metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
-
-	  $ret[]= array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
-	  $ret[]= array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />');
-	  $ret[]= array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
-	  $ret[]= array(lang('pagedata_codeblock').':',create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','pagedata','','','80','6'));
-	  $searchable = $this->GetPropertyValue('searchable');
-	  if( $searchable == '' )
-	    {
-	      $searchable = 1;
-	    }
-	  $ret[]= array(lang('searchable').':',
-			'<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
-                           <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />');
-
-	  $disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
-	  if( $disable_wysiwyg == '' )
-	    {
-	      $disable_wysiwyg = 0;
-	    }
-	  $ret[]= array(lang('disable_wysiwyg').':',
-			'<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
-             <input type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
-
-	  $ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
-	  $ret[]= array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
-	  $ret[]= array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
-	  
-	  $userops =& $gCms->GetUserOperations();
-	  if (!$adding && $showadmin)
-	    {
-	      $ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
-	    }
-
-	    if ($adding || $showadmin)
-	    {
-	      $addteditors = array();
-	      if( $adding )
-		{
-		  $addeditors = get_site_preference('additional_editors','');
-		  $addteditors = explode(",",$addeditors);
-		  $ret[]= $this->ShowAdditionalEditors($addteditors);
-		}
-	      else
-		{
-		  $ret[]= $this->ShowAdditionalEditors();
-		}
-	    }
 	    $tmp = get_preference(get_userid(),'date_format_string','%x %X');
 	    if( empty($tmp) ) $tmp = '%x %X';
 	    $ret[]=array(lang('last_modified_at').':', strftime($tmp, strtotime($this->mModifiedDate) ) );
+	    $userops =& $gCms->GetUserOperations();
 	    $modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);
 	    if($modifiedbyuser) $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
 	}
@@ -756,7 +663,97 @@ class Content extends ContentBase
 
 	return $tpl_source;
     }
-}
+
+    function display_single_element($one,$adding)
+    {
+      global $gCms;
+
+      switch($one) {
+      case 'template':
+	if( check_permission(get_userid(), 'Modify Page Structure') || $adding ) {
+	  
+	  $templateops =& $gCms->GetTemplateOperations();
+	  return array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"'));
+	}
+	break;
+	
+      case 'cachable':
+	if( check_permission(get_userid(),'Modify Page Structure') || $adding ) {
+	  return array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
+	}
+	else if( $this->mCachable ) {
+	  return array('','<input type="hidden" name="cachable" value="1" />');
+	}
+	break;
+	
+      case 'pagemetadata':
+	{
+	  return array(lang('page_metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
+	}
+	break;
+	
+      case 'pagedata':
+	{
+	  return array(lang('pagedata_codeblock').':',create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','pagedata','','','80','6'));
+	}
+	break;
+	
+      case 'searchable':
+	{
+	  $searchable = $this->GetPropertyValue('searchable');
+	  if( $searchable == '' )
+	    {
+	      $searchable = 1;
+	    }
+	  return array(lang('searchable').':',
+			'<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
+                           <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />');
+	}
+	break;
+	
+      case 'disable_wysiwyg':
+	{
+	  $disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
+	  if( $disable_wysiwyg == '' )
+	    {
+	      $disable_wysiwyg = 0;
+	    }
+	  return array(lang('disable_wysiwyg').':',
+			'<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
+             <input type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
+	}
+	break;
+
+      case 'content_en':
+	{
+	  $label = lang('content');
+	  $wysiwyg = true;
+	  $hide_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
+	  if ($hide_wysiwyg)
+	    {
+	      $wysiwyg = false;
+	    }
+	      
+	  if( isset($this->additionalContentBlocks['**default**']) )
+	    { 
+	      $tmp =& $this->additionalContentBlocks['**default**'];
+	      if ($wysiwyg)
+		{
+		  $wysiwyg = ($tmp['usewysiwyg'] == 'false')?false:true;
+		}
+	      if( !empty($tmp['label']) ) $label = $tmp['label'];
+	    }
+	  return array($label.':',create_textarea($wysiwyg, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $this->stylesheet));
+	}
+	break;
+
+      default:
+	return parent::display_single_element($one,$adding);
+      }
+
+      return $ret;
+    }
+} // end of class
 
 # vim:ts=4 sw=4 noet
 ?>

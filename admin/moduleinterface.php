@@ -103,6 +103,12 @@ else
 
 if (count($gCms->modules) > 0)
 {
+  if( !isset($gCms->modules[$module]) )
+    {
+      trigger_error('Module '.$module.' not found in memory. This could indicate that the module is in need of upgrade or that there are other problems');
+      redirect("index.php".$urlext);
+
+    }
 	if (isset($USE_THEME) && $USE_THEME == false)
 	{
 		echo '';

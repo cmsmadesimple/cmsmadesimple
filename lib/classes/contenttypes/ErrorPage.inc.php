@@ -21,142 +21,154 @@
 require_once('Content.inc.php');
 class ErrorPage extends Content
 {
-	var $doAliasCheck;
-	var $error_types;
+  var $doAliasCheck;
+  var $error_types;
 	
-	function ErrorPage()
-	{
-		$this->ContentBase();
-		$this->error_types = array('404' => lang('404description'));
-		$this->doAliasCheck = false;
-		$this->doAutoAliasIfEnabled = false;
-	}
+  function ErrorPage()
+  {
+    $this->ContentBase();
+    $this->error_types = array('404' => lang('404description'));
+    $this->doAliasCheck = false;
+    $this->doAutoAliasIfEnabled = false;
+  }
+  
+  function FriendlyName()
+  {
+    return lang('contenttype_errorpage');
+  }
 	
-	function FriendlyName()
-	{
-		return lang('contenttype_errorpage');
-	}
+  function SetProperties()
+  {
+    parent::SetProperties();
+    $this->RemoveProperty('searchable');
+    $this->RemoveProperty('template');
+    $this->RemoveProperty('pagemetadata');
+    $this->RemoveProperty('parent');
+    $this->RemoveProperty('showinmenu');
+    $this->RemoveProperty('menutext');
+    $this->RemoveProperty('target');
+    $this->RemoveProperty('extra1');
+    $this->RemoveProperty('extra2');
+    $this->RemoveProperty('extra3');
+    $this->RemoveProperty('image');
+    $this->RemoveProperty('thumbnail');
+    $this->RemoveProperty('accesskey');
+    $this->RemoveProperty('titleattribute');
+    $this->RemoveProperty('active');
+    $this->RemoveProperty('cachable');
+
+    $this->RemoveProperty('alias');
+    $this->AddBaseProperty('alias',1,1);
+
+    #Turn on preview
+    $this->mPreview = true;
+  }
+
+  function IsCopyable()
+  {
+    return FALSE;
+  }
+
+  function IsDefaultPossible()
+  {
+    return FALSE;
+  }
+
+  function HasUsableLink()
+  {
+    return false;
+  }
+
+  function WantsChildren()
+  {
+    return false;
+  }
 	
-	function IsCopyable()
-	{
-	  return FALSE;
-	}
+  function IsSystemPage()
+  {
+    return true;
+  }
 
-	function IsDefaultPossible()
-	{
-	  return FALSE;
-	}
-
-	function HasUsableLink()
-	{
-		return false;
-	}
-
-	function WantsChildren()
-	{
-		return false;
-	}
+  function FillParams($params)
+  {
+    parent::FillParams($params);
+    $this->mShowInMenu = false;
+    $this->mCachable = false;
+    $this->mActive = true;
+  }
 	
-	function IsSystemPage()
-	{
-		return true;
-	}
-
-	function SetProperties()
-	{
-	  $this->mProperties->Add('string', 'content_en'); //For later language support
-	  //Turn on preview
-	  $this->mPreview = true;
-	}
-
-	function FillParams($params)
-	{
-		parent::FillParams($params);
-		$this->mShowInMenu = false;
-		$this->mCachable = false;
-		$this->SetPropertyValue('searchable', '0');
-	}
-	
-	function EditAsArray($adding = false, $tab = 0, $showadmin = false)
-	{
-		$ret = parent::EditAsArray($adding, $tab, $showadmin);
-		if (count($ret))
+    function display_single_element($one,$adding)
+    {
+      switch($one) {
+	case 'alias':
+	  $dropdownopts = '<option value="">'.lang('none').'</option>';
+	  foreach ($this->error_types as $code=>$name)
+	    {
+	      $dropdownopts .= '<option value="error' . $code . '"';
+	      if ('error'.$code == $this->mAlias)
 		{
-			if ($tab == '0')
-			{
-				$dropdownopts = '<option value="">'.lang('none').'</option>';
-				foreach ($this->error_types as $code=>$name)
-				{
-					$dropdownopts .= '<option value="error' . $code . '"';
-					if ('error'.$code == $this->mAlias)
-					{
-						$dropdownopts .= ' selected="selected" ';
-					}
-					$dropdownopts .= ">{$name} ({$code})</option>";
-				}
-				
-				$dropdown = array(lang('error_type').':', '<select name="alias">'.$dropdownopts.'</select>');
+		  $dropdownopts .= ' selected="selected" ';
+		}
+	      $dropdownopts .= ">{$name} ({$code})</option>";
+	    }
+	  return array(lang('error_type').':', '<select name="alias">'.$dropdownopts.'</select>');
+	  break;
 
-				$tmp = array();
-				$tmp[] = $ret[0];
-				$tmp[] = $dropdown;
-				for( $i = 3; $i < count($ret); $i++ )
-				  {
-				    $tmp[] = $ret[$i];
-				  }
-				$ret = $tmp;
-			}
-			else if ($tab == '1')
-			{
-			  $tmp = array();
-			  $tmp[] = $ret[0];
-			  $tmp[] = array('', '<input type="hidden" name="showinmenu" value="0" />');
-			  $ret[] = array('', '<input type="hidden" name="cachable" value="0" />');
-			  $tmp[] = $ret[7];
-			  $tmp[] = $ret[8];
-			  $ret = $tmp;
-			}
-		}
-		return $ret;
-	}
-	
-	function ValidateData()
-	{
-		$errors = parent::ValidateData();
-		if ($errors == FALSE)
-		{
-			$errors = array();
-		}
-		
-		//Do our own alias check
-		if ($this->mAlias == '')
-		{
-			$errors[] = lang('nofieldgiven', array(lang('error_type')));
-		}
-		else if (in_array($this->mAlias, $this->error_types))
-		{
-			$errors[] = lang('nofieldgiven', array(lang('error_type')));
-		}
-		else if ($this->mAlias != $this->mOldAlias)
-		{
-			global $gCms;
-			$contentops =& $gCms->GetContentOperations();
-			$error = $contentops->CheckAliasError($this->mAlias, $this->mId);
-			if ($error !== FALSE)
-			{
-				if ($error == lang('aliasalreadyused'))
-				{
-					$errors[] = lang('errorpagealreadyinuse');
-				}
-				else
-				{
-					$errors[] = $error;
-				}
-			}
-		}
-		
-		return (count($errors) > 0 ? $errors : FALSE);
-	}
+      default:
+	return parent::display_single_element($one,$adding);
+      }
+    }
+
+  function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+  {
+    switch($tab)
+      {
+      case '0':
+	return $this->display_attributes($adding);
+	break;
+      case '1':
+	return $this->display_attributes($adding,1);
+	break;
+      }
+  }
+
+  function ValidateData()
+  {
+    $errors = parent::ValidateData();
+    if ($errors == FALSE)
+      {
+	$errors = array();
+      }
+    
+    //Do our own alias check
+    if ($this->mAlias == '')
+      {
+	$errors[] = lang('nofieldgiven', array(lang('error_type')));
+      }
+    else if (in_array($this->mAlias, $this->error_types))
+      {
+	$errors[] = lang('nofieldgiven', array(lang('error_type')));
+      }
+    else if ($this->mAlias != $this->mOldAlias)
+      {
+	global $gCms;
+	$contentops =& $gCms->GetContentOperations();
+	$error = $contentops->CheckAliasError($this->mAlias, $this->mId);
+	if ($error !== FALSE)
+	  {
+	    if ($error == lang('aliasalreadyused'))
+	      {
+		$errors[] = lang('errorpagealreadyinuse');
+	      }
+	    else
+	      {
+		$errors[] = $error;
+	      }
+	  }
+      }
+    
+    return (count($errors) > 0 ? $errors : FALSE);
+  }
 }
 
 # vim:ts=4 sw=4 noet

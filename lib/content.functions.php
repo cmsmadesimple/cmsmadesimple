@@ -952,6 +952,5 @@ function is_sitedown()
   return TRUE;
 }
 
-
 # vim:ts=4 sw=4 noet
 ?>

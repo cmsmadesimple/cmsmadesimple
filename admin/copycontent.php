@@ -144,10 +144,19 @@ $smarty->assign('lang_pagetitle',lang('title'));
 $smarty->assign('lang_pagealias',lang('pagealias'));
 $smarty->assign('lang_pageparent',lang('parent'));
 $smarty->assign('lang_pagemenutext',lang('menutext'));
-$smarty->assign('lang_pageaccesskey',lang('accesskey'));
 $smarty->assign('lang_submit',lang('submit'));
 $smarty->assign('lang_cancel',lang('cancel'));
-$smarty->assign('input_parentdropdown',$contentops->CreateHierarchyDropdown($fromobj->Id(),$fromobj->ParentId(),'to_parentid'));
+
+if( check_permission(get_userid(),'Modify Page Structure') )
+  {
+    $smarty->assign('lang_pageaccesskey',lang('accesskey'));
+  }
+
+$smarty->assign('input_parentdropdown',
+		$contentops->CreateHierarchyDropdown(
+						     $fromobj->Id(),
+						     $fromobj->ParentId(),
+						     'to_parentid',1,1));
 
 echo $smarty->fetch('copycontent.tpl');
 

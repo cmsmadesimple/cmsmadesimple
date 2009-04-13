@@ -74,6 +74,11 @@ if( isset($_POST['sitedownexcludes']) )
   {
     $sitedownexcludes = trim($_POST['sitedownexcludes']);
   }
+$basic_attributes = '';
+if( isset($_POST['basic_attributes']) )
+  {
+    $basic_attributes = implode(',',($_POST['basic_attributes']));
+  }
 
 $enablecustom404 = "0";
 if (isset($_POST["enablecustom404"])) $enablecustom404 = "1";
@@ -230,6 +235,7 @@ else if (isset($_POST["editsiteprefs"]))
       set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
       set_site_preference('enablenotifications',$enablenotifications);
       set_site_preference('sitedownexcludes',$sitedownexcludes);
+      set_site_preference('basic_attributes',$basic_attributes);
       audit(-1, '', 'Edited Site Preferences');
       $message .= lang('prefsupdated');
     }
@@ -260,6 +266,7 @@ else if (isset($_POST["editsiteprefs"]))
   $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',0);
   $enablenotifications = get_site_preference('enablenotifications',1);
   $sitedownexcludes = get_site_preference('sitedownexcludes','');
+  $basic_attributes = get_site_preference('basic_attributes','template');
  }
 
 
@@ -357,6 +364,7 @@ $smarty->assign('allowparamcheckwarnings',$allowparamcheckwarnings);
 $smarty->assign('defaultdateformat',$defaultdateformat);
 $smarty->assign('enablenotifications',$enablenotifications);
 $smarty->assign('sitedownexcludes',$sitedownexcludes);
+$smarty->assign('basic_attributes',explode(',',$basic_attributes));
 
 $smarty->assign('lang_general',lang('general_settings'));
 $smarty->assign('lang_sitedown',lang('sitedown_settings'));
@@ -392,6 +400,26 @@ $smarty->assign('lang_date_format_string_help',lang('date_format_string_help'));
 $smarty->assign('lang_admin_enablenotifications',lang('admin_enablenotifications'));
 $smarty->assign('lang_sitedownexcludes',lang('sitedownexcludes'));
 $smarty->assign('lang_info_sitedownexcludes',lang('info_sitedownexcludes'));
+$smarty->assign('lang_basic_attributes',lang('basic_attributes'));
+
+$all_attributes = array();
+$all_attributes['template'] = lang('template');
+$all_attributes['active'] = lang('active');
+$all_attributes['showinmenu'] = lang('showinmenu');
+$all_attributes['cachable'] = lang('cachable');
+$all_attributes['target'] = lang('target');
+$all_attributes['alias'] = lang('pagealias');
+$all_attributes['image'] = lang('image');
+$all_attributes['thumbnail'] = lang('thumbnail');
+$all_attributes['pagemetadata'] = lang('page_metadata');
+$all_attributes['titleattribute'] = lang('titleattribute');
+$all_attributes['accesskey'] = lang('accesskey');
+$all_attributes['pagedata'] = lang('pagedata_codeblock');
+$all_attributes['searchable'] = lang('searchable');
+$all_attributes['extra1'] = lang('extra1');
+$all_attributes['extra2'] = lang('extra2');
+$all_attributes['extra3'] = lang('extra3');
+$smarty->assign('all_attributes',$all_attributes);
 
 # begin output
 echo '<div class="pagecontainer">'.$themeObject->ShowHeader('siteprefs')."\n";

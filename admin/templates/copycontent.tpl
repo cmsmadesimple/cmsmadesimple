@@ -65,10 +65,12 @@
       <p class="pageinput">{$input_parentdropdown}</p>
     </div>
 
+    {if isset($lang_pageaccesskey)}
     <div class="pageoverflow">
       <p class="pagetext">{$lang_pageaccesskey}:</p>
       <p class="pageinput"><input type="text" name="to_accesskey" size="5" maxlength="5" value="{$fromobj->AccessKey()}" /></p>
     </div>
+    {/if}
 
     <div class="pageoverflow">
       <p class="pagetext">&nbsp;</p>

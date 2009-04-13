@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['advanced_attributes'] = 'Advanced Attributes';
 $lang['admin']['no_permission'] = 'You have not permission to perform that function.';
 $lang['admin']['bulk_success'] = 'Bulk operation was successfully updated.';
 $lang['admin']['no_bulk_performed'] = 'No bulk operation performed.';

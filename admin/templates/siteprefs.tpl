@@ -170,6 +170,15 @@
   <p class="pageinput"><input class="pagenb" type="checkbox" name="enablenotifications" {if $enablenotifications}checked="checked"{/if} /></p>
 </div>
 
+<div class="pageoverflow">
+  <p class="pagetext">{$lang_basic_attributes}:</p>
+  <p class="pageinput">
+    <select name="basic_attributes[]" multiple="multiple" size="5">
+      {html_options options=$all_attributes selected=$basic_attributes}
+    </select>
+  </p>
+</div>
+
 {$mod->EndTab()}
 
 {$mod->EndTabContent()}

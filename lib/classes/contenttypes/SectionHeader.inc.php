@@ -34,14 +34,10 @@ class SectionHeader extends ContentBase
 
     function SetProperties()
     {
-	$this->mProperties->Add('string', 'extra1'); 
-	$this->mProperties->Add('string', 'extra2'); 
-	$this->mProperties->Add('string', 'extra3'); 
-	$this->mProperties->Add('string', 'image'); 
-	$this->mProperties->Add('string', 'thumbnail'); 
+      parent::SetProperties();
 
-	#Turn off caching
-	$this->mCachable = false;
+      #Turn off caching
+      $this->mCachable = false;
     }
 
     function HasUsableLink()
@@ -137,60 +133,27 @@ class SectionHeader extends ContentBase
     {
     }
 
-    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    function TabNames()
     {
-	global $gCms;
-	
-	$ret = array();
-
-	$ret[]= array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
-	$ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
-	$ret[]= array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
-    if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
-    {
-      $contentops =& $gCms->GetContentOperations();
-      $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
-      if( !empty($tmp) ) $ret[]= array(lang('parent').':',$tmp);
+      $res = array(lang('main'));
+      if( check_permission(get_userid(),'Modify Page Structure') )
+	{
+	  $res[] = lang('options');
+	}
+      return $res;
     }
 
-      global $gCms;
-      $config =& $gCms->GetConfig();
-      $dir = $config['image_uploads_path'];
-      $data = $this->GetPropertyValue('image');
-      $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
-      $ret[] = array(lang('image').':',$dropdown);
-      
-      $data = $this->GetPropertyValue('thumbnail');
-      $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
-      $ret[] = array(lang('thumbnail').':',$dropdown);
-
-	$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />') ;
-	$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
-	$ret[]= array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
-	$ret[]= array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
-	$ret[]= array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
-
-	if (!$adding && $showadmin)
+    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    {
+      switch($tab)
 	{
-		$userops =& $gCms->GetUserOperations();
-	    $ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
+	case '0':
+	  return $this->display_attributes($adding);
+	  break;
+	case '1':
+	  return $this->display_attributes($adding,1);
+	  break;
 	}
-
-	if ($adding || $showadmin)
-	{
-	  if( $adding )
-	    {
-	      $addeditors = get_site_preference('additional_editors','');
-	      $addteditors = explode(",",$addeditors);
-	      $ret[]= $this->ShowAdditionalEditors($addteditors);
-	    }
-	  else
-	    {
-	      $ret[]= $this->ShowAdditionalEditors();
-	    }
-	}
-
-	return $ret;
     }
 
     function GetURL($rewrite = true)
