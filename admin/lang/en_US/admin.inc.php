@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['forgotpwprompt'] = 'Enter your admin username.  An email will then be sent to the email address associated with that username with new login information';
 $lang['admin']['advanced_attributes'] = 'Advanced Attributes';
 $lang['admin']['no_permission'] = 'You have not permission to perform that function.';
 $lang['admin']['bulk_success'] = 'Bulk operation was successfully updated.';
