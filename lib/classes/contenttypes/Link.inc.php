@@ -110,7 +110,11 @@ class Link extends ContentBase
 	    }
 	    if (isset($params['alias']))
 	    {
-		$this->SetAlias(trim($params['alias']));
+	      $this->SetAlias(trim($params['alias']),$this->doAutoAliasIfEnabled);
+	    }
+	    else if( $this->doAutoAliasIfEnabled)
+            {
+	      $this->SetAlias('');
 	    }
 	    if (isset($params['parent_id']))
 	    {

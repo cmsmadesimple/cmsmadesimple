@@ -145,6 +145,10 @@ class Content extends ContentBase
 	    {
 		$this->SetAlias(trim($params['alias']), $this->doAutoAliasIfEnabled);
 	    }
+	    else if($this->doAutoAliasIfEnabled) 
+            {
+	      $this->SetAlias('');
+	    }
 	    if (isset($params['parent_id']))
 	    {
 		if ($this->mParentId != $params['parent_id'])

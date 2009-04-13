@@ -104,7 +104,11 @@ class SectionHeader extends ContentBase
 	    }
 	    if (isset($params['alias']))
 	    {
-		$this->SetAlias($params['alias']);
+	      $this->SetAlias(trim($params['alias']),$this->doAutoAliasIfEnabled);
+	    }
+	    else if( $this->doAutoAliasIfEnabled)
+            {
+	      $this->SetAlias('');
 	    }
 	}
     }
