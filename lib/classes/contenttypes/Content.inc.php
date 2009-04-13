@@ -78,7 +78,7 @@ class Content extends ContentBase
     function FillParams($params)
     {
 	global $gCms;
-	$config = $gCms->config;
+	$config =& $gCms->config;
 
 	if (isset($params))
 	{
@@ -94,6 +94,15 @@ class Content extends ContentBase
 		}
 		$this->mTemplateId = $params['template_id'];
 	    }
+	    else
+	      {
+		$templateops =& $gCms->GetTemplateOperations();
+		$dflt = $templateops->LoadDefaultTemplate();
+		if( isset($dflt) )
+		  {
+		    $this->mTemplateId = $dflt->id;
+		  }
+	      }
 
 	    // could add file upload handling here.
 
@@ -356,6 +365,12 @@ class Content extends ContentBase
     function ValidateData()
     {
 	$errors = array();
+
+	if ($this->mTemplateId <= 0 )
+	  {
+	    $errors[] = lang('nofieldgiven',array(lang('template')));
+	    $result = false;
+	  }
 
 	if ($this->mName == '')
 	{
