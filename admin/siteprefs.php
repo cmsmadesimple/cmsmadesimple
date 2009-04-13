@@ -401,6 +401,7 @@ $smarty->assign('lang_admin_enablenotifications',lang('admin_enablenotifications
 $smarty->assign('lang_sitedownexcludes',lang('sitedownexcludes'));
 $smarty->assign('lang_info_sitedownexcludes',lang('info_sitedownexcludes'));
 $smarty->assign('lang_basic_attributes',lang('basic_attributes'));
+$smarty->assign('lang_info_basic_attributes',lang('info_basic_attributes'));
 
 $all_attributes = array();
 $all_attributes['template'] = lang('template');

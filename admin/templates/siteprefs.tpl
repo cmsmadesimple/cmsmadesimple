@@ -176,6 +176,8 @@
     <select name="basic_attributes[]" multiple="multiple" size="5">
       {html_options options=$all_attributes selected=$basic_attributes}
     </select>
+    <br/>
+    {$lang_info_basic_attributes}
   </p>
 </div>
 
