@@ -21,12 +21,6 @@
 class Link extends ContentBase
 {
 
-    function Link() {
-        $this->ContentBase();
-        $this->mProperties->SetAllowedPropertyNames(array('url', 'target','extra1','extra2','extra3',
-							  'image', 'thumbnail'));
-    }
-
     function IsCopyable()
     {
         return TRUE;
@@ -40,18 +34,18 @@ class Link extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
-      $this->AddBaseProperty('url',10,1);
-
-      #Turn off caching
-      $this->mCachable = false;
+      $this->RemoveProperty('showinmenu',true);
+      $this->RemoveProperty('cachable',true);
+      $this->AddContentProperty('url',10,1);
     }
 
     function FillParams($params)
     {
+	parent::FillParams($params);
+
 	if (isset($params))
 	{
-	  $parameters = array('url', 'target', 'extra1', 'extra2', 'extra3',
-			      'image', 'thumbnail');
+	  $parameters = array('url');
 	  foreach ($parameters as $oneparam)
 	    {
 	      if (isset($params[$oneparam]))
@@ -59,131 +53,29 @@ class Link extends ContentBase
 		  $this->SetPropertyValue($oneparam, $params[$oneparam]);
 		}
 	    }
-	    if (isset($_POST['file_url']) && $_POST['file_url'] != "---")
+
+	  if (isset($params['file_url']))
 	    {
 	    	$this->SetPropertyValue('url', $params['file_url']);
             } 
-            # make sure target keeps empty even with the new dropdown value
-	    if (isset($_POST['target']) && $_POST['target'] == "---")
-	    {
-	    	$this->SetPropertyValue('target', '');
-            } 
-	    if (isset($params['extra1']) )
-	      {
-		$this->SetPropertyValue('extra1',trim($_POST['extra1']));
-	      }
-	    if (isset($params['extra2']) )
-	      {
-		$this->SetPropertyValue('extra2',trim($_POST['extra2']));
-	      }
-	    if (isset($params['extra3']) )
-	      {
-		$this->SetPropertyValue('extra3',trim($_POST['extra3']));
-	      }
-	    if (isset($params['image']) )
-	      {
-		$this->SetPropertyValue('image',trim($_POST['image']));
-	      }
-	    if (isset($params['thumbnail']) )
-	      {
-		$this->SetPropertyValue('thumbnail',trim($_POST['thumbnail']));
-	      }
-	    if (isset($params['title']))
-	    {
-		$this->mName = $params['title'];
-	    }
-	    if (isset($params['menutext']))
-	    {
-		$this->mMenuText = $params['menutext'];
-	    }
-	    if (isset($params['accesskey']))
-	    {
-		$this->mAccessKey = $params['accesskey'];
-	    }
-	    if (isset($params['titleattribute']))
-	    {
-		$this->mTitleAttribute = $params['titleattribute'];
-	    }
-	    if (isset($params['tabindex']))
-	    {
-		$this->mTabIndex = $params['tabindex'];
-	    }
-	    if (isset($params['alias']))
-	    {
-	      $this->SetAlias(trim($params['alias']),$this->doAutoAliasIfEnabled);
-	    }
-	    else if( $this->doAutoAliasIfEnabled)
-            {
-	      $this->SetAlias('');
-	    }
-	    if (isset($params['parent_id']))
-	    {
-		if ($this->mParentId != $params['parent_id'])
-		{
-		    $this->mHierarchy = '';
-		    $this->mItemOrder = -1;
-		}
-		$this->mParentId = $params['parent_id'];
-	    }
-	    if (isset($params['active']))
-	    {
-		$this->mActive = true;
-	    }
-	    else
-	    {
-		$this->mActive = false;
-	    }
-	    if (isset($params['showinmenu']))
-	    {
-		$this->mShowInMenu = true;
-	    }
-	    else
-	    {
-		$this->mShowInMenu = false;
-	    }
 	}
     }
 
     function ValidateData()
     {
-	$errors = array();
-
-	if ($this->mName == '')
+      $errors = parent::ValidateData();
+      if( $errors === FALSE )
 	{
-	    $errors[]= lang('nofieldgiven',array(lang('title')));
-	    $result = false;
+	  $errors = array();
 	}
 
-	if ($this->mMenuText == '')
+      if ($this->GetPropertyValue('url') == '')
 	{
-	    $errors[]= lang('nofieldgiven',array(lang('menutext')));
-	    $result = false;
+	  $errors[]= lang('nofieldgiven',array(lang('url')));
+	  $result = false;
 	}
 
-	if ($this->mAlias != $this->mOldAlias || $this->mAlias == '') #Should only be empty if auto alias is false
-	{
-     	    global $gCms;
-	    $contentops =& $gCms->GetContentOperations();
-	    $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
-	    if ($error !== FALSE)
-	    {
-		$errors[]= $error;
-		$result = false;
-	    }
-	}
-
-
-	if ($this->GetPropertyValue('url') == '' && TRUE == empty($_POST['file_url']))
-	{
-	    $errors[]= lang('nofieldgiven',array(lang('url')));
-	    $result = false;
-	}
-
-	return (count($errors) > 0?$errors:FALSE);
-    }
-
-    function Show()
-    {
+      return (count($errors) > 0?$errors:FALSE);
     }
 
     function TabNames()

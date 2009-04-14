@@ -674,10 +674,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         } ## if indent
 
         // $thelist .= "<td>";
-        if ($display == 'edit')
-            $thelist .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($one->mMenuText, '', '', true) . '</a>'. "\n";
-        else
-	  $thelist .= cms_htmlentities($one->mMenuText, '', '', true);
+	if( $one->mMenuText != CMS_CONTENT_HIDDEN_NAME )
+	  {
+	    if ($display == 'edit')
+	      $thelist .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($one->mMenuText, '', '', true) . '</a>'. "\n";
+	    else
+	      $thelist .= cms_htmlentities($one->mMenuText, '', '', true);
+	  }
 	$thelist .= "</td>\n";
 
 
@@ -727,26 +730,26 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 $thelist .= "<td>&nbsp;</td>\n";
             }
         }
+
+
+	if (check_modify_all($userid))
+	  {
+	    if ($one->IsDefaultPossible() && ($display == 'edit' || $display == 'structure'))
+	      {
+		$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_html_entity_decode_utf8(lang("confirmdefault", $one->mName), true)."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
+	      }
+	    else
+	      {
+		$thelist .= "<td>&nbsp;</td>";
+	      }
+	  }
 	else
 	  {
-	    $thelist .= "<td>&nbsp;</td>\n";
+	    $thelist .= "<td>&nbsp;</td>";
 	  }
 
-
-		if (check_modify_all($userid))
-		{
-			if ($one->IsDefaultPossible() && ($display == 'edit' || $display == 'structure'))
-			{
-				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_html_entity_decode_utf8(lang("confirmdefault", $one->mName), true)."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
-			}
-			else
-			{
-				$thelist .= "<td>&nbsp;</td>";
-			}
-		}
-
         // code for move up is simple
-        if (check_permission($userid, 'Modify Page Structure'))
+	if (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure'))
         {
             $thelist .= "<td class=\"move\">";
             //$parentNode = &$root->getParentNode();
@@ -996,9 +999,9 @@ function display_content_list($themeObject = null)
 	$headoflist .= "<th>".lang('type')."</th>\n";
 	$headoflist .= "<th>".lang('owner')."</th>\n";
 	if (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Modify Any Page'))
-    {
-	   $headoflist .= "<th class=\"pagepos\">".lang('active')."</th>\n";
-    }
+	  {
+	    $headoflist .= "<th class=\"pagepos\">".lang('active')."</th>\n";
+	  }
 	if (check_modify_all($userid))
 	{
 		$headoflist .= "<th class=\"pagepos\">".lang('default')."</th>\n";
@@ -1006,6 +1009,7 @@ function display_content_list($themeObject = null)
 	else{
 	  $headoflist .= "<th class=\"pagepos\">&nbsp;</th>\n";
 	}
+
 	if (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure'))
 	{
 		$headoflist .= "<th class=\"move\">".lang('move')."</th>\n";

@@ -22,7 +22,6 @@ class Content extends ContentBase
 {
     var $additionalContentBlocks;
     var $addtContentBlocksLoaded;
-    var $doAliasCheck;
     var $doAutoAliasIfEnabled;
     var $stylesheet;
 	
@@ -31,9 +30,7 @@ class Content extends ContentBase
 	$this->ContentBase();
 	$this->additionalContentBlocks = array();
 	$this->addtContentBlocksLoaded = false;
-	$this->doAliasCheck = true;
 	$this->doAutoAliasIfEnabled = true;
-	//$this->_attributes = array_merge($this->_attributes,array('template','cachable','magemetadata','pagedata','searchable'));
     }
 
     function IsCopyable()
@@ -50,10 +47,9 @@ class Content extends ContentBase
     {
       parent::SetProperties();
       $this->AddBaseProperty('template',10);
-      $this->AddBaseProperty('cachable',6);
+      $this->AddBaseProperty('pagemetadata',20);
       $this->AddContentProperty('content_en',4,1);
       $this->AddContentProperty('searchable',4);
-      $this->AddBaseProperty('pagemetadata',20);
       $this->AddContentProperty('pagedata',25);
       $this->AddContentProperty('disable_wysiwyg',60);
 
@@ -69,128 +65,58 @@ class Content extends ContentBase
 	$this->GetAdditionalContentBlocks();
     }
 
-    function GetTabDefinitions()
-    {
-	return array('Basic', 'Advanced');
-	#return array();
-    }
-
     function FillParams($params)
     {
+	parent::FillParams($params);
+
 	global $gCms;
 	$config =& $gCms->config;
 
 	if (isset($params))
 	{
-	  $parameters = array('content_en','target','pagedata','extra1','extra2','extra3',
-			      'image','thumbnail','searchable','disable_wysiwyg');
+	  $parameters = array('content_en','pagedata','searchable','disable_wysiwyg');
 
-	    //pick up the template id before we do parameters
-	    if (isset($params['template_id']))
+	  //pick up the template id before we do parameters
+	  if (isset($params['template_id']))
 	    {
-		if ($this->mTemplateId != $params['template_id'])
+	      if ($this->mTemplateId != $params['template_id'])
 		{
-		    $this->addtContentBlocksLoaded = false;
+		  $this->addtContentBlocksLoaded = false;
 		}
-		$this->mTemplateId = $params['template_id'];
+	      $this->mTemplateId = $params['template_id'];
 	    }
-	    else
-	      {
-		$templateops =& $gCms->GetTemplateOperations();
-		$dflt = $templateops->LoadDefaultTemplate();
-		if( isset($dflt) )
-		  {
-		    $this->mTemplateId = $dflt->id;
-		  }
-	      }
-
-	    // could add file upload handling here.
-
-	    // add additional content blocks
-	    $this->GetAdditionalContentBlocks();
-	    foreach($this->additionalContentBlocks as $blockName => $blockNameId)
+	  else
 	    {
-		$parameters[] = $blockNameId['id'];
+	      $templateops =& $gCms->GetTemplateOperations();
+	      $dflt = $templateops->LoadDefaultTemplate();
+	      if( isset($dflt) )
+		{
+		  $this->mTemplateId = $dflt->id;
+		}
 	    }
-		
-	    foreach ($parameters as $oneparam)
+	  
+	  // add additional content blocks
+	  $this->GetAdditionalContentBlocks();
+	  foreach($this->additionalContentBlocks as $blockName => $blockNameId)
 	    {
-		if (isset($params[$oneparam]))
+	      $parameters[] = $blockNameId['id'];
+	    }
+	  
+	  // do the content property parameters
+	  foreach ($parameters as $oneparam)
+	    {
+	      if (isset($params[$oneparam]))
 		{
 		  $this->SetPropertyValue($oneparam, $params[$oneparam]);
 		}
 	    }
 
-            # make sure target keeps empty even with the new dropdown value
-	    if (isset($_POST['target']) && $_POST['target'] == "---")
+	  // metadata
+	  if (isset($params['metadata']))
 	    {
-	    	$this->SetPropertyValue('target', '');
-            } 
-	    if (isset($params['title']))
-	    {
-		$this->mName = $params['title'];
+	      $this->mMetadata = $params['metadata'];
 	    }
-	    if (isset($params['metadata']))
-	    {
-		$this->mMetadata = $params['metadata'];
-	    }
-	    if (isset($params['accesskey']))
-	    {
-		$this->mAccessKey = $params['accesskey'];
-	    }
-	    if (isset($params['titleattribute']))
-	    {
-		$this->mTitleAttribute = $params['titleattribute'];
-	    }
-	    if (isset($params['tabindex']))
-	    {
-		$this->mTabIndex = $params['tabindex'];
-	    }
-	    if (isset($params['menutext']))
-	    {
-		$this->mMenuText = $params['menutext'];
-	    }
-	    if (isset($params['alias']))
-	    {
-		$this->SetAlias(trim($params['alias']), $this->doAutoAliasIfEnabled);
-	    }
-	    else if($this->doAutoAliasIfEnabled) 
-            {
-	      $this->SetAlias('');
-	    }
-	    if (isset($params['parent_id']))
-	    {
-		if ($this->mParentId != $params['parent_id'])
-		{
-		    $this->mHierarchy = '';
-		    $this->mItemOrder = -1;
-		}
-		$this->mParentId = $params['parent_id'];
-	    }
-	    if (isset($params['active']))
-	    {
-		$this->mActive = true;
-	    }
-	    else
-	    {
-		$this->mActive = false;
-	    }
-	    if (isset($params['showinmenu']))
-	    {
-		$this->mShowInMenu = true;
-	    }
-	    else
-	    {
-		$this->mShowInMenu = false;
-	    }
-	    if (isset($params['cachable']))
-	    {
-		$this->mCachable = true;
-	    }
-	    else
-	    {
-		$this->mCachable = false;
-	    }
+
 	}
 
     }
@@ -239,6 +165,8 @@ class Content extends ContentBase
 		$this->stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
 	    }
 	}
+
+
 	if ($tab == 0)
 	{
 	  // now do basic attributes
@@ -340,6 +268,7 @@ class Content extends ContentBase
 		  }
 	    }
 	}
+
 	if ($tab == 1)
 	{
 	  // now do advanced attributes
@@ -358,66 +287,24 @@ class Content extends ContentBase
 	    $modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);
 	    if($modifiedbyuser) $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
 	}
+
 	return $ret;
     }
 
 
     function ValidateData()
     {
-	$errors = array();
+      $errors = parent::ValidateData();
+      if( $errors === FALSE )
+	{
+	  $errors = array();
+	}
 
 	if ($this->mTemplateId <= 0 )
 	  {
 	    $errors[] = lang('nofieldgiven',array(lang('template')));
 	    $result = false;
 	  }
-
-	if ($this->mName == '')
-	{
-	    if ($this->mMenuText != '')
-	    {
-		$this->mName = $this->mMenuText;
-	    }
-	    else
-	    {
-		$errors[]= lang('nofieldgiven',array(lang('title')));
-		$result = false;
-	    }
-	}
-
-	if ($this->mMenuText == '')
-	{
-	    if ($this->mName != '')
-	    {
-		$this->mMenuText = $this->mName;
-	    }
-	    else
-	    {
-		$errors[]=lang('nofieldgiven',array(lang('menutext')));
-		$result = false;
-	    }
-	}
-		
-	if ($this->doAliasCheck)
-	{
-		if ($this->mAlias != $this->mOldAlias || $this->mAlias == '') #Should only be empty if auto alias is false
-		{
-			global $gCms;
-			$contentops =& $gCms->GetContentOperations();
-			$error = $contentops->CheckAliasError($this->mAlias, $this->mId);
-			if ($error !== FALSE)
-			{
-				$errors[]= $error;
-				$result = false;
-			}
-		}
-	}
-
-	if ($this->mTemplateId == '')
-	{
-	    $errors[]= lang('nofieldgiven',array(lang('template')));
-	    $result = false;
-	}
 
 	if ($this->GetPropertyValue('content_en') == '')
 	{
@@ -693,15 +580,6 @@ class Content extends ContentBase
 	  
 	  $templateops =& $gCms->GetTemplateOperations();
 	  return array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"'));
-	}
-	break;
-	
-      case 'cachable':
-	if( check_permission(get_userid(),'Modify Page Structure') || $adding ) {
-	  return array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
-	}
-	else if( $this->mCachable ) {
-	  return array('','<input type="hidden" name="cachable" value="1" />');
 	}
 	break;
 	

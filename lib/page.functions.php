@@ -367,10 +367,10 @@ function check_authorship($userid, $contentid = '')
 
 	if (isset($gCms->variables['authorpages']))
 	{
-		if (in_array($contentid, $gCms->variables['authorpages']))
-		{
-			$check = true;
-		}
+	  if (in_array($contentid, $gCms->variables['authorpages']))
+	    {
+	      $check = true;
+	    }
 	}
 
 	return $check;

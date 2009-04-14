@@ -21,22 +21,23 @@
 class Separator extends ContentBase
 {
 
-    function Separator() {
-        $this->ContentBase();
-        $this->mProperties->SetAllowedPropertyNames(array());
+    function SetProperties()
+    {
+      parent::SetProperties();
+      $this->RemoveProperty('title','');
+      $this->RemoveProperty('menutext','');
+      $this->RemoveProperty('target','');
+      $this->RemoveProperty('accesskey','');
+      $this->RemoveProperty('titleattribute','');
+      $this->RemoveProperty('showinmenu',true);
+      $this->RemoveProperty('cachable',true);
     }
-    
+
     function FriendlyName()
     {
       return lang('contenttype_separator');
     }
 
-    function SetProperties()
-    {
-	#Turn off caching
-	$this->mCachable = false;
-    }
-	
     function HasUsableLink()
     {
 	return false;
@@ -47,89 +48,55 @@ class Separator extends ContentBase
 	return false;
     }
 
-    function FillParams($params)
+    /**
+     * Handle Auto Aliasing 
+     */
+    function DoAutoAlias()
     {
-	if (isset($params))
-	{
-	    if (isset($params['parent_id']))
-	    {
-		if ($this->mParentId != $params['parent_id'])
-		{
-		    $this->mHierarchy = '';
-		    $this->mItemOrder = -1;
-		}
-		$this->mParentId = $params['parent_id'];
-	    }
-	    if (isset($params['active']))
-	    {
-		$this->mActive = true;
-	    }
-	    else
-	    {
-		$this->mActive = false;
-	    }
-	    if (isset($params['showinmenu']))
-	    {
-		$this->mShowInMenu = true;
-	    }
-	    else
-	    {
-		$this->mShowInMenu = false;
-	    }
-	}
+      return FALSE;
     }
 
-    function Show()
+    function RequiresAlias()
     {
+      return FALSE;
+    }
+
+    function TabNames()
+    {
+      $res = array(lang('main'));
+      if( check_permission(get_userid(),'Modify Page Structure') )
+	{
+	  $res[] = lang('options');
+	}
+      return $res;
     }
 
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-	global $gCms;
-	
-	$ret = array();
-
-    if (check_permission(get_userid(), 'Modify Page Structure') 
-	|| ($adding == true && check_permission(get_userid(), 'Add Pages'))
-	|| check_authorship(get_userid(),$this->Id()) )
-    {
-		$contentops =& $gCms->GetContentOperations();
-		$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
-		if( !empty($tmp) ) $ret[]= array(lang('parent').':',$tmp);
+      switch($tab)
+	{
+	case '0':
+	  return $this->display_attributes($adding);
+	  break;
+	case '1':
+	  return $this->display_attributes($adding,1);
+	  break;
+	}
     }
-	$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
-	$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 
-	if (!$adding && $showadmin)
-	{
-		$userops =& $gCms->GetUserOperations();
-	    $ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
-	}
-
-	if ($adding || $showadmin)
-	{
-	  if( $adding )
-	    {
-	      $addeditors = get_site_preference('additional_editors','');
-	      $addteditors = explode(",",$addeditors);
-	      $ret[]= $this->ShowAdditionalEditors($addteditors);
-	    }
-	  else
-	    {
-	      $ret[]= $this->ShowAdditionalEditors();
-	    }
-	}
-
-	return $ret;
+    function ValidateData()
+    {
+      $this->mName = CMS_CONTENT_HIDDEN_NAME;
+      return parent::ValidateData();
     }
 
     function GetURL($rewrite = true)
     {
 	return '#';
     }
+
     function Save()
     {
-        $this->mName = '--------';
         ContentBase::Save();
     }
     

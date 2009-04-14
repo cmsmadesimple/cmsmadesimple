@@ -52,12 +52,6 @@ if (isset($_REQUEST["content_id"])) $content_id = $_REQUEST["content_id"];
 $pagelist_id = "1";
 if (isset($_REQUEST["page"])) $pagelist_id = $_REQUEST["page"];
 
-$preview = false;
-/* preview button removed, we have the preview tab 
-   tsw - 7.5.2007
-if (isset($_POST["previewbutton"])) $preview = true;
-*/
-
 $submit = false;
 if (isset($_POST["submitbutton"])) $submit = true;
 
@@ -67,7 +61,7 @@ if (isset($_POST["applybutton"])) $apply = true;
 $ajax = false;
 if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
 
-if ($preview || $apply)
+if ($apply)
 {
 	$CMS_EXCLUDE_FROM_RECENT=1;
 }
@@ -123,44 +117,24 @@ if ($access)
 {
 	if ($submit || $apply)
 	{
-		#Fill contentobj with parameters
-                $contentobj->SetProperties();
-		$contentobj->FillParams($_POST);
-		$error = $contentobj->ValidateData();
+	  #Fill contentobj with parameters
+	  // $contentobj->SetProperties();  // calguy should not be necessary
+	  $contentobj->FillParams($_POST);
+	  $error = $contentobj->ValidateData();
 
-		if (isset($_POST["ownerid"]))
+	  if ($error === FALSE)
+	    {
+	      $contentobj->SetLastModifiedBy(get_userid());
+	      $contentobj->Save();
+	      global $gCms;
+	      $contentops =& $gCms->GetContentOperations();
+	      $contentops->SetAllHierarchyPositions();
+	      audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
+	      if ($submit)
 		{
-			$contentobj->SetOwner($_POST["ownerid"]);
+		  redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&message=contentupdated');
 		}
-
-		#Fill Additional Editors (kind of kludgy)
-		if (isset($_POST["additional_editors"]))
-		{
-			$addtarray = array();
-			foreach ($_POST["additional_editors"] as $addt_user_id)
-			{
-				$addtarray[] = $addt_user_id;
-			}
-			$contentobj->SetAdditionalEditors($addtarray);
-		}
-		else if ($adminaccess)
-		{
-			$contentobj->SetAdditionalEditors(array());
-		}
-
-		if ($error === FALSE)
-		{
-		  $contentobj->SetLastModifiedBy(get_userid());
-		  $contentobj->Save();
-			global $gCms;
-			$contentops =& $gCms->GetContentOperations();
-			$contentops->SetAllHierarchyPositions();
-			audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
-			if ($submit)
-			{
-				redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&message=contentupdated');
-			}
-		}
+	    }
 
 		if ($ajax)
 		{
@@ -187,17 +161,18 @@ if ($access)
 			exit;
 		}
 	}
-	else if ($content_id != -1 && !$preview && strtolower(get_class($contentobj)) != strtolower($content_type))
+	else if ($content_id != -1 && strtolower(get_class($contentobj)) != strtolower($content_type))
 	{
+	  // handle changing content type
 		global $gCms;
 		$contentops =& $gCms->GetContentOperations();
 		$contentobj = $contentops->LoadContentFromId($content_id);
 		$content_type = $contentobj->Type();
-		//$contentobj->SetLastModifiedBy($userid);
 	}
 	else
-	{
-		updatecontentobj($contentobj, $preview);
+	  {
+	    // changing content type
+	    updatecontentobj($contentobj);
 	}
 }
 
@@ -316,16 +291,8 @@ else
 
 	if (FALSE == empty($error))
 	{
-    	echo $themeObject->ShowErrors($error);
+	  echo $themeObject->ShowErrors($error);
 	}
-	else if ($preview)
-	{
-		$tmpfname = createtmpfname($contentobj);
-	?>
-
-<?php
-
-}
 
 #$contentarray = $contentobj->EditAsArray(true, 0, $adminaccess);
 #$contentarray2 = $contentobj->EditAsArray(true, 1, $adminaccess);
@@ -420,7 +387,7 @@ $submit_buttons .= '</p></div>';
 				</div>
 				<?php
 			}
-			
+
 			$contentarray = $contentobj->EditAsArray(false, $currenttab, $adminaccess);
 			for($i=0;$i<count($contentarray);$i++)
 			{

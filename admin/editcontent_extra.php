@@ -34,7 +34,7 @@ function ajaxpreview($params)
 	return $objResponse;
 }
 
-function updatecontentobj(&$contentobj, $preview, $params = null)
+function updatecontentobj(&$contentobj, $preview = false, $params = null)
 {
 	if ($params == null)
 		$params = $_POST;

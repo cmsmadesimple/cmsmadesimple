@@ -48,9 +48,6 @@ $error = FALSE;
 $firsttime = "1"; #Flag to make sure we're not trying to fill params on the first display
 if (isset($_POST["firsttime"])) $firsttime = $_POST["firsttime"];
 
-$preview = false;
-if (isset($_POST["previewbutton"])) $preview = true;
-
 $submit = false;
 if (isset($_POST["submitbutton"])) $submit = true;
 
@@ -115,8 +112,10 @@ else
 	$contentobj->SetActive($active);
 	$contentobj->SetShowInMenu($showinmenu);
 	$contentobj->SetLastModifiedBy($userid);
+
+	// this stuff should be changed somehow.
 	$contentobj->SetMetadata($metadata);
-	$contentobj->SetPropertyValue('content_en', get_site_preference('defaultpagecontent'));
+	$contentobj->SetPropertyValue('content_en', get_site_preference('defaultpagecontent')); // why?
 	if ($parent_id!=-1) $contentobj->SetParentId($parent_id);
 	$contentobj->SetPropertyValue('searchable',
 				      get_site_preference('page_searchable',1));
@@ -136,17 +135,6 @@ if ($access)
 		$contentobj->FillParams($_POST);
 		$contentobj->SetOwner($userid);
 
-		#Fill Additional Editors (kind of kludgy)
-		if (isset($_POST["additional_editors"]))
-		{
-			$addtarray = array();
-			foreach ($_POST["additional_editors"] as $addt_user_id)
-			{
-				$addtarray[] = $addt_user_id;
-			}
-			$contentobj->SetAdditionalEditors($addtarray);
-		}
-
 		$error = $contentobj->ValidateData();
 		if ($error === FALSE)
 		{
@@ -164,10 +152,6 @@ if ($access)
 	else if ($firsttime == "0") #Either we're a preview or a template postback
 	{
 		$contentobj->FillParams($_POST);
-		if ($preview) #If preview, check for errors...
-		{
-			$error = $contentobj->ValidateData();
-		}
 		if (isset($_POST["additional_editors"]))
 		{
 			$addtarray = array();
@@ -211,10 +195,6 @@ if (FALSE == empty($error))
 {
 	echo $themeObject->ShowErrors($error);
 }
-else if ($preview)
-{
-	$tmpfname = createtmpfname($contentobj);
-
 ?>
 
 <!--
@@ -280,11 +260,6 @@ $tabnames = $contentobj->TabNames();
 			<div class="pagetext">&nbsp;</div>
 			<div class="pageinput">';
 		$submit_buttons .= ' <input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />';
-/*
-		if (isset($contentobj->mPreview) && $contentobj->mPreview == true) {
-			$submit_buttons .= ' <input type="submit" name="previewbutton" value="'.lang('preview').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;" />';
-		}
-*/
 		$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" /></div>';
 		
 		$numberoftabs = count($tabnames);
@@ -350,7 +325,6 @@ echo $submit_buttons;
 </div>
 
 <?php
-}
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");

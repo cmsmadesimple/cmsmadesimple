@@ -30,6 +30,7 @@
  * @package		CMS
  */
 
+define('CMS_CONTENT_HIDDEN_NAME','--------');
 class ContentBase
 {
     /**
@@ -183,6 +184,7 @@ class ContentBase
     var $mReadyForEdit;
 
     var $_attributes;
+    var $_prop_defaults;
 
     /************************************************************************/
     /* Constructor related													*/
@@ -195,23 +197,8 @@ class ContentBase
     {
 	$this->SetInitialValues();
 	$this->SetProperties();
-
-	// set allowed property names
-	if( is_array($this->_attributes ) ) 
-	  {
-	    $tmp = array();
-	    
-	    foreach( $this->_attributes as $one )
-	      {
-		$tmp[] = $one[0];
-	      }
-	    $this->mProperties->SetAllowedPropertyNames($tmp);
-	  }
-
 	$this->mPropertiesLoaded = false;
 	$this->mReadyForEdit = false;
-	//$this->_attributes = array('active','showinmenu','alias','target','image','thumbnail','titleattribute','accesskey','extra1','extra2','extra3');
-
     }
 
     /**
@@ -264,16 +251,19 @@ class ContentBase
       $this->AddBaseProperty('parent',3,1);
       $this->AddBaseProperty('active',5);
       $this->AddBaseProperty('showinmenu',5);
+      $this->AddBaseProperty('cachable',6);
       $this->AddBaseProperty('alias',10);
-      $this->AddBaseProperty('image',50);
-      $this->AddBaseProperty('thumbnail',50);
       $this->AddBaseProperty('titleattribute',55);
       $this->AddBaseProperty('accesskey',55);
+      //$this->AddBaseProperty('tabindex',55);
+      $this->AddBaseProperty('owner',90);
+      $this->AddBaseProperty('additionaleditors',91);
+
+      $this->AddContentProperty('image',50);
+      $this->AddContentProperty('thumbnail',50);
       $this->AddContentProperty('extra1',80);
       $this->AddContentProperty('extra2',80);
       $this->AddContentProperty('extra3',80);
-      $this->AddBaseProperty('owner',90);
-      $this->AddBaseProperty('additionaleditors',91);
     }
 
     
@@ -589,7 +579,12 @@ class ContentBase
 		$this->DoReadyForEdit();
 		$this->mLastModifiedBy = $lastmodifiedby;
 	}
-	
+
+	function RequiresAlias()
+	{
+	  return TRUE;
+	}
+
 	function SetAlias($alias, $doAutoAliasIfEnabled = true)
 	{
 		$this->DoReadyForEdit();
@@ -1225,7 +1220,65 @@ class ContentBase
      */
 	function ValidateData()
 	{
-		return FALSE;
+	  $errors = array();
+
+	  if ($this->mParentId <= 0 && !check_permission(get_userid(),'Modify Page Structure'))
+	    {
+	      $errors[] = lang('invalidparent');
+	      $result = false;
+	    }
+	  
+	  if ($this->mName == '')
+	    {
+	      if ($this->mMenuText != '')
+		{
+		  $this->mName = $this->mMenuText;
+		}
+	      else
+		{
+		  $errors[]= lang('nofieldgiven',array(lang('title')));
+		  $result = false;
+		}
+	    }
+	  
+	  if ($this->mParentId <= 0 && !check_permission(get_userid(),'Modify Page Structure'))
+	    {
+	      $errors[] = lang('invalidparent');
+	      $result = false;
+	    }
+	  else {
+	    // TODO
+	    // check to make sure that the parent is a valid one... this person
+	    // has to have authorship over the perent.. or has to have 'Modify Any Page'
+	    // permission, or 'Modify Page Structure' permission.
+	  }
+
+	  if ($this->mMenuText == '')
+	    {
+	      if ($this->mName != '')
+		{
+		  $this->mMenuText = $this->mName;
+		}
+	      else
+		{
+		  $errors[]=lang('nofieldgiven',array(lang('menutext')));
+		  $result = false;
+		}
+	    }
+		
+	  if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) 
+	    {
+	      global $gCms;
+	      $contentops =& $gCms->GetContentOperations();
+	      $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
+	      if ($error !== FALSE)
+		{
+		  $errors[]= $error;
+		  $result = false;
+		}
+	    }
+
+	  return (count($errors) > 0?$errors:FALSE);
 	}
 
     /**
@@ -1316,6 +1369,154 @@ class ContentBase
      */
     function FillParams($params)
     {
+      // content property parameters
+      $parameters = array('extra1','extra2','extra3','image','thumbnail');
+      foreach ($parameters as $oneparam)
+	{
+	  if (isset($params[$oneparam]))
+	    {
+	      $this->SetPropertyValue($oneparam, $params[$oneparam]);
+	    }
+	}
+
+      // go through the list of base parameters
+      // setting them from params
+      
+      // title
+      if (isset($params['title']))
+	{
+	  $this->mName = $params['title'];
+	}
+
+      // menu text
+      if (isset($params['menutext']))
+	{
+	  $this->mMenuText = $params['menutext'];
+	}
+
+      // parent id
+      if( isset($params['parent_id']) )
+	{
+	  if ($this->mParentId != $params['parent_id'])
+	    {
+	      $this->mHierarchy = '';
+	      $this->mItemOrder = -1;
+	    }
+	  $this->mParentId = $params['parent_id'];
+	}
+      else
+	{
+	  // parent id is not set.... we obviously don't have permission to set it.
+	  // because we don't even have a default value.
+
+	  // so we get the first page that this user has access to.
+	  $tmp = author_pages(get_userid());
+	  if( is_array($tmp) && count($tmp) )
+	    {
+	      $this->mParentId = $tmp[0];
+	    }
+	}
+
+      // active
+      if (isset($params['active']))
+	{
+	  $this->mActive = true;
+	}
+      else
+	{
+	  if( !$this->_handleRemovedBaseProperty('active','mActive') )
+	    {
+	      $this->mActive = false;
+	    }
+	}
+      
+      // show in menu
+      if (isset($params['showinmenu']))
+	{
+	  $this->mShowInMenu = true;
+	}
+      else
+	{
+	  if( !$this->_handleRemovedBaseProperty('showinmenu','mShowInMenu') )
+	    {
+	      $this->mShowInMenu = false;
+	    }
+	}
+
+      // alias
+      if (isset($params['alias']))
+	{
+	  $this->SetAlias(trim($params['alias']), $this->DoAutoAlias());
+	}
+      else if($this->RequiresAlias() && $this->DoAutoAlias())
+	{
+	  $this->SetAlias('');
+	}
+
+      // target
+      if (isset($params['target']))
+	{
+	  $val = $params['target'];
+	  if( $val == '---' )
+	    {
+	      $val = '';
+	    }
+	  $this->SetPropertyValue('target', $val);
+	} 
+
+      // title attribute
+      if (isset($params['titleattribute']))
+	{
+	  $this->mTitleAttribute = $params['titleattribute'];
+	}
+
+      // accesskey
+      if (isset($params['accesskey']))
+	{
+	  $this->mAccessKey = $params['accesskey'];
+	}
+
+      // tab index
+      if (isset($params['tabindex']))
+	{
+	  $this->mTabIndex = $params['tabindex'];
+	}
+
+      // cachable
+      if (isset($params['cachable']))
+	{
+	  $this->mCachable = true;
+	}
+      else
+	{
+	  if( !$this->_handleRemovedBaseProperty('cachable','mCachable') )
+	    {
+	      $this->mCachable = false;
+	    }
+	}
+
+      // owner
+      if (isset($params["ownerid"]))
+	{
+	  $this->SetOwner($params["ownerid"]);
+	}
+	 
+      // additional editors
+      if (isset($params["additional_editors"]))
+	{
+	  $addtarray = array();
+	  foreach ($params["additional_editors"] as $addt_user_id)
+	    {
+	      $addtarray[] = $addt_user_id;
+	    }
+	  $this->SetAdditionalEditors($addtarray);
+	}
+//       else if ($adminaccess)
+// 	{
+// 	  $this->SetAdditionalEditors(array());
+// 	}
+
+
     }
 
     /**
@@ -1398,10 +1599,16 @@ class ContentBase
      */
     function Show($param = '')
     {
-	# :TODO:
-	return "<tr><td>Show Not Defined</td></tr>";
     }
 	
+    /**
+     * Handle Auto Aliasing 
+     */
+    function DoAutoAlias()
+    {
+      return TRUE;
+    }
+
     /**
     * allow the content module to handle custom tags. Typically used for parameters in {content} tags
     */
@@ -1410,14 +1617,6 @@ class ContentBase
 	return $tpl_source;
     }
 
-    /**
-     * Returns a list of tab names that should be used when adding or editing this type of content
-     */
-    function GetTabDefinitions()
-    {
-	return array();
-    }
-	
     /**
      * Returns the tab names used in the add and edit content page.  If it's an empty array, then
      * the tabs won't show at all.
@@ -1583,7 +1782,21 @@ class ContentBase
 	}
 
 	/* private */
-	function RemoveProperty($name)
+	function _handleRemovedBaseProperty($name,$member)
+	{
+	  if( !in_array($name,$this->_attributes) )
+	    {
+	      if( isset($this->_prop_defaults[$name]) )
+		{
+		  $this->$member = $this->_prop_defaults[$name];
+		  return TRUE;
+		}
+	    }
+	  return FALSE;
+	}
+
+	/* private */
+	function RemoveProperty($name,$dflt)
 	{
 	  if( !is_array($this->_attributes) ) return;
 	  $tmp = array();
@@ -1596,6 +1809,7 @@ class ContentBase
 	      $tmp[] = $this->_attributes[$i];
 	    }
 	  $this->_attributes = $tmp;
+	  $this->_prop_defaults[$name] = $dflt;
 	}
 
 	/* private */
@@ -1699,6 +1913,15 @@ class ContentBase
 
 	  switch( $one )
 	    {
+	    case 'cachable':
+	      if( check_permission(get_userid(),'Modify Page Structure') || $adding ) {
+		return array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
+	      }
+	      else if( $this->mCachable ) {
+		return array('','<input type="hidden" name="cachable" value="1" />');
+	      }
+	      break;
+	
 	    case 'title':
 	      {
 		return array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
@@ -1718,6 +1941,8 @@ class ContentBase
 		{
 		  $contentops =& $gCms->GetContentOperations();
 		  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
+		  if( empty($tmp) && !check_permission(get_userid(),'Modify Page Structure') )
+		    return array('','<input type="hidden" name="parent_id" value="-1" />');
 		  if( !empty($tmp) ) return array(lang('parent').':',$tmp);
 		}
 	      break;

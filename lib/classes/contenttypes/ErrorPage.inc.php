@@ -40,24 +40,24 @@ class ErrorPage extends Content
   function SetProperties()
   {
     parent::SetProperties();
-    $this->RemoveProperty('searchable');
-    $this->RemoveProperty('template');
-    $this->RemoveProperty('pagemetadata');
-    $this->RemoveProperty('parent');
-    $this->RemoveProperty('showinmenu');
-    $this->RemoveProperty('menutext');
-    $this->RemoveProperty('target');
-    $this->RemoveProperty('extra1');
-    $this->RemoveProperty('extra2');
-    $this->RemoveProperty('extra3');
-    $this->RemoveProperty('image');
-    $this->RemoveProperty('thumbnail');
-    $this->RemoveProperty('accesskey');
-    $this->RemoveProperty('titleattribute');
-    $this->RemoveProperty('active');
-    $this->RemoveProperty('cachable');
+    $this->RemoveProperty('searchable',false);
+    $this->RemoveProperty('template','');
+    $this->RemoveProperty('pagemetadata','');
+    $this->RemoveProperty('parent',-1);
+    $this->RemoveProperty('showinmenu',false);
+    $this->RemoveProperty('menutext','');
+    $this->RemoveProperty('target','');
+    $this->RemoveProperty('extra1','');
+    $this->RemoveProperty('extra2','');
+    $this->RemoveProperty('extra3','');
+    $this->RemoveProperty('image','');
+    $this->RemoveProperty('thumbnail','');
+    $this->RemoveProperty('accesskey','');
+    $this->RemoveProperty('titleattribute','');
+    $this->RemoveProperty('active',true);
+    $this->RemoveProperty('cachable',false);
 
-    $this->RemoveProperty('alias');
+    $this->RemoveProperty('alias','');
     $this->AddBaseProperty('alias',1,1);
 
     #Turn on preview
@@ -87,6 +87,14 @@ class ErrorPage extends Content
   function IsSystemPage()
   {
     return true;
+  }
+
+  /**
+   * Handle Auto Aliasing 
+   */
+  function DoAutoAlias()
+  {
+    return FALSE;
   }
 
   function FillParams($params)
