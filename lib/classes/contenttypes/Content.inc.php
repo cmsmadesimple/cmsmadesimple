@@ -559,8 +559,7 @@ class Content extends ContentBase
 
       switch($one) {
       case 'template':
-	if( check_permission(get_userid(), 'Modify Page Structure') || $adding ) {
-	  
+	{
 	  $templateops =& $gCms->GetTemplateOperations();
 	  return array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"'));
 	}
@@ -630,8 +629,7 @@ class Content extends ContentBase
       default:
 	return parent::display_single_element($one,$adding);
       }
-
-      return $ret;
+      
     }
 } // end of class
 

@@ -1893,12 +1893,11 @@ class ContentBase
 	  switch( $one )
 	    {
 	    case 'cachable':
-	      if( check_permission(get_userid(),'Modify Page Structure') || $adding ) {
 		return array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
-	      }
-	      else if( $this->mCachable ) {
-		return array('','<input type="hidden" name="cachable" value="1" />');
-	      }
+// 	      }
+// 	      else if( $this->mCachable ) {
+// 		return array('','<input type="hidden" name="cachable" value="1" />');
+// 	      }
 	      break;
 	
 	    case 'title':
@@ -1914,9 +1913,9 @@ class ContentBase
 	      break;
 	      
 	    case 'parent':
-	      if (check_permission(get_userid(), 'Modify Page Structure') || 
-		  ($adding == true && check_permission(get_userid(), 'Add Pages')) ||
-		  check_authorship(get_userid(),$this->Id()) )
+// 	      if (check_permission(get_userid(), 'Modify Page Structure') || 
+// 		  check_permission(get_userid(), 'Add Pages') ||
+// 		  check_authorship(get_userid(),$this->Id()) )
 		{
 		  $contentops =& $gCms->GetContentOperations();
 		  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
@@ -1927,21 +1926,21 @@ class ContentBase
 	      break;
 
 	    case 'active':
-	      if( check_permission(get_userid(),'Modify Page Structure') || $adding ) {
+// 	      if( check_permission(get_userid(),'Modify Page Structure')) {
 		return array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
-	      }
-	      else if( $this->mAtive ) {
-		return array('','<input type="hidden" name="active" value="1" />');
-	      }
+// 	      }
+// 	      else if( $this->mAtive ) {
+// 		return array('','<input type="hidden" name="active" value="1" />');
+// 	      }
 	      break;
 	      
 	    case 'showinmenu':
-	      if( check_permission(get_userid(),'Modify Page Structure') || $adding ) {
+// 	      if( check_permission(get_userid(),'Modify Page Structure') ) {
 		return array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
-	      }
-	      else if( $this->mShowInMenu ) {
-		return array('','<input type="hidden" name="showinmenu" value="1" />');
-	      }
+// 	      }
+// 	      else if( $this->mShowInMenu ) {
+// 		return array('','<input type="hidden" name="showinmenu" value="1" />');
+// 	      }
 	      break;
 	      
 	    case 'target':
@@ -1957,12 +1956,12 @@ class ContentBase
 	      break;
 	      
 	    case 'alias':
-	      if( check_permission(get_userid(),'Modify Page Structure') || $adding == true) {
+// 	      if( check_permission(get_userid(),'Modify Page Structure') || $adding == true) {
 		return array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
-	      }
-	      else {
-		return array(lang('pagealias').':','<input type="text" disabled name="alias" value="'.$this->mAlias.'" />');
-	      }
+// 	      }
+// 	      else {
+// 		return array(lang('pagealias').':','<input type="text" disabled name="alias" value="'.$this->mAlias.'" />');
+// 	      }
 	      break;
 	      
 	    case 'image':
