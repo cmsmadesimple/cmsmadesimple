@@ -41,8 +41,6 @@ class ErrorPage extends Content
   {
     parent::SetProperties();
     $this->RemoveProperty('searchable',false);
-    $this->RemoveProperty('template','');
-    $this->RemoveProperty('pagemetadata','');
     $this->RemoveProperty('parent',-1);
     $this->RemoveProperty('showinmenu',false);
     $this->RemoveProperty('menutext','');
@@ -126,19 +124,6 @@ class ErrorPage extends Content
 	return parent::display_single_element($one,$adding);
       }
     }
-
-  function EditAsArray($adding = false, $tab = 0, $showadmin = false)
-  {
-    switch($tab)
-      {
-      case '0':
-	return $this->display_attributes($adding);
-	break;
-      case '1':
-	return $this->display_attributes($adding,1);
-	break;
-      }
-  }
 
   function ValidateData()
   {

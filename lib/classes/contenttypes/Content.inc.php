@@ -46,10 +46,10 @@ class Content extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
-      $this->AddBaseProperty('template',10);
+      $this->AddBaseProperty('template',4);
       $this->AddBaseProperty('pagemetadata',20);
-      $this->AddContentProperty('content_en',4,1);
-      $this->AddContentProperty('searchable',4);
+      $this->AddContentProperty('content_en',6,1);
+      $this->AddContentProperty('searchable',8);
       $this->AddContentProperty('pagedata',25);
       $this->AddContentProperty('disable_wysiwyg',60);
 
@@ -180,34 +180,12 @@ class Content extends ContentBase
 
 	  // and the content blocks
 	  $this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
-	  /*
-            {
-              $label = lang('content');
-	      $wysiwyg = true;
-	      $hide_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
-	      if ($hide_wysiwyg)
-		{
-		  $wysiwyg = false;
-		}
-	      
-	      
-	      if( isset($this->additionalContentBlocks['**default**']) )
-              { 
-                $tmp =& $this->additionalContentBlocks['**default**'];
-		if ($wysiwyg)
-		  {
-		    $wysiwyg = ($tmp['usewysiwyg'] == 'false')?false:true;
-		  }
-		if( !empty($tmp['label']) ) $label = $tmp['label'];
-	      }
-	      $ret[]= array($label.':',create_textarea($wysiwyg, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $this->stylesheet));
-            }
-	  */
 
 	    // add additional content blocks if required
 	    foreach($this->additionalContentBlocks as $blockName => $blockNameId)
 	    {
 		if (empty($blockName) || $blockName == '**default**') continue; 
+
                 $label = ucwords($blockName);
 		$data = $this->GetPropertyValue($blockNameId['id']);
 		if( empty($data) && isset($blockNameId['default']) ) $data = $blockNameId['default'];
@@ -244,26 +222,26 @@ class Content extends ContentBase
 
 		  case 'text':
 		  default:
-		    if ($blockNameId['oneline'] == 'true')
+		    if (isset($blockNameId['oneline']))
 		      {
-			
-			$ret[]= array($label.':','<input type="text" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />');
+			$size = (isset($blockNameId['size']))?$blockNameId['size']:50;
+			$ret[]= array($label.':','<input type="text" size="'.$size.'" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />');
 		      }
 		    else
 		      { 
-			    $block_wysiwyg = true;
-			    $hide_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
-				
-				if ($hide_wysiwyg)
-				{
-				$block_wysiwyg = false;
-				}
-				else
-				{
-				$block_wysiwyg = $blockNameId['usewysiwyg'] == 'false'?false:true;
-				}
-				
-				$ret[]= array($label.':',create_textarea($block_wysiwyg, $data, $blockNameId['id'], '', $blockNameId['id'], '', $this->stylesheet));
+			$block_wysiwyg = true;
+			$hide_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
+			
+			if ($hide_wysiwyg)
+			  {
+			    $block_wysiwyg = false;
+			  }
+			else
+			  {
+			    $block_wysiwyg = $blockNameId['usewysiwyg'] == 'false'?false:true;
+			  }
+			
+			$ret[]= array($label.':',create_textarea($block_wysiwyg, $data, $blockNameId['id'], '', $blockNameId['id'], '', $this->stylesheet));
 		      }
 		  }
 	    }
@@ -360,7 +338,8 @@ class Content extends ContentBase
 			  $oneline = 'false';
 			  $value = '';
 			  $label = '';
-			  
+			  $size = '50';
+
 			  foreach ($keyval as $key=>$val)
 			    {
 			      switch($key)
@@ -380,6 +359,9 @@ class Content extends ContentBase
 				case 'oneline':
 				  $oneline = $val;
 				  break;
+				case 'size':
+				  $size = $val;
+				  break;
 				case 'label':
 				  $label = $val;
 				  break;
@@ -398,6 +380,7 @@ class Content extends ContentBase
 			  $this->additionalContentBlocks[$name]['oneline'] = $oneline;
 			  $this->additionalContentBlocks[$name]['default'] = $value;
 			  $this->additionalContentBlocks[$name]['label'] = $label;
+			  $this->additionalContentBlocks[$name]['size'] = $size;
 			  
 			}
 		    }

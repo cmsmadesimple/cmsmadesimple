@@ -1625,9 +1625,6 @@ class ContentBase
         return array();
     }
 
-    /**
-     * Show the Alternate Edit interface
-     */
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
 	# :TODO:

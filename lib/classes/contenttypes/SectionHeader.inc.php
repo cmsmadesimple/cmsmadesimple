@@ -56,19 +56,6 @@ class SectionHeader extends ContentBase
       return $res;
     }
 
-    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
-    {
-      switch($tab)
-	{
-	case '0':
-	  return $this->display_attributes($adding);
-	  break;
-	case '1':
-	  return $this->display_attributes($adding,1);
-	  break;
-	}
-    }
-
     function ValidateData()
     {
       $res = parent::ValidateData();
