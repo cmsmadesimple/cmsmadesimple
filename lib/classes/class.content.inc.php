@@ -29,7 +29,6 @@
  * @since		0.8
  * @package		CMS
  */
-
 define('CMS_CONTENT_HIDDEN_NAME','--------');
 class ContentBase
 {

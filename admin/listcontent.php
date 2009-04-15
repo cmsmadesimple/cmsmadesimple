@@ -684,7 +684,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	$thelist .= "</td>\n";
 
 
-	if( $one->Type() == 'pagelink' || $one->Type() == 'link' || $one->Type() == 'sectionheader' )
+	if( $one->Type() == 'pagelink' || $one->Type() == 'link' || $one->Type() == 'sectionheader' || $one->Type() == 'separator' )
 	  {
 	    $thelist .= "<td>&nbsp;</td>\n";
 	  }

@@ -29,6 +29,7 @@ class SectionHeader extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
+      $this->RemoveProperty('alias','');
       $this->RemoveProperty('accesskey','');
       $this->RemoveProperty('title','');
       $this->RemoveProperty('showinmenu',true);
@@ -66,6 +67,13 @@ class SectionHeader extends ContentBase
 	  return $this->display_attributes($adding,1);
 	  break;
 	}
+    }
+
+    function ValidateData()
+    {
+      $res = parent::ValidateData();
+      $this->mTemplateId = -1;
+      return $res;
     }
 
     function GetURL($rewrite = true)

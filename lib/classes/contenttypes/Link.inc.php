@@ -117,37 +117,37 @@ class Link extends ContentBase
 	}
     }
 
-	/* Modfied from the Diagnostics module's directoryToArray. Thanks to SjG */
-	function directoryToSelect($directory, $recursive, &$orig_dir, $url)
-	{
-		$select = '';
-		if ($handle = opendir($directory)) {
-			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != ".." && $file[0] != '.') { // Mod Skip hidden file/dir
-					if (is_dir($directory. "/" . $file)) {
-						if($recursive) {
-							$select .= $this->directoryToSelect($directory. "/" . $file, $recursive, $orig_dir, $url);
-						}
-						$file = $directory . "/" . $file;
-						$file = preg_replace("/\/\//si", "/", $file);
-						// $array_items[$file] = "(dir)";
-					} else {
-						$file = $directory . "/" . $file;
-						// $stats = stat ( $file );
-						$file = preg_replace("/\/\//si", "/", $file);
-						// $array_items[$file] = "(".$stats[7].") " . date("Y-m-d H:i:s",$stats[9]);
-						$uploads_dir = basename($orig_dir);
-						$file = str_replace($orig_dir, '', $file);
-						$file = $uploads_dir.$file;
-						// $array_items[$file] = $file;
-						$select .= '<option value="'.$file.'"'.($url==$file?' selected="selected"':'').'>'.$file.'</option>';
-					}
-				}
-			}
-			closedir($handle);
-		}
-		return $select;
-	}
+// 	/* Modfied from the Diagnostics module's directoryToArray. Thanks to SjG */
+// 	function directoryToSelect($directory, $recursive, &$orig_dir, $url)
+// 	{
+// 		$select = '';
+// 		if ($handle = opendir($directory)) {
+// 			while (false !== ($file = readdir($handle))) {
+// 				if ($file != "." && $file != ".." && $file[0] != '.') { // Mod Skip hidden file/dir
+// 					if (is_dir($directory. "/" . $file)) {
+// 						if($recursive) {
+// 							$select .= $this->directoryToSelect($directory. "/" . $file, $recursive, $orig_dir, $url);
+// 						}
+// 						$file = $directory . "/" . $file;
+// 						$file = preg_replace("/\/\//si", "/", $file);
+// 						// $array_items[$file] = "(dir)";
+// 					} else {
+// 						$file = $directory . "/" . $file;
+// 						// $stats = stat ( $file );
+// 						$file = preg_replace("/\/\//si", "/", $file);
+// 						// $array_items[$file] = "(".$stats[7].") " . date("Y-m-d H:i:s",$stats[9]);
+// 						$uploads_dir = basename($orig_dir);
+// 						$file = str_replace($orig_dir, '', $file);
+// 						$file = $uploads_dir.$file;
+// 						// $array_items[$file] = $file;
+// 						$select .= '<option value="'.$file.'"'.($url==$file?' selected="selected"':'').'>'.$file.'</option>';
+// 					}
+// 				}
+// 			}
+// 			closedir($handle);
+// 		}
+// 		return $select;
+// 	}
 
 
     function GetURL($rewrite = true)

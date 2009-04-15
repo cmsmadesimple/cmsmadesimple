@@ -24,6 +24,8 @@ class Separator extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
+      $this->RemoveProperty('template','-1');
+      $this->RemoveProperty('alias','');
       $this->RemoveProperty('title','');
       $this->RemoveProperty('menutext','');
       $this->RemoveProperty('target','');
@@ -94,12 +96,6 @@ class Separator extends ContentBase
     {
 	return '#';
     }
-
-    function Save()
-    {
-        ContentBase::Save();
-    }
-    
 }
 
 # vim:ts=4 sw=4 noet
