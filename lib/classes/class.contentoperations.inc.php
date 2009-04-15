@@ -748,7 +748,7 @@ class ContentOperations
 						$result .= ' selected="selected"';
 					}
 
-					if( $value == -1 && $ignore_current )
+					if( ($value == -1) && ($ignore_current == 0) )
 					  {
 					    $result .= '>'.$one->Hierarchy().'. - '.$one->Name().' ('.lang('invalid').')</option>';
 					  }

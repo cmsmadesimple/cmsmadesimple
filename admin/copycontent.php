@@ -156,7 +156,7 @@ $smarty->assign('input_parentdropdown',
 		$contentops->CreateHierarchyDropdown(
 						     $fromobj->Id(),
 						     $fromobj->ParentId(),
-						     'to_parentid',1,1));
+						     'to_parentid',1,1,1));
 
 echo $smarty->fetch('copycontent.tpl');
 
