@@ -1240,18 +1240,6 @@ class ContentBase
 		}
 	    }
 	  
-	  if ($this->mParentId <= 0 && !check_permission(get_userid(),'Modify Page Structure'))
-	    {
-	      $errors[] = lang('invalidparent');
-	      $result = false;
-	    }
-	  else {
-	    // TODO
-	    // check to make sure that the parent is a valid one... this person
-	    // has to have authorship over the perent.. or has to have 'Modify Any Page'
-	    // permission, or 'Modify Page Structure' permission.
-	  }
-
 	  if ($this->mMenuText == '')
 	    {
 	      if ($this->mName != '')
@@ -1423,10 +1411,11 @@ class ContentBase
 	}
       else
 	{
-	  if( !$this->_handleRemovedBaseProperty('active','mActive') )
-	    {
-	      $this->mActive = false;
-	    }
+	  $this->_handleRemovedBaseProperty('active','mActive');
+// 	  if( !$this->_handleRemovedBaseProperty('active','mActive') )
+// 	    {
+// 	      $this->mActive = false;
+// 	    }
 	}
       
       // show in menu
@@ -1436,10 +1425,7 @@ class ContentBase
 	}
       else
 	{
-	  if( !$this->_handleRemovedBaseProperty('showinmenu','mShowInMenu') )
-	    {
-	      $this->mShowInMenu = false;
-	    }
+	  $this->_handleRemovedBaseProperty('showinmenu','mShowInMenu');
 	}
 
       // alias
@@ -1488,10 +1474,7 @@ class ContentBase
 	}
       else
 	{
-	  if( !$this->_handleRemovedBaseProperty('cachable','mCachable') )
-	    {
-	      $this->mCachable = false;
-	    }
+	  $this->_handleRemovedBaseProperty('cachable','mCachable');
 	}
 
       // owner

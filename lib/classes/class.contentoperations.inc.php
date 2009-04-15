@@ -682,7 +682,7 @@ class ContentOperations
 		return $contentcache;
 	}
 
-	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, $use_perms = 0)
+	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, $use_perms = 0, $ignore_current = 0)
 	{
 		$result = '';
 		$userid = -1;
@@ -748,7 +748,7 @@ class ContentOperations
 						$result .= ' selected="selected"';
 					}
 
-					if( $value == -1 )
+					if( $value == -1 && $ignore_current )
 					  {
 					    $result .= '>'.$one->Hierarchy().'. - '.$one->Name().' ('.lang('invalid').')</option>';
 					  }
