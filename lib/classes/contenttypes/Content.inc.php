@@ -222,7 +222,7 @@ class Content extends ContentBase
 
 		  case 'text':
 		  default:
-		    if (isset($blockNameId['oneline']))
+		    if (isset($blockNameId['oneline']) && $blockNameId['oneline'] == '1' || $blockNameId['oneline'] == 'true')
 		      {
 			$size = (isset($blockNameId['size']))?$blockNameId['size']:50;
 			$ret[]= array($label.':','<input type="text" size="'.$size.'" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />');
