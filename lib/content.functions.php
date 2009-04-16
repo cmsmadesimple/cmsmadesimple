@@ -628,11 +628,6 @@ class Smarty_CMS extends Smarty {
 
 			if (isset($contentobj) && $contentobj !== FALSE)
 			{
-				if ($tpl_name != 'content_en')
-				{
-					//TODO: Fix Me.  This is a super hack.
-					$contentobj->GetAdditionalContentBlocks();
-				}
 
 				$tpl_source = $contentobj->Show($tpl_name);
 

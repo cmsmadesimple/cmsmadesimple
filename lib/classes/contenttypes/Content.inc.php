@@ -613,31 +613,6 @@ class Content extends ContentBase
 	}
 	break;
 
-	/*
-      case 'content_en':
-	{
-	  $label = lang('content');
-	  $wysiwyg = true;
-	  $hide_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
-	  if ($hide_wysiwyg)
-	    {
-	      $wysiwyg = false;
-	    }
-	      
-	  if( isset($this->_contentBlocks['**default**']) )
-	    { 
-	      $tmp =& $this->_contentBlocks['**default**'];
-	      if ($wysiwyg)
-		{
-		  $wysiwyg = ($tmp['usewysiwyg'] == 'false')?false:true;
-		}
-	      if( !empty($tmp['label']) ) $label = $tmp['label'];
-	    }
-	  return array($label.':',create_textarea($wysiwyg, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $this->stylesheet));
-	}
-	break;
-	*/
-
       default:
 	return parent::display_single_element($one,$adding);
       }
