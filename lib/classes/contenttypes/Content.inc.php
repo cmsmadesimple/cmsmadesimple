@@ -48,7 +48,6 @@ class Content extends ContentBase
       parent::SetProperties();
       $this->AddBaseProperty('template',4);
       $this->AddBaseProperty('pagemetadata',20);
-      $this->AddContentProperty('content_en',6,1);
       $this->AddContentProperty('searchable',8);
       $this->AddContentProperty('pagedata',25);
       $this->AddContentProperty('disable_wysiwyg',60);
@@ -74,7 +73,7 @@ class Content extends ContentBase
 
 	if (isset($params))
 	{
-	  $parameters = array('content_en','pagedata','searchable','disable_wysiwyg');
+	  $parameters = array('pagedata','searchable','disable_wysiwyg');
 
 	  //pick up the template id before we do parameters
 	  if (isset($params['template_id']))
@@ -184,9 +183,11 @@ class Content extends ContentBase
 	    // add additional content blocks if required
 	    foreach($this->additionalContentBlocks as $blockName => $blockNameId)
 	    {
-		if (empty($blockName) || $blockName == '**default**') continue; 
-
                 $label = ucwords($blockName);
+		if( $blockName == 'content_en' ) 
+		  {
+		    $label = ucwords('content');
+		  }
 		$data = $this->GetPropertyValue($blockNameId['id']);
 		if( empty($data) && isset($blockNameId['default']) ) $data = $blockNameId['default'];
                 if( !empty($blockNameId['label']) ) $label = $blockNameId['label'];
@@ -297,8 +298,9 @@ class Content extends ContentBase
     {
       $result = false;
       global $gCms;
+      if ($this->addtContentBlocksLoaded) return;
+
       $templateops =& $gCms->GetTemplateOperations();
-      if ($this->addtContentBlocksLoaded == false)
 	{
 	  $this->additionalContentBlocks = array();
 	  if ($this->TemplateId() && $this->TemplateId() > -1)
@@ -314,14 +316,25 @@ class Content extends ContentBase
 	      $content = $template->content;
 	      
 	      // read text content blocks
-	      $pattern = '/{content\s([^}]*)}/';
+	      //$pattern = '/{content\s([^}]*)}/';
+	      $pattern = '/{content([^}]*)}/';
 	      $pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
 	      $matches = array();
 	      $result = preg_match_all($pattern, $content, $matches);
 	      if ($result && count($matches[1]) > 0)
 		{
+		  // get all the {content...} tags
 		  foreach ($matches[1] as $wholetag)
 		    {
+		      $id = '';
+		      $name = '';
+		      $usewysiwyg = 'true';
+		      $oneline = 'false';
+		      $value = '';
+		      $label = '';
+		      $size = '50';
+
+		      // get the arguments.
 		      $morematches = array();
 		      $result2 = preg_match_all($pattern2, $wholetag, $morematches);
 		      if ($result2)
@@ -332,14 +345,6 @@ class Content extends ContentBase
 			      $keyval[$morematches[1][$i]] = $morematches[2][$i];
 			    }
 			  
-			  $id = '';
-			  $name = '';
-			  $usewysiwyg = 'true';
-			  $oneline = 'false';
-			  $value = '';
-			  $label = '';
-			  $size = '50';
-
 			  foreach ($keyval as $key=>$val)
 			    {
 			      switch($key)
@@ -372,17 +377,16 @@ class Content extends ContentBase
 				  break;
 				}
 			    }
-
-			  if( empty($name) ) $name = '**default**';
-			  $this->additionalContentBlocks[$name]['type'] = 'text';
-			  $this->additionalContentBlocks[$name]['id'] = $id;
-			  $this->additionalContentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
-			  $this->additionalContentBlocks[$name]['oneline'] = $oneline;
-			  $this->additionalContentBlocks[$name]['default'] = $value;
-			  $this->additionalContentBlocks[$name]['label'] = $label;
-			  $this->additionalContentBlocks[$name]['size'] = $size;
-			  
 			}
+
+		      if( empty($name) ) { $name = 'content_en'; $id = 'content_en'; }
+		      $this->additionalContentBlocks[$name]['type'] = 'text';
+		      $this->additionalContentBlocks[$name]['id'] = $id;
+		      $this->additionalContentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
+		      $this->additionalContentBlocks[$name]['oneline'] = $oneline;
+		      $this->additionalContentBlocks[$name]['default'] = $value;
+		      $this->additionalContentBlocks[$name]['label'] = $label;
+		      $this->additionalContentBlocks[$name]['size'] = $size;
 		    }
 		  
 		  // force a load 
@@ -398,6 +402,7 @@ class Content extends ContentBase
 	      $result = preg_match_all($pattern, $content, $matches);
 	      if ($result && count($matches[1]) > 0)
 		{
+		  $blockcount = 0;
 		  foreach ($matches[1] as $wholetag)
 		    {
 		      $morematches = array();
@@ -446,8 +451,9 @@ class Content extends ContentBase
 				  break;
 				}
 			    }
-			  
-			  if( empty($name) ) $name = '**default**';
+
+			  $blockcount++;
+			  if( empty($name) ) $name = 'image_'.$blockcount;;
 			  $this->additionalContentBlocks[$name]['type'] = 'image';
 			  $this->additionalContentBlocks[$name]['id'] = $id;
 			  $this->additionalContentBlocks[$name]['upload'] = $upload;
@@ -603,6 +609,7 @@ class Content extends ContentBase
 	}
 	break;
 
+	/*
       case 'content_en':
 	{
 	  $label = lang('content');
@@ -625,6 +632,7 @@ class Content extends ContentBase
 	  return array($label.':',create_textarea($wysiwyg, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $this->stylesheet));
 	}
 	break;
+	*/
 
       default:
 	return parent::display_single_element($one,$adding);
