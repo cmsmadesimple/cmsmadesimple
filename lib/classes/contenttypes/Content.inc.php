@@ -20,16 +20,16 @@
 
 class Content extends ContentBase
 {
-    var $additionalContentBlocks;
-    var $addtContentBlocksLoaded;
+    var $_contentBlocks;
+    var $_contentBlocksLoaded;
     var $doAutoAliasIfEnabled;
     var $stylesheet;
 	
     function Content()
     {
 	$this->ContentBase();
-	$this->additionalContentBlocks = array();
-	$this->addtContentBlocksLoaded = false;
+	$this->_contentBlocks = array();
+	$this->_contentBlocksLoaded = false;
 	$this->doAutoAliasIfEnabled = true;
     }
 
@@ -61,7 +61,7 @@ class Content extends ContentBase
      */
     function ReadyForEdit()
     {
-	$this->GetAdditionalContentBlocks();
+	$this->get_content_blocks();
     }
 
     function FillParams($params)
@@ -80,7 +80,7 @@ class Content extends ContentBase
 	    {
 	      if ($this->mTemplateId != $params['template_id'])
 		{
-		  $this->addtContentBlocksLoaded = false;
+		  $this->_contentBlocksLoaded = false;
 		}
 	      $this->mTemplateId = $params['template_id'];
 	    }
@@ -94,11 +94,11 @@ class Content extends ContentBase
 		}
 	    }
 	  
-	  // add additional content blocks
-	  $this->GetAdditionalContentBlocks();
-	  foreach($this->additionalContentBlocks as $blockName => $blockNameId)
+	  // add content blocks
+	  $this->get_content_blocks();
+	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
-	      $parameters[] = $blockNameId['id'];
+	      $parameters[] = $blockInfo['id'];
 	    }
 	  
 	  // do the content property parameters
@@ -123,7 +123,7 @@ class Content extends ContentBase
     function Show($param = 'content_en')
     {
 	// check for additional content blocks
-	$this->GetAdditionalContentBlocks();
+	$this->get_content_blocks();
 	
 	return $this->GetPropertyValue($param);
     }
@@ -178,29 +178,29 @@ class Content extends ContentBase
 	    }
 
 	  // and the content blocks
-	  $this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
+	  $this->get_content_blocks(); // this is needed as this is the first time we get a call to our class when editing.
 
 	    // add additional content blocks if required
-	    foreach($this->additionalContentBlocks as $blockName => $blockNameId)
+	    foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
                 $label = ucwords($blockName);
 		if( $blockName == 'content_en' ) 
 		  {
 		    $label = ucwords('content');
 		  }
-		$data = $this->GetPropertyValue($blockNameId['id']);
-		if( empty($data) && isset($blockNameId['default']) ) $data = $blockNameId['default'];
-                if( !empty($blockNameId['label']) ) $label = $blockNameId['label'];
-		switch($blockNameId['type'])
+		$data = $this->GetPropertyValue($blockInfo['id']);
+		if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
+                if( !empty($blockInfo['label']) ) $label = $blockInfo['label'];
+		switch($blockInfo['type'])
 		  {
 		  case 'module':
 		    {
-		      if( !isset($blockNameId['module']) ) continue;
-		      if( !isset($gCms->modules[$blockNameId['module']]['object']) ) continue;
-		      $module =& $gCms->modules[$blockNameId['module']]['object'];
+		      if( !isset($blockInfo['module']) ) continue;
+		      if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
+		      $module =& $gCms->modules[$blockInfo['module']]['object'];
 		      if( !is_object($module) ) continue;
 		      if( $module->HasContentBlocks() === FALSE ) continue;
-		      $tmp = $module->GetContentBlockInputBase($blockName,$blockNameId['blocktype'],$blockNameId['params']);
+		      $tmp = $module->GetContentBlockInputBase($blockName,$blockInfo['blocktype'],$blockInfo['params']);
 		      if( $tmp === FALSE ) continue;
 		      $ret[]= array($label.':',$tmp);
 		    }
@@ -208,10 +208,10 @@ class Content extends ContentBase
 
 		  case 'image':
 		    {
-		      $dir = cms_join_path($config['uploads_path'],$blockNameId['dir']);
+		      $dir = cms_join_path($config['uploads_path'],$blockInfo['dir']);
 		      $optprefix = 'uploads';
-		      if( !empty($blockNameId['dir']) ) $optprefix .= '/'.$blockNameId['dir'];
-		      $dropdown = create_file_dropdown($blockNameId['id'],$dir,$data,'jpg,jpeg,png,gif',
+		      if( !empty($blockInfo['dir']) ) $optprefix .= '/'.$blockInfo['dir'];
+		      $dropdown = create_file_dropdown($blockInfo['id'],$dir,$data,'jpg,jpeg,png,gif',
 						       $optprefix,true);
 		      if( $dropdown === false )
 			{
@@ -223,10 +223,10 @@ class Content extends ContentBase
 
 		  case 'text':
 		  default:
-		    if (isset($blockNameId['oneline']) && $blockNameId['oneline'] == '1' || $blockNameId['oneline'] == 'true')
+		    if (isset($blockInfo['oneline']) && $blockInfo['oneline'] == '1' || $blockInfo['oneline'] == 'true')
 		      {
-			$size = (isset($blockNameId['size']))?$blockNameId['size']:50;
-			$ret[]= array($label.':','<input type="text" size="'.$size.'" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />');
+			$size = (isset($blockInfo['size']))?$blockInfo['size']:50;
+			$ret[]= array($label.':','<input type="text" size="'.$size.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />');
 		      }
 		    else
 		      { 
@@ -239,10 +239,10 @@ class Content extends ContentBase
 			  }
 			else
 			  {
-			    $block_wysiwyg = $blockNameId['usewysiwyg'] == 'false'?false:true;
+			    $block_wysiwyg = $blockInfo['usewysiwyg'] == 'false'?false:true;
 			  }
 			
-			$ret[]= array($label.':',create_textarea($block_wysiwyg, $data, $blockNameId['id'], '', $blockNameId['id'], '', $this->stylesheet));
+			$ret[]= array($label.':',create_textarea($block_wysiwyg, $data, $blockInfo['id'], '', $blockInfo['id'], '', $this->stylesheet));
 		      }
 		  }
 	    }
@@ -294,15 +294,16 @@ class Content extends ContentBase
 	return (count($errors) > 0?$errors:FALSE);
     }
 
-    function GetAdditionalContentBlocks()
+    /* private */
+    function get_content_blocks()
     {
       $result = false;
       global $gCms;
-      if ($this->addtContentBlocksLoaded) return;
+      if ($this->_contentBlocksLoaded) return;
 
       $templateops =& $gCms->GetTemplateOperations();
 	{
-	  $this->additionalContentBlocks = array();
+	  $this->_contentBlocks = array();
 	  if ($this->TemplateId() && $this->TemplateId() > -1)
 	    {
 	      $template = $templateops->LoadTemplateByID($this->TemplateId()); /* @var $template Template */
@@ -380,13 +381,16 @@ class Content extends ContentBase
 			}
 
 		      if( empty($name) ) { $name = 'content_en'; $id = 'content_en'; }
-		      $this->additionalContentBlocks[$name]['type'] = 'text';
-		      $this->additionalContentBlocks[$name]['id'] = $id;
-		      $this->additionalContentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
-		      $this->additionalContentBlocks[$name]['oneline'] = $oneline;
-		      $this->additionalContentBlocks[$name]['default'] = $value;
-		      $this->additionalContentBlocks[$name]['label'] = $label;
-		      $this->additionalContentBlocks[$name]['size'] = $size;
+		      if( !isset($this->_contentBlocks[$name]) )
+			{
+			  $this->_contentBlocks[$name]['type'] = 'text';
+			  $this->_contentBlocks[$name]['id'] = $id;
+			  $this->_contentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
+			  $this->_contentBlocks[$name]['oneline'] = $oneline;
+			  $this->_contentBlocks[$name]['default'] = $value;
+			  $this->_contentBlocks[$name]['label'] = $label;
+			  $this->_contentBlocks[$name]['size'] = $size;
+			}
 		    }
 		  
 		  // force a load 
@@ -454,12 +458,12 @@ class Content extends ContentBase
 
 			  $blockcount++;
 			  if( empty($name) ) $name = 'image_'.$blockcount;;
-			  $this->additionalContentBlocks[$name]['type'] = 'image';
-			  $this->additionalContentBlocks[$name]['id'] = $id;
-			  $this->additionalContentBlocks[$name]['upload'] = $upload;
-			  $this->additionalContentBlocks[$name]['dir'] = $dir;
-			  $this->additionalContentBlocks[$name]['default'] = $value;
-			  $this->additionalContentBlocks[$name]['label'] = $label;					
+			  $this->_contentBlocks[$name]['type'] = 'image';
+			  $this->_contentBlocks[$name]['id'] = $id;
+			  $this->_contentBlocks[$name]['upload'] = $upload;
+			  $this->_contentBlocks[$name]['dir'] = $dir;
+			  $this->_contentBlocks[$name]['default'] = $value;
+			  $this->_contentBlocks[$name]['label'] = $label;					
 			}
 		    }
 		  
@@ -527,11 +531,11 @@ class Content extends ContentBase
 			    }
 			  
 			  if( empty($name) ) $name = '**default**';
-			  $this->additionalContentBlocks[$name]['type'] = 'module';
-			  $this->additionalContentBlocks[$name]['blocktype'] = $blocktype;
-			  $this->additionalContentBlocks[$name]['id'] = $id;
-			  $this->additionalContentBlocks[$name]['module'] = $module;
-			  $this->additionalContentBlocks[$name]['params'] = $parms;
+			  $this->_contentBlocks[$name]['type'] = 'module';
+			  $this->_contentBlocks[$name]['blocktype'] = $blocktype;
+			  $this->_contentBlocks[$name]['id'] = $id;
+			  $this->_contentBlocks[$name]['module'] = $module;
+			  $this->_contentBlocks[$name]['params'] = $parms;
 			}
 		    }
 		  
@@ -544,7 +548,7 @@ class Content extends ContentBase
 		* end disabled code
 		*/
 	      
-	      $this->addtContentBlocksLoaded = true;
+	      $this->_contentBlocksLoaded = true;
 	    }
 	  return $result;
 	}
@@ -554,7 +558,7 @@ class Content extends ContentBase
     function ContentPreRender($tpl_source)
     {
 	// check for additional content blocks
-	$this->GetAdditionalContentBlocks();
+	$this->get_content_blocks();
 
 	return $tpl_source;
     }
@@ -620,9 +624,9 @@ class Content extends ContentBase
 	      $wysiwyg = false;
 	    }
 	      
-	  if( isset($this->additionalContentBlocks['**default**']) )
+	  if( isset($this->_contentBlocks['**default**']) )
 	    { 
-	      $tmp =& $this->additionalContentBlocks['**default**'];
+	      $tmp =& $this->_contentBlocks['**default**'];
 	      if ($wysiwyg)
 		{
 		  $wysiwyg = ($tmp['usewysiwyg'] == 'false')?false:true;
