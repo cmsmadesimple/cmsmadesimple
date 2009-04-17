@@ -98,6 +98,7 @@ class Content extends ContentBase
 	  $this->get_content_blocks();
 	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
+	      $this->AddContentProperty($blockName,99);
 	      $parameters[] = $blockInfo['id'];
 	    }
 	  
