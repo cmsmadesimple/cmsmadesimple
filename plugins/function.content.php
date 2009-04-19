@@ -61,50 +61,56 @@ function smarty_cms_function_content($params, &$smarty)
 						$modulename = $key;
 					}
 				}
-		
-				if (isset($modulename))
-				{
-					if (isset($cmsmodules[$modulename]))
-					{
-						if (isset($cmsmodules[$modulename]['object'])
-							&& $cmsmodules[$modulename]['installed'] == true
-							&& $cmsmodules[$modulename]['active'] == true
-							&& $cmsmodules[$modulename]['object']->IsPluginModule())
-						{
-							@ob_start();
-							$params = array_merge($params, GetModuleParameters($id));
 
-							// calguy1000..... increment the modulenum 
-							// if we're not in inlined mode.
-							if( $id != 'cntnt01' )
-							  {
-								++$gCms->variables["modulenum"]; 
-							  }
+				if (!isset($modulename) || empty($modulename) ||
+				    !isset($cmsmodules[$modulename]))
+				  {
+				    // module not found
+				    @trigger_error('Attempt to access module '.$modulename.' which could not be foune (is it properly installed and configured?');
+				    return _smarty_cms_function_content_return('', $params, $smarty);
+				  }
 
-							$returnid = '';
-							if (isset($params['returnid']))
-							{
-								$returnid = $params['returnid'];
-							}
-							else
-							{
-								$returnid = $pageinfo->content_id;
-							}
-							$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
-							if ($result !== FALSE)
-							{
-							  echo $result;
-							}
-							$modresult = @ob_get_contents();
-							@ob_end_clean();
-							return _smarty_cms_function_content_return($modresult, $params, $smarty);
-						}
-						else
-						{
-						  return _smarty_cms_function_content_return("<!-- Not a tag module -->\n", $params, $smarty);
-						}
-					}
-				}
+				if (isset($cmsmodules[$modulename]))
+				  {
+				    if (isset($cmsmodules[$modulename]['object'])
+					&& $cmsmodules[$modulename]['installed'] == true
+					&& $cmsmodules[$modulename]['active'] == true
+					&& $cmsmodules[$modulename]['object']->IsPluginModule())
+				      {
+					@ob_start();
+					$params = array_merge($params, GetModuleParameters($id));
+					
+					// calguy1000..... increment the modulenum 
+					// if we're not in inlined mode.
+					if( $id != 'cntnt01' )
+					  {
+					    ++$gCms->variables["modulenum"]; 
+					  }
+					
+					$returnid = '';
+					if (isset($params['returnid']))
+					  {
+					    $returnid = $params['returnid'];
+					  }
+					else
+					  {
+					    $returnid = $pageinfo->content_id;
+					  }
+					$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
+					if ($result !== FALSE)
+					  {
+					    echo $result;
+					  }
+					$modresult = @ob_get_contents();
+					@ob_end_clean();
+					return _smarty_cms_function_content_return($modresult, $params, $smarty);
+				      }
+				    else
+				      {
+					@trigger_error('Attempt to access module '.$key.' which could not be foune (is it properly installed and configured?');
+					return _smarty_cms_function_content_return("<!-- Not a tag module -->\n", $params, $smarty);
+				      }
+				  }
 			}
 		}
 		else
