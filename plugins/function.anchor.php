@@ -30,9 +30,27 @@ function smarty_cms_function_anchor($params, &$smarty)
 	if (isset($params['accesskey'])) $accesskey = ' accesskey="'.$params['accesskey'].'"';
 	#End of first part added by Russ 2006/07/19
 	
-	if (isset($_SERVER['REQUEST_URI']))
+	
+	
+	 $pageURL = 'http';
+	 if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+	 $pageURL .= "://";
+	 if ($_SERVER["SERVER_PORT"] != "80") {
+	  $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+	 } 
+	 else{
+		   $str = $_SERVER['REQUEST_URI'];
+		   $pos = strpos($str,'?');
+	           if( $pos !== FALSE )
+			     {
+			       $str = substr($str,0,$pos);
+			     }
+        $pageURL .= $_SERVER["SERVER_NAME"].$str;
+        }
+  
+	if (isset($pageURL))
 	{
-		$url = cms_htmlentities($_SERVER['REQUEST_URI']).'#'.$params['anchor'];
+		$url = cms_htmlentities($pageURL).'#'.$params['anchor'];
 		$url = str_replace('&amp;','***',$url);
 		$url = str_replace('&', '&amp;', $url);
 		$url = str_replace('***','&amp;',$url);

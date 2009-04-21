@@ -12,6 +12,7 @@ Version 1.6 - New Caledonia
   - #3257 Non-admin users can create admin users
   - Drop all assign_by_ref in Installer
   - Missing $frontendlang in siteprefs, thanks to jce76350
+  - Fixed lot of anchor issues (hoppe one for all)
 
 - Feature Requests:
   - #2605 adding a 'forgot password' submission on the login panel  
