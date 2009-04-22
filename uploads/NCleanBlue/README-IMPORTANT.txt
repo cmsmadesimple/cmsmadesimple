@@ -7,8 +7,6 @@ Menu Template:    File-Menu-Nncleanblue.txt
 
 
 
-2)Put the file:     cms-root/uploads/NCleanblue/NCleanBlue-css.css   into your root folder  EG:    cms-root/NCleanBlue-css.css
-
 
 images and other stuff in uploads/NCleanblue/*
 
