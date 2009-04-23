@@ -5,7 +5,7 @@ To order this beta theme testing work for now just folow this steps:
 Template:         File-Ncleanblue.txt
 Menu Template:    File-Menu-Nncleanblue.txt
 
-
+2)  IMPORTANT  Search template must be  "Restore To Defaults"
 
 
 images and other stuff in uploads/NCleanblue/*
