@@ -354,11 +354,6 @@ class Content extends ContentBase
 				case 'block':
 				  $id = str_replace(' ', '_', $val);
 				  $name = $val;
-				  
-				  if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
-				    {
-				      $this->mProperties->Add("string", $id);
-				    }
 				  break;
 				case 'wysiwyg':
 				  $usewysiwyg = $val;
@@ -384,6 +379,7 @@ class Content extends ContentBase
 		      if( empty($name) ) { $name = 'content_en'; $id = 'content_en'; }
 		      if( !isset($this->_contentBlocks[$name]) )
 			{
+			  $this->mProperties->Add('string',$id);
 			  $this->_contentBlocks[$name]['type'] = 'text';
 			  $this->_contentBlocks[$name]['id'] = $id;
 			  $this->_contentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
