@@ -212,7 +212,7 @@ class ContentBase
 	$this->mType           = strtolower(get_class($this)) ;
 	$this->mOwner          = -1 ;
 	$this->mProperties     = new ContentProperties();
-	$this->mParentId       = -1 ;
+	$this->mParentId       = -2 ;
 	$this->mOldParentId    = -1 ;
 	$this->mTemplateId     = -1 ;
 	$this->mItemOrder      = -1 ;
@@ -1217,7 +1217,7 @@ class ContentBase
 	{
 	  $errors = array();
 
-	  if ($this->mParentId <= 0 && !check_permission(get_userid(),'Modify Page Structure'))
+	  if ($this->mParentId < -1) 
 	    {
 	      $errors[] = lang('invalidparent');
 	      $result = false;
@@ -1916,7 +1916,7 @@ class ContentBase
 		  $contentops =& $gCms->GetContentOperations();
 		  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
 		  if( empty($tmp) && !check_permission(get_userid(),'Modify Page Structure') )
-		    return array('','<input type="hidden" name="parent_id" value="-1" />');
+		    return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
 		  if( !empty($tmp) ) return array(lang('parent').':',$tmp);
 		}
 	      break;
