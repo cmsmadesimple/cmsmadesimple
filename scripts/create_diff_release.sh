@@ -199,6 +199,13 @@ mkdir to_full
 cd to_full
 tar zxf $_tofull
 
+#6.  Get the schema version of $_to
+_schema_from=`grep '^$CMS_SCHEMA' from_full/version.php | cut -d\" -f2`
+_schema_to=`grep '^$CMS_SCHEMA' to_full/version.php | cut -d\" -f2`
+if [ $_schema_from -lt $_schema_to ]; then
+  echo 'DEBUG: schema version changed, can't do a diff release'
+fi
+
 #7.  Create the diff
 cd $_workdir
 _changedfiles=''

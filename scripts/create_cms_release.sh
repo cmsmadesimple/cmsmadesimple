@@ -21,7 +21,7 @@ cleanup()
 # Setup
 #
 _this=`basename $0`
-_svn=http://svn.cmsmadesimple.org/svn/cmsmadesimple/branches/1.2.x
+_svn=http://svn.cmsmadesimple.org/svn/cmsmadesimple/branches/1.6.x
 _workdir=/tmp/$_this.$$
 _owd=`pwd`
 _rmfiles='CHECKLIST scripts build config.php autogen.sh mpd.sql mysql.sql makedoc.sh cleardb.sh generatedump.php images/cms/*.svg svn-propset* find-mime admin/lang/*sh admin/lang/*.bat admin/lang/*pl admin/editconfig.php lib/adodb lib/preview.functions.php plugins/cache release-cleanup.sh';
@@ -31,6 +31,7 @@ _cmsurl='http://svn.cmsmadesimple.org/svn/cmsmadesimple';
 # noremove   (if set, disable removal of files that shouldn't be shipped with the distribution)
 # noindex    (if set, disable index.html creation)
 # noperms    (if set, disable permissions adjusting)
+# noask      (if set, disable confirmation check)
 # noclean    (if set, don't perform cleanup of temporary files)
 # notag      (if set, don't create a tag for this release)
 
@@ -98,6 +99,11 @@ while [ $# -gt 0 ]; do
       shift 1
       continue
       ;;
+    '--noask' )
+      noask=1
+      shift 1
+      continue
+      ;;
     '--basedir' )
       basedir=$2
       shift 2
@@ -109,20 +115,22 @@ done
 #
 # Ask for the root url to export
 #
-_done=0
-clear
-while [ $_done = 0 ]; do
-  echo "Export CMS Source"
-  echo "=================="
-  echo -n "Enter SVN URL ($_svn): "
-  read ans
-  if [ ${ans:-notset} = notset ]; then
-    _done=1
-  else
-    _svn=$ans
-    _done=1
-  fi
-done
+if [ ${noask:-notset} = notset ]; then
+  _done=0
+  clear
+  while [ $_done = 0 ]; do
+    echo "Export CMS Source"
+    echo "=================="
+    echo -n "Enter SVN URL ($_svn): "
+    read ans
+    if [ ${ans:-notset} = notset ]; then
+      _done=1
+    else
+      _svn=$ans
+      _done=1
+    fi
+  done
+fi
 
 # Export the directory
 echo
@@ -138,42 +146,44 @@ cd $_workdir
 _version=`grep '^\$CMS_VERSION' version.php | grep -v _NAME | cut -d\" -f2`
 _destdir=${basedir}/cmsmadesimple-$_version
 
-echo "Create CMS Release"
-echo "=================="
-echo "VERSION: $_version"
-echo "DESTDIR: $_destdir"
-echo "SVN URL: $_svn"
-echo -n "CREATE htaccess files? ";
-if [ ${nohtaccess:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
-echo -n "REMOVE system utility files? ";
-if [ ${noremove:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
-echo -n "CREATE index.html files? ";
-if [ ${noindex:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
-echo -n "DO POST Processing cleanup? ";
-if [ ${noclean:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
-echo -n "CREATE CMS TAG ${_cmsurl}/tags/version-$_version? ";
-if [ ${notag:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
+if [ ${noask:-notset} = notset ]; then
+  echo "Create CMS Release"
+  echo "=================="
+  echo "VERSION: $_version"
+  echo "DESTDIR: $_destdir"
+  echo "SVN URL: $_svn"
+  echo -n "CREATE htaccess files? ";
+  if [ ${nohtaccess:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
+  echo -n "REMOVE system utility files? ";
+  if [ ${noremove:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
+  echo -n "CREATE index.html files? ";
+  if [ ${noindex:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
+  echo -n "DO POST Processing cleanup? ";
+  if [ ${noclean:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
+  echo -n "CREATE CMS TAG ${_cmsurl}/tags/version-$_version? ";
+  if [ ${notag:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
 
-echo
-echo -n "Is this correct? (yes/no) ";
-read ans
-case $ans in
- y|Y|yes|YES|Yes)
-   true;
-   ;;
+  echo
+  echo -n "Is this correct? (yes/no) ";
+  read ans
+  case $ans in
+    y|Y|yes|YES|Yes)
+      true;
+      ;;
 
- *)
-   if [ ${noclean:-notset} != notset ]; then
-     echo "Cleaning up"
-     cd $_owd
-     rm -rf $_workdir
-   fi
-   echo "Exiting..."
-   cleanup;
-   exit;
-   ;;
-esac
-echo
+    *)
+      if [ ${noclean:-notset} != notset ]; then
+        echo "Cleaning up"
+        cd $_owd
+        rm -rf $_workdir
+      fi
+      echo "Exiting..."
+      cleanup;
+      exit;
+      ;;
+  esac
+  echo
+fi
 
 # Clean up files that are not distributed
 # or don't need to be in the release
