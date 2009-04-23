@@ -1798,6 +1798,11 @@ class ContentBase
 	  $this->_attributes[] = array($name,$priority,$is_required);
 	}
 
+	/* private */
+	function AddExtraProperty($name,$type='string')
+	{
+	  $this->mProperties->add($type,$name);
+	}
 
 	/* private */
 	function AddContentProperty($name,$priority,$is_required = 0,$type = 'string')
@@ -2043,6 +2048,7 @@ class ContentBase
 	      break;
 
 	    default:
+	      stack_trace();
 	      die('unknown property '.$one);
 	    }
 	}

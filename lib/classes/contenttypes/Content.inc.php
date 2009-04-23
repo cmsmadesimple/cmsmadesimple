@@ -66,8 +66,6 @@ class Content extends ContentBase
 
     function FillParams($params)
     {
-	parent::FillParams($params);
-
 	global $gCms;
 	$config =& $gCms->config;
 
@@ -98,7 +96,7 @@ class Content extends ContentBase
 	  $this->get_content_blocks();
 	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
-	      $this->AddContentProperty($blockName,99);
+	      $this->AddExtraProperty($blockName);
 	      $parameters[] = $blockInfo['id'];
 	    }
 	  
@@ -118,6 +116,8 @@ class Content extends ContentBase
 	    }
 
 	}
+
+	parent::FillParams($params);
 
     }
 
@@ -180,6 +180,11 @@ class Content extends ContentBase
 
 	  // and the content blocks
 	  $this->get_content_blocks(); // this is needed as this is the first time we get a call to our class when editing.
+	  foreach($this->_contentBlocks as $blockName => $blockInfo)
+	    {
+	      $this->AddExtraProperty($blockName);
+	      $parameters[] = $blockInfo['id'];
+	    }
 
 	    // add additional content blocks if required
 	    foreach($this->_contentBlocks as $blockName => $blockInfo)
@@ -379,7 +384,6 @@ class Content extends ContentBase
 		      if( empty($name) ) { $name = 'content_en'; $id = 'content_en'; }
 		      if( !isset($this->_contentBlocks[$name]) )
 			{
-			  $this->mProperties->Add('string',$id);
 			  $this->_contentBlocks[$name]['type'] = 'text';
 			  $this->_contentBlocks[$name]['id'] = $id;
 			  $this->_contentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
