@@ -2,13 +2,19 @@ To order this beta theme testing work for now just folow this steps:
 
 
 1) Wend i do the changes you must have to copy this files content and paste in your cms-DB-template
-Template:         File-Ncleanblue.txt
-Menu Template:    File-Menu-Nncleanblue.txt
+
+Page Template:         File-Ncleanblue.txt
+Menu Template:         File-Menu-Nncleanblue.txt
+
+  a)   Creat a new menu template with name:  "Menu-NCleanBlue"
+  b)   Creat a new page template with name:  "NCleanBlue"
+
+
 
 2)  IMPORTANT  Search template must be  "Restore To Defaults"
 
 
-images and other stuff in uploads/NCleanblue/*
+images and other stuff are in uploads/NCleanblue/*
 
 
 
