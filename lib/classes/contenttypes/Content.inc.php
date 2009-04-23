@@ -82,15 +82,15 @@ class Content extends ContentBase
 		}
 	      $this->mTemplateId = $params['template_id'];
 	    }
-	  else
-	    {
-	      $templateops =& $gCms->GetTemplateOperations();
-	      $dflt = $templateops->LoadDefaultTemplate();
-	      if( isset($dflt) )
-		{
-		  $this->mTemplateId = $dflt->id;
-		}
-	    }
+// 	  else
+// 	    {
+// 	      $templateops =& $gCms->GetTemplateOperations();
+// 	      $dflt = $templateops->LoadDefaultTemplate();
+// 	      if( isset($dflt) )
+// 		{
+// 		  $this->mTemplateId = $dflt->id;
+// 		}
+// 	    }
 	  
 	  // add content blocks
 	  $this->get_content_blocks();
