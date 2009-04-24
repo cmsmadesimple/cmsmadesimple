@@ -6,7 +6,7 @@ To order this beta theme testing work for now just folow this steps:
 Page Template:         File-Ncleanblue.txt
 Menu Template:         File-Menu-Nncleanblue.txt
 
-  a)   Creat a new menu template with name:  "Menu-NCleanBlue"
+  a)   Creat a new menu template with name:  "Menu-NCleanBlue"  and put  "minimal_menu.tpl" as default
   b)   Creat a new page template with name:  "NCleanBlue"
 
 
