@@ -81,12 +81,11 @@ function smarty_cms_function_content($params, &$smarty)
 					$params = array_merge($params, GetModuleParameters($id));
 					
 					// calguy1000..... increment the modulenum 
-					// if we're not in inlined mode.
-					if( $id != 'cntnt01' )
-					  {
-					    ++$gCms->variables["modulenum"]; 
-					  }
+					// this handles the case where there are modules called after
+					// the content block, and need their id to be consistent between calls.
+					++$gCms->variables["modulenum"]; 
 					
+					echo "DEBUG: function_content: $modulename,id = $id<br/>";
 					$returnid = '';
 					if (isset($params['returnid']))
 					  {
