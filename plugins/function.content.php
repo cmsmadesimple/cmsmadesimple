@@ -85,7 +85,6 @@ function smarty_cms_function_content($params, &$smarty)
 					// the content block, and need their id to be consistent between calls.
 					++$gCms->variables["modulenum"]; 
 					
-					echo "DEBUG: function_content: $modulename,id = $id<br/>";
 					$returnid = '';
 					if (isset($params['returnid']))
 					  {
