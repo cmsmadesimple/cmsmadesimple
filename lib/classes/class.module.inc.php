@@ -108,14 +108,17 @@ class CMSModule
 		#$smarty = new CMSModuleSmarty($config, $this->GetName());
 		$this->smarty = &$gCms->GetSmarty();
 
-		$this->SetParameterType('assign',CLEAN_STRING);
-		$this->SetParameterType('module',CLEAN_STRING);
-		$this->SetParameterType('lang',CLEAN_STRING);
-		$this->SetParameterType('returnid',CLEAN_INT);
-		$this->SetParameterType('action',CLEAN_STRING);
-		$this->SetParameterType('showtemplate',CLEAN_STRING);
-		$this->SetParameterType('inline',CLEAN_INT);
-		$this->SetParameters();
+		if( !isset($CMS_ADMIN_PAGE) )
+		  {
+		    $this->SetParameterType('assign',CLEAN_STRING);
+		    $this->SetParameterType('module',CLEAN_STRING);
+		    $this->SetParameterType('lang',CLEAN_STRING);
+		    $this->SetParameterType('returnid',CLEAN_INT);
+		    $this->SetParameterType('action',CLEAN_STRING);
+		    $this->SetParameterType('showtemplate',CLEAN_STRING);
+		    $this->SetParameterType('inline',CLEAN_INT);
+		    $this->SetParameters();
+		  }
 		
 		$this->modinstall = false;
 		$this->modtemplates = false;
