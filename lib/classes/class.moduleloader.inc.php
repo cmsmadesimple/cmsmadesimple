@@ -50,7 +50,7 @@ class ModuleLoader
 				{
 					if (@is_file("$dir/$file/$file.module.php"))
 					{
-						include("$dir/$file/$file.module.php");
+						include_once("$dir/$file/$file.module.php");
 					}
 					else
 					{
