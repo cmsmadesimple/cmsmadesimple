@@ -33,6 +33,14 @@ Version 1.6 - New Caledonia
   - xAjax 0.5
   - script.aculo.us 1.8.2 (included  Update to Prototype 1.6.0.3)
 
+- TinyMCE
+  - Rewrote profile handling allowing both a simple and an advanced profile in backend
+  - Rewrote frontenddetection to be more stable
+  - Improved Filepicker dialogue allowing on-the-fly scaling of images
+  - Updated to Tiny-distribution, including a rewritten more intelligent Paste plugin
+
+- Printing
+
 
 
 
