@@ -382,6 +382,7 @@ class Content extends ContentBase
 			}
 
 		      if( empty($name) ) { $name = 'content_en'; $id = 'content_en'; }
+		      $this->mProperties->Add('string',$id);
 		      if( !isset($this->_contentBlocks[$name]) )
 			{
 			  $this->_contentBlocks[$name]['type'] = 'text';
@@ -551,6 +552,7 @@ class Content extends ContentBase
 	      
 	      $this->_contentBlocksLoaded = true;
 	    }
+
 	  return $result;
 	}
     }

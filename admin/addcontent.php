@@ -54,14 +54,6 @@ if (isset($_POST["submitbutton"])) $submit = true;
 $apply = false;
 if (isset($_POST["applybutton"])) $apply = true;
 
-$page_cachable = ((get_site_preference('page_cachable',"1")=="1")?true:false);
-$active = ((get_site_preference('page_active',"1")=="1")?true:false);
-$showinmenu = ((get_site_preference('page_showinmenu',"1")=="1")?true:false);
-$metadata = get_site_preference('page_metadata');
-
-$parent_id = get_site_preference('default_parent_page', -1);
-if (isset($_GET["parent_id"])) $parent_id = $_GET["parent_id"];
-
 $contentobj = '';
 
 #Get current userid and make sure they have permission to add something
@@ -105,6 +97,14 @@ if (isset($_POST["serialized_content"]))
 }
 else
 {
+  $page_cachable = ((get_site_preference('page_cachable',"1")=="1")?true:false);
+  $active = ((get_site_preference('page_active',"1")=="1")?true:false);
+  $showinmenu = ((get_site_preference('page_showinmenu',"1")=="1")?true:false);
+  $metadata = get_site_preference('page_metadata');
+
+  $parent_id = get_site_preference('default_parent_page', -1);
+  if (isset($_GET["parent_id"])) $parent_id = $_GET["parent_id"];
+
 	$contentops =& $gCms->GetContentOperations();
 	$contentobj = $contentops->CreateNewContent($content_type);
 	$contentobj->SetOwner($userid);
@@ -113,18 +113,27 @@ else
 	$contentobj->SetShowInMenu($showinmenu);
 	$contentobj->SetLastModifiedBy($userid);
 
-	// this stuff should be changed somehow.
-	$contentobj->SetMetadata($metadata);
-	$contentobj->SetPropertyValue('content_en', get_site_preference('defaultpagecontent')); // why?
-	if ($parent_id!=-1) $contentobj->SetParentId($parent_id);
-	$contentobj->SetPropertyValue('searchable',
-				      get_site_preference('page_searchable',1));
-	$contentobj->SetPropertyValue('extra1',
-				      get_site_preference('page_extra1',''));
-	$contentobj->SetPropertyValue('extra2',
-				      get_site_preference('page_extra2',''));
-	$contentobj->SetPropertyValue('extra3',
-				      get_site_preference('page_extra3',''));
+  {
+    $templateops =& $gCms->GetTemplateOperations();
+    $dflt = $templateops->LoadDefaultTemplate();
+    if( isset($dflt) )
+      {
+	$contentobj->SetTemplateId($dflt->id);
+      }
+  }
+
+  // this stuff should be changed somehow.
+  $contentobj->SetMetadata($metadata);
+  $contentobj->SetPropertyValue('content_en', get_site_preference('defaultpagecontent')); // why?
+  if ($parent_id!=-1) $contentobj->SetParentId($parent_id);
+  $contentobj->SetPropertyValue('searchable',
+				get_site_preference('page_searchable',1));
+  $contentobj->SetPropertyValue('extra1',
+				get_site_preference('page_extra1',''));
+  $contentobj->SetPropertyValue('extra2',
+				get_site_preference('page_extra2',''));
+  $contentobj->SetPropertyValue('extra3',
+				get_site_preference('page_extra3',''));
 }
 
 if ($access)

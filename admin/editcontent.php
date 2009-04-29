@@ -371,6 +371,7 @@ $submit_buttons .= '</p></div>';
 			$numberoftabs = 1;
 			$showtabs = 1;
 		}
+
 		for ($currenttab = 0; $currenttab < $numberoftabs; $currenttab++)
 		{
 			if ($showtabs == 1)
