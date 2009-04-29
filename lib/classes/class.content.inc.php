@@ -350,6 +350,14 @@ class ContentBase
 	return $this->mMetadata;
     }
 
+    /**
+     * Content object handles the alias
+     */
+    function HandlesAlias()
+    {
+      return false;
+    }
+
     function SetMetadata($metadata)
     {
 	$this->DoReadyForEdit();
@@ -1249,15 +1257,18 @@ class ContentBase
 		}
 	    }
 		
-	  if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) 
+	  if (!$this->HandlesAlias())
 	    {
-	      global $gCms;
-	      $contentops =& $gCms->GetContentOperations();
-	      $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
-	      if ($error !== FALSE)
+	      if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) 
 		{
-		  $errors[]= $error;
-		  $result = false;
+		  global $gCms;
+		  $contentops =& $gCms->GetContentOperations();
+		  $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
+		  if ($error !== FALSE)
+		    {
+		      $errors[]= $error;
+		      $result = false;
+		    }
 		}
 	    }
 

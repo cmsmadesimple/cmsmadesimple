@@ -31,7 +31,12 @@ class ErrorPage extends Content
     $this->doAliasCheck = false;
     $this->doAutoAliasIfEnabled = false;
   }
-  
+
+  function HandlesAlias()
+  {
+    return true;
+  }
+
   function FriendlyName()
   {
     return lang('contenttype_errorpage');
@@ -98,6 +103,7 @@ class ErrorPage extends Content
   function FillParams($params)
   {
     parent::FillParams($params);
+    $this->mParentId = -1;
     $this->mShowInMenu = false;
     $this->mCachable = false;
     $this->mActive = true;
