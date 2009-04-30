@@ -61,6 +61,7 @@ $page_defaultcontent = get_site_preference("defaultpagecontent",
 $page_defaultparent = get_site_preference('default_parent_page',-1);
 $additional_editors = get_site_preference('additional_editors','');
 
+$message = '';
 if( isset( $_POST['submit'] ) )
   {
     //
@@ -99,6 +100,8 @@ if( isset( $_POST['submit'] ) )
     set_site_preference( 'page_extra1', $page_extra1 );
     set_site_preference( 'page_extra2', $page_extra2 );
     set_site_preference( 'page_extra3', $page_extra3 );
+
+    $message = lang('prefsupdated');
   }
 
 //

@@ -910,6 +910,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	  $txt = '';
 	  if (check_permission($userid, 'Modify Page Structure') || 
 	      check_permission($userid, 'Remove Pages') ||
+	      check_permission($userid, 'Modify Any Page') ||
 	      ((quick_check_authorship($one->Id(),$mypages) || check_ownership($userid,$one->Id()))
 	       && check_permission($userid,'Add Pages')
 	       && $one->IsCopyable()) )
