@@ -40,8 +40,15 @@ Version 1.6 - New Caledonia
   - Updated to Tiny-distribution, including a rewritten more intelligent Paste plugin
 
 - Printing
+  - todo
 
+- Search
+  - Template, added a class to submit and adjustments.
+  - New Param for method Post (pretty urls) - E.g. {search search_method="post"}
 
+- Default Themes
+  - New theme NCleanBlue
+  - TODO-> Mark themes
 
 
 Version 1.5.3 - Arecibo
