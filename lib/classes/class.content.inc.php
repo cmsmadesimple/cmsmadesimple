@@ -1414,25 +1414,13 @@ class ContentBase
       // active
       if (isset($params['active']))
 	{
-	  $this->mActive = true;
-	}
-      else
-	{
-	  $this->_handleRemovedBaseProperty('active','mActive');
-// 	  if( !$this->_handleRemovedBaseProperty('active','mActive') )
-// 	    {
-// 	      $this->mActive = false;
-// 	    }
+	  $this->mActive = $params['active'];
 	}
       
       // show in menu
       if (isset($params['showinmenu']))
 	{
-	  $this->mShowInMenu = true;
-	}
-      else
-	{
-	  $this->_handleRemovedBaseProperty('showinmenu','mShowInMenu');
+	  $this->mShowInMenu = $params['showinmenu'];
 	}
 
       // alias
@@ -1477,7 +1465,7 @@ class ContentBase
       // cachable
       if (isset($params['cachable']))
 	{
-	  $this->mCachable = true;
+	  $this->mCachable = $params['cachable'];
 	}
       else
 	{
@@ -1905,11 +1893,7 @@ class ContentBase
 	  switch( $one )
 	    {
 	    case 'cachable':
-		return array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
-// 	      }
-// 	      else if( $this->mCachable ) {
-// 		return array('','<input type="hidden" name="cachable" value="1" />');
-// 	      }
+	      return array(lang('cachable').':','<input type="hidden" name="cachable" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
 	      break;
 	
 	    case 'title':
@@ -1925,9 +1909,6 @@ class ContentBase
 	      break;
 	      
 	    case 'parent':
-// 	      if (check_permission(get_userid(), 'Modify Page Structure') || 
-// 		  check_permission(get_userid(), 'Add Pages') ||
-// 		  check_authorship(get_userid(),$this->Id()) )
 		{
 		  $contentops =& $gCms->GetContentOperations();
 		  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
@@ -1938,21 +1919,11 @@ class ContentBase
 	      break;
 
 	    case 'active':
-// 	      if( check_permission(get_userid(),'Modify Page Structure')) {
-		return array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
-// 	      }
-// 	      else if( $this->mAtive ) {
-// 		return array('','<input type="hidden" name="active" value="1" />');
-// 	      }
+	      return array(lang('active').':','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" value="1"'.($this->mActive?' checked="checked"':'').' />');
 	      break;
 	      
 	    case 'showinmenu':
-// 	      if( check_permission(get_userid(),'Modify Page Structure') ) {
-		return array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
-// 	      }
-// 	      else if( $this->mShowInMenu ) {
-// 		return array('','<input type="hidden" name="showinmenu" value="1" />');
-// 	      }
+	      return array(lang('showinmenu').':','<input type="hidden" name="showinmenu" value-"0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 	      break;
 	      
 	    case 'target':
