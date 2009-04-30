@@ -852,7 +852,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	{
 	  $columns['copy'] = '&nbsp;';
 	  $txt = '';
-	  if( $one->IsCopyable() && check_permission($userid,'Add Pages') )
+	  if( $one->IsCopyable() && check_permission($userid,'Add Pages') &&
+	      (check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages)) )
 	    {
 	      $txt .= '<a href="copycontent.php'.$urlext.'&amp;content_id='.$one->Id().'">';
 	      $txt .= $copyImg."</a>";

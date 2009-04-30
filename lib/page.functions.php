@@ -317,6 +317,10 @@ function check_ownership($userid, $contentid = '', $strict = false)
 	$check = false;
 	global $gCms;
 
+	$userops =& $gCms->GetUserOperations();
+	$adminuser = $userops->UserInGroup($userid,1);
+	if( $adminuser ) return true;
+
 	if (!isset($gCms->variables['ownerpages']))
 	{
 		$db =& $gCms->GetDb();
