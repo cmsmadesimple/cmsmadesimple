@@ -134,6 +134,13 @@ else
 				get_site_preference('page_extra2',''));
   $contentobj->SetPropertyValue('extra3',
 				get_site_preference('page_extra3',''));
+  $tmp = get_site_preference('additional_editors');
+  $tmp2 = array();
+  if( !empty($tmp) )
+    {
+      $tmp2 = explode(',',$tmp);
+    }
+  $contentobj->SetAdditionalEditors($tmp2);
 }
 
 if ($access)
@@ -161,15 +168,15 @@ if ($access)
 	else if ($firsttime == "0") #Either we're a preview or a template postback
 	{
 		$contentobj->FillParams($_POST);
-		if (isset($_POST["additional_editors"]))
-		{
-			$addtarray = array();
-			foreach ($_POST["additional_editors"] as $addt_user_id)
-			{
-				$addtarray[] = $addt_user_id;
-			}
-			$contentobj->SetAdditionalEditors($addtarray);
-		}
+// 		if (isset($_POST["additional_editors"]))
+// 		{
+// 			$addtarray = array();
+// 			foreach ($_POST["additional_editors"] as $addt_user_id)
+// 			{
+// 				$addtarray[] = $addt_user_id;
+// 			}
+// 			$contentobj->SetAdditionalEditors($addtarray);
+// 		}
 	}
 	else
 	{

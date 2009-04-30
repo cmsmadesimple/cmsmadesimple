@@ -82,15 +82,6 @@ class Content extends ContentBase
 		}
 	      $this->mTemplateId = $params['template_id'];
 	    }
-// 	  else
-// 	    {
-// 	      $templateops =& $gCms->GetTemplateOperations();
-// 	      $dflt = $templateops->LoadDefaultTemplate();
-// 	      if( isset($dflt) )
-// 		{
-// 		  $this->mTemplateId = $dflt->id;
-// 		}
-// 	    }
 	  
 	  // add content blocks
 	  $this->get_content_blocks();
@@ -611,7 +602,7 @@ class Content extends ContentBase
 	      $disable_wysiwyg = 0;
 	    }
 	  return array(lang('disable_wysiwyg').':',
-			'<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
+		       '<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
              <input type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
 	}
 	break;

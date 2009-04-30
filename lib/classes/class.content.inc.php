@@ -1488,12 +1488,6 @@ class ContentBase
 	    }
 	  $this->SetAdditionalEditors($addtarray);
 	}
-//       else if ($adminaccess)
-// 	{
-// 	  $this->SetAdditionalEditors(array());
-// 	}
-
-
     }
 
     /**
@@ -2010,22 +2004,27 @@ class ContentBase
 	    case 'additionaleditors':
 	      {
 		// do owner/additional-editor stuff
-		$showadmin = check_ownership(get_userid(), $this->Id()) || 
-		  check_permission(get_userid(), 'Modify Any Page');
-		if ($adding || $showadmin)
+		if( check_ownership(get_userid(),$this->Id()) ||
+		    check_permission(get_userid(), '--junk permission--')) // junk permissions check
 		  {
-		    $addteditors = array();
-		    if( $adding )
-		      {
-			$addeditors = get_site_preference('additional_editors','');
-			$addteditors = explode(",",$addeditors);
-			return $this->ShowAdditionalEditors($addteditors);
-		      }
-		    else
-		      {
-			return $this->ShowAdditionalEditors();
-		      }
+		    return $this->ShowAdditionalEditors();
 		  }
+// 		$showadmin = check_ownership(get_userid(), $this->Id()) || 
+// 		  check_permission(get_userid(), 'Modify Any Page');
+// 		if ($adding || $showadmin)
+// 		  {
+// 		    $addteditors = array();
+// 		    if( $adding )
+// 		      {
+// 			$addeditors = get_site_preference('additional_editors','');
+// 			$addteditors = explode(",",$addeditors);
+// 			return $this->ShowAdditionalEditors($addteditors);
+// 		      }
+// 		    else
+// 		      {
+// 			return $this->ShowAdditionalEditors();
+// 		      }
+// 		  }
 	      }
 	      break;
 
