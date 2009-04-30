@@ -1398,18 +1398,18 @@ class ContentBase
 	    }
 	  $this->mParentId = $params['parent_id'];
 	}
-      else
-	{
-	  // parent id is not set.... we obviously don't have permission to set it.
-	  // because we don't even have a default value.
+//       else
+// 	{
+// 	  // parent id is not set.... we obviously don't have permission to set it.
+// 	  // because we don't even have a default value.
 
-	  // so we get the first page that this user has access to.
-	  $tmp = author_pages(get_userid());
-	  if( is_array($tmp) && count($tmp) )
-	    {
-	      $this->mParentId = $tmp[0];
-	    }
-	}
+// 	  // so we get the first page that this user has access to.
+// 	  $tmp = author_pages(get_userid());
+// 	  if( is_array($tmp) && count($tmp) )
+// 	    {
+// 	      $this->mParentId = $tmp[0];
+// 	    }
+// 	}
 
       // active
       if (isset($params['active']))
