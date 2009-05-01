@@ -38,6 +38,10 @@ body{
 }
 
 /* ------------ Standard  HTML elements ------------ */	
+strong {
+	font-weight: bold;
+}
+
 p {
 	padding:0;
 	margin-top: 0.5em;
