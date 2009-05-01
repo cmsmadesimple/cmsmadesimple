@@ -43,6 +43,60 @@ $hm =& $gCms->GetHierarchyManager();
 $nodelist = array();
 $bulk = false;
 
+function get_delete_list($sel_nodes,&$parent = NULL)
+{
+  // get the list of items we should delete
+  $userid = get_userid();
+  if( !check_permission($userid,'Remove Pages') ) return FALSE;
+  $mypages = author_pages($userid);
+
+  $result = array();
+  foreach( $sel_nodes as $node )
+    {
+      if( check_ownership($userid, $node->getTag()) || quick_check_authorship($node->getTag(), $mypages) )
+	{
+	  $children =& $node->getChildren();
+	  $tmp = TRUE;
+	  if( isset($children) && count($children) )
+	    {
+	      $tmp = get_delete_list($children,$node);
+	      if( $tmp === FALSE ) continue;
+	    }
+	  if( is_array($tmp) )
+	    {
+	      foreach( $tmp as $one )
+		{
+		  $result[] =& $one;
+		}
+	    }
+
+	  $content =& $node->GetContent();
+	  $result[] =& $content;
+	}
+      else
+	{
+	  if( is_object($parent) )
+	    {
+	      return FALSE;
+	    }
+	}
+    }
+
+  $tmptag = array();
+  $tmpr = array();
+  for( $i = 0; $i < count($result); $i++ )
+    {
+      $obj =& $result[$i];
+      $tag = $obj->Id();
+      if( !in_array($tag,$tmptag) )
+	{
+	  $tmpr[] =& $obj;
+	  $tmptag[] = $tag;
+	}
+    }
+  return $tmpr;
+}
+
 function toggleexpand($contentid, $collapse = false)
 {
 	$userid = get_userid();
@@ -139,12 +193,15 @@ else
 			if (isset($node))
 			{
 				if ($action == 'inactive')
-					DoContent($nodelist, $node, true, false);
+				  DoContent($nodelist, $node, true, false);
 				else if ($action == 'active' || $action == 'settemplate' || $action == 'setcachable' || $action == 'setnoncachable'
                                          || $action == 'showinmenu' || $action == 'hidefrommenu')
 					DoContent($nodelist, $node, false, false);
 				else if ($action == 'delete')
- 				  DoContent($nodelist, $node, false, true);
+				  {
+				    $nodelist[] =& $node;
+				    //DoContent($nodelist, $node, false, true);
+				  }
 			}
 		}
 		if ($action == 'reorder')
@@ -176,6 +233,11 @@ else
 
 		  }
 	}
+	if ($action == 'delete' )
+	  {
+	    $nodelist = get_delete_list($nodelist);
+	  }
+
 	if ($action == 'reorder' && $reorder_error == FALSE)
 	  {
 	    $order_changed = FALSE;
@@ -212,21 +274,17 @@ else
 {
 	if ($action == 'delete')
 	{
-		?>
-		<div class="pagecontainer">
-			<p class="pageheader"><?php echo lang('deletecontent') ?></p><br />
-		<?php
-		$userid = get_userid();
-		$access = (check_permission($userid, 'Remove Pages') ||
-            check_permission($userid, 'Modify Page Structure'));
-		if ($access)
-		{
-			echo '<form method="post" action="multicontent.php">' . "\n";
-      echo '<div>
-          <input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />
-        </div>';
+	  echo '<div class="pagecontainer"><p class="pageheader">'.lang('deletecontent').'</p><br/>';
+	  $userid = get_userid();
+	  $access = (check_permission($userid, 'Remove Pages'));
+	  if ($access)
+	    {
+	      echo '<form method="post" action="multicontent.php">' . "\n";
+	      echo '<div>
+                    <input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />
+                    </div>';
       
-			echo '<p>'.lang('deletepages').'</p><p>' . "\n";
+	      echo '<p>'.lang('deletepages').'&nbsp;<em>('.lang('info_deletepages').')</em></p><p>' . "\n";
 			$idlist = array();
 			foreach ($nodelist as $node)
 			{

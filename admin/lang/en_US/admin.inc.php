@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['info_deletepages'] = 'Note: due to permission restrictions, some of the pages you selected for deletion may not be listed below';
 $lang['admin']['info_pagealias'] = 'Specify a unique alias for this page.';
 $lang['admin']['info_autoalias'] = 'If this field is empty, an alias will be created automatically.';
 $lang['admin']['invalidparent'] = 'You must select a parent page (contact your administrator if you do not see this option).';
