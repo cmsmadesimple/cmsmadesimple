@@ -145,7 +145,7 @@ html {filter:expression(document.execCommand("BackgroundImageCache", false, true
 
 </div>{* end pagewrapper *}
  <span class="util-clearb">&nbsp;</span>
-<div id="footer-wrapper" class="core-center util-clearfix">
+<div id="footer-wrapper" class="core-center">
 <div id="footer" class="core-wrap-960 core-center util-clearfix">
 <div class="block core-float-left">{menu template='minimal_menu.tpl'  number_of_levels='1'}</div>
 <div class="block core-float-left">{menu template='minimal_menu.tpl'  start_level="2"}</div>
