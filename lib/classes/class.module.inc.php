@@ -340,7 +340,12 @@ class CMSModule
 	 */
 	function GetParameters()
 	{
-		return $this->params;
+	  if( count($this->params) == 1 && $this->params[0]['name'] == 'lang' )
+	    {
+	      // quick hack to load parameters if they are not already loaded.
+	      $this->SetParameters();
+	    }
+	  return $this->params;
 	}
 
 	/**
