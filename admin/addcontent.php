@@ -105,13 +105,13 @@ else
   $parent_id = get_site_preference('default_parent_page', -1);
   if (isset($_GET["parent_id"])) $parent_id = $_GET["parent_id"];
 
-	$contentops =& $gCms->GetContentOperations();
-	$contentobj = $contentops->CreateNewContent($content_type);
-	$contentobj->SetOwner($userid);
-	$contentobj->SetCachable($page_cachable);
-	$contentobj->SetActive($active);
-	$contentobj->SetShowInMenu($showinmenu);
-	$contentobj->SetLastModifiedBy($userid);
+  $contentops =& $gCms->GetContentOperations();
+  $contentobj = $contentops->CreateNewContent($content_type);
+  $contentobj->SetOwner($userid);
+  $contentobj->SetCachable($page_cachable);
+  $contentobj->SetActive($active);
+  $contentobj->SetShowInMenu($showinmenu);
+  $contentobj->SetLastModifiedBy($userid);
 
   {
     $templateops =& $gCms->GetTemplateOperations();

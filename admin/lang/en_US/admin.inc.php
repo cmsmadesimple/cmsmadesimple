@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['info_pagealias'] = 'Specify a unique alias for this page.';
+$lang['admin']['info_autoalias'] = 'If this field is empty, an alias will be created automatically.';
 $lang['admin']['invalidparent'] = 'You must select a parent page (contact your administrator if you do not see this option).';
 $lang['admin']['forgotpwprompt'] = 'Enter your admin username.  An email will then be sent to the email address associated with that username with new login information';
 $lang['admin']['info_basic_attributes'] = 'This field allows you to specify which content properties that users without the &quot;Modify Page Structure&quot; permission are allowed to edit.';

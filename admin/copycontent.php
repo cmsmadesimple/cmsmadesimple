@@ -32,6 +32,7 @@ include_once("header.php");
 $fromid = (int)$_GET['content_id'];
 global $gCms;
 $contentops =& $gCms->GetContentOperations();
+$config =& $gCms->GetConfig();
 $fromobj = $contentops->LoadContentFromId($fromid,true);
 $fromobj->GetAdditionalEditors();
 $parentobj = $contentops->LoadContentFromId($fromobj->ParentId());
@@ -152,11 +153,20 @@ if( check_permission(get_userid(),'Modify Page Structure') )
     $smarty->assign('lang_pageaccesskey',lang('accesskey'));
   }
 
-$smarty->assign('input_parentdropdown',
-		$contentops->CreateHierarchyDropdown(
-						     $fromobj->Id(),
-						     $fromobj->ParentId(),
-						     'to_parentid',1,1,1));
+$tmp = 	$contentops->CreateHierarchyDropdown($fromobj->Id(),
+					     $fromobj->ParentId(),
+					     'to_parentid',0,1);
+if( empty($tmp) )
+  {
+    $tmp = '<input type="hidden" name="to_parentid" value="'.$fromobj->Id().'"/>'.$fromobj->Hierarchy().'&nbsp;'.$fromobj->Name();
+  }
+$smarty->assign('input_parentdropdown',$tmp);
+
+$smarty->assign('info_pagealias',lang('info_pagealias'));
+if( $config['auto_alias_content'] == true )
+  {
+    $smarty->assign('info_alias',lang('info_autoalias'));
+  }
 
 echo $smarty->fetch('copycontent.tpl');
 
