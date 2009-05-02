@@ -841,6 +841,27 @@ function create_encoding_dropdown($name = 'encoding', $selected = '')
 	return $result;
 }
 
+
+function cms_mapi_remove_permission($permission_name)
+{
+  global $gCms;
+  $db =& $gCms->GetDB();
+  
+  $query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
+  $row = &$db->GetRow($query, array($permission_name));
+  
+  if ($row)
+    {
+      $id = $row["permission_id"];
+      
+      $query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE permission_id = ?";
+      $db->Execute($query, array($id));
+      
+      $query = "DELETE FROM ".cms_db_prefix()."permissions WHERE permission_id = ?";
+      $db->Execute($query, array($id));
+    }
+}
+
 function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 {
 	global $gCms;

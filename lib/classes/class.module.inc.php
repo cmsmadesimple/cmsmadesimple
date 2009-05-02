@@ -2395,22 +2395,7 @@ class CMSModule
 	 */
 	function RemovePermission($permission_name)
 	{
-		global $gCms;
-		$db =& $gCms->GetDB();
-
-		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
-		$row = &$db->GetRow($query, array($permission_name));
-
-		if ($row)
-		{
-			$id = $row["permission_id"];
-
-			$query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE permission_id = ?";
-			$db->Execute($query, array($id));
-
-			$query = "DELETE FROM ".cms_db_prefix()."permissions WHERE permission_id = ?";
-			$db->Execute($query, array($id));
-		}
+	  cms_mapi_remove_permission($permission_name);
 	}
 
 	/**

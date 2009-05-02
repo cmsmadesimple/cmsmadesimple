@@ -695,10 +695,10 @@ class ContentOperations
 				{
 					$userid = get_userid();
 				}
-			if( $userid > 0 && check_permission($userid,'Modify Page Structure') )
-				{
-					$result .= '<option value="-1">'.lang('none').'</option>';
-				}
+			if( $userid > 0 && check_permission($userid,'Manage All Content') )
+			  {
+			    $result .= '<option value="-1">'.lang('none').'</option>';
+			  }
 
 			$curhierarchy = '';
 
@@ -730,10 +730,10 @@ class ContentOperations
 				#has write access... or is an admin user... or has appropriate permission.
 				if( $userid > 0 )
 					{
-						if( !check_permission($userid,'Modify Page Structure') && !check_authorship($userid,$one->Id()) )
-							{
-								continue;
-							}
+					  if( !check_permission($userid,'Manage All Content') && !check_authorship($userid,$one->Id()) )
+					    {
+					      continue;
+					    }
 					}				
 
 				#Don't include content types that do not want children either...

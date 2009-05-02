@@ -1906,7 +1906,7 @@ class ContentBase
 		{
 		  $contentops =& $gCms->GetContentOperations();
 		  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
-		  if( empty($tmp) && !check_permission(get_userid(),'Modify Page Structure') )
+		  if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
 		    return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
 		  if( !empty($tmp) ) return array(lang('parent').':',$tmp);
 		}
@@ -1933,12 +1933,7 @@ class ContentBase
 	      break;
 	      
 	    case 'alias':
-// 	      if( check_permission(get_userid(),'Modify Page Structure') || $adding == true) {
-		return array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
-// 	      }
-// 	      else {
-// 		return array(lang('pagealias').':','<input type="text" disabled name="alias" value="'.$this->mAlias.'" />');
-// 	      }
+	      return array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
 	      break;
 	      
 	    case 'image':
@@ -1991,8 +1986,7 @@ class ContentBase
 
 	    case 'owner':
 	      {
-		$showadmin = check_ownership(get_userid(), $this->Id()) || 
-		  check_permission(get_userid(), 'Modify Any Page');
+		$showadmin = check_ownership(get_userid(), $this->Id());
 		$userops =& $gCms->GetUserOperations();
 		if (!$adding && $showadmin)
 		  {
@@ -2008,22 +2002,6 @@ class ContentBase
 		  {
 		    return $this->ShowAdditionalEditors();
 		  }
-// 		$showadmin = check_ownership(get_userid(), $this->Id()) || 
-// 		  check_permission(get_userid(), 'Modify Any Page');
-// 		if ($adding || $showadmin)
-// 		  {
-// 		    $addteditors = array();
-// 		    if( $adding )
-// 		      {
-// 			$addeditors = get_site_preference('additional_editors','');
-// 			$addteditors = explode(",",$addeditors);
-// 			return $this->ShowAdditionalEditors($addteditors);
-// 		      }
-// 		    else
-// 		      {
-// 			return $this->ShowAdditionalEditors();
-// 		      }
-// 		  }
 	      }
 	      break;
 

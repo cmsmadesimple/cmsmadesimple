@@ -110,7 +110,7 @@ class PageLink extends ContentBase
     function TabNames()
     {
       $res = array(lang('main'));
-      if( check_permission(get_userid(),'Modify Page Structure') )
+      if( check_permission(get_userid(),'Manage All Content') )
 	{
 	  $res[] = lang('options');
 	}

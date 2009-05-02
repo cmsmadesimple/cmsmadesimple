@@ -128,7 +128,7 @@ class Content extends ContentBase
     function TabNames()
     {
       $res = array(lang('main'));
-      if( check_permission(get_userid(),'Modify Page Structure') )
+      if( check_permission(get_userid(),'Manage All Content') )
 	{
 	  $res[] = lang('options');
 	}
@@ -147,15 +147,6 @@ class Content extends ContentBase
 	{
 	    $this->stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
 	}
-// 	else
-// 	{
-// 	    $defaulttemplate = $templateops->LoadDefaultTemplate();
-// 	    if (isset($defaulttemplate))
-// 	    {
-// 		$this->mTemplateId = $defaulttemplate->id;
-// 		$this->stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
-// 	    }
-// 	}
 
 
 	if ($tab == 0)

@@ -62,7 +62,7 @@ function content_list_ajax()
 
 function check_modify_all($userid)
 {
-	return check_permission($userid, 'Modify Any Page');
+  return check_permission($userid, 'Modify Any Page');
 }
 
 function setdefault($contentid)
@@ -72,7 +72,7 @@ function setdefault($contentid)
 	
 	$result = false;
 
-	if (check_permission($userid,'Modify Page Structure'))
+	if (check_permission($userid,'Manage All Content'))
 	{
 		$hierManager =& $gCms->GetHierarchyManager();
 		$node = &$hierManager->getNodeById($contentid);
@@ -265,7 +265,7 @@ function setactive($contentid, $active = true)
 	// to activate a page, you must be admin, owner, or additional author
 	$permission = (	check_ownership($userid, $contentid) ||
 			check_authorship($userid, $contentid) ||
-			check_permission($userid, 'Modify Page Structure')
+			check_permission($userid, 'Manage All Content')
 	);
 
 	if($permission)
@@ -308,17 +308,9 @@ function movecontent($contentid, $parentid, $direction = 'down')
 	$db =& $gCms->GetDb();
 	$userid = get_userid();
 
-	if (check_permission($userid, 'Modify Page Structure'))
+	if (check_permission($userid, 'Manage All Content'))
 	{
 		$order = 1;
-
-// 		#Detect duplicate item orders, and abort
-// 		$query = "SELECT count(*) AS num FROM cms_content 
-//                            WHERE parent_id=? 
-//                           GROUP BY item_order,parent_id 
-//                           HAVING count(*) > 1";
-// 		$tmp = $db->GetOne($query,array($parentid));
-// 		if( $tmp > 0 ) return;
 
 		#Grab necessary info for fixing the item_order
 		$query = "SELECT item_order FROM ".cms_db_prefix()."content WHERE content_id = ?";
@@ -360,7 +352,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 function deletecontent($contentid)
 {
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Pages') || check_permission($userid, 'Modify Page Structure');
+	$access = check_permission($userid, 'Remove Pages') || check_permission($userid, 'Manage All Content');
 	
 	global $gCms;
 	$hierManager =& $gCms->GetHierarchyManager();
@@ -511,7 +503,7 @@ function reorder_process($get)
 	$userid = get_userid();
 	$objResponse = new xajaxResponse();
 
-	if (check_permission($userid,'Modify Page Structure'))
+	if (check_permission($userid,'Manage All Content'))
 	{
 		global $gCms;
 		$config =& $gCms->GetConfig();
@@ -633,7 +625,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
     {
       $display = 'view';
     }
-  else if (check_permission($userid, 'Modify Page Structure'))
+  else if (check_permission($userid, 'Manage All Content'))
     {
       $display = 'structure';
     }
@@ -747,7 +739,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	{
 	  $columns['active'] = '&nbsp;';
 	  $txt = '';
-	  if (check_permission($userid, 'Modify Page Structure'))
+	  if (check_permission($userid, 'Manage All Content'))
 	    {
 	      if($one->Active())
 		{
@@ -770,7 +762,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	{
 	  $columns['default'] = '&nbsp';
 	  $txt = '';
-	  if (check_permission($userid,'Modify Page Structure'))
+	  if (check_permission($userid,'Manage All Content'))
 	    {
 	      if ($one->IsDefaultPossible())
 		{
@@ -790,7 +782,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	  // code for move up is simple
 	  $columns['move'] = '&nbsp;';
 	  $txt = '';
-	  if (check_permission($userid, 'Modify Page Structure'))
+	  if (check_permission($userid, 'Manage All Content'))
 	    {
 	      $sameLevel = $root->getSiblingCount();
 	      if ($sameLevel>1)
@@ -852,7 +844,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	{
 	  $columns['copy'] = '&nbsp;';
 	  $txt = '';
-	  if( $one->IsCopyable() && check_permission($userid,'Add Pages') &&
+	  if( $one->IsCopyable() && 
+	      (check_permission($userid,'Add Pages') || check_permission($userid,'Manage All Content')) &&
 	      (check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages)) )
 	    {
 	      $txt .= '<a href="copycontent.php'.$urlext.'&amp;content_id='.$one->Id().'">';
@@ -870,7 +863,10 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	{
 	  $columns['edit'] = '&nbsp;';
 	  $txt = '';
-	  if (check_modify_all($userid) || check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages))
+	  if (check_modify_all($userid) || 
+	      check_ownership($userid, $one->Id()) || 
+	      quick_check_authorship($one->Id(), $mypages) ||
+	      check_permission($userid, 'Manage All Content'))
 	    {
 	      // edit link
 	      $txt .= "<a href=\"editcontent.php".$urlext."&amp;content_id=".$one->Id()."\">";
@@ -891,7 +887,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	  $txt = '';
 	  if ($one->DefaultContent() != true)
 	    {
-	      if ($root->getChildrenCount() == 0 && check_permission($userid, 'Remove Pages'))
+	      if ($root->getChildrenCount() == 0 && 
+		  (check_permission($userid, 'Remove Pages') || check_permission('Manage All Content')) )
 		{
 		  $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
 		  $txt .= $deleteImg;
@@ -911,7 +908,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	  $txt = '';
 
 	  $remove    = check_permission($userid, 'Remove Pages')?1:0;
-	  $structure = check_permission($userid, 'Modify Page Structure')?1:0;
+	  $structure = check_permission($userid, 'Manage All Content')?1:0;
 	  $editperms = (check_permission($userid, 'Modify Any Page') ||
 			quick_check_authorship($one->Id(),$mypages) ||
 			check_ownership($userid,$one->Id()))?1:0;
@@ -988,15 +985,15 @@ function display_content_list($themeObject = null)
 	$columnstodisplay['template'] = 1;
 	$columnstodisplay['friendlyname'] = 1;
 	$columnstodisplay['owner'] = 1;
-	$columnstodisplay['active'] = check_permission($userid, 'Modify Page Structure');
-	$columnstodisplay['default'] = check_permission($userid, 'Modify Page Structure');
-	$columnstodisplay['move'] = check_permission($userid, 'Modify Page Structure');
+	$columnstodisplay['active'] = check_permission($userid, 'Manage All Content');
+	$columnstodisplay['default'] = check_permission($userid, 'Manage All Content');
+	$columnstodisplay['move'] = check_permission($userid, 'Manage All Content');
 	$columnstodisplay['view'] = 1;
-	$columnstodisplay['copy'] = check_permission($userid,'Add Pages');
+	$columnstodisplay['copy'] = check_permission($userid,'Add Pages') || check_permission($userid,'Manage All Content');
 	$columnstodisplay['edit'] = 1;
-	$columnstodisplay['delete'] = check_permission($userid, 'Remove Pages');
+	$columnstodisplay['delete'] = check_permission($userid, 'Remove Pages') || check_permission($userid,'Manage All Content');
 	$columnstodisplay['multiselect'] = check_permission($userid, 'Remove Pages') ||
-	  check_permission($userid,'Modify Page Structure') || check_permission($userid,'Modify Any Page');
+	  check_permission($userid,'Manage All Content') || check_permission($userid,'Modify Any Page');
 	
 	$page = 1;
 	if (isset($_GET['page']))
@@ -1025,8 +1022,6 @@ function display_content_list($themeObject = null)
 	$copyImg = $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
 	$deleteImg = $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 
-	$counter = 0;
-
 	#Setup array so we don't load more templates than we need to
 	$templates = array();
 
@@ -1050,6 +1045,7 @@ function display_content_list($themeObject = null)
         $hierManager =& $gCms->GetHierarchyManager();
 	$hierarchy = &$hierManager->getRootNode();
 
+	$rowcount = 0;
 	if ($hierarchy->hasChildren())
 	{
 		$pagelist = array();
@@ -1057,6 +1053,7 @@ function display_content_list($themeObject = null)
 		{ 
 		  display_hierarchy($child, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay);
 		}
+		$rowcount += count($pagelist);
 		foreach ($pagelist as $item)
 		{
 			$thelist.=$item;
@@ -1073,23 +1070,20 @@ function display_content_list($themeObject = null)
 	$headoflist = '';
 
 	$headoflist .= '<div class="pageoverflow"><p class="pageoptions">';
-	if (check_permission($userid, 'Add Pages'))
+	if (check_permission($userid, 'Add Pages') || check_permission($userid,'Manage All Content'))
 	{
-		$headoflist .=  '<a href="addcontent.php'.$urlext.'" class="pageoptions">';
-        $headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
-        $headoflist .= ' <a class="pageoptions" href="addcontent.php'.$urlext.'">'.lang("addcontent").'</a>';
+	  $headoflist .=  '<a href="addcontent.php'.$urlext.'" class="pageoptions">';
+	  $headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
+	  $headoflist .= ' <a class="pageoptions" href="addcontent.php'.$urlext.'">'.lang("addcontent").'</a>';
 	}
-	if (check_permission($userid, 'Add Pages') || check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
+
+	if (check_permission($userid, 'Manage All Content'))
 	{
-          if (check_permission($userid, 'Modify Page Structure'))      {
-            if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
-            {
-                $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">';
-                $headoflist .= $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon').'</a>';
-                $headoflist .= ' <a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
-            }
-          }
+	  $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">';
+	  $headoflist .= $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon').'</a>';
+	  $headoflist .= ' <a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
 	}
+
 	$headoflist .='</p></div>';
 	$headoflist .= '<form action="multicontent.php" method="post">';
 	$headoflist .= '<div class="hidden" ><input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'"/></div>'."\n";
@@ -1159,11 +1153,11 @@ function display_content_list($themeObject = null)
 
 	ob_start();
 	$opts = array();
-	if( check_permission($userid, 'Remove Pages') )
+	if( check_permission($userid, 'Remove Pages') || check_permission($userid, 'Manage All Content') )
 	  {
 	    $opts['delete'] = lang('delete');
 	  }
-	if (check_permission($userid, 'Modify Page Structure')) 
+	if (check_permission($userid, 'Manage All Content')) 
 	  {
 	    $opts['active'] = lang('active');
 	    $opts['inactive'] = lang('inactive');
@@ -1172,7 +1166,7 @@ function display_content_list($themeObject = null)
 	    $opts['showinmenu'] = lang('showinmenu');
 	    $opts['hidefrommenu'] = lang('hidefrommenu');
 	  }
-	if (check_permission($userid, 'Modify Any Page'))
+	if (check_permission($userid, 'Modify Any Page') || check_permission($userid, 'Manage All Content'))
 	  {
 	    $opts['settemplate'] = lang('settemplate');
 	  }
@@ -1193,7 +1187,7 @@ function display_content_list($themeObject = null)
 ?>
 			<div style="float: left;">
 <?php
-	if (check_permission($userid, 'Add Pages'))
+	   if (check_permission($userid, 'Add Pages') || check_permission('Manage All Content'))
 	{
 ?>
 			<a href="addcontent.php<?php echo $urlext ?>" class="pageoptions">
@@ -1215,7 +1209,7 @@ function display_content_list($themeObject = null)
 <?php 
 			echo $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
 		echo ' <a class="pageoptions" href="'.$thisurl.'&amp;collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall").'</a>';
-		if (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure'))
+		if (check_permission($userid, 'Manage All Content'))
 		{
 			$image_reorder = $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon');
 			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="'.$thisurl.'&amp;error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.'</a> <a class="pageoptions" href="'.$thisurl.'&amp;error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';

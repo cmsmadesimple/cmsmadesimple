@@ -347,7 +347,7 @@ else
 	      {
 		$permission = ($modifyall || check_ownership($userid, $node->Id()) || 
 			       check_authorship($userid, $node->Id()) || 
-			       check_permission($userid, 'Modify Page Structure'));
+			       check_permission($userid, 'Manage All Content'));
 
 		if( $permission )
 		  {
@@ -360,7 +360,7 @@ else
 	else if ($action == 'dodelete')
 	{
 		$userid = get_userid();
-		$access = check_permission($userid, 'Remove Pages' || check_persmission($userid, 'Modify Page Structure'));
+		$access = check_permission($userid, 'Remove Pages' || check_persmission($userid, 'Manage All Content'));
 		if ($access)
 		{
 			global $gCms;
@@ -423,7 +423,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Modify Page Structure'));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
 
 			if ($permission)
 			{
@@ -448,7 +448,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Modify Page Structure'));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
 
 			if ($permission)
 			{
@@ -475,7 +475,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Modify Page Structure'));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
 
 			if ($permission)
 			{
@@ -494,7 +494,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Modify Page Structure'));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
 
 			if ($permission)
 			{

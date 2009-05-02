@@ -148,7 +148,7 @@ $smarty->assign('lang_pagemenutext',lang('menutext'));
 $smarty->assign('lang_submit',lang('submit'));
 $smarty->assign('lang_cancel',lang('cancel'));
 
-if( check_permission(get_userid(),'Modify Page Structure') )
+if( check_permission(get_userid(),'Manage All Content') )
   {
     $smarty->assign('lang_pageaccesskey',lang('accesskey'));
   }

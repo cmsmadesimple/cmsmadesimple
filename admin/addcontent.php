@@ -57,7 +57,7 @@ if (isset($_POST["applybutton"])) $apply = true;
 $contentobj = '';
 
 #Get current userid and make sure they have permission to add something
-$access = (check_permission($userid, 'Add Pages') || check_permission($userid, 'Modify Page Structure'));
+$access = (check_permission($userid, 'Add Pages') || check_permission($userid, 'Manage All Content'));
 
 #Get a list of content types and pick a default if necessary
 global $gCms;
