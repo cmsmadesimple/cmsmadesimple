@@ -873,7 +873,7 @@ $lang['admin']['help_function_content'] = <<<EOT
 		<li><em>(optional)</em>wysiwyg (true/false) - If set to false, then a wysiwyg will never be used while editing this block.  If true, then it acts as normal.  Only works when block parameter is used.</li>
 		<li><em>(optional)</em>oneline (true/false) - If set to true, then only one edit line will be shown while editing this block.  If false, then it acts as normal.  Only works when block parameter is used.</li>
 <li><em>(optional)</em>size - Applicable only when the oneline option is used this optional parameter allows you to specify the size of the edit field.  The default value is 50.</li>
-		<li><em>(optional)</em>default - Allows you to specify default content content for this content blocks (additional content blocks only).</li>
+		<li><em>(optional)</em>default - Allows you to specify default content for this content blocks (additional content blocks only).</li>
 		<li><em>(optional)</em>assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
 <p>Example of passing page content to a User Defined Tag as a parameter:</p>
 <pre>
