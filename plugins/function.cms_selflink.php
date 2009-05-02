@@ -391,7 +391,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 			}//* End uplink
 
 			$result .= '" title="'.$title.'" ';
-			$result .= '" href="' . $url . '" />';
+			$result .= 'href="'.$url.'" />';
 		}
 		else
 		{
