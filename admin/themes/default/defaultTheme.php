@@ -139,7 +139,8 @@ class defaultTheme extends AdminTheme
 			if ($counter > 0) {
 				echo " &#187; ";
 			}
-			if (str_replace('&amp;', '&', $crumb['url']) != basename($_SERVER['REQUEST_URI']))
+			if (isset($crumb['url']) && 
+			    str_replace('&amp;', '&', $crumb['url']) != basename($_SERVER['REQUEST_URI']))
 			  {
 			    echo '<a class="breadcrumbs" href="'.$crumb['url'];
 			    echo '">'.$crumb['title'];

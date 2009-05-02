@@ -1041,6 +1041,7 @@ class AdminTheme
 		$tmp = substr($this->breadcrumbs[$count-1]['url'],0,$pos).'?'.$this->query;
 		$this->breadcrumbs[$count-1]['url'] = $tmp;
 	      }
+	    unset($this->breadcrumbs[$count-1]['url']);
 	    if ($this->subtitle != '')
 	      {
 		$this->breadcrumbs[$count-1]['title'] .=  ': '.$this->subtitle;
