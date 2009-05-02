@@ -22,6 +22,23 @@ Version 1.6 - New Caledonia
   - Ability to set a page as the 404 error page.  Replaces
     the existing custom 404 stuff to allow for more
     flexibility.
+  - Rework of the 'Add Pages' permission
+    - This permission allows that you can only add pages as children
+      of pages you are either owner of, or additional editor of.
+  - Rework of the 'Modify Page Structure' permission
+    - This permission now indicates that you can modify the fields
+      in the options tab of the content types.
+    - Add the ability to specify in global settings which fields
+      should be displayed to users without the 'Modify Page Structure'
+      permission.
+  - Rework of the content types
+    - Faster, leaner, smarter
+    - {content} block is now just a shortcut for {content block='content_en'}
+      and there is no special handling
+  - Complete rewrite of site preferences
+  - Page Preview now works for templates with multiple content blocks
+  - Add the ability to specify ip addresses to exclude from the sitedown
+    message.
 
 - News 
   - #2620 Extra fields are not displayed in the print template

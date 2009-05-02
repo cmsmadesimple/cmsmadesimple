@@ -90,7 +90,7 @@ class defaultTheme extends AdminTheme
 		global $gCms;
 		$config =& $gCms->GetConfig();
 ?><head>
-<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-8 Ted Kulp. All rights reserved." />
+<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-9 Ted Kulp. All rights reserved." />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="robots" content="noindex, nofollow" />
 <title><?php echo $this->cms->siteprefs['sitename'] ." - ". $this->title ?></title>
