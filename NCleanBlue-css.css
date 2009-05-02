@@ -41,7 +41,9 @@ body{
 strong {
 	font-weight: bold;
 }
-
+br{
+	display: block;
+}
 p {
 	padding:0;
 	margin-top: 0.5em;
@@ -68,7 +70,11 @@ a:active{
 a:visited{
 	color:#679EBC;
 }
-
+input,textarea,select {
+	
+	font-size: 0.95em;
+	
+	}
 /* ------------ Wrapper ------------ */
 div#pagewrapper { 
 font-size: 95%;
