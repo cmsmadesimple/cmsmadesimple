@@ -288,7 +288,7 @@ if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
 
 #What type of URL rewriting should we be using for pretty URLs?  Valid options are: 
 #'none', 'internal', and 'mod_rewrite'.  'internal' will not work with IIS some CGI
-#configurations. 'mod_rewrite' requires proper apache configrautions, a valid 
+#configurations. 'mod_rewrite' requires proper apache configuration, a valid 
 #.htaccess file and most likely {metadata} in your page templates.  For more 
 #information, see:
 #http://wiki.cmsmadesimple.org/index.php/FAQ/Installation/Pretty_URLs#Pretty_URL.27s
