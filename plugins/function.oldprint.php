@@ -82,7 +82,7 @@ function smarty_cms_function_oldprint($params, &$smarty)
         }
 
 
-	if (true == $gCms->config['assume_mod_rewrite'])
+	if ('mod_rewrite' == $gCms->config['url_rewriting'])
 	{
 		$hm =& $gCms->GetHierarchyManager();
 		$curnode =& $hm->getNodeById($gCms->variables['content_id']);

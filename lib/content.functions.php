@@ -482,7 +482,7 @@ class Smarty_CMS extends Smarty {
 				else
 				{
 				  $hm =& $gCms->GetHierarchyManager();
-				  if (true == $config['assume_mod_rewrite'])
+				  if ('mod_rewrite' == $config['url_rewriting'])
 				    {
 				      $curnode =& $hm->getNodeByAlias($tpl_name);
 				    }

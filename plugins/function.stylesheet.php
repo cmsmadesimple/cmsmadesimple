@@ -26,7 +26,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
     
     $str = '';
     $url = '';
-    //if( $config['internal_pretty_urls'] == true || $config['assume_mod_rewrite'] == true )
+    //if( $config['url_rewriting'] != 'none' )
     if( 0 )
       {
 	$url = $config['root_url'].'/stylesheet.php/'.$cssid;

@@ -416,11 +416,11 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 
 	$class = (isset($params['class'])?cms_htmlentities($params['class']):'');
 
-	if ($prettyurl != '' && $config['assume_mod_rewrite'] == true && $config['use_hierarchy'] == true)
+	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite' && $config['use_hierarchy'] == true)
 	{
 		$text = $config['root_url'] . '/' . $prettyurl . $config['page_extension'];
 	}
-	else if ($prettyurl != '' && $config['internal_pretty_urls'] == true && $config['use_hierarchy'] == true)
+	else if ($prettyurl != '' && $config['url_rewriting'] == 'internal' && $config['use_hierarchy'] == true)
 	{
 		$text = $config['root_url'] . '/index.php/' . $prettyurl . $config['page_extension'];
 	}
@@ -502,7 +502,7 @@ function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
 	global $gCms;
 	$config = &$gCms->GetConfig();
 	$text = '<a href="';
-	if ($config["assume_mod_rewrite"])
+	if ($config["url_rewriting"] == 'mod_rewrite')
 	{
 		# mod_rewrite
 		$contentops =& $gCms->GetContentOperations();
@@ -519,7 +519,7 @@ function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
 	}
 	else
 	{
-		# mod rewrite
+		# not mod rewrite
 		$text .= $config["root_url"]."/index.php?".$config["query_var"]."=".$pageid;
 	}
 	$text .= '">'.$contents.'</a>';
@@ -558,7 +558,7 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
 				  $value = cms_htmlentities($value);
 					if ($count > 0)
 					{
-						if ($config["assume_mod_rewrite"] && $rewrite == true)
+						if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true)
 							$text .= '?';
 						else
 							$text .= '&amp;';

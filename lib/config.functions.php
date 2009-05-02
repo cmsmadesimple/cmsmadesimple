@@ -54,9 +54,10 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["max_upload_size"] = 1000000;
 	$config["debug"] = false;
 	$config['output_compression'] = false;
-	$config["assume_mod_rewrite"] = false;
-	$config['internal_pretty_urls'] = false;
-	$config['use_hierarchy'] = false;
+	$config['url_rewriting'] = 'none';
+	//$config["assume_mod_rewrite"] = false; //Not being used in core
+	//$config['internal_pretty_urls'] = false; //Not being used in core
+	$config['use_hierarchy'] = true; //Now true by default
 	$config["auto_alias_content"] = true;
 	$config["image_manipulation_prog"] = "GD";
 	$config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
@@ -118,6 +119,42 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 				$config["admin_encoding"] = "utf-8";
 			}
 		}
+	}
+	
+	//Handle upgrade to url_rewriting parameter
+	if ($upgrade)
+	{
+		//Do they exist?  We're probably going from pre 1.6 to 1.6
+		if (isset($config['assume_mod_rewrite']) && isset($config['internal_pretty_urls']))
+		{
+			//If internal is on, then set it
+			if ($config['internal_pretty_urls'] == true)
+			{
+				$config['url_rewriting'] = 'internal';
+			}
+			
+			//mod_rewrite trumps internal, so reset it if necessary.
+			if ($config['assume_mod_rewrite'] == true)
+			{
+				$config['url_rewriting'] = 'mod_rewrite';
+			}
+		}
+	}
+	
+	//For backwards compat on the url_rewriting parameter
+	switch ($config['url_rewriting'])
+	{
+		case 'mod_rewrite':
+			$config['internal_pretty_urls'] = false;
+			$config['assume_mod_rewrite'] = true;
+			break;
+		case 'internal':
+			$config['internal_pretty_urls'] = true;
+			$config['assume_mod_rewrite'] = false;
+			break;
+		default:
+			$config['internal_pretty_urls'] = false;
+			$config['assume_mod_rewrite'] = false;
 	}
 
 	return $config;
@@ -249,16 +286,16 @@ if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
 #URL Settings
 #------------
 
-#Show mod_rewrite URLs in the menu? You must enable 'use_hierarchy' for this to work for modules
-\$config['assume_mod_rewrite'] = ${$config['assume_mod_rewrite']?'true':'false'};
+#What type of URL rewriting should we be using for pretty URLs?  Valid options are: 
+#'none', 'internal', and 'mod_rewrite'.  'internal' will not work with IIS and 
+#the {metadata} tag should be in all of your templates before enabling 'mod_rewrite' 
+#requires proper apache configrautions, a valid .htaccess file and most likely {metadata} 
+#in your page templates.  For more information, see:
+#http://wiki.cmsmadesimple.org/index.php/FAQ/Installation/Pretty_URLs#Pretty_URL.27s
+\$config['url_rewriting'] = '{$config['url_rewriting']}';
 
 #Extension to use if you're using mod_rewrite for pretty URLs.
 \$config['page_extension'] = '{$config['page_extension']}';
-
-#If you don't use mod_rewrite, then would you like to use the built-in
-#pretty url mechanism?  This will not work with IIS and the {metadata} tag
-#should be in all of your templates before enabling.
-\$config['internal_pretty_urls'] = ${$config['internal_pretty_urls']?'true':'false'};
 
 #If you're using the internal pretty url mechanism or mod_rewrite, would you like to
 #show urls in their hierarchy?  (ex. http://www.mysite.com/parent/parent/childpage)
@@ -313,10 +350,6 @@ if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
 #modules written before 1.0 was released to work.  Keep in mind that this 
 #will use a lot more memory and isn't guaranteed to fix the problem.
 \$config['backwards_compatible'] = ${$config['backwards_compatible']?'true':'false'};
-
-#Not used anymore... kept around, just in case
-\$config['disable_htmlarea_translation'] = false;
-\$config['use_Indite'] = true;
 EOF;
 	return $result;
 }

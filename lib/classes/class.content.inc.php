@@ -1493,50 +1493,50 @@ class ContentBase
     /**
      * Function for content types to override to set their proper generated URL
      */
-    function GetURL($rewrite = true)
-    {
-	global $gCms;
-	$config = &$gCms->GetConfig();
-	$url = "";
-	$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
-
-	/* use root_url for default content */
-        if($this->mDefaultContent) {
-         $url =  $config['root_url']. '/';
-         return $url;
-        }
-
-	if ($config["assume_mod_rewrite"] && $rewrite == true)
+	function GetURL($rewrite = true)
 	{
-	    if ($config['use_hierarchy'] == true)
-	    {
-		$url = $config['root_url']. '/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
-	    }
-	    else
-	    {
-		$url = $config['root_url']. '/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
-	    }
-	}
-	else
-	{
-	    if (isset($_SERVER['PHP_SELF']) && $config['internal_pretty_urls'] == true)
-	    {
-		if ($config['use_hierarchy'] == true)
+		global $gCms;
+		$config = &$gCms->GetConfig();
+		$url = "";
+		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
+
+		/* use root_url for default content */
+		if($this->mDefaultContent) {
+			$url =  $config['root_url']. '/';
+			return $url;
+		}
+
+		if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true)
 		{
-		    $url = $config['root_url'] . '/index.php/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
+			if ($config['use_hierarchy'] == true)
+			{
+				$url = $config['root_url']. '/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
+			}
+			else
+			{
+				$url = $config['root_url']. '/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
+			}
 		}
 		else
 		{
-		    $url = $config['root_url'] . '/index.php/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
+			if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal')
+			{
+				if ($config['use_hierarchy'] == true)
+				{
+					$url = $config['root_url'] . '/index.php/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
+				}
+				else
+				{
+					$url = $config['root_url'] . '/index.php/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
+				}
+			}
+			else
+			{
+				$url = $config['root_url'] . '/index.php?' . $config['query_var'] . '=' . $alias;
+			}
 		}
-	    }
-	    else
-	    {
-		$url = $config['root_url'] . '/index.php?' . $config['query_var'] . '=' . $alias;
-	    }
-	}
 		return $url;
-    }
+	}
 
     /*
     function MakeHierarchyURL($ext='')

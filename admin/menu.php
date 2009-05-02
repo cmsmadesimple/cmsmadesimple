@@ -79,7 +79,7 @@ if (check_permission($userid, 'Modify Site Preferences'))
 <a href="adminlog.php"><?php echo lang('adminlog')?></a>
 <a href="<?php
 
-if (isset($config['assume_mod_rewrite']) && $config['assume_mod_rewrite'] == true)
+if (isset($config['url_rewriting']) && $config['url_rewriting'] == 'mod_rewrite')
 {
 	$query = "SELECT content_alias, content_id FROM " . cms_db_prefix() . "content WHERE default_content = '1'";
 	$result = $db->query($query);
