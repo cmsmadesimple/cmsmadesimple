@@ -28,7 +28,7 @@ $group_id= - 1;
 if (isset($_POST["group_id"])) $group_id = $_POST["group_id"];
 else if (isset($_GET["group_id"])) $group_id = $_GET["group_id"];
 
-$submitted= - 1;
+$submitted = -1;
 if (isset($_POST["submitted"])) $submitted = $_POST["submitted"];
 else if (isset($_GET["submitted"])) $submitted = $_GET["submitted"];
 
@@ -55,15 +55,22 @@ global $gCms;
 $db =& $gCms->GetDb();
 
 
+if( isset($_POST['filter']) )
+  {
+    $disp_group = $_POST['groupsel'];
+    set_preference($userid,'changegroupassign_group',$disp_group);
+  }
+$disp_group = get_preference($userid,'changegroupassign_group',-1);
+
 // always display the group pulldown
 global $gCms;
 $groupops =& $gCms->GetGroupOperations();
 $userops =& $gCms->GetUserOperations();
-$allgroups = new stdClass();
-$allgroups->name = lang('all_groups');
-$allgroups->id=-1;
-$groups = array($allgroups);
-
+$tmp = new stdClass();
+$tmp->name = lang('all_groups');
+$tmp->id=-1;
+$allgroups = array($tmp);
+$groups = array($tmp);
 $group_list = $groupops->LoadGroups();
 foreach( $group_list as $onegroup )
 {
@@ -71,17 +78,23 @@ foreach( $group_list as $onegroup )
     {
       continue;
     }
-  $groups[] = $onegroup;
+  $allgroups[] = $onegroup;
+  if( $disp_group == -1 || $disp_group == $onegroup->id )
+    {
+      $groups[] = $onegroup;
+    }
 }
-$smarty->assign_by_ref('group_list',$groups);
+$smarty->assign('group_list',$groups);
+$smarty->assign('allgroups',$allgroups);
 
 // because it's easier in PHP than Javascript:
 $groupidlist = array();
-foreach ($groups as $thisGroup)
+foreach ($group_list as $thisGroup)
 {
-  array_push($groupidlist,$thisGroup->id);
+  $groupidlist[] = $thisGroup->id;
 }
 $smarty->assign('groupidlist',implode(',',$groupidlist));
+
 
 if ($submitted == 1)
   {
@@ -120,14 +133,15 @@ if ($submitted == 1)
     
     $smarty->assign('message',lang('assignmentchanged'));
   }
+
+
+
 $query = "SELECT u.user_id, u.username, ug.group_id FROM ".
   cms_db_prefix()."users u LEFT JOIN ".cms_db_prefix().
   "user_groups ug ON u.user_id = ug.user_id ORDER BY u.username";
-
 $result = $db->Execute($query);
 
 $user_struct = array();
-
 while($result && $row = $result->FetchRow())
   {
     if (isset($user_struct[$row['user_id']]))
@@ -152,12 +166,15 @@ $smarty->assign_by_ref('users',$user_struct);
 
 
 if( $adminuser ) $smarty->assign('adminuser',1);
+$smarty->assign('disp_group',$disp_group);
 $smarty->assign('user_id',$userid);
 $smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
 $smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('admin_group_warning',$themeObject->ShowErrors(lang('adminspecialgroup')));
 $smarty->assign('form_start','<form id="groupname" method="post" action="changegroupassign.php">');
+$smarty->assign('filter_action','changegroupassign.php');
 $smarty->assign('form_end','</form>');
+$smarty->assign('apply',lang('apply'));
 $smarty->assign('selectgroup',lang('selectgroup'));
 $smarty->assign('title_user',lang('user'));
 $smarty->assign('hidden','<input type="hidden" name="submitted" value="1" />');

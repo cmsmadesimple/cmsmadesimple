@@ -36,6 +36,12 @@ if (isset($_POST["cancel"])) {
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Permissions');
+if (!$access) {
+	die('Permission Denied');
+	return;
+}
+$userops =& $gCms->GetUserOperations();
+$adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
 $group_name = '';
 $message = '';
 
@@ -47,91 +53,105 @@ $smarty =& $gCms->GetSmarty();
 if (!$access) {
 	die('permission denied');
 }
-else {
-    // always display the group pull down
-	global $gCms;
-	$groupops =& $gCms->GetGroupOperations();
-	$allgroups = new stdClass();
-	$allgroups->name = lang('all_groups');
-	$allgroups->id=-1;
-   $groups = array($allgroups);
 
-	$group_list = $groupops->LoadGroups();
-	$groups = array_merge($groups,$group_list);
-	$smarty->assign_by_ref('group_list',$groups);
+if( isset($_POST['filter']) )
+  {
+    $disp_group = $_POST['groupsel'];
+    set_preference($userid,'changegroupassign_group',$disp_group);
+  }
+$disp_group = get_preference($userid,'changegroupassign_group',-1);
 
-	// because it's easier in PHP than Javascript:
-	$groupidlist = array();
-	foreach ($groups as $thisGroup)
+// always display the group pull down
+global $gCms;
+$groupops =& $gCms->GetGroupOperations();
+$tmp = new stdClass();
+$tmp->name = lang('all_groups');
+$tmp->id=-1;
+$allgroups = array($tmp);
+$groups = array($tmp);
+$group_list = $groupops->LoadGroups();
+foreach( $group_list as $onegroup )
+{
+  if( $onegroup->id == 1 && $adminuser == false )
+    {
+      continue;
+    }
+  $allgroups[] = $onegroup;
+  if( $disp_group == -1 || $disp_group == $onegroup->id )
+    {
+      $groups[] = $onegroup;
+    }
+}
+$smarty->assign('group_list',$groups);
+$smarty->assign('allgroups',$allgroups);
+
+if ($submitted == 1)
+  {
+    // we have group permissions
+    $query = "DELETE FROM ".cms_db_prefix()."group_perms";
+    $result = $db->Execute($query);
+    $now = $db->DbTimeStamp(time());
+    $iquery = "INSERT INTO ".cms_db_prefix().
+      "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (?,?,?,$now,$now)";
+    
+    foreach ($_POST as $key=>$value)
+      {
+	if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false)
 	  {
-		array_push($groupidlist,$thisGroup->id);
-	  }
-	$smarty->assign('groupidlist',implode(',',$groupidlist));
-    if ($submitted == 1)
-	  {
-		// we have group permissions
-		$query = "DELETE FROM ".cms_db_prefix()."group_perms";
-		$result = $db->Execute($query);
-		$now = $db->DbTimeStamp(time());
-		$iquery = "INSERT INTO ".cms_db_prefix().
-		  "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (?,?,?,$now,$now)";
-		
-		foreach ($_POST as $key=>$value)
+	    $keyparts = explode('_',$key);
+	    if ($keyparts[2] != '1' && $value == '1')
+	      {
+		$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
+		$result = $db->Execute($iquery, array($new_id,$keyparts[2],$keyparts[1]));
+		if( !$result )
 		  {
-			if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false)
-			  {
-				$keyparts = explode('_',$key);
-				if ($keyparts[2] != '1' && $value == '1')
-				  {
-					$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-					$result = $db->Execute($iquery, array($new_id,$keyparts[2],$keyparts[1]));
-					if( !$result )
-					  {
-						echo "FATAL: ".$db->ErrorMsg().'<br/>'.$db->sql; exit();
-					  }
-				  }
-			  }
+		    echo "FATAL: ".$db->ErrorMsg().'<br/>'.$db->sql; exit();
 		  }
-		
-		audit($userid, 'Group ID', lang('permissionschanged'));
-        $smarty->assign('message',lang('permissionschanged'));
+	      }
 	  }
+      }
+    
+    audit($userid, 'Group ID', lang('permissionschanged'));
+    $smarty->assign('message',lang('permissionschanged'));
+  }
 
-	$query = "SELECT p.permission_id, p.permission_text, up.group_id FROM ".
-       	cms_db_prefix()."permissions p LEFT JOIN ".cms_db_prefix().
-       	"group_perms up ON p.permission_id = up.permission_id ORDER BY p.permission_name";
+$query = "SELECT p.permission_id, p.permission_text, up.group_id FROM ".
+  cms_db_prefix()."permissions p LEFT JOIN ".cms_db_prefix().
+  "group_perms up ON p.permission_id = up.permission_id ORDER BY p.permission_name";
 
-	$result = $db->Execute($query);
+$result = $db->Execute($query);
 
-	$perm_struct = array();
+$perm_struct = array();
 
-	while($result && $row = $result->FetchRow())
-		{
-		if (isset($perm_struct[$row['permission_id']]))
-			{
-			$str = &$perm_struct[$row['permission_id']];
-			$str->group[$row['group_id']]=1;
-			}
-		else
-			{
-			$thisPerm = new stdClass();
-			$thisPerm->group = array();
-			if (!empty($row['group_id']))
-				{
-				$thisPerm->group[$row['group_id']] = 1;
-				}
-			$thisPerm->id = $row['permission_id'];
-			$thisPerm->name = $row['permission_text'];
-			$perm_struct[$row['permission_id']] = $thisPerm;
-			}
-		}
-	$smarty->assign_by_ref('perms',$perm_struct);		
+while($result && $row = $result->FetchRow())
+  {
+    if (isset($perm_struct[$row['permission_id']]))
+      {
+	$str = &$perm_struct[$row['permission_id']];
+	$str->group[$row['group_id']]=1;
+      }
+    else
+      {
+	$thisPerm = new stdClass();
+	$thisPerm->group = array();
+	if (!empty($row['group_id']))
+	  {
+	    $thisPerm->group[$row['group_id']] = 1;
+	  }
+	$thisPerm->id = $row['permission_id'];
+	$thisPerm->name = $row['permission_text'];
+	$perm_struct[$row['permission_id']] = $thisPerm;
+      }
+  }
+$smarty->assign_by_ref('perms',$perm_struct);		
 
 $smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
 $smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('admin_group_warning',$themeObject->ShowErrors(lang('adminspecialgroup')));
 $smarty->assign('form_start','<form id="groupname" method="post" action="changegroupperm.php">');
 $smarty->assign('form_end','</form>');
+$smarty->assign('disp_group',$disp_group);
+$smarty->assign('apply',lang('apply'));
 $smarty->assign('title_permission',lang('permission'));
 $smarty->assign('selectgroup',lang('selectgroup'));
 $smarty->assign('hidden','<input type="hidden" name="submitted" value="1" />');
@@ -147,6 +167,6 @@ echo $smarty->fetch('changegroupperm.tpl');
 echo '</div>';
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
-}
+
 # vim:ts=4 sw=4 noet
 ?>

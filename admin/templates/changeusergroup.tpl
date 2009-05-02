@@ -1,92 +1,32 @@
+{*
 <div id="admin_group_warning" style="display:none">
 {$admin_group_warning}
 </div>
+*}
 
 {if isset($message)}
 <p class="pagemessage">{$message}</p>
 {/if}
 
-{literal}
-<script type="text/javascript">
-	/* <![CDATA[ */
-	var groupids = new Array({/literal}{$groupidlist}{literal});
-			
-	function set_group()
-		{
-		var gsel = document.getElementById('groupsel');
-		if (gsel)
-			{
-			var gid = gsel[gsel.selectedIndex].value;
-			var warn = document.getElementById('admin_group_warning');
-			if (gid == 1)
-				{
-				warn.style.display='block';
-				}
-			else
-				{
-				warn.style.display='none';
-				}
-			
-			if (gid == -1)
-				{
-				for (var i=0;i<groupids.length;i++)
-					{
-					if (groupids[i] != '')
-						{
-                  cell_class_toggle('g'+groupids[i],true);
-						}
-					}
-				}
-			else
-				{
-				for (var i=0;i<groupids.length;i++)
-					{
-						if (groupids[i]  == gid)
-	                    {
-    	                  cell_class_toggle('g'+groupids[i],true);
-						}
-						else
-						{
-	  					  cell_class_toggle('g'+groupids[i],false);
-						}
-					}
-				}
-			}
-		}
-
-      function cell_class_toggle(css_class,show)
-      {
-         var ths =document.body.getElementsByTagName('th');
-         for(var j=0; j<ths.length; j++)
-            {
-            if(ths[j].className==css_class)
-               {
-               ths[j].style.display = (show?'':'none');
-               }
-            }
-         var tds =document.body.getElementsByTagName('td');
-         for(var j=0; j<tds.length; j++)
-            {
-            if(tds[j].className==css_class)
-               {
-               tds[j].style.display = (show?'':'none');
-               }
-            }
-      }
-
-	/* ]]> */
-</script>
-{/literal}
-<br />
 <div class="pageoverflow">
-<form method="post" action="">
-	<b>{$selectgroup}:</b>	<select id="groupsel" onchange="set_group()">
-		{foreach from=$group_list item=thisgroup}
-			<option value="{$thisgroup->id}">{$thisgroup->name}</option>
-		{/foreach}
-	</select>
+<form method="post" action="{$filter_action}">
+<div class="hidden">
+  <input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
+</div>
+	<b>{$selectgroup}:</b>&nbsp;
+        <select name="groupsel" id="groupsel">
+	{foreach from=$allgroups item=thisgroup}
+           {if $thisgroup->id == $disp_group}
+                <option value="{$thisgroup->id}" selected="selected">{$thisgroup->name}</option>
+           {else}
+		<option value="{$thisgroup->id}">{$thisgroup->name}</option>
+           {/if}
+	{/foreach}
+	</select>&nbsp;
+        <input type="submit" name="filter" value="{$apply}"/>
 </form>
 </div><br />
+
 {$form_start}
 <div class="hidden">
   <input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
