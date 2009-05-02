@@ -116,7 +116,7 @@ div#search label {
 	
 }
 
-div#search input#cntnt01searchinput{
+div#search input.search-input{
 	width:143px;/*153px*/
 	height:17px;/*28px*/
 	background: url(uploads/NCleanBlue/search.png) no-repeat left top;
@@ -126,7 +126,7 @@ div#search input#cntnt01searchinput{
 	float:left;
 	font: bold 0.9em Arial, Helvetica, sans-serif;
 }
-div#search input.search-botton
+div#search input.search-button
     {
 	width:37px;
 	height:28px;
