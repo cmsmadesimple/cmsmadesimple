@@ -13,6 +13,10 @@ Version 1.6 - New Caledonia
   - Drop all assign_by_ref in Installer
   - Missing $frontendlang in siteprefs, thanks to jce76350
   - Fixed lot of anchor issues (hoppe one for all)
+  - Fixed issue with breadcrumbs in admin theme
+  - Fixed issue with encoding entities in cms_selflink tag
+  - Removed the javascript in the changegroupperms and changegroupassign
+    stuff, and replaced it with a filter button.
 
 - Feature Requests:
   - #2605 adding a 'forgot password' submission on the login panel  
@@ -25,12 +29,9 @@ Version 1.6 - New Caledonia
   - Rework of the 'Add Pages' permission
     - This permission allows that you can only add pages as children
       of pages you are either owner of, or additional editor of.
-  - Rework of the 'Modify Page Structure' permission
-    - This permission now indicates that you can modify the fields
-      in the options tab of the content types.
-    - Add the ability to specify in global settings which fields
-      should be displayed to users without the 'Modify Page Structure'
-      permission.
+  - Remove the 'Modify Page Structure' permission
+  - Add a 'Manage All Content' permission that provides global
+    capability on all content objects.
   - Rework of the content types
     - Faster, leaner, smarter
     - {content} block is now just a shortcut for {content block='content_en'}
@@ -44,6 +45,8 @@ Version 1.6 - New Caledonia
   - #2620 Extra fields are not displayed in the print template
   - #3163 Typo in News module
   - #3277 Drafts are not saved properly in News 2.9.3
+  - Fixed problem with incorrect counts (counting draft articles) in browsecat
+    action.
 
 - Libs Updates: 
   - Smarty
@@ -66,6 +69,12 @@ Version 1.6 - New Caledonia
 - Default Themes
   - New theme NCleanBlue
   - TODO-> Mark themes
+
+
+Version 1.5.4 - Carolina
+-----------------------------
+- Fix the logout/session issue once and for all.
+- Fix the canonical expressions in default templates.
 
 
 Version 1.5.3 - Arecibo
