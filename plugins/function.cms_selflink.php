@@ -353,7 +353,15 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 	      $label = '';
 	    }
 	}
+	$label = cms_htmlentities($label);
 	$result = "";
+
+	$title = $name;
+	if( isset($params['title']) ) 
+	  $title = $params['title'];
+	else if( !empty($titleattr) )
+	  $title = $titleattr;
+	$title = cms_htmlentities($title);
 
 	/* LeisureLarry - Changes if statement */
 	if (($url != "") and !isset($params['href']))
@@ -381,7 +389,8 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 			{
 				$result .= 'up';
 			}//* End uplink
-			$result .= '" title="' . (isset($params['title']) ? $params['title'] : ($titleattr != '' ? $titleattr : $name));
+
+			$result .= '" title="'$title.'" ';
 			$result .= '" href="' . $url . '" />';
 		}
 		else
@@ -392,7 +401,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 				}
 			$result .= '<a href="'.$url.'"';
 
-			$result .= ' title="'.(isset($params['title']) ? $params['title'] : ($titleattr != '' ? $titleattr : $name)).'"';
+			$result .= ' title="'.$title.'" ';
 
 			if (isset($params['target']))
 			{
@@ -429,6 +438,9 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 			} else {
 				$linktext = $name; // mbv - 21-06-2005
 			}
+
+			$linktext = cms_htmlentities($linktext);
+
 			if (isset($params['image']) && ! empty($params['image'])) {
 				$alt = (isset($params['alt']) && ! empty($params['alt'])) ? $params['alt'] : '';
 				$result .= "<img src=\"{$params['image']}\" alt=\"$alt\" />";
