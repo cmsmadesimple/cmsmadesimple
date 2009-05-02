@@ -300,7 +300,7 @@ class AdminTheme
                 check_permission($this->userid, 'Modify Any Page') ||
                 check_permission($this->userid, 'Add Pages') ||
                 check_permission($this->userid, 'Remove Pages') ||
-                check_permission($this->userid, 'Modify Page Structure')
+                check_permission($this->userid, 'Manage All Content')
         );
         $thisUserPages = author_pages($this->userid);
         if (count($thisUserPages) > 0)
