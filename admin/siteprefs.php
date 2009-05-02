@@ -55,6 +55,9 @@ $db =& $gCms->GetDb();
 $error = "";
 $message = "";
 
+$clear_vc_cache = 0;
+if (isset($_POST["clear_vc_cache"])) $clear_vc_cache = 1;
+
 $disablesafemodewarning = 0;
 if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = 1;
 
@@ -219,7 +222,7 @@ else if (isset($_POST["editsiteprefs"]))
 	{
 	  set_site_preference('lastcmsversioncheck',0);
 	}
-
+	  set_site_preference('clear_vc_cache', $clear_vc_cache);
       set_site_preference('defaultdateformat', $defaultdateformat);
       set_site_preference('custom404', $custom404);
       set_site_preference('custom404template', $custom404template);
@@ -262,6 +265,7 @@ else if (isset($_POST["editsiteprefs"]))
   $metadata = get_site_preference('metadata', '');
   $css_max_age = (int)get_site_preference('css_max_age',0);
   $sitename = get_site_preference('sitename', 'CMSMS Site');
+  $clear_vc_cache = get_site_preference('clear_vc_cache',0);
   $disablesafemodewarning = get_site_preference('disablesafemodewarning',0);
   $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',0);
   $enablenotifications = get_site_preference('enablenotifications',1);
@@ -359,6 +363,7 @@ $smarty->assign('custom404template',$custom404template);
 $smarty->assign('enablesitedownmessage',$enablesitedownmessage);
 $smarty->assign('textarea_sitedownmessage',create_textarea(true,$sitedownmessage,'sitedownmessage','pagesmalltextarea'));
 $smarty->assign('urlcheckversion',$urlcheckversion);
+$smarty->assign('clear_vc_cache',$clear_vc_cache);
 $smarty->assign('disablesafemodewarning',$disablesafemodewarning);
 $smarty->assign('allowparamcheckwarnings',$allowparamcheckwarnings);
 $smarty->assign('defaultdateformat',$defaultdateformat);

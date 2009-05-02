@@ -152,7 +152,7 @@
 </div>
 <div class="pageoverflow">
   <p class="pagetext">{$lang_clear_version_check_cache}:</p>
-  <p class="pageinput"><input class="pagenb" type="checkbox" name="clear_vc_cache" /></p>
+  <p class="pageinput"><input class="pagenb" type="checkbox" name="clear_vc_cache" {if $clear_vc_cache}checked="checked"{/if} /></p>
 </div>
 
 <div class="pageoverflow">
