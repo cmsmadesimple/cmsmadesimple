@@ -167,10 +167,10 @@ if( in_array('alias',$basic_attributes) || ($config['auto_alias_content'] != tru
     check_permission($userid, 'Manage All Content'))
   {
     $smarty->assign('info_pagealias',lang('info_pagealias'));
-  }
-if( $config['auto_alias_content'] == true )
-  {
-    $smarty->assign('info_alias',lang('info_autoalias'));
+    if( $config['auto_alias_content'] == true )
+      {
+	$smarty->assign('info_alias',lang('info_autoalias'));
+      }
   }
 
 echo $smarty->fetch('copycontent.tpl');

@@ -45,13 +45,14 @@
     </div>
     <div class="hidden"><input type="hidden" name="content_id" value="{$fromid}" /></div>
 
+    {if isset($info_pagealias)}
     <div class="pageoverflow">
       <p class="pagetext">{$lang_pagealias}:</p>
-      {*<p class="pageinput"><input type="text" name="to_alias" size="50" maxlength="255" value="{$fromobj->Alias()}" /></p>*}
       <p class="pageinput"><input type="text" name="to_alias" size="50" maxlength="255" value="" />
         <br/>{$info_pagealias}
 	{if isset($info_alias)}<br/>{$info_alias}{/if}</p>
     </div>
+    {/if}
 
     <div class="pageoverflow">
       <p class="pagetext">{$lang_pagetitle}:</p>
