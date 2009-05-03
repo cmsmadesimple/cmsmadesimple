@@ -1398,18 +1398,6 @@ class ContentBase
 	    }
 	  $this->mParentId = $params['parent_id'];
 	}
-//       else
-// 	{
-// 	  // parent id is not set.... we obviously don't have permission to set it.
-// 	  // because we don't even have a default value.
-
-// 	  // so we get the first page that this user has access to.
-// 	  $tmp = author_pages(get_userid());
-// 	  if( is_array($tmp) && count($tmp) )
-// 	    {
-// 	      $this->mParentId = $tmp[0];
-// 	    }
-// 	}
 
       // active
       if (isset($params['active']))
@@ -1538,32 +1526,6 @@ class ContentBase
 		return $url;
 	}
 
-    /*
-    function MakeHierarchyURL($ext='')
-    {
-	global $gCms;
-	$hm =& $gCms->GetHierarchyManager();
-
-	$path = '/' . $this->Alias();
-
-	$node =& $hm->getNodeById($this->ParentId());
-	if(isset($node))
-	{
-	    $content =& $node->GetContent();
-	    if (isset($content))
-	    {
-		$path = '/' . $content->HierarchyPath();
-	    }
-	}
-
-	$result = $path;
-
-	if ($ext != '')
-	    $result = $path . $ext;
-
-	return $result;
-    }
-    */
 
     /**
      * Show the content
@@ -1702,7 +1664,8 @@ class ContentBase
 		$ret = array();
 
 		$ret[] = lang('additionaleditors');
-		$text = '<select name="additional_editors[]" multiple="multiple" size="5">';
+		$text = '<input name="additional_editors" type="hidden" value""/>';
+		$text .= '<select name="additional_editors[]" multiple="multiple" size="5">';
 
 		global $gCms;
 		$userops =& $gCms->GetUserOperations();
