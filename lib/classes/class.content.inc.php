@@ -1470,9 +1470,12 @@ class ContentBase
       if (isset($params["additional_editors"]))
 	{
 	  $addtarray = array();
-	  foreach ($params["additional_editors"] as $addt_user_id)
+	  if( is_array($params['additional_editors']) )
 	    {
-	      $addtarray[] = $addt_user_id;
+	      foreach ($params["additional_editors"] as $addt_user_id)
+		{
+		  $addtarray[] = $addt_user_id;
+		}
 	    }
 	  $this->SetAdditionalEditors($addtarray);
 	}
