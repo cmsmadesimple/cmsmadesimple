@@ -58,9 +58,14 @@ function smarty_cms_function_stylesheet($params, &$smarty)
   global $gCms;
   $config = &$gCms->config;
   $pageinfo = &$gCms->variables['pageinfo'];
+  $template_id=$pageinfo->template_id;
+  if (isset($params["templateid"]) && $params["templateid"]!="") {
+    $template_id=$params["templateid"];
+  }
+
   $db =& $gCms->GetDb();
   
-  $stylesheet = '';
+  $stylesheet =  $template_id;
   
   if (isset($params['name']) && $params['name'] != '')
     {
@@ -81,7 +86,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
                        AND B.assoc_type = ?
                        AND B.assoc_to_id = ?
                      ORDER BY B.assoc_order';
-      $res = $db->GetArray($query,array('template',$pageinfo->template_id));
+      $res = $db->GetArray($query,array('template',$template_id));
       if( $res ) {
       $fmt1 = '<link rel="stylesheet" type="text/css" media="%s" href="%s" />';
       $fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
