@@ -290,7 +290,7 @@ else
 			{
 			  if ($node->DefaultContent())
 			    {
-			      redirect('listcontent.php'.$urlext.'&amp;error=error_delete_default_parent');
+			      redirect('listcontent.php'.$urlext.'&error=error_delete_default_parent');
 			    }
 
 				echo $node->Name() . ' (' . $node->Hierarchy() . ')' . '<br />' . "\n";
