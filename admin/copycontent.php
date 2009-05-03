@@ -163,7 +163,8 @@ if( empty($tmp) )
 $smarty->assign('input_parentdropdown',$tmp);
 
 $basic_attributes = explode(',',get_site_preference('basic_attributes','template'));
-if( in_array('alias',$basic_attributes) || $config['auto_alias_content'] != true )
+if( in_array('alias',$basic_attributes) || $config['auto_alias_content'] != true ||
+    check_permission($userid, 'Manage All Content')
   {
     $smarty->assign('info_pagealias',lang('info_pagealias'));
   }
