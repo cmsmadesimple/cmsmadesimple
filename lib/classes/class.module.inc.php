@@ -78,6 +78,7 @@ class CMSModule
 		$this->config =& $gCms->GetConfig();
 
 		global $CMS_ADMIN_PAGE;
+		global $CMS_MODULE_PAGE;
 		if (isset($CMS_ADMIN_PAGE))
 		{
 			$this->curlang = '';
@@ -108,7 +109,7 @@ class CMSModule
 		#$smarty = new CMSModuleSmarty($config, $this->GetName());
 		$this->smarty = &$gCms->GetSmarty();
 
-		if( !isset($CMS_ADMIN_PAGE) )
+		if( !isset($CMS_ADMIN_PAGE) || isset($CMS_MODULE_PAGE) )
 		  {
 		    $this->SetParameterType('assign',CLEAN_STRING);
 		    $this->SetParameterType('module',CLEAN_STRING);
