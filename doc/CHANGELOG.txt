@@ -60,7 +60,7 @@ Version 1.6 - New Caledonia
   - Updated to Tiny-distribution, including a rewritten more intelligent Paste plugin
 
 - Printing
-  - todo
+  - Now supports simple output from modules
 
 - Search
   - Template, added a class to submit and adjustments.
