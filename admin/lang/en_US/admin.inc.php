@@ -318,6 +318,7 @@ $lang['admin']['help_function_stylesheet'] = <<<EOT
 	<ul>
 		<li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one spefically named one, whether it's attached to the current template or not.</li>
 		<li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
+    <li><em>(optional)</em>templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
 	</ul>
 	</p>
 EOT;
