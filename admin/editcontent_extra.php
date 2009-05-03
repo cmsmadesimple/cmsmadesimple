@@ -56,20 +56,20 @@ function updatecontentobj(&$contentobj, $preview = false, $params = null)
 
 	$contentobj->SetLastModifiedBy($userid);
 
-	#Fill Additional Editors (kind of kludgy)
-	if (isset($params["additional_editors"]))
-	{
-		$addtarray = array();
-		foreach ($params["additional_editors"] as $addt_user_id)
-		{
-			$addtarray[] = $addt_user_id;
-		}
-		$contentobj->SetAdditionalEditors($addtarray);
-	}
-	else if ($adminaccess)
-	{
-		$contentobj->SetAdditionalEditors(array());
-	}
+// 	#Fill Additional Editors (kind of kludgy)
+// 	if (isset($params["additional_editors"]))
+// 	{
+// 		$addtarray = array();
+// 		foreach ($params["additional_editors"] as $addt_user_id)
+// 		{
+// 			$addtarray[] = $addt_user_id;
+// 		}
+// 		$contentobj->SetAdditionalEditors($addtarray);
+// 	}
+// 	else if ($adminaccess)
+// 	{
+// 		$contentobj->SetAdditionalEditors(array());
+// 	}
 }
 
 function copycontentobj(&$contentobj, $content_type, $params = null)
