@@ -345,6 +345,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 	if (isset($params['label']))
 	{
 		$label = $params['label'];
+		$label = cms_htmlentities($label);
 	}
 	else
 	{
@@ -353,7 +354,6 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 	      $label = '';
 	    }
 	}
-	$label = cms_htmlentities($label);
 	$result = "";
 
 	$title = $name;
