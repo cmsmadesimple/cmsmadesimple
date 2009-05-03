@@ -153,7 +153,7 @@ if( check_permission(get_userid(),'Manage All Content') )
     $smarty->assign('lang_pageaccesskey',lang('accesskey'));
   }
 
-$tmp = 	$contentops->CreateHierarchyDropdown($fromobj->Id(),
+$tmp = 	$contentops->CreateHierarchyDropdown(-100, /* $fromobj->Id(), */
 					     $fromobj->ParentId(),
 					     'to_parentid',1,1,1);
 if( empty($tmp) )
@@ -162,7 +162,11 @@ if( empty($tmp) )
   }
 $smarty->assign('input_parentdropdown',$tmp);
 
-$smarty->assign('info_pagealias',lang('info_pagealias'));
+$basic_attributes = explode(',',get_site_preference('basic_attributes','template'));
+if( in_array('alias',$basic_attributes) || $config['auto_alias_content'] != true )
+  {
+    $smarty->assign('info_pagealias',lang('info_pagealias'));
+  }
 if( $config['auto_alias_content'] == true )
   {
     $smarty->assign('info_alias',lang('info_autoalias'));
