@@ -65,7 +65,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 
   $db =& $gCms->GetDb();
   
-  $stylesheet =  $template_id;
+  $stylesheet = '';
   
   if (isset($params['name']) && $params['name'] != '')
     {
