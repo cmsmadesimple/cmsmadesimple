@@ -52,6 +52,7 @@ Version 1.6 - New Caledonia
   - Smarty
   - xAjax 0.5
   - script.aculo.us 1.8.2 (included  Update to Prototype 1.6.0.3)
+  - Dynamic Tabs 1.0.3
 
 - TinyMCE
   - Rewrote profile handling allowing both a simple and an advanced profile in backend
