@@ -23,7 +23,7 @@
 
    <div class="pageoverflow">
      <p class="pagetext">&nbsp;</p>
-     <p class="pageinput"><input type="submit" name="submit" value="{$text_submit}"><input type="submit" name="cancel" value="{$text_cancel}"></p>
+     <p class="pageinput"><input type="submit" name="submit" value="{$text_submit}" /><input type="submit" name="cancel" value="{$text_cancel}" /></p>
    </div>
    </form>
 </div>
