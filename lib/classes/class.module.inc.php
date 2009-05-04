@@ -49,25 +49,6 @@ class CMSModule
 	var $modmisc;
 	var $param_map;
 	var $restrict_unknown_params;
-	var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
-	var $xmldtd = '
-<!DOCTYPE module [
-  <!ELEMENT module (dtdversion,name,version,description*,help*,about*,requires*,file+)>
-  <!ELEMENT dtdversion (#PCDATA)>
-  <!ELEMENT name (#PCDATA)>
-  <!ELEMENT version (#PCDATA)>
-  <!ELEMENT mincmsversion (#PCDATA)>
-  <!ELEMENT description (#PCDATA)>
-  <!ELEMENT help (#PCDATA)>
-  <!ELEMENT about (#PCDATA)>
-  <!ELEMENT requires (requiredname,requiredversion)>
-  <!ELEMENT requiredname (#PCDATA)>
-  <!ELEMENT requiredversion (#PCDATA)>
-  <!ELEMENT file (filename,isdir,data)>
-  <!ELEMENT filename (#PCDATA)>
-  <!ELEMENT isdir (#PCDATA)>
-  <!ELEMENT data (#PCDATA)>
-]>';
 	var $smarty;
 
 	function CMSModule()

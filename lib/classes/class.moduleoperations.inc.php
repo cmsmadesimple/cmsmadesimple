@@ -41,6 +41,26 @@ class ModuleOperations
    */
   var $mActiveTab = '';
 
+  var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
+  var $xmldtd = '
+<!DOCTYPE module [
+  <!ELEMENT module (dtdversion,name,version,description*,help*,about*,requires*,file+)>
+  <!ELEMENT dtdversion (#PCDATA)>
+  <!ELEMENT name (#PCDATA)>
+  <!ELEMENT version (#PCDATA)>
+  <!ELEMENT mincmsversion (#PCDATA)>
+  <!ELEMENT description (#PCDATA)>
+  <!ELEMENT help (#PCDATA)>
+  <!ELEMENT about (#PCDATA)>
+  <!ELEMENT requires (requiredname,requiredversion)>
+  <!ELEMENT requiredname (#PCDATA)>
+  <!ELEMENT requiredversion (#PCDATA)>
+  <!ELEMENT file (filename,isdir,data)>
+  <!ELEMENT filename (#PCDATA)>
+  <!ELEMENT isdir (#PCDATA)>
+  <!ELEMENT data (#PCDATA)>
+]>';
+
   /**
    * ------------------------------------------------------------------
    * Error Functions
@@ -75,10 +95,10 @@ class ModuleOperations
 	  // get a file list
 	  $filecount = 0;
 	  $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
-	  $files = get_recursive_file_list( $dir, $modinstance->xml_exclude_files );
+	  $files = get_recursive_file_list( $dir, $this->xml_exclude_files );
 
 	  $xmltxt  = '<?xml version="1.0" encoding="ISO-8859-1"?>';
-	  $xmltxt .= $modinstance->xmldtd."\n";
+	  $xmltxt .= $this->xmldtd."\n";
 	  $xmltxt .= "<module>\n";
 		  $xmltxt .= "	<dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
 	  $xmltxt .= "	<name>".$modinstance->GetName()."</name>\n";
