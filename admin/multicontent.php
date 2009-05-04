@@ -310,7 +310,7 @@ else
 						</div>
 					</form>
 				</div>
-			</div>
+			
 			<?php
 		}
 		else
