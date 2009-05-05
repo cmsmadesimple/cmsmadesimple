@@ -1,11 +1,10 @@
 /*
   @Nuno Costa [criacaoweb.net].
   @Since [cms 1.6]
-  @Status [beta2]
+  @Status [Stable]
     --------------------------------------------------------------- 
 */
 body{
-	/*background: #7CA3B5;*/
 	background: #fff url(uploads/NCleanBlue/bg__full.png) repeat-x scroll left top;
 	font: normal 0.8em Tahoma,Verdana, Arial, Helvetica, sans-serif;
 	color: #3A3A36;
@@ -19,10 +18,10 @@ body{
 	}
 
  .accessibility, hr {
-   position: absolute;
-   top: -999%;
-   left: -999%;
-  background: none;
+     position: absolute;
+     top: -9999em;
+     left: -9999em;
+     background: none;
      border: 0;
      clear: both;
      display: block;
@@ -54,7 +53,6 @@ h1,h2,h3,h4,h5{
 	font-weight:normal;
 	width:auto;
 	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-	
 }
 a{
 	color:#679EBC;
@@ -73,21 +71,17 @@ a:visited{
 input,textarea,select {
 	
 	font-size: 0.95em;
-	
-	}
+}
 /* ------------ Wrapper ------------ */
 div#pagewrapper { 
 font-size: 95%;
 position:relative;
 z-index:1;
 }
-
 /* ------------ Header ------------ */
 #header{
 	height: 111px;
 	width: 960px;
-	/*position:relative;
-	background:red;*/
 	}
 #logo a{
 	background: url(uploads/NCleanBlue/logo.png) no-repeat left top;
@@ -98,9 +92,7 @@ z-index:1;
 	margin-top:0;
 	margin-left:0;
 	}
-
-
- /* ------------ Header - Search ------------ */
+/* ------------ Header - Search ------------ */
 div#search{
 	width:190px;
 	height:28px;
@@ -113,7 +105,6 @@ div#search label {
 	height:0pt;
 	width:0pt;
 	display:none;
-	
 }
 
 div#search input.search-input{
@@ -143,8 +134,6 @@ div#search input.search-button
 /* ------------ Content ------------ */
 
 #content{
-	/*background:blue;
-	background:transparent url(../layout/bg__content.png) repeat-y left top;*/
 	width: auto;
 	text-align: left;
 	}
@@ -173,15 +162,20 @@ div#search input.search-button
 	text-align: center;
 	vertical-align:middle;
 	}
+/* IE6 fixes */
 * html div#version{
 	top:150px;
 	}
+/* End IE6 fixes */
 
+/* Site Title */
 h1.title{
 	font-size: 1.8em;
 	color: #666666;
 	margin-bottom: 0.5em;
 	}
+	
+/* Breadcrumbs */
 div.breadcrumbs {
 	padding: 0.5em 0;
 	font-size: 80%;
@@ -194,9 +188,13 @@ div.breadcrumbs span.lastitem {
 #left{
 	width: 250px;
 	}
+	
+/* Image that Represents the new CMS design */
 #left .screen{
 	margin: 10px 50px;	
 	}
+/* End  */
+
 .sbar-title{
 	font:bold 1.2em Arial, Helvetica, sans-serif;
 	color: #252523;
@@ -213,9 +211,6 @@ div.breadcrumbs span.lastitem {
 	border-right: 1px solid #E2E2E2;
 	border-left: 1px solid #E2E2E2;
 	background:#F0F0F0;
-	/*min-height:185px;
-	height:auto!important;
-	height:185px;*/
 	}
 span.sbar-bottom{
 	width: auto;
@@ -239,9 +234,6 @@ span.sbar-bottom{
 	border-right: 1px solid #E2E2E2;
 	border-left: 1px solid #E2E2E2;
 	background:#F0F0F0;
-/*	min-height:250px;
-	height:auto!important;
-	height:250px;*/
 	padding: 20px;
 	}
 .main-bottom{
@@ -313,25 +305,7 @@ div#main dl {
   padding-bottom: 1em;
   border-bottom: 1px solid #c0c0c0;
 }	
-/* ------------ News ------------ */
- #news{ padding: 10px; }
-	
-.NewsSummary{}
-.NewsSummaryPostdate,
-.NewsSummaryCategory,
-.NewsSummaryAuthor
-{
-	font-style: italic;
-	font-size: 0.8em;
-}
-.NewsSummaryLink{margin: 2px 0;}
-
-.NewsSummaryContent{margin: 5px 0;}
-
 /* ------------ Footer ------------ */
-
-
-
 #footer-wrapper{
 	background: #7CA3B5 url(uploads/NCleanBlue/bg__footer.png) repeat-x left top;
 	min-height:235px;
@@ -373,8 +347,6 @@ div#main dl {
 	color: #FFF;
 	display: block;
 	font-weight: normal;
-	/*padding: 1px 1px 1px 20px;
-	background: url(uploads/NCleanBlue/arrowF.gif) no-repeat left 0px;*/
 	margin-bottom:0.5em;
 	text-decoration: none;
 	}
@@ -472,8 +444,6 @@ END LAYOUT
 }
 
 
-
-
 /* --------------------  Menu Dropdow  -------------------------
 /* Unless you know what you do, do not touch this */
 /* Set the width of the menu elements at second level. Leaving first level flexible. */
@@ -521,12 +491,6 @@ ul#primary-nav .menuparent .unli .menuparent .unli li a span
 	left: 100%; 
 	top: 3px; 
 	}
-/* * html #primary-nav ul ul { 
-	margin-top: 1px;
- 	margin-left: -27px;
-	left: 100%; 
-	top: 3px; 
-	}*/		
 #primary-nav li { 
 	margin: 0px;
 	float: left; 
@@ -595,7 +559,6 @@ ul#primary-nav .menuparent .unli .menuparent .unli li a span
 	background-color: #DBE7F2;
 }
 
-
 /* Styling the basic apperance of the menuparents - here styled the same on hover (fixes IE bug) */
 
 #primary-nav ul.unli li .menuparent,
@@ -608,14 +571,11 @@ ul#primary-nav .menuparent .unli .menuparent .unli li a span
 	background-repeat: no-repeat;
 
 	}
-
 /* Styling the apperance of menu items on hover */
 
 #primary-nav li:hover, #primary-nav li.menuh, #primary-nav li.menuparenth, #primary-nav li.menuactiveh {
 
 }
-
-
 /* The magic - set to work for up to a 3 level menu, but can be increased unlimited */
 
 #primary-nav ul, #primary-nav li:hover ul, #primary-nav li:hover ul ul, #primary-nav li:hover ul ul ul,
@@ -636,3 +596,21 @@ ul#primary-nav .menuparent .unli .menuparent .unli li a span
 	height: 1%; 
 	}
 /********************************/
+
+
+
+/* ------------ News Module ------------ */
+ #news{ padding: 10px; }
+	
+.NewsSummary{}
+.NewsSummaryPostdate,
+.NewsSummaryCategory,
+.NewsSummaryAuthor
+{
+	font-style: italic;
+	font-size: 0.8em;
+}
+.NewsSummaryLink{margin: 2px 0;}
+
+.NewsSummaryContent{margin: 5px 0;}
+/* ------------ End News Module ------------ */

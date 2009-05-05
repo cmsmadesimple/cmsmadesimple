@@ -1,5 +1,4 @@
-{process_pagedata}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+{process_pagedata}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 {* Change lang="en" to the language of your site *}
@@ -75,12 +74,10 @@ html {filter:expression(document.execCommand("BackgroundImageCache", false, true
 {* Start Content (Navigation and Content columns) *} 
    <div id="content" class="util-clearfix">
 
-{* Start Optional tag CMS Version Information, also is a good example how smarty works. *} 
-
-      <div title="CMS - {cms_version} - {cms_versionname}" id="version">
+{* Start Optional tag CMS Version Information, also is a good example how smarty works.  *} 
+<div title="CMS - {cms_version} - {cms_versionname}" id="version">
  {capture assign='cms_version'}{cms_version|lower}{/capture}{"/-([a-z]).*/"|preg_replace:"":$cms_version}
 </div>
-
 {* End Optional tag  *} 
 
 
@@ -138,20 +135,16 @@ html {filter:expression(document.execCommand("BackgroundImageCache", false, true
  </div>
    {* End Content *}
 
-
-   {* Start Footer. Edit the footer in the Global Content Block called "footer" *}
-  
-
-
 </div>{* end pagewrapper *}
+
+{* Start Footer. Edit the footer in the Global Content Block called "footer" *}
  <span class="util-clearb">&nbsp;</span>
 <div id="footer-wrapper" class="core-center">
 <div id="footer" class="core-wrap-960 core-center util-clearfix">
 <div class="block core-float-left">{menu template='minimal_menu.tpl'  number_of_levels='1'}</div>
 <div class="block core-float-left">{menu template='minimal_menu.tpl'  start_level="2"}</div>
 <div class="block cms core-float-left">{global_content name='footer'}</div>
-      
-   </div></div> 
+</div></div> 
    {* End Footer  *}
 </div>
 </body>
