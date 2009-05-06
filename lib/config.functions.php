@@ -75,6 +75,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config['old_stylesheet'] = true;
 	$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
 	$config['backwards_compatible'] = true;
+	$config['set_names'] = false; //Default to false for pre-1.6 compatibility.  New installs get true.
 
 	#Don't set it yet
 	#$config["admin_encoding"] = "utf-8";
@@ -335,6 +336,10 @@ if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
 #could seriously slow down the admin interfaces for users.
 \$config['default_encoding'] = '{$config['default_encoding']}';
 \$config['admin_encoding'] = '{$config['admin_encoding']}';
+
+#This is a mysql specific option that is generally defaulted to true.  Only 
+#disable this for backwards compatibility or the use of non utf-8 databases.
+\$config['set_names'] = ${$config['set_names']?'true':'false'};
 
 #---------------------------------------------
 #Use the old stylesheet logic?  It's much slower, but it works with older
