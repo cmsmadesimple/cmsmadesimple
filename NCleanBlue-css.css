@@ -612,5 +612,8 @@ ul#primary-nav .menuparent .unli .menuparent .unli li a span
 }
 .NewsSummaryLink{margin: 2px 0;}
 
-.NewsSummaryContent{margin: 5px 0;}
+.NewsSummaryContent{margin: 10px 0;}
+.NewsSummaryMorelink{
+	margin: 5px 0 15px;
+}
 /* ------------ End News Module ------------ */
