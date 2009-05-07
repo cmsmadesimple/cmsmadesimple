@@ -214,7 +214,8 @@ class Smarty_CMS extends Smarty {
 
 		$db = &$gCms->GetDb();
 		$config = $gCms->config;
-		if( isset($gCms->variables['module_template_cache']) )
+		if( isset($gCms->variables['module_template_cache']) &&
+		    isset($gCms->variables['module_template_cache'][$tpl_name]) )
 		  {
 		    $tpl_timestamp = $gCms->variables['module_template_cache'][$tpl_name];
 		    return true;
@@ -226,12 +227,17 @@ class Smarty_CMS extends Smarty {
 
 		if( !count($results) ) return false;
 
-		$tmp = array();
+		if( !isset($gCms->variables['module_template_cache']) )
+		  {
+		    $gCms->variables['module_template_cache'] = array();
+		  }
 		foreach( $results as $row )
 		  {
-		    $tmp[$row['module_name'].';'.$row['template_name']] = $db->UnixTimeStamp($row['modified_date']);
+		    $key = $row['module_name'].';'.$row['template_name'];
+		    $val = $db->UnixTimeStamp($row['modified_date']);
+		    $gCms->variables['module_template_cache'][$key] = $val;
 		  }
-		$gCms->variables['module_template_cache'] = $tmp;
+
 		$tpl_timestamp = $gCms->variables['module_template_cache'][$tpl_name];
 		return true;
 	}
