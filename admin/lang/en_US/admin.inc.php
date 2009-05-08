@@ -641,7 +641,7 @@ good for most people :) </p>
 		<em>Is the same as bigPicTitleTag but for the small thumbnail images.<br/>
 		<strong>*Except that after the options you have '... click for a bigger image' 
 		or if you do not set this option then you get the default of 
-		'Click for a bigger image...'</em></strong></li>
+		'Click for a bigger image...'</strong></em></li>
         </ol>
   <p>A More Complex Example</p>
         <p>'div id' is 'cdcovers', no Caption on big images, thumbs have default caption. 
