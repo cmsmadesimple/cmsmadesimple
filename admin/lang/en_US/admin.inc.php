@@ -389,11 +389,11 @@ $lang['admin']['help_function_sitemap'] = <<<EOT
 EOT;
 $lang['admin']['help_function_adsense'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>Google adsense is a popular advertising program for websites.  This tag will take the basic parameters that would be provided by the adsense program and puts them in a easy to use tag that makes your templates look much cleaner.  See <a href="http://www.google.com/adsense" target="_blank">here</a> for more details on adsense.</p>
+	<p>Google adsense is a popular advertising program for websites. This tag will take the basic parameters that would be provided by the adsense program and puts them in a easy to use tag that makes your templates look much cleaner.  See <a href="http://www.google.com/adsense" target="_blank">here</a> for more details on adsense.</p>
 	<h3>How do I use it?</h3>
-	<p>First, sign up for a google adsense account and get the parameters for your ad.  Then just use the tag in your page/template like so: <code>{adsense ad_client="pub-random#" ad_width="120" ad_height="600" ad_format="120x600_as"}</code>
+	<p>First, sign up for a google adsense account and get the parameters for your ad. Then just use the tag in your page/template like so: <code>{adsense ad_client="pub-random#" ad_width="120" ad_height="600" ad_format="120x600_as"}</code></p>
 	<h3>What parameters does it take?</h3>
-	<p>All parameters are optional, though skipping one might not necessarily made the ad work right.  Options are:
+	<p>All parameters are optional, though skipping one might not necessarily made the ad work right.  Options are:</p>
 	<ul>
 		<li>ad_client - This would be the pub_random# id that would represent your adsense account number</li>
 		<li>ad_width - width of the ad</li>
@@ -406,7 +406,6 @@ $lang['admin']['help_function_adsense'] = <<<EOT
 		<li>color_url - the color of the URL. Use HEX color or type the color name (Ex. Red)</li>
 		<li>color_text - the color of the text. Use HEX color or type the color name (Ex. Red)</li>
 	</ul>
-	</p>
 EOT;
 $lang['admin']['help_function_sitename'] = <<<EOT
         <h3>What does this do?</h3>
@@ -1045,7 +1044,6 @@ $lang['admin']['help_function_anchor'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like: <code>{anchor anchor='here' text='Scroll Down'}</code></p>
 	<h3>What parameters does it take?</h3>
-	<p>
 	<ul>
 	<li><tt>anchor</tt> - Where we are linking to.  The part after the #.</li>
 	<li><tt>text</tt> - The text to display in the link.</li>
@@ -1055,7 +1053,6 @@ $lang['admin']['help_function_anchor'] = <<<EOT
 	<li><tt>accesskey</tt> - The accesskey for the link, if any.</li>
 	<li><em>(optional)</em> <tt>onlyhref</tt> - Only display the href and not the entire link. No other options will work</li>
 	</ul>
-	</p>
 EOT;
 
 $lang['admin']['help_function_site_mapper'] = <<<EOT
