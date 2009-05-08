@@ -313,7 +313,6 @@ $lang['admin']['help_function_stylesheet'] = <<<EOT
 		<li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
     <li><em>(optional)</em>templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
 	</ul>
-	</p>
 EOT;
 $lang['admin']['help_function_stopexpandcollapse'] = <<<EOT
 	<h3>What does this do?</h3>
@@ -482,11 +481,10 @@ $lang['admin']['help_function_oldprint'] = <<<EOT
                 <li><em>(optional)</em> more - Place additional options inside the &lt;a&gt; link.</li>
                 <li><em>(optional)</em> src_img - Show this image file. Default images/cms/printbutton.gif.</li>
                 <li><em>(optional)</em> class_img - Class of &lt;img&gt; tag if showbutton is sets.</li>
-
+        </ul>
                     <p>Example:</p>
                      <pre>{oldprint text="Printable Page"}</pre>      
-                     </li>
-        </ul>
+
 EOT;
 $lang['admin']['login_info_title'] = 'Information';
 $lang['admin']['login_info'] = 'For the Admin console to work properly';
