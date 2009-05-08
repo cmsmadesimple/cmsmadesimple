@@ -941,7 +941,6 @@ $lang['admin']['help_function_cms_selflink'] = <<<EOT
 		<h3>How do I use it?</h3>
 		<p>Just insert the tag into your template/page like: <code>{cms_selflink page=&quot;1&quot;}</code> or  <code>{cms_selflink page=&quot;alias&quot;}</code></p>
 		<h3>What parameters does it take?</h3>
-		<p>
 		<ul>
 		<li><em>(optional)</em> <tt>page</tt> - Page ID or alias to link to.</li>
 		<li><em>(optional)</em> <tt>dir anchor (internal links)</tt> - New option for an internal page link. If this is used then <tt>anchorlink</tt> should be set to your link. </li> <!-- Russ - 25-04-2006 -->
@@ -967,9 +966,8 @@ $lang['admin']['help_function_cms_selflink'] = <<<EOT
 		<li><em>(optional)</em> <tt>imageonly</tt> - If using an image, whether to suppress display of text links. If you want no text in the link at all, also set lang=0 to suppress the label. <B>Example:</B> {cms_selflink dir=&quot;next&quot; image=&quot;next.png&quot; text=&quot;Next&quot; imageonly=1}</li>
 		<li><em>(optional)</em> <tt>ext</tt> - For external links, will add class=&quot;external and info text. <strong>warning:</strong> only text, target and title parameters are compatible with this parameter</li>
 		<li><em>(optional)</em> <tt>ext_info</tt> - Used together with &quot;ext&quot; defaults to (external link).</li>
-                <li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
+        <li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 		</ul>
-		</p>
 EOT;
 
 $lang['admin']['about_function_cms_module'] = <<<EOT
@@ -982,15 +980,14 @@ $lang['admin']['about_function_cms_module'] = <<<EOT
 EOT;
 $lang['admin']['help_function_cms_module'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>This tag is used to insert modules into your templates and pages.  If a module is created to be used as a tag plugin (check it's help for details), then you should be able to insert it with this tag.</p>
+	<p>This tag is used to insert modules into your templates and pages. If a module is created to be used as a tag plugin (check it's help for details), then you should be able to insert it with this tag.</p>
 	<h3>How do I use it?</h3>
-	<p>It's just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_module module="somemodulename"}</code>
+	<p>It's just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_module module="somemodulename"}</code></p>
 	<h3>What parameters does it take?</h3>
-	<p>There is only one required parameter.  All other parameters are passed on to the module.
+	<p>There is only one required parameter.  All other parameters are passed on to the module.</p>
 	<ul>
 		<li>module - Name of the module to insert.  This is not case sensitive.</li>
 	</ul>
-	</p>
 EOT;
 
 $lang['admin']['about_function_breadcrumbs'] = <<<EOT
@@ -1014,7 +1011,6 @@ $lang['admin']['help_function_breadcrumbs'] = <<<EOT
 <h3>How do I use it?</h3>
 <p>Just insert the tag into your template/page like: <code>{breadcrumbs}</code></p>
 <h3>What parameters does it take?</h3>
-<p>
 <ul>
 <li><em>(optional)</em> <tt>delimiter</tt> - Text to seperate entries in the list (default "&gt;&gt;").</li>
 <li><em>(optional)</em> <tt>initial</tt> - 1/0 If set to 1 start the breadcrumbs with a delimiter (default 0).</li>
@@ -1025,7 +1021,6 @@ $lang['admin']['help_function_breadcrumbs'] = <<<EOT
 <li><em>(optional)</em> <tt>currentclassid</tt> - The CSS class for the &lt;span&gt; tag surrounding the current page name.</li>
 <li><em>(optional)</em> <tt>starttext</tt> - Text to append to the front of the breadcrumbs list, something like &quot;You are here&quot;.</li>
 </ul>
-</p>
 EOT;
 
 $lang['admin']['about_function_anchor'] = <<<EOT
