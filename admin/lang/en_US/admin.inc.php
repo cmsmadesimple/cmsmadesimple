@@ -93,9 +93,7 @@ $lang['admin']['help_function_content_image'] = <<<EOT
   <li><em>(optional)</em> height - The desired height of the image.</li>
 
   <li><em>(optional)</em> alt - Alternative text if the image cannot be found.</li>
-   <li><em>(optional)</em> urlonly - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</ul>
-
-
+  <li><em>(optional)</em> urlonly - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
 </ul>
 EOT;
 $lang['admin']['error_udt_name_chars'] = 'A valid UDT name starts with a letter or underscore, followed by any number of letters, numbers, or underscores.';
@@ -265,7 +263,6 @@ $lang['admin']['help_function_valid_xhtml'] = <<<EOT
 <h3>How do I use it?</h3>
 <p>Just insert the tag into your template/page like: <code>{valid_xhtml}</code></p>
 <h3>What parameters does it take?</h3>
-<p>
     <ul>
 	<li><em>(optional)</em> url         (string)     - The URL used for validation, if none is given http://validator.w3.org/check/referer is used.</li>
 	<li><em>(optional)</em> class       (string)     - If set, this will be used as class attribute for the link (a) element</li>
@@ -278,7 +275,6 @@ $lang['admin']['help_function_valid_xhtml'] = <<<EOT
 	<li><em>(optional)</em> height      (string)     - Only if 'image' is not set to false. The image height. Default is 31 (height of http://www.w3.org/Icons/valid-xhtml10)</li>
 	<li><em>(optional)</em> alt         (string)     - Only if 'image' is not set to false. The alternate text ('alt' attribute) for the image (element). If none is given the link text will be used.</li>
     </ul>
-</p>
 EOT;
 $lang['admin']['help_function_valid_css'] = <<<EOT
 <h3>What does this do?</h3>
@@ -286,7 +282,6 @@ $lang['admin']['help_function_valid_css'] = <<<EOT
 <h3>How do I use it?</h3>
 <p>Just insert the tag into your template/page like: <code>{valid_css}</code></p>
 <h3>What parameters does it take?</h3>
-<p>
     <ul>
         <li><em>(optional)</em> url         (string)     - The URL used for validation, if none is given http://jigsaw.w3.org/css-validator/check/referer is used.</li>
 	<li><em>(optional)</em> class       (string)     - If set, this will be used as class attribute for the link (a) element</li>
@@ -299,7 +294,6 @@ $lang['admin']['help_function_valid_css'] = <<<EOT
         <li><em>(optional)</em> height      (string)     - Only if 'image' is not set to false. The image height. Default is 31 (height of http://jigsaw.w3.org/css-validator/images/vcss)</li>
 	<li><em>(optional)</em> alt         (string)     - Only if 'image' is not set to false. The alternate text ('alt' attribute) for the image (element). If none is given the link text will be used.</li>
     </ul>
-</p>
 EOT;
 $lang['admin']['help_function_title'] = <<<EOT
 	<h3>What does this do?</h3>
@@ -382,7 +376,6 @@ $lang['admin']['help_function_sitemap'] = <<<EOT
     <h3>How do I use it?</h3>
     <p>Just insert the tag into your template/page like: <code>{sitemap}</code></p>
     <h3>What parameters does it take?</h3>
-    <p>
         <ul>
             <li><em>(optional)</em> <tt>class</tt> - A css_class for the ul-tag which includes the complete sitemap.</li>
             <li><em>(optional)</em> <tt>start_element</tt> - The hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu. You can use the page alias instead of hierarchy.</li>
@@ -393,7 +386,6 @@ $lang['admin']['help_function_sitemap'] = <<<EOT
             <li><em>(optional)</em> <tt>showall 1/0</tt> - We are going to show all pages if showall is enabled, else we'll only show pages with active menu entries.</li>
             <li><em>(optional)</em> <tt>add_elements</tt> - A comma separated list of alias names which will be added to the shown pages with active menu entries (showall not enabled).</li>
         </ul>
-        </p>
 EOT;
 $lang['admin']['help_function_adsense'] = <<<EOT
 	<h3>What does this do?</h3>
@@ -430,7 +422,7 @@ $lang['admin']['help_function_search'] = <<<EOT
 	Instead of having to use <code>{cms_module module='Search'}</code> you can now just use <code>{search}</code> to insert the module in a template.
 	</p>
 	<h3>How do I use it?</h3>
-	<p>Just put <code>{search}</code> in a template where you want the search input box to appear. For help about the Search module, please refer to the Search module help.
+	<p>Just put <code>{search}</code> in a template where you want the search input box to appear. For help about the Search module, please refer to the Search module help.</p>
 EOT;
 $lang['admin']['help_function_root_url'] = <<<EOT
 	<h3>What does this do?</h3>
@@ -444,7 +436,7 @@ $lang['admin']['help_function_repeat'] = <<<EOT
   <h3>What does this do?</h3>
   <p>Repeats a specified sequence of characters, a specified number of times</p>
   <h3>How do I use it?</h3>
-  <p>Insert a tag similar to the following into your template/page, like this: <code>{repeat string='repeat this ' times='3'}</code>
+  <p>Insert a tag similar to the following into your template/page, like this: <code>{repeat string='repeat this ' times='3'}</code></p>
   <h3>What parameters does it take?</h3>
   <ul>
   <li>string='text' - The string to repeat</li>
@@ -458,11 +450,11 @@ $lang['admin']['help_function_recently_updated'] = <<<EOT
 	<p>Just insert the tag into your template/page like: <code>{recently_updated}</code></p>
 	<h3>What parameters does it take?</h3>
 	<ul>
-	 <li><p><em>(optional)</em> number='10' - Number of updated pages to show.</p><p>Example: <pre>{recently_updated number='15'}</pre></p></li>
- 	 <li><p><em>(optional)</em> leadin='Last changed' - Text to show left of the modified date.</p><p>Example: <pre>{recently_updated leadin='Last Changed'}</pre></p></li>
- 	 <li><p><em>(optional)</em> showtitle='true' - Shows the titleattribute if it exists as well (true|false).</p><p>Example: <pre>{recently_updated showtitle='true'}</pre></p></li>											 	
-	 <li><p><em>(optional)</em> css_class='some_name' - Warp a div tag with this class around the list.</p><p>Example: <pre>{recently_updated css_class='some_name'}</pre></p></li>											 	
-	 <li><p><em>(optional)</em> dateformat='d.m.y h:m' - default is d.m.y h:m , use the format you whish (php -date- format)</p><p>Example: <pre>{recently_updated dateformat='D M j G:i:s T Y'}</pre></p></li>											 	
+	 <li><p><em>(optional)</em> number='10' - Number of updated pages to show.</p><p>Example: {recently_updated number='15'}</p></li>
+ 	 <li><p><em>(optional)</em> leadin='Last changed' - Text to show left of the modified date.</p><p>Example: {recently_updated leadin='Last Changed'}</p></li>
+ 	 <li><p><em>(optional)</em> showtitle='true' - Shows the titleattribute if it exists as well (true|false).</p><p>Example: {recently_updated showtitle='true'}</p></li>											 	
+	 <li><p><em>(optional)</em> css_class='some_name' - Warp a div tag with this class around the list.</p><p>Example: {recently_updated css_class='some_name'}</p></li>											 	
+	 <li><p><em>(optional)</em> dateformat='d.m.y h:m' - default is d.m.y h:m , use the format you whish (php -date- format)</p><p>Example: {recently_updated dateformat='D M j G:i:s T Y'}</p></li>											 	
 	</ul>
 	<p>or combined:</p>
 	<pre>{recently_updated number='15' showtitle='false' leadin='Last Change: ' css_class='my_changes' dateformat='D M j G:i:s T Y'}</pre>
@@ -473,13 +465,13 @@ $lang['admin']['help_function_print'] = <<<EOT
 	Instead of having to use <code>{cms_module module='Printing'}</code> you can now just use <code>{print}</code> to insert the module on pages and templates.
 	</p>
 	<h3>How do I use it?</h3>
-	<p>Just put <code>{print}</code> on a page or in a template. For help about the Printing module, what parameters it takes etc., please refer to the Printing module help.
+	<p>Just put <code>{print}</code> on a page or in a template. For help about the Printing module, what parameters it takes etc., please refer to the Printing module help.</p>
 EOT;
 $lang['admin']['help_function_oldprint'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Creates a link to only the content of the page.</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{oldprint}</code><br></p>
+	<p>Just insert the tag into your template/page like: <code>{oldprint}</code><br /></p>
         <h3>What parameters does it take?</h3>
         <ul>
                 <li><em>(optional)</em> goback - Set to "true" to show a "Go Back" link on the page to print.</li>
@@ -487,7 +479,7 @@ $lang['admin']['help_function_oldprint'] = <<<EOT
                 <li><em>(optional)</em> script - Set to "true" and in print page will by used java script for run print of page.</li>
                 <li><em>(optional)</em> showbutton - Set to "true" and will show a printer graphic instead of a text link.</li>
                 <li><em>(optional)</em> class - class for the link, defaults to "noprint".</li>
-                <li><em>(optional)</em> text - Text to use instead of "Print This Page" for the print link.
+                <li><em>(optional)</em> text - Text to use instead of "Print This Page" for the print link.</li>
                 <li><em>(optional)</em> title - Text to show for title attribute. If blank show text parameter.</li>
                 <li><em>(optional)</em> more - Place additional options inside the &lt;a&gt; link.</li>
                 <li><em>(optional)</em> src_img - Show this image file. Default images/cms/printbutton.gif.</li>
@@ -514,7 +506,7 @@ $lang['admin']['help_function_news'] = <<<EOT
 	Instead of having to use <code>{cms_module module='News'}</code> you can now just use <code>{news}</code> to insert the module on pages and templates.
 	</p>
 	<h3>How do I use it?</h3>
-	<p>Just put <code>{news}</code> on a page or in a template. For help about the News module, what parameters it takes etc., please refer to the News module help.
+	<p>Just put <code>{news}</code> on a page or in a template. For help about the News module, what parameters it takes etc., please refer to the News module help.</p>
 EOT;
 $lang['admin']['help_function_modified_date'] = <<<EOT
         <h3>What does this do?</h3>
@@ -550,7 +542,7 @@ $lang['admin']['help_function_menu'] = <<<EOT
 	Instead of having to use <code>{cms_module module='MenuManager'}</code> you can now just use <code>{menu}</code> to insert the module on pages and templates.
 	</p>
 	<h3>How do I use it?</h3>
-	<p>Just put <code>{menu}</code> on a page or in a template. For help about the Menu Manager module, what parameters it takes etc., please refer to the Menu Manager module help.
+	<p>Just put <code>{menu}</code> on a page or in a template. For help about the Menu Manager module, what parameters it takes etc., please refer to the Menu Manager module help.</p>
 EOT;
 $lang['admin']['help_function_last_modified_by'] = <<<EOT
         <h3>What does this do?</h3>
@@ -827,16 +819,16 @@ $lang['admin']['help_function_embed'] = <<<EOT
         <br/>
         <h3>What parameters does it take?</h3>
         <ul>
-            <li><em>(required)</em>url - the url to be included 
+            <li><em>(required)</em>url - the url to be included</li> 
             <li><em>(required)</em>header=true - this will generate the header code for good resizing of the IFRAME.</li>
-            <li>(optional)name - an optional name to use for the iframe (instead of myframe).<p>If this option is used, it must be used identically in both calls, i.e: {embed header=true name=foo} and {embed name=foo url=http://www.google.com} calls.</p>
+            <li>(optional)name - an optional name to use for the iframe (instead of myframe).<p>If this option is used, it must be used identically in both calls, i.e: {embed header=true name=foo} and {embed name=foo url=http://www.google.com} calls.</p></li>
         </ul>
 EOT;
 $lang['admin']['help_function_edit'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Creates a link to edit the page</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{edit}</code><br></p>
+	<p>Just insert the tag into your template/page like: <code>{edit}</code><br /></p>
         <h3>What parameters does it take?</h3>
         <ul>
                 <li><em>(optional)</em>showbutton - Set to "true" and will show a edit graphic instead of a text link.</li>
@@ -870,7 +862,7 @@ $lang['admin']['help_function_content'] = <<<EOT
 		<li><em>(optional)</em>block - Allows you to have more than one content block per page.  When multiple content tags are put on a template, that number of edit boxes will be displayed when the page is edited.
 <p>Example:</p>
 <pre>{content block="Second Content Block"}</pre>
-<p>Now, when you edit a page there will a textarea called "Second Content Block".</li>
+<p>Now, when you edit a page there will a textarea called "Second Content Block".</p></li>
 		<li><em>(optional)</em>wysiwyg (true/false) - If set to false, then a wysiwyg will never be used while editing this block.  If true, then it acts as normal.  Only works when block parameter is used.</li>
 		<li><em>(optional)</em>oneline (true/false) - If set to true, then only one edit line will be shown while editing this block.  If false, then it acts as normal.  Only works when block parameter is used.</li>
 <li><em>(optional)</em>size - Applicable only when the oneline option is used this optional parameter allows you to specify the size of the edit field.  The default value is 50.</li>
@@ -894,7 +886,7 @@ $lang['admin']['help_function_cms_versionname'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This tag is used to insert the current version name of CMS into your template or page.  It doesn't display any extra besides the version name.</p>
 	<h3>How do I use it?</h3>
-	<p>This is just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_versionname}</code>
+	<p>This is just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_versionname}</code></p>
 	<h3>What parameters does it take?</h3>
 	<p>It takes no parameters.</p>
 EOT;
@@ -903,7 +895,7 @@ $lang['admin']['help_function_cms_version'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This tag is used to insert the current version number of CMS into your template or page.  It doesn't display any extra besides the version number.</p>
 	<h3>How do I use it?</h3>
-	<p>This is just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_version}</code>
+	<p>This is just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_version}</code></p>
 	<h3>What parameters does it take?</h3>
 	<p>It takes no parameters.</p>
 EOT;
