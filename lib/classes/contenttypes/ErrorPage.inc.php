@@ -61,7 +61,7 @@ class ErrorPage extends Content
     $this->RemoveProperty('cachable',false);
 
     $this->RemoveProperty('alias','');
-    $this->AddBaseProperty('alias',1,1);
+    $this->AddBaseProperty('alias',10,1);
 
     #Turn on preview
     $this->mPreview = true;

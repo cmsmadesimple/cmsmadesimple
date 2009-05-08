@@ -1789,17 +1789,20 @@ class ContentBase
 	  if( !empty($tmp) )
 	    {
 	      $tmp = explode(',',$tmp);
-	      foreach( $this->_attributes as $one )
+	      foreach( $tmp as $basic )
 		{
-		  $found = 0;
-		  foreach( $tmp as $basic )
+		  $found = NULL;
+		  foreach( $this->_attributes as $one )
 		    {
 		      if( $one[0] == $basic ) {
-			$found = 1; 
+			$found = $one;
 			break;
 		      }
 		    }
-		  $basic_attributes[] = $one;
+		  if( $found )
+		    {
+		      $basic_attributes[] = $found;
+		    }
 		}
 	    }
 
