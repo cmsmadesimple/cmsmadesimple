@@ -317,7 +317,7 @@ EOT;
 $lang['admin']['help_function_stopexpandcollapse'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Enables content to be expandable and collapsable. Like the following:<br />
-	<a href="#expand1" onClick="expandcontent('expand1')" style="cursor:hand; cursor:pointer">Click here for more info</a><span id="expand1" class="expand"><a name="help"></a> - Here is all the info you will ever need...</a></span></p>
+	a href="#expand1" onClick="expandcontent('expand1')" style="cursor:hand; cursor:pointer">Click here for more info</a><span id="expand1" class="expand"><a name="help"></a> - Here is all the info you will ever need...</a></span></p>
 
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like:<br />
@@ -342,8 +342,8 @@ $lang['admin']['help_function_stopexpandcollapse'] = <<<EOT
 EOT;
 $lang['admin']['help_function_startexpandcollapse'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>Enables content to be expandable and collapsable. Like the following:<br />
-	<a href="#expand1" onClick="expandcontent('expand1')" style="cursor:hand; cursor:pointer">Click here for more info</a><span id="expand1" class="expand"><a name="help"></a> - Here is all the info you will ever need...</a></span></p>
+	<p>Enables content to be expandable and collapsable. Like the following:</p>
+	&lt;a href="#expand1" onClick="expandcontent('expand1')" style="cursor:hand; cursor:pointer"&gt;Click here for more info&lt;/a:gt;<span id="expand1" class="expand">&lt;a name="help"&gt; - Here is all the info you will ever need...&lt;/a&gt;</span>
 
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like: <code>{startExpandCollapse id="name" title="Click Here"}</code>. Also, you must use the {stopExpandCollapse} at the end of the collapseable content. Here is an example:<br />
