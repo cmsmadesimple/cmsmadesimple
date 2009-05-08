@@ -255,7 +255,6 @@ $lang['admin']['help_function_current_date'] = <<<EOT
 		<li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
 		<li><em>(optional)</em>ucword - If true return uppercase the first character of each word.</li>
 	</ul>
-	</p>
 EOT;
 $lang['admin']['help_function_valid_xhtml'] = <<<EOT
 <h3>What does this do?</h3>
@@ -756,21 +755,19 @@ $lang['admin']['help_function_googlepr'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Display's a number that represents your google pagerank.</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{googlepr}</code><br>
-	<br>
+	<p>Just insert the tag into your template/page like: <code>{googlepr}</code><br /></p>
 
 	<h3>What parameters does it take?</h3>
 	<ul>
 		<li><em>(optional)</em> domain - The website to display the pagerank for.</li>
 	</ul>
-	</p>
 EOT;
 $lang['admin']['help_function_google_search'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Search's your website using Google's search engine.</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{google_search}</code><br>
-	<br>
+	<p>Just insert the tag into your template/page like: <code>{google_search}</code><br />
+	<br />
 	Note: Google needs to have your website indexed for this to work. You can submit your website to google <a href="http://www.google.com/addurl.html">here</a>.</p>
 	<h3>What if I want to change the look of the textbox or button?</h3>
 	<p>The look of the textbox and button can be changed via css. The textbox is given an id of textSearch and the button is given an id of buttonSearch.</p>
@@ -780,7 +777,6 @@ $lang['admin']['help_function_google_search'] = <<<EOT
 		<li><em>(optional)</em> domain - This tells google the website domain to search. This script tries to determine this automatically.</li>
 		<li><em>(optional)</em> buttonText - The text you want to display on the search button. The default is "Search Site".</li>
 	</ul>
-	</p>
 EOT;
 $lang['admin']['help_function_global_content'] = <<<EOT
 	<h3>What does this do?</h3>
@@ -945,10 +941,12 @@ $lang['admin']['help_function_cms_selflink'] = <<<EOT
 		<li><em>(optional)</em> <tt>page</tt> - Page ID or alias to link to.</li>
 		<li><em>(optional)</em> <tt>dir anchor (internal links)</tt> - New option for an internal page link. If this is used then <tt>anchorlink</tt> should be set to your link. </li> <!-- Russ - 25-04-2006 -->
 		<li><em>(optional)</em> <tt>anchorlink</tt> - New paramater for an internal page link. If this is used then <tt>dir =&quot;anchor&quot;</tt> should also be set. No need to add the #, because it is added automatically.</li> <!-- Russ - 25-04-2006 -->
-		<li><em>(optional)</em> <tt>urlparam</tt> - Specify additional parameters to the URL.  <strong>Do not use this in conjunction with the <em>anchorlink</em> parameter</em></strong>
+		<li><em>(optional)</em> <tt>urlparam</tt> - Specify additional parameters to the URL.  <strong>Do not use this in conjunction with the <em>anchorlink</em> parameter</strong></li>
 		<li><em>(optional)</em> <tt>tabindex =&quot;a value&quot;</tt> - Set a tabindex for the link.</li> <!-- Russ - 22-06-2005 -->
 		<li><em>(optional)</em> <tt>dir start/next/prev/up (previous)</tt> - Links to the default start page or the next or previous page, or the parent page (up). If this is used <tt>page</tt> should not be set.</li> <!-- mbv - 21-06-2005 -->
-		<B>Note!</B> Only one of the above may be used in the same cms_selflink statement!!
+		</ul>
+		<strong>Note!</strong> Only one of the above may be used in the same cms_selflink statement!!
+		<ul>
 		<li><em>(optional)</em> <tt>text</tt> - Text to show for the link.  If not given, the Page Name is used instead.</li>
 		<li><em>(optional)</em> <tt>menu 1/0</tt> - If 1 the Menu Text is used for the link text instead of the Page Name</li> <!-- mbv - 21-06-2005 -->
 		<li><em>(optional)</em> <tt>target</tt> - Optional target for the a link to point to.  Useful for frame and javascript situations.</li>
@@ -963,7 +961,7 @@ $lang['admin']['help_function_cms_selflink'] = <<<EOT
 		<li><em>(optional)</em> <tt>href</tt> - If href is used only the href value is generated (no other parameters possible). <strong>Example:</strong> &lt;a href=&quot;{cms_selflink href=&quot;alias&quot;}&quot;&gt;&lt;img src=&quot;&quot;&gt;&lt;/a&gt;</li>
 		<li><em>(optional)</em> <tt>image</tt> - A url of an image to use in the link. <strong>Example:</strong> {cms_selflink dir=&quot;next&quot; image=&quot;next.png&quot; text=&quot;Next&quot;}</li>
 		<li><em>(optional)</em> <tt>alt</tt> - Alternative text to be used with image (alt="" will be used if no alt parameter is given).</li>
-		<li><em>(optional)</em> <tt>imageonly</tt> - If using an image, whether to suppress display of text links. If you want no text in the link at all, also set lang=0 to suppress the label. <B>Example:</B> {cms_selflink dir=&quot;next&quot; image=&quot;next.png&quot; text=&quot;Next&quot; imageonly=1}</li>
+		<li><em>(optional)</em> <tt>imageonly</tt> - If using an image, whether to suppress display of text links. If you want no text in the link at all, also set lang=0 to suppress the label. <strong>Example:</strong> {cms_selflink dir=&quot;next&quot; image=&quot;next.png&quot; text=&quot;Next&quot; imageonly=1}</li>
 		<li><em>(optional)</em> <tt>ext</tt> - For external links, will add class=&quot;external and info text. <strong>warning:</strong> only text, target and title parameters are compatible with this parameter</li>
 		<li><em>(optional)</em> <tt>ext_info</tt> - Used together with &quot;ext&quot; defaults to (external link).</li>
         <li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
