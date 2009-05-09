@@ -760,7 +760,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
       /* default content */
       if( $columnstodisplay['default'] )
 	{
-	  $columns['default'] = '&nbsp';
+	  $columns['default'] = '&nbsp;';
 	  $txt = '';
 	  if (check_permission($userid,'Manage All Content'))
 	    {
