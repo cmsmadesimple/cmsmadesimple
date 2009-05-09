@@ -340,11 +340,12 @@ div#main dl {
 	margin-left:50px;
 	}
 	
-#footer ul li {
+#footer ul ul {
+	margin-left:0px;
 }
 
 #footer ul li a {
-	color: #FFF;
+	color: #fff;
 	display: block;
 	font-weight: normal;
 	margin-bottom:0.5em;
@@ -355,6 +356,7 @@ div#main dl {
 	text-decoration: underline;
 	font-weight: bold;
 	}			
+		
 
 /* 
 ------------------------------
