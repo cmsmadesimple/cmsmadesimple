@@ -316,9 +316,7 @@ $lang['admin']['help_function_stylesheet'] = <<<EOT
 EOT;
 $lang['admin']['help_function_stopexpandcollapse'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>Enables content to be expandable and collapsable. Like the following:</p>
-	&lt;a href="#expand1" onClick="expandcontent('expand1')" style="cursor:hand; cursor:pointer"&gt;Click here for more info&lt;/a&gt;<span id="expand1" class="expand">&lt;a name="help"&gt; - Here is all the info you will ever need...&lt;/a&gt;</span>
-
+	<p>Uses Javascript to enable content in an area to be expandable and collapsable on a mouse click.</p>
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like:<br />
 	<br />
