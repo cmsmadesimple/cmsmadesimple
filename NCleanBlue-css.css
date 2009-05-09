@@ -40,9 +40,7 @@ body{
 strong {
 	font-weight: bold;
 }
-br{
-	display: block;
-}
+
 p {
 	padding:0;
 	margin-top: 0.5em;
