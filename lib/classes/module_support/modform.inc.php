@@ -60,7 +60,6 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	$method = cms_htmlentities($method);
 	$enctype = cms_htmlentities($enctype);
 	$idsuffix = cms_htmlentities($idsuffix);
-	$extra = cms_htmlentities($extra);
 
 	if ($idsuffix == '')
 		$idsuffix = $formcount;
