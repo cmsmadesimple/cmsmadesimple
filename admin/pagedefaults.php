@@ -73,7 +73,7 @@ if( isset( $_POST['submit'] ) )
     $page_metadata = $_POST['page_metadata'];
     $page_defaultcontent = $_POST['page_defaultcontent'];
     $page_defaultparent = $_POST['parent_id'];
-    if( isset( $_POST['additional_editors'] ) )
+    if( isset( $_POST['additional_editors'] ) && !empty($_POST['additional_editors']) )
       {
 	$additional_editors = implode(',',$_POST['additional_editors']);
       }
