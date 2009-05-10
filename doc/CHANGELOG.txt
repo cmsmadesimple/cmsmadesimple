@@ -1,7 +1,6 @@
 Version 1.6 - New Caledonia
 -----------------------------
 - Fixes of several bugs: 
-  - Add a few logic in preview
   - #2786 Bulk page changes don't show messages
   - #2831 Upgrade process continue even if database is empty
   - #3040 no external view after moving pages up and down (and deleting pages) in listcontent
@@ -17,6 +16,7 @@ Version 1.6 - New Caledonia
   - Fixed issue with encoding entities in cms_selflink tag
   - Removed the javascript in the changegroupperms and changegroupassign
     stuff, and replaced it with a filter button.
+  - More...
 
 - Feature Requests:
   - #2605 adding a 'forgot password' submission on the login panel  
@@ -31,11 +31,14 @@ Version 1.6 - New Caledonia
       of pages you are either owner of, or additional editor of.
   - Remove the 'Modify Page Structure' permission
   - Add a 'Manage All Content' permission that provides global
-    capability on all content objects.
+    capability on all content objects.  Only users with this permission
+    can add top level pages.
   - Rework of the content types
     - Faster, leaner, smarter
     - {content} block is now just a shortcut for {content block='content_en'}
       and there is no special handling
+  - Add the ability for a site administrator to select which fields are visible
+    to normal editors when adding or editing content.
   - Complete rewrite of site preferences
   - Page Preview now works for templates with multiple content blocks
   - Add the ability to specify ip addresses to exclude from the sitedown
@@ -49,7 +52,6 @@ Version 1.6 - New Caledonia
     action.
 
 - Libs Updates: 
-  - Smarty
   - xAjax 0.5
   - script.aculo.us 1.8.2 (included  Update to Prototype 1.6.0.3)
   - Dynamic Tabs 1.0.3
