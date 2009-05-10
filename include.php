@@ -133,11 +133,6 @@ require_once(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 debug_buffer('loading php4 entity decode functions');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
 
-if (isset($config['backwards_compatible']) && $config['backwards_compatible'] == true)
-{
-	load_backwards_compatibility();
-}
-
 debug_buffer('done loading files');
 
 #Load them into the usual variables.  This'll go away a little later on.
@@ -250,29 +245,6 @@ debug_buffer('', 'End of include');
 function sanitize_get_var(&$value, $key)
 {
     $value = eregi_replace('\<\/?script[^\>]*\>', '', $value);
-}
-
-function load_backwards_compatibility()
-{
-	$dirname = dirname(__FILE__);
-	debug_buffer('loading template functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.templateoperations.inc.php'));
-	debug_buffer('loading gcb functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.globalcontentoperations.inc.php'));
-	debug_buffer('loading module class');
-	require_once(cms_join_path($dirname,'lib','classes','class.moduleoperations.inc.php'));
-	debug_buffer('loading bookmark functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.bookmarkoperations.inc.php'));
-	debug_buffer('loading content class');
-	require_once(cms_join_path($dirname,'lib','classes','class.contentoperations.inc.php'));
-	debug_buffer('loading user functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.useroperations.inc.php'));
-	debug_buffer('loading group functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.groupoperations.inc.php'));
-	debug_buffer('loading stylesheet functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.stylesheetoperations.inc.php'));
-	debug_buffer('loading user tags functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.usertagoperations.inc.php'));
 }
 
 # vim:ts=4 sw=4 noet

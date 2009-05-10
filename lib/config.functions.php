@@ -61,7 +61,6 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["auto_alias_content"] = true;
 	$config["image_manipulation_prog"] = "GD";
 	$config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
-	$config["use_Indite"] = true;
 	$config["image_uploads_path"] = $config["root_path"] . "/uploads/images";
 	$config["image_uploads_url"] = '/uploads/images'; 
 	$config["default_encoding"] = "";
@@ -73,7 +72,6 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["use_adodb_lite"] = true;
 	$config["locale"] = "";
 	$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
-	$config['backwards_compatible'] = true;
 	$config['set_names'] = false; //Default to false for pre-1.6 compatibility.  New installs get true.
 
 	#Don't set it yet
@@ -343,10 +341,6 @@ if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
 # URL of the Admin Panel section of the User Handbook
 \$config['wiki_url'] = '{$config['wiki_url']}';
 
-#Enable backwards compatibility mode?  This basically will allow some 
-#modules written before 1.0 was released to work.  Keep in mind that this 
-#will use a lot more memory and isn't guaranteed to fix the problem.
-\$config['backwards_compatible'] = ${$config['backwards_compatible']?'true':'false'};
 EOF;
 	return $result;
 }
