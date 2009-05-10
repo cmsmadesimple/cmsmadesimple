@@ -184,6 +184,7 @@ class ContentBase
 
     var $_attributes;
     var $_prop_defaults;
+    var $_add_mode;
 
     /************************************************************************/
     /* Constructor related													*/
@@ -1542,7 +1543,7 @@ class ContentBase
      */
     function DoAutoAlias()
     {
-      return TRUE;
+      return $this->_add_mode;
     }
 
     /**
@@ -1583,14 +1584,6 @@ class ContentBase
 	return $text;
     }
 
-    /**
-     * Show the Advanced Edit interface
-     */
-    function AdvancedEdit($adding = false)
-    {
-	# :TODO:
-	return "<tr><td>Advanced Edit Not Defined</td></tr>";
-    }
 
     /**
      * Show Help
@@ -1713,6 +1706,11 @@ class ContentBase
 	function IsDefaultPossible()
 	{
 		return FALSE;
+	}
+
+	function SetAddMode($flag = true)
+	{
+	  $this->_add_mode = $flag;
 	}
 
 	/* private */

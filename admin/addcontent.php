@@ -86,6 +86,7 @@ if (isset($_POST["serialized_content"]))
 	$contentops =& $gCms->GetContentOperations();
 	$contentops->LoadContentType($_POST['orig_content_type']);
 	$contentobj = unserialize(base64_decode($_POST["serialized_content"]));
+	$contentobj->SetAddMode();
 	if (strtolower(get_class($contentobj)) != $content_type)
 	{
 		#Fill up the existing object with values in form
@@ -107,6 +108,7 @@ else
 
   $contentops =& $gCms->GetContentOperations();
   $contentobj = $contentops->CreateNewContent($content_type);
+  $contentobj->SetAddMode();
   $contentobj->SetOwner($userid);
   $contentobj->SetCachable($page_cachable);
   $contentobj->SetActive($active);
@@ -148,6 +150,7 @@ if ($access)
 	if ($submit || $apply)
 	{
 		#Fill contentobj with parameters
+	  $contentobj->SetAddMode();
 		$contentobj->FillParams($_POST);
 		$contentobj->SetOwner($userid);
 
