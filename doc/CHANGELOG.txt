@@ -43,6 +43,13 @@ Version 1.6 - New Caledonia
   - Page Preview now works for templates with multiple content blocks
   - Add the ability to specify ip addresses to exclude from the sitedown
     message.
+  - Clean up the config.php file
+    - Remove the two pretty url variables and replace it with one
+      variable that can have three values.  This should help eliminate 
+      a few problems.
+    - Add a set_names variable that allows databases to use utf-8 by default
+      on new installs (true on new installs, false is assumed).
+    - Remove old, invalid config entries.
 
 - Menu Manager
   - Complete rewrite of the admin interface.  It is now much easier to understand,
