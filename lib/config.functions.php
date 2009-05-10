@@ -72,7 +72,6 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["page_extension"] = "";
 	$config["use_adodb_lite"] = true;
 	$config["locale"] = "";
-	$config['old_stylesheet'] = true;
 	$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
 	$config['backwards_compatible'] = true;
 	$config['set_names'] = false; //Default to false for pre-1.6 compatibility.  New installs get true.
@@ -340,13 +339,6 @@ if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
 #This is a mysql specific option that is generally defaulted to true.  Only 
 #disable this for backwards compatibility or the use of non utf-8 databases.
 \$config['set_names'] = ${$config['set_names']?'true':'false'};
-
-#---------------------------------------------
-#Use the old stylesheet logic?  It's much slower, but it works with older
-#versions of CMSMS.  You'll also need this set to true if there is a module
-#that uses a stylesheet callback.  Leave it as false instead you really
-#need it.
-\$config['old_stylesheet'] = ${$config['old_stylesheet']?'true':'false'};
 
 # URL of the Admin Panel section of the User Handbook
 \$config['wiki_url'] = '{$config['wiki_url']}';
