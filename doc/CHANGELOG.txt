@@ -44,6 +44,10 @@ Version 1.6 - New Caledonia
   - Add the ability to specify ip addresses to exclude from the sitedown
     message.
 
+- Menu Manager
+  - Complete rewrite of the admin interface.  It is now much easier to understand,
+    and also possible to select different a different default template.
+
 - News 
   - #2620 Extra fields are not displayed in the print template
   - #3163 Typo in News module
@@ -68,6 +72,8 @@ Version 1.6 - New Caledonia
 - Search
   - Template, added a class to submit and adjustments.
   - New Param for method Post (pretty urls) - E.g. {search search_method="post"}
+  - Remove Help Tab
+  - Add better statistics capabilities.
 
 - Default Themes
   - New theme NCleanBlue
