@@ -140,7 +140,7 @@ html {filter:expression(document.execCommand("BackgroundImageCache", false, true
 {* Start Footer. Edit the footer in the Global Content Block called "footer" *}
  <span class="util-clearb">&nbsp;</span>
 <div id="footer-wrapper">
-<div id="footer" class="core-wrap-960>
+<div id="footer" class="core-wrap-960">
 <div class="block core-float-left">{menu template='minimal_menu.tpl'  number_of_levels='1'}</div>
 <div class="block core-float-left">{menu template='minimal_menu.tpl'  start_level="2"}</div>
 <div class="block cms core-float-left">{global_content name='footer'}</div>
