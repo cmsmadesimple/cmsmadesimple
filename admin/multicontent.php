@@ -43,35 +43,38 @@ $hm =& $gCms->GetHierarchyManager();
 $nodelist = array();
 $bulk = false;
 
-function get_delete_list($sel_nodes,&$parent = NULL)
+$mypages = author_pages($userid);
+
+function &get_delete_list($sel_nodes,&$parent = NULL,$depth = 0)
 {
   // get the list of items we should delete
   $userid = get_userid();
   if( !check_permission($userid,'Remove Pages') ) return FALSE;
-  $mypages = author_pages($userid);
+  global $mypages;
 
   $result = array();
   foreach( $sel_nodes as $node )
     {
       if( check_ownership($userid, $node->getTag()) || quick_check_authorship($node->getTag(), $mypages) )
 	{
+	  $content =& $node->GetContent();
+	  $result[] =& $content;
+
 	  $children =& $node->getChildren();
 	  $tmp = TRUE;
 	  if( isset($children) && count($children) )
 	    {
-	      $tmp = get_delete_list($children,$node);
+	      $tmp = get_delete_list($children,$node,$depth + 1);
 	      if( $tmp === FALSE ) continue;
 	    }
 	  if( is_array($tmp) )
 	    {
-	      foreach( $tmp as $one )
+	      for( $i = 0; $i < count($tmp); $i++ )
 		{
+		  $one =& $tmp[$i];
 		  $result[] =& $one;
 		}
 	    }
-
-	  $content =& $node->GetContent();
-	  $result[] =& $content;
 	}
       else
 	{
@@ -82,19 +85,7 @@ function get_delete_list($sel_nodes,&$parent = NULL)
 	}
     }
 
-  $tmptag = array();
-  $tmpr = array();
-  for( $i = 0; $i < count($result); $i++ )
-    {
-      $obj =& $result[$i];
-      $tag = $obj->Id();
-      if( !in_array($tag,$tmptag) )
-	{
-	  $tmpr[] =& $obj;
-	  $tmptag[] = $tag;
-	}
-    }
-  return $tmpr;
+  return $result;
 }
 
 function toggleexpand($contentid, $collapse = false)
@@ -235,7 +226,7 @@ else
 	}
 	if ($action == 'delete' )
 	  {
-	    $nodelist = get_delete_list($nodelist);
+	    $nodelist =& get_delete_list($nodelist);
 	  }
 
 	if ($action == 'reorder' && $reorder_error == FALSE)
