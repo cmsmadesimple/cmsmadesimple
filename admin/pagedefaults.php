@@ -58,7 +58,6 @@ $page_metadata = get_site_preference('page_metadata',
 	           "<!-- ".lang('msg_defaultmetadata')." -->");
 $page_defaultcontent = get_site_preference("defaultpagecontent",
 		   "<!-- ".lang('msg_defaultcontent')." -->");
-$page_defaultparent = get_site_preference('default_parent_page',-1);
 $additional_editors = get_site_preference('additional_editors','');
 
 $message = '';
@@ -72,7 +71,6 @@ if( isset( $_POST['submit'] ) )
     $page_cachable = (isset($_POST['page_cachable'])?"1":"0");
     $page_metadata = $_POST['page_metadata'];
     $page_defaultcontent = $_POST['page_defaultcontent'];
-    $page_defaultparent = $_POST['parent_id'];
     if( isset( $_POST['additional_editors'] ) && !empty($_POST['additional_editors']) )
       {
 	$additional_editors = implode(',',$_POST['additional_editors']);
@@ -94,7 +92,6 @@ if( isset( $_POST['submit'] ) )
     set_site_preference( 'page_cachable', $page_cachable );
     set_site_preference( 'page_metadata', $page_metadata );
     set_site_preference( 'defaultpagecontent', $page_defaultcontent );
-    set_site_preference( 'default_parent_page', $page_defaultparent );
     set_site_preference( 'additional_editors', $additional_editors );
     set_site_preference( 'page_searchable', $page_searchable );
     set_site_preference( 'page_extra1', $page_extra1 );
@@ -155,15 +152,15 @@ if ($message != "") {
           </p>
         </div>
 
-	<div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
-	  <p class="pageinput">
-	  <?php
-	    $contentops =& $gCms->GetContentOperations();
-	    echo $contentops->CreateHierarchyDropdown(0, $page_defaultparent);
-	  ?>
-	  </p>
-	</div>	
+// 	<div class="pageoverflow">
+// 	  <p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
+// 	  <p class="pageinput">
+// 	  <?php
+// 	    $contentops =& $gCms->GetContentOperations();
+// 	    echo $contentops->CreateHierarchyDropdown(0, $page_defaultparent);
+// 	  ?>
+// 	  </p>
+// 	</div>	
 
         <div class="pageoverflow">
 	  <p class="pagetext"><?php echo lang('metadata')?>:</p>

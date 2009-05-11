@@ -72,6 +72,12 @@ if (isset($_POST['gcb_wysiwyg'])) $gcb_wysiwyg = 1;
 $date_format_string = '%x %X';
 if (isset($_POST['date_format_string'])) $date_format_string = $_POST['date_format_string'];
 
+$default_parent = '';
+if( isset($_POST['parent_id']) )
+  {
+    $default_parent = $_POST['parent_id'];
+  }
+
 $ignoredmodules = array();
 if (isset($_POST['ignoredmodules']) )
   {
@@ -113,6 +119,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'enablenotifications',$enablenotifications);
 	set_preference($userid, 'paging', $paging);
 	set_preference($userid, 'date_format_string', $date_format_string);
+	set_preference($userid, 'default_parent', $default_parent);
 	set_preference($userid, 'homepage', $homepage );
 	set_preference($userid, 'ignoredmodules', implode(',',$ignoredmodules));
 	audit(-1, '', 'Edited User Preferences');
@@ -131,6 +138,7 @@ if (isset($_POST["submit_form"])) {
 	$enablenotifications = get_preference($userid, 'enablenotifications', 1);
 	$paging = get_preference($userid, 'paging', 0);
 	$date_format_string = get_preference($userid, 'date_format_string','%x %X');
+	$default_parent = get_preference($userid,'default_parent',-2);
 
 	$homepage = get_preference($userid,'homepage');
 	$to = '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
@@ -241,6 +249,17 @@ if (FALSE == empty($page_message)) {
 		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="255" /><?php echo lang('date_format_string_help') ?>
 		</div>
 	    </div>
+
+	<div class="pageoverflow">
+	  <p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
+	  <p class="pageinput">
+	  <?php
+	    $contentops =& $gCms->GetContentOperations();
+echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1);
+	  ?>
+	  </p>
+	</div>	
+
             <div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('admintheme');  ?>:</div>
 				<div class="pageinput">

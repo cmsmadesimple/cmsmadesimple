@@ -103,7 +103,7 @@ else
   $showinmenu = ((get_site_preference('page_showinmenu',"1")=="1")?true:false);
   $metadata = get_site_preference('page_metadata');
 
-  $parent_id = get_site_preference('default_parent_page', -1);
+  $parent_id = get_preference($userid, 'default_parent', -2);
   if (isset($_GET["parent_id"])) $parent_id = $_GET["parent_id"];
 
   $contentops =& $gCms->GetContentOperations();
@@ -127,6 +127,7 @@ else
   // this stuff should be changed somehow.
   $contentobj->SetMetadata($metadata);
   $contentobj->SetPropertyValue('content_en', get_site_preference('defaultpagecontent')); // why?
+
   if ($parent_id!=-1) $contentobj->SetParentId($parent_id);
   $contentobj->SetPropertyValue('searchable',
 				get_site_preference('page_searchable',1));
