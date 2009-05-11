@@ -356,7 +356,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 	}
 	$result = "";
 
-	$title = $name;
+	$title = (isset($name)) ? $name : '';
 	if( isset($params['title']) ) 
 	  $title = $params['title'];
 	else if( !empty($titleattr) )
