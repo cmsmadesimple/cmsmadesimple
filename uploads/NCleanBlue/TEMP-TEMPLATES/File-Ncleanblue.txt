@@ -29,7 +29,7 @@
 <![endif]-->
 {literal}
 <!--[if IE 6]>
-<script type="text/javascript"  src="uploads/NCleanBlue/ie6fix.js"></script>
+<script type="text/javascript"  src="uploads/NCleanBlue/js/ie6fix.js"></script>
 <script type="text/javascript">
  // argument is a CSS selector
  DD_belatedPNG.fix('.sbar-top,.sbar-bottom,.main-top,.main-bottom,#version');
