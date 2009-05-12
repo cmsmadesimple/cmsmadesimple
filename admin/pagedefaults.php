@@ -152,16 +152,6 @@ if ($message != "") {
           </p>
         </div>
 
-// 	<div class="pageoverflow">
-// 	  <p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
-// 	  <p class="pageinput">
-// 	  <?php
-// 	    $contentops =& $gCms->GetContentOperations();
-// 	    echo $contentops->CreateHierarchyDropdown(0, $page_defaultparent);
-// 	  ?>
-// 	  </p>
-// 	</div>	
-
         <div class="pageoverflow">
 	  <p class="pagetext"><?php echo lang('metadata')?>:</p>
           <p class="pageinput">
