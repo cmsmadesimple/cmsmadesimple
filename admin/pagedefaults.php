@@ -198,6 +198,7 @@ if ($message != "") {
         <div class="pageoverflow">
           <?php 
 	    $my_addeditors = explode(',',$additional_editors);
+            $contentops =& $gCms->GetContentOperations();
             $content = new ContentBase();
             $addeditors = $content->ShowAdditionalEditors($my_addeditors);
           ?>
