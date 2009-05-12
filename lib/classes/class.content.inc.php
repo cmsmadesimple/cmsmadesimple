@@ -1660,7 +1660,7 @@ class ContentBase
 		$ret = array();
 
 		$ret[] = lang('additionaleditors');
-		$text = '<input name="additional_editors" type="hidden" value""/>';
+		$text = '<input name="additional_editors" type="hidden" value=""/>';
 		$text .= '<select name="additional_editors[]" multiple="multiple" size="5">';
 
 		global $gCms;
