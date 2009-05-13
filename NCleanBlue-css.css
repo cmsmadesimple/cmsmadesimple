@@ -69,7 +69,30 @@ a:visited{
 input,textarea,select {
 	
 	font-size: 0.95em;
+	font-family: Tahoma,Verdana, Arial, Helvetica, sans-serif;
 }
+/* Wrapping text in <code> tags. */
+
+code, pre {
+
+/* css-3 */
+	white-space: pre-wrap;
+    font-family: "Courier New", Courier, monospace;
+	font-size: 1em;
+}
+
+pre {
+
+/* black border for pre blocks */
+	border: 1px solid #333;
+/* set different from surroundings to stand out */
+	background-color: #ccc;
+	margin: 0 1em 1em 1em;
+	padding: 0.5em;
+	line-height: 1.5em;
+	font-size: 90%;
+}
+
 /* ------------ Wrapper ------------ */
 div#pagewrapper { 
 font-size: 95%;
@@ -142,7 +165,7 @@ div#search input.search-button
 	padding-left: 1em;
 	}
 .print{
-	margin-right:80px;
+	margin-right:75px;
 	margin-top: 10px;
 }
 #version{
@@ -241,7 +264,7 @@ span.sbar-bottom{
 }
 .right49, .left49{
 	font-size: 0.85em;
-	margin: 7px 5px 5px 15px;
+	margin: 7px 5px 5px 10px;
 	font-weight: bold;
 }
 .left49 span{
