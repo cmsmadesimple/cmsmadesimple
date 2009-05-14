@@ -1187,7 +1187,7 @@ function display_content_list($themeObject = null)
 ?>
 			<div style="float: left;">
 <?php
-	   if (check_permission($userid, 'Add Pages') || check_permission($userid,'Manage All Content'))
+	if ((check_permission($userid, 'Add Pages') && count($mypages)) || check_permission($userid,'Manage All Content'))
 	{
 ?>
 			<a href="addcontent.php<?php echo $urlext ?>" class="pageoptions">
