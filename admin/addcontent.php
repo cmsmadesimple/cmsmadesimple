@@ -199,6 +199,10 @@ $typesdropdown = '<select name="content_type" onchange="document.contentform.sub
 $cur_content_type = '';
 foreach ($gCms->contenttypes as $onetype)
 {
+  if( $onetype->type == 'errorpage' && !check_permission($userid,'Manage All Content') ) 
+    {
+      continue;
+    }
 	$contentops->LoadContentType($onetype->type);
 	$type_obj = new $onetype->type;
 	$typesdropdown .= '<option value="' . $onetype->type . '"';
