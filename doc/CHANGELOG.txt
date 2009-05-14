@@ -3,7 +3,8 @@ Version 1.6 - New Caledonia
 - Fixes of several bugs: 
   - #2786 Bulk page changes don't show messages
   - #2831 Upgrade process continue even if database is empty
-  - #3040 no external view after moving pages up and down (and deleting pages) in listcontent
+  - #3040 no external view after moving pages up and down (and deleting pages)
+    in listcontent
   - #3123 Installer overly restricts account names
   - #3179 Ability to show when news items were last updated
   - #3189 check if udt exists
@@ -30,7 +31,7 @@ Version 1.6 - New Caledonia
     - This permission allows that you can only add pages as children
       of pages you are either owner of, or additional editor of.
   - Remove the 'Modify Page Structure' permission
-  - Add a 'Manage All Content' permission that provides global
+  - Add a 'Manage All Content permission that provides global
     capability on all content objects.  Only users with this permission
     can add top level pages.
   - Rework of the content types
@@ -52,8 +53,9 @@ Version 1.6 - New Caledonia
     - Remove old, invalid config entries.
 
 - Menu Manager
-  - Complete rewrite of the admin interface.  It is now much easier to understand,
-    and also possible to select different a different default template.
+  - Complete rewrite of the admin interface.  It is now much easier to 
+    understand, and also possible to select different a different default 
+    template.
 
 - News 
   - #2620 Extra fields are not displayed in the print template
@@ -62,29 +64,36 @@ Version 1.6 - New Caledonia
   - Fixed problem with incorrect counts (counting draft articles) in browsecat
     action.
 
+- Module Manager
+  - Now supports checking for newer versions of installed modules.
+  - Now does dependency checking before allowing a download of a module.
+
 - Libs Updates: 
   - xAjax 0.5
   - script.aculo.us 1.8.2 (included  Update to Prototype 1.6.0.3)
   - Dynamic Tabs 1.0.3
 
 - TinyMCE
-  - Rewrote profile handling allowing both a simple and an advanced profile in backend
+  - Rewrote profile handling allowing both a simple and an advanced profile 
+    in backend
   - Rewrote frontenddetection to be more stable
   - Improved Filepicker dialogue allowing on-the-fly scaling of images
-  - Updated to Tiny-distribution, including a rewritten more intelligent Paste plugin
+  - Updated to Tiny-distribution, including a rewritten more intelligent Paste
+    plugin
 
 - Printing
   - Now supports simple output from modules
 
 - Search
   - Template, added a class to submit and adjustments.
-  - New Param for method Post (pretty urls) - E.g. {search search_method="post"}
+  - New Param for method Post (pretty urls) - 
+    E.g. {search search_method="post"}
   - Remove Help Tab
   - Add better statistics capabilities.
 
 - Default Themes
-  - New theme NCleanBlue
-  - TODO-> Mark themes
+  - New theme NCleanBlue (thank you Nuno).
+  - Numerous new themes for default content (thank you Mark).
 
 
 Version 1.5.4 - Carolina
