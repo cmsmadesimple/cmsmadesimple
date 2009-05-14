@@ -7,7 +7,7 @@
 {$mod->StartTabContent()}
 
 {$mod->StartTab('general')}
-<form id="siteprefform" method="post" action="siteprefs.php">
+<form id="siteprefform_general" method="post" action="siteprefs.php">
 <div>
   <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
   <input type="hidden" name="active_tab" value="general" />
@@ -76,7 +76,7 @@
 
 
 {$mod->StartTab('sitedown')}
-<form id="siteprefform" method="post" action="siteprefs.php">
+<form id="siteprefform_sitedown" method="post" action="siteprefs.php">
 <div>
   <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
   <input type="hidden" name="active_tab" value="sitedown" />
@@ -112,7 +112,7 @@
 
 
 {$mod->StartTab('handle_404')}
-<form id="siteprefform" method="post" action="siteprefs.php">
+<form id="siteprefform_handle_404" method="post" action="siteprefs.php">
 <div>
   <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
   <input type="hidden" name="active_tab" value="handle_404" />
@@ -147,7 +147,7 @@
 {$mod->EndTab()}
 
 {$mod->StartTab('setup')}
-<form id="siteprefform" method="post" action="siteprefs.php">
+<form id="siteprefform_setup" method="post" action="siteprefs.php">
 <div>
   <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
   <input type="hidden" name="active_tab" value="setup" />
@@ -231,6 +231,3 @@
 {$mod->EndTab()}
 
 {$mod->EndTabContent()}
-
-
-</form>
