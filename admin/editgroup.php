@@ -61,7 +61,7 @@ if ($access) {
 		if ($group == "")
 		{
 			$validinfo = false;
-			$error .= "<li>".lang('nofieldgiven', array(lang('name')))."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('groupname')))."</li>";
 		}
 
 		if ($validinfo)

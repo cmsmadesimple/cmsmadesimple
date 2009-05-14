@@ -75,8 +75,7 @@ if (isset($_POST["adduser"]))
 		$validinfo = false;
 		$error .= "<li>".lang('nofieldgiven', array(lang('username')))."</li>";
 	}
-
-	if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $user) ) {
+	else if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $user) ) {
 		$validinfo = false;
 		$error .= "<li>".lang('illegalcharacters', array(lang('username')))."</li>";
 	} 
@@ -175,11 +174,11 @@ include_once("header.php");
 
 if ($error != "")
 {
-	echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";
+  echo $themeObject->ShowErrors($error);
 }
 
 if (!$access) {
-	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('adduser')))."</p></div>";	
+  echo $themeObject->ShowErrors(lang('noaccessto',lang('adduser')));
 }
 else {
 ?>
