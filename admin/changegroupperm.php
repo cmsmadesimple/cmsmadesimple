@@ -112,7 +112,7 @@ if ($submitted == 1)
       }
     
     audit($userid, 'Group ID', lang('permissionschanged'));
-    $smarty->assign('message',lang('permissionschanged'));
+    $message = lang('permissionschanged');
   }
 
 $query = "SELECT p.permission_id, p.permission_text, up.group_id FROM ".
@@ -162,6 +162,10 @@ $smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('canc
 
 
 # begin output
+if( !empty($message) )
+  {
+    echo $themeObject->ShowMessage($message);
+  }
 echo '<div class="pagecontainer">'.$themeObject->ShowHeader('grouppermissions',array($group_name));
 echo $smarty->fetch('changegroupperm.tpl');
 echo '</div>';

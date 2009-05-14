@@ -130,8 +130,9 @@ if ($submitted == 1)
 				'users' => $userops->LoadUsersInGroup($thisGroup->id)));
 	audit($group_id, 'Group ID', lang('assignmentchanged'));
       }
-    
-    $smarty->assign('message',lang('assignmentchanged'));
+
+    audit($userid, 'Group ID', lang('assignmentschanged'));
+    $message = lang('assignmentchanged');
   }
 
 
@@ -185,7 +186,12 @@ $smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('canc
 
 
 # begin output
-echo '<div class="pagecontainer">'.$themeObject->ShowHeader('groupassignments',array($group_name));
+if( !empty($message) )
+  {
+    echo $themeObject->ShowMessage($message);
+  }
+echo '<div class="pagecontainer">';
+echo $themeObject->ShowHeader('groupassignments',array($group_name));
 echo $smarty->fetch('changeusergroup.tpl');
 echo '</div>';
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
