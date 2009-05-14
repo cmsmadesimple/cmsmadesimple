@@ -274,6 +274,9 @@ class UserOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
+		$query = "DELETE FROM ".cms_db_prefix()."user_groups where user_id = ?";
+		$db->Execute($query, array($id));
+
 		$query = "DELETE FROM ".cms_db_prefix()."additional_users where user_id = ?";
 		$db->Execute($query, array($id));
 
