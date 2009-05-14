@@ -1,26 +1,19 @@
-<form id="siteprefform" method="post" action="siteprefs.php">
-<div>
-  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
-  <input type="hidden" name="editsiteprefs" value="true" />
-</div>
-
-<div class="pageoverflow">
-  <p class="pagetext">&nbsp;</p>
-  <p class="pageinput">
-    <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-    <input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-  </p>
-</div>
-
 {$mod->StartTabHeaders()}
-{$mod->SetTabHeader('general',$lang_general)}
-{$mod->SetTabHeader('sitedown',$lang_sitedown)}
-{$mod->SetTabHeader('handle_404',$lang_handle404)}
-{$mod->SetTabHeader('setup',$lang_setup)}
+{$mod->SetTabHeader('general',$lang_general,$active_general)}
+{$mod->SetTabHeader('sitedown',$lang_sitedown,$active_sitedown)}
+{$mod->SetTabHeader('handle_404',$lang_handle404,$active_handle_404)}
+{$mod->SetTabHeader('setup',$lang_setup,$active_setup)}
 {$mod->EndTabHeaders()}
 {$mod->StartTabContent()}
 
 {$mod->StartTab('general')}
+<form id="siteprefform" method="post" action="siteprefs.php">
+<div>
+  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+  <input type="hidden" name="active_tab" value="general" />
+  <input type="hidden" name="editsiteprefs" value="true" />
+</div>
+
 <div class="pageoverflow">
   <p class="pagetext">{$lang_sitename}</p>
   <p class="pageinput"><input type="text" class="pagesmalltextarea" name="sitename" size="30" value="{$sitename}" /></p>
@@ -71,10 +64,25 @@
   </p>
 </div>
 
+<div class="pageoverflow">
+  <p class="pagetext">&nbsp;</p>
+  <p class="pageinput">
+    <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+    <input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+  </p>
+</div>
+</form>
 {$mod->EndTab()}
 
 
 {$mod->StartTab('sitedown')}
+<form id="siteprefform" method="post" action="siteprefs.php">
+<div>
+  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+  <input type="hidden" name="active_tab" value="sitedown" />
+  <input type="hidden" name="editsiteprefs" value="true" />
+</div>
+
 <div class="pageoverflow">
   <p class="pagetext">{$lang_enablesitedown}:</p>
   <p class="pageinput"><input class="pagenb" type="checkbox" name="enablesitedownmessage" {if $enablesitedownmessage == "1"}checked="checked"{/if}/></p>
@@ -91,10 +99,26 @@
      {$lang_info_sitedownexcludes}
   </p>
 </div>
+
+<div class="pageoverflow">
+  <p class="pagetext">&nbsp;</p>
+  <p class="pageinput">
+    <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+    <input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+  </p>
+</div>
+</form>
 {$mod->EndTab()}
 
 
 {$mod->StartTab('handle_404')}
+<form id="siteprefform" method="post" action="siteprefs.php">
+<div>
+  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+  <input type="hidden" name="active_tab" value="handle_404" />
+  <input type="hidden" name="editsiteprefs" value="true" />
+</div>
+
 <div class="pageoverflow">
   <p class="pagetext">{$lang_enablecustom404}:</p>
   <p class="pageinput"><input class="pagenb" type="checkbox" name="enablecustom404" {if $enablecustom404 == "1"}checked="checked"{/if}/></p>
@@ -112,9 +136,24 @@
   </p>
 </div>
 
+<div class="pageoverflow">
+  <p class="pagetext">&nbsp;</p>
+  <p class="pageinput">
+    <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+    <input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+  </p>
+</div>
+</form>
 {$mod->EndTab()}
 
 {$mod->StartTab('setup')}
+<form id="siteprefform" method="post" action="siteprefs.php">
+<div>
+  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+  <input type="hidden" name="active_tab" value="setup" />
+  <input type="hidden" name="editsiteprefs" value="true" />
+</div>
+
 <div class="pageoverflow">
   <p class="pagetext">{$lang_clearcache}:</p>
   <p class="pageinput">
@@ -181,11 +220,6 @@
   </p>
 </div>
 
-{$mod->EndTab()}
-
-{$mod->EndTabContent()}
-
-{* duplicate submit and cancel buttons *}
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
   <p class="pageinput">
@@ -193,6 +227,10 @@
     <input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
   </p>
 </div>
+</form>
+{$mod->EndTab()}
+
+{$mod->EndTabContent()}
 
 
 </form>
