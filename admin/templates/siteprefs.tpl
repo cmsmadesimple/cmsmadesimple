@@ -38,7 +38,7 @@
 
 <div class="pageoverflow">
   <p class="pagetext">{$lang_nogcbwysiwyg}:</p>
-  <p class="pageinput"><input class="pagenb" type="checkbox" name="nogcbwysiwyg" {if $nogcbwysiwyg == "1"}checked="checked"{/if} /></p>
+  <p class="pageinput"><input type="hidden" name="nogcbwysiwyg" value="0"/><input class="pagenb" type="checkbox" value="1" name="nogcbwysiwyg" {if $nogcbwysiwyg == "1"}checked="checked"{/if} /></p>
 </div>
 <div class="pageoverflow">
   <p class="pagetext">{$lang_globalmetadata}:</p>
@@ -85,7 +85,7 @@
 
 <div class="pageoverflow">
   <p class="pagetext">{$lang_enablesitedown}:</p>
-  <p class="pageinput"><input class="pagenb" type="checkbox" name="enablesitedownmessage" {if $enablesitedownmessage == "1"}checked="checked"{/if}/></p>
+  <p class="pageinput"><input type="hidden" name="enablesitedownmessage" value="0"/><input class="pagenb" type="checkbox" value="1" name="enablesitedownmessage" {if $enablesitedownmessage == "1"}checked="checked"{/if}/></p>
 </div>
 <div class="pageoverflow">
   <p class="pagetext">{$lang_sitedownmessage}:</p>
@@ -121,7 +121,7 @@
 
 <div class="pageoverflow">
   <p class="pagetext">{$lang_enablecustom404}:</p>
-  <p class="pageinput"><input class="pagenb" type="checkbox" name="enablecustom404" {if $enablecustom404 == "1"}checked="checked"{/if}/></p>
+  <p class="pageinput"><input type="hidden" name="enablecustom404" value="0"/><input class="pagenb" type="checkbox" value="1" name="enablecustom404" {if $enablecustom404 == "1"}checked="checked"{/if}/></p>
 </div>
 <div class="pageoverflow">
   <p class="pagetext">{$lang_custom404}</p>
@@ -191,22 +191,22 @@
 </div>
 <div class="pageoverflow">
   <p class="pagetext">{$lang_clear_version_check_cache}:</p>
-  <p class="pageinput"><input class="pagenb" type="checkbox" name="clear_vc_cache" {if $clear_vc_cache}checked="checked"{/if} /></p>
+  <p class="pageinput"><input type="hidden" name="clear_vc_cache" value="0"/><input class="pagenb" value="1" type="checkbox" name="clear_vc_cache" {if $clear_vc_cache}checked="checked"{/if} /></p>
 </div>
 
 <div class="pageoverflow">
   <p class="pagetext">{$lang_disablesafemodewarning}:</p>
-  <p class="pageinput"><input class="pagenb" type="checkbox" name="disablesafemodewarning" {if $disablesafemodewarning}checked="checked"{/if} /></p>
+  <p class="pageinput"><input type="hidden" name="disablesafemodwarning" value="0"/><input class="pagenb" type="checkbox" value="1" name="disablesafemodewarning" {if $disablesafemodewarning}checked="checked"{/if} /></p>
 </div>
 
 <div class="pageoverflow">
   <p class="pagetext">{$lang_allowparamcheckwarnings}:</p>
-  <p class="pageinput"><input class="pagenb" type="checkbox" name="allowparamcheckwarnings" {if $allowparamcheckwarnings}checked="checked"{/if} /></p>
+  <p class="pageinput"><input type="hidden" name="allowparamcheckwarnings" value="0"><input class="pagenb" type="checkbox" value="1" name="allowparamcheckwarnings" {if $allowparamcheckwarnings}checked="checked"{/if} /></p>
 </div>
 
 <div class="pageoverflow">
   <p class="pagetext">{$lang_admin_enablenotifications}:</p>
-  <p class="pageinput"><input class="pagenb" type="checkbox" name="enablenotifications" {if $enablenotifications}checked="checked"{/if} /></p>
+  <p class="pageinput"><input type="hidden" name="enablenotifications" value="0"/><input class="pagenb" type="checkbox" value="1" name="enablenotifications" {if $enablenotifications}checked="checked"{/if} /></p>
 </div>
 
 <div class="pageoverflow">

@@ -45,10 +45,14 @@ function siteprefs_display_permissions($permsarr)
 check_login();
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Site Preferences');
-if (!$access) {
-	die('Permission Denied');
-return;
-}
+
+
+if (!$access) 
+  {
+    die('Permission Denied');
+    return;
+  }
+
 global $gCms;
 $db =& $gCms->GetDb();
 
@@ -56,101 +60,65 @@ $error = "";
 $message = "";
 
 $clear_vc_cache = 0;
-if (isset($_POST["clear_vc_cache"])) $clear_vc_cache = 1;
-
 $disablesafemodewarning = 0;
-if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = 1;
-
 $allowparamcheckwarnings = 0;
-if (isset($_POST["allowparamcheckwarnings"])) 
-  {
-    $allowparamcheckwarnings = 1;
-  }
-
 $enablenotifications = 1;
-if (!isset($_POST["enablenotifications"])) 
-  {
-    $enablenotifications = 0;
-  }
 $sitedownexcludes = '';
-if( isset($_POST['sitedownexcludes']) )
-  {
-    $sitedownexcludes = trim($_POST['sitedownexcludes']);
-  }
 $basic_attributes = '';
-if( isset($_POST['basic_attributes']) )
-  {
-    $basic_attributes = implode(',',($_POST['basic_attributes']));
-  }
-
 $enablecustom404 = "0";
-if (isset($_POST["enablecustom404"])) $enablecustom404 = "1";
-
 $xmlmodulerepository = "";
-if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
-
 $urlcheckversion = "";
-if (isset($_POST["urlcheckversion"])) $urlcheckversion = $_POST["urlcheckversion"];
-
 $defaultdateformat = "";
-if (isset($_POST["defaultdateformat"])) $defaultdateformat = $_POST["defaultdateformat"];
-
 $custom404 = "<p>Page not found<//p>";
-if (isset($_POST["custom404"])) $custom404 = $_POST["custom404"];
-
 $custom404template = "-1";
-if (isset($_POST["custom404template"])) $custom404template = $_POST["custom404template"];
-
 $enablesitedownmessage = "0";
-if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage = "1";
-
 $sitedownmessage = "<p>Site is currently down.  Check back later.</p>";
-if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
-
 $sitedownmessagetemplate = "-1";
-if (isset($_POST["sitedownmessagetemplate"])) $sitedownmessagetemplate = $_POST["sitedownmessagetemplate"];
-
 $metadata = '';
-if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
-
-$sitename = '';
-if (isset($_POST['sitename'])) $sitename = cms_htmlentities($_POST['sitename']);
-
+$sitename = 'CMSMS Website';
 $css_max_age = 0;
-if (isset($_POST['css_max_age'])) $css_max_age = (int)$_POST['css_max_age'];
-
-#$useadvancedcss = "1";
-#if (isset($_POST["useadvancedcss"])) $useadvancedcss = $_POST["useadvancedcss"];
-
 $frontendlang = '';
-if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
-
 $frontendwysiwyg = '';
-if (isset($_POST['frontendwysiwyg'])) $frontendwysiwyg = $_POST['frontendwysiwyg'];
-
 $nogcbwysiwyg = '0';
-if (isset($_POST['nogcbwysiwyg'])) $nogcbwysiwyg = '1';
-
 $global_umask = '022';
-if (isset($_POST['global_umask'])) 
-  {
-    $global_umask = $_POST['global_umask'];
-  }
-
-// ADDED
 $logintheme = "default";
-if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
-// STOP
 
 
-$userid = get_userid();
-$access = check_permission($userid, 'Modify Site Preferences');
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php".$urlext);
 	return;
 }
 
+
+$global_umask = get_site_preference('global_umask',$global_umask);
+$frontendlang = get_site_preference('frontendlang',$frontendlang);
+$frontendwysiwyg = get_site_preference('frontendwysiwyg',$frontendwysiwyg);
+$nogcbwysiwyg = get_site_preference('nogcbwysiwyg',$nogcbwysiwyg);
+$enablecustom404 = get_site_preference('enablecustom404',$enablecustom404);
+$custom404 = get_site_preference('custom404',$custom404);
+$custom404template = get_site_preference('custom404template',$custom404template);
+$enablesitedownmessage = get_site_preference('enablesitedownmessage',$enablesitedownmessage);
+$sitedownmessage = get_site_preference('sitedownmessage',$sitedownmessage);
+$xmlmodulerepository = get_site_preference('xmlmodulerepository',$xmlmodulerepository);
+$urlcheckversion = get_site_preference('urlcheckversion',$urlcheckversion);
+$defaultdateformat = get_site_preference('defaultdateformat',$defaultdateformat);
+$logintheme = get_site_preference('logintheme',$logintheme);
+$metadata = get_site_preference('metadata',$metadata);
+$css_max_age = (int)get_site_preference('css_max_age',$css_max_age);
+$sitename = get_site_preference('sitename',$sitename);
+$clear_vc_cache = get_site_preference('clear_vc_cache',$clear_vc_cache);
+$disablesafemodewarning = get_site_preference('disablesafemodewarning',$disablesafemodewarning);
+$allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
+$enablenotifications = get_site_preference('enablenotifications',$enablenotifications);
+$sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
+$basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
+
+$active_tab='unknown';
+if( isset($_POST['active_tab']) )
+  {
+    $active_tab = trim($_POST['active_tab']);
+  }
 $testresults = lang('untested');
 if (isset($_POST["testumask"]))
 {
@@ -211,34 +179,79 @@ else if (isset($_POST["editsiteprefs"]))
 {
   if ($access)
     {
-      set_site_preference('global_umask', $global_umask);
-      set_site_preference('frontendlang', $frontendlang);      
-      set_site_preference('frontendwysiwyg', $frontendwysiwyg);
-      set_site_preference('nogcbwysiwyg', $nogcbwysiwyg);
-      set_site_preference('enablecustom404', $enablecustom404);
-      set_site_preference('xmlmodulerepository', $xmlmodulerepository);
-      set_site_preference('urlcheckversion', $urlcheckversion);
-      if( isset($_POST["clear_vc_cache"])) 
+      switch( $active_tab )
 	{
-	  set_site_preference('lastcmsversioncheck',0);
-	}
+	case 'general':
+	  // tab 1
+	  if (isset($_POST['sitename'])) $sitename = cms_htmlentities($_POST['sitename']);
+	  set_site_preference('sitename', $sitename);
+	  if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
+	  set_site_preference('frontendlang', $frontendlang);      
+	  if (isset($_POST['frontendwysiwyg'])) $frontendwysiwyg = $_POST['frontendwysiwyg'];
+	  set_site_preference('frontendwysiwyg', $frontendwysiwyg);
+	  if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
+	  set_site_preference('metadata', $metadata);
+	  if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
+	  set_site_preference('logintheme', $logintheme);
+	  if (isset($_POST["defaultdateformat"])) $defaultdateformat = $_POST["defaultdateformat"];
+	  set_site_preference('defaultdateformat', $defaultdateformat);
+	  if (isset($_POST['nogcbwysiwyg'])) $nogcbwysiwyg = $_POST['nogcbwysiwyg'];
+	  set_site_preference('nogcbwysiwyg', $nogcbwysiwyg);
+	  break;
+
+	case 'sitedown':
+	  if( isset($_POST['sitedownexcludes']) )
+	    {
+	      $sitedownexcludes = trim($_POST['sitedownexcludes']);
+	    }
+	  if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage=$_POST['enablesitedownmessage'];
+	  if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
+	  set_site_preference('enablesitedownmessage', $enablesitedownmessage);
+	  set_site_preference('sitedownmessage', $sitedownmessage);
+	  set_site_preference('sitedownexcludes',$sitedownexcludes);
+	  break;
+
+	case 'handle_404':
+	  if (isset($_POST["enablecustom404"])) $enablecustom404 = $_POST['enablecustom404'];
+	  if (isset($_POST["custom404"])) $custom404 = $_POST["custom404"];
+	  if (isset($_POST["custom404template"])) $custom404template = $_POST["custom404template"];
+	  set_site_preference('enablecustom404', $enablecustom404);
+	  set_site_preference('custom404', $custom404);
+	  set_site_preference('custom404template', $custom404template);
+	  break;
+
+	case 'setup':
+	  if (isset($_POST["clear_vc_cache"])) $clear_vc_cache = $_POST['clear_vc_cache'];
+	  if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = $_POST['disablesafemodewarning'];
+	  if (isset($_POST["allowparamcheckwarnings"])) $allowparamcheckwarnings = $_POST['allowparamcheckwarnings'];
+	  if (isset($_POST["enablenotifications"])) $enablenotifications = $_POST['enablenotifications'];
+	  if( isset($_POST['basic_attributes']) )
+	    {
+	      $basic_attributes = implode(',',($_POST['basic_attributes']));
+	    }
+	  if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
+	  if (isset($_POST["urlcheckversion"])) $urlcheckversion = $_POST["urlcheckversion"];
+	  if (isset($_POST['css_max_age'])) $css_max_age = (int)$_POST['css_max_age'];
+	  if (isset($_POST['global_umask'])) 
+	    {
+	      $global_umask = $_POST['global_umask'];
+	    }
+	  set_site_preference('global_umask', $global_umask);
+	  set_site_preference('xmlmodulerepository', $xmlmodulerepository);
+	  set_site_preference('urlcheckversion', $urlcheckversion);
+	  if( isset($_POST["clear_vc_cache"])) 
+	    {
+	      set_site_preference('lastcmsversioncheck',0);
+	    }
 	  set_site_preference('clear_vc_cache', $clear_vc_cache);
-      set_site_preference('defaultdateformat', $defaultdateformat);
-      set_site_preference('custom404', $custom404);
-      set_site_preference('custom404template', $custom404template);
-      set_site_preference('enablesitedownmessage', $enablesitedownmessage);
-      set_site_preference('sitedownmessage', $sitedownmessage);
-#set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
-#set_site_preference('useadvancedcss', $useadvancedcss);
-      set_site_preference('logintheme', $logintheme);
-      set_site_preference('metadata', $metadata);
-      set_site_preference('css_max_age',$css_max_age);
-      set_site_preference('sitename', $sitename);
-      set_site_preference('disablesafemodewarning',$disablesafemodewarning);
-      set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
-      set_site_preference('enablenotifications',$enablenotifications);
-      set_site_preference('sitedownexcludes',$sitedownexcludes);
-      set_site_preference('basic_attributes',$basic_attributes);
+	  set_site_preference('css_max_age',$css_max_age);
+	  set_site_preference('disablesafemodewarning',$disablesafemodewarning);
+	  set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
+	  set_site_preference('enablenotifications',$enablenotifications);
+	  set_site_preference('basic_attributes',$basic_attributes);
+	  break;
+	}
+
       audit(-1, '', 'Edited Site Preferences');
       $message .= lang('prefsupdated');
     }
@@ -246,34 +259,11 @@ else if (isset($_POST["editsiteprefs"]))
     {
       $error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
     }
- } else if (!isset($_POST["submit"])) {
-  $global_umask = get_site_preference('global_umask',$global_umask);
-  $frontendlang = get_site_preference('frontendlang');
-  $frontendwysiwyg = get_site_preference('frontendwysiwyg');
-  $nogcbwysiwyg = get_site_preference('nogcbwysiwyg');
-  $enablecustom404 = get_site_preference('enablecustom404');
-  $custom404 = get_site_preference('custom404');
-  $custom404template = get_site_preference('custom404template');
-  $enablesitedownmessage = get_site_preference('enablesitedownmessage');
-  $sitedownmessage = get_site_preference('sitedownmessage');
-  $xmlmodulerepository = get_site_preference('xmlmodulerepository');
-  $urlcheckversion = get_site_preference('urlcheckversion');
-  $defaultdateformat = get_site_preference('defaultdateformat');
-  #$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
-  #$useadvancedcss = get_site_preference('useadvancedcss');
-  $logintheme = get_site_preference('logintheme', 'default');
-  $metadata = get_site_preference('metadata', '');
-  $css_max_age = (int)get_site_preference('css_max_age',0);
-  $sitename = get_site_preference('sitename', 'CMSMS Site');
-  $clear_vc_cache = get_site_preference('clear_vc_cache',0);
-  $disablesafemodewarning = get_site_preference('disablesafemodewarning',0);
-  $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',0);
-  $enablenotifications = get_site_preference('enablenotifications',1);
-  $sitedownexcludes = get_site_preference('sitedownexcludes','');
-  $basic_attributes = get_site_preference('basic_attributes','template');
- }
+} 
 
-
+//
+// build the form
+//
 $templates = array();
 $templates['-1'] = lang('none');
 
