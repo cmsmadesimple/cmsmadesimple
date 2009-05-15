@@ -131,8 +131,8 @@ if ($submitted == 1)
 	audit($group_id, 'Group ID', lang('assignmentchanged'));
       }
 
-    audit($userid, 'Group ID', lang('assignmentschanged'));
-    $message = lang('assignmentschanged');
+    audit($userid, 'Group ID', lang('assignmentchanged'));
+    $message = lang('assignmentchanged');
   }
 
 
