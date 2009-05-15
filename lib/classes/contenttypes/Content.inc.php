@@ -378,7 +378,7 @@ class Content extends ContentBase
 		    }
 		  
 		  // force a load 
-		  $this->mProperties->Load($this->mId);
+		  $this->GetPropertyValue('extra1');
 		  
 		  $result = true;
 		}
@@ -452,7 +452,7 @@ class Content extends ContentBase
 		    }
 		  
 		  // force a load 
-		  $this->mProperties->Load($this->mId);
+		  $this->GetPropertyValue('extra1');
 		  
 		  $result = true;
 		}

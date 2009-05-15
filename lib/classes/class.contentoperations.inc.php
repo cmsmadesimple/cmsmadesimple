@@ -782,7 +782,7 @@ class ContentOperations
 
 		$db = &$gCms->GetDb();
 
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE default_content = 1";
+		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content = 1";
 		$row = &$db->GetRow($query);
 		if (!$row)
 		{
@@ -806,7 +806,7 @@ class ContentOperations
 		}
 
 		$params = array($alias);
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
+		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE content_alias = ?";
 		$row = $db->GetRow($query, $params);
 
 		if (!$row)
@@ -822,7 +822,7 @@ class ContentOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE hierarchy = ?";
+		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE hierarchy = ?";
 		$row = $db->GetRow($query, array(ContentOperations::CreateUnfriendlyHierarchyPosition($position)));
 
 		if (!$row)
@@ -846,7 +846,7 @@ class ContentOperations
 		}
 
 		$params = array($id);
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+		$query = "SELECT content_alias FROM ".cms_db_prefix()."content WHERE content_id = ?";
 		$row = $db->GetRow($query, $params);
 
 		if ( !$row )
@@ -874,7 +874,7 @@ class ContentOperations
 		else
 		{
 			$params = array($alias);
-			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
+			$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE content_alias = ?";
 			if ($content_id > -1)
 			{
 				$query .= " AND content_id != ?";

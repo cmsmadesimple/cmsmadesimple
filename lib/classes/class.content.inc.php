@@ -878,7 +878,7 @@ class ContentBase
      * @returns	bool		If it fails, the object comes back to initial values and returns FALSE
      *				If everything goes well, it returns TRUE
      */
-	function LoadFromData($data, $loadProperties = false)
+	function LoadFromData(&$data, $loadProperties = false)
 	{
 	  global $gCms, $debug_errors;
 	  $config =& $gCms->GetConfig();
