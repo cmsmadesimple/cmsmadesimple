@@ -774,29 +774,21 @@ class AdminTheme
             'users'=>array('url'=>'listusers.php','parent'=>'usersgroups',
                     'title'=>$this->FixSpaces(lang('users')),
                     'description'=>lang('usersdescription'),'show_in_menu'=>$this->HasPerm('userPerms')),
-
-	    /*
             'adduser'=>array('url'=>'adduser.php','parent'=>'users',
                     'title'=>$this->FixSpaces(lang('adduser')),
                     'description'=>lang('adduser'),'show_in_menu'=>false),
             'edituser'=>array('url'=>'edituser.php','parent'=>'users',
                     'title'=>$this->FixSpaces(lang('edituser')),
                     'description'=>lang('edituser'),'show_in_menu'=>false),
-	    */
-
             'groups'=>array('url'=>'listgroups.php','parent'=>'usersgroups',
                     'title'=>$this->FixSpaces(lang('groups')),
                     'description'=>lang('groupsdescription'),'show_in_menu'=>$this->HasPerm('groupPerms')),
-
-	    /*
             'addgroup'=>array('url'=>'addgroup.php','parent'=>'groups',
                     'title'=>$this->FixSpaces(lang('addgroup')),
                     'description'=>lang('addgroup'),'show_in_menu'=>false),
             'editgroup'=>array('url'=>'editgroup.php','parent'=>'groups',
                     'title'=>$this->FixSpaces(lang('editgroup')),
                     'description'=>lang('editgroup'),'show_in_menu'=>false),
-	    */
-
             'groupmembers'=>array('url'=>'changegroupassign.php','parent'=>'usersgroups',
                     'title'=>$this->FixSpaces(lang('groupassignments')),
                     'description'=>lang('groupassignmentdescription'),'show_in_menu'=>$this->HasPerm('groupMemberPerms')),                    
