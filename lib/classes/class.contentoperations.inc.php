@@ -577,12 +577,14 @@ class ContentOperations
 		return $tree;
 	}
 	
-	function LoadChildrenIntoTree($id, &$tree, $loadprops = false)
+	function LoadChildrenIntoTree($id, &$tree, $loadprops = false, $all = false)
 	{	
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? AND active = 1 ORDER BY hierarchy";
+		if( $all )
+		  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
 		$dbresult =& $db->Execute($query, array($id));
 
 		if ($dbresult && $dbresult->RecordCount() > 0)
