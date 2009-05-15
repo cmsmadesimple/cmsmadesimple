@@ -423,7 +423,7 @@ class Tree_Node
 		    $parent_node =& $this->getParent();
 		    if( !is_object($parent_node) )
 		      {
-			die('could not get parent node');
+			die('could not get parent node for '.$this->getTag());
 		      }
 		    
 		    // load all children
@@ -432,7 +432,7 @@ class Tree_Node
 		    // see if the object is cached now.
 		    if( !isset($tree->content[$this->getTag()]) )
 		      {
-			die('child node not cached');
+			die('getchildren failed, child node '.$this->getTag().' not cached');
 		      }
 
 		    $content =& $tree->content[$this->getTag()];
