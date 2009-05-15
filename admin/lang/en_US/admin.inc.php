@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['invalidemail'] = 'The email address entered is invalid';
 $lang['admin']['info_deletepages'] = 'Note: due to permission restrictions, some of the pages you selected for deletion may not be listed below';
 $lang['admin']['info_pagealias'] = 'Specify a unique alias for this page.';
 $lang['admin']['info_autoalias'] = 'If this field is empty, an alias will be created automatically.';

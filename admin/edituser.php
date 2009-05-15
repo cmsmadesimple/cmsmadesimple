@@ -109,6 +109,12 @@ if ($access) {
 			$error .= "<li>".lang('nopasswordmatch')."</li>";
 		}
 
+		if( !empty($email) && !eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", $email ) )
+		  {
+		    $validinfo = false;
+		    $error .= '</li>'.lang('invalidemail');
+		  }
+
 		if ($validinfo) {
 			#set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
 			#audit(-1, '', 'Edited User');

@@ -92,6 +92,12 @@ if (isset($_POST["adduser"]))
 		$error .= "<li>".lang('nopasswordmatch')."</li>";
 	}
 
+	if( !empty($email) && !eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", $email ) )
+	  {
+	    $validinfo = false;
+	    $error .= '</li>'.lang('invalidemail');
+	  }
+
 	if ($validinfo)
 	{
 		#$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
