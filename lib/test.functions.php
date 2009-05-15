@@ -1580,8 +1580,6 @@ function GDVersion()
  * @var string  $email
  * @var boolean $checkDNS
 */
-
- */
 function isEmail( $email, $checkDNS=false ) {
 	// Check that $email is a valid address. Read the following RFCs to understand the constraints:
 	// 	(http://tools.ietf.org/html/rfc5322)
