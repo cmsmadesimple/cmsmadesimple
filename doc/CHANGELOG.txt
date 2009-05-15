@@ -51,6 +51,7 @@ Version 1.6 - New Caledonia
     - Add a set_names variable that allows databases to use utf-8 by default
       on new installs (true on new installs, false is assumed).
     - Remove old, invalid config entries.
+    - Add a possibility to hide wiki_url from ERRORPAGE $config['wiki_url'] ='none'
 
 - Menu Manager
   - Complete rewrite of the admin interface.  It is now much easier to 

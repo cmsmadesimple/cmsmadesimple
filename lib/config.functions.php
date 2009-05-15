@@ -339,6 +339,7 @@ if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
 \$config['set_names'] = ${$config['set_names']?'true':'false'};
 
 # URL of the Admin Panel section of the User Handbook
+# Set none if you want hide the link from Error 
 \$config['wiki_url'] = '{$config['wiki_url']}';
 
 EOF;

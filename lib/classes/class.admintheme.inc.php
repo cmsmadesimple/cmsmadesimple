@@ -1785,19 +1785,20 @@ class AdminTheme
       global $gCms;
       $config =& $gCms->GetConfig();
       $wikiUrl = $config['wiki_url'];
-
-      if (FALSE == empty($_REQUEST['module'])  || FALSE == empty($_REQUEST['mact']))
-	{
-	  if (FALSE == empty($_REQUEST['module']))
-	    {
-	      $wikiUrl .= '/'.$_REQUEST['module'];
-	    }
-	  else
-	    {
-	      $wikiUrl .= '/'.substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
-	    }
-	}
+      if ($wikiUrl !='none'){
+		      if (FALSE == empty($_REQUEST['module'])  || FALSE == empty($_REQUEST['mact']))
+			{
+			  if (FALSE == empty($_REQUEST['module']))
+			    {
+			      $wikiUrl .= '/'.$_REQUEST['module'];
+			    }
+			  else
+			    {
+			      $wikiUrl .= '/'.substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
+			    }
+			}
       $wikiUrl .= '/Troubleshooting';
+      }//wiki check
       $image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
       $output  = '<div class="pageerrorcontainer"';
       if (FALSE == empty($get_var))
@@ -1826,8 +1827,10 @@ class AdminTheme
 	{
 	  $output  .= $image_error.' '.$errors;
 	}
-      $output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a></div></div>';
-      
+	 if ($wikiUrl !='none'){
+      $output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a>';
+      }//wiki check
+      $output .= '</div></div>';
       return $output;
     }
     
