@@ -57,6 +57,8 @@ Version 1.6 - New Caledonia
   - Complete rewrite of the admin interface.  It is now much easier to 
     understand, and also possible to select different a different default 
     template.
+  - Add the loadprops parameter to turn on loading all content properties
+    for advanced menus.
 
 - News 
   - #2620 Extra fields are not displayed in the print template

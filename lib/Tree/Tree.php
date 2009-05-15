@@ -397,14 +397,20 @@ class Tree_Node
         }
     }
 
+
+    /**
+     * Gets the ID of this node
+     */
+    function getID()
+    {
+      return $this->getTag();
+    }
+
 	/**
 	* Gets the underlying content of this node
 	*/
-	function &getContent()
+	function &getContent($deep = false)
 	{
-		//TODO: Lookup node in tree's list
-		//      Pull it from the db if it's not loaded already
-		//      Lots of room for optimization here
 		$content = null;
 		
 		$tree =& $this->getTree();
@@ -413,15 +419,24 @@ class Tree_Node
 			$content =& $tree->content[$this->getTag()];
 		}
 		else
-		{
-			//Basic one.  Just try to load it separately
-			//into our list.  Get the props, since a one timer
-			//will probably have some property shown
-			global $gCms;
-			$contentops =& $gCms->GetContentOperations();
-			$content =& $contentops->LoadContentFromId($this->getTag(), true);
-			$tree->content[$this->getTag()] =& $content;
-		}
+		  {
+		    $parent_node =& $this->getParent();
+		    if( !is_object($parent_node) )
+		      {
+			die('could not get parent node');
+		      }
+		    
+		    // load all children
+		    $parent_node->getChildren($deep);
+
+		    // see if the object is cached now.
+		    if( !isset($tree->content[$this->getTag()]) )
+		      {
+			die('child node not cached');
+		      }
+
+		    $content =& $tree->content[$this->getTag()];
+		  }
 		return $content;
 	}
     
@@ -640,7 +655,7 @@ class Tree_Node
 	*
 	* @return array All of the child nodes
 	*/
-	function &getChildren()
+	function &getChildren($deep = false)
 	{
 		//TODO: Write a bit here that pulls back all
 		//children in one shot if they're not already loaded
@@ -651,7 +666,7 @@ class Tree_Node
 			if (!isset($tree->content[$checkid])) {
 				global $gCms;
 				$contentops =& $gCms->GetContentOperations();
-				$contentops->LoadChildrenIntoTree($this->getTag(), $this->tree);
+				$contentops->LoadChildrenIntoTree($this->getTag(), $this->tree, $deep);
 			}
 		}
 		return $this->nodes->nodes;

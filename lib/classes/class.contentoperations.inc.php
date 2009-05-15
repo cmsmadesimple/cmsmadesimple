@@ -190,7 +190,7 @@ class ContentOperations
 		$id_list .= ')';
 		if ($id_list=='()') 
 		{
-			return $contents;
+		  return $contents;
 		}
 		$result = false;
 		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
