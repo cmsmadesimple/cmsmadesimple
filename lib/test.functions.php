@@ -1114,7 +1114,7 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 	// TEST FSOCKOPEN
 	if($debug) $handle = fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, $timeout);
 	else       $handle = @fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, $timeout);
-	if(false !== $handle)
+	if($handle)
 	{
 		$out  = "GET " . $complete_url . " HTTP/1.1\r\n";
 		$out .= "Host: " . $url_info['host'] . "\r\n";
