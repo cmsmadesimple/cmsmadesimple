@@ -268,7 +268,7 @@ function getEmbedPhpInfo( $info = INFO_ALL )
 	$output = str_replace('<a name=', '<a id=', $output);
 	$output = str_replace('<font', '<span', $output);
 	$output = str_replace('</font', '</span', $output);
-
+	$output = str_replace(',', ', ', $output);
 	// match class "v" td cells an pass them to callback function
 	return preg_replace_callback('%(<td class="v">)(.*?)(</td>)%i', '_sysinfo_phpinfo_v_callback', $output);
 }
@@ -483,7 +483,8 @@ function & testString( $required, $title, $var, $message = '', $ini = true, $cod
 	}
 	else
 	{
-		$test->res = $code_empty;
+		$test->value = str_replace(',', ', ', $test->value);
+		$test->res = $code_not_empty;
 	}
 
 	getTestReturn($test, $required, $message, $error_fragment);
