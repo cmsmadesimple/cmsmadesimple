@@ -570,7 +570,7 @@ class ContentOperations
 			fclose($handle);
 		}
 
-		ContentOperations::LoadChildrenIntoTree(-1, $tree);
+		ContentOperations::LoadChildrenIntoTree(-1, $tree, false, true);
 
 		debug_buffer('', 'ending tree');
 

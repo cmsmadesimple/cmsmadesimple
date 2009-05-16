@@ -654,7 +654,7 @@ class Tree_Node
 	*
 	* @return array All of the child nodes
 	*/
-	function &getChildren($deep = false)
+	function &getChildren($deep = false,$all = false)
 	{
 		//TODO: Write a bit here that pulls back all
 		//children in one shot if they're not already loaded
@@ -665,7 +665,8 @@ class Tree_Node
 			if (!isset($tree->content[$checkid])) {
 				global $gCms;
 				$contentops =& $gCms->GetContentOperations();
-				$contentops->LoadChildrenIntoTree($this->getTag(), $this->tree, $deep);
+				$contentops->LoadChildrenIntoTree($this->getTag(), $this->tree, 
+								  $deep, $all);
 			}
 		}
 		return $this->nodes->nodes;

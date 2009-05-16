@@ -438,7 +438,7 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 		$listArray[$content->mId] = 'parent'.$content->mId.'ListOrder';
 		$output .= '<ul id="parent'.$content->mId.'" class="sortableList">'."\n";
 
-		$children = &$root->getChildren();
+		$children = &$root->getChildren(false,true);
 		foreach ($children as $child)
 		{
 			show_h($child, $sortableLists, $listArray, $output);
@@ -474,7 +474,7 @@ function reorder_display_list()
 	$listArray[0] = 'parent0ListOrder';
 	$output .= '<ul id="parent0" class="sortableList">'."\n";
 	
-	foreach ($hierarchy->getChildren() as $child)
+	foreach ($hierarchy->getChildren(false,true) as $child)
 	{
 		show_h($child, $sortableLists, $listArray, $output);
 	}
@@ -522,7 +522,7 @@ function reorder_process($get)
 		$listArray[0] = 'parent0ListOrder';
 		$output .= '<ul id="parent0" class="sortableList">'."\n";
 
-		foreach ($hierarchy->getChildren() as $child)
+		foreach ($hierarchy->getChildren(false,true) as $child)
 		{
 			show_h($child, $sortableLists, $listArray, $output);
 		}
@@ -570,7 +570,7 @@ function check_children(&$root, &$mypages, &$userid)
 		$result = in_array($content->Id(), $mypages, false);
 		if (!$result)
 		{
-			$children =& $root->getChildren();
+		  $children =& $root->getChildren(false,true);
 			foreach ($children as $child)
 			{
 				$result = check_children($child, $mypages, $userid);
@@ -593,10 +593,10 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
   
   if(empty($currow)) $currow = 'row1';
   
+  $children =& $root->getChildren(false,true);
   $one =& $root->getContent();
-  $children =& $root->getChildren();
   $thelist = '';
-  
+
   if (!(isset($one) && $one != NULL))
     {
       return;
@@ -1049,7 +1049,7 @@ function display_content_list($themeObject = null)
 	if ($hierarchy->hasChildren())
 	{
 		$pagelist = array();
-		foreach ($hierarchy->getChildren() as $child)
+		foreach ($hierarchy->getChildren(false,true) as $child)
 		{ 
 		  display_hierarchy($child, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay);
 		}
