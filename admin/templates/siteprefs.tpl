@@ -201,7 +201,7 @@
 
 <div class="pageoverflow">
   <p class="pagetext">{$lang_allowparamcheckwarnings}:</p>
-  <p class="pageinput"><input type="hidden" name="allowparamcheckwarnings" value="0"><input class="pagenb" type="checkbox" value="1" name="allowparamcheckwarnings" {if $allowparamcheckwarnings}checked="checked"{/if} /></p>
+  <p class="pageinput"><input type="hidden" name="allowparamcheckwarnings" value="0" /><input class="pagenb" type="checkbox" value="1" name="allowparamcheckwarnings" {if $allowparamcheckwarnings}checked="checked"{/if} /></p>
 </div>
 
 <div class="pageoverflow">
