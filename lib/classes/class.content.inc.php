@@ -1907,7 +1907,7 @@ class ContentBase
 	      break;
 	      
 	    case 'showinmenu':
-	      return array(lang('showinmenu').':','<input type="hidden" name="showinmenu" value-"0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+	      return array(lang('showinmenu').':','<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 	      break;
 	      
 	    case 'target':
