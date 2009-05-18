@@ -93,7 +93,7 @@ if (isset($gCms->modules[$module]['object']) )
      $headtext = '';
    }
 
-if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->SuppressAdminOutput($_REQUEST) != false)
+if (isset($gCms->modules[$module]['object']) && ($gCms->modules[$module]['object']->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput'])))
 	{
 	$suppressOutput = true;
 	}
