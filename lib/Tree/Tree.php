@@ -422,8 +422,14 @@ class Tree_Node
 		  {
 		    $parent_node =& $this->getParent();
 		    if( !is_object($parent_node) )
-		      return $content;
-		    
+	 	      {	
+			global $gCms;
+                        $contentops =& $gCms->GetContentOperations();
+                        $content =& $contentops->LoadContentFromId($this->getTag(), true);
+                        $tree->content[$this->getTag()] =& $content;
+		        return $content;
+                      }
+		  
 		    // load all children
 		    $parent_node->getChildren($deep);
 
