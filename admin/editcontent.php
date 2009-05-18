@@ -415,7 +415,7 @@ $submit_buttons .= '</p></div>';
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>
 			  <div class="pagewarning"><?php echo lang('info_preview_notice') ?></div>
-			  <iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo "{$config['root_url']}/index.php?{$config['query_var']}=__CMS_PREVIEW_PAGE__"; } ?></iframe>
+			  <iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo "{$config['root_url']}/index.php?{$config['query_var']}=__CMS_PREVIEW_PAGE__"; } ?>></iframe>
 				<?php
 			echo '</div></div>';
 			echo '<div style="clear: both;"></div>';
