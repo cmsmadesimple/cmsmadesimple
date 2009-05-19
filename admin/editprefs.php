@@ -94,8 +94,9 @@ if (isset($_POST["cancel"])) {
 }
 
 $modules = array();
-$modules[ucwords(lang('none'))] = '**none**';
-$modules['---'] = '**none**';
+//Next 2 lines commented, to NOT show 'none' as a choice in the ignore list.
+//$modules[ucwords(lang('none'))] = '**none**';
+//$modules['---'] = '**none**';
 foreach($gCms->modules as $key=>$value)
 {
   if ($gCms->modules[$key]['installed'] == true &&
