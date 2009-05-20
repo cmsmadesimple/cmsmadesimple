@@ -92,7 +92,7 @@ if (isset($_POST["adduser"]))
 		$error .= "<li>".lang('nopasswordmatch')."</li>";
 	}
 
-	if( !empty($email) && !eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", $email ) )
+	if (!is_email($email))
 	  {
 	    $validinfo = false;
 	    $error .= '<li>'.lang('invalidemail').'</li>';
