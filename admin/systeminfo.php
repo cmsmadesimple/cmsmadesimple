@@ -73,7 +73,7 @@ $db = &$gCms->GetDb();
 
 //smartyfier
 $smarty->assign('themename', $themeObject->themeName);
-$smarty->assign('showheader', $themeObject->ShowHeader('copycontent'));
+$smarty->assign('showheader', $themeObject->ShowHeader('systeminfo'));
 $smarty->assign('backurl', $themeObject->BackUrl());
 $smarty->assign('systeminfo_cleanreport', 'systeminfo.php'.$urlext.'&amp;cleanreport=1');
 
