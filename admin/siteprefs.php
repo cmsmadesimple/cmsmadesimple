@@ -336,11 +336,12 @@ if ($dir=opendir(dirname(__FILE__)."/themes/"))
   $smarty->assign('logintheme',get_site_preference('logintheme','default'));
 }
 
-$active_tab = 'general';
-if( isset($_POST['active_tab']) )
-  {
-    $active_tab = trim($_POST['active_tab']);
-  }
+
+$smarty->assign('active_general', 0);
+$smarty->assign('active_sitedown', 0);
+$smarty->assign('active_handle_404', 0);
+$smarty->assign('active_setup', 0);
+
 $smarty->assign('active_'.$active_tab,1);
 $smarty->assign('SECURE_PARAM_NAME',CMS_SECURE_PARAM_NAME);
 $smarty->assign('CMS_USER_KEY',$_SESSION[CMS_USER_KEY]);
