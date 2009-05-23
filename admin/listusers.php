@@ -167,20 +167,14 @@ if (FALSE == empty($error)) {
                     }
 				else
 				    {
-					echo "<td>&nbsp;</td>\n";
-					}
+				      echo "<td>&nbsp;</td>\n";
+				    }
 				if ($remove && $oneuser->id != 1 && $oneuser->id != $userid)
-				    {
-					echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneuser->username),true)."');\">";
-                    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                    echo "</a></td>\n";
-		            }
-					//added
-					else
-				    {
-					echo "<td>&nbsp;</td>\n";
-					}
-					//end
+				  {
+				    echo "<td><a href=\"deleteuser.php".$urlext."&amp;user_id=".$oneuser->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneuser->username),true)."');\">";
+				    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+				    echo "</a></td>\n";
+				  }
         		echo "</tr>\n";
 
 				($currow=="row1"?$currow="row2":$currow="row1");

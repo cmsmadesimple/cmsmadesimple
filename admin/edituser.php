@@ -109,7 +109,7 @@ if ($access) {
 			$error .= "<li>".lang('nopasswordmatch')."</li>";
 		}
 
-		if (!is_email($email))
+		if (!empty($email) && !is_email($email))
 		  {
 		    $validinfo = false;
 		    $error .= '<li>'.lang('invalidemail').'</li>';
