@@ -132,6 +132,9 @@ class GroupOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
+		$query = 'DELETE FROM '.cms_db_perfix().'user_groups where group_id = ?';
+		$dbresult = $db->Execute($query, array($id));
+
 		$query = "DELETE FROM ".cms_db_prefix()."group_perms where group_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
