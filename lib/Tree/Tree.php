@@ -409,7 +409,7 @@ class Tree_Node
 	/**
 	* Gets the underlying content of this node
 	*/
-	function &getContent($deep = false)
+	function &getContent($force = false)
 	{
 		$content = null;
 		
@@ -431,16 +431,13 @@ class Tree_Node
                       }
 		  
 		    // load all children
-		    $parent_node->getChildren($deep);
+		    $parent_node->getChildren(false,$force);
 
 		    // see if the object is cached now.
-		    if( !isset($tree->content[$this->getTag()]) )
-// 		      {
-// 			die('getchildren failed, child node '.$this->getTag().' not cached');
-// 		      }
-		      return $content;
-
-		    $content =& $tree->content[$this->getTag()];
+		    if( isset($tree->content[$this->getTag()]) )
+		      {
+			$content =& $tree->content[$this->getTag()];
+		      }
 		  }
 		return $content;
 	}

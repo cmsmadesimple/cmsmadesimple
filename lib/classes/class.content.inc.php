@@ -1745,6 +1745,9 @@ class ContentBase
 	}
 
 	/* private */
+	/*
+	 * Add a property that is directly associtated with a field in the content table.
+	 */
 	function AddBaseProperty($name,$priority,$is_required = 0,$type = 'string')
 	{
 	  if( !is_array($this->_attributes) )
@@ -1756,12 +1759,19 @@ class ContentBase
 	}
 
 	/* private */
+	/*
+	 * Add a property to the content_props table for this content item
+	 * This property will not be effected by the basic_attributes list.
+	 */
 	function AddExtraProperty($name,$type='string')
 	{
 	  $this->mProperties->add($type,$name);
 	}
 
 	/* private */
+	/*
+	 * Add a property to the content_props table for this content item
+	 */
 	function AddContentProperty($name,$priority,$is_required = 0,$type = 'string')
 	{
 	  if( !is_array($this->_attributes) )
@@ -1773,6 +1783,10 @@ class ContentBase
 	}
 
 	/* private */
+	/*
+	 * Given the list of registered properties, cross reference with our
+	 * basic attributes list, and figure out which ones should be displayed
+	 */
 	function display_attributes($adding,$negative = 0)
 	{
 	  // get our required attributes
@@ -1868,7 +1882,7 @@ class ContentBase
 	  return $ret;
 	}
 
-	/* private */
+	/* protected */
 	function display_single_element($one,$adding)
 	{
 	  global $gCms;

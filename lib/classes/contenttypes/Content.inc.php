@@ -109,7 +109,6 @@ class Content extends ContentBase
 	}
 
 	parent::FillParams($params);
-
     }
 
     function Show($param = 'content_en')
