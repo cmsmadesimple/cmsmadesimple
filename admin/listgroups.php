@@ -37,10 +37,9 @@ check_permission($userid, "Modify Groups")
 check_permission($userid, "Remove Groups");
 
 if (!$access) {
-	die('Permission Denied');
-return;
+  die('Permission Denied');
+  return;
 }
-
 
 
 include_once("header.php");
@@ -62,6 +61,7 @@ include_once("header.php");
 	#$result = $db->Execute($query);
 
 	global $gCms;
+        $userops =& $gCms->GetUserOperations();
 	$groupops =& $gCms->GetGroupOperations();
 	$grouplist = $groupops->LoadGroups();
 
@@ -131,7 +131,7 @@ include_once("header.php");
                     echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
                     }
-				if ($remove && $onegroup->id != 1)
+				if ($remove && $onegroup->id != 1 && !$userops->UserInGroup($userid,$onegroup->id))
 				    {
 				      echo "<td class=\"icons_wide\"><a href=\"deletegroup.php".$urlext."&amp;group_id=".$onegroup->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $onegroup->name),true)."');\">";
 				      echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
