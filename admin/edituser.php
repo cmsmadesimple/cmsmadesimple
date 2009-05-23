@@ -68,14 +68,15 @@ $db =& $gCms->GetDb();
 
 $thisuser = $userops->LoadUserByID($user_id);
 if (strlen($thisuser->username) > 0)
-    {
+  {
     $CMS_ADMIN_SUBTITLE = $thisuser->username;
-    }
+  }
 
 // this is now always true... but we may want to change how things work, so I'll leave it
 $access_perm = check_permission($userid, 'Modify Users');
 $access_user = ($userid == $user_id);
-$access = $access_perm || $access_user;
+$access_group = $userops->UserInGroup($userid,1) || (!$userops->UserInGroup($user_id,1));
+$access = ($access_perm || $access_user) && $access_group;
 
 $assign_group_perm = check_permission($userid,'Modify Group Assignments');
 

@@ -110,7 +110,7 @@ if (FALSE == empty($error)) {
 <?php
 
 	$userid = get_userid();
-	$edit = check_permission($userid, 'Modify Users');
+        $edit = check_permission($userid, 'Modify Users');
         $remove = check_permission($userid, 'Remove Users');
 
 	$query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
@@ -148,9 +148,22 @@ if (FALSE == empty($error)) {
 
 		$counter=0;
 		foreach ($userlist as $oneuser){
+
+		  $this_user = $userid == $oneuser->id;
+		  $access_to_user = $edit && ($userops->UserInGroup($userid,1) || (!$userops->UserInGroup($oneuser->id,1)));
+		  $access_user = $this_user || $access_to_user;
+
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
   			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+			    if( $access_user )
+			      {
 				echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
+			      }
+			    else
+			      {
+				echo "<td>{$oneuser->username}</td>\n";
+			      }
+
 				if( $oneuser->id != 1 && $oneuser->id != $userid )
 				  {
 				    echo "<td class=\"pagepos\"><a href=\"listusers.php".$urlext."&amp;toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
@@ -159,12 +172,12 @@ if (FALSE == empty($error)) {
 				  {
 				    echo "<td class=\"pagepos\">&nbsp;</td>\n";
 				  }
-				if ($edit || $userid == $oneuser->id)
+				if ($access_user)
 				    {
-					echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">";
-                    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-                    echo "</a></td>\n";
-                    }
+				      echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">";
+				      echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+				      echo "</a></td>\n";
+				    }
 				else
 				    {
 				      echo "<td>&nbsp;</td>\n";
