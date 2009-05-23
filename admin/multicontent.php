@@ -58,15 +58,19 @@ function &get_delete_list($sel_nodes,&$parent = NULL,$depth = 0)
       if( check_ownership($userid, $node->getTag()) || quick_check_authorship($node->getTag(), $mypages) )
 	{
 	  $content =& $node->GetContent();
-	  $result[] =& $content;
 
-	  $children =& $node->getChildren();
+	  $children =& $node->getChildren(false,true);
 	  $tmp = TRUE;
 	  if( isset($children) && count($children) )
 	    {
+	      // we have children.. but we may not have access to them.
 	      $tmp = get_delete_list($children,$node,$depth + 1);
-	      if( $tmp === FALSE ) continue;
+	      if( is_null($tmp) ) {
+		continue;
+	      }
 	    }
+
+	  $result[] =& $content;
 	  if( is_array($tmp) )
 	    {
 	      for( $i = 0; $i < count($tmp); $i++ )
@@ -80,7 +84,8 @@ function &get_delete_list($sel_nodes,&$parent = NULL,$depth = 0)
 	{
 	  if( is_object($parent) )
 	    {
-	      return FALSE;
+	      $tmp = NULL;
+	      return $tmp;
 	    }
 	}
     }
