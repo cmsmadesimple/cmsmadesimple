@@ -342,7 +342,11 @@ $smarty->assign('active_sitedown', 0);
 $smarty->assign('active_handle_404', 0);
 $smarty->assign('active_setup', 0);
 
-$smarty->assign('active_'.$active_tab,1);
+$smarty->assign('active_general',($active_tab == 'general')?1:0);
+$smarty->assign('active_sitedown',($active_tab == 'sitedown')?1:0);
+$smarty->assign('active_handle_404',($active_tab == 'handle_404')?1:0);
+$smarty->assign('active_setup',($active_tab == 'setup')?1:0);
+
 $smarty->assign('SECURE_PARAM_NAME',CMS_SECURE_PARAM_NAME);
 $smarty->assign('CMS_USER_KEY',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('sitename',$sitename);
