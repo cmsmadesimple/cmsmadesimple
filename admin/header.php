@@ -52,7 +52,7 @@ else
 	// should be controlled by preferences or something
 	$ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
 	if( get_site_preference('enablenotifications',1) &&
-		get_preference($userid,'enablenotifications',1) )
+	    get_preference($userid,'enablenotifications',1) )
 	{
 		foreach( $gCms->modules as $modulename => $ext )
 		{
@@ -188,7 +188,8 @@ else
 
 			// update the last check time
 			// to midnight of the current day
-			if( $goodtest )
+			// if( $goodtest )
+			if( true )
 			{
 				set_site_preference('lastcmsversioncheck',
 					strtotime("23:59:55"));
