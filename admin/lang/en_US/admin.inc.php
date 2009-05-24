@@ -223,7 +223,7 @@ EOT;
 $lang['admin']['systeminfo'] = 'System Information';
 $lang['admin']['systeminfodescription'] = 'Display various pieces of information about your system that may be useful in diagnosing problems';
 $lang['admin']['welcome_user'] = 'Welcome';
-$lang['admin']['itsbeensincelogin'] = 'It has been %s since you last login';
+$lang['admin']['itsbeensincelogin'] = 'It has been %s since you last logged in';
 $lang['admin']['days'] = 'days';
 $lang['admin']['day'] = 'day';
 $lang['admin']['hours'] = 'hours';
