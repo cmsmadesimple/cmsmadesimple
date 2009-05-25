@@ -284,6 +284,7 @@ else
 			$idlist = array();
 			foreach ($nodelist as $node)
 			{
+			  if (!is_object($node)) continue;
 			  if ($node->DefaultContent())
 			    {
 			      redirect('listcontent.php'.$urlext.'&error=error_delete_default_parent');
