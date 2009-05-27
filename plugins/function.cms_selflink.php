@@ -118,48 +118,49 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		}
 		/* Russ - End */
 
-		$lang = get_site_preference('frontendlang','unknown');
+		$lang = get_site_preference('frontendlang','en');
 		if (isset($params['lang']))
 		{
 		  $lang = $params['lang'];
 		}
 		switch ($lang)
-			{
-				case 'dk':
-				case 'da':
-					$Prev_label = "Forrige side: ";
-					$Next_label = "N&aelig;ste side: ";
-					break;
-				case 'nl':
-					$Prev_label = "Vorige pagina: ";
-					$Next_label = "Volgende pagina: ";
-					$Parent_label = "Bovenliggende pagina: "; // uplink
-					break;
-				case 'en':
-					$Prev_label = "Previous page: ";
-					$Next_label = "Next page: ";
-					$Parent_label = "Parent page: "; //uplink
-					break;
-				case 'fr':
-					$Prev_label = "Page pr&eacute;c&eacute;dente&nbsp;: ";
-					$Next_label = "Page suivante&nbsp;: ";
-					$Parent_label = "Page ascendante&nbsp;: "; //uplink
-					break;
-				case 'no':
-					$Prev_label = "Forrige side : ";
-					$Next_label = "Neste side: ";
-					$Parent_label = "Side opp: "; //uplink
-					break;
-				case '0':
-					$Prev_label = "";
-					$Next_label = "";
-					break;
-				default:
-					$Prev_label = "Previous page: ";
-					$Next_label = "Next page: ";
-					$Parent_label = "Parent page: "; //uplink
-					break;
-			}
+		  {
+		  case 'dk':
+		  case 'da':
+		  case 'da_DK':
+		    $Prev_label = "Forrige side: ";
+		    $Next_label = "N&aelig;ste side: ";
+		    break;
+		  case 'nl':
+		  case 'nl_NL':
+		    $Prev_label = "Vorige pagina: ";
+		    $Next_label = "Volgende pagina: ";
+		    $Parent_label = "Bovenliggende pagina: "; // uplink
+		    break;
+		  case 'fr':
+		  case 'fr_FR':
+		    $Prev_label = "Page pr&eacute;c&eacute;dente&nbsp;: ";
+		    $Next_label = "Page suivante&nbsp;: ";
+		    $Parent_label = "Page ascendante&nbsp;: "; //uplink
+		    break;
+		  case 'no':
+		  case 'nb_NO':
+		    $Prev_label = "Forrige side : ";
+		    $Next_label = "Neste side: ";
+		    $Parent_label = "Side opp: "; //uplink
+		    break;
+		  case '0':
+		    $Prev_label = "";
+		    $Next_label = "";
+		    break;
+		  case 'en':
+		  default:
+		    $Prev_label = "Previous page: ";
+		    $Next_label = "Next page: ";
+		    $Parent_label = "Parent page: "; //uplink
+		    break;
+		  }
+
 		$condition = $order_by = false;
 		switch (strtolower($params['dir']))
 		{
