@@ -135,7 +135,7 @@ function toggleexpand($contentid, $collapse = false)
 
 function DoContent(&$list, &$node, $checkdefault = true, $checkchildren = true)
 {
-	$content =& $node->GetContent();
+	$content =& $node->GetContent(true);
 	if (isset($content))
 	{
 		if (!$checkdefault || ($checkdefault && !$content->DefaultContent()))
@@ -178,7 +178,7 @@ if (isset($_POST['idlist']))
 		$node =& $hm->sureGetNodeById($id);
 		if (isset($node))
 		{
-			$content =& $node->GetContent();
+			$content =& $node->GetContent(true);
 			if (isset($content))
 			{
 				$nodelist[] =& $content;
@@ -214,7 +214,7 @@ else
 		      {
 			$id = substr($k, strlen('order-'));
 			$node =& $hm->sureGetNodeById($id);
-			$one =& $node->getContent();
+			$one =& $node->getContent(true);
 			$parentNode = &$node->getParentNode();
 			if (FALSE == empty($reorder_parents_array[$one->ParentId()]) && array_key_exists($v, $reorder_parents_array[$one->ParentId()]))
 			  {
@@ -251,7 +251,7 @@ else
 	    foreach ($reorder_array AS $page_id => $page_order)
 	      {
 		$node =& $hm->sureGetNodeById($page_id);
-		$one =& $node->getContent();
+		$one =& $node->getContent(true);
 		// Only update if order has changed.
 		if ($one->ItemOrder() != $page_order)
 		  {

@@ -118,7 +118,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		}
 		/* Russ - End */
 
-		$lang = $gCms->current_language;
+		$lang = get_site_preference('frontendlang','unknown');
 		if (isset($params['lang']))
 		{
 		  $lang = $params['lang'];
