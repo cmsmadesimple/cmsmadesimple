@@ -45,52 +45,60 @@ $bulk = false;
 
 $mypages = author_pages($userid);
 
-function &get_delete_list($sel_nodes,&$parent = NULL,$depth = 0)
+function get_delete_list($sel_nodes,&$parent = NULL,&$final_result,$depth = 0)
 {
   // get the list of items we should delete
   $userid = get_userid();
   if( !check_permission($userid,'Remove Pages') ) return FALSE;
   global $mypages;
 
-  $result = array();
+  $status = TRUE;
   foreach( $sel_nodes as $node )
     {
       if( check_ownership($userid, $node->getTag()) || quick_check_authorship($node->getTag(), $mypages) )
 	{
-	  $content =& $node->GetContent();
+	  $content =& $node->GetContent(true);
 
 	  $children =& $node->getChildren(false,true);
-	  $tmp = TRUE;
+	  $child_status = array();
 	  if( isset($children) && count($children) )
 	    {
-	      // we have children.. but we may not have access to them.
-	      $tmp = get_delete_list($children,$node,$depth + 1);
-	      if( is_null($tmp) ) {
-		continue;
-	      }
-	    }
-
-	  $result[] =& $content;
-	  if( is_array($tmp) )
-	    {
-	      for( $i = 0; $i < count($tmp); $i++ )
+	      // we have children.. but we may not have access to 
+	      // any or all of them.
+	      $tmp = array();
+	      $child_status = get_delete_list($children,$node,$tmp,$depth+1);
+	      if( $child_status === FALSE || count($tmp) == 0 )
 		{
-		  $one =& $tmp[$i];
-		  $result[] =& $one;
+		  // there are children, but for one reason or another
+		  // we can't delete em. which means we can't delete this
+		  // parent either, or any of its parents.
+		  $status = FALSE;
+		}
+	      else
+		{
+		  $final_result[] = $content;
+		}
+
+	      if( count($tmp) )
+		{
+		  // there are children se can delete.
+		  for( $i = 0; $i < count($tmp); $i++ )
+		    {
+		      $one =& $tmp[$i];
+		      $final_result[] =& $one;
+		    }
 		}
 	    }
-	}
-      else
-	{
-	  if( is_object($parent) )
+	  else
 	    {
-	      $tmp = NULL;
-	      return $tmp;
+	      // no children
+	      $final_result[] = $content;
 	    }
+      
 	}
     }
 
-  return $result;
+  return $status;
 }
 
 function toggleexpand($contentid, $collapse = false)
@@ -231,7 +239,10 @@ else
 	}
 	if ($action == 'delete' )
 	  {
-	    $nodelist =& get_delete_list($nodelist);
+	    $parent = NULL;
+	    $result = array();
+	    $status = get_delete_list($nodelist,$parent,$result);
+	    $nodelist = $result;
 	  }
 
 	if ($action == 'reorder' && $reorder_error == FALSE)
