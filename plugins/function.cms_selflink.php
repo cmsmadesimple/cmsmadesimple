@@ -118,9 +118,12 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		}
 		/* Russ - End */
 
+		$lang = $gCms->current_language;
 		if (isset($params['lang']))
 		{
-			switch (strtolower($params['lang']))
+		  $lang = $params['lang'];
+		}
+		switch ($lang)
 			{
 				case 'dk':
 				case 'da':
