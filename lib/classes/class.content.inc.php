@@ -2002,7 +2002,7 @@ class ContentBase
 	    case 'additionaleditors':
 	      {
 		// do owner/additional-editor stuff
-		if( check_ownership(get_userid(),$this->Id()) )
+		if( $adding || check_ownership(get_userid(),$this->Id()) )
 		  {
 		    return $this->ShowAdditionalEditors();
 		  }
