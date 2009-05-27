@@ -94,7 +94,10 @@ function get_delete_list($sel_nodes,&$parent = NULL,&$final_result,$depth = 0)
 	      // no children
 	      $final_result[] = $content;
 	    }
-      
+	}
+      else
+	{
+	  $status = FALSE;
 	}
     }
 
