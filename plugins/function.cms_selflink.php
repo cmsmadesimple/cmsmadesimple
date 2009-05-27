@@ -160,13 +160,6 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 					$Parent_label = "Parent page: "; //uplink
 					break;
 			}
-		}
-		else
-		{
-			$Prev_label = "Previous page: ";
-			$Next_label = "Next page: ";
-			$Parent_label = "Parent page: "; //uplink
-		}
 		$condition = $order_by = false;
 		switch (strtolower($params['dir']))
 		{
