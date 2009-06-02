@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.6-beta2";
+$CMS_VERSION = "1.6-beta3";
 $CMS_VERSION_NAME = "New Caledonia";
 $CMS_SCHEMA_VERSION = "32";
 
