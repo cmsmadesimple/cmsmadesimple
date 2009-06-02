@@ -912,7 +912,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	  $editperms = (check_permission($userid, 'Modify Any Page') ||
 			quick_check_authorship($one->Id(),$mypages) ||
 			check_ownership($userid,$one->Id()))?1:0;
-	  if ( ($structure == 1) || (($remove == 1) && ($editperms == 1)) )
+	  if ( (($structure == 1) || (($remove == 1) && ($editperms == 1))) &&
+	       ($one->Type() != 'errorpage' ))
 	    {
 	      $txt .= '<input type="checkbox" name="multicontent-'.$one->Id().'" />';
 	    }
