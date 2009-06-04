@@ -50,7 +50,7 @@ function smarty_cms_function_anchor($params, &$smarty)
   
 	if (isset($pageURL))
 	{
-		$url = cms_htmlentities($pageURL).'#'.$params['anchor'];
+		$url = cms_htmlentities($_SERVER['REQUEST_URI']).'#'.$params['anchor'];
 		$url = str_replace('&amp;','***',$url);
 		$url = str_replace('&', '&amp;', $url);
 		$url = str_replace('***','&amp;',$url);
