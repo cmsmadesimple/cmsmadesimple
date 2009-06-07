@@ -86,6 +86,7 @@ Version 1.6 - New Caledonia
 
 - Printing
   - Now supports simple output from modules
+  - Fixed links in pdf-generation
 
 - Search
   - Template, added a class to submit and adjustments.
