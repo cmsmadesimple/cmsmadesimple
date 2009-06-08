@@ -19,9 +19,12 @@ Requirements:
     * Your web host may have different instructions for creating mysql databases
       and database users.
     - login to mysql: mysql -u root -p
-      create database cms;
-      grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';
-      quit
+    - create database cms;
+    - grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';
+      (optional, if you want to make sure character encodings are correct -- we'll
+       try to set this on installation, but it doesn't work):
+            - ALTER DATABASE cms DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+    - quit
 
 4.  Fix the permissions on the cache and template compilation directories so the web 
     server has access to them.
