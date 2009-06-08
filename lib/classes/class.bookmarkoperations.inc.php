@@ -154,8 +154,7 @@ class BookmarkOperations
 		$db = &$gCms->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."admin_bookmarks where bookmark_id = ?";
-		$db->Execute($query, array($id));
-
+		$dbresult = $db->Execute($query, array($id));
 		if ($dbresult !== false)
 		{
 			$result = true;
