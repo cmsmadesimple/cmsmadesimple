@@ -10,6 +10,7 @@ Version 1.6 - New Caledonia
   - #3189 check if udt exists
   - #3190 Error with link rel="canonical"
   - #3257 Non-admin users can create admin users
+  - #3451 typos in plugins page_image and page_attr
   - Drop all assign_by_ref in Installer
   - Missing $frontendlang in siteprefs, thanks to jce76350
   - Fixed lot of anchor issues (hoppe one for all)

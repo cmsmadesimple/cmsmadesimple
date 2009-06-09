@@ -31,7 +31,7 @@ function smarty_cms_function_page_attr($params, &$smarty)
   if(is_object($node))
     {
       $contentobj =& $node->GetContent();
-      if( is_object($node) )
+      if( is_object($contentobj) )
 	{
 	  $result = $contentobj->GetPropertyValue($key);
           if( $result == -1 ) $result = '';

@@ -33,7 +33,7 @@ function smarty_cms_function_page_image($params, &$smarty)
   if(is_object($node))
     {
       $contentobj =& $node->GetContent();
-      if( is_object($node) )
+      if( is_object($contentobj) )
 	{
 	  $result = $contentobj->GetPropertyValue($propname);
           if( $result == -1 ) $result = '';
