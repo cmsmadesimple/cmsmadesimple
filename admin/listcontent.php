@@ -826,7 +826,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	  $txt = '';
 	  {
 	    $url = $one->GetURL();
-	    if ($url != '' && $url != '#' && $one->Type() != 'pagelink' && $one->Type() != 'link' && $one->Type() != 'sectionheader' && $one->Active())
+	    if ($url != '' && $url != '#' && $one->IsViewable() && $one->Active())
 	      {
 		$txt .= "<a href=\"".$url."\" rel=\"external\" target=\"_blank\">";
 		$txt .= $viewImg."</a>";

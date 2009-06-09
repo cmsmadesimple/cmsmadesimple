@@ -363,7 +363,7 @@ if (isset($contentobj->mPreview) && $contentobj->mPreview == true)
 */
 $submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
 $submit_buttons .= ' <input type="submit" onclick="return window.Edit_Content_Apply(this);" name="applybutton" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
- if( $content_type == 'content' && $contentobj->Active() ) {
+ if( $contentobj->IsViewable() && $contentobj->Active() ) {
    $submit_buttons .= ' <a rel="external" href="'.$contentobj->GetURL().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
  }
 $submit_buttons .= '</p></div>';
