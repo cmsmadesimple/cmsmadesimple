@@ -26,6 +26,11 @@ class Link extends ContentBase
         return TRUE;
     }
 
+    function IsViewable()
+    {
+      return FALSE;
+    }
+
     function FriendlyName()
     {
       return lang('contenttype_link');

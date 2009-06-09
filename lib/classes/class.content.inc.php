@@ -593,6 +593,11 @@ class ContentBase
 	  return TRUE;
 	}
 
+	function IsViewable()
+	{
+	  return TRUE;
+	}
+
 	function SetAlias($alias, $doAutoAliasIfEnabled = true)
 	{
 		$this->DoReadyForEdit();

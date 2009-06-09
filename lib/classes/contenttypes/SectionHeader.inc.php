@@ -80,6 +80,11 @@ class SectionHeader extends ContentBase
     {
 	return '#';
     }
+
+    function IsViewable()
+    {
+      return FALSE;
+    }
 }
 
 # vim:ts=4 sw=4 noet
