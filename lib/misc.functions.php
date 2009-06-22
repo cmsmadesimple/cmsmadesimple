@@ -1133,7 +1133,8 @@ function munge_string_to_url($alias, $tolower = false)
 		$alias = strtolower($alias);
 	}
 
-	$alias = preg_replace("/[^\w-]+/", "-", $alias);
+	$alias = preg_replace('/[^a-z0-9-_]+/i','-',$alias);
+	//$alias = preg_replace("/[^\w-]+/", "-", $alias);
 	$alias = trim($alias, '-');
 
 	return $alias;
