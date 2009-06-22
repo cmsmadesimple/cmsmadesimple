@@ -150,7 +150,7 @@ if ($result && $result->RecordCount() > 0) {
 		$addt_users .= "<option value=\"".$row["user_id"]."\">".$row["username"]."</option>";
 	}
 }else{
-	$addt_users = "<option>&nbsp;</option>";
+	$addt_users .= "<option>&nbsp;</option>";
 }
 
 if (!$access)
