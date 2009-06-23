@@ -173,7 +173,36 @@ p.lbpass  {
    margin-top: 10px;
    }
 
-
+div.forgot-pw {
+	margin-top: 10px;
+	}
+div.forgot-pw a, div.forgot-pw a:hover, div.forgot-pw a:visited{
+	color: #243135;
+	font-weight: bold;
+}
+.acceptLogin  {
+	margin: 2px 2px 5px 2px;
+	padding: 10px 10px 10px 35px;
+	border: 1px solid #BDD3A3;
+	color: #000;
+	width: auto;
+	background: #D6E4C5  url(themes/default/images/icons/system/accept.gif) no-repeat 5px 5px;
+	height:1%; /*IE6*/
+	display: block;
+	text-align: left;
+   }
+.warningLogin  {
+	margin: 2px 2px 5px 2px;
+	padding: 10px 10px 10px 35px;
+	border: 1px solid #D3C403;
+	color: #000;
+	width: auto;
+	background: #FDF166 url(themes/default/images/icons/system/warning.gif) no-repeat 5px 5px;
+	height:1%; /*IE6*/
+	display: block;
+	text-align: left;
+   }
+   .lbfieldstart{padding:10px 1px;}
 /* Main Page - Menu */
 #nav, #nav ul  {
    list-style-type: none;
