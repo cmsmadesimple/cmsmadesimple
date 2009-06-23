@@ -655,7 +655,8 @@ class ContentOperations
 				$contentobj =& ContentOperations::CreateNewContent($dbresult->fields['type']);
 				if (isset($contentobj))
 				{
-					$contentobj->LoadFromData($dbresult->FetchRow(), false);
+					$tmp = $dbresult->FetchRow();
+					$contentobj->LoadFromData($tmp, false);
 					$map[$contentobj->Id()] = $count;
 					$contentcache[] = $contentobj;
 					$count++;

@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.6";
-$CMS_VERSION_NAME = "New Caledonia";
+$CMS_VERSION = "1.6.1";
+$CMS_VERSION_NAME = "Canala";
 $CMS_SCHEMA_VERSION = "32";
 
 define('CMS_VERSION', $CMS_VERSION);

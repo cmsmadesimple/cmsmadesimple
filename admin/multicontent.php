@@ -45,7 +45,7 @@ $bulk = false;
 
 $mypages = author_pages($userid);
 
-function get_delete_list($sel_nodes,&$parent = NULL,&$final_result,$depth = 0)
+function get_delete_list($sel_nodes,&$parent,&$final_result,$depth = 0)
 {
   // get the list of items we should delete
   $userid = get_userid();
