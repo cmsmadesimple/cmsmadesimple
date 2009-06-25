@@ -52,7 +52,7 @@ $passwordagain= "";
 if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
 
 $email = "";
-if (isset($_POST["email"])) $email = cleanValue($_POST["email"]);
+if (isset($_POST["email"])) $email = trim($_POST["email"]);
 
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
