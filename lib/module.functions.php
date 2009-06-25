@@ -46,7 +46,23 @@ function cms_module_plugin($params,&$smarty)
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
 
-	$id = 'm' . ++$gCms->variables["modulenum"];
+	//$id = 'm' . ++$gCms->variables["modulenum"];
+	if( !isset($gCms->variables['mid_cache']) )
+	  {
+	    $gCms->variables['mid_cache'] = array();
+	  }
+	for( $i = 0; $i < 10; $i++ )
+	{
+	  $tmp = $i;
+	  foreach($params as $key=>$value)
+	    $tmp .= $key.'='.$value;
+	  $id = substr(md5($tmp),0,5);
+	  if( !isset($gCms->variables['mid_cache'][$id]) )
+	    {
+	      $gCms->variables['mid_cache'][$id] = $id;
+	      break;
+	    }
+	}
 
 	$returnid = '';
 	if (isset($gCms->variables['pageinfo']) && isset($gCms->variables['pageinfo']->content_id))
