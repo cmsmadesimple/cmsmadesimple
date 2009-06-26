@@ -1,3 +1,13 @@
+Version 1.6.1 - Canala
+-----------------------------
+- Fixes of several bugs:
+  - #3589 Missing "Forgot Password?" on default template
+  - #3601 Creating new user fails, doesn't accept "-" in email address 
+  - Fixes issue with php 5.0.5 in content operations
+  - Fixes issue with php 4.x in multicontent
+  - Fixes the module id counting (inline / non-inline)
+  
+  
 Version 1.6 - New Caledonia
 -----------------------------
 - Fixes of several bugs: 
