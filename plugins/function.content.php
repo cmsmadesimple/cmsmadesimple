@@ -78,13 +78,14 @@ function smarty_cms_function_content($params, &$smarty)
 					&& $cmsmodules[$modulename]['object']->IsPluginModule())
 				      {
 					@ob_start();
+					unset($params['block']);
+					unset($params['label']);
+					unset($params['wysiwyg']);
+					unset($params['oneline']);
+					unset($params['default']);
+					unset($params['size']);
 					$params = array_merge($params, GetModuleParameters($id));
-					
-					// calguy1000..... increment the modulenum 
-					// this handles the case where there are modules called after
-					// the content block, and need their id to be consistent between calls.
-					++$gCms->variables["modulenum"]; 
-					
+					//$params = GetModuleParameters($id);
 					$returnid = '';
 					if (isset($params['returnid']))
 					  {
