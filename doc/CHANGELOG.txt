@@ -1,9 +1,11 @@
 Version 1.6.1 - Canala
 -----------------------------
 - Fixes of several bugs:
+  - #3138 A bug of counting modules in page 
   - #3589 Missing "Forgot Password?" on default template
   - #3601 Creating new user fails, doesn't accept "-" in email address
   - #3608 Edit icon of pages is shown even if no permissions to edit that page 
+  - #3612 {content} passes params to Module -> results in errormessage 
   - Fixes issue with php 5.0.5 in content operations
   - Fixes issue with php 4.x in multicontent
   - Fixes the module id counting (inline / non-inline)
