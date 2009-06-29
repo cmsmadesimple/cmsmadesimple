@@ -582,31 +582,79 @@ class ContentOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
+		// get the content rows
 		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? AND active = 1 ORDER BY hierarchy";
 		if( $all )
 		  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
-		$dbresult =& $db->Execute($query, array($id));
+		$contentrows =& $db->GetArray($query, array($id));
+		$contentprops = '';
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
-		{
-			while ($row = $dbresult->FetchRow())
-			{
-				#Make sure the type exists.  If so, instantiate and load
-				if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes())))
-				{
-					$contentobj =& ContentOperations::CreateNewContent($row['type']);
-					if ($contentobj)
-					{
-						$contentobj->LoadFromData($row, $loadprops);
-						$contentcache =& $tree->content;
-						$id = $row['content_id'];
-						$contentcache[$id] =& $contentobj;
-					}
-				}
-			}
-		}
+		// get the content ids from the returned data
+		if( $loadprops )
+		  {
+		    $child_ids = array();
+		    for( $i = 0; $i < count($contentrows); $i++ )
+		      {
+			$child_ids[] = $contentrows[$i]['content_id'];
+		      }
+		    
+		    // get all the properties for the child_ids
+		    $query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
+		    $tmp =& $db->GetArray($query);
+
+		    // re-organize the tmp data into a hash of arrays of properties for each content id.
+		    if( $tmp )
+		      {
+			$contentprops = array();
+			for( $i = 0; $i < count($contentrows); $i++ )
+			  {
+			    $content_id = $contentrows[$i]['content_id'];
+			    $t2 = array();
+			    for( $j = 0; $j < count($tmp); $j++ )
+			      {
+				if( $tmp[$j]['content_id'] == $content_id )
+				  {
+				    $t2[] = $tmp[$j];
+				  }
+			      }
+			    $contentprops[$content_id] = $t2;
+			  }
+		      }
+		  }
 		
-		if ($dbresult) $dbresult->Close();
+		// build the content objects
+		for( $i = 0; $i < count($contentrows); $i++ )
+		  {
+		    $row =& $contentrows[$i];
+		    $id = $row['content_id'];
+
+		    if (!in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) continue;
+		    $contentobj =& ContentOperations::CreateNewContent($row['type']);
+		    if ($contentobj)
+		      {
+			$contentobj->LoadFromData($row, false);
+			if( $loadprops && $contentprops && isset($contentprops[$id]) )
+			  {
+			    // load the properties from local cache.
+			    $props =& $contentprops[$id];
+			    $obj =& $contentobj->mProperties;
+			    $obj->mPropertyNames = array();
+			    $obj->mPropertyTypes = array();
+			    $obj->mPropertyValues = array();
+			    foreach( $props as $oneprop )
+			      {
+				$obj->mPropertyNames[] = $oneprop['prop_name'];
+				$obj->mPropertyTypes[$oneprop['prop_name']] = $oneprop['type'];
+				$obj->mPropertyValues[$oneprop['prop_name']] = $oneprop['content'];
+			      }
+			    $contentobj->mPropertiesLoaded = true;
+			  }
+
+			// cache the content objects
+			$contentcache =& $tree->content;
+			$contentcache[$id] =& $contentobj;
+		      }
+		  }
 	}
 
 	/**
