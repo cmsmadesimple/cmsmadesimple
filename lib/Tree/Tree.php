@@ -409,7 +409,7 @@ class Tree_Node
 	/**
 	* Gets the underlying content of this node
 	*/
-	function &getContent($force = false)
+    function &getContent($deep = false,$loadchildren = true)
 	{
 		$content = null;
 		
@@ -425,13 +425,16 @@ class Tree_Node
 	 	      {	
 			global $gCms;
                         $contentops =& $gCms->GetContentOperations();
-                        $content =& $contentops->LoadContentFromId($this->getTag(), true);
+                        $content =& $contentops->LoadContentFromId($this->getTag(), $deep);
                         $tree->content[$this->getTag()] =& $content;
 		        return $content;
                       }
 		  
 		    // load all children
-		    $parent_node->getChildren(false,$force);
+		    if( $loadchildren )
+		      {
+			$parent_node->getChildren($deep);
+		      }
 
 		    // see if the object is cached now.
 		    if( isset($tree->content[$this->getTag()]) )
@@ -637,7 +640,7 @@ class Tree_Node
 	  $result = false;
 	  foreach( $this->nodes->nodes as $onenode )
 	    {
-	      $contentobj =& $onenode->getContent();
+	      $contentobj =& $onenode->getContent(false,false);
 	      if( is_object($contentobj) )
                 {
 	          if( $contentobj->Active() && $contentobj->ShowInMenu() )

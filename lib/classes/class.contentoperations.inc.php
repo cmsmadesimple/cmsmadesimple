@@ -494,7 +494,7 @@ class ContentOperations
 		if ($dbresult) $dbresult->Close();
 	}
 	
-	function &GetAllContentAsHierarchy($loadprops, $onlyexpanded=null)
+	function &GetAllContentAsHierarchy($loadprops, $onlyexpanded=null, $loadcontent = false)
 	{
 		debug_buffer('', 'starting tree');
 
@@ -570,7 +570,10 @@ class ContentOperations
 			fclose($handle);
 		}
 
-		ContentOperations::LoadChildrenIntoTree(-1, $tree, false, true);
+		if( $loadcontent )
+		  {
+		    ContentOperations::LoadChildrenIntoTree(-1, $tree, false, true);
+		  }
 
 		debug_buffer('', 'ending tree');
 
@@ -579,6 +582,12 @@ class ContentOperations
 	
 	function LoadChildrenIntoTree($id, &$tree, $loadprops = false, $all = false)
 	{	
+	  if( !$loadprops ) {
+	    echo "DEBUG: loadprops = $loadprops<br/>";
+	    echo "DEBUG: start<br/>";
+	    stack_trace(); 
+	    echo "DEBUG: end<br/><br/>";
+	  }
 		global $gCms;
 		$db = &$gCms->GetDb();
 
