@@ -6,10 +6,8 @@ Version 1.6.1 - Canala
   - #3601 Creating new user fails, doesn't accept "-" in email address
   - #3608 Edit icon of pages is shown even if no permissions to edit that page 
   - #3612 {content} passes params to Module -> results in errormessage 
+  - #3626 Fixes issue with php 4.x in multicontent
   - Fixes issue with php 5.0.5 in content operations
-  - Fixes issue with php 4.x in multicontent
-  - Fixes the module id counting (inline / non-inline)
-  
   
 Version 1.6 - New Caledonia
 -----------------------------
