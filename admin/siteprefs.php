@@ -229,6 +229,10 @@ else if (isset($_POST["editsiteprefs"]))
 	    {
 	      $basic_attributes = implode(',',($_POST['basic_attributes']));
 	    }
+	  else
+	    {
+	      $basic_attributes = '';
+	    }
 	  if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
 	  if (isset($_POST["urlcheckversion"])) $urlcheckversion = $_POST["urlcheckversion"];
 	  if (isset($_POST['css_max_age'])) $css_max_age = (int)$_POST['css_max_age'];
