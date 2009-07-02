@@ -582,12 +582,6 @@ class ContentOperations
 	
 	function LoadChildrenIntoTree($id, &$tree, $loadprops = false, $all = false)
 	{	
-	  if( !$loadprops ) {
-	    echo "DEBUG: loadprops = $loadprops<br/>";
-	    echo "DEBUG: start<br/>";
-	    stack_trace(); 
-	    echo "DEBUG: end<br/><br/>";
-	  }
 		global $gCms;
 		$db = &$gCms->GetDb();
 

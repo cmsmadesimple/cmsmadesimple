@@ -220,7 +220,7 @@ class Tree
 	*/
 	function &getChildren()
 	{
-		return $this->nodes->nodes;
+	  return $this->nodes->nodes;
 	}
 	
 	function &getFlatList()
