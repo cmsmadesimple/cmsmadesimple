@@ -1425,7 +1425,15 @@ class ContentBase
       // alias
       if (isset($params['alias']))
 	{
-	  $this->SetAlias(trim($params['alias']), $this->DoAutoAlias());
+	  $tmp = trim($params['alias']);
+	  if( empty($tmp) )
+	    {
+	      $this->SetAlias($tmp);
+	    }
+	  else
+	    {
+	      $this->SetAlias($tmp, $this->DoAutoAlias());
+	    }
 	}
       else if($this->RequiresAlias() && $this->DoAutoAlias())
 	{
