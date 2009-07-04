@@ -1,12 +1,15 @@
 Version 1.6.1 - Canala
 -----------------------------
 - Fixes of several bugs:
-  - #3138 A bug of counting modules in page 
+  - #3138 A bug of counting modules in page
+  - #3582 (CMS 1.6) Fatal Error in contentoperations.inc.php    
   - #3589 Missing "Forgot Password?" on default template
+  - #3591 Default group "Editor" has no permission to edit a page 
   - #3601 Creating new user fails, doesn't accept "-" in email address
   - #3608 Edit icon of pages is shown even if no permissions to edit that page 
   - #3612 {content} passes params to Module -> results in errormessage 
   - #3626 Fixes issue with php 4.x in multicontent
+  - #3636 Global Settings -> Advanced Setup -> Basic Properties 
   - Fixes issue with php 5.0.5 in content operations
   
 Version 1.6 - New Caledonia
