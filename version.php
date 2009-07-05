@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.6.1";
+$CMS_VERSION = "1.7-beta1";
 $CMS_VERSION_NAME = "Canala";
 $CMS_SCHEMA_VERSION = "32";
 
