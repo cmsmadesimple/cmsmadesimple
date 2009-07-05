@@ -69,7 +69,6 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["persistent_db_conn"] = false;
 	$config["default_upload_permission"] = '664';
 	$config["page_extension"] = "";
-	$config["use_adodb_lite"] = true;
 	$config["locale"] = "";
 	$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
 	$config['set_names'] = false; //Default to false for pre-1.6 compatibility.  New installs get true.
@@ -224,11 +223,6 @@ function cms_config_text($config)
 #Use persistent connections?  They're generally faster, but not all hosts
 #allow them.
 \$config['persistent_db_conn'] = ${$config['persistent_db_conn']?'true':'false'};
-
-#Use ADODB Lite?  This should be true in almost all cases.  Note, slight
-#tweaks might have to be made to date handling in a "regular" adodb
-#install before it can be used.
-\$config['use_adodb_lite'] = ${$config['use_adodb_lite']?'true':'false'};
 
 #-------------
 #Path Settings
