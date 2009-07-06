@@ -41,7 +41,7 @@ function & adodb_connect()
 
 	if( $config['dbms'] == 'sqlite' )
           {
-	    $fn = dirname(dirname(__FILE__)).'/tmp/cmsms.db';
+	    $fn = dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.$config['db_name'];
 	    $connect_result = $dbinstance->$conn_func($fn);
           }
         else
