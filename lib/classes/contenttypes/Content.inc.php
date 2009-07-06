@@ -291,6 +291,7 @@ class Content extends ContentBase
 	return (count($errors) > 0?$errors:FALSE);
     }
 
+
     /* private */
     function get_content_blocks()
     {

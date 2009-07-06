@@ -47,6 +47,7 @@ class CMSModule
 	var $modform;
 	var $modredirect;
 	var $modmisc;
+	var $modblock;
 	var $param_map;
 	var $restrict_unknown_params;
 	var $smarty;
@@ -108,6 +109,7 @@ class CMSModule
 		$this->modform = false;
 		$this->modredirect = false;
 		$this->modmisc = false;
+		$this->modblock = false;
 	}
 	
 	function LoadTemplateMethods()
@@ -152,6 +154,15 @@ class CMSModule
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modmisc.inc.php'));
 			$this->modmisc = true;
+		}
+	}
+
+	function LoadContentMethods()
+	{
+		if (!$this->modcontent)
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modcontent.inc.php'));
+			$this->modcontent = true;
 		}
 	}
 
@@ -478,17 +489,8 @@ class CMSModule
 	 */
 	function GetContentBlockInputBase($blockname,$value = '',$params = array())
 	{
-	  if( empty($blockname)  )
-	    {
-	      return FALSE;
-	    }
-
-	  $id = $blockname;
-	  @ob_start();
-	  $tmp = $this->GetContentBlockInput($id,'',$blockname,$value,$params);
-	  $tmp = @ob_get_contents();
-	  @ob_end_clean();
-	  return $tmp;
+	  $this->LoadContentMethods();
+	  return cms_module_GetContentBlockInputBase($this,$blockname,$value,$params);
 	}
 
 
@@ -512,17 +514,8 @@ class CMSModule
 
 	function GetContentBlockValueBase($blockName,$blockParams,$inputparams)
 	{
-	  if( empty($blockName)  )
-	    {
-	      return FALSE;
-	    }
-
-	  $id = $blockName;
-	  @ob_start();
-	  $tmp = $this->GetContentBlockValue($id,'',$blockName,$blockParams,$inputparams);
-	  $tmp = @ob_get_contents();
-	  @ob_end_clean();
-	  return $tmp;
+	  $this->LoadContentMethods();
+	  return cms_module_GetContentBlockValueBase($this,$blockname,$value,$params);
 	}
 
 
@@ -539,6 +532,29 @@ class CMSModule
 
 	  include($filename);
 	}
+
+
+	function ValidateContentBlockValueBase($blockName,$value)
+	{
+	  $this->LoadContentMethods();
+	  return cms_module_GetContentBlockValueBase($this,$blockName,$value);
+	}
+
+
+	function ValidateContentBlockValue($blockName,$value)
+	{
+	  $mode = 'validate';
+	  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/contentblock.'.$blockName.'.php';
+	  if( !@is_file($filename) ) return FALSE;
+
+	  global $gCms;
+	  $db =& $gCms->GetDb();
+	  $config =& $gCms->GetConfig();
+	  $smarty =& $gCms->GetSmarty();
+
+	  include($filename);
+	}
+
 
 	/**
 	 * ------------------------------------------------------------------
