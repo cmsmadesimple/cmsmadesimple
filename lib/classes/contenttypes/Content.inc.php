@@ -89,6 +89,16 @@ class Content extends ContentBase
 	    {
 	      $this->AddExtraProperty($blockName);
 	      $parameters[] = $blockInfo['id'];
+
+	      if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
+		{
+		  if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
+		  $module =& $gCms->modules[$blockInfo['module']]['object'];
+		  if( !is_object($module) ) continue;
+		  if( !$module->HasContentBlocks() ) continue;
+		  $tmp = $module->GetContentBlockValueBase($blockName,$blockInfo,$params);
+		  $params[$blockInfo['id']] = $tmp;
+		}
 	    }
 	  
 	  // do the content property parameters
@@ -186,8 +196,8 @@ class Content extends ContentBase
 		      if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
 		      $module =& $gCms->modules[$blockInfo['module']]['object'];
 		      if( !is_object($module) ) continue;
-		      if( $module->HasContentBlocks() === FALSE ) continue;
-		      $tmp = $module->GetContentBlockInputBase($blockName,$blockInfo['blocktype'],$blockInfo['params']);
+		      if( !$module->HasContentBlocks() ) continue;
+		      $tmp = $module->GetContentBlockInputBase($blockName,$data,$blockInfo['params']);
 		      if( $tmp === FALSE ) continue;
 		      $ret[]= array($label.':',$tmp);
 		    }
@@ -456,9 +466,6 @@ class Content extends ContentBase
 		  $result = true;
 		}
 
-	      /* 
-	       * disable this for now 
-	       *
 	      // match module content tags
 	      $pattern = '/{content_module\s([^}]*)}/';
 	      $pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
@@ -482,7 +489,6 @@ class Content extends ContentBase
 			  $name = '';
 			  $module = '';
 			  $label = '';
-			  $blocktype = '';
 			  $parms = array();
 			  
 			  foreach ($keyval as $key=>$val)
@@ -504,9 +510,6 @@ class Content extends ContentBase
 				case 'module':
 				  $module = $val;
 				  break;
-				case 'type':
-				  $blocktype = $val;
-				  break;
 				default:
 				  $parms[$key] = $val;
 				  break;
@@ -515,7 +518,6 @@ class Content extends ContentBase
 			  
 			  if( empty($name) ) $name = '**default**';
 			  $this->_contentBlocks[$name]['type'] = 'module';
-			  $this->_contentBlocks[$name]['blocktype'] = $blocktype;
 			  $this->_contentBlocks[$name]['id'] = $id;
 			  $this->_contentBlocks[$name]['module'] = $module;
 			  $this->_contentBlocks[$name]['params'] = $parms;
@@ -523,13 +525,10 @@ class Content extends ContentBase
 		    }
 		  
 		  // force a load 
-		  $this->mProperties->Load($this->mId);
+		  $this->GetPropertyValue('extra1');
 		  
 		  $result = true;
 		}
-		*
-		* end disabled code
-		*/
 	      
 	      $this->_contentBlocksLoaded = true;
 	    }
