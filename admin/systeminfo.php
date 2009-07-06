@@ -221,22 +221,16 @@ $tmp[1]['server_software'] = testDummy('', $_SERVER['SERVER_SOFTWARE'], '');
 $tmp[0]['server_api'] = testDummy('', PHP_SAPI, '');
 $tmp[1]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('on') .' '. php_uname('m'), '');
 
-switch($config['dbms']) //workaroud: ServerInfo() is unsupported in adodblite
-{
-	case 'postgres7': $tmp[0]['server_db_type'] = testDummy('', 'PostgreSQL ('.$config['dbms'].')', '');
-					$v = pg_version();
-					$_server_db = (isset($v['server_version'])) ? $v['server_version'] : $v['client'];
-					list($minimum, $recommended) = getTestValues('pgsql_version');
-					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
-					break;
-	case 'mysqli':	$v = $db->connectionId->server_info;
-	case 'mysql':	if(!isset($v)) $v = mysql_get_server_info();
-					$tmp[0]['server_db_type'] = testDummy('', 'MySQL ('.$config['dbms'].')', '');
-					$_server_db = (false === strpos($v, "-")) ? $v : substr($v, 0, strpos($v, "-"));
-					list($minimum, $recommended) = getTestValues('mysql_version');
-					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
-					break;
-}
+$arr_db = getSupportedDBDriver();
+$db_string='';
+if(isset($arr_db[$config['dbms']])) $db_string = $arr_db[$config['dbms']]['label'];
+$tmp[0]['server_db_type'] = testDummy('', $db_string.' ('.$config['dbms'].')', '');
+
+$v = $db->ServerInfo();
+list($minimum, $recommended) = getTestValues($arr_db[$config['dbms']]['server'].'_version');
+$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $v['version'], '', $minimum, $recommended, false);
+$smarty->assign('count_server_info', count($tmp[0]));
+$smarty->assign('server_info', $tmp);
 $smarty->assign('count_server_info', count($tmp[0]));
 $smarty->assign('server_info', $tmp);
 

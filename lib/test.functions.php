@@ -34,7 +34,7 @@ function getSupportedDBDriver()
 	return array(
 		'mysqli'=>array('server'=>'mysql', 'label'=>'MySQL (compatibility)', 'extension' => 'mysql'),
 		'mysql'=>array('server'=>'mysql', 'label'=>'MySQL (4.1+)', 'extension' => 'mysql'),
-		'pgsql'=>array('server'=>'postgresql', 'label'=>'PostgreSQL 7/8', 'extension' => 'pgsql'),
+		'postgres7'=>array('server'=>'pgsql', 'label'=>'PostgreSQL 7/8', 'extension' => 'pgsql'),
 		'sqlite'=>array('server'=>'sqlite', 'label'=>'SQLite 2/3', 'extension' => 'sqlite'),
 	);
 }
