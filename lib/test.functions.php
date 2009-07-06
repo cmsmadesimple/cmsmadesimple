@@ -31,7 +31,7 @@
 */
 function getSupportedDBDriver()
 {
-	return array('mysqli'=>'mysql', 'mysql'=>'mysql', 'pgsql'=>'pgsql');
+	return array('mysqli'=>'mysql', 'mysql'=>'mysql', 'pgsql'=>'pgsql', 'sqlite'=>'sqlite');
 }
 
 /**
@@ -52,7 +52,7 @@ function getTestValues( $property )
 
 		'mysql_version'			=> array('minimum'=>'3.23', 'recommended'=>'4.1'),
 		'pgsql_version'			=> array('minimum'=>'7.4', 'recommended'=>'8'),
-		'sqlite_version'		=> array('minimum'=>'', 'recommended'=>''),
+		'sqlite_version'		=> array('minimum'=>'2.8.10', 'recommended'=>'2.8.16'),
 	);
 
 	if(array_key_exists($property, $range))
