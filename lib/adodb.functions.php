@@ -8,22 +8,19 @@ function load_adodb()
 
 	// @TODO: Remove dependence on PEAR for error handling	
 	define('ADODB_OUTP', 'debug_sql');
-	//define('ADODB_ERROR_HANDLER', 'adodb_error');
 	
-	{
 	# CMSMS is configured to use full ADOdb
-		$full_adodb = cms_join_path(dirname(__FILE__),'adodb','adodb.inc.php');
-		if (! file_exists($full_adodb))
-		{
-			# Full ADOdb cannot be found, show a debug error message
-			$gCms->errors[] = 'CMS Made Simple is configured to use the full ADOdb Database Abstraction library, but it\'s not in the lib' .DIRECTORY_SEPARATOR. 'adodb directory. Switched back to ADOdb Lite.';
-		}
-		else
-		{
-			# Load (full) ADOdb
-			require($full_adodb);
-			$loaded_adodb = true;
-		}
+	$full_adodb = cms_join_path(dirname(__FILE__),'adodb','adodb.inc.php');
+	if (! file_exists($full_adodb))
+	{
+		# Full ADOdb cannot be found, show a debug error message
+		$gCms->errors[] = 'CMS Made Simple is configured to use the full ADOdb Database Abstraction library, but it\'s not in the lib' .DIRECTORY_SEPARATOR. 'adodb directory!';
+	}
+	else
+	{
+		# Load (full) ADOdb
+		require($full_adodb);
+		$loaded_adodb = true;
 	}
 	
 	define('CMS_ADODB_DT', 'T');
@@ -34,29 +31,31 @@ function & adodb_connect()
 	global $gCms;
 	$config =& $gCms->GetConfig();
 	
-	$dbinstance =& ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
-	$dbinstance->raiseErrorFn = "adodb_error";
-	$conn_func = (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true) ? 'PConnect' : 'Connect';
-	if(!empty($config['db_port'])) $dbinstance->port = $config['db_port'];
-
+	$dsn = $config['dbms'].'://';
 	if( $config['dbms'] == 'sqlite' )
-          {
-	    $fn = dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.$config['db_name'];
-	    $connect_result = $dbinstance->$conn_func($fn);
-          }
-        else
-          {
-	    $connect_result = $dbinstance->$conn_func($config['db_hostname'], $config['db_username'], 
-			$config['db_password'], $config['db_name']);
-          }
-	
-	if (FALSE == $connect_result)
 	{
-		die();
+		$dsn .= urlencode(cms_join_path(CONFIG_FILE_LOCATION, 'tmp', $fn)) .'/';
+	}
+	else
+	{
+		$dsn .= $config['db_username'].':'.rawurlencode($config['db_password']).'@'.$config['db_hostname'].'/'.$config['db_name'];
+		$opt = array();
+		if(isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true) $opt[] = 'persist';
+		if( !empty($config['db_port']) )
+		{
+			$opt[] = 'port='.$config['db_port'];
+		}
+		elseif( !empty($config['db_socket']) && $config['dbms'] == 'mysqli')
+		{
+			$opt[] = 'socket='.$config['db_socket'];
+		}
+		$dsn .= ((count($opt) > 0) ? '?'.implode('&', $opt) : '');
 	}
 
-	$dbinstance->raiseErrorFn = null;
-	
+	define('ADODB_ERROR_HANDLER', 'adodb_error');
+	$dbinstance = ADONewConnection( $dsn );
+	define('ADODB_ERROR_HANDLER', false);
+
 	$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 	
 	if ($config['debug'] == true)
@@ -87,7 +86,6 @@ function adodb_error($dbtype, $function_performed, $error_number, $error_message
 	if(file_exists(cms_join_path(dirname(CONFIG_FILE_LOCATION), 'db_error.html')))
 	{
 		include_once cms_join_path(dirname(CONFIG_FILE_LOCATION), 'db_error.html');
-		exit;
 	}
 	else
 	{
@@ -97,6 +95,6 @@ function adodb_error($dbtype, $function_performed, $error_number, $error_message
 		echo "Host/DB: {$host}/{$database}<br />";
 		echo "Database Type: {$dbtype}<br />";
 	}
+	die();
 }
-
 ?>
