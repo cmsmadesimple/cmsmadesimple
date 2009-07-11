@@ -752,7 +752,7 @@ class CMSModule
 
 		$result = false;
 
-		$query = "SELECT child_module FROM ".cms_db_prefix()."module_deps WHERE parent_module = ? LIMIT 1";
+		$query = "SELECT child_module FROM ".cms_db_prefix()."module_deps WHERE parent_module = ?";
 		$tmp = $db->GetOne($query,array($this->GetName()));
 		if( $tmp ) 
 		  {
