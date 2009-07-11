@@ -34,7 +34,9 @@ function & adodb_connect()
 	$dsn = $config['dbms'].'://';
 	if( $config['dbms'] == 'sqlite' )
 	{
-		$dsn .= urlencode(cms_join_path(CONFIG_FILE_LOCATION, 'tmp', $fn)) .'/';
+		$fn = 'cmsms.db';
+		$path = dirname(dirname(__FILE__));
+		$dsn .= urlencode(cms_join_path($path, 'tmp', $fn)) .'/';
 	}
 	else
 	{
@@ -54,7 +56,7 @@ function & adodb_connect()
 
 	define('ADODB_ERROR_HANDLER', 'adodb_error');
 	$dbinstance = ADONewConnection( $dsn );
-	define('ADODB_ERROR_HANDLER', false);
+	#define('ADODB_ERROR_HANDLER', false);
 
 	$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 	
