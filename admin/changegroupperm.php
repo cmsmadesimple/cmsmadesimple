@@ -88,11 +88,28 @@ $smarty->assign('allgroups',$allgroups);
 if ($submitted == 1)
   {
     // we have group permissions
-    $query = "DELETE FROM ".cms_db_prefix()."group_perms";
-    $result = $db->Execute($query);
     $now = $db->DbTimeStamp(time());
     $iquery = "INSERT INTO ".cms_db_prefix().
-      "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (?,?,?,$now,$now)";
+      "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) 
+       VALUES (?,?,?,$now,$now)";
+
+    $groups = array();
+    foreach( $_POST as $key=>$value )
+      {
+	if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false)
+	  {
+	    $keyparts = explode('_',$key);
+	    if ($keyparts[2] == '1' && $value == '1')
+	      {
+		if( !in_array($keyparts[2],$groups) )
+		  {
+		    $groups[] = $keyparts[2];
+		  }
+	      }
+	  }
+      }
+    $query = 'DELETE FROM '.cms_db_prefix().'group_perms WHERE group_id IN ('.implode(',',$groups).')';
+    $db->Execute($query);
     
     foreach ($_POST as $key=>$value)
       {
