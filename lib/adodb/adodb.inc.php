@@ -4184,12 +4184,16 @@ http://www.stanford.edu/dept/itss/docs/oracle/10g/server.101/b10759/statements_1
 		case 'postgres7':
 		case 'postgres8':
 				$drivername = 'postgres'; 
-				break;	
+				break;
 		case 'firebird15': $drivername = 'firebird'; break;
 		case 'oracle': $drivername = 'oci8'; break;
 		case 'access': if ($perf) $drivername = ''; break;
 		case 'db2'   : break;
 		case 'sapdb' : break;
+		case 'sqlite':
+		case 'sqlitepo':
+				$drivername='sqlite';
+				break;
 		default:
 			$drivername = 'generic';
 			break;
