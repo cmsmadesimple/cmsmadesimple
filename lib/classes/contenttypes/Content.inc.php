@@ -306,8 +306,12 @@ class Content extends ContentBase
 	      if( !$module->HasContentBlocks() ) continue;
 	      $value = $this->GetPropertyValue($blockInfo['id']);
 
-	      $tmp = $module->ValidateContentBlockValueBase($blockName,$value);
-	      $params[$blockInfo['id']] = $tmp;
+	      $tmp = $module->ValidateContentBlockValueBase($blockName,$value,$blockInfo);
+	      if( !empty($tmp) )
+		{
+		  $errors[] = $tmp;
+		  $result = false;
+		}
 	    }
 	}
 

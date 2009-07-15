@@ -534,14 +534,14 @@ class CMSModule
 	}
 
 
-	function ValidateContentBlockValueBase($blockName,$value)
+	function ValidateContentBlockValueBase($blockName,$value,$blockParams)
 	{
 	  $this->LoadContentMethods();
-	  return cms_module_GetContentBlockValueBase($this,$blockName,$value);
+	  return cms_module_GetContentBlockValueBase($this,$blockName,$value,$blockParams);
 	}
 
 
-	function ValidateContentBlockValue($blockName,$value)
+	function ValidateContentBlockValue($blockName,$value,$blockparams)
 	{
 	  $mode = 'validate';
 	  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/contentblock.'.$blockName.'.php';
