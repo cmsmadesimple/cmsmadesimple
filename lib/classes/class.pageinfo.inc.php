@@ -164,7 +164,7 @@ class PageInfoOperations
 			if ($alias == 'error404')
 				return null;
 			
-			$result = self::LoadPageInfoByContentAlias('error404');
+			$result = PageInfoOperations::LoadPageInfoByContentAlias('error404');
 			
 			if ($result != null)
 			{
