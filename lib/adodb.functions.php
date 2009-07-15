@@ -56,14 +56,11 @@ function & adodb_connect()
 
 	define('ADODB_ERROR_HANDLER', 'adodb_error');
 	$dbinstance = ADONewConnection( $dsn );
-	#define('ADODB_ERROR_HANDLER', false);
-
 	$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 	
 	if ($config['debug'] == true)
 	{
 		$dbinstance->debug = true;
-		#$dbinstance->LogSQL();
 	}
 	
 	if ($config['dbms'] == 'sqlite')

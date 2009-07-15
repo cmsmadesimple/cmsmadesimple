@@ -159,10 +159,10 @@ class CMSModule
 
 	function LoadContentMethods()
 	{
-		if (!$this->modcontent)
+		if (!$this->modblock)
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modcontent.inc.php'));
-			$this->modcontent = true;
+			$this->modblock = true;
 		}
 	}
 
@@ -512,10 +512,10 @@ class CMSModule
 	}
 
 
-	function GetContentBlockValueBase($blockName,$blockParams,$inputparams)
+	function GetContentBlockValueBase($blockName,$blockParams,$inputParams)
 	{
 	  $this->LoadContentMethods();
-	  return cms_module_GetContentBlockValueBase($this,$blockname,$value,$params);
+	  return cms_module_GetContentBlockValueBase($this,$blockName,$blockParams,$inputParams);
 	}
 
 

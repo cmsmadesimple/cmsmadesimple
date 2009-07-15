@@ -199,7 +199,14 @@ class Content extends ContentBase
 		      if( !$module->HasContentBlocks() ) continue;
 		      $tmp = $module->GetContentBlockInputBase($blockName,$data,$blockInfo['params']);
 		      if( $tmp === FALSE ) continue;
-		      $ret[]= array($label.':',$tmp);
+		      if( is_array($tmp) )
+			{
+			  $ret[]= $tmp;
+			}
+		      else
+			{
+			  $ret[]= array($label.':',$tmp);
+			}
 		    }
 		    break;
 
@@ -276,19 +283,35 @@ class Content extends ContentBase
 	  $errors = array();
 	}
 
-	if ($this->mTemplateId <= 0 )
-	  {
-	    $errors[] = lang('nofieldgiven',array(lang('template')));
-	    $result = false;
-	  }
-
-	if ($this->GetPropertyValue('content_en') == '')
+      if ($this->mTemplateId <= 0 )
 	{
-	    $errors[]= lang('nofieldgiven',array(lang('content')));
-	    $result = false;
+	  $errors[] = lang('nofieldgiven',array(lang('template')));
+	  $result = false;
+	}
+      
+      if ($this->GetPropertyValue('content_en') == '')
+	{
+	  $errors[]= lang('nofieldgiven',array(lang('content')));
+	  $result = false;
 	}
 
-	return (count($errors) > 0?$errors:FALSE);
+      $this->get_content_blocks();
+      foreach($this->_contentBlocks as $blockName => $blockInfo)
+	{
+	  if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
+	    {
+	      if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
+	      $module =& $gCms->modules[$blockInfo['module']]['object'];
+	      if( !is_object($module) ) continue;
+	      if( !$module->HasContentBlocks() ) continue;
+
+	      $tmp = $module->ValidateContentBlockValueBase($blockName);
+	      $params[$blockInfo['id']] = $tmp;
+	    }
+	}
+
+      return (count($errors) > 0?$errors:FALSE);
+
     }
 
 
