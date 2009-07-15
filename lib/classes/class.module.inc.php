@@ -487,17 +487,17 @@ class CMSModule
 	/**
 	 * Base function for getting content blocks
 	 */
-	function GetContentBlockInputBase($blockname,$value = '',$params = array())
+	function GetContentBlockInputBase($blockname,$value = '',$params = array(),$adding = false)
 	{
 	  $this->LoadContentMethods();
-	  return cms_module_GetContentBlockInputBase($this,$blockname,$value,$params);
+	  return cms_module_GetContentBlockInputBase($this,$blockname,$value,$params,$adding);
 	}
 
 
 	/**
 	 * Get an input field for a specific content block type
 	 */
-	function GetContentBlockInput($id,$returnid,$blockName,$value,$params)
+	function GetContentBlockInput($id,$returnid,$blockName,$value,$params,$adding = false)
 	{
 	  $mode = 'input';
 	  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/contentblock.'.$blockName.'.php';

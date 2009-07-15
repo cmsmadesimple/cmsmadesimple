@@ -97,7 +97,7 @@ class Content extends ContentBase
 		  if( !is_object($module) ) continue;
 		  if( !$module->HasContentBlocks() ) continue;
 		  $tmp = $module->GetContentBlockValueBase($blockName,$blockInfo,$params);
-		  $params[$blockInfo['id']] = $tmp;
+		  if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
 		}
 	    }
 	  
@@ -197,7 +197,7 @@ class Content extends ContentBase
 		      $module =& $gCms->modules[$blockInfo['module']]['object'];
 		      if( !is_object($module) ) continue;
 		      if( !$module->HasContentBlocks() ) continue;
-		      $tmp = $module->GetContentBlockInputBase($blockName,$data,$blockInfo['params']);
+		      $tmp = $module->GetContentBlockInputBase($blockName,$data,$blockInfo['params'],$adding);
 		      if( $tmp === FALSE ) continue;
 		      if( is_array($tmp) )
 			{
@@ -304,8 +304,9 @@ class Content extends ContentBase
 	      $module =& $gCms->modules[$blockInfo['module']]['object'];
 	      if( !is_object($module) ) continue;
 	      if( !$module->HasContentBlocks() ) continue;
+	      $value = $this->GetPropertyValue($blockInfo['id']);
 
-	      $tmp = $module->ValidateContentBlockValueBase($blockName);
+	      $tmp = $module->ValidateContentBlockValueBase($blockName,$value);
 	      $params[$blockInfo['id']] = $tmp;
 	    }
 	}
