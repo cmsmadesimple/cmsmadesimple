@@ -82,6 +82,7 @@ foreach( $group_list as $onegroup )
       $groups[] = $onegroup;
     }
 }
+
 $smarty->assign('group_list',$groups);
 $smarty->assign('allgroups',$allgroups);
 
@@ -99,7 +100,7 @@ if ($submitted == 1)
 	if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false)
 	  {
 	    $keyparts = explode('_',$key);
-	    if ($keyparts[2] == '1' && $value == '1')
+	    if ($keyparts[2] != '1' && $value == '1')
 	      {
 		if( !in_array($keyparts[2],$groups) )
 		  {
@@ -108,6 +109,7 @@ if ($submitted == 1)
 	      }
 	  }
       }
+
     $query = 'DELETE FROM '.cms_db_prefix().'group_perms WHERE group_id IN ('.implode(',',$groups).')';
     $db->Execute($query);
     
