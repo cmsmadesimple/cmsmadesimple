@@ -80,7 +80,7 @@ if ($access) {
 			global $gCms;
 			$gcbops =& $gCms->GetGlobalContentOperations();
 
-			$blobobj =& new GlobalContent();
+			$blobobj = new GlobalContent();
 			$blobobj->name = $htmlblob;
 			$blobobj->content = $content;
 			$blobobj->owner = $userid;

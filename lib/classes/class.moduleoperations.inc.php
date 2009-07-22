@@ -507,7 +507,7 @@ class ModuleOperations
 	    return false;
 	  }
 
-	$newmodule =& new $modulename;
+	$newmodule = new $modulename;
 	$name = $newmodule->GetName();
 	$cmsmodules[$name]['object'] =& $newmodule;
 	$cmsmodules[$name]['installed'] = false;

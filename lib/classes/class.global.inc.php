@@ -181,7 +181,7 @@ class CmsObject {
         if (!isset($this->moduleloader))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.moduleloader.inc.php'));
-			$moduleloader =& new ModuleLoader();
+			$moduleloader = new ModuleLoader();
 			$this->moduleloader = &$moduleloader;
 		}
 
@@ -193,7 +193,7 @@ class CmsObject {
         if (!isset($this->moduleoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.moduleoperations.inc.php'));
-			$moduleoperations =& new ModuleOperations();
+			$moduleoperations = new ModuleOperations();
 			$this->moduleoperations = &$moduleoperations;
 		}
 
@@ -205,7 +205,7 @@ class CmsObject {
         if (!isset($this->useroperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.useroperations.inc.php'));
-			$useroperations =& new UserOperations();
+			$useroperations = new UserOperations();
 			$this->useroperations = &$useroperations;
 		}
 
@@ -218,7 +218,7 @@ class CmsObject {
 		{
 			debug_buffer('', 'Load Content Operations');
 			require_once(cms_join_path(dirname(__FILE__), 'class.contentoperations.inc.php'));
-			$contentoperations =& new ContentOperations();
+			$contentoperations = new ContentOperations();
 			$this->contentoperations = &$contentoperations;
 			debug_buffer('', 'End Load Content Operations');
 		}
@@ -231,7 +231,7 @@ class CmsObject {
         if (!isset($this->bookmarkoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.bookmarkoperations.inc.php'));
-			$bookmarkoperations =& new BookmarkOperations();
+			$bookmarkoperations = new BookmarkOperations();
 			$this->bookmarkoperations = &$bookmarkoperations;
 		}
 
@@ -243,7 +243,7 @@ class CmsObject {
         if (!isset($this->templateoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.templateoperations.inc.php'));
-			$templateoperations =& new TemplateOperations();
+			$templateoperations = new TemplateOperations();
 			$this->templateoperations = &$templateoperations;
 		}
 
@@ -255,7 +255,7 @@ class CmsObject {
         if (!isset($this->stylesheetoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.stylesheetoperations.inc.php'));
-			$stylesheetoperations =& new StylesheetOperations();
+			$stylesheetoperations = new StylesheetOperations();
 			$this->stylesheetoperations = &$stylesheetoperations;
 		}
 
@@ -267,7 +267,7 @@ class CmsObject {
         if (!isset($this->groupoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.groupoperations.inc.php'));
-			$groupoperations =& new GroupOperations();
+			$groupoperations = new GroupOperations();
 			$this->groupoperations = &$groupoperations;
 		}
 
@@ -279,7 +279,7 @@ class CmsObject {
         if (!isset($this->globalcontentoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.globalcontentoperations.inc.php'));
-			$globalcontentoperations =& new GlobalContentOperations();
+			$globalcontentoperations = new GlobalContentOperations();
 			$this->globalcontentoperations = &$globalcontentoperations;
 		}
 
@@ -291,7 +291,7 @@ class CmsObject {
         if (!isset($this->usertagoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.usertagoperations.inc.php'));
-			$usertagoperations =& new UserTagOperations();
+			$usertagoperations = new UserTagOperations();
 			$this->usertagoperations = &$usertagoperations;
 		}
 
@@ -313,7 +313,7 @@ class CmsObject {
 			}
 
 			#Setup global smarty object
-			$this->smarty =& new Smarty_CMS($conf);
+			$this->smarty = new Smarty_CMS($conf);
 		}
 
         return $this->smarty;

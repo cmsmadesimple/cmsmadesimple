@@ -77,7 +77,7 @@ class TemplateOperations
 
 		if($row)
 		{
-			$onetemplate =& new Template();
+			$onetemplate = new Template();
 			$onetemplate->id = $row['template_id'];
 			$onetemplate->name = $row['template_name'];
 			$onetemplate->content = $row['template_content'];

@@ -98,7 +98,7 @@ if ($access)
 
 		if ($validinfo)
 		{
-			$blobobj =& new GlobalContent();
+			$blobobj = new GlobalContent();
 			$blobobj->id = $htmlblob_id;
 			$blobobj->name = $htmlblob;
 			$blobobj->content = $content;

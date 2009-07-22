@@ -66,7 +66,7 @@ class ModuleLoader
 			{
 				if (class_exists($onemodule))
 				{
-					$newmodule =& new $onemodule;
+					$newmodule = new $onemodule;
 					$name = $newmodule->GetName();
 					$cmsmodules[$name]['object'] =& $newmodule;
 					$cmsmodules[$name]['installed'] = false;
@@ -126,7 +126,7 @@ class ModuleLoader
 									include_once("$dir/$modulename/$modulename.module.php");
 									if (class_exists($modulename))
 									{
-										$newmodule =& new $modulename;
+										$newmodule = new $modulename;
 										$name = $newmodule->GetName();
 
 										global $CMS_VERSION;

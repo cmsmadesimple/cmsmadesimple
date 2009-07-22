@@ -48,7 +48,7 @@ class UserOperations
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			$oneuser =& new User();
+			$oneuser = new User();
 			$oneuser->id = $row['user_id'];
 			$oneuser->username = $row['username'];
 			$oneuser->firstname = $row['first_name'];
@@ -81,7 +81,7 @@ class UserOperations
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			$oneuser =& new User();
+			$oneuser = new User();
 			$oneuser->id = $row['user_id'];
 			$oneuser->username = $row['username'];
 			$oneuser->firstname = $row['first_name'];
@@ -179,7 +179,7 @@ class UserOperations
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			$oneuser =& new User();
+			$oneuser = new User();
 			$oneuser->id = $id;
 			$oneuser->username = $row['username'];
 			$oneuser->password = $row['password'];
