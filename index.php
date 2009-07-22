@@ -81,7 +81,26 @@ else
 
 
 $params = array_merge($_GET, $_POST);
-
+{
+  // hack to work around IE problem of not submitting back the original
+  // value for an input field of type image.
+  $add = array();
+  foreach( $params as $key => $value )
+    {
+      if( preg_match('/_x$/',$key) )
+	{
+	  $str = substr($key,0,strlen($key)-2);
+	  if( isset($params[$str.'_y']) && !isset($params[$str]) )
+	    {
+	      $add[$key] = $value;
+	    }
+	}
+    }
+  if( count($add) )
+    {
+      $params = array_merge($add,$params);
+    }
+}
 $smarty = &$gCms->smarty;
 $smarty->params = $params;
 
