@@ -282,10 +282,10 @@ class Tree
     * @param  string $separator The separator to use
     * @return object            A tree structure (Tree object)
     */
-    function &createFromList($data, $separator = '/')
+    static function &createFromList($data, $separator = '/')
     {
         $nodeList = array();
-        $tree     =& new Tree();
+        $tree     = new Tree();
 
         for ($i=0; $i<count($data); $i++) {
             $pathParts = explode($separator, $data[$i]);
@@ -296,7 +296,7 @@ class Tree
                 if (!empty($nodeList[$pathParts[0]])) {
                     continue;
                 } else {
-                    $nodeList[$pathParts[0]] = &new Tree_Node(array($pathParts[0], $data[$i]));
+                    $nodeList[$pathParts[0]] = new Tree_Node(array($pathParts[0], $data[$i]));
                     $tree->nodes->addNode($nodeList[$pathParts[0]]);
                 }
 
@@ -312,7 +312,7 @@ class Tree
                         $parentObj = &$nodeList[$currentPath];
                         continue;
                     } else {
-                        $nodeList[$currentPath] = &new Tree_Node(array($pathParts[$j], $currentPath));
+                        $nodeList[$currentPath] = new Tree_Node(array($pathParts[$j], $currentPath));
                         // Update parent object to be the new node
                         $parentObj = &$parentObj->nodes->addNode($nodeList[$currentPath]);
                     }

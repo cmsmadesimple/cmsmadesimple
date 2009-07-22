@@ -108,7 +108,7 @@ class PageInfoOperations
     return $pi;
   }
 
-	function LoadPageInfoByContentAlias($alias)
+	static function LoadPageInfoByContentAlias($alias)
 	{
 		$result = false;
 

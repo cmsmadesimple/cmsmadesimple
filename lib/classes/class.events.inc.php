@@ -96,7 +96,7 @@ class Events
 	* @param array  The parameters associated with this event.
 	* @returns nothing
 	*/
-	function SendEvent( $modulename, $eventname, $params = array() )
+	static function SendEvent( $modulename, $eventname, $params = array() )
 	{
 		global $gCms;
 		$usertagops =& $gCms->GetUserTagOperations();
@@ -144,7 +144,7 @@ class Events
 	* in the array contains two elements 'handler_name', and 'module_handler',
 	* any one of these could be null. If it fails, false is returned.
 	*/
-	function ListEventHandlers( $modulename, $eventname )
+	static function ListEventHandlers( $modulename, $eventname )
 	{
 		global $gCms;
 		$db = &$gCms->GetDb();

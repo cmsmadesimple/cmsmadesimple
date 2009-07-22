@@ -70,7 +70,7 @@ array_walk_recursive($_GET, 'sanitize_get_var');
 
 #Make a new CMS object
 require(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
-$gCms =& new CmsObject();
+$gCms = new CmsObject();
 if (isset($starttime))
 {
     $gCms->variables['starttime'] = $starttime;
@@ -81,7 +81,7 @@ require(cms_join_path($dirname,'version.php'));
 require(cms_join_path($dirname,'lib','config.functions.php'));
 
 #Grab the current configuration
-$config =& $gCms->GetConfig();
+$config = $gCms->GetConfig();
 
 #Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  )
@@ -154,12 +154,14 @@ while ($file = readdir ($handle))
     $path_parts = pathinfo($file);
     if (isset($path_parts['extension']) && $path_parts['extension'] == 'php')
     {
-		$obj =& new CmsContentTypePlaceholder();
+		$obj = new CmsContentTypePlaceholder();
 		$obj->type = strtolower(basename($file, '.inc.php'));
 		$obj->filename = cms_join_path($dir,$file);
 		$obj->loaded = false;
+		$obj->classname = basename($file,'.inc.php');
 		$obj->friendlyname = basename($file, '.inc.php');
-		$contenttypes[strtolower(basename($file, '.inc.php'))] =& $obj;
+
+		$contenttypes[strtolower(basename($file, '.inc.php'))] = $obj;
     }
 }
 closedir($handle);
@@ -232,7 +234,7 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 	if (is_file(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php')))
 	{
 		include(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php'));
-		$gCms->variables['convertclass'] =& new ConvertCharset();
+		$gCms->variables['convertclass'] = new ConvertCharset();
 	}
 }
 

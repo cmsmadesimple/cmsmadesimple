@@ -70,7 +70,7 @@ class ContentOperations
 		
 		if (ContentOperations::LoadContentType($type))
 		{
-			$result =& new $type;
+			$result = new $type;
 		}
 		
 		return $result;
@@ -397,7 +397,6 @@ class ContentOperations
 	function &ListContentTypes()
 	{
 		global $gCms;
-		$contenttypes =& $gCms->contenttypes;
 		
 		if (isset($gCms->variables['contenttypes']))
 		{
@@ -406,12 +405,10 @@ class ContentOperations
 		}
 		
 		$result = array();
-		
-		reset($contenttypes);
-		while (list($key) = each($contenttypes))
+		$contenttypes =& $gCms->contenttypes;
+		foreach( $contenttypes as $key => $value )
 		{
-			$value =& $contenttypes[$key];
-			$result[] = $value->type;
+		  $result[] = $value->type;
 		}
 		
 		$variables =& $gCms->variables;
@@ -502,7 +499,7 @@ class ContentOperations
 
 		$nodes = array();
 		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = $gCms->GetDb();
 
 		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
 		$usecache = true;
@@ -556,7 +553,7 @@ class ContentOperations
 				}
 			}
 
-			$tree = &new Tree();
+			$tree = new Tree();
 			debug_buffer('', 'Start Loading Children into Tree');
 			$tree = &Tree::createFromList($nodes, '.');
 			debug_buffer('', 'End Loading Children into Tree');

@@ -286,7 +286,7 @@ class CMSModule
 	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */
-	function GetHelp($lang = 'en_US')
+	function GetHelp()
 	{
 		return '';
 	}
@@ -319,11 +319,11 @@ class CMSModule
 	function RegisterRoute($routeregex, $defaults = array())
 	{
 		global $gCms;
-		$route =& new CmsRoute();
+		$route = new CmsRoute();
 		$route->module = $this->GetName();
 		$route->defaults = $defaults;
 		$route->regex = $routeregex;
-		$routes =& $gCms->variables['routes'];
+		$routes = $gCms->variables['routes'];
 		$routes[] =& $route;
 	}
 
@@ -398,7 +398,7 @@ class CMSModule
 	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */
-	function GetAdminDescription($lang = 'en_US')
+	function GetAdminDescription()
 	{
 		return '';
 	}
@@ -576,7 +576,7 @@ class CMSModule
 		$contenttypes =& $gCms->contenttypes;
 		if (!isset($contenttypes[strtolower($name)]))
 		{
-			$obj =& new CmsContentTypePlaceholder();
+			$obj = new CmsContentTypePlaceholder();
 			$obj->type = strtolower($name);
 			$obj->filename = $file;
 			$obj->loaded = false;

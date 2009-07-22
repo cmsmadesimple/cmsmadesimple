@@ -34,9 +34,8 @@ function & adodb_connect()
 	$dsn = $config['dbms'].'://';
 	if( $config['dbms'] == 'sqlite' )
 	{
-		$fn = 'cmsms.db';
 		$path = dirname(dirname(__FILE__));
-		$dsn .= urlencode(cms_join_path($path, 'tmp', $fn)) .'/';
+		$dsn .= urlencode(cms_join_path($path, 'tmp', $config['db_name'])) .'/';
 	}
 	else
 	{
