@@ -56,7 +56,7 @@ function cms_module_plugin($params,&$smarty)
 	  $tmp = $i;
 	  foreach($params as $key=>$value)
 	    $tmp .= $key.'='.$value;
-	  $id = substr(md5($tmp),0,5);
+	  $id = 'm'.substr(md5($tmp),0,5);
 	  if( !isset($gCms->variables['mid_cache'][$id]) )
 	    {
 	      $gCms->variables['mid_cache'][$id] = $id;
