@@ -2033,7 +2033,8 @@ function is_email( $email, $checkDNS=false ) {
 			// 	(http://tools.ietf.org/html/rfc3696#section-2)
 			//
 			// Any excluded characters? i.e. 0x00-0x20, (, ), <, >, [, ], :, ;, @, \, comma, period, "
-			if (preg_match('/[\\x00-\\x20\\(\\)<>\\[\\]:;@\\\\,\\."]|^-|-$/', $element) > 0) {
+			//if (preg_match('/[\\x00-\\x20\\(\\)<>\\[\\]:;@\\\\,\\."]|^-|-$/', $element) > 0) {
+			if (preg_match('/[\\x00-\\x20\\(\\)<>\\[\\]:;@\\\\,\\."]$/', $element) > 0) {
 				return false;
 			}
 		}
