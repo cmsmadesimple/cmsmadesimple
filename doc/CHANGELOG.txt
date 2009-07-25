@@ -1,3 +1,9 @@
+Version 1.6.2 - Noumea
+-----------------------------
+- Fix a problem with the unique module hash not always starting with a letter
+  which fixes form validation problems.
+- Fixed a minor template problem in News.
+
 Version 1.6.1 - Canala
 -----------------------------
 - Fixes of several bugs:
