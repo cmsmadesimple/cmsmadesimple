@@ -1,4 +1,9 @@
 <?php
+$lang['admin']['site_information'] = 'Site Information';
+$lang['admin']['contents'] = 'Contents';
+$lang['admin']['count_contents'] = 'Total number of contents';
+$lang['admin']['count_htmlblobs'] = 'Total number of Global Contents';
+$lang['admin']['count_userplugins'] = 'Total number of User Defined Tags';
 $lang['admin']['invalidemail'] = 'The email address entered is invalid';
 $lang['admin']['info_deletepages'] = 'Note: due to permission restrictions, some of the pages you selected for deletion may not be listed below';
 $lang['admin']['info_pagealias'] = 'Specify a unique alias for this page.';

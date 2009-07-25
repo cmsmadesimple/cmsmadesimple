@@ -40,7 +40,7 @@
   {foreach from=$tmp key='key' item='test'}
 	<div class="pageoverflow">
 		<p class="pagetext">{$test->title}:</p>
-		<p class="pageinput">         
+		<p class="pageinput">
 	{if isset($test->value)}{$test->value|default:"&nbsp;"}{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue|default:"&nbsp;"}){/if}
 	{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}
@@ -116,6 +116,32 @@
 	</div>
   {/foreach}
 {/foreach}
+<br />
+
+
+</fieldset>
+
+
+
+<fieldset>
+<legend><strong>{si_lang a=site_information}</strong>: </legend>
+	<div class="pageoverflow">
+		<p class="pagetext">{si_lang a=contents}:</p>
+		<p class="pageinput">{si_lang a=count_contents}: <b>{$count_contents}</b></p>
+		<p class="pageinput">{si_lang a=contenttype}:<br />
+{foreach from=$content_type key='type' item='item'}
+{$type}: {if $item.active}{$item.active} {si_lang a=active}{/if} {if $item.inactive}{$item.inactive} {si_lang a=inactive}{/if}<br />
+{/foreach}
+		</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">{si_lang a=count_htmlblobs}:</p>
+		<p class="pageinput">{$count_htmlblobs}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">{si_lang a=count_userplugins}:</p>
+		<p class="pageinput">{$count_userplugins}</p>
+	</div>
 <br />
 
 

@@ -52,8 +52,8 @@ function systeminfo_lang($params,&$smarty)
 		foreach( $params as $k=>$v)
 		{
 			$tmp[] = $v;
-		}      
-      
+		}
+
 		$str = $tmp[0];
 		$tmp2 = array();
 		for( $i = 1; $i < count($tmp); $i++ )
@@ -62,12 +62,13 @@ function systeminfo_lang($params,&$smarty)
 	}
 }
 
+
 global $gCms;
 $smarty =& $gCms->GetSmarty();
 $smarty->register_function('si_lang','systeminfo_lang');
 $smarty->caching = false;
 $smarty->force_compile = true;
-$db = &$gCms->GetDb();
+$db =& $gCms->GetDb();
 
 
 
@@ -108,12 +109,14 @@ $tmp[0]['php_memory_limit'] = testConfig('php_memory_limit', 'php_memory_limit')
 $tmp[0]['process_whole_template'] = testConfig('process_whole_template', 'process_whole_template');
 $tmp[1]['debug'] = testConfig('debug', 'debug');
 $tmp[1]['output_compression'] = testConfig('output_compression', 'output_compression');
+$tmp[1]['db_prefix'] = testConfig('db_prefix', 'db_prefix');
+$tmp[1]['persistent_db_conn'] = testConfig('persistent_db_conn', 'persistent_db_conn');
+$tmp[1]['set_names'] = testConfig('set_names', 'set_names');
 
 $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
 $tmp[0]['default_upload_permission'] = testConfig('default_upload_permission', 'default_upload_permission');
-$tmp[0]['assume_mod_rewrite'] = testConfig('assume_mod_rewrite', 'assume_mod_rewrite');
+$tmp[0]['url_rewriting'] = testConfig('url_rewriting', 'url_rewriting');
 $tmp[0]['page_extension'] = testConfig('page_extension', 'page_extension');
-$tmp[0]['internal_pretty_urls'] = testConfig('internal_pretty_urls', 'internal_pretty_urls');
 $tmp[0]['use_hierarchy'] = testConfig('use_hierarchy', 'use_hierarchy');
 
 $tmp[1]['root_url'] = testConfig('root_url', 'root_url');
@@ -124,7 +127,10 @@ $tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
 $tmp[1]['image_uploads_path'] = testConfig('image_uploads_path', 'image_uploads_path', 'testDirWrite');
 $tmp[1]['image_uploads_url'] = testConfig('image_uploads_url', 'image_uploads_url');
 $tmp[1]['use_smarty_php_tags'] = testConfig('use_smarty_php_tags', 'use_smarty_php_tags');
+$tmp[1]['auto_alias_content'] = testConfig('auto_alias_content', 'auto_alias_content');
 $tmp[1]['locale'] = testConfig('locale', 'locale');
+$tmp[1]['image_manipulation_prog'] = testConfig('image_manipulation_prog', 'image_manipulation_prog');
+$tmp[1]['image_transform_lib_path'] = testConfig('image_transform_lib_path', 'image_transform_lib_path');
 $tmp[1]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
 $tmp[1]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
 
@@ -135,7 +141,6 @@ $smarty->assign('config_info', $tmp);
 
 
 /* PHP Information */
-
 $tmp = array(0=>array(), 1=>array());
 
 $safe_mode = ini_get('safe_mode');
@@ -213,8 +218,34 @@ $smarty->assign('php_information', $tmp);
 
 
 
-/* Server Information */
+/* Site Information */
+$q = "SELECT type, active FROM ".cms_db_prefix()."content";
+$contents = $db->GetArray($q);
+$_type=array();
+foreach($contents as $item)
+{
+	$_type[$item['type']][$item['active']][] = 1;
+}
+$content_type=array();
+foreach($_type as $type=>$item)
+{
+	$content_type[$type] = array('active'=>count($item[1]), 'inactive'=>count($item[0]));
+}
+$smarty->assign('count_contents', count($contents));
+$smarty->assign('content_type', $content_type);
 
+$q = "SELECT htmlblob_id FROM ".cms_db_prefix()."htmlblobs";
+$htmlblobs = $db->GetArray($q);
+$smarty->assign('count_htmlblobs', count($htmlblobs));
+
+$q = "SELECT userplugin_id FROM ".cms_db_prefix()."userplugins";
+$userplugins = $db->GetArray($q);
+$smarty->assign('count_userplugins', count($userplugins));
+
+
+
+
+/* Server Information */
 $tmp = array(0=>array(), 1=>array());
 
 $tmp[1]['server_software'] = testDummy('', $_SERVER['SERVER_SOFTWARE'], '');
