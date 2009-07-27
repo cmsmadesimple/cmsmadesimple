@@ -7,6 +7,9 @@ Version 1.6.2 - Noumea
 - TinyMCE
   - #3762 - file extension ignored in internal links
 
+- News
+  - Fix IE8 toggle in add/edit news (Use Expiration Date:)
+
 Version 1.6.1 - Canala
 -----------------------------
 - Fixes of several bugs:
