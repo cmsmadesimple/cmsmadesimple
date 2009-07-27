@@ -92,4 +92,5 @@ $lang['notemplatefiles'] = 'No file templates in %s';
 $lang['notemplatename'] = 'No template name given.';
 $lang['templatecontent'] = 'Template Content';
 $lang['templatenameexists'] = 'A template with this name already exists';
+$lang['recursive'] = 'Recursive';
 ?>

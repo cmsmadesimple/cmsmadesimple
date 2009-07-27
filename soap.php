@@ -57,7 +57,7 @@ $starttime = microtime();
 
 if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
 {
-    require_once("lib/misc.functions.php");
+    require_once("lib/cmsms.api.php");
     redirect("install/install.php");
 }
 else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))

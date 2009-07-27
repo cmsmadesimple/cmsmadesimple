@@ -28,7 +28,7 @@
 
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
 
-class ContentOperations
+class CmsContentOperations
 {
 	function LoadContentType($type)
 	{
@@ -86,7 +86,7 @@ class ContentOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ? ORDER BY hierarchy ASC";
 		$row = &$db->GetRow($query, array($id));
 		if ($row)
 		{
@@ -157,6 +157,71 @@ class ContentOperations
 		{
 		  $tmp = NULL; return $tmp;
 		}
+	}
+	
+	function LoadMultipleFromParentId($parent_id, $loadProperties = false)
+	{
+		$db = cms_db();
+		
+		$result = false;
+		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+		$rows   = $db->Execute($query, array($parent_id));
+
+		if ($rows)
+		{
+			while (isset($rows) && $row = $rows->FetchRow())
+			{
+				if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) 
+				{
+					$classtype = strtolower($row['type']);
+					$contentobj =& ContentOperations::CreateNewContent($classtype);
+					$contentobj->LoadFromData($row,false);
+					$contents[]=$contentobj;
+					$result = true;
+				}
+			}
+			$rows->Close();
+		}
+		if (!$result)
+		{
+			if (true == $config["debug"])
+			{
+				# :TODO: Translate the error message
+				$debug_errors .= "<p>Could not retrieve content from db</p>\n";
+			}
+		}
+
+		if ($result && $loadProperties)
+		{
+			foreach ($contents as $content) 
+			{
+				if ($content->mPropertiesLoaded == false)
+				{
+					debug_buffer("load from id is loading properties");
+					$content->mProperties->Load($content->mId);
+					$content->mPropertiesLoaded = true;
+				}
+
+				if (NULL == $content->mProperties)
+				{
+					$result = false;
+
+					# debug mode
+					if (true == $config["debug"])
+					{
+						# :TODO: Translate the error message
+						$debug_errors .= "<p>Could not load properties for content</p>\n";
+					}
+				}
+			}
+		}
+
+		foreach ($contents as $content) 
+		{
+			$content->Load();
+		}
+
+		return $contents;
 	}
 
      /**
@@ -987,7 +1052,11 @@ class ContentOperations
 	
 }
 
-class ContentManager extends ContentOperations
+class ContentOperations extends CmsContentOperations
+{
+}
+
+class ContentManager extends CmsContentOperations
 {
 }
 

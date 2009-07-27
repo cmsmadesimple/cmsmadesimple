@@ -61,7 +61,7 @@ if( isset($CMS_ADMIN_PAGE) )
 #magic_quotes_runtime is a nuisance...  turn it off before it messes something up
 set_magic_quotes_runtime(false);
 
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.functions.php');
 debug_buffer('', 'Start of include');
 
@@ -69,8 +69,8 @@ debug_buffer('', 'Start of include');
 array_walk_recursive($_GET, 'sanitize_get_var'); 
 
 #Make a new CMS object
-require(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
-$gCms = new CmsObject();
+//require(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
+$gCms = CmsApplication::get_instance();
 if (isset($starttime))
 {
     $gCms->variables['starttime'] = $starttime;

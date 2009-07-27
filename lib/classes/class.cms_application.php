@@ -32,8 +32,8 @@
  *
  * @since 0.5
  */
-class CmsObject {
-
+class CmsApplication extends CmsObject
+{
 	/**
 	 * Config object - hash containing variables from config.php
 	 */
@@ -118,11 +118,13 @@ class CmsObject {
 	 * content types array - List of available content types
 	 */
 	var $contenttypes;
+	
+	static private $instance = NULL;
 
 	/**
 	 * Constructor
 	 */
-	function CmsObject()
+	function __construct()
 	{
 		$this->cmssystemmodules = 
 		  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'TinyMCE', 'Printing', 'ThemeManager' );
@@ -144,6 +146,23 @@ class CmsObject {
 		$this->siteprefs           = array();
 
 		register_shutdown_function(array(&$this, 'dbshutdown'));
+	}
+	
+	/**
+	 * Returns an instnace of the CmsApplication singleton.  Most 
+	 * people can generally use cmsms() instead of this, but they 
+	 * both do the same thing.
+	 *
+	 * @return CmsApplication The singleton CmsApplication instance
+	 * @author Ted Kulp
+	 **/
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsApplication();
+		}
+		return self::$instance;
 	}
 
 	function & GetDb()
@@ -217,8 +236,8 @@ class CmsObject {
         if (!isset($this->contentoperations))
 		{
 			debug_buffer('', 'Load Content Operations');
-			require_once(cms_join_path(dirname(__FILE__), 'class.contentoperations.inc.php'));
-			$contentoperations = new ContentOperations();
+			//require_once(cms_join_path(dirname(__FILE__), 'class.contentoperations.inc.php'));
+			$contentoperations = new CmsContentOperations();
 			$this->contentoperations = &$contentoperations;
 			debug_buffer('', 'End Load Content Operations');
 		}

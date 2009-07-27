@@ -22,7 +22,7 @@ else if( preg_match('+^/[0-9]*$+',$url,$matches) )
 //require('config.php');//default
 require('fileloc.php');
 require(CONFIG_FILE_LOCATION);
-require(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
+require(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
 
 
 $mediatype = '';
@@ -88,11 +88,11 @@ if( isset($hash[$cssid]) && strcmp($hash[$cssid],$etag) == 0 &&
 require(dirname(__FILE__).DIRECTORY_SEPARATOR.'version.php');
 //require(dirname(__FILE__).DIRECTORY_SEPARATOR.'fileloc.php'); //is included in top now
 require(cms_join_path(dirname(__FILE__),'lib','config.functions.php'));
-require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
-require(cms_join_path(dirname(__FILE__),'lib','classes','class.global.inc.php'));
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
+//require(cms_join_path(dirname(__FILE__),'lib','classes','class.global.inc.php'));
 require(cms_join_path(dirname(__FILE__),'lib','adodb.functions.php'));
 
-$gCms =& new CmsObject();
+$gCms = CmsApplication::get_instance();
 load_adodb();
 $db =& $gCms->GetDb();
 

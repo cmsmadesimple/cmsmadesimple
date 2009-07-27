@@ -188,13 +188,15 @@ class CMSModule
 	 * from the module constructor, or from the SetParameters
 	 * method.
 	 */
-	function RegisterModulePlugin()
+	function RegisterModulePlugin($name = '', $plugin = 'function_plugin')
 	{
-	  global $gCms;
+		global $gCms;
+		
+		if ($name == '')
+			$name = $this->GetName();
 
-	  $smarty =& $gCms->GetSmarty();
-	  $smarty->register_function($this->GetName(),
-				   array($this,'function_plugin'));
+		$smarty =& $gCms->GetSmarty();
+		$smarty->register_function($name, array($this, $plugin));
 	}
 
 	/**

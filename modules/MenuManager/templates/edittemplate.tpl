@@ -15,6 +15,10 @@
 		<p class="pageinput">{$inputcontent}</p>
 	</div>
 	<div class="pageoverflow">
+		<p class="pagetext">{$mod->Lang('recursive')}:</p>
+		<p class="pageinput">{$inputrecursive}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>
 		<p class="pageinput">{$hidden}{$submit}{$cancel}{$apply}</p>
 	</div>
