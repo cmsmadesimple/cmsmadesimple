@@ -7,6 +7,7 @@ _owd=`pwd`
 _this=`basename $0`
 _workdir=/tmp/$_this.$$
 _owd=`pwd`
+_clean=1
 # basedir    (if set, specify the base directory to put generated releases).
 
 # adjust the path
@@ -46,6 +47,11 @@ while [ $# -gt 0 ]; do
       shift 2
       continue
       ;;
+    '--noclean' )
+      _clean=0
+      shift
+      continue
+      ;; 
   esac
 done
 
@@ -149,20 +155,23 @@ cd $_workdir
 _changedfiles=''
 _newfiles=''
 _delfiles=''
-diff -q -r from_base to_base > $_workdir/diffout.tmp 2>/dev/null
+diff -q -r from_base to_base > $_workdir/diffout_base.tmp 2>/dev/null
 while read line ; do
   _c=`echo $line | grep -c '^Files'`
   _n=`echo $line | grep -c '^Only in to_base'`
   _d=`echo $line | grep -c '^Only in from_base'`
   _f=`echo $line | cut -d' ' -f4 | cut -d/ -f2-`
-  if [ $_c = 1 ]; then
+
+  _ci=`echo $line | grep -c 'install/'`
+
+  if [ $_c = 1 -a $_ci = 0 ]; then
     _changedfiles="$_f $_changedfiles"
-  elif [ $_n = 1 ]; then
+  elif [ $_n = 1 -a $_ci = 0 ]; then
     _newfiles="$_f $_newfiles"
   elif [ $_d = 1 ]; then
     _delfiles="$_f $_delfiles"
   fi
-done < $_workdir/diffout.tmp
+done < $_workdir/diffout_base.tmp
 
 mkdir $_workdir/base_diff
 cd $_workdir/to_base
@@ -199,34 +208,32 @@ mkdir to_full
 cd to_full
 tar zxf $_tofull
 
-#6.  Get the schema version of $_to
-_schema_from=`grep '^$CMS_SCHEMA' from_full/version.php | cut -d\" -f2`
-_schema_to=`grep '^$CMS_SCHEMA' to_full/version.php | cut -d\" -f2`
-if [ $_schema_from -lt $_schema_to ]; then
-  echo 'DEBUG: schema version changed, can't do a diff release'
-fi
-
 #7.  Create the diff
 cd $_workdir
 _changedfiles=''
 _newfiles=''
 _delfiles=''
-diff -q -r from_full to_full > $_workdir/diffout.tmp 2>/dev/null
+diff -q -r from_full to_full > $_workdir/diffout_full.tmp 2>/dev/null
 while read line ; do
   _c=`echo $line | grep -c '^Files'`
   _n=`echo $line | grep -c '^Only in to_full'`
   _d=`echo $line | grep -c '^Only in from_full'`
-  _f=`echo $line | cut -d' ' -f4 | cut -d/ -f2-`
-  if [ $_c = 1 ]; then
-    _changedfiles="$_f $_changedfiles"
-  elif [ $_n = 1 ]; then
+  _fn=`echo $line | cut -d' ' -f4 | cut -d/ -f2-`
+
+  _ci=`echo $line | grep -c 'install/'`
+
+  if [ $_c = 1 -a $_ci = 0 ]; then
+    _changedfiles="$_fn $_changedfiles"
+  elif [ $_n = 1 -a $_ci = 0 ]; then
     _p=`echo $line | cut -d' ' -f3 | cut -d: -f1 | cut -d/ -f2-`
-    _f=$_p/$_f
-    _newfiles="$_f $_newfiles"
+    _fn=$_p/$_fn
+    _newfiles="$_fn $_newfiles"
   elif [ $_d = 1 ]; then
-    _delfiles="$_f $_delfiles"
+    _p=`echo $line | cut -d' ' -f3 | cut -d: -f1 | cut -d/ -f2-`
+    _fn=$_p/$_fn
+    _delfiles="$_fn $_delfiles"
   fi
-done < $_workdir/diffout.tmp
+done < $_workdir/diffout_full.tmp
 
 mkdir $_workdir/full_diff
 cd $_workdir/to_full
@@ -247,8 +254,11 @@ done
 cd $_workdir/full_diff
 tar zcf ${basedir}/${_to}/cmsmadesimple-full-diff-${_fromver}-${_tover}.tar.gz .
 
-echo "Cleaning up"
-cd $_owd
-rm -rf $_workdir
+if [ $_clean = 1 ]; then
+  echo "Cleaning up"
+  cd $_owd
+  rm -rf $_workdir
+fi
+
 
 echo "Done"
