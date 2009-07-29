@@ -95,8 +95,8 @@ class Content extends ContentBase
 		  if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
 		  $module =& $gCms->modules[$blockInfo['module']]['object'];
 		  if( !is_object($module) ) continue;
-		  if( !$module->HasContentBlocks() ) continue;
-		  $tmp = $module->GetContentBlockValueBase($blockName,$blockInfo,$params);
+		  if( !$module->HasCapability('contentblocks') ) continue;
+		  $tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
 		  if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
 		}
 	    }
@@ -196,8 +196,8 @@ class Content extends ContentBase
 		      if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
 		      $module =& $gCms->modules[$blockInfo['module']]['object'];
 		      if( !is_object($module) ) continue;
-		      if( !$module->HasContentBlocks() ) continue;
-		      $tmp = $module->GetContentBlockInputBase($blockName,$data,$blockInfo['params'],$adding);
+		      if( !$module->HasCapability('contentblocks') ) continue;
+		      $tmp = $module->GetContentBlockInput($blockName,$data,$blockInfo['params'],$adding);
 		      if( $tmp === FALSE ) continue;
 		      if( is_array($tmp) )
 			{
@@ -277,6 +277,8 @@ class Content extends ContentBase
 
     function ValidateData()
     {
+      global $gCms;
+
       $errors = parent::ValidateData();
       if( $errors === FALSE )
 	{
@@ -303,10 +305,9 @@ class Content extends ContentBase
 	      if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
 	      $module =& $gCms->modules[$blockInfo['module']]['object'];
 	      if( !is_object($module) ) continue;
-	      if( !$module->HasContentBlocks() ) continue;
+	      if( !$module->HasCapability('contentblocks') ) continue;
 	      $value = $this->GetPropertyValue($blockInfo['id']);
-
-	      $tmp = $module->ValidateContentBlockValueBase($blockName,$value,$blockInfo);
+	      $tmp = $module->ValidateContentBlockValue($blockName,$value,$blockInfo['params']);
 	      if( !empty($tmp) )
 		{
 		  $errors[] = $tmp;

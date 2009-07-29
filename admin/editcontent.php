@@ -398,10 +398,11 @@ $submit_buttons .= '</p></div>';
 			$contentarray = $contentobj->EditAsArray(false, $currenttab, $adminaccess);
 			for($i=0;$i<count($contentarray);$i++)
 			{
+			  $tmp =& $contentarray[$i];
 				?>
 				<div class="pageoverflow">
-					<div class="pagetext"><?php echo $contentarray[$i][0]; ?></div>
-					<div class="pageinput"><?php echo $contentarray[$i][1]; ?></div>
+					<div class="pagetext"><?php echo $tmp[0]; ?></div>
+					<div class="pageinput"><?php echo $tmp[1]; ?></div>
 				</div>
 				<?php
 			}

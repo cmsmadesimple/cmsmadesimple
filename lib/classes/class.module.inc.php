@@ -487,74 +487,22 @@ class CMSModule
 
 
 	/**
-	 * Base function for getting content blocks
-	 */
-	function GetContentBlockInputBase($blockname,$value = '',$params = array(),$adding = false)
-	{
-	  $this->LoadContentMethods();
-	  return cms_module_GetContentBlockInputBase($this,$blockname,$value,$params,$adding);
-	}
-
-
-	/**
 	 * Get an input field for a specific content block type
 	 */
-	function GetContentBlockInput($id,$returnid,$blockName,$value,$params,$adding = false)
+	function GetContentBlockInput($blockName,$value,$params,$adding = false)
 	{
-	  $mode = 'input';
-	  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/contentblock.'.$blockName.'.php';
-	  if( !@is_file($filename) ) return FALSE;
-
-	  global $gCms;
-	  $db =& $gCms->GetDb();
-	  $config =& $gCms->GetConfig();
-	  $smarty =& $gCms->GetSmarty();
-
-	  include($filename);
+	  return FALSE;
 	}
 
-
-	function GetContentBlockValueBase($blockName,$blockParams,$inputParams)
+	function GetContentBlockValue($blockName,$blockParams,$inputParams)
 	{
-	  $this->LoadContentMethods();
-	  return cms_module_GetContentBlockValueBase($this,$blockName,$blockParams,$inputParams);
-	}
-
-
-	function GetContentBlockValue($id,$returnid,$blockName,$blockParams,$inputParams)
-	{
-	  $mode = 'fillvalue';
-	  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/contentblock.'.$blockName.'.php';
-	  if( !@is_file($filename) ) return FALSE;
-
-	  global $gCms;
-	  $db =& $gCms->GetDb();
-	  $config =& $gCms->GetConfig();
-	  $smarty =& $gCms->GetSmarty();
-
-	  include($filename);
-	}
-
-
-	function ValidateContentBlockValueBase($blockName,$value,$blockParams)
-	{
-	  $this->LoadContentMethods();
-	  return cms_module_GetContentBlockValueBase($this,$blockName,$value,$blockParams);
+	  return FALSE;
 	}
 
 
 	function ValidateContentBlockValue($blockName,$value,$blockparams)
 	{
-	  $mode = 'validate';
-	  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/contentblock.'.$blockName.'.php';
-	  if( !@is_file($filename) ) return FALSE;
-
-	  global $gCms;
-	  $db =& $gCms->GetDb();
-	  $config =& $gCms->GetConfig();
-	  $smarty =& $gCms->GetSmarty();
-
-	  include($filename);
+	  return '';
 	}
 
 
