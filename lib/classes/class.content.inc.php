@@ -1535,27 +1535,13 @@ class ContentBase extends CmsObject
 
 		if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true)
 		{
-			if ($config['use_hierarchy'] == true)
-			{
-				$url = $config['root_url']. '/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
-			}
-			else
-			{
-				$url = $config['root_url']. '/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
-			}
+		  $url = $config['root_url']. '/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
 		}
 		else
 		{
 			if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal')
 			{
-				if ($config['use_hierarchy'] == true)
-				{
-					$url = $config['root_url'] . '/index.php/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
-				}
-				else
-				{
-					$url = $config['root_url'] . '/index.php/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
-				}
+			  $url = $config['root_url'] . '/index.php/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
 			}
 			else
 			{

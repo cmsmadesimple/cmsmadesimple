@@ -117,7 +117,6 @@ $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
 $tmp[0]['default_upload_permission'] = testConfig('default_upload_permission', 'default_upload_permission');
 $tmp[0]['url_rewriting'] = testConfig('url_rewriting', 'url_rewriting');
 $tmp[0]['page_extension'] = testConfig('page_extension', 'page_extension');
-$tmp[0]['use_hierarchy'] = testConfig('use_hierarchy', 'use_hierarchy');
 
 $tmp[1]['root_url'] = testConfig('root_url', 'root_url');
 $tmp[1]['root_path'] = testConfig('root_path', 'root_path', 'testDirWrite');

@@ -640,7 +640,7 @@ class Tree_Node
 	  $result = false;
 	  foreach( $this->nodes->nodes as $onenode )
 	    {
-	      $contentobj =& $onenode->getContent(false,false);
+	      $contentobj =& $onenode->getContent(false,true);
 	      if( is_object($contentobj) )
                 {
 	          if( $contentobj->Active() && $contentobj->ShowInMenu() )
