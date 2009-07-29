@@ -1,3 +1,10 @@
+Version 1.6.3 - Touho
+-----------------------------
+- Fix a potential security problem in the printing module
+- Fix a problem with deactivating and re-activating pages
+  in listcontent
+- Fix a problem with cms_selflink linking to inactive pages.
+
 Version 1.6.2 - Noumea
 -----------------------------
 - Fix a problem with the unique module hash not always starting with a letter
