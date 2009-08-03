@@ -763,7 +763,7 @@ class CMSModule
 	 */
 	function VisibleToAdminUser()
 	{
-		return true;
+	  return true;
 	}
 
 	/**
@@ -2149,7 +2149,7 @@ class CMSModule
 		//Push $this onto front of array
 		$args = func_get_args();
 		array_unshift($args,'');
-		$args[0] = $this;
+		$args[0] = &$this;
 
 		return call_user_func_array('cms_module_Lang', $args);
 	}
