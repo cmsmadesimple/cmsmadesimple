@@ -254,8 +254,8 @@ class ContentBase
       $this->AddBaseProperty('cachable',6);
       $this->AddBaseProperty('alias',10);
       $this->AddBaseProperty('titleattribute',55);
-      $this->AddBaseProperty('accesskey',55);
-      //$this->AddBaseProperty('tabindex',55);
+      $this->AddBaseProperty('accesskey',56);
+      $this->AddBaseProperty('tabindex',57);
       $this->AddBaseProperty('owner',90);
       $this->AddBaseProperty('additionaleditors',91);
 
@@ -1985,6 +1985,12 @@ class ContentBase
 	    case 'accesskey':
 	      {
 		return array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+	      }
+	      break;
+
+	    case 'tabindex':
+	      {
+		return array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
 	      }
 	      break;
 	      

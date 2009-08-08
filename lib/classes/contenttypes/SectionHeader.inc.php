@@ -32,7 +32,7 @@ class SectionHeader extends ContentBase
       $this->RemoveProperty('alias','');
       $this->RemoveProperty('accesskey','');
       $this->RemoveProperty('title','');
-      $this->RemoveProperty('showinmenu',true);
+      //$this->RemoveProperty('showinmenu',true);
       $this->RemoveProperty('cachable',true);
       $this->RemoveProperty('target','');
 
