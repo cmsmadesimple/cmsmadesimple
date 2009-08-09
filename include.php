@@ -115,6 +115,7 @@ if ($config["debug"] == true)
 debug_buffer('loading smarty');
 require(cms_join_path($dirname,'lib','smarty','Smarty.class.php'));
 debug_buffer('loading adodb');
+require(cms_join_path($dirname,'lib','adodb','adodb-exceptions.inc.php'));
 require(cms_join_path($dirname,'lib','adodb.functions.php'));
 load_adodb();
 debug_buffer('loading page functions');
