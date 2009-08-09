@@ -48,14 +48,14 @@ function getSupportedDBDriver()
 function getTestValues( $property )
 {
 	$range = array(
-		'php_version'			=> array('minimum'=>'4.3.0', 'recommended'=>'5.0.4'),
+		'php_version'			=> array('minimum'=>'5.2', 'recommended'=>'5.2.5'),
 		'gd_version'			=> array('minimum'=>2),
 		'memory_limit'			=> array('minimum'=>'16M', 'recommended'=>'24M'),
 		'max_execution_time'	=> array('minimum'=>30, 'recommended'=>60),
 		'post_max_size'			=> array('minimum'=>'2M', 'recommended'=>'10M'),
 		'upload_max_filesize'	=> array('minimum'=>'2M', 'recommended'=>'10M'),
 
-		'mysql_version'			=> array('minimum'=>'3.23', 'recommended'=>'4.1'),
+		'mysql_version'			=> array('minimum'=>'4.1.5', 'recommended'=>'5.0'),
 		'pgsql_version'			=> array('minimum'=>'7.4', 'recommended'=>'8'),
 		'sqlite_version'		=> array('minimum'=>'2.8.10', 'recommended'=>'2.8.16'),
 	);
