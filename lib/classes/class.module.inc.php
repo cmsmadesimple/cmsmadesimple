@@ -470,15 +470,6 @@ class CMSModule
 	 */
 	
 	/**
-	 * Does this module support a content block type or more
-	 */
-	function HasContentBlocks()
-	{
-	  return FALSE;
-	}
-
-
-	/**
 	 * Get an input field for a specific content block type
 	 */
 	function GetContentBlockInput($blockName,$value,$params,$adding = false)
