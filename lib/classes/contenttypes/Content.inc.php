@@ -61,7 +61,7 @@ class Content extends ContentBase
      */
     function ReadyForEdit()
     {
-	$this->get_content_blocks();
+	$this->parse_content_blocks();
     }
 
     function FillParams($params)
@@ -84,7 +84,7 @@ class Content extends ContentBase
 	    }
 	  
 	  // add content blocks
-	  $this->get_content_blocks();
+	  $this->parse_content_blocks();
 	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
 	      $this->AddExtraProperty($blockName);
@@ -124,7 +124,7 @@ class Content extends ContentBase
     function Show($param = 'content_en')
     {
 	// check for additional content blocks
-	$this->get_content_blocks();
+	$this->parse_content_blocks();
 	
 	return $this->GetPropertyValue($param);
     }
@@ -170,7 +170,7 @@ class Content extends ContentBase
 	    }
 
 	  // and the content blocks
-	  $this->get_content_blocks(); // this is needed as this is the first time we get a call to our class when editing.
+	  $this->parse_content_blocks(); // this is needed as this is the first time we get a call to our class when editing.
 	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
 	      $this->AddExtraProperty($blockName);
@@ -297,7 +297,7 @@ class Content extends ContentBase
 	  $result = false;
 	}
 
-      $this->get_content_blocks();
+      $this->parse_content_blocks();
       foreach($this->_contentBlocks as $blockName => $blockInfo)
 	{
 	  if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
@@ -321,8 +321,17 @@ class Content extends ContentBase
     }
 
 
-    /* private */
-    function get_content_blocks()
+    /**
+     * Function to return an array of content blocks
+     */
+    public function get_content_blocks()
+    {
+      $this->parse_content_blocks();
+      return $this->_contentBlocks;
+    }
+
+
+    private function parse_content_blocks()
     {
       $result = false;
       global $gCms;
@@ -361,6 +370,7 @@ class Content extends ContentBase
 		      $value = '';
 		      $label = '';
 		      $size = '50';
+		      $copyable = 0;
 
 		      // get the arguments.
 		      $morematches = array();
@@ -413,6 +423,7 @@ class Content extends ContentBase
 			  $this->_contentBlocks[$name]['default'] = $value;
 			  $this->_contentBlocks[$name]['label'] = $label;
 			  $this->_contentBlocks[$name]['size'] = $size;
+			  $this->_contentBlocks[$name]['copyable'] = $copyable;
 			}
 		    }
 		  
@@ -448,6 +459,7 @@ class Content extends ContentBase
 			  $upload = true;
 			  $dir = ''; // default to uploads path
 			  $label = '';
+			  $copyable = 0;
 			  
 			  foreach ($keyval as $key=>$val)
 			    {
@@ -461,6 +473,9 @@ class Content extends ContentBase
 				    {
 				      $this->mProperties->Add("string", $id);
 				    }
+				  break;
+				case 'copyable':
+				  $copyable = $val;
 				  break;
 				case 'label':
 				  $label = $val;
@@ -487,6 +502,7 @@ class Content extends ContentBase
 			  $this->_contentBlocks[$name]['dir'] = $dir;
 			  $this->_contentBlocks[$name]['default'] = $value;
 			  $this->_contentBlocks[$name]['label'] = $label;					
+			  $this->_contentBlocks[$name]['copyable'] = $copyable;
 			}
 		    }
 		  
@@ -520,6 +536,7 @@ class Content extends ContentBase
 			  $module = '';
 			  $label = '';
 			  $parms = array();
+			  $copyable = 0;
 			  
 			  foreach ($keyval as $key=>$val)
 			    {
@@ -533,6 +550,9 @@ class Content extends ContentBase
 				    {
 				      $this->mProperties->Add("string", $id);
 				    }
+				  break;
+				case 'copyable':
+				  $copyable = $val;
 				  break;
 				case 'label':
 				  $label = $val;
@@ -551,6 +571,7 @@ class Content extends ContentBase
 			  $this->_contentBlocks[$name]['id'] = $id;
 			  $this->_contentBlocks[$name]['module'] = $module;
 			  $this->_contentBlocks[$name]['params'] = $parms;
+			  $this->_contentBlocks[$name]['copyable'] = $copyable;
 			}
 		    }
 		  
@@ -571,7 +592,7 @@ class Content extends ContentBase
     function ContentPreRender($tpl_source)
     {
 	// check for additional content blocks
-	$this->get_content_blocks();
+	$this->parse_content_blocks();
 
 	return $tpl_source;
     }
