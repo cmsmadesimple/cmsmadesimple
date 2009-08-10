@@ -157,14 +157,6 @@ class CMSModule
 		}
 	}
 
-	function LoadContentMethods()
-	{
-		if (!$this->modblock)
-		{
-			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modcontent.inc.php'));
-			$this->modblock = true;
-		}
-	}
 
 	/**
 	 * ------------------------------------------------------------------
@@ -505,6 +497,13 @@ class CMSModule
 	  return '';
 	}
 
+	/**
+	 * Register a bulk content action
+	 */
+	function RegisterBulkContentFunction($label,$action)
+	{
+	  bulkcontentoperations::register_function($label,$action,$this->GetName());
+	}
 
 	/**
 	 * ------------------------------------------------------------------
@@ -2148,7 +2147,7 @@ class CMSModule
 		//Push $this onto front of array
 		$args = func_get_args();
 		array_unshift($args,'');
-		$args[0] = $this;
+		$args[0] =& $this;
 
 		return call_user_func_array('cms_module_Lang', $args);
 	}

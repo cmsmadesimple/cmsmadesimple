@@ -53,7 +53,7 @@ function & adodb_connect()
 		$dsn .= ((count($opt) > 0) ? '?'.implode('&', $opt) : '');
 	}
 
-	define('ADODB_ERROR_HANDLER', 'adodb_error');
+	//define('ADODB_ERROR_HANDLER', 'adodb_error');
 	$dbinstance = ADONewConnection( $dsn );
 	$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 	
