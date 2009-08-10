@@ -35,6 +35,7 @@ define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
 
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax_core/xajax.inc.php');
 $xajax = new xajax();
+$xajax->configure('javascript URI','../lib/xajax');
 $xajax->register(XAJAX_FUNCTION,'content_list_ajax');
 $xajax->register(XAJAX_FUNCTION,'content_setactive');
 $xajax->register(XAJAX_FUNCTION,'content_setinactive');
@@ -1153,31 +1154,14 @@ function display_content_list($themeObject = null)
 	$headoflist .= '<tbody>';
 
 	ob_start();
-	$opts = array();
-	if( check_permission($userid, 'Remove Pages') || check_permission($userid, 'Manage All Content') )
-	  {
-	    $opts['delete'] = lang('delete');
-	  }
-	if (check_permission($userid, 'Manage All Content')) 
-	  {
-	    $opts['active'] = lang('active');
-	    $opts['inactive'] = lang('inactive');
-	    $opts['setcachable'] = lang('cachable');
-	    $opts['setnoncachable'] = lang('noncachable');
-	    $opts['showinmenu'] = lang('showinmenu');
-	    $opts['hidefrommenu'] = lang('hidefrommenu');
-	  }
-	if (check_permission($userid, 'Modify Any Page') || check_permission($userid, 'Manage All Content'))
-	  {
-	    $opts['settemplate'] = lang('settemplate');
-	  }
-	if( !empty($opts) )
+	$multi_opts = bulkcontentoperations::get_operation_list();
+	if( !empty($multi_opts) )
 	  {
 	    echo '<div class="pageoptions">'."\n";
 	    echo '<div style="margin-top: 0; float: right; text-align: right">'."\n";
 	    echo lang('selecteditems').':&nbsp;&nbsp;'; 
 	    echo '<select name="multiaction">';
-	    foreach( $opts as $key => $value )
+	    foreach( $multi_opts as $key => $value )
 	      {
 		echo '<option value="'.$key.'">'.$value.'</option>';
 	      }
@@ -1227,6 +1211,27 @@ function display_content_list($themeObject = null)
 
 	return $headoflist . $thelist . $footer .'</form></div>';
 }
+
+//
+// This is the start of the output
+//
+if( check_permission($userid, 'Remove Pages') || check_permission($userid, 'Manage All Content') )
+  {
+    bulkcontentoperations::register_function(lang('delete'),'delete');
+  }
+if (check_permission($userid, 'Manage All Content')) 
+  {
+    bulkcontentoperations::register_function(lang('active'),'active');
+    bulkcontentoperations::register_function(lang('inactive'),'inactive');
+    bulkcontentoperations::register_function(lang('cachable'),'setcachable');
+    bulkcontentoperations::register_function(lang('noncachable'),'setnoncachable');
+    bulkcontentoperations::register_function(lang('showinmenu'),'showinmenu');
+    bulkcontentoperations::register_function(lang('hidefrommenu'),'hidefrommenu');
+  }
+if (check_permission($userid, 'Modify Any Page') || check_permission($userid, 'Manage All Content'))
+  {
+    bulkcontentoperations::register_function(lang('settemplate'),'settemplate');
+  }
 
 echo $themeObject->ShowMessage('', 'message');
 echo $themeObject->ShowErrors('' ,'error');
