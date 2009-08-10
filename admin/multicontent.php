@@ -19,22 +19,68 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-
 require_once("../include.php");
-check_login();
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-$thisurl=basename(__FILE__).$urlext;
 
-if (isset($_POST['cancel']))
-	redirect('listcontent.php'.$urlext);
-
-$userid = get_userid();
 
 $action = '';
 if (isset($_POST['multiaction'])) $action = $_POST['multiaction'];
 if (isset($_POST['reorderpages'])) $action = 'reorder';
 
+{
+  $tmp = explode('::',$action,2);
+  if( $tmp[0] == 'core' )
+    {
+      $action = $tmp[1];
+    }
+  else
+    {
+      // it's a module action.
+      $gCms = cmsms();
+      if( !isset($gCms->modules[$tmp[0]]) )
+	{
+	  redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
+	}
+      $obj =& $gCms->modules[$tmp[0]]['object'];
+      if( !is_object($obj) )
+	{
+	  redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
+	}
+
+      // strip out the multicontent params
+      $tmp2 = array();
+      foreach( $_POST as $key => $val )
+	{
+	  if( startswith($key,'multicontent-') )
+	    {
+	      $tmp2[] = substr($key,strlen('multicontent-'));
+	    }
+	}
+      // populate the REQUEST with a mact
+      $_SESSION['cms_passthru'] = array();
+      $_SESSION['cms_passthru']['mact'] = implode(',',array($tmp[0],'m1_',$tmp[1]));
+      if( count($tmp) )
+	{
+	  $_SESSION['cms_passthru']['m1_contentlist'] = implode(',',$tmp2);
+	}
+      // handle any normal module action.
+      redirect("moduleinterface.php".$urlext);
+    }
+}
+
+//
+// handling core actions from this point forward.
+//
+
+check_login();
+$thisurl=basename(__FILE__).$urlext;
+$userid = get_userid();
 include_once("header.php");
+
+if (isset($_POST['reorderpages'])) $action = 'reorder';
+
+if (isset($_POST['cancel']))
+  redirect('listcontent.php'.$urlext);
 
 global $gCms;
 $db =& $gCms->GetDb();
