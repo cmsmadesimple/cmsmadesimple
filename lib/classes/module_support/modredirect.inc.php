@@ -25,6 +25,21 @@
  * @package		CMS
  */
 
+function cms_module_RedirectToAdmin(&$modinstance, $page, $params=array())
+{
+  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+  $url = $page.$urlext;
+  if( count($params) )
+    {
+	foreach ($params as $key=>$value)
+	{
+		$url .= '&'.$key.'='.rawurlencode($value);
+	}
+    }
+  redirect($url);
+}
+
+
 function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=array(), $inline=false)
 {
 	global $gCms;
