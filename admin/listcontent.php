@@ -1233,8 +1233,16 @@ if (check_permission($userid, 'Modify Any Page') || check_permission($userid, 'M
     bulkcontentoperations::register_function(lang('settemplate'),'settemplate');
   }
 
-echo $themeObject->ShowMessage('', 'message');
-echo $themeObject->ShowErrors('' ,'error');
+if( isset($_GET['message']) )
+  {
+    $msg = cleanValue($_GET['message']);
+    echo $themeObject->ShowMessage($msg);
+  }
+if( isset($_GET['error']) )
+  {
+    $err = cleanValue($_GET['error']);
+    echo $themeObject->ShowErrors($err);
+  }
 ?>
 <div class="pagecontainer">
 <?php

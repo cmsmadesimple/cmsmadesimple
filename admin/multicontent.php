@@ -39,12 +39,12 @@ if (isset($_POST['reorderpages'])) $action = 'reorder';
       $gCms = cmsms();
       if( !isset($gCms->modules[$tmp[0]]) )
 	{
-	  redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
+	  redirect("listcontent.php".$urlext.'&message='.lang('no_bulk_performed'));
 	}
       $obj =& $gCms->modules[$tmp[0]]['object'];
       if( !is_object($obj) )
 	{
-	  redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
+	  redirect("listcontent.php".$urlext.'&message='.lang('no_bulk_performed'));
 	}
 
       // strip out the multicontent params
@@ -59,7 +59,7 @@ if (isset($_POST['reorderpages'])) $action = 'reorder';
       // populate the REQUEST with a mact
       $_SESSION['cms_passthru'] = array();
       $_SESSION['cms_passthru']['mact'] = implode(',',array($tmp[0],'m1_',$tmp[1]));
-      if( count($tmp) )
+      if( count($tmp2) > 0 )
 	{
 	  $_SESSION['cms_passthru']['m1_contentlist'] = implode(',',$tmp2);
 	}
@@ -324,7 +324,7 @@ else
 
 if (count($nodelist) == 0 && 'reorder' != $action)
 {
-	redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
+  redirect("listcontent.php".$urlext.'&message='.lang('no_bulk_performed'));
 }
 else
 {
@@ -347,7 +347,7 @@ else
 			  if (!is_object($node)) continue;
 			  if ($node->DefaultContent())
 			    {
-			      redirect('listcontent.php'.$urlext.'&error=error_delete_default_parent');
+			      redirect('listcontent.php'.$urlext.'&error='.lang('error_delete_default_parent'));
 			    }
 
 				echo $node->Name() . ' (' . $node->Hierarchy() . ')' . '<br />' . "\n";
@@ -372,7 +372,7 @@ else
 		}
 		else
 		{
-			redirect('listcontent.php'.$urlext.'&error=no_permission');
+		  redirect('listcontent.php'.$urlext.'&error='.lang('no_permission'));
 		}
 	}
         else if ($action == 'settemplate')
@@ -412,7 +412,7 @@ else
 		    $node->Save();
 		  }
 	      }
-	    redirect('listcontent.php'.$urlext.'&message=bulk_success');
+	    redirect('listcontent.php'.$urlext.'&message='.lang('bulk_success'));
 	  }
 	else if ($action == 'dodelete')
 	{
@@ -469,9 +469,9 @@ else
 		//include_once("footer.php");
 		if(! $bulk)
 		{
-			redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
+		  redirect("listcontent.php".$urlext.'&message='.lang('no_bulk_performed'));
 		}
-		redirect("listcontent.php".$urlext.'&message=bulk_success');
+		redirect('listcontent.php'.$urlext.'&message='.lang('bulk_success'));
 	}
 	else if ($action == 'inactive')
 	{
@@ -494,9 +494,9 @@ else
 		}
 		if(! $bulk)
 		{
-			redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
+		  redirect("listcontent.php".$urlext.'&message='.lang('no_bulk_performed'));
 		}
-		redirect("listcontent.php".$urlext.'&message=bulk_success');
+		redirect('listcontent.php'.$urlext.'&message='.lang('bulk_success'));
 	}
 	else if ($action == 'active')
 	{
@@ -519,9 +519,9 @@ else
 		}
 		if(! $bulk)
 		{
-			redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
+		  redirect("listcontent.php".$urlext.'&message='.lang('no_bulk_performed'));
 		}
-		redirect("listcontent.php".$urlext.'&message=bulk_success');
+		redirect('listcontent.php'.$urlext.'&message='.lang('bulk_success'));
 	}
         else if ($action == 'setcachable' || $action == 'setnoncachable')
         {
@@ -540,7 +540,7 @@ else
 			   $node->Save();
 			}
 		}
-		redirect("listcontent.php".$urlext.'&message=bulk_success');
+		redirect('listcontent.php'.$urlext.'&message='.lang('bulk_success'));
         }
         else if ($action == 'showinmenu' || $action == 'hidefrommenu')
         {
@@ -559,22 +559,22 @@ else
 			   $node->Save();
 			}
 		}
-		redirect("listcontent.php".$urlext.'&message=bulk_success');
+		redirect('listcontent.php'.$urlext.'&message='.lang('bulk_success'));
         }
 	else if ($action == 'reorder')
 	{
 	  if (FALSE == $reorder_error)
 	    {
-	      redirect('listcontent.php'.$urlext.'&amp;message=pages_reordered');
+	      redirect('listcontent.php'.$urlext.'&message='.lang('pages_reordered'));
 	    }
 	  else
 	    {
-	      redirect('listcontent.php'.$urlext.'&amp;error='.$reorder_error);
+	      redirect('listcontent.php'.$urlext.'&error='.lang($reorder_error));
 	    }
 	}
 	else
 	{
-		redirect('listcontent.php'.$urlext.'&message=no_bulk_performed');
+	  redirect('listcontent.php'.$urlext.'&message='.lang('no_bulk_performed'));
 	}
 }
 
