@@ -22,36 +22,28 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
-
-check_login();
-$userid = get_userid();
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+
+$userid = get_userid();
 $thisurl=basename(__FILE__).$urlext;
 
 include_once("../lib/classes/class.admintheme.inc.php");
 
-define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
+$cms_ajax = new CmsAjax();
+$cms_ajax->register_function('content_list_ajax');
+$cms_ajax->register_function('content_setactive');
+$cms_ajax->register_function('content_setinactive');
+$cms_ajax->register_function('content_setdefault');
+$cms_ajax->register_function('content_expandall');
+$cms_ajax->register_function('content_collapseall');
+$cms_ajax->register_function('content_toggleexpand');
+$cms_ajax->register_function('content_move');
+$cms_ajax->register_function('content_delete');
+$cms_ajax->register_function('reorder_display_list');
+$cms_ajax->register_function('reorder_process');
 
-
-require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax_core/xajax.inc.php');
-$xajax = new xajax();
-$xajax->configure('javascript URI','../lib/xajax');
-$xajax->register(XAJAX_FUNCTION,'content_list_ajax');
-$xajax->register(XAJAX_FUNCTION,'content_setactive');
-$xajax->register(XAJAX_FUNCTION,'content_setinactive');
-$xajax->register(XAJAX_FUNCTION,'content_setdefault');
-$xajax->register(XAJAX_FUNCTION,'content_expandall');
-$xajax->register(XAJAX_FUNCTION,'content_collapseall');
-$xajax->register(XAJAX_FUNCTION,'content_toggleexpand');
-$xajax->register(XAJAX_FUNCTION,'content_move');
-$xajax->register(XAJAX_FUNCTION,'content_delete');
-$xajax->register(XAJAX_FUNCTION,'reorder_display_list');
-$xajax->register(XAJAX_FUNCTION,'reorder_process');
-$xajax->processRequest();
-$headtext = $xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n";
+$headtext = $cms_ajax->get_javascript();
 include_once("header.php");
-
-//echo '<a onclick="xajax_reorder_display_list();">Test</a>';
 
 function content_list_ajax()
 {
@@ -68,7 +60,7 @@ function check_modify_all($userid)
 
 function setdefault($contentid)
 {
-	global $gCms;
+	$gCms = cmsms();
 	$userid = get_userid();
 	
 	$result = false;
@@ -91,7 +83,7 @@ function setdefault($contentid)
 			}
 		}
 		
-		$db = &$gCms->GetDb();
+		$db = cms_db();
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
 		$old_id = $db->GetOne($query);
 		if (isset($old_id))
@@ -120,7 +112,7 @@ function setdefault($contentid)
 		}
 
 		$result = true;
-		global $gCms;
+		$gCms = cmsms();
 		$contentops =& $gCms->GetContentOperations();
 		$contentops->ClearCache();
 	}
@@ -140,24 +132,26 @@ function content_setdefault($contentid)
 
 function content_setactive($contentid)
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	
 	setactive($contentid);
 
-	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
-	return $objResponse;
+	$resp->replace_html("#contentlist", display_content_list());
+	//$resp->script('set_context_menu();');
+	$resp->script("$('#tr_{$contentid}').highlight('#ff0', 1500);");
+	return $resp->get_result();
 }
 
 function content_setinactive($contentid)
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	
-	setactive($contentid, false);
+	setactive($contentid,false);
 
-	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
-	return $objResponse;
+	$resp->replace_html('#contentlist', display_content_list());
+	//$resp->script('set_context_menu();');
+	$resp->script("$('#tr__{$contentid}').highlight('#ff0', 1500);");
+	return $resp->get_result();
 }
 
 function content_expandall()
@@ -183,7 +177,7 @@ function content_collapseall()
 function expandall()
 {
 	$userid = get_userid();
-	global $gCms;
+	$gCms = cmsms();
 	$contentops =& $gCms->GetContentOperations();
 	$all = $contentops->GetAllContent(false);
 	$cs = '';
@@ -258,27 +252,28 @@ function toggleexpand($contentid, $collapse = false)
 
 function setactive($contentid, $active = true)
 {
-	global $gCms;
-	$userid = get_userid();
+  $gCms = cmsms();
+  $userid = get_userid();
 	
-	$hierManager =& $gCms->GetHierarchyManager();
-	
-	// to activate a page, you must be admin, owner, or additional author
-	$permission = (	check_ownership($userid, $contentid) ||
+  $hierManager =& $gCms->GetHierarchyManager();
+  
+  // to activate a page, you must be admin, owner, or additional author
+  $permission = (	check_ownership($userid, $contentid) ||
 			check_authorship($userid, $contentid) ||
 			check_permission($userid, 'Manage All Content')
-	);
+			);
 
-	if($permission)
-	{
-		$node = &$hierManager->getNodeById($contentid);
-		$value =& $node->getContent(true);
-		$value->SetActive($active);
-		$value->Save();
-		global $gCms;
-		$contentops =& $gCms->GetContentOperations();
-		$contentops->ClearCache();
-	}
+  if($permission)
+    {
+      $node = &$hierManager->getNodeById($contentid);
+      $value =& $node->getContent(false,true,true);
+      if( !is_object($value) ) die(' no object ');
+      $value->SetActive($active);
+      $value->Save();
+      $gCms = cmsms();
+      $contentops =& $gCms->GetContentOperations();
+      $contentops->ClearCache();
+    }
 }
 
 function content_move($contentid, $parentid, $direction)
@@ -305,8 +300,8 @@ function content_move($contentid, $parentid, $direction)
 
 function movecontent($contentid, $parentid, $direction = 'down')
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
+	$gCms = cmsms();
+	$db = cms_db();
 	$userid = get_userid();
 
 	if (check_permission($userid, 'Manage All Content'))
@@ -355,7 +350,7 @@ function deletecontent($contentid)
 	$userid = get_userid();
 	$access = check_permission($userid, 'Remove Pages') || check_permission($userid, 'Manage All Content');
 	
-	global $gCms;
+	$gCms = cmsms();
 	$hierManager =& $gCms->GetHierarchyManager();
 
 	if ($access)
@@ -427,7 +422,7 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 	$content = &$root->getContent();
 	if( !is_object($content) ) return;
 
-	global $gCms;
+	$gCms = cmsms();
 	$contentops =& $gCms->GetContentOperations();
 
 	$output .= '<li id="item_'.$content->mId.'">'."\n";
@@ -455,7 +450,7 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 function reorder_display_list()
 {
 	$objResponse = new xajaxResponse();
-	global $gCms;
+	$gCms = cmsms();
 	$config =& $gCms->GetConfig();
 	
 	$userid = get_userid();
@@ -506,9 +501,9 @@ function reorder_process($get)
 
 	if (check_permission($userid,'Manage All Content'))
 	{
-		global $gCms;
-		$config =& $gCms->GetConfig();
-		$db =& $gCms->GetDb();
+		$gCms = cmsms();
+		$config = cms_config();
+		$db = cms_db();
 		$contentops =& $gCms->GetContentOperations();
 	    $hm = $contentops->GetAllContentAsHierarchy(false);
 		$hierarchy = &$hm->getRootNode();
@@ -551,7 +546,7 @@ function reorder_process($get)
 			}
 		}
 		if (TRUE == $order_changed) {
-			global $gCms;
+			$gCms = cmsms();
 			$contentops =& $gCms->GetContentOperations();
 			$contentops->SetAllHierarchyPositions();
 			$contentops->ClearCache();
@@ -605,14 +600,14 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
   
   if (!array_key_exists($one->TemplateId(), $templates))
     {
-      global $gCms;
+      $gCms = cmsms();
       $templateops =& $gCms->GetTemplateOperations();
       $templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId());
     }
   
   if (!array_key_exists($one->Owner(), $users))
     {
-      global $gCms;
+      $gCms = cmsms();
       $userops =& $gCms->GetUserOperations();
       $users[$one->Owner()] =& $userops->LoadUserById($one->Owner());
     }
@@ -645,13 +640,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	    {
 	      if (!in_array($one->Id(),$openedArray))
 		{
-		  $txt .= "<a href=\"{$thisurl}&amp;content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'false'); return false;\">";
+		  $txt .= "<a href=\"{$thisurl}&amp;content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\" onclick=\"cms_ajax_content_toggleexpand(".$one->Id().", 'false'); return false;\">";
 		  $txt .= $expandImg;
 		  $txt .= "</a>";
 		}
 	      else
 		{
-		  $txt .= "<a href=\"{$thisurl}&amp;content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'true'); return false;\">";
+		  $txt .= "<a href=\"{$thisurl}&amp;content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\" onclick=\"cms_ajax_content_toggleexpand(".$one->Id().", 'true'); return false;\">";
 		  $txt .= $contractImg;
 		  $txt .= "</a>";
 		}
@@ -744,11 +739,11 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	    {
 	      if($one->Active())
 		{
-		  $txt = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;setinactive=".$one->Id()."\" onclick=\"xajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>");
+		  $txt = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;setinactive=".$one->Id()."\" onclick=\"alert('setinactive'); cms_ajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>");
 		}
 	      else
 		{
-		  $txt = "<a href=\"{$thisurl}&amp;setactive=".$one->Id()."\" onclick=\"xajax_content_setactive(".$one->Id().");return false;\">".$image_set_true."</a>";
+		  $txt = "<a href=\"{$thisurl}&amp;setactive=".$one->Id()."\" onclick=\"alert('setactive'); cms_ajax_content_setactive(".$one->Id().");return false;\">".$image_set_true."</a>";
 		}
 	    }
 	  if( !empty($txt) )
@@ -767,7 +762,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	    {
 	      if ($one->IsDefaultPossible())
 		{
-		  $txt = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_html_entity_decode_utf8(lang("confirmdefault", $one->mName), true)."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>");
+		  $txt = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_html_entity_decode_utf8(lang("confirmdefault", $one->mName), true)."')) cms_ajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>");
 		}
 	    }
 	  if( !empty($txt) )
@@ -790,21 +785,21 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		{
 		  if (($one->ItemOrder() - 1) <= 0) #first
 		    { 
-		      $txt .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+		      $txt .= "<a onclick=\"cms_ajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
 		      $txt .= $downImg;
 		      $txt .= "</a>&nbsp;&nbsp;";
 		    }
 		  else if (($one->ItemOrder() - 1) == $sameLevel-1) #last
 		    {
-		      $txt .= "&nbsp;&nbsp;<a class=\"move_up\" onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+		      $txt .= "&nbsp;&nbsp;<a class=\"move_up\" onclick=\"cms_ajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
 		      $txt .= $upImg;
 		      $txt .= "</a>";
 		    }
 		  else #middle
 		    {
-		      $txt .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+		      $txt .= "<a onclick=\"cms_ajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
 		      $txt .= $downImg;
-		      $txt .= "</a>&nbsp;<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+		      $txt .= "</a>&nbsp;<a onclick=\"cms_ajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
 		      $txt .= $upImg;
 		      $txt .= "</a>";
 		    }
@@ -891,7 +886,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	      if ($root->getChildrenCount() == 0 && 
 		  (check_permission($userid, 'Remove Pages') || check_permission($userid,'Manage All Content')) )
 		{
-		  $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
+		  $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) cms_ajax_content_delete(".$one->Id()."); return false;\">";
 		  $txt .= $deleteImg;
 		  $txt .= "</a>";
 		}
@@ -972,11 +967,10 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
 function display_content_list($themeObject = null)
 {
-	global $gCms;
+	$gCms = cmsms();
 	global $thisurl;
 	global $urlext;
 
-	check_login();
 	$userid = get_userid();
 	
 	$mypages = author_pages($userid);
@@ -1009,7 +1003,7 @@ function display_content_list($themeObject = null)
 	$currow = "row1";
 	
 	if ($themeObject == null)
-		$themeObject =& AdminTheme::GetThemeObject();
+	  $themeObject =& AdminTheme::GetThemeObject();
 
 	// construct true/false button images
 	$image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
@@ -1081,9 +1075,9 @@ function display_content_list($themeObject = null)
 
 	if (check_permission($userid, 'Manage All Content'))
 	{
-	  $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">';
+	  $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="cms_ajax_reorder_display_list();return false;">';
 	  $headoflist .= $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon').'</a>';
-	  $headoflist .= ' <a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
+	  $headoflist .= ' <a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="cms_ajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
 	}
 
 	$headoflist .='</p></div>';
@@ -1184,20 +1178,20 @@ function display_content_list($themeObject = null)
 <?php 
     } 
 ?>
-		<a style="margin-left: 10px;" href="'.$thisurl.'&amp;expandall=1" onclick="xajax_content_expandall(); return false;">
+		<a style="margin-left: 10px;" href="'.$thisurl.'&amp;expandall=1" onclick="cms_ajax_content_expandall(); return false;">
 <?php 
 			echo $themeObject->DisplayImage('icons/system/expandall.gif', lang('expandall'),'','','systemicon').'</a>';
-		echo ' <a class="pageoptions" href="'.$thisurl.'&amp;expandall=1" onclick="xajax_content_expandall(); return false;">'.lang("expandall");
+		echo ' <a class="pageoptions" href="'.$thisurl.'&amp;expandall=1" onclick="cms_ajax_content_expandall(); return false;">'.lang("expandall");
 ?>
 			</a>&nbsp;&nbsp;&nbsp;
-		<a href="<?php echo $thisurl ?>&amp;collapseall=1" onclick="xajax_content_collapseall(); return false;">
+		<a href="<?php echo $thisurl ?>&amp;collapseall=1" onclick="cms_ajax_content_collapseall(); return false;">
 <?php 
 			echo $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
-		echo ' <a class="pageoptions" href="'.$thisurl.'&amp;collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall").'</a>';
+		echo ' <a class="pageoptions" href="'.$thisurl.'&amp;collapseall=1" onclick="cms_ajax_content_collapseall(); return false;">'.lang("contractall").'</a>';
 		if (check_permission($userid, 'Manage All Content'))
 		{
 			$image_reorder = $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon');
-			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="'.$thisurl.'&amp;error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.'</a> <a class="pageoptions" href="'.$thisurl.'&amp;error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
+			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="'.$thisurl.'&amp;error=jsdisabled" onclick="cms_ajax_reorder_display_list();return false;">'.$image_reorder.'</a> <a class="pageoptions" href="'.$thisurl.'&amp;error=jsdisabled" onclick="cms_ajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
 		}
 ?>
 			</div>
@@ -1215,6 +1209,7 @@ function display_content_list($themeObject = null)
 //
 // This is the start of the output
 //
+$cms_ajax->process_requests();
 if( check_permission($userid, 'Remove Pages') || check_permission($userid, 'Manage All Content') )
   {
     bulkcontentoperations::register_function(lang('delete'),'delete');

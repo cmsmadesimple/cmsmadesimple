@@ -610,6 +610,7 @@ class AdminTheme
     function OutputHeaderJavascript()
     {
 ?>
+<script type="text/javascript" src="../lib/jquery/jquery.js"/></script>
 <script type="text/javascript">
 <!-- Needed for correct display in IE only -->
 <!--
@@ -1864,7 +1865,7 @@ class AdminTheme
 	
 		if (file_exists(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$config['admin_dir']."/themes/${themeName}/${themeObjectName}.php"))
 		{
-			include(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$config['admin_dir']."/themes/${themeName}/${themeObjectName}.php");
+			include_once(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$config['admin_dir']."/themes/${themeName}/${themeObjectName}.php");
 			$themeObject = new $themeObjectName($gCms, $userid, $themeName);
 		}
 		else

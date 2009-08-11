@@ -284,13 +284,13 @@ class xajaxPluginManager
 		{
 			$objPlugin =& $this->aRegistrars[$sKey];
 			$mResult = $objPlugin->register($aArgs);
-			if (get_class($mResult) == 'xajaxRequest')
-				return $mResult;
+			if (is_bool($mResult))
+			  if (true === $mResult)
+			    return true;
 			if (is_array($mResult))
 				return $mResult;
-			if (is_bool($mResult))
-				if (true === $mResult)
-					return true;
+			if (is_object($mResult) && get_class($mResult) == 'xajaxRequest')
+				return $mResult;
 		}
 //SkipDebug
 		$objLanguageManager =& xajaxLanguageManager::getInstance();

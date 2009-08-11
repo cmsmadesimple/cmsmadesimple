@@ -131,7 +131,7 @@ class xajaxFunctionPlugin extends xajaxRequestPlugin
 			{
 				$xuf =& $aArgs[1];
 
-				if (get_class($xuf) != 'xajaxUserFunction')
+				if (is_object($xuf) && get_class($xuf) != 'xajaxUserFunction')
 					$xuf =& new xajaxUserFunction($xuf);
 
 				if (2 < count($aArgs))
