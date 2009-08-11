@@ -56,6 +56,9 @@ function & adodb_connect()
 	//define('ADODB_ERROR_HANDLER', 'adodb_error');
 	$dbinstance = ADONewConnection( $dsn );
 	$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
+	$dbinstance->query_count = 0;
+	$dbinstance->fnExecute = 'adodb_count_recs';
+	$dbinstance->fnCacheExecute = 'adodb_cache_count_recs';
 	
 	if ($config['debug'] == true)
 	{
@@ -95,4 +98,15 @@ function adodb_error($dbtype, $function_performed, $error_number, $error_message
 	}
 	die();
 }
+
+function adodb_count_recs($db, $sql, $inputarray)
+{
+	$db->query_count++;
+}
+
+function adodb_cache_count_recs($db, $secs2cache, $sql, $inputarray)
+{
+	adodb_count_recs($db, $sql, $inputarray);
+}
+
 ?>

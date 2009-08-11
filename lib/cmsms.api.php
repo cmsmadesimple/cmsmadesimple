@@ -137,6 +137,19 @@ function cms_db()
 	return cmsms()->GetDb();
 }
 
+function cms_config()
+{
+	return cmsms()->GetConfig();
+}
+
+function cms_orm($class = '')
+{
+	if ($class == '')
+		return CmsObjectRelationalManager::get_instance();
+	else
+		return CmsObjectRelationalManager::get_instance()->$class;
+}
+
 /**
  * Looks through the hash given.  If a key named val1 exists, then it's value is 
  * returned.  If not, then val2 is returned.  Furthermore, passing one of the php
