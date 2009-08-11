@@ -496,6 +496,9 @@ class Content extends ContentBase
 				case 'module':
 				  $module = $val;
 				  break;
+				case 'assign':
+				  // do nothing.
+				  break;
 				default:
 				  $parms[$key] = $val;
 				  break;
