@@ -82,6 +82,7 @@ class CmsAjaxResponse extends CmsObject
 	
 	function get_result()
 	{
+		while(@ob_end_clean());
 		header("Content-Type: text/xml; charset=utf-8");
 		return '<?xml version="1.0" encoding="utf-8"?><ajax>' . $this->result . '</ajax>';
 	}
