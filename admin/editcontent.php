@@ -17,14 +17,18 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
-
 $CMS_ADMIN_PAGE=1;
-
 require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
+
 check_login();
 $userid = get_userid();
+
+if (isset($_POST["cancel"]))
+{
+	redirect("listcontent.php".$urlext);
+}
 
 include_once("../lib/classes/class.admintheme.inc.php");
 
@@ -35,14 +39,10 @@ require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax_core/xajax.inc.php')
 require_once(dirname(__FILE__).'/editcontent_extra.php');
 
 $xajax = new xajax();
+$xajax->configure('javascript URI','../lib/xajax');
 $xajax->register(XAJAX_FUNCTION,'ajaxpreview');
 $xajax->processRequest();
 $headtext = $xajax->getJavascript('../lib/xajax')."\n";
-
-if (isset($_POST["cancel"]))
-{
-	redirect("listcontent.php".$urlext);
-}
 
 $error = FALSE;
 
@@ -88,21 +88,6 @@ else
 	}
 }
 
-$contentobj = "";
-if (isset($_POST["serialized_content"]))
-{
-	$contentops =& $gCms->GetContentOperations();
-	$contentops->LoadContentType($_POST['orig_content_type']);
-	$contentobj = UnserializeObject($_POST["serialized_content"]);
-	if (strtolower(get_class($contentobj)) != strtolower($content_type))
-	{
-		#Fill up the existing object with values in form
-		#Create new object
-		#Copy important fields to new object
-		#Put new object on top of old one
-		copycontentobj($contentobj, $content_type);
-	}
-}
 
 #Get current userid and make sure they have permission to add something
 $userid = get_userid();
@@ -114,67 +99,83 @@ if (!$access)
 	$access = check_authorship($userid, $content_id);
 }
 
+$contentobj = $contentops->LoadContentFromId($content_id);
 if ($access)
 {
-	if ($submit || $apply)
+  if ($submit || $apply)
+    {
+      // $contentobj->SetProperties();  // calguy should not be necessary
+      $contentobj->FillParams($_POST);
+      $error = $contentobj->ValidateData();
+      
+      if ($error === FALSE)
 	{
-	  #Fill contentobj with parameters
-	  // $contentobj->SetProperties();  // calguy should not be necessary
-	  $contentobj->FillParams($_POST);
-	  $error = $contentobj->ValidateData();
-
-	  if ($error === FALSE)
+	  $contentobj->SetLastModifiedBy(get_userid());
+	  $contentobj->Save();
+	  global $gCms;
+	  $contentops =& $gCms->GetContentOperations();
+	  $contentops->SetAllHierarchyPositions();
+	  audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
+	  if ($submit)
 	    {
-	      $contentobj->SetLastModifiedBy(get_userid());
-	      $contentobj->Save();
-	      global $gCms;
-	      $contentops =& $gCms->GetContentOperations();
-	      $contentops->SetAllHierarchyPositions();
-	      audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
-	      if ($submit)
-		{
-		  redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&message=contentupdated');
-		}
+	      redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&message=contentupdated');
 	    }
+	}
 
-		if ($ajax)
-		{
-			header('Content-Type: text/xml');
-			print '<?xml version="1.0" encoding="UTF-8"?>';
-			print '<EditContent>';
-			if ($error !== false)
-			{
-				print '<Response>Error</Response>';
-				print '<Details><![CDATA[';
-				if (!is_array($error))
-				{
-					$error = array($error);
-				}
-				print '<li>' . join('</li><li>', $error) . '</li>';
-				print ']]></Details>';
-			}
-			else
-			{
-				print '<Response>Success</Response>';
-				print '<Details><![CDATA[' . lang('contentupdated') . ']]></Details>';
-			}
-			print '</EditContent>';
-			exit;
-		}
-	}
-	else if ($content_id != -1 && strtolower(get_class($contentobj)) != strtolower($content_type))
+      if ($ajax)
 	{
-	  // handle changing content type
-		global $gCms;
-		$contentops =& $gCms->GetContentOperations();
-		$contentobj = $contentops->LoadContentFromId($content_id);
-		$content_type = $contentobj->Type();
+	  header('Content-Type: text/xml');
+	  print '<?xml version="1.0" encoding="UTF-8"?>';
+	  print '<EditContent>';
+	  if ($error !== false)
+	    {
+	      print '<Response>Error</Response>';
+	      print '<Details><![CDATA[';
+	      if (!is_array($error))
+		{
+		  $error = array($error);
+		}
+	      print '<li>' . join('</li><li>', $error) . '</li>';
+	      print ']]></Details>';
+	    }
+	  else
+	    {
+	      print '<Response>Success</Response>';
+	      print '<Details><![CDATA[' . lang('contentupdated') . ']]></Details>';
+	    }
+	  print '</EditContent>';
+	  exit;
 	}
-	else
-	  {
-	    // changing content type
-	    updatecontentobj($contentobj);
-	}
+    }
+  else if (isset($_POST["serialized_content"]))
+    {
+      // content type changed.
+      global $gCms;
+      $contentops =& $gCms->GetContentOperations();
+      $contentops->LoadContentType($_POST['orig_content_type']);
+
+      $contentobj = UnserializeObject($_POST["serialized_content"]);
+      if (strtolower(get_class($contentobj)) != strtolower($content_type))
+	{
+	  // Fill up the existing object with values in form
+	  // Create new object
+	  // Copy important fields to new object
+	  // Put new object on top of old one
+	  copycontentobj($contentobj, $content_type);
+ 	}
+    }
+//   else if ($content_id != -1 || !is_object($contentobj) )
+//     {
+//       // loading content.
+//       global $gCms;
+//       $contentops =& $gCms->GetContentOperations();
+//       $contentobj = $contentops->LoadContentFromId($content_id);
+//       $content_type = $contentobj->Type();
+//     }
+//   else
+//     {
+//       die('unknwon condition');
+//     }
 }
 
 if (strlen($contentobj->Name()) > 0)

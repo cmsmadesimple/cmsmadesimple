@@ -102,6 +102,7 @@ function copycontentobj(&$contentobj, $content_type, $params = null)
 	$tmpobj->SetHierarchy($contentobj->Hierarchy());
 	$tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
 	$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
+	$tmpobj->FillParams($params);
 	$contentobj = $tmpobj;
 }
 
