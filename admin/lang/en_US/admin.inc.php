@@ -84,7 +84,7 @@ $lang['admin']['help_function_content_image'] = <<<EOT
 
   <li><em>(optional)</em> label - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
  
-  <li><em>(optional)</em> dir - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the uploads directory will be used.
+  <li><em>(optional)</em> dir - The name of a directory (relative to the uploads directory), from which to select image files. If not specified, the uploads directory will be used.
   <p>Example: use images from the uploads/image directory.</p>
   <pre>{content_image block='image1' dir='images'}</pre><br/>
   </li>
@@ -101,6 +101,7 @@ $lang['admin']['help_function_content_image'] = <<<EOT
 
   <li><em>(optional)</em> alt - Alternative text if the image cannot be found.</li>
   <li><em>(optional)</em> urlonly - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
+  <li><em>(optional)</em> promptoncopy - Indicates that the authorized user should be prompted for a value for this field when performing any advanced copy operations.  Advanced copy operations may be provided by third party modules.</li>
 </ul>
 EOT;
 $lang['admin']['error_udt_name_chars'] = 'A valid UDT name starts with a letter or underscore, followed by any number of letters, numbers, or underscores.';
