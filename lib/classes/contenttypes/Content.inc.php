@@ -306,7 +306,7 @@ class Content extends ContentBase
 		      $value = '';
 		      $label = '';
 		      $size = '50';
-		      $copyable = 0;
+		      $promptoncopy = 0;
 
 		      // get the arguments.
 		      $morematches = array();
@@ -359,7 +359,7 @@ class Content extends ContentBase
 			  $this->_contentBlocks[$name]['default'] = $value;
 			  $this->_contentBlocks[$name]['label'] = $label;
 			  $this->_contentBlocks[$name]['size'] = $size;
-			  $this->_contentBlocks[$name]['copyable'] = $copyable;
+			  $this->_contentBlocks[$name]['promptoncopy'] = $promptoncopy;
 			}
 		    }
 		  
@@ -395,7 +395,7 @@ class Content extends ContentBase
 			  $upload = true;
 			  $dir = ''; // default to uploads path
 			  $label = '';
-			  $copyable = 0;
+			  $promptoncopy = 0;
 			  
 			  foreach ($keyval as $key=>$val)
 			    {
@@ -410,8 +410,8 @@ class Content extends ContentBase
 				      $this->mProperties->Add("string", $id);
 				    }
 				  break;
-				case 'copyable':
-				  $copyable = $val;
+				case 'promptoncopy':
+				  $promptoncopy = $val;
 				  break;
 				case 'label':
 				  $label = $val;
@@ -438,7 +438,7 @@ class Content extends ContentBase
 			  $this->_contentBlocks[$name]['dir'] = $dir;
 			  $this->_contentBlocks[$name]['default'] = $value;
 			  $this->_contentBlocks[$name]['label'] = $label;					
-			  $this->_contentBlocks[$name]['copyable'] = $copyable;
+			  $this->_contentBlocks[$name]['promptoncopy'] = $promptoncopy;
 			}
 		    }
 		  
@@ -472,7 +472,7 @@ class Content extends ContentBase
 			  $module = '';
 			  $label = '';
 			  $parms = array();
-			  $copyable = 0;
+			  $promptoncopy = 0;
 			  
 			  foreach ($keyval as $key=>$val)
 			    {
@@ -487,8 +487,8 @@ class Content extends ContentBase
 				      $this->mProperties->Add("string", $id);
 				    }
 				  break;
-				case 'copyable':
-				  $copyable = $val;
+				case 'promptoncopy':
+				  $promptoncopy = $val;
 				  break;
 				case 'label':
 				  $label = $val;
@@ -507,7 +507,7 @@ class Content extends ContentBase
 			  $this->_contentBlocks[$name]['id'] = $id;
 			  $this->_contentBlocks[$name]['module'] = $module;
 			  $this->_contentBlocks[$name]['params'] = $parms;
-			  $this->_contentBlocks[$name]['copyable'] = $copyable;
+			  $this->_contentBlocks[$name]['promptoncopy'] = $promptoncopy;
 			}
 		    }
 		  
@@ -628,10 +628,17 @@ class Content extends ContentBase
      */
     private function _display_image_block($blockInfo,$value,$adding)
     {
+      $gCms = cmsms();
+      $config =& $gCms->GetConfig();
       $dir = cms_join_path($config['uploads_path'],$blockInfo['dir']);
       $optprefix = 'uploads';
       if( !empty($blockInfo['dir']) ) $optprefix .= '/'.$blockInfo['dir'];
-      $dropdown = create_file_dropdown($blockInfo['id'],$dir,$data,'jpg,jpeg,png,gif',
+      $inputname = $blockInfo['id'];
+      if( isset($blockInfo['inputname']) )
+	{
+	  $inputname = $blockInfo['inputname'];
+	}
+      $dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',
 				       $optprefix,true);
       if( $dropdown === false )
 	{
