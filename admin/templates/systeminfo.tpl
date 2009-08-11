@@ -1,6 +1,7 @@
 <div class="pagecontainer">
 {if empty($smarty.get.cleanreport)}
 	<p class="pageshowrows"><a href="{$systeminfo_cleanreport}">{si_lang a=copy_paste_forum}</a></p>
+	<p class="pageshowrows"><a href="{$systeminfo_phpinforeport}">{si_lang a=phpinfo_report}</a></p>
 {/if}
 
 {$showheader}
@@ -31,11 +32,13 @@
   </div>
 {/foreach}
 
-<br />
+</fieldset>
 
-<div class="pageoverflow">
-<h4 class="h-inside">{si_lang a=config_information}</h4>
-</div>
+
+
+<fieldset>
+<legend><strong>{si_lang a=config_information}</strong>: </legend>
+
 {foreach from=$config_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
 	<div class="pageoverflow">
@@ -98,11 +101,14 @@
 	</div>
   {/foreach}
 {/foreach}
-<br />
 
-<div class="pageoverflow">
-<h4 class="h-inside">{si_lang a=permission_information}</h4>
-</div>
+</fieldset>
+
+
+
+<fieldset>
+<legend><strong>{si_lang a=permission_information}</strong>: </legend>
+
 {foreach from=$permission_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
 	<div class="pageoverflow">
@@ -116,8 +122,6 @@
 	</div>
   {/foreach}
 {/foreach}
-<br />
-
 
 </fieldset>
 
@@ -130,7 +134,7 @@
 		<p class="pageinput">{si_lang a=count_contents}: <b>{$count_contents}</b></p>
 		<p class="pageinput">{si_lang a=contenttype}:<br />
 {foreach from=$content_type key='type' item='item'}
-{$type}: {if $item.active}{$item.active} {si_lang a=active}{/if} {if $item.inactive}{$item.inactive} {si_lang a=inactive}{/if}<br />
+&nbsp; {$type}: {if $item.active}{$item.active} {si_lang a=active}{/if} {if $item.inactive}{$item.inactive} {si_lang a=inactive}{/if}<br />
 {/foreach}
 		</p>
 	</div>
@@ -144,8 +148,8 @@
 	</div>
 <br />
 
-
 </fieldset>
+
 
 <p class="pageback"><a class="pageback" href="{$backurl}">&#171; {si_lang a=back}</a></p>
 

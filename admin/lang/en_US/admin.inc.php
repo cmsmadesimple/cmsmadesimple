@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['phpinfo_report'] = 'Display your PHP Information';
 $lang['admin']['site_information'] = 'Site Information';
 $lang['admin']['contents'] = 'Contents';
 $lang['admin']['count_contents'] = 'Total number of contents';

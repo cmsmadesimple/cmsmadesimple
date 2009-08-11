@@ -71,12 +71,13 @@ $smarty->force_compile = true;
 $db =& $gCms->GetDb();
 
 
-
 //smartyfier
 $smarty->assign('themename', $themeObject->themeName);
 $smarty->assign('showheader', $themeObject->ShowHeader('systeminfo'));
 $smarty->assign('backurl', $themeObject->BackUrl());
 $smarty->assign('systeminfo_cleanreport', 'systeminfo.php'.$urlext.'&amp;cleanreport=1');
+$smarty->assign('systeminfo_phpinforeport', 'systeminfo.php'.$urlext.'&amp;phpinforeport=1');
+
 
 $help_lang = get_preference($userid, 'default_cms_language');
 if(empty($help_lang))
@@ -111,7 +112,6 @@ $tmp[1]['debug'] = testConfig('debug', 'debug');
 $tmp[1]['output_compression'] = testConfig('output_compression', 'output_compression');
 $tmp[1]['db_prefix'] = testConfig('db_prefix', 'db_prefix');
 $tmp[1]['persistent_db_conn'] = testConfig('persistent_db_conn', 'persistent_db_conn');
-$tmp[1]['set_names'] = testConfig('set_names', 'set_names');
 
 $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
 $tmp[0]['default_upload_permission'] = testConfig('default_upload_permission', 'default_upload_permission');
@@ -130,8 +130,9 @@ $tmp[1]['auto_alias_content'] = testConfig('auto_alias_content', 'auto_alias_con
 $tmp[1]['locale'] = testConfig('locale', 'locale');
 $tmp[1]['image_manipulation_prog'] = testConfig('image_manipulation_prog', 'image_manipulation_prog');
 $tmp[1]['image_transform_lib_path'] = testConfig('image_transform_lib_path', 'image_transform_lib_path');
-$tmp[1]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
-$tmp[1]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
+$tmp[0]['set_names'] = testConfig('set_names', 'set_names');
+$tmp[0]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
+$tmp[0]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
 
 $smarty->assign('count_config_info', count($tmp[0]));
 $smarty->assign('config_info', $tmp);
@@ -288,8 +289,20 @@ $smarty->assign('permission_info', $tmp);
 
 
 
-if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) echo $smarty->fetch('systeminfo.txt.tpl');
-else echo $smarty->fetch('systeminfo.tpl');
+if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1)
+{
+	echo $smarty->fetch('systeminfo.txt.tpl');
+}
+elseif(isset($_GET['phpinforeport']) && $_GET['phpinforeport'] == 1)
+{
+	$smarty->assign('systeminfo', 'systeminfo.php'.$urlext);
+	$smarty->assign('phpinfo', getEmbedPhpInfo(INFO_CONFIGURATION | INFO_MODULES));
+	echo $smarty->fetch('systeminfo.phpinfo.tpl');
+}
+else
+{
+	echo $smarty->fetch('systeminfo.tpl');
+}
 
 
 include_once("footer.php");
