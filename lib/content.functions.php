@@ -163,8 +163,9 @@ class Smarty_CMS extends Smarty {
 
 	function module_file_template($tpl_name, &$tpl_source, &$smarty_obj)
     {
-        $params = split(';', $tpl_name);
-	
+        //5.3 $params = split(';', $tpl_name);
+		$params = explode(';', $tpl_name);
+
         if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/module_custom/' . $params[0] . '/templates/' . $params[1]))
 	  {
             $tpl_source = @file_get_contents(dirname(dirname(__FILE__)) . '/module_custom/' . $params[0] . '/templates/' . $params[1]);
@@ -180,7 +181,8 @@ class Smarty_CMS extends Smarty {
 
 	function module_file_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
-		$params = split(';', $tpl_name);
+		//5.3 $params = split(';', $tpl_name);
+		$params = explode(';', $tpl_name);
 		if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]))
 		{
 			$tpl_timestamp = filemtime(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]);

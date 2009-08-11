@@ -1028,7 +1028,8 @@ class CmsContentOperations
 	{
 		#Change padded numbers back into user-friendly values
 		$tmp = '';
-		$levels = split('\.', $position);
+		//5.3 $levels = split('\.', $position);
+		$levels = explode('.', $position);
 		foreach ($levels as $onelevel)
 		{
 			$tmp .= ltrim($onelevel, '0') . '.';
