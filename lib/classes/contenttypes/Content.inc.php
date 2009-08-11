@@ -654,6 +654,11 @@ class Content extends ContentBase
       $module =& $gCms->modules[$blockInfo['module']]['object'];
       if( !is_object($module) ) continue;
       if( !$module->HasCapability('contentblocks') ) return FALSE;
+      if( isset($blockInfo['inputname']) && !empty($blockInfo['inputname']) )
+	{
+	  // a hack to allow overriding the input field name.
+	  $blockName = $blockInfo['inputname'];
+	}
       $tmp = $module->GetContentBlockInput($blockName,$value,$blockInfo['params'],$adding);
       return $tmp;
     }

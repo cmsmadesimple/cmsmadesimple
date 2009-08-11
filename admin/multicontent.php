@@ -33,6 +33,10 @@ if (isset($_POST['reorderpages'])) $action = 'reorder';
     {
       $action = $tmp[1];
     }
+  else if( $tmp[0] == '-1' )
+    {
+      redirect("listcontent.php".$urlext.'&message='.lang('no_bulk_performed'));
+    }
   else
     {
       // it's a module action.
