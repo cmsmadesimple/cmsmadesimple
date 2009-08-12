@@ -47,10 +47,9 @@ include_once("header.php");
 
 function content_list_ajax()
 {
-	$objResponse = new xajaxResponse();
-	$objResponse->clear("contentlist", "innerHTML");
-	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	return $objResponse;
+	$resp = new CmsAjaxResponse();
+	$resp->replace_html("#contentlist", display_content_list());
+	return $resp->get_result();
 }
 
 function check_modify_all($userid)
@@ -121,13 +120,13 @@ function setdefault($contentid)
 
 function content_setdefault($contentid)
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	
 	setdefault($contentid);
 
-	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
-	return $objResponse;
+	$resp->replace_html("#contentlist", display_content_list());
+	$resp->script("jQuery('#tr_{$contentid}').highlight('#ff0',1000);");
+	return $resp->get_result();
 }
 
 function content_setactive($contentid)
@@ -137,8 +136,7 @@ function content_setactive($contentid)
 	setactive($contentid);
 
 	$resp->replace_html("#contentlist", display_content_list());
-	//$resp->script('set_context_menu();');
-	$resp->script("$('#tr_{$contentid}').highlight('#ff0', 1500);");
+	$resp->script("jQuery('#tr_{$contentid}').highlight('#ff0', 1000);");
 	return $resp->get_result();
 }
 
@@ -149,29 +147,28 @@ function content_setinactive($contentid)
 	setactive($contentid,false);
 
 	$resp->replace_html('#contentlist', display_content_list());
-	//$resp->script('set_context_menu();');
-	$resp->script("$('#tr__{$contentid}').highlight('#ff0', 1500);");
+	$resp->script("jQuery('#tr__{$contentid}').highlight('#ff0', 1000);");
 	return $resp->get_result();
 }
 
 function content_expandall()
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	
 	expandall();
 
-	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	return $objResponse;
+	$resp->replace_html("#contentlist", display_content_list());
+	return $resp->get_result();
 }
 
 function content_collapseall()
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	
 	collapseall();
 
-	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	return $objResponse;
+	$resp->replace_html("#contentlist", display_content_list());
+	return $resp->get_result();
 }
 
 function expandall()
@@ -199,23 +196,23 @@ function collapseall()
 
 function content_toggleexpand($contentid, $collapse)
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	
 	toggleexpand($contentid, $collapse=='true'?true:false);
 
-	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
-	return $objResponse;
+	$resp->replace_html("#contentlist", display_content_list());
+	$resp->script("jQuery('#tr__{$contentid}').highlight('#ff0', 1000);");
+	return $resp->get_result();
 }
 
 function content_delete($contentid)
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	
 	deletecontent($contentid);
-
-	$objResponse->script("new Effect.Fade('tr_$contentid', { afterFinish:function() { xajax_content_list_ajax(); } });");
-	return $objResponse;
+	// used to be an effect here, will have to redo that.
+	$resp->script("cms_ajax_content_list_ajax();");
+	return $resp->get_result();
 }
 
 function toggleexpand($contentid, $collapse = false)
@@ -278,23 +275,23 @@ function setactive($contentid, $active = true)
 
 function content_move($contentid, $parentid, $direction)
 {
-  $objResponse = new xajaxResponse();
+  $resp = new CmsAjaxResponse();
 
   $time = time();
   $tmp = get_site_preference('__listcontent_timelock__',0);
   if( (time() - $tmp) < 3 )
     {
-      return $objResponse; // delay between requests
+      return $resp->get_result(); // delay between requests
     }
   set_site_preference('__listcontent_timelock__',$time);
 	
-	movecontent($contentid, $parentid, $direction);
-
-	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
+  movecontent($contentid, $parentid, $direction);
+  
+  $resp->replace_html("#contentlist", display_content_list());
+  $resp->script("jQuery('#tr__{$contentid}').highlight('#ff0', 1000);");
 
   // reset lock
-  return $objResponse;
+  return $resp->get_result();
 
 }
 
@@ -449,7 +446,7 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 
 function reorder_display_list()
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	$gCms = cmsms();
 	$config =& $gCms->GetConfig();
 	
@@ -488,16 +485,16 @@ function reorder_display_list()
 	$script = ob_get_contents();
 	ob_end_clean();
 	
-	$objResponse->assign("contentlist", "innerHTML", $contents);
-	$objResponse->script($script);
+	$resp->replace_html("#contentlist", $contents);
+	$resp->script($script);
 
-	return $objResponse;
+	return $resp->get_result();
 }
 
 function reorder_process($get)
 {
 	$userid = get_userid();
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 
 	if (check_permission($userid,'Manage All Content'))
 	{
@@ -553,8 +550,8 @@ function reorder_process($get)
 		}
 	}
 	
-	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	return $objResponse;
+	$resp->replace_html("#contentlist", display_content_list());
+	return $resp->get_result();
 }
 
 function check_children(&$root, &$mypages, &$userid)
