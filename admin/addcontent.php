@@ -26,13 +26,12 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 $userid = get_userid();
 
-define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
-require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax_core/xajax.inc.php');
 require_once(dirname(__FILE__).'/editcontent_extra.php');
-$xajax = new xajax();
-$xajax->register(XAJAX_FUNCTION,'ajaxpreview');
-$xajax->processRequest();
-$headtext = $xajax->getJavascript('../lib/xajax')."\n";
+$cms_ajax = new CmsAjax();
+$cms_ajax->register_function('ajaxpreview');
+
+$headtext = $cms_ajax->get_javascript();
+$cms_ajax->process_requests();
 
 if (isset($_POST["cancel"]))
 {
@@ -266,7 +265,7 @@ $tabnames = $contentobj->TabNames();
 
 		if ($contentobj->mPreview)
 		{
-			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;">'.lang('preview').'</div>';
+			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##cms_ajax_ajaxpreview(jQuery(\'#contentform\').serializeForCmsAjax());return false;">'.lang('preview').'</div>';
 		}
 		?>
 	</div>
