@@ -34,15 +34,13 @@ include_once("../lib/classes/class.admintheme.inc.php");
 
 $dateformat = get_preference(get_userid(),'date_format_string','%x %X');
 
-define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
-require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax_core/xajax.inc.php');
 require_once(dirname(__FILE__).'/editcontent_extra.php');
 
-$xajax = new xajax();
-$xajax->configure('javascript URI','../lib/xajax');
-$xajax->register(XAJAX_FUNCTION,'ajaxpreview');
-$xajax->processRequest();
-$headtext = $xajax->getJavascript('../lib/xajax')."\n";
+$cms_ajax = new CmsAjax();
+$cms_ajax->register_function('ajaxpreview');
+
+$headtext = $cms_ajax->get_javascript();
+$cms_ajax->process_requests();
 
 $error = FALSE;
 
@@ -337,7 +335,7 @@ $tabnames = $contentobj->TabNames();
 		#Make a preview tab
 		if ($contentobj->mPreview)
 		{
-			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\')); return false;">'.lang('preview').'</div>';
+			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##cms_ajax_ajaxpreview(jQuery(\'#contentform\').serializeForCmsAjax()); return false;">'.lang('preview').'</div>';
 		}
 
 		?>
@@ -357,12 +355,6 @@ $submit_buttons = '<div class="pageoverflow">
 <p class="pagetext">&nbsp;</p>
 <p class="pageinput">
  <input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('submitdescription').'" />';
-/* tsw - 7.5.2007
-if (isset($contentobj->mPreview) && $contentobj->mPreview == true)
-  {
-    $submit_buttons .= ' <input type="submit" name="previewbutton" value="'.lang('preview').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('previewdescription').'" onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;" />';
-  }
-*/
 $submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
 $submit_buttons .= ' <input type="submit" onclick="return window.Edit_Content_Apply(this);" name="applybutton" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
  if( $contentobj->IsViewable() && $contentobj->Active() ) {

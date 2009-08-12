@@ -2,9 +2,9 @@
 
 function ajaxpreview($params)
 {
-	global $gCms;
+  $gCms = cmsms();
 	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-	$config =& $gCms->GetConfig();
+	$config = cms_config();
 	$contentops =& $gCms->GetContentOperations();
 
 	$content_type = $params['content_type'];
@@ -21,17 +21,23 @@ function ajaxpreview($params)
 	$tmpvar = substr(str_shuffle(md5($tmpfname)),-3);
 	$url = $config["root_url"].'/index.php?'.$config['query_var']."=__CMS_PREVIEW_PAGE__&r=$tmpvar"; // temporary
 	
-	$objResponse = new xajaxResponse();
-	$objResponse->assign("previewframe", "src", $url);
-	$objResponse->assign("serialized_content", "value", SerializeObject($contentobj));
+	$objResponse = new CmsAjaxResponse();
+	$objResponse->replace("#previewframe", "src", $url);
+	$objResponse->replace("#serialized_content", "value", SerializeObject($contentobj));
 	$count = 0;
 	foreach ($contentobj->TabNames() as $tabname)
 	{
-		$objResponse->script("Element.removeClassName('editab".$count."', 'active');Element.removeClassName('editab".$count."_c', 'active');$('editab".$count."_c').style.display = 'none';");
-		$count++;
+	  $objResponse->script("jQuery('#editteb{$count}').removeClass('active');");
+	  $objResponse->script("jQuery('#edittab{$count}_c').removeClass('active');");
+	  $objResponse->script("jQuery('#edittab{$count}_c').hide()");
+	  //$objResponse->script("Element.removeClassName('editab".$count."', 'active');Element.removeClassName('editab".$count."_c', 'active');$('editab".$count."_c').style.display = 'none';");
+	  $count++;
 	}
-	$objResponse->script("Element.addClassName('edittabpreview', 'active');Element.addClassName('edittabpreview_c', 'active');$('edittabpreview_c').style.display = '';");
-	return $objResponse;
+	$objResponse->script("jQuery('#edittabpreview').addClass('active');");
+	$objResponse->script("jQuery('#edittabpreview_c').addClass('active');");
+	$objResponse->script("jQuery('#edittabpreview_c').show();");
+	//$objResponse->script("Element.addClassName('edittabpreview', 'active');Element.addClassName('edittabpreview_c', 'active');$('edittabpreview_c').style.display = '';");
+	return $objResponse->get_result();
 }
 
 function updatecontentobj(&$contentobj, $preview = false, $params = null)
