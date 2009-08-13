@@ -12,6 +12,9 @@
 {/if}
 
 {if isset($modules) && !isset($body)}
+<div class="pageheader">
+ {'modules'|lang}
+</div>
 <table class="pagetable" cellspacing="0">
   <thead>
     <tr>

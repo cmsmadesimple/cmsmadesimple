@@ -341,21 +341,6 @@ else
 	$dbm[$row['module_name']]['Active'] = ($row['active'] == 1?true:false);
       }
 
-//       if (isset($_SESSION['modules_messages']) && count($_SESSION['modules_messages']) > 0)
-// 	{
-// 	  echo '<ul class="messages">';
-	  
-// 	  // do we need to worry about this for XSS?
-// 	  foreach ($_SESSION['modules_messages'] as $onemessage)
-// 	    {
-// 	      echo "<li>" . $onemessage . "</li>";
-// 	    }
-// 	  echo "</ul>";
-// 	  unset($_SESSION['modules_messages']);
-// 	}
-
-
-      $curclass = "row1";
       // construct true/false button images
       $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
       $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
