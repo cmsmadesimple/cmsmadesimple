@@ -647,6 +647,15 @@ class CMSModule
 	}
 
 	/**
+	 * Display a message and a Yes/No dialog before doing an uninstall.	 Returning noting
+	 * (FALSE) will go right to the uninstall.
+	 */
+	function UpgradePostMessage()
+	{
+	  return FALSE;
+	}
+
+	/**
 	 * Returns whether or not modules should be autoupgraded while upgrading
 	 * CMS versions.  Generally only useful for modules included with the CMS
 	 * base install, but there could be a situation down the road where we have
