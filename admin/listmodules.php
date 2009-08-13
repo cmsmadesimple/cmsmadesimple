@@ -250,10 +250,7 @@ if ($action == "showmoduleabout")
     if (isset($gCms->modules[$module]['object']))
       {
 	$module_name = $gCms->modules[$module]['object']->GetName();
-	// Turn ModuleName into _Module_Name
-	$moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
-	$moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
-	$smarty->assign('module',$moduleName);
+	$smarty->assign('module',$module_name);
 	$smarty->assign('module_about_output',$gCms->modules[$module]['object']->GetAbout());
 	$output = $smarty->fetch('module_about.tpl');
 	$smarty->assign('body',$output);
@@ -263,25 +260,24 @@ else if ($action == "showmodulehelp")
 {
   if (isset($gCms->modules[$module]['object']))
     {
-      $header  = '<div class="pageheader">';
-      $header .= lang('modulehelp', array($module));
-      $wikiUrl = $config['wiki_url'];
       $module_name = $gCms->modules[$module]['object']->GetName();
       // Turn ModuleName into _Module_Name
-      $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
-      $moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
-      if ($moduleName{0} == '_')
-	{
-	  $moduleName = substr($moduleName, 1);
-	}
       // Include English translation of titles. (Can't find better way to get them)
       $dirname = dirname(__FILE__);
       include($dirname.'/lang/en_US/admin.inc.php');
       $section = $lang['admin'][$gCms->modules[$module]['object']->GetAdminSection()];
-      $wikiUrl .= '/'.$section.'/'.$moduleName;
       if (FALSE == get_preference($userid, 'hide_help_links'))
 	{
+	  $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
+	  $moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
+	  if ($moduleName{0} == '_')
+	    {
+	      $moduleName = substr($moduleName, 1);
+	    }
+
 	  // Clean up URL
+	  $wikiUrl = $config['wiki_url'];
+	  $wikiUrl .= '/'.$section.'/'.$moduleName;
 	  $wikiUrl = str_replace(' ', '_', $wikiUrl);
 	  $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
 	  $image_help_external = $themeObject->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
@@ -289,7 +285,7 @@ else if ($action == "showmodulehelp")
 	  $smarty->assign('ext_help_image',$image_help_external);
 	}
 
-      $smarty->assign('module',$moduleName);
+      $smarty->assign('module',$module_name);
       $smarty->assign('module_help_output',$gCms->modules[$module]['object']->GetHelpPage());
       $output = $smarty->fetch('module_help.tpl');
       $smarty->assign('body',$output);
@@ -297,26 +293,16 @@ else if ($action == "showmodulehelp")
 }
 else if ($action == 'missingdeps')
 {
-  echo '<div class="pagecontainer">';
-  echo '<p class="pageheader">'.lang('depsformodule', array($module)).'</p>';
-  echo '<table cellspacing="0" class="AdminTable">';
-  echo '<thead>';
-  echo '<tr><th>'.lang('name').'</th><th>'.lang('minimumversion').'</th><th>'.lang('installed').'</th></tr>';
-  echo '</thead>';
-  echo '<tbody>';
-
+  $deps = array();
   if (isset($gCms->modules[$module]))
     {
       $modinstance = $gCms->modules[$module]['object'];
       if (count($modinstance->GetDependencies()) > 0) #Check for any deps
 	{
-	  $curclass = 'row1';
-#Now check to see if we can satisfy any deps
+	  // Now check to see if we can satisfy any deps
 	  debug_buffer($modinstance->GetDependencies(), 'deps in module');
 	  foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
 	    {
-	      echo '<tr class="'.$curclass.'"><td>'.$onedepkey.'</td><td>'.$onedepvalue.'</td><td>';
-
 	      $havedep = false;
 
 	      if (isset($gCms->modules[$onedepkey]) && 
@@ -327,16 +313,19 @@ else if ($action == 'missingdeps')
 		  $havedep = true;
 		}
 
-	      echo lang(($havedep?'true':'false'));
-	      echo '</td></tr>';
-	      ($curclass=="row1"?$curclass="row2":$curclass="row1");
+	      $row = array();
+	      $row['name'] = $onedepkey;
+	      $row['version'] = $onedepvalue;
+	      $row['installed'] = $havedep;
+	      $deps[] = $row;
 	    }
 	}
     }
 
-  echo '</tbody>';
-  echo '</table>';
-  echo '</div>';
+  $smarty->assign('module',$module);
+  $smarty->assign('deps',$deps);
+  $output = $smarty->fetch('module_deps.tpl');
+  $smarty->assign('body',$output);
 }
 else
 {

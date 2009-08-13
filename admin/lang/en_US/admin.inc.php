@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['no'] = 'No';
+$lang['admin']['yes'] = 'Yes';
 $lang['admin']['phpinfo_report'] = 'Display your PHP Information';
 $lang['admin']['site_information'] = 'Site Information';
 $lang['admin']['contents'] = 'Contents';
