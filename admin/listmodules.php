@@ -285,9 +285,19 @@ else if ($action == "showmodulehelp")
 	  $smarty->assign('ext_help_image',$image_help_external);
 	}
 
+      $smarty->assign('current_language',$gCms->current_language);
+      $obj =& $gCms->modules[$module]['object'];
+      if( isset($_GET['lang']) )
+	{
+	  $gCms->modules[$module]['object']->SetLanguage($_GET['lang']);
+	}
       $smarty->assign('module',$module_name);
       $smarty->assign('module_help_output',$gCms->modules[$module]['object']->GetHelpPage());
       $output = $smarty->fetch('module_help.tpl');
+      if( isset($_GET['lang']) )
+	{
+	  $gCms->modules[$module]['object']->SetLanguage();
+	}
       $smarty->assign('body',$output);
     }
 }
@@ -369,9 +379,10 @@ else
 	  $rec['activecol'] = '&nbsp;';
 	  $rec['status_spans'] = false;
 
-	  // check these modules permissions to see if we can uninstall this thing
+	  // check these modules permissions to see if we can remove this thing
 	  $permsok = is_directory_writable( $config['root_path'].DIRECTORY_SEPARATOR.
 					    'modules'.DIRECTORY_SEPARATOR.$key );
+
 	  $maxverok = version_compare($rec['instance']->MaximumCMSVersion(), $CMS_VERSION);
 	  $maxverok = ($maxverok >= 0 )?1:0;
 		  

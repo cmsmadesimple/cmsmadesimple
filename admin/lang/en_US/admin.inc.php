@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['display_english_help'] = 'Help in English';
 $lang['admin']['no'] = 'No';
 $lang['admin']['yes'] = 'Yes';
 $lang['admin']['phpinfo_report'] = 'Display your PHP Information';
