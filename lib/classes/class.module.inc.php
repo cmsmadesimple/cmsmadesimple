@@ -2128,11 +2128,23 @@ class CMSModule
     return $result;
 	}
 
-	/**
-	 * ------------------------------------------------------------------
-	 * Language Functions
-	 * ------------------------------------------------------------------
-	 */
+  /**
+   * ------------------------------------------------------------------
+   * Language Functions
+   * ------------------------------------------------------------------
+   */
+  
+  /**
+   * Sets the current langauge
+   */
+  function SetLanguage($lang = '')
+  {
+    if( $lang == '' )
+      {
+	$lang = $this->DefaultLanguage();
+      }
+    $this->curlang = $lang;
+  }
 
 	/**
 	 * Sets the default language (usually en_US) for the module.  There
