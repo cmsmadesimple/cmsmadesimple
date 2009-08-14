@@ -115,8 +115,8 @@ $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',$allowp
 $enablenotifications = get_site_preference('enablenotifications',$enablenotifications);
 $sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
 $basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
-$thumbnail_width = get_site_preference('thumkbnail_width',$thumbnail_width);
-$thumbnail_height = get_site_preference('thumkbnail_height',$thumbnail_height);
+$thumbnail_width = get_site_preference('thumbnail_width',$thumbnail_width);
+$thumbnail_height = get_site_preference('thumbnail_height',$thumbnail_height);
 
 $active_tab='unknown';
 if( isset($_POST['active_tab']) )
