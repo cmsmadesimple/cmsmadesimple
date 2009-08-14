@@ -258,8 +258,11 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 		$node =& $manager->sureGetNodeById($pageinfo->content_id);
 		if(is_object($node))
 		{
-		  $contentobj =& $node->GetContent(true,false);
-		  $smarty->assign('content_obj',$contentobj);
+		  $contentobj =& $node->GetContent(true,true);
+		  if( is_object($contentobj) )
+		    {
+		      $smarty->assign('content_obj',$contentobj);
+		    }
 		}
 	}
 
