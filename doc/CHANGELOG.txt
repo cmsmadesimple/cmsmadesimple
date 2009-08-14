@@ -1,3 +1,11 @@
+Version 1.6.4 - Moindou
+-----------------------------
+- Fixes a problem with the showinmenu option not being available to other content types
+- Fixes a problem with the lang stuff and a required reference operator
+- Fixes a problem with checksum verification and generation
+- Fixes a problem in filemanager where access time was shown and not creation time.
+- Adds tabindex to the list of selecatble properties in the site preferences.
+
 Version 1.6.3 - Touho
 -----------------------------
 - Fix a potential security problem in the printing module
