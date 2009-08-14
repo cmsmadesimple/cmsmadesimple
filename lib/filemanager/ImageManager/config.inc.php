@@ -9,8 +9,8 @@
  * File basicly functions as a stub to facilitate future upgrading
  */
 
-global $gCms;
-$config =& $gCms->GetConfig();
+
+$config = cms_config();
 
 /* 
  File system path to the directory you want to manage the images
@@ -129,8 +129,8 @@ $IMConfig['default_thumbnail'] = 'img/default.gif';
 /*
   Thumbnail dimensions.
 */
-$IMConfig['thumbnail_width'] = 96;
-$IMConfig['thumbnail_height'] = 96;
+$IMConfig['thumbnail_width'] = get_site_preference('thumbnail_width',96);
+$IMConfig['thumbnail_height'] = get_site_preference('thumbnail_height',96);
 
 /*
   Image Editor temporary filename prefix.

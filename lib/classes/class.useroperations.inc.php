@@ -36,7 +36,7 @@ class UserOperations
 	 * @returns array An array of User objects
 	 * @since 0.6.1
 	 */
-	function &LoadUsers()
+	function LoadUsers()
 	{
 		global $gCms;
 		$db = &$gCms->GetDb();
@@ -57,7 +57,7 @@ class UserOperations
 			$oneuser->password = $row['password'];
 			$oneuser->active = $row['active'];
 			$oneuser->adminaccess = $row['admin_access'];
-			$result[] =& $oneuser;
+			$result[] = $oneuser;
 		}
 
 		return $result;

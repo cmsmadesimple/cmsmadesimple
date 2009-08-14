@@ -1,5 +1,6 @@
 {$mod->StartTabHeaders()}
 {$mod->SetTabHeader('general',$lang_general,$active_general)}
+{$mod->SetTabHeader('image',$lang_image,$active_image)}
 {$mod->SetTabHeader('sitedown',$lang_sitedown,$active_sitedown)}
 {$mod->SetTabHeader('handle_404',$lang_handle404,$active_handle_404)}
 {$mod->SetTabHeader('setup',$lang_setup,$active_setup)}
@@ -64,6 +65,38 @@
   </p>
 </div>
 
+<div class="pageoverflow">
+  <p class="pagetext">&nbsp;</p>
+  <p class="pageinput">
+    <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+    <input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+  </p>
+</div>
+</form>
+{$mod->EndTab()}
+
+{* image tab *}
+{$mod->StartTab('image')}
+<form id="siteprefform_image" method="post" action="siteprefs.php">
+<div>
+  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+  <input type="hidden" name="active_tab" value="image" />
+  <input type="hidden" name="editsiteprefs" value="true" />
+</div>
+
+<p class="pageoverflow">{'info_image_settings'|lang}</p>
+<div class="pageoverflow">
+  <p class="pagetext">{'thumbnail_width'|lang}:</p>
+  <p class="pageinput">
+    <input class="pagenb" type="text" name="thumbnail_width" size="4" maxlength="3" value="{$thumbnail_width}"/>
+  </p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">{'thumbnail_height'|lang}:</p>
+  <p class="pageinput">
+    <input class="pagenb" type="text" name="thumbnail_height" size="4" maxlength="3" value="{$thumbnail_height}"/>
+  </p>
+</div>
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
   <p class="pageinput">

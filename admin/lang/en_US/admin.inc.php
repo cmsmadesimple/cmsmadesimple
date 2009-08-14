@@ -1,4 +1,10 @@
 <?php
+$lang['admin']['info_image_settings'] = 'The following settings configure behaviour in the image manager.';
+$lang['admin']['thumbnail_width'] = 'Thumbnail Width';
+$lang['admin']['thumbnail_height'] = 'Thumbnail Height';
+$lang['admin']['image_settings'] = 'Image Settings';
+$lang['admin']['this_sysmodule'] = 'This is a core module';
+$lang['admin']['info_sysmodule'] = 'Indicates a core module';
 $lang['admin']['display_english_help'] = 'Help in English';
 $lang['admin']['no'] = 'No';
 $lang['admin']['yes'] = 'Yes';

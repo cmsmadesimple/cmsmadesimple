@@ -82,6 +82,8 @@ $frontendwysiwyg = '';
 $nogcbwysiwyg = '0';
 $global_umask = '022';
 $logintheme = "default";
+$thumbnail_width = '96';
+$thumbnail_height = '96';
 
 
 
@@ -113,6 +115,8 @@ $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',$allowp
 $enablenotifications = get_site_preference('enablenotifications',$enablenotifications);
 $sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
 $basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
+$thumbnail_width = get_site_preference('thumkbnail_width',$thumbnail_width);
+$thumbnail_height = get_site_preference('thumkbnail_height',$thumbnail_height);
 
 $active_tab='unknown';
 if( isset($_POST['active_tab']) )
@@ -197,6 +201,13 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('defaultdateformat', $defaultdateformat);
 	  if (isset($_POST['nogcbwysiwyg'])) $nogcbwysiwyg = $_POST['nogcbwysiwyg'];
 	  set_site_preference('nogcbwysiwyg', $nogcbwysiwyg);
+	  break;
+
+	case 'image':
+	  if (isset($_POST['thumbnail_width'])) $thumbnail_width = $_POST['thumbnail_width'];
+	  if (isset($_POST['thumbnail_height'])) $thumbnail_height = $_POST['thumbnail_height'];
+	  set_site_preference('thumbnail_width',$thumbnail_width);
+	  set_site_preference('thumbnail_height',$thumbnail_height);
 	  break;
 
 	case 'sitedown':
@@ -298,7 +309,7 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 # give everything to smarty
 $tmp = array_keys($gCms->modules);
 $firstmod = $tmp[0];
-$smarty->assign_by_ref('mod',$gCms->modules[$firstmod]['object']);
+$smarty->assign('mod',$gCms->modules[$firstmod]['object']);
 asort($nls["language"]);
 $tmp = array(''=>lang('nodefault'));
 foreach( $nls['language'] as $key=>$value )
@@ -341,12 +352,8 @@ if ($dir=opendir(dirname(__FILE__)."/themes/"))
 }
 
 
-$smarty->assign('active_general', 0);
-$smarty->assign('active_sitedown', 0);
-$smarty->assign('active_handle_404', 0);
-$smarty->assign('active_setup', 0);
-
 $smarty->assign('active_general',($active_tab == 'general')?1:0);
+$smarty->assign('active_image',($active_tab == 'image')?1:0);
 $smarty->assign('active_sitedown',($active_tab == 'sitedown')?1:0);
 $smarty->assign('active_handle_404',($active_tab == 'handle_404')?1:0);
 $smarty->assign('active_setup',($active_tab == 'setup')?1:0);
@@ -374,8 +381,11 @@ $smarty->assign('defaultdateformat',$defaultdateformat);
 $smarty->assign('enablenotifications',$enablenotifications);
 $smarty->assign('sitedownexcludes',$sitedownexcludes);
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));
+$smarty->assign('thumbnail_width',$thumbnail_width);
+$smarty->assign('thumbnail_height',$thumbnail_height);
 
 $smarty->assign('lang_general',lang('general_settings'));
+$smarty->assign('lang_image',lang('image_settings'));
 $smarty->assign('lang_sitedown',lang('sitedown_settings'));
 $smarty->assign('lang_handle404',lang('handle_404'));
 $smarty->assign('lang_cancel',lang('cancel'));
