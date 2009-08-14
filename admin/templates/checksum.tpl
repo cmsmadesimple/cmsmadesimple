@@ -33,7 +33,7 @@
   </div>
   <div class="pageoverflow">
     <p class="pagetext">&nbsp;</p>
-    <p class="pageinput"><input type="submit" name="submit" value="{lang key='submit'}" /></p>
+    <p class="pageinput"><input type="submit" name="submit" accesskey="s" value="{lang key='submit'}" /></p>
   </div>
 </fieldset>
 </form>
@@ -51,7 +51,7 @@
   </div>
   <div class="pageoverflow">
     <p class="pagetext">&nbsp;</p>
-    <p class="pageinput"><input type="submit" name="submit" value="{lang key='submit'}" /></p>
+    <p class="pageinput"><input type="submit" name="submit" accesskey="s" value="{lang key='submit'}" /></p>
   </div>
 </fieldset>
 </form>

@@ -24,7 +24,7 @@
            {/if}
 	{/foreach}
 	</select>&nbsp;
-        <input type="submit" name="filter" value="{$apply}"/>
+        <input type="submit" name="filter" accesskey="f" value="{$apply}"/>
 </form>
 </div><br />
 

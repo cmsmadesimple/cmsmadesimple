@@ -308,8 +308,8 @@ else {
 			<div class="pageinput">
 				<input type="hidden" name="user_id" value="<?php echo $user_id?>" />
 				<input type="hidden" name="edituser" value="true" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('submit')?>" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" accesskey="s" value="<?php echo lang('submit')?>" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" />
 			</div>
 		</div>
 	</form>

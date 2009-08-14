@@ -88,7 +88,7 @@
   <div class="pageoverflow">
     <p class="pagetext">&nbsp;</p>
     <p class="pageinput">
-      <input type="submit" name="submit" value="{'submit'|lang}" />
+      <input type="submit" name="submit" accesskey="s" value="{'submit'|lang}" />
     </p>
   </div>
 </fieldset>
