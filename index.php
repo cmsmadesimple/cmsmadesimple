@@ -189,6 +189,10 @@ if (strpos($page, '/') !== FALSE)
 	if (!$matched)
 	{
 		$page = substr($page, strrpos($page, '/') + 1);
+		if( ($tmp = strpos($page,'?')) !== FALSE )
+		  {
+		    $page = substr($page,0,$tmp);
+		  }
 	}
 }
 if ($page == '')
