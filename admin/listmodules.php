@@ -361,7 +361,7 @@ else
 	  $rec = array();
 	  $rec['name'] = $key;
 	  $rec['instance'] =& $value['object'];
-	  $rec['sysmodule'] = (array_search( $key, $gCms->cmssystemmodules ) !== FALSE);
+	  $rec['sysmodule'] = (array_search( $key, $gCms->cmssystemmodules ) === FALSE)?0:1;
 	  if( $rec['instance']->GetHelp() != '' )
 	    {
 	      $rec['help_url'] = "{$thisurl}&amp;action=showmodulehelp&amp;module={$key}";

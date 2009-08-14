@@ -18,6 +18,7 @@
 <table class="pagetable" cellspacing="0">
   <thead>
     <tr>
+      <th><a href="javascript:void()" title="{'info_sysmodule'|lang}">*</a></th>
       <th>{'name'|lang}</th>
       <th>{'version'|lang}</th>
       <th>{'status'|lang}</th>
@@ -33,6 +34,9 @@
   {cycle assign='rowclass' values='row1,row2'}
   <tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
     <td>
+      {if $onemodule.sysmodule == 1}*{/if}
+    </td>
+    <td >
       {if isset($onemodule.help_url)}
         <a href="{$onemodule.help_url}" title="{'help'|lang}">{$onemodule.name}</a>
       {else}
