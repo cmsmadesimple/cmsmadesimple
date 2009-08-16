@@ -126,8 +126,8 @@ if ($message != "") {
           <p class="pagetext">&nbsp;</p>
 	  <p class="pageinput">
   	    <input type="hidden" name="editpagedefaults" value="true" />
-	    <input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-	    <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+	    <input type="submit" name="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+	    <input type="submit" name="cancel" accesskey="c" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
           </p>
         </div>
 
@@ -215,8 +215,8 @@ if ($message != "") {
           <p class="pagetext">&nbsp;</p>
 	  <p class="pageinput">
   	    <input type="hidden" name="editpagedefaults" value="true" />
-	    <input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-	    <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+	    <input type="submit" name="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+	    <input type="submit" name="cancel" accesskey="c" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
           </p>
         </div>
       </form>

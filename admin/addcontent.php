@@ -282,8 +282,8 @@ $tabnames = $contentobj->TabNames();
 		$submit_buttons = '
 			<div class="pagetext">&nbsp;</div>
 			<div class="pageinput">';
-		$submit_buttons .= ' <input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" accesskey="s" onmouseout="this.className=\'pagebutton\'" />';
-		$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" accesskey="c" onmouseout="this.className=\'pagebutton\'" /></div>';
+		$submit_buttons .= ' <input type="submit" accesskey="s" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" accesskey="s" onmouseout="this.className=\'pagebutton\'" />';
+		$submit_buttons .= ' <input type="submit" accesskey="C" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" accesskey="c" onmouseout="this.className=\'pagebutton\'" /></div>';
 		
 		$numberoftabs = count($tabnames);
 		$showtabs = 1;

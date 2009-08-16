@@ -264,7 +264,7 @@ if ($add) {
 				<option value="active"><?php echo lang('active') ?></option>
 				<option value="inactive"><?php echo lang('inactive') ?></option>
 				</select>
-				<input type="submit" value="<?php echo lang('submit') ?>" />
+				<input type="submit" accesskey="s" value="<?php echo lang('submit') ?>" />
 			</span>
 			<br />
 		</p>		

@@ -1054,7 +1054,7 @@ function display_content_list($themeObject = null)
 
 		$thelist .= '<tr class="invisible"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
 <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-<td>&nbsp;</td><td><input type="submit" name="reorderpages" value="'.lang('reorderpages').'" /></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>';
+<td>&nbsp;</td><td><input type="submit" accesskey="s" name="reorderpages" value="'.lang('reorderpages').'" /></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>';
 
 		$thelist .= '</tbody>';
 		$thelist .= "</table>\n";
@@ -1157,7 +1157,7 @@ function display_content_list($themeObject = null)
 		echo '<option value="'.$key.'">'.$value.'</option>';
 	      }
 	    echo '</select>'."\n";
-            echo '<input type="submit" value="'.lang('submit').'"/></div></div>'."\n";
+            echo '<input type="submit" accesskey="s" value="'.lang('submit').'"/></div></div>'."\n";
 	  }
 	/*    } */
 ?>

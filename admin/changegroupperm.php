@@ -174,9 +174,9 @@ $smarty->assign('apply',lang('apply'));
 $smarty->assign('title_permission',lang('permission'));
 $smarty->assign('selectgroup',lang('selectgroup'));
 $smarty->assign('hidden','<input type="hidden" name="submitted" value="1" />');
-$smarty->assign('submit','<input type="submit" name="changeperm" value="'.lang('submit').
+$smarty->assign('submit','<input type="submit" accesskey="s" name="changeperm" value="'.lang('submit').
 	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');
-$smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('cancel').
+$smarty->assign('cancel','<input type="submit" accesskey="c" name="cancel" value="'.lang('cancel').
 	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');
 
 

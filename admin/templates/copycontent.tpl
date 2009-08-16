@@ -78,7 +78,7 @@
 
     <div class="pageoverflow">
       <p class="pagetext">&nbsp;</p>
-      <p class="pageinput"><input type="submit" name="submit" accesskey="s" value="{$lang_submit}" /><input type="submit" name="cancel" value="{$lang_cancel}" /></p>
+      <p class="pageinput"><input type="submit" name="submit" accesskey="s" value="{$lang_submit}" /><input type="submit" accesskey="c" name="cancel" value="{$lang_cancel}" /></p>
     </div>
     </form>
   </fieldset>

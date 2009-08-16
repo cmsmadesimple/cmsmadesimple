@@ -257,7 +257,7 @@
   <p class="pagetext">&nbsp;</p>
   <p class="pageinput">
     <input type="submit" name="submit" accesskey="s" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-    <input type="submit" name="cancel" accesskey="a" value="{$lang_cancel}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+    <input type="submit" name="cancel" accesskey="c" value="{$lang_cancel}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
   </p>
 </div>
 </form>

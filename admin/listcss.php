@@ -223,7 +223,7 @@ if (isset($_GET["message"])) {
 				<option value="inactive"><?php echo lang('inactive') ?></option>
 				-->
 				</select>
-				<input type="submit" value="<?php echo lang('submit') ?>" />
+				<input type="submit" accesskey="s" value="<?php echo lang('submit') ?>" />
 			</span>
 			<br />
 <?php
