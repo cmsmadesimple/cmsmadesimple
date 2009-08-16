@@ -749,68 +749,71 @@ class ContentOperations
 			  {
 			    $userid = get_userid();
 			  }
-			if( ($userid > 0 && check_permission($userid,'Manage All Content')) || $userid == -1 )
+			if( ($userid > 0 && check_permission($userid,'Manage All Content')) || 
+			    $userid == -1 ||
+			    $parent == -1 )
 			  {
 			    $result .= '<option value="-1">'.lang('none').'</option>';
 			  }
-
 			$curhierarchy = '';
 
 			foreach ($allcontent as $one)
  			{
 			  $value = $one->Id();
-				if ($one->Id() == $current)
+			  if ($value == $current)
+			    {
+			      // Grab hierarchy just in case we need to check children
+			      // (which will always be after)
+			      $curhierarchy = $one->Hierarchy();
+			      
+			      if( !$allowcurrent )
 				{
-					#Grab hierarchy just in case we need to check children
-					#(which will always be after)
-					$curhierarchy = $one->Hierarchy();
-
-					if( !$allowcurrent )
-					  {
-					    // Then jump out.  We don't want ourselves in the list.
-					    continue;
-					  }
-					$value = -1;
+				  // Then jump out.  We don't want ourselves in the list.
+				  continue;
 				}
+			      $value = -1;
+			    }
 
-				#If it's a child of the current, we don't want to show it as it
-				#could cause a deadlock.
-				if (!$allowcurrent && $curhierarchy != '' && strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.')
+			  // If it's a child of the current, we don't want to show it as it
+			  // could cause a deadlock.
+			  if (!$allowcurrent && 
+			      $curhierarchy != '' && 
+			      strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.')
+			    {
+			      continue;
+			    }
+
+                          // If we have a valid userid... only include pages where this user
+                          // has write access... or is an admin user... or has appropriate permission.
+			  if( $userid > 0 && $one->Id() != $parent)
+			    {
+			      if( !check_permission($userid,'Manage All Content') && 
+				  !check_authorship($userid,$one->Id()) )
 				{
-					continue;
+				  continue;
 				}
+			    }				
 
-				#If we have a valid userid... only include pages where this user
-				#has write access... or is an admin user... or has appropriate permission.
-				if( $userid > 0 )
-					{
-					  if( !check_permission($userid,'Manage All Content') && !check_authorship($userid,$one->Id()) )
-					    {
-					      continue;
-					    }
-					}				
-
-				#Don't include content types that do not want children either...
-				if (!$one->WantsChildren()) continue;
-
-				{
-					$result .= '<option value="'.$value.'"';
-
-					#Select current parent if it exists
-					if ($one->Id() == $parent)
-					{
-						$result .= ' selected="selected"';
-					}
-
-					if( ($value == -1) && ($ignore_current == 0) )
-					  {
-					    $result .= '>'.$one->Hierarchy().'. - '.$one->Name().' ('.lang('invalid').')</option>';
-					  }
-					else
-					  {
-					    $result .= '>'.$one->Hierarchy().'. - '.$one->Name().'</option>';
-					  }
-				}
+			  // Don't include content types that do not want children either...
+			  if (!$one->WantsChildren()) continue;
+			  {
+			    $result .= '<option value="'.$value.'"';
+			    
+			    // Select current parent if it exists
+			    if ($one->Id() == $parent)
+			      {
+				$result .= ' selected="selected"';
+			      }
+			    
+			    if( ($value == -1) && ($ignore_current == 0) )
+			      {
+				$result .= '>'.$one->Hierarchy().'. - '.$one->Name().' ('.lang('invalid').')</option>';
+			      }
+			    else
+			      {
+				$result .= '>'.$one->Hierarchy().'. - '.$one->Name().'</option>';
+			      }
+			  }
 			}
 
 		}
