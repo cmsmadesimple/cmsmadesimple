@@ -408,8 +408,7 @@ class Tree_Node
 
 	/**
 	* Gets the underlying content of this node
-	*/
-    function &getContent($deep = false,$loadchildren = true,$all = false)
+    function &getContent($deep = false,$loadchildren = true,$loadall = false)
 	{
 		$content = null;
 		
@@ -433,7 +432,7 @@ class Tree_Node
 		    // load all children
 		    if( $loadchildren )
 		      {
-			$parent_node->getChildren($deep,$all);
+			$parent_node->getChildren($deep,$loadall);
 		      }
 
 		    // see if the object is cached now.

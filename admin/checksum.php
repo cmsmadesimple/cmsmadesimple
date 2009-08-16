@@ -90,7 +90,16 @@ function check_checksum_data(&$report)
       if( empty($line) ) continue;
 
       // split it into fields
-      list($md5sum,$file) = explode(' *',$line,2);
+      $md5sum = '';
+      $file = '';
+      if( strstr($line,' *.') !== FALSE )
+	{
+	  list($md5sum,$file) = explode(' *.',$line,2);
+	}
+      else
+	{
+	  list($md5sum,$file) = explode('--:--',$line,2);
+	}
       $md5sum = trim($md5sum);
       $file = trim($file);
 
@@ -180,8 +189,8 @@ function generate_checksum_file(&$report)
     {
       if( is_dir($file) ) continue;
       $md5sum = md5_file($file);
-      $file = str_replace($config['root_path'],'.',$file);
-      $output .= "$md5sum *$file\n";
+      $file = str_replace($config['root_path'],'',$file);
+      $output .= "{$md5sum}--:--{$file}\n";
     }
 
   $handlers = ob_list_handlers(); 

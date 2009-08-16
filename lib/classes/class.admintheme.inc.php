@@ -249,10 +249,10 @@ class AdminTheme
                     $this->sectionCount[$section] = 0;
                     }
                 $this->modulesBySection[$section][$this->sectionCount[$section]]['key'] = $key;
-                if ($cmsmodules[$key]['object']->GetFriendlyName() != '')
+	        $tmp = $cmsmodules[$key]['object']->GetFriendlyName();
+                if ($tmp != '')
                     {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['name'] =
-                       $cmsmodules[$key]['object']->GetFriendlyName();
+                    $this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $tmp;
                     }
                 else
                     {

@@ -433,6 +433,7 @@ $all_attributes['image'] = lang('image');
 $all_attributes['thumbnail'] = lang('thumbnail');
 $all_attributes['pagemetadata'] = lang('page_metadata');
 $all_attributes['titleattribute'] = lang('titleattribute');
+$all_attributes['tabindex'] = lang('tabindex');
 $all_attributes['accesskey'] = lang('accesskey');
 $all_attributes['pagedata'] = lang('pagedata_codeblock');
 $all_attributes['searchable'] = lang('searchable');

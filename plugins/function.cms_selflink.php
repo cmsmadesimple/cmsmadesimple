@@ -80,7 +80,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		$node =& $manager->sureGetNodeByAlias($page);
 		if (!isset($node)) return;
 		$content =& $node->GetContent();
-		if ($content !== FALSE)
+		if ($content !== FALSE && is_object($content))
 		{
 			$pageid = $content->Id();
 			$alias = $content->Alias();

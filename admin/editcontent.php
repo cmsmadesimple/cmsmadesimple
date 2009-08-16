@@ -38,9 +38,17 @@ require_once(dirname(__FILE__).'/editcontent_extra.php');
 
 $cms_ajax = new CmsAjax();
 $cms_ajax->register_function('ajaxpreview');
+$cms_ajax->register_function('ajaxapply');
 
 $headtext = $cms_ajax->get_javascript();
 $cms_ajax->process_requests();
+
+function ajaxapply($params)
+{
+  $resp = new CmsAjaxResponse();
+  $resp->script('alert(\'it worked\')');
+  return $resp->get_result();
+}
 
 $error = FALSE;
 
@@ -203,58 +211,18 @@ $headtext .= <<<EOSCRIPT
 
 window.Edit_Content_Apply = function(button)
 {
-	$addlScriptSubmit
-	$('Edit_Content_Result').innerHTML = '';
-	button.disabled = 'disabled';
-	var data = new Array();
-	data.push('ajax=1');
-	data.push('applybutton=1');
+  $addlScriptSubmit
 
-	var elements = Form.getElements($('contentform'));
-	for (var cnt = 0; cnt < elements.length; cnt++)
-	{
-		var elem = elements[cnt];
-		if (elem.type == 'submit')
-		{
-			continue;
-		}
-		var query = Form.Element.serialize(elem);
-		data.push(query);
-	}
+  // clear the result area
+  jQuery('Edit_Content_Result').html('');
 
-	new Ajax.Request(
-		'{$_SERVER['REQUEST_URI']}'
-		, {
-			method: 'post'
-			, parameters: data.join('&')
-			, onSuccess: function(t)
-			{
-				button.removeAttribute('disabled');
-				var xml = t.responseXML;
-				var response = xml.documentElement.childNodes[0];
-				var details = xml.documentElement.childNodes[1];
-				if (response.textContent) { response = response.textContent; } else { response = response.text; } 
-				if (details.textContent) { details = details.textContent; } else { details = details.text; }
-				
-				var htmlShow = '';
-				if (response == 'Success')
-				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
-				}
-				else
-				{
-					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details + '<\/ul><\/div>';
-				}
-				$('Edit_Content_Result').innerHTML = htmlShow;
-			}
-			, onFailure: function(t)
-			{
-				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
-			}
-		}
-	);
+  // disable the button
+  button.disabled = 'disabled';
 
-	return false;
+  // get the data
+  var data = button.form.serialize();
+  cms_ajax_call('cms_ajax_ajaxapply', data , 1);
+  return false;
 }
   // ]]>
 </script>
