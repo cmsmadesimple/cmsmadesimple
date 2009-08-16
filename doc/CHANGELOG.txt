@@ -6,6 +6,7 @@ Version 1.6.4 - Moindou
 - Fixes a problem in filemanager where access time was shown and not creation time.
 - Adds tabindex to the list of selecatble properties in the site preferences.
 - Fixes a problem with 404 errors if using internal pretty urls, and adding parameters to the URL
+- Fixes a problem with the parent page property for restricted content editors.
 
 Version 1.6.3 - Touho
 -----------------------------
