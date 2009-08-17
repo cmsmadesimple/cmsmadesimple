@@ -51,30 +51,10 @@ if (isset($_GET["user_id"]))
 
 		if ($dodelete)
 		{
-			#Perform the deleteuser_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->DeleteUserPre($oneuser);
-				}
-			}
-			
 			Events::SendEvent('Core', 'DeleteUserPre', array('user' => &$oneuser));
 
 			$oneuser->Delete();
 
-			#Perform the deleteuser_post callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->DeleteUserPost($oneuser);
-				}
-			}
-			
 			Events::SendEvent('Core', 'DeleteUserPost', array('user' => &$oneuser));
 
 			audit($user_id, $user_name, 'Deleted User');

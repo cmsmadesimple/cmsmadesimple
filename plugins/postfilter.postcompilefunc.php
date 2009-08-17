@@ -26,61 +26,23 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 		switch ($result[0])
 		{
 			case "content":
-				#Perform the content prerender callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->ContentPostCompile($tpl_output);
-					}
-				}
-				
 				Events::SendEvent('Core', 'ContentPostCompile', array('content' => &$tpl_output));
-				
 				break;
+
 			case "template":
-				#Perform the content prerender callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->TemplatePostCompile($tpl_output);
-					}
-				}
-				
 				Events::SendEvent('Core', 'TemplatePostCompile', array('template' => &$tpl_output));
-				
 				break;
+
 			case "globalcontent":
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->GlobalContentPostCompile($tpl_output);
-					}
-				}
-				
 				Events::SendEvent('Core', 'GlobalContentPostCompile', array('global_content' => &$tpl_output));
-				
 				break;
+
 			default:
 				break;
 		}
 
 	}
 
-	foreach($gCms->modules as $key=>$value)
-	{
-		if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-		{
-			$gCms->modules[$key]['object']->SmartyPostCompile($tpl_output);
-		}
-	}
-	
 	Events::SendEvent('Core', 'SmartyPostCompile', array('content' => &$tpl_output));
 
 	return $tpl_output;

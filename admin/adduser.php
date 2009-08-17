@@ -114,15 +114,6 @@ if (isset($_POST["adduser"]))
 		$newuser->adminaccess = $adminaccess;
 		$newuser->SetPassword($password);
 
-		#Perform the adduser_pre callback
-		foreach($gCms->modules as $key=>$value)
-		{
-			if ($gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->AddUserPre($newuser);
-			}
-		}
 		
 		Events::SendEvent('Core', 'AddUserPre', array('user' => &$newuser));
 
@@ -130,15 +121,6 @@ if (isset($_POST["adduser"]))
 
 		if ($result)
 		{
-			#Perform the adduser_post callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->AddUserPost($newuser);
-				}
-			}
 			
 			Events::SendEvent('Core', 'AddUserPost', array('user' => &$newuser));
 

@@ -575,6 +575,165 @@ function check_children(&$root, &$mypages, &$userid)
 	return $result;
 }
 
+
+function build_contentlist(&$node,&$templates,&$users,$userid)
+{
+  $gCms = cmsms();
+  $display = 'none';
+  if (check_modify_all($userid) || check_ownership($userid, $node->getTag()) || quick_check_authorship($node->getTag(), $mypages))
+    {
+      $display = 'edit';
+    }
+  else if (check_children($root, $mypages, $userid))
+    {
+      $display = 'view';
+    }
+  else if (check_permission($userid, 'Manage All Content'))
+    {
+      $display = 'structure';
+    }
+  if( $display == 'none' ) return FALSE;
+
+  $manage_all = check_permission($userid,'Manage All Content');
+  $children =& $node->getChildren(false,true);
+  $one =& $node->getContent();
+
+  if (!array_key_exists($one->TemplateId(), $templates))
+    {
+      $templateops =& $gCms->GetTemplateOperations();
+      $templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId());
+    }
+  
+  if (!array_key_exists($one->Owner(), $users))
+    {
+      $userops =& $gCms->GetUserOperations();
+      $users[$one->Owner()] =& $userops->LoadUserById($one->Owner());
+    }
+
+  // now start building our node array
+  $result = array();
+  $result['content_id'] = $node->getTag();
+  $result['content'] =& $one;
+  $result['owner'] = $users[$one->Owner()]->username;
+  if( $manage_all ) {
+    if($one->Active())
+      {
+	$result['active'] = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;setinactive=".$one->Id()."\" onclick=\"alert('setinactive'); cms_ajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>");
+      }
+    else
+      {
+	$result['active'] = "<a href=\"{$thisurl}&amp;setactive=".$one->Id()."\" onclick=\"alert('setactive'); cms_ajax_content_setactive(".$one->Id().");return false;\">".$image_set_true."</a>";
+      }
+
+    if ($one->IsDefaultPossible())
+      {
+	$result['default'] = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_html_entity_decode_utf8(lang("confirmdefault", $one->mName), true)."')) cms_ajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>");
+      }
+
+    $txt = '';
+    $sameLevel = $node->getSiblingCount();
+    if ($sameLevel>1)
+      {
+	if (($one->ItemOrder() - 1) <= 0) #first
+	  { 
+	    $txt .= "<a onclick=\"cms_ajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+	    $txt .= $downImg;
+	    $txt .= "</a>&nbsp;&nbsp;";
+	  }
+	else if (($one->ItemOrder() - 1) == $sameLevel-1) #last
+	  {
+	    $txt .= "&nbsp;&nbsp;<a class=\"move_up\" onclick=\"cms_ajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+	    $txt .= $upImg;
+	    $txt .= "</a>";
+	  }
+	else #middle
+	  {
+	    $txt .= "<a onclick=\"cms_ajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+	    $txt .= $downImg;
+	    $txt .= "</a>&nbsp;<a onclick=\"cms_ajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+	    $txt .= $upImg;
+	    $txt .= "</a>";
+	  }
+      }
+    if( !empty($txt) )
+      {
+	$result['move'] = $txt;
+      }    
+  }
+
+  // viewable?
+  $txt = '';
+  $url = $one->GetURL();
+  if ($url != '' && $url != '#' && $one->IsViewable() && $one->Active())
+    {
+      $txt .= "<a href=\"".$url."\" rel=\"external\" target=\"_blank\">";
+      $txt .= $viewImg."</a>";
+    }
+  $result['view'] = $txt;
+
+  // copyable
+  if( $one->IsCopyable() &&
+      (check_permission($userid,'Add Pages') || $manage_all) &&
+      (check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages)) )
+    {
+      $txt = '';
+      $txt .= '<a href="copycontent.php'.$urlext.'&amp;content_id='.$one->Id().'">';
+      $txt .= $copyImg."</a>";
+      $result['copy'] = $txt;
+    }
+
+  // edit
+  if( check_ownership($userid, $one->Id()) || 
+      quick_check_authorship($one->Id(), $mypages) ||
+      $manage_all )
+    {
+      $txt = '';
+      $txt .= "<a href=\"editcontent.php".$urlext."&amp;content_id=".$one->Id()."\">";
+      $txt .= $editImg;
+      $txt .= "</a>";
+      $result['edit'] = $txt;
+    }
+
+  // delete
+  if( !$one->DefaultContent() &&
+      $node->getChildrenCount() == 0 &&
+      (check_permission($userid,'Remove Pages') || $manage_all) )
+    {
+      $txt = '';
+      $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) cms_ajax_content_delete(".$one->Id()."); return false;\">";
+      $txt .= $deleteImg;
+      $txt .= "</a>";
+      $result['delete'] = $txt;
+    }
+
+  // multiselect
+  {
+    $remove    = check_permission($userid, 'Remove Pages')?1:0;
+    $structure = check_permission($userid, 'Manage All Content')?1:0;
+    $editperms = (check_permission($userid, 'Modify Any Page') ||
+		  quick_check_authorship($one->Id(),$mypages) ||
+		  check_ownership($userid,$one->Id()))?1:0;
+    if ( (($structure == 1) || (($remove == 1) && ($editperms == 1))) &&
+	 ($one->Type() != 'errorpage' ))
+      {
+	$result['multiselect'] .= '<input type="checkbox" name="multicontent-'.$one->Id().'" />';
+      }
+  }
+
+  // get child nodes (recursion)
+  if( $node->hasChildren() )
+    {
+      $tmp = array();
+      foreach( $node->getChildren(false,true) as $child )
+	{
+	  $tmp[] = build_contentlist($child,$templates,$users,$userid);
+	}
+      $result['children'] = $tmp;
+    }
+  return $result;
+}
+
+
 function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$copyImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages, &$page, $columnstodisplay)
 {
   global $thisurl;

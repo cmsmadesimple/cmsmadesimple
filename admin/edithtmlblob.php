@@ -113,16 +113,6 @@ if ($access)
 			// add this user as an additional editor? why?
 			$blobobj->AddAuthor($userid);
 
-			#Perform the edithtmlblob_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->EditHtmlBlobPre($blobobj);
-				}
-			}
-			
 			Events::SendEvent('Core', 'EditGlobalContentPre', array('global_content' => &$blobobj));
 
 			$result = $blobobj->save();
@@ -136,16 +126,6 @@ if ($access)
 				$smarty->clear_all_cache();
 				$smarty->clear_compiled_tpl();
 
-				#Perform the edithtmlblob_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->EditHtmlBlobPost($blobobj);
-					}
-				}
-				
 				Events::SendEvent('Core', 'EditGlobalContentPost', array('global_content' => &$blobobj));
 
 				if (!isset($_POST['apply'])) {

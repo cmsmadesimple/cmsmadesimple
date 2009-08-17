@@ -141,32 +141,12 @@ if ($access)
 			$newtemplate->active = $active;
 			$newtemplate->default = 0;
 
-			#Perform the addtemplate_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->AddTemplatePre($newtemplate);
-				}
-			}
-			
 			Events::SendEvent('Core', 'AddTemplatePre', array('template' => &$newtemplate));
 
 			$result = $newtemplate->save();
 
 			if ($result)
 			{
-				#Perform the addtemplate_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->AddTemplatePost($newtemplate);
-					}
-				}
-				
 				Events::SendEvent('Core', 'AddTemplatePost', array('template' => &$newtemplate));
 
 				audit($newtemplate->id, $template, 'Added Template');

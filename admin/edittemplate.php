@@ -134,16 +134,6 @@ if ($access)
 			$onetemplate->encoding = $encoding;
 			$onetemplate->active = $active;
 
-			#Perform the edittemplate_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->EditTemplatePre($onetemplate);
-				}
-			}
-			
 			Events::SendEvent('Core', 'EditTemplatePre', array('template' => &$onetemplate));
 
 			$result = $onetemplate->Save();
@@ -153,16 +143,6 @@ if ($access)
 				#Make sure the new name is used if this is an apply
 				$orig_template = $template;
 
-				#Perform the edittemplate_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->EditTemplatePost($onetemplate);
-					}
-				}
-				
 				Events::SendEvent('Core', 'EditTemplatePost', array('template' => &$onetemplate));
 
 				audit($template_id, $onetemplate->name, 'Edited Template');

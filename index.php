@@ -356,31 +356,7 @@ else
 
 if (!$cached)
 {
-	#Perform the content postrendernoncached callback
-	reset($gCms->modules);
-	while (list($key) = each($gCms->modules))
-	{
-		$value =& $gCms->modules[$key];
-		if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-		{
-			$gCms->modules[$key]['object']->ContentPostRenderNonCached($html);
-		}
-	}
 	//Events::SendEvent('Core', 'ContentPostRenderNonCached', array(&$html));
-}
-
-#Perform the content postrender callback
-reset($gCms->modules);
-while (list($key) = each($gCms->modules))
-{
-	$value =& $gCms->modules[$key];
-	if ( isset($gCms->modules[$key]['installed']) &&
-	     $gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true)
-	{
-		$gCms->modules[$key]['object']->ContentPostRender($html);
-	}
 }
 
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));

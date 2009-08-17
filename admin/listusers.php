@@ -62,16 +62,7 @@ if (isset($_GET["toggleactive"]))
       {
 
 	$thisuser->active == 1 ? $thisuser->active = 0 : $thisuser->active=1;
-
-        #Perform the edituser_pre callback
-        foreach($gCms->modules as $key=>$value)
-              {
-                 if ($gCms->modules[$key]['installed'] == true &&
-                       $gCms->modules[$key]['active'] == true)
-                        {
-                         $gCms->modules[$key]['object']->EditUserPre($thisuser);
-                        }
-                 }
+	Events::SendEvent('Core', 'EditUserPre', array('user' => &$thisuser));
 
         $result = $thisuser->save();
 
@@ -79,16 +70,8 @@ if (isset($_GET["toggleactive"]))
 
       if ($result)
          {
+	   Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
            audit($userid, $thisuser->username, 'Edited User');
-           #Perform the edituser_post callback
-           foreach($gCms->modules as $key=>$value)
-                  {
-                   if ($gCms->modules[$key]['installed'] == true &&
-                          $gCms->modules[$key]['active'] == true)
-                       {
-                          $gCms->modules[$key]['object']->EditUserPost($thisuser);
-                       }
-                  }
         } else {
            $error .= "<li>".lang('errorupdatinguser')."</li>";
         }

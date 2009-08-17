@@ -990,15 +990,6 @@ class ContentBase extends CmsObject
 	function Save()
 	{
 		global $gCms;
-		foreach($gCms->modules as $key=>$value)
-		{
-			if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentEditPre($this);
-			}
-		}
-
 		Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
 
 		if ($this->mPropertiesLoaded == false)
@@ -1015,15 +1006,6 @@ class ContentBase extends CmsObject
 		else
 		{
 			$this->Insert();
-		}
-
-		foreach($gCms->modules as $key=>$value)
-		{		
-			if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentEditPost($this);
-			}
 		}
 
 		Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
@@ -1312,15 +1294,6 @@ class ContentBase extends CmsObject
 		global $gCms, $sql_queries, $debug_errors;
 		$config =& $gCms->GetConfig();
 
-		foreach($gCms->modules as $key=>$value)
-		{
-			if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentDeletePre($this);
-			}
-		}
-
 		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
 
 		$db = &$gCms->GetDb();
@@ -1371,15 +1344,6 @@ class ContentBase extends CmsObject
 					# :TODO: Translate the error message
 					$debug_errors .= "<p>Error deleting : the content has no properties</p>\n";
 				}
-			}
-		}
-
-		foreach($gCms->modules as $key=>$value)
-		{
-			if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentDeletePost($this);
 			}
 		}
 
@@ -1565,14 +1529,6 @@ class ContentBase extends CmsObject
     function DoAutoAlias()
     {
       return $this->_add_mode;
-    }
-
-    /**
-    * allow the content module to handle custom tags. Typically used for parameters in {content} tags
-    */
-    function ContentPreRender($tpl_source)
-    {
-	return $tpl_source;
     }
 
     /**

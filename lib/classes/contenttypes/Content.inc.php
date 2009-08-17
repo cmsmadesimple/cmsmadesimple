@@ -528,14 +528,6 @@ class Content extends ContentBase
     }
 	
 
-    function ContentPreRender($tpl_source)
-    {
-	// check for additional content blocks
-	$this->parse_content_blocks();
-
-	return $tpl_source;
-    }
-
     function display_single_element($one,$adding)
     {
       global $gCms;
