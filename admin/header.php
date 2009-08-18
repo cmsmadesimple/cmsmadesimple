@@ -57,6 +57,7 @@ else
 		foreach( $gCms->modules as $modulename => $ext )
 		{
 			if( in_array($modulename,$ignoredmodules) ) continue;
+			if( $gCms->modules[$modulename]['installed'] != true ) continue;
 			$mod =& $gCms->modules[$modulename]['object'];
 			if( !is_object($mod) ) continue;
 
