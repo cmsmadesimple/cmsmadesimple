@@ -64,16 +64,32 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	if ($idsuffix == '')
 		$idsuffix = $formcount;
 
-	$goto = " action=\"".($returnid==''?'moduleinterface.php':__curPageURL()).'"';
-	#$goto = 'moduleinterface.php';
-	if ($inline && $returnid != '')
+	$goto = 'moduleinterface.php';
+	if( $returnid != '' )
 	{
-		#$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-		#$goto = 'index.php?mact='.$this->GetName().','.$id.','.$action;
-		#$goto .= '&amp;'.$id.'returnid='.$returnid;
-		#$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
+	  $hm =& $gCms->GetHierarchyManager();
+	  $node =& $hm->sureGetNodeById($returnid);
+	  $content_obj =& $node->getContent();
+	  $goto = $content_obj->GetURL();
 	}
+	if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on")
+	  {
+	    $pos = strpos($goto,':');
+	    $str = substr($goto,$pos);
+	    $goto = 'https'.$str;
+	  }
+	$goto = ' action="'.$goto.'"';
+	
+
+// 	if ($inline && $returnid != '')
+// 	{
+// 		#$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+// 		#$goto = 'index.php?mact='.$this->GetName().','.$id.','.$action;
+// 		#$goto .= '&amp;'.$id.'returnid='.$returnid;
+// 		#$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
+// 	}
 	//$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" name="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
+
 	$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'"'.$goto;
 	if ($enctype != '')
 	{
