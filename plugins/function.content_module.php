@@ -53,7 +53,7 @@ function smarty_cms_help_function_content_module() {
 
 function smarty_cms_about_function_content_module() {
 	?>
-	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
+	<p>Author: Robert Campbell&lt;calguy1000@cmsmadesimple.org&gt;</p>
 	<p>Version: 1.0</p>
 	<p>
 	Change History:<br/>
