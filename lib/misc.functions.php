@@ -31,7 +31,7 @@
  */
 function redirect($to, $noappend=false)
 {
-	$_SERVER['PHP_SELF'] = null;
+     $_SERVER['PHP_SELF'] = null;
 
     global $gCms;
 	if (isset($gCms))
@@ -89,6 +89,9 @@ function redirect($to, $noappend=false)
         }
     }
 	*/
+
+    session_write_close();
+
 
     if (headers_sent() && !(isset($config) && $config['debug'] == true))
     {
