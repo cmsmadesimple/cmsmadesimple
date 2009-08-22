@@ -57,7 +57,6 @@ function check_editcontent_perms($content_id,$adminonly = false)
 
 function do_save_content($contentobj,$data)
 {
-  $gCms = cmsms();
   $contentobj->FillParams($data);
   $error = $contentobj->ValidateData();
 
@@ -79,24 +78,25 @@ function editcontent_apply($params)
 {
   $content_id = $_REQUEST['content_id'];
   $resp = new CmsAjaxResponse();
-  $resp->script('alert(\'got here\');');
+  $resp->script("jQuery('#applybutton').attr('disabled','');");
   if( check_editcontent_perms($content_id) )
     {
+      $gCms = cmsms();
+      $contentops =& $gCms->GetContentOperations();
+
       $contentobj = $contentops->LoadContentFromId($content_id);
-      $error = do_save_content($content_id,$params);
+      $error = do_save_content($contentobj,$params);
 
       if( $error === FALSE )
         {
-	  $str = '<div class="pagemcontainer"><ul class="pagemessage">'+lang('contentupdated')+'</p></div>';
+	  $str = '<div class="pagemcontainer"><ul class="pagemessage">'.lang('contentupdated').'</p></div>';
 	  $resp->replace_html('#Edit_Content_Result',$str);
-	  $resp->script('alert(\'success\');');
 	}
       else
 	{
 	  $list = '<li>'.explode('</li><li>',$error).'</li>';
-	  $str = '<div class="pageerrorcontainer"><ul class="pageerror">'+$list+'</ul></div>';
+	  $str = '<div class="pageerrorcontainer"><ul class="pageerror">'.$list.'</ul></div>';
 	  $resp->replace_html('#Edit_Content_Result',$str);
-	  $resp->script('alert(\'error\');');
 	}
     }
   return $resp->get_result();
@@ -214,7 +214,7 @@ jQuery(document).ready(function(){
    jQuery('#applybutton').click(function(){
 
       jQuery('#Edit_Content_Result').html('');
-      //jQuery(this).attr('disabled','disabled');
+      jQuery(this).attr('disabled','disabled');
       var data = jQuery('#contentform').serializeForCmsAjax();
       cms_ajax_editcontent_apply(data);
       return false;
