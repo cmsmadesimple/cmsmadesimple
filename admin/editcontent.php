@@ -38,17 +38,70 @@ require_once(dirname(__FILE__).'/editcontent_extra.php');
 
 $cms_ajax = new CmsAjax();
 $cms_ajax->register_function('ajaxpreview');
-$cms_ajax->register_function('ajaxapply');
+$cms_ajax->register_function('editcontent_apply');
 
 $headtext = $cms_ajax->get_javascript();
-$cms_ajax->process_requests();
 
-function ajaxapply($params)
+function check_editcontent_perms($content_id,$adminonly = false)
 {
+  $userid = get_userid();
+  $access = check_ownership($userid, $content_id) || check_permission($userid, 'Modify Any Page') ||
+    check_permission($userid, 'Manage All Content');
+  if( $adminonly ) return $access;
+  if (!$access)
+    {
+      $access = check_authorship($userid, $content_id);
+    }
+  return $access;
+}
+
+function do_save_content($contentobj,$data)
+{
+  $gCms = cmsms();
+  $contentobj->FillParams($data);
+  $error = $contentobj->ValidateData();
+
+  if( $error === FALSE )
+    {
+      $contentobj->SetLastModifiedBy(get_userid());
+      $contentobj->Save();
+
+      $gCms = cmsms();
+      $contentops =& $gCms->GetContentOperations();
+      $contentops->SetAllHierarchyPositions();
+      audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
+    }
+
+  return $error;
+}
+
+function editcontent_apply($params)
+{
+  $content_id = $_REQUEST['content_id'];
   $resp = new CmsAjaxResponse();
-  $resp->script('alert(\'it worked\')');
+  $resp->script('alert(\'got here\');');
+  if( check_editcontent_perms($content_id) )
+    {
+      $contentobj = $contentops->LoadContentFromId($content_id);
+      $error = do_save_content($content_id,$params);
+
+      if( $error === FALSE )
+        {
+	  $str = '<div class="pagemcontainer"><ul class="pagemessage">'+lang('contentupdated')+'</p></div>';
+	  $resp->replace_html('#Edit_Content_Result',$str);
+	  $resp->script('alert(\'success\');');
+	}
+      else
+	{
+	  $list = '<li>'.explode('</li><li>',$error).'</li>';
+	  $str = '<div class="pageerrorcontainer"><ul class="pageerror">'+$list+'</ul></div>';
+	  $resp->replace_html('#Edit_Content_Result',$str);
+	  $resp->script('alert(\'error\');');
+	}
+    }
   return $resp->get_result();
 }
+
 
 $error = FALSE;
 
@@ -63,15 +116,6 @@ if (isset($_POST["submitbutton"])) $submit = true;
 
 $apply = false;
 if (isset($_POST["applybutton"])) $apply = true;
-
-$ajax = false;
-if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
-
-if ($apply)
-{
-	$CMS_EXCLUDE_FROM_RECENT=1;
-}
-
 
 #Get a list of content types and pick a default if necessary
 global $gCms;
@@ -95,62 +139,20 @@ else
 }
 
 
-#Get current userid and make sure they have permission to add something
-$userid = get_userid();
-$access = check_ownership($userid, $content_id) || check_permission($userid, 'Modify Any Page') ||
-	check_permission($userid, 'Manage All Content');
-$adminaccess = $access;
-if (!$access)
-{
-	$access = check_authorship($userid, $content_id);
-}
 
 $contentobj = $contentops->LoadContentFromId($content_id);
-if ($access)
+if (check_editcontent_perms($content_id))
 {
   if ($submit || $apply)
     {
-      // $contentobj->SetProperties();  // calguy should not be necessary
-      $contentobj->FillParams($_POST);
-      $error = $contentobj->ValidateData();
+      $error = do_save_content($contentobj,$_POST);
       
       if ($error === FALSE)
 	{
-	  $contentobj->SetLastModifiedBy(get_userid());
-	  $contentobj->Save();
-	  global $gCms;
-	  $contentops =& $gCms->GetContentOperations();
-	  $contentops->SetAllHierarchyPositions();
-	  audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
 	  if ($submit)
 	    {
 	      redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&message=contentupdated');
 	    }
-	}
-
-      if ($ajax)
-	{
-	  header('Content-Type: text/xml');
-	  print '<?xml version="1.0" encoding="UTF-8"?>';
-	  print '<EditContent>';
-	  if ($error !== false)
-	    {
-	      print '<Response>Error</Response>';
-	      print '<Details><![CDATA[';
-	      if (!is_array($error))
-		{
-		  $error = array($error);
-		}
-	      print '<li>' . join('</li><li>', $error) . '</li>';
-	      print ']]></Details>';
-	    }
-	  else
-	    {
-	      print '<Response>Success</Response>';
-	      print '<Details><![CDATA[' . lang('contentupdated') . ']]></Details>';
-	    }
-	  print '</EditContent>';
-	  exit;
 	}
     }
   else if (isset($_POST["serialized_content"]))
@@ -207,34 +209,29 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 
 $headtext .= <<<EOSCRIPT
 <script type="text/javascript">
-  // <![CDATA[
+// <![CDATA[
+jQuery(document).ready(function(){
+   jQuery('#applybutton').click(function(){
 
-window.Edit_Content_Apply = function(button)
-{
-  $addlScriptSubmit
-
-  // clear the result area
-  jQuery('Edit_Content_Result').html('');
-
-  // disable the button
-  button.disabled = 'disabled';
-
-  // get the data
-  var data = button.form.serialize();
-  cms_ajax_call('cms_ajax_ajaxapply', data , 1);
-  return false;
-}
+      jQuery('#Edit_Content_Result').html('');
+      //jQuery(this).attr('disabled','disabled');
+      var data = jQuery('#contentform').serializeForCmsAjax();
+      cms_ajax_editcontent_apply(data);
+      return false;
+   });
+});
   // ]]>
 </script>
 EOSCRIPT;
 include_once("header.php");
+$cms_ajax->process_requests();
 
 // AJAX result container
 print '<div id="Edit_Content_Result"></div>';
 
 $tmpfname = '';
 
-if (!$access)
+if (!check_editcontent_perms($content_id))
 {
 	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('editpage')))."</p></div>";
 }
@@ -266,9 +263,6 @@ else
 	{
 	  echo $themeObject->ShowErrors($error);
 	}
-
-#$contentarray = $contentobj->EditAsArray(true, 0, $adminaccess);
-#$contentarray2 = $contentobj->EditAsArray(true, 1, $adminaccess);
 
 $tabnames = $contentobj->TabNames();
 
@@ -324,7 +318,7 @@ $submit_buttons = '<div class="pageoverflow">
 <p class="pageinput">
  <input type="submit" name="submitbutton" accesskey="s" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('submitdescription').'" />';
 $submit_buttons .= ' <input type="submit" accesskey="c" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
-$submit_buttons .= ' <input type="submit" accesskey="a" onclick="return window.Edit_Content_Apply(this);" name="applybutton" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
+$submit_buttons .= ' <input type="submit" accesskey="a" id="applybutton" name="applybutton" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
  if( $contentobj->IsViewable() && $contentobj->Active() ) {
    $submit_buttons .= ' <a rel="external" href="'.$contentobj->GetURL().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
  }
@@ -356,7 +350,8 @@ $submit_buttons .= '</p></div>';
 				<?php
 			}
 
-			$contentarray = $contentobj->EditAsArray(false, $currenttab, $adminaccess);
+			$contentarray = $contentobj->EditAsArray(false, $currenttab, 
+								 check_editcontent_perms($content_id,true));
 			for($i=0;$i<count($contentarray);$i++)
 			{
 			  $tmp =& $contentarray[$i];

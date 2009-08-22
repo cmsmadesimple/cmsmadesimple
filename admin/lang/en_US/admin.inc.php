@@ -860,6 +860,23 @@ $lang['admin']['help_function_created_date'] = <<<EOT
                 <li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
         </ul>
 EOT;
+$lang['admin']['help_function_content_module'] = <<<EOT
+<h3><strong><span style="color: red;">Note: Available in CMSMS 1.7+ Only!</span></strong></h3>
+<h3>What does this do?</h3>
+<p>This tag allows utilizing addon modules to create different content blocks for your page template.  Examples are user lists from a user module, file lists from a file module, etc.</p>
+<h3>How do I use it?</h3>
+<p>If a module supports creating dynamic content blocks, it should indicate this in its help.  You will need to refer to the help for this module in order to complete the tag.</p>
+<p>Once the tag is properly placed in your page template, when editing a content objecdt that uses that page template you should see an appropriate content block displayed, allowing you to select a value.   Once the page is saved, and displayed on the website frontend, the value selected will be displayed.</p>
+<h3>What parameters does it take?<h3>
+<p><strong>Note:</strong> a block supported by a module may require additional parameters.</p>
+<ul>
+<li><strong>(required)</strong> block - The name of this block.</li>
+<li><strong>(required)</strong> module - The name of the module to request a block from.</li>
+<li><em>(optional)</em> label - An optional human readable label for this block, for use when editing a page.</li>
+<li><em>(optional)</em> promptoncopy - A flag that indicates wether the user should be prompted for this value when copying content that uses this page template.</em>
+<li><em>(optional)</em> assign - This parameter will assign the output of the tag on the frontend to the named smarty variable.</li>
+</ul>
+EOT;
 $lang['admin']['help_function_content'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This is where the content for your page will be displayed.  It's inserted into the template and changed based on the current page being displayed.</p>

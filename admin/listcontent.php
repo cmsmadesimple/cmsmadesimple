@@ -833,7 +833,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		    }
 		} 
 	      if ($display == 'edit')
-		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($one->mMenuText, '', '', true) . '</a>';
+		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($one->mMenuText, '', '', true) . '</a>';
 	      else
 		$txt .= cms_htmlentities($one->mMenuText, '', '', true);
 	    }
