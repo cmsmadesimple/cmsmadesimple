@@ -33,6 +33,7 @@ class Separator extends ContentBase
       $this->RemoveProperty('titleattribute','');
       $this->RemoveProperty('showinmenu',true);
       $this->RemoveProperty('cachable',true);
+      $this->RemoveProperty('secure',false);
     }
 
     function FriendlyName()

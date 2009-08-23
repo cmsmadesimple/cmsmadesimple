@@ -295,7 +295,7 @@ $tabnames = $contentobj->TabNames();
 		}
 		
 		#Make a preview tab
-		if ($contentobj->mPreview)
+		if ($contentobj->Previewable())
 		{
 			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##cms_ajax_ajaxpreview(jQuery(\'#contentform\').serializeForCmsAjax()); return false;">'.lang('preview').'</div>';
 		}
@@ -368,7 +368,7 @@ $submit_buttons .= '</p></div>';
 		</div>
 		<?php
 		}
-		if ($contentobj->mPreview)
+		if ($contentobj->Previewable())
 		{
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>

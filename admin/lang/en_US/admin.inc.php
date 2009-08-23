@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['secure_page'] = 'Use Secure (HTTPS) transport';
 $lang['admin']['info_image_settings'] = 'The following settings configure behaviour in the image manager.';
 $lang['admin']['thumbnail_width'] = 'Thumbnail Width';
 $lang['admin']['thumbnail_height'] = 'Thumbnail Height';

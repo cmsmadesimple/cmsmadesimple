@@ -45,6 +45,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["db_prefix"] = "cms_";
 	$config["root_url"] = "http://www.something.com";
 	$config["root_path"] = dirname(dirname(__FILE__));
+	$config["secure_root_url"] = "https://www.something.com";
 	$config["query_var"] = "page";
 	$config["use_bb_code"] = false;
 	$config["use_smarty_php_tags"] = false;
@@ -231,10 +232,11 @@ function cms_config_text($config)
 #If page is requested with https use https as root url
 #e.g. http://blah.com
 \$config['root_url'] = '{$config['root_url']}';
-if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
-{
-  \$config['root_url'] = str_replace('http','https',\$config['root_url']);
-}
+\$config['secure_root_url'] = '{$config['secure_root_url']}';
+#if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
+#{
+#  \$config['root_url'] = str_replace('http','https',\$config['root_url']);
+#}
 
 #Path to document root. This should be the directory this file is in.
 #e.g. /var/www/localhost

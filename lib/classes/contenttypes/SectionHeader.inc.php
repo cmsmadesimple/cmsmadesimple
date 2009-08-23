@@ -34,6 +34,7 @@ class SectionHeader extends ContentBase
       $this->RemoveProperty('title','');
       //$this->RemoveProperty('showinmenu',true);
       $this->RemoveProperty('cachable',true);
+      $this->RemoveProperty('secure',false);
       $this->RemoveProperty('target','');
 
       #Turn off caching

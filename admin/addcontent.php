@@ -263,7 +263,7 @@ $tabnames = $contentobj->TabNames();
 			}
 		}
 
-		if ($contentobj->mPreview)
+  if ($contentobj->Previewable())
 		{
 			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##cms_ajax_ajaxpreview(jQuery(\'#contentform\').serializeForCmsAjax());return false;">'.lang('preview').'</div>';
 		}
@@ -327,7 +327,7 @@ $tabnames = $contentobj->TabNames();
 			<div style="clear: both;"></div>
 				  <?php
 		}
-		if ($contentobj->mPreview)
+if ($contentobj->Previewable())
 		{
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>

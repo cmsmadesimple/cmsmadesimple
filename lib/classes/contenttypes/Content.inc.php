@@ -53,7 +53,7 @@ class Content extends ContentBase
       $this->AddContentProperty('disable_wysiwyg',60);
 
       #Turn on preview
-      $this->mPreview = true;
+      $this->SetPreviewAble(true);
     }
 
     /**
@@ -76,11 +76,11 @@ class Content extends ContentBase
 	  //pick up the template id before we do parameters
 	  if (isset($params['template_id']))
 	    {
-	      if ($this->mTemplateId != $params['template_id'])
+	      if ($this->TemplateId() != $params['template_id'])
 		{
 		  $this->_contentBlocksLoaded = false;
 		}
-	      $this->mTemplateId = $params['template_id'];
+	      $this->TemplateId($params['template_id']);
 	    }
 	  
 	  // add content blocks
@@ -113,7 +113,7 @@ class Content extends ContentBase
 	  // metadata
 	  if (isset($params['metadata']))
 	    {
-	      $this->mMetadata = $params['metadata'];
+	      $this->SetMetadata($params['metadata']);
 	    }
 
 	}
@@ -201,9 +201,9 @@ class Content extends ContentBase
 
 	    $tmp = get_preference(get_userid(),'date_format_string','%x %X');
 	    if( empty($tmp) ) $tmp = '%x %X';
-	    $ret[]=array(lang('last_modified_at').':', strftime($tmp, strtotime($this->mModifiedDate) ) );
+	    $ret[]=array(lang('last_modified_at').':', strftime($tmp, strtotime($this->GetModifiedDate()) ) );
 	    $userops =& $gCms->GetUserOperations();
-	    $modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);
+	    $modifiedbyuser = $userops->LoadUserByID($this->LastModifiedBy());
 	    if($modifiedbyuser) $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
 	}
 
@@ -221,7 +221,7 @@ class Content extends ContentBase
 	  $errors = array();
 	}
 
-      if ($this->mTemplateId <= 0 )
+      if ($this->TemplateId() <= 0 )
 	{
 	  $errors[] = lang('nofieldgiven',array(lang('template')));
 	  $result = false;
@@ -349,7 +349,7 @@ class Content extends ContentBase
 			}
 
 		      if( empty($name) ) { $name = 'content_en'; $id = 'content_en'; }
-		      $this->mProperties->Add('string',$id);
+		      $this->Properties()->Add('string',$id);
 		      if( !isset($this->_contentBlocks[$name]) )
 			{
 			  $this->_contentBlocks[$name]['type'] = 'text';
@@ -405,9 +405,9 @@ class Content extends ContentBase
 				  $id = str_replace(' ', '_', $val);
 				  $name = $val;
 				  
-				  if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
+				  if(!array_key_exists($val, $this->Properties()->mPropertyTypes))
 				    {
-				      $this->mProperties->Add("string", $id);
+				      $this->Properties()->Add("string", $id);
 				    }
 				  break;
 				case 'promptoncopy':
@@ -482,9 +482,9 @@ class Content extends ContentBase
 				  $id = str_replace(' ', '_', $val);
 				  $name = $val;
 				  
-				  if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
+				  if(!array_key_exists($val, $this->Properties()->mPropertyTypes))
 				    {
-				      $this->mProperties->Add("string", $id);
+				      $this->Properties()->Add("string", $id);
 				    }
 				  break;
 				case 'promptoncopy':
@@ -536,7 +536,7 @@ class Content extends ContentBase
       case 'template':
 	{
 	  $templateops =& $gCms->GetTemplateOperations();
-	  return array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"'));
+	  return array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->TemplateId(), 'onchange="document.contentform.submit()"'));
 	}
 	break;
 	

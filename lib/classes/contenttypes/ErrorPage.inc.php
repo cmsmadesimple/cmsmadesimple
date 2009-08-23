@@ -57,6 +57,7 @@ class ErrorPage extends Content
     $this->RemoveProperty('thumbnail','');
     $this->RemoveProperty('accesskey','');
     $this->RemoveProperty('titleattribute','');
+    $this->RemoveProperty('secure',false);
     $this->RemoveProperty('active',true);
     $this->RemoveProperty('cachable',false);
 

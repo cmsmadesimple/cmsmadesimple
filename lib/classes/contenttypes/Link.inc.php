@@ -41,6 +41,7 @@ class Link extends ContentBase
       parent::SetProperties();
       //$this->RemoveProperty('showinmenu',true);
       $this->RemoveProperty('cachable',true);
+      $this->RemoveProperty('secure',false);
       $this->AddContentProperty('url',10,1);
     }
 

@@ -422,14 +422,14 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 	$gCms = cmsms();
 	$contentops =& $gCms->GetContentOperations();
 
-	$output .= '<li id="item_'.$content->mId.'">'."\n";
-	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->mHierarchy).') '.cms_htmlentities($content->mMenuText, '', '', true);
+	$output .= '<li id="item_'.$content->Id().'">'."\n";
+	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->Hierarchy()).') '.cms_htmlentities($content->MenuText(), '', '', true);
 
 	if ($root->getChildrenCount()>0)
 	{
-		$sortableLists->addList('parent'.$content->mId,'parent'.$content->mId.'ListOrder');
-		$listArray[$content->mId] = 'parent'.$content->mId.'ListOrder';
-		$output .= '<ul id="parent'.$content->mId.'" class="sortableList">'."\n";
+	  $sortableLists->addList('parent'.$content->Id(),'parent'.$content->Id().'ListOrder');
+	  $listArray[$content->Id()] = 'parent'.$content->Id().'ListOrder';
+	  $output .= '<ul id="parent'.$content->Id().'" class="sortableList">'."\n";
 
 		$children = &$root->getChildren(false,true);
 		foreach ($children as $child)
@@ -627,7 +627,7 @@ function build_contentlist(&$node,&$templates,&$users,$userid)
 
     if ($one->IsDefaultPossible())
       {
-	$result['default'] = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_html_entity_decode_utf8(lang("confirmdefault", $one->mName), true)."')) cms_ajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>");
+	$result['default'] = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_html_entity_decode_utf8(lang("confirmdefault", $one->Name()), true)."')) cms_ajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>");
       }
 
     $txt = '';
@@ -700,7 +700,7 @@ function build_contentlist(&$node,&$templates,&$users,$userid)
       (check_permission($userid,'Remove Pages') || $manage_all) )
     {
       $txt = '';
-      $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) cms_ajax_content_delete(".$one->Id()."); return false;\">";
+      $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->Name()), true)."')) cms_ajax_content_delete(".$one->Id()."); return false;\">";
       $txt .= $deleteImg;
       $txt .= "</a>";
       $result['delete'] = $txt;
@@ -823,7 +823,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	{
 	  $columns['page'] = '&nbsp;';
 	  $txt = '';
-	  if( $one->mMenuText != CMS_CONTENT_HIDDEN_NAME )
+	  if( $one->MenuText() != CMS_CONTENT_HIDDEN_NAME )
 	    {
 	      if ($indent)
 		{
@@ -833,9 +833,9 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		    }
 		} 
 	      if ($display == 'edit')
-		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($one->mMenuText, '', '', true) . '</a>';
+		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '">'. cms_htmlentities($one->MenuText(), '', '', true) . '</a>';
 	      else
-		$txt .= cms_htmlentities($one->mMenuText, '', '', true);
+		$txt .= cms_htmlentities($one->MenuText(), '', '', true);
 	    }
 	  if( !empty($txt) ) $columns['page'] = $txt;
 	}
@@ -918,7 +918,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	    {
 	      if ($one->IsDefaultPossible())
 		{
-		  $txt = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_html_entity_decode_utf8(lang("confirmdefault", $one->mName), true)."')) cms_ajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>");
+		  $txt = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_html_entity_decode_utf8(lang("confirmdefault", $one->Name()), true)."')) cms_ajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>");
 		}
 	    }
 	  if( !empty($txt) )
@@ -1042,7 +1042,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	      if ($root->getChildrenCount() == 0 && 
 		  (check_permission($userid, 'Remove Pages') || check_permission($userid,'Manage All Content')) )
 		{
-		  $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) cms_ajax_content_delete(".$one->Id()."); return false;\">";
+		  $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->Name()), true)."')) cms_ajax_content_delete(".$one->Id()."); return false;\">";
 		  $txt .= $deleteImg;
 		  $txt .= "</a>";
 		}
