@@ -126,6 +126,7 @@ else
   // this stuff should be changed somehow.
   $contentobj->SetMetadata($metadata);
   $contentobj->SetPropertyValue('content_en', get_site_preference('defaultpagecontent')); // why?
+  $contentobj->SetSecurePage(get_site_preference('page_secure',0));
 
   if ($parent_id!=-1) $contentobj->SetParentId($parent_id);
   $contentobj->SetPropertyValue('searchable',

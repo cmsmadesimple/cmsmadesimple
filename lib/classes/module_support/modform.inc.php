@@ -25,25 +25,6 @@
  * @package		CMS
  */
 
-function __curPageURL() {
- $pageURL = 'http';
- if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
- $pageURL .= "://";
- if ($_SERVER["SERVER_PORT"] != "80") {
-  $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
- } else {
-   $str = $_SERVER['REQUEST_URI'];
-   $pos = strpos($str,'?');
-   if( $pos !== FALSE )
-     {
-       $str = substr($str,0,$pos);
-     }
-   $pageURL .= $_SERVER["SERVER_NAME"].$str;
-   //$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"];
- }
- return $pageURL;
-}
-
 function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 {
 	global $gCms;
@@ -64,16 +45,16 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	if ($idsuffix == '')
 		$idsuffix = $formcount;
 
-	$goto = " action=\"".($returnid==''?'moduleinterface.php':__curPageURL()).'"';
-	#$goto = 'moduleinterface.php';
-	if ($inline && $returnid != '')
+	$goto = 'moduleinterface.php';
+	if( $returnid != '' )
 	{
-		#$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-		#$goto = 'index.php?mact='.$this->GetName().','.$id.','.$action;
-		#$goto .= '&amp;'.$id.'returnid='.$returnid;
-		#$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
+	  $hm =& $gCms->GetHierarchyManager();
+	  $node =& $hm->sureGetNodeById($returnid);
+	  $content_obj =& $node->getContent();
+	  $goto = $content_obj->GetURL();
 	}
-	//$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" name="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
+	$goto = ' action="'.$goto.'"';
+
 	$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'"'.$goto;
 	if ($enctype != '')
 	{
