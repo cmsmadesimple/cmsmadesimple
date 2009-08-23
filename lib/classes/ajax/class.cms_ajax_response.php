@@ -20,11 +20,12 @@
 
 class CmsAjaxResponse extends CmsObject
 {
-	var $result = '';
+	var $result = null;
 
 	function __construct()
 	{
 		parent::__construct();
+		$this->result = array();
 	}
 	
 	function replace_html($selector, $text)
@@ -77,14 +78,16 @@ class CmsAjaxResponse extends CmsObject
 	
 	function script($text)
 	{
-		$this->result .= '<sc><t><![CDATA[' . $text . ']]></t></sc>';
+		//$this->result .= '<sc><t><![CDATA[' . $text . ']]></t></sc>';
+		$this->result[] = array("sc", $text);
 	}
 	
 	function get_result()
 	{
 		while(@ob_end_clean());
-		header("Content-Type: text/xml; charset=utf-8");
-		return '<?xml version="1.0" encoding="utf-8"?><ajax>' . $this->result . '</ajax>';
+		header("Content-Type: application/json; charset=utf-8");
+		return json_encode($this->result);
+		/* return '<?xml version="1.0" encoding="utf-8"?><ajax>' . $this->result . '</ajax>'; */
 	}
 }
 
