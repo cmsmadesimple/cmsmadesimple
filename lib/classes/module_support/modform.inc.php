@@ -48,10 +48,13 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	$goto = 'moduleinterface.php';
 	if( $returnid != '' )
 	{
-	  $hm =& $gCms->GetHierarchyManager();
-	  $node =& $hm->sureGetNodeById($returnid);
-	  $content_obj =& $node->getContent();
-	  $goto = $content_obj->GetURL();
+		$hm =& $gCms->GetHierarchyManager();
+		$node =& $hm->sureGetNodeById($returnid);
+		if ($node != null)
+		{
+			$content_obj =& $node->getContent();
+			$goto = $content_obj->GetURL();
+		}
 	}
 	$goto = ' action="'.$goto.'"';
 
