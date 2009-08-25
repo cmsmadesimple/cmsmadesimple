@@ -52,15 +52,17 @@ class CMSModule
 	var $restrict_unknown_params;
 	var $smarty;
 
-	function CMSModule()
+	public function __construct()
 	{
-		global $gCms;
-		
-		$this->cms =& $gCms;
-		$this->config =& $gCms->GetConfig();
+	  // specify that the autoload member will be used
+	  // for autoloading undefined classes.
+	  spl_autoload_register(array($this,'autoload'));
 
-		global $CMS_ADMIN_PAGE;
-		global $CMS_MODULE_PAGE;
+	  $gCms = cmsms();
+	  $config = cms_config();
+		
+	  global $CMS_ADMIN_PAGE;
+	  global $CMS_MODULE_PAGE;
 		if (isset($CMS_ADMIN_PAGE))
 		{
 			$this->curlang = '';
@@ -111,7 +113,28 @@ class CMSModule
 		$this->modmisc = false;
 		$this->modblock = false;
 	}
-	
+
+
+	public function CMSModule()
+	{
+	  $this->__construct();
+	}
+
+
+	/**
+	 * Function to handle autoloading of undefined classes.
+	 * by default it looks for a class.xxxxxx.php file in
+	 * the lib directory of the module.
+	 */
+	public function autoload($classname)
+	{
+	  $fn = $this->GetModulePath()."/lib/class.{$classname}.php";
+	  if( file_exists($fn) )
+	    {
+	      require_once($fn);
+	    }
+	}
+
 	function LoadTemplateMethods()
 	{
 		if (!$this->modtemplates)
