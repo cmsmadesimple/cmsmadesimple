@@ -595,7 +595,7 @@ class Content extends ContentBase
       if (isset($blockInfo['oneline']) && $blockInfo['oneline'] == '1' || $blockInfo['oneline'] == 'true')
 	{
 	  $size = (isset($blockInfo['size']))?$blockInfo['size']:50;
-	  $ret = '<input type="text" size="'.$size.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />';
+	  $ret = '<input type="text" size="'.$size.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, get_encoding('')).'" />';
 	}
       else
 	{ 
