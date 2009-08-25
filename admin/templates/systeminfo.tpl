@@ -134,7 +134,7 @@
 		<p class="pageinput">{si_lang a=count_contents}: <b>{$count_contents}</b></p>
 		<p class="pageinput">{si_lang a=contenttype}:<br />
 {foreach from=$content_type key='type' item='item'}
-&nbsp; {$type}: {if $item.active}{$item.active} {si_lang a=active}{/if} {if $item.inactive}{$item.inactive} {si_lang a=inactive}{/if}<br />
+&nbsp; {si_lang a=$type}: {$item.active} {si_lang a=active}, {$item.inactive} {si_lang a=inactive}<br />
 {/foreach}
 		</p>
 	</div>

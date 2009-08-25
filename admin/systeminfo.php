@@ -224,18 +224,21 @@ $contents = $db->GetArray($q);
 $_type=array();
 foreach($contents as $item)
 {
-	$_type[$item['type']][$item['active']][] = 1;
-}
-$content_type=array();
-foreach($_type as $type=>$item)
-{  
-	//$content_type[$type] = array('active'=>count($item[1]), 'inactive'=>count($item[0]));
-  $content_type[$type]['active']=count($item[1]);
-  //$item[0] sometimes not set
-  if (isset($item[0])) $content_type[$type]['inactive']=count($item[0]);
+  if( !isset($_type[$item['type']]) )
+    {
+      $_type[$item['type']] = array('active'=>0,'inactive'=>0);
+    }
+  if( $item['active'] )
+    {
+      $_type[$item['type']]['active']++;
+    }
+  else
+    {
+      $_type[$item['type']]['inactive']++;
+    }
 }
 $smarty->assign('count_contents', count($contents));
-$smarty->assign('content_type', $content_type);
+$smarty->assign('content_type', $_type);
 
 $q = "SELECT htmlblob_id FROM ".cms_db_prefix()."htmlblobs";
 $htmlblobs = $db->GetArray($q);
