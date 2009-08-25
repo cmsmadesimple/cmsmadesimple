@@ -23,12 +23,12 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 $userid = "";
-if ($_SESSION['cms_admin_user_id']) {
+if isset($_SESSION['cms_admin_user_id']) {
   $userid = $_SESSION['cms_admin_user_id'];
 }
 
 $username= "";
-if ($_SESSION['login_user_username']) {
+if isset($_SESSION['login_user_username']) {
   $username = $_SESSION['login_user_username'];
 }
 
