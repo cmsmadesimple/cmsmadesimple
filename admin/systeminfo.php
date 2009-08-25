@@ -228,8 +228,11 @@ foreach($contents as $item)
 }
 $content_type=array();
 foreach($_type as $type=>$item)
-{
-	$content_type[$type] = array('active'=>count($item[1]), 'inactive'=>count($item[0]));
+{  
+	//$content_type[$type] = array('active'=>count($item[1]), 'inactive'=>count($item[0]));
+  $content_type[$type]['active']=count($item[1]);
+  //$item[0] sometimes not set
+  if (isset($item[0])) $content_type[$type]['inactive']=count($item[0]);
 }
 $smarty->assign('count_contents', count($contents));
 $smarty->assign('content_type', $content_type);
