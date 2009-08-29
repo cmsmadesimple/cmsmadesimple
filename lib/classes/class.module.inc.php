@@ -340,7 +340,7 @@ class CMSModule
 		$route->module = $this->GetName();
 		$route->defaults = $defaults;
 		$route->regex = $routeregex;
-		$routes = $gCms->variables['routes'];
+		$routes =& $gCms->variables['routes'];
 		$routes[] =& $route;
 	}
 
