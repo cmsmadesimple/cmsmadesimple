@@ -70,14 +70,14 @@ foreach ($files as $onefile)
   $entryarray[] = $onerow;
 }
 
-$this->smarty->assign_by_ref('items', $entryarray);
-$this->smarty->assign('itemcount', count($entryarray));
+$smarty->assign_by_ref('items', $entryarray);
+$smarty->assign('itemcount', count($entryarray));
 
 $smarty->assign('default_template',$default_template);
-$this->smarty->assign('filenametext', $this->Lang('filename'));
-$this->smarty->assign('nofilestext', $this->Lang('notemplatefiles', dirname(__FILE__) . '/templates'));
-$this->smarty->assign('addlink', $this->CreateLink($id, 'addtemplate', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newobject.gif', $this->Lang('addtemplate'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addtemplate', $returnid, $this->Lang('addtemplate'), array(), '', false, false, 'class="pageoptions"'));
-$this->smarty->assign('templatetext', $this->Lang('templates'));
+$smarty->assign('filenametext', $this->Lang('filename'));
+$smarty->assign('nofilestext', $this->Lang('notemplatefiles', dirname(__FILE__) . '/templates'));
+$smarty->assign('addlink', $this->CreateLink($id, 'addtemplate', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newobject.gif', $this->Lang('addtemplate'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addtemplate', $returnid, $this->Lang('addtemplate'), array(), '', false, false, 'class="pageoptions"'));
+$smarty->assign('templatetext', $this->Lang('templates'));
 $smarty->assign('defaulttext',$this->Lang('default'));
 $smarty->assign('yesimg',$admintheme->DisplayImage('icons/system/true.gif',$this->Lang('this_is_default'),'','','systemicon'));
 $smarty->assign('readonlytext',$this->Lang('readonly'));

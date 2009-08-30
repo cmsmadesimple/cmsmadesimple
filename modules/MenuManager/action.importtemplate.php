@@ -46,13 +46,13 @@ if( !empty($error) )
     echo $this->ShowErrors($error);
   }
 
-$this->smarty->assign('startform', $this->CreateFormStart($id, 'importtemplate', $returnid));
-$this->smarty->assign('endform', $this->CreateFormEnd());
-$this->smarty->assign('newtemplate', $this->Lang('newtemplate'));
-$this->smarty->assign('inputname', $this->CreateInputText($id, 'newtemplate', $newtemplate, 20, 255));
-$this->smarty->assign('hidden', $this->CreateInputHidden($id, 'tplname', $params['tplname']));
-$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
-$this->smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
+$smarty->assign('startform', $this->CreateFormStart($id, 'importtemplate', $returnid));
+$smarty->assign('endform', $this->CreateFormEnd());
+$smarty->assign('newtemplate', $this->Lang('newtemplate'));
+$smarty->assign('inputname', $this->CreateInputText($id, 'newtemplate', $newtemplate, 20, 255));
+$smarty->assign('hidden', $this->CreateInputHidden($id, 'tplname', $params['tplname']));
+$smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
+$smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
 
 echo $this->ProcessTemplate('importtemplate.tpl');
 

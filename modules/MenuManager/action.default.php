@@ -246,7 +246,6 @@ else
 	
 	if (count($nodelist) > 0)
 	{
-		$smarty =& $this->smarty;
 		$smarty->assign('menuparams',$params);
 		$smarty->assign('count', count($nodelist));
 		$smarty->assign_by_ref('nodelist', $nodelist);
