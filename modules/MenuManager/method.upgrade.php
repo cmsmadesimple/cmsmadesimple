@@ -2,7 +2,7 @@
 if (!isset($gCms)) exit;
 
 $current_version = $oldversion;
-$db =& $this->cms->GetDb();
+$db =& $this->GetDb();
 switch($current_version)
 {
 	case "1.0":
