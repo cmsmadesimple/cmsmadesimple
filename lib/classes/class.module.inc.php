@@ -1036,6 +1036,8 @@ class CMSModule
 	 */
 	public function DoAction($name, $id, $params, $returnid='')
 	{
+	  $smarty->assign($this->GetName(),$this);
+
 		if ($name != '')
 		{
 			$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
