@@ -251,7 +251,8 @@ class CMSModule
 	{
 		if (is_subclass_of($this, 'CMSModule'))
 		{
-			return cms_join_path($this->config['root_path'], 'modules' , $this->GetName());
+		  $config = cms_config();
+			return cms_join_path($config['root_path'], 'modules' , $this->GetName());
 		}
 		else
 		{
