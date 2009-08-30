@@ -33,24 +33,23 @@ class CMSModule
 	 * Initialization Functions and parameters
 	 * ------------------------------------------------------------------
 	 */
-	var $cms;
-	var $config;
-	var $curlang;
-	var $langhash;
-	var $params;
-	var $wysiwygactive;
-	var $syntaxactive;
-	var $error;
-	var $modinstall;
-	var $modtemplates;
-	var $modlang;
-	var $modform;
-	var $modredirect;
-	var $modmisc;
-	var $modblock;
-	var $param_map;
-	var $restrict_unknown_params;
-	var $smarty;
+	protected $wysiwygactive;
+	protected $syntaxactive;
+
+	private $curlang;
+	private $langhash;
+	private $params;
+	private $error;
+	private $modinstall;
+	private $modtemplates;
+	private $modlang;
+	private $modform;
+	private $modredirect;
+	private $modmisc;
+	private $modblock;
+	private $param_map;
+	private $restrict_unknown_params;
+	var     $smarty;  // this should go to, but left for backwards compatibility.
 
 	public function __construct()
 	{
@@ -59,8 +58,9 @@ class CMSModule
 	  spl_autoload_register(array($this,'autoload'));
 
 	  $gCms = cmsms();
-	  $config = cms_config();
-		
+	  $config = cms_config();		
+	  $this->smarty =& $gCms->GetSmarty();
+
 	  global $CMS_ADMIN_PAGE;
 	  global $CMS_MODULE_PAGE;
 		if (isset($CMS_ADMIN_PAGE))
@@ -89,9 +89,6 @@ class CMSModule
 					'default' => 'en_US',
 					'help' => lang('langparam'),
 					'optional' => true);
-
-		#$smarty = new CMSModuleSmarty($config, $this->GetName());
-		$this->smarty = &$gCms->GetSmarty();
 
 		if( !isset($CMS_ADMIN_PAGE) || isset($CMS_MODULE_PAGE) )
 		  {
@@ -135,7 +132,7 @@ class CMSModule
 	    }
 	}
 
-	function LoadTemplateMethods()
+	public function LoadTemplateMethods()
 	{
 		if (!$this->modtemplates)
 		{
@@ -144,7 +141,7 @@ class CMSModule
 		}
 	}
 	
-	function LoadLangMethods()
+	public function LoadLangMethods()
 	{
 		if (!$this->modlang)
 		{
@@ -153,7 +150,7 @@ class CMSModule
 		}
 	}
 	
-	function LoadFormMethods()
+	public function LoadFormMethods()
 	{
 		if (!$this->modform)
 		{
@@ -162,7 +159,7 @@ class CMSModule
 		}
 	}
 	
-	function LoadRedirectMethods()
+	public function LoadRedirectMethods()
 	{
 		if (!$this->modredirect)
 		{
@@ -171,7 +168,7 @@ class CMSModule
 		}
 	}
 	
-	function LoadMiscMethods()
+	public function LoadMiscMethods()
 	{
 		if (!$this->modmisc)
 		{
@@ -191,7 +188,7 @@ class CMSModule
 	 * Callback function for module plugins
 	 * this function should not be overridden
 	 */
-	function function_plugin($params,&$smarty)
+	public function function_plugin($params,&$smarty)
 	{
 	  $params['module'] = $this->GetName();
 	  return cms_module_plugin($params,$smarty);
@@ -203,7 +200,7 @@ class CMSModule
 	 * from the module constructor, or from the SetParameters
 	 * method.
 	 */
-	function RegisterModulePlugin($name = '', $plugin = 'function_plugin')
+	public function RegisterModulePlugin($name = '', $plugin = 'function_plugin')
 	{
 		global $gCms;
 		
@@ -223,7 +220,7 @@ class CMSModule
 	/**
 	 * Returns a sufficient about page for a module
 	 */
-	function GetAbout()
+	public function GetAbout()
 	{
 		$this->LoadMiscMethods();
 		return cms_module_GetAbout($this);
@@ -233,7 +230,7 @@ class CMSModule
 	 * Returns a sufficient help page for a module
 	 * this function should not be overridden
 	 */
-	function GetHelpPage()
+	public function GetHelpPage()
 	{
 		$this->LoadMiscMethods();
 		return cms_module_GetHelpPage($this);
@@ -242,7 +239,7 @@ class CMSModule
 	/**
 	 * Returns the name of the module
 	 */
-	function GetName()
+	public function GetName()
 	{
 		return 'unset';
 	}
@@ -250,7 +247,7 @@ class CMSModule
 	/**
 	 * Returns the full path of the module directory.
 	 */
-	function GetModulePath()
+	public function GetModulePath()
 	{
 		if (is_subclass_of($this, 'CMSModule'))
 		{
@@ -266,7 +263,7 @@ class CMSModule
 	 * Returns a translatable name of the module.  For modulues who's names can
 	 * probably be translated into another language (like News)
 	 */
-	function GetFriendlyName()
+	public function GetFriendlyName()
 	{
 		return $this->GetName();
 	}
@@ -274,7 +271,7 @@ class CMSModule
 	/**
 	 * Returns the version of the module
 	 */
-	function GetVersion()
+	public function GetVersion()
 	{
 		return '0.0.0.1';
 	}
@@ -282,7 +279,7 @@ class CMSModule
 	/**
 	 * Returns the minimum version necessary to run this version of the module.
 	 */
-	function MinimumCMSVersion()
+	public function MinimumCMSVersion()
 	{
 		global $CMS_VERSION;
 		return $CMS_VERSION;
@@ -291,7 +288,7 @@ class CMSModule
 	/**
 	 * Returns the maximum version necessary to run this version of the module.
 	 */
-	function MaximumCMSVersion()
+	public function MaximumCMSVersion()
 	{
 		global $CMS_VERSION;
 		return $CMS_VERSION;
@@ -303,7 +300,7 @@ class CMSModule
 	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */
-	function GetHelp()
+	public function GetHelp()
 	{
 		return '';
 	}
@@ -311,7 +308,7 @@ class CMSModule
 	/**
 	 * Returns XHTML that nees to go between the <head> tags
 	 */
-	function GetHeaderHTML()
+	public function GetHeaderHTML()
 	{
 	  return '';
 	}
@@ -322,7 +319,7 @@ class CMSModule
 	 * Do this by returning true.
 	 *
 	 */
-	function SuppressAdminOutput(&$request)
+	public function SuppressAdminOutput(&$request)
 	{
 		return false;
 	}
@@ -333,7 +330,7 @@ class CMSModule
 	 * @param string Route to register
 	 * @param array Defaults for parameters that might not be included in the url
 	 */
-	function RegisterRoute($routeregex, $defaults = array())
+	public function RegisterRoute($routeregex, $defaults = array())
 	{
 		global $gCms;
 		$route = new CmsRoute();
@@ -348,7 +345,7 @@ class CMSModule
 	 * Returns a list of parameters and their help strings in a hash.  This is generally
 	 * used internally.
 	 */
-	function GetParameters()
+	public function GetParameters()
 	{
 	  if( count($this->params) == 1 && $this->params[0]['name'] == 'lang' )
 	    {
@@ -362,16 +359,16 @@ class CMSModule
 	 * Setup your parameters here.  It doesn't have to be here, but it makes the
 	 * code more legible.
 	 */
-	function SetParameters()
+	public function SetParameters()
 	{
 	}
 
-	function RestrictUnknownParams($flag = true)
+	public function RestrictUnknownParams($flag = true)
 	{
 	  $this->restrict_unknown_params = $flag;
 	}
 
-	function SetParameterType($param, $type)
+	public function SetParameterType($param, $type)
 	{
 	  switch($type)
 	    {
@@ -387,7 +384,7 @@ class CMSModule
 	    }
 	}
 
-	function CreateParameter($param, $defaultval='', $helpstring='', $optional=true)
+	public function CreateParameter($param, $defaultval='', $helpstring='', $optional=true)
 	{
 		//was: array_unshift(
 		array_push($this->params, array(
@@ -404,7 +401,7 @@ class CMSModule
 	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */
-	function GetDescription($lang = 'en_US')
+	public function GetDescription($lang = 'en_US')
 	{
 		return '';
 	}
@@ -415,7 +412,7 @@ class CMSModule
 	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */
-	function GetAdminDescription()
+	public function GetAdminDescription()
 	{
 		return '';
 	}
@@ -423,7 +420,7 @@ class CMSModule
 	/**
 	 * Returns whether this module should only be loaded from the admin
 	 */
-	function IsAdminOnly()
+	public function IsAdminOnly()
 	{
 		return false;
 	}
@@ -431,7 +428,7 @@ class CMSModule
 	/**
 	 * Returns the changelog for the module
 	 */
-	function GetChangeLog()
+	public function GetChangeLog()
 	{
 		return '';
 	}
@@ -439,7 +436,7 @@ class CMSModule
 	/**
 	 * Returns the name of the author
 	 */
-	function GetAuthor()
+	public function GetAuthor()
 	{
 		return '';
 	}
@@ -447,7 +444,7 @@ class CMSModule
 	/**
 	 * Returns the email address of the author
 	 */
-	function GetAuthorEmail()
+	public function GetAuthorEmail()
 	{
 		return '';
 	}
@@ -461,7 +458,7 @@ class CMSModule
 	/**
 	 * Returns the cms->config object as a reference
 	 */
-	function & GetConfig()
+	public function & GetConfig()
 	{
 		global $gCms;
 		$config = &$gCms->GetConfig();
@@ -471,7 +468,7 @@ class CMSModule
 	/**
 	 * Returns the cms->db object as a reference
 	 */
-	function & GetDb()
+	public function & GetDb()
 	{
 		global $gCms;
 		$db = &$gCms->GetDb();
@@ -481,7 +478,7 @@ class CMSModule
 	/**
 	 * Returns the cms->variables as a reference
 	 */
-	function & GetVariables()
+	public function & GetVariables()
 	{
 		return $this->cms->variables;
 	}
@@ -495,18 +492,18 @@ class CMSModule
 	/**
 	 * Get an input field for a specific content block type
 	 */
-	function GetContentBlockInput($blockName,$value,$params,$adding = false)
+	public function GetContentBlockInput($blockName,$value,$params,$adding = false)
 	{
 	  return FALSE;
 	}
 
-	function GetContentBlockValue($blockName,$blockParams,$inputParams)
+	public function GetContentBlockValue($blockName,$blockParams,$inputParams)
 	{
 	  return FALSE;
 	}
 
 
-	function ValidateContentBlockValue($blockName,$value,$blockparams)
+	public function ValidateContentBlockValue($blockName,$value,$blockparams)
 	{
 	  return '';
 	}
@@ -514,7 +511,7 @@ class CMSModule
 	/**
 	 * Register a bulk content action
 	 */
-	function RegisterBulkContentFunction($label,$action)
+	public function RegisterBulkContentFunction($label,$action)
 	{
 	  bulkcontentoperations::register_function($label,$action,$this->GetName());
 	}
@@ -528,12 +525,12 @@ class CMSModule
 	/**
 	 * Does this module support a custom content type?
 	 */
-	function HasContentType()
+	public function HasContentType()
 	{
 		return FALSE;
 	}
 	
-	function RegisterContentType($name, $file, $friendlyname = '')
+	public function RegisterContentType($name, $file, $friendlyname = '')
 	{
 		global $gCms;
 		$contenttypes =& $gCms->contenttypes;
@@ -551,12 +548,12 @@ class CMSModule
 	/**
 	 * Return an instance of the new content type
 	 */
-	function GetContentTypeInstance()
+	public function GetContentTypeInstance()
 	{
 		return FALSE;
 	}
 
-	function IsExclusive()
+	public function IsExclusive()
 	{
 		return FALSE;
 	}
@@ -573,7 +570,7 @@ class CMSModule
 	 * should return a string message if there is a failure. Returning nothing (FALSE)
 	 * will allow the install procedure to proceed.
 	 */
-	function Install()
+	public function Install()
 	{
 		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.install.php';
 		if (@is_file($filename))
@@ -596,7 +593,7 @@ class CMSModule
 	/**
 	 * Display a message after a successful installation of the module.
 	 */
-	function InstallPostMessage()
+	public function InstallPostMessage()
 	{
 		return FALSE;
 	}
@@ -607,7 +604,7 @@ class CMSModule
 	 * It should return a string message if there is a failure. Returning nothing
 	 * (FALSE) will allow the uninstall procedure to proceed.
 	 */
-	function Uninstall()
+	public function Uninstall()
 	{
 		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.uninstall.php';
 		if (@is_file($filename))
@@ -629,7 +626,7 @@ class CMSModule
 	 * Display a message and a Yes/No dialog before doing an uninstall.	 Returning noting
 	 * (FALSE) will go right to the uninstall.
 	 */
-	function UninstallPreMessage()
+	public function UninstallPreMessage()
 	{
 		return FALSE;
 	}
@@ -637,7 +634,7 @@ class CMSModule
 	/**
 	 * Display a message after a successful uninstall of the module.
 	 */
-	function UninstallPostMessage()
+	public function UninstallPostMessage()
 	{
 		return FALSE;
 	}
@@ -653,7 +650,7 @@ class CMSModule
 	 * @param string The version we are upgrading from
 	 * @param string The version we are upgrading to
 	 */
-	function Upgrade($oldversion, $newversion)
+	public function Upgrade($oldversion, $newversion)
 	{
 		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.upgrade.php';
 		if (@is_file($filename))
@@ -673,7 +670,7 @@ class CMSModule
 	 * Display a message and a Yes/No dialog before doing an uninstall.	 Returning noting
 	 * (FALSE) will go right to the uninstall.
 	 */
-	function UpgradePostMessage()
+	public function UpgradePostMessage()
 	{
 	  return FALSE;
 	}
@@ -685,7 +682,7 @@ class CMSModule
 	 * different distributions with different modules included in them.	 Defaults
 	 * to TRUE, as there is not many reasons to not allow it.
 	 */
-	function AllowAutoInstall()
+	public function AllowAutoInstall()
 	{
 		return TRUE;
 	}
@@ -697,7 +694,7 @@ class CMSModule
 	 * different distributions with different modules included in them.	 Defaults
 	 * to TRUE, as there is not many reasons to not allow it.
 	 */
-	function AllowAutoUpgrade()
+	public function AllowAutoUpgrade()
 	{
 		return TRUE;
 	}
@@ -707,7 +704,7 @@ class CMSModule
 	 * requires. It should return an hash, eg.
 	 * return array('somemodule'=>'1.0', 'othermodule'=>'1.1');
 	 */
-	function GetDependencies()
+	public function GetDependencies()
 	{
 		return array();
 	}
@@ -717,7 +714,7 @@ class CMSModule
 	 * used by the plugins.php page to make sure that a module can't be uninstalled
 	 * before any modules depending on it are uninstalled first.
 	 */
-	function CheckForDependents()
+	public function CheckForDependents()
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
@@ -738,7 +735,7 @@ class CMSModule
 	/**
 	 * Creates an xml data package from the module directory.
 	 */
-	function CreateXMLPackage( &$message, &$filecount )
+	public function CreateXMLPackage( &$message, &$filecount )
 	{
 		global $gCms;
 		$modops =& $gCms->GetModuleOperations();
@@ -750,7 +747,7 @@ class CMSModule
 	 * Return true if there is an admin for the module.	 Returns false by
 	 * default.
 	 */
-	function HasAdmin()
+	public function HasAdmin()
 	{
 		return false;
 	}
@@ -758,7 +755,7 @@ class CMSModule
 	/**
 	 * Should we use output buffering in the admin for this module?
 	 */
-	function HasAdminBuffering()
+	public function HasAdminBuffering()
 	{
 		return true;
 	}
@@ -771,7 +768,7 @@ class CMSModule
 	 * content, layout, files, usersgroups, extensions, preferences, admin
 	 *
 	 */
-	function GetAdminSection()
+	public function GetAdminSection()
 	{
 		return 'extensions';
 	}
@@ -782,7 +779,7 @@ class CMSModule
 	 *
 	 * Defaults to true.
 	 */
-	function VisibleToAdminUser()
+	public function VisibleToAdminUser()
 	{
 		return true;
 	}
@@ -791,7 +788,7 @@ class CMSModule
 	 * Returns true if the module should be treated as a content module.
 	 * Returns false by default.
 	 */
-	function IsContentModule()
+	public function IsContentModule()
 	{
 		return false;
 	}
@@ -800,7 +797,7 @@ class CMSModule
 	 * Returns true if the module should be treated as a plugin module (like
 	 * {cms_module module='name'}.	Returns false by default.
 	 */
-	function IsPluginModule()
+	public function IsPluginModule()
 	{
 		return false;
 	}
@@ -808,7 +805,7 @@ class CMSModule
 	/**
 	 * Returns true if the module acts as a soap server
 	 */
-	function IsSoapModule()
+	public function IsSoapModule()
 	{
 		return false;
 	}
@@ -816,7 +813,7 @@ class CMSModule
 	/**
 	 * Returns true if the module may support lazy loading in the front end
 	 */
-	function SupportsLazyLoading()
+	public function SupportsLazyLoading()
 	{
 	  return false;
 	}
@@ -834,7 +831,7 @@ class CMSModule
 	 * @param an id specifying which capability to check for, could be "wysiwyg" etc.
 	 * @param associative array further params to get more detailed info about the capabilities. Should be syncronized with other modules of same type
 	 */
-  function HasCapability($capability, $params=array())
+  public function HasCapability($capability, $params=array())
   {
     return false;
   }
@@ -849,7 +846,7 @@ class CMSModule
 	 * Returns true if this module should be treated as a Syntax Highlighting module. It
 	 * returns false be default.
 	 */
-	function IsSyntaxHighlighter()
+	public function IsSyntaxHighlighter()
 	{
 		return false;
 	}
@@ -859,7 +856,7 @@ class CMSModule
 	 * not the choice of the user. Used for forcing a wysiwyg.
 	 * returns false be default.
 	 */
-	function SyntaxActive()
+	public function SyntaxActive()
 	{
 		return $this->syntaxactive;
 	}
@@ -868,7 +865,7 @@ class CMSModule
 	 * Returns content destined for the <form> tag.	 It's useful if javascript is
 	 * needed for the onsubmit of the form.
 	 */
-	function SyntaxPageForm()
+	public function SyntaxPageForm()
 	{
 		return '';
 	}
@@ -880,7 +877,7 @@ class CMSModule
 	 * so that the SyntaxHighlighter can do any cleanups before the actual form submission
 	 * takes place.
 	 */
-	 function SyntaxPageFormSubmit()
+	 public function SyntaxPageFormSubmit()
 	 {
 		return '';
 	 }
@@ -890,7 +887,7 @@ class CMSModule
 	  *
 	  * @param string The html-code of the page before replacing SyntaxHighlighter-stuff
 	  */
-	  function SyntaxGenerateHeader($htmlresult='')
+	  public function SyntaxGenerateHeader($htmlresult='')
 	  {
 		return '';
 	  }
@@ -898,7 +895,7 @@ class CMSModule
 	 /**
 	  * Returns body code specific to this SyntaxHighlighter
 	  */
-	  function SyntaxGenerateBody()
+	  public function SyntaxGenerateBody()
 	  {
 		return '';
 	  }
@@ -914,7 +911,7 @@ class CMSModule
 	 * @param string Content to show in the textarea
 	 * @param string Stylesheet for content, if available
 	 */
-	  function SyntaxTextarea($name='textarea',$syntax='html',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='')
+	  public function SyntaxTextarea($name='textarea',$syntax='html',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='')
 	{
 		$this->syntaxactive=true;
 		return '<textarea name="'.$name.'" cols="'.$columns.'" rows="'.$rows.'" '.$addtext.' >'.$content.'</textarea>';
@@ -923,7 +920,7 @@ class CMSModule
 	/**
 	 * Returns whether or not this module should show in any module lists generated by a WYSIWYG.
 	 */
-	function ShowInSyntaxList()
+	public function ShowInSyntaxList()
 	{
 		return true;
 	}
@@ -940,7 +937,7 @@ class CMSModule
 	 * Returns true if this module should be treated as a WYSIWYG module. It
 	 * returns false be default.
 	 */
-	function IsWYSIWYG()
+	public function IsWYSIWYG()
 	{
 		return false;
 	}
@@ -950,7 +947,7 @@ class CMSModule
 	 * not the choice of the user. Used for forcing a wysiwyg.
 	 * returns false be default.
 	 */
-	function WYSIWYGActive()
+	public function WYSIWYGActive()
 	{
 		return $this->wysiwygactive;
 	}
@@ -959,7 +956,7 @@ class CMSModule
 	 * Returns content destined for the <form> tag.	 It's useful if javascript is
 	 * needed for the onsubmit of the form.
 	 */
-	function WYSIWYGPageForm()
+	public function WYSIWYGPageForm()
 	{
 		return '';
 	}
@@ -971,7 +968,7 @@ class CMSModule
 	 * so that the WYSIWYG can do any cleanups before the actual form submission
 	 * takes place.
 	 */
-	 function WYSIWYGPageFormSubmit()
+	 public function WYSIWYGPageFormSubmit()
 	 {
 		return '';
 	 }
@@ -981,7 +978,7 @@ class CMSModule
 	  *
 	  * @param string The html-code of the page before replacing WYSIWYG-stuff
 	  */
-	  function WYSIWYGGenerateHeader($htmlresult='')
+	  public function WYSIWYGGenerateHeader($htmlresult='')
 	  {
 		return '';
 	  }
@@ -989,7 +986,7 @@ class CMSModule
 	 /**
 	  * Returns body code specific to this WYSIWYG
 	  */
-	  function WYSIWYGGenerateBody()
+	  public function WYSIWYGGenerateBody()
 	  {
 		return '';
 	  }
@@ -1004,7 +1001,7 @@ class CMSModule
 	 * @param string Content to show in the textarea
 	 * @param string Stylesheet for content, if available
 	 */
-	  function WYSIWYGTextarea($name='textarea',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='')
+	  public function WYSIWYGTextarea($name='textarea',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='')
 	{
 		$this->wysiwygactive=true;
 		return '<textarea name="'.$name.'" cols="'.$columns.'" rows="'.$rows.'" '.$addtext.' >'.$content.'</textarea>';
@@ -1013,7 +1010,7 @@ class CMSModule
 	/**
 	 * Returns whether or not this module should show in any module lists generated by a WYSIWYG.
 	 */
-	function ShowInWYSIWYG()
+	public function ShowInWYSIWYG()
 	{
 		return true;
 	}
@@ -1036,7 +1033,7 @@ class CMSModule
 	 * @param string The ID of the module
 	 * @param string The parameters targeted for this module
 	 */
-	function DoAction($name, $id, $params, $returnid='')
+	public function DoAction($name, $id, $params, $returnid='')
 	{
 		if ($name != '')
 		{
@@ -1056,7 +1053,7 @@ class CMSModule
 		}
 	}
 
-	function DoActionBase($name, $id, $params, $returnid='')
+	public function DoActionBase($name, $id, $params, $returnid='')
 	{
 	  if( $returnid != '' )
 	    {
@@ -1107,7 +1104,7 @@ class CMSModule
    * @param string An alternative classname for the a-link of the tooltip
 	 */
   
-  function CreateTooltip($helptext, $linktext="?", $forcewidth="", $classname="admin-tooltip admin-tooltip-box", $href="")
+  public function CreateTooltip($helptext, $linktext="?", $forcewidth="", $classname="admin-tooltip admin-tooltip-box", $href="")
   {
     $result='<a class="'.$classname.'"';
     if ($href!='') $result.=' href="'.$href.'"';
@@ -1129,7 +1126,7 @@ class CMSModule
 	 * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
 	 */
 
-  function CreateTooltipLink($id, $action, $returnid, $contents, $tooltiptext, $params=array())
+  public function CreateTooltipLink($id, $action, $returnid, $contents, $tooltiptext, $params=array())
   {
     return $this->CreateTooltip($tooltiptext,$contents,"","admin-tooltip",$this->CreateLink($id,$action,$returnid,"admin-tooltip",$params,"",true) );
   }
@@ -1144,7 +1141,7 @@ class CMSModule
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param string Any additional text that should be added into the legend tag when rendered
 	 */
-	function CreateFieldsetStart( $id, $name, $legend_text='', $addtext='', $addtext_legend='' )
+	public function CreateFieldsetStart( $id, $name, $legend_text='', $addtext='', $addtext_legend='' )
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateFieldsetStart($this, $id, $name, $legend_text, $addtext, $addtext_legend);
@@ -1154,7 +1151,7 @@ class CMSModule
 	* Returns the end of the fieldset in a  form.  This is basically just a wrapper around </form>, but
 	* could be extended later on down the road.  It's here mainly for consistency.
 	*/
-	function CreateFieldsetEnd()
+	public function CreateFieldsetEnd()
 	{
 		return '</fieldset>'."\n";
 	}
@@ -1172,7 +1169,7 @@ class CMSModule
 	 * @param string Text to append to the end of the id and name of the form
 	 * @param array Extra parameters to pass along when the form is submitted
 	 */
-	function CreateFrontendFormStart($id,$returnid,$action='default',$method='post',
+	public function CreateFrontendFormStart($id,$returnid,$action='default',$method='post',
 					 $enctype='',$inline=true,$idsuffix='',$params=array())
 	{
 	  return $this->CreateFormStart($id,$action,$returnid,$method,$enctype,$inline,$idsuffix,$params);
@@ -1192,7 +1189,7 @@ class CMSModule
 	 * @param array Extra parameters to pass along when the form is submitted
 	 * @param string Text to append to the <form>-statement, for instanse for javascript-validation code
 	 */
-	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
+	public function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra);
@@ -1202,7 +1199,7 @@ class CMSModule
 	 * Returns the end of the a module form.  This is basically just a wrapper around </form>, but
 	 * could be extended later on down the road.  It's here mainly for consistency.
 	 */
-	function CreateFormEnd()
+	public function CreateFormEnd()
 	{
 		return '</form>'."\n";
 	}
@@ -1218,7 +1215,7 @@ class CMSModule
 	 * @param string The maximum number of characters that should be allowed to be entered
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+	public function CreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateInputText($this, $id, $name, $value, $size, $maxlength, $addttext);
@@ -1233,7 +1230,7 @@ class CMSModule
          * @param string The text in the label
          * @param string Any additional text that should be added into the tag when rendered
          */
-        function CreateLabelForInput($id, $name, $labeltext='', $addttext='')
+        public function CreateLabelForInput($id, $name, $labeltext='', $addttext='')
         {
 	        $this->LoadFormMethods();
 	        return cms_module_CreateLabelForInput($this, $id, $name, $labeltext, $addttext);
@@ -1252,7 +1249,7 @@ class CMSModule
 	 * @param string The text for label 
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputTextWithLabel($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
+	public function CreateInputTextWithLabel($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateInputTextWithLabel($this, $id, $name, $value, $size, $maxlength, $addttext, $label, $labeladdtext);
@@ -1268,7 +1265,7 @@ class CMSModule
 	 * @param string The number of columns wide the textbox should be displayed
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputFile($id, $name, $accept='', $size='10',$addttext='')
+	public function CreateInputFile($id, $name, $accept='', $size='10',$addttext='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateInputFile($this, $id, $name, $accept, $size, $addttext);
@@ -1285,7 +1282,7 @@ class CMSModule
 	 * @param string The maximum number of characters that should be allowed to be entered
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputPassword($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+	public function CreateInputPassword($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateInputPassword($this, $id, $name, $value, $size, $maxlength, $addttext);
@@ -1300,7 +1297,7 @@ class CMSModule
 	 * @param string The predefined value of the field, if any
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputHidden($id, $name, $value='', $addttext='')
+	public function CreateInputHidden($id, $name, $value='', $addttext='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateInputHidden($this, $id, $name, $value, $addttext);
@@ -1316,7 +1313,7 @@ class CMSModule
 	 * @param string The current value. If equal to $value the checkbox is selected 
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputCheckbox($id, $name, $value='', $selectedvalue='', $addttext='')
+	public function CreateInputCheckbox($id, $name, $value='', $selectedvalue='', $addttext='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateInputCheckbox($this, $id, $name, $value, $selectedvalue, $addttext);
@@ -1333,7 +1330,7 @@ class CMSModule
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param string Use an image instead of a regular button
 	 */
-	function CreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
+	public function CreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateInputSubmit($this, $id, $name, $value, $addttext, $image, $confirmtext);
@@ -1348,7 +1345,7 @@ class CMSModule
 	 * @param string The predefined value of the button, if any
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputReset($id, $name, $value='Reset', $addttext='')
+	public function CreateInputReset($id, $name, $value='Reset', $addttext='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateInputReset($this, $id, $name, $value, $addttext);
@@ -1362,7 +1359,7 @@ class CMSModule
 	 * @param string The html name of the input
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateFileUploadInput($id, $name, $addttext='',$size='10', $maxlength='255')
+	public function CreateFileUploadInput($id, $name, $addttext='',$size='10', $maxlength='255')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateFileUploadInput($this, $id, $name, $addttext, $size, $maxlength);
@@ -1380,7 +1377,7 @@ class CMSModule
 	 * @param string The default selected value of the dropdown list.  Setting to '' will result in the first choice being selected
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='')
+	public function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateInputDropdown($this, $id, $name, $items, $selectedindex, $selectedvalue, $addttext);
@@ -1398,7 +1395,7 @@ class CMSModule
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param boolean indicates wether multiple selections are allowed (defaults to true)
 	 */
-	function CreateInputSelectList($id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true)
+	public function CreateInputSelectList($id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true)
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateInputSelectList($this, $id, $name, $items, $selecteditems, $size, $addttext, $multiple);
@@ -1415,7 +1412,7 @@ class CMSModule
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param string A delimiter to throw between each radio button, e.g., a <br /> tag or something for formatting
 	 */
-	function CreateInputRadioGroup($id, $name, $items, $selectedvalue='', $addttext='', $delimiter='')
+	public function CreateInputRadioGroup($id, $name, $items, $selectedvalue='', $addttext='', $delimiter='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateInputRadioGroup($this, $id, $name, $items, $selectedvalue, $addttext, $delimiter);
@@ -1437,7 +1434,7 @@ class CMSModule
 	 * @param string The wysiwyg-system to be forced even if the user has chosen another one
 	 * @param string The language the content should be syntaxhightlighted as
 	 */
-	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='80', $rows='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
+	public function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='80', $rows='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
 	{
 	  return create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet, $cols, $rows,$forcewysiwyg,$wantedsyntax,$addtext);
 	}
@@ -1458,7 +1455,7 @@ class CMSModule
 	 * @param string The number of characters high (rows) the resulting textarea should be
 	 * @param string Additional text for the text area tag.
 	 */
-	function CreateSyntaxArea($id,$text,$name,$classname='',$htmlid='',$encoding='',
+	public function CreateSyntaxArea($id,$text,$name,$classname='',$htmlid='',$encoding='',
 				  $stylesheet='',$cols='80',$rows='15',$addtext='')
 	{
 	  return create_textarea(false,$text,$id.$name,$classname,$htmlid, $encoding, $stylesheet,
@@ -1479,7 +1476,7 @@ class CMSModule
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateFrontendLink( $id, $returnid, $action, $contents='', $params=array(), $warn_message='',
+	public function CreateFrontendLink( $id, $returnid, $action, $contents='', $params=array(), $warn_message='',
 					 $onlyhref=false, $inline=true, $addtext='', $targetcontentonly=false, $prettyurl='' )
 	{
 	  return $this->CreateLink( $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref,
@@ -1500,7 +1497,7 @@ class CMSModule
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false, $prettyurl='')
+	public function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false, $prettyurl='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateLink($this, $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref, $inline, $addttext, $targetcontentonly, $prettyurl);
@@ -1512,7 +1509,7 @@ class CMSModule
 	*
 	* @param string the page id of the page we want to direct to
 	*/
-	function CreateContentLink($pageid, $contents='')
+	public function CreateContentLink($pageid, $contents='')
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateContentLink($this, $pageid, $contents);
@@ -1529,7 +1526,7 @@ class CMSModule
 	 * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
 	 * @param boolean A flag to determine if only the href section should be returned
 	 */
-	function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
+	public function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
 	{
 		$this->LoadFormMethods();
 		return cms_module_CreateReturnLink($this, $id, $returnid, $contents, $params, $onlyhref);
@@ -1546,7 +1543,7 @@ class CMSModule
 	 * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 */
-	function RedirectForFrontEnd($id, $returnid, $action, $params = array(), $inline = true )
+	public function RedirectForFrontEnd($id, $returnid, $action, $params = array(), $inline = true )
 	{
 	  return $this->Redirect($id, $action, $returnid, $params, $inline );
 	}
@@ -1560,7 +1557,7 @@ class CMSModule
 	 * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 */
-	function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
+	public function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
 	{
 		$this->LoadRedirectMethods();
 		return cms_module_Redirect($this, $id, $action, $returnid, $params, $inline);
@@ -1571,7 +1568,7 @@ class CMSModule
 	 * @param string php script to redirect to
 	 * @param array  optional array of url parameters
 	 */
-	function RedirectToAdmin($page,$params = array())
+	public function RedirectToAdmin($page,$params = array())
 	{
 		$this->LoadRedirectMethods();
 		return cms_module_RedirectToAdmin($this,$page,$params);
@@ -1584,7 +1581,7 @@ class CMSModule
 	 *
 	 * @param string Content id to redirect to.
 	 */
-	function RedirectContent($id)
+	public function RedirectContent($id)
 	{
 	  redirect_to_alias($id);
 	}
@@ -1595,7 +1592,7 @@ class CMSModule
 	 * ------------------------------------------------------------------
 	 */
 
-	function &GetModuleInstance($module)
+	public function &GetModuleInstance($module)
 	{
 		global $gCms;
 
@@ -1617,7 +1614,7 @@ class CMSModule
    * @param an id specifying which capability to check for, could be "wysiwyg" etc.
 	 * @param associative array further params to get more detailed info about the capabilities. Should be syncronized with other modules of same type
 	*/
-  function GetModulesWithCapability($capability, $params=array())
+  public function GetModulesWithCapability($capability, $params=array())
 	{
 		global $gCms;
     $result=array();
@@ -1642,7 +1639,7 @@ class CMSModule
   /**
    * Sets the current langauge
    */
-  function SetLanguage($lang = '')
+  public function SetLanguage($lang = '')
   {
     if( $lang == '' )
       {
@@ -1651,12 +1648,20 @@ class CMSModule
     $this->curlang = $lang;
   }
 
+  /**
+   * Gets the current language
+   */
+  public function GetLanguage()
+  {
+    return $this->curlang;
+  }
+
 	/**
 	 * Sets the default language (usually en_US) for the module.  There
 	 * should be at least a language file for this language if the Lang()
 	 * function is used at all.
 	 */
-	function DefaultLanguage()
+	public function DefaultLanguage()
 	{
 		return 'en_US';
 	}
@@ -1668,7 +1673,7 @@ class CMSModule
 	 * @param array Corresponding params for string that require replacement.
 	 *		  These params use the vsprintf command and it's style of replacement.
 	 */
-	function Lang()
+	public function Lang()
 	{
 		$this->LoadLangMethods();
 
@@ -1686,7 +1691,7 @@ class CMSModule
 	 * ------------------------------------------------------------------
 	 */
 
-	function ListTemplates($modulename = '')
+	public function ListTemplates($modulename = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_ListTemplates($this, $modulename);
@@ -1696,7 +1701,7 @@ class CMSModule
 	 * Returns a database saved template.  This should be used for admin functions only, as it doesn't
 	 * follow any smarty caching rules.
 	 */
-	function GetTemplate($tpl_name, $modulename = '')
+	public function GetTemplate($tpl_name, $modulename = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_GetTemplate($this, $tpl_name, $modulename);
@@ -1706,37 +1711,37 @@ class CMSModule
 	 * Returns contents of the template that resides in modules/ModuleName/templates/{template_name}.tpl
 	 * Code adapted from the Guestbook module
 	 */
-	function GetTemplateFromFile($template_name)
+	public function GetTemplateFromFile($template_name)
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_GetTemplateFromFile($this, $template_name);
 	}
 
-	function SetTemplate($tpl_name, $content, $modulename = '')
+	public function SetTemplate($tpl_name, $content, $modulename = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_SetTemplate($this, $tpl_name, $content, $modulename);
 	}
 
-	function DeleteTemplate($tpl_name = '', $modulename = '')
+	public function DeleteTemplate($tpl_name = '', $modulename = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_DeleteTemplate($this, $tpl_name, $modulename);
 	}
 
-	function IsFileTemplateCached($tpl_name, $designation = '', $timestamp = '', $cacheid = '')
+	public function IsFileTemplateCached($tpl_name, $designation = '', $timestamp = '', $cacheid = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_IsFileTemplateCached($this, $tpl_name, $designation, $timestamp, $cacheid);
 	}
 
-	function ProcessTemplate($tpl_name, $designation = '', $cache = false, $cacheid = '')
+	public function ProcessTemplate($tpl_name, $designation = '', $cache = false, $cacheid = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_ProcessTemplate($this, $tpl_name, $designation, $cache = false, $cacheid);
 	}
 
-	function IsDatabaseTemplateCached($tpl_name, $designation = '', $timestamp = '')
+	public function IsDatabaseTemplateCached($tpl_name, $designation = '', $timestamp = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_IsDatabaseTemplateCached($this, $tpl_name, $designation, $timestamp);
@@ -1746,26 +1751,26 @@ class CMSModule
 	 * Given a template in a variable, this method processes it through smarty
 	 * note, there is no caching involved.
 	 */
-	function ProcessTemplateFromData( $data )
+	public function ProcessTemplateFromData( $data )
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_ProcessTemplateFromData($this, $data);
 	}
 
-	function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false, $modulename = '')
+	public function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false, $modulename = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_ProcessTemplateFromDatabase($this, $tpl_name, $designation, $cache, $modulename);
 	}
 
-	function ListUserTags()
+	public function ListUserTags()
 	{
 		global $gCms;
 		$usertagops =& $gCms->GetUserTagOperations();
 		return $usertagops->ListUserTags();
 	}
 
-	function CallUserTag($name, $params = array())
+	public function CallUserTag($name, $params = array())
 	{
 		global $gCms;
 		$usertagops =& $gCms->GetUserTagOperations();
@@ -1777,12 +1782,12 @@ class CMSModule
 	 * Tab Functions
 	 * ------------------------------------------------------------------
 	 */
-	function StartTabHeaders()
+	public function StartTabHeaders()
 	{
 		return '<div id="page_tabs">';
 	}
 
-	function SetTabHeader($tabid,$title,$active=false)
+	public function SetTabHeader($tabid,$title,$active=false)
 	{
 		$a="";
 		if (TRUE == $active)
@@ -1793,22 +1798,22 @@ class CMSModule
 	  return '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
 	}
 
-	function EndTabHeaders()
+	public function EndTabHeaders()
 	{
 		return "</div><!-- EndTabHeaders -->";
 	}
 
-	function StartTabContent()
+	public function StartTabContent()
 	{
 		return '<div class="clearb"></div><div id="page_content">';
 	}
 
-	function EndTabContent()
+	public function EndTabContent()
 	{
 		return '</div> <!-- EndTabContent -->';
 	}
 
-	function StartTab($tabid, $params = array())
+	public function StartTab($tabid, $params = array())
 	{
 		if (FALSE == empty($this->mActiveTab) && $tabid == $this->mActiveTab && FALSE == empty($params['tab_message'])) {
 			$message = $this->ShowMessage($this->Lang($params['tab_message']));
@@ -1818,7 +1823,7 @@ class CMSModule
 		return '<div id="' . strtolower(str_replace(' ', '_', $tabid)) . '_c">'.$message;
 	}
 
-	function EndTab()
+	public function EndTab()
 	{
 		return '</div> <!-- EndTab -->';
 	}
@@ -1834,7 +1839,7 @@ class CMSModule
 	  * Module can spit out extra CSS for the admin side
 	  *
 	  */
-	function AdminStyle()
+	public function AdminStyle()
 	{
 	  return '';
 	}
@@ -1844,7 +1849,7 @@ class CMSModule
 	 *
 	 * @param string Value to set the content-type header too
 	 */
-	function SetContentType($contenttype)
+	public function SetContentType($contenttype)
 	{
 		$variables = &$this->cms->variables;
 		$variables['content-type'] = $contenttype;
@@ -1854,7 +1859,7 @@ class CMSModule
 	 * Put an event into the audit (admin) log.	 This should be
 	 * done on most admin events for consistency.
 	 */
-	function Audit($itemid, $itemname, $action)
+	public function Audit($itemid, $itemname, $action)
 	{
 		#$userid = get_userid();
 		#$username = $_SESSION["cms_admin_username"];
@@ -1867,7 +1872,7 @@ class CMSModule
 	 * @param string Name of the permission to create
 	 * @param string Description of the permission
 	 */
-	function CreatePermission($permission_name, $permission_text)
+	public function CreatePermission($permission_name, $permission_text)
 	{
 		global $gCms;
 		$db =& $gCms->GetDB();
@@ -1889,7 +1894,7 @@ class CMSModule
 	 *
 	 * @param string The name of the permission to check against the current user
 	 */
-	function CheckPermission($permission_name)
+	public function CheckPermission($permission_name)
 	{
 		$userid = get_userid();
 		return check_permission($userid, $permission_name);
@@ -1901,7 +1906,7 @@ class CMSModule
 	 *
 	 * @param string The name of the permission to remove
 	 */
-	function RemovePermission($permission_name)
+	public function RemovePermission($permission_name)
 	{
 	  cms_mapi_remove_permission($permission_name);
 	}
@@ -1912,7 +1917,7 @@ class CMSModule
 	 * @param string The name of the preference to check
 	 * @param string The default value, just in case it doesn't exist
 	 */
-	function GetPreference($preference_name, $defaultvalue='')
+	public function GetPreference($preference_name, $defaultvalue='')
 	{
 		return get_site_preference($this->GetName() . "_mapi_pref_" . $preference_name, $defaultvalue);
 	}
@@ -1923,7 +1928,7 @@ class CMSModule
 	 * @param string The name of the preference to set
 	 * @param string The value to set it to
 	 */
-	function SetPreference($preference_name, $value)
+	public function SetPreference($preference_name, $value)
 	{
 	  return set_site_preference($this->GetName() . "_mapi_pref_" . $preference_name, $value);
 	}
@@ -1934,7 +1939,7 @@ class CMSModule
 	 *
 	 * @param string The name of the preference to remove
 	 */
-	function RemovePreference($preference_name='')
+	public function RemovePreference($preference_name='')
 	{
 	  if( $preference_name == '' )
 	    {
@@ -1953,7 +1958,7 @@ class CMSModule
 	 * @param string the amount of items to list per page
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 */
-	function CreatePagination($id, $action, $returnid, $page, $totalrows, $limit, $inline=false)
+	public function CreatePagination($id, $action, $returnid, $page, $totalrows, $limit, $inline=false)
 	{
 		$this->LoadMiscMethods();
 		return cms_module_CreatePagination($this, $id, $action, $returnid, $page, $totalrows, $limit, $inline);
@@ -1965,7 +1970,7 @@ class CMSModule
      *
      * @param message - Message to be shown
      */
-    function ShowMessage($message)
+    public function ShowMessage($message)
     {
 		global $gCms;
 		if (isset($gCms->variables['admintheme']))
@@ -1982,7 +1987,7 @@ class CMSModule
      *
      * @param errors - array or string of errors to be shown
      */
-    function ShowErrors($errors)
+    public function ShowErrors($errors)
     {
         global $gCms;
         if (isset($gCms->variables['admintheme']))
@@ -2009,7 +2014,7 @@ class CMSModule
 	*
 	* @returns mixed If successful, true.  If it fails, false.
 	*/
-	function AddEventHandler( $modulename, $eventname, $removable = true )
+	public function AddEventHandler( $modulename, $eventname, $removable = true )
 	{
 		Events::AddEventHandler( $modulename, $eventname, false, $this->GetName(), $removable );
 	}
@@ -2022,7 +2027,7 @@ class CMSModule
 	 *
 	 * @returns nothing
 	 */
-	function CreateEvent( $eventname )
+	public function CreateEvent( $eventname )
 	{
 		Events::CreateEvent($this->GetName(), $eventname);
 	}
@@ -2039,7 +2044,7 @@ class CMSModule
 	 *
 	 * @returns boolean
 	 */
-	function DoEvent( $originator, $eventname, &$params )
+	public function DoEvent( $originator, $eventname, &$params )
 	{
 		if ($originator != '' && $eventname != '')
 		{
@@ -2070,7 +2075,7 @@ class CMSModule
 	 *
 	 * @returns text string
 	 */
-	function GetEventDescription( $eventname )
+	public function GetEventDescription( $eventname )
 	{
 		return "";
 	}
@@ -2083,7 +2088,7 @@ class CMSModule
 	 *
 	 * @param string The name of the event
 	 */
-	function GetEventHelp( $eventname )
+	public function GetEventHelp( $eventname )
 	{
 		return "";
 	}
@@ -2093,7 +2098,7 @@ class CMSModule
 	 * A callback indicating if this module has a DoEvent method to
 	 * handle incoming events.
          */
-	function HandlesEvents()
+	public function HandlesEvents()
 	{
 		return false;
 	}
@@ -2109,7 +2114,7 @@ class CMSModule
 	 *
 	 * @returns nothing
 	 */
-	function RemoveEvent( $eventname )
+	public function RemoveEvent( $eventname )
 	{
 		Events::RemoveEvent($this->GetName(), $eventname);
 	}
@@ -2125,7 +2130,7 @@ class CMSModule
 	 *
 	 * @returns nothing
 	 */
-	function RemoveEventHandler( $modulename, $eventname )
+	public function RemoveEventHandler( $modulename, $eventname )
 	{
 		Events::RemoveEventHandler($modulename, $eventname, false, $this->GetName());
 	}
@@ -2140,7 +2145,7 @@ class CMSModule
 	 *
 	 * @returns nothing
 	 */
-	function SendEvent( $eventname, $params )
+	public function SendEvent( $eventname, $params )
 	{
 		Events::SendEvent($this->GetName(), $eventname, $params);
 	}
@@ -2150,7 +2155,7 @@ class CMSModule
 	 * 
 	 * @returns dashboard-content
 	 */
-	function GetDashboardOutput() 
+	public function GetDashboardOutput() 
         {
 	  return '';
 	}
@@ -2162,7 +2167,7 @@ class CMSModule
 	 * @returns a stdClass object with two properties.... priority (1->3)... and
 	 * html, which indicates the text to display for the Notification.
 	 */
-	function GetNotificationOutput($priority=2) 
+	public function GetNotificationOutput($priority=2) 
         {
 	  return '';
 	}

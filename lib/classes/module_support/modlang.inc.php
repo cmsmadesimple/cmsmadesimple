@@ -50,11 +50,12 @@ function cms_module_Lang(&$modinstance)
 		return '';
 	}
 
-	if ($modinstance->curlang == '' && isset($gCms->current_language))
+	if ($modinstance->GetLanguage() == '' && 
+	    isset($gCms->current_language))
 	{
-		$modinstance->curlang = $gCms->current_language;
+	  $modinstance->SetLanguage($gCms->current_language);
 	}
-	$ourlang = $modinstance->curlang;
+	$ourlang = $modinstance->GetLanguage();
 
 	#Load the language if it's not loaded
 	if (!isset($modinstance->langhash[$ourlang]) || !is_array($modinstance->langhash[$ourlang]) || 

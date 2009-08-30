@@ -28,6 +28,7 @@
 function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 {
 	global $gCms;
+	$config =& $gCms->GetConfig();
 
 	$formcount = 1;
 	$variables = &$gCms->variables;
@@ -73,7 +74,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 		$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />'."\n";
 		if ($inline)
 		{
-			$text .= '<input type="hidden" name="'.$modinstance->cms->config['query_var'].'" value="'.$returnid.'" />'."\n";
+			$text .= '<input type="hidden" name="'.$config['query_var'].'" value="'.$returnid.'" />'."\n";
 		}
 	}
 	else
