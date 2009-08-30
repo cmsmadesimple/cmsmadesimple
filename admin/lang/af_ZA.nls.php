@@ -31,25 +31,25 @@
 
 
 #Native language name
-$nls['language']['af_ZA'] = 'Afrikaans';
-$nls['englishlang']['af_ZA'] = 'Africaans';
+$cms_nls['language']['af_ZA'] = 'Afrikaans';
+$cms_nls['englishlang']['af_ZA'] = 'Africaans';
 
 #Possible aliases for language
-$nls['alias']['af'] = 'af_ZA';
-$nls['alias']['afr'] = 'af_ZA';
-$nls['alias']['afrikaans'] = 'af_ZA';
-$nls['alias']['af_ZA.ISO8859-1'] = 'af_ZA' ;
+$cms_nls['alias']['af'] = 'af_ZA';
+$cms_nls['alias']['afr'] = 'af_ZA';
+$cms_nls['alias']['afrikaans'] = 'af_ZA';
+$cms_nls['alias']['af_ZA.ISO8859-1'] = 'af_ZA' ;
 
 #Encoding of the language
-$nls['encoding']['af_ZA'] = 'UTF-8';
+$cms_nls['encoding']['af_ZA'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['af_ZA'] = array(dirname(__FILE__).'/af_ZA/admin.inc.php');
+$cms_nls['file']['af_ZA'] = array(dirname(__FILE__).'/af_ZA/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
-$nls['htmlarea']['af_ZA'] = 'en';
+$cms_nls['htmlarea']['af_ZA'] = 'en';
 
 
 

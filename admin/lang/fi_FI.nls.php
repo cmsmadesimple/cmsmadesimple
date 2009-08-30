@@ -30,26 +30,26 @@
 #Maintained by: Jani Mikkonen <jani@mikkonen.org>
 
 #Native language name
-$nls['language']['fi_FI'] = 'Suomi';
-$nls['englishlang']['fi_FI'] = 'Finnish';
+$cms_nls['language']['fi_FI'] = 'Suomi';
+$cms_nls['englishlang']['fi_FI'] = 'Finnish';
 
 #Possible aliases for language
-$nls['alias']['fi'] = 'fi_FI';
-$nls['alias']['finnish'] = 'fi_FI' ;
-$nls['alias']['fin'] = 'fi_FI' ;
-$nls['alias']['fi_FI.ISO8859-1'] = 'fi_FI' ;
-$nls['alias']['fi_FI.ISO8859-15'] = 'fi_FI' ;
+$cms_nls['alias']['fi'] = 'fi_FI';
+$cms_nls['alias']['finnish'] = 'fi_FI' ;
+$cms_nls['alias']['fin'] = 'fi_FI' ;
+$cms_nls['alias']['fi_FI.ISO8859-1'] = 'fi_FI' ;
+$cms_nls['alias']['fi_FI.ISO8859-15'] = 'fi_FI' ;
 
 #Encoding of the language
-$nls['encoding']['fi_FI'] = 'UTF-8';
+$cms_nls['encoding']['fi_FI'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['fi_FI'] = array(dirname(__FILE__).'/fi_FI/admin.inc.php');
+$cms_nls['file']['fi_FI'] = array(dirname(__FILE__).'/fi_FI/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['fi_FI'] = 'en';
+$cms_nls['htmlarea']['fi_FI'] = 'en';
 
 ?>

@@ -30,24 +30,24 @@
 #Maintained by: Daniel Vives < daniel.vives [at] catalonia [dot] net >
 
 #Native language name
-$nls['language']['ca_ES'] = 'Catal&agrave;';
-$nls['englishlang']['ca_ES'] = 'Catalan';
+$cms_nls['language']['ca_ES'] = 'Catal&agrave;';
+$cms_nls['englishlang']['ca_ES'] = 'Catalan';
 
 #Possible aliases for language
-$nls['alias']['ca'] = 'ca_ES';
-$nls['alias']['cat'] = 'ca_ES' ;
-$nls['alias']['catal&agrave;'] = 'ca_ES' ;
-$nls['alias']['ca_ES.ISO8859-1'] = 'ca_ES' ;
+$cms_nls['alias']['ca'] = 'ca_ES';
+$cms_nls['alias']['cat'] = 'ca_ES' ;
+$cms_nls['alias']['catal&agrave;'] = 'ca_ES' ;
+$cms_nls['alias']['ca_ES.ISO8859-1'] = 'ca_ES' ;
 
 #Encoding of the language
-$nls['encoding']['ca_ES'] = 'UTF-8';
+$cms_nls['encoding']['ca_ES'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['ca_ES'] = array(dirname(__FILE__).'/ca_ES/admin.inc.php');
+$cms_nls['file']['ca_ES'] = array(dirname(__FILE__).'/ca_ES/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['ca_ES'] = 'en';
+$cms_nls['htmlarea']['ca_ES'] = 'en';
 ?>

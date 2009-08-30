@@ -31,26 +31,26 @@
 #This is the default language
 
 #Native language name
-$nls['language']['ro_RO'] = 'Română';
-$nls['englishlang']['ro_RO'] = 'Romanian';
+$cms_nls['language']['ro_RO'] = 'Română';
+$cms_nls['englishlang']['ro_RO'] = 'Romanian';
 
 #Possible aliases for language
-$nls['alias']['ro'] = 'ro_RO';
-$nls['alias']['Română'] = 'ro_RO' ;
-$nls['alias']['rom'] = 'ro_RO' ;
-$nls['alias']['romanian'] = 'ro_RO' ;
-$nls['alias']['ro_RO.ISO8859-2'] = 'ro_RO' ;
-$nls['alias']['ro_RO.ISO8859-16'] = 'ro_RO' ;
+$cms_nls['alias']['ro'] = 'ro_RO';
+$cms_nls['alias']['Română'] = 'ro_RO' ;
+$cms_nls['alias']['rom'] = 'ro_RO' ;
+$cms_nls['alias']['romanian'] = 'ro_RO' ;
+$cms_nls['alias']['ro_RO.ISO8859-2'] = 'ro_RO' ;
+$cms_nls['alias']['ro_RO.ISO8859-16'] = 'ro_RO' ;
 
 #Encoding of the language
-$nls['encoding']['ro_RO'] = 'UTF-8';
+$cms_nls['encoding']['ro_RO'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['ro_RO'] = array(dirname(__FILE__).'/ro_RO/admin.inc.php');
+$cms_nls['file']['ro_RO'] = array(dirname(__FILE__).'/ro_RO/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['ro_RO'] = 'ro';
+$cms_nls['htmlarea']['ro_RO'] = 'ro';
 ?>

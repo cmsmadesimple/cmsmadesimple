@@ -28,27 +28,27 @@
 #Finnish
 
 #Native language name
-$nls['language']['et_EE'] = 'Eesti';
-$nls['englishlang']['et_EE'] = 'Estonian';
+$cms_nls['language']['et_EE'] = 'Eesti';
+$cms_nls['englishlang']['et_EE'] = 'Estonian';
 
 #Possible aliases for language
-$nls['alias']['et'] = 'et_EE';
-$nls['alias']['estonian'] = 'et_EE' ;
-$nls['alias']['eti'] = 'et_EE' ;
-$nls['alias']['et_EE.ISO8859-1'] = 'et_EE' ;
-$nls['alias']['et_EE.ISO8859-15'] = 'et_EE' ;
-$nls['alias']['et_EE.UTF-8'] = 'et_EE' ;
+$cms_nls['alias']['et'] = 'et_EE';
+$cms_nls['alias']['estonian'] = 'et_EE' ;
+$cms_nls['alias']['eti'] = 'et_EE' ;
+$cms_nls['alias']['et_EE.ISO8859-1'] = 'et_EE' ;
+$cms_nls['alias']['et_EE.ISO8859-15'] = 'et_EE' ;
+$cms_nls['alias']['et_EE.UTF-8'] = 'et_EE' ;
 
 #Encoding of the language
-$nls['encoding']['et_EE'] = "UTF-8";
+$cms_nls['encoding']['et_EE'] = "UTF-8";
 
 #Location of the file(s)
-$nls['file']['et_EE'] = array(dirname(__FILE__).'/et_EE/admin.inc.php');
+$cms_nls['file']['et_EE'] = array(dirname(__FILE__).'/et_EE/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['et_EE'] = 'en';
+$cms_nls['htmlarea']['et_EE'] = 'en';
 
 ?>

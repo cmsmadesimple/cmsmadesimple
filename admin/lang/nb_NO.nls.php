@@ -30,28 +30,28 @@
 #Maintained by: Jon Arne Holm <jaholm@start.no>
 
 #Native language name
-$nls['language']['nb_NO'] = 'Norsk bokmål';
-$nls['englishlang']['nb_NO'] = 'Norwegian bokmål';
+$cms_nls['language']['nb_NO'] = 'Norsk bokmål';
+$cms_nls['englishlang']['nb_NO'] = 'Norwegian bokmål';
 
 #Possible aliases for language
-$nls['alias']['no'] = 'nb_NO';
-$nls['alias']['norwegian'] = 'nb_NO' ;
-$nls['alias']['nor'] = 'nb_NO' ;
-$nls['alias']['nb_NO'] = 'nb_NO' ;
-$nls['alias']['no_NO'] = 'nb_NO' ;
-$nls['alias']['nb_NO.ISO8859-1'] = 'nb_NO' ;
-$nls['alias']['nb_NO.ISO8859-15'] = 'nb_NO' ;
+$cms_nls['alias']['no'] = 'nb_NO';
+$cms_nls['alias']['norwegian'] = 'nb_NO' ;
+$cms_nls['alias']['nor'] = 'nb_NO' ;
+$cms_nls['alias']['nb_NO'] = 'nb_NO' ;
+$cms_nls['alias']['no_NO'] = 'nb_NO' ;
+$cms_nls['alias']['nb_NO.ISO8859-1'] = 'nb_NO' ;
+$cms_nls['alias']['nb_NO.ISO8859-15'] = 'nb_NO' ;
 
 #Encoding of the language
-$nls['encoding']['nb_NO'] = 'UTF-8';
+$cms_nls['encoding']['nb_NO'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['nb_NO'] = array(dirname(__FILE__).'/nb_NO/admin.inc.php');
+$cms_nls['file']['nb_NO'] = array(dirname(__FILE__).'/nb_NO/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['nb_NO'] = 'en';
+$cms_nls['htmlarea']['nb_NO'] = 'en';
 
 ?>

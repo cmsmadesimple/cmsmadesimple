@@ -31,23 +31,23 @@
 
 #Native language name
 #NOTE: Enocde me with HTML escape chars like &#231; or &ntilde; so I work on every page
-$nls['language']['ru_RU'] = 'Русский';
-$nls['englishlang']['ru_RU'] = 'Russian';
+$cms_nls['language']['ru_RU'] = 'Русский';
+$cms_nls['englishlang']['ru_RU'] = 'Russian';
 
 #Possible aliases for language
-$nls['alias']['ru'] = 'ru_RU';
-$nls['alias']['russian'] = 'ru_RU' ;
-$nls['alias']['rus'] = 'ru_RU' ;
+$cms_nls['alias']['ru'] = 'ru_RU';
+$cms_nls['alias']['russian'] = 'ru_RU' ;
+$cms_nls['alias']['rus'] = 'ru_RU' ;
 
 #Encoding of the language
-$nls['encoding']['ru_RU'] = "utf-8";
+$cms_nls['encoding']['ru_RU'] = "utf-8";
 
 #Location of the file(s)
-$nls['file']['ru_RU'] = array(dirname(__FILE__).'/ru_RU/admin.inc.php');
+$cms_nls['file']['ru_RU'] = array(dirname(__FILE__).'/ru_RU/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['ru_RU'] = 'ru';
+$cms_nls['htmlarea']['ru_RU'] = 'ru';
 ?>

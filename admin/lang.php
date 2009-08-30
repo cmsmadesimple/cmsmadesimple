@@ -24,19 +24,7 @@ $current_language = isset($frontendlang) ? $frontendlang : 'en_US';
 #Only do language stuff for admin pages
 if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE))
 {
-	$nls = array();
 	$lang = array();
-
-	#Read in all current languages...
-	$dir = dirname(__FILE__)."/lang";
-
-	$handle = opendir($dir);
-	while (false!==($file = readdir($handle))) {
-		if (is_file("$dir/$file") && strpos($file, "nls.php") != 0) {
-			include("$dir/$file");
-		}
-	}
-	closedir($handle);
 
 	#Check to see if there is already a language in use...
 	if (isset($_POST["default_cms_lang"]))
@@ -86,31 +74,10 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE)
 			#Figure out default language and set it if it exists
 			if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) 
 			{
-				$alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
-				if (strpos($alllang, ";") !== FALSE)
-					$alllang = substr($alllang,0,strpos($alllang, ";"));
-				$langs = explode(",", $alllang);
-
-				foreach ($langs as $onelang)
+			  $tmp = CmsNLS::to_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+			  if( $tmp )
 				{
-					#Check to see if lang exists...
-					if (isset($nls['language'][$onelang]))
-					{
-						$current_language = $onelang;
-						setcookie("cms_language", $onelang);
-						break;
-					}
-					#Check to see if alias exists...
-					if (isset($nls['alias'][$onelang]))
-					{
-						$alias = $nls['alias'][$onelang];
-						if (isset($nls['language'][$alias]))
-						{
-							$current_language = $alias;
-							setcookie("cms_language", $alias);
-							break;
-						}
-					}
+				  setcookie('cms_language',$tmp);
 				}
 			}
 		}

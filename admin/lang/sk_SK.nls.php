@@ -31,26 +31,26 @@
 #This is the default language
 
 #Native language name
-$nls['language']['sk_SK'] = 'Slovenčina';
-$nls['englishlang']['sk_SK'] = 'Slovak';
+$cms_nls['language']['sk_SK'] = 'Slovenčina';
+$cms_nls['englishlang']['sk_SK'] = 'Slovak';
 
 #Possible aliases for language
-$nls['alias']['sk'] = 'sk_SK';
-$nls['alias']['slovak'] = 'sk_SK' ;
-$nls['alias']['svk'] = 'sk_SK' ;
-$nls['alias']['sk_SK'] = 'sk_SK' ;
-$nls['alias']['sk_SK.WINDOWS-1250'] = 'sk_SK' ;
-$nls['alias']['sk_SK.ISO8859-2'] = 'sk_SK' ;
+$cms_nls['alias']['sk'] = 'sk_SK';
+$cms_nls['alias']['slovak'] = 'sk_SK' ;
+$cms_nls['alias']['svk'] = 'sk_SK' ;
+$cms_nls['alias']['sk_SK'] = 'sk_SK' ;
+$cms_nls['alias']['sk_SK.WINDOWS-1250'] = 'sk_SK' ;
+$cms_nls['alias']['sk_SK.ISO8859-2'] = 'sk_SK' ;
 
 #Encoding of the language
-$nls['encoding']['sk_SK'] = "UTF-8";
+$cms_nls['encoding']['sk_SK'] = "UTF-8";
 
 #Location of the file(s)
-$nls['file']['sk_SK'] = array(dirname(__FILE__).'/sk_SK/admin.inc.php');
+$cms_nls['file']['sk_SK'] = array(dirname(__FILE__).'/sk_SK/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['sk_SK'] = 'sk';
+$cms_nls['htmlarea']['sk_SK'] = 'sk';
 ?>

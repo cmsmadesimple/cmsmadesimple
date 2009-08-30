@@ -31,18 +31,18 @@
 #This is the default language
 
 #Native language name
-$nls['language']['zh_TW'] = '&#32321;&#39636;&#20013;&#25991;';
-$nls['englishlang']['zh_TW'] = 'Traditional Chinese';
+$cms_nls['language']['zh_TW'] = '&#32321;&#39636;&#20013;&#25991;';
+$cms_nls['englishlang']['zh_TW'] = 'Traditional Chinese';
 
 #Possible aliases for language
-$nls['alias']['chinese'] = 'zh_TW' ;
-$nls['alias']['zh_TW.Big5'] = 'zh_TW' ;
+$cms_nls['alias']['chinese'] = 'zh_TW' ;
+$cms_nls['alias']['zh_TW.Big5'] = 'zh_TW' ;
 
 #Encoding of the language
-$nls['encoding']['zh_TW'] = 'UTF-8';
+$cms_nls['encoding']['zh_TW'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['zh_TW'] = array(dirname(__FILE__).'/zh_TW/admin.inc.php');
+$cms_nls['file']['zh_TW'] = array(dirname(__FILE__).'/zh_TW/admin.inc.php');
 
-$nls['htmlarea']['zh_TW'] = 'en';
+$cms_nls['htmlarea']['zh_TW'] = 'en';
 ?>

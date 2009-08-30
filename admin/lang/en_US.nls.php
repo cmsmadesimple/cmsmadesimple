@@ -32,25 +32,26 @@
 
 #Native language name
 #NOTE: Enocde me with HTML escape chars like &#231; or &ntilde; so I work on every page
-$nls['language']['en_US'] = 'English';
+$cms_nls['language']['en_US'] = 'English';
 
 #Possible aliases for language
-$nls['alias']['en'] = 'en_US';
-$nls['alias']['english'] = 'en_US' ;
-$nls['alias']['eng'] = 'en_US' ;
-$nls['alias']['en_CA'] = 'en_US' ;
-$nls['alias']['en_GB'] = 'en_US' ;
-$nls['alias']['en_US.ISO8859-1'] = 'en_US' ;
+$cms_nls['alias']['en'] = 'en_US';
+$cms_nls['alias']['english'] = 'en_US' ;
+$cms_nls['alias']['eng'] = 'en_US' ;
+$cms_nls['alias']['en-us'] = 'en_US';
+$cms_nls['alias']['en_CA'] = 'en_US' ;
+$cms_nls['alias']['en_GB'] = 'en_US' ;
+$cms_nls['alias']['en_US.ISO8859-1'] = 'en_US' ;
 
 #Encoding of the language
-$nls['encoding']['en_US'] = 'UTF-8';
+$cms_nls['encoding']['en_US'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['en_US'] = array(dirname(__FILE__).'/en_US/admin.inc.php');
+$cms_nls['file']['en_US'] = array(dirname(__FILE__).'/en_US/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['en_US'] = 'en';
+$cms_nls['htmlarea']['en_US'] = 'en';
 ?>

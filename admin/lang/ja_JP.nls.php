@@ -29,25 +29,25 @@
 #Translation: Nuspace Pty Ltd <http://www.nuspace.net/>
 
 #Native language name
-$nls['language']['ja_JP'] = '日本語';
-$nls['englishlang']['ja_JP'] = 'Japanese';
+$cms_nls['language']['ja_JP'] = '日本語';
+$cms_nls['englishlang']['ja_JP'] = 'Japanese';
 
 #Possible aliases for language
-$nls['alias']['ja'] = 'ja_JP';
-$nls['alias']['japanese'] = 'ja_JP' ;
-$nls['alias']['ja_JP.EUC-JP'] = 'ja_JP' ;
-$nls['alias']['ja_JP.Shift_JIS'] = 'ja_JP' ;
-$nls['alias']['ja_JP.UTF-8'] = 'ja_JP' ;
+$cms_nls['alias']['ja'] = 'ja_JP';
+$cms_nls['alias']['japanese'] = 'ja_JP' ;
+$cms_nls['alias']['ja_JP.EUC-JP'] = 'ja_JP' ;
+$cms_nls['alias']['ja_JP.Shift_JIS'] = 'ja_JP' ;
+$cms_nls['alias']['ja_JP.UTF-8'] = 'ja_JP' ;
 
 #Encoding of the language
-$nls['encoding']['ja_JP'] = 'UTF-8';
+$cms_nls['encoding']['ja_JP'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['ja_JP'] = array(dirname(__FILE__).'/ja_JP/admin.inc.php');
+$cms_nls['file']['ja_JP'] = array(dirname(__FILE__).'/ja_JP/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['ja_JP'] = 'ja';
+$cms_nls['htmlarea']['ja_JP'] = 'ja';
 ?>

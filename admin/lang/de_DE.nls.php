@@ -31,24 +31,24 @@
 #This is the default language
 
 #Native language name
-$nls['language']['de_DE'] = 'Deutsch';
-$nls['englishlang']['de_DE'] = 'German';
+$cms_nls['language']['de_DE'] = 'Deutsch';
+$cms_nls['englishlang']['de_DE'] = 'German';
 
 #Possible aliases for language
-$nls['alias']['de'] = 'de_DE';
-$nls['alias']['deutsch'] = 'de_DE' ;
-$nls['alias']['deu'] = 'de_DE' ;
-$nls['alias']['de_DE.ISO8859-1'] = 'de_DE' ;
+$cms_nls['alias']['de'] = 'de_DE';
+$cms_nls['alias']['deutsch'] = 'de_DE' ;
+$cms_nls['alias']['deu'] = 'de_DE' ;
+$cms_nls['alias']['de_DE.ISO8859-1'] = 'de_DE' ;
 
 #Encoding of the language
-$nls['encoding']['de_DE'] = 'UTF-8';
+$cms_nls['encoding']['de_DE'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['de_DE'] = array(dirname(__FILE__).'/de_DE/admin.inc.php');
+$cms_nls['file']['de_DE'] = array(dirname(__FILE__).'/de_DE/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['de_DE'] = 'de';
+$cms_nls['htmlarea']['de_DE'] = 'de';
 ?>
