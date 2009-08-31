@@ -1036,7 +1036,7 @@ class CMSModule
 	 */
 	public function DoAction($name, $id, $params, $returnid='')
 	{
-	  $smarty->assign($this->GetName(),$this);
+	  $this->smarty->assign($this->GetName(),$this);
 
 		if ($name != '')
 		{
