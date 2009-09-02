@@ -34,6 +34,7 @@ $cms_nls['language']['nb_NO'] = 'Norsk bokmål';
 $cms_nls['englishlang']['nb_NO'] = 'Norwegian bokmål';
 
 #Possible aliases for language
+$cms_nls['alias']['nb'] = 'nb_NO';
 $cms_nls['alias']['no'] = 'nb_NO';
 $cms_nls['alias']['norwegian'] = 'nb_NO' ;
 $cms_nls['alias']['nor'] = 'nb_NO' ;

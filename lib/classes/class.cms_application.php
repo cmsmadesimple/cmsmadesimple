@@ -127,7 +127,7 @@ class CmsApplication extends CmsObject
 	function __construct()
 	{
 		$this->cmssystemmodules = 
-		  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'TinyMCE', 'Printing', 'ThemeManager' );
+		  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'MicroTiny', 'SimplePrinting', 'ThemeManager' );
 		$this->modules = array();
 		$this->errors = array();
 		$this->nls = array();

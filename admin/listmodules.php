@@ -460,7 +460,6 @@ else
 		{
 		  $rec['actioncol'][]  = "<a href=\"{$thisurl}&amp;action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$rec['instance']->GetVersion()."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('upgradeconfirm'),true)."');\">".lang('upgrade')."</a>";
 		}
-	      $rec['xmlcol'] = '&nbsp;';
 	    }
 	  else // Must be installed
 	    {
@@ -494,6 +493,7 @@ else
 		  $rec['statuscol'][] = lang('cantremove');
 		  $rec['actioncol'][] = "<a href=\"{$thisurl}&amp;action=chmod&amp;module=".$key."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('changepermissionsconfirm'),true)."');\">".lang('changepermissions')."</a>";
 		}
+
 	    } // installed
 
 // 	  $rec['actioncol'] = implode('<br/>',$rec['actioncol']);

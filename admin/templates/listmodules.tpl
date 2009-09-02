@@ -61,7 +61,7 @@
       {/if}
     </td>
     <td><a href="{$onemodule.about_url}" title="{'about'|lang}">{'about'|lang}</a></td>
-    <td>{$onemodule.export}</td>
+    <td>{if isset($onemodule.xml_url)}<a href="{$onemodule.xml_url}"><img src="../images/cms/xml_rss.gif" alt="{'export'|lang}"</a>{/if}</td>
   </tr>
   {/foreach}
   <tbody>
