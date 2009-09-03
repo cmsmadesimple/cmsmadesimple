@@ -153,7 +153,7 @@ class ErrorPage extends Content
       {
 	global $gCms;
 	$contentops =& $gCms->GetContentOperations();
-	$error = $contentops->CheckAliasError($this->mAlias, $this->mId);
+	$error = $contentops->CheckAliasError($this->mAlias, $this->Id());
 	if ($error !== FALSE)
 	  {
 	    if ($error == lang('aliasalreadyused'))
