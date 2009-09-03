@@ -118,7 +118,7 @@ class ErrorPage extends Content
 	  foreach ($this->error_types as $code=>$name)
 	    {
 	      $dropdownopts .= '<option value="error' . $code . '"';
-	      if ('error'.$code == $this->mAlias)
+	      if ('error'.$code == $this->Alias())
 		{
 		  $dropdownopts .= ' selected="selected" ';
 		}
