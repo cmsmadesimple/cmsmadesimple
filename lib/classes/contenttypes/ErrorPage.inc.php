@@ -141,19 +141,19 @@ class ErrorPage extends Content
       }
     
     //Do our own alias check
-    if ($this->mAlias == '')
+    if ($this->Alias() == '')
       {
 	$errors[] = lang('nofieldgiven', array(lang('error_type')));
       }
-    else if (in_array($this->mAlias, $this->error_types))
+    else if (in_array($this->Alias(), $this->error_types))
       {
 	$errors[] = lang('nofieldgiven', array(lang('error_type')));
       }
-    else if ($this->mAlias != $this->mOldAlias)
+    else if ($this->Alias() != $this->OldAlias())
       {
 	global $gCms;
 	$contentops =& $gCms->GetContentOperations();
-	$error = $contentops->CheckAliasError($this->mAlias, $this->Id());
+	$error = $contentops->CheckAliasError($this->Alias(), $this->Id());
 	if ($error !== FALSE)
 	  {
 	    if ($error == lang('aliasalreadyused'))

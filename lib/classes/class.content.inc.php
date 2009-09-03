@@ -342,6 +342,12 @@ class ContentBase extends CmsObject
 	return $this->mAlias;
     }
 
+    protected function OldAlias()
+    {
+	return $this->mOldAlias;
+    }
+
+
     /**
      * Returns the Type
      */
