@@ -50,9 +50,12 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	{
 	  $hm =& $gCms->GetHierarchyManager();
 	  $node =& $hm->sureGetNodeById($returnid);
-	  $content_obj =& $node->getContent();
-	  if( $content_obj )
-	    $goto = $content_obj->GetURL();
+	  if( $node )
+	    {
+	      $content_obj =& $node->getContent();
+	      if( $content_obj )
+		$goto = $content_obj->GetURL();
+	    }
 	}
 	if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on")
 	  {

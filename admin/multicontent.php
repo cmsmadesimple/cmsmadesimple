@@ -181,11 +181,11 @@ if (isset($_POST['idlist']))
 		$node =& $hm->sureGetNodeById($id);
 		if (isset($node))
 		{
-			$content =& $node->GetContent(true);
-			if (isset($content))
-			{
-				$nodelist[] =& $content;
-			}
+		  $content =& $node->GetContent(false,false);
+		  if (isset($content))
+		    {
+		      $nodelist[] =& $content;
+		    }
 		}
 	}
 }

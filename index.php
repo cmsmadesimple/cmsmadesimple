@@ -32,7 +32,6 @@ require_once($dirname.'/fileloc.php');
 #echo '</code>';
 
 $starttime = microtime();
-
 clearstatcache();
 
 if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
@@ -66,9 +65,7 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 	exit;
 }
 
-require_once($dirname.'/include.php'); #Makes gCms object
-
-
+require_once($dirname.'/include.php'); 
 // optionally enable output compression (as long as debug mode isn't on)
 if( isset($config['output_compression']) && ($config['output_compression']) && $config['debug'] != true )
   {
@@ -86,7 +83,6 @@ $smarty = &$gCms->smarty;
 $smarty->params = $params;
 
 $page = '';
-
 if (isset($params['mact']))
   {
     $ary = explode(',', cms_htmlentities($params['mact']), 4);
@@ -103,14 +99,11 @@ if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
   }
 else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]]))
   {
-    $page = $_GET[$config["query_var"]];
-  
-}
+    $page = $_GET[$config["query_var"]];    
+  }
 else
    {
-     $calced = cms_calculate_url();
-     if ($calced != '')
-       $page = $calced;
+     $page = cms_calculate_url();
    }
 
 // strip off GET params.
@@ -124,6 +117,7 @@ if ($config['page_extension'] != '' && endswith($page, $config['page_extension']
   {   
     $page = substr($page, 0, strlen($page) - strlen($config['page_extension']));
   }
+
 
 //See if our page matches any predefined routes
 $page = rtrim($page, '/');
@@ -203,15 +197,16 @@ if( ($pos = strrpos($page,'/')) !== FALSE && $matched == false )
 
 
 if ($page == '')
-{
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	$page =& $contentops->GetDefaultContent();
-}
+  {
+    // assume default content
+    global $gCms;
+    $contentops =& $gCms->GetContentOperations();
+    $page =& $contentops->GetDefaultContent();
+  }
 else
-{
+  {
     $page = preg_replace('/\</','',$page);
-}
+  }
 
 $pageinfo = '';
 if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
