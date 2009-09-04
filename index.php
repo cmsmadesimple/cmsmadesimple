@@ -88,44 +88,51 @@ $smarty->params = $params;
 $page = '';
 
 if (isset($params['mact']))
-{
-  $ary = explode(',', cms_htmlentities($params['mact']), 4);
-  $smarty->id = (isset($ary[1])?$ary[1]:'');
-}
+  {
+    $ary = explode(',', cms_htmlentities($params['mact']), 4);
+    $smarty->id = (isset($ary[1])?$ary[1]:'');
+  }
 else
-{
-  $smarty->id = (isset($params['id'])?intval($params['id']):'');
-}
+  {
+    $smarty->id = (isset($params['id'])?intval($params['id']):'');
+  }
 
 if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
-{
-	$page = $params[$smarty->id . 'returnid'];
-}
+  {
+    $page = $params[$smarty->id . 'returnid'];
+  }
 else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]]))
-{
-	$page = $_GET[$config["query_var"]];
-
-    //trim off the extension, if there is one set
-    if ($config['page_extension'] != '' && endswith($page, $config['page_extension']))
-    {   
-        $page = substr($page, 0, strlen($page) - strlen($config['page_extension']));
-    }
+  {
+    $page = $_GET[$config["query_var"]];
+  
 }
 else
-{
-	$calced = cms_calculate_url();
-	if ($calced != '')
-		$page = $calced;
-}
+   {
+     $calced = cms_calculate_url();
+     if ($calced != '')
+       $page = $calced;
+   }
+
+// strip off GET params.
+if( ($tmp = strpos($page,'?')) !== FALSE )
+  {
+    $page = substr($page,0,$tmp);
+  }
+
+// strip off page extension
+if ($config['page_extension'] != '' && endswith($page, $config['page_extension']))
+  {   
+    $page = substr($page, 0, strlen($page) - strlen($config['page_extension']));
+  }
 
 //See if our page matches any predefined routes
 $page = rtrim($page, '/');
+$matched = false;
 if (strpos($page, '/') !== FALSE)
 {
 
 	$routes =& $gCms->variables['routes'];
 	
-	$matched = false;
 	foreach ($routes as $route)
 	{
 		$matches = array();
@@ -183,18 +190,18 @@ if (strpos($page, '/') !== FALSE)
 			$smarty->id = $matches['id'];
 
 			$matched = true;
+			break;
 		}
 	}
-
-	if (!$matched)
-	{
-		$page = substr($page, strrpos($page, '/') + 1);
-		if( ($tmp = strpos($page,'?')) !== FALSE )
-		  {
-		    $page = substr($page,0,$tmp);
-		  }
-	}
 }
+
+// strip from the last / forward
+if( ($pos = strrpos($page,'/')) !== FALSE && $matched == false )
+  {
+    $page = substr($page, $pos + 1);
+  }
+
+
 if ($page == '')
 {
 	global $gCms;
