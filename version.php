@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.6.4";
-$CMS_VERSION_NAME = "Moindou";
+$CMS_VERSION = "1.6.5";
+$CMS_VERSION_NAME = "Poya";
 $CMS_SCHEMA_VERSION = "32";
 
 define('CMS_VERSION', $CMS_VERSION);

@@ -1,3 +1,19 @@
+Version 1.6.5 - Poya
+-----------------------------
+- Fixes a problem with bulk deletion of pages that have inactive children.
+- Fixes many problems with ability to get content objects
+- Fixes the CreateFormStart method to reliably get the page url.
+- Fixes problem with pretty urls (internal or mod_rewrite) and GET parameters on the URL.
+- Printing
+  - Fixes problem with stylesheet not being found if pretty urls were being used
+  - Fixes problem with parsing the URL to print.
+- News
+  - Fixes trivial issue with editing an article that had expiry dates set.
+- MenuManager
+  - Fixes problem with having a default database template
+  - Fixes problem with being able to delete the default database template.
+
+
 Version 1.6.4 - Moindou
 -----------------------------
 - Fixes a problem with the showinmenu option not being available to other content types
