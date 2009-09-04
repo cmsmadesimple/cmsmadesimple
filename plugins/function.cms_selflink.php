@@ -226,7 +226,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 				{
 					for ($i = $number - 1; $i >= 0; $i--)
 					{
-						$content =& $flatcontent[$i]->getContent();
+					  $content =& $flatcontent[$i]->getContent();
 						if (isset($content) && $content != NULL)
 						{
 							if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())
@@ -253,7 +253,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 				{
 					for ($i = $number + 1; $i < count($flatcontent); $i++)
 					{
-						$content =& $flatcontent[$i]->getContent();
+					  $content =& $flatcontent[$i]->getContent();
 						if(isset($content) && $content != NULL)
 						{
 							if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())

@@ -409,7 +409,7 @@ class Tree_Node
     /**
      * Gets the underlying content of this node
      */
-    function &getContent($deep = false,$loadsiblings = true,$loadall = false)
+    function &getContent($deep = false,$loadsiblings = true,$loadall = true)
       {
 	$content = null;
 	

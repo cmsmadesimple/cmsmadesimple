@@ -271,7 +271,7 @@ function setactive($contentid, $active = true)
 	if($permission)
 	  {
 		$node = &$hierManager->getNodeById($contentid);
-		$value =& $node->getContent(false,true,true);
+		$value =& $node->getContent();
 		$value->SetActive($active);
 		$value->Save();
 		global $gCms;
