@@ -92,8 +92,9 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 		}
 
 		if ($root!='##ROOT_NODE##') {
-	# check if the last added is root. if not, add id
-                    $currentNode = &$manager->sureGetNodeByAlias($root);
+			// check if the last added is root. if not, add id
+			$currentNode = &$manager->sureGetNodeByAlias($root);
+
 			if (isset($currentNode))
 			{
 				$content = &$currentNode->getContent();
@@ -102,15 +103,16 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 					$node = &$manager->sureGetNodeByAlias($root);
 					if (isset($node)) {
 						$content = &$node->getContent();
-						if ($content->Id()!=$thispage) 
-                                                      $path[] = $node; # do not add if this is the current page
+						if( $content && $content->Id() != $thispage) 
+							$path[] = $node; # do not add if this is the current page
 					}
 				}
 			}
 		}
 		$classid=isset($params['classid'])?(' class="' . $params['classid'] . '"'):'';
 		$currentclassid=isset($params['currentclassid'])?(' class="' . $params['currentclassid'] . '"'):'';
-	# now create the trail (by iterating through the path we built, backwards)
+
+		// now create the trail (by iterating through the path we built, backwards)
 		for ($i=count($path)-1;$i>=0;$i--) {
 			$node = &$path[$i];
 			if (isset($node))

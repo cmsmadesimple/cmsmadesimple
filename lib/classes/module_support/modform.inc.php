@@ -25,25 +25,6 @@
  * @package		CMS
  */
 
-function __curPageURL() {
- $pageURL = 'http';
- if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
- $pageURL .= "://";
- if ($_SERVER["SERVER_PORT"] != "80") {
-  $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
- } else {
-   $str = $_SERVER['REQUEST_URI'];
-   $pos = strpos($str,'?');
-   if( $pos !== FALSE )
-     {
-       $str = substr($str,0,$pos);
-     }
-   $pageURL .= $_SERVER["SERVER_NAME"].$str;
-   //$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["PHP_SELF"];
- }
- return $pageURL;
-}
-
 function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 {
 	global $gCms;
@@ -70,7 +51,8 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	  $hm =& $gCms->GetHierarchyManager();
 	  $node =& $hm->sureGetNodeById($returnid);
 	  $content_obj =& $node->getContent();
-	  $goto = $content_obj->GetURL();
+	  if( $content_obj )
+	    $goto = $content_obj->GetURL();
 	}
 	if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on")
 	  {
