@@ -12,6 +12,10 @@ Version 1.6.5 - Poya
 - MenuManager
   - Fixes problem with having a default database template
   - Fixes problem with being able to delete the default database template.
+- TinyMCE
+  - Fixed bug disabling the wysiwyg togglebox upon saving the basic toolbar profile
+  - Fixed bug with truncated menutexts with quotes in them not getting properly escaped, breaking config
+  - Updated to latest TinyMCE 3.2.6
 
 
 Version 1.6.4 - Moindou
