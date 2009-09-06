@@ -10,6 +10,7 @@ $lang['addtemplate'] = 'Add Template';
 $lang['areyousure'] = 'Are you sure you want to delete this?';
 $lang['changelog'] = <<<EOF
 	<ul>
+<li>1.6.2 - Can no longer delete default template, fix problem with default database templates.</li>
 <li>1.6.1 - Add created and modified entries on each node.</li>
 <li>1.6 - Re-design admin interface, allow setting the default menu manager template.</li>
         <li>1.5.4 - Minor bugfix, now require CMS 1.5.3.</li>

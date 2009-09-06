@@ -8,11 +8,14 @@ $hm =& $gCms->GetHierarchyManager();
 $usefile = true;
 $tpl_name = coalesce_key($params, 'template', $this->GetPreference('default_template','simple_navigation.tpl'));
 $recursive = '0';
-if( !ends_with($tpl_name,'.tpl') )
-{
-	$recursive = $this->GetPreference('tpl_' . $tpl_name . '_recursive', '1');
-	$usefile = false;
-}
+if( endswith($tpl_name, '.tpl') )
+  {
+    $usefile = true;
+  }
+else
+  {
+    $usefile = false;
+  }
 
 $mdid = md5($gCms->variables['content_id'].implode('|', $params));
 
@@ -168,12 +171,14 @@ else
 		if (isset($curnode))
 		{
 			$curcontent =& $curnode->GetContent();
-			$properparentpos = $this->nthPos($curcontent->Hierarchy() . '.', '.', intval($params['start_level']) - 1);
-			if ($properparentpos > -1)
-			{
-				$prevdepth = intval($params['start_level']);
-				$rootnode =& $hm->getNodeByHierarchy(substr($curcontent->Hierarchy(), 0, $properparentpos));
-			}
+			if( $curcontent )  {
+			  $properparentpos = $this->nthPos($curcontent->Hierarchy() . '.', '.', intval($params['start_level']) - 1);
+			  if ($properparentpos > -1)
+			  {
+			    $prevdepth = intval($params['start_level']);
+			    $rootnode =& $hm->getNodeByHierarchy(substr($curcontent->Hierarchy(), 0, $properparentpos));
+			  }
+                        }
 		}
 	}
 	else if (isset($params['items']))
@@ -250,7 +255,7 @@ else
 		$smarty->assign('count', count($nodelist));
 		$smarty->assign_by_ref('nodelist', $nodelist);
 		if ($usefile)
-			echo $this->ProcessTemplate($tpl_name, $mdid, false, $gCms->variables['content_id']);
+		  echo $this->ProcessTemplate($tpl_name, $mdid, false, $gCms->variables['content_id']);
 		else
 			echo $this->ProcessTemplateFromDatabase($tpl_name, $mdid, false);
 	}

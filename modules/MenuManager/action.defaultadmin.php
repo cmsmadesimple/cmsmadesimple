@@ -19,13 +19,14 @@ foreach ($templates as $onetemplate)
   $onerow->templatelink = $this->CreateLink($id, 'edittemplate', $returnid, $onetemplate, array('tplname' => $onetemplate));
   
   $onerow->editlink = $this->CreateLink($id, 'edittemplate', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/edit.gif', $this->Lang('edittemplate'),'','','systemicon'), array('tplname' => $onetemplate));
-  $onerow->deletelink = $this->CreateLink($id, 'deletetemplate', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/delete.gif', $this->Lang('deletetemplate'),'','','systemicon'), array('tplname' => $onetemplate), $this->Lang('areyousure'));
 
   if( $default_template != $onetemplate )
     {
       $onerow->setdefault_link = $this->CreateLink($id,'setdefault',$returnid,
 						   $admintheme->DisplayImage('icons/system/false.gif',
 									     $this->Lang('set_as_default'),'','','systemicon'),array('template'=>$onetemplate));
+
+      $onerow->deletelink = $this->CreateLink($id, 'deletetemplate', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/delete.gif', $this->Lang('deletetemplate'),'','','systemicon'), array('tplname' => $onetemplate), $this->Lang('areyousure'));
     }
   $entryarray[] = $onerow;
 }
