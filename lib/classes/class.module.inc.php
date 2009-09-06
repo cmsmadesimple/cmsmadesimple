@@ -1508,7 +1508,7 @@ class CMSModule
 
 	public function CreateURL($id,$action,$returnid,$params=array(),$inline=false,$prettyurl='')
 	{
-	  $this->CreateLink($id,$action,$returnid,'',$params,'',true,$inline,'',false,$prettyurl);
+	  return $this->CreateLink($id,$action,$returnid,'',$params,'',true,$inline,'',false,$prettyurl);
 	}
 
 	/**
