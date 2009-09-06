@@ -1506,6 +1506,11 @@ class CMSModule
 		return cms_module_CreateLink($this, $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref, $inline, $addttext, $targetcontentonly, $prettyurl);
 	}
 
+	public function CreateURL($id,$action,$returnid,$params=array(),$inline=false,$prettyurl='')
+	{
+	  $this->CreateLink($id,$action,$returnid,'',$params,'',true,$inline,'',false,$prettyurl);
+	}
+
 	/**
 	* Returns the xhtml equivalent of an href link for content links.	This is basically a nice
 	* little wrapper to make sure that we go back to where we want and that it's xhtml complient
