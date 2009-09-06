@@ -159,6 +159,21 @@ if (count($nodelist) > 0)
 	$smarty->assign('menuparams',$params);
 	$smarty->assign('count', count($nodelist));
 	$smarty->assign_by_ref('nodelist', $nodelist);
+	$usefile = true;
+	$tpl_name = $this->GetPreference('default_template','simple_navigation.tpl');
+	if (isset($params['template']) && $params['template'] != '')
+		{
+			$tpl_name = $params['template'];
+		}
+	if( endswith($tpl_name, '.tpl') )
+		{
+			$usefile = true;
+		}
+	else
+		{
+			$usefile = false;
+		}
+
 	if ($usefile)
 		echo $this->ProcessTemplate($tpl_name, $mdid, false, $gCms->variables['content_id']);
 	else

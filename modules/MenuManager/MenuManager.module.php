@@ -378,8 +378,8 @@ class MenuManager extends CMSModule
 					}
 
 					if ($content != NULL && $content->Active() && 
-						($includeit && !$excludeit) &&
-						($content->ShowInMenu() || ($show_all == 1  && !$content->IsSystemPage())))
+					    ($includeit && !$excludeit) &&
+					    ($content->ShowInMenu() || $show_all == 1)  && !$content->IsSystemPage())
 					{
 						$newnode =& $this->FillNode($content, $onechild, $nodelist, 
 							$gCms, $count, $prevdepth, $origdepth, $deep);
