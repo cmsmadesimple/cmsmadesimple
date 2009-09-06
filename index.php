@@ -32,7 +32,6 @@ require_once($dirname.'/fileloc.php');
 #echo '</code>';
 
 $starttime = microtime();
-
 clearstatcache();
 
 if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
@@ -66,9 +65,7 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 	exit;
 }
 
-require_once($dirname.'/include.php'); #Makes gCms object
-
-
+require_once($dirname.'/include.php'); 
 // optionally enable output compression (as long as debug mode isn't on)
 if( isset($config['output_compression']) && ($config['output_compression']) && $config['debug'] != true )
   {
@@ -105,46 +102,50 @@ $smarty = &$gCms->smarty;
 $smarty->params = $params;
 
 $page = '';
-
 if (isset($params['mact']))
-{
-  $ary = explode(',', cms_htmlentities($params['mact']), 4);
-  $smarty->id = (isset($ary[1])?$ary[1]:'');
-}
+  {
+    $ary = explode(',', cms_htmlentities($params['mact']), 4);
+    $smarty->id = (isset($ary[1])?$ary[1]:'');
+  }
 else
-{
-  $smarty->id = (isset($params['id'])?intval($params['id']):'');
-}
+  {
+    $smarty->id = (isset($params['id'])?intval($params['id']):'');
+  }
 
 if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
-{
-	$page = $params[$smarty->id . 'returnid'];
-}
+  {
+    $page = $params[$smarty->id . 'returnid'];
+  }
 else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]]))
-{
-	$page = $_GET[$config["query_var"]];
-
-    //trim off the extension, if there is one set
-    if ($config['page_extension'] != '' && endswith($page, $config['page_extension']))
-    {   
-        $page = substr($page, 0, strlen($page) - strlen($config['page_extension']));
-    }
-}
+  {
+    $page = $_GET[$config["query_var"]];    
+  }
 else
-{
-	$calced = cms_calculate_url();
-	if ($calced != '')
-		$page = $calced;
-}
+   {
+     $page = cms_calculate_url();
+   }
+
+// strip off GET params.
+if( ($tmp = strpos($page,'?')) !== FALSE )
+  {
+    $page = substr($page,0,$tmp);
+  }
+
+// strip off page extension
+if ($config['page_extension'] != '' && endswith($page, $config['page_extension']))
+  {   
+    $page = substr($page, 0, strlen($page) - strlen($config['page_extension']));
+  }
+
 
 //See if our page matches any predefined routes
 $page = rtrim($page, '/');
+$matched = false;
 if (strpos($page, '/') !== FALSE)
 {
 
 	$routes =& $gCms->variables['routes'];
 	
-	$matched = false;
 	foreach ($routes as $route)
 	{
 		$matches = array();
@@ -202,28 +203,29 @@ if (strpos($page, '/') !== FALSE)
 			$smarty->id = $matches['id'];
 
 			$matched = true;
+			break;
 		}
 	}
+}
 
-	if (!$matched)
-	{
-		$page = substr($page, strrpos($page, '/') + 1);
-		if( ($tmp = strpos($page,'?')) !== FALSE )
-		  {
-		    $page = substr($page,0,$tmp);
-		  }
-	}
-}
+// strip from the last / forward
+if( ($pos = strrpos($page,'/')) !== FALSE && $matched == false )
+  {
+    $page = substr($page, $pos + 1);
+  }
+
+
 if ($page == '')
-{
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	$page =& $contentops->GetDefaultContent();
-}
+  {
+    // assume default content
+    global $gCms;
+    $contentops =& $gCms->GetContentOperations();
+    $page =& $contentops->GetDefaultContent();
+  }
 else
-{
+  {
     $page = preg_replace('/\</','',$page);
-}
+  }
 
 $pageinfo = '';
 if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
@@ -277,7 +279,7 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 		$node =& $manager->sureGetNodeById($pageinfo->content_id);
 		if(is_object($node))
 		{
-		  $contentobj =& $node->GetContent(true,true);
+		  $contentobj =& $node->GetContent(true,true,false);
 		  if( is_object($contentobj) )
 		    {
 		      $smarty->assign('content_obj',$contentobj);

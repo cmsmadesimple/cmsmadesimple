@@ -260,17 +260,16 @@ function setactive($contentid, $active = true)
 			check_permission($userid, 'Manage All Content')
 			);
 
-  if($permission)
-    {
-      $node = &$hierManager->getNodeById($contentid);
-      $value =& $node->getContent(false,true,true);
-      if( !is_object($value) ) die(' no object ');
-      $value->SetActive($active);
-      $value->Save();
-      $gCms = cmsms();
-      $contentops =& $gCms->GetContentOperations();
-      $contentops->ClearCache();
-    }
+	if($permission)
+	  {
+		$node = &$hierManager->getNodeById($contentid);
+		$value =& $node->getContent();
+		$value->SetActive($active);
+		$value->Save();
+		global $gCms;
+		$contentops =& $gCms->GetContentOperations();
+		$contentops->ClearCache();
+	}
 }
 
 function content_move($contentid, $parentid, $direction)

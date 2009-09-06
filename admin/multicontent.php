@@ -107,7 +107,7 @@ function get_delete_list($sel_nodes,&$parent,&$final_result,$depth = 0)
     {
       if( check_ownership($userid, $node->getTag()) || quick_check_authorship($node->getTag(), $mypages) )
 	{
-	  $content =& $node->GetContent(true);
+	  $content =& $node->GetContent(false);
 
 	  $children =& $node->getChildren(false,true);
 	  $child_status = array();
@@ -231,11 +231,11 @@ if (isset($_POST['idlist']))
 		$node =& $hm->sureGetNodeById($id);
 		if (isset($node))
 		{
-			$content =& $node->GetContent(true);
-			if (isset($content))
-			{
-				$nodelist[] =& $content;
-			}
+		  $content =& $node->GetContent();
+		  if (isset($content))
+		    {
+		      $nodelist[] =& $content;
+		    }
 		}
 	}
 }

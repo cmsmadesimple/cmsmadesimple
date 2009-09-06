@@ -12,7 +12,7 @@ $config = $gCms->GetConfig();
 
 if (isset($USE_THEME) && $USE_THEME == false)
 {
-	echo '<!-- admin theme disabled -->';
+  //echo '<!-- admin theme disabled -->';
 }
 else
 {

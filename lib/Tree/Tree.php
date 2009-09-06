@@ -406,44 +406,45 @@ class Tree_Node
       return $this->getTag();
     }
 
-	/**
-	* Gets the underlying content of this node
-	*/
-    function &getContent($deep = false,$loadchildren = true,$loadall = false)
-	{
-		$content = null;
-		
-		$tree =& $this->getTree();
-		if (isset($tree->content[$this->getTag()]))
-		{
-			$content =& $tree->content[$this->getTag()];
-		}
-		else
-		  {
-		    $parent_node =& $this->getParent();
-		    if( !is_object($parent_node) )
-	 	      {	
-			global $gCms;
-                        $contentops =& $gCms->GetContentOperations();
-                        $content =& $contentops->LoadContentFromId($this->getTag(), $deep);
-                        $tree->content[$this->getTag()] =& $content;
-		        return $content;
-                      }
-		  
-		    // load all children
-		    if( $loadchildren )
-		      {
-			$parent_node->getChildren($deep,$loadall);
-		      }
+    /**
+     * Gets the underlying content of this node
+     */
+    function &getContent($deep = false,$loadsiblings = true,$loadall = true)
+      {
+	$content = null;
+	
+	$tree =& $this->getTree();
+	if (isset($tree->content[$this->getTag()]))
+	  {
+	    $content =& $tree->content[$this->getTag()];
+	  }
+	else
+	  {
+	    // not in cache
 
-		    // see if the object is cached now.
-		    if( isset($tree->content[$this->getTag()]) )
-		      {
-			$content =& $tree->content[$this->getTag()];
-		      }
-		  }
-		return $content;
-	}
+	    // find the parent node.
+	    $parent_node =& $this->getParent();
+	    if( !$loadsiblings || !$parent_node )
+	      {
+		// load the single node
+		global $gCms;
+		$contentops =& $gCms->GetContentOperations();
+		$content =& $contentops->LoadContentFromId($this->getTag(), $deep);
+		$tree->content[$this->getTag()] =& $content;
+	      }
+	    else
+	      {
+		$parent_node->getChildren($deep,$loadall);
+	      }
+	    
+	    // see if the object is cached now.
+	    if( isset($tree->content[$this->getTag()]) )
+	      {
+		$content =& $tree->content[$this->getTag()];
+	      }
+	  }
+	return $content;
+      }
     
     /**
     * Sets the tag data

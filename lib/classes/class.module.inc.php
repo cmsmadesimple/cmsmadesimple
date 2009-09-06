@@ -1899,7 +1899,7 @@ class CMSModule
 	 */
 	public function CheckPermission($permission_name)
 	{
-		$userid = get_userid();
+		$userid = get_userid(false);
 		return check_permission($userid, $permission_name);
 	}
 
