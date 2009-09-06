@@ -63,6 +63,7 @@ if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIW
 }
 
 $USE_OUTPUT_BUFFERING = true;
+$USE_THEME = true;
 if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->HasAdminBuffering() == false)
 {
 	$USE_OUTPUT_BUFFERING = false;
@@ -76,7 +77,6 @@ else if (isset($_REQUEST['disable_buffer']))
 	$USE_OUTPUT_BUFFERING = false;
 }
 
-$USE_THEME = true;
 if( isset( $_REQUEST[$id . 'disable_theme'] ))
 {
 	$USE_THEME = false;
@@ -85,6 +85,14 @@ else if( isset( $_REQUEST['disable_theme'] ))
 {
 	$USE_THEME = false;
 }
+
+if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false'))
+{
+  // for simplicity and compatibility with the frontend.
+  $USE_THEME = false;
+  $USE_OUTPUT_BUFFERING = false;
+}
+
 if (isset($gCms->modules[$module]['object']) )
   {
     $txt = $gCms->modules[$module]['object']->GetHeaderHTML();
