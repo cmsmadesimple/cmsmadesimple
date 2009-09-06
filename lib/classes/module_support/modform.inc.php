@@ -46,6 +46,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	if ($idsuffix == '')
 		$idsuffix = $formcount;
 
+	$goto = '';
 	if( $returnid != '' )
 	{
 	  $hm =& $gCms->GetHierarchyManager();
