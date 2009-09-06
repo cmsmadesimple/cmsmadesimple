@@ -30,176 +30,29 @@
  * @package		CMS
  */
 define('CMS_CONTENT_HIDDEN_NAME','--------');
-class ContentBase extends CmsObject
+class CmsContentBase extends CmsObjectRelationalMapping
 {
-    /**
-     * The unique ID identifier of the element
-     * Integer
-     */
-    private $mId;
-
-    /**
-     * The name of the element (like a filename)
-     * String
-     */
-     private $mName;
-
-    /**
-     * The type of content (page, url, etc..)
-     * String
-     */
-    private $mType;
-
-    /**
-     * The owner of the content
-     * Integer
-     */
-    private $mOwner;
-
-    /**
-     * The properties part of the content. This is an object of the good type.
-     * It should contain all treatments specific to this type of content
-     */
-     private $mProperties;
-     
-     private $mPropertiesLoaded;
-
-    /**
-     * The ID of the parent, 0 if none
-     * Integer
-     */
-    private $mParentId;
-
-    /**
-     * The old parent id... only used on update
-     */
-    private $mOldParentId;
-
-    /**
-     * This is used too often to not be part of the base class
-     */
-    private $mTemplateId;
-
-    /**
-     * The item order of the content in his level
-     * Integer
-     */
-    private $mItemOrder;
-
-    /**
-     * The old item order... only used on update
-     */
-    private $mOldItemOrder;
-
-    /**
-     * The metadata (head tags) fir this content
-     */
-    private $mMetadata;
-
-    private $mTitleAttribute;
-    private $mAccessKey;
-    private $mTabIndex;
-
-    /**
-     * The full hierarchy of the content
-     * String of the form : 1.4.3
-     */
-    private $mHierarchy;
-
-    /**
-     * The full hierarchy of the content ids
-     * String of the form : 1.4.3
-     */
-    private $mIdHierarchy;
-
-    /**
-     * The full path through the hierarchy
-     * String of the form : parent/parent/child
-     */
-    private $mHierarchyPath;
-
-    /**
-     * What should be displayed in a menu
-     */
-    private $mMenuText;
-
-    /**
-     * Is the content active ?
-     * Integer : 0 / 1
-     */
-    private $mActive;
-
-    /**
-     * Alias of the content
-     */
-    private $mAlias;
-
-    private $mOldAlias;
-
-    /**
-     * Cachable?
-     */
-    private $mCachable;
-
-    /**
-     * Does this content have a preview function?
-     */
-    private $mPreview;
-
-    /**
-     * Should it show up in the menu?
-     */
-    private $mShowInMenu;
-
-    /**
-     * Is this page the default?
-     */
-    private $mDefaultContent;
-	
-    /**
-     * What type of markup is ths?  HTML is the default
-     */
-    private $mMarkup;
-
-    /**
-     * Last user to modify this content
-     */
-    private $mLastModifiedBy;
-
-    /**
-     * Creation date
-     * Date
-     */
-    private $mCreationDate;
-
-    /**
-     * Modification date
-     * Date
-     */
-    private $mModifiedDate;
-
-    /**
-     * Additional Editors
-     */
-    private $mAdditionalEditors;
-	
-
-    /**
-     * Secure
-     */
-    private $mSecure;
-
-    private $mReadyForEdit;
-
-    private $_attributes;
+    private $_attributes = array();
     private $_prop_defaults;
     private $_add_mode;
 
+	var $table = 'content';
+	var $params = array('id' => -1, 'template_id' => -1, 'active' => true, 'default_content' => false, 'parent_id' => -1, 'lft' => 1, 'rgt' => 1);
+	var $field_maps = array('content_alias' => 'alias', 'titleattribute' => 'title_attribute', 'accesskey' => 'access_key', 'tabindex' => 'tab_index', 'content_name' => 'name', 'content_id' => 'id');
+	var $unused_fields = array();
+	var $sequence = 'content_seq';
+
+	var $mProperties = null;
+
+	var $preview = false;
+	
+	var $props_loaded = false;
+
 	#Stuff needed to do a doppleganger for CmsNode -- Multiple inheritence would rock right now
-	private $tree = null;
-	private $parentnode = null;
-	private $children = array();
-	private $children_loaded = false;
+	public $tree = null;
+	public $parentnode = null;
+	public $children = array();
+	public $children_loaded = false;
 
     /************************************************************************/
     /* Constructor related													*/
@@ -208,18 +61,21 @@ class ContentBase extends CmsObject
     /**
      * Generic constructor. Runs the SetInitialValues fuction.
      */
-	public function __construct()
+	function __construct()
 	{
 		parent::__construct();
-		$this->ContentBase();
-    }
-
-	public function ContentBase()
-	{
-		$this->SetInitialValues();
+		//$this->SetInitialValues();
+		$this->mProperties = new ContentProperties();
 		$this->SetProperties();
 		$this->mPropertiesLoaded = false;
 		$this->mReadyForEdit = false;
+	}
+	
+	function setup()
+	{
+		//$this->create_belongs_to_association('template', 'cms_template', 'template_id');
+		$this->assign_acts_as('NestedSet');
+		//$this->assign_acts_as('Acl');
 	}
 	
 	public function GetContent()
@@ -232,7 +88,10 @@ class ContentBase extends CmsObject
      */
     public function SetInitialValues()
     {
-	$this->mId             = -1 ;
+	/*
+	$this->id             = -1 ;
+	$this->mLft            = -1 ;
+	$this->mRgt            = -1 ;
 	$this->mName           = "" ;
 	$this->mAlias          = "" ;
 	$this->mOldAlias       = "" ;
@@ -246,7 +105,7 @@ class ContentBase extends CmsObject
 	$this->mOldItemOrder   = -1 ;
 	$this->mLastModifiedBy = -1 ;
 	$this->mHierarchy      = "" ;
-	$this->mIdHierarchy    = "" ;
+	$this->idHierarchy    = "" ;
 	$this->mHierarchyPath  = "" ;
 	$this->mMetadata       = "" ;
 	$this->mTitleAttribute = "" ;
@@ -263,35 +122,36 @@ class ContentBase extends CmsObject
 	$this->mMarkup         = 'html' ;
 	$this->mChildCount     = 0;
 	$this->mPropertiesLoaded = false;
+	*/
     }
 
     /**
      * Subclasses should override this to set their property types using a lot
      * of mProperties.Add statements
      */
-    public function SetProperties()
-    {
-      $this->AddContentProperty('target',10);
-      $this->AddBaseProperty('title',1,1);
-      $this->AddBaseProperty('menutext',2,1);
-      $this->AddBaseProperty('parent',3,1);
-      $this->AddBaseProperty('active',5);
-      $this->AddBaseProperty('showinmenu',5);
-      $this->AddBaseProperty('alias',6);
-      $this->AddBaseProperty('secure',7);
-      $this->AddBaseProperty('cachable',10);
-      $this->AddBaseProperty('titleattribute',55);
-      $this->AddBaseProperty('accesskey',56);
-      $this->AddBaseProperty('tabindex',57);
-      $this->AddBaseProperty('owner',90);
-      $this->AddBaseProperty('additionaleditors',91);
+	public function SetProperties()
+	{
+		$this->AddContentProperty('target',10);
+		$this->AddBaseProperty('title',1,1);
+		$this->AddBaseProperty('menutext',2,1);
+		$this->AddBaseProperty('parent',3,1);
+		$this->AddBaseProperty('active',5);
+		$this->AddBaseProperty('showinmenu',5);
+		$this->AddBaseProperty('alias',6);
+		$this->AddBaseProperty('secure',7);
+		$this->AddBaseProperty('cachable',10);
+		$this->AddBaseProperty('titleattribute',55);
+		$this->AddBaseProperty('accesskey',56);
+		$this->AddBaseProperty('tabindex',57);
+		$this->AddBaseProperty('owner',90);
+		$this->AddBaseProperty('additionaleditors',91);
 
-      $this->AddContentProperty('image',50);
-      $this->AddContentProperty('thumbnail',50);
-      $this->AddContentProperty('extra1',80);
-      $this->AddContentProperty('extra2',80);
-      $this->AddContentProperty('extra3',80);
-    }
+		$this->AddContentProperty('image',50);
+		$this->AddContentProperty('thumbnail',50);
+		$this->AddContentProperty('extra1',80);
+		$this->AddContentProperty('extra2',80);
+		$this->AddContentProperty('extra3',80);
+	}
 
     
     /************************************************************************/
@@ -303,13 +163,12 @@ class ContentBase extends CmsObject
      */
     public function Id()
     {
-	return $this->mId;
+		return $this->id;
     }
 
     public function SetId($id)
     {
-	$this->DoReadyForEdit();
-	$this->mId = $id;
+		$this->id = $id;
     }
 
     /**
@@ -317,49 +176,20 @@ class ContentBase extends CmsObject
      */
     public function FriendlyName()
     {
-	return '';
+		return '';
     }
-
-    /**
-     * Returns the Name
-     */
-    public function Name()
-    {
-	return $this->mName;
-    }
-
-    public function SetName($name)
-    {
-	$this->DoReadyForEdit();
-	$this->mName = $name;
-    }
-
-    /**
-     * Returns the Alias
-     */
-    public function Alias()
-    {
-	return $this->mAlias;
-    }
-
-    protected function OldAlias()
-    {
-	return $this->mOldAlias;
-    }
-
 
     /**
      * Returns the Type
      */
     public function Type()
     {
-	return strtolower($this->mType);
+		return strtolower($this->type);
     }
 
     public function SetType($type)
     {
-	$this->DoReadyForEdit();
-	$this->mType = strtolower($type);
+		$this->type = strtolower($type);
     }
 
     /**
@@ -367,21 +197,25 @@ class ContentBase extends CmsObject
      */
     public function Owner()
     {
-	return $this->mOwner;
+		return $this->owner_id;
     }
 
     public function SetOwner($owner)
     {
-	$this->DoReadyForEdit();
-	$this->mOwner = $owner;
+		$this->owner_id = $owner;
     }
 
     /**
-     * Returns the Metadata
+     * Returns the Owner
      */
-    public function Metadata()
+    public function Name()
     {
-	return $this->mMetadata;
+		return $this->name;
+    }
+
+    public function SetName($name)
+    {
+		$this->name = $name;
     }
 
     /**
@@ -389,56 +223,47 @@ class ContentBase extends CmsObject
      */
     public function HandlesAlias()
     {
-      return false;
-    }
-
-    public function SetMetadata($metadata)
-    {
-	$this->DoReadyForEdit();
-	$this->mMetadata = $metadata;
+		return false;
     }
 
     public function TabIndex()
     {
-	return $this->mTabIndex;
+		return $this->tabindex;
     }
 
     public function SetTabIndex($tabindex)
     {
-	$this->DoReadyForEdit();
-	$this->mTabIndex = $tabindex;
+		$this->tabindex = $tabindex;
     }
 
     public function TitleAttribute()
     {
-	return $this->mTitleAttribute;
+		return $this->titleattribute;
     }
 
     public function GetCreationDate()
     {
-	return $this->mCreationDate;
+		return $this->create_date;
     }
 	
     public function GetModifiedDate()
     {
-	return $this->mModifiedDate;
+		return $this->modified_date;
     }
 
     public function SetTitleAttribute($titleattribute)
     {
-	$this->DoReadyForEdit();
-	$this->mTitleAttribute = $titleattribute;
+		$this->titleattribute = $titleattribute;
     }
 
     public function AccessKey()
     {
-	return $this->mAccessKey;
+		return $this->accesskey;
     }
 
     public function SetAccessKey($accesskey)
     {
-	$this->DoReadyForEdit();
-	$this->mAccessKey = $accesskey;
+		$this->accesskey = $accesskey;
     }
 
     /**
@@ -446,35 +271,32 @@ class ContentBase extends CmsObject
      */
     public function ParentId()
     {
-	return $this->mParentId;
+		return $this->parent_id;
     }
 
     public function SetParentId($parentid)
     {
-	$this->DoReadyForEdit();
-	$this->mParentId = $parentid;
+		$this->parent_id = $parentid;
     }
 
     public function OldParentId()
     {
-	return $this->mOldParentId;
+		return $this->old_parent_id;
     }
 
     public function SetOldParentId($parentid)
     {
-	$this->DoReadyForEdit();
-	$this->mOldParentId = $parentid;
+		$this->old_parent_id = $parentid;
     }
 
     public function TemplateId()
     {
-	return $this->mTemplateId;
+		return $this->template_id;
     }
 
     public function SetTemplateId($templateid)
     {
-	$this->DoReadyForEdit();
-	$this->mTemplateId = $templateid;
+		$this->template_id = $templateid;
     }
 
     /**
@@ -482,24 +304,23 @@ class ContentBase extends CmsObject
      */
     public function ItemOrder()
     {
-	return $this->mItemOrder;
+		return $this->item_order;
     }
 
     public function SetItemOrder($itemorder)
     {
-	$this->DoReadyForEdit();
-	$this->mItemOrder = $itemorder;
+		$this->item_order = $itemorder;
     }
 
     public function OldItemOrder()
     {
-	return $this->mOldItemOrder;
+		return $this->old_item_order;
     }
 
     public function SetOldItemOrder($itemorder)
     {
-	$this->DoReadyForEdit();
-	$this->mOldItemOrder = $itemorder;
+		$this->DoReadyForEdit();
+		$this->old_item_order = $itemorder;
     }
 
     /**
@@ -509,13 +330,7 @@ class ContentBase extends CmsObject
     {
 		global $gCms;
 		$contentops =& $gCms->GetContentOperations();
-		return $contentops->CreateFriendlyHierarchyPosition($this->mHierarchy);
-    }
-
-    public function SetHierarchy($hierarchy)
-    {
-	$this->DoReadyForEdit();
-	$this->mHierarchy = $hierarchy;
+		return $contentops->CreateFriendlyHierarchyPosition($this->hierarchy);
     }
 
     /**
@@ -523,13 +338,12 @@ class ContentBase extends CmsObject
      */
     public function IdHierarchy()
     {
-	return $this->mIdHierarchy;
+		return $this->id_hierarchy;
     }
 
     public function SetIdHierarchy($idhierarchy)
     {
-	$this->DoReadyForEdit();
-	$this->mIdHierarchy = $idhierarchy;
+		$this->id_hierarchy = $idhierarchy;
     }
 
     /**
@@ -537,27 +351,12 @@ class ContentBase extends CmsObject
      */
     public function HierarchyPath()
     {
-	return $this->mHierarchyPath;
+		return $this->hierarchy_path;
     }
 
     public function SetHierarchyPath($hierarchypath)
     {
-	$this->DoReadyForEdit();
-	$this->mHierarchyPath = $hierarchypath;
-    }
-
-    /**
-     * Returns the Active state
-     */
-    public function Active()
-    {
-	return $this->mActive;
-    }
-
-    public function SetActive($active)
-    {
-	$this->DoReadyForEdit();
-	$this->mActive = $active;
+		$this->hierarchy_path = $hierarchypath;
     }
 
     /**
@@ -565,70 +364,32 @@ class ContentBase extends CmsObject
      */
     public function ShowInMenu()
     {
-	return $this->mShowInMenu;
+	return $this->show_in_menu;
     }
 
     public function SetShowInMenu($showinmenu)
     {
-        $this->DoReadyForEdit();
-	$this->mShowInMenu = $showinmenu;
-    }
-
-    /**
-     * Returns if the page is the default
-     */
-    public function DefaultContent()
-    {
-	return $this->mDefaultContent;
-    }
-
-    public function SetDefaultContent($defaultcontent)
-    {
-	$this->DoReadyForEdit();
-	$this->mDefaultContent = $defaultcontent;
-    }
-
-    public function Cachable()
-    {
-	return $this->mCachable;
-    }
-
-    public function SetCachable($cachable)
-    {
-	$this->DoReadyForEdit();
-	$this->mCachable = $cachable;
+		$this->show_in_menu = $showinmenu;
     }
 
     public function Previewable()
     {
-      return $this->mPreview;
+      return $this->preview;
     }
 
     public function SetPreviewable($flag)
     {
-      return $this->mPreview = $flag;
+      return $this->preview = $flag;
     }
-	
-	public function Markup()
-	{
-		return $this->mMarkup;
-	}
-
-	public function SetMarkup($markup)
-	{
-		$this->DoReadyForEdit();
-		$this->mMarkup = $markup;
-	}
 
 	public function LastModifiedBy()
 	{
-		return $this->mLastModifiedBy;
+		return $this->last_modified_by;
 	}
 
 	public function SetLastModifiedBy($lastmodifiedby)
 	{
-		$this->DoReadyForEdit();
-		$this->mLastModifiedBy = $lastmodifiedby;
+		$this->last_modified_by = $lastmodifiedby;
 	}
 
 	public function RequiresAlias()
@@ -643,17 +404,17 @@ class ContentBase extends CmsObject
 
 	public function SetSecurePage($flag)
 	{
-	  $this->mSecure = ($flag)?1:0;
+	  $this->secure = ($flag)?1:0;
 	}
 
 	public function IsSecurePage()
 	{
-	  return $this->mSecure;
+	  return $this->secure;
 	}
 
-	public function SetAlias($alias, $doAutoAliasIfEnabled = true)
+	public function set_alias($alias, $doAutoAliasIfEnabled = true)
 	{
-		$this->DoReadyForEdit();
+		//$this->DoReadyForEdit();
 		global $gCms;
 		$config =& $gCms->GetConfig();
 
@@ -661,10 +422,10 @@ class ContentBase extends CmsObject
 
 		if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true)
 		{
-			$alias = trim($this->mMenuText);
+			$alias = trim($this->menu_text);
 			if ($alias == '')
 			{
-			    $alias = trim($this->mName);
+			    $alias = trim($this->content_name);
 			}
 			
 			$tolower = true;
@@ -697,21 +458,25 @@ class ContentBase extends CmsObject
 			}
 		}
 
-		$this->mAlias = munge_string_to_url($alias, $tolower);
-	} 
+		$this->alias = munge_string_to_url($alias, $tolower);
+	}
+	
+	public function SetAlias($alias, $doAutoAliasIfEnabled = true)
+	{
+		return $this->set_alias($alias, $doAutoAliasIfEnabled);
+	}
 	
     /**
      * Returns the menu text for this content
      */
 	public function MenuText()
 	{
-		return $this->mMenuText;
+		return $this->menu_text;
 	}
 
 	public function SetMenuText($menutext)
 	{
-		$this->DoReadyForEdit();
-		$this->mMenuText = $menutext;
+		$this->menu_text = $menutext;
 	}
 
     /**
@@ -730,7 +495,7 @@ class ContentBase extends CmsObject
 		debug_buffer('properties called');
 		if ($this->mPropertiesLoaded == false)
 		{
-			$this->mProperties->Load($this->mId);
+			$this->mProperties->Load($this->id);
 			$this->mPropertiesLoaded = true;
 		}
 		return $this->mProperties;
@@ -747,7 +512,7 @@ class ContentBase extends CmsObject
 		{
 			if ($this->mPropertiesLoaded == false)
 			{
-				$this->mProperties->Load($this->mId);
+				$this->mProperties->Load($this->id);
 				$this->mPropertiesLoaded = true;
 			}
 			return $this->mProperties->GetValue($name);
@@ -761,7 +526,7 @@ class ContentBase extends CmsObject
 		$this->DoReadyForEdit();
 		if ($this->mPropertiesLoaded == false)
 		{
-			$this->mProperties->Load($this->mId);
+			$this->mProperties->Load($this->id);
 			$this->mPropertiesLoaded = true;
 		}
 		$this->mProperties->SetValue($name, $value);
@@ -827,6 +592,11 @@ class ContentBase extends CmsObject
 			$this->mReadyForEdit = true;
 		}
 	}
+	
+	protected function after_load()
+	{
+		$this->mProperties->mPropertyNames = explode(',',$this->prop_names);
+	}
 
     /**
      * Load the content of the object from an ID
@@ -852,7 +622,9 @@ class ContentBase extends CmsObject
 
 			if ($row && !$row->EOF)
 			{
-				$this->mId                         = $row->fields["content_id"];
+				$this->id                         = $row->fields["content_id"];
+				$this->mLft                        = $row->fields['lft'];
+				$this->mRgt                        = $row->fields['rgt'];
 				$this->mName                       = $row->fields["content_name"];
 				$this->mAlias                      = $row->fields["content_alias"];
 				$this->mOldAlias                   = $row->fields["content_alias"];
@@ -866,9 +638,9 @@ class ContentBase extends CmsObject
 				$this->mOldItemOrder               = $row->fields["item_order"];
 				$this->mMetadata                   = $row->fields['metadata'];
 				$this->mHierarchy                  = $row->fields["hierarchy"];
-				$this->mIdHierarchy                = $row->fields["id_hierarchy"];
+				$this->idHierarchy                = $row->fields["id_hierarchy"];
 				$this->mHierarchyPath              = $row->fields["hierarchy_path"];
-				$this->mProperties->mPropertyNames = explode(',',$row->fields["prop_names"]);
+				//$this->mProperties->mPropertyNames = explode(',',$row->fields["prop_names"]);
 				$this->mMenuText                   = $row->fields['menu_text'];
 				$this->mMarkup                     = $row->fields['markup'];
 				$this->mTitleAttribute             = $row->fields['titleattribute'];
@@ -901,7 +673,7 @@ class ContentBase extends CmsObject
 				if ($this->mPropertiesLoaded == false)
 				{
 					debug_buffer("load from id is loading properties");
-					$this->mProperties->Load($this->mId);
+					$this->mProperties->Load($this->id);
 					$this->mPropertiesLoaded = true;
 				}
 
@@ -954,7 +726,9 @@ class ContentBase extends CmsObject
 
 		$result = true;
 
-		$this->mId                         = $data["content_id"];
+		$this->id                         = $data["content_id"];
+		$this->mLft                        = $data['lft'];
+		$this->mRgt                        = $data['rgt'];
 		$this->mName                       = $data["content_name"];
 		$this->mAlias                      = $data["content_alias"];
 		$this->mOldAlias                   = $data["content_alias"];
@@ -968,9 +742,9 @@ class ContentBase extends CmsObject
 		$this->mOldItemOrder               = $data["item_order"];
 		$this->mMetadata                   = $data['metadata'];
 		$this->mHierarchy                  = $data["hierarchy"];
-		$this->mIdHierarchy                = $data["id_hierarchy"];
+		$this->idHierarchy                = $data["id_hierarchy"];
 		$this->mHierarchyPath              = $data["hierarchy_path"];
-		$this->mProperties->mPropertyNames = explode(',',$data["prop_names"]);
+		//$this->mProperties->mPropertyNames = explode(',',$data["prop_names"]);
 		$this->mMenuText                   = $data['menu_text'];
 		$this->mMarkup                     = $data['markup'];
 		$this->mTitleAttribute             = $data['titleattribute'];
@@ -991,7 +765,7 @@ class ContentBase extends CmsObject
 			if ($this->mPropertiesLoaded == false)
 			{
 				debug_buffer("load from data is loading properties");
-				$this->mProperties->Load($this->mId);
+				$this->mProperties->Load($this->id);
 				$this->mPropertiesLoaded = true;
 			}
 
@@ -1030,6 +804,7 @@ class ContentBase extends CmsObject
      * Save or update the content
      */
     # :TODO: This function should return something
+	/*
 	public function Save()
 	{
 		global $gCms;
@@ -1038,11 +813,11 @@ class ContentBase extends CmsObject
 		if ($this->mPropertiesLoaded == false)
 		{
 			debug_buffer('save is loading properties');
-			$this->mProperties->Load($this->mId);
+			$this->mProperties->Load($this->id);
 			$this->mPropertiesLoaded = true;
 		}
 
-		if (-1 < $this->mId)
+		if (-1 < $this->id)
 		{
 			$this->Update();
 		}
@@ -1053,6 +828,49 @@ class ContentBase extends CmsObject
 
 		Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
 	}
+	*/
+	
+	function before_save()
+	{
+		Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
+		
+		if ($this->mPropertiesLoaded == false)
+		{
+			debug_buffer('save is loading properties');
+			$this->mProperties->Load($this->id);
+			$this->mPropertiesLoaded = true;
+		}
+	}
+    
+	function after_save(&$result)
+	{
+		if ($result)
+		{
+			$db = cms_db();
+			
+			if (isset($this->mAdditionalEditors))
+			{
+				$query = "DELETE FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
+				$db->Execute($query, array($this->Id()));
+				
+				foreach ($this->mAdditionalEditors as $oneeditor)
+				{
+					$new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
+					$query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
+					$db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
+				}
+			}
+			
+			if ($this->mProperties != NULL)
+			{
+				$this->mProperties->Save($this->id);
+			}
+			
+			Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
+			CmsCache::clear();
+		}
+	}
+
 
     /**
      * Update the content
@@ -1092,7 +910,7 @@ class ContentBase extends CmsObject
 
 		$this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
 
-		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, secure = ?, last_modified_by = ? WHERE content_id = ?";
+		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, lft = ?, rgt = ?, secure = ?, last_modified_by = ? WHERE content_id = ?";
 		$dbresult = $db->Execute($query, array(
 			$this->mName,
 			$this->mOwner,
@@ -1112,9 +930,11 @@ class ContentBase extends CmsObject
 			$this->mModifiedDate,
 			$this->mItemOrder,
 			$this->mMarkup,
+			$this->mLft,
+			$this->mRgt,
 			$this->mSecure,
 			$this->mLastModifiedBy,
-			$this->mId
+			$this->id
 			));
 
 		if (!$dbresult)
@@ -1153,7 +973,7 @@ class ContentBase extends CmsObject
 		{
 			# :TODO: There might be some error checking there
 			debug_buffer('save from ' . __LINE__);
-			$this->mProperties->Save($this->mId);
+			$this->mProperties->Save($this->id);
 		}
 		else
 		{
@@ -1199,11 +1019,11 @@ class ContentBase extends CmsObject
 		}
 
 		$newid = $db->GenID(cms_db_prefix()."content_seq");
-		$this->mId = $newid;
+		$this->id = $newid;
 
 		$this->mModifiedDate = $this->mCreationDate = trim($db->DBTimeStamp(time()), "'");
 
-		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, metadata, titleattribute, accesskey, tabindex, secure, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, metadata, titleattribute, accesskey, tabindex, lft, rgt, secure, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
 			$newid,
@@ -1215,7 +1035,7 @@ class ContentBase extends CmsObject
 			$this->mTemplateId,
 			$this->mItemOrder,
 			$this->mHierarchy,
-			$this->mIdHierarchy,
+			$this->idHierarchy,
 			($this->mActive == true         ? 1 : 0),
 			($this->mDefaultContent == true ? 1 : 0),
 			($this->mShowInMenu == true     ? 1 : 0),
@@ -1226,6 +1046,8 @@ class ContentBase extends CmsObject
 			$this->mTitleAttribute,
 			$this->mAccessKey,
 			$this->mTabIndex,
+			$this->mLft,
+			$this->mRgt,
 			$this->mSecure,
 			$this->mLastModifiedBy,
 			$this->mModifiedDate,
@@ -1280,17 +1102,17 @@ class ContentBase extends CmsObject
 	{
 	  $errors = array();
 
-	  if ($this->mParentId < -1) 
+	  if ($this->parent_id < -1) 
 	    {
 	      $errors[] = lang('invalidparent');
 	      $result = false;
 	    }
 	  
-	  if ($this->mName == '')
+	  if ($this->name == '')
 	    {
-	      if ($this->mMenuText != '')
+	      if ($this->menu_text != '')
 		{
-		  $this->mName = $this->mMenuText;
+		  $this->name = $this->menu_text;
 		}
 	      else
 		{
@@ -1299,11 +1121,11 @@ class ContentBase extends CmsObject
 		}
 	    }
 	  
-	  if ($this->mMenuText == '')
+	  if ($this->menu_text == '')
 	    {
-	      if ($this->mName != '')
+	      if ($this->name != '')
 		{
-		  $this->mMenuText = $this->mName;
+		  $this->menu_text = $this->name;
 		}
 	      else
 		{
@@ -1314,11 +1136,11 @@ class ContentBase extends CmsObject
 		
 	  if (!$this->HandlesAlias())
 	    {
-	      if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) 
+	      if ($this->alias != $this->mOldAlias || ($this->alias == '' && $this->RequiresAlias()) ) 
 		{
 		  global $gCms;
 		  $contentops =& $gCms->GetContentOperations();
-		  $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
+		  $error = $contentops->CheckAliasError($this->alias, $this->id);
 		  if ($error !== FALSE)
 		    {
 		      $errors[]= $error;
@@ -1345,7 +1167,7 @@ class ContentBase extends CmsObject
 
 		$result = false;
 
-		if (-1 > $this->mId)
+		if (-1 > $this->id)
 		{
 			if (true == $config["debug"])
 			{
@@ -1356,7 +1178,7 @@ class ContentBase extends CmsObject
 		else
 		{
 			$query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			$dbresult = $db->Execute($query, array($this->mId));
+			$dbresult = $db->Execute($query, array($this->id));
 
 			if (! $dbresult)
 			{
@@ -1372,7 +1194,7 @@ class ContentBase extends CmsObject
 			$result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
 
 			#Remove the cross references
-			remove_cross_references($this->mId, 'content');
+			remove_cross_references($this->id, 'content');
 
 			$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
 			@unlink($cachefilename);
@@ -1380,7 +1202,7 @@ class ContentBase extends CmsObject
 			if (NULL != $this->mProperties)
 			{
 				# :TODO: There might be some error checking there
-				$this->mProperties->Delete($this->mId);
+				$this->mProperties->Delete($this->id);
 			}
 			else
 			{
@@ -1416,42 +1238,42 @@ class ContentBase extends CmsObject
       // title
       if (isset($params['title']))
 	{
-	  $this->mName = $params['title'];
+	  $this->name = $params['title'];
 	}
 
       // menu text
       if (isset($params['menutext']))
 	{
-	  $this->mMenuText = $params['menutext'];
+	  $this->menu_text = $params['menutext'];
 	}
 
       // parent id
       if( isset($params['parent_id']) )
 	{
-	  if ($this->mParentId != $params['parent_id'])
+	  if ($this->parent_id != $params['parent_id'])
 	    {
-	      $this->mHierarchy = '';
-	      $this->mItemOrder = -1;
+	      $this->hierarchy = '';
+	      $this->item_order = -1;
 	    }
-	  $this->mParentId = $params['parent_id'];
+	  $this->parent_id = $params['parent_id'];
 	}
 
       // active
       if (isset($params['active']))
 	{
-	  $this->mActive = $params['active'];
+	  $this->active = $params['active'];
 	}
       
       // secure
       if (isset($params['secure']))
 	{
-	  $this->mSecure = $params['secure'];
+	  $this->secure = $params['secure'];
 	}
       
       // show in menu
       if (isset($params['showinmenu']))
 	{
-	  $this->mShowInMenu = $params['showinmenu'];
+	  $this->show_in_menu = $params['showinmenu'];
 	}
 
       // alias
@@ -1460,16 +1282,16 @@ class ContentBase extends CmsObject
 	  $tmp = trim($params['alias']);
 	  if( empty($tmp) )
 	    {
-	      $this->SetAlias($tmp);
+	      $this->set_alias($tmp);
 	    }
 	  else
 	    {
-	      $this->SetAlias($tmp, $this->DoAutoAlias());
+	      $this->set_alias($tmp, $this->DoAutoAlias());
 	    }
 	}
       else if($this->RequiresAlias() && $this->DoAutoAlias())
 	{
-	  $this->SetAlias('');
+	  $this->set_alias('');
 	}
 
       // target
@@ -1486,25 +1308,25 @@ class ContentBase extends CmsObject
       // title attribute
       if (isset($params['titleattribute']))
 	{
-	  $this->mTitleAttribute = $params['titleattribute'];
+	  $this->title_attribute = $params['titleattribute'];
 	}
 
       // accesskey
       if (isset($params['accesskey']))
 	{
-	  $this->mAccessKey = $params['accesskey'];
+	  $this->access_eky = $params['accesskey'];
 	}
 
       // tab index
       if (isset($params['tabindex']))
 	{
-	  $this->mTabIndex = $params['tabindex'];
+	  $this->tab_index = $params['tabindex'];
 	}
 
       // cachable
       if (isset($params['cachable']))
 	{
-	  $this->mCachable = $params['cachable'];
+	  $this->cachable = $params['cachable'];
 	}
       else
 	{
@@ -1514,7 +1336,7 @@ class ContentBase extends CmsObject
       // owner
       if (isset($params["ownerid"]))
 	{
-	  $this->SetOwner($params["ownerid"]);
+	  $this->owner_id = $params["ownerid"];
 	}
 	 
       // additional editors
@@ -1540,7 +1362,7 @@ class ContentBase extends CmsObject
 		global $gCms;
 		$config = &$gCms->GetConfig();
 		$url = "";
-		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
+		$alias = ($this->alias != ''?$this->alias:$this->id);
 
 		$root_url = $config['root_url'];
 		if ($this->IsSecurePage())
@@ -1549,7 +1371,7 @@ class ContentBase extends CmsObject
 		  }
 
 		/* use root_url for default content */
-		if($this->mDefaultContent) {
+		if($this->default_content) {
 			$url =  $root_url . '/';
 			return $url;
 		}
@@ -1600,6 +1422,7 @@ class ContentBase extends CmsObject
     public function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
 	# :TODO:
+	var_dump($this);
 	return array(array('Error','Edit Not Defined!'));
     }
 
@@ -1634,31 +1457,38 @@ class ContentBase extends CmsObject
 	public function has_children($activeonly = false)
 	{
 		if( $activeonly && !($this->Active() || $this->ShowInMenu()))
-			{
-				return false;
-			}
+		{
+			return false;
+		}
 
-		global $gCms, $sql_queries, $debug_errors;
-		$db = &$gCms->GetDb();
-		$config =& $gCms->GetConfig();
+		if (!$activeonly)
+		{
+			return $this->rgt - $this->lft > 1;
+		}
+		else
+		{
+			global $gCms, $sql_queries, $debug_errors;
+			$db = &$gCms->GetDb();
+			$config =& $gCms->GetConfig();
 
-		$result = false;
+			$result = false;
 
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-		$parms = array($this->mId);
-		if( $activeonly )
+			$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+			$parms = array($this->id);
+			if( $activeonly )
 			{
 				$query .= ' AND show_in_menu = 1 AND active = 1';
 			}
 
-		$row = &$db->GetRow($query, array($parms));
+			$row = &$db->GetRow($query, array($parms));
 
-		if ($row)
-		{
-			$result = true;
+			if ($row)
+			{
+				$result = true;
+			}
+
+			return $result;
 		}
-
-		return $result;
 	}
 	
 	public function HasChildren($activeonly = false)
@@ -1676,7 +1506,7 @@ class ContentBase extends CmsObject
 			$this->mAdditionalEditors = array();
 
 			$query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
-			$dbresult = &$db->Execute($query,array($this->mId));
+			$dbresult = &$db->Execute($query,array($this->id));
 
 			while ($dbresult && !$dbresult->EOF)
 			{
@@ -1930,41 +1760,41 @@ class ContentBase extends CmsObject
 	  switch( $one )
 	    {
 	    case 'cachable':
-	      return array(lang('cachable').':','<input type="hidden" name="cachable" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
+	      return array(lang('cachable').':','<input type="hidden" name="cachable" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->Cachable()?' checked="checked"':'').' />');
 	      break;
 	
 	    case 'title':
 	      {
-		return array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
+		return array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->name).'" />');
 	      }
 	      break;
 	      
 	    case 'menutext':
 	      {
-		return array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
+		return array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->menu_text).'" />');
 	      }
 	      break;
 	      
 	    case 'parent':
 		{
 		  $contentops =& $gCms->GetContentOperations();
-		  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
+		  $tmp = $contentops->CreateHierarchyDropdown($this->id, $this->parent_id, 'parent_id', 0, 1);
 		  if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
-		    return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
+		    return array('','<input type="hidden" name="parent_id" value="'.$this->parent_id.'" />');
 		  if( !empty($tmp) ) return array(lang('parent').':',$tmp);
 		}
 	      break;
 
 	    case 'active':
-	      return array(lang('active').':','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" value="1"'.($this->mActive?' checked="checked"':'').' />');
+	      return array(lang('active').':','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" value="1"'.($this->active?' checked="checked"':'').' />');
 	      break;
 	      
 	    case 'secure':
-	      return array(lang('secure_page').':','<input type="hidden" name="secure" value="0"/><input class="pagecheckbox" type="checkbox" name="secure" value="1"'.($this->mSecure?' checked="checked"':'').' />');
+	      return array(lang('secure_page').':','<input type="hidden" name="secure" value="0"/><input class="pagecheckbox" type="checkbox" name="secure" value="1"'.($this->secure?' checked="checked"':'').' />');
 	      break;
 	      
 	    case 'showinmenu':
-	      return array(lang('showinmenu').':','<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+	      return array(lang('showinmenu').':','<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($this->show_in_menu?' checked="checked"':'').' />');
 	      break;
 	      
 	    case 'target':
@@ -1980,7 +1810,7 @@ class ContentBase extends CmsObject
 	      break;
 	      
 	    case 'alias':
-	      return array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
+	      return array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->alias.'" />');
 	      break;
 	      
 	    case 'image':
@@ -2003,19 +1833,19 @@ class ContentBase extends CmsObject
 	      
 	    case 'titleattribute':
 	      {
-		return array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
+		return array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->titleattribute).'" />');
 	      }
 	      break;
 	      
 	    case 'accesskey':
 	      {
-		return array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+		return array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->accesskey).'" />');
 	      }
 	      break;
 
 	    case 'tabindex':
 	      {
-		return array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
+		return array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="5" value="'.cms_htmlentities($this->tab_index).'" />');
 	      }
 	      break;
 	      
@@ -2128,8 +1958,8 @@ class ContentBase extends CmsObject
 			//created yet.  We should probably do that.
 			if (!$this->children_loaded)
 			{
-				//$this->tree->load_child_nodes(-1, $this->lft, $this->rgt);
-				$this->tree->load_child_nodes($this->mId);
+				$this->tree->load_child_nodes(-1, $this->lft, $this->rgt);
+				//$this->tree->load_child_nodes($this->id);
 			}
 		}
 		return $this->children;
@@ -2315,7 +2145,7 @@ class ContentProperties
 					$dbresult = $db->Execute($delquery, array($content_id, $key));
 					if (true == $config["debug"])
 					  {
-					    $sql_queries .= "<p>".$db->sql."</p>\n";
+					    //$sql_queries .= "<p>".$db->sql."</p>\n";
 					  }
 					
 					$sql_vars = array(
@@ -2327,7 +2157,7 @@ class ContentProperties
 					$dbresult = $db->Execute($insquery, $sql_vars);
 					if (true == $config["debug"])
 					  {
-					    $sql_queries .= "<p>".$db->sql."</p>\n";
+					    //$sql_queries .= "<p>".$db->sql."</p>\n";
 					  }
 
 					$concat .= $this->mPropertyValues[$key];
@@ -2389,7 +2219,7 @@ class ContentProperties
  * @since		0.9
  * @package		CMS
  */
-class CMSModuleContentType extends ContentBase
+class CMSModuleContentType extends CmsContentBase
 {
 	//What module do I belong to?  (needed for things like Lang to work right)
 	public function ModuleName()
@@ -2428,6 +2258,11 @@ class CMSModuleContentType extends ContentBase
 			return 'ModuleName() not defined properly';
 		}
 	}
+}
+
+class ContentBase extends CmsContentBase
+{
+	
 }
 
 # vim:ts=4 sw=4 noet

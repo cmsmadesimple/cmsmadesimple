@@ -62,12 +62,11 @@ class CmsPageTree extends CmsTree
 
 		if ($lft == -1 && $rgt == -1)
 		{
-			//$pages = cms_orm()->content->find_all_by_parent_id($parent_id, array('order' => 'lft ASC'));
 			$pages = CmsContentOperations::LoadMultipleFromParentId($parent_id);
 		}
 		else
 		{
-			$pages = cms_orm()->content->find_all(array('conditions' => array('lft > ? AND rgt < ?', $lft, $rgt), 'order' => 'lft ASC'));
+			$pages = CmsContentOperations::LoadMultipleFromLeftAndRight($lft, $rgt);
 		}
 		
 		//var_dump(count($pages));
@@ -75,20 +74,20 @@ class CmsPageTree extends CmsTree
 		
 		foreach ($pages as $page)
 		{
-			if ($page->mParentId > -1)
+			if ($page->parent_id > -1)
 			{
-				$parent_node = $this->get_node_by_id($page->mParentId);
+				$parent_node = $this->get_node_by_id($page->parent_id);
 				if ($parent_node != null)
 				{
 					$parent_node->add_child($page);
-					self::$content[(string)$page->mId] = $page; //Put a reference up so we can quickly check to see if it's loaded already
+					self::$content[(string)$page->id] = $page; //Put a reference up so we can quickly check to see if it's loaded already
 					$parent_node->children_loaded = true;
 				}
 			}
 			else
 			{
 				$this->root->add_child($page);
-				self::$content[(string)$page->mId] = $page;
+				self::$content[(string)$page->id] = $page;
 				$this->root->children_loaded = true;
 			}
 		}
@@ -108,7 +107,7 @@ class CmsPageTree extends CmsTree
 			foreach ($top_nodes as $one_node)
 			{
 				//Don't bother doing this if we're only level 2
-				if ($one_node->lft < $page->lft && $one_node->rgt > $page->rgt && $one_node->id != $page->mId)
+				if ($one_node->lft < $page->lft && $one_node->rgt > $page->rgt && $one_node->id != $page->id)
 				{
 					$ancestor = $one_node;
 					break;

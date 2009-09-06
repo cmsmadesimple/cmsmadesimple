@@ -41,18 +41,21 @@ class PageLink extends ContentBase
       return false;
     }
 
-    function SetProperties()
-    {
-      parent::SetProperties();
-      $this->RemoveProperty('cachable',1);
-      $this->RemoveProperty('secure',false);
-      //$this->RemoveProperty('showinmenu',1);
-      $this->AddContentProperty('page',10,1,'int');
-      $this->AddContentProperty('params',10,1);
-		
-      //Turn off caching
-      $this->mCachable = false;
-    }
+	function SetProperties()
+	{
+		parent::SetProperties();
+
+		/*
+		$this->RemoveProperty('cachable',1);
+		$this->RemoveProperty('secure',false);
+		//$this->RemoveProperty('showinmenu',1);
+		$this->AddContentProperty('page',10,1,'int');
+		$this->AddContentProperty('params',10,1);
+		*/
+
+		//Turn off caching
+		$this->mCachable = false;
+	}
 
     function FillParams($params)
     {

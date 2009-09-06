@@ -163,7 +163,7 @@ class Smarty_CMS extends Smarty {
 
 	function module_file_template($tpl_name, &$tpl_source, &$smarty_obj)
     {
-        //5.3 $params = split(';', $tpl_name);
+        //5.3 $params = explode(';', $tpl_name);
 		$params = explode(';', $tpl_name);
 
         if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/module_custom/' . $params[0] . '/templates/' . $params[1]))
@@ -181,7 +181,7 @@ class Smarty_CMS extends Smarty {
 
 	function module_file_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
-		//5.3 $params = split(';', $tpl_name);
+		//5.3 $params = explode(';', $tpl_name);
 		$params = explode(';', $tpl_name);
 		if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]))
 		{
@@ -191,56 +191,55 @@ class Smarty_CMS extends Smarty {
 		return false;
 	}
 
-    function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)
-    {   
-        global $gCms;
+	function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)
+	{   
+		$gCms = cmsms();
+		$db = cms_db();
+		$config = cms_config();
 
-        $db = &$gCms->GetDb();
-        $config = $gCms->config;
+		$query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? AND template_name = ?";
+		$row = $db->GetRow($query, explode(';', $tpl_name));
 
-        $query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-        $row = $db->GetRow($query, split(';', $tpl_name));
+		if ($row)
+		{
+			$tpl_source = $row['content'];
+			return true;
+		}
 
-        if ($row)
-        {
-            $tpl_source = $row['content'];
-            return true;
-        }
-
-        return false;
-    }
+		return false;
+	}
 
 	function module_db_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
-		global $gCms;
+		$gCms = cmsms();
+		$db = cms_db();
+		$config = cms_config();
 
-		$db = &$gCms->GetDb();
-		$config = $gCms->config;
 		if( isset($gCms->variables['module_template_cache']) &&
-		    isset($gCms->variables['module_template_cache'][$tpl_name]) )
-		  {
-		    $tpl_timestamp = $gCms->variables['module_template_cache'][$tpl_name];
-		    return true;
-		  }
-		
-		$query = "SELECT module_name,template_name,modified_date 
-                            FROM ".cms_db_prefix()."module_templates";
+			isset($gCms->variables['module_template_cache'][$tpl_name]) )
+		{
+			$tpl_timestamp = $gCms->variables['module_template_cache'][$tpl_name];
+			return true;
+		}
+
+		$query = "SELECT module_name,template_name,modified_date FROM ".cms_db_prefix()."module_templates";
 		$results = $db->GetArray($query);
 
 		if( !count($results) ) return false;
 
 		if( !isset($gCms->variables['module_template_cache']) )
-		  {
-		    $gCms->variables['module_template_cache'] = array();
-		  }
+		{
+			$gCms->variables['module_template_cache'] = array();
+		}
 		foreach( $results as $row )
-		  {
-		    $key = $row['module_name'].';'.$row['template_name'];
-		    $val = $db->UnixTimeStamp($row['modified_date']);
-		    $gCms->variables['module_template_cache'][$key] = $val;
-		  }
+		{
+			$key = $row['module_name'].';'.$row['template_name'];
+			$val = $db->UnixTimeStamp($row['modified_date']);
+			$gCms->variables['module_template_cache'][$key] = $val;
+		}
 
 		$tpl_timestamp = $gCms->variables['module_template_cache'][$tpl_name];
+		
 		return true;
 	}
 
@@ -276,7 +275,7 @@ class Smarty_CMS extends Smarty {
 			#defined plugin instead.
 			if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 			{
-				$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+				$tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
 			}
 		}
 		else
@@ -643,7 +642,7 @@ class Smarty_CMS extends Smarty {
 				#defined plugin instead.
 				if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 				{
-					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+					$tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
 				}
 				
 				//do_cross_reference($pageinfo->content_id, 'content', $tpl_source);

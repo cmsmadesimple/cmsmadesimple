@@ -18,20 +18,20 @@
 #
 #$Id$
 
-class Content extends ContentBase
+class Content extends CmsContentBase
 {
     var $_contentBlocks;
     var $_contentBlocksLoaded;
     var $doAutoAliasIfEnabled;
     var $stylesheet;
 	
-    function Content()
-    {
-	$this->ContentBase();
-	$this->_contentBlocks = array();
-	$this->_contentBlocksLoaded = false;
-	$this->doAutoAliasIfEnabled = true;
-    }
+	function __construct()
+	{
+		parent::__construct();
+		$this->_contentBlocks = array();
+		$this->_contentBlocksLoaded = false;
+		$this->doAutoAliasIfEnabled = true;
+	}
 
     function IsCopyable()
     {
@@ -43,18 +43,18 @@ class Content extends ContentBase
       return lang('contenttype_content');
     }
 
-    function SetProperties()
-    {
-      parent::SetProperties();
-      $this->AddBaseProperty('template',4);
-      $this->AddBaseProperty('pagemetadata',20);
-      $this->AddContentProperty('searchable',8);
-      $this->AddContentProperty('pagedata',25);
-      $this->AddContentProperty('disable_wysiwyg',60);
+	function SetProperties()
+	{
+		parent::SetProperties();
+		$this->AddBaseProperty('template',4);
+		$this->AddBaseProperty('pagemetadata',20);
+		$this->AddContentProperty('searchable',8);
+		$this->AddContentProperty('pagedata',25);
+		$this->AddContentProperty('disable_wysiwyg',60);
 
-      #Turn on preview
-      $this->SetPreviewAble(true);
-    }
+		#Turn on preview
+		$this->SetPreviewAble(true);
+	}
 
     /**
      * Use the ReadyForEdit callback to get the additional content blocks loaded.

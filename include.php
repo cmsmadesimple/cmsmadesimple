@@ -59,7 +59,7 @@ if( isset($CMS_ADMIN_PAGE) )
  * @package CMS
  */
 #magic_quotes_runtime is a nuisance...  turn it off before it messes something up
-set_magic_quotes_runtime(false);
+@set_magic_quotes_runtime(false);
 
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.functions.php');
@@ -247,7 +247,7 @@ debug_buffer('', 'End of include');
 
 function sanitize_get_var(&$value, $key)
 {
-    $value = eregi_replace('\<\/?script[^\>]*\>', '', $value);
+    $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value);
 }
 
 # vim:ts=4 sw=4 noet

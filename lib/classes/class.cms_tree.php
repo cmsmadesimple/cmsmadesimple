@@ -52,6 +52,7 @@ class CmsTree extends CmsObject
 	function add_child($node)
 	{
 		$node->set_parent($this->root);
+		$node->tree = $this;
 		$this->root->children[] = $node;
 	}
 	

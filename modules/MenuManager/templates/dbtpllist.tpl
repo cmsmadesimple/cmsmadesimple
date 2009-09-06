@@ -25,9 +25,9 @@
                             {$entry->setdefault_link}
  			  {/if}
                         </td>
-			<td>{$entry->importlink}</td>
-			<td>{$entry->editlink}</td>
-			<td>{$entry->deletelink}</td>
+			<td>{if isset($entry->importlink)}{$entry->importlink}{/if}</td>
+			<td>{if isset($entry->editlink)}{$entry->editlink}{/if}</td>
+			<td>{if isset($entry->deletelink)}{$entry->deletelink}{/if}</td>
 		</tr>
 	{/foreach}
 	</tbody>

@@ -84,59 +84,34 @@ if ($access)
 {
 	if (isset($_POST["edithtmlblob"]))
 	{
-		$validinfo = true;
-		if ($htmlblob == "")
-		{
-			$error .= "<li>".lang('nofieldgiven', array(lang('edithtmlblob')))."</li>";
-			$validinfo = false;
-		}
-		else if ($htmlblob != $oldhtmlblob && $gcbops->CheckExistingHtmlBlobName($htmlblob, $htmlblob_id))
-		{
-			$error .= "<li>".lang('blobexists')."</li>";
-			$validinfo = false;
-		}
+		$blobobj = cms_orm('CmsGlobalContent')->find_by_id($htmlblob_id);
+		$blobobj->name = $htmlblob;
+		$blobobj->content = $content;
+		$blobobj->owner = $owner_id;
 
-		if ($validinfo)
+		if ($blobobj->save())
 		{
-			$blobobj = new GlobalContent();
-			$blobobj->id = $htmlblob_id;
-			$blobobj->name = $htmlblob;
-			$blobobj->content = $content;
-			$blobobj->owner = $owner_id;
-
 			$blobobj->ClearAuthors();
-			if (isset($_POST["additional_editors"])) {
-					foreach ($_POST["additional_editors"] as $addt_user_id) {
-						$blobobj->AddAuthor($addt_user_id);
-					}
-			}
-			// add this user as an additional editor? why?
-			$blobobj->AddAuthor($userid);
-
-			Events::SendEvent('Core', 'EditGlobalContentPre', array('global_content' => &$blobobj));
-
-			$result = $blobobj->save();
-
-			if ($result)
+			if (isset($_POST["additional_editors"]))
 			{
-				audit($blobobj->id, $blobobj->name, 'Edited Html Blob');
-
-				#Clear cache
-				$smarty = new Smarty_CMS($config);
-				$smarty->clear_all_cache();
-				$smarty->clear_compiled_tpl();
-
-				Events::SendEvent('Core', 'EditGlobalContentPost', array('global_content' => &$blobobj));
-
-				if (!isset($_POST['apply'])) {
-					redirect('listhtmlblobs.php'.$urlext);
-					return;
+				foreach ($_POST["additional_editors"] as $addt_user_id)
+				{
+					$blobobj->AddAuthor($addt_user_id);
 				}
 			}
-			else
+			$blobobj->AddAuthor($userid);
+
+			audit($blobobj->id, $blobobj->name, 'Edited Html Blob');
+
+			if (!isset($_POST['apply']))
 			{
-				$error .= "<li>".lang('errorinsertingblob')."</li>";
+				redirect('listhtmlblobs.php'.$urlext);
+				return;
 			}
+		}
+		else
+		{
+			$error .= "<li>".lang('errorinsertingblob')."</li>";
 		}
 
 		if ($ajax)
@@ -160,7 +135,7 @@ if ($access)
 	}
 	else if ($htmlblob_id != -1)
 	{
-		$onehtmlblob = $gcbops->LoadHtmlBlobByID($htmlblob_id);
+		$onehtmlblob = cms_orm('CmsGlobalContent')->find_by_id($htmlblob_id);
 		$htmlblob = $onehtmlblob->name;
 		$oldhtmlblob = $onehtmlblob->name;
 		$owner_id = $onehtmlblob->owner;

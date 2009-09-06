@@ -125,7 +125,7 @@ class MenuManager extends CMSModule
 			return;
 		}
 
-		if ($params['node']->HasChildren())
+		if ($params['node']->has_children())
 		{
 			$this->current_depth++;
 
@@ -162,7 +162,7 @@ class MenuManager extends CMSModule
 
 			foreach ($nodes as &$node)
 			{
-				$content = $node->GetContent();
+				//$content = $node->GetContent();
 				$this->add_fields_to_node($node);
 				$node->show = $this->should_show_node($node, $params);
 
@@ -194,7 +194,7 @@ class MenuManager extends CMSModule
 		//$node->url = $content->GetUrl(true, $lang);
 		$node->url = $content->GetUrl(true);
 		//$content->menutext = cms_htmlentities($content->get_property_value('menu_text', $lang));
-		$node->haschildren = $node->hasChildren();
+		$node->haschildren = $node->has_children();
 		$node->target = '';
 		//if ($content->has_property('target'))
 		//	$content->target = $content->get_property_value('target');
@@ -242,6 +242,68 @@ class MenuManager extends CMSModule
 		return $should_show;
 	}
 
+
+
+	function GetHelp($lang='en_US')
+	{
+		return $this->Lang('help');
+	}
+
+	function GetAuthor()
+	{
+		return 'Ted Kulp';
+	}
+
+	function GetAuthorEmail()
+	{
+		return 'ted@cmsmadesimple.org';
+	}
+
+	function GetChangeLog()
+	{
+		return $this->Lang('changelog');
+	} 
+
+	function GetMenuTemplate($tpl_name)
+	{
+		$data = false;
+		if (endswith($tpl_name, '.tpl'))
+		{
+			global $gCms;
+			// template file, we're gonna have to get it from
+			// the filesystem, 
+			$fn = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
+			$fn .= $this->GetName().DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR;
+			$fn .= $tpl_name;
+			if( file_exists( $fn ) )
+			{
+				$data = file_get_contents($fn);
+			}
+		}
+		else
+		{
+			$data = $this->GetTemplate($tpl_name);
+		}
+
+		return $data;
+	}
+
+	function SetMenuTemplate( $tpl_name, $content )
+	{
+		if (endswith($tpl_name, '.tpl'))
+		{
+			return false;
+		}
+
+		$this->SetTemplate( $tpl_name, $content );
+		return true;
+	}
+	
+	/**
+	 * Below are methods used for the old flat style of menu development.  These are here
+	 * only for backwards compatibility sake.
+	 */
+	
 	/**
 	 * Recursive function to go through all nodes and put them into a list
 	 */
@@ -432,61 +494,7 @@ class MenuManager extends CMSModule
 		}
 		return $reverse ? $size-1-$pos : $pos;
 	}
-
-	function GetHelp($lang='en_US')
-	{
-		return $this->Lang('help');
-	}
-
-	function GetAuthor()
-	{
-		return 'Ted Kulp';
-	}
-
-	function GetAuthorEmail()
-	{
-		return 'ted@cmsmadesimple.org';
-	}
-
-	function GetChangeLog()
-	{
-		return $this->Lang('changelog');
-	} 
-
-	function GetMenuTemplate($tpl_name)
-	{
-		$data = false;
-		if (endswith($tpl_name, '.tpl'))
-		{
-			global $gCms;
-			// template file, we're gonna have to get it from
-			// the filesystem, 
-			$fn = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
-			$fn .= $this->GetName().DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR;
-			$fn .= $tpl_name;
-			if( file_exists( $fn ) )
-			{
-				$data = file_get_contents($fn);
-			}
-		}
-		else
-		{
-			$data = $this->GetTemplate($tpl_name);
-		}
-
-		return $data;
-	}
-
-	function SetMenuTemplate( $tpl_name, $content )
-	{
-		if (endswith($tpl_name, '.tpl'))
-		{
-			return false;
-		}
-
-		$this->SetTemplate( $tpl_name, $content );
-		return true;
-	}
+	
 } // End of class
 
 # vim:ts=4 sw=4 noet

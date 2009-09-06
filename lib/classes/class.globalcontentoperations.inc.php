@@ -25,7 +25,7 @@
  * @package		CMS
  */
 
-include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.globalcontent.inc.php');
+include_once(dirname(__FILE__) . DS . 'class.cms_global_content.php');
 
 class GlobalContentOperations
 {
@@ -89,87 +89,17 @@ class GlobalContentOperations
 
 	function LoadHtmlBlobs()
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$result = array();
-
-		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs ORDER BY htmlblob_name";
-		$dbresult = &$db->Execute($query);
-
-		while (is_object($dbresult) && !$dbresult->EOF)
-		{
-			$oneblob = new GlobalContent();
-			$oneblob->id = $dbresult->fields['htmlblob_id'];
-			$oneblob->name = $dbresult->fields['htmlblob_name'];
-			$oneblob->content = $dbresult->fields['html'];
-			$oneblob->owner = $dbresult->fields['owner'];
-			$oneblob->modified_date = $db->UnixTimeStamp($dbresult->fields['modified_date']);
-			$result[] = $oneblob;
-			$dbresult->MoveNext();
-		}
-		if( $dbresult ) $dbresult->Close();
-		return $result;
+		return cms_orm('CmsGlobalContent')->find_all(array('ORDER' => 'name ASC'));
 	}
 
 	function LoadHtmlBlobByID($id)
 	{
-		$result = false;
-
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ?";
-		$row = &$db->GetRow($query, array($id));
-
-		if ($row)
-		{
-			$oneblob = new GlobalContent();
-			$oneblob->id = $row['htmlblob_id'];
-			$oneblob->name = $row['htmlblob_name'];
-			$oneblob->content = $row['html'];
-			$oneblob->owner = $row['owner'];
-			$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
-			$result =& $oneblob;
-		}
-
-		return $result;
+		return cms_orm('CmsGlobalContent')->find_by_id($id, array('ORDER' => 'name ASC'));
 	}
 
-	function &LoadHtmlBlobByName($name)
+	function LoadHtmlBlobByName($name)
 	{
-		$result = false;
-
-		global $gCms;
-		$db = &$gCms->GetDb();
-		$gcbops =& $gCms->GetGlobalContentOperations();
-		$cache = &$gCms->HtmlBlobCache;
-
-		if (isset($cache[$name]))
-		{
-			return $cache[$name];
-		}
-
-		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
-		$row = &$db->GetRow($query, array($name));
-
-		if ($row)
-		{
-			$oneblob = new GlobalContent();
-			$oneblob->id = $row['htmlblob_id'];
-			$oneblob->name = $row['htmlblob_name'];
-			$oneblob->content = $row['html'];
-			$oneblob->owner = $row['owner'];
-			$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
-			$result =& $oneblob;
-
-			if (!isset($cache[$oneblob->name]))
-			{
-				$cache[$oneblob->name] =& $oneblob;
-			}
-		}
-
-		return $result;
+		return cms_orm('CmsGlobalContent')->find_by_name($name, array('ORDER' => 'name ASC'));
 	}
 
 	function InsertHtmlBlob($htmlblob)

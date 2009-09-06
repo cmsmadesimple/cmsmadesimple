@@ -96,9 +96,9 @@ class CmsDateTime extends CmsObject
 	{
 		$format = '%x %X';
 
-		$user = CmsLogin::get_current_user();
-		if ($user != null)
-			$format = get_preference($user->id, 'date_format_string', $format);
+		//$user = CmsLogin::get_current_user();
+		//if ($user != null)
+		//	$format = get_preference($user->id, 'date_format_string', $format);
 
 		return $this->strftime($format);
 	}

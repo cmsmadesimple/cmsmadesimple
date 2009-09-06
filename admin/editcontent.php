@@ -63,7 +63,7 @@ function do_save_content($contentobj,$data)
   if( $error === FALSE )
     {
       $contentobj->SetLastModifiedBy(get_userid());
-      $contentobj->Save();
+      $contentobj->save();
 
       $gCms = cmsms();
       $contentops =& $gCms->GetContentOperations();

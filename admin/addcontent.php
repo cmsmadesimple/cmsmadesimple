@@ -158,7 +158,7 @@ if ($access)
 		$error = $contentobj->ValidateData();
 		if ($error === FALSE)
 		{
-			$contentobj->Save();
+			$contentobj->save();
 			global $gCms;
 			$contentops =& $gCms->GetContentOperations();
 			$contentops->SetAllHierarchyPositions();

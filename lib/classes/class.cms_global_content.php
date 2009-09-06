@@ -24,80 +24,33 @@
  * @since		0.6
  * @package		CMS
  */
-class GlobalContent
+class CmsGlobalContent extends CmsObjectRelationalMapping
 {
-	var $id;
-	var $name;
-	var $content;
-	var $owner;
-	var $modified_date;
-
-	function GlobalContent()
+	var $params = array('id' => -1, 'name' => '', 'owner' => -1, 'content' => '');
+	var $field_maps = array('htmlblob_name' => 'name', 'html' => 'content', 'htmlblob_id' => 'id');
+	var $table = 'htmlblobs';
+	var $sequence = 'htmlblobs_seq';
+	
+	public function __construct()
 	{
-		$this->SetInitialValues();
+		parent::__construct();
 	}
-
-	function SetInitialValues()
+	
+	public function validate()
 	{
-		$this->id = -1;
-		$this->name = '';
-		$this->content = '';
-		$this->owner = -1;
-		$this->modified_date = -1;
-	}
-
-	function Id()
-	{
-		return $this->id;
-	}
-
-	function Name()
-	{
-		return $this->name;
-	}
-
-	function Save()
-	{
-		$result = false;
-		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
-		
-		if ($this->id > -1)
+		$this->validate_not_blank('name', lang('nofieldgiven', array(lang('name'))));
+		$this->validate_not_blank('content', lang('nofieldgiven', array(lang('content'))));
+		if ($this->name != '')
 		{
-			$result = $gcbops->UpdateHtmlBlob($this);
-		}
-		else
-		{
-			$newid = $gcbops->InsertHtmlBlob($this);
-			if ($newid > -1)
+			$result = $this->find_all_by_name($this->name);
+			if (count($result) > 0)
 			{
-				$this->id = $newid;
-				$result = true;
-			}
-
-		}
-
-		return $result;
-	}
-
-	function Delete()
-	{
-		$result = false;
-		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
-
-		if ($this->id > -1)
-		{
-			$result = $gcbops->DeleteHtmlBlobByID($this->id);
-			if ($result)
-			{
-				$this->SetInitialValues();
+				if ($result[0]->id != $this->id)
+				{
+					$this->add_validation_error(lang('htmlblobexists'));
+				}
 			}
 		}
-
-		return $result;
 	}
 
 	function IsOwner($user_id)
@@ -161,9 +114,39 @@ class GlobalContent
 
 		return $result;
 	}
+	
+	//Callback handlers
+	function before_save()
+	{
+		Events::SendEvent('Core', ($this->id == -1 ? 'AddGlobalContentPre' : 'EditGlobalContentPre'), array('global_content' => &$this));
+	}
+	
+	function after_save()
+	{
+		Events::SendEvent('Core', ($this->create_date == $this->modified_date ? 'AddGlobalContentPost' : 'EditGlobalContentPost'), array('global_content' => &$this));
+		//CmsCache::clear();
+	}
+	
+	function before_delete()
+	{
+		Events::SendEvent('Core', 'DeleteGlobalContentPre', array('global_content' => &$this));
+	}
+	
+	function after_delete()
+	{
+		Events::SendEvent('Core', 'DeleteGlobalContentPost', array('global_content' => &$this));
+		//CmsCache::clear();
+	}
 }
 
-class HtmlBlob extends GlobalContent
+/**
+ * @deprecated Deprecated.  Use CmsGlobalContent instead.
+ */
+class GlobalContent extends CmsGlobalContent
+{
+}
+
+class HtmlBlob extends CmsGlobalContent
 {
 }
 

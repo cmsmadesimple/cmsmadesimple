@@ -35,7 +35,8 @@ if (isset($_POST['htmlblob'])) $htmlblob = $_POST['htmlblob'];
 $content = "";
 if (isset($_POST['content'])) $content = $_POST['content'];
 
-if (isset($_POST["cancel"])) {
+if (isset($_POST["cancel"]))
+{
 	redirect("listhtmlblobs.php".$urlext);
 	return;
 }
@@ -52,31 +53,35 @@ if (get_preference($userid, 'use_wysiwyg') == "1") {
     $use_javasyntax = true;
 }
 */
+
 $gcb_wysiwyg = (get_site_preference('nogcbwysiwyg','0') == '0') ? 1 : 0;
 if( $gcb_wysiwyg )
-  {
-    $gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
-  }
+{
+	$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
+}
 
-
-if ($access) {
-	if (isset($_POST["addhtmlblob"])) {
-		
+if ($access)
+{
+	if (isset($_POST["addhtmlblob"]))
+	{
 		global $gCms;
 		$gcbops =& $gCms->GetGlobalContentOperations();
 		$templateops =& $gCms->GetTemplateOperations();
 
 		$validinfo = true;
-		if ($htmlblob == ""){
+		if ($htmlblob == "")
+		{
 			$error .= "<li>".lang('nofieldgiven', array('addhtmlblob'))."</li>";
 			$validinfo = false;
 		}
-		else if ($gcbops->CheckExistingHtmlBlobName($htmlblob)){
+		else if ($gcbops->CheckExistingHtmlBlobName($htmlblob))
+		{
 			$error .= "<li>".lang('blobexists')."</li>";
 			$validinfo = false;
 		}
 
-		if ($validinfo) {
+		if ($validinfo)
+		{
 			global $gCms;
 			$gcbops =& $gCms->GetGlobalContentOperations();
 
@@ -102,7 +107,8 @@ if ($access) {
 				redirect("listhtmlblobs.php".$urlext);
 				return;
 			}
-			else {
+			else
+			{
 				$error .= "<li>".lang('errorinsertingblob')."</li>";
 			}
 		}

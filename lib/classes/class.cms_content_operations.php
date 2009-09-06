@@ -26,20 +26,20 @@
  * @package		CMS
  */
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
+//require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
 
-class CmsContentOperations
+class CmsContentOperations extends CmsObject
 {
-	function LoadContentType($type)
+	function load_content_type($type)
 	{
 		$type = strtolower($type);
 
 		global $gCms;
-		$contenttypes =& $gCms->contenttypes;
+		$contenttypes = $gCms->contenttypes;
 		
 		if (isset($contenttypes[$type]))
 		{
-			$placeholder =& $contenttypes[$type];
+			$placeholder = $contenttypes[$type];
 			if ($placeholder->loaded == false)
 			{
 				include_once($placeholder->filename);
@@ -49,15 +49,19 @@ class CmsContentOperations
 		}
 		return false;
 	}
+	function LoadContentType($type)
+	{
+		return CmsContentOperations::load_content_type($type);
+	}
 
-	function &LoadContentFromSerializedData(&$data)
+	function LoadContentFromSerializedData(&$data)
 	{
 	  if( !isset($data['content_type']) && !isset($data['serialized_content']) ) return FALSE;
 
 	  $contenttype = 'content';
 	  if( isset($data['content_type']) ) $contenttype = $data['content_type'];
 
-	  $contentobj =& ContentOperations::CreateNewContent($contenttype);
+	  $contentobj = ContentOperations::CreateNewContent($contenttype);
 	  $contentobj = unserialize($data['serialized_content']);
 	  return $contentobj;
 	}
@@ -79,8 +83,10 @@ class CmsContentOperations
     /**
      * Determine proper type of object, load it and return it
      */
-	function &LoadContentFromId($id,$loadprops=false)
+	function LoadContentFromId($id,$loadprops=false)
 	{
+		return cms_orm('CmsContentBase')->find_by_id($id);
+		/*
 		$result = FALSE;
 
 		global $gCms;
@@ -94,7 +100,7 @@ class CmsContentOperations
 			if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes())))
 			{
 				$classtype = strtolower($row['type']);
-				$contentobj =& ContentOperations::CreateNewContent($classtype);
+				$contentobj = ContentOperations::CreateNewContent($classtype);
 				if ($contentobj)
 				{
 					$contentobj->LoadFromData($row, $loadprops);
@@ -110,10 +116,16 @@ class CmsContentOperations
 		{
 			return $result;
 		}
+		*/
 	}
 
-	function &LoadContentFromAlias($alias, $only_active = false)
+	function LoadContentFromAlias($alias, $only_active = false)
 	{
+		if ($only_active)
+			return cms_orm('CmsContentBase')->find_by_alias_and_active($alias, 1);
+		else
+			return cms_orm('CmsContentBase')->find_by_alias($alias);
+		/*
 		global $gCms;
 		$db = &$gCms->GetDb();
 
@@ -144,7 +156,7 @@ class CmsContentOperations
 			if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes())))
 			{
 				$classtype = strtolower($row['type']);
-				$contentobj =& ContentOperations::CreateNewContent($classtype);
+				$contentobj = ContentOperations::CreateNewContent($classtype);
 				$contentobj->LoadFromData($row, TRUE);
 				return $contentobj;
 			}
@@ -157,10 +169,13 @@ class CmsContentOperations
 		{
 		  $tmp = NULL; return $tmp;
 		}
+		*/
 	}
 	
 	function LoadMultipleFromParentId($parent_id, $loadProperties = false)
 	{
+		return cms_orm('CmsContentBase')->find_all_by_parent_id($parent_id);
+		/*
 		$db = cms_db();
 		
 		$result = false;
@@ -174,9 +189,9 @@ class CmsContentOperations
 				if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) 
 				{
 					$classtype = strtolower($row['type']);
-					$contentobj =& ContentOperations::CreateNewContent($classtype);
+					$contentobj = ContentOperations::CreateNewContent($classtype);
 					$contentobj->LoadFromData($row,false);
-					$contents[]=$contentobj;
+					$contents[] = $contentobj;
 					$result = true;
 				}
 			}
@@ -222,6 +237,75 @@ class CmsContentOperations
 		}
 
 		return $contents;
+		*/
+	}
+	
+	function LoadMultipleFromLeftAndRight($lft, $rgt, $loadProperties = false)
+	{
+		return cms_orm('CmsContentBase')->find_all(array('conditions' => array('lft > ? AND rgt < ?', array($lft, $rgt)), 'order' => 'lft asc'));
+		/*
+		$db = cms_db();
+		
+		$result = false;
+		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE lft > ? AND rgt < ? ORDER BY lft";
+		$rows   = $db->Execute($query, array($lft, $rgt));
+
+		if ($rows)
+		{
+			while (isset($rows) && $row = $rows->FetchRow())
+			{
+				if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) 
+				{
+					$classtype = strtolower($row['type']);
+					$contentobj = ContentOperations::CreateNewContent($classtype);
+					$contentobj->LoadFromData($row,false);
+					$contents[] = $contentobj;
+					$result = true;
+				}
+			}
+			$rows->Close();
+		}
+		if (!$result)
+		{
+			if (true == $config["debug"])
+			{
+				# :TODO: Translate the error message
+				$debug_errors .= "<p>Could not retrieve content from db</p>\n";
+			}
+		}
+
+		if ($result && $loadProperties)
+		{
+			foreach ($contents as $content) 
+			{
+				if ($content->mPropertiesLoaded == false)
+				{
+					debug_buffer("load from id is loading properties");
+					$content->mProperties->Load($content->mId);
+					$content->mPropertiesLoaded = true;
+				}
+
+				if (NULL == $content->mProperties)
+				{
+					$result = false;
+
+					# debug mode
+					if (true == $config["debug"])
+					{
+						# :TODO: Translate the error message
+						$debug_errors .= "<p>Could not load properties for content</p>\n";
+					}
+				}
+			}
+		}
+
+		foreach ($contents as $content) 
+		{
+			$content->Load();
+		}
+
+		return $contents;
+		*/
 	}
 
      /**
@@ -232,17 +316,19 @@ class CmsContentOperations
      *
      * @returns array of content objects (empty if not found)
      */
-	/*private*/ function &LoadMultipleFromId($ids, $loadProperties = false)
+	function LoadMultipleFromId($ids, $loadProperties = false)
 	{
-		global $gCms, $sql_queries, $debug_errors;
+		global $sql_queries, $debug_errors;
 		$cpt = count($ids);
 		$contents=array();
 		if ($cpt==0) 
 		{
 			return $contents;
 		}
-		$config = &$gCms->GetConfig();
-		$db = &$gCms->GetDb();
+
+		$config = cms_config();
+		$db = cms_db();
+
 		$id_list = '(';
 		for ($i=0;$i<$cpt;$i++) 
 		{
@@ -259,18 +345,18 @@ class CmsContentOperations
 		}
 		$result = false;
 		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
-		$rows   =& $db->Execute($query);
+		$rows   = $db->Execute($query);
 
 		if ($rows)
 		{
-			while (isset($rows) && $row = &$rows->FetchRow())
+			while (isset($rows) && $row = $rows->FetchRow())
 			{
 				if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) 
 				{
 					$classtype = strtolower($row['type']);
-					$contentobj =& ContentOperations::CreateNewContent($classtype);
+					$contentobj = ContentOperations::CreateNewContent($classtype);
 					$contentobj->LoadFromData($row,false);
-					$contents[]=$contentobj;
+					$contents[] = $contentobj;
 					$result = true;
 				}
 			}
@@ -329,16 +415,17 @@ class CmsContentOperations
      *
      * @returns array of content objects (empty if not found)
      */
-	/*private*/function &LoadMultipleFromAlias($ids, $loadProperties = false)
+	function LoadMultipleFromAlias($ids, $loadProperties = false)
 	{
-		global $gCms, $sql_queries, $debug_errors;
+		global $sql_queries, $debug_errors;
 		$contents=array();
 		if (!is_array($ids) || count($ids) == 0)
 		{
 			return $contents;
 		}
-		$db = &$gCms->GetDb();
-		$config =& $gCms->GetConfig();
+
+		$db = cms_db();
+		$config = cms_config();
 
 		$param_qs = array();
 		for ($i=0; $i<count($ids); $i++) 
@@ -348,17 +435,17 @@ class CmsContentOperations
 
 		$result = false;
 		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias IN " . join(', ', $param_qs);
-		$rows   =& $db->Execute($query, $ids);
+		$rows   = $db->Execute($query, $ids);
 
-		while (isset($rows) && $row=&$rows->FetchRow())
+		while (isset($rows) && $row=$rows->FetchRow())
 		{
 			#Make sure the type exists.  If so, instantiate and load
 			if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) 
 			{
 				$classtype = strtolower($row['type']);
-				$contentobj =& ContentOperations::CreateNewContent($classtype);
+				$contentobj = ContentOperations::CreateNewContent($classtype);
 				$contentobj->LoadFromData($row,false);
-				$contents[] =& $contentobj;
+				$contents[] = $contentobj;
 				$result = true;
 			}
 		}
@@ -422,19 +509,20 @@ class CmsContentOperations
     {
     }
 
-	function & GetDefaultContent()
+	function GetDefaultContent()
 	{
 	  global $gCms;
 	  if( isset($gCms->variables['default_content_id']) )
 	    {
 	      return $gCms->variables['default_content_id'];
 	    }
-		$db =& $gCms->GetDb();
+		
+		$db = cms_db();
 
 		$result = -1;
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$row = &$db->GetRow($query);
+		$row = $db->GetRow($query);
 		if ($row)
 		{
 			$result = $row['content_id'];
@@ -443,7 +531,7 @@ class CmsContentOperations
 		{
 			#Just get something...
 			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
-			$row = &$db->GetRow($query);
+			$row = $db->GetRow($query);
 			if ($row)
 			{
 				$result = $row['content_id'];
@@ -459,7 +547,7 @@ class CmsContentOperations
      * The key is the name of the class that would be saved into the dabase.  The
      * value would be the text returned by the type's FriendlyName() method.
      */
-	function &ListContentTypes()
+	function ListContentTypes()
 	{
 		global $gCms;
 		
@@ -554,9 +642,11 @@ class CmsContentOperations
 		}
 		
 		if ($dbresult) $dbresult->Close();
+		
+		self::ResetNestedSet();
 	}
 	
-	function &GetAllContentAsHierarchy($loadprops, $onlyexpanded=null, $loadcontent = false)
+	function GetAllContentAsHierarchy($loadprops, $onlyexpanded=null, $loadcontent = false)
 	{
 		debug_buffer('', 'starting tree');
 
@@ -648,78 +738,78 @@ class CmsContentOperations
 		$db = &$gCms->GetDb();
 
 		// get the content rows
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? AND active = 1 ORDER BY hierarchy";
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? AND active = 1 ORDER BY lft ASC";
 		if( $all )
-		  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
+			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY lft ASC";
 		$contentrows =& $db->GetArray($query, array($id));
 		$contentprops = '';
 
 		// get the content ids from the returned data
 		if( $loadprops )
-		  {
-		    $child_ids = array();
-		    for( $i = 0; $i < count($contentrows); $i++ )
-		      {
-			$child_ids[] = $contentrows[$i]['content_id'];
-		      }
-		    
-		    // get all the properties for the child_ids
-		    $query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
-		    $tmp =& $db->GetArray($query);
-
-		    // re-organize the tmp data into a hash of arrays of properties for each content id.
-		    if( $tmp )
-		      {
-			$contentprops = array();
+		{
+			$child_ids = array();
 			for( $i = 0; $i < count($contentrows); $i++ )
-			  {
-			    $content_id = $contentrows[$i]['content_id'];
-			    $t2 = array();
-			    for( $j = 0; $j < count($tmp); $j++ )
-			      {
-				if( $tmp[$j]['content_id'] == $content_id )
-				  {
-				    $t2[] = $tmp[$j];
-				  }
-			      }
-			    $contentprops[$content_id] = $t2;
-			  }
-		      }
-		  }
-		
+			{
+				$child_ids[] = $contentrows[$i]['content_id'];
+			}
+
+			// get all the properties for the child_ids
+			$query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
+			$tmp =& $db->GetArray($query);
+
+			// re-organize the tmp data into a hash of arrays of properties for each content id.
+			if( $tmp )
+			{
+				$contentprops = array();
+				for( $i = 0; $i < count($contentrows); $i++ )
+				{
+					$content_id = $contentrows[$i]['content_id'];
+					$t2 = array();
+					for( $j = 0; $j < count($tmp); $j++ )
+					{
+						if( $tmp[$j]['content_id'] == $content_id )
+						{
+							$t2[] = $tmp[$j];
+						}
+					}
+					$contentprops[$content_id] = $t2;
+				}
+			}
+		}
+
 		// build the content objects
 		for( $i = 0; $i < count($contentrows); $i++ )
-		  {
-		    $row =& $contentrows[$i];
-		    $id = $row['content_id'];
+		{
+			$row =& $contentrows[$i];
+			$id = $row['content_id'];
 
-		    if (!in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) continue;
-		    $contentobj =& ContentOperations::CreateNewContent($row['type']);
-		    if ($contentobj)
-		      {
-			$contentobj->LoadFromData($row, false);
-			if( $loadprops && $contentprops && isset($contentprops[$id]) )
-			  {
-			    // load the properties from local cache.
-			    $props =& $contentprops[$id];
-			    $obj =& $contentobj->mProperties;
-			    $obj->mPropertyNames = array();
-			    $obj->mPropertyTypes = array();
-			    $obj->mPropertyValues = array();
-			    foreach( $props as $oneprop )
-			      {
-				$obj->mPropertyNames[] = $oneprop['prop_name'];
-				$obj->mPropertyTypes[$oneprop['prop_name']] = $oneprop['type'];
-				$obj->mPropertyValues[$oneprop['prop_name']] = $oneprop['content'];
-			      }
-			    $contentobj->mPropertiesLoaded = true;
-			  }
+			if (!in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) continue;
+			$contentobj =& ContentOperations::CreateNewContent($row['type']);
+			if ($contentobj)
+			{
+				$contentobj->LoadFromData($row, false);
+				if( $loadprops && $contentprops && isset($contentprops[$id]) )
+				{
+					// load the properties from local cache.
+					$props =& $contentprops[$id];
+					$obj =& $contentobj->mProperties;
+					$obj->mPropertyNames = array();
+					$obj->mPropertyTypes = array();
+					$obj->mPropertyValues = array();
+					foreach( $props as $oneprop )
+					{
+						$obj->mPropertyNames[] = $oneprop['prop_name'];
+						$obj->mPropertyTypes[$oneprop['prop_name']] = $oneprop['type'];
+						$obj->mPropertyValues[$oneprop['prop_name']] = $oneprop['content'];
+					}
+					$contentobj->mPropertiesLoaded = true;
+				}
 
-			// cache the content objects
-			$contentcache =& $tree->content;
-			$contentcache[$id] =& $contentobj;
-		      }
-		  }
+				// cache the content objects
+				$contentcache =& $tree->content;
+				$contentcache[$id] =& $contentobj;
+			}
+		}
 	}
 
 	/**
@@ -803,7 +893,8 @@ class CmsContentOperations
 		$result = '';
 		$userid = -1;
 
-		$allcontent =& ContentOperations::GetAllContent();
+		//$allcontent =& ContentOperations::GetAllContent();
+		$allcontent = cms_orm('CmsContentBase')->find_all(array('order' => 'lft ASC'));
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{
@@ -1051,6 +1142,135 @@ class CmsContentOperations
 		return $tmp;
 	}
 	
+	function ResetNestedSet()
+	{
+		if (!function_exists('get_first_child'))
+		{
+			function get_first_child($set, $check)
+			{
+				foreach ($set as $one)
+				{
+					if ($one != $check && starts_with($one, $check . '.'))
+					{
+						return $one;
+					}
+				}
+			
+				return FALSE;
+			}
+		}
+		
+		if (!function_exists('get_next_sibling'))
+		{
+			function get_next_sibling($set, $check)
+			{
+				//Figure out next sibling
+			
+				//Increment the pos by 1
+				$pos = CmsContentOperations::CreateFriendlyHierarchyPosition($check); //Turn into pure numbers
+				$ary = explode('.', $pos); //Split into an array
+				$pos_num = count($ary) - 1; //Get last item in array
+				$ary[$pos_num] = $ary[$pos_num] + 1; //Inc by 1
+				$pos = CmsContentOperations::CreateUnfriendlyHierarchyPosition(implode('.', $ary)); //Put back into format from string
+			
+				//Return it if it exists
+				$pos = array_search($pos, $set);
+				if ($pos !== FALSE && isset($set[$pos]))
+					return $set[$pos];
+			
+				return FALSE;
+			}
+		}
+		
+		if (!function_exists('get_parent'))
+		{
+			function get_parent($set, $check)
+			{
+				$pos = CmsContentOperations::CreateFriendlyHierarchyPosition($check); //Turn into pure numbers
+				$ary = explode('.', $pos); //Split into an array
+			
+				//This is the top level
+				if (count($ary) < 2)
+				{
+					return FALSE;
+				}
+			
+				//Pull off the last item
+				array_pop($ary);
+			
+				//Return the new string
+				return CmsContentOperations::CreateUnfriendlyHierarchyPosition(implode('.', $ary));
+			}
+		}
+		
+		$db = cms_db();
+		$cms_db_prefix = cms_db_prefix();
+		
+		$hierarchy = array();
+		
+		$orig_hierarchy = $db->GetCol("SELECT hierarchy FROM {$cms_db_prefix}content ORDER BY hierarchy ASC");
+		
+		foreach ($orig_hierarchy as $one)
+		{
+			$hierarchy[$one] = array(-1, -1);
+		}
+		
+		$counter = 0;
+		$current = array_shift(array_keys($hierarchy));
+		$done = false;
+		
+		//Logic goes as follows...
+		
+		//Set the left to counter, no matter what
+		//If there's a child, go to child, repeat logic
+		//If there's a sibling, set right to counter, move to sibling
+		//If there's no sibling, set right to counter, move to parent
+		//If returns from child, set right to counter, repeat child/sibling logic
+		
+		do
+		{
+			if ($hierarchy[$current][0] == -1)
+			{
+				$counter++;
+				$hierarchy[$current][0] = $counter;
+			}
+			
+			$child = get_first_child(array_keys($hierarchy), $current);
+			$sibling = get_next_sibling(array_keys($hierarchy), $current);
+			$parent = get_parent(array_keys($hierarchy), $current);
+			
+			if ($child && $hierarchy[$child][0] == -1)
+			{
+				$current = $child;
+			}
+			else if ($sibling)
+			{
+				$counter++;
+				$hierarchy[$current][1] = $counter;
+				$current = $sibling;
+			}
+			else if ($parent)
+			{
+				$counter++;
+				$hierarchy[$current][1] = $counter;
+				$current = $parent;
+			}
+			else
+			{
+				$counter++;
+				$hierarchy[$current][1] = $counter;
+				$done = true;
+			}
+		}
+		while (!$done);
+		
+		$db->BeginTrans();
+		foreach ($hierarchy as $k=>$v)
+		{
+			$db->Execute("UPDATE {$cms_db_prefix}content SET lft = ?, rgt = ? WHERE hierarchy = ?", array($v[0], $v[1], $k));
+		}
+		$db->CommitTrans();
+	}
 }
 
 class ContentOperations extends CmsContentOperations

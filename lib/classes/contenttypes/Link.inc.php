@@ -36,14 +36,16 @@ class Link extends ContentBase
       return lang('contenttype_link');
     }
 
-    function SetProperties()
-    {
-      parent::SetProperties();
-      //$this->RemoveProperty('showinmenu',true);
-      $this->RemoveProperty('cachable',true);
-      $this->RemoveProperty('secure',false);
-      $this->AddContentProperty('url',10,1);
-    }
+	function SetProperties()
+	{
+		parent::SetProperties();
+		//$this->RemoveProperty('showinmenu',true);
+		/*
+		$this->RemoveProperty('cachable',true);
+		$this->RemoveProperty('secure',false);
+		$this->AddContentProperty('url',10,1);
+		*/
+	}
 
     function FillParams($params)
     {

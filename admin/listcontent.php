@@ -735,51 +735,52 @@ function build_contentlist(&$node,&$templates,&$users,$userid)
 
 function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$copyImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages, &$page, $columnstodisplay)
 {
-  global $thisurl;
-  global $urlext;
-  global $currow;
-  global $config;
-  global $page;
-  global $indent;
-  
-  if(empty($currow)) $currow = 'row1';
+	global $thisurl;
+	global $urlext;
+	global $currow;
+	global $config;
+	global $page;
+	global $indent;
 
-  $children =& $root->getChildren(false,true);
-  $one =& $root->getContent();
-  $thelist = '';
+	if(empty($currow)) $currow = 'row1';
 
-  if (!(isset($one) && $one != NULL))
-    {
-      return;
-    }
+	$children =& $root->getChildren(false,true);
+	$one =& $root->getContent();
+
+	$thelist = '';
+
+	if (!isset($one) || $one == NULL)
+	{
+		return;
+	}
   
-  if (!array_key_exists($one->TemplateId(), $templates))
-    {
-      $gCms = cmsms();
-      $templateops =& $gCms->GetTemplateOperations();
-      $templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId());
-    }
+	if (!array_key_exists($one->TemplateId(), $templates))
+	{
+		$gCms = cmsms();
+		$templateops =& $gCms->GetTemplateOperations();
+		$templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId());
+	}
+
+	if (!array_key_exists($one->Owner(), $users))
+	{
+		$gCms = cmsms();
+		$userops =& $gCms->GetUserOperations();
+		$users[$one->Owner()] =& $userops->LoadUserById($one->Owner());
+	}
   
-  if (!array_key_exists($one->Owner(), $users))
-    {
-      $gCms = cmsms();
-      $userops =& $gCms->GetUserOperations();
-      $users[$one->Owner()] =& $userops->LoadUserById($one->Owner());
-    }
-  
-  $display = 'none';
-  if (check_modify_all($userid) || check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages))
-    {
-      $display = 'edit';
-    }
-  else if (check_children($root, $mypages, $userid))
-    {
-      $display = 'view';
-    }
-  else if (check_permission($userid, 'Manage All Content'))
-    {
-      $display = 'structure';
-    }
+	$display = 'none';
+	if (check_modify_all($userid) || check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages))
+	{
+		$display = 'edit';
+	}
+	else if (check_children($root, $mypages, $userid))
+	{
+		$display = 'view';
+	}
+	else if (check_permission($userid, 'Manage All Content'))
+	{
+		$display = 'structure';
+	}
   
   $columns = array();
   if ($display != 'none')
