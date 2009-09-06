@@ -175,137 +175,11 @@ class CmsContentOperations extends CmsObject
 	function LoadMultipleFromParentId($parent_id, $loadProperties = false)
 	{
 		return cms_orm('CmsContentBase')->find_all_by_parent_id($parent_id);
-		/*
-		$db = cms_db();
-		
-		$result = false;
-		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-		$rows   = $db->Execute($query, array($parent_id));
-
-		if ($rows)
-		{
-			while (isset($rows) && $row = $rows->FetchRow())
-			{
-				if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) 
-				{
-					$classtype = strtolower($row['type']);
-					$contentobj = ContentOperations::CreateNewContent($classtype);
-					$contentobj->LoadFromData($row,false);
-					$contents[] = $contentobj;
-					$result = true;
-				}
-			}
-			$rows->Close();
-		}
-		if (!$result)
-		{
-			if (true == $config["debug"])
-			{
-				# :TODO: Translate the error message
-				$debug_errors .= "<p>Could not retrieve content from db</p>\n";
-			}
-		}
-
-		if ($result && $loadProperties)
-		{
-			foreach ($contents as $content) 
-			{
-				if ($content->mPropertiesLoaded == false)
-				{
-					debug_buffer("load from id is loading properties");
-					$content->mProperties->Load($content->mId);
-					$content->mPropertiesLoaded = true;
-				}
-
-				if (NULL == $content->mProperties)
-				{
-					$result = false;
-
-					# debug mode
-					if (true == $config["debug"])
-					{
-						# :TODO: Translate the error message
-						$debug_errors .= "<p>Could not load properties for content</p>\n";
-					}
-				}
-			}
-		}
-
-		foreach ($contents as $content) 
-		{
-			$content->Load();
-		}
-
-		return $contents;
-		*/
 	}
 	
 	function LoadMultipleFromLeftAndRight($lft, $rgt, $loadProperties = false)
 	{
 		return cms_orm('CmsContentBase')->find_all(array('conditions' => array('lft > ? AND rgt < ?', array($lft, $rgt)), 'order' => 'lft asc'));
-		/*
-		$db = cms_db();
-		
-		$result = false;
-		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE lft > ? AND rgt < ? ORDER BY lft";
-		$rows   = $db->Execute($query, array($lft, $rgt));
-
-		if ($rows)
-		{
-			while (isset($rows) && $row = $rows->FetchRow())
-			{
-				if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) 
-				{
-					$classtype = strtolower($row['type']);
-					$contentobj = ContentOperations::CreateNewContent($classtype);
-					$contentobj->LoadFromData($row,false);
-					$contents[] = $contentobj;
-					$result = true;
-				}
-			}
-			$rows->Close();
-		}
-		if (!$result)
-		{
-			if (true == $config["debug"])
-			{
-				# :TODO: Translate the error message
-				$debug_errors .= "<p>Could not retrieve content from db</p>\n";
-			}
-		}
-
-		if ($result && $loadProperties)
-		{
-			foreach ($contents as $content) 
-			{
-				if ($content->mPropertiesLoaded == false)
-				{
-					debug_buffer("load from id is loading properties");
-					$content->mProperties->Load($content->mId);
-					$content->mPropertiesLoaded = true;
-				}
-
-				if (NULL == $content->mProperties)
-				{
-					$result = false;
-
-					# debug mode
-					if (true == $config["debug"])
-					{
-						# :TODO: Translate the error message
-						$debug_errors .= "<p>Could not load properties for content</p>\n";
-					}
-				}
-			}
-		}
-
-		foreach ($contents as $content) 
-		{
-			$content->Load();
-		}
-
-		return $contents;
-		*/
 	}
 
      /**
@@ -724,7 +598,7 @@ class CmsContentOperations extends CmsObject
 
 		if( $loadcontent )
 		  {
-		    ContentOperations::LoadChildrenIntoTree(-1, $tree, false, true);
+		    CmsContentOperations::LoadChildrenIntoTree(-1, $tree, false, true);
 		  }
 
 		debug_buffer('', 'ending tree');
@@ -732,83 +606,13 @@ class CmsContentOperations extends CmsObject
 		return $tree;
 	}
 	
-	function LoadChildrenIntoTree($id, &$tree, $loadprops = false, $all = false)
+	static public function LoadChildrenIntoTree($id, &$tree, $loadprops = false, $all = false)
 	{	
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		// get the content rows
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? AND active = 1 ORDER BY lft ASC";
-		if( $all )
-			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY lft ASC";
-		$contentrows =& $db->GetArray($query, array($id));
-		$contentprops = '';
-
-		// get the content ids from the returned data
-		if( $loadprops )
+	  $contentcache =& $tree->content;
+	  $allchildren = cms_orm('CmsContentBase')->find_all_by_parent_id($id);
+	  for( $i = 0; $i < count($allchildren); $i++ )
 		{
-			$child_ids = array();
-			for( $i = 0; $i < count($contentrows); $i++ )
-			{
-				$child_ids[] = $contentrows[$i]['content_id'];
-			}
-
-			// get all the properties for the child_ids
-			$query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
-			$tmp =& $db->GetArray($query);
-
-			// re-organize the tmp data into a hash of arrays of properties for each content id.
-			if( $tmp )
-			{
-				$contentprops = array();
-				for( $i = 0; $i < count($contentrows); $i++ )
-				{
-					$content_id = $contentrows[$i]['content_id'];
-					$t2 = array();
-					for( $j = 0; $j < count($tmp); $j++ )
-					{
-						if( $tmp[$j]['content_id'] == $content_id )
-						{
-							$t2[] = $tmp[$j];
-						}
-					}
-					$contentprops[$content_id] = $t2;
-				}
-			}
-		}
-
-		// build the content objects
-		for( $i = 0; $i < count($contentrows); $i++ )
-		{
-			$row =& $contentrows[$i];
-			$id = $row['content_id'];
-
-			if (!in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) continue;
-			$contentobj =& ContentOperations::CreateNewContent($row['type']);
-			if ($contentobj)
-			{
-				$contentobj->LoadFromData($row, false);
-				if( $loadprops && $contentprops && isset($contentprops[$id]) )
-				{
-					// load the properties from local cache.
-					$props =& $contentprops[$id];
-					$obj =& $contentobj->mProperties;
-					$obj->mPropertyNames = array();
-					$obj->mPropertyTypes = array();
-					$obj->mPropertyValues = array();
-					foreach( $props as $oneprop )
-					{
-						$obj->mPropertyNames[] = $oneprop['prop_name'];
-						$obj->mPropertyTypes[$oneprop['prop_name']] = $oneprop['type'];
-						$obj->mPropertyValues[$oneprop['prop_name']] = $oneprop['content'];
-					}
-					$contentobj->mPropertiesLoaded = true;
-				}
-
-				// cache the content objects
-				$contentcache =& $tree->content;
-				$contentcache[$id] =& $contentobj;
-			}
+		  $contentcache[$allchildren[$i]->Id()] = $allchildren[$i];
 		}
 	}
 

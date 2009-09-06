@@ -727,6 +727,11 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		$result = true;
 
 		$this->id                         = $data["content_id"];
+		foreach( $data as $key => $value )
+		  {
+		    $this->params[$key] = $value;
+		  }
+		/***
 		$this->mLft                        = $data['lft'];
 		$this->mRgt                        = $data['rgt'];
 		$this->mName                       = $data["content_name"];
@@ -742,7 +747,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		$this->mOldItemOrder               = $data["item_order"];
 		$this->mMetadata                   = $data['metadata'];
 		$this->mHierarchy                  = $data["hierarchy"];
-		$this->idHierarchy                = $data["id_hierarchy"];
+		$this->idHierarchy                 = $data["id_hierarchy"];
 		$this->mHierarchyPath              = $data["hierarchy_path"];
 		//$this->mProperties->mPropertyNames = explode(',',$data["prop_names"]);
 		$this->mMenuText                   = $data['menu_text'];
@@ -758,6 +763,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		$this->mLastModifiedBy             = $data["last_modified_by"];
 		$this->mCreationDate               = $data["create_date"];
 		$this->mModifiedDate               = $data["modified_date"];
+		***/
 
 		if ($loadProperties == true)
 		{

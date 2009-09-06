@@ -1784,7 +1784,8 @@ function stack_trace()
   foreach( $stack as $elem )
     {
       if( $elem['function'] == 'stack_trace' ) continue;
-      echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br/>';
+      if( isset($elem['file']) )
+	echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br/>';
     }
 }
 
