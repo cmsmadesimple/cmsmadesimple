@@ -240,7 +240,7 @@ class CmsContentOperations extends CmsObject
 
 		while ($current_parent_id > 1)
 		{
-			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE id = ?";
+			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE content_id = ?";
 			$row = &$db->GetRow($query, array($current_parent_id));
 			if ($row)
 			{
@@ -274,8 +274,8 @@ class CmsContentOperations extends CmsObject
 
 		debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
 
-		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE id = ?";
-		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
+		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE content_id = ?";
+		$db->Execute($query, array(CmsContentOperations::create_unfriendly_hierarchy_position($current_hierarchy_position), $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
 	}
 	
 	public static function SetHierarchyPosition($contentid)
@@ -292,19 +292,21 @@ class CmsContentOperations extends CmsObject
 		$db = $gCms->GetDb();
 
 		if ($lft > -1)
-			$query = "SELECT id FROM ".cms_db_prefix()."content WHERE lft >= " . $db->qstr($lft);
+			$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE lft >= " . $db->qstr($lft);
 		else
-			$query = "SELECT id FROM ".cms_db_prefix()."content WHERE id > 1";
+			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
 
 		$dbresult = $db->Execute($query);
 
 		while ($dbresult && !$dbresult->EOF)
 		{
-			self::set_hierarchy_position($dbresult->fields['id']);
+			self::set_hierarchy_position($dbresult->fields['content_id']);
 			$dbresult->MoveNext();
 		}
 		
 		if ($dbresult) $dbresult->Close();
+		
+		CmsContentOperations::reset_nested_set();
 	}
 	
 	public static function SetAllHierarchyPositions($lft = -1)
@@ -512,7 +514,7 @@ class CmsContentOperations extends CmsObject
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
 			if ($content_id > -1)
 			{
-				$query .= " AND id != ?";
+				$query .= " AND content_id != ?";
 				$params[] = $content_id;
 			}
 			$row = &$db->GetRow($query, $params);
