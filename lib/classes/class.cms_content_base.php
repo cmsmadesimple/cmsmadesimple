@@ -37,6 +37,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	var $field_maps = array('content_alias' => 'alias', 'titleattribute' => 'title_attribute', 'accesskey' => 'access_key', 'tabindex' => 'tab_index', 'content_name' => 'name', 'content_id' => 'id');
 	var $sequence = 'content_seq';
 	var $unused_fields = array();
+	var $_profile;
 
 	var $mProperties = array();
 
@@ -52,6 +53,26 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	function __construct()
 	{
 		parent::__construct();
+
+		// this defines the editing profile, tabs, and order of the fields in the tabs.
+		$profile = new CmsContentTypeProfile();
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('title','main',1));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('menutext','main',2));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('parent','main',3));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('active','options',1));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('showinmenu','options',2));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('cachable','options',3));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','options',4));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('target','options',5));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('titleattribute','options',6));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('accesskey','options',7));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('tabindex','options',8));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra1','options',9));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra2','options',9));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra3','options',9));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','options',10));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','options',11));
+		$this->_profile = $profile;
 	}
 	
 	function setup()
@@ -61,6 +82,12 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		//$this->assign_acts_as('Acl');
 	}
 	
+	public function &get_profile()
+	{
+		return $this->_profile;
+	}
+
+
 	/*
 	function __sleep()
 	{
@@ -230,7 +257,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	{
 		if ($force || $this->prop_names != '' && count($this->mProperties) == 0)
 		{
-			$props = cmsms()->content_property->find_all_by_content_id($this->id);
+			$props = cms_orm('CmsContentProperty')->find_all_by_content_id($this->id);
 			foreach ($props as &$prop)
 			{
 				//Make sure we don't overwrite any newly set properties
@@ -244,8 +271,6 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	
 	function get_property_value($name, $lang = 'en_US')
 	{
-		$default_lang = CmsMultiLanguage::get_default_language();
-		
 		//See if it exists...
 		if ($this->has_property($name))
 		{	
@@ -276,10 +301,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			}
 		}
 		
-		if ($lang != $default_lang)
-			return $this->get_property_value($name, $default_lang);
-		else
-			return '';
+		return '';
 	}
 	
 	function add_template(&$smarty, $lang = 'en_US')

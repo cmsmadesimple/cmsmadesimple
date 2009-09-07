@@ -23,7 +23,6 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 
 check_login();
-$userid = get_userid();
 
 if (isset($_POST["cancel"]))
 {
@@ -139,8 +138,11 @@ else
 }
 
 
-
+# Get the content object, and instantiate the ditor.
 $contentobj = $contentops->LoadContentFromId($content_id);
+$editortype = $contentops->get_content_editor_type($contentobj);
+$editor = new $editortype($contentobj);
+
 if (check_editcontent_perms($content_id))
 {
   if ($submit || $apply)
@@ -247,15 +249,15 @@ else
 	      continue;
 	    }
 
-		$contentops->LoadContentType($onetype->type);
-		$type_obj = new $onetype->type;
-		$typesdropdown .= '<option value="' . $onetype->type . '"';
-		if ($onetype->type == $content_type)
-		{
-			$typesdropdown .= ' selected="selected" ';
-			$cur_content_type = $onetype->type;
-		}
-		$typesdropdown .= ">".($type_obj->FriendlyName())."</option>";
+	  $contentops->LoadContentType($onetype->type);
+	  $type_obj = new $onetype->type;
+	  $typesdropdown .= '<option value="' . $onetype->type . '"';
+	  if ($onetype->type == $content_type)
+	    {
+	      $typesdropdown .= ' selected="selected" ';
+	      $cur_content_type = $onetype->type;
+	    }
+	  $typesdropdown .= ">".($type_obj->FriendlyName())."</option>";
 	}
 	$typesdropdown .= "</select>";
 
@@ -264,7 +266,7 @@ else
 	  echo $themeObject->ShowErrors($error);
 	}
 
-$tabnames = $contentobj->TabNames();
+	$tabnames = $editor->get_tab_names();
 
 ?>
 
@@ -350,8 +352,8 @@ $submit_buttons .= '</p></div>';
 				<?php
 			}
 
-			$contentarray = $contentobj->EditAsArray(false, $currenttab, 
-								 check_editcontent_perms($content_id,true));
+			$contentarray = $editor->get_tab_elements($currenttab);
+
 			for($i=0;$i<count($contentarray);$i++)
 			{
 			  $tmp =& $contentarray[$i];

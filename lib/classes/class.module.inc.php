@@ -481,7 +481,8 @@ class CMSModule
 	 */
 	public function & GetVariables()
 	{
-		return $this->cms->variables;
+	  global $gCms;
+	  return $gCms->variables;
 	}
 
 	/**

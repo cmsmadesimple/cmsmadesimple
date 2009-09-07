@@ -1,0 +1,306 @@
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+#CMS - CMS Made Simple
+#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id: class.cms_content_base.php 5976 2009-09-07 14:23:29Z wishy $
+
+class CmsContentEditorBase
+{
+	private $_contentobj;
+	private $_profile;
+
+
+	public function __construct($contentobj)
+	{
+		if( !is_a($contentobj,'CmsContentBase') )
+			{
+				return;
+			}
+		$this->_contentobj =& $contentobj;
+
+		// this defines the editing profile, tabs, and order of the fields in the tabs.
+		$profile = new CmsContentTypeProfile();
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('title','main',1));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('menutext','main',2));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('parent','main',3));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('active','options',1));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('showinmenu','options',2));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('cachable','options',3));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','options',4));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('target','options',5));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('titleattribute','options',6));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('accesskey','options',7));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('tabindex','options',8));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra1','options',9));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra2','options',9));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra3','options',9));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','options',10));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','options',11));
+		$this->_profile = $profile;
+	}
+
+
+	protected function &get_content()
+	{
+		return $this->_contentobj;
+	}
+
+	public function &get_profile()
+	{
+		return $this->_profile;
+	}
+
+
+	public function get_tab_names()
+	{
+		if( is_a( $this->_contentobj, 'ContentBase' ) &&
+			method_exists($this->_contentobj,'TabNames') )
+			{
+				// it's an old style content object.
+				// get a list of langified tab names
+				$tabnames = $this->_contentobj->TabNames();
+				return $tabnames;
+			}
+
+		// get tab names from the contentobj profile.
+		$tmp = $this->_profile->get_tab_list();
+		$results = array();
+		foreach( $tmp as $tabname => $permission )
+			{
+				if( empty($permission) || check_permission(get_userid(),$permission) )
+					{
+						$results[] = lang($tabname);
+					}
+			}
+		return $results;
+	}
+
+
+	public function get_tab_elements($tabindex,$adding = FALSE)
+	{
+		// this is the equivalent of the EditAsArray function for old
+		// content objects.
+		if( is_a( $this->_contentobj, 'ContentBase' ) &&
+			method_exists($this->_contentobj,'EditAsArray') &&
+			method_exists($this->_contentobj,'TabNames()') )
+			{
+				// it's an old style content object.
+				// get the tab names, and convert the tab name to an index.
+				$ret = $this->EditAsArray($adding,$tabindex);
+			}
+
+		$tabnames = $this->_profile->get_tab_list();
+		
+		$i = 0;
+		$tabname = '';
+		foreach( $tabnames as $key => $value )
+			{
+				if( $i == $tabindex ) $tabname = $key;
+				$i++;
+			}
+		$attrs = $this->_profile->find_all_by_tab($tabname);
+		if( !$attrs ) return FALSE;
+		
+		$ret = array();
+		for( $i = 0; $i < count($attrs); $i++ )
+			{
+				$ret[] = $this->get_single_element($this->_contentobj,$attrs[$i],$adding);
+			}
+		return $ret;
+	}
+
+
+	protected function get_single_element($content_obj,$attr,$adding = false)
+	{
+		$gCms = cmsms();
+		$config = cms_config();
+
+		$prompt = '';
+		$field  = '';
+		switch( $attr->get_name() )
+			{
+			case 'cachable':
+				$prompt = lang('cachable');
+				$field  = '<input type="hidden" name="cachable" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($content_obj->cachable()?' checked="checked"':'').' />';
+				break;
+
+			case 'title':
+				$prompt = lang('title');
+				$field  = '<input type="text" name="title" value="'.cms_htmlentities($content_obj->name()).'" />';
+				break;
+
+			case 'menutext':
+				$prompt = lang('menutext');
+				$field  = '<input type="text" name="menutext" value="'.cms_htmlentities($content_obj->menu_text).'" />';
+				break;
+
+			case 'parent':
+				{
+					$prompt = lang('parent');
+					$contentops =& $gCms->GetContentOperations();
+					$tmp = $contentops->CreateHierarchyDropdown($content_obj->id(), $content_obj->parent_id(), 'parent_id', 0, 1);
+					if( empty($tmp) || !check_permission(get_userid(),'Manage All Content') )
+						$field = '<input type="hidden" name="parent_id" value="'.$content_obj->parent_id().'" />';
+					if( !empty($tmp) ) $field = $tmp;
+				}
+				break;
+
+			case 'active':
+				$prompt = lang('active');
+				$field = '<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" value="1"'.($content_obj->active()?' checked="checked"':'').' />';
+				break;
+
+			case 'showinmenu':
+				$prompt = lang('showinmenu');
+				$field = '<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($content_obj->showinmenu()?' checked="checked"':'').' />';
+
+			case 'target':
+				{
+					$prompt = lang('target');
+					$text = '<option value="---">'.lang('none').'</option>';
+					$val = $content_obj->get_property_value('target');
+					$text .= '<option value="_blank"'.($val=='_blank'?' selected="selected"':'').'>_blank</option>';
+					$text .= '<option value="_parent"'.($val=='_parent'?' selected="selected"':'').'>_parent</option>';
+					$text .= '<option value="_self"'.($val=='_self'?' selected="selected"':'').'>_self</option>';
+					$text .= '<option value="_top"'.($val=='_top'?' selected="selected"':'').'>_top</option>';
+					$field = '<select name="target">'.$text.'</select>';
+				}
+				break;
+
+			case 'alias':
+				$prompt = lang('pagealias');
+				$field = '<input type="text" name="alias" value="'.$content_obj->alias().'" />';
+				break;
+
+			case 'image':
+				{
+					$prompt = lang('image');
+					$dir = $config['image_uploads_path'];
+					$data = $content_obj->get_property_value('image');
+					$field = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
+				}
+				break;
+
+			case 'thumbnail':
+				{
+					$prompt = lang('thumbnail');
+					$dir = $config['image_uploads_path'];
+					$data = $content_obj->get_property_value('thumbnail');
+					$field = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
+				}
+				break;
+
+			case 'titleattribute':
+				$prompt = lang('titleattribute');
+				$field = '<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->titleattribute()).'" />';
+				break;
+
+			case 'accesskey':
+				$prompt = lang('accesskey');
+				$field = '<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($content_obj->access_key()).'" />';
+				break;
+
+			case 'tabindex':
+				$prompt = lang('tabindex');
+				$field = '<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($content_obj->tab_index()).'" />';
+				break;
+
+			case 'extra1':
+				$prompt = lang('extra1');
+				$field = '<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->get_property_value('extra1')).'" />';
+				break;
+
+			case 'extra2':
+				$prompt = lang('extra2');
+				$field = '<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->get_property_value('extra2')).'" />';
+				break;
+
+			case 'extra3':
+				$prompt = lang('extra3');
+				$field = '<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->get_property_value('extra3')).'" />';
+				break;
+
+			case 'owner':
+				{
+					$prompt = lang('owner');
+					$showadmin = check_ownership(get_userid(), $content_obj->id());
+					$userops =& $gCms->GetUserOperations();
+					if (!$adding && $showadmin)
+						{
+							$field = $userops->GenerateDropdown($content_obj->owner());
+						}
+				}
+				break;
+
+				/*
+			case 'additionaleditors':
+				{
+					$prompt = lang('additionaleditors');
+					$text = '<input name="additional_editors" type="hidden" value=""/>';
+					$text .= '<select name="additional_editors[]" multiple="multiple" size="5">';
+
+					$userops =& $gCms->GetUserOperations();
+					$groupops =& $gCms->GetGroupOperations();
+					$allusers =& $userops->LoadUsers();
+					$allgroups =& $groupops->LoadGroups();
+					$addteditors = $this->GetAdditionalEditors();
+					foreach ($allgroups as $onegroup)
+						{
+							if( $onegroup->id == 1 ) continue;
+							$val = $onegroup->id*-1;
+							$text .= '<option value="'.$val.'"';
+							if( in_array($val,$addteditors) )
+								{
+									$text .= ' selected="selected"';
+								}
+							$text .= '>'.lang('group').': '.$onegroup->name."</option>";		   
+						}
+
+					foreach ($allusers as $oneuser)
+						{
+							if ($oneuser->id != $this->Owner() && $oneuser->id != 1)
+								{
+									$text .= '<option value="'.$oneuser->id.'"';
+									if (in_array($oneuser->id, $addteditors))
+										{
+											$text .= ' selected="selected"';
+										}
+									$text .= '>'.$oneuser->username.'</option>';
+								}
+						}
+
+					$text .= '</select>';
+					$field = $text;
+				}
+				break;
+				*/
+
+			default:
+				// throw an exception?
+			}
+
+		if( !empty($prompt) && !empty($field) )
+			{
+				return array($prompt.':',$field);
+			}
+	}
+} // end of class
+
+#
+# EOF
+#
+?>

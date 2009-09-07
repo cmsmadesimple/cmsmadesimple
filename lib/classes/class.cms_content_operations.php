@@ -773,6 +773,26 @@ class CmsContentOperations extends CmsObject
 		$db->CommitTrans();
 	}
 
+	function get_content_editor_type($content_obj)
+	{
+		$classname = get_class($content_obj);
+		global $gCms;
+		$contenttypes =& $gCms->contenttypes;
+		$found = '';
+		foreach( $contenttypes as $name => $type )
+			{
+				if( $type->classname == $classname )
+					{
+						$found = 'Cms'.$classname.'Editor';
+						break;
+					}
+			}
+		if( !$found )
+			{
+				$found = 'CmsContentEditorBase';
+			}
+		return $found;
+	}
 }
 
 /**
