@@ -741,6 +741,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	global $config;
 	global $page;
 	global $indent;
+	
+	$indent = get_preference($userid, 'indent', true);
 
 	if(empty($currow)) $currow = 'row1';
 
@@ -761,11 +763,11 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		$templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId());
 	}
 
-	if (!array_key_exists($one->Owner(), $users))
+	if (!array_key_exists($one->owner_id, $users))
 	{
 		$gCms = cmsms();
 		$userops =& $gCms->GetUserOperations();
-		$users[$one->Owner()] =& $userops->LoadUserById($one->Owner());
+		$users[$one->owner_id] =& $userops->LoadUserById($one->owner_id);
 	}
   
 	$display = 'none';
@@ -785,7 +787,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
   $columns = array();
   if ($display != 'none')
     {
-      $thelist .= "<tr id=\"tr_".$one->Id()."\" class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+      $thelist .= "<tr id=\"tr_".$one->id."\" class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
       
       /* expand/collapse column */
       $columns['expand'] = '&nbsp;';
@@ -794,15 +796,15 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	  $txt = '';
 	  if ($root->hasChildren())
 	    {
-	      if (!in_array($one->Id(),$openedArray))
+	      if (!in_array($one->id,$openedArray))
 		{
-		  $txt .= "<a href=\"{$thisurl}&amp;content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\" onclick=\"cms_ajax_content_toggleexpand(".$one->Id().", 'false'); return false;\">";
+		  $txt .= "<a href=\"{$thisurl}&amp;content_id=".$one->id."&amp;col=0&amp;page=".$page."\" onclick=\"cms_ajax_content_toggleexpand(".$one->id.", 'false'); return false;\">";
 		  $txt .= $expandImg;
 		  $txt .= "</a>";
 		}
 	      else
 		{
-		  $txt .= "<a href=\"{$thisurl}&amp;content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\" onclick=\"cms_ajax_content_toggleexpand(".$one->Id().", 'true'); return false;\">";
+		  $txt .= "<a href=\"{$thisurl}&amp;content_id=".$one->id."&amp;col=1&amp;page=".$page."\" onclick=\"cms_ajax_content_toggleexpand(".$one->id.", 'true'); return false;\">";
 		  $txt .= $contractImg;
 		  $txt .= "</a>";
 		}
@@ -814,30 +816,29 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
       /* hierarchy column */
       if( $columnstodisplay['hier'] )
 	{
-	  $columns['hier'] = $one->Hierarchy();
+	  $columns['hier'] = CmsContentOperations::create_friendly_hierarchy_position($one->hierarchy);
 	}
 
-
-      /* page column */
-      if( $columnstodisplay['page'] )
+	/* page column */
+	if( $columnstodisplay['page'] )
 	{
-	  $columns['page'] = '&nbsp;';
-	  $txt = '';
-	  if( $one->MenuText() != CMS_CONTENT_HIDDEN_NAME )
-	    {
-	      if ($indent)
+		$columns['page'] = '&nbsp;';
+		$txt = '';
+		if( $one->MenuText() != CMS_CONTENT_HIDDEN_NAME )
 		{
-		  for ($i=0;$i < $root->getLevel();$i++)
-		    {
-		      $txt .= "-&nbsp;&nbsp;&nbsp;";
-		    }
-		} 
-	      if ($display == 'edit')
-		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '">'. cms_htmlentities($one->MenuText(), '', '', true) . '</a>';
-	      else
-		$txt .= cms_htmlentities($one->MenuText(), '', '', true);
-	    }
-	  if( !empty($txt) ) $columns['page'] = $txt;
+			if ($indent)
+			{
+				for ($i=0;$i < $root->getLevel();$i++)
+				{
+					$txt .= "-&nbsp;&nbsp;&nbsp;";
+				}
+			} 
+			if ($display == 'edit')
+				$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '">'. cms_htmlentities($one->MenuText(), '', '', true) . '</a>';
+			else
+				$txt .= cms_htmlentities($one->MenuText(), '', '', true);
+		}
+		if( !empty($txt) ) $columns['page'] = $txt;
 	}
 
       
@@ -879,9 +880,9 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
       if( $columnstodisplay['owner'] )
 	{
 	  $columns['owner'] = '&nbsp;';
-	  if( $one->Owner() > - 1 )
+	  if( $one->owner_id > - 1 )
 	    {
-	      $columns['owner'] = $users[$one->Owner()]->username;
+	      $columns['owner'] = $users[$one->owner_id]->username;
 	    }
 	}
 
@@ -893,13 +894,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	  $txt = '';
 	  if (check_permission($userid, 'Manage All Content'))
 	    {
-	      if($one->Active())
+	      if($one->active)
 		{
-		  $txt = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;setinactive=".$one->Id()."\" onclick=\"alert('setinactive'); cms_ajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>");
+		  $txt = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;setinactive=".$one->id."\" onclick=\"alert('setinactive'); cms_ajax_content_setinactive(".$one->id.");return false;\">".$image_set_false."</a>");
 		}
 	      else
 		{
-		  $txt = "<a href=\"{$thisurl}&amp;setactive=".$one->Id()."\" onclick=\"alert('setactive'); cms_ajax_content_setactive(".$one->Id().");return false;\">".$image_set_true."</a>";
+		  $txt = "<a href=\"{$thisurl}&amp;setactive=".$one->id."\" onclick=\"alert('setactive'); cms_ajax_content_setactive(".$one->id.");return false;\">".$image_set_true."</a>";
 		}
 	    }
 	  if( !empty($txt) )
@@ -928,48 +929,48 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	}
 
 
-      /* move column */
-      if( $columnstodisplay['move'] )
+	/* move column */
+	if( $columnstodisplay['move'] )
 	{
-	  // code for move up is simple
-	  $columns['move'] = '&nbsp;';
-	  $txt = '';
-	  if (check_permission($userid, 'Manage All Content'))
-	    {
-	      $sameLevel = $root->getSiblingCount();
-	      if ($sameLevel>1)
+		// code for move up is simple
+		$columns['move'] = '&nbsp;';
+		$txt = '';
+		if (check_permission($userid, 'Manage All Content'))
 		{
-		  if (($one->ItemOrder() - 1) <= 0) #first
-		    { 
-		      $txt .= "<a onclick=\"cms_ajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-		      $txt .= $downImg;
-		      $txt .= "</a>&nbsp;&nbsp;";
-		    }
-		  else if (($one->ItemOrder() - 1) == $sameLevel-1) #last
-		    {
-		      $txt .= "&nbsp;&nbsp;<a class=\"move_up\" onclick=\"cms_ajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-		      $txt .= $upImg;
-		      $txt .= "</a>";
-		    }
-		  else #middle
-		    {
-		      $txt .= "<a onclick=\"cms_ajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-		      $txt .= $downImg;
-		      $txt .= "</a>&nbsp;<a onclick=\"cms_ajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-		      $txt .= $upImg;
-		      $txt .= "</a>";
-		    }
+			$sameLevel = $root->getSiblingCount();
+			if ($sameLevel>1)
+			{
+				if (($one->item_order - 1) <= 0) #first
+				{ 
+					$txt .= "<a onclick=\"cms_ajax_content_move(".$one->id.", ".$one->parent_id.", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->id."&amp;parent_id=".$one->parent_id."&amp;page=".$page."\">";
+					$txt .= $downImg;
+					$txt .= "</a>&nbsp;&nbsp;";
+				}
+				else if (($one->item_order - 1) == $sameLevel-1) #last
+				{
+					$txt .= "&nbsp;&nbsp;<a class=\"move_up\" onclick=\"cms_ajax_content_move(".$one->id.", ".$one->parent_id.", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->id."&amp;parent_id=".$one->parent_id."&amp;page=".$page."\">";
+					$txt .= $upImg;
+					$txt .= "</a>";
+				}
+				else #middle
+				{
+					$txt .= "<a onclick=\"cms_ajax_content_move(".$one->id.", ".$one->parent_id.", 'down'); return false;\" href=\"{$thisurl}&amp;direction=down&amp;content_id=".$one->id."&amp;parent_id=".$one->parent_id."&amp;page=".$page."\">";
+					$txt .= $downImg;
+					$txt .= "</a>&nbsp;<a onclick=\"cms_ajax_content_move(".$one->id.", ".$one->parent_id.", 'up'); return false;\" href=\"{$thisurl}&amp;direction=up&amp;content_id=".$one->id."&amp;parent_id=".$one->parent_id."&amp;page=".$page."\">";
+					$txt .= $upImg;
+					$txt .= "</a>";
+				}
+			}
+
+			// $txt .= '<input clsss="hidden" type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" />';
 		}
-	      
-	      // $txt .= '<input clsss="hidden" type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" />';
-	    }
-	  if( !empty($txt) )
-	    {
-	      $columns['move'] = $txt;
-	    }
-	  // end of move code
+		if( !empty($txt) )
+		{
+			$columns['move'] = $txt;
+		}
+		// end of move code
 	}
-	
+
 
       /* view column */
       if( $columnstodisplay['view'] )
@@ -1108,11 +1109,11 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
       ($currow == "row1"?$currow="row2":$currow="row1");
     }
 
+	$indent = get_preference($userid, 'indent', true);
+
     $pagelist[] = &$thelist;
 
-    $indent = get_preference($userid, 'indent', true);
-
-    if (in_array($one->Id(),$openedArray))
+    if (in_array($one->id,$openedArray))
     {
         foreach ($children as $child)
         { 
@@ -1194,16 +1195,16 @@ function display_content_list($themeObject = null)
 		}
 	}
 
-        $hierManager =& $gCms->GetHierarchyManager();
-	$hierarchy = &$hierManager->getRootNode();
+	$hierManager = cmsms()->GetHierarchyManager();
+	$hierarchy = $hierManager->getRootNode();
 
 	$rowcount = 0;
 	if ($hierarchy->hasChildren())
 	{
 		$pagelist = array();
 		foreach ($hierarchy->getChildren(false,true) as $child)
-		{ 
-		  display_hierarchy($child, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay);
+		{
+			display_hierarchy($child, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay);
 		}
 		$rowcount += count($pagelist);
 		foreach ($pagelist as $item)
@@ -1398,7 +1399,7 @@ if( isset($_GET['error']) )
 <div class="pagecontainer">
 <?php
 
-$hierManager =& $gCms->GetHierarchyManager();
+$hierManager = $gCms->GetHierarchyManager();
 
 if (isset($_GET["makedefault"]))
 {

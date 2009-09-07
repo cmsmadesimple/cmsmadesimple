@@ -338,11 +338,12 @@ class CmsApplication extends CmsObject
         return $this->smarty;
 	}
 
-	function & GetHierarchyManager()
+	public static function GetHierarchyManager()
 	{
 		//Check to see if it hasn't been
 		//instantiated yet.  If not, connect
 		//and return it
+		/*
         if (!isset($this->hrinstance))
 		{
 			debug_buffer('', 'Start Loading Hierarchy Manager');
@@ -355,6 +356,8 @@ class CmsApplication extends CmsObject
 		}
 
         return $this->hrinstance;
+		*/
+		return CmsPageTree::get_instance();
 	}
 
 	function dbshutdown()

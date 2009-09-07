@@ -94,7 +94,7 @@ class CmsNode extends CmsObject
 	
 	function depth()
 	{
-		$depth = 0;
+		$depth = -1;
 		$currLevel = &$this;
 
 		while ($currLevel->parentnode)
@@ -104,6 +104,20 @@ class CmsNode extends CmsObject
 		}
 		
 		return $depth;
+	}
+	
+	function get_sibling_count()
+	{
+		if ($this->get_parent()->has_children())
+		{
+			return $this->get_parent()->get_children_count();
+		}
+		return 0;
+	}
+	
+	function getSiblingCount()
+	{
+		return $this->get_sibling_count();
 	}
 	
 	function get_level()
@@ -131,6 +145,11 @@ class CmsNode extends CmsObject
 		return count($this->children) > 0;
 	}
 	
+	function hasChildren()
+	{
+		return $this->has_children();
+	}
+	
 	function get_children_count()
 	{
 		return count($this->children);
@@ -142,6 +161,11 @@ class CmsNode extends CmsObject
 	}
 
 	function &get_children()
+	{
+		return $this->children;
+	}
+	
+	function &getChildren()
 	{
 		return $this->children;
 	}
