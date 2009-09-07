@@ -185,7 +185,7 @@ class CmsContentOperations extends CmsObject
 	 **/
 	public static function _get_default_page_id()
 	{
-		$page = cmsms()->content_base->find_by_default_content(1);
+		$page = cms_orm('CmsContentBase')->find_by_default_content(1);
 		if ($page)
 		{
 			return $page->id;
@@ -414,7 +414,7 @@ class CmsContentOperations extends CmsObject
 		}
 		else
 		{
-			$result = cmsms()->content_base->find_by_alias($alias);
+			$result = cms_orm('ContentBase')->find_by_alias($alias);
 			if ($result)
 			{
 				return $result->id;
