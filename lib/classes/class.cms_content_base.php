@@ -273,7 +273,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	{
 		//See if it exists...
 		if ($this->has_property($name))
-		{	
+		{
 			//Loop through and see if it's loaded
 			foreach ($this->mProperties as &$prop)
 			{
@@ -302,6 +302,11 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		}
 		
 		return '';
+	}
+	
+	function GetPropertyValue($name, $lang = 'en_US')
+	{
+		return $this->get_property_value($name, $lang);
 	}
 	
 	function add_template(&$smarty, $lang = 'en_US')

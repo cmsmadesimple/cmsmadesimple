@@ -608,35 +608,38 @@ class Smarty_CMS extends Smarty {
 			return true;
 		}
 		else if( isset($_SESSION['cms_preview_data']) && $pageinfo->content_id == '__CMS_PREVIEW_PAGE__' )
-	        {
-		  if( !isset($_SESSION['cms_preview_data']['content_obj']) )
-		    {
-		      $contentops =& $gCms->GetContentOperations();
-		      $_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
-		      $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
-		    }
-		  $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
-		  $tpl_source = $contentobj->Show($tpl_name);
+		{
+			if( !isset($_SESSION['cms_preview_data']['content_obj']) )
+			{
+				$contentops =& $gCms->GetContentOperations();
+				$_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
+				$contentobj =& $_SESSION['cms_preview_data']['content_obj'];
+			}
+			$contentobj =& $_SESSION['cms_preview_data']['content_obj'];
+			$tpl_source = $contentobj->Show($tpl_name);
 
-                  #So no one can do anything nasty, take out the php smarty tags.  Use a user
-                  #defined plugin instead.
-		  if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-		    {
-		      $tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
-		    }
+			#So no one can do anything nasty, take out the php smarty tags.  Use a user
+			#defined plugin instead.
+			if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+			{
+				$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+			}
 
-		  return true;
+			return true;
 		}
 		else
 		{
+			/*
 			$manager =& $gCms->GetHierarchyManager();
 			$node =& $manager->sureGetNodeById($pageinfo->content_id);
 			$contentobj =& $node->GetContent();
+			*/
+			
+			$contentobj = CmsPageTree::get_instance()->get_node_by_id($pageinfo->content_id);
 
 			if (isset($contentobj) && $contentobj !== FALSE)
 			{
-
-				$tpl_source = $contentobj->Show($tpl_name);
+				$tpl_source = $contentobj->show($tpl_name);
 
 				#So no one can do anything nasty, take out the php smarty tags.  Use a user
 				#defined plugin instead.
@@ -644,7 +647,7 @@ class Smarty_CMS extends Smarty {
 				{
 					$tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
 				}
-				
+
 				//do_cross_reference($pageinfo->content_id, 'content', $tpl_source);
 
 				return true;

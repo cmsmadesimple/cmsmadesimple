@@ -31,6 +31,7 @@
 class CmsContentProperty extends CmsObjectRelationalMapping
 {
 	var $table = 'content_props';
+	var $language = 'en_US';
 }
 
 /**
