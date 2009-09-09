@@ -30,10 +30,10 @@ function smarty_cms_function_page_attr($params, &$smarty)
   $node =& $manager->sureGetNodeById($pageinfo->content_id);
   if(is_object($node))
     {
-      $contentobj =& $node->GetContent();
+      $contentobj =& $node->get_content();
       if( is_object($contentobj) )
 	{
-	  $result = $contentobj->GetPropertyValue($key);
+	  $result = $contentobj->get_property_value($key);
           if( $result == -1 ) $result = '';
 	}
     }

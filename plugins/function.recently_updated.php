@@ -70,9 +70,9 @@ if( !$dbresult )
 while ($dbresult && $updated_page = $dbresult->FetchRow())
 {
     $curnode =& $hm->getNodeById($updated_page['content_id']);
-    $curcontent =& $curnode->GetContent();
+    $curcontent =& $curnode->get_content();
     $output .= '<li>';
-    $output .= '<a href="'.$curcontent->GetURL().'">'.$updated_page['content_name'].'</a>';
+    $output .= '<a href="'.$curcontent->get_url().'">'.$updated_page['content_name'].'</a>';
     if ((FALSE == empty($updated_page['titleattribute'])) && ($showtitle=='true'))
       {
 	$output .= '<br />';

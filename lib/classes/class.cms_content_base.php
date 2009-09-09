@@ -429,11 +429,13 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		return $this->depth();
 	}
 	
+	// note this is not the parent_id
 	public function get_parent()
 	{
 		return $this->parentnode;
 	}
-	
+
+	// note this is not the parent_id
 	public function set_parent($node)
 	{
 		$this->parentnode = $node;
@@ -461,7 +463,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 				$this->tree->load_child_nodes($this->id);
 			}
 		}
-		return $this->children;
+		return $this->tree->children;
 	}
 	
     public function &get_flat_list()
@@ -485,6 +487,17 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	{
 		return $this;
 	}
+	
+	public function set_previewable($flag = true)
+	{
+		$this->preview = true();
+	}
+
+	public function get_previewable($flag = true)
+	{
+		$this->preview = true();
+	}
+
 	
 }
 

@@ -36,7 +36,7 @@ if (isset($params['start_page']) || isset($params['start_element']))
 
 	if (isset($rootnode))
 	{
-		$content =& $rootnode->GetContent();
+		$content =& $rootnode->get_content();
 		if (isset($content))
 		{
 			if (isset($params['show_root_siblings']) && $params['show_root_siblings'] == '1')
@@ -61,9 +61,9 @@ if (isset($params['start_page']) || isset($params['start_element']))
 			{
 				//Show a page if it's active and set to show in menu...
 				//Or if show_all is set and the page isn't a "system" page
-				if ($content->Active() && ($content->ShowInMenu() || ($params['show_all'] == 1 && !$content->IsSystemPage())))
+				if ($content->active() && ($content->show_in_menu() || ($params['show_all'] == 1 && !$content->is_system_page())))
 				{
-					$prevdepth = count(explode('.', $content->Hierarchy()));
+					$prevdepth = count(explode('.', $content->hierarchy()));
 					$this->FillNode($content, $rootnode, $nodelist, $gCms, $count, $prevdepth, $prevdepth);
 					if (isset($params['number_of_levels']) && $params['number_of_levels'] == '1')
 						$getchildren = false;
@@ -77,12 +77,12 @@ else if (isset($params['start_level']) && intval($params['start_level']) > 1)
 	$curnode =& $hm->sureGetNodeById($gCms->variables['content_id']);
 	if (isset($curnode))
 	{
-		$curcontent =& $curnode->GetContent();
-		$properparentpos = $this->nthPos($curcontent->Hierarchy() . '.', '.', intval($params['start_level']) - 1);
+		$curcontent =& $curnode->get_content();
+		$properparentpos = $this->nthPos($curcontent->hierarchy() . '.', '.', intval($params['start_level']) - 1);
 		if ($properparentpos > -1)
 		{
 			$prevdepth = intval($params['start_level']);
-			$rootnode =& $hm->getNodeByHierarchy(substr($curcontent->Hierarchy(), 0, $properparentpos));
+			$rootnode =& $hm->getNodeByHierarchy(substr($curcontent->hierarchy(), 0, $properparentpos));
 		}
 	}
 }
@@ -98,7 +98,7 @@ else if (isset($params['items']))
 			$curnode =& $hm->sureGetNodeByAlias(trim($oneitem));
 			if ($curnode)
 			{
-				$curcontent =& $curnode->GetContent();
+				$curcontent =& $curnode->get_content();
 				if (isset($curcontent))
 				{
 					$prevdepth = 1;
@@ -160,11 +160,7 @@ if (count($nodelist) > 0)
 	$smarty->assign('count', count($nodelist));
 	$smarty->assign_by_ref('nodelist', $nodelist);
 	$usefile = true;
-	$tpl_name = $this->GetPreference('default_template','simple_navigation.tpl');
-	if (isset($params['template']) && $params['template'] != '')
-		{
-			$tpl_name = $params['template'];
-		}
+	$tpl_name = coalesce_key($params, 'template', $this->GetPreference('default_template','simple_navigation.tpl'));
 	if( endswith($tpl_name, '.tpl') )
 		{
 			$usefile = true;
@@ -173,7 +169,7 @@ if (count($nodelist) > 0)
 		{
 			$usefile = false;
 		}
-
+			
 	if ($usefile)
 		echo $this->ProcessTemplate($tpl_name, $mdid, false, $gCms->variables['content_id']);
 	else

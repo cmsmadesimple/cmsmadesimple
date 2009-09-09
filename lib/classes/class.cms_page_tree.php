@@ -68,8 +68,9 @@ class CmsPageTree extends CmsTree
 		{
 			$pages = CmsContentOperations::LoadMultipleFromLeftAndRight($lft, $rgt);
 		}
-		
+
 		//var_dump(count($pages));
+		//stack_trace(); echo '<br/>';
 		//debug_print_backtrace();
 		
 		foreach ($pages as $page)

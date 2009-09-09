@@ -191,8 +191,8 @@ class MenuManager extends CMSModule
 	public function add_fields_to_node(&$node)
 	{
 		$content = $node->getContent();
-		//$node->url = $content->GetUrl(true, $lang);
-		$node->url = $content->GetUrl(true);
+		//$node->url = $content->get_url(true, $lang);
+		$node->url = $content->get_url(true);
 		//$content->menutext = cms_htmlentities($content->get_property_value('menu_text', $lang));
 		$node->haschildren = $node->has_children();
 		$node->target = '';
@@ -331,14 +331,14 @@ class MenuManager extends CMSModule
 		
 		if (isset($parentnode))
 		{
-			$children =& $parentnode->getChildren($deep);
+			$children =& $parentnode->get_children($deep);
 			if (isset($children) && count($children))
 			{
 				reset($children);
 				while (list($key) = each($children))
 				{
 					$onechild =& $children[$key];
-					$content =& $onechild->GetContent($deep);
+					$content =& $onechild->get_content($deep);
 					if( !is_object($content) ) 
 					{
 						// uhm, couldn't get the content object... this is strange
@@ -354,7 +354,7 @@ class MenuManager extends CMSModule
 						$prefixes = explode(',',$includeprefix);
 						foreach( $prefixes as $oneprefix )
 						{
-							if( strstr($content->Alias(),$oneprefix) !== FALSE )
+							if( strstr($content->alias(),$oneprefix) !== FALSE )
 							{
 								$includeit = 1;
 								break;
@@ -369,7 +369,7 @@ class MenuManager extends CMSModule
 						$prefixes = explode(',',$excludeprefix);
 						foreach( $prefixes as $oneprefix )
 						{
-							if( strstr($content->Alias(),$oneprefix) !== FALSE )
+							if( strstr($content->alias(),$oneprefix) !== FALSE )
 							{
 								$excludeit = 1;
 								break;
@@ -377,9 +377,9 @@ class MenuManager extends CMSModule
 						}
 					}
 
-					if ($content != NULL && $content->Active() && 
+					if ($content != NULL && $content->active() && 
 					    ($includeit && !$excludeit) &&
-					    ($content->ShowInMenu() || $show_all == 1)  && !$content->IsSystemPage())
+					    ($content->show_in_menu() || $show_all == 1)  && !$content->is_system_page())
 					{
 						$newnode =& $this->FillNode($content, $onechild, $nodelist, 
 							$gCms, $count, $prevdepth, $origdepth, $deep);
@@ -390,7 +390,7 @@ class MenuManager extends CMSModule
 						if (!(isset($params['number_of_levels']) && 
 							$newnode->depth > ($params['number_of_levels']) - ($origdepth)) && 
 							(count($showparents) == 0 || (count($showparents) > 0 && 
-							in_array($content->Hierarchy() . '.', $showparents))))
+							in_array($content->hierarchy() . '.', $showparents))))
 						{
 							$this->GetFlatChildNodes($onechild, $nodelist, $gCms, $prevdepth, $count, $params, $origdepth, $showparents, $deep);
 						}
@@ -403,50 +403,50 @@ class MenuManager extends CMSModule
 	function & FillNode(&$content, &$node, &$nodelist, &$gCms, &$count, &$prevdepth, $origdepth, $deep = false)
 	{
 		$onenode = new stdClass();
-		$onenode->id = $content->Id();
-		$onenode->pagetitle = $content->Name();
-		$onenode->url = $content->GetURL();
-		$onenode->accesskey = $content->AccessKey();
-		$onenode->type = strtolower($content->Type());
-		$onenode->tabindex = $content->TabIndex();
-		$onenode->titleattribute = $content->TitleAttribute();
+		$onenode->id = $content->id();
+		$onenode->pagetitle = $content->name();
+		$onenode->url = $content->get_url();
+		$onenode->accesskey = $content->access_key();
+		$onenode->type = strtolower($content->type());
+		$onenode->tabindex = $content->tab_index();
+		$onenode->titleattribute = $content->title_attribute();
 		$onenode->modified = $content->GetModifiedDate();
 		$onenode->created = $content->GetCreationDate();
 
-		$onenode->hierarchy = $content->Hierarchy();
-		$onenode->depth = count(explode('.', $content->Hierarchy())) - ($origdepth - 1);
+		$onenode->hierarchy = $content->hierarchy();
+		$onenode->depth = count(explode('.', $content->hierarchy())) - ($origdepth - 1);
 		$onenode->prevdepth = $prevdepth - ($origdepth - 1);
 		if ($onenode->prevdepth == 0)
 			$onenode->prevdepth = 1;
 		$onenode->haschildren = false;
 		if (isset($node))
-			$onenode->haschildren = $node->HasChildren(true);
+			$onenode->haschildren = $node->has_children(true);
 		$prevdepth = $onenode->depth + ($origdepth - 1);
-		$onenode->menutext = my_htmlentities($content->MenuText());
-		$onenode->raw_menutext = $content->MenuText();
+		$onenode->menutext = my_htmlentities($content->menu_text());
+		$onenode->raw_menutext = $content->menu_text();
 		$onenode->target = '';
 		$onenode->index = $count;
-		$onenode->alias = $content->Alias();
+		$onenode->alias = $content->alias();
 		$onenode->parent = false;
 		$count++;
 
 		if( $deep )
 		{
-			$onenode->extra1 = $content->GetPropertyValue('extra1');
-			$onenode->extra2 = $content->GetPropertyValue('extra2');
-			$onenode->extra3 = $content->GetPropertyValue('extra3');
-			$tmp = $content->GetPropertyValue('image');
+			$onenode->extra1 = $content->get_property_value('extra1');
+			$onenode->extra2 = $content->get_property_value('extra2');
+			$onenode->extra3 = $content->get_property_value('extra3');
+			$tmp = $content->get_property_value('image');
 			if( !empty($tmp) && $tmp != -1 )
 			{
 				$onenode->image = $tmp;
 			}
-			$tmp = $content->GetPropertyValue('thumbnail');
+			$tmp = $content->get_property_value('thumbnail');
 			if( !empty($tmp) && $tmp != -1 )
 			{
 				$onenode->thumbnail = $tmp;
 			}
-			if ($content->HasProperty('target'))
-				$onenode->target = $content->GetPropertyValue('target');
+			if ($content->has_property('target'))
+				$onenode->target = $content->get_property_value('target');
 		}
 		
 		if (isset($gCms->variables['content_id']) && $onenode->id == $gCms->variables['content_id'])
@@ -457,7 +457,7 @@ class MenuManager extends CMSModule
 			//So, it's not current.  Lets check to see if it's a direct parent
 			if (isset($gCms->variables["friendly_position"]))
 			{
-				if (strstr($gCms->variables["friendly_position"] . '.', $content->Hierarchy() . '.') == $gCms->variables["friendly_position"] . '.')
+				if (strstr($gCms->variables["friendly_position"] . '.', $content->hierarchy() . '.') == $gCms->variables["friendly_position"] . '.')
 				{
 					$onenode->parent = true;
 				}

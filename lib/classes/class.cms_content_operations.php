@@ -343,9 +343,9 @@ class CmsContentOperations extends CmsObject
 			$result .= ' ' . $addt_content;
 		}
 		$result .= '>';
-		$result .= '<option value="1">None</option>';
+		$result .= '<option value="-1">None</option>';
 
-		$allcontent = cmsms()->GetContentOperations()->GetAllContent(false);
+		$allcontent = self::get_all_content(false);
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{
@@ -353,34 +353,37 @@ class CmsContentOperations extends CmsObject
 
 			foreach ($allcontent as $one)
 			{
-				if ($one->id == $current)
+				if ($one->id() == $current)
 				{
 					#Grab hierarchy just in case we need to check children
 					#(which will always be after)
-					$curhierarchy = $one->hierarchy;
+					$curhierarchy = $one->hierarchy();
 
 					#Then jump out.  We don't want ourselves in the list.
 					continue;
 				}
+
 				#If it's a child of the current, we don't want to show it as it
 				#could cause a deadlock.
-				if ($curhierarchy != '' && strstr($one->hierarchy . '.', $curhierarchy . '.') == $one->hierarchy . '.')
+				echo "DEBUG: cur = $curhierarchy one = ".$one->hierarchy().'<br/>';
+				if ($curhierarchy != '' && strstr($one->hierarchy() . '.', $curhierarchy . '.') == $one->hierarchy() . '.')
 				{
 					continue;
 				}
-				#Don't include content types that do not want children either...
-				if ($one->WantsChildren() == true)
-				{
-					$result .= '<option value="'.$one->id.'"';
 
-					#Select current parent if it exists
-					if ($one->id == $parent)
+				#Don't include content types that do not want children either...
+				if (!$one->wants_children())
+				{
+					continue;
+				}
+
+				$result .= '<option value="'.$one->id().'"';
+                #Select current parent if it exists
+				if ($one->id == $parent)
 					{
 						$result .= ' selected="selected"';
 					}
-
-					$result .= '>'.$one->hierarchy().'. - '.$one->name.'</option>';
-				}
+				$result .= '>'.$one->hierarchy().'. - '.$one->name().'</option>';
 			}
 		}
 
@@ -442,7 +445,7 @@ class CmsContentOperations extends CmsObject
 	 **/
 	public static function get_page_id_from_hierarchy($position)
 	{
-		$result = cmsms()->content_base->find_by_hierarchy(CmsContentOperations::create_unfriendly_hierarchy_position($position));
+		$result = cms_orm('ContentBase')->find_by_hierarchy(CmsContentOperations::create_unfriendly_hierarchy_position($position));
 		if ($result)
 		{
 			return $result->id;

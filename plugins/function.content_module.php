@@ -33,7 +33,7 @@ function smarty_cms_function_content_module($params, &$smarty)
       $contentobj =& $node->GetContent();
       if( is_object($contentobj) )
 	{
-	  $result = $contentobj->GetPropertyValue($block);
+	  $result = $contentobj->get_property_value($block);
           if( $result == -1 ) $result = '';
 	}
     }

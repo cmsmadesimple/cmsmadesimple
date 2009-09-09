@@ -22,9 +22,9 @@ function smarty_cms_function_process_pagedata($params,&$smarty)
   $manager =& $gCms->GetHierarchyManager();
   $node =& $manager->getNodeById($gCms->variables['content_id']);
   if( !isset($node) || $node === FALSE ) return;
-  $content =& $node->Getcontent();
+  $content =& $node->get_content();
 
-  $tpl = $content->GetPropertyValue('pagedata','');
+  $tpl = $content->get_property_value('pagedata','');
   if( empty($tpl) ) return;
 
   $smarty->_compile_source('preprocess template', $tpl, $_compiled);

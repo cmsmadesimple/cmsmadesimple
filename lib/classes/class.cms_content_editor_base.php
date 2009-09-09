@@ -35,16 +35,16 @@ class CmsContentEditorBase
 		// this defines the editing profile, tabs, and order of the fields in the tabs.
 		$profile = new CmsContentTypeProfile();
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('title','main',1));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('menutext','main',2));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('parent','main',3));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('menu_text','main',2));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('parent_id','main',3));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('active','options',1));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('showinmenu','options',2));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('show_in_menu','options',2));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('cachable','options',3));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','options',4));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('target','options',5));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('titleattribute','options',6));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('accesskey','options',7));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('tabindex','options',8));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('title_attribute','options',6));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('access_key','options',7));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('tab_index','options',8));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra1','options',9));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra2','options',9));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra3','options',9));
@@ -143,12 +143,12 @@ class CmsContentEditorBase
 				$field  = '<input type="text" name="name" value="'.cms_htmlentities($content_obj->name()).'" />';
 				break;
 
-			case 'menutext':
+			case 'menu_text':
 				$prompt = lang('menutext');
 				$field  = '<input type="text" name="menu_text" value="'.cms_htmlentities($content_obj->menu_text).'" />';
 				break;
 
-			case 'parent':
+			case 'parent_id':
 				{
 					$prompt = lang('parent');
 					$contentops =& $gCms->GetContentOperations();
@@ -164,7 +164,7 @@ class CmsContentEditorBase
 				$field = '<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" value="1"'.($content_obj->active()?' checked="checked"':'').' />';
 				break;
 
-			case 'showinmenu':
+			case 'show_in_menu':
 				$prompt = lang('showinmenu');
 				$field = '<input type="hidden" name="show_in_menu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($content_obj->showinmenu()?' checked="checked"':'').' />';
 

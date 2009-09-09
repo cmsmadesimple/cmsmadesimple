@@ -58,22 +58,22 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 # build path
 	if (isset($endNode))
 	{
-	        $content =& $endNode->getContent();
+	        $content =& $endNode->get_content();
 		$path=array($endNode);
 		$currentNode = &$endNode->getParentNode();
 		while (isset($currentNode) && $currentNode->getLevel() >= 0)
 		{
-			$content = &$currentNode->getContent();
+			$content = &$currentNode->get_content();
 			if (isset($content))
 			{
 			  //Add current node to the path and then check to see if
 			  //current node is the set root
 			  //as long as it's not hidden
-			  if( $content->ShowInMenu() && $content->Active() )
+			  if( $content->show_in_menu() && $content->active() )
 			    {
 				$path[] = $currentNode;
 			    }
-			  if (strtolower($content->Alias())!=strtolower($root))
+			  if (strtolower($content->alias())!=strtolower($root))
 			    {
 			      //Get the parent node and loop
 			      $currentNode = &$currentNode->getParentNode();
@@ -97,13 +97,13 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 
 			if (isset($currentNode))
 			{
-				$content = &$currentNode->getContent();
-				if (isset($content) && (strtolower($content->Alias()) == strtolower($root)))
+				$content = &$currentNode->get_content();
+				if (isset($content) && (strtolower($content->alias()) == strtolower($root)))
 				{
 					$node = &$manager->sureGetNodeByAlias($root);
 					if (isset($node)) {
-						$content = &$node->getContent();
-						if( $content && $content->Id() != $thispage) 
+						$content = &$node->get_content();
+						if( $content && $content->id() != $thispage) 
 							$path[] = $node; # do not add if this is the current page
 					}
 				}
@@ -117,24 +117,24 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 			$node = &$path[$i];
 			if (isset($node))
 			{
-				$onecontent = &$node->getContent();
-				if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator') {
-					if (($onecontent->getURL() != "") && ($onecontent->Type() != 'sectionheader')) {
-					  if ($onecontent->DefaultContent() && false == empty($root_url))
+				$onecontent = &$node->get_content();
+				if ($onecontent->id() != $thispage && $onecontent->type() != 'seperator') {
+				  if (($onecontent->get_url() != "") && ($onecontent->type() != 'sectionheader')) {
+					  if ($onecontent->default_content() && false == empty($root_url))
 					    {
 					      $trail .= '<a href="' . $root_url . '"';     
 					    }
 					      else
 						{
-						  $trail .= '<a href="' . $onecontent->getURL() . '"';
+						  $trail .= '<a href="' . $onecontent->get_url() . '"';
 						}
 						$trail .= $classid;
 						$trail .= '>';
-						$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+						$trail .= cms_htmlentities($onecontent->menu_text()!=''?$onecontent->menu_text():$onecontent->name());
 						$trail .= '</a> ';
 					} else {
 						$trail .= "<span $classid>";
-						$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+						$trail .= cms_htmlentities($onecontent->menu_text()!=''?$onecontent->menu_text():$onecontent->name());
 						$trail .= '</span>';
 						$trail .= ' ';
 					}
@@ -145,7 +145,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 					} else {
 						$trail .= '<span class="lastitem">';
 					}
-					$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+					$trail .= cms_htmlentities($onecontent->menu_text()!=''?$onecontent->menu_text():$onecontent->Name());
 					if (isset($params['currentclassid'])) {
 						$trail .= '</span>';
 					} else {

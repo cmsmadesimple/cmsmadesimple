@@ -113,7 +113,7 @@ if ($recursive == '1')
 else
 {
 	//Pull the old logic out of a separate file.  No need to confuse matters.
-	include_once(cms_join_path(dirname(__FILE__), 'old_default_action.php'));
+	include(cms_join_path(dirname(__FILE__), 'old_default_action.php'));
 }
 debug_buffer('', 'End of Menu Manager Display');
 ?>
