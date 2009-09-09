@@ -420,7 +420,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 
 	if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
 	{
-		$content = cms_orm()->content->find_by_id($contentid);
+		$content = cms_orm('CmsContentBase')->find_by_id($contentid);
 		
 		if ($content != null)
 		{

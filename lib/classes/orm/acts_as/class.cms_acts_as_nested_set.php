@@ -110,7 +110,7 @@ class CmsActsAsNestedSet extends CmsActsAs
 		
 		if ($obj->parent_id > -1)
 		{
-			$row = $db->GetRow("SELECT rgt FROM {$table_name} WHERE id = ?", array($obj->parent_id));
+			$row = $db->GetRow("SELECT rgt FROM {$table_name} WHERE {$obj->id_field} = ?", array($obj->parent_id));
 			if ($row)
 			{
 				$right = $row['rgt'];
@@ -216,7 +216,7 @@ class CmsActsAsNestedSet extends CmsActsAs
 			$result = $db->Execute($query);
 			
 			//Now flip the item orders
-			$query = "UPDATE {$table_name} SET item_order = ?, modified_date = {$time} WHERE id = ?";
+			$query = "UPDATE {$table_name} SET item_order = ?, modified_date = {$time} WHERE {$obj->id_field} = ?";
 			$db->Execute($query, array($other_content->item_order, $obj->id));
 			$db->Execute($query, array($obj->item_order, $other_content->id));
 			

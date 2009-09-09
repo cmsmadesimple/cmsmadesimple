@@ -784,9 +784,23 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$id_field = $this->id_field;
 		$id = $this->$id_field;
 		
-		//Figure out if we need to replace the field from the field mappings
-		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
-		if (array_key_exists($id_field, $new_map)) $id_field = $new_map[$id_field];
+		//Figure out if we need to replace the id field from the field mappings
+		
+		//Flip the keys, since this is the reverse operation
+		$new_map = array_flip($this->field_maps); 
+		
+		//Does the id field exist in the mappings?  If so, set it as the 
+		//new $id_field for SQL.
+		if (array_key_exists($id_field, $new_map)) 
+		{
+			$id_field = $new_map[$id_field];
+		}
+		//Now we need to pull the actual id from the aliases 
+		//field, which is what $params stores
+		if (array_key_exists($id_field, $this->field_maps)) 
+		{
+			$id = $this->{$this->field_maps[$id_field]};
+		}
 		
 		$fields = $this->get_columns_in_table();
 		

@@ -35,6 +35,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	var $table = 'content';
 	var $params = array('id' => -1, 'template_id' => -1, 'active' => true, 'default_content' => false, 'parent_id' => -1, 'lft' => 1, 'rgt' => 1);
 	var $field_maps = array('content_alias' => 'alias', 'titleattribute' => 'title_attribute', 'accesskey' => 'access_key', 'tabindex' => 'tab_index', 'content_name' => 'name', 'content_id' => 'id');
+	var $id_field = 'content_id';
 	var $sequence = 'content_seq';
 	var $unused_fields = array();
 
@@ -89,7 +90,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	
 	protected function before_save()
 	{
-		CmsEvents::send_event('Core', 'ContentEditPre', array('content' => &$this));
+		//CmsEvents::send_event('Core', 'ContentEditPre', array('content' => &$this));
 	}
 	
 	protected function after_save(&$result)
@@ -108,7 +109,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			if ($concat != '')
 				CmsContentOperations::do_cross_reference($this->id, 'content', $concat);
 		
-			CmsEvents::send_event('Core', 'ContentEditPost', array('content' => &$this));
+			//CmsEvents::send_event('Core', 'ContentEditPost', array('content' => &$this));
 			CmsCache::clear();
 		}
 	}
@@ -247,7 +248,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		else
 			$this->move_down();
 		
-		CmsContentOperations::SetAllHierarchyPositions();
+		CmsContentOperations::set_all_hierarchy_positions();
 		CmsCache::clear();
 	}
 	
@@ -282,10 +283,17 @@ class CmsContentBase extends CmsObjectRelationalMapping
 
 		if ($alias == '' && $config['auto_alias_content'] == true)
 		{
+			/*
 			$alias = trim($this->get_property_value('menu_text', CmsMultiLanguage::get_default_language()));
 			if ($alias == '')
 			{
 			    $alias = trim($this->get_property_value('name', CmsMultiLanguage::get_default_language()));
+			}
+			*/
+			$alias = trim($this->params['name']);
+			if ($alias == '')
+			{
+				$alias = trim($this->params['menu_text']);
 			}
 			
 			$tolower = true;
