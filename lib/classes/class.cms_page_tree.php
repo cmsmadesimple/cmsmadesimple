@@ -31,7 +31,7 @@
  **/
 class CmsPageTree extends CmsTree
 {
-	static public $content = array();
+	static private $content = array();
 	static private $instance = NULL;
 
 	function __construct()
@@ -98,12 +98,12 @@ class CmsPageTree extends CmsTree
 		//TODO: Optimize this more -- right now we're just making sure it works
 		//First we find the page.  If it exists, we then grab the great-great-grandparent
 		//and load all of the nodes in between.
-		//$page = cms_orm()->content->find_by_id($id);
-		$page = CmsContentOperations::LoadContentFromId($id);
+		$page = cms_orm()->content->find_by_id($id);
+		//$page = CmsContentOperations::LoadContentFromId($id);
 		if ($page)
 		{
 			$ancestor = null;
-			$top_nodes = $this->tree->get_root_node()->get_children();
+			$top_nodes = $this->root->tree->get_children();
 			foreach ($top_nodes as $one_node)
 			{
 				//Don't bother doing this if we're only level 2
@@ -134,7 +134,7 @@ class CmsPageTree extends CmsTree
 			}
 			else
 			{
-				$this->load_parent_nodes($id);
+				//$this->load_parent_nodes($id);
 				return self::$content[(string)$id];
 			}
 		}

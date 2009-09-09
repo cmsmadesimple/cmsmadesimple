@@ -42,68 +42,9 @@ class Content extends CmsContentBase
     }
 
 
-    function FillParams($params)
-    {
-	global $gCms;
-	$config =& $gCms->config;
-
-	if (isset($params))
-	{
-	  $parameters = array('pagedata','searchable','disable_wysiwyg');
-
-	  //pick up the template id before we do parameters
-	  if (isset($params['template_id']))
-	    {
-	      if ($this->TemplateId() != $params['template_id'])
-		{
-		  $this->_contentBlocksLoaded = false;
-		}
-	      $this->TemplateId($params['template_id']);
-	    }
-	  
-	  // add content blocks
-	  $this->parse_content_blocks();
-	  foreach($this->_contentBlocks as $blockName => $blockInfo)
-	    {
-	      $this->AddExtraProperty($blockName);
-	      $parameters[] = $blockInfo['id'];
-
-	      if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
-		{
-		  if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
-		  $module =& $gCms->modules[$blockInfo['module']]['object'];
-		  if( !is_object($module) ) continue;
-		  if( !$module->HasCapability('contentblocks') ) continue;
-		  $tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
-		  if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
-		}
-	    }
-	  
-	  // do the content property parameters
-	  foreach ($parameters as $oneparam)
-	    {
-	      if (isset($params[$oneparam]))
-		{
-		  $this->SetPropertyValue($oneparam, $params[$oneparam]);
-		}
-	    }
-
-	  // metadata
-	  if (isset($params['metadata']))
-	    {
-	      $this->SetMetadata($params['metadata']);
-	    }
-
-	}
-
-	parent::FillParams($params);
-    }
-
     function Show($param = 'content_en')
     {
 	  // check for additional content blocks
-	  $this->parse_content_blocks();
-	  
 	  return $this->GetPropertyValue($param);
     }
 
@@ -139,7 +80,6 @@ class Content extends CmsContentBase
 	    }
 
 	  // and the content blocks
-	  $this->parse_content_blocks(); // this is needed as this is the first time we get a call to our class when editing.
 	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
 	      $this->AddExtraProperty($blockName);
@@ -180,108 +120,22 @@ class Content extends CmsContentBase
     }
 
 
-    function ValidateData()
-    {
-      global $gCms;
-
-      $errors = parent::ValidateData();
-      if( $errors === FALSE )
+	protected function validate()
 	{
-	  $errors = array();
-	}
+		parent::validate();
+		if( $this->template_id() < 0 )
+			{
+				$this->add_validation_error(lang('nofieldgiven',array(lang('template'))));
+			}
 
-      if ($this->TemplateId() <= 0 )
-	{
-	  $errors[] = lang('nofieldgiven',array(lang('template')));
-	  $result = false;
-	}
-      
-      if ($this->GetPropertyValue('content_en') == '')
-	{
-	  $errors[]= lang('nofieldgiven',array(lang('content')));
-	  $result = false;
-	}
-
-      $this->parse_content_blocks();
-      foreach($this->_contentBlocks as $blockName => $blockInfo)
-	{
-	  if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
-	    {
-	      if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
-	      $module =& $gCms->modules[$blockInfo['module']]['object'];
-	      if( !is_object($module) ) continue;
-	      if( !$module->HasCapability('contentblocks') ) continue;
-	      $value = $this->GetPropertyValue($blockInfo['id']);
-	      $tmp = $module->ValidateContentBlockValue($blockName,$value,$blockInfo['params']);
-	      if( !empty($tmp) )
-		{
-		  $errors[] = $tmp;
-		  $result = false;
-		}
-	    }
-	}
-
-      return (count($errors) > 0?$errors:FALSE);
-
-    }
+		$tmp = $this->get_property_value('content_en');
+		if( $tmp == '' )
+			{
+				$this->add_validation_error(lang('nofieldgiven',array(lang('content'))));
+			}
 
 
-    function display_single_element($one,$adding)
-    {
-      global $gCms;
-
-      switch($one) {
-      case 'template':
-	{
-	  $templateops =& $gCms->GetTemplateOperations();
-	  return array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->TemplateId(), 'onchange="document.contentform.submit()"'));
 	}
-	break;
-	
-      case 'pagemetadata':
-	{
-	  return array(lang('page_metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
-	}
-	break;
-	
-      case 'pagedata':
-	{
-	  return array(lang('pagedata_codeblock').':',create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','pagedata','','','80','6'));
-	}
-	break;
-	
-      case 'searchable':
-	{
-	  $searchable = $this->GetPropertyValue('searchable');
-	  if( $searchable == '' )
-	    {
-	      $searchable = 1;
-	    }
-	  return array(lang('searchable').':',
-			'<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
-                           <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />');
-	}
-	break;
-	
-      case 'disable_wysiwyg':
-	{
-	  $disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
-	  if( $disable_wysiwyg == '' )
-	    {
-	      $disable_wysiwyg = 0;
-	    }
-	  return array(lang('disable_wysiwyg').':',
-		       '<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
-             <input type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
-	}
-	break;
-
-      default:
-	return parent::display_single_element($one,$adding);
-      }
-      
-    }
-
 
 } // end of class
 

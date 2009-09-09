@@ -38,6 +38,7 @@ class CmsContentEditor extends CmsContentEditorBase
 	    $this->stylesheet = '../stylesheet.php?templateid='.$content_obj->template_id();
 	}
 
+
 	public function get_tab_elements($tabindex,$adding = FALSE)
 	{
 		$gCms = cmsms();
@@ -523,6 +524,79 @@ class CmsContentEditor extends CmsContentEditorBase
 			}
 		return array($label.':',$field);
     }
+
+
+	public function fill_from_form_data($params)
+	{
+		parent::fill_from_form_data($params);
+
+		$accepted = array('template','pagemetadata','searchable','pagedata',
+						  'disable_wysiwyg');
+		$this->parse_content_blocks();
+		foreach($this->_contentBlocks as $blockName => $blockInfo)
+			{
+				$accepted[] = $blockInfo['id'];
+			}
+
+		$content_obj = $this->get_content();
+		foreach( $accepted as $oneprop )
+			{
+				switch($oneprop)
+					{
+					case 'template':
+						if( isset($params[$oneprop]) )
+							{
+								$content_obj->set_template_id($params[$oneprop]);
+							}
+						break;
+
+					case 'metadata':
+						if( isset($params[$oneprop]) )
+							{
+								$content_obj->set_metadata($params[$oneprop]);
+							}
+						break;
+
+					default:
+						if( isset($params[$oneprop]) )
+							{
+								$content_obj->set_property_value($oneprop,$params[$oneprop]);
+							}
+						break;
+					}
+			}
+	}
+
+
+	public function validate()
+	{
+		$errs = parent::validate();
+		if( !$errs )
+			{
+				$errs = array();
+			}
+
+		$this->parse_content_blocks();
+		foreach($this->_contentBlocks as $blockName => $blockInfo)
+			{
+				if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
+					{
+						if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
+						$module =& $gCms->modules[$blockInfo['module']]['object'];
+						if( !is_object($module) ) continue;
+						if( !$module->HasCapability('contentblocks') ) continue;
+						$value = $this->GetPropertyValue($blockInfo['id']);
+						$tmp = $module->ValidateContentBlockValue($blockName,$value,$blockInfo['params']);
+						if( !empty($tmp) )
+							{
+								$errs[] = $tmp;
+							}
+					}
+			}
+
+		if( count($errs ) ) return $errs;
+		return FALSE;
+	}
 }
 
 #

@@ -37,7 +37,6 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	var $field_maps = array('content_alias' => 'alias', 'titleattribute' => 'title_attribute', 'accesskey' => 'access_key', 'tabindex' => 'tab_index', 'content_name' => 'name', 'content_id' => 'id');
 	var $sequence = 'content_seq';
 	var $unused_fields = array();
-	var $_profile;
 
 	var $mProperties = array();
 
@@ -50,44 +49,18 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	var $parentnode = null;
 	var $children = array();
 	
-	function __construct()
+	public function __construct()
 	{
 		parent::__construct();
-
-		// this defines the editing profile, tabs, and order of the fields in the tabs.
-		$profile = new CmsContentTypeProfile();
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('title','main',1));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('menutext','main',2));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('parent','main',3));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('active','options',1));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('showinmenu','options',2));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('cachable','options',3));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','options',4));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('target','options',5));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('titleattribute','options',6));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('accesskey','options',7));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('tabindex','options',8));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra1','options',9));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra2','options',9));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra3','options',9));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','options',10));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','options',11));
-		$this->_profile = $profile;
 	}
 	
-	function setup()
+	public function setup()
 	{
 		$this->create_belongs_to_association('template', 'cms_template', 'template_id');
 		$this->assign_acts_as('NestedSet');
 		//$this->assign_acts_as('Acl');
 	}
 	
-	public function &get_profile()
-	{
-		return $this->_profile;
-	}
-
-
 	/*
 	function __sleep()
 	{
@@ -109,33 +82,17 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	{
 	}
 	
-	public function check_permission($userid = null)
-	{
-		$user = CmsLogin::get_current_user();
-
-		if ($userid == null) 
-		{
-			cmsms()->user->find_by_id($userid);
-		}
-		else if ($userid == -1)
-		{
-			$user = new CmsAnonymousUser();
-		}
-
-		return CmsAcl::check_permission('Core', 'Page', 'View', $this->id, null, $user);
-	}
-	
-	function friendly_name()
+	public function friendly_name()
 	{
 		return '';
 	}
 	
-	function before_save()
+	protected function before_save()
 	{
 		CmsEvents::send_event('Core', 'ContentEditPre', array('content' => &$this));
 	}
 	
-	function after_save(&$result)
+	protected function after_save(&$result)
 	{
 		if ($result)
 		{
@@ -155,30 +112,19 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			CmsCache::clear();
 		}
 	}
+
 	
-	function validate()
+	protected function validate()
 	{
-		//$this->validate_not_blank('name', lang('nofieldgiven',array(lang('title'))));
-		//$this->validate_not_blank('menu_text', lang('nofieldgiven',array(lang('menutext'))));
+		$this->validate_numericality_of('parent_id',lang('invalidparent'));
+		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('title'))));
+		$this->validate_not_blank('menu_text', lang('nofieldgiven',array(lang('menutext'))));
+		$this->validate_not_blank('menu_text', lang('nofieldgiven',array(lang('menutext'))));
+		$this->validate_not_blank('alias', lang('nofieldgiven',array(lang('alias'))));
 	}
 	
-	/**
-	 * Overloaded so that we can pull out properties and set them separately
-	 */
-	function update_parameters($params, $lang = 'en_US', $strip_slashes = false)
-	{
-		if (isset($params['property']) && is_array($params['property']))
-		{
-			foreach ($params['property'] as $k=>$v)
-			{
-				if ($strip_slashes && is_string($v)) $v = stripslashes($v);
-				$this->set_property_value($k, $v, $lang);
-			}
-		}
-		parent::update_parameters($params, $strip_slashes);
-	}
-	
-	function set_property_value($name, $value, $lang = 'en_US')
+
+	public function set_property_value($name, $value, $lang = 'en_US')
 	{
 		$this->load_properties(false);
 
@@ -206,12 +152,12 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			$this->prop_names = implode(',', array_merge(explode(',', $this->prop_names), array($name)));
 	}
 	
-	function get_property_names($lang = 'en_US')
+	public function get_property_names($lang = 'en_US')
 	{
 		return explode(',', $this->prop_names);
 	}
 	
-	function get_loaded_property_names($lang = 'en_US')
+	public function get_loaded_property_names($lang = 'en_US')
 	{
 		$result = array();
 		foreach ($this->mProperties as &$prop)
@@ -224,22 +170,17 @@ class CmsContentBase extends CmsObjectRelationalMapping
     /**
      * Does this have children?
      */
-	function has_children()
+	public function has_children()
 	{
 		return $this->rgt > ($this->lft + 1);
 	}
 	
-	function hasChildren()
-	{
-		return $this->has_children();
-	}
-	
-	function has_property($name)
+	public function has_property($name)
 	{
 		return in_array($name, explode(',', $this->prop_names));
 	}
 	
-	function get_sibling_count()
+	public function get_sibling_count()
 	{
 		if ($this->get_parent()->has_children())
 		{
@@ -248,12 +189,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		return 0;
 	}
 	
-	function getSiblingCount()
-	{
-		return $this->get_sibling_count();
-	}
-	
-	function load_properties($force = true)
+	public function load_properties($force = true)
 	{
 		if ($force || $this->prop_names != '' && count($this->mProperties) == 0)
 		{
@@ -269,7 +205,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		}
 	}
 	
-	function get_property_value($name, $lang = 'en_US')
+	public function get_property_value($name, $lang = 'en_US')
 	{
 		//See if it exists...
 		if ($this->has_property($name))
@@ -304,29 +240,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		return '';
 	}
 	
-	function GetPropertyValue($name, $lang = 'en_US')
-	{
-		return $this->get_property_value($name, $lang);
-	}
-	
-	function add_template(&$smarty, $lang = 'en_US')
-	{
-		return array();
-	}
-	
-	function edit_template(&$smarty, $lang = 'en_US')
-	{
-		return array();
-	}
-
-	/*
-	function hierarchy()
-	{
-		return CmsContentOperations::create_friendly_hierarchy_position($this->hierarchy);
-	}
-	*/
-	
-	function shift_position($direction = 'up')
+	public function shift_position($direction = 'up')
 	{
 		if ($direction == 'up')
 			$this->move_up();
@@ -337,7 +251,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		CmsCache::clear();
 	}
 	
-    function get_url($rewrite = true, $lang = '')
+    public function get_url($rewrite = true, $lang = '')
     {
 		$config = cms_config();
 		$url = "";
@@ -360,12 +274,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		return $url;
     }
 
-    function GetURL($rewrite = true)
-    {
-		return $this->get_url($rewrite);
-	}
-
-	function set_alias($alias)
+	public function set_alias($alias = '')
 	{
 		$config = cms_config();
 
@@ -407,11 +316,6 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		$this->params['alias'] = munge_string_to_url($alias, $tolower);
 	}
 	
-	function SetAlias($alias)
-	{
-		return $this->set_alias($alias);
-	}
-
     /**
      * Function content types to use to say whether or not they should show
      * up in lists where parents of content are set.  This will default to true,
@@ -420,54 +324,39 @@ class CmsContentBase extends CmsObjectRelationalMapping
      * 
      * @since 0.11
      */
-	function wants_children()
+	public function wants_children()
 	{
 		return true;
 	}
-
-    function WantsChildren()
-    {
-		return $this->wants_children();
-    }
 
     /**
      * Should this link be used in various places where a link is the only
      * useful output?  (Like next/previous links in cms_selflink, for example)
      */
-	function has_usable_link()
+	public function has_usable_link()
 	{
 		return true;
 	}
 
-    function HasUsableLink()
-    {
-		return $this->has_usable_link();
-    }
-
-	function is_default_possible()
+	public function is_default_possible()
 	{
 		return true;
-	}
-
-	function IsDefaultPossible()
-	{
-		return $this->is_default_possible();
 	}
 
 	/**
 	 * Checks to see if this conte type uses the given field.
 	 */
-	function field_used($name)
+	public function field_used($name)
 	{
 		return !in_array($name, $this->unused_fields);
 	}
 	
-	function before_delete()
+	protected function before_delete()
 	{
 		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
 	}
 	
-	function after_delete()
+	protected function after_delete()
 	{
 		$items =& cmsms()->content_property->find_all_by_content_id($this->id);
 		foreach ($items as &$item)
@@ -482,7 +371,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		CmsCache::clear();
 	}
 	
-	function template_name()
+	public function template_name()
 	{
 		try
 		{
@@ -494,19 +383,19 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		}
 	}
 	
-	function add_child($node)
+	public function add_child($node)
 	{
 		$node->set_parent($this);
 		$node->tree = $this->tree;
 		$this->children[] = $node;
 	}
 	
-	function get_tree()
+	public function get_tree()
 	{
 		return $this->tree;
 	}
 	
-	function depth()
+	public function depth()
 	{
 		if ($this->hierarchy)
 		{
@@ -527,37 +416,32 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		}
 	}
 	
-	function get_level()
+	public function get_level()
 	{
 		return $this->depth();
 	}
 	
-	function getLevel()
-	{
-		return $this->depth();
-	}
-	
-	function get_parent()
+	public function get_parent()
 	{
 		return $this->parentnode;
 	}
 	
-	function set_parent($node)
+	public function set_parent($node)
 	{
 		$this->parentnode = $node;
 	}
 	
-	function get_children_count()
+	public function get_children_count()
 	{
 		return count($this->children);
 	}
 	
-	function getChildrenCount()
+	public function getChildrenCount()
 	{
 		return $this->get_children_count();
 	}
 
-	function &get_children()
+	public function &get_children()
 	{
 		if ($this->has_children())
 		{
@@ -572,12 +456,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		return $this->children;
 	}
 	
-	function &getChildren()
-	{
-		return $this->get_children();
-	}
-	
-    function &get_flat_list()
+    public function &get_flat_list()
     {
         $return = array();
 
@@ -593,26 +472,13 @@ class CmsContentBase extends CmsObjectRelationalMapping
         return $return;
     }
 
-	function &getFlatList()
-	{
-		$tmp =& $this->get_flat_list();
-		return $tmp;
-	}
-	
-	function get_content()
+	// ??
+	public function get_content()
 	{
 		return $this;
 	}
 	
-	function getContent()
-	{
-		return $this;
-	}
 }
 
-/**
- * @deprecated Deprecated.  Use CmsContentBase instead.
- **/
-class ContentBase extends CmsContentBase {}
 
 ?>

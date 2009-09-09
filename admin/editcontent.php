@@ -54,20 +54,14 @@ function check_editcontent_perms($content_id,$adminonly = false)
   return $access;
 }
 
-function do_save_content($contentobj,$data)
+function do_save_content($editor,$data)
 {
-  $contentobj->FillParams($data);
-  $error = $contentobj->ValidateData();
+  $editor->fill_from_form_data($data);
+  $error = $editor->validate();
 
-  if( $error === FALSE )
+  if( $error == FALSE )
     {
-      $contentobj->SetLastModifiedBy(get_userid());
-      $contentobj->save();
-
-      $gCms = cmsms();
-      $contentops =& $gCms->GetContentOperations();
-      $contentops->SetAllHierarchyPositions();
-      audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
+      $editor->save();
     }
 
   return $error;
@@ -84,7 +78,11 @@ function editcontent_apply($params)
       $contentops =& $gCms->GetContentOperations();
 
       $contentobj = $contentops->LoadContentFromId($content_id);
-      $error = do_save_content($contentobj,$params);
+      $editortype = $contentops->get_content_editor_type($contentobj);
+      $editor = new $editortype($contentobj);
+
+      $contentobj = $contentops->LoadContentFromId($content_id);
+      $error = do_save_content($editor,$params);
 
       if( $error === FALSE )
         {
@@ -147,7 +145,7 @@ if (check_editcontent_perms($content_id))
 {
   if ($submit || $apply)
     {
-      $error = do_save_content($contentobj,$_POST);
+      $error = do_save_content($editor,$_POST);
       
       if ($error === FALSE)
 	{
@@ -162,7 +160,7 @@ if (check_editcontent_perms($content_id))
       // content type changed.
       global $gCms;
       $contentops =& $gCms->GetContentOperations();
-      $contentops->LoadContentType($_POST['orig_content_type']);
+      $contentops->load_content_type($_POST['orig_content_type']);
 
       $contentobj = UnserializeObject($_POST["serialized_content"]);
       if (strtolower(get_class($contentobj)) != strtolower($content_type))

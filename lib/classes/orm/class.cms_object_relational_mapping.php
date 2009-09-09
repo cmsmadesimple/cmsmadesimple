@@ -770,8 +770,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	{
 		$this->before_validation_caller();
 
-		if ($this->_call_validation())
-			return false;
+		if ($this->check_not_valid())
+			{
+				return false;
+			}
 
 		$this->before_save_caller();
 
@@ -1447,7 +1449,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 */
-	public function validate()
+	protected function validate()
 	{
 	}
 	
@@ -1526,7 +1528,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return int The number of validation errors
 	 * @author Ted Kulp
 	 **/
-	public function _call_validation()
+	public function check_not_valid()
 	{	
 		//Clear them out first
 		if ($this->clear_errors)

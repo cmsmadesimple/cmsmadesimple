@@ -140,12 +140,12 @@ class CmsContentEditorBase
 
 			case 'title':
 				$prompt = lang('title');
-				$field  = '<input type="text" name="title" value="'.cms_htmlentities($content_obj->name()).'" />';
+				$field  = '<input type="text" name="name" value="'.cms_htmlentities($content_obj->name()).'" />';
 				break;
 
 			case 'menutext':
 				$prompt = lang('menutext');
-				$field  = '<input type="text" name="menutext" value="'.cms_htmlentities($content_obj->menu_text).'" />';
+				$field  = '<input type="text" name="menu_text" value="'.cms_htmlentities($content_obj->menu_text).'" />';
 				break;
 
 			case 'parent':
@@ -166,7 +166,7 @@ class CmsContentEditorBase
 
 			case 'showinmenu':
 				$prompt = lang('showinmenu');
-				$field = '<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($content_obj->showinmenu()?' checked="checked"':'').' />';
+				$field = '<input type="hidden" name="show_in_menu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($content_obj->showinmenu()?' checked="checked"':'').' />';
 
 			case 'target':
 				{
@@ -206,17 +206,17 @@ class CmsContentEditorBase
 
 			case 'titleattribute':
 				$prompt = lang('titleattribute');
-				$field = '<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->titleattribute()).'" />';
+				$field = '<input type="text" name="title_attribute" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->titleattribute()).'" />';
 				break;
 
 			case 'accesskey':
 				$prompt = lang('accesskey');
-				$field = '<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($content_obj->access_key()).'" />';
+				$field = '<input type="text" name="access_key" maxlength="5" value="'.cms_htmlentities($content_obj->access_key()).'" />';
 				break;
 
 			case 'tabindex':
 				$prompt = lang('tabindex');
-				$field = '<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($content_obj->tab_index()).'" />';
+				$field = '<input type="text" name="tab_index" maxlength="5" value="'.cms_htmlentities($content_obj->tab_index()).'" />';
 				break;
 
 			case 'extra1':
@@ -298,6 +298,69 @@ class CmsContentEditorBase
 				return array($prompt.':',$field);
 			}
 	}
+
+	public function fill_from_form_data($params)
+	{
+		if( is_a( $this->_contentobj, 'ContentBase' ) &&
+			method_exists($this->_contentobj,'FillParams') )
+			{
+				// it's an old style content object.
+				// get a list of langified tab names
+				$this->_contentobj->FillParams($params);
+				return;
+			}
+		
+		$props = array('name','menu_text','parent_id','active','show_in_menu','cachable','alias',
+					   'title_attribute','access_key','tab_index','owner_id','additionaleditors');
+		$content_obj = $this->get_content();
+		foreach( $props as $oneprop )
+			{
+				$str = 'set_'.$oneprop;
+				if( isset($params[$oneprop]) )
+					$content_obj->$str($params[$oneprop]);
+			}
+
+		$props = array('target','image','thumbnail','extra1','extra2','extra3');
+		foreach( $props as $oneprop )
+			{
+				if( isset($params[$oneprop]) )
+					$content_obj->set_property_value($oneprop,$params[$oneprop]);
+			}
+	}
+
+
+	public function validate()
+	{
+		if( is_a( $this->_contentobj, 'ContentBase' ) &&
+			method_exists($this->_contentobj,'ValidateData') )
+			{
+				// it's an old style content object.
+				// get a list of langified tab names
+				$res = $this->_contentobj->ValidateData();
+				return $res;
+			}
+		
+		$content_obj = $this->get_content();
+		$tmp = $content_obj->check_not_valid();
+		if( $tmp )
+			{
+				return $content_obj->get_validation_errors();
+			}
+		return FALSE;
+	}
+
+
+	public function save()
+	{
+		$content_obj = $this->get_content();
+		$res = $content_obj->save();
+		if( !$res ) die('save failed');
+
+		CmsContentOperations::SetAllHierarchyPositions();
+		CmsCache::clear();
+		audit($content_obj->id(),$content_obj->name(),'Edited Content');
+	}
+
 } // end of class
 
 #
