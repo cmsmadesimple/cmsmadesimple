@@ -80,6 +80,13 @@ else if( isset( $_REQUEST['disable_theme'] ))
 {
 	$USE_THEME = false;
 }
+if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false'))
+{
+  // for simplicity and compatibility with the frontend.
+  $USE_THEME = false;
+  $USE_OUTPUT_BUFFERING = false;
+}
+
 if (isset($gCms->modules[$module]['object']) )
   {
     $txt = $gCms->modules[$module]['object']->GetHeaderHTML();
