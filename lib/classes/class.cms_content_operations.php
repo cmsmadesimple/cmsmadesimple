@@ -365,7 +365,6 @@ class CmsContentOperations extends CmsObject
 
 				#If it's a child of the current, we don't want to show it as it
 				#could cause a deadlock.
-				echo "DEBUG: cur = $curhierarchy one = ".$one->hierarchy().'<br/>';
 				if ($curhierarchy != '' && strstr($one->hierarchy() . '.', $curhierarchy . '.') == $one->hierarchy() . '.')
 				{
 					continue;
@@ -790,7 +789,7 @@ class CmsContentOperations extends CmsObject
 						break;
 					}
 			}
-		if( !$found )
+		if( !$found || !class_exists($found))
 			{
 				$found = 'CmsContentEditorBase';
 			}

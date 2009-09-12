@@ -115,9 +115,8 @@ $apply = false;
 if (isset($_POST["applybutton"])) $apply = true;
 
 #Get a list of content types and pick a default if necessary
-global $gCms;
+$gCms = cmsms();
 $contentops =& $gCms->GetContentOperations();
-$existingtypes = $contentops->ListContentTypes();
 $content_type = "";
 if (isset($_POST["content_type"]))
 {
@@ -125,6 +124,7 @@ if (isset($_POST["content_type"]))
 }
 else
 {
+    $existingtypes = $contentops->ListContentTypes();
 	if (isset($existingtypes) && count($existingtypes) > 0)
 	{
 		$content_type = 'content';
@@ -138,8 +138,6 @@ else
 
 # Get the content object, and instantiate the ditor.
 $contentobj = $contentops->LoadContentFromId($content_id);
-$editortype = $contentops->get_content_editor_type($contentobj);
-$editor = new $editortype($contentobj);
 
 if (check_editcontent_perms($content_id))
 {
@@ -178,7 +176,7 @@ if (check_editcontent_perms($content_id))
 //       global $gCms;
 //       $contentops =& $gCms->GetContentOperations();
 //       $contentobj = $contentops->LoadContentFromId($content_id);
-//       $content_type = $contentobj->Type();
+//       $content_type = $contentobj->yype();
 //     }
 //   else
 //     {
@@ -186,9 +184,11 @@ if (check_editcontent_perms($content_id))
 //     }
 }
 
-if (strlen($contentobj->Name()) > 0)
+$editortype = $contentops->get_content_editor_type($contentobj);
+$editor = new $editortype($contentobj);
+if (strlen($contentobj->name()) > 0)
 {
-	$CMS_ADMIN_SUBTITLE = $contentobj->Name();
+	$CMS_ADMIN_SUBTITLE = $contentobj->name();
 }
 
 // Detect if a WYSIWYG is in use, and grab its form submit action
@@ -230,6 +230,7 @@ $cms_ajax->process_requests();
 print '<div id="Edit_Content_Result"></div>';
 
 $tmpfname = '';
+$tabnames = '';
 
 if (!check_editcontent_perms($content_id))
 {
@@ -255,7 +256,7 @@ else
 	      $typesdropdown .= ' selected="selected" ';
 	      $cur_content_type = $onetype->type;
 	    }
-	  $typesdropdown .= ">".($type_obj->FriendlyName())."</option>";
+	  $typesdropdown .= ">".($type_obj->friendly_name())."</option>";
 	}
 	$typesdropdown .= "</select>";
 
@@ -263,8 +264,6 @@ else
 	{
 	  echo $themeObject->ShowErrors($error);
 	}
-
-	$tabnames = $editor->get_tab_names();
 
 ?>
 
@@ -276,6 +275,7 @@ else
 		<?php
 		$count = 0;
 
+	$tabnames = $editor->get_tab_names();
 		#We have preview, but no tabs
 		if (count($tabnames) == 0)
 		{
@@ -295,7 +295,7 @@ else
 		}
 		
 		#Make a preview tab
-		if ($contentobj->Previewable())
+		if ($contentobj->is_previewable())
 		{
 			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##cms_ajax_ajaxpreview(jQuery(\'#contentform\').serializeForCmsAjax()); return false;">'.lang('preview').'</div>';
 		}
@@ -319,8 +319,8 @@ $submit_buttons = '<div class="pageoverflow">
  <input type="submit" name="submitbutton" accesskey="s" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('submitdescription').'" />';
 $submit_buttons .= ' <input type="submit" accesskey="c" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
 $submit_buttons .= ' <input type="submit" accesskey="a" id="applybutton" name="applybutton" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
- if( $contentobj->IsViewable() && $contentobj->Active() ) {
-   $submit_buttons .= ' <a rel="external" href="'.$contentobj->GetURL().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
+ if( $contentobj->is_viewable() && $contentobj->active() ) {
+   $submit_buttons .= ' <a rel="external" href="'.$contentobj->get_url().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
  }
 $submit_buttons .= '</p></div>';
 
@@ -368,7 +368,7 @@ $submit_buttons .= '</p></div>';
 		</div>
 		<?php
 		}
-		if ($contentobj->Previewable())
+		if ($contentobj->is_previewable())
 		{
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>

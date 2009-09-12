@@ -41,8 +41,6 @@ class CmsContentBase extends CmsObjectRelationalMapping
 
 	var $mProperties = array();
 
-	var $preview = false;
-	
 	var $props_loaded = false;
 	
 	#Stuff needed to do a doppleganger for CmsNode -- Multiple inheritence would rock right now
@@ -72,6 +70,62 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	}
 	*/
 	
+	//////////////////////////////////////////////////
+	// methods that should be overridden
+	//////////////////////////////////////////////////
+	
+	public function friendly_name()
+	{
+		return '';
+	}
+	
+    /**
+     * Function content types to use to say whether or not they should show
+     * up in lists where parents of content are set.  This will default to true,
+     * but should be used in cases like Separator where you don't want it to 
+     * have any children.
+     * 
+     * @since 0.11
+     */
+	public function wants_children()
+	{
+		return true;
+	}
+
+    /**
+     * Should this link be used in various places where a link is the only
+     * useful output?  (Like next/previous links in cms_selflink, for example)
+     */
+	public function has_usable_link()
+	{
+		return true;
+	}
+
+	public function is_default_possible()
+	{
+		return true;
+	}
+
+	public function is_copyable()
+	{
+		return true;
+	}
+
+	public function is_system_page()
+	{
+		return false;
+	}
+
+	public function is_previewable()
+	{
+		return false;
+	}
+
+	public function is_viewable()
+	{
+		return false;
+	}
+
 	/**
 	 * Method to override for indexing content in the search index.  If this is not overridden,
 	 * then the content type won't be searchable.
@@ -83,10 +137,19 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	{
 	}
 	
-	public function friendly_name()
+	protected function validate()
 	{
-		return '';
+		$this->validate_numericality_of('parent_id',lang('invalidparent'));
+		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('title'))));
+		$this->validate_not_blank('menu_text', lang('nofieldgiven',array(lang('menutext'))));
+		$this->validate_not_blank('menu_text', lang('nofieldgiven',array(lang('menutext'))));
+		$this->validate_not_blank('alias', lang('nofieldgiven',array(lang('alias'))));
 	}
+	
+
+	//////////////////////////////////////////////////
+	// methods that do not need to be overridden
+	//////////////////////////////////////////////////
 	
 	protected function before_save()
 	{
@@ -115,16 +178,6 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	}
 
 	
-	protected function validate()
-	{
-		$this->validate_numericality_of('parent_id',lang('invalidparent'));
-		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('title'))));
-		$this->validate_not_blank('menu_text', lang('nofieldgiven',array(lang('menutext'))));
-		$this->validate_not_blank('menu_text', lang('nofieldgiven',array(lang('menutext'))));
-		$this->validate_not_blank('alias', lang('nofieldgiven',array(lang('alias'))));
-	}
-	
-
 	public function set_property_value($name, $value, $lang = 'en_US')
 	{
 		$this->load_properties(false);
@@ -259,13 +312,13 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		$alias = ($this->alias != ''?$this->alias:$this->id);
 		if ($config["assume_mod_rewrite"] && $rewrite == true)
 		{
-			$url = $config['root_url']. '/' . ($lang != '' ? "$lang/" : '') . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
+			$url = $config['root_url']. '/' . ($lang != '' ? "$lang/" : '') . $this->hierarchy_path() . (isset($config['page_extension'])?$config['page_extension']:'.html');
 		}
 		else
 		{
 		    if (isset($_SERVER['PHP_SELF']) && $config['internal_pretty_urls'] == true)
 		    {
-				$url = $config['root_url'] . '/index.php/' . ($lang != '' ? "$lang/" : '') . $this->HierarchyPath() . (isset($config['page_extension']) ? $config['page_extension'] : '.html');
+				$url = $config['root_url'] . '/index.php/' . ($lang != '' ? "$lang/" : '') . $this->hierarchy_path() . (isset($config['page_extension']) ? $config['page_extension'] : '.html');
 		    }
 		    else
 		    {
@@ -324,33 +377,6 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		$this->params['alias'] = munge_string_to_url($alias, $tolower);
 	}
 	
-    /**
-     * Function content types to use to say whether or not they should show
-     * up in lists where parents of content are set.  This will default to true,
-     * but should be used in cases like Separator where you don't want it to 
-     * have any children.
-     * 
-     * @since 0.11
-     */
-	public function wants_children()
-	{
-		return true;
-	}
-
-    /**
-     * Should this link be used in various places where a link is the only
-     * useful output?  (Like next/previous links in cms_selflink, for example)
-     */
-	public function has_usable_link()
-	{
-		return true;
-	}
-
-	public function is_default_possible()
-	{
-		return true;
-	}
-
 	/**
 	 * Checks to see if this conte type uses the given field.
 	 */
@@ -445,7 +471,8 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	{
 		return count($this->children);
 	}
-	
+
+	// not needed?
 	public function getChildrenCount()
 	{
 		return $this->get_children_count();
@@ -486,19 +513,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	public function get_content()
 	{
 		return $this;
-	}
-	
-	public function set_previewable($flag = true)
-	{
-		$this->preview = true();
-	}
-
-	public function get_previewable($flag = true)
-	{
-		$this->preview = true();
-	}
-
-	
+	}	
 }
 
 

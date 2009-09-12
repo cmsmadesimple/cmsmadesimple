@@ -96,11 +96,11 @@ class CmsContentEditorBase
 		// content objects.
 		if( is_a( $this->_contentobj, 'ContentBase' ) &&
 			method_exists($this->_contentobj,'EditAsArray') &&
-			method_exists($this->_contentobj,'TabNames()') )
+			method_exists($this->_contentobj,'TabNames') )
 			{
 				// it's an old style content object.
 				// get the tab names, and convert the tab name to an index.
-				$ret = $this->EditAsArray($adding,$tabindex);
+				$ret = $this->_contentobj->EditAsArray($adding,$tabindex);
 			}
 
 		$tabnames = $this->_profile->get_tab_list();
