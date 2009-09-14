@@ -739,7 +739,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	{
 	  $columns['active'] = '&nbsp;';
 	  $txt = '';
-	  if (check_permission($userid, 'Manage All Content'))
+	  if (check_permission($userid, 'Manage All Content') && $one->Type() != 'errorpage' )
 	    {
 	      if($one->Active())
 		{

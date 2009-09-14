@@ -31,7 +31,6 @@ class Separator extends ContentBase
       $this->RemoveProperty('target','');
       $this->RemoveProperty('accesskey','');
       $this->RemoveProperty('titleattribute','');
-      $this->RemoveProperty('showinmenu',true);
       $this->RemoveProperty('cachable',true);
     }
 
