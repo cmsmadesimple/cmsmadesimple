@@ -39,14 +39,14 @@ class CmsContentEditor extends CmsContentEditorBase
 	}
 
 
-	public function get_tab_elements($tabindex,$adding = FALSE)
+	public function get_tab_elements($tabname,$adding = FALSE)
 	{
 		$gCms = cmsms();
 		$config = cms_config();
 		$templateops =& $gCms->GetTemplateOperations();
 
-		$ret = parent::get_tab_elements($tabindex,$adding);
-		if( $tabindex != 0 ) return $ret;
+		$ret = parent::get_tab_elements($tabname,$adding);
+		if( $tabname != 'main' ) return $ret;
 
 		$this->parse_content_blocks(); 
 		$content_obj = $this->get_content();

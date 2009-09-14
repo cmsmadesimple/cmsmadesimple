@@ -103,7 +103,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 
 	public function is_default_possible()
 	{
-		return true;
+		return false;
 	}
 
 	public function is_copyable()

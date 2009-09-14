@@ -124,15 +124,15 @@ if (isset($_POST["content_type"]))
 }
 else
 {
-    $existingtypes = $contentops->ListContentTypes();
-	if (isset($existingtypes) && count($existingtypes) > 0)
-	{
-		$content_type = 'content';
-	}
-	else
-	{
-		$error = "<p>No content types loaded!</p>";	
-	}
+  $existingtypes = CmsContentOperations::list_content_types();
+  if (isset($existingtypes) && count($existingtypes) > 0)
+    {
+      $content_type = 'content';
+    }
+  else
+    {
+      $error = "<p>No content types loaded!</p>";	
+    }
 }
 
 
@@ -158,7 +158,6 @@ if (check_editcontent_perms($content_id))
       // content type changed.
       global $gCms;
       $contentops =& $gCms->GetContentOperations();
-      $contentops->load_content_type($_POST['orig_content_type']);
 
       $contentobj = UnserializeObject($_POST["serialized_content"]);
       if (strtolower(get_class($contentobj)) != strtolower($content_type))
@@ -241,22 +240,21 @@ else
 	#Get a list of content_types and build the dropdown to select one
 	$typesdropdown = '<select name="content_type" onchange="document.contentform.submit()" class="standard">';
 	$cur_content_type = '';
-	foreach ($gCms->contenttypes as $onetype)
+	$contenttypes = CmsContentOperations::list_content_types();
+	foreach ($contenttypes as $onetype => $label)
 	{
-	  if( $onetype->type == 'errorpage' && !check_permission($userid,'Manage All Content') ) 
+	  if( $onetype == 'errorpage' && !check_permission($userid,'Manage All Content') ) 
 	    {
 	      continue;
 	    }
 
-	  $contentops->LoadContentType($onetype->type);
-	  $type_obj = new $onetype->type;
-	  $typesdropdown .= '<option value="' . $onetype->type . '"';
-	  if ($onetype->type == $content_type)
+	  $typesdropdown .= '<option value="' . $onetype . '"';
+	  if ($onetype == $content_type)
 	    {
 	      $typesdropdown .= ' selected="selected" ';
-	      $cur_content_type = $onetype->type;
+	      $cur_content_type = $onetype;
 	    }
-	  $typesdropdown .= ">".($type_obj->friendly_name())."</option>";
+	  $typesdropdown .= ">".$label."</option>";
 	}
 	$typesdropdown .= "</select>";
 
@@ -265,40 +263,28 @@ else
 	  echo $themeObject->ShowErrors($error);
 	}
 
-?>
-
-<div class="pagecontainer pageoverflow">
-	<?php
+	echo '<div class="pagecontainer pageoverflow">'."\n";
 	echo $themeObject->ShowHeader('editcontent');
-	?>
-	<div id="page_tabs" style="width:100%;">
-		<?php
-		$count = 0;
+	echo '<div id="page_tabs" style="width:100%;">'."\n";
 
 	$tabnames = $editor->get_tab_names();
-		#We have preview, but no tabs
-		if (count($tabnames) == 0)
-		{
-			?>
-			<div id="editab0"><?php echo lang('content')?></div>
-			<?php
-		}
-		else
-		{
-			foreach ($tabnames as $onetab)
-			{
-				?>
-				<div id="editab<?php echo $count?>"><?php echo $onetab?></div>
-				<?php
-				$count++;
-			}
-		}
-		
-		#Make a preview tab
-		if ($contentobj->is_previewable())
-		{
-			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##cms_ajax_ajaxpreview(jQuery(\'#contentform\').serializeForCmsAjax()); return false;">'.lang('preview').'</div>';
-		}
+	if (count($tabnames) == 0)
+	  {
+	    // this is a problem.
+	  }
+	else
+	  {
+	    foreach ($tabnames as $onetab => $label)
+	      {
+		echo '<div id="edittab'.$onetab.'">'.$label.'</div>'."\n";
+	      }
+	  }
+	
+	// Make a preview tab
+	if ($contentobj->is_previewable())
+	  {
+	    echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##cms_ajax_ajaxpreview(jQuery(\'#contentform\').serializeForCmsAjax()); return false;">'.lang('preview').'</div>';
+	  }
 
 		?>
 	</div>
@@ -324,64 +310,53 @@ $submit_buttons .= ' <input type="submit" accesskey="a" id="applybutton" name="a
  }
 $submit_buttons .= '</p></div>';
 
-//echo $submit_buttons;
-		$numberoftabs = count($tabnames);
-		$showtabs = 1;
-		if ($numberoftabs == 0)
-		{
-			$numberoftabs = 1;
-			$showtabs = 1;
-		}
+ $tabindex = 0;
+ foreach( $tabnames as $onetab => $label )
+   {
+     echo '<div id="edittab'.$onetab.'_c">'."\n";
+     if ($tabindex == 0)
+       {
+	 echo $submit_buttons;
+	 
+	 ?>
+	   <div class="pageoverflow">
+           <div class="pagetext"><?php echo lang('contenttype'); ?>:</div>
+	   <div class="pageinput"><?php echo $typesdropdown; ?></div>
+	   </div>
+ 	 <?php
+       }
+     $tabindex++;
 
-		for ($currenttab = 0; $currenttab < $numberoftabs; $currenttab++)
-		{
-			if ($showtabs == 1)
-			{
-				?><div id="editab<?php echo $currenttab ?>_c"><?php
-			}
-			if ($currenttab == 0)
-			{
-				echo $submit_buttons;
-				?>
-				<div class="pageoverflow">
-					<div class="pagetext"><?php echo lang('contenttype'); ?>:</div>
-					<div class="pageinput"><?php echo $typesdropdown; ?></div>
-				</div>
-				<?php
-			}
+     $contentarray = $editor->get_tab_elements($onetab);
+     
+     for($i=0;$i<count($contentarray);$i++)
+       {
+	 $tmp =& $contentarray[$i];
+	 ?>
+	   <div class="pageoverflow">
+	      <div class="pagetext"><?php echo $tmp[0]; ?></div>
+	      <div class="pageinput"><?php echo $tmp[1]; ?></div>
+           </div>
+	 <div style="clear: both;"></div>
+	 <?php
+       }
 
-			$contentarray = $editor->get_tab_elements($currenttab);
-
-			for($i=0;$i<count($contentarray);$i++)
-			{
-			  $tmp =& $contentarray[$i];
-				?>
-				<div class="pageoverflow">
-					<div class="pagetext"><?php echo $tmp[0]; ?></div>
-					<div class="pageinput"><?php echo $tmp[1]; ?></div>
-				</div>
-				<?php
-			}
-            
-			?>
-			<div style="clear: both;"></div>
-		</div>
-		<?php
-		}
-		if ($contentobj->is_previewable())
-		{
-			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
-				?>
-			  <div class="pagewarning"><?php echo lang('info_preview_notice') ?></div>
-			  <iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo "{$config['root_url']}/index.php?{$config['query_var']}=__CMS_PREVIEW_PAGE__"; } ?>></iframe>
-				<?php
-			echo '</div></div>';
-			echo '<div style="clear: both;"></div>';
-		}
-		echo $submit_buttons;
-		?>
-	</div>
-	</form>
+     echo '</div>'."\n";
+   }
+     if ($contentobj->is_previewable())
+       {
+	 echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
+	 ?>
+	   <div class="pagewarning"><?php echo lang('info_preview_notice') ?></div>
+	   <iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo "{$config['root_url']}/index.php?{$config['query_var']}=__CMS_PREVIEW_PAGE__"; } ?>></iframe>
+	   <?php
+	   echo '</div></div>';
+	   echo '<div style="clear: both;"></div>';
+       }
+       echo $submit_buttons;
+     ?>
+     </div>
+     </form>
 </div>
 
 <?php

@@ -81,34 +81,11 @@ function updatecontentobj(&$contentobj, $preview = false, $params = null)
 function copycontentobj(&$contentobj, $content_type, $params = null)
 {
 	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
 	
 	if ($params == null)
 		$params = $_POST;
 
-	$newcontenttype = strtolower($content_type);
-	$contentops->LoadContentType($newcontenttype);
-	$contentobj->FillParams($params);
-	$tmpobj = $contentops->CreateNewContent($newcontenttype);
-	$tmpobj->SetId($contentobj->Id());
-	$tmpobj->SetName($contentobj->Name());
-	$tmpobj->SetMenuText($contentobj->MenuText());
-	$tmpobj->SetTemplateId($contentobj->TemplateId());
-	$tmpobj->SetParentId($contentobj->ParentId());
-	$tmpobj->SetOldParentId($contentobj->OldParentId());
-	$tmpobj->SetAlias($contentobj->Alias());
-	$tmpobj->SetOwner($contentobj->Owner());
-	$tmpobj->SetActive($contentobj->Active());
-	$tmpobj->SetItemOrder($contentobj->ItemOrder());
-	$tmpobj->SetOldItemOrder($contentobj->OldItemOrder());
-	$tmpobj->SetShowInMenu($contentobj->ShowInMenu());
-	//Some content types default to false for a reason... don't override it
-	if (!(!$tmpobj->Cachable() && $contentobj->Cachable()))
-		$tmpobj->SetCachable($contentobj->Cachable());
-	$tmpobj->SetHierarchy($contentobj->Hierarchy());
-	$tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
-	$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
-	$tmpobj->FillParams($params);
+	$tmpobj = CmsContentOperations::clone_content_as($contentobj,$content_type);
 	$contentobj = $tmpobj;
 }
 

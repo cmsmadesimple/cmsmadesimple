@@ -114,11 +114,6 @@ class CmsApplication extends CmsObject
 	 */
 	var $HtmlBlobCache;
 	
-	/**
-	 * content types array - List of available content types
-	 */
-	var $contenttypes;
-	
 	static private $instance = NULL;
 
 	/**
@@ -131,7 +126,6 @@ class CmsApplication extends CmsObject
 		$this->modules = array();
 		$this->errors = array();
 		$this->nls = array();
-		$this->contenttypes = array();
 		$this->TemplateCache = array();
 		$this->StylesheetCache = array();
 		$this->variables['content-type'] = 'text/html';
@@ -378,13 +372,6 @@ class CmsRoute
 	var $defaults;
 }
 
-class CmsContentTypePlaceholder
-{
-	var $type;
-	var $filename;
-	var $friendlyname;
-	var $loaded;
-}
 
 # vim:ts=4 sw=4 noet
 ?>

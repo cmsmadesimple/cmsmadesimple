@@ -145,27 +145,6 @@ if (!isset($DONT_LOAD_DB))
 }
 
 $smarty =& $gCms->GetSmarty();
-$contenttypes =& $gCms->contenttypes;
-
-#Load content types
-$dir = cms_join_path($dirname,'lib','classes','contenttypes');
-$handle=opendir($dir);
-while ($file = readdir ($handle)) 
-{
-    $path_parts = pathinfo($file);
-    if (isset($path_parts['extension']) && $path_parts['extension'] == 'php')
-    {
-		$obj = new CmsContentTypePlaceholder();
-		$obj->type = strtolower(basename($file, '.inc.php'));
-		$obj->filename = cms_join_path($dir,$file);
-		$obj->loaded = false;
-		$obj->classname = basename($file,'.inc.php');
-		$obj->friendlyname = basename($file, '.inc.php');
-
-		$contenttypes[strtolower(basename($file, '.inc.php'))] = $obj;
-    }
-}
-closedir($handle);
 
 if (!defined('SMARTY_DIR')) {
     define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);

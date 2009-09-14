@@ -18,85 +18,63 @@
 #
 #$Id$
 
-class Separator extends ContentBase
+class Separator extends CmsContentBase
 {
 
-    function SetProperties()
-    {
-      parent::SetProperties();
-      $this->RemoveProperty('template','-1');
-      $this->RemoveProperty('alias','');
-      $this->RemoveProperty('title','');
-      $this->RemoveProperty('menutext','');
-      $this->RemoveProperty('target','');
-      $this->RemoveProperty('accesskey','');
-      $this->RemoveProperty('titleattribute','');
-      $this->RemoveProperty('showinmenu',true);
-      $this->RemoveProperty('cachable',true);
-      $this->RemoveProperty('secure',false);
-    }
+  public function __construct()
+  {
+    parent::__construct();
+    $this->set_cachable(false);
+    $this->set_name(CMS_CONTENT_HIDDEN_NAME);
+  }
 
-    function FriendlyName()
-    {
-      return lang('contenttype_separator');
-    }
+//     function SetProperties()
+//     {
+//       parent::SetProperties();
+//       $this->RemoveProperty('template','-1');
+//       $this->RemoveProperty('alias','');
+//       $this->RemoveProperty('title','');
+//       $this->RemoveProperty('menutext','');
+//       $this->RemoveProperty('target','');
+//       $this->RemoveProperty('accesskey','');
+//       $this->RemoveProperty('titleattribute','');
+//       $this->RemoveProperty('showinmenu',true);
+//       $this->RemoveProperty('cachable',true);
+//       $this->RemoveProperty('secure',false);
+//     }
 
-    function HasUsableLink()
-    {
-	return false;
-    }
+  public function friendly_name()
+  {
+    return lang('contenttype_separator');
+  }
 
-    function WantsChildren()
-    {
-	return false;
-    }
+  public function has_usable_link()
+  {
+    return false;
+  }
+
+  public function wants_children()
+  {
+    return false;
+  }
 
     /**
      * Handle Auto Aliasing 
      */
-    function DoAutoAlias()
-    {
-      return FALSE;
-    }
+//     function DoAutoAlias()
+//     {
+//       return FALSE;
+//     }
 
-    function RequiresAlias()
-    {
-      return FALSE;
-    }
+//     function RequiresAlias()
+//     {
+//       return FALSE;
+//     }
 
-    function TabNames()
-    {
-      $res = array(lang('main'));
-      if( check_permission(get_userid(),'Manage All Content') )
-	{
-	  $res[] = lang('options');
-	}
-      return $res;
-    }
-
-    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
-    {
-      switch($tab)
-	{
-	case '0':
-	  return $this->display_attributes($adding);
-	  break;
-	case '1':
-	  return $this->display_attributes($adding,1);
-	  break;
-	}
-    }
-
-    function ValidateData()
-    {
-      $this->mName = CMS_CONTENT_HIDDEN_NAME;
-      return parent::ValidateData();
-    }
-
-    function GetURL($rewrite = true)
-    {
-	return '#';
-    }
+  public function get_url($rewrite = true)
+  {
+    return '#';
+  }
 }
 
 # vim:ts=4 sw=4 noet

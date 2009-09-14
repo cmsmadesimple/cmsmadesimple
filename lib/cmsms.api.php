@@ -60,9 +60,9 @@ function cms_autoload($class_name)
 	{
 		require($files['class.' . strtolower($class_name) . '.inc.php']);
 	}
-	else if (CmsContentOperations::load_content_type($class_name))
-	{
-	}
+// 	else if (CmsContentOperations::load_content_type($class_name))
+// 	{
+// 	}
 }
 
 spl_autoload_register('cms_autoload');

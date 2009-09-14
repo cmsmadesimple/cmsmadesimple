@@ -67,15 +67,6 @@ class CmsContentEditorBase
 
 	public function get_tab_names()
 	{
-		if( is_a( $this->_contentobj, 'ContentBase' ) &&
-			method_exists($this->_contentobj,'TabNames') )
-			{
-				// it's an old style content object.
-				// get a list of langified tab names
-				$tabnames = $this->_contentobj->TabNames();
-				return $tabnames;
-			}
-
 		// get tab names from the contentobj profile.
 		$tmp = $this->_profile->get_tab_list();
 		$results = array();
@@ -83,35 +74,15 @@ class CmsContentEditorBase
 			{
 				if( empty($permission) || check_permission(get_userid(),$permission) )
 					{
-						$results[] = lang($tabname);
+						$results[$tabname] = lang($tabname);
 					}
 			}
 		return $results;
 	}
 
 
-	public function get_tab_elements($tabindex,$adding = FALSE)
+	public function get_tab_elements($tabname,$adding = FALSE)
 	{
-		// this is the equivalent of the EditAsArray function for old
-		// content objects.
-		if( is_a( $this->_contentobj, 'ContentBase' ) &&
-			method_exists($this->_contentobj,'EditAsArray') &&
-			method_exists($this->_contentobj,'TabNames') )
-			{
-				// it's an old style content object.
-				// get the tab names, and convert the tab name to an index.
-				$ret = $this->_contentobj->EditAsArray($adding,$tabindex);
-			}
-
-		$tabnames = $this->_profile->get_tab_list();
-		
-		$i = 0;
-		$tabname = '';
-		foreach( $tabnames as $key => $value )
-			{
-				if( $i == $tabindex ) $tabname = $key;
-				$i++;
-			}
 		$attrs = $this->_profile->find_all_by_tab($tabname);
 		if( !$attrs ) return FALSE;
 		
@@ -301,15 +272,6 @@ class CmsContentEditorBase
 
 	public function fill_from_form_data($params)
 	{
-		if( is_a( $this->_contentobj, 'ContentBase' ) &&
-			method_exists($this->_contentobj,'FillParams') )
-			{
-				// it's an old style content object.
-				// get a list of langified tab names
-				$this->_contentobj->FillParams($params);
-				return;
-			}
-		
 		$props = array('name','menu_text','parent_id','active','show_in_menu','cachable','alias',
 					   'title_attribute','access_key','tab_index','owner_id','additionaleditors');
 		$content_obj = $this->get_content();
@@ -331,15 +293,6 @@ class CmsContentEditorBase
 
 	public function validate()
 	{
-		if( is_a( $this->_contentobj, 'ContentBase' ) &&
-			method_exists($this->_contentobj,'ValidateData') )
-			{
-				// it's an old style content object.
-				// get a list of langified tab names
-				$res = $this->_contentobj->ValidateData();
-				return $res;
-			}
-		
 		$content_obj = $this->get_content();
 		$tmp = $content_obj->check_not_valid();
 		if( $tmp )

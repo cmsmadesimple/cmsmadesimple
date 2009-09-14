@@ -18,6 +18,15 @@
 #
 #$Id$
 
+class CmsContentTypePlaceholder
+{
+	var $type;
+	var $filename;
+	var $classname;
+	var $friendlyname;
+}
+
+
 /**
  * Class for static methods related to content
  *
@@ -41,31 +50,6 @@ class CmsContentOperations extends CmsObject
 		return self::$instance;
 	}
 
-	static function load_content_type($type)
-	{
-		$type = strtolower($type);
-
-		global $gCms;
-		$contenttypes =& $gCms->contenttypes;
-		
-		if (isset($contenttypes[$type]))
-		{
-			$placeholder =& $contenttypes[$type];
-			if ($placeholder->loaded == false)
-			{
-				include_once($placeholder->filename);
-				$placeholder->loaded = true;
-			}
-			return true;
-		}
-		return false;
-	}
-
-	static function LoadContentType($type)
-	{
-		return ContentOperations::load_content_type($type);
-	}
-	
 	/**
 	 * Returns an array of available content types.
 	 *
@@ -74,7 +58,14 @@ class CmsContentOperations extends CmsObject
 	 **/
 	public static function find_content_types()
 	{
-		$contenttypes =& cmsms()->contenttypes;
+		$gCms = cmsms();
+		$variables =& $gCms->variables;
+		if (isset($variables['contenttypes']))
+		{
+			return $variables['contenttypes'];
+		}
+
+		$variables['contenttypes'] = array();
 		$dir = cms_join_path(dirname(__FILE__),'contenttypes');
 		$handle=opendir($dir);
 		while ($file = readdir ($handle)) 
@@ -85,14 +76,58 @@ class CmsContentOperations extends CmsObject
 				$obj = new CmsContentTypePlaceholder();
 				$obj->type = strtolower(basename($file, '.inc.php'));
 				$obj->filename = cms_join_path($dir,$file);
-				$obj->loaded = false;
-				$obj->friendlyname = basename($file, '.inc.php');
-				$contenttypes[strtolower(basename($file, '.inc.php'))] = $obj;
+				$obj->classname = basename($file, '.inc.php');
+				$obj->friendlyname = basename($file, '.inc.php'); // todo, could get this from the object.
+				$variables['contenttypes'][$obj->type] = $obj;
 		    }
 		}
 		closedir($handle);
 	}
 	
+
+	public static function load_content_types()
+	{
+		$gCms = cmsms();
+		$variables =& $gCms->variables;
+		if (!isset($variables['contenttypes']))
+		{
+			self::find_content_types();
+		}
+
+		foreach( $variables['contenttypes'] as $key => $obj )
+		{
+			if( $obj->filename && file_exists($obj->filename) )
+			{
+				require_once($obj->filename);
+			}
+		}
+	}
+
+
+    /**
+     * Returns a hash of valid content types (classes that extend ContentBase)
+     * The key is the name of the class that would be saved into the dabase.  The
+     * value would be the text returned by the type's FriendlyName() method.
+     */
+	static public function &list_content_types()
+	{
+		$gCms = cmsms();
+		if (!isset($gCms->variables['contenttypes']))
+		{
+			self::find_content_types();
+		}
+
+		$result = array();
+		$contenttypes =& $gCms->variables['contenttypes'];
+		foreach( $contenttypes as $key => $placeholder )
+		{
+			$result[$key] = $placeholder->friendlyname;
+		}
+		
+		return $result;
+	}
+
+
 	/**
 	 * Returns an array of the available block types.
 	 *
@@ -124,28 +159,18 @@ class CmsContentOperations extends CmsObject
 		return $blocktypes;
 	}
 
-	function &CreateNewContent($type)
-	{
-		$type = strtolower($type);
-
-		$result = NULL;
-		
-		if (ContentOperations::LoadContentType($type))
-		{
-			$result = new $type;
-		}
-		
-		return $result;
-	}
 	
-	/**
-	 * @deprecated Deprecated.  Use cmsms()->content_base->find_by_id($id) instead.
-	 **/
 	function LoadContentFromId($id,$loadprops=true)
 	{	
-		return cms_orm('CmsContentBase')->find_by_id($id);
+		return self::load_content_from_id($id);
 	}
 	
+	public static function load_content_from_id($id)
+	{
+		self::load_content_types();
+		return cms_orm('CmsContentBase')->find_by_id($id);
+	}
+
 	public static function load_multiple_from_parent_id($parent_id, $loadProperties = false)
 	{
 		return cms_orm('CmsContentBase')->find_all_by_parent_id($parent_id, array('order' => 'lft ASC'));
@@ -191,37 +216,6 @@ class CmsContentOperations extends CmsObject
 			return $page->id;
 		}
 		return -1;
-	}
-
-    /**
-     * Returns a hash of valid content types (classes that extend ContentBase)
-     * The key is the name of the class that would be saved into the dabase.  The
-     * value would be the text returned by the type's FriendlyName() method.
-     */
-	function &ListContentTypes()
-	{
-		global $gCms;
-		$contenttypes =& $gCms->contenttypes;
-		
-		if (isset($gCms->variables['contenttypes']))
-		{
-			$variables =& $gCms->variables;
-			return $variables['contenttypes'];
-		}
-		
-		$result = array();
-		
-		reset($contenttypes);
-		while (list($key) = each($contenttypes))
-		{
-			$value =& $contenttypes[$key];
-			$result[] = $value->type;
-		}
-		
-		$variables =& $gCms->variables;
-		$variables['contenttypes'] =& $result;
-
-		return $result;
 	}
 
     /**
@@ -775,11 +769,11 @@ class CmsContentOperations extends CmsObject
 		$db->CommitTrans();
 	}
 
-	function get_content_editor_type($content_obj)
+	public function get_content_editor_type($content_obj)
 	{
 		$classname = get_class($content_obj);
-		global $gCms;
-		$contenttypes =& $gCms->contenttypes;
+		$gCms = cmsms();
+		$contenttypes =& $gCms->variables['contenttypes'];
 		$found = '';
 		foreach( $contenttypes as $name => $type )
 			{
@@ -794,6 +788,25 @@ class CmsContentOperations extends CmsObject
 				$found = 'CmsContentEditorBase';
 			}
 		return $found;
+	}
+
+	static public function clone_content_as($content_obj,$contenttype)
+	{
+		$gCms = cmsms();
+		self::load_content_types();
+		$contenttypes =& $gCms->variables['contenttypes'];
+		foreach( $contenttypes as $name => $obj )
+			{
+				if( $name == $contenttype )
+					{
+						$tmpobj = new $contenttype;
+						$tmpobj->dirty = true;
+						$tmpobj->params = $content_obj->params;
+						$tmpobj->mProperties = $content_obj->mProperties;
+						return $tmpobj;
+					}
+			}
+		return null;
 	}
 }
 
@@ -810,5 +823,6 @@ class ContentOperations extends CmsContentOperations
 class ContentManager extends CmsContentOperations
 {
 }
+
 
 ?>
