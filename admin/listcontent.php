@@ -36,6 +36,7 @@ $cms_ajax->register_function('content_toggleexpand');
 $cms_ajax->register_function('content_move');
 $cms_ajax->register_function('content_delete');
 $cms_ajax->register_function('context_menu');
+$cms_ajax->register_function('content_select');
 
 function check_modify_all($userid)
 {
@@ -409,6 +410,21 @@ function content_move($contentid, $parentid, $direction)
 
 	$resp->replace_html('#contentlist', display_content_list());
 	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
+	//$resp->script('set_context_menu();');
+
+	return $resp->get_result();
+}
+
+function content_select($html_id)
+{
+	$smarty = cms_smarty();
+	$resp = new CmsAjaxResponse();
+	
+	$id = str_replace('phtml_', '', $html_id);
+	$content = cms_orm('CmsContentBase')->find_by_id($id);
+	$smarty->assign_by_ref('content', $content);
+	
+	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
 	//$resp->script('set_context_menu();');
 
 	return $resp->get_result();

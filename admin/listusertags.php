@@ -38,7 +38,7 @@ if (!$access) {
 	die('Permission Denied');
 return;
 }
-$smarty = new Smarty_CMS($gCms->config);
+$smarty = new CmsSmarty$gCms->config);
 
 include_once("header.php");
 

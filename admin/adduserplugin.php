@@ -44,7 +44,7 @@ $access = check_permission($userid, 'Modify User-defined Tags');
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
-$smarty = new Smarty_CMS($gCms->config);
+$smarty = new CmsSmarty($gCms->config);
 load_plugins($smarty);
 
 global $gCms;

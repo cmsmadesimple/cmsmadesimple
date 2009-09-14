@@ -1,3 +1,41 @@
+<div id="content_tree" class="content_tree">
+    {if $content->has_children()}
+        <ul>
+            {include file='listcontent-entries.tpl' content=$content->get_children()}
+        </ul>
+    {/if}
+</div>
+{literal}
+<script type="text/javascript">
+$(function () {
+	$("#content_tree").tree(
+	    {
+	        rules:
+	        {
+                draggable : "all"
+	        },
+	        ui:
+	        {
+    	        theme_path: "../lib/jquery/tree/themes/"
+	        },
+	        callback:
+	        {
+	            onselect: function(node, tree_obj) { cms_ajax_content_select(node.id); }
+	        },
+	        cookies:
+	        {
+	            prefix: "pagetree",
+	            opts:
+	            {
+	                path : '/'
+	            }
+	        } 
+	    }
+	);
+});
+</script>
+{/literal}
+{*
 <div class="pageoverflow">
   <p class="pageoptions">
     {if $add_pages eq true}
@@ -61,4 +99,4 @@
     {/if}
   </p>
 </div>
-
+*}

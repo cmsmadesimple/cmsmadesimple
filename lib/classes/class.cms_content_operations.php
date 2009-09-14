@@ -339,7 +339,7 @@ class CmsContentOperations extends CmsObject
 		$result .= '>';
 		$result .= '<option value="-1">None</option>';
 
-		$allcontent = self::get_all_content(false);
+		$allcontent = CmsContentOperations::get_all_content(false);
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{

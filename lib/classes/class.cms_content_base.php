@@ -377,6 +377,11 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		$this->params['alias'] = munge_string_to_url($alias, $tolower);
 	}
 	
+	public function WantsChildren()
+    {
+		$this->wants_children();
+    }
+
 	/**
 	 * Checks to see if this conte type uses the given field.
 	 */
@@ -490,7 +495,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 				$this->tree->load_child_nodes($this->id);
 			}
 		}
-		return $this->tree->children;
+		return $this->children;
 	}
 	
     public function &get_flat_list()

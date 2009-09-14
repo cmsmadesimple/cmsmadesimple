@@ -326,7 +326,7 @@ class CmsApplication extends CmsObject
 			}
 
 			#Setup global smarty object
-			$this->smarty = new Smarty_CMS($conf);
+			$this->smarty = new CmsSmarty($conf);
 		}
 
         return $this->smarty;

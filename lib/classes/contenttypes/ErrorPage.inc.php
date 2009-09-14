@@ -85,6 +85,11 @@ class ErrorPage extends Content
   {
     return false;
   }
+
+  function WantsChildren()
+  {
+    return false;
+  }
 	
   function is_system_page()
   {

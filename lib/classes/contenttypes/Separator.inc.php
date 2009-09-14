@@ -43,20 +43,20 @@ class Separator extends CmsContentBase
 //       $this->RemoveProperty('secure',false);
 //     }
 
-  public function friendly_name()
-  {
-    return lang('contenttype_separator');
-  }
+	public function friendly_name()
+	{
+		return lang('contenttype_separator');
+	}
 
-  public function has_usable_link()
-  {
-    return false;
-  }
+	public function has_usable_link()
+	{
+		return false;
+	}
 
-  public function wants_children()
-  {
-    return false;
-  }
+	public function wants_children()
+	{
+		return false;
+	}
 
     /**
      * Handle Auto Aliasing 
@@ -71,10 +71,10 @@ class Separator extends CmsContentBase
 //       return FALSE;
 //     }
 
-  public function get_url($rewrite = true)
-  {
-    return '#';
-  }
+	public function get_url($rewrite = true)
+	{
+		return '#';
+	}
 }
 
 # vim:ts=4 sw=4 noet
