@@ -1,3 +1,12 @@
+Version 1.6.6 - NEW_NAME
+-----------------------------
+ - #3926 Little typo in stylesheet
+ - #4002 menu parameter start_level='2' don't show results
+ - Fix problem with showinmenu for separators
+ - Fix error pages being able to be set inactive in listcontent
+ - Submit is not taken on forms, when .htaccess is used and page_extension = ''.
+
+ 
 Version 1.6.5 - Poya
 -----------------------------
 - Fixes a problem with bulk deletion of pages that have inactive children.
