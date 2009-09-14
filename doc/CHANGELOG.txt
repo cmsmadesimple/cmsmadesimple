@@ -4,6 +4,7 @@ Version 1.6.6 - NEW_NAME
  - #4002 menu parameter start_level='2' don't show results
  - Fix problem with showinmenu for separators
  - Fix error pages being able to be set inactive in listcontent
+ - Fix error in permissions checking for copying content
  - Submit is not taken on forms, when .htaccess is used and page_extension = ''.
 
  
