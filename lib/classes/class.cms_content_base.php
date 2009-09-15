@@ -19,6 +19,8 @@
 #$Id$
 
 define('CMS_CONTENT_HIDDEN_NAME','--------');
+
+
 /**
  * Base content type class.  Extend this to create new content types for
  * the system.
@@ -76,9 +78,15 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	
 	public function friendly_name()
 	{
-		return '';
+		stack_trace();
+		die('ERROR: friendly_name not overriden');
 	}
-	
+
+	public function get_type()
+	{
+		die('ERROR: type not overriden');
+	}
+
     /**
      * Function content types to use to say whether or not they should show
      * up in lists where parents of content are set.  This will default to true,

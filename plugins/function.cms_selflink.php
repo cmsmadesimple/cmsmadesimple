@@ -79,7 +79,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		$manager =& $gCms->GetHierarchyManager();
 		$node =& $manager->sureGetNodeByAlias($page);
 		if (!isset($node)) return;
-		$content =& $node->GetContent();
+		$content =& $node->get_content();
 		if ($content !== FALSE && is_object($content))
 		{
 			$pageid = $content->id();
@@ -307,7 +307,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 				$node =& $node->getParentNode();
 				//				print_r($node);
 				if (!isset($node)) return;
-				$content =& $node->GetContent();
+				$content =& $node->get_content();
 				if ($content != FALSE)
 				{
 					if ($content->active() && $content->has_usable_link())

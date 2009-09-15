@@ -40,16 +40,19 @@ class CmsContentEditorBase
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('active','options',1));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('show_in_menu','options',2));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('cachable','options',3));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','options',4));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('target','options',5));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('title_attribute','options',6));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('access_key','options',7));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('tab_index','options',8));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra1','options',9));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra2','options',9));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra3','options',9));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','options',10));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','options',11));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('secure','options',5));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','options',6));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('target','options',7));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('title_attribute','options',8));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('access_key','options',9));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('tab_index','options',10));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('image','options',11));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('thumbnail','options',12));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra1','options',13));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra2','options',13));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra3','options',13));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','options',14));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','options',15));
 		$this->_profile = $profile;
 	}
 
@@ -138,6 +141,10 @@ class CmsContentEditorBase
 			case 'show_in_menu':
 				$prompt = lang('showinmenu');
 				$field = '<input type="hidden" name="show_in_menu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($content_obj->showinmenu()?' checked="checked"':'').' />';
+
+			case 'secure':
+				$prompt = lang('secure');
+				$field = '<input type="hidden" name="secure" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="secure"'.($content_obj->get_property_value('secure')?' checked="checked"':'').' />';
 
 			case 'target':
 				{
@@ -282,7 +289,7 @@ class CmsContentEditorBase
 					$content_obj->$str($params[$oneprop]);
 			}
 
-		$props = array('target','image','thumbnail','extra1','extra2','extra3');
+		$props = array('secure','target','image','thumbnail','extra1','extra2','extra3');
 		foreach( $props as $oneprop )
 			{
 				if( isset($params[$oneprop]) )

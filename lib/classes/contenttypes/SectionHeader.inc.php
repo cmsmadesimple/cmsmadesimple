@@ -32,6 +32,11 @@ class SectionHeader extends CmsContentBase
     return lang('contenttype_sectionheader');
   }
 
+  public function get_type()
+  {
+    return 'sectionheader';
+  }
+
 //     function SetProperties()
 //     {
 //       parent::SetProperties();
@@ -57,6 +62,7 @@ class SectionHeader extends CmsContentBase
   {
     return '#';
   }
+
 
   public function is_viewable()
   {

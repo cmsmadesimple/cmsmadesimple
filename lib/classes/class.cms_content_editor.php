@@ -585,7 +585,7 @@ class CmsContentEditor extends CmsContentEditorBase
 						$module =& $gCms->modules[$blockInfo['module']]['object'];
 						if( !is_object($module) ) continue;
 						if( !$module->HasCapability('contentblocks') ) continue;
-						$value = $this->GetPropertyValue($blockInfo['id']);
+						$value = $this->get_property_value($blockInfo['id']);
 						$tmp = $module->ValidateContentBlockValue($blockName,$value,$blockInfo['params']);
 						if( !empty($tmp) )
 							{

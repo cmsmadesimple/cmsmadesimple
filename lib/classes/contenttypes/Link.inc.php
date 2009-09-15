@@ -41,6 +41,11 @@ class Link extends CmsContentBase
     return lang('contenttype_link');
   }
 
+  public function get_type()
+  {
+    return 'link';
+  }
+
   public function get_url($rewrite = true)
   {
     return cms_htmlentities($this->get_property_value('url'));

@@ -27,10 +27,10 @@ class CmsSectionHeaderEditor extends CmsContentEditorBase
     $profile = $this->get_profile();
     $profile->remove_by_name('alias');
     $profile->remove_by_name('accesskey');
-    $profile->remove_by_name('show_in_menu');
     $profile->remove_by_name('cachable');
     $profile->remove_by_name('secure');
     $profile->remove_by_name('target');
+    $profile->remove_by_name('title');
   }
 
 } // end of class.

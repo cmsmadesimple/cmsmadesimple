@@ -42,6 +42,12 @@ class Content extends CmsContentBase
     }
 
 
+	public function get_type()
+	{
+	  return 'sectionheader';
+	}
+
+
     function Show($param = 'content_en')
     {
 	  // check for additional content blocks

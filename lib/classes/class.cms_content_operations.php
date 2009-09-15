@@ -173,6 +173,7 @@ class CmsContentOperations extends CmsObject
 
 	public static function load_multiple_from_parent_id($parent_id, $loadProperties = false)
 	{
+		self::load_content_types();
 		return cms_orm('CmsContentBase')->find_all_by_parent_id($parent_id, array('order' => 'lft ASC'));
 	}
 	

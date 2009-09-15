@@ -59,7 +59,7 @@ function do_save_content($editor,$data)
   $editor->fill_from_form_data($data);
   $error = $editor->validate();
 
-  if( $error == FALSE )
+  if( $error === FALSE )
     {
       $editor->save();
     }
@@ -138,6 +138,8 @@ else
 
 # Get the content object, and instantiate the ditor.
 $contentobj = $contentops->LoadContentFromId($content_id);
+$editortype = $contentops->get_content_editor_type($contentobj);
+$editor = new $editortype($contentobj);
 
 if (check_editcontent_perms($content_id))
 {
@@ -167,6 +169,8 @@ if (check_editcontent_perms($content_id))
 	  // Copy important fields to new object
 	  // Put new object on top of old one
 	  copycontentobj($contentobj, $content_type);
+	  $editortype = $contentops->get_content_editor_type($contentobj);
+	  $editor = new $editortype($contentobj);
  	}
     }
 //   else if ($content_id != -1 || !is_object($contentobj) )
@@ -183,8 +187,6 @@ if (check_editcontent_perms($content_id))
 //     }
 }
 
-$editortype = $contentops->get_content_editor_type($contentobj);
-$editor = new $editortype($contentobj);
 if (strlen($contentobj->name()) > 0)
 {
 	$CMS_ADMIN_SUBTITLE = $contentobj->name();
