@@ -897,7 +897,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		  ((check_permission($userid, 'Remove Pages') &&
 		    (check_ownership($userid,$one->Id()) || 
 		     quick_check_authorship($one->Id(),$mypages)))
-		   || check_permission($userid,'Manage All Content')) )
+		   || check_permission($userid,'Manage All Content')) 
 		 )
 		{
 		  $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
