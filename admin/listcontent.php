@@ -352,7 +352,12 @@ function movecontent($contentid, $parentid, $direction = 'down')
 function deletecontent($contentid)
 {
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Pages') || check_permission($userid, 'Manage All Content');
+	$mypages = author_pages($userid);
+
+	$access = (check_permission($userid, 'Remove Pages') &&
+	  (check_ownership($userid,$contentid) ||
+	   quick_check_authorship($contentid,$mypages)))
+	  || check_permission($userid, 'Manage All Content');
 	
 	global $gCms;
 	$hierManager =& $gCms->GetHierarchyManager();
@@ -889,7 +894,11 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	  if ($one->DefaultContent() != true)
 	    {
 	      if ($root->getChildrenCount() == 0 && 
-		  (check_permission($userid, 'Remove Pages') || check_permission($userid,'Manage All Content')) )
+		  ((check_permission($userid, 'Remove Pages') &&
+		    (check_ownership($userid,$one->Id()) || 
+		     quick_check_authorship($one->Id(),$mypages)))
+		   || check_permission($userid,'Manage All Content')) )
+		 )
 		{
 		  $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
 		  $txt .= $deleteImg;
