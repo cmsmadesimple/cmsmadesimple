@@ -59,9 +59,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	}
 	if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on")
 	  {
-	    $pos = strpos($goto,':');
-	    $str = substr($goto,$pos);
-	    $goto = 'https'.$str;
+	    $goto = str_replace('http:','https:',$goto);
 	  }
 	$goto = ' action="'.$goto.'"';
 	
