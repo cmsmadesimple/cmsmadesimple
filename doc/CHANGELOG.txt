@@ -1,5 +1,6 @@
 Version 1.6.6 - NEW_NAME
 -----------------------------
+ - #3923 Adminlog download, tab separator single quoted
  - #3926 Little typo in stylesheet.
  - #4002 menu parameter start_level='2' don't show results.
  - Fix problem with showinmenu for separators.
