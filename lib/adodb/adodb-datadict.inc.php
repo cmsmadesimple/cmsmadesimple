@@ -778,7 +778,7 @@ class ADODB_DataDict {
 						$fdefault = $this->connection->qstr($fdefault);
 				}
 			}
-			$suffix = $this->_CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint,$funsigned);
+			$suffix = $this->_CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint,$funsigned,$fprimary);
 			
 			// add index creation
 			if ($widespacing) $fname = str_pad($fname,24);
@@ -813,7 +813,7 @@ class ADODB_DataDict {
 	
 	
 	// return string must begin with space
-	function _CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint)
+	function _CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint,$funsigned,$fprimary)
 	{	
 		$suffix = '';
 		if (strlen($fdefault)) $suffix .= " DEFAULT $fdefault";

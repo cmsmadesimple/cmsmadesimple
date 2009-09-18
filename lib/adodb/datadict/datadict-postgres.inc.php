@@ -325,7 +325,7 @@ class ADODB2_postgres extends ADODB_DataDict {
 	}
 
 	// return string must begin with space
-	function _CreateSuffix($fname, &$ftype, $fnotnull,$fdefault,$fautoinc,$fconstraint)
+	function _CreateSuffix($fname, &$ftype, $fnotnull,$fdefault,$fautoinc,$fconstraint,$funsigned,$fprimary)
 	{
 		if ($fautoinc) {
 			$ftype = 'SERIAL';
