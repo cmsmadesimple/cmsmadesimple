@@ -35,6 +35,10 @@ class Content extends CmsContentBase
         return TRUE;
     }
 
+	function is_previewable()
+	{
+		return TRUE;
+	}
 
     function friendly_name()
     {
@@ -74,8 +78,6 @@ class Content extends CmsContentBase
 			{
 				$this->add_validation_error(lang('nofieldgiven',array(lang('content'))));
 			}
-
-
 	}
 
 } // end of class

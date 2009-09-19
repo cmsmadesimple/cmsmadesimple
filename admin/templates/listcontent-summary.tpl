@@ -15,6 +15,10 @@
 	<p class="pageinput">{$content->alias}</p>
 </div>
 <div class="pageoverflow">
+	<p class="pagetext">Type:</p>
+	<p class="pageinput">{$content->type}</p>
+</div>
+<div class="pageoverflow">
 	<p class="pagetext">Path:</p>
 	<p class="pageinput">/{$content->hierarchy_path}</p>
 </div>

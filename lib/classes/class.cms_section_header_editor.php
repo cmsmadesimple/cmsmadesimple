@@ -25,7 +25,6 @@ class CmsSectionHeaderEditor extends CmsContentEditorBase
     parent::__construct($content_obj);
 
     $profile = $this->get_profile();
-    $profile->remove_by_name('alias');
     $profile->remove_by_name('accesskey');
 	$profile->remove_by_name('template');
     $profile->remove_by_name('cachable');
@@ -35,6 +34,16 @@ class CmsSectionHeaderEditor extends CmsContentEditorBase
     $profile->remove_by_name('title_attribute');
     $profile->remove_by_name('access_key');
     $profile->remove_by_name('tab_index');
+  }
+
+  public function validate()
+  {
+	  // here we make sure that all the attributes we've disabled
+	  // are set to the appropriate values.
+	  $content_obj = $this->get_content();
+	  $content_obj->set_secure(0);
+	  $content_obj->set_target('_none');
+	  $content_obj->set_cachable(0);
   }
 
 } // end of class.

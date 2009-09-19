@@ -74,12 +74,12 @@ class CmsContentEditorBase
 		$tmp = $this->_profile->get_tab_list();
 		$results = array();
 		foreach( $tmp as $tabname => $permission )
+		{
+			if( empty($permission) || check_permission(get_userid(),$permission) )
 			{
-				if( empty($permission) || check_permission(get_userid(),$permission) )
-					{
-						$results[$tabname] = lang($tabname);
-					}
+				$results[$tabname] = lang($tabname);
 			}
+		}
 		return $results;
 	}
 
@@ -91,9 +91,30 @@ class CmsContentEditorBase
 		
 		$ret = array();
 		for( $i = 0; $i < count($attrs); $i++ )
+		{
+			$attr =& $attrs[$i];
+			$perm = $attr->get_permission();
+			$okay = false;
+			if( $perm == '' )
 			{
-				$ret[] = $this->get_single_element($this->_contentobj,$attrs[$i],$adding);
+				$okay = true;
 			}
+			else
+			{
+				if( function_exists($perm) )
+				{
+					$okay = call_user_func($perm,$get_userid());
+				}
+				else
+				{
+					$okay = check_permission(get_userid(),$perm);
+				}
+			}
+			if( $okay )
+				{
+					$ret[] = $this->get_single_element($this->_contentobj,$attrs[$i],$adding);
+				}
+		}
 		return $ret;
 	}
 
@@ -106,132 +127,132 @@ class CmsContentEditorBase
 		$prompt = '';
 		$field  = '';
 		switch( $attr->get_name() )
+		{
+		case 'cachable':
 			{
-			case 'cachable':
-				{
-					$str = ($content_obj->cachable())?' checked="checked"':'';
-					$prompt = lang('cachable');
-					$field  = '<input type="hidden" name="cachable" value="0"/>';
-					$field .= '<input class="pagecheckbox" type="checkbox" value="1" name="cachable"'.$str.'/>';
-				}
-				break;
+				$str = ($content_obj->cachable())?' checked="checked"':'';
+				$prompt = lang('cachable');
+				$field  = '<input type="hidden" name="cachable" value="0"/>';
+				$field .= '<input class="pagecheckbox" type="checkbox" value="1" name="cachable"'.$str.'/>';
+			}
+			break;
+			
+		case 'title':
+			$prompt = lang('title');
+			$field  = '<input type="text" name="name" value="'.cms_htmlentities($content_obj->name()).'" />';
+			break;
+			
+		case 'menu_text':
+			$prompt = lang('menutext');
+			$field  = '<input type="text" name="menu_text" value="'.cms_htmlentities($content_obj->menu_text).'" />';
+			break;
+			
+		case 'parent_id':
+			{
+				$prompt = lang('parent');
+				$contentops =& $gCms->GetContentOperations();
+				$tmp = $contentops->CreateHierarchyDropdown($content_obj->id, $content_obj->parent_id, 'parent_id', 0, 1);
+				if( empty($tmp) || !check_permission(get_userid(),'Manage All Content') )
+					$field = '<input type="hidden" name="parent_id" value="'.$content_obj->parent_id().'" />';
+				if( !empty($tmp) ) $field = $tmp;
+			}
+			break;
 
-			case 'title':
-				$prompt = lang('title');
-				$field  = '<input type="text" name="name" value="'.cms_htmlentities($content_obj->name()).'" />';
-				break;
-
-			case 'menu_text':
-				$prompt = lang('menutext');
-				$field  = '<input type="text" name="menu_text" value="'.cms_htmlentities($content_obj->menu_text).'" />';
-				break;
-
-			case 'parent_id':
-				{
-					$prompt = lang('parent');
-					$contentops =& $gCms->GetContentOperations();
-					$tmp = $contentops->CreateHierarchyDropdown($content_obj->id, $content_obj->parent_id, 'parent_id', 0, 1);
-					if( empty($tmp) || !check_permission(get_userid(),'Manage All Content') )
-						$field = '<input type="hidden" name="parent_id" value="'.$content_obj->parent_id().'" />';
-					if( !empty($tmp) ) $field = $tmp;
-				}
-				break;
-
-			case 'active':
-				$prompt = lang('active');
-				$field = '<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" value="1"'.($content_obj->active()?' checked="checked"':'').' />';
-				break;
-
-			case 'show_in_menu':
-				$prompt = lang('showinmenu');
-				$field = '<input type="hidden" name="show_in_menu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($content_obj->showinmenu()?' checked="checked"':'').' />';
-				break;
-
-			case 'secure':
-				$prompt = lang('secure');
-				$field = '<input type="hidden" name="secure" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="secure"'.($content_obj->get_property_value('secure')?' checked="checked"':'').' />';
-				break;
-
-			case 'target':
-				{
-					$prompt = lang('target');
-					$text = '<option value="---">'.lang('none').'</option>';
-					$val = $content_obj->get_property_value('target');
-					$text .= '<option value="_blank"'.($val=='_blank'?' selected="selected"':'').'>_blank</option>';
-					$text .= '<option value="_parent"'.($val=='_parent'?' selected="selected"':'').'>_parent</option>';
-					$text .= '<option value="_self"'.($val=='_self'?' selected="selected"':'').'>_self</option>';
-					$text .= '<option value="_top"'.($val=='_top'?' selected="selected"':'').'>_top</option>';
-					$field = '<select name="target">'.$text.'</select>';
-				}
-				break;
-
-			case 'alias':
-				$prompt = lang('pagealias');
-				$field = '<input type="text" name="alias" value="'.$content_obj->alias().'" />';
-				break;
-
-			case 'image':
-				{
-					$prompt = lang('image');
-					$dir = $config['image_uploads_path'];
-					$data = $content_obj->get_property_value('image');
-					$field = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
-				}
-				break;
-
-			case 'thumbnail':
-				{
-					$prompt = lang('thumbnail');
-					$dir = $config['image_uploads_path'];
-					$data = $content_obj->get_property_value('thumbnail');
-					$field = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
-				}
-				break;
-
-			case 'title_attribute':
-				$prompt = lang('titleattribute');
-				$field = '<input type="text" name="title_attribute" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->titleattribute()).'" />';
-				break;
-
-			case 'access_key':
-				$prompt = lang('accesskey');
-				$field = '<input type="text" name="access_key" maxlength="5" value="'.cms_htmlentities($content_obj->access_key()).'" />';
-				break;
-
-			case 'tab_index':
-				$prompt = lang('tabindex');
-				$field = '<input type="text" name="tab_index" maxlength="5" value="'.cms_htmlentities($content_obj->tab_index()).'" />';
-				break;
-
-			case 'extra1':
-				$prompt = lang('extra1');
-				$field = '<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->get_property_value('extra1')).'" />';
-				break;
-
-			case 'extra2':
-				$prompt = lang('extra2');
-				$field = '<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->get_property_value('extra2')).'" />';
-				break;
-
-			case 'extra3':
-				$prompt = lang('extra3');
-				$field = '<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->get_property_value('extra3')).'" />';
-				break;
-
-			case 'owner':
-				{
-					$prompt = lang('owner');
-					$showadmin = check_ownership(get_userid(), $content_obj->id());
-					$userops =& $gCms->GetUserOperations();
-					if (!$adding && $showadmin)
-						{
-							$field = $userops->GenerateDropdown($content_obj->owner());
-						}
-				}
-				break;
-
-				/*
-			case 'additionaleditors':
+		case 'active':
+			$prompt = lang('active');
+			$field = '<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" value="1"'.($content_obj->active()?' checked="checked"':'').' />';
+			break;
+			
+		case 'show_in_menu':
+			$prompt = lang('showinmenu');
+			$field = '<input type="hidden" name="show_in_menu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($content_obj->showinmenu()?' checked="checked"':'').' />';
+			break;
+			
+		case 'secure':
+			$prompt = lang('secure');
+			$field = '<input type="hidden" name="secure" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="secure"'.($content_obj->get_property_value('secure')?' checked="checked"':'').' />';
+			break;
+			
+		case 'target':
+			{
+				$prompt = lang('target');
+				$text = '<option value="---">'.lang('none').'</option>';
+				$val = $content_obj->get_property_value('target');
+				$text .= '<option value="_blank"'.($val=='_blank'?' selected="selected"':'').'>_blank</option>';
+				$text .= '<option value="_parent"'.($val=='_parent'?' selected="selected"':'').'>_parent</option>';
+				$text .= '<option value="_self"'.($val=='_self'?' selected="selected"':'').'>_self</option>';
+				$text .= '<option value="_top"'.($val=='_top'?' selected="selected"':'').'>_top</option>';
+				$field = '<select name="target">'.$text.'</select>';
+			}
+			break;
+			
+		case 'alias':
+			$prompt = lang('pagealias');
+			$field = '<input type="text" name="alias" value="'.$content_obj->alias().'" />';
+			break;
+			
+		case 'image':
+			{
+				$prompt = lang('image');
+				$dir = $config['image_uploads_path'];
+				$data = $content_obj->get_property_value('image');
+				$field = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1);
+			}
+			break;
+			
+		case 'thumbnail':
+			{
+				$prompt = lang('thumbnail');
+				$dir = $config['image_uploads_path'];
+				$data = $content_obj->get_property_value('thumbnail');
+				$field = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
+			}
+			break;
+			
+		case 'title_attribute':
+			$prompt = lang('titleattribute');
+			$field = '<input type="text" name="title_attribute" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->titleattribute()).'" />';
+			break;
+			
+		case 'access_key':
+			$prompt = lang('accesskey');
+			$field = '<input type="text" name="access_key" maxlength="5" value="'.cms_htmlentities($content_obj->access_key()).'" />';
+			break;
+			
+		case 'tab_index':
+			$prompt = lang('tabindex');
+			$field = '<input type="text" name="tab_index" maxlength="5" value="'.cms_htmlentities($content_obj->tab_index()).'" />';
+			break;
+			
+		case 'extra1':
+			$prompt = lang('extra1');
+			$field = '<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->get_property_value('extra1')).'" />';
+			break;
+			
+		case 'extra2':
+			$prompt = lang('extra2');
+			$field = '<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->get_property_value('extra2')).'" />';
+			break;
+			
+		case 'extra3':
+			$prompt = lang('extra3');
+			$field = '<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->get_property_value('extra3')).'" />';
+			break;
+			
+		case 'owner':
+			{
+				$prompt = lang('owner');
+				$showadmin = check_ownership(get_userid(), $content_obj->id());
+				$userops =& $gCms->GetUserOperations();
+				if (!$adding && $showadmin)
+					{
+						$field = $userops->GenerateDropdown($content_obj->owner());
+					}
+			}
+			break;
+			
+			/*
+			 case 'additionaleditors':
 				{
 					$prompt = lang('additionaleditors');
 					$text = '<input name="additional_editors" type="hidden" value=""/>';
@@ -273,15 +294,15 @@ class CmsContentEditorBase
 				break;
 				*/
 
-			default:
-				//die('got here with '.$attr->get_name());
-				// throw an exception?
-			}
+		default:
+			//die('got here with '.$attr->get_name());
+			// throw an exception?
+		}
 
 		if( !empty($prompt) && !empty($field) )
-			{
-				return array($prompt.":",$field);
-			}
+		{
+			return array($prompt.":",$field);
+		}
 	}
 
 	public function fill_from_form_data($params)
@@ -290,18 +311,18 @@ class CmsContentEditorBase
 					   'title_attribute','access_key','tab_index','owner_id','additionaleditors');
 		$content_obj = $this->get_content();
 		foreach( $props as $oneprop )
-			{
-				$str = 'set_'.$oneprop;
-				if( isset($params[$oneprop]) )
-					$content_obj->$str($params[$oneprop]);
-			}
+		{
+			$str = 'set_'.$oneprop;
+			if( isset($params[$oneprop]) )
+				$content_obj->$str($params[$oneprop]);
+		}
 
 		$props = array('secure','target','image','thumbnail','extra1','extra2','extra3');
 		foreach( $props as $oneprop )
-			{
-				if( isset($params[$oneprop]) )
-					$content_obj->set_property_value($oneprop,$params[$oneprop]);
-			}
+		{
+			if( isset($params[$oneprop]) )
+				$content_obj->set_property_value($oneprop,$params[$oneprop]);
+		}
 	}
 
 
@@ -310,10 +331,10 @@ class CmsContentEditorBase
 		$content_obj = $this->get_content();
 		$tmp = $content_obj->check_not_valid();
 		if( $tmp )
-			{
-				$tmp = $content_obj->validation_errors;
-				return $tmp;
-			}
+		{
+			$tmp = $content_obj->validation_errors;
+			return $tmp;
+		}
 		return FALSE;
 	}
 
@@ -323,10 +344,10 @@ class CmsContentEditorBase
 		$content_obj = $this->get_content();
 		$res = $content_obj->save();
 		if( !$res )
-			{
-				stack_trace();
-				die('save failed');
-			}
+		{
+			stack_trace();
+			die('save failed');
+		}
 
 		CmsContentOperations::SetAllHierarchyPositions();
 		CmsCache::clear();

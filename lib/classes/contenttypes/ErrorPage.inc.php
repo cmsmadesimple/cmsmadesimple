@@ -30,9 +30,9 @@ class ErrorPage extends Content
     $this->set_alias('error404');
   }
 
-  function handles_alias()
+  public function is_previewable()
   {
-    return true;
+    return FALSE;
   }
 
   public function friendly_name()

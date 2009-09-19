@@ -82,10 +82,10 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		die('ERROR: friendly_name not overriden');
 	}
 
-	public function get_type()
-	{
-		die('ERROR: type not overriden');
-	}
+// 	public function get_type()
+// 	{
+// 		die('ERROR: type not overriden');
+// 	}
 
     /**
      * Function content types to use to say whether or not they should show
@@ -391,7 +391,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
     }
 
 	/**
-	 * Checks to see if this conte type uses the given field.
+	 * Checks to see if this content type uses the given field.
 	 */
 	public function field_used($name)
 	{

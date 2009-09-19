@@ -37,6 +37,17 @@ class CmsSeparatorEditor extends CmsContentEditorBase
     $profile->remove_by_name('cachable');
   }
 
+  public function validate()
+  {
+	  // here we make sure that all the attributes we've disabled
+	  // are set to the appropriate values.
+	  $content_obj = $this->get_content();
+	  $content_obj->set_alias('');
+	  $content_obj->set_menu_text('');
+	  $content_obj->set_secure(0);
+	  $content_obj->set_target('_none');
+	  $content_obj->set_cachable(0);
+  }
 } // end of class.
 
 #

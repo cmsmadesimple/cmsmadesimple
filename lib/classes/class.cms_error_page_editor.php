@@ -18,7 +18,7 @@
 #
 #$Id$
 
-class CmsErrorPageEditor extends CmsContentEditorBase
+class CmsErrorPageEditor extends CmsContentEditor
 {
   public function __construct($content_obj)
   {
@@ -31,7 +31,6 @@ class CmsErrorPageEditor extends CmsContentEditorBase
 	$profile->remove_by_name('show_in_menu');
     $profile->remove_by_name('cachable');
 	$profile->remove_by_name('secure');
-	$profile->remove_by_name('alias');
 	$profile->remove_by_name('target');
 	$profile->remove_by_name('title_attribute');
 	$profile->remove_by_name('access_key');
@@ -42,8 +41,60 @@ class CmsErrorPageEditor extends CmsContentEditorBase
 	$profile->remove_by_name('extra2');
 	$profile->remove_by_name('extra3');
 	$profile->remove_by_name('searchable');
+
+	// alias gets moved to the main tab.
+	$profile->remove_by_name('alias');
+	$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','main',6));
   }
 
+  public function validate()
+  {
+	  // here we make sure that all the attributes we've disabled
+	  // are set to the appropriate values.
+	  $content_obj = $this->get_content();
+	  $content_obj->set_menutext('');
+	  $content_obj->set_parent_id('-1');
+	  $content_obj->set_active(1);
+	  $content_obj->set_show_in_menu(0);
+	  $content_obj->set_cachable(0);
+	  $content_obj->set_secure(0);
+	  $content_obj->set_target('_none');
+	  $content_obj->set_searchable(0);
+  }
+
+  protected function get_single_element($content_obj,&$attr,$adding = false)
+  {
+	  $prompt = '';
+	  $field = '';
+	  switch( $attr->get_name() )
+	  {
+	  case 'alias':
+		  {
+			  $prompt = lang('error_type');
+			  $dropdownopts = '<option value="">'.lang('none').'</option>';
+			  foreach ($content_obj->error_types as $code=>$name)
+				  {
+					  $dropdownopts .= '<option value="error' . $code . '"';
+					  if ('error'.$code == $content_obj->alias)
+						  {
+							  $dropdownopts .= ' selected="selected" ';
+						  }
+					  $dropdownopts .= ">{$name} ({$code})</option>";
+				  }
+			  $field = '<select name="alias">'.$dropdownopts.'</select>';
+		  }
+		  break;
+
+	  default:
+		  return parent::get_single_element($content_obj,$attr,$adding);
+	  }
+
+	  if( !empty($prompt) && !empty($field) )
+	  {
+		  return array($prompt.':',$field);
+	  }
+
+  }
 } // end of class.
 
 #

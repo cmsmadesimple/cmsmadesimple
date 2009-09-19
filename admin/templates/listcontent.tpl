@@ -16,7 +16,7 @@
   <br clear="both" />
 
 <div class="pageoverflow pageoptions">
-  <a href="{$addcontent_url}" title="{lang string='addcontent'}">{lang string='addcontent'}</a>
+  <a href="{$addcontent_url}{$urlext}" title="{lang string='addcontent'}">{$newobject_image} {lang string='addcontent'}</a>
 </div>
 </div>
 

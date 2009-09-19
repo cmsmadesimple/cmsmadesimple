@@ -31,7 +31,6 @@ class CmsPageLinkEditor extends CmsContentEditorBase
 		$profile->remove_by_name('secure');
 	}
 	
-	
 	protected function get_single_element($content_obj,&$attr,$adding = false)
 	{
 		$prompt = '';
@@ -74,13 +73,20 @@ class CmsPageLinkEditor extends CmsContentEditorBase
 
 	public function validate()
 	{
+		// here we make sure that all the attributes we've disabled
+		// are set to the appropriate values.
+		$content_obj = $this->get_content();
+		$content_obj->set_secure(0);
+		$content_obj->set_cachable(0);
+
+		// do the rest of the validation.
 		$errs = parent::validate();
 		if( !$errs )
 		{
 			$errs = array();
 		}
 
-		$url = $this->get_property_value('page');
+		$url = $content_obj->get_property_value('page');
 		if( empty($url) || $url == '-1' )
 		{
 			$errs[] = lang('nofieldgiven',array(lang('page')));

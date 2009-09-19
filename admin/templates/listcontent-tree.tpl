@@ -86,7 +86,7 @@ $(function () {
 <div class="pageoverflow">
   <p class="pageoptions">
     {if $add_pages eq true}
-      <a href="addcontent.php{$urlext}" class="pageoptions">{$newobject_image}</a>
+      <a href="editcontent.php{$urlext}" class="pageoptions">{$newobject_image}</a>
       <a class="pageoptions" href="addcontent.php{$urlext}">{lang string='addcontent'}</a>
     {/if}
     <a style="margin-left: 10px;" href="listcontent.php{$urlext}&expandall=1" onclick="cms_ajax_content_expandall(); return false;">{$expandall_image}</a>

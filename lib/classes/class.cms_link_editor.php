@@ -68,6 +68,13 @@ class CmsLinkEditor extends CmsContentEditorBase
 
 	public function validate()
 	{
+		// here we make sure that all the attributes we've disabled
+		// are set to the appropriate values.
+		$content_obj = $this->get_content();
+		$content_obj->set_secure(0);
+		$content_obj->set_cachable(0);
+
+		// do the rest of the validation.
 		$errs = parent::validate();
 		if( !$errs )
 		{

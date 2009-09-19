@@ -1132,13 +1132,15 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
       if( is_dir(cms_join_path($dir,$file)) && $excludedir ) continue;
       if( !empty($fileprefix) )
 	{
+	  // are we explicitly excluding files that start with a prefix.
 	  if( $excludefiles == 1 && startswith($file,$fileprefix) ) continue;
+
+	  // are we explicitly only including files that start with a prefix.
 	  if( $excludefiles == 0 && !startswith($file,$fileprefix) ) continue;
 	}
 
       $ext = strtolower(substr($file,strrpos($file,'.')+1));
       if( is_array($extensions) && count($extensions) && !in_array($ext,$extensions) ) continue;
-
       $results[] = $file;
     }
   closedir($dh);

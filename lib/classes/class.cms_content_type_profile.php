@@ -23,12 +23,12 @@ class CmsContentTypeProfile extends CmsObject
   private $_tabs = array();
   private $_attrs = array();
 
-  public function add_tab($tabname,$permission = '')
+  public function add_tab($tabname,$permission='')
   {
     if( !isset($this->_tabs[$tabname]) )
-      {
-	$this->_tabs[$tabname] = $permission;
-      }
+    {
+		$this->_tabs[$tabname] = $permission;
+    }
   }
 
   public function add_attribute($attr)
@@ -42,10 +42,10 @@ class CmsContentTypeProfile extends CmsObject
     // if the attribute already exists... we're gonna replace it
     $obj =& $this->find_by_name($attr->get_name());
     if( $obj )
-      {
-	$obj = $attr;
-	return;
-      }
+	{
+		$obj = $attr;
+		return;
+	}
     $this->_attrs[] = $attr;
   }
 
@@ -54,12 +54,12 @@ class CmsContentTypeProfile extends CmsObject
   {
     $new_attrs = array();
     for( $i = 0; $i < count($this->_attrs); $i++ )
-      {
-	if( $this->_attrs[$i]->get_name() != $attrname )
-	  {
-	    $new_attrs[] = $this->_attrs[$i];
-	  }
-      }
+	{
+		if( $this->_attrs[$i]->get_name() != $attrname )
+		{
+			$new_attrs[] = $this->_attrs[$i];
+		}
+	}
     $this->_attrs = $new_attrs;
   }
 
@@ -67,10 +67,10 @@ class CmsContentTypeProfile extends CmsObject
   public function &find_by_name($attrname)
   {
     for( $i = 0; $i < count($this->_attrs); $i++ )
-      {
-	if( $this->_attrs[$i]->get_name() == $attrname )
-	  return $this->_attrs[$i];
-      }
+    {
+		if( $this->_attrs[$i]->get_name() == $attrname )
+			return $this->_attrs[$i];
+    }
 
     $tmp = null;
     return $tmp;
@@ -81,12 +81,12 @@ class CmsContentTypeProfile extends CmsObject
   {
     $results = array();
     for( $i = 0; $i < count($this->_attrs); $i++ )
-      {
-	if( $this->_attrs[$i]->get_tab() == $tabname )
-	  {
-	    $results[] = $this->_attrs[$i];
-	  }
-      }
+    {
+		if( $this->_attrs[$i]->get_tab() == $tabname )
+		{
+			$results[] = $this->_attrs[$i];
+		}
+	}
     if( !$results ) return FALSE;
 
     // sort this array
