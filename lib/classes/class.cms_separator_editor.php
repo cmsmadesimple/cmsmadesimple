@@ -47,6 +47,8 @@ class CmsSeparatorEditor extends CmsContentEditorBase
 	  $content_obj->set_secure(0);
 	  $content_obj->set_target('_none');
 	  $content_obj->set_cachable(0);
+
+	  return parent::validate();
   }
 } // end of class.
 

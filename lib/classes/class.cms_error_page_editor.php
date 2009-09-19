@@ -60,6 +60,8 @@ class CmsErrorPageEditor extends CmsContentEditor
 	  $content_obj->set_secure(0);
 	  $content_obj->set_target('_none');
 	  $content_obj->set_searchable(0);
+
+	  return parent::validate();
   }
 
   protected function get_single_element($content_obj,&$attr,$adding = false)

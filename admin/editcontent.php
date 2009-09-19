@@ -204,6 +204,11 @@ if ($submit || $apply)
 	    redirect("listcontent.php".$urlext.'&message=contentupdated');
 	  }
       }
+    else
+      {
+	print_r( $error );
+	die('got error on save');
+      }
   }
 
 
