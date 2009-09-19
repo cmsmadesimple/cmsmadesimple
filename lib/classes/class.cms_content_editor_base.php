@@ -23,7 +23,6 @@ class CmsContentEditorBase
 	private $_contentobj;
 	private $_profile;
 
-
 	public function __construct($contentobj)
 	{
 		if( !is_a($contentobj,'CmsContentBase') )
@@ -84,7 +83,7 @@ class CmsContentEditorBase
 				{
 					$attr =& $attrs[$i];
 					$perm = $attr->get_permission();
-					$okay = false;
+					$okay = true;
 					if( $perm != '' )
 					{
 						$okay = false;
