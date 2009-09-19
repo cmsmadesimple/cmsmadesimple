@@ -77,7 +77,32 @@ class CmsContentEditorBase
 		{
 			if( empty($permission) || check_permission(get_userid(),$permission) )
 			{
-				$results[$tabname] = lang($tabname);
+				// now go through all the elements in each tab
+				// and see if we have permission for at least one of them.
+				$attrs = $this->_profile->find_all_by_tab($tabname);
+				for( $i = 0; $i < count($attrs); $i++ )
+				{
+					$attr =& $attrs[$i];
+					$perm = $attr->get_permission();
+					$okay = false;
+					if( $perm != '' )
+					{
+						$okay = false;
+						if( function_exists($perm) )
+						{
+							$okay = call_user_func($perm,get_userid());
+						}
+						else
+						{
+							$okay = check_permission(get_userid(),$perm);
+						}
+					}
+					if( $okay )
+					{
+						$results[$tabname] = lang($tabname);
+						break;
+					}
+				}
 			}
 		}
 		return $results;
@@ -103,7 +128,7 @@ class CmsContentEditorBase
 			{
 				if( function_exists($perm) )
 				{
-					$okay = call_user_func($perm,$get_userid());
+					$okay = call_user_func($perm,get_userid());
 				}
 				else
 				{
