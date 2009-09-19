@@ -51,8 +51,8 @@ class CmsContentEditorBase
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra1','options',13));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra2','options',13));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra3','options',13));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','options',14));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','options',15));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','permissions',14));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','permissions',15));
 		$this->_profile = $profile;
 	}
 
