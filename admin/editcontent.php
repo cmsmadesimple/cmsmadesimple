@@ -21,7 +21,6 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
-
 check_login();
 
 if (isset($_POST["cancel"]))
@@ -30,9 +29,6 @@ if (isset($_POST["cancel"]))
 }
 
 include_once("../lib/classes/class.admintheme.inc.php");
-
-$dateformat = get_preference(get_userid(),'date_format_string','%x %X');
-
 require_once(dirname(__FILE__).'/editcontent_extra.php');
 
 $cms_ajax = new CmsAjax();
@@ -41,15 +37,15 @@ $cms_ajax->register_function('editcontent_apply');
 
 $headtext = $cms_ajax->get_javascript();
 
-function check_editcontent_perms($content_id,$adminonly = false)
+function check_editcontent_perms($page_id,$adminonly = false)
 {
   $userid = get_userid();
-  $access = check_ownership($userid, $content_id) || check_permission($userid, 'Modify Any Page') ||
+  $access = check_ownership($userid, $page_id) || check_permission($userid, 'Modify Any Page') ||
     check_permission($userid, 'Manage All Content');
   if( $adminonly ) return $access;
   if (!$access)
     {
-      $access = check_authorship($userid, $content_id);
+      $access = check_authorship($userid, $page_id);
     }
   return $access;
 }
@@ -69,19 +65,19 @@ function do_save_content($editor,$data)
 
 function editcontent_apply($params)
 {
-  $content_id = $_REQUEST['content_id'];
+  $page_id = $_REQUEST['page_id'];
   $resp = new CmsAjaxResponse();
-  $resp->script("jQuery('#applybutton').attr('disabled','');");
-  if( check_editcontent_perms($content_id) )
+  $resp->script("jQuery('.applybutton').attr('disabled','');");
+  if( check_editcontent_perms($page_id) )
     {
       $gCms = cmsms();
       $contentops =& $gCms->GetContentOperations();
 
-      $contentobj = $contentops->LoadContentFromId($content_id);
+      $contentobj = $contentops->LoadContentFromId($page_id);
       $editortype = $contentops->get_content_editor_type($contentobj);
       $editor = new $editortype($contentobj);
 
-      $contentobj = $contentops->LoadContentFromId($content_id);
+      $contentobj = $contentops->LoadContentFromId($page_id);
       $error = do_save_content($editor,$params);
 
       if( $error === FALSE )
@@ -100,93 +96,120 @@ function editcontent_apply($params)
 }
 
 
+$userid = get_userid();
+$gCms = cmsms();
+$contentops =& $gCms->GetContentOperations();
 $error = FALSE;
-
-$content_id = "";
-if (isset($_REQUEST["content_id"])) $content_id = $_REQUEST["content_id"];
-
-$pagelist_id = "1";
-if (isset($_REQUEST["page"])) $pagelist_id = $_REQUEST["page"];
-
+$page_id = "";
+if (isset($_REQUEST["page_id"])) $page_id = $_REQUEST["page_id"];
 $submit = false;
 if (isset($_POST["submitbutton"])) $submit = true;
-
 $apply = false;
 if (isset($_POST["applybutton"])) $apply = true;
 
-#Get a list of content types and pick a default if necessary
-$gCms = cmsms();
-$contentops =& $gCms->GetContentOperations();
-$content_type = "";
-if (isset($_POST["content_type"]))
-{
+if( !check_editcontent_perms($page_id) )
+  {
+    echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('editpage')))."</p></div>";
+    echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+
+    include_once("footer.php");
+    return;
+  }
+
+
+//
+// GET THE CONTENT OBJECT AND INSTANTIATE THE EDITOR
+//
+$content_type = 'Content';
+$orig_content_type = 'Content';
+$contentobj = '';
+if( isset($_POST['serialized_content']) )
+  {
+    // we're here probably because of a submit, apply, template
+    // or content type change.
+    if (isset($_POST["content_type"]))
+      {
 	$content_type = $_POST["content_type"];
-}
+      }
+    if( isset($params['orig_content_type']) )
+      {
+	$orig_content_type = $params['orig_content_type'];
+      }
+
+    CmsContentOperations::load_content_types();
+    $contentobj = UnserializeObject($_POST['serialized_content']);
+    if( get_class($contentobj) != strtolower($content_type) )
+      {
+	// content type has changed.
+	copycontentobj($contentobj,$content_type);
+      }
+  }
+else if($page_id)
+  {
+    // we're loading this content from scratch.
+    $contentobj = $contentops->LoadContentFromId($page_id);
+    if( !is_object($contentobj) ) die("debug... wheres the content for $page_id");
+    $content_type = get_class($contentobj);
+    $orig_content_type = $content_type;
+  }
 else
-{
-  $existingtypes = CmsContentOperations::list_content_types();
-  if (isset($existingtypes) && count($existingtypes) > 0)
-    {
-      $content_type = 'content';
-    }
-  else
-    {
-      $error = "<p>No content types loaded!</p>";	
-    }
-}
+  {
+    // we're creating a new content object
+    CmsContentOperations::load_content_types();
+    $contentobj = new $content_type();
+    $contentobj->set_cachable(get_site_preference('page_cachable',1));
+    $contentobj->set_active(get_site_preference('page_active',1));
+    $contentobj->set_show_in_menu(get_site_preference('page_showinmenu',1));
+    $contentobj->set_owner($userid);
+    $contentobj->set_last_modified_by($userid);
+    $contentobj->set_metadata(get_site_preference('page_metadata'));
+    $contentobj->set_secure(get_site_preference('page_secure',0));
 
+    $contentobj->set_property_value('content_en',get_site_preference('defaultpagecontent'));
+    $contentobj->set_property_value('searchable',get_site_preference('page_searchable',1));
+    $contentobj->set_property_value('extra1',get_site_preference('page_extra1'));
+    $contentobj->set_property_value('extra2',get_site_preference('page_extra2'));
+    $contentobj->set_property_value('extra3',get_site_preference('page_extra3'));
 
-# Get the content object, and instantiate the ditor.
-$contentobj = $contentops->LoadContentFromId($content_id);
+    $parent_id = get_preference($userid, 'default_parent', -1);
+    if (isset($_GET["parent_id"])) $parent_id = $_GET["parent_id"];
+    $contentobj->set_parent_id($parent_id);
+
+    {
+      $templateops =& $gCms->GetTemplateOperations();
+      $dflt = $templateops->LoadDefaultTemplate();
+      if( isset($dflt) )
+	{
+	  $contentobj->set_template_id($dflt->id);
+	}
+    }
+
+    
+  }
+
 $editortype = $contentops->get_content_editor_type($contentobj);
 $editor = new $editortype($contentobj);
 
-if (check_editcontent_perms($content_id))
-{
-  if ($submit || $apply)
-    {
-      $error = do_save_content($editor,$_POST);
-      
-      if ($error === FALSE)
-	{
-	  if ($submit)
-	    {
-	      redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&message=contentupdated');
-	    }
-	}
-    }
-  else if (isset($_POST["serialized_content"]))
-    {
-      // content type changed.
-      global $gCms;
-      $contentops =& $gCms->GetContentOperations();
+//
+// HANDLE SUBMIT OR APPLY
+//
+if ($submit || $apply)
+  {
+    $error = do_save_content($editor,$_POST);
+    
+    if ($error === FALSE)
+      {
+	if ($submit)
+	  {
+	    redirect("listcontent.php".$urlext.'&message=contentupdated');
+	  }
+      }
+  }
 
-      $contentobj = UnserializeObject($_POST["serialized_content"]);
-      if (strtolower(get_class($contentobj)) != strtolower($content_type))
-	{
-	  // Fill up the existing object with values in form
-	  // Create new object
-	  // Copy important fields to new object
-	  // Put new object on top of old one
-	  copycontentobj($contentobj, $content_type);
-	  $editortype = $contentops->get_content_editor_type($contentobj);
-	  $editor = new $editortype($contentobj);
- 	}
-    }
-//   else if ($content_id != -1 || !is_object($contentobj) )
-//     {
-//       // loading content.
-//       global $gCms;
-//       $contentops =& $gCms->GetContentOperations();
-//       $contentobj = $contentops->LoadContentFromId($content_id);
-//       $content_type = $contentobj->yype();
-//     }
-//   else
-//     {
-//       die('unknwon condition');
-//     }
-}
 
+//
+// BEGIN THE CODE TO GENERATE THE PAGE
+//
 if (strlen($contentobj->name()) > 0)
 {
 	$CMS_ADMIN_SUBTITLE = $contentobj->name();
@@ -212,7 +235,7 @@ $headtext .= <<<EOSCRIPT
 <script type="text/javascript">
 // <![CDATA[
 jQuery(document).ready(function(){
-   jQuery('#applybutton').click(function(){
+   jQuery('.applybutton').click(function(){
 
       jQuery('#Edit_Content_Result').html('');
       jQuery(this).attr('disabled','disabled');
@@ -233,7 +256,7 @@ print '<div id="Edit_Content_Result"></div>';
 $tmpfname = '';
 $tabnames = '';
 
-if (!check_editcontent_perms($content_id))
+if (!check_editcontent_perms($page_id))
 {
 	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('editpage')))."</p></div>";
 }
@@ -241,11 +264,10 @@ else
 {
 	#Get a list of content_types and build the dropdown to select one
 	$typesdropdown = '<select name="content_type" onchange="document.contentform.submit()" class="standard">';
-	$cur_content_type = '';
 	$contenttypes = CmsContentOperations::list_content_types();
 	foreach ($contenttypes as $onetype => $label)
 	{
-	  if( $onetype == 'errorpage' && !check_permission($userid,'Manage All Content') ) 
+	  if( $onetype == 'ErrorPage' && !check_permission($userid,'Manage All Content') ) 
 	    {
 	      continue;
 	    }
@@ -254,7 +276,7 @@ else
 	  if ($onetype == $content_type)
 	    {
 	      $typesdropdown .= ' selected="selected" ';
-	      $cur_content_type = $onetype;
+	      $orig_content_type = $onetype;
 	    }
 	  $typesdropdown .= ">".$label."</option>";
 	}
@@ -288,16 +310,17 @@ else
 	    echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##cms_ajax_ajaxpreview(jQuery(\'#contentform\').serializeForCmsAjax()); return false;">'.lang('preview').'</div>';
 	  }
 
+	$turl = 'editcontent.php';
+	if(isset($page_id)) $turl .= "?page_id=$page_id";
 		?>
 	</div>
 	<div style="clear: both;"></div>
-	<form method="post" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
+	<form method="post" action="<?php echo $turl; ?>" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 <div>
   <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
   <input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
-  <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
-  <input type="hidden" name="page" value="<?php echo $pagelist_id; ?>" />
-  <input type="hidden" name="orig_content_type" value="<?php echo $cur_content_type ?>" />
+  <input type="hidden" name="page_id" value="<?php echo $page_id?>" />
+  <input type="hidden" name="orig_content_type" value="<?php echo $orig_content_type ?>" />
 </div>
 <div id="page_content">
 <?php
@@ -306,7 +329,7 @@ $submit_buttons = '<div class="pageoverflow">
 <p class="pageinput">
  <input type="submit" name="submitbutton" accesskey="s" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('submitdescription').'" />';
 $submit_buttons .= ' <input type="submit" accesskey="c" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
-$submit_buttons .= ' <input type="submit" accesskey="a" id="applybutton" name="applybutton" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
+$submit_buttons .= ' <input type="submit" accesskey="a" name="applybutton" value="'.lang('apply').'" class="pagebutton applybutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
  if( $contentobj->is_viewable() && $contentobj->active() ) {
    $submit_buttons .= ' <a rel="external" href="'.$contentobj->get_url().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
  }

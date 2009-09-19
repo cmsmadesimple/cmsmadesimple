@@ -53,6 +53,7 @@ $urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
 $smarty->assign('urlext', $urlext);
 $thisurl = basename(__FILE__) . $urlext;
 $smarty->assign('thisurl', $thisurl);
+$smarty->assign('addcontent_url','editcontent.php'.$urlext);
 
 //include_once("../lib/classes/class.admintheme.inc.php");
 
