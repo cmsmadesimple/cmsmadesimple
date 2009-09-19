@@ -108,8 +108,12 @@ class CmsContentEditorBase
 		switch( $attr->get_name() )
 			{
 			case 'cachable':
-				$prompt = lang('cachable');
-				$field  = '<input type="hidden" name="cachable" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($content_obj->cachable()?' checked="checked"':'').' />';
+				{
+					$str = ($content_obj->cachable())?' checked="checked"':'';
+					$prompt = lang('cachable');
+					$field  = '<input type="hidden" name="cachable" value="0"/>';
+					$field .= '<input class="pagecheckbox" type="checkbox" value="1" name="cachable"'.$str.'/>';
+				}
 				break;
 
 			case 'title':
@@ -141,10 +145,12 @@ class CmsContentEditorBase
 			case 'show_in_menu':
 				$prompt = lang('showinmenu');
 				$field = '<input type="hidden" name="show_in_menu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($content_obj->showinmenu()?' checked="checked"':'').' />';
+				break;
 
 			case 'secure':
 				$prompt = lang('secure');
 				$field = '<input type="hidden" name="secure" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="secure"'.($content_obj->get_property_value('secure')?' checked="checked"':'').' />';
+				break;
 
 			case 'target':
 				{
@@ -182,17 +188,17 @@ class CmsContentEditorBase
 				}
 				break;
 
-			case 'titleattribute':
+			case 'title_attribute':
 				$prompt = lang('titleattribute');
 				$field = '<input type="text" name="title_attribute" maxlength="255" size="80" value="'.cms_htmlentities($content_obj->titleattribute()).'" />';
 				break;
 
-			case 'accesskey':
+			case 'access_key':
 				$prompt = lang('accesskey');
 				$field = '<input type="text" name="access_key" maxlength="5" value="'.cms_htmlentities($content_obj->access_key()).'" />';
 				break;
 
-			case 'tabindex':
+			case 'tab_index':
 				$prompt = lang('tabindex');
 				$field = '<input type="text" name="tab_index" maxlength="5" value="'.cms_htmlentities($content_obj->tab_index()).'" />';
 				break;
@@ -268,12 +274,13 @@ class CmsContentEditorBase
 				*/
 
 			default:
+				//die('got here with '.$attr->get_name());
 				// throw an exception?
 			}
 
 		if( !empty($prompt) && !empty($field) )
 			{
-				return array($prompt.':',$field);
+				return array($prompt.":",$field);
 			}
 	}
 
@@ -304,7 +311,8 @@ class CmsContentEditorBase
 		$tmp = $content_obj->check_not_valid();
 		if( $tmp )
 			{
-				return $content_obj->get_validation_errors();
+				$tmp = $content_obj->validation_errors;
+				return $tmp;
 			}
 		return FALSE;
 	}
@@ -314,7 +322,11 @@ class CmsContentEditorBase
 	{
 		$content_obj = $this->get_content();
 		$res = $content_obj->save();
-		if( !$res ) die('save failed');
+		if( !$res )
+			{
+				stack_trace();
+				die('save failed');
+			}
 
 		CmsContentOperations::SetAllHierarchyPositions();
 		CmsCache::clear();

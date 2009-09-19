@@ -18,23 +18,30 @@
 #
 #$Id$
 
-class CmsSectionHeaderEditor extends CmsContentEditorBase
+class CmsErrorPageEditor extends CmsContentEditorBase
 {
   public function __construct($content_obj)
   {
     parent::__construct($content_obj);
 
     $profile = $this->get_profile();
-    $profile->remove_by_name('alias');
-    $profile->remove_by_name('accesskey');
-	$profile->remove_by_name('template');
+	$profile->remove_by_name('menu_text');
+	$profile->remove_by_name('parent_id');
+	$profile->remove_by_name('active');
+	$profile->remove_by_name('show_in_menu');
     $profile->remove_by_name('cachable');
-    $profile->remove_by_name('secure');
-    $profile->remove_by_name('target');
-    $profile->remove_by_name('title');
-    $profile->remove_by_name('title_attribute');
-    $profile->remove_by_name('access_key');
-    $profile->remove_by_name('tab_index');
+	$profile->remove_by_name('secure');
+	$profile->remove_by_name('alias');
+	$profile->remove_by_name('target');
+	$profile->remove_by_name('title_attribute');
+	$profile->remove_by_name('access_key');
+	$profile->remove_by_name('tab_index');
+	$profile->remove_by_name('image');
+	$profile->remove_by_name('thumbnail');
+	$profile->remove_by_name('extra1');
+	$profile->remove_by_name('extra2');
+	$profile->remove_by_name('extra3');
+	$profile->remove_by_name('searchable');
   }
 
 } // end of class.

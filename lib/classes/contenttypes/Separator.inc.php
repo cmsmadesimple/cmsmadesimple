@@ -28,53 +28,27 @@ class Separator extends CmsContentBase
     $this->set_name(CMS_CONTENT_HIDDEN_NAME);
   }
 
-//     function SetProperties()
-//     {
-//       parent::SetProperties();
-//       $this->RemoveProperty('template','-1');
-//       $this->RemoveProperty('alias','');
-//       $this->RemoveProperty('title','');
-//       $this->RemoveProperty('menutext','');
-//       $this->RemoveProperty('target','');
-//       $this->RemoveProperty('accesskey','');
-//       $this->RemoveProperty('titleattribute','');
-//       $this->RemoveProperty('showinmenu',true);
-//       $this->RemoveProperty('cachable',true);
-//       $this->RemoveProperty('secure',false);
-//     }
 
-	public function friendly_name()
-	{
-		return lang('contenttype_separator');
-	}
+  public function friendly_name()
+  {
+    return lang('contenttype_separator');
+  }
+  
+  public function has_usable_link()
+  {
+    return false;
+  }
 
-	public function has_usable_link()
-	{
-		return false;
-	}
+  public function wants_children()
+  {
+    return false;
+  }
 
-	public function wants_children()
-	{
-		return false;
-	}
 
-    /**
-     * Handle Auto Aliasing 
-     */
-//     function DoAutoAlias()
-//     {
-//       return FALSE;
-//     }
-
-//     function RequiresAlias()
-//     {
-//       return FALSE;
-//     }
-
-	public function get_url($rewrite = true)
-	{
-		return '#';
-	}
+  public function get_url($rewrite = true)
+  {
+    return '#';
+  }
 }
 
 # vim:ts=4 sw=4 noet

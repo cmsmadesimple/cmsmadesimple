@@ -78,7 +78,7 @@ class CmsContentOperations extends CmsObject
 				$obj->filename = cms_join_path($dir,$file);
 				$obj->classname = basename($file, '.inc.php');
 				$obj->friendlyname = basename($file, '.inc.php'); // todo, could get this from the object.
-				$variables['contenttypes'][$obj->type] = $obj;
+				$variables['contenttypes'][$obj->classname] = $obj;
 		    }
 		}
 		closedir($handle);
@@ -121,7 +121,7 @@ class CmsContentOperations extends CmsObject
 		$contenttypes =& $gCms->variables['contenttypes'];
 		foreach( $contenttypes as $key => $placeholder )
 		{
-			$result[$key] = $placeholder->friendlyname;
+			$result[$placeholder->classname] = $placeholder->friendlyname;
 		}
 		
 		return $result;

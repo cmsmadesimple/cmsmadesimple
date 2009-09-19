@@ -55,12 +55,13 @@ class CmsLinkEditor extends CmsContentEditorBase
 	public function fill_from_form_data($params)
 	{
 		parent::fill_from_form_data($params);
+		$content_obj = $this->get_content();
 		$accepted = array('url');
 		foreach( $accepted as $one )
 		{
 			if( isset($params[$one]) )
 			{
-				$this->set_property_value($one,$params[$one]);
+				$content_obj->set_property_value($one,$params[$one]);
 			}
 		}
 	}
@@ -73,7 +74,8 @@ class CmsLinkEditor extends CmsContentEditorBase
 			$errs = array();
 		}
 
-		$url = $this->get_property_value('url');
+		$content_obj = $this->get_content();
+		$url = $content_obj->get_property_value('url');
 		if( empty($url) )
 		{
 			$errs[] = lang('nofieldgiven',array(lang('url')));

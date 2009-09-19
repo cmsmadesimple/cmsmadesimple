@@ -25,7 +25,7 @@ class ErrorPage extends Content
 	
   public function __construct()
   {
-    $this->ContentBase();
+    parent::__construct();
     $this->error_types = array('404' => lang('404description'));
     $this->set_alias('error404');
   }
@@ -38,33 +38,7 @@ class ErrorPage extends Content
   public function friendly_name()
   {
     return lang('contenttype_errorpage');
-  }
-	
-//   function SetProperties()
-//   {
-//     parent::SetProperties();
-//     $this->RemoveProperty('searchable',false);
-//     $this->RemoveProperty('parent',-1);
-//     $this->RemoveProperty('showinmenu',false);
-//     $this->RemoveProperty('menutext','');
-//     $this->RemoveProperty('target','');
-//     $this->RemoveProperty('extra1','');
-//     $this->RemoveProperty('extra2','');
-//     $this->RemoveProperty('extra3','');
-//     $this->RemoveProperty('image','');
-//     $this->RemoveProperty('thumbnail','');
-//     $this->RemoveProperty('accesskey','');
-//     $this->RemoveProperty('titleattribute','');
-//     $this->RemoveProperty('secure',false);
-//     $this->RemoveProperty('active',true);
-//     $this->RemoveProperty('cachable',false);
-
-//     $this->RemoveProperty('alias','');
-//     $this->AddBaseProperty('alias',10,1);
-
-//     #Turn on preview
-//     $this->mPreview = true;
-//   }
+  }	
 
   public function is_copyable()
   {
@@ -86,54 +60,11 @@ class ErrorPage extends Content
     return false;
   }
 
-  function WantsChildren()
-  {
-    return false;
-  }
-	
   function is_system_page()
   {
     return true;
   }
 
-
-//   function ValidateData()
-//   {
-//     $errors = parent::ValidateData();
-//     if ($errors == FALSE)
-//       {
-// 	$errors = array();
-//       }
-    
-//     //Do our own alias check
-//     if ($this->Alias() == '')
-//       {
-// 	$errors[] = lang('nofieldgiven', array(lang('error_type')));
-//       }
-//     else if (in_array($this->Alias(), $this->error_types))
-//       {
-// 	$errors[] = lang('nofieldgiven', array(lang('error_type')));
-//       }
-//     else if ($this->Alias() != $this->OldAlias())
-//       {
-// 	global $gCms;
-// 	$contentops =& $gCms->GetContentOperations();
-// 	$error = $contentops->CheckAliasError($this->Alias(), $this->Id());
-// 	if ($error !== FALSE)
-// 	  {
-// 	    if ($error == lang('aliasalreadyused'))
-// 	      {
-// 		$errors[] = lang('errorpagealreadyinuse');
-// 	      }
-// 	    else
-// 	      {
-// 		$errors[] = $error;
-// 	      }
-// 	  }
-//       }
-    
-//     return (count($errors) > 0 ? $errors : FALSE);
-//   }
 }
 
 # vim:ts=4 sw=4 noet

@@ -18,7 +18,7 @@
 #
 #$Id$
 
-class CmsSectionHeaderEditor extends CmsContentEditorBase
+class CmsSeparatorEditor extends CmsContentEditorBase
 {
   public function __construct($content_obj)
   {
@@ -28,13 +28,13 @@ class CmsSectionHeaderEditor extends CmsContentEditorBase
     $profile->remove_by_name('alias');
     $profile->remove_by_name('accesskey');
 	$profile->remove_by_name('template');
-    $profile->remove_by_name('cachable');
+    $profile->remove_by_name('title');
+	$profile->remove_by_name('menu_text');
     $profile->remove_by_name('secure');
     $profile->remove_by_name('target');
-    $profile->remove_by_name('title');
-    $profile->remove_by_name('title_attribute');
+	$profile->remove_by_name('title_attribute');
     $profile->remove_by_name('access_key');
-    $profile->remove_by_name('tab_index');
+    $profile->remove_by_name('cachable');
   }
 
 } // end of class.

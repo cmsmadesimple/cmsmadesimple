@@ -99,12 +99,12 @@ class CmsContentEditor extends CmsContentEditorBase
 					$searchable = $content_obj->get_property_value('searchable');
 					if( $searchable == '' ) $searchable = 1;
 					$prompt = lang('searchable');
-					$field  = '<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
+					$field  = '<input type="hidden" name="searchable" value="0" />
                                <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />';
 				}
 				return array($prompt.':',$field);
 
-			case 'disablewysiwyg':
+			case 'disable_wysiwyg':
 				{
 					$disable_wysiwyg = $content_obj->get_property_value('disable_wysiwyg');
 					if( $disable_wysiwyg == '' ) $disable_wysiwyg = 0;
