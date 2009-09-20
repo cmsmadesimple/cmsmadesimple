@@ -28,7 +28,7 @@
  * @lastmodified $Date$
  * @license GPL
  **/
-class CmsAdditionalEditors extends CmsObjectRelationalMapping
+class CmsAdditionalEditor extends CmsObjectRelationalMapping
 {
 	var $table = 'additional_users';
 	var $language = 'en_US';

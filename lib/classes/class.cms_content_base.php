@@ -245,7 +245,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	{
 		if( $force || !$this->addusers_loaded )
 		{
-			$users = cms_orm('CmsAdditionalEditors')->find_all_by_content_id($this->id);
+			$users = cms_orm('CmsAdditionalEditor')->find_all_by_content_id($this->id);
 			foreach ($users as &$user)
 				{
 					$this->mAdditionalUsers[] = $user;
@@ -281,7 +281,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			if( !$found )
 			{
 				// create a new user
-				$newuser = new CmsAdditionalUser;
+				$newuser = new CmsAdditionalEditor;
 				$newuser->user_id = $one_user;
 				$newuser->content_id = $this->id;
 				$newuser->page_id = $this->id;
