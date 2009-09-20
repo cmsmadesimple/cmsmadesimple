@@ -149,17 +149,22 @@ class CmsSmarty extends Smarty
     {
         //5.3 $params = explode(';', $tpl_name);
 		$params = explode(';', $tpl_name);
+		$config = cms_config();
+		$root_path = $config['root_path'];
 
-        if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/module_custom/' . $params[0] . '/templates/' . $params[1]))
-	  {
-            $tpl_source = @file_get_contents(dirname(dirname(__FILE__)) . '/module_custom/' . $params[0] . '/templates/' . $params[1]);
-            return true;
-	  }
-        else if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]))
-        {   
-            $tpl_source = @file_get_contents(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]);
-            return true;
-        }
+		if( count($params) == 2 )
+		{
+			$fns = array("{$root_path}/module_custom/{$params[0]}/templates/{$params[1]}",
+						 "{$root_path}/modules/{$params[0]}/templates/{$params[1]}");
+			for( $i = 0; $i < count($fns); $i++ )
+			{
+				if( file_exists($fns[$i]) )
+				{
+					$tpl_source = @file_get_contents($fns[$i]);
+					return true;
+				}
+			}
+		}
         return false;
     }
 
@@ -167,12 +172,23 @@ class CmsSmarty extends Smarty
 	{
 		//5.3 $params = explode(';', $tpl_name);
 		$params = explode(';', $tpl_name);
-		if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]))
+		$config = cms_config();
+		$root_path = $config['root_path'];
+
+		if( count($params) == 2 )
 		{
-			$tpl_timestamp = filemtime(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]);
-			return true;
+			$fns = array("{$root_path}/module_custom/{$params[0]}/templates/{$params[1]}",
+						 "{$root_path}/modules/{$params[0]}/templates/{$params[1]}");
+			for( $i = 0; $i < count($fns); $i++ )
+			{
+				if( file_exists($fns[$i]) )
+				{
+					$tpl_timestamp = filemtime($fns[$i]);
+					return true;
+				}
+			}
 		}
-		return false;
+        return false;
 	}
 
 	function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)

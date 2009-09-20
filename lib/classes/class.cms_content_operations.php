@@ -411,7 +411,7 @@ class CmsContentOperations extends CmsObject
 		}
 		else
 		{
-			$result = cms_orm('ContentBase')->find_by_alias($alias);
+			$result = cms_orm('CmsContentBase')->find_by_alias($alias);
 			if ($result)
 			{
 				return $result->id;
@@ -439,7 +439,7 @@ class CmsContentOperations extends CmsObject
 	 **/
 	public static function get_page_id_from_hierarchy($position)
 	{
-		$result = cms_orm('ContentBase')->find_by_hierarchy(CmsContentOperations::create_unfriendly_hierarchy_position($position));
+		$result = cms_orm('CmsContentBase')->find_by_hierarchy(CmsContentOperations::create_unfriendly_hierarchy_position($position));
 		if ($result)
 		{
 			return $result->id;
@@ -632,7 +632,7 @@ class CmsContentOperations extends CmsObject
 	
 	public static function reindex_content()
 	{
-		$content = cms_orm('ContentBase')->find_all();
+		$content = cms_orm('CmsContentBase')->find_all();
 		foreach ($content as $one_item)
 		{
 			$one_item->index();
