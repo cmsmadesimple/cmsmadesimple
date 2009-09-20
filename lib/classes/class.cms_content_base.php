@@ -40,10 +40,11 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	var $id_field = 'content_id';
 	var $sequence = 'content_seq';
 	var $unused_fields = array();
-
 	var $mProperties = array();
 
 	var $props_loaded = false;
+    var $mAdditionalUsers = array();
+	var $addusers_loaded = false;
 	
 	#Stuff needed to do a doppleganger for CmsNode -- Multiple inheritence would rock right now
 	var $tree = null;
@@ -168,6 +169,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	{
 		if ($result)
 		{
+			// save properties.
 			$concat = '';
 			foreach ($this->mProperties as &$prop)
 			{
@@ -175,6 +177,16 @@ class CmsContentBase extends CmsObjectRelationalMapping
 					$prop->content_id = $this->id;
 				$prop->save();
 				$concat .= $prop->content;
+			}
+
+			// save additional editors
+			foreach ($this->mAdditionalUsers as &$user)
+			{
+				if( $user->content_id != $this->id )
+				{
+					$user->content_id = $thid->id;
+				}
+				$user->save();
 			}
 		
 			if ($concat != '')
@@ -228,7 +240,56 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		}
 		return $result;
 	}
-	
+
+	private function load_additional_users($force = false)
+	{
+		if( $force || !$this->addusers_loaded )
+		{
+			$users = cms_orm('CmsAdditionalEditors')->find_all_by_content_id($this->id);
+			foreach ($users as &$user)
+				{
+					$this->mAdditionalUsers[] = $user;
+				}
+			$this->addusers_loaded = true;
+		}
+	}
+
+	public function get_additional_users()
+	{
+		$this->load_additional_users();
+		$result = array();
+		foreach( $this->mAdditionalUsers as &$user )
+		{
+			$result[] = $user->user_id;
+		}
+		return $result;
+	}
+
+	public function set_additional_users($user_ids)
+	{
+		$this->load_additional_users();
+		foreach( $user_ids as $one_user )
+		{
+			$found = false;
+			foreach( $this->mAdditionalUsers as &$user )
+			{
+				if( $user->user_id == $one_user ) 
+					{
+						$found = true;
+					}
+			}
+			if( !$found )
+			{
+				// create a new user
+				$newuser = new CmsAdditionalUser;
+				$newuser->user_id = $one_user;
+				$newuser->content_id = $this->id;
+				$newuser->page_id = $this->id;
+				$this->mAdditionalUsers[] = $newuser;
+			}
+		}
+	}
+
     /**
      * Does this have children?
      */

@@ -275,48 +275,46 @@ class CmsContentEditorBase
 			}
 			break;
 			
-			/*
-			 case 'additionaleditors':
+		case 'additionaleditors':
+			{
+				$prompt = lang('additionaleditors');
+				$text = '<input name="additional_editors" type="hidden" value=""/>';
+				$text .= '<select name="additional_editors[]" multiple="multiple" size="5">';
+				
+				$userops =& $gCms->GetUserOperations();
+				$groupops =& $gCms->GetGroupOperations();
+				$allusers =& $userops->LoadUsers();
+				$allgroups =& $groupops->LoadGroups();
+				$addteditors = $content_obj->get_additional_users();
+				foreach ($allgroups as $onegroup)
 				{
-					$prompt = lang('additionaleditors');
-					$text = '<input name="additional_editors" type="hidden" value=""/>';
-					$text .= '<select name="additional_editors[]" multiple="multiple" size="5">';
-
-					$userops =& $gCms->GetUserOperations();
-					$groupops =& $gCms->GetGroupOperations();
-					$allusers =& $userops->LoadUsers();
-					$allgroups =& $groupops->LoadGroups();
-					$addteditors = $this->GetAdditionalEditors();
-					foreach ($allgroups as $onegroup)
-						{
-							if( $onegroup->id == 1 ) continue;
-							$val = $onegroup->id*-1;
-							$text .= '<option value="'.$val.'"';
-							if( in_array($val,$addteditors) )
-								{
-									$text .= ' selected="selected"';
-								}
-							$text .= '>'.lang('group').': '.$onegroup->name."</option>";		   
-						}
-
-					foreach ($allusers as $oneuser)
-						{
-							if ($oneuser->id != $this->Owner() && $oneuser->id != 1)
-								{
-									$text .= '<option value="'.$oneuser->id.'"';
-									if (in_array($oneuser->id, $addteditors))
-										{
-											$text .= ' selected="selected"';
-										}
-									$text .= '>'.$oneuser->username.'</option>';
-								}
-						}
-
-					$text .= '</select>';
-					$field = $text;
+					if( $onegroup->id == 1 ) continue;
+					$val = $onegroup->id*-1;
+					$text .= '<option value="'.$val.'"';
+					if( in_array($val,$addteditors) )
+					{
+						$text .= ' selected="selected"';
+					}
+					$text .= '>'.lang('group').': '.$onegroup->name."</option>";		   
 				}
-				break;
-				*/
+				
+				foreach ($allusers as $oneuser)
+				{
+					if ($oneuser->id != $content_obj->owner() && $oneuser->id != 1)
+					{
+						$text .= '<option value="'.$oneuser->id.'"';
+						if (in_array($oneuser->id, $addteditors))
+						{
+							$text .= ' selected="selected"';
+						}
+						$text .= '>'.$oneuser->username.'</option>';
+					}
+				}
+				
+				$text .= '</select>';
+				$field = $text;
+			}
+			break;
 
 		default:
 			//die('got here with '.$attr->get_name());
@@ -332,7 +330,7 @@ class CmsContentEditorBase
 	public function fill_from_form_data($params)
 	{
 		$props = array('name','menu_text','parent_id','active','show_in_menu','cachable','alias',
-					   'title_attribute','access_key','tab_index','owner_id','additionaleditors');
+					   'title_attribute','access_key','tab_index','owner_id');
 		$content_obj = $this->get_content();
 		foreach( $props as $oneprop )
 		{
@@ -347,6 +345,8 @@ class CmsContentEditorBase
 			if( isset($params[$oneprop]) )
 				$content_obj->set_property_value($oneprop,$params[$oneprop]);
 		}
+
+		$content_obj->set_additional_users($params['additional_editors']);
 	}
 
 
