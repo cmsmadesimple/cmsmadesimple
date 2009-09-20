@@ -26,8 +26,9 @@ class ContentBase extends CmsContentBase
 {
 	private $_editor_obj;
 
-	public function __construct();
+	public function __construct()
 	{
+		parent::__construct();
 		if( method_exists($this,'SetProperties') )
 			{
 				$this->SetProperties();
