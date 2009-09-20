@@ -72,7 +72,7 @@ class CmsActsAs extends CmsObject
 	
 	public function before_delete(&$obj)
 	{
-		
+		return true;
 	}
 	
 	public function after_delete(&$obj)

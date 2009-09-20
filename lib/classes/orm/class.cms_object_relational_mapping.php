@@ -1040,13 +1040,21 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		{
 			$table = $this->get_table();
 			$id_field = $this->id_field;
+			$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 		
 			$id = $this->$id_field;
+			if( !$id )
+				{
+					if( isset($this->field_maps[$id_field]) )
+					{
+						$id = $this->{$this->field_maps[$id_field]};
+					}
+				}
 		
-			$this->before_delete_caller();
-		
+			$can_delete = $this->before_delete_caller();
+			if( !$can_delete ) return false;
+
 			//Figure out if we need to replace the field from the field mappings
-			$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 			if (array_key_exists($id_field, $new_map)) $id_field = $new_map[$id_field];
 
 			$result = cms_db()->Execute("DELETE FROM {$table} WHERE ".$this->get_table($id_field)." = {$id}") ? true : false;
@@ -1422,9 +1430,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	{
 		foreach (cms_orm()->get_acts_as($this) as $one_acts_as)
 		{
-			$one_acts_as->before_delete($this);
+			$res = $one_acts_as->before_delete($this);
+			if( !$res ) return false;
 		}
-		$this->before_delete();
+		return $this->before_delete();
 	}
 	
 	/**

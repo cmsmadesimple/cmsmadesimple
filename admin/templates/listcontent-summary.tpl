@@ -24,5 +24,8 @@
 </div>
 <div class="pageoverflow">
     <p class="pagetext"></p>
-    <p class="pageinput"><a href="editcontent.php{$urlext}&amp;page_id={$content->id}">Edit</a> <a href="deletecontent.php{$urlext}&amp;page_id={$content->id}">Delete</a></p>
+    <p class="pageinput">
+      <a href="editcontent.php{$urlext}&amp;page_id={$content->id}">Edit</a> 
+      <a href="listcontent.php{$urlext}&amp;deletecontent={$content->id}">{$delete_image} Delete</a>
+    </p>
 </div>

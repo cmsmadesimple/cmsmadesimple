@@ -461,22 +461,36 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	
 	protected function before_delete()
 	{
+		if( $this->has_children() ) return false;
+		if( $this->default_content() ) return false;
+
 		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
+		return true;
 	}
 	
 	protected function after_delete()
 	{
-		$items =& cmsms()->content_property->find_all_by_content_id($this->id);
+		$items =& cms_orm('CmsContentProperty')->find_all_by_content_id($this->id);
 		foreach ($items as &$item)
 		{
 			$item->delete();
 		}
 		
+		// delete all the additional editors.
+		$users =& cms_orm('CmsAdditionalEditor')->find_all_by_content_id($this->id);
+		foreach( $users as &$user )
+		{
+			$user->delete();
+		}
+
 		#Remove the cross references
 		CmsContentOperations::remove_cross_references($this->id, 'content');
-		
-		CmsEvents::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
+
 		CmsCache::clear();
+		CmsContentOperations::set_all_hierarchy_positions();
+
+		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
+		audit($this->id,$this->name(),'Deleted Content');
 	}
 	
 	public function template_name()

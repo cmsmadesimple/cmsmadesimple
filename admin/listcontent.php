@@ -91,7 +91,7 @@ if (isset($_GET['collapseall']))
 if (isset($_GET['deletecontent']))
 {
 	deletecontent($_GET['deletecontent']);
-	redirect('listcontent.php');
+	redirect('listcontent.php'.$urlext);
 }
 
 if (isset($_GET['direction']))
@@ -449,75 +449,29 @@ function movecontent($contentid, $parentid, $direction = 'down')
 
 function deletecontent($contentid)
 {
-	//TODO: Rewrite me
-	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Pages') || check_permission($userid, 'Modify Page Structure');
-	
-	global $gCms;
-	$hierManager =& $gCms->GetHierarchyManager();
+  $userid = get_userid();
+  $access = check_permission($userid, 'Remove Pages') || check_permission($userid, 'Modify Page Structure');
+  
+  if (!$access)
+    {
+      $_GET['error'] = 'permissiondenied';
+      return;
+    }
 
-	if ($access)
-	{
-		$node = &$hierManager->getNodeById($contentid);
-		if ($node)
-		{
-			$contentobj =& $node->getContent();
-			$childcount = 0;
-			$parentid = -1;
-			if (isset($node->parentNode))
-			{
-				$parent =& $node->parentNode;
-				if (isset($parent))
-				{
-					$parentContent =& $parent->getContent();
-					if (isset($parentContent))
-					{
-						$parentid = $parentContent->Id();
-						$childcount = $parent->getChildrenCount();
-					}
-				}
-			}
+  $content_obj = CmsContentOperations::load_content_from_id($contentid);
+  if( !$content_obj )
+    {
+      $_GET['error'] = 'errorgettingcontent';
+      return;
+    }
 
-			if ($contentobj)
-			{
-				$title = $contentobj->Name();
-	
-				#Check for children
-				if ($contentobj->HasChildren())
-				{
-					$_GET['error'] = 'errorchildcontent';
-				}
-	
-				#Check for default
-				if ($contentobj->DefaultContent())
-				{
-					$_GET['error'] = 'errordefaultpage';
-				}
-			
-				$title = $contentobj->Name();
-				$contentobj->delete();
-
-				$contentops =& $gCms->GetContentOperations();
-				$contentops->SetAllHierarchyPositions();
-				
-				#See if this is the last child... if so, remove
-				#the expand for it
-				if ($childcount == 1 && $parentid > -1)
-				{
-					toggleexpand($parentid, true);
-				}
-				
-				#Do the same with this page as well
-				toggleexpand($contentid, true);
-				
-				audit($contentid, $title, 'Deleted Content');
-				
-				$contentops->ClearCache();
-			
-				$_GET['message'] = 'contentdeleted';
-			}
-		}
-	}
+  $res = $content_obj->delete();
+  if( !$res )
+    {
+      $_GET['error'] = 'errordeletingcontent';
+      return;
+    }
+  $_GET['message'] = 'contentdeleted';
 }
 
 function show_h(&$root, &$sortableLists, &$listArray, &$output)
