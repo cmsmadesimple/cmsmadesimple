@@ -26,7 +26,7 @@
 #Ideas from Gallery's implementation made to CMS by Ted Kulp
 
 #Native language name
-$nls['language']['kz_KZ'] = '%GҚ%@$B'Q'Y'Q(B$B%Gқ(B$B%@(B';
+$nls['language']['kz_KZ'] = 'Kazakh'
 $nls['englishlang']['kz_KZ'] = 'Kazakh';
 
 #Possible aliases for language
