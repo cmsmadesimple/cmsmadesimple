@@ -52,7 +52,7 @@ class CmsErrorPageEditor extends CmsContentEditor
 	  // here we make sure that all the attributes we've disabled
 	  // are set to the appropriate values.
 	  $content_obj = $this->get_content();
-	  $content_obj->set_menutext('');
+	  $content_obj->set_menu_text('----');
 	  $content_obj->set_parent_id('-1');
 	  $content_obj->set_active(1);
 	  $content_obj->set_show_in_menu(0);
@@ -60,7 +60,12 @@ class CmsErrorPageEditor extends CmsContentEditor
 	  $content_obj->set_secure(0);
 	  $content_obj->set_target('_none');
 	  $content_obj->set_searchable(0);
-
+	  
+	  die($content_obj->alias());
+	  if( $content_obj->alias() == '' )
+		  {
+			  die('no alias');
+		  }
 	  return parent::validate();
   }
 

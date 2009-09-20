@@ -71,7 +71,7 @@ class CmsContentOperations extends CmsObject
 		while ($file = readdir ($handle)) 
 		{
 		    $path_parts = pathinfo($file);
-		    if ($path_parts['extension'] == 'php')
+		    if ($path_parts['extension'] == 'php' && !startswith($file,'class.') && !startswith($file,'#'))
 		    {
 				$obj = new CmsContentTypePlaceholder();
 				$obj->type = strtolower(basename($file, '.inc.php'));
