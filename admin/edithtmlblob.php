@@ -129,7 +129,7 @@ if ($access)
 
 			if ($result)
 			{
-				audit($blobobj->id, $blobobj->name, 'Edited Html Blob');
+				audit($blobobj->id, $blobobj->name, 'Edited Global Content Block');
 
 				#Clear cache
 				$smarty = new Smarty_CMS($config);

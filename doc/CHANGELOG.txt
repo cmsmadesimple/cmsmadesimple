@@ -5,6 +5,7 @@ Version 1.6.6 - NEW_NAME
  - #3926 Little typo in stylesheet.
  - #3935 Validation error in stylesheet 'Accessibility and cross-browser tools'
  - #4002 menu parameter start_level='2' don't show results.
+ - #4068 Admin Log, update "HTML Blob" to "Global Content Block"
  - Fix problem with showinmenu for separators.
  - Fix error pages being able to be set inactive in listcontent.
  - Fix error in permissions checking for copying content.

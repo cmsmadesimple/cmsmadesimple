@@ -105,7 +105,7 @@ if ($access) {
 						$blobobj->AddAuthor($addt_user_id);
 					}
 				}
-				audit($blobobj->id, $blobobj->name, 'Added Html Blob');
+				audit($blobobj->id, $blobobj->name, 'Added Global Content Block');
 
 				#Perform the addhtmlblob_post callback
 				foreach($gCms->modules as $key=>$value)
