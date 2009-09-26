@@ -147,6 +147,7 @@ class CmsContentEditorBase
 	{
 		$profile = $this->get_profile();
 		$attrs = $profile->find_all_with_helper();
+		if( !is_array($attrs) ) return;
 
 		for( $i = 0; $i < count($attrs); $i++ )
 		{
@@ -166,6 +167,7 @@ class CmsContentEditorBase
 	{
 		$profile = $this->get_profile();
 		$attrs = $profile->find_all_with_helper();
+		if( !is_array($attrs) ) return;
 
 		for( $i = 0; $i < count($attrs); $i++ )
 		{
@@ -179,6 +181,7 @@ class CmsContentEditorBase
 	{
 		$profile = $this->get_profile();
 		$attrs = $profile->find_all_with_helper();
+		if( !is_array($attrs) ) return;
 
 		$tmp = array();
 		for( $i = 0; $i < count($attrs); $i++ )
@@ -262,7 +265,7 @@ class CmsContentEditorBase
 		$this->_merge_basic_attributes();
 
 		$attrs = $this->_profile->find_all_by_tab($tabname);
-		if( !$attrs ) return FALSE;
+		if( !is_array($attrs) ) return FALSE;
 		
 		$ret = array();
 		for( $i = 0; $i < count($attrs); $i++ )

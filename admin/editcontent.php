@@ -76,8 +76,6 @@ function editcontent_apply($params)
       $contentobj = $contentops->LoadContentFromId($page_id);
       $editortype = $contentops->get_content_editor_type($contentobj);
       $editor = new $editortype($contentobj);
-
-      $contentobj = $contentops->LoadContentFromId($page_id);
       $error = do_save_content($editor,$params);
 
       if( $error === FALSE )
@@ -138,7 +136,7 @@ if( isset($_POST['serialized_content']) )
 
     CmsContentOperations::load_content_types();
     $contentobj = UnserializeObject($_POST['serialized_content']);
-    if( get_class($contentobj) != strtolower($content_type) )
+    if( get_class($contentobj) != $content_type )
       {
 	// content type has changed.
 	copycontentobj($contentobj,$content_type);

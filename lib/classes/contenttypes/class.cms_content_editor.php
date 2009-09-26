@@ -29,7 +29,7 @@ class CmsContentEditor extends CmsContentEditorBase
 		parent::__construct($content_obj);
 
 		$profile = $this->get_profile();
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('template','main'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('template','options'),'alias');
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('searchable','options'),'image');
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('pagemetadata','options'),'searchable');
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('pagedata','options'),'pagemetadata');

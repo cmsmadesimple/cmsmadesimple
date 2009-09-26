@@ -180,6 +180,11 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			}
 
 			// save additional editors
+			$users =& cms_orm('CmsAdditionalEditor')->find_all_by_content_id($this->id);
+			foreach( $users as &$user )
+				{
+					$user->delete();
+				}
 			foreach ($this->mAdditionalUsers as &$user)
 			{
 				if( $user->content_id != $this->id )
@@ -268,6 +273,12 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	public function set_additional_users($user_ids)
 	{
 		$this->load_additional_users();
+		if( !is_array($user_ids) )
+		{
+			$this->mAdditionalUsers = array();
+			return;
+		}
+
 		foreach( $user_ids as $one_user )
 		{
 			$found = false;
