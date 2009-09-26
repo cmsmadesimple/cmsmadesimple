@@ -22,6 +22,7 @@ class CmsContentEditorBase
 {
 	private $_contentobj;
 	private $_profile;
+	private $_merge_done = false;
 
 	public function __construct($contentobj)
 	{
@@ -33,6 +34,10 @@ class CmsContentEditorBase
 
 		// this defines the editing profile, tabs, and order of the fields in the tabs.
 		$profile = new CmsContentTypeProfile();
+		$profile->add_tab('main');
+		$profile->add_tab('navigation','Manage All Content');
+		$profile->add_tab('options','Manage All Content');
+
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('title','main'));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('parent_id','main'));
 
@@ -54,9 +59,36 @@ class CmsContentEditorBase
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra2','options'));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra3','options'));
 
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','permissions'));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','permissions'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','permissions',
+																   array('CmsContentEditorBase','perm_act_as_owner')));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','permissions',
+																   array('CmsContentEditorBase','perm_act_as_owner')));
+
 		$this->_profile = $profile;
+	}
+
+
+	private function _merge_basic_properties()
+	{
+		if( $this->_merge_done ) return;
+
+		// move all of the 'basic attributes' to the main tab.
+		$tmp = get_site_preference('basic_attributes');
+		if( $tmp )
+		{
+			$profile = $this->get_profile();
+			$basic_attrs = explode(',',$tmp);
+			foreach( $basic_attrs as $one_attr_name )
+			{
+				$attr = $profile->find_by_name($one_attr_name);
+				if( is_object($attr) )
+				{
+					$attr->set_tab('main');
+				}
+			}
+		}
+
+		$this->_merge_done = true;
 	}
 
 
@@ -64,6 +96,7 @@ class CmsContentEditorBase
 	{
 		return $this->_contentobj;
 	}
+
 
 	public function &get_profile()
 	{
@@ -73,6 +106,8 @@ class CmsContentEditorBase
 
 	public function get_tab_names()
 	{
+		$this->_merge_basic_properties();
+
 		// get tab names from the contentobj profile.
 		$tmp = $this->_profile->get_tab_list();
 		$results = array();
@@ -92,7 +127,11 @@ class CmsContentEditorBase
 					if( $perm != '' )
 					{
 						$okay = false;
-						if( function_exists($perm) )
+						if( is_array($perm) )
+						{
+							$okay = call_user_func($perm,get_userid());
+						}
+						else if( function_exists($perm) )
 						{
 							$okay = call_user_func($perm,get_userid());
 						}
@@ -115,6 +154,8 @@ class CmsContentEditorBase
 
 	public function get_tab_elements($tabname,$adding = FALSE)
 	{
+		$this->_merge_basic_properties();
+
 		$attrs = $this->_profile->find_all_by_tab($tabname);
 		if( !$attrs ) return FALSE;
 		
@@ -130,7 +171,11 @@ class CmsContentEditorBase
 			}
 			else
 			{
-				if( function_exists($perm) )
+				if( is_array($perm) )
+				{
+					$okay = call_user_func($perm,get_userid());
+				}
+				else if( function_exists($perm) )
 				{
 					$okay = call_user_func($perm,get_userid());
 				}
@@ -395,8 +440,9 @@ class CmsContentEditorBase
 		audit($content_obj->id(),$content_obj->name(),'Edited Content');
 	}
 
-	public static function perm_is_owner($uid)
+	public static function perm_act_as_owner($uid)
 	{
+		if( check_permission(get_userid(),'Manage All Content') ) return true;
 		$content_obj = $this->get_content();
 		return $uid == $content_obj->owner_id;
 	}

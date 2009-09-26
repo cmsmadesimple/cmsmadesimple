@@ -25,10 +25,7 @@ class CmsContentTypeProfile extends CmsObject
 
   public function add_tab($tabname,$permission='')
   {
-    if( !isset($this->_tabs[$tabname]) )
-    {
-		$this->_tabs[$tabname] = $permission;
-    }
+	  $this->_tabs[$tabname] = $permission;
   }
 
   public function add_attribute($attr,$after = '')
@@ -142,6 +139,12 @@ class CmsContentTypeProfileAttribute
   public function get_tab()
   {
     return $this->_tab;
+  }
+
+  public function set_tab($tab)
+  {
+	  if( $tab )
+		  $this->_tab = $tab;
   }
 
   public function get_permission()

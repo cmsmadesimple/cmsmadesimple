@@ -171,7 +171,9 @@ if (count($nodelist) > 0)
 		}
 			
 	if ($usefile)
-		echo $this->ProcessTemplate($tpl_name, $mdid, false, $gCms->variables['content_id']);
+		{
+			echo $this->ProcessTemplate($tpl_name, $mdid, false, $gCms->variables['content_id']);
+		}
 	else
 		echo $this->ProcessTemplateFromDatabase($tpl_name, $mdid, false);
 }

@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['navigation'] = 'Navigation';
+$lang['admin']['css_class_name'] = 'CSS Class Name for Navigation';
 $lang['admin']['secure_page'] = 'Use Secure (HTTPS) transport';
 $lang['admin']['info_image_settings'] = 'The following settings configure behaviour in the image manager.';
 $lang['admin']['thumbnail_width'] = 'Thumbnail Width';
