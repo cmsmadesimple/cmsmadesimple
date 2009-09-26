@@ -34,24 +34,28 @@ class CmsContentEditorBase
 		// this defines the editing profile, tabs, and order of the fields in the tabs.
 		$profile = new CmsContentTypeProfile();
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('title','main',1));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('menu_text','main',2));
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('parent_id','main',3));
+
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('show_in_menu','navigation',1));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('menu_text','navigation',2));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('target','navigation',3));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('title_attribute','navigation',4));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('class_name','navigation',5));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('access_key','navigation',6));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('tab_index','navigation',7));
+
 		$profile->add_attribute(new CmsContentTypeProfileAttribute('active','options',1));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('show_in_menu','options',2));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('cachable','options',3));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('secure','options',5));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','options',6));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('target','options',7));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('title_attribute','options',8));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('access_key','options',9));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('tab_index','options',10));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('image','options',11));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('thumbnail','options',12));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra1','options',13));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra2','options',13));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra3','options',13));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','permissions',14));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','permissions',15));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('cachable','options',2));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('secure','options',3));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','options',4));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('image','options',5));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('thumbnail','options',6));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra1','options',7));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra2','options',7));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra3','options',7));
+
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','permissions',15));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','permissions',16));
 		$this->_profile = $profile;
 	}
 
@@ -136,7 +140,14 @@ class CmsContentEditorBase
 			}
 			if( $okay )
 				{
-					$ret[] = $this->get_single_element($this->_contentobj,$attrs[$i],$adding);
+					$tmp = $this->get_single_element($this->_contentobj,$attrs[$i],$adding);
+					if( $tmp )
+					{
+						$ret[] = $tmp;
+					}
+					else
+					{
+					}
 				}
 		}
 		return $ret;
@@ -170,6 +181,11 @@ class CmsContentEditorBase
 			$prompt = lang('menutext');
 			$field  = '<input type="text" name="menu_text" value="'.cms_htmlentities($content_obj->menu_text).'" />';
 			break;
+
+		case 'class_name':
+			$prompt = lang('css_class_name');
+			$field  = '<input type="text" name="class_name" value="'.cms_htmlentities($content_obj->get_property_value('class_name')).'" />';
+			break;
 			
 		case 'parent_id':
 			{
@@ -193,7 +209,7 @@ class CmsContentEditorBase
 			break;
 			
 		case 'secure':
-			$prompt = lang('secure');
+			$prompt = lang('secure_page');
 			$field = '<input type="hidden" name="secure" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="secure"'.($content_obj->get_property_value('secure')?' checked="checked"':'').' />';
 			break;
 			
@@ -339,7 +355,7 @@ class CmsContentEditorBase
 				$content_obj->$str($params[$oneprop]);
 		}
 
-		$props = array('secure','target','image','thumbnail','extra1','extra2','extra3');
+		$props = array('secure','target','image','thumbnail','extra1','extra2','extra3','class_name');
 		foreach( $props as $oneprop )
 		{
 			if( isset($params[$oneprop]) )

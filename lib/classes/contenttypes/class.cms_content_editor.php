@@ -106,9 +106,10 @@ class CmsContentEditor extends CmsContentEditorBase
 
 			case 'disable_wysiwyg':
 				{
+					$prompt = lang('disable_wysiwyg');
 					$disable_wysiwyg = $content_obj->get_property_value('disable_wysiwyg');
 					if( $disable_wysiwyg == '' ) $disable_wysiwyg = 0;
-					$fioeld = '<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
+					$field = '<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
              <input type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />';
 
 				}

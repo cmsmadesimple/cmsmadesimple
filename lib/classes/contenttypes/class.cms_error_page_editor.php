@@ -31,6 +31,7 @@ class CmsErrorPageEditor extends CmsContentEditor
 	$profile->remove_by_name('show_in_menu');
     $profile->remove_by_name('cachable');
 	$profile->remove_by_name('secure');
+	$profile->remove_by_name('class_name');
 	$profile->remove_by_name('target');
 	$profile->remove_by_name('title_attribute');
 	$profile->remove_by_name('access_key');
