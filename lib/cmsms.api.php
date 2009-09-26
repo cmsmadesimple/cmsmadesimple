@@ -1910,6 +1910,31 @@ function cms_ipmatches($ip,$checklist)
   return FALSE;
 }
 
+
+function get_current_url()
+{
+    if( !function_exists('_strleft') )
+      {
+	function _strleft($str,$substr)
+	{
+	  $pos = strpos($str,$substr);
+	  if( $pos !== FALSE )
+	    {
+	      return substr($str,0,$pos);
+	    }
+	  return $str;
+	}
+      }
+
+    $s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : "";
+    $protocol = _strleft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/").$s;
+    $port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":".$_SERVER["SERVER_PORT"]);
+    $s = $protocol."://".$_SERVER['SERVER_NAME'].$port;
+    
+    global $gCms;
+    return $s.$_SERVER['REQUEST_URI'];
+}
+
 /**
  * @package	isemail
  * @author	Dominic Sayers <dominic_sayers@hotmail.com>
@@ -2259,6 +2284,26 @@ function is_email( $email, $checkDNS=false ) {
 	// Eliminate all other factors, and the one which remains must be the truth.
 	// (Sherlock Holmes, The Sign of Four)
 	return true;
+}
+
+function cms_file_get_contents($filename)
+{
+  $content = '';
+  if( !preg_match('!^(http|ftp)://!i', $filename) )
+    {
+      if($fp = @fopen($params['file'],'r')) {
+	while(!feof($fp)) {
+	  $content .= fgets ($fp,4096);
+	}
+	fclose($fp);
+      }
+    }
+  else if( startswith('http',$filename) )
+    {
+      $obj = new CmsHttpClient();
+      $content  = $obj->do_get($filename);
+    }
+  return $content;
 }
 
 # vim:ts=4 sw=4 noet

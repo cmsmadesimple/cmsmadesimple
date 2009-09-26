@@ -159,7 +159,7 @@ else
 				if ($remote_test->continueon)
 				{
 					// we have a 'theoretically' valid url
-					$txt = @file_get_contents($url);
+					$txt = @cms_file_get_contents($url);
 					if( $txt !== FALSE )
 					{
 						// the url worked
