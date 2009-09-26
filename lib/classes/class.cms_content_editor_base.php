@@ -22,7 +22,8 @@ class CmsContentEditorBase
 {
 	private $_contentobj;
 	private $_profile;
-	private $_merge_done = false;
+	private $_merged_basic = false;
+	private $_merged_module = false;
 
 	public function __construct($contentobj)
 	{
@@ -68,9 +69,9 @@ class CmsContentEditorBase
 	}
 
 
-	private function _merge_basic_properties()
+	private function _merge_basic_attributes()
 	{
-		if( $this->_merge_done ) return;
+		if( $this->_merged_basic ) return;
 
 		// move all of the 'basic attributes' to the main tab.
 		$tmp = get_site_preference('basic_attributes');
@@ -88,7 +89,92 @@ class CmsContentEditorBase
 			}
 		}
 
-		$this->_merge_done = true;
+		$this->_merged_basic = true;
+	}
+
+	
+	private function _merge_module_attributes()
+	{
+		if( $this->_merged_module ) return;
+
+		$gCms = cmsms();
+		$profile = $this->get_profile();
+		$content_obj = $this->get_content();
+		foreach( $gCms->modules as $name => &$data )
+		{
+			if( !isset($data['object']) ) continue;
+			$module =& $data['object'];
+
+			if( !$module->HasCapability('content_attributes') ) continue;
+			if( !method_exists($module,'get_content_attributes') ) continue;
+			
+			$attrs = $module->get_content_attributes(get_class($content_obj));
+			if( is_array($attrs) )
+			{
+				for( $i = 0; $i < count($attrs); $i++ )
+				{
+					$attrs[$i]->set_module($name);
+					$profile->add_attribute($attrs[$i]);
+				}
+			}
+		}
+
+		$this->_merged_module = true;
+	}
+
+
+	private function _get_module_attribute_input($content_obj,$attr,$adding = false)
+	{
+		$mname = strtolower($attr->get_module());
+		if( !$mname || $mname == 'core' ) return;
+
+		$module = ModuleOperations::get_module($attr->get_module());
+		if( !$module ) return;
+
+		if( !$module->HasCapability('content_attributes') ) return;
+		if( !method_exists($module,'get_content_attrib_input') ) return;
+
+		$data = $module->get_content_attrib_input($attr,$content_obj,$adding);
+		if( !is_array($data) ) return;
+
+		return $data;
+	}
+
+
+	private function _fill_module_attributes($content_obj,$params)
+	{
+		$gCms = cmsms();
+		foreach( $gCms->modules as $name => &$data )
+		{
+			if( !isset($data['object']) ) continue;
+			$module =& $data['object'];
+
+			if( !$module->HasCapability('content_attributes') ) continue;
+			if( !method_exists($module,'fill_content_attribs') ) continue;
+			
+			$module->fill_content_attribs($content_obj,$params);
+		}
+	}
+
+
+	private function _validate_module_attribute($content_obj,$attr)
+	{
+		$gCms = cmsms();
+		$tmp = array();
+		foreach( $gCms->modules as $name => &$data )
+		{
+			if( !isset($data['object']) ) continue;
+			$module =& $data['object'];
+
+			if( !$module->HasCapability('content_attributes') ) continue;
+			if( !method_exists($module,'validate_content_attribs') ) continue;
+			
+			$ret = $module->validate_content_attribs($content_obj);
+			if( $ret ) $tmp = array_merge($tmp,$ret);
+		}
+		
+		if( count($tmp) ) return $tmp;
+		return FALSE;
 	}
 
 
@@ -106,7 +192,8 @@ class CmsContentEditorBase
 
 	public function get_tab_names()
 	{
-		$this->_merge_basic_properties();
+		$this->_merge_module_attributes();
+		$this->_merge_basic_attributes();
 
 		// get tab names from the contentobj profile.
 		$tmp = $this->_profile->get_tab_list();
@@ -154,7 +241,8 @@ class CmsContentEditorBase
 
 	public function get_tab_elements($tabname,$adding = FALSE)
 	{
-		$this->_merge_basic_properties();
+		$this->_merge_module_attributes();
+		$this->_merge_basic_attributes();
 
 		$attrs = $this->_profile->find_all_by_tab($tabname);
 		if( !$attrs ) return FALSE;
@@ -207,6 +295,7 @@ class CmsContentEditorBase
 
 		$prompt = '';
 		$field  = '';
+
 		switch( $attr->get_name() )
 		{
 		case 'cachable':
@@ -379,8 +468,12 @@ class CmsContentEditorBase
 			break;
 
 		default:
-			//die('got here with '.$attr->get_name());
-			// throw an exception?
+			$tmp = $this->_get_module_attribute_input($content_obj,$attr);
+			if( is_array($tmp) )
+				{
+					return $tmp;
+				}
+			break;
 		}
 
 		if( !empty($prompt) && !empty($field) )
@@ -391,6 +484,7 @@ class CmsContentEditorBase
 
 	public function fill_from_form_data($params)
 	{
+		// basic attributes
 		$props = array('name','menu_text','parent_id','active','show_in_menu','cachable','alias',
 					   'title_attribute','access_key','tab_index','owner_id');
 		$content_obj = $this->get_content();
@@ -401,6 +495,7 @@ class CmsContentEditorBase
 				$content_obj->$str($params[$oneprop]);
 		}
 
+		// pre-defined attributes
 		$props = array('secure','target','image','thumbnail','extra1','extra2','extra3','class_name');
 		foreach( $props as $oneprop )
 		{
@@ -408,6 +503,10 @@ class CmsContentEditorBase
 				$content_obj->set_property_value($oneprop,$params[$oneprop]);
 		}
 
+		// module defined attributes
+		$this->_fill_module_attributes($content_obj,$params);
+
+		// additional users.
 		$content_obj->set_additional_users($params['additional_editors']);
 	}
 

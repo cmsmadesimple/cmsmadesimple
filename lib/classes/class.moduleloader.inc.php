@@ -201,6 +201,7 @@ class ModuleLoader
 
 		return $result;
 	}
+
 }
 
 ?>

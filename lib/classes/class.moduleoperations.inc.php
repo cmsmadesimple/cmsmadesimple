@@ -563,4 +563,14 @@ class ModuleOperations
 		return $cmsmodules;
 	}
 
+
+	static public function &get_module($name)
+	{
+	  global $gCms;
+	  if( isset($gCms->modules[$name]) && isset($gCms->modules[$name]['object']) )
+	    {
+	      return $gCms->modules[$name]['object'];
+	    }
+	}
+
 }

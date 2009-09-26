@@ -120,44 +120,55 @@ class CmsContentTypeProfile extends CmsObject
 
 class CmsContentTypeProfileAttribute
 {
-  private $_name;
-  private $_tab;
-  private $_permission;
+	private $_module;
+	private $_name;
+	private $_tab;
+	private $_permission;
 
-  public function __construct($name,$tab,$permission = '')
-  {
-    $this->_name = $name;
-    $this->_tab  = $tab;
-    $this->_permission = $permission;
-  }
+	public function __construct($name,$tab,$permission = '',$module = '')
+	{
+		$this->_name = $name;
+		$this->_tab  = $tab;
+		$this->_permission = $permission;
+	}
 
-  public function get_name()
-  {
-    return $this->_name;
-  }
+	public function get_module()
+	{
+		return $this->_module;
+	}
 
-  public function get_tab()
-  {
-    return $this->_tab;
-  }
+	public function set_module($name)
+	{
+		$this->_module = $name;
+	}
 
-  public function set_tab($tab)
-  {
-	  if( $tab )
-		  $this->_tab = $tab;
-  }
+	public function get_name()
+	{
+		return $this->_name;
+	}
 
-  public function get_permission()
-  {
-    return $this->_permission;
-  }
+	public function get_tab()
+	{
+		return $this->_tab;
+	}
 
-  public static function compare($a,$b)
-  {
-    if( $a->_name < $b->_name ) return -1;
-    if( $a->_name > $b->_name ) return 1;
-    return 0;
-  }
+	public function set_tab($tab)
+	{
+		if( $tab )
+			$this->_tab = $tab;
+	}
+
+	public function get_permission()
+	{
+		return $this->_permission;
+	}
+
+	public static function compare($a,$b)
+	{
+		if( $a->_name < $b->_name ) return -1;
+		if( $a->_name > $b->_name ) return 1;
+		return 0;
+	}
 }
 
 #
