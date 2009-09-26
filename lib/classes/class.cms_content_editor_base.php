@@ -24,6 +24,7 @@ class CmsContentEditorBase
 	private $_profile;
 	private $_merged_basic = false;
 	private $_merged_module = false;
+	private $_merged_module_tabs = false;
 
 	public function __construct($contentobj)
 	{
@@ -92,7 +93,7 @@ class CmsContentEditorBase
 		$this->_merged_basic = true;
 	}
 
-	
+
 	private function _merge_module_attributes()
 	{
 		if( $this->_merged_module ) return;
@@ -132,44 +133,58 @@ class CmsContentEditorBase
 		if( !$module ) return;
 
 		if( !$module->HasCapability('content_attributes') ) return;
-		if( !method_exists($module,'get_content_attrib_input') ) return;
+		$helper = $attr->get_helper();
+		if( !is_object($helper) || !is_a($helper,'CmsContentAttributeHelperBase') ) return;
 
-		$data = $module->get_content_attrib_input($attr,$content_obj,$adding);
+		$data = $helper->get_attribute_input($attr,$content_obj,$adding);
 		if( !is_array($data) ) return;
 
 		return $data;
 	}
 
 
+	private function _get_module_tabs()
+	{
+		$profile = $this->get_profile();
+		$attrs = $profile->find_all_with_helper();
+
+		for( $i = 0; $i < count($attrs); $i++ )
+		{
+			$helper = $attrs[$i]->get_helper();
+			$tabs = $helper->get_attribute_tabs();
+			if( is_array($tabs) )
+			{
+				foreach( $tabs as $key => $data )
+				{
+					$profile->add_tab($key,$data['permission'],$data['prompt']);
+				}
+			}
+		}
+	}
+
 	private function _fill_module_attributes($content_obj,$params)
 	{
-		$gCms = cmsms();
-		foreach( $gCms->modules as $name => &$data )
-		{
-			if( !isset($data['object']) ) continue;
-			$module =& $data['object'];
+		$profile = $this->get_profile();
+		$attrs = $profile->find_all_with_helper();
 
-			if( !$module->HasCapability('content_attributes') ) continue;
-			if( !method_exists($module,'fill_content_attribs') ) continue;
-			
-			$module->fill_content_attribs($content_obj,$params);
+		for( $i = 0; $i < count($attrs); $i++ )
+		{
+			$helper = $attrs[$i]->get_helper();
+			$helper->get_attributes_from_formdata($content_obj,$params);
 		}
 	}
 
 
 	private function _validate_module_attribute($content_obj,$attr)
 	{
-		$gCms = cmsms();
-		$tmp = array();
-		foreach( $gCms->modules as $name => &$data )
-		{
-			if( !isset($data['object']) ) continue;
-			$module =& $data['object'];
+		$profile = $this->get_profile();
+		$attrs = $profile->find_all_with_helper();
 
-			if( !$module->HasCapability('content_attributes') ) continue;
-			if( !method_exists($module,'validate_content_attribs') ) continue;
-			
-			$ret = $module->validate_content_attribs($content_obj);
+		$tmp = array();
+		for( $i = 0; $i < count($attrs); $i++ )
+		{
+			$helper = $attrs[$i]->get_helper();
+			$ret = $helper->validateattributes($content_obj);
 			if( $ret ) $tmp = array_merge($tmp,$ret);
 		}
 		
@@ -193,13 +208,15 @@ class CmsContentEditorBase
 	public function get_tab_names()
 	{
 		$this->_merge_module_attributes();
+		$this->_get_module_tabs();
 		$this->_merge_basic_attributes();
 
 		// get tab names from the contentobj profile.
 		$tmp = $this->_profile->get_tab_list();
 		$results = array();
-		foreach( $tmp as $tabname => $permission )
+		foreach( $tmp as $tabname => $data )
 		{
+			$permission = $data['permission'];
 			if( empty($permission) || check_permission(get_userid(),$permission) )
 			{
 				// now go through all the elements in each tab
@@ -229,7 +246,7 @@ class CmsContentEditorBase
 					}
 					if( $okay )
 					{
-						$results[$tabname] = lang($tabname);
+						$results[$tabname] = $data['prompt'];
 						break;
 					}
 				}

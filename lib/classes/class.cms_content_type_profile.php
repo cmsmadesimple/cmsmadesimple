@@ -23,9 +23,10 @@ class CmsContentTypeProfile extends CmsObject
   private $_tabs = array();
   private $_attrs = array();
 
-  public function add_tab($tabname,$permission='')
+  public function add_tab($tabname,$permission='',$prompt='')
   {
-	  $this->_tabs[$tabname] = $permission;
+	  if( empty($prompt) ) $prompt = lang($tabname);
+	  $this->_tabs[$tabname] = array('permission'=>$permission,'prompt'=>$prompt);
   }
 
   public function add_attribute($attr,$after = '')
@@ -94,6 +95,22 @@ class CmsContentTypeProfile extends CmsObject
   }
 
 
+  public function find_all_with_helper()
+  {
+    $results = array();
+    for( $i = 0; $i < count($this->_attrs); $i++ )
+    {
+		if( $this->_attrs[$i]->get_helper() )
+		{
+			$results[] = $this->_attrs[$i];
+		}
+	}
+    if( !$results ) return FALSE;
+
+    return $results;
+  }
+
+
   public function find_all_by_tab($tabname)
   {
     $results = array();
@@ -124,6 +141,7 @@ class CmsContentTypeProfileAttribute
 	private $_name;
 	private $_tab;
 	private $_permission;
+	private $_helper;
 
 	public function __construct($name,$tab,$permission = '',$module = '')
 	{
@@ -156,6 +174,17 @@ class CmsContentTypeProfileAttribute
 	{
 		if( $tab )
 			$this->_tab = $tab;
+	}
+
+	public function &get_helper()
+	{
+		return $this->_helper;
+	}
+
+	public function set_helper($helper)
+	{
+		if( $helper )
+			$this->_helper = $helper;
 	}
 
 	public function get_permission()
