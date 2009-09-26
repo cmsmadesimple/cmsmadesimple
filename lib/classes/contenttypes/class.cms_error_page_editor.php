@@ -44,8 +44,8 @@ class CmsErrorPageEditor extends CmsContentEditor
 	$profile->remove_by_name('searchable');
 
 	// alias gets moved to the main tab.
-	$profile->remove_by_name('alias');
-	$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','main',6));
+	//$profile->remove_by_name('alias');
+	$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','main'));
   }
 
   public function validate()

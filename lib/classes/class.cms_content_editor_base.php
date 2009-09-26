@@ -33,29 +33,29 @@ class CmsContentEditorBase
 
 		// this defines the editing profile, tabs, and order of the fields in the tabs.
 		$profile = new CmsContentTypeProfile();
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('title','main',1));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('parent_id','main',3));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('title','main'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('parent_id','main'));
 
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('show_in_menu','navigation',1));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('menu_text','navigation',2));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('target','navigation',3));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('title_attribute','navigation',4));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('class_name','navigation',5));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('access_key','navigation',6));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('tab_index','navigation',7));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('show_in_menu','navigation'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('menu_text','navigation'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('target','navigation'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('title_attribute','navigation'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('class_name','navigation'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('access_key','navigation'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('tab_index','navigation'));
 
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('active','options',1));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('cachable','options',2));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('secure','options',3));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','options',4));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('image','options',5));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('thumbnail','options',6));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra1','options',7));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra2','options',7));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra3','options',7));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('active','options'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('cachable','options'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('secure','options'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('alias','options'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('image','options'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('thumbnail','options'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra1','options'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra2','options'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('extra3','options'));
 
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','permissions',15));
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','permissions',16));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('owner','permissions'));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('additionaleditors','permissions'));
 		$this->_profile = $profile;
 	}
 
@@ -83,6 +83,7 @@ class CmsContentEditorBase
 				// now go through all the elements in each tab
 				// and see if we have permission for at least one of them.
 				$attrs = $this->_profile->find_all_by_tab($tabname);
+				if( !$attrs ) continue;
 				for( $i = 0; $i < count($attrs); $i++ )
 				{
 					$attr =& $attrs[$i];
@@ -394,6 +395,17 @@ class CmsContentEditorBase
 		audit($content_obj->id(),$content_obj->name(),'Edited Content');
 	}
 
+	public static function perm_is_owner($uid)
+	{
+		$content_obj = $this->get_content();
+		return $uid == $content_obj->owner_id;
+	}
+
+	public static function perm_can_edit($uid)
+	{
+		$content_obj = $this->get_content();
+		return $content_obj->check_edit_permission($uid);
+	}
 } // end of class
 
 #

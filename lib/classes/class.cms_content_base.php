@@ -602,6 +602,15 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	{
 		return $this;
 	}	
+
+
+	public function check_edit_permission($uid)
+	{
+		if( $uid == $this->owner_id ) return true;
+		$addteditors = $this->get_additional_users();
+		if( in_array($uid,$addteditors) ) return true;
+		return false;
+	}
 }
 
 

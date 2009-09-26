@@ -25,7 +25,7 @@ class CmsLinkEditor extends CmsContentEditorBase
 		parent::__construct($content_obj);
 		
 		$profile = $this->get_profile();
-		$profile->add_attribute(new CmsContentTypeProfileAttribute('url','main',4));
+		$profile->add_attribute(new CmsContentTypeProfileAttribute('url','main'));
 		$profile->remove_by_name('cachable');
 		$profile->remove_by_name('secure');
 	}

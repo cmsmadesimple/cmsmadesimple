@@ -31,7 +31,7 @@ class CmsContentTypeProfile extends CmsObject
     }
   }
 
-  public function add_attribute($attr)
+  public function add_attribute($attr,$after = '')
   {
     if( !is_a($attr,'CmsContentTypeProfileAttribute') )
       return;
@@ -46,7 +46,27 @@ class CmsContentTypeProfile extends CmsObject
 		$obj = $attr;
 		return;
 	}
-    $this->_attrs[] = $attr;
+	if( !$after )
+	{
+		$this->_attrs[] = $attr;
+		return;
+	}
+
+	// we're given a positioning.
+	// find the index of the attribute with the specified name.
+	//echo 'before<br/><pre>'; print_r( $this->_attrs ); echo '</pre>';
+	$newattrs = array();
+	for( $i = 0; $i < count($this->_attrs); $i++ )
+	{
+		$t_attr =& $this->_attrs[$i];
+		$newattrs[] =& $t_attr;
+		if( $t_attr->get_name() == $after )
+		{
+			$newattrs[] =& $attr;
+		}
+	}
+	$this->_attrs = $newattrs;
+	//echo 'after<br/><pre>'; print_r( $this->_attrs ); echo '</pre>';
   }
 
 
@@ -89,9 +109,6 @@ class CmsContentTypeProfile extends CmsObject
 	}
     if( !$results ) return FALSE;
 
-    // sort this array
-    usort($results, array('CmsContentTypeProfileAttribute','compare'));
-
     return $results;
   }
 
@@ -108,14 +125,12 @@ class CmsContentTypeProfileAttribute
 {
   private $_name;
   private $_tab;
-  private $_priority;
   private $_permission;
 
-  public function __construct($name,$tab,$priority = 1,$permission = '')
+  public function __construct($name,$tab,$permission = '')
   {
     $this->_name = $name;
     $this->_tab  = $tab;
-    $this->_priority = (int)$priority;
     $this->_permission = $permission;
   }
 
@@ -129,11 +144,6 @@ class CmsContentTypeProfileAttribute
     return $this->_tab;
   }
 
-  public function get_priority()
-  {
-    return $this->_priority;
-  }
-
   public function get_permission()
   {
     return $this->_permission;
@@ -141,8 +151,6 @@ class CmsContentTypeProfileAttribute
 
   public static function compare($a,$b)
   {
-    if( $a->_priority < $b->_priority ) return -1;
-    if( $a->_priority > $b->_priority ) return 1;
     if( $a->_name < $b->_name ) return -1;
     if( $a->_name > $b->_name ) return 1;
     return 0;
