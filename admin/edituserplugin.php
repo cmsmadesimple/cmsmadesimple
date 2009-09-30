@@ -50,7 +50,7 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User-defined Tags');
 
-$smarty = new CmsSmarty$gCms->config);
+$smarty = new CmsSmarty($gCms->config);
 load_plugins($smarty);
 
 $ajax = false;

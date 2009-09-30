@@ -35,10 +35,12 @@ if (isset($_GET['action'])) $action = $_GET['action'];
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User-defined Tags');
 if (!$access) {
-	die('Permission Denied');
-return;
+  die('Permission Denied');
+  return;
 }
-$smarty = new CmsSmarty$gCms->config);
+
+$smarty = new CmsSmarty($gCms->config);
+load_plugins($smarty);
 
 include_once("header.php");
 
