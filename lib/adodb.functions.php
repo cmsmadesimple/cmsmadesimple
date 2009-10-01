@@ -65,7 +65,9 @@ function & adodb_connect()
 	
 	if (FALSE == $connect_result)
 	{
-		die();
+	  $str = "Attempt to connect to database {$config['db_name']} on {$config['db_username']}@{$config['db_hostname']} failed";
+	  trigger_error($str,E_USER_ERROR);
+	  die($str);
 	}
 
 	$dbinstance->raiseErrorFn = null;
