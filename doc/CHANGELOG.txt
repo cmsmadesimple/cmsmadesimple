@@ -1,4 +1,4 @@
-Version 1.6.6 - NEW_NAME
+Version 1.6.6 - Bonde
 -----------------------------
  - #3777 Documentation Error: redirect_url plugin
  - #3923 Adminlog download, tab separator single quoted
