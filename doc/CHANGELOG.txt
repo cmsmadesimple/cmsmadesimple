@@ -12,6 +12,16 @@ Version 1.6.6 - NEW_NAME
  - Fix error in permissions checking for copying content.
  - Fixes issues with the PDF output only working of the pdf flag was turned OFF
  - Submit is not taken on forms, when .htaccess is used and page_extension = ''.
+ *** FIXES RELATED TO session.use_cookies == off ****
+ NOTE: This is not a recommended setting, and future versions of CMSMS will not in any way
+       support this setting.  Please contact your hosts to ensure that this setting is enabled
+       properly.
+   - This issue has probably been the cause of many tinyMCE issues in the past.
+   - The install and upgrade routines will fail if this setting is off
+   - The install and upgrade routines now explicitly check for this setting.
+   - TinyMCE 2.2.5 now supports session.use_cookies == off (for now)
+   - ImageManager no longer displays the login screen with session.use_cookies == off
+       
 
  
 Version 1.6.5 - Poya
