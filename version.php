@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.6.5";
-$CMS_VERSION_NAME = "Poya";
+$CMS_VERSION = "1.6.6";
+$CMS_VERSION_NAME = "Bonde";
 $CMS_SCHEMA_VERSION = "32";
 
 define('CMS_VERSION', $CMS_VERSION);
