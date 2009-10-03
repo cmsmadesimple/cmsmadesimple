@@ -7,6 +7,7 @@
  */
 //LOCAL: lib/filemanager/ImageManager/images.php
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/include.php');
+
 check_login();
 $userid = get_userid();
 if (!check_permission($userid, 'Modify Files')) die();

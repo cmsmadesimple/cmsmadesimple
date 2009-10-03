@@ -2058,5 +2058,15 @@ function is_email( $email, $checkDNS=false ) {
 	return true;
 }
 
+function get_secure_param()
+{
+  $urlext = '?';
+  $str = strtolower(ini_get('session.use_cookies'));
+  if( $str == '0' || $str == 'off' ) {
+    $urlext .= htmlspecialchars(SID).'&';
+  }
+  $urlext .= CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+  return $urlext;
+}
 # vim:ts=4 sw=4 noet
 ?>

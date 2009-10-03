@@ -197,6 +197,7 @@ else
 {
 	$tmp[0]['session_save_path'] = testDirWrite(0, lang('session_save_path'), $session_save_path, $session_save_path, 1);
 }
+$tmp[0]['session.use_cookies'] = testBoolean(0, 'session.use_cookies', 'session.use_cookies');
 
 $tmp[1]['xml_function'] = testBoolean(0, 'xml_function', extension_loaded_or('xml'), '', false, false, 'Function_xml_disabled');
 
