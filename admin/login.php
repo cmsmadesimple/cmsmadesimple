@@ -35,7 +35,7 @@ if ((isset($_REQUEST['forgotpwform']) || isset($_REQUEST['forgotpwchangeform']))
 {
 	redirect('login.php');
 }
-else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['loginsubmit']))
+else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername']))
 {
 	global $gCms;
 	$userops =& $gCms->GetUserOperations();
