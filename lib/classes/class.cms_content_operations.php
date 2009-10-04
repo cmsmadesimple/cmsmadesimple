@@ -281,13 +281,18 @@ class CmsContentOperations extends CmsObject
     /**
      * Updates the hierarchy position of all items
      */
-	public static function set_all_hierarchy_positions($lft = -1)
+	public static function set_all_hierarchy_positions($lft = -1, $rgt = -1)
 	{
 		global $gCms;
 		$db = $gCms->GetDb();
 
 		if ($lft > -1)
-			$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE lft >= " . $db->qstr($lft);
+		{
+			if ($rgt > -1)
+				$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE lft >= " . $db->qstr($lft) . ' AND rgt <= ' . $db->qstr($rgt);
+			else
+				$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE lft >= " . $db->qstr($lft);
+		}
 		else
 			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
 
@@ -301,12 +306,12 @@ class CmsContentOperations extends CmsObject
 		
 		if ($dbresult) $dbresult->Close();
 		
-		CmsContentOperations::reset_nested_set();
+		//CmsContentOperations::reset_nested_set();
 	}
 	
-	public static function SetAllHierarchyPositions($lft = -1)
+	public static function SetAllHierarchyPositions($lft = -1, $rgt = -1)
 	{
-		return self::set_all_hierarchy_positions($lft);
+		return self::set_all_hierarchy_positions($lft, $rgt);
 	}
 	
 	/**

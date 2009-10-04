@@ -226,6 +226,107 @@ class CmsActsAsNestedSet extends CmsActsAs
 			$obj->item_order = $other_content->item_order;
 		}
 	}
+	
+	function move_before(&$obj, $target_obj = null)
+	{
+		return $this->move_before_or_after($obj, $target_obj, "before");
+	}
+	
+	function move_after(&$obj, $target_obj = null)
+	{
+		return $this->move_before_or_after($obj, $target_obj, "after");
+	}
+	
+	function move_before_or_after(&$obj, $target_obj = null, $dir = "after")
+	{
+		if (!$target_obj)
+			return false;
+		
+		if ($dir != 'after' && $dir != 'before')
+			return false;
+		
+		$db = cms_db();
+		$table_name = $obj->get_table();
+		
+		//Moving 7-8 before 4-5
+		
+		$diff = $obj->rgt - $obj->lft;  //1
+		$time = $db->DBTimeStamp(time());
+		
+		//Flip obj and children into the negative space
+		$query = "UPDATE {$table_name} SET lft = (lft * -1), rgt = (rgt * -1), modified_date = {$time} WHERE lft >= ? AND rgt <= ?";
+		$db->Execute($query, array($obj->lft, $obj->rgt));
+		
+		//Close up the space
+		$query = "UPDATE {$table_name} SET lft = (lft - ?), modified_date = {$time} WHERE lft >= ?";
+		$db->Execute($query, array($diff + 1, $obj->lft));
+		$query = "UPDATE {$table_name} SET rgt = (rgt - ?), modified_date = {$time} WHERE rgt >= ?";
+		$db->Execute($query, array($diff + 1, $obj->rgt));
+		
+		if ($target_obj->lft > $obj->lft) //Doesn't get called in our example, but...
+		{
+			$target_obj->lft = $target_obj->lft - ($diff + 1); //4 becomes 2
+			$target_obj->rgt = $target_obj->rgt - ($diff + 1); //5 becomes 3
+		}
+		
+		if ($obj->parent_id == $target_obj->parent_id && $target_obj->item_order > $obj->item_order) //Shouldn't get called
+		{
+			$target_obj->item_order = $target_obj->item_order - 1;
+		}
+		
+		//Fix item order
+		$query = "UPDATE {$table_name} SET item_order = item_order - 1 WHERE parent_id = ? AND item_order >= ?";
+		$db->Execute($query, array($obj->parent_id, $obj->item_order));
+
+		//Init the variables -- assume after
+		$new_lft = $target_obj->rgt + 1; //3 + 1 = 4
+		$new_rgt = $new_lft + $diff; //4 + 1 = 5
+		$dist_to_move = $new_lft - $obj->lft; //4 - 2 = 2
+
+		if ($dir == "before")
+		{
+			$new_lft = $target_obj->lft; //4
+			$new_rgt = $target_obj->lft + $diff; //4 + 1 = 5
+			$dist_to_move = $new_lft - $obj->lft; //4 - 6 = -2
+		}
+		
+		//Open up the new space
+		$query = "UPDATE {$table_name} SET lft = (lft + ?), modified_date = {$time} WHERE lft >= ?";
+		$db->Execute($query, array($diff + 1, $new_lft));
+		$query = "UPDATE {$table_name} SET rgt = (rgt + ?), modified_date = {$time} WHERE rgt >= ?";
+		$db->Execute($query, array($diff + 1, $new_lft));
+		
+		//Shift to the new position in the negative space
+		$query = "UPDATE {$table_name} SET lft = (lft - ?), rgt = (rgt - ?), modified_date = {$time} WHERE lft < 0 AND rgt < 0";
+		$db->Execute($query, array($dist_to_move, $dist_to_move));
+		
+		//Flip back over to the positive side...  hopefully in the correct place now
+		$query = "UPDATE {$table_name} SET lft = (lft * -1), rgt = (rgt * -1), modified_date = {$time} WHERE lft < 0 AND rgt < 0";
+		$db->Execute($query);
+		
+		$obj->parent_id = $target_obj->parent_id;
+		if ($dir == "before")
+			$obj->item_order = $target_obj->item_order;
+		else
+			$obj->item_order = $target_obj->item_order + 1;
+		
+		//Fix item order
+		$query = "UPDATE {$table_name} SET item_order = item_order + 1 WHERE parent_id = ? AND item_order >= ?";
+		$db->Execute($query, array($obj->parent_id, $obj->item_order));
+		
+		//And set values in obj in the database -- skip the save, since it could cause trouble
+		$query = "UPDATE {$table_name} SET item_order = ?, parent_id = ?, modified_date = {$time} WHERE {$obj->id_field} = ?";
+		$db->Execute($query, array($obj->item_order, $obj->parent_id, $obj->id));
+		
+		$test_obj = cms_orm('CmsContentBase')->find_by_id($obj->id);
+		
+		$result = ($test_obj->lft == $new_lft && $test_obj->rgt == $new_rgt && $test_obj->parent_id = $obj->parent_id);
+		
+		if ($result)
+			CmsContentOperations::set_all_hierarchy_positions($new_lft < $target_obj->lft ? $new_lft : $target_obj->lft);
+		
+		return $result;
+	}
 }
 
 # vim:ts=4 sw=4 noet

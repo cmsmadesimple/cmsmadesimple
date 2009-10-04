@@ -71,7 +71,7 @@ class CmsAjax extends CmsObject
 
 		foreach ($this->registered_functions as $function)
 		{
-			$result .= 'function cms_ajax_' . $function . '(){ return cms_ajax_call("' . $function . '", arguments, 1); }' . "\n";
+			$result .= 'function cms_ajax_' . $function . '(){ return cms_ajax_call("' . $function . '", arguments, {}); }' . "\n";
 		}
 		
 		return "<script type=\"text/javascript\">\n<!--\n" . $result . "-->\n</script>\n<script type=\"text/javascript\" src=\"" . CmsRequest::get_calculated_url_base(true) . "/lib/jquery/jquery.cmsms.js\"></script>\n";

@@ -12,15 +12,44 @@ $(function () {
 	    {
 	        rules:
 	        {
-                draggable : "all"
+                draggable : "all",
+                multiple : false
 	        },
 	        ui:
 	        {
-    	        theme_path: "../lib/jquery/tree/themes/"
+    	        theme_path: "../lib/jquery/tree/themes/",
+    	        theme_name: "default",
+    	        animation: 200
 	        },
 	        callback:
 	        {
-	            onselect: function(node, tree_obj) { cms_ajax_content_select(node.id); }
+                onselect: function(node, tree_obj)
+                {
+                    cms_ajax_content_select(node.id);
+
+                },
+                onmove: function(node, ref_node, type, tree_obj, rollback) 
+                {
+                    tree_obj.lock(true);
+                    cms_ajax_call("content_move_new", [node.id, ref_node.id, type],
+                    {
+                        success: function (data, textStatus)
+                        {
+                            successful = false;
+                            cms_ajax_callback(data);
+                            if (!successful)
+                            {
+                                $.tree_rollback(rollback);
+                            }
+                            this;
+                        },
+                        complete: function(XMLHttpRequest, textStatus)
+                        {
+                            tree_obj.lock(false);
+                            this;
+                        }
+                    }); 
+                }
 	        },
 	        cookies:
 	        {

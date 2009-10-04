@@ -771,9 +771,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$this->before_validation_caller();
 
 		if ($this->check_not_valid())
-			{
-				return false;
-			}
+		{
+			return false;
+		}
 
 		$this->before_save_caller();
 
@@ -884,7 +884,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 					$query .= $midpart . " WHERE {$table}.{$id_field} = ?";
 					$queryparams[] = $id;
 				}
-			
+
 				try
 				{
 					$result = $db->Execute($query, $queryparams) ? true : false;
@@ -893,7 +893,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				{
 					$result = false;
 				}
-				
+
 				if ($result)
 				{
 					$this->dirty = false;

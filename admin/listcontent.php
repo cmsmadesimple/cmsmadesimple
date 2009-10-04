@@ -34,6 +34,7 @@ $cms_ajax->register_function('content_expandall');
 $cms_ajax->register_function('content_collapseall');
 $cms_ajax->register_function('content_toggleexpand');
 $cms_ajax->register_function('content_move');
+$cms_ajax->register_function('content_move_new');
 $cms_ajax->register_function('content_delete');
 $cms_ajax->register_function('context_menu');
 $cms_ajax->register_function('content_select');
@@ -413,6 +414,47 @@ function content_move($contentid, $parentid, $direction)
 	$resp->replace_html('#contentlist', display_content_list());
 	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
 	//$resp->script('set_context_menu();');
+
+	return $resp->get_result();
+}
+
+function content_move_new($id, $ref_id, $type)
+{	
+	$resp = new CmsAjaxResponse();
+	
+	$result = false;
+	
+	//$resp->script('alert("'.$id.', '.$ref_id.', '.$type.'");');
+	if ($type == 'inside')
+	{
+		$child_id = str_replace('phtml_', '', $id);
+		$parent_id = str_replace('phtml_', '', $ref_id);
+		
+		$obj = cms_orm('CmsContentBase')->find_by_id($child_id);
+		if ($obj)
+		{
+			$obj->parent_id = $parent_id;
+			$result = $obj->save();
+		}
+	}
+	else if ($type == 'after' || $type == 'before')
+	{
+		$child_id = str_replace('phtml_', '', $id);
+		$target_id = str_replace('phtml_', '', $ref_id);
+		
+		$obj = cms_orm('CmsContentBase')->find_by_id($child_id);
+		$target_obj = cms_orm('CmsContentBase')->find_by_id($target_id);
+		if ($obj && $target_obj)
+		{
+			$result = $obj->move_before_or_after($target_obj, $type);
+		}
+	}
+	
+	if ($result)
+		$resp->script('successful = true;');
+	else
+		$resp->script('successful = false;');
+
 
 	return $resp->get_result();
 }
