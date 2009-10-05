@@ -8,7 +8,7 @@ $ADODB_INCLUDED_CSV = 1;
 
 /* 
 
-  v4.991 16 Oct 2008  (c) 2000-2008 John Lim (jlim#natsoft.com). All rights reserved.
+  V5.09 25 June 2009   (c) 2000-2009 John Lim (jlim#natsoft.com). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. See License.txt. 
@@ -54,7 +54,7 @@ $ADODB_INCLUDED_CSV = 1;
 		$line = "====1,$tt,$sql\n";
 		
 		if ($rs->databaseType == 'array') {
-			$rows =& $rs->_array;
+			$rows = $rs->_array;
 		} else {
 			$rows = array();
 			while (!$rs->EOF) {	
@@ -64,7 +64,7 @@ $ADODB_INCLUDED_CSV = 1;
 		}
 		
 		for($i=0; $i < $max; $i++) {
-			$o =& $rs->FetchField($i);
+			$o = $rs->FetchField($i);
 			$flds[] = $o;
 		}
 	
@@ -90,7 +90,7 @@ $ADODB_INCLUDED_CSV = 1;
 *			error occurred in sql INSERT/UPDATE/DELETE, 
 *			empty recordset is returned
 */
-	function &csv2rs($url,&$err,$timeout=0, $rsclass='ADORecordSet_array')
+	function csv2rs($url,&$err,$timeout=0, $rsclass='ADORecordSet_array')
 	{
 		$false = false;
 		$err = false;
@@ -264,7 +264,7 @@ $ADODB_INCLUDED_CSV = 1;
 	* Returns true if ok, false if fopen/fwrite error, 0 if rename error (eg. file is locked)
 	*/
 	function adodb_write_file($filename, $contents,$debug=false)
-	{
+	{ 
 	# http://www.php.net/bugs.php?id=9203 Bug that flock fails on Windows
 	# So to simulate locking, we assume that rename is an atomic operation.
 	# First we delete $filename, then we create a $tempfile write to it and 
@@ -285,7 +285,7 @@ $ADODB_INCLUDED_CSV = 1;
 			if (fwrite($fd,$contents)) $ok = true;
 			else $ok = false;
 			fclose($fd);
-
+			
 			if ($ok) {
 				@chmod($tmpname,0644);
 				// the tricky moment

@@ -1,6 +1,6 @@
 <?php
 /*
- v4.991 16 Oct 2008  (c) 2000-2008 John Lim (jlim#natsoft.com). All rights reserved.
+ V5.09 25 June 2009   (c) 2000-2009 John Lim (jlim#natsoft.com). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -34,14 +34,14 @@ class ADODB_postgres7 extends ADODB_postgres64 {
 	
 	// the following should be compat with postgresql 7.2, 
 	// which makes obsolete the LIMIT limit,offset syntax
-	 function &SelectLimit($sql,$nrows=-1,$offset=-1,$inputarr=false,$secs2cache=0) 
+	 function SelectLimit($sql,$nrows=-1,$offset=-1,$inputarr=false,$secs2cache=0) 
 	 {
 		 $offsetStr = ($offset >= 0) ? " OFFSET ".((integer)$offset) : '';
 		 $limitStr  = ($nrows >= 0)  ? " LIMIT ".((integer)$nrows) : '';
 		 if ($secs2cache)
-		  	$rs =& $this->CacheExecute($secs2cache,$sql."$limitStr$offsetStr",$inputarr);
+		  	$rs = $this->CacheExecute($secs2cache,$sql."$limitStr$offsetStr",$inputarr);
 		 else
-		  	$rs =& $this->Execute($sql."$limitStr$offsetStr",$inputarr);
+		  	$rs = $this->Execute($sql."$limitStr$offsetStr",$inputarr);
 		
 		return $rs;
 	 }
@@ -95,17 +95,17 @@ class ADODB_postgres7 extends ADODB_postgres64 {
 	  $a = array();
 	  while (!$rs->EOF) {
 	    if ($upper) {
-	      $a[strtoupper($rs->Fields('lookup_table'))][] = strtoupper(ereg_replace('"','',$rs->Fields('dep_field').'='.$rs->Fields('lookup_field')));
+	      $a[strtoupper($rs->Fields('lookup_table'))][] = strtoupper(str_replace('"','',$rs->Fields('dep_field').'='.$rs->Fields('lookup_field')));
 	    } else {
-	      $a[$rs->Fields('lookup_table')][] = ereg_replace('"','',$rs->Fields('dep_field').'='.$rs->Fields('lookup_field'));
+	      $a[$rs->Fields('lookup_table')][] = str_replace('"','',$rs->Fields('dep_field').'='.$rs->Fields('lookup_field'));
 	    }
-	    adodb_movenext($rs);
+		$rs->MoveNext();
 	  }
 	
 	  return $a;
 	
 	}
-
+	
 	// from  Edward Jaramilla, improved version - works on pg 7.4
 	function _old_MetaForeignKeys($table, $owner=false, $upper=false)
 	{
@@ -121,11 +121,11 @@ class ADODB_postgres7 extends ADODB_postgres64 {
 		ORDER BY
 			t.tgrelid';
 		
-		$rs =& $this->Execute($sql);
+		$rs = $this->Execute($sql);
 		
 		if (!$rs || $rs->EOF) return false;
 		
-		$arr =& $rs->GetArray();
+		$arr = $rs->GetArray();
 		$a = array();
 		foreach($arr as $v) {
 			$data = explode(chr(0), $v['args']);
@@ -140,7 +140,7 @@ class ADODB_postgres7 extends ADODB_postgres64 {
 		return $a;
 	}
 
-	function _query($sql,$inputarr)
+	function _query($sql,$inputarr=false)
 	{
 		if (! $this->_bindInputArray) {
 			// We don't have native support for parameterized queries, so let's emulate it at the parent

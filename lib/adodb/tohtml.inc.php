@@ -1,13 +1,13 @@
 <?php 
 /*
-  V4.93 10 Oct 2006  (c) 2000-2008 John Lim (jlim#natsoft.com). All rights reserved.
+  V4.93 10 Oct 2006  (c) 2000-2009 John Lim (jlim#natsoft.com). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
   
-  Some pretty-printing by Chris Oxenreider <oxenreid#state.net>
+  Some pretty-printing by Chris Oxenreider <oxenreid@state.net>
 */ 
-  
+
 // specific code for tohtml
 GLOBAL $gSQLMaxRows,$gSQLBlockRows,$ADODB_ROUND;
 
@@ -36,6 +36,7 @@ $gSQLBlockRows=20; // max no of rows per table block
 //	$rs->Close();
 //
 // RETURNS: number of rows displayed
+
 
 function rs2html(&$rs,$ztabhtml=false,$zheaderarray=false,$htmlspecialchars=true,$echo = true)
 {
@@ -94,7 +95,7 @@ GLOBAL $gSQLMaxRows,$gSQLBlockRows,$ADODB_ROUND;
 				}
 			case 'T':
 				if (empty($v)) $s .= "<TD> &nbsp; </TD>\n";
-				else $s .= "	<TD>".$rs->UserTimeStamp($v,"D d, M Y, h:i:s") ."&nbsp;</TD>\n";
+				else $s .= "	<TD>".$rs->UserTimeStamp($v,"D d, M Y, H:i:s") ."</TD>\n";
 			break;
 			
 			case 'N':
@@ -103,7 +104,9 @@ GLOBAL $gSQLMaxRows,$gSQLBlockRows,$ADODB_ROUND;
 				else
 					$v = round($v,$ADODB_ROUND);
 			case 'I':
-				$s .= "	<TD align=right>".stripslashes((trim($v))) ."&nbsp;</TD>\n";
+				$vv = stripslashes((trim($v)));
+				if (strlen($vv) == 0) $vv .= '&nbsp;';
+				$s .= "	<TD align=right>".$vv ."</TD>\n";
 			   	
 			break;
 			/*
@@ -179,7 +182,7 @@ function arr2html(&$arr,$ztabhtml='',$zheaderarray='')
 	
 	for ($i=0; $i<sizeof($arr); $i++) {
 		$s .= '<TR>';
-		$a = &$arr[$i];
+		$a = $arr[$i];
 		if (is_array($a)) 
 			for ($j=0; $j<sizeof($a); $j++) {
 				$val = $a[$j];
