@@ -1,5 +1,9 @@
 Version 1.6.6 - Bonde
 -----------------------------
+ - #4137 small text typo in admin/login.php
+
+Version 1.6.6 - Bonde
+-----------------------------
  - #3777 Documentation Error: redirect_url plugin
  - #3923 Adminlog download, tab separator single quoted
  - #3926 Little typo in stylesheet.
