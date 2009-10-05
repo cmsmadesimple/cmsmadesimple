@@ -248,6 +248,8 @@ class CmsActsAsNestedSet extends CmsActsAs
 		$db = cms_db();
 		$table_name = $obj->get_table();
 		
+		$obj->begin_transaction();
+		
 		//Moving 7-8 before 4-5
 		
 		$diff = $obj->rgt - $obj->lft;  //1
@@ -323,7 +325,16 @@ class CmsActsAsNestedSet extends CmsActsAs
 		$result = ($test_obj->lft == $new_lft && $test_obj->rgt == $new_rgt && $test_obj->parent_id = $obj->parent_id);
 		
 		if ($result)
-			CmsContentOperations::set_all_hierarchy_positions($new_lft < $target_obj->lft ? $new_lft : $target_obj->lft);
+		{
+			if ($obj->complete_transaction())
+				CmsContentOperations::set_all_hierarchy_positions($new_lft < $target_obj->lft ? $new_lft : $target_obj->lft);
+			else
+				$result = false;
+		}
+		else
+		{
+			$obj->fail_transaction();
+		}
 		
 		return $result;
 	}
