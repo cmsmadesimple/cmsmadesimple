@@ -1,4 +1,7 @@
 <?php
+$lang['admin']['content_image_path'] = 'Content Image Path';
+$lang['admin']['info_content_image_path'] = 'Specify the path <em>(relative to the image uploads path in your config)</em> that contains the images and thumbnails that should be used to select images and thumbnails associated with content pages.';
+$lang['admin']['content_settings'] = 'Content Settings';
 $lang['admin']['navigation'] = 'Navigation';
 $lang['admin']['css_class_name'] = 'CSS Class Name for Navigation';
 $lang['admin']['secure_page'] = 'Use Secure (HTTPS) transport';

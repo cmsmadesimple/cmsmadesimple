@@ -389,8 +389,9 @@ class CmsContentEditorBase
 		case 'image':
 			{
 				$prompt = lang('image');
-				$dir = $config['image_uploads_path'];
-				$data = $content_obj->get_property_value('image');
+				$tmp = trim(get_site_preference('content_image_path',''),'/');
+				$dir = cms_join_path($config['image_uploads_path'],$tmp);
+				$data = basename($content_obj->get_property_value('image'));
 				$field = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1);
 			}
 			break;
@@ -398,8 +399,9 @@ class CmsContentEditorBase
 		case 'thumbnail':
 			{
 				$prompt = lang('thumbnail');
-				$dir = $config['image_uploads_path'];
-				$data = $content_obj->get_property_value('thumbnail');
+				$tmp = trim(get_site_preference('content_image_path',''),'/');
+				$dir = cms_join_path($config['image_uploads_path'],$tmp);
+				$data = basename($content_obj->get_property_value('thumbnail'));
 				$field = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
 			}
 			break;
@@ -515,8 +517,20 @@ class CmsContentEditorBase
 				$content_obj->$str($params[$oneprop]);
 		}
 
+		// attributes to be handled specially
+		$props = array('image','thumbnail');
+		$tdir = trim(get_site_preference('content_image_path',''),'/');
+		foreach( $props as $oneprop )
+		{
+			if( isset($params[$oneprop]) )
+			{
+				$tmp = cms_join_path($tdir,$params[$oneprop]);
+				$content_obj->set_property_value($oneprop,$tmp);
+			}
+		}
+
 		// pre-defined attributes
-		$props = array('secure','target','image','thumbnail','extra1','extra2','extra3','class_name');
+		$props = array('secure','target','extra1','extra2','extra3','class_name');
 		foreach( $props as $oneprop )
 		{
 			if( isset($params[$oneprop]) )

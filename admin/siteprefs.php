@@ -84,6 +84,7 @@ $global_umask = '022';
 $logintheme = "default";
 $thumbnail_width = '96';
 $thumbnail_height = '96';
+$content_image_path = '';
 
 
 
@@ -117,6 +118,7 @@ $sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
 $basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
 $thumbnail_width = get_site_preference('thumbnail_width',$thumbnail_width);
 $thumbnail_height = get_site_preference('thumbnail_height',$thumbnail_height);
+$content_image_path = get_site_preference('content_image_path',$content_image_path);
 
 $active_tab='unknown';
 if( isset($_POST['active_tab']) )
@@ -203,6 +205,23 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('nogcbwysiwyg', $nogcbwysiwyg);
 	  break;
 
+        case 'content':
+          if( isset($_POST['content_image_path']) )
+	    {
+	      $content_image_path = trim($_POST['content_image_path']);
+	      set_site_preference('content_image_path',$content_image_path);
+	    }
+	  if( isset($_POST['basic_attributes']) )
+	    {
+	      $basic_attributes = implode(',',($_POST['basic_attributes']));
+	    }
+	  else
+	    {
+	      $basic_attributes = '';
+	    }
+	  set_site_preference('basic_attributes',$basic_attributes);
+	  break;
+
 	case 'image':
 	  if (isset($_POST['thumbnail_width'])) $thumbnail_width = $_POST['thumbnail_width'];
 	  if (isset($_POST['thumbnail_height'])) $thumbnail_height = $_POST['thumbnail_height'];
@@ -236,14 +255,6 @@ else if (isset($_POST["editsiteprefs"]))
 	  if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = $_POST['disablesafemodewarning'];
 	  if (isset($_POST["allowparamcheckwarnings"])) $allowparamcheckwarnings = $_POST['allowparamcheckwarnings'];
 	  if (isset($_POST["enablenotifications"])) $enablenotifications = $_POST['enablenotifications'];
-	  if( isset($_POST['basic_attributes']) )
-	    {
-	      $basic_attributes = implode(',',($_POST['basic_attributes']));
-	    }
-	  else
-	    {
-	      $basic_attributes = '';
-	    }
 	  if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
 	  if (isset($_POST["urlcheckversion"])) $urlcheckversion = $_POST["urlcheckversion"];
 	  if (isset($_POST['css_max_age'])) $css_max_age = (int)$_POST['css_max_age'];
@@ -263,7 +274,6 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('disablesafemodewarning',$disablesafemodewarning);
 	  set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
 	  set_site_preference('enablenotifications',$enablenotifications);
-	  set_site_preference('basic_attributes',$basic_attributes);
 	  break;
 	}
 
@@ -355,6 +365,7 @@ if ($dir=opendir(dirname(__FILE__)."/themes/"))
 
 
 $smarty->assign('active_general',($active_tab == 'general')?1:0);
+$smarty->assign('active_content',($active_tab == 'content')?1:0);
 $smarty->assign('active_image',($active_tab == 'image')?1:0);
 $smarty->assign('active_sitedown',($active_tab == 'sitedown')?1:0);
 $smarty->assign('active_handle_404',($active_tab == 'handle_404')?1:0);
@@ -385,8 +396,10 @@ $smarty->assign('sitedownexcludes',$sitedownexcludes);
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));
 $smarty->assign('thumbnail_width',$thumbnail_width);
 $smarty->assign('thumbnail_height',$thumbnail_height);
+$smarty->assign('content_image_path',$content_image_path);
 
 $smarty->assign('lang_general',lang('general_settings'));
+$smarty->assign('lang_content',lang('content_settings'));
 $smarty->assign('lang_image',lang('image_settings'));
 $smarty->assign('lang_sitedown',lang('sitedown_settings'));
 $smarty->assign('lang_handle404',lang('handle_404'));

@@ -1,5 +1,6 @@
 {$mod->StartTabHeaders()}
 {$mod->SetTabHeader('general',$lang_general,$active_general)}
+{$mod->SetTabHeader('content',$lang_content,$active_content)}
 {$mod->SetTabHeader('image',$lang_image,$active_image)}
 {$mod->SetTabHeader('sitedown',$lang_sitedown,$active_sitedown)}
 {$mod->SetTabHeader('handle_404',$lang_handle404,$active_handle_404)}
@@ -62,6 +63,43 @@
   <p class="pageinput">
     <input class="pagenb" type="text" name="defaultdateformat" size="20" maxlength="255" value="{$defaultdateformat}"/>
     <br/>{$lang_date_format_string_help}
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">&nbsp;</p>
+  <p class="pageinput">
+    <input type="submit" name="submit" accesskey="s" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+    <input type="submit" name="cancel" accesskey="c" value="{$lang_cancel}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+  </p>
+</div>
+</form>
+{$mod->EndTab()}
+
+{* content tab *}
+{$mod->StartTab('content')}
+<form id="siteprefform_content" method="post" action="siteprefs.php">
+<div>
+  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+  <input type="hidden" name="active_tab" value="content" />
+  <input type="hidden" name="editsiteprefs" value="true" />
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">{'content_image_path'|lang}</p>
+  <p class="pageinput">
+    <input type="text" name="content_image_path" value="{$content_image_path}" size="50" maxlength="255"/>
+    <br/>
+    {'info_content_image_path'|lang}
+  </p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">{$lang_basic_attributes}:</p>
+  <p class="pageinput">
+    <select name="basic_attributes[]" multiple="multiple" size="5">
+      {html_options options=$all_attributes selected=$basic_attributes}
+    </select>
+    <br/>
+    {$lang_info_basic_attributes}
   </p>
 </div>
 
@@ -240,17 +278,6 @@
 <div class="pageoverflow">
   <p class="pagetext">{$lang_admin_enablenotifications}:</p>
   <p class="pageinput"><input type="hidden" name="enablenotifications" value="0"/><input class="pagenb" type="checkbox" value="1" name="enablenotifications" {if $enablenotifications}checked="checked"{/if} /></p>
-</div>
-
-<div class="pageoverflow">
-  <p class="pagetext">{$lang_basic_attributes}:</p>
-  <p class="pageinput">
-    <select name="basic_attributes[]" multiple="multiple" size="5">
-      {html_options options=$all_attributes selected=$basic_attributes}
-    </select>
-    <br/>
-    {$lang_info_basic_attributes}
-  </p>
 </div>
 
 <div class="pageoverflow">
