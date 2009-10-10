@@ -1,5 +1,6 @@
 Version 1.6.6 - Bonde
 -----------------------------
+ - #3999 Upload a file with apostrophe make problem
  - #4137 small text typo in admin/login.php
 
 Version 1.6.6 - Bonde
