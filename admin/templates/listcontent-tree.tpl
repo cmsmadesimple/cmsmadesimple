@@ -7,18 +7,39 @@
 </div>
 {literal}
 <script type="text/javascript">
+function update_bulk_actions(tree_obj, deselect)
+{
+    selected = tree_obj.selected_arr;
+    if ((selected.length > 0 && !deselect) || (selected.length > 1 && deselect))
+    {
+        $(".multiselect").each(
+            function ()
+            {
+                $(this).fadeIn("slow");
+            }
+        );
+    }
+    else
+    {
+        $(".multiselect").each(
+            function ()
+            {
+                $(this).fadeOut("slow");
+            }
+        );
+    }
+}
 $(function () {
 	$("#content_tree").tree(
 	    {
 	        rules:
 	        {
                 draggable : "all",
-                multiple : false
+                multiple : "alt",
+                drag_copy : false
 	        },
 	        ui:
 	        {
-    	        theme_path: "../lib/jquery/tree/themes/",
-    	        theme_name: "default",
     	        animation: 200
 	        },
 	        callback:
@@ -26,7 +47,11 @@ $(function () {
                 onselect: function(node, tree_obj)
                 {
                     cms_ajax_content_select(node.id);
-
+                    update_bulk_actions(tree_obj, false);
+                },
+                ondeselect: function(node, tree_obj)
+                {
+                    update_bulk_actions(tree_obj, true);
                 },
                 onmove: function(node, ref_node, type, tree_obj, rollback) 
                 {
@@ -51,16 +76,19 @@ $(function () {
                     }); 
                 }
 	        },
-	        cookies:
-	        {
-	            prefix: "pagetree",
-	            opts:
-	            {
-	                path : '/'
-	            }
-	        } 
+            plugins : {
+                cookie : { prefix : "pagetree" },
+                metadata : {},
+                hotkeys : {},
+                contextmenu : { items : { remove : { action: function(NODE, TREE_OBJ) { if(confirm("?")) TREE_OBJ.remove(NODE); } } } },
+                checkbox : { three_state : true },
+                themeroller : { }
+            }
 	    }
 	);
+});
+$(document).ready(function () {
+    update_bulk_actions($.tree.reference('#content_tree'), false);
 });
 </script>
 {/literal}

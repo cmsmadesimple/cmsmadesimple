@@ -115,6 +115,8 @@ $smarty->assign('header_name', $themeObject->ShowHeader('currentpages'));
 
 setup_smarty($themeObject);
 
+set_bulk_actions();
+
 $smarty->assign('content_list', $smarty->fetch('listcontent-tree.tpl'));
 
 $smarty->display('listcontent.tpl');
@@ -163,6 +165,10 @@ function setup_smarty($themeObject)
 	$smarty->assign('content', cmsms()->GetHierarchyManager()->getRootNode());
 
 	$smarty->assign('addcontent_url','editcontent.php');
+	
+	set_bulk_actions();
+	
+	$smarty->assign('bulk_content_ops', bulkcontentoperations::get_operation_list());
 }
 
 function set_permissions(&$smarty)
@@ -220,6 +226,31 @@ function content_setinactive($contentid)
 	$resp->script("$('#content_span_{$contentid}').highlight('#ff0', 1500);");
 	
 	return $resp->get_result();
+}
+
+function set_bulk_actions()
+{
+	$userid = get_userid();
+	//
+	// This is the start of the output
+	//
+	if( check_permission($userid, 'Remove Pages') || check_permission($userid, 'Manage All Content') )
+	{
+		bulkcontentoperations::register_function(lang('delete'),'delete');
+	}
+	if (check_permission($userid, 'Manage All Content'))
+	{
+		bulkcontentoperations::register_function(lang('active'),'active');
+		bulkcontentoperations::register_function(lang('inactive'),'inactive');
+		bulkcontentoperations::register_function(lang('cachable'),'setcachable');
+		bulkcontentoperations::register_function(lang('noncachable'),'setnoncachable');
+		bulkcontentoperations::register_function(lang('showinmenu'),'showinmenu');
+		bulkcontentoperations::register_function(lang('hidefrommenu'),'hidefrommenu');
+	}
+	if (check_permission($userid, 'Modify Any Page') || check_permission($userid, 'Manage All Content'))
+	{
+		bulkcontentoperations::register_function(lang('settemplate'),'settemplate');
+	}
 }
 
 function setdefault($contentid)
