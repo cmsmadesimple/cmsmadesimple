@@ -40,6 +40,11 @@ class Content extends CmsContentBase
 		return TRUE;
 	}
 
+	function is_viewable()
+	{
+		return TRUE;
+	}
+
     function friendly_name()
     {
       return lang('contenttype_content');
