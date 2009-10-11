@@ -104,6 +104,7 @@ $lang['admin']['help_function_content_image'] = <<<EOT
   <pre>{content_image block='image1' dir='images'}</pre><br/>
   </li>
 
+  <li><em>(optional)</em> exclude - ignore any files beginning with the specified prefix.</li>
   <li><em>(optional)</em> class - The css class name to use on the img tag in frontend display.</li>
 
   <li><em>(optional)</em> id - The id name to use on the img tag in frontend display.</li> 

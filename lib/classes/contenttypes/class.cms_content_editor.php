@@ -246,6 +246,7 @@ class CmsContentEditor extends CmsContentEditorBase
 											$upload = true;
 											$dir = ''; // default to uploads path
 											$label = '';
+											$exclude = '';
 											$promptoncopy = 0;
 			  
 											foreach ($keyval as $key=>$val)
@@ -255,11 +256,6 @@ class CmsContentEditor extends CmsContentEditorBase
 														case 'block':
 															$id = str_replace(' ', '_', $val);
 															$name = $val;
-				  
-															if(!array_key_exists($val, $this->Properties()->mPropertyTypes))
-																{
-																	$this->Properties()->Add("string", $id);
-																}
 															break;
 														case 'promptoncopy':
 															$promptoncopy = $val;
@@ -272,6 +268,9 @@ class CmsContentEditor extends CmsContentEditorBase
 															break;
 														case 'dir':
 															$dir = $val;
+															break;
+														case 'exclude':
+															$exclude = $val;
 															break;
 														case 'default':
 															$value = $val;
@@ -287,6 +286,7 @@ class CmsContentEditor extends CmsContentEditorBase
 											$this->_contentBlocks[$name]['id'] = $id;
 											$this->_contentBlocks[$name]['upload'] = $upload;
 											$this->_contentBlocks[$name]['dir'] = $dir;
+											$this->_contentBlocks[$name]['exclude'] = $exclude;
 											$this->_contentBlocks[$name]['default'] = $value;
 											$this->_contentBlocks[$name]['label'] = $label;					
 											$this->_contentBlocks[$name]['promptoncopy'] = $promptoncopy;
@@ -424,7 +424,8 @@ class CmsContentEditor extends CmsContentEditorBase
     {
 		$gCms = cmsms();
 		$config =& $gCms->GetConfig();
-		$dir = cms_join_path($config['uploads_path'],$blockInfo['dir']);
+		$dir = cms_join_path($config['image_uploads_path'],$blockInfo['dir']);
+		$exclude = $blockInfo['exclude'];
 		$optprefix = 'uploads';
 		if( !empty($blockInfo['dir']) ) $optprefix .= '/'.$blockInfo['dir'];
 		$inputname = $blockInfo['id'];
@@ -432,8 +433,7 @@ class CmsContentEditor extends CmsContentEditorBase
 			{
 				$inputname = $blockInfo['inputname'];
 			}
-		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',
-										 $optprefix,true);
+		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',true,$exclude);
 		if( $dropdown === false )
 			{
 				$dropdown = lang('error_retrieving_file_list');

@@ -1109,16 +1109,23 @@ function is_directory_writable( $path )
 /**
  * Return an array containing a list of files in a directory
  * performs a non recursive search
- * @param path - path to search
- * @param extensions - include only files matching these extensions
- *                     case insensitive, comma delimited
+ * @param dir - (string) path to search
+ * @param extensions - (comma separated string) include only files matching these extensions
+ * @param excludedot - (boolean) exclude files starting with .
+ * @param excludedir - (boolean) exclude directories
+ * @param fileprefix - (string) prefix for filename matches
+ * @param excludefiles - (boolean) if false, and fileprefix is not empty, only include files that match the prefix.  if true, and fileprefix is not empty, exclude all files that match the prefix.
  */
 function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true,
 			    $fileprefix='',$excludefiles=1)
 {
 
   $dh = @opendir($dir);
-  if( !$dh ) return false;
+  if( !$dh )
+    {
+      die('DEBUG: '.$dir.' does not exist');
+      return false;
+    }
 
   if( !empty($extensions) )
     {

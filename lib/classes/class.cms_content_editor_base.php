@@ -392,7 +392,7 @@ class CmsContentEditorBase
 				$tmp = trim(get_site_preference('content_image_path',''),'/');
 				$dir = cms_join_path($config['image_uploads_path'],$tmp);
 				$data = basename($content_obj->get_property_value('image'));
-				$field = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1);
+				$field = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif',true,'thumb_');
 			}
 			break;
 			
@@ -402,7 +402,7 @@ class CmsContentEditorBase
 				$tmp = trim(get_site_preference('content_image_path',''),'/');
 				$dir = cms_join_path($config['image_uploads_path'],$tmp);
 				$data = basename($content_obj->get_property_value('thumbnail'));
-				$field = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
+				$field = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif',true,'thumb_',0);
 			}
 			break;
 			
