@@ -426,14 +426,14 @@ class CmsContentEditor extends CmsContentEditorBase
 		$config =& $gCms->GetConfig();
 		$dir = cms_join_path($config['image_uploads_path'],$blockInfo['dir']);
 		$exclude = $blockInfo['exclude'];
-		$optprefix = 'uploads';
+		$optprefix = $config['image_uploads_url'];
 		if( !empty($blockInfo['dir']) ) $optprefix .= '/'.$blockInfo['dir'];
 		$inputname = $blockInfo['id'];
 		if( isset($blockInfo['inputname']) )
 			{
 				$inputname = $blockInfo['inputname'];
 			}
-		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',true,$exclude);
+		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',true,$exclude,1,$optprefix);
 		if( $dropdown === false )
 			{
 				$dropdown = lang('error_retrieving_file_list');

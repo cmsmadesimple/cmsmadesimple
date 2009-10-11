@@ -192,6 +192,17 @@ class CmsContentOperations extends CmsObject
 		return self::load_multiple_from_left_and_right($lft, $rgt, $loadProperties);
 	}
 
+	public static function load_content_from_serialized_data($data)
+	{
+		if( !isset($data['content_type']) && !isset($data['serialized_content']) ) return FALSE;
+
+		$contenttype = 'Content';
+		if( isset($data['content_type']) ) $contenttype = $data['content_type'];
+		$contentobj = new $contenttype();
+		$contentobj = unserialize($data['serialized_content']);
+		return $contentobj;
+	}
+
 	/**
 	 * Returns the id of the page that is marked as the default
 	 *

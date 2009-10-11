@@ -105,7 +105,6 @@ function createtmpfname(&$contentobj)
 	$data['content_type'] = $contentobj->Type();
 	$data["title"] = $contentobj->Name();
 	$data["menutext"] = $contentobj->MenuText();
-	$data["content"] = $contentobj->Show();
 	$data["template_id"] = $contentobj->TemplateId();
 	$data["hierarchy"] = $contentobj->Hierarchy();
 	

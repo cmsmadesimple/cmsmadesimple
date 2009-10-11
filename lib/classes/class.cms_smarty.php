@@ -611,12 +611,10 @@ class CmsSmarty extends Smarty
 		{
 			if( !isset($_SESSION['cms_preview_data']['content_obj']) )
 			{
-				$contentops =& $gCms->GetContentOperations();
-				$_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
-				$contentobj =& $_SESSION['cms_preview_data']['content_obj'];
+				$_SESSION['cms_preview_data']['content_obj'] = CmsContentOperations::load_content_from_serialized_data($_SESSION['cms_preview_data']);
 			}
 			$contentobj =& $_SESSION['cms_preview_data']['content_obj'];
-			$tpl_source = $contentobj->Show($tpl_name);
+			$tpl_source = $contentobj->get_property_value($tpl_name);
 
 			#So no one can do anything nasty, take out the php smarty tags.  Use a user
 			#defined plugin instead.

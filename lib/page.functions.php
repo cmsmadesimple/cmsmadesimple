@@ -1102,7 +1102,7 @@ function cms_db_prefix() {
   return $config["db_prefix"];
 }
 
-function create_file_dropdown($name,$dir,$value,$allowed_extensions,$allownone=false,$fileprefix='',$excludeit = 1,$extratext='')
+function create_file_dropdown($name,$dir,$value,$allowed_extensions,$allownone=false,$fileprefix='',$excludeit = 1,$optprefix='',$extratext='')
 {
   $files = array();
   $files = get_matching_files($dir,$allowed_extensions,true,true,$fileprefix,$excludeit);
