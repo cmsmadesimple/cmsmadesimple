@@ -240,6 +240,9 @@ $headtext .= <<<EOSCRIPT
 jQuery(document).ready(function(){
    jQuery('.applybutton').click(function(){
 
+      // code to get text from wysiwyg editor
+      $addlScriptSubmit
+      
       jQuery('#Edit_Content_Result').html('');
       jQuery(this).attr('disabled','disabled');
       var data = jQuery('#contentform').serializeForCmsAjax();
@@ -333,8 +336,8 @@ $submit_buttons = '<div class="pageoverflow">
  <input type="submit" name="submitbutton" accesskey="s" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('submitdescription').'" />';
 $submit_buttons .= ' <input type="submit" accesskey="c" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
 $submit_buttons .= ' <input type="submit" accesskey="a" name="applybutton" value="'.lang('apply').'" class="pagebutton applybutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
- if( $contentobj->is_viewable() && $contentobj->active() ) {
-   $submit_buttons .= ' <a rel="external" href="'.$contentobj->get_url().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
+if( $contentobj->is_viewable() && $contentobj->active() ) {
+  $submit_buttons .= ' <a rel="external" href="'.$contentobj->get_url().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
  }
 $submit_buttons .= '</p></div>';
 
