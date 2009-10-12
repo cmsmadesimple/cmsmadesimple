@@ -289,17 +289,14 @@ function redirect($to, $noappend=false)
  */
 function redirect_to_alias($alias)
 {
-	global $gCms;
-	$manager =& $gCms->GetHierarchyManager();
-	$node =& $manager->sureGetNodeByAlias($alias);
-	$content =& $node->GetContent();
-	if (isset($content))
-	{
-		if ($content->GetURL() != '')
-		{
-			redirect($content->GetURL());
-		}
-	}
+  $content = cms_orm('CmsContentBase')->find_by_id_or_alias($alias);
+  if( $content ) {
+    $url = $content->get_url();
+    if( $url )
+      {
+	redirect($url);
+      }
+  }
 }
 
 /**

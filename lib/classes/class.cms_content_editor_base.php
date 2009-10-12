@@ -165,6 +165,7 @@ class CmsContentEditorBase
 
 	private function _fill_module_attributes($content_obj,$params)
 	{
+		$this->_merge_module_attributes();
 		$profile = $this->get_profile();
 		$attrs = $profile->find_all_with_helper();
 		if( !is_array($attrs) ) return;
@@ -360,7 +361,7 @@ class CmsContentEditorBase
 			
 		case 'show_in_menu':
 			$prompt = lang('showinmenu');
-			$field = '<input type="hidden" name="show_in_menu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($content_obj->showinmenu()?' checked="checked"':'').' />';
+			$field = '<input type="hidden" name="show_in_menu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="show_in_menu"'.($content_obj->showinmenu()?' checked="checked"':'').' />';
 			break;
 			
 		case 'secure':
