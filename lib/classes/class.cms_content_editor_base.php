@@ -361,7 +361,7 @@ class CmsContentEditorBase
 			
 		case 'show_in_menu':
 			$prompt = lang('showinmenu');
-			$field = '<input type="hidden" name="show_in_menu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="show_in_menu"'.($content_obj->showinmenu()?' checked="checked"':'').' />';
+			$field = '<input type="hidden" name="show_in_menu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="show_in_menu"'.($content_obj->show_in_menu()?' checked="checked"':'').' />';
 			break;
 			
 		case 'secure':
