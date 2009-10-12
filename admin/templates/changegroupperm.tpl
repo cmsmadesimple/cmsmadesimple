@@ -43,7 +43,7 @@
   <tr>
     <th>{$title_permission}</th>
 	{foreach from=$group_list item=thisgroup}
-		{if $thisgroup->id != -1}<th class="g{$thisgroup->id}">{$thisgroup->name}</th>{/if}
+		{if $thisgroup->id != -1}<th class="g{$thisgroup->id}">{$thisgroup->name}<input type="hidden" name="pg_0_{$thisgroup->id}" value="-1"/></th>{/if}
 	{/foreach}
  </tr>
   </thead>
