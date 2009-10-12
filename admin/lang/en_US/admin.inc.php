@@ -1,5 +1,5 @@
 <?php
-$lang['admin']['session.use_cookies'] = 'Session Use Cookies';
+$lang['admin']['session_use_cookies'] = 'Session Use Cookies';
 $lang['admin']['errorgettingcontent'] = 'Could not retrieve information for the specified content object';
 $lang['admin']['errordeletingcontent'] = 'Error deleting content (either this page has children or is the default content)';
 $lang['admin']['invalidemail'] = 'The email address entered is invalid';
