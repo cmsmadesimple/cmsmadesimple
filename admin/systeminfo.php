@@ -199,7 +199,7 @@ else
 }
 $tmp[0]['session_use_cookies'] = testBoolean(0, 'session.use_cookies', 'session.use_cookies');
 
-$tmp[1]['xml_function'] = testBoolean(0, 'xml_function', extension_loaded_or('xml'), '', false, false, 'Function_xml_disabled');
+$tmp[1]['xml_function'] = testBoolean(1, 'xml_function', extension_loaded_or('xml'), '', false, false, 'Function_xml_disabled');
 
 $tmp[1]['file_get_contents'] = testBoolean(0, 'file_get_contents', function_exists('file_get_contents'), '', false, false, 'Function_file_get_content_disabled');
 
