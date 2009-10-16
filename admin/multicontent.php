@@ -228,14 +228,22 @@ if (isset($_POST['idlist']))
 {
 	foreach (explode(':', $_POST['idlist']) as $id)
 	{
-		$node =& $hm->sureGetNodeById($id);
+		$node = CmsPageTree::get_instance()->get_node_by_id($id);
 		if (isset($node))
 		{
-		  $content =& $node->GetContent();
-		  if (isset($content))
-		    {
-		      $nodelist[] =& $content;
-		    }
+			$nodelist[] = $node;
+		}
+	}
+}
+else if (isset($_POST['selectedvals']))
+{
+	foreach (explode(" ", $_POST['selectedvals']) as $id)
+	{
+		$id = intval(str_replace('phtml_', '', $id));
+		$node = CmsPageTree::get_instance()->get_node_by_id($id);
+		if (isset($node))
+		{
+			$nodelist[] = $node;
 		}
 	}
 }

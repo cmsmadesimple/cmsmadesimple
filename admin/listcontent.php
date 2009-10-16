@@ -51,6 +51,8 @@ $contentops = $gCms->GetContentOperations();
 $templateops = $gCms->GetTemplateOperations();
 
 $urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
+$smarty->assign('secure_name', CMS_SECURE_PARAM_NAME);
+$smarty->assign('secure_key', $_SESSION[CMS_USER_KEY]);
 $smarty->assign('urlext', $urlext);
 $thisurl = basename(__FILE__) . $urlext;
 $smarty->assign('thisurl', $thisurl);

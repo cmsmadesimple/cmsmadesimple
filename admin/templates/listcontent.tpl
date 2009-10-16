@@ -7,10 +7,14 @@
   <div class="pageoverflow pageoptions">
     <div class="multiselect" style="margin-top: 0; float: right; text-align: right; display: none;">
         {if count($bulk_content_ops)}
+        <form action="multicontent.php" method="post" onsubmit="submit_bulk_actions($.tree.reference('#content_tree')); return true;">
         With Selected:&nbsp;&nbsp;<select name="multiaction">
             {html_options values=$bulk_content_ops options=$bulk_content_ops}
         </select>
+        <input class="selectedvals" type="hidden" name="selectedvals" value="" />
+        <input type="hidden" name="{$secure_name}" value="{$secure_key}" />
         <input type="submit" value="Submit"/>
+        </form>
         {/if}
     </div>
 
@@ -33,10 +37,14 @@
 <div class="pageoverflow pageoptions">
     <div class="multiselect" style="margin-top: 0; float: right; text-align: right; display: none;">
         {if count($bulk_content_ops)}
+        <form action="multicontent.php" method="post" onsubmit="submit_bulk_actions($.tree.reference('#content_tree')); return true;">
         With Selected:&nbsp;&nbsp;<select name="multiaction">
             {html_options values=$bulk_content_ops options=$bulk_content_ops}
         </select>
+        <input class="selectedvals" type="hidden" name="selectedvals" value="" />
+        <input type="hidden" name="{$secure_name}" value="{$secure_key}" />
         <input type="submit" value="Submit"/>
+        </form>
         {/if}
     </div>
   <a href="{$addcontent_url}{$urlext}" title="{lang string='addcontent'}">{$newobject_image} {lang string='addcontent'}</a>

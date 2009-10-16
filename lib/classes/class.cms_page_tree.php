@@ -104,7 +104,7 @@ class CmsPageTree extends CmsTree
 		if ($page)
 		{
 			$ancestor = null;
-			$top_nodes = $this->root->tree->get_children();
+			$top_nodes = $this->root->get_children();
 			foreach ($top_nodes as $one_node)
 			{
 				//Don't bother doing this if we're only level 2
@@ -135,7 +135,7 @@ class CmsPageTree extends CmsTree
 			}
 			else
 			{
-				//$this->load_parent_nodes($id);
+				$this->load_parent_nodes($id);
 				return self::$content[(string)$id];
 			}
 		}
