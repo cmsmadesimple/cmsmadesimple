@@ -155,6 +155,11 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		$this->validate_not_blank('alias', lang('nofieldgiven',array(lang('alias'))));
 	}
 	
+	function friendly_hierarchy()
+	{
+		return CmsContentOperations::create_friendly_hierarchy_position($this->hierarchy());
+	}
+	
 
 	//////////////////////////////////////////////////
 	// methods that do not need to be overridden
