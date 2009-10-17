@@ -76,14 +76,14 @@ class CmsContentEditor extends CmsContentEditorBase
 				{
 					$templateops =& $gCms->GetTemplateOperations();
 					$prompt = lang('template');
-					$field  = $templateops->TemplateDropdown('template_id', $content_obj->get_template_id(), 'onchange="document.contentform.submit()"');
+					$field  = $templateops->TemplateDropdown('template_id', $content_obj->template_id(), 'onchange="document.contentform.submit()"');
 				}
 				return array($prompt.':',$field);
 
 			case 'pagemetadata':
 				{
 					$prompt = lang('page_metadata');
-					$field  = create_textarea(false, $content_obj->get_metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6');
+					$field  = create_textarea(false, $content_obj->metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6');
 				}
 				return array($prompt.':',$field);
 
@@ -531,20 +531,15 @@ class CmsContentEditor extends CmsContentEditorBase
 	{
 		parent::fill_from_form_data($params);
 
-		$accepted = array('template','pagemetadata','searchable','pagedata',
+		$accepted = array('template_id','pagemetadata','searchable','pagedata',
 						  'disable_wysiwyg');
-		$this->parse_content_blocks();
-		foreach($this->_contentBlocks as $blockName => $blockInfo)
-			{
-				$accepted[] = $blockInfo['id'];
-			}
 
 		$content_obj = $this->get_content();
 		foreach( $accepted as $oneprop )
 			{
 				switch($oneprop)
 					{
-					case 'template':
+					case 'template_id':
 						if( isset($params[$oneprop]) )
 							{
 								$content_obj->set_template_id($params[$oneprop]);
@@ -565,6 +560,12 @@ class CmsContentEditor extends CmsContentEditorBase
 							}
 						break;
 					}
+			}
+
+		$this->parse_content_blocks();
+		foreach($this->_contentBlocks as $blockName => $blockInfo)
+			{
+				$accepted[] = $blockInfo['id'];
 			}
 	}
 

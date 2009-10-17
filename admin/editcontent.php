@@ -118,6 +118,7 @@ if( !check_editcontent_perms($page_id) )
 //
 // GET THE CONTENT OBJECT AND INSTANTIATE THE EDITOR
 //
+$editor = '';
 $content_type = 'Content';
 $orig_content_type = 'Content';
 $contentobj = '';
@@ -140,6 +141,12 @@ if( isset($_POST['serialized_content']) )
       {
 	// content type has changed.
 	copycontentobj($contentobj,$content_type);
+      }
+    else
+      {
+	$editortype = $contentops->get_content_editor_type($contentobj);
+	$editor = new $editortype($contentobj);
+	$editor->fill_from_form_data($_POST);
       }
   }
 else if($page_id)
@@ -185,8 +192,12 @@ else
     
   }
 
-$editortype = $contentops->get_content_editor_type($contentobj);
-$editor = new $editortype($contentobj);
+if( !is_object($editor) )
+  {
+    // make sure we have a valid editor object going forward.
+    $editortype = $contentops->get_content_editor_type($contentobj);
+    $editor = new $editortype($contentobj);
+  }
 
 //
 // HANDLE SUBMIT OR APPLY
