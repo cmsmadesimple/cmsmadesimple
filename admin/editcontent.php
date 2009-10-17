@@ -213,11 +213,6 @@ if ($submit || $apply)
 	    redirect("listcontent.php".$urlext.'&message=contentupdated');
 	  }
       }
-    else
-      {
-	print_r( $error );
-	die('got error on save');
-      }
   }
 
 
@@ -266,6 +261,7 @@ jQuery(document).ready(function(){
 EOSCRIPT;
 include_once("header.php");
 $cms_ajax->process_requests();
+$themeObject = $gCms->variables['admintheme'];
 
 // AJAX result container
 print '<div id="Edit_Content_Result"></div>';

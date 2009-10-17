@@ -549,6 +549,13 @@ class CmsContentEditorBase
 	public function validate()
 	{
 		$content_obj = $this->get_content();
+
+		// if the menu text is empty, fill it from the title.
+		if( $content_obj->menu_text() == '' )
+		{
+			$content_obj->set_menu_text($content_obj->name());
+		}
+
 		$tmp = $content_obj->check_not_valid();
 		if( $tmp )
 		{

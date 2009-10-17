@@ -151,7 +151,6 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		$this->validate_numericality_of('parent_id',lang('invalidparent'));
 		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('title'))));
 		$this->validate_not_blank('menu_text', lang('nofieldgiven',array(lang('menutext'))));
-		$this->validate_not_blank('menu_text', lang('nofieldgiven',array(lang('menutext'))));
 		$this->validate_not_blank('alias', lang('nofieldgiven',array(lang('alias'))));
 	}
 	
