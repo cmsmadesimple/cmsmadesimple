@@ -1,7 +1,8 @@
-Version 1.6.6 - Bonde
+Version NEW - NEW NAME
 -----------------------------
  - #3999 Upload a file with apostrophe make problem
  - #4137 small text typo in admin/login.php
+ - #4208 Don't show inactive template in the page 404
 
 Version 1.6.6 - Bonde
 -----------------------------
