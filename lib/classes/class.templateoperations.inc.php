@@ -37,7 +37,7 @@ class TemplateOperations
 		$result = array();
 
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates ORDER BY template_name";
-		$dbresult = &$db->Execute($query);
+		$dbresult = $db->Execute($query);
 
 		while ($dbresult && !$dbresult->EOF)
 		{
@@ -73,7 +73,7 @@ class TemplateOperations
 		}
 
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
-		$row = &$db->GetRow($query, array($id));
+		$row = $db->GetRow($query, array($id));
 
 		if($row)
 		{
@@ -105,7 +105,7 @@ class TemplateOperations
 		$db = &$gCms->GetDb();
 
 		$query = "SELECT t.template_id, t.template_name, t.template_content, t.stylesheet, t.encoding, t.active, t.default_template, t.modified_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
-		$row = &$db->GetRow($query, array($alias, $alias));
+		$row = $db->GetRow($query, array($alias, $alias));
 
 		if ($row)
 		{
@@ -132,7 +132,7 @@ class TemplateOperations
 		$db = &$gCms->GetDb();
 
 		$query = "SELECT c.modified_date AS c_date, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
-		$dbresult = &$db->Execute($query, array($alias, $alias));
+		$dbresult = $db->Execute($query, array($alias, $alias));
 
 		while ($dbresult && !$dbresult->EOF)
 		{
@@ -154,7 +154,7 @@ class TemplateOperations
 		$db = &$gCms->GetDb();
 
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template FROM ".cms_db_prefix()."templates WHERE default_template = 1";
-		$row = &$db->GetRow($query);
+		$row = $db->GetRow($query);
 
 		if($row)
 		{
@@ -180,7 +180,7 @@ class TemplateOperations
 		$db = &$gCms->GetDb();
 
 		$query = "SELECT count(*) as the_count FROM ".cms_db_prefix()."content WHERE template_id = ?";
-		$row = &$db->GetRow($query, array($id));
+		$row = $db->GetRow($query, array($id));
 
 		if($row)
 		{
@@ -259,7 +259,7 @@ class TemplateOperations
 		$db = &$gCms->GetDb();
 
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE template_id = ?";
-        $row = &$db->GetRow($query,array($id));
+        $row = $db->GetRow($query,array($id));
 
 		if ($row)
 		{
@@ -280,7 +280,7 @@ class TemplateOperations
 		$db = &$gCms->GetDb();
 
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."templates WHERE stylesheet is not null and stylesheet != ''";
-        $row = &$db->GetRow($query);
+        $row = $db->GetRow($query);
 
 		if ($row)
 		{
@@ -336,7 +336,7 @@ class TemplateOperations
 			$query .= ' AND template_id != ?';
 			$attrs[] = $id;
 		}
-		$row = &$db->GetRow($query,$attrs);
+		$row = $db->GetRow($query,$attrs);
 
 		if ($row)
 		{

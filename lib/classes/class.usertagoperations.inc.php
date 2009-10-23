@@ -40,7 +40,7 @@ class UserTagOperations
 		$db =& $gCms->GetDb();
 		
 		$query = 'SELECT userplugin_id, code FROM '.cms_db_prefix().'userplugins WHERE userplugin_name = ?';
-		$result = &$db->Execute($query, array($name));
+		$result = $db->Execute($query, array($name));
 
 		while ($result && !$result->EOF)
 		{
@@ -100,7 +100,7 @@ class UserTagOperations
 		$db =& $gCms->GetDb();
 		
 		$query = 'DELETE FROM '.cms_db_prefix().'userplugins WHERE userplugin_name = ?';
-		$result = &$db->Execute($query, array($name));
+		$result = $db->Execute($query, array($name));
 
 		if ($result)
 		{
@@ -127,7 +127,7 @@ class UserTagOperations
 
 		$query = 'SELECT userplugin_name FROM '.cms_db_prefix().'userplugins ORDER BY userplugin_name';
 		//var_dump($db->Execute($query));
-		$result = &$db->Execute($query);
+		$result = $db->Execute($query);
 		
 		//var_dump($result);
 

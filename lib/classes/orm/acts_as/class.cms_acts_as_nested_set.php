@@ -128,7 +128,7 @@ class CmsActsAsNestedSet extends CmsActsAs
 		$obj->rgt = $right + $diff;
 		
 		$query = "SELECT max(item_order) as new_order FROM {$table_name} WHERE parent_id = ?";
-		$row = &$db->GetRow($query, array($obj->parent_id));
+		$row = $db->GetRow($query, array($obj->parent_id));
 		if ($row)
 		{
 			if ($row['new_order'] < 1)

@@ -100,7 +100,7 @@ class ModuleLoader
 			  }
                         $query .= ' ORDER by module_name';
 
-			$result = &$db->Execute($query);
+			$result = $db->Execute($query);
 			while ($result && !$result->EOF)
 			{
 				if (isset($result->fields['module_name']))

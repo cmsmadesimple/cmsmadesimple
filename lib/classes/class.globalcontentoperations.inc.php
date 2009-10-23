@@ -52,7 +52,7 @@ class GlobalContentOperations
 
 			// get the list of html blobs where this user is a direct additional editor.
 			$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ?";
-			$result = &$db->Execute($query, array($userid));
+			$result = $db->Execute($query, array($userid));
 			while ($result && !$result->EOF)
 			{
 				$variables['authorblobs'][] = $result->fields['htmlblob_id'];
@@ -63,7 +63,7 @@ class GlobalContentOperations
 			// get the list of html blobs where this users member groups are listed as an additional editor
 			// in additional_htmlblob_users groupid's are indicated with a negative value.
 			$query = 'SELECT group_id FROM '.cms_db_prefix().'user_groups WHERE user_id = ?';
-			$result = &$db->Execute($query, array($userid));
+			$result = $db->Execute($query, array($userid));
 			$tmp = array();
 			while ($result && !$result->EOF)
 			  {
@@ -74,7 +74,7 @@ class GlobalContentOperations
                         if( count($tmp) > 0 ) {
 			  $query = 'SELECT htmlblob_id FROM '.cms_db_prefix().'additional_htmlblob_users WHERE user_id IN (';
 			  $query .= implode(',',$tmp).')';
-			  $result = &$db->Execute($query);
+			  $result = $db->Execute($query);
 			  while ($result && !$result->EOF)
 			    {
 			      $variables['authorblobs'][] = $result->fields['htmlblob_id'];
@@ -170,11 +170,11 @@ class GlobalContentOperations
 		if ($id > -1)
 		{
 			$query .= ' AND htmlblob_id <> ?';
-			$row = &$db->GetRow($query,array($name, $id));
+			$row = $db->GetRow($query,array($name, $id));
 		}
 		else
 		{
-			$row = &$db->GetRow($query,array($name));
+			$row = $db->GetRow($query,array($name));
 		}
 
 		if ($row)
@@ -193,7 +193,7 @@ class GlobalContentOperations
 		$db = &$gCms->GetDb();
 
 		$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ? AND owner = ?";
-		$row = &$db->GetRow($query, array($id, $user_id));
+		$row = $db->GetRow($query, array($id, $user_id));
 
 		if ($row)
 		{
@@ -212,7 +212,7 @@ class GlobalContentOperations
 		$myblobs = $this->AuthorBlobs($user_id);
 		return quick_check_authorship($id,$myblobs);
 // 		$query = "SELECT additional_htmlblob_users_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ? AND user_id = ?";
-// 		$row = &$db->GetRow($query, array($id, $user_id));
+// 		$row = $db->GetRow($query, array($id, $user_id));
 
 // 		if ($row)
 // 		{

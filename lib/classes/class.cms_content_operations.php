@@ -617,7 +617,7 @@ class CmsContentOperations extends CmsObject
 							VALUES (?,?,?,\'global_content\','.$db->DBTimeStamp(time()).','.$db->DBTimeStamp(time()).')';
 			foreach ($matches[1] as $name)
 			{
-				$result = &$db->Execute($selquery, array($name));
+				$result = $db->Execute($selquery, array($name));
 				while ($result && !$result->EOF)
 				{
 					$db->Execute($insquery, array($parent_id, $parent_type, $result->fields['htmlblob_id']));

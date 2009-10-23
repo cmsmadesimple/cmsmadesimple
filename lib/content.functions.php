@@ -47,7 +47,7 @@ function load_plugins(&$smarty)
 		search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins", false);
 
 		$query = "SELECT * FROM ".cms_db_prefix()."userplugins";
-		$result = &$db->Execute($query);
+		$result = $db->Execute($query);
 		while ($result && !$result->EOF)
 		{
 			if (!in_array($result->fields['userplugin_name'], $plugins))
@@ -159,7 +159,7 @@ function do_cross_reference($parent_id, $parent_type, $content)
 						VALUES (?,?,?,\'global_content\','.$db->DBTimeStamp(time()).','.$db->DBTimeStamp(time()).')';
 		foreach ($matches[1] as $name)
 		{
-			$result = &$db->Execute($selquery, array($name));
+			$result = $db->Execute($selquery, array($name));
 			while ($result && !$result->EOF)
 			{
 				$db->Execute($insquery, array($parent_id, $parent_type, $result->fields['htmlblob_id']));

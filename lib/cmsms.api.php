@@ -997,7 +997,7 @@ function cms_mapi_remove_permission($permission_name)
   $db =& $gCms->GetDB();
 
   $query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
-  $row = &$db->GetRow($query, array($permission_name));
+  $row = $db->GetRow($query, array($permission_name));
 
   if ($row)
     {
