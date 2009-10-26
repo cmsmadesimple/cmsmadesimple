@@ -624,6 +624,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 **/
 	function find_by_query($query, $queryparams = array())
 	{
+		$result = CmsCache::get_instance('orm')->call(array(&$this, 'find_by_query_'), $query, $queryparams);
+		return $result;
+	}
+
+	function find_by_query_($query, $queryparams = array())
+	{
 		$db = cms_db();
 		
 		$classname = get_class($this);
@@ -691,6 +697,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @author Ted Kulp
 	 **/
 	function find_all_by_query($query, $queryparams = array(), $numrows = -1, $offset = -1)
+	{
+		$result = CmsCache::get_instance('orm')->call(array(&$this, 'find_all_by_query_'), $query, $queryparams, $numrows, $offset);
+		return $result;
+	}
+	
+	function find_all_by_query_($query, $queryparams = array(), $numrows = -1, $offset = -1)
 	{
 		$db = cms_db();
 		
@@ -768,6 +780,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function save()
 	{
+		CmsCache::get_instance('orm')->clear();
+		
 		$this->before_validation_caller();
 
 		if ($this->check_not_valid())
@@ -1028,6 +1042,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function delete($id = -1)
 	{
+		CmsCache::get_instance('orm')->clear();
 		if ($id > -1)
 		{
 			$method = 'find_by_' . $this->id_field;
@@ -1234,7 +1249,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function get_columns_in_table()
 	{
-		return CmsCache::get_instance()->call(array(&$this, '_get_columns_in_table'), $this->get_table());
+		return CmsCache::get_instance('orm')->call(array(&$this, '_get_columns_in_table'), $this->get_table());
 	}
 	
 	function _get_columns_in_table($table)

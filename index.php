@@ -379,8 +379,8 @@ $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage()
 if( !isset($config['hide_performance_info']) )
 {
 echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak} -->\n";
-
 }
+echo microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}\n";
 
 if( is_sitedown() || $config['debug'] == true)
 {

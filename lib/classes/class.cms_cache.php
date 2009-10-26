@@ -52,6 +52,14 @@ class CmsCache extends CmsObject
 			require_once(cms_join_path(ROOT_DIR, 'lib', 'pear', 'cache', 'lite', 'Function.php'));
 			$this->cache = new Cache_Lite_Function($options);
 		}
+		else if ($type == 'orm')
+		{
+			if (CmsConfig::get('debug'))
+				$options['caching'] = false;
+			$options['lifeTime'] = 30;
+			require_once(cms_join_path(ROOT_DIR, 'lib', 'pear', 'cache', 'lite', 'Function.php'));
+			$this->cache = new Cache_Lite_Function($options);
+		}
 		else
 		{
 			require_once(cms_join_path(ROOT_DIR, 'lib', 'pear', 'cache', 'lite', 'Function.php'));
