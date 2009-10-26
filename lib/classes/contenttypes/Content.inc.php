@@ -53,7 +53,7 @@ class Content extends CmsContentBase
 
 	public function get_type()
 	{
-	  return 'sectionheader';
+	  return 'content';
 	}
 
 

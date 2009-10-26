@@ -405,9 +405,9 @@ class MenuManager extends CMSModule
 		$onenode = new stdClass();
 		$onenode->id = $content->id();
 		$onenode->pagetitle = $content->name();
-		$onenode->url = $content->get_url();
+		$onenode->url = $content->get_url(true);
 		$onenode->accesskey = $content->access_key();
-		$onenode->type = strtolower($content->type());
+		$onenode->type = strtolower($content->type);
 		$onenode->tabindex = $content->tab_index();
 		$onenode->titleattribute = $content->title_attribute();
 		$onenode->modified = $content->GetModifiedDate();
