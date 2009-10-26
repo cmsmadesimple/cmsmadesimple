@@ -8,14 +8,15 @@ $hm = $gCms->GetHierarchyManager();
 $usefile = true;
 $tpl_name = coalesce_key($params, 'template', $this->GetPreference('default_template','simple_navigation.tpl'));
 $recursive = '0';
-if( endswith($tpl_name, '.tpl') )
-  {
-    $usefile = true;
-  }
+if (endswith($tpl_name, '.tpl'))
+{
+	$usefile = true;
+}
 else
-  {
-    $usefile = false;
-  }
+{
+	$recursive = $this->GetPreference('tpl_' . $tpl_name . '_recursive', '1');
+	$usefile = false;
+}
 
 $mdid = md5($gCms->variables['content_id'].implode('|', $params));
 

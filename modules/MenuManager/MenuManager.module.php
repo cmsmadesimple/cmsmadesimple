@@ -190,7 +190,7 @@ class MenuManager extends CMSModule
 	
 	public function add_fields_to_node(&$node)
 	{
-		$content = $node->getContent();
+		$content = $node->get_content();
 		//$node->url = $content->get_url(true, $lang);
 		$node->url = $content->get_url(true);
 		//$content->menutext = cms_htmlentities($content->get_property_value('menu_text', $lang));
