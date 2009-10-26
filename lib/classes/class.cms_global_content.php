@@ -121,7 +121,7 @@ class CmsGlobalContent extends CmsObjectRelationalMapping
 		Events::SendEvent('Core', ($this->id == -1 ? 'AddGlobalContentPre' : 'EditGlobalContentPre'), array('global_content' => &$this));
 	}
 	
-	function after_save()
+	function after_save(&$result)
 	{
 		Events::SendEvent('Core', ($this->create_date == $this->modified_date ? 'AddGlobalContentPost' : 'EditGlobalContentPost'), array('global_content' => &$this));
 		//CmsCache::clear();

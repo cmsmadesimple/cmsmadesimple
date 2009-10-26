@@ -58,7 +58,7 @@ class SectionHeader extends CmsContentBase
   }
 
 
-  public function get_url($rewrite = true)
+  public function get_url($rewrite = true, $lang = '')
   {
     return '#';
   }

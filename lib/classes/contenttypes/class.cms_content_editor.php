@@ -146,7 +146,7 @@ class CmsContentEditor extends CmsContentEditorBase
 					// read text content blocks
 					//$pattern = '/{content\s([^}]*)}/';
 					$pattern = '/{content([^}]*)}/';
-					$pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
+					$pattern2 = '/([a-zA-z0-9]+)=["\']([^"\']+)["\']/';
 					$matches = array();
 					$result = preg_match_all($pattern, $content, $matches);
 					if ($result && count($matches[1]) > 0)

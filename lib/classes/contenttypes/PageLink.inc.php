@@ -46,7 +46,7 @@ class PageLink extends CmsContentBase
     return false;
   }
 
-  public function get_url($rewrite = true)
+  public function get_url($rewrite = true, $lang = '')
   {
     $page = $this->get_property_value('page');
     $params = $this->get_property_value('params');

@@ -70,6 +70,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["default_upload_permission"] = '664';
 	$config["page_extension"] = "";
 	$config["locale"] = "";
+	$config["timezone"] = "UTC";
 	$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
 	$config['set_names'] = false; //Default to false for pre-1.6 compatibility.  New installs get true.
 
@@ -317,8 +318,13 @@ function cms_config_text($config)
 
 #Locale to use for various default date handling functions, etc.  Leaving
 #this blank will use the server's default.  This might not be good if the
-#site is hosted in a different country than it's intended audience.
+#site is hosted in a different country than its intended audience.
 \$config['locale'] = '{$config['locale']}';
+
+#Similarly, time zone is used by time handling functions.  Leaving
+#this blank will use the server's default.  This might not be good if the
+#site is hosted in a different time zone than its intended audience.
+\$config['timezone'] = '{$config['timezone']}';
 
 #In almost all cases, default_encoding should be empty (which defaults to utf-8)
 #and admin_encoding should be utf-8.  If you'd like this to be different, change
