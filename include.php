@@ -108,7 +108,7 @@ if (isset($_SESSION['cms_admin_username']))
 if ($config["debug"] == true)
   {
     @ini_set('display_errors',1);
-    @error_reporting(E_ALL);
+    @error_reporting(E_STRICT);
   }
 
 
@@ -195,6 +195,10 @@ if ($frontendlang != '')
 {
     @setlocale(LC_ALL, $frontendlang);
 }
+if (isset($config['timezone']) && ! empty($config['timezone']) && function_exists('date_default_timezone_set'))
+	{
+	date_default_timezone_set($config['timezone']);
+	}
 
 $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 $smarty->assign('lang',$frontendlang);

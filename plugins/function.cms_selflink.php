@@ -194,13 +194,13 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		if ($condition && $order_by)
 		{
 			global $gCms;
-			$hm =& $gCms->GetHierarchyManager();
+			$hm = $gCms->GetHierarchyManager();
 			$flatcontent = array();
 			if ($condition != '|') // uplink (we don't need the flatcontent for an uplink)
 			{
 				#return '';
-				$flatcontent =& $hm->getFlatList();
-				$contentops =& $gCms->GetContentOperations();
+				$flatcontent = $hm->getFlatList();
+				$contentops = $gCms->GetContentOperations();
 				$defaultid = $contentops->GetDefaultPageID();
 				$number = 0;
 				for ($i = 0; $i < count($flatcontent); $i++)
@@ -226,7 +226,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 				{
 					for ($i = $number - 1; $i >= 0; $i--)
 					{
-					  $content =& $flatcontent[$i]->getContent();
+					  $content = $flatcontent[$i]->getContent();
 						if (isset($content) && $content != NULL)
 						{
 							if ($content->active() && $content->show_in_menu() && $content->has_usable_link())
@@ -253,7 +253,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 				{
 					for ($i = $number + 1; $i < count($flatcontent); $i++)
 					{
-					  $content =& $flatcontent[$i]->getContent();
+					  $content = $flatcontent[$i]->getContent();
 						if(isset($content) && $content != NULL)
 						{
 							if ($content->active() && $content->show_in_menu() && $content->has_usable_link())
@@ -280,7 +280,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 				{
 					for ($i = $number; $i < count($flatcontent); $i++)
 					{
-						$content =& $flatcontent[$i]->getContent();
+						$content = $flatcontent[$i]->getContent();
 						if (isset($content))
 						{
 							if ($content->active() && $content->show_in_menu() && $content->hasusable_link())
@@ -303,11 +303,11 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 			} //* End Russ addition
 			else if ($condition == '|') //* Start uplink
 			{
-				$node =& $hm->getNodeById($gCms->variables['content_id']);
-				$node =& $node->getParentNode();
+				$node = $hm->getNodeById($gCms->variables['content_id']);
+				$node = $node->getParentNode();
 				//				print_r($node);
 				if (!isset($node)) return;
-				$content =& $node->get_content();
+				$content = $node->get_content();
 				if ($content != FALSE)
 				{
 					if ($content->active() && $content->has_usable_link())
@@ -323,7 +323,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 			} //* End uplink
 			else if ($condition == '-')
 			{
-				$content =& $flatcontent[$number]->getContent();
+				$content = $flatcontent[$number]->getContent();
 				if (isset($content))
 				{
 					$pageid = $content->Id();

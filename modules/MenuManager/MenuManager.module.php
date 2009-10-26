@@ -338,7 +338,7 @@ class MenuManager extends CMSModule
 				while (list($key) = each($children))
 				{
 					$onechild =& $children[$key];
-					$content =& $onechild->get_content($deep);
+					$content = $onechild->get_content($deep);
 					if( !is_object($content) ) 
 					{
 						// uhm, couldn't get the content object... this is strange

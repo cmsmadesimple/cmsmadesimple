@@ -21,7 +21,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 {
 
 	global $gCms; 
-	$manager = &$gCms->GetHierarchyManager();
+	$manager = $gCms->GetHierarchyManager();
 
 	$thispage = $gCms->variables['content_id'];
 
@@ -53,17 +53,17 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	}
 
 
-	$endNode = &$manager->sureGetNodeById($thispage);
+	$endNode = $manager->sureGetNodeById($thispage);
 
 # build path
 	if (isset($endNode))
 	{
-	        $content =& $endNode->get_content();
+	        $content = $endNode->get_content();
 		$path=array($endNode);
-		$currentNode = &$endNode->getParentNode();
+		$currentNode = $endNode->getParentNode();
 		while (isset($currentNode) && $currentNode->getLevel() >= 0)
 		{
-			$content = &$currentNode->get_content();
+			$content = $currentNode->get_content();
 			if (isset($content))
 			{
 			  //Add current node to the path and then check to see if
@@ -76,7 +76,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 			  if (strtolower($content->alias())!=strtolower($root))
 			    {
 			      //Get the parent node and loop
-			      $currentNode = &$currentNode->getParentNode();
+			      $currentNode = $currentNode->getParentNode();
 			    }
 			  else
 			    {
@@ -93,16 +93,16 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 
 		if ($root!='##ROOT_NODE##') {
 			// check if the last added is root. if not, add id
-			$currentNode = &$manager->sureGetNodeByAlias($root);
+			$currentNode = $manager->sureGetNodeByAlias($root);
 
 			if (isset($currentNode))
 			{
-				$content = &$currentNode->get_content();
+				$content = $currentNode->get_content();
 				if (isset($content) && (strtolower($content->alias()) == strtolower($root)))
 				{
-					$node = &$manager->sureGetNodeByAlias($root);
+					$node = $manager->sureGetNodeByAlias($root);
 					if (isset($node)) {
-						$content = &$node->get_content();
+						$content = $node->get_content();
 						if( $content && $content->id() != $thispage) 
 							$path[] = $node; # do not add if this is the current page
 					}
@@ -117,7 +117,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 			$node = &$path[$i];
 			if (isset($node))
 			{
-				$onecontent = &$node->get_content();
+				$onecontent = $node->get_content();
 				if ($onecontent->id() != $thispage && $onecontent->type() != 'seperator') {
 				  if (($onecontent->get_url() != "") && ($onecontent->type() != 'sectionheader')) {
 					  if ($onecontent->default_content() && false == empty($root_url))

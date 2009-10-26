@@ -3,7 +3,7 @@ if (!isset($gCms)) exit;
 
 debug_buffer('', 'Start of Menu Manager Display');
 
-$hm =& $gCms->GetHierarchyManager();
+$hm = $gCms->GetHierarchyManager();
 
 $usefile = true;
 $tpl_name = coalesce_key($params, 'template', $this->GetPreference('default_template','simple_navigation.tpl'));

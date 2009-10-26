@@ -219,8 +219,8 @@ if ($page == '')
   {
     // assume default content
     global $gCms;
-    $contentops =& $gCms->GetContentOperations();
-    $page =& $contentops->get_default_page_id();
+    $contentops = $gCms->GetContentOperations();
+    $page = $contentops->get_default_page_id();
   }
 else
   {
@@ -275,11 +275,11 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 
 	if($pageinfo->content_id > 0)
 	{
-		$manager =& $gCms->GetHierarchyManager();
-		$node =& $manager->sureGetNodeById($pageinfo->content_id);
+		$manager = $gCms->GetHierarchyManager();
+		$node = $manager->sureGetNodeById($pageinfo->content_id);
 		if(is_object($node))
 		{
-		  $contentobj =& $node->GetContent(true,true,false);
+		  $contentobj = $node->GetContent(true,true,false);
 		  if( is_object($contentobj) )
 		    {
 		      $smarty->assign('content_obj',$contentobj);
@@ -294,7 +294,7 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	$gCms->variables['page_name'] = $pageinfo->content_alias;
 	$gCms->variables['position'] = $pageinfo->content_hierarchy;
 	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
+	$contentops = $gCms->GetContentOperations();
 	$gCms->variables['friendly_position'] = $contentops->CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
 
 	$smarty->assign('content_id', $pageinfo->content_id);
@@ -371,7 +371,7 @@ echo $html;
 
 $endtime = microtime();
 
-$db =& $gCms->GetDb();
+$db = $gCms->GetDb();
 
 $memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $memory = $memory - $orig_memory;

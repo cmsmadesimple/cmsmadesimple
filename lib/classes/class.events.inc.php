@@ -99,7 +99,7 @@ class Events
 	static function SendEvent( $modulename, $eventname, $params = array() )
 	{
 		global $gCms;
-		$usertagops =& $gCms->GetUserTagOperations();
+		$usertagops = $gCms->GetUserTagOperations();
 
 		$results = Events::ListEventHandlers($modulename, $eventname);
 		
@@ -122,7 +122,7 @@ class Events
 					}
 
 					// and call the module event handler.
-					$obj =& CMSModule::GetModuleInstance($row['module_name']);
+					$obj = &CMSModule::GetModuleInstance($row['module_name']);
 					if( $obj )
 					{
 						debug_buffer('calling module ' . $row['module_name'] . ' from event ' . $eventname);

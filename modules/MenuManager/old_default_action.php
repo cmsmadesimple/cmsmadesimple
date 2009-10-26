@@ -30,20 +30,20 @@ $prevdepth = 1;
 if (isset($params['start_page']) || isset($params['start_element']))
 {
 	if (isset($params['start_page']))
-		$rootnode =& $hm->sureGetNodeByAlias($params['start_page']);
+		$rootnode = $hm->sureGetNodeByAlias($params['start_page']);
 	else
-		$rootnode =& $hm->getNodeByHierarchy($params['start_element']);
+		$rootnode = $hm->getNodeByHierarchy($params['start_element']);
 
 	if (isset($rootnode))
 	{
-		$content =& $rootnode->get_content();
+		$content = $rootnode->get_content();
 		if (isset($content))
 		{
 			if (isset($params['show_root_siblings']) && $params['show_root_siblings'] == '1')
 			{
 				if ($rootnode->getLevel() == 0)
 				{
-					$rootnode =& $hm->getRootNode();
+					$rootnode = $hm->getRootNode();
 					$prevdepth = 1;
 				}
 				else
@@ -53,7 +53,7 @@ if (isset($params['start_page']) || isset($params['start_element']))
 				        #+1 and +2 fix HM changes of root node level
 				        #even more hackish ;)
 					$origdepth = $rootnode->getLevel()+1;
-					$rootnode =& $rootnode->getParentNode();
+					$rootnode = $rootnode->getParentNode();
 					$prevdepth = $rootnode->getLevel()+2;
 				}
 			}
@@ -74,15 +74,15 @@ if (isset($params['start_page']) || isset($params['start_element']))
 }
 else if (isset($params['start_level']) && intval($params['start_level']) > 1)
 {
-	$curnode =& $hm->sureGetNodeById($gCms->variables['content_id']);
+	$curnode = $hm->sureGetNodeById($gCms->variables['content_id']);
 	if (isset($curnode))
 	{
-		$curcontent =& $curnode->get_content();
+		$curcontent = $curnode->get_content();
 		$properparentpos = $this->nthPos($curcontent->hierarchy() . '.', '.', intval($params['start_level']) - 1);
 		if ($properparentpos > -1)
 		{
 			$prevdepth = intval($params['start_level']);
-			$rootnode =& $hm->getNodeByHierarchy(substr($curcontent->hierarchy(), 0, $properparentpos));
+			$rootnode = $hm->getNodeByHierarchy(substr($curcontent->hierarchy(), 0, $properparentpos));
 		}
 	}
 }
@@ -94,15 +94,15 @@ else if (isset($params['items']))
 		reset($items);
 		while (list($key) = each($items))
 		{
-			$oneitem =& $items[$key];
-			$curnode =& $hm->sureGetNodeByAlias(trim($oneitem));
+			$oneitem = $items[$key];
+			$curnode = $hm->sureGetNodeByAlias(trim($oneitem));
 			if ($curnode)
 			{
-				$curcontent =& $curnode->get_content();
+				$curcontent = $curnode->get_content();
 				if (isset($curcontent))
 				{
 					$prevdepth = 1;
-					$newnode =& $this->FillNode($curcontent, $curnode, $nodelist, $gCms, $count, $prevdepth, 1);
+					$newnode = $this->FillNode($curcontent, $curnode, $nodelist, $gCms, $count, $prevdepth, 1);
 					//$newnode->depth = 1;
 					//$newnode->prevdepth = 1;
 				}
@@ -113,7 +113,7 @@ else if (isset($params['items']))
 		reset($nodelist);
 		while (list($key) = each($nodelist))
 		{
-			$onenode =& $nodelist[$key];
+			$onenode = $nodelist[$key];
 			$onenode->depth = 1;
 			$onenode->prevdepth = 1;
 		}
@@ -122,7 +122,7 @@ else if (isset($params['items']))
 else
 {
   // load all content
-	$rootnode =& $hm->getRootNode();
+	$rootnode = $hm->getRootNode();
 	$prevdepth = 1;
 }
 

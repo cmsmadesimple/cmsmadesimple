@@ -19,10 +19,10 @@
 function smarty_cms_function_process_pagedata($params,&$smarty)
 {
   global $gCms;
-  $manager =& $gCms->GetHierarchyManager();
-  $node =& $manager->getNodeById($gCms->variables['content_id']);
+  $manager = $gCms->GetHierarchyManager();
+  $node = $manager->getNodeById($gCms->variables['content_id']);
   if( !isset($node) || $node === FALSE ) return;
-  $content =& $node->get_content();
+  $content = $node->get_content();
 
   $tpl = $content->get_property_value('pagedata','');
   if( empty($tpl) ) return;
