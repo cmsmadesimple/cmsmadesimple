@@ -289,14 +289,14 @@ else if ($action == "showmodulehelp")
       $obj =& $gCms->modules[$module]['object'];
       if( isset($_GET['lang']) )
 	{
-	  $gCms->modules[$module]['object']->SetLanguage($_GET['lang']);
+	  $gCms->modules[$module]['object']->SetModuleLanguage($_GET['lang']);
 	}
       $smarty->assign('module',$module_name);
       $smarty->assign('module_help_output',$gCms->modules[$module]['object']->GetHelpPage());
       $output = $smarty->fetch('module_help.tpl');
       if( isset($_GET['lang']) )
 	{
-	  $gCms->modules[$module]['object']->SetLanguage();
+	  $gCms->modules[$module]['object']->SetModuleLanguage();
 	}
       $smarty->assign('body',$output);
     }

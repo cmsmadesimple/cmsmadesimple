@@ -1648,7 +1648,7 @@ class CMSModule
   /**
    * Sets the current langauge
    */
-  public function SetLanguage($lang = '')
+  public function SetModuleLanguage($lang = '')
   {
     if( $lang == '' )
       {
@@ -1660,7 +1660,7 @@ class CMSModule
   /**
    * Gets the current language
    */
-  public function GetLanguage()
+  public function GetModuleLanguage()
   {
     return $this->curlang;
   }
