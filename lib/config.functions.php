@@ -70,7 +70,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["default_upload_permission"] = '664';
 	$config["page_extension"] = "";
 	$config["locale"] = "";
-	$config["timezone"] = "UTC";
+	$config["timezone"] = date_default_timezone_get();
 	$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
 	$config['set_names'] = false; //Default to false for pre-1.6 compatibility.  New installs get true.
 
