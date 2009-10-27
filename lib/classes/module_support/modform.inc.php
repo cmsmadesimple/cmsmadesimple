@@ -28,7 +28,7 @@
 function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 {
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 
 	$formcount = 1;
 	$variables = &$gCms->variables;
@@ -49,11 +49,11 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	$goto = '';
 	if( $returnid != '' )
 	{
-	  $hm =& $gCms->GetHierarchyManager();
-	  $node =& $hm->sureGetNodeById($returnid);
+	  $hm = $gCms->GetHierarchyManager();
+	  $node = $hm->sureGetNodeById($returnid);
 	  if( $node )
 	    {
-	      $content_obj =& $node->getContent();
+	      $content_obj = $node->getContent();
 	      if( $content_obj )
 		$goto = $content_obj->GetURL();
 	    }
@@ -225,7 +225,7 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
   $image = cms_htmlentities($image);
 
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 
 	$text = '<input name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" type=';
 
@@ -397,7 +397,7 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
   $prettyurl = cms_htmlentities($prettyurl);
 
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 
 	$class = (isset($params['class'])?cms_htmlentities($params['class']):'');
 
@@ -485,12 +485,12 @@ function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
   $contents = cms_htmlentities($contents);
 
 	global $gCms;
-	$config = &$gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	$text = '<a href="';
 	if ($config["url_rewriting"] == 'mod_rewrite')
 	{
 		# mod_rewrite
-		$contentops =& $gCms->GetContentOperations();
+		$contentops = $gCms->GetContentOperations();
 		$alias = $contentops->GetPageAliasFromID( $pageid );
 		if( $alias == false )
 		{
@@ -519,12 +519,12 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
 
 	$text = '';
 	global $gCms;
-	$config = &$gCms->GetConfig();
-	$manager =& $gCms->GetHierarchyManager();
-	$node =& $manager->sureGetNodeById($returnid);
+	$config = $gCms->GetConfig();
+	$manager = $gCms->GetHierarchyManager();
+	$node = $manager->sureGetNodeById($returnid);
 	if (isset($node))
 	{
-		$content =& $node->GetContent();
+		$content = $node->GetContent();
 
 		if (isset($content))
 		{
