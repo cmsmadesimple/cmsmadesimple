@@ -440,7 +440,7 @@ class CmsContentOperations extends CmsObject
 	/**
 	 * @deprecated Deprecated.  Use CmsContentOperations::get_page_id_from_alias($alias) instead.
 	 **/
-	function GetPageIDFromAlias( $alias )
+	public static function GetPageIDFromAlias( $alias )
 	{
 		return CmsContentOperations::get_page_id_from_alias($alias);
 	}
@@ -467,7 +467,7 @@ class CmsContentOperations extends CmsObject
 	/**
 	 * @deprecated Deprecated.  Use CmsContentOperations::get_page_id_from_hierarchy($position) instead.
 	 **/
-	function GetPageIDFromHierarchy($position)
+	public static function GetPageIDFromHierarchy($position)
 	{
 		return CmsContentOperations::get_page_id_from_hierarchy($position);
 	}
@@ -501,7 +501,7 @@ class CmsContentOperations extends CmsObject
 	/**
 	 * @deprecated Deprecated.  Use CmsContentOperations::get_page_alias_from_id($id) instead.
 	 **/
-	function GetPageAliasFromID( $id )
+	public static function GetPageAliasFromID( $id )
 	{
 		return $this->get_page_alias_from_id($id);
 	}
