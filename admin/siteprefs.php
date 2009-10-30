@@ -292,7 +292,7 @@ else if (isset($_POST["editsiteprefs"]))
 $templates = array();
 $templates['-1'] = lang('none');
 
-$query = "SELECT * FROM ".cms_db_prefix()."templates ORDER BY template_name";
+$query = "SELECT * FROM ".cms_db_prefix()."templates where active = 1 ORDER BY template_name";
 $result = $db->Execute($query);
 
 while ($result && $row = $result->FetchRow())
