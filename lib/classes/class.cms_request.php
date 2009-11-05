@@ -81,14 +81,14 @@ class CmsRequest extends CmsObject
 	{
 		$id = '';
 		
-		if (isset($_REQUEST['mact']))
+		if (isset($params['mact']))
 		{
-			$ary = explode(',', $_REQUEST['mact'], 4);
-			$id = (isset($ary[1])?$ary[1]:'');
+			$ary = explode(',', cms_htmlentities($params['mact']), 4);
+			$smarty->id = (isset($ary[1])?$ary[1]:'');
 		}
 		else
 		{
-			$id = (isset($_REQUEST['id'])?$_REQUEST['id']:'');
+			$smarty->id = (isset($params['id'])?intval($params['id']):'');
 		}
 		
 		return $id;
@@ -121,7 +121,7 @@ class CmsRequest extends CmsObject
 				$page = $calced;
 		}
 		
-		$page = self::strip_language_from_page($page);
+		//$page = self::strip_language_from_page($page);
 		
 		return rtrim($page, '/');
 	}

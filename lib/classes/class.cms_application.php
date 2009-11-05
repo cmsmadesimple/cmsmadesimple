@@ -138,7 +138,9 @@ class CmsApplication extends CmsObject
 		$this->userpluginfunctions = array();
 		$this->cmsplugins          = array();
 		$this->siteprefs           = array();
-
+		
+		$this->config              = CmsConfig::get_instance();
+		
 		register_shutdown_function(array(&$this, 'dbshutdown'));
 	}
 	
@@ -161,32 +163,12 @@ class CmsApplication extends CmsObject
 
 	function & GetDb()
 	{
-		#static $dbinstance;
-
-		//Check to see if it hasn't been
-		//instantiated yet.  If not, connect
-		//and return it
-		#if (!isset($dbinstance) && !isset($this->db))
-		global $DONT_LOAD_DB;
-		if (!isset($this->db) && !isset($DONT_LOAD_DB))
-		{
-			$this->db =& adodb_connect();
-		}
-
-		#return $dbinstance;
-		$db =& $this->db;
-		return ($db);
+		return CmsDatabase::get_instance();
 	}
 
 	function & GetConfig()
 	{
-        if (!isset($this->config))
-		{
-			$configinstance = cms_config_load(true);
-			$this->config = &$configinstance;
-		}
-
-		return $this->config;
+        return CmsConfig::get_instance();
 	}
 	
 	function & GetModuleLoader()
@@ -310,8 +292,20 @@ class CmsApplication extends CmsObject
 
 		return $this->usertagoperations;
 	}
+	
+	function & GetPageInfoOperations()
+	{
+        if (!isset($this->pageinfooperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.pageinfo.inc.php'));
+			$pageinfooperations = new PageInfoOperations();
+			$this->pageinfooperations = &$pageinfooperations;
+		}
 
-	function & GetSmarty()
+		return $this->pageinfooperations;
+	}
+
+	function GetSmarty()
 	{
 		//Check to see if it hasn't been
 		//instantiated yet.  If not, connect
@@ -322,7 +316,7 @@ class CmsApplication extends CmsObject
 
 			if (!defined('SMARTY_DIR'))
 			{
-				define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
+				define('SMARTY_DIR', cms_join_path(ROOT_DIR,'lib','smarty') . DIRECTORY_SEPARATOR);
 			}
 
 			#Setup global smarty object
@@ -364,14 +358,6 @@ class CmsApplication extends CmsObject
 		}
 	}
 }
-
-class CmsRoute
-{
-	var $module;
-	var $regex;
-	var $defaults;
-}
-
 
 # vim:ts=4 sw=4 noet
 ?>

@@ -497,9 +497,16 @@ function content_select($html_id)
 	$smarty = cms_smarty();
 	$resp = new CmsAjaxResponse();
 	
-	$id = str_replace('phtml_', '', $html_id);
-	$content = cms_orm('CmsContentBase')->find_by_id($id);
-	$smarty->assign_by_ref('content', $content);
+	if ($html_id == 'multiple' || $html_id == 'none')
+	{
+		$smarty->assign_by_ref('reason_for_not_showing', $html_id);
+	}
+	else
+	{
+		$id = str_replace('phtml_', '', $html_id);
+		$content = cms_orm('CmsContentBase')->find_by_id($id);
+		$smarty->assign_by_ref('content', $content);
+	}
 	
 	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
 	//$resp->script('set_context_menu();');

@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require_once(cms_join_path(ROOT_DIR,'lib','smarty','Smarty.class.php'));
+
 class CmsSmarty extends Smarty
 {
 	function __construct(&$config)
@@ -737,6 +739,18 @@ class CmsSmarty extends Smarty
 	function db_get_trusted($tpl_name, &$smarty_obj)
 	{
 		// not used for templates
+	}
+	
+	/**
+	 * Sets the internal id based on variables sent in from
+	 * the request.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public function set_id_from_request()
+	{
+		$this->id = CmsRequest::get_id_from_request();
 	}
 }
 

@@ -18,34 +18,47 @@
 #
 #$Id$
 
-$orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
-$dirname = dirname(__FILE__);
-require_once($dirname.'/fileloc.php');
-
-/**
- * Entry point for all non-admin pages
- *
- * @package CMS
- */	
-#echo '<code style="align: left;">';
-#var_dump($_SERVER);
-#echo '</code>';
-
-$starttime = microtime();
-clearstatcache();
-
-if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
-{
-	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+if (version_compare(phpversion(), "5.2", "<"))
+{ 
+	echo 'CMS Made Simple 2.0 requires php 5.2 and above to run.  Please upgrade your system before proceeding.';
+	exit;
 }
 
-if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
+//xdebug_start_trace('/tmp/mytrace');
+
+//Where are we?
+$dirname = dirname(__FILE__);
+
+//Yes, we do this again in include.php.  That's why we have the
+//require_once.  We need to make sure that we have a valid
+//config file location and tmp location before doing the
+//whole include.php include.  If not, then either show an
+//error or redirect to the installer.
+require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
+
+//CmsProfiler isn't able to autoload yet, so we
+//calculate the start_time the hard way
+list( $usec, $sec ) = explode( ' ', microtime() );
+$start_time = ((float)$usec + (float)$sec);
+
+//Load necessary global functions.  This allows us to load a few
+//things before hand... like the configuration
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
+
+//If we have a missing or empty config file, then we should think
+//about redirecting to the installer.  Also, check to see if the SITEDOWN
+//file is there.  That means we're probably in mid-upgrade.
+$config_location = CmsConfig::get_config_filename();
+if (!file_exists($config_location) || filesize($config_location) < 800)
 {
-    require_once($dirname.'/lib/cmsms.api.php');
-    if (FALSE == is_file($dirname.'/install/index.php')) {
+    if (FALSE == is_file($dirname.'/install/index.php'))
+	{
         die ('There is no config.php file or install/index.php please correct one these errors!');
-    } else {
-        redirect('install/');
+    }
+	else
+	{
+		//die('Do a redirect - ' . $config_location);
+        CmsResponse::redirect('install/index.php');
     }
 }
 else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
@@ -54,6 +67,9 @@ else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
 	exit;
 }
 
+//Ok, one more check.  Make sure we can write to the following locations.  If not, then 
+//we won't even be able to push stuff through smarty.  Error out now while we have the 
+//chance.
 if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 {
 	echo '<html><title>Error</title></head><body>';
@@ -65,212 +81,120 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 	exit;
 }
 
-require_once($dirname.'/include.php'); 
+//Start up a profiler for getting render times for this page.  Use
+//the start time we generated way up at the top.
+$profiler = CmsProfiler::get_instance('', $start_time);
+
+if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
+{
+	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+}
+
+//Start up a profiler for getting render times for this page.  Use
+//the start time we generated way up at the top.
+$profiler = CmsProfiler::get_instance('', $start_time);
+
+//Can we find a page somewhere in the request?
+$page = CmsRequest::calculate_page_from_request();
+
+//Are we using full page caching?  Now is a good time to check and 
+//output any cached data.
+if (CmsConfig::get('full_page_caching'))
+{
+	if (!isset($_REQUEST['mact']) && !isset($_REQUEST['id']) && $data = CmsCache::get_instance('page')->get($page))
+	{
+		echo $data;
+		$endtime = $profiler->get_time();
+		$memory = $profiler->get_memory();
+		echo "<!-- Generated in ".$endtime." seconds by CMS Made Simple (cached) -->\n";
+		echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
+		//if (CmsConfig::get('debug'))
+		//{
+			echo "<p>Generated in ".$endtime." seconds by CMS Made Simple (cached) using " . $memory . " bytes of memory</p>";
+			echo CmsProfiler::get_instance()->report();
+		//}
+		exit;
+	}
+}
+
 // optionally enable output compression (as long as debug mode isn't on)
 if( isset($config['output_compression']) && ($config['output_compression']) && $config['debug'] != true )
-  {
-    @ob_start('ob_gzhandler');
-  }
-else
-  {
-    @ob_start();
-  }
-
-
-$params = array_merge($_GET, $_POST);
 {
-  // hack to work around IE problem of not submitting back the original
-  // value for an input field of type image.
-  $add = array();
-  foreach( $params as $key => $value )
-    {
-      if( preg_match('/_x$/',$key) )
-	{
-	  $str = substr($key,0,strlen($key)-2);
-	  if( isset($params[$str.'_y']) && !isset($params[$str]) )
-	    {
-	      $add[$key] = $value;
-	    }
-	}
-    }
-  if( count($add) )
-    {
-      $params = array_merge($add,$params);
-    }
+	@ob_start('ob_gzhandler');
 }
-$smarty = &$gCms->smarty;
-$smarty->params = $params;
-
-$page = '';
-if (isset($params['mact']))
-  {
-    $ary = explode(',', cms_htmlentities($params['mact']), 4);
-    $smarty->id = (isset($ary[1])?$ary[1]:'');
-  }
 else
-  {
-    $smarty->id = (isset($params['id'])?intval($params['id']):'');
-  }
-
-if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
-  {
-    $page = $params[$smarty->id . 'returnid'];
-  }
-else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]]))
-  {
-    $page = $_GET[$config["query_var"]];    
-  }
-else
-   {
-     $page = cms_calculate_url();
-   }
-
-// strip off GET params.
-if( ($tmp = strpos($page,'?')) !== FALSE )
-  {
-    $page = substr($page,0,$tmp);
-  }
-
-// strip off page extension
-if ($config['page_extension'] != '' && endswith($page, $config['page_extension']))
-  {   
-    $page = substr($page, 0, strlen($page) - strlen($config['page_extension']));
-  }
-
-
-//See if our page matches any predefined routes
-$page = rtrim($page, '/');
-$matched = false;
-if (strpos($page, '/') !== FALSE)
 {
-
-	$routes =& $gCms->variables['routes'];
-	
-	foreach ($routes as $route)
-	{
-		$matches = array();
-		if (preg_match($route->regex, $page, $matches))
-		{
-			//Now setup some assumptions
-			if (!isset($matches['id']))
-				$matches['id'] = 'cntnt01';
-			if (!isset($matches['action']))
-				$matches['action'] = 'defaulturl';
-			if (!isset($matches['inline']))
-				$matches['inline'] = 0;
-			if (!isset($matches['returnid']))
-				$matches['returnid'] = ''; #Look for default page
-			if (!isset($matches['module']))
-				$matches['module'] = $route->module;
-
-			//Get rid of numeric matches
-			foreach ($matches as $key=>$val)
-			{
-				if (is_int($key))
-				{
-					unset($matches[$key]);
-				}
-				else
-				{
-					if ($key != 'id')
-						$_REQUEST[$matches['id'] . $key] = $val;
-				}
-			}
-
-			//Now set any defaults that might not have been in the url
-			if (isset($route->defaults) && count($route->defaults) > 0)
-			{
-				foreach ($route->defaults as $key=>$val)
-				{
-					$_REQUEST[$matches['id'] . $key] = $val;
-					if (array_key_exists($key, $matches))
-					{ 
-						$matches[$key] = $val;
-					}
-				}
-			}
-
-			//Get a decent returnid
-			if ($matches['returnid'] == '') {
-				global $gCms;
-				$contentops =& $gCms->GetContentOperations();
-				$matches['returnid'] = $contentops->GetDefaultPageID();
-			}
-
-			$_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
-
-			$page = $matches['returnid'];
-			$smarty->id = $matches['id'];
-
-			$matched = true;
-			break;
-		}
-	}
+	@ob_start();
 }
 
-// strip from the last / forward
-if( ($pos = strrpos($page,'/')) !== FALSE && $matched == false )
-  {
-    $page = substr($page, $pos + 1);
-  }
+//All systems are go...  let's include all the good stuff
+require_once(cms_join_path($dirname, DS, 'include.php'));
 
+//Make sure the id is set inside smarty if needed for modules
+cms_smarty()->set_id_from_request();
 
+//See if our page matches any predefined routes.  If so,
+//the updated $page will be returned. (No point in matching
+//if we have no url to match).
+if ($page != '')
+	$page = CmsRoute::match_route($page);
+
+//Last ditch effort.  If we still have no page, then
+//grab the default.
 if ($page == '')
-  {
-    // assume default content
-    global $gCms;
-    $contentops = $gCms->GetContentOperations();
-    $page = $contentops->get_default_page_id();
-  }
-else
-  {
-    $page = preg_replace('/\</','',$page);
-  }
+	$page = CmsContentOperations::get_default_page_id();
 
+//Ok, we should have SOMETHING at this point.  Grab it's info
+//from the database.
+$pageinfo = PageInfoOperations::load_page_info_by_content_alias($page);
+
+/*
 $pageinfo = '';
 if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
-  {
-    $tpl_name = trim($_SESSION['cms_preview']);
-    $fname = '';
-    if (is_writable($config["previews_path"]))
-      {
-	$fname = cms_join_path($config["previews_path"] , $tpl_name);
-      }
-    else
-      {
-	$fname = cms_join_path(TMP_CACHE_LOCATION , $tpl_name);
-      }
-    $fname = $tpl_name;
-    if( !file_exists($fname) )
-      {
-	die('error preview temp file not found: '.$fname);
-	return false;
-      }
+{
+	$tpl_name = trim($_SESSION['cms_preview']);
+	$fname = '';
+	if (is_writable($config["previews_path"]))
+	{
+		$fname = cms_join_path($config["previews_path"] , $tpl_name);
+	}
+	else
+	{
+		$fname = cms_join_path(TMP_CACHE_LOCATION , $tpl_name);
+	}
+	$fname = $tpl_name;
+	if( !file_exists($fname) )
+	{
+		die('error preview temp file not found: '.$fname);
+		return false;
+	}
 
-    // build pageinfo
-    $fh = fopen($fname,'r');
-    $_SESSION['cms_preview_data'] = unserialize(fread($fh,filesize($fname)));
-    fclose($fh);
-    unset($_SESSION['cms_preview']);
+	// build pageinfo
+	$fh = fopen($fname,'r');
+	$_SESSION['cms_preview_data'] = unserialize(fread($fh,filesize($fname)));
+	fclose($fh);
+	unset($_SESSION['cms_preview']);
 
-    $pageinfo = PageInfoOperations::LoadPageInfoFromSerializedData($_SESSION['cms_preview_data']);
-    $pageinfo->content_id = '__CMS_PREVIEW_PAGE__';
-  }
+	cmsms()->GetPageInfoOperations(); //Hack: Just to load it for now
+	$pageinfo = PageInfoOperations::LoadPageInfoFromSerializedData($_SESSION['cms_preview_data']);
+	$pageinfo->content_id = '__CMS_PREVIEW_PAGE__';
+}
 
 if( !is_object($pageinfo) )
-  {
-    $pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
-  }
+{
+	cmsms()->GetPageInfoOperations(); //Hack: Just to load it for now
+	$pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
+}
+*/
 
 // $page cannot be empty here
 if (isset($pageinfo) && $pageinfo !== FALSE)
 {
-	$gCms->variables['pageinfo'] =& $pageinfo;
+	$gCms->variables['pageinfo'] = $pageinfo;
 
-	if( isset($pageinfo->template_encoding) && 
-	    $pageinfo->template_encoding != '' )
+	if( isset($pageinfo->template_encoding) && $pageinfo->template_encoding != '' )
 	{
-	  set_encoding($pageinfo->template_encoding);
+		set_encoding($pageinfo->template_encoding);
 	}
 
 	if($pageinfo->content_id > 0)
@@ -367,12 +291,37 @@ header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . (iss
 
 echo $html;
 
-@ob_flush();
+//Calculate our profiler data
+$endtime = $profiler->get_time();
+$memory = $profiler->get_memory();
 
-$endtime = microtime();
+//Flush the buffer out to the browser
+//If caching is on, save the data to the cache
+//as well.
+//If not, then just flush it out and save the
+//memory of putting it into a variable.
+if (CmsConfig::get('full_page_caching'))
+{
+	$data = @ob_get_flush();
+	CmsCache::get_instance('page')->save($data);
+}
+else
+{
+	@ob_flush();
+}
 
-$db = $gCms->GetDb();
+echo "<!-- Generated in ".$endtime." seconds by CMS Made Simple using ".CmsDatabase::query_count()." SQL queries -->\n";
+echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
 
+//var_dump(CmsLogin::get_current_user());
+
+//if (CmsConfig::get('debug'))
+//{
+	echo "<p>Generated in ".$endtime." seconds by CMS Made Simple using ".CmsDatabase::query_count()." SQL queries and " . $memory . " bytes of memory</p>";
+	echo CmsProfiler::get_instance()->report();
+//}
+
+/*
 $memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $memory = $memory - $orig_memory;
 $memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
@@ -403,11 +352,14 @@ if ( !is_sitedown() && $config["debug"] == true)
 		echo $error;
 	}
 }
+*/
 
 if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
-  {
-    unset($_SESSION['cms_preview']);
-  }
+{
+	unset($_SESSION['cms_preview']);
+}
+
+//xdebug_stop_trace();
 
 //CmsContentOperations::ResetNestedSet();
 # vim:ts=4 sw=4 noet

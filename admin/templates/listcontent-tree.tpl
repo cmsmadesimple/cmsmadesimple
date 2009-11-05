@@ -68,11 +68,25 @@ $(function () {
 	        {
                 onselect: function(node, tree_obj)
                 {
-                    cms_ajax_content_select(node.id);
+                    selected = tree_obj.selected_arr;
+                    if (selected.length > 1)
+                        cms_ajax_content_select("multiple");
+                    else if (selected.length == 0)
+                        cms_ajax_content_select("none");
+                    else
+                        cms_ajax_content_select(node.id);
                     update_bulk_actions(tree_obj, false);
                 },
                 ondeselect: function(node, tree_obj)
                 {
+                    var node_id = node.id;
+                    selected = jQuery.grep(tree_obj.selected_arr, function(i, n) {return i.attr('id') != node_id});
+                    if (selected.length > 1)
+                        cms_ajax_content_select("multiple");
+                    else if (selected.length == 0)
+                        cms_ajax_content_select("none");
+                    else
+                        cms_ajax_content_select(selected[0].attr('id'));
                     update_bulk_actions(tree_obj, true);
                 },
                 onmove: function(node, ref_node, type, tree_obj, rollback) 

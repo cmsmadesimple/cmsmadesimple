@@ -18,59 +18,31 @@
 #
 #$Id$
 
-$dirname = dirname(__FILE__);
-require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
+//Load necessary global functions
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
+
+//Where are we?
+$dirname = ROOT_DIR;
+
+//Setup a global $gCms...  this needs to die, though
+$gCms = cmsms();
+$GLOBALS['gCms'] = $gCms;
 
 define('CMS_DEFAULT_VERSIONCHECK_URL','http://dev.cmsmadesimple.org/latest_version.php');
 define('CMS_SECURE_PARAM_NAME','sp_');
 define('CMS_USER_KEY','cmsuserkey');
 
-$session_key = substr(md5($dirname), 0, 8);
+//Load stuff that hasn't been moved to static methods yet
+require_once(cms_join_path($dirname,'lib','page.functions.php'));
+require_once(cms_join_path($dirname,'lib','module.functions.php'));
+require_once(cms_join_path($dirname,'lib','content.functions.php'));
 
-#Setup session with different id and start it
-@session_name('CMSSESSID' . $session_key);
-@ini_set('url_rewriter.tags', '');
-@ini_set('session.use_trans_sid', 0);
-if(!@session_id()) session_start();
+//Setup the session
+CmsSession::setup();
 
-if( isset($CMS_ADMIN_PAGE) )
-  {
-     if( !isset($_SESSION[CMS_USER_KEY]) )
-       {
-	 if( isset($_COOKIE[CMS_SECURE_PARAM_NAME]) )
-	   {
-	     $_SESSION[CMS_USER_KEY] = $_COOKIE[CMS_SECURE_PARAM_NAME];
-	   }
-	 else
-	   {
-	     // maybe change this algorithm.
-	     $key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
-	     $_SESSION[CMS_USER_KEY] = $key;
-	     setcookie(CMS_SECURE_PARAM_NAME, $key);
-	   }
-       }
-  }
+//Do any necessary stuff to the actual request
+CmsRequest::setup();
 
-/**
- * This file is included in every page.  It does all seutp functions including
- * importing additional functions/classes, setting up sessions and nls, and
- * construction of various important variables like $gCms.
- *
- * @package CMS
- */
-#magic_quotes_runtime is a nuisance...  turn it off before it messes something up
-@set_magic_quotes_runtime(false);
-
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.functions.php');
-debug_buffer('', 'Start of include');
-
-# sanitize $_GET
-array_walk_recursive($_GET, 'sanitize_get_var'); 
-
-#Make a new CMS object
-//require(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
-$gCms = CmsApplication::get_instance();
 if (isset($starttime))
 {
     $gCms->variables['starttime'] = $starttime;
@@ -85,43 +57,23 @@ $config = $gCms->GetConfig();
 
 #Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  )
-  {
-    ini_set('memory_limit',trim($config['php_memory_limit']));
-  }
+{
+	ini_set('memory_limit',trim($config['php_memory_limit']));
+}
 
 #Hack for changed directory and no way to upgrade config.php
 $config['previews_path'] = str_replace('smarty/cms', 'tmp', $config['previews_path']);
 
-#Add users if they exist in the session
-$gCms->variables['user_id'] = '';
-if (isset($_SESSION['cms_admin_user_id']))
-{
-    $gCms->variables['user_id'] = $_SESSION['cms_admin_user_id'];
-}
-
-$gCms->variables['username'] = '';
-if (isset($_SESSION['cms_admin_username']))
-{
-    $gCms->variables['username'] = $_SESSION['cms_admin_username'];
-}
-
 if ($config["debug"] == true)
-  {
-    @ini_set('display_errors',1);
-    @error_reporting(E_STRICT);
-  }
+{
+	@ini_set('display_errors',1);
+	@error_reporting(E_STRICT);
+}
 
-
+/*
 debug_buffer('loading smarty');
 require(cms_join_path($dirname,'lib','smarty','Smarty.class.php'));
-debug_buffer('loading adodb');
-require(cms_join_path($dirname,'lib','adodb','adodb-exceptions.inc.php'));
-require(cms_join_path($dirname,'lib','adodb.functions.php'));
-load_adodb();
-debug_buffer('loading page functions');
-require_once(cms_join_path($dirname,'lib','page.functions.php'));
-debug_buffer('loading content functions');
-require_once(cms_join_path($dirname,'lib','content.functions.php'));
+*/
 debug_buffer('loading pageinfo functions');
 require_once(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
 if (! isset($CMS_INSTALL_PAGE))
@@ -129,10 +81,12 @@ if (! isset($CMS_INSTALL_PAGE))
 	debug_buffer('loading translation functions');
 	require_once(cms_join_path($dirname,'lib','translation.functions.php'));
 }
+/*
 debug_buffer('loading events functions');
 require_once(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 debug_buffer('loading php4 entity decode functions');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
+*/
 
 debug_buffer('done loading files');
 
@@ -140,25 +94,10 @@ debug_buffer('done loading files');
 global $DONT_LOAD_DB;
 if (!isset($DONT_LOAD_DB))
 {
-    $cmsdb =& $gCms->GetDB();
-//    $cmsdb->Execute('set names utf8'); // database connection with utf-8
+    $cmsdb = cms_db();
 }
 
-$smarty =& $gCms->GetSmarty();
-
-if (!defined('SMARTY_DIR')) {
-    define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
-}
-
-#Stupid magic quotes...
-if(get_magic_quotes_gpc())
-{
-    stripslashes_deep($_GET);
-    stripslashes_deep($_POST);
-    stripslashes_deep($_REQUEST);
-    stripslashes_deep($_COOKIE);
-    stripslashes_deep($_SESSION);
-}
+$smarty = cms_smarty();
 
 #Fix for IIS (and others) to make sure REQUEST_URI is filled in
 if (!isset($_SERVER['REQUEST_URI']))
@@ -189,16 +128,16 @@ if( $global_umask != '' )
 $frontendlang = get_site_preference('frontendlang','');
 if (isset($config['locale']) && $config['locale'] != '')
 {
-    $frontendlang = $config['locale'];
+	$frontendlang = $config['locale'];
 }
 if ($frontendlang != '')
 {
-    @setlocale(LC_ALL, $frontendlang);
+	@setlocale(LC_ALL, $frontendlang);
 }
 if (isset($config['timezone']) && ! empty($config['timezone']) && function_exists('date_default_timezone_set'))
-	{
+{
 	date_default_timezone_set($config['timezone']);
-	}
+}
 
 $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 $smarty->assign('lang',$frontendlang);
@@ -210,6 +149,7 @@ if ($config['debug'] == true)
 	$smarty->debugging = true;
 	$smarty->error_reporting = 'E_ALL';
 }
+
 if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 {
     include_once(cms_join_path($dirname,$config['admin_dir'],'lang.php'));

@@ -1091,17 +1091,6 @@ function wysiwyg_form_submit()
 	return $result;
 }
 
-/**
- * Returns the currently configured database prefix.
- *
- * @since 0.4
- */
-function cms_db_prefix() {
-  global $gCms;
-  $config =& $gCms->GetConfig();
-  return $config["db_prefix"];
-}
-
 function create_file_dropdown($name,$dir,$value,$allowed_extensions,$allownone=false,$fileprefix='',$excludeit = 1,$optprefix='',$extratext='')
 {
   $files = array();

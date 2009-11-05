@@ -18,100 +18,105 @@
 
 function smarty_cms_function_stylesheet($params, &$smarty)
 {
-  if( !function_exists('get_stylesheet_tag') ) {
-  function get_stylesheet_tag($cssid,$media='')
-  {
-    global $gCms;
-    $config = &$gCms->config;
-    
-    $str = '';
-    $url = '';
-    //if( $config['url_rewriting'] != 'none' )
-    if( 0 )
-      {
-	$url = $config['root_url'].'/stylesheet.php/'.$cssid;
-	if( !empty($media) )
-	  {
-	    $url .= '/'.$media;
-	  }
-      }
-    else
-      {
-	$url = $config['root_url'].'/stylesheet.php?cssid='.$cssid;
-	if( !empty($media) )
-	  {
-	    $url .= '&amp;mediatype='.$media;
-	  }
-      }
-
-    $str = '<link rel="stylesheet" type="text/css" ';
-    if( !empty($media) )
-      {
-	$str .= 'media="'.$media.'" ';
-      }
-    $str .= 'href="'.$url.'" />';
-
-    return $str;
-  }
-  }
-
-  global $gCms;
-  $config = &$gCms->config;
-  $pageinfo = &$gCms->variables['pageinfo'];
-  $template_id=$pageinfo->template_id;
-  if (isset($params["templateid"]) && $params["templateid"]!="") {
-    $template_id=$params["templateid"];
-  }
-
-  $db =& $gCms->GetDb();
-  
-  $stylesheet = '';
-  
-  if (isset($params['name']) && $params['name'] != '')
-    {
-      $query = 'SELECT css_id FROM '.cms_db_prefix().'css 
-                     WHERE css_name = ?';
-      $cssid = $db->GetOne( $query, array($params['name']));
-      if( $cssid )
+	if (!function_exists('get_stylesheet_tag'))
 	{
-	  $stylesheet .= get_stylesheet_tag($cssid,isset($params['media'])?$params['media']:'');
-	  $stylesheet .= "\n";
+		function get_stylesheet_tag($cssid,$media='')
+		{
+			global $gCms;
+			$config = $gCms->GetConfig();
+
+			$str = '';
+			$url = '';
+			//if( $config['url_rewriting'] != 'none' )
+			if( 0 )
+			{
+				$url = $config['root_url'].'/stylesheet.php/'.$cssid;
+				if( !empty($media) )
+				{
+					$url .= '/'.$media;
+				}
+			}
+			else
+			{
+				$url = $config['root_url'].'/stylesheet.php?cssid='.$cssid;
+				if( !empty($media) )
+				{
+					$url .= '&amp;mediatype='.$media;
+				}
+			}
+
+			$str = '<link rel="stylesheet" type="text/css" ';
+			if( !empty($media) )
+			{
+				$str .= 'media="'.$media.'" ';
+			}
+			$str .= 'href="'.$url.'" />';
+
+			return $str;
+		}
 	}
-    }
-  else
-    {
-      $query = 'SELECT DISTINCT A.css_id,A.media_type,B.assoc_order 
-                      FROM '.cms_db_prefix().'css A, '.cms_db_prefix().'css_assoc B
-                     WHERE A.css_id = B.assoc_css_id
-                       AND B.assoc_type = ?
-                       AND B.assoc_to_id = ?
-                     ORDER BY B.assoc_order';
-      $res = $db->GetArray($query,array('template',$template_id));
-      if( $res ) {
-      $fmt1 = '<link rel="stylesheet" type="text/css" media="%s" href="%s" />';
-      $fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
-      foreach( $res as $one )
+
+	global $gCms;
+	$config = &$gCms->config;
+	$pageinfo = &$gCms->variables['pageinfo'];
+	$template_id=$pageinfo->template_id;
+	if (isset($params["templateid"]) && $params["templateid"]!="")
 	{
-          $tmp = str_replace(' ','',$one['media_type']);
-	  $stylesheet .= get_stylesheet_tag($one['css_id'],$tmp);
-	  $stylesheet .= "\n";
+		$template_id=$params["templateid"];
 	}
-      }
-    }
-  
-  if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-    {
-      $stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
-    }
-  
-  return $stylesheet;
+
+	$db =& $gCms->GetDb();
+
+	$stylesheet = '';
+
+	if (isset($params['name']) && $params['name'] != '')
+	{
+		$query = 'SELECT css_id FROM '.cms_db_prefix().'css 
+			WHERE css_name = ?';
+		$cssid = $db->GetOne( $query, array($params['name']));
+		if( $cssid )
+		{
+			$stylesheet .= get_stylesheet_tag($cssid,isset($params['media'])?$params['media']:'');
+			$stylesheet .= "\n";
+		}
+	}
+	else
+	{
+		$query = 'SELECT DISTINCT A.css_id,A.media_type,B.assoc_order 
+		FROM '.cms_db_prefix().'css A, '.cms_db_prefix().'css_assoc B
+		WHERE A.css_id = B.assoc_css_id
+		AND B.assoc_type = ?
+		AND B.assoc_to_id = ?
+		ORDER BY B.assoc_order';
+		
+		$res = $db->GetArray($query,array('template',$template_id));
+		if( $res ) {
+			$fmt1 = '<link rel="stylesheet" type="text/css" media="%s" href="%s" />';
+			$fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
+			foreach( $res as $one )
+			{
+				$tmp = str_replace(' ','',$one['media_type']);
+				$stylesheet .= get_stylesheet_tag($one['css_id'],$tmp);
+				$stylesheet .= "\n";
+			}
+		}
+	}
+
+	if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+	{
+		$stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
+	}
+
+	return $stylesheet;
 }
 
-function smarty_cms_help_function_stylesheet() {
-  echo lang('help_function_stylesheet');
+function smarty_cms_help_function_stylesheet()
+{
+	echo lang('help_function_stylesheet');
 }
 
-function smarty_cms_about_function_stylesheet() {
+function smarty_cms_about_function_stylesheet()
+{
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 	<p>Version: 1.0</p>

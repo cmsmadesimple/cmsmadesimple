@@ -27,8 +27,13 @@
 define("ROOT_DIR", dirname(dirname(__FILE__)));
 define("DS", DIRECTORY_SEPARATOR);
 
+//Load file location defines
+require_once(ROOT_DIR.DS.'fileloc.php');
+
 //So we can use them in __autoload
 require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_object.php');
+require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_config.php');
+require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_cache.php');
 
 /**
  * The one and only autoload function for the system.  This basically allows us 
@@ -435,8 +440,8 @@ function cms_calculate_url()
 {
 	$result = '';
 
-    global $gCms;
-    $config =& $gCms->GetConfig();
+	$gCms = cmsms();
+	$config = cmsms()->GetConfig();
 
 	//Apache
 	/*
@@ -647,6 +652,16 @@ function debug_bt()
 }
 
 /**
+ * Returns the currently configured database prefix.
+ *
+ * @since 0.4
+ */
+function cms_db_prefix()
+{
+	return CmsConfig::get('db_prefix');
+}
+
+/**
 * Debug function to display $var nicely in html.
 *
 * @param mixed $var
@@ -764,7 +779,7 @@ function debug_to_log($var, $title='')
  */
 function debug_buffer($var, $title="")
 {
-	global $gCms;
+	$gCms = cmsms();
 	if ($gCms)
 	{
 		$config =& $gCms->GetConfig();
