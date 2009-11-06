@@ -1734,15 +1734,16 @@ class ContentBase
 	/* private */
 	function _handleRemovedBaseProperty($name,$member)
 	{
-	  if( !in_array($name,$this->_attributes) )
-	    {
-	      if( isset($this->_prop_defaults[$name]) )
+		if( !is_array($this->_attributes) ) return FALSE;
+		if( !in_array($name,$this->_attributes) )
 		{
-		  $this->$member = $this->_prop_defaults[$name];
-		  return TRUE;
+			if( isset($this->_prop_defaults[$name]) )
+			{
+				$this->$member = $this->_prop_defaults[$name];
+				return TRUE;
+			}
 		}
-	    }
-	  return FALSE;
+		return FALSE;
 	}
 
 	/* private */
