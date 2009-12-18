@@ -294,6 +294,14 @@ else if (get_site_preference('enablecustom404') == '' || get_site_preference('en
 
 $html = '';
 $cached = '';
+$showtemplate = true;
+
+if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') ||
+    (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false'))
+{
+  $showtemplate = false;
+}
+
 
 if (isset($_GET["print"]))
 {
@@ -303,8 +311,7 @@ if (isset($_GET["print"]))
 else
 {
 	#If this is a case where a module doesn't want a template to be shown, just disable caching
-  if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') || 
-      (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false'))
+        if( !$showtemplate )
 	{
 		$html = $smarty->fetch('template:notemplate') . "\n";
 	}
@@ -385,7 +392,7 @@ if ( !is_sitedown() && $config["debug"] == true)
 {
   echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and {$memory} bytes of memory (peak memory usage was {$memory_peak})</p>";
 }
-else if( !isset($config['hide_performance_info']) )
+else if( !isset($config['hide_performance_info']) && ($showtemplate == true) )
 {
 echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak} -->\n";
 
