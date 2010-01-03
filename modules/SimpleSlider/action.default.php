@@ -4,26 +4,26 @@
 
 if (!isset($gCms)) exit;
 
-$db = $this->cms->db;
+$db = $this->GetDb();
 
-if(isset($params['show'])){
-	$showname=mysql_real_escape_string($params['show']);
-	
-	$sql='SELECT * FROM '.cms_db_prefix().'module_simpleslider_shows WHERE `showname`="'.$showname.'";';
-	$result=$db->Execute($sql);
+$vars=array();
+if(isset($params['show'])){	
+	$sql='SELECT * FROM '.cms_db_prefix().'module_simpleslider_shows WHERE showname=?;';
+	$result=$db->Execute($sql,array($params['show']));
 	$fields=$result->fields;
 	$showid=$fields['showid'];
 	$width=$fields['width'];
 	$height=$fields['height'];
 	$fadetime=$fields['fadetime'];
-	$sql='SELECT * FROM '.cms_db_prefix().'module_simpleslider_images, '.cms_db_prefix().'module_simpleslider_showimages WHERE `id`=`imageid` AND `showid`="'.$showid.'";';
+  $vars=array($showid);
+	$sql='SELECT * FROM '.cms_db_prefix().'module_simpleslider_images, '.cms_db_prefix().'module_simpleslider_showimages WHERE `id`=`imageid` AND showid=?;';
 }else{
 	$width=$this->getPreference('defwidth');
 	$height=$this->getPreference('defheight');
 	$fadetime=$this->getPreference('deffadetime');
 	$sql='SELECT * FROM '.cms_db_prefix().'module_simpleslider_images WHERE 1;';
 }
-$result=$db->Execute($sql);
+$result=$db->Execute($sql,$vars);
 if($this->debug){
 	//echo $sql;
 	echo $db->ErrorMsg();

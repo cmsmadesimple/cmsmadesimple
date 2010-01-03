@@ -1,4 +1,5 @@
 <?php
+$lang["friendlyname"]='Manage Simple Slider';
 $lang['images'] = 'Images';
 $lang['shows'] = 'Shows';
 $lang['editsettings'] = 'Edit Settings';
@@ -22,10 +23,7 @@ $lang['help'] = '<p>
 		</p>
 		<h2>Important!</h2>
 		<p>Make sure your upload folder is writeable before installing.</p>
-		<p>You need to download JQuery s3Slider.</p>
-		<p> You can download JQuery <a href="http://docs.jquery.com/Downloading_jQuery" target="_blank">here</a> and put it in the folder "lib" using the name "jquery.js". 
-		<p> You can download s3Slider <a href="http://www.serie3.info/s3slider/" target="_blank">here</a> and put it in the folder "lib" using the name "s3Slider.js". 
-		
+			
 		<h2>Usage</h2>
 		<p>Go to Content -> Manage Simple Slider to add images and slideshows.</p>
 		<p>Simply put {cms_module module=\'SimpleSlider\'} where you would like to have the slideshow. By default all images added to the module will be displayed. 
