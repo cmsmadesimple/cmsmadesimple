@@ -394,6 +394,12 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		$config = cms_config();
 		$url = "";
 		$alias = ($this->alias != ''?$this->alias:$this->id);
+		
+		if ($this->default_content)
+		{
+			return $config['root_url'] . '/';
+		}
+		
 		if ($config["assume_mod_rewrite"] && $rewrite == true)
 		{
 			$url = $config['root_url']. '/' . ($lang != '' ? "$lang/" : '') . $this->hierarchy_path() . (isset($config['page_extension'])?$config['page_extension']:'.html');

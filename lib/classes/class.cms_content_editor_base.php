@@ -372,7 +372,7 @@ class CmsContentEditorBase
 		case 'target':
 			{
 				$prompt = lang('target');
-				$text = '<option value="---">'.lang('none').'</option>';
+				$text = '<option value="">'.lang('none').'</option>';
 				$val = $content_obj->get_property_value('target');
 				$text .= '<option value="_blank"'.($val=='_blank'?' selected="selected"':'').'>_blank</option>';
 				$text .= '<option value="_parent"'.($val=='_parent'?' selected="selected"':'').'>_parent</option>';
