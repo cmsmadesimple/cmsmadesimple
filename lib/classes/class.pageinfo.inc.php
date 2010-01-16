@@ -38,7 +38,7 @@ class PageInfo
 	var $content_props;
 	var $content_metadata;
 	var $content_modified_date;
-        var $content_created_date;
+	var $content_created_date;
 	var $content_last_modified_date;
 	var $content_last_modified_by_id;
 	var $template_id;
@@ -64,7 +64,7 @@ class PageInfo
 		$this->content_modified_date = -1;
 		$this->content_created_date = -1;
 		$this->content_last_modified_date = -1;
-                $this->content_last_modified_by_id = -1;
+		$this->content_last_modified_by_id = -1;
 		$this->content_props = array();
 		$this->template_id = -1;
 		$this->template_modified_date = -1;
@@ -81,6 +81,56 @@ class PageInfo
 		{
 			$this->content_last_modified_date = $db->UnixTimeStamp($row['thedate']);
 		}
+	}
+	
+	public function send_headers()
+	{
+		//header("Content-Type: " . cmsms()->variables['content-type'] . "; charset=" . CmsResponse::get_encoding());
+		header("Content-Type: " . cmsms()->variables['content-type'] . "; charset=UTF-8");
+	}
+	
+	/**
+	 * Renders the given pageinfo object based on it's assigned content and template
+	 * parts.
+	 *
+	 * @return string The rendered html
+	 **/
+	public function render()
+	{
+		$html = '';
+		$cached = false;
+		
+		$gCms = cmsms();
+		$smarty = cms_smarty();
+		
+		$id = CmsRequest::get_id_from_request();
+
+		#If this is a case where a module doesn't want a template to be shown, just disable caching
+		if (isset($id) && $id != '' && isset($_REQUEST[$id.'showtemplate']) && ($_REQUEST[$id.'showtemplate'] == 'false' || $_REQUEST[$id.'showtemplate'] == false))
+		{
+			$html = $smarty->fetch('template:notemplate') . "\n";
+		}
+		else
+		{
+			//$smarty->caching = false;
+			//$smarty->compile_check = true;
+			($smarty->is_cached('template:'.$this->template_id)?$cached="":$cached="not ");
+			// Added HTTP_HOST here to work with multisites - SK
+			$html = $smarty->fetch('template:'.$this->template_id/*.$_SERVER['HTTP_HOST']*/) . "\n";
+			if (isset($_REQUEST['tmpfile']))
+			{
+				$smarty->clear_compiled_tpl('template:'.$this->template_id);
+			}
+		}
+
+		if (!$cached)
+		{
+			Events::SendEvent('Core', 'ContentPostRenderNonCached', array(&$html));
+		}
+
+		Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
+		
+		return $html;
 	}
 }
 
@@ -183,7 +233,9 @@ class PageInfoOperations
 				$result = $onepageinfo;
 			}
 		}
-
+		
+		$gCms->variables['pageinfo'] = $result;
+		
 		return $result;
 	}
 	

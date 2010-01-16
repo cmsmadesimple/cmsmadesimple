@@ -478,7 +478,7 @@ class CmsSmarty extends Smarty
 			}
 			else if (isset($_GET["print"]))
 			{
-			  // this should really just go.
+				// this should really just go.
 				$script = '';
 
 				if (isset($_GET["js"]) and $_GET["js"] == 1)
@@ -490,60 +490,60 @@ class CmsSmarty extends Smarty
 				}
 				else
 				{
-				  $hm =& $gCms->GetHierarchyManager();
-				  if ('mod_rewrite' == $config['url_rewriting'])
-				    {
-				      $curnode =& $hm->getNodeByAlias($tpl_name);
-				    }
-				  else
-				    {
-				      $curnode =& $hm->getNodeById($tpl_name);
-				    }
-				  $curcontent =& $curnode->GetContent();
-				  $page_url = $curcontent->GetURL();
-				  
-				  $tpl_source = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n".'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'.'<head><title>{title}</title><meta name="robots" content="noindex"></meta>{metadata}{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none; text-align: left;"><p><a id="back" href="'.$page_url.'">&laquo; Go Back</a></p>{content}'.$script.'</body></html>';
+					$hm =& $gCms->GetHierarchyManager();
+					if ('mod_rewrite' == $config['url_rewriting'])
+					{
+						$curnode =& $hm->getNodeByAlias($tpl_name);
+					}
+					else
+					{
+						$curnode =& $hm->getNodeById($tpl_name);
+					}
+					$curcontent =& $curnode->GetContent();
+					$page_url = $curcontent->GetURL();
+
+					$tpl_source = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n".'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'.'<head><title>{title}</title><meta name="robots" content="noindex"></meta>{metadata}{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none; text-align: left;"><p><a id="back" href="'.$page_url.'">&laquo; Go Back</a></p>{content}'.$script.'</body></html>';
 				}
 
 				return true;
 			}
 			if( isset($_SESSION['cms_preview']) )
-			  {
-			    return 'DEBUG: IN PREVIEW<br/>';
+			{
+				return 'DEBUG: IN PREVIEW<br/>';
 
-			    // get serialized data filename
-			    $tpl_name = trim($_SESSION['cms_preview']);
-			    unset($_SESSION['cms_preview']);
-			    $fname = '';
-			    if (is_writable($config["previews_path"]))
-			      {
-				$fname = cms_join_path($config["previews_path"] , $tpl_name);
-			      }
-			    else
-			      {
-				$fname = cms_join_path(TMP_CACHE_LOCATION , $tpl_name);
-			      }
-			    if( !file_exists($fname) )
-			      {
-				$tpl_source = 'Error: Cache file: '.$tpl_name.' does not exist.';
-				return false;
-			      }
+				// get serialized data filename
+				$tpl_name = trim($_SESSION['cms_preview']);
+				unset($_SESSION['cms_preview']);
+				$fname = '';
+				if (is_writable($config["previews_path"]))
+				{
+					$fname = cms_join_path($config["previews_path"] , $tpl_name);
+				}
+				else
+				{
+					$fname = cms_join_path(TMP_CACHE_LOCATION , $tpl_name);
+				}
+				if( !file_exists($fname) )
+				{
+					$tpl_source = 'Error: Cache file: '.$tpl_name.' does not exist.';
+					return false;
+				}
 
-			    // get the serialized data
-			    $handle = fopen($fname, "r");
-			    $data = unserialize(fread($handle, filesize($fname)));
-			    fclose($handle);
-			    unlink($fname);
-	
-			    $tpl_source = $data["template"];
+				// get the serialized data
+				$handle = fopen($fname, "r");
+				$data = unserialize(fread($handle, filesize($fname)));
+				fclose($handle);
+				unlink($fname);
 
-			    return true;
-			  }
+				$tpl_source = $data["template"];
+
+				return true;
+			}
 			else
 			{
 				global $gCms;
-				$templateops =& $gCms->GetTemplateOperations();
-				$templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
+				$templateops = $gCms->GetTemplateOperations();
+				$templateobj = $templateops->LoadTemplateByID($pageinfo->template_id);
 				if (isset($templateobj) && $templateobj !== FALSE)
 				{
 					$tpl_source = $templateobj->content;
@@ -554,7 +554,7 @@ class CmsSmarty extends Smarty
 					{
 						$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 					}
-					
+
 					//do_cross_reference($pageinfo->template_id, 'template', $tpl_source);
 
 					return true;

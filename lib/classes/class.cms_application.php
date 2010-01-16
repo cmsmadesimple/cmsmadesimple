@@ -77,7 +77,7 @@ class CmsApplication extends CmsObject
 	/**
 	 * Site Preferences object - holds all current site preferences so they're only loaded once
 	 */
-	var $siteprefs;
+	public static $siteprefs;
 
 	/**
 	 * User Preferences object - holds user preferences as they're loaded so they're only loaded once
@@ -346,6 +346,109 @@ class CmsApplication extends CmsObject
         return $this->hrinstance;
 		*/
 		return CmsPageTree::get_instance();
+	}
+	
+	/**
+	 * Loads a cache of site preferences so we only have to do it once.
+	 *
+	 * @since 0.6
+	 */
+	public static function load_site_preferences()
+	{
+		$db = cms_db();
+		
+		$result = array();
+
+		$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
+		$dbresult = &$db->Execute($query);
+
+		while ($dbresult && !$dbresult->EOF)
+		{
+			$result[$dbresult->fields['sitepref_name']] = $dbresult->fields['sitepref_value'];
+			$dbresult->MoveNext();
+		}
+
+		if ($dbresult) $dbresult->Close();
+
+		return $result;
+	}
+	
+	/**
+	 * Gets the given site prefernce
+	 *
+	 * @since 0.6
+	 */
+	public static function get_preference($prefname, $defaultvalue = '')
+	{
+		$value = $defaultvalue;
+
+		if (count(self::$siteprefs) == 0)
+		{
+			self::$siteprefs = CmsCache::get_instance()->call('CmsApplication::load_site_preferences');
+		}
+
+		if (isset(self::$siteprefs[$prefname]))
+		{
+			$value = self::$siteprefs[$prefname];
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Removes the given site preference
+	 *
+	 * @param string Preference name to remove
+	 */
+	public static function remove_preference($prefname)
+	{
+		$db = cms_db();
+
+		$query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ?";
+		$result = $db->Execute($query, array($prefname));
+
+		if (isset(self::$siteprefs[$prefname]))
+		{
+			unset(self::$siteprefs[$prefname]);
+		}
+
+		if ($result) $result->Close();
+		CmsCache::clear();
+	}
+
+	/**
+	 * Sets the given site perference with the given value.
+	 *
+	 * @since 0.6
+	 */
+	public static function set_preference($prefname, $value)
+	{
+		$doinsert = true;
+
+		$db = cms_db();
+
+		$query = "SELECT sitepref_value from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ".$db->qstr($prefname);
+		$result = $db->Execute($query);
+
+		if ($result && $result->RecordCount() > 0)
+		{
+			$doinsert = false;
+		}
+
+		if ($result) $result->Close();
+
+		if ($doinsert)
+		{
+			$query = "INSERT INTO ".cms_db_prefix()."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr($prefname).", ".$db->qstr($value).")";
+			$db->Execute($query);
+		}
+		else
+		{
+			$query = "UPDATE ".cms_db_prefix()."siteprefs SET sitepref_value = ".$db->qstr($value)." WHERE sitepref_name = ".$db->qstr($prefname);
+			$db->Execute($query);
+		}
+		self::$siteprefs[$prefname] = $value;
+		CmsCache::clear();
 	}
 
 	function dbshutdown()

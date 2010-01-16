@@ -148,6 +148,25 @@ if ($page == '')
 //from the database.
 $pageinfo = PageInfoOperations::load_page_info_by_content_alias($page);
 
+//No info?  Then it's a bum page.  If we had a custom 404, then it's info
+//would've been returned earlier.  The only option left is to show the generic
+//404 message and exit out.
+if ($pageinfo == null)
+{
+	//CmsResponse::send_error_404();
+	echo "404 error\n";
+	exit;
+}
+
+//Render the pageinfo object
+echo $pageinfo->render();
+
+//Send any headers.  After the render?  Sure, because modules that
+//have been processed could have changed what values should be in the
+//headers.  Plus, it's output buffered, so the content isn't actually
+//getting sent until the ob_flush below this.
+echo $pageinfo->send_headers();
+
 /*
 $pageinfo = '';
 if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
@@ -188,6 +207,7 @@ if( !is_object($pageinfo) )
 */
 
 // $page cannot be empty here
+/*
 if (isset($pageinfo) && $pageinfo !== FALSE)
 {
 	$gCms->variables['pageinfo'] = $pageinfo;
@@ -234,7 +254,9 @@ else if (get_site_preference('enablecustom404') == '' || get_site_preference('en
 	ErrorHandler404();
 	exit;
 }
+*/
 
+/*
 $html = '';
 $cached = '';
 
@@ -274,12 +296,14 @@ else
 		  }
 	}
 }
+*/
 
 #if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
 #{
 #	set_error_handler($old_error_handler);
 #}
 
+/*
 if (!$cached)
 {
 	//Events::SendEvent('Core', 'ContentPostRenderNonCached', array(&$html));
@@ -290,6 +314,8 @@ Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . (isset($pageinfo->template_encoding) && $pageinfo->template_encoding != ''?$pageinfo->template_encoding:get_encoding()));
 
 echo $html;
+
+*/
 
 //Calculate our profiler data
 $endtime = $profiler->get_time();
@@ -315,44 +341,18 @@ echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -
 
 //var_dump(CmsLogin::get_current_user());
 
-//if (CmsConfig::get('debug'))
-//{
-	echo "<p>Generated in ".$endtime." seconds by CMS Made Simple using ".CmsDatabase::query_count()." SQL queries and " . $memory . " bytes of memory</p>";
+if (CmsConfig::get('debug') || !CmsConfig::get('debug'))
+{
 	echo CmsProfiler::get_instance()->report();
-//}
-
-/*
-$memory = (function_exists('memory_get_usage')?memory_get_usage():0);
-$memory = $memory - $orig_memory;
-$memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
-if( !isset($config['hide_performance_info']) )
-{
-echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak} -->\n";
-}
-echo microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}\n";
-
-if( is_sitedown() || $config['debug'] == true)
-{
-	$smarty->clear_compiled_tpl();
-	#$smarty->clear_all_cache();
 }
 
-if ( !is_sitedown() && $config["debug"] == true)
+if (CmsApplication::get_preference('enablesitedownmessage') == "1" || CmsConfig::get('debug') == true)
 {
-	#$db->LogSQL(false); // turn off logging
-	
-	# output summary of SQL logging results
-	#$perf = NewPerfMonitor($db);
-	#echo $perf->SuspiciousSQL();
-	#echo $perf->ExpensiveSQL();
-
-	#echo $sql_queries;
-	foreach ($gCms->errors as $error)
-	{
-		echo $error;
-	}
+	cms_smarty()->clear_compiled_tpl();
 }
-*/
+
+//Clear out any previews that may be going on
+//CmsPreview::clear_preview();
 
 if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
 {
