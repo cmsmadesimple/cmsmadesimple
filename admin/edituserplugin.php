@@ -65,6 +65,11 @@ if ($access) {
 			$error[] = lang('nofieldgiven', array(lang('editusertag')));
 			$validinfo = false;
 		}
+		elseif(preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$>', $plugin_name) == 0)
+		{
+			$error[] = lang('error_udt_name_chars');
+			$validinfo = false;
+		}
 		else
 		{
 			if ($plugin_name != $orig_plugin_name && in_array($plugin_name, $gCms->cmsplugins))
