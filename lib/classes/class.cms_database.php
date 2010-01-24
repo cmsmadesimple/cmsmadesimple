@@ -57,6 +57,14 @@ class CmsDatabase extends CmsObject
 		}
 	}
 	
+	static public function unload()
+	{
+		if (self::$instance !== null)
+			self::$instance->close();
+		
+		self::$instance = null;
+	}
+	
 	static public function get_prefix()
 	{
 		if (self::$prefix === null)
@@ -138,7 +146,17 @@ class CmsDatabase extends CmsObject
 	    }
 		else
 		{
-			$dbinstance->Execute('set names utf8');
+			//if(!empty($config['default_encoding']) && $config['default_encoding'] == 'utf-8' && $config['set_names'] == true)
+			//{
+				try
+				{
+					$dbinstance->Execute("SET NAMES 'utf8'");
+				}
+				catch (exception $e)
+				{
+					//Ignore for now
+				}
+			//}
 		}
 	
 		if ($make_global)

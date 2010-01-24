@@ -307,17 +307,20 @@ class CmsContentOperations extends CmsObject
 		else
 			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
 
-		$dbresult = $db->Execute($query);
-
-		while ($dbresult && !$dbresult->EOF)
+		$dbresult = array();
+		//try
+		//{
+			$dbresult = $db->GetCol($query);
+		//}
+		//catch (Exception $ex)
+		//{
+		
+		//}
+		
+		foreach ($dbresult as $one_id)
 		{
-			self::set_hierarchy_position($dbresult->fields['content_id']);
-			$dbresult->MoveNext();
+			self::set_hierarchy_position($one_id);
 		}
-		
-		if ($dbresult) $dbresult->Close();
-		
-		//CmsContentOperations::reset_nested_set();
 	}
 	
 	public static function SetAllHierarchyPositions($lft = -1, $rgt = -1)
@@ -721,8 +724,16 @@ class CmsContentOperations extends CmsObject
 		$cms_db_prefix = cms_db_prefix();
 		
 		$hierarchy = array();
+		$orig_hierarchy = array();
 		
-		$orig_hierarchy = $db->GetCol("SELECT hierarchy FROM {$cms_db_prefix}content ORDER BY hierarchy ASC");
+		//try
+		//{
+			$orig_hierarchy = $db->GetCol("SELECT hierarchy FROM {$cms_db_prefix}content ORDER BY hierarchy ASC");
+		//}
+		//catch (Exception $ex)
+		//{
+			
+		//}
 		
 		foreach ($orig_hierarchy as $one)
 		{

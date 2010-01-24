@@ -81,7 +81,7 @@ class ModuleLoader
 
 		#Figger out what modules are active and/or installed
 		#Load them if loadall is false
-		if (isset($db))
+		if (isset($db) && $db->IsConnected())
 		{
 			$query = '';
 			$where = array();

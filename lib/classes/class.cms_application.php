@@ -358,17 +358,20 @@ class CmsApplication extends CmsObject
 		$db = cms_db();
 		
 		$result = array();
-
-		$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
-		$dbresult = &$db->Execute($query);
-
-		while ($dbresult && !$dbresult->EOF)
+		
+		if ($db->IsConnected())
 		{
-			$result[$dbresult->fields['sitepref_name']] = $dbresult->fields['sitepref_value'];
-			$dbresult->MoveNext();
-		}
+			$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
+			$dbresult = $db->Execute($query);
 
-		if ($dbresult) $dbresult->Close();
+			while ($dbresult && !$dbresult->EOF)
+			{
+				$result[$dbresult->fields['sitepref_name']] = $dbresult->fields['sitepref_value'];
+				$dbresult->MoveNext();
+			}
+
+			if ($dbresult) $dbresult->Close();
+		}
 
 		return $result;
 	}

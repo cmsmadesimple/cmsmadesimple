@@ -38,7 +38,7 @@ function load_plugins(&$smarty)
 	$userplugins = &$gCms->userplugins;
 	$userpluginfunctions = &$gCms->userpluginfunctions;
 	$db = &$gCms->GetDb();
-	if (isset($db))
+	if (isset($db) && $db->IsConnected())
 	{
 		#if (@is_dir(dirname(dirname(__FILE__))."/plugins/cache"))
 		#{
@@ -218,14 +218,14 @@ function global_content_regex_callback($matches)
 
 function is_sitedown()
 {
-  if( get_site_preference('enablesitedownmessage') !== '1' ) return FALSE;
-  $excludes = get_site_preference('sitedownexcludes','');
-  if( !isset($_SERVER['REMOTE_ADDR']) ) return TRUE;
-  if( empty($excludes) ) return TRUE;
-  
-  $ret = cms_ipmatches($_SERVER['REMOTE_ADDR'],$excludes);
-  if( $ret ) return FALSE;
-  return TRUE;
+	if( CmsApplication::get_preference('enablesitedownmessage', '0') !== '1' ) return FALSE;
+	$excludes = CmsApplication::get_preference('sitedownexcludes','');
+	if( !isset($_SERVER['REMOTE_ADDR']) ) return TRUE;
+	if( empty($excludes) ) return TRUE;
+
+	$ret = cms_ipmatches($_SERVER['REMOTE_ADDR'],$excludes);
+	if( $ret ) return FALSE;
+	return TRUE;
 }
 
 # vim:ts=4 sw=4 noet

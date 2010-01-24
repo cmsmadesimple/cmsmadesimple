@@ -533,24 +533,9 @@ function load_site_preferences()
  *
  * @since 0.6
  */
-function get_site_preference($prefname, $defaultvalue = '') {
-
-	$value = $defaultvalue;
-
-	global $gCms;
-	$siteprefs =& $gCms->siteprefs;
-	
-	if (count($siteprefs) == 0)
-	{
-		load_site_preferences();
-	}
-
-	if (isset($siteprefs[$prefname]))
-	{
-		$value = $siteprefs[$prefname];
-	}
-
-	return $value;
+function get_site_preference($prefname, $defaultvalue = '')
+{
+	return CmsApplication::get_preference($prefname, $defaultvalue);
 }
 
 /**
@@ -558,26 +543,26 @@ function get_site_preference($prefname, $defaultvalue = '') {
  *
  * @param string Preference name to remove
  */
-function remove_site_preference($prefname,$uselike=false)
+function remove_site_preference($prefname, $uselike=false)
 {
 	global $gCms;
-	$db =& $gCms->GetDb();
-$db->debug = true;
+	$db = $gCms->GetDb();
+
 	$siteprefs = &$gCms->siteprefs;
 
 	$query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ?";
 	if( $uselike == true )
-	  {
-	    $query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name LIKE ?";
+	{
+		$query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name LIKE ?";
 		$prefname .= '%';
-	  }
+	}
 	$result = $db->Execute($query, array($prefname));
 
 	if (isset($siteprefs[$prefname]))
 	{
 		unset($siteprefs[$prefname]);
 	}
-	
+
 	if ($result) $result->Close();
 }
 

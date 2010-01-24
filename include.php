@@ -117,7 +117,7 @@ if (isset($page))
 }
 
 #Set a umask
-$global_umask = get_site_preference('global_umask','');
+$global_umask = CmsApplication::get_preference('global_umask','');
 if( $global_umask != '' )
 {
   @umask( octdec($global_umask) );
@@ -125,7 +125,7 @@ if( $global_umask != '' )
 
 #Set the locale if it's set
 #either in the config, or as a site preference.
-$frontendlang = get_site_preference('frontendlang','');
+$frontendlang = CmsApplication::get_preference('frontendlang','');
 if (isset($config['locale']) && $config['locale'] != '')
 {
 	$frontendlang = $config['locale'];
@@ -139,7 +139,7 @@ if (isset($config['timezone']) && ! empty($config['timezone']) && function_exist
 	date_default_timezone_set($config['timezone']);
 }
 
-$smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
+$smarty->assign('sitename', CmsApplication::get_preference('sitename', 'CMSMS Site'));
 $smarty->assign('lang',$frontendlang);
 $smarty->assign('encoding',get_encoding());
 $smarty->assign_by_ref('gCms',$gCms);
