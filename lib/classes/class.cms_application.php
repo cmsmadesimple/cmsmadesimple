@@ -305,25 +305,30 @@ class CmsApplication extends CmsObject
 		return $this->pageinfooperations;
 	}
 
-	function GetSmarty()
+	public static function GetSmarty()
 	{
 		//Check to see if it hasn't been
 		//instantiated yet.  If not, connect
 		//and return it
-		if (!isset($this->smarty))
+		/*
+		$gCms = CmsApplication::get_instance();
+		
+		if (!isset($gCms->smarty))
 		{
-			$conf =& $this->GetConfig();
+			$conf = cms_config();
 
 			if (!defined('SMARTY_DIR'))
 			{
-				define('SMARTY_DIR', cms_join_path(ROOT_DIR,'lib','smarty') . DIRECTORY_SEPARATOR);
+				define('SMARTY_DIR', cms_join_path(ROOT_DIR, 'lib', 'smarty') . DIRECTORY_SEPARATOR);
 			}
 
 			#Setup global smarty object
-			$this->smarty = new CmsSmarty($conf);
+			$gCms->smarty = new CmsSmarty($conf);
 		}
 
-        return $this->smarty;
+		return $gCms->smarty;
+		*/
+		return CmsSmarty::get_instance();
 	}
 
 	public static function GetHierarchyManager()
@@ -453,15 +458,31 @@ class CmsApplication extends CmsObject
 		self::$siteprefs[$prefname] = $value;
 		CmsCache::clear();
 	}
+	
+	public static function is_sitedown()
+	{
+		if (self::get_preference('enablesitedownmessage', '0') !== '1')
+			return FALSE;
+		
+		$excludes = self::get_preference('sitedownexcludes','');
+		
+		if (!isset($_SERVER['REMOTE_ADDR']))
+			return TRUE;
+		
+		if (empty($excludes))
+			return TRUE;
+
+		$ret = cms_ipmatches($_SERVER['REMOTE_ADDR'], $excludes);
+		
+		if ($ret)
+			return FALSE;
+		
+		return TRUE;
+	}
 
 	function dbshutdown()
 	{
-		if (isset($this->db))
-		{
-			$db =& $this->db;
-			if ($db->IsConnected())
-				$db->Close();
-		}
+		CmsDatabase::close();
 	}
 }
 

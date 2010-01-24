@@ -128,7 +128,8 @@ function cmsms()
 
 function cms_smarty()
 {
-	return cmsms()->GetSmarty();
+	//return cmsms()->GetSmarty();
+	return CmsSmarty::get_instance();
 }
 
 /**

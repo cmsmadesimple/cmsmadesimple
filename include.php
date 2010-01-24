@@ -163,7 +163,7 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 }
 
 #Load all installed module code
-$modload =& $gCms->GetModuleLoader();
+$modload = $gCms->GetModuleLoader();
 $modload->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
 
 debug_buffer('', 'End of include');

@@ -20,23 +20,27 @@ require_once(cms_join_path(ROOT_DIR,'lib','smarty','Smarty.class.php'));
 
 class CmsSmarty extends Smarty
 {
-	function __construct(&$config)
+	static private $instance = NULL;
+	
+	function __construct()
 	{
 		parent::__construct();
 		global $CMS_ADMIN_PAGE;
+		
+		$config = cms_config();
 
-		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins', $config["root_path"].'/plugins');
+		$this->plugins_dir = array(cms_join_path(ROOT_DIR, 'lib', 'smarty', 'plugins'), cms_join_path(ROOT_DIR, 'plugins'));
 
 		if (isset($CMS_ADMIN_PAGE) && $CMS_ADMIN_PAGE == 1)
 		{
 			$this->template_dir = $config["root_path"].'/'.$config['admin_dir'].'/templates/';
 			$this->config_dir = $config["root_path"].'/'.$config['admin_dir'].'/configs/';
-			$this->plugins_dir[] = cms_join_path($config['root_path'], $config['admin_dir'], 'plugins');
+			$this->plugins_dir[] = cms_join_path(ROOT_DIR, $config['admin_dir'], 'plugins');
 		}
 		else
 		{
-			$this->template_dir = $config["root_path"].'/tmp/templates/';
-			$this->config_dir = $config["root_path"].'/tmp/configs/';
+			$this->template_dir = ROOT_DIR.'/tmp/templates/';
+			$this->config_dir = ROOT_DIR.'/tmp/configs/';
 		}
 		
 		$this->compile_dir = TMP_TEMPLATES_C_LOCATION;
@@ -62,7 +66,7 @@ class CmsSmarty extends Smarty
 			$this->debugging = true;
 		}
 
-		if (is_sitedown())
+		if (CmsApplication::is_sitedown())
 		{
 			$this->caching = false;
 			$this->force_compile = true;
@@ -73,8 +77,6 @@ class CmsSmarty extends Smarty
 			$this->caching = false;
 			$this->force_compile = true;
 		}
-
-		load_plugins($this);
 
 		$this->register_resource("db", array(&$this, "template_get_template",
 						       "template_get_timestamp",
@@ -124,6 +126,30 @@ class CmsSmarty extends Smarty
 						       "module_file_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
+	}
+	
+	/**
+	 * Returns an instnace of the CmsSmarty singleton.  Most 
+	 * people can generally use cms_smarty() instead of this, but they 
+	 * both do the same thing.
+	 *
+	 * @return CmsSmarty The singleton CmsSmarty instance
+	 * @author Ted Kulp
+	 **/
+	static public function get_instance()
+	{
+		if (!isset(self::$instance))
+		{
+			if (!defined('SMARTY_DIR'))
+			{
+				define('SMARTY_DIR', cms_join_path(ROOT_DIR, 'lib', 'smarty') . DIRECTORY_SEPARATOR);
+			}
+			
+			self::$instance = new CmsSmarty();
+			
+			CmsSmarty::load_plugins();
+		}
+		return self::$instance;
 	}
 
     /**
@@ -311,7 +337,7 @@ class CmsSmarty extends Smarty
 	  global $gCms;
 	  $config =& $gCms->GetConfig();
 	  
-	  if (is_sitedown())
+	  if (CmsApplication::is_sitedown())
 	    {
 	      $tpl_source = '';
 	      return true;
@@ -357,7 +383,7 @@ class CmsSmarty extends Smarty
 	  global $gCms;
 	  $config =& $gCms->GetConfig();
 	  
-	  if (is_sitedown())
+	  if (CmsApplication::is_sitedown())
 	    {
 	      $tpl_source = '';
 	      return true;
@@ -407,7 +433,7 @@ class CmsSmarty extends Smarty
 	  global $gCms;
 	  $config =& $gCms->GetConfig();
 	  
-	  if (is_sitedown())
+	  if (CmsApplication::is_sitedown())
 	    {
 	      header('HTTP/1.0 503 Service Unavailable');
 	      header('Status: 503 Service Unavailable');
@@ -459,9 +485,9 @@ class CmsSmarty extends Smarty
 	function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config = cms_config();
 
-		if (is_sitedown())
+		if (CmsApplication::is_sitedown())
 		{
 			$tpl_source = get_site_preference('sitedownmessage');
 			return true;
@@ -568,7 +594,7 @@ class CmsSmarty extends Smarty
 	{
 		global $gCms;
 
-		if (is_sitedown() || $tpl_name == 'notemplate')
+		if (CmsApplication::is_sitedown() || $tpl_name == 'notemplate')
 		{
 			$tpl_timestamp = time();
 			return true;
@@ -751,6 +777,129 @@ class CmsSmarty extends Smarty
 	public function set_id_from_request()
 	{
 		$this->id = CmsRequest::get_id_from_request();
+	}
+	
+	/**
+	 * Loads all plugins into the system
+	 *
+	 * @since 0.5
+	 */
+	public static function load_plugins()
+	{
+		if ($smarty == null)
+			$smarty = self::get_instance();
+		
+		$gCms = cmsms();
+		$plugins = &$gCms->cmsplugins;
+		$userplugins = &$gCms->userplugins;
+		$userpluginfunctions = &$gCms->userpluginfunctions;
+		$db = cms_db();
+		
+		if (isset($db) && $db->IsConnected())
+		{
+			#if (@is_dir(dirname(dirname(__FILE__))."/plugins/cache"))
+			#{
+			#	search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins/cache", true);
+			#}
+			CmsSmarty::search_plugins($smarty, $plugins, cms_join_path(ROOT_DIR, 'plugins'), false);
+
+			$query = "SELECT * FROM ".cms_db_prefix()."userplugins";
+			$result = $db->Execute($query);
+			while ($result && !$result->EOF)
+			{
+				if (!in_array($result->fields['userplugin_name'], $plugins))
+				{
+					$plugins[] =& $result->fields['userplugin_name'];
+					$userplugins[$result->fields['userplugin_name']] = $result->fields['userplugin_id'];
+					$functionname = "cms_tmp_".$result->fields['userplugin_name']."_userplugin_function";
+					//Only register valid code
+					if (!(@eval('function '.$functionname.'($params, &$smarty) {'.$result->fields['code'].'}') === FALSE))
+					{
+						$smarty->register_function($result->fields['userplugin_name'], $functionname, false);
+
+						//Register the function in a hash so that we can call it from other places by name
+						$userpluginfunctions[$result->fields['userplugin_name']] = $functionname;
+					}
+				}
+				$result->MoveNext();
+			}
+			sort($plugins);
+		}
+		
+	}
+	
+	public static function search_plugins(&$smarty, &$plugins, $dir, $caching)
+	{
+		global $CMS_LOAD_ALL_PLUGINS;
+
+		$types = array('function', 'compiler', 'prefilter', 'postfilter', 'outputfilter', 'modifier', 'block');
+		$handle = opendir($dir);
+		while ($file = readdir($handle))
+		{
+			// This hides the dummy function.summarize.php
+			// (function.summarize.php was renamed to modifier.summarize.php in 1.0.3)
+			// This code can be deleted once the dummy is removed from the distribution
+			// TODO: DELETE
+			if (
+				$file == 'function.summarize.php' &&
+				substr(file_get_contents(cms_join_path($dir, $file)), 9, 9) == '__DUMMY__'
+			)
+			{
+					continue;
+			}
+			// END TODO: DELETE
+
+			$path_parts = pathinfo($file);
+			if (isset($path_parts['extension']) && $path_parts['extension'] == 'php')
+			{
+				//Valid plugins will always have a 3 part filename
+				$filearray = explode('.', $path_parts['basename']);
+				if (count($filearray == 3))
+				{
+					$filename = cms_join_path($dir, $file);
+					//The part we care about is the middle one...
+					$file = $filearray[1];
+					if (!isset($plugins[$file]) && in_array($filearray[0],$types))
+					{
+						$key = array_search($filearray[0], $types);
+						$load = true;
+						switch ($key)
+						{
+							case 0:
+									if (isset($CMS_LOAD_ALL_PLUGINS))
+										$smarty->register_function($file, "smarty_cms_function_" . $file, $caching);
+									else
+										$load=false;
+									break;
+							case 1:
+									$smarty->register_compiler_function($file, "smarty_cms_compiler_" .  $file, $caching);
+									break;
+							case 2:
+									$smarty->register_prefilter("smarty_cms_prefilter_" . $file);
+									break;
+							case 3:
+									$smarty->register_postfilter("smarty_cms_postfilter_" . $file);
+									break;
+							case 4:
+									$smarty->register_outputfilter("smarty_cms_outputfilter_" . $file);
+									break;
+							case 5:
+									$smarty->register_modifier($file, "smarty_cms_modifier_" . $file);
+									break;
+							case 6:
+									$smarty->register_block($file, "smarty_cms_block_" . $file);
+									break;
+						}
+						if ($load)
+						{
+							$plugins[] = $file;
+							require_once($filename);
+						}
+					}
+				}
+			}
+		}
+		closedir($handle);
 	}
 }
 

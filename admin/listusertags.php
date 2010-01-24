@@ -40,7 +40,7 @@ if (!$access) {
 }
 
 $smarty = new CmsSmarty($gCms->config);
-load_plugins($smarty);
+CmsSmarty::load_plugins($smarty);
 
 include_once("header.php");
 

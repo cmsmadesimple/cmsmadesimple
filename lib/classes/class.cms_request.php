@@ -81,6 +81,8 @@ class CmsRequest extends CmsObject
 	{
 		$id = '';
 		
+		$smarty = cms_smarty();
+		
 		if (isset($params['mact']))
 		{
 			$ary = explode(',', cms_htmlentities($params['mact']), 4);

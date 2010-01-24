@@ -49,33 +49,34 @@ class CMSModule
 	private $modblock;
 	private $param_map;
 	private $restrict_unknown_params;
-	var     $smarty;  // this should go to, but left for backwards compatibility.
-
+	
+	var $smarty;  // this should go to, but left for backwards compatibility.
+	
 	public function __construct()
 	{
-	  // specify that the autoload member will be used
-	  // for autoloading undefined classes.
-	  spl_autoload_register(array($this,'autoload'));
+		// specify that the autoload member will be used
+		// for autoloading undefined classes.
+		spl_autoload_register(array($this,'autoload'));
 
-	  $gCms = cmsms();
-	  $config = cms_config();		
-	  $this->smarty =& $gCms->GetSmarty();
+		$gCms = cmsms();
+		$config = cms_config();		
+		$this->smarty = $gCms->GetSmarty();
 
-	  global $CMS_ADMIN_PAGE;
-	  global $CMS_MODULE_PAGE;
+		global $CMS_ADMIN_PAGE;
+		global $CMS_MODULE_PAGE;
 		if (isset($CMS_ADMIN_PAGE))
 		{
 			$this->curlang = '';
 		}
 		else
 		{
-		  $this->curlang = get_site_preference('frontendlang','');
-		  if (isset($config['locale']) && $config['locale'] != '') {
-		      $this->curlang = $config['locale'];
-		    }
-		  if( $this->curlang == '' ) {
-		    $this->curlang = 'en_US';
-		  }
+			$this->curlang = get_site_preference('frontendlang','');
+			if (isset($config['locale']) && $config['locale'] != '') {
+				$this->curlang = $config['locale'];
+			}
+			if( $this->curlang == '' ) {
+				$this->curlang = 'en_US';
+			}
 		}
 		$this->langhash = array();
 		$this->params = array();
@@ -83,25 +84,25 @@ class CMSModule
 		$this->restrict_unknown_params = false;
 		$this->wysiwygactive = false;
 		$this->error = '';
-		
+
 		$this->params[] = array(
-					'name' => 'lang',
-					'default' => 'en_US',
-					'help' => lang('langparam'),
-					'optional' => true);
+			'name' => 'lang',
+			'default' => 'en_US',
+			'help' => lang('langparam'),
+			'optional' => true);
 
 		if( !isset($CMS_ADMIN_PAGE) || isset($CMS_MODULE_PAGE) )
-		  {
-		    $this->SetParameterType('assign',CLEAN_STRING);
-		    $this->SetParameterType('module',CLEAN_STRING);
-		    $this->SetParameterType('lang',CLEAN_STRING);
-		    $this->SetParameterType('returnid',CLEAN_INT);
-		    $this->SetParameterType('action',CLEAN_STRING);
-		    $this->SetParameterType('showtemplate',CLEAN_STRING);
-		    $this->SetParameterType('inline',CLEAN_INT);
-		    $this->SetParameters();
-		  }
-		
+		{
+			$this->SetParameterType('assign',CLEAN_STRING);
+			$this->SetParameterType('module',CLEAN_STRING);
+			$this->SetParameterType('lang',CLEAN_STRING);
+			$this->SetParameterType('returnid',CLEAN_INT);
+			$this->SetParameterType('action',CLEAN_STRING);
+			$this->SetParameterType('showtemplate',CLEAN_STRING);
+			$this->SetParameterType('inline',CLEAN_INT);
+			$this->SetParameters();
+		}
+
 		$this->modinstall = false;
 		$this->modtemplates = false;
 		$this->modlang = false;
@@ -110,13 +111,6 @@ class CMSModule
 		$this->modmisc = false;
 		$this->modblock = false;
 	}
-
-
-	public function CMSModule()
-	{
-	  $this->__construct();
-	}
-
 
 	/**
 	 * Function to handle autoloading of undefined classes.
@@ -207,7 +201,7 @@ class CMSModule
 		if ($name == '')
 			$name = $this->GetName();
 
-		$smarty =& $gCms->GetSmarty();
+		$smarty = $gCms->GetSmarty();
 		$smarty->register_function($name, array($this, $plugin));
 	}
 
@@ -1048,7 +1042,7 @@ class CMSModule
 					global $gCms;
 					$db =& $gCms->GetDb();
 					$config =& $gCms->GetConfig();
-					$smarty =& $gCms->GetSmarty();
+					$smarty = cms_smarty();
 
 					include($filename);
 
@@ -2066,7 +2060,7 @@ class CMSModule
 					global $gCms;
 					$db =& $gCms->GetDb();
 					$config =& $gCms->GetConfig();
-					$smarty =& $gCms->GetSmarty();
+					$smarty = cms_smarty();
 
 					include($filename);
 

@@ -106,7 +106,7 @@ class CmsDatabase extends CmsObject
 
 		try
 		{
-			$dbinstance = &ADONewConnection($dbms);
+			$dbinstance = ADONewConnection($dbms);
 			$dbinstance->fnExecute = 'count_execs';
 			$dbinstance->fnCacheExecute = 'count_cached_execs';
 	
@@ -157,6 +157,7 @@ class CmsDatabase extends CmsObject
 					//Ignore for now
 				}
 			//}
+			$dbinstance->debug = true;
 		}
 	
 		if ($make_global)

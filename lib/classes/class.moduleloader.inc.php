@@ -36,12 +36,12 @@ class ModuleLoader
 	*/
 	function LoadModules($loadall = false, $noadmin = false)
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$gCms = cmsms();
+		$db = cms_db();
 		$cmsmodules = &$gCms->modules;
-
-		$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
-
+		
+		$dir = cms_join_path(ROOT_DIR, "modules");
+		
 		if ($loadall == true)
 		{
 			if ($handle = @opendir($dir))
@@ -59,9 +59,10 @@ class ModuleLoader
 				}
 				closedir($handle);
 			}
-
+			
 			//Find modules and instantiate them
 			$allmodules = $this->FindModules();
+			
 			foreach ($allmodules as $onemodule)
 			{
 				if (class_exists($onemodule))
@@ -78,7 +79,7 @@ class ModuleLoader
 				}
 			}
 		}
-
+		
 		#Figger out what modules are active and/or installed
 		#Load them if loadall is false
 		if (isset($db) && $db->IsConnected())
