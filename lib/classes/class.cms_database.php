@@ -99,24 +99,24 @@ class CmsDatabase extends CmsObject
 		
 		$dbinstance = null;
 
-		$_GLOBALS['ADODB_CACHE_DIR'] = cms_join_path(ROOT_DIR,'tmp','cache');
+		$_GLOBALS['ADODB_CACHE_DIR'] = cms_join_path(ROOT_DIR, 'tmp', 'cache');
 
-		require_once(cms_join_path(ROOT_DIR,'lib','adodb','adodb-exceptions.inc.php'));
-		require_once(cms_join_path(ROOT_DIR,'lib','adodb','adodb.inc.php'));
+		require_once(cms_join_path(ROOT_DIR, 'lib', 'adodb', 'adodb-exceptions.inc.php'));
+		require_once(cms_join_path(ROOT_DIR, 'lib', 'adodb', 'adodb.inc.php'));
 
 		try
 		{
 			$dbinstance = ADONewConnection($dbms);
-			$dbinstance->fnExecute = 'count_execs';
+			$dbinstance->fnExecute = 'pre_parse_query';
 			$dbinstance->fnCacheExecute = 'count_cached_execs';
 	
 			if ($persistent)
 			{
-				$connect_result = @$dbinstance->PConnect($hostname,$username,$password,$dbname);
+				$connect_result = @$dbinstance->PConnect($hostname, $username, $password, $dbname);
 			}
 			else
 			{
-				$connect_result = @$dbinstance->Connect($hostname,$username,$password,$dbname);
+				$connect_result = @$dbinstance->Connect($hostname, $username, $password, $dbname);
 			}
 		}
 		catch (exception $e)
@@ -226,9 +226,11 @@ function adodb_outp($msg, $newline = true)
 }
 
 //TODO: Clean me up.  Globals?  Yuck!
-function count_execs($db, $sql, $inputarray)
+function pre_parse_query($db, &$sql, $inputarray)
 {
 	//CmsProfiler::get_instance()->mark($sql);
+	
+	$sql = strtr($sql, array('{' => cms_db_prefix(), '}' => ''));
 
 	global $EXECS;
 

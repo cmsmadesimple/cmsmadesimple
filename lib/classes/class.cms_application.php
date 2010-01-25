@@ -366,7 +366,7 @@ class CmsApplication extends CmsObject
 		
 		if ($db->IsConnected())
 		{
-			$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
+			$query = "SELECT sitepref_name, sitepref_value from {siteprefs}";
 			$dbresult = $db->Execute($query);
 
 			while ($dbresult && !$dbresult->EOF)

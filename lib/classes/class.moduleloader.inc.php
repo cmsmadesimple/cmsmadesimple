@@ -94,7 +94,7 @@ class ModuleLoader
 			  {
 			    $where[] = 'active = 1';
 			  }
-			$query = 'SELECT * FROM '.cms_db_prefix().'modules ';
+			$query = 'SELECT * FROM {modules} ';
 			if( count($where) )
 			  {
 			    $query.= 'WHERE '.implode(' AND ',$where);
