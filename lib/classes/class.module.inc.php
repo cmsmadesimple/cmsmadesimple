@@ -26,7 +26,8 @@
  * @since		0.9
  * @package		CMS
  */
-class CMSModule
+
+class CMSModule extends CmsModuleBase 
 {
 	/**
 	 * ------------------------------------------------------------------
@@ -36,19 +37,19 @@ class CMSModule
 	protected $wysiwygactive;
 	protected $syntaxactive;
 
-	private $curlang;
-	private $langhash;
-	private $params;
-	private $error;
-	private $modinstall;
-	private $modtemplates;
-	private $modlang;
-	private $modform;
-	private $modredirect;
-	private $modmisc;
-	private $modblock;
-	private $param_map;
-	private $restrict_unknown_params;
+	var $curlang;
+	var $langhash;
+	var $params;
+	var $error;
+	var $modinstall;
+	var $modtemplates;
+	var $modlang;
+	var $modform;
+	var $modredirect;
+	var $modmisc;
+	var $modblock;
+	var $param_map;
+	var $restrict_unknown_params;
 	
 	var $smarty;  // this should go to, but left for backwards compatibility.
 	
@@ -232,10 +233,25 @@ class CMSModule
 
 	/**
 	 * Returns the name of the module
+	 * @deprecated Deprecated. Use CmsModuleBase::get_name() instead.
 	 */
 	public function GetName()
 	{
 		return 'unset';
+	}
+
+    /**
+     * ------------------------------------------------------------------
+     * Basic Methods. get_name and get_version MUST be overridden.
+     * ------------------------------------------------------------------
+     */
+
+    /**
+     * Returns the name of the module
+     */
+    public function get_name()
+	{
+		return $this->GetName();
 	}
 
 	/**
@@ -265,10 +281,19 @@ class CMSModule
 
 	/**
 	 * Returns the version of the module
+	 * @deprecated Deprecated. Use CmsModuleBase::get_version() instead.
 	 */
 	public function GetVersion()
 	{
 		return '0.0.0.1';
+	}
+
+    /**
+     * Returns the version of the module
+     */
+    public function get_version()
+	{
+		return $this->GetVersion();
 	}
 
 	/**
@@ -1031,13 +1056,19 @@ class CMSModule
 	 */
 	public function DoAction($name, $id, $params, $returnid='')
 	{
-	  $this->smarty->assign($this->GetName(),$this);
-
-		if ($name != '')
+		$this->smarty->assign($this->GetName(),$this);
+		switch ($name)
 		{
-			$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
-			if (@is_file($filename))
-			{
+			case '':break;
+			case 'admin_templates':
+				$this->admin_templates($id,$params,$returnid='');
+				break;
+			case 'edit_template':
+				$this->edit_template($id,$params,$returnid='');
+				break;
+			default:
+				$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
+				if (@is_file($filename))
 				{
 					global $gCms;
 					$db =& $gCms->GetDb();
@@ -1045,9 +1076,8 @@ class CMSModule
 					$smarty = cms_smarty();
 
 					include($filename);
-
 				}
-			}
+				break;
 		}
 	}
 
@@ -1780,57 +1810,163 @@ class CMSModule
 		return $usertagops->CallUserTag($name, $params);
 	}
 
-	/**
-	 * ------------------------------------------------------------------
-	 * Tab Functions
-	 * ------------------------------------------------------------------
-	 */
-	public function StartTabHeaders()
-	{
-		return '<div id="page_tabs">';
-	}
+    /**
+     * Creates an Admin List of Module Templates for editing
+     * @param id - Module actionid
+	 * @param params - List of parameters from action
+	 * @param returnid - The returnid
+     * ------------------------------------------------------------------
+     */
 
-	public function SetTabHeader($tabid,$title,$active=false)
-	{
-		$a="";
-		if (TRUE == $active)
+    public function admin_templates($id, $params, $returnid='')
+    {
+		if( !$this->CheckPermission('Modify Templates') )
 		{
-			$a=" class='active'";
-			$this->mActiveTab = $tabid;
+			die('permission denied');
 		}
-	  return '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
-	}
 
-	public function EndTabHeaders()
-	{
-		return "</div><!-- EndTabHeaders -->";
-	}
+		$this->mActiveSubTab = array();
 
-	public function StartTabContent()
-	{
-		return '<div class="clearb"></div><div id="page_content">';
-	}
-
-	public function EndTabContent()
-	{
-		return '</div> <!-- EndTabContent -->';
-	}
-
-	public function StartTab($tabid, $params = array())
-	{
-		if (FALSE == empty($this->mActiveTab) && $tabid == $this->mActiveTab && FALSE == empty($params['tab_message'])) {
-			$message = $this->ShowMessage($this->Lang($params['tab_message']));
-		} else {
-			$message = '';
+		$module_templates = $this->list_templates();
+		if ($params['errors'])
+		{
+			echo '<div class="pageerrorcontainer"><ul class="pageerror"><li>'.$params['errors'].'</li></ul></div>';
 		}
-		return '<div id="' . strtolower(str_replace(' ', '_', $tabid)) . '_c">'.$message;
-	}
+		if ($params['messages'])
+		{
+			echo '<div class="pagemcontainer"><p class="pagemessage">'.$params['messages']."</p></div>";
+		}
 
-	public function EndTab()
+		
+		echo '<div class="pageoverflow" style="text-align: right; width: 80%;"><a href="'.
+		$this->CreateLink($id,'defaultadmin',$returnid,
+		       $this->Lang('back'),array(),'',true).'" title="'.$this->Lang('back').'">'.$this->Lang('back').'</a></div><br/>';
+
+		$sorted_templates = array();
+		foreach ($module_templates as $template)
+		{
+			$sorted_templates[$template->params['template_type']][] = $template->params;
+		}
+		
+		echo $this->StartTabHeaders();
+		foreach ($sorted_templates as $type=>$templates)
+		{
+			echo $this->SetTabHeader($type,	 $this->Lang($type.'_templates'));
+			$sorted_templates[$type][] = array('name'=>'New');
+		}
+		echo $this->EndTabHeaders();
+
+		echo $this->StartTabContent();
+		foreach ($sorted_templates as $type=>$templates)
+		{
+			echo $this->StartTab($type);
+			echo '<div id="page_tabs">';
+			foreach ($templates as $one)
+			{
+				echo '<div onclick="jQuery(\'.sub_'.$type.'_content\').hide();jQuery(\'#'.$type.$one['name'].'\').show();">'.$one['name'].'</div>';
+			}
+			echo '</div>';
+			echo '<div id="page_content">';
+			foreach ($templates as $one)
+			{
+				if (empty($this->mActiveSubTab[$type])) $this->mActiveSubTab[$type] = $type.$one['name'];
+				if ( $this->mActiveSubTab[$type] == $type.$one['name'] )
+				{
+					echo '<div class="sub_'.$type.'_content" id="'.$type.$one['name'].'">';
+				}
+				else
+				{
+					echo '<div class="sub_'.$type.'_content" id="'.$type.$one['name'].'" style="display:none;">';
+				}
+				echo $this->CreateFormStart ($id, 'edit_template',$returnid,'post','',
+						    false, '', $params);
+				if ( $one['name'] == 'New')
+				{
+					$name = $this->CreateInputText ($id, 'template', '', '15','150');
+				}
+				else
+				{
+				    $name = $this->CreateInputHidden($id, 'template', $one['name'] ).$one['name'];
+				}
+				echo $this->CreateInputHidden($id, 'template_type', $type );
+				echo '<div class="pageoverflow"><p class="pagetext">'.$this->Lang('prompt_templatename').':</p>
+						<p class="pageinput">'.$name.' '.$this->CreateInputCheckbox ($id,'defaulttemplate',true,$one['default']).' '.$this->Lang('default_template').'</p></div>';
+				echo '<div class="pageoverflow"><p class="pagetext">'.$this->Lang('prompt_template').':</p><p class="pageinput">';
+				echo $this->CreateSyntaxArea($id,$one['content'],'templatecontent');
+				echo '</p></div><div class="pageoverflow"><p class="pagetext">&nbsp;</p><p class="pageinput">';
+				echo $this->CreateInputSubmit ($id, 'submitbutton', $this->Lang('submit'));
+				echo $this->CreateInputSubmit ($id, 'cancel', $this->Lang('cancel'));
+				if ( $one['name'] != 'New')
+				{
+					echo $this->CreateInputSubmit ($id, 'deletebutton', $this->Lang('delete'));
+				}
+				echo $this->CreateInputSubmit ($id, 'applybutton', $this->Lang('apply')).'</p></div>';
+				echo $this->CreateFormEnd();
+				echo '</div>';	
+			}
+			echo '</div>';
+			echo $this->EndTab();
+		}
+		echo $this->EndTabContent();
+
+    }
+
+    /**
+     * Saves Module Templates form return from CmsModule::admin_templates
+     * @param id - Module actionid
+	 * @param params - List of parameters from action
+	 * @param returnid - The returnid
+     * ------------------------------------------------------------------
+     */
+
+    public function edit_template($id, $params, $returnid='')
 	{
-		return '</div> <!-- EndTab -->';
+		if( isset( $params['cancel'] ) )
+		  {
+			$this->Redirect($id,'defaultadmin');
+		  }
+		if( empty( $params['template'] ) )
+		  {
+			$params['errors'] = $this->Lang('error_insufficientparams');
+			$this->admin_templates($id,$params,$returnid);
+			return;
+		  }
+		if( empty( $params['template_type'] ) )
+		  {
+			$params['errors'] = $this->Lang('error_insufficientparams');
+			$this->admin_templates($id,$params,$returnid);
+			return;
+		  }
+		if( isset( $params['deletebutton'] ) )
+		  {
+			if ( $this->delete_template($params['template_type'],$params['template']) )
+			{
+				$params['messages'] = $this->Lang('template_deleted');
+			}
+			$this->admin_templates($id,$params,$returnid);
+			return;
+		  }
+		if( empty( $params['templatecontent'] ) )
+		  {
+			$params['errors'] = $this->Lang('error_insufficientparams');
+			$this->admin_templates($id,$params,$returnid);
+			return;
+		  }
+		if ( $this->set_template($params['template_type'],$params['template'],$params['templatecontent'],$params['defaulttemplate']) )
+		{
+			$params['messages'] = $this->Lang($params['template_type'].'_template_updated'); 
+		}
+		if( isset( $params['applybutton'] ) )
+		  {
+			$this->admin_templates($id,$params,$returnid);
+			return;
+		  }
+		if( isset( $params['submitbutton'] ) )
+		  {
+			$this->Redirect($id,'defaultadmin');
+			return;
+		  }
 	}
-
 	/**
 	 * ------------------------------------------------------------------
 	 * Other Functions
