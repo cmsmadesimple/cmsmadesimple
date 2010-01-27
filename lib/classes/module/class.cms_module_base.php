@@ -1669,7 +1669,7 @@ abstract class CmsModuleBase extends CmsObject
     {
         $template = cms_orm('CmsModuleTemplate')->find_by_module_and_template_type_and_name($this->get_name(), $template_type, $template_name);
         if ($template != null)
-        {print_r($template);die();
+        {
             $template->content = $content;
 			$template->default = $default;
             return $template->save();

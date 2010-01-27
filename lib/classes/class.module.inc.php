@@ -1824,6 +1824,30 @@ class CMSModule extends CmsModuleBase
 		{
 			die('permission denied');
 		}
+		
+		if ( $params['select'] == 'all' )
+		{
+			$parms = array();
+			$parms[CMS_SECURE_PARAM_NAME] = $params[CMS_SECURE_PARAM_NAME];
+			$parms['select'] = $params['select'];
+			$parms['action'] = 'admin_templates';
+			$modulelist = CmsModuleTemplate::get_modules();
+			echo '<form name="module_select" method="post">';
+			echo '<input type=hidden name="id" value="'.$id.'"/>';
+			foreach ($parms as $key=>$one)
+			{
+				echo '<input type=hidden name="'.$key.'" value="'.$one.'"/>';
+				echo '<input type=hidden name="'.$id.$key.'" value="'.$one.'"/>';
+			}
+			echo '<select name="module" onchange="document.module_select.submit();">';
+			echo '<option value="">Select a module:</option>';
+			foreach ($modulelist as $modulename)
+			{
+				echo '<option value="'.$modulename.'">'.$modulename.'</option>';
+			}
+			echo '</select>';
+			echo '</form>';
+		}
 
 		$this->mActiveSubTab = array();
 
@@ -1832,9 +1856,9 @@ class CMSModule extends CmsModuleBase
 		{
 			echo '<div class="pageerrorcontainer"><ul class="pageerror"><li>'.$params['errors'].'</li></ul></div>';
 		}
-		if ($params['messages'])
+		if ($params['message'])
 		{
-			echo '<div class="pagemcontainer"><p class="pagemessage">'.$params['messages']."</p></div>";
+			echo '<div class="pagemcontainer"><p class="pagemessage">'.$params['message']."</p></div>";
 		}
 
 		
@@ -1941,7 +1965,7 @@ class CMSModule extends CmsModuleBase
 		  {
 			if ( $this->delete_template($params['template_type'],$params['template']) )
 			{
-				$params['messages'] = $this->Lang('template_deleted');
+				$params['message'] = $this->Lang('template_deleted');
 			}
 			$this->admin_templates($id,$params,$returnid);
 			return;
@@ -1954,7 +1978,7 @@ class CMSModule extends CmsModuleBase
 		  }
 		if ( $this->set_template($params['template_type'],$params['template'],$params['templatecontent'],$params['defaulttemplate']) )
 		{
-			$params['messages'] = $this->Lang($params['template_type'].'_template_updated'); 
+			$params['message'] = $this->Lang($params['template_type'].'_template_updated'); 
 		}
 		if( isset( $params['applybutton'] ) )
 		  {

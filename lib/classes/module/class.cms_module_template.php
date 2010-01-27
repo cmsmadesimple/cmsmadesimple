@@ -74,7 +74,7 @@ class CmsModuleTemplate extends CmsObjectRelationalMapping
         $result = array();
         $cms_db_prefix = CMS_DB_PREFIX;
         
-        $rows = cms_db()->GetAll("SELECT distinct module_name as module FROM {$cms_db_prefix}module_templates order by module_name");
+        $rows = cms_db()->GetAll("SELECT distinct module_name as module FROM {module_templates} order by module_name");
         if ($rows)
         {
             foreach ($rows as $one_row)
@@ -150,4 +150,4 @@ class CmsModuleTemplate extends CmsObjectRelationalMapping
 }
 
 # vim:ts=4 sw=4 noet
-?> 
+?>
