@@ -476,6 +476,33 @@ function nl2pnbr( $text )
 	return $text;
 }
 
+function debug_bt_to_log()
+{
+    $bt=debug_backtrace();
+    $file = $bt[0]['file'];
+    $line = $bt[0]['line'];
+
+    $out = array();
+    $out[] = "Backtrace in $file on line $line";
+
+    $bt = array_reverse($bt);
+    foreach($bt as $trace)
+    {
+      if( $elem['function'] == 'debug_bt_to_log' ) continue;
+
+      $file = $trace['file'];
+      $line = $trace['line'];
+      $function = $trace['function'];
+      $out[] = "$function at $file:$line"; 
+    }
+
+    $filename = TMP_CACHE_LOCATION . '/debug.log';
+    foreach ($out as $txt)
+      {
+	error_log($txt . "\n", 3, $filename);
+      }
+}
+
 function debug_bt()
 {
     $bt=debug_backtrace();
@@ -552,7 +579,14 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 		}
 		elseif(is_string($var))
 		{
+		  if( $use_html )
+		    {
 			print_r(htmlentities(str_replace("\t", '  ', $var)));
+		    }
+		  else
+		    {
+ 		      print_r($var);
+		    }
 		}
 		elseif(is_bool($var))
 		{
