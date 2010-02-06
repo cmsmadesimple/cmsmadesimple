@@ -13,11 +13,13 @@ _excludes="*~ #*# .svn CVS *.bak"
 _tmpfile="/tmp/$_this.$$"
 _yes=0
 _svn=1
+_tag=1
 
 usage()
 {
   echo "USAGE $_this [options]"
   echo "options:";
+  echo "  -t|--notag                 : do not create a tag for this release";
   echo "  -c|--configfile <filename> : source this file for config information"
   echo "  -d|--destdir <directory>   : place output file in directory"
   echo "  -n|--name  <name>          : use name for module name (use caution)"
@@ -46,6 +48,12 @@ while [ $# -gt 0 ]; do
     -c|--configfile)
       . $2
       shift 2
+      continue
+      ;;
+
+    -t|--notag)
+      _tag=0
+      shift 
       continue
       ;;
 
@@ -155,10 +163,27 @@ fi
 # create dummy index.html files in each directory
 #_dirs=`find . -type d | grep -v \.svn`
 #for i in $_dirs ; do
-#  if [ ! -f $i/index.php ]; then
+#  if [ ! -f $i/index.html ]; then
 #    echo '<!-- dummy -->' > ${i}/index.html
 #  fi
 #done
+
+# do an svn tag command
+if [ $_tag = 1 ]; then
+   _t1=`svn info`
+   _repo=`svn info | grep 'Root\:' | cut -d' ' -f3-`
+   _newtag=${_repo}/tags/v${_version}
+   echo -n "Do you want to create a tag at: ${_newtag} (Y/n)?"
+   read _ans
+   if [ ${_ans:-ns} = ns ]; then
+     _ans=y
+   fi
+   if [ "$_ans" = 'y' -o "$_ans" = 'Y' -o "$_ans" = 'YES' -o "$_ans" = 'yes' ]; then
+     echo "Performiong svn tag";
+     _msg="${_name} version ${_version}"
+     svn copy -m "{$_msg}" . ${_newtag}
+   fi   
+fi
 
 # make a temporary file of all the stuff we don't want in the archive
 for i in $_excludes ; do
