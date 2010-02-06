@@ -40,6 +40,8 @@ class ModuleLoader
 		$db = cms_db();
 		$cmsmodules = &$gCms->modules;
 		
+		CmsEventManager::send_event('load_modules');
+		
 		$dir = cms_join_path(ROOT_DIR, "modules");
 		
 		if ($loadall == true)
@@ -149,6 +151,9 @@ class ModuleLoader
 											$cmsmodules[$name]['object'] = $newmodule;
 											$cmsmodules[$name]['installed'] = true;
 											$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
+											
+											$params = array('name' => $name, 'version' => $newmodule->GetVersion());
+											CmsEventManager::send_event('module_loaded', $params);
 										}
 										else
 										{

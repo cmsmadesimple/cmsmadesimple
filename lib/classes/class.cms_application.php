@@ -121,6 +121,10 @@ class CmsApplication extends CmsObject
 	 */
 	function __construct()
 	{
+		parent::__construct();
+		
+		CmsEventManager::send_event('startup');
+		
 		$this->cmssystemmodules = 
 		  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'MicroTiny', 'SimplePrinting', 'ThemeManager' );
 		$this->modules = array();
@@ -141,7 +145,14 @@ class CmsApplication extends CmsObject
 		
 		$this->config              = CmsConfig::get_instance();
 		
-		register_shutdown_function(array(&$this, 'dbshutdown'));
+		//So our shutdown events are called right near the end of the page
+		register_shutdown_function(array(&$this, 'shutdown'));
+	}
+	
+	function shutdown()
+	{
+		CmsEventManager::send_event('shutdown_soon');
+		CmsEventManager::send_event('shutdown_now');
 	}
 	
 	/**
@@ -307,49 +318,11 @@ class CmsApplication extends CmsObject
 
 	public static function GetSmarty()
 	{
-		//Check to see if it hasn't been
-		//instantiated yet.  If not, connect
-		//and return it
-		/*
-		$gCms = CmsApplication::get_instance();
-		
-		if (!isset($gCms->smarty))
-		{
-			$conf = cms_config();
-
-			if (!defined('SMARTY_DIR'))
-			{
-				define('SMARTY_DIR', cms_join_path(ROOT_DIR, 'lib', 'smarty') . DIRECTORY_SEPARATOR);
-			}
-
-			#Setup global smarty object
-			$gCms->smarty = new CmsSmarty($conf);
-		}
-
-		return $gCms->smarty;
-		*/
 		return CmsSmarty::get_instance();
 	}
 
 	public static function GetHierarchyManager()
 	{
-		//Check to see if it hasn't been
-		//instantiated yet.  If not, connect
-		//and return it
-		/*
-        if (!isset($this->hrinstance))
-		{
-			debug_buffer('', 'Start Loading Hierarchy Manager');
-			#require_once(dirname(__FILE__).'/class.contenthierarchymanager.inc.php');
-
-			#Setup global smarty object
-			$contentops =& $this->GetContentOperations();
-			$this->hrinstance =& $contentops->GetAllContentAsHierarchy(false, array());
-			debug_buffer('', 'End Loading Hierarchy Manager');
-		}
-
-        return $this->hrinstance;
-		*/
 		return CmsPageTree::get_instance();
 	}
 	
@@ -478,11 +451,6 @@ class CmsApplication extends CmsObject
 			return FALSE;
 		
 		return TRUE;
-	}
-
-	function dbshutdown()
-	{
-		CmsDatabase::close();
 	}
 }
 

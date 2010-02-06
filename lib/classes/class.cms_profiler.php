@@ -90,7 +90,7 @@ class CmsProfiler extends CmsObject
 	 **/
 	function mark( $label )
 	{
-		$mark = @sprintf ( "\n<div class=\"profiler\">$this->_prefix %.4f $label</div>", $this->get_microtime() - $this->_start );
+		$mark = @sprintf ( "\n<div class=\"profiler\">$this->_prefix %.4f %d $label</div>", $this->get_microtime() - $this->_start, $this->get_memory());
 		$this->_buffer[] = $mark;
 		return $mark;
 	}

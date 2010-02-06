@@ -42,6 +42,7 @@ class CmsDatabase extends CmsObject
 		if (self::$instance == NULL)
 		{
 			CmsDatabase::connect($dbms, $hostname, $username, $password, $dbname, $debug);
+			CmsEventManager::register_event_handler('shutdown_now', array('CmsDatabase', 'close'));
 		}
 		return self::$instance;
 	}
@@ -157,7 +158,7 @@ class CmsDatabase extends CmsObject
 					//Ignore for now
 				}
 			//}
-			$dbinstance->debug = true;
+			//$dbinstance->debug = true;
 		}
 	
 		if ($make_global)

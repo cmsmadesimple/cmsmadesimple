@@ -34,6 +34,7 @@ require_once(ROOT_DIR.DS.'fileloc.php');
 require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_object.php');
 require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_config.php');
 require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_cache.php');
+require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_profiler.php');
 
 /**
  * The one and only autoload function for the system.  This basically allows us 
@@ -48,6 +49,11 @@ function cms_autoload($class_name)
 	//Fix references to older classes
 	if ($class_name == 'CMSModule')
 		$class_name = 'CmsModule';
+	
+	if ($class_name == 'string')
+		return;
+		
+	CmsProfiler::get_instance()->mark('Load ' . $class_name);
 		
 	if (array_key_exists('class.' . underscore($class_name) . '.php', $files))
 	{

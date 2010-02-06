@@ -55,6 +55,7 @@ class CMSModule extends CmsModuleBase
 	
 	public function __construct()
 	{
+		CmsProfiler::get_instance()->mark('loading: ' . get_class($this) . " module");
 		// specify that the autoload member will be used
 		// for autoloading undefined classes.
 		spl_autoload_register(array($this,'autoload'));
@@ -1625,16 +1626,12 @@ class CMSModule extends CmsModuleBase
 	 * ------------------------------------------------------------------
 	 */
 
-	public static function &GetModuleInstance($module)
+	public static function GetModuleInstance($module)
 	{
-		global $gCms;
-
-		if (isset($gCms->modules[$module]) &&
-			$gCms->modules[$module]['installed'] == true &&
-			$gCms->modules[$module]['active'] == true)
-		{
-			return $gCms->modules[$module]['object'];
-		}
+		$module = CmsModuleLoader::get_module_class($module_name);
+		if ($module)
+			return $module;
+		
 		// Fix only variable references should be returned by reference
 		$tmp = FALSE;
 		return $tmp;

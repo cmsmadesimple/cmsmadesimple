@@ -24,7 +24,9 @@ require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cm
 //Where are we?
 $dirname = ROOT_DIR;
 
-//Setup a global $gCms...  this needs to die, though
+//Setup a global $gCms.  Even if this goes away,
+//we need to instantiate CmsApplication near the
+//beginning so that event firing starts right away.
 $gCms = cmsms();
 $GLOBALS['gCms'] = $gCms;
 
@@ -74,11 +76,11 @@ if ($config["debug"] == true)
 debug_buffer('loading smarty');
 require(cms_join_path($dirname,'lib','smarty','Smarty.class.php'));
 */
-debug_buffer('loading pageinfo functions');
+CmsProfiler::get_instance()->mark('loading pageinfo functions');
 require_once(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
 if (! isset($CMS_INSTALL_PAGE))
 {
-	debug_buffer('loading translation functions');
+	CmsProfiler::get_instance()->mark('loading translation functions');
 	require_once(cms_join_path($dirname,'lib','translation.functions.php'));
 }
 /*
@@ -88,7 +90,7 @@ debug_buffer('loading php4 entity decode functions');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
 */
 
-debug_buffer('done loading files');
+CmsProfiler::get_instance()->mark('done loading files');
 
 #Load them into the usual variables.  This'll go away a little later on.
 global $DONT_LOAD_DB;
@@ -153,20 +155,16 @@ if ($config['debug'] == true)
 if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 {
     include_once(cms_join_path($dirname,$config['admin_dir'],'lang.php'));
-
-	#This will only matter on upgrades now.  All new stuff (0.13 on) will be UTF-8.
-	if (is_file(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php')))
-	{
-		include(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php'));
-		$gCms->variables['convertclass'] = new ConvertCharset();
-	}
 }
 
-#Load all installed module code
-$modload = $gCms->GetModuleLoader();
-$modload->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
+CmsProfiler::get_instance()->mark('Before module loader');
 
-debug_buffer('', 'End of include');
+CmsModuleLoader::load_module_data();
+#Load all installed module code
+//$modload = $gCms->GetModuleLoader();
+//$modload->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
+
+CmsProfiler::get_instance()->mark('End of include');
 
 function sanitize_get_var(&$value, $key)
 {

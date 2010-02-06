@@ -98,6 +98,7 @@ class Events
 	*/
 	static function SendEvent( $modulename, $eventname, $params = array() )
 	{
+		return;
 		global $gCms;
 		$usertagops = $gCms->GetUserTagOperations();
 

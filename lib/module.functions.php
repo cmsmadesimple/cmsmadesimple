@@ -120,50 +120,33 @@ function cms_module_plugin($params,&$smarty)
 
 	if( $action == '' ) $action = 'default'; // probably not needed, but safe
 
-	if (isset($cmsmodules))
+	$module_name = $params['module'];
+
+	if (isset($module_name))
 	{
-		$modulename = $params['module'];
-
-		foreach ($cmsmodules as $key=>$value)
+		$module = CmsModuleLoader::get_module_class($module_name);
+		if ($module)
 		{
-		  if (!strcasecmp($modulename,$key))
-		    {
-		      $modulename = $key;
-		    }
-		}
+			@ob_start();
 
-		if (isset($modulename))
-		{
-			if (isset($cmsmodules[$modulename]))
+			$result = $module->DoActionBase($action, $id, $params, $returnid);
+			if ($result !== FALSE)
 			{
-				if (isset($cmsmodules[$modulename]['object'])
-					&& $cmsmodules[$modulename]['installed'] == true
-					&& $cmsmodules[$modulename]['active'] == true
-					&& $cmsmodules[$modulename]['object']->IsPluginModule())
-				{
-					@ob_start();
-
-					$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
-					if ($result !== FALSE)
-					{
-						echo $result;
-					}
-					$modresult = @ob_get_contents();
-					@ob_end_clean();
-
-					if( isset($params['assign']) )
-					  {
-					    $smarty->assign(trim($params['assign']),$modresult);
-					    return;
-					  }
-					return $modresult;
-
-				}
-				else
-				{
-					return "<!-- Not a tag module -->\n";
-				}
+				echo $result;
 			}
+			$modresult = @ob_get_contents();
+			@ob_end_clean();
+
+			if( isset($params['assign']) )
+			{
+				$smarty->assign(trim($params['assign']),$modresult);
+				return;
+			}
+			return $modresult;
+		}
+		else
+		{
+			return "<!-- Not a tag module -->\n";
 		}
 	}
 }
