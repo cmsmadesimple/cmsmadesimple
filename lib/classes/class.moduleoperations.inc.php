@@ -104,12 +104,12 @@ class ModuleOperations
 	  $xmltxt .= "	<name>".$modinstance->GetName()."</name>\n";
 	  $xmltxt .= "	<version>".$modinstance->GetVersion()."</version>\n";
 	  $xmltxt .= "  <mincmsversion>".$modinstance->MinimumCMSVersion()."</mincmsversion>\n";
-	  $xmltxt .= "	<help>".base64_encode($modinstance->GetHelpPage())."</help>\n";
-	  $xmltxt .= "	<about>".base64_encode($modinstance->GetAbout())."</about>\n";
+	  $xmltxt .= "	<help><![CDATA[".base64_encode($modinstance->GetHelpPage())."]]></help>\n";
+	  $xmltxt .= "	<about><![CDATA[".base64_encode($modinstance->GetAbout())."]]></about>\n";
 	  $desc = $modinstance->GetAdminDescription();
 	  if( $desc != '' )
 		{
-		  $xmltxt .= "	<description>".$desc."</description>\n";
+		  $xmltxt .= "	<description><![CDATA[".$desc."]]></description>\n";
 		}
 	  $depends = $modinstance->GetDependencies();
 	  foreach( $depends as $key=>$val )
