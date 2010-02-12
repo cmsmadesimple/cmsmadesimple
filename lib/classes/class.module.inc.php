@@ -1555,6 +1555,7 @@ class CMSModule
 
 	function DoActionBase($name, $id, $params, $returnid='')
 	{
+          $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
 	  if( $returnid != '' )
 	    {
 	      if( !$this->restrict_unknown_params && 

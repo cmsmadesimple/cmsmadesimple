@@ -24,6 +24,8 @@ function smarty_cms_function_process_pagedata($params,&$smarty)
   if( !isset($node) || $node === FALSE ) return;
   $content =& $node->Getcontent();
 
+  if ( empty($content)) return;
+
   $tpl = $content->GetPropertyValue('pagedata','');
   if( empty($tpl) ) return;
 
