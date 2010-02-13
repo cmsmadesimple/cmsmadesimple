@@ -36,7 +36,11 @@ function smarty_cms_function_startExpandCollapse($params, &$smarty)
 		echo '<script type="text/javascript" language="javascript" src="'.$config['root_url'].'/lib/helparea.js"></script>';
 		$firstExpandCollapse = false;
 	}
-	$url = str_replace('&', '&amp;',  $_SERVER['REQUEST_URI']);
+	$url = cms_htmlentities($_SERVER['REQUEST_URI']);
+	$url = str_replace('&amp;','***',$url);
+	$url = str_replace('&', '&amp;', $url);
+	$url = str_replace('***','&amp;',$url);
+	//$url = str_replace('&', '&amp;',  $_SERVER['REQUEST_URI']);
 	echo '<a href="'. $url .'#'. $id .'" onclick="expandcontent(\''.$id.'\')" style="cursor:hand; cursor:pointer">'.$title.'</a><br />
 	<div id="'.$id.'" class="expand">';
 }
