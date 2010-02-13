@@ -42,7 +42,7 @@ class CmsDatabase extends CmsObject
 		if (self::$instance == NULL)
 		{
 			CmsDatabase::connect($dbms, $hostname, $username, $password, $dbname, $debug);
-			CmsEventManager::register_event_handler('shutdown_now', array('CmsDatabase', 'close'));
+			CmsEventManager::register_event_handler('Core:shutdown_now', array('CmsDatabase', 'close'));
 		}
 		return self::$instance;
 	}

@@ -123,7 +123,7 @@ class CmsApplication extends CmsObject
 	{
 		parent::__construct();
 		
-		CmsEventManager::send_event('startup');
+		CmsEventManager::send_event('Core:startup');
 		
 		$this->cmssystemmodules = 
 		  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'MicroTiny', 'SimplePrinting', 'ThemeManager' );
@@ -151,8 +151,8 @@ class CmsApplication extends CmsObject
 	
 	function shutdown()
 	{
-		CmsEventManager::send_event('shutdown_soon');
-		CmsEventManager::send_event('shutdown_now');
+		CmsEventManager::send_event('Core:shutdown_soon');
+		CmsEventManager::send_event('Core:shutdown_now');
 	}
 	
 	/**

@@ -27,7 +27,7 @@
  * @package		CMS
  */
 
-class CMSModule extends CmsModuleBase 
+class CMSModule extends CmsObject 
 {
 	/**
 	 * ------------------------------------------------------------------

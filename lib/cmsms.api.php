@@ -2332,5 +2332,10 @@ function cms_file_get_contents($filename)
   return $content;
 }
 
+function cms_module_plugin($params, &$smarty)
+{
+	return CmsModuleOperations::cms_module_plugin($params, $smarty);
+}
+
 # vim:ts=4 sw=4 noet
 ?>

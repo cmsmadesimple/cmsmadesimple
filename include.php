@@ -36,7 +36,6 @@ define('CMS_USER_KEY','cmsuserkey');
 
 //Load stuff that hasn't been moved to static methods yet
 require_once(cms_join_path($dirname,'lib','page.functions.php'));
-require_once(cms_join_path($dirname,'lib','module.functions.php'));
 require_once(cms_join_path($dirname,'lib','content.functions.php'));
 
 //Setup the session

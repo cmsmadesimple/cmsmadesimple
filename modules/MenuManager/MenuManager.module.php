@@ -53,10 +53,10 @@ class MenuManager extends CMSModule
 		$this->RemovePermission('Manage Menu');
 	}
 
-  function GetVersion()
-  {
-    return '1.6.2';
-  }
+	function GetVersion()
+	{
+		return '1.6.2';
+	}
 
 	function MinimumCMSVersion()
 	{

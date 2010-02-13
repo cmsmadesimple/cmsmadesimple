@@ -146,17 +146,17 @@ class CmsModuleLoader extends CmsObject
 			}
 		}
 		
-		return name;
+		return $name;
 	}
 	
-	public static function get_module_class($name, $check_active = true)
+	public static function get_module_class($name, $check_active = true, $check_deps = true)
 	{
 		if (self::$module_list != null)
 		{
 			//Make sure we can call modules without checking case
 			$name = self::get_proper_module_case($name);
 			
-			if (isset(self::$module_list[$name]) && self::$module_list[$name]['active'] == true)
+			if (isset(self::$module_list[$name]))
 			{
 				if ($check_active)
 				{
@@ -165,6 +165,7 @@ class CmsModuleLoader extends CmsObject
 						return null;
 					}
 				}
+				
 				if (isset(self::$module_list[$name]['object']))
 				{
 					return self::$module_list[$name]['object'];
@@ -177,9 +178,9 @@ class CmsModuleLoader extends CmsObject
 					}
 					
 					require_once(cms_join_path(ROOT_DIR, 'modules', $name, $name . '.module.php'));
-					if (class_exists($name) && is_subclass_of($name, 'CmsModuleBase'))
+					if (class_exists($name) && (is_subclass_of($name, 'CmsModuleBase') || is_subclass_of($name, 'CmsModule')))
 					{
-						if (isset(self::$module_list[$name]['dependencies']))
+						if ($check_deps && isset(self::$module_list[$name]['dependencies']))
 						{
 							foreach (self::$module_list[$name]['dependencies'] as $dep)
 							{
@@ -190,7 +191,10 @@ class CmsModuleLoader extends CmsObject
 						}
 						
 						self::$module_list[$name]['object'] = new $name();
-						self::$module_list[$name]['object']->setup();
+						
+						if (!self::$module_list[$name]['old_module'])
+							self::$module_list[$name]['object']->setup();
+						
 						return self::$module_list[$name]['object'];
 					}
 				}
@@ -200,18 +204,30 @@ class CmsModuleLoader extends CmsObject
 		return null;
 	}
 	
+	public static function get_module_info($name, $key = '')
+	{
+		if ($key != '')
+		{
+			if (isset(self::$module_list[$name]) && isset(self::$module_list[$name][$key]))
+				return self::$module_list[$name][$key];
+		}
+		else
+		{
+			if (isset(self::$module_list[$name]))
+				return self::$module_list[$name];
+		}
+		
+		return false;
+	}
+	
 	public static function is_installed($name)
 	{
-		if (isset(self::$module_list[$name]) && isset(self::$module_list[$name]['installed']))
-			return self::$module_list[$name]['installed'];
-		return false;
+		return self::get_module_info($name, 'installed');
 	}
 	
 	public static function is_active($name)
 	{
-		if (isset(self::$module_list[$name]) && isset(self::$module_list[$name]['active']))
-			return self::$module_list[$name]['active'];
-		return false;
+		return self::get_module_info($name, 'active');
 	}
 	
 	public static function get_installed_module_details()

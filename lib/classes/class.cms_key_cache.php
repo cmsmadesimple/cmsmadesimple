@@ -19,7 +19,7 @@
 #$Id$
 
 //Clear out old values when the request shuts down
-CmsEventManager::register_event_handler('shutdown_soon', array('CmsKeyCache', 'expire_entries'));
+CmsEventManager::register_event_handler('Core:shutdown_soon', array('CmsKeyCache', 'expire_entries'));
 
 /**
  * Class to represent a key/value cache.  The model is based on memcached, and will
