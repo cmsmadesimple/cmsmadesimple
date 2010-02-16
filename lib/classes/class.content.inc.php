@@ -262,8 +262,8 @@ class ContentBase
       $this->AddContentProperty('image',50);
       $this->AddContentProperty('thumbnail',50);
       $this->AddContentProperty('extra1',80);
-      $this->AddContentProperty('extra2',80);
-      $this->AddContentProperty('extra3',80);
+      $this->AddContentProperty('extra2',81);
+      $this->AddContentProperty('extra3',82);
     }
 
     
