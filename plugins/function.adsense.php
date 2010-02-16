@@ -17,7 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 function smarty_cms_function_adsense($params, &$smarty) {
-	$parts = array("ad_client","ad_width","ad_height","ad_format","ad_format","ad_channel",
+	$parts = array("ad_client","ad_width","ad_height","ad_format","ad_channel",
 			"ad_slot","ad_type","color_border","color_bg","color_link","color_url","color_text");
 	$result = "\n<script type='text/javascript'><!--\n";
 	foreach( $parts as $part ) 
