@@ -400,6 +400,7 @@ $lang['admin']['help_function_adsense'] = <<<EOT
 		<li>ad_height - height of the ad</li>
 		<li>ad_format - "format" of the ad <em>e.g. 120x600_as</em></li>
 		<li>ad_channel - channels are an advanced feature of adsense.  Put it here if you use it.</li>
+		<li>ad_slot - slots are an advanced feature of adsense.  Put it here if you use it.</li>
 		<li>ad_type - possible options are text, image or text_image.</li>
 		<li>color_border - the color of the border. Use HEX color or type the color name (Ex. Red)</li>
 		<li>color_link - the color of the linktext. Use HEX color or type the color name (Ex. Red)</li>
