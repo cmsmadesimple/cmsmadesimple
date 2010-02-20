@@ -9,7 +9,7 @@ Version 1.6.7 - Teremba Bay
  - Minor improvements to the News module
  - New version of TinyMCE
  - Improvements to File Manager and Image Manager
- - Improvements to Module Manager; upgrade now possible from the "Available Upgrade"-tab
+ - Improvements to Module Manager; upgrade now possible from the "Available Upgrades"-tab
  - Adsense-plugin modified, to accept the ad_slot parameter
 
 Version 1.6.6 - Bonde
@@ -35,8 +35,6 @@ Version 1.6.6 - Bonde
    - The install and upgrade routines now explicitly check for this setting.
    - TinyMCE 2.2.5 now supports session.use_cookies == off (for now)
    - ImageManager no longer displays the login screen with session.use_cookies == off
-       
-
  
 Version 1.6.5 - Poya
 -----------------------------
