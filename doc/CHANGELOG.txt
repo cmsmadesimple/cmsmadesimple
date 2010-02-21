@@ -4,6 +4,7 @@ Version 1.6.7 - Teremba Bay
  - #4137 small text typo in admin/login.php
  - #4192 Extra Page Attribute's are listed in the wrong order 
  - #4208 Don't show inactive template in the page 404
+ - #4431 UDT names not validated when being edited 
  - Improvements to XML module generation
  - Fixes to prevent possible remote file inclusion vulnerabilities
  - Minor improvements to the News module
