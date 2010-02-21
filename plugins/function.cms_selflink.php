@@ -436,7 +436,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 				$linktext = $name; // mbv - 21-06-2005
 			}
 
-			$linktext = cms_htmlentities($linktext);
+			//$linktext = cms_htmlentities($linktext);
 
 			if (isset($params['image']) && ! empty($params['image'])) {
 				$alt = (isset($params['alt']) && ! empty($params['alt'])) ? $params['alt'] : '';
