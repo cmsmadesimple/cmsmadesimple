@@ -1537,6 +1537,10 @@ class CMSModule
 	{
 		if ($name != '')
 		{
+			//Just in case DoAction is called directly and it's not overridden.
+			//See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
+			$name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
+			
 			$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
 			if (@is_file($filename))
 			{
