@@ -7,7 +7,7 @@ _owd=`pwd`
 _this=`basename $0`
 _workdir=/tmp/$_this.$$
 _owd=`pwd`
-_clean=1
+_clean=0
 # basedir    (if set, specify the base directory to put generated releases).
 
 # adjust the path
@@ -169,6 +169,8 @@ while read line ; do
   elif [ $_n = 1 -a $_ci = 0 ]; then
     _newfiles="$_f $_newfiles"
   elif [ $_d = 1 ]; then
+    _p=`echo $line | cut -d' ' -f3 | cut -d: -f1 | cut -d/ -f2-`
+    _f=$_p/$_f
     _delfiles="$_f $_delfiles"
   fi
 done < $_workdir/diffout_base.tmp
@@ -176,10 +178,10 @@ done < $_workdir/diffout_base.tmp
 mkdir $_workdir/base_diff
 cd $_workdir/to_base
 for _f in $_changedfiles ; do
-  tar cf - $_f | (cd $_workdir/base_diff && tar xf - )
+  tar cf - $_f 2>/dev/null | (cd $_workdir/base_diff && tar xf - )
 done
 for _f in $_newfiles ; do
-  tar cf - $_f | (cd $_workdir/base_diff && tar xf - )
+  tar cf - $_f 2>/dev/null | (cd $_workdir/base_diff && tar xf - )
 done
 for _f in $_delfiles ; do
   _dn=`dirname $_f`
@@ -190,7 +192,7 @@ done
 
 #4 tar it up
 cd $_workdir/base_diff
-tar zcf ${basedir}/${_to}/cmsmadesimple-base-diff-${_fromver}-${_tover}.tar.gz .
+tar zcf ${basedir}/${_to}/cmsmadesimple-base-diff-${_fromver}-${_tover}.tar.gz . 2>/dev/null
 
 #5.  Expand the full version of $_from
 echo Processing full version
@@ -199,7 +201,7 @@ _fromfull=$basedir/$_from/${_from}-full.tar.gz
 cd $_workdir
 mkdir from_full
 cd from_full
-tar zxf $_fromfull
+tar zxf $_fromfull 2>/dev/null
 
 #6.  Expand the full version of $_to
 _tofull=$basedir/$_to/${_to}-full.tar.gz 
