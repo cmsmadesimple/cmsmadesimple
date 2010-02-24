@@ -116,6 +116,8 @@ if (!$access)
 
 if ($access)
 {
+  $classname="";
+  if (is_object($contentobj)) $classname=get_class($contentobj);
 	if ($submit || $apply)
 	{
 	  #Fill contentobj with parameters
@@ -162,7 +164,7 @@ if ($access)
 			exit;
 		}
 	}
-	else if ($content_id != -1 && strtolower(get_class($contentobj)) != strtolower($content_type))
+	else if ($content_id != -1 && strtolower($classname) != strtolower($content_type))
 	{
 	  // handle changing content type
 		global $gCms;
