@@ -45,7 +45,6 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["db_prefix"] = "cms_";
 	$config["root_url"] = "http://www.something.com";
 	$config["root_path"] = dirname(dirname(__FILE__));
-	$config["secure_root_url"] = "https://www.something.com";
 	$config["query_var"] = "page";
 	$config["use_bb_code"] = false;
 	$config["use_smarty_php_tags"] = false;
@@ -58,6 +57,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config['url_rewriting'] = 'none';
 	//$config["assume_mod_rewrite"] = false; //Not being used in core
 	//$config['internal_pretty_urls'] = false; //Not being used in core
+	$config['use_hierarchy'] = true; //Now true by default
 	$config["auto_alias_content"] = true;
 	$config["image_manipulation_prog"] = "GD";
 	$config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
@@ -69,8 +69,8 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["persistent_db_conn"] = false;
 	$config["default_upload_permission"] = '664';
 	$config["page_extension"] = "";
+	$config["use_adodb_lite"] = true;
 	$config["locale"] = "";
-	$config["timezone"] = date_default_timezone_get();
 	$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
 	$config['set_names'] = false; //Default to false for pre-1.6 compatibility.  New installs get true.
 
@@ -225,6 +225,11 @@ function cms_config_text($config)
 #allow them.
 \$config['persistent_db_conn'] = ${$config['persistent_db_conn']?'true':'false'};
 
+#Use ADODB Lite?  This should be true in almost all cases.  Note, slight
+#tweaks might have to be made to date handling in a "regular" adodb
+#install before it can be used.
+\$config['use_adodb_lite'] = ${$config['use_adodb_lite']?'true':'false'};
+
 #-------------
 #Path Settings
 #-------------
@@ -233,11 +238,10 @@ function cms_config_text($config)
 #If page is requested with https use https as root url
 #e.g. http://blah.com
 \$config['root_url'] = '{$config['root_url']}';
-\$config['secure_root_url'] = '{$config['secure_root_url']}';
-#if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
-#{
-#  \$config['root_url'] = str_replace('http','https',\$config['root_url']);
-#}
+if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
+{
+  \$config['root_url'] = str_replace('http','https',\$config['root_url']);
+}
 
 #Path to document root. This should be the directory this file is in.
 #e.g. /var/www/localhost
@@ -293,6 +297,7 @@ function cms_config_text($config)
 
 #If you're using the internal pretty url mechanism or mod_rewrite, would you like to
 #show urls in their hierarchy?  (ex. http://www.mysite.com/parent/parent/childpage)
+\$config['use_hierarchy'] = ${$config['use_hierarchy']?'true':'false'};
 
 #If using none of the above options, what should we be using for the query string
 #variable?  (ex. http://www.mysite.com/index.php?page=somecontent)
@@ -318,13 +323,8 @@ function cms_config_text($config)
 
 #Locale to use for various default date handling functions, etc.  Leaving
 #this blank will use the server's default.  This might not be good if the
-#site is hosted in a different country than its intended audience.
+#site is hosted in a different country than it's intended audience.
 \$config['locale'] = '{$config['locale']}';
-
-#Similarly, time zone is used by time handling functions.  Leaving
-#this blank will use the server's default.  This might not be good if the
-#site is hosted in a different time zone than its intended audience.
-\$config['timezone'] = '{$config['timezone']}';
 
 #In almost all cases, default_encoding should be empty (which defaults to utf-8)
 #and admin_encoding should be utf-8.  If you'd like this to be different, change

@@ -84,34 +84,79 @@ if ($access)
 {
 	if (isset($_POST["edithtmlblob"]))
 	{
-		$blobobj = cms_orm('CmsGlobalContent')->find_by_id($htmlblob_id);
-		$blobobj->name = $htmlblob;
-		$blobobj->content = $content;
-		$blobobj->owner = $owner_id;
-
-		if ($blobobj->save())
+		$validinfo = true;
+		if ($htmlblob == "")
 		{
+			$error .= "<li>".lang('nofieldgiven', array(lang('edithtmlblob')))."</li>";
+			$validinfo = false;
+		}
+		else if ($htmlblob != $oldhtmlblob && $gcbops->CheckExistingHtmlBlobName($htmlblob, $htmlblob_id))
+		{
+			$error .= "<li>".lang('blobexists')."</li>";
+			$validinfo = false;
+		}
+
+		if ($validinfo)
+		{
+			$blobobj =& new GlobalContent();
+			$blobobj->id = $htmlblob_id;
+			$blobobj->name = $htmlblob;
+			$blobobj->content = $content;
+			$blobobj->owner = $owner_id;
+
 			$blobobj->ClearAuthors();
-			if (isset($_POST["additional_editors"]))
-			{
-				foreach ($_POST["additional_editors"] as $addt_user_id)
-				{
-					$blobobj->AddAuthor($addt_user_id);
-				}
+			if (isset($_POST["additional_editors"])) {
+					foreach ($_POST["additional_editors"] as $addt_user_id) {
+						$blobobj->AddAuthor($addt_user_id);
+					}
 			}
+			// add this user as an additional editor? why?
 			$blobobj->AddAuthor($userid);
 
-			audit($blobobj->id, $blobobj->name, 'Edited Html Blob');
-
-			if (!isset($_POST['apply']))
+			#Perform the edithtmlblob_pre callback
+			foreach($gCms->modules as $key=>$value)
 			{
-				redirect('listhtmlblobs.php'.$urlext);
-				return;
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->EditHtmlBlobPre($blobobj);
+				}
 			}
-		}
-		else
-		{
-			$error .= "<li>".lang('errorinsertingblob')."</li>";
+			
+			Events::SendEvent('Core', 'EditGlobalContentPre', array('global_content' => &$blobobj));
+
+			$result = $blobobj->save();
+
+			if ($result)
+			{
+				audit($blobobj->id, $blobobj->name, 'Edited Global Content Block');
+
+				#Clear cache
+				$smarty = new Smarty_CMS($config);
+				$smarty->clear_all_cache();
+				$smarty->clear_compiled_tpl();
+
+				#Perform the edithtmlblob_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->EditHtmlBlobPost($blobobj);
+					}
+				}
+				
+				Events::SendEvent('Core', 'EditGlobalContentPost', array('global_content' => &$blobobj));
+
+				if (!isset($_POST['apply'])) {
+					redirect('listhtmlblobs.php'.$urlext);
+					return;
+				}
+			}
+			else
+			{
+				$error .= "<li>".lang('errorinsertingblob')."</li>";
+			}
 		}
 
 		if ($ajax)
@@ -135,7 +180,7 @@ if ($access)
 	}
 	else if ($htmlblob_id != -1)
 	{
-		$onehtmlblob = cms_orm('CmsGlobalContent')->find_by_id($htmlblob_id);
+		$onehtmlblob = $gcbops->LoadHtmlBlobByID($htmlblob_id);
 		$htmlblob = $onehtmlblob->name;
 		$oldhtmlblob = $onehtmlblob->name;
 		$owner_id = $onehtmlblob->owner;
@@ -313,8 +358,8 @@ else
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
-			<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<input type="submit" onclick="return window.Edit_Blob_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>
@@ -344,11 +389,11 @@ else
 				<input type="hidden" name="edithtmlblob" value="true" />
 				<input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob; ?>" />
 				<input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id; ?>" />
-				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<?php if (!$adminaccess) { ?>
 					<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>" />
 				<?php } ?>
-				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<input type="submit" onclick="return window.Edit_Blob_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>

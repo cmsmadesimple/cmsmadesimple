@@ -44,7 +44,7 @@ return;
 
 
 
-#$smarty = new CmsSmarty$gCms->config);
+#$smarty = new Smarty_CMS($gCms->config);
 
 include_once("header.php");
 if ($action == "showpluginhelp")

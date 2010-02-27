@@ -34,8 +34,8 @@ return;
 }
 
 include_once("header.php");
-$gCms = cmsms();
-$userops = $gCms->GetUserOperations();
+global $gCms;
+$db =& $gCms->GetDb();
 
 if (isset($_GET["message"])) {
 	$message = preg_replace('/\</','',$_GET['message']);
@@ -48,21 +48,31 @@ if (isset($_GET["toggleactive"]))
  if($_GET["toggleactive"]==1) {
    $error .= "<li>".lang('errorupdatinguser')."</li>";
  } else {
-   $userops =& $gCms->GetUserOperations();
-   $thisuser = $userops->LoadUserByID($_GET["toggleactive"]);
+	global $gCms;
+	$userops =& $gCms->GetUserOperations();
+  $thisuser =& $userops->LoadUserByID($_GET["toggleactive"]);
 
-   if($thisuser) {
+  if($thisuser) {
 
-     //modify users, is this enough?
-     $userid = get_userid();
-     $permission = check_permission($userid, 'Modify Users');
+//modify users, is this enough?
+    $userid = get_userid();
+    $permission = check_permission($userid, 'Modify Users');
 
-     $result = false;
-     if($permission)
+    $result = false;
+    if($permission)
       {
 
-	$thisuser->active == 1 ? $thisuser->active = 0 : $thisuser->active=1;
-	Events::SendEvent('Core', 'EditUserPre', array('user' => &$thisuser));
+    $thisuser->active == 1 ? $thisuser->active = 0 : $thisuser->active=1;
+
+        #Perform the edituser_pre callback
+        foreach($gCms->modules as $key=>$value)
+              {
+                 if ($gCms->modules[$key]['installed'] == true &&
+                       $gCms->modules[$key]['active'] == true)
+                        {
+                         $gCms->modules[$key]['object']->EditUserPre($thisuser);
+                        }
+                 }
 
         $result = $thisuser->save();
 
@@ -70,8 +80,16 @@ if (isset($_GET["toggleactive"]))
 
       if ($result)
          {
-	   Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
            audit($userid, $thisuser->username, 'Edited User');
+           #Perform the edituser_post callback
+           foreach($gCms->modules as $key=>$value)
+                  {
+                   if ($gCms->modules[$key]['installed'] == true &&
+                          $gCms->modules[$key]['active'] == true)
+                       {
+                          $gCms->modules[$key]['object']->EditUserPost($thisuser);
+                       }
+                  }
         } else {
            $error .= "<li>".lang('errorupdatinguser')."</li>";
         }
@@ -95,7 +113,12 @@ if (FALSE == empty($error)) {
         $edit = check_permission($userid, 'Modify Users');
         $remove = check_permission($userid, 'Remove Users');
 
-	$userlist = $userops->LoadUsers();
+	$query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
+	$result = $db->Execute($query);
+
+	global $gCms;
+	$userops =& $gCms->GetUserOperations();
+	$userlist =& $userops->LoadUsers();
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
@@ -106,49 +129,49 @@ if (FALSE == empty($error)) {
 	}
 	echo $themeObject->ShowHeader('currentusers').'</div>';
 	if ($userlist && count($userlist) > 0){
-	  echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-	  echo '<thead>';
-	  echo "<tr>\n";
-	  echo "<th class=\"pagew70\">".lang('username')."</th>\n";
-	  echo "<th class=\"pagepos\">".lang('active')."</th>\n";
-	  echo "<th class=\"pageicon\">&nbsp;</th>\n";
-	  if ($remove)
-	    echo "<th class=\"pageicon\">&nbsp;</th>\n";
-	  echo "</tr>\n";
-	  echo '</thead>';
-	  echo '<tbody>';
+		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+		echo '<thead>';
+		echo "<tr>\n";
+		echo "<th class=\"pagew70\">".lang('username')."</th>\n";
+		echo "<th class=\"pagepos\">".lang('active')."</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
+		if ($remove)
+			echo "<th class=\"pageicon\">&nbsp;</th>\n";
+		echo "</tr>\n";
+		echo '</thead>';
+		echo '<tbody>';
 
-	  $currow = "row1";
-	  // construct true/false button images
-	  $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-	  $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
+		$currow = "row1";
+		// construct true/false button images
+        $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
 
-	  $counter=0;
-	  foreach ($userlist as $oneuser){
-	    
-	    $this_user = $userid == $oneuser->id;
-	    $access_to_user = $edit && ($userops->UserInGroup($userid,1) || (!$userops->UserInGroup($oneuser->id,1)));
-	    $access_user = $this_user || $access_to_user;
-	    
-	    if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-	      echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-	      if( $access_user )
-		{
-		  echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
-		}
-	      else
-		{
-		  echo "<td>{$oneuser->username}</td>\n";
-		}
-	      
-	      if( $oneuser->id != 1 && $oneuser->id != $userid )
-		{
-		  echo "<td class=\"pagepos\"><a href=\"listusers.php".$urlext."&amp;toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
-		}
-	      else
-		{
-		  echo "<td class=\"pagepos\">&nbsp;</td>\n";
-		}
+		$counter=0;
+		foreach ($userlist as $oneuser){
+
+		  $this_user = $userid == $oneuser->id;
+		  $access_to_user = $edit && ($userops->UserInGroup($userid,1) || (!$userops->UserInGroup($oneuser->id,1)));
+		  $access_user = $this_user || $access_to_user;
+
+			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
+  			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+			    if( $access_user )
+			      {
+				echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
+			      }
+			    else
+			      {
+				echo "<td>{$oneuser->username}</td>\n";
+			      }
+
+				if( $oneuser->id != 1 && $oneuser->id != $userid )
+				  {
+				    echo "<td class=\"pagepos\"><a href=\"listusers.php".$urlext."&amp;toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
+				  }
+				else
+				  {
+				    echo "<td class=\"pagepos\">&nbsp;</td>\n";
+				  }
 				if ($access_user)
 				    {
 				      echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">";

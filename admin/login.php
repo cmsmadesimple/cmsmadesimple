@@ -177,6 +177,15 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		}
 		audit($oneuser->id, $oneuser->username, 'User Login');
 
+		#Perform the login_post callback  TODO: Remove me
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->LoginPost($oneuser);
+			}
+		}
 		
 		#Now call the event
 		Events::SendEvent('Core', 'LoginPost', array('user' => &$oneuser));
@@ -277,6 +286,16 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		debug_buffer("Login failed.  Error is: " . $error);
 
 		audit($username, $username, 'User Login Failed');
+
+		#Perform the login_post callback  TODO: Remove me
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->LoginPost($username);
+			}
+		}
 		
 		#Now call the event
 		Events::SendEvent('Core', 'LoginPost', $username);

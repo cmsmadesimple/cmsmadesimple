@@ -96,11 +96,10 @@ class Events
 	* @param array  The parameters associated with this event.
 	* @returns nothing
 	*/
-	static function SendEvent( $modulename, $eventname, $params = array() )
+	function SendEvent( $modulename, $eventname, $params = array() )
 	{
-		return;
 		global $gCms;
-		$usertagops = $gCms->GetUserTagOperations();
+		$usertagops =& $gCms->GetUserTagOperations();
 
 		$results = Events::ListEventHandlers($modulename, $eventname);
 		
@@ -123,7 +122,7 @@ class Events
 					}
 
 					// and call the module event handler.
-					$obj = &CMSModule::GetModuleInstance($row['module_name']);
+					$obj =& CMSModule::GetModuleInstance($row['module_name']);
 					if( $obj )
 					{
 						debug_buffer('calling module ' . $row['module_name'] . ' from event ' . $eventname);
@@ -145,7 +144,7 @@ class Events
 	* in the array contains two elements 'handler_name', and 'module_handler',
 	* any one of these could be null. If it fails, false is returned.
 	*/
-	static function ListEventHandlers( $modulename, $eventname )
+	function ListEventHandlers( $modulename, $eventname )
 	{
 		global $gCms;
 		$db = &$gCms->GetDb();

@@ -28,7 +28,6 @@
 function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 {
 	global $gCms;
-	$config = $gCms->GetConfig();
 
 	$formcount = 1;
 	$variables = &$gCms->variables;
@@ -46,19 +45,33 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	if ($idsuffix == '')
 		$idsuffix = $formcount;
 
-	$goto = '';
+	$goto = 'moduleinterface.php';
 	if( $returnid != '' )
 	{
-	  $hm = $gCms->GetHierarchyManager();
-	  $node = $hm->sureGetNodeById($returnid);
+	  $hm =& $gCms->GetHierarchyManager();
+	  $node =& $hm->sureGetNodeById($returnid);
 	  if( $node )
 	    {
-	      $content_obj = $node->getContent();
+	      $content_obj =& $node->getContent();
 	      if( $content_obj )
 		$goto = $content_obj->GetURL();
 	    }
 	}
+	if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on")
+	  {
+	    $goto = str_replace('http:','https:',$goto);
+	  }
 	$goto = ' action="'.$goto.'"';
+	
+
+// 	if ($inline && $returnid != '')
+// 	{
+// 		#$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+// 		#$goto = 'index.php?mact='.$this->GetName().','.$id.','.$action;
+// 		#$goto .= '&amp;'.$id.'returnid='.$returnid;
+// 		#$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
+// 	}
+	//$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" name="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
 
 	$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'"'.$goto;
 	if ($enctype != '')
@@ -75,7 +88,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 		$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />'."\n";
 		if ($inline)
 		{
-			$text .= '<input type="hidden" name="'.$config['query_var'].'" value="'.$returnid.'" />'."\n";
+			$text .= '<input type="hidden" name="'.$modinstance->cms->config['query_var'].'" value="'.$returnid.'" />'."\n";
 		}
 	}
 	else
@@ -225,7 +238,7 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
   $image = cms_htmlentities($image);
 
 	global $gCms;
-	$config = $gCms->GetConfig();
+	$config =& $gCms->GetConfig();
 
 	$text = '<input name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" type=';
 
@@ -397,15 +410,15 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
   $prettyurl = cms_htmlentities($prettyurl);
 
 	global $gCms;
-	$config = $gCms->GetConfig();
+	$config =& $gCms->GetConfig();
 
 	$class = (isset($params['class'])?cms_htmlentities($params['class']):'');
 
-	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite')
+	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite' && $config['use_hierarchy'] == true)
 	{
 		$text = $config['root_url'] . '/' . $prettyurl . $config['page_extension'];
 	}
-	else if ($prettyurl != '' && $config['url_rewriting'] == 'internal')
+	else if ($prettyurl != '' && $config['url_rewriting'] == 'internal' && $config['use_hierarchy'] == true)
 	{
 		$text = $config['root_url'] . '/index.php/' . $prettyurl . $config['page_extension'];
 	}
@@ -485,12 +498,12 @@ function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
   $contents = cms_htmlentities($contents);
 
 	global $gCms;
-	$config = $gCms->GetConfig();
+	$config = &$gCms->GetConfig();
 	$text = '<a href="';
 	if ($config["url_rewriting"] == 'mod_rewrite')
 	{
 		# mod_rewrite
-		$contentops = $gCms->GetContentOperations();
+		$contentops =& $gCms->GetContentOperations();
 		$alias = $contentops->GetPageAliasFromID( $pageid );
 		if( $alias == false )
 		{
@@ -519,12 +532,12 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
 
 	$text = '';
 	global $gCms;
-	$config = $gCms->GetConfig();
-	$manager = $gCms->GetHierarchyManager();
-	$node = $manager->sureGetNodeById($returnid);
+	$config = &$gCms->GetConfig();
+	$manager =& $gCms->GetHierarchyManager();
+	$node =& $manager->sureGetNodeById($returnid);
 	if (isset($node))
 	{
-		$content = $node->GetContent();
+		$content =& $node->GetContent();
 
 		if (isset($content))
 		{

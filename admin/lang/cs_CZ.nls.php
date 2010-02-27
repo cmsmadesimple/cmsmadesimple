@@ -31,26 +31,26 @@
 #This is the default language
 
 #Native language name
-$cms_nls['language']['cs_CZ'] = 'Česky';
-$cms_nls['englishlang']['cs_CZ'] = 'Czech';
+$nls['language']['cs_CZ'] = 'Česky';
+$nls['englishlang']['cs_CZ'] = 'Czech';
 
 #Possible aliases for language
-$cms_nls['alias']['cs'] = 'cs_CZ';
-$cms_nls['alias']['czech'] = 'cs_CZ' ;
-$cms_nls['alias']['cze'] = 'cs_CZ' ;
-$cms_nls['alias']['cs_CS'] = 'cs_CZ' ;
-$cms_nls['alias']['cs_CZ.WINDOWS-1250'] = 'cs_CZ' ;
-$cms_nls['alias']['cs_CZ.ISO8859-2'] = 'cs_CZ' ;
+$nls['alias']['cs'] = 'cs_CZ';
+$nls['alias']['czech'] = 'cs_CZ' ;
+$nls['alias']['cze'] = 'cs_CZ' ;
+$nls['alias']['cs_CS'] = 'cs_CZ' ;
+$nls['alias']['cs_CZ.WINDOWS-1250'] = 'cs_CZ' ;
+$nls['alias']['cs_CZ.ISO8859-2'] = 'cs_CZ' ;
 
 #Encoding of the language
-$cms_nls['encoding']['cs_CZ'] = 'UTF-8';
+$nls['encoding']['cs_CZ'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['cs_CZ'] = array(dirname(__FILE__).'/cs_CZ/admin.inc.php');
+$nls['file']['cs_CZ'] = array(dirname(__FILE__).'/cs_CZ/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$cms_nls['htmlarea']['cs_CZ'] = 'cz';
+$nls['htmlarea']['cs_CZ'] = 'cz';
 ?>

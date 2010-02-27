@@ -1,25 +1,7 @@
 <?php
-$lang['admin']['content_image_path'] = 'Content Image Path';
-$lang['admin']['info_content_image_path'] = 'Specify the path <em>(relative to the image uploads path in your config)</em> that contains the images and thumbnails that should be used to select images and thumbnails associated with content pages.';
-$lang['admin']['content_settings'] = 'Content Settings';
-$lang['admin']['navigation'] = 'Navigation';
-$lang['admin']['css_class_name'] = 'CSS Class Name for Navigation';
-$lang['admin']['secure_page'] = 'Use Secure (HTTPS) transport';
-$lang['admin']['info_image_settings'] = 'The following settings configure behaviour in the image manager.';
-$lang['admin']['thumbnail_width'] = 'Thumbnail Width';
-$lang['admin']['thumbnail_height'] = 'Thumbnail Height';
-$lang['admin']['image_settings'] = 'Image Settings';
-$lang['admin']['this_sysmodule'] = 'This is a core module';
-$lang['admin']['info_sysmodule'] = 'Indicates a core module';
-$lang['admin']['display_english_help'] = 'Help in English';
-$lang['admin']['no'] = 'No';
-$lang['admin']['yes'] = 'Yes';
-$lang['admin']['phpinfo_report'] = 'Display your PHP Information';
-$lang['admin']['site_information'] = 'Site Information';
-$lang['admin']['contents'] = 'Contents';
-$lang['admin']['count_contents'] = 'Total number of contents';
-$lang['admin']['count_htmlblobs'] = 'Total number of Global Contents';
-$lang['admin']['count_userplugins'] = 'Total number of User Defined Tags';
+$lang['admin']['session_use_cookies'] = 'Sessions are allowed to use Cookies';
+$lang['admin']['errorgettingcontent'] = 'Could not retrieve information for the specified content object';
+$lang['admin']['errordeletingcontent'] = 'Error deleting content (either this page has children or is the default content)';
 $lang['admin']['invalidemail'] = 'The email address entered is invalid';
 $lang['admin']['info_deletepages'] = 'Note: due to permission restrictions, some of the pages you selected for deletion may not be listed below';
 $lang['admin']['info_pagealias'] = 'Specify a unique alias for this page.';
@@ -99,12 +81,11 @@ $lang['admin']['help_function_content_image'] = <<<EOT
 
   <li><em>(optional)</em> label - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
  
-  <li><em>(optional)</em> dir - The name of a directory (relative to the uploads directory), from which to select image files. If not specified, the uploads directory will be used.
+  <li><em>(optional)</em> dir - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the uploads directory will be used.
   <p>Example: use images from the uploads/image directory.</p>
   <pre>{content_image block='image1' dir='images'}</pre><br/>
   </li>
 
-  <li><em>(optional)</em> exclude - ignore any files beginning with the specified prefix.</li>
   <li><em>(optional)</em> class - The css class name to use on the img tag in frontend display.</li>
 
   <li><em>(optional)</em> id - The id name to use on the img tag in frontend display.</li> 
@@ -117,7 +98,6 @@ $lang['admin']['help_function_content_image'] = <<<EOT
 
   <li><em>(optional)</em> alt - Alternative text if the image cannot be found.</li>
   <li><em>(optional)</em> urlonly - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
-  <li><em>(optional)</em> promptoncopy - Indicates that the authorized user should be prompted for a value for this field when performing any advanced copy operations.  Advanced copy operations may be provided by third party modules.</li>
 </ul>
 EOT;
 $lang['admin']['error_udt_name_chars'] = 'A valid UDT name starts with a letter or underscore, followed by any number of letters, numbers, or underscores.';
@@ -420,6 +400,7 @@ $lang['admin']['help_function_adsense'] = <<<EOT
 		<li>ad_height - height of the ad</li>
 		<li>ad_format - "format" of the ad <em>e.g. 120x600_as</em></li>
 		<li>ad_channel - channels are an advanced feature of adsense.  Put it here if you use it.</li>
+		<li>ad_slot - slots are an advanced feature of adsense.  Put it here if you use it.</li>
 		<li>ad_type - possible options are text, image or text_image.</li>
 		<li>color_border - the color of the border. Use HEX color or type the color name (Ex. Red)</li>
 		<li>color_link - the color of the linktext. Use HEX color or type the color name (Ex. Red)</li>
@@ -867,23 +848,6 @@ $lang['admin']['help_function_created_date'] = <<<EOT
                 <li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
         </ul>
 EOT;
-$lang['admin']['help_function_content_module'] = <<<EOT
-<h3><strong><span style="color: red;">Note: Available in CMSMS 1.7+ Only!</span></strong></h3>
-<h3>What does this do?</h3>
-<p>This tag allows utilizing addon modules to create different content blocks for your page template.  Examples are user lists from a user module, file lists from a file module, etc.</p>
-<h3>How do I use it?</h3>
-<p>If a module supports creating dynamic content blocks, it should indicate this in its help.  You will need to refer to the help for this module in order to complete the tag.</p>
-<p>Once the tag is properly placed in your page template, when editing a content objecdt that uses that page template you should see an appropriate content block displayed, allowing you to select a value.   Once the page is saved, and displayed on the website frontend, the value selected will be displayed.</p>
-<h3>What parameters does it take?<h3>
-<p><strong>Note:</strong> a block supported by a module may require additional parameters.</p>
-<ul>
-<li><strong>(required)</strong> block - The name of this block.</li>
-<li><strong>(required)</strong> module - The name of the module to request a block from.</li>
-<li><em>(optional)</em> label - An optional human readable label for this block, for use when editing a page.</li>
-<li><em>(optional)</em> promptoncopy - A flag that indicates wether the user should be prompted for this value when copying content that uses this page template.</em>
-<li><em>(optional)</em> assign - This parameter will assign the output of the tag on the frontend to the named smarty variable.</li>
-</ul>
-EOT;
 $lang['admin']['help_function_content'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This is where the content for your page will be displayed.  It's inserted into the template and changed based on the current page being displayed.</p>
@@ -1098,7 +1062,7 @@ $lang['admin']['help_function_redirect_url'] = <<<EOT
 <h3>What does this do?</h3>
   <p>This plugin allows you to easily redirect to a specified url.  It is handy inside of smarty conditional logic (for example, redirect to a splash page if the site is not live yet).</p>
 <h3>How do I use it?</h3>
-<p>Simply insert this tage into your page or template: <code>{redirect_url urle='www.cmsmadesimple.org'}</code></p>
+<p>Simply insert this tage into your page or template: <code>{redirect_url to='http://www.cmsmadesimple.org'}</code></p>
 EOT;
 $lang['admin']['help_function_redirect_page'] = <<<EOT
 <h3>What does this do?</h3>
@@ -1489,8 +1453,6 @@ $lang['admin']['pagesdescription'] = 'This is where we add and edit pages and ot
 $lang['admin']['htmlblobdescription'] = 'Global Content Blocks are chunks of content you can place in your pages or templates.'; //needs translation
 $lang['admin']['templates'] = 'Templates'; //needs translation
 $lang['admin']['templatesdescription'] = 'This is where we add and edit templates. Templates define the look and feel of your site.'; //needs translation
-$lang['admin']['modtemplates'] = 'Module Templates'; //needs translation
-$lang['admin']['modtemplatesdescription'] = 'This is where we add and edit module templates. They define the look and feel of your modules.'; //needs translation
 $lang['admin']['stylesheets'] = 'Stylesheets'; //needs translation
 $lang['admin']['stylesheetsdescription'] = 'Stylesheet management is an advanced way to handle cascading Stylesheets (CSS) separately from templates.'; //needs translation
 $lang['admin']['filemanagerdescription'] = 'Upload and manage files.'; //needs translation

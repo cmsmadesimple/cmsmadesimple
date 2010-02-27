@@ -38,7 +38,7 @@ class PageInfo
 	var $content_props;
 	var $content_metadata;
 	var $content_modified_date;
-	var $content_created_date;
+        var $content_created_date;
 	var $content_last_modified_date;
 	var $content_last_modified_by_id;
 	var $template_id;
@@ -64,7 +64,7 @@ class PageInfo
 		$this->content_modified_date = -1;
 		$this->content_created_date = -1;
 		$this->content_last_modified_date = -1;
-		$this->content_last_modified_by_id = -1;
+                $this->content_last_modified_by_id = -1;
 		$this->content_props = array();
 		$this->template_id = -1;
 		$this->template_modified_date = -1;
@@ -74,63 +74,13 @@ class PageInfo
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$query = 'SELECT MAX(modified_date) AS thedate FROM {content} c';
+		$query = 'SELECT MAX(modified_date) AS thedate FROM '.cms_db_prefix().'content c';
 		$row = $db->GetRow($query);
 
 		if ($row)
 		{
 			$this->content_last_modified_date = $db->UnixTimeStamp($row['thedate']);
 		}
-	}
-	
-	public function send_headers()
-	{
-		//header("Content-Type: " . cmsms()->variables['content-type'] . "; charset=" . CmsResponse::get_encoding());
-		header("Content-Type: " . cmsms()->variables['content-type'] . "; charset=UTF-8");
-	}
-	
-	/**
-	 * Renders the given pageinfo object based on it's assigned content and template
-	 * parts.
-	 *
-	 * @return string The rendered html
-	 **/
-	public function render()
-	{
-		$html = '';
-		$cached = false;
-		
-		$gCms = cmsms();
-		$smarty = cms_smarty();
-		
-		$id = CmsRequest::get_id_from_request();
-
-		#If this is a case where a module doesn't want a template to be shown, just disable caching
-		if (isset($id) && $id != '' && isset($_REQUEST[$id.'showtemplate']) && ($_REQUEST[$id.'showtemplate'] == 'false' || $_REQUEST[$id.'showtemplate'] == false))
-		{
-			$html = $smarty->fetch('template:notemplate') . "\n";
-		}
-		else
-		{
-			//$smarty->caching = false;
-			//$smarty->compile_check = true;
-			($smarty->is_cached('template:'.$this->template_id)?$cached="":$cached="not ");
-			// Added HTTP_HOST here to work with multisites - SK
-			$html = $smarty->fetch('template:'.$this->template_id/*.$_SERVER['HTTP_HOST']*/) . "\n";
-			if (isset($_REQUEST['tmpfile']))
-			{
-				$smarty->clear_compiled_tpl('template:'.$this->template_id);
-			}
-		}
-
-		if (!$cached)
-		{
-			Events::SendEvent('Core', 'ContentPostRenderNonCached', array(&$html));
-		}
-
-		Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
-		
-		return $html;
 	}
 }
 
@@ -142,22 +92,23 @@ class PageInfo
  */
 class PageInfoOperations
 {
-	function LoadPageInfoFromSerializedData($data)
-	{
-		$pi = new PageInfo();
-		$pi->SetInitialValues();
-		$pi->content_id = $data['content_id'];
-		$pi->content_title = $data['title'];
-		$pi->content_menutext = $data['menutext'];
-		$pi->content_hierarchy = $data['hierarchy'];
-		$pi->template_id = $data['template_id'];
-		$pi->template_encoding = $data['encoding'];
-		$pi->cachable = false;
 
-		return $pi;
-	}
+  function LoadPageInfoFromSerializedData($data)
+  {
+    $pi = new PageInfo();
+    $pi->SetInitialValues();
+    $pi->content_id = $data['content_id'];
+    $pi->content_title = $data['title'];
+    $pi->content_menutext = $data['menutext'];
+    $pi->content_hierarchy = $data['hierarchy'];
+    $pi->template_id = $data['template_id'];
+    $pi->template_encoding = $data['encoding'];
+    $pi->cachable = false;
 
-	static function load_page_info_by_content_alias($alias)
+    return $pi;
+  }
+
+	function LoadPageInfoByContentAlias($alias)
 	{
 		$result = false;
 
@@ -168,13 +119,13 @@ class PageInfoOperations
 
 		if (is_numeric($alias) && strpos($alias, '.') === FALSE && strpos($alias, ',') === FALSE) //Fix for postgres
 		{ 
-			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.titleattribute, c.hierarchy, c.metadata, c.id_hierarchy, c.prop_names, c.create_date AS c_create_date, c.modified_date AS c_date, c.cachable, c.last_modified_by, t.template_id, t.encoding, t.modified_date AS t_date FROM {templates} t INNER JOIN {content} c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
-			$row = $db->GetRow($query, array($alias, $alias));
+			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.titleattribute, c.hierarchy, c.metadata, c.id_hierarchy, c.prop_names, c.create_date AS c_create_date, c.modified_date AS c_date, c.cachable, c.last_modified_by, t.template_id, t.encoding, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
+			$row = &$db->GetRow($query, array($alias, $alias));
 		}
 		else
 		{
-			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.titleattribute, c.hierarchy, c.metadata, c.id_hierarchy, c.prop_names, c.create_date AS c_create_date, c.modified_date AS c_date, c.cachable, c.last_modified_by,t.template_id, t.encoding, t.modified_date AS t_date FROM {templates} t INNER JOIN {content} c ON c.template_id = t.template_id WHERE c.content_alias = ? AND c.active = 1";
-			$row = $db->GetRow($query, array($alias));
+			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.titleattribute, c.hierarchy, c.metadata, c.id_hierarchy, c.prop_names, c.create_date AS c_create_date, c.modified_date AS c_date, c.cachable, c.last_modified_by,t.template_id, t.encoding, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE c.content_alias = ? AND c.active = 1";
+			$row = &$db->GetRow($query, array($alias));
 		}
 
 		if ($row)
@@ -233,15 +184,8 @@ class PageInfoOperations
 				$result = $onepageinfo;
 			}
 		}
-		
-		$gCms->variables['pageinfo'] = $result;
-		
+
 		return $result;
-	}
-	
-	static function LoadPageInfoByContentAlias($alias)
-	{
-		return PageInfoOperations::load_page_info_by_content_alias($alias);
 	}
 }
 

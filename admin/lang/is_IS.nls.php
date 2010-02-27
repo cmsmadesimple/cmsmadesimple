@@ -30,28 +30,28 @@
 #Maintained by: Rikhardur Brynjolfsson <rikhardur @nospam@ gmail.com>
 
 #Native language name
-$cms_nls['language']['is_IS'] = 'Íslenska';
-$cms_nls['englishlang']['is_IS'] = 'Icelandic';
+$nls['language']['is_IS'] = 'Íslenska';
+$nls['englishlang']['is_IS'] = 'Icelandic';
 
 #Possible aliases for language
-$cms_nls['alias']['is'] = 'is_IS';
-$cms_nls['alias']['icelandic'] = 'is_IS' ;
-$cms_nls['alias']['ice'] = 'is_IS' ;
-$cms_nls['alias']['isl'] = 'is_IS' ;
-$cms_nls['alias']['is_IS'] = 'is_IS' ;
-$cms_nls['alias']['is_IS.ISO8859-1'] = 'is_IS' ;
-$cms_nls['alias']['is_IS.ISO8859-15'] = 'is_IS' ;
+$nls['alias']['is'] = 'is_IS';
+$nls['alias']['icelandic'] = 'is_IS' ;
+$nls['alias']['ice'] = 'is_IS' ;
+$nls['alias']['isl'] = 'is_IS' ;
+$nls['alias']['is_IS'] = 'is_IS' ;
+$nls['alias']['is_IS.ISO8859-1'] = 'is_IS' ;
+$nls['alias']['is_IS.ISO8859-15'] = 'is_IS' ;
 
 #Encoding of the language
-$cms_nls['encoding']['is_IS'] = 'UTF-8';
+$nls['encoding']['is_IS'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['is_IS'] = array(dirname(__FILE__).'/is_IS/admin.inc.php');
+$nls['file']['is_IS'] = array(dirname(__FILE__).'/is_IS/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$cms_nls['htmlarea']['is_IS'] = 'en';
+$nls['htmlarea']['is_IS'] = 'en';
 
 ?>

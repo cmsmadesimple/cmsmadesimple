@@ -18,9 +18,9 @@
 #
 #$Id$
 
-$CMS_VERSION = "2.0-beta1";
-$CMS_VERSION_NAME = "Canala";
-$CMS_SCHEMA_VERSION = "37";
+$CMS_VERSION = "1.6.7";
+$CMS_VERSION_NAME = "Teremba Bay";
+$CMS_SCHEMA_VERSION = "32";
 
 define('CMS_VERSION', $CMS_VERSION);
 define('CMS_VERSION_NAME', $CMS_VERSION_NAME);

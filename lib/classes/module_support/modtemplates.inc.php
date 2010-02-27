@@ -156,7 +156,7 @@ function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '',
 	if (!$ok) return;
 
 	global $gCms;
-	$smarty = cms_smarty();
+	$smarty = &$gCms->GetSmarty();
 
 	$oldcache = $smarty->caching;
 	$smarty->caching = false;

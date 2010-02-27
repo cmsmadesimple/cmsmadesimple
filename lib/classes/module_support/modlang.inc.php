@@ -50,18 +50,11 @@ function cms_module_Lang(&$modinstance)
 		return '';
 	}
 
-	if( isset($gCms->variables['desired_language']) )
-	  {
-	    // this variable overrides the modules default language.
-	    // or anything set in the lang parameter for the module.
-	    $modinstance->SetModuleLanguage($gCms->variables['desired_language']);
-	  }
-	else if ($modinstance->GetModuleLanguage() == '' && 
-		 isset($gCms->current_language))
+	if ($modinstance->curlang == '' && isset($gCms->current_language))
 	{
-	  $modinstance->SetModuleLanguage($gCms->current_language);
+		$modinstance->curlang = $gCms->current_language;
 	}
-	$ourlang = $modinstance->GetModuleLanguage();
+	$ourlang = $modinstance->curlang;
 
 	#Load the language if it's not loaded
 	if (!isset($modinstance->langhash[$ourlang]) || !is_array($modinstance->langhash[$ourlang]) || 

@@ -42,23 +42,23 @@ function smarty_cms_function_sitemap($params, &$smarty)
     {
         // Handy little trick to figure out how deep in the tree we are
         // Remember, content comes to use in order of how it should be displayed in the tree already
-        $depth = count(split('\.', $onecontent->hierarchy()));
+        $depth = count(split('\.', $onecontent->Hierarchy()));
 
         // If hierarchy starts with the start_element (if it's set), then continue on
         if (isset($params['start_element']))
         {
             if (
                 ! (
-                    strpos($onecontent->hierarchy(), $params['start_element']) !== FALSE 
+                    strpos($onecontent->Hierarchy(), $params['start_element']) !== FALSE 
                     && 
-                    strpos($onecontent->hierarchy(), $params['start_element']) == 0
+                    strpos($onecontent->Hierarchy(), $params['start_element']) == 0
                 )
             )
             {
-                if(($onecontent->alias() == $params['start_element']))
+                if(($onecontent->Alias() == $params['start_element']))
                 {
-                     $params['start_element'] = $onecontent->hierarchy();
-                     $depth = count(split('\.', $onecontent->hierarchy()));
+                     $params['start_element'] = $onecontent->Hierarchy();
+                     $depth = count(split('\.', $onecontent->Hierarchy()));
                      $first_level = $depth;
                      continue;
                 }
@@ -88,19 +88,19 @@ function smarty_cms_function_sitemap($params, &$smarty)
         }
 
         // Not active or separator?  Toss it.
-        if (! $onecontent->active() || ! $onecontent->menu_text())
+        if (! $onecontent->Active() || ! $onecontent->MenuText())
         {
             continue;
         }
 
         // Not shown in menu?  Toss it.
-        if (! $onecontent->show_in_menu())
+        if (! $onecontent->ShowInMenu())
         {
             // If param showall, display also content not shown in menu.
             if (
                 ((isset($params['showall']) && $params['showall'] == 1)) 
                 ||
-                ($add_elements && in_array($onecontent->alias(), $add_element))
+                ($add_elements && in_array($onecontent->Alias(), $add_element))
             )
             {
 
@@ -141,7 +141,7 @@ function smarty_cms_function_sitemap($params, &$smarty)
                 (
                     isset($gCms->variables['content_id'])
                     && 
-                    $onecontent->id() == $gCms->variables['content_id']
+                    $onecontent->Id() == $gCms->variables['content_id']
                 )
             )
         )
@@ -151,7 +151,7 @@ function smarty_cms_function_sitemap($params, &$smarty)
 
             if ((isset($params['delimiter']) && $params['delimiter'] != '') && ($depth > 1))
             {
-                $ddepth = (split('\.', $onecontent->hierarchy()));
+                $ddepth = (split('\.', $onecontent->Hierarchy()));
                 if (
                     ($ddepth[sizeof($ddepth) - 1] > 1) 
                     ||
@@ -163,27 +163,27 @@ function smarty_cms_function_sitemap($params, &$smarty)
             }
 
             // No link if section header.
-            if ($onecontent->has_usable_link())
+            if ($onecontent->HasUsableLink())
             {
-                $menu .= '<a href="' . $onecontent->get_url() . '"';
-                if (isset($gCms->variables['content_id']) && $onecontent->id() == $gCms->variables['content_id'])
+                $menu .= '<a href="' . $onecontent->GetURL() . '"';
+                if (isset($gCms->variables['content_id']) && $onecontent->Id() == $gCms->variables['content_id'])
                 {
                     $menu .= ' class="currentpage"';
                 }
-                if ($onecontent->get_property_value('target') != '')
+                if ($onecontent->GetPropertyValue('target') != '')
                 {
-                    $menu .= ' target="' . $onecontent->get_property_alue('target') . '"';
+                    $menu .= ' target="' . $onecontent->GetPropertyValue('target') . '"';
                 }
-                $menu .= '>' . my_htmlentities($onecontent->menu_text()) . '</a>';
+                $menu .= '>' . my_htmlentities($onecontent->MenuText()) . '</a>';
             }
             else
             {
-                $menu .= my_htmlentities($onecontent->menu_text());
+                $menu .= my_htmlentities($onecontent->MenuText());
             }
         }
         else
         {
-            if (! $onecontent->has_children())
+            if (! $onecontent->HasChildren())
             {
                 $no_end = true;
             }

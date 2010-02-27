@@ -21,50 +21,153 @@
 require_once('Content.inc.php');
 class ErrorPage extends Content
 {
+  var $doAliasCheck;
   var $error_types;
 	
-  public function __construct()
+  function ErrorPage()
   {
-    parent::__construct();
+    $this->ContentBase();
     $this->error_types = array('404' => lang('404description'));
-    $this->set_alias('error404');
+    $this->doAliasCheck = false;
+    $this->doAutoAliasIfEnabled = false;
   }
 
-  public function is_previewable()
-  {
-    return FALSE;
-  }
-
-  public function friendly_name()
-  {
-    return lang('contenttype_errorpage');
-  }	
-
-  public function is_copyable()
-  {
-    return FALSE;
-  }
-
-  public function is_default_possible()
-  {
-    return FALSE;
-  }
-
-  function has_usable_link()
-  {
-    return false;
-  }
-
-  function wants_children()
-  {
-    return false;
-  }
-
-  function is_system_page()
+  function HandlesAlias()
   {
     return true;
   }
 
+  function FriendlyName()
+  {
+    return lang('contenttype_errorpage');
+  }
+	
+  function SetProperties()
+  {
+    parent::SetProperties();
+    $this->RemoveProperty('searchable',false);
+    $this->RemoveProperty('parent',-1);
+    $this->RemoveProperty('showinmenu',false);
+    $this->RemoveProperty('menutext','');
+    $this->RemoveProperty('target','');
+    $this->RemoveProperty('extra1','');
+    $this->RemoveProperty('extra2','');
+    $this->RemoveProperty('extra3','');
+    $this->RemoveProperty('image','');
+    $this->RemoveProperty('thumbnail','');
+    $this->RemoveProperty('accesskey','');
+    $this->RemoveProperty('titleattribute','');
+    $this->RemoveProperty('active',true);
+    $this->RemoveProperty('cachable',false);
+
+    $this->RemoveProperty('alias','');
+    $this->AddBaseProperty('alias',10,1);
+
+    #Turn on preview
+    $this->mPreview = true;
+  }
+
+  function IsCopyable()
+  {
+    return FALSE;
+  }
+
+  function IsDefaultPossible()
+  {
+    return FALSE;
+  }
+
+  function HasUsableLink()
+  {
+    return false;
+  }
+
+  function WantsChildren()
+  {
+    return false;
+  }
+	
+  function IsSystemPage()
+  {
+    return true;
+  }
+
+  /**
+   * Handle Auto Aliasing 
+   */
+  function DoAutoAlias()
+  {
+    return FALSE;
+  }
+
+  function FillParams($params)
+  {
+    parent::FillParams($params);
+    $this->mParentId = -1;
+    $this->mShowInMenu = false;
+    $this->mCachable = false;
+    $this->mActive = true;
+  }
+	
+    function display_single_element($one,$adding)
+    {
+      switch($one) {
+	case 'alias':
+	  $dropdownopts = '<option value="">'.lang('none').'</option>';
+	  foreach ($this->error_types as $code=>$name)
+	    {
+	      $dropdownopts .= '<option value="error' . $code . '"';
+	      if ('error'.$code == $this->mAlias)
+		{
+		  $dropdownopts .= ' selected="selected" ';
+		}
+	      $dropdownopts .= ">{$name} ({$code})</option>";
+	    }
+	  return array(lang('error_type').':', '<select name="alias">'.$dropdownopts.'</select>');
+	  break;
+
+      default:
+	return parent::display_single_element($one,$adding);
+      }
+    }
+
+  function ValidateData()
+  {
+    $errors = parent::ValidateData();
+    if ($errors == FALSE)
+      {
+	$errors = array();
+      }
+    
+    //Do our own alias check
+    if ($this->mAlias == '')
+      {
+	$errors[] = lang('nofieldgiven', array(lang('error_type')));
+      }
+    else if (in_array($this->mAlias, $this->error_types))
+      {
+	$errors[] = lang('nofieldgiven', array(lang('error_type')));
+      }
+    else if ($this->mAlias != $this->mOldAlias)
+      {
+	global $gCms;
+	$contentops =& $gCms->GetContentOperations();
+	$error = $contentops->CheckAliasError($this->mAlias, $this->mId);
+	if ($error !== FALSE)
+	  {
+	    if ($error == lang('aliasalreadyused'))
+	      {
+		$errors[] = lang('errorpagealreadyinuse');
+	      }
+	    else
+	      {
+		$errors[] = $error;
+	      }
+	  }
+      }
+    
+    return (count($errors) > 0 ? $errors : FALSE);
+  }
 }
 
 # vim:ts=4 sw=4 noet

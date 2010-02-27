@@ -27,11 +27,6 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 $userid = get_userid();
 
-if( isset($_SESSION['cms_passthru']) )
-  {
-    $_REQUEST = array_merge($_REQUEST,$_SESSION['cms_passthru']);
-    unset($_SESSION['cms_passthru']);
-  }
 $smarty =& $gCms->GetSmarty();
 $smarty->assign('date_format_string',get_preference($userid,'date_format_string','%x %X'));
 
@@ -63,7 +58,6 @@ if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIW
 }
 
 $USE_OUTPUT_BUFFERING = true;
-$USE_THEME = true;
 if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->HasAdminBuffering() == false)
 {
 	$USE_OUTPUT_BUFFERING = false;
@@ -77,6 +71,7 @@ else if (isset($_REQUEST['disable_buffer']))
 	$USE_OUTPUT_BUFFERING = false;
 }
 
+$USE_THEME = true;
 if( isset( $_REQUEST[$id . 'disable_theme'] ))
 {
 	$USE_THEME = false;
@@ -85,7 +80,6 @@ else if( isset( $_REQUEST['disable_theme'] ))
 {
 	$USE_THEME = false;
 }
-
 if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false'))
 {
   // for simplicity and compatibility with the frontend.

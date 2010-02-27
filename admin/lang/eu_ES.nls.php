@@ -30,24 +30,24 @@
 #and : Mikel Etxeberria (Mikel)  < mikel [at]  abartiateam [dot] com >
 
 #Native language name
-$cms_nls['language']['eu_ES'] = 'Euskara';
-$cms_nls['englishlang']['eu_ES'] = 'Basque';
+$nls['language']['eu_ES'] = 'Euskara';
+$nls['englishlang']['eu_ES'] = 'Basque';
 
 #Possible aliases for language
-$cms_nls['alias']['eu'] = 'eu_ES';
-$cms_nls['alias']['basque'] = 'eu_ES' ;
-$cms_nls['alias']['baq'] = 'eu_ES' ;
-$cms_nls['alias']['eus'] = 'eu_ES' ;
-$cms_nls['alias']['eu_ES'] = 'eu_ES' ;
-$cms_nls['alias']['eu_ES.ISO8859-1'] = 'eu_ES' ;
+$nls['alias']['eu'] = 'eu_ES';
+$nls['alias']['basque'] = 'eu_ES' ;
+$nls['alias']['baq'] = 'eu_ES' ;
+$nls['alias']['eus'] = 'eu_ES' ;
+$nls['alias']['eu_ES'] = 'eu_ES' ;
+$nls['alias']['eu_ES.ISO8859-1'] = 'eu_ES' ;
 
 #Encoding of the language
-$cms_nls['encoding']['eu_ES'] = 'UTF-8';
+$nls['encoding']['eu_ES'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['eu_ES'] = array(dirname(__FILE__).'/eu_ES/admin.inc.php');
+$nls['file']['eu_ES'] = array(dirname(__FILE__).'/eu_ES/admin.inc.php');
 
 #Language setting for HTML area
-$cms_nls['htmlarea']['eu_ES'] = 'en';
+$nls['htmlarea']['eu_ES'] = 'en';
 
 ?>

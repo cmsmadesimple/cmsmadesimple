@@ -249,10 +249,10 @@ class AdminTheme
                     $this->sectionCount[$section] = 0;
                     }
                 $this->modulesBySection[$section][$this->sectionCount[$section]]['key'] = $key;
-	        $tmp = $cmsmodules[$key]['object']->GetFriendlyName();
-                if ($tmp != '')
+                if ($cmsmodules[$key]['object']->GetFriendlyName() != '')
                     {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $tmp;
+                    $this->modulesBySection[$section][$this->sectionCount[$section]]['name'] =
+                       $cmsmodules[$key]['object']->GetFriendlyName();
                     }
                 else
                     {
@@ -610,7 +610,6 @@ class AdminTheme
     function OutputHeaderJavascript()
     {
 ?>
-<script type="text/javascript" src="../lib/jquery/jquery.js"/></script>
 <script type="text/javascript">
 <!-- Needed for correct display in IE only -->
 <!--
@@ -755,9 +754,6 @@ class AdminTheme
             'copytemplate'=>array('url'=>'copyemplate.php','parent'=>'template',
                     'title'=>$this->FixSpaces(lang('copytemplate')),
                     'description'=>lang('copytemplate'),'show_in_menu'=>false),
-			'modtemplate'=>array('url'=>'listmodtemplates.php','parent'=>'layout',
-                    'title'=>$this->FixSpaces(lang('modtemplates')),
-                    'description'=>lang('modtemplatesdescription'),'show_in_menu'=>$this->HasPerm('templatePerms')),
             'stylesheets'=>array('url'=>'listcss.php','parent'=>'layout',
                     'title'=>$this->FixSpaces(lang('stylesheets')),
                     'description'=>lang('stylesheetsdescription'),
@@ -1868,7 +1864,7 @@ class AdminTheme
 	
 		if (file_exists(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$config['admin_dir']."/themes/${themeName}/${themeObjectName}.php"))
 		{
-			include_once(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$config['admin_dir']."/themes/${themeName}/${themeObjectName}.php");
+			include(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$config['admin_dir']."/themes/${themeName}/${themeObjectName}.php");
 			$themeObject = new $themeObjectName($gCms, $userid, $themeName);
 		}
 		else

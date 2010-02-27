@@ -31,12 +31,7 @@
 */
 function getSupportedDBDriver()
 {
-	return array(
-		'mysqli'=>array('server'=>'mysql', 'label'=>'MySQL (compatibility)', 'extension' => 'mysql'),
-		'mysql'=>array('server'=>'mysql', 'label'=>'MySQL (4.1+)', 'extension' => 'mysql'),
-		'postgres7'=>array('server'=>'pgsql', 'label'=>'PostgreSQL 7/8', 'extension' => 'pgsql'),
-		'sqlite'=>array('server'=>'sqlite', 'label'=>'SQLite 2/3', 'extension' => 'sqlite'),
-	);
+	return array('mysqli'=>'mysql', 'mysql'=>'mysql', 'pgsql'=>'pgsql');
 }
 
 /**
@@ -48,16 +43,16 @@ function getSupportedDBDriver()
 function getTestValues( $property )
 {
 	$range = array(
-		'php_version'			=> array('minimum'=>'5.2', 'recommended'=>'5.2.5'),
+		'php_version'			=> array('minimum'=>'4.3.0', 'recommended'=>'5.0.4'),
 		'gd_version'			=> array('minimum'=>2),
 		'memory_limit'			=> array('minimum'=>'16M', 'recommended'=>'24M'),
 		'max_execution_time'	=> array('minimum'=>30, 'recommended'=>60),
 		'post_max_size'			=> array('minimum'=>'2M', 'recommended'=>'10M'),
 		'upload_max_filesize'	=> array('minimum'=>'2M', 'recommended'=>'10M'),
 
-		'mysql_version'			=> array('minimum'=>'4.1.5', 'recommended'=>'5.0'),
+		'mysql_version'			=> array('minimum'=>'3.23', 'recommended'=>'4.1'),
 		'pgsql_version'			=> array('minimum'=>'7.4', 'recommended'=>'8'),
-		'sqlite_version'		=> array('minimum'=>'2.8.10', 'recommended'=>'2.8.16'),
+		'sqlite_version'		=> array('minimum'=>'', 'recommended'=>''),
 	);
 
 	if(array_key_exists($property, $range))
@@ -188,7 +183,7 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 			getTestReturn($test, $required);
 			return $test;
 		}
-		$test = new StdClass();
+		$test =&new StdClass();
 		$test->title = $title;
 		if($required)
 		{
@@ -203,7 +198,7 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 	}
 //TODO
 
-	$test = new StdClass();
+	$test =&new StdClass();
 	$test->title = $title;
 
 	if(count($drivers) > 0)
@@ -309,7 +304,7 @@ function getApacheModules( $module = false )
 */
 function & testDummy( $title, $value, $return, $message = '', $error_fragment = '', $error = '' )
 {
-	$test = new StdClass();
+	$test =&new StdClass();
 	$test->title = $title;
 	$test->value = $value;
 	$test->secondvalue = null;
@@ -350,7 +345,7 @@ function & testConfig( $title, $varname, $testfunc = '', $message = '' )
 
 	if(! isset($test))
 	{
-		$test = new StdClass();
+		$test =&new StdClass();
 		$test->title = $title;
 		$test->value = $value;
 		$test->secondvalue = null;
@@ -414,7 +409,7 @@ function testIni( &$test, $varname, $type )
 */
 function & testInteger( $required, $title, $var, $message = '', $ini = true, $empty_is_ok = true, $error_fragment = '' )
 {
-	$test = new StdClass();
+	$test =&new StdClass();
 	$test->title = $title;
 
 	if($ini)
@@ -469,7 +464,7 @@ function & testInteger( $required, $title, $var, $message = '', $ini = true, $em
 */
 function & testString( $required, $title, $var, $message = '', $ini = true, $code_empty = 'green', $code_not_empty = 'yellow', $error_fragment = '' )
 {
-	$test = new StdClass();
+	$test =&new StdClass();
 	$test->title = $title;
 
 	if($ini)
@@ -508,7 +503,7 @@ function & testString( $required, $title, $var, $message = '', $ini = true, $cod
 */
 function & testBoolean( $required, $title, $var, $message = '', $ini = true, $negative_test = false, $error_fragment = '' )
 {
-	$test = new StdClass();
+	$test =&new StdClass();
 	$test->title = $title;
 
 	if($ini)
@@ -559,7 +554,7 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
 */
 function & testVersionRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $unlimited = null, $error_fragment='' )
 {
-	$test = new StdClass();
+	$test =& new StdClass();
 	$test->title = $title;
 
 	if($ini)
@@ -618,7 +613,7 @@ function & testVersionRange( $required, $title, $var, $message = '', $minimum, $
 */
 function & testRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $test_as_bytes = false, $unlimited = null, $error_fragment = '' )
 {
-	$test = new StdClass();
+	$test =& new StdClass();
 	$test->title = $title;
 
 	if($ini)
@@ -705,7 +700,7 @@ function returnBytes( $val )
  */
 function & testUmask( $required, $title, $umask, $message = '', $debug = false, $dir = '', $file = '_test_umask_', $data = 'this is a test' )
 {
-	$test = new StdClass();
+	$test =& new StdClass();
 	$test->title = $title;
 
 	if(empty($dir))
@@ -900,7 +895,7 @@ function permission_octal2string( $mode )
 */
 function & testCreateDirAndFile( $required, $title, $message = '', $debug = false, $dir = '_test_dir_file_', $file = '_test_dir_file_' )
 {
-	$test = new StdClass();
+	$test =& new StdClass();
 	$test->title = $title;
 	$dir = cms_join_path(TMP_CACHE_LOCATION, $dir);
 	$file = cms_join_path($dir, $file);
@@ -953,7 +948,7 @@ function & testCreateDirAndFile( $required, $title, $message = '', $debug = fals
 */
 function & testDirWrite( $required, $title, $dir, $message = '', $quick = 0, $debug = false, $file = '_test_dir_write_', $data = 'this is a test' )
 {
-	$test = new StdClass();
+	$test =& new StdClass();
 	$test->title = $title;
 
 	if(empty($dir))
@@ -1028,7 +1023,7 @@ function & testDirWrite( $required, $title, $dir, $message = '', $quick = 0, $de
 */
 function & testFileWritable( $required, $title, $file, $message = '', $debug = false )
 {
-	$test = new StdClass();
+	$test =& new StdClass();
 	$test->title = $title;
 
 	if(empty($file))
@@ -1090,7 +1085,7 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 		$url = 'http://dev.cmsmadesimple.org/latest_version.php';
 	}
 
-	$test = new StdClass();
+	$test =& new StdClass();
 	$test->title = $title;
 	//$test->value = $url;
 
@@ -1325,7 +1320,7 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 */
 function & testFileChecksum( $required, $title, $file, $checksum, $message = '', $formattime = '%c', $debug = false )
 {
-	$test = new StdClass();
+	$test =& new StdClass();
 	$test->title = $title;
 	$test->value = $file;
 
@@ -1459,7 +1454,7 @@ function & testFileUploads( $inputname )
 		return $_ary;
 	}
 
-	$test = new StdClass();
+	$test =& new StdClass();
 	$test->files = array();
 
 	$result = testBoolean('', '', 'file_uploads', '', true, false);
@@ -1521,7 +1516,7 @@ function & testFileUploads( $inputname )
 */
 function & testGDVersion( $required, $title, $minimum, $message = '', $error_fragment = '' )
 {
-	$test = new StdClass();
+	$test =& new StdClass();
 	$test->title = $title;
 
 	$gd_version_number = GDVersion();

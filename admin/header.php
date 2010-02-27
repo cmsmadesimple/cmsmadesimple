@@ -57,7 +57,6 @@ else
 		foreach( $gCms->modules as $modulename => $ext )
 		{
 			if( in_array($modulename,$ignoredmodules) ) continue;
-			if( $gCms->modules[$modulename]['installed'] != true ) continue;
 			$mod =& $gCms->modules[$modulename]['object'];
 			if( !is_object($mod) ) continue;
 
@@ -159,7 +158,7 @@ else
 				if ($remote_test->continueon)
 				{
 					// we have a 'theoretically' valid url
-					$txt = @cms_file_get_contents($url);
+					$txt = @file_get_contents($url);
 					if( $txt !== FALSE )
 					{
 						// the url worked

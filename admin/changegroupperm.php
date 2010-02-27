@@ -100,7 +100,7 @@ if ($submitted == 1)
 	if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false)
 	  {
 	    $keyparts = explode('_',$key);
-	    if ($keyparts[2] != '1' && $value != '0')
+	    if ($keyparts[2] != '1' && $value == '1')
 	      {
 		if( !in_array($keyparts[2],$groups) )
 		  {
@@ -112,6 +112,7 @@ if ($submitted == 1)
 
     $query = 'DELETE FROM '.cms_db_prefix().'group_perms WHERE group_id IN ('.implode(',',$groups).')';
     $db->Execute($query);
+    
     foreach ($_POST as $key=>$value)
       {
 	if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false)
@@ -140,6 +141,7 @@ $query = "SELECT p.permission_id, p.permission_text, up.group_id FROM ".
 $result = $db->Execute($query);
 
 $perm_struct = array();
+
 while($result && $row = $result->FetchRow())
   {
     if (isset($perm_struct[$row['permission_id']]))
@@ -172,9 +174,9 @@ $smarty->assign('apply',lang('apply'));
 $smarty->assign('title_permission',lang('permission'));
 $smarty->assign('selectgroup',lang('selectgroup'));
 $smarty->assign('hidden','<input type="hidden" name="submitted" value="1" />');
-$smarty->assign('submit','<input type="submit" accesskey="s" name="changeperm" value="'.lang('submit').
+$smarty->assign('submit','<input type="submit" name="changeperm" value="'.lang('submit').
 	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');
-$smarty->assign('cancel','<input type="submit" accesskey="c" name="cancel" value="'.lang('cancel').
+$smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('cancel').
 	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');
 
 

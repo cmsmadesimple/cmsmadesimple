@@ -31,27 +31,27 @@
 #This is the default language
 
 #Native language name
-$cms_nls['language']['es_ES'] = 'Espa&ntilde;ol';
-$cms_nls['englishlang']['es_ES'] = 'Spanish';
+$nls['language']['es_ES'] = 'Espa&ntilde;ol';
+$nls['englishlang']['es_ES'] = 'Spanish';
 
 #Possible aliases for language
-$cms_nls['alias']['es'] = 'es_ES';
-$cms_nls['alias']['espa&ntilde;ol'] = 'es_ES' ;
-$cms_nls['alias']['eng'] = 'es_ES' ;
-$cms_nls['alias']['es_AR'] = 'es_ES' ;
-$cms_nls['alias']['es_PE'] = 'es_ES' ;
-$cms_nls['alias']['es_MX'] = 'es_ES' ;
-$cms_nls['alias']['es_US.ISO8859-1'] = 'es_ES' ;
+$nls['alias']['es'] = 'es_ES';
+$nls['alias']['espa&ntilde;ol'] = 'es_ES' ;
+$nls['alias']['eng'] = 'es_ES' ;
+$nls['alias']['es_AR'] = 'es_ES' ;
+$nls['alias']['es_PE'] = 'es_ES' ;
+$nls['alias']['es_MX'] = 'es_ES' ;
+$nls['alias']['es_US.ISO8859-1'] = 'es_ES' ;
 
 #Encoding of the language
-$cms_nls['encoding']['es_ES'] = 'UTF-8';
+$nls['encoding']['es_ES'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['es_ES'] = array(dirname(__FILE__).'/es_ES/admin.inc.php');
+$nls['file']['es_ES'] = array(dirname(__FILE__).'/es_ES/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$cms_nls['htmlarea']['es_ES'] = 'es';
+$nls['htmlarea']['es_ES'] = 'es';
 ?>

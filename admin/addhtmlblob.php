@@ -35,8 +35,7 @@ if (isset($_POST['htmlblob'])) $htmlblob = $_POST['htmlblob'];
 $content = "";
 if (isset($_POST['content'])) $content = $_POST['content'];
 
-if (isset($_POST["cancel"]))
-{
+if (isset($_POST["cancel"])) {
 	redirect("listhtmlblobs.php".$urlext);
 	return;
 }
@@ -53,43 +52,49 @@ if (get_preference($userid, 'use_wysiwyg') == "1") {
     $use_javasyntax = true;
 }
 */
-
 $gcb_wysiwyg = (get_site_preference('nogcbwysiwyg','0') == '0') ? 1 : 0;
 if( $gcb_wysiwyg )
-{
-	$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
-}
+  {
+    $gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
+  }
 
-if ($access)
-{
-	if (isset($_POST["addhtmlblob"]))
-	{
+
+if ($access) {
+	if (isset($_POST["addhtmlblob"])) {
+		
 		global $gCms;
 		$gcbops =& $gCms->GetGlobalContentOperations();
 		$templateops =& $gCms->GetTemplateOperations();
 
 		$validinfo = true;
-		if ($htmlblob == "")
-		{
+		if ($htmlblob == ""){
 			$error .= "<li>".lang('nofieldgiven', array('addhtmlblob'))."</li>";
 			$validinfo = false;
 		}
-		else if ($gcbops->CheckExistingHtmlBlobName($htmlblob))
-		{
+		else if ($gcbops->CheckExistingHtmlBlobName($htmlblob)){
 			$error .= "<li>".lang('blobexists')."</li>";
 			$validinfo = false;
 		}
 
-		if ($validinfo)
-		{
+		if ($validinfo) {
 			global $gCms;
 			$gcbops =& $gCms->GetGlobalContentOperations();
 
-			$blobobj = new GlobalContent();
+			$blobobj =& new GlobalContent();
 			$blobobj->name = $htmlblob;
 			$blobobj->content = $content;
 			$blobobj->owner = $userid;
 
+			#Perform the addhtmlblob_pre callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->AddHtmlBlobPre($blobobj);
+				}
+			}
+			
 			Events::SendEvent('Core', 'AddGlobalContentPre', array('global_content' => &$blobobj));
 
 			$result = $blobobj->save();
@@ -100,15 +105,24 @@ if ($access)
 						$blobobj->AddAuthor($addt_user_id);
 					}
 				}
-				audit($blobobj->id, $blobobj->name, 'Added Html Blob');
+				audit($blobobj->id, $blobobj->name, 'Added Global Content Block');
 
+				#Perform the addhtmlblob_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->AddHtmlBlobPost($blobobj);
+					}
+				}
+				
 				Events::SendEvent('Core', 'AddGlobalContentPost', array('global_content' => &$blobobj));
 
 				redirect("listhtmlblobs.php".$urlext);
 				return;
 			}
-			else
-			{
+			else {
 				$error .= "<li>".lang('errorinsertingblob')."</li>";
 			}
 		}
@@ -172,8 +186,8 @@ else
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="addhtmlblob" value="true" />
-				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>
 	</form>

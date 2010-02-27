@@ -79,15 +79,15 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		$manager =& $gCms->GetHierarchyManager();
 		$node =& $manager->sureGetNodeByAlias($page);
 		if (!isset($node)) return;
-		$content =& $node->get_content();
+		$content =& $node->GetContent();
 		if ($content !== FALSE && is_object($content))
 		{
-			$pageid = $content->id();
-			$alias = $content->alias();
-			$name = $content->name(); //mbv - 21-06-2005
-			$url = $content->get_url();
-			$menu_text = $content->menu_text();
-			$titleattr = $content->title_attribute();
+			$pageid = $content->Id();
+			$alias = $content->Alias();
+			$name = $content->Name(); //mbv - 21-06-2005
+			$url = $content->GetUrl();
+			$menu_text = $content->MenuText();
+			$titleattr = $content->TitleAttribute();
 		}
 
 		/* Mod by Nemesis */
@@ -194,13 +194,13 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		if ($condition && $order_by)
 		{
 			global $gCms;
-			$hm = $gCms->GetHierarchyManager();
+			$hm =& $gCms->GetHierarchyManager();
 			$flatcontent = array();
 			if ($condition != '|') // uplink (we don't need the flatcontent for an uplink)
 			{
 				#return '';
-				$flatcontent = $hm->getFlatList();
-				$contentops = $gCms->GetContentOperations();
+				$flatcontent =& $hm->getFlatList();
+				$contentops =& $gCms->GetContentOperations();
 				$defaultid = $contentops->GetDefaultPageID();
 				$number = 0;
 				for ($i = 0; $i < count($flatcontent); $i++)
@@ -226,17 +226,17 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 				{
 					for ($i = $number - 1; $i >= 0; $i--)
 					{
-					  $content = $flatcontent[$i]->getContent();
+					  $content =& $flatcontent[$i]->getContent();
 						if (isset($content) && $content != NULL)
 						{
-							if ($content->active() && $content->show_in_menu() && $content->has_usable_link())
+							if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())
 							{
-								$pageid = $content->id();
-								$alias = $content->alias();
-								$name = $content->name();
-								$menu_text = $content->menu_text();
-								$url = $content->get_url();
-								$titleattr = $content->title_attribute();
+								$pageid = $content->Id();
+								$alias = $content->Alias();
+								$name = $content->Name();
+								$menu_text = $content->MenuText();
+								$url = $content->GetURL();
+								$titleattr = $content->TitleAttribute();
 								break;
 							}
 						}
@@ -253,17 +253,17 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 				{
 					for ($i = $number + 1; $i < count($flatcontent); $i++)
 					{
-					  $content = $flatcontent[$i]->getContent();
+					  $content =& $flatcontent[$i]->getContent();
 						if(isset($content) && $content != NULL)
 						{
-							if ($content->active() && $content->show_in_menu() && $content->has_usable_link())
+							if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())
 							{
-								$pageid = $content->id();
-								$alias = $content->alias();
-								$name = $content->name();
-								$menu_text = $content->menu_text();
-								$url = $content->get_url();
-								$titleattr = $content->title_attribute();
+								$pageid = $content->Id();
+								$alias = $content->Alias();
+								$name = $content->Name();
+								$menu_text = $content->MenuText();
+								$url = $content->GetURL();
+								$titleattr = $content->TitleAttribute();
 								break;
 							}
 						}
@@ -280,17 +280,17 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 				{
 					for ($i = $number; $i < count($flatcontent); $i++)
 					{
-						$content = $flatcontent[$i]->getContent();
+						$content =& $flatcontent[$i]->getContent();
 						if (isset($content))
 						{
-							if ($content->active() && $content->show_in_menu() && $content->hasusable_link())
+							if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())
 							{
-								$pageid = $content->id();
-								$alias = $content->alias();
-								$name = $content->name();
-								$menu_text = $content->menu_text();
-								$url = $content->get_url().'#'.$anchorlink; //set as Param
-								$titleattr = $content->title_attribute();
+								$pageid = $content->Id();
+								$alias = $content->Alias();
+								$name = $content->Name();
+								$menu_text = $content->MenuText();
+								$url = $content->GetURL().'#'.$anchorlink; //set as Param
+								$titleattr = $content->TitleAttribute();
 								break;
 							}
 						}
@@ -303,35 +303,35 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 			} //* End Russ addition
 			else if ($condition == '|') //* Start uplink
 			{
-				$node = $hm->getNodeById($gCms->variables['content_id']);
-				$node = $node->getParentNode();
+				$node =& $hm->getNodeById($gCms->variables['content_id']);
+				$node =& $node->getParentNode();
 				//				print_r($node);
 				if (!isset($node)) return;
-				$content = $node->get_content();
+				$content =& $node->GetContent();
 				if ($content != FALSE)
 				{
-					if ($content->active() && $content->has_usable_link())
+					if ($content->Active() && $content->HasUsableLink())
 					{
-						$pageid = $content->id();
-						$alias = $content->alias();
-						$name = $content->name();
-						$menu_text = $content->menu_text();
-						$url = $content->get_url();
-						$titleattr = $content->title_attribute();
+						$pageid = $content->Id();
+						$alias = $content->Alias();
+						$name = $content->Name();
+						$menu_text = $content->MenuText();
+						$url = $content->GetURL();
+						$titleattr = $content->TitleAttribute();
 					}
 				}
 			} //* End uplink
 			else if ($condition == '-')
 			{
-				$content = $flatcontent[$number]->getContent();
+				$content =& $flatcontent[$number]->getContent();
 				if (isset($content))
 				{
 					$pageid = $content->Id();
 					$alias = $content->Alias();
-					$name = $content->name();
-					$menu_text = $content->menu_text();
-					$url = $content->get_url();
-					$titleattr = $content->title_attribute();
+					$name = $content->Name();
+					$menu_text = $content->MenuText();
+					$url = $content->GetURL();
+					$titleattr = $content->TitleAttribute();
 				}
 			}
 		}
@@ -436,7 +436,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 				$linktext = $name; // mbv - 21-06-2005
 			}
 
-			$linktext = cms_htmlentities($linktext);
+			//$linktext = cms_htmlentities($linktext);
 
 			if (isset($params['image']) && ! empty($params['image'])) {
 				$alt = (isset($params['alt']) && ! empty($params['alt'])) ? $params['alt'] : '';

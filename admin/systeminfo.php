@@ -52,8 +52,8 @@ function systeminfo_lang($params,&$smarty)
 		foreach( $params as $k=>$v)
 		{
 			$tmp[] = $v;
-		}
-
+		}      
+      
 		$str = $tmp[0];
 		$tmp2 = array();
 		for( $i = 1; $i < count($tmp); $i++ )
@@ -62,13 +62,13 @@ function systeminfo_lang($params,&$smarty)
 	}
 }
 
-
 global $gCms;
 $smarty =& $gCms->GetSmarty();
 $smarty->register_function('si_lang','systeminfo_lang');
 $smarty->caching = false;
 $smarty->force_compile = true;
-$db =& $gCms->GetDb();
+$db = &$gCms->GetDb();
+
 
 
 //smartyfier
@@ -76,8 +76,6 @@ $smarty->assign('themename', $themeObject->themeName);
 $smarty->assign('showheader', $themeObject->ShowHeader('systeminfo'));
 $smarty->assign('backurl', $themeObject->BackUrl());
 $smarty->assign('systeminfo_cleanreport', 'systeminfo.php'.$urlext.'&amp;cleanreport=1');
-$smarty->assign('systeminfo_phpinforeport', 'systeminfo.php'.$urlext.'&amp;phpinforeport=1');
-
 
 $help_lang = get_preference($userid, 'default_cms_language');
 if(empty($help_lang))
@@ -110,13 +108,13 @@ $tmp[0]['php_memory_limit'] = testConfig('php_memory_limit', 'php_memory_limit')
 $tmp[0]['process_whole_template'] = testConfig('process_whole_template', 'process_whole_template');
 $tmp[1]['debug'] = testConfig('debug', 'debug');
 $tmp[1]['output_compression'] = testConfig('output_compression', 'output_compression');
-$tmp[1]['db_prefix'] = testConfig('db_prefix', 'db_prefix');
-$tmp[1]['persistent_db_conn'] = testConfig('persistent_db_conn', 'persistent_db_conn');
 
 $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
 $tmp[0]['default_upload_permission'] = testConfig('default_upload_permission', 'default_upload_permission');
-$tmp[0]['url_rewriting'] = testConfig('url_rewriting', 'url_rewriting');
+$tmp[0]['assume_mod_rewrite'] = testConfig('assume_mod_rewrite', 'assume_mod_rewrite');
 $tmp[0]['page_extension'] = testConfig('page_extension', 'page_extension');
+$tmp[0]['internal_pretty_urls'] = testConfig('internal_pretty_urls', 'internal_pretty_urls');
+$tmp[0]['use_hierarchy'] = testConfig('use_hierarchy', 'use_hierarchy');
 
 $tmp[1]['root_url'] = testConfig('root_url', 'root_url');
 $tmp[1]['root_path'] = testConfig('root_path', 'root_path', 'testDirWrite');
@@ -126,13 +124,9 @@ $tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
 $tmp[1]['image_uploads_path'] = testConfig('image_uploads_path', 'image_uploads_path', 'testDirWrite');
 $tmp[1]['image_uploads_url'] = testConfig('image_uploads_url', 'image_uploads_url');
 $tmp[1]['use_smarty_php_tags'] = testConfig('use_smarty_php_tags', 'use_smarty_php_tags');
-$tmp[1]['auto_alias_content'] = testConfig('auto_alias_content', 'auto_alias_content');
 $tmp[1]['locale'] = testConfig('locale', 'locale');
-$tmp[1]['image_manipulation_prog'] = testConfig('image_manipulation_prog', 'image_manipulation_prog');
-$tmp[1]['image_transform_lib_path'] = testConfig('image_transform_lib_path', 'image_transform_lib_path');
-$tmp[0]['set_names'] = testConfig('set_names', 'set_names');
-$tmp[0]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
-$tmp[0]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
+$tmp[1]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
+$tmp[1]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
 
 $smarty->assign('count_config_info', count($tmp[0]));
 $smarty->assign('config_info', $tmp);
@@ -141,6 +135,7 @@ $smarty->assign('config_info', $tmp);
 
 
 /* PHP Information */
+
 $tmp = array(0=>array(), 1=>array());
 
 $safe_mode = ini_get('safe_mode');
@@ -202,8 +197,9 @@ else
 {
 	$tmp[0]['session_save_path'] = testDirWrite(0, lang('session_save_path'), $session_save_path, $session_save_path, 1);
 }
+$tmp[0]['session_use_cookies'] = testBoolean(0, 'session.use_cookies', 'session.use_cookies');
 
-$tmp[1]['xml_function'] = testBoolean(0, 'xml_function', extension_loaded_or('xml'), '', false, false, 'Function_xml_disabled');
+$tmp[1]['xml_function'] = testBoolean(1, 'xml_function', extension_loaded_or('xml'), '', false, false, 'Function_xml_disabled');
 
 $tmp[1]['file_get_contents'] = testBoolean(0, 'file_get_contents', function_exists('file_get_contents'), '', false, false, 'Function_file_get_content_disabled');
 
@@ -218,56 +214,30 @@ $smarty->assign('php_information', $tmp);
 
 
 
-/* Site Information */
-$q = "SELECT type, active FROM ".cms_db_prefix()."content";
-$contents = $db->GetArray($q);
-$_type=array();
-foreach($contents as $item)
-{
-  if( !isset($_type[$item['type']]) )
-    {
-      $_type[$item['type']] = array('active'=>0,'inactive'=>0);
-    }
-  if( $item['active'] )
-    {
-      $_type[$item['type']]['active']++;
-    }
-  else
-    {
-      $_type[$item['type']]['inactive']++;
-    }
-}
-$smarty->assign('count_contents', count($contents));
-$smarty->assign('content_type', $_type);
-
-$q = "SELECT htmlblob_id FROM ".cms_db_prefix()."htmlblobs";
-$htmlblobs = $db->GetArray($q);
-$smarty->assign('count_htmlblobs', count($htmlblobs));
-
-$q = "SELECT userplugin_id FROM ".cms_db_prefix()."userplugins";
-$userplugins = $db->GetArray($q);
-$smarty->assign('count_userplugins', count($userplugins));
-
-
-
-
 /* Server Information */
+
 $tmp = array(0=>array(), 1=>array());
 
 $tmp[1]['server_software'] = testDummy('', $_SERVER['SERVER_SOFTWARE'], '');
 $tmp[0]['server_api'] = testDummy('', PHP_SAPI, '');
 $tmp[1]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('on') .' '. php_uname('m'), '');
 
-$arr_db = getSupportedDBDriver();
-$db_string='';
-if(isset($arr_db[$config['dbms']])) $db_string = $arr_db[$config['dbms']]['label'];
-$tmp[0]['server_db_type'] = testDummy('', $db_string.' ('.$config['dbms'].')', '');
-
-$v = $db->ServerInfo();
-list($minimum, $recommended) = getTestValues($arr_db[$config['dbms']]['server'].'_version');
-$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $v['version'], '', $minimum, $recommended, false);
-$smarty->assign('count_server_info', count($tmp[0]));
-$smarty->assign('server_info', $tmp);
+switch($config['dbms']) //workaroud: ServerInfo() is unsupported in adodblite
+{
+	case 'postgres7': $tmp[0]['server_db_type'] = testDummy('', 'PostgreSQL ('.$config['dbms'].')', '');
+					$v = pg_version();
+					$_server_db = (isset($v['server_version'])) ? $v['server_version'] : $v['client'];
+					list($minimum, $recommended) = getTestValues('pgsql_version');
+					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
+					break;
+	case 'mysqli':	$v = $db->connectionId->server_info;
+	case 'mysql':	if(!isset($v)) $v = mysql_get_server_info();
+					$tmp[0]['server_db_type'] = testDummy('', 'MySQL ('.$config['dbms'].')', '');
+					$_server_db = (false === strpos($v, "-")) ? $v : substr($v, 0, strpos($v, "-"));
+					list($minimum, $recommended) = getTestValues('mysql_version');
+					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
+					break;
+}
 $smarty->assign('count_server_info', count($tmp[0]));
 $smarty->assign('server_info', $tmp);
 
@@ -295,20 +265,8 @@ $smarty->assign('permission_info', $tmp);
 
 
 
-if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1)
-{
-	echo $smarty->fetch('systeminfo.txt.tpl');
-}
-elseif(isset($_GET['phpinforeport']) && $_GET['phpinforeport'] == 1)
-{
-	$smarty->assign('systeminfo', 'systeminfo.php'.$urlext);
-	$smarty->assign('phpinfo', getEmbedPhpInfo(INFO_CONFIGURATION | INFO_MODULES));
-	echo $smarty->fetch('systeminfo.phpinfo.tpl');
-}
-else
-{
-	echo $smarty->fetch('systeminfo.tpl');
-}
+if(isset($_GET['cleanreport']) && $_GET['cleanreport'] == 1) echo $smarty->fetch('systeminfo.txt.tpl');
+else echo $smarty->fetch('systeminfo.tpl');
 
 
 include_once("footer.php");

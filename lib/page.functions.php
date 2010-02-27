@@ -262,7 +262,7 @@ function load_all_permissions($userid)
 	$perms = array();
 
 	$query = "SELECT DISTINCT permission_name FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = gp.permission_id INNER JOIN ".cms_db_prefix()."groups gr ON gr.group_id = ug.group_id WHERE ug.user_id = ? AND gr.active = 1";
-	$result = $db->Execute($query, array($userid));
+	$result = &$db->Execute($query, array($userid));
 	while ($result && !$result->EOF)
 	{
 		$perms[] =& $result->fields['permission_name'];
@@ -329,7 +329,7 @@ function check_ownership($userid, $contentid = '', $strict = false)
 		$variables['ownerpages'] = array();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
-		$result = $db->Execute($query, array($userid));
+		$result = &$db->Execute($query, array($userid));
 
 		while ($result && !$result->EOF)
 		{
@@ -399,7 +399,7 @@ function author_pages($userid)
 		
 		// Get all of the pages this user owns
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
-		$result = $db->Execute($query, array($userid));
+		$result =& $db->Execute($query, array($userid));
 		
 		while ($result && !$result->EOF)
 		{
@@ -411,7 +411,7 @@ function author_pages($userid)
 
 		// Get all of the pages this user has access to.
 		$query = "SELECT user_id,content_id FROM ".cms_db_prefix()."additional_users";
-		$result = $db->Execute($query);
+		$result = &$db->Execute($query);
 
 		while ($result && !$result->EOF)
 		{
@@ -514,7 +514,7 @@ function load_site_preferences()
 	if ($db)
 	{
 		$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
-		$result = $db->Execute($query);
+		$result = &$db->Execute($query);
 
 		while ($result && !$result->EOF)
 		{
@@ -533,9 +533,24 @@ function load_site_preferences()
  *
  * @since 0.6
  */
-function get_site_preference($prefname, $defaultvalue = '')
-{
-	return CmsApplication::get_preference($prefname, $defaultvalue);
+function get_site_preference($prefname, $defaultvalue = '') {
+
+	$value = $defaultvalue;
+
+	global $gCms;
+	$siteprefs =& $gCms->siteprefs;
+	
+	if (count($siteprefs) == 0)
+	{
+		load_site_preferences();
+	}
+
+	if (isset($siteprefs[$prefname]))
+	{
+		$value = $siteprefs[$prefname];
+	}
+
+	return $value;
 }
 
 /**
@@ -543,26 +558,26 @@ function get_site_preference($prefname, $defaultvalue = '')
  *
  * @param string Preference name to remove
  */
-function remove_site_preference($prefname, $uselike=false)
+function remove_site_preference($prefname,$uselike=false)
 {
 	global $gCms;
-	$db = $gCms->GetDb();
-
+	$db =& $gCms->GetDb();
+$db->debug = true;
 	$siteprefs = &$gCms->siteprefs;
 
 	$query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ?";
 	if( $uselike == true )
-	{
-		$query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name LIKE ?";
+	  {
+	    $query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name LIKE ?";
 		$prefname .= '%';
-	}
+	  }
 	$result = $db->Execute($query, array($prefname));
 
 	if (isset($siteprefs[$prefname]))
 	{
 		unset($siteprefs[$prefname]);
 	}
-
+	
 	if ($result) $result->Close();
 }
 
@@ -610,7 +625,7 @@ function load_all_preferences($userid)
 	$variables = &$gCms->userprefs;
 
 	$query = 'SELECT preference, value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
-	$result = $db->Execute($query, array($userid));
+	$result = &$db->Execute($query, array($userid));
 
 	while ($result && !$result->EOF)
 	{
@@ -748,7 +763,7 @@ function get_stylesheet($template_id, $media_type = '')
 			AND		assoc_type	= 'template'
 			AND		assoc_to_id = ?
 			AND		c.media_type = ? ORDER BY ca.create_date";
-		$cssresult = $db->Execute($cssquery, array($template_id, $media_type));
+		$cssresult =& $db->Execute($cssquery, array($template_id, $media_type));
 
 		while ($cssresult && $cssline = $cssresult->FetchRow())
 		{
@@ -798,7 +813,7 @@ function get_stylesheet_media_types($template_id)
 			WHERE	css_id		= assoc_css_id
 			AND		assoc_type	= 'template'
 			AND		assoc_to_id = ?";
-		$cssresult = $db->Execute($cssquery, array($template_id));
+		$cssresult = &$db->Execute($cssquery, array($template_id));
 
 		while ($cssresult && !$cssresult->EOF)
 		{
@@ -1076,10 +1091,22 @@ function wysiwyg_form_submit()
 	return $result;
 }
 
-function create_file_dropdown($name,$dir,$value,$allowed_extensions,$allownone=false,$fileprefix='',$excludeit = 1,$optprefix='',$extratext='')
+/**
+ * Returns the currently configured database prefix.
+ *
+ * @since 0.4
+ */
+function cms_db_prefix() {
+  global $gCms;
+  $config =& $gCms->GetConfig();
+  return $config["db_prefix"];
+}
+
+function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='',$allownone=false,$extratext='',
+			      $fileprefix='',$excludefiles=1)
 {
   $files = array();
-  $files = get_matching_files($dir,$allowed_extensions,true,true,$fileprefix,$excludeit);
+  $files = get_matching_files($dir,$allowed_extensions,true,true,$fileprefix,$excludefiles);
   if( $files === false ) return false;
   $out = "<select name=\"{$name}\" {$extratext}>\n";
   if( $allownone )

@@ -18,57 +18,73 @@
 #
 #$Id$
 
-class SectionHeader extends CmsContentBase
+class SectionHeader extends ContentBase
 {
-  public function __construct()
-  {
-    parent::_construct();
-    $this->set_cachable(false);
-    $this->set_template_id(-1);
-  }
 
-  public function friendly_name()
-  {
-    return lang('contenttype_sectionheader');
-  }
+    function FriendlyName()
+    {
+      return lang('contenttype_sectionheader');
+    }
 
-  public function get_type()
-  {
-    return 'sectionheader';
-  }
+    function SetProperties()
+    {
+      parent::SetProperties();
+      $this->RemoveProperty('alias','');
+      $this->RemoveProperty('accesskey','');
+      $this->RemoveProperty('title','');
+      //$this->RemoveProperty('showinmenu',true);
+      $this->RemoveProperty('cachable',true);
+      $this->RemoveProperty('target','');
 
-//     function SetProperties()
-//     {
-//       parent::SetProperties();
-//       $this->RemoveProperty('alias','');
-//       $this->RemoveProperty('accesskey','');
-//       $this->RemoveProperty('title','');
-//       //$this->RemoveProperty('showinmenu',true);
-//       $this->RemoveProperty('cachable',true);
-//       $this->RemoveProperty('secure',false);
-//       $this->RemoveProperty('target','');
+      #Turn off caching
+      $this->mCachable = false;
+    }
 
-//       #Turn off caching
-//       $this->mCachable = false;
-//     }
-
-  public function has_usable_link()
-  {
-    return false;
-  }
+    function HasUsableLink()
+    {
+	return false;
+    }
 
 
-  public function get_url($rewrite = true, $lang = '')
-  {
-    return '#';
-  }
+    function TabNames()
+    {
+      $res = array(lang('main'));
+      if( check_permission(get_userid(),'Manage All Content') )
+	{
+	  $res[] = lang('options');
+	}
+      return $res;
+    }
 
+    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    {
+      switch($tab)
+	{
+	case '0':
+	  return $this->display_attributes($adding);
+	  break;
+	case '1':
+	  return $this->display_attributes($adding,1);
+	  break;
+	}
+    }
 
-  public function is_viewable()
-  {
-    return FALSE;
-  }
+    function ValidateData()
+    {
+      $res = parent::ValidateData();
+      $this->mTemplateId = -1;
+      return $res;
+    }
 
+    function GetURL($rewrite = true)
+    {
+	return '#';
+    }
+
+    function IsViewable()
+    {
+      return FALSE;
+    }
 }
 
 # vim:ts=4 sw=4 noet

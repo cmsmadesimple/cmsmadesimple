@@ -31,26 +31,26 @@
 #This is the default language
 
 #Native language name
-$cms_nls['language']['it_IT'] = 'Italiano';
-$cms_nls['englishlang']['it_IT'] = 'Italian';
+$nls['language']['it_IT'] = 'Italiano';
+$nls['englishlang']['it_IT'] = 'Italian';
 
 #Possible aliases for language
-$cms_nls['alias']['it'] = 'it_IT';
-$cms_nls['alias']['italiano'] = 'it_IT' ;
-$cms_nls['alias']['ita'] = 'it_IT' ;
-$cms_nls['alias']['italian'] = 'it_IT' ;
-$cms_nls['alias']['it_IT.ISO8859-1'] = 'it_IT' ;
-$cms_nls['alias']['it_IT.ISO8859-15'] = 'it_IT' ;
+$nls['alias']['it'] = 'it_IT';
+$nls['alias']['italiano'] = 'it_IT' ;
+$nls['alias']['ita'] = 'it_IT' ;
+$nls['alias']['italian'] = 'it_IT' ;
+$nls['alias']['it_IT.ISO8859-1'] = 'it_IT' ;
+$nls['alias']['it_IT.ISO8859-15'] = 'it_IT' ;
 
 #Encoding of the language
-$cms_nls['encoding']['it_IT'] = 'UTF-8';
+$nls['encoding']['it_IT'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['it_IT'] = array(dirname(__FILE__).'/it_IT/admin.inc.php');
+$nls['file']['it_IT'] = array(dirname(__FILE__).'/it_IT/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$cms_nls['htmlarea']['it_IT'] = 'it';
+$nls['htmlarea']['it_IT'] = 'it';
 ?>

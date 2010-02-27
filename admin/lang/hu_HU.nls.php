@@ -30,26 +30,26 @@
 #Hungarian maintained by: Kozman Bálint <qzy [AT] ultramarin [DOT] hu>
 
 #Native language name
-$cms_nls['language']['hu_HU'] = 'Magyar';
-$cms_nls['englishlang']['hu_HU'] = 'Hungarian';
+$nls['language']['hu_HU'] = 'Magyar';
+$nls['englishlang']['hu_HU'] = 'Hungarian';
 
 #Possible aliases for language
-$cms_nls['alias']['hu'] = 'hu_HU';
-$cms_nls['alias']['hungarian'] = 'hu_HU' ;
-$cms_nls['alias']['magyar'] = 'hu_HU' ;
-$cms_nls['alias']['hu_HU'] = 'hu_HU' ;
-$cms_nls['alias']['hu_HU.WINDOWS-1250'] = 'hu_HU' ;
-$cms_nls['alias']['hu_HU.ISO8859-2'] = 'hu_HU' ;
+$nls['alias']['hu'] = 'hu_HU';
+$nls['alias']['hungarian'] = 'hu_HU' ;
+$nls['alias']['magyar'] = 'hu_HU' ;
+$nls['alias']['hu_HU'] = 'hu_HU' ;
+$nls['alias']['hu_HU.WINDOWS-1250'] = 'hu_HU' ;
+$nls['alias']['hu_HU.ISO8859-2'] = 'hu_HU' ;
 
 #Encoding of the language
-$cms_nls['encoding']['hu_HU'] = 'UTF-8';
+$nls['encoding']['hu_HU'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['hu_HU'] = array(dirname(__FILE__).'/hu_HU/admin.inc.php');
+$nls['file']['hu_HU'] = array(dirname(__FILE__).'/hu_HU/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$cms_nls['htmlarea']['hu_HU'] = 'hu';
+$nls['htmlarea']['hu_HU'] = 'hu';
 ?>

@@ -26,26 +26,26 @@
 #Ideas from Gallery's implementation made to CMS by Ted Kulp
 
 #Native language name
-$cms_nls['language']['fr_FR'] = 'Fran&#231;ais';
-$cms_nls['englishlang']['fr_FR'] = 'French';
+$nls['language']['fr_FR'] = 'Fran&#231;ais';
+$nls['englishlang']['fr_FR'] = 'French';
 
 #Possible aliases for language
-$cms_nls['alias']['fr'] = 'fr_FR';
-$cms_nls['alias']['french'] = 'fr_FR' ;
-$cms_nls['alias']['fra'] = 'fr_FR' ;
-$cms_nls['alias']['fr_BE'] = 'fr_FR' ;
-$cms_nls['alias']['fr_CA'] = 'fr_FR' ;
-$cms_nls['alias']['fr_LU'] = 'fr_FR' ;
-$cms_nls['alias']['fr_CH'] = 'fr_FR' ;
-$cms_nls['alias']['fr_FR.ISO8859-1'] = 'fr_FR' ;
+$nls['alias']['fr'] = 'fr_FR';
+$nls['alias']['french'] = 'fr_FR' ;
+$nls['alias']['fra'] = 'fr_FR' ;
+$nls['alias']['fr_BE'] = 'fr_FR' ;
+$nls['alias']['fr_CA'] = 'fr_FR' ;
+$nls['alias']['fr_LU'] = 'fr_FR' ;
+$nls['alias']['fr_CH'] = 'fr_FR' ;
+$nls['alias']['fr_FR.ISO8859-1'] = 'fr_FR' ;
 
 #Encoding of the language
-$cms_nls['encoding']['fr_FR'] = 'UTF-8';
+$nls['encoding']['fr_FR'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['fr_FR'] = array(dirname(__FILE__).'/fr_FR/admin.inc.php');
+$nls['file']['fr_FR'] = array(dirname(__FILE__).'/fr_FR/admin.inc.php');
 
 #Language setting for HTML area
-$cms_nls['htmlarea']['fr_FR'] = 'fr';
+$nls['htmlarea']['fr_FR'] = 'fr';
 
 ?>

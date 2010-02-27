@@ -1,7 +1,6 @@
 <div class="pagecontainer">
 {if empty($smarty.get.cleanreport)}
 	<p class="pageshowrows"><a href="{$systeminfo_cleanreport}">{si_lang a=copy_paste_forum}</a></p>
-	<p class="pageshowrows"><a href="{$systeminfo_phpinforeport}">{si_lang a=phpinfo_report}</a></p>
 {/if}
 
 {$showheader}
@@ -32,18 +31,16 @@
   </div>
 {/foreach}
 
-</fieldset>
+<br />
 
-
-
-<fieldset>
-<legend><strong>{si_lang a=config_information}</strong>: </legend>
-
+<div class="pageoverflow">
+<h4 class="h-inside">{si_lang a=config_information}</h4>
+</div>
 {foreach from=$config_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
 	<div class="pageoverflow">
 		<p class="pagetext">{$test->title}:</p>
-		<p class="pageinput">
+		<p class="pageinput">         
 	{if isset($test->value)}{$test->value|default:"&nbsp;"}{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue|default:"&nbsp;"}){/if}
 	{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}
@@ -101,14 +98,11 @@
 	</div>
   {/foreach}
 {/foreach}
+<br />
 
-</fieldset>
-
-
-
-<fieldset>
-<legend><strong>{si_lang a=permission_information}</strong>: </legend>
-
+<div class="pageoverflow">
+<h4 class="h-inside">{si_lang a=permission_information}</h4>
+</div>
 {foreach from=$permission_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
 	<div class="pageoverflow">
@@ -122,34 +116,10 @@
 	</div>
   {/foreach}
 {/foreach}
-
-</fieldset>
-
-
-
-<fieldset>
-<legend><strong>{si_lang a=site_information}</strong>: </legend>
-	<div class="pageoverflow">
-		<p class="pagetext">{si_lang a=contents}:</p>
-		<p class="pageinput">{si_lang a=count_contents}: <b>{$count_contents}</b></p>
-		<p class="pageinput">{si_lang a=contenttype}:<br />
-{foreach from=$content_type key='type' item='item'}
-&nbsp; {si_lang a=$type}: {$item.active} {si_lang a=active}, {$item.inactive} {si_lang a=inactive}<br />
-{/foreach}
-		</p>
-	</div>
-	<div class="pageoverflow">
-		<p class="pagetext">{si_lang a=count_htmlblobs}:</p>
-		<p class="pageinput">{$count_htmlblobs}</p>
-	</div>
-	<div class="pageoverflow">
-		<p class="pagetext">{si_lang a=count_userplugins}:</p>
-		<p class="pageinput">{$count_userplugins}</p>
-	</div>
 <br />
 
-</fieldset>
 
+</fieldset>
 
 <p class="pageback"><a class="pageback" href="{$backurl}">&#171; {si_lang a=back}</a></p>
 

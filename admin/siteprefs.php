@@ -82,9 +82,6 @@ $frontendwysiwyg = '';
 $nogcbwysiwyg = '0';
 $global_umask = '022';
 $logintheme = "default";
-$thumbnail_width = '96';
-$thumbnail_height = '96';
-$content_image_path = '';
 
 
 
@@ -116,9 +113,6 @@ $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',$allowp
 $enablenotifications = get_site_preference('enablenotifications',$enablenotifications);
 $sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
 $basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
-$thumbnail_width = get_site_preference('thumbnail_width',$thumbnail_width);
-$thumbnail_height = get_site_preference('thumbnail_height',$thumbnail_height);
-$content_image_path = get_site_preference('content_image_path',$content_image_path);
 
 $active_tab='unknown';
 if( isset($_POST['active_tab']) )
@@ -205,30 +199,6 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('nogcbwysiwyg', $nogcbwysiwyg);
 	  break;
 
-        case 'content':
-          if( isset($_POST['content_image_path']) )
-	    {
-	      $content_image_path = trim($_POST['content_image_path']);
-	      set_site_preference('content_image_path',$content_image_path);
-	    }
-	  if( isset($_POST['basic_attributes']) )
-	    {
-	      $basic_attributes = implode(',',($_POST['basic_attributes']));
-	    }
-	  else
-	    {
-	      $basic_attributes = '';
-	    }
-	  set_site_preference('basic_attributes',$basic_attributes);
-	  break;
-
-	case 'image':
-	  if (isset($_POST['thumbnail_width'])) $thumbnail_width = $_POST['thumbnail_width'];
-	  if (isset($_POST['thumbnail_height'])) $thumbnail_height = $_POST['thumbnail_height'];
-	  set_site_preference('thumbnail_width',$thumbnail_width);
-	  set_site_preference('thumbnail_height',$thumbnail_height);
-	  break;
-
 	case 'sitedown':
 	  if( isset($_POST['sitedownexcludes']) )
 	    {
@@ -255,6 +225,14 @@ else if (isset($_POST["editsiteprefs"]))
 	  if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = $_POST['disablesafemodewarning'];
 	  if (isset($_POST["allowparamcheckwarnings"])) $allowparamcheckwarnings = $_POST['allowparamcheckwarnings'];
 	  if (isset($_POST["enablenotifications"])) $enablenotifications = $_POST['enablenotifications'];
+	  if( isset($_POST['basic_attributes']) )
+	    {
+	      $basic_attributes = implode(',',($_POST['basic_attributes']));
+	    }
+	  else
+	    {
+	      $basic_attributes = '';
+	    }
 	  if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
 	  if (isset($_POST["urlcheckversion"])) $urlcheckversion = $_POST["urlcheckversion"];
 	  if (isset($_POST['css_max_age'])) $css_max_age = (int)$_POST['css_max_age'];
@@ -274,6 +252,7 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('disablesafemodewarning',$disablesafemodewarning);
 	  set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
 	  set_site_preference('enablenotifications',$enablenotifications);
+	  set_site_preference('basic_attributes',$basic_attributes);
 	  break;
 	}
 
@@ -317,18 +296,16 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 }
 
 # give everything to smarty
-CmsNls::setup();
 $tmp = array_keys($gCms->modules);
 $firstmod = $tmp[0];
-$smarty->assign('mod',$gCms->modules[$firstmod]['object']);
-$languages = CmsNls::get_languages();
-asort($languages);
+$smarty->assign_by_ref('mod',$gCms->modules[$firstmod]['object']);
+asort($nls["language"]);
 $tmp = array(''=>lang('nodefault'));
-foreach( $languages as $key=>$value )
+foreach( $nls['language'] as $key=>$value )
 {
-  if( isset($languages['englishlang'][$key]) )
+  if( isset($nls['englishlang'][$key]) )
     {
-      $value .= ' ('.$languages['englishlang'][$key].')';
+      $value .= ' ('.$nls['englishlang'][$key].')';
     }
   $tmp[$key] = $value;
 }
@@ -364,9 +341,12 @@ if ($dir=opendir(dirname(__FILE__)."/themes/"))
 }
 
 
+$smarty->assign('active_general', 0);
+$smarty->assign('active_sitedown', 0);
+$smarty->assign('active_handle_404', 0);
+$smarty->assign('active_setup', 0);
+
 $smarty->assign('active_general',($active_tab == 'general')?1:0);
-$smarty->assign('active_content',($active_tab == 'content')?1:0);
-$smarty->assign('active_image',($active_tab == 'image')?1:0);
 $smarty->assign('active_sitedown',($active_tab == 'sitedown')?1:0);
 $smarty->assign('active_handle_404',($active_tab == 'handle_404')?1:0);
 $smarty->assign('active_setup',($active_tab == 'setup')?1:0);
@@ -394,13 +374,8 @@ $smarty->assign('defaultdateformat',$defaultdateformat);
 $smarty->assign('enablenotifications',$enablenotifications);
 $smarty->assign('sitedownexcludes',$sitedownexcludes);
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));
-$smarty->assign('thumbnail_width',$thumbnail_width);
-$smarty->assign('thumbnail_height',$thumbnail_height);
-$smarty->assign('content_image_path',$content_image_path);
 
 $smarty->assign('lang_general',lang('general_settings'));
-$smarty->assign('lang_content',lang('content_settings'));
-$smarty->assign('lang_image',lang('image_settings'));
 $smarty->assign('lang_sitedown',lang('sitedown_settings'));
 $smarty->assign('lang_handle404',lang('handle_404'));
 $smarty->assign('lang_cancel',lang('cancel'));
@@ -440,23 +415,22 @@ $smarty->assign('lang_info_basic_attributes',lang('info_basic_attributes'));
 $all_attributes = array();
 $all_attributes['template'] = lang('template');
 $all_attributes['active'] = lang('active');
-$all_attributes['show_in_menu'] = lang('showinmenu');
+$all_attributes['showinmenu'] = lang('showinmenu');
 $all_attributes['cachable'] = lang('cachable');
 $all_attributes['target'] = lang('target');
 $all_attributes['alias'] = lang('pagealias');
 $all_attributes['image'] = lang('image');
 $all_attributes['thumbnail'] = lang('thumbnail');
 $all_attributes['pagemetadata'] = lang('page_metadata');
-$all_attributes['title_attribute'] = lang('titleattribute');
-$all_attributes['tab_index'] = lang('tabindex');
-$all_attributes['access_key'] = lang('accesskey');
+$all_attributes['titleattribute'] = lang('titleattribute');
+$all_attributes['tabindex'] = lang('tabindex');
+$all_attributes['accesskey'] = lang('accesskey');
 $all_attributes['pagedata'] = lang('pagedata_codeblock');
 $all_attributes['searchable'] = lang('searchable');
 $all_attributes['extra1'] = lang('extra1');
 $all_attributes['extra2'] = lang('extra2');
 $all_attributes['extra3'] = lang('extra3');
 $all_attributes['additionaleditors'] = lang('additionaleditors');
-$all_attributes['secure'] = lang('secure_page');
 $smarty->assign('all_attributes',$all_attributes);
 
 # begin output

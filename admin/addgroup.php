@@ -60,12 +60,31 @@ if ($access)
 			$groupobj->name = $group;
 			$groupobj->active = $active;
 
+			#Perform the addgroup_pre callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->AddGroupPre($groupobj);
+				}
+			}
+			
 			Events::SendEvent('Core', 'AddGroupPre', array('group' => &$groupobj));
 
 			$result = $groupobj->save();
 
 			if ($result)
 			{
+				#Perform the addgroup_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->AddGroupPost($groupobj);
+					}
+				}
 				Events::SendEvent('Core', 'AddGroupPost', array('group' => &$groupobj));
 				audit($groupobj->id, $groupobj->name, 'Added Group');
 				redirect("listgroups.php".$urlext);
@@ -111,8 +130,8 @@ else
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="addgroup" value="true" />
-				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />			
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />			
 			</p>
 		</div>
 	</form>

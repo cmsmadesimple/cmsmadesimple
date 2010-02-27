@@ -114,6 +114,15 @@ if (isset($_POST["adduser"]))
 		$newuser->adminaccess = $adminaccess;
 		$newuser->SetPassword($password);
 
+		#Perform the adduser_pre callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->AddUserPre($newuser);
+			}
+		}
 		
 		Events::SendEvent('Core', 'AddUserPre', array('user' => &$newuser));
 
@@ -121,6 +130,15 @@ if (isset($_POST["adduser"]))
 
 		if ($result)
 		{
+			#Perform the adduser_post callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->AddUserPost($newuser);
+				}
+			}
 			
 			Events::SendEvent('Core', 'AddUserPost', array('user' => &$newuser));
 
@@ -239,8 +257,8 @@ else {
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="adduser" value="true" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" accesskey="s" value="<?php echo lang('submit')?>" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('submit')?>" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
 			</p>
 		</div>
 	</form>

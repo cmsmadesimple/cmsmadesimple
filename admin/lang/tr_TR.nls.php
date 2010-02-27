@@ -28,26 +28,26 @@
 #Turkish
 
 #Native language name
-$cms_nls['language']['tr_TR'] = 'Türkçe';
-$cms_nls['englishlang']['tr_TR'] = 'Turkish';
+$nls['language']['tr_TR'] = 'Türkçe';
+$nls['englishlang']['tr_TR'] = 'Turkish';
 
 #Possible aliases for language
-$cms_nls['alias']['tr'] = 'tr_TR';
-$cms_nls['alias']['turkish'] = 'tr_TR' ;
-$cms_nls['alias']['trk'] = 'tr_TR' ;
-$cms_nls['alias']['tr_TR.ISO8859-9'] = 'tr_TR' ;
-$cms_nls['alias']['tr_TR.UTF-8'] = 'tr_TR' ;
+$nls['alias']['tr'] = 'tr_TR';
+$nls['alias']['turkish'] = 'tr_TR' ;
+$nls['alias']['trk'] = 'tr_TR' ;
+$nls['alias']['tr_TR.ISO8859-9'] = 'tr_TR' ;
+$nls['alias']['tr_TR.UTF-8'] = 'tr_TR' ;
 
 #Encoding of the language
-$cms_nls['encoding']['tr_TR'] = 'UTF-8';
+$nls['encoding']['tr_TR'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['tr_TR'] = array(dirname(__FILE__).'/tr_TR/admin.inc.php');
+$nls['file']['tr_TR'] = array(dirname(__FILE__).'/tr_TR/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$cms_nls['htmlarea']['tr_TR'] = 'en';
+$nls['htmlarea']['tr_TR'] = 'en';
 
 ?>

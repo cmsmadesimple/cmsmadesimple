@@ -36,14 +36,12 @@ class ModuleLoader
 	*/
 	function LoadModules($loadall = false, $noadmin = false)
 	{
-		$gCms = cmsms();
-		$db = cms_db();
+		global $gCms;
+		$db =& $gCms->GetDb();
 		$cmsmodules = &$gCms->modules;
-		
-		CmsEventManager::send_event('Core:load_modules');
-		
-		$dir = cms_join_path(ROOT_DIR, "modules");
-		
+
+		$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+
 		if ($loadall == true)
 		{
 			if ($handle = @opendir($dir))
@@ -61,17 +59,16 @@ class ModuleLoader
 				}
 				closedir($handle);
 			}
-			
+
 			//Find modules and instantiate them
 			$allmodules = $this->FindModules();
-			
 			foreach ($allmodules as $onemodule)
 			{
 				if (class_exists($onemodule))
 				{
-					$newmodule = new $onemodule;
+					$newmodule =& new $onemodule;
 					$name = $newmodule->GetName();
-					$cmsmodules[$name]['object'] = $newmodule;
+					$cmsmodules[$name]['object'] =& $newmodule;
 					$cmsmodules[$name]['installed'] = false;
 					$cmsmodules[$name]['active'] = false;
 				}
@@ -81,10 +78,10 @@ class ModuleLoader
 				}
 			}
 		}
-		
+
 		#Figger out what modules are active and/or installed
 		#Load them if loadall is false
-		if (isset($db) && $db->IsConnected())
+		if (isset($db))
 		{
 			$query = '';
 			$where = array();
@@ -96,14 +93,14 @@ class ModuleLoader
 			  {
 			    $where[] = 'active = 1';
 			  }
-			$query = 'SELECT * FROM {modules} ';
+			$query = 'SELECT * FROM '.cms_db_prefix().'modules ';
 			if( count($where) )
 			  {
 			    $query.= 'WHERE '.implode(' AND ',$where);
 			  }
                         $query .= ' ORDER by module_name';
 
-			$result = $db->Execute($query);
+			$result = &$db->Execute($query);
 			while ($result && !$result->EOF)
 			{
 				if (isset($result->fields['module_name']))
@@ -129,7 +126,7 @@ class ModuleLoader
 									include_once("$dir/$modulename/$modulename.module.php");
 									if (class_exists($modulename))
 									{
-										$newmodule = new $modulename;
+										$newmodule =& new $modulename;
 										$name = $newmodule->GetName();
 
 										global $CMS_VERSION;
@@ -148,12 +145,9 @@ class ModuleLoader
 										#Check to see if version in db matches file version
 										if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
 										{
-											$cmsmodules[$name]['object'] = $newmodule;
+											$cmsmodules[$name]['object'] =& $newmodule;
 											$cmsmodules[$name]['installed'] = true;
 											$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
-											
-											$params = array('name' => $name, 'version' => $newmodule->GetVersion());
-											CmsEventManager::send_event('Core:module_loaded', $params);
 										}
 										else
 										{
@@ -178,7 +172,6 @@ class ModuleLoader
 			
 			if ($result) $result->Close();
 		}
-
 	}
 
 	/**
@@ -207,7 +200,6 @@ class ModuleLoader
 
 		return $result;
 	}
-
 }
 
 ?>

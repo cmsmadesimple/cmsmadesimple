@@ -31,23 +31,23 @@
 
 #Native language name
 #NOTE: Enocde me with HTML escape chars like &#231; or &ntilde; so I work on every page
-$cms_nls['language']['bg_BG'] = 'Български';
-$cms_nls['englishlang']['bg_BG'] = 'Bulgarian';
+$nls['language']['bg_BG'] = 'Български';
+$nls['englishlang']['bg_BG'] = 'Bulgarian';
 
 #Possible aliases for language
-$cms_nls['alias']['bg'] = 'bg_BG';
-$cms_nls['alias']['bulgarian'] = 'bg_BG' ;
-$cms_nls['alias']['bul'] = 'bg_BG' ;
+$nls['alias']['bg'] = 'bg_BG';
+$nls['alias']['bulgarian'] = 'bg_BG' ;
+$nls['alias']['bul'] = 'bg_BG' ;
 
 #Encoding of the language
-$cms_nls['encoding']['bg_BG'] = 'UTF-8';
+$nls['encoding']['bg_BG'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['bg_BG'] = array(dirname(__FILE__).'/bg_BG/admin.inc.php');
+$nls['file']['bg_BG'] = array(dirname(__FILE__).'/bg_BG/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$cms_nls['htmlarea']['bg_BG'] = 'bg';
+$nls['htmlarea']['bg_BG'] = 'bg';
 ?>

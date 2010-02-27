@@ -31,18 +31,18 @@
 #This is the default language
 
 #Native language name
-$cms_nls['language']['zh_CN'] = '&#31616;&#20307;&#20013;&#25991;';
-$cms_nls['englishlang']['zh_CN'] = 'Simplified Chinese';
+$nls['language']['zh_CN'] = '&#31616;&#20307;&#20013;&#25991;';
+$nls['englishlang']['zh_CN'] = 'Simplified Chinese';
 
 #Possible aliases for language
-$cms_nls['alias']['zh_CN.EUC'] = 'zh_CN' ;
-$cms_nls['alias']['chinese_gb2312'] = 'zh_CN' ;
+$nls['alias']['zh_CN.EUC'] = 'zh_CN' ;
+$nls['alias']['chinese_gb2312'] = 'zh_CN' ;
 
 #Encoding of the language
-$cms_nls['encoding']['zh_CN'] = 'UTF-8';
+$nls['encoding']['zh_CN'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['zh_CN'] = array(dirname(__FILE__).'/zh_CN/admin.inc.php');
+$nls['file']['zh_CN'] = array(dirname(__FILE__).'/zh_CN/admin.inc.php');
 
-$cms_nls['htmlarea']['zh_CN'] = 'en';
+$nls['htmlarea']['zh_CN'] = 'en';
 ?>

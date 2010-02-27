@@ -36,7 +36,7 @@ class UserOperations
 	 * @returns array An array of User objects
 	 * @since 0.6.1
 	 */
-	function LoadUsers()
+	function &LoadUsers()
 	{
 		global $gCms;
 		$db = &$gCms->GetDb();
@@ -48,7 +48,7 @@ class UserOperations
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			$oneuser = new User();
+			$oneuser =& new User();
 			$oneuser->id = $row['user_id'];
 			$oneuser->username = $row['username'];
 			$oneuser->firstname = $row['first_name'];
@@ -57,7 +57,7 @@ class UserOperations
 			$oneuser->password = $row['password'];
 			$oneuser->active = $row['active'];
 			$oneuser->adminaccess = $row['admin_access'];
-			$result[] = $oneuser;
+			$result[] =& $oneuser;
 		}
 
 		return $result;
@@ -81,7 +81,7 @@ class UserOperations
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			$oneuser = new User();
+			$oneuser =& new User();
 			$oneuser->id = $row['user_id'];
 			$oneuser->username = $row['username'];
 			$oneuser->firstname = $row['first_name'];
@@ -179,7 +179,7 @@ class UserOperations
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			$oneuser = new User();
+			$oneuser =& new User();
 			$oneuser->id = $id;
 			$oneuser->username = $row['username'];
 			$oneuser->password = $row['password'];

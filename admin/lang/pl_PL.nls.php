@@ -30,23 +30,23 @@
 #Maintained by: Michael Mrowiec <tedkulp@gmail.com>
 
 #Native language name
-$cms_nls['language']['pl_PL'] = 'Polski';
-$cms_nls['englishlang']['pl_PL'] = 'Polish';
+$nls['language']['pl_PL'] = 'Polski';
+$nls['englishlang']['pl_PL'] = 'Polish';
 
 #Possible aliases for language
-$cms_nls['alias']['pl'] = 'pl_PL';
-$cms_nls['alias']['polish'] = 'pl_PL' ;
-$cms_nls['alias']['pl_PL.ISO8859-2'] = 'pl_PL' ;
+$nls['alias']['pl'] = 'pl_PL';
+$nls['alias']['polish'] = 'pl_PL' ;
+$nls['alias']['pl_PL.ISO8859-2'] = 'pl_PL' ;
 
 #Encoding of the language
-$cms_nls['encoding']['pl_PL'] = 'UTF-8';
+$nls['encoding']['pl_PL'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['pl_PL'] = array(dirname(__FILE__).'/pl_PL/admin.inc.php');
+$nls['file']['pl_PL'] = array(dirname(__FILE__).'/pl_PL/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this whpl translations exist in HTMLarea and plugin dirs
 # (please spld language files to HTMLarea developmplt)
 
-$cms_nls['htmlarea']['pl_PL'] = 'pl';
+$nls['htmlarea']['pl_PL'] = 'pl';
 ?>

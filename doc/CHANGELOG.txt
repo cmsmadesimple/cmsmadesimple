@@ -1,3 +1,42 @@
+Version 1.6.7 - Teremba Bay
+-----------------------------
+ - #3999 Upload a file with apostrophe make problem
+ - #4137 small text typo in admin/login.php
+ - #4192 Extra Page Attribute's are listed in the wrong order 
+ - #4208 Don't show inactive template in the page 404
+ - #4431 UDT names not validated when being edited 
+ - Improvements to XML module generation
+ - Fixes to prevent possible remote file inclusion vulnerabilities
+ - Minor improvements to the News module
+ - New version of TinyMCE
+ - Improvements to File Manager and Image Manager
+ - Improvements to Module Manager; upgrade now possible from the "Available Upgrades"-tab
+ - Adsense-plugin modified, to accept the ad_slot parameter
+
+Version 1.6.6 - Bonde
+-----------------------------
+ - #3777 Documentation Error: redirect_url plugin
+ - #3923 Adminlog download, tab separator single quoted
+ - #3926 Little typo in stylesheet.
+ - #3935 Validation error in stylesheet 'Accessibility and cross-browser tools'
+ - #4002 menu parameter start_level='2' don't show results.
+ - #4068 Admin Log, update "HTML Blob" to "Global Content Block"
+ - #4118 die() with blank page
+ - Fix problem with showinmenu for separators.
+ - Fix error pages being able to be set inactive in listcontent.
+ - Fix error in permissions checking for copying content.
+ - Fixes issues with the PDF output only working of the pdf flag was turned OFF
+ - Submit is not taken on forms, when .htaccess is used and page_extension = ''.
+ *** FIXES RELATED TO session.use_cookies == off ****
+ NOTE: This is not a recommended setting, and future versions of CMSMS will not in any way
+       support this setting.  Please contact your hosts to ensure that this setting is enabled
+       properly.
+   - This issue has probably been the cause of many tinyMCE issues in the past.
+   - The install and upgrade routines will fail if this setting is off
+   - The install and upgrade routines now explicitly check for this setting.
+   - TinyMCE 2.2.5 now supports session.use_cookies == off (for now)
+   - ImageManager no longer displays the login screen with session.use_cookies == off
+ 
 Version 1.6.5 - Poya
 -----------------------------
 - Fixes a problem with bulk deletion of pages that have inactive children.

@@ -104,12 +104,12 @@ class ModuleOperations
 	  $xmltxt .= "	<name>".$modinstance->GetName()."</name>\n";
 	  $xmltxt .= "	<version>".$modinstance->GetVersion()."</version>\n";
 	  $xmltxt .= "  <mincmsversion>".$modinstance->MinimumCMSVersion()."</mincmsversion>\n";
-	  $xmltxt .= "	<help>".base64_encode($modinstance->GetHelpPage())."</help>\n";
-	  $xmltxt .= "	<about>".base64_encode($modinstance->GetAbout())."</about>\n";
+	  $xmltxt .= "	<help><![CDATA[".base64_encode($modinstance->GetHelpPage())."]]></help>\n";
+	  $xmltxt .= "	<about><![CDATA[".base64_encode($modinstance->GetAbout())."]]></about>\n";
 	  $desc = $modinstance->GetAdminDescription();
 	  if( $desc != '' )
 		{
-		  $xmltxt .= "	<description>".$desc."</description>\n";
+		  $xmltxt .= "	<description><![CDATA[".$desc."]]></description>\n";
 		}
 	  $depends = $modinstance->GetDependencies();
 	  foreach( $depends as $key=>$val )
@@ -507,7 +507,7 @@ class ModuleOperations
 	    return false;
 	  }
 
-	$newmodule = new $modulename;
+	$newmodule =& new $modulename;
 	$name = $newmodule->GetName();
 	$cmsmodules[$name]['object'] =& $newmodule;
 	$cmsmodules[$name]['installed'] = false;
@@ -561,16 +561,6 @@ class ModuleOperations
 		global $gCms;
 		$cmsmodules = &$gCms->modules;
 		return $cmsmodules;
-	}
-
-
-	static public function &get_module($name)
-	{
-	  global $gCms;
-	  if( isset($gCms->modules[$name]) && isset($gCms->modules[$name]['object']) )
-	    {
-	      return $gCms->modules[$name]['object'];
-	    }
 	}
 
 }

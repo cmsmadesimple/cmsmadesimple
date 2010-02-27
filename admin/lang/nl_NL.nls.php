@@ -28,24 +28,24 @@
 #Dutch (Netherlands)
 
 #Native language name
-$cms_nls['language']['nl_NL'] = 'Nederlands';
-$cms_nls['englishlang']['nl_NL'] = 'Dutch';
+$nls['language']['nl_NL'] = 'Nederlands';
+$nls['englishlang']['nl_NL'] = 'Dutch';
 
 #Possible aliases for language
-$cms_nls['alias']['nl'] = 'nl_NL';
-$cms_nls['alias']['dutch'] = 'nl_NL';
-$cms_nls['alias']['nl_NL.ISO8859-1'] = 'nl_NL' ;
+$nls['alias']['nl'] = 'nl_NL';
+$nls['alias']['dutch'] = 'nl_NL';
+$nls['alias']['nl_NL.ISO8859-1'] = 'nl_NL' ;
 
 #Encoding of the language
-$cms_nls['encoding']['nl_NL'] = 'UTF-8';
+$nls['encoding']['nl_NL'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['nl_NL'] = array(dirname(__FILE__).'/nl_NL/admin.inc.php');
+$nls['file']['nl_NL'] = array(dirname(__FILE__).'/nl_NL/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
-$cms_nls['htmlarea']['nl_NL'] = 'nl';
+$nls['htmlarea']['nl_NL'] = 'nl';
 
 
 

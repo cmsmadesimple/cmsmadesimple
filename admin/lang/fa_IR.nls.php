@@ -26,23 +26,23 @@
 #Ideas from Gallery's implementation made to CMS by Ted Kulp
 
 #Native language name
-$cms_nls['language']['fa_IR'] = '%Gفارسي%@';
-$cms_nls['englishlang']['fa_IR'] = 'Farsi';
+$nls['language']['fa_IR'] = '%Gفارسي%@';
+$nls['englishlang']['fa_IR'] = 'Farsi';
 
 #Possible aliases for language
-$cms_nls['alias']['fa'] = 'fa_IR';
-$cms_nls['alias']['farsi'] = 'fa_IR' ;
-$cms_nls['alias']['fa_IR.UTF-8'] = 'fa_IR' ;
+$nls['alias']['fa'] = 'fa_IR';
+$nls['alias']['farsi'] = 'fa_IR' ;
+$nls['alias']['fa_IR.UTF-8'] = 'fa_IR' ;
 
 #Encoding of the language
-$cms_nls['encoding']['fa_IR'] = 'UTF-8';
+$nls['encoding']['fa_IR'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['fa_IR'] = array(dirname(__FILE__).'/fa_IR/admin.inc.php');
+$nls['file']['fa_IR'] = array(dirname(__FILE__).'/fa_IR/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$cms_nls['htmlarea']['fa_IR'] = 'ja';
+$nls['htmlarea']['fa_IR'] = 'ja';
 ?>

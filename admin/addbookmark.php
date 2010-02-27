@@ -53,7 +53,7 @@ if (isset($_POST["addbookmark"]))
 		{
 		global $gCms;
 		$gCms->GetBookmarkOperations();
-		$markobj = new Bookmark();
+		$markobj =& new Bookmark();
 		$markobj->title = $title;
 		$markobj->url = $url;
 		$markobj->user_id=$userid;
@@ -99,8 +99,8 @@ if ($error != "")
 					<p class="pagetext">&nbsp;</p>
 					<p class="pageinput">
 						<input type="hidden" name="addbookmark" value="true" />
-						<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-						<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 					</p>
 				</div>		
 			</form>

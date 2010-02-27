@@ -141,12 +141,32 @@ if ($access)
 			$newtemplate->active = $active;
 			$newtemplate->default = 0;
 
+			#Perform the addtemplate_pre callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->AddTemplatePre($newtemplate);
+				}
+			}
+			
 			Events::SendEvent('Core', 'AddTemplatePre', array('template' => &$newtemplate));
 
 			$result = $newtemplate->save();
 
 			if ($result)
 			{
+				#Perform the addtemplate_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->AddTemplatePost($newtemplate);
+					}
+				}
+				
 				Events::SendEvent('Core', 'AddTemplatePost', array('template' => &$newtemplate));
 
 				audit($newtemplate->id, $template, 'Added Template');
@@ -235,9 +255,9 @@ else
 			<p class="pageinput">
 				<input type="hidden" name="from" value="<?php echo $from?>" />
 				<input type="hidden" name="addtemplate" value="true"/>
-				<!--<input type="submit" accesskey="p" name="preview" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />-->
-				<input type="submit" accesskey="s" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<!--<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />-->
+				<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>
 	</form>

@@ -50,7 +50,7 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User-defined Tags');
 
-$smarty = new CmsSmarty($gCms->config);
+$smarty = new Smarty_CMS($gCms->config);
 load_plugins($smarty);
 
 $ajax = false;
@@ -296,8 +296,8 @@ else {
 						<input type="hidden" name="userplugin_id" value="<?php echo $userplugin_id?>" />
 						<input type="hidden" name="origpluginname" value="<?php echo $orig_plugin_name?>" />
 						<input type="hidden" name="editplugin" value="true" />
-						<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-						<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 						<input type="submit" onclick="return window.Edit_UserPlugin_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 
 				</p>

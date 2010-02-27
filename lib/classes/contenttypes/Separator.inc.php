@@ -18,37 +18,83 @@
 #
 #$Id$
 
-class Separator extends CmsContentBase
+class Separator extends ContentBase
 {
 
-  public function __construct()
-  {
-    parent::__construct();
-    $this->set_cachable(false);
-    $this->set_name(CMS_CONTENT_HIDDEN_NAME);
-  }
+    function SetProperties()
+    {
+      parent::SetProperties();
+      $this->RemoveProperty('template','-1');
+      $this->RemoveProperty('alias','');
+      $this->RemoveProperty('title','');
+      $this->RemoveProperty('menutext','');
+      $this->RemoveProperty('target','');
+      $this->RemoveProperty('accesskey','');
+      $this->RemoveProperty('titleattribute','');
+      $this->RemoveProperty('cachable',true);
+    }
 
+    function FriendlyName()
+    {
+      return lang('contenttype_separator');
+    }
 
-  public function friendly_name()
-  {
-    return lang('contenttype_separator');
-  }
-  
-  public function has_usable_link()
-  {
-    return false;
-  }
+    function HasUsableLink()
+    {
+	return false;
+    }
 
-  public function wants_children()
-  {
-    return false;
-  }
+    function WantsChildren()
+    {
+	return false;
+    }
 
+    /**
+     * Handle Auto Aliasing 
+     */
+    function DoAutoAlias()
+    {
+      return FALSE;
+    }
 
-  public function get_url($rewrite = true, $lang = '')
-  {
-    return '#';
-  }
+    function RequiresAlias()
+    {
+      return FALSE;
+    }
+
+    function TabNames()
+    {
+      $res = array(lang('main'));
+      if( check_permission(get_userid(),'Manage All Content') )
+	{
+	  $res[] = lang('options');
+	}
+      return $res;
+    }
+
+    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    {
+      switch($tab)
+	{
+	case '0':
+	  return $this->display_attributes($adding);
+	  break;
+	case '1':
+	  return $this->display_attributes($adding,1);
+	  break;
+	}
+    }
+
+    function ValidateData()
+    {
+      $this->mName = CMS_CONTENT_HIDDEN_NAME;
+      return parent::ValidateData();
+    }
+
+    function GetURL($rewrite = true)
+    {
+	return '#';
+    }
 }
 
 # vim:ts=4 sw=4 noet

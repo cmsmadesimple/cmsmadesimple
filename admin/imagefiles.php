@@ -24,8 +24,8 @@ $CMS_ADMIN_PAGE=1;
 require_once(dirname(dirname(__FILE__))."/lib/filemanager/filetypes.inc.php");
 require_once(dirname(dirname(__FILE__))."/lib/file.functions.php");
 require_once("../include.php");
-$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
+$urlext = get_secure_param();
 check_login();
 
 $action_done='';
@@ -189,8 +189,7 @@ include_once("header.php");
 
 	<script type="text/javascript" src="../lib/filemanager/ImageManager/assets/dialog.js"></script>
 	<script type="text/javascript" src="../lib/filemanager/ImageManager/IMEStandalone.js"></script>
-  
-<?php echo "	<script type=\"text/javascript\" src=\"../lib/filemanager/ImageManager/lang/en.js\"></script>\n" ?>
+<?php echo "	<script type=\"text/javascript\" src=\"../lib/filemanager/ImageManager/lang/{$nls['htmlarea'][$current_language]}.js\"></script>\n" ?>
 	<script type="text/javascript">
     //<![CDATA[
 

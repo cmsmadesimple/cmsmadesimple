@@ -29,24 +29,24 @@
 #Created by: Prihantoosa Supraja  < pht854 [at]  yahoo [dot] com >
 
 #Native language name
-$cms_nls['language']['id_ID'] = 'Bahasa Indonesia';
-$cms_nls['englishlang']['id_ID'] = 'Indonesian';
+$nls['language']['id_ID'] = 'Bahasa Indonesia';
+$nls['englishlang']['id_ID'] = 'Indonesian';
 
 #Possible aliases for language
-$cms_nls['alias']['id'] = 'id_ID';
-$cms_nls['alias']['ind'] = 'id_ID' ;
-$cms_nls['alias']['id_ID'] = 'id_ID' ;
-$cms_nls['alias']['id_ID.ISO8859-15'] = 'id_ID' ;
+$nls['alias']['id'] = 'id_ID';
+$nls['alias']['ind'] = 'id_ID' ;
+$nls['alias']['id_ID'] = 'id_ID' ;
+$nls['alias']['id_ID.ISO8859-15'] = 'id_ID' ;
 
 #Encoding of the language
-$cms_nls['encoding']['id_ID'] = 'UTF-8';
+$nls['encoding']['id_ID'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['id_ID'] = array(dirname(__FILE__).'/id_ID/admin.inc.php');
+$nls['file']['id_ID'] = array(dirname(__FILE__).'/id_ID/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$cms_nls['htmlarea']['id_ID'] = 'en';
+$nls['htmlarea']['id_ID'] = 'en';
 ?>

@@ -29,26 +29,26 @@
 #Created by: Tobias Amnell <tobias.amnell@home.se> with additional translation by Daniel Westergren <daniel@wproductions.se>
 
 #Native language name
-$cms_nls['language']['sv_SE'] = 'Svenska';
-$cms_nls['englishlang']['sv_SE'] = 'Swedish';
+$nls['language']['sv_SE'] = 'Svenska';
+$nls['englishlang']['sv_SE'] = 'Swedish';
 
 #Possible aliases for language
-$cms_nls['alias']['sv'] = 'sv_SE';
-$cms_nls['alias']['svenska'] = 'sv_SE' ;
-$cms_nls['alias']['sve'] = 'sv_SE' ;
-$cms_nls['alias']['sv_SE'] = 'sv_SE' ;
-$cms_nls['alias']['sv_SE.ISO8859-1'] = 'sv_SE' ;
-$cms_nls['alias']['sv_SE.ISO8859-15'] = 'sv_SE' ;
+$nls['alias']['sv'] = 'sv_SE';
+$nls['alias']['svenska'] = 'sv_SE' ;
+$nls['alias']['sve'] = 'sv_SE' ;
+$nls['alias']['sv_SE'] = 'sv_SE' ;
+$nls['alias']['sv_SE.ISO8859-1'] = 'sv_SE' ;
+$nls['alias']['sv_SE.ISO8859-15'] = 'sv_SE' ;
 
 #Encoding of the language
-$cms_nls['encoding']['sv_SE'] = 'UTF-8';
+$nls['encoding']['sv_SE'] = 'UTF-8';
 
 #Location of the file(s)
-$cms_nls['file']['sv_SE'] = array(dirname(__FILE__).'/sv_SE/admin.inc.php');
+$nls['file']['sv_SE'] = array(dirname(__FILE__).'/sv_SE/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$cms_nls['htmlarea']['sv_SE'] = 'en';
+$nls['htmlarea']['sv_SE'] = 'en';
 ?>

@@ -32,10 +32,10 @@ function smarty_cms_function_page_image($params, &$smarty)
   $node =& $manager->sureGetNodeById($pageinfo->content_id);
   if(is_object($node))
     {
-      $contentobj =& $node->get_content();
+      $contentobj =& $node->GetContent();
       if( is_object($contentobj) )
 	{
-	  $result = $contentobj->get_property_value($propname);
+	  $result = $contentobj->GetPropertyValue($propname);
           if( $result == -1 ) $result = '';
 	}
     }
