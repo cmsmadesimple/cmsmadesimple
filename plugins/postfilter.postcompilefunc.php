@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -25,16 +25,16 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 	{
 		switch ($result[0])
 		{
-			case "content":				
-				CmsEvents::send_event('Core', 'ContentPostCompile', array('content' => &$tpl_output));
+			case "content":
+				Events::SendEvent('Core', 'ContentPostCompile', array('content' => &$tpl_output));
 				break;
 
 			case "template":
-				CmsEvents::send_event('Core', 'TemplatePostCompile', array('template' => &$tpl_output));
+				Events::SendEvent('Core', 'TemplatePostCompile', array('template' => &$tpl_output));
 				break;
 
-			case "globalcontent":				
-				CmsEvents::send_event('Core', 'GlobalContentPostCompile', array('global_content' => &$tpl_output));
+			case "globalcontent":
+				Events::SendEvent('Core', 'GlobalContentPostCompile', array('global_content' => &$tpl_output));
 				break;
 
 			default:
@@ -42,8 +42,8 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 		}
 
 	}
-	
-	CmsEvents::send_event('Core', 'SmartyPostCompile', array('content' => &$tpl_output));
+
+	Events::SendEvent('Core', 'SmartyPostCompile', array('content' => &$tpl_output));
 
 	return $tpl_output;
 }

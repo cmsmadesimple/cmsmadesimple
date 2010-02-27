@@ -17,16 +17,17 @@ $stringarray = explode(" ",$string);
 
 //=While loop to add int ($numwords) words to the summary string ($returnstring)
 $i = 0;
+$returnstring = '';
 while($i < $numwords){
     $returnstring .= " ".$stringarray[$i];
     $i++;
 }
 
 //If set, the suffix (by default "...") will now be added to the summary ($returnstring)
-$returnstring .= "...";
+$returnstring .= $etc;
 
 //Return the summary!
-return $returnstring;
+return trim($returnstring);
     
 }//end of function
 ?>

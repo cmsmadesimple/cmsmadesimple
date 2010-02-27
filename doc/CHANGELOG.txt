@@ -1,3 +1,536 @@
+Version 1.6.5 - Poya
+-----------------------------
+- Fixes a problem with bulk deletion of pages that have inactive children.
+- Fixes many problems with ability to get content objects
+- Fixes the CreateFormStart method to reliably get the page url.
+- Fixes problem with pretty urls (internal or mod_rewrite) and GET parameters on the URL.
+- Printing
+  - Fixes problem with stylesheet not being found if pretty urls were being used
+  - Fixes problem with parsing the URL to print.
+- News
+  - Fixes trivial issue with editing an article that had expiry dates set.
+- MenuManager
+  - Fixes problem with having a default database template
+  - Fixes problem with being able to delete the default database template.
+- TinyMCE
+  - Fixed bug disabling the wysiwyg togglebox upon saving the basic toolbar profile
+  - Fixed bug with truncated menutexts with quotes in them not getting properly escaped, breaking config
+  - Updated to latest TinyMCE 3.2.6
+
+
+Version 1.6.4 - Moindou
+-----------------------------
+- Fixes a problem with the showinmenu option not being available to other content types
+- Fixes a problem with the lang stuff and a required reference operator
+- Fixes a problem with checksum verification and generation
+- Fixes a problem in filemanager where access time was shown and not creation time.
+- Adds tabindex to the list of selecatble properties in the site preferences.
+- Fixes a problem with 404 errors if using internal pretty urls, and adding parameters to the URL
+- Fixes a problem with the parent page property for restricted content editors.
+
+Version 1.6.3 - Touho
+-----------------------------
+- Fix a potential security problem in the printing module
+- Fix a problem with deactivating and re-activating pages
+  in listcontent
+- Fix a problem with cms_selflink linking to inactive pages.
+
+Version 1.6.2 - Noumea
+-----------------------------
+- Fix a problem with the unique module hash not always starting with a letter
+  which fixes form validation problems.
+- Fixed a minor template problem in News.
+
+- TinyMCE
+  - #3762 - file extension ignored in internal links
+
+- News
+  - #3782 Fix IE8 toggle in add/edit news (Use Expiration Date:)
+
+Version 1.6.1 - Canala
+-----------------------------
+- Fixes of several bugs:
+  - #3138 A bug of counting modules in page
+    ---
+    Note: This bugfix WILL break any sites that use incorrectly hacked templates with 
+    hardcoded module id's like m6 and m7, etc.
+    ---
+  - #3582 (CMS 1.6) Fatal Error in contentoperations.inc.php    
+  - #3589 Missing "Forgot Password?" on default template
+  - #3591 Default group "Editor" has no permission to edit a page 
+  - #3601 Creating new user fails, doesn't accept "-" in email address
+  - #3606 Cannot remove additional editors from page
+  - #3608 Edit icon of pages is shown even if no permissions to edit that page 
+  - #3612 {content} passes params to Module -> results in errormessage 
+  - #3626 Fixes issue with php 4.x in multicontent
+  - #3636 Global Settings -> Advanced Setup -> Basic Properties 
+  - #3768 Email validation when add user
+  - #3680 Big problem with group permissions
+  - Fixes issue with php 5.0.5 in content operations
+  - More minor bug fixes.
+  - Fixes to default content on new installs
+  
+Version 1.6 - New Caledonia
+-----------------------------
+- Fixes of several bugs: 
+  - #2786 Bulk page changes don't show messages
+  - #2831 Upgrade process continue even if database is empty
+  - #3040 no external view after moving pages up and down (and deleting pages)
+    in listcontent
+  - #3123 Installer overly restricts account names
+  - #3179 Ability to show when news items were last updated
+  - #3189 check if udt exists
+  - #3190 Error with link rel="canonical"
+  - #3257 Non-admin users can create admin users
+  - #3451 typos in plugins page_image and page_attr
+  - Drop all assign_by_ref in Installer
+  - Missing $frontendlang in siteprefs, thanks to jce76350
+  - Fixed lot of anchor issues (hoppe one for all)
+  - Fixed issue with breadcrumbs in admin theme
+  - Fixed issue with encoding entities in cms_selflink tag
+  - Removed the javascript in the changegroupperms and changegroupassign
+    stuff, and replaced it with a filter button.
+  - More...
+
+- Feature Requests:
+  - #2605 adding a 'forgot password' submission on the login panel  
+  - #3048 News: Only show expiration-date when checkbox is set
+  
+- Core additions:
+  - Ability to set a page as the 404 error page.  Replaces
+    the existing custom 404 stuff to allow for more
+    flexibility.
+  - Rework of the 'Add Pages' permission
+    - This permission allows that you can only add pages as children
+      of pages you are either owner of, or additional editor of.
+  - Remove the 'Modify Page Structure' permission
+  - Add a 'Manage All Content permission that provides global
+    capability on all content objects.  Only users with this permission
+    can add top level pages.
+  - Rework of the content types
+    - Faster, leaner, smarter
+    - {content} block is now just a shortcut for {content block='content_en'}
+      and there is no special handling
+  - Add the ability for a site administrator to select which fields are visible
+    to normal editors when adding or editing content.
+  - Complete rewrite of site preferences
+  - Page Preview now works for templates with multiple content blocks
+  - Add the ability to specify ip addresses to exclude from the sitedown
+    message.
+  - Clean up the config.php file
+    - Remove the two pretty url variables and replace it with one
+      variable that can have three values.  This should help eliminate 
+      a few problems.
+    - Add a set_names variable that allows databases to use utf-8 by default
+      on new installs (true on new installs, false is assumed).
+    - Remove old, invalid config entries.
+    - Add a possibility to hide wiki_url from ERRORPAGE $config['wiki_url'] ='none'
+
+- Menu Manager
+  - Complete rewrite of the admin interface.  It is now much easier to 
+    understand, and also possible to select different a different default 
+    template.
+  - Add the loadprops parameter to turn on loading all content properties
+    for advanced menus.
+
+- News 
+  - #2620 Extra fields are not displayed in the print template
+  - #3163 Typo in News module
+  - #3277 Drafts are not saved properly in News 2.9.3
+  - Fixed problem with incorrect counts (counting draft articles) in browsecat
+    action.
+
+- Module Manager
+  - Now supports checking for newer versions of installed modules.
+  - Now does dependency checking before allowing a download of a module.
+
+- Libs Updates: 
+  - xAjax 0.5
+  - script.aculo.us 1.8.2 (included  Update to Prototype 1.6.0.3)
+  - Dynamic Tabs 1.0.3
+
+- TinyMCE
+  - Rewrote profile handling allowing both a simple and an advanced profile 
+    in backend
+  - Rewrote frontenddetection to be more stable
+  - Improved Filepicker dialogue allowing on-the-fly scaling of images
+  - Updated to Tiny-distribution, including a rewritten more intelligent Paste
+    plugin
+
+- Printing
+  - Now supports simple output from modules
+  - Fixed links in pdf-generation
+
+- Search
+  - Template, added a class to submit and adjustments.
+  - New Param for method Post (pretty urls) - 
+    E.g. {search search_method="post"}
+  - Remove Help Tab
+  - Add better statistics capabilities.
+
+- Default Themes
+  - New theme NCleanBlue (thank you Nuno).
+  - Numerous new themes for default content (thank you Mark).
+
+
+Version 1.5.4 - Carolina
+-----------------------------
+- Fix the logout/session issue once and for all.
+- Fix the canonical expressions in default templates.
+
+
+Version 1.5.3 - Arecibo
+-----------------------------
+- Fixes of several bugs:
+  - #2516 Javascript script errors in admin listcontent.php panel.
+  - #2706 CreatePagination() does not include Session Key. 
+  - #2915 Typo in multicontent.php throwing errors.
+  - #2925 User not exist in sample content.
+  - #2940 Field-length dateformat in UserPrefs shorter than in GlobaSettings.
+  - #2995 Group assignments bug.
+  - #2996 Language string missing.
+  
+  - Notice error in modform.inc.php.  
+  - Fixed a minor permission issue on editpref.php.
+  - Added an option to disable the wysiwyg for a content-page.    
+  - Fixed (hopefully) problem with pseudo-random logouts when there is inactivity in the admin section.
+  - Put 'canonical' logic in the default templates. 
+  - Made 'NCleanGrey' the default theme, in an install without default content installed as well.
+
+- Search 1.5.3
+  - #3034 Searching for words in the footer expose all pagenames on my site.
+  - Now remove event handlers when uninstalling the module
+  - Dont return page results for non searchable pages, even if the result was found in the template.
+  - Make changes to convert search results to entities on output to help with validation.
+  - Now search for the 'stop phrase' in the base addwords function, allowing optionally excluding specific module records from being indexed.
+  
+- Feature requests that are included:
+  - #1231 Make default templates use uploads/images/logo1.gif instead of images/cms/logo1.gif.  
+  - #2897 Moved Image/Thumbnail in content-page to options-tab.
+  - #3025 News: new parameter, action="detail", which can be used to show a specific entry in detail-mode directly.
+  - #3035 link from admin backend to the forge.
+  - #3068 New plugin; page_attr that returns attributes of a page.
+  
+ - TinyMCE
+  - Added support for configuring the third toolbar
+  - Added option to show actual thumbnail-files
+  - Fixed filetype icons in FilePicker
+  - Implemented | as seperator in toolbars
+  - Fixed working of force-cleanup-on-paste
+  - Fixed toolbars for frontend-usage
+
+- News 2.9.3
+  - Minor improvements to the articles tab in the admin
+  - Now output a canonical URL in detail view
+  - Changes to default templates
+  - #3027 field definitions not deletable when entry is made using fesubmit.
+  - #2941 (News) Extra-field not showing in detail-view.
+  - Draft news articles are not indexed in the search module.
+
+
+Version 1.5.2 - Caguas
+-----------------------------
+- Fixes of several bugs:
+  - #2406 Re-order pages causes hierarchy to be incorrect (longstanding), which could be caused by:
+		a) two users simultaneously re-ordering pages or,
+		b) moving a second page while ajax hasn't finished moving the first.
+  - #2476 cyclic internal linking is possible and causes listcontent to time-out
+  - #2709 Install and uninstall post messages not shown.
+  - #2717 Text inputs too short in page-copy-mode.
+  - #2739 Permission Denied user type Editor or Designer.
+  - #2744 Edit prefs missing div layout bug.
+  - #2789 message usertagdeleted not shown because of wrong url.
+  - #2791 News Module Pagination translation label. 
+  - #2804 Re-ordering in Events. 
+  - #2805 Deleting of an UDT attached to an Event. 
+  - #2808 Page found by search, with "page is searchable" flag unchecked.
+  - #2872 Login page showing, after deleting a template which is still in use.
+  - Setting output_compression to false in config.php still sent compressed data.
+  - Many fixes in html - Validations in admin side.
+  - More
+  
+- Feature requests that are included:
+  - #2045 Allow search to find expired news articles.
+  - #2649 Notifications when deleting Stylesheets in use by templates.
+  - Showall parameter added to News, to show all news-entries, regardless of end-date.
+
+- Tiny
+  - #2815 CMSLink don't have '$config['page_extension']' suffix.
+
+- Module-API
+  - Added HasCapability and GetModulesWithCapability for a more general way of checking what a module can do.
+
+  
+Version 1.5.1 - San Juan
+-----------------------------
+- News 2.9.1
+  - Fixes to permissions checks
+  - Additional help about the dateformat and formatpostdate stuff being removed
+- Fix sql error in listcssassoc
+- Fix missing username in admin header on login of new session.
+- Fix to expand all/collapse all icons in listcontent.
+- Fix to the edit tag.
+
+Version 1.5 - Puerto Rico
+-----------------------------
+- A new notification system in the admin
+- A new dashboard page in the admin
+- The ability to copy content pages has been added
+- More bulk actions have been added to the list content page
+- A searchable attribute has been added to the edit content page
+  to mark a page as searchable
+- Default content settings have been improved.
+- Numerous improvements to the installer
+- The complete content object is now available to smarty on each page request
+- The {content_image} tag has been added allowing numerous images to be attached to each page
+  (no upload capabilities at the moment)
+- TinyMCE changes: Updated to latest Tiny-core
+                   Static option for some installations where config-file could not be generated onthefly
+                   Pretty url improvements
+                   General bugfixes and smaller feature additions and improvements
+- Apply buttons on GCB's and UDT's
+- Groups as additional editors on GCB's 
+- Add 'image' and 'thumbnail' attributes to applicable content types
+  (we don't permit uploading, just selecting a previously uploaded file)
+- MenuManager 1.5.3
+  Add raw_menutext field to the node
+  Add image and thumbnail fields to the node (if they are set)
+  Support syntax hilighter when editing templates
+- News 2.9
+  - Support syntax hilighter when editing templates
+  - Support the notification area
+  - Remove all RSS Capabilities (now supplied by the addon module CGFeedMaker)
+- Extensive modifications were made to add a session key to each and every
+  URL in the admin console.  This prevents a medium level cross site scripting
+  vulnerability.
+  - This modification will break any existing bookmarks that you have created in your
+    admin section.  
+  - This modification will now prevent the administrator from creating bookarms in his
+    web browser to various actions in the CMS Made Simple admin console.
+- Numerous bug fixes
+  The CMS Made Simple Geek Moot in august this year resulted in many bugs (some of them
+  very old) being fixed, or closed.  There are way too many of them to describe, but
+  the result should be a much more stable, much more solid application.
+- It is now a requirement inorder for an administrator to be able to login
+  that they be a member of at least one active group.
+- An improved {get_template_vars} plugin
+- A new plugin {dump} to provide a report about the contents of a single smarty variable.
+- A fixed {embed} plugin
+- Much much more.
+  
+
+Version 1.4.1 "Spring Garden"
+-----------------------------
+- Fixes an issue with the "name" parameter being broken on the stylesheet tag
+- Fixes an issue with changing group permissons on windows hosts
+- Fixes an issue with group assignment
+- Fixes a hard-coded table prefix in the css associations stuff
+- Fixes a problem with REQUEST_URI not being set on IIS hosts (stupid windows)
+- TinyMCE: Fixed problem with cmslinker not allowing to select parentpages 
+           Fixed a small bug which could cause invalid relative urls to be generated
+
+
+Version 1.4 "Jamaica"
+-----------------
+- Includes a new system information page in the admin
+  * Many thanks to Alby, and others
+- Smarty now works as you would expect in the admin
+  * Any new or rewritten pages in the admin are using this
+  * This may break pisearch plugin, etc
+- A completely new way of page template processing.
+  * We split the template into three pieces
+    a) Any text ontop of <head>
+    b) The <head> section
+    c) the rest of the template (the body)
+  * We then process the top section through smarty, then the body, and finally the head.  Then we glue it back together.  This will allow variables set in page content or in various module templates to be used in the head section to effect such things as meta tags, and page titles.
+  * A new text area in the options tab of content pages allows specifying page specific data (as opposed to putting page specific data into the metadata section of the page)
+  * A new plugin {process_pagedata} processes the page specific data through
+    smarty.  It should be at the very top of all page templates
+  * On new install, all page templates have {process_pagedata} at the very top.
+  * This may break sites that have used some of my tricks to 
+    change the page title based on news or other modules content
+    so it will be off by default after release, and on for the beta
+- Memory optimizations, and query optimizations: We've done a few checks, and improved a few things here and there that will provide a modest boost in performance.
+  * FileManager is now an admin only module
+  * nuSOAP is now an admin only module (for most sites).
+  * more in memory caching
+- Massive improvement in stylesheet handling: It is now possible to allow or deny browser stylesheet caching. Stylesheets are now re-orderable
+- Updates to the admin menu structure: Main is now called CMS, and the logout and view site links are under there.
+- Theme Improvements
+  * Many thanks to Nuno
+  * New icons for view site and logout
+- Cleaned up and improved Module Manager.  It should be much faster and leaner now.
+- Minor improvements to CMSMailer
+- Improvements to the Installer
+  * Many thanks to Alby
+  * The installer is now fully translatable, so you can choose what
+    language you want the installer pages to appear in
+  * Many more checks have been added and re-organized to hopefully
+    solve some of the issues people have with installation.
+    - Safe mode is still a warning, however we do a required check to see if the httpd server process can create a file within a directory it created.  This should help track problems with safe mode enabled when php is running as an apache module (which we do not support).
+- We now ship a full distribution as well as an english only version and several 'language packs'.
+- NCleanGrey is now the default admin theme.
+- you can now specify default text for additional content blocks in page templates.
+- A new permission that controls access to the Tags page so that editors, etc. can see the help there.
+- Add assign parameter to numerous plugins (including all module plugins)
+- adds the image_url plugin (thanks Nuno)
+- Now use a wysiwyg for the sitedown message and the custom404 message.
+- Added the target option to the 'content' content type.
+- A general review of security checks in admin methods (thanks Nuno)
+- Modifications to the group permissions, and user creation forms makes managing users, groups, and permissions much simpler.
+  * Many thanks to _SjG_
+- Updates to the embed plugin
+- Add three new page attributes to content, PageLink, Link, and SectionHeader content types
+- Modify the menu manager to export the new page attributes.  This will be useful for permissions, or meta data or other tags.
+- FileManager gained recursive chmodding, custom sorting and saner permission handling in windows
+- Printing updated to latest TCPDF release 4.0 including rewritten html rendering code
+- TinyMCE got updated and some css-related issues were fixed
+- Search Improvements 
+  * Minor performance tweaks to Search Re-indexing
+  * Now escape any characters that have special importance in regular expressions before performing the search
+  * Restore the template to it's pre-1.5 behavior whils till retaining the new functionality.
+- Now remind the user to configure their mail settings
+- A new admin function to check the current install against either a release-generated checksum file or a previously downloaded checksum file.  This will help to find upload errors, or to find files that have been modified since the last known good state, to aid in detecting hacks.
+- News has had minor tweaks
+  * Now handle the old pretty urls as well as the new ones
+    i.e;  News/<newsid>/<pageid> will work just as well as 
+          News/<newsid>/<pageid>/<article-title>
+  * A new icon for rss feeds
+- Though it's not really a 1.4 issue, the Translation center has been fixed (many many thanks to the regex guro _SjG_) so that links will work in translated files.  We essentially translate all quotes inside of <a> tags to a special string, then do the html entity stuff, then translate that special string back to quotes.  Translators need to go through and update ALL translations.
+
+Version 1.3 "Cuba" -- June 7, 2008
+-----------------
+- Massive updates to translations
+- Includes TinyMCE 2.4.0b5
+  (this should be a release version by the time 1.3 comes out)
+  Note: The wysiwyg editor is not called TinyMCE-Adv or TinyMCE-Basic anymore, 
+- Includes FileManager 0.3.0b2
+  (this should be a release version by the time 1.3 comes out)
+- Includes News 2.8
+  - Fixes for pretty urls
+  - Adds news_extra and custom field support to the fesubmit action
+  - Uses cms_html_entity_decode for php4 compatibility
+  - Removes the News content type once and for all
+- Includes Search 1.5
+  - Adds the ability to change the search output on a per module basis
+  - Adds an ability to track search words
+  - Better templating for News
+  - More
+- Includes MenuManager 1.5
+  - Pass all parameters to the menumanager template for easier customization
+  - Fixes for has_children
+  - Minor fixes
+- Includes ModuleManager 1.1.6
+  - Now indicates that a module available in the repository is incompatible
+    with the current CMS version
+  - A nice big notice on the top of the display about xml vs zip modules
+  - Cleanup on uninstall
+- Includes a new admin theme generously donated by Nuno Costa
+- All plugins are now translatable
+- The title and sitename plugins now support the assign param
+- Adds two new plugins (redirect_page and redirect_url)
+- Debug mode now tweaks the display_errors and error levels 
+  in the admin section as well as in the frontend
+- Listcontent is now cleaned-up and has better security checks
+- Minor improvements to listmodules
+- Admin templates are now override-able by creating a matching file in 
+  module_custom/<module name>/templates/<template filename>.tpl
+- All language files are now override-able by creating a matching file in
+  module_custom/<module name>/lang/<language name>.php
+- Adds a new PageLink content type to allow linking to an internal page
+  easily
+- The {sitemap} plugin is deprecated, and replaced by {site_mapper} which
+  is just a simple wrapper around menumanager
+- Fixes so that menumanager sets has_children properly
+- Attempt to handle hosts that have disabled the readfile function
+- Add cms_html_entity_decode which is php4 compatible as html_entity_decode
+  may not be.
+- Fix un-necessary queries in cms_selflink
+- Fixes for bugs #2227, 2205, 2230, 2207
+- Content type names are now translatable
+- Replaced the 'select all' link in Listcontent with a checkbox which is a bit more standardish
+- Changed the comment at the bottom of output pages to have nothing that can be searched on
+
+Version 1.2.5 "Free Hill" -- May 12, 2008
+-----------------
+- Fixed a security issue with the java applet functionality in the File Manager
+
+Version 1.2.4 "Greenland" -- March 29, 2008
+-----------------
+- Fixed a potential security issue with the applet upload in File Mananger
+- Fixed a bug where IE users would have content list issues if there were odd characters in a page name
+- Fixed a bug where putting quotes in a "oneline" content block would cause issues while editing
+
+Version 1.2.3 "Black Rock" -- January 2, 2008
+-----------------
+- Fixed a SQL injection
+
+Version 1.2.2 "Holetown" -- November 30, 2007
+-----------------
+- Fix a bug in the cms_date_time plugin that was causing random
+  issues with User Defined Tags
+- Fix a minor issue with the handling of the site down message
+
+Version 1.2.1 "Bridgetown"
+-----------------
+- New versions of News, Search, Tiny, and FileManager modules
+  - see the documentation for each module to learn what has changed
+  - some of these modules may have been released seperately at an earlier date
+- Fixes the issue with pages being set inactive on edit if not edited by somebody
+  with the 'Modify Site Structure' permission
+- Adds the cms_move_uploaded_file function that all modules should use from now
+  on to assist in handling file uploads.
+- Adds the ability to set a 'home page' in the user prefences to determine
+  a page to redirect to upon login.
+- Adds a 'Home' menu item under 'Main' 
+- Adds a site preference for date format
+- Adds the cms_date_format modifier that reads the site preference
+  as well as the user preference for date format (when in the admin section)
+
+Version 1.2 "Barbados"
+-----------------
+- Adds capabilities to have a wysiwyg on the front end
+- Adds the ability to select 'groups' as additional editors
+- Now the 'admin group' automatically has all permissions, not
+  just the admin user
+- Add a new page where default settings for new pages can be set
+- Adds a new file manager
+- Enhance the use of permissions when adding or editing content
+- Adds a new 'print' plugin capable of generating pdf filees
+  from one or more pages
+- News 2.5.1
+  * Moved the default summary and detail templates into
+    their own tab
+  * Adds An extra field
+- Fix issues with stylesheet name changes after hitting 'apply'
+- Fixes issues with spaces or underscores not being allowed in usernames
+- Fixes pagination issues in the admin log, and anywhere that uses
+  the built in pagination functions.
+- Turn error reporting to E_ALL and turn display_errors on
+  if debug mode is on.
+- You can no longer delete the admin group
+
+Version 1.1.4 "Taga" -- October 07. 2007
+-----------------
+- Fixes an XSS issue in the anchor tag
+- Fixes an XSS issue in listtags
+- Adds a permission check to adduser.php
+- More fixes for potential security issues with adodb_lite
+- Added a permission check to view the admin log
+
+Version 1.1.3 "Apia" -- September 22. 2007
+-----------------
+- Fixes a potential security hole in adodb lite.
+
+Version 1.1.2 "Savaii" -- September 3, 2007
+-----------------
+- Fixes the order of buttons in the edit template page
+- Fixes so that you can now uninstall and remove modules even
+  if their MaximumCMSVersion is greater than the current
+- Fixes an obscure problem with parameters getting passed to the
+  wrong module if modules calls were used in a template, after they
+  were included from the content
+
 Version 1.1.1 "Upolu" -- Aug 09 2007
 -----------------
 - Fixes to wysiwyg handling in GCB's 
@@ -959,6 +1492,15 @@ deleted
 * Fixed it so textareas are filled proeperly with html encoded characters
 * Upgraded schema to version 2
 * Removed some code from install.php that was breaking on non-posix systems
+* By popular request, there is now a feature in the 'main' section of the admin panel
+  to check for a newer version of CMS Made simple.  This check is done once per day.
+  There are two new options in the global settings panel.  The first will 
+  allow overriding the default hardcoded URL to check for a new version, or to
+  disable checking all together.  The second will force clearing all cached information
+  and result in a version check occurring the next time the 'main' section of the
+  admin panel is accessed.
+  
+
 
 Version 0.1 -- Thu Jul 01 2004
 -----------------

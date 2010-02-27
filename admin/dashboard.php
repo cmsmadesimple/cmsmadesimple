@@ -19,33 +19,39 @@
 #$Id: dashboard.php 4631 2008-06-14 18:03:26Z nuno $
 
 $CMS_ADMIN_PAGE=1;
-$LOAD_ALL_MODULES=1;
 
 require_once("../include.php");
-
+require_once("../lib/classes/class.group.inc.php");
 
 check_login();
-$smarty = cms_smarty();
-$gCms = cmsms();
-$db = cms_db();
 
 include_once("header.php");
+
+?>
+
+<div class="pagecontainer">
+<div class="pageoverflow">
+<div class="pageheader">
+<?php echo lang('dashboard'); ?>
+</div>
+<?php 
+global $gCms;
+
+$themeObject->DisplayDashboardPageItem("start");
 
 $output="";
 
 /******* Core Information Output ********/
 
-$current_user = CmsLogin::get_current_user();
-$username = $current_user->name;
-		
-		
-$output.= lang('welcome_user') . " <b>".$username."</b>";
+require_once("../lib/classes/class.user.inc.php");
 
+$output.= lang('welcome_user') . " <b>".$gCms->variables['username']."</b>";
 
+$db =& $gCms->GetDb();
 
-$query = "SELECT timestamp FROM ".cms_db_prefix()."adminlog WHERE user_id=? AND action=? ORDER BY timestamp ASC";
+$query = "SELECT timestamp FROM ".cms_db_prefix()."adminlog WHERE user_id=? AND action=? ORDER BY timestamp DESC";
 //echo $query;
-$result = &$db->Execute($query, array(get_userid(),"User Logout"));
+$result = &$db->Execute($query, array(get_userid(),"User Login"));
 if ($result && $result->RecordCount()>2) {
 	$row=$result->FetchRow();
 	$row=$result->FetchRow(); //Pick the previous, not the current
@@ -76,32 +82,31 @@ if ($result && $result->RecordCount()>2) {
 	$output.=lang('itsbeensincelogin',$sincelogin);
 	//$output.="<br/>It's been ".$sincelogin." seconds since your last login";
 }
-$smarty->assign("coreoutput",$output);
 
-//get_preference($userid,'ignoredmodules')
+$themeObject->DisplayDashboardPageItem("core","Core information",$output);
 
 /******* ModuleInformation Output ********/
-$dashboarditems=array();
+
 foreach ($gCms->modules as $module) {
-	
 	if (!$module["installed"]) continue;
 	if (!$module["active"]) continue;
-	if (CmsApplication::get_preference(get_userid()."_show_".$module["object"]->get_name(),"1")!="1") continue;
-	$dashboarditem=array();
-	$output="";
-	if (method_exists($module["object"],"GetDashboardOutput")) {
-	  $output=$module["object"]->GetDashboardOutput();
-	}
-	if ($output!="") {
-		$dashboarditem["output"]=$output;
-		$dashboarditem["title"]=$module["object"]->get_name();
-   // $themeObject->DisplayDashboardPageItem("module",$module["object"]->GetFriendlyName(),$output);
-    $dashboarditems[]=$dashboarditem;
-	}
+	//if ($this->GetPreference(get_userid()."_show_".$module["object"]->GetName(),"1")!="1") continue;
 	
+	$output=$module["object"]->GetDashboardOutput();
+	if ($output!="") {
+    $themeObject->DisplayDashboardPageItem("module",$module["object"]->GetFriendlyName(),$output);		
+	}
 }
-$smarty->assign_by_ref('dashitems',$dashboarditems);
-$smarty->display('dashboard.tpl');
+
+
+
+
+
+
+$themeObject->DisplayDashboardPageItem("end");
+
+?></div></div>
+<?php 
 
 include_once("footer.php");
 

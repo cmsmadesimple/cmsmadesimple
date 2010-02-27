@@ -18,6 +18,15 @@
 #
 #$Id$
 
+class CmsContentTypePlaceholder
+{
+	var $type;
+	var $filename;
+	var $classname;
+	var $friendlyname;
+}
+
+
 /**
  * Class for static methods related to content
  *
@@ -41,31 +50,6 @@ class CmsContentOperations extends CmsObject
 		return self::$instance;
 	}
 
-	static function load_content_type($type)
-	{
-		$type = strtolower($type);
-
-		global $gCms;
-		$contenttypes =& $gCms->contenttypes;
-		
-		if (isset($contenttypes[$type]))
-		{
-			$placeholder =& $contenttypes[$type];
-			if ($placeholder->loaded == false)
-			{
-				include_once($placeholder->filename);
-				$placeholder->loaded = true;
-			}
-			return true;
-		}
-		return false;
-	}
-
-	static function LoadContentType($type)
-	{
-		return ContentOperations::load_content_type($type);
-	}
-	
 	/**
 	 * Returns an array of available content types.
 	 *
@@ -74,25 +58,76 @@ class CmsContentOperations extends CmsObject
 	 **/
 	public static function find_content_types()
 	{
-		$contenttypes =& cmsms()->contenttypes;
+		$gCms = cmsms();
+		$variables =& $gCms->variables;
+		if (isset($variables['contenttypes']))
+		{
+			return $variables['contenttypes'];
+		}
+
+		$variables['contenttypes'] = array();
 		$dir = cms_join_path(dirname(__FILE__),'contenttypes');
 		$handle=opendir($dir);
 		while ($file = readdir ($handle)) 
 		{
 		    $path_parts = pathinfo($file);
-		    if ($path_parts['extension'] == 'php')
+		    if ($path_parts['extension'] == 'php' && !startswith($file,'class.') && !startswith($file,'#'))
 		    {
 				$obj = new CmsContentTypePlaceholder();
 				$obj->type = strtolower(basename($file, '.inc.php'));
 				$obj->filename = cms_join_path($dir,$file);
-				$obj->loaded = false;
-				$obj->friendlyname = basename($file, '.inc.php');
-				$contenttypes[strtolower(basename($file, '.inc.php'))] = $obj;
+				$obj->classname = basename($file, '.inc.php');
+				$obj->friendlyname = basename($file, '.inc.php'); // todo, could get this from the object.
+				$variables['contenttypes'][$obj->classname] = $obj;
 		    }
 		}
 		closedir($handle);
 	}
 	
+
+	public static function load_content_types()
+	{
+		$gCms = cmsms();
+		$variables =& $gCms->variables;
+		if (!isset($variables['contenttypes']))
+		{
+			self::find_content_types();
+		}
+
+		foreach( $variables['contenttypes'] as $key => $obj )
+		{
+			if( $obj->filename && file_exists($obj->filename) )
+			{
+				require_once($obj->filename);
+			}
+		}
+	}
+
+
+    /**
+     * Returns a hash of valid content types (classes that extend ContentBase)
+     * The key is the name of the class that would be saved into the dabase.  The
+     * value would be the text returned by the type's FriendlyName() method.
+     */
+	static public function &list_content_types()
+	{
+		$gCms = cmsms();
+		if (!isset($gCms->variables['contenttypes']))
+		{
+			self::find_content_types();
+		}
+
+		$result = array();
+		$contenttypes =& $gCms->variables['contenttypes'];
+		foreach( $contenttypes as $key => $placeholder )
+		{
+			$result[$placeholder->classname] = $placeholder->friendlyname;
+		}
+		
+		return $result;
+	}
+
+
 	/**
 	 * Returns an array of the available block types.
 	 *
@@ -124,26 +159,48 @@ class CmsContentOperations extends CmsObject
 		return $blocktypes;
 	}
 
-	function &CreateNewContent($type)
-	{
-		$type = strtolower($type);
-
-		$result = NULL;
-		
-		if (ContentOperations::LoadContentType($type))
-		{
-			$result = new $type;
-		}
-		
-		return $result;
-	}
 	
-	/**
-	 * @deprecated Deprecated.  Use cmsms()->content_base->find_by_id($id) instead.
-	 **/
 	function LoadContentFromId($id,$loadprops=true)
 	{	
-		return cmsms()->content_base->find_by_id($id);
+		return self::load_content_from_id($id);
+	}
+	
+	public static function load_content_from_id($id)
+	{
+		self::load_content_types();
+		return cms_orm('CmsContentBase')->find_by_id($id);
+	}
+
+	public static function load_multiple_from_parent_id($parent_id, $loadProperties = false)
+	{
+		self::load_content_types();
+		return cms_orm('CmsContentBase')->find_all_by_parent_id($parent_id, array('order' => 'lft ASC'));
+	}
+	
+	public static function LoadMultipleFromParentId($parent_id, $loadProperties = false)
+	{
+		return self::load_multiple_from_parent_id($parent_id, $loadProperties);
+	}
+	
+	public static function load_multiple_from_left_and_right($lft, $rgt, $loadProperties = false)
+	{
+		return cms_orm('CmsContentBase')->find_all(array('conditions' => array('lft > ? AND rgt < ?', array($lft, $rgt)), 'order' => 'lft ASC'));
+	}
+	
+	public static function LoadMultipleFromLeftAndRight($lft, $rgt, $loadProperties = false)
+	{
+		return self::load_multiple_from_left_and_right($lft, $rgt, $loadProperties);
+	}
+
+	public static function load_content_from_serialized_data($data)
+	{
+		if( !isset($data['content_type']) && !isset($data['serialized_content']) ) return FALSE;
+
+		$contenttype = 'Content';
+		if( isset($data['content_type']) ) $contenttype = $data['content_type'];
+		$contentobj = new $contenttype();
+		$contentobj = unserialize($data['serialized_content']);
+		return $contentobj;
 	}
 
 	/**
@@ -165,43 +222,12 @@ class CmsContentOperations extends CmsObject
 	 **/
 	public static function _get_default_page_id()
 	{
-		$page = cmsms()->content_base->find_by_default_content(1);
+		$page = cms_orm('CmsContentBase')->find_by_default_content(1);
 		if ($page)
 		{
 			return $page->id;
 		}
 		return -1;
-	}
-
-    /**
-     * Returns a hash of valid content types (classes that extend ContentBase)
-     * The key is the name of the class that would be saved into the dabase.  The
-     * value would be the text returned by the type's FriendlyName() method.
-     */
-	function &ListContentTypes()
-	{
-		global $gCms;
-		$contenttypes =& $gCms->contenttypes;
-		
-		if (isset($gCms->variables['contenttypes']))
-		{
-			$variables =& $gCms->variables;
-			return $variables['contenttypes'];
-		}
-		
-		$result = array();
-		
-		reset($contenttypes);
-		while (list($key) = each($contenttypes))
-		{
-			$value =& $contenttypes[$key];
-			$result[] = $value->type;
-		}
-		
-		$variables =& $gCms->variables;
-		$variables['contenttypes'] =& $result;
-
-		return $result;
 	}
 
     /**
@@ -220,7 +246,7 @@ class CmsContentOperations extends CmsObject
 
 		while ($current_parent_id > 1)
 		{
-			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE id = ?";
+			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE content_id = ?";
 			$row = &$db->GetRow($query, array($current_parent_id));
 			if ($row)
 			{
@@ -254,8 +280,8 @@ class CmsContentOperations extends CmsObject
 
 		debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
 
-		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE id = ?";
-		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
+		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE content_id = ?";
+		$db->Execute($query, array(CmsContentOperations::create_unfriendly_hierarchy_position($current_hierarchy_position), $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
 	}
 	
 	public static function SetHierarchyPosition($contentid)
@@ -266,30 +292,40 @@ class CmsContentOperations extends CmsObject
     /**
      * Updates the hierarchy position of all items
      */
-	public static function set_all_hierarchy_positions($lft = -1)
+	public static function set_all_hierarchy_positions($lft = -1, $rgt = -1)
 	{
 		global $gCms;
 		$db = $gCms->GetDb();
 
 		if ($lft > -1)
-			$query = "SELECT id FROM ".cms_db_prefix()."content WHERE lft >= " . $db->qstr($lft);
-		else
-			$query = "SELECT id FROM ".cms_db_prefix()."content WHERE id > 1";
-
-		$dbresult = $db->Execute($query);
-
-		while ($dbresult && !$dbresult->EOF)
 		{
-			self::set_hierarchy_position($dbresult->fields['id']);
-			$dbresult->MoveNext();
+			if ($rgt > -1)
+				$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE lft >= " . $db->qstr($lft) . ' AND rgt <= ' . $db->qstr($rgt);
+			else
+				$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE lft >= " . $db->qstr($lft);
 		}
+		else
+			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
+
+		$dbresult = array();
+		//try
+		//{
+			$dbresult = $db->GetCol($query);
+		//}
+		//catch (Exception $ex)
+		//{
 		
-		if ($dbresult) $dbresult->Close();
+		//}
+		
+		foreach ($dbresult as $one_id)
+		{
+			self::set_hierarchy_position($one_id);
+		}
 	}
 	
-	public static function SetAllHierarchyPositions($lft = -1)
+	public static function SetAllHierarchyPositions($lft = -1, $rgt = -1)
 	{
-		return self::set_all_hierarchy_positions($lft);
+		return self::set_all_hierarchy_positions($lft, $rgt);
 	}
 	
 	/**
@@ -302,7 +338,7 @@ class CmsContentOperations extends CmsObject
 
 	public static function get_all_content($loadprops=true)
 	{
-		return cmsms()->content_base->find_all(array('conditions' => array('id > 1'), 'order' => 'lft ASC'));
+		return cms_orm('CmsContentBase')->find_all(array('order' => 'lft ASC'));
 	}
 	
 	/**
@@ -321,9 +357,9 @@ class CmsContentOperations extends CmsObject
 			$result .= ' ' . $addt_content;
 		}
 		$result .= '>';
-		$result .= '<option value="1">None</option>';
+		$result .= '<option value="-1">None</option>';
 
-		$allcontent = cmsms()->GetContentOperations()->GetAllContent(false);
+		$allcontent = CmsContentOperations::get_all_content(false);
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{
@@ -331,34 +367,36 @@ class CmsContentOperations extends CmsObject
 
 			foreach ($allcontent as $one)
 			{
-				if ($one->id == $current)
+				if ($one->id() == $current)
 				{
 					#Grab hierarchy just in case we need to check children
 					#(which will always be after)
-					$curhierarchy = $one->hierarchy;
+					$curhierarchy = $one->hierarchy();
 
 					#Then jump out.  We don't want ourselves in the list.
 					continue;
 				}
+
 				#If it's a child of the current, we don't want to show it as it
 				#could cause a deadlock.
-				if ($curhierarchy != '' && strstr($one->hierarchy . '.', $curhierarchy . '.') == $one->hierarchy . '.')
+				if ($curhierarchy != '' && strstr($one->hierarchy() . '.', $curhierarchy . '.') == $one->hierarchy() . '.')
 				{
 					continue;
 				}
-				#Don't include content types that do not want children either...
-				if ($one->WantsChildren() == true)
-				{
-					$result .= '<option value="'.$one->id.'"';
 
-					#Select current parent if it exists
-					if ($one->id == $parent)
+				#Don't include content types that do not want children either...
+				if (!$one->wants_children())
+				{
+					continue;
+				}
+
+				$result .= '<option value="'.$one->id().'"';
+                #Select current parent if it exists
+				if ($one->id == $parent)
 					{
 						$result .= ' selected="selected"';
 					}
-
-					$result .= '>'.$one->hierarchy().'. - '.$one->name.'</option>';
-				}
+				$result .= '>'.$one->hierarchy().'. - '.$one->name().'</option>';
 			}
 		}
 
@@ -392,7 +430,7 @@ class CmsContentOperations extends CmsObject
 		}
 		else
 		{
-			$result = cmsms()->content_base->find_by_alias($alias);
+			$result = cms_orm('CmsContentBase')->find_by_alias($alias);
 			if ($result)
 			{
 				return $result->id;
@@ -405,7 +443,7 @@ class CmsContentOperations extends CmsObject
 	/**
 	 * @deprecated Deprecated.  Use CmsContentOperations::get_page_id_from_alias($alias) instead.
 	 **/
-	function GetPageIDFromAlias( $alias )
+	public static function GetPageIDFromAlias( $alias )
 	{
 		return CmsContentOperations::get_page_id_from_alias($alias);
 	}
@@ -420,7 +458,7 @@ class CmsContentOperations extends CmsObject
 	 **/
 	public static function get_page_id_from_hierarchy($position)
 	{
-		$result = cmsms()->content_base->find_by_hierarchy(CmsContentOperations::create_unfriendly_hierarchy_position($position));
+		$result = cms_orm('CmsContentBase')->find_by_hierarchy(CmsContentOperations::create_unfriendly_hierarchy_position($position));
 		if ($result)
 		{
 			return $result->id;
@@ -432,7 +470,7 @@ class CmsContentOperations extends CmsObject
 	/**
 	 * @deprecated Deprecated.  Use CmsContentOperations::get_page_id_from_hierarchy($position) instead.
 	 **/
-	function GetPageIDFromHierarchy($position)
+	public static function GetPageIDFromHierarchy($position)
 	{
 		return CmsContentOperations::get_page_id_from_hierarchy($position);
 	}
@@ -466,7 +504,7 @@ class CmsContentOperations extends CmsObject
 	/**
 	 * @deprecated Deprecated.  Use CmsContentOperations::get_page_alias_from_id($id) instead.
 	 **/
-	function GetPageAliasFromID( $id )
+	public static function GetPageAliasFromID( $id )
 	{
 		return $this->get_page_alias_from_id($id);
 	}
@@ -492,7 +530,7 @@ class CmsContentOperations extends CmsObject
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
 			if ($content_id > -1)
 			{
-				$query .= " AND id != ?";
+				$query .= " AND content_id != ?";
 				$params[] = $content_id;
 			}
 			$row = &$db->GetRow($query, $params);
@@ -582,7 +620,7 @@ class CmsContentOperations extends CmsObject
 							VALUES (?,?,?,\'global_content\','.$db->DBTimeStamp(time()).','.$db->DBTimeStamp(time()).')';
 			foreach ($matches[1] as $name)
 			{
-				$result = &$db->Execute($selquery, array($name));
+				$result = $db->Execute($selquery, array($name));
 				while ($result && !$result->EOF)
 				{
 					$db->Execute($insquery, array($parent_id, $parent_type, $result->fields['htmlblob_id']));
@@ -595,7 +633,7 @@ class CmsContentOperations extends CmsObject
 
 	public static function remove_cross_references($parent_id, $parent_type)
 	{
-		$db = db();
+		$db = cms_db();
 
 		//Delete old ones from the database
 		$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE parent_id = ? AND parent_type = ?';
@@ -604,7 +642,7 @@ class CmsContentOperations extends CmsObject
 
 	public static function remove_cross_references_by_child($child_id, $child_type)
 	{
-		$db = db();
+		$db = cms_db();
 
 		//Delete old ones from the database
 		$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE child_id = ? AND child_type = ?';
@@ -613,14 +651,191 @@ class CmsContentOperations extends CmsObject
 	
 	public static function reindex_content()
 	{
-		$content = cms_orm('ContentBase')->find_all();
+		$content = cms_orm('CmsContentBase')->find_all();
 		foreach ($content as $one_item)
 		{
 			$one_item->index();
 		}
 		CmsSearch::get_instance()->commit();
 	}
+	
+	function reset_nested_set()
+	{
+		if (!function_exists('get_first_child'))
+		{
+			function get_first_child($set, $check)
+			{
+				foreach ($set as $one)
+				{
+					if ($one != $check && starts_with($one, $check . '.'))
+					{
+						return $one;
+					}
+				}
+			
+				return FALSE;
+			}
+		}
+		
+		if (!function_exists('get_next_sibling'))
+		{
+			function get_next_sibling($set, $check)
+			{
+				//Figure out next sibling
+			
+				//Increment the pos by 1
+				$pos = CmsContentOperations::CreateFriendlyHierarchyPosition($check); //Turn into pure numbers
+				$ary = explode('.', $pos); //Split into an array
+				$pos_num = count($ary) - 1; //Get last item in array
+				$ary[$pos_num] = $ary[$pos_num] + 1; //Inc by 1
+				$pos = CmsContentOperations::CreateUnfriendlyHierarchyPosition(implode('.', $ary)); //Put back into format from string
+			
+				//Return it if it exists
+				$pos = array_search($pos, $set);
+				if ($pos !== FALSE && isset($set[$pos]))
+					return $set[$pos];
+			
+				return FALSE;
+			}
+		}
+		
+		if (!function_exists('get_parent'))
+		{
+			function get_parent($set, $check)
+			{
+				$pos = CmsContentOperations::CreateFriendlyHierarchyPosition($check); //Turn into pure numbers
+				$ary = explode('.', $pos); //Split into an array
+			
+				//This is the top level
+				if (count($ary) < 2)
+				{
+					return FALSE;
+				}
+			
+				//Pull off the last item
+				array_pop($ary);
+			
+				//Return the new string
+				return CmsContentOperations::CreateUnfriendlyHierarchyPosition(implode('.', $ary));
+			}
+		}
+		
+		$db = cms_db();
+		$cms_db_prefix = cms_db_prefix();
+		
+		$hierarchy = array();
+		$orig_hierarchy = array();
+		
+		//try
+		//{
+			$orig_hierarchy = $db->GetCol("SELECT hierarchy FROM {$cms_db_prefix}content ORDER BY hierarchy ASC");
+		//}
+		//catch (Exception $ex)
+		//{
+			
+		//}
+		
+		foreach ($orig_hierarchy as $one)
+		{
+			$hierarchy[$one] = array(-1, -1);
+		}
+		
+		$counter = 0;
+		$current = array_shift(array_keys($hierarchy));
+		$done = false;
+		
+		//Logic goes as follows...
+		
+		//Set the left to counter, no matter what
+		//If there's a child, go to child, repeat logic
+		//If there's a sibling, set right to counter, move to sibling
+		//If there's no sibling, set right to counter, move to parent
+		//If returns from child, set right to counter, repeat child/sibling logic
+		
+		do
+		{
+			if ($hierarchy[$current][0] == -1)
+			{
+				$counter++;
+				$hierarchy[$current][0] = $counter;
+			}
+			
+			$child = get_first_child(array_keys($hierarchy), $current);
+			$sibling = get_next_sibling(array_keys($hierarchy), $current);
+			$parent = get_parent(array_keys($hierarchy), $current);
+			
+			if ($child && $hierarchy[$child][0] == -1)
+			{
+				$current = $child;
+			}
+			else if ($sibling)
+			{
+				$counter++;
+				$hierarchy[$current][1] = $counter;
+				$current = $sibling;
+			}
+			else if ($parent)
+			{
+				$counter++;
+				$hierarchy[$current][1] = $counter;
+				$current = $parent;
+			}
+			else
+			{
+				$counter++;
+				$hierarchy[$current][1] = $counter;
+				$done = true;
+			}
+		}
+		while (!$done);
+		
+		$db->BeginTrans();
+		foreach ($hierarchy as $k=>$v)
+		{
+			$db->Execute("UPDATE {$cms_db_prefix}content SET lft = ?, rgt = ? WHERE hierarchy = ?", array($v[0], $v[1], $k));
+		}
+		$db->CommitTrans();
+	}
 
+	public function get_content_editor_type($content_obj)
+	{
+		$classname = get_class($content_obj);
+		$gCms = cmsms();
+		$contenttypes =& $gCms->variables['contenttypes'];
+		$found = '';
+		foreach( $contenttypes as $name => $type )
+			{
+				if( $type->classname == $classname )
+					{
+						$found = 'Cms'.$classname.'Editor';
+						break;
+					}
+			}
+		if( !$found || !class_exists($found))
+			{
+				$found = 'CmsContentEditorBase';
+			}
+		return $found;
+	}
+
+	static public function clone_content_as($content_obj,$contenttype)
+	{
+		$gCms = cmsms();
+		self::load_content_types();
+		$contenttypes =& $gCms->variables['contenttypes'];
+		foreach( $contenttypes as $name => $obj )
+			{
+				if( $name == $contenttype )
+					{
+						$tmpobj = new $contenttype;
+						$tmpobj->dirty = true;
+						$tmpobj->params = $content_obj->params;
+						$tmpobj->mProperties = $content_obj->mProperties;
+						return $tmpobj;
+					}
+			}
+		return null;
+	}
 }
 
 /**
@@ -636,5 +851,6 @@ class ContentOperations extends CmsContentOperations
 class ContentManager extends CmsContentOperations
 {
 }
+
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,95 +21,13 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.template.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
-if (isset($_POST["cancel"]))
-{
-	redirect("listtemplates.php");
-}
-
-$gCms = cmsms();
-$smarty = cms_smarty();
-$smarty->assign('action', 'addtemplate.php');
-
-$contentops = $gCms->GetContentOperations();
-$templateops = $gCms->GetTemplateOperations();
-
-#Make sure we're logged in and get that user id
 check_login();
-$userid = get_userid();
-$access = check_permission($userid, 'Add Templates');
 
-require_once("header.php");
-
-$preview = array_key_exists('previewbutton', $_POST);
-$submit = array_key_exists('submitbutton', $_POST);
-$apply = array_key_exists('applybutton', $_POST);
-
-function &get_template_object()
-{
-	$template_object = new CmsTemplate();
-	if (isset($_REQUEST['template']))
-		$template_object->update_parameters($_REQUEST['template']);
-	return $template_object;
-}
-
-function create_preview(&$template_object)
-{
-	$config =& cmsms()->GetConfig();
-	cmsms()->GetContentOperations()->LoadContentType('Content');
-	$page_object = Content::create_preview_object($template_object);
-
-	$tmpfname = '';
-	if (is_writable($config["previews_path"]))
-	{
-		$tmpfname = tempnam($config["previews_path"], "cmspreview");
-	}
-	else
-	{
-		$tmpfname = tempnam(TMP_CACHE_LOCATION, "cmspreview");
-	}
-	$handle = fopen($tmpfname, "w");
-	fwrite($handle, serialize(array($template_object, $page_object)));
-	fclose($handle);
-	
-	return $tmpfname;
-}
-
-//Get a working page object
-$template_object = get_template_object($userid);
-
-//Preview?
-$smarty->assign('showpreview', false);
-if ($preview)
-{
-	if (!$template_object->_call_validation())
-	{
-		$tmpfname = create_preview($template_object);
-		if ($tmpfname != '')
-		{
-			$smarty->assign('showpreview', true);
-			$smarty->assign('previewfname', $config["root_url"] . '/index.php?tmpfile=' . urlencode(basename($tmpfname)));
-		}
-	}
-}
-else if ($access)
-{
-	if ($submit || $apply)
-	{
-		if ($template_object->save())
-		{
-			if ($submit)
-			{
-				$themeObject->add_message(__("Template Added"), true);
-				CmsResponse::redirect("listtemplates.php");
-			}
-		}
-	}
-}
-
-if(empty($_POST))
-{
-$template_object->content = '
+$dflt_content='
+{process_pagedata}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
 <head>
@@ -141,30 +59,193 @@ $template_object->content = '
 </body>
 </html>
 ';
+
+$error = "";
+
+$template = "";
+if (isset($_POST["template"])) $template = $_POST["template"];
+
+$content = $dflt_content;
+if (isset($_POST["content"])) $content = $_POST["content"];
+
+$stylesheet = "";
+if (isset($_POST["stylesheet"])) $stylesheet = $_POST["stylesheet"];
+
+$preview = false;
+if (isset($_POST["preview"])) $preview = true;
+
+$active = 1;
+if (!isset($_POST["active"]) && isset($_POST["addsection"])) $active = 0;
+
+$from='listtemplates.php'.$urlext;
+if( isset($_GET['from'] ) )
+  {
+    $from = "moduleinterface.php".$urlext."&amp;module=".$_GET['from'];
+  }
+else if( isset($_REQUEST['from']) ) 
+  {
+    $from = $_REQUEST['from'];
+  }
+
+if (isset($_POST["cancel"]))
+{
+	redirect($from);
+	return;
 }
 
-//Add the header
-$smarty->assign('header_name', $themeObject->ShowHeader('addtemplate'));
+global $gCms;
+$db =& $gCms->GetDb();
+$templateops =& $gCms->GetTemplateOperations();
 
-//Setup the template object
-$smarty->assign_by_ref('template_object', $template_object);
+$userid = get_userid();
+$access = check_permission($userid, 'Add Templates');
 
-$smarty->assign('content_box', create_textarea(false, $template_object->content, 'template[content]', 'pagebigtextarea', '', $template_object->encoding));
+$use_javasyntax = false;
+if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
-//extra buttons
-$ExtraButtons = array(
-		      array(
-			    'name'    => 'previewbutton',
-			    'class'   => '',
-			    'image'   => '',
-			    'caption' => lang('preview'),
-			    ),
-		      );
+if ($access)
+{
+	if (isset($_POST["addtemplate"]) && !$preview)
+	{
+		$validinfo = true;
 
-$smarty->assign('DisplayButtons', $ExtraButtons);
+		if ($template == "")
+		{
+			$error .= "<li>".lang("nofieldgiven",array(lang('name')))."</li>";
+			$validinfo = false;
+		}
+		else
+		{
+			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
+			$result = $db->Execute($query);
 
-$smarty->display('addtemplate.tpl');
+			if ($result && $result->RecordCount() > 0)
+			{
+				$error .= "<li>".lang('templateexists')."</li>";
+				$validinfo = false;
+			}
+		}
 
+		if ($content == "")
+		{
+			$error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
+			$validinfo = false;
+		}
+
+		if ($validinfo)
+		{
+			$newtemplate = new Template();
+			$newtemplate->name = $template;
+			$newtemplate->content = $content;
+			$newtemplate->stylesheet = $stylesheet;
+			$newtemplate->active = $active;
+			$newtemplate->default = 0;
+
+			Events::SendEvent('Core', 'AddTemplatePre', array('template' => &$newtemplate));
+
+			$result = $newtemplate->save();
+
+			if ($result)
+			{
+				Events::SendEvent('Core', 'AddTemplatePost', array('template' => &$newtemplate));
+
+				audit($newtemplate->id, $template, 'Added Template');
+				redirect($from);
+				return;
+			}
+			else
+			{
+				$error .= "<li>".lang('errorinsertingtemplate')."$query</li>";
+			}
+		}
+	}
+}
+
+include_once("header.php");
+
+if (!$access)
+{
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addtemplate')))."</p></div>";
+}
+else
+{
+	if ($error != "")
+	{
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
+	}
+
+	if ($preview)
+	{
+		$data["title"] = "TITLE HERE";
+		$data["content"] = "Test Content";
+		#$data["template_id"] = $template_id;
+		$data["stylesheet"] = $stylesheet;
+		$data["template"] = $content;
+
+		$tmpfname = '';
+		if (is_writable($config["previews_path"]))
+		{
+			$tmpfname = tempnam($config["previews_path"], "cmspreview");
+		}
+		else
+		{
+			$tmpfname = tempnam(TMP_CACHE_LOCATION, "cmspreview");
+		}
+		$handle = fopen($tmpfname, "w");
+		fwrite($handle, serialize($data));
+		fclose($handle);
+
+?>
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('preview')?></p>
+	<iframe class="preview" name="preview" src="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
+</div>
+<?php
+
+	}
+?>
+
+<div class="pagecontainer">
+	<?php echo $themeObject->ShowHeader('addtemplate'); ?>
+	<form method="post" action="addtemplate.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('name')?>:</p>
+			<p class="pageinput"><input class="name" type="text" name="template" maxlength="255" value="<?php echo $template?>" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('content')?>:</p>
+			
+			<p class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagebigtextarea', 'content', '', '', '80', '15','','html')?></p>
+		</div>
+		<?php if ($templateops->StylesheetsUsed() > 0) { ?>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('stylesheet')?>:</p>
+			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagebigtextarea', '', '', '', '80', '15','','css')?></p>
+		</div>
+		<?php } ?>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('active')?>:</p>
+			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="from" value="<?php echo $from?>" />
+				<input type="hidden" name="addtemplate" value="true"/>
+				<!--<input type="submit" accesskey="p" name="preview" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />-->
+				<input type="submit" accesskey="s" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
+		</div>
+	</form>
+</div>
+
+<?php
+}
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

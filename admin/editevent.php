@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,8 +21,9 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 global $gCms;
-$db = cms_db();
+$db =& $gCms->GetDb();
 
 $userid = get_userid();
 $access = check_permission($userid, "Modify Events");
@@ -36,14 +37,14 @@ check_login();
 
 include_once("header.php");
 
-$downImg = $themeObject->display_image('icons/system/arrow-d.gif', lang('down'),'','','systemicon');
-$upImg = $themeObject->display_image('icons/system/arrow-u.gif', lang('up'),'','','systemicon');
-$deleteImg = $themeObject->display_image('icons/system/delete.gif', lang('delete'),'','','systemicon');
+$downImg = $themeObject->DisplayImage('icons/system/arrow-d.gif', lang('down'),'','','systemicon');
+$upImg = $themeObject->DisplayImage('icons/system/arrow-u.gif', lang('up'),'','','systemicon');
+$deleteImg = $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 
 
 echo "<div class=\"pagecontainer\">\n";
 echo "<div class=\"pageoverflow\">\n";
-echo $themeObject->show_header('editeventhandler');
+echo $themeObject->ShowHeader('editeventhandler');
 echo "</div>\n";
 
 if ($access)
@@ -57,111 +58,151 @@ if ($access)
 		// we're adding some funky event handler
 		if( isset( $_POST['module'] ) && $_POST['module'] != '' )
 		{
-			$module = $_POST['module'];
+		$module = $_POST['module'];
 		}
 		if( isset( $_POST['event'] ) && $_POST['event'] != '' )
 		{
-			$event = $_POST['event'];
+		$event = $_POST['event'];
 		}
 		if( isset( $_POST['handler'] ) )
 		{
-			// handler is set, we just have to try to set it
-			$handler = $_POST['handler'];
+		// handler is set, we just have to try to set it
+		$handler = $_POST['handler'];
 		}
 		if( $module && $event && $handler )
 		{
-			if( substr( $handler, 0, 2 ) == "m:" )
-			{
-				$handler = substr( $handler, 2 );
-				CmsEventOperations::add_event_handler( $module, $event, false, $handler );
-			}
-			else
-			{
-				CmsEventOperations::add_event_handler( $module, $event, $handler );
-			}
+		if( substr( $handler, 0, 2 ) == "m:" )
+		{
+			$handler = substr( $handler, 2 );
+			Events::AddEventHandler( $module, $event, false, $handler );
+		}
+		else
+		{
+			Events::AddEventHandler( $module, $event, $handler );
+		}
 		}
 	}
 	else
 	{
-		$cur_order = -1;
-
-		// we're processing an up/down or delete
-		if( isset( $_GET['action'] ) && $_GET['action'] != '' )
+	  $cur_order = -1;
+	
+	  // we're processing an up/down or delete
+	  if( isset( $_GET['action'] ) && $_GET['action'] != '' )
+	    {
+	      $action = $_GET['action'];
+	    }
+	  if( isset( $_GET['module'] ) && $_GET['module'] != '' )
+	    {
+	      $module = $_GET['module'];
+	    }
+	  if( isset( $_GET['event'] ) && $_GET['event'] != '' )
+	    {
+	      $event = $_GET['event'];
+	    }
+	  if( isset( $_GET['handler'] ) && $_GET['handler'] != '' )
+	    {
+	      $handler = $_GET['handler'];
+	    }
+	  if( isset( $_GET['order'] ) && $_GET['order'] != '' )
+	    {
+	      $cur_order = $_GET['order'];
+	    }
+	  
+	  switch( $action )
+	    {
+	    case 'up':
+	      // move an item up (decrease the order)
+	      // increases the previous order, and decreases the current handler id
+	      if( $handler == "" || $module == "" || $event == "" || $action == "" ||
+		  ($cur_order == "" && $action != "delete") )
 		{
-			$action = $_GET['action'];
+		  display_error( lang("missingparams" ) );
 		}
-		if( isset( $_GET['module'] ) && $_GET['module'] != '' )
+	      
+	      // Get the event id
+	      $q = "SELECT event_id FROM ".cms_db_prefix().'event_handlers WHERE handler_id = ?';
+	      $event_id = $db->GetOne($q,array($handler));
+
+	      // Get the previous handler id
+	      $q = 'SELECT handler_id FROM '.cms_db_prefix().'event_handlers WHERE handler_order = ?
+                    AND event_id = ?';
+	      $prev_id = $db->GetOne($q,array($cur_order -1,$event_id));
+
+	      if( $prev_id )
 		{
-			$module = $_GET['module'];
+		  $q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order - 1)
+					where handler_id = ?";
+		  $db->Execute( $q, array( $handler ) );
+		  
+		  $q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order + 1)
+					where handler_id = ?";
+		  $db->Execute( $q, array( $prev_id ) );
 		}
-		if( isset( $_GET['event'] ) && $_GET['event'] != '' )
+	      break;
+	      
+	    case 'down':
+	      // move an item down (increase the order)
+	      // move an item up (decrease the order)
+	      // increases the previous order, and decreases the current handler id
+	      if( $handler == "" || $module == "" || $event == "" || $action == "" ||
+		  ($cur_order == "" && $action != "delete") )
 		{
-			$event = $_GET['event'];
+		  display_error( lang("missingparams" ) );
 		}
-		if( isset( $_GET['handler'] ) && $_GET['handler'] != '' )
+	      
+	      // Get the event id
+	      $q = "SELECT event_id FROM ".cms_db_prefix().'event_handlers WHERE handler_id = ?';
+	      $event_id = $db->GetOne($q,array($handler));
+
+	      // Get the next handler id
+	      $q = 'SELECT handler_id FROM '.cms_db_prefix().'event_handlers WHERE handler_order = ?
+                    AND event_id = ?';
+	      $next_id = $db->GetOne($q,array($cur_order + 1,$event_id));
+	      if( $next_id )
 		{
-			$handler = $_GET['handler'];
+		  $q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order + 1)
+					where handler_id = ?";
+		  $db->Execute( $q, array( $handler ) );
+		  
+		  $q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order - 1)
+					where handler_id = ?";
+		  $db->Execute( $q, array( $next_id ) );
 		}
-		if( isset( $_GET['order'] ) && $_GET['order'] != '' )
-		{
-			$cur_order = $_GET['order'];
+	      break;
+	      
+	    case 'delete':
+	      {
+		if( $handler == "" || $module == "" || $event == "" || $action == "" ||
+		    ($cur_order == "" && $action != "delete") )
+		  {
+		    display_error( lang("missingparams" ) );
+		  }
+		
+		// get the details about the handler
+		$q = "SELECT * FROM ".cms_db_prefix()."event_handlers WHERE
+						handler_id = ?";
+		$dbresult = $db->Execute( $q, array( $handler ) );
+		if( $dbresult && $dbresult->RecordCount() )
+			{
+			$row = $dbresult->FetchRow();
+			$event_id = $row['event_id'];
+	
+			// delete a handler
+			$q = "DELETE FROM ".cms_db_prefix()."event_handlers WHERE
+						handler_id = ?";
+			$dbresult = $db->Execute( $q, array( $handler ) );
+	
+			// re-order the events
+			$q = "UPDATE ".cms_db_prefix()."event_handlers SET handler_order = (handler_order - 1)
+						WHERE handler_order > ? AND event_id = ?";
+			$dbresult = $db->Execute( $q, array( $cur_order, $event_id ) );
+			}
 		}
-
-		switch( $action )
-		{
-			case 'up':
-				// move an item up (decrease the order)
-				// increases the previous order, and decreases the current handler id
-				if( $handler == "" || $module == "" || $event == "" || $action == "" ||
-					($cur_order == "" && $action != "delete") )
-				{
-					display_error( lang("missingparams" ) );
-				}
-
-				$event_handler = cms_orm('CmsEventHandler')->find_by_id($handler);
-				if ($event_handler != null)
-				{
-					$event_handler->move_up();
-				}
-
-				break;
-
-			case 'down':
-				// move an item down (increase the order)
-				// move an item up (decrease the order)
-				// increases the previous order, and decreases the current handler id
-				if( $handler == "" || $module == "" || $event == "" || $action == "" ||
-					($cur_order == "" && $action != "delete") )
-				{
-					display_error( lang("missingparams" ) );
-				}
-
-				$event_handler = cms_orm('CmsEventHandler')->find_by_id($handler);
-				if ($event_handler != null)
-				{
-					$event_handler->move_down();
-				}
-
-				break;
-
-			case 'delete':
-
-				if( $handler == "" || $module == "" || $event == "" || $action == "" ||
-					($cur_order == "" && $action != "delete") )
-				{
-					display_error( lang("missingparams" ) );
-				}
-
-				$event_handler = cms_orm('CmsEventHandler')->find_by_id($handler);
-				if ($event_handler != null)
-				{
-					$event_handler->delete();
-				}
-				break;
-
-			default:
-			// unknown or unset action
-			break;
+		break;
+			
+		default:
+		// unknown or unset action
+		break;
 		} // switch
 	}
 		
@@ -173,26 +214,26 @@ if ($access)
 	$description = '';
 	$modulename = '';
 	if ($module == 'Core') {
-		$description = CmsEventOperations::get_event_description($event);
+		$description = Events::GetEventDescription($event);
 		$modulename = lang('core');
 	}
 	else if (isset($gCms->modules[$module])) {
 		$objinstance =& $gCms->modules[$module]['object'];
-		$description = $objinstance->get_event_description($event);
-		$modulename = $objinstance->get_friendly_name();
+		$description = $objinstance->GetEventDescription($event);
+		$modulename = $objinstance->GetFriendlyName();
 	}
 	
 	// and now get the list of handlers for this event
-	$handlers = CmsEventOperations::list_event_handlers( $module, $event );
+	$handlers = Events::ListEventHandlers( $module, $event );
 	//print_r( $handlers ); echo "<br/><br/>";
 	
 	// and the list of all available handlers
 	$allhandlers = array();
 	// we get the list of user tags, and add them to the list
-	$usertags = cms_orm('CmsUserTag')->find_all(array('order' => 'name ASC'));
-	foreach( $usertags as $usertag )
+	$usertags = $usertagops->ListUserTags();
+	foreach( $usertags as $key => $value )
 	{
-	$allhandlers[$usertag->name] = $usertag->name;
+	$allhandlers[$value] = $key;
 	}
 	// and the list of modules, and add them
 	foreach( $gCms->modules as $key => $value )
@@ -202,7 +243,7 @@ if ($access)
 		continue;
 		}
 	
-	if( $gCms->modules[$key]['object']->handles_events() )
+	if( $gCms->modules[$key]['object']->HandlesEvents() )
 		{
 		$allhandlers[$key] = 'm:'.$key;
 		}
@@ -238,16 +279,16 @@ if ($access)
 	{
 		echo "<tbody>\n";
 		$idx = 0;
-		$url = "editevent.php?module=".$module."&amp;event=".$event;
+		$url = "editevent.php".$urlext."&amp;module=".$module."&amp;event=".$event;
 		foreach( $handlers as $onehandler )
 		{
 		echo "<tr class=\"$rowclass\">\n";
-		echo "  <td>".$onehandler['order_num']."</td>\n";
+		echo "  <td>".$onehandler['handler_order']."</td>\n";
 		echo "  <td>".$onehandler['tag_name']."</td>\n";
 		echo "  <td>".$onehandler['module_name']."</td>\n";
 		if( $idx != 0 ) 
 		{
-			echo "  <td><a href=\"".$url."&amp;action=up&amp;order=".$onehandler['order_num']."&amp;handler=".$onehandler['id']."\">$upImg</a></td>\n";
+			echo "  <td><a href=\"".$url."&amp;action=up&amp;order=".$onehandler['handler_order']."&amp;handler=".$onehandler['handler_id']."\">$upImg</a></td>\n";
 		}
 		else
 		{
@@ -255,7 +296,7 @@ if ($access)
 		}
 		if( $idx + 1 != count($handlers) )
 		{
-			echo "  <td><a href=\"".$url."&amp;action=down&amp;order=".$onehandler['order_num']."&amp;handler=".$onehandler['id']."\">$downImg</a></td>\n";
+			echo "  <td><a href=\"".$url."&amp;action=down&amp;order=".$onehandler['handler_order']."&amp;handler=".$onehandler['handler_id']."\">$downImg</a></td>\n";
 		}
 		else
 		{
@@ -263,7 +304,7 @@ if ($access)
 		}
 		if( $onehandler['removable'] == 1 )
 		{
-			echo "  <td><a href=\"".$url."&amp;action=delete&amp;order=".$onehandler['order_num']."&amp;handler=".$onehandler['id']."\">$deleteImg</a></td>\n";
+			echo "  <td><a href=\"".$url."&amp;action=delete&amp;order=".$onehandler['handler_order']."&amp;handler=".$onehandler['handler_id']."\">$deleteImg</a></td>\n";
 		}
 		else
 		{
@@ -273,22 +314,33 @@ if ($access)
 	
 		$idx++;
 		}
-		echo "</tbody>\n";
+
 	}
+    else{
+    	echo "<tbody>\n";
+        echo "<tr>\n";
+        echo "<td>&nbsp;</td>";
+        echo "</tr>\n";
+    }
+    echo "</tbody>\n";
 	echo "</table>\n";
 	
-	echo "<br/><form action=\"editevent.php?action=create\" method=\"post\">\n";
+	echo "<br/><form action=\"editevent.php\" method=\"post\">\n";
+        echo "<div>\n";
+        echo '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />'."\n";
+	echo '<input type="hidden" name="action" value="create" />'."\n";
+        echo "</div>\n";
 	echo "<select name=\"handler\">\n";
 	foreach( $allhandlers as $key => $value )
 	{
 	echo "<option value=\"$value\">$key</option>\n";
 	}
 	echo "</select>\n";
-	echo "<input type=\"hidden\" name=\"module\" value=\"$module\">\n";
-	echo "<input type=\"hidden\" name=\"event\" value=\"$event\">\n";
-	echo "<input type=\"submit\" name=\"add\" value=\"".lang('add')."\">";
+	echo "<input type=\"hidden\" name=\"module\" value=\"$module\" />\n";
+	echo "<input type=\"hidden\" name=\"event\" value=\"$event\" />\n";
+	echo "<input type=\"submit\" name=\"add\" value=\"".lang('add')."\" />";
 	echo "</form>\n";
-	echo "<p class=\"pageback\"><a class=\"pageback\" href=\"".$themeObject->back_url()."\">&#171; ".lang('back')."</a></p>\n";
+	echo "<p class=\"pageback\"><a class=\"pageback\" href=\"".$themeObject->BackUrl()."\">&#171; ".lang('back')."</a></p>\n";
 	
 	echo "</div>\n";
 }

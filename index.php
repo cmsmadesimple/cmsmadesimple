@@ -1,7 +1,7 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.org
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -18,15 +18,13 @@
 #
 #$Id$
 
-/**
- * Entry point for all non-admin pages
- **/
-//Cut them off at the pass...
 if (version_compare(phpversion(), "5.2", "<"))
 { 
-    echo 'CMS Made Simple 2.0 requires php 5.2 and above to run.  Please upgrade your system before proceeding.';
-    exit;
+	echo 'CMS Made Simple 2.0 requires php 5.2 and above to run.  Please upgrade your system before proceeding.';
+	exit;
 }
+
+//xdebug_start_trace('/tmp/mytrace');
 
 //Where are we?
 $dirname = dirname(__FILE__);
@@ -53,15 +51,15 @@ require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.p
 $config_location = CmsConfig::get_config_filename();
 if (!file_exists($config_location) || filesize($config_location) < 800)
 {
-    if (FALSE == is_file($dirname.'/install/index.php'))
+	if (FALSE == is_file($dirname.'/install/index.php'))
 	{
-        die ('There is no config.php file or install/index.php please correct one these errors!');
-    }
+		die ('There is no config.php file or install/index.php please correct one these errors!');
+	}
 	else
 	{
 		//die('Do a redirect - ' . $config_location);
-        CmsResponse::redirect('install/index.php');
-    }
+		redirect('install/index.php');
+	}
 }
 else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
 {
@@ -87,6 +85,15 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 //the start time we generated way up at the top.
 $profiler = CmsProfiler::get_instance('', $start_time);
 
+if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
+{
+	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+}
+
+//Start up a profiler for getting render times for this page.  Use
+//the start time we generated way up at the top.
+$profiler = CmsProfiler::get_instance('', $start_time);
+
 //Can we find a page somewhere in the request?
 $page = CmsRequest::calculate_page_from_request();
 
@@ -94,7 +101,7 @@ $page = CmsRequest::calculate_page_from_request();
 //output any cached data.
 if (CmsConfig::get('full_page_caching'))
 {
-	if (!isset($_REQUEST['mact']) && !isset($_REQUEST['id']) && $data = CmsCache::get_instance('page')->get($page, CmsMultiLanguage::get_client_language()))
+	if (!isset($_REQUEST['mact']) && !isset($_REQUEST['id']) && $data = CmsCache::get_instance('page')->get($page))
 	{
 		echo $data;
 		$endtime = $profiler->get_time();
@@ -110,18 +117,18 @@ if (CmsConfig::get('full_page_caching'))
 	}
 }
 
-//Startup the output buffering
-@ob_start();
+// optionally enable output compression (as long as debug mode isn't on)
+if( isset($config['output_compression']) && ($config['output_compression']) && $config['debug'] != true )
+{
+	@ob_start('ob_gzhandler');
+}
+else
+{
+	@ob_start();
+}
 
 //All systems are go...  let's include all the good stuff
-require_once($dirname.DIRECTORY_SEPARATOR.'include.php');
-
-//If we need the xmlrpc server, then jump out		
-if ($page == 'cmsms/xmlrpc.php')
-{
-	CmsXmlrpc::handle_requests();
-	exit;
-}
+require_once(cms_join_path($dirname, DS, 'include.php'));
 
 //Make sure the id is set inside smarty if needed for modules
 cms_smarty()->set_id_from_request();
@@ -139,12 +146,7 @@ if ($page == '')
 
 //Ok, we should have SOMETHING at this point.  Grab it's info
 //from the database.
-$pageinfo = CmsPageInfoOperations::load_page_info_by_content_alias($page);
-
-//Testing the permission check
-//$thepage = cms_orm()->cms_content_base->find_by_id($pageinfo->content_id);
-//var_dump($thepage->check_permission());
-//$thepage->test_me();
+$pageinfo = PageInfoOperations::load_page_info_by_content_alias($page);
 
 //No info?  Then it's a bum page.  If we had a custom 404, then it's info
 //would've been returned earlier.  The only option left is to show the generic
@@ -152,6 +154,8 @@ $pageinfo = CmsPageInfoOperations::load_page_info_by_content_alias($page);
 if ($pageinfo == null)
 {
 	//CmsResponse::send_error_404();
+	echo "404 error\n";
+	exit;
 }
 
 //Render the pageinfo object
@@ -162,6 +166,156 @@ echo $pageinfo->render();
 //headers.  Plus, it's output buffered, so the content isn't actually
 //getting sent until the ob_flush below this.
 echo $pageinfo->send_headers();
+
+/*
+$pageinfo = '';
+if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
+{
+	$tpl_name = trim($_SESSION['cms_preview']);
+	$fname = '';
+	if (is_writable($config["previews_path"]))
+	{
+		$fname = cms_join_path($config["previews_path"] , $tpl_name);
+	}
+	else
+	{
+		$fname = cms_join_path(TMP_CACHE_LOCATION , $tpl_name);
+	}
+	$fname = $tpl_name;
+	if( !file_exists($fname) )
+	{
+		die('error preview temp file not found: '.$fname);
+		return false;
+	}
+
+	// build pageinfo
+	$fh = fopen($fname,'r');
+	$_SESSION['cms_preview_data'] = unserialize(fread($fh,filesize($fname)));
+	fclose($fh);
+	unset($_SESSION['cms_preview']);
+
+	cmsms()->GetPageInfoOperations(); //Hack: Just to load it for now
+	$pageinfo = PageInfoOperations::LoadPageInfoFromSerializedData($_SESSION['cms_preview_data']);
+	$pageinfo->content_id = '__CMS_PREVIEW_PAGE__';
+}
+
+if( !is_object($pageinfo) )
+{
+	cmsms()->GetPageInfoOperations(); //Hack: Just to load it for now
+	$pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
+}
+*/
+
+// $page cannot be empty here
+/*
+if (isset($pageinfo) && $pageinfo !== FALSE)
+{
+	$gCms->variables['pageinfo'] = $pageinfo;
+
+	if( isset($pageinfo->template_encoding) && $pageinfo->template_encoding != '' )
+	{
+		set_encoding($pageinfo->template_encoding);
+	}
+
+	if($pageinfo->content_id > 0)
+	{
+		$manager = $gCms->GetHierarchyManager();
+		$node = $manager->sureGetNodeById($pageinfo->content_id);
+		if(is_object($node))
+		{
+		  $contentobj = $node->GetContent(true,true,false);
+		  if( is_object($contentobj) )
+		    {
+		      $smarty->assign('content_obj',$contentobj);
+		    }
+		}
+	}
+
+	$gCms->variables['content_id'] = $pageinfo->content_id;
+	$gCms->variables['page'] = $page;
+	$gCms->variables['page_id'] = $page;
+
+	$gCms->variables['page_name'] = $pageinfo->content_alias;
+	$gCms->variables['position'] = $pageinfo->content_hierarchy;
+	global $gCms;
+	$contentops = $gCms->GetContentOperations();
+	$gCms->variables['friendly_position'] = $contentops->CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
+
+	$smarty->assign('content_id', $pageinfo->content_id);
+	$smarty->assign('page', $page);
+	$smarty->assign('page_id', $page);
+	$smarty->assign('page_name', $pageinfo->content_alias);
+	$smarty->assign('page_alias', $pageinfo->content_alias);
+	$smarty->assign('position', $pageinfo->content_hierarchy);
+	$smarty->assign('friendly_position', $gCms->variables['friendly_position']);
+}
+else if (get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0")
+{
+	ErrorHandler404();
+	exit;
+}
+*/
+
+/*
+$html = '';
+$cached = '';
+
+if (isset($_GET["print"]))
+{
+	($smarty->is_cached('print:'.$page, '', $pageinfo->template_id)?$cached="":$cached="not ");
+	$html = $smarty->fetch('print:'.$page, '', $pageinfo->template_id) . "\n";
+}
+else
+{
+	#If this is a case where a module doesn't want a template to be shown, just disable caching
+  if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') || 
+      (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false'))
+	{
+		$html = $smarty->fetch('template:notemplate') . "\n";
+	}
+	else
+	{
+		$smarty->caching = false;
+		$smarty->compile_check = true;
+		($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
+
+		// we allow backward compatibility (for a while)
+		// for people that have hacks for setting page title
+		// or header variables by capturing a modules output
+		// to a smarty variable, and then displaying it later.
+		if( isset($config['process_whole_template']) && $config['process_whole_template'] === false )
+		  {
+		    $top  = $smarty->fetch('tpl_top:'.$pageinfo->template_id);
+		    $body = $smarty->fetch('tpl_body:'.$pageinfo->template_id);
+		    $head = $smarty->fetch('tpl_head:'.$pageinfo->template_id);
+		    $html = $top.$head.$body;
+		  }
+		else
+		  {
+		    $html = $smarty->fetch('template:'.$pageinfo->template_id);
+		  }
+	}
+}
+*/
+
+#if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
+#{
+#	set_error_handler($old_error_handler);
+#}
+
+/*
+if (!$cached)
+{
+	//Events::SendEvent('Core', 'ContentPostRenderNonCached', array(&$html));
+}
+
+Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
+
+header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . (isset($pageinfo->template_encoding) && $pageinfo->template_encoding != ''?$pageinfo->template_encoding:get_encoding()));
+
+echo $html;
+
+*/
 
 //Calculate our profiler data
 $endtime = $profiler->get_time();
@@ -187,9 +341,8 @@ echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -
 
 //var_dump(CmsLogin::get_current_user());
 
-if (CmsConfig::get('debug'))
+if (CmsConfig::get('debug') || !CmsConfig::get('debug'))
 {
-	echo "<p>Generated in ".$endtime." seconds by CMS Made Simple using ".CmsDatabase::query_count()." SQL queries and " . $memory . " bytes of memory</p>";
 	echo CmsProfiler::get_instance()->report();
 }
 
@@ -199,7 +352,15 @@ if (CmsApplication::get_preference('enablesitedownmessage') == "1" || CmsConfig:
 }
 
 //Clear out any previews that may be going on
-CmsPreview::clear_preview();
+//CmsPreview::clear_preview();
 
+if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
+{
+	unset($_SESSION['cms_preview']);
+}
+
+//xdebug_stop_trace();
+
+//CmsContentOperations::ResetNestedSet();
 # vim:ts=4 sw=4 noet
 ?>

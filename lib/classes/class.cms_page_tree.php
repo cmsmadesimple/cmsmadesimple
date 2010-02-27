@@ -31,7 +31,7 @@
  **/
 class CmsPageTree extends CmsTree
 {
-	static public $content = array();
+	static private $content = array();
 	static private $instance = NULL;
 
 	function __construct()
@@ -56,30 +56,40 @@ class CmsPageTree extends CmsTree
 		return $this->root;
 	}
 
-	public function load_child_nodes($parent_id = 1, $lft = -1, $rgt = -1)
+	public function load_child_nodes($parent_id = -1, $lft = -1, $rgt = -1)
 	{
 		$pages = array();
 
 		if ($lft == -1 && $rgt == -1)
 		{
-			$pages = cms_orm()->content->find_all_by_parent_id($parent_id, array('order' => 'lft ASC'));
+			$pages = CmsContentOperations::LoadMultipleFromParentId($parent_id);
 		}
 		else
 		{
-			$pages = cms_orm()->content->find_all(array('conditions' => array('lft > ? AND rgt < ?', $lft, $rgt), 'order' => 'lft ASC'));
+			$pages = CmsContentOperations::LoadMultipleFromLeftAndRight($lft, $rgt);
 		}
-		
+
 		//var_dump(count($pages));
+		//stack_trace(); echo '<br/>';
 		//debug_print_backtrace();
 		
 		foreach ($pages as $page)
 		{
-			$parent_node = $this->get_node_by_id($page->parent_id);
-			if ($parent_node != null)
+			if ($page->parent_id > -1)
 			{
-				$parent_node->add_child($page);
-				self::$content[(string)$page->id] = $page; //Put a reference up so we can quickly check to see if it's loaded already
-				$parent_node->children_loaded = true;
+				$parent_node = $this->get_node_by_id($page->parent_id);
+				if ($parent_node != null)
+				{
+					$parent_node->add_child($page);
+					self::$content[(string)$page->id] = $page; //Put a reference up so we can quickly check to see if it's loaded already
+					$parent_node->children_loaded = true;
+				}
+			}
+			else
+			{
+				$this->root->add_child($page);
+				self::$content[(string)$page->id] = $page;
+				$this->root->children_loaded = true;
 			}
 		}
 	}
@@ -90,10 +100,11 @@ class CmsPageTree extends CmsTree
 		//First we find the page.  If it exists, we then grab the great-great-grandparent
 		//and load all of the nodes in between.
 		$page = cms_orm()->content->find_by_id($id);
+		//$page = CmsContentOperations::LoadContentFromId($id);
 		if ($page)
 		{
 			$ancestor = null;
-			$top_nodes = $this->tree->get_root_node()->get_children();
+			$top_nodes = $this->root->get_children();
 			foreach ($top_nodes as $one_node)
 			{
 				//Don't bother doing this if we're only level 2
@@ -105,7 +116,7 @@ class CmsPageTree extends CmsTree
 			}
 			if ($ancestor != null)
 			{
-				$this->load_child_nodes(1, $ancestor->lft, $ancestor->rgt);
+				$this->load_child_nodes(-1, $ancestor->lft, $ancestor->rgt);
 			}
 		}
 	}
@@ -114,7 +125,7 @@ class CmsPageTree extends CmsTree
 	{
 		if ($id)
 		{
-			if ($id == 1)
+			if ($id == -1)
 			{
 				return $this->get_root_node();
 			}
@@ -143,7 +154,8 @@ class CmsPageTree extends CmsTree
 	public function get_node_by_alias($alias)
 	{
 		$result = null;
-		$id = CmsCache::get_instance()->call('CmsContentOperations::get_page_id_from_alias', $alias);
+		//$id = CmsCache::get_instance()->call('CmsContentOperations::get_page_id_from_alias', $alias);
+		$id = CmsContentOperations::GetPageIdFromAlias($alias);
 		if ($id)
 		{
 			$result = $this->get_node_by_id($id);
@@ -164,7 +176,8 @@ class CmsPageTree extends CmsTree
 	function get_node_by_hierarchy($position)
 	{
 		$result = null;
-		$id = CmsCache::get_instance()->call('CmsContentOperations::get_page_id_from_hierarchy', $position);
+		//$id = CmsCache::get_instance()->call('CmsContentOperations::get_page_id_from_hierarchy', $position);
+		$id = CmsContentOperations::GetPageIdFromHierarchy($position);
 		if ($id)
 		{
 			$result = $this->get_node_by_id($id);

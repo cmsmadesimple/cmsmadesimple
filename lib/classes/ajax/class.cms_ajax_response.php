@@ -20,31 +20,74 @@
 
 class CmsAjaxResponse extends CmsObject
 {
-	var $result = '';
+	var $result = null;
 
 	function __construct()
 	{
 		parent::__construct();
+		$this->result = array();
 	}
 	
-	function modify_html($selector, $text)
+	function replace_html($selector, $text)
 	{
-		$this->result .= '<mh><s>' . $selector . '</s><t><![CDATA[' . $text . ']]></t></mh>';
+		$text = str_replace("'", "\\'", $text);
+		$text = str_replace("\r", "\\r", $text);
+		$text = str_replace("\n", "\\n", $text);
+		$this->script("jQuery('{$selector}').html('{$text}')");
 	}
 	
-	function modify_attribute($selector, $attribute, $text)
+	function replace($selector, $attribute, $text)
 	{
-		$this->result .= '<ma><s>' . $selector . '</s><a><![CDATA[' . $attribute . ']]></a><t><![CDATA[' . $text . ']]></t></ma>';
+		$text = str_replace("'", "\\'", $text);
+		$text = str_replace("\r", "\\r", $text);
+		$text = str_replace("\n", "\\n", $text);
+		$this->script("jQuery('{$selector}').attr('{$attribute}', '{$text}')");
+	}
+	
+	function insert($selector, $text, $position = "append")
+	{
+		$text = str_replace("'", "\\'", $text);
+		$text = str_replace("\r", "\\r", $text);
+		$text = str_replace("\n", "\\n", $text);
+		$position = trim(strtolower($position));
+		if ($position == "before" || $position == "after" || $position == "prepend" || $position == "append")
+		{
+			$this->script("jQuery('{$selector}').{$position}('{$text}')");
+		}
+	}
+	
+	function remove($selector)
+	{
+		$this->script("jQuery('{$selector}').remove()");
+	}
+	
+	function show($selector)
+	{
+		$this->script("jQuery('{$selector}').show()");
+	}
+	
+	function hide($selector)
+	{
+		$this->script("jQuery('{$selector}').hide()");
+	}
+	
+	function toggle($selector)
+	{
+		$this->script("jQuery('{$selector}').toggle()");
 	}
 	
 	function script($text)
 	{
-		$this->result .= '<sc><t><![CDATA[' . $text . ']]></t></sc>';
+		//$this->result .= '<sc><t><![CDATA[' . $text . ']]></t></sc>';
+		$this->result[] = array("sc", $text);
 	}
 	
 	function get_result()
 	{
-		return '<?xml version="1.0" encoding="utf-8"?><ajax>' . $this->result . '</ajax>';
+		while(@ob_end_clean());
+		header("Content-Type: application/json; charset=utf-8");
+		return json_encode($this->result);
+		/* return '<?xml version="1.0" encoding="utf-8"?><ajax>' . $this->result . '</ajax>'; */
 	}
 }
 

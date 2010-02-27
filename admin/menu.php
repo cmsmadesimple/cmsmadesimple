@@ -1,10 +1,11 @@
 <div id="navcontainer">
 
 <?php
-
+die('this file is not used');
 $userid = get_userid();
 global $gCms;
 $db =& $gCms->GetDb();
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 ?>
 
@@ -49,16 +50,16 @@ if (check_permission($userid, 'Add Groups') || check_permission($userid, 'Remove
 <?php
 
 }
-
+/*
 if (check_permission($userid, 'Modify Files'))
 {
 
-?>
-<a href="files.php"><?php echo lang('filemanagement')?></a>
-<?php
+?
+<a href="files.php"><?php echo lang('filemanagement')?</a>
+?php
 
 }
-
+*/
 ?>
 <a href="plugins.php"><?php echo lang('pluginmanagement')?></a>
 <?php
@@ -73,10 +74,12 @@ if (check_permission($userid, 'Modify Site Preferences'))
 }
 
 ?>
+<a href="systeminfo.php"><?php echo lang('systeminfo')?></a>
+<a href="adminlog.php"><?php echo lang('adminlog')?></a>
 <a href="adminlog.php"><?php echo lang('adminlog')?></a>
 <a href="<?php
 
-if (isset($config['assume_mod_rewrite']) && $config['assume_mod_rewrite'] == true)
+if (isset($config['url_rewriting']) && $config['url_rewriting'] == 'mod_rewrite')
 {
 	$query = "SELECT content_alias, content_id FROM " . cms_db_prefix() . "content WHERE default_content = '1'";
 	$result = $db->query($query);
@@ -102,7 +105,7 @@ else
 	echo "../index.php";
 }
 
-?>" rel="external"><?php echo lang('showsite')?></a>
+?>" target="_blank"><?php echo lang('showsite')?></a>
 <a href="editprefs.php"><?php echo lang('userprefs')?></a>
 <a href="logout.php"><?php echo lang('logout')?></a>
 

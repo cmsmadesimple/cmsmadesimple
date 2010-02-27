@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
+#$Id: class.cms_config.php 5313 2008-12-04 20:04:11Z calguy1000 $
 
 /**
  * Class to hold the configuration values found in the config.php file.

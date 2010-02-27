@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -18,29 +18,20 @@
 
 function smarty_cms_function_sitename($params, &$smarty)
 {
-	$result = CmsApplication::get_preference('sitename', 'CMSMS Site');
-	if (array_key_exists('assign', $params))
+     $result = get_site_preference('sitename', 'CMSMS Site');
+     if( isset($params['assign']) )
 	{
-		$smarty->assign($params['assign'], $result);
+	   global $gCms;
+           $smarty =& $gCms->GetSmarty();
+           $smarty->assign(trim($params['assign']),$result);
+	   return;
 	}
-	else
-	{
-		return $result;
-	}
+     return $result;
 }
 
 function smarty_cms_help_function_sitename()
 {
-        ?>
-        <h3>What does this do?</h3>
-        <p>Shows the name of the site.  This is defined during install and can bbe modified in the Global Settings section of the admin panel.</p>
-        <h3>How do I use it?</h3>
-        <p>Just insert the tag into your template/page like: <code>{sitename}</code></p>
-        <h3>What parameters does it take?</h3>
-		<ul>
-			<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
-		</ul>
-        <?php
+  echo lang('help_function_sitename');
 }
 
 function smarty_cms_about_function_sitename()

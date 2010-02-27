@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -30,10 +30,30 @@ function smarty_cms_function_anchor($params, &$smarty)
 	if (isset($params['accesskey'])) $accesskey = ' accesskey="'.$params['accesskey'].'"';
 	#End of first part added by Russ 2006/07/19
 	
-	if (isset($_SERVER['REQUEST_URI']))
+	
+	
+	 $pageURL = 'http';
+	 if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+	 $pageURL .= "://";
+	 if ($_SERVER["SERVER_PORT"] != "80") {
+	  $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+	 } 
+	 else{
+		   $str = $_SERVER['REQUEST_URI'];
+		   $pos = strpos($str,'?');
+	           if( $pos !== FALSE )
+			     {
+			       $str = substr($str,0,$pos);
+			     }
+        $pageURL .= $_SERVER["SERVER_NAME"].$str;
+        }
+  
+	if (isset($pageURL))
 	{
-		$url = $_SERVER['REQUEST_URI'].'#'.$params['anchor'];
+		$url = cms_htmlentities($_SERVER['REQUEST_URI']).'#'.$params['anchor'];
+		$url = str_replace('&amp;','***',$url);
 		$url = str_replace('&', '&amp;', $url);
+		$url = str_replace('***','&amp;',$url);
 		if (isset($params['onlyhref']) && ($params['onlyhref'] == '1' || $params['onlyhref'] == 'true'))
 			#Note if you set 'onlyheref' that is what you get - no class or title or tabindex or text
 			echo $url;
@@ -47,36 +67,10 @@ function smarty_cms_function_anchor($params, &$smarty)
 }
 	#Ammended by Russ for class, tabindex and title for anchor 2006/07/19
 function smarty_cms_help_function_anchor() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Makes a proper anchor link.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{anchor anchor='here' text='Scroll Down'}</code></p>
-	<h3>What parameters does it take?</h3>
-	<p>
-	<ul>
-	<li><tt>anchor</tt> - Where we are linking to.  The part after the #.</li>
-	<li><tt>text</tt> - The text to display in the link.</li>
-	<li><tt>class</tt> - The class for the link, if any</li>
-	<li><tt>title</tt> - The title to display for the link, if any.</li>
-	<li><tt>tabindex</tt> - The numeric tabindex for the link, if any.</li>
-	<li><tt>accesskey</tt> - The accesskey for the link, if any.</li>
-	<li><em>(optional)</em> <tt>onlyhref</tt> - Only display the href and not the entire link. No other options will work</li>
-	</ul>
-	</p>
-	<?php
+  echo lang('help_function_anchor');
 }
 	#Amended by Russ for class, tabindex and title for anchor 2006/07/19
 function smarty_cms_about_function_anchor() {
-	?>
-	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.1</p>
-	<p>
-	Change History:<br/>
-	<strong>Update to version 1.1 from 1.0</strong> <em>2006/07/19</em><br/>
-	Russ added the means to insert a title, a tabindex and a class for the anchor link. Westis added accesskey and changed parameter names to not include 'anchorlink'.<br/>
-	</hr>
-	</p>
-	<?php
+  echo lang('about_function_anchor');
 }
 ?>

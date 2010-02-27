@@ -1,6 +1,6 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#BUT withOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -19,22 +19,17 @@
 #$Id$
 
 /**
- * Represents a global content block in the database.
+ * Generic html blob class. This can be used for any logged in blob or blob related function.
  *
- * @author Ted Kulp
- * @since 0.6
- * @version $Revision$
- * @modifiedby $LastChangedBy$
- * @lastmodified $Date$
- * @license GPL
- **/
+ * @since		0.6
+ * @package		CMS
+ */
 class CmsGlobalContent extends CmsObjectRelationalMapping
-{	
-	var $params = array('id' => -1, 'name' => '', 'owner' => -1);
-	var $field_maps = array('htmlblob_name' => 'name', 'html' => 'content');
+{
+	var $params = array('id' => -1, 'name' => '', 'owner' => -1, 'content' => '');
+	var $field_maps = array('htmlblob_name' => 'name', 'html' => 'content', 'htmlblob_id' => 'id');
 	var $table = 'htmlblobs';
-	var $multi_language_params = array('content'); //For acts_as_multi_language
-	var $content_type = 'global_content'; //For acts_as_multi_language
+	var $sequence = 'htmlblobs_seq';
 	
 	public function __construct()
 	{
@@ -43,8 +38,8 @@ class CmsGlobalContent extends CmsObjectRelationalMapping
 	
 	public function validate()
 	{
-		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('name'))));
-		$this->validate_not_blank('content', lang('nofieldgiven',array(lang('content'))));
+		$this->validate_not_blank('name', lang('nofieldgiven', array(lang('name'))));
+		$this->validate_not_blank('content', lang('nofieldgiven', array(lang('content'))));
 		if ($this->name != '')
 		{
 			$result = $this->find_all_by_name($this->name);
@@ -56,12 +51,6 @@ class CmsGlobalContent extends CmsObjectRelationalMapping
 				}
 			}
 		}
-	}
-	
-	public function setup()
-	{
-		//$this->assign_acts_as('MultiLanguage');
-		$this->assign_acts_as('Versioned');
 	}
 
 	function IsOwner($user_id)
@@ -129,39 +118,34 @@ class CmsGlobalContent extends CmsObjectRelationalMapping
 	//Callback handlers
 	function before_save()
 	{
-		CmsEvents::send_event( 'Core', ($this->id == -1 ? 'AddGlobalContentPre' : 'EditGlobalContentPre'), array('global_content' => &$this));
+		Events::SendEvent('Core', ($this->id == -1 ? 'AddGlobalContentPre' : 'EditGlobalContentPre'), array('global_content' => &$this));
 	}
 	
-	function after_save()
+	function after_save(&$result)
 	{
-		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddGlobalContentPost' : 'EditGlobalContentPost'), array('global_content' => &$this));
-		CmsCache::clear();
+		Events::SendEvent('Core', ($this->create_date == $this->modified_date ? 'AddGlobalContentPost' : 'EditGlobalContentPost'), array('global_content' => &$this));
+		//CmsCache::clear();
 	}
 	
 	function before_delete()
 	{
-		CmsEvents::send_event('Core', 'DeleteGlobalContentPre', array('global_content' => &$this));
+		Events::SendEvent('Core', 'DeleteGlobalContentPre', array('global_content' => &$this));
 	}
 	
 	function after_delete()
 	{
-		CmsEvents::send_event('Core', 'DeleteGlobalContentPost', array('global_content' => &$this));
-		CmsCache::clear();
+		Events::SendEvent('Core', 'DeleteGlobalContentPost', array('global_content' => &$this));
+		//CmsCache::clear();
 	}
 }
 
 /**
  * @deprecated Deprecated.  Use CmsGlobalContent instead.
- **/
-/*
+ */
 class GlobalContent extends CmsGlobalContent
 {
 }
-*/
 
-/**
- * @deprecated Deprecated.  Use CmsGlobalContent instead.
- **/
 class HtmlBlob extends CmsGlobalContent
 {
 }

@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -24,14 +24,7 @@ function smarty_function_root_url($params, &$smarty)
 }
 
 function smarty_cms_help_function_root_url() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Prints the root url location for the site.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{root_url}</code></p>
-	<h3>What parameters does it take?</h3>
-	<p>None at this time.</p>
-	<?php
+  echo lang('help_function_root_url');
 }
 
 function smarty_cms_about_function_root_url() {

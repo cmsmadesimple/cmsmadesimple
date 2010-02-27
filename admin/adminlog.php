@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,13 +21,18 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
-$gCms = cmsms();
-$db = cms_db();
-$smarty = cms_smarty();
 
-$dateformat = get_preference(get_userid(),'date_format_string','%x %X');
+global $gCms;
+$db =& $gCms->GetDb();
+
+$dateformat = trim(get_preference(get_userid(),'date_format_string','%x %X')); 
+		  if( empty($dateformat) )
+		   {
+			 $dateformat = '%x %X';
+		   }
+
 
 $result = $db->Execute("SELECT * FROM ".cms_db_prefix()."adminlog ORDER BY timestamp DESC");
 $totalrows = $result->RecordCount();
@@ -40,7 +45,7 @@ if (isset($_GET['download']))
 	{
 		while ($row = $result->FetchRow()) 
 		{
-		  echo strftime($dateformat,$row['timestamp']).'\t';
+		  echo strftime($dateformat,$row['timestamp'])."\t";
 //			echo date("D M j, Y G:i:s", $row["timestamp"]) . "\t";
 		  echo $row['username'] . "\t";
 		  echo $row['item_id'] . "\t";
@@ -54,62 +59,92 @@ if (isset($_GET['download']))
 
 include_once("header.php");
 
-$db = cms_db();
-
 $userid = get_userid();
 $access = check_permission($userid, 'Clear Admin Log');
 
-if (isset($_GET['clear']) && $access)
+if (check_permission($userid, 'Modify Site Preferences'))
 {
-       $query = "DELETE FROM ".cms_db_prefix()."adminlog";
-       $db->Execute($query);
-	   
-	   $smarty->assign('message', lang('adminlogcleared'));
-	 
-     }
+	if (isset($_GET['clear']) && $access) {
+	       $query = "DELETE FROM ".cms_db_prefix()."adminlog";
+	       $db->Execute($query);
+	       echo $themeObject->ShowMessage(lang('adminlogcleared'));
+	}
 
-$page = 1;
-if (isset($_GET['page']))$page = $_GET['page'];
+	$page = 1;
+	if (isset($_GET['page']))$page = $_GET['page'];
 
-$limit = 20;
-$page_string = "";
-$from = ($page * $limit) - $limit;
+	$limit = 20;
+	$page_string = "";
+	$from = ($page * $limit) - $limit;
 
-$result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog ORDER BY timestamp DESC', $limit, $from);
+	$result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog ORDER BY timestamp DESC', $limit, $from);
 
 
-    $smarty->assign('have_result', $result && $result->RecordCount() > 0);
+	echo '<div class="pagecontainer">';
+	echo '<div class="pageoverflow">';
 
+	if ($result && $result->RecordCount() > 0) 
+	{
 	
-	$page_string = pagination($page, $totalrows, $limit);
-		
-	$smarty->assign('page_string', $page_string);
-	$smarty->assign('header_name', $themeObject->ShowHeader('adminlog'));
+		$page_string = pagination($page, $totalrows, $limit);
+		echo "<p class=\"pageshowrows\">".$page_string."</p>";
+		echo $themeObject->ShowHeader('adminlog').'</div>';
+		echo '<a href="adminlog.php'.$urlext.'&amp;download=1">'.lang('download').'</a>';
+
+		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+		echo '<thead>';
+		echo "<tr>\n";
+		echo "<th>".lang('user')."</th>\n";
+		echo "<th>".lang('itemid')."</th>\n";
+		echo "<th>".lang('itemname')."</th>\n";
+		echo "<th>".lang('action')."</th>\n";
+		echo "<th>".lang('date')."</th>\n";
+		echo "</tr>\n";
+		echo '</thead>';
+		echo '<tbody>';
+
+	       $currow = "row1";
+	       while ($row = $result->FetchRow()) {
+
+	               echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+	               echo "<td>".$row["username"]."</td>\n";
+	               echo "<td>".($row["item_id"]!=-1?$row["item_id"]:"&nbsp;")."</td>\n";
+	               echo "<td>".$row["item_name"]."</td>\n";
+	               echo "<td>".$row["action"]."</td>\n";
+				   echo "<td>".strftime($dateformat,$row['timestamp'])."</td>\n";
+		       //               echo "<td>".date("D M j, Y G:i:s", $row["timestamp"])."</td>\n";
+	               echo "</tr>\n";
+
+	               ($currow == "row1"?$currow="row2":$currow="row1");
+
+	       }
+	   
+		echo '</tbody>';
+		echo '</table>';
+
+		}
+		else {
+			echo '<p class="pageheader">'.lang('adminlog').'</p></div>';
+			echo '<p>'.lang('adminlogempty').'</p>';
+		}
+
+	if ($access && $result && $result->RecordCount() > 0) {
+		echo '<div class="pageoptions">';
+		echo '<p class="pageoptions">';
+		echo '<a href="adminlog.php'.$urlext.'&amp;clear=true">';
+		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon').'</a>';
+		echo '<a class="pageoptions" href="adminlog.php'.$urlext.'&amp;clear=true">'.lang('clearadminlog').'</a>';
+		echo '</p>';
+		echo '</div>';
+	}
+
+	echo '</div>';
+
+}
+
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 
-       while ($row = $result->FetchRow()) {
-		   
-		      $timestamp[]=$row["timestamp"]; 
-			  $username[]=$row["username"]; 
-			  $item_id[] =($row["item_id"]!=-1?$row["item_id"]:"&nbsp;"); 
-			  $item_name[]=$row["item_name"];
-			  $action[] = $row["action"]; 
-		      $dateformats[] = strftime($dateformat,$row['timestamp']); 
-			   $date[]= date("D M j, Y G:i:s", $row["timestamp"]); 
-			  
-			  
-			  $smarty->assign('timestamp', $timestamp); 
-              $smarty->assign('username', $username); 
-			  $smarty->assign('item_id', $item_id); 
-			  $smarty->assign('item_name', $item_name); 
-			  $smarty->assign('action', $action); 
-			  $smarty->assign('dateformats', $dateformats); 
-		      $smarty->assign('date', $date); 
- }
-            $smarty->assign('access_result', $access && $result && $result->RecordCount() > 0);
-			$smarty->assign('back_url', $themeObject->BackUrl());
-			$smarty->display('adminlog.tpl');
-			
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

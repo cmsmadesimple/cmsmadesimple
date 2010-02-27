@@ -41,6 +41,7 @@ abstract class CmsObject
 	public function __construct()
 	{
 		//echo 'instantiate - ', $this->__toString(), '<br />';
+		CmsProfiler::get_instance()->mark('Instantiate ' . get_class($this));
 	}
 	
 	/**

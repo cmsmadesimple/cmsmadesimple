@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -19,12 +19,20 @@
 #Author: Sorin Sbarnea / INTERSOL SRL
 function smarty_cms_function_embed($params, &$smarty)
 {
-	global $gCms;
+  global $gCms;
 
-	if(!empty($params['header']))
-	{
-		$code = <<<IFRAMECODE
+  $name = 'myframe';
+  if(isset($params['name']) )
+    {
+      $name = trim($params['name']);
+    }
+
+  if(isset($params['header']))
+    {
+      $code = <<<IFRAMECODE
 <script type="text/javascript">
+  // <![CDATA[
+
 
 /***********************************************
 * IFrame SSI script II- S Dynamic Drive DHTML code library (http://www.dynamicdrive.com)
@@ -34,7 +42,11 @@ function smarty_cms_function_embed($params, &$smarty)
 
 //Input the IDs of the IFRAMES you wish to dynamically resize to match its content height:
 //Separate each ID with a comma. Examples: ["myframe1", "myframe2"] or ["myframe"] or [] for none:
-var iframeids=["myframe"]
+
+IFRAMECODE;
+      // and add the name.
+      $code .= 'var iframeids=["'.$name.'"]'."\n";
+      $tmp = <<<IFRAMECODE
 
 //Should script hide iframe from browsers that don't support this script (non IE5+/NS6+ browsers. Recommended):
 var iframehide="yes"
@@ -90,48 +102,36 @@ else if (window.attachEvent)
 window.attachEvent("onload", resizeCaller)
 else
 window.onload=resizeCaller
-
+  // ]]>
 </script>
 IFRAMECODE;
-	return $code;
-	}
-
-	if (!empty($params['url']))
-	{
-		$url = $params['url'];
-	} else return "<pre>Invalid call for embed function.<pre>";
-
-//	$params['height']='200%';
-//	$params['width']='100%';
-	//
-//	return '<iframe width="'.$params['width'].
-//		'" scrolling="yes" height="'.$params['height'].
-//		'" frameborder="0" marginwidth="0" marginheight="0" src="http://www2.romanianoffice.ro/forum/index.php"></iframe>';
- 
-	return   "<iframe id='myframe' src='$url' scrolling='no' marginwidth='0' marginheight='0' frameborder='0' vspace='0' hspace='0' style='overflow:visible; width:99%; display:none'></iframe>";
-
+ $code .= $tmp;
+ return $code;
+    }
+  
+  if (isset($params['url']))
+    {
+      $url = trim($params['url']);
+    } 
+  else if( isset($params['src']) )
+    {
+      $url = trim($params['src']);
+    }
+  else return "<pre>Invalid call for embed function.<pre>";
+  
+  //	$params['height']='200%';
+  //	$params['width']='100%';
+  //
+  //	return '<iframe width="'.$params['width'].
+  //		'" scrolling="yes" height="'.$params['height'].
+  //		'" frameborder="0" marginwidth="0" marginheight="0" src="http://www2.romanianoffice.ro/forum/index.php"></iframe>';
+  
+  return   "<iframe id='{$name}' name='{$name}' src='$url' scrolling='no' marginwidth='0' marginheight='0' frameborder='0' style='overflow:visible; width:99%; display:none'></iframe>";
+  
 }
 
 function smarty_cms_help_function_embed() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Enable inclusion (embeding) of any other application into the CMS. The most usual use could be a forum. 
-	This implementation is using IFRAMES so older browsers can have problems. Sorry bu this is the only known way 
-	that works without modifing the embeded application.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{embed url=http://www.google.com/}</code><br></p>
-        <h4>Example to make the iframe larger</h4>
-	<p>Add the following to your style sheet:</p>
-        <pre>#myframe { height: 600px; }</pre>
-        <h3>What parameters does it take?</h3>
-        <ul>
-               <li><em>(required)</em>url - the url to be included 
-               <li><em>(optional)</em>header=true - this will generate the header code for good resizing of the IFRAME.</li>
-
-        </ul>
-       <p>You must include in your page content {embed url=..} and in the "Metadata:" section (advanced tab) you must put {embed header=true}. Also be sure to put this in between the "head" tags of your template: {metadata}</p>
-                                                      
-	<?php
+  echo lang('help_function_embed');
 }
 
 function smarty_cms_about_function_embed() {

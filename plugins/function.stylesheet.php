@@ -1,7 +1,7 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.org
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -15,76 +15,108 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#
-#$Id$
 
 function smarty_cms_function_stylesheet($params, &$smarty)
 {
+	if (!function_exists('get_stylesheet_tag'))
+	{
+		function get_stylesheet_tag($cssid,$media='')
+		{
+			global $gCms;
+			$config = $gCms->GetConfig();
+
+			$str = '';
+			$url = '';
+			//if( $config['url_rewriting'] != 'none' )
+			if( 0 )
+			{
+				$url = $config['root_url'].'/stylesheet.php/'.$cssid;
+				if( !empty($media) )
+				{
+					$url .= '/'.$media;
+				}
+			}
+			else
+			{
+				$url = $config['root_url'].'/stylesheet.php?cssid='.$cssid;
+				if( !empty($media) )
+				{
+					$url .= '&amp;mediatype='.$media;
+				}
+			}
+
+			$str = '<link rel="stylesheet" type="text/css" ';
+			if( !empty($media) )
+			{
+				$str .= 'media="'.$media.'" ';
+			}
+			$str .= 'href="'.$url.'" />';
+
+			return $str;
+		}
+	}
+
 	global $gCms;
-	$pageinfo =& $gCms->variables['pageinfo'];
-	$root_url = CmsConfig::get('root_url');
-	
-	$result = '';
-	
+	$config = &$gCms->config;
+	$pageinfo = &$gCms->variables['pageinfo'];
+	$template_id=$pageinfo->template_id;
+	if (isset($params["templateid"]) && $params["templateid"]!="")
+	{
+		$template_id=$params["templateid"];
+	}
+
+	$db =& $gCms->GetDb();
+
+	$stylesheet = '';
+
 	if (isset($params['name']) && $params['name'] != '')
 	{
-		$result .= '<link rel="result" type="text/css" ';
-		if (isset($params['media']) && $params['media'] != '')
+		$query = 'SELECT css_id FROM '.cms_db_prefix().'css 
+			WHERE css_name = ?';
+		$cssid = $db->GetOne( $query, array($params['name']));
+		if( $cssid )
 		{
-			$result .= 'media="' . $params['media'] . '" ';
+			$stylesheet .= get_stylesheet_tag($cssid,isset($params['media'])?$params['media']:'');
+			$stylesheet .= "\n";
 		}
-		$result .= 'href="'.$root_url.'/stylesheet.php?name='.$params['name'];
-		$result .= "\" />\n"; 
 	}
 	else
 	{
-		$template = cms_orm('cms_template')->find_by_id($pageinfo->template_id);
-		if ($template)
-		{
-			foreach ($template->get_stylesheet_media_types() as $media)
+		$query = 'SELECT DISTINCT A.css_id,A.media_type,B.assoc_order 
+		FROM '.cms_db_prefix().'css A, '.cms_db_prefix().'css_assoc B
+		WHERE A.css_id = B.assoc_css_id
+		AND B.assoc_type = ?
+		AND B.assoc_to_id = ?
+		ORDER BY B.assoc_order';
+		
+		$res = $db->GetArray($query,array('template',$template_id));
+		if( $res ) {
+			$fmt1 = '<link rel="stylesheet" type="text/css" media="%s" href="%s" />';
+			$fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
+			foreach( $res as $one )
 			{
-				$result .= '<link rel="result" type="text/css" ';
-				if ($media != '')
-				{
-					$result .= 'media="'.$media.'" ';
-				}
-				$result .= "href=\"{$root_url}/stylesheet.php?templateid={$pageinfo->template_id}";
-				if ($media != '')
-				{
-					$result .= '&amp;mediatype='.urlencode($media);
-				}
-				$result .= "\" />\n"; 
+				$tmp = str_replace(' ','',$one['media_type']);
+				$stylesheet .= get_stylesheet_tag($one['css_id'],$tmp);
+				$stylesheet .= "\n";
 			}
 		}
 	}
-	
-	if (array_key_exists('assign', $params))
+
+	if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 	{
-		$smarty->assign($params['assign'], $result);
+		$stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
 	}
-	else
-	{
-		return $result;
-	}
+
+	return $stylesheet;
 }
 
-function smarty_cms_help_function_stylesheet() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Gets stylesheet information from the system.  By default, it grabs all of the stylesheets attached to the current template.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page's head section like: <code>{stylesheet}</code></p>
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one spefically named one, whether it's attached to the current template or not.</li>
-		<li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
-		<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
-	</ul>
-	</p>
-	<?php
+function smarty_cms_help_function_stylesheet()
+{
+	echo lang('help_function_stylesheet');
 }
 
-function smarty_cms_about_function_stylesheet() {
+function smarty_cms_about_function_stylesheet()
+{
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 	<p>Version: 1.0</p>
@@ -94,6 +126,4 @@ function smarty_cms_about_function_stylesheet() {
 	</p>
 	<?php
 }
-
-# vim:ts=4 sw=4 noet
 ?>

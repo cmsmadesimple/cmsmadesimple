@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,8 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -31,16 +33,20 @@ $action = '';
 if (isset($_GET['action'])) $action = $_GET['action'];
 
 $userid = get_userid();
-$access = check_permission($userid, 'Modify Modules');
+$access = check_permission($userid, 'Modify User-defined Tags');
+if (!$access) {
+  die('Permission Denied');
+  return;
+}
+
+$smarty = new CmsSmarty($gCms->config);
+CmsSmarty::load_plugins($smarty);
 
 include_once("header.php");
 
 if (FALSE == empty($_GET['message'])) {
     echo $themeObject->ShowMessage(lang($_GET['message']));
 }
-
-$udt_object = new CmsUserTag();
-$user_defined_tags = $udt_object->find_all();
 
 echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
@@ -57,20 +63,23 @@ echo '<tbody>';
 
 $curclass = "row1";
 
-foreach($user_defined_tags as $tag)
+foreach($gCms->cmsplugins as $oneplugin)
 {
+	if (array_key_exists($oneplugin, $gCms->userplugins))
+	{
 		echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
-		echo "<td><a href=\"edituserplugin.php?userplugin_id=".$tag->params['id']."\">".$tag->params['name']."</a></td>\n";
-		echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php?userplugin_id=".$tag->params['id']."\">";
+		echo "<td><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">$oneplugin</a></td>\n";
+		echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
 		echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 		echo "</a></td>\n";
-		echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php?userplugin_id=".$tag->params['id']."\" onclick=\"return confirm('".lang('deleteconfirm', $tag->params['name'])."');\">";
+		echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneplugin),true)."');\">";
 		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 		echo "</a></td>\n";
 
 		echo "</tr>\n";
 
 		($curclass=="row1"?$curclass="row2":$curclass="row1");
+	}
 }
 
 	?>
@@ -78,10 +87,10 @@ foreach($user_defined_tags as $tag)
 </table>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="adduserplugin.php">
+			<a href="adduserplugin.php<?php echo $urlext; ?>">
 				<?php
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addusertag'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="adduserplugin.php">'.lang("addusertag");
+					echo ' <a class="pageoptions" href="adduserplugin.php'.$urlext.'">'.lang("addusertag");
 				?>
 			</a>
 		</p>

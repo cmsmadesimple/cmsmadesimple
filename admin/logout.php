@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -23,16 +23,15 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 $userid = "";
-if ($_SESSION['cmsms_user_id'])
-{
- 	$userid = $_SESSION['cmsms_user_id'];
+if( isset($_SESSION['cms_admin_user_id'])) {
+  $userid = $_SESSION['cms_admin_user_id'];
 }
 
 $username= "";
-if ($_SESSION['login_user_username'])
-{
- 	$username = $_SESSION['login_user_username'];
+if( isset($_SESSION['login_user_username'])) {
+  $username = $_SESSION['login_user_username'];
 }
+
 
 audit($userid, $username, 'User Logout');
 
@@ -41,8 +40,9 @@ audit($userid, $username, 'User Logout');
 #setcookie('cms_passhash', '', time() - 3600);
 
 #Now call the event
-CmsEventOperations::send_event('Core', 'LogoutPost');
+Events::SendEvent('Core', 'LogoutPost');
 
+#echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./login.php"></head><body>Logging out.  Redirecting to <a href="./login.php">login</a> page...</body></html>');
 $_SESSION['logout_user_now'] = "1";
 redirect("login.php");
 

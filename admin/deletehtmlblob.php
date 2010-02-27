@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,8 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.template.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -40,22 +42,26 @@ if (isset($_GET["htmlblob_id"]))
 		$gcbops =& $gCms->GetGlobalContentOperations();
 		$templateops =& $gCms->GetTemplateOperations();
 
-		$blobobj = cmsms()->global_content->find_by_id($htmlblob_id);
+		$blobobj = $gcbops->LoadHtmlBlobByID($htmlblob_id);
 		$htmlblob_name = $blobobj->name;
 
 		if ($blobobj)
-		{	
-			$result = $blobobj->delete();
+		{
+			Events::SendEvent('Core', 'DeleteGlobalContentPre', array('global_content' => &$blobobj));
+
+			$result = $blobobj->Delete();
 		}
 
 		if ($result == true)
-		{	
+		{
+			Events::SendEvent('Core', 'DeleteGlobalContentPost', array('global_content' => &$blobobj));
+
 			audit($htmlblob_id, $htmlblob_name, 'Deleted Html Blob');
 		}
 	}
 }
 
-CmsResponse::redirect("listhtmlblobs.php");
+redirect("listhtmlblobs.php".$urlext);
 
 # vim:ts=4 sw=4 noet
 ?>

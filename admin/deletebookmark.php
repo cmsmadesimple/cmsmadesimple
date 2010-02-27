@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,8 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.bookmark.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -31,16 +33,18 @@ if (isset($_GET["bookmark_id"]))
 
 	$result = false;
 
-	$markobj = cmsms()->bookmark->find_by_id($bookmark_id);
+	global $gCms;
+	$bookops =& $gCms->GetBookmarkOperations();
+	$markobj = $bookops->LoadBookmarkByID($bookmark_id);
 
 	if ($markobj)
 	{
-		$result = $markobj->delete();
+		$result = $markobj->Delete();
 	}
 
 }
 
-redirect("listbookmarks.php");
+redirect("listbookmarks.php".$urlext);
 
 # vim:ts=4 sw=4 noet
 ?>

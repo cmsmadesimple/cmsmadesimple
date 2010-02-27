@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.org
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -17,460 +17,391 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
-
 $CMS_ADMIN_PAGE=1;
-
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+
+check_login();
 
 if (isset($_POST["cancel"]))
 {
-	redirect("listcontent.php");
+	redirect("listcontent.php".$urlext);
 }
 
-$gCms = cmsms();
-$smarty = cms_smarty();
-$contentops =& $gCms->GetContentOperations();
-$templateops =& $gCms->GetTemplateOperations();
-
-#Make sure we're logged in and get that user id
-check_login();
-$userid = get_userid();
-$user = CmsLogin::get_current_user();
-
-$language = CmsMultiLanguage::get_user_default_language($user);
-$smarty->assign('language', $language);
-
-//Need to know where we're submitting to
-$smarty->assign('action', 'editcontent.php');
-
-//See if some variables are returned
-$start_tab = coalesce_key($_REQUEST, 'start_tab', isset($_REQUEST['permission_add_submit']) ? '3' : '1');
-$content_id = coalesce_key($_REQUEST, 'content_id', '-1');
-$page_type = coalesce_key($_REQUEST, 'page_type', 'content');
-$orig_page_type = coalesce_key($_POST, 'orig_page_type', 'content');
-$current_language = coalesce_key($_POST, 'current_language', $language);
-$orig_current_language = coalesce_key($_POST, 'orig_current_language', $language);
-$preview = array_key_exists('previewbutton', $_POST);
-$submit = array_key_exists('submitbutton', $_POST);
-$apply = array_key_exists('applybutton', $_POST);
-
-$dateformat = get_preference(get_userid(),'date_format_string','%x %X');
+include_once("../lib/classes/class.admintheme.inc.php");
+require_once(dirname(__FILE__).'/editcontent_extra.php');
 
 $cms_ajax = new CmsAjax();
-
 $cms_ajax->register_function('ajaxpreview');
-$cms_ajax->register_function('change_block_type');
+$cms_ajax->register_function('editcontent_apply');
 
+$headtext = $cms_ajax->get_javascript();
+
+function check_editcontent_perms($page_id,$adminonly = false)
+{
+  $userid = get_userid();
+  $access = check_ownership($userid, $page_id) || check_permission($userid, 'Modify Any Page') ||
+    check_permission($userid, 'Manage All Content');
+  if( $adminonly ) return $access;
+  if (!$access)
+    {
+      $access = check_authorship($userid, $page_id);
+    }
+  return $access;
+}
+
+function do_save_content($editor,$data)
+{
+  $editor->fill_from_form_data($data);
+  $error = $editor->validate();
+
+  if( $error === FALSE )
+    {
+      $editor->save();
+    }
+
+  return $error;
+}
+
+function editcontent_apply($params)
+{
+  $page_id = $_REQUEST['page_id'];
+  $resp = new CmsAjaxResponse();
+  $resp->script("jQuery('.applybutton').attr('disabled','');");
+  if( check_editcontent_perms($page_id) )
+    {
+      $gCms = cmsms();
+      $contentops =& $gCms->GetContentOperations();
+
+      $contentobj = $contentops->LoadContentFromId($page_id);
+      $editortype = $contentops->get_content_editor_type($contentobj);
+      $editor = new $editortype($contentobj);
+      $error = do_save_content($editor,$params);
+
+      if( $error === FALSE )
+        {
+	  $str = '<div class="pagemcontainer"><ul class="pagemessage">'.lang('contentupdated').'</p></div>';
+	  $resp->replace_html('#Edit_Content_Result',$str);
+	}
+      else
+	{
+	  $list = '<li>'.explode('</li><li>',$error).'</li>';
+	  $str = '<div class="pageerrorcontainer"><ul class="pageerror">'.$list.'</ul></div>';
+	  $resp->replace_html('#Edit_Content_Result',$str);
+	}
+    }
+  return $resp->get_result();
+}
+
+
+$userid = get_userid();
+$gCms = cmsms();
+$contentops =& $gCms->GetContentOperations();
+$error = FALSE;
+$page_id = "";
+if (isset($_REQUEST["page_id"])) $page_id = $_REQUEST["page_id"];
+$submit = false;
+if (isset($_POST["submitbutton"])) $submit = true;
+$apply = false;
+if (isset($_POST["applybutton"])) $apply = true;
+
+if( !check_editcontent_perms($page_id) )
+  {
+    echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('editpage')))."</p></div>";
+    echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+
+    include_once("footer.php");
+    return;
+  }
+
+
+//
+// GET THE CONTENT OBJECT AND INSTANTIATE THE EDITOR
+//
+$editor = '';
+$content_type = 'Content';
+$orig_content_type = 'Content';
+$contentobj = '';
+if( isset($_POST['serialized_content']) )
+  {
+    // we're here probably because of a submit, apply, template
+    // or content type change.
+    if (isset($_POST["content_type"]))
+      {
+	$content_type = $_POST["content_type"];
+      }
+    if( isset($params['orig_content_type']) )
+      {
+	$orig_content_type = $params['orig_content_type'];
+      }
+
+    CmsContentOperations::load_content_types();
+    $contentobj = UnserializeObject($_POST['serialized_content']);
+    if( get_class($contentobj) != $content_type )
+      {
+	// content type has changed.
+	copycontentobj($contentobj,$content_type);
+      }
+    else
+      {
+	$editortype = $contentops->get_content_editor_type($contentobj);
+	$editor = new $editortype($contentobj);
+	$editor->fill_from_form_data($_POST);
+      }
+  }
+else if($page_id)
+  {
+    // we're loading this content from scratch.
+    $contentobj = $contentops->LoadContentFromId($page_id);
+    if( !is_object($contentobj) ) die("debug... wheres the content for $page_id");
+    $content_type = get_class($contentobj);
+    $orig_content_type = $content_type;
+  }
+else
+  {
+    // we're creating a new content object
+    CmsContentOperations::load_content_types();
+    $contentobj = new $content_type();
+    $contentobj->set_cachable(get_site_preference('page_cachable',1));
+    $contentobj->set_active(get_site_preference('page_active',1));
+    $contentobj->set_show_in_menu(get_site_preference('page_showinmenu',1));
+    $contentobj->set_owner($userid);
+    $contentobj->set_last_modified_by($userid);
+    $contentobj->set_metadata(get_site_preference('page_metadata'));
+    $contentobj->set_secure(get_site_preference('page_secure',0));
+
+    $contentobj->set_property_value('content_en',get_site_preference('defaultpagecontent'));
+    $contentobj->set_property_value('searchable',get_site_preference('page_searchable',1));
+    $contentobj->set_property_value('extra1',get_site_preference('page_extra1'));
+    $contentobj->set_property_value('extra2',get_site_preference('page_extra2'));
+    $contentobj->set_property_value('extra3',get_site_preference('page_extra3'));
+
+    $parent_id = get_preference($userid, 'default_parent', -1);
+    if (isset($_GET["parent_id"])) $parent_id = $_GET["parent_id"];
+    $contentobj->set_parent_id($parent_id);
+
+    {
+      $templateops =& $gCms->GetTemplateOperations();
+      $dflt = $templateops->LoadDefaultTemplate();
+      if( isset($dflt) )
+	{
+	  $contentobj->set_template_id($dflt->id);
+	}
+    }
+
+    
+  }
+
+if( !is_object($editor) )
+  {
+    // make sure we have a valid editor object going forward.
+    $editortype = $contentops->get_content_editor_type($contentobj);
+    $editor = new $editortype($contentobj);
+  }
+
+//
+// HANDLE SUBMIT OR APPLY
+//
+if ($submit || $apply)
+  {
+    $error = do_save_content($editor,$_POST);
+    
+    if ($error === FALSE)
+      {
+	if ($submit)
+	  {
+	    redirect("listcontent.php".$urlext.'&message=contentupdated');
+	  }
+      }
+  }
+
+
+//
+// BEGIN THE CODE TO GENERATE THE PAGE
+//
+if (strlen($contentobj->name()) > 0)
+{
+	$CMS_ADMIN_SUBTITLE = $contentobj->name();
+}
+
+// Detect if a WYSIWYG is in use, and grab its form submit action
+$addlScriptSubmit = '';
+foreach (array_keys($gCms->modules) as $moduleKey)
+{
+	$module =& $gCms->modules[$moduleKey];
+	if (!($module['installed'] && $module['active'] && $module['object']->IsWYSIWYG()))
+	{
+		continue;
+	}
+
+	if ($module['object']->WYSIWYGActive() or get_preference(get_userid(), 'wysiwyg') == $module['object']->GetName())
+	{
+		$addlScriptSubmit .= $module['object']->WYSIWYGPageFormSubmit();
+	}
+}
+
+$headtext .= <<<EOSCRIPT
+<script type="text/javascript">
+// <![CDATA[
+jQuery(document).ready(function(){
+   jQuery('.applybutton').click(function(){
+
+      // code to get text from wysiwyg editor
+      $addlScriptSubmit
+      
+      jQuery('#Edit_Content_Result').html('');
+      jQuery(this).attr('disabled','disabled');
+      var data = jQuery('#contentform').serializeForCmsAjax();
+      cms_ajax_editcontent_apply(data);
+      return false;
+   });
+});
+  // ]]>
+</script>
+EOSCRIPT;
+include_once("header.php");
 $cms_ajax->process_requests();
+$themeObject = $gCms->variables['admintheme'];
 
-#See what kind of permissions we have
-$access = check_permission($userid, 'Modify Any Page');
-$adminaccess = $access;
+// AJAX result container
+print '<div id="Edit_Content_Result"></div>';
 
-require_once("header.php");
-CmsAdminTheme::inject_header_text($cms_ajax->get_javascript()."\n");
+$tmpfname = '';
+$tabnames = '';
 
-#No access?  Just display an error and exit.
-if (!$access) {
-	$smarty->assign('error_message', lang('noaccessto',array(lang('addcontent'))));
-	$smarty->display('elements/pageerror.tpl');
-	include_once('footer.php');
-	exit;
-}
-
-function get_type($n)
+if (!check_editcontent_perms($page_id))
 {
-	return $n->type;
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('editpage')))."</p></div>";
 }
-
-function get_friendlyname($n)
+else
 {
-	return $n->friendlyname;
-}
-
-function copycontentobj(&$page_object, $page_type)
-{
-	$contentops = cmsms()->GetContentOperations();
-
-	$newcontenttype = strtolower($page_type);
-	//$contentops->LoadContentType($newcontenttype);
-	$tmpobj = $contentops->CreateNewContent($newcontenttype);
-
-	$tmpobj->params = $page_object->params;
-	$tmpobj->mProperties = $page_object->mProperties;
-
-	$page_object = $tmpobj;
-}
-
-function &get_page_object(&$page_type, &$orig_page_type, $userid, $content_id, $params, $lang = 'en_US')
-{
-	global $gCms;
-
-	$page_object = new StdClass();
-
-	if (isset($params["serialized_content"]))
+	#Get a list of content_types and build the dropdown to select one
+	$typesdropdown = '<select name="content_type" onchange="document.contentform.submit()" class="standard">';
+	$contenttypes = CmsContentOperations::list_content_types();
+	foreach ($contenttypes as $onetype => $label)
 	{
-		$page_object = unserialize_object($params["serialized_content"]);
-		
-		//Do this first -- so alias gets set
-		$page_object->set_property_value('name', $_REQUEST['name'], $lang);
-		$page_object->set_property_value('menu_text', $_REQUEST['menu_text'], $lang);
+	  if( $onetype == 'ErrorPage' && !check_permission($userid,'Manage All Content') ) 
+	    {
+	      continue;
+	    }
 
-		$page_object->update_parameters($params['content'], $lang, get_magic_quotes_gpc());
-		if (strtolower(get_class($page_object)) != $page_type)
-		{
-			copycontentobj($page_object, $page_type);
-			$orig_page_type = $page_type;
-		}
+	  $typesdropdown .= '<option value="' . $onetype . '"';
+	  if ($onetype == $content_type)
+	    {
+	      $typesdropdown .= ' selected="selected" ';
+	      $orig_content_type = $onetype;
+	    }
+	  $typesdropdown .= ">".$label."</option>";
 	}
+	$typesdropdown .= "</select>";
+
+	if (FALSE == empty($error))
+	{
+	  echo $themeObject->ShowErrors($error);
+	}
+
+	echo '<div class="pagecontainer pageoverflow">'."\n";
+	echo $themeObject->ShowHeader('editcontent');
+	echo '<div id="page_tabs" style="width:100%;">'."\n";
+
+	$tabnames = $editor->get_tab_names();
+	if (count($tabnames) == 0)
+	  {
+	    // this is a problem.
+	  }
 	else
-	{
-		$page_object = cmsms()->GetContentOperations()->LoadContentFromId($content_id);
-		$page_type = $page_object->type;
-		$orig_page_type = $page_object->type;
-		$page_object->last_modified_by = $userid;
-	}
+	  {
+	    foreach ($tabnames as $onetab => $label)
+	      {
+		echo '<div id="edittab'.$onetab.'">'.$label.'</div>'."\n";
+	      }
+	  }
 	
-	return $page_object;
+	// Make a preview tab
+	if ($contentobj->is_previewable())
+	  {
+	    echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##cms_ajax_ajaxpreview(jQuery(\'#contentform\').serializeForCmsAjax()); return false;">'.lang('preview').'</div>';
+	  }
+
+	$turl = 'editcontent.php';
+	if(isset($page_id)) $turl .= "?page_id=$page_id";
+		?>
+	</div>
+	<div style="clear: both;"></div>
+	<form method="post" action="<?php echo $turl; ?>" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
+<div>
+  <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+  <input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
+  <input type="hidden" name="page_id" value="<?php echo $page_id?>" />
+  <input type="hidden" name="orig_content_type" value="<?php echo $orig_content_type ?>" />
+</div>
+<div id="page_content">
+<?php
+$submit_buttons = '<div class="pageoverflow">
+<p class="pagetext">&nbsp;</p>
+<p class="pageinput">
+ <input type="submit" name="submitbutton" accesskey="s" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('submitdescription').'" />';
+$submit_buttons .= ' <input type="submit" accesskey="c" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
+$submit_buttons .= ' <input type="submit" accesskey="a" name="applybutton" value="'.lang('apply').'" class="pagebutton applybutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
+if( $contentobj->is_viewable() && $contentobj->active() ) {
+  $submit_buttons .= ' <a rel="external" href="'.$contentobj->get_url().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
+ }
+$submit_buttons .= '</p></div>';
+
+ $tabindex = 0;
+ foreach( $tabnames as $onetab => $label )
+   {
+     echo '<div id="edittab'.$onetab.'_c">'."\n";
+     if ($tabindex == 0)
+       {
+	 echo $submit_buttons;
+	 
+	 ?>
+	   <div class="pageoverflow">
+           <div class="pagetext"><?php echo lang('contenttype'); ?>:</div>
+	   <div class="pageinput"><?php echo $typesdropdown; ?></div>
+	   </div>
+ 	 <?php
+       }
+     $tabindex++;
+
+     $contentarray = $editor->get_tab_elements($onetab);
+     
+     for($i=0;$i<count($contentarray);$i++)
+       {
+	 $tmp =& $contentarray[$i];
+	 ?>
+	   <div class="pageoverflow">
+	      <div class="pagetext"><?php echo $tmp[0]; ?></div>
+	      <div class="pageinput"><?php echo $tmp[1]; ?></div>
+           </div>
+	 <div style="clear: both;"></div>
+	 <?php
+       }
+
+     echo '</div>'."\n";
+   }
+     if ($contentobj->is_previewable())
+       {
+	 echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
+	 ?>
+	   <div class="pagewarning"><?php echo lang('info_preview_notice') ?></div>
+	   <iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo "{$config['root_url']}/index.php?{$config['query_var']}=__CMS_PREVIEW_PAGE__"; } ?>></iframe>
+	   <?php
+	   echo '</div></div>';
+	   echo '<div style="clear: both;"></div>';
+       }
+       echo $submit_buttons;
+     ?>
+     </div>
+     </form>
+</div>
+
+<?php
+
 }
 
-function load_permissions($params, $page_object, &$start_tab)
-{
-	$smarty = cms_smarty();
-
-	$permission_defns = CmsAcl::get_permission_definitions('Core', 'Page');
-	$custom_permission_defns = CmsAcl::get_permission_definitions('Core', 'Page');
-	$permission_list = array();
-
-	if (isset($params["serialized_permissions_defns"]))
-	{
-		$custom_permission_defns = unserialize_object($params["serialized_permissions_defns"]);
-
-		if (isset($params['permission_add_submit']))
-		{
-			for ($x = 0; $x < count($custom_permission_defns); $x++)
-			{
-				if ($params['permission_id'] == $custom_permission_defns[$x]['id'])
-				{
-					$add_me = true;
-
-					$group_id = -1;
-					$gorup_name = _('Everyone');
-					
-					if (isset($params['group_id']) && $params['group_id'] > -1)
-					{
-						$group = cms_orm()->cms_group->find_by_id($params['group_id']);
-						if ($group)
-						{
-							$group_id = $group->id;
-							$group_name = $group->name;
-						}
-						else
-						{
-							$add_me = false;
-						}
-					}
-					
-					if ($group_id == -1)
-					{
-						$group_name = _('Everyone');
-					}
-					
-					$custom_permission_defns[$x]['entries'][] = array('has_access' => $params['permission_allow'] == 1 ? lang('true') : lang('false'), 'object_name' => $page_object->get_property_value('menu_text', $current_language) . ' - ' . $page_object->hierarchy, 'group_id' => $group_id, 'group_name' => $group_name, 'object_id' => $page_object->id);
-				}
-			}
-		}
-		else
-		{
-			foreach ($params as $k=>$v)
-			{
-				if (starts_with($k, 'delete_permission'))
-				{
-					$start_tab = '3';
-
-					list($blah, $group_id, $permission_id) = explode('-', $k);
-
-					if ($group_id == '')
-						$group_id = -1;
-
-					if ($group_id && $permission_id)
-					{
-						for ($x = 0; $x < count($custom_permission_defns); $x++)
-						{
-							if ($permission_id == $custom_permission_defns[$x]['id'])
-							{
-								for ($y = 0; $y < count($custom_permission_defns[$x]['entries']); $y++)
-								{
-									if ($custom_permission_defns[$x]['entries'][$y]['group_id'] == $group_id)
-									{
-										unset($custom_permission_defns[$x]['entries'][$y]);
-										break;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	else
-	{
-		for ($x = 0; $x < count($permission_defns); $x++)
-		{
-			$custom_permission_defns[$x]['entries'] = CmsAcl::get_permissions('Core', 'Page', $permission_defns[$x]['name'], $page_object->id, true);
-		}
-	}
-	
-	for ($x = 0; $x < count($permission_defns); $x++)
-	{
-		$permission_list[$permission_defns[$x]['id']] = $permission_defns[$x]['name'];
-		$entries = CmsAcl::get_permissions('Core', 'Page', $permission_defns[$x]['name'], $page_object->parent_id, true);
-		if (isset($custom_permission_defns[$x]['entries']))
-		{
-			foreach ($custom_permission_defns[$x]['entries'] as $custom_entry)
-			{
-				$add = true;
-				foreach ($entries as $orig_entry)
-				{
-					if ($orig_entry['id'] == $custom_entry['id'] && $orig_entry['group_id'] == $custom_entry['group_id'])
-						$add = false;
-				}
-				
-				if ($add)
-					$entries[] = $custom_entry;
-			}
-		}
-		
-		foreach ($entries as &$oneentry)
-		{
-			$oneentry['object_name'] = '';
-			if ($oneentry['object_id'] == 1)
-			{
-				$oneentry['object_name'] = lang('root');
-			}
-			else if ($oneentry['object_id'] != $page_object->id)
-			{
-				$content = cms_orm()->content->find_by_id($oneentry['object_id']);
-				if ($content != null)
-				{
-					$oneentry['object_name'] = $content->get_property_value('menu_text', $current_language) . ' - ' . $content->hierarchy;
-				}
-			}
-		}
-		$permission_defns[$x]['entries'] = $entries;
-	}
-	
-	$smarty->assign('permission_defns', $permission_defns);
-	$smarty->assign('permission_list', $permission_list);
-	$smarty->assign("serialized_permissions_defns", serialize_object($custom_permission_defns));
-	
-	return $permission_defns;
-}
-
-function save_permissions($params, $page_object, $permission_defns)
-{
-	for ($x = 0; $x < count($permission_defns); $x++)
-	{
-		$dfn = $permission_defns[$x];
-		for ($y = 0; $y < count($permission_defns[$x]['entries']); $y++)
-		{
-			$perm = $permission_defns[$x]['entries'][$y];
-			if ($perm['object_id'] == $page_object->id)
-			{
-				CmsAcl::set_permission('Core', 'Page', $dfn['name'], $page_object->id, $perm['group_id'], $perm['has_access'] == 'True' ? 1 : 0);
-			}
-		}
-	}
-}
-
-function create_preview(&$page_object)
-{
-	$config =& cmsms()->GetConfig();
-	$templateobj = cmsms()->template->find_by_id($page_object->template_id);
-
-	$tmpfname = '';
-	if (is_writable($config["previews_path"]))
-	{
-		$tmpfname = tempnam($config["previews_path"], "cmspreview");
-	}
-	else
-	{
-		$tmpfname = tempnam(TMP_CACHE_LOCATION, "cmspreview");
-	}
-	$handle = fopen($tmpfname, "w");
-	fwrite($handle, serialize(array($templateobj, $page_object)));
-	fclose($handle);
-	
-	return $tmpfname;
-}
-
-function change_block_type($params, $block_id, $new_block_type)
-{
-	$content_id = coalesce_key($params, 'content_id', '-1');
-	$page_type = coalesce_key($params, 'page_type', 'content');
-	$orig_page_type = coalesce_key($params, 'orig_page_type', 'content');
-	
-	$userid = get_userid();
-	$config = cms_config();
-	$smarty = cms_smarty();
-	
-	$language = get_preference($userid, 'default_cms_language', 'en_US');
-	$orig_current_language = coalesce_key($params, 'orig_current_language', $language);
-
-	$page_object = get_page_object($page_type, $orig_page_type, $userid, $content_id, $params, $orig_current_language);
-	$type_param = $block_id . '-block-type';
-	$div_id = 'content-form-' . $block_id;
-	$page_object->$type_param = $new_block_type;
-	
-	$resp = new CmsAjaxResponse();
-
-	$resp->modify_attribute("#serialized_content", "value", serialize_object($page_object));
-	
-	$smarty->_compile_source('metadata template', $page_object->create_block_type($block_id), $_compiled);
-	@ob_start();
-	$smarty->_eval('?>' . $_compiled);
-	$result = @ob_get_contents();
-	@ob_end_clean();
-	
-	$resp->modify_html("#$div_id", $result);
-	
-	return $resp->get_result();
-}
-
-function ajaxpreview($params)
-{
-	$content_id = coalesce_key($params, 'content_id', '-1');
-	$page_type = coalesce_key($params, 'page_type', 'content');
-	$orig_page_type = coalesce_key($params, 'orig_page_type', 'content');
-	$userid = get_userid();
-	
-	$language = get_preference($userid, 'default_cms_language', 'en_US');
-	$orig_current_language = coalesce_key($params, 'orig_current_language', $language);
-	
-	$config =& cmsms()->GetConfig();
-
-	$page_object = get_page_object($page_type, $orig_page_type, $userid, $content_id, $params, $orig_current_language);
-	$tmpfname = create_preview($page_object);
-	$url = $config["root_url"] . '/index.php?tmpfile=' . urlencode(basename($tmpfname));
-	
-	$resp = new CmsAjaxResponse();
-
-	$resp->modify_attribute("#previewframe", "src", $url);
-	$resp->modify_attribute("#serialized_content", "value", serialize_object($page_object));
-
-	return $resp->get_result();
-}
-
-//Get a working page object
-$page_object = get_page_object($page_type, $orig_page_type, $userid, $content_id, $_REQUEST, $orig_current_language);
-
-//Load permissions (from db or serialized versions) and put them into smarty for dispaly on the template
-$permission_defns = load_permissions($_REQUEST, $page_object, $start_tab);
-
-//Preview?
-$smarty->assign('showpreview', false);
-if ($preview)
-{
-	if (!$page_object->_call_validation())
-	{
-		$tmpfname = create_preview($page_object);
-		if ($tmpfname != '')
-		{
-			$smarty->assign('showpreview', true);
-			$smarty->assign('previewfname', $config["root_url"] . '/index.php?tmpfile=' . urlencode(basename($tmpfname)));
-		}
-	}
-}
-else if ($access)
-{
-	if ($submit || $apply)
-	{
-		if ($page_object->save())
-		{
-			$contentops->set_all_hierarchy_positions($page_object->lft);
-			save_permissions($params, $page_object, $permission_defns);
-			if ($submit)
-			{
-				audit($page_object->id, $page_object->name, 'Edited Content');
-				if ($submit)
-					redirect('listcontent.php?message=contentupdated');
-			}
-		}
-	}
-}
-
-//Set some page variables
-$smarty->assign('header_name', $themeObject->ShowHeader('addcontent'));
-
-//Setup the page object
-$smarty->assign_by_ref('page_object', $page_object);
-$smarty->assign('serialized_object', serialize_object($page_object));
-$smarty->assign('orig_page_type', $orig_page_type);
-
-//Language related stuff
-$smarty->assign('languages', CmsMultiLanguage::get_enabled_languages_as_hash());
-$smarty->assign('current_language', $current_language);
-$smarty->assign('orig_current_language', $current_language); //orig_current_language should match current_language now that saves and stuff are done
-
-//Can we preview?
-$smarty->assign('can_preview', $page_object->preview);
-
-//Set the pagetypes
-$smarty->assign('page_types', array_combine(array_map('get_type', $gCms->contenttypes), array_map('get_friendlyname', $gCms->contenttypes)));
-$smarty->assign('selected_page_type', $page_type);
-
-//Set the parent dropdown
-$smarty->assign('show_parent_dropdown', $access);
-$smarty->assign('parent_dropdown', $contentops->CreateHierarchyDropdown($page_object->id, $page_object->parent_id, 'content[parent_id]', "onchange='document.contentform.submit();'"));
-
-//Se the template dropdown
-$smarty->assign('template_names', $templateops->TemplateDropdown('content[template_id]', $page_object->template_id, 'onchange="document.contentform.submit()"'));
-
-$smarty->assign('group_dropdown', CmsGroup::get_groups_for_dropdowm(true));
-
-//Name and menu text are multilang, use the parameters
-$smarty->assign('name', $page_object->get_property_value('name', $current_language));
-$smarty->assign('menu_text', $page_object->get_property_value('menu_text', $current_language));
-
-//Set the users
-$userops =& $gCms->GetUserOperations();
-$smarty->assign('show_owner_dropdown', false);
-$smarty->assign('owner_dropdown', $userops->GenerateDropdown($page_object->owner_id, 'content[owner_id]'));
-
-//Any included smarty templates for this page type?
-$smarty->assign('include_templates', $page_object->edit_template($smarty, $current_language));
-
-//Other fields that aren't easily done with smarty
-$smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, 'content[metadata]', 'pagesmalltextarea', 'content_metadata', '', '', '80', '6'));
-
-$smarty->assign('start_tab', $start_tab);
-
-$smarty->assign('attribute_defns', cms_orm('CmsAttributeDefinition')->find_all_by_module_and_extra_attr('Core', 'Content'));
-
-$ExtraButtons = array(
-	array(
-		'name'    => 'applybutton',
-		'class'   => 'positive apply',
-		'image'   => '',
-		'caption' => lang('apply'),
-	)
-);
-
-if ($page_object->preview)
-{
-	$ExtraButtons[] = array(
-			'name'    => 'previewbutton',
-			'class'   => 'positive preview',
-			'image'   => '',
-			'caption' => lang('preview'),
-			'onclick' => "$('#page_tabs').tabsClick(4);return false;"
-	);
-}
-
-$smarty->assign('DisplayButtons', $ExtraButtons);
-
-$smarty->display('addcontent.tpl');
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 

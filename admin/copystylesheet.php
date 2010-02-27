@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -38,7 +39,7 @@ if (isset($_REQUEST["stylesheet_name"])) { $stylesheet_name = $_REQUEST["stylesh
 
 if (isset($_POST["cancel"]))
 {
-	redirect("listcss.php");
+	redirect("listcss.php".$urlext);
 	return;
 }
 
@@ -76,7 +77,7 @@ if ($access)
 			if ($result)
 			{
 				audit($onestylesheet->id, $onestylesheet->name, 'Copied Stylesheet');
-				redirect("listcss.php");
+				redirect("listcss.php".$urlext);
 				return;
 			}
 			else
@@ -105,20 +106,26 @@ else
 
 
 <div class="pagecontainer">
-	<div class="pageheader"><?php echo lang('copystylesheet')?></div>
+	<p class="pageheader"><?php echo lang('copystylesheet')?></p>
 	<form method="post" action="copystylesheet.php">
-		<div class="row">
-			<label><?php echo lang('stylesheet'); ?>:</label>
-			<?php echo $stylesheet_name; ?>
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('stylesheet'); ?>:</p>
+			<p class="pageinput"><?php echo $stylesheet_name; ?></p>
 		</div>
-		<div class="row">
-			<label for="new_stylesheet_name"><?php echo lang('newstylesheetname'); ?>:</label>
-			<input type="text" name="stylesheet" id="new_stylesheet_name" maxlength="255" value="<?php echo $stylesheet?>">
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('newstylesheetname'); ?>:</p>
+			<p class="pageinput"><input type="text" name="stylesheet" maxlength="255" value="<?php echo $stylesheet?>" /></p>
 		</div>
-		<input type="hidden" name="stylesheet_id" value="<?php echo $stylesheet_id?>" /><input type="hidden" name="copystylesheet" value="true" />
-		<div class="submitrow">
-			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
-			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="stylesheet_id" value="<?php echo $stylesheet_id?>" /><input type="hidden" name="copystylesheet" value="true" />
+				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
 		</div>
 	</form>
 </div>
@@ -127,7 +134,7 @@ else
 
 }
 
-echo '<p class="pageback"><a class="pageback" href="listcss.php">&#171; '.lang('back').'</a></p>';
+echo '<p class="pageback"><a class="pageback" href="listcss.php'.$urlext.'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 

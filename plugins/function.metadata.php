@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -28,6 +28,9 @@ function smarty_cms_function_metadata($params, &$smarty)
 	
 	#Show a base tag unless showbase is false in config.php
 	#It really can't hinder, only help.
+	if( isset($config['showbase']))  $showbase = $config['showbase'];
+
+        # but allow a parameter to override it.
 	if (isset($params['showbase']))
 	{
 		if ($params['showbase'] == 'false')
@@ -40,29 +43,31 @@ function smarty_cms_function_metadata($params, &$smarty)
 	{
 		$result .= "\n<base href=\"".$config['root_url']."/\" />\n";
 	}
-	
-	if (array_key_exists('assign', $params))
+
+	$result .= get_site_preference('metadata', '');
+
+	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
-		$smarty->assign($params['assign'], $result);
+		if (isset($pageinfo->content_metadata) && $pageinfo->content_metadata != '')
+		{
+			$result .= "\n" . $pageinfo->content_metadata;
+		}
 	}
-	else
+
+	if ((!strpos($result,$smarty->left_delimiter) === false) and (!strpos($result,$smarty->right_delimiter) === false))
 	{
-		return $result;
+		$smarty->_compile_source('metadata template', $result, $_compiled);
+		@ob_start();
+		$smarty->_eval('?>' . $_compiled);
+		$result = @ob_get_contents();
+		@ob_end_clean();
 	}
+
+	return $result;
 }
 
 function smarty_cms_help_function_metadata() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Displays the metadata for this page. Both global metdata from the global settings page and metadata for each page will be shown.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template like: <code>{metadata}</code></p>
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li><em>(optional)</em>showbase (true/false) - If set to false, the base tag will not be sent to the browser.  Defaults to true.</li>
-		<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
-	</ul>
-	<?php
+  echo lang('help_function_metadata');
 }
 
 function smarty_cms_about_function_metadata() {

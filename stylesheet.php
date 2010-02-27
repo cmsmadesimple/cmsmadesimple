@@ -1,101 +1,157 @@
 <?php
-#CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.sf.net
-#
-#This program is free software; you can redistribute it and/or modify
-#it under the terms of the GNU General Public License as published by
-#the Free Software Foundation; either version 2 of the License, or
-#(at your option) any later version.
-#
-#This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
-#You should have received a copy of the GNU General Public License
-#along with this program; if not, write to the Free Software
-#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#
-#$Id$
 
-if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+// Parse pretty URLS
+if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
 {
-	@ini_set( 'zlib.output_compression','Off' );
+  $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
 }
+$url = substr($_SERVER['REQUEST_URI'],strlen($_SERVER['PHP_SELF']));
+$url = rtrim($url,'/');
+$matches = array();
+if( preg_match('+^/[0-9]*/.*?$+',$url,$matches) )
+  {
+    $tmp = substr($url,1);
+    list($_GET['cssid'],$_GET['mediatype']) = explode('/',$tmp);
+  }
+else if( preg_match('+^/[0-9]*$+',$url,$matches) )
+  {
+    $_GET['cssid'] = (int)substr($url,1);
+  }
 
-$dirname = dirname(__FILE__);
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
 
-$template_id = coalesce_key($_GET, 'templateid', '');
-$mediatype = coalesce_key($_GET, 'mediatype', '');
-$cssid = coalesce_key($_GET, 'cssid', '');
-$name = coalesce_key($_GET, 'name', '');
-$stripbackground = isset($_GET["stripbackground"]) ? true :false;
+//require('config.php');//default
+require('fileloc.php');
+require(CONFIG_FILE_LOCATION);
+require(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
 
-if ($template_id == '' && $name == '' && $cssid == '') return '';
 
-$css='';
+$mediatype = '';
+if (isset($_GET["mediatype"])) $mediatype = $_GET["mediatype"];
 
-if ($name != '')
-{
-	$stylesheet = cms_orm('cms_stylesheet')->find_by_name($name);
-	if ($stylesheet)
-	{
-		$css .= "/* Start of CMSMS style sheet '{$stylesheet->name}' */\n{$stylesheet->value}\n/* End of '{$stylesheet->name}' */\n";
-	}
-}
-else
-{
-	if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
-	{
-		$template = cms_orm('cms_template')->find_by_id($template_id);
-		if ($template)
-		{
-			$stylesheets = $template->active_stylesheets;
-			if ($stylesheets)
-			{
-				foreach ($stylesheets as $stylesheet)
-				{
-					$css .= "/* Start of CMSMS style sheet '{$stylesheet->name}' */\n{$stylesheet->value}\n/* End of '{$stylesheet->name}' */\n";
-					CmsEvents::SendEvent('Core', 'ContentStylesheet', array('stylesheet' => &$stylesheet));
-				}
-			}
-		}
-	}
-}
+$cssid = '';
+if (isset($_GET['cssid'])) $cssid = $_GET['cssid'];
 
-// send HTTP header
-header("Content-Type: text/css; charset=UTF-8");
+$name = '';
+if (isset($_GET['name'])) $name = $_GET['name'];
 
-#sending content length allows HTTP/1.0 persistent connections
-#(and also breaks if gzip is on)
-#header("Content-Length: ".strlen($css));
+$stripbackground = false;
+if (isset($_GET["stripbackground"])) $stripbackground = true;
 
+if ($name == '' && $cssid == '') return '';
+
+// Get the hash filename
+//$hashfile = $config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.'csshash.dat';
+$hashfile = TMP_CACHE_LOCATION . DIRECTORY_SEPARATOR . 'csshash.dat';
+
+// Get the cache
+$hashmtime = @filemtime($hashfile);
+$hash = csscache_csvfile_to_hash($hashfile);
+
+// Get the etag header if set
+//print_r( $_SERVER ); echo "\n";
+$etag = '';
+if( function_exists('getallheaders') )
+  {
+    $headers = getallheaders();
+    if (isset($headers['If-None-Match'])  )
+      {
+	$etag = trim($headers['If-None-Match'],'"');
+      }
+  }
+else if( isset($_SERVER['HTTP_IF_NONE_MATCH']) )
+  {
+    $etag = trim($_SERVER['HTTP_IF_NONE_MATCH']);
+    $etag = trim($etag,'"');
+  }
+
+//echo "DEBUG: cssid = $cssid, hashval = \"{$hash[$cssid]}\" etag = \"$etag\" \n";
+//echo "DEBUG: ".strcmp($hash[$cssid],$etag)."\n";
+//if( $hash[$cssid] != $etag ) die('uhoh');
+if( isset($hash[$cssid]) && strcmp($hash[$cssid],$etag) == 0 && 
+    $config['debug'] != true )
+  {
+    // we have a value
+    // and it's fine
+    // just have to output a 304
+    header('Etag: "'.$etag.'"');
+    header('HTTP/1.1 304 Not Modified');
+    exit;
+  }
+
+//
+// Either we don't have a value for this cache
+// or the hash is out of date
+// so get the styesheets, 
+//
+
+// connect to the database
+require(dirname(__FILE__).DIRECTORY_SEPARATOR.'version.php');
+//require(dirname(__FILE__).DIRECTORY_SEPARATOR.'fileloc.php'); //is included in top now
+require(cms_join_path(dirname(__FILE__),'lib','config.functions.php'));
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
+//require(cms_join_path(dirname(__FILE__),'lib','classes','class.global.inc.php'));
+require(cms_join_path(dirname(__FILE__),'lib','adodb.functions.php'));
+
+$gCms = CmsApplication::get_instance();
+load_adodb();
+$db =& $gCms->GetDb();
+
+require(cms_join_path(dirname(__FILE__),'lib','page.functions.php'));
+
+
+// extract the stylesheet(s)
+$sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_id = ".$db->qstr($cssid);
+$row = $db->GetRow($sql);
+
+// calculate the new etag
+$etag = md5($row['css_text']);
+
+// update the hash cache
+$hash[$cssid] = $etag;
+csscache_hash_to_csvfile($hashfile,$hash);
+
+// add a comment at the start
+$css = "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n\n";
+
+// set encoding
+$encoding = '';
+if ($config['admin_encoding'] != '')
+  $encoding = $config['admin_encoding'];
+elseif ($config['default_encoding'] != '')
+  $encoding = $config['default_encoding'];
+ else
+   $encoding = 'UTF-8';
+
+//
+// Begin output
+//
+
+// postprocess
 if ($stripbackground)
 {
-	#$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '', $css);
-	$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $css);
-	$css = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $css);
+  #$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '', $css);
+  $css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $css);
+  $css = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $css);
 }
 
-#Do cache-control stuff but only if we are running Apache
-if(function_exists('getallheaders'))
-{
-	$headers = getallheaders();
-	$hash = md5($css);
-
-	#if browser sent etag and it is the same then reply with 304
-	if (isset($headers['If-None-Match']) && $headers['If-None-Match'] == '"'.$hash.'"')
-	{
-		header('HTTP/1.1 304 Not Modified');
-		exit;
-	}
-	else {
-		header('ETag: "'.$hash.'"');
-	}
-}
-
+if( isset($config['output_compression']) && ($config['output_compression']) && ($config['debug'] != true) )
+  {
+    @ob_start('ob_gzhandler');
+  }
+$max_age = (int)get_site_preference('css_max_age',0);
+header("Content-Type: text/css; charset=$encoding");
+$datestr = gmdate('D, d M Y H:i:s',$hashmtime).' GMT';
+header("Last-Modified: ".$datestr);
+if( $max_age > 0 )
+  {
+    $datestr = gmdate('D, d M Y H:i:s',$hashmtime+$max_age).' GMT';
+    header("Expires: ".$datestr);
+    header("Cache-Control: must-revalidate");
+    // no caching?
+    //header("Cache-Control: max-age=$max_age, s-max-age=$max_age, must-revalidate");
+  }
+header('Etag: "'.$etag.'"');
 echo $css;
 
-# vim:ts=4 sw=4 noet
+// EOF
 ?>

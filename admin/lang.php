@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -22,21 +22,9 @@
 $current_language = isset($frontendlang) ? $frontendlang : 'en_US';
 
 #Only do language stuff for admin pages
-if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
+if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE))
 {
-	$nls = array();
 	$lang = array();
-
-	#Read in all current languages...
-	$dir = dirname(__FILE__)."/lang";
-
-	$handle = opendir($dir);
-	while (false!==($file = readdir($handle))) {
-		if (is_file("$dir/$file") && strpos($file, "nls.php") != 0) {
-			include("$dir/$file");
-		}
-	}
-	closedir($handle);
 
 	#Check to see if there is already a language in use...
 	if (isset($_POST["default_cms_lang"]))
@@ -46,7 +34,7 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 		{
 			setcookie("cms_language", '', time() - 3600);
 		}
-		else
+		else if (isset($_POST["change_cms_lang"]))
 		{
 			setcookie("cms_language", $_POST["change_cms_lang"]);
 		}
@@ -60,7 +48,17 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 	}
 	else if (isset($_COOKIE["cms_language"]))
 	{
-		$current_language = $_COOKIE["cms_language"];
+	  $tmp = trim(basename($_COOKIE["cms_language"]));
+	  $file = dirname(__FILE__) . "/lang/" . $tmp . "/admin.inc.php";
+	  if( !file_exists($file) )
+	    {
+	      $file = dirname(__FILE__) . "/lang/ext/" . $tmp . "/admin.inc.php";
+	      if( !file_exists($file) )
+		{
+		  $$tmp = '';
+		}
+	    }
+	  $current_language = $tmp;
 	}
 
 	if ($current_language == '')
@@ -76,31 +74,10 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 			#Figure out default language and set it if it exists
 			if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) 
 			{
-				$alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
-				if (strpos($alllang, ";") !== FALSE)
-					$alllang = substr($alllang,0,strpos($alllang, ";"));
-				$langs = explode(",", $alllang);
-
-				foreach ($langs as $onelang)
+			  $tmp = CmsNls::to_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+			  if( $tmp )
 				{
-					#Check to see if lang exists...
-					if (isset($nls['language'][$onelang]))
-					{
-						$current_language = $onelang;
-						setcookie("cms_language", $onelang);
-						break;
-					}
-					#Check to see if alias exists...
-					if (isset($nls['alias'][$onelang]))
-					{
-						$alias = $nls['alias'][$onelang];
-						if (isset($nls['language'][$alias]))
-						{
-							$current_language = $alias;
-							setcookie("cms_language", $alias);
-							break;
-						}
-					}
+				  setcookie('cms_language',$tmp);
 				}
 			}
 		}
@@ -110,7 +87,7 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 	@include(dirname(__FILE__) . DIRECTORY_SEPARATOR . "lang" . DIRECTORY_SEPARATOR . 'en_US' . DIRECTORY_SEPARATOR . "admin.inc.php");
 	
 	#Now load the real file
-	if ($lang != 'en_US')
+	if ($current_language != 'en_US')
 	{
 	    $file = dirname(__FILE__) . "/lang/ext/" . $current_language . "/admin.inc.php";
 		if (!is_file($file))
@@ -123,6 +100,17 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 	        include ($file);
 	    }
 	}
+	
+	#
+	# and override it, if desired
+	#
+	$ofile = dirname(__FILE__) . DIRECTORY_SEPARATOR . "custom" .
+      DIRECTORY_SEPARATOR . "lang" . DIRECTORY_SEPARATOR . $current_language .
+      DIRECTORY_SEPARATOR . "admin.inc.php";
+	if (is_file($ofile))
+      {
+      include ($ofile);
+      }
 	
 	$nls['direction'] = (isset($nls['direction']) && $nls['direction'] == 'rtl') ? 'rtl' : 'ltr';
 

@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -38,6 +38,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -65,7 +66,8 @@ if (isset($_GET["template_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 
 	# we check the permissions
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Stylesheet Assoc');
+	$access = check_permission($userid, 'Remove Stylesheet Assoc') 
+	  || check_permission($userid,'Modify Stylesheet Assoc');
 
 #******************************************************************************
 # the user has the right to delete association, we can go on
@@ -139,11 +141,11 @@ else
 #******************************************************************************
 if ($dodelete)
 {
-	redirect("templatecss.php?id=$id&type=$type");
+	redirect("templatecss.php".$urlext."&id=$id&type=$type");
 }
 else
 {
-	redirect("templatecss.php?id=$id&type=$type&message=$error");
+	redirect("templatecss.php".$urlext."&id=$id&type=$type&message=$error");
 }
 
 # vim:ts=4 sw=4 noet

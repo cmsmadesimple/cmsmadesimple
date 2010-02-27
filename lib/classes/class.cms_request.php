@@ -22,10 +22,7 @@
  * Static methods for handling web requests.
  *
  * @author Ted Kulp
- * @since 2.0
- * @version $Revision$
- * @modifiedby $LastChangedBy$
- * @lastmodified $Date$
+ * @since 1.7
  * @license GPL
  **/
 class CmsRequest extends CmsObject
@@ -84,14 +81,16 @@ class CmsRequest extends CmsObject
 	{
 		$id = '';
 		
-		if (isset($_REQUEST['mact']))
+		$smarty = cms_smarty();
+		
+		if (isset($params['mact']))
 		{
-			$ary = explode(',', $_REQUEST['mact'], 4);
-			$id = (isset($ary[1])?$ary[1]:'');
+			$ary = explode(',', cms_htmlentities($params['mact']), 4);
+			$smarty->id = (isset($ary[1])?$ary[1]:'');
 		}
 		else
 		{
-			$id = (isset($_REQUEST['id'])?$_REQUEST['id']:'');
+			$smarty->id = (isset($params['id'])?intval($params['id']):'');
 		}
 		
 		return $id;
@@ -124,7 +123,7 @@ class CmsRequest extends CmsObject
 				$page = $calced;
 		}
 		
-		$page = self::strip_language_from_page($page);
+		//$page = self::strip_language_from_page($page);
 		
 		return rtrim($page, '/');
 	}
@@ -241,19 +240,45 @@ class CmsRequest extends CmsObject
 		}
 	}
 	
-	public static function get_calculated_url_base()
+	public static function get_calculated_url_base($whole_url = false, $add_index_php = false)
 	{
-		$cur_url_dir = isset($_SERVER['SCRIPT_NAME']) ? dirname($_SERVER['SCRIPT_NAME']) : dirname($_SERVER['SCRIPT_NAME']);
+		$cur_url_dir = dirname($_SERVER['SCRIPT_NAME']);
 		$cur_file_dir = dirname(self::get_request_filename());
-		$root_file_dir = dirname(dirname(dirname(__FILE__)));
-
+		
+		$has_index_php = false;
+		if (isset($_REQUEST['REQUEST_URI']) && strpos($_REQUEST['REQUEST_URI'], "index.php") === false)
+		{
+			$has_index_php = true;
+		}
+		
 		//Get the difference in number of characters between the root
 		//and the requested file
-		$len = strlen($cur_file_dir) - strlen($root_file_dir);
-		
+		$len = strlen($cur_file_dir) - strlen(ROOT_DIR);
+
 		//Now substract that # from the currently requested uri
 		$result = substr($cur_url_dir, 0, strlen($cur_url_dir) - $len);
 
+		if ($whole_url)
+		{
+			//Ok, we want the whole url of the base -- time for some magic
+			//Grab the requested uri
+			$requested_uri = self::get_requested_uri();
+
+			//Figure out where in the string our calculated base is
+			$pos = strpos($requested_uri, $result, 7);
+			if ($pos)
+			{
+				//If it exists, substr out the whole thing
+				$result = substr($requested_uri, 0, $pos + strlen($result));
+			}
+		}
+		
+		if ($add_index_php && $has_index_php)
+			$result = $result . '/index.php';
+		
+		//if (!ends_with($result, '/'))
+		//	$result = $result . '/';
+		
 		return $result;
 	}
 

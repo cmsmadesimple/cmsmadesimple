@@ -1,7 +1,7 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.org
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,138 +16,153 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
+#$Id: News.module.php 2114 2005-11-04 21:51:13Z wishy $
 
 ini_set('include_path', cms_join_path(ROOT_DIR, 'lib'));
 include_once(cms_join_path(ROOT_DIR, 'lib', 'Zend', 'Search', 'Lucene.php'));
 
 class CmsSearch extends CmsObject
 {
-	static private $instance = NULL;
+    static private $instance = NULL;
 
-	private $index_path = '';
-	private $index = null;
+    private $index_path = '';
+    private $index = null;
 
-	function __construct()
-	{
-		parent::__construct();
-		$this->index_path = cms_join_path(ROOT_DIR, 'tmp', 'search');
-		try
+    function __construct()
+    {
+        parent::__construct();
+        $this->index_path = cms_join_path(ROOT_DIR, 'tmp', 'search');
+        try
+        {
+            $this->open_index();
+        }
+        catch (Zend_Search_Lucene_Exception $e)
+        {
+            $this->create_index();
+        }
+    }
+    
+    function open_index()
+    {
+        $this->index = Zend_Search_Lucene::open($this->index_path);
+    }
+    
+    function create_index()
+    {
+        $this->index = Zend_Search_Lucene::create($this->index_path);
+    }
+    
+    /**
+     * Returns an instance of the CmsSearch singleton.
+     *
+     * @return CmsSearch The singleton CmsSearch instance
+     * @author Ted Kulp
+     **/
+    static public function get_instance()
+    {
+        if (self::$instance == NULL)
+        {
+            self::$instance = new CmsSearch();
+        }
+        return self::$instance;
+    }
+
+    function add_content($module_name, $extra_attr, $object_id, $url = '', $title = '', $content = '', $lang = 'en_US', $teaser = '', $pretty_url = '',$custom_fields = array())
+    {
+        $this->remove_content($module_name, $extra_attr, $object_id);
+
+        $doc = new Zend_Search_Lucene_Document();
+
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('module_name', $module_name));
+        if ($extra_attr != '')
+            $doc->addField(Zend_Search_Lucene_Field::UnIndexed('extra_attr', $extra_attr));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('object_id', $object_id));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $url));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('pretty_url', $pretty_url));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('teaser', $teaser));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('language', $lang));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', $title));
+        $doc->addField(Zend_Search_Lucene_Field::UnStored('content', $content));
+		$customnames = array();
+		foreach($custom_fields as $key=>$field)
 		{
-			$this->open_index();
+			$customnames[] = $key;
+			if($field['index'] == true)
+			{
+		        $doc->addField(Zend_Search_Lucene_Field::Text($key, $field['value']));
+			}else
+			{
+		        $doc->addField(Zend_Search_Lucene_Field::UnIndexed($key, $field['value']));
+			}
 		}
-		catch (Zend_Search_Lucene_Exception $e)
-		{
-			$this->create_index();
-		}
-	}
-	
-	function open_index()
-	{
-		$this->index = Zend_Search_Lucene::open($this->index_path);
-	}
-	
-	function create_index()
-	{
-		$this->index = Zend_Search_Lucene::create($this->index_path);
-	}
-	
-	/**
-	 * Returns an instance of the CmsSearch singleton.
-	 *
-	 * @return CmsSearch The singleton CmsSearch instance
-	 * @author Ted Kulp
-	 **/
-	static public function get_instance()
-	{
-		if (self::$instance == NULL)
-		{
-			self::$instance = new CmsSearch();
-		}
-		return self::$instance;
-	}
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('customnames', implode(', ', $customnames) ));
+        $this->index->addDocument($doc);
+    }
+    
+    function add_document(Zend_Search_Lucene_Document $doc)
+    {
+        $this->index->addDocument($doc);
+    }
+    
+    function remove_content($module_name, $extra_attr = '', $object_id = '')
+    {
+        $find_query = 'module_name:' . $module_name . ' ';
+        if ($extra_attr != '')
+            $find_query .= 'extra_attr:' . $extra_attr . ' ';
+        if ($object_id != '')
+            $find_query .= 'object_id:' . $object_id . ' ';
 
-	function add_content($module_name, $extra_attr, $object_id, $url = '', $title = '', $content = '', $lang = 'en_US', $teaser = '', $pretty_url = '')
-	{
-		$this->remove_content($module_name, $extra_attr, $object_id);
-
-		$doc = new Zend_Search_Lucene_Document();
-
-		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('module_name', $module_name));
-		if ($extra_attr != '')
-			$doc->addField(Zend_Search_Lucene_Field::UnIndexed('extra_attr', $extra_attr));
-		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('object_id', $object_id));
-		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $url));
-		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('pretty_url', $pretty_url));
-		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('teaser', $teaser));
-		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('language', $lang));
-		$doc->addField(Zend_Search_Lucene_Field::Text('title', $title));
-		$doc->addField(Zend_Search_Lucene_Field::UnStored('content', $content));
-		
-		$this->index->addDocument($doc);
-	}
-	
-	function add_document(Zend_Search_Lucene_Document $doc)
-	{
-		$this->index->addDocument($doc);
-	}
-	
-	function remove_content($module_name, $extra_attr = '', $object_id = '')
-	{
-		$find_query = 'module_name:' . $module_name . ' ';
-		if ($extra_attr != '')
-			$find_query .= 'extra_attr:' . $extra_attr . ' ';
-		if ($object_id != '')
-			$find_query .= 'object_id:' . $object_id . ' ';
-
-		$this->remove_document($find_query);
-	}
-	
-	function remove_document($find_query = '')
-	{
-		$hits = $this->index->find(trim($find_str));
-		foreach ($hits as $hit)
-		{
-		    $this->index->delete($hit->id);
-		}
-	}
-	
-	function commit()
-	{
-		$this->index->commit();
-	}
-	
-	function index_count()
-	{
-		return $this->index->count();
-	}
-	
-	function index_num_docs()
-	{
-		return $this->index->numDocs();
-	}
-	
-	function optimize()
-	{
-		return $this->index->optimize();
-	}
-	
-	function parse($find_query)
-	{
-		return $this->index->parse($find_query);
-	}
-	
-	function find($find_query)
-	{
-		return $this->index->find($find_query);
-	}
-	
-	function reindex()
-	{
-		$this->create_index(); //aka clear index
+        $this->remove_document($find_query);
+    }
+    
+    function remove_document($find_query = '')
+    {
+        $hits = $this->index->find(trim($find_str));
+        foreach ($hits as $hit)
+        {
+            $this->index->delete($hit->id);
+        }
+    }
+    
+    function commit()
+    {
+        $this->index->commit();
+    }
+    
+    function index_count()
+    {
+        return $this->index->count();
+    }
+    
+    function index_num_docs()
+    {
+        return $this->index->numDocs();
+    }
+    
+    function optimize()
+    {
+        return $this->index->optimize();
+    }
+    
+    function parse($find_query)
+    {
+        return $this->index->parse($find_query);
+    }
+    
+    function find($find_query)
+    {
+        return $this->index->find($find_query);
+    }
+    
+    function reindex()
+    {
+        $this->create_index(); //aka clear index
 		CmsContentOperations::reindex_content();
-		CmsEventOperations::send_event('Core', 'SearchReindex');
-	}
+		Events::SendEvent('Search','SearchReIndex', array());
+        //CmsEventOperations::send_event('Core', 'SearchReindex');
+
+		$this->optimize();
+    }
 }
 
 # vim:ts=4 sw=4 noet

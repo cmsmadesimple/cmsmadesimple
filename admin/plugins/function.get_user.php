@@ -38,7 +38,9 @@ function smarty_function_get_user($params, &$smarty)
 	$users = $smarty->get_template_vars('users');
 	if (!array_key_exists($params['id'], $users))
 	{
-		$users[$params['id']] = cmsms()->user->find_by_id($params['id']);
+		//$users[$params['id']] = cmsms('CmsUser')->find_by_id($params['id']);
+		$ops = cmsms()->GetUserOperations();
+		$ops->LoadUserByID($params['id']);
 	}
 
 	$smarty->assign('users', $users);

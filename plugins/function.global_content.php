@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -18,28 +18,18 @@
 
 function smarty_cms_function_global_content($params, &$smarty)
 {
-	if (array_key_exists('assign', $params))
-	{
-		$smarty->assign($params['assign'], $smarty->fetch('globalcontent:'.$params['name']));
-	}
-	else
-	{
-		return $smarty->fetch('globalcontent:'.$params['name']);
-	}
+  $smarty->assign('gcb_params',$params);
+  $txt = $smarty->fetch('globalcontent:'.$params['name']);
+  if( isset($params['assign']) )
+    {
+      $smarty->assign(trim($params['assign']),$txt);
+      return;
+    }
+  return $txt;
 }
 
 function smarty_cms_help_function_global_content() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Inserts a global content block into your template or page.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{global_content name='myblob'}</code>, where name is the name given to the block when it was created.</p>
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li>name - The name of the global content block to display.</li>
-		<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
-	</ul>
-	<?php
+  echo lang('help_function_global_content');
 }
 
 function smarty_cms_about_function_global_content() {

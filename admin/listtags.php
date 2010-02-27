@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -22,23 +22,31 @@ $CMS_ADMIN_PAGE=1;
 $CMS_LOAD_ALL_PLUGINS=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
 $plugin = "";
-if (isset($_GET["plugin"])) $plugin = $_GET["plugin"];
+if (isset($_GET["plugin"])) $plugin = cms_htmlentities($_GET["plugin"]);
 
 $action = "";
-if (isset($_GET["action"])) $action = $_GET["action"];
+if (isset($_GET["action"])) $action = cms_htmlentities($_GET["action"]);
 
 $userid = get_userid();
-$access = check_permission($userid, "Modify Modules");
+$access = check_permission($userid, "View Tag Help");
+//if( !$access ) return;
 
-#$smarty = new Smarty_CMS($gCms->config);
 
-//include_once("header.php");
-CmsAdminTheme::start();
+if (!$access) {
+	die('Permission Denied');
+return;
+}
 
+
+
+#$smarty = new CmsSmarty$gCms->config);
+
+include_once("header.php");
 if ($action == "showpluginhelp")
 {
 	if (function_exists('smarty_cms_help_function_'.$plugin))
@@ -67,7 +75,7 @@ if ($action == "showpluginhelp")
 
 			$image_help = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
 			$image_help_external = $themeObject->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
-			$header .= '<span class="helptext"><a href="'.$wikiUrl.'" rel="external">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" rel="external">'.lang('help').'</a> ('.lang('new_window').')</span>';
+			$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
 		}
 
 		$header .= '</div>';
@@ -81,7 +89,7 @@ if ($action == "showpluginhelp")
 
 		echo $content;
 		echo "</div>";
-		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
+		echo '<p class="pageback"><a class="pageback" href="listtags.php'.$urlext.'">&#171; '.lang('back').'</a></p>';
 	}
 	else
 	{
@@ -89,7 +97,7 @@ if ($action == "showpluginhelp")
 		echo '<p class="pageheader">'.lang('pluginhelp', array($plugin)).'</p>';
 		echo '<P>No help text available for this plugin.</P>';
 		echo "</div>";
-		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
+		echo '<p class="pageback"><a class="pageback" href="listtags.php'.$urlext.'">&#171; '.lang('back').'</a></p>';
 	}
 }
 else if ($action == "showpluginabout")
@@ -104,7 +112,7 @@ else if ($action == "showpluginabout")
 		echo '<p class="pageheader">'.lang('pluginabout', array($plugin)).'</p>';
 		echo $content;
 		echo "</div>";
-		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
+		echo '<p class="pageback"><a class="pageback" href="listtags.php'.$urlext.'">&#171; '.lang('back').'</a></p>';
 	}
 	else
 	{
@@ -112,7 +120,7 @@ else if ($action == "showpluginabout")
 		echo '<p class="pageheader">'.lang('pluginhelp', array($plugin)).'</p>';
 		echo '<P>No help text available for this plugin.</P>';
 		echo "</div>";
-		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
+		echo '<p class="pageback"><a class="pageback" href="listtags.php'.$urlext.'">&#171; '.lang('back').'</a></p>';
 	}
 }
 else
@@ -120,7 +128,7 @@ else
 
 	echo '<div class="pagecontainer">';
 	echo '<div class="pageoverflow">';
-	echo CmsAdminTheme::get_instance()->show_header('tags').'</div>';
+	echo $themeObject->ShowHeader('tags').'</div>';
 	echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 	echo '<thead>';
 	echo "<tr>\n";
@@ -141,7 +149,7 @@ else
 
 				if (function_exists('smarty_cms_help_function_'.$oneplugin))
 				{
-					echo "<td><a href=\"listtags.php?action=showpluginhelp&amp;plugin=".$oneplugin."\">".$oneplugin."</a></td>";
+					echo "<td><a href=\"listtags.php".$urlext."&amp;action=showpluginhelp&amp;plugin=".$oneplugin."\">".$oneplugin."</a></td>";
 				}
 				else
 				{
@@ -149,7 +157,7 @@ else
 				}
 				if (function_exists('smarty_cms_help_function_'.$oneplugin))
 				{
-					echo "<td><a href=\"listtags.php?action=showpluginhelp&amp;plugin=".$oneplugin."\">".lang('help')."</a></td>";
+					echo "<td><a href=\"listtags.php".$urlext."&amp;action=showpluginhelp&amp;plugin=".$oneplugin."\">".lang('help')."</a></td>";
 				}
 				else
 				{
@@ -157,7 +165,7 @@ else
 				}
 				if (function_exists('smarty_cms_about_function_'.$oneplugin))
 				{
-					echo "<td><a href=\"listtags.php?action=showpluginabout&amp;plugin=".$oneplugin."\">".lang('about')."</a></td>";
+					echo "<td><a href=\"listtags.php".$urlext."&amp;action=showpluginabout&amp;plugin=".$oneplugin."\">".lang('about')."</a></td>";
 				}
 				else
 				{
@@ -177,11 +185,10 @@ else
 </div>
 
 <?php
-echo '<p class="pageback"><a class="pageback" href="'.CmsAdminTheme::get_instance()->back_url().'">&#171; '.lang('back').'</a></p>';
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 }
 
-//include_once("footer.php");
-CmsAdminTheme::end();
+include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
 ?>

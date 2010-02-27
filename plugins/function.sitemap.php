@@ -2,7 +2,7 @@
 
 # CMS - CMS Made Simple
 #
-# (c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+# (c)2004 by Ted Kulp (wishy@users.sf.net)
 #
 # This project's homepage is: http://cmsmadesimple.sf.net
 #
@@ -42,23 +42,23 @@ function smarty_cms_function_sitemap($params, &$smarty)
     {
         // Handy little trick to figure out how deep in the tree we are
         // Remember, content comes to use in order of how it should be displayed in the tree already
-        $depth = count(split('\.', $onecontent->Hierarchy()));
+        $depth = count(split('\.', $onecontent->hierarchy()));
 
         // If hierarchy starts with the start_element (if it's set), then continue on
         if (isset($params['start_element']))
         {
             if (
                 ! (
-                    strpos($onecontent->Hierarchy(), $params['start_element']) !== FALSE 
+                    strpos($onecontent->hierarchy(), $params['start_element']) !== FALSE 
                     && 
-                    strpos($onecontent->Hierarchy(), $params['start_element']) == 0
+                    strpos($onecontent->hierarchy(), $params['start_element']) == 0
                 )
             )
             {
-                if(($onecontent->Alias() == $params['start_element']))
+                if(($onecontent->alias() == $params['start_element']))
                 {
-                     $params['start_element'] = $onecontent->Hierarchy();
-                     $depth = count(split('\.', $onecontent->Hierarchy()));
+                     $params['start_element'] = $onecontent->hierarchy();
+                     $depth = count(split('\.', $onecontent->hierarchy()));
                      $first_level = $depth;
                      continue;
                 }
@@ -88,19 +88,19 @@ function smarty_cms_function_sitemap($params, &$smarty)
         }
 
         // Not active or separator?  Toss it.
-        if (! $onecontent->Active() || ! $onecontent->MenuText())
+        if (! $onecontent->active() || ! $onecontent->menu_text())
         {
             continue;
         }
 
         // Not shown in menu?  Toss it.
-        if (! $onecontent->ShowInMenu())
+        if (! $onecontent->show_in_menu())
         {
             // If param showall, display also content not shown in menu.
             if (
                 ((isset($params['showall']) && $params['showall'] == 1)) 
                 ||
-                ($add_elements && in_array($onecontent->Alias(), $add_element))
+                ($add_elements && in_array($onecontent->alias(), $add_element))
             )
             {
 
@@ -141,7 +141,7 @@ function smarty_cms_function_sitemap($params, &$smarty)
                 (
                     isset($gCms->variables['content_id'])
                     && 
-                    $onecontent->Id() == $gCms->variables['content_id']
+                    $onecontent->id() == $gCms->variables['content_id']
                 )
             )
         )
@@ -151,7 +151,7 @@ function smarty_cms_function_sitemap($params, &$smarty)
 
             if ((isset($params['delimiter']) && $params['delimiter'] != '') && ($depth > 1))
             {
-                $ddepth = (split('\.', $onecontent->Hierarchy()));
+                $ddepth = (split('\.', $onecontent->hierarchy()));
                 if (
                     ($ddepth[sizeof($ddepth) - 1] > 1) 
                     ||
@@ -163,27 +163,27 @@ function smarty_cms_function_sitemap($params, &$smarty)
             }
 
             // No link if section header.
-            if ($onecontent->HasUsableLink())
+            if ($onecontent->has_usable_link())
             {
-                $menu .= '<a href="' . $onecontent->GetURL() . '"';
-                if (isset($gCms->variables['content_id']) && $onecontent->Id() == $gCms->variables['content_id'])
+                $menu .= '<a href="' . $onecontent->get_url() . '"';
+                if (isset($gCms->variables['content_id']) && $onecontent->id() == $gCms->variables['content_id'])
                 {
                     $menu .= ' class="currentpage"';
                 }
-                if ($onecontent->GetPropertyValue('target') != '')
+                if ($onecontent->get_property_value('target') != '')
                 {
-                    $menu .= ' target="' . $onecontent->GetPropertyValue('target') . '"';
+                    $menu .= ' target="' . $onecontent->get_property_alue('target') . '"';
                 }
-                $menu .= '>' . cms_htmlentities($onecontent->MenuText()) . '</a>';
+                $menu .= '>' . my_htmlentities($onecontent->menu_text()) . '</a>';
             }
             else
             {
-                $menu .= cms_htmlentities($onecontent->MenuText());
+                $menu .= my_htmlentities($onecontent->menu_text());
             }
         }
         else
         {
-            if (! $onecontent->HasChildren())
+            if (! $onecontent->has_children())
             {
                 $no_end = true;
             }
@@ -213,25 +213,7 @@ function smarty_cms_function_sitemap($params, &$smarty)
 
 function smarty_cms_help_function_sitemap()
 {
-?>
-    <h3>What does this do?</h3>
-    <p>Prints out a sitemap.</p>
-    <h3>How do I use it?</h3>
-    <p>Just insert the tag into your template/page like: <code>{sitemap}</code></p>
-    <h3>What parameters does it take?</h3>
-    <p>
-        <ul>
-            <li><em>(optional)</em> <tt>class</tt> - A css_class for the ul-tag which includes the complete sitemap.</li>
-            <li><em>(optional)</em> <tt>start_element</tt> - The hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu. You can use the page alias instead of hierarchy.</li>
-            <li><em>(optional)</em> <tt>number_of_levels</tt> - An integer, the number of levels you want to show in your menu. Should be set to 2 using a delimiter.</li>
-            <li><em>(optional)</em> <tt>delimiter</tt> - Text to separate entries not on depth 1 of the sitemap (i.e. 1.1, 1.2). This is helpful for showing entries on depth 2 beside each other (using css display:inline).</li>
-            <li><em>(optional)</em> <tt>initial 1/0</tt> - If set to 1, begin also the first entries not on depth 1 with a delimiter (i.e. 1.1, 2.1).</li>
-            <li><em>(optional)</em> <tt>relative 1/0</tt> - We are not going to show current page (with the sitemap) - we'll show only his childs.</li>
-            <li><em>(optional)</em> <tt>showall 1/0</tt> - We are going to show all pages if showall is enabled, else we'll only show pages with active menu entries.</li>
-            <li><em>(optional)</em> <tt>add_elements</tt> - A comma separated list of alias names which will be added to the shown pages with active menu entries (showall not enabled).</li>
-        </ul>
-        </p>
-<?php
+  echo lang('help_function_sitemap');
 }
 
 function smarty_cms_about_function_sitemap()

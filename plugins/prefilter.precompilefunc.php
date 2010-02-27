@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -23,18 +23,20 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 	$result = explode(':', $smarty->_current_file);
 	if (count($result) > 1)
 	{
+	  if( startswith($result[0],'tmp_') ) $result[0] = 'template';
+
 		switch ($result[0])
 		{
 			case "content":
-				CmsEvents::send_event('Core', 'ContentPreCompile', array('content' => &$tpl_output));				
+				Events::SendEvent('Core', 'ContentPreCompile', array('content' => &$tpl_output));
 				break;
 
-			case "template":				
-				CmsEvents::send_event('Core', 'TemplatePreCompile', array('template' => &$tpl_output));
+			case "template":
+				Events::SendEvent('Core', 'TemplatePreCompile', array('template' => &$tpl_output));
 				break;
 
-			case "globalcontent":				
-				CmsEvents::send_event('Core', 'GlobalContentPreCompile', array('global_content' => &$tpl_output));
+			case "globalcontent":
+				Events::SendEvent('Core', 'GlobalContentPreCompile', array('global_content' => &$tpl_output));
 				break;
 
 			default:
@@ -42,8 +44,8 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 		}
 
 	}
-	
-	CmsEvents::send_event('Core', 'SmartyPreCompile', array('content' => &$tpl_output));
+
+	Events::SendEvent('Core', 'SmartyPreCompile', array('content' => &$tpl_output));
 
 	return $tpl_output;
 }

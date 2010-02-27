@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -20,17 +20,13 @@ function smarty_cms_function_content($params, &$smarty)
 {
 	global $gCms;
 	$pageinfo =& $gCms->variables['pageinfo'];
-	if (isset($pageinfo) && $pageinfo !== FALSE && isset($pageinfo->content_id))
+	if (isset($pageinfo) && $pageinfo !== FALSE && isset($pageinfo->content_id) )
 	{
 		$id = '';
 		$modulename = '';
 		$action = '';
 		$inline = false;
-		if (isset($_REQUEST['module']))
-		{
-			$modulename = $_REQUEST['module'];
-		}
-
+		if (isset($_REQUEST['module'])) $modulename = $_REQUEST['module'];
 		if (isset($_REQUEST['id']))
 		{
 			$id = $_REQUEST['id'];
@@ -43,43 +39,16 @@ function smarty_cms_function_content($params, &$smarty)
 			$action = (isset($ary[2])?$ary[2]:'');
 			$inline = (isset($ary[3]) && $ary[3] == 1?true:false);
 		}
-
-		if (isset($_REQUEST[$id.'action']))
-			$action = $_REQUEST[$id.'action'];
-		else if (isset($_REQUEST['action']))
-			$action = $_REQUEST['action'];
-		
-		$block_name = 'default';
-		if (isset($params['block']))
-			$block_name = $params['block'];
-		else if (isset($params['name']))
-			$block_name = $params['name'];
-
-		$block_name = strtolower(str_replace(' ', '_', $block_name));
-		
-		$target_block = 'default';
-		if (isset($_REQUEST[$id.'target']))
-		{
-			//Only if it actually exists do we use it...  just in case the template was changed we want to
-			//make sure the module still shows up
-			$blocks = CmsTemplateOperations::parse_content_blocks_from_template(cms_orm()->template->find_by_id($pageinfo->template_id));
-			foreach ($blocks as $k=>$v)
-			{
-				if ($_REQUEST[$id.'target'] == $k)
-				{
-					$target_block = $_REQUEST[$id.'target'];
-				}
-			}
-		}
-
-		$target_block = strtolower(str_replace(' ', '_', $target_block));
+		if (isset($_REQUEST[$id.'action'])) $action = $_REQUEST[$id.'action'];
+		else if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
 
 		//Only consider doing module processing if
 		//a. There is no block parameter
 		//b. then
 		//   1. $id is cntnt01
 		//   2. or inline is false
-		if ($block_name == $target_block && ($id == 'cntnt01' || ($id != '' && $inline == false)))
+
+		if (!isset($params['block']) && ($id == 'cntnt01' || ($id != '' && $inline == false)))
 		{
 			$cmsmodules = &$gCms->modules;
 		
@@ -92,53 +61,64 @@ function smarty_cms_function_content($params, &$smarty)
 						$modulename = $key;
 					}
 				}
-		
-				if (isset($modulename))
-				{
-					if (isset($cmsmodules[$modulename]))
-					{
-						if (isset($cmsmodules[$modulename]['object'])
-							&& $cmsmodules[$modulename]['installed'] == true
-							&& $cmsmodules[$modulename]['active'] == true
-							&& $cmsmodules[$modulename]['object']->is_plugin_module())
-						{
-							@ob_start();
-							$params = array_merge($params, GetModuleParameters($id));
 
-							$returnid = '';
-							if (isset($params['returnid']))
-							{
-								$returnid = $params['returnid'];
-							}
-							else
-							{
-								$returnid = $pageinfo->content_id;
-							}
-							$request = $gCms->modules[$modulename]['object']->create_request_instance($id, $returnid);
-							echo $request->do_action_base($action, $params);
-							if ($result !== FALSE)
-							{
-								echo $result;
-							}
-							$modresult = @ob_get_contents();
-							@ob_end_clean();
-							return _smarty_cms_function_content_return($modresult, $params, $smarty);
-						}
-						else
-						{
-						  return _smarty_cms_function_content_return("<!-- Not a tag module -->\n", $params, $smarty);
-						}
-					}
-				}
+				if (!isset($modulename) || empty($modulename) ||
+				    !isset($cmsmodules[$modulename]))
+				  {
+				    // module not found
+				    @trigger_error('Attempt to access module '.$modulename.' which could not be foune (is it properly installed and configured?');
+				    return _smarty_cms_function_content_return('', $params, $smarty);
+				  }
+
+				if (isset($cmsmodules[$modulename]))
+				  {
+				    if (isset($cmsmodules[$modulename]['object'])
+					&& $cmsmodules[$modulename]['installed'] == true
+					&& $cmsmodules[$modulename]['active'] == true
+					&& $cmsmodules[$modulename]['object']->IsPluginModule())
+				      {
+					@ob_start();
+					unset($params['block']);
+					unset($params['label']);
+					unset($params['wysiwyg']);
+					unset($params['oneline']);
+					unset($params['default']);
+					unset($params['size']);
+					$params = array_merge($params, GetModuleParameters($id));
+					//$params = GetModuleParameters($id);
+					$returnid = '';
+					if (isset($params['returnid']))
+					  {
+					    $returnid = $params['returnid'];
+					  }
+					else
+					  {
+					    $returnid = $pageinfo->content_id;
+					  }
+					$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
+					if ($result !== FALSE)
+					  {
+					    echo $result;
+					  }
+					$modresult = @ob_get_contents();
+					@ob_end_clean();
+					return _smarty_cms_function_content_return($modresult, $params, $smarty);
+				      }
+				    else
+				      {
+					@trigger_error('Attempt to access module '.$key.' which could not be foune (is it properly installed and configured?');
+					return _smarty_cms_function_content_return("<!-- Not a tag module -->\n", $params, $smarty);
+				      }
+				  }
 			}
 		}
 		else
 		{
-			$result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block_name), '', $pageinfo->content_id);
-			if (isset($_REQUEST['tmpfile']))
-			{
-				$smarty->clear_compiled_tpl(str_replace(' ', '_', 'content:' . $block_name), $pageinfo->content_id);
-			}
+			$result = '';
+			$oldvalue = $smarty->caching;
+			$smarty->caching = false;
+			$result = $smarty->fetch(str_replace(' ', '_', 'content:' . (isset($params['block'])?$params['block']:'content_en')), '', $pageinfo->content_id);
+			$smarty->caching = $oldvalue;
 			return _smarty_cms_function_content_return($result, $params, $smarty);
 		}
 	}
@@ -160,28 +140,7 @@ function _smarty_cms_function_content_return($result, &$params, &$smarty)
 
 function smarty_cms_help_function_content()
 {
-	?>
-	<h3>What does this do?</h3>
-	<p>This is where the content for your page will be displayed.  It's inserted into the template and changed based on the current page being displayed.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template like: <code>{content}</code>.</p>
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li><em>(optional)</em>block - Allows you to have more than one content block per page.  When multiple content tags are put on a template, that number of edit boxes will be displayed when the page is edited.
-<p>Example:</p>
-<pre>{content block="Second Content Block"}</pre>
-<p>Now, when you edit a page there will a textarea called "Second Content Block".</li>
-		<li><em>(optional)</em>wysiwyg (true/false) - If set to false, then a wysiwyg will never be used while editing this block.  If true, then it acts as normal.  Only works when block parameter is used.</li>
-		<li><em>(optional)</em>oneline (true/false) - If set to true, then only one edit line will be shown while editing this block.  If false, then it acts as normal.  Only works when block parameter is used.</li>
-		<li><em>(optional)</em>assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
-<p>Example of passing page content to a User Defined Tag as a parameter:</p>
-<pre>
-         {content assign=pagecontent}
-         {table_of_contents thepagecontent="$pagecontent"}
-</pre>
-</li>
-	</ul>
-	<?php
+  echo lang('help_function_content');
 }
 
 function smarty_cms_about_function_content()

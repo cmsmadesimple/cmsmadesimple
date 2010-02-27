@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -52,13 +52,13 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 
 #******************************************************************************
 # global variables definition
 #******************************************************************************
-$db = cms_db();
+
 # variable to check if we'll make the association or not
 # will be set to false if an error is encountered
 $doadd = true;
@@ -76,7 +76,8 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
 
 	# we then check permissions
 	$userid = get_userid();
-	$access = check_permission($userid, 'Add Stylesheet Assoc');
+	$access = check_permission($userid, 'Add Stylesheet Assoc')
+	  || check_permission($userid,'Modify Stylesheet Assoc');
 
 #******************************************************************************
 # the user has permissions, and vars are set, we can go on
@@ -114,12 +115,17 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
 			}
 		}
 
+		# get the next access_order
+		$query = "SELECT max(assoc_order)+1 FROM ".cms_db_prefix()."css_assoc where assoc_to_id = ?";
+		$nextord = $db->GetOne($query,array($template_id));
+		if( !$nextord ) $nextord = 1;
+
 		# everything is ok, we can insert the element.
 		if ($doadd)
 		{
 			$time = $db->DBTimeStamp(time());
-			$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date) VALUES (?, ?, ?, ".$time.", ".$time.")";
-			$result = $db->Execute($query, array($template_id, $id, $type));
+			$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date,assoc_order) VALUES (?, ?, ?, ".$time.", ".$time.",?)";
+			$result = $db->Execute($query, array($template_id, $id, $type,$nextord));
 
 			if ($result)
 			{
@@ -158,11 +164,11 @@ else
 #******************************************************************************
 if ($doadd)
 {
-	redirect("templatecss.php?id=$id&type=$type");
+	redirect("templatecss.php".$urlext."&id=$id&type=$type");
 }
 else
 {
-	redirect("templatecss.php?id=$id&type=$type&message=$error");
+	redirect("templatecss.php".$urlext."&id=$id&type=$type&message=$error");
 }
 
 # vim:ts=4 sw=4 noet

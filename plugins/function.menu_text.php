@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,39 +21,24 @@ function smarty_cms_function_menu_text($params, &$smarty)
 	global $gCms;
 	$pageinfo = &$gCms->variables['pageinfo'];
 	$config = &$gCms->config;
-	
-	$result = '404 Error';
-	
-	if (!(isset($pageinfo) && $pageinfo->content_id == -1))
+	if (isset($pageinfo) && $pageinfo->content_id == -1)
+	{
+		#We've a custom error message...  set a message
+		return "404 Error";
+	}
+	else
 	{
 		$result = $pageinfo->content_menutext;
 		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 		{
 			$result = ereg_replace("\{\/?php\}", "", $result);
 		}
-	}
-	
-	if (array_key_exists('assign', $params))
-	{
-		$smarty->assign($params['assign'], $result);
-	}
-	else
-	{
 		return $result;
 	}
 }
 
 function smarty_cms_help_function_menu_text() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Prints the menu text of the page.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{menu_text}</code></p>
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
-	</ul>
-	<?php
+  echo lang('help_function_menu_text');
 }
 
 function smarty_cms_about_function_menu_text() {

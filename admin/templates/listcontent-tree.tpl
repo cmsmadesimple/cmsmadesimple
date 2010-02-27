@@ -1,30 +1,130 @@
-<div class="pageoverflow">
-  <p class="pageoptions">
-    {if $add_pages eq true}
-      <a href="addcontent.php" class="pageoptions">{$newobject_image}</a>
-      <a class="pageoptions" href="addcontent.php">{lang string='addcontent'}</a>
+<div id="content_tree" class="content_tree">
+    {if $content->has_children()}
+        <ul>
+            {include file='listcontent-entries.tpl' content=$content->get_children()}
+        </ul>
     {/if}
-  </p>
 </div>
-
-<form action="multicontent.php" method="post">
-	{if count($content->get_children()) gt 0}
-		<ul style="list-style-type: none;" id="list-container">
-			{include file='listcontent-entries.tpl' content=$content->get_children() siblingcount=$content->get_children_count()}
-		</ul>
-	{/if}
-</form>
-
-<div class="pageoverflow">
-  <p class="pageoptions">
-    {if $add_pages eq true}
-      <a href="addcontent.php" class="pageoptions">{$newobject_image}</a>
-      <a class="pageoptions" href="addcontent.php">{lang string='addcontent'}</a>
-    {/if}
-    <a style="margin-left: 10px;" href="listcontent.php?expandall=1" onclick="cms_ajax_content_expandall(); return false;">{$expandall_image}</a>
-    <a href="listcontent.php?expandall=1" onclick="cms_ajax_content_expandall(); return false;">{lang string='expandall'}</a>
-    <a style="margin-left: 10px;" href="listcontent.php?collapseall=1" onclick="cms_ajax_content_collapseall(); return false;">{$collapseall_image}</a>
-    <a href="listcontent.php?collapseall=1" onclick="cms_ajax_content_collapseall(); return false;">{lang string='contractall'}</a>
-  </p>
-</div>
-
+{literal}
+<script type="text/javascript">
+function update_bulk_actions(tree_obj, deselect)
+{
+    selected = tree_obj.selected_arr;
+    if ((selected.length > 0 && !deselect) || (selected.length > 1 && deselect))
+    {
+        $(".multiselect").each(
+            function ()
+            {
+                $(this).fadeIn("slow");
+            }
+        );
+    }
+    else
+    {
+        $(".multiselect").each(
+            function ()
+            {
+                $(this).fadeOut("slow");
+            }
+        );
+    }
+}
+function submit_bulk_actions(tree_obj)
+{
+    $(".selectedvals").each(
+        function()
+        {
+            $(this).val("");
+        }
+    );
+    $.each(
+        $.tree.reference('#content_tree').selected_arr,
+        function()
+        {
+            var the_id = this.attr('id');
+            $(".selectedvals").each(
+                function()
+                {
+                    $(this).val($.trim($(this).val() + " " + the_id));
+                }
+            );
+        }
+    );
+}
+$(function () {
+	$("#content_tree").tree(
+	    {
+	        rules:
+	        {
+                draggable : "all",
+                multiple : "alt",
+                drag_copy : false
+	        },
+	        ui:
+	        {
+    	        animation: 200
+	        },
+	        callback:
+	        {
+                onselect: function(node, tree_obj)
+                {
+                    selected = tree_obj.selected_arr;
+                    if (selected.length > 1)
+                        cms_ajax_content_select("multiple");
+                    else if (selected.length == 0)
+                        cms_ajax_content_select("none");
+                    else
+                        cms_ajax_content_select(node.id);
+                    update_bulk_actions(tree_obj, false);
+                },
+                ondeselect: function(node, tree_obj)
+                {
+                    var node_id = node.id;
+                    selected = jQuery.grep(tree_obj.selected_arr, function(i, n) {return i.attr('id') != node_id});
+                    if (selected.length > 1)
+                        cms_ajax_content_select("multiple");
+                    else if (selected.length == 0)
+                        cms_ajax_content_select("none");
+                    else
+                        cms_ajax_content_select(selected[0].attr('id'));
+                    update_bulk_actions(tree_obj, true);
+                },
+                onmove: function(node, ref_node, type, tree_obj, rollback) 
+                {
+                    tree_obj.lock(true);
+                    cms_ajax_call("content_move_new", [node.id, ref_node.id, type],
+                    {
+                        success: function (data, textStatus)
+                        {
+                            successful = false;
+                            cms_ajax_callback(data);
+                            if (!successful)
+                            {
+                                $.tree_rollback(rollback);
+                            }
+                            this;
+                        },
+                        complete: function(XMLHttpRequest, textStatus)
+                        {
+                            tree_obj.lock(false);
+                            this;
+                        }
+                    }); 
+                }
+	        },
+            plugins : {
+                cookie : { prefix : "pagetree" },
+                metadata : {},
+                hotkeys : {},
+                /* contextmenu : { items : { remove : { action: function(NODE, TREE_OBJ) { if(confirm("?")) TREE_OBJ.remove(NODE); } } } }, */
+                checkbox : { three_state : true },
+                themeroller : { }
+            }
+	    }
+	);
+});
+$(document).ready(function () {
+    update_bulk_actions($.tree.reference('#content_tree'), false);
+});
+</script>
+{/literal}

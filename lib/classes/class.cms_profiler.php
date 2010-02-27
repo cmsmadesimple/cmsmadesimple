@@ -90,7 +90,7 @@ class CmsProfiler extends CmsObject
 	 **/
 	function mark( $label )
 	{
-		$mark = @sprintf ( "\n<div class=\"profiler\">$this->_prefix %.4f $label</div>", $this->get_microtime() - $this->_start );
+		$mark = @sprintf ( "\n<div class=\"profiler\">$this->_prefix %.4f %d $label</div>", $this->get_microtime() - $this->_start, $this->get_memory());
 		$this->_buffer[] = $mark;
 		return $mark;
 	}
@@ -106,13 +106,15 @@ class CmsProfiler extends CmsObject
 	 * @access public
 	 * @param string Glue string
 	 **/
-	function report( $memory = true, $database = true, $glue='' )
+	function report( $memory = true, $database = true, $glue='')
 	{
-		//$db = cms_db();
-		
 		echo '<div id="profiler_output" style="font-size: .75em;">';
-
+		
 		echo implode( $glue, $this->_buffer );
+		
+		echo '<br />';
+		echo $this->get_time();
+		
 		if ($memory)
 		{
 			echo '<br />';

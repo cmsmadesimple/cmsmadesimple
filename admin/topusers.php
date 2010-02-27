@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,10 @@ require_once("../include.php");
 check_login();
 
 include_once("header.php");
-$themeObject->display_section_pages('usersgroups');
+$themeObject->ShowShortcuts();
+$themeObject->DisplaySectionMenuDivStart();
+$themeObject->DisplaySectionPages('usersgroups');
+$themeObject->DisplaySectionMenuDivEnd();
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

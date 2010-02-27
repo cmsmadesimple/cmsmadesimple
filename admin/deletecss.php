@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -35,6 +35,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -70,8 +71,8 @@ if (isset($_GET["css_id"]))
 	{
 
 		# first we get the name of the css for logging
-		$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE id = ?";
-		$result = cms_db()->Execute($query, array($css_id));
+		$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = ?";
+		$result = $db->Execute($query, array($css_id));
 		
 		if ($result && $result->RecordCount())
 		{
@@ -89,7 +90,7 @@ if (isset($_GET["css_id"]))
 		{
 			# then we check if this CSS has associations
 			$query = "SELECT * FROM ".cms_db_prefix()."css_assoc WHERE assoc_css_id = ?";
-			$result = cms_db()->Execute($query, array($css_id));
+			$result = $db->Execute($query, array($css_id));
 			
 			if ($result && $result->RecordCount())
 			{
@@ -100,10 +101,18 @@ if (isset($_GET["css_id"]))
 
 		# everything should be ok
 		if ($dodelete)
-		{
-			if (cmsms()->stylesheet->delete($css_id))
+		{	
+			global $gCms;
+			$styleops =& $gCms->GetStylesheetOperations();
+			$onestylesheet = $styleops->LoadStylesheetByID($css_id);
+			
+			Events::SendEvent('Core', 'DeleteStylesheetPre', array('stylesheet' => &$onestylesheet));
+			
+			$result = $styleops->DeleteStylesheetById($css_id);
+
+			if ($result)
 			{
-				//Events::SendEvent('Core', 'DeleteStylesheetPost', array('stylesheet' => &$onestylesheet));
+				Events::SendEvent('Core', 'DeleteStylesheetPost', array('stylesheet' => &$onestylesheet));
 				audit($css_id, $css_name, 'Deleted CSS');
 			}
 			else
@@ -133,11 +142,11 @@ else
 #******************************************************************************
 if ($dodelete)
 {
-	redirect("listcss.php");
+	redirect("listcss.php".$urlext);
 }
 else
 {
-	redirect("listcss.php?message=$error");
+	redirect("listcss.php".$urlext."&message=$error");
 }
 
 # vim:ts=4 sw=4 noet

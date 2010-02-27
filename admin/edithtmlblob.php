@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,8 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.template.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -46,17 +48,17 @@ if (isset($_POST["htmlblob_id"])) $htmlblob_id = $_POST["htmlblob_id"];
 else if (isset($_GET["htmlblob_id"])) $htmlblob_id = $_GET["htmlblob_id"];
 
 if (isset($_POST["cancel"])) {
-	redirect("listhtmlblobs.php");
+	redirect("listhtmlblobs.php".$urlext);
 	return;
 }
 
-$gCms = cmsms();
+global $gCms;
 $gcbops =& $gCms->GetGlobalContentOperations();
 
 $userid = get_userid();
 $adminaccess = check_permission($userid, 'Modify Global Content Blocks');
-$access = check_permission($userid, 'Modify Global Content Blocks') || $gcbops->CheckOwnership($htmlblob_id, $userid) ||
-$gcbops->CheckAuthorship($htmlblob_id, $userid);
+$isowner = $gcbops->CheckOwnership($htmlblob_id,$userid);
+$access = $adminaccess || $isowner || $gcbops->CheckAuthorship($htmlblob_id, $userid);
 
 /*
 $htmlarea_flag = false;
@@ -72,53 +74,44 @@ else if (get_preference($userid, 'use_javasyntax') == "1")
     $use_javasyntax = true;
 }
 */
-
-$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
+$gcb_wysiwyg = (get_site_preference('nogcbwysiwyg','0') == '0') ? 1 : 0;
+if( $gcb_wysiwyg )
+  {
+    $gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
+  }
 
 if ($access)
 {
 	if (isset($_POST["edithtmlblob"]))
 	{
-		$validinfo = true;
-		if ($htmlblob == "")
-		{
-			$error .= "<li>".lang('nofieldgiven', array(lang('edithtmlblob')))."</li>";
-			$validinfo = false;
-		}
-		else if ($htmlblob != $oldhtmlblob && CmsGlobalContentOperations::check_existing_name($htmlblob))
-		{
-			$error .= "<li>".lang('blobexists')."</li>";
-			$validinfo = false;
-		}
+		$blobobj = cms_orm('CmsGlobalContent')->find_by_id($htmlblob_id);
+		$blobobj->name = $htmlblob;
+		$blobobj->content = $content;
+		$blobobj->owner = $owner_id;
 
-		if ($validinfo)
+		if ($blobobj->save())
 		{
-			$blobobj = cmsms()->global_content->find_by_id($htmlblob_id);
-			$blobobj->name = $htmlblob;
-			$blobobj->set_multi_language_content('content', 'en_US', $content);
-			$blobobj->owner = $owner_id;
-
 			$blobobj->ClearAuthors();
-			if (isset($_POST["additional_editors"])) {
-					foreach ($_POST["additional_editors"] as $addt_user_id) {
-						$blobobj->AddAuthor($addt_user_id);
-					}
-			}
-			$blobobj->AddAuthor($userid);
-			$result = $blobobj->save();
-
-			if ($result)
+			if (isset($_POST["additional_editors"]))
 			{
-				audit($blobobj->id, $blobobj->name, 'Edited Html Blob');
-
-				if (!isset($_POST['apply'])) {
-					CmsResponse::redirect('listhtmlblobs.php');
+				foreach ($_POST["additional_editors"] as $addt_user_id)
+				{
+					$blobobj->AddAuthor($addt_user_id);
 				}
 			}
-			else
+			$blobobj->AddAuthor($userid);
+
+			audit($blobobj->id, $blobobj->name, 'Edited Html Blob');
+
+			if (!isset($_POST['apply']))
 			{
-				$error .= "<li>".lang('errorinsertingblob')."</li>";
+				redirect('listhtmlblobs.php'.$urlext);
+				return;
 			}
+		}
+		else
+		{
+			$error .= "<li>".lang('errorinsertingblob')."</li>";
 		}
 
 		if ($ajax)
@@ -142,18 +135,18 @@ if ($access)
 	}
 	else if ($htmlblob_id != -1)
 	{
-		$onehtmlblob = cmsms()->global_content->find_by_id($htmlblob_id);
+		$onehtmlblob = cms_orm('CmsGlobalContent')->find_by_id($htmlblob_id);
 		$htmlblob = $onehtmlblob->name;
 		$oldhtmlblob = $onehtmlblob->name;
 		$owner_id = $onehtmlblob->owner;
-		$content = $onehtmlblob->get_multi_language_content('content', 'en_US');
+		$content = $onehtmlblob->content;
 	}
 }
 
 if (strlen($htmlblob) > 0)
-{
-	$CMS_ADMIN_SUBTITLE = $htmlblob;
-}
+    {
+    $CMS_ADMIN_SUBTITLE = $htmlblob;
+    }
 
 // Detect if a WYSIWYG is in use, and grab its form submit action (copied from editcotent.php)
 $addlScriptSubmit = '';
@@ -173,6 +166,7 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
+  // <![CDATA[
 window.Edit_Blob_Apply = function(button)
 {
 	$addlScriptSubmit
@@ -210,13 +204,13 @@ window.Edit_Blob_Apply = function(button)
 				var htmlShow = '';
 				if (response == 'Success')
 				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '</p></div>';
+					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
 				}
 				else
 				{
 					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
 					htmlShow += details;
-					htmlShow += '</ul></div>';
+					htmlShow += '<\/ul><\/div>';
 				}
 				$('Edit_Blob_Result').innerHTML = htmlShow;
 			}
@@ -229,6 +223,7 @@ window.Edit_Blob_Apply = function(button)
 
 	return false;
 }
+ // ]]>
 </script>
 EOSCRIPT;
 
@@ -237,40 +232,63 @@ include_once("header.php");
 // Holder for AJAX apply result
 print '<div id="Edit_Blob_Result"></div>';
 
-$db = cms_db();
+global $gCms;
+$db =& $gCms->GetDb();
 
-$owners = "<select name=\"owner_id\">";
 
-$query = "SELECT id, username FROM ".cms_db_prefix()."users ORDER BY username";
-$result = $db->Execute($query);
-
-while($result && $row = $result->FetchRow())
+// get the current list of additional users
+$query = 'SELECT user_id FROM '.cms_db_prefix().'additional_htmlblob_users WHERE htmlblob_id = ?';
+$cur_addt_users = $db->GetArray($query,array($htmlblob_id));
 {
-	$owners .= "<option value=\"".$row["id"]."\"";
-	if ($row["id"] == $owner_id)
-	{
-		$owners .= " selected=\"selected\"";
-	}
-	$owners .= ">".$row["username"]."</option>";
+  $tmp = array();
+  foreach( $cur_addt_users as $one )
+    {
+      $tmp[] = $one['user_id'];
+    }
+  $cur_addt_users = $tmp;
 }
 
+// Get the list of all users
+$query = "SELECT user_id, username FROM ".cms_db_prefix()."users ORDER BY username";
+$users = $db->GetArray($query);
+
+// Build the owners list
+$owners = "<select name=\"owner_id\">";
+foreach( $users as $row )
+{
+  $owners .= "<option value=\"".$row["user_id"]."\"";
+  if ($row["user_id"] == $owner_id)
+    {
+      $owners .= " selected=\"selected\"";
+    }
+  $owners .= ">".$row["username"]."</option>";
+}
 $owners .= "</select>";
 
+// Build the additional users list
 $addt_users = "";
-
-$query = "SELECT id, username FROM ".cms_db_prefix()."users WHERE id <> ? ORDER BY username";
-$result = $db->Execute($query,array($userid));
-
-while($result && $row = $result->FetchRow())
+$groupops =& $gCms->GetGroupOperations();
+$groups = $groupops->LoadGroups();
+foreach( $groups as $onegroup )
 {
-	$addt_users .= "<option value=\"".$row["id"]."\"";
-	$query = "SELECT * from ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ".$row["id"]." AND htmlblob_id = ?";
-	$newresult = $db->Execute($query,array($htmlblob_id));
-	if ($newresult && $newresult->RecordCount() > 0)
-	{
-		$addt_users .= " selected=\"true\"";
-	}
-	$addt_users .= ">".$row["username"]."</option>";
+  if( $onegroup->id == 1 ) continue;
+  $addt_users .= "<option value=\"".($onegroup->id*-1)."\"";
+  if( in_array($onegroup->id * -1, $cur_addt_users) )
+    {
+      $addt_users .= "selected=\"selected\"";
+    }
+  $addt_users .= '>'.lang('group').":&nbsp;{$onegroup->name}</option>";
+}
+foreach( $users as $row )
+{
+  if( $row['user_id'] == 1 ) continue;
+  if( $row['user_id'] == $userid ) continue;
+  $addt_users .= "<option value=\"".$row["user_id"]."\"";
+  if( in_array( $row['user_id'], $cur_addt_users ) )
+    {
+      $addt_users .= "selected=\"selected\"";
+    }
+  $addt_users .= ">".$row["username"]."</option>";
 }
 
 if (!$access)
@@ -289,60 +307,53 @@ else
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('edithtmlblob'); ?>
 	<form id="Edit_Blob" method="post" action="edithtmlblob.php">
-	<div class="submitrow">
-		<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
-		<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
-		<button class="apply" name="applybutton" type="submit"><?php echo lang('apply')?></button>	
-	</div>
-	<div id="page_tabs" style="margin-top:0.5em;">
-		<ul>
-			<li><a href="#content"><span>Content</span></a></li>
-			<li><a href="#permissions"><span>Permissions</span></a></li>
-		</ul>
-		<div id="content">		
-		
-		<div class="row">
-			<label for="htmlblob"><?php echo lang('name')?>:</label>
-			<input type="text" id="htmlblob" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" />
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+			<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" onclick="return window.Edit_Blob_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
 		</div>
-		<div class="row">
-			<label>*<?php echo lang('content')?>:</label>
-			<?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content');?>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('name')?>:</p>
+			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
 		</div>
-	</div>
-	<div id="permissions">
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('content')?>:</p>
+			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content');?></p>
+		</div>
 	<?php if ($adminaccess) { ?>
-		<div class="row">
-			<label><?php echo lang('owner')?>:</label>
-			<?php echo $owners?>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('owner')?>:</p>
+			<p class="pageinput"><?php echo $owners?></p>
 		</div>
 	<?php } ?>
-	<?php if ($addt_users != '') { ?>
-		<div class="row">
-			<label><?php echo lang('additionaleditors')?>:</label>
-			<select name="additional_editors[]" multiple="multiple" size="3"><?php echo $addt_users?></select>
+        <?php if ($adminaccess || $isowner && ($addt_users != '')) { ?>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>
+			<p class="pageinput"><select name="additional_editors[]" multiple="multiple" size="6"><?php echo $addt_users?></select></p>
 		</div>
 	<?php } ?>
-	</div>
-	</div>
-		<input type="hidden" name="edithtmlblob" value="true" />
-		<input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob; ?>" />
-		<input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id; ?>" />
-		<?php if (!$adminaccess) { ?>
-			<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>" />
-		<?php } ?>
-		<div class="submitrow">
-			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
-			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
-			<button class="apply" name="applybutton" type="submit"><?php echo lang('apply')?></button>	
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="edithtmlblob" value="true" />
+				<input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob; ?>" />
+				<input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id; ?>" />
+				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<?php if (!$adminaccess) { ?>
+					<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>" />
+				<?php } ?>
+				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" onclick="return window.Edit_Blob_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
 		</div>
 	</form>
 </div>
-<script type="text/javascript">
-<!--
-	$('#page_tabs').tabs('content');
-//-->
-</script>
 
 <?php
 }

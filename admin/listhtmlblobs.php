@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-//require_once("../lib/classes/class.htmlblob.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -40,7 +40,7 @@ if (isset($_GET["message"])) {
 	$userid	= get_userid();
 
 	global $gCms;
-	$gcbops = $gCms->GetGlobalContentOperations();
+	$gcbops =& $gCms->GetGlobalContentOperations();
 
 	$modifyall = check_permission($userid, 'Modify Global Content Blocks');
 	$htmlbloblist = $gcbops->LoadHtmlBlobs();
@@ -60,7 +60,6 @@ if (isset($_GET["message"])) {
 		echo "<th>".lang('tagtousegcb')."</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
-		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
@@ -73,20 +72,15 @@ if (isset($_GET["message"])) {
 		$counter = 0;
 		foreach ($htmlbloblist as $onehtmlblob){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-            if ($modifyall)
+            if ($modifyall ||  quick_check_authorship($onehtmlblob->id, $myblobs))
 				{
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
-				/*echo "<td><a href=\"gcbversions.php?id=".$onehtmlblob->id."\">";
-				echo $themeObject->DisplayImage('icons/system/versions.gif', lang('versions'),'','','systemicon');
-				echo "</a></td>\n";*/
-				echo "<td>";
-				echo "{global_content name=\"$onehtmlblob->name\"}";
-				echo "</td>\n";				
-				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">";
-				echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+				echo "<td><a href=\"edithtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
+				echo "<td>{global_content name='".$onehtmlblob->name."'}</td>\n";
+				echo "<td><a href=\"edithtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\">";
+                echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
-				echo "<td><a href=\"deletehtmlblob.php?htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onehtmlblob->name)."');\">";
+				echo "<td><a href=\"deletehtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onehtmlblob->name)."');\">";
                 echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                 echo "</a></td>\n";
 				echo "</tr>\n";
@@ -107,10 +101,10 @@ if (check_permission($userid, 'Add Global Content Blocks'))
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="addhtmlblob.php">
+			<a href="addhtmlblob.php<?php echo $urlext ?>">
 				<?php 
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addhtmlblob'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="addhtmlblob.php">'.lang("addhtmlblob");
+					echo ' <a class="pageoptions" href="addhtmlblob.php'.$urlext.'">'.lang("addhtmlblob");
 				?>
 			</a>
 		</p>		

@@ -1,8 +1,25 @@
 <?php
+$lang['help_loadprops'] = 'Use this parameter when using advanced properties in your menu manager template.  This parameeter will force the loading of all content properties for each node (such as extra1, image, thumbnail, etc).  and will dramatically increase the number of queries required to build a menu, and increase memory requirements, but will allow for much more advanced menus';
+$lang['readonly'] = 'read only';
+$lang['error_templatename'] = 'You cannot specify a template name ending with .tpl';
+$lang['this_is_default'] = 'Default menu template';
+$lang['set_as_default'] = 'Set as default menu template';
+$lang['default'] = 'Default';
+$lang['templates'] = 'Templates';
 $lang['addtemplate'] = 'Add Template';
 $lang['areyousure'] = 'Are you sure you want to delete this?';
 $lang['changelog'] = <<<EOF
 	<ul>
+<li>1.6.2 - Can no longer delete default template, fix problem with default database templates.</li>
+<li>1.6.1 - Add created and modified entries on each node.</li>
+<li>1.6 - Re-design admin interface, allow setting the default menu manager template.</li>
+        <li>1.5.4 - Minor bugfix, now require CMS 1.5.3.</li>
+        <li>1.5.3 - Support for syntax hilighter.</li>
+        <li>1.5.2 - Added more fields available in each node in the template.</li>
+        <li>1.5 - Bump version to be compatible with 1.1 only, and add the SetParameterTypes calls</li>
+	<li>1.4.1 -- Fix a problem where menus would not show if includeprefix was not specified.
+	<li>1.4 -- Accept a comma separated list of includeprefixes or excludeprefixes</li>
+	<li>1.3 -- Added includeprefix and excludeprefix params</li>
 	<li>1.1 -- Added handling of target parameter, mainly for the Link content type</li>
 	<li>1.0 -- Initial Release</li>
 	</ul> 
@@ -13,6 +30,8 @@ $lang['deletetemplate'] = 'Delete Template';
 $lang['edittemplate'] = 'Edit Template';
 $lang['filename'] = 'Filename';
 $lang['filetemplates'] = 'File Templates';
+$lang['help_includeprefix'] = 'Include only those items who\'s page alias matches one of the specified (comma separated) prefixes.  This parameter cannot be combined with the excludeprefix parameter.';
+$lang['help_excludeprefix'] = 'Exclude all items (and their children) who\'s page alias matches one of the specified (comma separated) prefixes.  This parameter must not be used in conjunction with the includeprefix parameter.';
 $lang['help_collapse'] = 'Turn on (set to 1) to have the menu hide items not related to the current selected page.';
 $lang['help_items'] = 'Use this item to select a list of pages that this menu should display.  The value should be a list of page aliases separated with commas.';
 $lang['help_number_of_levels'] = 'This setting will only allow the menu to only display a certain number of levels deep.';
@@ -21,7 +40,7 @@ $lang['help_show_root_siblings'] = 'This option only becomes useful if start_ele
 $lang['help_start_level'] = 'This option will have the menu only display items starting a the given level.  An easy example would be if you had one menu on the page with number_of_levels=\'1\'.  Then as a second menu, you have start_level=\'2\'.  Now, your second menu will show items based on what is selected in the first menu.';
 $lang['help_start_element'] = 'Starts the menu displaying at the given start_element and showing that element and it\'s children only.  Takes a hierarchy position (e.g. 5.1.2).';
 $lang['help_start_page'] = 'Starts the menu displaying at the given start_page and showing that element and it\'s children only.  Takes a page alias.';
-$lang['help_template'] = 'The template to use for displaying the menu.  Templates will come from the database templates unless the template name ends with .tpl, in which case it will come from a file in the MenuManager templates directory';
+$lang['help_template'] = 'The template to use for displaying the menu.  Templates will come from the database templates unless the template name ends with .tpl, in which case it will come from a file in the MenuManager templates directory (defaults to simple_navigation.tpl)';
 $lang['help'] = <<<EOF
 	<h3>What does this do?</h3>
 	<p>Menu Manager is a module for abstracting menus into a system that's easily usable and customizable.  It abstracts the display portion of menus into smarty templates that can be easily modified to suit the user's needs. That is, the menu manager itself is just an engine that feeds the template. By customizing templates, or make your own ones, you can create virtually any menu you can think of.</p>
@@ -51,8 +70,16 @@ $lang['help'] = <<<EOF
 			<li>\$node->prevdepth -- Depth (level) of the node that was right before this one</li>
 			<li>\$node->haschildren -- Returns true if this node has child nodes to be displayed</li>
 			<li>\$node->menutext -- Menu Text</li>
+			<li>\$node->raw_menutext -- Menu Text without having html entities converted</li>
 			<li>\$node->alias -- Page alias</li>
-			<li>\$node->target -- Target for the link.  Will be empty if content doesn't set it.</li>
+			<li>\$node->extra1 -- Applicable only when the loadprops parameter is supplied on the menu tag, this field contains the value of the extra1 page property.</li>
+			<li>\$node->extra2 -- Applicable only when the loadprops parameter is supplied on the menu tag, this field contains the value of the extra2 page property.</li>
+			<li>\$node->extra3 -- Applicable only when the loadprops parameter is supplied on the menu tag, this field contains the value of the extra3 page property.</li>
+			<li>\$node->image -- Applicable only when the loadprops parameter is supplied on the menu tag, this field contains the value of the image page property (if non empty)</li>
+			<li>\$node->thumbnail -- Applicable only when the loadprops parameter is supplied on the menu tag, this field contains the value of the thumbnail page property (if non empty)</li>
+			<li>\$node->target -- Applicable only when the loadprops parameter is supplied in the menu tag, this field contains Target for the link.  Will be empty if content does not set it.</li>
+			<li>\$node->created -- Item creation date</li>
+			<li>\$node->modified -- Item modified date</li>
 			<li>\$node->index -- Count of this node in the whole menu</li>
 			<li>\$node->parent -- True if this node is a parent of the currently selected page</li>
 		</ul>
@@ -66,4 +93,5 @@ $lang['notemplatefiles'] = 'No file templates in %s';
 $lang['notemplatename'] = 'No template name given.';
 $lang['templatecontent'] = 'Template Content';
 $lang['templatenameexists'] = 'A template with this name already exists';
+$lang['recursive'] = 'Recursive';
 ?>

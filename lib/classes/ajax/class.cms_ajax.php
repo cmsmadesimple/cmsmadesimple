@@ -36,28 +36,25 @@ class CmsAjax extends CmsObject
 	{
 		if (isset($_REQUEST['cms_ajax_function_name']))
 		{
-			header("Content-Type: text/xml; charset=utf-8");
+			while(@ob_end_clean());
+			header("Content-Type: text/html; charset=utf-8");
 			$function_name = $_REQUEST['cms_ajax_function_name'];
 			
-			$xml = new SimpleXMLElement($_REQUEST['cms_ajax_args']);
+			$json = json_decode($_REQUEST['cms_ajax_args']);
 			$args = array();
-			if ($xml)
+			if (is_array($json))
 			{
-				foreach ($xml->xpath('/ajaxarray/*') as $element)
+				foreach ($json as $ary)
 				{
-					switch($element->getName())
+					if (is_array($ary) && $ary[0] == 'sf')
 					{
-						case 'e':
-							$args[] = (string)$element;
-							break;
-						case 'sf':
-							$str = (string)$element;
-							$result = array();
-
-							parse_str($str, $result);
-							
-							$args[] = $result;
-							break;
+						$result = array();
+						parse_str($ary[1], $result);
+						$args[] = $result;
+					}
+					else
+					{
+						$args[] = $ary;
 					}
 				}
 			}
@@ -74,10 +71,10 @@ class CmsAjax extends CmsObject
 
 		foreach ($this->registered_functions as $function)
 		{
-			$result .= 'function cms_ajax_' . $function . '(){ return cms_ajax_call("' . $function . '", arguments, 1); }' . "\n";
+			$result .= 'function cms_ajax_' . $function . '(){ return cms_ajax_call("' . $function . '", arguments, {}); }' . "\n";
 		}
 		
-		return "<script type=\"text/javascript\">\n<!--\n" . $result . "-->\n</script>\n<script type=\"text/javascript\" src=\"" . CmsRequest::get_calculated_url_base() . "/lib/js/cms_ajax.js\"></script>\n";
+		return "<script type=\"text/javascript\">\n<!--\n" . $result . "-->\n</script>\n<script type=\"text/javascript\" src=\"" . CmsRequest::get_calculated_url_base(true) . "/lib/jquery/jquery.cmsms.js\"></script>\n";
 	}
 }
 

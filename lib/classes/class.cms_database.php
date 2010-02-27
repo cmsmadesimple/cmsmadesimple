@@ -42,6 +42,7 @@ class CmsDatabase extends CmsObject
 		if (self::$instance == NULL)
 		{
 			CmsDatabase::connect($dbms, $hostname, $username, $password, $dbname, $debug);
+			CmsEventManager::register_event_handler('Core:shutdown_now', array('CmsDatabase', 'close'));
 		}
 		return self::$instance;
 	}
@@ -55,6 +56,14 @@ class CmsDatabase extends CmsObject
 				self::$instance->Close();
 			}
 		}
+	}
+	
+	static public function unload()
+	{
+		if (self::$instance !== null)
+			self::$instance->close();
+		
+		self::$instance = null;
 	}
 	
 	static public function get_prefix()
@@ -91,24 +100,24 @@ class CmsDatabase extends CmsObject
 		
 		$dbinstance = null;
 
-		$_GLOBALS['ADODB_CACHE_DIR'] = cms_join_path(ROOT_DIR,'tmp','cache');
+		$_GLOBALS['ADODB_CACHE_DIR'] = cms_join_path(ROOT_DIR, 'tmp', 'cache');
 
-		require_once(cms_join_path(ROOT_DIR,'lib','adodb5','adodb-exceptions.inc.php'));
-        require_once(cms_join_path(ROOT_DIR,'lib','adodb5','adodb.inc.php'));
+		require_once(cms_join_path(ROOT_DIR, 'lib', 'adodb', 'adodb-exceptions.inc.php'));
+		require_once(cms_join_path(ROOT_DIR, 'lib', 'adodb', 'adodb.inc.php'));
 
 		try
 		{
-			$dbinstance = &ADONewConnection($dbms);
-			$dbinstance->fnExecute = 'count_execs';
+			$dbinstance = ADONewConnection($dbms);
+			$dbinstance->fnExecute = 'pre_parse_query';
 			$dbinstance->fnCacheExecute = 'count_cached_execs';
 	
 			if ($persistent)
 			{
-				$connect_result = @$dbinstance->PConnect($hostname,$username,$password,$dbname);
+				$connect_result = @$dbinstance->PConnect($hostname, $username, $password, $dbname);
 			}
 			else
 			{
-				$connect_result = @$dbinstance->Connect($hostname,$username,$password,$dbname);
+				$connect_result = @$dbinstance->Connect($hostname, $username, $password, $dbname);
 			}
 		}
 		catch (exception $e)
@@ -136,6 +145,21 @@ class CmsDatabase extends CmsObject
 			$dbinstance->Execute("PRAGMA short_column_names = 1;");
 	        sqlite_create_function($dbinstance->_connectionID,'now','time',0);
 	    }
+		else
+		{
+			//if(!empty($config['default_encoding']) && $config['default_encoding'] == 'utf-8' && $config['set_names'] == true)
+			//{
+				try
+				{
+					$dbinstance->Execute("SET NAMES 'utf8'");
+				}
+				catch (exception $e)
+				{
+					//Ignore for now
+				}
+			//}
+			//$dbinstance->debug = true;
+		}
 	
 		if ($make_global)
 		{
@@ -203,9 +227,11 @@ function adodb_outp($msg, $newline = true)
 }
 
 //TODO: Clean me up.  Globals?  Yuck!
-function count_execs($db, $sql, $inputarray)
+function pre_parse_query($db, &$sql, $inputarray)
 {
 	//CmsProfiler::get_instance()->mark($sql);
+	
+	$sql = strtr($sql, array('{' => cms_db_prefix(), '}' => ''));
 
 	global $EXECS;
 

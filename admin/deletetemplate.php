@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,14 +21,15 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-//require_once("../lib/classes/class.template.inc.php");
+require_once("../lib/classes/class.template.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
-$from = 'listtemplates.php';
+$from = 'listtemplates.php'.$urlext;
 if (isset($_GET['from']) )
   {
-    $from = 'moduleinterface.php?module='.$_GET['from'];
+    $from = 'moduleinterface.php'.$urlext.'&module='.$_GET['from'];
   }
 
 
@@ -54,33 +55,13 @@ if (isset($_GET["template_id"]))
 
 		if ($dodelete)
 		{
-			#Perform the deletetemplate_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->DeleteTemplatePre($onetemplate);
-				}
-			}
-			
-			CmsEvents::SendEvent('Core', 'DeleteTemplatePre', array('template' => &$onetemplate));
+			Events::SendEvent('Core', 'DeleteTemplatePre', array('template' => &$onetemplate));
 
 			$result = $templateops->DeleteTemplateByID($template_id);
 
 			if ($result)
 			{
-				#Perform the deletetemplate_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->DeleteTemplatePost($onetemplate);
-					}
-				}
-				
-				CmsEvents::SendEvent('Core', 'DeleteTemplatePost', array('template' => &$onetemplate));
+				Events::SendEvent('Core', 'DeleteTemplatePost', array('template' => &$onetemplate));
 
 				audit($template_id, $onetemplate->name, 'Deleted Template');
 			}
@@ -94,7 +75,8 @@ if ($dodelete)
 }
 else
 {
-  redirect($from."message=".lang('errortemplateinuse'));
+  $url = $from."&message=".lang('errortemplateinuse');
+  redirect($url);
 }
 
 # vim:ts=4 sw=4 noet

@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,9 +21,10 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 if (isset($_POST['cancel']))
-	redirect('listcss.php');
+	redirect('listcss.php'.$urlext);
 
 check_login();
 
@@ -60,7 +61,7 @@ include_once("header.php");
 
 if (count($nodelist) == 0)
 {
-	redirect("listcss.php");
+	redirect("listcss.php".$urlext);
 }
 else
 {
@@ -68,13 +69,17 @@ else
 	{
 		?>
 		<div class="pagecontainer">
-			<div class="pageheader"><?php echo lang('deletetemplate') ?></div>
+			<p class="pageheader"><?php echo lang('deletetemplate') ?></p><br />
 		<?php
 		$userid = get_userid();
 		$access = check_permission($userid, 'Remove Stylesheets');
 		if ($access)
 		{
 			echo '<form method="post" action="multistylesheet.php">' . "\n";
+			echo "<div>\n";
+			echo '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />'."\n";
+			echo "</div>\n";
+
 			$idlist = array();
 			if (count($nodelist) > 0)
 			{
@@ -93,8 +98,8 @@ else
 
 			echo '<input type="hidden" name="multiaction" value="dodelete" /><input type="hidden" name="idlist" value="'.implode(':', $idlist).'" />' . "\n";
 			?>
-								<?php if (count($nodelist) > 0) { ?><input type="submit" name="confirm" value="<?php echo lang('submit') ?>"  class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" /><?php } ?>
-								<input type="submit" name="cancel" value="<?php echo lang('cancel') ?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+								<?php if (count($nodelist) > 0) { ?><input type="submit" accesskey="s" name="confirm" value="<?php echo lang('submit') ?>"  class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" /><?php } ?>
+								<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel') ?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 							</p>
 						</div>
 					</form>
@@ -104,7 +109,7 @@ else
 		}
 		else
 		{
-			redirect('listcss.php');
+			redirect('listcss.php'.$urlext);
 		}
 	}
 	else if ($action == 'dodelete')
@@ -121,11 +126,11 @@ else
 				audit($id, $title, 'Deleted Stylesheet');
 			}
 		}
-		redirect("listcss.php");
+		redirect("listcss.php".$urlext);
 	}
 	else
 	{
-		redirect("listcss.php");
+		redirect("listcss.php".$urlext);
 	}
 }
 

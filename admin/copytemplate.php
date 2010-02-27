@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,8 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-//require_once("../lib/classes/class.template.inc.php");
+require_once("../lib/classes/class.template.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -36,10 +37,10 @@ else if (isset($_GET["template_id"])) $template_id = $_GET["template_id"];
 
 if (isset($_REQUEST["template_name"])) { $template_name = $_REQUEST["template_name"]; }
 
-$from = 'listtemplates.php';
+$from = 'listtemplates.php'.$urlext;
 if (isset($_GET['from']) )
   {
-    $from = 'moduleinterface.php?module='.$_GET['from'];
+    $from = 'moduleinterface.php'.$urlext.'&amp;module='.$_GET['from'];
   }
 else if( isset( $_POST['from'] ) )
   {
@@ -101,7 +102,7 @@ if ($access)
 				//Copy attached CSS templates as well...
 				$db = &$gCms->GetDb();
 
-				$query = "SELECT assoc_css_id, assoc_type, css_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css WHERE assoc_to_id = " . $db->qstr($template_id) . " AND assoc_css_id = id";
+				$query = "SELECT assoc_css_id, assoc_type, css_name, assoc_order FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css WHERE assoc_to_id = " . $db->qstr($template_id) . " AND assoc_css_id = css_id";
 				debug_buffer($query);
 				$result2 = $db->Execute($query);
 				debug_buffer($result2);
@@ -111,7 +112,7 @@ if ($access)
 				{
 					while ($row = $result2->FetchRow())
 					{
-						$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date) VALUES ('".$onetemplate->id."','".$row['assoc_css_id']."','".$row['assoc_type']."',".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+						$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date,assoc_order) VALUES ('".$onetemplate->id."','".$row['assoc_css_id']."','".$row['assoc_type']."',".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).",'".$row['assoc_order']."')";
 						debug_buffer($query);
 						$db->Execute($query);
 					}
@@ -147,20 +148,26 @@ else
 
 
 <div class="pagecontainer">
-	<div class="pageheader"><?php echo lang('copytemplate')?></div>
+	<p class="pageheader"><?php echo lang('copytemplate')?></p>
 	<form method="post" action="copytemplate.php">
-		<div class="row">
-			<label><?php echo lang('template'); ?>:</label>
-			<?php echo $template_name; ?>
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('template'); ?>:</p>
+			<p class="pageinput"><?php echo $template_name; ?></p>
 		</div>
-		<div class="row">
-			<label for="new_template_name"><?php echo lang('newtemplatename'); ?>:</label>
-			<input type="text" id="new_template_name" name="template" maxlength="255" value="<?php echo $template?>">
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('newtemplatename'); ?>:</p>
+			<p class="pageinput"><input type="text" name="template" maxlength="255" value="<?php echo $template?>"></p>
 		</div>
-		<input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="copytemplate" value="true" /><input type="hidden" name="from" value="<?php echo $from?>" />
-		<div class="submitrow">
-			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
-			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+			      <input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="copytemplate" value="true" /><input type="hidden" name="from" value="<?php echo $from?>" />
+				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
 		</div>
 	</form>
 </div>
@@ -169,7 +176,7 @@ else
 
 }
 
-echo '<p class="pageback"><a class="pageback" href="listtemplates.php">&#171; '.lang('back').'</a></p>';
+echo '<p class="pageback"><a class="pageback" href="listtemplates.php'.$urlext.'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 

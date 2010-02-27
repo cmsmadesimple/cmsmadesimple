@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -18,21 +18,11 @@
 
 function smarty_cms_function_html_blob($params, &$smarty)
 {
-	if (array_key_exists('assign', $params))
-	{
-		$smarty->assign($params['assign'], $smarty->fetch('globalcontent:'.$params['name']));
-	}
-	else
-	{
-		return $smarty->fetch('globalcontent:'.$params['name']);
-	}
+	return $smarty->fetch('globalcontent:'.$params['name']);
 }
 
 function smarty_cms_help_function_html_blob() {
-	?>
-	<h3>What does this do?</h3>
-	<p>See the help for global_content for a description.</p>
-	<?php
+  echo lang('help_function_html_blob');
 }
 
 function smarty_cms_about_function_html_blob() {

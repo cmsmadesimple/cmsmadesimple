@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,8 +21,11 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.group.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
+
 global $gCms;
 $db =& $gCms->GetDb();
 
@@ -33,22 +36,22 @@ $dropdown = "";
 $group = "";
 if (isset($_POST["group"])) $group = $_POST["group"];
 
-$active = 1;
-if (!isset($_POST["active"]) && isset($_POST["editgroup"])) $active = 0;
-
 $group_id = -1;
 if (isset($_POST["group_id"])) $group_id = $_POST["group_id"];
 else if (isset($_GET["group_id"])) $group_id = $_GET["group_id"];
 
+$active = 1;
+if (!isset($_POST["active"]) && isset($_POST["editgroup"]) && $group_id != 1) $active = 0;
+
 if (isset($_POST["cancel"])) {
-	redirect("listgroups.php");
+	redirect("listgroups.php".$urlext);
 	return;
 }
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Groups');
-
-$db = cms_db();
+$userops =& $gCms->GetUserOperations();
+$useringroup = $userops->UserInGroup($userid,$group_id);
 
 if ($access) {
 
@@ -58,50 +61,26 @@ if ($access) {
 		if ($group == "")
 		{
 			$validinfo = false;
-			$error .= "<li>".lang('nofieldgiven', array(lang('name')))."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('groupname')))."</li>";
 		}
 
 		if ($validinfo)
 		{
-			$groupobj = new CmsGroup();
+			$groupobj = new Group();
 			$groupobj->id = $group_id;
 			$groupobj->name = $group;
 			$groupobj->active = $active;
 
-			#Perform the editgroup_pre callback
-			/*
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->EditGroupPre($groupobj);
-				}
-			}
-			*/
-			
-			//CmsEvents::SendEvent('Core', 'EditGroupPre', array('group' => &$groupobj));
+			Events::SendEvent('Core', 'EditGroupPre', array('group' => &$groupobj));
 
 			$result = $groupobj->save();
 
 			if ($result)
 			{
-				#Perform the editgroup_post callback
-				/*
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->EditGroupPost($groupobj);
-					}
-				}
-				*/
-				
-				//CmsEvents::SendEvent('Core', 'EditGroupPost', array('group' => &$groupobj));
+				Events::SendEvent('Core', 'EditGroupPost', array('group' => &$groupobj));
 
 				audit($groupobj->id, $groupobj->name, 'Edited Group');
-				CmsResponse::redirect("listgroups.php");
+				redirect("listgroups.php".$urlext);
 				return;
 			}
 			else {
@@ -139,20 +118,27 @@ else {
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('editgroup'); ?>
 	<form method="post" action="editgroup.php">
+        <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" name="group" maxlength="25" value="<?php echo $group?>" /></p>
 		</div>
+	   <?php if( !$useringroup && ($group_id != 1) ) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
 			<p class="pageinput"><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
 		</div>
+ 	   <?php } else { ?>
+                <div><input type="hidden" name="active" value="<?php echo $active ?>"/></div>
+           <?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="group_id" value="<?php echo $group_id?>" /><input type="hidden" name="editgroup" value="true" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>
 	</form>

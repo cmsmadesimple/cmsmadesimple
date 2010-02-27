@@ -1,47 +1,56 @@
 <div class="pagecontainer">
+
   <div class="pageoverflow">
     {$header_name}
-  </div><!-- pageoverflow -->
+  </div>
+  
+  <div class="pageoverflow pageoptions">
+    <div class="multiselect" style="margin-top: 0; float: right; text-align: right; display: none;">
+        {if count($bulk_content_ops)}
+        <form action="multicontent.php" method="post" onsubmit="submit_bulk_actions($.tree.reference('#content_tree')); return true;">
+        With Selected:&nbsp;&nbsp;<select name="multiaction">
+            {html_options values=$bulk_content_ops options=$bulk_content_ops}
+        </select>
+        <input class="selectedvals" type="hidden" name="selectedvals" value="" />
+        <input type="hidden" name="{$secure_name}" value="{$secure_key}" />
+        <input type="submit" value="Submit"/>
+        </form>
+        {/if}
+    </div>
 
-  <div id="contentlist">
+    <a href="{$addcontent_url}{$urlext}" title="{lang string='addcontent'}">{$newobject_image} {lang string='addcontent'}</a>
+    <a href="{$thisurl}#" onclick="$.tree.reference('#content_tree').open_all(); return false;" title="{lang string='expandall'}">{$expandall_image} {lang string='expandall'}</a>
+    <a href="{$thisurl}#" onclick="$.tree.reference('#content_tree').close_all(); return false;" title="{lang string='contractall'}">{$collapseall_image} {lang string='contractall'}</a>
+  </div>
+  
+  <div id="contentlist" style="float: left;">
+    <br clear="both" />
     {$content_list}
   </div>
+  
+  <div id="contentsummary" style="float: right; width: 500px;">
+    Nothing selected
+  </div>
+  
+  <br clear="both" />
 
+<div class="pageoverflow pageoptions">
+    <div class="multiselect" style="margin-top: 0; float: right; text-align: right; display: none;">
+        {if count($bulk_content_ops)}
+        <form action="multicontent.php" method="post" onsubmit="submit_bulk_actions($.tree.reference('#content_tree')); return true;">
+        With Selected:&nbsp;&nbsp;<select name="multiaction">
+            {html_options values=$bulk_content_ops options=$bulk_content_ops}
+        </select>
+        <input class="selectedvals" type="hidden" name="selectedvals" value="" />
+        <input type="hidden" name="{$secure_name}" value="{$secure_key}" />
+        <input type="submit" value="Submit"/>
+        </form>
+        {/if}
+    </div>
+  <a href="{$addcontent_url}{$urlext}" title="{lang string='addcontent'}">{$newobject_image} {lang string='addcontent'}</a>
+  <a href="{$thisurl}#" onclick="$.tree.reference('#content_tree').open_all(); return false;" title="{lang string='expandall'}">{$expandall_image} {lang string='expandall'}</a>
+  <a href="{$thisurl}#" onclick="$.tree.reference('#content_tree').close_all(); return false;" title="{lang string='contractall'}">{$collapseall_image} {lang string='contractall'}</a>
+</div>
 </div>
 
 <p class="pageback"><a class="pageback" href="{$back_url}">&#171; {lang string='back'}</a></p>
-
-
-<div class="contextMenu" id="context_menu" style="display: none;">
-</div>
-
-{literal}
-<script type="text/javascript">
-//<![CDATA[
-
-function set_context_menu()
-{
-	$("span.content_name").showMenu(
-		{
-			query: "#context_menu",
-			before_call: function(e) {
-				cms_ajax_context_menu($(e.currentTarget).attr('id'));
-			}
-		}
-	);
-}
-
-set_context_menu();
-
-function selectall()
-{
-      checkboxes = document.getElementsByTagName("input");
-      for (i=0; i<checkboxes.length ; i++)
-      {
-              if (checkboxes[i].type == "checkbox") checkboxes[i].checked=true;
-      }
-}
-
-//]]>
-</script>
-{/literal}

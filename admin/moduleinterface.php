@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -19,13 +19,20 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_MODULE_PAGE=1;
 
 require_once("../include.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 $userid = get_userid();
 
-$smarty = cms_smarty();
+if( isset($_SESSION['cms_passthru']) )
+  {
+    $_REQUEST = array_merge($_REQUEST,$_SESSION['cms_passthru']);
+    unset($_SESSION['cms_passthru']);
+  }
+$smarty =& $gCms->GetSmarty();
 $smarty->assign('date_format_string',get_preference($userid,'date_format_string','%x %X'));
 
 $id = '';
@@ -46,7 +53,7 @@ elseif (isset($_REQUEST['mact']))
   $action = (isset($ary[2])?$ary[2]:'');
 }
 
-if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->is_wysiwyg())
+if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIWYG())
 {
 	if (get_preference($userid, 'use_wysiwyg') == "1")
 	{
@@ -56,7 +63,8 @@ if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->is_wysi
 }
 
 $USE_OUTPUT_BUFFERING = true;
-if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->has_admin_buffering() == false)
+$USE_THEME = true;
+if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->HasAdminBuffering() == false)
 {
 	$USE_OUTPUT_BUFFERING = false;
 }
@@ -69,7 +77,6 @@ else if (isset($_REQUEST['disable_buffer']))
 	$USE_OUTPUT_BUFFERING = false;
 }
 
-$USE_THEME = true;
 if( isset( $_REQUEST[$id . 'disable_theme'] ))
 {
 	$USE_THEME = false;
@@ -78,16 +85,28 @@ else if( isset( $_REQUEST['disable_theme'] ))
 {
 	$USE_THEME = false;
 }
-if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->get_header_html() != false)
+
+if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false'))
+{
+  // for simplicity and compatibility with the frontend.
+  $USE_THEME = false;
+  $USE_OUTPUT_BUFFERING = false;
+}
+
+if (isset($gCms->modules[$module]['object']) )
   {
-    $headtext =  $gCms->modules[$module]['object']->get_header_html();
+    $txt = $gCms->modules[$module]['object']->GetHeaderHTML();
+    if( $txt !== false )
+      {
+	$headtext = $txt;
+      }
   }
  else
    {
      $headtext = '';
    }
 
-if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->suppress_admin_output($_REQUEST) != false)
+if (isset($gCms->modules[$module]['object']) && ($gCms->modules[$module]['object']->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput'])))
 	{
 	$suppressOutput = true;
 	}
@@ -98,6 +117,12 @@ else
 
 if (count($gCms->modules) > 0)
 {
+  if( !isset($gCms->modules[$module]) )
+    {
+      trigger_error('Module '.$module.' not found in memory. This could indicate that the module is in need of upgrade or that there are other problems');
+      redirect("index.php".$urlext);
+
+    }
 	if (isset($USE_THEME) && $USE_THEME == false)
 	{
 		echo '';
@@ -107,17 +132,17 @@ if (count($gCms->modules) > 0)
 	  $params = GetModuleParameters($id);
 	  if (FALSE == empty($params['module_message']))
 	    {
-	      echo $themeObject->show_message($params['module_message']);
+	      echo $themeObject->ShowMessage($params['module_message']);
 	    }
 	  if (FALSE == empty($params['module_error']))
 	    {
-	      echo $themeObject->show_errors($params['module_error']);
+	      echo $themeObject->ShowErrors($params['module_error']);
 	    }
 	  if (!$suppressOutput)
 	    {
 	      echo '<div class="pagecontainer">';
 	      echo '<div class="pageoverflow">';
-	      echo $themeObject->show_header($gCms->modules[$module]['object']->get_friendly_name(), '', '', 'both').'</div>';
+	      echo $themeObject->ShowHeader($gCms->modules[$module]['object']->GetFriendlyName(), '', '', 'both').'</div>';
 	    }
 	}
 
@@ -129,8 +154,7 @@ if (count($gCms->modules) > 0)
 		}
 		$id = 'm1_';
 		$params = GetModuleParameters($id);
-		$request = $gCms->modules[$module]['object']->create_request_instance($id);
-		echo $request->do_action_base($action, $params);
+		echo $gCms->modules[$module]['object']->DoActionBase($action, $id, $params);
 		if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 		{
 			$content = @ob_get_contents();
@@ -144,7 +168,7 @@ if (count($gCms->modules) > 0)
 	}
 	else
 	{
-		redirect("index.php");
+		redirect("index.php".$urlext);
 	}
 }
 
@@ -154,7 +178,7 @@ if (isset($USE_THEME) && $USE_THEME == false)
 }
 elseif (!$suppressOutput)
 {
-	echo '<p class="pageback"><a class="pageback" href="'.$themeObject->back_url().'">&#171; '.lang('back').'</a></p>';
+	echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 }
 if (!$suppressOutput)
 	{

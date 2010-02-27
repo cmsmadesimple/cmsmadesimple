@@ -34,8 +34,10 @@ $cms_ajax->register_function('content_expandall');
 $cms_ajax->register_function('content_collapseall');
 $cms_ajax->register_function('content_toggleexpand');
 $cms_ajax->register_function('content_move');
+$cms_ajax->register_function('content_move_new');
 $cms_ajax->register_function('content_delete');
 $cms_ajax->register_function('context_menu');
+$cms_ajax->register_function('content_select');
 
 function check_modify_all($userid)
 {
@@ -48,11 +50,18 @@ $config = cms_config();
 $contentops = $gCms->GetContentOperations();
 $templateops = $gCms->GetTemplateOperations();
 
+$urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
+$smarty->assign('secure_name', CMS_SECURE_PARAM_NAME);
+$smarty->assign('secure_key', $_SESSION[CMS_USER_KEY]);
+$smarty->assign('urlext', $urlext);
+$thisurl = basename(__FILE__) . $urlext;
+$smarty->assign('thisurl', $thisurl);
+
 //include_once("../lib/classes/class.admintheme.inc.php");
 
-$cms_ajax->process_requests();
+//$cms_ajax->process_requests();
 
-CmsAdminTheme::inject_header_text($cms_ajax->get_javascript()."\n");
+//CmsAdminTheme::inject_header_text($cms_ajax->get_javascript()."\n");
 
 if (isset($_GET["makedefault"]))
 {
@@ -85,7 +94,7 @@ if (isset($_GET['collapseall']))
 if (isset($_GET['deletecontent']))
 {
 	deletecontent($_GET['deletecontent']);
-	redirect('listcontent.php');
+	redirect('listcontent.php'.$urlext);
 }
 
 if (isset($_GET['direction']))
@@ -100,11 +109,15 @@ if (isset($_GET['col']) && isset($_GET['content_id']))
 
 $userid = get_userid();
 $smarty->assign('language', get_preference($userid, 'default_cms_language', 'en_US'));
+$headtext = $cms_ajax->get_javascript();
 include_once("header.php");
+$cms_ajax->process_requests();
 
 $smarty->assign('header_name', $themeObject->ShowHeader('currentpages'));
 
 setup_smarty($themeObject);
+
+set_bulk_actions();
 
 $smarty->assign('content_list', $smarty->fetch('listcontent-tree.tpl'));
 
@@ -152,6 +165,12 @@ function setup_smarty($themeObject)
 
 	//Set some page variables
 	$smarty->assign('content', cmsms()->GetHierarchyManager()->getRootNode());
+
+	$smarty->assign('addcontent_url','editcontent.php');
+	
+	set_bulk_actions();
+	
+	$smarty->assign('bulk_content_ops', bulkcontentoperations::get_operation_list());
 }
 
 function set_permissions(&$smarty)
@@ -168,7 +187,8 @@ function set_permissions(&$smarty)
 function display_content_list()
 {
 	$userid = get_userid();
-	$themeObject = CmsAdminTheme::get_theme_for_user($userid);
+	//$themeObject = CmsAdminTheme::get_theme_for_user($userid);
+	global $themeObject;
 	$smarty = cms_smarty();
 	setup_smarty($themeObject);
 	return $smarty->fetch('listcontent-tree.tpl');
@@ -178,8 +198,8 @@ function content_list_ajax()
 {
 	$resp = new CmsAjaxResponse();
 
-	$resp->modify_html('#contentlist', display_content_list());
-	$resp->script('set_context_menu();');
+	$resp->replace_html('#contentlist', display_content_list());
+	//$resp->script('set_context_menu();');
 	
 	return $resp->get_result();
 }
@@ -190,8 +210,8 @@ function content_setactive($contentid)
 	
 	setactive($contentid, true);
 	
-	$resp->modify_html('#contentlist', display_content_list());
-	$resp->script('set_context_menu();');
+	$resp->replace_html('#contentlist', display_content_list());
+	//$resp->script('set_context_menu();');
 	$resp->script("$('#content_span_{$contentid}').highlight('#ff0', 1500);");
 	
 	return $resp->get_result();
@@ -203,11 +223,36 @@ function content_setinactive($contentid)
 	
 	setactive($contentid, false);
 	
-	$resp->modify_html('#contentlist', display_content_list());
-	$resp->script('set_context_menu();');
+	$resp->replace_html('#contentlist', display_content_list());
+	//$resp->script('set_context_menu();');
 	$resp->script("$('#content_span_{$contentid}').highlight('#ff0', 1500);");
 	
 	return $resp->get_result();
+}
+
+function set_bulk_actions()
+{
+	$userid = get_userid();
+	//
+	// This is the start of the output
+	//
+	if( check_permission($userid, 'Remove Pages') || check_permission($userid, 'Manage All Content') )
+	{
+		bulkcontentoperations::register_function(lang('delete'),'delete');
+	}
+	if (check_permission($userid, 'Manage All Content'))
+	{
+		bulkcontentoperations::register_function(lang('active'),'active');
+		bulkcontentoperations::register_function(lang('inactive'),'inactive');
+		bulkcontentoperations::register_function(lang('cachable'),'setcachable');
+		bulkcontentoperations::register_function(lang('noncachable'),'setnoncachable');
+		bulkcontentoperations::register_function(lang('showinmenu'),'showinmenu');
+		bulkcontentoperations::register_function(lang('hidefrommenu'),'hidefrommenu');
+	}
+	if (check_permission($userid, 'Modify Any Page') || check_permission($userid, 'Manage All Content'))
+	{
+		bulkcontentoperations::register_function(lang('settemplate'),'settemplate');
+	}
 }
 
 function setdefault($contentid)
@@ -245,9 +290,9 @@ function content_setdefault($contentid)
 	
 	setdefault($contentid);
 
-	$resp->modify_html('#contentlist', display_content_list());
+	$resp->replace_html('#contentlist', display_content_list());
 	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
-	$resp->script('set_context_menu();');
+	//$resp->script('set_context_menu();');
 
 	return $resp->get_result();
 }
@@ -258,8 +303,8 @@ function content_expandall()
 	
 	expandall();
 
-	$resp->modify_html('#contentlist', display_content_list());
-	$resp->script('set_context_menu();');
+	$resp->replace_html('#contentlist', display_content_list());
+	//$resp->script('set_context_menu();');
 
 	return $resp->get_result();
 }
@@ -270,8 +315,8 @@ function content_collapseall()
 	
 	collapseall();
 
-	$resp->modify_html('#contentlist', display_content_list());
-	$resp->script('set_context_menu();');
+	$resp->replace_html('#contentlist', display_content_list());
+	//$resp->script('set_context_menu();');
 
 	return $resp->get_result();
 }
@@ -286,7 +331,7 @@ function context_menu($content_id)
 	$content = cms_orm('content')->find_by_id(substr($content_id, strlen('content_span_')));
 	$smarty->assign_by_ref('current', $content);
 
-	$resp->modify_html('#context_menu', $smarty->fetch('listcontent-context_menu.tpl'));
+	$resp->replace_html('#context_menu', $smarty->fetch('listcontent-context_menu.tpl'));
 	
 	return $resp->get_result();	
 }
@@ -295,7 +340,7 @@ function expandall()
 {
 	$userid = get_userid();
 	//$all = cmsms()->GetContentOperations()->GetAllContent(false);
-	$all = cmsms()->content->find_all(array('order' => 'hierarchy ASC'));
+	$all = cms_orm('CmsContentBase')->find_all(array('order' => 'lft ASC'));
 	$cs = '';
 	foreach ($all as &$thisitem)
 	{
@@ -319,9 +364,9 @@ function content_toggleexpand($contentid, $collapse)
 	
 	toggleexpand($contentid, $collapse=='true'?true:false);
 
-	$resp->modify_html('#contentlist', display_content_list());
+	$resp->replace_html('#contentlist', display_content_list());
 	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
-	$resp->script('set_context_menu();');
+	//$resp->script('set_context_menu();');
 
 	return $resp->get_result();
 }
@@ -334,8 +379,8 @@ function content_delete($contentid)
 
 	//$objResponse->addScript("new Effect.Fade('tr_$contentid', { afterFinish:function() { xajax_content_list_ajax(); } });");
 	//$objResponse->addScript("$('#tr_{$contentid}').Highlight(500, '#f00', function() { xajax_content_list_ajax(); });");
-	$resp->modify_html('#contentlist', display_content_list());
-	$resp->script('set_context_menu();');
+	$resp->replace_html('#contentlist', display_content_list());
+	//$resp->script('set_context_menu();');
 	
 	return $resp->get_result();
 }
@@ -399,9 +444,72 @@ function content_move($contentid, $parentid, $direction)
 	
 	movecontent($contentid, $parentid, $direction);
 
-	$resp->modify_html('#contentlist', display_content_list());
+	$resp->replace_html('#contentlist', display_content_list());
 	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
-	$resp->script('set_context_menu();');
+	//$resp->script('set_context_menu();');
+
+	return $resp->get_result();
+}
+
+function content_move_new($id, $ref_id, $type)
+{	
+	$resp = new CmsAjaxResponse();
+	
+	$result = false;
+	
+	//$resp->script('alert("'.$id.', '.$ref_id.', '.$type.'");');
+	if ($type == 'inside')
+	{
+		$child_id = str_replace('phtml_', '', $id);
+		$parent_id = str_replace('phtml_', '', $ref_id);
+		
+		$obj = cms_orm('CmsContentBase')->find_by_id($child_id);
+		if ($obj)
+		{
+			$obj->parent_id = $parent_id;
+			$result = $obj->save();
+		}
+	}
+	else if ($type == 'after' || $type == 'before')
+	{
+		$child_id = str_replace('phtml_', '', $id);
+		$target_id = str_replace('phtml_', '', $ref_id);
+		
+		$obj = cms_orm('CmsContentBase')->find_by_id($child_id);
+		$target_obj = cms_orm('CmsContentBase')->find_by_id($target_id);
+		if ($obj && $target_obj)
+		{
+			$result = $obj->move_before_or_after($target_obj, $type);
+		}
+	}
+	
+	if ($result)
+		$resp->script('successful = true;');
+	else
+		$resp->script('successful = false;');
+
+
+	return $resp->get_result();
+}
+
+function content_select($html_id)
+{
+	$smarty = cms_smarty();
+	$resp = new CmsAjaxResponse();
+	
+	if ($html_id == 'multiple' || $html_id == 'none')
+	{
+		$smarty->assign_by_ref('reason_for_not_showing', $html_id);
+	}
+	else
+	{
+		$id = str_replace('phtml_', '', $html_id);
+		$content = cms_orm('CmsContentBase')->find_by_id($id);
+		$smarty->assign_by_ref('content', $content);
+	}
+	
+	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
+	//$resp->script('set_context_menu();');
 
 	return $resp->get_result();
 }
@@ -412,7 +520,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 
 	if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
 	{
-		$content = cms_orm()->content->find_by_id($contentid);
+		$content = cms_orm('CmsContentBase')->find_by_id($contentid);
 		
 		if ($content != null)
 		{
@@ -423,75 +531,29 @@ function movecontent($contentid, $parentid, $direction = 'down')
 
 function deletecontent($contentid)
 {
-	//TODO: Rewrite me
-	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Pages') || check_permission($userid, 'Modify Page Structure');
-	
-	global $gCms;
-	$hierManager =& $gCms->GetHierarchyManager();
+  $userid = get_userid();
+  $access = check_permission($userid, 'Remove Pages') || check_permission($userid, 'Modify Page Structure');
+  
+  if (!$access)
+    {
+      $_GET['error'] = 'permissiondenied';
+      return;
+    }
 
-	if ($access)
-	{
-		$node = &$hierManager->getNodeById($contentid);
-		if ($node)
-		{
-			$contentobj =& $node->getContent();
-			$childcount = 0;
-			$parentid = -1;
-			if (isset($node->parentNode))
-			{
-				$parent =& $node->parentNode;
-				if (isset($parent))
-				{
-					$parentContent =& $parent->getContent();
-					if (isset($parentContent))
-					{
-						$parentid = $parentContent->Id();
-						$childcount = $parent->getChildrenCount();
-					}
-				}
-			}
+  $content_obj = CmsContentOperations::load_content_from_id($contentid);
+  if( !$content_obj )
+    {
+      $_GET['error'] = 'errorgettingcontent';
+      return;
+    }
 
-			if ($contentobj)
-			{
-				$title = $contentobj->Name();
-	
-				#Check for children
-				if ($contentobj->HasChildren())
-				{
-					$_GET['error'] = 'errorchildcontent';
-				}
-	
-				#Check for default
-				if ($contentobj->DefaultContent())
-				{
-					$_GET['error'] = 'errordefaultpage';
-				}
-			
-				$title = $contentobj->Name();
-				$contentobj->delete();
-
-				$contentops =& $gCms->GetContentOperations();
-				$contentops->SetAllHierarchyPositions();
-				
-				#See if this is the last child... if so, remove
-				#the expand for it
-				if ($childcount == 1 && $parentid > -1)
-				{
-					toggleexpand($parentid, true);
-				}
-				
-				#Do the same with this page as well
-				toggleexpand($contentid, true);
-				
-				audit($contentid, $title, 'Deleted Content');
-				
-				$contentops->ClearCache();
-			
-				$_GET['message'] = 'contentdeleted';
-			}
-		}
-	}
+  $res = $content_obj->delete();
+  if( !$res )
+    {
+      $_GET['error'] = 'errordeletingcontent';
+      return;
+    }
+  $_GET['message'] = 'contentdeleted';
 }
 
 function show_h(&$root, &$sortableLists, &$listArray, &$output)

@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -19,18 +19,11 @@
 function smarty_cms_function_menu($params, &$smarty)
 {
   $params['module'] = 'MenuManager';
-  return CmsModuleBase::cms_module_plugin($params, $smarty);
+  return cms_module_plugin($params,$smarty);
 }
 
 function smarty_cms_help_function_menu() {
-	?>
-	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module</a> to make the tag syntax easier. 
-	Instead of having to use <code>{cms_module module='MenuManager'}</code> you can now just use <code>{menu}</code> to insert the module on pages and templates.
-	</p>
-	<h3>How do I use it?</h3>
-	<p>Just put <code>{menu}</code> on a page or in a template. For help about the Menu Manager module, what parameters it takes etc., please refer to the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module help</a>.
-	<?php
+  echo lang('help_function_menu');
 }
 
 function smarty_cms_about_function_menu() {

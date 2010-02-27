@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -31,71 +31,52 @@ if ($default_cms_lang != '')
 	$_POST['change_cms_lang'] = $default_cms_lang;
 }
 require_once("../include.php");
-check_login();
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+$thisurl=basename(__FILE__).$urlext;
 
-$smarty = cms_smarty();
+check_login();
+$userid = get_userid();
+$access = check_permission($userid, 'Modify Site Preferences');
+
 
 $admintheme = 'default';
-if (isset($_POST['admintheme'])) 
-{   
-	$admintheme = $_POST['admintheme'];
-}
+if (isset($_POST['admintheme'])) $admintheme = $_POST['admintheme'];
+
 $bookmarks = 0;
-if (isset($_POST['bookmarks'])) 
-{  
-	$bookmarks = $_POST['bookmarks'];
-}
+if (isset($_POST['bookmarks'])) $bookmarks = $_POST['bookmarks'];
 
 $hide_help_links = 0;
-if (isset($_POST['hide_help_links'])) 
-{ 
-	$hide_help_links = $_POST['hide_help_links'];
-}
-
+if (isset($_POST['hide_help_links'])) $hide_help_links = $_POST['hide_help_links'];
 
 $indent = 0;
-if (isset($_POST['indent'])) 
-{ 
-	$indent = $_POST['indent'];
-}
+if (isset($_POST['indent'])) $indent = $_POST['indent'];
 
 $enablenotifications = 1;
-if (isset($_POST['enablenotifications'])) 
-{
-$enablenotifications = $_POST['enablenotifications'];
-}
+if (!isset($_POST['enablenotifications'])) $enablenotifications = 0;
 
 $paging = 0;
-if (isset($_POST['paging'])) 
-{ 
-	$paging = $_POST['paging'];
- }
- 
-$page_message = '';
+if (isset($_POST['paging'])) $paging = $_POST['paging'];
+
+$homepage = '';
+if (isset($_POST['homepage'])) $homepage = $_POST['homepage'];
 
 $wysiwyg = '';
-if (isset($_POST["wysiwyg"])) 
-{
-	$wysiwyg = $_POST["wysiwyg"];
-}
+if (isset($_POST["wysiwyg"])) $wysiwyg = $_POST["wysiwyg"];
 
 $syntaxhighlighter = '';
-if (isset($_POST["syntaxhighlighter"])) 
-{
-	$syntaxhighlighter = $_POST["syntaxhighlighter"];
-}
+if (isset($_POST["syntaxhighlighter"])) $syntaxhighlighter = $_POST["syntaxhighlighter"];
 
 $gcb_wysiwyg = 0;
-if (isset($_POST['gcb_wysiwyg'])) 
-{
-	$gcb_wysiwyg = $_POST['gcb_wysiwyg'];
-}
+if (isset($_POST['gcb_wysiwyg'])) $gcb_wysiwyg = 1;
 
 $date_format_string = '%x %X';
-if (isset($_POST['date_format_string'])) 
-{
-	$date_format_string = $_POST['date_format_string'];
-}
+if (isset($_POST['date_format_string'])) $date_format_string = $_POST['date_format_string'];
+
+$default_parent = '';
+if( isset($_POST['parent_id']) )
+  {
+    $default_parent = $_POST['parent_id'];
+  }
 
 $ignoredmodules = array();
 if (isset($_POST['ignoredmodules']) )
@@ -106,27 +87,26 @@ if (isset($_POST['ignoredmodules']) )
 	$ignoredmodules = array();
       }
   }
-  
-  
-$userid = get_userid();
 
 if (isset($_POST["cancel"])) {
-	redirect("topmyprefs.php");
-	return;
+  redirect("index.php?".CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY]);
+  return;
 }
 
 $modules = array();
-$modules[ucwords(lang('none'))] = '**none**';
-$modules['---'] = '**none**';
-foreach(cmsms()->modules as $key=>$value)
+//Next 2 lines commented, to NOT show 'none' as a choice in the ignore list.
+//$modules[ucwords(lang('none'))] = '**none**';
+//$modules['---'] = '**none**';
+foreach($gCms->modules as $key=>$value)
 {
-  if (cmsms()->modules[$key]['installed'] == true &&
-      cmsms()->modules[$key]['active'] == true)
+  if ($gCms->modules[$key]['installed'] == true &&
+      $gCms->modules[$key]['active'] == true)
     {
-      $obj =& cmsms()->modules[$key]['object'];
-      $modules[$obj->get_name()] = $obj->get_name();
+      $obj =& $gCms->modules[$key]['object'];
+      $modules[$obj->GetFriendlyName()] = $obj->GetName();
     }
 }
+
 
 if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'gcb_wysiwyg', $gcb_wysiwyg);
@@ -137,26 +117,39 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'bookmarks', $bookmarks);
 	set_preference($userid, 'hide_help_links', $hide_help_links);
 	set_preference($userid, 'indent', $indent);
-	set_preference($userid, 'enablenotifications', $enablenotifications);
+	set_preference($userid, 'enablenotifications',$enablenotifications);
 	set_preference($userid, 'paging', $paging);
 	set_preference($userid, 'date_format_string', $date_format_string);
+	set_preference($userid, 'default_parent', $default_parent);
+	set_preference($userid, 'homepage', $homepage );
+	set_preference($userid, 'ignoredmodules', implode(',',$ignoredmodules));
 	audit(-1, '', 'Edited User Preferences');
 	$page_message = lang('prefsupdated');
-	redirect("topmyprefs.php");
-	return;
+	#redirect("index.php");
+	#return;
 } else if (!isset($_POST["edituserprefs"])) {
-	$smarty->assign('gcb_wysiwyg', get_preference($userid, 'gcb_wysiwyg', 1));
-	$smarty->assign('wysiwyg', get_preference($userid, 'wysiwyg'));
-	$smarty->assign('syntaxhighlighter', get_preference($userid, 'syntaxhighlighter'));
-	$smarty->assign('default_cms_lang', get_preference($userid, 'default_cms_language'));
-	$smarty->assign('old_default_cms_lang', $default_cms_lang);
-	$smarty->assign('admintheme', get_preference($userid, 'admintheme'));
-	$smarty->assign('bookmarks', get_preference($userid, 'bookmarks'));
-	$smarty->assign('indent', get_preference($userid, 'indent', true));
-	$smarty->assign('enablenotifications', get_preference($userid, 'enablenotifications', 1));
-	$smarty->assign('paging', get_preference($userid, 'paging', 0));
-	$smarty->assign('date_format_string', get_preference($userid, 'date_format_string','%x %X'));
-	$smarty->assign('hide_help_links', get_preference($userid, 'hide_help_links'));
+	$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
+	$wysiwyg = get_preference($userid, 'wysiwyg');
+	$syntaxhighlighter = get_preference($userid, 'syntaxhighlighter');
+	$default_cms_lang = get_preference($userid, 'default_cms_language');
+	$old_default_cms_lang = $default_cms_lang;
+	$admintheme = get_preference($userid, 'admintheme');
+	$bookmarks = get_preference($userid, 'bookmarks');
+	$indent = get_preference($userid, 'indent', true);
+	$enablenotifications = get_preference($userid, 'enablenotifications', 1);
+	$paging = get_preference($userid, 'paging', 0);
+	$date_format_string = get_preference($userid, 'date_format_string','%x %X');
+	$default_parent = get_preference($userid,'default_parent',-2);
+
+	$homepage = get_preference($userid,'homepage');
+	$to = '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+	$pos = strpos($homepage,'?'.CMS_SECURE_PARAM_NAME);
+	$from = substr($homepage,$pos,strlen($to));
+	$homepage = str_replace($from,$to,$homepage);
+	$homepage = str_replace('&','&amp;',$homepage);
+
+	$hide_help_links = get_preference($userid, 'hide_help_links');
+	$ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
 }
 
 include_once("header.php");
@@ -165,62 +158,185 @@ if (FALSE == empty($page_message)) {
 	echo $themeObject->ShowMessage($page_message);
 }
 
-// Assign the header
-$smarty->assign('header_name', $themeObject->ShowHeader('userprefs'));
+?>
 
-// Assign the WYSIWYG options
-$wysiwyg_options = array();
-$wysiwyg_options[] = lang('none');
-foreach($gCms->modules as $key=>$value)
-{
-	if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true &&
-		$gCms->modules[$key]['object']->is_wysiwyg())
-		{
-			$wysiwyg_options[$key] = $key;
-		}
-}
-$smarty->assign('wysiwyg_options', $wysiwyg_options);
+<div class="pagecontainer">
+	<div class="pageoverflow">
+	<?php echo $themeObject->ShowHeader('userprefs'); ?>
+	<form method="post" action="editprefs.php" name="prefsform">
+            <div class="invisible">
+	    <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" /></div>
+            <div>
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</div>
+				<div class="pageinput">
+					<select name="wysiwyg">
+					<option value=""><?php echo lang('none'); ?></option>
+					<?php
+						foreach($gCms->modules as $key=>$value)
+						{
+							if ($gCms->modules[$key]['installed'] == true &&
+								$gCms->modules[$key]['active'] == true &&
+								$gCms->modules[$key]['object']->IsWYSIWYG())
+							{
+								echo '<option value="'.$key.'"';
+								if ($wysiwyg == $key)
+								{
+									echo ' selected="selected"';
+								}
+								echo '>'.$key.'</option>';
+							}
+						}
+					?>
+					</select>
+				</div>
+			</div>
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('syntaxhighlightertouse'); ?>:</div>
+				<div class="pageinput">
+					<select name="syntaxhighlighter">
+					<option value=""><?php echo lang('none'); ?></option>
+					<?php
+						foreach($gCms->modules as $key=>$value)
+						{
+							if ($gCms->modules[$key]['installed'] == true &&
+								$gCms->modules[$key]['active'] == true &&
+								$gCms->modules[$key]['object']->IsSyntaxHighlighter())
+							{
+								echo '<option value="'.$key.'"';
+								if ($syntaxhighlighter == $key)
+								{
+									echo ' selected="selected"';
+								}
+								echo '>'.$key.'</option>';
+							}
+						}
+					?>
+					</select>
+				</div>
+			</div>
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('gcb_wysiwyg'); ?>:</div>
+				<div class="pageinput">
+  <input class="pagenb" type="checkbox" name="gcb_wysiwyg" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; if( get_site_preference('nogcbwysiwyg') == '1' ) echo "disabled=\"disabled\""; ?> /><?php echo lang('gcb_wysiwyg_help') ?>
+				</div>
+			</div>
+				<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('language'); ?>:</div>
+				<div class="pageinput">
+					<select name="default_cms_lang" style="vertical-align: middle;">
+					<option value=""><?php echo lang('nodefault'); ?></option>
+					<?php
+						asort($nls["language"]);
+						foreach ($nls["language"] as $key=>$val) {
+							echo "<option value=\"$key\"";
+							if ($default_cms_lang == $key) {
+								echo " selected=\"selected\"";
+							}
+							echo ">$val";
+							if (isset($nls["englishlang"][$key]))
+							{
+								echo " (".$nls["englishlang"][$key].")";
+							}
+							echo "</option>\n";
+						}
+					?>
+					</select>
+				</div>
+			</div>
+	    <div class="pageoverflow">
+		<div class="pagetext"><?php echo lang('date_format_string'); ?>:</div>
+		<div class="pageinput">
+		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="255" /><?php echo lang('date_format_string_help') ?>
+		</div>
+	    </div>
 
-// Assign the Syntax Highlighter Options
-$syntaxhighlighter_options = array();
-$syntaxhighlighter_options[] = lang('none');
-/*
-foreach($gCms->modules as $key=>$value)
-{
-	if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true &&
-		$gCms->modules[$key]['object']->is_syntax_highlighter())
-	{
-		$syntaxhighlighter_options[$key] = $key;
-	}
-}
-*/
-$smarty->assign('syntaxhighlighter_options', $syntaxhighlighter_options);
+	<div class="pageoverflow">
+	  <p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
+	  <p class="pageinput">
+	  <?php
+	    $contentops =& $gCms->GetContentOperations();
+echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1);
+	  ?>
+	  </p>
+	</div>	
 
-// Assign the language options
-$default_cms_lang_options = array();
-$default_cms_lang_options[] = lang('nodefault');
-$list = CmsLanguage::get_language_list(true);
-foreach ($list as $key=>$val) {
-	$default_cms_lang_options[$key] = $val;
-}
-$smarty->assign('default_cms_lang_options', $default_cms_lang_options);
+            <div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('admintheme');  ?>:</div>
+				<div class="pageinput">
+					<?php
+						if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
+								echo '<select name="admintheme">';
+									while (($file = readdir($dir)) !== false) {
+										if (@is_dir("themes/".$file) && ( $file[0] != '.') &&
+										    is_readable("themes/{$file}/{$file}Theme.php")) {
+											echo '<option value="'.$file.'"';
+											echo (get_preference($userid,"admintheme")==$file?" selected=\"selected\"":"");
+											echo '>'.$file.'</option>';
+										}
+									}
+								echo '</select>';
+						}
+					?>	
+				</div>					
+			</div>
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('admincallout'); ?>:</div>
+				<div class="pageinput">
+					<input class="pagenb" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><?php echo lang('showbookmarks') ?>
+				</div>
+			</div>
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('hide_help_links'); ?>:</div>
+				<div class="pageinput">
+					<input class="pagenb" type="checkbox" name="hide_help_links" <?php if ($hide_help_links) echo "checked=\"checked\""; ?> /><?php echo lang('hide_help_links_help') ?>
+				</div>
+			</div>
 
-// Assign the admin theme options
-$admintheme_options = array();
-if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
-	while (($file = readdir($dir)) !== false) {
-		if (@is_dir("themes/".$file) && ( $file[0] != '.')) {
-			$admintheme_options[$file] = $file;
-		}
-	}
-}
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('homepage'); ?>:</div>
+				<div class="pageinput">
+						  <?php echo $themeObject->GetAdminPageDropdown('homepage',$homepage); ?>
+				</div>
+			</div>
 
-$smarty->assign('admintheme_options', $admintheme_options);
+			<!--
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('adminpaging'); ?>:</p>
+				<p class="pageinput">
+					<select name="paging">
+					<option value="0"<?php if ($paging == 0) echo " selected";?>><?php echo lang('nopaging');?></option>
+					<option value="10"<?php if ($paging == 10) echo " selected";?>>10</option>
+					<option value="20"<?php if ($paging == 20) echo " selected";?>>20</option>
+					<option value="30"<?php if ($paging == 30) echo " selected";?>>30</option>
+					<option value="40"<?php if ($paging == 40) echo " selected";?>>40</option>
+					<option value="50"<?php if ($paging == 50) echo " selected";?>>50</option>
+					<option value="100"<?php if ($paging == 100) echo " selected";?>>100</option>
+					</select>
+				</p>
+			</div>
+			-->
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('adminindent'); ?>:</div>
+				<div class="pageinput">
+					<input class="pagenb" type="checkbox" name="indent" <?php if ($indent) echo "checked=\"checked\""; ?> /><?php echo lang('indent') ?>
+				</div>
+			</div>
+               <?php  if ($access) 
+					  {
+					  ?>
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('enablenotifications'); ?>:</div>
+				<div class="pageinput">
+					<input class="pagenb" type="checkbox" name="enablenotifications" <?php if ($enablenotifications) echo "checked=\"checked\""; ?> /></div>
+			</div>
 
-
- $txt = '<select id="ignorenotificationsfrommodules" name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
+			<div class="pageoverflow">
+			  <div class="pagetext"><?php echo lang('ignorenotificationsfrommodules'); ?>:</div>
+			  <div class="pageinput">
+				 <?php
+					  
+					   $txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
                           foreach( $modules as $key => $value )
                           {
                             $txt .= '<option value="'.$value.'"';
@@ -231,15 +347,26 @@ $smarty->assign('admintheme_options', $admintheme_options);
                             $txt .= ">{$key}</option>\n";
                           }
                           $txt .= "</select>\n";
-				
-				
-				$smarty->assign('txt', $txt);
-                          //echo $txt;
-						  
-						  
-						  
-// Display the template
-$smarty->display('editprefs.tpl');
+                          echo $txt;
+                         ?>
+			  </div>
+                        </div> 
+                <?php }?>
+			<p class="pagetext">&nbsp;</p>
+			<div class="pageinput">
+            <div class="invisible">
+				<input type="hidden" name="edituserprefs" value="true" />
+                <input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
+                </div>
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="submit_form" value="<?php echo lang('submit'); ?>" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" />
+			</div>
+			</div>			
+		</form>
+	</div>
+</div>	
+
+<?php
 
 include_once("footer.php");
 

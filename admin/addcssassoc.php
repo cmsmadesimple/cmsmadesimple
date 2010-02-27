@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -52,7 +52,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 
 #******************************************************************************
@@ -63,17 +63,15 @@ check_login();
 # will be set to false if an error is encountered
 $doadd = true;
 
-$db = cms_db();
-
 #******************************************************************************
 # start of the treatment
 #******************************************************************************
+#print_r( $_POST );
 if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 {
-
 	# we get the arguments as local vars (easier)
 	$css_id = $_POST["css_id"];
-	$id		= $_POST["id"];
+	$id	= $_POST["id"];
 	$type	= $_POST["type"];
 
 	# we then check permissions
@@ -97,44 +95,53 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 		{
 			$error = lang('associationexists');
 			$doadd = false;
+			$result->Close();
 		}
 
-		# we get the name of the element (for logging)
+		# we get the name of the element (for logging)		
 		if ("template" == $type && $doadd)
 		{
-			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE id = ?";
+			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
 			$result = $db->Execute($query, array($id));
 			
 			if ($result && $result->RecordCount() > 0)
 			{
 				$line = $result->FetchRow();
 				$name = $line["template_name"];
+				$result->Close();
 			}
 			else
 			{
+				
 				$doadd = false;
 				$error = lang('invalidtemplate');
 			}
 		}
+
+		# get the next access_order
+		$query = "SELECT max(assoc_order)+1 FROM ".cms_db_prefix()."css_assoc where assoc_to_id = ?";
+		$nextord = $db->GetOne($query,array($id));
+		if( !$nextord ) $nextord = 1;
 
 		# everything is ok, we can insert the element.
 		if ($doadd)
 		{
 			$time = $db->DBTimeStamp(time());
 			$query = "INSERT INTO ".cms_db_prefix().
-                "css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date)" .
-				" VALUES (?,?,?,".$time.",".$time.")";
-			$result = $db->Execute($query, array($id,$css_id,$type));
+                "css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date,assoc_order)" .
+				" VALUES (?,?,?,".$time.",".$time.",?)";
+			$result = $db->Execute($query, array($id,$css_id,$type,$nextord));
 
 			if ($result)
 			{
+				
 				audit($id, (isset($name)?$name:""), 'Added Stylesheet Association');
 
 				if ("template" == $type)
 				{
 					$time = $db->DBTimeStamp(time());
 					$tplquery = "UPDATE ".cms_db_prefix().
-                    "templates SET modified_date = ".$time."  WHERE id = ?";
+                    "templates SET modified_date = ".$time."  WHERE template_id = ?";
 					$tplresult = $db->Execute($tplquery, array($id));
 				}
 			}
@@ -142,19 +149,24 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 			{
 				$doadd = false;
 				$error = lang('errorcreatingassociation');
+				
 			}
 		} # enf od adding query to db
+		
+		
 	} # end of "if has access"
 	
 	# user does not have the right to create association
 	else
 	{
+			
 		$doadd = false;
 		$error = lang('noaccessto', array(lang('addcss')));
 	}
 } # end if vars are set
 else
 {
+
 	$doadd = false;
 	$error = lang('informationmissing');
 }
@@ -164,11 +176,11 @@ else
 #******************************************************************************
 if ($doadd)
 {
-	redirect("listcssassoc.php?id=$id&type=$type");
+	redirect("listcssassoc.php".$urlext."&id=$id&type=$type");
 }
 else
 {
-	redirect("listcssassoc.php?id=$id&type=$type&message=$error");
+	redirect("listcssassoc.php".$urlext."&id=$id&type=$type&message=$error");
 }
 
 # vim:ts=4 sw=4 noet

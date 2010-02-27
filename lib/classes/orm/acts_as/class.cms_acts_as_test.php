@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
+#$Id: class.cms_acts_as_test.php 4093 2007-08-27 00:44:25Z wishy $
 
 class CmsActsAsTest extends CmsActsAs
 {

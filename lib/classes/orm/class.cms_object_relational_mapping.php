@@ -389,7 +389,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		if (array_key_exists($n, $this->params))
 		{
 			if (method_exists($this, 'get_' . $n))
-				return call_user_func_array(array($this, 'get_'.$n), array($val));
+				return call_user_func_array(array($this, 'get_'.$n), array());
 			else
 				return $this->params[$n];
 		}
@@ -624,6 +624,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 **/
 	function find_by_query($query, $queryparams = array())
 	{
+		$result = CmsCache::get_instance('orm')->call(array(&$this, 'find_by_query_'), $query, $queryparams);
+		return $result;
+	}
+
+	function find_by_query_($query, $queryparams = array())
+	{
 		$db = cms_db();
 		
 		$classname = get_class($this);
@@ -691,6 +697,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @author Ted Kulp
 	 **/
 	function find_all_by_query($query, $queryparams = array(), $numrows = -1, $offset = -1)
+	{
+		$result = CmsCache::get_instance('orm')->call(array(&$this, 'find_all_by_query_'), $query, $queryparams, $numrows, $offset);
+		return $result;
+	}
+	
+	function find_all_by_query_($query, $queryparams = array(), $numrows = -1, $offset = -1)
 	{
 		$db = cms_db();
 		
@@ -768,10 +780,14 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function save()
 	{
+		CmsCache::get_instance('orm')->clear();
+		
 		$this->before_validation_caller();
 
-		if ($this->_call_validation())
+		if ($this->check_not_valid())
+		{
 			return false;
+		}
 
 		$this->before_save_caller();
 
@@ -782,9 +798,23 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$id_field = $this->id_field;
 		$id = $this->$id_field;
 		
-		//Figure out if we need to replace the field from the field mappings
-		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
-		if (array_key_exists($id_field, $new_map)) $id_field = $new_map[$id_field];
+		//Figure out if we need to replace the id field from the field mappings
+		
+		//Flip the keys, since this is the reverse operation
+		$new_map = array_flip($this->field_maps); 
+		
+		//Does the id field exist in the mappings?  If so, set it as the 
+		//new $id_field for SQL.
+		if (array_key_exists($id_field, $new_map)) 
+		{
+			$id_field = $new_map[$id_field];
+		}
+		//Now we need to pull the actual id from the aliases 
+		//field, which is what $params stores
+		if (array_key_exists($id_field, $this->field_maps)) 
+		{
+			$id = $this->{$this->field_maps[$id_field]};
+		}
 		
 		$fields = $this->get_columns_in_table();
 		
@@ -801,9 +831,20 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				$query = "UPDATE {$table} SET ";
 				$midpart = '';
 				$queryparams = array();
+				$unsetparams = array();
+				$fieldnames = array();
+				$has_extra_params = false;
 
 				foreach($fields as $onefield=>$obj)
 				{
+					$fieldnames[] = $onefield;
+					
+					if ($onefield == 'extra_params')
+					{
+						$has_extra_params = true;
+						continue;
+					}
+					
 					$localname = $onefield;
 					if (array_key_exists($localname, $this->field_maps)) $localname = $this->field_maps[$localname];
 					if ($onefield == $this->modified_date_field)
@@ -814,8 +855,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 					}
 					else if ($this->type_field != '' && $this->type_field == $onefield)
 					{
-						$this->$onefield = strtolower(get_class($this));
-						$queryparams[] = strtolower(get_class($this));
+						$this->$onefield = get_class($this);
+						$queryparams[] = get_class($this);
 						$midpart .= "{$table}.{$onefield} = ?, ";
 					}
 					else if (array_key_exists($localname, $this->params))
@@ -831,6 +872,25 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 						}
 					}
 				}
+				
+				if ($has_extra_params)
+				{
+					foreach($this->params as $k=>$v)
+					{
+						$localname = $k;
+						if (array_key_exists($localname, $this->field_maps)) $localname = $this->field_maps[$localname];
+						if (!in_array($k, $fieldnames) && !in_array($localname, $fieldnames))
+						{
+							$unsetparams[$k] = $v;
+						}
+					}
+					
+					if (!empty($unsetparams))
+					{
+						$queryparams[] = serialize($unsetparams);
+						$midpart .= "{$table}.extra_params = ?, ";
+					}
+				}
 
 				if ($midpart != '')
 				{	
@@ -838,7 +898,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 					$query .= $midpart . " WHERE {$table}.{$id_field} = ?";
 					$queryparams[] = $id;
 				}
-			
+
 				try
 				{
 					$result = $db->Execute($query, $queryparams) ? true : false;
@@ -847,7 +907,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				{
 					$result = false;
 				}
-				
+
 				if ($result)
 				{
 					$this->dirty = false;
@@ -876,9 +936,20 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			$query = "INSERT INTO {$table} (";
 			$midpart = '';
 			$queryparams = array();
+			$unsetparams = array();
+			$fieldnames = array();
+			$has_extra_params = false;
 			
 			foreach($fields as $onefield=>$obj)
 			{
+				$fieldnames[] = $onefield;
+				
+				if ($onefield == 'extra_params')
+				{
+					$has_extra_params = true;
+					continue;
+				}
+				
 				$localname = $onefield;
 				if (array_key_exists($localname, $this->field_maps)) $localname = $this->field_maps[$localname];
 				
@@ -890,9 +961,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				}
 				else if ($this->type_field != '' && $this->type_field == $onefield)
 				{
-					$queryparams[] = strtolower(get_class($this));
+					$queryparams[] = get_class($this);
 					$midpart .= $onefield . ', ';
-					$this->$onefield = strtolower(get_class($this));
+					$this->$onefield = get_class($this);
 				}
 				else if (array_key_exists($localname, $this->params))
 				{
@@ -904,6 +975,25 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 							$queryparams[] = $this->params[$localname];
 						$midpart .= $onefield . ', ';
 					}
+				}
+			}
+			
+			if ($has_extra_params)
+			{
+				foreach($this->params as $k=>$v)
+				{
+					$localname = $k;
+					if (array_key_exists($localname, $this->field_maps)) $localname = $this->field_maps[$localname];
+					if (!in_array($k, $fieldnames) && !in_array($localname, $fieldnames))
+					{
+						$unsetparams[$k] = $v;
+					}
+				}
+				
+				if (!empty($unsetparams))
+				{
+					$queryparams[] = serialize($unsetparams);
+					$midpart .= "extra_params, ";
 				}
 			}
 			
@@ -952,6 +1042,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function delete($id = -1)
 	{
+		CmsCache::get_instance('orm')->clear();
 		if ($id > -1)
 		{
 			$method = 'find_by_' . $this->id_field;
@@ -964,13 +1055,21 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		{
 			$table = $this->get_table();
 			$id_field = $this->id_field;
+			$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 		
 			$id = $this->$id_field;
+			if( !$id )
+				{
+					if( isset($this->field_maps[$id_field]) )
+					{
+						$id = $this->{$this->field_maps[$id_field]};
+					}
+				}
 		
-			$this->before_delete_caller();
-		
+			$can_delete = $this->before_delete_caller();
+			if( !$can_delete ) return false;
+
 			//Figure out if we need to replace the field from the field mappings
-			$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 			if (array_key_exists($id_field, $new_map)) $id_field = $new_map[$id_field];
 
 			$result = cms_db()->Execute("DELETE FROM {$table} WHERE ".$this->get_table($id_field)." = {$id}") ? true : false;
@@ -1058,6 +1157,17 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			{
 				$object->params[$k] = new CmsDateTime(cms_db()->UnixTimeStamp($v));
 			}
+			else if ($k == 'extra_params')
+			{
+				$ary = unserialize($v);
+				if (is_array($ary))
+				{
+					foreach ($ary as $k2=>$v2)
+					{
+						$object->params[$k2] = $v2;
+					}
+				}
+			}
 			else
 			{
 				$object->params[$k] = $v;
@@ -1139,7 +1249,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function get_columns_in_table()
 	{
-		return CmsCache::get_instance()->call(array(&$this, '_get_columns_in_table'), $this->get_table());
+		return CmsCache::get_instance('orm')->call(array(&$this, '_get_columns_in_table'), $this->get_table());
 	}
 	
 	function _get_columns_in_table($table)
@@ -1335,9 +1445,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	{
 		foreach (cms_orm()->get_acts_as($this) as $one_acts_as)
 		{
-			$one_acts_as->before_delete($this);
+			$res = $one_acts_as->before_delete($this);
+			if( !$res ) return false;
 		}
-		$this->before_delete();
+		return $this->before_delete();
 	}
 	
 	/**
@@ -1376,7 +1487,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 */
-	public function validate()
+	protected function validate()
 	{
 	}
 	
@@ -1455,7 +1566,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return int The number of validation errors
 	 * @author Ted Kulp
 	 **/
-	public function _call_validation()
+	public function check_not_valid()
 	{	
 		//Clear them out first
 		if ($this->clear_errors)

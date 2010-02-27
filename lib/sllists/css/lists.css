@@ -1,0 +1,76 @@
+body,div,input,td {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+td {
+	vertical-align: top;
+}
+
+h2 {
+	background-color: #86bd16;
+	padding: 3px;
+	border: 1px solid #000000;
+	margin-top: 40px;
+}
+
+form {
+	display: inline;
+}
+
+input.button {
+	color: #FFFFFF;
+	background-color: #86bd16;
+	border: 2px solid #daeda3;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+ul.sortableList {
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+	width: 300px;
+	font-family: Arial, sans-serif;
+}
+ul.sortableList li {
+	cursor: move;
+	padding: 2px 2px;
+	margin: 2px 0px;
+	border: 1px solid #000000;
+	background-color: #daeda3;
+}
+
+div#divContainer {
+	border: 1px solid #000000;
+	width: 400px;
+}
+
+div#divContainer div {
+	border: 1px solid #000000;
+	margin: 5px;
+	padding: 2px;
+	cursor: move;
+}
+
+div#imageContainer {
+	margin-left: 75px;
+}
+
+div#imageContainer img {
+	cursor: move;
+	display: block;
+	margin: 5px 0px;
+	border: 1px solid #000000;
+}
+
+div#imageFloatContainer {
+	width: 600px;
+	border: 1px solid #000000;
+}
+
+div#imageFloatContainer img {
+	float: left;
+	margin: 10px;
+	border: 1px solid #000000;
+}

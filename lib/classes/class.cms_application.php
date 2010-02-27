@@ -1,7 +1,6 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
-#CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.org
+<?php
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -9,7 +8,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -19,19 +18,32 @@
 #$Id$
 
 /**
- * Global object that holds references to various data structures
+ * Global class for easy access to all important variables.
+ *
+ * @package CMS
+ */
+
+/**
+ * Simple global object to hold references to other objects
+ *
+ * Global object that holds references to various data sctructures
  * needed by classes/functions in CMS.  Initialized in include.php
  * as $gCms for use in every page.
  *
- * @author Ted Kulp
- * @since 2.0
- * @version $Revision$
- * @modifiedby $LastChangedBy$
- * @lastmodified $Date$
- * @license GPL
+ * @since 0.5
  */
 class CmsApplication extends CmsObject
 {
+	/**
+	 * Config object - hash containing variables from config.php
+	 */
+	var $config;
+
+	/**
+	 * Database object - adodb reference to the current database
+	 */
+	var $db;
+
 	/**
 	 * Variables object - various objects and strings needing to be passed 
 	 */
@@ -65,7 +77,7 @@ class CmsApplication extends CmsObject
 	/**
 	 * Site Preferences object - holds all current site preferences so they're only loaded once
 	 */
-	static private $siteprefs = array();
+	public static $siteprefs;
 
 	/**
 	 * User Preferences object - holds user preferences as they're loaded so they're only loaded once
@@ -73,9 +85,19 @@ class CmsApplication extends CmsObject
 	var $userprefs;
 
 	/**
+	 * Smarty object - holds reference to the current smarty object -- will not be set in the admin
+	 */
+	var $smarty;
+
+	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
 	 */
 	var $errors;
+
+	/**
+     * nls array - This holds all of the nls information for different languages
+	 */
+	var $nls;
 
 	/**
      * template cache array - If something's called LoadTemplateByID, we keep a copy around
@@ -92,30 +114,6 @@ class CmsApplication extends CmsObject
 	 */
 	var $HtmlBlobCache;
 	
-	/**
-	 * content types array - List of available content types
-	 */
-	var $contenttypes;
-	
-	/**
-	 * block types array - List of available block types
-	 */
-	var $blocktypes;
-	
-	var $ormclasses;
-
-	var $hrinstance;
-	
-	var $params = array();
-	
-	var $modules;
-	
-	var $StylesheeteCache;
-	
-	var $userpluginfunctions;
-	
-	var $orm;
-	
 	static private $instance = NULL;
 
 	/**
@@ -123,26 +121,38 @@ class CmsApplication extends CmsObject
 	 */
 	function __construct()
 	{
-		$this->cmssystemmodules = array( 'nuSOAP', 'MenuManager', 'ModuleManager' );
+		parent::__construct();
+		
+		CmsEventManager::send_event('Core:startup');
+		
+		$this->cmssystemmodules = 
+		  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'MicroTiny', 'SimplePrinting', 'ThemeManager' );
 		$this->modules = array();
 		$this->errors = array();
 		$this->nls = array();
-		$this->contenttypes = array();
-		$this->blocktypes = array();
 		$this->TemplateCache = array();
 		$this->StylesheetCache = array();
 		$this->variables['content-type'] = 'text/html';
 		$this->variables['modulenum'] = 1;
 		$this->variables['routes'] = array();
-		$this->variables['pluginnum'] = 1;
 		
 		#Setup hash for storing all modules and plugins
-		$this->coremodules         = array('UserAdmin','MenuManager');
 		$this->cmsmodules          = array();
 		$this->userplugins         = array();
 		$this->userpluginfunctions = array();
 		$this->cmsplugins          = array();
-		$this->orm                 = array();
+		$this->siteprefs           = array();
+		
+		$this->config              = CmsConfig::get_instance();
+		
+		//So our shutdown events are called right near the end of the page
+		register_shutdown_function(array(&$this, 'shutdown'));
+	}
+	
+	function shutdown()
+	{
+		CmsEventManager::send_event('Core:shutdown_soon');
+		CmsEventManager::send_event('Core:shutdown_now');
 	}
 	
 	/**
@@ -162,176 +172,156 @@ class CmsApplication extends CmsObject
 		return self::$instance;
 	}
 
-	/**
-	 * @deprecated Deprecated.  Use cms_db() instead.
-	 **/
-	function get_db()
+	function & GetDb()
 	{
 		return CmsDatabase::get_instance();
 	}
-	
-	/**
-	 * @deprecated Deprecated.  Use cms_db() instead.
-	 **/
-	function GetDb()
+
+	function & GetConfig()
 	{
-		return CmsDatabase::get_instance();
+        return CmsConfig::get_instance();
 	}
 	
-	function get($name)
+	function & GetModuleLoader()
 	{
-		return $this->variables[$name];
+        if (!isset($this->moduleloader))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.moduleloader.inc.php'));
+			$moduleloader = new ModuleLoader();
+			$this->moduleloader = &$moduleloader;
+		}
+
+		return $this->moduleloader;
 	}
 	
-	function set($name, $value)
+	function & GetModuleOperations()
 	{
-		$this->variables[$name] = $value;
+        if (!isset($this->moduleoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.moduleoperations.inc.php'));
+			$moduleoperations = new ModuleOperations();
+			$this->moduleoperations = &$moduleoperations;
+		}
+
+		return $this->moduleoperations;
 	}
 	
-	/**
-	 * Getter overload method.  Called when an $obj->field and field
-	 * does not exist in the object's variable list.  In this case,
-	 * it will get a config, db or smarty instance (for backwards 
-	 * compatibility), or call get_orm_class on the given field name.
-	 *
-	 * @param string The field to look up
-	 * @return mixed The value for that field, if it exists
-	 * @author Ted Kulp
-	 **/
-	function __get($name)
+	function & GetUserOperations()
 	{
-		if ($name == 'config')
-			return CmsConfig::get_instance();
-		else if ($name == 'db')
-			return CmsDatabase::get_instance();
-		else if ($name == 'smarty')
-			return CmsSmarty::get_instance();
-		else
-			return cms_orm()->get_orm_class($name);
+        if (!isset($this->useroperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.useroperations.inc.php'));
+			$useroperations = new UserOperations();
+			$this->useroperations = &$useroperations;
+		}
+
+		return $this->useroperations;
 	}
 	
-	/**
-	 * Retrieves an instance of an ORM'd object for doing
-	 * find_by_* methods.
-	 *
-	 * @return mixed The object with the given name, or null if it's not registered
-	 * @author Ted Kulp
-	 **/
-	function get_orm_class($name, $try_prefix = true)
+	function & GetContentOperations()
 	{
-		return cms_orm()->get_orm_class($name, $try_prefix);
+        if (!isset($this->contentoperations))
+		{
+			debug_buffer('', 'Load Content Operations');
+			//require_once(cms_join_path(dirname(__FILE__), 'class.contentoperations.inc.php'));
+			$contentoperations = new CmsContentOperations();
+			$this->contentoperations = &$contentoperations;
+			debug_buffer('', 'End Load Content Operations');
+		}
+
+		return $this->contentoperations;
 	}
 	
-	/**
-	 * @deprecated Deprecated.  Use cms_config() instead.
-	 **/
-	function get_config()
+	function & GetBookmarkOperations()
 	{
-		return CmsConfig::get_instance();
+        if (!isset($this->bookmarkoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.bookmarkoperations.inc.php'));
+			$bookmarkoperations = new BookmarkOperations();
+			$this->bookmarkoperations = &$bookmarkoperations;
+		}
+
+		return $this->bookmarkoperations;
+	}
+	
+	function & GetTemplateOperations()
+	{
+        if (!isset($this->templateoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.templateoperations.inc.php'));
+			$templateoperations = new TemplateOperations();
+			$this->templateoperations = &$templateoperations;
+		}
+
+		return $this->templateoperations;
+	}
+	
+	function & GetStylesheetOperations()
+	{
+        if (!isset($this->stylesheetoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.stylesheetoperations.inc.php'));
+			$stylesheetoperations = new StylesheetOperations();
+			$this->stylesheetoperations = &$stylesheetoperations;
+		}
+
+		return $this->stylesheetoperations;
+	}
+	
+	function & GetGroupOperations()
+	{
+        if (!isset($this->groupoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.groupoperations.inc.php'));
+			$groupoperations = new GroupOperations();
+			$this->groupoperations = &$groupoperations;
+		}
+
+		return $this->groupoperations;
+	}
+	
+	function & GetGlobalContentOperations()
+	{
+        if (!isset($this->globalcontentoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.globalcontentoperations.inc.php'));
+			$globalcontentoperations = new GlobalContentOperations();
+			$this->globalcontentoperations = &$globalcontentoperations;
+		}
+
+		return $this->globalcontentoperations;
+	}
+	
+	function & GetUserTagOperations()
+	{
+        if (!isset($this->usertagoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.usertagoperations.inc.php'));
+			$usertagoperations = new UserTagOperations();
+			$this->usertagoperations = &$usertagoperations;
+		}
+
+		return $this->usertagoperations;
+	}
+	
+	function & GetPageInfoOperations()
+	{
+        if (!isset($this->pageinfooperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.pageinfo.inc.php'));
+			$pageinfooperations = new PageInfoOperations();
+			$this->pageinfooperations = &$pageinfooperations;
+		}
+
+		return $this->pageinfooperations;
 	}
 
-	/**
-	 * @deprecated Deprecated.  Use cms_config() instead.
-	 **/
-	function GetConfig()
-	{
-		return CmsConfig::get_instance();
-	}
-		
-	/**
-	 * @deprecated Deprecated.  Use CmsModuleOperations::some_method instead.
-	 **/
-	function GetModuleOperations()
-	{
-		return CmsModuleOperations::get_instance();
-	}
-	
-	/**
-	 * @deprecated Deprecated.  Use CmsUserOperations::some_method instead.
-	 **/
-	function GetUserOperations()
-	{
-        return CmsUserOperations::get_instance();
-	}
-	
-	/**
-	 * @deprecated Deprecated.  Use CmsContentOperations::some_method instead.
-	 **/
-	function GetContentOperations()
-	{
-		return CmsContentOperations::get_instance();
-	}
-	
-	/**
-	 * @deprecated Deprecated.  Use CmsBookmarkOperations::some_method instead.
-	 **/
-	function GetBookmarkOperations()
-	{
-        return CmsBookmarkOperations::get_instance();
-	}
-	
-	/**
-	 * @deprecated Deprecated.  Use CmsTemplateOperations::some_method instead.
-	 **/
-	function GetTemplateOperations()
-	{
-        return CmsTemplateOperations::get_instance();
-	}
-	
-	/**
-	 * @deprecated Deprecated.  Use CmsStylesheetOperations::some_method instead.
-	 **/
-	function GetStylesheetOperations()
-	{
-		return CmsStylesheetOperations::get_instance();
-	}
-	
-	/**
-	 * @deprecated Deprecated.  Use CmsGroupOperations::some_method instead.
-	 **/
-	function GetGroupOperations()
-	{
-		return CmsGroupOperations::get_instance();
-	}
-	
-	/**
-	 * @deprecated Deprecated.  Use CmsGlobalContentOperations::some_method instead.
-	 **/
-	function GetGlobalContentOperations()
-	{
-		return CmsGlobalContentOperations::get_instance();
-	}
-	
-	/**
-	 * @deprecated Deprecated.  Use CmsUserTagOperations::some_method instead.
-	 **/
-	function GetUserTagOperations()
-	{
-		return CmsUserTagOperations::get_instance();
-	}
-
-	/**
-	 * @deprecated Deprecated.  Use cms_smarty() instead.
-	 **/
-	function GetSmarty()
+	public static function GetSmarty()
 	{
 		return CmsSmarty::get_instance();
 	}
-	
-	/**
-	 * @deprecated Deprecated.  Use cms_smarty() instead.
-	 **/
-	function get_smarty()
-	{
-		return CmsSmarty::get_instance();
-	}
-	
-	public function get_current_user()
-	{
-		return CmsLogin::get_current_user();
-	}
 
-	function GetHierarchyManager()
+	public static function GetHierarchyManager()
 	{
 		return CmsPageTree::get_instance();
 	}
@@ -346,21 +336,24 @@ class CmsApplication extends CmsObject
 		$db = cms_db();
 		
 		$result = array();
-
-		$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
-		$dbresult = &$db->Execute($query);
-
-		while ($dbresult && !$dbresult->EOF)
+		
+		if ($db->IsConnected())
 		{
-			$result[$dbresult->fields['sitepref_name']] = $dbresult->fields['sitepref_value'];
-			$dbresult->MoveNext();
-		}
+			$query = "SELECT sitepref_name, sitepref_value from {siteprefs}";
+			$dbresult = $db->Execute($query);
 
-		if ($dbresult) $dbresult->Close();
+			while ($dbresult && !$dbresult->EOF)
+			{
+				$result[$dbresult->fields['sitepref_name']] = $dbresult->fields['sitepref_value'];
+				$dbresult->MoveNext();
+			}
+
+			if ($dbresult) $dbresult->Close();
+		}
 
 		return $result;
 	}
-
+	
 	/**
 	 * Gets the given site prefernce
 	 *
@@ -438,24 +431,27 @@ class CmsApplication extends CmsObject
 		self::$siteprefs[$prefname] = $value;
 		CmsCache::clear();
 	}
-
-	function __destruct()
+	
+	public static function is_sitedown()
 	{
-		//*cough* Hack
-		CmsDatabase::close();
+		if (self::get_preference('enablesitedownmessage', '0') !== '1')
+			return FALSE;
+		
+		$excludes = self::get_preference('sitedownexcludes','');
+		
+		if (!isset($_SERVER['REMOTE_ADDR']))
+			return TRUE;
+		
+		if (empty($excludes))
+			return TRUE;
+
+		$ret = cms_ipmatches($_SERVER['REMOTE_ADDR'], $excludes);
+		
+		if ($ret)
+			return FALSE;
+		
+		return TRUE;
 	}
-}
-
-class CmsContentTypePlaceholder extends CmsObject
-{
-	var $type;
-	var $filename;
-	var $friendlyname;
-	var $loaded;
-}
-
-class CmsBlockTypePlaceholder extends CmsContentTypePlaceholder
-{
 }
 
 # vim:ts=4 sw=4 noet

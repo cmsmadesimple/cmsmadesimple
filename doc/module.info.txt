@@ -1,0 +1,51 @@
+<module_info>
+	<name>Test</name>
+	<version>1.0</version>
+	<summary>Does some test things that are really awesome.</summary>
+	<minimum_core_version>1.99</minimum_core_version>
+	<authors>
+		<author>
+			<name>Ted Kulp</name>
+			<email>ted@cmsmadesimple.org</email>
+		</author>
+	</authors>
+	<dependencies>
+		<module>
+			<name>Parent Module</name>
+			<minimum_version>1.0</minimum_version>
+		</module>
+	</dependencies>
+	<events_watched>
+		<module>
+			<name>Core</name>
+			<events>
+				<event>edit_content_pre</event>
+				<event>edit_content_post</event>
+			</events>
+		</module>
+		<module>
+			<name>News</name>
+			<events>
+				<event>news_item_created</event>
+			</events>
+		</module>
+	</events_watched>
+	<events_sent>
+		<event>TestEventThing</event>
+	</events_sent>
+	<content_types>
+		<type>TestContentType</type>
+	</content_types>
+	<page_types>
+		<type>TestPageType</type>
+	</page_types>
+	<admin_interface>true</admin_interface>
+	<admin_section>extensions</admin_section>
+	<admin_buffering>true</admin_buffering>
+	<cms_form_project>test</cms_form_project>
+	<content_module>true</content_module>
+	<plugin_module>true</plugin_module>
+	<wysiwyg>false</wysiwyg>
+	<auto_install>true</auto_install>
+	<auto_upgrade>true</auto_upgrade>
+</module_info>

@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
+#$Id: class.cms_content_property.php 4328 2008-02-03 13:33:22Z wishy $
 
 /**
  * Class to represent content properties stored in the database.
@@ -31,6 +31,7 @@
 class CmsContentProperty extends CmsObjectRelationalMapping
 {
 	var $table = 'content_props';
+	var $language = 'en_US';
 }
 
 /**

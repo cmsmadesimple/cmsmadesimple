@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -33,11 +33,11 @@
  * @author	calexico
  */
 
-
-
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -73,7 +73,7 @@ if (isset($type) && "template" == $type)
 {
 
 	$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = ?";
-	$result = cms_db()->Execute($query, array($id));
+	$result = $db->Execute($query, array($id));
 
 	if ($result)
 	{
@@ -92,12 +92,13 @@ if (isset($type) && "template" == $type)
 	$userid = get_userid();
 
 	$modify  = check_permission($userid, 'Modify Stylesheet Assoc');
+        $modifytpl = check_permission($userid,'Modify Templates');
 	$delasso = check_permission($userid, 'Remove Stylesheet Assoc');
 	$addasso = check_permission($userid, 'Add Stylesheet Assoc');
 
 	$query = "SELECT assoc_to_id, template_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."templates
 		WHERE assoc_type=? AND assoc_css_id = ? AND assoc_to_id = template_id";
-	$result = cms_db()->Execute($query, array($type, $id));
+	$result = $db->Execute($query, array($type, $id));
 
 #******************************************************************************
 # displaying erros if any
@@ -111,7 +112,7 @@ if ("" != $error)
 	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".$error."</p></div>";
 }
 
-if (!$addasso) {
+if (!$addasso && !$modify && !$delasso) {
 		echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addcssassociation')))."</p></div>";
 }
 
@@ -125,9 +126,8 @@ else {
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('currentassociations'); ?>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('stylesheet')?> :</p>
-			<p class="pageinput"><?php echo (isset($name)?$name:"")?></p>
-		</div>
+			<?php echo '<b>'.lang('stylesheet').'</b>'?>: <?php echo (isset($name)?$name:"")?>
+		</div><br />
 
 <?php
 
@@ -154,12 +154,19 @@ else {
 			$csslist[] = $one["assoc_to_id"];
 		 
 			echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-			echo "<td><a href=\"edittemplate.php?template_id=".$one["assoc_to_id"]."&amp;from=cssassoc&amp;cssid=".$id."\">".$one["template_name"]."</a></td>\n";
+			if( $modifytpl )
+			  {
+			    echo "<td><a href=\"edittemplate.php".$urlext."&amp;template_id=".$one["assoc_to_id"]."&amp;from=cssassoc&amp;cssid=".$id."\">".$one["template_name"]."</a></td>\n";
+			  }
+			else
+			  {
+			    echo "<td>".$one['template_name']."</td>\n";
+			  }
 
 			# if user has right to delete
-			if ($delasso)
+			if ($modify || $delasso)
 			{
-				echo "<td><a href=\"deletetemplateassoc.php?id=".$id."&amp;template_id=".$one["assoc_to_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteassociationconfirm',$one['template_name'] )."');\">";
+				echo "<td><a href=\"deletetemplateassoc.php".$urlext."&amp;id=".$id."&amp;template_id=".$one["assoc_to_id"]."&amp;type=$type\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteassociationconfirm',$one['template_name']),true)."');\">";
                 echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                 echo "</a></td>\n";
 			}
@@ -179,7 +186,8 @@ else {
 
 	} # end of if result
 	
-
+  if( $modify || $addasso )
+    {
 	# this var is used to store the css ids that should not appear in the
 	# dropdown
 	$notinto = "";
@@ -202,13 +210,18 @@ else {
 	{
 		$query = "SELECT * FROM ".cms_db_prefix()."templates WHERE template_id NOT IN (".$notinto.") AND active = 1 ORDER BY template_name";
 	}
-	$result = cms_db()->Execute($query);
+	$result = $db->Execute($query);
 
 	if ($result && $result->RecordCount() > 0)
 	{
-		echo "<form action=\"addtemplateassoc.php\" method=\"post\">";
-		echo '<div class="pageoverflow"><p class="pageoptions">';
-		echo "<select name=\"template_id\">\n";
+		?>
+    <form action="addtemplateassoc.php" method="post">
+     <div>
+       <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+     </div>
+    <div class="pageoverflow"><p class="pageoptions">
+		<select name="template_id">
+    <?php
 		while ($line = $result->FetchRow())
 		{
 			echo "<option value=\"".$line["template_id"]."\">".$line["template_name"]."</option>\n";
@@ -217,13 +230,14 @@ else {
 ?>
 			<input type="hidden" name="id" value="<?php echo $id?>" />
 			<input type="hidden" name="type" value="<?php echo $type?>" />
-			<input type="submit" value="<?php echo lang('attachtemplate')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover';" onmouseout="this.className='pagebutton';" />
+			<input type="submit" accesskey="s" value="<?php echo lang('attachtemplate')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover';" onmouseout="this.className='pagebutton';" />
 			</p>
 			</div>
 			</form>
 		</div>
 <?php
 	} # end of showing form
+    }
 }
 
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';

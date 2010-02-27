@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,8 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-#require_once("../lib/classes/class.group.inc.php");
+require_once("../lib/classes/class.group.inc.php");
+$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -34,7 +35,7 @@ $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addgroup"])) $active = 0;
 
 if (isset($_POST["cancel"])) {
-	redirect("listgroups.php");
+	redirect("listgroups.php".$urlext);
 	return;
 }
 
@@ -49,21 +50,26 @@ if ($access)
 
 		if ($group == "")
 		{
-			$error .= "<li>".lang('nofieldgiven', array('addgroup'))."</li>";
+			$error .= "<li>".lang('nofieldgiven', lang('groupname'))."</li>";
 			$validinfo = false;
 		}
 
 		if ($validinfo)
 		{
-			$groupobj = new CmsGroup();
+			$groupobj = new Group();
 			$groupobj->name = $group;
 			$groupobj->active = $active;
+
+			Events::SendEvent('Core', 'AddGroupPre', array('group' => &$groupobj));
 
 			$result = $groupobj->save();
 
 			if ($result)
 			{
-				redirect("listgroups.php");
+				Events::SendEvent('Core', 'AddGroupPost', array('group' => &$groupobj));
+				audit($groupobj->id, $groupobj->name, 'Added Group');
+				redirect("listgroups.php".$urlext);
+				return;
 			}
 			else
 			{
@@ -87,22 +93,30 @@ else
 	}
 ?>
 
+<div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('addgroup'); ?>
 	<form method="post" action="addgroup.php">
-		<div class="row">
-			<label>*<?php echo lang('name')?>:</label>
-			<input type="text" name="group" maxlength="255" value="<?php echo $group?>" />
+          <div>
+          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+        </div>
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('name')?>:</p>
+			<p class="pageinput"><input type="text" name="group" maxlength="255" value="<?php echo $group?>" /></p>
 		</div>
-		<div class="row">
-			<label><?php echo lang('active')?>:</label>
-			<input class="checkbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> />
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('active')?>:</p>
+			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
 		</div>
-		<input type="hidden" name="addgroup" value="true" />
-		<div class="submitrow">
-			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
-			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
-		</div>	
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="addgroup" value="true" />
+				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />			
+			</p>
+		</div>
 	</form>
+</div>
 
 <?php
 }
