@@ -66,9 +66,9 @@ class ModuleLoader
 			{
 				if (class_exists($onemodule))
 				{
-					$newmodule =& new $onemodule;
+					$newmodule = new $onemodule;
 					$name = $newmodule->GetName();
-					$cmsmodules[$name]['object'] =& $newmodule;
+					$cmsmodules[$name]['object'] = $newmodule;
 					$cmsmodules[$name]['installed'] = false;
 					$cmsmodules[$name]['active'] = false;
 				}
@@ -126,7 +126,7 @@ class ModuleLoader
 									include_once("$dir/$modulename/$modulename.module.php");
 									if (class_exists($modulename))
 									{
-										$newmodule =& new $modulename;
+										$newmodule = new $modulename;
 										$name = $newmodule->GetName();
 
 										global $CMS_VERSION;
@@ -145,7 +145,7 @@ class ModuleLoader
 										#Check to see if version in db matches file version
 										if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
 										{
-											$cmsmodules[$name]['object'] =& $newmodule;
+											$cmsmodules[$name]['object'] = $newmodule;
 											$cmsmodules[$name]['installed'] = true;
 											$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
 										}

@@ -48,7 +48,7 @@ class UserOperations
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			$oneuser =& new User();
+			$oneuser = new User();
 			$oneuser->id = $row['user_id'];
 			$oneuser->username = $row['username'];
 			$oneuser->firstname = $row['first_name'];
@@ -57,7 +57,7 @@ class UserOperations
 			$oneuser->password = $row['password'];
 			$oneuser->active = $row['active'];
 			$oneuser->adminaccess = $row['admin_access'];
-			$result[] =& $oneuser;
+			$result[] = $oneuser;
 		}
 
 		return $result;
@@ -81,7 +81,7 @@ class UserOperations
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			$oneuser =& new User();
+			$oneuser = new User();
 			$oneuser->id = $row['user_id'];
 			$oneuser->username = $row['username'];
 			$oneuser->firstname = $row['first_name'];
@@ -90,7 +90,7 @@ class UserOperations
 			$oneuser->password = $row['password'];
 			$oneuser->active = $row['active'];
 			$oneuser->adminaccess = $row['admin_access'];
-			$result[] =& $oneuser;
+			$result[] = $oneuser;
 		}
 
 		return $result;
@@ -179,7 +179,7 @@ class UserOperations
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			$oneuser =& new User();
+			$oneuser = new User();
 			$oneuser->id = $id;
 			$oneuser->username = $row['username'];
 			$oneuser->password = $row['password'];
@@ -188,7 +188,7 @@ class UserOperations
 			$oneuser->email = $row['email'];
 			$oneuser->adminaccess = $row['admin_access'];
 			$oneuser->active = $row['active'];
-			$result =& $oneuser;
+			$result = $oneuser;
 		}
 
 		return $result;

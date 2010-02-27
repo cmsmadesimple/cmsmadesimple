@@ -59,7 +59,9 @@ if( isset($CMS_ADMIN_PAGE) )
  * @package CMS
  */
 #magic_quotes_runtime is a nuisance...  turn it off before it messes something up
-set_magic_quotes_runtime(false);
+if (version_compare(phpversion(),"5.3.0","<")) {
+  set_magic_quotes_runtime(false);
+}
 
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.functions.php');
@@ -70,7 +72,7 @@ array_walk_recursive($_GET, 'sanitize_get_var');
 
 #Make a new CMS object
 require(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
-$gCms =& new CmsObject();
+$gCms = new CmsObject();
 if (isset($starttime))
 {
     $gCms->variables['starttime'] = $starttime;
@@ -154,12 +156,12 @@ while ($file = readdir ($handle))
     $path_parts = pathinfo($file);
     if (isset($path_parts['extension']) && $path_parts['extension'] == 'php')
     {
-		$obj =& new CmsContentTypePlaceholder();
+		$obj = new CmsContentTypePlaceholder();
 		$obj->type = strtolower(basename($file, '.inc.php'));
 		$obj->filename = cms_join_path($dir,$file);
 		$obj->loaded = false;
 		$obj->friendlyname = basename($file, '.inc.php');
-		$contenttypes[strtolower(basename($file, '.inc.php'))] =& $obj;
+		$contenttypes[strtolower(basename($file, '.inc.php'))] = $obj;
     }
 }
 closedir($handle);
@@ -232,7 +234,7 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 	if (is_file(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php')))
 	{
 		include(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php'));
-		$gCms->variables['convertclass'] =& new ConvertCharset();
+		$gCms->variables['convertclass'] = new ConvertCharset();
 	}
 }
 
@@ -244,7 +246,11 @@ debug_buffer('', 'End of include');
 
 function sanitize_get_var(&$value, $key)
 {
+  if (version_compare(phpversion(),"5.3.0","<")) {
     $value = eregi_replace('\<\/?script[^\>]*\>', '', $value);
+  } else {
+    $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value); //the i makes it caseinsensitive
+  }
 }
 
 # vim:ts=4 sw=4 noet

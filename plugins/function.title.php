@@ -32,7 +32,11 @@ function smarty_cms_function_title($params, &$smarty)
 		$result = cms_htmlentities($pageinfo->content_title);
 		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 		{
-			$result = ereg_replace("\{\/?php\}", "", $result);
+      if (version_compare(phpversion(),"5.3.0","<")) {
+			  $result = ereg_replace("\{\/?php\}", "", $result);
+      } else {
+        $result = preg_replace("/\{\/?php\}/", "", $result);
+      }
 		}
 	}
 

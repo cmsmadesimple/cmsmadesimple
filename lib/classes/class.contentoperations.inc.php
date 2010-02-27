@@ -70,7 +70,7 @@ class ContentOperations
 		
 		if (ContentOperations::LoadContentType($type))
 		{
-			$result =& new $type;
+			$result = new $type;
 		}
 		
 		return $result;
@@ -556,9 +556,9 @@ class ContentOperations
 				}
 			}
 
-			$tree = &new Tree();
+			$tree = new Tree();
 			debug_buffer('', 'Start Loading Children into Tree');
-			$tree = &Tree::createFromList($nodes, '.');
+			$tree = Tree::createFromList($nodes, '.');
 			debug_buffer('', 'End Loading Children into Tree');
 		}
 
@@ -969,7 +969,8 @@ class ContentOperations
 	{
 		#Change padded numbers back into user-friendly values
 		$tmp = '';
-		$levels = split('\.', $position);
+    $levels = preg_split('/\./', $position);
+    
 		foreach ($levels as $onelevel)
 		{
 			$tmp .= ltrim($onelevel, '0') . '.';
@@ -982,7 +983,9 @@ class ContentOperations
 	{
 		#Change user-friendly values into padded numbers
 		$tmp = '';
-		$levels = split('\.', $position);
+        
+    $levels = preg_split('/\./', $position);
+    
 		foreach ($levels as $onelevel)
 		{
 			$tmp .= str_pad($onelevel, 5, '0', STR_PAD_LEFT) . '.';

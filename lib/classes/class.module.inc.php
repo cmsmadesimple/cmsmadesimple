@@ -308,12 +308,12 @@ class CMSModule
 	function RegisterRoute($routeregex, $defaults = array())
 	{
 		global $gCms;
-		$route =& new CmsRoute();
+		$route = new CmsRoute();
 		$route->module = $this->GetName();
 		$route->defaults = $defaults;
 		$route->regex = $routeregex;
 		$routes =& $gCms->variables['routes'];
-		$routes[] =& $route;
+		$routes[] = $route;
 	}
 
 	/**
@@ -527,12 +527,12 @@ class CMSModule
 		$contenttypes =& $gCms->contenttypes;
 		if (!isset($contenttypes[strtolower($name)]))
 		{
-			$obj =& new CmsContentTypePlaceholder();
+			$obj = new CmsContentTypePlaceholder();
 			$obj->type = strtolower($name);
 			$obj->filename = $file;
 			$obj->loaded = false;
 			$obj->friendlyname = ($friendlyname != '' ? $friendlyname : $name);
-			$contenttypes[strtolower($name)] =& $obj;
+			$contenttypes[strtolower($name)] = $obj;
 		}
 	}
 

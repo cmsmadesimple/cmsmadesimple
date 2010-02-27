@@ -77,7 +77,7 @@ class TemplateOperations
 
 		if($row)
 		{
-			$onetemplate =& new Template();
+			$onetemplate = new Template();
 			$onetemplate->id = $row['template_id'];
 			$onetemplate->name = $row['template_name'];
 			$onetemplate->content = $row['template_content'];
@@ -86,11 +86,11 @@ class TemplateOperations
 			$onetemplate->default = $row['default_template'];
 			$onetemplate->active = $row['active'];
 			$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
-			$result =& $onetemplate;
+			$result = $onetemplate;
 
 			if (!isset($cache[$onetemplate->id]))
 			{
-				$cache[$onetemplate->id] =& $onetemplate;
+				$cache[$onetemplate->id] = $onetemplate;
 			}
 		}
 
