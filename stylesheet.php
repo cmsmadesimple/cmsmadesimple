@@ -92,7 +92,7 @@ require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'mi
 require(cms_join_path(dirname(__FILE__),'lib','classes','class.global.inc.php'));
 require(cms_join_path(dirname(__FILE__),'lib','adodb.functions.php'));
 
-$gCms =& new CmsObject();
+$gCms = new CmsObject();
 load_adodb();
 $db =& $gCms->GetDb();
 
