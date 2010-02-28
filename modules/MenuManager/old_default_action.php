@@ -50,8 +50,8 @@ if (isset($params['start_page']) || isset($params['start_element']))
 				{
 					#Set original depth first before getting parent node
 					#This is slightly hackish, but it works nicely
-				        #+1 and +2 fix HM changes of root node level
-				        #even more hackish ;)
+					#+1 and +2 fix HM changes of root node level
+					#even more hackish ;)
 					$origdepth = $rootnode->getLevel()+1;
 					$rootnode = $rootnode->getParentNode();
 					$prevdepth = $rootnode->getLevel()+2;

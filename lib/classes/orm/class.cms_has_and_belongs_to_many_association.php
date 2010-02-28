@@ -68,7 +68,7 @@ class CmsHasAndBelongsToManyAssociation extends CmsObjectRelationalAssociation
 			$ary = new CmsAssociationCollection();
 			if ($this->child_class != '' && $this->join_table != '')
 			{
-				$class = cms_orm()->{$this->child_class};
+				$class = cms_orm($this->child_class);
 				$table = $class->get_table();
 				$other_id_field = $class->id_field;
 			

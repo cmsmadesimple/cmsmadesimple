@@ -35,7 +35,7 @@ define('CMS_CONTENT_HIDDEN_NAME','--------');
 class CmsContentBase extends CmsObjectRelationalMapping
 {
 	var $table = 'content';
-	var $params = array('id' => -1, 'template_id' => -1, 'active' => true, 'default_content' => false, 'parent_id' => -1, 'lft' => 1, 'rgt' => 1);
+	var $params = array('id' => -1, 'template_id' => -1, 'active' => true, 'default_content' => false, 'parent_id' => -1, 'lft' => 1, 'rgt' => 1, 'content_props' => array());
 	var $field_maps = array('content_alias' => 'alias', 'titleattribute' => 'title_attribute', 'accesskey' => 'access_key', 'tabindex' => 'tab_index', 'content_name' => 'name', 'content_id' => 'id');
 	var $id_field = 'content_id';
 	var $sequence = 'content_seq';
@@ -164,6 +164,21 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	// methods that do not need to be overridden
 	//////////////////////////////////////////////////
 	
+	function after_load()
+	{
+		if (empty($this->content_props))
+		{
+			$val = cms_db()->GetAll("SELECT prop_name, content FROM {content_props} WHERE content_id = ?", array($this->id));
+			if ($val)
+			{
+				foreach ($val as $row)
+				{
+					$this->set_property_value($row['prop_name'], $row['content']);
+				}
+			}
+		}
+	}
+	
 	protected function before_save()
 	{
 		//CmsEvents::send_event('Core', 'ContentEditPre', array('content' => &$this));
@@ -174,6 +189,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		if ($result)
 		{
 			// save properties.
+			/*
 			$concat = '';
 			foreach ($this->mProperties as &$prop)
 			{
@@ -182,6 +198,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 				$prop->save();
 				$concat .= $prop->content;
 			}
+			*/
 
 			// save additional editors
 			$users =& cms_orm('CmsAdditionalEditor')->find_all_by_content_id($this->id);
@@ -209,6 +226,8 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	
 	public function set_property_value($name, $value, $lang = 'en_US')
 	{
+		$this->params['content_props'][$name] = $value;
+		/*
 		$this->load_properties(false);
 
 		foreach ($this->mProperties as &$prop)
@@ -233,21 +252,26 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		
 		if (!$this->has_property($name))
 			$this->prop_names = implode(',', array_merge(explode(',', $this->prop_names), array($name)));
+		*/
 	}
 	
 	public function get_property_names($lang = 'en_US')
 	{
-		return explode(',', $this->prop_names);
+		//return explode(',', $this->prop_names);
+		return array_keys($this->content_props);
 	}
 	
 	public function get_loaded_property_names($lang = 'en_US')
 	{
+		/*
 		$result = array();
 		foreach ($this->mProperties as &$prop)
 		{
 			$result[] = $prop->prop_name;
 		}
 		return $result;
+		*/
+		return $this->get_property_names($lang);
 	}
 
 	private function load_additional_users($force = false)
@@ -313,9 +337,10 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		return $this->rgt > ($this->lft + 1);
 	}
 	
-	public function has_property($name)
+	public function has_property($name, $lang = 'en_US')
 	{
-		return in_array($name, explode(',', $this->prop_names));
+		//return in_array($name, explode(',', $this->prop_names));
+		return in_array($name, $this->get_property_names($lang));
 	}
 	
 	public function get_sibling_count()
@@ -346,6 +371,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	public function get_property_value($name, $lang = 'en_US')
 	{
 		//See if it exists...
+		/*
 		if ($this->has_property($name))
 		{
 			//Loop through and see if it's loaded
@@ -376,6 +402,8 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		}
 		
 		return '';
+		*/
+		return $this->content_props[$name];
 	}
 	
 	public function shift_position($direction = 'up')

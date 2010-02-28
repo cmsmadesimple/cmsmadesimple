@@ -147,6 +147,9 @@ class CmsApplication extends CmsObject
 		
 		//So our shutdown events are called right near the end of the page
 		register_shutdown_function(array(&$this, 'shutdown'));
+		
+		//Load database events when the database gets going
+		CmsEventManager::register_event_handler('Core:database_opened', array('CmsDatabaseEventManager', 'load_events_into_manager'));
 	}
 	
 	function shutdown()

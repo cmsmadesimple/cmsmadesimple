@@ -143,7 +143,7 @@ class UserTagOperations
 		return $plugins;
 	}
 	
-	function CallUserTag($name, &$params)
+	public static function call_user_tag($name, &$params)
 	{
 		global $gCms;
 		$smarty =& $gCms->GetSmarty();
@@ -161,6 +161,11 @@ class UserTagOperations
 		}
 		
 		return $result;
+	}
+	
+	public static function CallUserTag($name, &$params)
+	{
+		return self::call_user_tag($name, $params);
 	}
 
 } // class

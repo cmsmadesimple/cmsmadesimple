@@ -25,7 +25,9 @@ class CmsEventManager extends CmsObject
 	static public function init_store()
 	{
 		if (self::$event_store == null)
+		{
 			self::$event_store = array();
+		}
 	}
 
 	static public function register_event_handler($name, $function)
@@ -87,7 +89,7 @@ class CmsEventManager extends CmsObject
 		return false;
 	}
 
-	static public function send_event($name, &$arguments = array())
+	static public function send_event($name, $arguments = array())
 	{
 		self::init_store();
 		

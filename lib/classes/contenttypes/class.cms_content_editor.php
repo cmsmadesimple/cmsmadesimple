@@ -567,6 +567,11 @@ class CmsContentEditor extends CmsContentEditorBase
 			{
 				$accepted[] = $blockInfo['id'];
 			}
+			
+		foreach ($accepted as $one_param)
+		{
+			$content_obj->set_property_value($one_param, $params[$one_param]);
+		}
 	}
 
 

@@ -67,7 +67,7 @@ class CmsHasManyAssociation extends CmsObjectRelationalAssociation
 			$ary = new CmsAssociationCollection();
 			if ($this->child_class != '' && $this->child_field != '')
 			{
-				$class = cmsms()->{$this->child_class};
+				$class = cms_orm($this->child_class);
 				if ($obj->{$obj->id_field} > -1)
 				{
 					$queryattrs = $this->extra_params;

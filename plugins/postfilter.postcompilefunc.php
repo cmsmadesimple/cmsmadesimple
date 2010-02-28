@@ -43,7 +43,8 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 
 	}
 
-	Events::SendEvent('Core', 'SmartyPostCompile', array('content' => &$tpl_output));
+	//Events::SendEvent('Core', 'SmartyPostCompile', array('content' => &$tpl_output));
+	CmsEventManager::send_event('Core:SmartyPostCompile', array('content' => &$tpl_output));
 
 	return $tpl_output;
 }

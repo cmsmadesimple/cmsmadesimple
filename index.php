@@ -24,8 +24,6 @@ if (version_compare(phpversion(), "5.2", "<"))
 	exit;
 }
 
-//xdebug_start_trace('/tmp/mytrace');
-
 //Where are we?
 $dirname = dirname(__FILE__);
 
@@ -338,8 +336,6 @@ else
 
 echo "<!-- Generated in ".$endtime." seconds by CMS Made Simple using ".CmsDatabase::query_count()." SQL queries -->\n";
 echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
-
-//var_dump(CmsLogin::get_current_user());
 
 if (CmsConfig::get('debug') || !CmsConfig::get('debug'))
 {
