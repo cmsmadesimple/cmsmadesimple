@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.6.7";
+$CMS_VERSION = "1.7.0-beta1";
 $CMS_VERSION_NAME = "Teremba Bay";
 $CMS_SCHEMA_VERSION = "32";
 
