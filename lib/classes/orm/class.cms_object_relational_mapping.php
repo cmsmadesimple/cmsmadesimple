@@ -636,7 +636,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 
 		try
 		{
-			$row = $db->GetRow($query, $queryparams);
+			$row = $db->CacheGetRow($query, $queryparams);
 
 			if($row)
 			{
@@ -712,7 +712,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		
 		try
 		{
-			$dbresult = $db->SelectLimit($query, $numrows, $offset, $queryparams);
+			$dbresult = $db->CacheSelectLimit($query, $numrows, $offset, $queryparams);
 
 			while ($dbresult && !$dbresult->EOF)
 			{
@@ -764,7 +764,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		
 		list($query, $queryparams, $numrows, $offset) = $this->generate_select_query_and_parameters($table, $arguments, $query, $queryparams, true);
 		
-		return $db->GetOne($query, $queryparams);
+		return $db->CacheGetOne($query, $queryparams);
 	}
 
 	/**

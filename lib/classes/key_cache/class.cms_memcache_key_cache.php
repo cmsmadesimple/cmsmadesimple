@@ -18,9 +18,6 @@
 #
 #$Id$
 
-//Clear out old values when the request shuts down
-CmsEventManager::register_event_handler('Core:shutdown_soon', array('CmsKeyCache', 'expire_entries'));
-
 /**
  * Class to represent a key/value cache.  The model is based on memcached, and will
  * work with memcached if a server exists, is configured, and the memcache module is
@@ -29,11 +26,32 @@ CmsEventManager::register_event_handler('Core:shutdown_soon', array('CmsKeyCache
  *
  * @author Ted Kulp
  */
-class CmsKeyCache extends CmsObject
+class CmsMemcacheKeyCache extends CmsObject
 {
+	static private $instance = NULL;
+	
+	private $memcache_obj = NULL;
+	
 	function __construct()
 	{
 		parent::__construct();
+		$this->memcache_obj = new Memcache;
+		$this->memcache_obj->connect(CmsConfig::get('memcache_server'), CmsConfig::get('memcache_port'));
+	}
+	
+	/**
+	 * Returns an instnace of the CmsAdodbKeyCache singleton.
+	 *
+	 * @return CmsAdodbKeyCache The singleton CmsAdodbKeyCache instance
+	 * @author Ted Kulp
+	 **/
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsMemcacheKeyCache();
+		}
+		return self::$instance;
 	}
 	
 	/**
@@ -42,21 +60,12 @@ class CmsKeyCache extends CmsObject
 	 * @return void
 	 * @author Ted Kulp
 	 */
-	public static function expire_entries()
+	public function expire_entries()
 	{
-		//Put into an try/catch, just in case the database has closed
-		//before we get here.  It doesn't really matter THAT much if
-		//it's run every time.  Cron would come in handy for this.
-		try
-		{
-			cms_db()->Execute("DELETE FROM {cache} WHERE expiry < ?", array(cms_db()->BindTimeStamp(time())));
-		}
-		catch (Exception $e)
-		{
-		}
+		//Not necessary.  The daemon handles this automatically.
 	}
 	
-	/**
+	/**cms
 	 * Return the value with the given key.  If the key doesn't exist (or is expired)
 	 * it will return null.
 	 *
@@ -64,20 +73,10 @@ class CmsKeyCache extends CmsObject
 	 * @return mixed The value retrieved. null if no valid data for key is found.
 	 * @author Ted Kulp
 	 */
-	public static function get($key)
+	public function get($key)
 	{
-		try
-		{
-			$time = cms_db()->BindTimeStamp(time());
-			$result = cms_db()->GetOne("select v FROM {cache} WHERE k = ? and expiry > ?", array($key, $time));
-			if ($result)
-				return unserialize($result);
-		}
-		catch (Exception $e)
-		{
-			
-		}
-		return null;
+		CmsProfiler::get_instance()->mark("Getting {$key} from Memcache");
+		return $this->memcache_obj->get($key);
 	}
 	
 	/**
@@ -92,21 +91,10 @@ class CmsKeyCache extends CmsObject
 	 * @return void
 	 * @author Ted Kulp
 	 */
-	public static function set($key, $value, $expiry = 3600)
+	public function set($key, $value, $expiry = 3600)
 	{
-		self::delete($key);
-		if ($expiry == 0)
-			$expiry = (60 * 60 * 24 * 365 * 10); //10 years
-		$expiry = cms_db()->BindTimeStamp(time() + $expiry);
-		$time = cms_db()->BindTimeStamp(time());
-		try
-		{
-			cms_db()->Execute("insert into {cache} (k, v, expiry, create_date, modified_date) values (?, ?, ?, ?, ?)", array($key, serialize($value), $expiry, $time, $time));
-		}
-		catch (Exception $e)
-		{
-			
-		}
+		CmsProfiler::get_instance()->mark("Setting {$key} in Memcache");
+		return $this->memcache_obj->set($key, $value, 0, $expiry);
 	}
 	
 	/**
@@ -117,16 +105,9 @@ class CmsKeyCache extends CmsObject
 	 * @return void
 	 * @author Ted Kulp
 	 */
-	public static function delete($key)
+	public function delete($key)
 	{
-		try
-		{
-			cms_db()->Execute("delete from {cache} where k = ?", array($key));
-		}
-		catch (Exception $e)
-		{
-			
-		}
+		return $this->memcache_obj->delete($key);
 	}
 }
 

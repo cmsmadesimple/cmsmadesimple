@@ -148,6 +148,9 @@ class CmsConfig extends CmsObject implements ArrayAccess
 		$config['timezone'] = 'Etc/GMT+0';
 		$config['function_caching'] = true;
 		$config['full_page_caching'] = false;
+		$config['use_memcache'] = false;
+		$config['memcache_server'] = 'localhost';
+		$config['memcache_port'] = '11211';
 
 		if ($loadLocal == true)
 		{
@@ -231,6 +234,39 @@ class CmsConfig extends CmsObject implements ArrayAccess
 #after making any changes to path or url related options
 
 #-----------------
+#Behaviour Settings
+#-----------------
+
+# These settings will effect the overall behaviour of the CMS application, please
+# use extreme caution when editing these.  Additionally, some settings may have 
+# no effect on servers with significantly restricted configurability.
+
+# If you are experiencing propblems with php memory limit errors, then you may
+# want to try enabling and/or adjusting this setting.  
+# Note: Your server may not allow the application to override memory limits.
+\$config['php_memory_limit'] = '{$config['php_memory_limit']}';
+
+# In versions of CMS Made Simple prior to version 1.4, the page template was processed
+# in it's entirety.  This behaviour was later changed to process the head portion of the
+# page template after the body.  If you are working with a highly configured site that
+# relies significantly on the old order of smarty processing, you may want to try
+# setting this parameter to false.
+\$config['process_whole_template'] = ${$config['process_whole_template']?'true':'false'};
+
+# CMSMS Debug Mode?  Turn it on to get a better error when you
+# see {nocache} errors, or to allow seeing php notices, warnings, and errors in the html output.
+# This setting will also disable browser css caching.
+\$config['debug'] = ${$config['debug']?'true':'false'};
+
+# Output compression?
+# Turn this on to allow CMS to do output compression
+# this is not needed for apache servers that have mod_deflate enabled
+# and possibly other servers.  But may provide significant performance
+# increases on some sites.  Use caution when using this as there have
+# been reports of incompatibilities with some browsers.
+\$config['output_compression'] = ${$config['output_compression']?'true':'false'};
+
+#-----------------
 #Database Settings
 #-----------------
 
@@ -241,7 +277,10 @@ class CmsConfig extends CmsObject implements ArrayAccess
 \$config['db_hostname'] = '{$config['db_hostname']}';
 \$config['db_username'] = '{$config['db_username']}';
 \$config['db_password'] = '{$config['db_password']}';
-\$config['db_name'] = '{$config['db_name']}';	
+\$config['db_name'] = '{$config['db_name']}';
+#Change this param only if you know what you are doing
+\$config["db_port"] = '{$config['db_port']}';
+
 
 #If app needs to coexist with other tables in the same db,
 #put a prefix here.  e.g. "cms_"
@@ -251,21 +290,27 @@ class CmsConfig extends CmsObject implements ArrayAccess
 #allow them.
 \$config['persistent_db_conn'] = ${$config['persistent_db_conn']?'true':'false'};
 
+#Use ADODB Lite?  This should be true in almost all cases.  Note, slight
+#tweaks might have to be made to date handling in a "regular" adodb
+#install before it can be used.
+\$config['use_adodb_lite'] = ${$config['use_adodb_lite']?'true':'false'};
+
 #-------------
 #Path Settings
 #-------------
 
 #Document root as seen from the webserver.  No slash at the end
 #If page is requested with https use https as root url
-#e.g. http://blah.com.  Only override this if you are having issues
-#with the url calculation routine, which could be caused by strange
-#web server configurations.
-#\$config['root_url'] = '{$config['root_url']}';
+#e.g. http://blah.com
+\$config['root_url'] = '{$config['root_url']}';
+if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
+{
+  \$config['root_url'] = str_replace('http','https',\$config['root_url']);
+}
 
 #Path to document root. This should be the directory this file is in.
-#e.g. /var/www/localhost.  Only override this if PHP is for some reason
-#calculating a bad path.
-#\$config['root_path'] = '{$config['root_path']}';
+#e.g. /var/www/localhost
+\$config['root_path'] = '{$config['root_path']}';
 
 #Name of the admin directory
 \$config['admin_dir'] = '{$config['admin_dir']}';
@@ -294,23 +339,8 @@ class CmsConfig extends CmsObject implements ArrayAccess
 #Usability Settings
 #------------------
 
-#Should smarty be tightened up a bit?  This is only really necessary if you don't trust
-#your users 100%.
-\$config['smarty_security'] = ${$config['smarty_security']?'true':'false'};
-
-#Should we use function caching?  This basically means that we cache certain data that
-#is repeately queried from the database.  There shouldn't be many reasons to turn this
-#off, but the option is there in case there are problems.
-\$config['function_caching'] = ${$config['function_caching']?'true':'false'};
-
-#Should we use full page caching?  This basically means that the database will not even
-#be touched and contents will only come from a file cache that is reset every hour.  Only
-#use this if you have a truly static site or in case of "slashdot" effect.
-\$config['full_page_caching'] = ${$config['full_page_caching']?'true':'false'};
-
-#CMSMS Debug Mode?  Turn is on to get a better error when you
-#see {nocache} errors.
-\$config['debug'] = ${$config['debug']?'true':'false'};
+#Allow smarty {php} tags?  These could be dangerous if you don't trust your users.
+\$config['use_smarty_php_tags'] = ${$config['use_smarty_php_tags']?'true':'false'};
 
 #Automatically assign alias based on page title?
 \$config['auto_alias_content'] = ${$config['auto_alias_content']?'true':'false'};
@@ -319,16 +349,20 @@ class CmsConfig extends CmsObject implements ArrayAccess
 #URL Settings
 #------------
 
-#Show mod_rewrite URLs in the menu? You must enable 'use_hierarchy' for this to work for modules
-\$config['assume_mod_rewrite'] = ${$config['assume_mod_rewrite']?'true':'false'};
+#What type of URL rewriting should we be using for pretty URLs?  Valid options are: 
+#'none', 'internal', and 'mod_rewrite'.  'internal' will not work with IIS some CGI
+#configurations. 'mod_rewrite' requires proper apache configuration, a valid 
+#.htaccess file and most likely {metadata} in your page templates.  For more 
+#information, see:
+#http://wiki.cmsmadesimple.org/index.php/FAQ/Installation/Pretty_URLs#Pretty_URL.27s
+\$config['url_rewriting'] = '{$config['url_rewriting']}';
 
 #Extension to use if you're using mod_rewrite for pretty URLs.
 \$config['page_extension'] = '{$config['page_extension']}';
 
-#If you don't use mod_rewrite, then would you like to use the built-in
-#pretty url mechanism?  This will not work with IIS and the {metadata} tag
-#should be in all of your templates before enabling.
-\$config['internal_pretty_urls'] = ${$config['internal_pretty_urls']?'true':'false'};
+#If you're using the internal pretty url mechanism or mod_rewrite, would you like to
+#show urls in their hierarchy?  (ex. http://www.mysite.com/parent/parent/childpage)
+\$config['use_hierarchy'] = ${$config['use_hierarchy']?'true':'false'};
 
 #If using none of the above options, what should we be using for the query string
 #variable?  (ex. http://www.mysite.com/index.php?page=somecontent)
@@ -365,30 +399,30 @@ class CmsConfig extends CmsObject implements ArrayAccess
 \$config['default_encoding'] = '{$config['default_encoding']}';
 \$config['admin_encoding'] = '{$config['admin_encoding']}';
 
-
-#Timezone for this site.
-#Check http://php.net/manual/en/timezones.php for available timezones
-\$config['timezone'] = 'Etc/GMT+0';
-
-
-#---------------------------------------------
-#Use the old stylesheet logic?  It's much slower, but it works with older
-#versions of CMSMS.  You'll also need this set to true if there is a module
-#that uses a stylesheet callback.  Leave it as false instead you really
-#need it.
-\$config['old_stylesheet'] = ${$config['old_stylesheet']?'true':'false'};
+#This is a mysql specific option that is generally defaulted to true.  Only 
+#disable this for backwards compatibility or the use of non utf-8 databases.
+\$config['set_names'] = ${$config['set_names']?'true':'false'};
 
 # URL of the Admin Panel section of the User Handbook
+# Set none if you want hide the link from Error 
 \$config['wiki_url'] = '{$config['wiki_url']}';
 
-#Enable backwards compatibility mode?  This basically will allow some 
-#modules written before 1.0 was released to work.  Keep in mind that this 
-#will use a lot more memory and isn't guaranteed to fix the problem.
-\$config['backwards_compatible'] = ${$config['backwards_compatible']?'true':'false'};
+#-----------------
+#Memcache Settings
+#-----------------
 
-#Not used anymore... kept around, just in case
-\$config['disable_htmlarea_translation'] = false;
-\$config['use_Indite'] = true;
+#This section allows areas of caching to be handled by Memcached instead
+#of files or the database. This generally speeds up cache reads and writes
+#greatly, but requires special configuration, the memcached daemon to be
+#available and the memache module to be installed in your PHP. We recommend
+#this for production environments where you have control over the items that
+#are compiled and installed into your PHP. See http://memcached.org/ and
+#http://us3.php.net/manual/en/book.memcache.php for more details.
+#
+\$config['use_memcache'] = ${$config['use_memcache']?'true':'false'};
+\$config['memcache_server'] = '{$config['memcache_server']}';
+\$config['memcache_port'] = '{$config['memcache_port']}';
+
 EOF;
 		return $result;
 	}

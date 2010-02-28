@@ -1288,6 +1288,7 @@ function UnserializeObject(&$serialized)
 
 function starts_with( $str, $sub )
 {
+	if (!is_string($str)) return false;
 	return ( substr( $str, 0, strlen( $sub ) ) == $sub );
 }
 
@@ -1298,6 +1299,7 @@ function startswith( $str, $sub )
 
 function ends_with( $str, $sub )
 {
+	if (!is_string($str)) return false;
 	return ( substr( $str, strlen( $str ) - strlen( $sub ) ) == $sub );
 }
 

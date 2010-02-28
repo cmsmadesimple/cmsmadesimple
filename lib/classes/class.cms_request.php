@@ -41,7 +41,7 @@ class CmsRequest extends CmsObject
 	public static function setup()
 	{
 		#magic_quotes_runtime is a nuisance...  turn it off before it messes something up
-		set_magic_quotes_runtime(false);
+		//set_magic_quotes_runtime(false);
 		
 		# sanitize $_GET
 		array_walk_recursive($_GET, array('CmsRequest', 'sanitize_get_var'));
@@ -100,6 +100,7 @@ class CmsRequest extends CmsObject
 	{
 		$config = cms_config();
 		$page = '';
+		
 		$id = CmsRequest::get_id_from_request();
 
 		if (isset($id) && isset($params[$id . 'returnid']))

@@ -343,7 +343,7 @@ class CmsApplication extends CmsObject
 		if ($db->IsConnected())
 		{
 			$query = "SELECT sitepref_name, sitepref_value from {siteprefs}";
-			$dbresult = $db->Execute($query);
+			$dbresult = $db->CacheExecute($query);
 
 			while ($dbresult && !$dbresult->EOF)
 			{
@@ -412,7 +412,7 @@ class CmsApplication extends CmsObject
 		$db = cms_db();
 
 		$query = "SELECT sitepref_value from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ".$db->qstr($prefname);
-		$result = $db->Execute($query);
+		$result = $db->CacheExecute($query);
 
 		if ($result && $result->RecordCount() > 0)
 		{

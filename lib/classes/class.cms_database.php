@@ -104,7 +104,7 @@ class CmsDatabase extends CmsObject
 
 		$_GLOBALS['ADODB_CACHE_DIR'] = cms_join_path(ROOT_DIR, 'tmp', 'cache');
 
-		require_once(cms_join_path(ROOT_DIR, 'lib', 'adodb', 'adodb-exceptions.inc.php'));
+		//require_once(cms_join_path(ROOT_DIR, 'lib', 'adodb', 'adodb-exceptions.inc.php'));
 		require_once(cms_join_path(ROOT_DIR, 'lib', 'adodb', 'adodb.inc.php'));
 
 		try
@@ -115,11 +115,11 @@ class CmsDatabase extends CmsObject
 	
 			if ($persistent)
 			{
-				$connect_result = @$dbinstance->PConnect($hostname, $username, $password, $dbname);
+				$connect_result = $dbinstance->PConnect($hostname, $username, $password, $dbname);
 			}
 			else
 			{
-				$connect_result = @$dbinstance->Connect($hostname, $username, $password, $dbname);
+				$connect_result = $dbinstance->Connect($hostname, $username, $password, $dbname);
 			}
 		}
 		catch (exception $e)
@@ -170,6 +170,13 @@ class CmsDatabase extends CmsObject
 		
 		//Initialize the CMS_DB_PREFIX define
 		self::get_prefix();
+		
+		if(class_exists('Memcache') && CmsConfig::get('use_memcache') == true)
+		{
+			self::$instance->memCache = true; /// should we use memCache instead of caching in files
+			self::$instance->memCacheHost = array(CmsConfig::get('memcache_server')); /// 
+			self::$instance->memCachePort = CmsConfig::get('memcache_port'); /// this is default memCache port
+		}
 
 		return $dbinstance;
 	}
