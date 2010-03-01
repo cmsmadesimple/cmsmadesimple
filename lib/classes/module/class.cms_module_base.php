@@ -67,6 +67,17 @@ class CmsModuleBase extends CmsObject
 	}
 	
 	/**
+	 * Returns the calcuated name of the module.
+	 *
+	 * @return string The name of the module
+	 * @author Ted Kulp
+	 */
+	public function get_name()
+	{
+		return get_name($this);
+	}
+	
+	/**
 	 * Returns a list of filter ids so passed filter constants can 
 	 * be checked and are valid. Results are cached in the class.
 	 *
@@ -233,7 +244,7 @@ class CmsModuleBase extends CmsObject
 	{
 		$gCms = cmsms();
 		$route = new CmsRoute();
-		$route->module = get_name($this);
+		$route->module = $this->get_name();
 		$route->defaults = $defaults;
 		$route->regex = $route_regex;
 		$routes =& $gCms->variables['routes'];
