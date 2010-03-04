@@ -27,6 +27,8 @@ $rootnode = null;
 
 $prevdepth = 1;
 
+$hm = $gCms->GetHierarchyManager();
+
 if (isset($params['start_page']) || isset($params['start_element']))
 {
 	if (isset($params['start_page']))
@@ -160,7 +162,7 @@ if (count($nodelist) > 0)
 	$smarty->assign('count', count($nodelist));
 	$smarty->assign_by_ref('nodelist', $nodelist);
 	$usefile = true;
-	$tpl_name = coalesce_key($params, 'template', $this->GetPreference('default_template','simple_navigation.tpl'));
+	$tpl_name = coalesce_key($params, 'template', $this->Preference->get('default_template','simple_navigation.tpl'));
 	if( endswith($tpl_name, '.tpl') )
 		{
 			$usefile = true;
@@ -172,10 +174,10 @@ if (count($nodelist) > 0)
 			
 	if ($usefile)
 		{
-			echo $this->ProcessTemplate($tpl_name, $mdid, false, $gCms->variables['content_id']);
+			echo $this->Template->process($tpl_name, $mdid, false, $gCms->variables['content_id']);
 		}
 	else
-		echo $this->ProcessTemplateFromDatabase($tpl_name, $mdid, false);
+		echo $this->Template->process_from_database($tpl_name, $mdid, false);
 }
 
 # vim:ts=4 sw=4 noet

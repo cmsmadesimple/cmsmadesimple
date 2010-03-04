@@ -16,14 +16,14 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-class CmsModuleTemplateExtension extends CmsObject
+class CmsModuleTemplateExtension extends CmsModuleExtension
 {
-	function __construct()
+	function __construct($module)
 	{
-		parent::__construct();
+		parent::__construct($module);
 	}
 
-	public function list($template_type = '')
+	public function get_list($template_type = '')
 	{
 		if( empty($template_type) )
 		{
@@ -31,7 +31,6 @@ class CmsModuleTemplateExtension extends CmsObject
 		}
 		return cms_orm('CmsModuleTemplate')->find_all_by_module_and_template_type($this->module->get_name(), $template_type);
 	}
-
 
 	/**
 	* Returns a database saved template.  This should be used for admin functions only, as it doesn't

@@ -18,28 +18,19 @@
 #
 #$Id$
 
-class MenuManager extends CMSModule
+class MenuManager extends CmsModuleBase
 {
 	var $current_depth = 1;
+	var $includes = array('Preference', 'Template');
 	
-	function GetName()
+	public function __construct()
 	{
-		return 'MenuManager';
+		parent::__construct();
 	}
 
 	function GetFriendlyName()
 	{
 		return $this->Lang('menumanager');
-	}
-
-	function IsPluginModule()
-	{
-		return true;
-	}
-
-	function HasAdmin()
-	{
-		return true;
 	}
 
 	function VisibleToAdminUser()
@@ -53,24 +44,9 @@ class MenuManager extends CMSModule
 		$this->RemovePermission('Manage Menu');
 	}
 
-	function GetVersion()
-	{
-		return '1.6.2';
-	}
-
-	function MinimumCMSVersion()
-	{
-		return '1.6.1';
-	}
-
 	function GetAdminDescription()
 	{
 		return $this->Lang('description');
-	}
-
-	function GetAdminSection()
-	{
-		return 'layout';
 	}
 
 	function SetParameters()

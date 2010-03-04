@@ -74,7 +74,7 @@ class CmsModuleBase extends CmsObject
 	 */
 	public function get_name()
 	{
-		return get_name($this);
+		return get_class($this);
 	}
 	
 	/**
@@ -143,14 +143,14 @@ class CmsModuleBase extends CmsObject
 	 */
 	public function do_action($action_name, $params)
 	{
-		$this->smarty->assign_by_ref('mod', $this);
+		cms_smarty()->assign_by_ref('mod', $this);
 		
 		if ($action_name != '')
 		{
-			$filename = cms_join_path(ROOT_DIR, 'modules', get_class($this), 'action' . $action_name . '.php');
+			$filename = cms_join_path(ROOT_DIR, 'modules', get_class($this), 'action.' . $action_name . '.php');
 			if (@is_file($filename))
 			{
-				return $this->include_file_in_scope($filename);
+				return $this->include_file_in_scope($filename, array('params' => $params));
 			}
 		}
 		
@@ -215,10 +215,11 @@ class CmsModuleBase extends CmsObject
 	 * the file inclusion is buffered and returned as a string.
 	 *
 	 * @param string $filename The name of the file to include
+	 * @param array $param_hash Hash of variables to include in the scope
 	 * @return string The buffered output of the file inclusion
 	 * @author Ted Kulp
 	 */
-	public function include_file_in_scope($filename)
+	public function include_file_in_scope($filename, $param_hash = array())
 	{
 		@ob_start();
 		{
@@ -226,6 +227,11 @@ class CmsModuleBase extends CmsObject
 			$db = cms_db();
 			$config = cms_config();
 			$smarty = cms_smarty();
+			
+			foreach ($param_hash as $k => $v)
+			{
+				$$k = $v;
+			}
 
 			include($filename);
 		}

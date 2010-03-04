@@ -67,7 +67,7 @@ class CmsRequest extends CmsObject
 	 **/
 	public static function sanitize_get_var(&$value, $key)
 	{
-		$value = eregi_replace('\<\/?script[^\>]*\>', '', $value);
+		$value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value);
 	}
 	
 	/**
