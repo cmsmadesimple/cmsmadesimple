@@ -18,9 +18,18 @@
 
 class CmsModuleTemplateExtension extends CmsModuleExtension
 {
+	var $id = null;
+	var $return_id = null;
+	
 	function __construct($module)
 	{
 		parent::__construct($module);
+	}
+	
+	public function set_id($id, $return_id = '')
+	{
+		$this->id = $id;
+		$this->return_id = $return_id;
 	}
 
 	public function get_list($template_type = '')
@@ -120,9 +129,15 @@ class CmsModuleTemplateExtension extends CmsModuleExtension
 		return $smarty->is_cached('module_file_tpl:' . $this->module->get_name() . ';' . $template_name, $cache_id, ($designation != '' ? $designation : $this->module->get_name()));
 	}
 
-	public function process($template_name, $id, $return_id, $designation = '', $cache_id = '')
+	public function process($template_name, $id = '', $return_id = '', $designation = '', $cache_id = '')
 	{
 		$smarty = cms_smarty();
+		
+		if ($id == '')
+			$id = $this->id;
+		
+		if ($return_id == '')
+			$return_id = $this->return_id;
 
 		$old_module = null;
 		if ($smarty->get_template_vars('cms_mapi_module') != null)

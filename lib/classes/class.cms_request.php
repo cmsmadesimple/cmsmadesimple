@@ -207,10 +207,27 @@ class CmsRequest extends CmsObject
 	 */
 	public static function get_requested_uri()
 	{
+		if (!function_exists('_strleft'))
+		{
+			function _strleft($str,$substr)
+			{
+				$pos = strpos($str,$substr);
+				if( $pos !== FALSE )
+				{
+					return substr($str,0,$pos);
+				}
+				return $str;
+			}
+		}
+
+		$s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : "";
+		$protocol = _strleft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/") . $s;
+		$port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":".$_SERVER["SERVER_PORT"]);
+		
 		$result = '';
 		if (isset($_SERVER['HTTP_HOST']))
 		{
-			$result .= 'http://' . $_SERVER['HTTP_HOST'];
+			$result .= $protocol . '://' . $_SERVER['HTTP_HOST'] . $port;
 		}
 		
 		if (isset($_SERVER['REQUEST_URI']))
@@ -292,6 +309,7 @@ class CmsRequest extends CmsObject
 	 **/
 	public static function strip_slashes_from_globals()
 	{
+		/*
 		if (get_magic_quotes_gpc())
 		{
 		    $_GET = CmsRequest::stripslashes_deep($_GET);
@@ -300,6 +318,7 @@ class CmsRequest extends CmsObject
 		    $_COOKIE = CmsRequest::stripslashes_deep($_COOKIE);
 		    $_SESSION = CmsRequest::stripslashes_deep($_SESSION);
 		}
+		*/
 	}
 	
 	function stripslashes_deep($value)

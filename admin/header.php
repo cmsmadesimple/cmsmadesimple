@@ -1,34 +1,55 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+#CMS - CMS Made Simple
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id$
 
-$orig_memory = (function_exists('memory_get_usage')?memory_get_usage():0);
-$starttime = microtime();
+$current_user = CmsLogin::get_current_user();
+if ($current_user->is_anonymous())
+{
+	$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
+	redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+}
+
+CmsAdminTheme::start();
+
+$themeObject = CmsAdminTheme::get_instance();
+
+cmsms()->variables['admintheme'] = CmsAdminTheme::get_instance();
+
+/*
 if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 {
 	@ob_start();
 }
-include_once("../lib/classes/class.admintheme.inc.php");
+*/
 
-$config = $gCms->GetConfig();
+//$themeObject = CmsAdminTheme::get_theme_for_user(get_userid());
+
+/*
+include_once("../lib/classes/class.admintheme.inc.php");
 
 if (isset($USE_THEME) && $USE_THEME == false)
 {
-  //echo '<!-- admin theme disabled -->';
+	echo '<!-- admin theme disabled -->';
 }
 else
 {
-	$themeName=get_preference(get_userid(), 'admintheme', 'default');
-	$themeObjectName = $themeName."Theme";
-	$userid = get_userid();
-
-	if (file_exists(dirname(__FILE__)."/themes/${themeName}/${themeObjectName}.php"))
-	{
-		include(dirname(__FILE__)."/themes/${themeName}/${themeObjectName}.php");
-		$themeObject = new $themeObjectName($gCms, $userid, $themeName);
-	}
-	else
-	{
-		$themeObject = new AdminTheme($gCms, $userid, $themeName);
-	}
+	$themeObject = AdminTheme::get_theme_for_user(get_userid());
 
 	$gCms->variables['admintheme']=&$themeObject;
 	if (isset($gCms->config['admin_encoding']) && $gCms->config['admin_encoding'] != '')
@@ -47,181 +68,9 @@ else
 	$themeObject->DisplayBodyTag();
 	$themeObject->DoTopMenu();
 	$themeObject->DisplayMainDivStart();
-
-	// Display notification stuff from modules
-	// should be controlled by preferences or something
-	$ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
-	if( get_site_preference('enablenotifications',1) &&
-	    get_preference($userid,'enablenotifications',1) )
-	{
-		foreach( $gCms->modules as $modulename => $ext )
-		{
-			if( in_array($modulename,$ignoredmodules) ) continue;
-			if( $gCms->modules[$modulename]['installed'] != true ) continue;
-			$mod =& $gCms->modules[$modulename]['object'];
-			if( !is_object($mod) ) continue;
-
-			$data = $mod->GetNotificationOutput(3); // todo, priority user preference
-			if( empty($data) ) continue;
-			if( is_object($data) )
-			{
-				$themeObject->AddNotification($data->priority,
-					$mod->GetName(),
-					$data->html);
-			}
-			else
-			{
-				// we have more than one item
-				// for the dashboard from this module
-				if( is_array($data) )
-				{
-					foreach( $data as $item )
-					{
-						$themeObject->AddNotification($item->priority,
-							$mod->GetName(),
-							$item->html);
-					}
-				}
-			}
-		}
-
-		// if the install directory still exists
-		// add a priority 1 dashboard item
-		if( file_exists(dirname(dirname(__FILE__)).'/install') )
-		{
-			$themeObject->AddNotification(1,'Core', lang('installdirwarning'));
-		}
-
-		// Display a warning if safe mode is enabled
-		if( ini_get_boolean('safe_mode') && get_site_preference('disablesafemodewarning',0) == 0 )
-		{
-			$themeObject->AddNotification(1,'Core',lang('warning_safe_mode'));
-		}
-
-		// Display a warning sitedownwarning
-		$sitedown_message = lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN');
-		$sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';
-		if (file_exists($sitedown_file))
-		{
-			$themeObject->AddNotification(1,'Core',$sitedown_message);
-		}
-
-		// Display a warning if CMSMS needs upgrading
-		$db =& $gCms->GetDb();
-		$current_version = $CMS_SCHEMA_VERSION;
-		$query = "SELECT version from ".cms_db_prefix()."version";
-		$row = $db->GetRow($query);
-		if ($row)
-		{
-			$current_version = $row["version"];
-		}
-
-		$warning_upgrade = 
-			lang('warning_upgrade') . "<br />" . lang('warning_upgrade_info1',$current_version,  
-			$CMS_SCHEMA_VERSION) . "<br /> " . lang('warning_upgrade_info2',
-			'<a href="'.$config['root_url'].'/install/upgrade.php">'.lang('start_upgrade_process').'</a>')
-			;
-
-
-		if ($current_version < $CMS_SCHEMA_VERSION)
-		{
-			$themeObject->AddNotification(1,'Core', $warning_upgrade);
-		}
-
-		// Display an upgrade notification 
-		// but only do a check once per day
-		$timelastchecked = get_site_preference('lastcmsversioncheck',0);
-		$tmpl = '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">%s</p></div></div>';
-		$cms_is_uptodate = 1;
-		$do_getpref = 0;
-		$url = strtolower(trim(get_site_preference('urlcheckversion','')));
-		//if( $url != 'none' && !empty($url) &&
-		//    ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
-		if( $url != 'none' && ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
-		{
-			// check forced
-			// get the url
-			$do_getpref = 1;
-			$goodtest = false;
-			if( empty($url) )
-			{
-				$url = CMS_DEFAULT_VERSIONCHECK_URL;
-			}
-			if( $url == 'none')
-			{
-				$cms_is_uptodate = 1;
-				$do_getpref = 0;
-			}
-			else
-			{
-				include_once(cms_join_path($config['root_path'], 'lib', 'test.functions.php'));
-				$remote_test = testRemoteFile(0, lang('test_remote_url'), $url, lang('test_remote_url_failed'), $config['debug']);
-				if ($remote_test->continueon)
-				{
-					// we have a 'theoretically' valid url
-					$txt = @cms_file_get_contents($url);
-					if( $txt !== FALSE )
-					{
-						// the url worked
-						// do a version check
-						$goodtest = true;
-						$parts = explode(':',$txt);
-						if( is_array( $parts ) && 
-							strtolower($parts[0]) == 'cmsmadesimple' )
-						{
-							$ver = $parts[1];
-							$res = version_compare( CMS_VERSION, $ver );
-							if( $res < 0 )
-							{
-								// new version available
-								$cms_is_uptodate = 0;
-								set_site_preference('cms_is_uptodate',0);
-							}
-							else
-							{
-								// the version is valid.
-								set_site_preference('cms_is_uptodate',1);
-							}
-						} // if
-					} // if
-				}
-			} // if
-
-			// update the last check time
-			// to midnight of the current day
-			// if( $goodtest )
-			if( true )
-			{
-				set_site_preference('lastcmsversioncheck',
-					strtotime("23:59:55"));
-			}
-		}
-
-		if( $cms_is_uptodate == 0 || 
-			($do_getpref == 1 && get_site_preference('cms_is_uptodate',1) == 0) )
-		{
-			// it wasn't up-to-date last time either
-			$themeObject->AddNotification(1,'Core',lang('new_version_available'));
-		}
-
-
-		// Display a warning about mail settings.
-		if( isset($gCms->modules['CMSMailer']) && 
-			isset($gCms->modules['CMSMailer']['object']) &&
-			isset($gCms->modules['CMSMailer']['installed']) &&
-			get_site_preference('mail_is_set',0) == 0 )
-		{
-			$urlCMSMailer = 'moduleinterface.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&amp;module=CMSMailer';
-			$themeObject->AddNotification(1,'Core',lang('warning_mail_settings', $urlCMSMailer));
-		}
-	}
-
-	// and display the dashboard.
-	$themeObject->DisplayNotifications(3); // todo, a preference.
-
 	// we've removed the Recent Pages stuff, but other things could go in this box
 	// so I'll leave some of the logic there. We can remove it later if it makes sense. SjG
-	$marks = get_preference($userid, 'bookmarks');
+	$marks = get_preference(get_userid(), 'bookmarks');
 	if ($marks)
 	{
 		$themeObject->StartRighthandColumn();
@@ -233,4 +82,5 @@ else
 		$themeObject->EndRighthandColumn();
 	}
 }
+*/
 ?>

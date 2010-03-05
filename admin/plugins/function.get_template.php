@@ -32,9 +32,7 @@ function smarty_function_get_template($params, &$smarty)
 	$templates = $smarty->get_template_vars('templates');
 	if (!array_key_exists($params['id'], $templates))
 	{
-		//$templates[$params['id']] = cms_orm('CmsTemplate')->find_by_id($params['id']);
-		$ops = cmsms()->GetTemplateOperations();
-		$templates[$params['id']] = $ops->LoadTemplateByID($params['id']);
+		$templates[$params['id']] = cms_orm('Template')->find_by_id($params['id']);
 	}
 
 	$smarty->assign('templates', $templates);

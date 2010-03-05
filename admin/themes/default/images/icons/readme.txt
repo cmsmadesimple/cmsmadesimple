@@ -1,60 +1,27 @@
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-This copyright and license notice covers the images in this directory.
-Note the license notice contains an add-on.
-************************************************************************
+@changes and Adjustments by:
+@Nuno Costa - nuno.mfcosta@sapo.pt
 
-TITLE:	NUVOLA ICON THEME for KDE 3.x
-AUTHOR:	David Vignoni | ICON KING
-SITE:	http://www.icon-king.com
-MAILING LIST: http://mail.icon-king.com/mailman/listinfo/nuvola_icon-king.com
 
-Copyright (c)  2003-2004  David Vignoni.
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation,
-version 2.1 of the License.
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
-You should have received a copy of the GNU Lesser General Public
-License along with this library (see the the license.txt file); if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#######**** NOTE THIS ADD-ON ****#######
-The GNU Lesser General Public License or LGPL is written for software libraries
-in the first place. The LGPL has to be considered valid for this artwork
-library too.
-Nuvola icon theme for KDE 3.x is a special kind of software library, it is an
-artwork library, it's elements can be used in a Graphical User Interface, or
-GUI.
-Source code, for this library means:
- - raster png image* .
-The LGPL in some sections obliges you to make the files carry
-notices. With images this is in some cases impossible or hardly usefull.
-With this library a notice is placed at a prominent place in the directory
-containing the elements. You may follow this practice.
-The exception in section 6 of the GNU Lesser General Public License covers
-the use of elements of this art library in a GUI.
-dave [at] icon-king.com
 
-Date:		15 october 2004
-Version:	1.0
+VistaICO File Icons
+from VistaICO.com
 
-DESCRIPTION:
 
-Icon theme for KDE 3.x. 
-Icons where designed using Adobe Illustrator, and then exported to PNG format.
-Icons shadows and minor corrections were done using Adobe Photoshop.
-Kiconedit was used to correct some 16x16 and 22x22 icons.
+This icon pack contains 55 icons grouped in 5 categories: Archive, Audio, Video, Pictures and Scripts.
 
-LICENSE
 
-Released under GNU Lesser General Public License (LGPL)
-Look at the license.txt file.
 
-CONTACT
 
-David Vignoni	
-e-mail :		david [at] icon-king.com
-ICQ :			117761009
-http:           	http://www.icon-king.com
+IMPORTANT!
+- This pack is licensed under a Creative Commons Attribution 3.0 License. This means you may copy, distribute and adapt the work as long as you include a link back to VistaICO.com in your web site, software, project, etc. Here you can find few examples:
+http://www.vistaico.com/link_to_us.htm
+
+- To contact us regarding the link placement or other matters please check here:
+http://www.vistaico.com/contact.htm
+
+license.pdf are in:
+  http://www.cmsmadesimple.org/visaico-license.pdf
+
+
+Copyright © VistaICO.com

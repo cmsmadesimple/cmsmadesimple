@@ -93,10 +93,15 @@ function linksExternal()	{
 	}
 }
 
-//use <input class="defaultfocus" ...>
-function defaultFocus() {
 
-   if (!document.getElementsByTagName) {
+function togglecollapse(cid)
+{
+  document.getElementById(cid).style.display=(document.getElementById(cid).style.display!="block")? "block" : "none";
+}
+//use <input class="defaultfocus" ...>
+/* function defaultFocus() {
+
+  if (!document.getElementsByTagName) {
         return;
    }
 
@@ -124,8 +129,4 @@ function defaultFocus() {
         }
    }
 }
-
-function togglecollapse(cid)
-{
-  document.getElementById(cid).style.display=(document.getElementById(cid).style.display!="block")? "block" : "none";
-}
+*/

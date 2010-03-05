@@ -1,4 +1,26 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+#CMS - CMS Made Simple
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id$
+
+CmsAdminTheme::end();
+
+/*
 if (isset($USE_THEME) && $USE_THEME == false)
   {
     echo '<!-- admin theme disabled -->';
@@ -12,16 +34,8 @@ else
 
 if ($gCms->config["debug"] == true)
 {
-	echo '<div id="DebugFooter">';
-	global $sql_queries;
-	if (FALSE == empty($sql_queries))
-	  {
-	    echo "<div>".$sql_queries."</div>\n";
-	  }
-	foreach ($gCms->errors as $error)
-	{
-		echo $error;
-	}
+	echo '<div id="_DebugFooter">';
+	echo CmsProfiler::get_instance()->report();
 	echo '</div> <!-- end DebugFooter -->';
 }
 
@@ -57,44 +71,23 @@ foreach($gCms->modules as $key=>$value)
 		)
 	{
 		$loadit=false;
-		if ($gCms->modules[$key]['object']->WYSIWYGActive()) {
+		if ($gCms->modules[$key]['object']->WYSIWYGActive())
+		{
 			$loadit=true;
-		} else {
-		 //Silmarillion: It shouldn't be loaded unless it's in use 
-		  /*if (get_preference(get_userid(), 'wysiwyg')==$gCms->modules[$key]['object']->GetName()) {
-		  	$loadit=true;
-		  }*/
 		}
-		if ($loadit) {
-		  $bodytext.=$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
-		  $footertext.=$gCms->modules[$key]['object']->WYSIWYGGenerateHeader($htmlresult);
-		  $formtext.=$gCms->modules[$key]['object']->WYSIWYGPageForm();
-		  $formsubmittext.=$gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
+		else
+		{
+			if (get_preference(get_userid(), 'wysiwyg')==$gCms->modules[$key]['object']->GetName())
+			{
+				$loadit=true;
+			}
 		}
-	}
-}
-
-foreach($gCms->modules as $key=>$value)
-{
-	if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true &&
-		$gCms->modules[$key]['object']->IsSyntaxHighlighter()
-		)
-	{
-		$loadit=false;
-		if ($gCms->modules[$key]['object']->SyntaxActive()) {
-			$loadit=true;
-		} else {
-		 //Silmarillion: It shouldn't be loaded unless it's in use
-		  /*if (get_preference(get_userid(), 'syntaxhightlighter')==$gCms->modules[$key]['object']->GetName()) {
-		  	$loadit=true;
-		  }*/
-		}
-		if ($loadit) {
-		  $bodytext.=$gCms->modules[$key]['object']->SyntaxGenerateBody();
-		  $footertext.=$gCms->modules[$key]['object']->SyntaxGenerateHeader($htmlresult);
-		  $formtext.=$gCms->modules[$key]['object']->SyntaxPageForm();
-		  $formsubmittext.=$gCms->modules[$key]['object']->SyntaxPageFormSubmit();
+		if ($loadit)
+		{
+			$bodytext.=$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
+			$footertext.=$gCms->modules[$key]['object']->WYSIWYGGenerateHeader($htmlresult);
+			$formtext.=$gCms->modules[$key]['object']->WYSIWYGPageForm();
+			$formsubmittext.=$gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
 		}
 	}
 }
@@ -105,12 +98,9 @@ $htmlresult = str_replace('##INLINESUBMITSTUFFGOESHERE##', ' '.$formsubmittext, 
 $htmlresult = str_replace('##BODYSUBMITSTUFFGOESHERE##', ' '.$bodytext, $htmlresult);
 
 echo $htmlresult;
-$endtime = microtime();
-$memory = (function_exists('memory_get_usage')?memory_get_usage():0);
-$memory = $memory - $orig_memory;
-$memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():0);
-echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak} -->\n";
-#var_dump(memory_get_usage());
+
+var_dump(memory_get_usage());
+*/
 
 # vim:ts=4 sw=4 noet
 ?>

@@ -89,17 +89,44 @@ class CmsEventManager extends CmsObject
 		return false;
 	}
 
-	static public function send_event($name, $arguments = array())
+	static public function send_event($name, $arguments = array(), $first_time = true)
 	{
 		self::init_store();
 		
 		$send_params = array($name, &$arguments);
+		CmsProfiler::get_instance()->mark('Trying event: ' . $name);
 		if (isset(self::$event_store[$name]))
 		{
 			foreach (self::$event_store[$name] as &$one_method)
 			{
 				if (is_callable($one_method))
+				{
 					call_user_func_array($one_method, $send_params);
+				}
+			}
+		}
+		
+		//Some backwards compat love
+		//If it's not camelcase, then do so and send it one more time
+		//Then do the opposite
+		if ($first_time && strpos($name, ':') !== FALSE)
+		{
+			list($module, $event_name) = explode(':', $name);
+			if (!empty($module) && !empty($event_name))
+			{
+				$new_event_name = camelize($event_name);
+				if (strtolower($new_event_name) != strtolower($event_name))
+				{
+					self::send_event($module . ':' . $new_event_name, $arguments, false);
+				}
+				else
+				{
+					$new_event_name = underscore($event_name);
+					if (strtolower($new_event_name) != strtolower($event_name))
+					{
+						self::send_event($module . ':' . $new_event_name, $arguments, false);
+					}
+				}
 			}
 		}
 	}

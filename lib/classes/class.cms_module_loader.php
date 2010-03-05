@@ -35,7 +35,6 @@ class CmsModuleLoader extends CmsObject
 		$module_list = array();
 		foreach ($files as $one_file)
 		{
-			$module_data = array();
 			if (ends_with($one_file, '.xml'))
 				$module_data = self::xmlify_module_info_file($one_file);
 			else if (ends_with($one_file, '.yml'))
@@ -44,6 +43,8 @@ class CmsModuleLoader extends CmsObject
 			{
 				$module_data = $one_file;
 			}
+			if (!isset($module_data['admin_section']))
+				$module_data['admin_section'] = 'extensions';
 			$module_data = self::inject_installed_data_for_module($module_data, $installed_data);
 			$module_list[$module_data['name']] = $module_data;
 		}
@@ -147,6 +148,11 @@ class CmsModuleLoader extends CmsObject
 		}
 		
 		return $name;
+	}
+	
+	public static function get_module_list()
+	{
+		return self::$module_list;
 	}
 	
 	public static function get_module_class($name, $check_active = true, $check_deps = true)
@@ -360,6 +366,8 @@ class CmsModuleLoader extends CmsObject
 		$ary['minimum_core_version'] = $mod->MinimumCMSVersion();
 		$ary['authors'][0]['name'] = $mod->GetAuthor();
 		$ary['authors'][0]['email'] = $mod->GetAuthorEmail();
+		$ary['admin_section'] = $mod->GetAdminSection();
+		$ary['summary'] = $mod->GetDescription();
 		
 		foreach ($mod->GetDependencies() as $k=>$v)
 		{

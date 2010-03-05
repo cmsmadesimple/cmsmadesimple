@@ -36,6 +36,8 @@ require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_config.php');
 require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_cache.php');
 require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_profiler.php');
 
+set_error_handler('cms_warning_handler', E_WARNING | E_USER_WARNING);
+
 /**
  * The one and only autoload function for the system.  This basically allows us 
  * to remove a lot of the require_once BS and keep the file loading to as much 
@@ -188,111 +190,95 @@ function coalesce_key($array, $val1, $val2, $filter = -1, $filter_options = arra
 }
 
 /**
+ * Check to see if all keys in the given hash exist
+ * in the check array.  If there are any extra, it will
+ * return false.
+ *
+ * @param array The hash to check
+ * @param array The hash to test against
+ * @return boolean Returns false if there are extra keys
+ * @author Ted Kulp
+ **/
+function are_all_keys_valid($array, $valid_keys)
+{
+	return invalid_key($array, $valid_keys) == null;
+}
+
+/**
+ * Finds all keys_to_remove in the hash, removes them,
+ * and returns the new hash.
+ *
+ * @param array The original hash
+ * @param array The names of the keys to remove
+ * @return array The result of the key removal
+ * @author Ted Kulp
+ * @since 1.1
+ */
+function remove_keys($array, $keys_to_remove)
+{
+	if (is_array($array))
+	{
+		foreach ($keys_to_remove as $k)
+		{
+			if (array_key_exists($k, $array))
+			{
+				unset($array[$k]);
+			}
+		}
+	}
+
+	return $array;
+}
+
+/**
+ * Check to see if all keys in the given hash exist
+ * in the check array.  If there are any extra, it will
+ * return the name of the first extra one.
+ *
+ * @param array The hash to check
+ * @param array The hash to test against
+ * @return string The name of the extra key, if any.  If there are none, it returns null.
+ * @author Ted Kulp
+ **/
+function invalid_key($array, $valid_keys)
+{
+	if (array_keys($valid_keys) != $valid_keys)
+		$valid_keys = array_keys($valid_keys);
+
+	foreach (array_keys($array) as $one_key)
+	{
+		if (!in_array($one_key, $valid_keys))
+		{
+			return $one_key;
+		}
+	}
+
+	return null;
+}
+
+function array_search_keys($array, $keys_to_search)
+{
+	$result = array();
+
+	foreach ($array as $k=>$v)
+	{
+		if (in_array($k, $keys_to_search))
+		{
+			$result[$key] = $value;
+		}
+	}
+
+	return $result;
+}
+
+/**
  * Redirects to relative URL on the current site
  *
- * @author http://www.edoceo.com/
  * @since 0.1
  */
 function redirect($to, $noappend=false)
 {
-	$_SERVER['PHP_SELF'] = null;
-
-    global $gCms;
-	if (isset($gCms))
-		$config =& $gCms->GetConfig();
-	else
-		$config = array();
-
-    $schema = $_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http';
-    $host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
-
-    $components = parse_url($to);
-    if(count($components) > 0)
-    {
-        $to =  (isset($components['scheme']) && startswith($components['scheme'], 'http') ? $components['scheme'] : $schema) . '://';
-        $to .= isset($components['host']) ? $components['host'] : $host;
-        $to .= isset($components['port']) ? ':' . $components['port'] : '';
-        if(isset($components['path']))
-        {
-            if(in_array(substr($components['path'],0,1),array('\\','/')))//Path is absolute, just append.
-            {
-                $to .= $components['path'];
-            }
-            //Path is relative, append current directory first.
-			else if (isset($_SERVER['PHP_SELF']) && !is_null($_SERVER['PHP_SELF'])) //Apache
-            {
-                $to .= (strlen(dirname($_SERVER['PHP_SELF'])) > 1 ?  dirname($_SERVER['PHP_SELF']).'/' : '/') . $components['path'];
-            }
-			else if (isset($_SERVER['REQUEST_URI']) && !is_null($_SERVER['REQUEST_URI'])) //Lighttpd
-            {
-				if (endswith($_SERVER['REQUEST_URI'], '/'))
-					$to .= (strlen($_SERVER['REQUEST_URI']) > 1 ? $_SERVER['REQUEST_URI'] : '/') . $components['path'];
-				else
-					$to .= (strlen(dirname($_SERVER['REQUEST_URI'])) > 1 ? dirname($_SERVER['REQUEST_URI']).'/' : '/') . $components['path'];
-            }
-        }
-        $to .= isset($components['query']) ? '?' . $components['query'] : '';
-        $to .= isset($components['fragment']) ? '#' . $components['fragment'] : '';
-    }
-    else
-    {
-        $to = $schema."://".$host."/".$to;
-    }
-
-    //If session trans-id is being used, and they is on yo website, add it.
-	/*
-    if (ini_get("session.use_trans_sid") != "0" && $noappend == false && strpos($to,$host) !== false)
-    {
-        if(strpos($to,'?') !== false)//If there are no arguments start a querystring
-        {
-            //$to = $to."?".session_name()."=".session_id();
-        }
-        else//There are arguments, print an arg seperator
-        {
-            //$to = $to.ini_get('arg_separator.input').session_name()."=".session_id();
-        }
-    }
-	*/
-
-    if (headers_sent() && !(isset($config) && $config['debug'] == true))
-    {
-        // use javascript instead
-        echo '<script type="text/javascript">
-            <!--
-                location.replace("'.$to.'");
-            // -->
-            </script>
-            <noscript>
-                <meta http-equiv="Refresh" content="0;URL='.$to.'">
-            </noscript>';
-        exit;
-
-    }
-    else
-    {
-        if (isset($config['debug']) && $config['debug'] == true)
-        {
-            echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
-            echo "<a href=\"".$to."\">".$to."</a><br />";
-			echo '<div id="DebugFooter">';
-			global $sql_queries;
-			if (FALSE == empty($sql_queries))
-			  {
-				echo "<div>".$sql_queries."</div>\n";
-			  }
-			foreach ($gCms->errors as $error)
-			{
-				echo $error;
-			}
-			echo '</div> <!-- end DebugFooter -->';
-            exit();
-        }
-        else
-        {
-            header("Location: $to");
-            exit();
-        }
-	}
+	return CmsResponse::redirect($to, $noappend);
 }
 
 
@@ -301,14 +287,7 @@ function redirect($to, $noappend=false)
  */
 function redirect_to_alias($alias)
 {
-  $content = cms_orm('CmsContentBase')->find_by_id_or_alias($alias);
-  if( $content ) {
-    $url = $content->get_url();
-    if( $url )
-      {
-	redirect($url);
-      }
-  }
+	return CmsResponse::redirect_to_alias($alias);
 }
 
 /**
@@ -347,19 +326,7 @@ function cms_join_path()
 #function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
 function ErrorHandler404()
 {
-	#if ($errno == E_USER_WARNING) {
-		@ob_end_clean();
-		header("HTTP/1.0 404 Not Found");
-		header("Status: 404 Not Found");
-		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-<html><head>
-<title>404 Not Found</title>
-</head><body>
-<h1>Not Found</h1>
-<p>The requested URL was not found on this server.</p>
-</body></html>';
-		exit();
-	#}
+	CmsReponse::send_error_404();
 }
 
 /**
@@ -1286,26 +1253,26 @@ function UnserializeObject(&$serialized)
 	return  unserialize(base64_decode($serialized));
 }
 
-function starts_with( $str, $sub )
+function starts_with( $haystack, $needle )
 {
-	if (!is_string($str)) return false;
-	return ( substr( $str, 0, strlen( $sub ) ) == $sub );
+	if (!is_string($haystack)) return false;
+	return ( substr( $haystack, 0, strlen( $needle ) ) == $needle );
 }
 
-function startswith( $str, $sub )
+function startswith( $haystack, $needle )
 {
-	return starts_with( $str, $sub );
+	return starts_with( $haystack, $needle );
 }
 
-function ends_with( $str, $sub )
+function ends_with( $haystack, $needle )
 {
-	if (!is_string($str)) return false;
-	return ( substr( $str, strlen( $str ) - strlen( $sub ) ) == $sub );
+	if (!is_string($haystack)) return false;
+	return ( substr( $haystack, strlen( $haystack ) - strlen( $needle ) ) == $needle );
 }
 
-function endswith( $str, $sub )
+function endswith( $haystack, $needle )
 {
-	return ends_with( $str, $sub );
+	return ends_with( $haystack, $needle );
 }
 
 /**
@@ -1372,101 +1339,6 @@ function munge_string_to_url($alias, $tolower = false)
 	$alias = trim($alias, '-');
 
 	return $alias;
-}
-
-if (!function_exists('file_put_contents')) {
-    function file_put_contents($filename, $data) {
-        $f = @fopen($filename, 'w');
-        if (!$f) {
-            return false;
-        } else {
-            $bytes = fwrite($f, $data);
-            fclose($f);
-            return $bytes;
-        }
-    }
-}
-
-if(!function_exists("file_get_contents"))
-{
-   function file_get_contents($filename)
-   {
-	   if(($contents = file($filename)))
-	   {
-		   $contents = implode('', $contents);
-		   return $contents;
-	   }
-	   else
-		   return false;
-   }
-}
-
-
-if(!function_exists("readfile"))
-{
-    function readfile($filename)
-    {
-      @ob_start();
-      echo file_get_contents($filename);
-      $result = @ob_get_contents();
-      @ob_end_clean();
-      if( !empty($result) ) {
-	echo $result;
-        return TRUE;
-      }
-      return FALSE;
-    }
-}
-
-// create the array_walk_recursive function in PHP4
-// from http://www.php.net/manual/en/function.array-walk-recursive.php
-if (!function_exists('array_walk_recursive'))
-{
-   function array_walk_recursive(&$input, $funcname, $userdata = "")
-   {
-       if (!is_callable($funcname))
-       {
-           return false;
-       }
-
-       if (!is_array($input))
-       {
-           return false;
-       }
-
-       foreach ($input AS $key => $value)
-       {
-           if (is_array($input[$key]))
-           {
-               array_walk_recursive($input[$key], $funcname, $userdata);
-           }
-           else
-           {
-               $saved_value = $value;
-               if (!empty($userdata))
-               {
-                   $funcname($value, $key, $userdata);
-               }
-               else
-               {
-                   $funcname($value, $key);
-               }
-
-               if ($value != $saved_value)
-               {
-                   $input[$key] = $value;
-               }
-           }
-       }
-       return true;
-	}
-}
-
-if (!function_exists("stripos")) {
-  function stripos($str,$needle,$offset=0)
-  {
-      return strpos(strtolower($str),strtolower($needle),$offset);
-  }
 }
 
 /*
@@ -1626,27 +1498,26 @@ function cleanParamHash($modulename,$data,$map = false,
  */
 function GetModuleParameters($id)
 {
-  $params = array();
+	$params = array();
 
-  if ($id != '')
-    {
-      foreach ($_REQUEST as $key=>$value)
+	if ($id != '')
 	{
-	  if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
-	    {
-	      $key = str_replace($id, '', $key);
-	      if( $key == 'id' || $key == 'returnid' )
+		foreach ($_REQUEST as $key=>$value)
 		{
-		  $value = (int)$value;
+			if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
+			{
+				$key = str_replace($id, '', $key);
+				if( $key == 'id' || $key == 'returnid' )
+				{
+					$value = (int)$value;
+				}
+				$params[$key] = $value;
+			}
 		}
-	      $params[$key] = $value;
-	    }
 	}
-    }
 
-  return $params;
+	return $params;
 }
-
 
 function can_users_upload()
 {
@@ -1799,30 +1670,31 @@ function interpret_permissions($perms)
 
 function ini_get_boolean($str)
 {
-  $val1 = ini_get($str);
-  $val2 = strtolower($val1);
+	$val1 = ini_get($str);
+	$val2 = strtolower($val1);
 
-  $ret = 0;
-  if( $val2 == 1 || $val2 == '1' || $val2 == 'yes' || $val2 == 'true' || $val2 == 'on' )
-     $ret = 1;
-  return $ret;
+	$ret = 0;
+	if( $val2 == 1 || $val2 == '1' || $val2 == 'yes' || $val2 == 'true' || $val2 == 'on' )
+		$ret = 1;
+	return $ret;
 }
 
 function stack_trace()
 {
-  $stack = debug_backtrace();
-  foreach( $stack as $elem )
-    {
-      if( $elem['function'] == 'stack_trace' ) continue;
-      if( isset($elem['file']) )
-	echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br/>';
-    }
+	$stack = debug_backtrace();
+	foreach( $stack as $elem )
+	{
+		if( $elem['function'] == 'stack_trace' ) continue;
+		if( isset($elem['file']) )
+			echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br/>';
+	}
 }
+
 
 function cms_move_uploaded_file( $tmpfile, $destination )
 {
    global $gCms;
-   $config =& $gCms->GetConfig();
+   $config = & $gCms->GetConfig();
 
    if( !@move_uploaded_file( $tmpfile, $destination ) )
    {
@@ -1835,132 +1707,112 @@ function cms_move_uploaded_file( $tmpfile, $destination )
 
 function csscache_csvfile_to_hash($filename)
 {
-  if( !is_readable($filename) ) return false;
-  $tmp = @file($filename);
-  if( !is_array($tmp) || !count($tmp) ) return false;
+	if( !is_readable($filename) ) return false;
+	$tmp = @file($filename);
+	if( !is_array($tmp) || !count($tmp) ) return false;
 
-  $result = array();
-  foreach( $tmp as $one )
-    {
-      $vals = explode(',',trim($one));
-      $result[$vals[0]] = $vals[1];
-    }
-  return $result;
+	$result = array();
+	foreach( $tmp as $one )
+	{
+		$vals = explode(',',trim($one));
+		$result[$vals[0]] = $vals[1];
+	}
+	return $result;
 }
 
 function csscache_hash_to_csvfile($filename,$hash)
 {
-  $fh = @fopen($filename,'w');
-  if( !$fh ) return false;
-  foreach( $hash as $key => $val )
-    {
-      $key = trim($key); $val = trim($val);
-      $line = "$key,$val\n";
-      fwrite($fh,$line);
-    }
-  fclose($fh);
+	$fh = @fopen($filename,'w');
+	if( !$fh ) return false;
+	foreach( $hash as $key => $val )
+	{
+		$key = trim($key); $val = trim($val);
+		$line = "$key,$val\n";
+		fwrite($fh,$line);
+	}
+	fclose($fh);
 }
 
 function css_cache_clear($filename)
 {
-  @unlink($filename);
+	@unlink($filename);
 }
 
 function cms_ipmatches($ip,$checklist)
 {
-  if( !function_exists('__testip') ) {
-  function __testip($range,$ip)
-  {
-    $result = 1;
+	if( !function_exists('__testip') ) {
+		function __testip($range,$ip)
+		{
+			$result = 1;
 
-    // IP Pattern Matcher
-    // J.Adams <jna@retina.net>
-    //
-    // Matches:
-    //
-    // xxx.xxx.xxx.xxx        (exact)
-    // xxx.xxx.xxx.[yyy-zzz]  (range)
-    // xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
-    //
-    // Does not match:
-    // xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets not supported)
+			// IP Pattern Matcher
+			// J.Adams <jna@retina.net>
+			//
+			// Matches:
+			//
+			// xxx.xxx.xxx.xxx        (exact)
+			// xxx.xxx.xxx.[yyy-zzz]  (range)
+			// xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
+			//
+			// Does not match:
+			// xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets not supported)
 
-    if (ereg("([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/([0-9]+)",$range,$regs)) {
-      // perform a mask match
-      $ipl = ip2long($ip);
-      $rangel = ip2long($regs[1] . "." . $regs[2] . "." . $regs[3] . "." . $regs[4]);
+			if (ereg("([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/([0-9]+)",$range,$regs)) {
+				// perform a mask match
+				$ipl = ip2long($ip);
+				$rangel = ip2long($regs[1] . "." . $regs[2] . "." . $regs[3] . "." . $regs[4]);
 
-      $maskl = 0;
+				$maskl = 0;
 
-      for ($i = 0; $i< 31; $i++) {
-	if ($i < $regs[5]-1) {
-	  $maskl = $maskl + pow(2,(30-$i));
+				for ($i = 0; $i< 31; $i++) {
+					if ($i < $regs[5]-1) {
+						$maskl = $maskl + pow(2,(30-$i));
+					}
+				}
+
+				if (($maskl & $rangel) == ($maskl & $ipl)) {
+					return 1;
+				} else {
+					return 0;
+				}
+			} else {
+				// range based
+				$maskocts = split("\.",$range);
+				$ipocts = split("\.",$ip);
+
+				// perform a range match
+				for ($i=0; $i<4; $i++) {
+					if (ereg("\[([0-9]+)\-([0-9]+)\]",$maskocts[$i],$regs)) {
+						if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) {
+							$result = 0;
+						}
+					}
+					else
+					{
+						if ($maskocts[$i] <> $ipocts[$i]) {
+							$result = 0;
+						}
+					}
+				}
+			}
+			return $result;
+		} // __testip
+	} // if
+
+	if( !is_array($checklist) )
+	{
+		$checklist = explode(',',$checklist);
 	}
-      }
-
-      if (($maskl & $rangel) == ($maskl & $ipl)) {
-	return 1;
-      } else {
-	return 0;
-      }
-    } else {
-      // range based
-      $maskocts = split("\.",$range);
-      $ipocts = split("\.",$ip);
-
-      // perform a range match
-      for ($i=0; $i<4; $i++) {
-	if (ereg("\[([0-9]+)\-([0-9]+)\]",$maskocts[$i],$regs)) {
-	  if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) {
-	    $result = 0;
-	  }
+	foreach( $checklist as $one )
+	{
+		if( __testip(trim($one),$ip) ) return TRUE;
 	}
-	else
-	  {
-	    if ($maskocts[$i] <> $ipocts[$i]) {
-	      $result = 0;
-	    }
-	  }
-      }
-    }
-    return $result;
-  } // __testip
-  } // if
-
-  if( !is_array($checklist) )
-    {
-      $checklist = explode(',',$checklist);
-    }
-  foreach( $checklist as $one )
-    {
-      if( __testip(trim($one),$ip) ) return TRUE;
-    }
-  return FALSE;
+	return FALSE;
 }
-
 
 function get_current_url()
 {
-    if( !function_exists('_strleft') )
-      {
-	function _strleft($str,$substr)
-	{
-	  $pos = strpos($str,$substr);
-	  if( $pos !== FALSE )
-	    {
-	      return substr($str,0,$pos);
-	    }
-	  return $str;
-	}
-      }
-
-    $s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : "";
-    $protocol = _strleft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/").$s;
-    $port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":".$_SERVER["SERVER_PORT"]);
-    $s = $protocol."://".$_SERVER['SERVER_NAME'].$port;
-    
-    global $gCms;
-    return $s.$_SERVER['REQUEST_URI'];
+	return CmsRequest::get_requested_uri();
 }
 
 /**
@@ -2316,28 +2168,85 @@ function is_email( $email, $checkDNS=false ) {
 
 function cms_file_get_contents($filename)
 {
-  $content = '';
-  if( !preg_match('!^(http|ftp)://!i', $filename) )
-    {
-      if($fp = @fopen($params['file'],'r')) {
-	while(!feof($fp)) {
-	  $content .= fgets ($fp,4096);
+	$content = '';
+	if( !preg_match('!^(http|ftp)://!i', $filename) )
+	{
+		if($fp = @fopen($params['file'],'r')) {
+			while(!feof($fp)) {
+				$content .= fgets ($fp,4096);
+			}
+			fclose($fp);
+		}
 	}
-	fclose($fp);
-      }
-    }
-  else if( startswith('http',$filename) )
-    {
-      $obj = new CmsHttpClient();
-      $content  = $obj->do_get($filename);
-    }
-  return $content;
+	else if( startswith('http',$filename) )
+	{
+		$obj = new CmsHttpClient();
+		$content  = $obj->do_get($filename);
+	}
+	return $content;
 }
 
 function cms_module_plugin($params, &$smarty)
 {
 	return CmsModuleOperations::cms_module_plugin($params, $smarty);
 }
+
+function in_debug()
+{
+	return CmsConfig::get("debug") == true;
+}
+
+/**
+ * Error handler so that we can swallow warning messages unless the
+ * debug flag is on.
+ *
+ * @author Ted Kulp
+ */
+function cms_warning_handler($errno, $errstr, $errfile = '', $errline = -1, $errcontext = array())
+{
+	if (in_debug())
+	{
+		trigger_error($errstr, E_USER_WARNING);
+	}
+}
+
+function strip_extra_params(&$params, $default_params, $other_params_key = '')
+{
+	$extra_params = array_diff_key($params, $default_params);
+	$params = $default_params;
+	if ($other_params_key != '' && isset($params[$other_params_key]) && is_array($params[$other_params_key]))
+	{
+		$extra_params = array_merge($extra_params, $params[$other_params_key]);
+		unset($params[$other_params_key]);
+	}
+	return $extra_params;
+}
+
+function start_tag($name, $params, $self_close = false, $extra_html = '', $drop_empty_values = true)
+{
+	$text = "<{$name}";
+	
+	foreach ($params as $key=>$value)
+	{
+		if ($value != '' || !$drop_empty_values)
+			$text .= " {$key}=\"{$value}\"";
+	}
+	
+	if ($extra_html != '')
+	{
+		$text .= " {$extra}";
+	}
+	
+	$text .= ($self_close ? ' />' : '>');
+	
+	return $text;
+}
+
+function end_tag($name)
+{
+	return "</{$name}>";
+}
+
 
 # vim:ts=4 sw=4 noet
 ?>

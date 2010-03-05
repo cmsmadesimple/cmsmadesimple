@@ -331,7 +331,12 @@ class CMSModule extends CmsObject
 	 */
 	public function GetHeaderHTML()
 	{
-	  return '';
+		return '';
+	}
+	
+	public function get_header_html($admin = true)
+	{
+		return $this->GetHeaderHTML();
 	}
 
 	/**
@@ -343,6 +348,11 @@ class CMSModule extends CmsObject
 	public function SuppressAdminOutput(&$request)
 	{
 		return false;
+	}
+	
+	public function suppress_admin_output(&$request)
+	{
+		return $this->SuppressAdminOutput($request);
 	}
 
 	/**

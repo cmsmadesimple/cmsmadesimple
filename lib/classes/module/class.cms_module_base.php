@@ -34,6 +34,7 @@ class CmsModuleBase extends CmsObject
 	public $params = array();
 	public $restrict_unknown_params = false;
 	public $filter_id_list = array();
+	public $loaded_includes = array();
 	
 	function __construct()
 	{
@@ -44,26 +45,45 @@ class CmsModuleBase extends CmsObject
 	public function __get($key)
 	{
 		//If there is a key, then they want an explicit module
-		if (isset($this->includes[$key]))
+		if (isset($this->loaded_includes[$key]))
+		{
+			if (is_subclass_of($this->loaded_includes[$key], 'CmsModuleExtension'))
+			{
+				//Make sure these are reset, in case there are two calls to the
+				//the same module in the same request
+				if ($this->id != null)
+					$obj->id = $this->id;
+				if ($this->return_id != null)
+					$obj->return_id = $this->return_id;
+			}
+			return $this->loaded_includes[$key];
+		}
+		else if (isset($this->includes[$key]))
 		{
 			$class = $this->includes[$key];
 			$module = CmsModuleLoader::get_module_class($class);
 			if ($module)
 			{
-				$this->$key = $module;
+				$this->loaded_includes[$key] = $module;
 				return $module;
 			}
 		}
-		else if (in_array($key, $this->includes))
+		else
 		{
 			$class = 'CmsModule'.$key.'Extension';
 			$obj = new $class($this);
 			if ($obj)
 			{
-				$this->$key = $obj;
+				if ($this->id != null)
+					$obj->id = $this->id;
+				if ($this->return_id != null)
+					$obj->return_id = $this->return_id;
+				$this->loaded_includes[$key] = $obj;
 				return $obj;
 			}
 		}
+		
+		return false;
 	}
 	
 	/**
@@ -232,6 +252,9 @@ class CmsModuleBase extends CmsObject
 			{
 				$$k = $v;
 			}
+			
+			$id = $this->id;
+			$return_id = $this->return_id;
 
 			include($filename);
 		}
@@ -300,6 +323,21 @@ class CmsModuleBase extends CmsObject
 		}
 		
 		array_push($this->params, $ary);
+	}
+	
+	public function get_header_html($admin = true)
+	{
+		return '';
+	}
+	
+	public function suppress_admin_output(&$request)
+	{
+		return false;
+	}
+	
+	public function lang($str)
+	{
+		return $str;
 	}
 
 }

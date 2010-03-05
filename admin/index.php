@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -26,23 +26,12 @@ $CMS_EXCLUDE_FROM_RECENT=1;
 
 require_once("../include.php");
 
-// if this page was accessed directly, and the secure param name is not in the URL
-// but it is in the session, assume it is correct.
-if( isset($_SESSION[CMS_USER_KEY]) && !isset($_GET[CMS_SECURE_PARAM_NAME]) )
-  {
-    $_GET[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
-  }
-
-check_login();
-
-global $gCms;
-$db =& $gCms->GetDb();
+CmsLogin::check_login();
+$gCms = cmsms();
+$db = cms_db();
 
 include_once("header.php");
-$themeObject->ShowShortcuts();
-$themeObject->DisplaySectionMenuDivStart();
-$themeObject->DisplayAllSectionPages();
-$themeObject->DisplaySectionMenuDivEnd();
+$themeObject->display_all_section_pages();
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

@@ -34,100 +34,7 @@
  */
 function check_login($no_redirect = false)
 {
-	global $gCms;
-	$config =& $gCms->GetConfig();
-
-	//Handle a current login if one is in queue in the SESSION
-	if (isset($_SESSION['login_user_id']))
-	{
-		debug_buffer("Found login_user_id.  Going to generate the user object.");
-		generate_user_object($_SESSION['login_user_id']);
-		unset($_SESSION['login_user_id']);
-	}
-
-	if (isset($_SESSION['login_cms_language']))
-	{
-		debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
-		setcookie('cms_language', $_SESSION['login_cms_language']);
-		unset($_SESSION['login_cms_language']);
-	}
-
-	if (!isset($_SESSION["cms_admin_user_id"]))
-	{
-		debug_buffer('No session found.  Now check for cookies');
-		if (isset($_COOKIE["cms_admin_user_id"]) && isset($_COOKIE["cms_passhash"]))
-		{
-			debug_buffer('Cookies found, do a passhash check');
-			if (check_passhash($_COOKIE["cms_admin_user_id"], $_COOKIE["cms_passhash"]))
-			{
-				debug_buffer('passhash check succeeded...  creating session object');
-				generate_user_object($_COOKIE["cms_admin_user_id"]);
-			}
-			else
-			{
-				debug_buffer('passhash check failed...  redirect to login');
-				$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-				if (false == $no_redirect)
-				  {
-				    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
-				  }
-				return false;
-			}
-		}
-		else
-		{
-			debug_buffer('No cookies found.  Redirect to login.');
-			$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-			if (false == $no_redirect)
-			  {
-			    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
-			  }
-			return false;
-		}
-	}
-
-	debug_buffer('Session found.  Moving on...');
-
-	global $CMS_ADMIN_PAGE;
-	if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE) )
-	  {
-	    if( !isset($_SESSION[CMS_USER_KEY]) )
-	      {
-		// it's not in the session, try to grab something from cookies
-		if( isset($_COOKIE[CMS_SECURE_PARAM_NAME]) )
-		  {
-		    $_SESSION[CMS_USER_KEY] = $_COOKIE[CMS_SECURE_PARAM_NAME];
-		  }
-	      }
-
-	    // now we've got to check the request
-	    // and make sure it matches the session key
-	    if( !isset($_SESSION[CMS_USER_KEY]) || 
-		!isset($_GET[CMS_SECURE_PARAM_NAME]) ||
-                !isset($_POST[CMS_SECURE_PARAM_NAME]) )
-	      {
-		$v = '<no$!tgonna!$happen>';
-		if( isset($_GET[CMS_SECURE_PARAM_NAME]) )
-		  {
-		    $v = $_GET[CMS_SECURE_PARAM_NAME];
-		  }
-		else if( isset($_POST[CMS_SECURE_PARAM_NAME]) )
-		  {
-		    $v = $_POST[CMS_SECURE_PARAM_NAME];
-		  }
-
-		if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) )
-		  {
-		    debug_buffer('Session key mismatch problem... redirect to login');
-		    if (false == $no_redirect)
-		      {
-			redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
-		      }
-		    return false;
-		  }
-	      }
-	  }
-	return true;
+	return CmsLogin::check_login($no_redirect);
 }
 
 /**
@@ -138,19 +45,7 @@ function check_login($no_redirect = false)
  */
 function get_userid($check = true)
 {
-	if ($check)
-	{
-		check_login(); //It'll redirect out to login if it fails
-	}
-
-	if (isset($_SESSION["cms_admin_user_id"]))
-	{
-		return $_SESSION["cms_admin_user_id"];
-	}
-	else
-	{
-		return false;
-	}
+	return CmsLogin::get_userid($check);
 }
 
 function check_passhash($userid, $checksum)
@@ -255,8 +150,9 @@ function find_recovery_user($hash)
  */
 function load_all_permissions($userid)
 {
-	global $gCms;
-	$db = &$gCms->GetDb();
+	$gCms = cmsms();
+	
+	$db = cms_db();
 	$variables = &$gCms->variables;
 
 	$perms = array();
@@ -285,9 +181,10 @@ function check_permission($userid, $permname)
 {
 	$check = false;
 
-	global $gCms;
+	$gCms = cmsms();
+	
 	$userops =& $gCms->GetUserOperations();
-	$adminuser = $userops->UserInGroup($userid,1);
+	$adminuser = $userops->UserInGroup($userid, 1);
 
 	if (!isset($gCms->variables['userperms']))
 	{

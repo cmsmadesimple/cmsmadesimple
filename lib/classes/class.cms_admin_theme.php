@@ -146,7 +146,7 @@ class CmsAdminTheme extends CmsObject
 	
 	static public function start($is_anonymous = false)
 	{
-		CmsEventOperations::send_event('Core', 'AdminDisplayStart');
+		CmsEventManager::send_event('Core:admin_display_start');
 
 		@ob_start();
 		
@@ -205,17 +205,19 @@ class CmsAdminTheme extends CmsObject
 		$smarty->assign('headtext', self::get_instance()->headtext);
 		$smarty->assign_by_ref('theme_object', self::get_instance());
 		
-		$smarty->display(self::get_instance()->theme_template_dir . 'overall.tpl');
+		$result = $smarty->fetch(self::get_instance()->theme_template_dir . 'overall.tpl');
 		
 		//Now that it's all done, send out an event telling everyone
-		CmsEventOperations::send_event('Core', 'AdminDisplayFinish');
+		CmsEventManager::send_event('Core:admin_display_finish', array('content' => &$result));
 		
-		if (CmsConfig::get('debug'))
-		{
+		echo $result;
+		
+		//if (in_debug())
+		//{
 			echo '<div id="_DebugFooter">';
 			echo CmsProfiler::get_instance()->report();
 			echo '</div> <!-- end DebugFooter -->';
-		}
+		//}
 	}
 	
 	static public function inject_header_text($text)
@@ -283,11 +285,13 @@ class CmsAdminTheme extends CmsObject
 					$node = CmsAdminTree::find_node_by_title($title);
 					if ($node)
 					{
-						$wikiUrl .= '/'. CmsLanguage::translate($node->english_title, array(), 'core', 'en_US');
+						//$wikiUrl .= '/'. CmsLanguage::translate($node->english_title, array(), 'core', 'en_US');
+						$wikiUrl .= '/'. $node->english_title;
 						$help_title = $title;	
 					}
 				}
 			}
+			
 			if (FALSE == get_preference($this->userid, 'hide_help_links'))
 			{
 				// Clean up URL
@@ -518,38 +522,31 @@ class CmsAdminTheme extends CmsObject
 	function set_module_admin_interfaces()
 	{
 		# Are there any modules with an admin interface?
-		$cmsmodules = cmsms()->modules;
-		reset($cmsmodules);
-		while (list($key) = each($cmsmodules))
+		
+		$module_list = CmsModuleLoader::get_module_list();
+		foreach ($module_list as $one_module)
 		{
-			$value =& $cmsmodules[$key];
-			if (isset($cmsmodules[$key]['object'])
-				&& $cmsmodules[$key]['installed'] == true
-				&& $cmsmodules[$key]['active'] == true
-				&& $cmsmodules[$key]['object']->has_admin()
-				&& $cmsmodules[$key]['object']->visible_to_admin_user())
+			if ($one_module['admin_interface'] && $one_module['installed'] && $one_module['active'])
 			{
-				foreach ($cmsmodules[$key]['object']->get_admin_menu_items() as $one_item)
+				$section = $one_module['admin_section'];
+				if (! isset($this->section_count[$section]))
 				{
-					$section = $one_item[3];
-					if (! isset($this->section_count[$section]))
-					{
-						$this->section_count[$section] = 0;
-					}
-					$this->modules_by_section[$section][$this->section_count[$section]]['key'] = $key;
-					$this->modules_by_section[$section][$this->section_count[$section]]['name'] = $key;
-					$this->modules_by_section[$section][$this->section_count[$section]]['action'] = $one_item[2];
-					$this->modules_by_section[$section][$this->section_count[$section]]['title'] = $one_item[0];
-					if ($one_item[1] != '')
-					{
-						$this->modules_by_section[$section][$this->section_count[$section]]['description'] = $one_item[1];
-					}
-					else
-					{
-						$this->modules_by_section[$section][$this->section_count[$section]]['description'] = "";
-					}
-					$this->section_count[$section]++;
+					$this->section_count[$section] = 0;
 				}
+				//var_dump($one_module);
+				$this->modules_by_section[$section][$this->section_count[$section]]['key'] = $one_module['name'];
+				$this->modules_by_section[$section][$this->section_count[$section]]['name'] = $one_module['name'];
+				$this->modules_by_section[$section][$this->section_count[$section]]['action'] = 'defaultadmin';
+				$this->modules_by_section[$section][$this->section_count[$section]]['title'] = $one_module['name'];
+				if ($one_module['summary'] != '')
+				{
+					$this->modules_by_section[$section][$this->section_count[$section]]['description'] = $one_module['summary'];
+				}
+				else
+				{
+					$this->modules_by_section[$section][$this->section_count[$section]]['description'] = "";
+				}
+				$this->section_count[$section]++;
 			}
 		}
 	}
@@ -705,14 +702,17 @@ class CmsAdminTheme extends CmsObject
      * Method for displaying admin bookmarks (shortcuts) & help links.
 	 * Smarty call in indexcontent.tpl {$admin_bookmarks}
      */
-	 function show_bookmarks()
-			{	
-			 $smarty = cms_smarty();
-		     $marks = CmsBookmarkOperations::load_bookmarks($this->userid);
-         	 $smarty->assign('show_admin_shortcuts',get_preference($this->userid, 'bookmarks'));
-             $smarty->assign_by_ref('marks', $marks);
-			 $smarty->display(self::get_instance()->theme_template_dir . 'bookmarks.tpl');
-	         }
+	function show_bookmarks()
+	{
+		/*
+		$smarty = cms_smarty();
+		$marks = CmsBookmarkOperations::load_bookmarks($this->userid);
+		$smarty->assign('show_admin_shortcuts',get_preference($this->userid, 'bookmarks'));
+		$smarty->assign_by_ref('marks', $marks);
+		$smarty->display(self::get_instance()->theme_template_dir . 'bookmarks.tpl');
+		*/
+	}
+
     /**
      * DisplayDashboardCallout
      * Outputs warning if the install directory is still there.
@@ -993,8 +993,9 @@ class CmsAdminTheme extends CmsObject
     function display_all_section_pages()
 	{
 		$smarty = cms_smarty();
-		 #Bookmark
-		 @ob_start();
+		
+		#Bookmark
+		@ob_start();
 		self::get_instance()->show_bookmarks();
 		$bookmarks = @ob_get_clean();
 		$smarty->assign('admin_bookmarks', $bookmarks);
@@ -1003,8 +1004,6 @@ class CmsAdminTheme extends CmsObject
 		#safe_mode
 		//self::get_instance()->safe_mode();
 		
-  
-  
 		$root_node = CmsAdminTree::get_instance()->get_root_node();
 		$smarty->assign('subitems', lang('subitems'));
 		$smarty->assign_by_ref('root_node', $root_node);

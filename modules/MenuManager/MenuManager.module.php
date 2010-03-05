@@ -21,7 +21,6 @@
 class MenuManager extends CmsModuleBase
 {
 	var $current_depth = 1;
-	var $includes = array('Preference', 'Template');
 	
 	public function __construct()
 	{
