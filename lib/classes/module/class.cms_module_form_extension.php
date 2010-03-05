@@ -17,19 +17,10 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 class CmsModuleFormExtension extends CmsModuleExtension
-{
-	var $id = null;
-	var $return_id = null;
-	
+{	
 	function __construct($module)
 	{
 		parent::__construct($module);
-	}
-	
-	public function set_id($id, $return_id = '')
-	{
-		$this->id = $id;
-		$this->return_id = $return_id;
 	}
 	
 	/**

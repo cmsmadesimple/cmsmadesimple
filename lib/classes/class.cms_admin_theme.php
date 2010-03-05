@@ -1125,7 +1125,45 @@ class CmsAdminTheme extends CmsObject
 	   echo "<div class=\"clearb\">&nbsp;</div>\n";
     }
 
-   
+	public function start_tab_headers()
+	{
+		return '<!-- start_tab_headers --> <div id="page_tabs">';
+	}
+
+	public function set_tab_header($tab_id, $title, $active = false)
+	{
+		$a = "";
+		if ($active)
+		{
+			$a = " class='active'";
+		}
+		return '<div id="' . $tab_id . '"' . $a . '>' . $title . '</div>';
+	}
+
+	public function end_tab_headers()
+	{
+		return "</div> <!-- end_tab_headers -->";
+	}
+
+	public function start_tab_content()
+	{
+		return '<div class="clearb"></div><div id="page_content">';
+	}
+
+	public function end_tab_content()
+	{
+		return '</div> <!-- end_tab_content -->';
+	}
+
+	public function start_tab($tab_id, $params = array(), $message = '')
+	{
+		return '<!-- start_tab --> <div id="' . strtolower(str_replace(' ', '_', $tab_id)) . '_c">' . $message;
+	}
+
+	public function end_tab()
+	{
+		return '</div> <!-- end_tab -->';
+	}
 	
 	
 	###############################################################

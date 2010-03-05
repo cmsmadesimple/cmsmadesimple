@@ -48,46 +48,24 @@ class MenuManager extends CmsModuleBase
 		return $this->Lang('description');
 	}
 
-	function SetParameters()
+	function setup()
 	{
-		$this->RestrictUnknownParams();
-		$this->CreateParameter('collapse', '1', $this->lang('help_collapse'));
-		$this->SetParameterType('collapse',CLEAN_INT);
-
-		$this->CreateParameter('loadprops', '0', $this->lang('help_loadprops'));
-		$this->SetParameterType('loadprops',CLEAN_INT);
-
-		$this->CreateParameter('items', 'contact,home', $this->lang('help_items'));
-		$this->SetParameterType('items',CLEAN_STRING);
-
-		$this->CreateParameter('number_of_levels', '1', $this->lang('help_number_of_levels'));
-		$this->SetParameterType('number_of_levels',CLEAN_INT);
-
-		$this->CreateParameter('show_all', '0', $this->lang('help_show_all'));
-		$this->SetParameterType('show_all',CLEAN_INT);
-
-		$this->CreateParameter('show_root_siblings', '1', $this->lang('help_show_root_siblings'));
-		$this->SetParameterType('show_root_siblings',CLEAN_INT);
-
-		$this->CreateParameter('start_level', '2', $this->lang('help_start_level'));
-		$this->SetParameterType('start_level',CLEAN_INT);
-
-		$this->CreateParameter('start_element', '1.2', $this->lang('help_start_element'));
-		$this->SetParameterType('start_element',CLEAN_STRING); // yeah, it's a string
-
-		$this->CreateParameter('start_page', 'home', $this->lang('help_start_page'));
-		$this->SetParameterType('start_page',CLEAN_STRING); 
-
-		$this->CreateParameter('template', 'simple_navigation.tpl', $this->lang('help_template'));
-		$this->SetParameterType('template',CLEAN_STRING); 
-
-		$this->CreateParameter('excludeprefix','',$this->Lang('help_excludeprefix'));
-		$this->SetParameterType('excludeprefix',CLEAN_STRING); 
-
-		$this->CreateParameter('includeprefix','',$this->Lang('help_includeprefix'));
-		$this->SetParameterType('includeprefix',CLEAN_STRING); 
-
-		$this->RegisterModulePlugin('menu_children', 'menu_children_plugin_callback');
+		$this->restrict_unknown_params();
+		
+		$this->create_parameter('collapse', '1', $this->lang('help_collapse'), FILTER_SANITIZE_NUMBER_INT);
+		$this->create_parameter('loadprops', '0', $this->lang('help_loadprops'), FILTER_SANITIZE_NUMBER_INT);
+		$this->create_parameter('items', 'contact,home', $this->lang('help_items'), FILTER_SANITIZE_STRING);
+		$this->create_parameter('number_of_levels', '1', $this->lang('help_number_of_levels'), FILTER_SANITIZE_NUMBER_INT);
+		$this->create_parameter('show_all', '0', $this->lang('help_show_all'), FILTER_SANITIZE_NUMBER_INT);
+		$this->create_parameter('show_root_siblings', '1', $this->lang('help_show_root_siblings'), FILTER_SANITIZE_NUMBER_INT);
+		$this->create_parameter('start_level', '2', $this->lang('help_start_level'), FILTER_SANITIZE_NUMBER_INT);
+		$this->create_parameter('start_element', '1.2', $this->lang('help_start_element'), FILTER_SANITIZE_STRING);
+		$this->create_parameter('start_page', 'home', $this->lang('help_start_page'), FILTER_SANITIZE_STRING);
+		$this->create_parameter('template', 'simple_navigation.tpl', $this->lang('help_template'), FILTER_SANITIZE_STRING);
+		$this->create_parameter('excludeprefix','',$this->Lang('help_excludeprefix'), FILTER_SANITIZE_STRING);
+		$this->create_parameter('includeprefix','',$this->Lang('help_includeprefix'), FILTER_SANITIZE_STRING);
+		
+		$this->register_module_plugin('menu_children', 'menu_children_plugin_callback');
 	}
 
 	public function menu_children_plugin_callback($params, &$smarty)

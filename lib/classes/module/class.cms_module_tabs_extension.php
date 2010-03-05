@@ -24,35 +24,59 @@ class CmsModuleTabsExtension extends CmsModuleExtension
 		$this->module->mActiveTab = '';
 	}
 	
+	public function get_theme_object()
+	{
+		return CmsAdminTheme::get_instance();
+	}
+	
 	public function start_tab_headers()
 	{
-		return '<!-- start_tab_headers --> <div id="page_tabs">';
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->start_tab_headers();
+		
+		return '';
 	}
 
 	public function set_tab_header($tab_id, $title, $active = false)
 	{
-		$a = "";
-		if (TRUE == $active)
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->set_tab_header($tab_id, $title, $active);
+		
+		if ($active)
 		{
-			$a = " class='active'";
 			$this->module->mActiveTab = $tab_id;
 		}
-		return '<div id="' . $tab_id . '"' . $a . '>' . $title . '</div>';
+		
+		return '';
 	}
 
 	public function end_tab_headers()
 	{
-		return "</div> <!-- end_tab_headers -->";
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->end_tab_headers();
+		
+		return '';
 	}
 
 	public function start_tab_content()
 	{
-		return '<div class="clearb"></div><div id="page_content">';
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->start_tab_content();
+		
+		return '';
 	}
 
 	public function end_tab_content()
 	{
-		return '</div> <!-- end_tab_content -->';
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->end_tab_content();
+		
+		return '';
 	}
 
 	public function start_tab($tab_id, $params = array())
@@ -67,12 +91,21 @@ class CmsModuleTabsExtension extends CmsModuleExtension
 		{
 			$message = '';
 		}
-		return '<!-- start_tab --> <div id="' . strtolower(str_replace(' ', '_', $tab_id)) . '_c">' . $message;
+		
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->start_tab($tab_id, $params);
+		
+		return '';
 	}
 
 	public function end_tab()
 	{
-		return '</div> <!-- end_tab -->';
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->end_tab();
+		
+		return '';
 	}
 }
 

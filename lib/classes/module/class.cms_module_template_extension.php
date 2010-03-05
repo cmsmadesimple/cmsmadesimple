@@ -18,20 +18,11 @@
 
 class CmsModuleTemplateExtension extends CmsModuleExtension
 {
-	var $id = null;
-	var $return_id = null;
-	
 	function __construct($module)
 	{
 		parent::__construct($module);
 	}
 	
-	public function set_id($id, $return_id = '')
-	{
-		$this->id = $id;
-		$this->return_id = $return_id;
-	}
-
 	public function get_list($template_type = '')
 	{
 		if( empty($template_type) )

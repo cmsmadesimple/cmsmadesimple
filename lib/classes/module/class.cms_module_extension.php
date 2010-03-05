@@ -20,10 +20,19 @@ class CmsModuleExtension extends CmsObject
 {
 	protected $module = null;
 	
+	public $id = null;
+	public $return_id = null;
+	
 	function __construct($module)
 	{
 		parent::__construct();
 		$this->set_module($module);
+	}
+	
+	public function set_id($id, $return_id = '')
+	{
+		$this->id = $id;
+		$this->return_id = $return_id;
 	}
 	
 	function get_module()

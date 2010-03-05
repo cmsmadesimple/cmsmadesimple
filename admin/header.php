@@ -30,6 +30,7 @@ CmsAdminTheme::start();
 $themeObject = CmsAdminTheme::get_instance();
 
 cmsms()->variables['admintheme'] = CmsAdminTheme::get_instance();
+$smarty->assign_by_ref('theme_object', $themeObject);
 
 /*
 if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))

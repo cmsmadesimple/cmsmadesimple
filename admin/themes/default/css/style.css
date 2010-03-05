@@ -690,7 +690,7 @@ div.navt_hide  {
    display: none;
    }
 /* Page Tabs - used for all page tabs */
-/*#page_tabs  {
+#page_tabs  {
 	overflow: hidden;
 	margin-left:20px;
 	
@@ -743,7 +743,7 @@ margin-right:5px;
 	border-left: 1px solid #CCCCCC;
 	border-top: 1px solid #F4F4F4;
    }
-*/
+
 
 
 /* top*.php files */

@@ -1,14 +1,14 @@
-{$mod->StartTabHeaders()}
-{$mod->SetTabHeader('general',$lang_general,$active_general)}
-{$mod->SetTabHeader('content',$lang_content,$active_content)}
-{$mod->SetTabHeader('image',$lang_image,$active_image)}
-{$mod->SetTabHeader('sitedown',$lang_sitedown,$active_sitedown)}
-{$mod->SetTabHeader('handle_404',$lang_handle404,$active_handle_404)}
-{$mod->SetTabHeader('setup',$lang_setup,$active_setup)}
-{$mod->EndTabHeaders()}
-{$mod->StartTabContent()}
+{$theme_object->start_tab_headers()}
+{$theme_object->set_tab_header('general',$lang_general,$active_general)}
+{$theme_object->set_tab_header('content',$lang_content,$active_content)}
+{$theme_object->set_tab_header('image',$lang_image,$active_image)}
+{$theme_object->set_tab_header('sitedown',$lang_sitedown,$active_sitedown)}
+{$theme_object->set_tab_header('handle_404',$lang_handle404,$active_handle_404)}
+{$theme_object->set_tab_header('setup',$lang_setup,$active_setup)}
+{$theme_object->end_tab_headers()}
+{$theme_object->start_tab_content()}
 
-{$mod->StartTab('general')}
+{$theme_object->start_tab('general')}
 <form id="siteprefform_general" method="post" action="siteprefs.php">
 <div>
   <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
@@ -74,10 +74,10 @@
   </p>
 </div>
 </form>
-{$mod->EndTab()}
+{$theme_object->end_tab()}
 
 {* content tab *}
-{$mod->StartTab('content')}
+{$theme_object->start_tab('content')}
 <form id="siteprefform_content" method="post" action="siteprefs.php">
 <div>
   <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
@@ -89,7 +89,7 @@
   <p class="pageinput">
     <input type="text" name="content_image_path" value="{$content_image_path}" size="50" maxlength="255"/>
     <br/>
-    {'info_content_image_path'|lang}
+    {'info_content_image_path'|lang|wordwrap:120:'<br />'}
   </p>
 </div>
 <div class="pageoverflow">
@@ -99,7 +99,7 @@
       {html_options options=$all_attributes selected=$basic_attributes}
     </select>
     <br/>
-    {$lang_info_basic_attributes}
+    {$lang_info_basic_attributes|wordwrap:120:'<br />'}
   </p>
 </div>
 
@@ -111,10 +111,10 @@
   </p>
 </div>
 </form>
-{$mod->EndTab()}
+{$theme_object->end_tab()}
 
 {* image tab *}
-{$mod->StartTab('image')}
+{$theme_object->start_tab('image')}
 <form id="siteprefform_image" method="post" action="siteprefs.php">
 <div>
   <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
@@ -143,10 +143,10 @@
   </p>
 </div>
 </form>
-{$mod->EndTab()}
+{$theme_object->end_tab()}
 
 
-{$mod->StartTab('sitedown')}
+{$theme_object->start_tab('sitedown')}
 <form id="siteprefform_sitedown" method="post" action="siteprefs.php">
 <div>
   <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
@@ -167,7 +167,7 @@
   <p class="pageinput">
      <input type="text" name="sitedownexcludes" size="50" maxlength="255" value="{$sitedownexcludes}"/>
      <br/>
-     {$lang_info_sitedownexcludes}
+     {$lang_info_sitedownexcludes|wordwrap:120:'<br />'}
   </p>
 </div>
 
@@ -179,10 +179,10 @@
   </p>
 </div>
 </form>
-{$mod->EndTab()}
+{$theme_object->end_tab()}
 
 
-{$mod->StartTab('handle_404')}
+{$theme_object->start_tab('handle_404')}
 <form id="siteprefform_handle_404" method="post" action="siteprefs.php">
 <div>
   <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
@@ -215,9 +215,9 @@
   </p>
 </div>
 </form>
-{$mod->EndTab()}
+{$theme_object->end_tab()}
 
-{$mod->StartTab('setup')}
+{$theme_object->start_tab('setup')}
 <form id="siteprefform_setup" method="post" action="siteprefs.php">
 <div>
   <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
@@ -288,6 +288,6 @@
   </p>
 </div>
 </form>
-{$mod->EndTab()}
+{$theme_object->end_tab()}
 
-{$mod->EndTabContent()}
+{$theme_object->end_tab_content()}

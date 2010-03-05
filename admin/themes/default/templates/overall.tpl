@@ -9,7 +9,7 @@
 	<title>{sitename} - {$admin_theme->title}</title>
    
 	<!--<link rel="stylesheet" href="{$root}/admin/themes/NCleanGrey2/css/kevin_layout.css" type="text/css" />-->
-	<link rel="stylesheet" href="{$root}/admin/themes/default/css/kevin_tabs.css" type="text/css" />
+	<!--<link rel="stylesheet" href="{$root}/admin/themes/default/css/tabs.css" type="text/css" />-->
     
     
 	 <link rel="stylesheet" href="{$root}/admin/themes/default/css/style.css" type="text/css" />
