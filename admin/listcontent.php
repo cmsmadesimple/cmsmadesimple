@@ -59,9 +59,9 @@ $smarty->assign('thisurl', $thisurl);
 
 //include_once("../lib/classes/class.admintheme.inc.php");
 
-//$cms_ajax->process_requests();
+$cms_ajax->process_requests();
 
-//CmsAdminTheme::inject_header_text($cms_ajax->get_javascript()."\n");
+CmsAdminTheme::inject_header_text($cms_ajax->get_javascript()."\n");
 
 if (isset($_GET["makedefault"]))
 {

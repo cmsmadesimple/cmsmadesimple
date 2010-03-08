@@ -33,7 +33,7 @@ class CmsModuleTabsExtension extends CmsModuleExtension
 	{
 		$theme_obj = $this->get_theme_object();
 		if ($theme_obj)
-			return $theme_obj->start_tab_headers();
+			return $theme_obj->start_tab_headers(CmsResponse::make_dom_id('module_page_tabs' . $this->id));
 		
 		return '';
 	}
@@ -74,7 +74,7 @@ class CmsModuleTabsExtension extends CmsModuleExtension
 	{
 		$theme_obj = $this->get_theme_object();
 		if ($theme_obj)
-			return $theme_obj->end_tab_content();
+			return $theme_obj->end_tab_content(CmsResponse::make_dom_id('module_page_tabs' . $this->id));
 		
 		return '';
 	}

@@ -10,27 +10,27 @@
    
 	<!--<link rel="stylesheet" href="{$root}/admin/themes/NCleanGrey2/css/kevin_layout.css" type="text/css" />-->
 	<!--<link rel="stylesheet" href="{$root}/admin/themes/default/css/tabs.css" type="text/css" />-->
-    
-    
-	 <link rel="stylesheet" href="{$root}/admin/themes/default/css/style.css" type="text/css" />
-        <!--[if IE]>
-		  <script type="text/javascript" src="{$root}/admin/themes/default/includes/ie7-standard-p.js"></script>
-	<![endif]-->	
-    <!--[if IE]>
-		
-	<![endif]-->
-    <script type="text/javascript"  src="{$root}/admin/themes/default/includes/standard.js"></script>
+	<link rel="stylesheet" href="{$root}/admin/themes/default/css/style.css" type="text/css" />
 
+	<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
+	<script type="text/javascript"  src="../lib/jquery/json2.js"></script>
+	<script type="text/javascript"  src="../lib/jquery/jquery.ui.js"></script>
+	<script type="text/javascript"  src="../lib/jquery/jquery.css.js"></script>
+	<script type="text/javascript"  src="../lib/jquery/jquery.metadata.js"></script>
+	<script type="text/javascript"  src="../lib/jquery/jquery.cookie.js"></script>
+	<script type="text/javascript"  src="../lib/jquery/jquery.hotkeys.js"></script>
+	<script type="text/javascript"  src="../lib/jquery/jquery.cmsms.js"></script>
 
-    <script type="text/javascript" src="{$root}/lib/jquery/jquery.js"></script>
-	 <script type="text/javascript"  src="{$root}/lib/jquery/jquery.color.js"></script>
-	 <script type="text/javascript"  src="{$root}/lib/jquery/jquery.jcontext.1.0.js"></script>
-	 <script type="text/javascript"  src="{$root}/lib/jquery/ui/ui.tabs.js"></script>
-	 <script type="text/javascript"  src="{$root}/lib/jquery/ui/ui.accordion.js"></script>
-	 <script type="text/javascript"  src="{$root}/lib/jquery/ui/ui.mouse.js"></script>
-	 <script type="text/javascript"  src="{$root}/lib/jquery/ui/ui.draggable.js"></script>
-	 <script type="text/javascript"  src="{$root}/lib/jquery/ui/ui.droppable.js"></script>
-	 <script type="text/javascript"  src="{$root}/lib/jquery/ui/ui.sortable.js"></script>	
+	<!--
+	<script type="text/javascript" src="../lib/jquery/tree/tree_component.js"></script>
+	<link rel="stylesheet" type="text/css" href="../lib/jquery/tree/tree_component.css" />
+	-->
+
+	<script type="text/javascript"  src="../lib/jquery/jstree/jquery.tree.js"></script>
+	<script type="text/javascript"  src="../lib/jquery/jstree/plugins/jquery.tree.cookie.js"></script>
+	<script type="text/javascript"  src="../lib/jquery/jstree/plugins/jquery.tree.contextmenu.js"></script>
+	<script type="text/javascript"  src="../lib/jquery/jstree/plugins/jquery.tree.metadata.js"></script>
+	<script type="text/javascript"  src="../lib/jquery/jstree/plugins/jquery.tree.checkbox.js"></script>
 	
 	{literal}	
 	 <script type="text/javascript">

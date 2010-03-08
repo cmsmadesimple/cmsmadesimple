@@ -1125,44 +1125,39 @@ class CmsAdminTheme extends CmsObject
 	   echo "<div class=\"clearb\">&nbsp;</div>\n";
     }
 
-	public function start_tab_headers()
+	public function start_tab_headers($overall_id = 'page_tabs')
 	{
-		return '<!-- start_tab_headers --> <div id="page_tabs">';
+		return '<div id="' . $overall_id . '"><ul>';
 	}
 
 	public function set_tab_header($tab_id, $title, $active = false)
 	{
-		$a = "";
-		if ($active)
-		{
-			$a = " class='active'";
-		}
-		return '<div id="' . $tab_id . '"' . $a . '>' . $title . '</div>';
+		return '<li' . ($active ? ' class="ui-tabs-selected"' : '') . '><a href="' . CmsRequest::get_requested_uri().'#'.$tab_id.'"><span>'.$title.'</span></a></li>';
 	}
 
 	public function end_tab_headers()
 	{
-		return "</div> <!-- end_tab_headers -->";
+		return "</ul>";
 	}
 
 	public function start_tab_content()
 	{
-		return '<div class="clearb"></div><div id="page_content">';
+		return '';
 	}
 
-	public function end_tab_content()
+	public function end_tab_content($overall_id = 'page_tabs')
 	{
-		return '</div> <!-- end_tab_content -->';
+		return "</div>\n<script type='text/javascript'>\n<!--\n$('#" . $overall_id . "').tabs();\n//-->\n</script>\n";
 	}
 
 	public function start_tab($tab_id, $params = array(), $message = '')
 	{
-		return '<!-- start_tab --> <div id="' . strtolower(str_replace(' ', '_', $tab_id)) . '_c">' . $message;
+		return '<div id="' . $tab_id . '">';
 	}
 
 	public function end_tab()
 	{
-		return '</div> <!-- end_tab -->';
+		return "</div> <!-- EndTab -->\n";
 	}
 	
 	
