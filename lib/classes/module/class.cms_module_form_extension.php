@@ -167,6 +167,8 @@ class CmsModuleFormExtension extends CmsModuleExtension
 	 * - 'label_extra' - Text to append to the <label>-statement, ex. for javascript-validation code.  Defaults to ''.
 	 * - 'in_between_text' - Text to put between the label and input fields.  Defaults to ''.
 	 * - 'password' - Boolean to tell whether or not we want it to be a password input.  Defaults to false.
+	 * - 'file' - Boolean to tell whether or not we want it to be a file input.  Defaults to false.
+	 * - 'accept' - If this is a file type, it can allow for an accept parameter.  If empty, it will be left off.  Defaults to ''.
 	 * - 'params' - An array of key/value pairs to add as attributes to the input command.  These will merge into any
 	 *      additional parameters you pass along in to the $params hash that aren't parsed by the function.
 	 *
@@ -189,6 +191,8 @@ class CmsModuleFormExtension extends CmsModuleExtension
 			'label_extra' => coalesce_key($params, 'label_extra', ''),
 			'in_between_text' => coalesce_key($params, 'in_between_text', ''),
 			'password' => coalesce_key($params, 'password', false, FILTER_VALIDATE_BOOLEAN),
+			'file' => coalesce_key($params, 'file', false, FILTER_VALIDATE_BOOLEAN),
+			'accept' => coalesce_key($params, 'accept', '', FILTER_SANITIZE_STRING),
 			'params' => coalesce_key($params, 'params', array())
 		);
 		$default_params['id'] = coalesce_key($params,
@@ -211,7 +215,10 @@ class CmsModuleFormExtension extends CmsModuleExtension
 		}
 		unset($params['extra']);
 		
-		$params['type'] = ($params['password'] == true ? 'password' : 'text');
+		$params['type'] = ($params['password'] == true ? 'password' : ($params['file'] == true ? 'file' : 'text'));
+		
+		if ($params['type'] != 'file')
+			unset($params['accept']);
 		
 		$text = '';
 		
@@ -223,6 +230,8 @@ class CmsModuleFormExtension extends CmsModuleExtension
 		
 		unset($params['label']);
 		unset($params['label_extra']);
+		unset($params['password']);
+		unset($params['file']);
 		
 		$text .= start_tag('input', $params, true, $extra);
 		

@@ -132,92 +132,125 @@ class CmsModuleUrlExtension extends CmsModuleExtension
 		return start_tag('a', $link_params, false, $extra) . $params['contents'] . end_tag('a');
 	}
 
-	function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
+	function content_link($params = array(), $check_keys = false)
 	{
-	  $pageid = cms_htmlentities($pageid);
-	  $contents = cms_htmlentities($contents);
-
-		global $gCms;
-		$config = $gCms->GetConfig();
-		$text = '<a href="';
-		if ($config["url_rewriting"] == 'mod_rewrite')
+		$default_params = array(
+			'page_id' => coalesce_key($params, 'action', 'default', FILTER_SANITIZE_INTEGER),
+			'contents' => coalesce_key($params, 'contents', ''),
+			'only_href' => coalesce_key($params, 'only_href', false, FILTER_VALIDATE_BOOLEAN),
+			'id_suffix' => coalesce_key($params, 'id_suffix', '', FILTER_SANITIZE_STRING),
+			'class' => coalesce_key($params, 'class', '', FILTER_SANITIZE_STRING),
+			'extra' => coalesce_key($params, 'extra', '')
+		);
+		$default_params['html_id'] = coalesce_key($params,
+			'html_id',
+			CmsResponse::make_dom_id('cnt_'.$params['page_id'].$default_params['id_suffix']),
+			FILTER_SANITIZE_STRING
+		);
+		
+		if ($check_keys && !are_all_keys_valid($params, $default_params))
+			throw new CmsInvalidKeyException(invalid_key($params, $default_params));
+		
+		//Combine EVERYTHING together into a big managerie
+		//Merge in anything if it was passed in the params key to the method
+		$params = array_merge($default_params, strip_extra_params($params, $default_params, 'params'));
+		
+		$href = '';
+		$page = CmsPageTree::get_instance()->get_node_by_id($params['page_id']);
+		if ($page == null)
 		{
-			# mod_rewrite
-			$contentops = $gCms->GetContentOperations();
-			$alias = $contentops->GetPageAliasFromID( $pageid );
-			if( $alias == false )
-			{
-				return '<!-- ERROR: could not get an alias for pageid='.$pageid.'-->';
-			}
-			else
-			{
-				$text .= $config["root_url"]."/".$alias.
-				(isset($config['page_extension'])?$config['page_extension']:'.shtml');
-			}
+			return '<!-- ERROR: could not get an alias for pageid=' . $params['page_id'] . '-->';
 		}
-		else
+		
+		$href = $page->get_url();
+		
+		$link_params = array(
+			'id' => $params['html_id'],
+			'class' => $params['class']
+		);
+		
+		if ($params['only_href'])
+			return $href;
+	
+		$link_params['href'] = $href;
+		
+		$extra = '';
+		if ($params['extra'])
 		{
-			# not mod rewrite
-			$text .= $config["root_url"]."/index.php?".$config["query_var"]."=".$pageid;
+			$extra = $params['extra'];
 		}
-		$text .= '">'.$contents.'</a>';
-		return $text;
+		
+		return start_tag('a', $link_params, false, $extra) . $params['contents'] . end_tag('a');
 	}
 
-	function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents='', $params=array(), $onlyhref=false)
+	function return_link($params = array(), $check_keys = false)
 	{
-	  $id = cms_htmlentities($id);
-	  $returnid = cms_htmlentities($returnid);
-	  $contents = $contents;
+		$default_params = array(
+			'contents' => coalesce_key($params, 'contents', ''),
+			'only_href' => coalesce_key($params, 'only_href', false, FILTER_VALIDATE_BOOLEAN),
+			'id_suffix' => coalesce_key($params, 'id_suffix', '', FILTER_SANITIZE_STRING),
+			'class' => coalesce_key($params, 'class', '', FILTER_SANITIZE_STRING),
+			'extra' => coalesce_key($params, 'extra', ''),
+			'params' => coalesce_key($params, 'params', array()),
+			'id' => coalesce_key($params, 'id', $this->id),
+			'return_id' => coalesce_key($params, 'return_id', $this->return_id)
+		);
+		$default_params['html_id'] = coalesce_key($params,
+			'html_id',
+			CmsResponse::make_dom_id($default_params['id'].$default_params['action'].$default_params['id_suffix']),
+			FILTER_SANITIZE_STRING
+		);
+		
+		if ($check_keys && !are_all_keys_valid($params, $default_params))
+			throw new CmsInvalidKeyException(invalid_key($params, $default_params));
 
-		$text = '';
-		global $gCms;
-		$config = $gCms->GetConfig();
-		$manager = $gCms->GetHierarchyManager();
-		$node = $manager->sureGetNodeById($returnid);
-		if (isset($node))
+		//Combine EVERYTHING together into a big managerie
+		//Merge in anything if it was passed in the params key to the method
+		$extra_params = strip_extra_params($params, $default_params, 'params');
+		
+		$link_params = array(
+			'id' => $params['html_id'],
+			'class' => $params['class']
+		);
+		
+		$href = '';
+		$page = CmsPageTree::get_instance()->get_node_by_id($params['page_id']);
+		if ($page == null)
 		{
-			$content = $node->GetContent();
-
-			if (isset($content))
+			return '<!-- ERROR: could not get an alias for pageid=' . $params['page_id'] . '-->';
+		}
+	
+		$href = $page->get_url();
+		
+		$count = 0;
+		foreach ($extra_params as $key => $value)
+		{
+			$key = cms_htmlentities($key);
+			$value = cms_htmlentities($value);
+			if ($key != 'module' && $key != 'action' && $key != 'id')
 			{
-				if ($content->GetURL() != '')
-				{
-					if (!$onlyhref)
-					{
-						$text .= '<a href="';
-					}
-					$text .= $content->GetURL();
-
-					$count = 0;
-					foreach ($params as $key=>$value)
-					{
-					  $key = cms_htmlentities($key);
-					  $value = cms_htmlentities($value);
-						if ($count > 0)
-						{
-							if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true)
-								$text .= '?';
-							else
-								$text .= '&amp;';
-						}
-						else
-						{
-							$text .= '&amp;';
-						}
-						$text .= $id.$key.'='.$value;
-						$count++;
-					}
-					if (!$onlyhref)
-					{
-						$text .= "\"";
-						$text .= '>'.$contents.'</a>';
-					}
-				}
+				if ($count == 0 && CmsConfig::get("url_rewriting") == 'mod_rewrite' && $rewrite == true)
+					$href .= '?';
+				else
+					$href .= '&amp;';
+				$href .= $params['id'].$key.'='.rawurlencode($value);
+				
+				$count++;
 			}
 		}
-
-		return $text;
+		
+		if ($params['only_href'])
+			return $href;
+	
+		$link_params['href'] = $href;
+		
+		$extra = '';
+		if ($params['extra'])
+		{
+			$extra = $params['extra'];
+		}
+		
+		return start_tag('a', $link_params, false, $extra) . $params['contents'] . end_tag('a');
 	}
 }
 
