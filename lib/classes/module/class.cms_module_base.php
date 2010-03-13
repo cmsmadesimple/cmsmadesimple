@@ -223,7 +223,7 @@ class CmsModuleBase extends CmsObject
 		global $gCms;
 		
 		if ($name == '')
-			$name = get_class($this);
+			$name = $this->get_name();
 
 		$smarty = cms_smarty();
 		$smarty->register_function($name, array($this, $callback));

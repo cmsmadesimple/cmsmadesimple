@@ -1,7 +1,33 @@
 {* CSS classes used in this template:
 .currentpage - The active/current page
 .bullet_sectionheader - To style section header
-hr.separator - To style the ruler for the separator *} 
+hr.separator - To style the ruler for the separator *}
+
+{if $count > 0}
+	<ul{if $mod->current_depth == 1} class="clearfix"{/if}> <!-- {$mod->current_depth} -->
+		{foreach from=$nodelist item=node}
+			{if $node->current == true}
+				<li>
+					<a href="{$node->url}" class="currentpage"{if $node->target ne ""} target="{$node->target}"{/if}> {$node->menu_text} </a>
+			{elseif $node->parent == true && $node->depth == 1 and $node->type != 'sectionheader' and $node->type != 'separator'}
+				<li class="activeparent">
+					<a href="{$node->url}" class="activeparent"{if $node->target ne ""} target="{$node->target}"{/if}> {$node->menu_text} </a>
+			{elseif $node->type == 'sectionheader'}
+				<li class="sectionheader">{$node->menu_text}
+			{elseif $node->type == 'separator'}
+				<li style="list-style-type: none;">
+					<hr class="separator" />
+			{else}
+				<li>
+					<a href="{$node->url}"{if $node->target ne ""} target="{$node->target}"{/if}> {$node->menu_text} </a>
+			{/if}
+					{menu_children node=$node}
+				</li>
+		{/foreach}
+	</ul> <!-- {$mod->current_depth} -->
+{/if}
+
+{*
 {if $count > 0}
 <ul class="clearfix">
 {foreach from=$nodelist item=node}
@@ -35,3 +61,4 @@ hr.separator - To style the ruler for the separator *}
 {repeat string="</li></ul>" times=$node->depth-1}</li>
 </ul>
 {/if}
+*}

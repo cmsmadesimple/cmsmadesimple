@@ -3,6 +3,38 @@
 #primary-nav - The id for the <ul>
 .menuparent - The class for each <li> that has children.
 .menuactive - The class for each <li> that is active or is a parent (on any level) of a child that is active. *}
+
+{if $mod->current_depth == 1}<div id="menuwrapper">{/if}
+	{if $count > 0}
+		<ul {if $mod->current_depth == 1}id="primary-nav"{else}class="unli"{/if}> <!-- {$mod->current_depth} -->
+			{foreach from=$nodelist item=node}
+				{if $node->parent == true or ($node->current == true and $node->haschildren == true)}
+					<li class="menuactive menuparent">
+						<a class="menuactive menuparent" href="{$node->url}"><span>{$node->menu_text}</span></a>
+				{elseif $node->current == true}
+					<li class="menuactive">
+						<a class="menuactive" href="{$node->url}"><span>{$node->menu_text}</span></a>
+				{elseif $node->haschildren == true}
+					<li class="menuparent">
+						<a class="menuparent" href="{$node->url}"><span>{$node->menu_text}</span></a>
+				{elseif $node->type == 'sectionheader' and $node->haschildren == true}
+					<li class="sectionheader">
+						<span class="sectionheader">{$node->menu_text}</span>
+				{elseif $node->type == 'separator'}
+					<li style="list-style-type: none;">
+						<hr class="menu_separator" />
+				{else}
+					<li>
+						<a href="{$node->url}"><span>{$node->menu_text}</span></a>
+				{/if}
+						{menu_children node=$node}
+					</li>
+			{/foreach}
+		</ul> <!-- {$mod->current_depth} -->
+	{/if}
+{if $mod->current_depth == 1}</div>{/if}
+
+{*
 {if $count > 0}
 <div id="menuwrapper">
 <ul id="primary-nav">
@@ -38,4 +70,4 @@ href="{$node->url}"><span>{$node->menutext}</span></a>
 <div class="clearb"></div>
 </div>
 {/if}
-
+*}

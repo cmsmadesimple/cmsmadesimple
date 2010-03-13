@@ -49,7 +49,8 @@ class CoreMenuManager extends CmsModuleBase
 		$this->create_parameter('excludeprefix','',$this->Lang('help_excludeprefix'), FILTER_SANITIZE_STRING);
 		$this->create_parameter('includeprefix','',$this->Lang('help_includeprefix'), FILTER_SANITIZE_STRING);
 		
-		$this->register_module_plugin('menu_children', 'menu_children_plugin_callback');
+		//$this->register_module_plugin('menu');
+		//$this->register_module_plugin('menu_children', 'menu_children_plugin_callback');
 	}
 
 	public function menu_children_plugin_callback($params, &$smarty)
@@ -85,10 +86,10 @@ class CoreMenuManager extends CmsModuleBase
 		$usefile = true;
 		//$lang = CmsMultiLanguage::get_client_language();
 		//$mdid = md5(cmsms()->variables['content_id'].implode('|', $params).$lang);
-		$mdid = md5(cmsms()->variables['content_id'].implode('|', $params));
-		$tpl_name = coalesce_key($params, 'template', $this->GetPreference('default_template','simple_navigation.tpl'));
+		//$mdid = md5(cmsms()->variables['content_id'].implode('|', $params));
+		$template = coalesce_key($params, 'template', $this->Preference->get('default_template','simple_navigation.tpl'));
 
-		if (!endswith($tpl_name, '.tpl'))
+		if (!endswith($template, '.tpl'))
 		{
 			$usefile = false;
 		}
@@ -120,8 +121,14 @@ class CoreMenuManager extends CmsModuleBase
 				$smarty->assign('orig_params', $params);
 				$this->current_depth = 1;
 			}
+			
+			//var_dump($tpl_name);
+			//var_dump(count($nodes));
 
-			echo $this->ProcessTemplateFromDatabase($tpl_name, $mdid, false);
+			if ($usefile)
+				echo $this->Template->process($template, $mdid, false);
+			else
+				echo $this->Template->process_from_database($template, $mdid, false);
 		}
 	}
 	

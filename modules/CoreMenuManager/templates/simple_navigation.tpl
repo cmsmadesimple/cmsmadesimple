@@ -6,6 +6,35 @@ li.sectionheader h3 - To style section header
 li.separator - To style the ruler for the separator *} 
 
 {if $count > 0}
+	<ul> <!-- {$mod->current_depth} -->
+		{foreach from=$nodelist item=node}
+			{if $node->parent == true or ($node->current == true and $node->haschildren == true)}
+				<li class="menuactive menuparent">
+					<a class="menuactive menuparent" href="{$node->url}"><span>{$node->menu_text}</span></a>
+			{elseif $node->haschildren == true and $node->type != 'sectionheader' and $node->type != 'separator'}
+				<li class="parent">
+					<a class="parent" href="{$node->url}"><span>{$node->menu_text}</span></a>
+			{elseif $node->current == true}
+				<li class="currentpage">
+					<h3><span>{$node->menu_text}</span></h3>
+			{elseif $node->type == 'sectionheader'}
+				<li class="sectionheader">
+					<span>{$node->menu_text}</span>
+			{elseif $node->type == 'separator'}
+				<li class="separator" style="list-style-type: none;">
+					<hr />
+			{else}
+				<li>
+					<a href="{$node->url}"><span>{$node->menu_text}</span></a>
+			{/if}
+					{menu_children node=$node}
+				</li>
+		{/foreach}
+	</ul> <!-- {$mod->current_depth} -->
+{/if}
+
+{*
+{if $count > 0}
 <ul>
 {foreach from=$nodelist item=node}
 {if $node->depth > $node->prevdepth}
@@ -41,3 +70,4 @@ li.separator - To style the ruler for the separator *}
 {repeat string="</li></ul>" times=$node->depth-1}</li>
 </ul>
 {/if}
+*}

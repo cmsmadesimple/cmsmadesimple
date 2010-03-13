@@ -4,12 +4,15 @@ if (!isset($gCms)) exit;
 debug_buffer('', 'Start of Menu Manager Display');
 
 $usefile = true;
-$tpl_name = coalesce_key($params, 'template', $this->Preference->get('default_template','simple_navigation.tpl'));
+$params['template'] = coalesce_key($params, 'template', $this->Preference->get('default_template','simple_navigation.tpl'));
 $mdid = md5($gCms->variables['content_id'].implode('|', $params));
-if (!endswith($tpl_name, '.tpl'))
+if (!endswith($params['template'], '.tpl'))
 {
 	$usefile = false;
 }
+
+//$params['template'] = 'simple_navigation.tpl';
+//$usefile = true;
 
 $root_node = null;
 
@@ -95,7 +98,6 @@ else if (isset($params['items']))
 else
 {
 	$this->display_menu(CmsPageTree::get_instance()->get_root_node()->get_children(), $params, true);
-}
 }
 debug_buffer('', 'End of Menu Manager Display');
 ?>

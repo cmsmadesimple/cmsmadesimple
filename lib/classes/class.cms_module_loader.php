@@ -22,6 +22,7 @@ class CmsModuleLoader extends CmsObject
 {
 	public static $module_list = null;
 	public static $core_modules = array('CoreMenuManager', 'Search', 'ModuleManager');
+	public static $plugin_lookup = array();
 	
 	function __construct()
 	{
@@ -53,8 +54,33 @@ class CmsModuleLoader extends CmsObject
 		self::check_core_version($module_list);
 		self::check_dependencies($module_list);
 		self::check_uninstall_all($module_list);
+		self::register_plugins($module_list);
 		
 		self::$module_list = $module_list;
+	}
+	
+	public static function register_plugins(&$module_list)
+	{
+		foreach ($module_list as &$one_module)
+		{
+			//self::check_uninstall($one_module['name'], $module_list);
+			if ($one_module['plugins'])
+			{
+				foreach ($one_module['plugins'] as $k => $v)
+				{
+					$val = $v['plugin'];
+					if (isset($val['name']))
+					{
+						if (isset($val['callback']))
+							CmsModuleFunctionProxy::get_instance()->register($one_module['name'], $val['name'], $val['callback']);
+						else
+							CmsModuleFunctionProxy::get_instance()->register($one_module['name'], $val['name'], 'function_plugin');
+					}
+				}
+			}
+		}
+		
+		//var_dump(self::$plugin_lookup);
 	}
 	
 	public static function check_uninstall_all(&$module_list)
@@ -311,7 +337,18 @@ class CmsModuleLoader extends CmsObject
 	{
 		if (!($xml->children()))
 		{
-			return (string) $xml;
+			$str = (string)$xml;
+			if ($str == 'false' || $str == 'true')
+			{
+				//var_dump($str);
+				$ret = ($str == 'true' ? true : false);
+				//var_dump($ret);
+				return $ret;
+			}
+			else
+			{
+				return $str;
+			}
 		}
 		
 		foreach ($xml->children() as $child)
@@ -391,7 +428,7 @@ class CmsModuleLoader extends CmsObject
 		
 		$ary['name'] = $mod->GetName();
 		$ary['version'] = $mod->GetVersion();
-		$ary['admin_interface'] = $mod->HasAdmin() ? 'true' : 'false';
+		$ary['admin_interface'] = $mod->HasAdmin() ? true : false;
 		$ary['minimum_core_version'] = $mod->MinimumCMSVersion();
 		$ary['authors'][0]['name'] = $mod->GetAuthor();
 		$ary['authors'][0]['email'] = $mod->GetAuthorEmail();

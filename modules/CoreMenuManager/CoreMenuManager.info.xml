@@ -15,6 +15,15 @@
 	<admin_interface>false</admin_interface>
 	<cms_forge_project>cmsmadesimple</cms_forge_project>
 	<plugin_module>true</plugin_module>
+	<plugins>
+	  <plugin>
+	    <name>menu</name>
+	  </plugin>
+	  <plugin>
+	    <name>menu_children</name>
+	    <callback>menu_children_plugin_callback</callback>
+	  </plugin>
+	</plugins>
 	<auto_install>true</auto_install>
 	<auto_upgrade>true</auto_upgrade>
 </module_info>
