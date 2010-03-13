@@ -40,14 +40,14 @@ class CmsModuleTabsExtension extends CmsModuleExtension
 
 	public function set_tab_header($tab_id, $title, $active = false)
 	{
-		$theme_obj = $this->get_theme_object();
-		if ($theme_obj)
-			return $theme_obj->set_tab_header($tab_id, $title, $active);
-		
 		if ($active)
 		{
 			$this->module->mActiveTab = $tab_id;
 		}
+		
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->set_tab_header($tab_id, $title, $active);
 		
 		return '';
 	}

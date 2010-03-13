@@ -16,19 +16,10 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
-
-$CMS_ADMIN_PAGE=1;
-
-require_once("../include.php");
-
-check_login();
-
-$this_url = basename(__FILE__).'?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-
-include_once("header.php");
+#$Id: listmodules.php 6077 2009-10-27 03:09:40Z sjg $
 
 // construct true/false button images
+$themeObject = CmsAdminTheme::get_instance();
 $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
 $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
 
@@ -43,15 +34,15 @@ foreach (CmsModuleLoader::get_module_list() as $module_name => $module_item)
 	//var_dump($modules[$module_name]);
 	
 	//Set different URLs
-	$modules[$module_name]['help_url'] = "{$this_url}&amp;action=showmodulehelp&amp;module={$module_name}";
-	$modules[$module_name]['about_url'] = "{$this_url}&amp;action=showmoduleabout&amp;module={$module_name}";
-	$modules[$module_name]['xml_url'] = "{$this_url}&amp;action=exportxml&amp;module={$module_name}";
+	$modules[$module_name]['help_url'] = $this->Url->link(array('action' => 'showmodulehelp', 'module_name' => $module_name, 'only_href' => true));
+	$modules[$module_name]['about_url'] = $this->Url->link(array('action' => 'showmoduleabout', 'module_name' => $module_name, 'only_href' => true));
+	$modules[$module_name]['xml_url'] = $this->Url->link(array('action' => 'exportxml', 'module_name' => $module_name, 'only_href' => true));
 	
 	$modules[$module_name]['statuscol'] = array();
 	$modules[$module_name]['actioncol'] = array();
 	$modules[$module_name]['activecol'] = '&nbsp;';
 	
-	$perms_ok = is_directory_writable(cms_join_path(ROOT_DIR,'modues',$module_name));
+	$perms_ok = is_directory_writable(cms_join_path(ROOT_DIR, 'modues', $module_name));
 	
 	// Make sure it's a valid module for this version of CMSMS 
 	if (!$modules[$module_name]['meets_minimum_core'])
@@ -68,23 +59,23 @@ foreach (CmsModuleLoader::get_module_list() as $module_name => $module_item)
 
 		if (!$modules[$module_name]['meets_dependencies'])
 		{
-			$modules[$module_name]['actioncol'][] = "<a href=\"{$this_url}&amp;action=missingdeps&amp;module=" . $module_name . "\">" . lang('missingdependency') . "</a>";
+			$modules[$module_name]['actioncol'][] = $this->Url->link(array('action' => 'missingdeps', 'module_name' => $module_name, 'contents' => $this->lang('missingdependency')));
 		}
 		else
 		{
-			$modules[$module_name]['actioncol'][] = "<a href=\"{$this_url}&amp;action=install&amp;module=" . $module_name . "\">" . lang('install') . "</a>";
+			$modules[$module_name]['actioncol'][] = $this->Url->link(array('action' => 'install', 'module_name' => $module_name, 'contents' => $this->lang('install')));
 		}
 		
 		if (!$modules[$module_name]['system_module'])
 		{
 			if ($perms_ok)
 			{
-				$modules[$module_name]['actioncol'][] .= "<a href=\"{$this_url}&amp;action=remove&amp;module=".$module_name."\" onclick=\"return confirm('".html_entity_decode(lang('removeconfirm'),true)."');\">".lang('remove')."</a>";
+				$modules[$module_name]['actioncol'][] .= $this->Url->link(array('action' => 'remove', 'module_name' => $module_name, 'contents' => $this->lang('remove'), 'warn_message' => $this->lang('removeconfirm'))); //"<a href=\"{$this_url}&amp;action=remove&amp;module=".$module_name."\" onclick=\"return confirm('".html_entity_decode(lang('removeconfirm'),true)."');\">".lang('remove')."</a>";
 			}
 
 			else
 			{
-				$modules[$module_name]['actioncol'][] = "<a href=\"{$this_url}&amp;action=chmod&amp;module=".$module_name."\" onclick=\"return confirm('".html_entity_decode(lang('changepermissionsconfirm'),true)."');\">".lang('changepermissions')."</a>";
+				$modules[$module_name]['actioncol'][] = $this->Url->link(array('action' => 'chmod', 'module_name' => $module_name, 'contents' => $this->lang('changepermissions'), 'warn_message' => $this->lang('changepermissionsconfirm'))); //"<a href=\"{$this_url}&amp;action=chmod&amp;module=".$module_name."\" onclick=\"return confirm('".html_entity_decode(lang('changepermissionsconfirm'),true)."');\">".lang('changepermissions')."</a>";
 			}
 		}
 	}
@@ -95,8 +86,10 @@ foreach (CmsModuleLoader::get_module_list() as $module_name => $module_item)
 		$modules[$module_name]['statuscol'][] = '<span class="important">' . lang('needupgrade') . '</span>';
 		$modules[$module_name]['activecol'] = (
 			$modules[$module_name]['active'] ?
-				"<a href='{$this_url}&amp;action=setfalse&amp;module=".$module_name."'>".$image_true."</a>" :
-				"<a href='{$this_url}&amp;action=settrue&amp;module=".$module_name."'>".$image_false."</a>"
+				$this->Url->link(array('action' => 'deactivate', 'module_name' => $module_name, 'contents' => $image_true)) :
+					//"<a href='{$this_url}&amp;action=setfalse&amp;module=" . $module_name . "'>" . $image_true . "</a>" :
+				$this->Url->link(array('action' => 'activate', 'module_name' => $module_name, 'contents' => $image_false))
+					//"<a href='{$this_url}&amp;action=settrue&amp;module=".$module_name."'>".$image_false."</a>"
 		);
 	}
 	else // Must be installed
@@ -104,8 +97,10 @@ foreach (CmsModuleLoader::get_module_list() as $module_name => $module_item)
 		$modules[$module_name]['statuscol'][]  = lang('installed');
 		$modules[$module_name]['activecol'] = (
 			$modules[$module_name]['active'] ? 
-			"<a href='{$this_url}&amp;action=setfalse&amp;module=".$module_name."'>".$image_true."</a>" : 
-			"<a href='{$this_url}&amp;action=settrue&amp;module=".$module_name."'>".$image_false."</a>"
+				$this->Url->link(array('action' => 'deactivate', 'module_name' => $module_name, 'contents' => $image_true)) :
+					//"<a href='{$this_url}&amp;action=setfalse&amp;module=".$module_name."'>".$image_true."</a>" : 
+				$this->Url->link(array('action' => 'activate', 'module_name' => $module_name, 'contents' => $image_false))
+					//"<a href='{$this_url}&amp;action=settrue&amp;module=".$module_name."'>".$image_false."</a>"
 		);
 		
 		if ($modules[$module_name]['can_uninstall'])
@@ -115,7 +110,7 @@ foreach (CmsModuleLoader::get_module_list() as $module_name => $module_item)
 			//		cms_utf8entities($rec['instance']->UninstallPreMessage()) :
 			//		lang('uninstallconfirm').' '.$key)."');\">".lang('uninstall')."</a>";
 			
-			$modules[$module_name]['actioncol'][] = "<a href=\"{$this_url}&amp;action=uninstall&amp;module=" . $module_name . "\">" . lang('uninstall') . "</a>";
+			$modules[$module_name]['actioncol'][] = $this->Url->link(array('action' => 'uninstall', 'module_name' => $module_name, 'contents' => $this->lang('uninstall'), 'warn_message' => $this->lang('uninstallconfirm'))); //"<a href=\"{$this_url}&amp;action=uninstall&amp;module=" . $module_name . "\">" . lang('uninstall') . "</a>";
 		}
 		else
 		{
@@ -129,9 +124,13 @@ foreach (CmsModuleLoader::get_module_list() as $module_name => $module_item)
 //Give smarty the list
 $smarty->assign('modules', $modules);
 
+echo $this->Template->process('listmodules.tpl');
+
+/*
 echo $smarty->fetch('listmodules.tpl');
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
+*/
 
 /*
 $LOAD_ALL_MODULES=1;

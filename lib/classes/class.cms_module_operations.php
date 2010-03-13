@@ -25,74 +25,74 @@ class CmsModuleOperations extends CmsObject
 	
 	function install($name)
 	{
-		$filename = cms_join_path(ROOT_DIR, 'modules', $name, 'method.install.php');
-		if (@is_file($filename))
+		if (CmsModuleLoader::get_module_info($name) !== false && !CmsModuleLoader::get_module_info($name, 'installed'))
 		{
-			if (!CmsModuleLoader::get_module_info($name, 'installed'))
+			$version = CmsModuleLoader::get_module_info($name, 'version');
+			
+			$filename = cms_join_path(ROOT_DIR, 'modules', $name, 'method.install.php');
+			if (@is_file($filename))
 			{
-				$version = CmsModuleLoader::get_module_info($name, 'version');
-				
-				$module = get_module_class($name, false, false);
+				$module = CmsModuleLoader::get_module_class($name, false, false);
 				$module->include_file_in_scope($filename);
-				
-				$query = "INSERT INTO {modules} (module_name, version, status, active) VALUES (?, ?, ?, ?)";
-				cms_db()->Execute($query, array($name, $version, 'installed', 1));
-
-				$event_params = array('name' => $module, 'version' => $version);
-				CmsEventManager::send_event('Core:module_installed', $event_params);
-				//Events::SendEvent('Core', 'ModuleInstalled', $event_params);
 			}
+			
+			$query = "INSERT INTO {modules} (module_name, version, status, active) VALUES (?, ?, ?, ?)";
+			cms_db()->Execute($query, array($name, $version, 'installed', 1));
+
+			$event_params = array('name' => $module, 'version' => $version);
+			CmsEventManager::send_event('Core:module_installed', $event_params);
+			//Events::SendEvent('Core', 'ModuleInstalled', $event_params);
 		}
 	}
 	
 	function uninstall($name)
 	{
-		$filename = cms_join_path(ROOT_DIR, 'modules', $name, 'method.uninstall.php');
-		if (@is_file($filename))
+		if (CmsModuleLoader::get_module_info($name) !== false && CmsModuleLoader::get_module_info($name, 'installed'))
 		{
-			if (CmsModuleLoader::get_module_info($name, 'installed'))
+			$version = CmsModuleLoader::get_module_info($name, 'installed_version');
+			
+			$filename = cms_join_path(ROOT_DIR, 'modules', $name, 'method.uninstall.php');
+			if (@is_file($filename))
 			{
-				$version = CmsModuleLoader::get_module_info($name, 'installed_version');
-				
-				$module = get_module_class($name, false, false);
+				$module = CmsModuleLoader::get_module_class($name, false, false);
 				$module->include_file_in_scope($filename);
-				
-				$query = "DELETE FROM {modules} WHERE module_name = ?";
-				cms_db()->Execute($query, array($name));
-
-				$event_params = array('name' => $module, 'version' => $version);
-				CmsEventManager::send_event('Core:module_uninstalled', $event_params);
-				//Events::SendEvent('Core', 'ModuleUninstalled', $event_params);
 			}
+			
+			$query = "DELETE FROM {modules} WHERE module_name = ?";
+			cms_db()->Execute($query, array($name));
+
+			$event_params = array('name' => $module, 'version' => $version);
+			CmsEventManager::send_event('Core:module_uninstalled', $event_params);
+			//Events::SendEvent('Core', 'ModuleUninstalled', $event_params);
 		}
 	}
 	
 	function upgrade($name)
 	{
-		$filename = cms_join_path(ROOT_DIR, 'modules', $name, 'method.upgrade.php');
-		if (@is_file($filename))
+		if (CmsModuleLoader::get_module_info($name) !== false && CmsModuleLoader::get_module_info($name, 'installed') && CmsModuleLoader::get_module_info($name, 'needs_upgrade'))
 		{
-			if (CmsModuleLoader::get_module_info($name, 'installed') && CmsModuleLoader::get_module_info($name, 'needs_upgrade'))
-			{
-				$old_version = CmsModuleLoader::get_module_info($name, 'installed_version');
-				$new_version = CmsModuleLoader::get_module_info($name, 'version');
-				
-				$module = get_module_class($name, false, false);
-				$module->include_file_in_scope($filename);
+			$old_version = CmsModuleLoader::get_module_info($name, 'installed_version');
+			$new_version = CmsModuleLoader::get_module_info($name, 'version');
 			
-				$query = "UPDATE {modules} SET version = ? WHERE module_name = ?";
-				cms_db()->Execute($query, array($new_version, $name));
-
-				$event_params = array('name' => $module, 'oldversion' => $old_version, 'newversion' => $new_version);
-				CmsEventManager::send_event('Core:module_upgraded', $event_params);
-				//Events::SendEvent('Core', 'ModuleUpgraded', $event_params);
+			$filename = cms_join_path(ROOT_DIR, 'modules', $name, 'method.upgrade.php');
+			if (@is_file($filename))
+			{
+				$module = CmsModuleLoader::get_module_class($name, false, false);
+				$module->include_file_in_scope($filename);
 			}
+		
+			$query = "UPDATE {modules} SET version = ? WHERE module_name = ?";
+			cms_db()->Execute($query, array($new_version, $name));
+
+			$event_params = array('name' => $module, 'oldversion' => $old_version, 'newversion' => $new_version);
+			CmsEventManager::send_event('Core:module_upgraded', $event_params);
+			//Events::SendEvent('Core', 'ModuleUpgraded', $event_params);
 		}
 	}
 	
 	function activate($name)
 	{
-		if (CmsModuleLoader::get_module_info($name, 'installed') && !CmsModuleLoader::get_module_info($name, 'active'))
+		if (CmsModuleLoader::get_module_info($name) !== false && CmsModuleLoader::get_module_info($name, 'installed') && !CmsModuleLoader::get_module_info($name, 'active'))
 		{
 			$query = "UPDATE {modules} SET active = 1 WHERE module_name = ?";
 			cms_db()->Execute($query, array($name));
@@ -101,7 +101,7 @@ class CmsModuleOperations extends CmsObject
 	
 	function deactivate($name)
 	{
-		if (CmsModuleLoader::get_module_info($name, 'installed') && CmsModuleLoader::get_module_info($name, 'active'))
+		if (CmsModuleLoader::get_module_info($name) !== false && CmsModuleLoader::get_module_info($name, 'installed') && CmsModuleLoader::get_module_info($name, 'active'))
 		{
 			$query = "UPDATE {modules} SET active = 0 WHERE module_name = ?";
 			cms_db()->Execute($query, array($name));

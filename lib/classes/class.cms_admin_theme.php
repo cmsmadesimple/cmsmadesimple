@@ -1127,12 +1127,12 @@ class CmsAdminTheme extends CmsObject
 
 	public function start_tab_headers($overall_id = 'page_tabs')
 	{
-		return '<div id="' . $overall_id . '"><ul>';
+		return '<div id="' . $overall_id . '" class="page_tabs"><ul>';
 	}
 
 	public function set_tab_header($tab_id, $title, $active = false)
 	{
-		return '<li' . ($active ? ' class="ui-tabs-selected"' : '') . '><a href="' . CmsRequest::get_requested_uri().'#'.$tab_id.'"><span>'.$title.'</span></a></li>';
+		return '<li' . ($active ? ' class="ui-tabs-selected"' : '') . '><a href="' . CmsRequest::get_requested_uri() . '#' . $tab_id . '"><span>' . $title . '</span></a></li>';
 	}
 
 	public function end_tab_headers()
@@ -1152,12 +1152,12 @@ class CmsAdminTheme extends CmsObject
 
 	public function start_tab($tab_id, $params = array(), $message = '')
 	{
-		return '<div id="' . $tab_id . '">';
+		return '<div id="' . $tab_id . '"><div class="inside_tab">';
 	}
 
 	public function end_tab()
 	{
-		return "</div> <!-- EndTab -->\n";
+		return "</div></div> <!-- EndTab -->\n";
 	}
 	
 	

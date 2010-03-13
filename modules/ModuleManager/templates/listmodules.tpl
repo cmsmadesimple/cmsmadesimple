@@ -1,4 +1,4 @@
-<div class="pagecontainer">
+<!-- <div class="pagecontainer"> -->
 {if isset($errors)}
 <div class="pageerrors">{$errors}</div>
 {/if}
@@ -95,4 +95,4 @@
 </form>
 {/if}
 
-</div>{* pagecontainer *}
+<!-- </div> -->{* pagecontainer *}

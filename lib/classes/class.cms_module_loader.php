@@ -21,6 +21,7 @@
 class CmsModuleLoader extends CmsObject
 {
 	public static $module_list = null;
+	public static $core_modules = array('CoreMenuManager', 'Search', 'ModuleManager');
 	
 	function __construct()
 	{
@@ -51,8 +52,35 @@ class CmsModuleLoader extends CmsObject
 		
 		self::check_core_version($module_list);
 		self::check_dependencies($module_list);
+		self::check_uninstall_all($module_list);
 		
 		self::$module_list = $module_list;
+	}
+	
+	public static function check_uninstall_all(&$module_list)
+	{
+		foreach ($module_list as &$one_module)
+		{
+			self::check_uninstall($one_module['name'], $module_list);
+		}
+	}
+	
+	public static function check_uninstall($module_name, &$module_list)
+	{
+		if (!isset($module_list[$module_name]['can_uninstall']))
+		{
+			$module_list[$module_name]['can_uninstall'] = true;
+			foreach ($module_list[$module_name]['dependencies'] as $one_dep)
+			{
+				$dep_mod = $module_list[$one_dep['module']['name']];
+				self::check_uninstall($one_dep['module']['name'], $module_list);
+				
+				if ($dep_mod && $dep_mod['installed'])
+				{
+					$module_list[$module_name]['can_uninstall'] = false;
+				}
+			}
+		}
 	}
 	
 	public static function check_core_version(&$module_list)
@@ -61,7 +89,7 @@ class CmsModuleLoader extends CmsObject
 		{
 			if (isset($one_module['minimum_core_version']))
 			{
-				if (version_compare($one_module['minimum_core_version'], '2.0', '>')) //Use a real version number here
+				if (version_compare($one_module['minimum_core_version'], CMS_VERSION, '>'))
 				{
 					$one_module['meets_minimum_core'] = false;
 					$one_module['active'] = false;
@@ -248,6 +276,7 @@ class CmsModuleLoader extends CmsObject
 		$module_data['installed_version'] = $module_data['version'];
 		$module_data['needs_upgrade'] = false;
 		$module_data['meets_minimum_core'] = true;
+		$module_data['system_module'] = in_array($module_data['name'], self::$core_modules);
 		
 		foreach($installed_data as $one_row)
 		{

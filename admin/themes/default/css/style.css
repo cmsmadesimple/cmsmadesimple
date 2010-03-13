@@ -691,13 +691,13 @@ div.navt_hide  {
    }
 
 /* Page Tabs - used for all page tabs */
-#page_tabs  {
+.page_tabs  {
 	overflow: hidden;
-	margin-left:20px;
-	border-right: 1px solid #F4F4F4;
+	margin-left: 20px;
+	/*border-right: 1px solid #F4F4F4; */
 } 
 
-#page_tabs ul li  {
+.page_tabs ul li  {
 	color: #000000;
 	font-size: 1em;
 	background: #F9F9F9 url(../images/layout/tabs.png) repeat-x left 0px;
@@ -711,18 +711,18 @@ div.navt_hide  {
 	margin-top: 1px;
 }
 
-#page_tabs ul li img {
+.page_tabs ul li img {
 	height:14px;
 	margin-top:2px;
 	margin-left:5px;
 	margin-right:5px;
 }
 
-#page_tabs ul li:hover, #page_tabs ul li.cssHover  {
+.page_tabs ul li:hover, .page_tabs ul li.cssHover  {
 	background: #F9F9F9 url(../images/layout/tabs.png) repeat-x left -45px;	
 }
 
-#page_tabs ul li.active  {
+.page_tabs ul li.active  {
 	background: #fff url(../images/layout/tabs.png) repeat-x left -95px;
 	border-right: 1px solid #666;
 	border-left: 1px solid #666;
@@ -734,6 +734,16 @@ div.navt_hide  {
 
 .ui-tabs .ui-tabs-hide {
 	display: none;
+}
+
+.ui-tabs-panel {
+	clear: both;
+}
+
+.ui-tabs-panel div.inside_tab {
+	padding-top: 10px;
+	border-top: 1px solid #F4F4F4;
+	clear: both;
 }
 
 #page_content  {

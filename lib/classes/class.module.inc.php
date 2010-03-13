@@ -1638,13 +1638,7 @@ class CMSModule extends CmsObject
 
 	public static function GetModuleInstance($module)
 	{
-		$module = CmsModuleLoader::get_module_class($module_name);
-		if ($module)
-			return $module;
-		
-		// Fix only variable references should be returned by reference
-		$tmp = FALSE;
-		return $tmp;
+		return CmsModuleLoader::get_module_class($module);
 	}
 
   /**
@@ -2340,6 +2334,95 @@ class CMSModule extends CmsObject
 	public function GetNotificationOutput($priority=2) 
         {
 	  return '';
+	}
+	
+	/**
+	 * ------------------------------------------------------------------
+	 * Tab Functions
+	 * ------------------------------------------------------------------
+	 */
+	public function get_theme_object()
+	{
+		return CmsAdminTheme::get_instance();
+	}
+	
+	function StartTabHeaders()
+	{
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->start_tab_headers(CmsResponse::make_dom_id('module_page_tabs_orig'));
+		
+		return '';
+	}
+
+	function SetTabHeader($tabid,$title,$active=false)
+	{
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->set_tab_header($tabid, $title, $active);
+		
+		if ($active)
+		{
+			$this->module->mActiveTab = $tabid;
+		}
+		
+		return '';
+	}
+
+	function EndTabHeaders()
+	{
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->end_tab_headers();
+		
+		return '';
+	}
+
+	function StartTabContent()
+	{
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->start_tab_content();
+		
+		return '';
+	}
+
+	function EndTabContent()
+	{
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->end_tab_content(CmsResponse::make_dom_id('module_page_tabs_orig'));
+		
+		return '';
+	}
+
+	function StartTab($tabid, $params = array())
+	{
+		if (FALSE == empty($this->mActiveTab) &&
+				$tabid == $this->mActiveTab &&
+				FALSE == empty($params['tab_message']))
+		{
+			$message = $this->ShowMessage($this->Lang($params['tab_message']));
+		}
+		else
+		{
+			$message = '';
+		}
+		
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->start_tab($tabid, $params);
+		
+		return '';
+	}
+
+	function EndTab()
+	{
+		$theme_obj = $this->get_theme_object();
+		if ($theme_obj)
+			return $theme_obj->end_tab();
+		
+		return '';
 	}
 
 }

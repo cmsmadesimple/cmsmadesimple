@@ -1,0 +1,20 @@
+<module_info>
+	<name>CoreMenuManager</name>
+	<version>2.0</version>
+	<summary>Displays Menus. Looks awesome.</summary>
+	<minimum_core_version>1.99</minimum_core_version>
+	<authors>
+		<author>
+			<name>Ted Kulp</name>
+			<email>ted@cmsmadesimple.org</email>
+		</author>
+	</authors>
+	<events_sent>
+		<event>post_render</event>
+	</events_sent>
+	<admin_interface>false</admin_interface>
+	<cms_forge_project>cmsmadesimple</cms_forge_project>
+	<plugin_module>true</plugin_module>
+	<auto_install>true</auto_install>
+	<auto_upgrade>true</auto_upgrade>
+</module_info>

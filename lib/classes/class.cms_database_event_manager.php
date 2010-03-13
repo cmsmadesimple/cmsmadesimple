@@ -58,7 +58,7 @@ class CmsDatabaseEventManager extends CmsObject
 					}
 
 					// and call the module event handler.
-					$obj = CmsModule::get_module_instance($row['module_name']);
+					$obj = CmsModuleLoader::get_module_class($row['module_name']);
 					if( $obj )
 					{
 						debug_buffer('calling module ' . $row['module_name'] . ' from event ' . $sub_name);

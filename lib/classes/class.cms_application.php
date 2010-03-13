@@ -174,6 +174,41 @@ class CmsApplication extends CmsObject
 		}
 		return self::$instance;
 	}
+	
+	public function get($name)
+	{
+		if (!isset($this->variables[$name])) {
+			//throw new InvalidArgumentException("Cannot get($name), $name is not set.");
+			return null;
+		}
+		return $this->variables[$name];
+	}
+
+	public function set($name, $value)
+	{
+		$this->variables[$name] = $value;
+	}
+
+    /**
+     * Getter overload method.  Called when an $obj->field and field
+     * does not exist in the object's variable list.  In this case,
+     * it will get a db or smarty instance (for backwards 
+     * compatibility), or call get on the given field name.
+     *
+     * @param string The field to look up
+     * @return mixed The value for that field, if it exists
+     * @author Ted Kulp
+     **/
+/*
+	public function __get($name)
+	{
+		if ($name == 'db')
+			return CmsDatabase::get_instance();
+		else if ($name == 'smarty')
+			return CmsSmarty::get_instance();
+		else
+			return $this->get($name);
+	}*/
 
 	function & GetDb()
 	{

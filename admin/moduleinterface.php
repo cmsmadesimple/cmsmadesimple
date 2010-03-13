@@ -155,8 +155,15 @@ if ($module_obj)
 	}
 	$id = 'm1_';
 	$params = GetModuleParameters($id);
-	$module_obj->set_id($id, ''); //admin gets no return id
-	echo $module_obj->run_action($action, $params);
+	if (is_subclass_of($module_obj, 'CmsModuleBase'))
+	{
+		$module_obj->set_id($id, ''); //admin gets no return id
+		echo $module_obj->run_action($action, $params);
+	}
+	else
+	{
+		$module_obj->DoActionBase($action, $id, $params, $returnid);
+	}
 	if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 	{
 		$content = @ob_get_contents();
