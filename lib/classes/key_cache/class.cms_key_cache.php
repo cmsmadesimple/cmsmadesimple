@@ -38,7 +38,7 @@ class CmsKeyCache extends CmsObject
 	
 	public static function get_impl_class()
 	{
-		if(class_exists('Memcache') && CmsConfig::get('use_memcache') == true)
+		if (CmsConfig::get('use_memcache') == true && class_exists('Memcache'))
 		{
 			return CmsMemcacheKeyCache::get_instance();
 		}

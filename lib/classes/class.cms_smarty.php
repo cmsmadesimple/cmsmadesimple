@@ -318,7 +318,7 @@ class CmsSmarty extends Smarty
 	{
 		debug_buffer('start global_content_get_timestamp');
 		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
+		$gcbops = $gCms->GetGlobalContentOperations();
 		$oneblob = $gcbops->LoadHtmlBlobByName($tpl_name);
 		if ($oneblob)
 		{
@@ -786,8 +786,7 @@ class CmsSmarty extends Smarty
 	 */
 	public static function load_plugins()
 	{
-		if ($smarty == null)
-			$smarty = self::get_instance();
+		$smarty = cms_smarty();
 		
 		$gCms = cmsms();
 		$plugins = &$gCms->cmsplugins;

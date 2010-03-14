@@ -76,6 +76,10 @@ function cms_autoload($class_name)
 // 	else if (CmsContentOperations::load_content_type($class_name))
 // 	{
 // 	}
+	else
+	{
+		CmsProfiler::get_instance()->mark('Failed to load ' . $class_name);
+	}
 }
 
 spl_autoload_register('cms_autoload');
@@ -756,11 +760,7 @@ function debug_buffer($var, $title="")
 	$gCms = cmsms();
 	if ($gCms)
 	{
-		$config =& $gCms->GetConfig();
-
-		//debug_to_log($var, $title='');
-
-		if($config["debug"] == true)
+		if(CmsConfig::get("debug") == true)
 		{
 			$gCms->errors[] = debug_display($var, $title, false, true);
 		}

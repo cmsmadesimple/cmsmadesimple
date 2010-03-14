@@ -141,7 +141,7 @@ class CmsApplication extends CmsObject
 		$this->userplugins         = array();
 		$this->userpluginfunctions = array();
 		$this->cmsplugins          = array();
-		$this->siteprefs           = array();
+		self::$siteprefs           = array();
 		
 		$this->config              = CmsConfig::get_instance();
 		
@@ -210,17 +210,17 @@ class CmsApplication extends CmsObject
 			return $this->get($name);
 	}*/
 
-	function & GetDb()
+	function GetDb()
 	{
 		return CmsDatabase::get_instance();
 	}
 
-	function & GetConfig()
+	function GetConfig()
 	{
         return CmsConfig::get_instance();
 	}
 	
-	function & GetModuleLoader()
+	function GetModuleLoader()
 	{
         if (!isset($this->moduleloader))
 		{
@@ -232,7 +232,7 @@ class CmsApplication extends CmsObject
 		return $this->moduleloader;
 	}
 	
-	function & GetModuleOperations()
+	function GetModuleOperations()
 	{
         if (!isset($this->moduleoperations))
 		{
@@ -244,7 +244,7 @@ class CmsApplication extends CmsObject
 		return $this->moduleoperations;
 	}
 	
-	function & GetUserOperations()
+	function GetUserOperations()
 	{
         if (!isset($this->useroperations))
 		{
@@ -256,7 +256,7 @@ class CmsApplication extends CmsObject
 		return $this->useroperations;
 	}
 	
-	function & GetContentOperations()
+	function GetContentOperations()
 	{
         if (!isset($this->contentoperations))
 		{
@@ -270,7 +270,7 @@ class CmsApplication extends CmsObject
 		return $this->contentoperations;
 	}
 	
-	function & GetBookmarkOperations()
+	function GetBookmarkOperations()
 	{
         if (!isset($this->bookmarkoperations))
 		{
@@ -282,7 +282,7 @@ class CmsApplication extends CmsObject
 		return $this->bookmarkoperations;
 	}
 	
-	function & GetTemplateOperations()
+	function GetTemplateOperations()
 	{
         if (!isset($this->templateoperations))
 		{
@@ -294,7 +294,7 @@ class CmsApplication extends CmsObject
 		return $this->templateoperations;
 	}
 	
-	function & GetStylesheetOperations()
+	function GetStylesheetOperations()
 	{
         if (!isset($this->stylesheetoperations))
 		{
@@ -306,7 +306,7 @@ class CmsApplication extends CmsObject
 		return $this->stylesheetoperations;
 	}
 	
-	function & GetGroupOperations()
+	function GetGroupOperations()
 	{
         if (!isset($this->groupoperations))
 		{
@@ -318,7 +318,7 @@ class CmsApplication extends CmsObject
 		return $this->groupoperations;
 	}
 	
-	function & GetGlobalContentOperations()
+	function GetGlobalContentOperations()
 	{
         if (!isset($this->globalcontentoperations))
 		{
@@ -330,7 +330,7 @@ class CmsApplication extends CmsObject
 		return $this->globalcontentoperations;
 	}
 	
-	function & GetUserTagOperations()
+	function GetUserTagOperations()
 	{
         if (!isset($this->usertagoperations))
 		{
@@ -342,7 +342,7 @@ class CmsApplication extends CmsObject
 		return $this->usertagoperations;
 	}
 	
-	function & GetPageInfoOperations()
+	function GetPageInfoOperations()
 	{
         if (!isset($this->pageinfooperations))
 		{

@@ -52,9 +52,9 @@ class CmsModuleBase extends CmsObject
 				//Make sure these are reset, in case there are two calls to the
 				//the same module in the same request
 				if ($this->id != null)
-					$obj->id = $this->id;
+					$this->loaded_includes[$key]->id = $this->id;
 				if ($this->return_id != null)
-					$obj->return_id = $this->return_id;
+					$this->loaded_includes[$key]->return_id = $this->return_id;
 			}
 			return $this->loaded_includes[$key];
 		}

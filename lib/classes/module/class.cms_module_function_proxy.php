@@ -62,8 +62,7 @@ class CmsModuleFunctionProxy extends CmsObject
 		{
 			if (is_callable(array($module, $lookup[1])))
 			{
-				//var_dump($module->get_name(), $lookup[1], $params);
-				echo call_user_func_array(array($module, $lookup[1]), array($params, $smarty));
+				echo call_user_func_array(array($module, $lookup[1]), array($params, &$smarty));
 			}
 		}
 	}

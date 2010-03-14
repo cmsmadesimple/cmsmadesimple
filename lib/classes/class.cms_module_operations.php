@@ -108,7 +108,7 @@ class CmsModuleOperations extends CmsObject
 		}
 	}
 
-	function cms_module_plugin($params,&$smarty)
+	public static function cms_module_plugin($params,&$smarty)
 	{
 		global $gCms;
 		$cmsmodules = &$gCms->modules;
