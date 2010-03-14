@@ -188,6 +188,7 @@ class CmsModuleBase extends CmsObject
 	 */
 	public function run_action($action_name, $params)
 	{
+		$params = $this->clean_param_hash($params, !$this->restrict_unknown_params);
 		return $this->do_action($action_name, $params);
 	}
 	
@@ -323,6 +324,57 @@ class CmsModuleBase extends CmsObject
 		}
 		
 		array_push($this->params, $ary);
+	}
+	
+	function clean_param_hash($data, $allow_unknown = false, $clean_keys = true)
+	{
+		$result = array();
+		foreach ($data as $key => $value)
+		{
+			$mapped = false;
+
+			foreach ($this->params as $set_param)
+			{
+				if ($key == $set_param['name'])
+				{
+					if (isset($set_param['filter']) && $set_param['filter'] != FILTER_NONE)
+					{
+						$filter_result = filter_var_array(array($key => $value), array($key => $set_param));
+						if ($filter_result && ($set_param['filter'] == FILTER_VALIDATE_BOOLEAN || $filter_result[$key] !== FALSE))
+							$value = $filter_result[$key];
+						else
+							$value = '';
+					}
+
+					$mapped = true;
+
+					break;
+				}
+			}
+
+			// we didn't clean this yet
+			if ($allow_unknown && !$mapped)
+			{
+				// but we're allowing unknown stuff so we'll just clean it.
+				$value = cms_htmlentities($value);
+				$mapped = true;
+			}
+
+			if ($clean_keys)
+			{
+				$key = cms_htmlentities($key);
+			}
+
+			if (!$mapped && !$allow_unknown)
+			{
+				trigger_error('Parameter '.$key.' is not known... dropped', E_USER_WARNING);
+				continue;
+			}
+
+			$result[$key]=$value;
+		}
+
+		return $result;
 	}
 	
 	public function get_header_html($admin = true)

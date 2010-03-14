@@ -36,12 +36,12 @@ class CoreMenuManager extends CmsModuleBase
 	{
 		$this->restrict_unknown_params();
 		
-		$this->create_parameter('collapse', '1', $this->lang('help_collapse'), FILTER_SANITIZE_NUMBER_INT);
-		$this->create_parameter('loadprops', '0', $this->lang('help_loadprops'), FILTER_SANITIZE_NUMBER_INT);
+		$this->create_parameter('collapse', false, $this->lang('help_collapse'), FILTER_VALIDATE_BOOLEAN);
+		$this->create_parameter('loadprops', false, $this->lang('help_loadprops'), FILTER_VALIDATE_BOOLEAN);
 		$this->create_parameter('items', 'contact,home', $this->lang('help_items'), FILTER_SANITIZE_STRING);
 		$this->create_parameter('number_of_levels', '1', $this->lang('help_number_of_levels'), FILTER_SANITIZE_NUMBER_INT);
-		$this->create_parameter('show_all', '0', $this->lang('help_show_all'), FILTER_SANITIZE_NUMBER_INT);
-		$this->create_parameter('show_root_siblings', '1', $this->lang('help_show_root_siblings'), FILTER_SANITIZE_NUMBER_INT);
+		$this->create_parameter('show_all', false, $this->lang('help_show_all'), FILTER_VALIDATE_BOOLEAN);
+		$this->create_parameter('show_root_siblings', true, $this->lang('help_show_root_siblings'), FILTER_VALIDATE_BOOLEAN);
 		$this->create_parameter('start_level', '2', $this->lang('help_start_level'), FILTER_SANITIZE_NUMBER_INT);
 		$this->create_parameter('start_element', '1.2', $this->lang('help_start_element'), FILTER_SANITIZE_STRING);
 		$this->create_parameter('start_page', 'home', $this->lang('help_start_page'), FILTER_SANITIZE_STRING);
@@ -71,7 +71,7 @@ class CoreMenuManager extends CmsModuleBase
 			if (!isset($params['number_of_levels']) || $params['number_of_levels'] >= $this->current_depth)
 			{
 				//Handle collapse param
-				if (!isset($params['collapse']) || $params['collapse'] != true || starts_with(cmsms()->variables['position'] . '.', $params['node']->hierarchy . '.'))
+				if (!isset($params['collapse']) || $params['collapse'] != true || starts_with(cmsms()->get('pageinfo')->content_hierarchy . '.', $params['node']->hierarchy . '.'))
 				{
 					$this->display_menu($params['node']->get_children(), $params, false);
 				}
