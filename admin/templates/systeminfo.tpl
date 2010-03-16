@@ -63,7 +63,7 @@
 	<div class="pageoverflow">
 		<p class="pagetext">{si_lang a=$key} ({$key}):</p>
 		<p class="pageinput">
-	{if isset($test->value)}&nbsp;{$test->value}{/if}
+	{if isset($test->value) && $test->display_value != 0}&nbsp;{$test->value}{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue}){/if}
 	{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}
 	{if isset($test->error_fragment)}<a class="external" rel="external" href="{$cms_install_help_url}#{$test->error_fragment}"><img src="themes/{$themename}/images/icons/system/info-external.gif" title="?" alt="?" /></a>{/if}
