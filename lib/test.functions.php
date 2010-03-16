@@ -24,6 +24,18 @@
  * @package CMS
  */
 
+class CmsInstallTest
+{
+	public $title = null;
+	public $res = null;
+	public $value = null;
+	public $secondvalue = null;
+	public $message = null;
+	public $ini_val = null;
+	public $error = null;
+    public $display_value = true;
+}
+
 /**
  * Array with PHP driver => DB server
  *
@@ -43,7 +55,7 @@ function getSupportedDBDriver()
 function getTestValues( $property )
 {
 	$range = array(
-		'php_version'			=> array('minimum'=>'4.3.0', 'recommended'=>'5.0.4'),
+		'php_version'			=> array('minimum'=>'5.2.4', 'recommended'=>'5.2.12'),
 		'gd_version'			=> array('minimum'=>2),
 		'memory_limit'			=> array('minimum'=>'16M', 'recommended'=>'24M'),
 		'max_execution_time'	=> array('minimum'=>30, 'recommended'=>60),
@@ -183,7 +195,7 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 			getTestReturn($test, $required);
 			return $test;
 		}
-		$test =new StdClass();
+		$test = new CmsInstallTest();
 		$test->title = $title;
 		if($required)
 		{
@@ -198,7 +210,7 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 	}
 //TODO
 
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if(count($drivers) > 0)
@@ -304,7 +316,7 @@ function getApacheModules( $module = false )
 */
 function & testDummy( $title, $value, $return, $message = '', $error_fragment = '', $error = '' )
 {
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 	$test->value = $value;
 	$test->secondvalue = null;
@@ -345,7 +357,7 @@ function & testConfig( $title, $varname, $testfunc = '', $message = '' )
 
 	if(! isset($test))
 	{
-		$test =new StdClass();
+		$test = new CmsInstallTest();
 		$test->title = $title;
 		$test->value = $value;
 		$test->secondvalue = null;
@@ -420,9 +432,9 @@ function testIni( &$test, $varname, $type, $opt = '' )
  * @var boolean $empty_is_ok
  * @var string  $error_fragment
 */
-function & testIntegerMask($required,$title,$var,$mask,$message = '',$ini = true,$negate = false,$error_fragment = '')
+function & testIntegerMask($required,$title,$var,$mask,$message = '',$ini = true,$negate = false,$display_value = true,$error_fragment = '')
 {
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 	
 	if( $ini )
@@ -466,6 +478,7 @@ function & testIntegerMask($required,$title,$var,$mask,$message = '',$ini = true
 		$test->res = 'green';
 	}
 
+	$test->display_value = $display_value;
 	getTestReturn($test, $required, $message, $error_fragment);
 	return $test;
 }
@@ -482,7 +495,7 @@ function & testIntegerMask($required,$title,$var,$mask,$message = '',$ini = true
 */
 function & testInteger( $required, $title, $var, $message = '', $ini = true, $empty_is_ok = true, $error_fragment = '' )
 {
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if($ini)
@@ -537,7 +550,7 @@ function & testInteger( $required, $title, $var, $message = '', $ini = true, $em
 */
 function & testString( $required, $title, $var, $message = '', $ini = true, $code_empty = 'green', $code_not_empty = 'yellow', $error_fragment = '' )
 {
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if($ini)
@@ -576,7 +589,7 @@ function & testString( $required, $title, $var, $message = '', $ini = true, $cod
 */
 function & testBoolean( $required, $title, $var, $message = '', $ini = true, $negative_test = false, $error_fragment = '' )
 {
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if($ini)
@@ -627,7 +640,7 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
 */
 function & testVersionRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $unlimited = null, $error_fragment='' )
 {
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if($ini)
@@ -686,7 +699,7 @@ function & testVersionRange( $required, $title, $var, $message = '', $minimum, $
 */
 function & testRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $test_as_bytes = false, $unlimited = null, $error_fragment = '' )
 {
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if($ini)
@@ -773,7 +786,7 @@ function returnBytes( $val )
  */
 function & testUmask( $required, $title, $umask, $message = '', $debug = false, $dir = '', $file = '_test_umask_', $data = 'this is a test' )
 {
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if(empty($dir))
@@ -968,7 +981,7 @@ function permission_octal2string( $mode )
 */
 function & testCreateDirAndFile( $required, $title, $message = '', $debug = false, $dir = '_test_dir_file_', $file = '_test_dir_file_' )
 {
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 	$dir = cms_join_path(TMP_CACHE_LOCATION, $dir);
 	$file = cms_join_path($dir, $file);
@@ -1021,7 +1034,7 @@ function & testCreateDirAndFile( $required, $title, $message = '', $debug = fals
 */
 function & testDirWrite( $required, $title, $dir, $message = '', $quick = 0, $debug = false, $file = '_test_dir_write_', $data = 'this is a test' )
 {
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if(empty($dir))
@@ -1096,7 +1109,7 @@ function & testDirWrite( $required, $title, $dir, $message = '', $quick = 0, $de
 */
 function & testFileWritable( $required, $title, $file, $message = '', $debug = false )
 {
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if(empty($file))
@@ -1158,7 +1171,7 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 		$url = 'http://dev.cmsmadesimple.org/latest_version.php';
 	}
 
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 	//$test->value = $url;
 
@@ -1393,7 +1406,7 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 */
 function & testFileChecksum( $required, $title, $file, $checksum, $message = '', $formattime = '%c', $debug = false )
 {
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 	$test->value = $file;
 
@@ -1527,7 +1540,7 @@ function & testFileUploads( $inputname )
 		return $_ary;
 	}
 
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->files = array();
 
 	$result = testBoolean('', '', 'file_uploads', '', true, false);
@@ -1589,7 +1602,7 @@ function & testFileUploads( $inputname )
 */
 function & testGDVersion( $required, $title, $minimum, $message = '', $error_fragment = '' )
 {
-	$test =new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	$gd_version_number = GDVersion();
