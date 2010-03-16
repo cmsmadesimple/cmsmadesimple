@@ -364,13 +364,25 @@ function & testConfig( $title, $varname, $testfunc = '', $message = '' )
  * @var string $varname
  * @var string $type
 */
-function testIni( &$test, $varname, $type )
+function testIni( &$test, $varname, $type, $opt = '' )
 {
 	$error = null;
 	$str = ini_get($varname);
 
 	switch($type)
 	{
+  	    case 'and':
+			if($str === '') break;
+			$str = (int) $str;
+			if( empty($str) )
+			{
+				$str = (int)$str;
+			}
+			else
+			{
+				$str = (int)$str & (int)$opt;
+			}
+			break;
 		case 'boolean':
 			$str = (bool) $str;
 			break;
@@ -395,6 +407,67 @@ function testIni( &$test, $varname, $type )
 	$test->ini_val = $str;
 	$test->error = $error;
 	return true;
+}
+
+/**
+ * @return object
+ * @var boolean $required
+ * @var string  $title
+ * @var mixed   $var
+ * @var integer $bitmask
+ * @var string  $message
+ * @var boolean $ini
+ * @var boolean $empty_is_ok
+ * @var string  $error_fragment
+*/
+function & testIntegerMask($required,$title,$var,$mask,$message = '',$ini = true,$negate = false,$error_fragment = '')
+{
+	$test = new StdClass();
+	$test->title = $title;
+	
+	if( $ini )
+	{
+		testIni($test,$var,'and',$mask);
+	}
+	else
+	{
+		$test->ini_val = $var;
+	}
+	
+	// did the ini test work.
+	if( $test->ini_val === '' )
+	{
+		$test->value = 0;
+	}
+	else
+	{
+		$test->value = $test->ini_val;
+	}
+
+	$res = $test->value;
+	if( $negate )
+	{
+		$res = !(int)$res;
+	}
+
+	if(empty($res))
+	{
+		if($required)
+		{
+			$test->res = 'red';
+		}
+		else
+		{
+			$test->res = 'yellow';
+		}
+	}
+	else
+	{
+		$test->res = 'green';
+	}
+
+	getTestReturn($test, $required, $message, $error_fragment);
+	return $test;
 }
 
 /**

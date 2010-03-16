@@ -275,7 +275,8 @@ class CMSModule
 	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */
-	function GetHelp($lang = 'en_US')
+	//	function GetHelp($lang = 'en_US')
+	function GetHelp()
 	{
 		return '';
 	}
@@ -387,7 +388,8 @@ class CMSModule
 	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */
-	function GetAdminDescription($lang = 'en_US')
+	//	function GetAdminDescription($lang = 'en_US')
+	function GetAdminDescription()
 	{
 		return '';
 	}
