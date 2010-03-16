@@ -154,6 +154,9 @@ $tmp[0]['gd_version'] = testGDVersion(0, 'gd_version', $minimum, '', 'min_GD_ver
 $tmp[0]['tempnam_function'] = testBoolean(0, 'tempnam_function', function_exists('tempnam'), '', false, false, 'Function_tempnam_disabled');
 
 $tmp[0]['magic_quotes_runtime'] = testBoolean(0, 'magic_quotes_runtime', 'magic_quotes_runtime', lang('magic_quotes_runtime_on'), true, true, 'magic_quotes_runtime_On');
+$tmp[0]['E_STRICT'] = testIntegerMask(1,lang('test_error_estrict'), 'error_reporting',E_STRICT,lang('test_estrict_failed'),true,true,lang('info_estrict_failed'));
+$tmp[0]['E_DEPRECATED'] =  testIntegerMask(1,lang('test_error_edeprecated'), 'error_reporting',E_DEPRECATED,lang('test_edeprecated_failed'),true,true,lang('info_edeprecated_failed'));
+
 
 $tmp[1]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
 

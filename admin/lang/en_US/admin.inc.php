@@ -1,4 +1,10 @@
 <?php
+$lang['admin']['E_STRICT'] = 'Is E_STRICT disabled in error_reporting';
+$lang['admin']['test_estrict_failed'] = 'E_STRICT is enabled in the error_reporting';
+$lang['admin']['info_estrict_failed'] = 'Some libraries that CMSMS uses do not work well with E_STRICT.  Please disable this before continuing';
+$lang['admin']['E_DEPRECATED'] = 'Is E_DEPRECATED disabled in error_reporting';
+$lang['admin']['test_edeprecated_failed'] = 'E_DEPRECATED is enabled';
+$lang['admin']['info_edeprecated_failed'] = 'If E_DEPRECATED is enabled in your error reporting users will see alot of warning messages that could effect the display and functionalty';
 $lang['admin']['session_use_cookies'] = 'Sessions are allowed to use Cookies';
 $lang['admin']['errorgettingcontent'] = 'Could not retrieve information for the specified content object';
 $lang['admin']['errordeletingcontent'] = 'Error deleting content (either this page has children or is the default content)';
