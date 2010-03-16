@@ -155,7 +155,10 @@ $tmp[0]['tempnam_function'] = testBoolean(0, 'tempnam_function', function_exists
 
 $tmp[0]['magic_quotes_runtime'] = testBoolean(0, 'magic_quotes_runtime', 'magic_quotes_runtime', lang('magic_quotes_runtime_on'), true, true, 'magic_quotes_runtime_On');
 $tmp[0]['E_STRICT'] = testIntegerMask(1,lang('test_error_estrict'), 'error_reporting',E_STRICT,lang('test_estrict_failed'),true,true,false);
-$tmp[0]['E_DEPRECATED'] =  testIntegerMask(1,lang('test_error_edeprecated'), 'error_reporting',E_DEPRECATED,lang('test_edeprecated_failed'),true,true,false);
+if( defined('E_DEPRECATED') )
+  {
+    $tmp[0]['E_DEPRECATED'] =  testIntegerMask(1,lang('test_error_edeprecated'), 'error_reporting',E_DEPRECATED,lang('test_edeprecated_failed'),true,true,false);
+  }
 
 
 $tmp[1]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
