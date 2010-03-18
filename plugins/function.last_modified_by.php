@@ -37,22 +37,27 @@ function smarty_cms_function_last_modified_by($params, &$smarty)
 	else
 	{
 		$format = $params['format'];
-		global $gCms;
 		$userops =& $gCms->GetUserOperations();
 		$thisuser =& $userops->LoadUserByID($id);
 	}
 
 
 
+  $output = '';
   if($format==="id") {
-     return $id;
+     $output = $id;
   } else if ($format==="username") {
-     return cms_htmlentities($thisuser->username);
+     $output = cms_htmlentities($thisuser->username);
   } else if ($format==="fullname") {
-     return cms_htmlentities($thisuser->firstname ." ". $thisuser->lastname);
-  } else {
-     return "";
+     $output = cms_htmlentities($thisuser->firstname ." ". $thisuser->lastname);
   }
+
+  if( isset($params['assign']) ) {
+    $smarty = $gCms->GetSmarty();
+    $smarty->assign($params['assign'],$output);
+    return;
+  }
+  return $output;
 }
 
 function smarty_cms_help_function_last_modified_by()
@@ -63,9 +68,12 @@ function smarty_cms_help_function_last_modified_by()
 function smarty_cms_about_function_last_modified_by() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Version: 1.1</p>
 	<p>
 	Change History:<br/>
+        <ul>
+	   <li>v1.1 - (calguy) Added assign param.</li>
+        </ul>
 	</p>
 	<?php
 }
