@@ -21,7 +21,7 @@
 class CmsModuleLoader extends CmsObject
 {
 	public static $module_list = null;
-	public static $core_modules = array('CoreMenuManager', 'Search', 'ModuleManager');
+	public static $core_modules = array('CoreMenuManager', 'Search', 'ModuleManager', 'SwiftMailer');
 	public static $plugin_lookup = array();
 	
 	function __construct()
@@ -253,7 +253,9 @@ class CmsModuleLoader extends CmsObject
 						self::$module_list[$name]['object'] = new $name();
 						
 						if (!self::$module_list[$name]['old_module'])
+						{
 							self::$module_list[$name]['object']->setup();
+						}
 						
 						return self::$module_list[$name]['object'];
 					}

@@ -189,6 +189,7 @@ class CmsModuleBase extends CmsObject
 	public function run_action($action_name, $params)
 	{
 		$params = $this->clean_param_hash($params, !$this->restrict_unknown_params);
+		
 		return $this->do_action($action_name, $params);
 	}
 	

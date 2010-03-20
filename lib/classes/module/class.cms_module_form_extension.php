@@ -183,7 +183,7 @@ class CmsModuleFormExtension extends CmsModuleExtension
 	{
 		$default_params = array(
 			'name' => $this->id . coalesce_key($params, 'name', 'input', FILTER_SANITIZE_STRING),
-			'value' => coalesce_key($params, 'value', '', FILTER_SANITIZE_STRING),
+			'value' => coalesce_key($params, 'value', ''),
 			'size' => coalesce_key($params, 'size', 25, FILTER_SANITIZE_NUMBER_INT),
 			'maxlength' => coalesce_key($params, 'maxlength', 255, FILTER_SANITIZE_NUMBER_INT),
 			'extra' => coalesce_key($params, 'extra', ''),

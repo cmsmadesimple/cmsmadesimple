@@ -378,7 +378,7 @@ class CmsApplication extends CmsObject
 		if ($db->IsConnected())
 		{
 			$query = "SELECT sitepref_name, sitepref_value from {siteprefs}";
-			$dbresult = $db->CacheExecute($query);
+			$dbresult = $db->Execute($query);
 
 			while ($dbresult && !$dbresult->EOF)
 			{
@@ -403,7 +403,8 @@ class CmsApplication extends CmsObject
 
 		if (count(self::$siteprefs) == 0)
 		{
-			self::$siteprefs = CmsCache::get_instance()->call('CmsApplication::load_site_preferences');
+			//self::$siteprefs = CmsCache::get_instance()->call('CmsApplication::load_site_preferences');
+			self::$siteprefs = CmsApplication::load_site_preferences();
 		}
 
 		if (isset(self::$siteprefs[$prefname]))
