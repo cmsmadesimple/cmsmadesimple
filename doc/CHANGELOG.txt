@@ -1,6 +1,10 @@
 Version 1.7 - Cape Verde
 -----------------------------
 - We now support php 5.3
+  Note: Minimum PHP Version required is 5.2.4 though we recommend PHP 5.2.12
+    - Users that are using many of the newer modules that take advantage of PHP 5's OOP features
+      may experience strange problems when using earlier versions of PHP 5.2.  It is therefore
+      recommended that your PHP version be updated frequently.
   Note: We do NOT support E_DEPRECATED or E_STRICT at this time.
   Note: We no longer support PHP 4.x
 - The installer no longer performs smarty caching
