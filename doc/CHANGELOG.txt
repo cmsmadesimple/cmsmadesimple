@@ -12,6 +12,10 @@ Version 1.7 - Cape Verde
   - Now not depending on admin-theme's icons anymore. Thanks Nuno
   - Updated to Tiny 3.3-final
   - Added an option to generate cms-compatible thumbnails when uploading files though the filepicker.
+- Search 1.6.2
+  - Adds the detailpage param (can be overriden by modules)
+- ModuleManager 1.3.3
+  - Minor improvements... mostly for PHP 5.3
 - Remove the long-deprecated ImageGallery plugin
 - Various small bug fixes
 
