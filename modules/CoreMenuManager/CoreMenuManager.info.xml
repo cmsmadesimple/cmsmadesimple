@@ -24,6 +24,6 @@
 	    <callback>menu_children_plugin_callback</callback>
 	  </plugin>
 	</plugins>
-	<auto_install>true</auto_install>
-	<auto_upgrade>true</auto_upgrade>
+	<auto_install>false</auto_install>
+	<auto_upgrade>false</auto_upgrade>
 </module_info>

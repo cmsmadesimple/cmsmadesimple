@@ -46,8 +46,8 @@ class CoreMenuManager extends CmsModuleBase
 		$this->create_parameter('start_element', '1.2', $this->lang('help_start_element'), FILTER_SANITIZE_STRING);
 		$this->create_parameter('start_page', 'home', $this->lang('help_start_page'), FILTER_SANITIZE_STRING);
 		$this->create_parameter('template', 'simple_navigation.tpl', $this->lang('help_template'), FILTER_SANITIZE_STRING);
-		$this->create_parameter('excludeprefix','',$this->Lang('help_excludeprefix'), FILTER_SANITIZE_STRING);
-		$this->create_parameter('includeprefix','',$this->Lang('help_includeprefix'), FILTER_SANITIZE_STRING);
+		$this->create_parameter('excludeprefix', '', $this->Lang('help_excludeprefix'), FILTER_SANITIZE_STRING);
+		$this->create_parameter('includeprefix', '', $this->Lang('help_includeprefix'), FILTER_SANITIZE_STRING);
 		
 		//$this->register_module_plugin('menu');
 		//$this->register_module_plugin('menu_children', 'menu_children_plugin_callback');

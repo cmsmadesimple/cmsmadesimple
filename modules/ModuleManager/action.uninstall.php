@@ -21,6 +21,8 @@ if (!isset($gCms)) die("Can't call actions directly!");
 if ($this->Permission->check('Modify Modules'))
 {
 	$name = coalesce_key($params, 'module_name', '');
+	
+	//var_dump($params);
 
 	if ($name != '')
 	{

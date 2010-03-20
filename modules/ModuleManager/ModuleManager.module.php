@@ -180,6 +180,8 @@ class ModuleManager extends CmsModuleBase
 		$this->includes = array('nusoap' => 'nuSOAP');
 		$this->restrict_unknown_params();
 		
+		$this->create_parameter('module_name', '', '', FILTER_SANITIZE_STRING);
+		
 		/*
 		$this->SetParameterType('curletter',CLEAN_STRING);
 		$this->SetParameterType('name',CLEAN_STRING);
