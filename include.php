@@ -165,10 +165,5 @@ CmsModuleLoader::load_module_data();
 
 CmsProfiler::get_instance()->mark('End of include');
 
-function sanitize_get_var(&$value, $key)
-{
-    $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value);
-}
-
 # vim:ts=4 sw=4 noet
 ?>

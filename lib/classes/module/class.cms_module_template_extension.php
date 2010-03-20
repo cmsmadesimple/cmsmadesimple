@@ -60,17 +60,20 @@ class CmsModuleTemplateExtension extends CmsModuleExtension
 		}
 	}
 
-	public function set($template_type, $template_name, $content, $default = false)
+	public function set($template_type, $template_name, $content, $default = null)
 	{
 		$template = cms_orm('CmsModuleTemplate')->find_by_module_and_template_type_and_name($this->module->get_name(), $template_type, $template_name);
 		if ($template != null)
 		{
 			$template->content = $content;
-			$template->default = $default;
+			if ($default !== null) //Only want to change it if it's set explicitly
+				$template->default = $default;
 			return $template->save();
 		}
 		else
 		{
+			if ($default === null) //No default given? Default to false.
+				$default = false;
 			$template = new CmsModuleTemplate();
 			$template->module = $this->module->get_name();
 			$template->template_type = $template_type;
