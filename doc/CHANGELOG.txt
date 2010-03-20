@@ -4,6 +4,10 @@ Version 1.7 - Cape Verde
   Note: We do NOT support E_DEPRECATED or E_STRICT at this time.
   Note: We no longer support PHP 4.x
 - The installer no longer performs smarty caching
+- Improvements to TinYMCE
+  - Now not depending on admin-theme's icons anymore. Thanks Nuno
+  - Updated to Tiny 3.3-final
+  - Added an option to generate cms-compatible thumbnails when uploading files though the filepicker.
 - Remove the long-deprecated ImageGallery plugin
 - Various small bug fixes
 
