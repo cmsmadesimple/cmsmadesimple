@@ -1,3 +1,10 @@
+Version 1.7 - Cape Verde
+-----------------------------
+- We now support php 5.3
+  Note: We do NOT support E_DEPRECATED or E_STRICT at this time.
+- The installer no longer performs smarty caching
+- Various small bug fixes
+
 Version 1.6.7 - Teremba Bay
 -----------------------------
  - #3999 Upload a file with apostrophe make problem

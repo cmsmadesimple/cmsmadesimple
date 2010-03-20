@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.7.0-beta1";
-$CMS_VERSION_NAME = "Teremba Bay";
+$CMS_VERSION = "1.7";
+$CMS_VERSION_NAME = "Cape Verde";
 $CMS_SCHEMA_VERSION = "32";
 
 define('CMS_VERSION', $CMS_VERSION);
