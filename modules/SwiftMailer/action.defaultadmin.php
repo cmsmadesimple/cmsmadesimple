@@ -1,11 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
-# Module: CMSMailer - a simple wrapper around phpmailer
-# Version: 1.73.10, Robert Campbell <rob@techcom.dyndns.org>
-#
-#-------------------------------------------------------------------------
-# CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
-# This project's homepage is: http://www.cmsmadesimple.org
+# Module: SwiftMailer - a simple wrapper around swift
+# Version: 1.0, Ted Kulp <ted@cmsmadesimple.org>
 #
 #-------------------------------------------------------------------------
 #
@@ -24,6 +20,8 @@
 # Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
 #
 #-------------------------------------------------------------------------
+
+if (!isset($gCms)) exit;
 
     if( !$this->Permission->check('Modify Site Preferences') )
       return;
