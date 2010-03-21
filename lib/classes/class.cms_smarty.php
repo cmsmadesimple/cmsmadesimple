@@ -29,7 +29,7 @@ class CmsSmarty extends Smarty
 		
 		$config = cms_config();
 
-		$this->plugins_dir = array(cms_join_path(ROOT_DIR, 'lib', 'smarty', 'plugins'), cms_join_path(ROOT_DIR, 'plugins'));
+		$this->plugins_dir = array(cms_join_path(ROOT_DIR, 'lib', 'smarty', 'plugins'), cms_join_path(ROOT_DIR, 'plugins'), cms_join_path(ROOT_DIR, 'lib', 'module_plugins'));
 
 		if (isset($CMS_ADMIN_PAGE) && $CMS_ADMIN_PAGE == 1)
 		{

@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_block_mod_form($params, $content, &$smarty, &$repeat)
+function smarty_block_mod_form($params, $content, &$smarty, &$repeat)
 {
 	$module = $smarty->get_template_vars('cms_mapi_module');
 	$id = $smarty->get_template_vars('cms_mapi_id');
@@ -26,7 +26,7 @@ function smarty_cms_block_mod_form($params, $content, &$smarty, &$repeat)
 	{
 		if (isset($content))
 		{
-			return $module->Form->form_start($params) . $content . $module->Form->create_form_end();
+			return $module->Form->form_start($params) . $content . $module->Form->form_end();
 		}
 	}
 }

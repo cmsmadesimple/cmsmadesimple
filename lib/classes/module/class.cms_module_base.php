@@ -98,6 +98,17 @@ class CmsModuleBase extends CmsObject
 	}
 	
 	/**
+	 * Returns the directory that the module lives in.
+	 *
+	 * @return string The full path of the module
+	 * @author Ted Kulp
+	 */
+	public function get_module_path()
+	{
+		return cms_join_path(ROOT_DIR, 'modules', $this->get_name());
+	}
+	
+	/**
 	 * Returns a list of filter ids so passed filter constants can 
 	 * be checked and are valid. Results are cached in the class.
 	 *
@@ -391,6 +402,38 @@ class CmsModuleBase extends CmsObject
 	public function lang($str)
 	{
 		return $str;
+	}
+	
+	/**
+	 * Registers a class into the ORM system for use.
+	 *
+	 * @param string Name of the class
+	 * @param string File, relative to the module's path, the class resides in
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public function register_data_object($class_name, $file_name = '')
+	{
+		if ($file_name == '')
+		{
+			$file_name = cms_join_path($this->get_module_path(), 'class.' . underscore($class_name) . '.php');
+		}
+		else
+		{
+			//Make sure it can't load files outside of the module's directory
+			if (!starts_with($file_name, $this->get_module_path()))
+			{
+				return false;
+			}
+		}
+
+		if (include($file_name))
+		{
+			$mgr = CmsObjectRelationalManager::get_instance();
+			$mgr->classes[underscore($class_name)] = new $class_name;
+			return true;
+		}
+		return false;
 	}
 
 }

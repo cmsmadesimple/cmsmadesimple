@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -16,19 +16,29 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_block_tab_content($params, $content, &$smarty, &$repeat)
+class CmsModuleDatabaseExtension extends CmsModuleExtension
 {
-	$module = $smarty->get_template_vars('cms_mapi_module');
-	$id = $smarty->get_template_vars('cms_mapi_id');
-	$return_id = $smarty->get_template_vars('cms_mapi_return_id');
-	
-	if (!$repeat)
+	function __construct($module)
 	{
-		if (isset($content))
-		{
-			return $module->Tabs->start_tab($params['name']) . $content . $module->Tabs->end_tab();
-		}
+		parent::__construct($module);
 	}
+
+	public function create_table($table, $fields)
+	{
+		CmsDatabase::create_table($table, $fields);
+	}
+	
+	public function create_index($table, $name, $field)
+	{	
+		CmsDatabase::create_index($table, $name, $field);
+	}
+	
+	public function drop_table($table)
+	{
+		CmsDatabase::drop_table($table);
+	} 
+
 }
 
+# vim:ts=4 sw=4 noet
 ?>

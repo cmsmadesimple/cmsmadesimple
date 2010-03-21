@@ -15,21 +15,39 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id$
 
-function smarty_block_mod_label($params, $content, &$smarty, &$repeat)
+class CmsModuleOrm extends CmsObjectRelationalMapping
 {
-	$module = $smarty->get_template_vars('cms_mapi_module');
-	$id = $smarty->get_template_vars('cms_mapi_id');
-	$return_id = $smarty->get_template_vars('cms_mapi_return_id');
+	/**
+	 * Variable to hold the name of the module that this class belongs to
+	 *
+	 * @var string Name of the module
+	 **/
+	public $module_name = '';
+	
+	/**
+	 * Variable to hold the module that this object references.  This way, the
+	 * ORM'd class has access to the modules methods, including lang().
+	 *
+	 * @var object The module object, if it exists and is installed/active.
+	 **/
+	var $module = null;
 
-    if (!$repeat)
+	function __construct()
 	{
-		if (isset($content))
-		{	
-        	//return $module->create_label_for_input($id, $params['name'], $content, coalesce_key($params, 'addttext', ''), coalesce_key($params, 'id', ''));
-			return "<label for=\"".$params['name']."\">".$content."</label>";
-    	}
-    }
+		parent::__construct();
+		
+		if ($this->module_name == '')
+		{
+			trigger_error('Class ' . get_class($this) . ' doesn\'t define $module_name.  $this->mod will not be available');
+		}
+		else
+		{
+			$this->module = CmsModuleLoader::get_module_class($this->module_name);
+		}
+	}
 }
 
 # vim:ts=4 sw=4 noet

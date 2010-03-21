@@ -128,16 +128,16 @@ class CmsModuleTemplateExtension extends CmsModuleExtension
 		$smarty = cms_smarty();
 		
 		if ($id == '')
-			$id = $this->id;
+			$id = $this->module->id;
 		
 		if ($return_id == '')
-			$return_id = $this->return_id;
+			$return_id = $this->module->return_id;
 
 		$old_module = null;
 		if ($smarty->get_template_vars('cms_mapi_module') != null)
 			$old_module = $smarty->get_template_vars('cms_mapi_module');
 
-		$smarty->assign_by_ref('cms_mapi_module', $this);
+		$smarty->assign_by_ref('cms_mapi_module', $this->module);
 		$smarty->assign('cms_mapi_id', $id);
 		$smarty->assign('cms_mapi_return_id', $return_id);
 
@@ -162,7 +162,7 @@ class CmsModuleTemplateExtension extends CmsModuleExtension
 		if ($smarty->get_template_vars('cms_mapi_module') != null)
 			$old_module = $smarty->get_template_vars('cms_mapi_module');
 
-		$smarty->assign_by_ref('cms_mapi_module', $this);
+		$smarty->assign_by_ref('cms_mapi_module', $this->module);
 		$smarty->assign('cms_mapi_id', $id);
 		$smarty->assign('cms_mapi_return_id', $return_id);
 
