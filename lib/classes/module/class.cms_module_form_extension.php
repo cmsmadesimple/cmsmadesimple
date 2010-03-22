@@ -527,6 +527,7 @@ class CmsModuleFormExtension extends CmsModuleExtension
 		
 		$items = $params['items'];
 		unset($params['items']);
+		
 		if (!is_array($items) && strlen($items) > 0)
 		{
 			$ary = array_chunk(explode(',', $items), 2);

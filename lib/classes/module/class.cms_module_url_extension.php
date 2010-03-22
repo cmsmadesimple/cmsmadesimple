@@ -27,7 +27,7 @@ class CmsModuleUrlExtension extends CmsModuleExtension
 	{
 		$default_params = array(
 			'action' => coalesce_key($params, 'action', 'default', FILTER_SANITIZE_URL),
-			'contents' => coalesce_key($params, 'contents', ''),
+			'value' => coalesce_key($params, 'value', ''),
 			'warn_message' => coalesce_key($params, 'warn_message', '', FILTER_SANITIZE_STRING),
 			'only_href' => coalesce_key($params, 'only_href', false, FILTER_VALIDATE_BOOLEAN),
 			'inline' => coalesce_key($params, 'inline', false, FILTER_VALIDATE_BOOLEAN),
@@ -129,14 +129,14 @@ class CmsModuleUrlExtension extends CmsModuleExtension
 			$extra = $params['extra'];
 		}
 		
-		return start_tag('a', $link_params, false, $extra) . $params['contents'] . end_tag('a');
+		return start_tag('a', $link_params, false, $extra) . $params['value'] . end_tag('a');
 	}
 
 	function content_link($params = array(), $check_keys = false)
 	{
 		$default_params = array(
 			'page_id' => coalesce_key($params, 'action', 'default', FILTER_SANITIZE_INTEGER),
-			'contents' => coalesce_key($params, 'contents', ''),
+			'value' => coalesce_key($params, 'value', ''),
 			'only_href' => coalesce_key($params, 'only_href', false, FILTER_VALIDATE_BOOLEAN),
 			'id_suffix' => coalesce_key($params, 'id_suffix', '', FILTER_SANITIZE_STRING),
 			'class' => coalesce_key($params, 'class', '', FILTER_SANITIZE_STRING),
@@ -180,13 +180,13 @@ class CmsModuleUrlExtension extends CmsModuleExtension
 			$extra = $params['extra'];
 		}
 		
-		return start_tag('a', $link_params, false, $extra) . $params['contents'] . end_tag('a');
+		return start_tag('a', $link_params, false, $extra) . $params['value'] . end_tag('a');
 	}
 
 	function return_link($params = array(), $check_keys = false)
 	{
 		$default_params = array(
-			'contents' => coalesce_key($params, 'contents', ''),
+			'value' => coalesce_key($params, 'value', ''),
 			'only_href' => coalesce_key($params, 'only_href', false, FILTER_VALIDATE_BOOLEAN),
 			'id_suffix' => coalesce_key($params, 'id_suffix', '', FILTER_SANITIZE_STRING),
 			'class' => coalesce_key($params, 'class', '', FILTER_SANITIZE_STRING),
@@ -250,7 +250,7 @@ class CmsModuleUrlExtension extends CmsModuleExtension
 			$extra = $params['extra'];
 		}
 		
-		return start_tag('a', $link_params, false, $extra) . $params['contents'] . end_tag('a');
+		return start_tag('a', $link_params, false, $extra) . $params['value'] . end_tag('a');
 	}
 }
 

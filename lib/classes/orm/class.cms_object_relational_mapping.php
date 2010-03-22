@@ -781,6 +781,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	function save()
 	{
 		CmsCache::get_instance('orm')->clear();
+		cms_db()->CacheFlush();
 		
 		$this->before_validation_caller();
 
@@ -1043,6 +1044,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	function delete($id = -1)
 	{
 		CmsCache::get_instance('orm')->clear();
+		cms_db()->CacheFlush();
+		
 		if ($id > -1)
 		{
 			$method = 'find_by_' . $this->id_field;

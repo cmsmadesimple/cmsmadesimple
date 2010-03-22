@@ -1705,7 +1705,8 @@
 	{
 	global $ADODB_CACHE_DIR, $ADODB_CACHE;
 		
-		if (empty($ADODB_CACHE)) return false;
+		//if (empty($ADODB_CACHE)) return false;
+		if (empty($ADODB_CACHE)) $this->_CreateCache();
 		
 		if (!$sql) {
 			 $ADODB_CACHE->flushall($this->debug);

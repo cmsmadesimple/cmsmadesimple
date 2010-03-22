@@ -101,8 +101,10 @@ class CmsDatabase extends CmsObject
 		}
 		
 		$dbinstance = null;
-
-		$_GLOBALS['ADODB_CACHE_DIR'] = cms_join_path(ROOT_DIR, 'tmp', 'cache');
+		
+		//Globals are teh lame
+		global $ADODB_CACHE_DIR;
+		$ADODB_CACHE_DIR = cms_join_path(ROOT_DIR, 'tmp', 'cache');
 
 		//require_once(cms_join_path(ROOT_DIR, 'lib', 'adodb', 'adodb-exceptions.inc.php'));
 		require_once(cms_join_path(ROOT_DIR, 'lib', 'adodb', 'adodb.inc.php'));
