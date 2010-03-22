@@ -86,9 +86,7 @@ class BlogPost extends CmsModuleOrm
 		$module = $smarty->get_template_vars('cms_mapi_module');
 		if ($module != null && $module instanceof Blog)
 		{
-			$id = $smarty->get_template_vars('cms_mapi_id');
-			$return_id = $smarty->get_template_vars('cms_mapi_return_id');
-			return $module->create_link($id, 'detail', $return_id, '', array('post_id' => $this->id), '', true, false, '', false, 'blog/' . $this->params['url']);
+			return $module->Url->link(array('action' => 'detail', 'post_id' => $this->id, 'pretty_url' => 'blog/' . $this->params['url'], 'only_href' => true));
 		}
 		else
 		{

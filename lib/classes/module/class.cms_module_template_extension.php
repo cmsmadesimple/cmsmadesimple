@@ -154,19 +154,29 @@ class CmsModuleTemplateExtension extends CmsModuleExtension
 		return $smarty->is_cached('module_db_tpl:' . $this->module->get_name() . ';' . $template_type . ';' . $template_name, $cache_id, ($designation != '' ? $designation : $this->module->get_name()));
 	}
 
-	public function process_from_database($id, $return_id, $template_type, $template_name = '', $designation = '', $cache_id = '')
+	public function process_from_database($template_type, $template_name = '', $id = '', $return_id = '', $designation = '', $cache_id = '')
 	{
 		$smarty = cms_smarty();
 
 		$old_module = null;
 		if ($smarty->get_template_vars('cms_mapi_module') != null)
 			$old_module = $smarty->get_template_vars('cms_mapi_module');
+		
+		if ($id == '')
+			$id = $this->module->id;
+		
+		if ($return_id == '')
+			$return_id = $this->module->return_id;
 
 		$smarty->assign_by_ref('cms_mapi_module', $this->module);
 		$smarty->assign('cms_mapi_id', $id);
 		$smarty->assign('cms_mapi_return_id', $return_id);
-
-		$result = $smarty->fetch('module_db_tpl:' . $this->module->get_name() . ';' . $template_type . ';' . $template_name, $cache_id, ($designation != '' ? $designation : $this->module->get_name()));
+		
+		$resource = 'module_db_tpl:' . $this->module->get_name() . ';' . $template_type;
+		if ($template_name != '')
+			$resource .= ';' . $template_name;
+		
+		$result = $smarty->fetch($resource, $cache_id, ($designation != '' ? $designation : $this->module->get_name()));
 
 		if ($old_module != null)
 			$smarty->assign_by_ref('cms_mapi_module', $old_module);

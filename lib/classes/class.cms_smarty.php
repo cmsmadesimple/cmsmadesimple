@@ -220,13 +220,25 @@ class CmsSmarty extends Smarty
 	}
 
 	function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)
-	{   
+	{
 		$gCms = cmsms();
 		$db = cms_db();
 		$config = cms_config();
+		
+		$params = explode(';', $tpl_name);
 
-		$query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? AND template_name = ?";
-		$row = $db->GetRow($query, explode(';', $tpl_name));
+		$row = null;
+		
+		if (count($params) == 2)
+		{
+			$query = "SELECT content from {module_templates} WHERE module_name = ? AND template_type = ? AND default_template = 1";
+			$row = $db->GetRow($query, $params);
+		}
+		else if (count($params) == 3)
+		{
+			$query = "SELECT content from {module_templates} WHERE module_name = ? AND template_type = ? AND template_name = ?";
+			$row = $db->GetRow($query, $params);
+		}
 
 		if ($row)
 		{
@@ -242,33 +254,31 @@ class CmsSmarty extends Smarty
 		$gCms = cmsms();
 		$db = cms_db();
 		$config = cms_config();
+		
+		$params = explode(';', $tpl_name);
 
-		if( isset($gCms->variables['module_template_cache']) &&
-			isset($gCms->variables['module_template_cache'][$tpl_name]) )
+		$row = null;
+		
+		//TODO: Make me cache, please?
+		
+		if (count($params) == 2)
 		{
-			$tpl_timestamp = $gCms->variables['module_template_cache'][$tpl_name];
+			$query = "SELECT modified_date from {module_templates} WHERE module_name = ? AND template_type = ? AND default_template = 1";
+			$row = $db->GetRow($query, $params);
+		}
+		else if (count($params) == 3)
+		{
+			$query = "SELECT modified_date from {module_templates} WHERE module_name = ? AND template_type = ? AND template_name = ?";
+			$row = $db->GetRow($query, $params);
+		}
+
+		if ($row)
+		{
+			$tpl_timestamp = $db->UnixTimeStamp($row['modified_date']);
 			return true;
 		}
-
-		$query = "SELECT module_name,template_name,modified_date FROM ".cms_db_prefix()."module_templates";
-		$results = $db->GetArray($query);
-
-		if( !count($results) ) return false;
-
-		if( !isset($gCms->variables['module_template_cache']) )
-		{
-			$gCms->variables['module_template_cache'] = array();
-		}
-		foreach( $results as $row )
-		{
-			$key = $row['module_name'].';'.$row['template_name'];
-			$val = $db->UnixTimeStamp($row['modified_date']);
-			$gCms->variables['module_template_cache'][$key] = $val;
-		}
-
-		$tpl_timestamp = $gCms->variables['module_template_cache'][$tpl_name];
 		
-		return true;
+		return false;
 	}
 
 	function global_content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
