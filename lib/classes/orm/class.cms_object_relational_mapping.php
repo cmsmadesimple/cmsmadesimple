@@ -1062,15 +1062,15 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		
 			$id = $this->$id_field;
 			if( !$id )
+			{
+				if( isset($this->field_maps[$id_field]) )
 				{
-					if( isset($this->field_maps[$id_field]) )
-					{
-						$id = $this->{$this->field_maps[$id_field]};
-					}
+					$id = $this->{$this->field_maps[$id_field]};
 				}
+			}
 		
 			$can_delete = $this->before_delete_caller();
-			if( !$can_delete ) return false;
+			if ($can_delete === false) return false;
 
 			//Figure out if we need to replace the field from the field mappings
 			if (array_key_exists($id_field, $new_map)) $id_field = $new_map[$id_field];
