@@ -29,6 +29,7 @@ define("DS", DIRECTORY_SEPARATOR);
 
 //Load file location defines
 require_once(ROOT_DIR.DS.'fileloc.php');
+require_once(ROOT_DIR.DS.'version.php');
 
 //So we can use them in __autoload
 require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_object.php');

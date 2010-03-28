@@ -64,17 +64,20 @@ class CmsModuleLoader extends CmsObject
 		foreach ($module_list as &$one_module)
 		{
 			//self::check_uninstall($one_module['name'], $module_list);
-			if ($one_module['plugins'])
+			if (isset($one_module['plugins']))
 			{
 				foreach ($one_module['plugins'] as $k => $v)
 				{
-					$val = $v['plugin'];
-					if (isset($val['name']))
+					if (isset($v['plugin']))
 					{
-						if (isset($val['callback']))
-							CmsModuleFunctionProxy::get_instance()->register($one_module['name'], $val['name'], $val['callback']);
-						else
-							CmsModuleFunctionProxy::get_instance()->register($one_module['name'], $val['name'], 'function_plugin');
+						$val = $v['plugin'];
+						if (isset($val['name']))
+						{
+							if (isset($val['callback']))
+								CmsModuleFunctionProxy::get_instance()->register($one_module['name'], $val['name'], $val['callback']);
+							else
+								CmsModuleFunctionProxy::get_instance()->register($one_module['name'], $val['name'], 'function_plugin');
+						}
 					}
 				}
 			}
@@ -96,14 +99,17 @@ class CmsModuleLoader extends CmsObject
 		if (!isset($module_list[$module_name]['can_uninstall']))
 		{
 			$module_list[$module_name]['can_uninstall'] = true;
-			foreach ($module_list[$module_name]['dependencies'] as $one_dep)
+			if (isset($module_list[$module_name]['dependencies']))
 			{
-				$dep_mod = $module_list[$one_dep['module']['name']];
-				self::check_uninstall($one_dep['module']['name'], $module_list);
-				
-				if ($dep_mod && $dep_mod['installed'])
+				foreach ($module_list[$module_name]['dependencies'] as $one_dep)
 				{
-					$module_list[$module_name]['can_uninstall'] = false;
+					$dep_mod = $module_list[$one_dep['module']['name']];
+					self::check_uninstall($one_dep['module']['name'], $module_list);
+
+					if ($dep_mod && $dep_mod['installed'])
+					{
+						$module_list[$module_name]['can_uninstall'] = false;
+					}
 				}
 			}
 		}

@@ -18,8 +18,8 @@
 
 function smarty_cms_function_metadata($params, &$smarty)
 {
-	global $gCms;
-	$config =& $gCms->GetConfig();
+	$gCms = cmsms();
+	$config = cms_config();
 	$pageinfo =& $gCms->variables['pageinfo'];
 
 	$result = '';	

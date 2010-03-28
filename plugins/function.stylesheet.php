@@ -65,7 +65,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 		$template_id=$params["templateid"];
 	}
 
-	$db =& $gCms->GetDb();
+	$db = cms_db();
 
 	$stylesheet = '';
 

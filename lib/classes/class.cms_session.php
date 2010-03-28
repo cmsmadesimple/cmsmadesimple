@@ -67,7 +67,7 @@ class CmsSession extends CmsObject
 		    $gCms->variables['username'] = $_SESSION['cms_admin_username'];
 		}
 		
-		if( isset($GLOBALS[CMS_ADMIN_PAGE]) )
+		if( isset($GLOBALS['CMS_ADMIN_PAGE']) )
 		{
 			if( !isset($_SESSION[CMS_USER_KEY]) )
 			{

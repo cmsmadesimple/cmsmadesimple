@@ -18,9 +18,9 @@
 
 function smarty_cms_function_title($params, &$smarty)
 {
-	global $gCms;
+	$gCms = cmsms();
 	$pageinfo = &$gCms->variables['pageinfo'];
-	$config = &$gCms->GetConfig();
+	$config = cms_config();
 	$result = '';
 	if (isset($pageinfo) && $pageinfo->content_id == -1)
 	{

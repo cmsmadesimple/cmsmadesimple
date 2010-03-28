@@ -71,8 +71,8 @@ class PageInfo
 		$this->template_encoding = '';
 		$this->cachable = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = cms_db();
 
 		$query = 'SELECT MAX(modified_date) AS thedate FROM {content} c';
 		$row = $db->GetRow($query);
@@ -161,8 +161,8 @@ class PageInfoOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = cms_db();
 
 		$row = '';
 

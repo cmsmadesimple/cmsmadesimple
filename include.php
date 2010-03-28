@@ -50,7 +50,7 @@ if (isset($starttime))
 }
 
 #Load the config file (or defaults if it doesn't exist)
-require(cms_join_path($dirname,'version.php'));
+//require(cms_join_path($dirname,'version.php'));
 require(cms_join_path($dirname,'lib','config.functions.php'));
 
 #Grab the current configuration
