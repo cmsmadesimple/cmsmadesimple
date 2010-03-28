@@ -631,7 +631,7 @@ class CmsSmarty extends Smarty
 	function content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config = cms_config();
 		$pageinfo = &$gCms->variables['pageinfo'];
 
 		if (isset($pageinfo) && $pageinfo->content_id == -1)
