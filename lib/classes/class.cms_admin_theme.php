@@ -203,7 +203,7 @@ class CmsAdminTheme extends CmsObject
 		$smarty->assign('admin_topmenu', $topmenu);
 		
 		$smarty->assign('headtext', self::get_instance()->headtext);
-		$smarty->assign_by_ref('theme_object', self::get_instance());
+		$smarty->assign('theme_object', self::get_instance());
 		
 		$result = $smarty->fetch(self::get_instance()->theme_template_dir . 'overall.tpl');
 		

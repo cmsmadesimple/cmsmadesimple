@@ -365,7 +365,7 @@ class UserOperations
 	      // us cached result.
 	      return $gCms->variables['user_in_group'][$uid.','.$gid];
 	    }
-	  $db =& $gCms->GetDb();
+	  $db = cms_db();
 	 
 	  $query = "SELECT ug.user_id FROM ".cms_db_prefix()."user_groups ug
                      WHERE ug.user_id = ? AND ug.group_id = ?";

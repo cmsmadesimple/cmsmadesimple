@@ -192,7 +192,10 @@ class CmsLanguage extends CmsObject
 	 */
 	public static function to_lang($str)
 	{
-		self::setup();
+		if (self::$nls == null)
+		{
+			self::$nls = CmsCache::get_instance()->call(array('CmsLanguage', 'load_nls_files'));
+		}
 
 		// get the incoming accepted languages.
 		$langs = explode(',',$str);
@@ -205,15 +208,15 @@ class CmsLanguage extends CmsObject
 				$onelang = substr($onelang,0,strpos($onelang,';'));
 			}
 
-			if( isset(self::$_nls['language'][$onelang]) )
+			if( isset(self::$nls['language'][$onelang]) )
 			{
 				return $onelang;
 			}
 
-			if( isset(self::$_nls['alias'][$onelang]) )
+			if( isset(self::$nls['alias'][$onelang]) )
 			{
-				$alias = self::$_nls['alias'][$onelang];
-				if( isset(self::$_nls['language'][$alias]) )
+				$alias = self::$nls['alias'][$onelang];
+				if( isset(self::$nls['language'][$alias]) )
 				{
 					return $alias;
 				}

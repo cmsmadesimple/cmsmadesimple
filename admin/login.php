@@ -66,7 +66,6 @@ $smarty->assign('cancel_text', lang('cancel'));
 
 $smarty->assign('username', $username);
 $smarty->assign('error', $error);
-$smarty->assign('openid', $openid);
 
 $smarty->display($theme_template_dir_login . 'login.tpl');
 

@@ -39,12 +39,12 @@ class GlobalContentOperations
 	 */
 	function AuthorBlobs($userid)
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = cms_db();
+		
 		$variables = &$gCms->variables;
 		if (!isset($variables['authorblobs']))
-		{
-			$db = &$gCms->GetDb();
+		{;
 			$variables['authorblobs'] = array();
 
 			// get the list of html blobs where this user is a direct owner

@@ -183,7 +183,7 @@ function check_permission($userid, $permname)
 
 	$gCms = cmsms();
 	
-	$userops =& $gCms->GetUserOperations();
+	$userops = $gCms->GetUserOperations();
 	$adminuser = $userops->UserInGroup($userid, 1);
 
 	if (!isset($gCms->variables['userperms']))
@@ -502,8 +502,9 @@ function set_site_preference($prefname, $value)
 
 function load_all_preferences($userid)
 {
-	global $gCms;
-	$db = &$gCms->GetDb();
+	$gCms = cmsms();
+	$db = cms_db();
+	
 	$variables = &$gCms->userprefs;
 
 	$query = 'SELECT preference, value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
@@ -525,8 +526,8 @@ function load_all_preferences($userid)
  */
 function get_preference($userid, $prefname, $default='')
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
+	$gCms = cmsms();
+	$db = cms_db();
 
 	$result = '';
 
@@ -560,8 +561,8 @@ function set_preference($userid, $prefname, $value)
 {
 	$doinsert = true;
 
-	global $gCms;
-	$db =& $gCms->GetDb();
+	$gCms = cmsms();
+	$db = cms_db();
 
 	if (!isset($gCms->userprefs))
 	{
@@ -604,8 +605,9 @@ function get_stylesheet($template_id, $media_type = '')
 	$result = array();
 	$css = "";
 
-	global $gCms;
-	$db =& $gCms->GetDb();
+	$gCms = cmsms();
+	$db = cms_db();
+	
 	$templateops =& $gCms->GetTemplateOperations();
 
 	$templateobj = FALSE;
