@@ -74,7 +74,7 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE)
 			#Figure out default language and set it if it exists
 			if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) 
 			{
-			  $tmp = CmsNls::to_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+			  $tmp = CmsLanguage::to_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
 			  if( $tmp )
 				{
 				  setcookie('cms_language',$tmp);

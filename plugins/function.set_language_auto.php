@@ -27,7 +27,7 @@ function smarty_cms_function_set_language_auto($params, &$smarty)
   if( isset($_REQUEST['lang']) )
     {
       $lang = trim($_REQUEST['lang']);
-      $lang = CmsNls::to_lang($lang);
+      $lang = CmsLanguage::to_lang($lang);
     }
   else if( isset($_SESSION['desired_language']) && isset($params['use_sticky']) )
     {
@@ -35,7 +35,7 @@ function smarty_cms_function_set_language_auto($params, &$smarty)
     }
   else if( isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) )
     {
-      $lang = CmsNls::to_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+      $lang = CmsLanguage::to_lang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
     }
 
   if( isset($params['allow']) )

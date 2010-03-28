@@ -317,11 +317,11 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 }
 
 # give everything to smarty
-CmsNls::setup();
+//CmsNls::setup();
 $tmp = array_keys($gCms->modules);
 $firstmod = $tmp[0];
 $smarty->assign('mod',$gCms->modules[$firstmod]['object']);
-$languages = CmsNls::get_languages();
+$languages = CmsLanguage::get_language_list();
 asort($languages);
 $tmp = array(''=>lang('nodefault'));
 foreach( $languages as $key=>$value )
