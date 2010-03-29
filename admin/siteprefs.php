@@ -53,8 +53,8 @@ if (!$access)
     return;
   }
 
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = cms_db();
 
 $error = "";
 $message = "";
@@ -318,12 +318,12 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 
 # give everything to smarty
 //CmsNls::setup();
-$tmp = array_keys($gCms->modules);
-$firstmod = $tmp[0];
-$smarty->assign('mod',$gCms->modules[$firstmod]['object']);
+//$tmp = array_keys($gCms->modules);
+//$firstmod = $tmp[0];
+//$smarty->assign('mod',$gCms->modules[$firstmod]['object']);
 $languages = CmsLanguage::get_language_list();
 asort($languages);
-$tmp = array(''=>lang('nodefault'));
+$tmp = array('' => lang('No Default'));
 foreach( $languages as $key=>$value )
 {
   if( isset($languages['englishlang'][$key]) )

@@ -1068,6 +1068,54 @@ class CmsAdminTheme extends CmsObject
 		$smarty->assign('breadcrumbs', $this->breadcrumbs);
 		$smarty->display(self::get_instance()->theme_template_dir . 'topmenu.tpl');
 	}
+
+	function GetAdminPageDropdown($name, $selected)
+	{
+		return $this->get_admin_page_dropdown($name, $selected);
+	}
+	
+	function get_admin_page_dropdown($name, $selected)
+	{
+		$opts = array();
+		$opts[ucfirst(lang('None'))] = '';
+
+		foreach (CmsAdminTree::get_instance()->get_flat_list() as $onenode)
+		{
+			if ($onenode->depth() < 1)
+			{
+				continue;
+			}
+			
+			if (!$onenode->show_in_menu || strlen($onenode->url) < 1 )
+			{
+				continue;
+			}
+			
+			if ($onenode->name == 'home' || $onenode->name == 'logout' || $onenode->name == 'viewsite')
+			{
+				continue;
+			}
+
+			$opts[$onenode->title] = $onenode->url;
+		}
+
+		$output = '<select name="'.$name.'">';
+		foreach ($opts as $key => $value)
+		{
+			if ($value == $selected)
+			{
+				$output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>",
+					$value,$key);
+			}
+			else
+			{
+				$output .= sprintf("<option value=\"%s\">%s</option>",
+					$value,$key);
+			}
+		}
+		$output .= '</select>';
+		return $output;
+	}
 	
 	
 	###############################################################	

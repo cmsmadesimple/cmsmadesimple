@@ -255,7 +255,7 @@ if (FALSE == empty($page_message)) {
 	  <p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
 	  <p class="pageinput">
 	  <?php
-	    $contentops =& $gCms->GetContentOperations();
+	    $contentops = $gCms->GetContentOperations();
 echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1);
 	  ?>
 	  </p>

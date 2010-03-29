@@ -35,7 +35,7 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	var $table = 'templates';
 	//var $sequence = 'templates_seq';
 	
-	public function setup()
+	public function setup($first_time = false)
 	{
 		$this->create_has_many_association('stylesheet_associations', 'template_stylesheet_association', 'template_id', array('order' => 'order_num ASC'));
 		$this->create_has_and_belongs_to_many_association('stylesheets', 'stylesheet', 'stylesheet_template_assoc', 'stylesheet_id', 'template_id', array('order' => 'order_num ASC'));
@@ -135,7 +135,7 @@ class CmsTemplate extends CmsObjectRelationalMapping
 		CmsEvents::send_event( 'Core', ($this->id == -1 ? 'AddTemplatePre' : 'EditTemplatePre'), array('template' => &$this));
 	}
 	
-	function after_save()
+	function after_save(&$result)
 	{
 		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddTemplatePost' : 'EditTemplatePost'), array('template' => &$this));
 		CmsCache::clear();

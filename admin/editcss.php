@@ -40,9 +40,9 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
-global $gCms;
-$styleops =& $gCms->GetStylesheetOperations();
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$styleops = $gCms->GetStylesheetOperations();
+$db = cms_db();
 $dateformat = trim(get_preference(get_userid(),'date_format_string','%x %X')); 
 		  if( empty($dateformat) )
 		   {

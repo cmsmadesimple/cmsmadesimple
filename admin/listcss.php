@@ -51,8 +51,8 @@ if (!$access) {
 
 
 include_once("header.php");
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = cms_db();
 
 #******************************************************************************
 # first : displaying error message, if any.
