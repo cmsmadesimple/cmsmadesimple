@@ -25,10 +25,10 @@ require_once("../include.php");
 check_login();
 
 include_once("header.php");
-$themeObject->ShowShortcuts();
-$themeObject->DisplaySectionMenuDivStart();
-$themeObject->DisplaySectionPages('usersgroups');
-$themeObject->DisplaySectionMenuDivEnd();
+//$themeObject->ShowShortcuts();
+//$themeObject->DisplaySectionMenuDivStart();
+$themeObject->display_section_pages('usersgroups');
+//$themeObject->DisplaySectionMenuDivEnd();
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
