@@ -41,8 +41,8 @@ return;
 
 
 include_once("header.php");
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = cms_db();
 
 if (isset($_GET["message"])) {
 	$message = preg_replace('/\</','',$_GET['message']);
@@ -66,8 +66,7 @@ if (isset($_GET["message"])) {
 	$all = check_permission($userid, 'Modify Any Page');
 	$remove	= check_permission($userid, 'Remove Templates');
 	
-	global $gCms;
-	$templateops =& $gCms->GetTemplateOperations();
+	$templateops = $gCms->GetTemplateOperations();
 
 	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
 		if( (isset($_GET["template_id"])) && (is_numeric($_GET["template_id"])) ) {
@@ -79,12 +78,12 @@ if (isset($_GET["message"])) {
 			if ($result) {
 				$query = "UPDATE ".cms_db_prefix()."content SET modified_date = ".$db->DBTimeStamp(time());
 				$db->Execute($query);
-				echo '<div class="pagemcontainer"><div class="pagemessage">' .$themeObject->DisplayImage('icons/system/accept.gif', lang('allpagesmodified'),'','','systemicon') . '&nbsp;' .  lang('allpagesmodified'). '</div></div>';
+				echo '<div class="pagemcontainer"><div class="pagemessage">' .$themeObject->DisplayImage('icons/system/accept.gif', lang('All Pages Modified'),'','','systemicon') . '&nbsp;' .  lang('All Pages Modified'). '</div></div>';
 			} else {
-				echo '<div class="pageerrorcontainer"><div class="pageoverflow">'.lang('errorupdatingpages').'</div></div>';
+				echo '<div class="pageerrorcontainer"><div class="pageoverflow">'.lang('Error Updating Pages').'</div></div>';
 			}
 			} else {
-				echo '<p class="error">'.lang('errorupdatetemplateallpages').'</p>';
+				echo '<p class="error">'.lang('Error Updating Template on All Pages').'</p>';
 			}
 		}
 	}
@@ -144,15 +143,15 @@ if (isset($_GET["message"])) {
 	{
 		echo "<p class=\"pageshowrows\">".pagination($page, count($templatelist), $limit)."</p>";
 	}
-	echo $themeObject->ShowHeader('currenttemplates').'</div>';
+	echo $themeObject->ShowHeader(lang('Current Page Templates')).'</div>';
 	if ($templatelist && count($templatelist) > 0) {
 
 		echo '<table cellspacing="0" class="pagetable">';
 		echo '<thead>';
 		echo "<tr>\n";
-		echo '<th class="pagew50">'.lang('template').'</th>';
-		echo "<th class=\"pagepos\">".lang('default')."</th>\n";
-		echo "<th class=\"pagepos\">".lang('active')."</th>\n";
+		echo '<th class="pagew50">'.lang('Template').'</th>';
+		echo "<th class=\"pagepos\">".lang('Default')."</th>\n";
+		echo "<th class=\"pagepos\">".lang('Active')."</th>\n";
 		if ($edit)
 			echo "<th class=\"pagepos\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
@@ -174,34 +173,34 @@ if (isset($_GET["message"])) {
 		foreach ($templatelist as $onetemplate)
 		{
 			// construct true/false button images
-            $image_true = "<a href=\"listtemplates.php".$urlext."&amp;setinactive=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/true.gif', lang('setfalse'),'','','systemicon')."</a>";
-            $image_false = "<a href=\"listtemplates.php".$urlext."&amp;setactive=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/false.gif', lang('settrue'),'','','systemicon')."</a>";
+            $image_true = "<a href=\"listtemplates.php".$urlext."&amp;setinactive=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/true.gif', lang('Set to False'),'','','systemicon')."</a>";
+            $image_false = "<a href=\"listtemplates.php".$urlext."&amp;setactive=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/false.gif', lang('Set to True'),'','','systemicon')."</a>";
 			$default_true =$themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-			$default_false ="<a href=\"listtemplates.php".$urlext."&amp;setdefault=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/false.gif', lang('settrue'),'','','systemicon')."</a>";
+			$default_false ="<a href=\"listtemplates.php".$urlext."&amp;setdefault=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/false.gif', lang('Set to True'),'','','systemicon')."</a>";
 
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
   			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edittemplate.php".$urlext."&amp;template_id=".$onetemplate->id."\">".$onetemplate->name."</a></td>\n";
 				echo "<td class=\"pagepos\">".($onetemplate->default == 1?$default_true:$default_false)."</td>\n";
 				if ($onetemplate->default)
-					echo "<td class=\"pagepos\">".$themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon')."</td>\n";
+					echo "<td class=\"pagepos\">".$themeObject->DisplayImage('icons/system/true.gif', lang('True'),'','','systemicon')."</td>\n";
 				else
 					echo "<td class=\"pagepos\">".($onetemplate->active == 1?$image_true:$image_false)."</td>\n";
 
 				# set template to all content
 				if ($all)
-					echo "<td class=\"pagepos\"><a href=\"listtemplates.php".$urlext."&amp;action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('setallcontentconfirm'),true)."');\">".lang('setallcontent')."</a></td>\n";
+					echo "<td class=\"pagepos\"><a href=\"listtemplates.php".$urlext."&amp;action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('Are you sure you want to set all pages to use this template?'),true)."');\">".lang('Set All Pages')."</a></td>\n";
 
 				# view css association
 				echo "<td class=\"icons_wide\"><a href=\"listcssassoc.php".$urlext."&amp;type=template&amp;id=".$onetemplate->id."\">";
-                echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon');
+                echo $themeObject->DisplayImage('icons/system/css.gif', lang('Attach Stylesheets'),'','','systemicon');
                 echo "</a></td>\n";
 
 				# add new template
 				if ($add)
 				{
 				  echo "<td class=\"icons_wide\"><a href=\"copytemplate.php".$urlext."&amp;template_id=".$onetemplate->id."&amp;template_name=".urlencode($onetemplate->name)."\">";
-                    echo $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
+                    echo $themeObject->DisplayImage('icons/system/copy.gif', lang('Copy'),'','','systemicon');
                     echo "</a></td>\n";
 				}
 
@@ -209,7 +208,7 @@ if (isset($_GET["message"])) {
 				if ($edit)
 				{
 					echo "<td class=\"icons_wide\"><a href=\"edittemplate.php".$urlext."&amp;template_id=".$onetemplate->id."\">";
-                    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+                    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('Edit'),'','','systemicon');
                     echo "</a></td>\n";
 				}
 
@@ -223,8 +222,8 @@ if (isset($_GET["message"])) {
 					}
 					else
 					{
-						echo "<a href=\"deletetemplate.php".$urlext."&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $onetemplate->name),true)."');\">";
-						echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+						echo "<a href=\"deletetemplate.php".$urlext."&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('Are you sure you want to delete %s?', $onetemplate->name),true)."');\">";
+						echo $themeObject->DisplayImage('icons/system/delete.gif', lang('Delete'),'','','systemicon');
 						echo "</a>";
 					}
 					echo "</td>\n";
@@ -253,25 +252,25 @@ if ($add) {
 			<span style="float: left;">
 				<a href="addtemplate.php<?php echo $urlext ?>">
 					<?php 
-						echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addtemplate'),'','','systemicon').'</a>';
-						echo ' <a class="pageoptions" href="addtemplate.php'.$urlext.'">'.lang("addtemplate");
+						echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('Add Template'),'','','systemicon').'</a>';
+						echo ' <a class="pageoptions" href="addtemplate.php'.$urlext.'">'.lang("Add Template");
 					?>
 				</a>
 			</span>
 			<span style="margin-right: 30px; float: right; align: right">
-				<?php echo lang("selecteditems"); ?>: <select name="multiaction">
-				<option value="delete"><?php echo lang('delete') ?></option>
-				<option value="active"><?php echo lang('active') ?></option>
-				<option value="inactive"><?php echo lang('inactive') ?></option>
+				<?php echo lang("Selected Items"); ?>: <select name="multiaction">
+				<option value="delete"><?php echo lang('Delete') ?></option>
+				<option value="active"><?php echo lang('Active') ?></option>
+				<option value="inactive"><?php echo lang('Inactive') ?></option>
 				</select>
-				<input type="submit" accesskey="s" value="<?php echo lang('submit') ?>" />
+				<input type="submit" accesskey="s" value="<?php echo lang('Submit') ?>" />
 			</span>
 			<br />
 		</p>		
 	</div>
 </div>
 </form>
-<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
+<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('Back')?></a></p>
 
 <?php
 }

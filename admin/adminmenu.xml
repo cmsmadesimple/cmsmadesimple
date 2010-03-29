@@ -8,20 +8,20 @@
 	<children>
 	  <node>
     <name>viewsite</name>
-    <title>viewsite</title>
+    <title>View Site</title>
     <url>../</url>
     <description></description>
     <target>_blank</target>
        </node>
 	    <node>
     <name>dashboard</name>
-    <title>dashboard</title>
+    <title>Dashboard</title>
     <url>dashboard.php</url>
     <description></description>
   </node>
    <node>
     <name>logout</name>
-    <title>logout</title>
+    <title>Logout</title>
     <url>logout.php</url>
     <description></description>
   </node>
@@ -30,7 +30,7 @@
 
   <node>
     <name>content</name>
-    <title>content</title>
+    <title>Content</title>
     <url>topcontent.php</url>
     <description>contentdescription</description>
     <show_in_menu>
@@ -39,7 +39,7 @@
     <children>
       <node>
         <name>pages</name>
-        <title>pages</title>
+        <title>Pages</title>
         <url>listcontent.php</url>
         <description>pagesdescription</description>
         <show_in_menu>
@@ -48,21 +48,21 @@
       </node>
       <node>
         <name>addcontent</name>
-        <title>addcontent</title>
+        <title>Add Content</title>
         <url>addcontent.php</url>
         <description>addcontent</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>editpage</name>
-        <title>editcontent</title>
+        <title>Edit Content</title>
         <url>editcontent.php</url>
         <description>editpage</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>files</name>
-        <title>filemanager</title>
+        <title>File Manager</title>
         <url>files.php</url>
         <description>filemanagerdescription</description>
         <show_in_menu>
@@ -71,7 +71,7 @@
       </node>
       <node>
         <name>images</name>
-        <title>imagemanager</title>
+        <title>Image Manager</title>
         <url>imagefiles.php</url>
         <description>imagemanagerdescription</description>
         <show_in_menu>
@@ -80,7 +80,7 @@
       </node>
       <node>
         <name>blobs</name>
-        <title>htmlblobs</title>
+        <title>Global Content Blocks</title>
         <url>listhtmlblobs.php</url>
         <description>htmlblobdescription</description>
         <show_in_menu>
@@ -89,14 +89,14 @@
       </node>
       <node>
         <name>addhtmlblob</name>
-        <title>addhtmlblob</title>
+        <title>Add Global Content Block</title>
         <url>addhtmlblob.php</url>
         <description>addhtmlblob</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>edithtmlblob</name>
-        <title>edithtmlblob</title>
+        <title>Edit Global Content Block</title>
         <url>edithtmlblob.php</url>
         <description>edithtmlblob</description>
         <show_in_menu>false</show_in_menu>
@@ -105,77 +105,77 @@
   </node>
   <node>
     <name>layout</name>
-    <title>layout</title>
+    <title>Layout</title>
     <url>toplayout.php</url>
     <description>layoutdescription</description>
     <show_in_menu><permission>layoutPerms</permission></show_in_menu>
     <children>
       <node>
         <name>template</name>
-        <title>templates</title>
+        <title>Templates</title>
         <url>listtemplates.php</url>
         <description>templatesdescription</description>
         <show_in_menu><permission>templatePerms</permission></show_in_menu>
       </node>
       <node>
         <name>addtemplate</name>
-        <title>addtemplate</title>
+        <title>Add Template</title>
         <url>addtemplate.php</url>
         <description>addtemplate</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>edittemplate</name>
-        <title>edittemplate</title>
+        <title>Edit Template</title>
         <url>edittemplate.php</url>
         <description>edittemplate</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>currentassociations</name>
-        <title>currentassocations</title>
+        <title>Current Associations</title>
         <url>listcssassoc.php</url>
         <description>currentassocations</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>copytemplate</name>
-        <title>copytemplate</title>
+        <title>Copy Template</title>
         <url>copytemplate.php</url>
         <description>copytemplate</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>stylesheets</name>
-        <title>stylesheets</title>
+        <title>Stylesheets</title>
         <url>listcss.php</url>
         <description>stylesheetdescription</description>
         <show_in_menu><permission>cssAssocPerms</permission></show_in_menu>
       </node>
       <node>
         <name>addstylesheet</name>
-        <title>addstylesheet</title>
+        <title>Add Stylesheet</title>
         <url>addcss.php</url>
         <description>addstylesheet</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>editstylesheet</name>
-        <title>editstylesheet</title>
+        <title>Edit Stylesheet</title>
         <url>editcss.php</url>
         <description>editstylesheet</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>templatecss</name>
-        <title>templatecss</title>
+        <title>Template CSS</title>
         <url>templatecss.php</url>
         <description>templatecss</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>moduletemplate</name>
-        <title>moduletemplates</title>
+        <title>Module Templates</title>
         <url>listmodtemplates.php</url>
         <description>moduletemplatesdescription</description>
         <show_in_menu><permission>templatePerms</permission></show_in_menu>
@@ -184,63 +184,63 @@
   </node>
   <node>
     <name>usersgroups</name>
-    <title>usersgroups</title>
+    <title>User Groups</title>
     <url>topusers.php</url>
     <description></description>
     <show_in_menu><permission>usersGroupsPerms</permission></show_in_menu>
   </node>
   <node>
     <name>extensions</name>
-    <title>extensions</title>
+    <title>Extensions</title>
     <url>topextensions.php</url>
     <description>extensionsdescription</description>
     <show_in_menu><permission>extensionsPerms</permission></show_in_menu>
     <children>
       <node>
         <name>modules</name>
-        <title>modules</title>
+        <title>Modules</title>
         <url>listmodules.php</url>
         <description>moduledescription</description>
         <show_in_menu><permission>modulePerms</permission></show_in_menu>
       </node>
       <node>
         <name>tags</name>
-        <title>tags</title>
+        <title>Tags</title>
         <url>listtags.php</url>
         <description>tagdescription</description>
         <show_in_menu>true</show_in_menu>
       </node>
       <node>
         <name>eventhandlers</name>
-        <title>eventhandlers</title>
+        <title>Event Handlers</title>
         <url>eventhandlers.php</url>
         <description>eventhandlerdescription</description>
         <show_in_menu>true</show_in_menu>
       </node>
       <node>
         <name>editeventhandler</name>
-        <title>editeventhandler</title>
+        <title>Edit Event Handler</title>
         <url>editevent.php</url>
         <description>editdeventshandler</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>usertags</name>
-        <title>usertags</title>
+        <title>User Defined Tags</title>
         <url>listusertags.php</url>
         <description>usertagdescription</description>
         <show_in_menu><permission>codeBlockPerms</permission></show_in_menu>
       </node>
       <node>
         <name>addusertag</name>
-        <title>addusertag</title>
+        <title>Add User Tag</title>
         <url>adduserplugin.php</url>
         <description>addusertag</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>editusertag</name>
-        <title>editusertag</title>
+        <title>Edit User Tag</title>
         <url>edituserplugin.php</url>
         <description>editusertag</description>
         <show_in_menu>false</show_in_menu>
@@ -249,21 +249,21 @@
   </node>
   <node>
     <name>siteadmin</name>
-    <title>admin</title>
+    <title>Admin</title>
     <url>topadmin.php</url>
     <description>admindescription</description>
     <show_in_menu><permission>siteAdminPerms</permission></show_in_menu>
     <children>
       <node>
         <name>siteprefs</name>
-        <title>globalconfig</title>
+        <title>Global Configuration</title>
         <url>siteprefs.php</url>
         <description>preferencesdescription</description>
         <show_in_menu><permission>sitePrefPerms</permission></show_in_menu>
       </node>
       <node>
         <name>adminlog</name>
-        <title>adminlog</title>
+        <title>Admin Log</title>
         <url>adminlog.php</url>
         <description>adminlogdescription</description>
         <show_in_menu><permission>adminPerms</permission></show_in_menu>
@@ -272,42 +272,42 @@
   </node>
   <node>
     <name>myprefs</name>
-    <title>myprefs</title>
+    <title>My Preferences</title>
     <url>topmyprefs.php</url>
     <description>myprefsdescription</description>
     <show_in_menu>true</show_in_menu>
     <children>
       <node>
         <name>myaccount</name>
-        <title>myaccount</title>
+        <title>My Account</title>
         <url>edituser.php</url>
         <description>myaccountdescription</description>
         <show_in_menu>true</show_in_menu>
       </node>
       <node>
         <name>preferences</name>
-        <title>adminprefs</title>
+        <title>Preferences</title>
         <url>editprefs.php</url>
         <description>adminprefsdescription</description>
         <show_in_menu>true</show_in_menu>
       </node>
       <node>
         <name>managebookmarks</name>
-        <title>managebookmarks</title>
+        <title>Manage Bookmarks</title>
         <url>listbookmarks.php</url>
         <description>managebookmarksdescription</description>
         <show_in_menu>true</show_in_menu>
       </node>
       <node>
         <name>addbookmark</name>
-        <title>addbookmark</title>
+        <title>Add Bookmark</title>
         <url>addbookmark.php</url>
         <description>addbookmark</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
         <name>editbookmark</name>
-        <title>editbookmark</title>
+        <title>Edit Bookmark</title>
         <url>editbookmark.php</url>
         <description>editbookmark</description>
         <show_in_menu>false</show_in_menu>

@@ -167,6 +167,27 @@ function cms_orm($class = '')
 		return CmsObjectRelationalManager::get_instance()->$class;
 }
 
+function lang()
+{
+	$name = '';
+	$params = array();
+
+	if (func_num_args() > 0)
+	{
+		$name = func_get_arg(0);
+		if (func_num_args() == 2 && is_array(func_get_arg(1)))
+		{
+			$params = func_get_arg(1);
+		}
+		else if (func_num_args() > 1)
+		{
+			$params = array_slice(func_get_args(), 1);
+		}
+	}
+	
+	return CmsLanguage::translate($name, $params);
+}
+
 /**
  * Looks through the hash given.  If a key named val1 exists, then it's value is 
  * returned.  If not, then val2 is returned.  Furthermore, passing one of the php

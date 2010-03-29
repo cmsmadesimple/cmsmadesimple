@@ -1,6 +1,6 @@
-<div id="logocontainer"><img src="themes/default/images/logoCMS.png" alt="{$adminpaneltitle}" title="{$adminpaneltitle}" /><div class="logotext">{$adminpaneltitle}
+<div id="logocontainer"><img src="themes/default/images/logoCMS.png" alt="{tr}CMS Made Simple Admin Panel{/tr}" title="{tr}CMS Made Simple Admin Panel{/tr}" /><div class="logotext">{tr}CMS Made Simple Admin Panel{/tr}
 
-<br />{tr}welcome_user{/tr}:  {$its_me} 
+<br />{tr}Welcome to{/tr}:  {$its_me} 
 
 
 </div></div>
