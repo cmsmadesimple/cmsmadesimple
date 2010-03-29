@@ -50,6 +50,12 @@ class CmsLanguage extends CmsObject
 		
 		$current_language = $current_language != '' ? $current_language : CmsLanguage::get_current_language();
 		
+		//Fast track English
+		if (starts_with($current_language, 'en'))
+		{
+			//return vsprintf($string, $params);
+		}
+		
 		if (!array_key_exists($module, self::$lang) || !array_key_exists($current_language, self::$lang[$module]))
 		{
 			CmsLanguage::load_lang_file($module, $current_language);

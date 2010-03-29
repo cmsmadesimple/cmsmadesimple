@@ -22,7 +22,7 @@ class CmsModuleLoader extends CmsObject
 {
 	public static $module_list = null;
 	public static $core_modules = array('CoreMenuManager', 'Search', 'ModuleManager', 'SwiftMailer');
-	public static $plugin_lookup = array();
+	public static $event_lookup = array();
 	
 	function __construct()
 	{
@@ -55,6 +55,7 @@ class CmsModuleLoader extends CmsObject
 		self::check_dependencies($module_list);
 		self::check_uninstall_all($module_list);
 		self::register_plugins($module_list);
+		self::register_event_handlers($module_list);
 		
 		self::$module_list = $module_list;
 	}
@@ -82,8 +83,47 @@ class CmsModuleLoader extends CmsObject
 				}
 			}
 		}
-		
-		//var_dump(self::$plugin_lookup);
+	}
+	
+	public static function register_event_handlers(&$module_list)
+	{
+		foreach ($module_list as &$one_module)
+		{
+			if (isset($one_module['events_watched']))
+			{
+				foreach ($one_module['events_watched'] as $k => $v)
+				{
+					if ($k == 'module' && is_array($v))
+					{
+						$name = $v['name'];
+						foreach ($v['events'] as $k2 => $v2)
+						{
+							if ($k2 == 'event')
+							{
+								$event_name = $name . ':' . $v2;
+								CmsEventManager::register_event_handler($event_name, 'CmsModuleLoader::event_proxy');
+								self::$event_lookup[$event_name][] = $one_module['name'];
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public static function event_proxy($event_name, $params)
+	{
+		if (isset(self::$event_lookup[$event_name]) && is_array(self::$event_lookup[$event_name]))
+		{
+			foreach (self::$event_lookup[$event_name] as $module_name)
+			{
+				$obj = self::get_module_class($module_name);
+				if (is_object($obj))
+				{
+					$obj->do_event($event_name, $params);
+				}
+			}
+		}
 	}
 	
 	public static function check_uninstall_all(&$module_list)

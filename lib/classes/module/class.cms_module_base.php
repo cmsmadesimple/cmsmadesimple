@@ -18,6 +18,8 @@
 #
 #$Id: class.cms_module_base.php 5348 2008-12-14 18:32:56Z wishy $
 
+define('MODULE_ACTION_REGEX', '/[^A-Za-z0-9\-_+]/');
+
 /**
  * Base class for modules.  This base class was renamed in 2.0
  * to allow for module compatibility with modules written for 
@@ -178,7 +180,39 @@ class CmsModuleBase extends CmsObject
 		
 		if ($action_name != '')
 		{
-			$filename = cms_join_path(ROOT_DIR, 'modules', get_class($this), 'action.' . $action_name . '.php');
+			//Just in case do_action is called directly and it's not overridden.
+			//See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
+			$action_name = preg_replace(MODULE_ACTION_REGEX, '', $action_name);
+
+			$filename = cms_join_path($this->get_module_path(), 'action.' . $action_name . '.php');
+			if (@is_file($filename))
+			{
+				return $this->include_file_in_scope($filename, array('params' => $params));
+			}
+		}
+		
+		return '';
+	}
+	
+	/**
+	 * Handle an event triggered by another module
+	 * This method must be over-ridden if this module is capable of handling events.
+	 * of any type.
+	 *
+	 * @param string The name of the event
+	 * @param array  Array of parameters provided with the event.
+	 *
+	 * @return string The contents of the events's output (if any)
+	 */
+	public function do_event($event_name, $params)
+	{
+		if ($event_name != '')
+		{
+			cms_smarty()->assign_by_ref('mod', $this);
+			
+			list($originator, $event_name) = explode(':', $event_name);
+			$filename = cms_join_path($this->get_module_path(), "event.{$originator}.{$event_name}.php");
+
 			if (@is_file($filename))
 			{
 				return $this->include_file_in_scope($filename, array('params' => $params));
@@ -199,6 +233,8 @@ class CmsModuleBase extends CmsObject
 	 */
 	public function run_action($action_name, $params)
 	{
+		$action_name = preg_replace(MODULE_ACTION_REGEX, '', $action_name);
+		
 		$params = $this->clean_param_hash($params, !$this->restrict_unknown_params);
 		
 		return $this->do_action($action_name, $params);

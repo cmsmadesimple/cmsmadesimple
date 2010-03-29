@@ -321,16 +321,12 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 //$tmp = array_keys($gCms->modules);
 //$firstmod = $tmp[0];
 //$smarty->assign('mod',$gCms->modules[$firstmod]['object']);
-$languages = CmsLanguage::get_language_list();
+$languages = CmsLanguage::get_language_list(true);
 asort($languages);
 $tmp = array('' => lang('No Default'));
 foreach( $languages as $key=>$value )
 {
-  if( isset($languages['englishlang'][$key]) )
-    {
-      $value .= ' ('.$languages['englishlang'][$key].')';
-    }
-  $tmp[$key] = $value;
+	$tmp[$key] = $value;
 }
 $smarty->assign('languages',$tmp);
 $smarty->assign('templates',$templates);
