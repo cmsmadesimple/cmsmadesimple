@@ -1,0 +1,82 @@
+Version 1.6 - New Caledonia
+-----------------------------
+
+                 ===========================
+                   WARNING WARNING WARNING
+                 ===========================
+  
+This releases introduces numerous new features that may effect the way your site operates, and may require adjustments upon upgrading.
+
+-----
+1) 404 Handling.
+  
+Version 1.6 introduces a new content type 'Error Page'.  Which can handle 404 error requests.  It is intended to replace the 404 error handling that is currently on the global settings page.  The information in the global settings page may be removed at a later date.  This new 'Error Page' allows you to put module calls into the content area, and is much more flexible than the older mechanism.
+
+
+-----
+2) Sitedown Exclusions
+
+Version 1.6 allows you to specify numerous IP addresses, or IP address ranges that will not see the site-down message when you toggle the site into a down state.  This allows network administrators to take the site down for most visitors, but to work on it in a running state from a remote host.
+
+
+-----
+3) Content Permissions Changes --  ** Major **
+
+In order to allow for more flexibility, to remove the confusion, and to have better access control, we have rewritten the permissions model with respect to page content.  If you had setup additional users with restricted permissions related to content, then you will need to re-visit your permissions setup.  
+
+There are four content related permissions.
+
+3.1) "Add Pages" Permission.
+
+An admin user with this permission will have the ability to create new pages as children of pages that he is owner of, or an additional editor of.  A user with this permission cannot create a top level page.  Users with this permission do not have access to the 'Options' tab when editing content.
+
+3.2) "Remove Pages" Permission.
+
+An admin user with this permission will have the ability to remove pages that he has created.  Users with this permission do not have access to the 'Options' tab when editing content.
+
+3.3) "Modify Any Page" Permission.
+
+An admin user with this permission is treated basically as an 'additional editor', and will be able to make content changes on all pages.  However, unless the admin user also has the 'Add Pages' permission he will not be able to create new content pages.  Users with this permission do not have access to the 'Options' tab when editing content.
+
+3.4) User has No content permissions
+
+As a special note... an admin user that has not been granted any of the above permissions can still edit pages that he owns, or is an additional editor on.  Additional editors can be specified by group and by individual users.  These users also do not have access to the 'Options' tab when editing content.
+
+3.5) "Manage All Content" Permission
+
+An admin user with this permission has global access to do anything with respect to content.  Users with this permission have complete access to the 'Options' tab when editing content.  The user can add, delete, modify, re-order, change ownership of, set cachable flags, hide them from the menu, everything.  
+
+
+-----
+4) Selectable Properties
+
+By default, most admin users that do not have 'Manage All Content' permission (lets call these people 'basic content editors') will not have access to the 'Options' tab when editing content, even if they have ownership.   This is useful for most installs where content editors should not have access to options that may mess with the usability, or appearance of the page.
+
+However, there are times when content editors need to change some attributes (for example the page alias, or the thumbnail and image properties of a page).  
+
+Therefore a new field has been added to the 'Global Settings' page allowing a site administrator (must have 'Modify Site Preferences' permission) to specify which content properties should be viewable by basic content editors.  When items in this area are selected, the appropriate fields will appear in the 'Main' form of the edit content page.
+
+-----
+** IMPORTANT **
+5) Content Types Rewrite -- 
+
+Related to the 'Selectable Properties' work described above, a lot of the way that content types operate has been modified in release 1.6.  They are now much smaller, leaner, smarter, and faster.   We've also removed much of the special behavior of the {content} tag in the 'Content' content type.  So it will operate much like any other content block.  
+
+However it also means that we broke some stuff.  Any third party modules that create content types, like PageBlocks, and Cataloger will not work with CMSMS 1.6 until they are revised.
+
+-----
+6) Content Loading Rewrite
+
+An important performance improvement that went into CMSMS 1.6 was a change in the way that content is loaded into memory.   For most websites they will notice a dramatic reduction in the number of queries required to build a single page, and the various navigation links on the page.   This is because now, when information about a page is requested, we load all of the information about all of the siblings to that page at the same time, with one query.  Additionally, the page properties (like the extra1, extra2, extra3, and metadata information) is entirely lazy loaded.  Which means that if you don't need the extra2 parameter for a certain page, it is not loaded into RAM.  A savings on time and memory.
+
+However, some websites (particularly those that use image attributes, or the extra1, extra2, and extra3 menu manager attributes) will notice that some navigation things stop working upon upgrade to 1.6.  This is because MenuManager has been modified so that the page properties are not loaded by default, and added to each menu manager 'node'.   To force the old behaviour you will need to add the loadprops=1 parameter to your {menu ...} calls.
+
+-----
+7) TinyMCE
+
+TinyMCE has had some serious enhancements as well.  However, those enhancements make it so that on an upgrade you may not see the TinyMCE editor in your content pages, or various frontend forms.  To resolve this problem, you may need to uninstall the TinyMCE module (in Extensions >> Modules) and re-install it, then reset the settings.
+
+-----
+8) Conclusion
+
+We have described the important changes in version 1.6 that will effect the behavior of your current CMS Made Simple installation.  For a complete list of changes, please see the release notes in the forum or the CHANGELOG.txt file in the doc directory.

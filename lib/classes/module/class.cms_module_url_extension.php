@@ -120,7 +120,7 @@ class CmsModuleUrlExtension extends CmsModuleExtension
 		
 		if ($params['warn_message'] != '')
 		{
-			$link_params['onclick'] = "return confirm('{$warn_message}');";
+			$link_params['onclick'] = "return confirm('" . $params['warn_message'] . "');";
 		}
 		
 		$extra = '';
