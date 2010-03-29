@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSUpgradePage2.class.php 240 2009-10-12 21:13:35Z ronnyk $
+#$Id: CMSUpgradePage2.class.php 215 2009-07-18 07:04:18Z alby $
 
 class CMSInstallerPage2 extends CMSInstallerPage
 {
@@ -129,6 +129,9 @@ class CMSInstallerPage2 extends CMSInstallerPage
 			testRange(0, lang('test_check_upload_max') .'<br />'. lang('test_min_recommend', $minimum, $recommended),
 				'upload_max_filesize', lang('test_check_upload_max_failed'), $minimum, $recommended, true, true, null, 'min_upload_max_filesize');
 
+		$f = cms_join_path(CMS_BASE, 'tmp');
+		$settings['recommended'][] = testDirWrite(0, lang('test_check_writable', $f), $f, lang('test_check_tmp_failed'), 0, $this->debug);
+
 		$f = cms_join_path(CMS_BASE, 'uploads');
 		$settings['recommended'][] = testDirWrite(0, lang('test_check_writable', $f), $f, lang('test_check_upload_failed'), 0, $this->debug);
 
@@ -153,7 +156,6 @@ class CMSInstallerPage2 extends CMSInstallerPage
 				testDirWrite(0, lang('test_check_session_save_path'), $session_save_path,
 					lang('test_check_session_save_path_failed', $session_save_path), 1, $this->debug);
 		}
-		$settings['recommended'][] = testBoolean(0, 'session.use_cookies', 'session.use_cookies', lang('session_use_cookies'));
 
 		$settings['recommended'][] =
 			testBoolean(0, lang('test_check_xml_func'),

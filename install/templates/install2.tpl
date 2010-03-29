@@ -51,7 +51,7 @@
 {foreach from=$settings.required item='test'}
 		<tr class="{cycle values='row1,row2'}">
 			<td>
-	{if isset($test->value) && $test->value != '' && $test->display_value != 0}
+	{if isset($test->value) && $test->value != ''}
 				<span class="have">{lang_install a=install_you_have} {$test->value}</span>
 	{/if}
 				{$test->title}

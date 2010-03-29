@@ -235,8 +235,8 @@ class CmsContentOperations extends CmsObject
      */
 	public static function set_hierarchy_position($contentid)
 	{
-		global $gCms;
-		$db = $gCms->GetDb();
+		$gCms = cmsms();
+		$db = cms_db();
 
 		$current_hierarchy_position = '';
 		$current_id_hierarchy_position = '';
@@ -247,7 +247,7 @@ class CmsContentOperations extends CmsObject
 		while ($current_parent_id > 1)
 		{
 			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			$row = &$db->GetRow($query, array($current_parent_id));
+			$row = $db->GetRow($query, array($current_parent_id));
 			if ($row)
 			{
 				$current_hierarchy_position = $row['item_order'] . '.' . $current_hierarchy_position;

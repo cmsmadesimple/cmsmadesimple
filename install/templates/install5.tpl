@@ -20,8 +20,8 @@
 			<td>{lang_install a=install_admin_db_type}:</td>
 			<td>
 				<select name="dbms">
-{foreach from=$dbms_options item=option}
-					<option value="{$option.name}"{if $values.db.dbms == $option.name} selected="selected"{/if}>{$option.title}</option>
+{foreach from=$dbms_options key=driver item=option}
+					<option value="{$driver}"{if $values.db.dbms == $driver} selected="selected"{/if}>{$option.label}</option>
 {/foreach}
 				</select>
 {if empty($dbms_options)}
@@ -39,6 +39,7 @@
 			<td>{lang_install a=install_admin_db_name}</td>
 			<td>
 				<input type="text" name="database" value="{$values.db.database}" size="20" maxlength="50" />
+				{lang_install a=install_admin_db_database_info}
 			</td>
 		</tr>
 		<tr class="row1">

@@ -139,7 +139,7 @@ function testIni(&$test, $varname, $type)
 */
 function & testBoolean($required, $title, $var, $message = '', $ini = true, $negative_test = false)
 {
-	$test =&new StdClass();
+	$test = new StdClass();
 	$test->title = $title;
 
 	if($ini)
@@ -204,7 +204,7 @@ function & testBoolean($required, $title, $var, $message = '', $ini = true, $neg
 */
 function & testFileChecksum($required, $title, $file, $checksum, $message = '', $formattime = '%c', $debug = false)
 {
-	$test =& new StdClass();
+	$test = new StdClass();
 	$test->title = $title;
 	$test->value = $file;
 
@@ -308,7 +308,7 @@ function & testFileUploads($inputname)
 		return $_ary;
 	}
 
-	$test =& new StdClass();
+	$test = new StdClass();
 	$test->files = array();
 
 	$_file_uploads = testBoolean(0, '', 'file_uploads', '', true, false);
@@ -459,7 +459,7 @@ if(isset($results))
 	else
 	{
 		echo lang('checksum_passed').'<hr>';
-	}	
+	}
 }
 
 echo '<h4 style="color:navy;">'.lang('install_test_checksum').'</h4>';

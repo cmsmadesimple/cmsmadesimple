@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSInstallPage7.class.php 162 2009-05-10 16:19:13Z calguy1000 $
+#$Id: CMSInstallPage7.class.php 245 2010-01-24 12:43:47Z wishy $
 
 class CMSInstallerPage7 extends CMSInstallerPage
 {
@@ -37,6 +37,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		$values['admininfo']['password'] = $_POST['adminpassword'];
 		$base_url = str_replace(" ", "%20", rtrim($_POST['docroot'], '/'));
 		$link = '<a href="'.$base_url.'">'.lang('cms_site').'</a>';
+		$values['timezone'] = $_POST['timezone'];
 
 		$this->smarty->assign('base_url', $base_url);
 		$this->smarty->assign('values', $values);
@@ -55,11 +56,19 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		// to be used for sending spam by messing up $_POST variables
 		$db = ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
 		if (! empty($_POST['db_port'])) $db->port = $_POST['db_port'];
-		if (! $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']))
-		{
-			$this->errors[] = lang('could_not_connect_db');
-			return;
-		}
+		if ($_POST['dbms'] == 'sqlite' )
+		  {
+		    $res = $db->Connect(cms_join_path(CMS_BASE,'tmp',$_POST['database']));
+		  }
+		else
+		  {
+		    $res = $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
+		  }
+		if( !$res )
+		  {
+		    $this->errors[] = lang('could_not_connect_db');
+		    return;
+		  }
 
 		$newconfig = cms_config_load();
 		$newconfig['dbms'] = $_POST['dbms'];
@@ -72,6 +81,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
                 // $newconfig['db_socket'] = $_POST['db_socket'];
 
 		$newconfig['root_url'] = rtrim($_POST['docroot'], '/');
+		$newconfig['secure_root_url'] = str_replace('http:','https:',rtrim($_POST['docroot'], '/'));
 		$newconfig['root_path'] = rtrim($_POST['docpath'], '\\/');
 		$newconfig['query_var'] = $_POST['querystr'];
 		$newconfig['use_bb_code'] = false;
@@ -119,10 +129,10 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		$newconfig['default_upload_permission'] = '664';
 		$newconfig['page_extension'] = "";
 		$newconfig['locale'] = "";
+		$newconfig['timezone'] = $_POST['timezone'];
 		$newconfig['admin_encoding'] = "utf-8";
 		$newconfig['use_adodb_lite'] = true;
 		//$newconfig['internal_pretty_urls'] = false; //Not in use now
-		$newconfig['use_hierarchy'] = true; //Now true
 		$newconfig['wiki_url'] = 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel';
 		$newconfig['set_names'] = true;
 		$newconfig['url_rewriting'] = 'none';
@@ -151,21 +161,31 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		#Do module installation
 		if (isset($_POST["createtables"]) && $_POST['createtables'] != 0 )
 		{
-			global $DONT_SET_DB;
+			//global $DONT_SET_DB;
 			echo '<p>' . lang('install_admin_update_hierarchy');
 
 			#Set $gCms->config - somehow it doesn't get set by include.php
-			$gCms->config = $newconfig;
+			//$gCms->config = $newconfig;
+			$config = cms_config();
+			$config->load();
+			
+			//Set the instance up with the new parameters
+			CmsDatabase::unload();
+			$db = CmsDatabase::get_instance($newconfig['dbms'], $newconfig['db_hostname'], $newconfig['db_username'], $newconfig['db_password'], $newconfig['db_name']);
+			
+			/*
 
 			$db->SetFetchMode(ADODB_FETCH_ASSOC);
 			#$db->debug = true;
 			$gCms->db =& $db;
 			unset($GLOBALS['DONT_SET_DB']);
 			unset($DONT_SET_DB);
+			
+			*/
 
 
-			$contentops =& $gCms->GetContentOperations();
-			$contentops->SetAllHierarchyPositions();
+			CmsContentOperations::set_all_hierarchy_positions();
+			CmsContentOperations::reset_nested_set();
 
 			echo " [" . lang('done') . "]</p>";
 
@@ -178,7 +198,13 @@ class CMSInstallerPage7 extends CMSInstallerPage
 
 
 			echo '<p>' . lang('install_admin_install_modules');
-
+			
+			foreach (CmsModuleLoader::$core_modules as $one_module)
+			{
+				CmsModuleOperations::install($one_module);
+			}
+			
+			/*
 			foreach ($gCms->modules as $modulename=>$value)
 			{
 			  // only deal with system modules
@@ -234,16 +260,17 @@ class CMSInstallerPage7 extends CMSInstallerPage
 								exit;
 
 							}
-							*/
+							*/ /*
 						}
 					}
 				}
 			}
+			*/
 			echo " [" . lang('done') . "]</p>";
 
 
 			echo '<p>' . lang('install_admin_clear_cache');
-			$contentops->ClearCache();
+			CmsContentOperations::clear_cache();
 			echo " [" . lang('done') . "]</p>";
 
 			// Insert new site preferences

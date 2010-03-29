@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSInstallPage6.class.php 164 2009-05-13 14:58:14Z calguy1000 $
+#$Id: CMSInstallPage6.class.php 242 2009-10-27 02:54:30Z sjg $
 
 class CMSInstallerPage6 extends CMSInstallerPage
 {
@@ -51,6 +51,12 @@ class CMSInstallerPage6 extends CMSInstallerPage
 		$this->smarty->assign('docpath', CMS_BASE);
 		$this->smarty->assign('default_encoding', 'utf-8');
 
+		$zones = DateTimeZone::listIdentifiers();
+		$tzdef = date_default_timezone_get();		
+		$this->smarty->assign('timezones',$zones);
+		$this->smarty->assign('default_timezone',$tzdef);
+		
+
 		$this->smarty->assign('values', $values);
 
 		$this->smarty->assign('errors', $this->errors);
@@ -62,14 +68,27 @@ class CMSInstallerPage6 extends CMSInstallerPage
 
 		if(isset($_POST['createtables']))
 		{
+			$sql_error=false;
 			$db->SetFetchMode(ADODB_FETCH_ASSOC);
 
 			$CMS_INSTALL_DROP_TABLES=1;
 			$CMS_INSTALL_CREATE_TABLES=1;
 
+
+			$t=time();
+			echo "<p>" . lang('install_sql_schema') ."</p>";
+
 			include_once(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'schema.php'));
 
-			echo "<p>" . lang('install_admin_importing');
+			echo "<p>[" . (($this->debug) ? lang('done_in_sec', (time()-$t)) : lang('done')) . "]</p>";
+			flush();
+
+
+			echo "<p>&nbsp;</p>";
+
+
+			$t=time();
+			echo "<p>" . lang('install_admin_importing') ."</p>";
 
 			$handle = '';
 			if(isset($_POST["createextra"]))
@@ -86,12 +105,15 @@ class CMSInstallerPage6 extends CMSInstallerPage
 			}
 
 			if($handle) {
+				$db->StartTrans();
+
 				while(!feof($handle)) {
-					set_magic_quotes_runtime(false);
+					//set_magic_quotes_runtime(false);
 					$s = fgets($handle, 32768);
 					if ($s != "") {
 						$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));
-						$s = str_replace("\\r\\n", "\r\n", $s);
+						$s = str_replace("\\r", "\r", $s);
+						$s = str_replace("\\n", "\n", $s);
 						$s = str_replace("\\'", "''", $s);
 						$s = str_replace('\\"', '"', $s);
 						$result = $db->Execute($s);
@@ -101,48 +123,61 @@ class CMSInstallerPage6 extends CMSInstallerPage
 					}
 				}
 				fclose($handle);
-				echo " [" . lang('done') . "]</p>";
+
+				if($this->debug && $db->HasFailedTrans()) echo "<p>" . lang('install_error_trans') . "</p>";
+				$db->CompleteTrans();
+				echo "<p>[" . (($this->debug) ? lang('done_in_sec', (time()-$t)) : lang('done')) . "]</p>";
 			}
 			else
 			{
-				echo lang('install_admin_error_schema') . "</p>";
+				echo "<p>" . lang('install_admin_error_schema') . "</p>";
 			}
+			flush();
 
 
-			echo "<p>" . lang('install_admin_set_account');
+			echo "<p>&nbsp;</p>";
 
-			$sql_error = false;
+
+			$t=time();
+			echo "<p>" . lang('install_set') . "</p>";
 
 			$sql = 'UPDATE ' . $db_prefix . 'users SET username = ?, password = ?, email = ? WHERE user_id = 1';
-			$dbresult = $db->Execute($sql, array($_POST['adminusername'], md5($_POST['adminpassword']), $_POST['adminemail']));
-			if (!$dbresult)
-			{
-				echo lang('invalid_query', $db->$sql) ."</p>";
+			try {
+				$dbresult = $db->Execute($sql, array($_POST['adminusername'], md5($_POST['adminpassword']), $_POST['adminemail']));
+				echo lang('install_set_account', lang('done'));
+			} catch (exception $e) {
+				echo lang('install_set_account', lang('failed').': '.$e->getMessage());
 				$sql_error = true;
 			}
-			else
-			{
-				echo " [" . lang('done') . "]</p>";
-			}
 
-			echo "<p>" . lang('install_admin_set_sitename');
-
-			$query = "INSERT INTO ". $db_prefix ."siteprefs (sitepref_name, sitepref_value) VALUES (?,?)";
-			$dbresult = $db->Execute($query, array('sitename', htmlentities($_POST['sitename'], ENT_QUOTES, 'UTF-8')));
-			if (!$dbresult)
-			{
-				echo lang('invalid_query', $db->sql) ."</p>";
+			$sql = "INSERT INTO ". $db_prefix ."siteprefs (sitepref_name, sitepref_value) VALUES (?,?)";
+			try {
+				$dbresult = $db->Execute($sql, array('sitename', htmlentities($_POST['sitename'], ENT_QUOTES, 'UTF-8')));
+				echo lang('install_set_sitename', lang('done'));
+			} catch (exception $e) {
+				echo lang('install_set_sitename', lang('failed').': '.$e->getMessage());
 				$sql_error = true;
 			}
-			else
-			{
-				echo " [" . lang('done') . "]</p>";
-			}
+
+			echo "<p>[" . (($this->debug) ? lang('done_in_sec', (time()-$t)) : lang('done')) . "]</p>";
+			flush();
+
+
+			echo "<p>&nbsp;</p>";
+
+
+			$t=time();
+			echo "<p>" . lang('install_sequence') ."</p>";
+			$db->StartTrans();
 
 			include_once(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'createseq.php'));
 
-			$db->Close();
+			if($this->debug && $db->HasFailedTrans()) echo "<p>" . lang('install_error_trans') . "</p>";
+			$db->CompleteTrans();
+			echo "<p>[" . (($this->debug) ? lang('done_in_sec', (time()-$t)) : lang('done')) . "]</p>";
 
+
+			$db->Close();
 			if (!$sql_error)
 			{
 				echo '<p class="success">' . lang('success') . '!</p>';

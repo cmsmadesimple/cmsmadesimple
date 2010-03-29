@@ -1,10 +1,7 @@
 <?php
-$lang['test_error_estrict'] = 'Testing error_reporting to ensure E_STRICT is disabled';
-$lang['test_estrict_failed'] = 'E_STRICT is enabled';
-$lang['info_estrict_failed'] = 'Some libraries that CMSMS uses do not work well with E_STRICT.  Please disable this before continuing';
-$lang['test_error_edeprecated'] = 'Testing error_reporting to ensure E_DEPRECATED is disabled';
-$lang['test_edeprecated_failed'] = 'E_DEPRECATED is enabled';
-$lang['info_edeprecated_failed'] = 'If E_DEPRECATED is enabled in your error reporting users will see alot of warning messages that could effect the display and functionalty';
+$lang['install_set'] = 'Setting information...';
+$lang['install_set_account'] = '<p>Setting admin account information... [%s]</p>';
+$lang['install_set_sitename'] = '<p>Setting sitename... [%s]</p>';
 $lang['invalidemail'] = 'The email address entered is invalid';
 $lang['empty_query'] = 'Empty query?? %s';
 $lang['no_db_driver'] = 'No compatible database drivers found';
@@ -19,12 +16,14 @@ $lang['test_check_register_globals'] = 'Checking PHP register globals';
 $lang['test_check_register_globals_failed'] = 'PHP register globals is active. For security reasons, this should be disabled.';
 $lang['test_check_disable_functions'] = 'Checking PHP disable functions';
 $lang['test_check_disable_functions_failed'] = 'Warning: this is a list of functions disabled on your server.';
+$lang['install_admin_db_database_info'] = 'Sqlite will create the database file if it does not exist.';
 $lang['install_admin_db_port'] = 'Database port';
 $lang['install_admin_db_port_info'] = 'If you don\'t know, leave this blank to use default settings.';
 $lang['install_admin_db_socket'] = 'Database socket';
 $lang['install_admin_db_socket_info'] = 'NOT SUPPORTED.';
 $lang['install_admin_frontendlang'] = 'Default language for the frontend. This adjusts the locale used for various default date handling functions, etc.';
 $lang['install_default_encoding'] = 'In almost all cases, default_encoding should be utf-8.';
+$lang['install_timezone'] = 'Site\'s time zone to use for time calculations';
 
 $lang['installer_done'] = '[done]';
 $lang['installer_failed'] = '[failed]';
@@ -293,6 +292,7 @@ $lang['test_check_post_max_failed'] = 'You will probably not be able to submit (
 $lang['test_check_upload_max'] = 'Checking max upload file size';
 $lang['test_check_upload_max_failed'] = 'You will probably not be able to upload (larger) files using the included file management functions. Please be aware of this restriction.';
 $lang['test_check_writable'] = 'Checking if %s is writable';
+$lang['test_check_tmp_failed'] = 'The tmp folder is not writable. You can still install the system, but you will not be able to use SQLite database.';
 $lang['test_check_upload_failed'] = 'The uploads folder is not writable. You can still install the system, but you will not be able to upload files via the Admin Panel.';
 $lang['test_check_images_failed'] = 'The images folder is not writable. You can still install the system, but you will not be able to upload and use images via the Admin Panel.';
 $lang['test_check_modules_failed'] = 'The modules folder is not writable. You can still install the system, but you will not be able to upload modules via the Admin Panel.';
@@ -331,12 +331,14 @@ $lang['install_admin_db_prefix'] = 'Table prefix';
 $lang['install_admin_db_sample'] = 'Install sample content and templates';
 $lang['retry'] = 'Retry';
 $lang['install_admin_db_create_seq'] = 'Creating %s table sequence...';
-
+$lang['install_sql_schema'] = 'Create sql schema...';
 $lang['install_admin_importing'] = 'Importing sample data...';
 $lang['invalid_query'] = 'Invalid query: %s';
 $lang['install_creating_table'] = '<p>Creating %s table... [%s]</p>';
 $lang['install_creating_index'] = '<p>Creating index in %s table... [%s]</p>';
-
+$lang['install_error_trans'] = 'Transaction has failed!';
+$lang['install_sequence'] = 'Create sequences...';
+$lang['done_in_sec'] = 'done in %s seconds';
 $lang['done'] = 'done';
 $lang['failed'] = 'failed';
 $lang['install_admin_error_schema'] = 'Error in retrieve SQL schema';

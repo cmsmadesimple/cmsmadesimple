@@ -23,7 +23,6 @@ global $gCms;
 $CMS_INSTALL_PAGE=1;
 $LOAD_ALL_MODULES = true;
 #$DONT_LOAD_DB = false;
-$USE_OLD_ADODB=1;
 $process = 'upgrade';
 $max_pages = 7;
 
@@ -32,7 +31,7 @@ define('CMS_UPGRADE_HELP_URL', 'http://wiki.cmsmadesimple.org/index.php/User_Han
 define('CMS_INSTALL_BASE', dirname(__FILE__));
 define('CMS_BASE', dirname(CMS_INSTALL_BASE));
 
-require_once CMS_BASE . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'misc.functions.php';
+require_once CMS_BASE . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php';
 require_once cms_join_path(CMS_BASE, 'fileloc.php');
 require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'functions.php');
@@ -84,7 +83,7 @@ if(isset($_GET['advanceduser']))
 
 
 
-$installer =& new CMSInstaller($max_pages, $debug);
+$installer = new CMSInstaller($max_pages, $debug);
 
 
 
@@ -118,7 +117,7 @@ if(! isset($_GET['sessiontest']) && (! isset($_POST['page'])) )
 	}
 
 	require_once $pathSmartClass;
-	$smarty =& new Smarty();
+	$smarty = new Smarty();
 	$smarty->compile_dir = TMP_TEMPLATES_C_LOCATION;
 	$smarty->cache_dir = TMP_CACHE_LOCATION;
 	$smarty->template_dir = cms_join_path(CMS_INSTALL_BASE, 'templates');

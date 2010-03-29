@@ -472,8 +472,8 @@ function set_site_preference($prefname, $value)
 {
 	$doinsert = true;
 
-	global $gCms;
-	$db =& $gCms->GetDb();
+	$gCms = cmsms();
+	$db = cms_db();
 
 	$siteprefs = &$gCms->siteprefs;
 

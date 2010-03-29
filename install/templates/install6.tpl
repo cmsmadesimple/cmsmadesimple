@@ -41,6 +41,16 @@
 			<input type="text" name="default_encoding" value="{$default_encoding}" size="20" maxlength="20" />
 		</td>
 	</tr>
+	<tr class="row2">
+		<td>{lang_install a=install_timezone}</td>
+		<td>
+			<select name="timezone">
+{foreach from=$timezones item=tz}
+				<option value="{$tz}"{if $default_timezone==$tz} selected="selected"{/if}>{$tz}</option>
+{/foreach}
+			</select>
+		</td>
+	</tr>
    </table>
 
 	<div class="continue">

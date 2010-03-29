@@ -23,14 +23,22 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
     foreach ($table_ids as $tablename => $tableinfo)
     {
-        echo '<p>' . lang('install_admin_db_create_seq', $tablename);
-        $max = $db->Execute(
-            'SELECT max(' . $tableinfo['id'] . ') AS maxid FROM '.$db_prefix.$tablename
-        );
-        $max = ($max && $row = $max->FetchRow()) ? $row['maxid']+1 : 1;
-        $tableinfo['seq'] = isset($tableinfo['seq']) ? $tableinfo['seq'] : $tablename . '_seq';
-        $db->CreateSequence($db_prefix.$tableinfo['seq'], $max);
-        echo " [" . lang('done') . "]</p>";
+		try {
+			$res = $db->Execute('SELECT max('. $tableinfo['id'] .') AS maxid FROM '.$db_prefix.$tablename);
+			$max = ($row = $res->FetchRow()) ? $row['maxid']+1 : 1;
+		} catch (exception $e) {
+			echo '<p>' . lang('install_admin_db_create_seq', $tablename) .' ['. lang('failed') .': '. $e->getMessage() .']</p>';
+			break;
+		}
+
+		$tableinfo['seq'] = isset($tableinfo['seq']) ? $tableinfo['seq'] : $tablename .'_seq';
+		try {
+			$res = $db->CreateSequence($db_prefix.$tableinfo['seq'], $max);
+			echo '<p>' . lang('install_admin_db_create_seq', $tablename) .' ['. lang('done') .']</p>';
+		} catch (exception $e) {
+			echo '<p>' . lang('install_admin_db_create_seq', $tablename) .' ['. lang('failed') .': '. $e->getMessage() .']</p>';
+			break;
+		}
     }
 
 }

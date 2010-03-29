@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSUpgradePage5.class.php 150 2009-03-17 23:01:15Z alby $
+#$Id: CMSUpgradePage5.class.php 210 2009-07-07 16:24:54Z alby $
 
 class CMSInstallerPage5 extends CMSInstallerPage
 {
@@ -35,7 +35,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
 
 	function preContent(&$db)
 	{
-		$test =&new StdClass();
+		$test = new StdClass();
 
 		$test->error = false;
 		$test->messages = array();

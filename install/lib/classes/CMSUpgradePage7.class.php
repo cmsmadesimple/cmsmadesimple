@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSUpgradePage7.class.php 149 2009-03-17 22:22:13Z alby $
+#$Id: CMSUpgradePage7.class.php 210 2009-07-07 16:24:54Z alby $
 
 class CMSInstallerPage7 extends CMSInstallerPage
 {
@@ -33,7 +33,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		global $gCms;
 		$config =& $gCms->GetConfig();
 
-		$test =&new StdClass();
+		$test = new StdClass();
 
 		$test->error = false;
 		$test->messages = array();

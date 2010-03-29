@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSInstallPage5.class.php 159 2009-05-05 10:47:28Z alby $
+#$Id: CMSInstallPage5.class.php 207 2009-07-06 17:50:05Z alby $
 
 class CMSInstallerPage5 extends CMSInstallerPage
 {
@@ -48,19 +48,14 @@ class CMSInstallerPage5 extends CMSInstallerPage
 		$values['email_accountinfo'] = empty($_POST['email_accountinfo']) ? 0 : 1;
 		$values['createtables'] = isset($_POST['createtables']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
 		$values['createextra'] = isset($_POST['createextra']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
-		$databases = array(
-			array('name' => 'mysqli', 'title' => 'MySQL (4.1+)'),
-			array('name' => 'mysql', 'title' => 'MySQL (compatibility)'),
-			array('name' => 'postgres7', 'title' => 'PostgreSQL 7/8', 'extension' => 'pgsql')
-			// array('name' => 'sqlite', 'title' => 'SQLite')
-		);
+		$databases = getSupportedDBDriver();
 		$dbms_options = array();
-		foreach ($databases as $db)
+		foreach ($databases as $driver=>$db)
 		{
-			$extension = isset($db['extension']) ? $db['extension'] : $db['name'];
+			$extension = isset($db['extension']) ? $db['extension'] : $db['server'];
 			if (extension_loaded($extension))
 			{
-				$dbms_options[] = $db;
+				$dbms_options[$driver] = $db;
 			}
 		}
 		$this->smarty->assign('extra_sql', is_file(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'extra.sql')));

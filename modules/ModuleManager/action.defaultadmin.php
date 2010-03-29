@@ -77,13 +77,13 @@
 		echo $this->Tabs->end_tab();
 
 		echo $this->Tabs->start_tab('modules');
-		$this->_DisplayAdminModulesTab( $id, $params, $returnid );
+		$this->_DisplayAdminModulesTab( $id, $params, $return_id );
 		echo $this->Tabs->end_tab();
 	}
 	if( $this->Permission->check('Modify Site Preferences') )
 	{
 		echo $this->Tabs->start_tab('prefs');
-		$this->_DisplayAdminPrefsTab( $id, $params, $returnid );
+		$this->_DisplayAdminPrefsTab( $id, $params, $return_id );
 		echo $this->Tabs->end_tab();
 	}
 	echo $this->Tabs->end_tab_content();

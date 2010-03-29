@@ -217,7 +217,7 @@ class ModuleManager extends CmsModuleBase
     cms_smarty()->assign_by_ref('message', $message);
 	  
     // Display the populated template
-    echo $this->ProcessTemplate('error.tpl');
+    echo $this->Template->process('error.tpl');
   }
 	
 

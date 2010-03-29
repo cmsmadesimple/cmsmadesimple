@@ -31,7 +31,7 @@ define('CMS_INSTALL_HELP_URL', 'http://wiki.cmsmadesimple.org/index.php/User_Han
 define('CMS_INSTALL_BASE', dirname(__FILE__));
 define('CMS_BASE', dirname(CMS_INSTALL_BASE));
 
-require_once CMS_BASE . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'misc.functions.php';
+require_once CMS_BASE . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php';
 require_once cms_join_path(CMS_BASE, 'fileloc.php');
 require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'functions.php');
@@ -59,6 +59,7 @@ if( (isset($_GET['debug'])) || (isset($_SESSION['debug'])) )
 	@error_reporting(E_ALL);
 	$debug = true;
 }
+$debug = true;
 /* Set memory_limit without add in file */
 if( (isset($_GET['memory_limit'])) || (isset($_SESSION['memory_limit'])) )
 {
@@ -140,8 +141,6 @@ else if(! isset($_SESSION['test']))
 
 // First checks ok
 require_once cms_join_path(CMS_BASE, 'include.php');
-$smarty->caching = false;
-$smarty->force_compile = true;
 
 if(isset($_POST['default_cms_lang']))
 {

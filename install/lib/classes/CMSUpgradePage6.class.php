@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSUpgradePage6.class.php 149 2009-03-17 22:22:13Z alby $
+#$Id: CMSUpgradePage6.class.php 210 2009-07-07 16:24:54Z alby $
 
 class CMSInstallerPage6 extends CMSInstallerPage
 {
@@ -38,12 +38,12 @@ class CMSInstallerPage6 extends CMSInstallerPage
 	}
 
 
-	//Do module autoupgrades 
+	//Do module autoupgrades
 	function module_autoupgrade()
 	{
 		global $gCms;
 		$db =& $gCms->GetDB();
-		$test =&new StdClass();
+		$test = new StdClass();
 
 		$test->error = false;
 		$test->messages = array();
@@ -89,12 +89,12 @@ class CMSInstallerPage6 extends CMSInstallerPage
 						{
 							$_msg .= " [" . lang('done') . "]";
 						}
-						$test->message[] = $_msg; 
+						$test->message[] = $_msg;
 
 						$_msg = lang('upgrade_event_module_from_to', $modulename, $module_version, $file_version);
 						Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $modulename, 'oldversion' => $module_version, 'newversion' => $file_version));
 						$_msg .= " [" . lang('done') . "]";
-						$test->message[] = $_msg; 
+						$test->message[] = $_msg;
 					}
 				}
 			}

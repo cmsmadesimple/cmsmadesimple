@@ -2,31 +2,24 @@
 
 if (isset($CMS_INSTALL_DROP_TABLES)) {
 
-	$db->DropSequence($db_prefix."additional_htmlblob_users_seq");
-	$db->DropSequence($db_prefix."additional_users_seq");
-	$db->DropSequence($db_prefix."admin_bookmarks_seq");
-	$db->DropSequence($db_prefix."admin_recent_pages_seq");
-	$db->DropSequence($db_prefix."additional_users_seq");
-	$db->DropSequence($db_prefix."content_seq");
-	$db->DropSequence($db_prefix."content_props_seq");
-	$db->DropSequence($db_prefix."css_seq");
-	$db->DropSequence($db_prefix."events_seq");
-	$db->DropSequence($db_prefix."event_handler_seq");
-	$db->DropSequence($db_prefix."group_perms_seq");
-	$db->DropSequence($db_prefix."groups_seq");
-	$db->DropSequence($db_prefix."htmlblobs_seq");
-	$db->DropSequence($db_prefix."module_deps_seq");
-	$db->DropSequence($db_prefix."module_templates_seq");
-	$db->DropSequence($db_prefix."permissions_seq");
-	$db->DropSequence($db_prefix."templates_seq");
-	#$db->DropSequence($db_prefix."sequence_seq");
-	$db->DropSequence($db_prefix."users_seq");
-	$db->DropSequence($db_prefix."userplugins_seq");
+	@$db->DropSequence($db_prefix."additional_htmlblob_users_seq");
+	@$db->DropSequence($db_prefix."additional_users_seq");
+	@$db->DropSequence($db_prefix."admin_bookmarks_seq");
+	@$db->DropSequence($db_prefix."admin_recent_pages_seq");
+	@$db->DropSequence($db_prefix."content_seq");
+	@$db->DropSequence($db_prefix."content_props_seq");
+	@$db->DropSequence($db_prefix."css_seq");
+	@$db->DropSequence($db_prefix."events_seq");
+	@$db->DropSequence($db_prefix."event_handler_seq");
+	@$db->DropSequence($db_prefix."group_perms_seq");
+	@$db->DropSequence($db_prefix."groups_seq");
+	@$db->DropSequence($db_prefix."htmlblobs_seq");
+	@$db->DropSequence($db_prefix."permissions_seq");
+	@$db->DropSequence($db_prefix."templates_seq");
+	@$db->DropSequence($db_prefix."users_seq");
+	@$db->DropSequence($db_prefix."userplugins_seq");
 
 	$dbdict = NewDataDictionary($db);
-
-	$sqlarray = $dbdict->DropIndexSQL("idx_template_id_modified_date");
-	$dbdict->ExecuteSQLArray($sqlarray);
 
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."additional_users");
 	$dbdict->ExecuteSQLArray($sqlarray);
@@ -70,8 +63,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."templates");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	#$sqlarray = $dbdict->DropTableSQL($db_prefix."sequence");
-	#$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."user_groups");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."userprefs");
@@ -86,8 +77,9 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 }
 
 if (isset($CMS_INSTALL_CREATE_TABLES)) {
-	
-	if ($db->dbtype == 'mysql' || $db->dbtype == 'mysqli')
+
+	if (isset($db->dbtype))
+	  if ($db->dbtype == 'mysql' || $db->dbtype == 'mysqli')
 		@$db->Execute("ALTER DATABASE `" . $db->database . "` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 
 	$dbdict = NewDataDictionary($db);
@@ -96,16 +88,18 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		additional_users_id I KEY,
+		additional_users_id I KEY AUTO,
 		user_id I,
 		page_id I,
 		content_id I
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."additional_users", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_users", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'additional_users', $ado_ret);
-
+*/
 
 
 	$flds = "
@@ -114,16 +108,14 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		title C(255),
 		url C(255)
 	";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_bookmarks", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
-	echo lang('install_creating_table', 'admin_bookmarks', $ado_ret);
-
+	echo installer_create_tablesql($dbdict, $db_prefix."admin_bookmarks", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."admin_bookmarks", array('user_id'));
+/*
 	$sqlarray = $dbdict->CreateIndexSQL('index_admin_bookmarks_by_user_id', $db_prefix."admin_bookmarks", 'user_id');
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'admin_bookmarks', $ado_ret);
-
+*/
 
 
 	$flds = "
@@ -134,11 +126,13 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		item_name C(50),
 		action C(255)
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."adminlog", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."adminlog", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'adminlog', $ado_ret);
-
+*/
 
 
 	$flds = "
@@ -146,17 +140,19 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		user_id I,
 		title C(255),
 		url C(255),
-		access_time DT
+		access_time T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."admin_recent_pages", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_recent_pages", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'admin_recent_pages', $ado_ret);
-
+*/
 
 
 	$flds = "
-		content_id I KEY,
+		content_id I KEY AUTO,
 		content_name C(255),
 		type C(25),
 		owner_id I,
@@ -179,10 +175,18 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		titleattribute C(255),
 		tabindex C(10),
 		accesskey C(5),
+                secure I1,
 		last_modified_by I,
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T,
+                lft I1,
+                rgt I1
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."content", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."content", array('content_alias', 'active'));
+	echo installer_create_indexsql($dbdict, $db_prefix."content", array('default_content'));
+	echo installer_create_indexsql($dbdict, $db_prefix."content", array('parent_id'));
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
@@ -202,10 +206,11 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
-
+*/
 
 
 	$flds = "
+		id I KEY AUTO,
 		content_id I,
 		type C(25),
 		prop_name C(255),
@@ -213,9 +218,12 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		param2 C(255),
 		param3 C(255),
 		content X,
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."content_props", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."content_props", array('content_id'));
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content_props", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
@@ -225,7 +233,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
-
+*/
 
 
 	$flds = '
@@ -233,10 +241,13 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		child_id I,
 		parent_type C(100),
 		parent_id I,
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	';
-
+	echo installer_create_tablesql($dbdict, $db_prefix."crossref", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."crossref", array('child_type', 'child_id'));
+	echo installer_create_indexsql($dbdict, $db_prefix."crossref", array('parent_type', 'parent_id'));
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."crossref", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
@@ -251,7 +262,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
-
+*/
 
 
 	$flds = "
@@ -259,9 +270,12 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		css_name C(255),
 		css_text X,
 		media_type C(255),
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."css", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."css", array('css_name'));
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
@@ -271,17 +285,21 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
-
+*/
 
 
 	$flds = "
 		assoc_to_id I,
 		assoc_css_id I,
 		assoc_type C(80),
-		create_date DT,
-		modified_date DT,
+		create_date T,
+		modified_date T,
 		assoc_order I
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."css_assoc", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."css_assoc", array('assoc_to_id'));
+	echo installer_create_indexsql($dbdict, $db_prefix."css_assoc", array('assoc_css_id'));
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css_assoc", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
@@ -296,8 +314,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
+*/
 
-	
 
 	$flds = "
 		event_id I,
@@ -307,11 +325,13 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		handler_order I,
 		handler_id I KEY
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."event_handlers", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."event_handlers", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'event_handlers', $ado_ret);
-
+*/
 
 
 	$flds = "
@@ -319,30 +339,37 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		event_name C(200) NOTNULL,
 		event_id I KEY
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."events", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."events", array('originator'));
+	echo installer_create_indexsql($dbdict, $db_prefix."events", array('event_name'));
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."events", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'events', $ado_ret);
-	
+
 	$sqlarray = $dbdict->CreateIndexSQL('originator', $db_prefix."events", 'originator');
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
-    
+
 	$sqlarray = $dbdict->CreateIndexSQL('event_name', $db_prefix."events", 'event_name');
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
-	
-	
+*/
+
 
 	$flds = "
 		group_perm_id I KEY,
 		group_id I,
 		permission_id I,
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."group_perms", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."group_perms", array('group_id', 'permission_id'));
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."group_perms", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
@@ -352,21 +379,23 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
-
+*/
 
 
 	$flds = "
 		group_id I KEY,
 		group_name C(25),
 		active I1,
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."groups", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."groups", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'groups', $ado_ret);
-
+*/
 
 
 	$flds = "
@@ -374,9 +403,12 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		htmlblob_name C(255),
 		html X,
 		owner I,
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."htmlblobs", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."htmlblobs", array('htmlblob_name'));
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."htmlblobs", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
@@ -386,7 +418,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
-
+*/
 
 
 	$flds = "
@@ -394,11 +426,13 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		user_id I,
 		htmlblob_id I
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."additional_htmlblob_users", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_htmlblob_users", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'additional_htmlblob_users', $ado_ret);
-
+*/
 
 
 	$flds = "
@@ -408,6 +442,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		admin_only I1 DEFAULT 0,
 		active I1
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."modules", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."modules", array('module_name'));
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."modules", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
@@ -417,30 +454,38 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
-
+*/
 
 
 	$flds = "
 		parent_module C(25),
 		child_module C(25),
 		minimum_version C(25),
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."module_deps", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_deps", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'module_deps', $ado_ret);
-
+*/
 
 
 	$flds = "
-		module_name C(160),
-		template_name C(160),
-		content X,
-		create_date DT,
-		modified_date DT
+    id I KEY AUTO,
+    module_name C(160) NOTNULL,
+    template_type C(160) NOTNULL default '',
+    template_name C(160) NOTNULL,
+    content XL,
+    default_template I1 default 0,
+    create_date T,
+    modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."module_templates", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."module_templates", array('module_name', 'template_name'));
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_templates", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
@@ -450,34 +495,38 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
-
+*/
 
 
 	$flds = "
 		permission_id I KEY,
 		permission_name C(255),
 		permission_text C(255),
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."permissions", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."permissions", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'permissions', $ado_ret);
-
+*/
 
 
 	$flds = "
 		sitepref_name C(255) KEY,
 		sitepref_value text,
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."siteprefs", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."siteprefs", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'siteprefs', $ado_ret);
-
+*/
 
 
 	$flds = "
@@ -488,9 +537,12 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		encoding C(25),
 		active I1,
 		default_template I1,
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."templates", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."templates", array('template_name'));
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."templates", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
@@ -500,20 +552,22 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
-
+*/
 
 
 	$flds = "
 		group_id I,
 		user_id I,
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."user_groups", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."user_groups", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'user_groups', $ado_ret);
-
+*/
 
 
 	$flds = "
@@ -522,6 +576,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		value X,
 		type C(25)
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."userprefs", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."userprefs", array('user_id'));
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."userprefs", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
@@ -531,7 +588,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_index', 'content', $ado_ret);
-
+*/
 
 
 	$flds = "
@@ -543,55 +600,44 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		last_name C(50),
 		email C(255),
 		active I1,
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."users", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."users", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'users', $ado_ret);
-
+*/
 
 
 	$flds = "
 		userplugin_id I KEY,
 		userplugin_name C(255),
 		code X,
-		create_date DT,
-		modified_date DT
+		create_date T,
+		modified_date T
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."userplugins", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."userplugins", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'userplugins', $ado_ret);
-
+*/
 
 
 	$flds = "
 		version I
 	";
+	echo installer_create_tablesql($dbdict, $db_prefix."version", $flds, $taboptarray);
+/*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."version", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'version', $ado_ret);
-
-
-
-	/*
-	$flds = "
-		sequence_id I KEY,
-		sequence_name C(25),
-		sequence_actions X,
-		sequence_panic X,
-		active I1,
-		create_date DT,
-		modified_date DT
-	";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."sequence", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
-	echo lang('install_creating_table', 'sequence', $ado_ret);
-	*/
+*/
 }
 
 # vim:ts=4 sw=4 noet

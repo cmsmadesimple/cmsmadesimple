@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSInstaller.class.php 214 2009-07-17 22:09:25Z calguy1000 $
+#$Id: CMSInstaller.class.php 226 2009-08-09 20:01:18Z alby $
 
 /**
  * Uses the CMSInstallerPage class
@@ -102,7 +102,7 @@ class CMSInstaller
 	{
 		global $gCms;
 
-		$this->smarty = &$gCms->GetSmarty();
+		$this->smarty = cms_smarty();
 		$this->smarty->template_dir = cms_join_path(CMS_INSTALL_BASE, 'templates');
 		$this->smarty->caching = false;
 		$this->smarty->force_compile = true;
@@ -214,27 +214,34 @@ class CMSInstaller
 						return;
 					}
 
-					$db =& ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
-					if(! empty($_POST['db_port']))
+					$dsn = $_POST['dbms'].'://';
+					if( $_POST['dbms'] == 'sqlite' )
 					{
-						$db->port = $_POST['db_port'];
+						$dsn .= urlencode(cms_join_path(CMS_BASE,'tmp',$_POST['database'])) .'/';
 					}
-					if( (! empty($_POST['db_socket'])) && ($_POST['dbms'] == 'mysqli') )
+					else
 					{
-						$db->socket = $_POST['db_socket'];
+						$dsn .= $_POST['username'].':'.rawurlencode($_POST['password']).'@'.$_POST['host'].'/'.$_POST['database'];
+						if(! empty($_POST['db_port']))
+						{
+							$dsn .= '?port='.$_POST['db_port'];
+						}
+						elseif( (! empty($_POST['db_socket'])) && ($_POST['dbms'] == 'mysqli') )
+						{
+							$dsn .= '?socket='.$_POST['db_socket'];
+						}
 					}
-					$result = $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
-					if (! $result)
+					$db = ADONewConnection( $dsn );
+					if (! $db)
 					{
 						$this->errors[] = lang('test_could_not_connect_db');
 						$this->currentPage = 5;
 						return;
 					}
-
 					//Try to create and drop a dummy table (with appropriate prefix)
-					$db_prefix = $_POST['prefix'];
+					$db_prefix = trim($_POST['prefix']);
 					@$db->Execute('DROP TABLE ' . $db_prefix . 'dummyinstall');
-					$result = $db->Execute('CREATE TABLE ' . $db_prefix . 'dummyinstall (i int)');
+					@$result = $db->Execute('CREATE TABLE ' . $db_prefix . 'dummyinstall (i int)');
 					if ($result)
 					{
 						$result = $db->Execute('DROP TABLE ' . $db_prefix . 'dummyinstall');
