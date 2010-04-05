@@ -76,10 +76,13 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		$name = $page;
 
 		# check if the page exists in the db
-		$manager =& $gCms->GetHierarchyManager();
-		$node =& $manager->sureGetNodeByAlias($page);
+		/*
+		$manager = $gCms->GetHierarchyManager();
+		$node = $manager->sureGetNodeByAlias($page);
 		if (!isset($node)) return;
 		$content =& $node->get_content();
+		*/
+		$content = CmsPageTree::get_instance()->get_node_by_alias($page);
 		if ($content !== FALSE && is_object($content))
 		{
 			$pageid = $content->id();

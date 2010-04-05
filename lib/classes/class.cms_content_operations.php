@@ -564,7 +564,7 @@ class CmsContentOperations extends CmsObject
 	{
 		#Change padded numbers back into user-friendly values
 		$tmp = '';
-		$levels = split('\.', $position);
+		$levels = preg_split('/\./', $position);
 		foreach ($levels as $onelevel)
 		{
 			$tmp .= ltrim($onelevel, '0') . '.';

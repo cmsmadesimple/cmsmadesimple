@@ -58,6 +58,8 @@ class CmsApplication extends CmsObject
 	 * System Modules - a list (hardcoded) of all system modules
 	 */
 	var $cmssystemmodules;
+	
+	var $userpluginfunctions;
 
 	/**
 	 * Plugins object - holds list of all registered plugins 

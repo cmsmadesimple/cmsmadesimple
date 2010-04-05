@@ -109,7 +109,7 @@ class CmsDispatcher extends CmsObject
 		
 		//Setup variables
 		//Some for backwards compat
-		cmsms()->content_id = $pageinfo->id;
+		cmsms()->content_id = $page_obj->id;
 		cmsms()->page = $page;
 		cmsms()->page_id = $page;
 		cmsms()->page_name = $page_obj->alias;
