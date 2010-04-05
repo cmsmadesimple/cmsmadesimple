@@ -52,10 +52,8 @@ class CmsSession extends CmsObject
 		{
 		    @session_start();
 		}
-		#Add users if they exist in the session
-		$gCms = cmsms();
 
-		$gCms->variables['user_id'] = '';
+		cmsms()->variables['user_id'] = '';
 		if (isset($_SESSION['cmsms_user_id']))
 		{
 		    $gCms->variables['user_id'] = $_SESSION['cmsms_user_id'];

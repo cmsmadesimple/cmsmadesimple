@@ -27,15 +27,27 @@
 define("ROOT_DIR", dirname(dirname(__FILE__)));
 define("DS", DIRECTORY_SEPARATOR);
 
+$CMS_VERSION = "2.0-beta1";
+$CMS_VERSION_NAME = "Canala";
+$CMS_SCHEMA_VERSION = "37";
+
+define('CMS_VERSION', $CMS_VERSION);
+define('CMS_VERSION_NAME', $CMS_VERSION_NAME);
+define('CMS_SCHEMA_VERSION', $CMS_SCHEMA_VERSION);
+define('CMS_DEFAULT_VERSIONCHECK_URL', 'http://dev.cmsmadesimple.org/latest_version.php');
+define('CMS_SECURE_PARAM_NAME', 'sp_');
+define('CMS_USER_KEY', 'cmsuserkey');
+
 //Load file location defines
-require_once(ROOT_DIR.DS.'fileloc.php');
-require_once(ROOT_DIR.DS.'version.php');
+require_once(cms_join_path(ROOT_DIR, 'fileloc.php'));
 
 //So we can use them in __autoload
-require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_object.php');
-require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_config.php');
-require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_cache.php');
-require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_profiler.php');
+require_once(cms_join_path(ROOT_DIR, 'lib', 'classes', 'class.cms_object.php'));
+require_once(cms_join_path(ROOT_DIR, 'lib', 'classes', 'class.cms_config.php'));
+require_once(cms_join_path(ROOT_DIR, 'lib', 'classes', 'class.cms_cache.php'));
+require_once(cms_join_path(ROOT_DIR, 'lib', 'classes', 'class.cms_profiler.php'));
+require_once(cms_join_path(ROOT_DIR, 'lib', 'page.functions.php'));
+require_once(cms_join_path(ROOT_DIR, 'lib', 'content.functions.php'));
 
 set_error_handler('cms_warning_handler', E_WARNING | E_USER_WARNING);
 
@@ -84,6 +96,12 @@ function cms_autoload($class_name)
 }
 
 spl_autoload_register('cms_autoload');
+
+//Setup a global $gCms.  Even if this goes away,
+//we need to instantiate CmsApplication near the
+//beginning so that event firing starts right away.
+$gCms = cmsms();
+$GLOBALS['gCms'] = $gCms;
 
 function scan_classes()
 {
@@ -145,18 +163,31 @@ function cms_smarty()
 	return CmsSmarty::get_instance();
 }
 
+function cms_request($request_param = '')
+{
+	if ($request_param != '')
+		return CmsRequest::get_instance()->get($request_param);
+	else
+		return CmsRequest::get_instance();
+}
+
+function cms_response()
+{
+	return CmsResponse::get_instance();
+}
+
 /**
  * Returns a reference to the adodb(lite) connection singleton object.
  * Replaces the global $gCms; $db =& $gCms->GetDb(); routine.
  */
 function cms_db()
 {
-	return cmsms()->GetDb();
+	return CmsDatabase::get_instance();
 }
 
 function cms_config()
 {
-	return cmsms()->GetConfig();
+	return CmsConfig::get_instance();
 }
 
 function cms_orm($class = '')

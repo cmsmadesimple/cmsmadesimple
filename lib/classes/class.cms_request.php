@@ -27,26 +27,20 @@
  **/
 class CmsRequest extends CmsObject
 {
+	public $_get = array();
+	public $_post = array();
+	public $_cookie = array();
+	public $_request = array();
+	public $_env = array();
+	
+	static private $instance = NULL;
+	
 	function __construct()
 	{
 		parent::__construct();
-	}
-	
-	/**
-	 * Sets up various things important for incoming requests
-	 *
-	 * @return void
-	 * @author Ted Kulp
-	 **/
-	public static function setup()
-	{
-		#magic_quotes_runtime is a nuisance...  turn it off before it messes something up
-		//set_magic_quotes_runtime(false);
 		
 		# sanitize $_GET
 		array_walk_recursive($_GET, array('CmsRequest', 'sanitize_get_var'));
-		
-		CmsRequest::strip_slashes_from_globals();
 		
 		#Fix for IIS (and others) to make sure REQUEST_URI is filled in
 		if (!isset($_SERVER['REQUEST_URI']))
@@ -57,6 +51,79 @@ class CmsRequest extends CmsObject
 		        $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
 		    }
 		}
+		
+		$this->_get += $_GET;
+		$this->_post += $_POST;
+		$this->_cookie += $_COOKIE;
+		
+		$this->_env += (array)$_SERVER + (array)$_ENV;
+		
+		//Pull the module id into smarty if necessary
+		$this->_request = $this->_get + $this->_post + $this->_cookie;
+		if (isset($this->_request['mact']))
+		{
+			$ary = explode(',', cms_htmlentities($this->_request['mact']), 4);
+			cms_smarty()->id = (isset($ary[1])?$ary[1]:'');
+		}
+		else
+		{
+			cms_smarty()->id = (isset($this->_request['id'])?intval($this->_request['id']):'');
+		}
+	}
+	
+	/**
+	 * Returns an instnace of the CmsRequest singleton.
+	 *
+	 * @return CmsRequest The singleton CmsRequest instance
+	 * @author Ted Kulp
+	 **/
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsRequest();
+		}
+		return self::$instance;
+	}
+	
+	public function has($name)
+	{
+		return $this->get($name, false) != null;
+	}
+	
+	public function get($name, $clean = false)
+	{
+		$ret = null;
+		
+		list($var, $key) = explode(':', $name);
+		if ($var && $key)
+		{	
+			if (in_array($var, array('request', 'get', 'post', 'cookie')))
+			{
+				$var = "_{$var}";
+				$ret = isset($this->{$var}[$key]) ? $this->{$var}[$key] : null;
+			}
+			else if ($var == 'env')
+			{
+				$ret = env($key);
+			}
+		}
+		else
+		{
+			$ret = isset($this->_request[$name]) ? $this->request[$name] : null;
+		}
+		
+		if ($ret && $clean)
+		{
+			$ret = self::clean_value($ret);
+		}
+		
+		return $ret;
+	}
+	
+	public function env($name)
+	{
+		return isset($this->_env[$name]) ? $this->_env[$name] : null;
 	}
 	
 	/**
@@ -101,7 +168,7 @@ class CmsRequest extends CmsObject
 		$config = cms_config();
 		$page = '';
 		
-		$id = CmsRequest::get_id_from_request();
+		$id = cms_smarty()->id;
 
 		if (isset($id) && isset($params[$id . 'returnid']))
 		{
@@ -264,7 +331,7 @@ class CmsRequest extends CmsObject
 		$cur_file_dir = dirname(self::get_request_filename());
 		
 		$has_index_php = false;
-		if (isset($_REQUEST['REQUEST_URI']) && strpos($_REQUEST['REQUEST_URI'], "index.php") === false)
+		if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], "index.php") === false)
 		{
 			$has_index_php = true;
 		}
@@ -298,40 +365,6 @@ class CmsRequest extends CmsObject
 		//	$result = $result . '/';
 		
 		return $result;
-	}
-
-	/**
-	 * Strips the slashes from all incoming superglobals,
-	 * if necessary.
-	 *
-	 * @return void
-	 * @author Ted Kulp
-	 **/
-	public static function strip_slashes_from_globals()
-	{
-		/*
-		if (get_magic_quotes_gpc())
-		{
-		    $_GET = CmsRequest::stripslashes_deep($_GET);
-		    $_POST = CmsRequest::stripslashes_deep($_POST);
-		    $_REQUEST = CmsRequest::stripslashes_deep($_REQUEST);
-		    $_COOKIE = CmsRequest::stripslashes_deep($_COOKIE);
-		    $_SESSION = CmsRequest::stripslashes_deep($_SESSION);
-		}
-		*/
-	}
-	
-	function stripslashes_deep($value)
-	{
-		if (is_array($value))
-		{
-			$value = array_map(array('CmsRequest', 'stripslashes_deep'), $value);
-		}
-		elseif (!empty($value) && is_string($value))
-		{
-			$value = stripslashes($value);
-		}
-		return $value;
 	}
 	
 	/**
@@ -387,34 +420,6 @@ class CmsRequest extends CmsObject
 			$string = preg_replace($patterns, $replacements, $string);
 		}
 		return $string;
-	}
-	
-	public static function has($name, $session = false)
-	{
-		if ($session)
-			$_ARR = array_merge($_SESSION, $_REQUEST);
-		else
-			$_ARR = $_REQUEST;
-		return array_key_exists($name, $_ARR);
-	}
-	
-	public static function get($name, $clean = true, $session = false)
-	{
-		$value = '';
-		if (array_key_exists($name, $_REQUEST))
-			$value = $_REQUEST[$name];
-		if ( ($session) && (array_key_exists($name, $_SESSION)))
-			$value = $_SESSION[$name];
-		if ($clean)
-			$value = self::clean_value($value);
-		return $value;
-	}
-	
-	public static function get_cookie($name)
-	{
-		if (array_key_exists($name, $_COOKIE))
-			return self::clean_value($_COOKIE[$name]);
-		return '';
 	}
 	
 	public static function set_cookie($name, $value, $expire = null)

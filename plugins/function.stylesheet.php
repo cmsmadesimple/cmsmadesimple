@@ -56,10 +56,10 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 		}
 	}
 
-	global $gCms;
-	$config = &$gCms->config;
-	$pageinfo = &$gCms->variables['pageinfo'];
-	$template_id=$pageinfo->template_id;
+	$gCms = cmsms();
+	$config = cms_config();
+	$pageinfo = cmsms()->current_page;
+	$template_id = $pageinfo->template_id;
 	if (isset($params["templateid"]) && $params["templateid"]!="")
 	{
 		$template_id=$params["templateid"];

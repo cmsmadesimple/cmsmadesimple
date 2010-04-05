@@ -20,7 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
+require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
 
 check_login();
 
@@ -136,7 +136,8 @@ include_once("footer.php");
 /*
 $LOAD_ALL_MODULES=1;
 
-require_once("../include.php");
+require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
+
 require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
 
 check_login();

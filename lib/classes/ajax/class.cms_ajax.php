@@ -34,13 +34,12 @@ class CmsAjax extends CmsObject
 	
 	function process_requests()
 	{
-		if (isset($_REQUEST['cms_ajax_function_name']))
+		if (cms_request('request:cms_ajax_function_name') != null)
 		{
-			while(@ob_end_clean());
-			header("Content-Type: text/html; charset=utf-8");
-			$function_name = $_REQUEST['cms_ajax_function_name'];
+			//while(@ob_end_clean());
+			$function_name = cms_request('request:cms_ajax_function_name');
 			
-			$json = json_decode($_REQUEST['cms_ajax_args']);
+			$json = json_decode(cms_request('request:cms_ajax_args'));
 			$args = array();
 			if (is_array($json))
 			{
@@ -59,7 +58,9 @@ class CmsAjax extends CmsObject
 				}
 			}
 			
-			echo call_user_func_array($function_name, $args);
+			cms_response()->add_header('Content-Type', "text/html; charset=utf-8");
+			cms_response()->body(call_user_func_array($function_name, $args));
+			cms_response()->render();
 			exit;
 		}
 	}

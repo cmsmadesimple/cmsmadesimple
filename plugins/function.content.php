@@ -18,9 +18,9 @@
 
 function smarty_cms_function_content($params, &$smarty)
 {
-	global $gCms;
-	$pageinfo =& $gCms->variables['pageinfo'];
-	if (isset($pageinfo) && $pageinfo !== FALSE && isset($pageinfo->content_id) )
+	$gCms = cmsms();
+	$pageinfo = $gCms->current_page;
+	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
 		$id = '';
 		$modulename = '';
@@ -93,7 +93,7 @@ function smarty_cms_function_content($params, &$smarty)
 					  }
 					else
 					  {
-					    $returnid = $pageinfo->content_id;
+					    $returnid = $pageinfo->id;
 					  }
 					$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
 					if ($result !== FALSE)
@@ -117,11 +117,12 @@ function smarty_cms_function_content($params, &$smarty)
 			$result = '';
 			$oldvalue = $smarty->caching;
 			$smarty->caching = false;
-			$result = $smarty->fetch(str_replace(' ', '_', 'content:' . (isset($params['block'])?$params['block']:'content_en')), '', $pageinfo->content_id);
+			$result = $smarty->fetch(str_replace(' ', '_', 'content:' . (isset($params['block'])?$params['block']:'content_en')), '', $pageinfo->id);
 			$smarty->caching = $oldvalue;
 			return _smarty_cms_function_content_return($result, $params, $smarty);
 		}
 	}
+	var_dump('ere');
 	return _smarty_cms_function_content_return('', $params, $smarty);
 }
 

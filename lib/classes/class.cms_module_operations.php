@@ -158,14 +158,14 @@ class CmsModuleOperations extends CmsObject
 			$action = $params['action'];
 		}
 
-		if (isset($_REQUEST['id'])) //Not really needed now...
+		if (cms_request('request:id') != null) //Not really needed now...
 		{
-			$checkid = $_REQUEST['id'];
+			$checkid = cms_request('request:id');
 		}
-		else if (isset($_REQUEST['mact']))
+		else if (cms_request('request:mact') != null)
 		{
 			// we're handling an action
-			$ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
+			$ary = explode(',', cms_htmlentities(cms_request('request:mact'), 4));
 			$mactmodulename = (isset($ary[0])?$ary[0]:'');
 			if (!strcasecmp($mactmodulename,$params['module']))
 			{

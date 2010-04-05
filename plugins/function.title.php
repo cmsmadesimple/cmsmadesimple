@@ -18,18 +18,17 @@
 
 function smarty_cms_function_title($params, &$smarty)
 {
-	$gCms = cmsms();
-	$pageinfo = &$gCms->variables['pageinfo'];
+	$pageinfo = cmsms()->current_page;
 	$config = cms_config();
 	$result = '';
-	if (isset($pageinfo) && $pageinfo->content_id == -1)
+	if (isset($pageinfo) && $pageinfo->id == -1)
 	{
 		#We've a custom error message...  set a current timestamp
 		$result = "404 Error";
 	}
 	else
 	{
-		$result = cms_htmlentities($pageinfo->content_title);
+		$result = cms_htmlentities($pageinfo->name);
 		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 		{
 			$result = preg_replace("/\{\/?php\}/", "", $result);
@@ -38,11 +37,11 @@ function smarty_cms_function_title($params, &$smarty)
 
 	if( isset($params['assign']) )
 	{
-	    $smarty =& $gCms->GetSmarty();
+	    $smarty = cms_smarty();
 	    $smarty->assign($params['assign'],$result);
 	    return;
-        }
-        return $result;
+	}
+	return $result;
 }
 
 function smarty_cms_help_function_title() {

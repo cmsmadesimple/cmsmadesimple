@@ -22,6 +22,8 @@ class CmsSmarty extends Smarty
 {
 	static private $instance = NULL;
 	
+	public $id = '';
+	
 	function __construct()
 	{
 		parent::__construct();
@@ -645,7 +647,7 @@ class CmsSmarty extends Smarty
 				$tpl_source = '';
 			return true;
 		}
-		else if( isset($_SESSION['cms_preview_data']) && $pageinfo->content_id == '__CMS_PREVIEW_PAGE__' )
+		else if( isset($_SESSION['cms_preview_data']) && $pageinfo->id == '__CMS_PREVIEW_PAGE__' )
 		{
 			if( !isset($_SESSION['cms_preview_data']['content_obj']) )
 			{
@@ -667,11 +669,11 @@ class CmsSmarty extends Smarty
 		{
 			/*
 			$manager =& $gCms->GetHierarchyManager();
-			$node =& $manager->sureGetNodeById($pageinfo->content_id);
+			$node =& $manager->sureGetNodeById($pageinfo->id);
 			$contentobj =& $node->GetContent();
 			*/
 			
-			$contentobj = CmsPageTree::get_instance()->get_node_by_id($pageinfo->content_id);
+			$contentobj = CmsPageTree::get_instance()->get_node_by_id($pageinfo->id);
 
 			if (isset($contentobj) && $contentobj !== FALSE)
 			{
@@ -684,7 +686,7 @@ class CmsSmarty extends Smarty
 					$tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
 				}
 
-				//do_cross_reference($pageinfo->content_id, 'content', $tpl_source);
+				//do_cross_reference($pageinfo->id, 'content', $tpl_source);
 
 				return true;
 			}
@@ -694,11 +696,9 @@ class CmsSmarty extends Smarty
 
 	function content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
-		global $gCms;
+		$pageinfo = cmsms()->current_page;
 
-		$pageinfo =& $gCms->variables['pageinfo'];
-
-		if (isset($pageinfo) && $pageinfo->content_id == -1)
+		if (isset($pageinfo) && $pageinfo->id == -1)
 		{
 			#We've a custom error message...  set a current timestamp
 			$tpl_timestamp = time();
@@ -707,7 +707,7 @@ class CmsSmarty extends Smarty
 		{
 			if ($pageinfo->cachable)
 			{
-				$tpl_timestamp = $pageinfo->content_modified_date;
+				$tpl_timestamp = $pageinfo->modified_date;
 			}
 			else
 			{
@@ -719,9 +719,9 @@ class CmsSmarty extends Smarty
 	
 	function module_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
 	{
-		global $gCms;
-		$pageinfo =& $gCms->variables['pageinfo'];
-		$config = $gCms->config;
+		$gCms = cmsms();
+		$pageinfo = cmsms()->current_page;
+		$config = cms_config();
 
 		#Run the execute_user function and replace {content} with it's output 
 		if (isset($gCms->modules[$tpl_name]))
@@ -729,7 +729,7 @@ class CmsSmarty extends Smarty
 			@ob_start();
 
 			$id = $smarty_obj->id;
-			$returnid = isset($pageinfo)?$pageinfo->content_id:'';
+			$returnid = isset($pageinfo)?$pageinfo->id:'';
 			$params = GetModuleParameters($id);
 			$action = 'default';
 			if (isset($params['action']))
@@ -775,18 +775,6 @@ class CmsSmarty extends Smarty
 	function db_get_trusted($tpl_name, &$smarty_obj)
 	{
 		// not used for templates
-	}
-	
-	/**
-	 * Sets the internal id based on variables sent in from
-	 * the request.
-	 *
-	 * @return void
-	 * @author Ted Kulp
-	 **/
-	public function set_id_from_request()
-	{
-		$this->id = CmsRequest::get_id_from_request();
 	}
 	
 	/**

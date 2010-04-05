@@ -24,7 +24,7 @@ $CMS_ADMIN_TITLE='adminhome';
 $CMS_ADMIN_TITLE='mainmenu';
 $CMS_EXCLUDE_FROM_RECENT=1;
 
-require_once("../include.php");
+require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
 
 CmsLogin::check_login();
 $gCms = cmsms();

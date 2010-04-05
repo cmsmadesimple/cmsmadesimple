@@ -20,7 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
+require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
 
 check_login();
 
@@ -496,6 +496,8 @@ function content_select($html_id)
 {
 	$smarty = cms_smarty();
 	$resp = new CmsAjaxResponse();
+	
+	var_dump($html_id);
 	
 	if ($html_id == 'multiple' || $html_id == 'none')
 	{

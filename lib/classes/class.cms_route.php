@@ -44,6 +44,8 @@ class CmsRoute extends CmsObject
 		if (strpos($page, '/') !== FALSE)
 		{
 			$routes =& cmsms()->variables['routes'];
+			
+			$response = CmsResponse::get_instance();
 
 			$matched = false;
 			foreach ($routes as $route)
@@ -73,7 +75,7 @@ class CmsRoute extends CmsObject
 						else
 						{
 							if ($key != 'id')
-								$_REQUEST[$matches['id'] . $key] = $val;
+								$response->_request[$matches['id'] . $key] = $_REQUEST[$matches['id'] . $key] = $val;
 						}
 					}
 
@@ -82,7 +84,7 @@ class CmsRoute extends CmsObject
 					{
 						foreach ($route->defaults as $key=>$val)
 						{
-							$_REQUEST[$matches['id'] . $key] = $val;
+							$response->_request[$matches['id'] . $key] = $_REQUEST[$matches['id'] . $key] = $val;
 						}
 					}
 
@@ -92,8 +94,8 @@ class CmsRoute extends CmsObject
 						$matches['returnid'] = CmsContentOperations::get_default_page_id();
 					}
 
-					$_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
-					$_REQUEST[$matches['id'] . 'returnid'] = $matches['returnid'];
+					$response->_request['mact'] = $_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
+					$response->_request[$matches['id'] . 'returnid'] = $_REQUEST[$matches['id'] . 'returnid'] = $matches['returnid'];
 					$page = $matches['returnid'];
 					$smarty->id = $matches['id'];
 

@@ -23,21 +23,149 @@
  *
  * @author Ted Kulp
  * @since 2.0
- * @version $Revision$
- * @modifiedby $LastChangedBy$
- * @lastmodified $Date$
- * @license GPL
  **/
 class CmsResponse extends CmsObject
 {
+	static private $instance = NULL;
+	
+	protected $body = array();
+	protected $headers = array();
+	protected $status = '200';
+	protected $version = '1.1';
+
+	protected $_statuses = array(
+		100 => 'Continue',
+		101 => 'Switching Protocols',
+		200 => 'OK',
+		201 => 'Created',
+		202 => 'Accepted',
+		203 => 'Non-Authoritative Information',
+		204 => 'No Content',
+		205 => 'Reset Content',
+		206 => 'Partial Content',
+		300 => 'Multiple Choices',
+		301 => 'Moved Permanently',
+		302 => 'Found',
+		303 => 'See Other',
+		304 => 'Not Modified',
+		305 => 'Use Proxy',
+		307 => 'Temporary Redirect',
+		400 => 'Bad Request',
+		401 => 'Unauthorized',
+		402 => 'Payment Required',
+		403 => 'Forbidden',
+		404 => 'Not Found',
+		405 => 'Method Not Allowed',
+		406 => 'Not Acceptable',
+		407 => 'Proxy Authentication Required',
+		408 => 'Request Time-out',
+		409 => 'Conflict',
+		410 => 'Gone',
+		411 => 'Length Required',
+		412 => 'Precondition Failed',
+		413 => 'Request Entity Too Large',
+		414 => 'Request-URI Too Large',
+		415 => 'Unsupported Media Type',
+		416 => 'Requested range not satisfiable',
+		417 => 'Expectation Failed',
+		500 => 'Internal Server Error',
+		501 => 'Not Implemented',
+		502 => 'Bad Gateway',
+		503 => 'Service Unavailable',
+		504 => 'Gateway Time-out'
+	);
+	
 	function __construct()
 	{
 		parent::__construct();
 	}
 	
+	/**
+	 * Returns an instnace of the CmsResponse singleton.
+	 *
+	 * @return CmsResponse The singleton CmsResponse instance
+	 * @author Ted Kulp
+	 **/
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsResponse();
+		}
+		return self::$instance;
+	}
+	
 	function get_encoding()
 	{
 		return 'UTF-8';
+	}
+	
+	function set_status_code($code = '200')
+	{
+		$this->status = $code;
+	}
+	
+	function add_header($name, $value)
+	{
+		if ($name == '')
+			$this->headers[] = $value;
+		else
+			$this->headers[$name] = $value;
+	}
+	
+	function body($str = '')
+	{
+		$this->body[] = $str;
+	}
+	
+	function clear_body()
+	{
+		$this->body = array();
+	}
+	
+	function render()
+	{
+		$this->headers[] = "HTTP/{$this->version} {$this->status} {$this->_statuses[(int)$this->status]}";
+		$this->headers['Status'] = "{$this->status} {$this->_statuses[(int)$this->status]}";
+		
+		$this->send_headers();
+		
+		$body = join("\r\n", (array)$this->body);
+		
+		if (CmsConfig::get('output_compression') == true &&
+			CmsConfig::get('debug') != true &&
+			extension_loaded('zlib') &&
+			$this->status == '200'
+		)
+		{
+			$str = ob_gzhandler($body, 5);
+			if ($str !== false)
+			{
+				$body = $str;
+			}
+		}
+		
+		$split_ary = str_split($body, 8192);
+
+		foreach ($split_ary as $one_item)
+		{
+			echo $one_item;
+		}
+	}
+	
+	function send_headers()
+	{
+		foreach ($this->headers as $k => $v)
+		{
+			if (is_int($k))
+			{
+				header($v, true);
+			}
+			else
+			{
+				header("{$k}: {$v}", true);
+			}
+		}
 	}
 	
 	/**
@@ -78,56 +206,65 @@ class CmsResponse extends CmsObject
 	            }
 	            //Path is relative, append current directory first.
 				else if (isset($_SERVER['PHP_SELF']) && !is_null($_SERVER['PHP_SELF'])) //Apache
-	            {
-	                $to .= (strlen(dirname($_SERVER['PHP_SELF'])) > 1 ?  dirname($_SERVER['PHP_SELF']).'/' : '/') . $components['path'];
-	            }
+				{
+					$to .= (strlen(dirname($_SERVER['PHP_SELF'])) > 1 ?  dirname($_SERVER['PHP_SELF']).'/' : '/') . $components['path'];
+				}
 				else if (isset($_SERVER['REQUEST_URI']) && !is_null($_SERVER['REQUEST_URI'])) //Lighttpd
-	            {
+				{
 					if (endswith($_SERVER['REQUEST_URI'], '/'))
 						$to .= (strlen($_SERVER['REQUEST_URI']) > 1 ? $_SERVER['REQUEST_URI'] : '/') . $components['path'];
 					else
 						$to .= (strlen(dirname($_SERVER['REQUEST_URI'])) > 1 ? dirname($_SERVER['REQUEST_URI']).'/' : '/') . $components['path'];
-	            }
-	        }
-	        $to .= isset($components['query']) ? '?' . $components['query'] : '';
-	        $to .= isset($components['fragment']) ? '#' . $components['fragment'] : '';
-	    }
-	    else
-	    {
-	        $to = $schema."://".$host."/".$to;
-	    }
+				}
+			}
+			$to .= isset($components['query']) ? '?' . $components['query'] : '';
+			$to .= isset($components['fragment']) ? '#' . $components['fragment'] : '';
+		}
+		else
+		{
+			$to = $schema."://".$host."/".$to;
+		}
+		
+		$response = CmsResponse::get_instance();
 
-	    if (headers_sent() && !(isset($config) && $config['debug'] == true))
-	    {
-	        // use javascript instead
-	        echo '<script type="text/javascript">
-	            <!--
-	                location.replace("'.$to.'");
-	            // -->
-	            </script>
-	            <noscript>
-	                <meta http-equiv="Refresh" content="0;URL='.$to.'">
-	            </noscript>';
-	        exit;
-	    }
-	    else
-	    {
-	        if (isset($config) && $config['debug'] == true)
-	        {
-	            echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
-	            echo "<a href=\"".$to."\">".$to."</a><br />";
+		if (headers_sent() && !(isset($config) && $config['debug'] == true))
+		{
+			// use javascript instead
+			$response->clear_body();
+			$response->body('<script type="text/javascript">
+				<!--
+					location.replace("'.$to.'");
+				// -->
+				</script>
+				<noscript>
+					<meta http-equiv="Refresh" content="0;URL='.$to.'">
+				</noscript>');
+			$response->render();
+			exit;
+		}
+		else
+		{
+			if (isset($config) && $config['debug'] == true)
+			{
+				$response->clear_body();
+				$response->body("Debug is on.  Redirecting disabled...  Please click this link to continue.<br />");
+				$response->body("<a href=\"".$to."\">".$to."</a><br />");
 
-				echo '<pre>';
-				echo CmsProfiler::get_instance()->report();
-				echo '</pre>';
-	
-	            exit();
-	        }
-	        else
-	        {
-	            header("Location: $to");
-	            exit();
-	        }
+				$response->body('<pre>');
+				$response->body(CmsProfiler::get_instance()->report());
+				$response->body('</pre>');
+
+				$response->render();
+				exit;
+			}
+			else
+			{
+				$response->set_status_code('302');
+				$response->add_header('Location', $to);
+				$response->clear_body();
+				$response->render();
+				exit();
+			}
 		}
 	}
 
@@ -139,12 +276,12 @@ class CmsResponse extends CmsObject
 		$node = CmsPageTree::get_node_by_alias($alias);
 		$content = $node->get_content();
 		if (isset($content))
+		{
+			if ($content->get_url() != '')
 			{
-				if ($content->get_url() != '')
-					{
-						redirect($content->get_url());
-					}
+				CmsResponse::redirect($content->get_url());
 			}
+		}
 	}
 
 	
@@ -158,16 +295,15 @@ class CmsResponse extends CmsObject
 	 **/
 	function send_error_404()
 	{
-		while (@ob_end_clean());
-		header("HTTP/1.0 404 Not Found");
-		header("Status: 404 Not Found");
-		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+		$this->set_status_code('404');
+		$this->body('<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
 <title>404 Not Found</title>
 </head><body>
 <h1>Not Found</h1>
 <p>The requested URL was not found on this server.</p>
-</body></html>';
+</body></html>');
+		$this->render();
 		exit();
 	}
 	

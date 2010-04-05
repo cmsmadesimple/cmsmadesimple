@@ -20,7 +20,8 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
+require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
+
 require_once("../lib/classes/class.group.inc.php");
 
 check_login();

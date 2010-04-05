@@ -554,6 +554,50 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		}
 	}
 	
+	/**
+	 * Renders the given pageinfo object based on it's assigned content and template
+	 * parts.
+	 *
+	 * @return string The rendered html
+	 **/
+	public function render()
+	{
+		$html = '';
+		$cached = false;
+		
+		$gCms = cmsms();
+		$smarty = cms_smarty();
+		
+		$id = cms_smarty()->id;
+
+		#If this is a case where a module doesn't want a template to be shown, just disable caching
+		if (isset($id) && $id != '' && isset($_REQUEST[$id.'showtemplate']) && ($_REQUEST[$id.'showtemplate'] == 'false' || $_REQUEST[$id.'showtemplate'] == false))
+		{
+			$html = $smarty->fetch('template:notemplate') . "\n";
+		}
+		else
+		{
+			//$smarty->caching = false;
+			//$smarty->compile_check = true;
+			($smarty->is_cached('template:'.$this->template_id)?$cached="":$cached="not ");
+			// Added HTTP_HOST here to work with multisites - SK
+			$html = $smarty->fetch('template:'.$this->template_id/*.$_SERVER['HTTP_HOST']*/) . "\n";
+			if (isset($_REQUEST['tmpfile']))
+			{
+				$smarty->clear_compiled_tpl('template:'.$this->template_id);
+			}
+		}
+
+		if (!$cached)
+		{
+			Events::SendEvent('Core', 'ContentPostRenderNonCached', array(&$html));
+		}
+
+		Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
+		
+		return $html;
+	}
+	
 	public function add_child($node)
 	{
 		$node->set_parent($this);

@@ -18,9 +18,8 @@
 
 function smarty_cms_function_metadata($params, &$smarty)
 {
-	$gCms = cmsms();
 	$config = cms_config();
-	$pageinfo =& $gCms->variables['pageinfo'];
+	$pageinfo = cmsms()->current_page;
 
 	$result = '';	
 
@@ -48,9 +47,9 @@ function smarty_cms_function_metadata($params, &$smarty)
 
 	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
-		if (isset($pageinfo->content_metadata) && $pageinfo->content_metadata != '')
+		if (isset($pageinfo->metadata) && $pageinfo->metadata != '')
 		{
-			$result .= "\n" . $pageinfo->content_metadata;
+			$result .= "\n" . $pageinfo->metadata;
 		}
 	}
 

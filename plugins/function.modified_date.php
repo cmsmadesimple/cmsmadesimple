@@ -30,9 +30,9 @@ function smarty_cms_function_modified_date($params, &$smarty)
 		$format = $params['format'];
 	}
 
-	if (isset($pageinfo) && isset($pageinfo->content_modified_date) && $pageinfo->content_modified_date > -1)
+	if (isset($pageinfo) && isset($pageinfo->modified_date) && $pageinfo->modified_date->timestamp() > -1)
 	{
-		return htmlentities(strftime($format, $pageinfo->content_modified_date));
+		return htmlentities(strftime($format, $pageinfo->modified_date->timestamp()));
 	}
 	else
 	{

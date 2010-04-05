@@ -108,24 +108,28 @@ class CmsProfiler extends CmsObject
 	 **/
 	function report( $memory = true, $database = true, $glue='')
 	{
-		echo '<div id="profiler_output" style="font-size: .75em;">';
+		$ret = '';
 		
-		echo implode( $glue, $this->_buffer );
+		$ret .= '<div id="profiler_output" style="font-size: .75em;">';
 		
-		echo '<br />';
-		echo $this->get_time();
+		$ret .= implode( $glue, $this->_buffer );
+		
+		$ret .= '<br />';
+		$ret .= $this->get_time();
 		
 		if ($memory)
 		{
-			echo '<br />';
-			echo $this->get_memory();
+			$ret .= '<br />';
+			$ret .= $this->get_memory();
 		}
 		if ($database)
 		{
-			echo '<br />' . CmsDatabase::query_count() . ' queries executed';
+			$ret .= '<br />' . CmsDatabase::query_count() . ' queries executed';
 		}
 		
-		echo '</div>';
+		$ret .= '</div>';
+		
+		return $ret;
 	}
 	
 	/**

@@ -20,7 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
+require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
 
 $userid = "";
 if( isset($_SESSION['cms_admin_user_id'])) {

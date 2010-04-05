@@ -19,7 +19,9 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-require_once("../include.php");
+
+require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
+
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 
