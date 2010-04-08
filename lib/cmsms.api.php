@@ -49,6 +49,7 @@ require_once(cms_join_path(ROOT_DIR, 'lib', 'classes', 'class.cms_profiler.php')
 require_once(cms_join_path(ROOT_DIR, 'lib', 'page.functions.php'));
 require_once(cms_join_path(ROOT_DIR, 'lib', 'content.functions.php'));
 
+
 set_error_handler('cms_warning_handler', E_WARNING | E_USER_WARNING);
 
 /**
@@ -96,6 +97,17 @@ function cms_autoload($class_name)
 }
 
 spl_autoload_register('cms_autoload');
+
+// some defines for backwards compatibility.
+// needed to be done justafter he autoloader is setup.
+// note:: should use CMSModule::PARAM_ consts.
+define('CLEAN_INT','CLEAN_INT');
+define('CLEAN_FLOAT','CLEAN_FLOAT');
+define('CLEAN_NONE','CLEAN_NONE');
+define('CLEAN_STRING','CLEAN_STRING');
+define('CLEAN_REGEXP','regexp:');
+define('CLEAN_FILE','CLEAN_FILE');
+
 
 //Setup a global $gCms.  Even if this goes away,
 //we need to instantiate CmsApplication near the
@@ -1445,12 +1457,6 @@ function cleanHtml($string, $remove = false) {
  * a hash
  *
 */
-define('CLEAN_INT','CLEAN_INT');
-define('CLEAN_FLOAT','CLEAN_FLOAT');
-define('CLEAN_NONE','CLEAN_NONE');
-define('CLEAN_STRING','CLEAN_STRING');
-define('CLEAN_REGEXP','regexp:');
-define('CLEAN_FILE','CLEAN_FILE');
 function cleanParamHash($modulename,$data,$map = false,
 			$allow_unknown = false,$clean_keys = true)
 {

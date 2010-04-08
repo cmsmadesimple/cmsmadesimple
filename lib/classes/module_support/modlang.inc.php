@@ -67,7 +67,7 @@ function cms_module_Lang(&$modinstance)
 	if (!isset($modinstance->langhash[$ourlang]) || !is_array($modinstance->langhash[$ourlang]) || 
 	    (is_array($modinstance->langhash[$ourlang]) && count(array_keys($modinstance->langhash[$ourlang])) == 0))
 	{
-		$dir = $gCms->config['root_path'];
+	  $dir = CmsConfig::get('root_path');
 
 		$lang = array();
 

@@ -32,16 +32,25 @@ class CmsLanguage extends CmsObject
 	private static $nls = null;
 	private static $lang = array();
 	private static $current_language = null;
+	private static $current_module = 'core';
 
 	function __construct()
 	{
 		parent::__construct();
 	}
 	
-	public static function translate($string, $params = array(), $module = 'core', $current_language = '')
+	public static function set_current_module($module = 'core')
+	{
+		self::$current_module = $module;
+	}
+
+	public static function translate($string, $params = array(), $module = '', $current_language = '')
 	{
 		if ($string == null || $string == '')
 			return '';
+
+		if ($module == null || $module == '')
+			$module = self::$current_module;
 
 		if (self::$nls == null)
 		{
@@ -165,6 +174,14 @@ class CmsLanguage extends CmsObject
 					$file = cms_join_path(ROOT_DIR, 'admin', 'lang', $language, 'admin.inc.php');
 				}
 			}
+			else if( $module == 'installer')
+			{
+			    $file = cms_join_path(ROOT_DIR, 'install', 'lang', $language . '.php');
+				if( !is_file($file) )
+				{
+					$file = cms_join_path(ROOT_DIR, 'install', 'lang', 'ext', $language . '.php');
+				}
+			}
 			else
 			{
 			    $file = cms_join_path(ROOT_DIR, 'modules', $module, 'lang', 'ext', $language . '.php');
@@ -178,7 +195,7 @@ class CmsLanguage extends CmsObject
 				}
 			}
 			
-		    if (is_file($file) && strlen($language) == 5 && strpos($language, ".") === false)
+		    if (is_file($file) && strlen($language) == 5 && strpos($language, ".") === FALSE)
 		    {
 				CmsProfiler::get_instance()->mark('Load:' . $file);
 		        include ($file);
@@ -272,7 +289,7 @@ class CmsLanguage extends CmsObject
 				{
 					setcookie("cms_language", '', time() - 3600);
 				}
-				else
+				else if( isset($_POST['change_cms_lang']) )
 				{
 					setcookie("cms_language", $_POST["change_cms_lang"]);
 				}

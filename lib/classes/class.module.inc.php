@@ -37,6 +37,13 @@ class CMSModule extends CmsObject
 	protected $wysiwygactive;
 	protected $syntaxactive;
 
+	const PARAM_INT = 'CLEAN_INT';
+	const PARAM_FLOAT = 'CLEAN_FLOAT';
+	const PARAM_NONE = 'CLEAN_NONE';
+	const PARAM_STRING = 'CLEAN_STRING';
+	const PARAM_REGEXP = 'CLEAN_REGEXP';
+	const PARAM_FILE = 'CLEAN_FILE';
+
 	var $curlang;
 	var $langhash;
 	var $params;
@@ -95,13 +102,13 @@ class CMSModule extends CmsObject
 
 		if( !isset($CMS_ADMIN_PAGE) || isset($CMS_MODULE_PAGE) )
 		{
-			$this->SetParameterType('assign',CLEAN_STRING);
-			$this->SetParameterType('module',CLEAN_STRING);
-			$this->SetParameterType('lang',CLEAN_STRING);
-			$this->SetParameterType('returnid',CLEAN_INT);
-			$this->SetParameterType('action',CLEAN_STRING);
-			$this->SetParameterType('showtemplate',CLEAN_STRING);
-			$this->SetParameterType('inline',CLEAN_INT);
+			$this->SetParameterType('assign',self::PARAM_STRING);
+			$this->SetParameterType('module',self::PARAM_STRING);
+			$this->SetParameterType('lang',self::PARAM_STRING);
+			$this->SetParameterType('returnid',self::PARAM_INT);
+			$this->SetParameterType('action',self::PARAM_STRING);
+			$this->SetParameterType('showtemplate',self::PARAM_STRING);
+			$this->SetParameterType('inline',self::PARAM_INT);
 			$this->SetParameters();
 		}
 
@@ -126,6 +133,16 @@ class CMSModule extends CmsObject
 	    {
 	      require_once($fn);
 	    }
+	}
+
+	public function include_file_in_scope($filename)
+	{
+	  // todo: check to make sure the filename is in the module directory.
+	  $gCms = cmsms();
+	  $config = cms_config();
+	  $smarty = cms_smarty();
+
+	  include $filename;
 	}
 
 	public function LoadTemplateMethods()

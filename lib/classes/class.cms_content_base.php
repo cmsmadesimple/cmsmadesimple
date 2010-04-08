@@ -403,7 +403,10 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		
 		return '';
 		*/
-		return $this->content_props[$name];
+		if( isset($this->content_props[$name]) )
+		{
+			return $this->content_props[$name];
+		}
 	}
 	
 	public function shift_position($direction = 'up')

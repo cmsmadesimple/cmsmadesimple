@@ -475,7 +475,7 @@ function set_site_preference($prefname, $value)
 	$gCms = cmsms();
 	$db = cms_db();
 
-	$siteprefs = &$gCms->siteprefs;
+	$siteprefs = CmsApplication::$siteprefs;
 
 	$query = "SELECT sitepref_value from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ".$db->qstr($prefname);
 	$result = $db->Execute($query);

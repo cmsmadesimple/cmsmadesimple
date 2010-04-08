@@ -76,6 +76,7 @@ class CmsSession extends CmsObject
 				else
 				{
 					// maybe change this algorithm.
+                                        $dirname = dirname(__FILE__);
 					$key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
 					$_SESSION[CMS_USER_KEY] = $key;
 					setcookie(CMS_SECURE_PARAM_NAME, $key);

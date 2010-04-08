@@ -1185,12 +1185,12 @@ class CmsAdminTheme extends CmsObject
 
 	public function end_tab_headers()
 	{
-		return "</ul>";
+		return "</ul></div>";
 	}
 
 	public function start_tab_content()
 	{
-		return '';
+		return '<div>';
 	}
 
 	public function end_tab_content($overall_id = 'page_tabs')
