@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['thumbnail_width'] = 'Thumbnail Width';
+$lang['admin']['thumbnail_height'] = 'Thumbnail Height';
 $lang['admin']['E_STRICT'] = 'Is E_STRICT disabled in error_reporting';
 $lang['admin']['test_estrict_failed'] = 'E_STRICT is enabled in the error_reporting';
 $lang['admin']['info_estrict_failed'] = 'Some libraries that CMSMS uses do not work well with E_STRICT.  Please disable this before continuing';

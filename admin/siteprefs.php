@@ -59,6 +59,8 @@ $db =& $gCms->GetDb();
 $error = "";
 $message = "";
 
+$thumbnail_width = 96;
+$thumbnail_height = 96;
 $clear_vc_cache = 0;
 $disablesafemodewarning = 0;
 $allowparamcheckwarnings = 0;
@@ -91,6 +93,8 @@ if (isset($_POST["cancel"])) {
 }
 
 
+$thumb_width = get_site_preference('thumbnail_width',$thumbnail_width);
+$thumb_height = get_site_preference('thumbnail_height',$thumbnail_height);
 $global_umask = get_site_preference('global_umask',$global_umask);
 $frontendlang = get_site_preference('frontendlang',$frontendlang);
 $frontendwysiwyg = get_site_preference('frontendwysiwyg',$frontendwysiwyg);
@@ -197,6 +201,10 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('defaultdateformat', $defaultdateformat);
 	  if (isset($_POST['nogcbwysiwyg'])) $nogcbwysiwyg = $_POST['nogcbwysiwyg'];
 	  set_site_preference('nogcbwysiwyg', $nogcbwysiwyg);
+	  if( isset($_POST['thumbnail_width']) ) $thumbnail_width = (int)$_POST['thumbnail_width'];
+	  if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
+	  set_site_preference('thumbnail_width',$thumbnail_width);
+	  set_site_preference('thumbnail_height',$thumbnail_height);
 	  break;
 
 	case 'sitedown':
@@ -374,7 +382,11 @@ $smarty->assign('defaultdateformat',$defaultdateformat);
 $smarty->assign('enablenotifications',$enablenotifications);
 $smarty->assign('sitedownexcludes',$sitedownexcludes);
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));
+$smarty->assign('thumbnail_width',$thumbnail_width);
+$smarty->assign('thumbnail_height',$thumbnail_height);
 
+$smarty->assign('lang_thumbnail_width',lang('thumbnail_width'));
+$smarty->assign('lang_thumbnail_height',lang('thumbnail_height'));
 $smarty->assign('lang_general',lang('general_settings'));
 $smarty->assign('lang_sitedown',lang('sitedown_settings'));
 $smarty->assign('lang_handle404',lang('handle_404'));

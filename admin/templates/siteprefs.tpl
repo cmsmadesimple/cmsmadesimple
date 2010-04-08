@@ -65,6 +65,20 @@
 </div>
 
 <div class="pageoverflow">
+  <p class="pagetext">{$lang_thumbnail_width}:</p>
+  <p class="pageinput">
+    <input class="pagenb" type="text" name="thumbnail_width" size="3" maxlength="3" value="{$thumbnail_width}"/>
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{$lang_thumbnail_height}:</p>
+  <p class="pageinput">
+    <input class="pagenb" type="text" name="thumbnail_height" size="3" maxlength="3" value="{$thumbnail_height}"/>
+  </p>
+</div>
+
+<div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
   <p class="pageinput">
     <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
