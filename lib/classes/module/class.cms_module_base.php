@@ -25,7 +25,7 @@ define('MODULE_ACTION_REGEX', '/[^A-Za-z0-9\-_+]/');
  * to allow for module compatibility with modules written for 
  * 1.x.
  *
- * @package cmsms
+ * @package cmsms 
  * @author Ted Kulp
  **/
 class CmsModuleBase extends CmsObject
@@ -297,10 +297,8 @@ class CmsModuleBase extends CmsObject
 			$config = cms_config();
 			$smarty = cms_smarty();
 			
-			foreach ($param_hash as $k => $v)
-			{
-				$$k = $v;
-			}
+			//Pull all the params in $param_hash into the current scope
+			extract($param_hash);
 			
 			$id = $this->id;
 			$return_id = $this->return_id;
