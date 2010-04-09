@@ -1449,6 +1449,10 @@ class ContentBase
       if (isset($params['active']))
 	{
 	  $this->mActive = $params['active'];
+	  if( $this->DefaultContent() )
+	    {
+	      $this->mActive = 1;
+	    }
 	}
       
       // show in menu
@@ -1994,7 +1998,10 @@ class ContentBase
 	      break;
 
 	    case 'active':
-	      return array(lang('active').':','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" value="1"'.($this->mActive?' checked="checked"':'').' />');
+	      if( !$this->DefaultContent() )
+		{
+		  return array(lang('active').':','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" value="1"'.($this->mActive?' checked="checked"':'').' />');
+		}
 	      break;
 	      
 	    case 'showinmenu':
