@@ -29,6 +29,7 @@ class SectionHeader extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
+      $this->RemoveProperty('secure','');
       $this->RemoveProperty('alias','');
       $this->RemoveProperty('accesskey','');
       $this->RemoveProperty('title','');

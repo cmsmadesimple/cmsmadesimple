@@ -24,6 +24,7 @@ class Separator extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
+      $this->RemoveProperty('secure','');
       $this->RemoveProperty('template','-1');
       $this->RemoveProperty('alias','');
       $this->RemoveProperty('title','');
