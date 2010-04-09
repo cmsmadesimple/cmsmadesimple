@@ -94,7 +94,7 @@ require(cms_join_path(dirname(__FILE__),'lib','adodb.functions.php'));
 
 $gCms = new CmsObject();
 load_adodb();
-$db =& $gCms->GetDb();
+$db = $gCms->GetDb();
 
 require(cms_join_path(dirname(__FILE__),'lib','page.functions.php'));
 
@@ -119,8 +119,8 @@ if ($config['admin_encoding'] != '')
   $encoding = $config['admin_encoding'];
 elseif ($config['default_encoding'] != '')
   $encoding = $config['default_encoding'];
- else
-   $encoding = 'UTF-8';
+else
+  $encoding = 'UTF-8';
 
 //
 // Begin output
@@ -133,6 +133,9 @@ if ($stripbackground)
   $css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $css);
   $css = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $css);
 }
+
+$parms['content'] =& $css;
+Events::SendEvent('Core','ContentStylesheet',$params);
 
 if( isset($config['output_compression']) && ($config['output_compression']) && ($config['debug'] != true) )
   {
