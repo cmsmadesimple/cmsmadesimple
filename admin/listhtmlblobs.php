@@ -80,9 +80,13 @@ if (isset($_GET["message"])) {
 				echo "<td><a href=\"edithtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\">";
                 echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
-				echo "<td><a href=\"deletehtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onehtmlblob->name)."');\">";
-                echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                echo "</a></td>\n";
+		echo "<td>";
+		if( $modifyall || check_permission($userid,'Remove Global Content Blocks') )
+		  {
+		    echo "<a href=\"deletehtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onehtmlblob->name)."');\">";
+		    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon')."</a>";
+		  }
+                echo "</td>\n";
 				echo "</tr>\n";
 
 				($currow=="row1"?$currow="row2":$currow="row1");
