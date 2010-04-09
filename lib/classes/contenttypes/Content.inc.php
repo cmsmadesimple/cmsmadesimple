@@ -173,7 +173,7 @@ class Content extends ContentBase
                 $label = ucwords($blockName);
 		if( $blockName == 'content_en' ) 
 		  {
-		    $label = ucwords('content');
+		    $label = ucwords('content').'*';
 		  }
 		$data = $this->GetPropertyValue($blockInfo['id']);
 		if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
@@ -189,7 +189,9 @@ class Content extends ContentBase
 		      if( $module->HasContentBlocks() === FALSE ) continue;
 		      $tmp = $module->GetContentBlockInputBase($blockName,$blockInfo['blocktype'],$blockInfo['params']);
 		      if( $tmp === FALSE ) continue;
-		      $ret[]= array($label.':',$tmp);
+		      if( !endswith(':',$label) )
+			$label .= ':';
+		      $ret[]= array($label,$tmp);
 		    }
 		    break;
 

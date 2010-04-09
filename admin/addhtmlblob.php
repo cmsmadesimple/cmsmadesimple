@@ -33,7 +33,7 @@ $htmlblob = "";
 if (isset($_POST['htmlblob'])) $htmlblob = trim($_POST['htmlblob']);
 
 $content = "";
-if (isset($_POST['content'])) $content = trim($_POST['content']);
+if (isset($_POST['content'])) $content = trim(trim($_POST['content']));
 
 if (isset($_POST["cancel"])) {
 	redirect("listhtmlblobs.php".$urlext);
@@ -75,6 +75,11 @@ if ($access) {
 			$error .= "<li>".lang('blobexists')."</li>";
 			$validinfo = false;
 		}
+		else if($content == ""){
+		  $error .= '<li>'.lang('nofieldgiven',array('content')).'</li>';
+		  $validinfo = false;
+		}
+
 
 		if ($validinfo) {
 			global $gCms;
@@ -175,7 +180,7 @@ else
 			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('content')?>:</p>
+			<p class="pagetext">*<?php echo lang('content')?>:*</p>
 			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content'); ?></p>
 		</div>
 		<div class="pageoverflow">
