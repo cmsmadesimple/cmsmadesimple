@@ -23,13 +23,13 @@ function cms_autoloader($classname)
   global $gCms;
   $config = $gCms->GetConfig();
 
-  $fn = cms_join_path($config['cms_root_path'],'lib','classes',"class.{$classname}.php");
+  $fn = cms_join_path($config['root_path'],'lib','classes',"class.{$classname}.php");
   if( file_exists($fn) )
     {
       require_once($fn);
       return;
     }
-  $fn = cms_join_path($config['cms_root_path'],'lib','classes',"interface.{$classname}.php");
+  $fn = cms_join_path($config['root_path'],'lib','classes',"interface.{$classname}.php");
   if( file_exists($fn) )
     {
       require_once($fn);
