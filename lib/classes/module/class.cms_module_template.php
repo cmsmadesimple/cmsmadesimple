@@ -53,7 +53,7 @@ class CmsModuleTemplate extends CmsObjectRelationalMapping
         }
     }
     
-    function after_save()
+    function after_save(&$result)
     {
         //Reset all other templates to have a false default if this one is true
         if ($this->default)
