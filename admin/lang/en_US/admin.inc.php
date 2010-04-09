@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['secure_page'] = 'Use HTTPS for this page';
 $lang['admin']['thumbnail_width'] = 'Thumbnail Width';
 $lang['admin']['thumbnail_height'] = 'Thumbnail Height';
 $lang['admin']['E_STRICT'] = 'Is E_STRICT disabled in error_reporting';

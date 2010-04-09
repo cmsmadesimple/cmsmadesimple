@@ -427,6 +427,7 @@ $smarty->assign('lang_info_basic_attributes',lang('info_basic_attributes'));
 $all_attributes = array();
 $all_attributes['template'] = lang('template');
 $all_attributes['active'] = lang('active');
+$all_attributes['secure'] = lang('secure_page');
 $all_attributes['showinmenu'] = lang('showinmenu');
 $all_attributes['cachable'] = lang('cachable');
 $all_attributes['target'] = lang('target');

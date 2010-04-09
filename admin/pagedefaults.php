@@ -47,6 +47,7 @@ if (isset($_POST["cancel"])) {
 # Set all of the values from the preferences
 # or from hardcoded defaults
 #
+$page_secure = get_site_preference('page_secure','0');
 $page_active = get_site_preference('page_active',"1");
 $page_showinmenu = get_site_preference('page_showinmenu',"1");
 $page_extra1 = get_site_preference('page_extra1','');
@@ -66,6 +67,7 @@ if( isset( $_POST['submit'] ) )
     //
     // Process Submit
     //
+    $page_secure = (isset($_POST['page_secure'])?"1":"0");
     $page_active = (isset($_POST['page_active'])?"1":"0");
     $page_showinmenu = (isset($_POST['page_showinmenu'])?"1":"0");
     $page_cachable = (isset($_POST['page_cachable'])?"1":"0");
@@ -87,6 +89,7 @@ if( isset( $_POST['submit'] ) )
     //
     // Store preferences
     //
+    set_site_preference( 'page_secure', $page_secure );
     set_site_preference( 'page_active', $page_active );
     set_site_preference( 'page_showinmenu', $page_showinmenu );
     set_site_preference( 'page_cachable', $page_cachable );
@@ -135,6 +138,13 @@ if ($message != "") {
 	  <p class="pagetext"><?php echo lang('active')?>:</p>
           <p class="pageinput">
 	    <input class="pagenb" type="checkbox" name="page_active" <?php if($page_active == "1") echo "checked=\"checked\""?> />
+          </p>
+        </div>
+
+        <div class="pageoverflow">
+	  <p class="pagetext"><?php echo lang('secure_page')?>:</p>
+          <p class="pageinput">
+	    <input class="pagenb" type="checkbox" name="page_secure" <?php if($page_secure == "1") echo "checked=\"checked\""?> />
           </p>
         </div>
 

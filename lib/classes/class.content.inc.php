@@ -259,6 +259,7 @@ class ContentBase
       $this->AddBaseProperty('owner',90);
       $this->AddBaseProperty('additionaleditors',91);
 
+      $this->AddContentProperty('secure',7);
       $this->AddContentProperty('image',50);
       $this->AddContentProperty('thumbnail',50);
       $this->AddContentProperty('extra1',80);
@@ -1375,7 +1376,7 @@ class ContentBase
     function FillParams($params)
     {
       // content property parameters
-      $parameters = array('extra1','extra2','extra3','image','thumbnail');
+      $parameters = array('secure','extra1','extra2','extra3','image','thumbnail');
       foreach ($parameters as $oneparam)
 	{
 	  if (isset($params[$oneparam]))
@@ -1510,9 +1511,22 @@ class ContentBase
 		$url = "";
 		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 
+		$base_url = $config['root_url'];
+		if( $this->GetPropertyValue('secure') ) 
+		  {
+		    if( isset($config['ssl_url']) )
+		      {
+			$base_url = $config['ssl_url'];
+		      }
+		    else
+		      {
+			$base_url = str_replace('http://','https://',$base_url);
+		      }
+		  }
+
 		/* use root_url for default content */
 		if($this->mDefaultContent) {
-			$url =  $config['root_url']. '/';
+			$url =  $base_url . '/';
 			return $url;
 		}
 
@@ -1520,11 +1534,11 @@ class ContentBase
 		{
 			if ($config['use_hierarchy'] == true)
 			{
-				$url = $config['root_url']. '/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
+				$url = $base_url. '/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
 			}
 			else
 			{
-				$url = $config['root_url']. '/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
+				$url = $base_url . '/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
 			}
 		}
 		else
@@ -1533,16 +1547,16 @@ class ContentBase
 			{
 				if ($config['use_hierarchy'] == true)
 				{
-					$url = $config['root_url'] . '/index.php/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
+					$url = $base_url . '/index.php/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
 				}
 				else
 				{
-					$url = $config['root_url'] . '/index.php/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
+					$url = $base_url . '/index.php/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
 				}
 			}
 			else
 			{
-				$url = $config['root_url'] . '/index.php?' . $config['query_var'] . '=' . $alias;
+				$url = $base_url . '/index.php?' . $config['query_var'] . '=' . $alias;
 			}
 		}
 		return $url;
@@ -1959,6 +1973,19 @@ class ContentBase
 	      return array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
 	      break;
 	      
+	    case 'secure':
+	      {
+		$opt = '';
+		if( $this->GetPropertyValue('secure') )
+		  {
+		    $opt = ' checked="checked"';
+		  }
+		$str  = '<input type="hidden" name="secure" value="0"/>';
+                $str .= '<input type="checkbox" name="secure" value="1"'.$opt.'/>';
+		return array(lang('secure_page').':',$str);
+	      }
+	      break;
+
 	    case 'image':
 	      {
 		$dir = $config['image_uploads_path'];
