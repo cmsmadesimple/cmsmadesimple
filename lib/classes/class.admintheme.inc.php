@@ -106,6 +106,11 @@ class AdminTheme
      */
     var $_notificationitems;
 
+    /**
+     * View Site URL
+     */
+    protected $_viewsite_url;
+
 	/**
 	 * Generic constructor.  Runs the SetInitialValues fuction.
 	 */
@@ -119,6 +124,12 @@ class AdminTheme
 	 */
 	function SetInitialValues($cms, $userid, $themeName)
 	{
+	  global $gCms;
+	  $contentops = $gCms->GetContentOperations();
+	  $dflt_content_id = $contentops->GetDefaultContent();
+	  $content_obj = $contentops->LoadContentFromId($dflt_content_id);
+	  $this->_viewsite_url = $content_obj->GetURL();
+
 		$this->title = '';
 		$this->subtitle = '';
 		$this->cms = $cms;
@@ -133,13 +144,13 @@ class AdminTheme
 		  {
 		  $this->query = 'module='.$_POST['module'];
 		  }
-        $this->userid = $userid;
+		$this->userid = $userid;
 		$this->themeName = $themeName;
 		$this->perms = array();
 		$this->recent = array();
 		$this->menuItems = array();
 		$this->breadcrumbs = array();
-        $this->imageLink = array();
+		$this->imageLink = array();
 		$this->modulesBySection = array();
 		$this->sectionCount = array();
         $this->SetModuleAdminInterfaces();

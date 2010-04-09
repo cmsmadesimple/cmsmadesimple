@@ -299,7 +299,7 @@ class defaultTheme extends AdminTheme
 	  echo '<div class="itemoverflow">';
 	  echo '<p class="itemicon">';
 	  $iconSpec = $thisSection;
-	  if ($menuItem['url'] == '../index.php')
+	  if ($menuItem['url'] == $this->_viewsite_url)
 	    {
 	      $iconSpec = 'viewsite';
 	    }
@@ -393,7 +393,7 @@ class defaultTheme extends AdminTheme
 	    }
 	  if (! $moduleIcon)
 	    {
-	      if ($thisItem['url'] == '../index.php')
+	      if ($thisItem['url'] == $this->_viewsite_url)
 		{
 		  $iconSpec = 'viewsite';
 		}
