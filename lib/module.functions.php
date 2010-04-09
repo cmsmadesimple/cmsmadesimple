@@ -113,7 +113,8 @@ function cms_module_plugin($params,&$smarty)
 		{
 		  // and we're inline (the results are supposed to replace
 		  // the tag, not {content}
-		  $action = $mactaction;
+		  if( empty($action) )
+		    $action = $mactaction;
 		}
 	    }
 	}
