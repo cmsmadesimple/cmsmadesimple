@@ -29,7 +29,7 @@ check_login();
 $error = "";
 
 $htmlblob = "";
-if (isset($_POST['htmlblob'])) $htmlblob = $_POST['htmlblob'];
+if (isset($_POST['htmlblob'])) $htmlblob = trim($_POST['htmlblob']);
 
 $oldhtmlblob = "";
 if (isset($_POST['oldhtmlblob'])) $oldhtmlblob = $_POST['oldhtmlblob'];
@@ -87,7 +87,7 @@ if ($access)
 		$validinfo = true;
 		if ($htmlblob == "")
 		{
-			$error .= "<li>".lang('nofieldgiven', array(lang('edithtmlblob')))."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('name')))."</li>";
 			$validinfo = false;
 		}
 		else if ($htmlblob != $oldhtmlblob && $gcbops->CheckExistingHtmlBlobName($htmlblob, $htmlblob_id))

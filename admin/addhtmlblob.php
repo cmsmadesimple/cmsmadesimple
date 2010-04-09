@@ -30,10 +30,10 @@ check_login();
 $error = "";
 
 $htmlblob = "";
-if (isset($_POST['htmlblob'])) $htmlblob = $_POST['htmlblob'];
+if (isset($_POST['htmlblob'])) $htmlblob = trim($_POST['htmlblob']);
 
 $content = "";
-if (isset($_POST['content'])) $content = $_POST['content'];
+if (isset($_POST['content'])) $content = trim($_POST['content']);
 
 if (isset($_POST["cancel"])) {
 	redirect("listhtmlblobs.php".$urlext);
@@ -68,7 +68,7 @@ if ($access) {
 
 		$validinfo = true;
 		if ($htmlblob == ""){
-			$error .= "<li>".lang('nofieldgiven', array('addhtmlblob'))."</li>";
+			$error .= "<li>".lang('nofieldgiven', array('name'))."</li>";
 			$validinfo = false;
 		}
 		else if ($gcbops->CheckExistingHtmlBlobName($htmlblob)){
