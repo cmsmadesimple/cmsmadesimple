@@ -33,7 +33,6 @@ $userid = get_userid();
 $action = '';
 if (isset($_POST['multiaction'])) $action = $_POST['multiaction'];
 if (isset($_POST['reorderpages'])) $action = 'reorder';
-
 include_once("header.php");
 
 global $gCms;
@@ -202,7 +201,7 @@ else
 				if ($action == 'inactive')
 				  DoContent($nodelist, $node, true, false);
 				else if ($action == 'active' || $action == 'settemplate' || $action == 'setcachable' || $action == 'setnoncachable'
-                                         || $action == 'showinmenu' || $action == 'hidefrommenu')
+                                         || $action == 'showinmenu' || $action == 'hidefrommenu' || $action == 'marksecure' || $action == 'markinsecure')
 					DoContent($nodelist, $node, false, false);
 				else if ($action == 'delete')
 				  {
@@ -496,6 +495,25 @@ else
 		}
 		redirect("listcontent.php".$urlext.'&message=bulk_success');
         }
+	else if ($action == 'marksecure' || $action == 'markinsecure')
+        {
+	  $flag = ($action == 'marksecure')?1:0;
+
+	  $userid = get_userid();
+	  $modifyall = check_permission($userid, 'Modify Any Page');
+
+	  foreach ($nodelist as $node)
+	    {
+	      $permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
+
+	      if ($permission)
+		{
+		  $node->SetSecure($flag);
+		  $node->Save();
+		}
+	    }
+	  redirect("listcontent.php".$urlext.'&message=bulk_success');
+	}
         else if ($action == 'showinmenu' || $action == 'hidefrommenu')
         {
                 $flag = ($action == 'showinmenu')?true:false;

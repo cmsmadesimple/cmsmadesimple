@@ -142,6 +142,11 @@ class ContentBase
     var $mCachable;
 
     /**
+     * Secure?
+     */
+    var $mSecure;
+
+    /**
      * Does this content have a preview function?
      */
     var $mPreview;
@@ -230,6 +235,7 @@ class ContentBase
 	$this->mDefaultContent = false ;
 	$this->mShowInMenu     = false ;
 	$this->mCachable       = true;
+	$this->mSecure         = 0;
 	$this->mMenuText       = "" ;
 	$this->mCreationDate   = "" ;
 	$this->mModifiedDate   = "" ;
@@ -251,7 +257,8 @@ class ContentBase
       $this->AddBaseProperty('parent',3,1);
       $this->AddBaseProperty('active',5);
       $this->AddBaseProperty('showinmenu',5);
-      $this->AddBaseProperty('cachable',6);
+      $this->AddBaseProperty('secure',6);
+      $this->AddBaseProperty('cachable',7);
       $this->AddBaseProperty('alias',10);
       $this->AddBaseProperty('titleattribute',55);
       $this->AddBaseProperty('accesskey',56);
@@ -259,7 +266,6 @@ class ContentBase
       $this->AddBaseProperty('owner',90);
       $this->AddBaseProperty('additionaleditors',91);
 
-      $this->AddContentProperty('secure',7);
       $this->AddContentProperty('image',50);
       $this->AddContentProperty('thumbnail',50);
       $this->AddContentProperty('extra1',80);
@@ -494,11 +500,13 @@ class ContentBase
 	return $this->mIdHierarchy;
     }
 
+
     function SetIdHierarchy($idhierarchy)
     {
 	$this->DoReadyForEdit();
 	$this->mIdHierarchy = $idhierarchy;
     }
+
 
     /**
      * Returns the Hierarchy
@@ -508,11 +516,13 @@ class ContentBase
 	return $this->mHierarchyPath;
     }
 
+
     function SetHierarchyPath($hierarchypath)
     {
 	$this->DoReadyForEdit();
 	$this->mHierarchyPath = $hierarchypath;
     }
+
 
     /**
      * Returns the Active state
@@ -522,11 +532,13 @@ class ContentBase
 	return $this->mActive;
     }
 
+
     function SetActive($active)
     {
 	$this->DoReadyForEdit();
 	$this->mActive = $active;
     }
+
 
     /**
      * Returns whether it should show in the menu
@@ -536,11 +548,13 @@ class ContentBase
 	return $this->mShowInMenu;
     }
 
+
     function SetShowInMenu($showinmenu)
     {
         $this->DoReadyForEdit();
 	$this->mShowInMenu = $showinmenu;
     }
+
 
     /**
      * Returns if the page is the default
@@ -550,21 +564,37 @@ class ContentBase
 	return $this->mDefaultContent;
     }
 
+
     function SetDefaultContent($defaultcontent)
     {
 	$this->DoReadyForEdit();
 	$this->mDefaultContent = $defaultcontent;
     }
 
+
     function Cachable()
     {
 	return $this->mCachable;
     }
 
+
     function SetCachable($cachable)
     {
 	$this->DoReadyForEdit();
 	$this->mCachable = $cachable;
+    }
+
+
+    function Secure()
+    {
+      return $this->mSecure;
+    }
+
+
+    function SetSecure($secure)
+    {
+	$this->DoReadyForEdit();
+	$this->mSecure = $secure;
     }
 	
 	function Markup()
@@ -821,6 +851,7 @@ class ContentBase
 				$this->mDefaultContent             = ($row->fields["default_content"] == 1 ? true : false);
 				$this->mShowInMenu                 = ($row->fields["show_in_menu"] == 1    ? true : false);
 				$this->mCachable                   = ($row->fields["cachable"] == 1        ? true : false);
+				$this->mSecure                     = $row->fields['secure'];
 				$this->mLastModifiedBy             = $row->fields["last_modified_by"];
 				$this->mCreationDate               = $row->fields["create_date"];
 				$this->mModifiedDate               = $row->fields["modified_date"];
@@ -922,6 +953,7 @@ class ContentBase
 		$this->mActive                     = ($data["active"] == 1          ? true : false);
 		$this->mShowInMenu                 = ($data["show_in_menu"] == 1    ? true : false);
 		$this->mCachable                   = ($data["cachable"] == 1        ? true : false);
+		$this->mSecure                     = $data["secure"];
 		$this->mLastModifiedBy             = $data["last_modified_by"];
 		$this->mCreationDate               = $data["create_date"];
 		$this->mModifiedDate               = $data["modified_date"];
@@ -1051,7 +1083,7 @@ class ContentBase
 
 		$this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
 
-		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
+		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
 		$dbresult = $db->Execute($query, array(
 			$this->mName,
 			$this->mOwner,
@@ -1062,6 +1094,7 @@ class ContentBase
 			($this->mDefaultContent == true ? 1 : 0),
 			($this->mShowInMenu == true     ? 1 : 0),
 			($this->mCachable == true       ? 1 : 0),
+			$this->mSecure,
 			$this->mMenuText,
 			$this->mAlias,
 			$this->mMetadata,
@@ -1161,7 +1194,7 @@ class ContentBase
 
 		$this->mModifiedDate = $this->mCreationDate = trim($db->DBTimeStamp(time()), "'");
 
-		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, menu_text, markup, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
 			$newid,
@@ -1178,6 +1211,7 @@ class ContentBase
 			($this->mDefaultContent == true ? 1 : 0),
 			($this->mShowInMenu == true     ? 1 : 0),
 			($this->mCachable == true       ? 1 : 0),
+			$this->mSecure,
 			$this->mMenuText,
 			$this->mMarkup,
 			$this->mMetadata,
@@ -1376,7 +1410,7 @@ class ContentBase
     function FillParams($params)
     {
       // content property parameters
-      $parameters = array('secure','extra1','extra2','extra3','image','thumbnail');
+      $parameters = array('extra1','extra2','extra3','image','thumbnail');
       foreach ($parameters as $oneparam)
 	{
 	  if (isset($params[$oneparam]))
@@ -1480,6 +1514,16 @@ class ContentBase
 	  $this->_handleRemovedBaseProperty('cachable','mCachable');
 	}
 
+      // secure
+      if (isset($params['secure']))
+	{
+	  $this->mSecure = $params['secure'];
+	}
+      else
+	{
+	  $this->_handleRemovedBaseProperty('secure','mSecure');
+	}
+
       // owner
       if (isset($params["ownerid"]))
 	{
@@ -1512,7 +1556,7 @@ class ContentBase
 		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 
 		$base_url = $config['root_url'];
-		if( $this->GetPropertyValue('secure') ) 
+		if( $this->Secure() )
 		  {
 		    if( isset($config['ssl_url']) )
 		      {
@@ -1976,7 +2020,7 @@ class ContentBase
 	    case 'secure':
 	      {
 		$opt = '';
-		if( $this->GetPropertyValue('secure') )
+		if( $this->mSecure )
 		  {
 		    $opt = ' checked="checked"';
 		  }
@@ -2110,7 +2154,7 @@ class ContentProperties
 	{
 		#debug_buffer($this->mPropertyNames);
 		if (!isset($this->mPropertyNames))
-		$this->mPropertyNames = array();
+		  $this->mPropertyNames = array();
 		return in_array($name, $this->mPropertyNames);
 	}
 
@@ -2155,7 +2199,6 @@ class ContentProperties
 
 	function Load($content_id)
 	{
-		debug_buffer('load properties called');
 		if (count($this->mPropertyNames) > 0)
 		{
 			global $gCms, $sql_queries, $debug_errors;

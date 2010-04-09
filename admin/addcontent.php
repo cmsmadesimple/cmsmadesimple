@@ -98,6 +98,7 @@ if (isset($_POST["serialized_content"]))
 }
 else
 {
+  $page_secure = get_site_preference('page_secure',0);
   $page_cachable = ((get_site_preference('page_cachable',"1")=="1")?true:false);
   $active = ((get_site_preference('page_active',"1")=="1")?true:false);
   $showinmenu = ((get_site_preference('page_showinmenu',"1")=="1")?true:false);

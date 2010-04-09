@@ -1176,6 +1176,8 @@ function display_content_list($themeObject = null)
 	    $opts['setnoncachable'] = lang('noncachable');
 	    $opts['showinmenu'] = lang('showinmenu');
 	    $opts['hidefrommenu'] = lang('hidefrommenu');
+	    $opts['marksecure'] = lang('secure');
+	    $opts['markinsecure'] = lang('insecure');
 	  }
 	if (check_permission($userid, 'Modify Any Page') || check_permission($userid, 'Manage All Content'))
 	  {

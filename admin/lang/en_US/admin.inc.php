@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['insecure'] = 'Insecure (HTTP)';
+$lang['admin']['secure'] = 'Secure (HTTPS)';
 $lang['admin']['secure_page'] = 'Use HTTPS for this page';
 $lang['admin']['thumbnail_width'] = 'Thumbnail Width';
 $lang['admin']['thumbnail_height'] = 'Thumbnail Height';
