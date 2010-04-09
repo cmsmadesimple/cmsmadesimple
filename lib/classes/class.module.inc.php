@@ -68,7 +68,7 @@ class CMSModule
 		else
 		{
 		  $this->curlang = get_site_preference('frontendlang','');
-		  if (isset($config['locale']) && $config['locale'] != '') {
+		  if (isset($this->config['locale']) && $this->config['locale'] != '') {
 		      $this->curlang = $config['locale'];
 		    }
 		  if( $this->curlang == '' ) {
