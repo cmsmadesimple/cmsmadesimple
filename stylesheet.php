@@ -143,6 +143,7 @@ if( !isset($CMS_INSTALL_PAGE) && !isset($CMS_ADMIN_PAGE) )
 	$fn = cms_join_path($config['root_path'],'lib','classes','class.events.inc.php');
 	include($fn);
       }
+    $parms = array();
     $parms['content'] =& $css;
     Events::SendEvent('Core','ContentStylesheet',$params);
   }
