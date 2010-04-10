@@ -141,7 +141,7 @@ if( !isset($CMS_INSTALL_PAGE) && !isset($CMS_ADMIN_PAGE) )
     if( !class_exists('Events') )
       {
 	$fn = cms_join_path($config['root_path'],'lib','classes','class.events.inc.php');
-	require_once($fn);
+	include($fn);
       }
     $parms['content'] =& $css;
     Events::SendEvent('Core','ContentStylesheet',$params);
