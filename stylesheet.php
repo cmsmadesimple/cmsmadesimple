@@ -1,5 +1,7 @@
 <?php
 
+
+global $CMS_INSTALL_PAGE;
 // Parse pretty URLS
 if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
 {
@@ -134,8 +136,16 @@ if ($stripbackground)
   $css = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $css);
 }
 
-$parms['content'] =& $css;
-Events::SendEvent('Core','ContentStylesheet',$params);
+if( !isset($CMS_INSTALL_PAGE) && !isset($CMS_ADMIN_PAGE) )
+  {
+    if( !class_exists('Events') )
+      {
+	$fn = cms_join_path($config['root_path'],'lib','classes','class.events.inc.php');
+	require_once($fn);
+      }
+    $parms['content'] =& $css;
+    Events::SendEvent('Core','ContentStylesheet',$params);
+  }
 
 if( isset($config['output_compression']) && ($config['output_compression']) && ($config['debug'] != true) )
   {
