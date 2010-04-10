@@ -165,6 +165,9 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 
 function cms_config_text($config)
 {
+  if( !isset($config['ssl_url']) )
+    $config['ssl_url'] = str_replace('http://','https://',$config['root_url']);
+
 	$true = 'true';
 	$false = 'false';
 	$result = <<<EOF
@@ -245,7 +248,7 @@ function cms_config_text($config)
 \$config['root_url'] = '{$config['root_url']}';
 
 #SSL URL.  This is used for pages that are marked as secure.
-\$config['ssl_url'] = '{str_replace('http://','https://',$config['ssl_url'])}';
+\$config['ssl_url'] = '{$config['ssl_url']}';
 
 #Path to document root. This should be the directory this file is in.
 #e.g. /var/www/localhost
