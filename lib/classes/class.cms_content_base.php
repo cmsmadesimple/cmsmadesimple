@@ -188,9 +188,8 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	{
 		if ($result)
 		{
-			// save properties.
-			/*
 			$concat = '';
+			/*
 			foreach ($this->mProperties as &$prop)
 			{
 				if ($prop->content_id != $this->id)
