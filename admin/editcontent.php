@@ -322,16 +322,21 @@ else
   if( $contentobj->is_viewable() && $contentobj->active() ) {
     $submit_buttons .= ' <a rel="external" href="'.$contentobj->get_url().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
   }
-  
+
   $tabelements = array();
   $tabcontents = array();
   $tabindex = 0;
   foreach( $tabnames as $onetab => $label )
     {
       $tabelements[$onetab] = array();
+      if( $onetab != 'preview' )
+	{
+	  // submit buttons right at top.
+	  $tabelements[$onetab][] = array('',$submit_buttons);
+	}
       if ($tabindex == 0)
 	{
-	  $tabelements[$onetab][] = array('',$submit_buttons);
+	  // content type dropdown.
 	  $tabelements[$onetab][] = array(lang('contenttype'),$typesdropdown);
 	}
       else if( $onetab == 'preview' )
@@ -365,10 +370,10 @@ else
   $smarty->assign('formend',$formend);
   $smarty->assign('tabnames',$tabnames);
   $smarty->assign('tabelements',$tabelements);
+  $smarty->assign('tabcontents',$tabcontents);
 }
 
-echo $smarty->fetch('editcontent.tpl');
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+$smarty->display('editcontent.tpl');
 
 include_once("footer.php");
 

@@ -11,17 +11,17 @@
 
   {$javascript}
 
+  {$formstart}
   {$theme_object->start_tab_headers()}
   {foreach from=$tabnames key='name' item='label'}
     {$theme_object->set_tab_header($name,$label)}
   {/foreach}
   {$theme_object->end_tab_headers()}
 
-  {$formstart}
   {$theme_object->start_tab_content()}
     {foreach from=$tabnames key='name' item='label'}
     {$theme_object->start_tab($name)}
-      {if isset($tabelements.$name)}
+      {if !empty($tabelements.$name)}
         {assign var='elements' value=$tabelements.$name}
         {foreach from=$elements item='element'}
           <div class="pageoverflow">
@@ -29,8 +29,8 @@
             <p class="pageinput">{$element[1]}</p>
           </div>
         {/foreach}
-      {elseif isset($tab_contents.$name)}
-        {$tab_contents.$name}
+      {elseif isset($tabcontents.$name)}
+        {$tabcontents.$name}
       {/if}
     {$theme_object->end_tab()}
     {/foreach}
