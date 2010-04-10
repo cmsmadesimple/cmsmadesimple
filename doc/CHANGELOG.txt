@@ -1,3 +1,15 @@
+Version 1.7.1 - ***
+
+Core:
+  - #4414 Default page becoming inactive
+  - #4500 Permission "Remove Global Content Block" not working
+  - #4720 Error in class.module.inc.php
+  - Missing </li> in accessible_simple_navigation.tpl
+
+News:
+  - #4659 documentation error
+
+
 Version 1.7 - Cape Verde
 -----------------------------
 - We now support php 5.3
