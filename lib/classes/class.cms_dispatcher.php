@@ -47,6 +47,13 @@ class CmsDispatcher extends CmsObject
 
 		//Can we find a page somewhere in the request?
 		$page = CmsRequest::calculate_page_from_request();
+		
+		//If we need the xmlrpc server, then jump out
+		if ($page == 'cmsms/xmlrpc.php')
+		{
+			CmsXmlrpc::handle_requests();
+			exit;
+		}
 
 		//Are we using full page caching?  Now is a good time to check and 
 		//output any cached data.

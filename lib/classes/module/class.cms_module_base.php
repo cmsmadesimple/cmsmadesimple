@@ -469,6 +469,22 @@ class CmsModuleBase extends CmsObject
 		}
 		return false;
 	}
+	
+	/**
+	 * Registers a module's method to be available via xmlrpc calls
+	 *
+	 * @param string $method_name Method to expose to xmlrpc
+	 * @param string $namespace Optional namespace of the method
+	 * @param string $callback_method Method in the module class to callback 
+	 *        to.  If left blank, it uses the $method_name.
+	 * @return void
+	 * @author Ted Kulp
+	 */
+	function add_xmlrpc_method($method_name, $namespace = '', $callback_method = '')
+	{
+		$callback_method = (empty($callback_method) ? $method_name : $callback_method);
+		CmsXmlrpc::add_method($method_name, array($this, $callback_method), $namespace);
+	}
 
 }
 
