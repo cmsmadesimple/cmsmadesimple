@@ -145,7 +145,7 @@ if( !isset($CMS_INSTALL_PAGE) && !isset($CMS_ADMIN_PAGE) )
       }
     $parms = array();
     $parms['content'] =& $css;
-    Events::SendEvent('Core','ContentStylesheet',$params);
+    Events::SendEvent('Core','ContentStylesheet',$parms);
   }
 
 if( isset($config['output_compression']) && ($config['output_compression']) && ($config['debug'] != true) )
