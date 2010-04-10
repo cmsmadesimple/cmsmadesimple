@@ -30,7 +30,6 @@ class SectionHeader extends ContentBase
     {
       parent::SetProperties();
       $this->RemoveProperty('secure','');
-      $this->RemoveProperty('alias','');
       $this->RemoveProperty('accesskey','');
       $this->RemoveProperty('title','');
       //$this->RemoveProperty('showinmenu',true);
