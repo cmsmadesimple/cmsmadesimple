@@ -733,65 +733,69 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 	global $gCms;
 	$result = '';
 
-	if ($enablewysiwyg == true)
-	{
-		reset($gCms->modules);
-		while (list($key) = each($gCms->modules))
-		{
-			$value =& $gCms->modules[$key];
-			if ($gCms->modules[$key]['installed'] == true && //is the module installed?
-				$gCms->modules[$key]['active'] == true &&			 //us the module active?
-				$gCms->modules[$key]['object']->IsWYSIWYG())   //is it a wysiwyg module?
-			{
-			  
-				if ($forcewysiwyg=='') {
-				  
-				  if (get_userid(false)==false) {
+// 	if ($enablewysiwyg == true)
+// 	{
+// 	  $module_list = CmsModuleLoader::get_module_list();
+// 	  while (list($key) = each($module_list))
+// 	    {
+// 	      if( !CmsModuleLoader::is_installed($key) ) continue;
+// 	      if( !CmsModuleLoader::is_active($key) ) continue;
+// 	      $value = CmsModuleLoader::get_module_class($key);
+// 	      if( !$value ) continue;
 
-				    //echo "admin";
-					  //get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway					  
-				    if ($gCms->modules[$key]['object']->GetName()==get_site_preference('frontendwysiwyg')) {
+// 			if ($gCms->modules[$key]['installed'] == true && //is the module installed?
+// 				$gCms->modules[$key]['active'] == true &&			 //us the module active?
+// 				$gCms->modules[$key]['object']->IsWYSIWYG())   //is it a wysiwyg module?
+// 			{
+			  
+// 				if ($forcewysiwyg=='') {
+				  
+// 				  if (get_userid(false)==false) {
+
+// 				    //echo "admin";
+// 					  //get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway					  
+// 				    if ($gCms->modules[$key]['object']->GetName()==get_site_preference('frontendwysiwyg')) {
 				      
-				      $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
-					  }					  
-				  } else {
+// 				      $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
+// 					  }					  
+// 				  } else {
 				    
-				    if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(false), 'wysiwyg')) {
-				      $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
-					  }
-				  }	 
-				} else {
-					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
-					  $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
-					}
-				}
-			}
-		}
-	}
+// 				    if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(false), 'wysiwyg')) {
+// 				      $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
+// 					  }
+// 				  }	 
+// 				} else {
+// 					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
+// 					  $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
 	
-  if (($result=="") && ($wantedsyntax!=''))
-	{	  
-		reset($gCms->modules);
-		while (list($key) = each($gCms->modules))
-		{
-			$value =& $gCms->modules[$key];
-			if ($gCms->modules[$key]['installed'] == true && //is the module installed?
-				$gCms->modules[$key]['active'] == true &&			 //us the module active?
-				$gCms->modules[$key]['object']->IsSyntaxHighlighter())   //is it a syntaxhighlighter module module?
-			{
-				if ($forcewysiwyg=='') {
-					//get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway
-					if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(false), 'syntaxhighlighter')) {
-					  $result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
-					}
-				} else {
-					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
-					  $result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
-					}
-				}
-			}
-		}
-	}
+//   if (($result=="") && ($wantedsyntax!=''))
+// 	{	  
+// 		reset($gCms->modules);
+// 		while (list($key) = each($gCms->modules))
+// 		{
+// 			$value =& $gCms->modules[$key];
+// 			if ($gCms->modules[$key]['installed'] == true && //is the module installed?
+// 				$gCms->modules[$key]['active'] == true &&			 //us the module active?
+// 				$gCms->modules[$key]['object']->IsSyntaxHighlighter())   //is it a syntaxhighlighter module module?
+// 			{
+// 				if ($forcewysiwyg=='') {
+// 					//get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway
+// 					if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(false), 'syntaxhighlighter')) {
+// 					  $result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
+// 					}
+// 				} else {
+// 					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
+// 					  $result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
 
 	if ($result == '')
 	{

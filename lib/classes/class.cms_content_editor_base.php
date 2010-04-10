@@ -101,11 +101,13 @@ class CmsContentEditorBase
 		$gCms = cmsms();
 		$profile = $this->get_profile();
 		$content_obj = $this->get_content();
-		foreach( $gCms->modules as $name => &$data )
+		$modules = CmsModuleLoader::get_module_list();
+		foreach( $modules as $name => &$data )
 		{
-			if( !isset($data['object']) ) continue;
-			$module =& $data['object'];
+			$module = CmsModuleLoader::get_module_class($name);
+			if( !$module ) return FALSE;
 
+			if( !method_exists($module,'HasCapability') ) continue;
 			if( !$module->HasCapability('content_attributes') ) continue;
 			if( !method_exists($module,'get_content_attributes') ) continue;
 			

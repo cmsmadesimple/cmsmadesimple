@@ -39,7 +39,7 @@ class CmsModuleOperations extends CmsObject
 			$query = "INSERT INTO {modules} (module_name, version, status, active) VALUES (?, ?, ?, ?)";
 			cms_db()->Execute($query, array($name, $version, 'installed', 1));
 
-			$event_params = array('name' => $module, 'version' => $version);
+			$event_params = array('name' => $name, 'version' => $version);
 			CmsEventManager::send_event('Core:module_installed', $event_params);
 			//Events::SendEvent('Core', 'ModuleInstalled', $event_params);
 		}

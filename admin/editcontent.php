@@ -23,7 +23,6 @@ require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTOR
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
-
 if (isset($_POST["cancel"]))
 {
   redirect("listcontent.php".$urlext);
@@ -35,7 +34,6 @@ require_once(dirname(__FILE__).'/editcontent_extra.php');
 $cms_ajax = new CmsAjax();
 $cms_ajax->register_function('ajaxpreview');
 $cms_ajax->register_function('editcontent_apply');
-
 $headtext = $cms_ajax->get_javascript();
 
 function check_editcontent_perms($page_id,$adminonly = false)
@@ -86,8 +84,8 @@ function editcontent_apply($params)
 	}
       else
 	{
-	  $list = '<li>'.explode('</li><li>',$error).'</li>';
-	  $str = '<div class="pageerrorcontainer"><ul class="pageerror">'.$list.'</ul></div>';
+	  $str = $theme_object->show_errors($error);
+	  debug_to_log($str);
 	  $resp->replace_html('#Edit_Content_Result',$str);
 	}
     }
@@ -261,8 +259,6 @@ include_once("header.php");
 $cms_ajax->process_requests();
 $themeObject = $gCms->variables['admintheme'];
 
-// AJAX result container
-
 $tmpfname = '';
 $tabnames = '';
 if (!check_editcontent_perms($page_id))
@@ -318,10 +314,14 @@ else
 
   $submit_buttons = '<input type="submit" name="submitbutton" accesskey="s" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('submitdescription').'" />';
   $submit_buttons .= ' <input type="submit" accesskey="c" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
-  $submit_buttons .= ' <input type="submit" accesskey="a" name="applybutton" value="'.lang('apply').'" class="pagebutton applybutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
-  if( $contentobj->is_viewable() && $contentobj->active() ) {
-    $submit_buttons .= ' <a rel="external" href="'.$contentobj->get_url().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
-  }
+  if( $page_id )
+    {
+      $submit_buttons .= ' <input type="submit" accesskey="a" name="applybutton" value="'.lang('apply').'" class="pagebutton applybutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
+    }
+  if( $page_id && $contentobj->is_viewable() && $contentobj->is_active() )
+    {
+      $submit_buttons .= ' <a rel="external" href="'.$contentobj->get_url().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
+    }
 
   $tabelements = array();
   $tabcontents = array();
@@ -366,6 +366,10 @@ else
       $tabindex++;
     }
 
+  if( !empty($error) )
+    {
+      $smarty->assign('error',$error);
+    }
   $smarty->assign('formstart',$formstart);
   $smarty->assign('formend',$formend);
   $smarty->assign('tabnames',$tabnames);

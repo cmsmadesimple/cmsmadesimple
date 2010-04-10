@@ -83,7 +83,7 @@ class CmsContentEditor extends CmsContentEditorBase
 			case 'pagemetadata':
 				{
 					$prompt = lang('page_metadata');
-					$field  = create_textarea(false, $content_obj->metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6');
+					$field  = create_textarea(false, $content_obj->metadata(), 'pagemetadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6');
 				}
 				return array($prompt.':',$field);
 
@@ -109,7 +109,7 @@ class CmsContentEditor extends CmsContentEditorBase
 					$prompt = lang('disable_wysiwyg');
 					$disable_wysiwyg = $content_obj->get_property_value('disable_wysiwyg');
 					if( $disable_wysiwyg == '' ) $disable_wysiwyg = 0;
-					$field = '<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
+					$field = '<input type="hidden" name="disable_wysiwyg" value="0" />
              <input type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />';
 
 				}
@@ -567,7 +567,7 @@ class CmsContentEditor extends CmsContentEditorBase
 			{
 				$accepted[] = $blockInfo['id'];
 			}
-			
+
 		foreach ($accepted as $one_param)
 		{
 			$content_obj->set_property_value($one_param, $params[$one_param]);

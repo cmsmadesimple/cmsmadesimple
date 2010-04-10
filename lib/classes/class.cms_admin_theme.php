@@ -905,13 +905,13 @@ class CmsAdminTheme extends CmsObject
 		$wikiLink = ' <a href="'.$wikiUrl.'" rel="external">'.lang('troubleshooting').'</a>';
 		if (FALSE != is_array($errors))
 		{
-			$output = '<ul class="pageerrorcontainer">';
+			$output = '<div class="pageerrorcontainer"><ul>';
 			foreach ($errors as $oneerror)
 			{
 				$output .= '<li>'.$oneerror.'</li>';
 			}
 			$output .= '<li>'.$wikiLink.'</li>';
-			$output .= '</ul>';
+			$output .= '</ul></div>';
 		}
 		else
 		{

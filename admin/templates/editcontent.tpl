@@ -3,13 +3,13 @@
   {$theme_object->show_header('editcontent')}
   </div>
 
-  <div id="Edit_Content_Result"></div>
-
-  {if isset($error)}
-  <div class="pageerrorcontainer"><p class="pageerror">{$error}</p></div>
-  {else}
-
   {$javascript}
+
+  <div id="Edit_Content_Result">
+  {if isset($error)}
+  {$theme_object->show_errors($error)}
+  {/if}
+  </div>
 
   {$formstart}
   {$theme_object->start_tab_headers()}
@@ -37,5 +37,4 @@
   {$theme_object->end_tab_content()}
   {$formend}
 
-  {/if}
 </div>{* pagecontainer *}
