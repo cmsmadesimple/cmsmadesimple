@@ -38,8 +38,8 @@ class UserOperations
 	 */
 	function LoadUsers()
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = cms_db();
 
 		$result = array();
 

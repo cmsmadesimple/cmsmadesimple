@@ -95,7 +95,7 @@ function editcontent_apply($params)
 
 $userid = get_userid();
 $gCms = cmsms();
-$contentops =& $gCms->GetContentOperations();
+$contentops = $gCms->GetContentOperations();
 $error = FALSE;
 $page_id = "";
 if (isset($_REQUEST["page_id"])) $page_id = $_REQUEST["page_id"];

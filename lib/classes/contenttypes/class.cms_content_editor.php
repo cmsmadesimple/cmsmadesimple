@@ -43,7 +43,7 @@ class CmsContentEditor extends CmsContentEditorBase
 	{
 		$gCms = cmsms();
 		$config = cms_config();
-		$templateops =& $gCms->GetTemplateOperations();
+		$templateops = $gCms->GetTemplateOperations();
 
 		$ret = parent::get_tab_elements($tabname,$adding);
 		if( $tabname != 'main' ) return $ret;
@@ -74,7 +74,7 @@ class CmsContentEditor extends CmsContentEditorBase
 			{
 			case 'template':
 				{
-					$templateops =& $gCms->GetTemplateOperations();
+					$templateops = $gCms->GetTemplateOperations();
 					$prompt = lang('template');
 					$field  = $templateops->TemplateDropdown('template_id', $content_obj->template_id(), 'onchange="document.contentform.submit()"');
 				}
@@ -128,7 +128,7 @@ class CmsContentEditor extends CmsContentEditorBase
 		global $gCms;
 		if ($this->_contentBlocksLoaded) return;
 
-		$templateops =& $gCms->GetTemplateOperations();
+		$templateops = $gCms->GetTemplateOperations();
 		{
 			$this->_contentBlocks = array();
 			if ($content_obj->template_id() && $content_obj->template_id() > -1)

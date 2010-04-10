@@ -39,6 +39,10 @@ class CmsRequest extends CmsObject
 	{
 		parent::__construct();
 		
+		#magic_quotes_runtime is a nuisance...  turn it off before it messes something up
+		if (version_compare(PHP_VERSION, '5.3.0') < 0)
+			@set_magic_quotes_runtime(false);
+		
 		# sanitize $_GET
 		array_walk_recursive($_GET, array('CmsRequest', 'sanitize_get_var'));
 		

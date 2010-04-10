@@ -351,7 +351,7 @@ class TemplateOperations
 		$result = "";
 		
 		global $gCms;
-		$templateops =& $gCms->GetTemplateOperations();
+		$templateops = $gCms->GetTemplateOperations();
 
 		$alltemplates = $templateops->LoadTemplates();
 		

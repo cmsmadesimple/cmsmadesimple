@@ -311,7 +311,7 @@ class CmsContentEditorBase
 	}
 
 
-	protected function get_single_element($content_obj,$attr,$adding = false)
+	protected function get_single_element($content_obj,&$attr,$adding = false)
 	{
 		$gCms = cmsms();
 		$config = cms_config();
@@ -348,7 +348,7 @@ class CmsContentEditorBase
 		case 'parent_id':
 			{
 				$prompt = lang('parent');
-				$contentops =& $gCms->GetContentOperations();
+				$contentops = $gCms->GetContentOperations();
 				$tmp = $contentops->CreateHierarchyDropdown($content_obj->id, $content_obj->parent_id, 'parent_id', 0, 1);
 				if( empty($tmp) || !check_permission(get_userid(),'Manage All Content') )
 					$field = '<input type="hidden" name="parent_id" value="'.$content_obj->parent_id().'" />';
@@ -443,7 +443,7 @@ class CmsContentEditorBase
 			{
 				$prompt = lang('owner');
 				$showadmin = check_ownership(get_userid(), $content_obj->id());
-				$userops =& $gCms->GetUserOperations();
+				$userops = $gCms->GetUserOperations();
 				if (!$adding && $showadmin)
 					{
 						$field = $userops->GenerateDropdown($content_obj->owner());
@@ -457,10 +457,10 @@ class CmsContentEditorBase
 				$text = '<input name="additional_editors" type="hidden" value=""/>';
 				$text .= '<select name="additional_editors[]" multiple="multiple" size="5">';
 				
-				$userops =& $gCms->GetUserOperations();
-				$groupops =& $gCms->GetGroupOperations();
-				$allusers =& $userops->LoadUsers();
-				$allgroups =& $groupops->LoadGroups();
+				$userops = $gCms->GetUserOperations();
+				$groupops = $gCms->GetGroupOperations();
+				$allusers = $userops->LoadUsers();
+				$allgroups = $groupops->LoadGroups();
 				$addteditors = $content_obj->get_additional_users();
 				foreach ($allgroups as $onegroup)
 				{

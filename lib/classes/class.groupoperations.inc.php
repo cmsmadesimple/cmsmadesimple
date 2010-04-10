@@ -31,8 +31,8 @@ class GroupOperations
 {
 	function LoadGroups()
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = cms_db();
 
 		$result = array();
 
