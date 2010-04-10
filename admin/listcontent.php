@@ -497,7 +497,7 @@ function content_select($html_id)
 	$smarty = cms_smarty();
 	$resp = new CmsAjaxResponse();
 	
-	var_dump($html_id);
+	//var_dump($html_id);
 	
 	if ($html_id == 'multiple' || $html_id == 'none')
 	{

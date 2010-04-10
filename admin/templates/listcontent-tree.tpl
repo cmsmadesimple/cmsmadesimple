@@ -7,12 +7,12 @@
 </div>
 {literal}
 <script type="text/javascript">
-function update_bulk_actions(tree_obj, deselect)
+function update_bulk_actions(tree_obj)
 {
     selected = tree_obj.selected_arr;
-    if ((selected.length > 0 && !deselect) || (selected.length > 1 && deselect))
+    if (selected.length > 0)
     {
-        $(".multiselect").each(
+        $(".multiselect:hidden").each(
             function ()
             {
                 $(this).fadeIn("slow");
@@ -21,7 +21,7 @@ function update_bulk_actions(tree_obj, deselect)
     }
     else
     {
-        $(".multiselect").each(
+        $(".multiselect:visible").each(
             function ()
             {
                 $(this).fadeOut("slow");
@@ -66,7 +66,7 @@ $(function () {
 	        },
 	        callback:
 	        {
-                onselect: function(node, tree_obj)
+                onchange: function(node, tree_obj)
                 {
                     selected = tree_obj.selected_arr;
                     if (selected.length > 1)
@@ -74,20 +74,8 @@ $(function () {
                     else if (selected.length == 0)
                         cms_ajax_content_select("none");
                     else
-                        cms_ajax_content_select(node.id);
-                    update_bulk_actions(tree_obj, false);
-                },
-                ondeselect: function(node, tree_obj)
-                {
-                    var node_id = node.id;
-                    selected = jQuery.grep(tree_obj.selected_arr, function(i, n) {return i.attr('id') != node_id});
-                    if (selected.length > 1)
-                        cms_ajax_content_select("multiple");
-                    else if (selected.length == 0)
-                        cms_ajax_content_select("none");
-                    else
                         cms_ajax_content_select(selected[0].attr('id'));
-                    update_bulk_actions(tree_obj, true);
+                    update_bulk_actions(tree_obj);
                 },
                 onmove: function(node, ref_node, type, tree_obj, rollback) 
                 {
@@ -124,7 +112,7 @@ $(function () {
 	);
 });
 $(document).ready(function () {
-    update_bulk_actions($.tree.reference('#content_tree'), false);
+    update_bulk_actions($.tree.reference('#content_tree'));
 });
 </script>
 {/literal}
