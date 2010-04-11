@@ -261,6 +261,14 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 		if(is_object($node))
 		{
 		  $contentobj =& $node->GetContent(true,true,false);
+		  if( !$contentobj->IsViewable() )
+		    {
+		      $url = $contentobj->GetURL();
+		      if( $url != '' && $url != '#' )
+			{
+			  redirect($url);
+			}
+		    }
 		  if( is_object($contentobj) )
 		    {
 		      $smarty->assign('content_obj',$contentobj);
