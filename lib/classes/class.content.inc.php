@@ -1462,22 +1462,12 @@ class ContentBase
 	}
 
       // alias
+      $tmp = '';
       if (isset($params['alias']))
 	{
 	  $tmp = trim($params['alias']);
-	  if( !empty($tmp) )
-	    {
-	      $this->SetAlias($tmp);
-	    }
-	  else
-	    {
-	      $this->SetAlias($tmp, $this->DoAutoAlias());
-	    }
 	}
-      else if($this->RequiresAlias() && $this->DoAutoAlias())
-	{
-	  $this->SetAlias('');
-	}
+      $this->SetAlias($tmp);
 
       // target
       if (isset($params['target']))
