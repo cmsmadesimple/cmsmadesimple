@@ -647,11 +647,11 @@ class ContentBase
 			
 			$tolower = true;
 			$alias = munge_string_to_url($alias, $tolower);
-			if( empty($alias) )
-			  {
-			    // calguy: quick hack so that the alias is never empty...
-			    $alias = 'alias';
-			  }
+// 			if( empty($alias) )
+// 			  {
+// 			    // calguy: quick hack so that the alias is never empty...
+// 			    $alias = 'alias';
+// 			  }
 			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
 			$contentops =& $gCms->GetContentOperations();
 			$error = $contentops->CheckAliasError($alias);
@@ -1465,7 +1465,7 @@ class ContentBase
       if (isset($params['alias']))
 	{
 	  $tmp = trim($params['alias']);
-	  if( empty($tmp) )
+	  if( !empty($tmp) )
 	    {
 	      $this->SetAlias($tmp);
 	    }
