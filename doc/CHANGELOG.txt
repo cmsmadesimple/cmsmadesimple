@@ -1,4 +1,5 @@
 Version 1.7.1 - ***
+-----------------------------
 
   - #3794 Remove use of readfile.
   - #3901 Forms use SERVER_NAME not HTTP_HOST, conflicts with canonical redirects
@@ -15,6 +16,9 @@ Version 1.7.1 - ***
 
 News:
   - #4659 documentation error
+  
+TinyMCE:
+  - #4769 It's possible to crash TinyMCE by crafting strange titles on pages
 
 
 Version 1.7 - Cape Verde
