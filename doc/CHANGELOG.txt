@@ -1,9 +1,15 @@
 Version 1.7.1 - ***
 
-Core:
+  - #3794 Remove use of readfile.
+  - #3901 Forms use SERVER_NAME not HTTP_HOST, conflicts with canonical redirects
+  - #4009 Modules cannot update or dont work when using SSL
+  - #4032 Admin Forms won't work on https
   - #4209 Alias field is not shown for Section Header
+  - #4321 cms_module action parameter by tag overwriten by mact 
   - #4414 Default page becoming inactive
   - #4500 Permission "Remove Global Content Block" not working
+  - #4551 OO Programming
+  - #4603 ContentStylesheet is never triggered
   - #4720 Error in class.module.inc.php
   - Missing </li> in accessible_simple_navigation.tpl
 
