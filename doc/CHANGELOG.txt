@@ -20,7 +20,9 @@ News:
 TinyMCE:
   - #4769 It's possible to crash TinyMCE by crafting strange titles on pages
 
-
+Feature Requests:
+  - #4550 Add new sort order to News module
+  
 Version 1.7 - Cape Verde
 -----------------------------
 - We now support php 5.3
