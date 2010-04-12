@@ -400,7 +400,7 @@ if ( !is_sitedown() && $config["debug"] == true)
 {
   echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and {$memory} bytes of memory (peak memory usage was {$memory_peak})</p>";
 }
-else if( !isset($config['hide_performance_info']) && ($showtemplate == true) )
+else if( isset($config['show_performance_info']) && ($showtemplate == true) )
 {
 echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak} -->\n";
 
