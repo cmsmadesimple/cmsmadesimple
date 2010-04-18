@@ -19,6 +19,9 @@ News:
   
 TinyMCE:
   - #4769 It's possible to crash TinyMCE by crafting strange titles on pages
+  - Updated to TinyMCE 3.3.2
+  - Added a plugin-hook allowing module writes to add pieces of functionality
+  - Allowed inplace resizing of editor
 
 Feature Requests:
   - #4550 Add new sort order to News module
