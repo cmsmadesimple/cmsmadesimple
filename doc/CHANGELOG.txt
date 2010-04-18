@@ -15,6 +15,7 @@ Version 1.7.1 - ***
   - Missing </li> in accessible_simple_navigation.tpl
 
 News:
+  - #4304 Use expiration date logical problem
   - #4659 documentation error
   
 TinyMCE:
