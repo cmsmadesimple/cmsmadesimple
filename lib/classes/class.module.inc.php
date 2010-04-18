@@ -576,7 +576,9 @@ class CMSModule
 				$config =& $gCms->GetConfig();
 				$smarty =& $gCms->GetSmarty();
 
-				include($filename);
+				$res = include($filename);
+				if( $res === 1 ) $res = '';
+				return $res;
 			}
 		}
 		else
@@ -609,7 +611,9 @@ class CMSModule
 		  $config =& $gCms->GetConfig();
 		  $smarty =& $gCms->GetSmarty();
 		  
-		  include($filename);
+		  $res = include($filename);
+		  if( $res === 1 ) $res = '';
+		  return $res;
 		}
 		else
 		{
@@ -656,7 +660,9 @@ class CMSModule
 				$config =& $gCms->GetConfig();
 				$smarty =& $gCms->GetSmarty();
 
-				include($filename);
+				$res = include($filename);
+				if( $res === 1 ) $res = '';
+				return $res;
 			}
 		}
 	}
