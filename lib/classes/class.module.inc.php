@@ -577,7 +577,7 @@ class CMSModule
 				$smarty =& $gCms->GetSmarty();
 
 				$res = include($filename);
-				if( $res === 1 ) $res = '';
+				if( !is_string($res) ) $res = FALSE;
 				return $res;
 			}
 		}
