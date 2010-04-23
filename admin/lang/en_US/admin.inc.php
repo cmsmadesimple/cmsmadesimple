@@ -1,4 +1,7 @@
 <?php
+$lang['admin']['listtemplates_pagelimit'] = 'Number of rows per page when viewing templates';
+$lang['admin']['liststylesheets_pagelimit'] = 'Number of rows per page when viewing stylesheets';
+$lang['admin']['listgcbs_pagelimit'] = 'Number of rows per page when viewing Global Content Blocks';
 $lang['admin']['insecure'] = 'Insecure (HTTP)';
 $lang['admin']['secure'] = 'Secure (HTTPS)';
 $lang['admin']['secure_page'] = 'Use HTTPS for this page';

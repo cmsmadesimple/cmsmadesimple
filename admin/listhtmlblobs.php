@@ -48,7 +48,7 @@ if (isset($_GET["message"])) {
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
-	$limit = 20;
+        $limit = get_preference($userid,'listgcbs_pagelimit',20);
 	echo "<p class=\"pageshowrows\">".pagination($page, count($htmlbloblist), $limit)."</p>";
 	echo $themeObject->ShowHeader('htmlblobs').'</div>';
 

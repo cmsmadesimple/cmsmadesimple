@@ -20,6 +20,26 @@
 
 $CMS_ADMIN_PAGE=1;
 
+function pagelimit_dropdown($name,$opts,$selected)
+{
+  $str = '<select name="'.$name.'">';
+  foreach( $opts as $key => $value )
+    {
+      if( $key == $selected )
+	{
+	  $str .= '<option value="'.$key.'" selected="selected">'.$value.'</option>';
+	}
+      else
+	{
+	  $str .= '<option value="'.$key.'">'.$value.'</option>';
+	}
+    }
+  $str .= '</select>';
+  return $str;
+}
+
+$pagelimit_opts = array(10=>10,20=>20,50=>50,100=>100);
+
 $default_cms_lang = '';
 if (isset($_POST['default_cms_lang'])) $default_cms_lang = $_POST['default_cms_lang'];
 $old_default_cms_lang = '';
@@ -72,6 +92,16 @@ if (isset($_POST['gcb_wysiwyg'])) $gcb_wysiwyg = 1;
 $date_format_string = '%x %X';
 if (isset($_POST['date_format_string'])) $date_format_string = $_POST['date_format_string'];
 
+$listtemplates_pagelimit = '20';
+if (isset($_POST['listtemplates_pagelimit'])) $listtemplates_pagelimit = $_POST['listtemplates_pagelimit'];
+
+$liststylesheets_pagelimit = '20';
+if (isset($_POST['liststylesheets_pagelimit'])) $liststylesheets_pagelimit = $_POST['liststylesheets_pagelimit'];
+
+$listgcbs_pagelimit = '20';
+if (isset($_POST['listgcbs_pagelimit'])) $listgcbs_pagelimit = $_POST['listgcbs_pagelimit'];
+
+
 $default_parent = '';
 if( isset($_POST['parent_id']) )
   {
@@ -123,6 +153,9 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'default_parent', $default_parent);
 	set_preference($userid, 'homepage', $homepage );
 	set_preference($userid, 'ignoredmodules', implode(',',$ignoredmodules));
+	set_preference($userid, 'listtemplates_pagelimit', $listtemplates_pagelimit);
+	set_preference($userid, 'liststylesheets_pagelimit', $liststylesheets_pagelimit);
+	set_preference($userid, 'listgcbs_pagelimit', $listgcbs_pagelimit);
 	audit(-1, '', 'Edited User Preferences');
 	$page_message = lang('prefsupdated');
 	#redirect("index.php");
@@ -140,6 +173,9 @@ if (isset($_POST["submit_form"])) {
 	$paging = get_preference($userid, 'paging', 0);
 	$date_format_string = get_preference($userid, 'date_format_string','%x %X');
 	$default_parent = get_preference($userid,'default_parent',-2);
+	$listtemplates_pagelimit = get_preference($userid,'listtemplates_pagelimit',20);
+	$liststylesheets_pagelimit = get_preference($userid,'liststylesheets_pagelimit',20);
+	$listgcbs_pagelimit = get_preference($userid,'listgcbs_pagelimit',20);
 
 	$homepage = get_preference($userid,'homepage');
 	$to = '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
@@ -299,6 +335,27 @@ echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1)
 						  <?php echo $themeObject->GetAdminPageDropdown('homepage',$homepage); ?>
 				</div>
 			</div>
+
+<div class="pageoverflow">
+  <div class="pagetext"><?php echo lang('listtemplates_pagelimit'); ?>:</div>
+  <div class="pageinput">
+    <?php echo pagelimit_dropdown('listtemplates_pagelimit',$pagelimit_opts,$listtemplates_pagelimit); ?>
+  </div>
+</div>
+
+<div class="pageoverflow">
+  <div class="pagetext"><?php echo lang('liststylesheets_pagelimit'); ?>:</div>
+  <div class="pageinput">
+    <?php echo pagelimit_dropdown('liststylesheets_pagelimit',$pagelimit_opts,$liststylesheets_pagelimit); ?>
+  </div>
+</div>
+
+<div class="pageoverflow">
+  <div class="pagetext"><?php echo lang('listgcbs_pagelimit'); ?>:</div>
+  <div class="pageinput">
+    <?php echo pagelimit_dropdown('listgcbs_pagelimit',$pagelimit_opts,$listgcbs_pagelimit); ?>
+  </div>
+</div>
 
 			<!--
 			<div class="pageoverflow">

@@ -87,7 +87,7 @@ if (isset($_GET["message"])) {
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
-	$limit = 20;
+        $limit = get_preference($userid,'liststylesheets_pagelimit',20);
 	if ($result->RecordCount() > $limit)
 	{
 		echo "<p class=\"pageshowrows\">".pagination($page, $result->RecordCount(), $limit)."</p>";
