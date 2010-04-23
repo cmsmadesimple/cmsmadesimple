@@ -278,7 +278,7 @@ class Smarty_CMS extends Smarty {
 			#defined plugin instead.
 			if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 			{
-				$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+				$tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
 			}
 		}
 		else
@@ -553,7 +553,7 @@ class Smarty_CMS extends Smarty {
 					#defined plugin instead.
 					if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 					{
-						$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+						$tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
 					}
 					
 					//do_cross_reference($pageinfo->template_id, 'template', $tpl_source);
@@ -625,7 +625,7 @@ class Smarty_CMS extends Smarty {
                   #defined plugin instead.
 		  if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 		    {
-		      $tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+		      $tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
 		    }
 
 		  return true;
@@ -718,7 +718,7 @@ class Smarty_CMS extends Smarty {
 		#defined plugin instead.
 		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 		{
-			$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+			$tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
 		}
 
 		return true;
