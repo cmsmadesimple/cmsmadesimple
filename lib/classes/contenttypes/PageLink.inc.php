@@ -131,7 +131,7 @@ class PageLink extends ContentBase
 	  $contentops =& $gCms->GetContentOperations();
 	  
 	  $tmp = $contentops->CreateHierarchyDropdown($this->mId, 
-						      $this->GetPropertyValue('page'), 'page', 1);
+						      $this->GetPropertyValue('page'), 'page', 1, 0, 0, 0);
 	  if( !empty($tmp) ) return array(lang('destination_page').':',$tmp);
 	}
 	break;

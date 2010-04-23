@@ -736,7 +736,7 @@ class ContentOperations
 		return $contentcache;
 	}
 
-	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, $use_perms = 0, $ignore_current = 0)
+	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, $use_perms = 0, $ignore_current = 0, $allow_all = false)
 	{
 		$result = '';
 		$userid = -1;
@@ -772,6 +772,13 @@ class ContentOperations
 				  continue;
 				}
 			      $value = -1;
+			    }
+
+			  // If it doesn't have a valid link...
+			  // don't include it.
+			  if( !$allow_all && !$this->HasUsableLink() )
+			    {
+			      continue;
 			    }
 
 			  // If it's a child of the current, we don't want to show it as it

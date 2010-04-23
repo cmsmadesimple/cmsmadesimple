@@ -1980,7 +1980,7 @@ class ContentBase
 	    case 'parent':
 		{
 		  $contentops =& $gCms->GetContentOperations();
-		  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1);
+		  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1. 0, 1);
 		  if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
 		    return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
 		  if( !empty($tmp) ) return array(lang('parent').':',$tmp);
