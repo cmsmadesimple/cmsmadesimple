@@ -261,6 +261,8 @@ $lang['admin']['nogcbwysiwyg'] = 'Disallow WYSIWYG editors on global content blo
 $lang['admin']['destination_page'] = 'Destination Page';
 $lang['admin']['additional_params'] = 'Additional Parameters';
 $lang['admin']['help_function_current_date'] = <<<EOT
+        <h3 style="color: red;">Deprecated</h3>
+	 <p>use <code>{$smarty.now|cms_date_format}</code></p>
 	<h3>What does this do?</h3>
 	<p>Prints the current date and time.  If no format is given, it will default to a format similar to 'Jan 01, 2004'.</p>
 	<h3>How do I use it?</h3>
