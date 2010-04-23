@@ -72,6 +72,14 @@ class SectionHeader extends ContentBase
     function ValidateData()
     {
       $res = parent::ValidateData();
+      if( is_array($res) && $this->mId < 1 )
+	{
+	  // some error occurred..
+	  // reset the menu text
+	  // and the alias
+	  $this->mMenuText = '';
+	  $this->mAlias = '';
+	}
       $this->mTemplateId = -1;
       return $res;
     }
