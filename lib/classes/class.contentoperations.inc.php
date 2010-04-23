@@ -776,7 +776,7 @@ class ContentOperations
 
 			  // If it doesn't have a valid link...
 			  // don't include it.
-			  if( !$allow_all && !$this->HasUsableLink() )
+			  if( !$allow_all && !$one->HasUsableLink() )
 			    {
 			      continue;
 			    }
