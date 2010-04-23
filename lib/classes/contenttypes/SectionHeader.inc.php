@@ -77,6 +77,7 @@ class SectionHeader extends ContentBase
 	  // some error occurred..
 	  // reset the menu text
 	  // and the alias
+	  $this->mName = '';
 	  $this->mMenuText = '';
 	  $this->mAlias = '';
 	}
