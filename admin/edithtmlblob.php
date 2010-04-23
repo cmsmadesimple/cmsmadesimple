@@ -60,6 +60,16 @@ $adminaccess = check_permission($userid, 'Modify Global Content Blocks');
 $isowner = $gcbops->CheckOwnership($htmlblob_id,$userid);
 $access = $adminaccess || $isowner || $gcbops->CheckAuthorship($htmlblob_id, $userid);
 
+$the_blob = '';
+if( $htmlblob_id > 0 )
+  {
+    $the_blob = $gcbops->LoadHtmlBlobById($htmlblob_id);
+  }
+else
+  {
+    $the_blob = new GlobalContent();
+  }
+
 /*
 $htmlarea_flag = false;
 $use_javasyntax = false;
@@ -102,20 +112,17 @@ if ($access)
 
 		if ($validinfo)
 		{
-			$blobobj =& new GlobalContent();
-			$blobobj->id = $htmlblob_id;
-			$blobobj->name = $htmlblob;
-			$blobobj->content = $content;
-			$blobobj->owner = $owner_id;
+			$the_blob->id = $htmlblob_id;
+			$the_blob->name = $htmlblob;
+			$the_blob->content = $content;
+			$the_blob->owner = $owner_id;
 
-			$blobobj->ClearAuthors();
 			if (isset($_POST["additional_editors"])) {
-					foreach ($_POST["additional_editors"] as $addt_user_id) {
-						$blobobj->AddAuthor($addt_user_id);
-					}
+			  $the_blob->ClearAuthors();
+			  foreach ($_POST["additional_editors"] as $addt_user_id) {
+			    $the_blob->AddAuthor($addt_user_id);
+			  }
 			}
-			// add this user as an additional editor? why?
-			$blobobj->AddAuthor($userid);
 
 			#Perform the edithtmlblob_pre callback
 			foreach($gCms->modules as $key=>$value)
@@ -129,11 +136,11 @@ if ($access)
 			
 			Events::SendEvent('Core', 'EditGlobalContentPre', array('global_content' => &$blobobj));
 
-			$result = $blobobj->save();
+			$result = $the_blob->save();
 
 			if ($result)
 			{
-				audit($blobobj->id, $blobobj->name, 'Edited Global Content Block');
+				audit($the_blob->id, $the_blob->name, 'Edited Global Content Block');
 
 				#Clear cache
 				$smarty = new Smarty_CMS($config);
@@ -146,11 +153,11 @@ if ($access)
 					if ($gCms->modules[$key]['installed'] == true &&
 						$gCms->modules[$key]['active'] == true)
 					{
-						$gCms->modules[$key]['object']->EditHtmlBlobPost($blobobj);
+						$gCms->modules[$key]['object']->EditHtmlBlobPost($the_blob);
 					}
 				}
 				
-				Events::SendEvent('Core', 'EditGlobalContentPost', array('global_content' => &$blobobj));
+				Events::SendEvent('Core', 'EditGlobalContentPost', array('global_content' => &$the_blob));
 
 				if (!isset($_POST['apply'])) {
 					redirect('listhtmlblobs.php'.$urlext);
@@ -184,11 +191,10 @@ if ($access)
 	}
 	else if ($htmlblob_id != -1)
 	{
-		$onehtmlblob = $gcbops->LoadHtmlBlobByID($htmlblob_id);
-		$htmlblob = $onehtmlblob->name;
-		$oldhtmlblob = $onehtmlblob->name;
-		$owner_id = $onehtmlblob->owner;
-		$content = $onehtmlblob->content;
+		$htmlblob = $the_blob->name;
+		$oldhtmlblob = $the_blob->name;
+		$owner_id = $the_blob->owner;
+		$content = $the_blob->content;
 	}
 }
 
