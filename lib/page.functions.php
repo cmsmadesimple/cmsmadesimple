@@ -916,6 +916,10 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 		{
 			$result .= ' class="'.$classname.'"';
 		}
+		else
+                {
+		  $result .= ' class="cms_textara"';
+		}
 		if ($id != '')
 		{
 			$result .= ' id="'.$id.'"';
