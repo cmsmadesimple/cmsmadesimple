@@ -27,6 +27,7 @@ TinyMCE:
   - Updated to TinyMCE 3.3.2
   - Added a plugin-hook allowing module writes to add pieces of functionality
   - Allowed inplace resizing of editor
+  - Updated to TinyMCE 3.3.3
 
 Feature Requests:
   - #4550 Add new sort order to News module
