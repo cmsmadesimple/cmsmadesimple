@@ -74,6 +74,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	//$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" name="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
 
 	$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'"'.$goto;
+	$text .= ' class="cms_form"';
 	if ($enctype != '')
 	{
 		$text .= ' enctype="'.$enctype.'"';
@@ -111,7 +112,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 
 function cms_module_CreateLabelForInput(&$modinstance, $id, $name, $labeltext='', $addttext='')
 {
-  $text = '<label for="'.cms_htmlentities($id.$name).'"';
+  $text = '<label class="cms_label" for="'.cms_htmlentities($id.$name).'"';
   if ($addttext != '')
     {
       $text .= ' ' . $addttext;
@@ -131,7 +132,7 @@ function cms_module_CreateInputText(&$modinstance, $id, $name, $value='', $size=
 
   $value = str_replace('"', '&quot;', $value);
   
-  $text = '<input type="text" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+  $text = '<input type="text" class="cms_textfield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
   if ($addttext != '')
     {
       $text .= ' ' . $addttext;
@@ -151,7 +152,7 @@ function cms_module_CreateInputTextWithLabel(&$modinstance, $id, $name, $value='
         if ($label == '') {
 	  $label = $name;
 	}
-	$text = '<label for="'.$id.$name.'" '.$labeladdtext.'>'.$label.'</label>'."\n";
+	$text = '<label class="cms_label" for="'.$id.$name.'" '.$labeladdtext.'>'.$label.'</label>'."\n";
 	$text .= $modinstance->CreateInputText($id, $name, $value, $size, $maxlength, $addttext);
 	$text .= "\n";
 	return $text;
@@ -164,7 +165,7 @@ function cms_module_CreateInputFile(&$modinstance, $id, $name, $accept='', $size
   $accept = cms_htmlentities($accept);
   $size = cms_htmlentities($size);
 
-	$text='<input type="file" name="'.$id.$name.'" size="'.$size.'"';
+	$text='<input type="file" class="cms_browse" name="'.$id.$name.'" size="'.$size.'"';
 	if ($accept != '')
 	{
 		$text .= ' accept="' . $accept.'"';
@@ -186,7 +187,7 @@ function cms_module_CreateInputPassword(&$modinstance, $id, $name, $value='', $s
   $maxlength = cms_htmlentities($maxlength);
 
 	$value = str_replace('"', '&quot;', $value);
-	$text = '<input type="password" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+	$text = '<input type="password" class="cms_password" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
 	if ($addttext != '')
 	{
 		$text .= ' ' . $addttext;
@@ -218,7 +219,7 @@ function cms_module_CreateInputCheckbox(&$modinstance, $id, $name, $value='', $s
   $value = cms_htmlentities($value);
   $selectedvalue = cms_htmlentities($selectedvalue);
 
-	$text = '<input type="checkbox" name="'.$id.$name.'" value="'.$value.'"';
+	$text = '<input type="checkbox" class="cms_checkbox" name="'.$id.$name.'" value="'.$value.'"';
 	if ($selectedvalue == $value)
 	{
 		$text .= ' ' . 'checked="checked"';
@@ -240,7 +241,7 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
 	global $gCms;
 	$config =& $gCms->GetConfig();
 
-	$text = '<input name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" type=';
+	$text = '<input class="cms_submit" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" type=';
 
 	if ($image != '')
 	{
@@ -271,7 +272,7 @@ function cms_module_CreateInputReset(&$modinstance, $id, $name, $value='Reset', 
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
 
-  $text = '<input type="reset" name="'.$id.$name.'" value="'.$value.'"';
+  $text = '<input type="reset" class="cms_reset" name="'.$id.$name.'" value="'.$value.'"';
   if ($addttext != '')
     {
       $text .= ' '.$addttext;
@@ -286,7 +287,7 @@ function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
 
-	$text = '<input type="file" name="'.$id.$name.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+	$text = '<input type="file" class="cms_browse" name="'.$id.$name.'" size="'.$size.'" maxlength="'.$maxlength.'"';
 	if ($addttext != '')
 	{
 		$text .= ' '.$addttext;
@@ -302,7 +303,7 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
   $selectedindex = cms_htmlentities($selectedindex);
   $selectedvalue = cms_htmlentities($selectedvalue);
 
-	$text = '<select name="'.$id.$name.'"';
+	$text = '<select class="cms_dropdown" name="'.$id.$name.'"';
 	if ($addttext != '')
 	{
 		$text .= ' ' . $addttext;
@@ -341,7 +342,7 @@ function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $se
     {
       $name.='[]';
     }
-  $text = '<select name="'.$id.$name.'"';
+  $text = '<select class="cms_select" name="'.$id.$name.'"';
 	if ($addttext != '')
 	{
 		$text .= ' ' . $addttext;
@@ -386,7 +387,7 @@ function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $se
 	  $value = cms_htmlentities($value);
 
 		$counter = $counter + 1;
-		$text .= '<input type="radio" name="'.$id.$name.'" id="'.$id.$name.$counter.'" value="'.$value.'"';
+		$text .= '<input class="cms_radio" type="radio" name="'.$id.$name.'" id="'.$id.$name.$counter.'" value="'.$value.'"';
 		if ($addttext != '')
 		{
 			$text .= ' ' . $addttext;
@@ -396,7 +397,7 @@ function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $se
 			$text .= ' ' . 'checked="checked"';
 		}
 		$text .= ' />';
-		$text .= '<label for="'.$id.$name.$counter.'">'.$key .'</label>' . $delimiter;
+		$text .= '<label class="cms_label" for="'.$id.$name.$counter.'">'.$key .'</label>' . $delimiter;
 	}
 
 	return $text;
@@ -586,8 +587,8 @@ function cms_module_CreateFieldsetStart(&$modinstance, $id, $name, $legend_text=
   $name = cms_htmlentities($name);
   $legend_text = cms_htmlentities($legend_text);
 
-  $text = '<fieldset '. $addtext. '>'."\n";
-  $text .= '<legend '. $addtext_legend .'>'."\n";
+  $text = '<fieldset class="cms_fieldset" '. $addtext. '>'."\n";
+  $text .= '<legend class="cms_legend" '. $addtext_legend .'>'."\n";
   $text .= $legend_text;
   $text .= '</legend>';
   return $text;
