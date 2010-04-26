@@ -53,8 +53,8 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."modules");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_deps");
-	$dbdict->ExecuteSQLArray($sqlarray);
+	//$sqlarray = $dbdict->DropTableSQL($db_prefix."module_deps");
+	//$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_templates");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."permissions");
@@ -103,7 +103,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		bookmark_id I KEY,
+		bookmark_id I KEY AUTO,
 		user_id I,
 		title C(255),
 		url C(255)
@@ -136,7 +136,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		id I KEY,
+		id I KEY AUTO,
 		user_id I,
 		title C(255),
 		url C(255),
@@ -266,7 +266,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		css_id I KEY,
+		css_id I KEY AUTO,
 		css_name C(255),
 		css_text X,
 		media_type C(255),
@@ -323,7 +323,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		module_name C(160),
 		removable I,
 		handler_order I,
-		handler_id I KEY
+		handler_id I KEY AUTO
 	";
 	echo installer_create_tablesql($dbdict, $db_prefix."event_handlers", $flds, $taboptarray);
 /*
@@ -337,7 +337,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$flds = "
 		originator C(200) NOTNULL,
 		event_name C(200) NOTNULL,
-		event_id I KEY
+		event_id I KEY AUTO
 	";
 	echo installer_create_tablesql($dbdict, $db_prefix."events", $flds, $taboptarray);
 	echo installer_create_indexsql($dbdict, $db_prefix."events", array('originator'));
@@ -361,7 +361,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		group_perm_id I KEY,
+		group_perm_id I KEY AUTO,
 		group_id I,
 		permission_id I,
 		create_date T,
@@ -383,7 +383,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		group_id I KEY,
+		group_id I KEY AUTO,
 		group_name C(25),
 		active I1,
 		create_date T,
@@ -399,7 +399,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		htmlblob_id I KEY,
+		htmlblob_id I KEY AUTO,
 		htmlblob_name C(255),
 		html X,
 		owner I,
@@ -422,7 +422,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		additional_htmlblob_users_id I KEY,
+		additional_htmlblob_users_id I KEY AUTO,
 		user_id I,
 		htmlblob_id I
 	";
@@ -456,7 +456,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo lang('install_creating_index', 'content', $ado_ret);
 */
 
-
+/*
 	$flds = "
 		parent_module C(25),
 		child_module C(25),
@@ -464,7 +464,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	echo installer_create_tablesql($dbdict, $db_prefix."module_deps", $flds, $taboptarray);
+	echo installer_create_tablesql($dbdict, $db_prefix."module_deps", $flds, $taboptarray); */
 /*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_deps", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
@@ -499,7 +499,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		permission_id I KEY,
+		permission_id I KEY AUTO,
 		permission_name C(255),
 		permission_text C(255),
 		create_date T,
@@ -530,7 +530,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		template_id I KEY,
+		template_id I KEY AUTO,
 		template_name C(160),
 		template_content X,
 		stylesheet X,
@@ -592,7 +592,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		user_id I KEY,
+		user_id I KEY AUTO,
 		username C(25),
 		password C(40),
 		admin_access I1,
@@ -613,7 +613,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		userplugin_id I KEY,
+		userplugin_id I KEY AUTO,
 		userplugin_name C(255),
 		code X,
 		create_date T,

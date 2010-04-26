@@ -166,15 +166,15 @@ class CMSInstallerPage6 extends CMSInstallerPage
 			echo "<p>&nbsp;</p>";
 
 
-			$t=time();
-			echo "<p>" . lang('install_sequence') ."</p>";
-			$db->StartTrans();
+			//$t=time();
+			//echo "<p>" . lang('install_sequence') ."</p>";
+			//$db->StartTrans();
 
-			include_once(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'createseq.php'));
+			//include_once(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'createseq.php'));
 
-			if($this->debug && $db->HasFailedTrans()) echo "<p>" . lang('install_error_trans') . "</p>";
-			$db->CompleteTrans();
-			echo "<p>[" . (($this->debug) ? lang('done_in_sec', (time()-$t)) : lang('done')) . "]</p>";
+			//if($this->debug && $db->HasFailedTrans()) echo "<p>" . lang('install_error_trans') . "</p>";
+			//$db->CompleteTrans();
+			//echo "<p>[" . (($this->debug) ? lang('done_in_sec', (time()-$t)) : lang('done')) . "]</p>";
 
 
 			$db->Close();
