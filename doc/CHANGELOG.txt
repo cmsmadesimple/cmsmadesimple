@@ -1,6 +1,7 @@
 Version 1.7.1 - Escada
 -----------------------------
   - #3794 Remove use of readfile.
+  - #3854 Problem searching multiple words
   - #3901 Forms use SERVER_NAME not HTTP_HOST, conflicts with canonical redirects
   - #4009 Modules cannot update or dont work when using SSL
   - #4138 Content Internal Page doesn't work if approched directly
