@@ -38,6 +38,7 @@ $cms_ajax->register_function('content_move_new');
 $cms_ajax->register_function('content_delete');
 $cms_ajax->register_function('context_menu');
 $cms_ajax->register_function('content_select');
+$cms_ajax->register_function('save_page');
 
 function check_modify_all($userid)
 {
@@ -57,8 +58,25 @@ $smarty->assign('urlext', $urlext);
 $thisurl = basename(__FILE__) . $urlext;
 $smarty->assign('thisurl', $thisurl);
 
+$opt = array();
+foreach (cms_orm('CmsTemplate')->find_all_by_active(true) as $tpl)
+{
+	$opt[$tpl->id] = $tpl->name;
+}
+$smarty->assign('template_items', $opt);
+
+$opt = array();
+$opt['Content'] = 'Standard Page';
+$opt['ErrorPage'] = 'Error Page';
+$smarty->assign('page_types', $opt);
+
+$opt = array();
+$opt['CmsHtmlContentType'] = 'HTML Content';
+$smarty->assign('content_types', $opt);
+
 //include_once("../lib/classes/class.admintheme.inc.php");
 
+$smarty->assign('theme_object', CmsAdminTheme::get_instance());
 $cms_ajax->process_requests();
 
 CmsAdminTheme::inject_header_text($cms_ajax->get_javascript()."\n");
@@ -119,7 +137,7 @@ setup_smarty($themeObject);
 
 set_bulk_actions();
 
-$smarty->assign('content_list', $smarty->fetch('listcontent-tree.tpl'));
+$smarty->assign('content_list', display_content_list());
 
 $smarty->display('listcontent.tpl');
 
@@ -186,11 +204,11 @@ function set_permissions(&$smarty)
 
 function display_content_list()
 {
-	$userid = get_userid();
+	//$userid = get_userid();
 	//$themeObject = CmsAdminTheme::get_theme_for_user($userid);
-	global $themeObject;
+	$admin_theme = CmsAdminTheme::get_instance();
 	$smarty = cms_smarty();
-	setup_smarty($themeObject);
+	setup_smarty($admin_theme);
 	return $smarty->fetch('listcontent-tree.tpl');
 }
 
@@ -255,7 +273,7 @@ function set_bulk_actions()
 	}
 }
 
-function setdefault($contentid)
+function setdefault($page_id)
 {
 	$userid = get_userid();
 	
@@ -263,14 +281,14 @@ function setdefault($contentid)
 
 	if (check_modify_all($userid))
 	{
-		$old = cmsms()->content->find_by_default_content(1);
+		$old = cms_orm('CmsPage')->find_by_default_content(1);
 		if ($old)
 		{
 			$old->default_content = false;
 			$old->save();
 		}
 		
-		$new = cmsms()->content->find_by_id($contentid);
+		$new = cms_orm('CmsPage')->load($page_id);
 		if ($new)
 		{
 			$new->active = true;
@@ -284,14 +302,14 @@ function setdefault($contentid)
 	return $result;
 }
 
-function content_setdefault($contentid)
+function content_setdefault($page_id)
 {
 	$resp = new CmsAjaxResponse();
 	
-	setdefault($contentid);
+	setdefault($page_id);
 
 	$resp->replace_html('#contentlist', display_content_list());
-	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
+	$resp->script("$('#tr_{$page_id} > td').highlight('#ff0', 1500);");
 	//$resp->script('set_context_menu();');
 
 	return $resp->get_result();
@@ -340,7 +358,7 @@ function expandall()
 {
 	$userid = get_userid();
 	//$all = cmsms()->GetContentOperations()->GetAllContent(false);
-	$all = cms_orm('CmsContentBase')->find_all(array('order' => 'lft ASC'));
+	$all = cms_orm('CmsPage')->find_all(array('order' => 'lft ASC'));
 	$cs = '';
 	foreach ($all as &$thisitem)
 	{
@@ -463,7 +481,7 @@ function content_move_new($id, $ref_id, $type)
 		$child_id = str_replace('phtml_', '', $id);
 		$parent_id = str_replace('phtml_', '', $ref_id);
 		
-		$obj = cms_orm('CmsContentBase')->find_by_id($child_id);
+		$obj = cms_orm('CmsPage')->find_by_id($child_id);
 		if ($obj)
 		{
 			$obj->parent_id = $parent_id;
@@ -475,8 +493,8 @@ function content_move_new($id, $ref_id, $type)
 		$child_id = str_replace('phtml_', '', $id);
 		$target_id = str_replace('phtml_', '', $ref_id);
 		
-		$obj = cms_orm('CmsContentBase')->find_by_id($child_id);
-		$target_obj = cms_orm('CmsContentBase')->find_by_id($target_id);
+		$obj = cms_orm('CmsPage')->find_by_id($child_id);
+		$target_obj = cms_orm('CmsPage')->find_by_id($target_id);
 		if ($obj && $target_obj)
 		{
 			$result = $obj->move_before_or_after($target_obj, $type);
@@ -506,8 +524,8 @@ function content_select($html_id)
 	else
 	{
 		$id = str_replace('phtml_', '', $html_id);
-		$content = cms_orm('CmsContentBase')->find_by_id($id);
-		$smarty->assign_by_ref('content', $content);
+		$page = cms_orm('CmsPage')->load($id);
+		$smarty->assign_by_ref('page', $page);
 	}
 	
 	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
@@ -522,7 +540,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 
 	if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
 	{
-		$content = cms_orm('CmsContentBase')->find_by_id($contentid);
+		$content = cms_orm('CmsPage')->find_by_id($contentid);
 		
 		if ($content != null)
 		{
@@ -558,32 +576,55 @@ function deletecontent($contentid)
   $_GET['message'] = 'contentdeleted';
 }
 
-function show_h(&$root, &$sortableLists, &$listArray, &$output)
+function save_page($params)
 {
-	$content = &$root->getContent();
-
-	$contentops = cmsms()->GetContentOperations();
-
-	$output .= '<li id="item_'.$content->id.'">'."\n";
-	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->hierarchy).') '.$content->name;
-
-	if ($root->getChildrenCount()>0)
+	$ajax = new CmsAjaxResponse();
+	$admin_theme = CmsAdminTheme::get_instance();
+	
+	if (isset($params['save']) || isset($params['apply']))
 	{
-		$sortableLists->addList('parent'.$content->id,'parent'.$content->id.'ListOrder');
-		$listArray[$content->id] = 'parent'.$content->id.'ListOrder';
-		$output .= '<ul id="parent'.$content->id.'" class="sortableList">'."\n";
-
-		$children = &$root->getChildren();
-		foreach ($children as $child)
+		$page = cms_orm('CmsPage')->load($params['page']);
+		$result = '';
+		if ($page)
 		{
-			show_h($child, $sortableLists, $listArray, $output);
+			$page->update_parameters($params['page']);
+			$valid = !$page->check_not_valid();
+			if ($valid)
+			{
+				//Ok, page validates.  Let's handle the content (if there is)
+				if (isset($params['block_type']) && is_array($params['block_type']))
+				{
+					foreach ($params['block_type'] as $block_name => $content_type)
+					{
+						$content_obj = cms_orm('CmsContentBase')->load($params['block'][$block_name], $content_type);
+						if ($content_obj)
+						{
+							$content_obj->update_parameters($params['block'][$block_name]);
+							if ($content_obj->save())
+							{
+								$page->params['blocks'][$block_name]['id'] = $content_obj->id;
+							}
+						}
+					}
+				}
+				
+				if ($page->save())
+				{
+					$admin_theme->add_message('Page Saved');
+					$ajax->replace_html('.pagemessagecontainer', $admin_theme->display_messages());
+					$ajax->script('$(".pagemessage").fadeOut(3500)');
+					CmsCache::clear();
+					$ajax->replace_html('#contentlist', display_content_list());
+					return $ajax->get_result();
+				}
+			}
 		}
-		$output .= "</ul>\n";
+	
+		$admin_theme->add_error('Error Saving Page');
+		$ajax->replace_html('div.pageerrorcontainer', $admin_theme->display_errors());
+		$ajax->script('$(".pageerror").fadeOut(3500)');
 	}
-	else 
-	{
-		$output .= "</li>\n";
-	}
+	return $ajax->get_result();
 }
 
 # vim:ts=4 sw=4 noet

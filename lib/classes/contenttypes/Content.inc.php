@@ -29,7 +29,6 @@ class Content extends CmsContentBase
 
 	}
 
-
     function is_copyable()
     {
         return TRUE;

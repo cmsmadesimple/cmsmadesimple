@@ -898,7 +898,7 @@ div.pagecontainer p {
    margin-bottom: 1em;
 }
 
-div.pageerrorcontainer , div.pageerrorinstalldir  {
+div.pageerror , div.pageerrorinstalldir  {
 	margin: 10px;
 	padding: 10px;
 	border: 1px solid #FD9999;
@@ -908,12 +908,12 @@ div.pageerrorcontainer , div.pageerrorinstalldir  {
 	font-weight: bold;
 	
    }
-div.pageerrorcontainer a:link {
+div.pageerror a:link {
 	color: #DE2C27;
 	text-decoration: underline;
 }
 
-div.pagemcontainer  {
+div.pagemessage  {
 	margin: 10px;
 	padding: 10px;
 	border: 1px solid #BDD3A3;
@@ -1009,12 +1009,6 @@ div.pagecontainer .pageinput  {
 
 .pageinputwysiwyg  {
    padding-top: 5px;
-   }
-
- .pagemessage  {
-	margin-bottom: 0;
-	padding: 5px;
-	font-weight: bold;	/*background: #D6E4C5;*/
    }
 
 .pageshowrows  {
@@ -1228,7 +1222,7 @@ ul.pageerror li {
 	margin-left: 5px;
 	background: url(../images/icons/system/stop.gif) no-repeat left center;
    }
-   div.pageerrorcontainer a {
+   div.pageerror a {
 	color: #fff;
 	}
 .clearb  {

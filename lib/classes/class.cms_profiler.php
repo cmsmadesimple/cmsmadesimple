@@ -90,7 +90,7 @@ class CmsProfiler extends CmsObject
 	 **/
 	function mark( $label )
 	{
-		$mark = @sprintf ( "\n<div class=\"profiler\">$this->_prefix %.4f %d $label</div>", $this->get_microtime() - $this->_start, $this->get_memory());
+		$mark = @sprintf("\n$this->_prefix %.4f %d $label", $this->get_microtime() - $this->_start, $this->get_memory());
 		$this->_buffer[] = $mark;
 		return $mark;
 	}
@@ -106,28 +106,36 @@ class CmsProfiler extends CmsObject
 	 * @access public
 	 * @param string Glue string
 	 **/
-	function report( $memory = true, $database = true, $glue='')
+	function report($memory = true, $database = true, $glue='', $html = true)
 	{
+		$newline = $html ? '<br />' : "\n";
 		$ret = '';
 		
-		$ret .= '<div id="profiler_output" style="font-size: .75em;">';
+		if ($html)
+		{
+			$glue = '</div>' . $glue . '<div class="profiler">';
+			$ret .= '<div id="profiler_output" style="font-size: .75em;"><div class="profiler">';
+		}
 		
 		$ret .= implode( $glue, $this->_buffer );
 		
-		$ret .= '<br />';
+		$ret .= $newline;
 		$ret .= $this->get_time();
 		
 		if ($memory)
 		{
-			$ret .= '<br />';
+			$ret .= $newline;
 			$ret .= $this->get_memory();
 		}
 		if ($database)
 		{
-			$ret .= '<br />' . CmsDatabase::query_count() . ' queries executed';
+			$ret .= $newline . CmsDatabase::query_count() . ' queries executed';
 		}
 		
-		$ret .= '</div>';
+		if ($html)
+		{
+			$ret .= '</div></div>';
+		}
 		
 		return $ret;
 	}

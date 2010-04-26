@@ -112,7 +112,10 @@ class CmsCache extends CmsObject
 	
 	static public function clear($group = FALSE, $mode = 'ingroup')
 	{
-		return self::get_instance()->clean($group, $mode);
+		foreach (self::$instances as $k => $v)
+		{
+			$v->clean($group, $mode);
+		}
 	}
 }
 

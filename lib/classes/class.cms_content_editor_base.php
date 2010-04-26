@@ -148,18 +148,21 @@ class CmsContentEditorBase
 	private function _get_module_tabs()
 	{
 		$profile = $this->get_profile();
-		$attrs = $profile->find_all_with_helper();
-		if( !is_array($attrs) ) return;
-
-		for( $i = 0; $i < count($attrs); $i++ )
+		if ($profile != null)
 		{
-			$helper = $attrs[$i]->get_helper();
-			$tabs = $helper->get_attribute_tabs();
-			if( is_array($tabs) )
+			$attrs = $profile->find_all_with_helper();
+			if( !is_array($attrs) ) return;
+
+			for( $i = 0; $i < count($attrs); $i++ )
 			{
-				foreach( $tabs as $key => $data )
+				$helper = $attrs[$i]->get_helper();
+				$tabs = $helper->get_attribute_tabs();
+				if( is_array($tabs) )
 				{
-					$profile->add_tab($key,$data['permission'],$data['prompt']);
+					foreach( $tabs as $key => $data )
+					{
+						$profile->add_tab($key,$data['permission'],$data['prompt']);
+					}
 				}
 			}
 		}
@@ -218,42 +221,45 @@ class CmsContentEditorBase
 		$this->_merge_basic_attributes();
 
 		// get tab names from the contentobj profile.
-		$tmp = $this->_profile->get_tab_list();
 		$results = array();
-		foreach( $tmp as $tabname => $data )
+		if ($this->_profile != null)
 		{
-			$permission = $data['permission'];
-			if( empty($permission) || check_permission(get_userid(),$permission) )
+			$tmp = $this->_profile->get_tab_list();
+			foreach( $tmp as $tabname => $data )
 			{
-				// now go through all the elements in each tab
-				// and see if we have permission for at least one of them.
-				$attrs = $this->_profile->find_all_by_tab($tabname);
-				if( !$attrs ) continue;
-				for( $i = 0; $i < count($attrs); $i++ )
+				$permission = $data['permission'];
+				if( empty($permission) || check_permission(get_userid(),$permission) )
 				{
-					$attr =& $attrs[$i];
-					$perm = $attr->get_permission();
-					$okay = true;
-					if( $perm != '' )
+					// now go through all the elements in each tab
+					// and see if we have permission for at least one of them.
+					$attrs = $this->_profile->find_all_by_tab($tabname);
+					if( !$attrs ) continue;
+					for( $i = 0; $i < count($attrs); $i++ )
 					{
-						$okay = false;
-						if( is_array($perm) )
+						$attr =& $attrs[$i];
+						$perm = $attr->get_permission();
+						$okay = true;
+						if( $perm != '' )
 						{
-							$okay = call_user_func($perm,get_userid());
+							$okay = false;
+							if( is_array($perm) )
+							{
+								$okay = call_user_func($perm,get_userid());
+							}
+							else if( function_exists($perm) )
+							{
+								$okay = call_user_func($perm,get_userid());
+							}
+							else
+							{
+								$okay = check_permission(get_userid(),$perm);
+							}
 						}
-						else if( function_exists($perm) )
+						if( $okay )
 						{
-							$okay = call_user_func($perm,get_userid());
+							$results[$tabname] = $data['prompt'];
+							break;
 						}
-						else
-						{
-							$okay = check_permission(get_userid(),$perm);
-						}
-					}
-					if( $okay )
-					{
-						$results[$tabname] = $data['prompt'];
-						break;
 					}
 				}
 			}

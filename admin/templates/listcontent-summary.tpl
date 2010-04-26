@@ -4,6 +4,37 @@
     {elseif $reason_for_not_showing eq 'none'}
         Nothing Selected
     {/if}
+{elseif 1 == 1} {* Has edit permissions *}
+    <form method="post" action="listcontent.php" onsubmit="cms_ajax_call('cms_ajax_save_page', $(this).serializeArray()); return false;">
+
+    	{$theme_object->start_tab_headers()}
+        {$theme_object->set_tab_header('info', 'Information')}
+        {$theme_object->set_tab_header('edit', 'Content')}
+        {$theme_object->set_tab_header('attributes', 'Attributes')}
+        {$theme_object->set_tab_header('metadata', 'Metadata')}
+        {$theme_object->set_tab_header('preview', 'Preview')}
+    	{$theme_object->end_tab_headers()}
+    	{$theme_object->start_tab_content()}
+    	{$theme_object->start_tab('info')}
+    		{include file="editcontent-info.tpl"}
+    	{$theme_object->end_tab()}
+    	{$theme_object->start_tab('edit')}
+    		{include file="editcontent-content.tpl"}
+    	{$theme_object->end_tab()}
+    	{$theme_object->start_tab('attributes')}
+    	{$theme_object->end_tab()}
+    	{$theme_object->start_tab('metadata')}
+    	{$theme_object->end_tab()}
+    	{$theme_object->start_tab('preview')}
+    	{$theme_object->end_tab()}
+    	{$theme_object->end_tab_content()}
+    	<br />
+
+    	{html_hidden name='page[id]' value=$page.id}
+
+    	{html_submit name="save" value="Save" remote="save_page"} {html_submit name="cancel" value="Cancel" onclick="clear_main_content(); return false;"} {html_submit name="apply" value="Apply" remote="save_page"}
+
+    </form>
 {else}
     <div class="pageoverflow">
     	<p class="pagetext">Id:</p>

@@ -320,7 +320,7 @@ class CmsActsAsNestedSet extends CmsActsAs
 		$query = "UPDATE {$table_name} SET item_order = ?, parent_id = ?, modified_date = {$time} WHERE {$obj->id_field} = ?";
 		$db->Execute($query, array($obj->item_order, $obj->parent_id, $obj->id));
 		
-		$test_obj = cms_orm('CmsContentBase')->find_by_id($obj->id);
+		$test_obj = $obj->find_by_id($obj->id);
 		
 		$result = ($test_obj->lft == $new_lft && $test_obj->rgt == $new_rgt && $test_obj->parent_id = $obj->parent_id);
 		

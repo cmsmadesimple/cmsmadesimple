@@ -79,7 +79,7 @@ class CmsLanguage extends CmsObject
 		else
 		{
 			//Send event here
-			CmsEventManager::send_event('Core:missing_translation', array('module' => $module, 'language' => $current_language, 'string' => $string, 'hash' => self::create_bt_hash(debug_backtrace())));
+			//CmsEventManager::send_event('Core:missing_translation', array('module' => $module, 'language' => $current_language, 'string' => $string, 'hash' => self::create_bt_hash(debug_backtrace())));
 			$result = $string;
 		}
 

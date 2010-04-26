@@ -32,6 +32,11 @@ function smarty_function_html_submit($params, &$smarty)
 		echo ' onmouseout="'.$params['onmouseout'].'"';
 	if (isset($params['onmouseover']))
 		echo ' onmouseover="'.$params['onmouseover'].'"';
+	
+	if ($params['remote'])
+	{
+		echo "onclick = 'var ary = $(this.form).serializeArray(); ary.push({name:\"" . $params['name'] . "\", value:\"" . $params['value'] . "\"}); cms_ajax_call(\"" . $params['remote'] . "\", ary, {}); return false;'";
+	}
 
 	echo ' />';
 }

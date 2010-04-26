@@ -57,7 +57,7 @@ class CmsSmarty extends Smarty
 		//$this->caching = false;
 		//$this->compile_check = true;
 		$this->assign('app_name','CMS');
-		//$this->debugging = false;
+		$this->debugging = false;
 		//$this->force_compile = false;
 		$this->cache_plugins = false;
 
@@ -65,7 +65,7 @@ class CmsSmarty extends Smarty
 		{
 			//$this->caching = false;
 			$this->force_compile = true;
-			$this->debugging = true;
+			//$this->debugging = true;
 		}
 
 		if (CmsApplication::is_sitedown())
@@ -496,6 +496,7 @@ class CmsSmarty extends Smarty
 
 	function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
+		/*
 		global $gCms;
 		$config = cms_config();
 
@@ -600,10 +601,19 @@ class CmsSmarty extends Smarty
 			}
 			return false;
 		}
+		*/
+		$template = cms_orm('CmsTemplate')->find_by_id($tpl_name);
+		if ($template)
+		{
+			$tpl_source = $template->content;
+			return true;
+		}
+		return false;
 	}
 
 	function template_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
+		/*
 		global $gCms;
 
 		if (CmsApplication::is_sitedown() || $tpl_name == 'notemplate')
@@ -628,6 +638,14 @@ class CmsSmarty extends Smarty
 			$tpl_timestamp = $pageinfo->template_modified_date;
 			return true;
 		}
+		*/
+		$template = cms_orm('CmsTemplate')->find_by_id($tpl_name);
+		if ($template)
+		{
+			$tpl_timestamp = $template->modified_date->timestamp();
+			return true;
+		}
+		return false;
 	}
 
 	function content_get_template($tpl_name, &$tpl_source, &$smarty_obj)

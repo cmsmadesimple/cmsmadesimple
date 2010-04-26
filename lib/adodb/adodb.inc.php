@@ -1031,7 +1031,7 @@
 		*************************/
 
 		if ($this->_queryID === false) { // error handling if query fails
-			if ($this->debug == 99) adodb_backtrace(true,5);	
+			//if ($this->debug == 99) adodb_backtrace(true,5);	
 			$fn = $this->raiseErrorFn;
 			if ($fn) {
 				$fn($this->databaseType,'EXECUTE',$this->ErrorNo(),$this->ErrorMsg(),$sql,$inputarr,$this);
@@ -1845,7 +1845,7 @@
 		// ok, set cached object found
 			$rs->connection = $this; // Pablo suggestion
 			if ($this->debug){ 			
-				if ($this->debug == 99) adodb_backtrace();
+				//if ($this->debug == 99) adodb_backtrace();
 				$inBrowser = isset($_SERVER['HTTP_USER_AGENT']);
 				$ttl = $rs->timeCreated + $secs2cache - time();
 				$s = is_array($sql) ? $sql[0] : $sql;

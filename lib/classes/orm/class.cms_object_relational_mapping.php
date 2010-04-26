@@ -530,6 +530,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			$parameters = array_merge($parameters, $arguments[0]);
 		}
 		
+		//die(var_export($parameters, true));
+		
 		return $this->find($parameters);
 	}
 	
@@ -625,6 +627,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	function find_by_query($query, $queryparams = array())
 	{
 		$result = CmsCache::get_instance('orm')->call(array(&$this, 'find_by_query_'), $query, $queryparams);
+		//$result = $this->find_by_query_($query, $queryparams);
 		return $result;
 	}
 
@@ -636,7 +639,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 
 		try
 		{
-			$row = $db->CacheGetRow($query, $queryparams);
+			//$row = $db->CacheGetRow($query, $queryparams);
+			$row = $db->GetRow($query, $queryparams);
 
 			if($row)
 			{
@@ -699,6 +703,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	function find_all_by_query($query, $queryparams = array(), $numrows = -1, $offset = -1)
 	{
 		$result = CmsCache::get_instance('orm')->call(array(&$this, 'find_all_by_query_'), $query, $queryparams, $numrows, $offset);
+		//$result = $this->find_all_by_query_($query, $queryparams, $numrows, $offset);
 		return $result;
 	}
 	
@@ -712,7 +717,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		
 		try
 		{
-			$dbresult = $db->CacheSelectLimit($query, $numrows, $offset, $queryparams);
+			//$dbresult = $db->CacheSelectLimit($query, $numrows, $offset, $queryparams);
+			$dbresult = $db->SelectLimit($query, $numrows, $offset, $queryparams);
 
 			while ($dbresult && !$dbresult->EOF)
 			{
@@ -764,7 +770,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		
 		list($query, $queryparams, $numrows, $offset) = $this->generate_select_query_and_parameters($table, $arguments, $query, $queryparams, true);
 		
-		return $db->CacheGetOne($query, $queryparams);
+		//return $db->CacheGetOne($query, $queryparams);
+		return $db->GetOne($query, $queryparams);
 	}
 
 	/**
@@ -780,7 +787,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function save()
 	{
-		CmsCache::get_instance('orm')->clear();
+		CmsCache::get_instance('orm')->clean();
 		cms_db()->CacheFlush();
 		
 		$this->before_validation_caller();
@@ -902,7 +909,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 
 				try
 				{
-					$result = $db->Execute($query, $queryparams) ? true : false;
+					$result = $db->Execute($query, $queryparams);
+					$result = $result ? true : false;
 				}
 				catch (Exception $e)
 				{
@@ -1043,7 +1051,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function delete($id = -1)
 	{
-		CmsCache::get_instance('orm')->clear();
+		CmsCache::get_instance('orm')->clean();
 		cms_db()->CacheFlush();
 		
 		if ($id > -1)
@@ -1278,6 +1286,38 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		cms_db()->SetFetchMode(ADODB_FETCH_ASSOC); //Data dictionary resets this
 		
 		return $fields;
+	}
+	
+	/**
+	 * Takes the parameters passed (particularly the id -- works great from a form submit) and loads 
+	 * the appropriate object from the database.  If the value is a single number, it will load the
+	 * object with that id.  If a type is given and the id doesn't exist, then a new object of the
+	 * given type will be returned.
+	 *
+	 * @param array Hash of parameters (make sure one is named id) or one id
+	 * @param string If set to a class name, type of class to return if id isn't given.
+	 * @return mixed The found object, or null if none are found
+	 * @author Ted Kulp
+	 */
+	public function load($hash_or_id, $type = null)
+	{
+		if (is_array($hash_or_id))
+		{
+			if (!isset($hash_or_id['id']))
+			{
+				if ($type != null)
+					return new $type;
+				else
+					return null;
+			}
+		}
+		else
+		{
+			//Just make a hash out of it for simplicity sake
+			$hash_or_id['id'] = $hash_or_id;
+		}
+		
+		return $this->find(array('conditions' => array('id = ?', $hash_or_id['id'])));
 	}
 	
 	/**

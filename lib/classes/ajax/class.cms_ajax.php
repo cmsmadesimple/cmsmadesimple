@@ -39,28 +39,51 @@ class CmsAjax extends CmsObject
 			//while(@ob_end_clean());
 			$function_name = cms_request('request:cms_ajax_function_name');
 			
-			$json = json_decode(cms_request('request:cms_ajax_args'));
-			$args = array();
-			if (is_array($json))
+			if (in_array($function_name, $this->registered_functions))
 			{
-				foreach ($json as $ary)
+				$args = array();
+				$arg_str = '';
+				$params = cms_request('request:cms_ajax_args');
+				$json = json_decode($params);
+				if (is_array($json))
 				{
-					if (is_array($ary) && $ary[0] == 'sf')
+					foreach ($json as $ary)
 					{
-						$result = array();
-						parse_str($ary[1], $result);
-						$args[] = $result;
-					}
-					else
-					{
-						$args[] = $ary;
+						if (is_array($ary) && isset($ary[0]) && $ary[0] == 'sf')
+						{
+							$result = array();
+							parse_str($ary[1], $result);
+							$args[] = $result;
+						}
+						//If we had a form submit (remote var on html_submit), then it'll
+						//come in good {name:blah value:blah} form.  We convert it in a special
+						//way to get nested parameters back properly.  Yes, it's a hack.
+						else if (is_object($ary) && isset($ary->name) && isset($ary->value))
+						{
+							$arg_str .= "{$ary->name}={$ary->value}&";
+						}
+						else
+						{
+							$args[] = $ary;
+						}
 					}
 				}
+				
+				//If we have the arg_str because of a form submission, then handle
+				//it by making it all happy with nested parameters
+				if (!empty($arg_str))
+				{
+					$arg_str = trim($arg_str, '&');
+					$str_ary = array();
+					parse_str($arg_str, $str_ary);
+					$args[] = $str_ary;
+				}
+
+				cms_response()->add_header('Content-Type', "text/html; charset=utf-8");
+				cms_response()->body(call_user_func_array($function_name, $args));
+				cms_response()->render();
 			}
 			
-			cms_response()->add_header('Content-Type', "text/html; charset=utf-8");
-			cms_response()->body(call_user_func_array($function_name, $args));
-			cms_response()->render();
 			exit;
 		}
 	}

@@ -1,3 +1,4 @@
+<br clear="both" />
 <div id="content_tree" class="content_tree">
     {if $content->has_children()}
         <ul>

@@ -279,7 +279,7 @@ class CmsApplication extends CmsObject
 
 		if ($config['debug'] == true)
 		{
-			$smarty->debugging = true;
+			//$smarty->debugging = true;
 			$smarty->error_reporting = 'E_ALL';
 		}
 

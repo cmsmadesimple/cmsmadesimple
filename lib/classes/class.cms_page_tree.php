@@ -99,7 +99,7 @@ class CmsPageTree extends CmsTree
 		//TODO: Optimize this more -- right now we're just making sure it works
 		//First we find the page.  If it exists, we then grab the great-great-grandparent
 		//and load all of the nodes in between.
-		$page = cms_orm('CmsContentBase')->find_by_id($id);
+		$page = cms_orm('CmsPage')->find_by_id($id);
 		//$page = CmsContentOperations::LoadContentFromId($id);
 		if ($page)
 		{

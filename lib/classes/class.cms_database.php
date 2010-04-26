@@ -147,7 +147,7 @@ class CmsDatabase extends CmsObject
 	    if ($dbms == 'sqlite')
 	    {
 			$dbinstance->Execute("PRAGMA short_column_names = 1;");
-	        sqlite_create_function($dbinstance->_connectionID,'now','time',0);
+	        sqlite_create_function($dbinstance->_connectionID, 'now', 'time', 0);
 	    }
 		else
 		{
@@ -229,10 +229,12 @@ class CmsDatabase extends CmsObject
 
 function adodb_outp($msg, $newline = true)
 {
-	if ($newline)
-		$msg .= "<br>\n";
-
 	$msg = str_replace('<hr />', '', $msg);
+	$msg = str_replace('<hr>', '', $msg);
+	$msg = str_replace("\r\n", '', $msg);
+	$msg = str_replace("\r", '', $msg);
+	$msg = str_replace("\n", '', $msg);
+	$msg = html_entity_decode($msg, ENT_COMPAT, 'UTF-8');
 
 	CmsProfiler::get_instance()->mark($msg);
 }
@@ -240,8 +242,6 @@ function adodb_outp($msg, $newline = true)
 //TODO: Clean me up.  Globals?  Yuck!
 function pre_parse_query($db, &$sql, $inputarray)
 {
-	//CmsProfiler::get_instance()->mark($sql);
-	
 	$sql = strtr($sql, array('{' => cms_db_prefix(), '}' => ''));
 
 	global $EXECS;

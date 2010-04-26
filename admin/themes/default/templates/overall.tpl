@@ -81,40 +81,30 @@
 	
 <div id="clean-container">
 
-  {$admin_topmenu}
+    {$admin_topmenu}
 
-	<div id="MainContent">
-		
-    {if $theme_object->has_errors()}
-            <div class="pageerrorcontainer">
-            <div class="pageoverflow">
-             {foreach from=$theme_object->errors item='one_error'}
-                                <img class="systemicon" title="Erro" alt="Erro" src="themes/default/images/icons/system/stop.gif"/>	{$one_error}<br />
-            {/foreach}
-            </div>
-            </div>
-     {/if}
-	{if $theme_object->has_messages()}
-            <div class="pagemcontainer">
-                <p class="pagemessage">
-                
-               {foreach from=$theme_object->messages item='one_message'}
-						<img class="systemicon" title="Sucesso" alt="Sucesso" src="themes/default/images/icons/system/accept.gif"/> {$one_message}<br />
-					{/foreach}
-                </p>
-            </div>
+    <div id="MainContent">
 
-			{/if}
-			{$admin_content}
-			<div class="clearb"></div>
-		
+        <div class="pageerrorcontainer">
+            {$admin_errors}
+        </div>
 
+        <div class="pagemessagecontainer">
+            {$admin_messages}
+        </div>
 
-	<div id="HelpContent"></div>	
+        {$admin_content}
 
-</div><!-- end MainContent -->
+        <div class="clearb"></div>
 
-<div id="footer"><a rel="external" href="http://www.cmsmadesimple.org"><b>CMS Made Simple</b></a> {cms_version} "{cms_versionname}"<br /><b>CMS Made Simple</b> is free software released under the General Public Licence.</div>
+        <div id="HelpContent"></div>
+
+    </div><!-- end MainContent -->
+
+    <div id="footer">
+        <a rel="external" href="http://www.cmsmadesimple.org"><b>CMS Made Simple</b></a> {cms_version} "{cms_versionname}"<br /><b>CMS Made Simple</b> is free software released under the General Public Licence.
+    </div>
+
 </div><!--end clean-container-->
         
         

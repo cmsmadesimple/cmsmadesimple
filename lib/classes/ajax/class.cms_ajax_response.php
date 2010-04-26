@@ -30,27 +30,21 @@ class CmsAjaxResponse extends CmsObject
 	
 	function replace_html($selector, $text)
 	{
-		$text = str_replace("'", "\\'", $text);
-		$text = str_replace("\r", "\\r", $text);
-		$text = str_replace("\n", "\\n", $text);
+		$text = $this->json_safe($text);
 		$this->script("jQuery('{$selector}').html('{$text}')");
 	}
 	
 	function replace($selector, $attribute, $text)
 	{
-		$text = str_replace("'", "\\'", $text);
-		$text = str_replace("\r", "\\r", $text);
-		$text = str_replace("\n", "\\n", $text);
+		$text = $this->json_safe($text);
 		$this->script("jQuery('{$selector}').attr('{$attribute}', '{$text}')");
 	}
 	
 	function insert($selector, $text, $position = "append")
 	{
-		$text = str_replace("'", "\\'", $text);
-		$text = str_replace("\r", "\\r", $text);
-		$text = str_replace("\n", "\\n", $text);
+		$text = $this->json_safe($text);
 		$position = trim(strtolower($position));
-		if ($position == "before" || $position == "after" || $position == "prepend" || $position == "append")
+		if (in_array($position, array('before', 'after', 'prepend', 'append')))
 		{
 			$this->script("jQuery('{$selector}').{$position}('{$text}')");
 		}
@@ -78,16 +72,26 @@ class CmsAjaxResponse extends CmsObject
 	
 	function script($text)
 	{
-		//$this->result .= '<sc><t><![CDATA[' . $text . ']]></t></sc>';
 		$this->result[] = array("sc", $text);
+	}
+	
+	function json_safe($text)
+	{
+		$text = str_replace("'", "\\'", $text);
+		$text = str_replace("\r", "\\r", $text);
+		$text = str_replace("\n", "\\n", $text);
+		return $text;
 	}
 	
 	function get_result()
 	{
 		while(@ob_end_clean());
 		header("Content-Type: application/json; charset=utf-8");
+		if (in_debug())
+		{
+			$this->result[] = array('__debug', CmsProfiler::get_instance()->report(true, true, '', false));
+		}
 		return json_encode($this->result);
-		/* return '<?xml version="1.0" encoding="utf-8"?><ajax>' . $this->result . '</ajax>'; */
 	}
 }
 

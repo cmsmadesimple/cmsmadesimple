@@ -1,40 +1,30 @@
-<div class="pagecontainer">
-  <div class="pageoverflow">
-  {$theme_object->show_header('editcontent')}
-  </div>
+{form action="save" controller="page"}
 
-  {$javascript}
+	<div id="module_page_tabs">
+		<ul>
+			<li><a href="#info"><span>Information</span></a></li>
+			<li><a href="#edit"><span>Content</span></a></li>
+			<li><a href="#attributes"><span>Attributes</span></a></li>
+			<li><a href="#metadata"><span>Metadata</span></a></li>
+			<li><a href="#preview"><span>Preview</span></a></li>
+		</ul>
+		<div id="info">
+			{render_partial template="info.tpl"}
+		</div>
+		<div id="edit">
+			{render_partial template="content.tpl"}
+		</div>
+		<div id="attributes">
+		</div>
+		<div id="metadata">
+		</div>
+		<div id="preview">
+		</div>
+	</div>
+	<br />
+	
+	{hidden name='page[id]' value=$page.id}
 
-  <div id="Edit_Content_Result">
-  {if isset($error)}
-  {$theme_object->show_errors($error)}
-  {/if}
-  </div>
+	{submit name="save" value="Save" remote="true" action="save" controller="page"} {submit name="cancel" value="Cancel" onclick="clear_main_content(); return false;"} {submit name="apply" value="Apply" remote="true" action="save" controller="page"}
 
-  {$formstart}
-  {$theme_object->start_tab_headers()}
-  {foreach from=$tabnames key='name' item='label'}
-    {$theme_object->set_tab_header($name,$label)}
-  {/foreach}
-  {$theme_object->end_tab_headers()}
-
-  {$theme_object->start_tab_content()}
-    {foreach from=$tabnames key='name' item='label'}
-    {$theme_object->start_tab($name)}
-      {if !empty($tabelements.$name)}
-        {assign var='elements' value=$tabelements.$name}
-        {foreach from=$elements item='element'}
-          <div class="pageoverflow">
-            <p class="pagetext">{$element[0]}</p>
-            <p class="pageinput">{$element[1]}</p>
-          </div>
-        {/foreach}
-      {elseif isset($tabcontents.$name)}
-        {$tabcontents.$name}
-      {/if}
-    {$theme_object->end_tab()}
-    {/foreach}
-  {$theme_object->end_tab_content()}
-  {$formend}
-
-</div>{* pagecontainer *}
+{/form}

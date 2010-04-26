@@ -71,7 +71,7 @@ class CmsContentOperations extends CmsObject
 		while ($file = readdir ($handle)) 
 		{
 		    $path_parts = pathinfo($file);
-		    if ($path_parts['extension'] == 'php' && !startswith($file,'class.') && !startswith($file,'#'))
+		    if (isset($path_parts['extension']) && $path_parts['extension'] == 'php' && !startswith($file,'class.') && !startswith($file,'#'))
 		    {
 				$obj = new CmsContentTypePlaceholder();
 				$obj->type = strtolower(basename($file, '.inc.php'));
@@ -83,7 +83,6 @@ class CmsContentOperations extends CmsObject
 		}
 		closedir($handle);
 	}
-	
 
 	public static function load_content_types()
 	{
@@ -168,13 +167,13 @@ class CmsContentOperations extends CmsObject
 	public static function load_content_from_id($id)
 	{
 		self::load_content_types();
-		return cms_orm('CmsContentBase')->find_by_id($id);
+		return cms_orm('CmsPage')->find_by_id($id);
 	}
 
 	public static function load_multiple_from_parent_id($parent_id, $loadProperties = false)
 	{
 		self::load_content_types();
-		return cms_orm('CmsContentBase')->find_all_by_parent_id($parent_id, array('order' => 'lft ASC'));
+		return cms_orm('CmsPage')->find_all_by_parent_id($parent_id, array('order' => 'lft ASC'));
 	}
 	
 	public static function LoadMultipleFromParentId($parent_id, $loadProperties = false)
@@ -184,7 +183,7 @@ class CmsContentOperations extends CmsObject
 	
 	public static function load_multiple_from_left_and_right($lft, $rgt, $loadProperties = false)
 	{
-		return cms_orm('CmsContentBase')->find_all(array('conditions' => array('lft > ? AND rgt < ?', array($lft, $rgt)), 'order' => 'lft ASC'));
+		return cms_orm('CmsPage')->find_all(array('conditions' => array('lft > ? AND rgt < ?', array($lft, $rgt)), 'order' => 'lft ASC'));
 	}
 	
 	public static function LoadMultipleFromLeftAndRight($lft, $rgt, $loadProperties = false)
@@ -222,7 +221,7 @@ class CmsContentOperations extends CmsObject
 	 **/
 	public static function _get_default_page_id()
 	{
-		$page = cms_orm('CmsContentBase')->find_by_default_content(1);
+		$page = cms_orm('CmsPage')->find_by_default_content(1);
 		if ($page)
 		{
 			return $page->id;
@@ -246,7 +245,7 @@ class CmsContentOperations extends CmsObject
 
 		while ($current_parent_id > 1)
 		{
-			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE content_id = ?";
+			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."pages WHERE id = ?";
 			$row = $db->GetRow($query, array($current_parent_id));
 			if ($row)
 			{
@@ -275,12 +274,12 @@ class CmsContentOperations extends CmsObject
 			$current_hierarchy_path = substr($current_hierarchy_path, 0, strlen($current_hierarchy_path) - 1);
 		}
 
-		$query = "SELECT prop_name FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
+		$query = "SELECT prop_name FROM ".cms_db_prefix()."content_props WHERE id = ?";
 		$prop_name_array = $db->GetCol($query, array($contentid));
 
 		debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
 
-		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE content_id = ?";
+		$query = "UPDATE ".cms_db_prefix()."pages SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE id = ?";
 		$db->Execute($query, array(CmsContentOperations::create_unfriendly_hierarchy_position($current_hierarchy_position), $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
 	}
 	
@@ -300,12 +299,12 @@ class CmsContentOperations extends CmsObject
 		if ($lft > -1)
 		{
 			if ($rgt > -1)
-				$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE lft >= " . $db->qstr($lft) . ' AND rgt <= ' . $db->qstr($rgt);
+				$query = "SELECT id FROM ".cms_db_prefix()."pages WHERE lft >= " . $db->qstr($lft) . ' AND rgt <= ' . $db->qstr($rgt);
 			else
-				$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE lft >= " . $db->qstr($lft);
+				$query = "SELECT id FROM ".cms_db_prefix()."pages WHERE lft >= " . $db->qstr($lft);
 		}
 		else
-			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
+			$query = "SELECT id FROM ".cms_db_prefix()."pages";
 
 		$dbresult = array();
 		//try
@@ -338,7 +337,7 @@ class CmsContentOperations extends CmsObject
 
 	public static function get_all_content($loadprops=true)
 	{
-		return cms_orm('CmsContentBase')->find_all(array('order' => 'lft ASC'));
+		return cms_orm('CmsPage')->find_all(array('order' => 'lft ASC'));
 	}
 	
 	/**
@@ -430,7 +429,7 @@ class CmsContentOperations extends CmsObject
 		}
 		else
 		{
-			$result = cms_orm('CmsContentBase')->find_by_alias($alias);
+			$result = cms_orm('CmsPage')->find_by_alias($alias);
 			if ($result)
 			{
 				return $result->id;
@@ -458,7 +457,7 @@ class CmsContentOperations extends CmsObject
 	 **/
 	public static function get_page_id_from_hierarchy($position)
 	{
-		$result = cms_orm('CmsContentBase')->find_by_hierarchy(CmsContentOperations::create_unfriendly_hierarchy_position($position));
+		$result = cms_orm('CmsPage')->find_by_hierarchy(CmsContentOperations::create_unfriendly_hierarchy_position($position));
 		if ($result)
 		{
 			return $result->id;
@@ -527,10 +526,10 @@ class CmsContentOperations extends CmsObject
 		else
 		{
 			$params = array($alias);
-			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
+			$query = "SELECT * FROM ".cms_db_prefix()."pages WHERE content_alias = ?";
 			if ($content_id > -1)
 			{
-				$query .= " AND content_id != ?";
+				$query .= " AND id != ?";
 				$params[] = $content_id;
 			}
 			$row = &$db->GetRow($query, $params);
@@ -651,7 +650,7 @@ class CmsContentOperations extends CmsObject
 	
 	public static function reindex_content()
 	{
-		$content = cms_orm('CmsContentBase')->find_all();
+		$content = cms_orm('CmsPage')->find_all();
 		foreach ($content as $one_item)
 		{
 			$one_item->index();
@@ -728,7 +727,7 @@ class CmsContentOperations extends CmsObject
 		
 		//try
 		//{
-			$orig_hierarchy = $db->GetCol("SELECT hierarchy FROM {$cms_db_prefix}content ORDER BY hierarchy ASC");
+			$orig_hierarchy = $db->GetCol("SELECT hierarchy FROM {$cms_db_prefix}pages ORDER BY hierarchy ASC");
 		//}
 		//catch (Exception $ex)
 		//{
@@ -792,7 +791,7 @@ class CmsContentOperations extends CmsObject
 		$db->BeginTrans();
 		foreach ($hierarchy as $k=>$v)
 		{
-			$db->Execute("UPDATE {$cms_db_prefix}content SET lft = ?, rgt = ? WHERE hierarchy = ?", array($v[0], $v[1], $k));
+			$db->Execute("UPDATE {$cms_db_prefix}pages SET lft = ?, rgt = ? WHERE hierarchy = ?", array($v[0], $v[1], $k));
 		}
 		$db->CommitTrans();
 	}

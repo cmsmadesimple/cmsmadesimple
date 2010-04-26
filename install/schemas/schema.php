@@ -33,8 +33,8 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."content");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."content_props");
-	$dbdict->ExecuteSQLArray($sqlarray);
+	//$sqlarray = $dbdict->DropTableSQL($db_prefix."content_props");
+	//$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."crossref");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."css");
@@ -56,6 +56,8 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	//$sqlarray = $dbdict->DropTableSQL($db_prefix."module_deps");
 	//$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_templates");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."pages");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."permissions");
 	$dbdict->ExecuteSQLArray($sqlarray);
@@ -152,22 +154,21 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		content_id I KEY AUTO,
-		content_name C(255),
+		id I KEY AUTO,
 		type C(25),
 		owner_id I,
 		parent_id I,
 		template_id I,
 		item_order I,
 		hierarchy C(255),
-		default_content I1,
+		default_content I1 default 0,
 		menu_text C(255),
 		content_alias C(255),
-		show_in_menu I1,
+		show_in_menu I1 default 0,
 		collapsed I1,
 		markup C(25),
-		active I1,
-		cachable I1,
+		active I1 default 1,
+		cachable I1 default 1,
 		id_hierarchy C(255),
 		hierarchy_path X,
 		prop_names X,
@@ -175,17 +176,34 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		titleattribute C(255),
 		tabindex C(10),
 		accesskey C(5),
-                secure I1,
+		secure I1,
 		last_modified_by I,
+		url_text C(255),
+		lft I1,
+		rgt I1,
 		create_date T,
 		modified_date T,
-                lft I1,
-                rgt I1
+		extra_params XL
+	";
+	echo installer_create_tablesql($dbdict, $db_prefix."pages", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."pages", array('content_alias', 'active'));
+	echo installer_create_indexsql($dbdict, $db_prefix."pages", array('default_content'));
+	echo installer_create_indexsql($dbdict, $db_prefix."pages", array('parent_id'));
+	
+	$flds = "
+		id I KEY AUTO,
+		type C(50),
+		lang C(50),
+		content XL,
+		unique_name C(255),
+		create_date T,
+		modified_date T,
+		extra_params XL
 	";
 	echo installer_create_tablesql($dbdict, $db_prefix."content", $flds, $taboptarray);
-	echo installer_create_indexsql($dbdict, $db_prefix."content", array('content_alias', 'active'));
-	echo installer_create_indexsql($dbdict, $db_prefix."content", array('default_content'));
-	echo installer_create_indexsql($dbdict, $db_prefix."content", array('parent_id'));
+	echo installer_create_indexsql($dbdict, $db_prefix."content", array('type'));
+	echo installer_create_indexsql($dbdict, $db_prefix."content", array('type', 'lang'));
+	echo installer_create_indexsql($dbdict, $db_prefix."content", array('unique_name'));
 /*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
@@ -208,7 +226,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo lang('install_creating_index', 'content', $ado_ret);
 */
 
-
+	/*
 	$flds = "
 		id I KEY AUTO,
 		content_id I,
@@ -223,6 +241,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	";
 	echo installer_create_tablesql($dbdict, $db_prefix."content_props", $flds, $taboptarray);
 	echo installer_create_indexsql($dbdict, $db_prefix."content_props", array('content_id'));
+	*/
 /*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content_props", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);

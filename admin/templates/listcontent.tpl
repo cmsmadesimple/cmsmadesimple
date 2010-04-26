@@ -23,12 +23,11 @@
     <a href="{$thisurl}#" onclick="$.tree.reference('#content_tree').close_all(); return false;" title="{lang string='contractall'}">{$collapseall_image} {lang string='contractall'}</a>
   </div>
   
-  <div id="contentlist" style="float: left;">
-    <br clear="both" />
+  <div id="contentlist" style="float: left; height: 350px;">
     {$content_list}
   </div>
   
-  <div id="contentsummary" style="float: right; width: 500px;">
+  <div id="contentsummary" style="float: right; width: 700px;">
     Nothing selected
   </div>
   

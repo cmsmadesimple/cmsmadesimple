@@ -202,6 +202,10 @@ class CmsAdminTheme extends CmsObject
 		$topmenu = @ob_get_clean();
 		$smarty->assign('admin_topmenu', $topmenu);
 		
+		$val = self::get_instance()->display_errors();
+		//$smarty->assign('admin_errors', $val);
+		//$smarty->assign('admin_messages', self::get_instance()->display_messages());
+		
 		$smarty->assign('headtext', self::get_instance()->headtext);
 		$smarty->assign('theme_object', self::get_instance());
 		
@@ -849,6 +853,13 @@ class CmsAdminTheme extends CmsObject
 		return count($this->errors) > 0;
 	}
 	
+	public function display_errors()
+	{
+		$tpl = $this->theme_template_dir . 'errors.tpl';
+		$ret = cms_smarty()->display($tpl);
+		return $ret;
+	}
+	
 	/**
 	 * Add message for display next time header is shown.  If flash is true,
 	 * this will display after a redirect.
@@ -873,6 +884,13 @@ class CmsAdminTheme extends CmsObject
 	public function has_messages()
 	{
 		return count($this->messages) > 0;
+	}
+	
+	public function display_messages()
+	{
+		$tpl = $this->theme_template_dir . 'messages.tpl';
+		$ret = cms_smarty()->fetch($tpl);
+		return $ret;
 	}
 	
     /**
