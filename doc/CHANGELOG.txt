@@ -23,6 +23,10 @@ Version 1.7.1 - Escada
     but may be used by other modules.
   - Fixes a VERY MINOR potential security issue in user preferences.
 
+CMSMailer
+  - Upgraded underlying phpmailer class
+  - now supports (and tested) sending email via encrypted servers like google.
+    
 News:
   - #4304 Use expiration date logical problem
   - #4659 documentation error
