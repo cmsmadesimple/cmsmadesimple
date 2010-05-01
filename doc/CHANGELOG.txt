@@ -19,6 +19,8 @@ Version 1.7.1 - Escada
   - Missing </li> in accessible_simple_navigation.tpl
   - Adds class items to every form element for easier styling.
   - Adds user preferences for page limits in GCB, Stylesheet, and template lists.
+  - Adds site preferences for thumbnail width and height, primarily used by image manager
+    but may be used by other modules.
 
 News:
   - #4304 Use expiration date logical problem
