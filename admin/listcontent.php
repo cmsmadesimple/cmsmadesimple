@@ -39,6 +39,8 @@ $cms_ajax->register_function('content_delete');
 $cms_ajax->register_function('context_menu');
 $cms_ajax->register_function('content_select');
 $cms_ajax->register_function('save_page');
+$cms_ajax->register_function('check_url');
+$cms_ajax->register_function('check_alias');
 
 function check_modify_all($userid)
 {
@@ -529,7 +531,7 @@ function content_select($html_id)
 	}
 	
 	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
-	//$resp->script('set_context_menu();');
+	//$resp->script('setup_observers();');
 
 	return $resp->get_result();
 }
@@ -626,6 +628,53 @@ function save_page($params)
 	}
 	return $ajax->get_result();
 }
+
+function check_alias($params)
+{
+	$ajax = new CmsAjaxResponse();
+	$count = cms_orm('CmsPage')->find_count(array('conditions' => array('alias = ? AND id != ?', $params['alias'], $params['page_id'])));
+	if ($params['alias'] == '')
+	{
+		$ajax->replace_html('#unique_alias_ok', 'Empty');
+		$ajax->script('$("#unique_alias_ok").attr("style", "color: red;")');
+	}
+	else if ($count > 0 || $params['alias'] == '')
+	{
+		$ajax->replace_html('#unique_alias_ok', 'Used');
+		$ajax->script('$("#unique_alias_ok").attr("style", "color: red;")');
+	}
+	else
+	{
+		$ajax->replace_html('#unique_alias_ok', 'Ok');
+		$ajax->script('$("#unique_alias_ok").attr("style", "color: green;")');
+	}
+	$ajax->script('reset_main_content();');
+	return $ajax->get_result();
+}
+
+function check_url($params)
+{
+	$ajax = new CmsAjaxResponse();
+	$count = cms_orm('CmsPage')->find_count(array('conditions' => array('url_text = ? AND id != ?', $params['alias'], $params['page_id'])));
+	if ($params['alias'] == '')
+	{
+		$ajax->replace_html('#alias_ok', 'Empty');
+		$ajax->script('$("#alias_ok").attr("style", "color: red;")');
+	}
+	else if ($count > 0 || $params['alias'] == '')
+	{
+		$ajax->replace_html('#alias_ok', 'Used');
+		$ajax->script('$("#alias_ok").attr("style", "color: red;")');
+	}
+	else
+	{
+		$ajax->replace_html('#alias_ok', 'Ok');
+		$ajax->script('$("#alias_ok").attr("style", "color: green;")');
+	}
+	$ajax->script('reset_main_content();');
+	return $ajax->get_result();
+}
+
 
 # vim:ts=4 sw=4 noet
 ?>

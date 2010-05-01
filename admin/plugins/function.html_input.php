@@ -21,6 +21,8 @@ function smarty_function_html_input($params, &$smarty)
 	echo '<input type="text"';
 	if (isset($params['id']))
 		echo ' id="'.$params['id'].'"';
+	else if (isset($params['html_id']))
+		echo ' id="'.$params['html_id'].'"';
 	if (isset($params['name']))
 		echo ' name="'.$params['name'].'"';
 	if (isset($params['size']))
