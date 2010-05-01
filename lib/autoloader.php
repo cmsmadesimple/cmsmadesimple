@@ -36,7 +36,7 @@ function cms_autoloader($classname)
       return;
     }
 
-  foreach( $gCms->modules as $module => $data )
+  foreach( $gCms->modules as $module => &$data )
     {
       if( !isset($data['object']) ) continue;
       $obj =& $data['object'];
