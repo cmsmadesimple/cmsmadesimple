@@ -577,7 +577,7 @@ class CMSModule
 				$smarty =& $gCms->GetSmarty();
 
 				$res = include($filename);
-				if( !is_string($res) ) $res = FALSE;
+				if( is_string($res) ) $res = FALSE;
 				return $res;
 			}
 		}
@@ -612,7 +612,7 @@ class CMSModule
 		  $smarty =& $gCms->GetSmarty();
 		  
 		  $res = include($filename);
-		  if( !is_string($res) ) $res = FALSE;
+		  if( is_string($res) ) $res = FALSE;
 		  return $res;
 		}
 		else
@@ -661,7 +661,12 @@ class CMSModule
 				$smarty =& $gCms->GetSmarty();
 
 				$res = include($filename);
-				if( !is_string($res) ) return FALSE;
+				if( is_string($res) ) 
+				  {
+				    $modops = $gCms->GetModuleOperations();
+				    $modops->SetError($res);
+				    return FALSE;
+				  }
 				return $res;
 			}
 		}
