@@ -28,7 +28,7 @@ function smarty_cms_function_title($params, &$smarty)
 	}
 	else
 	{
-		$result = cms_htmlentities($pageinfo->name);
+		$result = cms_htmlentities($pageinfo->name['en_US']);
 		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 		{
 			$result = preg_replace("/\{\/?php\}/", "", $result);

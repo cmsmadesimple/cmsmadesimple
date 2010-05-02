@@ -22,8 +22,10 @@
     		{include file="editcontent-content.tpl"}
     	{$theme_object->end_tab()}
     	{$theme_object->start_tab('attributes')}
+    		{include file="editcontent-attributes.tpl"}
     	{$theme_object->end_tab()}
     	{$theme_object->start_tab('metadata')}
+    		{include file="editcontent-metadata.tpl"}
     	{$theme_object->end_tab()}
     	{$theme_object->start_tab('preview')}
     	{$theme_object->end_tab()}
@@ -34,7 +36,7 @@
     	    {html_hidden name='page[id]' value=$page.id}
     	{/if}
 
-    	{html_submit name="save" value="Save" remote="save_page"} {html_submit name="cancel" value="Cancel" onclick="clear_main_content(); return false;"} {html_submit name="apply" value="Apply" remote="save_page"}
+    	{html_submit name="save" value="Save" remote="save_page"} {html_submit name="cancel" value="Cancel" remote="save_page"} {html_submit name="apply" value="Apply" remote="save_page"}
 
     </form>
 {else}

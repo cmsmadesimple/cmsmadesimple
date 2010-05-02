@@ -10,22 +10,22 @@ li.separator - To style the ruler for the separator *}
 		{foreach from=$nodelist item=node}
 			{if $node->parent == true or ($node->current == true and $node->haschildren == true)}
 				<li class="menuactive menuparent">
-					<a class="menuactive menuparent" href="{$node->url}"><span>{$node->menu_text}</span></a>
+					<a class="menuactive menuparent" href="{$node->url}"><span>{$node->menutext}</span></a>
 			{elseif $node->haschildren == true and $node->type != 'sectionheader' and $node->type != 'separator'}
 				<li class="parent">
-					<a class="parent" href="{$node->url}"><span>{$node->menu_text}</span></a>
+					<a class="parent" href="{$node->url}"><span>{$node->menutext}</span></a>
 			{elseif $node->current == true}
 				<li class="currentpage">
-					<h3><span>{$node->menu_text}</span></h3>
+					<h3><span>{$node->menutext}</span></h3>
 			{elseif $node->type == 'sectionheader'}
 				<li class="sectionheader">
-					<span>{$node->menu_text}</span>
+					<span>{$node->menutext}</span>
 			{elseif $node->type == 'separator'}
 				<li class="separator" style="list-style-type: none;">
 					<hr />
 			{else}
 				<li>
-					<a href="{$node->url}"><span>{$node->menu_text}</span></a>
+					<a href="{$node->url}"><span>{$node->menutext}</span></a>
 			{/if}
 					{menu_children node=$node}
 				</li>

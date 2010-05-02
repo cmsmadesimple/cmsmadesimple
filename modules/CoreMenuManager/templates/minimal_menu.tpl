@@ -8,18 +8,18 @@ hr.separator - To style the ruler for the separator *}
 		{foreach from=$nodelist item=node}
 			{if $node->current == true}
 				<li>
-					<a href="{$node->url}" class="currentpage"{if $node->target ne ""} target="{$node->target}"{/if}> {$node->menu_text} </a>
+					<a href="{$node->url}" class="currentpage"{if $node->target ne ""} target="{$node->target}"{/if}> {$node->menutext} </a>
 			{elseif $node->parent == true && $node->depth == 1 and $node->type != 'sectionheader' and $node->type != 'separator'}
 				<li class="activeparent">
-					<a href="{$node->url}" class="activeparent"{if $node->target ne ""} target="{$node->target}"{/if}> {$node->menu_text} </a>
+					<a href="{$node->url}" class="activeparent"{if $node->target ne ""} target="{$node->target}"{/if}> {$node->menutext} </a>
 			{elseif $node->type == 'sectionheader'}
-				<li class="sectionheader">{$node->menu_text}
+				<li class="sectionheader">{$node->menutext}
 			{elseif $node->type == 'separator'}
 				<li style="list-style-type: none;">
 					<hr class="separator" />
 			{else}
 				<li>
-					<a href="{$node->url}"{if $node->target ne ""} target="{$node->target}"{/if}> {$node->menu_text} </a>
+					<a href="{$node->url}"{if $node->target ne ""} target="{$node->target}"{/if}> {$node->menutext} </a>
 			{/if}
 					{menu_children node=$node}
 				</li>

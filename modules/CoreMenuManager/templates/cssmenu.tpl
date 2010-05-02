@@ -10,22 +10,22 @@
 			{foreach from=$nodelist item=node}
 				{if $node->parent == true or ($node->current == true and $node->haschildren == true)}
 					<li class="menuactive menuparent">
-						<a class="menuactive menuparent" href="{$node->url}"><span>{$node->menu_text}</span></a>
+						<a class="menuactive menuparent" href="{$node->url}"><span>{$node->menutext}</span></a>
 				{elseif $node->current == true}
 					<li class="menuactive">
-						<a class="menuactive" href="{$node->url}"><span>{$node->menu_text}</span></a>
+						<a class="menuactive" href="{$node->url}"><span>{$node->menutext}</span></a>
 				{elseif $node->haschildren == true}
 					<li class="menuparent">
-						<a class="menuparent" href="{$node->url}"><span>{$node->menu_text}</span></a>
+						<a class="menuparent" href="{$node->url}"><span>{$node->menutext}</span></a>
 				{elseif $node->type == 'sectionheader' and $node->haschildren == true}
 					<li class="sectionheader">
-						<span class="sectionheader">{$node->menu_text}</span>
+						<span class="sectionheader">{$node->menutext}</span>
 				{elseif $node->type == 'separator'}
 					<li style="list-style-type: none;">
 						<hr class="menu_separator" />
 				{else}
 					<li>
-						<a href="{$node->url}"><span>{$node->menu_text}</span></a>
+						<a href="{$node->url}"><span>{$node->menutext}</span></a>
 				{/if}
 						{menu_children node=$node}
 					</li>

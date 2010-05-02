@@ -6,7 +6,7 @@
     {get_user id=$content_item->owner_id to=user}
     {get_edit_permission userid=$content_item->owner_id id=$content_item->id mypages=$mypages modify_any_page=$check_modify_all to=has_edit}
     
-    <li id="phtml_{$content_item->id}"><a href="#">{$content_item->menu_text}</a>
+    <li id="phtml_{$content_item->id}"><a href="#">{$content_item.menu_text.en_US}</a>
 
         {if $current->has_children()}
             <ul>

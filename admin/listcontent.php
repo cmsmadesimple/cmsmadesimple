@@ -598,6 +598,8 @@ function save_page($params)
 	$ajax = new CmsAjaxResponse();
 	$admin_theme = CmsAdminTheme::get_instance();
 	
+	$smarty = cms_smarty();
+	
 	if (isset($params['save']) || isset($params['apply']))
 	{
 		$page = cms_orm('CmsPage')->load($params['page']);
@@ -631,15 +633,27 @@ function save_page($params)
 					$ajax->replace_html('.pagemessagecontainer', $admin_theme->display_messages());
 					$ajax->script('$(".pagemessage").fadeOut(3500)');
 					CmsCache::clear();
+					if (isset($params['save']))
+					{
+						$ajax->script('prepare_add_content()');
+						$smarty->assign('reason_for_not_showing', 'none');
+						$ajax->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
+					}
 					$ajax->replace_html('#contentlist', display_content_list());
 					return $ajax->get_result();
 				}
 			}
+			
+			$admin_theme->add_error('Error Saving Page');
+			$ajax->replace_html('div.pageerrorcontainer', $admin_theme->display_errors());
+			$ajax->script('$(".pageerror").fadeOut(3500)');
 		}
-	
-		$admin_theme->add_error('Error Saving Page');
-		$ajax->replace_html('div.pageerrorcontainer', $admin_theme->display_errors());
-		$ajax->script('$(".pageerror").fadeOut(3500)');
+	}
+	else if (isset($params['cancel']))
+	{
+		$ajax->script('prepare_add_content()');
+		$smarty->assign('reason_for_not_showing', 'none');
+		$ajax->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
 	}
 	return $ajax->get_result();
 }

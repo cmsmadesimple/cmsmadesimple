@@ -157,6 +157,7 @@ class CoreMenuManager extends CmsModuleBase
 		$content = $node->get_content();
 		//$node->url = $content->get_url(true, $lang);
 		$node->url = $content->get_url(true);
+		$node->menutext = $node->menu_text['en_US'];
 		//$content->menutext = cms_htmlentities($content->get_property_value('menu_text', $lang));
 		$node->haschildren = $node->has_children();
 		$node->target = '';

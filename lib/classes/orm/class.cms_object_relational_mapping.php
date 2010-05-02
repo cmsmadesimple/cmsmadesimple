@@ -1106,8 +1106,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 
 		foreach ($params as $k=>$v)
 		{
-			if (array_key_exists($k, $this->params))
-			{
+			//if (array_key_exists($k, $this->params))
+			//{
 				if ($strip_slashes && is_string($v)) $v = stripslashes($v);
 
 				if (method_exists($this, 'set_' . $k))
@@ -1120,8 +1120,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 					//Just in case there is an override
 					$this->params[$k] = $v;
 				}
+				
 				$this->dirty = true;
-			}
+			//}
 		}
 		
 		foreach ($do_sets_last as $k=>$v)

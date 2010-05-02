@@ -41,6 +41,8 @@ function smarty_function_html_checkbox($params, &$smarty)
 	} else {
 		echo ' value="1"';
 	}
+	if (isset($params['disabled']))
+		echo ' disabled=\'disabled\'';
 	if (isset($params['selected']) && ($params['selected'] == true || $params['selected'] == 'on' || $params['selected'] == 1)) {
 		echo ' checked="checked"';
 	}
