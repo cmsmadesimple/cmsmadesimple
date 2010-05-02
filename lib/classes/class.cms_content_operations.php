@@ -253,75 +253,26 @@ class CmsContentOperations extends CmsObject
 		return CmsContentOperations::load_children_into_tree($id, $tree);
 	}
 
-	public static function get_all_content($loadprops=true)
+	/**
+	 * @deprecated Deprecated.  Use CmsPage::get_all_pages($loadprops) instead.
+	 **/
+	public static function get_all_content($loadprops = true)
 	{
-		return cms_orm('CmsPage')->find_all(array('order' => 'lft ASC'));
+		return CmsPage::get_all_pages($loadprops);
 	}
 	
 	/**
-	 * @deprecated Deprecated.  Use CmsContentOperations::get_all_content($loadprops) instead.
+	 * @deprecated Deprecated.  Use CmsPage::get_all_pages($loadprops) instead.
 	 **/
-	function GetAllContent($loadprops=true)
+	public static function GetAllContent($loadprops = true)
 	{
-		return CmsContentOperations::get_all_content($loadprops);
+		return CmsPage::get_all_pages($loadprops);
 	}
 
 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $addt_content = '')
 	{
-		$result = '<select name="'.$name.'"';
-		if ($addt_content != '')
-		{
-			$result .= ' ' . $addt_content;
-		}
-		$result .= '>';
-		$result .= '<option value="-1">None</option>';
-
-		$allcontent = CmsContentOperations::get_all_content(false);
-
-		if ($allcontent !== FALSE && count($allcontent) > 0)
-		{
-			$curhierarchy = '';
-
-			foreach ($allcontent as $one)
-			{
-				if ($one->id() == $current)
-				{
-					#Grab hierarchy just in case we need to check children
-					#(which will always be after)
-					$curhierarchy = $one->hierarchy();
-
-					#Then jump out.  We don't want ourselves in the list.
-					continue;
-				}
-
-				#If it's a child of the current, we don't want to show it as it
-				#could cause a deadlock.
-				if ($curhierarchy != '' && strstr($one->hierarchy() . '.', $curhierarchy . '.') == $one->hierarchy() . '.')
-				{
-					continue;
-				}
-
-				#Don't include content types that do not want children either...
-				if (!$one->wants_children())
-				{
-					continue;
-				}
-
-				$result .= '<option value="'.$one->id().'"';
-                #Select current parent if it exists
-				if ($one->id == $parent)
-					{
-						$result .= ' selected="selected"';
-					}
-				$result .= '>'.$one->hierarchy().'. - '.$one->name().'</option>';
-			}
-		}
-
-		$result .= '</select>';
-
-		return $result;
+		return CmsPage::create_hierarchy_dropdown($current, $parent, $name, $addt_content);
 	}
-
 
 	/**
 	 * @deprecated Deprecated.  Use CmsContentOperations::get_default_page_id instead.

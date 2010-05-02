@@ -528,6 +528,8 @@ function content_select($html_id)
 		$id = str_replace('phtml_', '', $html_id);
 		$page = cms_orm('CmsPage')->load($id);
 		$smarty->assign_by_ref('page', $page);
+		
+		$smarty->assign('parent_dropdown', CmsPage::create_hierarchy_dropdown($id, $page->parent_id, 'page[parent_id]'));
 	}
 	
 	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
@@ -544,6 +546,8 @@ function content_new()
 	$page = new CmsPage();
 	$smarty->assign_by_ref('page', $page);
 	
+	$smarty->assign('parent_dropdown', CmsPage::create_hierarchy_dropdown('', '-1', 'page[parent_id]'));
+	
 	$resp->script('prepare_add_content()');
 	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
 	//$resp->script('setup_observers();');
@@ -558,7 +562,6 @@ function movecontent($contentid, $parentid, $direction = 'down')
 	if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
 	{
 		$content = cms_orm('CmsPage')->find_by_id($contentid);
-		
 		if ($content != null)
 		{
 			$content->shift_position($direction);

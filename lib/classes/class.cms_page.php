@@ -622,12 +622,16 @@ class CmsPage extends CmsObjectRelationalMapping
         return $return;
     }
 
-	// ??
+	/**
+	 * Backwards compatiblity function.  Just returns $this.
+	 *
+	 * @return object Returns $this
+	 * @author Ted Kulp
+	 */
 	public function get_content()
 	{
 		return $this;
-	}	
-
+	}
 
 	public function check_edit_permission($uid)
 	{
@@ -635,6 +639,11 @@ class CmsPage extends CmsObjectRelationalMapping
 		$addteditors = $this->get_additional_users();
 		if( in_array($uid,$addteditors) ) return true;
 		return false;
+	}
+	
+	public static function get_all_pages($loadprops = true)
+	{
+		return cms_orm('CmsPage')->find_all(array('order' => 'lft ASC'));
 	}
 	
 	public static function set_all_hierarchy_positions($lft = -1, $rgt = -1)
@@ -715,8 +724,64 @@ class CmsPage extends CmsObjectRelationalMapping
 
 		//debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $page_id));
 
-		$query = "UPDATE ".cms_db_prefix()."pages SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ? WHERE id = ?";
+		$query = "UPDATE {pages} SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ? WHERE id = ?";
 		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, $page_id));
+	}
+	
+	public static function create_hierarchy_dropdown($current = '', $parent = '', $name = 'parent_id', $addt_content = '')
+	{
+		$result = '<select name="'.$name.'"';
+		if ($addt_content != '')
+		{
+			$result .= ' ' . $addt_content;
+		}
+		$result .= '>';
+		$result .= '<option value="-1">None</option>';
+
+		$allcontent = CmsContentOperations::get_all_content(false);
+
+		if ($allcontent !== FALSE && count($allcontent) > 0)
+		{
+			$curhierarchy = '';
+
+			foreach ($allcontent as $one)
+			{
+				if ($one->id == $current)
+				{
+					#Grab hierarchy just in case we need to check children
+					#(which will always be after)
+					$curhierarchy = $one->hierarchy;
+
+					#Then jump out.  We don't want ourselves in the list.
+					continue;
+				}
+
+				#If it's a child of the current, we don't want to show it as it
+				#could cause a deadlock.
+				if ($curhierarchy != '' && strstr($one->hierarchy . '.', $curhierarchy . '.') == $one->hierarchy . '.')
+				{
+					continue;
+				}
+
+				#Don't include content types that do not want children either...
+				if (!$one->wants_children())
+				{
+					continue;
+				}
+
+				$result .= '<option value="' . $one->id . '"';
+                #Select current parent if it exists
+				if ($one->id == $parent)
+				{
+					$result .= ' selected="selected"';
+				}
+				$result .= '>'.$one->hierarchy.'. - '.$one->name['en_US'].'</option>';
+			}
+		}
+
+		$result .= '</select>';
+
+		return $result;
 	}
 }
 
