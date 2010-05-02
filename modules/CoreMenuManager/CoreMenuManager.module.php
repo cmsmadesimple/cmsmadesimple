@@ -97,20 +97,43 @@ class CoreMenuManager extends CmsModuleBase
 		if (is_array($nodes))
 		{
 			$count = 0;
+			$usable_count = 0;
+			$unset_ary = array();
 
 			foreach ($nodes as &$node)
 			{
-				//$content = $node->GetContent();
+				//Pull our page's fields into the node
 				$this->add_fields_to_node($node);
+				
+				//Now check to see if we actually want to show this thing
+				//(either because it's not active, now showing in menu, or 
+				//because of passed parameters)
 				$node->show = $this->should_show_node($node, $params);
-
-				//Numeric Stuff
-				$node->first = ($count == 0);
-				$node->last = ($count + 1 == count($nodes));
-				$node->index = $count;
-
+				
+				if ($node->show)
+				{
+					//Numeric Stuff
+					$node->first = ($usable_count == 0);
+					$node->last = false; //Set them all as false for now
+					$node->index = $usable_count;
+					$usable_count++;
+				}
+				else
+				{
+					$unset_ary[] = $count;
+				}
+				
 				$count++;
 			}
+			
+			//Reverse our array to unset and remove them
+			foreach (array_reverse($unset_ary) as $index)
+			{
+				unset($nodes[$index]);
+			}
+			
+			//Now set the last usable node as true
+			$nodes[(count($nodes) - 1)]->last = true;
 
 			$smarty = cms_smarty();
 			$smarty->assign('count', count($nodes));
@@ -121,9 +144,6 @@ class CoreMenuManager extends CmsModuleBase
 				$smarty->assign('orig_params', $params);
 				$this->current_depth = 1;
 			}
-			
-			//var_dump($tpl_name);
-			//var_dump(count($nodes));
 
 			if ($usefile)
 				echo $this->Template->process($template, $mdid, false);
@@ -177,7 +197,7 @@ class CoreMenuManager extends CmsModuleBase
 			}
 		}
 
-		$should_show = $node->Active() && $node->ShowInMenu() && ($include && !$exclude);
+		$should_show = $node->active && $node->show_in_menu && ($include && !$exclude);
 
 		//Override is show_all is true
 		if (isset($params['show_all']) && $params['show_all'])

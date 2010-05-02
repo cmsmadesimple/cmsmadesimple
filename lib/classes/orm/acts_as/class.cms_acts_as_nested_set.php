@@ -327,7 +327,7 @@ class CmsActsAsNestedSet extends CmsActsAs
 		if ($result)
 		{
 			if ($obj->complete_transaction())
-				CmsContentOperations::set_all_hierarchy_positions($new_lft < $target_obj->lft ? $new_lft : $target_obj->lft);
+				CmsPage::set_all_hierarchy_positions($new_lft < $target_obj->lft ? $new_lft : $target_obj->lft);
 			else
 				$result = false;
 		}

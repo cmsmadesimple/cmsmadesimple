@@ -228,103 +228,21 @@ class CmsContentOperations extends CmsObject
 		}
 		return -1;
 	}
-
-    /**
-     * Updates the hierarchy position of one item
-     */
-	public static function set_hierarchy_position($contentid)
-	{
-		$gCms = cmsms();
-		$db = cms_db();
-
-		$current_hierarchy_position = '';
-		$current_id_hierarchy_position = '';
-		$current_hierarchy_path = '';
-		$current_parent_id = $contentid;
-		$count = 0;
-
-		while ($current_parent_id > 1)
-		{
-			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."pages WHERE id = ?";
-			$row = $db->GetRow($query, array($current_parent_id));
-			if ($row)
-			{
-				$current_hierarchy_position = $row['item_order'] . '.' . $current_hierarchy_position;
-				$current_id_hierarchy_position = $current_parent_id . '.' . $current_id_hierarchy_position;
-				$current_hierarchy_path = $row['content_alias'] . '/' . $current_hierarchy_path;
-				$current_parent_id = $row['parent_id'];
-				$count++;
-			}
-			else
-			{
-				$current_parent_id = 1;
-			}
-		}
-
-		if (strlen($current_hierarchy_position) > 0)
-		{
-			$current_hierarchy_position = substr($current_hierarchy_position, 0, strlen($current_hierarchy_position) - 1);
-		}
-		if (strlen($current_id_hierarchy_position) > 0)
-		{
-			$current_id_hierarchy_position = substr($current_id_hierarchy_position, 0, strlen($current_id_hierarchy_position) - 1);
-		}
-		if (strlen($current_hierarchy_path) > 0)
-		{
-			$current_hierarchy_path = substr($current_hierarchy_path, 0, strlen($current_hierarchy_path) - 1);
-		}
-
-		$query = "SELECT prop_name FROM ".cms_db_prefix()."content_props WHERE id = ?";
-		$prop_name_array = $db->GetCol($query, array($contentid));
-
-		debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
-
-		$query = "UPDATE ".cms_db_prefix()."pages SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE id = ?";
-		$db->Execute($query, array(CmsContentOperations::create_unfriendly_hierarchy_position($current_hierarchy_position), $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
-	}
 	
+	/**
+	 * @deprecated Deprecated.  Use CmsPage::set_hierarchy_position($page_id) instead.
+	 **/
 	public static function SetHierarchyPosition($contentid)
 	{
-		return self::set_hierarchy_position($contentid);
-	}
-
-    /**
-     * Updates the hierarchy position of all items
-     */
-	public static function set_all_hierarchy_positions($lft = -1, $rgt = -1)
-	{
-		global $gCms;
-		$db = $gCms->GetDb();
-
-		if ($lft > -1)
-		{
-			if ($rgt > -1)
-				$query = "SELECT id FROM ".cms_db_prefix()."pages WHERE lft >= " . $db->qstr($lft) . ' AND rgt <= ' . $db->qstr($rgt);
-			else
-				$query = "SELECT id FROM ".cms_db_prefix()."pages WHERE lft >= " . $db->qstr($lft);
-		}
-		else
-			$query = "SELECT id FROM ".cms_db_prefix()."pages";
-
-		$dbresult = array();
-		//try
-		//{
-			$dbresult = $db->GetCol($query);
-		//}
-		//catch (Exception $ex)
-		//{
-		
-		//}
-		
-		foreach ($dbresult as $one_id)
-		{
-			self::set_hierarchy_position($one_id);
-		}
+		return CmsPage::set_hierarchy_position($contentid);
 	}
 	
+	/**
+	 * @deprecated Deprecated.  Use CmsPage::set_all_hierarchy_positions($lft, $rgt) instead.
+	 **/
 	public static function SetAllHierarchyPositions($lft = -1, $rgt = -1)
 	{
-		return self::set_all_hierarchy_positions($lft, $rgt);
+		return CmsPage::set_all_hierarchy_positions($lft, $rgt);
 	}
 	
 	/**

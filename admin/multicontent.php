@@ -293,9 +293,7 @@ else
 		}
 		if (TRUE == $order_changed)
 		{
-			global $gCms;
-			$contentops =& $gCms->GetContentOperations();
-			$contentops->SetAllHierarchyPositions();
+			CmsPage::set_all_hierarchy_positions();
 		}
 		else
 		{
@@ -435,7 +433,7 @@ else
 
 				audit($id, $title, 'Deleted Content');
 			}
-			ContentManager::SetAllHierarchyPositions();
+			CmsPage::set_all_hierarchy_positions();
 			$bulk = true;
 		}
 		//include_once("footer.php");

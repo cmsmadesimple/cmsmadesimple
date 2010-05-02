@@ -107,7 +107,7 @@ if( isset($_GET['submit']) )
       // everything is okay... save it
       // and make sure the hierarchy stuff works.
       $tmpobj->Save();
-      $contentops->SetAllHierarchyPositions();
+      CmsPage::set_all_hierarchy_positions();
 
       // something for the audit log
       audit($fromobj->Id(),$fromobj->Alias(),'Content Item Copied to '.$tmpobj->Alias());

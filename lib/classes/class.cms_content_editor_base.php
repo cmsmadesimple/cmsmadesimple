@@ -584,7 +584,7 @@ class CmsContentEditorBase
 			die('save failed');
 		}
 
-		CmsContentOperations::SetAllHierarchyPositions();
+		CmsPage::set_all_hierarchy_positions();
 		CmsCache::clear();
 		audit($content_obj->id(),$content_obj->name(),'Edited Content');
 	}

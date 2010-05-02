@@ -263,6 +263,8 @@ class CmsPage extends CmsObjectRelationalMapping
 		
 			if ($concat != '')
 				CmsContentOperations::do_cross_reference($this->id, 'content', $concat);
+			
+			CmsPage::set_all_hierarchy_positions(/*$this->lft, $this->rgt*/);
 		
 			//CmsEvents::send_event('Core', 'ContentEditPost', array('content' => &$this));
 			CmsCache::clear();
@@ -348,7 +350,7 @@ class CmsPage extends CmsObjectRelationalMapping
 		else
 			$this->move_down();
 		
-		CmsContentOperations::set_all_hierarchy_positions();
+		CmsPage::set_all_hierarchy_positions();
 		CmsCache::clear();
 	}
 	
@@ -463,7 +465,7 @@ class CmsPage extends CmsObjectRelationalMapping
 		CmsContentOperations::remove_cross_references($this->id, 'content');
 
 		CmsCache::clear();
-		CmsContentOperations::set_all_hierarchy_positions();
+		CmsPage::set_all_hierarchy_positions();
 
 		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
 		audit($this->id,$this->name(),'Deleted Content');
@@ -633,6 +635,88 @@ class CmsPage extends CmsObjectRelationalMapping
 		$addteditors = $this->get_additional_users();
 		if( in_array($uid,$addteditors) ) return true;
 		return false;
+	}
+	
+	public static function set_all_hierarchy_positions($lft = -1, $rgt = -1)
+	{
+		$gCms = cmsms();
+		$db = cms_db();
+
+		if ($lft > -1)
+		{
+			if ($rgt > -1)
+				$query = "SELECT id FROM ".cms_db_prefix()."pages WHERE lft >= " . $db->qstr($lft) . ' AND rgt <= ' . $db->qstr($rgt);
+			else
+				$query = "SELECT id FROM ".cms_db_prefix()."pages WHERE lft >= " . $db->qstr($lft);
+		}
+		else
+			$query = "SELECT id FROM ".cms_db_prefix()."pages";
+
+		$dbresult = array();
+		//try
+		//{
+			$dbresult = $db->GetCol($query);
+		//}
+		//catch (Exception $ex)
+		//{
+		
+		//}
+		
+		foreach ($dbresult as $one_id)
+		{
+			self::set_hierarchy_position($one_id);
+		}
+	}
+	
+    /**
+     * Updates the hierarchy position of one item
+     */
+	public static function set_hierarchy_position($page_id)
+	{
+		$gCms = cmsms();
+		$db = cms_db();
+
+		$current_hierarchy_position = '';
+		$current_id_hierarchy_position = '';
+		$current_hierarchy_path = '';
+		$current_parent_id = $page_id;
+		$count = 0;
+
+		while ($current_parent_id > -1)
+		{
+			$query = "SELECT item_order, parent_id, url_text FROM ".cms_db_prefix()."pages WHERE id = ?";
+			$row = $db->GetRow($query, array($current_parent_id));
+			if ($row)
+			{
+				$current_hierarchy_position = $row['item_order'] . '.' . $current_hierarchy_position;
+				$current_id_hierarchy_position = $current_parent_id . '.' . $current_id_hierarchy_position;
+				$current_hierarchy_path = $row['url_text'] . '/' . $current_hierarchy_path;
+				$current_parent_id = $row['parent_id'];
+				$count++;
+			}
+			else
+			{
+				$current_parent_id = 1;
+			}
+		}
+
+		if (strlen($current_hierarchy_position) > 0)
+		{
+			$current_hierarchy_position = substr($current_hierarchy_position, 0, strlen($current_hierarchy_position) - 1);
+		}
+		if (strlen($current_id_hierarchy_position) > 0)
+		{
+			$current_id_hierarchy_position = substr($current_id_hierarchy_position, 0, strlen($current_id_hierarchy_position) - 1);
+		}
+		if (strlen($current_hierarchy_path) > 0)
+		{
+			$current_hierarchy_path = substr($current_hierarchy_path, 0, strlen($current_hierarchy_path) - 1);
+		}
+
+		//debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $page_id));
+
+		$query = "UPDATE ".cms_db_prefix()."pages SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ? WHERE id = ?";
+		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, $page_id));
 	}
 }
 

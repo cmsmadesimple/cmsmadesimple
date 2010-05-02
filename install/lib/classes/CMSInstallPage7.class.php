@@ -184,7 +184,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
 			*/
 
 
-			CmsContentOperations::set_all_hierarchy_positions();
+			CmsPage::set_all_hierarchy_positions();
 			CmsContentOperations::reset_nested_set();
 
 			echo " [" . lang('done') . "]</p>";
