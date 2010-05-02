@@ -30,7 +30,7 @@ function update_bulk_actions(tree_obj)
         );
     }
 }
-function submit_bulk_actions(tree_obj)
+function submit_bulk_actions()
 {
     $(".selectedvals").each(
         function()
@@ -49,6 +49,28 @@ function submit_bulk_actions(tree_obj)
                     $(this).val($.trim($(this).val() + " " + the_id));
                 }
             );
+        }
+    );
+}
+function prepare_add_content()
+{
+    //Unset the callback and store it in a safe place
+    var callback = $.tree.reference('#content_tree').settings.callback['onchange'];
+    $.tree.reference('#content_tree').settings.callback['onchange'] = function(NODE,TREE_OBJ) {};
+    
+    //Deselect all the nodes
+    deselect_all();
+    
+    //Put it back
+    $.tree.reference('#content_tree').settings.callback['onchange'] = callback;
+}
+function deselect_all()
+{
+    $.each(
+        $.tree.reference('#content_tree').selected_arr,
+        function()
+        {
+            $.tree.reference('#content_tree').deselect_branch(this);
         }
     );
 }

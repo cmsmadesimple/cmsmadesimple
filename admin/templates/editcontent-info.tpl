@@ -1,4 +1,6 @@
-<label>Id:</label> <span id="page_id">{$page.id}</span><br />
+{if $page.id > -1}
+    <label>Id:</label> <span id="page_id">{$page.id}</span><br />
+{/if}
 <label>Page Name:</label> {html_input name='page[name][en_US]' value=$page.name}<br />
 <label>Menu Text:</label> {html_input name='page[menu_text]' value=$page.menu_text}<br />
 <label>Page Type:</label> {html_options class='page_type_picker' name="page[type]" options=$page_types selected=$page.type}<br />

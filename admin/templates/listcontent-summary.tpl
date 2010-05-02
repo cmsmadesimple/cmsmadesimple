@@ -29,8 +29,10 @@
     	{$theme_object->end_tab()}
     	{$theme_object->end_tab_content()}
     	<br />
-
-    	{html_hidden name='page[id]' value=$page.id}
+        
+        {if $page.id > -1}
+    	    {html_hidden name='page[id]' value=$page.id}
+    	{/if}
 
     	{html_submit name="save" value="Save" remote="save_page"} {html_submit name="cancel" value="Cancel" onclick="clear_main_content(); return false;"} {html_submit name="apply" value="Apply" remote="save_page"}
 

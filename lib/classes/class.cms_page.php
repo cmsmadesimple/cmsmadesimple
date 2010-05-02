@@ -52,6 +52,11 @@ class CmsPage extends CmsObjectRelationalMapping
 	public function __construct()
 	{
 		parent::__construct();
+		$template = CmsTemplate::get_default_template();
+		if ($template)
+		{
+			$this->params['template_id'] = $template->id;
+		}
 	}
 	
 	public function setup($first_time = false)

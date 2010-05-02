@@ -371,6 +371,22 @@ class CmsRequest extends CmsObject
 		return $result;
 	}
 	
+	public static function get_current_anchor()
+	{
+		$current_uri = self::get_requested_uri();
+		
+		if (!empty($current_uri))
+		{
+			$bits = parse_url($current_uri);
+			if (is_array($bits) && isset($bits['fragment']))
+			{
+				return $bits['fragment'];
+			}
+		}
+		
+		return '';
+	}
+	
 	/**
 	 * Sanitize input to prevent against XSS and other nasty stuff.
 	 * Taken from cakephp (http://cakephp.org)

@@ -1307,6 +1307,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			{
 				if ($type != null)
 					return new $type;
+				else if (isset($hash_or_id['type']))
+				{
+					return new $hash_or_id['type'];
+				}
 				else
 					return null;
 			}

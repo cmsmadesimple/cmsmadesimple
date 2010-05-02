@@ -856,7 +856,7 @@ class CmsAdminTheme extends CmsObject
 	public function display_errors()
 	{
 		$tpl = $this->theme_template_dir . 'errors.tpl';
-		$ret = cms_smarty()->display($tpl);
+		$ret = cms_smarty()->fetch($tpl);
 		return $ret;
 	}
 	

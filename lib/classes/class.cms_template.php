@@ -60,6 +60,11 @@ class CmsTemplate extends CmsObjectRelationalMapping
 			return 0;
 	}
 	
+	public static function get_default_template()
+	{
+		return cms_orm('CmsTemplate')->find(array('conditions' => array('default_template = ?', 1)));
+	}
+	
 	function UsageCount()
 	{
 		return $this->usage_count();

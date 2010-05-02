@@ -18,7 +18,7 @@
         {/if}
     </div>
 
-    <a href="{$addcontent_url}{$urlext}" title="{lang string='addcontent'}">{$newobject_image} {lang string='addcontent'}</a>
+    <a href="{$addcontent_url}{$urlext}" title="{lang string='addcontent'}" onclick='cms_ajax_content_new(); return false;'>{$newobject_image} {lang string='addcontent'}</a>
     <a href="{$thisurl}#" onclick="$.tree.reference('#content_tree').open_all(); return false;" title="{lang string='expandall'}">{$expandall_image} {lang string='expandall'}</a>
     <a href="{$thisurl}#" onclick="$.tree.reference('#content_tree').close_all(); return false;" title="{lang string='contractall'}">{$collapseall_image} {lang string='contractall'}</a>
   </div>
@@ -46,7 +46,7 @@
         </form>
         {/if}
     </div>
-  <a href="{$addcontent_url}{$urlext}" title="{lang string='addcontent'}">{$newobject_image} {lang string='addcontent'}</a>
+  <a href="{$addcontent_url}{$urlext}" title="{lang string='addcontent'}" onclick='cms_ajax_content_new(); return false;'>{$newobject_image} {lang string='addcontent'}</a>
   <a href="{$thisurl}#" onclick="$.tree.reference('#content_tree').open_all(); return false;" title="{lang string='expandall'}">{$expandall_image} {lang string='expandall'}</a>
   <a href="{$thisurl}#" onclick="$.tree.reference('#content_tree').close_all(); return false;" title="{lang string='contractall'}">{$collapseall_image} {lang string='contractall'}</a>
 </div>

@@ -38,6 +38,7 @@ $cms_ajax->register_function('content_move_new');
 $cms_ajax->register_function('content_delete');
 $cms_ajax->register_function('context_menu');
 $cms_ajax->register_function('content_select');
+$cms_ajax->register_function('content_new');
 $cms_ajax->register_function('save_page');
 $cms_ajax->register_function('check_url');
 $cms_ajax->register_function('check_alias');
@@ -68,8 +69,8 @@ foreach (cms_orm('CmsTemplate')->find_all_by_active(true) as $tpl)
 $smarty->assign('template_items', $opt);
 
 $opt = array();
-$opt['Content'] = 'Standard Page';
-$opt['ErrorPage'] = 'Error Page';
+$opt['CmsPage'] = 'Standard Page';
+$opt['CmsErrorPage'] = 'Error Page';
 $smarty->assign('page_types', $opt);
 
 $opt = array();
@@ -530,6 +531,21 @@ function content_select($html_id)
 		$smarty->assign_by_ref('page', $page);
 	}
 	
+	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
+	//$resp->script('setup_observers();');
+
+	return $resp->get_result();
+}
+
+function content_new()
+{
+	$smarty = cms_smarty();
+	$resp = new CmsAjaxResponse();
+	
+	$page = new CmsPage();
+	$smarty->assign_by_ref('page', $page);
+	
+	$resp->script('prepare_add_content()');
 	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
 	//$resp->script('setup_observers();');
 
