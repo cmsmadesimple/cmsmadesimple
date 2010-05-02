@@ -443,12 +443,11 @@ function setactive($contentid, $active = true)
 	$userid = get_userid();
 	
 	// to activate a page, you must be admin, owner, or additional author
-	$permission = (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure')
-	);
+	$permission = (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'));
 
 	if($permission)
 	{
-		$value = cmsms()->content->find_by_id($contentid);
+		$value = cms_orm('CmsPage')->find_by_id($contentid);
 		if ($value)
 		{
 			$value->active = $active;
@@ -648,30 +647,7 @@ function save_page($params)
 function check_alias($params)
 {
 	$ajax = new CmsAjaxResponse();
-	$count = cms_orm('CmsPage')->find_count(array('conditions' => array('alias = ? AND id != ?', $params['alias'], $params['page_id'])));
-	if ($params['alias'] == '')
-	{
-		$ajax->replace_html('#unique_alias_ok', 'Empty');
-		$ajax->script('$("#unique_alias_ok").attr("style", "color: red;")');
-	}
-	else if ($count > 0 || $params['alias'] == '')
-	{
-		$ajax->replace_html('#unique_alias_ok', 'Used');
-		$ajax->script('$("#unique_alias_ok").attr("style", "color: red;")');
-	}
-	else
-	{
-		$ajax->replace_html('#unique_alias_ok', 'Ok');
-		$ajax->script('$("#unique_alias_ok").attr("style", "color: green;")');
-	}
-	$ajax->script('reset_main_content();');
-	return $ajax->get_result();
-}
-
-function check_url($params)
-{
-	$ajax = new CmsAjaxResponse();
-	$count = cms_orm('CmsPage')->find_count(array('conditions' => array('url_text = ? AND id != ?', $params['alias'], $params['page_id'])));
+	$count = cms_orm('CmsPage')->find_count(array('conditions' => array('content_alias = ? AND id <> ?', $params['alias'], $params['page_id'])));
 	if ($params['alias'] == '')
 	{
 		$ajax->replace_html('#alias_ok', 'Empty');
@@ -687,7 +663,30 @@ function check_url($params)
 		$ajax->replace_html('#alias_ok', 'Ok');
 		$ajax->script('$("#alias_ok").attr("style", "color: green;")');
 	}
-	$ajax->script('reset_main_content();');
+	//$ajax->script('reset_main_content();');
+	return $ajax->get_result();
+}
+
+function check_url($params)
+{
+	$ajax = new CmsAjaxResponse();
+	$count = cms_orm('CmsPage')->find_count(array('conditions' => array('url_text = ? AND id != ?', $params['alias'], $params['page_id'])));
+	if ($params['alias'] == '')
+	{
+		$ajax->replace_html('#url_text_ok', 'Empty');
+		$ajax->script('$("#url_text_ok").attr("style", "color: red;")');
+	}
+	else if ($count > 0 || $params['alias'] == '')
+	{
+		$ajax->replace_html('#url_text_ok', 'Used');
+		$ajax->script('$("#url_text_ok").attr("style", "color: red;")');
+	}
+	else
+	{
+		$ajax->replace_html('#url_text_ok', 'Ok');
+		$ajax->script('$("#url_text_ok").attr("style", "color: green;")');
+	}
+	//$ajax->script('reset_main_content();');
 	return $ajax->get_result();
 }
 
