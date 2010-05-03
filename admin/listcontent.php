@@ -28,7 +28,6 @@ $cms_ajax = new CmsAjax();
 
 $cms_ajax->register_function('content_setactive'); 
 $cms_ajax->register_function('content_setinactive');
-$cms_ajax->register_function('content_list_ajax');
 $cms_ajax->register_function('content_setdefault');
 $cms_ajax->register_function('content_expandall');
 $cms_ajax->register_function('content_collapseall');
@@ -215,16 +214,6 @@ function display_content_list()
 	return $smarty->fetch('listcontent-tree.tpl');
 }
 
-function content_list_ajax()
-{
-	$resp = new CmsAjaxResponse();
-
-	$resp->replace_html('#contentlist', display_content_list());
-	//$resp->script('set_context_menu();');
-	
-	return $resp->get_result();
-}
-
 function content_setactive($contentid) 
 {	
 	$resp = new CmsAjaxResponse();
@@ -349,10 +338,12 @@ function context_menu($content_id)
 	
 	set_permissions($smarty);
 	
-	$content = cms_orm('content')->find_by_id(substr($content_id, strlen('content_span_')));
+	$id = str_replace('phtml_', '', $content_id);
+	$content = cms_orm('CmsPage')->find_by_id($id);
 	$smarty->assign_by_ref('current', $content);
 
-	$resp->replace_html('#context_menu', $smarty->fetch('listcontent-context_menu.tpl'));
+	//$resp->replace_html('#context_menu', $smarty->fetch('listcontent-context_menu.tpl'));
+	$resp->script($smarty->fetch('listcontent-context_menu.tpl'));
 	
 	return $resp->get_result();	
 }
@@ -398,8 +389,6 @@ function content_delete($contentid)
 	
 	deletecontent($contentid);
 
-	//$objResponse->addScript("new Effect.Fade('tr_$contentid', { afterFinish:function() { xajax_content_list_ajax(); } });");
-	//$objResponse->addScript("$('#tr_{$contentid}').Highlight(500, '#f00', function() { xajax_content_list_ajax(); });");
 	$resp->replace_html('#contentlist', display_content_list());
 	//$resp->script('set_context_menu();');
 	
@@ -522,6 +511,7 @@ function content_select($html_id)
 	if ($html_id == 'multiple' || $html_id == 'none')
 	{
 		$smarty->assign_by_ref('reason_for_not_showing', $html_id);
+		$resp->location_hash('');
 	}
 	else
 	{
@@ -530,6 +520,7 @@ function content_select($html_id)
 		$smarty->assign_by_ref('page', $page);
 		
 		$smarty->assign('parent_dropdown', CmsPage::create_hierarchy_dropdown($id, $page->parent_id, 'page[parent_id]'));
+		$resp->location_hash("editpage-" . $id);
 	}
 	
 	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
@@ -550,6 +541,7 @@ function content_new()
 	
 	$resp->script('prepare_add_content()');
 	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
+	$resp->location_hash("addpage");
 	//$resp->script('setup_observers();');
 
 	return $resp->get_result();
@@ -641,6 +633,7 @@ function save_page($params)
 						$ajax->script('prepare_add_content()');
 						$smarty->assign('reason_for_not_showing', 'none');
 						$ajax->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
+						$ajax->location_hash('');
 					}
 					$ajax->replace_html('#contentlist', display_content_list());
 					return $ajax->get_result();
@@ -657,6 +650,7 @@ function save_page($params)
 		$ajax->script('prepare_add_content()');
 		$smarty->assign('reason_for_not_showing', 'none');
 		$ajax->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
+		$ajax->location_hash('');
 	}
 	return $ajax->get_result();
 }

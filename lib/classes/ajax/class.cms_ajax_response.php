@@ -75,6 +75,11 @@ class CmsAjaxResponse extends CmsObject
 		$this->result[] = array("sc", $text);
 	}
 	
+	function location_hash($text)
+	{
+		$this->script("window.location.hash = '{$text}'");
+	}
+	
 	function json_safe($text)
 	{
 		$text = str_replace("'", "\\'", $text);

@@ -11,6 +11,7 @@
 	<!--<link rel="stylesheet" href="{$root}/admin/themes/NCleanGrey2/css/kevin_layout.css" type="text/css" />-->
 	<!--<link rel="stylesheet" href="{$root}/admin/themes/default/css/tabs.css" type="text/css" />-->
 	<link rel="stylesheet" href="{$root}/admin/themes/default/css/style.css" type="text/css" />
+	<link rel="stylesheet" href="{$root}/admin/themes/default/css/jquery.contextmenu.css" type="text/css" />
 
 	<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
 	<script type="text/javascript"  src="../lib/jquery/json2.js"></script>
@@ -18,8 +19,9 @@
 	<script type="text/javascript"  src="../lib/jquery/jquery.css.js"></script>
 	<script type="text/javascript"  src="../lib/jquery/jquery.metadata.js"></script>
 	<script type="text/javascript"  src="../lib/jquery/jquery.cookie.js"></script>
-	<script type="text/javascript"  src="../lib/jquery/jquery.hotkeys.js"></script>
+	<!-- <script type="text/javascript"  src="../lib/jquery/jquery.hotkeys.js"></script> -->
 	<script type="text/javascript"  src="../lib/jquery/jquery.cmsms.js"></script>
+	<script type="text/javascript"  src="../lib/jquery/jquery.contextmenu.js"></script>
 
 	<!--
 	<script type="text/javascript" src="../lib/jquery/tree/tree_component.js"></script>
@@ -28,7 +30,7 @@
 
 	<script type="text/javascript"  src="../lib/jquery/jstree/jquery.tree.js"></script>
 	<script type="text/javascript"  src="../lib/jquery/jstree/plugins/jquery.tree.cookie.js"></script>
-	<script type="text/javascript"  src="../lib/jquery/jstree/plugins/jquery.tree.contextmenu.js"></script>
+	<!-- <script type="text/javascript"  src="../lib/jquery/jstree/plugins/jquery.tree.contextmenu.js"></script> -->
 	<script type="text/javascript"  src="../lib/jquery/jstree/plugins/jquery.tree.metadata.js"></script>
 	<script type="text/javascript"  src="../lib/jquery/jstree/plugins/jquery.tree.checkbox.js"></script>
 	

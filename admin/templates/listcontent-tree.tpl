@@ -6,6 +6,8 @@
         </ul>
     {/if}
 </div>
+<div id="context_menu" style="display: none;">
+</div>
 {literal}
 <script type="text/javascript">
 function update_bulk_actions(tree_obj)
@@ -121,14 +123,28 @@ $(function () {
                             this;
                         }
                     }); 
+                },
+                onrgtclk: function(node, tree_obj, event)
+                {
+                    cms_ajax_call('context_menu', [node.id],
+                    {
+                        success: function (data, textStatus)
+                        {
+                            cms_ajax_callback(data);
+                            var cmenu = $.contextMenu.create($.tree.reference('#content_tree').menu_def, {theme: 'xp'});
+                            cmenu.show(node, event);
+                            this;
+                        }
+                    });
+                    return false;
                 }
 	        },
             plugins : {
                 cookie : { prefix : "pagetree" },
                 metadata : {},
-                hotkeys : {},
+                /* hotkeys : {}, */
                 /* contextmenu : { items : { remove : { action: function(NODE, TREE_OBJ) { if(confirm("?")) TREE_OBJ.remove(NODE); } } } }, */
-                checkbox : { three_state : true },
+                /* checkbox : { three_state : true }, */
                 themeroller : { }
             }
 	    }
