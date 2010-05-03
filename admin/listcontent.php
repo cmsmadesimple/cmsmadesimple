@@ -511,7 +511,7 @@ function content_select($html_id)
 	if ($html_id == 'multiple' || $html_id == 'none')
 	{
 		$smarty->assign_by_ref('reason_for_not_showing', $html_id);
-		$resp->location_hash('');
+		$resp->location_hash('nothing');
 	}
 	else
 	{
@@ -633,7 +633,7 @@ function save_page($params)
 						$ajax->script('prepare_add_content()');
 						$smarty->assign('reason_for_not_showing', 'none');
 						$ajax->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
-						$ajax->location_hash('');
+						$ajax->location_hash('nothing');
 					}
 					$ajax->replace_html('#contentlist', display_content_list());
 					return $ajax->get_result();
@@ -650,7 +650,7 @@ function save_page($params)
 		$ajax->script('prepare_add_content()');
 		$smarty->assign('reason_for_not_showing', 'none');
 		$ajax->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
-		$ajax->location_hash('');
+		$ajax->location_hash('nothing');
 	}
 	return $ajax->get_result();
 }
