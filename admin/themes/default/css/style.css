@@ -1241,6 +1241,17 @@ ul.pageerror li {
    padding-top: 5px;
    padding-left: 1px;
    }
+#ajaxbusy {
+	display: none;
+	z-index: 100;
+	border: 1px solid orange;
+	padding: 5px;
+	background-color: #FFDCA8;
+	color: red;
+    text-align: center;
+	position: fixed;
+	right: 0;
+}
 ul.sortableList {
 	list-style-type: none;
 	padding: 10px;

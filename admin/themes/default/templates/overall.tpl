@@ -70,6 +70,18 @@
 			var input = $('button', form);
 			input.attr('disabled', false).removeClass('disabled');
 		}
+		
+        $(document).ajaxStart(
+            function ()
+            {
+                $('#ajaxbusy').show();
+            }
+        ).ajaxStop(
+            function ()
+            {
+                $('#ajaxbusy').hide();
+            }
+        );
 
 	//]]></script>
 	{/literal}
@@ -80,6 +92,10 @@
 
 </head>
 <body>
+
+<div id='ajaxbusy'>
+    Loading
+</div>
 	
 <div id="clean-container">
 
