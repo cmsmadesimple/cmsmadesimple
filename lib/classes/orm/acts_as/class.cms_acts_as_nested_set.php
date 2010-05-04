@@ -23,7 +23,7 @@
  * In order to use this, do the following:
  * 1. Add interger fields named lft, rgt, parent_id and item_order to your table.
  * 2. Initialize lft, rgt, parent_id and item_order in your orm class.  
- *    ex. var $params = array('lft' => 1, 'rgt' => 1, 'parent_id => -1, 'item_order' => 0);
+ *    ex. var $params = array('lft' => 1, 'rgt' => 1, 'parent_id' => -1, 'item_order' => 0);
  * 3. Optionally, create a "dummy" root item with lft = 1, rgt = 2, parent_id = -1 and item_oder = 1,
  *    depending on how you want to treat the root of the tree.
  *
@@ -51,7 +51,7 @@ class CmsActsAsNestedSet extends CmsActsAs
 		$obj->begin_transaction();
 
 		if ($obj->id == -1)
-		{			
+		{
 			$this->make_space_for_child($obj);
 		}
 		else
@@ -106,6 +106,7 @@ class CmsActsAsNestedSet extends CmsActsAs
 		{
 			$diff = 1;
 		}
+		
 		$right = $db->GetOne("SELECT max(rgt) FROM {$table_name}");
 		
 		if ($obj->parent_id > -1)
@@ -121,7 +122,8 @@ class CmsActsAsNestedSet extends CmsActsAs
 		}
 		else
 		{
-			$right = $right + $diff;
+			if ($obj->rgt != $right) //We're already at the max -- don't want to increase it
+				$right = $right + $diff;
 		}
 		
 		$obj->lft = $right;
@@ -224,6 +226,8 @@ class CmsActsAsNestedSet extends CmsActsAs
 			$obj->rgt = $obj->rgt - $diff2;
 			
 			$obj->item_order = $other_content->item_order;
+			
+			CmsCache::clear();
 		}
 	}
 	
@@ -239,6 +243,19 @@ class CmsActsAsNestedSet extends CmsActsAs
 	
 	function move_before_or_after(&$obj, $target_obj = null, $dir = "after")
 	{
+		/*
+			1
+				2-3
+			4
+			5-6
+			
+			becomes
+			
+			1-2
+			3-4 (was 2-3)
+			5-6
+			
+		*/
 		if (!$target_obj)
 			return false;
 		
@@ -248,7 +265,7 @@ class CmsActsAsNestedSet extends CmsActsAs
 		$db = cms_db();
 		$table_name = $obj->get_table();
 		
-		$obj->begin_transaction();
+		//$obj->begin_transaction();
 		
 		//Moving 7-8 before 4-5
 		
@@ -257,17 +274,21 @@ class CmsActsAsNestedSet extends CmsActsAs
 		
 		//Flip obj and children into the negative space
 		$query = "UPDATE {$table_name} SET lft = (lft * -1), rgt = (rgt * -1), modified_date = {$time} WHERE lft >= ? AND rgt <= ?";
-		$db->Execute($query, array($obj->lft, $obj->rgt));
+		$db->Execute($query, array($obj->lft, $obj->rgt)); //2 becomes -2, 3 becomes -3
 		
 		//Close up the space
-		$query = "UPDATE {$table_name} SET lft = (lft - ?), modified_date = {$time} WHERE lft >= ?";
+		$query = "UPDATE {$table_name} SET lft = (lft - ?), modified_date = {$time} WHERE lft >= ?"; //5 becomes 3
 		$db->Execute($query, array($diff + 1, $obj->lft));
-		$query = "UPDATE {$table_name} SET rgt = (rgt - ?), modified_date = {$time} WHERE rgt >= ?";
+		$query = "UPDATE {$table_name} SET rgt = (rgt - ?), modified_date = {$time} WHERE rgt >= ?"; //4 becomes 2, 6 becomes 4
 		$db->Execute($query, array($diff + 1, $obj->rgt));
 		
 		if ($target_obj->lft > $obj->lft) //Doesn't get called in our example, but...
 		{
 			$target_obj->lft = $target_obj->lft - ($diff + 1); //4 becomes 2
+		}
+		
+		if ($target_obj->rgt > $obj->rgt)
+		{
 			$target_obj->rgt = $target_obj->rgt - ($diff + 1); //5 becomes 3
 		}
 		
@@ -281,9 +302,9 @@ class CmsActsAsNestedSet extends CmsActsAs
 		$db->Execute($query, array($obj->parent_id, $obj->item_order));
 
 		//Init the variables -- assume after
-		$new_lft = $target_obj->rgt + 1; //3 + 1 = 4
-		$new_rgt = $new_lft + $diff; //4 + 1 = 5
-		$dist_to_move = $new_lft - $obj->lft; //4 - 2 = 2
+		$new_lft = $target_obj->rgt + 1; //3 + 1 = 4 // 2 + 1 = 3
+		$new_rgt = $new_lft + $diff; //4 + 1 = 5 // 3 + 1 = 4
+		$dist_to_move = $new_lft - $obj->lft; //4 - 2 = 2 // 3 - 2 = 1
 
 		if ($dir == "before")
 		{
@@ -292,19 +313,25 @@ class CmsActsAsNestedSet extends CmsActsAs
 			$dist_to_move = $new_lft - $obj->lft; //4 - 6 = -2
 		}
 		
+		/*
+			(-2--3 => 3-4)
+			1-2
+			3-4
+		*/
+		
 		//Open up the new space
-		$query = "UPDATE {$table_name} SET lft = (lft + ?), modified_date = {$time} WHERE lft >= ?";
+		$query = "UPDATE {$table_name} SET lft = (lft + ?), modified_date = {$time} WHERE lft >= ?"; //3 becomes 5
 		$db->Execute($query, array($diff + 1, $new_lft));
-		$query = "UPDATE {$table_name} SET rgt = (rgt + ?), modified_date = {$time} WHERE rgt >= ?";
+		$query = "UPDATE {$table_name} SET rgt = (rgt + ?), modified_date = {$time} WHERE rgt >= ?"; //4 becomes 6
 		$db->Execute($query, array($diff + 1, $new_lft));
 		
 		//Shift to the new position in the negative space
 		$query = "UPDATE {$table_name} SET lft = (lft - ?), rgt = (rgt - ?), modified_date = {$time} WHERE lft < 0 AND rgt < 0";
-		$db->Execute($query, array($dist_to_move, $dist_to_move));
+		$db->Execute($query, array($dist_to_move, $dist_to_move)); //-2 becomes -3, -3 becomes -4
 		
 		//Flip back over to the positive side...  hopefully in the correct place now
 		$query = "UPDATE {$table_name} SET lft = (lft * -1), rgt = (rgt * -1), modified_date = {$time} WHERE lft < 0 AND rgt < 0";
-		$db->Execute($query);
+		$db->Execute($query); //-3 becomes 3, -4 becomes 4
 		
 		$obj->parent_id = $target_obj->parent_id;
 		if ($dir == "before")
@@ -320,10 +347,13 @@ class CmsActsAsNestedSet extends CmsActsAs
 		$query = "UPDATE {$table_name} SET item_order = ?, parent_id = ?, modified_date = {$time} WHERE {$obj->id_field} = ?";
 		$db->Execute($query, array($obj->item_order, $obj->parent_id, $obj->id));
 		
+		CmsCache::clear();
+		
 		$test_obj = $obj->find_by_id($obj->id);
 		
 		$result = ($test_obj->lft == $new_lft && $test_obj->rgt == $new_rgt && $test_obj->parent_id = $obj->parent_id);
 		
+		/*
 		if ($result)
 		{
 			if ($obj->complete_transaction())
@@ -335,6 +365,7 @@ class CmsActsAsNestedSet extends CmsActsAs
 		{
 			$obj->fail_transaction();
 		}
+		*/
 		
 		return $result;
 	}

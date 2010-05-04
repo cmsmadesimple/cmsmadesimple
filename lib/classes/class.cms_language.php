@@ -345,7 +345,7 @@ class CmsLanguage extends CmsObject
 								if (isset(self::$nls['language'][$alias]))
 								{
 									$current_language = $alias;
-									setcookie("cms_language", $alias);
+									@setcookie("cms_language", $alias);
 									break;
 								}
 							}

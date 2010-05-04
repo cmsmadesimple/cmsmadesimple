@@ -2306,6 +2306,39 @@ function end_tag($name)
 	return "</{$name}>";
 }
 
+function substr_match($str1, $str2, $reverse = false)
+{
+        $len = strlen($str1) <= strlen($str2) ? strlen($str1) : strlen($str2);
+        $i = 0;
+        
+        $cmpstr1 = $str1;
+        $cmpstr2 = $str2;
+        
+        if ($reverse)
+        {
+                $cmpstr1 = strrev($str1);
+                $cmpstr2 = strrev($str2);
+        }
+        
+        for (; $i < $len; $i++)
+        {
+                if (!isset($cmpstr1[$i]) || !isset($cmpstr2[$i]) || $cmpstr1[$i] != $cmpstr2[$i])
+                {
+                        break;
+                }
+        }
+        
+        if ($reverse)
+        {
+                $i = strlen($str1) - $i;
+                return substr($str1, $i);
+        }
+        else
+        {
+                return substr($str1, 0, $i);
+        }
+        
+}
 
 # vim:ts=4 sw=4 noet
 ?>

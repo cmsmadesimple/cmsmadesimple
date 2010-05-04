@@ -1319,7 +1319,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		else
 		{
 			//Just make a hash out of it for simplicity sake
-			$hash_or_id['id'] = $hash_or_id;
+			$tmp = $hash_or_id;
+			$hash_or_id = array();
+			$hash_or_id['id'] = $tmp;
 		}
 		
 		return $this->find(array('conditions' => array('id = ?', $hash_or_id['id'])));

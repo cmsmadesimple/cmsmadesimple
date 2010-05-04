@@ -279,7 +279,7 @@ function setdefault($page_id)
 			$old->default_content = false;
 			$old->save();
 		}
-		
+
 		$new = cms_orm('CmsPage')->load($page_id);
 		if ($new)
 		{
@@ -505,8 +505,6 @@ function content_select($html_id)
 {
 	$smarty = cms_smarty();
 	$resp = new CmsAjaxResponse();
-	
-	//var_dump($html_id);
 	
 	if ($html_id == 'multiple' || $html_id == 'none')
 	{

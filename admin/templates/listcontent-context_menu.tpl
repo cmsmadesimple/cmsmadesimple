@@ -43,6 +43,15 @@ $.tree.reference('#content_tree').menu_def =
                         {rdelim}
                     {rdelim}
                 {rdelim},
+                {ldelim}
+                    'Make Default Page':
+                    {ldelim}
+                        onclick:function(menuItem, menu)
+                        {ldelim}
+                            cms_ajax_content_setdefault({$content_item->id});
+                        {rdelim}
+                    {rdelim}
+                {rdelim},
 		    {/if}
 		{else}
             {ldelim}
