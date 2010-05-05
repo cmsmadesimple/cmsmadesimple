@@ -189,6 +189,18 @@ class CmsPageTree extends CmsTree
 	{
 		return $this->get_node_by_hierarchy($position);
 	}
+	
+	function get_node_by_hierarchy_path($path)
+	{
+		$result = null;
+		//$id = CmsCache::get_instance()->call('CmsContentOperations::get_page_id_from_hierarchy', $position);
+		$id = CmsContentOperations::GetPageIdFromHierarchyPath($path);
+		if ($id)
+		{
+			$result = $this->get_node_by_id($id);
+		}
+		return $result;
+	}
 }
 
 # vim:ts=4 sw=4 noet

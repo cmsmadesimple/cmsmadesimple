@@ -158,6 +158,8 @@ class CmsActsAsNestedSet extends CmsActsAs
 		
 		$query = "UPDATE {$table_name} SET rgt = rgt - 2 WHERE rgt > ?";
 		$result = cms_db()->Execute($query, array($obj->rgt));
+		
+		CmsCache::clear('orm');
 	}
 	
 	function move_up(&$obj)
@@ -227,7 +229,7 @@ class CmsActsAsNestedSet extends CmsActsAs
 			
 			$obj->item_order = $other_content->item_order;
 			
-			CmsCache::clear();
+			CmsCache::clear('orm');
 		}
 	}
 	
@@ -347,7 +349,7 @@ class CmsActsAsNestedSet extends CmsActsAs
 		$query = "UPDATE {$table_name} SET item_order = ?, parent_id = ?, modified_date = {$time} WHERE {$obj->id_field} = ?";
 		$db->Execute($query, array($obj->item_order, $obj->parent_id, $obj->id));
 		
-		CmsCache::clear();
+		CmsCache::clear('orm');
 		
 		$test_obj = $obj->find_by_id($obj->id);
 		

@@ -103,10 +103,12 @@ class CmsRoute extends CmsObject
 				}
 			}
 
+			/*
 			if (!$matched)
 			{
 				$page = substr($page, strrpos($page, '/') + 1);
 			}
+			*/
 		}
 
 		return $page;

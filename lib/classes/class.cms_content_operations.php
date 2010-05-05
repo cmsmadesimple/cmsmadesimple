@@ -317,6 +317,40 @@ class CmsContentOperations extends CmsObject
 	}
 	
 	/**
+	 * Function to map an alias to a page id.  Returns null if
+	 * no page is found.
+	 *
+	 * @param string Alias to look up
+	 * @return integer The id of the page found.  Null is no page is found.
+	 * @author Ted Kulp
+	 **/
+	public static function get_page_id_from_hierarchy_path( $alias )
+	{
+		if (is_numeric($alias) && strpos($alias,'.') == FALSE && strpos($alias,',') == FALSE)
+		{
+			return $alias;
+		}
+		else
+		{
+			$result = cms_orm('CmsPage')->find_by_hierarchy_path($alias);
+			if ($result)
+			{
+				return $result->id;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * @deprecated Deprecated.  Use CmsContentOperations::get_page_id_from_alias($alias) instead.
+	 **/
+	public static function GetPageIDFromHierarchyPath( $alias )
+	{
+		return CmsContentOperations::get_page_id_from_hierarchy_path($alias);
+	}
+	
+	/**
 	 * Function to map a hierarchy to a page id.  Returns null if
 	 * no page is found.
 	 *

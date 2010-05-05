@@ -97,8 +97,15 @@ class CmsDispatcher extends CmsObject
 		
 		if ($page_obj == null)
 		{
+			$page_obj = CmsPageTree::get_instance()->get_node_by_hierarchy_path($page);
+		}
+		
+		/*
+		if ($page_obj == null)
+		{
 			$page_obj = CmsPageTree::get_instance()->get_node_by_alias($page);
 		}
+		*/
 
 		//No info?  Look for a 404 page.  If none, then generate a generic
 		//404 error...
