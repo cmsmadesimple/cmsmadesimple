@@ -40,10 +40,9 @@ class CmsModulePermissionExtension extends CmsModuleExtension
 
 			if (intval($count) == 0)
 			{
-				$new_id = $db->GenID(cms_db_prefix()."permissions_seq");
 				$time = $db->DBTimeStamp(time());
-				$query = "INSERT INTO {permissions} (id, permission_name, permission_text, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
-				$db->Execute($query, array($new_id, $permission_name, $permission_text));
+				$query = "INSERT INTO {permissions} (permission_name, permission_text, create_date, modified_date) VALUES (?,?,".$time.",".$time.")";
+				$db->Execute($query, array($permission_name, $permission_text));
 			}
 		}
 		catch (Exception $e)
@@ -73,17 +72,17 @@ class CmsModulePermissionExtension extends CmsModuleExtension
 	{
 		$db = cms_db();
 
-		$query = "SELECT id FROM {permissions} WHERE permission_name = ?";
+		$query = "SELECT permission_id FROM {permissions} WHERE permission_name = ?";
 		$row = $db->GetRow($query, array($permission_name));
 
 		if ($row)
 		{
-			$id = $row["id"];
+			$id = $row["permission_id"];
 
 			$query = "DELETE FROM {group_perms} WHERE permission_id = ?";
 			$db->Execute($query, array($id));
 
-			$query = "DELETE FROM {permissions} WHERE id = ?";
+			$query = "DELETE FROM {permissions} WHERE permission_id = ?";
 			$db->Execute($query, array($id));
 		}
 	}
