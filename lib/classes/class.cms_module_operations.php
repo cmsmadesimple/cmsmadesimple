@@ -132,9 +132,10 @@ class CmsModuleOperations extends CmsObject
 		}
 
 		$returnid = '';
-		if (isset($gCms->variables['pageinfo']) && isset($gCms->variables['pageinfo']->content_id))
+		//if (isset($gCms->variables['current_page']) && isset($gCms->variables['current_page']->id))
+		if (isset($gCms->variables['current_page']))
 		{
-			$returnid = $gCms->variables['pageinfo']->content_id;
+			$returnid = $gCms->variables['current_page']->id;
 		}
 		$params = array_merge($params, GetModuleParameters($id));
 

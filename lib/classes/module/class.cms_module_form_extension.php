@@ -85,7 +85,9 @@ class CmsModuleFormExtension extends CmsModuleExtension
 		$goto = '';
 		$use_current_page_as_action = $params['use_current_page_as_action']; unset($params['use_current_page_as_action']);
 		if ($use_current_page_as_action)
+		{
 			$goto = CmsRequest::get_requested_uri();
+		}
 		else
 			$goto = ($params['return_id'] == '' ? 'moduleinterface.php' : 'index.php');
 		
