@@ -527,7 +527,7 @@ function content_select($html_id)
 	return $resp->get_result();
 }
 
-function content_new()
+function content_new($parent_id = null)
 {
 	$smarty = cms_smarty();
 	$resp = new CmsAjaxResponse();
@@ -535,7 +535,10 @@ function content_new()
 	$page = new CmsPage();
 	$smarty->assign_by_ref('page', $page);
 	
-	$smarty->assign('parent_dropdown', CmsPage::create_hierarchy_dropdown('', '-1', 'page[parent_id]'));
+	if ($parent_id == null || !is_integer($parent_id))
+		$parent_id = -1;
+	
+	$smarty->assign('parent_dropdown', CmsPage::create_hierarchy_dropdown('', $parent_id, 'page[parent_id]'));
 	
 	$resp->script('prepare_add_content()');
 	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));

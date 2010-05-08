@@ -25,7 +25,7 @@ $.tree.reference('#content_tree').menu_def =
             {ldelim}
                 onclick:function(menuItem, menu)
                 {ldelim}
-                    alert('Adding a child...');
+                    cms_ajax_content_new({$content_item->id});
                 {rdelim},
                 title: 'Add a child to this page'
             {rdelim}
@@ -40,7 +40,8 @@ $.tree.reference('#content_tree').menu_def =
                         onclick:function(menuItem, menu)
                         {ldelim}
                             cms_ajax_content_setinactive({$content_item->id});
-                        {rdelim}
+                        {rdelim},
+                        title: 'Make this page inactive'
                     {rdelim}
                 {rdelim},
                 {ldelim}
@@ -49,7 +50,8 @@ $.tree.reference('#content_tree').menu_def =
                         onclick:function(menuItem, menu)
                         {ldelim}
                             cms_ajax_content_setdefault({$content_item->id});
-                        {rdelim}
+                        {rdelim},
+                        title: 'Make this the default page'
                     {rdelim}
                 {rdelim},
 		    {/if}
@@ -60,7 +62,8 @@ $.tree.reference('#content_tree').menu_def =
                     onclick:function(menuItem, menu)
                     {ldelim}
                         cms_ajax_content_setactive({$content_item->id});
-                    {rdelim}
+                    {rdelim},
+                    title: 'Make this page active'
                 {rdelim}
             {rdelim},
 		{/if}
