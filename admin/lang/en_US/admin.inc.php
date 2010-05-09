@@ -869,7 +869,7 @@ $lang['admin']['help_function_content'] = <<<EOT
 	<p>This is where the content for your page will be displayed. It's inserted into the template and changed based on the current page being displayed.</p>
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template like: <code>{content}</code>.</p>
-	<p><strong>The default block <code>{content}</code> is required for proper working.</strong> To give the block a specific label, use the label-parameter. Additionals blocks can be added by using the block-parameter.</p>
+	<p><strong>The default block <code>{content}</code> is required for proper working. (so without the block-parameter)</strong> To give the block a specific label, use the label-parameter. Additional blocks can be added by using the block-parameter.</p>
 	<h3>What parameters does it take?</h3>
 	<ul>
 		<li><em>(optional) </em>block - Allows you to have more than one content block per page. When multiple content tags are put on a template, that number of edit boxes will be displayed when the page is edited.
