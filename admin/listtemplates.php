@@ -71,19 +71,22 @@ if (isset($_GET["message"])) {
 
 	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
 		if( (isset($_GET["template_id"])) && (is_numeric($_GET["template_id"])) ) {
-			$thetemplate = $templateops->LoadTemplateByID($_GET["template_id"]);
+			$thetemplate = cms_orm('CmsTemplate')->find_by_id($_GET['template_id']);
 			if ($thetemplate->active == 1)
 			{
-			$query = "UPDATE ".cms_db_prefix()."content SET template_id = ?";
-			$result = $db->Execute($query, array($_GET['template_id']));
-			if ($result) {
-				$query = "UPDATE ".cms_db_prefix()."content SET modified_date = ".$db->DBTimeStamp(time());
-				$db->Execute($query);
-				echo '<div class="pagemcontainer"><div class="pagemessage">' .$themeObject->DisplayImage('icons/system/accept.gif', lang('All Pages Modified'),'','','systemicon') . '&nbsp;' .  lang('All Pages Modified'). '</div></div>';
-			} else {
-				echo '<div class="pageerrorcontainer"><div class="pageoverflow">'.lang('Error Updating Pages').'</div></div>';
+				$query = "UPDATE {pages} SET template_id = ?, modified_date = ?";
+				$result = $db->Execute($query, array($_GET['template_id'], $db->DBTimeStamp(time())));
+				if ($result)
+				{
+					echo '<div class="pagemcontainer"><div class="pagemessage">' .$themeObject->DisplayImage('icons/system/accept.gif', lang('All Pages Modified'),'','','systemicon') . '&nbsp;' .  lang('All Pages Modified'). '</div></div>';
+				}
+				else
+				{
+					echo '<div class="pageerrorcontainer"><div class="pageoverflow">'.lang('Error Updating Pages').'</div></div>';
+				}
 			}
-			} else {
+			else
+			{
 				echo '<p class="error">'.lang('Error Updating Template on All Pages').'</p>';
 			}
 		}
