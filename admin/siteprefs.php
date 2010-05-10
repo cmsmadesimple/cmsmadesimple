@@ -93,8 +93,8 @@ if (isset($_POST["cancel"])) {
 }
 
 
-$thumb_width = get_site_preference('thumbnail_width',$thumbnail_width);
-$thumb_height = get_site_preference('thumbnail_height',$thumbnail_height);
+$thumbnail_width = get_site_preference('thumbnail_width',$thumbnail_width);
+$thumbnail_height = get_site_preference('thumbnail_height',$thumbnail_height);
 $global_umask = get_site_preference('global_umask',$global_umask);
 $frontendlang = get_site_preference('frontendlang',$frontendlang);
 $frontendwysiwyg = get_site_preference('frontendwysiwyg',$frontendwysiwyg);
