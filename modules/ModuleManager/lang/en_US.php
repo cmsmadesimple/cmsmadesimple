@@ -1,4 +1,5 @@
 <?php
+$lang['installed_modules'] = 'Installed Modules';
 $lang['available_updates'] = 'Modules Available for Update';
 $lang['all_modules_up_to_date'] = 'There are no newer modules available in the repository';
 $lang['error_module_object'] = 'Error: could not get an instance of the %s module';

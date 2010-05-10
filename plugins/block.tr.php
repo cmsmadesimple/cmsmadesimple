@@ -19,10 +19,11 @@
 function smarty_cms_block_tr($params, $content, &$smarty)
 {
 	if (is_null($content)) return;
+	
 	$module = $smarty->get_template_vars('cms_mapi_module');
 
-	/*
-	$txt = '';
+	$txt = $content;
+	
 	if (!is_object($module))
 	{
 		$txt = CmsLanguage::translate(trim($content));
@@ -31,8 +32,6 @@ function smarty_cms_block_tr($params, $content, &$smarty)
 	{
 		$txt = $module->lang(trim($content));
 	}
-	*/
-	$txt = $content;
 
 	if (isset($params['assign']))
 	{

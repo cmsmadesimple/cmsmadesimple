@@ -433,9 +433,25 @@ class CmsModuleBase extends CmsObject
 		return false;
 	}
 	
-	public function lang($str)
+	public function lang()
 	{
-		return $str;
+		$name = '';
+		$params = array();
+
+		if (func_num_args() > 0)
+		{
+			$name = func_get_arg(0);
+			if (func_num_args() == 2 && is_array(func_get_arg(1)))
+			{
+				$params = func_get_arg(1);
+			}
+			else if (func_num_args() > 1)
+			{
+				$params = array_slice(func_get_args(), 1);
+			}
+		}
+		
+		return CmsLanguage::translate($name, $params, $this->get_name());
 	}
 	
 	/**

@@ -10,8 +10,7 @@
 		
 		{foreach from=$template_types key=template_name item=templates}
 		
-			<h4>{$template_name} (<a href="addmodtemplate.php?module_name={$module_name}&amp;template_type={$template_name}">{tr}add{/tr}</a>)</h4>
-
+			<h4>{$template_name} (<a href="addmodtemplate.php?module_name={$module_name}&amp;template_type={$template_name}">{tr}add_template{/tr}</a>)</h4>
 			<table>
 				<tbody>
 				{foreach from=$templates item=template}

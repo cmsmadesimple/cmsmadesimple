@@ -18,7 +18,7 @@
 
 function smarty_function_lang($params, &$smarty)
 {
-	echo lang($params['string']);
+	echo CmsLanguage::translate($params['string']);
 }
 
 ?>

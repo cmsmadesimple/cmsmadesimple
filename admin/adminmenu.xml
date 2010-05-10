@@ -197,13 +197,6 @@
     <show_in_menu><permission>extensionsPerms</permission></show_in_menu>
     <children>
       <node>
-        <name>modules</name>
-        <title>Modules</title>
-        <url>listmodules.php</url>
-        <description>moduledescription</description>
-        <show_in_menu><permission>modulePerms</permission></show_in_menu>
-      </node>
-      <node>
         <name>tags</name>
         <title>Tags</title>
         <url>listtags.php</url>

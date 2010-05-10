@@ -43,8 +43,29 @@ class CmsLanguage extends CmsObject
 	{
 		self::$current_module = $module;
 	}
+	
+	public static function tr()
+	{
+		$name = '';
+		$params = array();
 
-	public static function translate($string, $params = array(), $module = '', $current_language = '')
+		if (func_num_args() > 0)
+		{
+			$name = func_get_arg(0);
+			if (func_num_args() == 2 && is_array(func_get_arg(1)))
+			{
+				$params = func_get_arg(1);
+			}
+			else if (func_num_args() > 1)
+			{
+				$params = array_slice(func_get_args(), 1);
+			}
+		}
+
+		return CmsLanguage::translate($name, $params);
+	}
+
+	public static function translate($string, $params = array(), $module = 'core', $current_language = '')
 	{
 		if ($string == null || $string == '')
 			return '';
@@ -172,6 +193,10 @@ class CmsLanguage extends CmsObject
 				if (!is_file($file))
 				{
 					$file = cms_join_path(ROOT_DIR, 'admin', 'lang', $language, 'admin.inc.php');
+					if (!is_file($file))
+					{
+						$file = cms_join_path(ROOT_DIR, 'admin', 'lang', $language . '.php');
+					}
 				}
 			}
 			else if( $module == 'installer')
@@ -190,7 +215,7 @@ class CmsLanguage extends CmsObject
 					$file = cms_join_path(ROOT_DIR, 'modules', $module, 'lang', $language . '.php');
 					if (!is_file($file))
 					{
-						$file = cms_join_path(ROOT_DIR, 'modules', $module, 'lang', 'ext', $language . '.php');						
+						$file = cms_join_path(ROOT_DIR, 'modules', $module, 'lang', 'ext', $language . '.php');
 					}
 				}
 			}
@@ -198,14 +223,15 @@ class CmsLanguage extends CmsObject
 		    if (is_file($file) && strlen($language) == 5 && strpos($language, ".") === FALSE)
 		    {
 				CmsProfiler::get_instance()->mark('Load:' . $file);
-		        include ($file);
+				include ($file);
+				
 				if (isset($lang['admin']) && is_array($lang['admin']) && count($lang['admin'] > 1))
 				{
 					$lang = $lang['admin'];
 				}
 		    }
 
-			self::$lang[$module][$language] =& $lang;
+			self::$lang[$module][$language] = $lang;
 		}
 	}
 	
