@@ -1,4 +1,7 @@
 <?php
+$lang['install'] = 'Install';
+$lang['changepermissions'] = 'Change Permissions';
+$lang['uninstall'] = 'Uninstall';
 $lang['installed_modules'] = 'Installed Modules';
 $lang['available_updates'] = 'Modules Available for Update';
 $lang['all_modules_up_to_date'] = 'There are no newer modules available in the repository';

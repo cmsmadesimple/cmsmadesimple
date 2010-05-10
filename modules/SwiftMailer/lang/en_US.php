@@ -61,15 +61,14 @@ $lang['changelog'] = '
 $lang['help'] = '<h3>What Does This Do?</h3>
 <p>This module provides no end user functionality.  It is designed to be integrated into other modules to provide email capabilities.  Thats it, nothing more.</p>
 <h3>How Do I Use It</h3>
-<p>This module provides a simple wrapper around all of the methods and variables of phpmailer.  It is designed for use by other module developers, below is an example, and a brief API reference.  Please read the PHPMailer documentation included for more information.</p>
+<p>This module provides a simple wrapper around all of the methods and variables of swiftmailer.  It is designed for use by other module developers, below is an example, and a brief API reference.  Please read the SwiftMailer documentation included for more information.</p>
 <h3>An Example</h3>
 <pre>
-  $cmsmailer = $this->GetModuleInstance(\'CMSMailer\');
-  $cmsmailer->AddAddress(\'calguy1000@hotmail.com\',\'calguy\');
-  $cmsmailer->SetBody(\'&lt;h4&gt;This is a test message&lt;/h4&gt;\');
-  $cmsmailer->IsHTML(true);
-  $cmsmailer->SetSubject(\'Test message\');
-  $cmsmailer->Send();
+  $swiftmailer = CmsModuleLoader::get_module_class(\'SwiftMailer\');
+  $swiftmailer->add_address(\'calguy1000@hotmail.com\',\'calguy\');
+  $swiftmailer->set_body(\'&lt;h4&gt;This is a test message&lt;/h4&gt;\');
+  $swiftmailer->set_subject(\'Test message\');
+  $swiftmailer->send();
 </pre>
 <h3>API</h3>
 <ul>
