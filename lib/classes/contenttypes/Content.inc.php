@@ -173,7 +173,7 @@ class Content extends ContentBase
                 $label = ucwords($blockName);
 		if( $blockName == 'content_en' ) 
 		  {
-		    $label = ucwords('content').'*';
+		    $label = lang('content').'*';
 		  }
 		$data = $this->GetPropertyValue($blockInfo['id']);
 		if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
