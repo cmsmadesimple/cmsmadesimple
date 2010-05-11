@@ -1,3 +1,14 @@
+Version 1.7.2 - Escada
+-----------------------------
+Core:
+  - #4907 Content/Pages/Edit Page Content is not translated
+  - Fixed issue where thumbnail width and height wasnt taken.
+
+MenuManager:
+  - #2488 Apply and Submit does not work in certain scenario
+  - #4906 Error W3C on accessible_simple_navigation.tpl
+  
+  
 Version 1.7.1 - Escada
 -----------------------------
   - #3794 Remove use of readfile.
