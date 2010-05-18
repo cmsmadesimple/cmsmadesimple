@@ -918,7 +918,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 		}
 		else
                 {
-		  $result .= ' class="cms_textara"';
+		  $result .= ' class="cms_textarea"';
 		}
 		if ($id != '')
 		{
