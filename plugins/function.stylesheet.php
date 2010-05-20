@@ -27,21 +27,17 @@ function smarty_cms_function_stylesheet($params, &$smarty)
     $str = '';
     $url = '';
     //if( $config['url_rewriting'] != 'none' )
-    if( 0 )
+
+    $base = $config['root_url'];
+    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'))
+    {
+      $base = $config['ssl_url'];
+    }
+
+    $url = $base.'/stylesheet.php?cssid='.$cssid;
+    if( !empty($media) )
       {
-	$url = $config['root_url'].'/stylesheet.php/'.$cssid;
-	if( !empty($media) )
-	  {
-	    $url .= '/'.$media;
-	  }
-      }
-    else
-      {
-	$url = $config['root_url'].'/stylesheet.php?cssid='.$cssid;
-	if( !empty($media) )
-	  {
-	    $url .= '&amp;mediatype='.$media;
-	  }
+	$url .= '&amp;mediatype='.$media;
       }
 
     $str = '<link rel="stylesheet" type="text/css" ';

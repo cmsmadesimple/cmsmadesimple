@@ -41,7 +41,13 @@ function smarty_cms_function_metadata($params, &$smarty)
 
 	if ($showbase)
 	{
-		$result .= "\n<base href=\"".$config['root_url']."/\" />\n";
+	  $base = $config['root_url'];
+	  if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'))
+	  {
+	    $base = $config['ssl_url'];
+	  }
+
+	  $result .= "\n<base href=\"".$base."/\" />\n";
 	}
 
 	$result .= get_site_preference('metadata', '');
