@@ -29,7 +29,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
     //if( $config['url_rewriting'] != 'none' )
 
     $base = $config['root_url'];
-    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'))
+    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off')
     {
       $base = $config['ssl_url'];
     }
