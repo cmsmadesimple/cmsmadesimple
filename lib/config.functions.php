@@ -160,6 +160,11 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	  {
 	    $config['ssl_url'] = str_replace('http://','https://',$config['root_url']);
 	  }
+	// adjust ssl url if not specified
+	if( !isset($config['ssl_uploads_url']) )
+	  {
+	    $config['ssl_uploads_url'] = str_replace('http://','https://',$config['uploads_url']);
+	  }
 	return $config;
 }
 
@@ -167,6 +172,8 @@ function cms_config_text($config)
 {
   if( !isset($config['ssl_url']) )
     $config['ssl_url'] = str_replace('http://','https://',$config['root_url']);
+  if( !isset($config['ssl_uploads_url']) )
+    $config['ssl_uploads_url'] = str_replace('http://','https://',$config['uploads_url']);
 
 	$true = 'true';
 	$false = 'false';
@@ -323,6 +330,8 @@ function cms_config_text($config)
 #Default path and URL for uploaded images in the image manager
 \$config['image_uploads_path'] = '{$config['image_uploads_path']}';
 \$config['image_uploads_url'] = \$config['root_url'] . '{$config['image_uploads_url']}'; 
+#SSL URL.  This is used for pages that are marked as secure.
+\$config['ssl_uploads_url'] = '{$config['ssl_uploads_url']}';
 
 #------------------------
 #Locale/Encoding Settings

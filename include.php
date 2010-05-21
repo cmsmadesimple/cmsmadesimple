@@ -85,6 +85,24 @@ require(cms_join_path($dirname,'lib','config.functions.php'));
 #Grab the current configuration
 $config =& $gCms->GetConfig();
 
+#Adjust the url stuff if we're using HTTPS
+if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
+{
+  // adjust the root url
+  if( !isset($config['ssl_url']) )
+  { 
+    $config['ssl_url'] = str_replace('http://','https://',$config['root_url']);
+  }
+  $config['root_url'] = $config['ssl_url'];
+
+  // adjust the uploads url
+  if( !isset($config['ssl_uploads_url']) )
+  {
+    $config['ssl_uploads_url'] = str_replace('http://','https://',$config['ssl_uploads_url']);
+  }
+  $config['uploads_url'] = $config['ssl_uploads_url'];
+}
+
 #Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  )
   {
