@@ -8,6 +8,8 @@ MenuManager:
   - #2488 Apply and Submit does not work in certain scenario
   - #4906 Error W3C on accessible_simple_navigation.tpl
   
+CoreInstaller:
+  - #4978 Fix typo in upgrade.32.to.33 script
   
 Version 1.7.1 - Escada
 -----------------------------
