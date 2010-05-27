@@ -1,4 +1,4 @@
-Version 1.7.2 - Escada
+Version 1.7.2 - Tarrafal
 -----------------------------
 Core:
   - #4907 Content/Pages/Edit Page Content is not translated
