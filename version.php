@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.7.1";
-$CMS_VERSION_NAME = "Escada";
+$CMS_VERSION = "1.7.2";
+$CMS_VERSION_NAME = "Tarrafal";
 $CMS_SCHEMA_VERSION = "33";
 
 define('CMS_VERSION', $CMS_VERSION);
