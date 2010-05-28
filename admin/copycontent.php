@@ -155,7 +155,7 @@ if( check_permission(get_userid(),'Manage All Content') )
 
 $tmp = 	$contentops->CreateHierarchyDropdown(-100, /* $fromobj->Id(), */
 					     $fromobj->ParentId(),
-					     'to_parentid',1,1,1);
+					     'to_parentid',1,1,1,true);
 if( empty($tmp) )
   {
     $tmp = '<input type="hidden" name="to_parentid" value="'.$fromobj->Id().'"/>'.$fromobj->Hierarchy().'&nbsp;'.$fromobj->Name();
