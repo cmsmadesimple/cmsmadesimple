@@ -121,7 +121,8 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		$lang = get_site_preference('frontendlang','en');
 		if (isset($params['lang']))
 		{
-		  $lang = $params['lang'];
+		  $lang = trim($params['lang']);
+                  if( !$lang ) $lang = '0';
 		}
 		switch ($lang)
 		  {
