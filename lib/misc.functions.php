@@ -322,6 +322,10 @@ function cms_calculate_url()
 		{
 			$result = $matches[1];
 		}
+		else
+		{
+			$result = $_SERVER['PHP_SELF'];
+		}
 	}
 
 	//trim off the extension, if there is one set
