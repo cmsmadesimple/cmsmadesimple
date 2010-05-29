@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Softwarenews-fesubmit.html&articleid=3
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_smarty_stylesheet($params, &$smarty)
+function smarty_cms_function_cms_stylesheet($params, &$smarty)
 {
   if( !function_exists('get_stylesheet_tag') ) {
   function get_stylesheet_tag($cssid,$media='')
@@ -101,7 +101,7 @@ function smarty_cms_function_smarty_stylesheet($params, &$smarty)
 	foreach( $res as $one )
 	  {
 	    $media_type = str_replace(' ','',$one['media_type']);
-	    $filename = strtr($one['css_name'], $conv_filename).'_'.srtotime($one['modified_date']).'.css';
+	    $filename = strtr($one['css_name'], $conv_filename).'_'.strtotime($one['modified_date']).'.css';
 	    if ( !file_exists(cms_join_path($cache_dir,$filename)) )
 	      {
 		$smarty = $gCms->GetSmarty();
@@ -142,12 +142,12 @@ function smarty_cms_function_smarty_stylesheet($params, &$smarty)
   return $stylesheet;
 }
 
-function smarty_cms_help_function_smarty_stylesheet()
+function smarty_cms_help_function_cms_stylesheet()
 {
-	echo lang('help_function_stylesheet');
+	echo lang('help_function_cms_stylesheet');
 }
 
-function smarty_cms_about_function_smarty_stylesheet()
+function smarty_cms_about_function_cms_stylesheet()
 {
 	?>
 	<p>Author: jeff&lt;jeff@ajprogramming.com&gt;</p>
