@@ -309,11 +309,11 @@ function cms_calculate_url()
 			{
 				$result = $matches[1];
 			}
-		}/*
+		}
 		else
 		{
 			$result = $_SERVER['PHP_SELF'];
-		}*/
+		}
 	}
 	*/
 	//lighttpd
@@ -326,11 +326,11 @@ function cms_calculate_url()
 		if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['REQUEST_URI'], $matches))
 		{
 			$result = $matches[1];
-		}
+		}/*
 		else
 		{
 			$result = $_SERVER['PHP_SELF'];
-		}
+		}*/
 	}
 
 	//trim off the extension, if there is one set
