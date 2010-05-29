@@ -45,7 +45,7 @@ class ErrorPage extends Content
   function SetProperties()
   {
     parent::SetProperties();
-    $this->RemoveProperty('secure','');
+    $this->RemoveProperty('secure',0);
     $this->RemoveProperty('searchable',false);
     $this->RemoveProperty('parent',-1);
     $this->RemoveProperty('showinmenu',false);

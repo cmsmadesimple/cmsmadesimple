@@ -40,7 +40,7 @@ class Link extends ContentBase
     {
       parent::SetProperties();
       //$this->RemoveProperty('showinmenu',true);
-      $this->RemoveProperty('secure','');
+      $this->RemoveProperty('secure',0);
       $this->RemoveProperty('cachable',true);
       $this->AddContentProperty('url',10,1);
     }
