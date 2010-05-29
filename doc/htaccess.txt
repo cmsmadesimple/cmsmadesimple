@@ -12,7 +12,7 @@
 #Options -Indexes
 #ServerSignature Off
 #
-Options +FollowSymLinks
+#Options +FollowSymLinks
 #
 <IfModule mod_rewrite.c>
 RewriteEngine on
