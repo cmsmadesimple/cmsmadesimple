@@ -84,11 +84,21 @@ class Content extends ContentBase
 	    }
 	  
 	  // add content blocks
-	  $this->get_content_blocks();
+	  $this->parse_content_blocks();
 	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
 	      $this->AddExtraProperty($blockName);
 	      $parameters[] = $blockInfo['id'];
+
+	      if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
+		{
+		  if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
+		  $module =& $gCms->modules[$blockInfo['module']]['object'];
+		  if( !is_object($module) ) continue;
+		  if( !$module->HasCapability('contentblocks') ) continue;
+		  $tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
+		  if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
+		}
 	    }
 	  
 	  // do the content property parameters
@@ -160,80 +170,21 @@ class Content extends ContentBase
 	    }
 
 	  // and the content blocks
-	  $this->get_content_blocks(); // this is needed as this is the first time we get a call to our class when editing.
+	  $this->parse_content_blocks(); // this is needed as this is the first time we get a call to our class when editing.
 	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
 	      $this->AddExtraProperty($blockName);
 	      $parameters[] = $blockInfo['id'];
 	    }
 
-	    // add additional content blocks if required
-	    foreach($this->_contentBlocks as $blockName => $blockInfo)
+	  // add content blocks.
+	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
-                $label = ucwords($blockName);
-		if( $blockName == 'content_en' ) 
-		  {
-		    $label = lang('content').'*';
-		  }
-		$data = $this->GetPropertyValue($blockInfo['id']);
-		if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
-                if( !empty($blockInfo['label']) ) $label = $blockInfo['label'];
-		switch($blockInfo['type'])
-		  {
-		  case 'module':
-		    {
-		      if( !isset($blockInfo['module']) ) continue;
-		      if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
-		      $module =& $gCms->modules[$blockInfo['module']]['object'];
-		      if( !is_object($module) ) continue;
-		      if( $module->HasContentBlocks() === FALSE ) continue;
-		      $tmp = $module->GetContentBlockInputBase($blockName,$blockInfo['blocktype'],$blockInfo['params']);
-		      if( $tmp === FALSE ) continue;
-		      if( !endswith(':',$label) )
-			$label .= ':';
-		      $ret[]= array($label,$tmp);
-		    }
-		    break;
-
-		  case 'image':
-		    {
-		      $dir = cms_join_path($config['uploads_path'],$blockInfo['dir']);
-		      $optprefix = 'uploads';
-		      if( !empty($blockInfo['dir']) ) $optprefix .= '/'.$blockInfo['dir'];
-		      $dropdown = create_file_dropdown($blockInfo['id'],$dir,$data,'jpg,jpeg,png,gif',
-						       $optprefix,true);
-		      if( $dropdown === false )
-			{
-			  $dropdown = lang('error_retrieving_file_list');
-			}
-		      $ret[]= array($label.':',$dropdown);
-		    }
-		    break;
-
-		  case 'text':
-		  default:
-		    if (isset($blockInfo['oneline']) && $blockInfo['oneline'] == '1' || $blockInfo['oneline'] == 'true')
-		      {
-			$size = (isset($blockInfo['size']))?$blockInfo['size']:50;
-			$ret[]= array($label.':','<input type="text" size="'.$size.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />');
-		      }
-		    else
-		      { 
-			$block_wysiwyg = true;
-			$hide_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
-			
-			if ($hide_wysiwyg)
-			  {
-			    $block_wysiwyg = false;
-			  }
-			else
-			  {
-			    $block_wysiwyg = $blockInfo['usewysiwyg'] == 'false'?false:true;
-			  }
-			
-			$ret[]= array($label.':',create_textarea($block_wysiwyg, $data, $blockInfo['id'], '', $blockInfo['id'], '', $this->stylesheet));
-		      }
-		  }
+	      $data = $this->GetPropertyValue($blockInfo['id']);
+	      if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
+	      $tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
+	      if( !$tmp ) continue;
+	      $ret[] = $tmp;
 	    }
 	}
 
@@ -260,31 +211,59 @@ class Content extends ContentBase
     }
 
 
-    function ValidateData()
+	function ValidateData()
+	{
+		$errors = parent::ValidateData();
+		if( $errors === FALSE )
+		{
+			$errors = array();
+		}
+
+		if ($this->mTemplateId <= 0 )
+		{
+			$errors[] = lang('nofieldgiven',array(lang('template')));
+			$result = false;
+		}
+
+		if ($this->GetPropertyValue('content_en') == '')
+		{
+			$errors[]= lang('nofieldgiven',array(lang('content')));
+			$result = false;
+		}
+
+		$this->parse_content_blocks();
+		foreach($this->_contentBlocks as $blockName => $blockInfo)
+		{
+			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
+			{
+				if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
+				$module =& $gCms->modules[$blockInfo['module']]['object'];
+				if( !is_object($module) ) continue;
+				if( !$module->HasCapability('contentblocks') ) continue;
+				$value = $this->GetPropertyValue($blockInfo['id']);
+				$tmp = $module->ValidateContentBlockValue($blockName,$value,$blockInfo['params']);
+				if( !empty($tmp) )
+				{
+					$errors[] = $tmp;
+					$result = false;
+				}
+			}
+		}
+
+		return (count($errors) > 0?$errors:FALSE);
+	}
+
+    /**
+     * Function to return an array of content blocks
+     */
+    public function get_content_blocks()
     {
-      $errors = parent::ValidateData();
-      if( $errors === FALSE )
-	{
-	  $errors = array();
-	}
-
-	if ($this->mTemplateId <= 0 )
-	  {
-	    $errors[] = lang('nofieldgiven',array(lang('template')));
-	    $result = false;
-	  }
-
-	if ($this->GetPropertyValue('content_en') == '')
-	{
-	    $errors[]= lang('nofieldgiven',array(lang('content')));
-	    $result = false;
-	}
-
-	return (count($errors) > 0?$errors:FALSE);
+      $this->parse_content_blocks();
+      return $this->_contentBlocks;
     }
 
-    /* private */
-    function get_content_blocks()
+
+    private function parse_content_blocks()
     {
       $result = false;
       global $gCms;
@@ -448,7 +427,7 @@ class Content extends ContentBase
 			  $this->_contentBlocks[$name]['upload'] = $upload;
 			  $this->_contentBlocks[$name]['dir'] = $dir;
 			  $this->_contentBlocks[$name]['default'] = $value;
-			  $this->_contentBlocks[$name]['label'] = $label;					
+			  $this->_contentBlocks[$name]['label'] = $label;
 			}
 		    }
 		  
@@ -458,9 +437,6 @@ class Content extends ContentBase
 		  $result = true;
 		}
 
-	      /* 
-	       * disable this for now 
-	       *
 	      // match module content tags
 	      $pattern = '/{content_module\s([^}]*)}/';
 	      $pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
@@ -529,9 +505,6 @@ class Content extends ContentBase
 		  
 		  $result = true;
 		}
-		*
-		* end disabled code
-		*/
 	      
 	      $this->_contentBlocksLoaded = true;
 	    }
@@ -604,6 +577,148 @@ class Content extends ContentBase
       }
       
     }
+
+	/*
+	* return the HTML to create the text area in the admin console.
+	* does not include a label.
+	*/
+	private function _display_text_block($blockInfo,$value,$adding)
+	{
+		$ret = '';
+		if (isset($blockInfo['oneline']) && $blockInfo['oneline'] == '1' || $blockInfo['oneline'] == 'true')
+		{
+			$size = (isset($blockInfo['size']))?$blockInfo['size']:50;
+			$ret = '<input type="text" size="'.$size.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($data, ENT_NOQUOTES, get_encoding('')).'" />';
+		}
+		else
+		{ 
+			$block_wysiwyg = true;
+			$hide_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
+
+			if ($hide_wysiwyg)
+			{
+				$block_wysiwyg = false;
+			}
+			else
+			{
+				$block_wysiwyg = $blockInfo['usewysiwyg'] == 'false'?false:true;
+			}
+
+			$ret = create_textarea($block_wysiwyg, $value, $blockInfo['id'], '', $blockInfo['id'], '', $this->stylesheet);
+		}
+		return $ret;
+	}
+
+	/*
+	* return the HTML to create an image dropdown in the admin console.
+	* does not include a label.
+	*/
+	private function _display_image_block($blockInfo,$value,$adding)
+	{
+		global $gCms;
+		$config =& $gCms->GetConfig();
+		$dir = cms_join_path($config['uploads_path'],$blockInfo['dir']);
+		$optprefix = 'uploads';
+		if( !empty($blockInfo['dir']) ) $optprefix .= '/'.$blockInfo['dir'];
+		$inputname = $blockInfo['id'];
+		if( isset($blockInfo['inputname']) )
+		{
+			$inputname = $blockInfo['inputname'];
+		}
+		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',
+			$optprefix,true);
+		if( $dropdown === false )
+		{
+			$dropdown = lang('error_retrieving_file_list');
+		}
+		return $dropdown;
+	}
+
+
+/*
+	* return the HTML to create the text area in the admin console.
+	* may include a label.
+*/
+	private function _display_module_block($blockName,$blockInfo,$value,$adding)
+	{
+		global $gCms;
+		$ret = '';
+		if( !isset($blockInfo['module']) ) return FALSE;
+		if( !isset($gCms->modules[$blockInfo['module']]['object']) ) return FALSE;
+		$module =& $gCms->modules[$blockInfo['module']]['object'];
+		if( !is_object($module) ) continue;
+		if( !$module->HasCapability('contentblocks') ) return FALSE;
+		if( isset($blockInfo['inputname']) && !empty($blockInfo['inputname']) )
+		{
+			// a hack to allow overriding the input field name.
+			$blockName = $blockInfo['inputname'];
+		}
+		$tmp = $module->GetContentBlockInput($blockName,$value,$blockInfo['params'],$adding);
+		return $tmp;
+	}
+
+
+	/**
+	* Return an array of two elements
+	* the first is the string for the label for the field
+	* the second is the html for the input field
+*/
+	public function display_content_block($blockName,$blockInfo,$value,$adding = false)
+	{
+		// it'd be nice if the content block was an object..
+		// but I don't have the time to do it at the moment.
+		$field = '';
+		$label = '';
+		if( isset($blockInfo['label']) )
+		{
+			$label = $blockInfo['label'];
+		}
+		switch( $blockInfo['type'] )
+		{
+			case 'text':
+			{
+				if( $blockName == 'content_en' && $label == '' )
+				{
+					$label = ucwords('content');
+				}
+				$field = $this->_display_text_block($blockInfo,$value,$adding);
+			}
+			break;
+
+			case 'image':
+			$field = $this->_display_image_block($blockInfo,$value,$adding);
+			break;
+
+			case 'module':
+			{
+				$tmp = $this->_display_module_block($blockName,$blockInfo,$value,$adding);
+				if( is_array($tmp) )
+				{
+					if( count($tmp) == 2 )
+					{
+						$label = $tmp[0];
+						$field = $tmp[1];
+					}
+					else
+					{
+						$field = $tmp[0];
+					}
+				}
+				else
+				{
+					$field = $tmp;
+				}
+			}
+			break;
+		}
+		if( empty($field) ) return FALSE;
+		if( empty($label) )
+		{
+			$label = $blockName;
+		}
+		return array($label.':',$field);
+	}
+
 } // end of class
 
 # vim:ts=4 sw=4 noet

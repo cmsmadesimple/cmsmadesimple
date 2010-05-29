@@ -469,45 +469,30 @@ class CMSModule
 	 */
 	
 	/**
-	 * Does this module support a content block type or more
+	 * Get an input field for a specific content block type
 	 */
-	function HasContentBlocks()
+	function GetContentBlockInput($blockName,$value,$params,$adding = false)
 	{
 	  return FALSE;
 	}
 
-	/**
-	 * Base function for getting content blocks
-	 */
-	function GetContentBlockInputBase($blockname,$type,$value = '',$params = array())
+	function GetContentBlockValue($blockName,$blockParams,$inputParams)
 	{
-	  if( empty($blockname) || empty($type) )
-	    {
-	      return FALSE;
-	    }
+	  return FALSE;
+	}
 
-	  $id = $blockname.'_'.$type;
-	  @ob_start();
-	  $tmp = $this->GetContentBlockInput($id,$type,'',$blockname,$value,$params);
-	  $tmp = @ob_get_contents();
-	  @ob_end_clean();
-	  return $tmp;
+
+	function ValidateContentBlockValue($blockName,$value,$blockparams)
+	{
+	  return '';
 	}
 
 	/**
-	 * Get an input field for a specific content block type
+	 * Register a bulk content action
 	 */
-	function GetContentBlockInput($id,$type,$returnid,$blockName,$value,$params)
+	function RegisterBulkContentFunction($label,$action)
 	{
-	  $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/contentblock.'.$type.'.php';
-	  if( !@is_file($filename) ) return FALSE;
-
-	  global $gCms;
-	  $db =& $gCms->GetDb();
-	  $config =& $gCms->GetConfig();
-	  $smarty =& $gCms->GetSmarty();
-
-	  include($filename);
+	  bulkcontentoperations::register_function($label,$action,$this->GetName());
 	}
 
 
