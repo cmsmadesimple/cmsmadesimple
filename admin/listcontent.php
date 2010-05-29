@@ -1166,23 +1166,24 @@ function display_content_list($themeObject = null)
 	$opts = array();
 	if( check_permission($userid, 'Remove Pages') || check_permission($userid, 'Manage All Content') )
 	  {
-	    $opts['delete'] = lang('delete');
+    bulkcontentoperations::register_function(lang('delete'),'delete');
 	  }
 	if (check_permission($userid, 'Manage All Content')) 
 	  {
-	    $opts['active'] = lang('active');
-	    $opts['inactive'] = lang('inactive');
-	    $opts['setcachable'] = lang('cachable');
-	    $opts['setnoncachable'] = lang('noncachable');
-	    $opts['showinmenu'] = lang('showinmenu');
-	    $opts['hidefrommenu'] = lang('hidefrommenu');
-	    $opts['marksecure'] = lang('secure');
-	    $opts['markinsecure'] = lang('insecure');
+	    bulkcontentoperations::register_function(lang('active'),'active');
+	    bulkcontentoperations::register_function(lang('inactive'),'inactive');
+	    bulkcontentoperations::register_function(lang('cachable'),'setcachable');
+	    bulkcontentoperations::register_function(lang('noncachable'),'setnoncachable');
+	    bulkcontentoperations::register_function(lang('showinmenu'),'showinmenu');
+	    bulkcontentoperations::register_function(lang('hidefrommenu'),'hidefrommenu');
+	    bulkcontentoperations::register_function(lang('secure'),'secure');
+	    bulkcontentoperations::register_function(lang('insecure'),'insecure');
 	  }
 	if (check_permission($userid, 'Modify Any Page') || check_permission($userid, 'Manage All Content'))
 	  {
-	    $opts['settemplate'] = lang('settemplate');
+    bulkcontentoperations::register_function(lang('settemplate'),'settemplate');
 	  }
+	$opts = bulkcontentoperations::get_operation_list();
 	if( !empty($opts) )
 	  {
 	    echo '<div class="pageoptions">'."\n";
@@ -1194,7 +1195,7 @@ function display_content_list($themeObject = null)
 		echo '<option value="'.$key.'">'.$value.'</option>';
 	      }
 	    echo '</select>'."\n";
-            echo '<input type="submit" value="'.lang('submit').'"/></div></div>'."\n";
+            echo '<input type="submit" accesskey="s" value="'.lang('submit').'"/></div></div>'."\n";
 	  }
 	/*    } */
 ?>

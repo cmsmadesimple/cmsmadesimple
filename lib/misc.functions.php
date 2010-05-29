@@ -176,6 +176,11 @@ function cms_join_path()
 	return implode(DIRECTORY_SEPARATOR,$args);
 }
 
+function cmsms()
+{
+	global $gCms;
+	return $gCms;
+}
 
 /**
  * Shows a very close approximation of an Apache generated 404 error.

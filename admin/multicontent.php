@@ -33,6 +33,53 @@ $userid = get_userid();
 $action = '';
 if (isset($_POST['multiaction'])) $action = $_POST['multiaction'];
 if (isset($_POST['reorderpages'])) $action = 'reorder';
+
+{
+  $tmp = explode('::',$action,2);
+  if( $tmp[0] == 'core' )
+    {
+      $action = $tmp[1];
+    }
+  else if( $tmp[0] == '-1' )
+    {
+      redirect("listcontent.php".$urlext.'&message='.lang('no_bulk_performed'));
+    }
+  else
+    {
+      // it's a module action.
+      $gCms = cmsms();
+      if( !isset($gCms->modules[$tmp[0]]) )
+	{
+	  redirect("listcontent.php".$urlext.'&message='.lang('no_bulk_performed'));
+	}
+      $obj =& $gCms->modules[$tmp[0]]['object'];
+      if( !is_object($obj) )
+	{
+	  redirect("listcontent.php".$urlext.'&message='.lang('no_bulk_performed'));
+	}
+
+      // strip out the multicontent params
+      $tmp2 = array();
+      foreach( $_POST as $key => $val )
+	{
+	  if( startswith($key,'multicontent-') )
+	    {
+	      $tmp2[] = substr($key,strlen('multicontent-'));
+	    }
+	}
+      // populate the REQUEST with a mact
+      $_SESSION['cms_passthru'] = array();
+      $_SESSION['cms_passthru']['mact'] = implode(',',array($tmp[0],'m1_',$tmp[1]));
+      if( count($tmp2) > 0 )
+	{
+	  $_SESSION['cms_passthru']['m1_contentlist'] = implode(',',$tmp2);
+	}
+	
+      // handle any normal module action.
+      redirect("moduleinterface.php".$urlext);
+    }
+}
+
 include_once("header.php");
 
 global $gCms;

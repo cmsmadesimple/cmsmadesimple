@@ -27,6 +27,12 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 $userid = get_userid();
 
+if( isset($_SESSION['cms_passthru']) )
+  {
+    $_REQUEST = array_merge($_REQUEST,$_SESSION['cms_passthru']);
+    unset($_SESSION['cms_passthru']);
+  }
+
 $smarty =& $gCms->GetSmarty();
 $smarty->assign('date_format_string',get_preference($userid,'date_format_string','%x %X'));
 
