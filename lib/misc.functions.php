@@ -309,11 +309,11 @@ function cms_calculate_url()
 			{
 				$result = $matches[1];
 			}
-		}
+		}/*
 		else
 		{
 			$result = $_SERVER['PHP_SELF'];
-		}
+		}*/
 	}
 	*/
 	//lighttpd
