@@ -4,6 +4,7 @@ Core:
   - #4895 lang=0 versus lang="0" on cms_selflink help page
   - #4907 Content/Pages/Edit Page Content is not translated
   - #4929 Copy page - can't select section header.
+  - #4993 Cannot add new section header
   - Fixed issue where thumbnail width and height wasnt taken.
 
 MenuManager:
