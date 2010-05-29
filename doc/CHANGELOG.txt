@@ -1,4 +1,4 @@
-Version 1.7.2 - Tarrafal
+Version 1.8 - Madagascar 
 -----------------------------
 Core:
   - #4895 lang=0 versus lang="0" on cms_selflink help page

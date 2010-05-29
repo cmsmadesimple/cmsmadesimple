@@ -102,6 +102,21 @@ if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
   }
   $config['uploads_url'] = $config['ssl_uploads_url'];
 }
+else if( startswith($config['root_url'],'https://') )
+{
+  // okay, not using SSL, but the root url is https...
+  if( !isset($config['non_ssl_url']) )
+    {
+      $config['non_ssl_url'] = str_replace('https://','http://',$config['root_url']);
+    }
+  $config['root_url'] = $config['non_ssl_url'];
+
+  if( !isset($config['non_ssl_uploads_url']) )
+    {
+      $config['non_ssl_uploads_url'] = str_replace('https://','http://',$config['uploads_url']);
+    }
+  $config['uploads_url'] = $config['non_ssl_uploads_url'];
+}
 
 #Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  )

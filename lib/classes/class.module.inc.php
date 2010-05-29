@@ -2088,7 +2088,7 @@ class CMSModule
 	 * ------------------------------------------------------------------
 	 */
 
-	function &GetModuleInstance($module)
+	static public function &GetModuleInstance($module)
 	{
 		global $gCms;
 

@@ -1141,5 +1141,155 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
   return $out;
 }
 
+
+function get_pageid_or_alias_from_url()
+{
+  global $gCms;
+  $config = $gCms->GetConfig();
+  $contentops =& $gCms->GetContentOperations();
+
+  $params =& $_REQUEST;
+  if (isset($params['mact']))
+    {
+      $ary = explode(',', cms_htmlentities($params['mact']), 4);
+      $smarty->id = (isset($ary[1])?$ary[1]:'');
+    }
+  else
+    { // old?
+      $smarty->id = (isset($params['id'])?intval($params['id']):'');
+    }
+
+  $page = '';
+  if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
+    {
+      // old?
+      $page = $params[$smarty->id . 'returnid'];
+    }
+  else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]]))
+    {
+      $page = $_GET[$config["query_var"]];    
+    }
+  else
+    {
+      // either we're using internal urls
+      // or this is the default page.
+      if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
+	{
+	  $matches = array();
+	  if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['REQUEST_URI'], $matches))
+	    {
+	      // internal pretty urls.
+	      $page = $matches[1];
+	    }
+	}
+    }
+
+
+  // by here, if page is empty, use the default page id
+  if ($page == '')
+    {
+      // assume default content
+      $page = $contentops->GetDefaultContent();
+    }
+
+  // by here page should be a string.
+  if( is_numeric($page) ) return $page;
+
+  // strip off GET params.
+  if( ($tmp = strpos($page,'?')) !== FALSE )
+    {
+      $page = substr($page,0,$tmp);
+    }
+
+  // strip off page extension
+  if ($config['page_extension'] != '' && endswith($page, $config['page_extension']))
+    {   
+      $page = substr($page, 0, strlen($page) - strlen($config['page_extension']));
+    }
+
+  // trim trailing /
+  $page = rtrim($page, '/');
+
+  // match routes
+  $matched = false;
+  if (strpos($page, '/') !== FALSE)
+    {
+      $routes =& $gCms->variables['routes'];
+	
+      foreach ($routes as $route)
+	{
+	  $matches = array();
+	  if (preg_match($route->regex, $page, $matches))
+	    {
+	      //Now setup some assumptions
+	      if (!isset($matches['id']))
+		$matches['id'] = 'cntnt01';
+	      if (!isset($matches['action']))
+		$matches['action'] = 'defaulturl';
+	      if (!isset($matches['inline']))
+		$matches['inline'] = 0;
+	      if (!isset($matches['returnid']))
+		$matches['returnid'] = ''; #Look for default page
+	      if (!isset($matches['module']))
+		$matches['module'] = $route->module;
+
+	      //Get rid of numeric matches
+	      foreach ($matches as $key=>$val)
+		{
+		  if (is_int($key))
+		    {
+		      unset($matches[$key]);
+		    }
+		  else
+		    {
+		      if ($key != 'id')
+			$_REQUEST[$matches['id'] . $key] = $val;
+		    }
+		}
+
+	      //Now set any defaults that might not have been in the url
+	      if (isset($route->defaults) && count($route->defaults) > 0)
+		{
+		  foreach ($route->defaults as $key=>$val)
+		    {
+		      $_REQUEST[$matches['id'] . $key] = $val;
+		      if (array_key_exists($key, $matches))
+			{ 
+			  $matches[$key] = $val;
+			}
+		    }
+		}
+
+	      //Get a decent returnid
+	      if ($matches['returnid'] == '') {
+		$matches['returnid'] = $contentops->GetDefaultPageID();
+	      }
+
+	      $_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
+
+	      $page = $matches['returnid'];
+	      $smarty->id = $matches['id'];
+
+	      $matched = true;
+	      break;
+	    }
+	}
+    }
+
+  // if noroute matched... grab the alias from the last /
+  if( ($pos = strrpos($page,'/')) !== FALSE && $matched == false )
+    {
+      $page = substr($page, $pos + 1);
+    }
+
+  // at this point we MUST have a valid page
+  if( empty($page) )
+    {
+      // maybe it's the home page.
+      $page = $contentops->GetDefaultContent();
+    }
+  
+  return $page;
+}
 # vim:ts=4 sw=4 noet
 ?>

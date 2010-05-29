@@ -27,12 +27,10 @@ require_once($dirname.'/fileloc.php');
  *
  * @package CMS
  */	
-#echo '<code style="align: left;">';
-#var_dump($_SERVER);
-#echo '</code>';
 
 $starttime = microtime();
 clearstatcache();
+
 
 if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
 {
@@ -82,131 +80,7 @@ $params = array_merge($_GET, $_POST);
 $smarty = &$gCms->smarty;
 $smarty->params = $params;
 
-$page = '';
-if (isset($params['mact']))
-  {
-    $ary = explode(',', cms_htmlentities($params['mact']), 4);
-    $smarty->id = (isset($ary[1])?$ary[1]:'');
-  }
-else
-  {
-    $smarty->id = (isset($params['id'])?intval($params['id']):'');
-  }
-
-if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
-  {
-    $page = $params[$smarty->id . 'returnid'];
-  }
-else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]]))
-  {
-    $page = $_GET[$config["query_var"]];    
-  }
-else
-   {
-     $page = cms_calculate_url();
-   }
-
-// strip off GET params.
-if( ($tmp = strpos($page,'?')) !== FALSE )
-  {
-    $page = substr($page,0,$tmp);
-  }
-
-// strip off page extension
-if ($config['page_extension'] != '' && endswith($page, $config['page_extension']))
-  {   
-    $page = substr($page, 0, strlen($page) - strlen($config['page_extension']));
-  }
-
-
-//See if our page matches any predefined routes
-$page = rtrim($page, '/');
-$matched = false;
-if (strpos($page, '/') !== FALSE)
-{
-
-	$routes =& $gCms->variables['routes'];
-	
-	foreach ($routes as $route)
-	{
-		$matches = array();
-		if (preg_match($route->regex, $page, $matches))
-		{
-			//Now setup some assumptions
-			if (!isset($matches['id']))
-				$matches['id'] = 'cntnt01';
-			if (!isset($matches['action']))
-				$matches['action'] = 'defaulturl';
-			if (!isset($matches['inline']))
-				$matches['inline'] = 0;
-			if (!isset($matches['returnid']))
-				$matches['returnid'] = ''; #Look for default page
-			if (!isset($matches['module']))
-				$matches['module'] = $route->module;
-
-			//Get rid of numeric matches
-			foreach ($matches as $key=>$val)
-			{
-				if (is_int($key))
-				{
-					unset($matches[$key]);
-				}
-				else
-				{
-					if ($key != 'id')
-						$_REQUEST[$matches['id'] . $key] = $val;
-				}
-			}
-
-			//Now set any defaults that might not have been in the url
-			if (isset($route->defaults) && count($route->defaults) > 0)
-			{
-				foreach ($route->defaults as $key=>$val)
-				{
-					$_REQUEST[$matches['id'] . $key] = $val;
-					if (array_key_exists($key, $matches))
-					{ 
-						$matches[$key] = $val;
-					}
-				}
-			}
-
-			//Get a decent returnid
-			if ($matches['returnid'] == '') {
-				global $gCms;
-				$contentops =& $gCms->GetContentOperations();
-				$matches['returnid'] = $contentops->GetDefaultPageID();
-			}
-
-			$_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
-
-			$page = $matches['returnid'];
-			$smarty->id = $matches['id'];
-
-			$matched = true;
-			break;
-		}
-	}
-}
-
-// strip from the last / forward
-if( ($pos = strrpos($page,'/')) !== FALSE && $matched == false )
-  {
-    $page = substr($page, $pos + 1);
-  }
-
-
-if ($page == '')
-  {
-    // assume default content
-    global $gCms;
-    $contentops =& $gCms->GetContentOperations();
-    $page =& $contentops->GetDefaultContent();
-  }
-else
-  {
-    $page = preg_replace('/\</','',$page);
-  }
+$page = get_pageid_or_alias_from_url();
 
 $pageinfo = '';
 if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary

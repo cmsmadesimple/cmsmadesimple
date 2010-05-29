@@ -33,7 +33,7 @@ class Events
 	* @param string The name of the event
 	* @returns nothing
 	*/
-	function CreateEvent( $modulename, $eventname )
+	static public function CreateEvent( $modulename, $eventname )
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
@@ -58,7 +58,7 @@ class Events
 	* @param string The name of the event
 	* @returns nothing
 	*/
-	function RemoveEvent( $modulename, $eventname )
+	static public function RemoveEvent( $modulename, $eventname )
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
@@ -96,7 +96,7 @@ class Events
 	* @param array  The parameters associated with this event.
 	* @returns nothing
 	*/
-	function SendEvent( $modulename, $eventname, $params = array() )
+	static public function SendEvent( $modulename, $eventname, $params = array() )
 	{
 		global $gCms;
 		$usertagops =& $gCms->GetUserTagOperations();
@@ -144,7 +144,7 @@ class Events
 	* in the array contains two elements 'handler_name', and 'module_handler',
 	* any one of these could be null. If it fails, false is returned.
 	*/
-	function ListEventHandlers( $modulename, $eventname )
+	static public function ListEventHandlers( $modulename, $eventname )
 	{
 		global $gCms;
 		$db = &$gCms->GetDb();
@@ -192,7 +192,7 @@ class Events
 	*
 	* @returns mixed If successful, a list of all the known events.  If it fails, false
 	*/
-	function ListEvents()
+	static public function ListEvents()
 	{
 		global $gCms;
 		$db = &$gCms->GetDb();
@@ -224,7 +224,7 @@ class Events
 	*
 	* @returns mixed If successful, true.  If it fails, false.
 	*/
-	function AddEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false, $removable = true)
+	static public function AddEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false, $removable = true)
 	{
 		if( $tag_name == false && $module_handler == false )
 		{
@@ -321,7 +321,7 @@ class Events
 	*
 	* @returns mixed If successful, true.  If it fails, false.
 	*/
-	function RemoveEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false )
+	static public function RemoveEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false )
 	{
 		if( $tag_name != false && $module_handler != false )
 		{
@@ -371,7 +371,7 @@ class Events
 	}
 
 
-	function RemoveAllEventHandlers( $modulename, $eventname )
+	static public function RemoveAllEventHandlers( $modulename, $eventname )
 	{
 		global $gCms;
 		$db = &$gCms->GetDb();
