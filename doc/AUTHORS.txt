@@ -36,7 +36,8 @@ Danish: Morten Poulsen <morten [AT] poulsen [DOT] org>
 
 Dutch: Sjaak <sjaak [AT] nlweb [DOT] net>
        Jesca Z <jesca [AT] zweijtzer [DOT] nl>
-       Ronny Krijt <r [DOT] krijt [AT] gmail [DOT] com>
+       Ronny Krijt <ronnyk [AT] cmsmadesimple [DOT] org>
+	   Rolf <rolf [at] cmsmadesimple [dot] org>
 
 French: Herve Commowick <daycom [AT] daycom [DOT] net>,
         Patricia Brun <cmsms [AT] virtuaza [DOT] net>
