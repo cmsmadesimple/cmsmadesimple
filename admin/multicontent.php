@@ -36,7 +36,11 @@ if (isset($_POST['reorderpages'])) $action = 'reorder';
 
 {
   $tmp = explode('::',$action,2);
-  if( $tmp[0] == 'core' )
+  if( count($tmp) == 1 )
+    {
+      // do nothing here.
+    }
+  else if( $tmp[0] == 'core')
     {
       $action = $tmp[1];
     }
