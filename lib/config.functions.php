@@ -357,6 +357,15 @@ function cms_config_text($config)
 # Set none if you want hide the link from Error 
 \$config['wiki_url'] = '{$config['wiki_url']}';
 
+#------------------------
+#Miscelaneous Settings
+#------------------------
+
+#Add performance information (in the form of an HTML comment) to the
+#bottom of all generated pages.  Note, this may cause problems with validation
+#or with advanced AJAX requests where only portions of a page are requested.
+#\$config['show_performance_info'] = true;
+
 EOF;
 	return $result;
 }
