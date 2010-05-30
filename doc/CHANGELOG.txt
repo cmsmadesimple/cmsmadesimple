@@ -9,6 +9,9 @@ Core:
   - #4993 Cannot add new section header
   - Fixed issue where thumbnail width and height wasnt taken.
 
+News:
+  - Fixed issue with sorting of articleid.  
+  
 MenuManager:
   - #2488 Apply and Submit does not work in certain scenario
   - #4906 Error W3C on accessible_simple_navigation.tpl
