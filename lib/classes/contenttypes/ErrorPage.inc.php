@@ -114,7 +114,8 @@ class ErrorPage extends Content
     {
       switch($one) {
 	case 'alias':
-	  $dropdownopts = '<option value="">'.lang('none').'</option>';
+          $dropdownopts = '';
+	  //$dropdownopts = '<option value="">'.lang('none').'</option>';
 	  foreach ($this->error_types as $code=>$name)
 	    {
 	      $dropdownopts .= '<option value="error' . $code . '"';
