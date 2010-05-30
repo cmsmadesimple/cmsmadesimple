@@ -1,7 +1,6 @@
 {$mod->StartTabHeaders()}
 {$mod->SetTabHeader('general',$lang_general,$active_general)}
 {$mod->SetTabHeader('sitedown',$lang_sitedown,$active_sitedown)}
-{$mod->SetTabHeader('handle_404',$lang_handle404,$active_handle_404)}
 {$mod->SetTabHeader('setup',$lang_setup,$active_setup)}
 {$mod->EndTabHeaders()}
 {$mod->StartTabContent()}
@@ -124,41 +123,6 @@
 </form>
 {$mod->EndTab()}
 
-
-{$mod->StartTab('handle_404')}
-<form id="siteprefform_handle_404" method="post" action="siteprefs.php">
-<div>
-  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
-  <input type="hidden" name="active_tab" value="handle_404" />
-  <input type="hidden" name="editsiteprefs" value="true" />
-</div>
-
-<div class="pageoverflow">
-  <p class="pagetext">{$lang_enablecustom404}:</p>
-  <p class="pageinput"><input type="hidden" name="enablecustom404" value="0"/><input class="pagenb" type="checkbox" value="1" name="enablecustom404" {if $enablecustom404 == "1"}checked="checked"{/if}/></p>
-</div>
-<div class="pageoverflow">
-  <p class="pagetext">{$lang_custom404}</p>
-  <p class="pageinput">{$textarea_custom404}</p>
-</div>
-<div class="pageoverflow">
-  <p class="pagetext">{$lang_template}:</p>
-  <p class="pageinput">
-    <select name="custom404template">
-      {html_options options=$templates selected=$custom404template}
-    </select>
-  </p>
-</div>
-
-<div class="pageoverflow">
-  <p class="pagetext">&nbsp;</p>
-  <p class="pageinput">
-    <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-    <input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-  </p>
-</div>
-</form>
-{$mod->EndTab()}
 
 {$mod->StartTab('setup')}
 <form id="siteprefform_setup" method="post" action="siteprefs.php">

@@ -67,12 +67,9 @@ $allowparamcheckwarnings = 0;
 $enablenotifications = 1;
 $sitedownexcludes = '';
 $basic_attributes = '';
-$enablecustom404 = "0";
 $xmlmodulerepository = "";
 $urlcheckversion = "";
 $defaultdateformat = "";
-$custom404 = "<p>Page not found<//p>";
-$custom404template = "-1";
 $enablesitedownmessage = "0";
 $sitedownmessage = "<p>Site is currently down.  Check back later.</p>";
 $sitedownmessagetemplate = "-1";
@@ -102,9 +99,6 @@ $global_umask = get_site_preference('global_umask',$global_umask);
 $frontendlang = get_site_preference('frontendlang',$frontendlang);
 $frontendwysiwyg = get_site_preference('frontendwysiwyg',$frontendwysiwyg);
 $nogcbwysiwyg = get_site_preference('nogcbwysiwyg',$nogcbwysiwyg);
-$enablecustom404 = get_site_preference('enablecustom404',$enablecustom404);
-$custom404 = get_site_preference('custom404',$custom404);
-$custom404template = get_site_preference('custom404template',$custom404template);
 $enablesitedownmessage = get_site_preference('enablesitedownmessage',$enablesitedownmessage);
 $sitedownmessage = get_site_preference('sitedownmessage',$sitedownmessage);
 $xmlmodulerepository = get_site_preference('xmlmodulerepository',$xmlmodulerepository);
@@ -220,15 +214,6 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('enablesitedownmessage', $enablesitedownmessage);
 	  set_site_preference('sitedownmessage', $sitedownmessage);
 	  set_site_preference('sitedownexcludes',$sitedownexcludes);
-	  break;
-
-	case 'handle_404':
-	  if (isset($_POST["enablecustom404"])) $enablecustom404 = $_POST['enablecustom404'];
-	  if (isset($_POST["custom404"])) $custom404 = $_POST["custom404"];
-	  if (isset($_POST["custom404template"])) $custom404template = $_POST["custom404template"];
-	  set_site_preference('enablecustom404', $enablecustom404);
-	  set_site_preference('custom404', $custom404);
-	  set_site_preference('custom404template', $custom404template);
 	  break;
 
 	case 'setup':
@@ -362,12 +347,10 @@ if ($dir=opendir(dirname(__FILE__)."/themes/"))
 
 $smarty->assign('active_general', 0);
 $smarty->assign('active_sitedown', 0);
-$smarty->assign('active_handle_404', 0);
 $smarty->assign('active_setup', 0);
 
 $smarty->assign('active_general',($active_tab == 'general')?1:0);
 $smarty->assign('active_sitedown',($active_tab == 'sitedown')?1:0);
-$smarty->assign('active_handle_404',($active_tab == 'handle_404')?1:0);
 $smarty->assign('active_setup',($active_tab == 'setup')?1:0);
 
 $smarty->assign('SECURE_PARAM_NAME',CMS_SECURE_PARAM_NAME);
@@ -379,9 +362,6 @@ $smarty->assign('frontendlang',$frontendlang);
 $smarty->assign('frontendwysiwyg',$frontendwysiwyg);
 $smarty->assign('nogcbwysiwyg',$nogcbwysiwyg);
 $smarty->assign('metadata',$metadata);
-$smarty->assign('enablecustom404',$enablecustom404);
-$smarty->assign('textarea_custom404',create_textarea(true,$custom404,'custom404','pagesmalltextarea'));
-$smarty->assign('custom404template',$custom404template);
 $smarty->assign('enablesitedownmessage',$enablesitedownmessage);
 $smarty->assign('textarea_sitedownmessage',create_textarea(true,$sitedownmessage,'sitedownmessage','pagesmalltextarea'));
 $smarty->assign('urlcheckversion',$urlcheckversion);
@@ -412,7 +392,6 @@ $smarty->assign('lang_thumbnail_width',lang('thumbnail_width'));
 $smarty->assign('lang_thumbnail_height',lang('thumbnail_height'));
 $smarty->assign('lang_general',lang('general_settings'));
 $smarty->assign('lang_sitedown',lang('sitedown_settings'));
-$smarty->assign('lang_handle404',lang('handle_404'));
 $smarty->assign('lang_cancel',lang('cancel'));
 $smarty->assign('lang_submit',lang('submit'));
 $smarty->assign('lang_clearcache',lang('clearcache'));
@@ -426,8 +405,6 @@ $smarty->assign('lang_frontendlang',lang('frontendlang'));
 $smarty->assign('lang_frontendwysiwygtouse',lang('frontendwysiwygtouse'));
 $smarty->assign('lang_nogcbwysiwyg',lang('nogcbwysiwyg'));
 $smarty->assign('lang_globalmetadata',lang('globalmetadata'));
-$smarty->assign('lang_enablecustom404',lang('enablecustom404'));
-$smarty->assign('lang_custom404',lang('custom404'));
 $smarty->assign('lang_template',lang('template'));
 $smarty->assign('lang_enablesitedown',lang('enablesitedown'));
 $smarty->assign('lang_sitedownmessage',lang('sitedownmessage'));
