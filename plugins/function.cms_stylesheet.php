@@ -63,10 +63,10 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
     }
   else
     {
-      $config = &$gCms->config;
       $pageinfo = &$gCms->variables['pageinfo'];
       $template_id=$pageinfo->template_id;
     }
+  $config =& $gCms->config;
   $db =& $gCms->GetDb();
 
   $cache_dir = TMP_CACHE_LOCATION;
