@@ -175,6 +175,15 @@
   </p>
 </div>  
 <div class="pageoverflow">
+  <p class="pagetext">{$lang_autoclearcache}:</p>
+  <p class="pageinput">
+    <input type="text" class="pagesmalltextarea"  name="auto_clear_cache_age" size="4" value="{$auto_clear_cache_age}" maxlength="4"/>
+    <br/>
+    {$lang_info_autoclearcache}
+  </p>
+</div>  
+
+<div class="pageoverflow">
   <p class="pagetext">{$lang_global_umask}:</p>
   <p class="pageinput"><input type="text" class="pagesmalltextarea" name="global_umask" size="4" value="{$global_umask}" /></p>
 </div>
@@ -187,13 +196,6 @@
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
   <p class="pageinput"><input type="submit" name="testumask" value="{$lang_test}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" /></p>
-</div>
-<div class="pageoverflow">
-  <p class="pagetext">{$lang_css_max_age}:</p>
-  <p class="pageinput">
-    <input type="text" class="pagesmalltextarea" name="css_max_age" size="10" maxlength="10" value="{$css_max_age}" />
-    <br/>{$lang_help_css_max_age}
-  </p>
 </div>
 
 <div class="pageoverflow">

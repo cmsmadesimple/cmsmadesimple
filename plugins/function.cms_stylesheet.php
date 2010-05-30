@@ -120,7 +120,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		fwrite($fp, str_replace("\r\n", "\n", $_contents));
 		fclose($fp);
 		//set the modified date to the template modified date
-		touch($fname, $one['modified_date']);
+		//touch($fname, $db->UnixTimeStamp($one['modified_date']));
 	      }
 	    if ( empty($media_type) )
 	      {

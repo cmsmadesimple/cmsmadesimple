@@ -347,6 +347,28 @@ class CmsObject {
 				$db->Close();
 		}
 	}
+
+
+	function clear_cached_files($age_days)
+	{
+	  if( $age_days <= 0 ) return;
+	  $the_time = time() - $age_days * 24*60*60;
+
+	  $dirs = array(TMP_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
+	  foreach( $dirs as $start_dir )
+	    {
+	      $dirIterator = new RecursiveDirectoryIterator($start_dir);
+ 	      $dirContents = new RecursiveIteratorIterator($dirIterator);
+	      foreach( $dirContents as $one )
+		{
+		  if( $one->isFile() && $one->getMTime() <= $the_time )
+		    {
+		      //echo $one->getPathname().' '.$one->getMTime().'<br/>';
+ 		      @unlink($one->getPathname());
+		    }
+		}
+	    }
+	}
 }
 
 class CmsRoute

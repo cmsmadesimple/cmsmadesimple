@@ -78,12 +78,12 @@ $sitedownmessage = "<p>Site is currently down.  Check back later.</p>";
 $sitedownmessagetemplate = "-1";
 $metadata = '';
 $sitename = 'CMSMS Website';
-$css_max_age = 0;
 $frontendlang = '';
 $frontendwysiwyg = '';
 $nogcbwysiwyg = '0';
 $global_umask = '022';
 $logintheme = "default";
+$auto_clear_cache_age = 0;
 
 
 
@@ -93,6 +93,7 @@ if (isset($_POST["cancel"])) {
 }
 
 
+$auto_clear_cache_age = get_site_preference('auto_clear_cache_age',$auto_clear_cache_age);
 $thumbnail_width = get_site_preference('thumbnail_width',$thumbnail_width);
 $thumbnail_height = get_site_preference('thumbnail_height',$thumbnail_height);
 $global_umask = get_site_preference('global_umask',$global_umask);
@@ -109,7 +110,6 @@ $urlcheckversion = get_site_preference('urlcheckversion',$urlcheckversion);
 $defaultdateformat = get_site_preference('defaultdateformat',$defaultdateformat);
 $logintheme = get_site_preference('logintheme',$logintheme);
 $metadata = get_site_preference('metadata',$metadata);
-$css_max_age = (int)get_site_preference('css_max_age',$css_max_age);
 $sitename = get_site_preference('sitename',$sitename);
 $clear_vc_cache = get_site_preference('clear_vc_cache',$clear_vc_cache);
 $disablesafemodewarning = get_site_preference('disablesafemodewarning',$disablesafemodewarning);
@@ -175,8 +175,9 @@ if (isset($_POST["testumask"]))
 else if (isset($_POST['clearcache']))
 {
 	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	$contentops->ClearCache();
+	$gCms->clear_cached_files(1);
+// 	$contentops =& $gCms->GetContentOperations();
+// 	$contentops->ClearCache();
 	$message .= lang('cachecleared');
 }
 else if (isset($_POST["editsiteprefs"]))
@@ -243,7 +244,6 @@ else if (isset($_POST["editsiteprefs"]))
 	    }
 	  if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
 	  if (isset($_POST["urlcheckversion"])) $urlcheckversion = $_POST["urlcheckversion"];
-	  if (isset($_POST['css_max_age'])) $css_max_age = (int)$_POST['css_max_age'];
 	  if (isset($_POST['global_umask'])) 
 	    {
 	      $global_umask = $_POST['global_umask'];
@@ -256,11 +256,15 @@ else if (isset($_POST["editsiteprefs"]))
 	      set_site_preference('lastcmsversioncheck',0);
 	    }
 	  set_site_preference('clear_vc_cache', $clear_vc_cache);
-	  set_site_preference('css_max_age',$css_max_age);
 	  set_site_preference('disablesafemodewarning',$disablesafemodewarning);
 	  set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
 	  set_site_preference('enablenotifications',$enablenotifications);
 	  set_site_preference('basic_attributes',$basic_attributes);
+	  if( isset($_POST['auto_clear_cache_age']) )
+	    {
+	      $auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
+	      set_site_preference('auto_clear_cache_age',$auto_clear_cache_age);
+	    }
 	  break;
 	}
 
@@ -363,7 +367,6 @@ $smarty->assign('SECURE_PARAM_NAME',CMS_SECURE_PARAM_NAME);
 $smarty->assign('CMS_USER_KEY',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('sitename',$sitename);
 $smarty->assign('global_umask',$global_umask);
-$smarty->assign('css_max_age',$css_max_age);
 $smarty->assign('testresults',$testresults);
 $smarty->assign('frontendlang',$frontendlang);
 $smarty->assign('frontendwysiwyg',$frontendwysiwyg);
@@ -384,7 +387,10 @@ $smarty->assign('sitedownexcludes',$sitedownexcludes);
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));
 $smarty->assign('thumbnail_width',$thumbnail_width);
 $smarty->assign('thumbnail_height',$thumbnail_height);
+$smarty->assign('auto_clear_cache_age',$auto_clear_cache_age);
 
+$smarty->assign('lang_info_autoclearcache',lang('info_autoclearcache'));
+$smarty->assign('lang_autoclearcache',lang('autoclearcache'));
 $smarty->assign('lang_thumbnail_width',lang('thumbnail_width'));
 $smarty->assign('lang_thumbnail_height',lang('thumbnail_height'));
 $smarty->assign('lang_general',lang('general_settings'));
@@ -398,8 +404,6 @@ $smarty->assign('lang_setup',lang('setup'));
 $smarty->assign('lang_sitename',lang('sitename'));
 $smarty->assign('lang_global_umask',lang('global_umask'));
 $smarty->assign('lang_test',lang('test'));
-$smarty->assign('lang_css_max_age',lang('css_max_age'));
-$smarty->assign('lang_help_css_max_age',lang('help_css_max_age'));
 $smarty->assign('lang_results',lang('results'));
 $smarty->assign('lang_frontendlang',lang('frontendlang'));
 $smarty->assign('lang_frontendwysiwygtouse',lang('frontendwysiwygtouse'));

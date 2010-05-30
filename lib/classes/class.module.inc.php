@@ -1337,6 +1337,17 @@ class CMSModule
   {
     return false;
   }
+
+
+  /**
+   * Returns a list of the tasks that this module manages
+   *
+   * @returns array of CmsRegularTask objects, or one object.  NULL if not handled.
+   */
+  function get_tasks()
+  {
+    return FALSE;
+  }
 	
 	/**
 	 * ------------------------------------------------------------------

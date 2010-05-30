@@ -551,16 +551,47 @@ class ModuleOperations
     return true;
   }
 
-	/**
-	 * Returns a hash of all loaded modules.  This will include all
-	 * modules loaded by LoadModules, which could either be all or them,
-	 * or just ones that are active and installed.
-	 */
-	function & GetAllModules()
-	{
-		global $gCms;
-		$cmsmodules = &$gCms->modules;
-		return $cmsmodules;
-	}
+  /**
+   * Returns a hash of all loaded modules.  This will include all
+   * modules loaded by LoadModules, which could either be all or them,
+   * or just ones that are active and installed.
+   */
+  function & GetAllModules()
+    {
+      global $gCms;
+      $cmsmodules = &$gCms->modules;
+      return $cmsmodules;
+    }
 
+
+  /**
+   * Returns an ArrayObject of modules that have a certain capabili
+   * 
+   * @param string the capability name
+   * @param mixed  capability arguments.
+   * 
+   * @return An ArrayObject of module objects.
+   */
+  public static function get_modules_with_capability($capability,$args= '')
+  {
+    global $gCms;
+
+    $output = array();
+    foreach($gCms->modules as $key => $data)
+      {
+	if( isset($data['installed']) &&
+	    isset($data['object']) && 
+	    is_object($data['object']) )
+	  {
+	    $obj =& $data['object'];
+	    if( $obj->HasCapability($capability,$args) )
+	      {
+		$output->append($obj);
+	      }
+	  }
+      }
+
+    if( count($output) ) return FALSE;
+    return $output;
+  }
 }
