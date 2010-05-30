@@ -279,7 +279,10 @@ $modload->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
 debug_buffer('', 'End of include');
 
 #Do auto task stuff.
-CmsRegularTaskHandler::handle_tasks();
+if (! isset($CMS_INSTALL_PAGE))
+  {
+    CmsRegularTaskHandler::handle_tasks();
+  }
 
 
 function sanitize_get_var(&$value, $key)
