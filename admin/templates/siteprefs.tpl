@@ -237,6 +237,16 @@
 </div>
 
 <div class="pageoverflow">
+  <p class="pagetext">{$lang_pseudocron_granularity}:</p>
+  <p class="pageinput">
+    <select name="pseudocron_granularity">
+    {html_options options=$pseudocron_options selected=$pseudocron_granularity}
+    </select><br/>
+    {$lang_info_pseudocron_granularity}
+  </p>
+</div>  
+
+<div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
   <p class="pageinput">
     <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />

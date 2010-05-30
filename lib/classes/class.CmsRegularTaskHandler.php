@@ -96,14 +96,22 @@ class CmsRegularTaskHandler
 
   public static function handle_tasks()
   {
-    // 1.  Get Task objects.
-    self::get_tasks();
+    $granularity = (int)get_site_preference('pseudocron_granularity',60);
+    $last_check = get_site_preference('pseudocron_lastrun',time());
+    if( (time() - $granularity * 60) <= $last_check )
+      {
+	// 1.  Get Task objects.
+	self::get_tasks();
+	
+	// 2.  Evaluate Tasks
+	self::execute();
+	
+	// 3.  Cleanup to minimize memory usage
+	self::cleanup();
 
-    // 2.  Evaluate Tasks
-    self::execute();
-
-    // 3.  Cleanup to minimize memory usage
-    //self::cleanup();
+	// 4.  Say we've done a check
+	set_site_preference('pseudocron_lastrun',time());
+      }
   }
 }
 

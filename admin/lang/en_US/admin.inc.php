@@ -1,4 +1,15 @@
 <?php
+$lang['admin']['pseudocron_granularity'] = 'Pseudocron Granularity';
+$lang['admin']['info_pseudocron_granularity'] = 'This setting indicates how often the system will attempt to handle regularly scheduled tasks';
+$lang['admin']['cron_request'] = 'Each Request';
+$lang['admin']['cron_15m'] = '15 Minutes';
+$lang['admin']['cron_30m'] = '30 Minutes';
+$lang['admin']['cron_60m'] = '1 Hour';
+$lang['admin']['cron_120m'] = '2 Hours';
+$lang['admin']['cron_3h'] = '3 Hours';
+$lang['admin']['cron_6h'] = '6 Hours';
+$lang['admin']['cron_12h'] = '12 Hours';
+$lang['admin']['cron_24h'] = '24 Hours';
 $lang['admin']['automatedtask_failed'] = 'Automatic Task Execution Succeded';
 $lang['admin']['automatedtask_failed'] = 'Automatic Task Execution Failed';
 $lang['admin']['clearcache_taskdescription'] = 'Executed daily, this task will clear cached files that are older than the age preset in the global preferences';

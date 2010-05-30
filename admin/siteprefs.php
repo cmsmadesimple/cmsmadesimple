@@ -84,6 +84,7 @@ $nogcbwysiwyg = '0';
 $global_umask = '022';
 $logintheme = "default";
 $auto_clear_cache_age = 0;
+$pseudocron_granularity = 60;
 
 
 
@@ -93,6 +94,7 @@ if (isset($_POST["cancel"])) {
 }
 
 
+$pseudocron_granularity = get_site_preference('pseudocron_granularity',$pseudocron_granularity);
 $auto_clear_cache_age = get_site_preference('auto_clear_cache_age',$auto_clear_cache_age);
 $thumbnail_width = get_site_preference('thumbnail_width',$thumbnail_width);
 $thumbnail_height = get_site_preference('thumbnail_height',$thumbnail_height);
@@ -265,6 +267,11 @@ else if (isset($_POST["editsiteprefs"]))
 	      $auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
 	      set_site_preference('auto_clear_cache_age',$auto_clear_cache_age);
 	    }
+	  if( isset($_POST['pseudocron_granularity']) )
+	    {
+	      $pseudocron_granularity = (int)$_POST['pseudocron_granularity'];
+	      set_site_preference('pseudocron_granularity',$pseudocron_granularity);
+	    }
 	  break;
 	}
 
@@ -388,7 +395,17 @@ $smarty->assign('basic_attributes',explode(',',$basic_attributes));
 $smarty->assign('thumbnail_width',$thumbnail_width);
 $smarty->assign('thumbnail_height',$thumbnail_height);
 $smarty->assign('auto_clear_cache_age',$auto_clear_cache_age);
+$smarty->assign('pseudocron_granularity',$pseudocron_granularity);
 
+$tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
+	     60=>lang('cron_60m'),120=>lang('cron_120m'),
+	     180=>lang('cron_3h'),360=>lang('cron_6h'),
+	     12*60=>lang('cron_12h'),
+	     24*60=>lang('cron_24h'),
+	     -1=>lang('cron_request'));
+$smarty->assign('pseudocron_options',$tmp);	     
+$smarty->assign('lang_pseudocron_granularity',lang('pseudocron_granularity'));
+$smarty->assign('lang_info_pseudocron_granularity',lang('info_pseudocron_granularity'));
 $smarty->assign('lang_info_autoclearcache',lang('info_autoclearcache'));
 $smarty->assign('lang_autoclearcache',lang('autoclearcache'));
 $smarty->assign('lang_thumbnail_width',lang('thumbnail_width'));
