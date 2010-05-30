@@ -57,7 +57,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config['url_rewriting'] = 'none';
 	//$config["assume_mod_rewrite"] = false; //Not being used in core
 	//$config['internal_pretty_urls'] = false; //Not being used in core
-	$config['use_hierarchy'] = true; //Now true by default
+	//$config['use_hierarchy'] = true; //Now true by default
 	$config["auto_alias_content"] = true;
 	$config["image_manipulation_prog"] = "GD";
 	$config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
@@ -154,6 +154,9 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 			$config['internal_pretty_urls'] = false;
 			$config['assume_mod_rewrite'] = false;
 	}
+
+	// set use hierarchy for backward compatibility
+	$config['use_hierarchy'] = true;
 
 	// adjust ssl url if not specified
 	if( !isset($config['ssl_url']) )
@@ -308,10 +311,6 @@ function cms_config_text($config)
 
 #Extension to use if you're using mod_rewrite for pretty URLs.
 \$config['page_extension'] = '{$config['page_extension']}';
-
-#If you're using the internal pretty url mechanism or mod_rewrite, would you like to
-#show urls in their hierarchy?  (ex. http://www.mysite.com/parent/parent/childpage)
-\$config['use_hierarchy'] = ${$config['use_hierarchy']?'true':'false'};
 
 #If using none of the above options, what should we be using for the query string
 #variable?  (ex. http://www.mysite.com/index.php?page=somecontent)

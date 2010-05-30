@@ -415,7 +415,7 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 
 	$class = (isset($params['class'])?cms_htmlentities($params['class']):'');
 
-	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite' && $config['use_hierarchy'] == true)
+	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite')
 	{
 		$text = $config['root_url'] . '/' . $prettyurl . $config['page_extension'];
 	}
