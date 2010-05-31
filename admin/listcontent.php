@@ -41,6 +41,7 @@ $cms_ajax->register_function('content_new');
 $cms_ajax->register_function('save_page');
 $cms_ajax->register_function('check_url');
 $cms_ajax->register_function('check_alias');
+$cms_ajax->register_function('change_parent');
 
 function check_modify_all($userid)
 {
@@ -517,7 +518,17 @@ function content_select($html_id)
 		$page = cms_orm('CmsPage')->load($id);
 		$smarty->assign_by_ref('page', $page);
 		
-		$smarty->assign('parent_dropdown', CmsPage::create_hierarchy_dropdown($id, $page->parent_id, 'page[parent_id]'));
+		$smarty->assign('parent_dropdown', CmsPage::create_hierarchy_dropdown($id, $page->parent_id, 'page[parent_id]', 'id="parent_dropdown"'));
+		$parent_path = '/';
+		if ($page->parent_id > 0)
+		{
+			$parent = cms_orm('CmsPage')->load($page->parent_id);
+			if ($parent)
+			{
+				$parent_path = "/{$parent->hierarchy_path}/";
+			}
+		}
+		$smarty->assign('parent_path', $parent_path);
 		$resp->location_hash("editpage-" . $id);
 	}
 	
@@ -538,7 +549,7 @@ function content_new($parent_id = null)
 	if ($parent_id == null || !is_integer($parent_id))
 		$parent_id = -1;
 	
-	$smarty->assign('parent_dropdown', CmsPage::create_hierarchy_dropdown('', $parent_id, 'page[parent_id]'));
+	$smarty->assign('parent_dropdown', CmsPage::create_hierarchy_dropdown('', $parent_id, 'page[parent_id]', 'id="parent_dropdown"'));
 	
 	$resp->script('prepare_add_content()');
 	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
@@ -682,7 +693,7 @@ function check_alias($params)
 function check_url($params)
 {
 	$ajax = new CmsAjaxResponse();
-	$count = cms_orm('CmsPage')->find_count(array('conditions' => array('url_text = ? AND id != ?', $params['alias'], $params['page_id'])));
+	$count = cms_orm('CmsPage')->find_count(array('conditions' => array('url_text = ? AND id != ? and parent_id = ?', $params['alias'], $params['page_id'], $params['parent_id'])));
 	if ($params['alias'] == '')
 	{
 		$ajax->replace_html('#url_text_ok', 'Empty');
@@ -702,6 +713,28 @@ function check_url($params)
 	return $ajax->get_result();
 }
 
+function change_parent($params)
+{
+	$ajax = new CmsAjaxResponse();
+	if ($params['parent_id'] && $params['parent_id'] > 0)
+	{
+		$page = cms_orm('CmsPage')->find_by_id($params['parent_id']);
+		if ($page)
+		{
+			$ajax->replace_html('#parent_path', "/{$page->hierarchy_path}/");
+		}
+		else
+		{
+			$ajax->replace_html('#parent_path', '/');
+		}
+	}
+	else
+	{
+		$ajax->replace_html('#parent_path', '/');
+	}
+	//$ajax->script('reset_main_content();');
+	return $ajax->get_result();
+}
 
 # vim:ts=4 sw=4 noet
 ?>
