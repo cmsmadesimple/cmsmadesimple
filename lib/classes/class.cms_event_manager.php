@@ -35,7 +35,7 @@ class CmsEventManager extends CmsObject
 		self::init_store();
 
 		//Create the store for this event if it doesn't exist
-		if (!empty(self::$event_store[$name]))
+		if (!isset(self::$event_store[$name]))
 		{
 			self::$event_store[$name] = array();
 		}

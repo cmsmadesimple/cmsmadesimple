@@ -4,7 +4,7 @@ if (!isset($gCms)) exit;
 debug_buffer('', 'Start of Menu Manager Display');
 
 $usefile = true;
-$params['template'] = coalesce_key($params, 'template', $this->Preference->get('default_template','simple_navigation.tpl'));
+$params['template'] = coalesce_key($params, 'template', '');
 $mdid = md5($gCms->variables['content_id'].implode('|', $params));
 if (!endswith($params['template'], '.tpl'))
 {
@@ -15,6 +15,12 @@ if (!endswith($params['template'], '.tpl'))
 //$usefile = true;
 
 $root_node = null;
+
+if (isset($params['childrenof']))
+{
+	$params['start_page'] = $params['childrenof'];
+	$params['show_only_children'] = true;
+}
 
 if (isset($params['start_page']) || isset($params['start_element']))
 {
