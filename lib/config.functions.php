@@ -194,7 +194,7 @@ function cms_config_text($config)
 # use extreme caution when editing these.  Additionally, some settings may have 
 # no effect on servers with significantly restricted configurability.
 
-# If you are experiencing propblems with php memory limit errors, then you may
+# If you are experiencing problems with php memory limit errors, then you may
 # want to try enabling and/or adjusting this setting.  
 # Note: Your server may not allow the application to override memory limits.
 \$config['php_memory_limit'] = '{$config['php_memory_limit']}';
