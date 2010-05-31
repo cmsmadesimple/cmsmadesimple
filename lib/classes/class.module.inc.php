@@ -2080,6 +2080,17 @@ class CMSModule
 		$this->LoadRedirectMethods();
 		return cms_module_Redirect($this, $id, $action, $returnid, $params, $inline);
 	}
+	
+  /**
+   * Redirects to an admin page
+   * @param string php script to redirect to
+   * @param array  optional array of url parameters
+   */
+  function RedirectToAdmin($page,$params = array())
+  {
+    $this->LoadRedirectMethods();
+    return cms_module_RedirectToAdmin($this,$page,$params);
+  }
 
 	/**
 	 * Redirects the user to a content page outside of the module.	The passed around returnid is
