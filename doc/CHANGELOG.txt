@@ -11,6 +11,9 @@ Core:
   - #4952 Alias changes if user has no permission "Manage All Content"
   - #4993 Cannot add new section header
   - Fixed issue where thumbnail width and height wasnt taken.
+  
+  Feature request
+  - #380 use variables in stylesheets
 
 News:
   - Fixed issue with sorting of articleid.  
