@@ -364,7 +364,8 @@ function cms_config_text($config)
 #Add performance information (in the form of an HTML comment) to the
 #bottom of all generated pages.  Note, this may cause problems with validation
 #or with advanced AJAX requests where only portions of a page are requested.
-#\$config['show_performance_info'] = true;
+#This variable just needs to exist, value is irrelevant.
+#\$config['show_performance_info'] = 'anything';
 
 EOF;
 	return $result;

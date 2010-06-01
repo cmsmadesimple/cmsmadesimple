@@ -29,6 +29,39 @@ include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.bookmark.inc.php')
 
 class BookmarkOperations
 {
+  private function _prep_for_saving($url)
+  {
+    global $gCms;
+    $config = $gCms->GetConfig();
+    $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+
+    $map = array('[SECURITYTAG]'=>$urlext,
+		 '[ROOT_URL]'=>$config['root_url']);
+    foreach( $map as $to => $from )
+      {
+	$url = str_replace($from,$to,$url);
+      }
+    return $url;
+  }
+
+
+  private function _prep_for_display($url)
+  {
+    global $gCms;
+    $config = $gCms->GetConfig();
+    $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+
+    $map = array('[SECURITYTAG]'=>$urlext,
+		 '[ROOT_URL]'=>$config['root_url']);
+    foreach( $map as $from => $to )
+      {
+	$url = str_replace($from,$to,$url);
+      }
+
+    $url = str_replace($from,$to,$url);
+    return $url;
+  }
+
 	/**
 	 * Gets a list of all bookmarks for a given user
 	 *
@@ -36,12 +69,11 @@ class BookmarkOperations
 	 */
 	function LoadBookmarks($user_id)
 	{
-	  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 		global $gCms;
 		$db = &$gCms->GetDb();
+		$config = $gCms->GetConfig();
 
 		$result = array();
-
 		$query = "SELECT bookmark_id, user_id, title, url FROM ".cms_db_prefix()."admin_bookmarks WHERE user_id = ? ORDER BY title";
 		$dbresult = $db->Execute($query, array($user_id));
 
@@ -50,8 +82,7 @@ class BookmarkOperations
 			$onemark = new Bookmark();
 			$onemark->bookmark_id = $row['bookmark_id'];
 			$onemark->user_id = $row['user_id'];
-			$onemark->url = str_replace('[SECURITYTAG]',
-						    $urlext,$row['url']);
+			$onemark->url = $this->_prep_for_display($row['url']);
 			$onemark->title = $row['title'];
 			$result[] = $onemark;
 		}
@@ -82,7 +113,7 @@ class BookmarkOperations
 			$onemark = new Bookmark();
 			$onemark->bookmark_id = $row['bookmark_id'];
 			$onemark->user_id = $row['user_id'];
-			$onemark->url = $row['url'];
+			$onemark->url = $this->_prep_for_display($row['url']);
 			$onemark->title = $row['title'];
 			$result = $onemark;
 		}
@@ -104,6 +135,7 @@ class BookmarkOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
+		$bookmark->url = $this->_prep_for_saving($bookmark->url);
 		$new_bookmark_id = $db->GenID(cms_db_prefix()."admin_bookmarks_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."admin_bookmarks (bookmark_id, user_id, url, title) VALUES (?,?,?,?)";
 		$dbresult = $db->Execute($query, array($new_bookmark_id, $bookmark->user_id, $bookmark->url, $bookmark->title));
@@ -129,6 +161,7 @@ class BookmarkOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
+		$bookmark->url = $this->_prep_for_saving($bookmark->url);
 		$query = "UPDATE ".cms_db_prefix()."admin_bookmarks SET user_id = ?, title = ?, url = ? WHERE bookmark_id = ?";
 		$dbresult = $db->Execute($query, array($bookmark->user_id, $bookmark->title, $bookmark->url, $bookmark->bookmark_id));
 		if ($dbresult !== false)
