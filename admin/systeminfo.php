@@ -114,7 +114,6 @@ $tmp[0]['default_upload_permission'] = testConfig('default_upload_permission', '
 $tmp[0]['assume_mod_rewrite'] = testConfig('assume_mod_rewrite', 'assume_mod_rewrite');
 $tmp[0]['page_extension'] = testConfig('page_extension', 'page_extension');
 $tmp[0]['internal_pretty_urls'] = testConfig('internal_pretty_urls', 'internal_pretty_urls');
-$tmp[0]['use_hierarchy'] = testConfig('use_hierarchy', 'use_hierarchy');
 
 $tmp[1]['root_url'] = testConfig('root_url', 'root_url');
 $tmp[1]['root_path'] = testConfig('root_path', 'root_path', 'testDirWrite');

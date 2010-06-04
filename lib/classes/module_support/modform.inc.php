@@ -419,7 +419,7 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 	{
 		$text = $config['root_url'] . '/' . $prettyurl . $config['page_extension'];
 	}
-	else if ($prettyurl != '' && $config['url_rewriting'] == 'internal' && $config['use_hierarchy'] == true)
+	else if ($prettyurl != '' && $config['url_rewriting'] == 'internal')
 	{
 		$text = $config['root_url'] . '/index.php/' . $prettyurl . $config['page_extension'];
 	}
