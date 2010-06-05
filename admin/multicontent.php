@@ -252,7 +252,7 @@ else
 				if ($action == 'inactive')
 				  DoContent($nodelist, $node, true, false);
 				else if ($action == 'active' || $action == 'settemplate' || $action == 'setcachable' || $action == 'setnoncachable'
-                                         || $action == 'showinmenu' || $action == 'hidefrommenu' || $action == 'marksecure' || $action == 'markinsecure')
+                                         || $action == 'showinmenu' || $action == 'hidefrommenu' || $action == 'secure' || $action == 'insecure')
 					DoContent($nodelist, $node, false, false);
 				else if ($action == 'delete')
 				  {
@@ -546,9 +546,9 @@ else
 		}
 		redirect("listcontent.php".$urlext.'&message=bulk_success');
         }
-	else if ($action == 'marksecure' || $action == 'markinsecure')
+	else if ($action == 'secure' || $action == 'insecure')
         {
-	  $flag = ($action == 'marksecure')?1:0;
+	  $flag = ($action == 'secure')?1:0;
 
 	  $userid = get_userid();
 	  $modifyall = check_permission($userid, 'Modify Any Page');
