@@ -918,16 +918,16 @@ function global_content_regex_callback($matches)
 			$text = $oneblob->content;
 
 			#Perform the content htmlblob callback
-			reset($gCms->modules);
-			while (list($key) = each($gCms->modules))
-			{
-				$value =& $gCms->modules[$key];
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->GlobalContentPreCompile($text);
-				}
-			}
+			#reset($gCms->modules);
+			#while (list($key) = each($gCms->modules))
+			#{
+			#	$value =& $gCms->modules[$key];
+			#	if ($gCms->modules[$key]['installed'] == true &&
+			#		$gCms->modules[$key]['active'] == true)
+			#	{
+			#		$gCms->modules[$key]['object']->GlobalContentPreCompile($text);
+			#	}
+			#}
 			
 			Events::SendEvent('Core', 'GlobalContentPreCompile', array('content' => &$text));
 
