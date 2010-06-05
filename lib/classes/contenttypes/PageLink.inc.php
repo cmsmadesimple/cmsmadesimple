@@ -48,6 +48,7 @@ class PageLink extends ContentBase
       parent::SetProperties();
       $this->RemoveProperty('cachable',1);
       //$this->RemoveProperty('showinmenu',1);
+      $this->RemoveProperty('secure',0);
       $this->AddContentProperty('page',10,1,'int');
       $this->AddContentProperty('params',10,1);
 		
