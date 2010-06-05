@@ -1697,6 +1697,7 @@ class CMSModule
 	function ContentPostRender(&$content)
 	{
 	}
+	*/
 
 	function SmartyPreCompile(&$content)
 	{
@@ -1705,7 +1706,6 @@ class CMSModule
 	function SmartyPostCompile(&$content)
 	{
 	}
-	*/
 
 	/**
 	 * ------------------------------------------------------------------
