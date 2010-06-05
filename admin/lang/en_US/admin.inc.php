@@ -21,6 +21,12 @@ $lang['admin']['help_function_cms_stylesheet'] = <<<EOT
 h3 .error { color: [[\$red]]; }<br/>
 </code>
 </pre>
+<p>Because the cached files are generated in the tmp/cache directory of the CMSMS installation, the CSS relative working directory is not the root of the website.  Therefore any images, or other tags that require a url should use the [[root_url]] tag to force it to be an absolute url. i.e:</p>
+<pre>
+<code>
+h3 .error { background: url([[root_url]]/uploads/images/error_background.gif); }<br/>
+</code>
+</pre>
 <p><strong>Note:</strong> Due to the caching nature of the plugin, smarty variables should be placed at the top of EACH stylesheet that is attached to a temmplate.</p>
 EOT;
 $lang['admin']['pseudocron_granularity'] = 'Pseudocron Granularity';
