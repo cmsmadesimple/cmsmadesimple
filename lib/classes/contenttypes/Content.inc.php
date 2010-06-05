@@ -320,7 +320,8 @@ class Content extends ContentBase
 				{
 				case 'block':
 				  $id = str_replace(' ', '_', $val);
-				  $name = $val;
+				  $id = $this->get_new_property_name($id);
+				  $name = $id;
 				  break;
 				case 'wysiwyg':
 				  $usewysiwyg = $val;
@@ -396,7 +397,8 @@ class Content extends ContentBase
 				{
 				case 'block':
 				  $id = str_replace(' ', '_', $val);
-				  $name = $val;
+				  $id = $this->get_new_property_name($id);
+				  $name = $id;
 				  
 				  if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
 				    {
@@ -469,7 +471,8 @@ class Content extends ContentBase
 				{
 				case 'block':
 				  $id = str_replace(' ', '_', $val);
-				  $name = $val;
+				  $id = $this->get_new_property_name($id);
+				  $name = $id;
 				  
 				  if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
 				    {
