@@ -232,8 +232,13 @@ class Content extends ContentBase
 		}
 
 		$this->parse_content_blocks();
+		$have_content_en = FALSE;
 		foreach($this->_contentBlocks as $blockName => $blockInfo)
 		{
+		  if( $blockInfo['id'] == 'content_en' )
+		    {
+		      $have_content_en = TRUE;
+		    }
 			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
 			{
 				if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
@@ -249,6 +254,12 @@ class Content extends ContentBase
 				}
 			}
 		}
+
+		if( !$have_content_en )
+		  {
+		    $errors[] = lang('error_no_default_content_block');
+		    $result = false;
+		  }
 
 		return (count($errors) > 0?$errors:FALSE);
 	}

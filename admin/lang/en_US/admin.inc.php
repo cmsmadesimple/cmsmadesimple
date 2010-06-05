@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['error_no_default_content_block'] = 'No default content block was detected in this template.  Please ensure that you have a {content} tag in the page template.';
 $lang['admin']['help_function_cms_stylesheet'] = <<<EOT
 	<h3>What does this do?</h3>
   <p>A replacement for the {stylesheet} tag, this tag provides caching of css files by generating static files in the tmp/cache directory, and smarty processing of the individual stylesheets.</p>
