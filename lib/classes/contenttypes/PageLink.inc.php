@@ -36,10 +36,12 @@ class PageLink extends ContentBase
       return lang('contenttype_pagelink');
     }
 
-    function HasUsableLink()
-    {
-      return false;
-    }
+// calguy1000: commented this out so that this page can be seen in cms_selflink
+// but not sure what it's gonna mess up.
+//     function HasUsableLink()
+//     {
+//       return false;
+//     }
 
     function SetProperties()
     {

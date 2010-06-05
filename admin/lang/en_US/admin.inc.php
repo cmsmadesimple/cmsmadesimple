@@ -1,4 +1,27 @@
 <?php
+$lang['admin']['help_function_cms_stylesheet'] = <<<EOT
+	<h3>What does this do?</h3>
+  <p>A replacement for the {stylesheet} tag, this tag provides caching of css files by generating static files in the tmp/cache directory, and smarty processing of the individual stylesheets.</p>
+  <p>This plugin retrieves stylesheet information from the system.  By default, it grabs all of the stylesheets attached to the current template in the order specified by the designer, and generates stylesheet tags.</p>
+  <p>Generated stylesheets are uniquely named according to the last modification date in the database, and are only generated if the stylesheet has changed.</p>
+  <p>This tag is the replacement for the {stylesheet} tag.</p>
+  <h3>How do I use it?</h3>
+  <p>Just insert the tag into your template/page's head section like: <code>{cms_stylesheet}</code></p>
+  <h3>What parameters does it take?</h3>
+  <ul>
+  <li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one spefically named one, whether it's attached to the current template or not.</li>
+  <li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
+  <li><em>(optional)</em>templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
+  </ul>
+  <h3>Smarty Processing</h3>
+  <p>When generating css files this system passes the stylesheets retrieved from the database through smarty.  The smarty delimiters have beenc hanged from the CMSMS standard { and } to [[ and ]] respectively to ease transition in stylesheets.  This allows creating smarty variables i.e.: [[assign var='red' value='#900']] at the top of the stylesheet, and then using these variables later in the stylesheet, i.e:</p>
+<pre>
+<code>
+h3 .error { color: [[\$red]]; }<br/>
+</code>
+</pre>
+<p><strong>Note:</strong> Due to the caching nature of the plugin, smarty variables should be placed at the top of EACH stylesheet that is attached to a temmplate.</p>
+EOT;
 $lang['admin']['pseudocron_granularity'] = 'Pseudocron Granularity';
 $lang['admin']['info_pseudocron_granularity'] = 'This setting indicates how often the system will attempt to handle regularly scheduled tasks';
 $lang['admin']['cron_request'] = 'Each Request';
@@ -341,6 +364,7 @@ $lang['admin']['help_function_title'] = <<<EOT
 EOT;
 $lang['admin']['help_function_stylesheet'] = <<<EOT
 	<h3>What does this do?</h3>
+        <p><strong>Deprecated:</strong> This function is deprecated and will be removed in later versions of CMSMS.</p>
 	<p>Gets stylesheet information from the system.  By default, it grabs all of the stylesheets attached to the current template.</p>
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page's head section like: <code>{stylesheet}</code></p>
