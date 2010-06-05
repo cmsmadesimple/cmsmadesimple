@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['error_parsing_content_blocks'] = 'An error occurred parsing content blocks (perhaps duplicated block names)';
 $lang['admin']['error_no_default_content_block'] = 'No default content block was detected in this template.  Please ensure that you have a {content} tag in the page template.';
 $lang['admin']['help_function_cms_stylesheet'] = <<<EOT
 	<h3>What does this do?</h3>

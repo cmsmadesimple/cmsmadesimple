@@ -192,7 +192,7 @@ class ContentBase
     var $_attributes;
     var $_prop_defaults;
     var $_add_mode;
-    var $_known_attribs;
+    var $_error;
 
     /************************************************************************/
     /* Constructor related													*/
@@ -1849,36 +1849,16 @@ class ContentBase
 	 */
 	function is_known_property($str)
 	{
-	  if( !is_array($this->_known_attribs) )
+	  $tmp = array();
+	  foreach( $this->_attributes as $one )
 	    {
-	      $tmp = array();
-	      foreach( $this->_attributes as $one )
-		{
-		  $tmp[] = $one[0];
-		}
-
-	      $props = $this->Properties();
-	      $tmp = array_merge($props->mPropertyNames,$tmp);
-	      $this->_known_attribs = array_unique($tmp);
+	      $tmp[] = $one[0];
 	    }
 	  
-	  return in_array($str,$this->_known_attribs);
-	}
-
-	/* private */
-	/*
-	 * Given a proeprty name, return a unique, usable name.
-         */
-	function get_new_property_name($name)
-	{
-	  $count = 1;
-	  $tmp = $name;
-	  while( $this->is_known_property($tmp) && $count < 25 )
-	    {
-	      $count++;
-	      $tmp = $name.'_'.$count;
-	    }
-	  return $tmp;
+	  $props = $this->Properties();
+	  $tmp = array_merge(array_keys($props->mPropertyTypes),$tmp);
+	  $tmp = array_unique($tmp);
+	  return in_array($str,$tmp);
 	}
 
 	/* private */
@@ -2136,6 +2116,15 @@ class ContentBase
 	    }
 	}
 
+	protected function SetError($str)
+	{
+	  $this->_error = $str;
+	}
+
+	public function GetError()
+	{
+	  return $this->_error;
+	}
 }
 
 /**

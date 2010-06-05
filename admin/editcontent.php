@@ -305,7 +305,20 @@ else
 #$contentarray = $contentobj->EditAsArray(true, 0, $adminaccess);
 #$contentarray2 = $contentobj->EditAsArray(true, 1, $adminaccess);
 
-$tabnames = $contentobj->TabNames();
+	$tabnames = $contentobj->TabNames();
+	$numberoftabs = count($tabnames);
+	$tab_contents_array = array();
+	for ($currenttab = 0; $currenttab < $numberoftabs; $currenttab++)
+	  {
+	    $contentarray = $contentobj->EditAsArray(false, $currenttab, $adminaccess);
+	    $tab_contents_array[$currenttab] = $contentarray;
+
+	    if( $tmp = $contentobj->GetError() )
+	      {
+		echo $themeObject->ShowErrors($tmp);
+		break;
+	      }
+	  }
 
 ?>
 
@@ -372,7 +385,6 @@ $submit_buttons .= ' <input type="submit" onclick="return window.Edit_Content_Ap
 $submit_buttons .= '</p></div>';
 
 //echo $submit_buttons;
-		$numberoftabs = count($tabnames);
 		$showtabs = 1;
 		if ($numberoftabs == 0)
 		{
@@ -397,16 +409,19 @@ $submit_buttons .= '</p></div>';
 				<?php
 			}
 
-			$contentarray = $contentobj->EditAsArray(false, $currenttab, $adminaccess);
-			for($i=0;$i<count($contentarray);$i++)
-			{
+			if( isset($tab_contents_array[$currenttab]) )
+			  {
+			    $contentarray =& $tab_contents_array[$currenttab];
+			    for($i=0;$i<count($contentarray);$i++)
+			      {
 				?>
 				<div class="pageoverflow">
 					<div class="pagetext"><?php echo $contentarray[$i][0]; ?></div>
 					<div class="pageinput"><?php echo $contentarray[$i][1]; ?></div>
 				</div>
 				<?php
-			}
+			      }
+			  }
             
 			?>
 			<div style="clear: both;"></div>

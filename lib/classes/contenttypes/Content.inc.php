@@ -170,7 +170,13 @@ class Content extends ContentBase
 	    }
 
 	  // and the content blocks
-	  $this->parse_content_blocks(); // this is needed as this is the first time we get a call to our class when editing.
+	  $res = $this->parse_content_blocks(); // this is needed as this is the first time we get a call to our class when editing.
+	  if( !$res ) 
+	    {
+	      $this->SetError(lang('error_parsing_content_blocks'));
+	      return $ret;
+	    }
+
 	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
 	      $this->AddExtraProperty($blockName);
@@ -231,7 +237,13 @@ class Content extends ContentBase
 			$result = false;
 		}
 
-		$this->parse_content_blocks();
+		$res = $this->parse_content_blocks();
+		if( !$res )
+		  {
+		    $errors[] = lang('error_parsing_content_blocks');
+		    $result = false;
+		  }
+
 		$have_content_en = FALSE;
 		foreach($this->_contentBlocks as $blockName => $blockInfo)
 		{
@@ -278,10 +290,10 @@ class Content extends ContentBase
     {
       $result = false;
       global $gCms;
-      if ($this->_contentBlocksLoaded) return;
+      if ($this->_contentBlocksLoaded) return TRUE;
 
       $templateops =& $gCms->GetTemplateOperations();
-	{
+      {
 	  $this->_contentBlocks = array();
 	  if ($this->TemplateId() && $this->TemplateId() > -1)
 	    {
@@ -331,8 +343,7 @@ class Content extends ContentBase
 				{
 				case 'block':
 				  $id = str_replace(' ', '_', $val);
-				  $id = $this->get_new_property_name($id);
-				  $name = $id;
+				  $name = $val;
 				  break;
 				case 'wysiwyg':
 				  $usewysiwyg = $val;
@@ -356,6 +367,12 @@ class Content extends ContentBase
 			}
 
 		      if( empty($name) ) { $name = 'content_en'; $id = 'content_en'; }
+		      
+		      if( $this->is_known_property($id) )
+			{
+			  // adding a duplicated content block.
+			  return FALSE;
+			}
 		      $this->mProperties->Add('string',$id);
 		      if( !isset($this->_contentBlocks[$name]) )
 			{
@@ -408,8 +425,7 @@ class Content extends ContentBase
 				{
 				case 'block':
 				  $id = str_replace(' ', '_', $val);
-				  $id = $this->get_new_property_name($id);
-				  $name = $id;
+				  $name = $val;
 				  
 				  if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
 				    {
@@ -435,6 +451,11 @@ class Content extends ContentBase
 
 			  $blockcount++;
 			  if( empty($name) ) $name = 'image_'.$blockcount;;
+			  if( $this->is_known_property($id) )
+			    {
+			      // adding a duplicated content block.
+			      return FALSE;
+			    }
 			  $this->_contentBlocks[$name]['type'] = 'image';
 			  $this->_contentBlocks[$name]['id'] = $id;
 			  $this->_contentBlocks[$name]['upload'] = $upload;
@@ -482,9 +503,7 @@ class Content extends ContentBase
 				{
 				case 'block':
 				  $id = str_replace(' ', '_', $val);
-				  $id = $this->get_new_property_name($id);
-				  $name = $id;
-				  
+				  $name = $val;
 				  if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
 				    {
 				      $this->mProperties->Add("string", $id);
@@ -506,6 +525,11 @@ class Content extends ContentBase
 			    }
 			  
 			  if( empty($name) ) $name = '**default**';
+			  if( $this->is_known_property($id) )
+			    {
+			      // adding a duplicated content block.
+			      return FALSE;
+			    }
 			  $this->_contentBlocks[$name]['type'] = 'module';
 			  $this->_contentBlocks[$name]['blocktype'] = $blocktype;
 			  $this->_contentBlocks[$name]['id'] = $id;
@@ -516,8 +540,7 @@ class Content extends ContentBase
 		  
 		  // force a load 
 		  $this->mProperties->Load($this->mId);
-		  
-		  $result = true;
+		  $result = TRUE;
 		}
 	      
 	      $this->_contentBlocksLoaded = true;
