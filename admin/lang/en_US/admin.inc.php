@@ -1,5 +1,5 @@
 <?php
-$lang['admin']['automatedtask_success'] = 'Automatic Task Succcess';
+$lang['admin']['automatedtask_success'] = 'Automatic Task Success';
 $lang['admin']['automatedtask_failed'] = 'Automatic Task Failed';
 $lang['admin']['error_parsing_content_blocks'] = 'An error occurred parsing content blocks (perhaps duplicated block names)';
 $lang['admin']['error_no_default_content_block'] = 'No default content block was detected in this template.  Please ensure that you have a {content} tag in the page template.';
