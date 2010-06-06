@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['automatedtask_success'] = 'Automatic Task Succcess';
+$lang['admin']['automatedtask_failed'] = 'Automatic Task Failed';
 $lang['admin']['error_parsing_content_blocks'] = 'An error occurred parsing content blocks (perhaps duplicated block names)';
 $lang['admin']['error_no_default_content_block'] = 'No default content block was detected in this template.  Please ensure that you have a {content} tag in the page template.';
 $lang['admin']['help_function_cms_stylesheet'] = <<<EOT
@@ -16,7 +18,7 @@ $lang['admin']['help_function_cms_stylesheet'] = <<<EOT
   <li><em>(optional)</em>templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
   </ul>
   <h3>Smarty Processing</h3>
-  <p>When generating css files this system passes the stylesheets retrieved from the database through smarty.  The smarty delimiters have beenc hanged from the CMSMS standard { and } to [[ and ]] respectively to ease transition in stylesheets.  This allows creating smarty variables i.e.: [[assign var='red' value='#900']] at the top of the stylesheet, and then using these variables later in the stylesheet, i.e:</p>
+  <p>When generating css files this system passes the stylesheets retrieved from the database through smarty.  The smarty delimiters have been changed from the CMSMS standard { and } to [[ and ]] respectively to ease transition in stylesheets.  This allows creating smarty variables i.e.: [[assign var='red' value='#900']] at the top of the stylesheet, and then using these variables later in the stylesheet, i.e:</p>
 <pre>
 <code>
 h3 .error { color: [[\$red]]; }<br/>

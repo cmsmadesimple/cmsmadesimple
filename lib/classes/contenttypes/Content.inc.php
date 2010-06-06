@@ -171,7 +171,7 @@ class Content extends ContentBase
 
 	  // and the content blocks
 	  $res = $this->parse_content_blocks(); // this is needed as this is the first time we get a call to our class when editing.
-	  if( !$res ) 
+	  if( $res === FALSE ) 
 	    {
 	      $this->SetError(lang('error_parsing_content_blocks'));
 	      return $ret;
@@ -238,7 +238,7 @@ class Content extends ContentBase
 		}
 
 		$res = $this->parse_content_blocks();
-		if( !$res )
+		if( $res === FALSE )
 		  {
 		    $errors[] = lang('error_parsing_content_blocks');
 		    $result = false;
@@ -288,7 +288,7 @@ class Content extends ContentBase
 
     private function parse_content_blocks()
     {
-      $result = false;
+      $result = true;
       global $gCms;
       if ($this->_contentBlocksLoaded) return TRUE;
 
@@ -312,8 +312,8 @@ class Content extends ContentBase
 	      $pattern = '/{content([^}]*)}/';
 	      $pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
 	      $matches = array();
-	      $result = preg_match_all($pattern, $content, $matches);
-	      if ($result && count($matches[1]) > 0)
+	      $result2 = preg_match_all($pattern, $content, $matches);
+	      if ($result2 && count($matches[1]) > 0)
 		{
 		  // get all the {content...} tags
 		  foreach ($matches[1] as $wholetag)
@@ -328,8 +328,8 @@ class Content extends ContentBase
 
 		      // get the arguments.
 		      $morematches = array();
-		      $result2 = preg_match_all($pattern2, $wholetag, $morematches);
-		      if ($result2)
+		      $result3 = preg_match_all($pattern2, $wholetag, $morematches);
+		      if ($result3)
 			{
 			  $keyval = array();
 			  for ($i = 0; $i < count($morematches[1]); $i++)
@@ -368,7 +368,7 @@ class Content extends ContentBase
 
 		      if( empty($name) ) { $name = 'content_en'; $id = 'content_en'; }
 		      
-		      if( $this->is_known_property($id) )
+		      if( $this->is_known_property($id) || in_array($id,array_keys($this->_contentBlocks)) )
 			{
 			  // adding a duplicated content block.
 			  return FALSE;
@@ -387,24 +387,23 @@ class Content extends ContentBase
 		    }
 		  
 		  // force a load 
-		  $this->GetPropertyValue('extra1');
-		  
-		  $result = true;
+		  $this->GetPropertyValue('extra1');		  
+		  $result = TRUE;
 		}
 	      
 	      // read image content blocks
 	      $pattern = '/{content_image\s([^}]*)}/';
 	      $pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
 	      $matches = array();
-	      $result = preg_match_all($pattern, $content, $matches);
-	      if ($result && count($matches[1]) > 0)
+	      $result2 = preg_match_all($pattern, $content, $matches);
+	      if ($result2 && count($matches[1]) > 0)
 		{
 		  $blockcount = 0;
 		  foreach ($matches[1] as $wholetag)
 		    {
 		      $morematches = array();
-		      $result2 = preg_match_all($pattern2, $wholetag, $morematches);
-		      if ($result2)
+		      $result3 = preg_match_all($pattern2, $wholetag, $morematches);
+		      if ($result3)
 			{
 			  $keyval = array();
 			  for ($i = 0; $i < count($morematches[1]); $i++)
@@ -451,7 +450,7 @@ class Content extends ContentBase
 
 			  $blockcount++;
 			  if( empty($name) ) $name = 'image_'.$blockcount;;
-			  if( $this->is_known_property($id) )
+			  if( $this->is_known_property($id) || in_array($id,array_keys($this->_contentBlocks)) )
 			    {
 			      // adding a duplicated content block.
 			      return FALSE;
@@ -466,23 +465,22 @@ class Content extends ContentBase
 		    }
 		  
 		  // force a load 
-		  $this->GetPropertyValue('extra1');
-		  
-		  $result = true;
+		  $this->GetPropertyValue('extra1');		  
+		  $result = TRUE;
 		}
 
 	      // match module content tags
 	      $pattern = '/{content_module\s([^}]*)}/';
 	      $pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
 	      $matches = array();
-	      $result = preg_match_all($pattern, $content, $matches);
-	      if ($result && count($matches[1]) > 0)
+	      $result2 = preg_match_all($pattern, $content, $matches);
+	      if ($result2 && count($matches[1]) > 0)
 		{
 		  foreach ($matches[1] as $wholetag)
 		    {
 		      $morematches = array();
-		      $result2 = preg_match_all($pattern2, $wholetag, $morematches);
-		      if ($result2)
+		      $result3 = preg_match_all($pattern2, $wholetag, $morematches);
+		      if ($result3)
 			{
 			  $keyval = array();
 			  for ($i = 0; $i < count($morematches[1]); $i++)
@@ -525,7 +523,7 @@ class Content extends ContentBase
 			    }
 			  
 			  if( empty($name) ) $name = '**default**';
-			  if( $this->is_known_property($id) )
+			  if( $this->is_known_property($id) || in_array($id,array_keys($this->_contentBlocks)) )
 			    {
 			      // adding a duplicated content block.
 			      return FALSE;

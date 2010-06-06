@@ -1855,9 +1855,9 @@ class ContentBase
 	      $tmp[] = $one[0];
 	    }
 	  
-	  $props = $this->Properties();
-	  $tmp = array_merge(array_keys($props->mPropertyTypes),$tmp);
-	  $tmp = array_unique($tmp);
+// 	  $props = $this->Properties();
+// 	  $tmp = array_merge(array_keys($props->mPropertyTypes),$tmp);
+// 	  $tmp = array_unique($tmp);
 	  return in_array($str,$tmp);
 	}
 
