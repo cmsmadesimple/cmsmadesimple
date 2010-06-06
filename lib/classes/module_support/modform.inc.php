@@ -405,6 +405,7 @@ function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $se
 
 function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false, $prettyurl='')
 {
+  if( !is_array($params) && $params == '' ) $params = array();
   $id = cms_htmlentities($id);
   $action = cms_htmlentities($action);
   $returnid = cms_htmlentities($returnid);
