@@ -194,6 +194,7 @@ function cms_config_text($config)
 # use extreme caution when editing these.  Additionally, some settings may have 
 # no effect on servers with significantly restricted configurability.
 
+# Warning: This option is deprecated and will be removed in later versions oF CMSMS.
 # If you are experiencing problems with php memory limit errors, then you may
 # want to try enabling and/or adjusting this setting.  
 # Note: Your server may not allow the application to override memory limits.
