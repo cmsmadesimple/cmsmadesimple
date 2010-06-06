@@ -28,7 +28,7 @@ h3 .error { color: [[\$red]]; }<br/>
 h3 .error { background: url([[root_url]]/uploads/images/error_background.gif); }<br/>
 </code>
 </pre>
-<p><strong>Note:</strong> Due to the caching nature of the plugin, smarty variables should be placed at the top of EACH stylesheet that is attached to a temmplate.</p>
+<p><strong>Note:</strong> Due to the caching nature of the plugin, smarty variables should be placed at the top of EACH stylesheet that is attached to a template.</p>
 EOT;
 $lang['admin']['pseudocron_granularity'] = 'Pseudocron Granularity';
 $lang['admin']['info_pseudocron_granularity'] = 'This setting indicates how often the system will attempt to handle regularly scheduled tasks';
