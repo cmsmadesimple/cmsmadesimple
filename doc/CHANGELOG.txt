@@ -3,6 +3,7 @@ Version 1.8 - Madagascar
 Core:
   - #3255 Shortcuts in admin section should omit server name
   - #3825 Error in demo template "Top simple navigation + left subnavigation + 1 column"
+  - #4016 Add Pages permission cannot be removed from new groups
   - #4211 simple_navigation.tpl broken
   -       Added Section Header in stylesheet "Navigation: Simple - Horizontal"
   - #4895 lang=0 versus lang="0" on cms_selflink help page
