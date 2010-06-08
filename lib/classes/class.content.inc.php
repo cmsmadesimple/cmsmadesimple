@@ -956,7 +956,8 @@ class ContentBase
 		$this->mActive                     = ($data["active"] == 1          ? true : false);
 		$this->mShowInMenu                 = ($data["show_in_menu"] == 1    ? true : false);
 		$this->mCachable                   = ($data["cachable"] == 1        ? true : false);
-		$this->mSecure                     = $data["secure"];
+		if( isset($data['secure']) )
+		  $this->mSecure                   = $data["secure"];
 		$this->mLastModifiedBy             = $data["last_modified_by"];
 		$this->mCreationDate               = $data["create_date"];
 		$this->mModifiedDate               = $data["modified_date"];
