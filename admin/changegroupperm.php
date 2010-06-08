@@ -68,8 +68,9 @@ $tmp = new stdClass();
 $tmp->name = lang('all_groups');
 $tmp->id=-1;
 $allgroups = array($tmp);
-$groups = array($tmp);
+$sel_groups = array($tmp);
 $group_list = $groupops->LoadGroups();
+$sel_group_ids = array();
 foreach( $group_list as $onegroup )
 {
   if( $onegroup->id == 1 && $adminuser == false )
@@ -79,11 +80,12 @@ foreach( $group_list as $onegroup )
   $allgroups[] = $onegroup;
   if( $disp_group == -1 || $disp_group == $onegroup->id )
     {
-      $groups[] = $onegroup;
+      $sel_groups[] = $onegroup;
+      $sel_group_ids[] = $onegroup->id;
     }
 }
 
-$smarty->assign('group_list',$groups);
+$smarty->assign('group_list',$sel_groups);
 $smarty->assign('allgroups',$allgroups);
 
 if ($submitted == 1)
@@ -110,7 +112,9 @@ if ($submitted == 1)
 	  }
       }
 
-    $query = 'DELETE FROM '.cms_db_prefix().'group_perms WHERE group_id IN ('.implode(',',$groups).')';
+    $selected_groups = unserialize(base64_decode($_POST['sel_groups']));
+    $query = 'DELETE FROM '.cms_db_prefix().'group_perms 
+               WHERE group_id IN ('.implode(',',$selected_groups).')';
     $db->Execute($query);
     
     foreach ($_POST as $key=>$value)
@@ -141,7 +145,6 @@ $query = "SELECT p.permission_id, p.permission_text, up.group_id FROM ".
 $result = $db->Execute($query);
 
 $perm_struct = array();
-
 while($result && $row = $result->FetchRow())
   {
     if (isset($perm_struct[$row['permission_id']]))
@@ -163,7 +166,6 @@ while($result && $row = $result->FetchRow())
       }
   }
 $smarty->assign_by_ref('perms',$perm_struct);		
-
 $smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
 $smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('admin_group_warning',$themeObject->ShowErrors(lang('adminspecialgroup')));
@@ -173,6 +175,7 @@ $smarty->assign('disp_group',$disp_group);
 $smarty->assign('apply',lang('apply'));
 $smarty->assign('title_permission',lang('permission'));
 $smarty->assign('selectgroup',lang('selectgroup'));
+$smarty->assign('hidden2','<input type="hidden" name="sel_groups" value="'.base64_encode(serialize($sel_group_ids)).'"/>');
 $smarty->assign('hidden','<input type="hidden" name="submitted" value="1" />');
 $smarty->assign('submit','<input type="submit" name="changeperm" value="'.lang('submit').
 	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');

@@ -34,7 +34,7 @@
 </div>
 <div class="pageoverflow">
   <p class="pageoptions">
-    {$hidden}
+    {$hidden}{$hidden2}
     {$submit} {$cancel}
   </p>
 </div>
