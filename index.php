@@ -168,7 +168,8 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	$smarty->assign('position', $pageinfo->content_hierarchy);
 	$smarty->assign('friendly_position', $gCms->variables['friendly_position']);
 }
-else if (get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0")
+else
+// else if (get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0")
 {
 	ErrorHandler404();
 	exit;
@@ -226,21 +227,22 @@ else
 #	set_error_handler($old_error_handler);
 #}
 
-if (!$cached)
-{
+#if (!$cached)
+#{
 	#Perform the content postrendernoncached callback
-	reset($gCms->modules);
-	while (list($key) = each($gCms->modules))
-	{
-		$value =& $gCms->modules[$key];
-		if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-		{
-			$gCms->modules[$key]['object']->ContentPostRenderNonCached($html);
-		}
-	}
+#	reset($gCms->modules);
+#	while (list($key) = each($gCms->modules))
+#	{
+#		$value =& $gCms->modules[$key];
+#		if ($gCms->modules[$key]['installed'] == true &&
+#			$gCms->modules[$key]['active'] == true)
+#		{
+#			$gCms->modules[$key]['object']->ContentPostRenderNonCached($html);
+#		}
+#	}
+  // this event doesn't exist in 1.7.x
 	//Events::SendEvent('Core', 'ContentPostRenderNonCached', array(&$html));
-}
+#}
 
 #Perform the content postrender callback
 #reset($gCms->modules);
