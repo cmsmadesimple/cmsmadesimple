@@ -96,12 +96,12 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
       if( isset($params['media']) )
 	{
 	  $query .= ' AND media_type LIKE ?';
-	  $qparms[] = trim($params['media']);
+	  $qparms[] = '%'.trim($params['media']).'%';
 	}
       $query .= ' ORDER BY B.assoc_order';
 		
       $conv_filename = array(' '=>'',':'=>'_');
-      $res = $db->GetArray($query,array('template',$template_id));
+      $res = $db->GetArray($query,$qparms);
       if( $res ) {
 	$fmt1 = '<link rel="stylesheet" type="text/css" media="%s" href="%s" />';
 	$fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
