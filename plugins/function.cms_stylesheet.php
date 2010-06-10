@@ -85,13 +85,20 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
     }
   else
     {
+      $qparms = array();
       $query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,
 		A.media_type,B.assoc_order 
 		FROM '.cms_db_prefix().'css A, '.cms_db_prefix().'css_assoc B
 		WHERE A.css_id = B.assoc_css_id
 		AND B.assoc_type = ?
-		AND B.assoc_to_id = ?
-		ORDER BY B.assoc_order';
+		AND B.assoc_to_id = ?';
+      $qparms = array('template',$template_id);
+      if( isset($params['media']) )
+	{
+	  $query .= ' AND media_type LIKE ?';
+	  $qparms[] = trim($params['media']);
+	}
+      $query .= ' ORDER BY B.assoc_order';
 		
       $conv_filename = array(' '=>'',':'=>'_');
       $res = $db->GetArray($query,array('template',$template_id));

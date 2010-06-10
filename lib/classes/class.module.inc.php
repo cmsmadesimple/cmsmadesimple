@@ -61,7 +61,7 @@ class CMSModule
 		global $gCms;
 		
 		$this->cms =& $gCms;
-		$this->config =& $gCms->GetConfig();
+		$this->config =& $gCms->GetConfig(); // why?
 
 		global $CMS_STYLESHEET;
 		global $CMS_ADMIN_PAGE;
@@ -75,7 +75,7 @@ class CMSModule
 		{
 		  $this->curlang = get_site_preference('frontendlang','');
 		  if (isset($this->config['locale']) && $this->config['locale'] != '') {
-		      $this->curlang = $config['locale'];
+		      $this->curlang = $this->config['locale'];
 		    }
 		  if( $this->curlang == '' ) {
 		    $this->curlang = 'en_US';
