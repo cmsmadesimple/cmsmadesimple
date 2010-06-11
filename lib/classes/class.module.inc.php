@@ -34,11 +34,43 @@ class CMSModule
 	 * Initialization Functions and parameters
 	 * ------------------------------------------------------------------
 	 */
+
+        /**
+	 * Reference to the global CMS Object
+	 * use: global $gCms;
+	 *
+	 * @deprecated
+	 */
 	var $cms;
+
+	/**
+	 * Reference to the config array in the global CMS Object
+	 * use: global $gCms; $config = $gCms->GetConfig();
+         *
+	 * @deprecated
+	 */
 	var $config;
+
+	/**
+	 * A variable that indicates the current desired language
+	 * this is effected by the (optional) lang parameter on module action
+	 * calls. 
+	 *
+	 */
 	var $curlang;
+
+	/**
+	 * An array of loaded lang strings
+	 *
+	 */
 	var $langhash;
+
+	/**
+	 * A hash of the parameters passed in to the module action
+	 *
+	 */
 	var $params;
+
 	var $wysiwygactive;
 	var $syntaxactive;
 	var $error;
@@ -50,6 +82,13 @@ class CMSModule
 	var $modmisc;
 	var $param_map;
 	var $restrict_unknown_params;
+
+	/**
+	 * A reference to the global smarty object
+	 * use: global $gCms; $smarty = $gCms->GetSmarty();
+	 *
+	 * @deprecated
+	 */
 	var $smarty;
 
 	/**

@@ -307,9 +307,10 @@ class Content extends ContentBase
 	    {
 	      $content = $template->content;
 	      
+	      // fallthrough condition.
 	      // read text content blocks
 	      //$pattern = '/{content\s([^}]*)}/';
-	      $pattern = '/{content([^}]*)}/';
+	      $pattern = '/{content([^_}]*)}/';
 	      $pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
 	      $matches = array();
 	      $result2 = preg_match_all($pattern, $content, $matches);
@@ -318,6 +319,11 @@ class Content extends ContentBase
 		  // get all the {content...} tags
 		  foreach ($matches[1] as $wholetag)
 		    {
+		      if( preg_match('/{content_/',$wholetag) )
+			{
+			  continue;
+			}
+
 		      $id = '';
 		      $name = '';
 		      $usewysiwyg = 'true';
