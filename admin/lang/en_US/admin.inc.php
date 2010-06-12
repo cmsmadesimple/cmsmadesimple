@@ -1,4 +1,10 @@
 <?php
+$lang['admin']['help_function_content_module'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This content block type allows interfacing with different modules to create different content block types.</p>
+<p>Some modules can define content block types for use in module templates.  i.e: The FrontEndUsers module may define a group list content block type.  It will then indicate how you can use the content_module tag to utilize that block type within your templates.</p>
+<p><strong>Note:</strong> This block type must be used only with compatible modules.  You should not use this in any way except for as guided by addon modules.</p>
+EOT;
 $lang['admin']['automatedtask_success'] = 'Automatic Task Success';
 $lang['admin']['automatedtask_failed'] = 'Automatic Task Failed';
 $lang['admin']['error_parsing_content_blocks'] = 'An error occurred parsing content blocks (perhaps duplicated block names)';
@@ -14,8 +20,8 @@ $lang['admin']['help_function_cms_stylesheet'] = <<<EOT
   <h3>What parameters does it take?</h3>
   <ul>
   <li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one spefically named one, whether it's attached to the current template or not.</li>
-  <li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
   <li><em>(optional)</em>templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
+  <li><em>(optional)</em>media - When used in conjunction with the name parameter this parameter will allow you to override the media type for that stylesheet.  When used in conjunction with the templateid parameter, the media parameter will only output stylesheet tags for those stylesheets that arer marked as compatible with the specified media type.</li>
   </ul>
   <h3>Smarty Processing</h3>
   <p>When generating css files this system passes the stylesheets retrieved from the database through smarty.  The smarty delimiters have been changed from the CMSMS standard { and } to [[ and ]] respectively to ease transition in stylesheets.  This allows creating smarty variables i.e.: [[assign var='red' value='#900']] at the top of the stylesheet, and then using these variables later in the stylesheet, i.e:</p>
