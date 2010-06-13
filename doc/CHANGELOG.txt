@@ -11,6 +11,7 @@ Core:
   - #4929 Copy page - can't select section header.
   - #4952 Alias changes if user has no permission "Manage All Content"
   - #4993 Cannot add new section header
+  - #5062 Date Format String in Admin Prefs too Short
   - Fixed issue where thumbnail width and height wasnt taken.
   - Generate an error if there is no default content detected when saving
     a page, this should help with the problem of no {content} block with
