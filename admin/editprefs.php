@@ -91,7 +91,7 @@ if (isset($_POST['gcb_wysiwyg'])) $gcb_wysiwyg = 1;
 
 $date_format_string = '%x %X';
 if (isset($_POST['date_format_string'])) $date_format_string = $_POST['date_format_string'];
-$date_format_string = substr(strip_tags($date_format_string),0,10);
+$date_format_string = cms_htmlentities(strip_tags($date_format_string));
 
 $listtemplates_pagelimit = '20';
 if (isset($_POST['listtemplates_pagelimit'])) $listtemplates_pagelimit = $_POST['listtemplates_pagelimit'];
