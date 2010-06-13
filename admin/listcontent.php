@@ -42,6 +42,7 @@ $cms_ajax->register_function('save_page');
 $cms_ajax->register_function('check_url');
 $cms_ajax->register_function('check_alias');
 $cms_ajax->register_function('change_parent');
+$cms_ajax->register_function('change_template');
 
 function check_modify_all($userid)
 {
@@ -517,6 +518,7 @@ function content_select($html_id)
 		$id = str_replace('phtml_', '', $html_id);
 		$page = cms_orm('CmsPage')->load($id);
 		$smarty->assign_by_ref('page', $page);
+		$smarty->assign('serialized_page', base64_encode(serialize($page)));
 		
 		$smarty->assign('parent_dropdown', CmsPage::create_hierarchy_dropdown($id, $page->parent_id, 'page[parent_id]', 'id="parent_dropdown"'));
 		$parent_path = '/';
@@ -545,11 +547,23 @@ function content_new($parent_id = null)
 	
 	$page = new CmsPage();
 	$smarty->assign_by_ref('page', $page);
+	$smarty->assign('serialized_page', base64_encode(serialize($page)));
 	
 	if ($parent_id == null || !is_integer($parent_id))
 		$parent_id = -1;
 	
 	$smarty->assign('parent_dropdown', CmsPage::create_hierarchy_dropdown('', $parent_id, 'page[parent_id]', 'id="parent_dropdown"'));
+	
+	$parent_path = '/';
+	if ($parent_id > 0)
+	{
+		$parent = cms_orm('CmsPage')->load($parent_id);
+		if ($parent)
+		{
+			$parent_path = "/{$parent->hierarchy_path}/";
+		}
+	}
+	$smarty->assign('parent_path', $parent_path);
 	
 	$resp->script('prepare_add_content()');
 	$resp->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
@@ -600,6 +614,34 @@ function deletecontent($contentid)
   $_GET['message'] = 'contentdeleted';
 }
 
+function fill_page(&$page, $params)
+{
+	if ($params['page'])
+	{
+		$page->update_parameters($params['page']);
+		$valid = !$page->check_not_valid();
+		if ($valid)
+		{
+			//Ok, page validates.  Let's handle the content (if there is)
+			if (isset($params['block_type']) && is_array($params['block_type']))
+			{
+				foreach ($params['block_type'] as $block_name => $content_type)
+				{
+					$content_obj = cms_orm('CmsContentBase')->load($params['block'][$block_name], $content_type);
+					if ($content_obj)
+					{
+						$content_obj->update_parameters($params['block'][$block_name]);
+						if ($content_obj->save())
+						{
+							$page->params['blocks'][$block_name]['id'] = $content_obj->id;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 function save_page($params)
 {
 	$ajax = new CmsAjaxResponse();
@@ -609,31 +651,15 @@ function save_page($params)
 	
 	if (isset($params['save']) || isset($params['apply']))
 	{
-		$page = cms_orm('CmsPage')->load($params['page']);
 		$result = '';
+		
+		$page = cms_orm('CmsPage')->load($params['page']);
 		if ($page)
 		{
-			$page->update_parameters($params['page']);
+			fill_page($page, $params);
 			$valid = !$page->check_not_valid();
 			if ($valid)
 			{
-				//Ok, page validates.  Let's handle the content (if there is)
-				if (isset($params['block_type']) && is_array($params['block_type']))
-				{
-					foreach ($params['block_type'] as $block_name => $content_type)
-					{
-						$content_obj = cms_orm('CmsContentBase')->load($params['block'][$block_name], $content_type);
-						if ($content_obj)
-						{
-							$content_obj->update_parameters($params['block'][$block_name]);
-							if ($content_obj->save())
-							{
-								$page->params['blocks'][$block_name]['id'] = $content_obj->id;
-							}
-						}
-					}
-				}
-				
 				if ($page->save())
 				{
 					$admin_theme->add_message('Page Saved');
@@ -646,6 +672,10 @@ function save_page($params)
 						$smarty->assign('reason_for_not_showing', 'none');
 						$ajax->replace_html('#contentsummary', $smarty->fetch('listcontent-summary.tpl'));
 						$ajax->location_hash('nothing');
+					}
+					else
+					{
+						set_serialized_page($ajax, $page);
 					}
 					$ajax->replace_html('#contentlist', display_content_list());
 					return $ajax->get_result();
@@ -670,6 +700,9 @@ function save_page($params)
 function check_alias($params)
 {
 	$ajax = new CmsAjaxResponse();
+	$page = get_serialized_page($params['serialized_page']);
+	$page->alias = $params['alias'];
+	
 	$count = cms_orm('CmsPage')->find_count(array('conditions' => array('content_alias = ? AND id <> ?', $params['alias'], $params['page_id'])));
 	if ($params['alias'] == '')
 	{
@@ -686,6 +719,8 @@ function check_alias($params)
 		$ajax->replace_html('#alias_ok', 'Ok');
 		$ajax->script('$("#alias_ok").attr("style", "color: green;")');
 	}
+
+	set_serialized_page($ajax, $page);
 	//$ajax->script('reset_main_content();');
 	return $ajax->get_result();
 }
@@ -693,6 +728,9 @@ function check_alias($params)
 function check_url($params)
 {
 	$ajax = new CmsAjaxResponse();
+	$page = get_serialized_page($params['serialized_page']);
+	$page->url_text = $params['alias'];
+	
 	$count = cms_orm('CmsPage')->find_count(array('conditions' => array('url_text = ? AND id != ? and parent_id = ?', $params['alias'], $params['page_id'], $params['parent_id'])));
 	if ($params['alias'] == '')
 	{
@@ -709,6 +747,8 @@ function check_url($params)
 		$ajax->replace_html('#url_text_ok', 'Ok');
 		$ajax->script('$("#url_text_ok").attr("style", "color: green;")');
 	}
+	
+	set_serialized_page($ajax, $page);
 	//$ajax->script('reset_main_content();');
 	return $ajax->get_result();
 }
@@ -716,12 +756,15 @@ function check_url($params)
 function change_parent($params)
 {
 	$ajax = new CmsAjaxResponse();
+	$page = get_serialized_page($params['serialized_page']);
+	
 	if ($params['parent_id'] && $params['parent_id'] > 0)
 	{
-		$page = cms_orm('CmsPage')->find_by_id($params['parent_id']);
-		if ($page)
+		$page->parent_id = $params['parent_id'];
+		$parent_page = cms_orm('CmsPage')->find_by_id($params['parent_id']);
+		if ($parent_page)
 		{
-			$ajax->replace_html('#parent_path', "/{$page->hierarchy_path}/");
+			$ajax->replace_html('#parent_path', "/{$parent_page->hierarchy_path}/");
 		}
 		else
 		{
@@ -730,10 +773,39 @@ function change_parent($params)
 	}
 	else
 	{
+		$page->parent_id = -1;
 		$ajax->replace_html('#parent_path', '/');
 	}
+	
+	set_serialized_page($ajax, $page);
 	//$ajax->script('reset_main_content();');
 	return $ajax->get_result();
+}
+
+function change_template($params)
+{
+	$smarty = cms_smarty();
+	$ajax = new CmsAjaxResponse();
+	$page = get_serialized_page($params['serialized_page']);
+
+	fill_page($page, $params);
+	
+	$smarty->assign('page', $page);
+	$ajax->replace_html('#edit', $smarty->fetch('editcontent-content.tpl'));
+	
+	set_serialized_page($ajax, $page);
+	//$ajax->script('reset_main_content();');
+	return $ajax->get_result();
+}
+
+function get_serialized_page($str)
+{
+	return unserialize(base64_decode($str));
+}
+
+function set_serialized_page(&$ajax_obj, $page, $id = 'serialized_page')
+{
+	$ajax_obj->replace_html('#' . $id, base64_encode(serialize($page)));
 }
 
 # vim:ts=4 sw=4 noet

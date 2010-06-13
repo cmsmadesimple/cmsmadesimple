@@ -24,7 +24,9 @@ function smarty_function_html_hidden($params, &$smarty)
 	if (isset($params['name']))
 		echo ' name="'.$params['name'].'"';
 	if (isset($params['value']))
+	{
 		echo ' value="'.$params['value'].'"';
+	}
 	echo ' />';
 }
 

@@ -5,7 +5,7 @@
         Nothing Selected
     {/if}
 {elseif 1 == 1} {* Has edit permissions *}
-    <form method="post" action="listcontent.php" onsubmit="cms_ajax_call('cms_ajax_save_page', $(this).serializeArray()); return false;">
+    <form method="post" action="listcontent.php" id="content_form" onsubmit="cms_ajax_call('cms_ajax_save_page', $(this).serializeArray()); return false;">
 
     	{$theme_object->start_tab_headers()}
         {$theme_object->set_tab_header('info', 'Information')}
@@ -35,6 +35,7 @@
         {if $page.id > -1}
     	    {html_hidden name='page[id]' value=$page.id}
     	{/if}
+    	{html_hidden name='serialized_page' id='serialized_page' value=$serialized_page}
 
     	{html_submit name="save" value="Save" remote="save_page"} {html_submit name="cancel" value="Cancel" remote="save_page"} {html_submit name="apply" value="Apply" remote="save_page"}
 
