@@ -26,7 +26,7 @@ class ClearCacheTask implements CmsRegularTask
     // we only do it daily.
     if( !$time ) $time = time();
     $last_execute = get_site_preference(self::LASTEXECUTE_SITEPREF,time());
-    if( ($time - 24*60*60*$age_days) >= $last_execute )
+    if( ($time - 24*60*60) >= $last_execute )
       {
 	return TRUE;
       } 
