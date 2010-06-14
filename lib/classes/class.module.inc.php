@@ -443,7 +443,7 @@ class CMSModule
 	 * @param string The incoming URL.
 	 * @return array A hash with the module id, action, returnid, and inline flag, or FALSE
 	 */
-	public function HandleRoute($url)
+	public function IsValidRoute($url,$src_module = '')
 	{
 	  return FALSE;
 	}

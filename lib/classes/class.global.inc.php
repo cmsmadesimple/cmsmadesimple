@@ -349,9 +349,9 @@ class CmsObject {
 	}
 
 
-	function clear_cached_files($age_days)
+	function clear_cached_files($age_days = -100)
 	{
-	  if( $age_days <= 0 ) return;
+	  //if( $age_days <= 0 ) return;
 	  $the_time = time() - $age_days * 24*60*60;
 
 	  $dirs = array(TMP_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);

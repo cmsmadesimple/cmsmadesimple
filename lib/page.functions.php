@@ -1284,7 +1284,7 @@ function get_pageid_or_alias_from_url()
 	  if( !isset($data['installed']) || $data['installed'] == FALSE ) continue;
 
 	  $module =& $data['object'];
-	  $res = $module->HandleRoute($page);
+	  $res = $module->IsValidRoute($page);
 	  if( !is_array($res) ) continue;
 
 	  $tmp = array('id'=>'cntnt01','action'=>'defaulturl',
