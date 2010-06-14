@@ -62,7 +62,8 @@ function content_list_ajax()
 
 function check_modify_all($userid)
 {
-  return check_permission($userid, 'Modify Any Page') || check_permission($userid,'Manage All Content');
+  //return check_permission($userid, 'Modify Any Page') || check_permission($userid,'Manage All Content');
+  return check_permission($userid,'Manage All Content');
 }
 
 function setdefault($contentid)
@@ -919,7 +920,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
 	  $remove    = check_permission($userid, 'Remove Pages')?1:0;
 	  $structure = check_permission($userid, 'Manage All Content')?1:0;
-	  $editperms = (check_permission($userid, 'Modify Any Page') ||
+	  $editperms = (check_permission($userid, 'Manage All Content') ||
 			quick_check_authorship($one->Id(),$mypages) ||
 			check_ownership($userid,$one->Id()))?1:0;
 	  if ( (($structure == 1) || (($remove == 1) && ($editperms == 1))) &&
@@ -1004,7 +1005,8 @@ function display_content_list($themeObject = null)
 	$columnstodisplay['edit'] = 1;
 	$columnstodisplay['delete'] = check_permission($userid, 'Remove Pages') || check_permission($userid,'Manage All Content');
 	$columnstodisplay['multiselect'] = check_permission($userid, 'Remove Pages') ||
-	  check_permission($userid,'Manage All Content') || check_permission($userid,'Modify Any Page');
+	  //	  check_permission($userid,'Manage All Content') || check_permission($userid,'Modify Any Page');
+  check_permission($userid,'Manage All Content');
 	
 	$page = 1;
 	if (isset($_GET['page']))
@@ -1179,9 +1181,9 @@ function display_content_list($themeObject = null)
 	    bulkcontentoperations::register_function(lang('secure'),'secure');
 	    bulkcontentoperations::register_function(lang('insecure'),'insecure');
 	  }
-	if (check_permission($userid, 'Modify Any Page') || check_permission($userid, 'Manage All Content'))
+	if (check_permission($userid, 'Manage All Content'))
 	  {
-    bulkcontentoperations::register_function(lang('settemplate'),'settemplate');
+	    bulkcontentoperations::register_function(lang('settemplate'),'settemplate');
 	  }
 	$opts = bulkcontentoperations::get_operation_list();
 	if( !empty($opts) )
