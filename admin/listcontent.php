@@ -62,7 +62,7 @@ function content_list_ajax()
 
 function check_modify_all($userid)
 {
-  return check_permission($userid, 'Modify Any Page');
+  return check_permission($userid, 'Modify Any Page') || check_permission($userid,'Manage All Content');
 }
 
 function setdefault($contentid)

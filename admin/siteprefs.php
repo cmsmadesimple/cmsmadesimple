@@ -171,7 +171,7 @@ if (isset($_POST["testumask"]))
 else if (isset($_POST['clearcache']))
 {
 	global $gCms;
-	$gCms->clear_cached_files(1);
+	$gCms->clear_cached_files();
 // 	$contentops =& $gCms->GetContentOperations();
 // 	$contentops->ClearCache();
 	$message .= lang('cachecleared');
