@@ -1291,7 +1291,25 @@ function get_pageid_or_alias_from_url()
 		       'inline'=>0,'returnid'=>'','module'=>$key);
 	  $tmp = array_merge($tmp,$res);
 
-	  $_REQUEST['mact'] = $tmp['module'] . ',' . $tmp['id'] . ',' . $tmp['action'] . ',' . $tmp['inline'];
+	  foreach( $tmp as $key => $value )
+	    {
+	      switch( $key )
+		{
+		case 'returnid':
+		case 'module':
+		case 'id':
+		case 'inline':
+		  // do nothing.
+		  break;
+
+		case 'action':
+		  $_REQUEST['mact'] = $tmp['module'] . ',' . $tmp['id'] . ',' . $tmp['action'] . ',' . $tmp['inline'];
+		  break;
+
+		default:
+		  $_REQUEST[$tmp['id'].$key] = $value;
+		}
+	    }
 	  
 	  $page = $tmp['returnid'];
 	  $smarty->id = $tmp['id'];
