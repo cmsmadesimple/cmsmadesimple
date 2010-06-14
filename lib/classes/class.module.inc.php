@@ -435,6 +435,20 @@ class CMSModule
 	}
 
 	/**
+	 * Handle unmatched routes
+	 * A callback method that is called if a page request cannot be handled
+	 * via the registered routes.
+	 *
+	 * @abstract
+	 * @param string The incoming URL.
+	 * @return array A hash with the module id, action, returnid, and inline flag, or FALSE
+	 */
+	public function HandleRoute($url)
+	{
+	  return FALSE;
+	}
+
+	/**
 	 * Returns a list of parameters and their help strings in a hash.  This is generally
 	 * used internally.
 	 *

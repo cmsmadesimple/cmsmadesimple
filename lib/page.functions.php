@@ -1276,6 +1276,29 @@ function get_pageid_or_alias_from_url()
 	}
     }
 
+  if( !$matched )
+    {
+      // call modules to see if they can match the URL
+      foreach( $gCms->modules as $key => &$data )
+	{
+	  if( !isset($data['installed']) || $data['installed'] == FALSE ) continue;
+
+	  $module =& $data['object'];
+	  $res = $module->HandleRoute($page);
+	  if( !is_array($res) ) continue;
+
+	  $tmp = array('id'=>'cntnt01','action'=>'defaulturl',
+		       'inline'=>0,'returnid'=>'','module'=>$key);
+	  $tmp = array_merge($tmp,$res);
+
+	  $_REQUEST['mact'] = $tmp['module'] . ',' . $tmp['id'] . ',' . $tmp['action'] . ',' . $tmp['inline'];
+	  
+	  $page = $tmp['returnid'];
+	  $smarty->id = $tmp['id'];
+	  $matched = true;
+	}
+    }
+
   // if noroute matched... grab the alias from the last /
   if( ($pos = strrpos($page,'/')) !== FALSE && $matched == false )
     {
