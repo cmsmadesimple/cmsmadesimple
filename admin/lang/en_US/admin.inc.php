@@ -1,4 +1,7 @@
 <?php
+$lang['admin']['clearcache_taskname'] = 'Clear Cache Files';
+$lang['admin']['automatedtask_failed'] = 'Automated Task Failed';
+$lang['admin']['automatedtask_success'] = 'Automated Task Completed';
 $lang['admin']['help_function_content_module'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This content block type allows interfacing with different modules to create different content block types.</p>

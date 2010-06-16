@@ -441,9 +441,10 @@ class CMSModule
 	 *
 	 * @abstract
 	 * @param string The incoming URL.
+	 * @param boolean Wether we are adding a new URL or checking for an existing one.
 	 * @return array A hash with the module id, action, returnid, and inline flag, or FALSE
 	 */
-	public function IsValidRoute($url,$src_module = '')
+	public function IsValidRoute($url,$is_adding = false)
 	{
 	  return FALSE;
 	}

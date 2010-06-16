@@ -98,7 +98,7 @@ class CmsRegularTaskHandler
   {
     $granularity = (int)get_site_preference('pseudocron_granularity',60);
     $last_check = get_site_preference('pseudocron_lastrun',time());
-    if( (time() - $granularity * 60) <= $last_check )
+    if( (time() - $granularity * 60) >= $last_check )
       {
 	// 1.  Get Task objects.
 	self::get_tasks();
