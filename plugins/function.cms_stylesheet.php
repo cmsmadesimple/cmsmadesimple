@@ -95,8 +95,9 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
       $qparms = array('template',$template_id);
       if( isset($params['media']) && strtolower($params['media']) != 'all' )
 	{
-	  $query .= ' AND media_type LIKE ?';
+	  $query .= ' AND (media_type LIKE ? OR media_type LIKE ?)';
 	  $qparms[] = '%'.trim($params['media']).'%';
+          $qparms[] = '%all%';
 	}
       $query .= ' ORDER BY B.assoc_order';
 		
