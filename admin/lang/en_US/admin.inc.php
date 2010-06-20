@@ -22,7 +22,7 @@ $lang['admin']['help_function_cms_stylesheet'] = <<<EOT
   <p>Just insert the tag into your template/page's head section like: <code>{cms_stylesheet}</code></p>
   <h3>What parameters does it take?</h3>
   <ul>
-  <li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one spefically named one, whether it's attached to the current template or not.</li>
+  <li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one specifally named one, whether it's attached to the current template or not.</li>
   <li><em>(optional)</em>templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
   <li><em>(optional)</em>media - When used in conjunction with the name parameter this parameter will allow you to override the media type for that stylesheet.  When used in conjunction with the templateid parameter, the media parameter will only output stylesheet tags for those stylesheets that arer marked as compatible with the specified media type.</li>
   </ul>
