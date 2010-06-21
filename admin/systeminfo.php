@@ -107,25 +107,30 @@ $tmp = array(0=>array(), 1=>array());
 $tmp[0]['php_memory_limit'] = testConfig('php_memory_limit', 'php_memory_limit');
 $tmp[0]['process_whole_template'] = testConfig('process_whole_template', 'process_whole_template');
 $tmp[1]['debug'] = testConfig('debug', 'debug');
-$tmp[1]['output_compression'] = testConfig('output_compression', 'output_compression');
+$tmp[0]['output_compression'] = testConfig('output_compression', 'output_compression');
 
 $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
 $tmp[0]['default_upload_permission'] = testConfig('default_upload_permission', 'default_upload_permission');
-$tmp[0]['assume_mod_rewrite'] = testConfig('assume_mod_rewrite', 'assume_mod_rewrite');
+$tmp[0]['url_rewriting'] = testConfig('url_rewriting', 'url_rewriting');
 $tmp[0]['page_extension'] = testConfig('page_extension', 'page_extension');
-$tmp[0]['internal_pretty_urls'] = testConfig('internal_pretty_urls', 'internal_pretty_urls');
+$tmp[0]['query_var'] = testConfig('query_var', 'query_var');
 
 $tmp[1]['root_url'] = testConfig('root_url', 'root_url');
+$tmp[1]['ssl_url'] = testConfig('ssl_url', 'ssl_url');
 $tmp[1]['root_path'] = testConfig('root_path', 'root_path', 'testDirWrite');
 $tmp[1]['previews_path'] = testConfig('previews_path', 'previews_path', 'testDirWrite');
 $tmp[1]['uploads_path'] = testConfig('uploads_path', 'uploads_path', 'testDirWrite');
 $tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
 $tmp[1]['image_uploads_path'] = testConfig('image_uploads_path', 'image_uploads_path', 'testDirWrite');
 $tmp[1]['image_uploads_url'] = testConfig('image_uploads_url', 'image_uploads_url');
+$tmp[1]['ssl_uploads_url'] = testConfig('ssl_uploads_url', 'ssl_uploads_url');
 $tmp[1]['use_smarty_php_tags'] = testConfig('use_smarty_php_tags', 'use_smarty_php_tags');
-$tmp[1]['locale'] = testConfig('locale', 'locale');
-$tmp[1]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
-$tmp[1]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
+$tmp[0]['image_manipulation_prog'] = testConfig('image_manipulation_prog', 'image_manipulation_prog');
+$tmp[0]['auto_alias_content'] = testConfig('auto_alias_content', 'auto_alias_content');
+$tmp[0]['locale'] = testConfig('locale', 'locale');
+$tmp[0]['default_encoding'] = testConfig('default_encoding', 'default_encoding');
+$tmp[0]['admin_encoding'] = testConfig('admin_encoding', 'admin_encoding');
+$tmp[0]['set_names'] = testConfig('set_names', 'set_names');
 
 $smarty->assign('count_config_info', count($tmp[0]));
 $smarty->assign('config_info', $tmp);
@@ -159,9 +164,7 @@ if( defined('E_DEPRECATED') )
     $tmp[0]['E_DEPRECATED'] =  testIntegerMask(1,lang('test_error_edeprecated'), 'error_reporting',E_DEPRECATED,lang('test_edeprecated_failed'),true,true,false);
   }
 
-
 $tmp[1]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
-
 
 list($minimum, $recommended) = getTestValues('memory_limit');
 $tmp[0]['memory_limit'] = testRange(0, 'memory_limit', 'memory_limit', '', $minimum, $recommended, true, true, null, 'memory_limit_range');
@@ -171,7 +174,7 @@ $tmp[0]['max_execution_time'] = testRange(0, 'max_execution_time', 'max_executio
 
 $tmp[1]['register_globals'] = testBoolean(0, lang('register_globals'), 'register_globals', '', true, true, 'register_globals_enabled');
 
-$tmp[1]['output_buffering'] = testInteger(0, lang('output_buffering'), 'output_buffering', '', true, true, 'output_buffering_disabled');
+$tmp[0]['output_buffering'] = testInteger(0, lang('output_buffering'), 'output_buffering', '', true, true, 'output_buffering_disabled');
 
 $tmp[1]['disable_functions'] = testString(0, lang('disable_functions'), 'disable_functions', '', true, 'green', 'yellow', 'disable_functions_not_empty');
 
@@ -181,13 +184,13 @@ $tmp[1]['open_basedir'] = testString(0, lang('open_basedir'), $open_basedir, '',
 
 $tmp[1]['test_remote_url'] = testRemoteFile(0, 'test_remote_url', '', lang('test_remote_url_failed'));
 
-$tmp[1]['file_uploads'] = testBoolean(0, 'file_uploads', 'file_uploads', '', true, false, 'Function_file_uploads_disabled');
+$tmp[0]['file_uploads'] = testBoolean(0, 'file_uploads', 'file_uploads', '', true, false, 'Function_file_uploads_disabled');
 
 list($minimum, $recommended) = getTestValues('post_max_size');
-$tmp[1]['post_max_size'] = testRange(0, 'post_max_size', 'post_max_size', '', $minimum, $recommended, true, true, null, 'min_post_max_size');
+$tmp[0]['post_max_size'] = testRange(0, 'post_max_size', 'post_max_size', '', $minimum, $recommended, true, true, null, 'min_post_max_size');
 
 list($minimum, $recommended) = getTestValues('upload_max_filesize');
-$tmp[1]['upload_max_filesize'] = testRange(0, 'upload_max_filesize', 'upload_max_filesize', '', $minimum, $recommended, true, true, null, 'min_upload_max_filesize');
+$tmp[0]['upload_max_filesize'] = testRange(0, 'upload_max_filesize', 'upload_max_filesize', '', $minimum, $recommended, true, true, null, 'min_upload_max_filesize');
 
 $session_save_path = testSessionSavePath('');
 if(empty($session_save_path))
@@ -204,9 +207,9 @@ else
 }
 $tmp[0]['session_use_cookies'] = testBoolean(0, 'session.use_cookies', 'session.use_cookies');
 
-$tmp[1]['xml_function'] = testBoolean(1, 'xml_function', extension_loaded_or('xml'), '', false, false, 'Function_xml_disabled');
+$tmp[0]['xml_function'] = testBoolean(1, 'xml_function', extension_loaded_or('xml'), '', false, false, 'Function_xml_disabled');
 
-$tmp[1]['file_get_contents'] = testBoolean(0, 'file_get_contents', function_exists('file_get_contents'), '', false, false, 'Function_file_get_content_disabled');
+#$tmp[1]['file_get_contents'] = testBoolean(0, 'file_get_contents', function_exists('file_get_contents'), '', false, false, 'Function_file_get_content_disabled');
 
 $_log_errors_max_len = (ini_get('log_errors_max_len')) ? ini_get('log_errors_max_len').'0' : '99';
 ini_set('log_errors_max_len', $_log_errors_max_len);
