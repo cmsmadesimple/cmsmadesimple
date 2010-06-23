@@ -1,15 +1,10 @@
 <?php
-$lang['admin']['clearcache_taskname'] = 'Clear Cache Files';
-$lang['admin']['automatedtask_failed'] = 'Automated Task Failed';
-$lang['admin']['automatedtask_success'] = 'Automated Task Completed';
 $lang['admin']['help_function_content_module'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This content block type allows interfacing with different modules to create different content block types.</p>
 <p>Some modules can define content block types for use in module templates.  i.e: The FrontEndUsers module may define a group list content block type.  It will then indicate how you can use the content_module tag to utilize that block type within your templates.</p>
 <p><strong>Note:</strong> This block type must be used only with compatible modules.  You should not use this in any way except for as guided by addon modules.</p>
 EOT;
-$lang['admin']['automatedtask_success'] = 'Automatic Task Success';
-$lang['admin']['automatedtask_failed'] = 'Automatic Task Failed';
 $lang['admin']['error_parsing_content_blocks'] = 'An error occurred parsing content blocks (perhaps duplicated block names)';
 $lang['admin']['error_no_default_content_block'] = 'No default content block was detected in this template.  Please ensure that you have a {content} tag in the page template.';
 $lang['admin']['help_function_cms_stylesheet'] = <<<EOT
@@ -52,7 +47,7 @@ $lang['admin']['cron_3h'] = '3 Hours';
 $lang['admin']['cron_6h'] = '6 Hours';
 $lang['admin']['cron_12h'] = '12 Hours';
 $lang['admin']['cron_24h'] = '24 Hours';
-$lang['admin']['automatedtask_failed'] = 'Automatic Task Execution Succeded';
+$lang['admin']['automatedtask_success'] = 'Automatic Task Success';
 $lang['admin']['automatedtask_failed'] = 'Automatic Task Execution Failed';
 $lang['admin']['clearcache_taskdescription'] = 'Executed daily, this task will clear cached files that are older than the age preset in the global preferences';
 $lang['admin']['clearcache_taskname'] = 'Clear Cached Files';
