@@ -6,6 +6,7 @@ class CmsRegularTaskHandler
 
   private static function get_tasks()
   {
+    die(lang_by_realm('testme','tasks'));
     if( !is_object(self::$_tasks) )
       {
 	self::$_tasks = new ArrayObject();
@@ -74,12 +75,12 @@ class CmsRegularTaskHandler
 	    if( !$res )
 	      {
 		// test failed.
-		audit('',lang('automatedtask_failed'),$task->get_name());
+		audit('',lang_by_realm('automatedtask_failed','tasks'),$task->get_name());
 		$task->on_failure($time);
 	      }
 	    else
 	      {
-		audit('',lang('automatedtask_success'),$task->get_name());
+		audit('',lang_by_realm('automatedtask_success','tasks'),$task->get_name());
 		$task->on_success($time);
 	      }
 	  }

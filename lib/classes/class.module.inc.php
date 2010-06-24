@@ -130,7 +130,6 @@ class CMSModule
 		$this->params[] = array(
 					'name' => 'lang',
 					'default' => 'en_US',
-					'help' => lang('langparam'),
 					'optional' => true);
 
 		#$smarty = new CMSModuleSmarty($config, $this->GetName());
@@ -146,6 +145,10 @@ class CMSModule
 		    $this->SetParameterType('showtemplate',CLEAN_STRING);
 		    $this->SetParameterType('inline',CLEAN_INT);
 		    $this->SetParameters();
+		  }
+		else
+		  {
+		    $this->params['help'] = lang('langparam');
 		  }
 		
 		$this->modinstall = false;

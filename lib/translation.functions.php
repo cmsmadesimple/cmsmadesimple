@@ -24,12 +24,258 @@
  * @package CMS
  */
 
+function cms_admin_current_language()
+{
+  global $gCms;
+  global $nls;
+  $nls = array();
+  $lang = array();
+
+  #Read in all current languages...
+  $dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'/lang');
+
+  $handle = opendir($dir);
+  while (false!==($file = readdir($handle))) {
+    if (is_file("$dir/$file") && strpos($file, "nls.php") != 0) {
+      include("$dir/$file");
+    }
+  }
+  closedir($handle);
+
+  #Check to see if there is already a language in use...
+  if (isset($_POST["default_cms_lang"]) )
+    {
+      $current_language = $_POST["default_cms_lang"];
+      if ($current_language == '')
+	{
+	  setcookie("cms_language", '', time() - 3600);
+	}
+      else if (isset($_POST["change_cms_lang"]))
+	{
+	  setcookie("cms_language", $_POST["change_cms_lang"]);
+	}
+    }
+  else if (isset($_SESSION['login_cms_language']))
+    {
+      debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
+      $current_language = $_SESSION['login_cms_language'];
+      setcookie('cms_language', $_SESSION['login_cms_language']);
+      unset($_SESSION['login_cms_language']);
+    }
+  else if (isset($_COOKIE["cms_language"]))
+    {
+      $tmp = trim(basename($_COOKIE["cms_language"]));
+      $file = dirname(__FILE__) . "/lang/" . $tmp . "/admin.inc.php";
+      if( !file_exists($file) )
+	{
+	  $file = dirname(__FILE__) . "/lang/ext/" . $tmp . "/admin.inc.php";
+	  if( !file_exists($file) )
+	    {
+	      $$tmp = '';
+	    }
+	}
+      $current_language = $tmp;
+    }
+
+  if ($current_language == '')
+    {
+      if (isset($gCms->config['locale']) && $gCms->config['locale'] != '')
+	{
+	  $current_language = $gCms->config['locale'];
+	}
+      else
+	{
+		
+#No, take a stab at figuring out the default language...
+#Figure out default language and set it if it exists
+	  if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) 
+	    {
+	      $alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
+	      if (strpos($alllang, ";") !== FALSE)
+		$alllang = substr($alllang,0,strpos($alllang, ";"));
+	      $langs = explode(",", $alllang);
+
+	      foreach ($langs as $onelang)
+		{
+#Check to see if lang exists...
+		  if (isset($nls['language'][$onelang]))
+		    {
+		      $current_language = $onelang;
+		      setcookie("cms_language", $onelang);
+		      break;
+		    }
+#Check to see if alias exists...
+		  if (isset($nls['alias'][$onelang]))
+		    {
+		      $alias = $nls['alias'][$onelang];
+		      if (isset($nls['language'][$alias]))
+			{
+			  $current_language = $alias;
+			  setcookie("cms_language", $alias);
+			  break;
+			}
+		    }
+		}
+	    }
+	}
+    }
+
+  return $current_language;
+}
+
+
+function cms_frontend_current_language()
+{
+  global $gCms;
+  $curlang = get_site_preference('frontendlang','');
+  if (isset($gCms->config['locale']) && $gCms->config['locale'] != '') {
+    $curlang = $this->config['locale'];
+  }
+  if( $curlang == '' ) {
+    $curlang = 'en_US';
+  }
+
+  return $curlang;
+}
+
+
+function cms_current_language()
+{
+  global $CMS_ADMIN_PAGE;
+  global $CMS_STYLESHEET;
+  global $CMS_INSTALL_PAGE;
+
+  if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE))
+    {
+      return cms_admin_current_language();
+    }
+  return cms_frontend_current_language();
+}
+
+
+
+function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 0)
+{
+  global $gCms;
+  global $lang;
+  if( empty($realm) ) return fALSE;
+
+  if( empty($basedir) )
+    {
+      $basedir = cms_join_path($gCms->config['root_path'],'lib','lang',$realm);
+    }
+  if( empty($filename) )
+    {
+      $filename = 'en_US.php';
+    }
+
+  $cur_lang = cms_current_language();
+  
+  // load the default (en_US) file first.
+  $fn = cms_join_path($basedir,$filename);
+  if( $lang_is_dir )
+    {
+      $fn = cms_join_path($basedir,'en_US',$filename);
+    }
+  if( @file_exists($fn) )
+    {
+      include($fn);
+      if( !isset($lang[$realm]) ) return FALSE;
+    }
+
+  // now load the lang file itself.
+  if( $cur_lang != 'en_US' )
+    {
+      $fn = cms_join_path($basedir,'ext',$cur_lang.'.php');
+      if( $lang_is_dir )
+	{
+	  $fn = cms_join_path($basedir,'ext',$cur_lang,$filename);
+	}
+      if( @file_exists($fn) )
+	{
+	  include($fn);
+	  if( !isset($lang[$realm]) ) return FALSE;
+	}
+    }
+
+  return TRUE;
+}
+
+
+function lang_by_realm()
+{
+  global $gCms;
+  global $lang;
+
+  $name = '';
+  $realm = 'admin';
+  $params = array();
+  $result = '';
+
+  $num = func_num_args();
+  if( $num == 0 ) return '';
+
+  $name = func_get_arg(0);
+  if( $num > 1 )
+    {
+      $realm = func_get_arg(1);
+      
+      if( $num > 2 && is_array(func_get_arg(2)) )
+	{
+	  $params = func_get_arg(2);
+	}
+      else if( $num > 2 )
+	{
+	  $params = array_slice(func_get_args(), 2);
+	}
+    }
+
+  // we now have a name, a realm, and possible additonal arguments.
+  if( !isset($lang[$realm]) )
+    {
+      cms_load_lang_realm($realm);
+    }
+
+  // do processing.
+  if (isset($lang[$realm][$name]))
+    {
+      if (count($params))
+	{
+	  $result = vsprintf($lang[$realm][$name], $params);
+	}
+      else
+	{
+	  $result = $lang[$realm][$name];
+	}
+    }
+  else
+    {
+      $result = "--Add Me - $name --";
+    }
+
+  // conversion.
+  if (isset($gCms->config['admin_encoding']) && isset($gCms->variables['convertclass']))
+    {
+      if (strcasecmp(get_encoding('', false),$gCms->config['admin_encoding']) )
+	{
+	  $class =& $gCms->variables['convertclass'];
+	  $result = $class->Convert($result, get_encoding('', false), $gCms->config['admin_encoding']);
+	}
+    }
+
+  return $result;
+
+}
+
 function lang()
 {
+  // uses the default admin realm.
 	global $gCms;
 	global $lang;
 	global $nls;
 
+	$dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'lang');
+	cms_load_lang_realm('admin',$dir,'admin.inc.php',1);
 	$name = '';
 	$params = array();
 	$realm = 'admin';
@@ -51,50 +297,19 @@ function lang()
 		return '';
 	}
 
-	//echo strtolower(get_encoding()) . ':' . strtolower($nls['encoding'][$gCms->current_language]);
+	// quick test to see if we are on the frontend or admin.
+	global $CMS_ADMIN_PAGE;
+	global $CMS_STYLESHEET;
+	global $CMS_INSTALL_PAGE;
 
-	$result = '';
+	if (!isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
+	  {
+	    trigger_error('Attempt to load admin realm from non admin action');
+	    return '';
+	  }
 
-	if (isset($lang[$realm][$name]))
-	{
-		if (count($params))
-		{
-			$result = vsprintf($lang[$realm][$name], $params);
-		}
-		else
-		{
-			$result = $lang[$realm][$name];
-		}
-	}
-	else
-	{
-		$result = "--Add Me - $name --";
-	}
-
-	/*
-	if (isset($gCms->current_language) && isset($gCms->config['admin_encoding']) && $gCms->config['admin_encoding'] != '' && isset($gCms->variables['convertclass']) && ($nls['encoding'][$gCms->current_language] != $gCms->config['admin_encoding']))
-	{
-		$class =& $gCms->variables['convertclass'];
-		$result = $class->Convert($result, $nls['encoding'][$gCms->current_language], $gCms->config['admin_encoding']);
-	}
-	else if (isset($gCms->current_language) && (strtolower(get_encoding()) != strtolower($nls['encoding'][$gCms->current_language])) && isset($gCms->variables['convertclass']))
-	{
-		$class =& $gCms->variables['convertclass'];
-		$result = $class->Convert($result, $nls['encoding'][$gCms->current_language], get_encoding());
-	}
-	*/
-
-	if (isset($gCms->config['admin_encoding']) && isset($gCms->variables['convertclass']))
-	{
-	  if (strcasecmp(get_encoding('', false),$gCms->config['admin_encoding']) )
-		{
-			$class =& $gCms->variables['convertclass'];
-			$result = $class->Convert($result, get_encoding('', false), $gCms->config['admin_encoding']);
-		}
-	}
-
-	//return strtolower(get_encoding('', false)) . ':' . strtolower($gCms->config['admin_encoding']) . ' - ' . $result;
-	return $result;
+	// todo:
+	return lang_by_realm($name,'admin',$params);
 }
 
 function get_encoding($charset='', $defaultoverrides=true)

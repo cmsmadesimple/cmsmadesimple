@@ -1215,7 +1215,6 @@ function get_pageid_or_alias_from_url()
   if (strpos($page, '/') !== FALSE)
     {
       $routes =& $gCms->variables['routes'];
-	
       foreach ($routes as $route)
 	{
 	  $matches = array();

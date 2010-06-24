@@ -18,6 +18,8 @@
 #
 #$Id$
 
+return;
+
 #Nice decent default
 $current_language = isset($frontendlang) ? $frontendlang : 'en_US';
 

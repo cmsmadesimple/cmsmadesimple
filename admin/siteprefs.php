@@ -303,6 +303,7 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 $tmp = array_keys($gCms->modules);
 $firstmod = $tmp[0];
 $smarty->assign_by_ref('mod',$gCms->modules[$firstmod]['object']);
+
 asort($nls["language"]);
 $tmp = array(''=>lang('nodefault'));
 foreach( $nls['language'] as $key=>$value )

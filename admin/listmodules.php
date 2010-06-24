@@ -309,10 +309,11 @@ else if ($action == "showmodulehelp")
 		{
 			$moduleName = substr($moduleName, 1);
 		}
+
 		// Include English translation of titles. (Can't find better way to get them)
-		$dirname = dirname(__FILE__);
-		include($dirname.'/lang/en_US/admin.inc.php');
-		$section = $lang['admin'][$gCms->modules[$module]['object']->GetAdminSection()];
+// 		$dirname = dirname(__FILE__);
+// 		include($dirname.'/lang/en_US/admin.inc.php');
+		$section = lang($gCms->modules[$module]['object']->GetAdminSection());
 		$wikiUrl .= '/'.$section.'/'.$moduleName;
 		if (FALSE == get_preference($userid, 'hide_help_links'))
 		{
