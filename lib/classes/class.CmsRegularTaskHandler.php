@@ -6,7 +6,6 @@ class CmsRegularTaskHandler
 
   private static function get_tasks()
   {
-    die(lang_by_realm('testme','tasks'));
     if( !is_object(self::$_tasks) )
       {
 	self::$_tasks = new ArrayObject();

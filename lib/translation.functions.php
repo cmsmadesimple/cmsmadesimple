@@ -154,7 +154,7 @@ function cms_current_language()
 
 
 
-function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 0)
+function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 0,$has_realm = 0)
 {
   global $gCms;
   global $lang;
@@ -179,7 +179,21 @@ function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 
     }
   if( @file_exists($fn) )
     {
-      include($fn);
+      if( !$has_realm )
+	{
+	  // the lang file doesn't create a subarray
+	  $hold_lang = $lang;
+	  $lang = array();
+	  include($fn);
+	  $hold_lang[$realm] = $lang;
+	  $lang = $hold_lang;
+	  unset($hold_lang);
+	}
+      else
+	{
+	  // the lang file defines the sub-array itself.
+	  include($fn);
+	}
       if( !isset($lang[$realm]) ) return FALSE;
     }
 
@@ -193,7 +207,21 @@ function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 
 	}
       if( @file_exists($fn) )
 	{
-	  include($fn);
+	  if( !$has_realm )
+	    {
+	      // the lang file doesn't create a subarray
+	      $hold_lang = $lang;
+	      $lang = array();
+	      include($fn);
+	      $hold_lang[$realm] = $lang;
+	      $lang = $hold_lang;
+	      unset($hold_lang);
+	    }
+	  else
+	    {
+	      // the lang file defines the sub-array itself.
+	      include($fn);
+	    }
 	  if( !isset($lang[$realm]) ) return FALSE;
 	}
     }
@@ -275,7 +303,7 @@ function lang()
 	global $nls;
 
 	$dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'lang');
-	cms_load_lang_realm('admin',$dir,'admin.inc.php',1);
+	cms_load_lang_realm('admin',$dir,'admin.inc.php',1,1);
 	$name = '';
 	$params = array();
 	$realm = 'admin';
