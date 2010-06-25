@@ -30,6 +30,7 @@ function cms_admin_current_language()
   global $nls;
   $nls = array();
   $lang = array();
+  $current_language = '';
 
   #Read in all current languages...
   $dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'/lang');
@@ -332,6 +333,7 @@ function lang()
 
 	if (!isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
 	  {
+  stack_trace(); die();
 	    trigger_error('Attempt to load admin realm from non admin action');
 	    return '';
 	  }
