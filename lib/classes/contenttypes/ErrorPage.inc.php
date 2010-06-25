@@ -27,7 +27,12 @@ class ErrorPage extends Content
   function ErrorPage()
   {
     $this->ContentBase();
-    $this->error_types = array('404' => lang('404description'));
+    
+    global $CMS_ADMIN_PAGE;
+    if( isset($CMS_ADMIN_PAGE) )
+      {
+	$this->error_types = array('404' => lang('404description'));
+      }
     $this->doAliasCheck = false;
     $this->doAutoAliasIfEnabled = false;
   }
