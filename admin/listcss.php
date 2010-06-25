@@ -93,6 +93,8 @@ if (isset($_GET["message"])) {
 		echo "<p class=\"pageshowrows\">".pagination($page, $result->RecordCount(), $limit)."</p>";
 	}
 	echo $themeObject->ShowHeader('liststylesheets').'</div>';
+
+
 	if ($result && $result->RecordCount() > 0)
 	{
 		# displaying the table header

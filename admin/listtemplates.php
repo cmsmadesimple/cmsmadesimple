@@ -136,7 +136,7 @@ if (isset($_GET["message"])) {
 	}
 
 	$templatelist = $templateops->LoadTemplates();
-	
+
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;

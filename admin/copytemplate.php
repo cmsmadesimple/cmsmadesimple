@@ -35,6 +35,7 @@ $template_id = -1;
 if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
 else if (isset($_GET["template_id"])) $template_id = $_GET["template_id"];
 
+$template_name = '';
 if (isset($_REQUEST["template_name"])) { $template_name = $_REQUEST["template_name"]; }
 
 $from = 'listtemplates.php'.$urlext;
@@ -119,7 +120,7 @@ if ($access)
 				}
 
 				audit($onetemplate->id, $onetemplate->name, 'Copied Template');
-				redirect($from);
+				redirect($from.'&message='.lang('templatecopied'));
 				return;
 			}
 			else

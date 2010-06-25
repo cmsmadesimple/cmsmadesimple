@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['stylesheetcopied'] = 'Stylesheet Copied';
+$lang['admin']['templatecopied'] = 'Template Copied';
 $lang['admin']['ecommerce_desc'] = 'Modules for providing E-commerce capabilities';
 $lang['admin']['ecommerce'] = 'E-Commerce';
 $lang['admin']['help_function_content_module'] = <<<EOT
