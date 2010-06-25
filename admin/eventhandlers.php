@@ -86,10 +86,11 @@ switch( $action )
 {
 	case 'showeventhelp':
 	{
+	  $text = '';
 		if ($module == 'Core')
-			$text = Events::GetEventHelp($event);
-		else
-			$text = $gCms->modules[$module]['object']->GetEventHelp( $event );
+		  $text = Events::GetEventHelp($event);
+		else if( isset($gCms->modules[$module]) )
+		  $text = $gCms->modules[$module]['object']->GetEventHelp( $event );
 		echo "<h3>$event</h3>";
 		if( $text == "" )
 		{
