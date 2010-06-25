@@ -874,13 +874,30 @@ class AdminTheme
     	);
 
 
+	// slightly cleaner syntax
+	$this->menuItems['ecommerce'] = array('url'=>'topadmin.php?section=ecommerce','parent'=>-1,
+					      'title'=>$this->FixSpaces(lang('ecommerce')),
+					      'description'=>lang('ecommerce_desc'),
+					      'show_in_menu'=>true);
+	
+	
 	// adjust all the urls to include the session key
 	foreach( $this->menuItems as $sectionKey => $sectionArray )
 	  {
 	    if( isset($sectionArray['url']) && 
 		(!isset($sectionArray['type']) || $sectionArray['type'] != 'external' ))
 	      {
-		$this->menuItems[$sectionKey]['url'] .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		$url = $this->menuItems[$sectionKey]['url'];
+		if( strpos($url,'?') !== FALSE )
+		  {
+		    $url .= '&';
+		  }
+		else
+		  {
+		    $url .= '?';
+		  }
+		$url .= CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		$this->menuItems[$sectionKey]['url'] = $url;
 	      }
 	  }
 
@@ -968,6 +985,30 @@ class AdminTheme
 		  }
 	      }
 	  }
+
+	// remove any top level items that don't have children
+	$parents = array();
+	foreach ($this->menuItems as $sectionKey=>$sectionArray)
+	  {
+	    if( $this->menuItems[$sectionKey]['parent'] == -1 )
+	      {
+		$parents[] = $sectionKey;
+	      }
+	  }
+	foreach( $parents as $oneparent )
+	  {
+	    $found = 0;
+	    foreach ($this->menuItems as $sectionKey=>$sectionArray)
+	      {
+		if( $sectionArray['parent'] == $oneparent )
+		  {
+		    $found = 1;
+		    break;
+		  }
+	      }
+	    if( !$found ) unset($this->menuItems[$oneparent]);
+	  }
+	
 
 	// resolve the tree to be doubly-linked,
 	// and make sure the selections are selected            

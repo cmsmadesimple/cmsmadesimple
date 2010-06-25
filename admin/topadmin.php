@@ -24,10 +24,15 @@ require_once("../include.php");
 
 check_login();
 
+$section = 'siteadmin';
+if( isset($_GET['section']) )
+  {
+    $section = trim($_GET['section']);
+  }
 include_once("header.php");
 $themeObject->ShowShortcuts();
 $themeObject->DisplaySectionMenuDivStart();
-$themeObject->DisplaySectionPages('siteadmin');
+$themeObject->DisplaySectionPages($section);
 $themeObject->DisplaySectionMenuDivEnd();
 include_once("footer.php");
 

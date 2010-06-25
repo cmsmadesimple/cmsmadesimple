@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['ecommerce_desc'] = 'Modules for providing E-commerce capabilities';
+$lang['admin']['ecommerce'] = 'E-Commerce';
 $lang['admin']['help_function_content_module'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This content block type allows interfacing with different modules to create different content block types.</p>
@@ -47,8 +49,6 @@ $lang['admin']['cron_3h'] = '3 Hours';
 $lang['admin']['cron_6h'] = '6 Hours';
 $lang['admin']['cron_12h'] = '12 Hours';
 $lang['admin']['cron_24h'] = '24 Hours';
-$lang['admin']['automatedtask_success'] = 'Automatic Task Success';
-$lang['admin']['automatedtask_failed'] = 'Automatic Task Execution Failed';
 $lang['admin']['clearcache_taskdescription'] = 'Executed daily, this task will clear cached files that are older than the age preset in the global preferences';
 $lang['admin']['clearcache_taskname'] = 'Clear Cached Files';
 $lang['admin']['info_autoclearcache'] = 'Specify an integer value. Enter 0 to disable automatic cache clearing';
