@@ -13,9 +13,9 @@ require_once("../lib/classes/class.user.inc.php");
 $theme=get_preference(get_userid(),"admintheme");
 $style="style";
 
-if ($gCms->nls['direction'] == 'rtl')
+if (isset($gCms->nls['direction']) && $gCms->nls['direction'] == 'rtl')
 {
-	$style.="-rtl";
+  $style.="-rtl";
 }
 
 if (isset($_GET['ie']))
