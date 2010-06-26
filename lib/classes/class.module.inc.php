@@ -148,7 +148,7 @@ class CMSModule
 		  }
 		else
 		  {
-		    $this->params['help'] = lang('langparam');
+		    $this->params[0]['help'] = lang('langparam');
 		  }
 		
 		$this->modinstall = false;
