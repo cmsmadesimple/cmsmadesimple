@@ -378,7 +378,7 @@ else
 			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('content')?>:*</p>
+			<p class="pagetext">*<?php echo lang('content')?>:</p>
 			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content');?></p>
 		</div>
 	<?php if ($adminaccess) { ?>
