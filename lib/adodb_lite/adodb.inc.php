@@ -345,7 +345,10 @@ class ADOConnection
 	function outp($text, $newline = true)
 	{
 		global $ADODB_OUTP;
-		$this->debug_output = "<br>\n(" . $this->dbtype . "): ".htmlspecialchars($text)."<br>\n Error (" . $this->ErrorNo() .'): '. $this->ErrorMsg() . "<br>\n";
+		//$this->debug_output = "<br>\n(" . $this->dbtype . "): ".htmlspecialchars($text)."<br>\n Error (" . $this->ErrorNo() .'): '. $this->ErrorMsg() . "<br>\n";
+		$this->debug_output = "(" . $this->dbtype . "): ".htmlspecialchars($text)."\n";
+                if( $this->ErrorNo() != 0 )
+		   $this->debug_output .= "Error (" . $this->ErrorNo() .'): '. $this->ErrorMsg() . "\n";
 
 		if(defined('ADODB_OUTP'))
 		{
