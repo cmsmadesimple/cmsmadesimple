@@ -1147,6 +1147,7 @@ function get_pageid_or_alias_from_url()
   global $gCms;
   $config = $gCms->GetConfig();
   $contentops =& $gCms->GetContentOperations();
+  $smarty = &$gCms->smarty;
 
   $params =& $_REQUEST;
   if (isset($params['mact']))
