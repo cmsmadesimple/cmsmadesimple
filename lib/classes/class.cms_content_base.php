@@ -49,10 +49,14 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		return '';
 	}
 	
-	function get_edit_form($block_name = 'default')
+	function get_edit_form($block_name = 'default', $tpl_file = null)
 	{
 		$file_name = underscore(get_class($this));
-		$tpl_file = cms_join_path(dirname(__FILE__), 'content_types', 'templates', 'edit.' . $file_name . '.tpl');
+		if ($tpl_file == null)
+		{
+			$tpl_file = cms_join_path(dirname(__FILE__), 'content_types', 'templates', 'edit.' . $file_name . '.tpl');
+		}
+		
 		if (is_file($tpl_file))
 		{
 			cms_smarty()->assign_by_ref('obj', $this);
@@ -60,6 +64,11 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			return cms_smarty()->fetch($tpl_file);
 		}
 		return '';
+	}
+	
+	function before_delete()
+	{
+		
 	}
 }
 

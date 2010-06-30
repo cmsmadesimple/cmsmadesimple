@@ -115,7 +115,7 @@ if (isset($_GET['collapseall']))
 
 if (isset($_GET['deletecontent']))
 {
-	deletecontent($_GET['deletecontent']);
+	delete_content($_GET['deletecontent']);
 	redirect('listcontent.php'.$urlext);
 }
 
@@ -389,7 +389,7 @@ function content_delete($contentid)
 {
 	$resp = new CmsAjaxResponse();
 	
-	deletecontent($contentid);
+	delete_content($contentid);
 
 	$resp->replace_html('#contentlist', display_content_list());
 	//$resp->script('set_context_menu();');
@@ -587,31 +587,31 @@ function movecontent($contentid, $parentid, $direction = 'down')
 	}
 }
 
-function deletecontent($contentid)
+function delete_content($contentid)
 {
-  $userid = get_userid();
-  $access = check_permission($userid, 'Remove Pages') || check_permission($userid, 'Modify Page Structure');
-  
-  if (!$access)
-    {
-      $_GET['error'] = 'permissiondenied';
-      return;
-    }
+	$userid = get_userid();
+	$access = check_permission($userid, 'Remove Pages') || check_permission($userid, 'Modify Page Structure');
 
-  $content_obj = CmsContentOperations::load_content_from_id($contentid);
-  if( !$content_obj )
-    {
-      $_GET['error'] = 'errorgettingcontent';
-      return;
-    }
+	if (!$access)
+	{
+		$_GET['error'] = 'permissiondenied';
+		return;
+	}
 
-  $res = $content_obj->delete();
-  if( !$res )
-    {
-      $_GET['error'] = 'errordeletingcontent';
-      return;
-    }
-  $_GET['message'] = 'contentdeleted';
+	$content_obj = CmsContentOperations::load_content_from_id($contentid);
+	if( !$content_obj )
+	{
+		$_GET['error'] = 'errorgettingcontent';
+		return;
+	}
+
+	$res = $content_obj->delete();
+	if( !$res )
+	{
+		$_GET['error'] = 'errordeletingcontent';
+		return;
+	}
+	$_GET['message'] = 'contentdeleted';
 }
 
 function fill_page(&$page, $params)

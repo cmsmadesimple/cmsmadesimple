@@ -439,20 +439,38 @@ class CmsPage extends CmsObjectRelationalMapping
 	
 	protected function before_delete()
 	{
-		if( $this->has_children() ) return false;
-		if( $this->default_content() ) return false;
+		if ($this->has_children()) return false;
+		if ($this->default_content()) return false;
 
-		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
+		CmsEventManager::send_event('Core::ContentDeletePre', array('content' => &$this));
 		return true;
 	}
 	
 	protected function after_delete()
 	{
+		/*
 		$items =& cms_orm('CmsContentProperty')->find_all_by_content_id($this->id);
 		foreach ($items as &$item)
 		{
 			$item->delete();
 		}
+		*/
+		
+		if (isset($this->params['blocks']) && is_array($this->params['blocks']))
+		{
+			foreach ($this->params['blocks'] as $the_block)
+			{
+				if (isset($the_block['id']))
+				{
+					$obj = cms_orm('CmsContentBase')->load($the_block['id']);
+					if ($obj)
+					{
+						$obj->delete();
+					}
+				}
+			}
+		}
+		
 		
 		// delete all the additional editors.
 		$users =& cms_orm('CmsAdditionalEditor')->find_all_by_content_id($this->id);
@@ -467,7 +485,7 @@ class CmsPage extends CmsObjectRelationalMapping
 		CmsCache::clear();
 		CmsPage::set_all_hierarchy_positions();
 
-		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
+		CmsEventManager::send_event('Core::ContentDeletePost', array('content' => &$this));
 		audit($this->id,$this->name(),'Deleted Content');
 	}
 	

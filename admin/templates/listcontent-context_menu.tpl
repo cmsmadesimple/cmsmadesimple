@@ -54,6 +54,16 @@ $.tree.reference('#content_tree').menu_def =
                         title: 'Make this the default page'
                     {rdelim}
                 {rdelim},
+                {ldelim}
+                    'Delete':
+                    {ldelim}
+                        onclick:function(menuItem, menu)
+                        {ldelim}
+                            cms_ajax_content_delete({$content_item->id});
+                        {rdelim},
+                        title: 'Delete this page'
+                    {rdelim}
+                {rdelim},
 		    {/if}
 		{else}
             {ldelim}
