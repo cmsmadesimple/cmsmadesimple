@@ -134,7 +134,7 @@ if ($access)
 				}
 			}
 			
-			Events::SendEvent('Core', 'EditGlobalContentPre', array('global_content' => &$blobobj));
+			Events::SendEvent('Core', 'EditGlobalContentPre', array('global_content' => &$the_blob));
 
 			$result = $the_blob->save();
 
