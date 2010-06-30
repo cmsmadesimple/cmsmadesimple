@@ -331,6 +331,19 @@ class CMSModule
 	}
 
 	/**
+	 * Returns the URL path to the module directory.
+	 *
+	 * @final
+	 * @param boolean Optional generate an URL using HTTPS path
+	 * @return string The full path to the module directory.
+	 */
+	function GetModuleURLPath($use_ssl=false)
+	{
+		return ($use_ssl?$this->config['ssl_url']:$this->config['root_url']) . '/modules/' . $this->GetName();
+	}
+
+
+	/**
 	 * Returns a translatable name of the module.  For modulues who's names can
 	 * probably be translated into another language (like News)
 	 *
