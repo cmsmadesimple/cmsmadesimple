@@ -720,7 +720,7 @@ class Content extends ContentBase
 			{
 				if( $blockName == 'content_en' && $label == '' )
 				{
-					$label = ucwords('content').'*';
+					$label = lang('content').'*';
 				}
 				$field = $this->_display_text_block($blockInfo,$value,$adding);
 			}

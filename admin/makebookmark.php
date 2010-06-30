@@ -19,6 +19,8 @@
 #$Id$ 
 
 require_once('../include.php');
+global $CMS_ADMIN_PAGE;
+$CMS_ADMIN_PAGE = 1;
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 include_once("header.php");
