@@ -8,10 +8,12 @@ Core:
   -       Added Section Header in stylesheet "Navigation: Simple - Horizontal"
   - #4895 lang=0 versus lang="0" on cms_selflink help page
   - #4907 Content/Pages/Edit Page Content is not translated
-  - #4929 Copy page - can't select section header.
+  - #4929 Copy page - can't select section header
+  - #4941 Error in Search Module
   - #4952 Alias changes if user has no permission "Manage All Content"
   - #4993 Cannot add new section header
   - #5062 Date Format String in Admin Prefs too Short
+  - #5090 Print module: includetemplate parameter doesn't work
   - Fixed issue where thumbnail width and height wasnt taken.
   - Generate an error if there is no default content detected when saving
     a page, this should help with the problem of no {content} block with
