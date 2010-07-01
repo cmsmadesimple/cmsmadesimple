@@ -22,8 +22,15 @@
  * Handles test functions and values for CMSMS
  *
  * @package CMS
+ * @internal
+ * @ignore
  */
 
+/**
+ * A class for working with tests
+ * 
+ * @internal
+ */
 class CmsInstallTest
 {
 	public $title = null;
@@ -46,12 +53,14 @@ function getSupportedDBDriver()
 	return array('mysqli'=>'mysql', 'mysql'=>'mysql', 'pgsql'=>'pgsql');
 }
 
+
 /**
  * Array with minimum and recommended values
  *
+ * @internal
  * @return array
- * @var string $property
-*/
+ * @param string $property
+ */
 function getTestValues( $property )
 {
 	$range = array(
@@ -80,10 +89,12 @@ function getTestValues( $property )
 }
 
 /**
+ * Test a php global.
+
  * @return array
  * @var mixed   $result
  * @var boolean $set
-*/
+ */
 function testGlobal( $result, $set = false )
 {
 	static $continueon = true;
@@ -111,6 +122,7 @@ function testGlobal( $result, $set = false )
 
 	return array($continueon, $special_failed);
 }
+
 
 /**
  * @return boolean
