@@ -1,35 +1,39 @@
-<?php
-
-# CMS - CMS Made Simple
-# (c)2004 by Ted Kulp (tedkulp@users.sf.net)
-# This project's homepage is: http://cmsmadesimple.org
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+#CMS - CMS Made Simple
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# BUT withOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
+
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
 
 /**
  * Class for static methods related to content
  *
- * @since		0.8
- * @package		CMS
+ * @since 0.8
+ * @package CMS
  */
-
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
-
 class ContentOperations
 {
+	/**
+	 * Loads a content type into the system by it's name.
+	 *
+	 * @param string $type The content type to load
+	 * @return boolean Returns true if the content type was found and loaded
+	 */
 	function LoadContentType($type)
 	{
 		$type = strtolower($type);
@@ -50,6 +54,13 @@ class ContentOperations
 		return false;
 	}
 
+	/**
+	 * Given an array of content_type and seralized_content, reconstructs a 
+	 * content object.  It will handled loading the content type if it hasn't
+	 * already been loaded.
+	 *
+	 * @return mixed The unserialized content object
+	 */
 	function &LoadContentFromSerializedData(&$data)
 	{
 	  if( !isset($data['content_type']) && !isset($data['serialized_content']) ) return FALSE;
@@ -62,6 +73,11 @@ class ContentOperations
 	  return $contentobj;
 	}
 
+	/**
+	 * Creates a new, empty content object of the given type.
+	 *
+	 * @return mixed The new content object
+	 */
 	function &CreateNewContent($type)
 	{
 		$type = strtolower($type);
@@ -77,7 +93,11 @@ class ContentOperations
 	}
 	
     /**
-     * Determine proper type of object, load it and return it
+     * Given a content id, load and return the loaded content object.
+     *
+     * @param integer $id The id of the content object to load
+     * @param boolean $loadprops Also load the properties of that content object. Defaults to false.
+     * @return mixed The loaded content object. If nothing is found, returns FALSE.
      */
 	function &LoadContentFromId($id,$loadprops=false)
 	{
@@ -112,6 +132,13 @@ class ContentOperations
 		}
 	}
 
+    /**
+     * Given a content alias, load and return the loaded content object.
+     *
+     * @param integer $id The id of the content object to load
+     * @param boolean $only_active If true, only return the object if it's active flag is true. Defaults to false.
+     * @return mixed The loaded content object. If nothing is found, returns NULL.
+     */
 	function &LoadContentFromAlias($alias, $only_active = false)
 	{
 		global $gCms;
@@ -160,14 +187,15 @@ class ContentOperations
 	}
 
      /**
-     * Load the content of the object from a list of ID
-     * Private method.
-     * @param $ids	array of element ids
-     * @param $loadProperties	whether to load or not the properties
-     *
-     * @returns array of content objects (empty if not found)
-     */
-	/*private*/ function &LoadMultipleFromId($ids, $loadProperties = false)
+      * Load the content of the object from a list of ids
+      * Private method.
+      *
+      * @access private
+      * @param array $ids List of of element ids to load
+      * @param boolean $loadProperties Whether or not to load the properties
+      * @return array Array of content objects (empty if not found)
+      */
+	function &LoadMultipleFromId($ids, $loadProperties = false)
 	{
 		global $gCms, $sql_queries, $debug_errors;
 		$cpt = count($ids);
@@ -254,17 +282,15 @@ class ContentOperations
 	}
 	
     /**
-     * Load the content of the object from a list of aliases
-     * Private method.
-     * @param $ids	array of element ids
-     * Private method
-     *
-     * @param $alis				the alias of the element
-     * @param $loadProperties	whether to load or not the properties
-     *
-     * @returns array of content objects (empty if not found)
+    * Load the content of the object from a list of content aliases.
+    * Private method.
+    *
+    * @access private
+    * @param array $ids List of of content aliases to load
+    * @param boolean $loadProperties Whether or not to load the properties
+    * @return array Array of content objects (empty if not found)
      */
-	/*private*/function &LoadMultipleFromAlias($ids, $loadProperties = false)
+	function &LoadMultipleFromAlias($ids, $loadProperties = false)
 	{
 		global $gCms, $sql_queries, $debug_errors;
 		$contents=array();
@@ -341,22 +367,30 @@ class ContentOperations
 	}
 
 
-    /**
-     * Display content
-     */
+	/**
+	 * Displays the content of the given content object
+	 *
+	 * @param mixed $content Content object
+	 * @return void
+	 */
 	function DisplayContent($content)
 	{
 		//This should be straight forward, since the content will pretty much determine how it is displayed
 		$content->Show();
 	}
 
-    /**
-     * Determine if content should be loaded from cache
-     */
+	/**
+	 * @ignore
+	 */
     function IsCached($id)
     {
     }
 
+	/**
+	 * Returns the id of the content marked as default.
+	 *
+	 * @return integer The id of the default content page
+	 */
 	function & GetDefaultContent()
 	{
 	  global $gCms;
@@ -389,11 +423,13 @@ class ContentOperations
 		return $result;
 	}
 
-    /**
+	/**
      * Returns a hash of valid content types (classes that extend ContentBase)
      * The key is the name of the class that would be saved into the dabase.  The
      * value would be the text returned by the type's FriendlyName() method.
-     */
+	 *
+	 * @return array Lost of content types registerd in the system.
+	 */
 	function &ListContentTypes()
 	{
 		global $gCms;
@@ -422,6 +458,9 @@ class ContentOperations
 
     /**
      * Updates the hierarchy position of one item
+	 *
+	 * @param integer $contentid The content id to update
+	 * @return void
      */
 	function SetHierarchyPosition($contentid)
 	{
@@ -474,9 +513,11 @@ class ContentOperations
 		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
 	}
 
-    /**
-     * Updates the hierarchy position of all items
-     */
+	/**
+	 * Updates the hierarchy position of all items
+	 *
+	 * @return void
+	 */
 	function SetAllHierarchyPositions()
 	{
 		global $gCms;
@@ -494,6 +535,15 @@ class ContentOperations
 		if ($dbresult) $dbresult->Close();
 	}
 	
+	/**
+	 * Loads a set of content objects into the cached tree.
+	 *
+	 * @param boolean $loadprops If true, load the properties of those content objects
+	 * @param boolean $onlyexpanded Not implemented
+	 * @param boolean $loadcontent If false, only create the nodes in the tree, 
+	 *                             don't load the content objects
+	 * @return mixed The cached tree of content
+	 */
 	function &GetAllContentAsHierarchy($loadprops, $onlyexpanded=null, $loadcontent = false)
 	{
 		debug_buffer('', 'starting tree');
@@ -580,6 +630,16 @@ class ContentOperations
 		return $tree;
 	}
 	
+	/**
+	 * Loads additional, active children into a given tree object
+	 *
+	 * @param integer $id The parent of the content objects to load into the tree
+	 * @param mixed $tree The passed tree object (reference)
+	 * @param boolean $loadprops If true, load the properties of all loaded content objects
+	 * @param boolean $all If true, load all content objects, even inactive ones.
+	 * @return void
+	 * @author Ted Kulp
+	 */
 	function LoadChildrenIntoTree($id, &$tree, $loadprops = false, $all = false)
 	{	
 		global $gCms;
@@ -661,8 +721,12 @@ class ContentOperations
 	}
 
 	/**
-	*  Sets the default content as id
-	*/   
+	 * Sets the default content to the given id
+	 *
+	 * @param integer $id The id to set as default
+	 * @return void
+	 * @author Ted Kulp
+	 */
 	function SetDefaultContent($id) {
 		global $gCms;
 		$db = &$gCms->GetDb();
@@ -683,6 +747,12 @@ class ContentOperations
 		$one->Save();
 	}
 
+	/**
+	 * Returns an array of all content objects in the system, active or not.
+	 *
+	 * @param boolean $loadprops Not implemented
+	 * @return array The array of content objects
+	 */
 	function &GetAllContent($loadprops=true)
 	{
 		debug_buffer('get all content...');
@@ -736,6 +806,23 @@ class ContentOperations
 		return $contentcache;
 	}
 
+	/**
+	 * Create a hierarchical ordered dropdown of all the content objects in the system for use
+	 * in the admin and various modules.  If $current or $parent variables are passed, care is taken
+	 * to make sure that children which could cause a loop are hidden, in cases of when you're creating
+	 * a dropdown for changing a content object's parent.
+	 *
+	 * @param string $current The currently selected content object.  If none is given, we show all items.
+	 * @param string $parent The parent of the currently selected content object. If none is given, we show all items.
+	 * @param string $name The html name of the dropdown
+	 * @param boolean $allowcurrent Overrides the logic if $current and/or $parent are passed. Defaults to false.
+	 * @param boolean $use_perms If true, checks authorship permissions on pages and only shows those the current
+	 *                user has access to.
+	 * @param boolean $ignore_current Ignores the value of $current totally by not marking any items as invalid.
+	 * @param boolean $allow_all If true, show all items, even if the content object 
+	 *                           doesn't have a valid link. Defaults to false.
+	 * @return string The html dropdown of the hierarchy
+	 */
 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, $use_perms = 0, $ignore_current = 0, $allow_all = false)
 	{
 		$result = '';
@@ -833,8 +920,11 @@ class ContentOperations
 		return $result;
 	}
 
-
-    // function to get the id of the default page
+	/**
+	 * Gets the content id of the page marked as default
+	 *
+	 * @return integer The id of the default page. false if not found.
+	 */
 	function GetDefaultPageID()
 	{
 	  
@@ -856,9 +946,12 @@ class ContentOperations
 		return $row['content_id'];
 	}
 
-
-    // function to map an alias to a page id
-    // returns false if nothing cound be found.
+	/**
+	 * Returns the content id given a valid content alias.
+	 *
+	 * @param string $alias The alias to query
+	 * @return integer The resulting id.  false if not found.
+	 */
 	function GetPageIDFromAlias( $alias )
 	{
 		global $gCms;
@@ -881,6 +974,12 @@ class ContentOperations
 		return $row['content_id'];
 	}
 	
+	/**
+	 * Returns the content id given a valid hierarchical position.
+	 *
+	 * @param string $position The position to query
+	 * @return integer The resulting id.  false if not found.
+	 */
 	function GetPageIDFromHierarchy($position)
 	{
 		global $gCms;
@@ -896,9 +995,12 @@ class ContentOperations
 		return $row['content_id'];
 	}
 
-
-    // function to map an alias to a page id
-    // returns false if nothing cound be found.
+	/**
+	 * Returns the content alias given a valid content id.
+	 *
+	 * @param integer $id The content id to query
+	 * @return string The resulting content alias.  false if not found.
+	 */
 	function GetPageAliasFromID( $id )
 	{
 		global $gCms;
@@ -920,6 +1022,13 @@ class ContentOperations
 		return $row['content_alias'];
 	}
 
+	/**
+	 * Checks to see if a content alias is valid and not in use.
+	 *
+	 * @param string $alias The content alias to check
+	 * @param string $content_id The id of the current page, for used alias checks on existing pages
+	 * @return string The error, if any.  If there is no error, returns FALSE.
+	 */
 	function CheckAliasError($alias, $content_id = -1)
 	{
 		global $gCms;
@@ -955,6 +1064,11 @@ class ContentOperations
 		return $error;
 	}
 	
+	/**
+	 * Clears the content cache
+	 *
+	 * @return void
+	 */
 	function ClearCache()
 	{
 		global $gCms;
@@ -972,6 +1086,13 @@ class ContentOperations
 		@touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
 	}
 
+	/**
+	 * Converts a friendly hierarchy (1.1.1) to an unfriendly hierarchy (00001.00001.00001) for
+	 * use in the database.
+	 *
+	 * @param string $position The hierarchy position to convert
+	 * @return string The unfriendly version of the hierarchy string
+	 */
 	function CreateFriendlyHierarchyPosition($position)
 	{
 		#Change padded numbers back into user-friendly values
@@ -986,6 +1107,13 @@ class ContentOperations
 		return $tmp;
 	}
 
+	/**
+	 * Converts an unfriendly hierarchy (00001.00001.00001) to a friendly hierarchy (1.1.1) for
+	 * use in the database.
+	 *
+	 * @param string $position The hierarchy position to convert
+	 * @return string The friendly version of the hierarchy string
+	 */
 	function CreateUnfriendlyHierarchyPosition($position)
 	{
 		#Change user-friendly values into padded numbers
@@ -1003,6 +1131,9 @@ class ContentOperations
 	
 }
 
+/**
+ * @ignore
+ */
 class ContentManager extends ContentOperations
 {
 }

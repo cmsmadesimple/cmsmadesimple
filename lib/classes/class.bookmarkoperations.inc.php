@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (tedkulp@users.sf.net)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,13 @@ include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.bookmark.inc.php')
 
 class BookmarkOperations
 {
+  /**
+   * Prepares a url for saving by replacing security tags with a holder
+   * string so it can be replaced when retrieved and not break security.
+   *
+   * @param string $url The url to save
+   * @return string The fixed url
+   */
   private function _prep_for_saving($url)
   {
     global $gCms;
@@ -44,7 +51,13 @@ class BookmarkOperations
     return $url;
   }
 
-
+  /**
+   * Prepares a url for displaying by replacing the holder for the security
+   * tag with the actual value.
+   *
+   * @param string $url The url to display
+   * @return string The fixed url
+   */
   private function _prep_for_display($url)
   {
     global $gCms;
@@ -65,7 +78,7 @@ class BookmarkOperations
 	/**
 	 * Gets a list of all bookmarks for a given user
 	 *
-	 * @returns array An array of Bookmark objects
+	 * @return array An array of Bookmark objects
 	 */
 	function LoadBookmarks($user_id)
 	{
@@ -94,8 +107,7 @@ class BookmarkOperations
 	 * Loads a bookmark by bookmark_id.
 	 *
 	 * @param mixed $id bookmark_id to load
-	 *
-	 * @returns mixed If successful, the filled Bookmark object.  If it fails, it returns false.
+	 * @return mixed If successful, the filled Bookmark object.  If it fails, it returns false.
 	 * @since 0.6.1
 	 */
 	function LoadBookmarkByID($id)
@@ -125,8 +137,7 @@ class BookmarkOperations
 	 * Saves a new bookmark to the database.
 	 *
 	 * @param mixed $bookmark Bookmark object to save
-	 *
-	 * @returns mixed The new bookmark_id.  If it fails, it returns -1.
+	 * @return mixed The new bookmark_id.  If it fails, it returns -1.
 	 */
 	function InsertBookmark($bookmark)
 	{
@@ -151,8 +162,7 @@ class BookmarkOperations
 	 * Updates an existing bookmark in the database.
 	 *
 	 * @param mixed $bookmark Bookmark object to save
-	 *
-	 * @returns mixed If successful, true.  If it fails, false.
+	 * @return mixed If successful, true.  If it fails, false.
 	 */
 	function UpdateBookmark($bookmark)
 	{
@@ -176,8 +186,7 @@ class BookmarkOperations
 	 * Deletes an existing bookmark from the database.
 	 *
 	 * @param mixed $id Id of the bookmark to delete
-	 *
-	 * @returns mixed If successful, true.  If it fails, false.
+	 * @return mixed If successful, true.  If it fails, false.
 	 */
 	function DeleteBookmarkByID($id)
 	{
@@ -196,4 +205,5 @@ class BookmarkOperations
 	}
 }
 
+# vim:ts=4 sw=4 noet
 ?>

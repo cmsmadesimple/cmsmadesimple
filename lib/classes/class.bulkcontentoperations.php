@@ -1,6 +1,6 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -31,6 +31,15 @@
 
 class bulkcontentoperations {
   
+  /**
+   * Register a function to show in the bulk content operations list
+   * in listcontent.php.
+   *
+   * @param string $label Label to show to users
+   * @param string $name Name of the action to call
+   * @param string $module Name of module, defaults to "core"
+   * @return void
+   */
   static public function register_function($label,$name,$module='core')
     {
       if( empty($name) || empty($label) ) return FALSE;
@@ -48,7 +57,13 @@ class bulkcontentoperations {
       
     }
 
-
+  /**
+   * Gets a list of the registered bulk operations.
+   *
+   * @param boolean $separate_modules Split out the actions from various modules
+   *                                  with a horizontal line.
+   * @return array The list of operations
+   */
   static public function get_operation_list($separate_modules = true)
     {
       $gCms = cmsms();
@@ -80,4 +95,5 @@ class bulkcontentoperations {
     }
 } // end of class
 
+# vim:ts=4 sw=4 noet
 ?>

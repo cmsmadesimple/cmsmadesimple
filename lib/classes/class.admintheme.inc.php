@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (tedkulp@users.sf.net)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -1513,6 +1513,12 @@ class AdminTheme
       $this->_notificationitems[$priority-1][] = array($module,$html);
     }
 
+	/**
+	 * Display the available notifications
+	 *
+	 * @param string $priority Priority threshold
+	 * @return void
+	 */
     function DisplayNotifications($priority=2)
     {
       if( !is_array($this->_notificationitems) ) return;
@@ -1574,7 +1580,7 @@ class AdminTheme
      * Outputs warning if the install directory is still there.
      *
      * @param file file or dir to check for
-	   * @param message to display if it does exist
+	 * @param message to display if it does exist
      */
     function DisplayDashboardCallout($file, $message = '')
     {
@@ -1594,7 +1600,7 @@ class AdminTheme
      * Outputs an item on the dashboard page
      *
      * @param itemtype to display, start/end/core/module
-	   * @param output to display
+	 * @param output to display
      */
     function DisplayDashboardPageItem($item="module", $title='', $content = '')
     {
@@ -1617,6 +1623,7 @@ class AdminTheme
      * @param alt - alt text
      * @param width
      * @param height
+     * @param class
      */
     function DisplayImage($imageName, $alt='', $width='', $height='', $class='')
     {
@@ -1906,6 +1913,9 @@ class AdminTheme
       return $output;
     }
     
+	/**
+	 * Based on the current user's prefernces, get the current theme object.
+	 */
 	function &GetThemeObject()
 	{
 		global $gCms;
@@ -1930,6 +1940,15 @@ class AdminTheme
 	
 	}
 	
+	/**
+	 * Returns a select list of the pages in the system for use in
+	 * various admin pages.
+	 *
+	 * @param string $name - The html name of the select box
+	 * @param string $selected - If a matching id is found in the list, that item
+	 *                           is marked as selected.
+	 * @return string The select list of pages
+	 */
 	function GetAdminPageDropdown($name,$selected)
 	{
 	  $opts = array();
