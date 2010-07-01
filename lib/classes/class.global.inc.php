@@ -170,7 +170,7 @@ class CmsObject {
 	*
 	* @link http://phplens.com/lens/adodb/docs-adodb.htm
 	* @final
-	* @return a handle to the ADODB database object
+	* @return ADOConnection a handle to the ADODB database object
 	*/
 	function & GetDb()
 	{
@@ -192,7 +192,7 @@ class CmsObject {
 	* defined in config.php
 	*
 	* @final
-	* @return an associative array of configuration values
+	* @return mixed an associative array of configuration values
 	*/
 	function & GetConfig()
 	{
@@ -211,7 +211,7 @@ class CmsObject {
 	*
 	* @final
 	* @see ModuleLoader
-	* @return handle to the ModuleLoader object
+	* @return ModuleLoader handle to the ModuleLoader object
 	*/
 	function & GetModuleLoader()
 	{
@@ -231,7 +231,7 @@ class CmsObject {
 	*
 	* @final
 	* @see ModuleOperations
-	* @return handle to the ModuleOperations object
+	* @return ModuleOperations handle to the ModuleOperations object
 	*/
 	function & GetModuleOperations()
 	{
@@ -251,7 +251,7 @@ class CmsObject {
 	*
 	* @final
 	* @see UserOperations
-	* @return handle to the UserOperations object
+	* @return UserOperations handle to the UserOperations object
 	*/
 	function & GetUserOperations()
 	{
@@ -273,7 +273,7 @@ class CmsObject {
 	*
 	* @final
 	* @see ContentOperations
-	* @return handle to the ContentOperations object
+	* @return ContentOperations handle to the ContentOperations object
 	*/
 	function & GetContentOperations()
 	{
@@ -295,7 +295,7 @@ class CmsObject {
 	*
 	* @final
 	* @see BookmarkOperations
-	* @return handle to the BookmarkOperations object, useful only in the admin
+	* @return BookmarkOperations handle to the BookmarkOperations object, useful only in the admin
 	*/	
 	function & GetBookmarkOperations()
 	{
@@ -315,7 +315,7 @@ class CmsObject {
 	*
 	* @final
 	* @see TemplateOperations
-	* @return handle to the TemplateOperations object
+	* @return TemplateOperations handle to the TemplateOperations object
 	*/
 	function & GetTemplateOperations()
 	{
@@ -335,7 +335,7 @@ class CmsObject {
 	*
 	* @final
 	* @see StylesheetOperations
-	* @return handle to the StylesheetOperations object
+	* @return StylesheetOperations handle to the StylesheetOperations object
 	*/	
 	function & GetStylesheetOperations()
 	{
@@ -355,7 +355,7 @@ class CmsObject {
 	*
 	* @final
 	* @see GroupOperations
-	* @return handle to the GroupOperations object
+	* @return GroupOperations handle to the GroupOperations object
 	*/
 	function & GetGroupOperations()
 	{
@@ -377,7 +377,7 @@ class CmsObject {
 	*
 	* @final
 	* @see GlobalContentOperations
-	* @return handle to the GlobalContentOperations object
+	* @return GlobalContentOperations handle to the GlobalContentOperations object
 	*/
 	function & GetGlobalContentOperations()
 	{
@@ -397,7 +397,7 @@ class CmsObject {
 	*
 	* @final
 	* @see UserTagOperations
-	* @return handle to the UserTagOperations object
+	* @return UserTagOperations handle to the UserTagOperations object
 	*/
 	function & GetUserTagOperations()
 	{
@@ -419,7 +419,7 @@ class CmsObject {
 	* @final
 	* @see Smarty_CMS
 	* @link http://www.smarty.net/manual/en/
-	* @return handle to the Smarty object
+	* @return Smarty_CMS handle to the Smarty object
 	*/
 	function & GetSmarty()
 	{
@@ -446,7 +446,7 @@ class CmsObject {
 	*
 	* @final
 	* @see HierarchyManager
-	* @return handle to the HierarchyManager object
+	* @return HierarchyManager handle to the HierarchyManager object
 	*/
 	function & GetHierarchyManager()
 	{
