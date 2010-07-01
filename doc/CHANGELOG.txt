@@ -6,6 +6,7 @@ Core:
   - #4016 Add Pages permission cannot be removed from new groups
   - #4211 simple_navigation.tpl broken
   -       Added Section Header in stylesheet "Navigation: Simple - Horizontal"
+  - #4720 Error in class.module.inc.php
   - #4895 lang=0 versus lang="0" on cms_selflink help page
   - #4907 Content/Pages/Edit Page Content is not translated
   - #4929 Copy page - can't select section header
