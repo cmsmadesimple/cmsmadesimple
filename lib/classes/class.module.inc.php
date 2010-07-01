@@ -56,31 +56,89 @@ class CMSModule
 	 * this is effected by the (optional) lang parameter on module action
 	 * calls. 
 	 *
+	 * @access private
 	 */
 	var $curlang;
 
 	/**
 	 * An array of loaded lang strings
 	 *
+	 * @access private
+	 * @ignore
 	 */
 	var $langhash;
 
 	/**
 	 * A hash of the parameters passed in to the module action
 	 *
+	 * @access private
+	 * @ignore
 	 */
 	var $params;
 
+	/**
+	 * @access private
+	 * @ignore
+	 */
 	var $wysiwygactive;
+
+	/**
+	 * @access private
+	 * @ignore
+	 */
 	var $syntaxactive;
+
+	/**
+	 * @access private
+	 * @ignore
+	 */
 	var $error;
+
+	/**
+	 * @access private
+	 * @ignore
+	 */
 	var $modinstall;
+
+	/**
+	 * @access private
+	 * @ignore
+	 */
 	var $modtemplates;
+
+	/**
+	 * @access private
+	 * @ignore
+	 */
 	var $modlang;
+
+	/**
+	 * @access private
+	 * @ignore
+	 */
 	var $modform;
+
+	/**
+	 * @access private
+	 * @ignore
+	 */
 	var $modredirect;
+
+	/**
+	 * @access private
+	 */
 	var $modmisc;
+
+	/**
+	 * @access private
+	 * @ignore
+	 */
 	var $param_map;
+
+	/**
+	 * @access private
+	 * @ignore
+	 */
 	var $restrict_unknown_params;
 
 	/**
