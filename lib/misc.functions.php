@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#(c)2004-2010 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -23,11 +23,15 @@
  *
  * @package CMS
  */
+
+
 /**
  * Redirects to relative URL on the current site
  *
  * @author http://www.edoceo.com/
  * @since 0.1
+ * @param string The url to redirect to
+ * @return void
  */
 function redirect($to, $noappend=false)
 {
@@ -137,6 +141,10 @@ function redirect($to, $noappend=false)
 
 /**
  * Given a page ID or an alias, redirect to it
+ * Retrieves the URL of the specified page, and performs a redirect
+ *
+ * @param mixed An integer page id or a string page alias.
+ * @return void
  */
 function redirect_to_alias($alias)
 {
@@ -153,10 +161,14 @@ function redirect_to_alias($alias)
 	}
 }
 
+
 /**
- * Shows the difference in seconds between two microtime() values
+ * Calculate the difference in seconds between two microtime() values
  *
  * @since 0.3
+ * @param string Microtime value A
+ * @param string Microtime value B
+ * @return integer The difference.
  */
 function microtime_diff($a, $b) {
 	list($a_dec, $a_sec) = explode(" ", $a);
@@ -164,11 +176,15 @@ function microtime_diff($a, $b) {
 	return $b_sec - $a_sec + $b_dec - $a_dec;
 }
 
+
 /**
  * Joins a path together using proper directory separators
  * Taken from: http://www.php.net/manual/en/ref.dir.php
  *
+ * This method accepts a variable number of string arguments.
+ *
  * @since 0.14
+ * @return string
  */
 function cms_join_path()
 {
@@ -176,11 +192,18 @@ function cms_join_path()
 	return implode(DIRECTORY_SEPARATOR,$args);
 }
 
+
+/**
+ * Return the global gCms object
+ *
+ * @return object
+ */
 function cmsms()
 {
 	global $gCms;
 	return $gCms;
 }
+
 
 /**
  * Shows a very close approximation of an Apache generated 404 error.
@@ -190,6 +213,8 @@ function cmsms()
  * browser error pages (like what IE does) will be displayed.
  *
  * @since 0.3
+ * @deprecated
+ * @internal
  */
 #function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
 function ErrorHandler404()
@@ -213,7 +238,6 @@ function ErrorHandler404()
  * Simple template parser
  *
  * @since 0.6.1
- */
 
 	function parse_template ($template, $tpl_array, $warn=0)
 	{
@@ -254,7 +278,19 @@ function ErrorHandler404()
 		return $template;
 
 	}	// end parse_template();
+ */
 
+
+/**
+ * A method to perform HTML entity conversion on a string
+ *
+ * @see htmlentities
+ * @param string The input string
+ * @param string A flag indicating how quotes should be handled (see htmlentities) (ignored)
+ * @param string The input character set (ignored)
+ * @param boolean A flag indicating wether single quotes should be converted to entities.
+ * @return string the converted string.
+ */
 function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8", $convert_single_quotes = false)
 {
 	$result = "";
@@ -267,6 +303,10 @@ function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8", $convert
  * Clean up the filename, and ensure that the filename resides underneath
  * the cms_root directory, if it does not replace it with the hardcoded
  * string CLEANED_FILENAME
+ *
+ * @internal
+ * @param string The complete file specification
+ * @return string the cleaned file path.
  */
 define('CLEANED_FILENAME','BAD_FILE');
 function cms_cleanfile($filename)
@@ -289,6 +329,10 @@ function cms_cleanfile($filename)
 /**
  * Figures out the page name from the uri string.  Has to use different logic
  * based on the type of httpd server.
+ *
+ * @ignore
+ * @access private
+ * return string
  */
 function cms_calculate_url()
 {
@@ -344,16 +388,12 @@ function cms_calculate_url()
 }
 
 /**
- * Enter description here...
+ * A replacement for the built in htmlentities method.
  *
- * @param unknown $val
- * @param integer $quote_style
+ * @ignore
+ * @param string  input string
+ * @param boolean A flag wether or not to handle single quotes.
  * @return unknown
- *
- * $quote_style may be one of:
- *     ENT_COMPAT   : Will convert double-quotes and leave single-quotes alone.
- *     ENT_QUOTES   : Will convert both double and single quotes.
- *     ENT_NOQUOTES : Will leave both double and single quotes unconverted.
  */
 function my_htmlentities($val, $convert_single_quotes = false)
 {
@@ -412,10 +452,12 @@ function my_htmlentities($val, $convert_single_quotes = false)
 
 
 /**
- * Enter description here...
+ * A method to convert a string into UTF-8 entities
  *
- * @param unknown $val
- * @return unknown
+ * @internal
+ * @deprecated
+ * @param string Input string
+ * @return string
  */
 function cms_utf8entities($val)
 {
@@ -468,6 +510,7 @@ function cms_utf8entities($val)
 
 
 //Taken from http://www.webmasterworld.com/forum88/164.htm
+/*
 function nl2pnbr( $text )
 {
 	// Use \n for newline on all systems
@@ -483,8 +526,12 @@ function nl2pnbr( $text )
 	$text = preg_replace('|(?<!</p>)\s*\n|', "<br />", $text);
 
 	return $text;
-}
+}*/
 
+
+/**
+ * A function to put a backtrace into the generated log file
+ */
 function debug_bt_to_log()
 {
     $bt=debug_backtrace();
@@ -512,6 +559,9 @@ function debug_bt_to_log()
       }
 }
 
+/**
+ * A function to generate a backtrace in a readable format.
+ */
 function debug_bt()
 {
     $bt=debug_backtrace();
@@ -640,6 +690,14 @@ function debug_output($var, $title="")
 
 }
 
+
+/**
+ * Debug function to output debug information about a variable in a formatted matter
+ * to a debug file.
+ *
+ * @param mixed data to display
+ * @param string Optional title.
+ */
 function debug_to_log($var, $title='')
 {
 	global $gCms;
@@ -652,6 +710,7 @@ function debug_to_log($var, $title='')
 		error_log($txt . "\n", 3, $filename);
 	}
 }
+
 
 /**
  * Display $var nicely to the $gCms->errors array if $config['debug'] is set
@@ -675,7 +734,15 @@ function debug_buffer($var, $title="")
 	}
 }
 
-function debug_sql($str, $newline)
+
+/**
+ * Debug an sql command
+ *
+ * @internal
+ * @param string SQL query
+ * @param boolean (unused)
+ */
+function debug_sql($str, $newline = false)
 {
 	global $gCms;
 	if ($gCms)
@@ -784,6 +851,7 @@ function get_value_with_default($value, $default_value = '', $session_key = '')
 	return $return_value;
 }
 
+
 /**
  * Retrieve the $value from the $parameters array checking for
  * $parameters[$value] and $params[$id.$value]. Returns $default
@@ -866,6 +934,14 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
 	return $return_value;
 }
 
+/**
+ * A convenience functo to create a dropdown control with supported encodings.
+ *
+ * @internal
+ * @param string A name for the control
+ * @param string The name of the option that should be selected.
+ * @return string
+ */
 function create_encoding_dropdown($name = 'encoding', $selected = '')
 {
 	$result = '';
@@ -888,6 +964,13 @@ function create_encoding_dropdown($name = 'encoding', $selected = '')
 }
 
 
+/**
+ * A method to remove a permission from the database.
+ *
+ * @internal
+ * @access private
+ * @param string The permission name
+ */
 function cms_mapi_remove_permission($permission_name)
 {
   global $gCms;
@@ -908,6 +991,16 @@ function cms_mapi_remove_permission($permission_name)
     }
 }
 
+
+/**
+ * A method to add a permission to the CMSMS permissions table
+ *
+ * @internal
+ * @access private
+ * @param unknown (ignored)
+ * @param string  The permission name
+ * @param string  The permission human readable text.
+ */
 function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 {
 	global $gCms;
@@ -932,6 +1025,17 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 }
 
 
+/**
+ * A function to test if a file specification matches an array of
+ * file specifications that indicate it should be excluded
+ *
+ * @internal
+ * @deprecated
+ * @access private
+ * @param string Flle specification
+ * @param array  Array of regular expressions.
+ * @return boolean
+ */
 function filespec_is_excluded( $file, $excludes )
 {
   // strip the path from the file
@@ -950,15 +1054,12 @@ function filespec_is_excluded( $file, $excludes )
 /**
  * Check the permissions of a directory recursively to make sure that
  * we have write permission to all files
- * &param  path      start path
-*/
+ *
+ * @param  string  Start directory.
+ * @return boolean
+ */
 function is_directory_writable( $path )
 {
-//   if( can_admin_upload() == FALSE )
-//     {
-//       return false;
-//     }
-
   if ( substr ( $path , strlen ( $path ) - 1 ) != '/' )
     {
       $path .= '/' ;
@@ -1000,9 +1101,12 @@ function is_directory_writable( $path )
   return true;
 }
 
+
 /**
  * Return an array containing a list of files in a directory
  * performs a non recursive search
+ *
+ * @internal
  * @param path - path to search
  * @param extensions - include only files matching these extensions
  *                     case insensitive, comma delimited
@@ -1043,11 +1147,15 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
 
 /**
  * Return an array containing a list of files in a directory
- * performs a recursive serach
- * @param  path      start path
- * @param  maxdepth  how deep to browse (-1=unlimited)
- * @param  mode      "FULL"|"DIRS"|"FILES"
+ * performs a recursive search
+ *
+ * @internal
+ * @param  string    Start Path.
+ * @param  array     Array of regular expressions indicating files to exclude.
+ * @param  int       How deep to browse (-1=unlimited)
+ * @param  string    "FULL"|"DIRS"|"FILES"
  * @param  d         for internal use only
+ * @rturn  array
 **/
 function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "FULL" , $d = 0 )
 {
@@ -1076,6 +1184,13 @@ function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "
 }
 
 
+/**
+ * A function to recursively delete all files and folders in a directory
+ * synonymous with rm -r
+ *
+ * @param string The directory name
+ * @return boolean
+ */
 function recursive_delete( $dirname )
 {
   // all subdirectories and contents:
@@ -1107,6 +1222,13 @@ function recursive_delete( $dirname )
 }
 
 
+/**
+ * A function to recursively chmod all files and folders in a directory
+ *
+ * @see chmod
+ * @param string The start location
+ * @param integer The mode
+ */
 function chmod_r( $path, $mode )
 {
   if( !is_dir( $path ) )
@@ -1141,32 +1263,81 @@ function chmod_r( $path, $mode )
   return @chmod( $path, $mode );
 }
 
-
+/**
+ * A method to serialize an object and encode it for storage or transport.
+ *
+ * @internal
+ * @param object The object to serialize
+ * @return string
+ */
 function SerializeObject(&$object)
 {
 	return base64_encode(serialize($object));
 }
 
+/**
+ * A function unserialize data into an object
+ *
+ * @internal
+ * @param string The serialized text.
+ * @return object  A valid object on success, or null
+ */
 function UnserializeObject(&$serialized)
 {
 	return  unserialize(base64_decode($serialized));
 }
 
+
+/**
+ * A convenience function to test wether one string starts with another
+ *
+ * i.e:  startswith('The Quick Brown Fox','The');
+ *
+ * @param string The string to test against
+ * @param string The search string
+ * @return boolean
+ */
 function startswith( $str, $sub )
 {
 	return ( substr( $str, 0, strlen( $sub ) ) == $sub );
 }
 
+/**
+ * Similar to the startswith method, this function tests with string A ends with string B
+ *
+ * i.e: endswith('The Quick Brown Fox','Fox');
+ *
+ * @param string The string to test against
+ * @param string The search string
+ * @return boolean
+ */
 function endswith( $str, $sub )
 {
 	return ( substr( $str, strlen( $str ) - strlen( $sub ) ) == $sub );
 }
 
+/**
+ * A convenience function to display the memory usage
+ *
+ * @internal
+ * @param string A prefix to display before the memory output
+ * @return void
+ */
 function showmem($string = '')
 {
 	var_dump($string . ' -- ' . memory_get_usage());
 }
 
+
+/**
+ * convert a human readable string into something that is suitable for use in URLS
+ * because many browsers don't support UTF-8 characters in URLS
+ *
+ * @internal
+ * @param string String to convert
+ * @param boolean indicates whether output string should be converted to lower case
+ * @return string
+ */
 function munge_string_to_url($alias, $tolower = false)
 {
 	// replacement.php is encoded utf-8 and must be the first modification of alias
@@ -1186,6 +1357,7 @@ function munge_string_to_url($alias, $tolower = false)
 	return $alias;
 }
 
+// I'm not gonna document these.
 if (!function_exists('file_put_contents')) {
     function file_put_contents($filename, $data) {
         $f = @fopen($filename, 'w');
@@ -1285,6 +1457,9 @@ if (!function_exists("stripos")) {
  * Sanitize input to prevent against XSS and other nasty stuff.
  * Taken from cakephp (http://cakephp.org)
  * Licensed under the MIT License
+ * 
+ * @param string input
+ * @return string
  */
 function cleanValue($val) {
 	if ($val == "") {
@@ -1314,6 +1489,10 @@ function cleanValue($val) {
  * Method to sanitize incoming html.
  * Take from cakephp (http://cakephp.org)
  * Licensed under the MIT License
+ *
+ * @param string Input HTML code.
+ * @param boolean Wether HTML tags should be removed.
+ * @return string
  */
 function cleanHtml($string, $remove = false) {
 	if ($remove) {
@@ -1327,17 +1506,24 @@ function cleanHtml($string, $remove = false) {
 }
 
 
-/**
- * Method to sanitize all entries in
- * a hash
- *
-*/
 define('CLEAN_INT','CLEAN_INT');
 define('CLEAN_FLOAT','CLEAN_FLOAT');
 define('CLEAN_NONE','CLEAN_NONE');
 define('CLEAN_STRING','CLEAN_STRING');
 define('CLEAN_REGEXP','regexp:');
 define('CLEAN_FILE','CLEAN_FILE');
+/**
+ * Method to sanitize all entries in a hash
+ * This method is called by the module api to clean incomming parameters in the frontend.
+ * It uses the map created with the SetParameterType() method in the module api.
+ *
+ * @internal
+ * @param string Module Name
+ * @param array  Hash data
+ * @param array  A map of param names and type information
+ * @param boolean A flag indicating wether unknown keys in the input data should be allowed.
+ * @param boolean A flag indicating wether keys should be treated as strings and cleaned.
+*/
 function cleanParamHash($modulename,$data,$map = false,
 			$allow_unknown = false,$clean_keys = true)
 {
@@ -1432,9 +1618,14 @@ function cleanParamHash($modulename,$data,$map = false,
   return $result;
 }
 
+
 /**
  * Returns all parameters sent that are destined for the module with
- * the given $id
+ * the given $id.  This method reads the parameters directly from the $_REQUEST
+ *
+ * @internal
+ * @param string ID (the module instance ID to use for extracting parameters)
+ * @return array
  */
 function GetModuleParameters($id)
 {
@@ -1460,6 +1651,13 @@ function GetModuleParameters($id)
 }
 
 
+/**
+ * A function to test if permissions are set correctly, and the server is set properly
+ * to allow users to upload to CMSMS.
+ *
+ * @internal
+ * @return boolean
+ */
 function can_users_upload()
 {
   # first, check to see if safe mode is enabled
@@ -1504,6 +1702,14 @@ function can_users_upload()
   return TRUE;
 }
 
+
+/**
+ * A function to test if permissions, and php configuration is setup correctly
+ * to allow an administrator to upload files to CMSMS
+ *
+ * @internal
+ * @return boolean
+ */
 function can_admin_upload()
 {
   # first, check to see if safe mode is enabled
@@ -1561,6 +1767,15 @@ function can_admin_upload()
   return TRUE;
 }
 
+
+/** 
+ * A convenience function to interpret octal permissions, and return 
+ * a human readable string.  Uses the lang() function for translation.
+ *
+ * @internal
+ * @param int The permissions to test.
+ * @return string
+ */
 function interpret_permissions($perms)
 {
   $owner = array();
@@ -1609,6 +1824,13 @@ function interpret_permissions($perms)
   return array($owner,$group,$other);
 }
 
+
+/**
+ * A convenience function to return a boolean variable given a php ini key that represents a boolean
+ *
+ * @param string  The php ini key
+ * @return integer
+ */
 function ini_get_boolean($str)
 {
   $val1 = ini_get($str);
@@ -1620,6 +1842,11 @@ function ini_get_boolean($str)
   return $ret;
 }
 
+/**
+ * Another convenience function to output a human readable function stack trace
+ *
+ * @return void
+ */
 function stack_trace()
 {
   $stack = debug_backtrace();
@@ -1637,6 +1864,15 @@ function stack_trace()
     }
 }
 
+
+/** 
+ * A wrapper around move_uploaded_file that attempts to ensure permissions on uploaded
+ * files are set correctly.
+ *
+ * @param string The temporary file specification
+ * @param string The destination file specification
+ * @return boolean.
+ */
 function cms_move_uploaded_file( $tmpfile, $destination )
 {
    global $gCms;
@@ -1651,6 +1887,15 @@ function cms_move_uploaded_file( $tmpfile, $destination )
    return true;
 }
 
+
+/**
+ * A function to read CSS cache information
+ *
+ * @deprecated
+ * @internal
+ * @param string Filename containing cash information
+ * @return array of css cache information
+ */
 function csscache_csvfile_to_hash($filename)
 {
   if( !is_readable($filename) ) return false;
@@ -1666,6 +1911,15 @@ function csscache_csvfile_to_hash($filename)
   return $result;
 }
 
+/**
+ * A function to take hash information representing CSS cache data and store it in a CSV file
+ *
+ * @deprecated
+ * @internal
+ * @param string Filename to output information to
+ * @param array  Hash of CSS cache information.
+ * @return void
+ */
 function csscache_hash_to_csvfile($filename,$hash)
 {
   $fh = @fopen($filename,'w');
@@ -1679,11 +1933,33 @@ function csscache_hash_to_csvfile($filename,$hash)
   fclose($fh);
 }
 
+/**
+ * A function to clear clear the cached CSS information
+ *
+ * @deprecated
+ * @internal
+ * @param string Filename containing CSS cache information
+ * @return void
+ */
 function css_cache_clear($filename)
 {
   @unlink($filename);
 }
 
+
+/**
+ * A function to test wether an IP address matches a list of expressions
+ * Credits to J.Adams <jna@retins.net>
+ *
+ * Expressions can be of the form
+ *   xxx.xxx.xxx.xxx        (exact)
+ *   xxx.xxx.xxx.[yyy-zzz]  (range)
+ *   xxx.xxx.xxx.xxx/nn    (nn = # bits, cisco style -- i.e. /24 = class C)
+ *
+ * @param string IP address to test
+ * @param array  Array of match expressions
+ * @return boolean
+ */
 function cms_ipmatches($ip,$checklist)
 {
   if( !function_exists('__testip') ) {
@@ -1755,6 +2031,7 @@ function cms_ipmatches($ip,$checklist)
     }
   return FALSE;
 }
+
 
 /**
  * @package	isemail
@@ -2108,6 +2385,14 @@ function is_email( $email, $checkDNS=false ) {
 	return true;
 }
 
+
+/**
+ * A convenience method to output the secure param tag that is used on all admin links
+ *
+ * @internal
+ * @access private
+ * @return string
+ */
 function get_secure_param()
 {
   $urlext = '?';

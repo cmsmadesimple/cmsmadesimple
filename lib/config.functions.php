@@ -23,10 +23,12 @@
  *
  * @package CMS
  */
+
 /**
  * Loads the config file with defaults and then with specific values from config.php
  *
  * @since 0.5
+ * @ignore
  */
 function cms_config_load($loadLocal = true, $upgrade = false)
 {
@@ -171,6 +173,9 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	return $config;
 }
 
+/**
+ * @ignore
+ */
 function cms_config_text($config)
 {
   if( !isset($config['ssl_url']) )
@@ -380,6 +385,7 @@ EOF;
  * if there is no access to the file;
  *
  * @since 0.5
+ * @ignore
  */
 function cms_config_save($config)
 {
@@ -427,6 +433,8 @@ function cms_config_save($config)
  * Upgrades config.php from the old style
  *
  * @since 0.5
+ * @deprecated
+ * @ignore
  */
 function cms_config_upgrade()
 {

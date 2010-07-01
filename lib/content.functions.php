@@ -23,19 +23,31 @@
  *
  * @package CMS
  */
+
+/**
+ * @ignore
+ */
 $sorted_sections = array();
+
+/**
+ * @ignore
+ */
 $sorted_content = array();
 
 /**
  * Extends the Smarty class for content.
  *
- * Extends the Smarty class for checking timestamps and rendering
- * content to the browser.
+ * Extends the Smarty class for checking timestamps and rendering content to the browser.
  *
  * @since 0.1
  */
 class Smarty_CMS extends Smarty {
 	
+        /**
+	 * Constructor
+	 *
+	 * @param array The hash of CMSMS config settings
+	 */
 	function Smarty_CMS(&$config)
 	{
 		$this->Smarty();
@@ -142,6 +154,11 @@ class Smarty_CMS extends Smarty {
 
     /**
      * wrapper for include() retaining $this
+     *
+     * @ignore
+     * @access private
+     * @param  string The input filename
+     * @param  boolean A flag wether include_once should be called or just include
      * @return mixed
      */
     function _include($filename, $once=false, $params=null)
@@ -156,12 +173,32 @@ class Smarty_CMS extends Smarty {
         }
     }
 
+
+    /**
+     * Wrapper for the trigger_error method
+     *
+     * @ignore
+     * @access private
+     * @param string The error message
+     * @param int    The error type E_USER_WARNING or E_USER_NOTICE
+     * @return void
+     */
     function trigger_error($error_msg, $error_type = E_USER_WARNING)
     {   
         var_dump("Smarty error: $error_msg");
     }
 
-	function module_file_template($tpl_name, &$tpl_source, &$smarty_obj)
+
+    /**
+     * Method to return module file template contents.
+     * 
+     * @access private
+     * @param string The module template name
+     * @param string (returned) template contents
+     * @param object The smarty object
+     * @return boolean
+     */
+    function module_file_template($tpl_name, &$tpl_source, &$smarty_obj)
     {
       
       $params = preg_split('/;/', $tpl_name);
@@ -180,6 +217,15 @@ class Smarty_CMS extends Smarty {
         return false;
     }
 
+    /** 
+     *  A method to return the timestamp of a module file template
+     *
+     *  @access private
+     *  @param  string The filename of the module template
+     *  @param  int    (returned) The file timestamp
+     *  @param  object The smarty object
+     *  @return boolean
+     */
 	function module_file_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
       
@@ -193,6 +239,15 @@ class Smarty_CMS extends Smarty {
 		return false;
 	}
 
+    /**
+     * A method to return a module database template.
+     *
+     * @access private
+     * @pararm string The database template name.
+     * @param  string (returned) The database template contents
+     * @param  object The smarty object.
+     * @return boolean
+     */
     function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)
     {   
         global $gCms;
@@ -212,6 +267,15 @@ class Smarty_CMS extends Smarty {
         return false;
     }
 
+    /** 
+     *  A method to return the timestamp of a module database template
+     *
+     *  @access private
+     *  @param  string The name of the module template
+     *  @param  int    (returned) The file timestamp
+     *  @param  object The smarty object
+     *  @return boolean
+     */
 	function module_db_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
 		global $gCms;
@@ -246,6 +310,16 @@ class Smarty_CMS extends Smarty {
 		return true;
 	}
 
+
+    /**
+     * A method to return the contents of a global content block.
+     *
+     * @access private
+     * @pararm string The global content block name.
+     * @param  string (returned) The database template contents
+     * @param  object The smarty object.
+     * @return boolean
+     */
 	function global_content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		debug_buffer('start global_content_get_template');
@@ -289,6 +363,16 @@ class Smarty_CMS extends Smarty {
 		return true;
 	}
 
+
+    /** 
+     *  A method to return the timestamp of a global content block.
+     *
+     *  @access private
+     *  @param  string The name of the global content block.
+     *  @param  int    (returned) The file timestamp
+     *  @param  object The smarty object
+     *  @return boolean
+     */
 	function global_content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
 		debug_buffer('start global_content_get_timestamp');
@@ -307,6 +391,16 @@ class Smarty_CMS extends Smarty {
 		}
 	}
 
+
+    /**
+     * Given a page template, return the portion of a page template before the head tag.
+     *
+     * @access private
+     * @pararm string The page template name.
+     * @param  string (returned) The database template contents
+     * @param  object The smarty object.
+     * @return boolean
+     */
 	function template_top_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 	  global $gCms;
@@ -353,6 +447,16 @@ class Smarty_CMS extends Smarty {
 	  return false;
 	}
 
+
+    /**
+     * Given a page template, return the head portion of a page template.
+     *
+     * @access private
+     * @pararm string The page template name.
+     * @param  string (returned) The database template contents
+     * @param  object The smarty object.
+     * @return boolean
+     */
 	function template_head_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 	  global $gCms;
@@ -403,6 +507,15 @@ class Smarty_CMS extends Smarty {
 	}
 
 
+    /**
+     * Given a page template, return the body portion of a page template.
+     *
+     * @access private
+     * @pararm string The page template name.
+     * @param  string (returned) The database template contents
+     * @param  object The smarty object.
+     * @return boolean
+     */
 	function template_body_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 	  global $gCms;
@@ -457,6 +570,15 @@ class Smarty_CMS extends Smarty {
 	  return false;
 	}
 
+    /**
+     * Given a page template name, return it's entire contents.
+     *
+     * @access private
+     * @pararm string The page template name.
+     * @param  string (returned) The database template contents
+     * @param  object The smarty object.
+     * @return boolean
+     */
 	function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		global $gCms;
@@ -565,6 +687,16 @@ class Smarty_CMS extends Smarty {
 		}
 	}
 
+
+    /**
+     * Given a page template name, return it's modification date.
+     *
+     * @access private
+     * @pararm string The page template name.
+     * @param  int (returned) The database template modification time.
+     * @param  object The smarty object.
+     * @return boolean
+     */
 	function template_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
 		global $gCms;
@@ -593,6 +725,20 @@ class Smarty_CMS extends Smarty {
 		}
 	}
 
+
+    /**
+     * Given the name of a content block, return it's content.
+     * This method assumes the use of the pageinfo information that is created in the CMSMS index.php
+     * to determine the page id that should be used to identify which content object to use.
+     * if the pageinfo is not set, it is possible for a 404 error message to be displayed.
+     * This method also handles returning preview content if the data exists in the session.
+     *
+     * @access private
+     * @pararm string The page template name.
+     * @param  string (returned) The database template contents
+     * @param  object The smarty object.
+     * @return boolean
+     */
 	function content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		global $gCms;
@@ -656,6 +802,16 @@ class Smarty_CMS extends Smarty {
 		return false;
 	}
 
+    /**
+     * Return the modified date of the current page id (as specified in the pageinfo)
+     * This method is used by smarty to indicate wether a content page should be recompiled and cached
+     *
+     * @access private
+     * @pararm string The page template name (ignored)
+     * @param  int (returned) The timestamp of the modification date of the matching content object.
+     * @param  object The smarty object.
+     * @return boolean
+     */
 	function content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
 		global $gCms;
@@ -681,6 +837,19 @@ class Smarty_CMS extends Smarty {
 		return true;
 	}
 	
+    /**
+     * Retrieve output from a module.
+     * This method grabs parameters from the request, and given the module name
+     * will call the module with the specified parameters to retrieve the module output.
+     * This is used to replace the contents of the {content} tag when a module action is
+     * called in a non inline manner.
+     *
+     * @access private
+     * @pararm string The module name.
+     * @param  string (returned) The moduleoutput.
+     * @param  object The smarty object.
+     * @return boolean
+     */
 	function module_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		global $gCms;
@@ -724,18 +893,47 @@ class Smarty_CMS extends Smarty {
 		return true;
 	}
 
+    /**
+     * A dummy function to return the modified date of the latest module output.  
+     * This function always returns the current time which essentially disables smarty compile caching
+     * for non-inline module output.
+     *
+     * @access private
+     * @pararm string The page template name (ignored)
+     * @param  int (returned) The timestamp of the modification date of the matching template (always current time)
+     * @param  object The smarty object.
+     * @return boolean
+     */
 	function module_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
 		$tpl_timestamp = time();
 		return true;
 	}
 
+	/** 
+	 * A dummy function that indicates that all db templates are secure.
+	 * (always returns true)
+	 *
+	 * @access private
+	 * @param  string The template name (ignored)
+	 * @param  object The smarty object
+	 * @return boolean
+	 */
 	function db_get_secure($tpl_name, &$smarty_obj)
 	{
 		// assume all templates are secure
 		return true;
 	}
 
+	/** 
+	 * A dummy function that indicates that all db templates are truested.
+	 * (always returns true)
+	 *
+	 * @access private
+	 * @param  string The template name (ignored)
+	 * @param  object The smarty object
+	 * @return boolean
+	 */
 	function db_get_trusted($tpl_name, &$smarty_obj)
 	{
 		// not used for templates
@@ -746,6 +944,8 @@ class Smarty_CMS extends Smarty {
  * Loads all plugins into the system
  *
  * @since 0.5
+ * @param object The smarty object
+ * @return void
  */
 function load_plugins(&$smarty)
 {
@@ -786,6 +986,17 @@ function load_plugins(&$smarty)
 	}
 }
 
+/**
+ * A function to load all valid plugins in the plugins directory.
+ *
+ * @internal
+ * @access privae
+ * @param object The smarty object
+ * @param array  A reference to the $gCms->plugins array.
+ * @param string The directory name
+ * @param boolean Wether caching should be applied
+ * @return void
+ */
 function search_plugins(&$smarty, &$plugins, $dir, $caching)
 {
 	global $CMS_LOAD_ALL_PLUGINS;
@@ -856,6 +1067,17 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 	closedir($handle);
 }
 
+/**
+ * A function to generate cross references between content types
+ * This function can be used to generate which global content blocks are used by which content object
+ *
+ * @ignore
+ * @access private
+ * @param int the parent object id (usually a page template id or a page id.
+ * @param string The parent object type
+ * @param string The test content
+ * @return void
+ */
 function do_cross_reference($parent_id, $parent_type, $content)
 {
 	global $gCms;
@@ -886,6 +1108,15 @@ function do_cross_reference($parent_id, $parent_type, $content)
 	}
 }
 
+/**
+ * A function to remove all cross references for a parent object
+ *
+ * @ignore
+ * @access private
+ * @param int The parent object id
+ * @param string The parent object type
+ * @return void
+ */
 function remove_cross_references($parent_id, $parent_type)
 {
 	global $gCms;
@@ -896,6 +1127,15 @@ function remove_cross_references($parent_id, $parent_type)
 	$db->Execute($query, array($parent_id, $parent_type));
 }
 
+/**
+ * A function to remove all cross references for a child
+ *
+ * @ignore
+ * @access private
+ * @param int The child object id
+ * @param string The child object type
+ * @return void
+ */
 function remove_cross_references_by_child($child_id, $child_type)
 {
 	global $gCms;
@@ -906,6 +1146,14 @@ function remove_cross_references_by_child($child_id, $child_type)
 	$db->Execute($query, array($child_id, $child_type));
 }
 
+/**
+ * A utility function to load the specified global content blocks and call the GlobalContentPrecompile method.
+ *
+ * @ignore
+ * @access private
+ * @param array Array containing the name of 1 global content block
+ * @return void
+ */
 function global_content_regex_callback($matches)
 {
 	global $gCms;
@@ -945,6 +1193,13 @@ function global_content_regex_callback($matches)
 }
 
 
+/**
+ * A convenience function to test if the site is marked as down according to the config panel.
+ * This method includes handling the preference that indicates that site-down behaviour should
+ * be disabled for certain IP address ranges.
+ *
+ * @return boolean
+ */
 function is_sitedown()
 {
   if( get_site_preference('enablesitedownmessage') !== '1' ) return FALSE;

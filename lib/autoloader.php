@@ -18,6 +18,9 @@
 #
 #$Id$
 
+/**
+ * @ignore
+ */
 function cms_autoloader($classname)
 {
   global $gCms;

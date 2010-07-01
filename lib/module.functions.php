@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#(c)2004-2010 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -24,23 +24,17 @@
  * @package CMS
  */
 
-/* a duplicate function?
-function cms_mapi_create_permission($cms, $permission_name, $permission_text) {
 
-	$db =& $cms->db;
-
-	$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name =" . $db->qstr($permission_name); 
-	$result = $db->Execute($query);
-
-	if ($result && $result->RecordCount() < 1) {
-
-		$new_id = $db->GenID(cms_db_prefix()."permissions_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id, ".$db->qstr($permission_name).",".$db->qstr($permission_text).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
-		$db->Execute($query);
-	}
-}
-*/
-
+/**
+ * A function to call a module as a smarty plugin
+ * This method is used by the {cms_module} plugin, and internally when {ModuleName} is called
+ *
+ * @internal
+ * @access private
+ * @param array A hash of parameters 
+ * @param object The smarty object
+ * @return string The module output
+ */
 function cms_module_plugin($params,&$smarty)
 {
 	global $gCms;

@@ -24,13 +24,15 @@
  *
  * @package CMS
  */
+
+
 /**
  * Checks to see if the user is logged in.   If not, redirects the browser
  * to the admin login.
  *
  * @since 0.1
  * @param string no_redirect - If true, then don't redirect if not logged in
- * @returns If they're logged in, true.  If not logged in, false. 
+ * @return boolean
  */
 function check_login($no_redirect = false)
 {
@@ -130,11 +132,13 @@ function check_login($no_redirect = false)
 	return true;
 }
 
+
 /**
  * Gets the userid of the currently logged in user.
  *
- * @returns If they're logged in, the user id.  If not logged in, false.
  * @since 0.1
+ * @param  boolean Redirect to the admin login page if the user is not logged in.
+ * @return integer The UID of the logged in administrator, otherwise FALSE
  */
 function get_userid($check = true)
 {
@@ -153,6 +157,15 @@ function get_userid($check = true)
 	}
 }
 
+/**
+ * A function to check if the checksum provided can be used to validate the user to this site
+ *
+ * @internal
+ * @access private
+ * @param int The admin userid.
+ * @param string The checksum variable
+ * @return boolean
+ */
 function check_passhash($userid, $checksum)
 {
 	$check = false;
@@ -178,7 +191,11 @@ function check_passhash($userid, $checksum)
  * for 20+ minutes with no interaction), the user won't have to relogin to regenerate
  * the details.
  *
+ * @internal
+ * @access private
  * @since 0.5
+ * @param integer The admin user id
+ * @return void
  */
 function generate_user_object($userid)
 {
@@ -199,6 +216,15 @@ function generate_user_object($userid)
 	}
 }
 
+
+/**
+ * A function to send lost password recovery email to a specified admin user (by name)
+ *
+ * @internal
+ * @access private
+ * @param string the username
+ * @return results from the attempt to send a message.
+ */
 function send_recovery_email($username)
 {
 	global $gCms;
@@ -231,6 +257,14 @@ function send_recovery_email($username)
 	return $obj->Send();
 }
 
+/**
+ * A function find a matching user id given an identity hash
+ *
+ * @internal
+ * @access private
+ * @param string the hash
+ * @return object The matching user object if found, or null otherwise.
+ */
 function find_recovery_user($hash)
 {
 	global $gCms;
@@ -251,7 +285,11 @@ function find_recovery_user($hash)
 /**
  * Loads all permissions for a particular user into a global variable so we don't hit the db for every one.
  *
+ * @internal
+ * @access private
  * @since 0.8
+ * @param int The user id
+ * @return void
  */
 function load_all_permissions($userid)
 {
@@ -275,11 +313,13 @@ function load_all_permissions($userid)
 }
 
 /**
- * Checks to see that the given userid has access to
- * the given permission.
+ * Checks to see that the given userid has access to the given permission.
+ * Members of the admin group have all permissions.
  *
- * @returns mixed If they have perimission, true.  If they do not, false.
  * @since 0.1
+ * @param int The user id
+ * @param string The permission name
+ * @return boolean
  */
 function check_permission($userid, $permname)
 {
@@ -306,11 +346,17 @@ function check_permission($userid, $permname)
 	return $check;
 }
 
+
 /**
  * Checks that the given userid is the owner of the given contentid.
+ * (members of the admin group have all permission)
  *
- * @returns mixed If they have ownership, true.  If they do not, false.
+ * @internal
  * @since 0.1
+ * @param   integer  The User ID
+ * @param   integer  The content id
+ * @param   boolean  use strict checking (ignored)
+ * @return  boolean 
  */
 function check_ownership($userid, $contentid = '', $strict = false)
 {
@@ -356,8 +402,11 @@ function check_ownership($userid, $contentid = '', $strict = false)
  * pageid.  This would mean that they were set as additional
  * authors/editors by the owner.
  *
- * @returns mixed If they have authorship, true.  If they do not, false.
+ * @internal
  * @since 0.2
+ * @param  integer The admin user id
+ * @param  integer A valid content id.
+ * @return boolean
  */
 function check_authorship($userid, $contentid = '')
 {
@@ -383,8 +432,10 @@ function check_authorship($userid, $contentid = '')
 /**
  * Prepares an array with the list of the pages $userid is an author of
  *
- * @returns an array in whose elements are the IDs of the pages
+ * @internal
  * @since 0.11
+ * @param  integer The user id.
+ * @return array   An array of pages this user is an author of.
  */
 function author_pages($userid)
 {
@@ -443,8 +494,11 @@ function author_pages($userid)
  * pageid.  This would mean that they were set as additional
  * authors/editors by the owner.
  *
- * @returns mixed If they have authorship, true.  If they do not, false.
  * @since 0.11
+ * @internal
+ * @param   integer The content id to test with
+ * @param   array   A list of the authors pages.
+ * @return  boolean
  */
 function quick_check_authorship($contentid, $hispages)
 {
@@ -458,11 +512,16 @@ function quick_check_authorship($contentid, $hispages)
 	return $check;
 }
 
+
 /**
  * Put an event into the audit (admin) log.  This should be
  * done on most admin events for consistency.
  *
  * @since 0.3
+ * @param integer The item id (perhaps a content id, or a record id from a module)
+ * @param string  The item name (perhaps Content, or the module name)
+ * @param string  The action that needs to be audited
+ * @return void
  */
 function audit($itemid, $itemname, $action)
 {
@@ -498,15 +557,16 @@ function audit($itemid, $itemname, $action)
 	$db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action));
 }
 
+
 /**
  * Loads a cache of site preferences so we only have to do it once.
  *
  * @since 0.6
+ * @internal
+ * @return void
  */
 function load_site_preferences()
 {
-	$value = "";
-
 	global $gCms;
 	$db = &$gCms->GetDb();
 	$siteprefs = &$gCms->siteprefs;
@@ -524,14 +584,16 @@ function load_site_preferences()
 		
 		if ($result) $result->Close();
 	}
-
-	return $value;
 }
+
 
 /**
  * Gets the given site prefernce
  *
  * @since 0.6
+ * @param string The preference name
+ * @param mixed  The default value if the preference does not exist
+ * @return mixed
  */
 function get_site_preference($prefname, $defaultvalue = '') {
 
@@ -553,10 +615,13 @@ function get_site_preference($prefname, $defaultvalue = '') {
 	return $value;
 }
 
+
 /**
  * Removes the given site preference
  *
  * @param string Preference name to remove
+ * @param boolean Wether or not to remove all preferences that are LIKE the supplied name
+ * @return void
  */
 function remove_site_preference($prefname,$uselike=false)
 {
@@ -581,10 +646,14 @@ $db->debug = true;
 	if ($result) $result->Close();
 }
 
+
 /**
  * Sets the given site perference with the given value.
  *
  * @since 0.6
+ * @param string The preference name
+ * @param mixed  The preference value (will be stored as a string)
+ * @return void
  */
 function set_site_preference($prefname, $value)
 {
@@ -618,6 +687,15 @@ function set_site_preference($prefname, $value)
 	$siteprefs[$prefname] = $value;
 }
 
+
+/**
+ * A function to load all user preferences for the specified user ID
+ *
+ * @internal
+ * @access private
+ * @param integer The User ID
+ * @return void
+ */
 function load_all_preferences($userid)
 {
 	global $gCms;
@@ -640,6 +718,10 @@ function load_all_preferences($userid)
  * Gets the given preference for the given userid.
  *
  * @since 0.3
+ * @param integer The user id
+ * @param string  The preference name
+ * @param mixed   The default value if the preference is not set for the given user id.
+ * @return mixed.
  */
 function get_preference($userid, $prefname, $default='')
 {
@@ -673,6 +755,10 @@ function get_preference($userid, $prefname, $default='')
  * Sets the given perference for the given userid with the given value.
  *
  * @since 0.3
+ * @param integer The user id
+ * @param string  The preference name
+ * @param mixed   The preference value (will be stored as a string)
+ * @return void
  */
 function set_preference($userid, $prefname, $value)
 {
@@ -712,10 +798,16 @@ function set_preference($userid, $prefname, $value)
 	}
 }
 
+
 /**
  * Returns the stylesheet for the given templateid.  Returns a hash with encoding and stylesheet entries.
  *
  * @since 0.1
+ * @internal
+ * @deprecated
+ * @param integer template id
+ * @param string  An optional media type
+ * @return string
  */
 function get_stylesheet($template_id, $media_type = '')
 {
@@ -784,6 +876,15 @@ function get_stylesheet($template_id, $media_type = '')
 	return $result;
 }
 
+
+/**
+ * Return a list of the media types supported for the specified template
+ *
+ * @internal
+ * @access private
+ * @param integer The template ID
+ * @return array
+ */
 function get_stylesheet_media_types($template_id)
 {
 	$result = array();
@@ -828,8 +929,13 @@ function get_stylesheet_media_types($template_id)
 	return $result;
 }
 
+
 /**
  * Strips slashes from an array of values.
+ *
+ * @internal
+ * @param array A reference to an array of strings
+ * @return reference to the cleaned values
  */
 function & stripslashes_deep(&$value) 
 { 
@@ -843,7 +949,26 @@ function & stripslashes_deep(&$value)
         } 
         return $value;
 }
-	
+
+/**
+ * A method to create a text area control
+ *
+ * @internal
+ * @access private
+ * @param boolean Wether the currently selected wysiwyg area should be enabled (depends on user, and site preferences
+ * @param string  The contents of the text area
+ * @param string  The name of the text area
+ * @param string  An optional class name
+ * @param string  An optional ID (HTML ID) value
+ * @param string  The optional encoding
+ * @param string  Optional style information
+ * @param integer Width (the number of columns) (CSS can and will override this)
+ * @param integer Hieght (the number of rows) (CSS can and will override this)
+ * @param string  A flag to indicate that the wysiwyg should be forced to a different type independant of user settings
+ * @param string  The name of the syntax hilighter to use (if empty it is assumed that a wysiwyg text area is requested instead of a syntax hiliter)
+ * @param string  Optional additional text to include in the textarea tag
+ * @return string
+ */
 function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
 {
 	global $gCms;
@@ -981,20 +1106,12 @@ function textarea_highlight($use_javasyntax, $text, $name, $class_name="syntaxHi
     return $output;
 }
 */
-/*
- * Displays the login form (frontend)
- */
-function display_login_form()
-{
-	return '<form method=post action="'.$_SERVER['PHP_SELF'].'">'.
-	'Name: <input type="text" name="login_name"><br>'.
-	'Password: <input type="password" name="login_password"><br>'.
-	'<input type="submit">'.
-	'</form>';
-}
+
 
 /**
  * Creates a string containing links to all the pages.
+ *
+ * @deprecated
  * @param page - the current page to display
  * @param totalrows - the amount of items being listed
  * @param limit - the amount of items to list per page
@@ -1063,42 +1180,12 @@ function display_login_form()
  }
 
 
-function wysiwyg_form_submit()
-{
-	global $gCms;
-	$result = '';
-
-	$userid = get_userid(false);
-    if( $userid != '' ) 
-    {
-	    $wysiwyg = get_preference($userid, 'wysiwyg');
-    }
-
-	if (isset($wysiwyg) && $wysiwyg != '')
-	{
-		#Perform the content title callback
-		reset($gCms->modules);
-		while (list($key) = each($gCms->modules))
-		{
-			$value =&  $gCms->modules[$key];
-			if ($gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true)
-			{
-				@ob_start();
-				$gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
-				$result = @ob_get_contents();
-				@ob_end_clean();
-			}
-		}
-	}
-
-	return $result;
-}
 
 /**
  * Returns the currently configured database prefix.
  *
  * @since 0.4
+ * @return string
  */
 function cms_db_prefix() {
   global $gCms;
@@ -1106,6 +1193,22 @@ function cms_db_prefix() {
   return $config["db_prefix"];
 }
 
+
+/**
+ * Create a dropdown form element containing a list of files that match certain conditions
+ *
+ * @internal
+ * @param string The name for the select element.
+ * @param string The directory name to search for files.
+ * @param string The name of the file that should be selected
+ * @param string A comma separated list of extensions that should be displayed in the list
+ * @param string An optional string with which to prefix each value in the output by
+ * @param boolean Wether 'none' should be an allowed option
+ * @param string Text containing additional parameters for the dropdown element
+ * @param string A prefix to use when filtering files
+ * @param boolean A flag indicating wether the files matching the extension and the prefix should be included or excluded from the result set
+ * @return string
+ */
 function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='',$allownone=false,$extratext='',
 			      $fileprefix='',$excludefiles=1)
 {
@@ -1142,6 +1245,16 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
 }
 
 
+/**
+ * A function tat, given the current request information will return
+ * a pageid or an alias that should be used for the display
+ * This method also handles matching routes and specifying which module
+ * should be called with what parameters
+ *
+ * @internal
+ * @access private
+ * @return string
+ */
 function get_pageid_or_alias_from_url()
 {
   global $gCms;

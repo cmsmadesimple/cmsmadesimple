@@ -21,6 +21,8 @@
 
 /**
  * Returns the UTF-8 string corresponding to unicode value.
+ *
+ * @ignore
  * @param $num unicode value to convert.
  * @return string converted
  */
@@ -40,6 +42,7 @@ function code_to_utf8($num) {
 /**
  * Reverse function for htmlentities.
  * Convert entities in UTF-8.
+ *
  * @param $text_to_convert Text to convert.
  * @return string converted
  */

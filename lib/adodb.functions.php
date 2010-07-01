@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * A method to initialize the connection with the CMSMS configured database.
+ *
+ * @internal
+ * @access private
+ */
 function load_adodb() 
 {
   global $gCms;
@@ -52,6 +58,12 @@ function load_adodb()
 	define('CMS_ADODB_DT', $config['use_adodb_lite'] ? 'DT' : 'T');
 }
 
+/**
+ * A method to re-initialize connections to the CMSMS configured database.
+ * This method should be used by any UDT's or other plugins that use any other method
+ * than the standard CMSMS supplied database object to connect to a database.
+ *
+ */
 function & adodb_connect()
 {
 	global $gCms;
@@ -97,6 +109,10 @@ function & adodb_connect()
 	return $db;
 }
 
+
+/**
+ * @ignore
+ */
 function adodb_error($dbtype, $function_performed, $error_number, $error_message, $host, $database, &$connection_obj)
 {
 	if(file_exists(cms_join_path(dirname(CONFIG_FILE_LOCATION), 'db_error.html')))

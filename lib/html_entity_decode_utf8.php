@@ -1,5 +1,32 @@
 <?php
-//http://www.php.net/manual/en/function.html-entity-decode.php
+#CMS - CMS Made Simple
+#(c)2004-2010 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://cmsmadesimple.sf.net
+#
+# Code copied from http://www.php.net/manual/en/function.html-entity-decode.php
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id$
+
+/**
+ * A function to decode utf8 entities in a string
+ *
+ * @param string The input string
+ * @param boolean Should single quotes be converted
+ * @return string The converted string
+ */
 function cms_html_entity_decode_utf8( $string, $convert_single_quotes = false )
 {
 	static $trans_tbl;
@@ -18,7 +45,15 @@ function cms_html_entity_decode_utf8( $string, $convert_single_quotes = false )
 
 	return $decode;
 }
-//Returns the utf string corresponding to the unicode value (from php.net, courtesy - romans@void.lv)
+
+/**
+ * Returns the utf string corresponding to the unicode value (from php.net, courtesy - romans@void.lv)
+ *
+ * @ignore
+ * @access private
+ * @param int The unicode value
+ * @return string UTF string
+ */
 function _code2utf8( $num )
 {
 	if($num < 0) return '';
