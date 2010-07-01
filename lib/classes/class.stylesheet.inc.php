@@ -26,16 +26,38 @@
  */
 class Stylesheet
 {
+	/**
+	 * ID
+	 */
 	var $id;
+	
+	/**
+	 * Name
+	 */
 	var $name;
+	
+	/**
+	 * Value
+	 */
 	var $value;
+	
+	/**
+	 * CSS Media Type
+	 */
 	var $media_type;
 
+	/**
+	 * Sets some initial values
+	 */
 	function Stylesheet()
 	{
 		$this->SetInitialValues();
 	}
-
+	
+	/**
+	 * Sets object to some sane initial values
+	 *
+	 */
 	function SetInitialValues()
 	{
 		$this->id = -1;
@@ -44,16 +66,31 @@ class Stylesheet
 		$this->media_type = '';
 	}
 	
+	/**
+	 * Gets the Stylesheet id.
+	 *
+	 * @returns integer The id of the Stylesheet.
+	 */	
 	function Id()
 	{
 		return $this->id;
 	}
-
+	
+	/**
+	 * Gets the Stylesheet name.
+	 *
+	 * @returns string The name of the Stylesheet.
+	 */
 	function Name()
 	{
 		return $this->name;
 	}
 
+	/**
+	 * Saves the Stylesheet to the database, creating a new record.
+	 *
+	 * @returns mixed If successful, true.  If it fails, false.
+	 */
 	function Save()
 	{
 		$result = false;
@@ -79,6 +116,11 @@ class Stylesheet
 		return $result;
 	}
 
+	/**
+	 * Deletes the Stylesheet from the database.
+	 *
+	 * @returns mixed If successful, true.  If it fails, false.
+	 */
 	function Delete()
 	{
 		$result = false;
