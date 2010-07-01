@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -19,24 +19,52 @@
 #$Id$
 
 /**
- * Generic html blob class. This can be used for any logged in blob or blob related function.
+ * Global content object. These are abstract simple content objects (in contrast to CMS Content Types)
+ * that can be subclassed and used for simple storage.
  *
  * @since		0.6
  * @package		CMS
  */
 class GlobalContent
 {
+	/**
+	* Database ID for this Global Content Block
+	* @access private
+	*/
 	var $id;
+	/**
+	* Name for this Global Content Block
+	* @access private
+	*/
 	var $name;
+	/**
+	* Actual contents of this Global Content Block
+	* @access private
+	*/
 	var $content;
+	/**
+	* Owner ID for this Global Content Block
+	* @access private
+	*/
 	var $owner;
+	/**
+	* Modification date for this Global Content Block
+	* @access private
+	*/
 	var $modified_date;
 
+	/**
+	 * Constructor
+	 */
 	function GlobalContent()
 	{
 		$this->SetInitialValues();
 	}
 
+	/**
+	 * Set attributes of global content block to blank (but predictable) values.
+	 * @access private
+	 */
 	function SetInitialValues()
 	{
 		$this->id = -1;
@@ -46,16 +74,32 @@ class GlobalContent
 		$this->modified_date = -1;
 	}
 
+	/**
+	* Returns the database ID for this Global Content Block
+	* @final
+	* @return int opaque database ID for the Global Content Block
+	*/
 	function Id()
 	{
 		return $this->id;
 	}
 
+	/**
+	 * Returns the name for this Global Content Block
+	 *
+	 * @final
+	 * @return string name of the global content block
+	 */
 	function Name()
 	{
 		return $this->name;
 	}
 
+	/**
+	 * Saves the Global Content Block to the database
+	 *
+	 * @return boolean true indicates success, false indicates failure
+	 */
 	function Save()
 	{
 		$result = false;
@@ -77,10 +121,14 @@ class GlobalContent
 			}
 
 		}
-
 		return $result;
 	}
 
+	/**
+	 * Deletes the Global Content Block from the database
+	 *
+	 * @return boolean  true indicates success, false indicates failure
+	 */
 	function Delete()
 	{
 		$result = false;
@@ -96,10 +144,16 @@ class GlobalContent
 				$this->SetInitialValues();
 			}
 		}
-
 		return $result;
 	}
 
+	/**
+	 * Test to see if a specified User (specified as admin-side user's database ID)
+	 * is the owner of this Global Content Block
+	 *
+	 * @param string $user_id User ID to test
+	 * @return boolean indicates whether specified user owns this Global Content Block
+	 */
 	function IsOwner($user_id)
 	{
 		$result = false;
@@ -115,6 +169,13 @@ class GlobalContent
 		return $result;
 	}
 
+	/**
+	 * Test to see if a specified User (specified as admin-side user's database ID)
+	 * is the author of this Global Content Block
+	 *
+	 * @param string $user_id User ID to test
+	 * @return boolean indicates whether specified user is the author of this Global Content Block
+	 */
 	function IsAuthor($user_id)
 	{
 		$result = false;
@@ -130,6 +191,12 @@ class GlobalContent
 		return $result;
 	}
 
+
+	/**
+	 * Clears all of the Additional Editors from this Global Content Block in the database
+	 *
+	 * @return boolean  true indicates success, false indicates failure
+	 */
 	function ClearAuthors()
 	{
 		$result = false;
@@ -146,6 +213,13 @@ class GlobalContent
 		return $result;
 	}
 
+	/**
+	 * Adds a specified User (specified as admin-side user's database ID) as an editor for
+	 * this Global Content Block
+	 *
+	 * @param string $user_id User ID to add
+	 * @return boolean true indicates success, false indicates failure
+	 */
 	function AddAuthor($user_id)
 	{
 		$result = false;
@@ -163,6 +237,11 @@ class GlobalContent
 	}
 }
 
+/**
+ * The class used for "Global Content Blocks" in CMS Made Simple.
+ *
+ * @package		CMS
+ */
 class HtmlBlob extends GlobalContent
 {
 }
