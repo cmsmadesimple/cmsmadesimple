@@ -195,7 +195,7 @@ class GlobalContent
 	/**
 	 * Clears all of the Additional Editors from this Global Content Block in the database
 	 *
-	 * @return boolean  true indicates success, false indicates failure
+	 * @return boolean true indicates success, false indicates failure
 	 */
 	function ClearAuthors()
 	{
@@ -240,6 +240,7 @@ class GlobalContent
 /**
  * The class used for "Global Content Blocks" in CMS Made Simple.
  *
+ * @ignore
  * @package		CMS
  */
 class HtmlBlob extends GlobalContent

@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -31,10 +31,10 @@ class GlobalContentOperations
 {
 
 	/**
-	 * Prepares an array with the list of the html blobs $userid is an author of 
+	 * Prepares an array with the list of the global content blocks $userid is an author of 
 	 * or is authorized to edit.
 	 *
-	 * @returns an array in whose elements are the IDs of the blobs  
+	 * @return array List of ids of the found global content blocks
 	 * @since 0.11
 	 */
 	function AuthorBlobs($userid)
@@ -87,6 +87,11 @@ class GlobalContentOperations
 		return $variables['authorblobs'];
 	}
 
+	/**
+	 * Loads all gobal content blocks from the database and returns them
+	 *
+	 * @return array The list of global content blocks
+	 */
 	function LoadHtmlBlobs()
 	{
 		global $gCms;
@@ -112,6 +117,12 @@ class GlobalContentOperations
 		return $result;
 	}
 
+	/**
+	 * Load a global content block by it's id
+	 *
+	 * @param string $id The id to load
+	 * @return mixed If found, the global content block. If none is found, returns false.
+	 */
 	function LoadHtmlBlobByID($id)
 	{
 		$result = false;
@@ -136,6 +147,12 @@ class GlobalContentOperations
 		return $result;
 	}
 
+	/**
+	 * Loads a global content block by it's name
+	 *
+	 * @param string $name The name of the global content block to load
+	 * @return mixed If found, the global content block. If none is found, returns false.
+	 */
 	function &LoadHtmlBlobByName($name)
 	{
 		$result = false;
@@ -172,6 +189,12 @@ class GlobalContentOperations
 		return $result;
 	}
 
+	/**
+	 * Given a global content object, creates a new global content block in the databse with it's attributes.
+	 *
+	 * @param mixed $htmlblob The global content object to store.
+	 * @return int Returns the id of the new object in the database. If failure, returns -1.
+	 */
 	function InsertHtmlBlob($htmlblob)
 	{
 		$result = -1; 
@@ -191,6 +214,12 @@ class GlobalContentOperations
 		return $result;
 	}
 
+	/**
+	 * Given a global content object, updates that global content block in the database with it's updated attributes.
+	 *
+	 * @param mixed $htmlblob The global content object to store.
+	 * @return boolean Returns true if successful, false if not.
+	 */
 	function UpdateHtmlBlob($htmlblob)
 	{
 		$result = false; 
@@ -209,6 +238,12 @@ class GlobalContentOperations
 		return $result;
 	}
 
+	/**
+	 * Given a global content block's id, delete it from the database.
+	 *
+	 * @param integer $id The id of the block to delete
+	 * @return boolean Returns true if successful, false if not.
+	 */
 	function DeleteHtmlBlobByID($id)
 	{
 		$result = false;
@@ -228,6 +263,14 @@ class GlobalContentOperations
 		return $result;
 	}
 
+	/**
+	 * Given a name, check to see if it already exists in the databse. If the id is given,
+	 * ignore it for purposes of updating an exsiting block.
+	 *
+	 * @param string $name The name to check
+	 * @param integer $id The global content block to ignore. If not passed, all blocks will be checked.
+	 * @return boolean Returns true if the name is used. False if it not.
+	 */
 	function CheckExistingHtmlBlobName($name, $id = -1)
 	{
 		$result = false;
@@ -255,6 +298,13 @@ class GlobalContentOperations
 		return $result;
 	}
 
+	/**
+	 * Checks to see if the given global content block's id is owned by the given user's id.
+	 *
+	 * @param integer $id The global content block id to check
+	 * @param string $user_id The user id to check
+	 * @return boolean Returns true if the user is the owner.  False if they are not.
+	 */
 	function CheckOwnership($id, $user_id)
 	{
 		$result = false;
@@ -273,6 +323,13 @@ class GlobalContentOperations
 		return $result;
 	}
 
+	/**
+	 * Checks to see if the given global content block's id is permitted to modify the block by the given user's id.
+	 *
+	 * @param integer $id The global content block id to check
+	 * @param string $user_id The user id to check
+	 * @return boolean Returns true if the user is the permitted.  False if they are not.
+	 */
 	function CheckAuthorship($id, $user_id)
 	{		
 // 		global $gCms;
@@ -292,6 +349,12 @@ class GlobalContentOperations
 // 		return $result;
 	}
 
+	/**
+	 * Clears the list of additional editors for the given content block id
+	 *
+	 * @param integer $id The global content block id to clear
+	 * @return void
+	 */
 	function ClearAdditionalEditors($id)
 	{
 		global $gCms;
@@ -302,6 +365,13 @@ class GlobalContentOperations
 		$dbresult = $db->Execute($query, array($id));
 	}
 
+	/**
+	 * Insert a user id into the additional editors list of the given id's global content block
+	 *
+	 * @param string $id The id of the global content block
+	 * @param string $user_id The id of the user to add to the list
+	 * @return boolean True if successful, false if not.
+	 */
 	function InsertAdditionalEditors($id, $user_id)
 	{
 		global $gCms;
@@ -313,8 +383,12 @@ class GlobalContentOperations
 	}
 }
 
+/**
+ * @ignore
+ */
 class HtmlBlobOperations extends GlobalContentOperations
 {
 }
 
+# vim:ts=4 sw=4 noet
 ?>
