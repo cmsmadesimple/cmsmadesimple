@@ -337,7 +337,7 @@ function cms_cleanfile($filename)
  *
  * @ignore
  * @access private
- * return string
+ * @return string
  */
 function cms_calculate_url()
 {

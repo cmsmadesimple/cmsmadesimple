@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @package CMS
+ */
+
+/**
  * A method to initialize the connection with the CMSMS configured database.
  *
  * @internal

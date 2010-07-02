@@ -19,6 +19,11 @@
 #$Id$
 
 /**
+ * @package CMS
+ */
+
+
+/**
  * A task for managing autometed tasks.  
  * Task classes are found in the lib/tasks directory.
  *
