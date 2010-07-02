@@ -24,6 +24,6 @@
 {/if}
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
-  <p class="pageinput">{$clearwordcount}&nbsp;{$exportcsv}</p>
+  <p class="pageinput">{mod_submit name="clearwordcount" value="clear" confirm_text="confirm_clearstats"}&nbsp;{mod_submit name="exportcsv" value="export_to_csv"}</p>
 </div>
 {$formend}

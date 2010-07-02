@@ -1,14 +1,9 @@
 <?php
 
-$smarty->assign('formstart',$this->CreateFormStart($id,'defaultadmin'));
-$smarty->assign('formend',$this->CreateFormStart($id,'defaultadmin'));
+$smarty->assign('formstart',$this->Form->form_start(array('id'=>$id,'action'=>'defaultadmin')));
+$smarty->assign('formend',$this->Form->form_start(array('id'=>$id,'action'=>'defaultadmin')));
 $smarty->assign('wordtext',$this->Lang('word'));
 $smarty->assign('counttext',$this->Lang('count'));
-$smarty->assign('exportcsv',
-		$this->CreateInputSubmit($id,'exportcsv',$this->Lang('export_to_csv')));
-$smarty->assign('clearwordcount',
-		$this->CreateInputSubmit($id,'clearwordcount',$this->Lang('clear'),'','',
-					 $this->Lang('confirm_clearstats')));
 
 $query = 'SELECT * FROM '.cms_db_prefix().'module_search_words ORDER BY count DESC';
 $results = array();
@@ -22,6 +17,6 @@ if( count($results) )
     $smarty->assign('topwords',$results);
   }
 
-echo $this->ProcessTemplate('admin_statistics_tab.tpl');
+$smarty->assign('statistics_tab',$this->Template->process('admin_statistics_tab.tpl', $id, $return_id));
 
 ?>

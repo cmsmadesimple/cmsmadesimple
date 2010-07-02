@@ -1,12 +1,11 @@
 <?php
 if (!isset($gCms)) exit;
-$this->CheckPermission('dummy permission'); //Redirect if not logged in
-if( $this->CheckPermission('Modify Templates') )
-  {
-echo '<div class="pageoverflow" style="text-align: right; width: 80%;"><a href="'.
-		$this->CreateLink($id,'admin_templates',$returnid,
-		       $this->Lang('modify_templates'),array(),'',true).'" title="'.$this->Lang('modify_templates').'">'.$this->Lang('modify_templates').'</a></div><br/>';
-  }
+$this->Permission->check('dummy permission'); //Redirect if not logged in
+//if( $this->Permission->check('Modify Templates') )
+//  {
+//echo '<div class="pageoverflow" style="text-align: right; width: 80%;"><a href="listmodtemplates.php" title="'.
+//		$this->Lang('modify_templates').'">'.$this->Lang('modify_templates').'</a></div><br/>';
+//  }
 
 if (isset($params['reindex']))
   {
@@ -53,55 +52,15 @@ else if (isset($params['submit']))
 
 
 #The tabs
-echo $this->StartTabHeaders();
 if (FALSE == empty($params['active_tab']))
   {
     $tab = $params['active_tab'];
   } else {
-  $tab = '';
+  $tab = 'statistics';
  }
-
-if ($this->CheckPermission('Modify Site Preferences'))
-  {
-    echo $this->SetTabHeader('statistics',$this->Lang('statistics'), 
-			     ('statistics' == $tab)?true:false);
-    echo $this->SetTabHeader('options',$this->Lang('options'), ('options' == $tab)?true:false);
-  }
-
-echo $this->EndTabHeaders();
+$smarty->assign('active_tab_for_modules', $tab);
+//$smarty->assign('statistics_tab', include(dirname(__FILE__).'/function.admin_statistics_tab.php'));
 
 
-
-#The content of the tabs
-echo $this->StartTabContent();
-
-if ($this->CheckPermission('Modify Site Preferences'))
-  {
-    echo $this->StartTab('statistics',$params);
-    include(dirname(__FILE__).'/function.admin_statistics_tab.php');
-    echo $this->EndTab();
-
-    echo $this->StartTab('options', $params);
-    echo $this->CreateFormStart($id, 'defaultadmin');
-
-    echo $this->CreateInputSubmit($id, 'reindex', $this->Lang('reindexallcontent'));
-    echo $this->CreateInputSubmit($id, 'optimize', $this->Lang('optimizecontent'));
-
-    echo '<hr />';
-
-    echo '<p>'.$this->Lang('stopwords').':<br />'.$this->CreateTextArea(false, $id, str_replace(array("\r", "\n"), '', $this->GetPreference('stopwords', $this->DefaultStopWords())), 'stopwords', '', '', '', '', '50', '6').'</p>';
-
-    echo '<p>'.$this->Lang('prompt_searchtext').':&nbsp;' . $this->CreateInputText($id,'searchtext',
-									     $this->GetPreference('searchtext','')).'</p>';
-
-    echo '<p>'.$this->Lang('prompt_alpharesults').':&nbsp;' . $this->CreateInputCheckbox($id,'alpharesults','true',$this->GetPreference('alpharesults','false')).'</p>';
-
-    echo $this->CreateInputSubmit($id, 'submit', $this->Lang('submit'));
-
-    echo $this->CreateFormEnd();
-    echo $this->EndTab();
-  }
-
-echo $this->EndTabContent();
-
+echo $this->Template->process('defaultadmin.tpl', $id, $return_id);
 ?>
