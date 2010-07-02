@@ -18,13 +18,19 @@
 #
 #$Id$
 
+/**
+ * @package CMS 
+ */
+
 include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.group.inc.php');
 
 /**
  * Class for doing group related functions.  Maybe of the Group object functions are just wrappers around these.
  *
- * @since		0.6
- * @package		CMS
+ * @since 0.6
+ * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class GroupOperations
 {

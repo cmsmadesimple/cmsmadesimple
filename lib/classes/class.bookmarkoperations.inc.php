@@ -18,6 +18,10 @@
 #
 #$Id$
 
+/**
+ * @package CMS 
+ */
+
 include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.bookmark.inc.php');
 
 /**
@@ -25,8 +29,9 @@ include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.bookmark.inc.php')
  * are just wrappers around these.
  *
  * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
-
 class BookmarkOperations
 {
   /**

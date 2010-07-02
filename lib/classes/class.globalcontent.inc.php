@@ -19,11 +19,17 @@
 #$Id$
 
 /**
+ * @package CMS 
+ */
+
+/**
  * Global content object. These are abstract simple content objects (in contrast to CMS Content Types)
  * that can be subclassed and used for simple storage.
  *
- * @since		0.6
- * @package		CMS
+ * @since 0.6
+ * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class GlobalContent
 {
@@ -241,7 +247,9 @@ class GlobalContent
  * The class used for "Global Content Blocks" in CMS Made Simple.
  *
  * @ignore
- * @package		CMS
+ * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class HtmlBlob extends GlobalContent
 {

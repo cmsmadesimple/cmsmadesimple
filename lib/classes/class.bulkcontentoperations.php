@@ -19,6 +19,10 @@
 #$Id$
 
 /**
+ * @package CMS 
+ */
+
+/**
  * Class for operations dealing with bulk content methods.
  *
  * @package CMS
@@ -27,7 +31,6 @@
  * @version $Revision$
  * @license GPL
  **/
-
 class bulkcontentoperations {
   
   /**

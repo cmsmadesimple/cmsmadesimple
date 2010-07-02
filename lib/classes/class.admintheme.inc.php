@@ -19,9 +19,15 @@
 #$Id$
 
 /**
+ * @package CMS 
+ */
+
+/**
  * Class for Admin Theme
  *
  * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class AdminTheme
 {

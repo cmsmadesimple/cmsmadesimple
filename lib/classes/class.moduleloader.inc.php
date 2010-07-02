@@ -18,17 +18,19 @@
 #
 #$Id$
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.module.inc.php');
-
 /**
  * @package  CMS
  */
 
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.module.inc.php');
+
 /**
  * Class to load modules
  *
- * @since		1.0
- * @package		CMS
+ * @since 1.0
+ * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class ModuleLoader
 {

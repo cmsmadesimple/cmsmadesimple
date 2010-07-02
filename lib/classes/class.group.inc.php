@@ -19,10 +19,16 @@
 #$Id$
 
 /**
+ * @package CMS 
+ */
+
+/**
  * Generic group class. This can be used for any logged in group or group related function.
  *
- * @since		0.9
- * @package		CMS
+ * @since 0.9
+ * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class Group
 {

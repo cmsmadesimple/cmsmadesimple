@@ -18,17 +18,22 @@
 #
 #$Id$
 
+/**
+ * @package CMS 
+ */
+
 include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.globalcontent.inc.php');
 
 /**
  * Class for doing html blob related functions.  Maybe of the HtmlBlob object functions are just wrappers around these.
  *
- * @since		0.6
- * @package		CMS
+ * @since 0.6
+ * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class GlobalContentOperations
 {
-
 	/**
 	 * Prepares an array with the list of the global content blocks $userid is an author of 
 	 * or is authorized to edit.
@@ -383,8 +388,10 @@ class GlobalContentOperations
 }
 
 /**
- * @package CMS
  * @ignore
+ * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class HtmlBlobOperations extends GlobalContentOperations
 {

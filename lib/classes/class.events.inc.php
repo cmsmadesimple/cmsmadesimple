@@ -19,9 +19,15 @@
 #$Id: class.bookmark.inc.php 2746 2006-05-09 01:18:15Z wishy $
 
 /**
+ * @package CMS 
+ */
+
+/**
  * Class for handling and dispatching system and user defined events.
  *
  * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class Events
 { 

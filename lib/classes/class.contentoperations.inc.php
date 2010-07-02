@@ -18,6 +18,10 @@
 #
 #$Id$
 
+/**
+ * @package CMS
+ */
+
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
 
 /**
@@ -25,6 +29,8 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
  *
  * @since 0.8
  * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class ContentOperations
 {

@@ -19,9 +19,15 @@
 #$Id$
 
 /**
+ * @package CMS 
+ */
+
+/**
  * Bookmark class for admin
  *
  * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class Bookmark
 {
