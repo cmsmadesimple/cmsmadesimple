@@ -18,6 +18,15 @@
 #
 #$Id$
 
+/**
+ * A task for managing autometed tasks.  
+ * Task classes are found in the lib/tasks directory.
+ *
+ * @package CMS
+ * @author  Robert Campbell
+ * @since   1.8
+ * @license GPL
+ */
 class CmsRegularTaskHandler
 {
   private static $_tasks;

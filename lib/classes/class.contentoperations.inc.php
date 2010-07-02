@@ -1132,6 +1132,7 @@ class ContentOperations
 }
 
 /**
+ * @package CMS
  * @ignore
  */
 class ContentManager extends ContentOperations

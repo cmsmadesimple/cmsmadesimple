@@ -18,15 +18,14 @@
 #
 #$Id$
 
+include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.globalcontent.inc.php');
+
 /**
  * Class for doing html blob related functions.  Maybe of the HtmlBlob object functions are just wrappers around these.
  *
  * @since		0.6
  * @package		CMS
  */
-
-include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.globalcontent.inc.php');
-
 class GlobalContentOperations
 {
 
@@ -384,6 +383,7 @@ class GlobalContentOperations
 }
 
 /**
+ * @package CMS
  * @ignore
  */
 class HtmlBlobOperations extends GlobalContentOperations

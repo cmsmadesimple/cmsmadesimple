@@ -19,8 +19,10 @@
 #$Id$
 
 /**
+ * @package CMS
  * @ignore
  */
+
 function cms_autoloader($classname)
 {
   global $gCms;

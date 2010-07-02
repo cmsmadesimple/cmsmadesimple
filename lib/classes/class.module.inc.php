@@ -878,8 +878,8 @@ class CMSModule
 	 * This method must be overridden if this object is providing
 	 * a content type.
 	 *
-	 * @abstract.
-	 * @deprocated.
+	 * @abstract
+	 * @deprecated
 	 * @return object
 	 */
 	function GetContentTypeInstance()
@@ -909,7 +909,7 @@ class CMSModule
 	 * in the module directory, if one can be found.  This provides a way of splitting
 	 * secondary functions into other files.
 	 *
-	 * @abstract.
+	 * @abstract
 	 * @return boolean
 	 */
 	function Install()
@@ -1077,7 +1077,7 @@ class CMSModule
 	 * requires. It should return an hash, eg.
 	 * return array('somemodule'=>'1.0', 'othermodule'=>'1.1');
 	 *
-	 * @abstract.
+	 * @abstract
 	 * @return array
 	 */
 	function GetDependencies()
@@ -1596,7 +1596,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param Stylesheet The stylesheet that was just created
-	 * @void
+	 * @return void
 	 */
 	function AddStylesheetPre(&$stylesheet)
 	{
@@ -1609,7 +1609,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param Stylesheet The stylesheet that was just created
-	 * @void
+	 * @return void
 	 */
 	function AddStylesheetPost(&$stylesheet)
 	{
@@ -1622,7 +1622,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param Stylesheet The stylesheet that was just created
-	 * @void
+	 * @return void
 	 */
 	function EditStylesheetPre(&$stylesheet)
 	{
@@ -1635,7 +1635,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param Stylesheet The stylesheet that was just created
-	 * @void
+	 * @return void
 	 */
 	function EditStylesheetPost(&$stylesheet)
 	{
@@ -1648,7 +1648,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param Stylesheet The stylesheet that was just created
-	 * @void
+	 * @return void
 	 */
 	function DeleteStylesheetPre(&$stylesheet)
 	{
@@ -1661,7 +1661,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param Stylesheet The stylesheet that was just created
-	 * @void
+	 * @return void
 	 */
 	function DeleteStylesheetPost(&$stylesheet)
 	{
@@ -1680,7 +1680,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param HtmlBlob The HTML blob
-	 * @void
+	 * @return void
 	 */
 	function AddHtmlBlobPre(&$htmlblob)
 	{
@@ -1693,7 +1693,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param HtmlBlob The HTML blob
-	 * @void
+	 * @return void
 	 */
 	function AddHtmlBlobPost(&$htmlblob)
 	{
@@ -1706,7 +1706,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param HtmlBlob The HTML blob
-	 * @void
+	 * @return void
 	 */
 	function EditHtmlBlobPre(&$htmlblob)
 	{
@@ -1719,7 +1719,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param HtmlBlob The HTML blob
-	 * @void
+	 * @return void
 	 */
 	function EditHtmlBlobPost(&$htmlblob)
 	{
@@ -1732,7 +1732,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param HtmlBlob The HTML blob
-	 * @void
+	 * @return void
 	 */
 	function DeleteHtmlBlobPre(&$htmlblob)
 	{
@@ -1745,7 +1745,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param HtmlBlob The HTML blob
-	 * @void
+	 * @return void
 	 */
 	function DeleteHtmlBlobPost(&$htmlblob)
 	{
@@ -1758,7 +1758,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param string The HTML blob
-	 * @void
+	 * @return void
 	 */
 	function GlobalContentPreCompile(&$gc)
 	{
@@ -1771,7 +1771,7 @@ class CMSModule
 	 * @deprecated
 	 * @abstract
 	 * @param string The HTML blob
-	 * @void
+	 * @return void
 	 */
 	function GlobalContentPostCompile(&$gc)
 	{
@@ -1954,7 +1954,7 @@ class CMSModule
 	/**
 	 * Returns the textarea specific for this WYSIWYG.
 	 *
-	 * @abstract.
+	 * @abstract
 	 * @param string HTML name of the textarea
 	 * @param string the language which the content should be highlighted as
 	 * @param int Number of columns wide that the textarea should be
@@ -3461,7 +3461,7 @@ class CMSModule
 	 * @final
 	 * @param string The module name (or Core)
 	 * @param string The name of the event
-	 * @retun void
+	 * @return void
 	 */
 	function RemoveEventHandler( $modulename, $eventname )
 	{

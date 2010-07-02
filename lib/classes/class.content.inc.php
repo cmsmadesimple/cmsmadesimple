@@ -20,6 +20,15 @@
 #$Id$
 
 /**
+ * @package CMS
+ */
+
+/**
+ * @ignore
+ */
+define('CMS_CONTENT_HIDDEN_NAME','--------');
+
+/**
  * Generic content class.
  *
  * As for some treatment we don't need the extra properties of the content
@@ -29,7 +38,6 @@
  * @since		0.8
  * @package		CMS
  */
-define('CMS_CONTENT_HIDDEN_NAME','--------');
 class ContentBase
 {
     /**

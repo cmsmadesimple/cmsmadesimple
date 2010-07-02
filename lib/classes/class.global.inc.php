@@ -31,6 +31,7 @@
  * needed by classes/functions in CMS.  Initialized in include.php
  * as $gCms for use in every page.
  *
+ * @package CMS
  * @since 0.5
  */
 class CmsObject {
@@ -509,6 +510,8 @@ class CmsObject {
 
 /**
  * Simple global convenience object to hold CMS route information.
+ * 
+ * @package CMS
  */
 class CmsRoute
 {
@@ -519,6 +522,8 @@ class CmsRoute
 
 /**
  * Simple global convenience object to hold CMS Content Type structure.
+ *
+ * @package CMS
  */
 class CmsContentTypePlaceholder
 {

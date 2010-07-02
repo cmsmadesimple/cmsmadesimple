@@ -18,14 +18,14 @@
 #
 #$Id$
 
+include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.bookmark.inc.php');
+
 /**
  * Class for doing bookmark related functions.  Maybe of the Bookmark object functions
  * are just wrappers around these.
  *
  * @package CMS
  */
-
-include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.bookmark.inc.php');
 
 class BookmarkOperations
 {

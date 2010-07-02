@@ -21,11 +21,10 @@
 /**
  * Class for operations dealing with bulk content methods.
  *
+ * @package CMS
  * @author Robert Campbell
  * @since 1.7
  * @version $Revision$
- * @modifiedby $LastChangedBy$
- * @lastmodified $Date$
  * @license GPL
  **/
 
