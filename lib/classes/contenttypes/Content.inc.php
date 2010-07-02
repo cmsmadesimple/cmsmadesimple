@@ -1,30 +1,64 @@
-<?php
-# CMS - CMS Made Simple
-# (c)2004-2009 by Ted Kulp (ted@cmsmadesimple.org)
-# This project's homepage is: http://cmsmadesimple.org
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+#CMS - CMS Made Simple
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# BUT withOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
 #
 #$Id$
 
+/**
+ * Class definition and methods for Content
+ *
+ * @package CMS
+ * @license GPL
+ */
+
+/**
+ * Main class for CMS Made Simple content
+ *
+ * @package CMS
+ * @version $Revision$
+ * @license GPL
+ */
 class Content extends ContentBase
 {
+	/**
+	 * @access private
+	 * @var array
+	 */
     var $_contentBlocks;
+	/**
+	 * @access private
+	 * @var array
+	 */
     var $_contentBlocksLoaded;
+	/**
+	 * @access private
+	 * @var boolean
+	 */
     var $doAutoAliasIfEnabled;
+	/**
+	 * @access private
+	 * @var string
+	 */
     var $stylesheet;
 	
+	/**
+	 * Constructor
+	 */
     function Content()
     {
 	$this->ContentBase();
@@ -33,16 +67,31 @@ class Content extends ContentBase
 	$this->doAutoAliasIfEnabled = true;
     }
 
+	/**
+	 * Indicate whether or not this content type may be copied
+	 *
+	 * @return boolean whether or not it's copyable
+	 */
     function IsCopyable()
     {
         return TRUE;
     }
 
+	/**
+	 * Get the friendly (e.g., human-readable) name for this content type
+	 *
+	 * @return string a human-readable name for this type of content
+	 */
     function FriendlyName()
     {
       return lang('contenttype_content');
     }
 
+	/**
+	 * Set up base property attributes for this content type
+	 *
+	 * @return void
+	 */
     function SetProperties()
     {
       parent::SetProperties();
@@ -58,12 +107,19 @@ class Content extends ContentBase
 
     /**
      * Use the ReadyForEdit callback to get the additional content blocks loaded.
+     * @return void
      */
     function ReadyForEdit()
     {
 	$this->get_content_blocks();
     }
 
+	/**
+	 * Set content attribute values (from parameters received from admin add/edit form) 
+	 *
+	 * @param array $params hash of parameters to load into content attributes
+	 * @return void
+	 */
     function FillParams($params)
     {
 	global $gCms;
@@ -121,6 +177,12 @@ class Content extends ContentBase
 	parent::FillParams($params);
     }
 
+	/**
+	 * Gets the main content
+	 *
+	 * @param string $param which attribute to return
+	 * @return string the specified content
+	 */
     function Show($param = 'content_en')
     {
 	// check for additional content blocks
@@ -129,11 +191,21 @@ class Content extends ContentBase
 	return $this->GetPropertyValue($param);
     }
 
+	/**
+	 * test whether or not content may be made the default content
+	 *
+	 * @return boolean whether or not content may be made the default content
+	 */
     function IsDefaultPossible()
     {
 	return TRUE;
     }
 
+	/**
+	 * Get a list of custom tabs this content type shows in the admin for adding / editing
+	 *
+	 * @return array list of custom tabs
+	 */
     function TabNames()
     {
       $res = array(lang('main'));
@@ -144,6 +216,14 @@ class Content extends ContentBase
       return $res;
     }
 
+	/**
+	 * Get a form for editing the content in the admin
+	 *
+	 * @param boolean $adding  true if the content is being added for the first time
+	 * @param string $tab which tab to display
+	 * @param string $showadmin 
+	 * @return array 
+	 */
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
 	global $gCms;
@@ -217,6 +297,11 @@ class Content extends ContentBase
     }
 
 
+	/**
+	 * Validate the user's entries in the content add/edit form
+	 *
+	 * @return mixed either an array of validation error strings, or false to indicate no errors
+	 */
 	function ValidateData()
 	{
 		$errors = parent::ValidateData();
@@ -278,6 +363,7 @@ class Content extends ContentBase
 
     /**
      * Function to return an array of content blocks
+     * @return array of content blocks
      */
     public function get_content_blocks()
     {
@@ -285,7 +371,11 @@ class Content extends ContentBase
       return $this->_contentBlocks;
     }
 
-
+	/**
+	 * parse content blocks
+	 *
+	 * @access private
+	 */
     private function parse_content_blocks()
     {
       $result = true;
@@ -297,7 +387,7 @@ class Content extends ContentBase
 	  $this->_contentBlocks = array();
 	  if ($this->TemplateId() && $this->TemplateId() > -1)
 	    {
-	      $template = $templateops->LoadTemplateByID($this->TemplateId()); /* @var $template Template */
+	      $template = $templateops->LoadTemplateByID($this->TemplateId());
 	    }
 	  else
 	    {
@@ -309,7 +399,6 @@ class Content extends ContentBase
 	      
 	      // fallthrough condition.
 	      // read text content blocks
-	      //$pattern = '/{content\s([^}]*)}/';
 	      $pattern = '/{content([^_}]*)}/';
 	      $pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
 	      $matches = array();
@@ -554,7 +643,11 @@ class Content extends ContentBase
 	}
     }
 	
-
+	/**
+	 * undocumented function
+	 *
+	 * @param string $tpl_source 
+	 */
     function ContentPreRender($tpl_source)
     {
 	// check for additional content blocks
@@ -563,6 +656,13 @@ class Content extends ContentBase
 	return $tpl_source;
     }
 
+	/**
+	 * undocumented function
+	 *
+	 * @param string $one 
+	 * @param string $adding 
+	 * @return void
+	 */
     function display_single_element($one,$adding)
     {
       global $gCms;

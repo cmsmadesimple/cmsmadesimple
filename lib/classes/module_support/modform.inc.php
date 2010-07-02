@@ -1,30 +1,34 @@
-<?php
-# CMS - CMS Made Simple
-# (c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
-# This project's homepage is: http://cmsmadesimple.org
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+#CMS - CMS Made Simple
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# BUT withOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
-# GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA	02111-1307	USA
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
 
 /**
- * Methods for modules to do form related functions
- *
+ * Methods for modules to do form related functions; included in the module class when needed
+ * @see CMSModule
  * @since		1.0
  * @package		CMS
+ * @license GPL
  */
 
+/**
+ * @access private
+ */
 function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 {
 	global $gCms;
@@ -63,16 +67,6 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	  }
 	$goto = ' action="'.$goto.'"';
 	
-
-// 	if ($inline && $returnid != '')
-// 	{
-// 		#$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-// 		#$goto = 'index.php?mact='.$this->GetName().','.$id.','.$action;
-// 		#$goto .= '&amp;'.$id.'returnid='.$returnid;
-// 		#$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
-// 	}
-	//$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" name="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
-
 	$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'"'.$goto;
 	$text .= ' class="cms_form"';
 	if ($enctype != '')
@@ -110,6 +104,9 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateLabelForInput(&$modinstance, $id, $name, $labeltext='', $addttext='')
 {
   $text = '<label class="cms_label" for="'.cms_htmlentities($id.$name).'"';
@@ -122,6 +119,9 @@ function cms_module_CreateLabelForInput(&$modinstance, $id, $name, $labeltext=''
 
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateInputText(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='')
 {
   $value = cms_htmlentities($value);
@@ -141,6 +141,9 @@ function cms_module_CreateInputText(&$modinstance, $id, $name, $value='', $size=
   return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateInputTextWithLabel(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
 {
   $id = cms_htmlentities($id);
@@ -158,6 +161,9 @@ function cms_module_CreateInputTextWithLabel(&$modinstance, $id, $name, $value='
 	return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateInputFile(&$modinstance, $id, $name, $accept='', $size='10',$addttext='')
 {
   $id = cms_htmlentities($id);
@@ -178,6 +184,9 @@ function cms_module_CreateInputFile(&$modinstance, $id, $name, $accept='', $size
 	return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateInputPassword(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='')
 {
   $id = cms_htmlentities($id);
@@ -196,6 +205,9 @@ function cms_module_CreateInputPassword(&$modinstance, $id, $name, $value='', $s
 	return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateInputHidden(&$modinstance, $id, $name, $value='', $addttext='')
 {
   $id = cms_htmlentities($id);
@@ -212,6 +224,9 @@ function cms_module_CreateInputHidden(&$modinstance, $id, $name, $value='', $add
 	return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateInputCheckbox(&$modinstance, $id, $name, $value='', $selectedvalue='', $addttext='')
 {
   $id = cms_htmlentities($id);
@@ -232,6 +247,9 @@ function cms_module_CreateInputCheckbox(&$modinstance, $id, $name, $value='', $s
 	return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $addttext='', $image='', $confirmtext='')
 {
   $id = cms_htmlentities($id);
@@ -267,6 +285,9 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
 	return $text . "\n";
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateInputReset(&$modinstance, $id, $name, $value='Reset', $addttext='')
 {
   $id = cms_htmlentities($id);
@@ -281,6 +302,9 @@ function cms_module_CreateInputReset(&$modinstance, $id, $name, $value='Reset', 
   return $text . "\n";
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='', $size='10',
 					  $maxlength='255')
 {
@@ -296,6 +320,9 @@ function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='
 	return $text . "\n";
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $selectedindex, $selectedvalue, $addttext)
 {
   $id = cms_htmlentities($id);
@@ -331,6 +358,9 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
 	return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true)
 {
   $id = cms_htmlentities($id);
@@ -372,6 +402,9 @@ function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $se
 	return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $selectedvalue='', $addttext='', $delimiter='')
 {
   $id = cms_htmlentities($id);
@@ -403,6 +436,9 @@ function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $se
 	return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false, $prettyurl='')
 {
   if( !is_array($params) && $params == '' ) $params = array();
@@ -494,6 +530,9 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 	return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
 {
   $pageid = cms_htmlentities($pageid);
@@ -526,6 +565,9 @@ function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
 	return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents='', $params=array(), $onlyhref=false)
 {
   $id = cms_htmlentities($id);
@@ -582,6 +624,9 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
 	return $text;
 }
 
+/**
+ * @access private
+ */
 function cms_module_CreateFieldsetStart(&$modinstance, $id, $name, $legend_text='', $addtext='', $addtext_legend='')
 {
   $id = cms_htmlentities($id);

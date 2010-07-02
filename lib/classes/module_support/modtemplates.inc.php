@@ -1,20 +1,20 @@
-<?php
-# CMS - CMS Made Simple
-# (c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
-# This project's homepage is: http://cmsmadesimple.org
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+#CMS - CMS Made Simple
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# BUT withOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
-# GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA	02111-1307	USA
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
 
@@ -23,8 +23,12 @@
  *
  * @since		1.0
  * @package		CMS
+ * @license GPL
  */
 
+/**
+ * @access private
+ */
 function cms_module_ListTemplates(&$modinstance, $modulename = '')
 {
 	global $gCms;
@@ -49,6 +53,7 @@ function cms_module_ListTemplates(&$modinstance, $modulename = '')
 /**
  * Returns a database saved template.  This should be used for admin functions only, as it doesn't
  * follow any smarty caching rules.
+ * @access private
  */
 function cms_module_GetTemplate(&$modinstance, $tpl_name, $modulename = '')
 {
@@ -72,6 +77,7 @@ function cms_module_GetTemplate(&$modinstance, $tpl_name, $modulename = '')
 /**
  * Returns contents of the template that resides in modules/ModuleName/templates/{template_name}.tpl
  * Code adapted from the Guestbook module
+ * @access private
  */
 function cms_module_GetTemplateFromFile(&$modinstance, $template_name)
 {
@@ -92,6 +98,9 @@ function cms_module_GetTemplateFromFile(&$modinstance, $template_name)
 	}
 }
 
+/**
+ * @access private
+ */
 function cms_module_SetTemplate(&$modinstance, $tpl_name, $content, $modulename = '')
 {
 	global $gCms;
@@ -113,6 +122,9 @@ function cms_module_SetTemplate(&$modinstance, $tpl_name, $content, $modulename 
 	}
 }
 
+/**
+ * @access private
+ */
 function cms_module_DeleteTemplate(&$modinstance, $tpl_name = '', $modulename = '')
 {
 	global $gCms;
@@ -129,6 +141,9 @@ function cms_module_DeleteTemplate(&$modinstance, $tpl_name = '', $modulename = 
 	return ($result == false)?false:true;
 }
 
+/**
+ * @access private
+ */
 function cms_module_IsFileTemplateCached(&$modinstance, $tpl_name, $designation = '', $timestamp = '', $cacheid = '')
 {
 	$ok = (strpos($tpl_name, '..') === false);
@@ -150,6 +165,9 @@ function cms_module_IsFileTemplateCached(&$modinstance, $tpl_name, $designation 
 	return $result;
 }
 
+/**
+ * @access private
+ */
 function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '', $cache = false, $cacheid = '')
 {
 	$ok = (strpos($tpl_name, '..') === false);
@@ -167,6 +185,9 @@ function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '',
 	return $result;
 }
 
+/**
+ * @access private
+ */
 function cms_module_IsDatabaseTemplateCached(&$modinstance, $tpl_name, $designation = '', $timestamp = '')
 {
 	$ok = (strpos($tpl_name, '..') === false);
@@ -191,6 +212,7 @@ function cms_module_IsDatabaseTemplateCached(&$modinstance, $tpl_name, $designat
 /**
  * Given a template in a variable, this method processes it through smarty
  * note, there is no caching involved.
+ * @access private
  */
 function cms_module_ProcessTemplateFromData(&$modinstance, $data)
 {
@@ -204,11 +226,11 @@ function cms_module_ProcessTemplateFromData(&$modinstance, $data)
 	return $_contents;
 }
 
+/**
+ * @access private
+ */
 function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $designation = '', $cache = false, $modulename = '')
 {
-	#$ok = (strpos($tpl_name, '..') === false);
-	#if (!$ok) return;
-
 	global $gCms;
 	$smarty = &$gCms->GetSmarty();
 
