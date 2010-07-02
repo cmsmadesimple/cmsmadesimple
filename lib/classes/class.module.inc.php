@@ -130,6 +130,7 @@ class CMSModule
 
 	/**
 	 * @access private
+	 * @ignore
 	 */
 	var $modmisc;
 
@@ -234,6 +235,7 @@ class CMSModule
 			$this->modtemplates = true;
 		}
 	}
+
 	
 	/**
 	 * Private
@@ -719,6 +721,7 @@ class CMSModule
 	 * Returns the cms->config object as a reference
 	 * 
 	 * @final
+	 * @deprecated
 	 * @return array The config hash.
 	 */
 	function & GetConfig()
@@ -732,6 +735,7 @@ class CMSModule
 	 * Returns the cms->db object as a reference
 	 *
 	 * @final
+	 * @deprecated
 	 * @return object Adodb Database object.
 	 */
 	function & GetDb()
@@ -891,11 +895,11 @@ class CMSModule
 		return FALSE;
 	}
 
-	// what is this?
-	function IsExclusive()
-	{
-		return FALSE;
-	}
+// 	// what is this?
+// 	function IsExclusive()
+// 	{
+// 		return FALSE;
+// 	}
 
 	/**
 	 * ------------------------------------------------------------------
@@ -1236,35 +1240,6 @@ class CMSModule
 
 	/**
 	 * ------------------------------------------------------------------
-	 * Login Related Functions
-	 * ------------------------------------------------------------------
-	 */
-
-	/**
-	 * Called after a successful admin login. It sends the user object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param User The user that just logged in
-	 * @return void
-	 */
-	function LoginPost(&$user)
-	{
-	}
-
-	/**
-	 * Called after a successful logout.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @return void
-	 */
-	function LogoutPost()
-	{
-	}
-
-	/**
-	 * ------------------------------------------------------------------
 	 * User Related Functions
 	 * ------------------------------------------------------------------
 	 */
@@ -1504,32 +1479,6 @@ class CMSModule
 	}
 
 	/**
-	 * Called before a page template is passed through smarty.
-	 * Sends the template object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Template The template object.
-	 * @return void
-	 */
-	function TemplatePreCompile(&$template)
-	{
-	}
-
-	/**
-	 * Called after a page template is passed through smarty.
-	 * Sends the template object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Template The template object.
-	 * @return void
-	 */
-	function TemplatePostCompile(&$template)
-	{
-	}
-
-	/**
 	 * ------------------------------------------------------------------
 	 * General Content Related Functions
 	 * ------------------------------------------------------------------
@@ -1756,80 +1705,11 @@ class CMSModule
 	}
 
 	/**
-	 * Called before an HTML blob is compiled by smarty.
-	 * Sends the blob text.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param string The HTML blob
-	 * @return void
-	 */
-	function GlobalContentPreCompile(&$gc)
-	{
-	}
-
-	/**
-	 * Called after an HTML blob is compiled by smarty.
-	 * Sends the blob text.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param string The HTML blob
-	 * @return void
-	 */
-	function GlobalContentPostCompile(&$gc)
-	{
-	}
-
-
-	/**
 	 * ------------------------------------------------------------------
 	 * Content Related Functions
 	 * ------------------------------------------------------------------
 	 */
 
-	/* calguy - commenting out a whole bunch of cruft.
-
-	function ContentTemplate(&$template)
-	{
-	}
-
-	function ContentStylesheet(&$stylesheet)
-	{
-	}
-
-	function ContentTitle(&$title)
-	{
-	}
-
-	function ContentData(&$content)
-	{
-	}
-
-	function ContentHtmlBlob(&$htmlblob)
-	{
-	}
-
-	function ContentPreRender(&$content)
-	{
-	}
-
-	function ContentPreCompile(&$content)
-	{
-	}
-
-	function ContentPostCompile(&$content)
-	{
-	}
-
-	function ContentPostRenderNonCached(&$content)
-	{
-	}
-
-	function ContentPostRender(&$content)
-	{
-	}
-	*/
 
 	function SmartyPreCompile(&$content)
 	{
@@ -1870,6 +1750,7 @@ class CMSModule
 	{
 	  return FALSE;
 	}
+
 	
 	/**
 	 * ------------------------------------------------------------------
@@ -2153,6 +2034,7 @@ class CMSModule
 	 *
 	 * @internal
 	 * @final
+	 * @access private
 	 */
 	function DoActionBase($name, $id, $params, $returnid='')
 	{

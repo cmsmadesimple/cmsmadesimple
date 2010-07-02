@@ -299,6 +299,12 @@ function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8", $convert
 	return $result;
 }
 
+
+/**
+ * @ignore
+ */
+define('CLEANED_FILENAME','BAD_FILE');
+
 /**
  * Clean up the filename, and ensure that the filename resides underneath
  * the cms_root directory, if it does not replace it with the hardcoded
@@ -308,7 +314,6 @@ function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8", $convert
  * @param string The complete file specification
  * @return string the cleaned file path.
  */
-define('CLEANED_FILENAME','BAD_FILE');
 function cms_cleanfile($filename)
 {
 	$realpath = realpath($filename);
@@ -1512,6 +1517,7 @@ define('CLEAN_NONE','CLEAN_NONE');
 define('CLEAN_STRING','CLEAN_STRING');
 define('CLEAN_REGEXP','regexp:');
 define('CLEAN_FILE','CLEAN_FILE');
+
 /**
  * Method to sanitize all entries in a hash
  * This method is called by the module api to clean incomming parameters in the frontend.

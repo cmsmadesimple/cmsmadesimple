@@ -6,12 +6,26 @@
 
 /**
  * An interface to define how tasks should work.
+ *
+ * @since 1.8
  */
 interface CmsRegularTask
 {
+  /**
+   * Get the name for this task
+   *
+   * @return string
+   */
   public function get_name();
 
+
+  /**
+   * Get the description for this task.
+   *
+   * @return string
+   */
   public function get_description();
+
 
   /**
    * Test if a function should be executed given the supplied time argument
@@ -20,6 +34,7 @@ interface CmsRegularTask
    * @returns boolean TRUE IF the task should be executed, FALSE otherwise.
    */
   public function test($time = '');
+
 
   /**
    * Execute a given task
