@@ -25,7 +25,7 @@
 include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.globalcontent.inc.php');
 
 /**
- * Class for doing html blob related functions.  Maybe of the HtmlBlob object functions are just wrappers around these.
+ * Class for doing html blob related functions.  Many of the HtmlBlob object functions are just wrappers around these.
  *
  * @since 0.6
  * @package CMS
@@ -92,7 +92,7 @@ class GlobalContentOperations
 	}
 
 	/**
-	 * Loads all gobal content blocks from the database and returns them
+	 * Loads all global content blocks from the database and returns them
 	 *
 	 * @return array The list of global content blocks
 	 */
@@ -122,9 +122,9 @@ class GlobalContentOperations
 	}
 
 	/**
-	 * Load a global content block by it's id
+	 * Load a global content block by its database id
 	 *
-	 * @param string $id The id to load
+	 * @param string $id The id of the block to load
 	 * @return mixed If found, the global content block. If none is found, returns false.
 	 */
 	function LoadHtmlBlobByID($id)
@@ -152,7 +152,7 @@ class GlobalContentOperations
 	}
 
 	/**
-	 * Loads a global content block by it's name
+	 * Loads a global content block by its name
 	 *
 	 * @param string $name The name of the global content block to load
 	 * @return mixed If found, the global content block. If none is found, returns false.
@@ -194,7 +194,7 @@ class GlobalContentOperations
 	}
 
 	/**
-	 * Given a global content object, creates a new global content block in the databse with it's attributes.
+	 * Given a global content object, creates a new global content block in the database with its attributes.
 	 *
 	 * @param mixed $htmlblob The global content object to store.
 	 * @return int Returns the id of the new object in the database. If failure, returns -1.
@@ -219,7 +219,7 @@ class GlobalContentOperations
 	}
 
 	/**
-	 * Given a global content object, updates that global content block in the database with it's updated attributes.
+	 * Given a global content object, updates that global content block in the database with its updated attributes.
 	 *
 	 * @param mixed $htmlblob The global content object to store.
 	 * @return boolean Returns true if successful, false if not.
@@ -268,8 +268,8 @@ class GlobalContentOperations
 	}
 
 	/**
-	 * Given a name, check to see if it already exists in the databse. If the id is given,
-	 * ignore it for purposes of updating an exsiting block.
+	 * Given a name, check to see if it already exists in the database. If the id is given,
+	 * ignore it for purposes of updating an existing block.
 	 *
 	 * @param string $name The name to check
 	 * @param integer $id The global content block to ignore. If not passed, all blocks will be checked.
@@ -328,29 +328,17 @@ class GlobalContentOperations
 	}
 
 	/**
-	 * Checks to see if the given global content block's id is permitted to modify the block by the given user's id.
+	 * Checks to see if the given user has permission to modify the given global content block. Both user and
+	 * block are identified by id.
 	 *
 	 * @param integer $id The global content block id to check
-	 * @param string $user_id The user id to check
+	 * @param integer $user_id The user id to check
 	 * @return boolean Returns true if the user is the permitted.  False if they are not.
 	 */
 	function CheckAuthorship($id, $user_id)
 	{		
-// 		global $gCms;
-// 		$db = &$gCms->GetDb();
-// 		$result = false;
-
 		$myblobs = $this->AuthorBlobs($user_id);
 		return quick_check_authorship($id,$myblobs);
-// 		$query = "SELECT additional_htmlblob_users_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ? AND user_id = ?";
-// 		$row = &$db->GetRow($query, array($id, $user_id));
-
-// 		if ($row)
-// 		{
-// 			$result = true;
-// 		}
-
-// 		return $result;
 	}
 
 	/**
@@ -370,11 +358,11 @@ class GlobalContentOperations
 	}
 
 	/**
-	 * Insert a user id into the additional editors list of the given id's global content block
+	 * Insert a user id into the additional editors list of the specified global content block
 	 *
 	 * @param string $id The id of the global content block
 	 * @param string $user_id The id of the user to add to the list
-	 * @return boolean True if successful, false if not.
+	 * @return boolean true if successful, false if not.
 	 */
 	function InsertAdditionalEditors($id, $user_id)
 	{

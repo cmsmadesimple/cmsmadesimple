@@ -107,6 +107,7 @@ class ModuleOperations
 	 *                        created by the run of the method
 	 * @param integer $filecount Reference to an interger which will be filled with the 
 	 *                           total # of files in the package
+	 * @return string an XML string comprising the module and its files
 	 */
 	function CreateXMLPackage( &$modinstance, &$message, &$filecount )
 	{
@@ -448,7 +449,7 @@ class ModuleOperations
    *
    * @param string $module The name of the module to install
    * @param boolean $loadifnecessary If true, loads the module before trying to install it
-   * @return array Returns a tuple of whether the install was sucessful and a message if applicable
+   * @return array Returns a tuple of whether the install was successful and a message if applicable
    */
   function InstallModule($module, $loadifnecessary = false)
   {
@@ -517,7 +518,7 @@ class ModuleOperations
   /**
    * Load a single module from the filesystem
    *
-   * @param string $modulename The name of the moule to load
+   * @param string $modulename The name of the module to load
    * @return boolean Whether or not the module load was successful
    */
   function LoadNewModule( $modulename )
@@ -557,7 +558,7 @@ class ModuleOperations
    * @param string $module The name of the module to upgrade
    * @param string $oldversion The version number of the existing module
    * @param string $newversion The version number of the new module
-   * @return boolean Whether or not the upgrade was sucessful
+   * @return boolean Whether or not the upgrade was successful
    */
   function UpgradeModule( $module, $oldversion, $newversion )
   {
@@ -602,7 +603,7 @@ class ModuleOperations
 
 
   /**
-   * Returns an ArrayObject of modules that have a certain capabili
+   * Returns an array of modules that have a certain capabilies
    * 
    * @param string $capability The capability name
    * @param mixed $args Capability arguments

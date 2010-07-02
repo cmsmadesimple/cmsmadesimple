@@ -186,7 +186,7 @@ class ModuleLoader
 	/**
 	 * Finds all classes extending cmsmodule for loading
 	 *
-	 * @return void
+	 * @return array list of class names
 	 */
 	function FindModules()
 	{

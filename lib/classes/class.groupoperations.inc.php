@@ -62,7 +62,7 @@ class GroupOperations
 	}
 
 	/**
-	 * Load a group from the database by it's id
+	 * Load a group from the database by its id
 	 *
 	 * @param integer $id The id of the group to load
 	 * @return mixed The group if found. If it's not found, then false
@@ -123,7 +123,7 @@ class GroupOperations
 	}
 
 	/**
-	 * Given a group object, update it's attributes in the databse.
+	 * Given a group object, update its attributes in the database.
 	 *
 	 * @param mixed $group The group to update
 	 * @return boolean True if the update was successful, false if not
@@ -154,7 +154,7 @@ class GroupOperations
 	}
 
 	/**
-	 * Given a group id, delete it from the database along with all it's associations.
+	 * Given a group id, delete it from the database along with all its associations.
 	 *
 	 * @param integer $id The group's id to delete
 	 * @return boolean True if the delete was successful. False if not.

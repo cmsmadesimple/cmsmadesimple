@@ -45,7 +45,7 @@ class Group
 	}
 
 	/**
-	 * Set's up some default values
+	 * Sets up some default values
 	 *
 	 * @access private
 	 * @return void
@@ -60,7 +60,7 @@ class Group
 	/**
 	 * Persists the group to the database.
 	 *
-	 * @return boolean True if the save was successful, false if not.
+	 * @return boolean true if the save was successful, false if not.
 	 */
 	function Save()
 	{
