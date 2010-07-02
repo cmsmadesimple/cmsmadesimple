@@ -1,20 +1,20 @@
-<?php
-# CMS - CMS Made Simple
-# (c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
-# This project's homepage is: http://cmsmadesimple.org
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+#CMS - CMS Made Simple
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# BUT withOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
-# GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA	02111-1307	USA
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
 
@@ -76,6 +76,9 @@ class ModuleOperations
 
   /**
    * Set an error condition
+   *
+   * @param string $str The string to set for the error
+   * @return void
    */
   function SetError($str = '')
   {
@@ -85,6 +88,8 @@ class ModuleOperations
 
   /**
    * Return the last error
+   *
+   * @return string The last error, if any
    */
   function GetLastError()
   {
@@ -96,6 +101,12 @@ class ModuleOperations
 
 	/**
 	 * Creates an xml data package from the module directory.
+	 *
+	 * @param mixed $modinstance The instance of the module object
+	 * @param string $message Reference to a string which will be filled with the message 
+	 *                        created by the run of the method
+	 * @param integer $filecount Reference to an interger which will be filled with the 
+	 *                           total # of files in the package
 	 */
 	function CreateXMLPackage( &$modinstance, &$message, &$filecount )
 	{
@@ -161,6 +172,11 @@ class ModuleOperations
   /**
    * Unpackage a module from an xml string
    * does not touch the database
+   *
+   * @param string $xml The xml data for the package
+   * @param boolean $overwrite Should we overwrite files if they exist?
+   * @param boolean $brief If set to true, less checking is done and no errors are returned
+   * @return array A hash of details about the installed module
    */
   function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
   {
@@ -429,6 +445,10 @@ class ModuleOperations
 
   /**
    * Install a module into the database
+   *
+   * @param string $module The name of the module to install
+   * @param boolean $loadifnecessary If true, loads the module before trying to install it
+   * @return array Returns a tuple of whether the install was sucessful and a message if applicable
    */
   function InstallModule($module, $loadifnecessary = false)
   {
@@ -496,6 +516,9 @@ class ModuleOperations
 
   /**
    * Load a single module from the filesystem
+   *
+   * @param string $modulename The name of the moule to load
+   * @return boolean Whether or not the module load was successful
    */
   function LoadNewModule( $modulename )
   {
@@ -530,6 +553,11 @@ class ModuleOperations
 
   /**
    * Upgrade a module
+   *
+   * @param string $module The name of the module to upgrade
+   * @param string $oldversion The version number of the existing module
+   * @param string $newversion The version number of the new module
+   * @return boolean Whether or not the upgrade was sucessful
    */
   function UpgradeModule( $module, $oldversion, $newversion )
   {
@@ -562,6 +590,8 @@ class ModuleOperations
    * Returns a hash of all loaded modules.  This will include all
    * modules loaded by LoadModules, which could either be all or them,
    * or just ones that are active and installed.
+   *
+   * @return array The hash of all loaded modules
    */
   function & GetAllModules()
     {
@@ -574,12 +604,11 @@ class ModuleOperations
   /**
    * Returns an ArrayObject of modules that have a certain capabili
    * 
-   * @param string the capability name
-   * @param mixed  capability arguments.
-   * 
-   * @return An ArrayObject of module objects.
+   * @param string $capability The capability name
+   * @param mixed $args Capability arguments
+   * @return array List of all the module with that capability
    */
-  public static function get_modules_with_capability($capability,$args= '')
+  public static function get_modules_with_capability($capability, $args= '')
   {
     global $gCms;
 
@@ -602,3 +631,6 @@ class ModuleOperations
     return $output;
   }
 }
+
+# vim:ts=4 sw=4 noet
+?>

@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -26,9 +26,13 @@ include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.group.inc.php');
  * @since		0.6
  * @package		CMS
  */
-
 class GroupOperations
 {
+	/**
+	 * Loads all the groups from the database and returns them
+	 *
+	 * @return array The list of groups
+	 */
 	function LoadGroups()
 	{
 		global $gCms;
@@ -51,6 +55,12 @@ class GroupOperations
 		return $result;
 	}
 
+	/**
+	 * Load a group from the database by it's id
+	 *
+	 * @param integer $id The id of the group to load
+	 * @return mixed The group if found. If it's not found, then false
+	 */
 	function & LoadGroupByID($id)
 	{
 
@@ -74,6 +84,12 @@ class GroupOperations
 		return $result;
 	}
 
+	/**
+	 * Given a group object, inserts it into the database.
+	 *
+	 * @param mixed $group The group object to save to the database
+	 * @return integer The id of the newly created group. If none is created, -1
+	 */
 	function InsertGroup($group)
 	{
 		$result = -1; 
@@ -100,6 +116,12 @@ class GroupOperations
 		return $result;
 	}
 
+	/**
+	 * Given a group object, update it's attributes in the databse.
+	 *
+	 * @param mixed $group The group to update
+	 * @return boolean True if the update was successful, false if not
+	 */
 	function UpdateGroup($group)
 	{
 		$result = false; 
@@ -125,6 +147,12 @@ class GroupOperations
 		return $result;
 	}
 
+	/**
+	 * Given a group id, delete it from the database along with all it's associations.
+	 *
+	 * @param integer $id The group's id to delete
+	 * @return boolean True if the delete was successful. False if not.
+	 */
 	function DeleteGroupByID($id)
 	{
 		$result = false;
@@ -150,4 +178,5 @@ class GroupOperations
 	}
 }
 
+# vim:ts=4 sw=4 noet
 ?>
