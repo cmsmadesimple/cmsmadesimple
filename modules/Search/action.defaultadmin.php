@@ -7,6 +7,7 @@ $this->Permission->check('dummy permission'); //Redirect if not logged in
 //		$this->Lang('modify_templates').'">'.$this->Lang('modify_templates').'</a></div><br/>';
 //  }
 
+
 if (isset($params['reindex']))
   {
     CmsSearch::get_instance()->reindex();
@@ -59,7 +60,7 @@ if (FALSE == empty($params['active_tab']))
   $tab = 'statistics';
  }
 $smarty->assign('active_tab_for_modules', $tab);
-//$smarty->assign('statistics_tab', include(dirname(__FILE__).'/function.admin_statistics_tab.php'));
+include(dirname(__FILE__).'/function.admin_statistics_tab.php');
 
 
 echo $this->Template->process('defaultadmin.tpl', $id, $return_id);
