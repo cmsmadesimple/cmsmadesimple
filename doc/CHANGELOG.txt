@@ -22,10 +22,16 @@ Core:
   - Generate unique content block names if trying to use something that
     already exists.
   - Fixes with HTTPS stuff and the secure option
-  - Remove the long deprecated callback methods.
+  - Remove alot of long deprecated callback methods.
+  - Update the phpdoc documentation
+  - Removed the 'community help' links for modules.
+  - re-work the lang mechanism to be smarter, and faster.
+  - Remove the old 404 handler stuff
+  - The {stylesheet} tag is now deprecated, use {cms_stylesheet} instead.
+  - General cleanup of unused functions and methods.
   
   Feature request
-  - #380 use variables in stylesheets
+  - #380 use variables in stylesheets.
 
 News:
   - Fixed issue with sorting of articleid.  
@@ -33,9 +39,14 @@ News:
 MenuManager:
   - #2488 Apply and Submit does not work in certain scenario
   - #4906 Error W3C on accessible_simple_navigation.tpl
+  - Adds the childrenof parameter so that you can do something like
+    {menu childrenof=$page_alias}
   
 CoreInstaller:
   - #4978 Fix typo in upgrade.32.to.33 script
+
+ModuleManager
+  - Many improvements.
   
 Version 1.7.1 - Escada
 -----------------------------
