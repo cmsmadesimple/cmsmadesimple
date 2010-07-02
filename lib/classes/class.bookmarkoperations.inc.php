@@ -19,9 +19,15 @@
 #$Id$
 
 /**
- * @package CMS 
+ * Bookmark related functions.
+ *
+ * @package CMS
+ * @license GPL
  */
 
+/**
+ * Include the bookmark class definitions
+ */
 include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.bookmark.inc.php');
 
 /**

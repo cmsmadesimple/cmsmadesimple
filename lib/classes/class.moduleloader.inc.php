@@ -19,9 +19,14 @@
 #$Id$
 
 /**
+ * Functions for loading modules
  * @package  CMS
+ * @license GPL
  */
 
+/**
+ * Include the module class definition
+ */
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.module.inc.php');
 
 /**

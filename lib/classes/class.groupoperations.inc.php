@@ -19,9 +19,14 @@
 #$Id$
 
 /**
+ * Group related functions
  * @package CMS 
+ * @license GPL
  */
 
+/**
+ * Include group class definition
+ */
 include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.group.inc.php');
 
 /**

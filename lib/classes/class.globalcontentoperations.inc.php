@@ -19,9 +19,14 @@
 #$Id$
 
 /**
+ * Global content related functions 
  * @package CMS 
+ * @license GPL
  */
 
+/**
+ * Include global content class definition
+ */
 include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.globalcontent.inc.php');
 
 /**

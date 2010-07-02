@@ -19,9 +19,15 @@
 #$Id$
 
 /**
+ * Content related functions.
+ *
  * @package CMS
+ * @license GPL
  */
 
+/**
+ * Include the content class definition
+ */
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
 
 /**
