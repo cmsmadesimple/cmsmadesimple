@@ -1155,7 +1155,7 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
  * @param  int       How deep to browse (-1=unlimited)
  * @param  string    "FULL"|"DIRS"|"FILES"
  * @param  d         for internal use only
- * @rturn  array
+ * @return  array
 **/
 function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "FULL" , $d = 0 )
 {

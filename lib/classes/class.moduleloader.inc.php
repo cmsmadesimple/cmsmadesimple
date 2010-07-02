@@ -23,7 +23,6 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.module.inc.php');
 /**
  * @package  CMS
  */
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.module.inc.php');
 
 /**
  * Class to load modules

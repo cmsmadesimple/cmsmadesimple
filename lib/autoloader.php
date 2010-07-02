@@ -23,6 +23,13 @@
  * @ignore
  */
 
+/**
+ * A function for auto-loading classes.
+ *
+ * @since 1.7
+ * @param string A class name
+ * @return boolean
+ */
 function cms_autoloader($classname)
 {
   global $gCms;

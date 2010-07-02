@@ -19,6 +19,10 @@
 #$Id$
 
 /**
+ * @package             CMS
+ */
+
+/**
  * Base module class.
  *
  * All modules should inherit and extend this class with their functionality.

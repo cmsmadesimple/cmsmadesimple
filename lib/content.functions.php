@@ -39,6 +39,7 @@ $sorted_content = array();
  *
  * Extends the Smarty class for checking timestamps and rendering content to the browser.
  *
+ * @package CMS
  * @since 0.1
  */
 class Smarty_CMS extends Smarty {
@@ -243,7 +244,7 @@ class Smarty_CMS extends Smarty {
      * A method to return a module database template.
      *
      * @access private
-     * @pararm string The database template name.
+     * @param string The database template name.
      * @param  string (returned) The database template contents
      * @param  object The smarty object.
      * @return boolean
@@ -315,7 +316,7 @@ class Smarty_CMS extends Smarty {
      * A method to return the contents of a global content block.
      *
      * @access private
-     * @pararm string The global content block name.
+     * @param string The global content block name.
      * @param  string (returned) The database template contents
      * @param  object The smarty object.
      * @return boolean
@@ -396,7 +397,7 @@ class Smarty_CMS extends Smarty {
      * Given a page template, return the portion of a page template before the head tag.
      *
      * @access private
-     * @pararm string The page template name.
+     * @param string The page template name.
      * @param  string (returned) The database template contents
      * @param  object The smarty object.
      * @return boolean
@@ -452,7 +453,7 @@ class Smarty_CMS extends Smarty {
      * Given a page template, return the head portion of a page template.
      *
      * @access private
-     * @pararm string The page template name.
+     * @param string The page template name.
      * @param  string (returned) The database template contents
      * @param  object The smarty object.
      * @return boolean
@@ -511,7 +512,7 @@ class Smarty_CMS extends Smarty {
      * Given a page template, return the body portion of a page template.
      *
      * @access private
-     * @pararm string The page template name.
+     * @param string The page template name.
      * @param  string (returned) The database template contents
      * @param  object The smarty object.
      * @return boolean
@@ -574,7 +575,7 @@ class Smarty_CMS extends Smarty {
      * Given a page template name, return it's entire contents.
      *
      * @access private
-     * @pararm string The page template name.
+     * @param string The page template name.
      * @param  string (returned) The database template contents
      * @param  object The smarty object.
      * @return boolean
@@ -692,7 +693,7 @@ class Smarty_CMS extends Smarty {
      * Given a page template name, return it's modification date.
      *
      * @access private
-     * @pararm string The page template name.
+     * @param string The page template name.
      * @param  int (returned) The database template modification time.
      * @param  object The smarty object.
      * @return boolean
@@ -734,7 +735,7 @@ class Smarty_CMS extends Smarty {
      * This method also handles returning preview content if the data exists in the session.
      *
      * @access private
-     * @pararm string The page template name.
+     * @param string The page template name.
      * @param  string (returned) The database template contents
      * @param  object The smarty object.
      * @return boolean
@@ -807,7 +808,7 @@ class Smarty_CMS extends Smarty {
      * This method is used by smarty to indicate wether a content page should be recompiled and cached
      *
      * @access private
-     * @pararm string The page template name (ignored)
+     * @param string The page template name (ignored)
      * @param  int (returned) The timestamp of the modification date of the matching content object.
      * @param  object The smarty object.
      * @return boolean
@@ -845,7 +846,7 @@ class Smarty_CMS extends Smarty {
      * called in a non inline manner.
      *
      * @access private
-     * @pararm string The module name.
+     * @param string The module name.
      * @param  string (returned) The moduleoutput.
      * @param  object The smarty object.
      * @return boolean
@@ -899,7 +900,7 @@ class Smarty_CMS extends Smarty {
      * for non-inline module output.
      *
      * @access private
-     * @pararm string The page template name (ignored)
+     * @param string The page template name (ignored)
      * @param  int (returned) The timestamp of the modification date of the matching template (always current time)
      * @param  object The smarty object.
      * @return boolean

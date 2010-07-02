@@ -21,6 +21,10 @@
 #$Id$
 
 /**
+ * @package CMS
+ */
+
+/**
  * A function to decode utf8 entities in a string
  *
  * @param string The input string

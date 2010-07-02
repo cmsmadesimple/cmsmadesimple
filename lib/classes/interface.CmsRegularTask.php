@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @package CMS
+ */
+
+/**
+ * An interface to define how tasks should work.
+ */
 interface CmsRegularTask
 {
   public function get_name();

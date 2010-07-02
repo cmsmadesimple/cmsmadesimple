@@ -22,13 +22,13 @@
  * Handles test functions and values for CMSMS
  *
  * @package CMS
- * @internal
  * @ignore
  */
 
 /**
  * A class for working with tests
  * 
+ * @package CMS
  * @internal
  */
 class CmsInstallTest
