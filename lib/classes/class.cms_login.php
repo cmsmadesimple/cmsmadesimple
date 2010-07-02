@@ -185,6 +185,7 @@ class CmsLogin extends CmsObject
 		if ($oneuser != null && $oneuser->password == md5($password))
 		{
 			self::generate_user_object($oneuser->id);
+			$_SESSION['login_cms_language'] = get_preference($oneuser->id, 'default_cms_language');
 			CmsEventManager::send_event('Core:LoginPost', array('user' => &$oneuser));
 			//audit($oneuser->id, $oneuser->username, 'User Login');
 			

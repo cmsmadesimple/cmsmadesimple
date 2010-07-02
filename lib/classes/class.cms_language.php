@@ -65,7 +65,7 @@ class CmsLanguage extends CmsObject
 		return CmsLanguage::translate($name, $params);
 	}
 
-	public static function translate($string, $params = array(), $module = 'core', $current_language = '')
+	public static function translate($string, $params = array(), $module = '', $current_language = '')
 	{
 		if ($string == null || $string == '')
 			return '';
@@ -77,7 +77,7 @@ class CmsLanguage extends CmsObject
 		{
 			self::$nls = CmsCache::get_instance()->call(array('CmsLanguage', 'load_nls_files'));
 		}
-		
+
 		$current_language = $current_language != '' ? $current_language : CmsLanguage::get_current_language();
 		
 		//Fast track English
