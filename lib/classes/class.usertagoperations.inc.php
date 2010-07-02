@@ -28,9 +28,9 @@ class UserTagOperations
 	/**
 	 * Retrieve the body of a user defined tag
 	 *
-	 * @params string $name User defined tag name
+	 * @param string $name User defined tag name
 	 *
-	 * @returns mixed If successfull, the body of the user tag (string).  If it fails, false
+	 * @return mixed If successfull, the body of the user tag (string).  If it fails, false
 	 */
 	function GetUserTag( $name )
 	{
@@ -55,10 +55,10 @@ class UserTagOperations
 	/**
 	 * Add or update a named user defined tag into the database
 	 *
-	 * @params string $name User defined tag name
-	 * @params string $text Body of user defined tag
+	 * @param string $name User defined tag name
+	 * @param string $text Body of user defined tag
 	 *
-	 * @returns mixed If successful, true.  If it fails, false.
+	 * @return mixed If successful, true.  If it fails, false.
 	 */
 	function SetUserTag( $name, $text )
 	{
@@ -90,9 +90,9 @@ class UserTagOperations
 	/**
 	 * Remove a named user defined tag from the database
 	 *
-	 * @params string $name User defined tag name
+	 * @param string $name User defined tag name
 	 *
-	 * @returns mixed If successful, true.  If it fails, false.
+	 * @return mixed If successful, true.  If it fails, false.
 	 */
 	function RemoveUserTag( $name )
 	{
@@ -114,7 +114,7 @@ class UserTagOperations
  	/**
 	 * Return a list (suitable for use in a pulldown) of user tags.
 	 *
-	 * @returns mixed If successful, an array.  If it fails, false.
+	 * @return mixed If successful, an array.  If it fails, false.
 	 */
 	function ListUserTags()
 	{
