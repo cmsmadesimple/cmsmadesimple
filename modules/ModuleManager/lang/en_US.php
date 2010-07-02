@@ -51,7 +51,6 @@ $lang['vertext'] = 'Version';
 $lang['sizetext'] = 'Size (Kilobytes)';
 $lang['statustext'] = 'Status/Action';
 $lang['uptodate'] = 'Installed';
-$lang['install'] = 'install';
 $lang['newerversion'] = 'Newer version installed';
 $lang['onlynewesttext'] ='Show only newest version';
 $lang['upgrade'] = 'Upgrade';
