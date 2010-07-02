@@ -315,7 +315,8 @@ else if ($action == "showmodulehelp")
 // 		include($dirname.'/lang/en_US/admin.inc.php');
 		$section = lang($gCms->modules[$module]['object']->GetAdminSection());
 		$wikiUrl .= '/'.$section.'/'.$moduleName;
-		if (FALSE == get_preference($userid, 'hide_help_links'))
+		//		if (FALSE == get_preference($userid, 'hide_help_links'))
+		  if (FALSE)
 		{
 			// Clean up URL
 			$wikiUrl = str_replace(' ', '_', $wikiUrl);
