@@ -2034,15 +2034,14 @@ function cms_ipmatches($ip,$checklist)
 
 
 /**
- * @package	isemail
  * @author	Dominic Sayers <dominic_sayers@hotmail.com>
  * @copyright	2009 Dominic Sayers
  * @license	http://www.opensource.org/licenses/cpal_1.0 Common Public Attribution License Version 1.0 (CPAL) license
  * @link	http://www.dominicsayers.com/isemail
  * @version	1.9 - Minor modifications to make it compatible with PHPLint
  * @return boolean
- * @var string  $email
- * @var boolean $checkDNS
+ * @param string  $email
+ * @param boolean $checkDNS
 */
 function is_email( $email, $checkDNS=false ) {
 	// Check that $email is a valid address. Read the following RFCs to understand the constraints:

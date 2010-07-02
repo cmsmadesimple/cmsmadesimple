@@ -991,7 +991,7 @@ function load_plugins(&$smarty)
  * A function to load all valid plugins in the plugins directory.
  *
  * @internal
- * @access privae
+ * @access private
  * @param object The smarty object
  * @param array  A reference to the $gCms->plugins array.
  * @param string The directory name

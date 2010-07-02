@@ -92,8 +92,8 @@ function getTestValues( $property )
  * Test a php global.
 
  * @return array
- * @var mixed   $result
- * @var boolean $set
+ * @param mixed   $result
+ * @param boolean $set
  */
 function testGlobal( $result, $set = false )
 {
@@ -126,7 +126,7 @@ function testGlobal( $result, $set = false )
 
 /**
  * @return boolean
- * @var string $test
+ * @param string $test
 */
 function extension_loaded_or( $test )
 {
@@ -137,11 +137,11 @@ function extension_loaded_or( $test )
 
 /**
  * @return string
- * @var object  $test
- * @var boolean $required
- * @var string  $message
- * @var string  $error_fragment
- * @var string  $error
+ * @param object  $test
+ * @param boolean $required
+ * @param string  $message
+ * @param string  $error_fragment
+ * @param string  $error
 */
 function getTestReturn( &$test, $required, $message = '', $error_fragment = '', $error = '' )
 {
@@ -183,10 +183,10 @@ function getTestReturn( &$test, $required, $message = '', $error_fragment = '', 
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $db
- * @var string  $message
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $db
+ * @param string  $message
 */
 function & testSupportedDatabase( $required, $title, $db = false, $message = '' )
 {
@@ -267,7 +267,7 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 
 /**
  * @return string
- * @var integer $info
+ * @param integer $info
 */
 function getEmbedPhpInfo( $info = INFO_ALL )
 {
@@ -299,7 +299,7 @@ function getEmbedPhpInfo( $info = INFO_ALL )
 
 /**
  * @return mixed
- * @var string $module
+ * @param string $module
 */
 function getApacheModules( $module = false )
 {
@@ -319,12 +319,12 @@ function getApacheModules( $module = false )
 
 /**
  * @return object
- * @var string $title
- * @var string $value
- * @var string $return
- * @var string $message
- * @var string $error_fragment	
- * @var string $error
+ * @param string $title
+ * @param string $value
+ * @param string $return
+ * @param string $message
+ * @param string $error_fragment	
+ * @param string $error
 */
 function & testDummy( $title, $value, $return, $message = '', $error_fragment = '', $error = '' )
 {
@@ -340,10 +340,10 @@ function & testDummy( $title, $value, $return, $message = '', $error_fragment = 
 
 /**
  * @return object
- * @var string $title
- * @var string $varname
- * @var string $testfunc
- * @var string $message
+ * @param string $title
+ * @param string $varname
+ * @param string $testfunc
+ * @param string $message
 */
 function & testConfig( $title, $varname, $testfunc = '', $message = '' )
 {
@@ -384,9 +384,9 @@ function & testConfig( $title, $varname, $testfunc = '', $message = '' )
 
 /**
  * @return boolean
- * @var object $test
- * @var string $varname
- * @var string $type
+ * @param object $test
+ * @param string $varname
+ * @param string $type
 */
 function testIni( &$test, $varname, $type, $opt = '' )
 {
@@ -435,14 +435,14 @@ function testIni( &$test, $varname, $type, $opt = '' )
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var mixed   $var
- * @var integer $bitmask
- * @var string  $message
- * @var boolean $ini
- * @var boolean $empty_is_ok
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param mixed   $var
+ * @param integer $bitmask
+ * @param string  $message
+ * @param boolean $ini
+ * @param boolean $empty_is_ok
+ * @param string  $error_fragment
 */
 function & testIntegerMask($required,$title,$var,$mask,$message = '',$ini = true,$negate = false,$display_value = true,$error_fragment = '')
 {
@@ -497,13 +497,13 @@ function & testIntegerMask($required,$title,$var,$mask,$message = '',$ini = true
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var mixed   $var
- * @var string  $message
- * @var boolean $ini
- * @var boolean $empty_is_ok
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param mixed   $var
+ * @param string  $message
+ * @param boolean $ini
+ * @param boolean $empty_is_ok
+ * @param string  $error_fragment
 */
 function & testInteger( $required, $title, $var, $message = '', $ini = true, $empty_is_ok = true, $error_fragment = '' )
 {
@@ -551,14 +551,14 @@ function & testInteger( $required, $title, $var, $message = '', $ini = true, $em
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var mixed   $var
- * @var string  $message
- * @var boolean $ini
- * @var boolean $code_empty
- * @var boolean $code_not_empty
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param mixed   $var
+ * @param string  $message
+ * @param boolean $ini
+ * @param boolean $code_empty
+ * @param boolean $code_not_empty
+ * @param string  $error_fragment
 */
 function & testString( $required, $title, $var, $message = '', $ini = true, $code_empty = 'green', $code_not_empty = 'yellow', $error_fragment = '' )
 {
@@ -591,13 +591,13 @@ function & testString( $required, $title, $var, $message = '', $ini = true, $cod
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var mixed   $var
- * @var string  $message
- * @var boolean $ini
- * @var boolean $negative_test
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param mixed   $var
+ * @param string  $message
+ * @param boolean $ini
+ * @param boolean $negative_test
+ * @param string  $error_fragment
 */
 function & testBoolean( $required, $title, $var, $message = '', $ini = true, $negative_test = false, $error_fragment = '' )
 {
@@ -640,15 +640,15 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var mixed   $var
- * @var string  $message
- * @var mixed   $minimum
- * @var mixed   $recommended
- * @var boolean $ini
- * @var int     $unlimited
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param mixed   $var
+ * @param string  $message
+ * @param mixed   $minimum
+ * @param mixed   $recommended
+ * @param boolean $ini
+ * @param int     $unlimited
+ * @param string  $error_fragment
 */
 function & testVersionRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $unlimited = null, $error_fragment='' )
 {
@@ -698,16 +698,16 @@ function & testVersionRange( $required, $title, $var, $message = '', $minimum, $
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var mixed   $var
- * @var string  $message
- * @var mixed   $minimum
- * @var mixed   $recommended
- * @var boolean $ini
- * @var boolean $test_as_bytes
- * @var int     $unlimited
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param mixed   $var
+ * @param string  $message
+ * @param mixed   $minimum
+ * @param mixed   $recommended
+ * @param boolean $ini
+ * @param boolean $test_as_bytes
+ * @param int     $unlimited
+ * @param string  $error_fragment
 */
 function & testRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $test_as_bytes = false, $unlimited = null, $error_fragment = '' )
 {
@@ -763,7 +763,7 @@ function & testRange( $required, $title, $var, $message = '', $minimum, $recomme
 
 /**
  * @return int
- * @var string $val
+ * @param string $val
  */
 function returnBytes( $val )
 {
@@ -787,14 +787,14 @@ function returnBytes( $val )
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $umask
- * @var string  $message
- * @var boolean $debug
- * @var string  $dir
- * @var string  $file
- * @var string  $data
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $umask
+ * @param string  $message
+ * @param boolean $debug
+ * @param string  $dir
+ * @param string  $file
+ * @param string  $data
  */
 function & testUmask( $required, $title, $umask, $message = '', $debug = false, $dir = '', $file = '_test_umask_', $data = 'this is a test' )
 {
@@ -886,8 +886,8 @@ function & testUmask( $required, $title, $umask, $message = '', $debug = false, 
 
 /**
  * @return array
- * @var string  $file
- * @var boolean $debug
+ * @param string  $file
+ * @param boolean $debug
  */
 function permission_stat( $file, $debug = false )
 {
@@ -933,7 +933,7 @@ function permission_stat( $file, $debug = false )
 
 /**
  * @return string
- * @var octal $mode
+ * @param octal $mode
  */
 function permission_octal2string( $mode )
 {
@@ -984,12 +984,12 @@ function permission_octal2string( $mode )
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $message
- * @var boolean $debug
- * @var string  $dir
- * @var string  $file
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $message
+ * @param boolean $debug
+ * @param string  $dir
+ * @param string  $file
 */
 function & testCreateDirAndFile( $required, $title, $message = '', $debug = false, $dir = '_test_dir_file_', $file = '_test_dir_file_' )
 {
@@ -1035,14 +1035,14 @@ function & testCreateDirAndFile( $required, $title, $message = '', $debug = fals
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $dir
- * @var string  $message
- * @var boolean $quick
- * @var boolean $debug
- * @var string  $file
- * @var string  $data
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $dir
+ * @param string  $message
+ * @param boolean $quick
+ * @param boolean $debug
+ * @param string  $file
+ * @param string  $data
 */
 function & testDirWrite( $required, $title, $dir, $message = '', $quick = 0, $debug = false, $file = '_test_dir_write_', $data = 'this is a test' )
 {
@@ -1113,11 +1113,11 @@ function & testDirWrite( $required, $title, $dir, $message = '', $quick = 0, $de
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $file
- * @var string  $message
- * @var boolean $debug
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $file
+ * @param string  $message
+ * @param boolean $debug
 */
 function & testFileWritable( $required, $title, $file, $message = '', $debug = false )
 {
@@ -1168,13 +1168,13 @@ function & testFileWritable( $required, $title, $file, $message = '', $debug = f
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $dir
- * @var string  $message
- * @var boolean $debug
- * @var int     $timeout
- * @var string  $search
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $dir
+ * @param string  $message
+ * @param boolean $debug
+ * @param int     $timeout
+ * @param string  $search
 */
 function & testRemoteFile( $required, $title, $url = '', $message = '', $debug = false, $timeout = 10, $search = 'cmsmadesimple' )
 {
@@ -1408,13 +1408,13 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $file
- * @var string  $checksum
- * @var string  $message
- * @var string  $formattime
- * @var boolean $debug
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $file
+ * @param string  $checksum
+ * @param string  $message
+ * @param string  $formattime
+ * @param boolean $debug
 */
 function & testFileChecksum( $required, $title, $file, $checksum, $message = '', $formattime = '%c', $debug = false )
 {
@@ -1478,7 +1478,7 @@ function & testFileChecksum( $required, $title, $file, $checksum, $message = '',
 
 /**
  * @return string
- * @var string $sess_path
+ * @param string $sess_path
 */
 function testSessionSavePath( $sess_path )
 {
@@ -1525,7 +1525,7 @@ function testSessionSavePath( $sess_path )
 
 /**
  * @return object
- * @var string $inputname
+ * @param string $inputname
 */
 function & testFileUploads( $inputname )
 {
@@ -1606,11 +1606,11 @@ function & testFileUploads( $inputname )
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $minimum
- * @var string  $message
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $minimum
+ * @param string  $message
+ * @param string  $error_fragment
 */
 function & testGDVersion( $required, $title, $minimum, $message = '', $error_fragment = '' )
 {

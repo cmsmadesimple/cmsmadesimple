@@ -24,6 +24,12 @@
  * @package CMS
  */
 
+/**
+ * A function to return the current admin language
+ *
+ * @internal
+ * @return string
+ */
 function cms_admin_current_language()
 {
   global $gCms;
@@ -125,6 +131,12 @@ function cms_admin_current_language()
 }
 
 
+/**
+ * A function to return the current frontend language
+ *
+ * @internal
+ * @return string
+ */
 function cms_frontend_current_language()
 {
   global $gCms;
@@ -140,6 +152,12 @@ function cms_frontend_current_language()
 }
 
 
+/**
+ * A function to return the current language for the current request
+ *
+ * @internal
+ * @return string
+ */
 function cms_current_language()
 {
   global $CMS_ADMIN_PAGE;
@@ -154,7 +172,17 @@ function cms_current_language()
 }
 
 
-
+/**
+ * Load a lang file for a specific realm.
+ *
+ * @since 1.8
+ * @internal
+ * @param string The realm
+ * @param string An optional base directory
+ * @param boolean Indicates that the language is indicated by the directory name
+ * @param boolean Indicates that the lang file has a sub array for the realm.
+ * @return void
+ */
 function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 0,$has_realm = 0)
 {
   global $gCms;
@@ -231,6 +259,21 @@ function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 
 }
 
 
+/**
+ * A method to return a translation for a specific string in a specific realm.
+ * called with the realm first, followed by the key, this method will attempt
+ * to load the specific realm data if necessary before doing translation.
+ *
+ * This method accepts a variable number of arguments.  Any arguments after
+ * the realm and the key are passed to the key via vsprintf
+ *
+ * i.e: lang_by_realm('tasks','my_string');
+ *
+ * @since 1.8
+ * @param string The realm
+ * @param string The lang key
+ * @return string
+ */
 function lang_by_realm()
 {
   global $gCms;
@@ -296,6 +339,17 @@ function lang_by_realm()
 
 }
 
+
+/**
+ * Return a translated string for the default 'admin' realm.
+ * This function is merely a wrapper around the lang_by_realm function
+ * that assumes the realm is 'admin'.
+ *
+ * This method will throw a notice if it is called from a frontend request
+ *
+ * @param string The key to translate
+ * @return string
+ */
 function lang()
 {
   // uses the default admin realm.
@@ -373,6 +427,12 @@ function get_encoding($charset='', $defaultoverrides=true)
 }
 
 
+/**
+ * Set the current encoding
+ *
+ * @internal
+ * @access private
+ */
 function set_encoding($charset)
 {
   global $gCms;
@@ -387,7 +447,13 @@ function set_encoding($charset)
   $variables['current_encoding'] =  $charset;
 }
 
-// Returns true if $string is valid UTF-8 and false otherwise.
+/**
+ * Test wether a string is valid UTF-8
+ *
+ * @internal
+ * @param string The string to test
+ * @return boolean
+ */
 function is_utf8($string)
 {
    // From http://w3.org/International/questions/qa-forms-utf-8.html
