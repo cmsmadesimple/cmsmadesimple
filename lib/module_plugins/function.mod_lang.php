@@ -22,7 +22,7 @@ function smarty_function_mod_lang($params, &$smarty)
 	$id = $smarty->get_template_vars('cms_mapi_id');
 	$return_id = $smarty->get_template_vars('cms_mapi_return_id');
 	
-	echo isset($params['string']) ? $module->lang($params['string']) : '';
+	echo isset($params['string']) ? CmsLanguage::translate($params['value'],array(),$module->get_name()) : '';
 }
 
 ?>

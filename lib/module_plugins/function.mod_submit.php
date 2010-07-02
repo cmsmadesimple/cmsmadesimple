@@ -22,6 +22,8 @@ function smarty_function_mod_submit($params, &$smarty)
 	$id = $smarty->get_template_vars('cms_mapi_id');
 	$return_id = $smarty->get_template_vars('cms_mapi_return_id');
 
+	$translate = coalesce_key($params, 'translate', true, FILTER_VALIDATE_BOOLEAN);
+	$params['value'] = ($translate === true) ? CmsLanguage::translate($params['value'],array(),$module->get_name()) : $params['value'];
 	return $module->Form->input_submit($params);
 }
 

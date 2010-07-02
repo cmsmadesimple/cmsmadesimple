@@ -26,7 +26,7 @@ function smarty_function_mod_helptext($params, &$smarty)
 	
 	$translate = coalesce_key($params, 'translate', true, FILTER_VALIDATE_BOOLEAN);
 	$params['name'] = isset($params['name']) ? 'help_' . $params['name'] : 'help_input';
-	$params['value'] = ($translate === true) ? $module->lang($params['value']) : $params['value'];
+	$params['value'] = ($translate === true) ? CmsLanguage::translate($params['value'],array(),$module->get_name()) : $params['value'];
 	$params['html_id'] = $id . 'help_' . $params['name'];
 
 	return $module->Form->input_hidden($params);
