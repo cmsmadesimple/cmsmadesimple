@@ -34,7 +34,7 @@ function smarty_block_has_permission($params, $content, &$smarty, &$repeat)
 		$permissions = explode(",",$params['perm']);
 		foreach ($permissions as $perm)
 		{
-			if ( $module->Permission->check($perm) )
+			if ( $module->Permission->check(trim($perm) ) )
 			{
 				return; //Permission match user has rights
 			}
