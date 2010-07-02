@@ -26,7 +26,7 @@ function smarty_block_tab_content($params, $content, &$smarty, &$repeat)
 	{
 		if (isset($content))
 		{
-			return $module->Tabs->start_tab($params['name']) . $content . $module->Tabs->end_tab();
+			return $module->Tabs->start_tab($params['name'],$params) . $content . $module->Tabs->end_tab();
 		}
 	}
 }

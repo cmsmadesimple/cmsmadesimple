@@ -31,8 +31,10 @@ function smarty_block_tab_header($params, $content, &$smarty, &$repeat)
         	{
         		$active = true;
         	}
+		$tab_headers = $smarty->get_template_vars('tab_headers');
 
-        	return $module->Tabs->set_tab_header($params['name'], $content, $active);
+        	$smarty->assign('tab_headers', $tab_headers . $module->Tabs->set_tab_header($params['name'], $content, $active) );
+		return;
         }
     }
 }

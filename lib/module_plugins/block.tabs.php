@@ -16,31 +16,23 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_block_has_permission($params, $content, &$smarty, &$repeat)
+function smarty_block_tabs($params, $content, &$smarty, &$repeat)
 {
-	$module = $smarty->get_template_vars('cms_mapi_module');
-	$id = $smarty->get_template_vars('cms_mapi_id');
-	$return_id = $smarty->get_template_vars('cms_mapi_return_id');
 
 	if (!$repeat)
 	{
+
+		$module = $smarty->get_template_vars('cms_mapi_module');
+		$id = $smarty->get_template_vars('cms_mapi_id');
+		$return_id = $smarty->get_template_vars('cms_mapi_return_id');
+
+		$tab_headers = $module->Tabs->start_tab_headers() . $smarty->get_template_vars('tab_headers') . $module->Tabs->end_tab_headers();
+	
 		if (isset($content))
 		{
-			return $content;
+			$smarty->assign('tab_headers','');
+			return $tab_headers . $module->Tabs->start_tab_content() . $content . $module->Tabs->end_tab_content();
 		}
-	}
-	else
-	{
-		$permissions = explode(",",$params['perm']);
-		foreach ($permissions as $perm)
-		{
-			if ( $module->Permission->check($perm) )
-			{
-				return; //Permission match user has rights
-			}
-		}
-		$repeat = false;
-		return;
 	}
 }
 
