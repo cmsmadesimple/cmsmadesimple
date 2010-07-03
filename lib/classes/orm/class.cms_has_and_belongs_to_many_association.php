@@ -75,7 +75,7 @@ class CmsHasAndBelongsToManyAssociation extends CmsObjectRelationalAssociation
 				if ($obj->{$obj->id_field} > -1)
 				{
 					$queryattrs = $this->extra_params;
-					$queryattrs['joins'] = "INNER JOIN {$this->join_table} ON {$this->join_table}.{$this->join_other_id_field} = {$table}.{$other_id_field}";
+					$queryattrs['joins'] = "INNER JOIN {$this->join_table} ON {$this->join_table}.{$this->join_other_id_field} = {$table}.{$this->join_other_id_field}";
 					$queryattrs['conditions'] = array("{$this->join_table}.{$this->join_this_id_field} = ?", $obj->{$obj->id_field});
 					$ary->children = $class->find_all($queryattrs);
 					$obj->set_association($this->association_name, $ary);

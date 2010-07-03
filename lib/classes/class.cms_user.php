@@ -34,7 +34,7 @@ class CmsUser extends CmsObjectRelationalMapping
 	var $field_maps = array('admin_access' => 'adminaccess', 'user_id' => 'id', 'username' => 'name');
 	var $table = 'users';
 	
-	var $id_field = 'user_id';
+	var $id_field = 'id';
 	var $sequence = 'user_seq';
 	
 	var $attr_module = 'Core';
