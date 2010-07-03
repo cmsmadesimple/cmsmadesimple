@@ -37,7 +37,7 @@ require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'functions.php');
 //require_once cms_join_path(CMS_INSTALL_BASE, 'translation.functions.php');
 CmsLanguage::set_current_module('installer');
-CmsLanguage::translate('dummy',array(),'installer');
+//CmsLanguage::translate('dummy',array(),'installer');
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'classes', 'CMSInstaller.class.php');
 
 

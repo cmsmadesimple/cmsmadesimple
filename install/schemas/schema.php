@@ -383,11 +383,14 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		group_perm_id I KEY AUTO,
 		group_id I,
 		permission_id I,
+		object_id I DEFAULT 0,
+		has_access I(1) DEFAULT 1,
 		create_date T,
 		modified_date T
 	";
 	echo installer_create_tablesql($dbdict, $db_prefix."group_perms", $flds, $taboptarray);
 	echo installer_create_indexsql($dbdict, $db_prefix."group_perms", array('group_id', 'permission_id'));
+	echo installer_create_indexsql($dbdict, $db_prefix."group_perms", array('group_id', 'permission_id', 'object_id'));
 /*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."group_perms", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
@@ -521,10 +524,15 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		permission_id I KEY AUTO,
 		permission_name C(255),
 		permission_text C(255),
+		module C(100),
+		extra_attr C(50),
+		hierarchical I(1) DEFAULT 0,
+		link_table C(50),
 		create_date T,
 		modified_date T
 	";
 	echo installer_create_tablesql($dbdict, $db_prefix."permissions", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."permissions", array('permission_name', 'module', 'extra_attr'));
 /*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."permissions", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
@@ -575,12 +583,13 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		group_id I,
-		user_id I,
+		group_id I KEY,
+		user_id I KEY,
 		create_date T,
 		modified_date T
 	";
 	echo installer_create_tablesql($dbdict, $db_prefix."user_groups", $flds, $taboptarray);
+
 /*
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."user_groups", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
