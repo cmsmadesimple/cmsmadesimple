@@ -32,6 +32,7 @@ class CmsGroup extends CmsObjectRelationalMapping
 {
 	var $params = array('id' => -1, 'name' => '', 'active' => true);
 	var $field_maps = array('group_name' => 'name', 'group_id' => 'id');
+	var $id_field = 'group_id';
 	var $table = 'groups';
 	
 	public function __construct()
@@ -41,7 +42,7 @@ class CmsGroup extends CmsObjectRelationalMapping
 	
 	public function setup($first_time = false)
 	{
-		$this->create_has_and_belongs_to_many_association('users', 'user', 'user_groups', 'user_id', 'group_id');
+		$this->create_has_and_belongs_to_many_association('users', 'CmsUser', 'user_groups', 'user_id', 'group_id');
 	}
 	
 	public function validate()
@@ -73,8 +74,7 @@ class CmsGroup extends CmsObjectRelationalMapping
 	{
 		if ($this->id > -1)
 		{
-			$date = cms_db()->DBTimeStamp(time());
-			return cms_db()->Execute('INSERT INTO ' . cms_db_prefix() . "user_groups (user_id, group_id, create_date, modified_date) VALUES (?,?,{$date},{$date})", array($user->id, $this->id));
+			return cms_db()->Execute("INSERT INTO {user_groups} (user_id, group_id, create_date, modified_date) VALUES (?,?,NOW(),NOW())", array($user->id, $this->id));
 		}
 		
 		return false;
@@ -84,7 +84,7 @@ class CmsGroup extends CmsObjectRelationalMapping
 	{
 		if ($this->id > -1)
 		{
-			return cms_db()->Execute('DELETE FROM '.cms_db_prefix().'user_groups WHERE user_id = ? AND group_id = ?', array($user->id, $this->id));
+			return cms_db()->Execute('DELETE FROM {user_groups} WHERE user_id = ? AND group_id = ?', array($user->id, $this->id));
 		}
 
 		return false;

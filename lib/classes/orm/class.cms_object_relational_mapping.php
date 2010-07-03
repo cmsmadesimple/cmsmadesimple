@@ -525,6 +525,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$field = str_replace('find_by_', '', $function);
 		
 		$parameters = $this->split_conditions($field, $arguments);
+
 		if (count($arguments) > 0)
 		{
 			$parameters = array_merge($parameters, $arguments[0]);
@@ -1324,7 +1325,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			$hash_or_id['id'] = $tmp;
 		}
 		
-		return $this->find(array('conditions' => array('id = ?', $hash_or_id['id'])));
+		return $this->find(array('conditions' => array($this->id_field.' = ?', $hash_or_id['id'])));
 	}
 	
 	/**
