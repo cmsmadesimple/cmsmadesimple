@@ -10,13 +10,13 @@
 {/if}
 
   <p>
-    {mod_label name='groupname' value='Name'}:*<br/>
+    {mod_label name='groupname'}{tr}name{/tr}{/mod_label}:*<br/>
     {mod_textbox name='groupname' value=$group->name size="25" maxlength="25"}
   </p>
   {if $group->id gt 1}
   <p>
-    {mod_label name="active" value="Active"}:*<br/>
-    {mod_checkbox name="active" selected="$group->active"}
+    {mod_label name="active"}{tr}active{/tr}{/mod_label}:*<br/>
+    {mod_checkbox name="active" checked=$group->active}
   </p>
   {/if}
 

@@ -20,7 +20,7 @@
 
 // security
 if (!isset($gCms)) die("Can't call actions directly!");
-if (!isset($gCms)) die("Can't call actions directly!");
+
 $user = CmsLogin::get_current_user();
 if (!CmsAcl::check_core_permission('Manage Users',$user)) die('permission denied');
 
@@ -33,12 +33,12 @@ $uid = (int)$params['uid'];
 
 if( $uid != 1 )
 	{
-		$user = CmsUserOperations::load_user_by_id($uid);
+		$user = cms_orm('CmsUser')->find_by_id($uid);
 		$user->active = !$user->active;
 		$user->save();
 	}
 
-$this->redirect($id,'defaultadmin',$return_id,array('selected_tab'=>'users'));
+$this->Redirect->module_url(array('action' => 'defaultadmin', 'selected_tab' => 'users'));
 
 # 
 # EOF

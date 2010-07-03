@@ -20,6 +20,7 @@
 
 // security
 if (!isset($gCms)) die("Can't call actions directly!");
+
 $user = CmsLogin::get_current_user();
 if (!CmsAcl::check_core_permission('Manage Groups',$user)) die('permission denied');
 
@@ -32,12 +33,12 @@ $gid = (int)$params['gid'];
 
 if( $gid != 1 )
 	{
-		$user = CmsGroupOperations::load_group_by_id($gid);
-		$user->active = !$user->active;
-		$user->save();
+		$group = cms_orm('CmsGroup')->find_by_id($gid);
+		$group->active = !$group->active;
+		$group->save();
 	}
 
-$this->redirect($id,'defaultadmin',$return_id,array('selected_tab'=>'groups'));
+$this->Redirect->module_url(array('action' => 'defaultadmin', 'selected_tab' => 'groups'));
 
 # 
 # EOF

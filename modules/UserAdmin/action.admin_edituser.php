@@ -20,7 +20,6 @@
 
 // security
 if (!isset($gCms)) die("Can't call actions directly!");
-if (!isset($gCms)) die("Can't call actions directly!");
 
 if (!$this->Permission->check('Manage Users') ) die('permission denied');
 

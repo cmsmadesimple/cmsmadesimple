@@ -24,46 +24,73 @@ $user = CmsLogin::get_current_user();
 if (!CmsAcl::check_core_permission('Manage Groups',$user)) die('permission denied');
 
 // setup
-if( !isset($params['gid']) )
+
+$group = array();
+if ( !empty($params['gid']) )
+	{
+		$gid = (int)$params['gid'];
+		$group[] = cms_orm('CmsGroup')->find_by_id($gid);
+	}
+elseif( is_array($params['groups']) )
+	{
+		foreach( $params['groups'] as $group_id )
+			{
+				if ( $group_id > 0 )
+					{
+						$gid = (int)$group_id;
+						$group[] = cms_orm('CmsGroup')->find_by_id($gid);
+					}
+			}
+	}
+
+if( count($group) < 1 )
 	{
 		die('insufficient parameters');
 	}
-$gid = (int)$params['gid'];
-$group = CmsGroupOperations::load_group_by_id($gid);
 
 if( isset($params['cancel']) )
 	{
-		$this->redirect($id,'defaultadmin',$return_id,array('selected_tab'=>'groups'));
+		$this->Redirect->module_url(array('action' => 'defaultadmin', 'selected_tab' => 'groups'));
 	}
-else if( isset( $params['submit']) )
+else if( isset( $params['submit']))
 	{
-		foreach( $params['selected'] as $defn_id => $flag )
+		foreach( $group as $onegroup )
 			{
-				$defn = CmsAcl::get_permission_definition_by_id($defn_id);
-				if( $flag )
+				foreach( $params["selected_{$onegroup->name}"] as $defn_id => $flag )
 					{
-						CmsAcl::set_permission($defn['module'],$defn['extra_attr'],$defn['name'],-1,$gid);
-					}
-				else
-					{
-						CmsAcl::remove_permission($defn['module'],$defn['extra_attr'],$defn['name'],$gid);
+						if( $flag )
+							{
+								CmsAcl::set_permission_by_id($defn_id,$onegroup->id);
+							}
+						else
+							{
+								CmsAcl::remove_permission_by_id($defn_id,$onegroup->id);
+							}
 					}
 			}
-		$this->redirect($id,'defaultadmin',$return_id,array('selected_tab'=>'groups'));
+		$this->Redirect->module_url(array('action' => 'defaultadmin', 'selected_tab' => 'groups'));
 	}
 
 $perms = CmsAcl::get_permission_definitions('','',false);
-$groupperms = CmsAcl::get_group_permissions($gid);
+$groupperms = array();
+foreach( $group as $onegroup)
+{
+	$groupperms[$onegroup->name] = CmsAcl::get_group_permissions($onegroup->id);
+}
 
 $newperms = array();
 foreach( $perms as $oneperm )
 {
-	$oneperm['selected'] = 0;
-	foreach( $groupperms as $onegroupperm )
+	$oneperm['selected'] = array();
+	foreach( $groupperms as $name => $group_permissions )
 	{
-		if( $onegroupperm['id'] == $oneperm['id'] )
+		$oneperm['selected'][$name] = 0;
+		foreach( $group_permissions as $onegroupperm )
 		{
-			$oneperm['selected'] = 1;
+			if( $onegroupperm['id'] == $oneperm['id'] )
+			{
+				$oneperm['selected'][$name] = 1;
+			}
 		}
 	}
 	$newperms[] = $oneperm;
@@ -71,7 +98,8 @@ foreach( $perms as $oneperm )
 
 $smarty->assign('group',$group);
 $smarty->assign('permissions',$newperms);
-echo $this->process_template('editgroupperms.tpl',$id,$return_id);
+$smarty->assign('module_action','admin_editgroupperms');
+echo $this->Template->process('editgroupperms.tpl',$id,$return_id);
 # 
 # EOF
 #

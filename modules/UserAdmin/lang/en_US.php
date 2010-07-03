@@ -1,8 +1,11 @@
 <?php
 
 #A
+$lang['active'] = 'Active';
 $lang['admin_adduser'] = 'Add User';
 $lang['admin_edituser'] = 'Edit User';
+$lang['admin_addgroup'] = 'Add Group';
+$lang['admin_editgroup'] = 'Edit Group';
 $lang['admin_editgroupperms'] = 'Edit Group Permissions';
 
 #B
@@ -45,6 +48,7 @@ $lang['modify_templates'] = 'Modify Templates';
 $lang['module_description'] = 'User Management for CMS Made Simple';
 
 #N
+$lang['name'] = 'Name';
 
 #O
 

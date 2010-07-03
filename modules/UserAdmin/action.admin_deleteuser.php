@@ -19,7 +19,8 @@
 #$Id$
 if (!isset($gCms)) die("Can't call actions directly!");
 
-if (!$this->Permission->check('Manage Users') ) die('permission denied');
+$user = CmsLogin::get_current_user();
+if (!CmsAcl::check_core_permission('Manage Users',$user)) die('permission denied');
 
 if( isset($params['uid']) )
 	{

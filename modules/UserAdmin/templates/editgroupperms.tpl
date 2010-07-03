@@ -1,15 +1,15 @@
 <h3>{tr}Action{/tr}:&nbsp;{tr}{$module_action}{/tr}</h3>
-<h4>{tr}Group{/tr}:&nbsp;{$group->name}</h4>
 <br/>
 {mod_form action=$module_action}
-  {mod_hidden name='gid' value=$group->id}
   <table class="pagetable" cellspacing="0">
     <thead>
       <tr>
         <th>{tr}Module{/tr}</th>
         <th>{tr}Extra{/tr}</th>
         <th>{tr}Name{/tr}</th>
-        <th>&nbsp;</th>
+	{foreach from=$group item='onegroup'}
+		<th>{mod_hidden name='groups[]' value=$onegroup->id}{$onegroup->name}</th>
+	{/foreach}
       </tr>
     </thead>
     <tbody>
@@ -18,15 +18,13 @@
       <tr class="{$rowclass}" onmouseover="{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
 	<td>{$oneperm.module}</td>
         <td>{$oneperm.extra_attr}</td>
-        <td>{$oneperm.name}</td>
-        <td>
-	  {assign var='tmp' value=$oneperm.id}
-          {if $oneperm.selected}
-            {mod_checkbox name="selected[$tmp]" selected='1'}
-          {else}
-            {mod_checkbox name="selected[$tmp]"}
-	  {/if}
-        </td>
+        <td>{tr module=$oneperm.module}{$oneperm.permission_name}{/tr}</td>
+	{foreach from=$oneperm.selected key='group_name' item='group_access'}
+		<td>
+			{assign var='tmp' value=$oneperm.id}
+			{mod_checkbox name="selected_$group_name[$tmp]" checked=$group_access}
+		</td>
+	{/foreach}
       </tr>
     {/foreach}
     </tbody>

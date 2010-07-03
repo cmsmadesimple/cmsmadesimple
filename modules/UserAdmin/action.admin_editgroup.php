@@ -20,6 +20,7 @@
 
 // security
 if (!isset($gCms)) die("Can't call actions directly!");
+
 $user = CmsLogin::get_current_user();
 if (!CmsAcl::check_core_permission('Manage Groups',$user)) die('permission denied');
 
@@ -29,12 +30,12 @@ if( !isset($params['gid']) )
 		die('insufficient parameters');
 	}
 $gid = (int)$params['gid'];
-$group = CmsGroupOperations::load_group_by_id($gid);
+$group = cms_orm('CmsGroup')->find_by_id($gid);
 
 // handle form operations
 if( isset($params['cancel']) )
 	{
-		$this->redirect($id,'defaultadmin',$return_id,array('selected_tab'=>'groups'));
+		$this->Redirect->module_url(array('action' => 'defaultadmin', 'selected_tab' => 'groups'));
 	}
 else if( isset( $params['submit']) )
 	{
@@ -47,12 +48,13 @@ else if( isset( $params['submit']) )
 		// save
 		if( $group->save() )
 			{
-				$this->redirect($id,'defaultadmin',$return_id,array('selected_tab'=>'groups'));
+				$this->Redirect->module_url(array('action' => 'defaultadmin', 'selected_tab' => 'groups'));
 			}
 	}
 
 $smarty->assign('group',$group);
-echo $this->process_template('editgroup.tpl',$id,$return_id);
+$smarty->assign('module_action','admin_editgroup');
+echo $this->Template->process('editgroup.tpl',$id,$return_id);
 
 # 
 # EOF

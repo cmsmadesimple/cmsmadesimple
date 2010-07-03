@@ -18,16 +18,22 @@
 #
 #$Id$
 if (!isset($gCms)) die("Can't call actions directly!");
+
 $user = CmsLogin::get_current_user();
 if (!CmsAcl::check_core_permission('Manage Groups',$user)) die('permission denied');
 
 if( isset($params['gid']) )
 	{
 		$gid = (int)coalesce_key($params,'gid',-1);
-		cmsms()->cms_group->delete($gid);
+		$permissions = CmsAcl::get_group_permissions($gid);
+		foreach($permissions as $oneperm)
+			{
+				CmsAcl::remove_permission_by_id($oneperm['id'],$gid);
+			}
+		$group = cms_orm('CmsGroup')->delete($gid);
 	}
 
-$this->redirect($id,'defaultadmin',$return_id,array('selected_tab'=>'groups'));
+$this->Redirect->module_url(array('action' => 'defaultadmin', 'selected_tab' => 'groups'));
 
 
 # 

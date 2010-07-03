@@ -70,7 +70,7 @@
   <hr/><br/>
   {if $user->id gt 1}
   {mod_formrow name='active'}
-    {mod_label name="active"}{tr}Active{/tr}:*{/mod_label}
+    {mod_label name="active"}{tr}active{/tr}:*{/mod_label}
     {mod_checkbox name="active" checked=$user->active}
     {mod_helptext name='first_name' value='help-input_user_active'}
   {/mod_formrow}
