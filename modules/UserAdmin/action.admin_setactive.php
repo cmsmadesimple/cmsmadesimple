@@ -22,7 +22,7 @@
 if (!isset($gCms)) die("Can't call actions directly!");
 
 $user = CmsLogin::get_current_user();
-if (!CmsAcl::check_core_permission('Manage Users',$user)) die('permission denied');
+if (!CmsAcl::check_core_permission('Modify Users',$user)) die('permission denied');
 
 // setup
 if( !isset($params['uid']) )

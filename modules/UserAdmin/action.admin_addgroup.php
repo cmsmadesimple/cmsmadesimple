@@ -22,7 +22,7 @@
 if (!isset($gCms)) die("Can't call actions directly!");
 
 $user = CmsLogin::get_current_user();
-if (!CmsAcl::check_core_permission('Manage Groups',$user)) die('permission denied');
+if (!CmsAcl::check_core_permission('Modify Groups',$user)) die('permission denied');
 
 // handle form operations
 if( isset($params['cancel']) )
@@ -37,7 +37,7 @@ else if( isset($params['submit']) )
 
 		if( $group->save() )
 			{
-				$this->Redirect->module_url(array('action' => 'defaultadmin', 'selected_tab' => 'groups'));
+				$this->Redirect->module_url(array('action' => 'admin_editgroupperms', 'gid' => $group->id));
 			}
 
 		$smarty->assign('group',$group);

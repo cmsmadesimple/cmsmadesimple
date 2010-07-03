@@ -19,9 +19,15 @@
 #$Id$
 if (!isset($gCms)) die("Can't call actions directly!");
 
+$user = CmsLogin::get_current_user();
+if ( !CmsAcl::check_core_permission('Modify Users', $user) &&
+		!CmsAcl::check_core_permission('Modify Groups', $user) &&
+		!CmsAcl::check_core_permission('Modify Site Preferences', $user) )
+			CmsResponse::redirect('index.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY]);
+
 if (isset($params['submitprefs']) )
 	{
-		if( !$this->Permissions->check('Manage Site Preferences') )
+		if( !CmsAcl::check_core_permission('Modify Site Preferences', $user) )
 			die('permission denied');
 
 		$password_minlength = (int)coalesce_key($params,'password_minlength',6);

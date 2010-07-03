@@ -22,7 +22,7 @@
 if (!isset($gCms)) die("Can't call actions directly!");
 
 $user = CmsLogin::get_current_user();
-if (!CmsAcl::check_core_permission('Manage Groups',$user)) die('permission denied');
+if (!CmsAcl::check_core_permission('Modify Groups',$user)) die('permission denied');
 
 // setup
 if( !isset($params['gid']) )

@@ -68,31 +68,33 @@
   {/mod_formrow}
 
   <hr/><br/>
-  {if $user->id gt 1}
-  {mod_formrow name='active'}
-    {mod_label name="active"}{tr}active{/tr}:*{/mod_label}
-    {mod_checkbox name="active" checked=$user->active}
-    {mod_helptext name='first_name' value='help-input_user_active'}
-  {/mod_formrow}
-  {/if}
+	{has_permission perm='Modify Users'}
+		{if $user->id gt 1}
+			{mod_formrow name='active'}
+				{mod_label name="active"}{tr}active{/tr}:*{/mod_label}
+				{mod_checkbox name="active" checked=$user->active}
+				{mod_helptext name='first_name' value='help-input_user_active'}
+			{/mod_formrow}
+		{/if}
 
-  {if count($groups)}
-      <br/>
-      <h5>{tr}Group Membership{/tr}:</h5><br/>
-      <table class="pagetable" cellspacing="0" width="50%" border="0">
-      {foreach from=$groups item='onegroup'}
-	{assign var='selected' value=$onegroup->member}
-        {if $onegroup->name == 'Anonymous' && $module_action == 'admin_adduser'}
-          {assign var='selected' value='1'}
-        {/if}
-        <tr>
-          <td>{assign var='tmp' value=$onegroup->id}{$onegroup->name}</td>
-          <td>{mod_checkbox name="groups[$tmp]" checked=$selected}</td>
-        </tr>
-      {/foreach}
-      </table>
-      <br/>
-    {/if}
+		{if count($groups)}
+			<br/>
+			<h5>{tr}Group Membership{/tr}:</h5><br/>
+			<table class="pagetable" cellspacing="0" width="50%" border="0">
+				{foreach from=$groups item='onegroup'}
+					{assign var='selected' value=$onegroup->member}
+					{if $onegroup->name == 'Anonymous' && $module_action == 'admin_adduser'}
+						{assign var='selected' value='1'}
+					{/if}
+					<tr>
+					<td>{assign var='tmp' value=$onegroup->id}{$onegroup->name}</td>
+					<td>{mod_checkbox name="groups[$tmp]" checked=$selected}</td>
+					</tr>
+				{/foreach}
+			</table>
+			<br/>
+		{/if}
+	{/has_permission}
 
     {mod_formrow name='submitrow' class='submitrow'}
       {if $module_action == 'admin_adduser'}

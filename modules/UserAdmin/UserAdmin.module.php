@@ -54,7 +54,10 @@ class UserAdmin extends CmsModuleBase
 	 ---------------------------------------------------------*/
 	function visible_to_admin_user()
 	{
-		return $this->Permission->check('Manage Users' || 'Manage Groups' || 'Manage Site Preference');
+		$user = CmsLogin::get_current_user();
+		return ( CmsAcl::check_core_permission('Modify Users',$user) || 
+					CmsAcl::check_core_permission('Modify Groups',$user) ||
+					CmsAcl::check_core_permission('Modify Site Preferences',$user) );
 	}
 
 

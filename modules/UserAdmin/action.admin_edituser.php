@@ -21,14 +21,18 @@
 // security
 if (!isset($gCms)) die("Can't call actions directly!");
 
-if (!$this->Permission->check('Manage Users') ) die('permission denied');
+$user = CmsLogin::get_current_user();
+if (!CmsAcl::check_core_permission('Modify Users',$user) || !isset($params['uid']))
+	{ 
+		$uid = $user->id;
+	}
+else
+	{
+		$uid = (int)$params['uid'];
+	}
 
 // setup
-if( !isset($params['uid']) )
-	{
-		die('insufficient parameters');
-	}
-$uid = (int)$params['uid'];
+
 $groups = cms_orm('CmsGroup')->find_all();
 $user = cms_orm('CmsUser')->find_by_id($uid);
 
@@ -52,18 +56,17 @@ else if( isset( $params['submit']) )
 		// these fields are extra and used only for validation
 		$user->min_username_length = $this->Preference->get('username_minlength',4);
 		$user->min_password_length = $this->Preference->get('password_minlength',4);
-		if( isset($params['password']) )
+		if( !empty($params['password']) )
 			{
 				$user->clear_password = trim(coalesce_key($params,'password',''));
 				$user->clear_repeat_password = trim(coalesce_key($params,'repeat',''));
 			}
 
 		// this will encode the password
-		if( isset($params['password']) )
+		if( !empty($params['password']) )
 			{
-				$user->set_password($user->password);
+				$user->set_password($params['password']);
 			}
-
 
 		// save
 		if( $user->save() )
