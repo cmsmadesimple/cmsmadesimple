@@ -32,7 +32,7 @@ class CmsModulePermissionExtension extends CmsModuleExtension
 	*/
 	public function create($permission_name, $permission_text)
 	{
-		CmsAcl::create_permission_definition($permission_name,$this->module->get_name())
+		CmsAcl::create_permission_definition($permission_name,$this->module->get_name());
 	}
 
 	/**
@@ -63,7 +63,7 @@ class CmsModulePermissionExtension extends CmsModuleExtension
 	*/
 	public function remove($permission_name)
 	{
-		if (!CmsAcl::delete_permission_definition($permission_name, $this->module->get_name())
+		if (!CmsAcl::delete_permission_definition($permission_name, $this->module->get_name()) )
 		{
 				return CmsAcl::delete_permission_definition($permission_name, 'Core');
 		}
