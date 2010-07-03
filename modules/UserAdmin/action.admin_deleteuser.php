@@ -18,16 +18,16 @@
 #
 #$Id$
 if (!isset($gCms)) die("Can't call actions directly!");
-$user = CmsLogin::get_current_user();
-if (!CmsAcl::check_core_permission('Manage Users',$user)) die('permission denied');
+
+if (!$this->Permission->check('Manage Users') ) die('permission denied');
 
 if( isset($params['uid']) )
 	{
 		$uid = (int)coalesce_key($params,'uid',-1);
-		cmsms()->cms_user->delete($uid);
+		cms_orm('CmsUser')->delete($uid);
 	}
 
-$this->redirect($id,'defaultadmin',$return_id,array('selected_tab'=>'users'));
+$this->Redirect->module_url(array('action' => 'defaultadmin', 'selected_tab' => 'users'));
 
 # 
 # EOF

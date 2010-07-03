@@ -35,7 +35,7 @@ else if( isset( $params['submit']) )
 	{
 		// Get the data
 		$user = new CmsUser;
-		$user->name = trim(coalesce_key($params,'username',''));
+		$user->name = trim(coalesce_key($params,'name',''));
 		$user->first_name = trim(coalesce_key($params,'first_name',''));
 		$user->last_name = trim(coalesce_key($params,'last_name',''));
 		$user->email = trim(coalesce_key($params,'email',''));
