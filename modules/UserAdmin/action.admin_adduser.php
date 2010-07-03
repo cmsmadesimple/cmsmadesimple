@@ -29,7 +29,7 @@ $groups = cms_orm('CmsGroup')->find_all();
 // handle form operations
 if( isset($params['cancel']) )
 	{
-		$this->redirect($id,'defaultadmin',$return_id,array('selected_tab'=>'users'));
+		$this->Redirect->module_url(array('action' => 'defaultadmin', 'selected_tab' => 'users'));
 	}
 else if( isset( $params['submit']) )
 	{
@@ -67,7 +67,7 @@ else if( isset( $params['submit']) )
 							}
 					}
 
-				$this->Redirect->module_url($id,'defaultadmin',$return_id,array('selected_tab'=>'users'));
+				$this->Redirect->module_url(array('action' => 'defaultadmin', 'selected_tab' => 'users'));
 			}
 
 		foreach( $groups as $onegroup )
