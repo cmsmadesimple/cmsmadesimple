@@ -31,7 +31,7 @@
 class CmsGroup extends CmsObjectRelationalMapping
 {
 	var $params = array('id' => -1, 'name' => '', 'active' => true);
-	var $field_maps = array('group_name' => 'name');
+	var $field_maps = array('group_name' => 'name', 'group_id' => 'id');
 	var $table = 'groups';
 	
 	public function __construct()
@@ -120,7 +120,7 @@ class CmsGroup extends CmsObjectRelationalMapping
 		CmsEvents::send_event('Core', 'DeleteGroupPost', array('group' => &$this));
 	}
 	
-	public static function get_groups_for_dropdowm($add_everyone = false)
+	public static function get_groups_for_dropdown($add_everyone = false)
 	{
 		$result = array();
 		
@@ -130,7 +130,7 @@ class CmsGroup extends CmsObjectRelationalMapping
 		}
 		
 
-		$groups = cmsms()->group->find_all(array('order' => 'name ASC'));
+		$groups = cms_orm('CmsGroup')->find_all(array('order' => 'name ASC'));
 		foreach ($groups as $group)
 		{
 			$result[$group->id] = $group->name;
