@@ -30,8 +30,8 @@
  **/
 class CmsUser extends CmsObjectRelationalMapping
 {
-	var $params = array('id' => -1, 'username' => '', 'password' => '', 'firstname' => '', 'lastname' => '', 'email' => '', 'active' => false);
-	var $field_maps = array('first_name' => 'firstname', 'last_name' => 'lastname', 'admin_access' => 'adminaccess', 'user_id' => 'id');
+	var $params = array('id' => -1, 'name' => '', 'password' => '', 'first_name' => '', 'last_name' => '', 'email' => '', 'active' => false);
+	var $field_maps = array('admin_access' => 'adminaccess', 'user_id' => 'id', 'username' => 'name');
 	var $table = 'users';
 	
 	var $id_field = 'user_id';
@@ -120,7 +120,7 @@ class CmsUser extends CmsObjectRelationalMapping
 	function setup($first_time = false)
 	{
 		$this->create_has_many_association('bookmarks', 'bookmark', 'user_id');
-		$this->create_has_and_belongs_to_many_association('groups', 'group', 'user_groups', 'group_id', 'user_id');
+		$this->create_has_and_belongs_to_many_association('groups', 'CmsGroup', 'user_groups', 'group_id', 'user_id');
 	}
 
 	/**
