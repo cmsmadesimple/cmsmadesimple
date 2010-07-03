@@ -21,7 +21,7 @@
 class CmsModuleLoader extends CmsObject
 {
 	public static $module_list = null;
-	public static $core_modules = array('CoreMenuManager', 'Search', 'ModuleManager', 'SwiftMailer');
+	public static $core_modules = array('CoreMenuManager', 'Search', 'ModuleManager', 'SwiftMailer', 'UserAdmin');
 	public static $event_lookup = array();
 	
 	function __construct()
