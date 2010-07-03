@@ -68,7 +68,7 @@ class ErrorPage extends Content
   {
     parent::SetProperties();
     $this->RemoveProperty('secure',0);
-    $this->RemoveProperty('searchable',false);
+    //$this->RemoveProperty('searchable',0);
     $this->RemoveProperty('parent',-1);
     $this->RemoveProperty('showinmenu',false);
     $this->RemoveProperty('menutext','');
@@ -157,38 +157,42 @@ class ErrorPage extends Content
 
   function ValidateData()
   {
-    $errors = parent::ValidateData();
-    if ($errors == FALSE)
-      {
-	$errors = array();
-      }
+	  // force not searchable.
+	  $this->SetPropertyValue('searchable',0);
+
+	  // debug
+	  $errors = parent::ValidateData();
+	  if ($errors == FALSE)
+		  {
+			  $errors = array();
+		  }
     
-    //Do our own alias check
-    if ($this->mAlias == '')
-      {
-	$errors[] = lang('nofieldgiven', array(lang('error_type')));
-      }
-    else if (in_array($this->mAlias, $this->error_types))
-      {
-	$errors[] = lang('nofieldgiven', array(lang('error_type')));
-      }
-    else if ($this->mAlias != $this->mOldAlias)
-      {
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	$error = $contentops->CheckAliasError($this->mAlias, $this->mId);
-	if ($error !== FALSE)
-	  {
-	    if ($error == lang('aliasalreadyused'))
-	      {
-		$errors[] = lang('errorpagealreadyinuse');
-	      }
-	    else
-	      {
-		$errors[] = $error;
-	      }
-	  }
-      }
+	  //Do our own alias check
+	  if ($this->mAlias == '')
+		  {
+			  $errors[] = lang('nofieldgiven', array(lang('error_type')));
+		  }
+	  else if (in_array($this->mAlias, $this->error_types))
+		  {
+			  $errors[] = lang('nofieldgiven', array(lang('error_type')));
+		  }
+	  else if ($this->mAlias != $this->mOldAlias)
+		  {
+			  global $gCms;
+			  $contentops =& $gCms->GetContentOperations();
+			  $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
+			  if ($error !== FALSE)
+				  {
+					  if ($error == lang('aliasalreadyused'))
+						  {
+							  $errors[] = lang('errorpagealreadyinuse');
+						  }
+					  else
+						  {
+							  $errors[] = $error;
+						  }
+				  }
+		  }
     
     return (count($errors) > 0 ? $errors : FALSE);
   }
