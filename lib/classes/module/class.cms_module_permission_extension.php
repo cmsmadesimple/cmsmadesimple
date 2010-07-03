@@ -28,27 +28,11 @@ class CmsModulePermissionExtension extends CmsModuleExtension
 	*
 	* @param string Name of the permission to create
 	* @param string Description of the permission
+	* @Depreciated Use CmsAcl:create_permission_definition($name, $module, $extra_attr = '', $hierarchical = false, $table = '')
 	*/
 	public function create($permission_name, $permission_text)
 	{
-		$db = cms_db();
-
-		try
-		{
-			$query = "SELECT permission_id FROM {permissions} WHERE permission_name = ?";
-			$count = $db->GetOne($query, array($permission_name));
-
-			if (intval($count) == 0)
-			{
-				$time = $db->DBTimeStamp(time());
-				$query = "INSERT INTO {permissions} (permission_name, permission_text, create_date, modified_date) VALUES (?,?,".$time.",".$time.")";
-				$db->Execute($query, array($permission_name, $permission_text));
-			}
-		}
-		catch (Exception $e)
-		{
-			//trigger_error("Could not run CreatePermission", E_WARNING);
-		}
+		CmsAcl::create_permission_definition($permission_name,$this->module->get_name())
 	}
 
 	/**
@@ -58,8 +42,16 @@ class CmsModulePermissionExtension extends CmsModuleExtension
 	*/
 	public function check($permission_name)
 	{
-		$userid = get_userid();
-		return check_permission($userid, $permission_name);
+		$user = CmsLogin::get_current_user();
+		$tmp = CmsAcl::check_permission($permission_name, $user, $this->module->get_name());
+		if (!$tmp)
+		{
+			return CmsAcl::check_permission($permission_name, $user, 'Core');
+		}
+		else
+		{
+			return $tmp;
+		}
 	}
 
 	/**
@@ -67,23 +59,13 @@ class CmsModulePermissionExtension extends CmsModuleExtension
 	* permission would have to be set to all groups again.
 	*
 	* @param string The name of the permission to remove
+	* @Depreciated Use CmsAcl:delete_permission_definition($name, $module, $extra_attr)
 	*/
 	public function remove($permission_name)
 	{
-		$db = cms_db();
-
-		$query = "SELECT permission_id FROM {permissions} WHERE permission_name = ?";
-		$row = $db->GetRow($query, array($permission_name));
-
-		if ($row)
+		if (!CmsAcl::delete_permission_definition($permission_name, $this->module->get_name())
 		{
-			$id = $row["permission_id"];
-
-			$query = "DELETE FROM {group_perms} WHERE permission_id = ?";
-			$db->Execute($query, array($id));
-
-			$query = "DELETE FROM {permissions} WHERE permission_id = ?";
-			$db->Execute($query, array($id));
+				return CmsAcl::delete_permission_definition($permission_name, 'Core');
 		}
 	}
 }

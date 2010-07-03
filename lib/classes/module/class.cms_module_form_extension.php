@@ -315,6 +315,7 @@ class CmsModuleFormExtension extends CmsModuleExtension
 		$default_params = array(
 			'name' => $this->id . coalesce_key($params, 'name', 'input', FILTER_SANITIZE_STRING),
 			'checked' => coalesce_key($params, 'checked', false, FILTER_VALIDATE_BOOLEAN),
+			'value' => coalesce_key($params, 'value', '1', FILTER_SANITIZE_STRING),
 			'extra' => coalesce_key($params, 'extra', ''),
 			'params' => coalesce_key($params, 'params', array())
 		);
@@ -326,13 +327,12 @@ class CmsModuleFormExtension extends CmsModuleExtension
 		
 		if ($check_keys && !are_all_keys_valid($params, $default_params))
 			throw new CmsInvalidKeyException(invalid_key($params, $default_params));
-			
+		
 		//Combine EVERYTHING together into a big managerie
 		$params = array_merge($default_params, strip_extra_params($params, $default_params, 'params'));
 		unset($params['params']);
 		
 		$params['type'] = 'checkbox';
-		$params['value'] = '1';
 		
 		if ($params['checked'])
 			$params['checked'] = 'checked';

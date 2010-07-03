@@ -93,7 +93,7 @@ class CmsGroup extends CmsObjectRelationalMapping
 	//Callback handlers
 	public function before_save()
 	{
-		CmsEvents::send_event( 'Core', ($this->id == -1 ? 'AddGroupPre' : 'EditGroupPre'), array('group' => &$this));
+		CmsEventManager::send_event( 'Core', ($this->id == -1 ? 'AddGroupPre' : 'EditGroupPre'), array('group' => &$this));
 	}
 	
 	public function after_save(&$result)
@@ -104,20 +104,20 @@ class CmsGroup extends CmsObjectRelationalMapping
 		{
 			//CmsAcl::add_aro($this->id, 'Group');
 		}
-		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddGroupPost' : 'EditGroupPost'), array('group' => &$this));
+		CmsEventManager::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddGroupPost' : 'EditGroupPost'), array('group' => &$this));
 	}
 	
 	public function before_delete()
 	{
 		cms_db()->Execute('DELETE FROM '.cms_db_prefix().'user_groups WHERE group_id = ?',
 						  array($this->id));
-		CmsEvents::send_event('Core', 'DeleteGroupPre', array('group' => &$this));
+		CmsEventManager::send_event('Core', 'DeleteGroupPre', array('group' => &$this));
 	}
 	
 	public function after_delete()
 	{
 		//CmsAcl::delete_aro($this->id, 'Group');
-		CmsEvents::send_event('Core', 'DeleteGroupPost', array('group' => &$this));
+		CmsEventManager::send_event('Core', 'DeleteGroupPost', array('group' => &$this));
 	}
 	
 	public static function get_groups_for_dropdown($add_everyone = false)
