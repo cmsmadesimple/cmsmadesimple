@@ -1088,6 +1088,13 @@ function display_content_list($themeObject = null)
 	  $headoflist .= ' <a class="pageoptions" href="addcontent.php'.$urlext.'">'.lang("addcontent").'</a>';
 	}
 
+	$headoflist .= '<a style="margin-left: 10px;" href="'.$thisurl.'&amp;expandall=1" onclick="xajax_content_expandall(); return false;">';
+	$headoflist .= $themeObject->DisplayImage('icons/system/expandall.gif', lang('expandall'),'','','systemicon').'</a>';
+	$headoflist .= ' <a class="pageoptions" href="'.$thisurl.'&amp;expandall=1" onclick="xajax_content_expandall(); return false;">'.lang("expandall").'</a>&nbsp;&nbsp;&nbsp;';
+	$headoflist .= ' <a href="'.$thisurl.'&amp;collapseall=1" onclick="xajax_content_collapseall(); return false;">';
+	$headoflist .= $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
+	$headoflist .= ' <a class="pageoptions" href="'.$thisurl.'&amp;collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall").'</a>';
+
 	if (check_permission($userid, 'Manage All Content'))
 	{
 	  $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">';
