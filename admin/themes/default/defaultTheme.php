@@ -221,7 +221,7 @@ class defaultTheme extends AdminTheme
 
 	function DisplayHTMLStartTag() {
 		$tag = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"';
-		if ($this->cms->nls['direction'] == 'rtl')
+		if (isset($this->cms->nls['direction']) &&  $this->cms->nls['direction'] == 'rtl')
 		{
 			$tag .= ' dir="rtl"';
 		}
