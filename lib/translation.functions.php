@@ -39,7 +39,7 @@ function cms_admin_current_language()
   $current_language = '';
 
   #Read in all current languages...
-  if( !is_array($nls) )
+  if( !count($nls) )
     {
       $dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'/lang');
       
