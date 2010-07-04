@@ -362,7 +362,11 @@ function lang()
 	global $nls;
 
 	$dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'lang');
-	cms_load_lang_realm('admin',$dir,'admin.inc.php',1,1);
+
+	if( !isset($lang['admin']) )
+	  {
+	    cms_load_lang_realm('admin',$dir,'admin.inc.php',1,1);
+	  }
 	$name = '';
 	$params = array();
 	$realm = 'admin';
