@@ -39,15 +39,18 @@ function cms_admin_current_language()
   $current_language = '';
 
   #Read in all current languages...
-  $dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'/lang');
-
-  $handle = opendir($dir);
-  while (false!==($file = readdir($handle))) {
-    if (is_file("$dir/$file") && strpos($file, "nls.php") != 0) {
-      include("$dir/$file");
+  if( !is_array($nls) )
+    {
+      $dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'/lang');
+      
+      $handle = opendir($dir);
+      while (false!==($file = readdir($handle))) {
+	if (is_file("$dir/$file") && strpos($file, "nls.php") != 0) {
+	  include("$dir/$file");
+	}
+      }
+      closedir($handle);
     }
-  }
-  closedir($handle);
 
   #Check to see if there is already a language in use...
   if (isset($_POST["default_cms_lang"]) )
