@@ -705,6 +705,8 @@ class AdminTheme
             return;
             }
         $this->subtitle = $subtitle;
+
+debug_buffer('before menu items');
     	    
     	$this->menuItems = array(
     	    // base main menu ---------------------------------------------------------
@@ -879,6 +881,8 @@ class AdminTheme
                     'description'=>lang('editbookmark'),'show_in_menu'=>false),
     	);
 
+debug_buffer('after menu items');
+
 
 	// slightly cleaner syntax
 	$this->menuItems['ecommerce'] = array('url'=>'topadmin.php?section=ecommerce','parent'=>-1,
@@ -906,6 +910,9 @@ class AdminTheme
 		$this->menuItems[$sectionKey]['url'] = $url;
 	      }
 	  }
+	
+	
+	debug_buffer('before syste modules');
 
 
 	// add in all of the 'system' modules too
@@ -951,6 +958,8 @@ class AdminTheme
 		  }
 	      }
 	  }
+	
+	debug_buffer('before module menu items');
 
 	// add in all of the modules
         foreach ($this->menuItems as $sectionKey=>$sectionArray)
@@ -991,6 +1000,8 @@ class AdminTheme
 		  }
 	      }
 	  }
+	
+	debug_buffer('after module menu items');
 
 	// remove any top level items that don't have children
 	$parents = array();

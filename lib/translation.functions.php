@@ -185,77 +185,81 @@ function cms_current_language()
  */
 function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 0,$has_realm = 0)
 {
-  global $gCms;
-  global $lang;
-  if( empty($realm) ) return fALSE;
+	global $gCms;
+	global $lang;
+	if( empty($realm) ) return fALSE;
 
-  if( empty($basedir) )
-    {
-      $basedir = cms_join_path($gCms->config['root_path'],'lib','lang',$realm);
-    }
-  if( empty($filename) )
-    {
-      $filename = 'en_US.php';
-    }
+	if( empty($basedir) )
+	{
+		$basedir = cms_join_path($gCms->config['root_path'],'lib','lang',$realm);
+	}
+	if( empty($filename) )
+	{
+		$filename = 'en_US.php';
+	}
 
-  $cur_lang = cms_current_language();
-  
-  // load the default (en_US) file first.
-  $fn = cms_join_path($basedir,$filename);
-  if( $lang_is_dir )
-    {
-      $fn = cms_join_path($basedir,'en_US',$filename);
-    }
-  if( @file_exists($fn) )
-    {
-      if( !$has_realm )
-	{
-	  // the lang file doesn't create a subarray
-	  $hold_lang = $lang;
-	  $lang = array();
-	  include($fn);
-	  $hold_lang[$realm] = $lang;
-	  $lang = $hold_lang;
-	  unset($hold_lang);
-	}
-      else
-	{
-	  // the lang file defines the sub-array itself.
-	  include($fn);
-	}
-      if( !isset($lang[$realm]) ) return FALSE;
-    }
+	$cur_lang = cms_current_language();
 
-  // now load the lang file itself.
-  if( $cur_lang != 'en_US' )
-    {
-      $fn = cms_join_path($basedir,'ext',$cur_lang.'.php');
-      if( $lang_is_dir )
+	// load the default (en_US) file first.
+	$fn = cms_join_path($basedir,$filename);
+	if( $lang_is_dir )
 	{
-	  $fn = cms_join_path($basedir,'ext',$cur_lang,$filename);
+		$fn = cms_join_path($basedir,'en_US',$filename);
 	}
-      if( @file_exists($fn) )
+	if (!$lang[$realm])
 	{
-	  if( !$has_realm )
-	    {
-	      // the lang file doesn't create a subarray
-	      $hold_lang = $lang;
-	      $lang = array();
-	      include($fn);
-	      $hold_lang[$realm] = $lang;
-	      $lang = $hold_lang;
-	      unset($hold_lang);
-	    }
-	  else
-	    {
-	      // the lang file defines the sub-array itself.
-	      include($fn);
-	    }
-	  if( !isset($lang[$realm]) ) return FALSE;
-	}
-    }
+		if( @file_exists($fn) )
+		{
+			if( !$has_realm )
+			{
+				// the lang file doesn't create a subarray
+				$hold_lang = $lang;
+				$lang = array();
+				include($fn);
+				$hold_lang[$realm] = $lang;
+				$lang = $hold_lang;
+				unset($hold_lang);
+			}
+			else
+			{
+				// the lang file defines the sub-array itself.
+				include($fn);
+			}
+			if( !isset($lang[$realm]) ) return FALSE;
+		}
 
-  return TRUE;
+		// now load the lang file itself.
+		if( $cur_lang != 'en_US' )
+		{
+			$fn = cms_join_path($basedir,'ext',$cur_lang.'.php');
+			if( $lang_is_dir )
+			{
+				$fn = cms_join_path($basedir,'ext',$cur_lang,$filename);
+			}
+			if( @file_exists($fn) )
+			{
+				if( !$has_realm )
+				{
+					// the lang file doesn't create a subarray
+					$hold_lang = $lang;
+					$lang = array();
+					include($fn);
+					$hold_lang[$realm] = $lang;
+					$lang = $hold_lang;
+					unset($hold_lang);
+				}
+				else
+				{
+					// the lang file defines the sub-array itself.
+					include($fn);
+				}
+				if( !isset($lang[$realm]) ) return FALSE;
+			}
+		}
+	
+	}
+
+	return TRUE;
 }
 
 

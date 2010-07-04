@@ -46,7 +46,12 @@ return;
 
 #$smarty = new Smarty_CMS($gCms->config);
 
+debug_buffer('before header');
+
 include_once("header.php");
+
+debug_buffer('after header');
+
 if ($action == "showpluginhelp")
 {
 	if (function_exists('smarty_cms_help_function_'.$plugin))

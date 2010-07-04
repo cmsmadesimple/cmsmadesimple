@@ -19,6 +19,8 @@ else
 	$themeName=get_preference(get_userid(), 'admintheme', 'default');
 	$themeObjectName = $themeName."Theme";
 	$userid = get_userid();
+	
+	debug_buffer('before theme load');
 
 	if (file_exists(dirname(__FILE__)."/themes/${themeName}/${themeObjectName}.php"))
 	{
@@ -29,6 +31,8 @@ else
 	{
 		$themeObject = new AdminTheme($gCms, $userid, $themeName);
 	}
+	
+	debug_buffer('after theme load');
 
 	$gCms->variables['admintheme']=&$themeObject;
 	if (isset($gCms->config['admin_encoding']) && $gCms->config['admin_encoding'] != '')
@@ -39,7 +43,14 @@ else
 	{
 		$themeObject->SendHeaders(isset($charsetsent), get_encoding('', false));
 	}
+	
+	debug_buffer('before populate admin navigation');
+	
 	$themeObject->PopulateAdminNavigation(isset($CMS_ADMIN_SUBTITLE)?$CMS_ADMIN_SUBTITLE:'');
+	
+	debug_buffer('after populate admin navigation');
+	
+	debug_buffer('before theme-y stuff');
 
 	$themeObject->DisplayDocType();
 	$themeObject->DisplayHTMLStartTag();
@@ -47,6 +58,8 @@ else
 	$themeObject->DisplayBodyTag();
 	$themeObject->DoTopMenu();
 	$themeObject->DisplayMainDivStart();
+	
+	debug_buffer('after theme-y stuff');
 
 	// Display notification stuff from modules
 	// should be controlled by preferences or something
@@ -83,6 +96,8 @@ else
 				}
 			}
 		}
+		
+		debug_buffer('before notifications');
 
 		// if the install directory still exists
 		// add a priority 1 dashboard item
@@ -104,6 +119,8 @@ else
 		{
 			$themeObject->AddNotification(1,'Core',$sitedown_message);
 		}
+		
+		debug_buffer('after notifications');
 
 		// Display a warning if CMSMS needs upgrading
 		$db =& $gCms->GetDb();
