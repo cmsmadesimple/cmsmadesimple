@@ -1797,7 +1797,7 @@ debug_buffer('after menu items');
 	    if ('both' == $module_help_type)
 	      {
 		$module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
-		$header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a> | ';
+		$header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a></span>';
 		//$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank" title="'.lang('wikihelp').'">'.lang('wikihelp').'</a>  ('.lang('new_window').')</span>';
 	      }
 	    else
