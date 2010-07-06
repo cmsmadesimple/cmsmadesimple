@@ -31,6 +31,8 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."admin_recent_pages");
 	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."cache");
+	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."content");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	//$sqlarray = $dbdict->DropTableSQL($db_prefix."content_props");
@@ -151,7 +153,16 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$ado_ret = ($return == 2) ? lang('done') : lang('failed');
 	echo lang('install_creating_table', 'admin_recent_pages', $ado_ret);
 */
-
+	$flds = "
+		k C(255) UNIQUE KEY,
+		v XL,
+		expiry T,
+		create_date T,
+		modified_date T
+	";
+	echo installer_create_tablesql($dbdict, $db_prefix."cache", $flds, $taboptarray);
+	echo installer_create_indexsql($dbdict, $db_prefix."cache", array('k'));
+	echo installer_create_indexsql($dbdict, $db_prefix."cache", array('expiry'));
 
 	$flds = "
 		id I KEY AUTO,
@@ -409,7 +420,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		group_name C(25),
 		active I1,
 		create_date T,
-		modified_date T
+		modified_date T,
+		extra_params XL
 	";
 	echo installer_create_tablesql($dbdict, $db_prefix."groups", $flds, $taboptarray);
 /*
@@ -629,7 +641,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		email C(255),
 		active I1,
 		create_date T,
-		modified_date T
+		modified_date T,
+		extra_params XL
 	";
 	echo installer_create_tablesql($dbdict, $db_prefix."users", $flds, $taboptarray);
 /*

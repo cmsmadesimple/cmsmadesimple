@@ -37,16 +37,16 @@ class CmsModuleLoader extends CmsObject
 		$module_list = array();
 		foreach ($files as $one_file)
 		{
-			if (ends_with($one_file, '.xml'))
+			if (is_array($one_file))
+				$module_data = $one_file;
+			else if (ends_with($one_file, '.xml'))
 				$module_data = self::xmlify_module_info_file($one_file);
 			else if (ends_with($one_file, '.yml'))
 				$module_data = self::ymlify_module_info_file($one_file);
-			else if (is_array($one_file))
-			{
-				$module_data = $one_file;
-			}
+			
 			if (!isset($module_data['admin_section']))
 				$module_data['admin_section'] = 'extensions';
+			
 			$module_data = self::inject_installed_data_for_module($module_data, $installed_data);
 			$module_list[$module_data['name']] = $module_data;
 		}
@@ -368,16 +368,40 @@ class CmsModuleLoader extends CmsObject
 	
 	public static function ymlify_module_info_file($file)
 	{
+		$file_mod_time = filemtime($file);
+		list($ary, $db_mod_time) = CmsKeyCache::get('module_metadata:' . str_replace('.info.yml', '', basename($file)));
+		
+		if ($db_mod_time != null && $file_mod_time <= $db_mod_time)
+		{
+			if ($ary)
+				return $ary;
+		}
+		
 		$yml = CmsYaml::load_file($file);
 		$yml['old_module'] = false;
+		
+		CmsKeyCache::set('module_metadata:' . str_replace('.info.yml', '', basename($file)), array($yml, $file_mod_time));
+		
 		return $yml;
 	}
 	
 	public static function xmlify_module_info_file($file)
 	{
+		$file_mod_time = filemtime($file);
+		list($ary, $db_mod_time) = CmsKeyCache::get('module_metadata:' . str_replace('.info.xml', '', basename($file)));
+		
+		if ($db_mod_time != null && $file_mod_time <= $db_mod_time)
+		{
+			if ($ary)
+				return $ary;
+		}
+		
 		$xml = simplexml_load_file($file);
 		$xml = self::convert_xml_to_array($xml);
 		$xml['old_module'] = false;
+		
+		CmsKeyCache::set('module_metadata:' . str_replace('.info.xml', '', basename($file)), array($xml, $file_mod_time));
+		
 		return $xml;
 	}
 	
@@ -495,7 +519,7 @@ class CmsModuleLoader extends CmsObject
 		
 		unset($mod);
 		
-		CmsKeyCache::set('module_metadata:' . $module_name, array($ary, $file_mod_time), 0);
+		CmsKeyCache::set('module_metadata:' . $module_name, array($ary, $file_mod_time));
 		
 		return $ary;
 	}

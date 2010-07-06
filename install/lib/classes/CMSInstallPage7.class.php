@@ -70,7 +70,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		    return;
 		  }
 
-		$newconfig = cms_config_load();
+		$newconfig = CmsConfig::get_instance();
 		$newconfig['dbms'] = $_POST['dbms'];
 		$newconfig['db_hostname'] = $_POST['host'];
 		$newconfig['db_username'] = $_POST['username'];
@@ -136,18 +136,13 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		$newconfig['wiki_url'] = 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel';
 		$newconfig['set_names'] = true;
 		$newconfig['url_rewriting'] = 'none';
-	
-		$configfile = CONFIG_FILE_LOCATION;
-		## build the content for config file
-	
-		if ((file_exists($configfile) && is_writable($configfile)) || !file_exists($configfile)) {
-			cms_config_save($newconfig);
-		}
-		else 
+		
+		if (!$newconfig->save())
 		{
 			echo lang('cannot_write_config', $configfile);
 			exit;
 		}
+
 
 		if (file_exists(cms_join_path(TMP_CACHE_LOCATION, 'SITEDOWN')))
 		{

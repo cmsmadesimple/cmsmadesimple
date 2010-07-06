@@ -34,8 +34,8 @@ class CMSInstallerPage3 extends CMSInstallerPage
 	function assignVariables()
 	{
 		//cms_config_upgrade();
-		$config = cms_config_load(true, true);
-		$result = cms_config_save($config);
+		CmsConfig::load(true, true);
+		$result = CmsConfig::save();
 		if($result)
 		{
 			// Delete backup config file

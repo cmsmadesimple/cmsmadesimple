@@ -219,8 +219,10 @@ class CmsConfig extends CmsObject implements ArrayAccess
 				fwrite($handle, $this->config_text($this->params));
 				fwrite($handle, "\n?>");
 				fclose($handle);
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	function config_text($config)

@@ -1,5 +1,5 @@
-INSERT INTO {DB_PREFIX}version VALUES (34);
-INSERT INTO {DB_PREFIX}users VALUES (1,'admin','5f4dcc3b5aa765d61d8327deb882cf99',1,'','','',1,'2006-07-25 21:22:33','2009-05-13 07:43:16');
+INSERT INTO {DB_PREFIX}version VALUES (37);
+INSERT INTO {DB_PREFIX}users VALUES (1,'admin','5f4dcc3b5aa765d61d8327deb882cf99',1,'','','',1,'2006-07-25 21:22:33','2009-05-13 07:43:16', '');
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'use_wysiwyg','1',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'wysiwyg','TinyMCE',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'default_cms_language','en_US',NULL);
@@ -83,9 +83,9 @@ INSERT INTO {DB_PREFIX}permissions VALUES (40,'Approve News','Approve News For F
 INSERT INTO {DB_PREFIX}permissions VALUES (41,'Delete News','Delete News Articles','Core','',0,NULL,'2008-09-27 19:58:12','2008-09-27 19:58:12');
 INSERT INTO {DB_PREFIX}permissions VALUES (44,'Manage All Content','Manage All Content','Core','',0,NULL,'2009-05-06 15:04:11','2009-05-06 15:04:11');
 INSERT INTO {DB_PREFIX}htmlblobs VALUES (1,'footer','<p>&copy; Copyright {custom_copyright} - CMS Made Simple<br />\r\nThis site is powered by <a href=\"http://www.cmsmadesimple.org\">CMS Made Simple</a> version {cms_version}</p>',1,'2006-07-25 21:22:32','2006-07-25 21:22:32');
-INSERT INTO {DB_PREFIX}groups VALUES (1,'Admin',1,'2006-07-25 21:22:32','2006-07-25 21:22:32');
-INSERT INTO {DB_PREFIX}groups VALUES (2,'Editor',1,'2006-07-25 21:22:32','2006-07-25 21:22:32');
-INSERT INTO {DB_PREFIX}groups VALUES (3,'Designer',1,'2006-07-25 21:22:32','2006-07-25 21:22:32');
+INSERT INTO {DB_PREFIX}groups VALUES (1,'Admin',1,'2006-07-25 21:22:32','2006-07-25 21:22:32', '');
+INSERT INTO {DB_PREFIX}groups VALUES (2,'Editor',1,'2006-07-25 21:22:32','2006-07-25 21:22:32', '');
+INSERT INTO {DB_PREFIX}groups VALUES (3,'Designer',1,'2006-07-25 21:22:32','2006-07-25 21:22:32', '');
 INSERT INTO {DB_PREFIX}group_perms VALUES (176,3,30,0,1,'2009-05-12 08:05:26','2009-05-12 08:05:26');
 INSERT INTO {DB_PREFIX}group_perms VALUES (177,3,25,0,1,'2009-05-12 08:05:26','2009-05-12 08:05:26');
 INSERT INTO {DB_PREFIX}group_perms VALUES (178,3,4,0,1,'2009-05-12 08:05:26','2009-05-12 08:05:26');
