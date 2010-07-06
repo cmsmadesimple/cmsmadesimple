@@ -143,7 +143,7 @@ else
 	{
 		echo '<div class="pagecontainer">';
 		echo '<div class="pageoverflow">';
-		echo $themeObject->ShowHeader($module_obj->get_name(), '', '', 'both');
+		echo $themeObject->ShowHeader(CmsLanguage::translate($module_obj->get_name(), array(), $module_obj->get_name()), '', '', 'both');
 		echo '</div>';
 	}
 }

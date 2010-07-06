@@ -541,7 +541,7 @@ class CmsAdminTheme extends CmsObject
 				$this->modules_by_section[$section][$this->section_count[$section]]['key'] = $one_module['name'];
 				$this->modules_by_section[$section][$this->section_count[$section]]['name'] = $one_module['name'];
 				$this->modules_by_section[$section][$this->section_count[$section]]['action'] = 'defaultadmin';
-				$this->modules_by_section[$section][$this->section_count[$section]]['title'] = $one_module['name'];
+				$this->modules_by_section[$section][$this->section_count[$section]]['title'] = CmsLanguage::translate($one_module['name'], array(), $one_module['name']);
 				if ($one_module['summary'] != '')
 				{
 					$this->modules_by_section[$section][$this->section_count[$section]]['description'] = $one_module['summary'];

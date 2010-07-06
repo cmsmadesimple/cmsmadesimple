@@ -1,4 +1,5 @@
 <?php
+$lang['SwiftMailer'] = 'Email Sending Preferences';
 $lang['info_cmsmailer'] = 'This module is used by numerous other modules to facilitate sending emails.  It must be properly configured to your hosts requirements.  Please use the information provided by your host to adjust these settings.  If you still cannot get the test message to send properly, you may have to contact your host for assistance.';
 $lang['charset'] = 'Character Set';
 $lang['sendtestmailconfirm'] = 'This will send a test message to the address specified. If the send process suceeded, you will be returned to this page.  Do you want to continue?';

@@ -65,6 +65,7 @@ $lang['preferences'] = 'Preferences';
 
 #U
 $lang['users'] = 'Users';
+$lang['UserAdmin'] = 'Users & Groups';
 
 #V
 
