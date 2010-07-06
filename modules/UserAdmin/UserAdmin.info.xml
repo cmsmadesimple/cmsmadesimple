@@ -16,6 +16,6 @@
 	<content_module>false</content_module>
 	<plugin_module>false</plugin_module>
 	<wysiwyg>false</wysiwyg>
-	<auto_install>false</auto_install>
+	<auto_install>true</auto_install>
 	<auto_upgrade>false</auto_upgrade>
 </module_info>

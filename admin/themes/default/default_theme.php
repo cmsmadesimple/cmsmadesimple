@@ -19,9 +19,9 @@
 
 class DefaultTheme extends CmsAdminTheme
 {	
-	function __construct($userid, $theme_name = 'Default')
+	function __construct($userid, $theme_name = 'default')
 	{
-		parent::__construct($userid, $theme_name = 'Default');
+		parent::__construct($userid, $theme_name = 'default');
 	}
 }
 ?>

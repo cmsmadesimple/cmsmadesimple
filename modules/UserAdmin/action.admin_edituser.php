@@ -34,7 +34,7 @@ else
 // setup
 
 $groups = cms_orm('CmsGroup')->find_all();
-$user = cms_orm('CmsUser')->find_by_id($uid);
+$user = cms_orm('CmsUser')->load($uid);
 
 // handle form operations
 if( isset($params['cancel']) )

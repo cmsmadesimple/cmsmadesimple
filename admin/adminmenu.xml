@@ -273,7 +273,7 @@
       <node>
         <name>myaccount</name>
         <title>My Account</title>
-        <url>edituser.php</url>
+        <url>moduleinterface.php?mact=UserAdmin,m1_,admin_edituser,0</url>
         <description>myaccountdescription</description>
         <show_in_menu>true</show_in_menu>
       </node>

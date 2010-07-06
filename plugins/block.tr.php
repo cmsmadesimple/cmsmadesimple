@@ -21,16 +21,17 @@ function smarty_cms_block_tr($params, $content, &$smarty)
 	if (is_null($content)) return;
 	
 	$module = $smarty->get_template_vars('cms_mapi_module');
-
+	
+	$module_name = coalesce_key($params, 'module', $module == NULL ? '' : $module->get_name(), FILTER_SANITIZE_STRING);
 	$txt = $content;
 	
-	if (!is_object($module))
+	if ($module_name == '')
 	{
 		$txt = CmsLanguage::translate(trim($content));
 	}
 	else
 	{
-		$txt = $module->lang(trim($content));
+		$txt = CmsLanguage::translate(trim($content),$params,$module_name);
 	}
 
 	if (isset($params['assign']))
