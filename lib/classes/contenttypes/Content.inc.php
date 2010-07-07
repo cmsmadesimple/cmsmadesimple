@@ -399,7 +399,8 @@ class Content extends ContentBase
 	      
 	      // fallthrough condition.
 	      // read text content blocks
-	      $pattern = '/{content([^_}]*)}/';
+	      //$pattern = '/{content([^_}]*)}/';
+	      $pattern = '/{content(?!_)([^}]*)}/';
 	      $pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
 	      $matches = array();
 	      $result2 = preg_match_all($pattern, $content, $matches);
