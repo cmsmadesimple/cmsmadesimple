@@ -1,3 +1,15 @@
+Version 1.8.1 - Mankara 
+-----------------------------
+Fixes:
+  - Backend is slower then previous release
+  - Internet Explorer doesnt show specific backend-pages nicely (f.e. News)
+  - Theme ´default´ gives message ´Undefined index: direction´ on top in backend
+  - The content tag isn't allowing underscore in name of block anymore
+  - Default content has News categories in summary-template
+  - Added expand-collapse buttons on top of listcontent as well
+  - User preferences for page-limit templates isnt taken
+  - Additional blocks arent visible in editmode, when underscore is used
+
 Version 1.8 - Madagascar 
 -----------------------------
 Core:
