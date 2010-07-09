@@ -139,7 +139,7 @@ if (isset($_GET["message"])) {
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
-	$limit = 20;
+	$limit = get_preference($userid,'listtemplates_pagelimit',20);
 	if (count($templatelist) > $limit)
 	{
 		echo "<p class=\"pageshowrows\">".pagination($page, count($templatelist), $limit)."</p>";
