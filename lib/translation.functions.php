@@ -209,7 +209,7 @@ function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 
 	{
 		$fn = cms_join_path($basedir,'en_US',$filename);
 	}
-	if (!$lang[$realm])
+	if (!isset($lang[$realm]))
 	{
 		if( @file_exists($fn) )
 		{
