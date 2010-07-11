@@ -59,9 +59,9 @@ function cms_module_Lang(&$modinstance)
 		return '';
 	}
 
-	if ($modinstance->curlang == '' && isset($gCms->current_language))
+	if ($modinstance->curlang == '')
 	{
-		$modinstance->curlang = $gCms->current_language;
+		$modinstance->curlang = cms_current_language();
 	}
 	$ourlang = $modinstance->curlang;
 
