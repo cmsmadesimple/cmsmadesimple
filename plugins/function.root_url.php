@@ -18,13 +18,12 @@
 
 function smarty_function_root_url($params, &$smarty)
 {
-	global $gCms;
-	$config = &$gCms->GetConfig();
+	$config = cms_config();
 	return $config['root_url'];
 }
 
 function smarty_cms_help_function_root_url() {
-  echo lang('help_function_root_url');
+  echo CmsLanguage::translate('help_function_root_url');
 }
 
 function smarty_cms_about_function_root_url() {
