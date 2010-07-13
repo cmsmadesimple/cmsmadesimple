@@ -280,6 +280,9 @@ class UserOperations
 	 */
 	function DeleteUserByID($id)
 	{
+		if( $id <= 1 ) return false;
+		if( check_permission(get_userid(),'Remove Users') ) return false;
+	
 		$result = false;
 
 		global $gCms;
