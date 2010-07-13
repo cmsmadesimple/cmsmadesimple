@@ -262,8 +262,6 @@ if ($config['debug'] == true)
 }
 if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 {
-    include_once(cms_join_path($dirname,$config['admin_dir'],'lang.php'));
-
 	#This will only matter on upgrades now.  All new stuff (0.13 on) will be UTF-8.
 	if (is_file(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php')))
 	{
