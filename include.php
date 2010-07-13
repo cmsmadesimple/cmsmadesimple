@@ -253,7 +253,7 @@ if ($frontendlang != '')
 $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 $smarty->assign('lang',$frontendlang);
 $smarty->assign('encoding',get_encoding());
-//$smarty->assign_by_ref('gCms',$gCms);
+$smarty->assign_by_ref('gCms',$gCms);
 
 if ($config['debug'] == true)
 {
