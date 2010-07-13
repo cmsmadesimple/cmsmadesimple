@@ -234,6 +234,7 @@ function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 
 		// now load the lang file itself.
 		if( $cur_lang != 'en_US' )
 		{
+      		        $cur_lang = basename($cur_lang);
 			$fn = cms_join_path($basedir,'ext',$cur_lang.'.php');
 			if( $lang_is_dir )
 			{
