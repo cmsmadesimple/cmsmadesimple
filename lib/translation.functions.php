@@ -55,14 +55,19 @@ function cms_admin_current_language()
   #Check to see if there is already a language in use...
   if (isset($_POST["default_cms_lang"]) )
     {
-      $current_language = $_POST["default_cms_lang"];
-      if ($current_language == '')
+      $tmp = basename($_POST['default_cms_lang']);
+      if( isset($nls['language'][$tmp]) ||
+	  isset($nls['alias'][$tmp]) )
 	{
-	  setcookie("cms_language", '', time() - 3600);
-	}
-      else if (isset($_POST["change_cms_lang"]))
-	{
-	  setcookie("cms_language", $_POST["change_cms_lang"]);
+	  $current_language = $tmp;
+	  if ($current_language == '')
+	    {
+	      setcookie("cms_language", '', time() - 3600);
+	    }
+	  else if (isset($_POST["change_cms_lang"]))
+	    {
+	      setcookie("cms_language", basename($_POST["change_cms_lang"]));
+	    }
 	}
     }
   else if (isset($_SESSION['login_cms_language']))
