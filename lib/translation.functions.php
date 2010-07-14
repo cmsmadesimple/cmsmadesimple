@@ -116,8 +116,8 @@ function cms_admin_current_language()
       // user is logged in (this is after the admin login)
       // get his preference.
       $current_language = get_preference(get_userid(false),'default_cms_language');
-      if( $current_language != '' && 
-	  (!isset($nls['language'][$current_language]) || !isset($nls['alias'][$current_language])) )
+      if( $current_language == '' || 
+	  (!isset($nls['language'][$current_language]) && !isset($nls['alias'][$current_language])) )
 	{
 	  // preferred lang doesn't exist
 	  $current_language = '';
