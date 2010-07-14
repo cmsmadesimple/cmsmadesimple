@@ -1445,5 +1445,24 @@ function get_pageid_or_alias_from_url()
   
   return $page;
 }
+
+
+/**
+ * Function to return the current page id.
+ * 
+ * Will return FALSE if in an admin action.
+ *
+ * @return integer pageid indicating the current page, or FALSE.
+ */
+function cms_get_current_pageid()
+{
+  global $gCms;
+
+  if( isset($gCms->variables['page_id']) )
+    {
+      return (int)$gCms->variables['page_id'];
+    }
+  return FALSE;
+}
 # vim:ts=4 sw=4 noet
 ?>
