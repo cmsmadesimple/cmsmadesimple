@@ -94,41 +94,33 @@ function cms_admin_current_language()
 
   if ($current_language == '')
     {
-      if (isset($gCms->config['locale']) && $gCms->config['locale'] != '')
+      #take a stab at figuring out the default language...
+      #Figure out default language and set it if it exists
+      if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) 
 	{
-	  $current_language = $gCms->config['locale'];
-	}
-      else
-	{
-		
-#No, take a stab at figuring out the default language...
-#Figure out default language and set it if it exists
-	  if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) 
+	  $alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
+	  if (strpos($alllang, ";") !== FALSE)
+	    $alllang = substr($alllang,0,strpos($alllang, ";"));
+	  $langs = explode(",", $alllang);
+	  
+	  foreach ($langs as $onelang)
 	    {
-	      $alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
-	      if (strpos($alllang, ";") !== FALSE)
-		$alllang = substr($alllang,0,strpos($alllang, ";"));
-	      $langs = explode(",", $alllang);
-
-	      foreach ($langs as $onelang)
+              #Check to see if lang exists...
+	      if (isset($nls['language'][$onelang]))
 		{
-#Check to see if lang exists...
-		  if (isset($nls['language'][$onelang]))
+		  $current_language = $onelang;
+		  setcookie("cms_language", $onelang);
+		  break;
+		}
+              #Check to see if alias exists...
+	      if (isset($nls['alias'][$onelang]))
+		{
+		  $alias = $nls['alias'][$onelang];
+		  if (isset($nls['language'][$alias]))
 		    {
-		      $current_language = $onelang;
-		      setcookie("cms_language", $onelang);
+		      $current_language = $alias;
+		      setcookie("cms_language", $alias);
 		      break;
-		    }
-#Check to see if alias exists...
-		  if (isset($nls['alias'][$onelang]))
-		    {
-		      $alias = $nls['alias'][$onelang];
-		      if (isset($nls['language'][$alias]))
-			{
-			  $current_language = $alias;
-			  setcookie("cms_language", $alias);
-			  break;
-			}
 		    }
 		}
 	    }
@@ -148,10 +140,7 @@ function cms_admin_current_language()
 function cms_frontend_current_language()
 {
   global $gCms;
-  if (isset($gCms->config['locale']) && $gCms->config['locale'] != '') {
-    $curlang = $this->config['locale'];
-  }
-  $curlang = get_site_preference('frontendlang',$curlang);
+  $curlang = get_site_preference('frontendlang','');
   if( $curlang == '' ) {
     $curlang = 'en_US';
   }

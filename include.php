@@ -240,15 +240,11 @@ if( $global_umask != '' )
 
 #Set the locale if it's set
 #either in the config, or as a site preference.
-$frontendlang = get_site_preference('frontendlang','');
 if (isset($config['locale']) && $config['locale'] != '')
 {
-    $frontendlang = $config['locale'];
+    @setlocale(LC_ALL, $config['locale']);
 }
-if ($frontendlang != '')
-{
-    @setlocale(LC_ALL, $frontendlang);
-}
+$frontendlang = get_site_preference('frontendlang');
 
 $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 $smarty->assign('lang',$frontendlang);

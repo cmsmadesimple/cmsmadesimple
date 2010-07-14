@@ -169,20 +169,7 @@ class CMSModule
 		global $CMS_ADMIN_PAGE;
 		global $CMS_MODULE_PAGE;
 		global $CMS_INSTALL_PAGE;
-		if (isset($CMS_ADMIN_PAGE))
-		{
-			$this->curlang = '';
-		}
-		else
-		{
-		  if (isset($this->config['locale']) && $this->config['locale'] != '') {
-		      $this->curlang = $this->config['locale'];
-		    }
-		  $this->curlang = get_site_preference('frontendlang',$this->curlang);
-		  if( $this->curlang == '' ) {
-		    $this->curlang = 'en_US';
-		  }
-		}
+		$this->curlang = cms_current_language(); // current language for this request.
 		$this->langhash = array();
 		$this->params = array();
 		$this->param_map = array();
