@@ -178,7 +178,7 @@ class CMSModule
 		  if (isset($this->config['locale']) && $this->config['locale'] != '') {
 		      $this->curlang = $this->config['locale'];
 		    }
-		  $this->curlang = get_site_preference('frontendlang',$curlang);
+		  $this->curlang = get_site_preference('frontendlang',$this->curlang);
 		  if( $this->curlang == '' ) {
 		    $this->curlang = 'en_US';
 		  }
