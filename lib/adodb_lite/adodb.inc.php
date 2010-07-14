@@ -17,10 +17,12 @@ if (!defined('ADODB_DIR'))
 
 $ADODB_vers = 'V1.42 ADOdb Lite 11 January 2007  (c) 2005-2007 Mark Dickenson. All rights reserved. Released LGPL.';
 
+if( !defineed('ADODB_FETCH_DEFAULT') ) {
 define('ADODB_FETCH_DEFAULT',0);
 define('ADODB_FETCH_NUM',1);
 define('ADODB_FETCH_ASSOC',2);
 define('ADODB_FETCH_BOTH',3);
+}
 
 GLOBAL $ADODB_FETCH_MODE;
 $ADODB_FETCH_MODE = ADODB_FETCH_DEFAULT;	// DEFAULT, NUM, ASSOC or BOTH. Default follows native driver default...
