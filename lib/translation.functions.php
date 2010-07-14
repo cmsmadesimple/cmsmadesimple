@@ -113,7 +113,7 @@ function cms_admin_current_language()
   $uid = get_userid(false);
   if( $uid )
     {
-      // user is logged in (this is after the admin)
+      // user is logged in (this is after the admin login)
       // get his preference.
       $current_language = get_preference(get_userid(false),'default_cms_language');
       if( $current_language != '' && 
@@ -133,6 +133,8 @@ function cms_admin_current_language()
   if (isset($_POST['change_cms_lang']) && isset($_POST['default_cms_lang']) )
     {
       // a hack to handle the editpref case of the user changing his language
+      // this is needed because the lang stuff is included before the preference may
+      // actually be set.
       $a1 = basename(trim($_POST['change_cms_lang']));
       $a2 = basename(trim($_POST['default_cms_lang']));
       if( $a1 == $a2 && 
