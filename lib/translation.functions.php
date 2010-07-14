@@ -148,10 +148,10 @@ function cms_admin_current_language()
 function cms_frontend_current_language()
 {
   global $gCms;
-  $curlang = get_site_preference('frontendlang','');
   if (isset($gCms->config['locale']) && $gCms->config['locale'] != '') {
     $curlang = $this->config['locale'];
   }
+  $curlang = get_site_preference('frontendlang',$curlang);
   if( $curlang == '' ) {
     $curlang = 'en_US';
   }
