@@ -72,9 +72,9 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	
 	/**
 	 * Gets a list of content blocks in the template.  It does this by
-	 * temporarily overriding the definition of the content smarty plugin,
-	 * having smarty parse it and callback to parse_block_callback.  It then
-	 * sets the plugin definition back to what it was before.
+	 * overriding the compiler class temporarily, doing an in-place
+	 * compile, having the lexer pull out all the relevant tags,
+	 * and then putting everything back in place.
 	 *
 	 * @return array
 	 * @author Ted Kulp
@@ -85,42 +85,24 @@ class CmsTemplate extends CmsObjectRelationalMapping
 		
 		$this->blocks = array();
 		
-		$old_function = $smarty->_plugins['function']['content'];
-		$smarty->register_function('content', array($this, 'parse_block_callback'));
+		$tpl = $smarty->createTemplate('string:' . $this->content);
 		
-		$smarty->_compile_source('temporary template', $this->content, $_compiled);
-		@ob_start();
-		$smarty->_eval('?>' . $_compiled);
-		$_contents = @ob_get_contents();
-		@ob_end_clean();
+		$cur_obj = $tpl->compiler_object;
 		
-		$smarty->unregister_function('content');
-		$smarty->_plugins['function']['content'] = $old_function;
+		$new_obj = new CmsTemplateCompiler(
+			$tpl->resource_object->template_lexer_class,
+			$tpl->resource_object->template_parser_class,
+			$smarty
+		);
+		$tpl->compiler_object = $new_obj;
+		
+		$tpl->compileTemplateSource();
+		
+		$tpl->compiler_object = $cur_obj;
+		
+		$this->blocks = $new_obj->blocks;
 		
 		return $this->blocks;
-	}
-	
-	public function parse_block_callback($params, &$smarty)
-	{
-		$name = 'default';
-		
-		if (isset($params['name']))
-		{
-			$name = $params['name'];
-			unset($params['name']);
-		}
-		else if (isset($params['block']))
-		{
-			$name = $params['block'];
-			unset($params['block']);
-		}
-		
-		if (!isset($params['type']))
-		{
-			$params['type'] = 'CmsHtmlContentType';
-		}
-		
-		$this->blocks[$name] = $params;
 	}
 	
 	function validate()
@@ -219,6 +201,41 @@ class CmsTemplate extends CmsObjectRelationalMapping
 		CmsEvents::send_event('Core', 'DeleteTemplatePost', array('template' => &$this));
 		CmsCache::clear();
 		CmsContentOperations::clear_cache();
+	}
+}
+
+class CmsTemplateCompiler extends Smarty_Internal_SmartyTemplateCompiler
+{
+	var $blocks = array();
+	
+	public function compileTag($tag, $args)
+    {
+		$result = parent::compileTag($tag, $args);
+		
+		if ($tag == 'content')
+		{
+			$name = 'default';
+
+			if (isset($args['name']))
+			{
+				$name = $args['name'];
+				unset($args['block']);
+			}
+			else if (isset($args['block']))
+			{
+				$name = $args['block'];
+				unset($args['block']);
+			}
+
+			if (!isset($args['type']))
+			{
+				$args['type'] = 'CmsHtmlContentType';
+			}
+			
+			$this->blocks[$name] = $args;
+		}
+		
+		return $result;
 	}
 }
 
