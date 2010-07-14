@@ -169,12 +169,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		generate_user_object($oneuser->id);
 		$_SESSION['login_user_id'] = $oneuser->id;
 		$_SESSION['login_user_username'] = $oneuser->username;
-		$default_cms_lang = get_preference($oneuser->id, 'default_cms_language');
-		if ($default_cms_lang != '')
-		{
-			#setcookie('cms_language', $default_cms_lang);
-			$_SESSION['login_cms_language'] = $default_cms_lang;
-		}
 		audit($oneuser->id, $oneuser->username, 'User Login');
 
 		#Now call the event

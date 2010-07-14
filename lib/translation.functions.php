@@ -25,22 +25,63 @@
  */
 
 /**
- * A function to return the current admin language
+ * A function to attempt to find a language given browser settings
  *
  * @internal
  * @return string
  */
-function cms_admin_current_language()
+function cms_detect_browser_lang()
 {
+  $curlang = '';
+
+  # take a stab at figuring out the default language...
+  # Figure out default language and set it if it exists
+  if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) 
+    {
+      $alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
+      if (strpos($alllang, ";") !== FALSE)
+	$alllang = substr($alllang,0,strpos($alllang, ";"));
+      $langs = explode(",", $alllang);
+	  
+      foreach ($langs as $onelang)
+	{
+	  // Check to see if lang exists...
+	  if (isset($nls['language'][$onelang]))
+	    {
+	      $curlang = $onelang;
+	      break;
+	    }
+#Check to see if alias exists...
+	  if (isset($nls['alias'][$onelang]))
+	    {
+	      $alias = $nls['alias'][$onelang];
+	      if (isset($nls['language'][$alias]))
+		{
+		  $curlang = $alias;
+		  break;
+		}
+	    }
+	}
+    }
+
+  return $curlang;
+}
+
+/** 
+ * A function to initialize the nls array
+ *
+ * @internal
+ * @return void
+ */
+function cms_initialize_nls()
+{
+  #Read in all current languages...
   global $gCms;
   global $nls;
-  $nls = array();
-  $lang = array();
-  $current_language = '';
 
-  #Read in all current languages...
-  if( !count($nls) )
+  if( !is_array($nls) )
     {
+      $nls = array();
       $dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'/lang');
       
       $handle = opendir($dir);
@@ -51,82 +92,58 @@ function cms_admin_current_language()
       }
       closedir($handle);
     }
+}
 
-  #Check to see if there is already a language in use...
-  if (isset($_POST["default_cms_lang"]) )
+
+/**
+ * A function to return the current admin language
+ *
+ * @internal
+ * @return string
+ */
+function cms_admin_current_language()
+{
+  global $gCms;
+  global $nls;
+  $lang = array();
+  $current_language = '';
+
+  cms_initialize_nls();
+
+  $uid = get_userid(false);
+  if( $uid )
     {
-      $tmp = basename($_POST['default_cms_lang']);
-      if( isset($nls['language'][$tmp]) ||
-	  isset($nls['alias'][$tmp]) )
+      // user is logged in (this is after the admin)
+      // get his preference.
+      $current_language = get_preference(get_userid(false),'default_cms_language');
+      if( $current_language != '' && 
+	  (!isset($nls['language'][$current_language]) || !isset($nls['alias'][$current_language])) )
 	{
-	  $current_language = $tmp;
-	  if ($current_language == '')
-	    {
-	      setcookie("cms_language", '', time() - 3600);
-	    }
-	  else if (isset($_POST["change_cms_lang"]))
-	    {
-	      setcookie("cms_language", basename($_POST["change_cms_lang"]));
-	    }
+	  // preferred lang doesn't exist
+	  $current_language = '';
 	}
-    }
-  else if (isset($_SESSION['login_cms_language']))
-    {
-      debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
-      $current_language = $_SESSION['login_cms_language'];
-      setcookie('cms_language', $_SESSION['login_cms_language']);
-      unset($_SESSION['login_cms_language']);
-    }
-  else if (isset($_COOKIE["cms_language"]))
-    {
-      $tmp = trim(basename($_COOKIE["cms_language"]));
-      $file = dirname(__FILE__) . "/lang/" . $tmp . "/admin.inc.php";
-      if( !file_exists($file) )
-	{
-	  $file = dirname(__FILE__) . "/lang/ext/" . $tmp . "/admin.inc.php";
-	  if( !file_exists($file) )
-	    {
-	      $$tmp = '';
-	    }
-	}
-      $current_language = $tmp;
     }
 
   if ($current_language == '')
     {
-      #take a stab at figuring out the default language...
-      #Figure out default language and set it if it exists
-      if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) 
+      // still nothing, see if we can get something from the browser.
+      $current_language = cms_detect_browser_lang();
+    }
+
+  if (isset($_POST['change_cms_lang']) && isset($_POST['default_cms_lang']) )
+    {
+      // a hack to handle the editpref case of the user changing his language
+      $a1 = basename(trim($_POST['change_cms_lang']));
+      $a2 = basename(trim($_POST['default_cms_lang']));
+      if( $a1 == $a2 && 
+	  (isset($nls['language'][$a1]) || isset($nls['alias'][$a1])) )
 	{
-	  $alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
-	  if (strpos($alllang, ";") !== FALSE)
-	    $alllang = substr($alllang,0,strpos($alllang, ";"));
-	  $langs = explode(",", $alllang);
-	  
-	  foreach ($langs as $onelang)
-	    {
-              #Check to see if lang exists...
-	      if (isset($nls['language'][$onelang]))
-		{
-		  $current_language = $onelang;
-		  setcookie("cms_language", $onelang);
-		  break;
-		}
-              #Check to see if alias exists...
-	      if (isset($nls['alias'][$onelang]))
-		{
-		  $alias = $nls['alias'][$onelang];
-		  if (isset($nls['language'][$alias]))
-		    {
-		      $current_language = $alias;
-		      setcookie("cms_language", $alias);
-		      break;
-		    }
-		}
-	    }
+	  $current_language = $a1;
 	}
     }
 
+  // if it's still not set, this will use the 
+  // current locale.. maybe we should hardcode to en_US ??
   return $current_language;
 }
 
@@ -139,7 +156,8 @@ function cms_admin_current_language()
  */
 function cms_frontend_current_language()
 {
-  global $gCms;
+  cms_initialize_nls();
+
   $curlang = get_site_preference('frontendlang','');
   if( $curlang == '' ) {
     $curlang = 'en_US';
