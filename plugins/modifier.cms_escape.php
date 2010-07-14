@@ -21,7 +21,7 @@
  *
  * calguy1000: change default char-set to utf-8
  */
-function smarty_cms_modifier_cms_escape($string, $esc_type = 'html', $char_set = 'utf-8')
+function smarty_modifier_cms_escape($string, $esc_type = 'html', $char_set = 'utf-8')
 {
     switch ($esc_type) {
         case 'html':

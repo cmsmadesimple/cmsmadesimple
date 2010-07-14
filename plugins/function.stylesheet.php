@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_stylesheet($params, &$smarty)
+function smarty_function_stylesheet($params, &$smarty)
 {
 	if (!function_exists('get_stylesheet_tag'))
 	{
@@ -110,12 +110,12 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 	return $stylesheet;
 }
 
-function smarty_cms_help_function_stylesheet()
+function smarty_help_function_stylesheet()
 {
 	echo lang('help_function_stylesheet');
 }
 
-function smarty_cms_about_function_stylesheet()
+function smarty_about_function_stylesheet()
 {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>

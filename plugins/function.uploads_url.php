@@ -23,7 +23,7 @@ function smarty_function_uploads_url($params, &$smarty)
 	return $config['uploads_url'];
 }
 
-function smarty_cms_help_function_uploads_url() {
+function smarty_help_function_uploads_url() {
 	?>
 	<h3>What does this do?</h3>
 	<p>Prints the uploads url location for the site.</p>
@@ -34,7 +34,7 @@ function smarty_cms_help_function_uploads_url() {
 	<?php
 }
 
-function smarty_cms_about_function_uploads_url() {
+function smarty_about_function_uploads_url() {
 	?>
 	<p>Author: Nuno Costa&lt nuno.mfcosta@sapo.pt&gt;</p>
 	<p>Version: 1.0</p>

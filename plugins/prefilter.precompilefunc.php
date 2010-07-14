@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
+function smarty_prefilter_precompilefunc($tpl_output, &$smarty)
 {
 	global $gCms;
 
@@ -45,7 +45,7 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 
 	}
 
-	Events::SendEvent('Core', 'SmartyPreCompile', array('content' => &$tpl_output));
+	CmsEventManager::send_event('Core:SmartyPreCompile', array('content' => &$tpl_output));
 
 	return $tpl_output;
 }

@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_cms_selflink($params, &$smarty) {
+function smarty_function_cms_selflink($params, &$smarty) {
 
 	global $gCms;
 
@@ -487,11 +487,11 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 	return $result;
 }
 
-function smarty_cms_help_function_cms_selflink() {
+function smarty_help_function_cms_selflink() {
   echo lang('help_function_cms_selflink');
 }
 
-function smarty_cms_about_function_cms_selflink() {
+function smarty_about_function_cms_selflink() {
   echo lang('about_function_cms_selflink');
 }
 

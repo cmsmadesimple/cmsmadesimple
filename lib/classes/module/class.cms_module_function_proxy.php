@@ -46,7 +46,7 @@ class CmsModuleFunctionProxy extends CmsObject
 	
 	public function register($module_name, $name, $callback = '')
 	{
-		cms_smarty()->register_function($name, array($this, $name));
+		cms_smarty()->register->templateFunction($name, array($this, $name));
 		$this->plugin_lookup[$name] = array($module_name, $callback);
 	}
 	

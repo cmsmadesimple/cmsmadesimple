@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_last_modified_by($params, &$smarty) 
+function smarty_function_last_modified_by($params, &$smarty) 
 {
         global $gCms;
 	$pageinfo = $gCms->variables['pageinfo'];
@@ -55,12 +55,12 @@ function smarty_cms_function_last_modified_by($params, &$smarty)
   }
 }
 
-function smarty_cms_help_function_last_modified_by()
+function smarty_help_function_last_modified_by()
 {
   echo lang('help_function_last_modified_by');
 }
 
-function smarty_cms_about_function_last_modified_by() {
+function smarty_about_function_last_modified_by() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 	<p>Version: 1.0</p>

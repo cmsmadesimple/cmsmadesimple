@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_set_language($params, &$smarty) 
+function smarty_function_set_language($params, &$smarty) 
 {
   if( isset($params['lang']) )
     {
@@ -35,7 +35,7 @@ function smarty_cms_function_set_language($params, &$smarty)
     }
 }
 
-function smarty_cms_help_function_set_language() {
+function smarty_help_function_set_language() {
   echo lang('help_function_contact_form');
 }
 

@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_anchor($params, &$smarty)
+function smarty_function_anchor($params, &$smarty)
 {
 	global $gCms;
 	#Added by Russ for class, tabindex and title for anchor 2006/07/19
@@ -66,11 +66,11 @@ function smarty_cms_function_anchor($params, &$smarty)
 	}
 }
 	#Ammended by Russ for class, tabindex and title for anchor 2006/07/19
-function smarty_cms_help_function_anchor() {
+function smarty_help_function_anchor() {
   echo lang('help_function_anchor');
 }
 	#Amended by Russ for class, tabindex and title for anchor 2006/07/19
-function smarty_cms_about_function_anchor() {
+function smarty_about_function_anchor() {
   echo lang('about_function_anchor');
 }
 ?>

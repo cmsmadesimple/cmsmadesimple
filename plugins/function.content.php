@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_content($params, &$smarty)
+function smarty_function_content($params, &$smarty)
 {
 	$request = cms_request();
 	
@@ -186,7 +186,7 @@ function smarty_cms_function_content($params, &$smarty)
 				  {
 				    // module not found
 				    @trigger_error('Attempt to access module '.$modulename.' which could not be foune (is it properly installed and configured?');
-				    return _smarty_cms_function_content_return('', $params, $smarty);
+				    return _smarty_function_content_return('', $params, $smarty);
 				  }
 
 				if (isset($cmsmodules[$modulename]))
@@ -221,12 +221,12 @@ function smarty_cms_function_content($params, &$smarty)
 					  }
 					$modresult = @ob_get_contents();
 					@ob_end_clean();
-					return _smarty_cms_function_content_return($modresult, $params, $smarty);
+					return _smarty_function_content_return($modresult, $params, $smarty);
 				      }
 				    else
 				      {
 					@trigger_error('Attempt to access module '.$key.' which could not be foune (is it properly installed and configured?');
-					return _smarty_cms_function_content_return("<!-- Not a tag module -->\n", $params, $smarty);
+					return _smarty_function_content_return("<!-- Not a tag module -->\n", $params, $smarty);
 				      }
 				  }
 			}
@@ -238,15 +238,15 @@ function smarty_cms_function_content($params, &$smarty)
 			$smarty->caching = false;
 			$result = $smarty->fetch(str_replace(' ', '_', 'content:' . (isset($params['block'])?$params['block']:'content_en')), '', $pageinfo->id);
 			$smarty->caching = $oldvalue;
-			return _smarty_cms_function_content_return($result, $params, $smarty);
+			return _smarty_function_content_return($result, $params, $smarty);
 		}
 	}
-	return _smarty_cms_function_content_return('', $params, $smarty);
+	return _smarty_function_content_return('', $params, $smarty);
 	*/
 }
 
 /*
-function _smarty_cms_function_content_return($result, &$params, &$smarty)
+function _smarty_function_content_return($result, &$params, &$smarty)
 {
 	if ( empty($params['assign']) )
 	{
@@ -260,12 +260,12 @@ function _smarty_cms_function_content_return($result, &$params, &$smarty)
 }
 */
 
-function smarty_cms_help_function_content()
+function smarty_help_function_content()
 {
   echo lang('help_function_content');
 }
 
-function smarty_cms_about_function_content()
+function smarty_about_function_content()
 {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>

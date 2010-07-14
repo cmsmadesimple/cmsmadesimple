@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_process_pagedata($params,&$smarty)
+function smarty_function_process_pagedata($params,&$smarty)
 {
   global $gCms;
   $manager = $gCms->GetHierarchyManager();
@@ -36,11 +36,11 @@ function smarty_cms_function_process_pagedata($params,&$smarty)
   return $result;
 }
 
-function smarty_cms_help_function_process_pagedata() {
+function smarty_help_function_process_pagedata() {
   echo lang('help_function_process_pagedata');
 }
 
-function smarty_cms_about_function_process_pagedata() {
+function smarty_about_function_process_pagedata() {
   ?>
   <p>Author: Robert Campbell&lt;calguy1000@cmsmadesimple.org&gt;</p>
   <p>Version: 1.0</p>

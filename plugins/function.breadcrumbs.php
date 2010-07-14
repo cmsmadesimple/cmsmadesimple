@@ -17,7 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-function smarty_cms_function_breadcrumbs($params, &$smarty)
+function smarty_function_breadcrumbs($params, &$smarty)
 {
 
 	global $gCms; 
@@ -165,11 +165,11 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 
 }
 	
-function smarty_cms_help_function_breadcrumbs() {
+function smarty_help_function_breadcrumbs() {
   echo lang('help_function_breadcrumbs');
 }
 
-function smarty_cms_about_function_breadcrumbs() {
+function smarty_about_function_breadcrumbs() {
   echo lang('about_function_breadcrumbs');
 }
 # vim:ts=4 sw=4 noet

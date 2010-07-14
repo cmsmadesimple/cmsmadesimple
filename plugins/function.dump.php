@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_dump($params, &$smarty)
+function smarty_function_dump($params, &$smarty)
 {
   $ignore = array('cms','smarty','db','config','params','param_map','langhash','xml_exclude_files','xmldtd');
 
@@ -253,12 +253,12 @@ function smarty_cms_function_dump($params, &$smarty)
 }
 
 
-function smarty_cms_help_function_dump() {
+function smarty_help_function_dump() {
   echo lang('help_function_dump');
 }
 
 
-function smarty_cms_about_function_dump() {
+function smarty_about_function_dump() {
 	?>
 	<p>Author: Robert Campbell&lt;calguy1000@hotmail.com&gt;</p>
 	<p>Version: 1.0</p>

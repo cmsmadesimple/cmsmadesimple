@@ -16,17 +16,17 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_search($params, &$smarty)
+function smarty_function_search($params, &$smarty)
 {
   $params['module'] = 'Search';
   return cms_module_plugin($params,$smarty);
 }
 
-function smarty_cms_help_function_search() {
+function smarty_help_function_search() {
   echo lang('help_function_search');
 }
 
-function smarty_cms_about_function_search() {
+function smarty_about_function_search() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 	<p>Version: 1.0</p>

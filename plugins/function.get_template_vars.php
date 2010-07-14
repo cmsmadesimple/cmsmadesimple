@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_get_template_vars($params, &$smarty)
+function smarty_function_get_template_vars($params, &$smarty)
 {
 	global $gCms;
 	
@@ -40,11 +40,11 @@ function smarty_cms_function_get_template_vars($params, &$smarty)
 	return $str.'</pre>';
 }
 
-function smarty_cms_help_function_get_template_vars() {
+function smarty_help_function_get_template_vars() {
   echo lang('help_function_get_template_vars');
 }
 
-function smarty_cms_about_function_get_template_vars() {
+function smarty_about_function_get_template_vars() {
 	?>
 	<p>Author: Robert Campbell&lt;calguy1000@hotmail.com&gt;</p>
 	<p>Version: 1.0</p>

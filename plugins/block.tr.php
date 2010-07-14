@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_block_tr($params, $content, &$smarty)
+function smarty_block_tr($params, $content, &$smarty)
 {
 	if (is_null($content)) return;
 	

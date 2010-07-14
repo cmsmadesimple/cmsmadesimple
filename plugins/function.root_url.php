@@ -22,11 +22,11 @@ function smarty_function_root_url($params, &$smarty)
 	return $config['root_url'];
 }
 
-function smarty_cms_help_function_root_url() {
+function smarty_help_function_root_url() {
   echo CmsLanguage::translate('help_function_root_url');
 }
 
-function smarty_cms_about_function_root_url() {
+function smarty_about_function_root_url() {
 	?>
 	<p>Author: Ted Kulp&lt;ted@cmsmadesimple.org&gt;</p>
 	<p>Version: 1.0</p>

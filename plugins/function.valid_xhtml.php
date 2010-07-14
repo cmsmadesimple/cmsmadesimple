@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_valid_xhtml($params, &$smarty)
+function smarty_function_valid_xhtml($params, &$smarty)
 {
 
     $link_url = 
@@ -84,12 +84,12 @@ function smarty_cms_function_valid_xhtml($params, &$smarty)
     return $html;
 }
 
-function smarty_cms_help_function_valid_xhtml() 
+function smarty_help_function_valid_xhtml() 
 {
   echo lang('help_function_valid_xhtml');
 }
 
-function smarty_cms_about_function_valid_xhtml() 
+function smarty_about_function_valid_xhtml() 
 {
 ?>
 <p>Author: Dick Ittmann&lt;dittmann2@users.sourceforge.net&gt;</p>

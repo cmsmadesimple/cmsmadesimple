@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_valid_css($params, &$smarty)
+function smarty_function_valid_css($params, &$smarty)
 {
     $link_url = 
 	(isset($params['url']) && trim($params['url']) != '')
@@ -83,12 +83,12 @@ function smarty_cms_function_valid_css($params, &$smarty)
     return $html;
 }
 
-function smarty_cms_help_function_valid_css() 
+function smarty_help_function_valid_css() 
 {
   echo lang('help_function_valid_css');
 }
 
-function smarty_cms_about_function_valid_css() 
+function smarty_about_function_valid_css() 
 {
 ?>
 <p>Author: Tatu Wikman&lt;tatu.wikman[at]gmail.com&gt;</p>

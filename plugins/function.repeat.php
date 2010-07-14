@@ -16,13 +16,13 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_repeat($params, &$smarty)
+function smarty_function_repeat($params, &$smarty)
 {
 	return (isset($params['times']) && intval($params['times']) > 0 ? str_repeat($params['string'], $params['times']) : '');
 	#return str_repeat($params['string'], $params['times']);
 }
 
-function smarty_cms_help_function_repeat()
+function smarty_help_function_repeat()
 {
   echo lang('help_function_repeat');
 }

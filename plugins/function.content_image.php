@@ -16,12 +16,12 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_content_image($params,&$smarty)
+function smarty_function_content_image($params,&$smarty)
 {
   global $gCms;
   $pageinfo =& $gCms->variables['pageinfo'];
   if (!isset($pageinfo) || $pageinfo === FALSE || !isset($pageinfo->content_id) )
-    return _smarty_cms_function_content_return('', $params, $smarty);
+    return _smarty_function_content_return('', $params, $smarty);
     
 
   $result = '';
@@ -32,7 +32,7 @@ function smarty_cms_function_content_image($params,&$smarty)
       $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $params['block']), '', $pageinfo->content_id);
       $smarty->caching = $oldvalue;
     }
-  $img = _smarty_cms_function_content_return($result, $params, $smarty);
+  $img = _smarty_function_content_return($result, $params, $smarty);
   if( $img == -1 || empty($img) )
     return;
 
@@ -81,12 +81,12 @@ function smarty_cms_function_content_image($params,&$smarty)
   return $out;
 }
 
-function smarty_cms_help_function_content_image()
+function smarty_help_function_content_image()
 {
   echo lang('help_function_content_image');
 }
 
-function smarty_cms_about_function_content_image()
+function smarty_about_function_content_image()
 {
 	?>
 	<p>Author: Robert Campbell&lt;calguy1000@cmsmadesimple.org&gt;</p>

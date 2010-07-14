@@ -41,7 +41,7 @@
  * @param Smarty
  * @return string|null
  */
-function smarty_function_cycle($params, &$smarty)
+function smarty_function_cycle($params, $smarty)
 {
     static $cycle_vars;
     
@@ -63,7 +63,11 @@ function smarty_function_cycle($params, &$smarty)
         $cycle_vars[$name]['values'] = $params['values'];
     }
 
-    $cycle_vars[$name]['delimiter'] = (isset($params['delimiter'])) ? $params['delimiter'] : ',';
+    if (isset($params['delimiter'])) {
+        $cycle_vars[$name]['delimiter'] = $params['delimiter'];
+    } elseif (!isset($cycle_vars[$name]['delimiter'])) {
+        $cycle_vars[$name]['delimiter'] = ',';       
+    }
     
     if(is_array($cycle_vars[$name]['values'])) {
         $cycle_array = $cycle_vars[$name]['values'];
@@ -96,7 +100,4 @@ function smarty_function_cycle($params, &$smarty)
     
     return $retval;
 }
-
-/* vim: set expandtab: */
-
 ?>

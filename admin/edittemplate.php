@@ -26,8 +26,9 @@ require_once("../lib/classes/class.template.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
-global $gCms;
-$db =& $gCms->GetDb();
+
+$gCms = cmsms();
+$db = cms_db();
 
 $error = "";
 
@@ -102,8 +103,8 @@ $access = check_permission($userid, 'Modify Templates');
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
-global $gCms;
-$templateops =& $gCms->GetTemplateOperations();
+$gCms = cmsms();
+$templateops = $gCms->GetTemplateOperations();
 
 if ($access)
 {

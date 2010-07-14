@@ -19,7 +19,7 @@
  * @param Smarty
  * @return string|null
  */
-function smarty_function_counter($params, &$smarty)
+function smarty_function_counter($params, $smarty)
 {
     static $counters = array();
 
@@ -74,7 +74,4 @@ function smarty_function_counter($params, &$smarty)
     return $retval;
     
 }
-
-/* vim: set expandtab: */
-
 ?>

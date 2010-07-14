@@ -48,8 +48,7 @@ class CmsSmarty extends Smarty
 		$this->compile_dir = TMP_TEMPLATES_C_LOCATION;
 		$this->cache_dir = TMP_CACHE_LOCATION;
 		
-		$this->compiler_file = 'CMS_Compiler.class.php';
-		$this->compiler_class = 'CMS_Compiler';
+		$this->deprecation_notices = false;
 
 		//use_sub_dirs doesn't work in safe mode
 		//if (ini_get("safe_mode") != "1")
@@ -80,51 +79,51 @@ class CmsSmarty extends Smarty
 			$this->force_compile = true;
 		}
 
-		$this->register_resource("db", array(&$this, "template_get_template",
-						       "template_get_timestamp",
+		$this->register->resource("db", array(&$this, "cms_template_get_template",
+						       "cms_template_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("print", array(&$this, "template_get_template",
-						       "template_get_timestamp",
+		$this->register->resource("print", array(&$this, "cms_template_get_template",
+						       "cms_template_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("template", array(&$this, "template_get_template",
-						       "template_get_timestamp",
+		$this->register->resource("template", array(&$this, "cms_template_get_template",
+						       "cms_template_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("tpl_top", array(&$this, "template_top_get_template",
-						       "template_get_timestamp",
+		$this->register->resource("tpl_top", array(&$this, "template_top_get_template",
+						       "cms_template_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("tpl_head", array(&$this, "template_head_get_template",
-						       "template_get_timestamp",
+		$this->register->resource("tpl_head", array(&$this, "template_head_get_template",
+						       "cms_template_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("tpl_body", array(&$this, "template_body_get_template",
-						       "template_get_timestamp",
+		$this->register->resource("tpl_body", array(&$this, "template_body_get_template",
+						       "cms_template_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("htmlblob", array(&$this, "global_content_get_template",
+		$this->register->resource("htmlblob", array(&$this, "global_content_get_template",
 						       "global_content_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("globalcontent", array(&$this, "global_content_get_template",
+		$this->register->resource("globalcontent", array(&$this, "global_content_get_template",
 						       "global_content_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("content", array(&$this, "content_get_template",
+		$this->register->resource("content", array(&$this, "content_get_template",
 						       "content_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("module", array(&$this, "module_get_template",
+		$this->register->resource("module", array(&$this, "module_get_template",
 						       "module_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("module_db_tpl", array(&$this, "module_db_template",
+		$this->register->resource("module_db_tpl", array(&$this, "module_db_template",
 						       "module_db_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("module_file_tpl", array(&$this, "module_file_template",
+		$this->register->resource("module_file_tpl", array(&$this, "module_file_template",
 						       "module_file_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
@@ -149,7 +148,7 @@ class CmsSmarty extends Smarty
 			
 			self::$instance = new CmsSmarty();
 			
-			CmsSmarty::load_plugins();
+			//CmsSmarty::load_plugins();
 		}
 		return self::$instance;
 	}
@@ -175,7 +174,7 @@ class CmsSmarty extends Smarty
         var_dump("Smarty error: $error_msg");
     }
 
-	function module_file_template($tpl_name, &$tpl_source, &$smarty_obj)
+	function module_file_template($tpl_name, &$tpl_source, $smarty_obj)
     {
         //5.3 $params = explode(';', $tpl_name);
 		$params = explode(';', $tpl_name);
@@ -198,7 +197,7 @@ class CmsSmarty extends Smarty
         return false;
     }
 
-	function module_file_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	function module_file_timestamp($tpl_name, &$tpl_timestamp, $smarty_obj)
 	{
 		//5.3 $params = explode(';', $tpl_name);
 		$params = explode(';', $tpl_name);
@@ -221,7 +220,7 @@ class CmsSmarty extends Smarty
         return false;
 	}
 
-	function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)
+	function module_db_template($tpl_name, &$tpl_source, $smarty_obj)
 	{
 		$gCms = cmsms();
 		$db = cms_db();
@@ -251,7 +250,7 @@ class CmsSmarty extends Smarty
 		return false;
 	}
 
-	function module_db_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	function module_db_timestamp($tpl_name, &$tpl_timestamp, $smarty_obj)
 	{
 		$gCms = cmsms();
 		$db = cms_db();
@@ -283,7 +282,7 @@ class CmsSmarty extends Smarty
 		return false;
 	}
 
-	function global_content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	function global_content_get_template($tpl_name, &$tpl_source, $smarty_obj)
 	{
 		debug_buffer('start global_content_get_template');
 		global $gCms;
@@ -326,7 +325,7 @@ class CmsSmarty extends Smarty
 		return true;
 	}
 
-	function global_content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	function global_content_get_timestamp($tpl_name, &$tpl_timestamp, $smarty_obj)
 	{
 		debug_buffer('start global_content_get_timestamp');
 		global $gCms;
@@ -344,7 +343,7 @@ class CmsSmarty extends Smarty
 		}
 	}
 
-	function template_top_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	function template_top_get_template($tpl_name, &$tpl_source, $smarty_obj)
 	{
 	  global $gCms;
 	  $config =& $gCms->GetConfig();
@@ -390,7 +389,7 @@ class CmsSmarty extends Smarty
 	  return false;
 	}
 
-	function template_head_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	function template_head_get_template($tpl_name, &$tpl_source, $smarty_obj)
 	{
 	  global $gCms;
 	  $config =& $gCms->GetConfig();
@@ -440,7 +439,7 @@ class CmsSmarty extends Smarty
 	}
 
 
-	function template_body_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	function template_body_get_template($tpl_name, &$tpl_source, $smarty_obj)
 	{
 	  global $gCms;
 	  $config =& $gCms->GetConfig();
@@ -494,7 +493,7 @@ class CmsSmarty extends Smarty
 	  return false;
 	}
 
-	function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	function cms_template_get_template($tpl_name, &$tpl_source, $smarty_obj)
 	{
 		/*
 		global $gCms;
@@ -611,7 +610,7 @@ class CmsSmarty extends Smarty
 		return false;
 	}
 
-	function template_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	function cms_template_get_timestamp($tpl_name, &$tpl_timestamp, $smarty_obj)
 	{
 		/*
 		global $gCms;
@@ -648,7 +647,7 @@ class CmsSmarty extends Smarty
 		return false;
 	}
 
-	function content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	function content_get_template($tpl_name, &$tpl_source, $smarty_obj)
 	{
 		global $gCms;
 		$config = cms_config();
@@ -712,7 +711,7 @@ class CmsSmarty extends Smarty
 		return false;
 	}
 
-	function content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	function content_get_timestamp($tpl_name, &$tpl_timestamp, $smarty_obj)
 	{
 		$pageinfo = cmsms()->current_page;
 
@@ -735,7 +734,7 @@ class CmsSmarty extends Smarty
 		return true;
 	}
 	
-	function module_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
+	function module_get_template ($tpl_name, &$tpl_source, $smarty_obj)
 	{
 		$gCms = cmsms();
 		$pageinfo = cmsms()->current_page;
@@ -778,19 +777,19 @@ class CmsSmarty extends Smarty
 		return true;
 	}
 
-	function module_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	function module_get_timestamp($tpl_name, &$tpl_timestamp, $smarty_obj)
 	{
 		$tpl_timestamp = time();
 		return true;
 	}
 
-	function db_get_secure($tpl_name, &$smarty_obj)
+	function db_get_secure($tpl_name, $smarty_obj)
 	{
 		// assume all templates are secure
 		return true;
 	}
 
-	function db_get_trusted($tpl_name, &$smarty_obj)
+	function db_get_trusted($tpl_name, $smarty_obj)
 	{
 		// not used for templates
 	}
@@ -830,7 +829,7 @@ class CmsSmarty extends Smarty
 					//Only register valid code
 					if (!(@eval('function '.$functionname.'($params, &$smarty) {'.$result->fields['code'].'}') === FALSE))
 					{
-						$smarty->register_function($result->fields['userplugin_name'], $functionname, false);
+						$smarty->register->templateFunction($result->fields['userplugin_name'], $functionname, false);
 
 						//Register the function in a hash so that we can call it from other places by name
 						$userpluginfunctions[$result->fields['userplugin_name']] = $functionname;
@@ -877,44 +876,65 @@ class CmsSmarty extends Smarty
 					if (!isset($plugins[$file]) && in_array($filearray[0],$types))
 					{
 						$key = array_search($filearray[0], $types);
-						$load = true;
 						switch ($key)
 						{
 							case 0:
 									if (isset($CMS_LOAD_ALL_PLUGINS))
-										$smarty->register_function($file, "smarty_cms_function_" . $file, $caching);
-									else
-										$load=false;
+									{
+										$plugins[] = $file;
+										require_once($filename);
+										$smarty->register->templateFunction($file, "smarty_cms_function_" . $file, $caching);
+									}
 									break;
 							case 1:
-									$smarty->register_compiler_function($file, "smarty_cms_compiler_" .  $file, $caching);
+									$plugins[] = $file;
+									require_once($filename);
+									$smarty->register->compilerFunction($file, "smarty_cms_compiler_" .  $file, $caching);
 									break;
 							case 2:
-									$smarty->register_prefilter("smarty_cms_prefilter_" . $file);
+									$plugins[] = $file;
+									require_once($filename);
+									$smarty->register->preFilter("smarty_cms_prefilter_" . $file);
 									break;
 							case 3:
-									$smarty->register_postfilter("smarty_cms_postfilter_" . $file);
+									$plugins[] = $file;
+									require_once($filename);
+									$smarty->register->postFilter("smarty_cms_postfilter_" . $file);
 									break;
 							case 4:
-									$smarty->register_outputfilter("smarty_cms_outputfilter_" . $file);
+									$plugins[] = $file;
+									require_once($filename);
+									$smarty->register->outputFilter("smarty_cms_outputfilter_" . $file);
 									break;
 							case 5:
-									$smarty->register_modifier($file, "smarty_cms_modifier_" . $file);
+									$plugins[] = $file;
+									require_once($filename);
+									$smarty->register->modifier($file, "smarty_cms_modifier_" . $file);
 									break;
 							case 6:
-									$smarty->register_block($file, "smarty_cms_block_" . $file);
+									$plugins[] = $file;
+									require_once($filename);
+									$smarty->register->block($file, "smarty_cms_block_" . $file, $caching);
 									break;
-						}
-						if ($load)
-						{
-							$plugins[] = $file;
-							require_once($filename);
 						}
 					}
 				}
 			}
 		}
 		closedir($handle);
+	}
+	
+    /**
+    * wrapper function for Smarty 2 BC
+    * 
+    * @param string $tpl_var the template variable name
+    * @param mixed $ &$value the referenced value to assign
+    * @param boolean $nocache if true any output of this variable will be not cached
+    * @param boolean $scope the scope the variable will have  (local,parent or root)
+    */
+	public function assign_by_ref($tpl_var, &$value, $nocache = false, $scope = SMARTY_LOCAL_SCOPE)
+	{
+		$this->assignByRef($tpl_var,$value,$nocache,$scope);
 	}
 }
 

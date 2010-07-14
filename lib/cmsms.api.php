@@ -50,7 +50,7 @@ require_once(cms_join_path(ROOT_DIR, 'lib', 'page.functions.php'));
 require_once(cms_join_path(ROOT_DIR, 'lib', 'content.functions.php'));
 
 
-set_error_handler('cms_warning_handler', E_WARNING | E_USER_WARNING);
+set_error_handler('cms_warning_handler', E_WARNING | E_USER_WARNING | E_STRICT);
 
 /**
  * The one and only autoload function for the system.  This basically allows us 
@@ -59,6 +59,14 @@ set_error_handler('cms_warning_handler', E_WARNING | E_USER_WARNING);
  */
 function cms_autoload($class_name)
 {
+	//Hack in the smarty loading
+	$_class = strtolower($class_name);
+	if (substr($_class, 0, 16) === 'smarty_internal_' || $_class == 'smarty_security')
+	{
+		include cms_join_path(ROOT_DIR, 'lib', 'smarty', 'sysplugins', $_class . '.php');
+		return;
+	}
+	
 	$files = scan_classes();
 	//$files = CmsCache::get_instance()->call('scan_classes');
 	
@@ -2256,17 +2264,14 @@ function in_debug()
 }
 
 /**
- * Error handler so that we can swallow warning messages unless the
- * debug flag is on.
+ * Error handler so that we can swallow warning messages and put
+ * them in a better place.
  *
  * @author Ted Kulp
  */
 function cms_warning_handler($errno, $errstr, $errfile = '', $errline = -1, $errcontext = array())
 {
-	if (in_debug())
-	{
-		trigger_error($errstr, E_USER_WARNING);
-	}
+	CmsProfiler::get_instance()->mark('WARNING: ' . $errstr);
 }
 
 function strip_extra_params(&$params, $default_params, $other_params_key = '')

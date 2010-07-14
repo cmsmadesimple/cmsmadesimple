@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_page_image($params, &$smarty)
+function smarty_function_page_image($params, &$smarty)
 {
   $result = '';
   $propname = 'image';
@@ -50,11 +50,11 @@ function smarty_cms_function_page_image($params, &$smarty)
   return $result;
 }
 
-function smarty_cms_help_function_page_image() {
+function smarty_help_function_page_image() {
   echo lang('help_function_page_image');
 }
 
-function smarty_cms_about_function_page_image() {
+function smarty_about_function_page_image() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 	<p>Version: 1.0</p>

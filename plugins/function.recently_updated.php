@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_recently_updated($params, &$smarty)
+function smarty_function_recently_updated($params, &$smarty)
 {
   if(empty($params['number']))
     {
@@ -93,11 +93,11 @@ if (isset($params['css_class'])){
 return $output;
 }
 
-function smarty_cms_help_function_recently_updated() {
+function smarty_help_function_recently_updated() {
   echo lang('help_function_recently_updated');
 }
 
-function smarty_cms_about_function_recently_updated() {
+function smarty_about_function_recently_updated() {
 	?>
 	<p>Author: Olaf Noehring &lt;http://www.team-noehring.de&gt;</p>
 	<p>Version: 1.1</p>

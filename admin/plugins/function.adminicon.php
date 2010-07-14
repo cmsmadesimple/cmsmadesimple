@@ -18,7 +18,7 @@
 
 require_once(dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
 
-function smarty_cms_function_adminicon($params, &$smarty)
+function smarty_function_adminicon($params, &$smarty)
 {
   $themeObject = CmsAdminTheme::get_instance();
 

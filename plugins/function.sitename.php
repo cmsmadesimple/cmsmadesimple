@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_sitename($params, &$smarty)
+function smarty_function_sitename($params, &$smarty)
 {
      $result = get_site_preference('sitename', 'CMSMS Site');
      if( isset($params['assign']) )
@@ -29,12 +29,12 @@ function smarty_cms_function_sitename($params, &$smarty)
      return $result;
 }
 
-function smarty_cms_help_function_sitename()
+function smarty_help_function_sitename()
 {
   echo lang('help_function_sitename');
 }
 
-function smarty_cms_about_function_sitename()
+function smarty_about_function_sitename()
 {
         ?>
         <p>Author: Ted Kulp &lt;ted@cmsmadesimple.org&gt;</p>

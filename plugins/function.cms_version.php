@@ -16,16 +16,16 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_cms_version() {
+function smarty_function_cms_version() {
     global $CMS_VERSION;
     return $CMS_VERSION;
 } ## smarty_function_cms_version
 
-function smarty_cms_help_function_cms_version() {
+function smarty_help_function_cms_version() {
   echo lang('help_function_cms_version');
 }
 
-function smarty_cms_about_function_cms_version() {
+function smarty_about_function_cms_version() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 	<p>Version: 1.0</p>

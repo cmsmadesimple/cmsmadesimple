@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_image($params, &$smarty)
+function smarty_function_image($params, &$smarty)
 {
 	global $gCms;
 
@@ -69,13 +69,13 @@ function smarty_cms_function_image($params, &$smarty)
 }
 
 
-function smarty_cms_help_function_image()
+function smarty_help_function_image()
 {
   echo lang('help_function_image');
 }
 
 
-function smarty_cms_about_function_image() 
+function smarty_about_function_image() 
 {
 ?>
   <p>Author:  Robert Campbell &lt;calguy1000@hotmail.com&gt;,</p>

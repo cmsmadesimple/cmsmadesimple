@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_googlepr($params, &$smarty) {
+function smarty_function_googlepr($params, &$smarty) {
 	$domain = $_SERVER['SERVER_NAME'];
 	if (!empty($params['domain']))
 		$domain = $params['domain'];
@@ -110,11 +110,11 @@ function smarty_cms_function_googlepr($params, &$smarty) {
 	return getPR($domain);
 }
 
-function smarty_cms_help_function_googlepr() {
+function smarty_help_function_googlepr() {
   echo lang('help_function_googlepr');
 }
 
-function smarty_cms_about_function_googlepr() {
+function smarty_about_function_googlepr() {
 	?>
 	<p>Author: Brett Batie&lt;brett-cms@classicwebdevelopment.com&gt;</p>
 	<p>Version: 1.0</p>

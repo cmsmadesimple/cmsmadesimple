@@ -10,7 +10,7 @@
  *        http://dev.cmsmadesimple.org/users/marks/
  * ----------------------------------------------------------------
  **/
-function smarty_cms_modifier_summarize($string,$numwords='5',$etc='...'){
+function smarty_modifier_summarize($string,$numwords='5',$etc='...'){
 
 //=Put each word (any character or group of characters seperated by a space) into the field's array
 $stringarray = explode(" ",$string);

@@ -16,12 +16,12 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_redirect_url($params, &$smarty)
+function smarty_function_redirect_url($params, &$smarty)
 {
   if( isset($params['to']) ) redirect(trim($params['to']));
 }
 
-function smarty_cms_help_function_redirect_url()
+function smarty_help_function_redirect_url()
 {
   echo lang('help_function_redirect_url');
 }

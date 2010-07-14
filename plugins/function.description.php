@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_description($params, &$smarty)
+function smarty_function_description($params, &$smarty)
 {
 	global $gCms;
 	$pageinfo = &$gCms->variables['pageinfo'];
@@ -37,11 +37,11 @@ function smarty_cms_function_description($params, &$smarty)
 	}
 }
 
-function smarty_cms_help_function_description() {
+function smarty_help_function_description() {
   echo lang('help_function_description');
 }
 
-function smarty_cms_about_function_description() {
+function smarty_about_function_description() {
 	?>
 	<p>Author: Elijah Lofgren&lt;elijahlofgren@elijahlofgren.com&gt;</p>
 	<p>Version: 1.0</p>
