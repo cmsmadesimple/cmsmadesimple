@@ -83,12 +83,19 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	{
 		$smarty = cms_smarty();
 		
+		//Setup an array to store the found blocks in
 		$this->blocks = array();
 		
+		//Create a template object using the string resource (on the fly)
 		$tpl = $smarty->createTemplate('string:' . $this->content);
 		
+		//Pull out the existing compiler object, if one already exists
+		//for this particular resource
 		$cur_obj = $tpl->compiler_object;
 		
+		//Create a new compiler object of our own, passing in the
+		//lexer and parser class names from the current resource.
+		//Pop it into the old compiler's place
 		$new_obj = new CmsTemplateCompiler(
 			$tpl->resource_object->template_lexer_class,
 			$tpl->resource_object->template_parser_class,
@@ -96,10 +103,13 @@ class CmsTemplate extends CmsObjectRelationalMapping
 		);
 		$tpl->compiler_object = $new_obj;
 		
+		//Force a compilation
 		$tpl->compileTemplateSource();
 		
+		//Put the old compiler back now that we're done
 		$tpl->compiler_object = $cur_obj;
 		
+		//Grab the list of blocks from our special compiler
 		$this->blocks = $new_obj->blocks;
 		
 		return $this->blocks;
@@ -204,6 +214,15 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	}
 }
 
+/**
+ * Custom smarty compiler class to pull content blocks directly from the 
+ * compiler and prepare them for the CmsTemplate class to use for it's various
+ * display routines.
+ *
+ * @ignore
+ * @package CMS
+ * @author Ted Kulp
+ */
 class CmsTemplateCompiler extends Smarty_Internal_SmartyTemplateCompiler
 {
 	var $blocks = array();
@@ -214,6 +233,15 @@ class CmsTemplateCompiler extends Smarty_Internal_SmartyTemplateCompiler
 		
 		if ($tag == 'content')
 		{
+			foreach ($args as &$arg)
+			{
+				if (preg_match('/^([\'"])(.+?)\1$/', $arg, $matches))
+				{
+					if (count($matches) > 2)
+						$arg = $matches[2];
+				}
+			}
+			
 			$name = 'default';
 
 			if (isset($args['name']))
