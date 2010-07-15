@@ -10,6 +10,7 @@ class AllTests extends TestSuite
 		$this->addFile(dirname(__FILE__) . '/cms_api_test.php');
 		$this->addFile(dirname(__FILE__) . '/cms_orm_test.php');
 		$this->addFile(dirname(__FILE__) . '/cms_nested_set_test.php');
+		$this->addFile(dirname(__FILE__) . '/cms_template_test.php');
 	}
 }
 ?>
