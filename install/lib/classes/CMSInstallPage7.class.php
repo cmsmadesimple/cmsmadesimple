@@ -50,7 +50,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
 	{
 		global $gCms;
 
-		require_once(cms_join_path(CMS_BASE, 'lib', 'config.functions.php'));
+		//require_once(cms_join_path(CMS_BASE, 'lib', 'config.functions.php'));
 		
 		// check if db info is correct as it should at this point to prevent an undeleted installation dir
 		// to be used for sending spam by messing up $_POST variables

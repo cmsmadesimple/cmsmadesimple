@@ -29,7 +29,7 @@ define("DS", DIRECTORY_SEPARATOR);
 
 $CMS_VERSION = "2.0-beta1";
 $CMS_VERSION_NAME = "Canala";
-$CMS_SCHEMA_VERSION = "37";
+$CMS_SCHEMA_VERSION = "1";
 
 define('CMS_VERSION', $CMS_VERSION);
 define('CMS_VERSION_NAME', $CMS_VERSION_NAME);
@@ -48,7 +48,6 @@ require_once(cms_join_path(ROOT_DIR, 'lib', 'classes', 'class.cms_cache.php'));
 require_once(cms_join_path(ROOT_DIR, 'lib', 'classes', 'class.cms_profiler.php'));
 require_once(cms_join_path(ROOT_DIR, 'lib', 'page.functions.php'));
 require_once(cms_join_path(ROOT_DIR, 'lib', 'content.functions.php'));
-
 
 set_error_handler('cms_warning_handler', E_WARNING | E_USER_WARNING | E_STRICT);
 
