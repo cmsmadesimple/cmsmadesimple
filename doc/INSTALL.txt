@@ -1,5 +1,5 @@
 Requirements:
-    PHP 4.3+ 
+    PHP 5.2.4+ 
     MySQL
     Apache webserver (or another php enabled webserver)
 
