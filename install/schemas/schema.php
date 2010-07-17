@@ -170,7 +170,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	
 	$flds = "
 		id I KEY AUTO,
-		type C(50),
+		content_type C(50),
 		lang C(50),
 		title C(255),
 		autotitled I1 default 0,

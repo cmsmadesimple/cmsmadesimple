@@ -54,6 +54,19 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		return '';
 	}
 	
+	protected function instantiate_class($type, $row)
+	{
+		$ret = null;
+		
+		if (isset($row['content_type']) && $row['content_type'] != '')
+			$ret = CmsContentType::get_content_type_class_by_type($row['content_type'], true);
+		
+		if ($ret != null)
+			return $ret;
+		else
+			return parent::instantiate_class($type, $row);
+	}
+	
 	function get_edit_form($block_name = 'default', $tpl_file = null)
 	{
 		$file_name = underscore(get_class($this));

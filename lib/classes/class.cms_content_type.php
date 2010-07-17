@@ -72,10 +72,17 @@ class CmsContentType extends CmsObjectRelationalMapping
 	 * @return string The name of the class for that content type
 	 * @author Ted Kulp
 	 */
-	public static function get_content_type_class_by_type($name)
+	public static function get_content_type_class_by_type($name, $instantiate = false)
 	{
-		$type = cms_orm('ContentType')->find_by_name($name);
-		return self::get_content_type_class($type);
+		$type = cms_orm('CmsContentType')->find_by_name($name);
+		if ($type != null && is_a($type, 'CmsContentType'))
+		{
+			if ($instantiate)
+				return self::get_content_type_obj($type);
+			else
+				return self::get_content_type_class($type);
+		}
+		return null;
 	}
 
 	/**

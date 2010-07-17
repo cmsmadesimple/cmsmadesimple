@@ -636,6 +636,7 @@ function fill_page(&$page, $params)
 					if ($content_obj)
 					{
 						$content_obj->update_parameters($params['block'][$block_name]);
+						$content_obj->content_type = $content_type;
 						if ($content_obj->save())
 						{
 							$page->params['blocks'][$block_name]['id'] = $content_obj->id;

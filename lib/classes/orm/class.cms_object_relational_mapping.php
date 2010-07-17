@@ -654,12 +654,16 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			
 				$this->before_load_caller($newclassname, $row);
 			
+				//Wish PHP had the unless statement...
+				//If the new class doesn't match the existing one and
+				//for some reason it's not avaiable, then fallback to
+				//the original class name.
 				if (!($newclassname != $classname && class_exists($newclassname)))
 				{
 					$newclassname = $classname;
 				}
 
-				$oneobj = new $newclassname;
+				$oneobj = $this->instantiate_class($newclassname, $row);
 				$oneobj = $this->fill_object($row, $oneobj);
 				return $oneobj;
 			}
@@ -737,7 +741,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 					$newclassname = $classname;
 				}
 
-				$oneobj = new $newclassname;
+				$oneobj = $this->instantiate_class($newclassname, $dbresult->fields);
 				$oneobj = $this->fill_object($dbresult->fields, $oneobj);
 				$result[] = $oneobj;
 				$dbresult->MoveNext();
@@ -1308,13 +1312,17 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			if (!isset($hash_or_id['id']))
 			{
 				if ($type != null)
+				{
 					return new $type;
+				}
 				else if (isset($hash_or_id['type']))
 				{
 					return new $hash_or_id['type'];
 				}
 				else
+				{
 					return null;
+				}
 			}
 		}
 		else
@@ -1528,6 +1536,20 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			$one_acts_as->after_delete($this);
 		}
 		$this->after_delete();
+	}
+	
+	/**
+	 * Callback that instantiates the class.  Allows an ORM'd object to 
+	 * override the default logic that the "type" field gives.
+	 *
+	 * @param string $type The type (class) that is going to be created
+	 * @param array $row The row from the database that will be filled
+	 * @return mixed A new object of the desired subclass. Defaults to $type.
+	 * @author Ted Kulp
+	 */
+	protected function instantiate_class($type, $row)
+	{
+		return new $type;
 	}
 	
 	/**

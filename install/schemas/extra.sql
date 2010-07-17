@@ -1,4 +1,5 @@
 INSERT INTO {DB_PREFIX}version VALUES (1);
+INSERT INTO {DB_PREFIX}content_types VALUES (1, 'html_content', 'A block of standard html content for use on any page.', 'Core', 'CmsHtmlContentType', '2010-07-15 22:20:40', '2010-07-15 22:20:40', NULL);
 INSERT INTO {DB_PREFIX}users VALUES (1,'admin','5f4dcc3b5aa765d61d8327deb882cf99',1,'','','',1,'2006-07-25 21:22:33','2009-05-13 07:43:16', '');
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'use_wysiwyg','1',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'wysiwyg','TinyMCE',NULL);

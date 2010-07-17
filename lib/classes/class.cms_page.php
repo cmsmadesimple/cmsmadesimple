@@ -186,7 +186,7 @@ class CmsPage extends CmsObjectRelationalMapping
 		
 		if ($can_return_new)
 		{
-			$obj = new CmsHtmlContentType(); //TODO: Fix me
+			$obj = CmsContentType::get_content_type_obj(CmsContentType::get_default_content_type()); //TODO: Make me check for allowed types on this block
 			return $obj;
 		}
 		else
