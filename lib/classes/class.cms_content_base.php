@@ -49,12 +49,24 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		return '';
 	}
 	
+	function get_edit_template()
+	{
+		return '';
+	}
+	
 	function get_edit_form($block_name = 'default', $tpl_file = null)
 	{
 		$file_name = underscore(get_class($this));
 		if ($tpl_file == null)
 		{
-			$tpl_file = cms_join_path(dirname(__FILE__), 'content_types', 'templates', 'edit.' . $file_name . '.tpl');
+			if ($this->get_edit_template() != '')
+			{
+				$tpl_file = $this->get_edit_template();
+			}
+			else
+			{
+				$tpl_file = cms_join_path(dirname(__FILE__), 'content_types', 'templates', 'edit.' . $file_name . '.tpl');
+			}
 		}
 		
 		if (is_file($tpl_file))

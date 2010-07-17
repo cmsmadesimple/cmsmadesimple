@@ -257,7 +257,7 @@ class CmsTemplateCompiler extends Smarty_Internal_SmartyTemplateCompiler
 
 			if (!isset($args['type']))
 			{
-				$args['type'] = 'CmsHtmlContentType';
+				$args['type'] = 'HTML Content';
 			}
 			
 			$this->blocks[$name] = $args;

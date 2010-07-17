@@ -75,7 +75,11 @@ $opt['CmsErrorPage'] = 'Error Page';
 $smarty->assign('page_types', $opt);
 
 $opt = array();
-$opt['CmsHtmlContentType'] = 'HTML Content';
+$types = CmsContentType::get_all_content_types();
+foreach ($types as $one_type)
+{
+	$opt[$one_type->name] = $one_type->name;
+}
 $smarty->assign('content_types', $opt);
 
 //include_once("../lib/classes/class.admintheme.inc.php");
@@ -627,7 +631,8 @@ function fill_page(&$page, $params)
 			{
 				foreach ($params['block_type'] as $block_name => $content_type)
 				{
-					$content_obj = cms_orm('CmsContentBase')->load($params['block'][$block_name], $content_type);
+					$actual_type = CmsContentType::get_content_type_class_by_type($content_type);
+					$content_obj = cms_orm('CmsContentBase')->load($params['block'][$block_name], $actual_type);
 					if ($content_obj)
 					{
 						$content_obj->update_parameters($params['block'][$block_name]);
