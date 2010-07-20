@@ -89,11 +89,11 @@ $config =& $gCms->GetConfig();
 if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
 {
   // adjust the root url
-  if( !isset($config['ssl_url']) )
-  { 
-    $config['ssl_url'] = str_replace('http://','https://',$config['root_url']);
-  }
-  $config['root_url'] = $config['ssl_url'];
+//   if( !isset($config['ssl_url']) )
+//   { 
+//     $config['ssl_url'] = str_replace('http://','https://',$config['root_url']);
+//   }
+//   $config['root_url'] = $config['ssl_url'];
 
   // adjust the uploads url
   if( !isset($config['ssl_uploads_url']) )

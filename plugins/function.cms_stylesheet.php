@@ -130,13 +130,20 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		//set the modified date to the template modified date
 		//touch($fname, $db->UnixTimeStamp($one['modified_date']));
 	      }
+
+	    $base = $config['root_url'];
+	    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off')
+	      {
+		$base = $config['ssl_url'];
+	      }
+
 	    if ( empty($media_type) || isset($params['media']) )
 	      {
-		$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$config['root_url'].'/tmp/cache/'.$filename.'"/>'."\n";
+		$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$base.'/tmp/cache/'.$filename.'"/>'."\n";
 	      }
 	    else
 	      {
-		$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$config['root_url'].'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
+		$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$base.'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
 	      }
 	  }
       }
