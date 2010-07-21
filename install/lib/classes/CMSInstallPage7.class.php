@@ -132,10 +132,12 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		$newconfig['timezone'] = $_POST['timezone'];
 		$newconfig['admin_encoding'] = "utf-8";
 		$newconfig['use_adodb_lite'] = true;
-		//$newconfig['internal_pretty_urls'] = false; //Not in use now
 		$newconfig['wiki_url'] = 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel';
 		$newconfig['set_names'] = true;
 		$newconfig['url_rewriting'] = 'none';
+		
+		$newconfig['php_memory_limit'] = '';
+		$newconfig['output_compression'] = 'false';
 		
 		if (!$newconfig->save())
 		{

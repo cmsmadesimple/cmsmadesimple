@@ -108,7 +108,6 @@ clearstatcache();
 $tmp = array(0=>array(), 1=>array());
 
 $tmp[0]['php_memory_limit'] = testConfig('php_memory_limit', 'php_memory_limit');
-$tmp[0]['process_whole_template'] = testConfig('process_whole_template', 'process_whole_template');
 $tmp[1]['debug'] = testConfig('debug', 'debug');
 $tmp[1]['output_compression'] = testConfig('output_compression', 'output_compression');
 $tmp[1]['db_prefix'] = testConfig('db_prefix', 'db_prefix');

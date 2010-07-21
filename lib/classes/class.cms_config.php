@@ -248,13 +248,6 @@ class CmsConfig extends CmsObject implements ArrayAccess
 # Note: Your server may not allow the application to override memory limits.
 \$config['php_memory_limit'] = '{$config['php_memory_limit']}';
 
-# In versions of CMS Made Simple prior to version 1.4, the page template was processed
-# in it's entirety.  This behaviour was later changed to process the head portion of the
-# page template after the body.  If you are working with a highly configured site that
-# relies significantly on the old order of smarty processing, you may want to try
-# setting this parameter to false.
-\$config['process_whole_template'] = ${$config['process_whole_template']?'true':'false'};
-
 # CMSMS Debug Mode?  Turn it on to get a better error when you
 # see {nocache} errors, or to allow seeing php notices, warnings, and errors in the html output.
 # This setting will also disable browser css caching.
