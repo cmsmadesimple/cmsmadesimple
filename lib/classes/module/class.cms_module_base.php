@@ -37,6 +37,7 @@ class CmsModuleBase extends CmsObject
 	public $restrict_unknown_params = false;
 	public $filter_id_list = array();
 	public $loaded_includes = array();
+	public $default_allowed_props = array('module', 'id', 'return_id', 'action');
 	
 	function __construct()
 	{
@@ -411,7 +412,7 @@ class CmsModuleBase extends CmsObject
 				$key = cms_htmlentities($key);
 			}
 
-			if (!$mapped && !$allow_unknown)
+			if (!$mapped && !$allow_unknown && !in_array($key, $this->default_allowed_props))
 			{
 				trigger_error('Parameter '.$key.' is not known... dropped', E_USER_WARNING);
 				continue;
