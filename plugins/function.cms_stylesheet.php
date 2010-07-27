@@ -60,7 +60,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
       $pageinfo = cmsms()->current_page;
       $template_id=$pageinfo->template_id;
     }
-  $config = cms_config;
+  $config = cms_config();
   $db = cms_db();
 
   $cache_dir = TMP_CACHE_LOCATION;
@@ -107,15 +107,11 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	    if ( !file_exists(cms_join_path($cache_dir,$filename)) )
 	      {
 		$smarty = $gCms->GetSmarty();
-		$smarty->left_delimiter = '[[';
-		$smarty->right_delimiter = ']]';
 		$smarty->_compile_source('temporary stylesheet', $one['css_text'], $_compiled );
 		@ob_start();
 		$smarty->_eval('?>' . $_compiled);
 		$_contents = @ob_get_contents();
 		@ob_end_clean();
-		$smarty->left_delimiter = '{';
-		$smarty->right_delimiter = '}';
 		$fname = cms_join_path($cache_dir,$filename);
 		$fp = fopen($fname, 'w');
 		//we convert CRLF to LF for unix compatibility
