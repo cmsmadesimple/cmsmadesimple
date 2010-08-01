@@ -33,6 +33,9 @@
   <events_sent>
     <event>TestEventThing</event>
   </events_sent>
+  <capabilities>
+    <capability>some_capability</capability>
+  </capabilities>
   <content_types>
     <type>TestContentType</type>
   </content_types>

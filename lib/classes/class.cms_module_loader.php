@@ -343,6 +343,30 @@ class CmsModuleLoader extends CmsObject
 		return cms_db()->GetAll("select * from {modules}");
 	}
 	
+	public static function has_capability($capability_name, $module_name = '')
+	{
+		$modules = array();
+		
+		foreach (self::$module_list as $one_module)
+		{
+			if (($module_name == '' || $module_name == $one_module['name']) && isset($one_module['capabilities']))
+			{
+				if (self::is_installed($one_module['name']) && self::is_active($one_module['name']))
+				{
+					foreach ($one_module['capabilities'] as $k => $one_item)
+					{
+						if ($one_item == $capability_name)
+						{
+							$modules[] = $one_module['name'];
+						}
+					}
+				}
+			}
+		}
+		
+		return $modules;
+	}
+	
 	public static function inject_installed_data_for_module($module_data, $installed_data)
 	{
 		$module_data['installed'] = false;
