@@ -36,7 +36,7 @@ class CmsMemcacheKeyCache extends CmsObject
 	{
 		parent::__construct();
 		$this->memcache_obj = new Memcache;
-		$this->memcache_obj->connect(CmsConfig::get('memcache_server'), CmsConfig::get('memcache_port'));
+		$this->memcache_obj->addServer(CmsConfig::get('memcache_server'), CmsConfig::get('memcache_port'), true);
 	}
 	
 	/**
