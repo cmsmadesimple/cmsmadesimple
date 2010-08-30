@@ -487,13 +487,17 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=array(),
 							   $inline=false,$targetcontentonly=false,$prettyurl='')
 {
+	global $gCms;
+	$config = $gCms->GetConfig();
+
+	$text = '';
 	if( empty($prettyurl) )
 	{
 		// attempt to get a pretty url from the module... this is useful
 		// incase this method is being called from outside the source module.
 		// i.e: comments module wants a link to the article the comments are about
 		// or something.
-		$prettyrl = $modinstance->get_pretty_url($id,$action,$returnid,$params,$inline);
+		$prettyurl = $modinstance->get_pretty_url($id,$action,$returnid,$params,$inline);
 	}
 
 	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite')
@@ -528,7 +532,6 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 				$secureparam='&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			}
 		$text .= '/'.$goto.'?mact='.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).$secureparam;
-
 		foreach ($params as $key=>$value)
 			{
 				$key = cms_htmlentities($key);
@@ -545,6 +548,8 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 					}
 			}
 	}
+
+	return $text;
 }
 
 /**
