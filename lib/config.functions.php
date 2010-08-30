@@ -36,6 +36,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 
 	#Set some defaults, just in case the config file is corrupted or
 	#we're coming from an upgrade
+	$config['timezone'] = '';
 	$config['php_memory_limit'] = '';
 	$config['process_whole_template'] = false;
 	$config["dbms"] = "mysql";
@@ -225,6 +226,14 @@ function cms_config_text($config)
 # increases on some sites.  Use caution when using this as there have
 # been reports of incompatibilities with some browsers.
 \$config['output_compression'] = ${$config['output_compression']?'true':'false'};
+
+# Timezone setting
+# PHP 5.3 requires that timezones be set at the server level.
+# This variable can be used to set your sites timezone.
+# Valid values for this variable can be found at:
+# http://www.php.net/manual/en/timezones.php
+# If this field is empty, no timezone will be set
+\$config['timezone'] = '{$config['timezone']}';
 
 #-----------------
 #Database Settings

@@ -85,6 +85,12 @@ require(cms_join_path($dirname,'lib','config.functions.php'));
 #Grab the current configuration
 $config =& $gCms->GetConfig();
 
+#Set the timezone
+if( $config['timezone'] != '' )
+  {
+    @date_default_timezone_set(trim($config['timezone']));
+  }
+
 #Adjust the url stuff if we're using HTTPS
 if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
 {
