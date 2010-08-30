@@ -1,10 +1,12 @@
-Version 1.9
+uMVersion 1.9
 -----------------------------
 Core:
   - Adds support for custom urls for each content page.
     * URLS can be auto created from the page hierarchy, or a custom string
       entered.  The system checks for duplocate URLS.
     * The url mechanism works in addition to the existing alias generated urls
+  - A new config option 'auto_create_url' determines how page urls are
+    determined (if at all).
   - Add support for a description and a wysiwyg toggle for global content blocks.
   - Adds titles and a little bit of customization to the listcontent screen
   - Adds the ability to 'run' a UDT from within the admin interface.
@@ -38,8 +40,6 @@ Installer
     (may be a few addmes yet that have to be added to the core lang stuff).
   - Fixes module install stuff
   - Now asks for the timezone
-  - Attempt to automatically create the config.php file on install, though this SHOULD fail
-    for most installs.
 
 MenuManager
   - image and thumbnail fields now output absolute URLS.

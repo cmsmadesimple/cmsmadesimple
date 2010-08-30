@@ -1172,6 +1172,7 @@ function & testFileWritable( $required, $title, $file, $message = '', $debug = f
 	}
 
 	$test->res = 'red';
+	global $lang_fn;
 	getTestReturn($test, $required, $message, 'File_not_writable', $lang_fn('errorfilenotwritable').' ('.$file.')');
 	return $test;
 }

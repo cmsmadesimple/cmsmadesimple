@@ -611,6 +611,7 @@ class ContentOperations
 
 			foreach ($allcontent as $one)
  			{
+				if( !is_object($one) ) continue;
 			  $value = $one->Id();
 			  if ($value == $current)
 			    {
