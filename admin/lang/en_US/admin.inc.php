@@ -1,4 +1,19 @@
 <?php
+$lang['admin']['yes'] = 'Yes';
+$lang['admin']['no'] = 'No';
+$lang['admin']['listcontent_showalias'] = 'Display the &quot;Alias&quot; column';
+$lang['admin']['listcontent_showurl'] = 'Display the &quot;URL&quot; column';
+$lang['admin']['listcontent_showtitle'] = 'Display the Page Title or Menu Text';
+$lang['admin']['listcontent_settings'] = 'Content List Settings';
+$lang['admin']['lctitle_page'] = 'The title of existing content items';
+$lang['admin']['lctitle_alias'] = "The alias of existing content items. Some content items do not have aliases";
+$lang['admin']['lctitle_url'] = 'The URL suffix for the content item.  If set';
+$lang['admin']['lctitle_template'] = "The selected template for the content item. Some content items do not have templates";
+$lang['admin']['lctitle_owner'] = 'The owner of the content item';
+$lang['admin']['lctitle_active'] = "Indicates wether the content item is active. Inactive items cannot be displayed.";
+$lang['admin']['lctitle_default'] = "Specify the content item that is accessed when the root url is requested.  Only one item can be default";
+$lang['admin']['lctitle_move'] = 'Allows arranging your content hierarchy';
+$lang['admin']['lctitle_multiselect'] = 'Select All/Select None';
 $lang['admin']['invalid_url'] = 'The page URL specified is invalid.  It should contain ony alphanumeric characters, or - or /';
 $lang['admin']['page_url'] = 'Page URL';
 $lang['admin']['runuserplugin'] = 'Run User Plugin';

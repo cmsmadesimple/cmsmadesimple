@@ -685,10 +685,15 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		      $txt .= "-&nbsp;&nbsp;&nbsp;";
 		    }
 		} 
+	      $str = $one->mMenuText;
+	      if( get_site_preference('listcontent_showtitle',0) )
+		{
+		  $str = $one->mName;
+		}
 	      if ($display == 'edit')
-		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($one->mMenuText, '', '', true) . '</a>';
+		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($str, '', '', true) . '</a>';
 	      else
-		$txt .= cms_htmlentities($one->mMenuText, '', '', true);
+		$txt .= cms_htmlentities($str, '', '', true);
 	    }
 	  if( !empty($txt) ) $columns['page'] = $txt;
 	}
@@ -1016,13 +1021,14 @@ function display_content_list($themeObject = null)
 	check_login();
 	$userid = get_userid();
 	
+	// setup which columns to display.
 	$mypages = author_pages($userid);
 	$columnstodisplay = array();
 	$columnstodisplay['expand'] = 1;
 	$columnstodisplay['hier'] = 1;
 	$columnstodisplay['page'] = 1;
-	$columnstodisplay['alias'] = 1;
-	$columnstodisplay['url'] = 1;
+	$columnstodisplay['alias'] = get_site_preference('listcontent_showalias',1);
+	$columnstodisplay['url'] = get_site_preference('listcontent_showurl',1);
 	$columnstodisplay['template'] = 1;
 	$columnstodisplay['friendlyname'] = 1;
 	$columnstodisplay['owner'] = 1;
@@ -1108,6 +1114,7 @@ function display_content_list($themeObject = null)
 		$thelist .= "</table>\n";
 	}
 
+
 	$headoflist = '';
 
 	$headoflist .= '<div class="pageoverflow"><p class="pageoptions">';
@@ -1139,6 +1146,7 @@ function display_content_list($themeObject = null)
 	$headoflist .= '<thead>';
 	$headoflist .= "<tr>\n";
 
+	// setup column titles.
 	if( $columnstodisplay['expand'] )
 	  {
 	    $headoflist .= "<th>&nbsp;</th>";
@@ -1149,19 +1157,19 @@ function display_content_list($themeObject = null)
 	  }
 	if( $columnstodisplay['page'] )
 	  {
-	    $headoflist .= "<th class=\"pagew25\">".lang('page')."</th>\n";
+	    $headoflist .= '<th class="pagew25" title="'.lang('lctitle_page').'\">'.lang('page')."</th>\n";
 	  }
 	if( $columnstodisplay['alias'] )
 	  {
-	    $headoflist .= "<th>".lang('pagealias')."</th>\n";
+	    $headoflist .= '<th title="'.lang('lctitle_alias').'">'.lang('pagealias')."</th>\n";
 	  }
 	if( $columnstodisplay['url'] )
 	  {
-	    $headoflist .= "<th>".lang('url')."</th>\n";
+	    $headoflist .= '<th title="'.lang('lctitle_url').'">'.lang('url')."</th>\n";
 	  }
 	if( $columnstodisplay['template'] )
 	  {
-	    $headoflist .= "<th>".lang('template')."</th>\n";
+	    $headoflist .= '<th title="'.lang('lctitle_template').'">'.lang('template')."</th>\n";
 	  }
 	if( $columnstodisplay['friendlyname'] )
 	  {
@@ -1169,19 +1177,19 @@ function display_content_list($themeObject = null)
 	  }
 	if( $columnstodisplay['owner'] )
 	  {
-	    $headoflist .= "<th>".lang('owner')."</th>\n";
+	    $headoflist .= '<th title="'.lang('lctitle_owner').'">'.lang('owner')."</th>\n";
 	  }
 	if( $columnstodisplay['active'] )
 	  {
-	    $headoflist .= "<th class=\"pagepos\">".lang('active')."</th>\n";
+	    $headoflist .= '<th title="'.lang('lctitle_active').'" class="pagepos">'.lang('active')."</th>\n";
 	  }
 	if( $columnstodisplay['default'] )
 	  {
-	    $headoflist .= "<th class=\"pagepos\">".lang('default')."</th>\n";
+	    $headoflist .= '<th title="'.lang('lctitle_default').'" class="pagepos">'.lang('default')."</th>\n";
 	  }
 	if( $columnstodisplay['move'] )
 	  {
-	    $headoflist .= "<th class=\"move\">".lang('move')."</th>\n";
+	    $headoflist .= '<th title="'.lang('lctitle_move').'" class="move">'.lang('move')."</th>\n";
 	  }
 	if( $columnstodisplay['view'] )
 	  {
@@ -1201,7 +1209,7 @@ function display_content_list($themeObject = null)
 	  }
 	if( $columnstodisplay['multiselect'] )
 	  {
-	    $headoflist .= "<th class=\"checkbox\"><input id=\"selectall\" type=\"checkbox\" onclick=\"select_all();\" /></th>\n"; // checkbox column
+	    $headoflist .= '<th title="'.lang('lctitle_multiselect').'" class="checkbox"><input id="selectall" type="checkbox" onclick="select_all();" /></th>'."\n"; // checkbox column
 	  }
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';

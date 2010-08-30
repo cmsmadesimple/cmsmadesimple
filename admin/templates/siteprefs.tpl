@@ -1,5 +1,6 @@
 {$mod->StartTabHeaders()}
 {$mod->SetTabHeader('general',$lang_general,$active_general)}
+{$mod->SetTabHeader('listcontent',$lang_listcontent,$active_listcontent)}
 {$mod->SetTabHeader('sitedown',$lang_sitedown,$active_sitedown)}
 {$mod->SetTabHeader('setup',$lang_setup,$active_setup)}
 {$mod->EndTabHeaders()}
@@ -87,6 +88,50 @@
 </form>
 {$mod->EndTab()}
 
+{$mod->StartTab('listcontent')}
+<form id="siteprefform_general" method="post" action="siteprefs.php">
+<div>
+  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+  <input type="hidden" name="active_tab" value="listcontent" />
+  <input type="hidden" name="editsiteprefs" value="true" />
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{'listcontent_showalias'|lang}:</p>
+  <p class="pageinput">
+    <select name="listcontent_showalias">
+      {html_options options=$yesno selected=$listcontent_showalias}
+    </select>
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{'listcontent_showurl'|lang}:</p>
+  <p class="pageinput">
+    <select name="listcontent_showurl">
+      {html_options options=$yesno selected=$listcontent_showurl}
+    </select>
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{'listcontent_showtitle'|lang}:</p>
+  <p class="pageinput">
+    <select name="listcontent_showtitle">
+      {html_options options=$titlemenu selected=$listcontent_showtitle}
+    </select>
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">&nbsp;</p>
+  <p class="pageinput">
+    <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+    <input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+  </p>
+</div>
+</form>
+{$mod->EndTab()}
 
 {$mod->StartTab('sitedown')}
 <form id="siteprefform_sitedown" method="post" action="siteprefs.php">

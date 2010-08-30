@@ -82,8 +82,9 @@ $global_umask = '022';
 $logintheme = "default";
 $auto_clear_cache_age = 0;
 $pseudocron_granularity = 60;
-
-
+$listcontent_showalias = 1;
+$listcontent_showurl = 1;
+$listcontent_showtitle = 1;
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php".$urlext);
@@ -113,6 +114,9 @@ $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',$allowp
 $enablenotifications = get_site_preference('enablenotifications',$enablenotifications);
 $sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
 $basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
+$listcontent_showalias = get_site_preference('listcontent_showalias',$listcontent_showalias);
+$listcontent_showurl = get_site_preference('listcontent_showurl',$listcontent_showurl);
+$listcontent_showtitle = get_site_preference('listcontent_showtitle',$listcontent_showtitle);
 
 $active_tab='unknown';
 if( isset($_POST['active_tab']) )
@@ -202,6 +206,15 @@ else if (isset($_POST["editsiteprefs"]))
 	  if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
 	  set_site_preference('thumbnail_width',$thumbnail_width);
 	  set_site_preference('thumbnail_height',$thumbnail_height);
+	  break;
+
+	case 'listcontent':
+	  $listcontent_showalias = (int)$_POST['listcontent_showalias'];
+	  set_site_preference('listcontent_showalias',$listcontent_showalias);
+	  $listcontent_showurl = (int)$_POST['listcontent_showurl'];
+	  set_site_preference('listcontent_showurl',$listcontent_showurl);
+	  $listcontent_showtitle = (int)$_POST['listcontent_showtitle'];
+	  set_site_preference('listcontent_showtitle',$listcontent_showtitle);
 	  break;
 
 	case 'sitedown':
@@ -347,11 +360,8 @@ if ($dir=opendir(dirname(__FILE__)."/themes/"))
 }
 
 
-$smarty->assign('active_general', 0);
-$smarty->assign('active_sitedown', 0);
-$smarty->assign('active_setup', 0);
-
 $smarty->assign('active_general',($active_tab == 'general')?1:0);
+$smarty->assign('active_listcontent',($active_tab == 'listcontent')?1:0);
 $smarty->assign('active_sitedown',($active_tab == 'sitedown')?1:0);
 $smarty->assign('active_setup',($active_tab == 'setup')?1:0);
 
@@ -378,6 +388,9 @@ $smarty->assign('thumbnail_width',$thumbnail_width);
 $smarty->assign('thumbnail_height',$thumbnail_height);
 $smarty->assign('auto_clear_cache_age',$auto_clear_cache_age);
 $smarty->assign('pseudocron_granularity',$pseudocron_granularity);
+$smarty->assign('listcontent_showalias',$listcontent_showalias);
+$smarty->assign('listcontent_showurl',$listcontent_showurl);
+$smarty->assign('listcontent_showtitle',$listcontent_showtitle);
 
 $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
 	     60=>lang('cron_60m'),120=>lang('cron_120m'),
@@ -393,6 +406,7 @@ $smarty->assign('lang_autoclearcache',lang('autoclearcache'));
 $smarty->assign('lang_thumbnail_width',lang('thumbnail_width'));
 $smarty->assign('lang_thumbnail_height',lang('thumbnail_height'));
 $smarty->assign('lang_general',lang('general_settings'));
+$smarty->assign('lang_listcontent',lang('listcontent_settings'));
 $smarty->assign('lang_sitedown',lang('sitedown_settings'));
 $smarty->assign('lang_cancel',lang('cancel'));
 $smarty->assign('lang_submit',lang('submit'));
@@ -446,6 +460,12 @@ $all_attributes['extra3'] = lang('extra3');
 $all_attributes['additionaleditors'] = lang('additionaleditors');
 $all_attributes['url'] = lang('url');
 $smarty->assign('all_attributes',$all_attributes);
+
+$yesno = array(0=>lang('no'),1=>lang('yes'));
+$smarty->assign('yesno',$yesno);
+
+$titlemenu = array(0=>lang('menutext'),1=>lang('title'));
+$smarty->assign('titlemenu',$titlemenu);
 
 # begin output
 echo '<div class="pagecontainer">'.$themeObject->ShowHeader('siteprefs')."\n";
