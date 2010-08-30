@@ -492,29 +492,10 @@ class CMSModule
 	 */
 	function RegisterRoute($routeregex, $defaults = array())
 	{
-		global $gCms;
-		$route = new CmsRoute();
-		$route->module = $this->GetName();
-		$route->defaults = $defaults;
-		$route->regex = $routeregex;
-		$routes =& $gCms->variables['routes'];
-		$routes[] = $route;
+		$route = new CmsRoute($routeregex,$this->GetName(),$defaults);
+		cms_route_manager::register($route);
 	}
 
-	/**
-	 * Handle unmatched routes
-	 * A callback method that is called if a page request cannot be handled
-	 * via the registered routes.
-	 *
-	 * @abstract
-	 * @param string The incoming URL.
-	 * @param boolean Wether we are adding a new URL or checking for an existing one.
-	 * @return array A hash with the module id, action, returnid, and inline flag, or FALSE
-	 */
-	public function IsValidRoute($url,$is_adding = false)
-	{
-	  return FALSE;
-	}
 
 	/**
 	 * Returns a list of parameters and their help strings in a hash.  This is generally
@@ -2508,6 +2489,7 @@ class CMSModule
 		$this->LoadFormMethods();
 		return cms_module_CreateLink($this, $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref, $inline, $addttext, $targetcontentonly, $prettyurl);
 	}
+
 
 	/**
 	* Returns the xhtml equivalent of an href link for content links.	This is basically a nice

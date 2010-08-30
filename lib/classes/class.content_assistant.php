@@ -34,40 +34,38 @@ class content_assistant
 	return FALSE;
       }
 
-    // now check to see if this URL is used.
+    // force modules to register their routes.
     global $gCms;
-    $db = $gCms->GetDb();
-    $query = '';
-    $parms = array($url);
-    if( $content_id > 0 )
+    global $CMS_ADMIN_PAGE;
+    $flag = false;
+    if( isset($CMS_ADMIN_PAGE) )
       {
-	$query = 'SELECT content_id FROM '.cms_db_prefix().'content
-                   WHERE url = ? AND content_id != ?';
-	$parms[] = $content_id;
-      }
-    else
-      {
-	$query = 'SELECT content_id FROM '.cms_db_prefix().'content
-                   WHERE url = ?';
-      }
-    $tmp = $db->GetOne($query,$parms);
-    if( $tmp )
-      {
-	return FALSE;
+	// hack to force modules to register their routes.
+	$flag = $CMS_ADMIN_PAGE;
+	unset($CMS_ADMIN_PAGE);
       }
 
-    // not used by content... check modules.
     foreach( $gCms->modules as $name => $data )
       {
-	if( $name  && isset($data['object'])  )
+	if( $name && isset($data['object'])  )
 	  {
 	    $module =& $data['object'];
-	    if( $module->IsValidRoute($url) )
-	      {
-		return FALSE;
-	      }
+	    $module->SetParameters();
 	  }
       }
+
+    if( $flag )
+      {
+	$CMS_ADMIN_PAGE = $flag;
+      }
+
+    // force content to register routes.
+    $contentops = $gCms->GetContentOperations();
+    $contentops->register_routes();
+
+    $route = cms_route_manager::match_str($url);
+    if( is_object($route) ) return FALSE;
+
     return TRUE;
   }
 } // end of class

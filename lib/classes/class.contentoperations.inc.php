@@ -1140,7 +1140,25 @@ class ContentOperations
 		$tmp = rtrim($tmp, '.');
 		return $tmp;
 	}
+
 	
+	public function register_routes()
+	{
+ 		global $gCms;
+ 		$db = $gCms->GetDb();
+
+		$query = 'SELECT content_id,url FROM '.cms_db_prefix().'content
+                   WHERE url != \'\'';
+		$data = $db->GetArray($query);
+ 		if( is_array($data) )
+ 		{
+ 			foreach( $data as $onerow )
+ 			{
+ 				$route = new CmsRoute($onerow['url'],$onerow['content_id']);
+				cms_route_manager::register($route);
+			}
+		}
+	}
 }
 
 /**

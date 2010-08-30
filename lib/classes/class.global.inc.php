@@ -498,27 +498,16 @@ class CmsObject {
 	      $dirIterator = new RecursiveDirectoryIterator($start_dir);
  	      $dirContents = new RecursiveIteratorIterator($dirIterator);
 	      foreach( $dirContents as $one )
-		{
-		  if( $one->isFile() && $one->getMTime() <= $the_time )
-		    {
- 		      @unlink($one->getPathname());
-		    }
-		}
+			  {
+				  if( $one->isFile() && $one->getMTime() <= $the_time )
+					  {
+						  @unlink($one->getPathname());
+					  }
+			  }
 	    }
 	}
 }
 
-/**
- * Simple global convenience object to hold CMS route information.
- * 
- * @package CMS
- */
-class CmsRoute
-{
-	var $module;
-	var $regex;
-	var $defaults;
-}
 
 /**
  * Simple global convenience object to hold CMS Content Type structure.

@@ -1276,11 +1276,12 @@ function get_pageid_or_alias_from_url()
   $page = '';
   if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
     {
-      // old?
+      // get page from returnid parameter in module action
       $page = $params[$smarty->id . 'returnid'];
     }
   else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]]))
     {
+      // using non friendly urls... get the page alias/id from the query var.
       $page = $_GET[$config["query_var"]];    
     }
   else
@@ -1306,9 +1307,10 @@ function get_pageid_or_alias_from_url()
       $page = $contentops->GetDefaultContent();
     }
 
-  // by here page should be a string.
+  // by here if page is an int, we're done.
   if( is_numeric($page) ) return $page;
 
+  // some kind of a pretty url.
   // strip off GET params.
   if( ($tmp = strpos($page,'?')) !== FALSE )
     {
@@ -1324,113 +1326,72 @@ function get_pageid_or_alias_from_url()
   // trim trailing /
   $page = rtrim($page, '/');
 
-  // match routes
+  // see if there's a route that matches.
   $matched = false;
-  if (strpos($page, '/') !== FALSE)
+  $route = cms_route_manager::match_str($page);
+  if( is_object($route) )
     {
-      $routes =& $gCms->variables['routes'];
-      foreach ($routes as $route)
+      $matched = true;
+      if( $route->is_content() )
 	{
-	  $matches = array();
-	  if (preg_match($route->regex, $page, $matches))
+	  // a route to a page.
+	  $page = $route->get_content();
+	}
+      else
+	{
+	  // it's a module route
+	  //Now setup some assumptions
+	  if (!isset($matches['id']))
+	    $matches['id'] = 'cntnt01';
+	  if (!isset($matches['action']))
+	    $matches['action'] = 'defaulturl';
+	  if (!isset($matches['inline']))
+	    $matches['inline'] = 0;
+	  if (!isset($matches['returnid']))
+	    $matches['returnid'] = ''; #Look for default page
+	  if (!isset($matches['module']))
+	    $matches['module'] = $route->module;
+
+	  //Get rid of numeric matches
+	  foreach ($matches as $key=>$val)
 	    {
-	      //Now setup some assumptions
-	      if (!isset($matches['id']))
-		$matches['id'] = 'cntnt01';
-	      if (!isset($matches['action']))
-		$matches['action'] = 'defaulturl';
-	      if (!isset($matches['inline']))
-		$matches['inline'] = 0;
-	      if (!isset($matches['returnid']))
-		$matches['returnid'] = ''; #Look for default page
-	      if (!isset($matches['module']))
-		$matches['module'] = $route->module;
-
-	      //Get rid of numeric matches
-	      foreach ($matches as $key=>$val)
+	      if (is_int($key))
 		{
-		  if (is_int($key))
-		    {
-		      unset($matches[$key]);
-		    }
-		  else
-		    {
-		      if ($key != 'id')
-			$_REQUEST[$matches['id'] . $key] = $val;
-		    }
+		  unset($matches[$key]);
 		}
-
-	      //Now set any defaults that might not have been in the url
-	      if (isset($route->defaults) && count($route->defaults) > 0)
+	      else
 		{
-		  foreach ($route->defaults as $key=>$val)
-		    {
-		      $_REQUEST[$matches['id'] . $key] = $val;
-		      if (array_key_exists($key, $matches))
-			{ 
-			  $matches[$key] = $val;
-			}
-		    }
+		  if ($key != 'id')
+		    $_REQUEST[$matches['id'] . $key] = $val;
 		}
-
-	      //Get a decent returnid
-	      if ($matches['returnid'] == '') {
-		$matches['returnid'] = $contentops->GetDefaultPageID();
-	      }
-
-	      $_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
-
-	      $page = $matches['returnid'];
-	      $smarty->id = $matches['id'];
-
-	      $matched = true;
-	      break;
 	    }
+
+	  //Now set any defaults that might not have been in the url
+	  if (isset($route->defaults) && count($route->defaults) > 0)
+	    {
+	      foreach ($route->defaults as $key=>$val)
+		{
+		  $_REQUEST[$matches['id'] . $key] = $val;
+		  if (array_key_exists($key, $matches))
+		    { 
+		      $matches[$key] = $val;
+		    }
+		}
+	    }
+
+	  //Get a decent returnid
+	  if ($matches['returnid'] == '') {
+	    $matches['returnid'] = $contentops->GetDefaultPageID();
+	  }
+
+	  $_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
+
+	  $page = $matches['returnid'];
+	  $smarty->id = $matches['id'];
 	}
     }
 
-  if( !$matched )
-    {
-      // call modules to see if they can match the URL
-      foreach( $gCms->modules as $key => &$data )
-	{
-	  if( !isset($data['installed']) || $data['installed'] == FALSE ) continue;
-
-	  $module =& $data['object'];
-	  $res = $module->IsValidRoute($page);
-	  if( !is_array($res) ) continue;
-
-	  $tmp = array('id'=>'cntnt01','action'=>'defaulturl',
-		       'inline'=>0,'returnid'=>'','module'=>$key);
-	  $tmp = array_merge($tmp,$res);
-
-	  foreach( $tmp as $key => $value )
-	    {
-	      switch( $key )
-		{
-		case 'returnid':
-		case 'module':
-		case 'id':
-		case 'inline':
-		  // do nothing.
-		  break;
-
-		case 'action':
-		  $_REQUEST['mact'] = $tmp['module'] . ',' . $tmp['id'] . ',' . $tmp['action'] . ',' . $tmp['inline'];
-		  break;
-
-		default:
-		  $_REQUEST[$tmp['id'].$key] = $value;
-		}
-	    }
-	  
-	  $page = $tmp['returnid'];
-	  $smarty->id = $tmp['id'];
-	  $matched = true;
-	}
-    }
-
-  // if noroute matched... grab the alias from the last /
+  // if no route matched... grab the alias from the last /
   if( ($pos = strrpos($page,'/')) !== FALSE && $matched == false )
     {
       $page = substr($page, $pos + 1);

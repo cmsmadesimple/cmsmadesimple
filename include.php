@@ -266,6 +266,12 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 	}
 }
 
+#Setup content routes
+if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) )
+{
+  $contentops = $gCms->GetContentOperations();
+  $contentops->register_routes();
+}
 
 #Load all installed module code
 $modload =& $gCms->GetModuleLoader();
