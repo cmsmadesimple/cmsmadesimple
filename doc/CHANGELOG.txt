@@ -43,6 +43,8 @@ Installer
 
 MenuManager
   - image and thumbnail fields now output absolute URLS.
+  - Adds the ability to cache the menumanager output into uniquely named cache files
+  - Adds the nocache parameter. 
 
 News:
   - Adds support for custom urls for each news article

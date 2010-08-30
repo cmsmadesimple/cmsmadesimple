@@ -200,8 +200,8 @@ else
 	}
 	else
 	{
-		$smarty->caching = false;
-		$smarty->compile_check = true;
+	  //$smarty->caching = false;
+	  //	$smarty->compile_check = true;
 		($smarty->is_cached('template:'.$contentobj->TemplateId())?$cached="":$cached="not ");
 
 		// we allow backward compatibility (for a while)
@@ -222,40 +222,6 @@ else
 	}
 }
 
-#if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
-#{
-#	set_error_handler($old_error_handler);
-#}
-
-#if (!$cached)
-#{
-	#Perform the content postrendernoncached callback
-#	reset($gCms->modules);
-#	while (list($key) = each($gCms->modules))
-#	{
-#		$value =& $gCms->modules[$key];
-#		if ($gCms->modules[$key]['installed'] == true &&
-#			$gCms->modules[$key]['active'] == true)
-#		{
-#			$gCms->modules[$key]['object']->ContentPostRenderNonCached($html);
-#		}
-#	}
-  // this event doesn't exist in 1.7.x
-	//Events::SendEvent('Core', 'ContentPostRenderNonCached', array(&$html));
-#}
-
-#Perform the content postrender callback
-#reset($gCms->modules);
-#while (list($key) = each($gCms->modules))
-#{
-#	$value =& $gCms->modules[$key];
-#	if ( isset($gCms->modules[$key]['installed']) &&
-#	     $gCms->modules[$key]['installed'] == true &&
-#		$gCms->modules[$key]['active'] == true)
-#	{
-#		$gCms->modules[$key]['object']->ContentPostRender($html);
-#	}
-#}
 
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
@@ -308,5 +274,7 @@ if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temp
   {
     unset($_SESSION['cms_preview']);
   }
+
+
 # vim:ts=4 sw=4 noet
 ?>

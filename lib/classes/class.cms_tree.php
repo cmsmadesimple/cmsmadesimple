@@ -1,12 +1,78 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+#BEGIN_LICENSE
+#-------------------------------------------------------------------------
+# Module: cms_tree (c) 2010 by Robert Campbell 
+#         (calguy1000@cmsmadesimple.org)
+#  A simple php tree class.
+# 
+#-------------------------------------------------------------------------
+# CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
+# This project's homepage is: http://www.cmsmadesimple.org
+#
+#-------------------------------------------------------------------------
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# However, as a special exception to the GPL, this software is distributed
+# as an addon module to CMS Made Simple.  You may not use this software
+# in any Non GPL version of CMS Made simple, or in any version of CMS
+# Made simple that does not indicate clearly and obviously in its admin 
+# section that the site was built with CMS Made simple.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+# Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
+#
+#-------------------------------------------------------------------------
+#END_LICENSE
 
+/**
+ * A Simple PHP Tree class that allows storing associative data along with each node.
+ *
+ * @package CMS
+ * @author  Robert Campbell
+ * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @since 1.9
+ */
 class cms_tree
 {
+  /**
+   * A reference to the parent tree.
+   *
+   * @ignore
+   */
   private $_parent;
+
+  /**
+   * A hash of the tags for this node in the tree.
+   *
+   * @ignore
+   */
   private $_tags;
+
+  /**
+   * An array of children nodes.
+   *
+   * @ignore
+   */
   private $_children;
 
-  public function cms_tree($key = '',$value = '')
+
+  /**
+   * Construct a new tree, or node of a tree.
+   *
+   * @param string An optional key for a tag
+   * @param mixed  An optional value for the tag.
+   */
+  public function __construct($key = '',$value = '')
   {
     if( $key )
       {
@@ -18,52 +84,20 @@ class cms_tree
 	  {
 	    foreach( $key as $k => $v )
 	      {
-		$this->setTag($k,$v);
+		$this->set_tag($k,$v);
 	      }
 	  }
       }
   }
 
 
-  // return a tree.
-  public function sureGetNodeById($id)
-  {
-    return $this->find_by_tag('id',$id);
-  }
-
-
-  public function getNodeById($id)
-  {
-    return $this->find_by_tag('id',$id);
-  }
-
-
-  public function sureGetNodeByAlias($alias)
-  {
-    return $this->find_by_tag('alias',$alias);
-  }
-
-
-  public function getNodeByAlias($alias)
-  {
-    return $this->find_by_tag('alias',$alias);
-  }
-
-
-  function &getNodeByHierarchy($position)
-  {
-    $result = null;
-    global $gCms;
-    $contentops =& $gCms->GetContentOperations();
-    $id = $contentops->GetPageIDFromHierarchy($position);
-    if ($id)
-    {
-      $result =& $this->find_by_tag('id',$id);
-    }
-    return $result;
-  }
-
-
+  /**
+   * Find a tree node given a specfied tag and value.
+   *
+   * @param string The tag name to search for
+   * @param mixed  The tag value to search for
+   * @return cms_tree or null on failure.
+   */
   public function &find_by_tag($tag_name,$value)
   {
     $res = null;
@@ -75,7 +109,7 @@ class cms_tree
 	  }
       }
     
-    if( $this->hasChildren() )
+    if( $this->has_children() )
       {
 	for( $i = 0; $i < count($this->_children); $i++ )
 	  {
@@ -92,7 +126,12 @@ class cms_tree
   }
 
 
-  public function hasChildren()
+  /**
+   * Test if this node has children.
+   *
+   * @return boolean
+   */
+  public function has_children()
   {
     if( !is_array($this->_children) )
       {
@@ -102,13 +141,13 @@ class cms_tree
   }
 
 
-  public function createFromList($data, $separator = '/')
-  {
-    die('todo');
-  }
-
-
-  public function setTag($key,$value)
+  /**
+   * Set a tag value into this node
+   *
+   * @param string Tag name
+   * @param mixed  Tag value
+   */
+  public function set_tag($key,$value)
   {
     if( !$this->_tags )
       {
@@ -118,13 +157,13 @@ class cms_tree
   }
 
 
-  public function getId()
-  {
-    return $this->getTag('id');
-  }
-
-
-  public function &getTag($key = 'id')
+  /**
+   * Retrieve a tag for this node.
+   *
+   * @param string The tag name
+   * @return mixed The tag value, or null
+   */
+  public function &get_tag($key)
   {
     $res = null;
     if( !$this->_tags ) return $res;
@@ -134,9 +173,22 @@ class cms_tree
   }
 
 
-  protected function removeNode(cms_tree &$node, $search_children = false)
+  /**
+   * Remove the specified node from the tree.
+   *
+   * Search through the children of this node (and optionally recursively through the tree)
+   * for the specified node.  If found, remove it.
+   *
+   * Use this method with caution, as it is very easy to break your tree, corrupt memory
+   * and have tree nodes hanging out there with no parents.
+   *
+   * @param cms_tree Reference to the node to be removed.
+   * @param boolean  Wether to recursively search children.
+   * @return boolean
+   */
+  protected function remove_node(cms_tree &$node, $search_children = false)
   {
-    if( !$this->hasChildren() ) return FALSE;
+    if( !$this->has_children() ) return FALSE;
 
     for( $i = 0; $i < count($this->_children); $i++ )
       {
@@ -147,7 +199,7 @@ class cms_tree
 	    $this->_children = @array_values($this->_children);
 	    return TRUE;
 	  }
-	elseif ($search_children && $this->_children[$i]->hasChildren())
+	elseif ($search_children && $this->_children[$i]->has_children())
 	  {
 	    $res = $this->_children[$i]->removeNode($node,$search_children);
 	    if( $res )
@@ -161,41 +213,38 @@ class cms_tree
   }
 
 
+  /**
+   * Remove this node
+   *
+   * This is a convenience method that calls remove_node on the current object.
+   *
+   * @return boolean
+   */
   public function remove()
   {
     if( is_null($this->_parent) ) return FALSE;
 
-    return $this->_parent->_removeNode($this);
+    return $this->_parent->remove_node($this);
   }
 
   
-  public function &getParentNode()
-  {
-    return $this->getParent();
-  }
-
-
+  /**
+   * Get a reference to the parent node.
+   *
+   * @return cms_tree Reference to the parent node, or null.
+   */
   public function &getParent()
   {
     return $this->_parent;
   }
 
 
-  public function depth()
-  {
-    $depth = 0;
-    $curr = &$this;
-
-    while($curr->_parent)
-      {
-	$depth++;
-	$curr = $curr->_parent;
-      }
-    return $depth;
-  }
-
-  
-  public function addNode(cms_tree &$node)
+  /**
+   * Add the specified node as a child to this node.
+   *
+   * @param cms_tree The node to add
+   */
+  public function add_node(cms_tree &$node)
   {
     if( !is_array($this->_children) )
       {
@@ -211,40 +260,14 @@ class cms_tree
   }
 
 
-  public function &getContent($deep = false,$loadsiblings = true,$loadall = true)
+  /**
+   * Count the number of direct children to this node.
+   *
+   * @return integer
+   */
+  public function count_children()
   {
-    if( cms_content_cache::content_exists($this->getTag('alias')) )
-      {
-	return cms_content_cache::get_content($this->getTag('alias'));
-      }
-
-    // not in cache
-    $parent = $this->getParent();
-    $content = null;
-    if( !$loadsiblings || !$parent )
-      {
-	// only load this content object
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	// todo: LoadContentFromId should use content cache.
-	$content =& $contentops->LoadContentFromId($this->getTag('id'), $deep);
-	return $content;
-      }
-    else
-      {
-	$parent->getChildren($deep,$loadall);
-	if( cms_content_cache::content_exists($this->getTag('alias')) )
-	  {
-	    return cms_content_cache::get_content($this->getTag('alias'));
-	  }
-      }
-    return $content;    
-  }
-
-
-  public function getChildrenCount()
-  {
-    if( $this->hasChildren() )
+    if( $this->has_children() )
       {
 	return count($this->_children);
       }
@@ -252,17 +275,29 @@ class cms_tree
   }
 
 
-  public function getSiblingCount()
+  /**
+   * Count the number of siblings that this node has.
+   *
+   * @return integer
+   */
+  public function count_siblings()
   {
     if( $this->_parent )
       {
-	return $this->_parent->getChildrenCount();
+	return $this->_parent->count_children();
       }
     return 0;
   }
 
 
-  public function getLevel()
+  /**
+   * Find the depth of the current node.
+   *
+   * This method counts all of the parents in the tree until there are no more parents.
+   *
+   * @return integer
+   */
+  public function get_level()
   {
     $n = -1;
     $node =& $this;
@@ -275,67 +310,18 @@ class cms_tree
   }
 
 
-  public function &getChildren($deep = false,$all = false,$loadcontent = true)
+  /**
+   * Return the children of this node.
+   *
+   * @return an array of cms_tree objects, or null if there are no children.
+   */
+  public function &get_children()
   {
-    if( $this->hasChildren() )
-      {
-	if( $loadcontent )
-	  {
-	    // check to see if we need to load anything.
-	    $ids = array();
-	    for( $i = 0; $i < count($this->_children); $i++ )
-	      {
-		if( !$this->_children[$i]->isContentCached() )
-		  {
-		    $ids[] = $this->_children[$i]->getTag('id');
-		  }
-	      }
-
-	    if( count($ids) )
-	      {
-		global $gCms;
-		$contentops = $gCms->GetContentOperations();
-		$contentops->LoadChildren($this->GetTag('id'),$deep,$all,$ids);
-	      }
-	  }
-
-	return $this->_children;
-      }
-
     $res = null;
-    return $res;
+    if( !$this->has_children() ) return $res;
+    return $this->_children;
   }
 
-
-  public function &getFlatList()
-  {
-    $result = array();
-
-    if( $this->hasChildren() )
-      {
-	for( $i = 0; $i < count($this->_children); $i++ )
-	  {
-	    $result[] =& $this->_children[$i];
-	    if( $this->_children[$i]->hasChildren() )
-	      {
-		$result = array_merge($result,$this->_children[$i]->getFlatList());
-	      }
-	  }
-      }
-
-    return $result;
-  }
-
-
-  public function isContentCached()
-  {
-    if( cms_content_cache::content_exists($this->getTag('id')) )
-      {
-	return TRUE;
-      }
-
-    return FALSE;
-  }
 } // end of class
 
 ?>

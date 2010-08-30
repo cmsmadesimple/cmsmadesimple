@@ -32,7 +32,7 @@ function smarty_cms_function_created_date($params, &$smarty)
 
 	if (is_object($content_obj) && $content_obj->GetCreationDate() > -1)
 	{
-	  return htmlentities(strftime($format, $content_obj->GetCreationDate());
+	  return htmlentities(strftime($format, $content_obj->GetCreationDate()));
 	}
 	else
 	{

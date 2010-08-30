@@ -184,7 +184,7 @@ class ContentOperations
 	 *
 	 * @return integer The id of the default content page
 	 */
-	function & GetDefaultContent()
+	function& GetDefaultContent()
 	{
 	  global $gCms;
 	  if( isset($gCms->variables['default_content_id']) )
@@ -369,7 +369,7 @@ class ContentOperations
 				
 				$tree = unserialize(substr($data, 16));
 				
-				if (strtolower(get_class($tree)) == 'cms_tree')
+				if (strtolower(get_class($tree)) == 'cms_content_tree')
 				{
 					$loadedcache = true;
 				}
@@ -557,52 +557,17 @@ class ContentOperations
 		debug_buffer('get all content...');
 
 		global $gCms;
+		$tree = $gCms->GetHierarchyManager();
+		$list = $tree->getFlatList();
 
-		$contentcache = array();
-
-		$db = &$gCms->GetDb();
-		$query = "SELECT * FROM ".cms_db_prefix()."content ORDER BY hierarchy";
-		$dbresult = &$db->Execute($query);
-
-		$map = array();
-		$count = 0;
-
-		while ($dbresult && !$dbresult->EOF)
+		$output = array();
+		foreach( $list as &$one )
 		{
-			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($dbresult->fields['type'], array_keys($this->ListContentTypes())))
-			{
-				$contentobj =& $this->CreateNewContent($dbresult->fields['type']);
-				if (isset($contentobj))
-				{
-					$tmp = $dbresult->FetchRow();
-					$contentobj->LoadFromData($tmp, false);
-					$map[$contentobj->Id()] = $count;
-					$contentcache[] = $contentobj;
-					$count++;
-				}
-				else
-				{
-					$dbresult->MoveNext();
-				}
-			}
-			else
-			{
-				$dbresult->MoveNext();
-			}
+			$output[] =& $one->GetContent($loadprops);
 		}
 
-		if ($dbresult) $dbresult->Close();
-
-		for ($i=0;$i<$count;$i++)
-		{
-			if ($contentcache[$i]->ParentId() != -1 && isset($map[$contentcache[$i]->ParentId()]))
-			{
-				$contentcache[$map[$contentcache[$i]->ParentId()]]->mChildCount++;
-			}
-		}
-
-		return $contentcache;
+		debug_buffer('end get all content...');
+		return $output;
 	}
 
 
@@ -628,7 +593,7 @@ class ContentOperations
 		$result = '';
 		$userid = -1;
 
-		$allcontent =& $this->GetAllContent();
+		$allcontent =& $this->GetAllContent(false);
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{

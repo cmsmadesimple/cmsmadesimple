@@ -22,7 +22,7 @@ function smarty_cms_function_process_pagedata($params,&$smarty)
   $manager =& $gCms->GetHierarchyManager();
   $node =& $manager->getNodeById($gCms->variables['content_id']);
   if( !isset($node) || $node === FALSE ) return;
-  $content =& $node->Getcontent();
+  $content =& $node->GetContent();
 
   if ( empty($content)) return;
 

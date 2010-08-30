@@ -72,7 +72,10 @@ class Smarty_CMS extends Smarty {
 		$this->compiler_class = 'CMS_Compiler';
 
 		$this->assign('app_name','CMS');
-		$this->cache_plugins = false;
+
+		//$this->cache_plugins = true;
+		//$this->caching = 1; // output caching disabled because output could come from databases, and can't strictly depend on the time of the template.
+		//$this->force_compile = true;
 
 		if ($config["debug"] == true)
 		{
@@ -374,7 +377,7 @@ class Smarty_CMS extends Smarty {
 		$oneblob = $gcbops->LoadHtmlBlobByName($tpl_name);
 		if ($oneblob)
 		{
-			$tpl_timestamp = $oneblob->modified_date;
+		  $tpl_timestamp = $oneblob->modified_date;
 			debug_buffer('end global_content_get_timestamp');
 			return true;
 		}
@@ -820,7 +823,8 @@ class Smarty_CMS extends Smarty {
 		{
 		  if ($contentobj->Cachable())
 			{
-			  $tpl_timestamp = $contentobj->GetModifiedDate();
+			  $db = $gCms->GetDb();
+			  $tpl_timestamp = $db->UnixTimestamp($contentobj->GetModifiedDate());
 			}
 			else
 			{
