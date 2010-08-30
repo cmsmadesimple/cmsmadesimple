@@ -1003,7 +1003,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
     $indent = get_preference($userid, 'indent', true);
 
-    if (in_array($one->Id(),$openedArray))
+    if (in_array($one->Id(),$openedArray) && is_array($children) && count($children) )
     {
         foreach ($children as $child)
         { 
