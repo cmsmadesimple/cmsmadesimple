@@ -317,6 +317,7 @@ function cms_config_text($config)
 \$config['url_rewriting'] = '{$config['url_rewriting']}';
 
 #Would you like the system to create URL paths for content pages automatically?  
+#This option applies only when using the 'mod_rewrite' or 'internal' types of url_rewriting
 #Valid options are:'none', 'full', and 'flat'. 'none' will disable automatic URL 
 #calculations for content paths. 'full' will use the full hierarchical path to the
 #page, and 'flat' will create a url that is identical to the page alias 
