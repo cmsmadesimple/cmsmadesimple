@@ -20,8 +20,8 @@ function smarty_cms_function_content_image($params,&$smarty)
 {
   global $gCms;
   $config = $gCms->GetConfig();
-  $pageinfo =& $gCms->variables['pageinfo'];
-  if (!isset($pageinfo) || $pageinfo === FALSE || !isset($pageinfo->content_id) )
+  $contentobj = $gCms->variables['content_obj'];
+  if( !is_object($contentobj) || !$contentobj->Id() <= 0 )
     {
       return _smarty_cms_function_content_return('', $params, $smarty);
     }
@@ -39,7 +39,7 @@ function smarty_cms_function_content_image($params,&$smarty)
     {
       $oldvalue = $smarty->caching;
       $smarty->caching = false;
-      $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $params['block']), '', $pageinfo->content_id);
+      $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $params['block']), '', $contentobj->Id());
       $smarty->caching = $oldvalue;
     }
   $img = _smarty_cms_function_content_return($result, $params, $smarty);

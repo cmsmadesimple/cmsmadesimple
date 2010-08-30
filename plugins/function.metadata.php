@@ -20,7 +20,7 @@ function smarty_cms_function_metadata($params, &$smarty)
 {
 	global $gCms;
 	$config =& $gCms->GetConfig();
-	$pageinfo =& $gCms->variables['pageinfo'];
+	$content_obj =& $gCms->variables['content_obj'];
 
 	$result = '';	
 
@@ -52,12 +52,9 @@ function smarty_cms_function_metadata($params, &$smarty)
 
 	$result .= get_site_preference('metadata', '');
 
-	if (isset($pageinfo) && $pageinfo !== FALSE)
+	if (is_object($content_obj) && $content_obj->Metadata() != '')
 	{
-		if (isset($pageinfo->content_metadata) && $pageinfo->content_metadata != '')
-		{
-			$result .= "\n" . $pageinfo->content_metadata;
-		}
+	  $result .= "\n" . $content_obj->Metadata();
 	}
 
 	if ((!strpos($result,$smarty->left_delimiter) === false) and (!strpos($result,$smarty->right_delimiter) === false))

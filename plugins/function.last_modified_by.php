@@ -19,13 +19,13 @@
 function smarty_cms_function_last_modified_by($params, &$smarty) 
 {
         global $gCms;
-	$pageinfo = $gCms->variables['pageinfo'];
+	$content_obj = $gCms->variables['content_obj'];
 
         $id = "";
  
-	if (isset($pageinfo) && $pageinfo->content_last_modified_by_id > -1)
+	if (isset($content_obj) && $content_obj->GetModifiedDate() > -1)
 	{
-		$id = $pageinfo->content_last_modified_by_id;
+	  $id = $content_obj->GetModifiedDate();
 	} else {
                 return "";
         }

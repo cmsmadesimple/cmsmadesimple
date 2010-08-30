@@ -19,16 +19,16 @@
 function smarty_cms_function_description($params, &$smarty)
 {
 	global $gCms;
-	$pageinfo = &$gCms->variables['pageinfo'];
+	$content_obj = &$gCms->variables['content_obj'];
 	$config = &$gCms->config;
-	if (isset($pageinfo) && $pageinfo->content_id == -1)
+	if (is_object($content_obj) && $content_obj->Id() == -1)
 	{
 		#We've a custom error message...  set a message
 		return "404 Error";
 	}
 	else
 	{
-		$result = $pageinfo->content_titleattribute;
+	  $result = $content_obj->TitleAttribute();
 		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 		{
 			$result = ereg_replace("\{\/?php\}", "", $result);

@@ -22,28 +22,22 @@ function smarty_cms_function_page_attr($params, &$smarty)
   $key = '';
 
   if( isset($params['key']) ) {
-  $key = $params['key'];
+    $key = $params['key'];
+    global $gCms;
+    $content_obj = &$gCms->variables['content_obj'];
+    if( is_object($contentobj) )
+      {
+	$result = $contentobj->GetPropertyValue($key);
+	if( $result == -1 ) $result = '';
+      }
+    
+    if( isset($params['assign']) )
+      {
+	$smarty =& $gCms->GetSmarty();
+	$smarty->assign($params['assign'],$result);
+	return;
+      }
   }
-  global $gCms;
-  $pageinfo = &$gCms->variables['pageinfo'];
-  $manager =& $gCms->GetHierarchyManager();
-  $node =& $manager->sureGetNodeById($pageinfo->content_id);
-  if(is_object($node))
-    {
-      $contentobj =& $node->GetContent();
-      if( is_object($contentobj) )
-	{
-	  $result = $contentobj->GetPropertyValue($key);
-          if( $result == -1 ) $result = '';
-	}
-    }
-
-  if( isset($params['assign']) )
-    {
-      $smarty =& $gCms->GetSmarty();
-      $smarty->assign($params['assign'],$result);
-      return;
-    }
 
   return $result;
 }

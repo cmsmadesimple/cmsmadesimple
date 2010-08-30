@@ -27,17 +27,11 @@ function smarty_cms_function_page_image($params, &$smarty)
     }
 
   global $gCms;
-  $pageinfo = &$gCms->variables['pageinfo'];
-  $manager =& $gCms->GetHierarchyManager();
-  $node =& $manager->sureGetNodeById($pageinfo->content_id);
-  if(is_object($node))
+  $content_obj = &$gCms->variables['content_obj'];
+  if( is_object($contentobj) )
     {
-      $contentobj =& $node->GetContent();
-      if( is_object($contentobj) )
-	{
-	  $result = $contentobj->GetPropertyValue($propname);
-          if( $result == -1 ) $result = '';
-	}
+      $result = $contentobj->GetPropertyValue($propname);
+      if( $result == -1 ) $result = '';
     }
 
   if( isset($params['assign']) )

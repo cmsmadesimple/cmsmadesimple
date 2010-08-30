@@ -19,7 +19,7 @@
 function smarty_cms_function_modified_date($params, &$smarty)
 {
 	global $gCms;
-	$pageinfo = $gCms->variables['pageinfo'];
+	$content_obj = $gCms->variables['content_obj'];
 
 	if(empty($params['format']))
 	{
@@ -31,9 +31,9 @@ function smarty_cms_function_modified_date($params, &$smarty)
 	}
 
 	$str = '';
-	if (isset($pageinfo) && isset($pageinfo->content_modified_date) && $pageinfo->content_modified_date > -1)
+	if (is_object($content_obj) && isset($content_obj->GetModifiedDate()) && $content_obj->GetModifiedDate() > -1)
 	{
-		$str = htmlentities(strftime($format, $pageinfo->content_modified_date));
+	  $str = htmlentities(strftime($format, $content_obj->GetModifiedDate()));
 	}
 
 	if( isset($params['assign']) )

@@ -53,8 +53,8 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 
   global $gCms;
   $config = &$gCms->config;
-  $pageinfo = &$gCms->variables['pageinfo'];
-  $template_id=$pageinfo->template_id;
+  $content_obj = &$gCms->variables['content_obj'];
+  $template_id=$content_obj->TemplateId();
   if (isset($params["templateid"]) && $params["templateid"]!="") {
     $template_id=$params["templateid"];
   }

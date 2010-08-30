@@ -19,7 +19,7 @@
 function smarty_cms_function_created_date($params, &$smarty)
 {
 	global $gCms;
-	$pageinfo = $gCms->variables['pageinfo'];
+	$content_obj = $gCms->variables['content_obj'];
 
 	if(empty($params['format']))
 	{
@@ -30,9 +30,9 @@ function smarty_cms_function_created_date($params, &$smarty)
 		$format = $params['format'];
 	}
 
-	if (isset($pageinfo) && $pageinfo->content_created_date > -1)
+	if (is_object($content_obj) && $content_obj->GetCreationDate() > -1)
 	{
-		return htmlentities(strftime($format, $pageinfo->content_created_date));
+	  return htmlentities(strftime($format, $content_obj->GetCreationDate());
 	}
 	else
 	{

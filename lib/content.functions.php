@@ -66,20 +66,12 @@ class Smarty_CMS extends Smarty {
 		}
 		$this->compile_dir = TMP_TEMPLATES_C_LOCATION;
 		$this->cache_dir = TMP_CACHE_LOCATION;
-		#$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins',$config["root_path"].'/plugins',$config["root_path"].'/plugins/cache');
 		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins',$config["root_path"].'/plugins');
 
 		$this->compiler_file = 'CMS_Compiler.class.php';
 		$this->compiler_class = 'CMS_Compiler';
 
-		//use_sub_dirs doesn't work in safe mode
-		//if (ini_get("safe_mode") != "1")
-		//	$this->use_sub_dirs = true;
-		//$this->caching = false;
-		//$this->compile_check = true;
 		$this->assign('app_name','CMS');
-		//$this->debugging = false;
-		//$this->force_compile = false;
 		$this->cache_plugins = false;
 
 		if ($config["debug"] == true)
@@ -544,7 +536,7 @@ class Smarty_CMS extends Smarty {
 		}
 	      else
 		{
-		  $contentobj = $gCms->varaibles['content_obj'];
+		  $contentobj = $gCms->variables['content_obj'];
 		  $templateops =& $gCms->GetTemplateOperations();
 		  $templateobj =& $templateops->LoadTemplateByID($contentobj->TemplateId());
 		  if (isset($templateobj) && $templateobj !== FALSE)
@@ -781,8 +773,6 @@ class Smarty_CMS extends Smarty {
 		else
 		{
 			$manager =& $gCms->GetHierarchyManager();
-			$contentobj = $gCms->variables['content_obj'];
-
 			if (isset($contentobj) && $contentobj !== FALSE)
 			{
 

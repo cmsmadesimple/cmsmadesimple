@@ -312,6 +312,7 @@ class ContentOperations
 		cms_content_cache::clear();
 	}
 
+
 	/**
 	 * Updates the hierarchy position of all items
 	 *
@@ -334,6 +335,7 @@ class ContentOperations
 		if ($dbresult) $dbresult->Close();
 		cms_content_cache::clear();
 	}
+
 	
 	/**
 	 * Loads a set of content objects into the cached tree.
@@ -726,23 +728,7 @@ class ContentOperations
 	 */
 	function GetDefaultPageID()
 	{
-	  
-	  global $gCms;
-	  if( isset($gCms->variables['default_content_id']) )
-	    {
-	      return $gCms->variables['default_content_id'];
-	    }
-
-		$db = &$gCms->GetDb();
-
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$row = &$db->GetRow($query);
-		if (!$row)
-		{
-			return false;
-		}
-		$gCms->variables['default_content_id'] = $row['content_id'];
-		return $row['content_id'];
+		return $this->GetDefaultContent();
 	}
 
 

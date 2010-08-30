@@ -25,9 +25,9 @@ function smarty_cms_function_content_module($params, &$smarty)
     $block = $params['block'];
   }
   global $gCms;
-  $pageinfo = &$gCms->variables['pageinfo'];
+  $content_obj = &$gCms->variables['content_obj'];
   $manager =& $gCms->GetHierarchyManager();
-  $node =& $manager->sureGetNodeById($pageinfo->content_id);
+  $node =& $manager->sureGetNodeById($content_obj->Id());
   if(is_object($node))
     {
       $contentobj =& $node->GetContent();
