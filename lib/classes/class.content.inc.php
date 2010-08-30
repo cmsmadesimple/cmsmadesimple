@@ -2137,6 +2137,7 @@ class ContentBase
 		$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_imagefield_path'));
 		$data = $this->GetPropertyValue('image');
 		$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
+		if( !$dropdown ) return;
 		return array(lang('image').':',$dropdown);
 	      }
 	      break;
