@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['invalid_url'] = 'The page URL specified is invalid.  It should contain ony alphanumeric characters, or - or /';
 $lang['admin']['page_url'] = 'Page URL';
 $lang['admin']['runuserplugin'] = 'Run User Plugin';
 $lang['admin']['output'] = 'Output';
