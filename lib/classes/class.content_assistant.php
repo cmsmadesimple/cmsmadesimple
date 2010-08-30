@@ -37,11 +37,15 @@ class content_assistant
     cms_route_manager::load_routes();
     $route = cms_route_manager::find_match($url);
     if( !$route ) return TRUE;
-    if( $route->is_content() && $content_id != '' && $route->get_content() == $content_id )
+    if( $route->is_content() )
+
       {
-	return TRUE;
+	if($content_id == '' || ($route->get_content() == $content_id))
+	  {
+	    return TRUE;
+	  }
       }
-    return TRUE;
+    return FALSE;
   }
 } // end of class
 
