@@ -1,10 +1,24 @@
 <?php
 
+/**
+ * A class to manage all recognized routes in the system.
+ * 
+ * @package CMS
+ * @author Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @since  1.9
+ */
 class cms_route_manager
 {
   private static $_routes;
 
-  /*
+  /**
+   * A function to load routes from a cache file.
+   * This function will test if routes already exist, and will not load them (unless told to force loading).
+   *
+   * @param boolean Flag to indicate that loading should be forced
+   * @return boolean
+   * @internal
+   */
   static public function load($force = false)
   {
     if( (!is_array(self::$_routes) || count(self::$_routes) == 0) && $force == false )
@@ -30,6 +44,12 @@ class cms_route_manager
     return TRUE;
   }
 
+
+  /**
+   * Save routes to a cache file
+   *
+   * @internal
+   */
   static public function save()
   {
     if( !is_array(self::$_routes) || count(self::$_routes) == 0 )
@@ -46,8 +66,14 @@ class cms_route_manager
       }
     fclose($fp);
   }
-  */
 
+  
+  /**
+   * Test wether the specified route exists.
+   *
+   * @param CmsRoute The route object
+   * @return boolean
+   */
   static public function route_exists(CmsRoute $route)
   {
     if( !is_array(self::$_routes) ) return FALSE;
@@ -60,6 +86,13 @@ class cms_route_manager
   }
 
 
+  /**
+   * Register a new route.
+   * This method will not register duplicate routes.
+   *
+   * @param CmsRoute The route to register
+   * @return boolean
+   */
   static public function register(CmsRoute $route)
   {
     if( self::route_exists($route) ) return TRUE;
@@ -73,11 +106,18 @@ class cms_route_manager
   }
 
 
-  static public function match_str($str)
+  /**
+   * Find a route that matches the specified string
+   *
+   * @param string The string to test against (usually an incoming url request)
+   * @return CmsRoute the matching route, or null.
+   */
+  static public function find_match($str)
   {
+    $res = null;
     if( !is_array(self::$_routes) )
       {
-	return FALSE;
+	return $res;
       }
     
     foreach( self::$_routes as $route )
@@ -88,15 +128,20 @@ class cms_route_manager
 	  }
       }
 
-    return FALSE;
+    return $res;
   }
 
-  /*
+
+  /**
+   * Retrieve the cache filename.
+   *
+   * @ignore
+   * @return string
+   */
   private static function get_filename()
   {
     return TMP_CACHE_LOCATION.'/routes.dat';
   }
-  */
 } // end of class
 
 

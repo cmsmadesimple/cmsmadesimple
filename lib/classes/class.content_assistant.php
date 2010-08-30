@@ -27,6 +27,12 @@ class content_assistant
    */ 
   public static function is_valid_url($url,$content_id)
   {
+    // check for starting or ending slashes
+    if( startswith($url,'/') || endswith($url,'/') )
+      {
+	return FALSE;
+      }
+
     // first check for invalid chars.
     $translated = munge_string_to_url($url,false,true);
     if( strtolower($translated) != strtolower($url) )

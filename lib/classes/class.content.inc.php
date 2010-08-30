@@ -1354,12 +1354,14 @@ class ContentBase
 
 	  if( $this->mURL == '' && content_assistant::auto_create_url() && $this->HasUsableLink() )
 	    {
-	      // create a valud url.
+	      // create a valid url.
 	      if( !$this->DefaultContent() )
 		{
 		  $this->mURL = $this->HierarchyPath();
 		}
 	    }
+	  $this->mURL = trim($this->mURL," /\t\r\n\0\x08"); // silently delete bad chars.
+	  
 	  if( $this->mURL != '' && !content_assistant::is_valid_url($this->mURL,$this->mId) )
 	    {
 	      // and validate the URL.

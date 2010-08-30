@@ -1328,7 +1328,7 @@ function get_pageid_or_alias_from_url()
 
   // see if there's a route that matches.
   $matched = false;
-  $route = cms_route_manager::match_str($page);
+  $route = cms_route_manager::find_match($page);
   if( is_object($route) )
     {
       $matched = true;
@@ -1384,6 +1384,8 @@ function get_pageid_or_alias_from_url()
 	    $matches['returnid'] = $contentops->GetDefaultPageID();
 	  }
 
+	  // Put the resulting mact into the request so that the subsequent smarty plugins
+	  // can grab it...
 	  $_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
 
 	  $page = $matches['returnid'];

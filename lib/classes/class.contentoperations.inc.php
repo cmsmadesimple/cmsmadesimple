@@ -1141,7 +1141,14 @@ class ContentOperations
 		return $tmp;
 	}
 
-	
+
+	/**
+	 * Grab URLs from the content table and register them with the route manager.
+	 *
+	 * @since 1.9
+	 * @author Robert Campbell <calguy1000@hotmail.com>
+	 * @internal
+	 */
 	public function register_routes()
 	{
  		global $gCms;
@@ -1154,7 +1161,7 @@ class ContentOperations
  		{
  			foreach( $data as $onerow )
  			{
- 				$route = new CmsRoute($onerow['url'],$onerow['content_id']);
+ 				$route = new CmsRoute($onerow['url'],$onerow['content_id'],'',TRUE);
 				cms_route_manager::register($route);
 			}
 		}
