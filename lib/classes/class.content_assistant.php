@@ -69,7 +69,7 @@ class content_assistant
     $contentops = $gCms->GetContentOperations();
     $contentops->register_routes();
 
-    $route = cms_route_manager::match_str($url);
+    $route = cms_route_manager::find_match($url);
     if( is_object($route) ) return FALSE;
 
     return TRUE;

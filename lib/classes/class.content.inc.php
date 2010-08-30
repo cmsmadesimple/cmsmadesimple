@@ -271,7 +271,7 @@ class ContentBase
       $this->AddContentProperty('target',10);
       $this->AddBaseProperty('title',1,1);
       $this->AddBaseProperty('menutext',2,1);
-      $this->AddBaseProperty('url',3);
+      $this->AddBaseProperty('page_url',3);
       $this->AddBaseProperty('parent',4,1);
       $this->AddBaseProperty('active',5);
       $this->AddBaseProperty('showinmenu',5);
@@ -880,7 +880,7 @@ class ContentBase
 				$this->mShowInMenu                 = ($row->fields["show_in_menu"] == 1    ? true : false);
 				$this->mCachable                   = ($row->fields["cachable"] == 1        ? true : false);
 				$this->mSecure                     = $row->fields['secure'];
-				$this->mURL                        = $row->fields['url'];
+				$this->mURL                        = $row->fields['page_url'];
 				$this->mLastModifiedBy             = $row->fields["last_modified_by"];
 				$this->mCreationDate               = $row->fields["create_date"];
 				$this->mModifiedDate               = $row->fields["modified_date"];
@@ -984,8 +984,8 @@ class ContentBase
 		$this->mCachable                   = ($data["cachable"] == 1        ? true : false);
 		if( isset($data['secure']) )
 		  $this->mSecure                   = $data["secure"];
-		if( isset($data['url']) )
-		  $this->mURL                      = $data["url"];
+		if( isset($data['page_url']) )
+		  $this->mURL                      = $data["page_url"];
 		$this->mLastModifiedBy             = $data["last_modified_by"];
 		$this->mCreationDate               = $data["create_date"];
 		$this->mModifiedDate               = $data["modified_date"];
@@ -1115,7 +1115,7 @@ class ContentBase
 
 		$this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
 
-		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
+		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, page_url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
 		$dbresult = $db->Execute($query, array(
 			$this->mName,
 			$this->mOwner,
@@ -1227,7 +1227,7 @@ class ContentBase
 
 		$this->mModifiedDate = $this->mCreationDate = trim($db->DBTimeStamp(time()), "'");
 
-		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, url, menu_text, markup, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, page_url, menu_text, markup, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
 			$newid,
@@ -1578,13 +1578,13 @@ class ContentBase
 	}
 
       // url
-      if (isset($params['url']))
+      if (isset($params['page_url']))
 	{
-	  $this->mURL = $params['url'];
+	  $this->mURL = $params['page_url'];
 	}
       else
 	{
-	  $this->_handleRemovedBaseProperty('url','mURL');
+	  $this->_handleRemovedBaseProperty('page_url','mURL');
 	}
 
       // owner
@@ -2110,9 +2110,9 @@ class ContentBase
 	      }
 	      break;
 
-	    case 'url':
+	    case 'page_url':
 	      {
-		$str = '<input type="text" name="url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
+		$str = '<input type="text" name="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
 		return array(lang('page_url').':',$str);
 	      }
 	      break;

@@ -1155,7 +1155,7 @@ class ContentOperations
  		$db = $gCms->GetDb();
 
 		$query = 'SELECT content_id,url FROM '.cms_db_prefix().'content
-                   WHERE active = 1 AND default_content = 0 AND url != \'\'';
+                   WHERE active = 1 AND default_content = 0 AND page_url != \'\'';
 		$data = $db->GetArray($query);
  		if( is_array($data) )
  		{
