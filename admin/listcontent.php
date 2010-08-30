@@ -693,7 +693,35 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	  if( !empty($txt) ) $columns['page'] = $txt;
 	}
 
-      
+      /* alias column */
+      if( $columnstodisplay['alias'] )
+	{
+	  $columns['alias'] = '&nbsp';
+	  $txt = '';
+	  if( $one->HasUsableLink() && $one->mAlias != '' )
+	    {
+	      $txt = $one->Alias();
+	    }
+	  if( !empty($txt) ) $columns['alias'] = $txt;
+	}
+       
+      /* url column */
+      if( $columnstodisplay['url'] )
+	{
+	  $columns['url'] = '&nbsp';
+	  $txt = '';
+	  if( $one->HasUsableLink() && $one->URL() != '' )
+	    {
+	      $url = $one->URL();
+	      if( strlen($url) > 30 )
+		{
+		  $url = '...'.substr($url,strlen($url)-27);
+		}
+	      $txt = $url;
+	    }
+	  if( !empty($txt) ) $columns['url'] = $txt;
+	}
+
       /* template column */
       if( $columnstodisplay['template'] )
 	{
@@ -993,6 +1021,8 @@ function display_content_list($themeObject = null)
 	$columnstodisplay['expand'] = 1;
 	$columnstodisplay['hier'] = 1;
 	$columnstodisplay['page'] = 1;
+	$columnstodisplay['alias'] = 1;
+	$columnstodisplay['url'] = 1;
 	$columnstodisplay['template'] = 1;
 	$columnstodisplay['friendlyname'] = 1;
 	$columnstodisplay['owner'] = 1;
@@ -1120,6 +1150,14 @@ function display_content_list($themeObject = null)
 	if( $columnstodisplay['page'] )
 	  {
 	    $headoflist .= "<th class=\"pagew25\">".lang('page')."</th>\n";
+	  }
+	if( $columnstodisplay['alias'] )
+	  {
+	    $headoflist .= "<th>".lang('pagealias')."</th>\n";
+	  }
+	if( $columnstodisplay['url'] )
+	  {
+	    $headoflist .= "<th>".lang('url')."</th>\n";
 	  }
 	if( $columnstodisplay['template'] )
 	  {
