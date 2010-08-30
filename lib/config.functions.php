@@ -57,6 +57,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["debug"] = false;
 	$config['output_compression'] = false;
 	$config['url_rewriting'] = 'none';
+	$config['auto_create_url'] = 'true';
 	//$config["assume_mod_rewrite"] = false; //Not being used in core
 	//$config['internal_pretty_urls'] = false; //Not being used in core
 	//$config['use_hierarchy'] = true; //Now true by default
@@ -314,6 +315,9 @@ function cms_config_text($config)
 #information, see:
 #http://wiki.cmsmadesimple.org/index.php/FAQ/Installation/Pretty_URLs#Pretty_URL.27s
 \$config['url_rewriting'] = '{$config['url_rewriting']}';
+
+#Would you like the system to create URL paths automatically.
+\$config['auto_create_url'] = 'true';
 
 #Extension to use if you're using mod_rewrite for pretty URLs.
 \$config['page_extension'] = '{$config['page_extension']}';

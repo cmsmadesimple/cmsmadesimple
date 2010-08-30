@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['page_url'] = 'Page URL';
 $lang['admin']['runuserplugin'] = 'Run User Plugin';
 $lang['admin']['output'] = 'Output';
 $lang['admin']['run'] = 'Run';

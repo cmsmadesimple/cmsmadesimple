@@ -152,7 +152,12 @@ class ContentBase
     /**
      * Secure?
      */
-    var $mSecure;
+    protected $mSecure;
+
+    /**
+     * URL
+     */
+    protected $mURL;
 
     /**
      * Does this content have a preview function?
@@ -254,6 +259,7 @@ class ContentBase
 	$this->mMarkup         = 'html' ;
 	$this->mChildCount     = 0;
 	$this->mPropertiesLoaded = false;
+        $this->mURL = '';
     }
 
     /**
@@ -265,7 +271,8 @@ class ContentBase
       $this->AddContentProperty('target',10);
       $this->AddBaseProperty('title',1,1);
       $this->AddBaseProperty('menutext',2,1);
-      $this->AddBaseProperty('parent',3,1);
+      $this->AddBaseProperty('url',3);
+      $this->AddBaseProperty('parent',4,1);
       $this->AddBaseProperty('active',5);
       $this->AddBaseProperty('showinmenu',5);
       $this->AddBaseProperty('secure',6);
@@ -601,13 +608,23 @@ class ContentBase
       return $this->mSecure;
     }
 
-
     function SetSecure($secure)
     {
 	$this->DoReadyForEdit();
 	$this->mSecure = $secure;
     }
 	
+    public function URL()
+    {
+      return $this->mURL;
+    }
+
+    public function SetURL($url)
+    {
+      $this->DoReadyForEdit();
+      $this->mURL = $url;
+    }
+
 	function Markup()
 	{
 		return $this->mMarkup;
@@ -863,6 +880,7 @@ class ContentBase
 				$this->mShowInMenu                 = ($row->fields["show_in_menu"] == 1    ? true : false);
 				$this->mCachable                   = ($row->fields["cachable"] == 1        ? true : false);
 				$this->mSecure                     = $row->fields['secure'];
+				$this->mURL                        = $row->fields['url'];
 				$this->mLastModifiedBy             = $row->fields["last_modified_by"];
 				$this->mCreationDate               = $row->fields["create_date"];
 				$this->mModifiedDate               = $row->fields["modified_date"];
@@ -966,6 +984,8 @@ class ContentBase
 		$this->mCachable                   = ($data["cachable"] == 1        ? true : false);
 		if( isset($data['secure']) )
 		  $this->mSecure                   = $data["secure"];
+		if( isset($data['url']) )
+		  $this->mURL                      = $data["url"];
 		$this->mLastModifiedBy             = $data["last_modified_by"];
 		$this->mCreationDate               = $data["create_date"];
 		$this->mModifiedDate               = $data["modified_date"];
@@ -1095,7 +1115,7 @@ class ContentBase
 
 		$this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
 
-		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
+		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
 		$dbresult = $db->Execute($query, array(
 			$this->mName,
 			$this->mOwner,
@@ -1107,6 +1127,7 @@ class ContentBase
 			($this->mShowInMenu == true     ? 1 : 0),
 			($this->mCachable == true       ? 1 : 0),
 			$this->mSecure,
+			$this->mURL,
 			$this->mMenuText,
 			$this->mAlias,
 			$this->mMetadata,
@@ -1206,7 +1227,7 @@ class ContentBase
 
 		$this->mModifiedDate = $this->mCreationDate = trim($db->DBTimeStamp(time()), "'");
 
-		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, menu_text, markup, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, secure, url, menu_text, markup, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
 			$newid,
@@ -1224,6 +1245,7 @@ class ContentBase
 			($this->mShowInMenu == true     ? 1 : 0),
 			($this->mCachable == true       ? 1 : 0),
 			$this->mSecure,
+			$this->mURL,
 			$this->mMenuText,
 			$this->mMarkup,
 			$this->mMetadata,
@@ -1328,6 +1350,20 @@ class ContentBase
 		      $result = false;
 		    }
 		}
+	    }
+
+	  if( $this->mURL == '' && content_assistant::auto_create_url() && $this->HasUsableLink() )
+	    {
+	      // create a valud url.
+	      if( !$this->DefaultContent() )
+		{
+		  $this->mURL = $this->HierarchyPath();
+		}
+	    }
+	  if( $this->mURL != '' && !content_assistant::is_valid_url($this->mURL,$this->mId) )
+	    {
+	      // and validate the URL.
+	      $errors[] = lang('invalid_url');
 	    }
 
 	  return (count($errors) > 0?$errors:FALSE);
@@ -1530,6 +1566,16 @@ class ContentBase
 	  $this->_handleRemovedBaseProperty('secure','mSecure');
 	}
 
+      // url
+      if (isset($params['url']))
+	{
+	  $this->mURL = $params['url'];
+	}
+      else
+	{
+	  $this->_handleRemovedBaseProperty('url','mURL');
+	}
+
       // owner
       if (isset($params["ownerid"]))
 	{
@@ -1582,19 +1628,28 @@ class ContentBase
 
 		if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true)
 		{
-			$url = $base_url. '/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
+		  $str = $this->HierarchyPath();
+		  if( $this->mURL != '')
+		    {
+		      // we have a url path
+		      $str = $this->mURL;
+		    }
+		  $url = $base_url. '/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
+		}
+		else if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal' && $rewrite == true)
+		{
+		  $str = $this->HierarchyPath();
+		  if( $this->mURL != '')
+		    {
+		      // we have a url path
+		      $str = $this->mURL;
+		    }
+		  $url = $base_url . '/index.php/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
 		}
 		else
-		{
-			if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal')
-			{
-				$url = $base_url . '/index.php/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
-			}
-			else
-			{
-				$url = $base_url . '/index.php?' . $config['query_var'] . '=' . $alias;
-			}
-		}
+		  {
+		    $url = $base_url . '/index.php?' . $config['query_var'] . '=' . $alias;
+		  }
 		return $url;
 	}
 
@@ -2041,6 +2096,13 @@ class ContentBase
 		$str  = '<input type="hidden" name="secure" value="0"/>';
                 $str .= '<input type="checkbox" name="secure" value="1"'.$opt.'/>';
 		return array(lang('secure_page').':',$str);
+	      }
+	      break;
+
+	    case 'url':
+	      {
+		$str = '<input type="text" name="url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
+		return array(lang('page_url').':',$str);
 	      }
 	      break;
 

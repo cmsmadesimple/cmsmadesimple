@@ -1341,9 +1341,10 @@ function showmem($string = '')
  * @internal
  * @param string String to convert
  * @param boolean indicates whether output string should be converted to lower case
+ * @param boolean indicates wether slashes should be allowed in the input.
  * @return string
  */
-function munge_string_to_url($alias, $tolower = false)
+function munge_string_to_url($alias, $tolower = false, $withslash = false)
 {
 	// replacement.php is encoded utf-8 and must be the first modification of alias
 	include(dirname(__FILE__) . '/replacement.php');
@@ -1355,7 +1356,12 @@ function munge_string_to_url($alias, $tolower = false)
 		$alias = strtolower($alias);
 	}
 
-	$alias = preg_replace('/[^a-z0-9-_]+/i','-',$alias);
+	$expr = '/[^a-z0-9-_]+/i';
+	if( $withslash )
+	  {
+	    $expr = '/[^a-z0-9-_\/]+/i';
+	  }
+	$alias = preg_replace($expr,'-',$alias);
 	//$alias = preg_replace("/[^\w-]+/", "-", $alias);
 	$alias = trim($alias, '-');
 
