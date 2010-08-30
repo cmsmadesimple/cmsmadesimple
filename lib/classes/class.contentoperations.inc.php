@@ -835,6 +835,8 @@ class ContentOperations
 		global $gCms;
 		$smarty =& $gCms->GetSmarty();
 
+		cms_content_cache::clear();
+		unset($gCms->hrinstance);
 		$smarty->clear_all_cache();
 		$smarty->clear_compiled_tpl();
 

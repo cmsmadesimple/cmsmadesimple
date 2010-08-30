@@ -82,6 +82,7 @@ if( isset($_GET['submit']) )
   $tmpobj->SetOldItemOrder(-1);
 
   // Stuff that needs to be changed
+  $tmpobj->SetURL('');
   $tmpobj->SetAlias($to_alias);
   $tmpobj->mOldAlias = ''; // no method for this.
   $tmpobj->SetName($to_title);
