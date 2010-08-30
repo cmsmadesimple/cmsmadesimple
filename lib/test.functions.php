@@ -901,6 +901,7 @@ function & testUmask( $required, $title, $umask, $message = '', $debug = false, 
  */
 function permission_stat( $file, $debug = false )
 {
+	global $lang_fn;
 	$opt = array();
 	clearstatcache();
 	$filestat = stat($file);

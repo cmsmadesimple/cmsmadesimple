@@ -1200,18 +1200,19 @@ function global_content_regex_callback($matches)
 function is_sitedown()
 {
   if( get_site_preference('enablesitedownmessage') !== '1' ) return FALSE;
-  $excludes = get_site_preference('sitedownexcludes','');
-  if( !isset($_SERVER['REMOTE_ADDR']) ) return TRUE;
-  if( empty($excludes) ) return TRUE;
-  
-  $ret = cms_ipmatches($_SERVER['REMOTE_ADDR'],$excludes);
-  if( $ret ) return FALSE;
 
   if( get_site_preference('sitedownexcludeadmins') )
     {
       $uid = get_userid(FALSE);
       if( $uid ) return FALSE;
     }
+
+  if( !isset($_SERVER['REMOTE_ADDR']) ) return TRUE;
+  $excludes = get_site_preference('sitedownexcludes','');
+  if( empty($excludes) ) return TRUE;
+  
+  $ret = cms_ipmatches($_SERVER['REMOTE_ADDR'],$excludes);
+  if( $ret ) return FALSE;
 
   return TRUE;
 }
