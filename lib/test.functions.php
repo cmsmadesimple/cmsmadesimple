@@ -25,6 +25,13 @@
  * @ignore
  */
 
+$lang_fn = 'lang';
+global $CMS_INSTALL_PAGE;
+if( isset($CMS_INSTALL_PAGE) )
+	{
+		$lang_fn = 'ilang';
+	}
+
 /**
  * A class for working with tests
  * 
@@ -145,22 +152,23 @@ function extension_loaded_or( $test )
 */
 function getTestReturn( &$test, $required, $message = '', $error_fragment = '', $error = '' )
 {
+	global $lang_fn;
 	switch($test->res)
 	{
 		case 'green':
 			list($test->continueon, $test->special_failed) = testGlobal('');
-			$test->res_text = lang('success');
+			$test->res_text = $lang_fn('success');
 			break;
 		case 'yellow':
 		case 'red':
 			list($test->continueon, $test->special_failed) = testGlobal($required);
 			if($test->res == 'yellow')
 			{
-				$test->res_text = lang('caution');
+				$test->res_text = $lang_fn('caution');
 			}
 			elseif($test->res == 'red')
 			{
-				$test->res_text = lang('failure');
+				$test->res_text = $lang_fn('failure');
 			}
 
 			if(trim($message) != '')
@@ -259,7 +267,7 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 	else
 	{
 		$test->res = 'red';
-		getTestReturn($test, $required, $message, 'DB_driver_missing', lang('no_db_driver'));
+		getTestReturn($test, $required, $message, 'DB_driver_missing', $lang_fn('no_db_driver'));
 	}
 
 	return $test;
@@ -507,6 +515,7 @@ function & testIntegerMask($required,$title,$var,$mask,$message = '',$ini = true
 */
 function & testInteger( $required, $title, $var, $message = '', $ini = true, $empty_is_ok = true, $error_fragment = '' )
 {
+	global $lang_fn;
 	$test = new CmsInstallTest();
 	$test->title = $title;
 
@@ -521,7 +530,7 @@ function & testInteger( $required, $title, $var, $message = '', $ini = true, $em
 
 	if($test->ini_val === '')
 	{
-		if($empty_is_ok) $test->value = lang('on');
+		if($empty_is_ok) $test->value = $lang_fn('on');
 		else $test->value = 0;
 	}
 	else
@@ -601,6 +610,7 @@ function & testString( $required, $title, $var, $message = '', $ini = true, $cod
 */
 function & testBoolean( $required, $title, $var, $message = '', $ini = true, $negative_test = false, $error_fragment = '' )
 {
+	global $lang_fn;
 	$test = new CmsInstallTest();
 	$test->title = $title;
 
@@ -616,8 +626,8 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
 
 	if($test->ini_val == false)
 	{
-		$test->value = $negative_test ? lang('on') : lang('off');
-		$test->secondvalue = $negative_test ? lang('true') : lang('false');
+		$test->value = $negative_test ? $lang_fn('on') : $lang_fn('off');
+		$test->secondvalue = $negative_test ? $lang_fn('true') : $lang_fn('false');
 		if($required)
 		{
 			$test->res = 'red';
@@ -629,8 +639,8 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
 	}
 	else
 	{
-		$test->value = $negative_test ? lang('off') : lang('on');
-		$test->secondvalue = $negative_test ? lang('false') : lang('true');
+		$test->value = $negative_test ? $lang_fn('off') : $lang_fn('on');
+		$test->secondvalue = $negative_test ? $lang_fn('false') : $lang_fn('true');
 		$test->res = 'green';
 	}
 
@@ -673,7 +683,7 @@ function & testVersionRange( $required, $title, $var, $message = '', $minimum, $
 
 	if( (! is_null($unlimited)) && ($test->ini_val == (string) $unlimited) )
 	{
-		$test->value = lang('unlimited');
+		$test->value = $lang_fn('unlimited');
 		$test->res = 'green';
 		getTestReturn($test, $required);
 	}
@@ -738,7 +748,7 @@ function & testRange( $required, $title, $var, $message = '', $minimum, $recomme
 
 	if( (! is_null($unlimited)) && ((int) $test->ini_val == (int) $unlimited) )
 	{
-		$test->value = lang('unlimited');
+		$test->value = $lang_fn('unlimited');
 		$test->res = 'green';
 		getTestReturn($test, $required);
 	}
@@ -820,7 +830,7 @@ function & testUmask( $required, $title, $umask, $message = '', $debug = false, 
 	if(! $_test)
 	{
 		$test->res = 'red';
-		getTestReturn($test, $required, $message, 'Directory_not_writable', lang('errordirectorynotwritable').' ('.$dir .')');
+		getTestReturn($test, $required, $message, 'Directory_not_writable', $lang_fn('errordirectorynotwritable').' ('.$dir .')');
 		return $test;
 	}
 	$_test = true;
@@ -861,7 +871,7 @@ function & testUmask( $required, $title, $umask, $message = '', $debug = false, 
 			{
 				$test->res = 'yellow';
 			}
-			getTestReturn($test, $required, $message, 'Can.27t_create_file', lang('errorcantcreatefile').' ('.$test_file.')');
+			getTestReturn($test, $required, $message, 'Can.27t_create_file', $lang_fn('errorcantcreatefile').' ('.$test_file.')');
 			return $test;
 		}
 
@@ -878,7 +888,7 @@ function & testUmask( $required, $title, $umask, $message = '', $debug = false, 
 	}
 
 	$test->res = 'red';
-	getTestReturn($test, $required, $message, 'Can.27t_create_file', lang('errorcantcreatefile').' ('.$test_file.')');
+	getTestReturn($test, $required, $message, 'Can.27t_create_file', $lang_fn('errorcantcreatefile').' ('.$test_file.')');
 	return $test;
 }
 
@@ -919,13 +929,13 @@ function permission_stat( $file, $debug = false )
 			$userinfo = @posix_getpwuid($filestat[4]);
 			$groupinfo = @posix_getgrgid($filestat[5]);
 		}
-		$opt['username'] = isset($userinfo['name']) ? $userinfo['name'] : lang('unknown');
-		$opt['usergroup'] = isset($groupinfo['name']) ? $groupinfo['name'] : lang('unknown');
+		$opt['username'] = isset($userinfo['name']) ? $userinfo['name'] : $lang_fn('unknown');
+		$opt['usergroup'] = isset($groupinfo['name']) ? $groupinfo['name'] : $lang_fn('unknown');
 	}
 	else
 	{
-		$opt['username'] = lang('unknown');
-		$opt['usergroup'] = lang('unknown');
+		$opt['username'] = $lang_fn('unknown');
+		$opt['usergroup'] = $lang_fn('unknown');
 	}
 
 	return $opt;
@@ -1003,8 +1013,8 @@ function & testCreateDirAndFile( $required, $title, $message = '', $debug = fals
 		if(file_exists($file)) unlink($file);
 		if( (is_dir($dir)) && (false !== strpos($dir, dirname(dirname(__FILE__)))) ) rmdir($dir);
 
-		if(! mkdir($dir)) $test->error = lang('errordirectorynotwritable') .' ('. $dir . ')';
-		if(! touch($file)) $test->error = lang('errorcantcreatefile') .' ('. $file . ')';
+		if(! mkdir($dir)) $test->error = $lang_fn('errordirectorynotwritable') .' ('. $dir . ')';
+		if(! touch($file)) $test->error = $lang_fn('errorcantcreatefile') .' ('. $file . ')';
 		$_test = file_exists($file);
 	}
 	else
@@ -1107,7 +1117,7 @@ function & testDirWrite( $required, $title, $dir, $message = '', $quick = 0, $de
 	}
 
 	$test->res = 'red';
-	getTestReturn($test, $required, $message, 'Directory_not_writable', lang('errordirectorynotwritable').' ('.$dir.')');
+	getTestReturn($test, $required, $message, 'Directory_not_writable', $lang_fn('errordirectorynotwritable').' ('.$dir.')');
 	return $test;
 }
 
@@ -1126,7 +1136,7 @@ function & testFileWritable( $required, $title, $file, $message = '', $debug = f
 
 	if(empty($file))
 	{
-		$test->error = lang('errorfilenot');
+		$test->error = $lang_fn('errorfilenot');
 		return $test;
 	}
 
@@ -1162,7 +1172,7 @@ function & testFileWritable( $required, $title, $file, $message = '', $debug = f
 	}
 
 	$test->res = 'red';
-	getTestReturn($test, $required, $message, 'File_not_writable', lang('errorfilenotwritable').' ('.$file.')');
+	getTestReturn($test, $required, $message, 'File_not_writable', $lang_fn('errorfilenotwritable').' ('.$file.')');
 	return $test;
 }
 
@@ -1178,6 +1188,7 @@ function & testFileWritable( $required, $title, $file, $message = '', $debug = f
 */
 function & testRemoteFile( $required, $title, $url = '', $message = '', $debug = false, $timeout = 10, $search = 'cmsmadesimple' )
 {
+	global $lang_fn;
 	if(empty($url))
 	{
 		$url = 'http://dev.cmsmadesimple.org/latest_version.php';
@@ -1191,7 +1202,7 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 	{
 		// Relative or invalid URL?
 		$test->res = 'red';
-		getTestReturn($test, $required, '', '', lang('invalid_test'));
+		getTestReturn($test, $required, '', '', $lang_fn('invalid_test'));
 		return $test;
 	}
 
@@ -1246,8 +1257,8 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 		{
 			$test->opt['fsockopen']['ok'] = 1;
 			$test->opt['fsockopen']['res'] = 'yellow';
-			$test->opt['fsockopen']['res_text'] = lang('caution');
-			$test->opt['fsockopen']['message'] = lang('remote_connection_timeout');
+			$test->opt['fsockopen']['res_text'] = $lang_fn('caution');
+			$test->opt['fsockopen']['message'] = $lang_fn('remote_connection_timeout');
 		}
 		else
 		{
@@ -1257,7 +1268,7 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 	else
 	{
 		$test->res = 'red';
-		getTestReturn($test, $required, '', '', lang('connection_error'));
+		getTestReturn($test, $required, '', '', $lang_fn('connection_error'));
 		return $test;
 	}
 
@@ -1266,29 +1277,29 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 		if( (! empty($search)) && (false !== strpos($content_fsockopen, $search)) )
 		{
 			$test->opt['fsockopen']['res'] = 'green';
-			$test->opt['fsockopen']['res_text'] = lang('success');
-			$test->opt['fsockopen']['message'] = lang('search_string_find');
+			$test->opt['fsockopen']['res_text'] = $lang_fn('success');
+			$test->opt['fsockopen']['message'] = $lang_fn('search_string_find');
 		}
 		elseif(false !== strpos($content_fsockopen, '200 OK'))
 		{
 			$test->opt['fsockopen']['ok'] = 1;
 			$test->opt['fsockopen']['res'] = 'yellow';
-			$test->opt['fsockopen']['res_text'] = lang('caution');
-			$test->opt['fsockopen']['message'] = lang('remote_response_ok');
+			$test->opt['fsockopen']['res_text'] = $lang_fn('caution');
+			$test->opt['fsockopen']['message'] = $lang_fn('remote_response_ok');
 		}
 		elseif(false !== strpos($content_fsockopen, '404 Not Found'))
 		{
 			$test->opt['fsockopen']['ok'] = 1;
 			$test->opt['fsockopen']['res'] = 'yellow';
-			$test->opt['fsockopen']['res_text'] = lang('caution');
-			$test->opt['fsockopen']['message'] = lang('remote_response_404');
+			$test->opt['fsockopen']['res_text'] = $lang_fn('caution');
+			$test->opt['fsockopen']['message'] = $lang_fn('remote_response_404');
 		}
 		else
 		{
 			$test->opt['fsockopen']['ok'] = 2;
 			$test->opt['fsockopen']['res'] = 'red';
-			$test->opt['fsockopen']['res_text'] = lang('failure');
-			$test->opt['fsockopen']['message'] = lang('remote_response_error');
+			$test->opt['fsockopen']['res_text'] = $lang_fn('failure');
+			$test->opt['fsockopen']['message'] = $lang_fn('remote_response_error');
 		}
 	}
 
@@ -1304,8 +1315,8 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 		{
 			$test->opt['fopen']['ok'] = 2;
 			$test->opt['fopen']['res'] = 'red';
-			$test->opt['fopen']['res_text'] = lang('failure');
-			$test->opt['fopen']['message'] = lang('connection_failed');
+			$test->opt['fopen']['res_text'] = $lang_fn('failure');
+			$test->opt['fopen']['message'] = $lang_fn('connection_failed');
 		}
 		else
 		{
@@ -1335,8 +1346,8 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 			{
 				$test->opt['fopen']['ok'] = 1;
 				$test->opt['fopen']['res'] = 'yellow';
-				$test->opt['fopen']['res_text'] = lang('caution');
-				$test->opt['fopen']['message'] = lang('remote_connection_timeout');
+				$test->opt['fopen']['res_text'] = $lang_fn('caution');
+				$test->opt['fopen']['message'] = $lang_fn('remote_connection_timeout');
 			}
 			else
 			{
@@ -1347,8 +1358,8 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 	else
 	{
 		$test->opt['fopen']['res'] = 'red';
-		$test->opt['fopen']['res_text'] = lang('failure');
-		$test->opt['fopen']['message'] = lang('test_allow_url_fopen_failed');
+		$test->opt['fopen']['res_text'] = $lang_fn('failure');
+		$test->opt['fopen']['message'] = $lang_fn('test_allow_url_fopen_failed');
 	}
 
 
@@ -1357,29 +1368,29 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 		if( (! empty($search)) && (false !== strpos($content_fopen, $search)) )
 		{
 			$test->opt['fopen']['res'] = 'green';
-			$test->opt['fopen']['res_text'] = lang('success');
-			$test->opt['fopen']['message'] = lang('search_string_find');
+			$test->opt['fopen']['res_text'] = $lang_fn('success');
+			$test->opt['fopen']['message'] = $lang_fn('search_string_find');
 		}
 		elseif(false !== strpos($content_fopen, '200 OK'))
 		{
 			$test->opt['fopen']['ok'] = 1;
 			$test->opt['fopen']['res'] = 'yellow';
-			$test->opt['fopen']['res_text'] = lang('caution');
-			$test->opt['fopen']['message'] = lang('remote_response_ok');
+			$test->opt['fopen']['res_text'] = $lang_fn('caution');
+			$test->opt['fopen']['message'] = $lang_fn('remote_response_ok');
 		}
 		elseif(false !== strpos($content_fopen, '404 Not Found'))
 		{
 			$test->opt['fopen']['ok'] = 1;
 			$test->opt['fopen']['res'] = 'yellow';
-			$test->opt['fopen']['res_text'] = lang('caution');
-			$test->opt['fopen']['message'] = lang('remote_response_404');
+			$test->opt['fopen']['res_text'] = $lang_fn('caution');
+			$test->opt['fopen']['message'] = $lang_fn('remote_response_404');
 		}
 		else
 		{
 			$test->opt['fopen']['ok'] = 2;
 			$test->opt['fopen']['res'] = 'red';
-			$test->opt['fopen']['res_text'] = lang('failure');
-			$test->opt['fopen']['message'] = lang('remote_response_error');
+			$test->opt['fopen']['res_text'] = $lang_fn('failure');
+			$test->opt['fopen']['message'] = $lang_fn('remote_response_error');
 		}
 	}
 
@@ -1424,17 +1435,17 @@ function & testFileChecksum( $required, $title, $file, $checksum, $message = '',
 
 	if(is_dir($file))
 	{
-		$test->secondvalue = lang('is_directory');
+		$test->secondvalue = $lang_fn('is_directory');
 		$test->res = 'yellow';
-		getTestReturn($test, '', '', '', lang('is_directory').' ('.$file.')');
+		getTestReturn($test, '', '', '', $lang_fn('is_directory').' ('.$file.')');
 		return $test;
 	}
 
 	if(! file_exists($file))
 	{
-		$test->secondvalue = lang('nofiles');
+		$test->secondvalue = $lang_fn('nofiles');
 		$test->res = 'red';
-		getTestReturn($test, '', $message, '', lang('nofiles').' ('.$file.')');
+		getTestReturn($test, '', $message, '', $lang_fn('nofiles').' ('.$file.')');
 		return $test;
 	}
 
@@ -1442,9 +1453,9 @@ function & testFileChecksum( $required, $title, $file, $checksum, $message = '',
 	else       $_test = @is_readable($file);
 	if(! $_test)
 	{
-		$test->secondvalue = lang('is_readable_false');
+		$test->secondvalue = $lang_fn('is_readable_false');
 		$test->res = 'yellow';
-		getTestReturn($test, '', '', '', lang('is_readable_false').' ('.$file.')');
+		getTestReturn($test, '', '', '', $lang_fn('is_readable_false').' ('.$file.')');
 		return $test;
 	}
 
@@ -1452,15 +1463,15 @@ function & testFileChecksum( $required, $title, $file, $checksum, $message = '',
 	else       $file_checksum = @md5_file($file);
 	if(false == $file_checksum)
 	{
-		$test->secondvalue = lang('not_checksum');
+		$test->secondvalue = $lang_fn('not_checksum');
 		$test->res = 'yellow';
-		getTestReturn($test, '', '', '', lang('not_checksum').' ('.$file.')');
+		getTestReturn($test, '', '', '', $lang_fn('not_checksum').' ('.$file.')');
 		return $test;
 	}
 
 	if($file_checksum == $checksum)
 	{
-		$test->secondvalue = lang('checksum_match');
+		$test->secondvalue = $lang_fn('checksum_match');
 		$test->res = 'green';
 		getTestReturn($test, $required);
 		return $test;
@@ -1470,9 +1481,9 @@ function & testFileChecksum( $required, $title, $file, $checksum, $message = '',
 	else       $test->opt['file_timestamp'] = @filemtime($file);
 	$test->opt['format_timestamp'] = $formattime;
 
-	$test->secondvalue = lang('checksum_not_match');
+	$test->secondvalue = $lang_fn('checksum_not_match');
 	$test->res = 'red';
-	getTestReturn($test, $required, $message, '', lang('checksum_not_match'));
+	getTestReturn($test, $required, $message, '', $lang_fn('checksum_not_match'));
 	return $test;
 }
 
@@ -1530,13 +1541,13 @@ function testSessionSavePath( $sess_path )
 function & testFileUploads( $inputname )
 {
 	$_errors = array(
-		UPLOAD_ERR_INI_SIZE => lang('upload_err_ini_size'),
-		UPLOAD_ERR_FORM_SIZE => lang('upload_err_form_size'),
-		UPLOAD_ERR_PARTIAL => lang('upload_err_partial'),
-		UPLOAD_ERR_NO_FILE => lang('upload_err_no_file'),
-		UPLOAD_ERR_NO_TMP_DIR => lang('upload_err_no_tmp_dir'), //at least PHP 4.3.10 or PHP 5.0.3
-		UPLOAD_ERR_CANT_WRITE => lang('upload_err_cant_write'), //at least PHP 5.1.0
-		UPLOAD_ERR_EXTENSION => lang('upload_err_extension'), //at least PHP 5.2.0
+		UPLOAD_ERR_INI_SIZE => $lang_fn('upload_err_ini_size'),
+		UPLOAD_ERR_FORM_SIZE => $lang_fn('upload_err_form_size'),
+		UPLOAD_ERR_PARTIAL => $lang_fn('upload_err_partial'),
+		UPLOAD_ERR_NO_FILE => $lang_fn('upload_err_no_file'),
+		UPLOAD_ERR_NO_TMP_DIR => $lang_fn('upload_err_no_tmp_dir'), //at least PHP 4.3.10 or PHP 5.0.3
+		UPLOAD_ERR_CANT_WRITE => $lang_fn('upload_err_cant_write'), //at least PHP 5.1.0
+		UPLOAD_ERR_EXTENSION => $lang_fn('upload_err_extension'), //at least PHP 5.2.0
 	);
 
 	function orderFiles(&$file_upl)
@@ -1559,14 +1570,14 @@ function & testFileUploads( $inputname )
 	if($result->res != 'green')
 	{
 		$test->res = 'red';
-		getTestReturn($test, '', '', 'Function_file_uploads_disabled', lang('function_file_uploads_off'));
+		getTestReturn($test, '', '', 'Function_file_uploads_disabled', $lang_fn('function_file_uploads_off'));
 		return $test;
 	}
 
 	if(! isset($_FILES["$inputname"]))
 	{
 		$test->res = 'red';
-		getTestReturn($test, '', '', '', lang('error_nofileuploaded'));
+		getTestReturn($test, '', '', '', $lang_fn('error_nofileuploaded'));
 		return $test;
 	}
 
@@ -1586,15 +1597,15 @@ function & testFileUploads( $inputname )
 			}
 			elseif($_file['size'] == 0)
 			{
-				$_data['error_string'] = lang('upload_err_empty');
+				$_data['error_string'] = $lang_fn('upload_err_empty');
 			}
 			elseif(! is_readable($_file['tmp_name']))
 			{
-				$_data['error_string'] = lang('upload_file_no_readable');
+				$_data['error_string'] = $lang_fn('upload_file_no_readable');
             }
 			else
 			{
-				$_data['error_string'] = lang('upload_err_unknown');
+				$_data['error_string'] = $lang_fn('upload_err_unknown');
 			}
 		}
 
@@ -1667,5 +1678,6 @@ function GDVersion()
 
 	return $gd_version_number;
 }
+
 # vim:ts=4 sw=4 noet
 ?>

@@ -264,7 +264,7 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 }
 
 #Setup content routes
-if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) )
+if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) )
 {
   $contentops = $gCms->GetContentOperations();
   $contentops->register_routes();
