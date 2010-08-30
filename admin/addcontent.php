@@ -198,21 +198,22 @@ else
 #Get a list of content_types and build the dropdown to select one
 $typesdropdown = '<select name="content_type" onchange="document.contentform.submit()" class="standard">';
 $cur_content_type = '';
-foreach ($gCms->contenttypes as $onetype)
+$content_types = $contentops->ListContentTypes();
+foreach ($content_types as $onetype)
 {
-  if( $onetype->type == 'errorpage' && !check_permission($userid,'Manage All Content') ) 
+  if( $onetype == 'errorpage' && !check_permission($userid,'Manage All Content') ) 
     {
       continue;
     }
-	$contentops->LoadContentType($onetype->type);
-	$type_obj = new $onetype->type;
-	$typesdropdown .= '<option value="' . $onetype->type . '"';
-	if ($onetype->type == $content_type)
-	{
-		$typesdropdown .= ' selected="selected" ';
-		$cur_content_type = $onetype->type;
-	}
-	$typesdropdown .= ">".($type_obj->FriendlyName())."</option>";
+  $type_obj = $contentops->CreateNewContent($onetype);
+  $type_obj = new $onetype;
+  $typesdropdown .= '<option value="' . $onetype . '"';
+  if ($onetype == $content_type)
+    {
+      $typesdropdown .= ' selected="selected" ';
+      $cur_content_type = $onetype;
+    }
+  $typesdropdown .= ">".($type_obj->FriendlyName())."</option>";
 }
 $typesdropdown .= "</select>";
 

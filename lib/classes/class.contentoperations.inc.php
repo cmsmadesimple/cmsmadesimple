@@ -41,32 +41,6 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
 class ContentOperations
 {
 	/**
-	 * Loads a content type into the system by it's name.
-	 *
-	 * @param string $type The content type to load
-	 * @return boolean Returns true if the content type was found and loaded
-	 */
-	function LoadContentType($type)
-	{
-		$type = strtolower($type);
-
-		global $gCms;
-		$contenttypes =& $gCms->contenttypes;
-		
-		if (isset($contenttypes[$type]))
-		{
-			$placeholder =& $contenttypes[$type];
-			if ($placeholder->loaded == false)
-			{
-				include_once($placeholder->filename);
-				$placeholder->loaded = true;
-			}
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Given an array of content_type and seralized_content, reconstructs a 
 	 * content object.  It will handled loading the content type if it hasn't
 	 * already been loaded.
@@ -80,10 +54,11 @@ class ContentOperations
 	  $contenttype = 'content';
 	  if( isset($data['content_type']) ) $contenttype = $data['content_type'];
 
-	  $contentobj =& ContentOperations::CreateNewContent($contenttype);
+	  $contentobj =& $this->CreateNewContent($contenttype);
 	  $contentobj = unserialize($data['serialized_content']);
 	  return $contentobj;
 	}
+
 
 	/**
 	 * Creates a new, empty content object of the given type.
@@ -92,17 +67,21 @@ class ContentOperations
 	 */
 	function &CreateNewContent($type)
 	{
-		$type = strtolower($type);
-
 		$result = NULL;
-		
-		if (ContentOperations::LoadContentType($type))
+		if( class_exists($type) )
+		{
+			$result = new $type;
+			return $result;
+		}
+
+		$type[0] = strtoupper($type[0]);
+		if( class_exists($type) )
 		{
 			$result = new $type;
 		}
-		
 		return $result;
 	}
+
 	
     /**
      * Given a content id, load and return the loaded content object.
@@ -113,6 +92,11 @@ class ContentOperations
      */
 	function &LoadContentFromId($id,$loadprops=false)
 	{
+		if( cms_content_cache::content_exists($id) )
+		{
+			return cms_content_cache::get_content($id);
+		}
+
 		$result = FALSE;
 
 		global $gCms;
@@ -122,27 +106,18 @@ class ContentOperations
 		$row = &$db->GetRow($query, array($id));
 		if ($row)
 		{
-			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes())))
+			$classtype = strtolower($row['type']);
+			$contentobj =& $this->CreateNewContent($classtype);
+			if ($contentobj)
 			{
-				$classtype = strtolower($row['type']);
-				$contentobj =& ContentOperations::CreateNewContent($classtype);
-				if ($contentobj)
-				{
-					$contentobj->LoadFromData($row, $loadprops);
-				}
+				$contentobj->LoadFromData($row, $loadprops);
+				cms_content_cache::add_content($id,$row['content_alias'],$contentobj);
 				return $contentobj;
 			}
-			else
-			{
-				return $result;
-			}
 		}
-		else
-		{
-			return $result;
-		}
+		return $result;
 	}
+
 
     /**
      * Given a content alias, load and return the loaded content object.
@@ -153,11 +128,15 @@ class ContentOperations
      */
 	function &LoadContentFromAlias($alias, $only_active = false)
 	{
+		if( cms_content_cache::content_exists($alias) )
+		{
+			return cms_content_cache::get_content($alias);
+		}
+
 		global $gCms;
 		$db = &$gCms->GetDb();
 
 		$row = '';
-
 		if (is_numeric($alias) && strpos($alias,'.') === FALSE && strpos($alias,',') === FALSE) //Fix for postgres
 		{
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
@@ -180,11 +159,12 @@ class ContentOperations
 		if ($row)
 		{
 			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes())))
+			if (in_array($row['type'], array_keys($this->ListContentTypes())))
 			{
 				$classtype = strtolower($row['type']);
-				$contentobj =& ContentOperations::CreateNewContent($classtype);
+				$contentobj =& $this->CreateNewContent($classtype);
 				$contentobj->LoadFromData($row, TRUE);
+				cms_content_cache::add_content($row['content_id'],$row['content_alias'],$contentobj);
 				return $contentobj;
 			}
 			else
@@ -198,205 +178,6 @@ class ContentOperations
 		}
 	}
 
-     /**
-      * Load the content of the object from a list of ids
-      * Private method.
-      *
-      * @access private
-      * @param array $ids List of of element ids to load
-      * @param boolean $loadProperties Whether or not to load the properties
-      * @return array Array of content objects (empty if not found)
-      */
-	function &LoadMultipleFromId($ids, $loadProperties = false)
-	{
-		global $gCms, $sql_queries, $debug_errors;
-		$cpt = count($ids);
-		$contents=array();
-		if ($cpt==0) 
-		{
-			return $contents;
-		}
-		$config = &$gCms->GetConfig();
-		$db = &$gCms->GetDb();
-		$id_list = '(';
-		for ($i=0;$i<$cpt;$i++) 
-		{
-			$id_list .= (int)$ids[$i];
-			if ($i<$cpt-1)
-			{
-				$id_list .= ',';
-			}
-		}
-		$id_list .= ')';
-		if ($id_list=='()') 
-		{
-		  return $contents;
-		}
-		$result = false;
-		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
-		$rows   =& $db->Execute($query);
-
-		if ($rows)
-		{
-			while (isset($rows) && $row = &$rows->FetchRow())
-			{
-				if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) 
-				{
-					$classtype = strtolower($row['type']);
-					$contentobj =& ContentOperations::CreateNewContent($classtype);
-					$contentobj->LoadFromData($row,false);
-					$contents[]=$contentobj;
-					$result = true;
-				}
-			}
-			$rows->Close();
-		}
-		if (!$result)
-		{
-			if (true == $config["debug"])
-			{
-				# :TODO: Translate the error message
-				$debug_errors .= "<p>Could not retrieve content from db</p>\n";
-			}
-		}
-
-		if ($result && $loadProperties)
-		{
-			foreach ($contents as $content) 
-			{
-				if ($content->mPropertiesLoaded == false)
-				{
-					debug_buffer("load from id is loading properties");
-					$content->mProperties->Load($content->mId);
-					$content->mPropertiesLoaded = true;
-				}
-
-				if (NULL == $content->mProperties)
-				{
-					$result = false;
-
-					# debug mode
-					if (true == $config["debug"])
-					{
-						# :TODO: Translate the error message
-						$debug_errors .= "<p>Could not load properties for content</p>\n";
-					}
-				}
-			}
-		}
-
-		foreach ($contents as $content) 
-		{
-			$content->Load();
-		}
-
-		return $contents;
-	}
-	
-    /**
-    * Load the content of the object from a list of content aliases.
-    * Private method.
-    *
-    * @access private
-    * @param array $ids List of of content aliases to load
-    * @param boolean $loadProperties Whether or not to load the properties
-    * @return array Array of content objects (empty if not found)
-     */
-	function &LoadMultipleFromAlias($ids, $loadProperties = false)
-	{
-		global $gCms, $sql_queries, $debug_errors;
-		$contents=array();
-		if (!is_array($ids) || count($ids) == 0)
-		{
-			return $contents;
-		}
-		$db = &$gCms->GetDb();
-		$config =& $gCms->GetConfig();
-
-		$param_qs = array();
-		for ($i=0; $i<count($ids); $i++) 
-		{
-			$param_qs[] = '?';
-		}
-
-		$result = false;
-		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias IN " . join(', ', $param_qs);
-		$rows   =& $db->Execute($query, $ids);
-
-		while (isset($rows) && $row=&$rows->FetchRow())
-		{
-			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) 
-			{
-				$classtype = strtolower($row['type']);
-				$contentobj =& ContentOperations::CreateNewContent($classtype);
-				$contentobj->LoadFromData($row,false);
-				$contents[] =& $contentobj;
-				$result = true;
-			}
-		}
-
-		if ($rows) $rows->Close();
-
-		if (!$result)
-		{
-			if (true == $config["debug"])
-			{
-				# :TODO: Translate the error message
-				$debug_errors .= "<p>Could not retrieve content from db</p>\n";
-			}
-		}
-
-		if ($result && $loadProperties)
-		{
-			foreach ($contents as $content) 
-			{
-				if ($content->mPropertiesLoaded == false)
-				{
-					debug_buffer("load from id is loading properties");
-					$content->mProperties->Load($content->mId);
-					$content->mPropertiesLoaded = true;
-				}
-
-				if (NULL == $content->mProperties)
-				{
-					$result = false;
-
-					# debug mode
-					if (true == $config["debug"])
-					{
-						# :TODO: Translate the error message
-						$debug_errors .= "<p>Could not load properties for content</p>\n";
-					}
-				}
-			}
-		}
-		foreach ($contents as $content) 
-		{
-			$content->Load();
-		}
-		return $contents;
-	}
-
-
-	/**
-	 * Displays the content of the given content object
-	 *
-	 * @param mixed $content Content object
-	 * @return void
-	 */
-	function DisplayContent($content)
-	{
-		//This should be straight forward, since the content will pretty much determine how it is displayed
-		$content->Show();
-	}
-
-	/**
-	 * @ignore
-	 */
-    function IsCached($id)
-    {
-    }
 
 	/**
 	 * Returns the id of the content marked as default.
@@ -435,6 +216,7 @@ class ContentOperations
 		return $result;
 	}
 
+
 	/**
      * Returns a hash of valid content types (classes that extend ContentBase)
      * The key is the name of the class that would be saved into the dabase.  The
@@ -446,27 +228,30 @@ class ContentOperations
 	{
 		global $gCms;
 		$contenttypes =& $gCms->contenttypes;
+		$variables =& $gCms->variables;
 		
 		if (isset($gCms->variables['contenttypes']))
 		{
-			$variables =& $gCms->variables;
 			return $variables['contenttypes'];
 		}
-		
+
 		$result = array();
-		
-		reset($contenttypes);
-		while (list($key) = each($contenttypes))
+		$dir = dirname(__FILE__).'/contenttypes';
+		$files = glob($dir.'/*.inc.php');
+		if( is_array($files) )
 		{
-			$value =& $contenttypes[$key];
-			$result[] = $value->type;
+			foreach( $files as $one )
+			{
+				$class = basename($one,'.inc.php');
+				$type  = strtolower($class);
+				$result[$type] = $class;
+			}
 		}
 		
-		$variables =& $gCms->variables;
 		$variables['contenttypes'] =& $result;
-
 		return $result;
 	}
+
 
     /**
      * Updates the hierarchy position of one item
@@ -523,6 +308,8 @@ class ContentOperations
 
 		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE content_id = ?";
 		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
+
+		cms_content_cache::clear();
 	}
 
 	/**
@@ -540,11 +327,12 @@ class ContentOperations
 
 		while ($dbresult && !$dbresult->EOF)
 		{
-			ContentOperations::SetHierarchyPosition($dbresult->fields['content_id']);
+		    $this->SetHierarchyPosition($dbresult->fields['content_id']);
 			$dbresult->MoveNext();
 		}
 		
 		if ($dbresult) $dbresult->Close();
+		cms_content_cache::clear();
 	}
 	
 	/**
@@ -556,75 +344,59 @@ class ContentOperations
 	 *                             don't load the content objects
 	 * @return mixed The cached tree of content
 	 */
-	function &GetAllContentAsHierarchy($loadprops, $onlyexpanded=null, $loadcontent = false)
+	function &GetAllContentAsHierarchy($loadcontent = false)
 	{
 		debug_buffer('', 'starting tree');
 
-		require_once(dirname(dirname(__FILE__)).'/Tree/Tree.php');
-
-		$nodes = array();
 		global $gCms;
 		$db = &$gCms->GetDb();
-
+		$tree = null;
 		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-		$usecache = true;
-		if (isset($onlyexpanded) || isset($CMS_ADMIN_PAGE))
-		{
-			#$usecache = false;
-		}
-
 		$loadedcache = false;
 
-		if ($usecache)
+		if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
 		{
-			if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
+			$pageinfo =& $gCms->variables['pageinfo'];
+			if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
 			{
-				$pageinfo =& $gCms->variables['pageinfo'];
-				//debug_buffer('content cache file exists... file: ' . filemtime($cachefilename) . ' content:' . $pageinfo->content_last_modified_date);
-				if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
+				debug_buffer('file needs loading');
+				
+				$handle = fopen($cachefilename, "r");
+				$data = fread($handle, filesize($cachefilename));
+				fclose($handle);
+				
+				$tree = unserialize(substr($data, 16));
+				
+				if (strtolower(get_class($tree)) == 'cms_tree')
 				{
-					debug_buffer('file needs loading');
-
-					$handle = fopen($cachefilename, "r");
-					$data = fread($handle, filesize($cachefilename));
-					fclose($handle);
-
-					$tree = unserialize(substr($data, 16));
-
-					#$variables =& $gCms->variables;
-					#$variables['contentcache'] =& $tree;
-					if (strtolower(get_class($tree)) == 'tree')
-					{
-						$loadedcache = true;
-					}
-					else
-					{
-						$loadedcache = false;
-					}
+					$loadedcache = true;
+				}
+				else
+				{
+					$loadedcache = false;
 				}
 			}
 		}
 
 		if (!$loadedcache)
 		{
-			$query = "SELECT id_hierarchy FROM ".cms_db_prefix()."content ORDER BY hierarchy";
+			$query = "SELECT id_hierarchy,content_alias FROM ".cms_db_prefix()."content ORDER BY hierarchy";
 			$dbresult =& $db->Execute($query);
-
+			$nodes = array();
 			if ($dbresult && $dbresult->RecordCount() > 0)
 			{
 				while ($row = $dbresult->FetchRow())
 				{
-					$nodes[] = $row['id_hierarchy'];
+					$nodes[] = $row['id_hierarchy'].','.$row['content_alias'];
 				}
 			}
 
-			$tree = new Tree();
 			debug_buffer('', 'Start Loading Children into Tree');
-			$tree = Tree::createFromList($nodes, '.');
+			$tree = cms_tree_operations::load_from_list($nodes);
 			debug_buffer('', 'End Loading Children into Tree');
 		}
 
-		if (!$loadedcache && $usecache)
+		if (!$loadedcache)
 		{
 			debug_buffer("Serializing...");
 			$handle = fopen($cachefilename, "w");
@@ -634,34 +406,47 @@ class ContentOperations
 
 		if( $loadcontent )
 		  {
-		    ContentOperations::LoadChildrenIntoTree(-1, $tree, false, true);
+		    $this->LoadChildren(-1, true, true);
 		  }
 
 		debug_buffer('', 'ending tree');
 
 		return $tree;
 	}
+
 	
 	/**
 	 * Loads additional, active children into a given tree object
 	 *
 	 * @param integer $id The parent of the content objects to load into the tree
-	 * @param mixed $tree The passed tree object (reference)
 	 * @param boolean $loadprops If true, load the properties of all loaded content objects
 	 * @param boolean $all If true, load all content objects, even inactive ones.
 	 * @return void
 	 * @author Ted Kulp
 	 */
-	function LoadChildrenIntoTree($id, &$tree, $loadprops = false, $all = false)
+	function LoadChildren($id, $loadprops = false, $all = false, $explicit_ids = array() )
 	{	
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		// get the content rows
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? AND active = 1 ORDER BY hierarchy";
-		if( $all )
-		  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
-		$contentrows =& $db->GetArray($query, array($id));
+		$contentrows = '';
+		if( is_array($explicit_ids) && count($explicit_ids) )
+		{
+			$expr = 'content_id IN ('.implode(',',$explicit_ids).')';
+			if( !$all ) $expr .= ' AND active = 1';
+
+			$query = 'SELECT * FROM '.cms_db_prefix().'content WHERE '.$expr.' ORDER BY hierarchy';
+			$contentrows =& $db->GetArray($query);
+		}
+		else 
+		{
+			if( !$id ) { $id = -1; }
+			// get the content rows
+			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? AND active = 1 ORDER BY hierarchy";
+			if( $all )
+				$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
+			$contentrows =& $db->GetArray($query, array($id));
+		}
 		$contentprops = '';
 
 		// get the content ids from the returned data
@@ -670,7 +455,7 @@ class ContentOperations
 		    $child_ids = array();
 		    for( $i = 0; $i < count($contentrows); $i++ )
 		      {
-			$child_ids[] = $contentrows[$i]['content_id'];
+				  $child_ids[] = $contentrows[$i]['content_id'];
 		      }
 		    
 		    // get all the properties for the child_ids
@@ -680,20 +465,20 @@ class ContentOperations
 		    // re-organize the tmp data into a hash of arrays of properties for each content id.
 		    if( $tmp )
 		      {
-			$contentprops = array();
-			for( $i = 0; $i < count($contentrows); $i++ )
-			  {
-			    $content_id = $contentrows[$i]['content_id'];
-			    $t2 = array();
-			    for( $j = 0; $j < count($tmp); $j++ )
-			      {
-				if( $tmp[$j]['content_id'] == $content_id )
-				  {
-				    $t2[] = $tmp[$j];
-				  }
-			      }
-			    $contentprops[$content_id] = $t2;
-			  }
+				  $contentprops = array();
+				  for( $i = 0; $i < count($contentrows); $i++ )
+					  {
+						  $content_id = $contentrows[$i]['content_id'];
+						  $t2 = array();
+						  for( $j = 0; $j < count($tmp); $j++ )
+							  {
+								  if( $tmp[$j]['content_id'] == $content_id )
+									  {
+										  $t2[] = $tmp[$j];
+									  }
+							  }
+						  $contentprops[$content_id] = $t2;
+					  }
 		      }
 		  }
 		
@@ -703,31 +488,30 @@ class ContentOperations
 		    $row =& $contentrows[$i];
 		    $id = $row['content_id'];
 
-		    if (!in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) continue;
-		    $contentobj =& ContentOperations::CreateNewContent($row['type']);
+		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
+		    $contentobj =& $this->CreateNewContent($row['type']);
 		    if ($contentobj)
 		      {
-			$contentobj->LoadFromData($row, false);
-			if( $loadprops && $contentprops && isset($contentprops[$id]) )
-			  {
-			    // load the properties from local cache.
-			    $props =& $contentprops[$id];
-			    $obj =& $contentobj->mProperties;
-			    $obj->mPropertyNames = array();
-			    $obj->mPropertyTypes = array();
-			    $obj->mPropertyValues = array();
-			    foreach( $props as $oneprop )
-			      {
-				$obj->mPropertyNames[] = $oneprop['prop_name'];
-				$obj->mPropertyTypes[$oneprop['prop_name']] = $oneprop['type'];
-				$obj->mPropertyValues[$oneprop['prop_name']] = $oneprop['content'];
-			      }
-			    $contentobj->mPropertiesLoaded = true;
-			  }
-
-			// cache the content objects
-			$contentcache =& $tree->content;
-			$contentcache[$id] =& $contentobj;
+				  $contentobj->LoadFromData($row, false);
+				  if( $loadprops && $contentprops && isset($contentprops[$id]) )
+					  {
+						  // load the properties from local cache.
+						  $props =& $contentprops[$id];
+						  $obj =& $contentobj->mProperties;
+						  $obj->mPropertyNames = array();
+						  $obj->mPropertyTypes = array();
+						  $obj->mPropertyValues = array();
+						  foreach( $props as $oneprop )
+							  {
+								  $obj->mPropertyNames[] = $oneprop['prop_name'];
+								  $obj->mPropertyTypes[$oneprop['prop_name']] = $oneprop['type'];
+								  $obj->mPropertyValues[$oneprop['prop_name']] = $oneprop['content'];
+							  }
+						  $contentobj->mPropertiesLoaded = true;
+					  }
+				  
+				  // cache the content objects
+				  cms_content_cache::add_content($id,$contentobj->Alias(),$contentobj);
 		      }
 		  }
 	}
@@ -759,6 +543,7 @@ class ContentOperations
 		$one->Save();
 	}
 
+
 	/**
 	 * Returns an array of all content objects in the system, active or not.
 	 *
@@ -783,9 +568,9 @@ class ContentOperations
 		while ($dbresult && !$dbresult->EOF)
 		{
 			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($dbresult->fields['type'], array_keys(ContentOperations::ListContentTypes())))
+			if (in_array($dbresult->fields['type'], array_keys($this->ListContentTypes())))
 			{
-				$contentobj =& ContentOperations::CreateNewContent($dbresult->fields['type']);
+				$contentobj =& $this->CreateNewContent($dbresult->fields['type']);
 				if (isset($contentobj))
 				{
 					$tmp = $dbresult->FetchRow();
@@ -818,6 +603,7 @@ class ContentOperations
 		return $contentcache;
 	}
 
+
 	/**
 	 * Create a hierarchical ordered dropdown of all the content objects in the system for use
 	 * in the admin and various modules.  If $current or $parent variables are passed, care is taken
@@ -840,7 +626,7 @@ class ContentOperations
 		$result = '';
 		$userid = -1;
 
-		$allcontent =& ContentOperations::GetAllContent();
+		$allcontent =& $this->GetAllContent();
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{
@@ -932,6 +718,7 @@ class ContentOperations
 		return $result;
 	}
 
+
 	/**
 	 * Gets the content id of the page marked as default
 	 *
@@ -958,6 +745,7 @@ class ContentOperations
 		return $row['content_id'];
 	}
 
+
 	/**
 	 * Returns the content id given a valid content alias.
 	 *
@@ -966,6 +754,9 @@ class ContentOperations
 	 */
 	function GetPageIDFromAlias( $alias )
 	{
+		$res = cms_content_cache::get_id_from_alias($alias);
+		if( $res !== FALSE ) return $res;
+
 		global $gCms;
 		$db = &$gCms->GetDb();
 
@@ -985,6 +776,7 @@ class ContentOperations
 		
 		return $row['content_id'];
 	}
+
 	
 	/**
 	 * Returns the content id given a valid hierarchical position.
@@ -998,7 +790,7 @@ class ContentOperations
 		$db = &$gCms->GetDb();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE hierarchy = ?";
-		$row = $db->GetRow($query, array(ContentOperations::CreateUnfriendlyHierarchyPosition($position)));
+		$row = $db->GetRow($query, array($this->CreateUnfriendlyHierarchyPosition($position)));
 
 		if (!$row)
 		{
@@ -1006,6 +798,7 @@ class ContentOperations
 		}
 		return $row['content_id'];
 	}
+
 
 	/**
 	 * Returns the content alias given a valid content id.
@@ -1015,6 +808,9 @@ class ContentOperations
 	 */
 	function GetPageAliasFromID( $id )
 	{
+		$res = cms_content_cache::get_alias_from_id($alias);
+		if( $res !== FALSE ) return $res;
+
 		global $gCms;
 		$db = &$gCms->GetDb();
 
@@ -1033,6 +829,7 @@ class ContentOperations
 		}
 		return $row['content_alias'];
 	}
+
 
 	/**
 	 * Checks to see if a content alias is valid and not in use.

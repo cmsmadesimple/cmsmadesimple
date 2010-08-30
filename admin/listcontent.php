@@ -1090,7 +1090,7 @@ function display_content_list($themeObject = null)
 	}
 
         $hierManager =& $gCms->GetHierarchyManager();
-	$hierarchy = &$hierManager->getRootNode();
+	$hierarchy = &$hierManager;
 
 	$rowcount = 0;
 	if ($hierarchy->hasChildren())

@@ -426,9 +426,9 @@ class Smarty_CMS extends Smarty {
 		}
 	      else
 		{
-		  $pageinfo = $gCms->variables['pageinfo'];
+		  $contentobj = $gCms->variables['content_obj'];
 		  $templateops =& $gCms->GetTemplateOperations();
-		  $templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
+		  $templateobj =& $templateops->LoadTemplateByID($contentobj->TemplateId());
 		  if (isset($templateobj) && $templateobj !== FALSE)
 		    {
 		      $tpl_source = $templateobj->content;
@@ -482,9 +482,9 @@ class Smarty_CMS extends Smarty {
 		}
 	      else
 		{
-		  $pageinfo = $gCms->variables['pageinfo'];
+		  $contentobj = $gCms->variables['content_obj'];
 		  $templateops =& $gCms->GetTemplateOperations();
-		  $templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
+		  $templateobj =& $templateops->LoadTemplateByID($contentobj->TemplateId());
 		  if (isset($templateobj) && $templateobj !== FALSE)
 		    {
 		      $tpl_source = $templateobj->content;
@@ -544,9 +544,9 @@ class Smarty_CMS extends Smarty {
 		}
 	      else
 		{
-		  $pageinfo = $gCms->variables['pageinfo'];
+		  $contentobj = $gCms->varaibles['content_obj'];
 		  $templateops =& $gCms->GetTemplateOperations();
-		  $templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
+		  $templateobj =& $templateops->LoadTemplateByID($contentobj->TemplateId());
 		  if (isset($templateobj) && $templateobj !== FALSE)
 		    {
 		      $tpl_source = $templateobj->content;
@@ -592,8 +592,6 @@ class Smarty_CMS extends Smarty {
 		}
 		else
 		{
-			$pageinfo = $gCms->variables['pageinfo'];
-
 			if ($tpl_name == 'notemplate')
 			{
 				$tpl_source = '{content}';
@@ -666,8 +664,9 @@ class Smarty_CMS extends Smarty {
 			else
 			{
 				global $gCms;
+				$contentobj = $gCms->variables['content_obj'];
 				$templateops =& $gCms->GetTemplateOperations();
-				$templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
+				$templateobj =& $templateops->LoadTemplateByID($contentobj->TemplateId());
 				if (isset($templateobj) && $templateobj !== FALSE)
 				{
 					$tpl_source = $templateobj->content;
@@ -679,8 +678,6 @@ class Smarty_CMS extends Smarty {
 						$tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
 					}
 					
-					//do_cross_reference($pageinfo->template_id, 'template', $tpl_source);
-
 					return true;
 				}
 			}
@@ -719,10 +716,14 @@ class Smarty_CMS extends Smarty {
 		}
 		else
 		{
-			$pageinfo = &$gCms->variables['pageinfo'];
-
-			$tpl_timestamp = $pageinfo->template_modified_date;
-			return true;
+		  $contentobj = $gCms->variables['content_obj'];
+		  $templateops =& $gCms->GetTemplateOperations();
+		  $templateobj =& $templateops->LoadTemplateByID($contentobj->TemplateId());
+		  if (isset($templateobj) && $templateobj !== FALSE)
+		    {
+		      $tpl_timestamp = $templateobj->modified_date;
+		      return true;
+		    }
 		}
 	}
 
@@ -744,9 +745,9 @@ class Smarty_CMS extends Smarty {
 	{
 		global $gCms;
 		$config =& $gCms->GetConfig();
-		$pageinfo = &$gCms->variables['pageinfo'];
+		$contentobj = $gCms->variables['content_obj'];
 
-		if (isset($pageinfo) && $pageinfo->content_id == -1)
+		if (!is_object($contentobj))
 		{
 			#We've a custom error message...  return it here
 			header("HTTP/1.0 404 Not Found");
@@ -757,7 +758,7 @@ class Smarty_CMS extends Smarty {
 				$tpl_source = '';
 			return true;
 		}
-		else if( isset($_SESSION['cms_preview_data']) && $pageinfo->content_id == '__CMS_PREVIEW_PAGE__' )
+		else if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' )
 	        {
 		  if( !isset($_SESSION['cms_preview_data']['content_obj']) )
 		    {
@@ -780,8 +781,7 @@ class Smarty_CMS extends Smarty {
 		else
 		{
 			$manager =& $gCms->GetHierarchyManager();
-			$node =& $manager->sureGetNodeById($pageinfo->content_id);
-			$contentobj =& $node->GetContent();
+			$contentobj = $gCms->variables['content_obj'];
 
 			if (isset($contentobj) && $contentobj !== FALSE)
 			{
@@ -817,18 +817,18 @@ class Smarty_CMS extends Smarty {
 	{
 		global $gCms;
 
-		$pageinfo =& $gCms->variables['pageinfo'];
+		$contentobj = $gCms->variables['content_obj'];
 
-		if (isset($pageinfo) && $pageinfo->content_id == -1)
+		if (!is_object($contentobj))
 		{
 			#We've a custom error message...  set a current timestamp
 			$tpl_timestamp = time();
 		}
 		else
 		{
-			if ($pageinfo->cachable)
+		  if ($contentobj->Cachable())
 			{
-				$tpl_timestamp = $pageinfo->content_modified_date;
+			  $tpl_timestamp = $contentobj->GetModifiedDate();
 			}
 			else
 			{
@@ -854,7 +854,7 @@ class Smarty_CMS extends Smarty {
 	function module_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		global $gCms;
-		$pageinfo =& $gCms->variables['pageinfo'];
+		$contentobj = $gCms->variables['content_obj'];
 		$config = $gCms->config;
 
 		#Run the execute_user function and replace {content} with it's output 
@@ -863,14 +863,14 @@ class Smarty_CMS extends Smarty {
 			@ob_start();
 
 			$id = $smarty_obj->id;
-			$returnid = isset($pageinfo)?$pageinfo->content_id:'';
+			$returnid = is_object($contentobj)?$contentobj->Id():'';
 			$params = GetModuleParameters($id);
 			$action = 'default';
 			if (isset($params['action']))
 			{
 				$action = $params['action'];
 			}
-			echo $gCms->modules[$tpl_name]['object']->DoActionBase($action, $id, $params, isset($pageinfo)?$pageinfo->content_id:'');
+			echo $gCms->modules[$tpl_name]['object']->DoActionBase($action, $id, $params, is_object($contentobj)?$$contentobj->Id():'');
 			$modoutput = @ob_get_contents();
 			@ob_end_clean();
 

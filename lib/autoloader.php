@@ -48,6 +48,13 @@ function cms_autoloader($classname)
       return;
     }
 
+  $fn = cms_join_path($config['root_path'],'lib','classes','contenttypes',"{$classname}.inc.php");
+  if( file_exists($fn) )
+    {
+      require_once($fn);
+      return;
+    }
+
   foreach( $gCms->modules as $module => &$data )
     {
       if( !isset($data['object']) ) continue;

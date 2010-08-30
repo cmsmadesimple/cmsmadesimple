@@ -28,6 +28,11 @@ Core:
   - Add a preference in siteprefs to determine relative path (from uploads_path ) for content_image tag. (default value for the dir param)
   - Modify the content_image tag to check to see if the existing values start with uploads/ and handle that correctly.
   - Modify the content_image tag to output absolute URLS.
+  - Rerite the Tree class to be lighter weight
+  - Adds a new cms_content_cache class to manage cached content
+  - Optimize the contentoperations class to handle cached content
+  - Get rid of the pageinfo stuff... it's redundant
+    (in progress)  
   
 Installer
   - Fixes method conflicts between the installer and the upgrade routine.

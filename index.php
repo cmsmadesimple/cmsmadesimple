@@ -86,6 +86,8 @@ $smarty = &$gCms->smarty;
 $smarty->params = $params;
 
 $page = get_pageid_or_alias_from_url();
+global $gCms;
+$contentops =& $gCms->GetContentOperations();
 
 $pageinfo = '';
 if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
@@ -117,61 +119,40 @@ if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temp
     $pageinfo->content_id = '__CMS_PREVIEW_PAGE__';
   }
 
-if( !is_object($pageinfo) )
-  {
-    $pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
-  }
+$contentobj = '';
+$contentobj = $contentops->LoadContentFromAlias($page,true);
 
 // $page cannot be empty here
-if (isset($pageinfo) && $pageinfo !== FALSE)
+if (is_object($contentobj))
 {
-	$gCms->variables['pageinfo'] =& $pageinfo;
+  //$gCms->variables['pageinfo'] =& $pageinfo;
 
-	if( isset($pageinfo->template_encoding) && 
-	    $pageinfo->template_encoding != '' )
+  if( !$contentobj->IsViewable() )
+    {
+      $url = $contentobj->GetURL();
+      if( $url != '' && $url != '#' )
 	{
-	  set_encoding($pageinfo->template_encoding);
+	  redirect($url);
 	}
+    }
+  $gCms->variables['content_obj'] = $contentobj;
+  $smarty->assign('content_obj',$contentobj);
 
-	if($pageinfo->content_id > 0)
-	{
-		$manager =& $gCms->GetHierarchyManager();
-		$node =& $manager->sureGetNodeById($pageinfo->content_id);
-		if(is_object($node))
-		{
-		  $contentobj =& $node->GetContent(true,true,false);
-		  if( !$contentobj->IsViewable() )
-		    {
-		      $url = $contentobj->GetURL();
-		      if( $url != '' && $url != '#' )
-			{
-			  redirect($url);
-			}
-		    }
-		  if( is_object($contentobj) )
-		    {
-		      $smarty->assign('content_obj',$contentobj);
-		    }
-		}
-	}
+  $gCms->variables['content_id'] = $contentobj->Id();
+  $gCms->variables['page'] = $page;
+  $gCms->variables['page_id'] = $page;
 
-	$gCms->variables['content_id'] = $pageinfo->content_id;
-	$gCms->variables['page'] = $page;
-	$gCms->variables['page_id'] = $page;
+  $gCms->variables['page_name'] = $contentobj->Alias();
+  $gCms->variables['position'] = $contentobj->Hierarchy();
+  $gCms->variables['friendly_position'] = $contentops->CreateFriendlyHierarchyPosition($contentobj->Hierarchy());
 
-	$gCms->variables['page_name'] = $pageinfo->content_alias;
-	$gCms->variables['position'] = $pageinfo->content_hierarchy;
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	$gCms->variables['friendly_position'] = $contentops->CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
-
-	$smarty->assign('content_id', $pageinfo->content_id);
-	$smarty->assign('page', $page);
-	$smarty->assign('page_id', $page);
-	$smarty->assign('page_name', $pageinfo->content_alias);
-	$smarty->assign('page_alias', $pageinfo->content_alias);
-	$smarty->assign('position', $pageinfo->content_hierarchy);
-	$smarty->assign('friendly_position', $gCms->variables['friendly_position']);
+  $smarty->assign('content_id', $contentobj->Id());
+  $smarty->assign('page', $page);
+  $smarty->assign('page_id', $page);
+  $smarty->assign('page_name', $contentobj->Alias());
+  $smarty->assign('page_alias', $contentobj->Alias());
+  $smarty->assign('position', $contentobj->Hierarchy());
+  $smarty->assign('friendly_position', $gCms->variables['friendly_position']);
 }
 else
 // else if (get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0")
@@ -207,7 +188,7 @@ else
 	{
 		$smarty->caching = false;
 		$smarty->compile_check = true;
-		($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
+		($smarty->is_cached('template:'.$contentobj->TemplateId())?$cached="":$cached="not ");
 
 		// we allow backward compatibility (for a while)
 		// for people that have hacks for setting page title
@@ -215,14 +196,14 @@ else
 		// to a smarty variable, and then displaying it later.
 		if( isset($config['process_whole_template']) && $config['process_whole_template'] === false )
 		  {
-		    $top  = $smarty->fetch('tpl_top:'.$pageinfo->template_id);
-		    $body = $smarty->fetch('tpl_body:'.$pageinfo->template_id);
-		    $head = $smarty->fetch('tpl_head:'.$pageinfo->template_id);
+		    $top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
+		    $body = $smarty->fetch('tpl_body:'.$contentobj->TemplateId());
+		    $head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
 		    $html = $top.$head.$body;
 		  }
 		else
 		  {
-		    $html = $smarty->fetch('template:'.$pageinfo->template_id);
+		    $html = $smarty->fetch('template:'.$contentobj->TemplateId());
 		  }
 	}
 }
@@ -264,7 +245,7 @@ else
 
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
-header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . (isset($pageinfo->template_encoding) && $pageinfo->template_encoding != ''?$pageinfo->template_encoding:get_encoding()));
+header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . get_encoding());
 
 echo $html;
 

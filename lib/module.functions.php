@@ -59,9 +59,9 @@ function cms_module_plugin($params,&$smarty)
 	}
 
 	$returnid = '';
-	if (isset($gCms->variables['pageinfo']) && isset($gCms->variables['pageinfo']->content_id))
+	if (isset($gCms->variables['content_obj']) && $gCms->variables['content_obj']->Id())
 	  {
-	    $returnid = $gCms->variables['pageinfo']->content_id;
+	    $returnid = $gCms->variables['content_obj']->Id();
 	  }
 	$params = array_merge($params, GetModuleParameters($id));
 

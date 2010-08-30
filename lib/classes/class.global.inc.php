@@ -457,7 +457,7 @@ class CmsObject {
 		{
 			debug_buffer('', 'Start Loading Hierarchy Manager');
 			$contentops =& $this->GetContentOperations();
-			$this->hrinstance =& $contentops->GetAllContentAsHierarchy(false, array());
+			$this->hrinstance =& $contentops->GetAllContentAsHierarchy(false);
 			debug_buffer('', 'End Loading Hierarchy Manager');
 		}
 

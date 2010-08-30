@@ -180,7 +180,7 @@ class GlobalContentOperations
 			return $cache[$name];
 		}
 
-		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
+		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, use_wysiwyg, description, modified_date FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
 		$row = &$db->GetRow($query, array($name));
 
 		if ($row)

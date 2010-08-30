@@ -162,8 +162,6 @@ debug_buffer('loading page functions');
 require_once(cms_join_path($dirname,'lib','page.functions.php'));
 debug_buffer('loading content functions');
 require_once(cms_join_path($dirname,'lib','content.functions.php'));
-debug_buffer('loading pageinfo functions');
-require_once(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
 debug_buffer('loading translation functions');
 require_once(cms_join_path($dirname,'lib','translation.functions.php'));
 debug_buffer('loading events functions');
@@ -186,6 +184,7 @@ $smarty =& $gCms->GetSmarty();
 $contenttypes =& $gCms->contenttypes;
 
 #Load content types
+/*
 $dir = cms_join_path($dirname,'lib','classes','contenttypes');
 $handle=opendir($dir);
 while ($file = readdir ($handle)) 
@@ -202,6 +201,7 @@ while ($file = readdir ($handle))
     }
 }
 closedir($handle);
+*/
 
 if (!defined('SMARTY_DIR')) {
     define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);

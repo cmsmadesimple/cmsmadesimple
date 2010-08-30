@@ -19,17 +19,17 @@
 function smarty_cms_function_title($params, &$smarty)
 {
 	global $gCms;
-	$pageinfo = &$gCms->variables['pageinfo'];
+	$contentobj = $gCms->variables['content_obj'];
 	$config = &$gCms->GetConfig();
 	$result = '';
-	if (isset($pageinfo) && $pageinfo->content_id == -1)
+	if (!is_object($contentobj))
 	{
 		#We've a custom error message...  set a current timestamp
 		$result = "404 Error";
 	}
 	else
 	{
-		$result = cms_htmlentities($pageinfo->content_title);
+	  $result = cms_htmlentities($contentobj->Name());
 		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 		{
       if (version_compare(phpversion(),"5.3.0","<")) {
