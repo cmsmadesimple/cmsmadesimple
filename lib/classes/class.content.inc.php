@@ -1259,7 +1259,7 @@ class ContentBase
 
 		if (! $dbresult)
 		{
-		  die($db->sql.'<br/>'.$db->ErrorMsg);
+		  die($db->sql.'<br/>'.$db->ErrorMsg());
 			if ($config["debug"] == true)
 			{
 				# :TODO: Translate the error message
