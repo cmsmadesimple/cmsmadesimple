@@ -82,7 +82,6 @@ function copycontentobj(&$contentobj, $content_type, $params = null)
 		$params = $_POST;
 
 	$newcontenttype = strtolower($content_type);
-	$contentops->LoadContentType($newcontenttype);
 	$contentobj->FillParams($params);
 	$tmpobj = $contentops->CreateNewContent($newcontenttype);
 	$tmpobj->SetId($contentobj->Id());
