@@ -1402,13 +1402,13 @@ function get_pageid_or_alias_from_url()
       $page = substr($page, $pos + 1);
     }
 
-  // at this point we MUST have a valid page
+  // if there's nothing use the default content.
   if( empty($page) )
     {
       // maybe it's the home page.
       $page = $contentops->GetDefaultContent();
     }
-  
+
   return $page;
 }
 

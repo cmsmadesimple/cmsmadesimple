@@ -89,7 +89,7 @@ $page = get_pageid_or_alias_from_url();
 global $gCms;
 $contentops =& $gCms->GetContentOperations();
 
-$pageinfo = '';
+$contentobj = '';
 if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
   {
     $tpl_name = trim($_SESSION['cms_preview']);
@@ -115,12 +115,26 @@ if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temp
     fclose($fh);
     unset($_SESSION['cms_preview']);
 
-    $pageinfo = PageInfoOperations::LoadPageInfoFromSerializedData($_SESSION['cms_preview_data']);
-    $pageinfo->content_id = '__CMS_PREVIEW_PAGE__';
+    $contentobj = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
+    $contentobj->setId('__CMS_PREVIEW_PAGE__');
+  }
+else
+  {
+    $contentobj = $contentops->LoadContentFromAlias($page,true);
   }
 
-$contentobj = '';
-$contentobj = $contentops->LoadContentFromAlias($page,true);
+
+if( !is_object($contentobj) )
+  {
+    // specified page not found, load the 404 error page.
+    $contentobj = $contentops->LoadContentFromAlias('error404',true);
+    if( !is_object($contentobj) )
+      {
+	// that wasn't found either... display a hardcoded message.
+	ErrorHandler404();
+	return;
+      }
+  }
 
 // $page cannot be empty here
 if (is_object($contentobj))

@@ -92,7 +92,7 @@ $contentobj = "";
 if (isset($_POST["serialized_content"]))
 {
 	$contentops =& $gCms->GetContentOperations();
-	$contentops->LoadContentType($_POST['orig_content_type']);
+	//$contentops->LoadContentType($_POST['orig_content_type']);
 	$contentobj = UnserializeObject($_POST["serialized_content"]);
 	if (strtolower(get_class($contentobj)) != strtolower($content_type))
 	{
@@ -436,7 +436,7 @@ $submit_buttons .= '</p></div>';
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>
 			  <div class="pagewarning"><?php echo lang('info_preview_notice') ?></div>
-			  <iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo "{$config['root_url']}/index.php?{$config['query_var']}=__CMS_PREVIEW_PAGE__"; } ?>></iframe>
+			  <iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo "{$config['root_url']}/index.php?{$config['query_var']}=__CMS_PREVIEW_PAGE__"; } ?>"></iframe>
 				<?php
 			echo '</div></div>';
 			echo '<div style="clear: both;"></div>';

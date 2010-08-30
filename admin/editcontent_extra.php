@@ -8,7 +8,8 @@ function ajaxpreview($params)
 	$contentops =& $gCms->GetContentOperations();
 
 	$content_type = $params['content_type'];
-	$contentops->LoadContentType($content_type);
+
+	//$contentops->LoadContentType($content_type);
 	$contentobj = UnserializeObject($params["serialized_content"]);
 	if (strtolower(get_class($contentobj)) != strtolower($content_type))
 	{
@@ -20,7 +21,7 @@ function ajaxpreview($params)
 	$_SESSION['cms_preview'] = str_replace('\\','/',$tmpfname);
 	$tmpvar = substr(str_shuffle(md5($tmpfname)),-3);
 	$url = $config["root_url"].'/index.php?'.$config['query_var']."=__CMS_PREVIEW_PAGE__&r=$tmpvar"; // temporary
-	
+
 	$objResponse = new xajaxResponse();
 	$objResponse->assign("previewframe", "src", $url);
 	$objResponse->assign("serialized_content", "value", SerializeObject($contentobj));
