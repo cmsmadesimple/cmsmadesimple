@@ -1427,7 +1427,8 @@ debug_buffer('after menu items');
      */
     function DisplayHTMLStartTag()
     {
-    	echo $this->cms->nls['direction'] == 'rtl' ? "<html dir=\"rtl\"\n>" : "<html>\n";
+		global $nls;
+    	echo (isset($nls['direction']) && $nls['direction'] == 'rtl') ? "<html dir=\"rtl\"\n>" : "<html>\n";
     }
 
     /**

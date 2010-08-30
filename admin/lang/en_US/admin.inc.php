@@ -1,4 +1,8 @@
 <?php
+$lang['admin']['runuserplugin'] = 'Run User Plugin';
+$lang['admin']['output'] = 'Output';
+$lang['admin']['run'] = 'Run';
+$lang['admin']['run_udt'] = 'Run this User Defined Tag';
 $lang['admin']['stylesheetcopied'] = 'Stylesheet Copied';
 $lang['admin']['templatecopied'] = 'Template Copied';
 $lang['admin']['ecommerce_desc'] = 'Modules for providing E-commerce capabilities';
