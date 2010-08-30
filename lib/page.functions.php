@@ -1339,6 +1339,8 @@ function get_pageid_or_alias_from_url()
 	}
       else
 	{
+	  $matches = $route->get_results();
+
 	  // it's a module route
 	  //Now setup some assumptions
 	  if (!isset($matches['id']))
@@ -1350,7 +1352,7 @@ function get_pageid_or_alias_from_url()
 	  if (!isset($matches['returnid']))
 	    $matches['returnid'] = ''; #Look for default page
 	  if (!isset($matches['module']))
-	    $matches['module'] = $route->module;
+	    $matches['module'] = $route->get_dest();
 
 	  //Get rid of numeric matches
 	  foreach ($matches as $key=>$val)
@@ -1367,9 +1369,10 @@ function get_pageid_or_alias_from_url()
 	    }
 
 	  //Now set any defaults that might not have been in the url
-	  if (isset($route->defaults) && count($route->defaults) > 0)
+	  $tmp = $route->get_defaults();
+	  if (is_array($tmp) && count($tmp) > 0)
 	    {
-	      foreach ($route->defaults as $key=>$val)
+	      foreach ($tmp as $key=>$val)
 		{
 		  $_REQUEST[$matches['id'] . $key] = $val;
 		  if (array_key_exists($key, $matches))

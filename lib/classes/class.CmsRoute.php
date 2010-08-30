@@ -14,6 +14,7 @@ class CmsRoute
   private $_term;
   private $_defaults;
   private $_absolute;
+  private $_results;
 
   /**
    * Construct a new route object.
@@ -61,7 +62,17 @@ class CmsRoute
   {
     return $this->_content_id;
   }
-  
+
+
+  /**
+   * Retrieve the default parameters for this route
+   *
+   * @return array The default parameters for the route.. Null if no defaults specified.
+   */
+  public function get_defaults()
+  {
+    return $this->_defaults;
+  }
 
   /**
    * Test wether this route is for a page.
@@ -75,16 +86,30 @@ class CmsRoute
 
 
   /**
+   * Get matching parameter results.
+   *
+   * @return array Matching parameters... or Null
+   */
+  public function get_results()
+  {
+    return $this->_results;
+  }
+
+  /**
    * Test if this route matches the specified string
    * Depending upon the route, either a string comparison or regular expression match
    * is performed.
    *
    * @param string The input string
+   * @param boolean Perform an exact string match rather than depending on the route values.
+   * @param array   Optional array which will contain output matched parameters for regular expression
+   * searches.
    * @return boolean
    */
-  public function matches($str)
+  public function matches($str,$exact = false)
   {
-    if( $this->is_content() || $this->_absolute )
+    $this->_result = null;
+    if( $this->is_content() || $this->_absolute || $exact )
       {
 	if( $this->_term == $str )
 	  {
@@ -92,9 +117,20 @@ class CmsRoute
 	  }
 	return FALSE;
       }
-    return (bool)preg_match($this->_term,$str);
+
+    $tmp = array();
+    $res = (bool)preg_match($this->_term,$str,$tmp);
+    if( $res && is_array($tmp) )
+      {
+	$this->_results = $tmp;
+      }
+    return $res;
   }
+
+
 } // end of class
+
+
 
 # vim:ts=4 sw=4 noet
 ?>

@@ -110,9 +110,10 @@ class cms_route_manager
    * Find a route that matches the specified string
    *
    * @param string The string to test against (usually an incoming url request)
-   * @return CmsRoute the matching route, or null.
+   * @param boolean Perform an exact string match rather than a regex match.
+   * @return CmsRouteMatch the matching route, or null.
    */
-  static public function find_match($str)
+  static public function find_match($str,$exact = false)
   {
     $res = null;
     if( !is_array(self::$_routes) )
@@ -122,7 +123,7 @@ class cms_route_manager
     
     foreach( self::$_routes as $route )
       {
-	if( $route->matches($str) )
+	if( $route->matches($str,$exact) )
 	  {
 	    return $route;
 	  }
@@ -131,6 +132,41 @@ class cms_route_manager
     return $res;
   }
 
+
+  /**
+   * Load existing routes from modules
+   */
+  public static function load_routes()
+  {
+    // force modules to register their routes.
+    global $gCms;
+    global $CMS_ADMIN_PAGE;
+    $flag = false;
+    if( isset($CMS_ADMIN_PAGE) )
+      {
+	// hack to force modules to register their routes.
+	$flag = $CMS_ADMIN_PAGE;
+	unset($CMS_ADMIN_PAGE);
+      }
+
+    foreach( $gCms->modules as $name => $data )
+      {
+	if( $name && isset($data['object'])  )
+	  {
+	    $module =& $data['object'];
+	    $module->SetParameters();
+	  }
+      }
+
+    if( $flag )
+      {
+	$CMS_ADMIN_PAGE = $flag;
+      }
+
+    // force content to register routes.
+    $contentops = $gCms->GetContentOperations();
+    $contentops->register_routes();
+  }
 
   /**
    * Retrieve the cache filename.

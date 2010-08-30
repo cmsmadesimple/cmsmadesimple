@@ -22,10 +22,9 @@ class content_assistant
    * A utility function to test if the supplied url path is valid for the supplied content id
    *
    * @param string The partial url path to test
-   * @param integer The associated content id.  Use a negative value for new content objects.
    * @return boolean
    */ 
-  public static function is_valid_url($url,$content_id)
+  public static function is_valid_url($url,$content_id = '')
   {
     // check for starting or ending slashes
     if( startswith($url,'/') || endswith($url,'/') )
@@ -40,38 +39,13 @@ class content_assistant
 	return FALSE;
       }
 
-    // force modules to register their routes.
-    global $gCms;
-    global $CMS_ADMIN_PAGE;
-    $flag = false;
-    if( isset($CMS_ADMIN_PAGE) )
-      {
-	// hack to force modules to register their routes.
-	$flag = $CMS_ADMIN_PAGE;
-	unset($CMS_ADMIN_PAGE);
-      }
-
-    foreach( $gCms->modules as $name => $data )
-      {
-	if( $name && isset($data['object'])  )
-	  {
-	    $module =& $data['object'];
-	    $module->SetParameters();
-	  }
-      }
-
-    if( $flag )
-      {
-	$CMS_ADMIN_PAGE = $flag;
-      }
-
-    // force content to register routes.
-    $contentops = $gCms->GetContentOperations();
-    $contentops->register_routes();
-
+    cms_route_manager::load_routes();
     $route = cms_route_manager::find_match($url);
-    if( is_object($route) ) return FALSE;
-
+    if( !$route ) return TRUE;
+    if( $route->is_content() && $content_id != '' && $route->get_content() == $content_id )
+      {
+	return TRUE;
+      }
     return TRUE;
   }
 } // end of class
