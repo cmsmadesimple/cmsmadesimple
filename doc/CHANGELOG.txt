@@ -1,3 +1,31 @@
+Version 1.9
+-----------------------------
+Core:
+  - Adds support for custom urls for each content page.
+    * URLS can be auto created from the page hierarchy, or a custom string
+      entered.  The system checks for duplocate URLS.
+    * The url mechanism works in addition to the existing alias generated urls
+  - A new config option 'auto_create_url' determines how page urls are
+    determined (if at all).
+  - Add support for a description and a wysiwyg toggle for global content blocks.
+  - Adds titles and a little bit of customization to the listcontent screen
+  - Adds the ability to 'run' a UDT from within the admin interface.
+  - Adds a create_url method to the module api
+    * The builtin CreateLink method calls this to create the URL portion of the link
+    * If a prettyurl argument is not passed in, an attempt is made to call the create_pretty_url
+      method in the module to generate one based upon the arguments passed to create_url
+  - Removes the IsValidRoute() method from the module api that was introduced in 1.8 
+    (it's much better to use the new route mechanism)
+  - Rewrite the route handing mechanism, adds a new cms_route_manager class and
+    fills out the CmsRoute class.
+  
+Installer
+  - Fixes method conflicts between the installer and the upgrade routine.
+    (may be a few addmes yet that have to be added to the core lang stuff).
+
+News:
+  - Adds support for custom urls for each news article
+
 Version 1.8.1 - Mankara 
 -----------------------------
 Security:
