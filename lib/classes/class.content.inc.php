@@ -1352,12 +1352,22 @@ class ContentBase
 		}
 	    }
 
-	  if( $this->mURL == '' && content_assistant::auto_create_url() && $this->HasUsableLink() )
+	  $auto_type = content_assistant::auto_create_url();
+	  if( $this->mURL == '' && $auto_type && $this->HasUsableLink() )
 	    {
 	      // create a valid url.
 	      if( !$this->DefaultContent() )
 		{
-		  $this->mURL = $this->HierarchyPath();
+		  if( $auto_type == 'flat' )
+		    {
+		      // this is kinda redundant as the route processing would handle this.
+		      $this->mURL = $this->mAlias;
+		    }
+		  else
+		    {
+		      // if it don't explicitly say 'flat' we're creating a hierarchical url.
+		      $this->mURL = $this->HierarchyPath();
+		    }
 		}
 	    }
 	  $this->mURL = trim($this->mURL," /\t\r\n\0\x08"); // silently delete bad chars.

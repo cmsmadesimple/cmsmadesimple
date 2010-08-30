@@ -10,9 +10,9 @@ class content_assistant
   public static function auto_create_url()
   {
     global $gCms;
-    if( isset($gCms->config['auto_create_url']) && $gCms->config['auto_create_url'] == true )
+    if( isset($gCms->config['auto_create_url']) && $gCms->config['auto_create_url'] != 'none' )
       {
-	return TRUE;
+	return strtolower($gCms->config['auto_create_url']);
       }
     return FALSE;
   }
