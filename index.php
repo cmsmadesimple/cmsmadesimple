@@ -38,6 +38,11 @@ if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
 }
 
 if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
+  {
+    // attempt to create the config.php if it doesn't already exist.
+    @touch(CONFIG_FILE_LOCATION);
+  }
+if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
 {
     require_once($dirname.'/lib/misc.functions.php');
     if (FALSE == is_file($dirname.'/install/index.php')) {

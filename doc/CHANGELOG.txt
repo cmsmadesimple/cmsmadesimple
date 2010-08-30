@@ -20,10 +20,23 @@ Core:
     fills out the CmsRoute class.
   - Adds a new config entry for the timezone.
   - Adds the ability to exclude logged in administrators from seeing the sitedown message.
+  - Adds preference in siteprefs to enable mandatory URLS
+  - Adds preference in siteprefs to require page urls be created automatically on add or edit page.
+  - Adds preference in siteprefs to determine the form of automatically created page urls.
+  - Add a preference in siteprefs to determine relative path (from image_uploads_path) for image field.
+  - Add a preference in siteprefs to determine relative path (from image_uploads_path) for thumbnail field.
+  - Add a preference in siteprefs to determine relative path (from uploads_path ) for content_image tag. (default value for the dir param)
+  - Modify the content_image tag to check to see if the existing values start with uploads/ and handle that correctly.
+  - Modify the content_image tag to output absolute URLS.
   
 Installer
   - Fixes method conflicts between the installer and the upgrade routine.
     (may be a few addmes yet that have to be added to the core lang stuff).
+  - Fixes module install stuff
+  - Now asks for the timezone
+
+MenuManager
+  - image and thumbnail fields now output absolute URLS.
 
 News:
   - Adds support for custom urls for each news article

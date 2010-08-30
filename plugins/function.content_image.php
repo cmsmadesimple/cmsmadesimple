@@ -19,10 +19,20 @@
 function smarty_cms_function_content_image($params,&$smarty)
 {
   global $gCms;
+  $config = $gCms->GetConfig();
   $pageinfo =& $gCms->variables['pageinfo'];
   if (!isset($pageinfo) || $pageinfo === FALSE || !isset($pageinfo->content_id) )
-    return _smarty_cms_function_content_return('', $params, $smarty);
-    
+    {
+      return _smarty_cms_function_content_return('', $params, $smarty);
+    }
+
+  $adddir = get_site_preference('contentimage_path');
+  if( $params['dir'] != '' )
+    {
+      $adddir = $params['dir'];
+    }
+  $dir = cms_join_path($config['uploads_path'],$adddir);
+  $basename = basename($config['uploads_path']);
 
   $result = '';
   if( isset($params['block']) )
@@ -35,6 +45,17 @@ function smarty_cms_function_content_image($params,&$smarty)
   $img = _smarty_cms_function_content_return($result, $params, $smarty);
   if( $img == -1 || empty($img) )
     return;
+
+  // create the absolute url.
+  if( startswith($img,$basename) )
+    {
+      // old style url.
+      $img = $config['uploads_url'] . '/'.$img;
+    }
+  else
+    {
+      $img = $config['uploads_url'] . '/'.$adddir.'/'.$img;
+    }
 
   $name = $params['block'];
   $alt = '';

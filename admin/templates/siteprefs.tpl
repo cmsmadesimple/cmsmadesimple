@@ -1,6 +1,7 @@
 {$mod->StartTabHeaders()}
 {$mod->SetTabHeader('general',$lang_general,$active_general)}
 {$mod->SetTabHeader('listcontent',$lang_listcontent,$active_listcontent)}
+{$mod->SetTabHeader('editcontent',$lang_editcontent_settings)}
 {$mod->SetTabHeader('sitedown',$lang_sitedown,$active_sitedown)}
 {$mod->SetTabHeader('setup',$lang_setup,$active_setup)}
 {$mod->EndTabHeaders()}
@@ -133,6 +134,83 @@
 </form>
 {$mod->EndTab()}
 
+{* editcontent tab *}
+{$mod->StartTab('editcontent')}
+<form id="siteprefform_editcontent" method="post" action="siteprefs.php">
+<div>
+  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+  <input type="hidden" name="active_tab" value="editcontent" />
+  <input type="hidden" name="editsiteprefs" value="true" />
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{'content_autocreate_urls'|lang}:</p>
+  <p class="pageinput">
+    <select name="content_autocreate_urls">
+    {html_options options=$yesno selected=$content_autocreate_urls}
+    </select>
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{'content_autocreate_flaturls'|lang}:</p>
+  <p class="pageinput">
+    <select name="content_autocreate_flaturls">
+    {html_options options=$yesno selected=$content_autocreate_flaturls}
+    </select>
+    <br/>
+    {'info_content_autocreate_flaturls'|lang}
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{'content_mandatory_urls'|lang}:</p>
+  <p class="pageinput">
+    <select name="content_mandatory_urls">
+    {html_options options=$yesno selected=$content_mandatory_urls}
+    </select>
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{'content_imagefield_path'|lang}:</p>
+  <p class="pageinput">
+    <input type="text" name="content_imagefield_path" size="50" maxlength="255" value="{$content_imagefield_path}"/>
+    <br/>
+    {'info_content_imagefield_path'|lang}
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{'content_thumbnailfield_path'|lang}:</p>
+  <p class="pageinput">
+    <input type="text" name="content_thumbnailfield_path" size="50" maxlength="255" value="{$content_thumbnailfield_path}"/>
+    <br/>
+    {'info_content_thumbnailfield_path'|lang}
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{'contentimage_path'|lang}:</p>
+  <p class="pageinput">
+    <input type="text" name="contentimage_path" size="50" maxlength="255" value="{$contentimage_path}"/>
+    <br/>
+    {'info_contentimage_path'|lang}
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">&nbsp;</p>
+  <p class="pageinput">
+    <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+    <input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+  </p>
+</div>
+
+</form>
+{$mod->EndTab()}
+
+{* sitedown tab *}
 {$mod->StartTab('sitedown')}
 <form id="siteprefform_sitedown" method="post" action="siteprefs.php">
 <div>

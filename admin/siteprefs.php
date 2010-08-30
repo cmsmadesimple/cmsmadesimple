@@ -55,6 +55,7 @@ if (!$access)
 
 global $gCms;
 $db =& $gCms->GetDb();
+$config = $gCms->GetConfig();
 
 $error = "";
 $message = "";
@@ -86,6 +87,13 @@ $pseudocron_granularity = 60;
 $listcontent_showalias = 1;
 $listcontent_showurl = 1;
 $listcontent_showtitle = 1;
+$content_autocreate_urls = 0;
+$content_autocreate_flaturls = 0;
+$content_mandatory_urls = 0;
+$contentimage_useimagepath = 0;
+$content_imagefield_path = '';
+$content_thumbnailfield_path = '';
+$contentimage_path = '';
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php".$urlext);
@@ -119,6 +127,12 @@ $basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
 $listcontent_showalias = get_site_preference('listcontent_showalias',$listcontent_showalias);
 $listcontent_showurl = get_site_preference('listcontent_showurl',$listcontent_showurl);
 $listcontent_showtitle = get_site_preference('listcontent_showtitle',$listcontent_showtitle);
+$content_autocreate_urls = get_site_preference('content_autocreate_urls',$content_autocreate_urls);
+$content_autocreate_flaturls = get_site_preference('content_autocreate_flaturls',$content_autocreate_flaturls);
+$content_mandatory_urls = get_site_preference('content_mandatory_urls',$content_mandatory_urls);
+$content_imagefield_path = get_site_preference('content_imagefield_path',$content_imagefield_path);
+$content_thumbnailfield_path = get_site_preference('content_thumbnailfield_path',$content_thumbnailfield_path);
+$contentimage_path = get_site_preference('contentimage_path',$contentimage_path);
 
 $active_tab='unknown';
 if( isset($_POST['active_tab']) )
@@ -208,6 +222,21 @@ else if (isset($_POST["editsiteprefs"]))
 	  if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
 	  set_site_preference('thumbnail_width',$thumbnail_width);
 	  set_site_preference('thumbnail_height',$thumbnail_height);
+	  break;
+
+	case 'editcontent':
+	  $content_autocreate_urls = (int)$_POST['content_autocreate_urls'];
+	  set_site_preference('content_autocreate_urls',$content_autocreate_urls);
+	  $content_autocreate_flaturls = (int)$_POST['content_autocreate_flaturls'];
+	  set_site_preference('content_autocreate_flaturls',$content_autocreate_flaturls);
+	  $content_mandatory_urls = (int)$_POST['content_mandatory_urls'];
+	  set_site_preference('content_mandatory_urls',$content_mandatory_urls);
+	  $content_imagefield_path = trim($_POST['content_imagefield_path']);
+	  set_site_preference('content_imagefield_path',$content_imagefield_path);
+	  $content_thumbnailfield_path = trim($_POST['content_thumbnailfield_path']);
+	  set_site_preference('content_thumbnailfield_path',$content_thumbnailfield_path);
+	  $contentimage_path = trim($_POST['contentimage_path']);
+	  set_site_preference('contentimage_path',$contentimage_path);
 	  break;
 
 	case 'listcontent':
@@ -401,6 +430,12 @@ $smarty->assign('pseudocron_granularity',$pseudocron_granularity);
 $smarty->assign('listcontent_showalias',$listcontent_showalias);
 $smarty->assign('listcontent_showurl',$listcontent_showurl);
 $smarty->assign('listcontent_showtitle',$listcontent_showtitle);
+$smarty->assign('content_autocreate_urls',$content_autocreate_urls);
+$smarty->assign('content_autocreate_flaturls',$content_autocreate_flaturls);
+$smarty->assign('content_mandatory_urls',$content_mandatory_urls);
+$smarty->assign('content_imagefield_path',$content_imagefield_path);
+$smarty->assign('content_thumbnailfield_path',$content_thumbnailfield_path);
+$smarty->assign('contentimage_path',$contentimage_path);
 
 $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
 	     60=>lang('cron_60m'),120=>lang('cron_120m'),
@@ -447,6 +482,7 @@ $smarty->assign('lang_sitedownexcludes',lang('sitedownexcludes'));
 $smarty->assign('lang_info_sitedownexcludes',lang('info_sitedownexcludes'));
 $smarty->assign('lang_basic_attributes',lang('basic_attributes'));
 $smarty->assign('lang_info_basic_attributes',lang('info_basic_attributes'));
+$smarty->assign('lang_editcontent_settings',lang('editcontent_settings'));
 
 $all_attributes = array();
 $all_attributes['template'] = lang('template');

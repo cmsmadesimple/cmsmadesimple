@@ -1286,14 +1286,14 @@ function get_pageid_or_alias_from_url()
     }
   else
     {
-      // either we're using internal urls
+      // either we're using pretty urls
       // or this is the default page.
       if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
 	{
 	  $matches = array();
 	  if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['REQUEST_URI'], $matches))
 	    {
-	      // internal pretty urls.
+	      // pretty urls... grab all the stuff after the index.php
 	      $page = $matches[1];
 	    }
 	}

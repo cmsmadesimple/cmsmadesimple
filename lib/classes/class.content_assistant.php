@@ -9,12 +9,7 @@ class content_assistant
    */
   public static function auto_create_url()
   {
-    global $gCms;
-    if( isset($gCms->config['auto_create_url']) && $gCms->config['auto_create_url'] != 'none' )
-      {
-	return strtolower($gCms->config['auto_create_url']);
-      }
-    return FALSE;
+    return get_site_preference('content_autocreate_urls',0);
   }
 
 

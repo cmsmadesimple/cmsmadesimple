@@ -1,4 +1,19 @@
 <?php
+$lang['admin']['info_content_autocreate_flaturls'] = 'If enabled, all urls will be created as a copy of the page alias (but not synchronized to the page alias)';
+$lang['admin']['content_autocreate_flaturls'] = 'Automatically created URL\'s are flat';
+$lang['admin']['content_autocreate_urls'] = 'Automatically create page URL\'s';
+$lang['admin']['content_mandatory_urls'] = 'Page URLS are required';
+$lang['admin']['content_imagefield_path'] = 'Path for image field';
+$lang['admin']['info_content_imagefield_path'] = 'Relative to the image uploads path, specify a directory name that contains the paths containing files for the image field';
+$lang['admin']['content_thumbnailfield_path'] = 'Path for thumbnail field';
+$lang['admin']['info_content_thumbnailfield_path'] = 'Relative to the image uploads path, specify a directory name that contains the paths containing files for the image field.  Usually this will be the same as the path above.';
+$lang['admin']['contentimage_path'] = 'Path for {content_image} tag';
+$lang['admin']['info_contentimage_path'] = 'Relative to the uploads path, specify a directory name that contains the paths containing files for the {content_image} tag.  This value is used as a default for the dir parameter';
+$lang['admin']['editcontent_settings'] = 'Content Editing Settings';
+$lang['admin']['help_page_url'] = 'Specify an alternat URL (relative to the root of your website) that can be used to uniquely identify this page.  i.e: path/to/mypage';
+$lang['admin']['help_page_alias'] = 'The alias is used as an alternate to the page id to uniquely idendify a page. It mmust be unique across all pages.  The alias is also used to assist in building the URL for the page';
+$lang['admin']['help_page_searchable'] = 'This setting indicates wether the content for this page should be indexed by the search engine';
+$lang['admin']['help_page_cachable'] = 'Performance can be increased by setting as many pages as possible to cachable.  However this cannot be used for pages where content may change on a per request basis';
 $lang['admin']['sitedownexcludeadmins'] = 'Exclude logged in administrators';
 $lang['admin']['your_ipaddress'] = 'Your IP Address is';
 $lang['admin']['use_wysiwyg'] = 'Use WYSIWYG';

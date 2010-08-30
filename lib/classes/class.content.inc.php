@@ -1354,14 +1354,14 @@ class ContentBase
 	    }
 
 	  $auto_type = content_assistant::auto_create_url();
-	  if( $this->mURL == '' && $auto_type && $this->HasUsableLink() )
+	  if( $this->mURL == '' && get_site_preference('content_autocreate_urls') )
 	    {
 	      // create a valid url.
 	      if( !$this->DefaultContent() )
 		{
-		  if( $auto_type == 'flat' )
+		  if( get_site_preference('content_autocreate_flaturls',0) )
 		    {
-		      // this is kinda redundant as the route processing would handle this.
+		      // the default url is the alias... but not synced to the alias.
 		      $this->mURL = $this->mAlias;
 		    }
 		  else
@@ -1371,11 +1371,20 @@ class ContentBase
 		    }
 		}
 	    }
-	  $this->mURL = trim($this->mURL," /\t\r\n\0\x08"); // silently delete bad chars.
-	  if( $this->mURL != '' && !content_assistant::is_valid_url($this->mURL,$this->mId) )
+	  if( $this->mURL == '' && get_site_preference('content_mandatory_urls') && !$this->mDefaultContent )
 	    {
-	      // and validate the URL.
-	      $errors[] = lang('invalid_url');
+	      // page url is empty and mandatory
+	      $errors[] = lang('content_mandatory_urls');
+	    }
+	  else if( $this->mURL != '' )
+	    {
+	      // page url is not empty, check for validity.
+	      $this->mURL = trim($this->mURL," /\t\r\n\0\x08"); // silently delete bad chars.
+	      if( $this->mURL != '' && !content_assistant::is_valid_url($this->mURL,$this->mId) )
+		{
+		  // and validate the URL.
+		  $errors[] = lang('invalid_url');
+		}
 	    }
 
 	  return (count($errors) > 0?$errors:FALSE);
@@ -2046,7 +2055,7 @@ class ContentBase
 	  switch( $one )
 	    {
 	    case 'cachable':
-	      return array(lang('cachable').':','<input type="hidden" name="cachable" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
+	      return array(lang('cachable').':','<input type="hidden" name="cachable" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />',lang('help_page_cachable'));
 	      break;
 	
 	    case 'title':
@@ -2095,7 +2104,7 @@ class ContentBase
 	      break;
 	      
 	    case 'alias':
-	      return array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
+	      return array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />',lang('help_page_alias'));
 	      break;
 	      
 	    case 'secure':
@@ -2114,13 +2123,18 @@ class ContentBase
 	    case 'page_url':
 	      {
 		$str = '<input type="text" name="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
-		return array(lang('page_url').':',$str);
+		$prompt = lang('page_url').':';
+		if( get_site_preference('content_mandatory_urls',0) )
+		  {
+		    $prompt = '*'.$prompt;
+		  }
+		return array($prompt,$str);
 	      }
 	      break;
 
 	    case 'image':
 	      {
-		$dir = $config['image_uploads_path'];
+		$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_imagefield_path'));
 		$data = $this->GetPropertyValue('image');
 		$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
 		return array(lang('image').':',$dropdown);
@@ -2129,9 +2143,10 @@ class ContentBase
 	      
 	    case 'thumbnail':
 	      {
-		$dir = $config['image_uploads_path'];
+		$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_thumbnailfield_path'));
 		$data = $this->GetPropertyValue('thumbnail');
 		$dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
+		if( !$dropdown ) return FALSE;
 		return array(lang('thumbnail').':',$dropdown);
 	      }
 	      break;

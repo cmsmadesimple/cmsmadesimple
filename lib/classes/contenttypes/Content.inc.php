@@ -697,7 +697,8 @@ class Content extends ContentBase
 	    }
 	  return array(lang('searchable').':',
 			'<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
-                           <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />');
+            <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />',
+				   lang('help_page_searchable'));
 	}
 	break;
 	
@@ -759,16 +760,21 @@ class Content extends ContentBase
 	{
 		global $gCms;
 		$config =& $gCms->GetConfig();
-		$dir = cms_join_path($config['uploads_path'],$blockInfo['dir']);
-		$optprefix = 'uploads';
-		if( !empty($blockInfo['dir']) ) $optprefix .= '/'.$blockInfo['dir'];
+		$adddir = get_site_preference('contentimage_path');
+		if( $blockInfo['dir'] != '' )
+			{
+				$adddir = $blockInfo['dir'];
+			}
+		$dir = cms_join_path($config['uploads_path'],$adddir);
+		$optprefix = '';
+		//$optprefix = 'uploads';
+		//if( !empty($blockInfo['dir']) ) $optprefix .= '/'.$blockInfo['dir'];
 		$inputname = $blockInfo['id'];
 		if( isset($blockInfo['inputname']) )
 		{
 			$inputname = $blockInfo['inputname'];
 		}
-		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',
-			$optprefix,true);
+		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',$optprefix,true);
 		if( $dropdown === false )
 		{
 			$dropdown = lang('error_retrieving_file_list');
