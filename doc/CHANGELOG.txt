@@ -32,7 +32,8 @@ Core:
   - Adds a new cms_content_cache class to manage cached content
   - Optimize the contentoperations class to handle cached content
   - Get rid of the pageinfo stuff... it's redundant
-    (in progress)  
+    (in progress)
+  - Remove the long deprecated {sitemap} plugin. 
   
 Installer
   - Fixes method conflicts between the installer and the upgrade routine.
