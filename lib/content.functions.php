@@ -1210,6 +1210,13 @@ function is_sitedown()
   
   $ret = cms_ipmatches($_SERVER['REMOTE_ADDR'],$excludes);
   if( $ret ) return FALSE;
+
+  if( get_site_preference('sitedownexcludeadmins') )
+    {
+      $uid = get_userid(FALSE);
+      if( $uid ) return FALSE;
+    }
+
   return TRUE;
 }
 

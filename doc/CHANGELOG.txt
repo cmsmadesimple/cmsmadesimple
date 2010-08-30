@@ -19,6 +19,7 @@ Core:
   - Rewrite the route handing mechanism, adds a new cms_route_manager class and
     fills out the CmsRoute class.
   - Adds a new config entry for the timezone.
+  - Adds the ability to exclude logged in administrators from seeing the sitedown message.
   
 Installer
   - Fixes method conflicts between the installer and the upgrade routine.

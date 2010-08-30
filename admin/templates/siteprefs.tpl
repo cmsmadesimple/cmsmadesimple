@@ -150,10 +150,18 @@
   <p class="pageinput">{$textarea_sitedownmessage}</p>
 </div>
 <div class="pageoverflow">
+  <p class="pagetext">{'sitedownexcludeadmins'|lang}:</p>
+  <p class="pageinput">
+    <input type="hidden" name="sitedownexcludeadmins" value="0"/>
+    <input type="checkbox" name="sitedownexcludeadmins" value="1" {if $sitedownexcludeadmins == 1}checked="checked"{/if}/>
+  </p>
+</div>
+<div class="pageoverflow">
   <p class="pagetext">{$lang_sitedownexcludes}:</p>
   <p class="pageinput">
      <input type="text" name="sitedownexcludes" size="50" maxlength="255" value="{$sitedownexcludes}"/>
      <br/>
+     <strong>{'your_ipaddress'|lang}:</strong>&nbsp;{$smarty.server.REMOTE_ADDR}<br/>
      {$lang_info_sitedownexcludes}
   </p>
 </div>

@@ -66,6 +66,7 @@ $disablesafemodewarning = 0;
 $allowparamcheckwarnings = 0;
 $enablenotifications = 1;
 $sitedownexcludes = '';
+$sitedownexcludeadmins = '';
 $basic_attributes = '';
 $xmlmodulerepository = "";
 $urlcheckversion = "";
@@ -113,6 +114,7 @@ $disablesafemodewarning = get_site_preference('disablesafemodewarning',$disables
 $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
 $enablenotifications = get_site_preference('enablenotifications',$enablenotifications);
 $sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
+$sitedownexcludeadmins = get_site_preference('sitedownexcludeadmins',$sitedownexcludeadmins);
 $basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
 $listcontent_showalias = get_site_preference('listcontent_showalias',$listcontent_showalias);
 $listcontent_showurl = get_site_preference('listcontent_showurl',$listcontent_showurl);
@@ -222,11 +224,13 @@ else if (isset($_POST["editsiteprefs"]))
 	    {
 	      $sitedownexcludes = trim($_POST['sitedownexcludes']);
 	    }
+	  $sitedownexcludeadmins = (int)$_POST['sitedownexcludeadmins'];
 	  if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage=$_POST['enablesitedownmessage'];
 	  if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
 	  set_site_preference('enablesitedownmessage', $enablesitedownmessage);
 	  set_site_preference('sitedownmessage', $sitedownmessage);
 	  set_site_preference('sitedownexcludes',$sitedownexcludes);
+	  set_site_preference('sitedownexcludeadmins',$sitedownexcludeadmins);
 	  break;
 
 	case 'setup':
@@ -388,6 +392,7 @@ $smarty->assign('allowparamcheckwarnings',$allowparamcheckwarnings);
 $smarty->assign('defaultdateformat',$defaultdateformat);
 $smarty->assign('enablenotifications',$enablenotifications);
 $smarty->assign('sitedownexcludes',$sitedownexcludes);
+$smarty->assign('sitedownexcludeadmins',$sitedownexcludeadmins);
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));
 $smarty->assign('thumbnail_width',$thumbnail_width);
 $smarty->assign('thumbnail_height',$thumbnail_height);

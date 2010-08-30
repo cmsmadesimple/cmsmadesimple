@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['sitedownexcludeadmins'] = 'Exclude logged in administrators';
+$lang['admin']['your_ipaddress'] = 'Your IP Address is';
 $lang['admin']['use_wysiwyg'] = 'Use WYSIWYG';
 $lang['admin']['contenttype_redirlink'] = 'Redirecting Link';
 $lang['admin']['yes'] = 'Yes';
