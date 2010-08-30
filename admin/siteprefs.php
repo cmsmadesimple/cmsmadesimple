@@ -314,6 +314,11 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 
 # give everything to smarty
 $tmp = array_keys($gCms->modules);
+if( !is_array($tmp) || count($tmp) == 0 )
+{
+  echo $themeObject->ShowErrors(lang('error_nomodules'));
+  return;
+}
 $firstmod = $tmp[0];
 $smarty->assign_by_ref('mod',$gCms->modules[$firstmod]['object']);
 
