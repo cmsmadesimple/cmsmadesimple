@@ -108,7 +108,7 @@ class GlobalContentOperations
 
 		$result = array();
 
-		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs ORDER BY htmlblob_name";
+		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date, use_wysiwyg, description FROM ".cms_db_prefix()."htmlblobs ORDER BY htmlblob_name";
 		$dbresult = &$db->Execute($query);
 
 		while (is_object($dbresult) && !$dbresult->EOF)
@@ -118,6 +118,8 @@ class GlobalContentOperations
 			$oneblob->name = $dbresult->fields['htmlblob_name'];
 			$oneblob->content = $dbresult->fields['html'];
 			$oneblob->owner = $dbresult->fields['owner'];
+			$oneblob->description = $dbresult->fields['description'];
+			$oneblob->use_wysiwyg = $dbresult->fields['use_wysiwyg'];
 			$oneblob->modified_date = $db->UnixTimeStamp($dbresult->fields['modified_date']);
 			$result[] = $oneblob;
 			$dbresult->MoveNext();
@@ -139,7 +141,7 @@ class GlobalContentOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ?";
+		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date, description, use_wysiwyg FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ?";
 		$row = &$db->GetRow($query, array($id));
 
 		if ($row)
@@ -149,6 +151,8 @@ class GlobalContentOperations
 			$oneblob->name = $row['htmlblob_name'];
 			$oneblob->content = $row['html'];
 			$oneblob->owner = $row['owner'];
+			$oneblob->description = $row['description'];
+			$oneblob->use_wysiwyg = $row['use_wysiwyg'];
 			$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
 			$result =& $oneblob;
 		}
@@ -186,6 +190,8 @@ class GlobalContentOperations
 			$oneblob->name = $row['htmlblob_name'];
 			$oneblob->content = $row['html'];
 			$oneblob->owner = $row['owner'];
+			$oneblob->use_wysiwyg = $row['use_wysiwyg'];
+			$oneblob->description = $row['description'];
 			$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
 			$result =& $oneblob;
 
@@ -213,8 +219,8 @@ class GlobalContentOperations
 
 		$new_htmlblob_id = $db->GenID(cms_db_prefix()."htmlblobs_seq");
 		$time = $db->DBTimeStamp(time());
-		$query = "INSERT INTO ".cms_db_prefix()."htmlblobs (htmlblob_id, htmlblob_name, html, owner, create_date, modified_date) VALUES (?,?,?,?,".$time.",".$time.")";
-		$dbresult = $db->Execute($query, array($new_htmlblob_id, $htmlblob->name, $htmlblob->content, $htmlblob->owner));
+		$query = "INSERT INTO ".cms_db_prefix()."htmlblobs (htmlblob_id, htmlblob_name, html, owner, use_wysiwyg, description, create_date, modified_date) VALUES (?,?,?,?,?,?,".$time.",".$time.")";
+		$dbresult = $db->Execute($query, array($new_htmlblob_id, $htmlblob->name, $htmlblob->content, $htmlblob->owner, $htmlblob->use_wysiwyg, $htmlblob->description));
 		if ($dbresult !== false)
 		{
 			$result = $new_htmlblob_id;
@@ -237,8 +243,8 @@ class GlobalContentOperations
 		$db = &$gCms->GetDb();
 
 		$time = $db->DBTimeStamp(time());
-		$query = "UPDATE ".cms_db_prefix()."htmlblobs SET htmlblob_name = ?, html = ?, owner = ?, modified_date = ".$time." WHERE htmlblob_id = ?";
-		$dbresult = $db->Execute($query,array($htmlblob->name,$htmlblob->content,$htmlblob->owner,$htmlblob->id));
+		$query = "UPDATE ".cms_db_prefix()."htmlblobs SET htmlblob_name = ?, html = ?, owner = ?, use_wysiwyg = ?, description = ?, modified_date = ".$time." WHERE htmlblob_id = ?";
+		$dbresult = $db->Execute($query,array($htmlblob->name,$htmlblob->content,$htmlblob->owner,$htmlblob->use_wysiwyg,$htmlblob->description,$htmlblob->id));
 		if ($dbresult !== false)
 		{
 			$result = true;

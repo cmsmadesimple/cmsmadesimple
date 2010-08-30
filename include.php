@@ -158,11 +158,8 @@ debug_buffer('loading content functions');
 require_once(cms_join_path($dirname,'lib','content.functions.php'));
 debug_buffer('loading pageinfo functions');
 require_once(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
-if (! isset($CMS_INSTALL_PAGE))
-{
-	debug_buffer('loading translation functions');
-	require_once(cms_join_path($dirname,'lib','translation.functions.php'));
-}
+debug_buffer('loading translation functions');
+require_once(cms_join_path($dirname,'lib','translation.functions.php'));
 debug_buffer('loading events functions');
 require_once(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 debug_buffer('loading php4 entity decode functions');
@@ -274,8 +271,11 @@ if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) )
 }
 
 #Load all installed module code
-$modload =& $gCms->GetModuleLoader();
-$modload->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
+if (! isset($CMS_INSTALL_PAGE))
+  {
+    $modload =& $gCms->GetModuleLoader();
+    $modload->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
+  }
 debug_buffer('', 'End of include');
 
 #Do auto task stuff.

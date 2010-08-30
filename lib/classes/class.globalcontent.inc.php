@@ -60,6 +60,18 @@ class GlobalContent
 	var $modified_date;
 
 	/**
+	 * Flag wether the wysiwyg should be enabled or not.
+	 * @access private
+	 */
+	var $use_wysiwyg;
+
+	/**
+	 * The description for the Global Content Block
+	 * @access private
+	 */
+	var $description;
+
+	/**
 	 * Constructor
 	 */
 	function GlobalContent()
@@ -78,6 +90,8 @@ class GlobalContent
 		$this->content = '';
 		$this->owner = -1;
 		$this->modified_date = -1;
+		$this->use_wywiwyg = 1;
+		$this->description = '';
 	}
 
 	/**
@@ -99,6 +113,17 @@ class GlobalContent
 	function Name()
 	{
 		return $this->name;
+	}
+
+	/**
+	 * Returns the description for this global content block
+	 *
+	 * @final
+	 * @return string Description of the global content block
+	 */
+	function Description()
+	{
+		return $this->description;
 	}
 
 	/**

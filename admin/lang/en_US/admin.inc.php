@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['use_wysiwyg'] = 'Use WYSIWYG';
 $lang['admin']['contenttype_redirlink'] = 'Redirecting Link';
 $lang['admin']['yes'] = 'Yes';
 $lang['admin']['no'] = 'No';

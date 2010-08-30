@@ -318,7 +318,7 @@ $firstmod = $tmp[0];
 $smarty->assign_by_ref('mod',$gCms->modules[$firstmod]['object']);
 
 $tmp = array(''=>lang('nodefault'));
-global $nls;
+$nls = $gCms->nls;
 asort($nls["language"]);
 foreach( $nls['language'] as $key=>$value )
 {

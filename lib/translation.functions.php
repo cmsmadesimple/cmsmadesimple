@@ -32,6 +32,8 @@
  */
 function cms_detect_browser_lang()
 {
+  global $gCms;
+  $nls =& $gCms->nls;
   $curlang = '';
 
   # take a stab at figuring out the default language...
@@ -77,13 +79,12 @@ function cms_initialize_nls()
 {
   #Read in all current languages...
   global $gCms;
-  global $nls;
+  $nls =& $gCms->nls;
 
-  if( !is_array($nls) )
+  if( !is_array($nls) || count($nls) == 0 )
     {
       $nls = array();
       $dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'/lang');
-      
       $handle = opendir($dir);
       while (false!==($file = readdir($handle))) {
 	if (is_file("$dir/$file") && strpos($file, "nls.php") != 0) {
@@ -104,7 +105,7 @@ function cms_initialize_nls()
 function cms_admin_current_language()
 {
   global $gCms;
-  global $nls;
+  $nls =& $gCms->nls;
   $lang = array();
   $current_language = '';
 
@@ -377,7 +378,7 @@ function lang()
   // uses the default admin realm.
 	global $gCms;
 	global $lang;
-	global $nls;
+	$nls =& $gCms->nls;
 
 	$dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'lang');
 
@@ -424,11 +425,11 @@ function lang()
 
 function get_encoding($charset='', $defaultoverrides=true)
 {
-	global $nls;
 	global $current_language;
 	global $gCms;
 	$variables =& $gCms->variables;
 	$config =& $gCms->GetConfig();
+	$nls =& $gCms->nls;
 
 	if ($charset != '')
 	{

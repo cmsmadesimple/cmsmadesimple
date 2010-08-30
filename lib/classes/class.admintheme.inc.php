@@ -1427,7 +1427,8 @@ debug_buffer('after menu items');
      */
     function DisplayHTMLStartTag()
     {
-		global $nls;
+		global $gCms;
+		$nls =& $gCms->nls;
     	echo (isset($nls['direction']) && $nls['direction'] == 'rtl') ? "<html dir=\"rtl\"\n>" : "<html>\n";
     }
 

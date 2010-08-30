@@ -37,6 +37,9 @@ if (isset($_POST['oldhtmlblob'])) $oldhtmlblob = trim($_POST['oldhtmlblob']);
 $content = "";
 if (isset($_POST['content'])) $content = $_POST['content'];
 
+$use_wysiwyg = 0;
+if( isset($_POST['use_wysiwyg']) ) $use_wysiwyg = (int)$_POST['use_wysiwyg'];
+
 $owner_id = "";
 if (isset($_POST['owner_id'])) $owner_id = $_POST['owner_id'];
 
@@ -113,6 +116,7 @@ if ($access)
 		if ($validinfo)
 		{
 			$the_blob->id = $htmlblob_id;
+			$the_blob->use_wysiwyg = $use_wysiwyg;
 			$the_blob->name = $htmlblob;
 			$the_blob->content = $content;
 			$the_blob->owner = $owner_id;
@@ -195,6 +199,7 @@ if ($access)
 		$oldhtmlblob = $the_blob->name;
 		$owner_id = $the_blob->owner;
 		$content = $the_blob->content;
+		$use_wysiwyg = $the_blob->use_wysiwyg;
 	}
 }
 
@@ -377,9 +382,13 @@ else
 			<p class="pagetext"><?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
 		</div>
+                <div class="pageoverflow">
+		      <p class="pagetext"><?php echo lang('use_wysiwyg') ?>:</p>
+						      <p class="pagetext"><input type="hidden" name="use_wysiwyg" value="0"/><input type="checkbox" name="use_wysiwyg" value="1" <?php if($use_wysiwyg) echo ' checked="checked"' ?></p>
+                </div>						      
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content');?></p>
+			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg && $use_wysiwyg, $content, 'content', 'wysiwyg', 'content');?></p>
 		</div>
 	<?php if ($adminaccess) { ?>
 		<div class="pageoverflow">
