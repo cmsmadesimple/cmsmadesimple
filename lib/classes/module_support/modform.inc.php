@@ -452,59 +452,9 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 
 	$class = (isset($params['class'])?cms_htmlentities($params['class']):'');
 
-	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite')
-	{
-		$text = $config['root_url'] . '/' . $prettyurl . $config['page_extension'];
-	}
-	else if ($prettyurl != '' && $config['url_rewriting'] == 'internal')
-	{
-		$text = $config['root_url'] . '/index.php/' . $prettyurl . $config['page_extension'];
-	}
-	else
-	{
-		$text = '';
-		if ($targetcontentonly || ($returnid != '' && !$inline))
-		{
-			$id = 'cntnt01';
-		}
-		$goto = 'index.php';
-		if ($returnid == '')
-		{
-			$goto = 'moduleinterface.php';
-		}
-		if (!$onlyhref)
-		{
-		}
-		$text .= $config['root_url'];
-		if (!($returnid != '' && $returnid > -1))
-		{
-			$text .= '/'.$config['admin_dir'];
-		}
-
-		$secureparam = '';
-		if( $returnid == '' )
-		  {
-		    $secureparam='&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-		  }
-		#$text .= '/'.$goto.'?module='.$modinstance->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action.$secureparam;
-		$text .= '/'.$goto.'?mact='.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).$secureparam;
-
-		foreach ($params as $key=>$value)
-		{
-		  $key = cms_htmlentities($key);
-		  $value = cms_htmlentities($value);
-			if ($key != 'module' && $key != 'action' && $key != 'id')
-				$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
-		}
-		if ($returnid != '')
-		{
-			$text .= '&amp;'.$id.'returnid='.$returnid;
-			if ($inline)
-			{
-				$text .= '&amp;'.$config['query_var'].'='.$returnid;
-			}
-		}
-	}
+	// create url....
+	$text = cms_module_create_url($modinstance,$id,$action,$returnid,$params,
+								  $inline,$targetcontentonly,$prettyurl);
 
 	if (!$onlyhref)
 	{
@@ -528,6 +478,73 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 		$text .= '>'.$contents.'</a>';
 	}
 	return $text;
+}
+
+
+/**
+ * @access private
+ */
+function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=array(),
+							   $inline=false,$targetcontentonly=false,$prettyurl='')
+{
+	if( empty($prettyurl) )
+	{
+		// attempt to get a pretty url from the module... this is useful
+		// incase this method is being called from outside the source module.
+		// i.e: comments module wants a link to the article the comments are about
+		// or something.
+		$prettyrl = $modinstance->get_pretty_url($id,$action,$returnid,$params,$inline);
+	}
+
+	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite')
+	{
+		$text = $config['root_url'] . '/' . $prettyurl . $config['page_extension'];
+	}
+	else if ($prettyurl != '' && $config['url_rewriting'] == 'internal')
+	{
+		$text = $config['root_url'] . '/index.php/' . $prettyurl . $config['page_extension'];
+	}
+	else
+	{
+		$text = '';
+		if ($targetcontentonly || ($returnid != '' && !$inline))
+		{
+			$id = 'cntnt01';
+		}
+		$goto = 'index.php';
+		if ($returnid == '')
+		{
+			$goto = 'moduleinterface.php';
+		}
+		$text .= $config['root_url'];
+		if (!($returnid != '' && $returnid > -1))
+			{
+				$text .= '/'.$config['admin_dir'];
+			}
+		
+		$secureparam = '';
+		if( $returnid == '' )
+			{
+				$secureparam='&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+			}
+		$text .= '/'.$goto.'?mact='.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).$secureparam;
+
+		foreach ($params as $key=>$value)
+			{
+				$key = cms_htmlentities($key);
+				$value = cms_htmlentities($value);
+				if ($key != 'module' && $key != 'action' && $key != 'id')
+					$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
+			}
+		if ($returnid != '')
+			{
+				$text .= '&amp;'.$id.'returnid='.$returnid;
+				if ($inline)
+					{
+						$text .= '&amp;'.$config['query_var'].'='.$returnid;
+					}
+			}
+	}
 }
 
 /**

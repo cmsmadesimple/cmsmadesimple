@@ -2492,6 +2492,29 @@ class CMSModule
 
 
 	/**
+	 * Returns a URL to a module action
+	 *
+	 */
+	public function create_url($id,$action,$returnid='',$params=array(),
+				   $inline=false,$targetcontentonly=false,$prettyurl='')
+	{
+	  $this->LoadFormMethods();
+	  return cms_module_create_url($this,$id,$action,$returnid,$params,
+				       $inline,$targetcontentonly,$prettyurl);
+	}
+
+	/**
+	 * Return a pretty url string for a module action
+	 * 
+	 * @abstract
+	 * @return string
+	 */
+	public function get_pretty_url($id,$action,$returnid='',$params=array(),$inline=false)
+	{
+	  return '';
+	}
+
+	/**
 	* Returns the xhtml equivalent of an href link for content links.	This is basically a nice
 	* little wrapper to make sure that we go back to where we want and that it's xhtml complient
 	*
