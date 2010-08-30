@@ -1154,14 +1154,14 @@ class ContentOperations
  		global $gCms;
  		$db = $gCms->GetDb();
 
-		$query = 'SELECT content_id,url FROM '.cms_db_prefix().'content
+		$query = 'SELECT content_id,page_url FROM '.cms_db_prefix().'content
                    WHERE active = 1 AND default_content = 0 AND page_url != \'\'';
 		$data = $db->GetArray($query);
  		if( is_array($data) )
  		{
  			foreach( $data as $onerow )
  			{
- 				$route = new CmsRoute($onerow['url'],$onerow['content_id'],'',TRUE);
+ 				$route = new CmsRoute($onerow['page_url'],$onerow['content_id'],'',TRUE);
 				cms_route_manager::register($route);
 			}
 		}
