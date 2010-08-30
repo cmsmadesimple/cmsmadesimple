@@ -35,6 +35,12 @@ if (isset($_POST['htmlblob'])) $htmlblob = trim($_POST['htmlblob']);
 $content = "";
 if (isset($_POST['content'])) $content = trim(trim($_POST['content']));
 
+$use_wysiwyg = 1;
+if (isset($_POST['use_wysiwyg'])) $use_wysiwyg = (int)$_POST['use_wysiwyg'];
+
+$description = "";
+if (isset($_POST['description'])) $description = trim(trim($_POST['description']));
+
 if (isset($_POST["cancel"])) {
 	redirect("listhtmlblobs.php".$urlext);
 	return;
@@ -60,7 +66,7 @@ if( $gcb_wysiwyg )
 
 
 if ($access) {
-	if (isset($_POST["addhtmlblob"])) {
+	if (isset($_POST["submit2"])) {
 		
 		global $gCms;
 		$gcbops =& $gCms->GetGlobalContentOperations();
@@ -89,6 +95,8 @@ if ($access) {
 			$blobobj->name = $htmlblob;
 			$blobobj->content = $content;
 			$blobobj->owner = $userid;
+			$blobobj->use_wysiwyg = $use_wysiwyg;
+			$blobobj->description = $description;
 
 			#Perform the addhtmlblob_pre callback
 			foreach($gCms->modules as $key=>$value)
@@ -179,9 +187,17 @@ else
 			<p class="pagetext">*<?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
 		</div>
+                <div class="pageoverflow">
+		      <p class="pagetext"><?php echo lang('use_wysiwyg') ?>:</p>
+		      <p class="pagetext"><input type="hidden" name="use_wysiwyg" value="0"/><input type="checkbox" name="use_wysiwyg" onclick="this.form.submit();" value="1" <?php if($use_wysiwyg) echo ' checked="checked"' ?>/></p>
+                </div>						      
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content'); ?></p>
+			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg && $use_wysiwyg, $content, 'content', 'wysiwyg', 'content'); ?></p>
+		</div>
+		<div class="pageoverflow">
+		       <p class="pagetext"><?php echo lang('description')?>:</p>
+		       <p class="pageinput"><textarea name="description"><?php echo $description ?></textarea></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>
@@ -191,7 +207,7 @@ else
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="addhtmlblob" value="true" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="submit2" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>

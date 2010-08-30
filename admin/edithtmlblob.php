@@ -24,44 +24,22 @@ require_once("../include.php");
 require_once("../lib/classes/class.template.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
-check_login();
-
-$error = "";
-
-$htmlblob = "";
-if (isset($_POST['htmlblob'])) $htmlblob = trim($_POST['htmlblob']);
-
-$oldhtmlblob = "";
-if (isset($_POST['oldhtmlblob'])) $oldhtmlblob = trim($_POST['oldhtmlblob']);
-
-$content = "";
-if (isset($_POST['content'])) $content = $_POST['content'];
-
-$use_wysiwyg = 0;
-if( isset($_POST['use_wysiwyg']) ) $use_wysiwyg = (int)$_POST['use_wysiwyg'];
-
-$owner_id = "";
-if (isset($_POST['owner_id'])) $owner_id = $_POST['owner_id'];
-
-$ajax = false;
-if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
-
 $htmlblob_id = -1;
 if (isset($_POST["htmlblob_id"])) $htmlblob_id = $_POST["htmlblob_id"];
 else if (isset($_GET["htmlblob_id"])) $htmlblob_id = $_GET["htmlblob_id"];
 
-if (isset($_POST["cancel"])) {
-	redirect("listhtmlblobs.php".$urlext);
-	return;
-}
-
+check_login();
 global $gCms;
 $gcbops =& $gCms->GetGlobalContentOperations();
-
 $userid = get_userid();
 $adminaccess = check_permission($userid, 'Modify Global Content Blocks');
 $isowner = $gcbops->CheckOwnership($htmlblob_id,$userid);
 $access = $adminaccess || $isowner || $gcbops->CheckAuthorship($htmlblob_id, $userid);
+
+if (isset($_POST["cancel"])) {
+  redirect("listhtmlblobs.php".$urlext);
+  return;
+}
 
 $the_blob = '';
 if( $htmlblob_id > 0 )
@@ -72,21 +50,23 @@ else
   {
     $the_blob = new GlobalContent();
   }
+$htmlblob = $the_blob->name;
+$oldhtmlblob = $the_blob->name;
+$owner_id = $the_blob->owner;
+$content = $the_blob->content;
+$use_wysiwyg = $the_blob->use_wysiwyg;
+$description = $the_blob->description;
+$ajax = false;
+$error = "";
 
-/*
-$htmlarea_flag = false;
-$use_javasyntax = false;
+if (isset($_POST['htmlblob'])) $htmlblob = trim($_POST['htmlblob']);
+if (isset($_POST['oldhtmlblob'])) $oldhtmlblob = trim($_POST['oldhtmlblob']);
+if (isset($_POST['content'])) $content = $_POST['content'];
+if (isset($_POST['use_wysiwyg']) ) $use_wysiwyg = (int)$_POST['use_wysiwyg'];
+if (isset($_POST['description']) ) $description = trim($_POST['description']);
+if (isset($_POST['owner_id'])) $owner_id = $_POST['owner_id'];
+if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
 
-if (get_preference($userid, 'use_wysiwyg') == "1")
-{
-	$htmlarea_flag = true;
-    $use_javasyntax = false;
-}
-else if (get_preference($userid, 'use_javasyntax') == "1")
-{
-    $use_javasyntax = true;
-}
-*/
 $gcb_wysiwyg = (get_site_preference('nogcbwysiwyg','0') == '0') ? 1 : 0;
 if( $gcb_wysiwyg )
   {
@@ -95,7 +75,7 @@ if( $gcb_wysiwyg )
 
 if ($access)
 {
-	if (isset($_POST["edithtmlblob"]))
+	if (isset($_POST["submit2"]) || $ajax)
 	{
 		$validinfo = true;
 		if ($htmlblob == "")
@@ -117,6 +97,7 @@ if ($access)
 		{
 			$the_blob->id = $htmlblob_id;
 			$the_blob->use_wysiwyg = $use_wysiwyg;
+			$the_blob->description = $description;
 			$the_blob->name = $htmlblob;
 			$the_blob->content = $content;
 			$the_blob->owner = $owner_id;
@@ -193,20 +174,12 @@ if ($access)
 			exit;
 		}
 	}
-	else if ($htmlblob_id != -1)
-	{
-		$htmlblob = $the_blob->name;
-		$oldhtmlblob = $the_blob->name;
-		$owner_id = $the_blob->owner;
-		$content = $the_blob->content;
-		$use_wysiwyg = $the_blob->use_wysiwyg;
-	}
 }
 
 if (strlen($htmlblob) > 0)
-    {
+  {
     $CMS_ADMIN_SUBTITLE = $htmlblob;
-    }
+  }
 
 // Detect if a WYSIWYG is in use, and grab its form submit action (copied from editcotent.php)
 $addlScriptSubmit = '';
@@ -373,7 +346,7 @@ else
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
-			<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			<input type="submit" name="submit2" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<input type="submit" onclick="return window.Edit_Blob_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
@@ -384,12 +357,17 @@ else
 		</div>
                 <div class="pageoverflow">
 		      <p class="pagetext"><?php echo lang('use_wysiwyg') ?>:</p>
-						      <p class="pagetext"><input type="hidden" name="use_wysiwyg" value="0"/><input type="checkbox" name="use_wysiwyg" value="1" <?php if($use_wysiwyg) echo ' checked="checked"' ?></p>
+						      <p class="pagetext"><input type="hidden" name="use_wysiwyg" value="0"/><input type="checkbox" name="use_wysiwyg" onclick="this.form.submit();" value="1" <?php if($use_wysiwyg) echo ' checked="checked"' ?>/></p>
                 </div>						      
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
 			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg && $use_wysiwyg, $content, 'content', 'wysiwyg', 'content');?></p>
 		</div>
+		<div class="pageoverflow">
+		       <p class="pagetext"><?php echo lang('description')?>:</p>
+		       <p class="pageinput"><textarea name="description"><?php echo $description ?></textarea></p>
+		</div>
+               																		               
 	<?php if ($adminaccess) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('owner')?>:</p>
@@ -408,7 +386,7 @@ else
 				<input type="hidden" name="edithtmlblob" value="true" />
 				<input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob; ?>" />
 				<input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id; ?>" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="submit2" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<?php if (!$adminaccess) { ?>
 					<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>" />
 				<?php } ?>
