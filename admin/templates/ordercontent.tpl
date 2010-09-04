@@ -21,24 +21,43 @@ function parseTree(ul){
 
 $(document).ready(function(){
 		
-	$("li.tree_item span").droppable({
+	$("li.tree_item span.label").droppable({
 		tolerance		: "pointer",
 		hoverClass		: "tree_hover",
 		drop			: function(event, ui){
 			var dropped = ui.draggable;
-			dropped.css({top: 0, left: 0});
-	                dropped.removeClass('modified');
+			//dropped.css({top: 0, left: 0});
 	                dropped.addClass('modified');
 			var me = $(this).parent();
 			if(me == dropped)
 				return;
 			var subbranch = $(me).children("ul");
+			var oldParent = dropped.parent();
+			//subbranch.eq(0).append(dropped);
+			$(me).after(dropped);
+			var oldBranches = $("li", oldParent);
+			if (oldBranches.size() == 0) { $(oldParent).remove(); }
+		}
+	});
+
+	$("li.tree_item span.dropchild").droppable({
+		tolerance		: "pointer",
+		hoverClass		: "tree_hover",
+		drop			: function(event, ui){
+			var dropped = ui.draggable;
+			//dropped.css({top: 0, left: 0});
+	                dropped.addClass('modified');
+			var me = $(this).closest('li');
+			if(me == dropped)
+				return;
+			var subbranch = $(me).children("ul");
 			if(subbranch.size() == 0) {
-				me.find("span").after("<ul></ul>");
+				me.find("span.dropchild").after("<ul></ul>");
 				subbranch = me.find("ul");
 			}
 			var oldParent = dropped.parent();
 			subbranch.eq(0).append(dropped);
+			//$(me).after(dropped);
 			var oldBranches = $("li", oldParent);
 			if (oldBranches.size() == 0) { $(oldParent).remove(); }
 		}
@@ -74,7 +93,7 @@ $(document).ready(function(){
 
 <div>
 <ul id="content_tree" class="sortableList">
-  <li id="page_-1" class="tree_item"><span>{'root'|lang}</span>
+  <li id="page_-1" class="tree_item"><span class="label">{'root'|lang}</span>&nbsp;<span class="dropchild"><em>(add here)</em></span>
   {include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1}
   </li>
 </ul>
