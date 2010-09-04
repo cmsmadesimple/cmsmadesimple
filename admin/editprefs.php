@@ -264,6 +264,7 @@ if (FALSE == empty($page_message)) {
 					<select name="default_cms_lang" style="vertical-align: middle;">
 					<option value=""><?php echo lang('nodefault'); ?></option>
 					<?php
+                                                $nls = $gCms->nls;
 						asort($nls["language"]);
 						foreach ($nls["language"] as $key=>$val) {
 							echo "<option value=\"$key\"";

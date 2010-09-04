@@ -133,7 +133,7 @@ function content_setdefault($contentid)
 	setdefault($contentid);
 
 	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
+	$objResponse->script("$('#tr_$contentid').effect('highlight', [], 3000);");
 	return $objResponse;
 }
 
@@ -144,7 +144,7 @@ function content_setactive($contentid)
 	setactive($contentid);
 
 	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
+	$objResponse->script("$('#tr_$contentid').effect('highlight', [], 3000);");
 	return $objResponse;
 }
 
@@ -155,7 +155,7 @@ function content_setinactive($contentid)
 	setactive($contentid, false);
 
 	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
+	$objResponse->script("$('#tr_$contentid').effect('highlight', [], 3000);");
 	return $objResponse;
 }
 
@@ -209,7 +209,7 @@ function content_toggleexpand($contentid, $collapse)
 	toggleexpand($contentid, $collapse=='true'?true:false);
 
 	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
+	$objResponse->script("$('#tr_$contentid').effect('highlight', [], 3000);");
 	return $objResponse;
 }
 
@@ -219,7 +219,9 @@ function content_delete($contentid)
 	
 	deletecontent($contentid);
 
-	$objResponse->script("new Effect.Fade('tr_$contentid', { afterFinish:function() { xajax_content_list_ajax(); } });");
+	$objResponse->script("$('#tr_$contentid').effect('fade', [], 3000);");
+	$objResponse->clear("contentlist", "innerHTML");
+	$objResponse->assign("contentlist", "innerHTML", display_content_list());
 	return $objResponse;
 }
 
@@ -295,7 +297,7 @@ function content_move($contentid, $parentid, $direction)
 	movecontent($contentid, $parentid, $direction);
 
 	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	$objResponse->script("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
+	$objResponse->script("$('#tr_$contentid').effect('highlight', [], 3000);");
 
   // reset lock
   return $objResponse;
@@ -1104,9 +1106,9 @@ function display_content_list($themeObject = null)
 			$thelist.=$item;
 		}
 
-		$thelist .= '<tr class="invisible"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-<td>&nbsp;</td><td><input type="submit" name="reorderpages" value="'.lang('reorderpages').'" /></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>';
+		//$thelist .= '<tr class="invisible"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+		//<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+		//<td>&nbsp;</td><td><input type="submit" name="reorderpages" value="'.lang('reorderpages').'" /></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>';
 
 		$thelist .= '</tbody>';
 		$thelist .= "</table>\n";
@@ -1132,9 +1134,10 @@ function display_content_list($themeObject = null)
 
 	if (check_permission($userid, 'Manage All Content'))
 	{
-	  $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">';
+	  $reorderurl = "ordercontent.php?".CMS_SECURE_PARAM_NAME."=".$_SESSION[CMS_USER_KEY];
+	  $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="'.$reorderurl.'">';
 	  $headoflist .= $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon').'</a>';
-	  $headoflist .= ' <a href="'.$thisurl.'&amp;error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
+	  $headoflist .= ' <a href="'.$reorderurl.'">'.lang('reorderpages').'</a>';
 	}
 
 	$headoflist .='</p></div>';
@@ -1274,7 +1277,8 @@ function display_content_list($themeObject = null)
 		if (check_permission($userid, 'Manage All Content'))
 		{
 			$image_reorder = $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon');
-			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="'.$thisurl.'&amp;error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.'</a> <a class="pageoptions" href="'.$thisurl.'&amp;error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
+			$reorderurl = "ordercontent.php?".CMS_SECURE_PARAM_NAME."=".$_SESSION[CMS_USER_KEY];
+			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="'.$reorderurl.'">'.$image_reorder.'</a> <a class="pageoptions" href="'.$reorderurl.'">'.lang('reorderpages').'</a>';
 		}
 ?>
 			</div>
