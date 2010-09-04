@@ -1367,7 +1367,20 @@ class ContentBase
 		  else
 		    {
 		      // if it don't explicitly say 'flat' we're creating a hierarchical url.
-		      $this->mURL = $this->HierarchyPath();
+		      global $gCms;
+		      $tree = $gCms->GetHierarchyManager();
+		      $node = $tree->find_by_tag('id',$this->ParentId());
+		      $stack = array($this->mAlias);
+		      while( $node )
+			{
+			  $tmp_content = $node->GetContent();
+			  if( $tmp_content )
+			    {
+			      array_unshift($stack,$tmp_content->Alias());
+			    }
+			  $node = $node->GetParent();
+			}
+		      $this->mURL = implode('/',$stack);
 		    }
 		}
 	    }
