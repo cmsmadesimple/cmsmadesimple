@@ -49,6 +49,23 @@ MenuManager
 News:
   - Adds support for custom urls for each news article
 
+
+Version 1.8.2 - Toliara
+-----------------------------
+Reverted:
+  - Put the use_hierarchy config option back in for backwards compatibility
+    with upgrades. This may go away in the future, as it doesn't allow for
+    modules to have pretty URLs, but we'll have a proper workaround.
+
+Fixes:
+  - #5206 Using variable $this in translation.functions.php
+  - #5198 German adaption in function.cms_selflink.php
+  - #2215 Form Input Type of Password should have an ID attribute
+  - #4834 Add an ID attribute to the form hidden tag
+  - #5279 cms_stylesheet doesn't use new logic with "name" parameter
+  - #3620 $node->image not showing while using the items variable
+
+
 Version 1.8.1 - Mankara 
 -----------------------------
 Security:

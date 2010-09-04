@@ -201,7 +201,7 @@ function cms_current_language()
  * @param boolean Indicates that the lang file has a sub array for the realm.
  * @return void
  */
-function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 0,$has_realm = 0)
+function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 0,$has_realm = 0, $is_custom = 0)
 {
 	global $gCms;
 	global $lang;
@@ -224,7 +224,7 @@ function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 
 	{
 		$fn = cms_join_path($basedir,'en_US',$filename);
 	}
-	if (!isset($lang[$realm]))
+	if (!isset($lang[$realm]) || $is_custom)
 	{
 		if( @file_exists($fn) )
 		{
@@ -381,10 +381,12 @@ function lang()
 	$nls =& $gCms->nls;
 
 	$dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'lang');
+	$customdir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'custom','lang');
 
 	if( !isset($lang['admin']) )
 	  {
 	    cms_load_lang_realm('admin',$dir,'admin.inc.php',1,1);
+	    cms_load_lang_realm('admin',$customdir,'admin.inc.php',1,1,1);			
 	  }
 	$name = '';
 	$params = array();

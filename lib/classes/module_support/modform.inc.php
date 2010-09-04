@@ -196,7 +196,7 @@ function cms_module_CreateInputPassword(&$modinstance, $id, $name, $value='', $s
   $maxlength = cms_htmlentities($maxlength);
 
 	$value = str_replace('"', '&quot;', $value);
-	$text = '<input type="password" class="cms_password" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+	$text = '<input type="password" class="cms_password" id="'.$id.$name.'" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
 	if ($addttext != '')
 	{
 		$text .= ' ' . $addttext;
@@ -215,7 +215,7 @@ function cms_module_CreateInputHidden(&$modinstance, $id, $name, $value='', $add
   $value = cms_htmlentities($value);
 
 	$value = str_replace('"', '&quot;', $value);
-	$text = '<input type="hidden" name="'.$id.$name.'" value="'.$value.'"';
+	$text = '<input type="hidden" id="'.$id.$name.'" name="'.$id.$name.'" value="'.$value.'"';
 	if ($addttext != '')
 	{
 		$text .= ' '.$addttext;

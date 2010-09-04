@@ -116,6 +116,11 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 	}
       switch ($lang)
 	{
+	case 'de':
+	case 'de_DE':
+	  $Prev_label = "Vorherige Seite: ";
+	  $Next_label = "N&auml;chste Seite: ";
+	  break;
 	case 'dk':
 	case 'da':
 	case 'da_DK':
