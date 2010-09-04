@@ -93,7 +93,7 @@ $(document).ready(function(){
 
 <div>
 <ul id="content_tree" class="sortableList">
-  <li id="page_-1" class="tree_item"><span class="label">{'root'|lang}</span>&nbsp;<span class="dropchild"><em>(add here)</em></span>
+  <li id="page_-1" class="tree_item"><span>{'root'|lang}</span>&nbsp;<span class="dropchild" title="{'dropchildhere'|lang}"><em>(add here)</em></span>
   {include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1}
   </li>
 </ul>

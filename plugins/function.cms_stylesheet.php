@@ -32,8 +32,8 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	}
 	else
 	{
-		$pageinfo = &$gCms->variables['pageinfo'];
-		$template_id = $pageinfo->template_id;
+		$content_obj = &$gCms->variables['content_obj'];
+		$template_id = $content_obj->TemplateId();
 	}
 	
 	$config =& $gCms->config;
