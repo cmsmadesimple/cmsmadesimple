@@ -73,7 +73,11 @@ $(document).ready(function(){
 </div>
 
 <div>
-{include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1 tree=content_tree}
+<ul id="content_tree" class="sortableList">
+  <li id="page_-1" class="tree_item"><span>{'root'|lang}</span>
+  {include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1}
+  </li>
+</ul>
 </div>
 
 <div class="pagoeverflow">

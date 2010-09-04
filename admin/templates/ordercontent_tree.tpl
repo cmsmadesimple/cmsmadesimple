@@ -1,4 +1,4 @@
-<ul{if isset($tree) && $tree != ''} id="{$tree}"{/if} class="sortableList">
+<ul class="sortableList">
 {foreach from=$list item='child'}
 {strip}
   {assign var='obj' value=$child->getContent()}

@@ -72,6 +72,7 @@ if( isset($_POST['data']) )
 
     // step 1, create a flat list of the content items, and their new orders, and new parents.
     $data = ordercontent_create_flatlist($data);
+    array_shift($data);
 
     // step 2. mrege in old orders, and old parents.
     global $gCms;
@@ -94,8 +95,6 @@ if( isset($_POST['data']) )
 	      }
 	  }
       }
-    debug_to_log('data2 is ');
-    debug_to_log($data2);
     
     // do the updates
     if( count($data2) > 0 )

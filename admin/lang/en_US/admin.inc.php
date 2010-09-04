@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['nothingtodo'] = 'Nothing to do!';
+$lang['admin']['root'] = 'Root';
 $lang['admin']['info_content_autocreate_flaturls'] = 'If enabled, all urls will be created as a copy of the page alias (but not synchronized to the page alias)';
 $lang['admin']['content_autocreate_flaturls'] = 'Automatically created URL\'s are flat';
 $lang['admin']['content_autocreate_urls'] = 'Automatically create page URL\'s';
