@@ -1371,16 +1371,35 @@ class ContentBase
 		      $tree = $gCms->GetHierarchyManager();
 		      $node = $tree->find_by_tag('id',$this->ParentId());
 		      $stack = array($this->mAlias);
+		      $parent_url = '';
+		      $count = 0;
 		      while( $node )
 			{
 			  $tmp_content = $node->GetContent();
 			  if( $tmp_content )
 			    {
+			      $tmp = $tmp_content->URL();
+			      if( $tmp != '' && $count == 0 )
+				{
+				  // try to build the url out of the parent url.
+				  $parent_url = $tmp;
+				  break;
+				}
 			      array_unshift($stack,$tmp_content->Alias());
 			    }
 			  $node = $node->GetParent();
+			  $count++;
 			}
-		      $this->mURL = implode('/',$stack);
+
+		      if( $parent_url != '' )
+			{
+			  // woot, we got a prent url.
+			  $this->mURL = $parent_url.'/'.$this->mAlias;
+			}
+		      else
+			{
+			  $this->mURL = implode('/',$stack);
+			}
 		    }
 		}
 	    }
