@@ -1682,7 +1682,7 @@ class ContentBase
 		if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true)
 		{
 		  $str = $this->HierarchyPath();
-		  if( $config['use_hierarchy'] )
+		  if( isset($config['use_hierarchy']) && $config['use_hierarchy'] == false )
 		    {
 		      $str = $alias;
 		    }
@@ -1697,7 +1697,7 @@ class ContentBase
 		else if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal' && $rewrite == true)
 		{
 		  $str = $this->HierarchyPath();
-		  if( $config['use_hierarchy'] )
+		  if( isset($config['use_hierarchy']) && $config['use_hierarchy'] == false )
 		    {
 		      $str = $alias;
 		    }
