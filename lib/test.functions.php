@@ -198,6 +198,8 @@ function getTestReturn( &$test, $required, $message = '', $error_fragment = '', 
 */
 function & testSupportedDatabase( $required, $title, $db = false, $message = '' )
 {
+	global $lang_fn;
+	
 	$drivers = getSupportedDBDriver();
 
 //TODO?
@@ -723,6 +725,8 @@ function & testRange( $required, $title, $var, $message = '', $minimum, $recomme
 {
 	$test = new CmsInstallTest();
 	$test->title = $title;
+	
+	global $lang_fn;
 
 	if($ini)
 	{
@@ -810,6 +814,8 @@ function & testUmask( $required, $title, $umask, $message = '', $debug = false, 
 {
 	$test = new CmsInstallTest();
 	$test->title = $title;
+	
+	global $lang_fn;
 
 	if(empty($dir))
 	{
@@ -1008,6 +1014,8 @@ function & testCreateDirAndFile( $required, $title, $message = '', $debug = fals
 	$test->title = $title;
 	$dir = cms_join_path(TMP_CACHE_LOCATION, $dir);
 	$file = cms_join_path($dir, $file);
+	
+	global $lang_fn;
 
 	if($debug)
 	{
@@ -1118,6 +1126,7 @@ function & testDirWrite( $required, $title, $dir, $message = '', $quick = 0, $de
 	}
 
 	$test->res = 'red';
+	global $lang_fn;
 	getTestReturn($test, $required, $message, 'Directory_not_writable', $lang_fn('errordirectorynotwritable').' ('.$dir.')');
 	return $test;
 }
@@ -1134,6 +1143,8 @@ function & testFileWritable( $required, $title, $file, $message = '', $debug = f
 {
 	$test = new CmsInstallTest();
 	$test->title = $title;
+	
+	global $lang_fn;
 
 	if(empty($file))
 	{
@@ -1173,7 +1184,6 @@ function & testFileWritable( $required, $title, $file, $message = '', $debug = f
 	}
 
 	$test->res = 'red';
-	global $lang_fn;
 	getTestReturn($test, $required, $message, 'File_not_writable', $lang_fn('errorfilenotwritable').' ('.$file.')');
 	return $test;
 }
@@ -1434,6 +1444,8 @@ function & testFileChecksum( $required, $title, $file, $checksum, $message = '',
 	$test = new CmsInstallTest();
 	$test->title = $title;
 	$test->value = $file;
+	
+	global $lang_fn;
 
 	if(is_dir($file))
 	{
@@ -1542,6 +1554,8 @@ function testSessionSavePath( $sess_path )
 */
 function & testFileUploads( $inputname )
 {
+	global $lang_fn;
+	
 	$_errors = array(
 		UPLOAD_ERR_INI_SIZE => $lang_fn('upload_err_ini_size'),
 		UPLOAD_ERR_FORM_SIZE => $lang_fn('upload_err_form_size'),

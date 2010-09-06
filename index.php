@@ -188,6 +188,7 @@ if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') |
 
 if (isset($_GET["print"]))
 {
+  $pageinfo = $gCms->variables['pageinfo'];
 	($smarty->is_cached('print:'.$page, '', $pageinfo->template_id)?$cached="":$cached="not ");
 	$html = $smarty->fetch('print:'.$page, '', $pageinfo->template_id) . "\n";
 }

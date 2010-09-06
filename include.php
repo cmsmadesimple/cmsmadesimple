@@ -170,6 +170,9 @@ debug_buffer('loading php4 entity decode functions');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'autoloader.php');
 
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.pageinfo.inc.php');
+$gCms->variables['pageinfo'] = new PageInfo();
+
 debug_buffer('done loading files');
 
 #Load them into the usual variables.  This'll go away a little later on.
