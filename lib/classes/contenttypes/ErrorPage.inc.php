@@ -25,18 +25,13 @@
  */
 
 /**
- * include content class defintion
- */
-require_once('Content.inc.php');
-
-/**
  * Main class for CMS Made Simple ErrorPage content type
  *
  * @package CMS
  * @version $Revision$
  * @license GPL
  */
-class ErrorPage extends Content
+class ErrorPage extends ContentBase
 {
   var $doAliasCheck;
   var $error_types;

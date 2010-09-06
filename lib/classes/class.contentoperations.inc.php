@@ -401,9 +401,7 @@ class ContentOperations
 		if (!$loadedcache)
 		{
 			debug_buffer("Serializing...");
-			$handle = fopen($cachefilename, "w");
-			fwrite($handle, '<?php return; ?>'.serialize($tree));
-			fclose($handle);
+			@file_put_contents($cachefilename, '<?php return; ?>'.serialize($tree));
 		}
 
 		if( $loadcontent )
