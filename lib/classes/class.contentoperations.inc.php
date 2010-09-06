@@ -40,6 +40,8 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
  */
 class ContentOperations
 {
+	private $_content_types;
+
 	/**
 	 * Return a content object for the currently requested page.
 	 *
@@ -86,13 +88,26 @@ class ContentOperations
 	function &CreateNewContent($type)
 	{
 		$result = NULL;
-		if( class_exists($type) )
+
+		// still didn't find it.
+		if( !is_array($this->_content_types) )
 		{
-			$result = new $type;
-			return $result;
+			global $gCms;
+			$dir = dirname(__FILE__).'/contenttypes';
+			$files = glob($dir.'/*.inc.php');
+			$tmp = array();
+			foreach( $files as $one )
+			{
+				$name = basename($one,'.inc.php');
+				$tmp[strtolower($name)] = $name;
+			}
+			$this->_content_types = $tmp;
+		}
+		if( isset($this->_content_types[$type]) )
+		{
+			$type = $this->_content_types[$type];
 		}
 
-		$type[0] = strtoupper($type[0]);
 		if( class_exists($type) )
 		{
 			$result = new $type;

@@ -31,7 +31,7 @@
  * @version $Revision$
  * @license GPL
  */
-class ErrorPage extends ContentBase
+class ErrorPage extends Content
 {
   var $doAliasCheck;
   var $error_types;
