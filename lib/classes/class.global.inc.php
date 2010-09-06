@@ -165,6 +165,42 @@ class CmsObject {
 		register_shutdown_function(array(&$this, 'dbshutdown'));
 	}
 
+
+	/**
+	 * Get a reference to an installed module instance.
+	 *
+	 * This method will return a reference to the module object specified if it is installed, and available.
+	 * Optionally, a version check can be performed to test if the version of the requeted module matches
+	 * that specified.
+	 *
+	 * @since 1.9
+	 * @param string Module Name.
+	 * @param string (optional) version number for a check.  
+	 * @return object Reference to the module object, or null.
+	 */
+	public function &GetModuleInstance($module_name,$version = '')
+	{
+		if( empty($module_name) && isset($gCms->variables['module']))
+			{
+				$module_name = $gCms->variables['module'];
+			}
+
+		$obj = null;
+		if( isset($gCms->modules[$module_name]) &&
+			isset($gCms->modules[$module_name]['object']) )
+			{
+				$obj = $gCms->modules[$module_name]['object'];
+			}
+		if( is_object($obj) && !empty($version) )
+			{
+				$res = version_compare($obj->GetVersion,$version);
+				if( $res < 1 OR $res === FALSE ) 
+					$obj = null;
+			}
+		return $obj;
+	}
+
+
 	/**
 	* Get a handle to the ADODB database object. You can then use this
 	* to perform all kinds of database operations.
