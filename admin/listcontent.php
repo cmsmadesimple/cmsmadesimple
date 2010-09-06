@@ -369,7 +369,6 @@ function deletecontent($contentid)
 		$node = &$hierManager->getNodeById($contentid);
 		if ($node)
 		{
-		  debug_to_log($node);
 			$contentobj =& $node->getContent(true);
 			$childcount = 0;
 			$parentid = -1;
@@ -377,7 +376,7 @@ function deletecontent($contentid)
 			if ($parent)
 			{
 			  $parentContent =& $parent->getContent();
-			  if (isset($parentContent))
+			  if (is_object($parentContent))
 			    {
 			      $parentid = $parentContent->Id();
 			      $childcount = $parent->getChildrenCount();
@@ -933,6 +932,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		   || check_permission($userid,'Manage All Content')) 
 		 )
 		{
+		  //$txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."');\">";
 		  $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
 		  $txt .= $deleteImg;
 		  $txt .= "</a>";
