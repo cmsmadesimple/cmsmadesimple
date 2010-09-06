@@ -41,6 +41,24 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
 class ContentOperations
 {
 	/**
+	 * Return a content object for the currently requested page.
+	 *
+	 * @since 1.9
+	 * @return getContentObject()
+	 */
+	function &getContentObject()
+	{
+		global $gCms;
+		$res = null;
+		if( isset($gCms->variables['content_obj']) && is_object($gCms->variables['content_obj']) )
+		{
+			$res = $gCms->variables['content_obj'];
+		}
+		return $res;
+	}
+
+
+	/**
 	 * Given an array of content_type and seralized_content, reconstructs a 
 	 * content object.  It will handled loading the content type if it hasn't
 	 * already been loaded.
