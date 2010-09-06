@@ -1158,7 +1158,12 @@ function display_content_list($themeObject = null)
 	  }
 	if( $columnstodisplay['page'] )
 	  {
-	    $headoflist .= '<th class="pagew25" title="'.lang('lctitle_page').'\">'.lang('page')."</th>\n";
+	    $str = lang('menutext');
+	    if( get_site_preference('listcontent_showtitle') )
+	      {
+		$str = lang('title');
+	      }
+	    $headoflist .= '<th class="pagew25" title="'.lang('lctitle_page').'\">'.lang('page')." <em>({$str})</em></th>\n";
 	  }
 	if( $columnstodisplay['alias'] )
 	  {
