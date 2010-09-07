@@ -205,11 +205,11 @@ else
                   <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
                 </div>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('name')?>:</p>
+			<p class="pagetext">*<?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" class="name" name="css_name" maxlength="255" value="<?php echo $css_name?>" /></p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('content')?>:</p>
+			<p class="pagetext">*<?php echo lang('content')?>:</p>
 			<p class="pageinput">
 			<?php echo create_textarea(false, $css_text, 'css_text', 'pagebigtextarea', 'css_text', '', '', '80', '15','','css')?>
 			<!-- <textarea class="pagebigtextarea" name="css_text" cols="" rows=""><_?php echo $css_text?></textarea>  -->
