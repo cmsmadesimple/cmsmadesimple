@@ -1163,7 +1163,7 @@ function display_content_list($themeObject = null)
 	      {
 		$str = lang('title');
 	      }
-	    $headoflist .= '<th class="pagew25" title="'.lang('lctitle_page').'\">'.lang('page')." <em>({$str})</em></th>\n";
+	    $headoflist .= '<th class="pagew25" title="'.lang('lctitle_page').'">'.lang('page')." <em>({$str})</em></th>\n";
 	  }
 	if( $columnstodisplay['alias'] )
 	  {
