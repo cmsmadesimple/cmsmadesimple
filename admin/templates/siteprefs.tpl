@@ -270,7 +270,7 @@
   </p>
 </div>  
 <div class="pageoverflow">
-  <p class="pagetext">{$lang_autoclearcache}:</p>
+  <p class="pagetext">{'autoclearcache2'|lang}:</p>
   <p class="pageinput">
     <input type="text" class="pagesmalltextarea"  name="auto_clear_cache_age" size="4" value="{$auto_clear_cache_age}" maxlength="4"/>
     <br/>

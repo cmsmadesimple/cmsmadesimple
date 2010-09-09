@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['autoclearcache2'] = 'Remove cache files that are older than the specified number of days';
 $lang['admin']['nothingtodo'] = 'Nothing to do!';
 $lang['admin']['root'] = 'Root';
 $lang['admin']['info_content_autocreate_flaturls'] = 'If enabled, all urls will be created as a copy of the page alias (but not synchronized to the page alias)';

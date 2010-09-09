@@ -51,9 +51,16 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
     return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
   }
 
+  if (isset($params['lang']))
+    {
+      // attempt to override the chosen frontend lang.
+      $lang = trim($params['lang']);
+      cms_set_frontend_language($lang);
+    }
+
   $urlparams = '';
   if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
-    $urlparams =$params['urlparams'];
+    $urlparams = $params['urlparams'];
   }
 
   $label = '';
@@ -74,7 +81,11 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
       // check if the page exists in the db
       $manager =& $gCms->GetHierarchyManager();
       $node =& $manager->sureGetNodeByAlias($page);
-      if (!isset($node)) return;
+      if (!isset($node)) 
+	{
+	  cms_set_frontend_language();
+	  return;
+	}
       $content =& $node->GetContent();
       if ($content !== FALSE && is_object($content) && $content->Active() && $content->HasUsableLink() )
 	{
@@ -95,11 +106,6 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 	      $url .= trim($params['urlparam']);
 	    }
 	}
-     
-      $Prev_label = "";
-      $Next_label = "";
-      $Anchor_label = "";
-      $Parent_label = "Parent page: ";
     }
   elseif (isset($params['dir'])) 
     {
@@ -108,66 +114,17 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 	  $anchorlink = ltrim($params['anchorlink'], '#');
 	}
 
-      $lang = get_site_preference('frontendlang','en');
-      if (isset($params['lang']))
-	{
-	  $lang = trim($params['lang']);
-	  if( !$lang ) $lang = '0';
-	}
-      switch ($lang)
-	{
-	case 'de':
-	case 'de_DE':
-	  $Prev_label = "Vorherige Seite: ";
-	  $Next_label = "N&auml;chste Seite: ";
-	  break;
-	case 'dk':
-	case 'da':
-	case 'da_DK':
-	  $Prev_label = "Forrige side: ";
-	  $Next_label = "N&aelig;ste side: ";
-	  break;
-	case 'nl':
-	case 'nl_NL':
-	  $Prev_label = "Vorige pagina: ";
-	  $Next_label = "Volgende pagina: ";
-	  $Parent_label = "Bovenliggende pagina: "; // uplink
-	  break;
-	case 'fr':
-	case 'fr_FR':
-	  $Prev_label = "Page pr&eacute;c&eacute;dente&nbsp;: ";
-	  $Next_label = "Page suivante&nbsp;: ";
-	  $Parent_label = "Page ascendante&nbsp;: "; //uplink
-	  break;
-	case 'no':
-	case 'nb_NO':
-	  $Prev_label = "Forrige side : ";
-	  $Next_label = "Neste side: ";
-	  $Parent_label = "Side opp: "; //uplink
-	  break;
-	case '0':
-	  $Prev_label = "";
-	  $Next_label = "";
-	  break;
-	case 'en':
-	default:
-	  $Prev_label = "Previous page: ";
-	  $Next_label = "Next page: ";
-	  $Parent_label = "Parent page: "; //uplink
-	  break;
-	}
-      
       $condition = false;
       switch (strtolower($params['dir']))
 	{
 	case 'next':
 	  $condition = '>';
-	  $label=$Next_label;
+	  $label=lang_by_realm('next_label','cms_selflink');
 	  break;
 	case 'prev':
 	case 'previous':
 	  $condition = '<';
-	  $label=$Prev_label;
+	  $label=lang_by_realm('prev_label','cms_selflink');
 	  break;
 	case 'anchor': // Start Russ addition
 	  $condition = '^';
@@ -175,7 +132,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 	  break; // End Russ addition
 	case 'start':
 	  $condition = '-';
-	  $label = '';
+	  $label = ''; // no label needed.
 	  break;
 	case 'up': // Start uplink
 	  $condition = '|';
@@ -302,7 +259,11 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 	      // Uplink
 	      $node =& $hm->getNodeById($gCms->variables['content_id']);
 	      $node =& $node->getParentNode();
-	      if (!isset($node)) return;
+	      if (!isset($node)) 
+		{
+		  cms_set_frontend_language();
+		  return;
+		}
 	      $content =& $node->GetContent();
 	      if ($content != FALSE)
 		{
@@ -352,11 +313,13 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
   if( empty($url) )
     {
       // no url to link to, therefore nothing to do.
+      cms_set_frontend_language();
       return;
     }
 
   if( isset($params['href']) )
     {
+      cms_set_frontend_language();
       return $href;
     }
 
@@ -385,7 +348,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
     {
       if (! isset($params['label_side']) || $params['label_side'] == 'left')
 	{
-	  $result .= $label;
+	  $result .= $label.'&nbsp;';
 	}
       $result .= '<a href="'.$url.'"';      
       $result .= ' title="'.$title.'" ';
@@ -442,6 +405,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 	}
     }
 
+  cms_set_frontend_language();
   if( isset($params['assign']) )
     {
       $smarty->assign($params['assign'],$result);

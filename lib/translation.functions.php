@@ -152,6 +152,26 @@ function cms_admin_current_language()
 
 
 /**
+ * Temporarily override the current frontend language
+ *
+ * @string lang, the language to set.  If empty, the system will be restored to the default frontend language.
+ */
+function cms_set_frontend_language($lang = '')
+{
+  global $gCms;
+  if( empty($lang) )
+    {
+      unset($gCms->variables['cms_frontend_cur_language']);
+    }
+  else if( isset($gCms->nls['language'][$lang]) || isset($gCms->nls['alias'][$lang]) )
+    {
+      // todo: check here if the language exists.
+      $gCms->variables['cms_frontend_cur_language'] = $lang;
+    }
+}
+
+
+/**
  * A function to return the current frontend language
  *
  * @internal
@@ -160,6 +180,12 @@ function cms_admin_current_language()
 function cms_frontend_current_language()
 {
   cms_initialize_nls();
+
+  global $gCms;
+  if( isset($gCms->variables['cms_frontend_cur_language']) )
+    {
+      return $gCms->variables['cms_frontend_cur_language'];
+    }
 
   $curlang = get_site_preference('frontendlang','');
   if( $curlang == '' ) {
@@ -190,6 +216,7 @@ function cms_current_language()
 }
 
 
+
 /**
  * Load a lang file for a specific realm.
  *
@@ -199,9 +226,10 @@ function cms_current_language()
  * @param string An optional base directory
  * @param boolean Indicates that the language is indicated by the directory name
  * @param boolean Indicates that the lang file has a sub array for the realm.
+ * @param string  The alternate language to load.  If not specified the current language will be used.
  * @return void
  */
-function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 0,$has_realm = 0, $is_custom = 0)
+function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 0,$has_realm = 0, $is_custom = 0, $cur_lang = '')
 {
 	global $gCms;
 	global $lang;
@@ -216,7 +244,10 @@ function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 
 		$filename = 'en_US.php';
 	}
 
-	$cur_lang = cms_current_language();
+	if( empty($cur_lang) )
+	  {
+	    $cur_lang = cms_current_language();
+	  }
 
 	// load the default (en_US) file first.
 	$fn = cms_join_path($basedir,$filename);
