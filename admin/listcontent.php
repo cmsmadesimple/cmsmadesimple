@@ -575,12 +575,15 @@ function check_children(&$root, &$mypages, &$userid)
 		if (!$result)
 		{
 		  $children =& $root->getChildren(false,true);
-			foreach ($children as $child)
-			{
-				$result = check_children($child, $mypages, $userid);
-				if ($result)
-					break;
-			}
+		  if( is_array($children) && count($children) > 0 )
+		  {
+		    foreach ($children as $child)
+		      {
+			$result = check_children($child, $mypages, $userid);
+			if ($result)
+			  break;
+		      }
+		  }
 		}
 	}
 	return $result;
