@@ -5,6 +5,7 @@
  * 
  * @package CMS
  * @author Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @internal
  * @since  1.9
  */
 class cms_route_manager

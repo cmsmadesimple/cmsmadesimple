@@ -505,7 +505,7 @@ $all_attributes['extra1'] = lang('extra1');
 $all_attributes['extra2'] = lang('extra2');
 $all_attributes['extra3'] = lang('extra3');
 $all_attributes['additionaleditors'] = lang('additionaleditors');
-$all_attributes['url'] = lang('url');
+$all_attributes['page_url'] = lang('url');
 $smarty->assign('all_attributes',$all_attributes);
 
 $yesno = array(0=>lang('no'),1=>lang('yes'));
