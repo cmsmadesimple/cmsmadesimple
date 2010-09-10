@@ -78,6 +78,7 @@ class ErrorPage extends Content
     $this->RemoveProperty('titleattribute','');
     $this->RemoveProperty('active',true);
     $this->RemoveProperty('cachable',false);
+	$this->RemoveProperty('page_url','');
 
     $this->RemoveProperty('alias','');
     $this->AddBaseProperty('alias',10,1);
