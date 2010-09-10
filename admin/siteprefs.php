@@ -237,6 +237,15 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('content_thumbnailfield_path',$content_thumbnailfield_path);
 	  $contentimage_path = trim($_POST['contentimage_path']);
 	  set_site_preference('contentimage_path',$contentimage_path);
+	  if( isset($_POST['basic_attributes']) )
+	    {
+	      $basic_attributes = implode(',',($_POST['basic_attributes']));
+	    }
+	  else
+	    {
+	      $basic_attributes = '';
+	    }
+	  set_site_preference('basic_attributes',$basic_attributes);
 	  break;
 
 	case 'listcontent':
@@ -267,14 +276,6 @@ else if (isset($_POST["editsiteprefs"]))
 	  if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = $_POST['disablesafemodewarning'];
 	  if (isset($_POST["allowparamcheckwarnings"])) $allowparamcheckwarnings = $_POST['allowparamcheckwarnings'];
 	  if (isset($_POST["enablenotifications"])) $enablenotifications = $_POST['enablenotifications'];
-	  if( isset($_POST['basic_attributes']) )
-	    {
-	      $basic_attributes = implode(',',($_POST['basic_attributes']));
-	    }
-	  else
-	    {
-	      $basic_attributes = '';
-	    }
 	  if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
 	  if (isset($_POST["urlcheckversion"])) $urlcheckversion = $_POST["urlcheckversion"];
 	  if (isset($_POST['global_umask'])) 
@@ -292,7 +293,6 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('disablesafemodewarning',$disablesafemodewarning);
 	  set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
 	  set_site_preference('enablenotifications',$enablenotifications);
-	  set_site_preference('basic_attributes',$basic_attributes);
 	  if( isset($_POST['auto_clear_cache_age']) )
 	    {
 	      $auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
@@ -400,6 +400,7 @@ if ($dir=opendir(dirname(__FILE__)."/themes/"))
 
 $smarty->assign('active_general',($active_tab == 'general')?1:0);
 $smarty->assign('active_listcontent',($active_tab == 'listcontent')?1:0);
+$smarty->assign('active_editcontent',($active_tab == 'editcontent')?1:0);
 $smarty->assign('active_sitedown',($active_tab == 'sitedown')?1:0);
 $smarty->assign('active_setup',($active_tab == 'setup')?1:0);
 

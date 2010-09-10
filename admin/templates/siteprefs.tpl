@@ -1,7 +1,7 @@
 {$mod->StartTabHeaders()}
 {$mod->SetTabHeader('general',$lang_general,$active_general)}
 {$mod->SetTabHeader('listcontent',$lang_listcontent,$active_listcontent)}
-{$mod->SetTabHeader('editcontent',$lang_editcontent_settings)}
+{$mod->SetTabHeader('editcontent',$lang_editcontent_settings,$active_editcontent)}
 {$mod->SetTabHeader('sitedown',$lang_sitedown,$active_sitedown)}
 {$mod->SetTabHeader('setup',$lang_setup,$active_setup)}
 {$mod->EndTabHeaders()}
@@ -200,6 +200,17 @@
 </div>
 
 <div class="pageoverflow">
+  <p class="pagetext">{$lang_basic_attributes}:</p>
+  <p class="pageinput">
+    <select name="basic_attributes[]" multiple="multiple" size="5">
+      {html_options options=$all_attributes selected=$basic_attributes}
+    </select>
+    <br/>
+    {$lang_info_basic_attributes}
+  </p>
+</div>
+
+<div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
   <p class="pageinput">
     <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
@@ -318,17 +329,6 @@
 <div class="pageoverflow">
   <p class="pagetext">{$lang_admin_enablenotifications}:</p>
   <p class="pageinput"><input type="hidden" name="enablenotifications" value="0"/><input class="pagenb" type="checkbox" value="1" name="enablenotifications" {if $enablenotifications}checked="checked"{/if} /></p>
-</div>
-
-<div class="pageoverflow">
-  <p class="pagetext">{$lang_basic_attributes}:</p>
-  <p class="pageinput">
-    <select name="basic_attributes[]" multiple="multiple" size="5">
-      {html_options options=$all_attributes selected=$basic_attributes}
-    </select>
-    <br/>
-    {$lang_info_basic_attributes}
-  </p>
 </div>
 
 <div class="pageoverflow">
