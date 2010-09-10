@@ -3,7 +3,7 @@ uMVersion 1.9
 Core:
   - Adds support for custom urls for each content page.
     * URLS can be auto created from the page hierarchy, or a custom string
-      entered.  The system checks for duplocate URLS.
+      entered.  The system checks for duplicate URLS.
     * The url mechanism works in addition to the existing alias generated urls
   - A new config option 'auto_create_url' determines how page urls are
     determined (if at all).
@@ -28,7 +28,7 @@ Core:
   - Add a preference in siteprefs to determine relative path (from uploads_path ) for content_image tag. (default value for the dir param)
   - Modify the content_image tag to check to see if the existing values start with uploads/ and handle that correctly.
   - Modify the content_image tag to output absolute URLS.
-  - Rerite the Tree class to be lighter weight
+  - Rewrite of the Tree class to be of lighter weight
   - Adds a new cms_content_cache class to manage cached content
   - Optimize the contentoperations class to handle cached content
   - Get rid of the pageinfo stuff... it's redundant
@@ -77,7 +77,7 @@ Fixes:
   - Backend is slower then previous release
   - Core modules/tabs in the backend aren't translated
   - Internet Explorer doesnt show specific backend-pages nicely (f.e. News)
-  - Theme ´default´ gives message ´Undefined index: direction´ on top in backend
+  - Theme ï¿½defaultï¿½ gives message ï¿½Undefined index: directionï¿½ on top in backend
   - The content tag isn't allowing underscore in name of block anymore
   - Default content has News categories in summary-template
   - Added expand-collapse buttons on top of listcontent as well
