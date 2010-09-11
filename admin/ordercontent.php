@@ -15,7 +15,10 @@ if( isset($_POST['cancel']) || isset($_POST['submit']))
     redirect('listcontent.php'.$urlext);
     return;
   }
-
+if(isset( $_POST['revert'] ))
+  {
+	$_POST = array();
+  } 
 if( isset($_POST['data']) )
   {
 
@@ -124,11 +127,11 @@ if( isset($_POST['data']) )
 include_once("header.php");
 include_once("../lib/classes/class.admintheme.inc.php");
 
-echo '<div class="pageoverflow">';
-echo $themeObject->ShowHeader('reorderpages').'</div>';
+//echo '<div class="pageoverflow">';
+//echo $themeObject->ShowHeader('reorderpages');
 
 $tree = $gCms->GetHierarchyManager();
-
+$smarty->assign('showheader', $themeObject->ShowHeader('reorderpages'));
 $smarty->assign('tree',$tree);
 $smarty->assign('urlext',$urlext);
 

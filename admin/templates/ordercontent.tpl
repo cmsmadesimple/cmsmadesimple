@@ -1,3 +1,5 @@
+<div class="pagecontainer">
+{$showheader}
 {literal}
 <style type="text/css">
 .modified { background-color: red; color: white; }
@@ -52,7 +54,7 @@ $(document).ready(function(){
 				return;
 			var subbranch = $(me).children("ul");
 			if(subbranch.size() == 0) {
-				me.find("span.dropchild").after("<ul></ul>");
+				me.find("span.dropchild").after("<ul><\/ul>");
 				subbranch = me.find("ul");
 			}
 			var oldParent = dropped.parent();
@@ -89,6 +91,7 @@ $(document).ready(function(){
 <div class="pagoeverflow">
  <input type="submit" name="submit" class="button save" value="{'submit'|lang}"/>
  <input type="submit" name="cancel" value="{'cancel'|lang}"/>
+ <input type="submit" name="revert" value="{'revert'|lang}"/>
 </div>
 
 <div>
@@ -102,5 +105,7 @@ $(document).ready(function(){
 <div class="pagoeverflow">
  <input type="submit" name="submit" class="button save" value="{'submit'|lang}"/>
  <input type="submit" name="cancel" value="{'cancel'|lang}"/>
+ <input type="submit" name="revert" value="{'revert'|lang}"/>
 </div>
 </form>
+</div>
