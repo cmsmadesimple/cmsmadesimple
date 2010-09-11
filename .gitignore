@@ -1,3 +1,7 @@
 *~
 *.bak
 \#*\#
+config.php
+modules/
+uploads/
+tmp/
