@@ -210,7 +210,7 @@ function cms_config_text($config)
 # in it's entirety.  This behaviour was later changed to process the head portion of the
 # page template after the body.  If you are working with a highly configured site that
 # relies significantly on the old order of smarty processing, you may want to try
-# setting this parameter to false.
+# setting this parameter to true.
 \$config['process_whole_template'] = ${$config['process_whole_template']?'true':'false'};
 
 # CMSMS Debug Mode?  Turn it on to get a better error when you
