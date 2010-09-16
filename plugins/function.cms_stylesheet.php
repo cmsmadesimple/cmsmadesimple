@@ -43,27 +43,28 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	$stylesheet = '';
 
 	$qparms = array();
+	$where = array();
 	$query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,
 		A.media_type,B.assoc_order 
-	FROM '.cms_db_prefix().'css A, '.cms_db_prefix().'css_assoc B
-	WHERE A.css_id = B.assoc_css_id';
+	FROM '.cms_db_prefix().'css A LEFT JOIN '.cms_db_prefix().'css_assoc B ON A.css_id = B.assoc_css_id';
 	if( isset($params['media']) && strtolower($params['media']) != 'all' )
 	{
-		$query .= ' AND (media_type LIKE ? OR media_type LIKE ?)';
+		$where[] = '(media_type LIKE ? OR media_type LIKE ?)';
 		$qparms[] = '%'.trim($params['media']).'%';
 		$qparms[] = '%all%';
 	}
 	if (isset($params['name']) && $params['name'] != '')
 	{
-		$query .= ' AND A.css_name = ?';
+		$where[] = 'A.css_name = ?';
 		$qparms[] = $params['name'];
 	}
 	else //No name?  Use the template_id instead
 	{
-		$query .= ' AND B.assoc_type = ?
+		$where[] = 'B.assoc_type = ?
 		AND B.assoc_to_id = ?';
 		$qparms = array('template', $template_id);
 	}
+	$query .= " WHERE ".implode(' AND ',$where);
 	$query .= ' ORDER BY B.assoc_order';
 
 	$conv_filename = array(' '=>'',':'=>'_');
