@@ -304,6 +304,7 @@ jQuery(document).ready(function(){
 	     if( resp == 'Success' )
 	       {
 		 htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
+		 $('input[name=cancel]').fadeOut();
 	       }
              else
                {
