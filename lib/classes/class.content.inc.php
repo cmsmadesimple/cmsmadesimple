@@ -2170,7 +2170,7 @@ class ContentBase
 		  {
 		    $prompt = '*'.$prompt;
 		  }
-		return array($prompt,$str);
+		return array($prompt,$str,lang('help_page_url'));
 	      }
 	      break;
 

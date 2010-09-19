@@ -231,9 +231,6 @@ if (FALSE == empty($error))
 <?php
 }
 
-#$contentarray = $contentobj->EditAsArray(true, 0);
-#$contentarray2 = $contentobj->EditAsArray(true, 1);
-
 $tabnames = $contentobj->TabNames();
 
 ?>
@@ -318,7 +315,7 @@ $tabnames = $contentobj->TabNames();
 				?>
 				<div class="pageoverflow">
 					<div class="pagetext"><?php echo $contentarray[$i][0]; ?></div>
-					<div class="pageinput"><?php echo $contentarray[$i][1]; ?></div>
+ 					<div class="pageinput"><?php echo $contentarray[$i][1]; if( isset($contentarray[$i][2]) ) { echo '<br/>'.$contentarray[$i][2]; } ?></div>
 				</div>
 				<?php
 		            }

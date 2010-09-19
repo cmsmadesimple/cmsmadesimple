@@ -56,7 +56,7 @@ $submit = false;
 if (isset($_POST["submitbutton"])) $submit = true;
 
 $apply = false;
-if (isset($_POST["applybutton"])) $apply = true;
+if (isset($_POST["apply"])) $apply = true;
 
 $ajax = false;
 if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
@@ -202,64 +202,34 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 
 $headtext .= <<<EOSCRIPT
 <script type="text/javascript">
-  // <![CDATA[
-
-window.Edit_Content_Apply = function(button)
-{
-	$addlScriptSubmit
-	$('Edit_Content_Result').innerHTML = '';
-	button.disabled = 'disabled';
-	var data = new Array();
-	data.push('ajax=1');
-	data.push('applybutton=1');
-
-	var elements = Form.getElements($('contentform'));
-	for (var cnt = 0; cnt < elements.length; cnt++)
-	{
-		var elem = elements[cnt];
-		if (elem.type == 'submit')
-		{
-			continue;
-		}
-		var query = Form.Element.serialize(elem);
-		data.push(query);
-	}
-
-	new Ajax.Request(
-		'{$_SERVER['REQUEST_URI']}'
-		, {
-			method: 'post'
-			, parameters: data.join('&')
-			, onSuccess: function(t)
-			{
-				button.removeAttribute('disabled');
-				var xml = t.responseXML;
-				var response = xml.documentElement.childNodes[0];
-				var details = xml.documentElement.childNodes[1];
-				if (response.textContent) { response = response.textContent; } else { response = response.text; } 
-				if (details.textContent) { details = details.textContent; } else { details = details.text; }
-				
-				var htmlShow = '';
-				if (response == 'Success')
-				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
-				}
-				else
-				{
-					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details + '<\/ul><\/div>';
-				}
-				$('Edit_Content_Result').innerHTML = htmlShow;
-			}
-			, onFailure: function(t)
-			{
-				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
-			}
-		}
-	);
-
-	return false;
-}
-  // ]]>
+// <![CDATA[
+jQuery(document).ready(function(){
+  jQuery('input[name=apply]').click(function(){
+    var data = jQuery('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
+    data.push({ 'name': 'ajax', 'value': 1});
+    data.push({ 'name': 'apply', 'value': 1 });
+    $.post('{$_SERVER['REQUEST_URI']}',data,function(resultdata,text){
+	     var resp = $(resultdata).find('Response').text();
+	     var details = $(resultdata).find('Details').text();
+             var htmlShow = '';
+	     if( resp == 'Success' )
+	       {
+		 htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
+		 $('input[name=cancel]').fadeOut();
+	       }
+             else
+               {
+		 htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
+		 htmlShow += details;
+		 htmlShow += '<\/ul><\/div>';
+               }
+	     $('#Edit_Content_Result').html(htmlShow);
+	   },
+	   'xml');
+    return false;
+  });
+});
+// ]]>
 </script>
 EOSCRIPT;
 include_once("header.php");
@@ -301,9 +271,6 @@ else
 	{
 	  echo $themeObject->ShowErrors($error);
 	}
-
-#$contentarray = $contentobj->EditAsArray(true, 0, $adminaccess);
-#$contentarray2 = $contentobj->EditAsArray(true, 1, $adminaccess);
 
 	$tabnames = $contentobj->TabNames();
 	$numberoftabs = count($tabnames);
@@ -357,7 +324,7 @@ else
 		?>
 	</div>
 	<div style="clear: both;"></div>
-	<form method="post" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
+	<form method="post" id="Edit_Content" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 <div>
   <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
   <input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
@@ -378,7 +345,7 @@ if (isset($contentobj->mPreview) && $contentobj->mPreview == true)
   }
 */
 $submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
-$submit_buttons .= ' <input type="submit" onclick="return window.Edit_Content_Apply(this);" name="applybutton" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
+$submit_buttons .= ' <input type="submit" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
  if( $contentobj->IsViewable() && $contentobj->Active() ) {
    $submit_buttons .= ' <a rel="external" href="'.$contentobj->GetURL().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
  }
