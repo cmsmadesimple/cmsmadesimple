@@ -98,6 +98,15 @@
 </div>
 
 <div class="pageoverflow">
+  <p class="pagetext">{'listcontent_showtitle'|lang}:</p>
+  <p class="pageinput">
+    <select name="listcontent_showtitle">
+      {html_options options=$titlemenu selected=$listcontent_showtitle}
+    </select>
+  </p>
+</div>
+
+<div class="pageoverflow">
   <p class="pagetext">{'listcontent_showalias'|lang}:</p>
   <p class="pageinput">
     <select name="listcontent_showalias">
@@ -111,15 +120,6 @@
   <p class="pageinput">
     <select name="listcontent_showurl">
       {html_options options=$yesno selected=$listcontent_showurl}
-    </select>
-  </p>
-</div>
-
-<div class="pageoverflow">
-  <p class="pagetext">{'listcontent_showtitle'|lang}:</p>
-  <p class="pageinput">
-    <select name="listcontent_showtitle">
-      {html_options options=$titlemenu selected=$listcontent_showtitle}
     </select>
   </p>
 </div>
