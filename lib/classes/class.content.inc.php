@@ -1850,10 +1850,10 @@ class ContentBase
 		$text .= '<select name="additional_editors[]" multiple="multiple" size="5">';
 
 		global $gCms;
-		$userops =& $gCms->GetUserOperations();
-		$groupops =& $gCms->GetGroupOperations();
-		$allusers =& $userops->LoadUsers();
-		$allgroups =& $groupops->LoadGroups();
+		$userops = $gCms->GetUserOperations();
+		$groupops = $gCms->GetGroupOperations();
+		$allusers = $userops->LoadUsers();
+		$allgroups = $groupops->LoadGroups();
 		if( $addteditors == '' )
 		  {
 		    $addteditors = $this->GetAdditionalEditors();

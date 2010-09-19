@@ -283,8 +283,8 @@ class xajaxPluginManager
 		foreach ($aKeys as $sKey)
 		{
 			$objPlugin =& $this->aRegistrars[$sKey];
-			$mResult =& $objPlugin->register($aArgs);
-			if (is_a($mResult, 'xajaxRequest'))
+			$mResult = $objPlugin->register($aArgs);
+			if ($mResult instanceof xajaxRequest)
 				return $mResult;
 			if (is_array($mResult))
 				return $mResult;

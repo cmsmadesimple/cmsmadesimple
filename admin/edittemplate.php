@@ -246,65 +246,33 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
-  // <![CDATA[
-window.Edit_Template_Apply = function(button)
-{
-	$addlScriptSubmit
-	$('Edit_Template_Result').innerHTML = '';
-	button.disabled = 'disabled';
-
-	var data = new Array();
-	data.push('ajax=1');
-	data.push('apply=1');
-	// Have to handle some of the serialization here (rather than Form.serialize()) because the cancel button can break things.
-	var elements = Form.getElements($('Edit_Template'));
-	for (var cnt = 0; cnt < elements.length; cnt++)
-	{
-		var elem = elements[cnt];
-		if (elem.type == 'submit')
-		{
-			// Leave off all submit buttons
-			continue;
-		}
-		var query = Form.Element.serialize(elem);
-		data.push(query);
-	}
-
-	new Ajax.Request(
-		'{$_SERVER['REQUEST_URI']}'
-		, {
-			method: 'post'
-			, parameters: data.join('&')
-			, onSuccess: function(t) 
-			{
-				button.removeAttribute('disabled');
-				var response = t.responseXML.documentElement.childNodes[0];
-				var details = t.responseXML.documentElement.childNodes[1];
-				if (response.textContent) { response = response.textContent; } else { response = response.text; } 
-				if (details.textContent) { details = details.textContent; } else { details = details.text; }
-				
-				var htmlShow = '';
-				if (response == 'Success')
-				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
-				}
-				else
-				{
-					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
-					htmlShow += details;
-					htmlShow += '<\/ul><\/div>';
-				}
-				$('Edit_Template_Result').innerHTML = htmlShow;
-			}
-			, onFailure: function(t) 
-			{
-				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
-			}
-		}
-	);
-	return false;
-}
-  // ]]>
+// <![CDATA[
+jQuery(document).ready(function(){
+  jQuery('input[name=apply]').click(function(){
+    var data = jQuery('#Edit_Template').find('input:not([type=submit]), select, textarea').serializeArray();
+    data.push({ 'name': 'ajax', 'value': 1});
+    data.push({ 'name': 'apply', 'value': 1 });
+    $.post('{$_SERVER['REQUEST_URI']}',data,function(resultdata,text){
+	     var resp = $(resultdata).find('Response').text();
+	     var details = $(resultdata).find('Details').text();
+             var htmlShow = '';
+	     if( resp == 'Success' )
+	       {
+		 htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
+	       }
+             else
+               {
+		 htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
+		 htmlShow += details;
+		 htmlShow += '<\/ul><\/div>';
+               }
+	     $('#Edit_Template_Result').html(htmlShow);
+	   },
+	   'xml');
+    return false;
+  });
+});
+// ]]>
 </script>
 EOSCRIPT;
 include_once("header.php");
@@ -314,7 +282,7 @@ $submitbtns = '
 <!--	<input type="submit" name="preview" value="'.lang('preview').'" class="button" onmouseover="this.className=\'buttonHover\'" onmouseout="this.className=\'button\'" /> -->
 	<input type="submit" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
 	<input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
-	<input type="submit" onclick="return window.Edit_Template_Apply(this);" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
+	<input type="submit" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
 ';
 
 if (!$access)
