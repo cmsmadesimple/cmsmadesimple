@@ -196,7 +196,7 @@ $lang['admin']['help_function_content_image'] = <<<EOT
   <li><em>(optional)</em> label - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
  
   <li><em>(optional)</em> dir - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the uploads directory will be used.
-  <p>Example: use images from the uploads/image directory.</p>
+  <p>Example: use images from the uploads/images directory.</p>
   <pre>{content_image block='image1' dir='images'}</pre><br/>
   </li>
 
