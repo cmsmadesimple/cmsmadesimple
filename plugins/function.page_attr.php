@@ -24,9 +24,11 @@ function smarty_cms_function_page_attr($params, &$smarty)
   if( isset($params['key']) ) {
     $key = $params['key'];
     global $gCms;
-    $content_obj = &$gCms->variables['content_obj'];
+	$contentops = $gCms->GetContentOperations();
+	$contentobj = $contentops->getContentObject();
     if( is_object($contentobj) )
       {
+	
 	$result = $contentobj->GetPropertyValue($key);
 	if( $result == -1 ) $result = '';
       }
