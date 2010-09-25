@@ -22,11 +22,10 @@ function smarty_cms_function_stylesheet($params, &$smarty)
   function get_stylesheet_tag($cssid,$media='')
   {
     global $gCms;
-    $config = &$gCms->config;
+    $config = $gCms->GetConfig();
     
     $str = '';
     $url = '';
-    //if( $config['url_rewriting'] != 'none' )
 
     $base = $config['root_url'];
     if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off')
@@ -52,7 +51,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
   }
 
   global $gCms;
-  $config = &$gCms->config;
+  $config = $gCms->config;
   $content_obj = &$gCms->variables['content_obj'];
   $template_id=$content_obj->TemplateId();
   if (isset($params["templateid"]) && $params["templateid"]!="") {
