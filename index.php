@@ -154,6 +154,16 @@ if (is_object($contentobj))
       redirect($contentobj->GetURL());
     }
 
+  $gCms->variables['content_obj'] = $contentobj;
+  $smarty->assign('content_obj',$contentobj);
+
+  if( $contentobj->Secure() && 
+      (! isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') )
+    {
+      // if this page is marked to be secure, make sure we redirect to the secure page.
+      redirect($contentobj->GetURL());
+    }
+
   cmsms()->set_variable('content_obj',$contentobj);
   cmsms()->set_variable('content_id',$contentobj->Id());
   cmsms()->set_variable('page',$page);
