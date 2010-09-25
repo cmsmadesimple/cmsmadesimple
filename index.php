@@ -154,7 +154,7 @@ if (is_object($contentobj))
       redirect($contentobj->GetURL());
     }
 
-  $gCms->variables['content_obj'] = $contentobj;
+  cmsms()->set_variable('content_obj',$contentobj);
   $smarty->assign('content_obj',$contentobj);
 
   if( $contentobj->Secure() && 
