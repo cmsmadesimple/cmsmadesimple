@@ -37,7 +37,7 @@
 function check_login($no_redirect = false)
 {
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 
 	//Handle a current login if one is in queue in the SESSION
 	if (isset($_SESSION['login_user_id']))
@@ -172,7 +172,7 @@ function check_passhash($userid, $checksum)
 
 	global $gCms;
 	$db =& $gCms->GetDb();
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 
 	$userops =& $gCms->GetUserOperations();
 	$oneuser =& $userops->LoadUserByID($userid);
@@ -201,7 +201,7 @@ function generate_user_object($userid)
 {
 	global $gCms;
 	$db =& $gCms->GetDb();
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 
 	$userops =& $gCms->GetUserOperations();
 	$oneuser =& $userops->LoadUserByID($userid);
@@ -228,7 +228,7 @@ function generate_user_object($userid)
 function send_recovery_email($username)
 {
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	$userops =& $gCms->GetUserOperations();
 	$user = $userops->LoadUserByUsername($username);
 	
@@ -268,7 +268,7 @@ function send_recovery_email($username)
 function find_recovery_user($hash)
 {
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	$userops =& $gCms->GetUserOperations();
 	
 	foreach ($userops->LoadUsers() as $user)
@@ -1189,7 +1189,7 @@ function textarea_highlight($use_javasyntax, $text, $name, $class_name="syntaxHi
  */
 function cms_db_prefix() {
   global $gCms;
-  $config =& $gCms->GetConfig();
+  $config = $gCms->GetConfig();
   return $config["db_prefix"];
 }
 

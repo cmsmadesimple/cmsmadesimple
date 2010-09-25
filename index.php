@@ -82,12 +82,11 @@ else
 
 $params = array_merge($_GET, $_POST);
 
-$smarty = &$gCms->smarty;
+$smarty = cmsms()->GetSmarty();
 $smarty->params = $params;
 
 $page = get_pageid_or_alias_from_url();
-global $gCms;
-$contentops =& $gCms->GetContentOperations();
+$contentops = cmsms()->GetContentOperations();
 
 $contentobj = '';
 if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temporary
@@ -155,17 +154,15 @@ if (is_object($contentobj))
       redirect($contentobj->GetURL());
     }
 
-  $gCms->variables['content_obj'] = $contentobj;
+  cmsms()->set_variable('content_obj',$contentobj);
+  cmsms()->set_variable('content_id',$contentobj->Id());
+  cmsms()->set_variable('page',$page);
+  cmsms()->set_variable('page_id',$page);
+  cmsms()->set_variable('page_name',$contentobj->Alias());
+  cmsms()->set_variable('position',$contentobj->Hierarchy());
+  cmsms()->set_variable('friendly_position',$contentops->CreateFriendlyHierarchyPosition($contentobj->Hierarchy()));
+
   $smarty->assign('content_obj',$contentobj);
-
-  $gCms->variables['content_id'] = $contentobj->Id();
-  $gCms->variables['page'] = $page;
-  $gCms->variables['page_id'] = $page;
-
-  $gCms->variables['page_name'] = $contentobj->Alias();
-  $gCms->variables['position'] = $contentobj->Hierarchy();
-  $gCms->variables['friendly_position'] = $contentops->CreateFriendlyHierarchyPosition($contentobj->Hierarchy());
-
   $smarty->assign('content_id', $contentobj->Id());
   $smarty->assign('page', $page);
   $smarty->assign('page_id', $page);
@@ -194,9 +191,9 @@ if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') |
 
 if (isset($_GET["print"]))
 {
-  $pageinfo = $gCms->variables['pageinfo'];
-	($smarty->is_cached('print:'.$page, '', $pageinfo->template_id)?$cached="":$cached="not ");
-	$html = $smarty->fetch('print:'.$page, '', $pageinfo->template_id) . "\n";
+  $pageinfo = cmsms()->get_variable('pageinfo');
+  ($smarty->is_cached('print:'.$page, '', $pageinfo->template_id)?$cached="":$cached="not ");
+  $html = $smarty->fetch('print:'.$page, '', $pageinfo->template_id) . "\n";
 }
 else
 {
@@ -232,7 +229,7 @@ else
 
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
-header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . get_encoding());
+header("Content-Type: " . cmsms()->get_variable('content-type') . "; charset=" . get_encoding());
 
 echo $html;
 
@@ -240,7 +237,7 @@ echo $html;
 
 $endtime = microtime();
 
-$db =& $gCms->GetDb();
+$db =& cmsms()->GetDb();
 
 $memory = (function_exists('memory_get_usage')?memory_get_usage():0);
 $memory = $memory - $orig_memory;

@@ -39,7 +39,7 @@ function redirect($to, $noappend=false)
 
     global $gCms;
 	if (isset($gCms))
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 	else
 		$config = array();
 
@@ -123,7 +123,7 @@ function redirect($to, $noappend=false)
 			  {
 				echo "<div>".$sql_queries."</div>\n";
 			  }
-			foreach ($gCms->errors as $error)
+			foreach (cmsms()->get_errors() as $error)
 			{
 				echo $error;
 			}
@@ -324,7 +324,7 @@ function cms_cleanfile($filename)
 	// This ensures that the file specified is somewhere
 	// underneath the cms root path
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	if( strpos($realpath, $config['root_path']) !== 0 ) {
 		return CLEANED_FILENAME;
 	}
@@ -344,7 +344,7 @@ function cms_calculate_url()
 	$result = '';
 
     global $gCms;
-    $config =& $gCms->GetConfig();
+    $config = $gCms->GetConfig();
 
 	//Apache
 	/*
@@ -728,13 +728,13 @@ function debug_buffer($var, $title="")
 	global $gCms;
 	if ($gCms)
 	{
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 
 		//debug_to_log($var, $title='');
 
 		if($config["debug"] == true)
 		{
-			$gCms->errors[] = debug_display($var, $title, false, true);
+		  cmsms()->add_error(debug_display($var, $title, false, true));
 		}
 	}
 }
@@ -752,11 +752,11 @@ function debug_sql($str, $newline = false)
 	global $gCms;
 	if ($gCms)
 	{
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 
 		if($config["debug"] == true)
 		{
-			$gCms->errors[] = debug_display($str, '', false, true);
+		  cmsms()->add_error(debug_display($str, '', false, true));
 		}
 	}
 }
@@ -1888,7 +1888,7 @@ function stack_trace()
 function cms_move_uploaded_file( $tmpfile, $destination )
 {
    global $gCms;
-   $config =& $gCms->GetConfig();
+   $config = $gCms->GetConfig();
 
    if( !@move_uploaded_file( $tmpfile, $destination ) )
    {

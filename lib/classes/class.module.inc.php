@@ -163,7 +163,7 @@ class CMSModule
 		global $gCms;
 		
 		$this->cms =& $gCms;
-		$this->config =& $gCms->GetConfig(); // why?
+		$this->config = $gCms->GetConfig(); // why?
 
 		global $CMS_STYLESHEET;
 		global $CMS_ADMIN_PAGE;
@@ -692,10 +692,10 @@ class CMSModule
 	 * @deprecated
 	 * @return array The config hash.
 	 */
-	function & GetConfig()
+	function GetConfig()
 	{
 		global $gCms;
-		$config = &$gCms->GetConfig();
+		$config = $gCms->GetConfig();
 		return $config;
 	}
 
@@ -896,7 +896,7 @@ class CMSModule
 			{
 				global $gCms;
 				$db =& $gCms->GetDb();
-				$config =& $gCms->GetConfig();
+				$config = $gCms->GetConfig();
 				$smarty =& $gCms->GetSmarty();
 
 				$res = include($filename);
@@ -942,7 +942,7 @@ class CMSModule
 		{
 		  global $gCms;
 		  $db =& $gCms->GetDb();
-		  $config =& $gCms->GetConfig();
+		  $config = $gCms->GetConfig();
 		  $smarty =& $gCms->GetSmarty();
 		  
 		  $res = include($filename);
@@ -1006,7 +1006,7 @@ class CMSModule
 			{
 				global $gCms;
 				$db =& $gCms->GetDb();
-				$config =& $gCms->GetConfig();
+				$config = $gCms->GetConfig();
 				$smarty =& $gCms->GetSmarty();
 
 				$res = include($filename);
@@ -1986,7 +1986,7 @@ class CMSModule
 				{
 					global $gCms;
 					$db =& $gCms->GetDb();
-					$config =& $gCms->GetConfig();
+					$config = $gCms->GetConfig();
 					$smarty =& $gCms->GetSmarty();
 
 					include($filename);
@@ -3261,7 +3261,7 @@ class CMSModule
 				{
 					global $gCms;
 					$db =& $gCms->GetDb();
-					$config =& $gCms->GetConfig();
+					$config = $gCms->GetConfig();
 					$smarty =& $gCms->GetSmarty();
 
 					include($filename);

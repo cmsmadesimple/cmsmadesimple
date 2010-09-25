@@ -4,7 +4,7 @@ function ajaxpreview($params)
 {
 	global $gCms;
 	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	$contentops =& $gCms->GetContentOperations();
 
 	$content_type = $params['content_type'];
@@ -108,7 +108,7 @@ function copycontentobj(&$contentobj, $content_type, $params = null)
 function createtmpfname(&$contentobj)
 {
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	$templateops =& $gCms->GetTemplateOperations();
 
 	$data["content_id"] = $contentobj->Id();

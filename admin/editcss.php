@@ -169,7 +169,7 @@ if ($access)
 			$result = $onestylesheet->Save();
 
 			// Update the css hash
-			$config =& $gCms->GetConfig();
+			$config = $gCms->GetConfig();
 			$hashfile = cms_join_path($config['root_path'],'tmp','cache','csshash.dat');
 			$md5sum = md5($css_text);
 			$csshash = csscache_csvfile_to_hash($hashfile);

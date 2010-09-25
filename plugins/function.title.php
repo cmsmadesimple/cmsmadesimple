@@ -20,7 +20,7 @@ function smarty_cms_function_title($params, &$smarty)
 {
 	global $gCms;
 	$contentobj = $gCms->variables['content_obj'];
-	$config = &$gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	$result = '';
 	if (!is_object($contentobj))
 	{

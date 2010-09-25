@@ -759,7 +759,7 @@ class Content extends ContentBase
 	private function _display_image_block($blockInfo,$value,$adding)
 	{
 		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 		$adddir = get_site_preference('contentimage_path');
 		if( $blockInfo['dir'] != '' )
 			{

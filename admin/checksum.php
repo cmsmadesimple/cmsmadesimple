@@ -66,7 +66,7 @@ function check_checksum_data(&$report)
     }
   
   global $gCms;
-  $config =& $gCms->GetConfig();
+  $config = $gCms->GetConfig();
   $filenotfound = array();
   $notreadable = 0;
   $md5failed = 0;
@@ -173,7 +173,7 @@ function check_checksum_data(&$report)
 function generate_checksum_file(&$report)
 {
   global $gCms;
-  $config =& $gCms->GetConfig();
+  $config = $gCms->GetConfig();
   $output = '';
 
   $excludes = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^uploads$', 

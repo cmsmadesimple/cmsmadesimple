@@ -10,7 +10,7 @@
  */
 
 global $gCms;
-$config =& $gCms->GetConfig();
+$config = $gCms->GetConfig();
 
 /* 
  File system path to the directory you want to manage the images

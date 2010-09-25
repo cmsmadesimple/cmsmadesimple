@@ -14,7 +14,7 @@ function load_adodb()
 {
   global $gCms;
   global $ADODB_vers;
-  $config =& $gCms->GetConfig();
+  $config = $gCms->GetConfig();
 
 	// @TODO: Remove dependence on PEAR for error handling	
 	if ($config['debug'] == true)
@@ -71,7 +71,7 @@ function load_adodb()
 function & adodb_connect()
 {
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	
 	$dbinstance =& ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
 	$dbinstance->raiseErrorFn = "adodb_error";

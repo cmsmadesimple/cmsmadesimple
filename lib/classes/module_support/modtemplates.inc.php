@@ -34,7 +34,7 @@ function cms_module_ListTemplates(&$modinstance, $modulename = '')
 	global $gCms;
 
 	$db =& $gCms->GetDb();
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 
 	$retresult = array();
 
@@ -60,7 +60,7 @@ function cms_module_GetTemplate(&$modinstance, $tpl_name, $modulename = '')
 	global $gCms;
 
 	$db =& $gCms->GetDb();
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 
 	$query = 'SELECT * from '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?';
 	$result = $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName(), $tpl_name));
@@ -85,7 +85,7 @@ function cms_module_GetTemplateFromFile(&$modinstance, $template_name)
 	if (!$ok) return;
 
 	global $gCms;
-	$config = &$gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	$tpl_base  = $config['root_path'].DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
 	$tpl_base .= $modinstance->GetName().DIRECTORY_SEPARATOR.'templates';
 	$template = $tpl_base.DIRECTORY_SEPARATOR.$template_name.'.tpl';

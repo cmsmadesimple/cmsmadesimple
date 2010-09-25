@@ -99,7 +99,7 @@ function cms_module_GetHelpPage(&$modinstance)
 function cms_module_CreatePagination(&$modinstance, $id, $action, $returnid, $page, $totalrows, $limit, $inline=false)
 {
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 
 	$goto = 'index.php';
 	if ($returnid == '')

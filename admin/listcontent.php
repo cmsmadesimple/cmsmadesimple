@@ -459,7 +459,7 @@ function reorder_display_list()
 {
 	$objResponse = new xajaxResponse();
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	
 	$userid = get_userid();
 	
@@ -510,7 +510,7 @@ function reorder_process($get)
 	if (check_permission($userid,'Manage All Content'))
 	{
 		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 		$db =& $gCms->GetDb();
 		$contentops =& $gCms->GetContentOperations();
 	    $hm = $contentops->GetAllContentAsHierarchy(false);

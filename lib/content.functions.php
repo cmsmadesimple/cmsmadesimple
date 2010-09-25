@@ -400,7 +400,7 @@ class Smarty_CMS extends Smarty {
 	function template_top_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 	  global $gCms;
-	  $config =& $gCms->GetConfig();
+	  $config = $gCms->GetConfig();
 	  
 	  if (is_sitedown())
 	    {
@@ -456,7 +456,7 @@ class Smarty_CMS extends Smarty {
 	function template_head_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 	  global $gCms;
-	  $config =& $gCms->GetConfig();
+	  $config = $gCms->GetConfig();
 	  
 	  if (is_sitedown())
 	    {
@@ -515,7 +515,7 @@ class Smarty_CMS extends Smarty {
 	function template_body_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 	  global $gCms;
-	  $config =& $gCms->GetConfig();
+	  $config = $gCms->GetConfig();
 	  
 	  if (is_sitedown())
 	    {
@@ -578,7 +578,7 @@ class Smarty_CMS extends Smarty {
 	function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 
 		if (is_sitedown())
 		{
@@ -739,7 +739,7 @@ class Smarty_CMS extends Smarty {
 	function content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 		$contentobj = $gCms->variables['content_obj'];
 
 		if (!is_object($contentobj))

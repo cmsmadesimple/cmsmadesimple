@@ -257,7 +257,7 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
   $image = cms_htmlentities($image);
 
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 
 	$text = '<input class="cms_submit" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" type=';
 
@@ -448,7 +448,7 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
   $prettyurl = cms_htmlentities($prettyurl);
 
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 
 	$class = (isset($params['class'])?cms_htmlentities($params['class']):'');
 
@@ -561,7 +561,7 @@ function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
   $contents = cms_htmlentities($contents);
 
 	global $gCms;
-	$config = &$gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	$text = '<a href="';
 	if ($config["url_rewriting"] == 'mod_rewrite')
 	{
@@ -598,7 +598,7 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
 
 	$text = '';
 	global $gCms;
-	$config = &$gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	$manager =& $gCms->GetHierarchyManager();
 	$node =& $manager->sureGetNodeById($returnid);
 	if (isset($node))

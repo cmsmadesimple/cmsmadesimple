@@ -661,7 +661,7 @@ class ContentBase
 	{
 		$this->DoReadyForEdit();
 		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 
 		$tolower = false;
 
@@ -842,7 +842,7 @@ class ContentBase
 	{
 		global $gCms, $sql_queries, $debug_errors;
 		$db = &$gCms->GetDb();
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 
 		$result = false;
 
@@ -952,7 +952,7 @@ class ContentBase
 	function LoadFromData(&$data, $loadProperties = false)
 	{
 	  global $gCms, $debug_errors;
-	  $config =& $gCms->GetConfig();
+	  $config = $gCms->GetConfig();
 
 		$result = true;
 
@@ -1090,7 +1090,7 @@ class ContentBase
 	{
 		global $gCms, $sql_queries, $debug_errors;
 		$db = &$gCms->GetDb();
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 
 		$result = false;
 
@@ -1199,7 +1199,7 @@ class ContentBase
 	{
 		global $gCms, $sql_queries, $debug_errors;
 		$db = &$gCms->GetDb();
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 
 		$result = false;
 
@@ -1429,7 +1429,7 @@ class ContentBase
 	function Delete()
 	{
 		global $gCms, $sql_queries, $debug_errors;
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 
 		foreach($gCms->modules as $key=>$value)
 		{
@@ -1656,7 +1656,7 @@ class ContentBase
 	function GetURL($rewrite = true)
 	{
 		global $gCms;
-		$config = &$gCms->GetConfig();
+		$config = $gCms->GetConfig();
 		$url = "";
 		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 
@@ -1792,7 +1792,7 @@ class ContentBase
 
 		global $gCms, $sql_queries, $debug_errors;
 		$db = &$gCms->GetDb();
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 
 		$result = false;
 
@@ -2092,7 +2092,7 @@ class ContentBase
 	function display_single_element($one,$adding)
 	{
 	  global $gCms;
-	  $config =& $gCms->GetConfig();
+	  $config = $gCms->GetConfig();
 
 	  switch( $one )
 	    {
@@ -2388,7 +2388,7 @@ class ContentProperties
 			global $gCms, $sql_queries, $debug_errors;
 			
 			$db        =& $gCms->GetDb();
-			$config    =& $gCms->GetConfig();
+			$config    = $gCms->GetConfig();
 			$concat    =  '';
 			$timestamp =  $db->DBTimeStamp(time());
 

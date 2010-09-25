@@ -72,10 +72,11 @@ array_walk_recursive($_GET, 'sanitize_get_var');
 
 #Make a new CMS object
 require(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
+require(cms_join_path($dirname,'lib','classes','class.cms_config.php'));
 $gCms = new CmsObject();
 if (isset($starttime))
 {
-    $gCms->variables['starttime'] = $starttime;
+  cmsms()->set_variable('starttime',$starttime);
 }
 
 #Load the config file (or defaults if it doesn't exist)
@@ -83,7 +84,7 @@ require(cms_join_path($dirname,'version.php'));
 require(cms_join_path($dirname,'lib','config.functions.php'));
 
 #Grab the current configuration
-$config =& $gCms->GetConfig();
+$config = cmsms()->GetConfig();
 
 #Set the timezone
 if( $config['timezone'] != '' )
@@ -130,20 +131,16 @@ if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  )
     ini_set('memory_limit',trim($config['php_memory_limit']));
   }
 
-#Hack for changed directory and no way to upgrade config.php
-$config['previews_path'] = str_replace('smarty/cms', 'tmp', $config['previews_path']);
-
 #Add users if they exist in the session
-$gCms->variables['user_id'] = '';
+cmsms()->set_variable('user_id','');
+cmsms()->set_variable('username','');
 if (isset($_SESSION['cms_admin_user_id']))
 {
-    $gCms->variables['user_id'] = $_SESSION['cms_admin_user_id'];
+  cmsms()->set_variable('user_id',$_SESSION['cms_admin_user_id']);
 }
-
-$gCms->variables['username'] = '';
 if (isset($_SESSION['cms_admin_username']))
 {
-    $gCms->variables['username'] = $_SESSION['cms_admin_username'];
+  cmsms()->set_variable('username',$_SESSION['cms_admin_username']);
 }
 
 if ($config["debug"] == true)
@@ -171,7 +168,7 @@ require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'html_entity
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'autoloader.php');
 
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.pageinfo.inc.php');
-$gCms->variables['pageinfo'] = new PageInfo();
+cmsms()->set_variable('pageinfo',new PageInfo());
 
 debug_buffer('done loading files');
 
@@ -179,32 +176,10 @@ debug_buffer('done loading files');
 global $DONT_LOAD_DB;
 if (!isset($DONT_LOAD_DB))
 {
-    $cmsdb =& $gCms->GetDB();
-//    $cmsdb->Execute('set names utf8'); // database connection with utf-8
+  cmsms()->GetDb();
 }
 
-$smarty =& $gCms->GetSmarty();
-$contenttypes =& $gCms->contenttypes;
-
-#Load content types
-/*
-$dir = cms_join_path($dirname,'lib','classes','contenttypes');
-$handle=opendir($dir);
-while ($file = readdir ($handle)) 
-{
-    $path_parts = pathinfo($file);
-    if (isset($path_parts['extension']) && $path_parts['extension'] == 'php')
-    {
-		$obj = new CmsContentTypePlaceholder();
-		$obj->type = strtolower(basename($file, '.inc.php'));
-		$obj->filename = cms_join_path($dir,$file);
-		$obj->loaded = false;
-		$obj->friendlyname = basename($file, '.inc.php');
-		$contenttypes[strtolower(basename($file, '.inc.php'))] = $obj;
-    }
-}
-closedir($handle);
-*/
+$smarty = cmsms()->GetSmarty();
 
 if (!defined('SMARTY_DIR')) {
     define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
@@ -231,10 +206,10 @@ if (!isset($_SERVER['REQUEST_URI']))
 }
 
 #Setup the object sent to modules
-$gCms->variables['pluginnum'] = 1;
+cmsms()->set_variable('pluginnum',1);
 if (isset($page))
 {
-	$gCms->variables['page'] = $page;
+  cmsms()->set_variable('page',$page);
 }
 
 #Set a umask
@@ -255,7 +230,6 @@ $frontendlang = get_site_preference('frontendlang');
 $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 $smarty->assign('lang',$frontendlang);
 $smarty->assign('encoding',get_encoding());
-//$smarty->assign_by_ref('gCms',$gCms);
 
 if ($config['debug'] == true)
 {
@@ -268,21 +242,21 @@ if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 	if (is_file(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php')))
 	{
 		include(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php'));
-		$gCms->variables['convertclass'] = new ConvertCharset();
+		cmsms()->set_variable('convertclass',new ConvertCharset());
 	}
 }
 
 #Setup content routes
 if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) )
 {
-  $contentops = $gCms->GetContentOperations();
+  $contentops = cmsms()->GetContentOperations();
   $contentops->register_routes();
 }
 
 #Load all installed module code
 if (! isset($CMS_INSTALL_PAGE))
   {
-    $modload =& $gCms->GetModuleLoader();
+    $modload =& cmsms()->GetModuleLoader();
     $modload->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
   }
 debug_buffer('', 'End of include');

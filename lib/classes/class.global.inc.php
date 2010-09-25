@@ -56,7 +56,7 @@ class CmsObject {
 
 	/**
 	 * Modules object - holds references to all registered modules
-	 *	@access private
+	 * @access private
 	 */
 	var $cmsmodules;
 
@@ -68,13 +68,13 @@ class CmsObject {
 
 	/**
 	 * Plugins object - holds list of all registered plugins 
-	 *	@access private
+	 * @access private
 	 */
 	var $cmsplugins;
 
 	/**
 	 * User Plugins object - holds list and function pointers of all registered user plugins
-	 *	@access private
+	 * @access private
 	 */
 	var $userplugins;
 
@@ -139,9 +139,18 @@ class CmsObject {
 	var $contenttypes;
 
 	/**
+	 * module list - list of installed and available modules.
+	 * includes references to the module objects.
+	 *
+	 * @access private
+	 */
+	var $modules;
+
+
+	/**
 	 * Constructor
 	 */
-	function CmsObject()
+	public function CmsObject()
 	{
 		$this->cmssystemmodules = 
 		  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'TinyMCE', 'Printing', 'ThemeManager' );
@@ -167,6 +176,91 @@ class CmsObject {
 
 
 	/**
+	 * Retrieve the list of errors
+	 *
+	 * @since 1.9
+	 * @internal
+	 * return array
+	 */
+	public function get_errors()
+	{
+		return $this->errors;
+	}
+
+
+	/**
+	 * Add an error to the list
+	 *
+	 * @since 1.9
+	 * @internal
+	 * @param string The error message.
+	 */
+	public function add_error($str)
+	{
+		if( !is_array($this->errors) ) $this->errors = array();
+		$this->errors[] = $str;
+	}
+
+
+	/**
+	 * Retrieve the value of an internal variable.
+	 *
+	 * @internal
+	 * @since 1.9
+	 * @param string The variable name to get
+	 * @return mixed The value of the internal variable, or null.
+	 */
+	public function get_variable($key)
+	{
+		if( $key != '' && isset($this->variables[$key]) )
+		{
+			return $this->variables[$key];
+		}
+	}
+
+	
+	/**
+	 * Set a variable
+	 *
+	 * Set a variable for later usage.
+	 *
+	 * @internal
+	 * @since 1.9
+	 * @param string The variable name to set
+	 * @param mixed  The value
+	 */
+	public function set_variable($key,$value)
+	{
+		$this->variables[$key] = $value;
+	}
+
+
+	/**
+	 * Get a list of all installed and available modules
+	 *
+	 * This method will return an array of module names that are installed, loaded and ready for use.
+	 * suotable for iteration with GetModuleInstance
+	 *
+	 * @see CmsObject::GetModuleInstance()
+	 * @since 1.9
+	 * @return array
+	 */
+	public function GetAvailableModules()
+	{
+		$results = array();
+		foreach( $this->modules as $module_name => &$data )
+		{
+			if( isset($data['installed']) && $data['installed'] &&
+				isset($data['object']) && is_object($data['object']) )
+			{
+				$results[] = $module_name;
+			}
+		}
+		return $results;
+	}
+
+
+	/**
 	 * Get a reference to an installed module instance.
 	 *
 	 * This method will return a reference to the module object specified if it is installed, and available.
@@ -178,18 +272,18 @@ class CmsObject {
 	 * @param string (optional) version number for a check.  
 	 * @return object Reference to the module object, or null.
 	 */
-	public function &GetModuleInstance($module_name,$version = '')
+	public function & GetModuleInstance($module_name,$version = '')
 	{
-		if( empty($module_name) && isset($gCms->variables['module']))
+		if( empty($module_name) && isset($this->variables['module']))
 			{
-				$module_name = $gCms->variables['module'];
+				$module_name = $this->variables['module'];
 			}
 
 		$obj = null;
-		if( isset($gCms->modules[$module_name]) &&
-			isset($gCms->modules[$module_name]['object']) )
+		if( isset($this->modules[$module_name]) &&
+			isset($this->modules[$module_name]['object']) )
 			{
-				$obj = $gCms->modules[$module_name]['object'];
+				$obj = $this->modules[$module_name]['object'];
 			}
 		if( is_object($obj) && !empty($version) )
 			{
@@ -209,7 +303,7 @@ class CmsObject {
 	* @final
 	* @return ADOConnection a handle to the ADODB database object
 	*/
-	function & GetDb()
+	public function & GetDb()
 	{
 		global $DONT_LOAD_DB;
 
@@ -231,14 +325,12 @@ class CmsObject {
 	* @final
 	* @return mixed an associative array of configuration values
 	*/
-	function & GetConfig()
+	public function GetConfig()
 	{
-        if (!isset($this->config))
+		if( !$this->config )
 		{
-			$configinstance = cms_config_load(true);
-			$this->config = &$configinstance;
+			$this->config = cms_config::get_instance();
 		}
-
 		return $this->config;
 	}
 	
@@ -250,7 +342,7 @@ class CmsObject {
 	* @see ModuleLoader
 	* @return ModuleLoader handle to the ModuleLoader object
 	*/
-	function & GetModuleLoader()
+	public function & GetModuleLoader()
 	{
         if (!isset($this->moduleloader))
 		{
@@ -270,7 +362,7 @@ class CmsObject {
 	* @see ModuleOperations
 	* @return ModuleOperations handle to the ModuleOperations object
 	*/
-	function & GetModuleOperations()
+	public function & GetModuleOperations()
 	{
         if (!isset($this->moduleoperations))
 		{
@@ -290,7 +382,7 @@ class CmsObject {
 	* @see UserOperations
 	* @return UserOperations handle to the UserOperations object
 	*/
-	function & GetUserOperations()
+	public function & GetUserOperations()
 	{
         if (!isset($this->useroperations))
 		{
@@ -312,7 +404,7 @@ class CmsObject {
 	* @see ContentOperations
 	* @return ContentOperations handle to the ContentOperations object
 	*/
-	function & GetContentOperations()
+	public function & GetContentOperations()
 	{
         if (!isset($this->contentoperations))
 		{
@@ -334,7 +426,7 @@ class CmsObject {
 	* @see BookmarkOperations
 	* @return BookmarkOperations handle to the BookmarkOperations object, useful only in the admin
 	*/	
-	function & GetBookmarkOperations()
+	public function & GetBookmarkOperations()
 	{
         if (!isset($this->bookmarkoperations))
 		{
@@ -354,7 +446,7 @@ class CmsObject {
 	* @see TemplateOperations
 	* @return TemplateOperations handle to the TemplateOperations object
 	*/
-	function & GetTemplateOperations()
+	public function & GetTemplateOperations()
 	{
         if (!isset($this->templateoperations))
 		{
@@ -374,7 +466,7 @@ class CmsObject {
 	* @see StylesheetOperations
 	* @return StylesheetOperations handle to the StylesheetOperations object
 	*/	
-	function & GetStylesheetOperations()
+	public function & GetStylesheetOperations()
 	{
         if (!isset($this->stylesheetoperations))
 		{
@@ -394,7 +486,7 @@ class CmsObject {
 	* @see GroupOperations
 	* @return GroupOperations handle to the GroupOperations object
 	*/
-	function & GetGroupOperations()
+	public function & GetGroupOperations()
 	{
         if (!isset($this->groupoperations))
 		{
@@ -416,7 +508,7 @@ class CmsObject {
 	* @see GlobalContentOperations
 	* @return GlobalContentOperations handle to the GlobalContentOperations object
 	*/
-	function & GetGlobalContentOperations()
+	public function & GetGlobalContentOperations()
 	{
         if (!isset($this->globalcontentoperations))
 		{
@@ -436,7 +528,7 @@ class CmsObject {
 	* @see UserTagOperations
 	* @return UserTagOperations handle to the UserTagOperations object
 	*/
-	function & GetUserTagOperations()
+	public function & GetUserTagOperations()
 	{
         if (!isset($this->usertagoperations))
 		{
@@ -458,13 +550,13 @@ class CmsObject {
 	* @link http://www.smarty.net/manual/en/
 	* @return Smarty_CMS handle to the Smarty object
 	*/
-	function & GetSmarty()
+	public function & GetSmarty()
 	{
 		/* Check to see if a Smarty object has been instantiated yet,
 		  and, if not, go ahead an create the instance. */
 		if (!isset($this->smarty))
 		{
-			$conf =& $this->GetConfig();
+			$conf = $this->GetConfig();
 
 			if (!defined('SMARTY_DIR'))
 			{
@@ -485,7 +577,7 @@ class CmsObject {
 	* @see HierarchyManager
 	* @return HierarchyManager handle to the HierarchyManager object
 	*/
-	function & GetHierarchyManager()
+	public function & GetHierarchyManager()
 	{
 		/* Check to see if a HierarchyManager has been instantiated yet,
 		  and, if not, go ahead an create the instance. */
@@ -504,9 +596,10 @@ class CmsObject {
 	* Disconnect from the database.
 	*
 	* @final
+	* @internal
 	* @access private
 	*/
-	function dbshutdown()
+	public function dbshutdown()
 	{
 		if (isset($this->db))
 		{
@@ -524,7 +617,7 @@ class CmsObject {
 	* @final
 	* @access private
 	*/
-	function clear_cached_files($age_days = -100)
+	public function clear_cached_files($age_days = -100)
 	{
 	  $the_time = time() - $age_days * 24*60*60;
 

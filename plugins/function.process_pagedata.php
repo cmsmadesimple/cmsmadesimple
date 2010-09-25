@@ -18,9 +18,8 @@
 
 function smarty_cms_function_process_pagedata($params,&$smarty)
 {
-  global $gCms;
-  $manager =& $gCms->GetHierarchyManager();
-  $node =& $manager->getNodeById($gCms->variables['content_id']);
+  $manager = cmsms()->GetHierarchyManager();
+  $node = $manager->getNodeById(cmsms()->get_variable('content_id'));
   if( !isset($node) || $node === FALSE ) return;
   $content =& $node->GetContent();
 

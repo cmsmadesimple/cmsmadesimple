@@ -21,7 +21,7 @@ function smarty_cms_function_startExpandCollapse($params, &$smarty)
 	static $firstExpandCollapse = true;//only gets set one time per page
 	
 	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 
 	if (!empty($params['id']) && !empty($params['title'])) {
 		$id = $params['id'];

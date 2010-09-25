@@ -19,7 +19,7 @@
 function smarty_function_root_url($params, &$smarty)
 {
 	global $gCms;
-	$config = &$gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	return $config['root_url'];
 }
 

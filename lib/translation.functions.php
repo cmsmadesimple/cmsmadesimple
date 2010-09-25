@@ -465,7 +465,7 @@ function get_encoding($charset='', $defaultoverrides=true)
 	global $current_language;
 	global $gCms;
 	$variables =& $gCms->variables;
-	$config =& $gCms->GetConfig();
+	$config = $gCms->GetConfig();
 	$nls =& $gCms->nls;
 
 	if ($charset != '')

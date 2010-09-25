@@ -88,7 +88,7 @@ class defaultTheme extends AdminTheme
     function DisplayHTMLHeader($showielink = false, $addt = '')
     {
 		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 ?><head>
 <meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-10 Ted Kulp. All rights reserved." />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

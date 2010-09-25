@@ -53,7 +53,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	}
 
 
-	$endNode = &$manager->sureGetNodeById($thispage);
+	$endNode = $manager->sureGetNodeById($thispage);
 
 # build path
 	if (isset($endNode))
@@ -93,7 +93,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 
 		if ($root!='##ROOT_NODE##') {
 			// check if the last added is root. if not, add id
-			$currentNode = &$manager->sureGetNodeByAlias($root);
+			$currentNode = $manager->sureGetNodeByAlias($root);
 
 			if (isset($currentNode))
 			{

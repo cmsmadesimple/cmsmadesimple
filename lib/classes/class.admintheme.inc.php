@@ -1439,7 +1439,7 @@ debug_buffer('after menu items');
     function DisplayHTMLHeader($showielink = false, $addt = '')
     {
 		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 ?><head>
 <meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-9 Ted Kulp. All rights reserved." />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -1705,7 +1705,7 @@ debug_buffer('after menu items');
     function ShowHeader($title_name, $extra_lang_param=array(), $link_text = '', $module_help_type = FALSE)
     {
       $cms = $this->cms;
-      $config =& $cms->GetConfig();             
+      $config = $cms->GetConfig();             
       $header  = '<div class="pageheader">';
       if (FALSE != $module_help_type)
 	{
@@ -1853,7 +1853,7 @@ debug_buffer('after menu items');
     function ShowErrors($errors, $get_var = '')
     {
       global $gCms;
-      $config =& $gCms->GetConfig();
+      $config = $gCms->GetConfig();
       $wikiUrl = $config['wiki_url'];
       if ($wikiUrl !='none'){
 		      if (FALSE == empty($_REQUEST['module'])  || FALSE == empty($_REQUEST['mact']))
@@ -1938,7 +1938,7 @@ debug_buffer('after menu items');
 	function &GetThemeObject()
 	{
 		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 		$themeName = get_preference(get_userid(), 'admintheme', 'default');
 		$themeObjectName = $themeName."Theme";
 		$userid = get_userid();

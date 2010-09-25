@@ -9,7 +9,7 @@
 <script src="themes/default/includes/standard.js" type="text/javascript"></script> 
 
 <link rel="stylesheet" type="text/css" media="screen, projection" href="loginstyle.php" />
-<base href="<?php global $gCms; $config =& $gCms->GetConfig(); echo $config['root_url'] . '/' . $config['admin_dir'] . '/'; ?>" />
+<base href="<?php global $gCms; $config = $gCms->GetConfig(); echo $config['root_url'] . '/' . $config['admin_dir'] . '/'; ?>" />
 </head>
 
 <body>
