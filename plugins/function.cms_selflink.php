@@ -79,8 +79,8 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
       $name = $page;
      
       // check if the page exists in the db
-      $manager =& $gCms->GetHierarchyManager();
-      $node =& $manager->sureGetNodeByAlias($page);
+      $manager = $gCms->GetHierarchyManager();
+      $node = $manager->sureGetNodeByAlias($page);
       if (!isset($node)) 
 	{
 	  cms_set_frontend_language();

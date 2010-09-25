@@ -51,7 +51,7 @@ class bulkcontentoperations {
 	{
 	  $gCms->variables['bulkcontent'] = array();
 	}
-      $bulk =& $gCms->variables['bulkcontent'];
+      $bulk = $gCms->variables['bulkcontent'];
 
       $name = $module.'::'.$name;
       $bulk[$name] = $label;

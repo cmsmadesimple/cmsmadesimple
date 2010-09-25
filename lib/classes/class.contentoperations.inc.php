@@ -217,7 +217,7 @@ class ContentOperations
 	 *
 	 * @return integer The id of the default content page
 	 */
-	function& GetDefaultContent()
+	function GetDefaultContent()
 	{
 	  global $gCms;
 	  if( isset($gCms->variables['default_content_id']) )
@@ -257,7 +257,7 @@ class ContentOperations
 	 *
 	 * @return array Lost of content types registerd in the system.
 	 */
-	function &ListContentTypes()
+	function ListContentTypes()
 	{
 		global $gCms;
 		$contenttypes =& $gCms->contenttypes;
@@ -281,7 +281,7 @@ class ContentOperations
 			}
 		}
 		
-		$variables['contenttypes'] =& $result;
+		$variables['contenttypes'] = $result;
 		return $result;
 	}
 

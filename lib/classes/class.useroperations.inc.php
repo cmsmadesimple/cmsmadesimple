@@ -373,27 +373,30 @@ class UserOperations
 	function UserInGroup($uid,$gid)
 	{
 	  global $gCms;
-	  if( isset($gCms->variables['user_in_group']) && 
-	      isset($gCms->variables['user_in_group'][$uid.','.$gid]) )
+	  $data = array();
+	  if( isset($gCms->variables['user_in_group']) )
+	  {
+		  $data = $gCms->variables['user_in_group'];
+	  }
+	  
+	  if( isset($data[$uid.','.$gid]) )
 	    {
 	      // us cached result.
-	      return $gCms->variables['user_in_group'][$uid.','.$gid];
+	      return $data[$uid.','.$gid];
 	    }
+
 	  $db =& $gCms->GetDb();
-	 
 	  $query = "SELECT ug.user_id FROM ".cms_db_prefix()."user_groups ug
                      WHERE ug.user_id = ? AND ug.group_id = ?";
 	  $row = $db->GetRow( $query,array($uid,$gid));
-	  if( !isset($gCms->variables['user_in_group']) )
-	    {
-	      $gCms->variables['user_in_group'] = array();
-	    }
+
+	  $data[$uid.','.$gid] = true;
 	  if( !$row ) 
 	    {
-	      $gCms->variables['user_in_group'][$uid.','.$gid] = false;
-	      return false;
+			$data[$uid.','.$gid] = false;
+			return false;
 	    }
-	  $gCms->variables['user_in_group'][$uid.','.$gid] = true;
+	  $gCms->variables['user_in_group'] = $data;
 	  return true;
 	}
 }

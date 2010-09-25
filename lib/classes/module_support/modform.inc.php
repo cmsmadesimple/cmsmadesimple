@@ -600,7 +600,7 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
 	global $gCms;
 	$config = $gCms->GetConfig();
 	$manager =& $gCms->GetHierarchyManager();
-	$node =& $manager->sureGetNodeById($returnid);
+	$node = $manager->sureGetNodeById($returnid);
 	if (isset($node))
 	{
 		$content =& $node->GetContent();

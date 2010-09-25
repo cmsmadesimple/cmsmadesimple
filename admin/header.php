@@ -34,7 +34,7 @@ else
 	
 	debug_buffer('after theme load');
 
-	$gCms->variables['admintheme']=&$themeObject;
+	$gCms->variables['admintheme']=$themeObject;
 	if (isset($gCms->config['admin_encoding']) && $gCms->config['admin_encoding'] != '')
 	{
 		$themeObject->SendHeaders(isset($charsetsent), $gCms->config['admin_encoding']);

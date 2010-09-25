@@ -34,6 +34,9 @@
  * @package CMS
  * @since 0.5
  */
+
+require_once(dirname(__FILE__).'/class.cms_variables.php');
+
 class CmsObject {
 
 	/**
@@ -160,6 +163,7 @@ class CmsObject {
 		$this->contenttypes = array();
 		$this->TemplateCache = array();
 		$this->StylesheetCache = array();
+		$this->variables = cms_variables::get_instance();
 		$this->variables['content-type'] = 'text/html';
 		$this->variables['modulenum'] = 1;
 		$this->variables['routes'] = array();
