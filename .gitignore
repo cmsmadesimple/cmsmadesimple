@@ -5,3 +5,4 @@ config.php
 modules/
 uploads/
 tmp/
+.htaccess

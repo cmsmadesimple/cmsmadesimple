@@ -34,6 +34,10 @@ Core:
   - Get rid of the pageinfo stuff... it's redundant
     (in progress)
   - Remove the long deprecated {sitemap} plugin. 
+  - Changed the config from a flat array into an object
+    - this will introduce E_STRICT errors for anybody using  =& $gCms->GetConfig();  etc.
+    - config variables are now read-only once loaded.
+  - Added new api functions to reduce the need for using cms internals.
   
 Installer
   - Fixes method conflicts between the installer and the upgrade routine.
