@@ -51,7 +51,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
   }
 
   global $gCms;
-  $config = $gCms->config;
+  $config = $gCms->GetConfig();
   $content_obj = &$gCms->variables['content_obj'];
   $template_id=$content_obj->TemplateId();
   if (isset($params["templateid"]) && $params["templateid"]!="") {
