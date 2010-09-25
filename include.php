@@ -101,13 +101,6 @@ if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
 //     $config['ssl_url'] = str_replace('http://','https://',$config['root_url']);
 //   }
 //   $config['root_url'] = $config['ssl_url'];
-
-  // adjust the uploads url
-  if( !isset($config['ssl_uploads_url']) )
-  {
-    $config['ssl_uploads_url'] = str_replace('http://','https://',$config['ssl_uploads_url']);
-  }
-  $config['uploads_url'] = $config['ssl_uploads_url'];
 }
 else if( startswith($config['root_url'],'https://') )
 {
