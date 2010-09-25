@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['close'] = 'Close';
 $lang['admin']['revert'] = 'Revert all changes';
 $lang['admin']['autoclearcache2'] = 'Remove cache files that are older than the specified number of days';
 $lang['admin']['nothingtodo'] = 'Nothing to do!';

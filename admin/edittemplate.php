@@ -244,6 +244,7 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 	}
 }
 
+$closestr = lang('close');
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
 // <![CDATA[
@@ -260,6 +261,8 @@ jQuery(document).ready(function(){
 	       {
 		 htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
 		 $('input[name=cancel]').fadeOut();
+		 $('input[name=cancel]').attr('value','{$closestr}');
+		 $('input[name=cancel]').fadeIn();
 	       }
              else
                {
