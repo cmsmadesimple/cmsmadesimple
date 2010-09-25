@@ -139,8 +139,6 @@ if( !is_object($contentobj) )
 // $page cannot be empty here
 if (is_object($contentobj))
 {
-  //$gCms->variables['pageinfo'] =& $pageinfo;
-
   if( !$contentobj->IsViewable() )
     {
       $url = $contentobj->GetURL();
@@ -149,6 +147,14 @@ if (is_object($contentobj))
 	  redirect($url);
 	}
     }
+
+  if( $contentobj->Secure() && 
+      (! isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') )
+    {
+      // if this page is marked to be secure, make sure we redirect to the secure page.
+      redirect($contentobj->GetURL());
+    }
+
   $gCms->variables['content_obj'] = $contentobj;
   $smarty->assign('content_obj',$contentobj);
 
