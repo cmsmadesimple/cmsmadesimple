@@ -1218,196 +1218,206 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 		return $test;
 	}
 
-	switch($url_info['scheme'])
-	{
-		case 'https':
-			$scheme = 'ssl://';
-			$port = (isset($url_info['port'])) ? $url_info['port'] : 443;
-			break;
-		case 'http':
-		default:
-			$scheme = '';
-			$port = (isset($url_info['port'])) ? $url_info['port'] : 80;
-	}
-	$complete_url  = (isset($url_info['path'])) ? $url_info['path'] : '/';
-	$complete_url .= (isset($url_info['query'])) ? '?'.$url_info['query'] : '';
-
-
-	// TEST FSOCKOPEN
-	if($debug) $handle = fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, $timeout);
-	else       $handle = @fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, $timeout);
-	if($handle)
-	{
-		$out  = "GET " . $complete_url . " HTTP/1.1\r\n";
-		$out .= "Host: " . $url_info['host'] . "\r\n";
-		$out .= "Connection: Close\r\n\r\n";
-		if($debug)
-		{
-			fwrite($handle, $out);
-			stream_set_blocking($handle, 1);
-			stream_set_timeout($handle, $timeout);
-			$_info = stream_get_meta_data($handle);
-		}
-		else
-		{
-			@fwrite($handle, $out);
-			@stream_set_blocking($handle, 1);
-			@stream_set_timeout($handle, $timeout);
-			$_info = @stream_get_meta_data($handle);
-		}
-
-		$content_fsockopen = '';
-		while( (! feof($handle)) && (! $_info['timed_out']) )
-		{
-			if($debug) $content_fsockopen .= fgets($handle, 128);
-			else       $content_fsockopen .= @fgets($handle, 128);
-			$_info = stream_get_meta_data($handle);
-		}
-		@fclose($handle);
-
-		if($_info['timed_out'])
-		{
-			$test->opt['fsockopen']['ok'] = 1;
-			$test->opt['fsockopen']['res'] = 'yellow';
-			$test->opt['fsockopen']['res_text'] = $lang_fn('caution');
-			$test->opt['fsockopen']['message'] = $lang_fn('remote_connection_timeout');
-		}
-		else
-		{
-			$test->opt['fsockopen']['ok'] = 0;
-		}
-	}
-	else
+	if( !isset($url_info['scheme']) || !isset($url_info['host']) )
 	{
 		$test->res = 'red';
-		getTestReturn($test, $required, '', '', $lang_fn('connection_error'));
+		getTestReturn($test, $required, '', '', $lang_fn('invalid_url'));
 		return $test;
-	}
-
-	if($test->opt['fsockopen']['ok'] < 1)
-	{
-		if( (! empty($search)) && (false !== strpos($content_fsockopen, $search)) )
-		{
-			$test->opt['fsockopen']['res'] = 'green';
-			$test->opt['fsockopen']['res_text'] = $lang_fn('success');
-			$test->opt['fsockopen']['message'] = $lang_fn('search_string_find');
-		}
-		elseif(false !== strpos($content_fsockopen, '200 OK'))
-		{
-			$test->opt['fsockopen']['ok'] = 1;
-			$test->opt['fsockopen']['res'] = 'yellow';
-			$test->opt['fsockopen']['res_text'] = $lang_fn('caution');
-			$test->opt['fsockopen']['message'] = $lang_fn('remote_response_ok');
-		}
-		elseif(false !== strpos($content_fsockopen, '404 Not Found'))
-		{
-			$test->opt['fsockopen']['ok'] = 1;
-			$test->opt['fsockopen']['res'] = 'yellow';
-			$test->opt['fsockopen']['res_text'] = $lang_fn('caution');
-			$test->opt['fsockopen']['message'] = $lang_fn('remote_response_404');
-		}
-		else
-		{
-			$test->opt['fsockopen']['ok'] = 2;
-			$test->opt['fsockopen']['res'] = 'red';
-			$test->opt['fsockopen']['res_text'] = $lang_fn('failure');
-			$test->opt['fsockopen']['message'] = $lang_fn('remote_response_error');
-		}
-	}
-
-
-	// TEST FOPEN
-	$test->opt['fopen']['ok'] = 2;
-	$result = testBoolean('', '', 'allow_url_fopen', '', true, false);
-	if($result->res == 'green')
-	{
-		if($debug) $handle = fopen($url, 'rb');
-		else       $handle = @fopen($url, 'rb');
-		if(false == $handle)
-		{
-			$test->opt['fopen']['ok'] = 2;
-			$test->opt['fopen']['res'] = 'red';
-			$test->opt['fopen']['res_text'] = $lang_fn('failure');
-			$test->opt['fopen']['message'] = $lang_fn('connection_failed');
-		}
-		else
-		{
-			if($debug)
-			{
-				stream_set_blocking($handle, 1);
-				stream_set_timeout($handle, $timeout);
-				$_info = stream_get_meta_data($handle);
-			}
-			else
-			{
-				@stream_set_blocking($handle, 1);
-				@stream_set_timeout($handle, $timeout);
-				$_info = @stream_get_meta_data($handle);
-			}
-
-			$content_fopen = '';
-			while( (! feof($handle)) && (! $_info['timed_out']) )
-			{
-				if($debug) $content_fopen .= fgets($handle, 128);
-				else       $content_fopen .= @fgets($handle, 128);
-				$_info = stream_get_meta_data($handle);
-			}
-			@fclose($handle);
-
-			if($_info['timed_out'])
-			{
-				$test->opt['fopen']['ok'] = 1;
-				$test->opt['fopen']['res'] = 'yellow';
-				$test->opt['fopen']['res_text'] = $lang_fn('caution');
-				$test->opt['fopen']['message'] = $lang_fn('remote_connection_timeout');
-			}
-			else
-			{
-				$test->opt['fopen']['ok'] = 0;
-			}
-		}
 	}
 	else
 	{
-		$test->opt['fopen']['res'] = 'red';
-		$test->opt['fopen']['res_text'] = $lang_fn('failure');
-		$test->opt['fopen']['message'] = $lang_fn('test_allow_url_fopen_failed');
-	}
+		switch($url_info['scheme'])
+			{
+			case 'https':
+				$scheme = 'ssl://';
+				$port = (isset($url_info['port'])) ? $url_info['port'] : 443;
+				break;
+			case 'http':
+			default:
+				$scheme = '';
+				$port = (isset($url_info['port'])) ? $url_info['port'] : 80;
+			}
+		$complete_url  = (isset($url_info['path'])) ? $url_info['path'] : '/';
+		$complete_url .= (isset($url_info['query'])) ? '?'.$url_info['query'] : '';
 
 
-	if($test->opt['fopen']['ok'] < 1)
-	{
-		if( (! empty($search)) && (false !== strpos($content_fopen, $search)) )
-		{
-			$test->opt['fopen']['res'] = 'green';
-			$test->opt['fopen']['res_text'] = $lang_fn('success');
-			$test->opt['fopen']['message'] = $lang_fn('search_string_find');
-		}
-		elseif(false !== strpos($content_fopen, '200 OK'))
-		{
-			$test->opt['fopen']['ok'] = 1;
-			$test->opt['fopen']['res'] = 'yellow';
-			$test->opt['fopen']['res_text'] = $lang_fn('caution');
-			$test->opt['fopen']['message'] = $lang_fn('remote_response_ok');
-		}
-		elseif(false !== strpos($content_fopen, '404 Not Found'))
-		{
-			$test->opt['fopen']['ok'] = 1;
-			$test->opt['fopen']['res'] = 'yellow';
-			$test->opt['fopen']['res_text'] = $lang_fn('caution');
-			$test->opt['fopen']['message'] = $lang_fn('remote_response_404');
-		}
+		// TEST FSOCKOPEN
+		if($debug) $handle = fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, $timeout);
+		else       $handle = @fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, $timeout);
+		if($handle)
+			{
+				$out  = "GET " . $complete_url . " HTTP/1.1\r\n";
+				$out .= "Host: " . $url_info['host'] . "\r\n";
+				$out .= "Connection: Close\r\n\r\n";
+				if($debug)
+					{
+						fwrite($handle, $out);
+						stream_set_blocking($handle, 1);
+						stream_set_timeout($handle, $timeout);
+						$_info = stream_get_meta_data($handle);
+					}
+				else
+					{
+						@fwrite($handle, $out);
+						@stream_set_blocking($handle, 1);
+						@stream_set_timeout($handle, $timeout);
+						$_info = @stream_get_meta_data($handle);
+					}
+
+				$content_fsockopen = '';
+				while( (! feof($handle)) && (! $_info['timed_out']) )
+					{
+						if($debug) $content_fsockopen .= fgets($handle, 128);
+						else       $content_fsockopen .= @fgets($handle, 128);
+						$_info = stream_get_meta_data($handle);
+					}
+				@fclose($handle);
+
+				if($_info['timed_out'])
+					{
+						$test->opt['fsockopen']['ok'] = 1;
+						$test->opt['fsockopen']['res'] = 'yellow';
+						$test->opt['fsockopen']['res_text'] = $lang_fn('caution');
+						$test->opt['fsockopen']['message'] = $lang_fn('remote_connection_timeout');
+					}
+				else
+					{
+						$test->opt['fsockopen']['ok'] = 0;
+					}
+			}
 		else
-		{
-			$test->opt['fopen']['ok'] = 2;
-			$test->opt['fopen']['res'] = 'red';
-			$test->opt['fopen']['res_text'] = $lang_fn('failure');
-			$test->opt['fopen']['message'] = $lang_fn('remote_response_error');
-		}
+			{
+				$test->res = 'red';
+				getTestReturn($test, $required, '', '', $lang_fn('connection_error'));
+				return $test;
+			}
+
+		if($test->opt['fsockopen']['ok'] < 1)
+			{
+				if( (! empty($search)) && (false !== strpos($content_fsockopen, $search)) )
+					{
+						$test->opt['fsockopen']['res'] = 'green';
+						$test->opt['fsockopen']['res_text'] = $lang_fn('success');
+						$test->opt['fsockopen']['message'] = $lang_fn('search_string_find');
+					}
+				elseif(false !== strpos($content_fsockopen, '200 OK'))
+					{
+						$test->opt['fsockopen']['ok'] = 1;
+						$test->opt['fsockopen']['res'] = 'yellow';
+						$test->opt['fsockopen']['res_text'] = $lang_fn('caution');
+						$test->opt['fsockopen']['message'] = $lang_fn('remote_response_ok');
+					}
+				elseif(false !== strpos($content_fsockopen, '404 Not Found'))
+					{
+						$test->opt['fsockopen']['ok'] = 1;
+						$test->opt['fsockopen']['res'] = 'yellow';
+						$test->opt['fsockopen']['res_text'] = $lang_fn('caution');
+						$test->opt['fsockopen']['message'] = $lang_fn('remote_response_404');
+					}
+				else
+					{
+						$test->opt['fsockopen']['ok'] = 2;
+						$test->opt['fsockopen']['res'] = 'red';
+						$test->opt['fsockopen']['res_text'] = $lang_fn('failure');
+						$test->opt['fsockopen']['message'] = $lang_fn('remote_response_error');
+					}
+			}
+
+
+		// TEST FOPEN
+		$test->opt['fopen']['ok'] = 2;
+		$result = testBoolean('', '', 'allow_url_fopen', '', true, false);
+		if($result->res == 'green')
+			{
+				if($debug) $handle = fopen($url, 'rb');
+				else       $handle = @fopen($url, 'rb');
+				if(false == $handle)
+					{
+						$test->opt['fopen']['ok'] = 2;
+						$test->opt['fopen']['res'] = 'red';
+						$test->opt['fopen']['res_text'] = $lang_fn('failure');
+						$test->opt['fopen']['message'] = $lang_fn('connection_failed');
+					}
+				else
+					{
+						if($debug)
+							{
+								stream_set_blocking($handle, 1);
+								stream_set_timeout($handle, $timeout);
+								$_info = stream_get_meta_data($handle);
+							}
+						else
+							{
+								@stream_set_blocking($handle, 1);
+								@stream_set_timeout($handle, $timeout);
+								$_info = @stream_get_meta_data($handle);
+							}
+
+						$content_fopen = '';
+						while( (! feof($handle)) && (! $_info['timed_out']) )
+							{
+								if($debug) $content_fopen .= fgets($handle, 128);
+								else       $content_fopen .= @fgets($handle, 128);
+								$_info = stream_get_meta_data($handle);
+							}
+						@fclose($handle);
+
+						if($_info['timed_out'])
+							{
+								$test->opt['fopen']['ok'] = 1;
+								$test->opt['fopen']['res'] = 'yellow';
+								$test->opt['fopen']['res_text'] = $lang_fn('caution');
+								$test->opt['fopen']['message'] = $lang_fn('remote_connection_timeout');
+							}
+						else
+							{
+								$test->opt['fopen']['ok'] = 0;
+							}
+					}
+			}
+		else
+			{
+				$test->opt['fopen']['res'] = 'red';
+				$test->opt['fopen']['res_text'] = $lang_fn('failure');
+				$test->opt['fopen']['message'] = $lang_fn('test_allow_url_fopen_failed');
+			}
+
+
+		if($test->opt['fopen']['ok'] < 1)
+			{
+				if( (! empty($search)) && (false !== strpos($content_fopen, $search)) )
+					{
+						$test->opt['fopen']['res'] = 'green';
+						$test->opt['fopen']['res_text'] = $lang_fn('success');
+						$test->opt['fopen']['message'] = $lang_fn('search_string_find');
+					}
+				elseif(false !== strpos($content_fopen, '200 OK'))
+					{
+						$test->opt['fopen']['ok'] = 1;
+						$test->opt['fopen']['res'] = 'yellow';
+						$test->opt['fopen']['res_text'] = $lang_fn('caution');
+						$test->opt['fopen']['message'] = $lang_fn('remote_response_ok');
+					}
+				elseif(false !== strpos($content_fopen, '404 Not Found'))
+					{
+						$test->opt['fopen']['ok'] = 1;
+						$test->opt['fopen']['res'] = 'yellow';
+						$test->opt['fopen']['res_text'] = $lang_fn('caution');
+						$test->opt['fopen']['message'] = $lang_fn('remote_response_404');
+					}
+				else
+					{
+						$test->opt['fopen']['ok'] = 2;
+						$test->opt['fopen']['res'] = 'red';
+						$test->opt['fopen']['res_text'] = $lang_fn('failure');
+						$test->opt['fopen']['message'] = $lang_fn('remote_response_error');
+					}
+			}
+
+
+		$result = $test->opt['fsockopen']['ok'] + $test->opt['fopen']['ok'];
 	}
 
-
-	$result = $test->opt['fsockopen']['ok'] + $test->opt['fopen']['ok'];
 	switch($result)
 	{
 		case 0:
