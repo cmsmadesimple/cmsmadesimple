@@ -107,7 +107,7 @@ class cms_content_tree extends cms_tree
    *
    * @return cms_content_tree or null.
    */
-  function &getNodeByHierarchy($position)
+  function getNodeByHierarchy($position)
   {
     $result = null;
     global $gCms;

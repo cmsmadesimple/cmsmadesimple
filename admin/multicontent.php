@@ -126,23 +126,31 @@ function get_delete_list($sel_nodes,&$parent,&$final_result,$depth = 0)
 		}
 	      else
 		{
-		  $final_result[] = $content;
+		  if( !isset($final_result[$content->Id()]) )
+		    {
+		      $final_result[$content->Id()] = $content;
+		    }
 		}
 
 	      if( count($tmp) )
 		{
 		  // there are children se can delete.
-		  for( $i = 0; $i < count($tmp); $i++ )
+		  foreach( $tmp as $content_id => $one )
 		    {
-		      $one =& $tmp[$i];
-		      $final_result[] =& $one;
+		      if( !isset($final_result[$content_id]) )
+			{
+			  $final_result[$content_id] = $one;
+			}
 		    }
 		}
 	    }
 	  else
 	    {
 	      // no children
-	      $final_result[] = $content;
+	      if( !isset($final_result[$content->Id()]) )
+		{
+		  $final_result[$content->Id()] = $content;
+		}
 	    }
 	}
       else
@@ -188,7 +196,7 @@ function toggleexpand($contentid, $collapse = false)
 
 function DoContent(&$list, &$node, $checkdefault = true, $checkchildren = true)
 {
-	$content =& $node->GetContent(true);
+	$content = $node->GetContent(true);
 	if (isset($content))
 	{
 		if (!$checkdefault || ($checkdefault && !$content->DefaultContent()))
@@ -256,7 +264,7 @@ else
 					DoContent($nodelist, $node, false, false);
 				else if ($action == 'delete')
 				  {
-				    $nodelist[] =& $node;
+				    $nodelist[] = $node;
 				    //DoContent($nodelist, $node, false, true);
 				  }
 			}
