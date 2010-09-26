@@ -84,7 +84,7 @@ class xajaxPluginManager
 		object : a reference to the one and only instance of the
 			plugin manager.
 	*/
-	function &getInstance()
+	static function &getInstance()
 	{
 		static $obj;
 		if (!$obj) {
@@ -163,7 +163,7 @@ class xajaxPluginManager
 	*/
 	function registerPlugin(&$objPlugin, $nPriority=1000)
 	{
-		if (is_a($objPlugin, 'xajaxRequestPlugin'))
+	  if ( $objPlugin instanceof xajaxRequestPlugin )
 		{
 			$this->_insertIntoArray($this->aRequestPlugins, $objPlugin, $nPriority);
 			

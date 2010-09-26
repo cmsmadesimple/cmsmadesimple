@@ -1935,7 +1935,7 @@ debug_buffer('after menu items');
 	/**
 	 * Based on the current user's prefernces, get the current theme object.
 	 */
-	function &GetThemeObject()
+	static function &GetThemeObject()
 	{
 		global $gCms;
 		$config = $gCms->GetConfig();
@@ -1953,7 +1953,7 @@ debug_buffer('after menu items');
 			$themeObject = new AdminTheme($gCms, $userid, $themeName);
 		}
 
-		$gCms->variables['admintheme']=&$themeObject;
+		$gCms->variables['admintheme'] = $themeObject;
 		
 		return $themeObject;
 	

@@ -68,7 +68,7 @@ class xajaxResponseManager
 		Implementation of the singleton pattern: provide a single instance of the <xajaxResponseManager>
 		to all who request it.
 	*/
-	function &getInstance()
+	static function &getInstance()
 	{
 		static $obj;
 		if (!$obj) {
@@ -138,7 +138,7 @@ class xajaxResponseManager
 	*/
 	function append($mResponse)
 	{
-		if (is_a($mResponse, 'xajaxResponse')) {
+		if ($mResponse instanceof xajaxResponse) {
 			if (NULL == $this->objResponse) {
 				$this->objResponse = $mResponse;
 			} else if (is_a($this->objResponse, 'xajaxResponse')) {
