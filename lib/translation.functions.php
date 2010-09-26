@@ -280,17 +280,17 @@ function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 
 		// now load the lang file itself.
 		if( $cur_lang != 'en_US' )
 		{
-      		$cur_lang = basename($cur_lang);
-			$fn = cms_join_path($basedir,'ext',$cur_lang.'.php');
-			if( $lang_is_dir && ! $is_custom)
-			{
-				$fn = cms_join_path($basedir,'ext',$cur_lang,$filename);
-			}
-			else if ($lang_is_dir && $is_custom)
-			{
-				$fn = cms_join_path($basedir,$cur_lang,$filename);
-			}
-			if( @file_exists($fn) )
+		  $cur_lang = basename($cur_lang);
+		  $fn = cms_join_path($basedir,'ext',$cur_lang.'.php');
+		  if( $lang_is_dir && ! $is_custom)
+		    {
+		      $fn = cms_join_path($basedir,'ext',$cur_lang,$filename);
+		    }
+		  else if ($lang_is_dir && $is_custom)
+		    {
+		      $fn = cms_join_path($basedir,$cur_lang,$filename);
+		    }
+		  if( @file_exists($fn) )
 			{
 				if( !$has_realm )
 				{

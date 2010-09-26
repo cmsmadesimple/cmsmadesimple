@@ -320,7 +320,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
   if( isset($params['href']) )
     {
       cms_set_frontend_language();
-      return $href;
+      return $url;
     }
 
   if ($rellink && isset($params['dir']))
@@ -401,7 +401,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
       $result .= '</a>';
       if (isset($params['label_side']) && $params['label_side'] == 'right')
 	{
-	  $result .= $label;
+	  $result .= ' '.$label;
 	}
     }
 
