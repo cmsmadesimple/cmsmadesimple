@@ -54,7 +54,7 @@ class GlobalContentOperations
 		if (!isset($variables['authorblobs']))
 		{
 			$db = &$gCms->GetDb();
-			$variables['authorblobs'] = array();
+			$authorblobs = array();
 
 			// get the list of html blobs where this user is a direct owner
 			// todo.
@@ -64,7 +64,7 @@ class GlobalContentOperations
 			$result = &$db->Execute($query, array($userid));
 			while ($result && !$result->EOF)
 			{
-				$variables['authorblobs'][] = $result->fields['htmlblob_id'];
+				$authorblobs[] = $result->fields['htmlblob_id'];
 				$result->MoveNext();
 			}
 			if( $result ) $result->Close();
@@ -76,21 +76,23 @@ class GlobalContentOperations
 			$tmp = array();
 			while ($result && !$result->EOF)
 			  {
-			    $tmp[] = $result->fields['group_id'] * -1;
-			    $result->MoveNext();
+				  $tmp[] = $result->fields['group_id'] * -1;
+				  $result->MoveNext();
 			  }
 			if( $result ) $result->Close();
-                        if( count($tmp) > 0 ) {
-			  $query = 'SELECT htmlblob_id FROM '.cms_db_prefix().'additional_htmlblob_users WHERE user_id IN (';
-			  $query .= implode(',',$tmp).')';
-			  $result = &$db->Execute($query);
-			  while ($result && !$result->EOF)
-			    {
-			      $variables['authorblobs'][] = $result->fields['htmlblob_id'];
-			      $result->MoveNext();
-			    }
-			  if( $result ) $result->Close();
-                        }
+			if( count($tmp) > 0 ) {
+				$query = 'SELECT htmlblob_id FROM '.cms_db_prefix().'additional_htmlblob_users WHERE user_id IN (';
+				$query .= implode(',',$tmp).')';
+				$result = &$db->Execute($query);
+				while ($result && !$result->EOF)
+					{
+						$authorblobs[] = $result->fields['htmlblob_id'];
+						$result->MoveNext();
+					}
+				if( $result ) $result->Close();
+			}
+
+			$variables['authorblobs'] = $authorblobs;
 		}
 
 		return $variables['authorblobs'];
