@@ -366,7 +366,7 @@ function deletecontent($contentid)
 
 	if ($access)
 	{
-		$node = &$hierManager->getNodeById($contentid);
+		$node = $hierManager->getNodeById($contentid);
 		if ($node)
 		{
 			$contentobj =& $node->getContent(true);

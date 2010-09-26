@@ -228,7 +228,7 @@ if (isset($_POST['idlist']))
 {
 	foreach (explode(':', $_POST['idlist']) as $id)
 	{
-		$node =& $hm->sureGetNodeById($id);
+		$node = $hm->sureGetNodeById($id);
 		if (isset($node))
 		{
 		  $content =& $node->GetContent();
@@ -246,7 +246,7 @@ else
 		if (startswith($k, 'multicontent-'))
 		{
 			$id = substr($k, strlen('multicontent-'));
-			$node =& $hm->sureGetNodeById($id);
+			$node = $hm->sureGetNodeById($id);
 			if (isset($node))
 			{
 				if ($action == 'inactive')
@@ -266,7 +266,7 @@ else
 		    if (startswith($k, 'order-'))
 		      {
 			$id = substr($k, strlen('order-'));
-			$node =& $hm->sureGetNodeById($id);
+			$node = $hm->sureGetNodeById($id);
 			$one =& $node->getContent(true);
 			$parentNode = &$node->getParentNode();
 			if (FALSE == empty($reorder_parents_array[$one->ParentId()]) && array_key_exists($v, $reorder_parents_array[$one->ParentId()]))
@@ -303,7 +303,7 @@ else
 	    $order_changed = FALSE;
 	    foreach ($reorder_array AS $page_id => $page_order)
 	      {
-		$node =& $hm->sureGetNodeById($page_id);
+		$node = $hm->sureGetNodeById($page_id);
 		$one =& $node->getContent(true);
 		// Only update if order has changed.
 		if ($one->ItemOrder() != $page_order)
@@ -467,7 +467,8 @@ else
 
 				audit($id, $title, 'Deleted Content');
 			}
-			ContentManager::SetAllHierarchyPositions();
+			$ops = $gCms->GetContentOperations();
+			$ops->SetAllHierarchyPositions();
 			$bulk = true;
 		}
 		//include_once("footer.php");

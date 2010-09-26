@@ -48,13 +48,14 @@ class bulkcontentoperations {
 
       $gCms = cmsms();
       if( !isset($gCms->variables['bulkcontent']) )
-	{
-	  $gCms->variables['bulkcontent'] = array();
-	}
+		  {
+			  $gCms->variables['bulkcontent'] = array();
+		  }
       $bulk = $gCms->variables['bulkcontent'];
 
       $name = $module.'::'.$name;
       $bulk[$name] = $label;
+	  $gCms->variables['bulkcontent'] = $bulk;
       return TRUE;
       
     }

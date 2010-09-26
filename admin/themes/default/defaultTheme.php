@@ -168,7 +168,6 @@ class defaultTheme extends AdminTheme
 		echo '<script type="text/javascript" src="../lib/jquery/js/jquery-1.4.2.min.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../lib/jquery/js/jquery-ui-1.8.4.custom.min.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../lib/jquery/js/jquery.json-2.2.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../lib/scriptaculous/cmsext.js"></script>';
 	}
 
 	function StartRighthandColumn() {
