@@ -38,7 +38,14 @@ Core:
     - this will introduce E_STRICT errors for anybody using  =& $gCms->GetConfig();  etc.
     - config variables are now read-only once loaded.
   - Added new api functions to reduce the need for using cms internals.
-  
+  - Make many changes to fix E_STRICT problems, though we don't necessarily support E_STRICT yet.
+  - Permanently removed scriptaculous
+  - xajax is now deprecated and will be removed in later versions
+  - Replace the $gCms->config array with an object.  Modifying config variables from within CMSMS will generate a notice. 
+    In later versions we will replace this notice with an error.
+  - Replace the $gCms->variables array with an object.  Now only specific variables can be set without generating a notice.
+    In later versions we will replace this notice with an error.
+
 Installer
   - Fixes method conflicts between the installer and the upgrade routine.
     (may be a few addmes yet that have to be added to the core lang stuff).
