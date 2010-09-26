@@ -348,7 +348,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
     {
       if (! isset($params['label_side']) || $params['label_side'] == 'left')
 	{
-	  $result .= $label;
+	  $result .= $label.' ';
 	}
       $result .= '<a href="'.$url.'"';      
       $result .= ' title="'.$title.'" ';
