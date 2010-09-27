@@ -62,7 +62,7 @@ $('ul.sortable').nestedSortable({
 
 <div>
 <ul id="content_tree" class="sortable">
-  <li id="page_-1"><div>{'root'|lang}</div>
+  <li id="page_-1"><div></div>
   {include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1}
   </li>
 </ul>
