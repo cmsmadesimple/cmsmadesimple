@@ -16,71 +16,40 @@ function parseTree(ul){
 }
 
 $(document).ready(function(){
-		
-	$("li.tree_item span.label").droppable({
-		tolerance		: "pointer",
-		hoverClass		: "tree_hover",
 
-		drop			: function(event, ui){
-			var dropped = ui.draggable;
-			  //dropped.css({top: 0, left: 0});
-	            dropped.addClass('modified');
-			var me = $(this).parent();
-			if(me == dropped)
-				return;
-			var subbranch = $(me).children("ul");
-			var oldParent = dropped.parent();
-			//subbranch.eq(0).append(dropped);
-			$(me).after(dropped);
-			var oldBranches = $("li", oldParent);
-			if (oldBranches.size() == 0) { $(oldParent).remove(); }
-		}
-	});
+$('ul.sortable').nestedSortable({	
+					disableNesting: 'no-nest',
+					forcePlaceholderSize: true,
+					handle: 'div',
+					items: 'li',
+					opacity: .6,
+					placeholder: 'placeholder',
+					tabSize: 25,
+					tolerance: 'pointer',
+					toleranceElement: '> div'
+				});
 
-	$("li.tree_item span.dropchild").droppable({
-		tolerance		: "pointer",
-		hoverClass		: "tree_hover",
-		drop			: function(event, ui){
-			var dropped = ui.draggable;
-			  //dropped.css({top: 0, left: 0});
-			    dropped.addClass('children-modified');
-				
-			
-			var me = $(this).closest('li');
-			if(me == dropped)
-			     return;
-			var subbranch = $(me).children("ul");
-			if(subbranch.size() == 0) {
-				me.find("span.dropchild").after("<ul><\/ul>");
-				subbranch = me.find("ul");
-			}
-			var oldParent = dropped.parent();
-			subbranch.eq(0).append(dropped);
-			//$(me).after(dropped);
-			var oldBranches = $("li", oldParent);
-			if (oldBranches.size() == 0) { $(oldParent).remove(); }
-		}
-	});
-	
-	$("li.tree_item").draggable({
-		opacity: 0.5,
-		revert: true
-	});
-	
+
 	$(".save").click(function(){
-          var tree = $.toJSON(parseTree($('#content_tree')));
-          $.post(ajax_url, {data: tree}, function(res){
-	     if( res != '' ) 
-	     {
-	       alert(res);
-               return false;
-             }
-             return true;
-          });
-	});
+          var tree = $.toJSON(parseTree($('ul#content_tree')));
+          //alert(tree);
+          //return false;
+
+         
+            $.post(ajax_url, {data: tree}, function(res){
+           	     if( res != '' ) 
+           	     {
+           	       alert(res);
+                   return false;
+                   }
+                   return true;
+                  });
+        
+
+	});//end save
 
 	
-});
+});//end ready
 {/literal}
 </script>
 
@@ -92,8 +61,8 @@ $(document).ready(function(){
 </div>
 
 <div>
-<ul id="content_tree" class="sortableList">
-  <li id="page_-1" class="tree_item"><span>{'root'|lang}</span>&nbsp;<span class="dropchild" title="{'dropchildhere'|lang}"><em>(add here)</em></span>
+<ul id="content_tree" class="sortable">
+  <li id="page_-1"><div>{'root'|lang}</div>
   {include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1}
   </li>
 </ul>
