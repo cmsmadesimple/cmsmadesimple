@@ -725,7 +725,12 @@ class ContentBase
      */
 	function ChildCount()
 	{
-		return $this->mChildCount;
+	  $hm = cmsms()->GetHierarchyManager();
+	  $node = $hm->getNodeById($this->mId);
+	  if( $node )
+	    {
+	      return $node->count_children();
+	    }
 	}
 
     /**
@@ -1785,33 +1790,24 @@ class ContentBase
      */
 	function HasChildren($activeonly = false)
 	{
-		if( $activeonly && !($this->Active() || $this->ShowInMenu()))
-			{
-				return false;
-			}
+	  $hm = cmsms()->GetHierarchyManager();
+	  $node = $hm->getNodeById($this->mId);
+	  if( !$node->has_children() ) return false;
+	  if( $activeonly == false) return true;
 
-		global $gCms, $sql_queries, $debug_errors;
-		$db = &$gCms->GetDb();
-		$config = $gCms->GetConfig();
-
-		$result = false;
-
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-		$parms = array($this->mId);
-		if( $activeonly )
-			{
-				$query .= ' AND show_in_menu = 1 AND active = 1';
-			}
-
-		$row = &$db->GetRow($query, array($parms));
-
-		if ($row)
+	  $children = $this->get_children();
+	  if( $children )
+	    {
+	      for( $i = 0; $i < count($children); $i++ )
 		{
-			$result = true;
+		  $content = $children[$i]->getContent();
+		  if( $content->Active() ) return true;
 		}
+	    }
 
-		return $result;
+	  return false;
 	}
+
 
 	function GetAdditionalEditors()
 	{
