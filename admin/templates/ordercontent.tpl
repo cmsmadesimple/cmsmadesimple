@@ -1,3 +1,4 @@
+<link href="../lib/jquery/css/smoothness/jquery-ui-1.8.4.custom.css" rel="stylesheet" type="text/css" />
 <div class="pagecontainer">
 {$showheader}
 <script type="text/javascript">
@@ -29,14 +30,29 @@ $('ul.sortable').nestedSortable({
 					toleranceElement: '> div'
 				});
 
+$( "#dialog-confirm" ).dialog({
+        	        autoOpen: false,
+        			resizable: false,
+        			height:140,
+        			modal: true,
+        			buttons: {
+        				"Re Order now?": function() {
+        					$( this ).dialog( "close" );// TODO HERE!!!
+        				},
+        				Cancel: function() {
+        					$( this ).dialog( "close" );
+        				}
+        			}
+		});
+        
 
 	$(".save").click(function(){
           var tree = $.toJSON(parseTree($('ul#content_tree')));
           //alert(tree);
           //return false;
-
-         
-            $.post(ajax_url, {data: tree}, function(res){
+       
+    	
+    $.post(ajax_url, {data: tree}, function(res){
            	     if( res != '' ) 
            	     {
            	       alert(res);
@@ -47,14 +63,26 @@ $('ul.sortable').nestedSortable({
         
 
 	});//end save
-
+    
+        $(".save-tmp").click(function(){      
+         $( "#dialog-confirm" ).dialog( "open" );
+			return false;
+	    });//end save-tmp
 	
 });//end ready
 {/literal}
 </script>
+<!---->
+<div id="dialog-confirm" title="Re Order Content">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These items will be re order. Are you sure?</p>
+</div>
+
+
+
 
 <form action="ordercontent.php{$urlext}" method="post">
 <div class="pagoeverflow">
+ <input type="submit" name="submit" class="button save-tmp" value="Confirm Test"/>
  <input type="submit" name="submit" class="button save" value="{'submit'|lang}"/>
  <input type="submit" name="cancel" value="{'cancel'|lang}"/>
  <input type="submit" name="revert" value="{'revert'|lang}"/>
@@ -62,7 +90,7 @@ $('ul.sortable').nestedSortable({
 
 <div>
 <ul id="content_tree" class="sortable">
-  <li id="page_-1"><div></div>
+  <li id="page_-1"><div>&nbsp;</div>
   {include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1}
   </li>
 </ul>
