@@ -73,7 +73,7 @@ if( isset($_GET['submit']) )
   //
   // Now do the copy
   //
-  $tmpobj = $fromobj;
+  $tmpobj = clone $fromobj;
 
   // trick some of the variables to handle
   // an insert properly.
