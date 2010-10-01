@@ -2079,7 +2079,11 @@ class ContentBase
 	  $ret = array();
 	  foreach( $attributelist as $one )
 	    {
-	      $ret[] = $this->display_single_element($one[0],$adding);
+	      $tmp = $this->display_single_element($one[0],$adding);
+	      if( is_array($tmp) )
+		{
+		  $ret[] = $tmp;
+		}
 	    }
 	  return $ret;
 	}
@@ -2159,15 +2163,16 @@ class ContentBase
 	      break;
 
 	    case 'page_url':
-	      {
-		$str = '<input type="text" name="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
-		$prompt = lang('page_url').':';
-		if( get_site_preference('content_mandatory_urls',0) )
-		  {
-		    $prompt = '*'.$prompt;
-		  }
-		return array($prompt,$str,lang('help_page_url'));
-	      }
+	      if( !$this->DefaultContent() )
+		{
+		  $str = '<input type="text" name="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
+		  $prompt = lang('page_url').':';
+		  if( get_site_preference('content_mandatory_urls',0) )
+		    {
+		      $prompt = '*'.$prompt;
+		    }
+		  return array($prompt,$str,lang('help_page_url'));
+		}
 	      break;
 
 	    case 'image':
