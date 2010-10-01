@@ -200,7 +200,7 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 	}
 }
 
-$closestr = lang('close');
+$closestr = html_entity_decode(lang('close'));
 $headtext .= <<<EOSCRIPT
 <script type="text/javascript">
 // <![CDATA[
