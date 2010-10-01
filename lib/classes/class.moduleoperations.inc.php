@@ -456,17 +456,17 @@ class ModuleOperations
     global $gCms;
     if( !isset( $gCms->modules[$module] ) )
       {
-	if( $loadifnecessary == false )
-	  {
-	    return array(false,lang('errormodulenotloaded'));
-	  }
-	else
-	  {
-	    if( !ModuleOperations::LoadNewModule( $module ) )
-	      {
-		return array(false,lang('errormodulewontload'));
-	      }
-	  }
+		  if( $loadifnecessary == false )
+			  {
+				  return array(false,lang('errormodulenotloaded'));
+			  }
+		  else
+			  {
+				  if( !$this->LoadNewModule( $module ) )
+					  {
+						  return array(false,lang('errormodulewontload'));
+					  }
+			  }
       }
  
     $db =& $gCms->GetDb();
@@ -521,7 +521,7 @@ class ModuleOperations
    * @param string $modulename The name of the module to load
    * @return boolean Whether or not the module load was successful
    */
-  function LoadNewModule( $modulename )
+  private function LoadNewModule( $modulename )
   {
     global $gCms;
     $db =& $gCms->GetDb();
