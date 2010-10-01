@@ -829,23 +829,23 @@ class CMSModule
 	 * @deprecated
 	 * @final
 	 * @param string A name for the new content type
-	 * @param string A filename containing the content block definition.
+	 * @param string A filename containing the content type definition.
 	 * @param string A friendly name for this content type.
 	 * @return void
 	 */
 	function RegisterContentType($name, $file, $friendlyname = '')
 	{
-		global $gCms;
-		$contenttypes =& $gCms->contenttypes;
-		if (!isset($contenttypes[strtolower($name)]))
-		{
-			$obj = new CmsContentTypePlaceholder();
-			$obj->type = strtolower($name);
-			$obj->filename = $file;
-			$obj->loaded = false;
-			$obj->friendlyname = ($friendlyname != '' ? $friendlyname : $name);
-			$contenttypes[strtolower($name)] = $obj;
-		}
+	  $contentops = cmsms()->GetContentOperations();
+	  if( !$contentops->CheckContentType($name) )
+	    {
+	      $obj = new CmsContentTypePlaceholder();
+	      $obj->class = $name;
+	      $obj->type  = strtolower($name);
+	      $obj->filename = $file;
+	      $obj->loaded = false;
+	      $obj->friendlyname = ($friendlyname != '' ? $friendlyname : $name);
+	      $contentops->register_content_type($obj);
+	    }
 	}
 
 	/**

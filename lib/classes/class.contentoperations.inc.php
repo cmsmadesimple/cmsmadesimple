@@ -83,35 +83,33 @@ class ContentOperations
 	/**
 	 * Creates a new, empty content object of the given type.
 	 *
+	 * if the content type is registered with the system,
+	 * and the class does not exist, the appropriate filename will be included
+	 * and then, if possible a new object of the designated type will be
+	 * instantiated.
+	 *
+	 * @param mixed The type.  Either a string, or an instance of CmsContentTypePlaceHolder
 	 * @return mixed The new content object
 	 */
 	function &CreateNewContent($type)
 	{
-		$result = NULL;
-
-		// still didn't find it.
-		if( !is_array($this->_content_types) )
-		{
-			global $gCms;
-			$dir = dirname(__FILE__).'/contenttypes';
-			$files = glob($dir.'/*.inc.php');
-			$tmp = array();
-			foreach( $files as $one )
+		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) 
 			{
-				$name = basename($one,'.inc.php');
-				$tmp[strtolower($name)] = $name;
+				$type = $type->type;
 			}
-			$this->_content_types = $tmp;
-		}
-		if( isset($this->_content_types[$type]) )
-		{
-			$type = $this->_content_types[$type];
-		}
-
-		if( class_exists($type) )
-		{
-			$result = new $type;
-		}
+		$result = NULL;
+		$ctph = $this->_get_content_type($type);
+		if( is_object($ctph) )
+			{
+				if( !class_exists( $ctph->class ) && file_exists( $ctph->filename ) )
+					{
+						include_once( $ctph->filename );
+					}
+				if( class_exists($ctph->class) )
+					{
+						$result = new $ctph->class;
+					}
+			}
 		return $result;
 	}
 
@@ -251,21 +249,20 @@ class ContentOperations
 
 
 	/**
-     * Returns a hash of valid content types (classes that extend ContentBase)
-     * The key is the name of the class that would be saved into the dabase.  The
-     * value would be the text returned by the type's FriendlyName() method.
+	 * Load standard CMS content types
 	 *
-	 * @return array Lost of content types registerd in the system.
+	 * This internal method looks through the contenttypes directory
+	 * and loads the placeholders for them.
+	 *
+	 * @since 1.9
+	 * @access private
+	 * @internal
 	 */
-	function ListContentTypes()
+	private function _load_std_content_types()
 	{
-		global $gCms;
-		$contenttypes =& $gCms->contenttypes;
-		$variables =& $gCms->variables;
-		
-		if (isset($gCms->variables['contenttypes']))
+		if (isset($gCms->variables['contenttypes'])) 
 		{
-			return $variables['contenttypes'];
+			return;
 		}
 
 		$result = array();
@@ -275,14 +272,88 @@ class ContentOperations
 		{
 			foreach( $files as $one )
 			{
+				$obj = new CmsContentTypePlaceHolder();
 				$class = basename($one,'.inc.php');
 				$type  = strtolower($class);
-				$result[$type] = $class;
+
+				$obj->class = $class;
+				$obj->type = strtolower($class);
+				$obj->filename = $one;
+				$obj->loaded = false;
+				$obj->friendlyname = $class;
+				$result[$type] = $obj;
 			}
 		}
-		
-		$variables['contenttypes'] = $result;
-		return $result;
+
+		cmsms()->variables['contenttypes'] = $result;
+	}
+
+
+	/**
+	 * Function to return a content type given it's name
+	 *
+	 * @since 1.9
+	 * @access private
+	 * @internal
+	 * @param string The content type name
+	 * @return CmsContentTypePlaceHolder placeholder object.
+	 */
+	private function _get_content_type($name)
+	{
+		$name = strtolower($name);
+		$this->_load_std_content_types();
+		$types = cmsms()->variables['contenttypes'];
+		if( is_array($types) )
+		{
+			foreach( $types as $key => $obj )
+			{
+				if( $key == $name && $obj instanceof CmsContentTypePlaceHolder )
+					{
+						return $obj;
+					}
+			}
+		}
+	}
+
+
+	/**
+	 * Register a new content type
+	 *
+	 * @since 1.9
+	 * @param CmsContentTypePlaceHolder Reference to placeholder object
+	 */
+	public function register_content_type(CmsContentTypePlaceHolder& $obj)
+	{
+		$this->_load_std_content_types();
+		$types = cmsms()->variables['contenttypes'];
+		if( isset($types[$obj->type]) ) return;
+
+		$types[$obj->type] = $obj;
+		cmsms()->variables['contenttypes'] = $types;
+	}
+
+
+
+	/**
+     * Returns a hash of valid content types (classes that extend ContentBase)
+     * The key is the name of the class that would be saved into the database.  The
+     * value would be the text returned by the type's FriendlyName() method.
+	 *
+	 * @return array List of content types registered in the system.
+	 */
+	function ListContentTypes()
+	{
+		$this->_load_std_content_types();
+		$types = cmsms()->variables['contenttypes'];
+		if ( isset($types) )
+		{
+			$result = array();
+			foreach( $types as $obj )
+				{
+					$result[$obj->type] = $obj->friendlyname;
+				}
+			return $result;
+		}
 	}
 
 
