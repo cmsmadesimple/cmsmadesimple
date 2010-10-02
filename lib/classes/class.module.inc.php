@@ -836,7 +836,8 @@ class CMSModule
 	function RegisterContentType($name, $file, $friendlyname = '')
 	{
 	  $contentops = cmsms()->GetContentOperations();
-	  if( !$contentops->CheckContentType($name) )
+	  $types = $contentops->ListContentTypes();
+	  if( !in_array(strtolower($name),array_keys($types)) )
 	    {
 	      $obj = new CmsContentTypePlaceholder();
 	      $obj->class = $name;
