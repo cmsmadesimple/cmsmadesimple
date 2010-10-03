@@ -600,8 +600,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
   
   if(empty($currow)) $currow = 'row1';
   
-  $children =& $root->getChildren(false,true);
-  $one =& $root->getContent();
+  $children = $root->getChildren(false,true);
+  $one = $root->getContent();
   $thelist = '';
 
   if (!(isset($one) && $one != NULL))

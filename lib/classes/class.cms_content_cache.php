@@ -125,14 +125,17 @@ class cms_content_cache
    */
   public static function add_content($id,$alias,ContentBase& $obj)
   {
-    if( !$id || !$alias ) return FALSE;
+    if( !$id) return FALSE;
     if( !self::$_alias_map ) self::$_alias_map = array();
     if( !self::$_id_map ) self::$_id_map = array();
     if( !self::$_content_cache ) self::$_content_cache = array();
     
     $hash = md5($id.$alias);
     self::$_content_cache[$hash] = $obj;
-    self::$_alias_map[$alias] = $hash;
+	if( $alias )
+		{
+			self::$_alias_map[$alias] = $hash;
+		}
     self::$_id_map[$id] = $hash;
     return TRUE;
   }

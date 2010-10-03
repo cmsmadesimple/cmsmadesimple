@@ -593,6 +593,7 @@ class ContentOperations
 		      }
 		  }
 		
+
 		// build the content objects
 		for( $i = 0; $i < count($contentrows); $i++ )
 		  {
@@ -601,6 +602,7 @@ class ContentOperations
 
 		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
 		    $contentobj =& $this->CreateNewContent($row['type']);
+
 		    if ($contentobj)
 		      {
 				  $contentobj->LoadFromData($row, false);

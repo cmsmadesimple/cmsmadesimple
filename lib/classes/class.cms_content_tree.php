@@ -226,7 +226,7 @@ class cms_content_tree extends cms_tree
    */
   public function &getContent($deep = false,$loadsiblings = true,$loadall = true)
   {
-    if( !cms_content_cache::content_exists($this->get_tag('alias')) )
+    if( !cms_content_cache::content_exists($this->get_tag('id')) )
       {
 		  // not in cache
 		  $parent = $this->getParent();
@@ -242,13 +242,13 @@ class cms_content_tree extends cms_tree
 		  else
 			  {
 				  $parent->getChildren($deep,$loadall);
-				  if( cms_content_cache::content_exists($this->get_tag('alias')) )
+				  if( cms_content_cache::content_exists($this->get_tag('id')) )
 					  {
-						  return cms_content_cache::get_content($this->get_tag('alias'));
+						  return cms_content_cache::get_content($this->get_tag('id'));
 					  }
 			  }
       }
-    return cms_content_cache::get_content($this->get_tag('alias'));
+    return cms_content_cache::get_content($this->get_tag('id'));
   }
 
  
@@ -315,24 +315,24 @@ class cms_content_tree extends cms_tree
     $children = $this->get_children();
     if( is_array($children) && count($children) && $loadcontent )
       {
-	// check to see if we need to load anything.
-	$ids = array();
-	for( $i = 0; $i < count($children); $i++ )
-	  {
-	    if( !$children[$i]->isContentCached() )
-	      {
-		$ids[] = $children[$i]->get_tag('id');
-	      }
-	  }
-
-	if( count($ids) )
-	  {
-	    global $gCms;
-	    $contentops = $gCms->GetContentOperations();
-	    $contentops->LoadChildren($this->GetTag('id'),$deep,$all,$ids);
-	  }
+		  // check to see if we need to load anything.
+		  $ids = array();
+		  for( $i = 0; $i < count($children); $i++ )
+			  {
+				  if( !$children[$i]->isContentCached() )
+					  {
+						  $ids[] = $children[$i]->get_tag('id');
+					  }
+			  }
+		  
+		  if( count($ids) )
+			  {
+				  global $gCms;
+				  $contentops = $gCms->GetContentOperations();
+				  $contentops->LoadChildren($this->get_tag('id'),$deep,$all,$ids);
+			  }
       }
-
+	
     return $children;
   }
 
