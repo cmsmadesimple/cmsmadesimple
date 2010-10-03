@@ -260,7 +260,7 @@ class ContentOperations
 	 */
 	private function _load_std_content_types()
 	{
-		if (isset($gCms->variables['contenttypes'])) 
+		if (isset(cmsms()->variables['contenttypes'])) 
 		{
 			return;
 		}
