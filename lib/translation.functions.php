@@ -451,7 +451,6 @@ function lang()
 
 	if (!isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
 	  {
-  stack_trace(); die();
 	    trigger_error('Attempt to load admin realm from non admin action');
 	    return '';
 	  }

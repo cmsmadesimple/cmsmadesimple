@@ -351,9 +351,11 @@ class ContentOperations
 			$result = array();
 			foreach( $types as $obj )
 				{
-					if( !isset($obj->friendlyname) && isset($obj->friendlyname_key) )
+					global $CMS_ADMIN_PAGE;
+					if( !isset($obj->friendlyname) && isset($obj->friendlyname_key) && isset($CMS_ADMIN_PAGE) )
 						{
-							$obj->friendlyname = lang($obj->friendlyname_key);
+							$txt = lang($obj->friendlyname_key); 
+							$obj->friendlyname = $txt;
 						}
 					$result[$obj->type] = $obj->friendlyname;
 				}
