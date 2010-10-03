@@ -280,7 +280,8 @@ class ContentOperations
 				$obj->type = strtolower($class);
 				$obj->filename = $one;
 				$obj->loaded = false;
-				$obj->friendlyname = $class;
+				$obj->friendlyname_key = 'contenttype_'.$obj->type;
+				//$obj->friendlyname = $class;
 				$result[$type] = $obj;
 			}
 		}
@@ -350,6 +351,10 @@ class ContentOperations
 			$result = array();
 			foreach( $types as $obj )
 				{
+					if( !isset($obj->friendlyname) && isset($obj->friendlyname_key) )
+						{
+							$obj->friendlyname = lang($obj->friendlyname_key);
+						}
 					$result[$obj->type] = $obj->friendlyname;
 				}
 			return $result;

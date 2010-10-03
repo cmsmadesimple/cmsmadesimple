@@ -252,21 +252,20 @@ else
 	$typesdropdown = '<select name="content_type" onchange="document.contentform.submit()" class="standard">';
 	$cur_content_type = '';
 	$content_types = $contentops->ListContentTypes();
-	foreach ($content_types as $onetype)
+	foreach ($content_types as $onetype => $onetypename )
 	{
 	  if( $onetype == 'errorpage' && !check_permission($userid,'Manage All Content') ) 
 	    {
 	      continue;
 	    }
 
-	  $type_obj = $contentops->CreateNewContent($onetype);
 	  $typesdropdown .= '<option value="' . $onetype . '"';
 	  if ($onetype == $content_type)
 	    {
 	      $typesdropdown .= ' selected="selected" ';
 	      $cur_content_type = $onetype;
 	    }
-	  $typesdropdown .= ">".($type_obj->FriendlyName())."</option>";
+	  $typesdropdown .= ">".$onetypename."</option>";
 	}
 	$typesdropdown .= "</select>";
 

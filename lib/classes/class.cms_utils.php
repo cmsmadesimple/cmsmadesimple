@@ -61,9 +61,9 @@ class cms_utils
    */
   public static function get_app_data($key)
   {
-    if( is_array( self::$_vars[$key] ) )
+	  if( is_array( self::$_vars ) && isset(self::$_vars[$key]) )
       {
-	return self::$_vars[$key];
+		  return self::$_vars[$key];
       }
   }
 
@@ -83,7 +83,7 @@ class cms_utils
     if( $key == '' ) return;
     if( !is_array(self::$_vars) )
       {
-	self::$_vars = array();
+		  self::$_vars = array();
       }
     self::$_vars[$key] = $value;
   }
