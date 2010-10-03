@@ -29,7 +29,7 @@ class cms_variables implements ArrayAccess
   {
     if( !in_array($key,$this->_allowed_variables) )
       {
-	trigger_error('Retrival of unauthorized internal variables is deprecated: '.$key,E_USER_NOTICE);
+	trigger_error('Retrival of unauthorized internal variables is deprecated: '.$key,E_STRICT);
 	return;
       }
     if( isset($this->_data[$key]) )
