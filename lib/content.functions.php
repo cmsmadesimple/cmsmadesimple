@@ -274,14 +274,12 @@ class Smarty_CMS extends Smarty {
      */
 	function module_db_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
-		global $gCms;
 
-		$db = &$gCms->GetDb();
-		$config = $gCms->config;
-		if( isset($gCms->variables['module_template_cache']) &&
-		    isset($gCms->variables['module_template_cache'][$tpl_name]) )
+		$db = cmsms()->GetDb();
+		$module_template_cache = cms_utils::get_app_data('module_template_cache');
+		if( isset($module_template_cache) && isset($module_template_cache[$tpl_name]) )
 		  {
-		    $tpl_timestamp = $gCms->variables['module_template_cache'][$tpl_name];
+		    $tpl_timestamp = $module_template_cache[$tpl_name];
 		    return true;
 		  }
 		
@@ -291,18 +289,19 @@ class Smarty_CMS extends Smarty {
 
 		if( !count($results) ) return false;
 
-		if( !isset($gCms->variables['module_template_cache']) )
+		if( empty($module_template_cache) )
 		  {
-		    $gCms->variables['module_template_cache'] = array();
+		    $module_template_cache = array();
 		  }
 		foreach( $results as $row )
 		  {
 		    $key = $row['module_name'].';'.$row['template_name'];
 		    $val = $db->UnixTimeStamp($row['modified_date']);
-		    $gCms->variables['module_template_cache'][$key] = $val;
+		    $module_template_cache[$key] = $val;
 		  }
 
-		$tpl_timestamp = $gCms->variables['module_template_cache'][$tpl_name];
+		$tpl_timestamp = $module_template_cache[$tpl_name];
+		cms_utils::set_app_data('module_template_cache',$module_template_cache);
 		return true;
 	}
 

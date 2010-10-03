@@ -37,13 +37,14 @@
  */
 function cms_module_plugin($params,&$smarty)
 {
-	global $gCms;
-	$cmsmodules = &$gCms->modules;
+	$gCms = cmsms();
+	$cmsmodules = $gCms->modules;
 
 	//$id = 'm' . ++$gCms->variables["modulenum"];
-	if( !isset($gCms->variables['mid_cache']) )
+	$mid_cache = cms_utils::get_app_data('mid_cache');
+	if( empty($mid_cache) )
 	  {
-	    $gCms->variables['mid_cache'] = array();
+	    $mid_cache = array();
 	  }
 	for( $i = 0; $i < 10; $i++ )
 	{
@@ -51,17 +52,19 @@ function cms_module_plugin($params,&$smarty)
 	  foreach($params as $key=>$value)
 	    $tmp .= $key.'='.$value;
 	  $id = 'm'.substr(md5($tmp),0,5);
-	  if( !isset($gCms->variables['mid_cache'][$id]) )
+	  if( !isset($mid_cache[$id]) )
 	    {
-	      $gCms->variables['mid_cache'][$id] = $id;
+	      $mid_cache[$id] = $id;
 	      break;
 	    }
 	}
+	cms_utils::set_app_data('mid_cache',$mid_cache);
 
 	$returnid = '';
-	if (isset($gCms->variables['content_obj']) && $gCms->variables['content_obj']->Id())
+	$content_obj = cmsms()->get_variable('content_obj');
+	if (isset($content_obj) && $content_obj->Id())
 	  {
-	    $returnid = $gCms->variables['content_obj']->Id();
+	    $returnid = $content_obj->Id();
 	  }
 	$params = array_merge($params, GetModuleParameters($id));
 
