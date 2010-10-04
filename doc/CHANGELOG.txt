@@ -60,6 +60,9 @@ News:
 
 TinyMCE:
   - Fixed issue with double alias in the URL, when 'internal' is used for url_rewriting.
+  - Rewrote test-area
+  - Added an option to avoid Tiny's linkconversion, makes {smarty} in urls possible
+  - Added an optional addition to the output of the CMSLinker, both in selflink or href method
   
 
 Version 1.8.2 - Toliara
