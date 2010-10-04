@@ -204,8 +204,9 @@ $closestr = html_entity_decode(lang('close'));
 $headtext .= <<<EOSCRIPT
 <script type="text/javascript">
 // <![CDATA[
-jQuery(document).ready(function(){
+jQuery(document).ready(function(){  
   jQuery('input[name=apply]').click(function(){
+    $addlScriptSubmit
     var data = jQuery('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'ajax', 'value': 1});
     data.push({ 'name': 'apply', 'value': 1 });
