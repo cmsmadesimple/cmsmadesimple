@@ -32,15 +32,17 @@
  */
 function cms_autoloader($classname)
 {
-  global $gCms;
-  $config = $gCms->GetConfig();
+  $config = cmsms()->GetConfig();
 
+  // standard classes
   $fn = cms_join_path($config['root_path'],'lib','classes',"class.{$classname}.php");
   if( file_exists($fn) )
     {
       require_once($fn);
       return;
     }
+
+  // standard interfaces
   $fn = cms_join_path($config['root_path'],'lib','classes',"interface.{$classname}.php");
   if( file_exists($fn) )
     {
@@ -48,6 +50,7 @@ function cms_autoloader($classname)
       return;
     }
 
+  // standard content types
   $fn = cms_join_path($config['root_path'],'lib','classes','contenttypes',"{$classname}.inc.php");
   if( file_exists($fn) )
     {
@@ -55,7 +58,15 @@ function cms_autoloader($classname)
       return;
     }
 
-  foreach( $gCms->modules as $module => &$data )
+  // module loaded content types
+  $contentops = cmsms()->GetContentOperations();
+  $types = $contentops->ListContentTypes();
+  if( in_array(strtolower($classname),array_keys($types)) )
+    {
+      $contentops->LoadContentType(strtolower($classname));
+    }
+
+  foreach( cmsms()->modules as $module => &$data )
     {
       if( !isset($data['object']) ) continue;
       $obj =& $data['object'];

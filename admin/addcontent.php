@@ -83,7 +83,6 @@ else
 $contentobj = "";
 if (isset($_POST["serialized_content"]))
 {
-	$contentops =& $gCms->GetContentOperations();
 	$contentobj = unserialize(base64_decode($_POST["serialized_content"]));
 	$contentobj->SetAddMode();
 	if (strtolower(get_class($contentobj)) != $content_type)

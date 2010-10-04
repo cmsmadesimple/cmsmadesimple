@@ -81,6 +81,34 @@ class ContentOperations
 
 
 	/**
+	 * Load a specific content type
+	 *
+	 * This method is called from the autoloader.  There is no need to call it internally
+	 *
+	 * @internal
+	 * @final
+	 * @since 1.9
+	 * @param mixed The type.  Either a string, or an instance of CmsContentTypePlaceHolder
+	 */
+	final public function LoadContentType($type)
+	{
+		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) 
+			{
+				$type = $type->type;
+			}
+
+		$ctph = $this->_get_content_type($type);
+		if( is_object($ctph) )
+			{
+				if( !class_exists( $ctph->class ) && file_exists( $ctph->filename ) )
+					{
+						include_once( $ctph->filename );
+					}
+			}
+
+	}
+
+	/**
 	 * Creates a new, empty content object of the given type.
 	 *
 	 * if the content type is registered with the system,
@@ -101,10 +129,6 @@ class ContentOperations
 		$ctph = $this->_get_content_type($type);
 		if( is_object($ctph) )
 			{
-				if( !class_exists( $ctph->class ) && file_exists( $ctph->filename ) )
-					{
-						include_once( $ctph->filename );
-					}
 				if( class_exists($ctph->class) )
 					{
 						$result = new $ctph->class;
@@ -340,9 +364,10 @@ class ContentOperations
      * The key is the name of the class that would be saved into the database.  The
      * value would be the text returned by the type's FriendlyName() method.
 	 *
+	 * @param boolean optionally return keys as class names.
 	 * @return array List of content types registered in the system.
 	 */
-	function ListContentTypes()
+	function ListContentTypes($byclassname = false)
 	{
 		$this->_load_std_content_types();
 		$types = cmsms()->variables['contenttypes'];
@@ -357,7 +382,14 @@ class ContentOperations
 							$txt = lang($obj->friendlyname_key); 
 							$obj->friendlyname = $txt;
 						}
-					$result[$obj->type] = $obj->friendlyname;
+					if( $byclassname )
+						{
+							$result[$obj->class] = $obj->friendlyname;
+						}
+					else
+						{
+							$result[$obj->type] = $obj->friendlyname;
+						}
 				}
 			return $result;
 		}
