@@ -487,11 +487,10 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=array(),
 							   $inline=false,$targetcontentonly=false,$prettyurl='')
 {
-	global $gCms;
-	$config = $gCms->GetConfig();
+	$config = cmsms()->GetConfig();
 
 	$text = '';
-	if( empty($prettyurl) )
+	if( empty($prettyurl) && $config['url_rewriting'] != 'none' )
 	{
 		// attempt to get a pretty url from the module... this is useful
 		// incase this method is being called from outside the source module.
@@ -500,13 +499,25 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 		$prettyurl = $modinstance->get_pretty_url($id,$action,$returnid,$params,$inline);
 	}
 
+	$base_url = $config['root_url'];
+	
+	// get the destination content object
+	if( $returnid != '' )
+	{
+		$content_obj = cmsms()->GetContentOperations()->LoadContentFromId($returnid);
+		if( $content_obj->Secure() )
+		{
+			$base_url = $config['ssl_url'];
+		}
+	}
+	   
 	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite')
 	{
-		$text = $config['root_url'] . '/' . $prettyurl . $config['page_extension'];
+		$text = $base_url . '/' . $prettyurl . $config['page_extension'];
 	}
 	else if ($prettyurl != '' && $config['url_rewriting'] == 'internal')
 	{
-		$text = $config['root_url'] . '/index.php/' . $prettyurl . $config['page_extension'];
+		$text = $base_url . '/index.php/' . $prettyurl . $config['page_extension'];
 	}
 	else
 	{
@@ -520,7 +531,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 		{
 			$goto = 'moduleinterface.php';
 		}
-		$text .= $config['root_url'];
+		$text .= $base_url;
 		if (!($returnid != '' && $returnid > -1))
 			{
 				$text .= '/'.$config['admin_dir'];
