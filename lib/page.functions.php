@@ -1294,8 +1294,12 @@ function get_pageid_or_alias_from_url()
       $page = $contentops->GetDefaultContent();
     }
 
-  // by here if page is an int, we're done.
-  if( is_numeric($page) ) return $page;
+  // by here, if we're not assuming pretty urls of any sort
+  // and we have a value... we're done.
+  if( $config['url_rewriting'] == 'none' )
+    {
+      return $page;
+    }
 
   // some kind of a pretty url.
   // strip off GET params.
