@@ -59,10 +59,16 @@ News:
   - Adds support for custom urls for each news article
 
 TinyMCE:
+  - Major update to this module, now in version 2.8.0
   - Fixed issue with double alias in the URL, when 'internal' is used for url_rewriting.
   - Rewrote test-area
   - Added an option to avoid Tiny's linkconversion, makes {smarty} in urls possible
   - Added an optional addition to the output of the CMSLinker, both in selflink or href method
+  - Removed last non-cms entrypoint, filepicker
+  - Imageuploading now honers the site-thumbnailsize setting
+  - Uploadin non-images when in imageselector now works
+  - Generation thumbnails when uploading images right after installation fixed
+  - Updated to Tiny 3.3.9.2
   
 
 Version 1.8.2 - Toliara
