@@ -626,28 +626,14 @@ class AdminTheme
      */
     function OutputHeaderJavascript()
     {
-?>
-<script type="text/javascript">
-<!-- Needed for correct display in IE only -->
-<!--
-	cssHover = function() {
-		var sfEls = document.getElementById("nav").getElementsByTagName("LI");
-		for (var i=0; i<sfEls.length; i++) {
-			sfEls[i].onmouseover=function() {
-				this.className+=" cssHover";
-			}
-			sfEls[i].onmouseout=function() {
-				this.className=this.className.replace(new RegExp(" cssHover\\b"), "");
-			}
-		}
-	}
-	if (window.attachEvent) window.attachEvent("onload", cssHover);
--->
-</script>
-<?php
-        echo "<script type=\"text/javascript\" src=\"";
-        echo $this->cms->config['root_url'];
-        echo "/lib/dynamic_tabs/tabs.js\"></script>\n";
+		echo '<script type="text/javascript" src="themes/default/includes/standard.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../lib/jquery/js/jquery-1.4.2.min.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../lib/jquery/js/jquery-ui-1.8.4.custom.min.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../lib/jquery/js/jquery.ui.nestedSortable.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../lib/jquery/js/jquery.json-2.2.js"></script>'."\n";
+//         echo "<script type=\"text/javascript\" src=\"";
+//         echo $this->cms->config['root_url'];
+//         echo "/lib/dynamic_tabs/tabs.js\"></script>\n";
 	}
 
     /**
@@ -1444,7 +1430,7 @@ debug_buffer('after menu items');
 <meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-9 Ted Kulp. All rights reserved." />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="robots" content="noindex, nofollow" />
-<title><?php echo $this->title ?></title>
+<title><?php echo $this->cms->siteprefs['sitename'] ." - ". $this->title ?></title>
 <link rel="stylesheet" type="text/css" href="style.php" />
 <?php
 	if ($showielink) {

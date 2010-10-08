@@ -81,38 +81,6 @@ class defaultTheme extends AdminTheme
     return;
   }
 
-    /**
-     * DisplayHTMLHeader
-     * This method outputs the HEAD section of the html page in the admin section.
-     */
-    function DisplayHTMLHeader($showielink = false, $addt = '')
-    {
-		global $gCms;
-		$config = $gCms->GetConfig();
-?><head>
-<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-10 Ted Kulp. All rights reserved." />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="robots" content="noindex, nofollow" />
-<title><?php echo $this->cms->siteprefs['sitename'] ." - ". $this->title ?></title>
-<link rel="stylesheet" type="text/css" href="style.php" />
-<?php
-	if ($showielink) {
-?>
-<!--[if IE]>
-<link rel="stylesheet" type="text/css" href="style.php?ie=1" />
-<![endif]-->
-<?php
-	}
-?>
-<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
-<?php $this->OutputHeaderJavascript(); ?>
-<?php echo $addt ?>
-<base href="<?php echo $config['root_url'] . '/' . $config['admin_dir'] . '/'; ?>" />
-</head>
-<?php
-    }
-
-
     function DisplayTopMenu()
     {
 	echo '<div><p class="logocontainer"><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">'.lang('adminpaneltitle').' - '. $this->cms->siteprefs['sitename'] .' &nbsp;&nbsp; '.lang('welcome_user').': '.$this->cms->variables['username'].'</span></p></div>';
@@ -163,13 +131,6 @@ class defaultTheme extends AdminTheme
 		echo '<p class="footer"><a class="footer" href="http://www.cmsmadesimple.org">CMS Made Simple</a> '.$CMS_VERSION.' "' . $CMS_VERSION_NAME . '"<br /><a class="footer" href="http://www.cmsmadesimple.org">CMS Made Simple</a> is free software released under the General Public Licence.</p>';
 	}
 	
-	function OutputHeaderJavascript() {
-		echo '<script type="text/javascript" src="themes/default/includes/standard.js"></script>';
-		echo '<script type="text/javascript" src="../lib/jquery/js/jquery-1.4.2.min.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../lib/jquery/js/jquery-ui-1.8.4.custom.min.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../lib/jquery/js/jquery.json-2.2.js"></script>'."\n";
-	}
-
 	function StartRighthandColumn() {
 		echo '<div class="navt_menu">'."\n";
 		echo '<div id="navt_display" class="navt_show" onclick="change(\'navt_display\', \'navt_hide\', \'navt_show\'); change(\'navt_container\', \'invisible\', \'visible\');"></div>'."\n";
