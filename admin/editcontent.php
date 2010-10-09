@@ -250,7 +250,7 @@ if (!$access)
 else
 {
 	#Get a list of content_types and build the dropdown to select one
-	$typesdropdown = '<select name="content_type" onchange="document.contentform.submit()" class="standard">';
+	$typesdropdown = '<select name="content_type" onchange="document.Edit_Content.submit()" class="standard">';
 	$cur_content_type = '';
 	$content_types = $contentops->ListContentTypes();
 	foreach ($content_types as $onetype => $onetypename )
@@ -321,13 +321,13 @@ else
 		#Make a preview tab
 		if ($contentobj->mPreview)
 		{
-			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\')); return false;">'.lang('preview').'</div>';
+			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'Edit_Content\')); return false;">'.lang('preview').'</div>';
 		}
 
 		?>
 	</div>
 	<div style="clear: both;"></div>
-	<form method="post" id="Edit_Content" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
+	<form method="post" id="Edit_Content" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" ##FORMSUBMITSTUFFGOESHERE##>
 <div>
   <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
   <input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />

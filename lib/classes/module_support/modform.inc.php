@@ -505,7 +505,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 	if( $returnid != '' )
 	{
 		$content_obj = cmsms()->GetContentOperations()->LoadContentFromId($returnid);
-		if( $content_obj->Secure() )
+		if( is_object($content_obj) && $content_obj->Secure() )
 		{
 			$base_url = $config['ssl_url'];
 		}
