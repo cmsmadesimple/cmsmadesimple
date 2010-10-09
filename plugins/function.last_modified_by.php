@@ -23,11 +23,11 @@ function smarty_cms_function_last_modified_by($params, &$smarty)
 
         $id = "";
  
-	if (isset($content_obj) && $content_obj->GetModifiedDate() > -1)
+	if (isset($content_obj) && $content_obj->LastModifiedBy() > -1)
 	{
-	  $id = $content_obj->GetModifiedDate();
+	  $id = $content_obj->LastModifiedBy();
 	} else {
-                return "";
+	  return "";
         }
 
 	if(empty($params['format']))

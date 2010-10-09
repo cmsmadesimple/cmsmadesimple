@@ -33,7 +33,8 @@ function smarty_cms_function_modified_date($params, &$smarty)
 	$str = '';
 	if (is_object($content_obj) && $content_obj->GetModifiedDate() && $content_obj->GetModifiedDate() > -1)
 	{
-	  $str = htmlentities(strftime($format, $content_obj->GetModifiedDate()));
+	  $time = $content_obj->GetModifiedDate();
+	  $str = htmlentities(strftime($format, $time));
 	}
 
 	if( isset($params['assign']) )

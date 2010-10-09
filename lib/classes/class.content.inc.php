@@ -406,14 +406,26 @@ class ContentBase
 	return $this->mTitleAttribute;
     }
 
+
+    /**
+     * Retreive the creation date of this content object.
+     *
+     * @return int Unix Timestamp of the creation date
+     */
     function GetCreationDate()
     {
-	return $this->mCreationDate;
+      return strtotime($this->mCreationDate);
     }
 	
+
+    /**
+     * Retreive the date of the last modification of this content object.
+     *
+     * @return int Unix Timestamp of the modification date.
+     */
     function GetModifiedDate()
     {
-	return $this->mModifiedDate;
+      return strtotime($this->mModifiedDate);
     }
 
     function SetTitleAttribute($titleattribute)

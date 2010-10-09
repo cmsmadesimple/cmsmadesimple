@@ -40,7 +40,10 @@ Core:
     In later versions we will replace this notice with an error.
   - Replace the $gCms->variables array with an object.  Now only specific variables can be set without generating a notice.
     In later versions we will replace this notice with an error.
-  
+  - Rewrite of the reorder pages stuff to use jquery
+    - People with custom admin themes may need to make changes, to ensure that the parent method for GetHeaderHTML() is called and
+      possibly not override the getHeaderJavascript() method.
+ 
 Theme Manager
   - Now handles attached images much better.
 
