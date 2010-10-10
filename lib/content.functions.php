@@ -823,7 +823,7 @@ class Smarty_CMS extends Smarty {
 		  if ($contentobj->Cachable())
 			{
 			  $db = $gCms->GetDb();
-			  $tpl_timestamp = $db->UnixTimestamp($contentobj->GetModifiedDate());
+			  $tpl_timestamp = $contentobj->GetModifiedDate();
 			}
 			else
 			{
