@@ -115,7 +115,7 @@ class cms_content_tree extends cms_tree
     $id = $contentops->GetPageIDFromHierarchy($position);
     if ($id)
     {
-      $result =& $this->find_by_tag('id',$id);
+      $result = $this->find_by_tag('id',$id);
     }
     return $result;
   }
