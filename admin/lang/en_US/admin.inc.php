@@ -15,7 +15,7 @@ $lang['admin']['info_content_thumbnailfield_path'] = 'Relative to the image uplo
 $lang['admin']['contentimage_path'] = 'Path for {content_image} tag';
 $lang['admin']['info_contentimage_path'] = 'Relative to the uploads path, specify a directory name that contains the paths containing files for the {content_image} tag.  This value is used as a default for the dir parameter';
 $lang['admin']['editcontent_settings'] = 'Content Editing Settings';
-$lang['admin']['help_page_url'] = 'Specify an alternat URL (relative to the root of your website) that can be used to uniquely identify this page.  i.e: path/to/mypage.  The page url is only useful when pretty urls are enabled.';
+$lang['admin']['help_page_url'] = 'Specify an alternate URL (relative to the root of your website) that can be used to uniquely identify this page.  i.e: path/to/mypage.  The page url is only useful when pretty urls are enabled.';
 $lang['admin']['help_page_alias'] = 'The alias is used as an alternate to the page id to uniquely identify a page. It must be unique across all pages.  The alias is also used to assist in building the URL for the page';
 $lang['admin']['help_page_searchable'] = 'This setting indicates whether the content for this page should be indexed by the search engine';
 $lang['admin']['help_page_cachable'] = 'Performance can be increased by setting as many pages as possible to cachable.  However this cannot be used for pages where content may change on a per request basis';
@@ -113,7 +113,7 @@ $lang['admin']['test_estrict_failed'] = 'E_STRICT is enabled in the error_report
 $lang['admin']['info_estrict_failed'] = 'Some libraries that CMSMS uses do not work well with E_STRICT.  Please disable this before continuing';
 $lang['admin']['E_DEPRECATED'] = 'Is E_DEPRECATED disabled in error_reporting';
 $lang['admin']['test_edeprecated_failed'] = 'E_DEPRECATED is enabled';
-$lang['admin']['info_edeprecated_failed'] = 'If E_DEPRECATED is enabled in your error reporting users will see alot of warning messages that could effect the display and functionalty';
+$lang['admin']['info_edeprecated_failed'] = 'If E_DEPRECATED is enabled in your error reporting users will see a lot of warning messages that could affect the display and functionality';
 $lang['admin']['session_use_cookies'] = 'Sessions are allowed to use Cookies';
 $lang['admin']['errorgettingcontent'] = 'Could not retrieve information for the specified content object';
 $lang['admin']['errordeletingcontent'] = 'Error deleting content (either this page has children or is the default content)';
@@ -720,9 +720,9 @@ $lang['admin']['help_function_get_template_vars'] = <<<EOT
 EOT;
 $lang['admin']['help_function_embed'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>Enable inclusion (embeding) of any other application into the CMS. The most usual use could be a forum. 
+	<p>Enable inclusion (embedding) of any other application into the CMS. The most usual use could be a forum. 
 	This implementation is using IFRAMES so older browsers can have problems. Sorry bu this is the only known way 
-	that works without modifing the embeded application.</p>
+	that works without modifing the embedded application.</p>
 	<h3>How do I use it?</h3>
         <ul>
         <li>a) Add <code>{embed header=true}</code> into the head section of your page template, or into the metadata section in the options tab of a content page.  This will ensure that the required javascript gets included.   If you insert this tag into the metadata section in the options tab of a content page you must ensure that <code>{metadata}</code> is in your page template.</li>
@@ -831,7 +831,7 @@ $lang['admin']['about_function_cms_selflink'] = <<<EOT
 		1.2 - by Martin B. Vestergaard
 		<ul>
 		<li>changed default text to Page Name (was Page Alias)</li>
-		<li>added option dir=next/prev to display next or previous item in the hirachy - thanks to 100rk</li>
+		<li>added option dir=next/prev to display next or previous item in the hierachy - thanks to 100rk</li>
 		<li>added option class to add a class= statement to the a-tag.</li>
 		<li>added option menu to display menu-text in sted of Page Name</li>
 		<li>added option lang to display link-labels in different languages</li>
@@ -1051,7 +1051,7 @@ $lang['admin']['adduser'] = 'Add New User';
 $lang['admin']['addusertag'] = 'Add User Defined Tag';
 $lang['admin']['adminaccess'] = 'Access to login to admin';
 $lang['admin']['adminlog'] = 'Admin Log';
-$lang['admin']['adminlogcleared'] = 'The Admin Log was succesfully cleared';
+$lang['admin']['adminlogcleared'] = 'The Admin Log was successfully cleared';
 $lang['admin']['adminlogempty'] = 'The Admin Log is empty';
 $lang['admin']['adminsystemtitle'] = 'CMS Admin System';
 $lang['admin']['adminpaneltitle'] = 'CMS Made Simple Admin Console'; // needs translation
@@ -1126,7 +1126,7 @@ $lang['admin']['errorcreatingassociation'] = 'Error creating association';
 $lang['admin']['errorcssinuse'] = 'This Stylesheet is still used by template or pages. Please remove those associations first.';
 $lang['admin']['errordefaultpage'] = 'Can not delete the current default page. Please set a different one first.';
 $lang['admin']['errordeletingassociation'] = 'Error deleting association';
-$lang['admin']['errordeletingcss'] = 'Error deleteing css';
+$lang['admin']['errordeletingcss'] = 'Error deleting css';
 $lang['admin']['errordeletingdirectory'] = 'Could not delete directory. Permissions problem?';
 $lang['admin']['errordeletingfile'] = 'Could not delete file. Permissions Problem?';
 $lang['admin']['errordirectorynotwritable'] = 'No permission to write in directory.  This could be caused by file permissions and ownership.  Safe mode may also be in effect.';
@@ -1242,7 +1242,7 @@ $lang['admin']['previewdescription'] = 'Preview changes';
 $lang['admin']['previous'] = 'Previous';
 $lang['admin']['remove'] = 'Remove';
 $lang['admin']['removeconfirm'] = 'This action will permanently remove the files making up this module from this installation.\nAre you sure you want to proceed?';
-$lang['admin']['removecssassociation'] = 'Remove Stylesheet Assocation';
+$lang['admin']['removecssassociation'] = 'Remove Stylesheet Association';
 $lang['admin']['saveconfig'] = 'Save Config';
 $lang['admin']['send'] = 'Send';
 $lang['admin']['setallcontent'] = 'Set All Pages';
@@ -1508,7 +1508,7 @@ $lang['admin']['event_desc_contentstylesheet'] = 'Sent before the stylesheet is 
 $lang['admin']['event_desc_contentprecompile'] = 'Sent before content is sent to smarty for processing';
 $lang['admin']['event_desc_contentpostcompile'] = 'Sent after content has been processed by smarty';
 $lang['admin']['event_desc_contentpostrender'] = 'Sent before the combined html is sent to the browser';
-$lang['admin']['event_desc_smartyprecompile'] = 'Sent before any content destined for smarty is sent to for processing';
+$lang['admin']['event_desc_smartyprecompile'] = 'Sent before any content destined for smarty is sent for processing';
 $lang['admin']['event_desc_smartypostcompile'] = 'Sent after any content destined for smarty has been processed';
 $lang['admin']['event_help_loginpost'] = '<p>Sent after a user logs into the admin panel.</p>
 <h4>Parameters</h4>
