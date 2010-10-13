@@ -304,7 +304,15 @@ class ContentOperations
 				$obj->type = strtolower($class);
 				$obj->filename = $one;
 				$obj->loaded = false;
-				$obj->friendlyname_key = 'contenttype_'.$obj->type;
+				if( $obj->type == 'link' )
+					{
+						// cough... big hack... cough.
+						$obj->friendlyname_key = 'contenttype_redirlink';
+					}
+				else
+					{
+						$obj->friendlyname_key = 'contenttype_'.$obj->type;
+					}
 				//$obj->friendlyname = $class;
 				$result[$type] = $obj;
 			}

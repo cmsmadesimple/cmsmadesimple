@@ -327,7 +327,7 @@ else
 		?>
 	</div>
 	<div style="clear: both;"></div>
-	<form method="post" id="Edit_Content" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" ##FORMSUBMITSTUFFGOESHERE##>
+	<form method="post" name="Edit_Content" id="Edit_Content" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" ##FORMSUBMITSTUFFGOESHERE##>
 <div>
   <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
   <input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />

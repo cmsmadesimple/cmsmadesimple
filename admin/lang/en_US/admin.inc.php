@@ -358,7 +358,6 @@ $lang['admin']['urlcheckversion'] = 'Check for new CMS versions using this URL';
 $lang['admin']['master_admintheme'] = 'Default Administration Theme (for the login page and new user accounts)';
 $lang['admin']['contenttype_separator'] = 'Separator';
 $lang['admin']['contenttype_sectionheader'] = 'Section Header';
-$lang['admin']['contenttype_link'] = 'External Link';
 $lang['admin']['contenttype_content'] = 'Content';
 $lang['admin']['contenttype_pagelink'] = 'Internal Page Link';
 $lang['admin']['nogcbwysiwyg'] = 'Disallow WYSIWYG editors on global content blocks';
