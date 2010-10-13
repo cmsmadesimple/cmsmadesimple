@@ -185,7 +185,7 @@ class CMSModule
 		#$smarty = new CMSModuleSmarty($config, $this->GetName());
 		$this->smarty = &$gCms->GetSmarty();
 
-		if( (!isset($CMS_ADMIN_PAGE)  || isset($CMS_MODULE_PAGE)) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
+		if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
 		  {
 		    $this->SetParameterType('assign',CLEAN_STRING);
 		    $this->SetParameterType('module',CLEAN_STRING);
