@@ -262,22 +262,18 @@ if (FALSE == empty($page_message)) {
 				<div class="pagetext"><?php echo lang('language'); ?>:</div>
 				<div class="pageinput">
 					<select name="default_cms_lang" style="vertical-align: middle;">
-					<option value=""><?php echo lang('nodefault'); ?></option>
 					<?php
-                                                $nls = $gCms->nls;
-						asort($nls["language"]);
-						foreach ($nls["language"] as $key=>$val) {
-							echo "<option value=\"$key\"";
-							if ($default_cms_lang == $key) {
-								echo " selected=\"selected\"";
-							}
-							echo ">$val";
-							if (isset($nls["englishlang"][$key]))
-							{
-								echo " (".$nls["englishlang"][$key].")";
-							}
-							echo "</option>\n";
-						}
+					$opts = get_language_list();
+foreach( $opts as $key => $value )
+{
+  $str = "<option value=\"$key\"";
+  if( $default_cms_lang == $key )
+    { 
+      $str .= " selected=\"selected\"";
+    }
+  $str .= ">$value</option>\n";
+  echo $str;
+}
 					?>
 					</select>
 				</div>
@@ -285,7 +281,7 @@ if (FALSE == empty($page_message)) {
 	    <div class="pageoverflow">
 		<div class="pagetext"><?php echo lang('date_format_string'); ?>:</div>
 		<div class="pageinput">
-		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="255" /><?php echo lang('date_format_string_help') ?>
+		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="255" /><?php echo '<br/>'.lang('date_format_string_help') ?>
 		</div>
 	    </div>
 
@@ -321,7 +317,7 @@ echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1)
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('admincallout'); ?>:</div>
 				<div class="pageinput">
-					<input class="pagenb" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><?php echo lang('showbookmarks') ?>
+					<input class="pagenb" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><?php echo '<br/>'.lang('showbookmarks') ?>
 				</div>
 			</div>
 			<div class="pageoverflow">

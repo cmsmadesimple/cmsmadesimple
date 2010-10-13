@@ -355,18 +355,7 @@ if( !is_array($tmp) || count($tmp) == 0 )
 $firstmod = $tmp[0];
 $smarty->assign_by_ref('mod',$gCms->modules[$firstmod]['object']);
 
-$tmp = array(''=>lang('nodefault'));
-$nls = $gCms->nls;
-asort($nls["language"]);
-foreach( $nls['language'] as $key=>$value )
-{
-  if( isset($nls['englishlang'][$key]) )
-    {
-      $value .= ' ('.$nls['englishlang'][$key].')';
-    }
-  $tmp[$key] = $value;
-}
-$smarty->assign('languages',$tmp);
+$smarty->assign('languages',get_language_list());
 $smarty->assign('templates',$templates);
 
 $tmp = array(''=>lang('none'));

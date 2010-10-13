@@ -533,5 +533,34 @@ function is_utf8($string)
    
 } // function is_utf8
 
+function get_language_list($allow_none = true)
+{
+  $tmp = array();
+  if( $allow_none )
+    {
+      $tmp = array(''=>lang('nodefault'));
+    }
+
+  global $gCms;
+  $config = $gCms->GetConfig();
+  $nls = $gCms->nls;
+  asort($nls["language"]);
+  foreach( $nls['language'] as $key=>$value )
+    {
+      if( is_dir($config['root_path'].'/'.$config['admin_dir'].'/lang/ext'.$key) ||
+	  is_dir($config['root_path'].'/'.$config['admin_dir'].'/lang/'.$key) ||
+	  file_exists($config['root_path'].'/'.$config['admin_dir'].'/lang/'.$key.'/admin.inc.php') )
+	{
+	  if( isset($nls['englishlang'][$key]) )
+	    {
+	      $value .= ' ('.$nls['englishlang'][$key].')';
+	    }
+	  $tmp[$key] = $value;
+	}
+    }
+
+  return $tmp;
+}
+
 # vim:ts=4 sw=4 noet
 ?>

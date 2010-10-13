@@ -2152,7 +2152,8 @@ class ContentBase
 		$text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
 		$text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
 		$text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
-		return array(lang('target').':','<select name="target">'.$text.'</select>');
+		return array(lang('target').':','<select name="target">'.$text.'</select>',
+			     lang('info_target'));
 		
 	      }
 	      break;
