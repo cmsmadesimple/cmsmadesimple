@@ -818,6 +818,10 @@ class Smarty_CMS extends Smarty {
 			#We've a custom error message...  set a current timestamp
 			$tpl_timestamp = time();
 		}
+		else if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' )
+		{
+		       $tpl_timestamp = time();
+		}
 		else
 		{
 		  if ($contentobj->Cachable())
