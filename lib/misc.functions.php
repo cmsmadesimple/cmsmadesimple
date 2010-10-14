@@ -149,9 +149,9 @@ function redirect($to, $noappend=false)
 function redirect_to_alias($alias)
 {
 	global $gCms;
-	$manager =& $gCms->GetHierarchyManager();
-	$node =& $manager->sureGetNodeByAlias($alias);
-	$content =& $node->GetContent();
+	$manager = $gCms->GetHierarchyManager();
+	$node = $manager->sureGetNodeByAlias($alias);
+	$content = $node->GetContent();
 	if (isset($content))
 	{
 		if ($content->GetURL() != '')

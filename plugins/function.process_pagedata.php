@@ -18,12 +18,8 @@
 
 function smarty_cms_function_process_pagedata($params,&$smarty)
 {
-  $manager = cmsms()->GetHierarchyManager();
-  $node = $manager->getNodeById(cmsms()->get_variable('content_id'));
-  if( !isset($node) || $node === FALSE ) return;
-  $content =& $node->GetContent();
-
-  if ( empty($content)) return;
+  $content = cmsms()->get_variable('content_obj');
+  if (!is_object($content) ||  empty($content)) return;
 
   $tpl = $content->GetPropertyValue('pagedata','');
   if( empty($tpl) ) return;

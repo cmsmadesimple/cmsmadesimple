@@ -210,7 +210,19 @@ else
 	#If this is a case where a module doesn't want a template to be shown, just disable caching
         if( !$showtemplate )
 	{
-		$html = $smarty->fetch('template:notemplate') . "\n";
+	  // snarfed from process_pagedata plugin
+	  $tpl = $contentobj->GetPropertyValue('pagedata','');
+	  if( !empty($tpl) ) 
+	    {
+	      $smarty->_compile_source('preprocess template', $tpl, $_compiled);
+	      @ob_start();
+	      $smarty->_eval('?>' . $_compiled);
+	      $result = @ob_get_contents();
+	      @ob_end_clean();
+	    }
+
+	  // now parse the default content block.
+	  $html = $smarty->fetch('template:notemplate') . "\n";
 	}
 	else
 	{
