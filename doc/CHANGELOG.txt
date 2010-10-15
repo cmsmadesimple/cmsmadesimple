@@ -43,6 +43,9 @@ Core:
   - Rewrite of the reorder pages stuff to use jquery
     - People with custom admin themes may need to make changes, to ensure that the parent method for GetHeaderHTML() is called and
       possibly not override the getHeaderJavascript() method.
+ - Fixes bug with the {cms_stylesheet name='foo'} syntax.
+ - The language lists in the global settings and user settings now will be restricted to available installed languages.
+ - The process_pagedata plugin is called even when showtemplate=false is used.
  
 Theme Manager
   - Now handles attached images much better.
