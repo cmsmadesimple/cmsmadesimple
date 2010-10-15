@@ -46,6 +46,7 @@ Core:
  - Fixes bug with the {cms_stylesheet name='foo'} syntax.
  - The language lists in the global settings and user settings now will be restricted to available installed languages.
  - The process_pagedata plugin is called even when showtemplate=false is used.
+ - use_hierarchy parameter is dropped now, because the page_url stuff far surpasses it.
  
 Theme Manager
   - Now handles attached images much better.
@@ -55,6 +56,7 @@ Installer
     (may be a few addmes yet that have to be added to the core lang stuff).
   - Fixes module install stuff
   - Now asks for the timezone
+  - if use_hierarchy was false in the config.php, on upgrade the page alias will be copied to the page_url field.
 
 MenuManager
   - image and thumbnail fields now output absolute URLS.
