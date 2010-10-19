@@ -187,7 +187,7 @@ class CMSModule
 
 		if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) )
 		  {
-		    $this-SetupRoutes();
+		    $this->SetupRoutes();
 		  }
 
 		if( (!isset($CMS_ADMIN_PAGE) || isset($CMS_MODULE_PAGE)) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
