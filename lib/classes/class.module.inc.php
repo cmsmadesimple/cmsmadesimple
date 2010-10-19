@@ -185,8 +185,14 @@ class CMSModule
 		#$smarty = new CMSModuleSmarty($config, $this->GetName());
 		$this->smarty = &$gCms->GetSmarty();
 
-		if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
+		if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) )
 		  {
+		    $this-SetupRoutes();
+		  }
+
+		if( (!isset($CMS_ADMIN_PAGE) || isset($CMS_MODULE_PAGE)) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
+		  {
+		    // this gets called from module actions too.
 		    $this->SetParameterType('assign',CLEAN_STRING);
 		    $this->SetParameterType('module',CLEAN_STRING);
 		    $this->SetParameterType('lang',CLEAN_STRING);
@@ -485,7 +491,8 @@ class CMSModule
 	 * Register a route to use for pretty url parsing
 	 *
 	 * @final
-	 * @see SetParameters
+	 * @see SetupRoutes
+	 * @see cms_route_manager
 	 * @param string Regular Expression Route to register
 	 * @param array Defaults for parameters that might not be included in the url
 	 * @return void
@@ -515,6 +522,21 @@ class CMSModule
 	  return $this->params;
 	}
 
+
+	/**
+	 * Called from within the constructor, ONLY for fronend module actions.
+	 * This module should be overridden to create routes.
+	 *
+	 * @abstract
+	 * @since 1.9
+	 * @see RegisterRoute()
+	 * @return void
+	 */
+	function SetupRoutes()
+	{
+	}
+
+
 	/**
 	 * Called from within the constructor, ONLY for frontend module 
          * actions.  This method should be overridden to create routes, and
@@ -524,7 +546,6 @@ class CMSModule
 	 * @abstract
 	 * @see SetParameterType
 	 * @see CreateParameter
-	 * @see RegisterRoute
 	 * @see RestrictUnknownParams
 	 * @see RegisterModulePlugin
 	 * @return void

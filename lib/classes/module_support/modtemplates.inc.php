@@ -232,7 +232,7 @@ function cms_module_ProcessTemplateFromData(&$modinstance, $data)
 function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $designation = '', $cache = false, $modulename = '')
 {
 	global $gCms;
-	$smarty = &$gCms->GetSmarty();
+	$smarty = $gCms->GetSmarty();
 
 	$oldcache = $smarty->caching;
 	$smarty->caching = false;
