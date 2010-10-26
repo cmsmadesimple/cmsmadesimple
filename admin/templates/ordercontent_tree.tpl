@@ -1,4 +1,4 @@
-<ul class="sortableList">
+<ul class="sortableList {if $depth==1}sortable{/if}">
 {foreach from=$list item='child'}
 {strip}
   {assign var='obj' value=$child->getContent()}

@@ -21,7 +21,6 @@ if(isset( $_POST['revert'] ))
   } 
 if( isset($_POST['data']) )
   {
-
     function ordercontent_get_node_rec($str,$prefix = 'page_')
     {
       global $gCms;
@@ -72,12 +71,16 @@ if( isset($_POST['data']) )
     }
 
     $data = json_decode($_POST['data']);
+    debug_to_log('ordercontent - from ajax');
+    debug_to_log($data);
 
     // step 1, create a flat list of the content items, and their new orders, and new parents.
     $data = ordercontent_create_flatlist($data);
     array_shift($data);
+    debug_to_log('ordercontent - flat list');
+    debug_to_log($data);
 
-    // step 2. mrege in old orders, and old parents.
+    // step 2. merge in old orders, and old parents.
     global $gCms;
     $tree = $gCms->GetHierarchyManager();
     $data2 = array();
@@ -99,6 +102,9 @@ if( isset($_POST['data']) )
 	  }
       }
     
+    debug_to_log('ordercontent - after merge');
+    debug_to_log($data);
+
     // do the updates
     if( count($data2) > 0 )
       {
@@ -111,7 +117,7 @@ if( isset($_POST['data']) )
 	  }
 	$contentops =& $gCms->GetContentOperations();
 	$contentops->SetAllHierarchyPositions();
-	$contentops->ClearCache();
+	//$contentops->ClearCache();
 	return;
       }
     else

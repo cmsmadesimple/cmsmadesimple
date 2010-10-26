@@ -26,25 +26,35 @@ $('ul.sortable').nestedSortable({
 					placeholder: 'placeholder',
 					tabSize: 25,
 					tolerance: 'pointer',
-					toleranceElement: '> div'
+					toleranceElement: '> div',
+					onChange: function(){
+					  alert(' got here ');
+					}
 				});
 
      
 $(".save").click(function(){
-          var tree = $.toJSON(parseTree($('ul#content_tree')));
-          //alert(tree);
-          //return false;
-       
-    	
-    $.post(ajax_url, {data: tree}, function(res){
-           	     if( res != '' ) 
-           	     {
-           	       alert("Res is: " + res);
-                   return false;
-                   }
-                   return true;
-                  });
-        
+    var tree = $.toJSON(parseTree($('ul.sortable')));
+    var ajax_res = false;
+    //alert(tree);
+    //return false;       
+    $.ajax({
+      type: 'POST',
+      url:  ajax_url,
+      data: {data: tree},
+      cache: false,
+      async: false,
+      success: function(res) {
+         if( res != '' ) {
+           alert("Res is: " + res);
+           ajax_res = false;
+         }
+         else {
+           ajax_res = true;
+         }
+      }
+    });
+    return ajax_res;
 });//end save
 
 });//end ready
@@ -58,11 +68,14 @@ $(".save").click(function(){
 </div>
 
 <div>
-<ul id="content_tree" class="sortable">
-  <li id="page_-1"><div>&nbsp;</div>
+{*
+<ul id="content_tree">
+  <li id="page_-1" class="sortable"><div>&nbsp;</div>
   {include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1}
-  </li>
+  </li> 
 </ul>
+*}
+{include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1}
 </div>
 
 <div class="pagoeverflow">
