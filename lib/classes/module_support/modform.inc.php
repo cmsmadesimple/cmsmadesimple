@@ -52,8 +52,8 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	$goto = 'moduleinterface.php';
 	if( $returnid != '' )
 	{
-	  $hm =& $gCms->GetHierarchyManager();
-	  $node =& $hm->sureGetNodeById($returnid);
+	  $hm = $gCms->GetHierarchyManager();
+	  $node = $hm->sureGetNodeById($returnid);
 	  if( $node )
 	    {
 	      $content_obj =& $node->getContent();

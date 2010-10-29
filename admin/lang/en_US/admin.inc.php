@@ -1,4 +1,18 @@
 <?php
+$lang['admin']['help_function_browser_lang'] = <<<EOT
+<h3>What does this do?</h3>
+  <p>This plugin detects and outputs the language that the users browser accepts, and cross references it with a list of allowd languages to determine a language value for the session.</p>
+<h3>How do I use it?</h3>
+<p>Insert the tag early into your page template <em>(it can go above the &lt;head&gt; section if you want)</em> and provide it the name of the default language, and the accepted languages (only two character language names are accepted), then do something with the result.  i.e:</p>
+<pre><code>{browser_lang accept=de,fr,en,es default=en assign=tmp}{session_put var=lang val=\$tmp}</code></pre>
+<p><em>({session_put} is a plugin provided by the CGSimpleSmarty module)</em></p>
+<h3>What Parameters does it Take?</h3>
+<ul>
+<li><strong>accepted <em>(required)</em></strong><br/> - A comma separated list of two character language names that are accepted.</li>
+<li>default<br/>- <em>(optional)</em> A default language to output if no acceptad language was supported by the browser.  en is used if no other value is specified.</li>
+<li>assign<br/>- <en>(optional)</em> The name of the smarty variable to assign the results to.  If not specified the results of this function are returned.</li>
+</ul>
+EOT;
 $lang['admin']['info_target'] = 'This option may used by the Menu Manager to indicate when and how new frames or windows should be opened.  Some menu manager templates may ignore this option.'; 
 $lang['admin']['close'] = 'Close';
 $lang['admin']['revert'] = 'Revert all changes';

@@ -433,7 +433,7 @@ class Events
 	 * @return string Returns the description string for the event.  Empty string if nothing
 	 *                is found.
 	 */
-	function GetEventDescription($eventname)
+	static public function GetEventDescription($eventname)
 	{
 		return lang('event_desc_'.strtolower($eventname));
 	}

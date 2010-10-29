@@ -93,11 +93,13 @@ function smarty_cms_function_browser_lang($params, &$smarty)
 
 function smarty_cms_help_function_browser_lang()
 {
+ echo lang('help_function_browser_lang');
 }
 
 
 function smarty_cms_about_function_browser_lang()
 {
+?>
   <p>Author: Robert Campbell &lt;calguy1000@cmsmadesimple.org&gt;</p>
   <p>Version: 1.0</p>
   <p>
@@ -105,6 +107,6 @@ function smarty_cms_about_function_browser_lang()
   <ul>
    <li>Version 1.0 written for CMSMS 1.9</li>
   </ul>
-	</p>
-	<?php
+  </p>
+<?php
 }
