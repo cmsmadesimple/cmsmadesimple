@@ -85,6 +85,9 @@ function smarty_cms_modifier_cms_escape($string, $esc_type = 'html', $char_set =
            }
            return $_res;
 
+				case 'htmltiny':
+        	return str_replace("<", "&lt;", $string);
+					
         default:
             return $string;
     }
