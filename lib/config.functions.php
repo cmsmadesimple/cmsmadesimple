@@ -159,7 +159,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	}
 
 	// set use hierarchy for backward compatibility
-	$config['use_hierarchy'] = true;
+	//$config['use_hierarchy'] = true;
 
 	// adjust ssl url if not specified
 	if( !isset($config['ssl_url']) )
