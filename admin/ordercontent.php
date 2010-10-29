@@ -76,7 +76,6 @@ if( isset($_POST['data']) )
 
     // step 1, create a flat list of the content items, and their new orders, and new parents.
     $data = ordercontent_create_flatlist($data);
-    array_shift($data);
     debug_to_log('ordercontent - flat list');
     debug_to_log($data);
 
