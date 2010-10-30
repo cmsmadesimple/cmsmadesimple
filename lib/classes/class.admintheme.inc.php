@@ -626,7 +626,7 @@ class AdminTheme
      */
     function OutputHeaderJavascript()
     {
-		echo '<script type="text/javascript" src="themes/default/includes/standard.js"></script>'."\n";
+		//echo '<script type="text/javascript" src="themes/default/includes/standard.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../lib/jquery/js/jquery-1.4.2.min.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../lib/jquery/js/jquery-ui-1.8.4.custom.min.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../lib/jquery/js/jquery.ui.nestedSortable.js"></script>'."\n";
@@ -1417,7 +1417,20 @@ debug_buffer('after menu items');
 		$nls =& $gCms->nls;
     	echo (isset($nls['direction']) && $nls['direction'] == 'rtl') ? "<html dir=\"rtl\"\n>" : "<html>\n";
     }
-
+	/**
+     * ThemeHeader
+     * This method outputs the HEAD section of the html page in the admin Theme section,
+     * after OutputHeaderJavascript() and before $addt.
+     */
+	function ThemeHeader(){
+		
+		if(file_exists('themes/'. $this->themeName. '/includes/stndard.js'))
+		{
+			echo '<script type="text/javascript" src="themes/'. $this->themeName. '/includes/standard.js"></script>'."\n";
+		}else{
+			echo '<script type="text/javascript" src="themes/default/includes/standard.js"></script>'."\n";
+		}
+	}
     /**
      * DisplayHTMLHeader
      * This method outputs the HEAD section of the html page in the admin section.
@@ -1443,6 +1456,7 @@ debug_buffer('after menu items');
 ?>
 <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 <?php $this->OutputHeaderJavascript(); ?>
+<?php $this->ThemeHeader(); ?>
 <?php echo $addt ?>
 <base href="<?php echo $config['root_url'] . '/' . $config['admin_dir'] . '/'; ?>" />
 </head>
