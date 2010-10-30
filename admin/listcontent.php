@@ -703,7 +703,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
       /* alias column */
       if( $columnstodisplay['alias'] )
 	{
-	  $columns['alias'] = '&nbsp';
+	  $columns['alias'] = '&nbsp;';
 	  $txt = '';
 	  if( $one->HasUsableLink() && $one->mAlias != '' )
 	    {
@@ -715,7 +715,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
       /* url column */
       if( $columnstodisplay['url'] )
 	{
-	  $columns['url'] = '&nbsp';
+	  $columns['url'] = '&nbsp;';
 	  $txt = '';
 	  if( $one->HasUsableLink() && $one->URL() != '' )
 	    {
