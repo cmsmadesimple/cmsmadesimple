@@ -9,7 +9,7 @@ $lang['admin']['help_function_browser_lang'] = <<<EOT
 <h3>What Parameters does it Take?</h3>
 <ul>
 <li><strong>accepted <em>(required)</em></strong><br/> - A comma separated list of two character language names that are accepted.</li>
-<li>default<br/>- <em>(optional)</em> A default language to output if no acceptad language was supported by the browser.  en is used if no other value is specified.</li>
+<li>default<br/>- <em>(optional)</em> A default language to output if no accepted language was supported by the browser.  en is used if no other value is specified.</li>
 <li>assign<br/>- <em>(optional)</em> The name of the smarty variable to assign the results to.  If not specified the results of this function are returned.</li>
 </ul>
 EOT;
