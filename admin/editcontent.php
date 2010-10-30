@@ -211,15 +211,15 @@ jQuery(document).ready(function(){
     data.push({ 'name': 'ajax', 'value': 1});
     data.push({ 'name': 'apply', 'value': 1 });
     $.post('{$_SERVER['REQUEST_URI']}',data,function(resultdata,text){
-	     var resp = $(resultdata).find('Response').text();
-	     var details = $(resultdata).find('Details').text();
+	     var resp = jQuery(resultdata).find('Response').text();
+	     var details = jQuery(resultdata).find('Details').text();
              var htmlShow = '';
 	     if( resp == 'Success' )
 	       {
 		 htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
-		 $('input[name=cancel]').fadeOut();
-		 $('input[name=cancel]').attr('value','{$closestr}');
-		 $('input[name=cancel]').fadeIn();
+		 jQuery('input[name=cancel]').fadeOut();
+		 jQuery('input[name=cancel]').attr('value','{$closestr}');
+		 jQuery('input[name=cancel]').fadeIn();
 	       }
              else
                {
@@ -227,7 +227,7 @@ jQuery(document).ready(function(){
 		 htmlShow += details;
 		 htmlShow += '<\/ul><\/div>';
                }
-	     $('#Edit_Content_Result').html(htmlShow);
+	     jQuery('#Edit_Content_Result').html(htmlShow);
 	   },
 	   'xml');
     return false;
