@@ -1140,7 +1140,7 @@ function display_content_list($themeObject = null)
 	  $reorderurl = "ordercontent.php?".CMS_SECURE_PARAM_NAME."=".$_SESSION[CMS_USER_KEY];
 	  $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="'.$reorderurl.'">';
 	  $headoflist .= $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon').'</a>';
-	  $headoflist .= ' <a href="'.$reorderurl.'">'.lang('reorderpages').'</a>';
+	  $headoflist .= ' <a class="pageoptions" href="'.$reorderurl.'">'.lang('reorderpages').'</a>';
 	}
 
 	$headoflist .='</p></div>';
