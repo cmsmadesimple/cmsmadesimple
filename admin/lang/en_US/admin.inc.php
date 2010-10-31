@@ -144,9 +144,9 @@ $lang['admin']['no_permission'] = 'You have not permission to perform that funct
 $lang['admin']['bulk_success'] = 'Bulk operation was successfully updated.';
 $lang['admin']['no_bulk_performed'] = 'No bulk operation performed.';
 $lang['admin']['info_preview_notice'] = 'Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour. If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab. When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.';
-$lang['admin']['sitedownexcludes'] = 'Exclude these Addresses from Sitedown Messages';
+$lang['admin']['sitedownexcludes'] = 'Exclude these Addresses from Site Down Messages';
 $lang['admin']['info_sitedownexcludes'] = <<<EOT
-This parameter allows listing a comma separated list of ip addresses or networks that should not be subject to the sitedown mechanism.  This allows administrators to work on a site whilst anonymous visitors receive a sitedown message.<br/><br/>Addresses can be specified in the following formats:<br/>
+This parameter allows listing a comma separated list of ip addresses or networks that should not be subject to the Site Down mechanism.  This allows administrators to work on a site whilst anonymous visitors receive a Site Down message.<br/><br/>Addresses can be specified in the following formats:<br/>
 1. xxx.xxx.xxx.xxx -- (exact IP address)<br/>
 2. xxx.xxx.xxx.[yyy-zzz] -- (IP address range)<br/>
 3. xxx.xxx.xxx.xxx/nn -- (nnn = number of bits, cisco style.  i.e:  192.168.0.100/24 = entire 192.168.0 class C subnet)
