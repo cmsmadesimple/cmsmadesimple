@@ -210,7 +210,7 @@ jQuery(document).ready(function(){
     var data = jQuery('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'ajax', 'value': 1});
     data.push({ 'name': 'apply', 'value': 1 });
-    $.post('{$_SERVER['REQUEST_URI']}',data,function(resultdata,text){
+    jQuery.post('{$_SERVER['REQUEST_URI']}',data,function(resultdata,text){
 	     var resp = jQuery(resultdata).find('Response').text();
 	     var details = jQuery(resultdata).find('Details').text();
              var htmlShow = '';
