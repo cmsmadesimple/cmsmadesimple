@@ -153,7 +153,7 @@ This parameter allows listing a comma separated list of ip addresses or networks
 EOT;
 $lang['admin']['setup'] = 'Advanced Setup';
 $lang['admin']['handle_404'] = 'Custom 404 Handling';
-$lang['admin']['sitedown_settings'] = 'Sitedown Settings';
+$lang['admin']['sitedown_settings'] = 'Site Down Settings';
 $lang['admin']['general_settings'] = 'General Settings';
 $lang['admin']['help_function_page_attr'] = <<<EOT
 <h3>What does this do?</h3>
