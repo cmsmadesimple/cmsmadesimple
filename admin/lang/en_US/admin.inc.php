@@ -351,7 +351,7 @@ $lang['admin']['installed_modules'] = 'Installed Modules';
 $lang['admin']['config_information'] = 'Config Information';
 $lang['admin']['systeminfo_copy_paste'] = 'Please copy and paste this selected text into your forum posting';
 $lang['admin']['help_systeminformation'] = <<<EOT
-The information displayed below is collected from a variety of locations, and summarized here so that you may be able to conveniently find some of the information required when trying to diagnose a problem or request help with your CMS Made Simple installation.
+The information displayed below is collected from a variety of locations, and summarized here so that you may be able to conveniently find some of the information required when trying to diagnose a problem or request help with your CMS Made Simple&trade; installation.
 EOT;
 $lang['admin']['systeminfo'] = 'System Information';
 $lang['admin']['systeminfodescription'] = 'Display various pieces of information about your system that may be useful in diagnosing problems';
@@ -367,7 +367,7 @@ $lang['admin']['help_css_max_age'] = 'This parameter should be set relatively hi
 $lang['admin']['css_max_age'] = 'Maximum amount of time (seconds) stylesheets can be cached in the browser';
 $lang['admin']['error'] = 'Error';
 $lang['admin']['clear_version_check_cache'] = 'Clear any cached version check information on submit';
-$lang['admin']['new_version_available'] = '<em>Notice:</em> A new version of CMS Made Simple is available.  Please notify your administrator.';
+$lang['admin']['new_version_available'] = '<em>Notice:</em> A new version of CMS Made Simple&trade; is available.  Please notify your administrator.';
 $lang['admin']['info_urlcheckversion'] = 'If this url is the word &quot;none&quot; no checks will be made.<br/>An empty string will result in a default URL being used.';
 $lang['admin']['urlcheckversion'] = 'Check for new CMS versions using this URL';
 $lang['admin']['master_admintheme'] = 'Default Administration Theme (for the login page and new user accounts)';
@@ -1209,7 +1209,7 @@ $lang['admin']['language'] = 'Language';
 $lang['admin']['lastname'] = 'Last Name';
 $lang['admin']['logout'] = 'Logout';
 $lang['admin']['loginprompt'] = 'Enter a valid user credential to get access to the Admin Console.'; // needs translation
-$lang['admin']['logintitle'] = 'Login to CMS Made Simple'; // needs translation
+$lang['admin']['logintitle'] = 'Login to CMS Made Simple&trade;'; // needs translation
 $lang['admin']['menutext'] = 'Menu Text';
 $lang['admin']['missingparams'] = 'Some parameters were missing or invalid';
 $lang['admin']['modifygroupassignments'] = 'Modify Group Assignments';
@@ -1379,7 +1379,7 @@ $lang['admin']['stylesheets'] = 'Stylesheets'; //needs translation
 $lang['admin']['stylesheetsdescription'] = 'Stylesheet management is an advanced way to handle cascading Stylesheets (CSS) separately from templates.'; //needs translation
 $lang['admin']['filemanagerdescription'] = 'Upload and manage files.'; //needs translation
 $lang['admin']['imagemanagerdescription'] = 'Upload/edit and remove images.'; //needs translation
-$lang['admin']['moduledescription'] = 'Modules extend CMS Made Simple to provide all kinds of custom functionality.'; //needs translation
+$lang['admin']['moduledescription'] = 'Modules extend CMS Made Simple&trade; to provide all kinds of custom functionality.'; //needs translation
 $lang['admin']['tagdescription'] = 'Tags are little bits of functionality that can be added to your content and/or templates.'; //needs translation
 $lang['admin']['usertagdescription'] = 'Tags that you can create and modify yourself to perform specific tasks, right from your browser.'; //needs translation
 $lang['admin']['installdirwarning'] = '<em><strong>Warning:</strong></em> install directory still exists. Please remove it completely.'; //needs translation
