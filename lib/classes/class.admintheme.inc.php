@@ -1390,7 +1390,7 @@ debug_buffer('after menu items');
     {
 ?>
 <div id="Footer">
-<a href="http://www.cmsmadesimple.org">CMS Made Simple</a> is Free Software released under the GNU/GPL License
+<a href="http://www.cmsmadesimple.org">CMS Made Simple&trade;</a> is Free Software released under the GNU/GPL License
 </div>
 <?php
     }

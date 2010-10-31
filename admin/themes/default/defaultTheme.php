@@ -128,7 +128,7 @@ class defaultTheme extends AdminTheme
 	function DisplayFooter() {
 		global $CMS_VERSION;
 		global $CMS_VERSION_NAME;
-		echo '<p class="footer"><a class="footer" href="http://www.cmsmadesimple.org">CMS Made Simple</a> '.$CMS_VERSION.' "' . $CMS_VERSION_NAME . '"<br /><a class="footer" href="http://www.cmsmadesimple.org">CMS Made Simple</a> is free software released under the General Public Licence.</p>';
+		echo '<p class="footer"><a class="footer" href="http://www.cmsmadesimple.org">CMS Made Simple&trade;</a> '.$CMS_VERSION.' "' . $CMS_VERSION_NAME . '"<br /><a class="footer" href="http://www.cmsmadesimple.org">CMS Made Simple</a> is free software released under the General Public Licence.</p>';
 	}
 	
 	function StartRighthandColumn() {
