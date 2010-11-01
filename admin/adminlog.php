@@ -89,7 +89,7 @@ if (check_permission($userid, 'Modify Site Preferences'))
 		$page_string = pagination($page, $totalrows, $limit);
 		echo "<p class=\"pageshowrows\">".$page_string."</p>";
 		echo $themeObject->ShowHeader('adminlog').'</div>';
-		echo '<a href="adminlog.php'.$urlext.'&amp;download=1">'.lang('download').'</a>';
+		echo '<p><a href="adminlog.php'.$urlext.'&amp;download=1">'.lang('download').'</a></p>';
 
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';

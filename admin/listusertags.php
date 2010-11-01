@@ -69,7 +69,7 @@ foreach($gCms->cmsplugins as $oneplugin)
 		echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
 		echo "<td><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">$oneplugin</a></td>\n";
 		echo "<td class=\"icons_wide\"><a href=\"runuserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
-		echo $themeObject->DisplayImage('icons/system/accept.gif', lang('run_udt'), '', '', 'systemicon')."</a></td>\n";
+		echo $themeObject->DisplayImage('icons/system/run.gif', lang('run_udt'), '', '', 'systemicon')."</a></td>\n";
 		echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
 		echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 		echo "</a></td>\n";
