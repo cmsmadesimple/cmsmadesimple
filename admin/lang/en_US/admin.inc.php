@@ -69,6 +69,8 @@ $lang['admin']['help_function_content_module'] = <<<EOT
 <p>Some modules can define content block types for use in module templates.  i.e: The FrontEndUsers module may define a group list content block type.  It will then indicate how you can use the content_module tag to utilize that block type within your templates.</p>
 <p><strong>Note:</strong> This block type must be used only with compatible modules.  You should not use this in any way except for as guided by addon modules.</p>
 EOT;
+
+
 $lang['admin']['error_parsing_content_blocks'] = 'An error occurred parsing content blocks (perhaps duplicated block names)';
 $lang['admin']['error_no_default_content_block'] = 'No default content block was detected in this template.  Please ensure that you have a {content} tag in the page template.';
 $lang['admin']['help_function_cms_stylesheet'] = <<<EOT
@@ -807,6 +809,21 @@ $lang['admin']['help_function_content'] = <<<EOT
 </pre>
 </li>
 	</ul>
+EOT;
+
+$lang['admin']['help_function_contact_form'] = <<<EOT
+  <h2>NOTE: This plugin is deprecated</h2>
+  <h3>This plugin has been removed as of CMS made simple version 1.5</h3>
+  <p>You can use the module FormBuilder instead.</p>
+EOT;
+
+$lang['admin']['help_function_cms_versionname'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>This tag is used to insert the current version name of CMS into your template or page.  It doesn't display any extra besides the version name.</p>
+	<h3>How do I use it?</h3>
+	<p>This is just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_versionname}</code>
+	<h3>What parameters does it take?</h3>
+	<p>It takes no parameters.</p>
 EOT;
 
 $lang['admin']['help_function_cms_version'] = <<<EOT
