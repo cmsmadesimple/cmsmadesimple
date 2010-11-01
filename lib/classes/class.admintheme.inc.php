@@ -498,6 +498,7 @@ class AdminTheme
     {
       if (get_preference($this->userid, 'bookmarks')) {
 	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+	echo "<div class=\"sections\">\n";
 	echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
 	echo '<div class="itemoverflow">';
 	echo '<h2>'.lang('bookmarks').'</h2>';
@@ -1418,6 +1419,7 @@ debug_buffer('after menu items');
     	echo (isset($nls['direction']) && $nls['direction'] == 'rtl') ? "<html dir=\"rtl\"\n>" : "<html>\n";
     }
 	/**
+	 * @since 1.9
      * ThemeHeader
      * This method outputs the HEAD section of the html page in the admin Theme section,
      * after OutputHeaderJavascript() and before $addt.
@@ -1513,7 +1515,10 @@ debug_buffer('after menu items');
      */
     function DisplaySectionMenuDivEnd()
     {
-        echo "</div>\n";
+        echo "</div><!-- END .MainMenu-->\n";
+		if (get_preference($this->userid, 'bookmarks')) {
+			echo "</div><!-- END .sections-->\n";
+		}
     }
 
 
