@@ -1,4 +1,4 @@
-<div class="reorder-pages">
+
 <ul class="sortableList {if $depth==1}sortable{/if}">
 {foreach from=$list item='child'}
 {strip}
@@ -11,4 +11,3 @@
 {/strip}
 {/foreach}
 </ul>
-</div>

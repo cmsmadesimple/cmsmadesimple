@@ -67,14 +67,7 @@ $(".save").click(function(){
  <input type="submit" name="revert" value="{'revert'|lang}"/>
 </div>
 
-<div>
-{*
-<ul id="content_tree">
-  <li id="page_-1" class="sortable"><div>&nbsp;</div>
-  {include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1}
-  </li> 
-</ul>
-*}
+<div class="reorder-pages">
 {include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1}
 </div>
 
