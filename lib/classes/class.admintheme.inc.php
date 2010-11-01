@@ -706,7 +706,7 @@ debug_buffer('before menu items');
 //	    'dashboard'=>array('url'=>'dashboard.php','parent'=>'main',
 //			       'title'=>$this->FixSpaces(lang('dashboard')),
 //			       'description'=>'','show_in_menu'=>true),
-            'viewsite'=>array('url'=>'../index.php','parent'=>'main',
+            'viewsite'=>array('url'=>$this->_viewsite_url,'parent'=>'main',
 			      'title'=>$this->FixSpaces(lang('viewsite')),
 			      'type'=>'external',
                     'description'=>'','show_in_menu'=>true, 'target'=>'_blank'),
