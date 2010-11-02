@@ -94,7 +94,7 @@ include_once("header.php");
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="addbookmark.php<? echo $urlext ?>">
+			<a href="addbookmark.php<?php echo $urlext ?>">
 				<?php 
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addbookmark'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="addbookmark.php'.$urlext.'">'.lang("addbookmark");
