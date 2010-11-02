@@ -36,12 +36,17 @@ class cms_config implements ArrayAccess
 
   public function offsetGet($key)
   {
+    if( !isset($this->_data[$key]) )
+      {
+	if( $this->_data['debug'] == true )
+	  trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
+	return;
+      }
     return $this->_data[$key];
   }
 
   public function offsetSet($key,$value)
   {
-    stack_trace();
     trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
     $this->_data[$key] = $value;
   }

@@ -47,6 +47,8 @@ Core:
  - The language lists in the global settings and user settings now will be restricted to available installed languages.
  - The process_pagedata plugin is called even when showtemplate=false is used.
  - use_hierarchy parameter is dropped now, because the page_url stuff far surpasses it.
+ - Many improvements to themes
+ - Images and logos with Trademarks are now used.
  
 Theme Manager
   - Now handles attached images much better.

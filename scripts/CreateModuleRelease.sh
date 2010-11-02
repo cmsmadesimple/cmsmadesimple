@@ -163,10 +163,24 @@ if [ $_yes = 0 ]; then
   exit 0;
 fi
 
+_vc_type=''
+if [ -d .svn ]; then
+  _vc_type='svn'
+elif [ -d .git ]; then
+  if [ -d .git/svn ]; then
+    _vc_type='gitsvn'
+  fi
+fi
+
 # do an svn update
-if [ $_svn = 1 -a -d .svn ]; then
-  echo "Performing svn update"
-  svn update >/dev/null 2>&1
+if [ $_svn = 1 -a ${_vc_type:-bad} != 'bad' ]; then
+  if [ $_vc_type = 'gitsvn' ]; then
+    echo "Performing git-svn rebase"
+    git svn rebase
+  else
+    echo "Performing svn update"
+    svn update >/dev/null 2>&1
+  fi
 fi
 
 # create dummy index.html files in each directory
@@ -178,19 +192,29 @@ fi
 #done
 
 # do an svn tag command
-if [ $_tag = 1 -a -d .svn ]; then
-   _t1=`svn info`
-   _repo=`svn info | grep 'Root\:' | cut -d' ' -f3-`
-   _newtag=${_repo}/tags/v${_version}
+if [ $_tag = 1 -a ${_vc_type:-bad} != 'bad' ]; then
+   _newtag=''
+   if [ ${_vc_type:-bad} = 'svn' ]; then
+     _repo=`svn info | grep 'Root\:' | cut -d' ' -f3-`
+     _newtag=${_repo}/tags/v${_version}
+   else
+     _repo=`git svn info | grep 'Root\:' | cut -d' ' -f3-`
+     _newtag="v${_version}"
+   fi
    echo -n "Do you want to create a tag at: ${_newtag} (Y/n)?"
    read _ans
    if [ ${_ans:-ns} = ns ]; then
      _ans=y
    fi
    if [ "$_ans" = 'y' -o "$_ans" = 'Y' -o "$_ans" = 'YES' -o "$_ans" = 'yes' ]; then
-     echo "Performiong svn tag";
      _msg="${_name} version ${_version}"
-     svn copy -m "{$_msg}" . ${_newtag}
+     if [ ${_vc_type:-bad} = 'svn' ]; then
+       echo "Performiong svn tag";
+       svn copy -m "${_msg}" . ${_newtag}
+     else
+       echo "Performiong git svn branch";
+       git svn branch -t -m "${_msg}" ${_newtag} .
+     fi
    fi   
 fi
 
