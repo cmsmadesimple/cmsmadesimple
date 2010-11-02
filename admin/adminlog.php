@@ -89,7 +89,13 @@ if (check_permission($userid, 'Modify Site Preferences'))
 		$page_string = pagination($page, $totalrows, $limit);
 		echo "<p class=\"pageshowrows\">".$page_string."</p>";
 		echo $themeObject->ShowHeader('adminlog').'</div>';
-		echo '<p><a href="adminlog.php'.$urlext.'&amp;download=1">'.lang('download').'</a></p>';
+		echo '<div class="pageoptions">';
+		echo '<p class="pageoptions">';
+		echo '<a href="adminlog.php'.$urlext.'&amp;download=1">';
+		echo $themeObject->DisplayImage('icons/system/attachment.gif', lang('download'),'','','systemicon').'</a>';
+		echo '<a class="pageoptions" href="adminlog.php'.$urlext.'&amp;download=1">'.lang('download').'</a>';
+		echo '</p>';
+		echo '</div>';
 
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
