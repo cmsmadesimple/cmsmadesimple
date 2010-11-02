@@ -143,7 +143,7 @@ class Content extends ContentBase
 	  $this->parse_content_blocks();
 	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
-	      $this->AddExtraProperty($blockName);
+	      $this->AddExtraProperty($blockInfo['id']);
 	      $parameters[] = $blockInfo['id'];
 
 	      if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
@@ -259,7 +259,7 @@ class Content extends ContentBase
 
 	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
-	      $this->AddExtraProperty($blockName);
+  		  $this->AddExtraProperty($blockInfo['id']);
 	      $parameters[] = $blockInfo['id'];
 	    }
 
