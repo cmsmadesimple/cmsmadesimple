@@ -27,9 +27,6 @@ $('ul.sortable').nestedSortable({
 					tabSize: 25,
 					tolerance: 'pointer',
 					toleranceElement: '> div',
-					onChange: function(){
-					  alert(' got here ');
-					}
 				});
 
      
