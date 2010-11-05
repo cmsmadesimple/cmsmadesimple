@@ -47,8 +47,8 @@
 						</div>
 						<div class="login-fields">
 							<form method="post" action="login.php">
-								<p class="lbpass"><input id="lbpassword"  name="password" type="password" size="15" /></p>
-								<p class="lbpass"><input id="lbpasswordagain"  name="passwordagain" type="password" size="15" /></p>
+								<p class="lbpass"><input id="lbpassword"  name="password" alt="password" type="password" size="15" /></p>
+								<p class="lbpass"><input id="lbpasswordagain"  name="passwordagain" alt="password again" type="password" size="15" /></p>
 								<input type="hidden" name="changepwhash" value="<?php echo $changepwhash ?>" />
 								<input type="hidden" name="forgotpwchangeform" value="1" />
 								<input class="lbsubmit" name="loginsubmit" type="submit" value="<?php echo lang('submit')?>" /> 
@@ -62,7 +62,7 @@
 						</div>
 						<div class="login-fields">
 							<form method="post" action="login.php">
-								<input id="lbusername" name="forgottenusername" <?php if(!isset($_POST['username'])) echo 'class="defaultfocus"' ?> type="text" size="15" value="" /><br />
+								<input id="lbusername" alt="username" name="forgottenusername" <?php if(!isset($_POST['username'])) echo 'class="defaultfocus"' ?> type="text" size="15" value="" /><br />
 								<input type="hidden" name="forgotpwform" value="1" />
 								<input class="lbsubmit" name="loginsubmit" type="submit" value="<?php echo lang('submit')?>" /> 
 								<input class="lbsubmit" name="logincancel" type="submit" value="<?php echo lang('cancel')?>" />
@@ -76,11 +76,11 @@
 				<div class="lbinput">
 					<form method="post" action="login.php">
 						<p>
-							<input name="username" <?php if(!isset($_POST['username'])) echo 'class="defaultfocus"' ?> type="text" size="15" value="<?php echo htmlentities(isset($_POST['username'])?$_POST['username']:'')?>" /><br />
+							<input name="username" alt="username" <?php if(!isset($_POST['username'])) echo 'class="defaultfocus"' ?> type="text" size="15" value="<?php echo htmlentities(isset($_POST['username'])?$_POST['username']:'')?>" /><br />
 						<?php if(isset($error) && $error!='') {
-						  echo '<input class="lbpassword defaultfocus" name="password" type="password" size="15" /><br />';
+						  echo '<input class="lbpassword defaultfocus" alt="password" name="password" type="password" size="15" /><br />';
 						} else {
-						  echo '<input class="lbpassword" name="password" type="password" size="15" /><br />';
+						  echo '<input class="lbpassword" name="password" alt="password" type="password" size="15" /><br />';
 						} ?>
 							<input class="lbsubmit" name="loginsubmit" type="submit" value="<?php echo lang('submit')?>" /> 
 							<input class="lbsubmit" name="logincancel" type="submit" value="<?php echo lang('cancel')?>" />
