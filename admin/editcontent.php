@@ -194,7 +194,7 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 		continue;
 	}
 
-	if ($module['object']->WYSIWYGActive() or get_preference(get_userid(), 'wysiwyg') == $module['object']->GetName())
+	if (!$contentobj->GetPropertyValue('disable_wysiwyg') && ($module['object']->WYSIWYGActive() or get_preference(get_userid(), 'wysiwyg') == $module['object']->GetName()))
 	{
 		$addlScriptSubmit .= $module['object']->WYSIWYGPageFormSubmit();
 	}
