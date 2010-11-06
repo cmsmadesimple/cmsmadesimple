@@ -191,7 +191,7 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 		continue;
 	}
 
-	if ($use_wysiwyg && ($module['object']->WYSIWYGActive() or get_preference(get_userid(), 'wysiwyg') == $module['object']->GetName()))
+	if (($gcb_wysiwyg && $use_wysiwyg) && ($module['object']->WYSIWYGActive() or get_preference(get_userid(), 'wysiwyg') == $module['object']->GetName()))
 	{
 		$addlScriptSubmit .= $module['object']->WYSIWYGPageFormSubmit();
 	}
@@ -333,9 +333,11 @@ else
 			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
 		</div>
                 <div class="pageoverflow">
+			<?php if (get_site_preference('nogcbwysiwyg','0') == '0') { ?>
 		      <p class="pagetext"><?php echo lang('use_wysiwyg') ?>:</p>
 						      <p class="pagetext"><input type="hidden" name="use_wysiwyg" value="0"/><input type="checkbox" name="use_wysiwyg" onclick="this.form.submit();" value="1" <?php if($use_wysiwyg) echo ' checked="checked"' ?>/></p>
-                </div>						      
+                </div>					
+			<?php } ?>      
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
 			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg && $use_wysiwyg, $content, 'content', 'wysiwyg', 'content');?></p>
