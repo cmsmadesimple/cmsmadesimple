@@ -40,16 +40,15 @@ Core:
     In later versions we will replace this notice with an error.
   - Replace the $gCms->variables array with an object.  Now only specific variables can be set without generating a notice.
     In later versions we will replace this notice with an error.
-  - Rewrite of the reorder pages stuff to use jquery
-    - People with custom admin themes may need to make changes, to ensure that the parent method for GetHeaderHTML() is called and
-      possibly not override the getHeaderJavascript() method.
- - Fixes bug with the {cms_stylesheet name='foo'} syntax.
+  - Rewrite of the reorder pages stuff to use jquery.  Re-ordering is now completely flexible.
+  - Fixes bug with the {cms_stylesheet name='foo'} syntax.
  - The language lists in the global settings and user settings now will be restricted to available installed languages.
  - The process_pagedata plugin is called even when showtemplate=false is used.
  - use_hierarchy parameter is dropped now, because the page_url stuff far surpasses it.
  - Many minor changes to the themes.
  - An overhaul to the NCleanGrey admin theme... Many thanks to Nuno Costa for this great improvement.
  - Images and logos with Trademarks are now used.
+ - The cms_selflink tag has been improved and is now translatable.
  
 Theme Manager
   - Now handles attached images much better.
@@ -60,6 +59,7 @@ Installer
   - Fixes module install stuff
   - Now asks for the timezone
   - if use_hierarchy was false in the config.php, on upgrade the page alias will be copied to the page_url field.
+  - Now attempt to silently create the config.php on install.  For 90% of installations on well configured hosts, this SHOULD fail... but it may be useful to somebody.
 
 MenuManager
   - image and thumbnail fields now output absolute URLS.
