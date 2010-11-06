@@ -17,7 +17,6 @@ $lang['admin']['info_target'] = 'This option may used by the Menu Manager to ind
 $lang['admin']['close'] = 'Close';
 $lang['admin']['revert'] = 'Revert all changes';
 $lang['admin']['autoclearcache2'] = 'Remove cache files that are older than the specified number of days';
-$lang['admin']['nothingtodo'] = 'No changes were made!';
 $lang['admin']['root'] = 'Root';
 $lang['admin']['info_content_autocreate_flaturls'] = 'If enabled, all urls will be created as a copy of the page alias (but not synchronized to the page alias)';
 $lang['admin']['content_autocreate_flaturls'] = 'Automatically created URL\'s are flat';
