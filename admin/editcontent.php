@@ -201,10 +201,22 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 }
 
 $closestr = cms_html_entity_decode(lang('close'));
+$cancelstr = cms_html_entity_decode(lang('confirmcancel'));
 $headtext .= <<<EOSCRIPT
 <script type="text/javascript">
 // <![CDATA[
-jQuery(document).ready(function(){  
+jQuery(document).ready(function(){ 
+  jQuery('input[name=cancel]').click(function(){
+    var tmp = jQuery(this).val();
+    if( tmp == '{$closestr}' )
+      {
+	return true;
+      }
+    else
+      {
+	return confirm('{$cancelstr}');
+      }
+  });
   jQuery('input[name=apply]').click(function(){
     $addlScriptSubmit
     var data = jQuery('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
@@ -347,7 +359,7 @@ if (isset($contentobj->mPreview) && $contentobj->mPreview == true)
     $submit_buttons .= ' <input type="submit" name="previewbutton" value="'.lang('preview').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('previewdescription').'" onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;" />';
   }
 */
-$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
+$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
 $submit_buttons .= ' <input type="submit" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
  if( $contentobj->IsViewable() && $contentobj->Active() ) {
    $submit_buttons .= ' <a rel="external" href="'.$contentobj->GetURL().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
