@@ -33,8 +33,6 @@ $('ul.sortable').nestedSortable({
 $(".save").click(function(){
     var tree = $.toJSON(parseTree($('ul.sortable')));
     var ajax_res = false;
-    //alert(tree);
-    //return false;       
     $.ajax({
       type: 'POST',
       url:  ajax_url,
@@ -42,13 +40,7 @@ $(".save").click(function(){
       cache: false,
       async: false,
       success: function(res) {
-         if( res != '' ) {
-           alert("Res is: " + res);
-           ajax_res = false;
-         }
-         else {
-           ajax_res = true;
-         }
+         ajax_res = true;
       }
     });
     return ajax_res;
