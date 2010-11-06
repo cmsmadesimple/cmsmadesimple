@@ -1,4 +1,4 @@
-Version 1.9
+Version 1.9 - Bora Bora
 -----------------------------
 Core:
   - Adds support for custom urls for each content page.
@@ -47,7 +47,8 @@ Core:
  - The language lists in the global settings and user settings now will be restricted to available installed languages.
  - The process_pagedata plugin is called even when showtemplate=false is used.
  - use_hierarchy parameter is dropped now, because the page_url stuff far surpasses it.
- - Many improvements to themes
+ - Many minor changes to the themes.
+ - An overhaul to the NCleanGrey admin theme... Many thanks to Nuno Costa for this great improvement.
  - Images and logos with Trademarks are now used.
  
 Theme Manager
