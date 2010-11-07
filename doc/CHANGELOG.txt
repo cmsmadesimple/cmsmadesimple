@@ -5,7 +5,6 @@ Core:
     * URLS can be auto created from the page hierarchy, or a custom string
       entered.  The system checks for duplicate URLS.
     * The url mechanism works in addition to the existing alias generated urls
-  - A new config option 'auto_create_url' determines how page urls are  determined (if at all).
   - Add support for a description and a wysiwyg toggle for global content blocks.
   - Adds titles and a little bit of customization to the listcontent screen
   - Adds the ability to 'run' a UDT from within the admin interface.

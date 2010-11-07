@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.9-beta1";
+$CMS_VERSION = "1.9";
 $CMS_VERSION_NAME = "Bora Bora";
 $CMS_SCHEMA_VERSION = "34";
 
