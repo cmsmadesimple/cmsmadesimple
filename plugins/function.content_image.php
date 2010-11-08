@@ -21,7 +21,7 @@ function smarty_cms_function_content_image($params,&$smarty)
   global $gCms;
   $config = $gCms->GetConfig();
   $contentobj = $gCms->variables['content_obj'];
-  if( !is_object($contentobj) || !$contentobj->Id() <= 0 )
+  if( !is_object($contentobj) || $contentobj->Id() <= 0 )
     {
       return _smarty_cms_function_content_return('', $params, $smarty);
     }
