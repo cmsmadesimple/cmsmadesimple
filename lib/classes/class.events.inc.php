@@ -103,6 +103,9 @@ class Events
 	 */
 	static public function SendEvent( $modulename, $eventname, $params = array() )
 	{
+		global $CMS_INSTALL_PAGE;
+		if( isset($CMS_INSTALL_PAGE) ) return;
+
 		global $gCms;
 		$usertagops =& $gCms->GetUserTagOperations();
 
