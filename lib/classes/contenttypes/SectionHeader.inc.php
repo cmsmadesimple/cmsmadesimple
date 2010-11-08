@@ -58,9 +58,14 @@ class SectionHeader extends ContentBase
 
     function HasUsableLink()
     {
-	return false;
+		return false;
     }
 
+
+	function RequiresAlias()
+	{
+		return FALSE;
+	}
 
     function TabNames()
     {

@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.9";
-$CMS_VERSION_NAME = "Bora Bora";
+$CMS_VERSION = "1.9.1";
+$CMS_VERSION_NAME = "Toopua";
 $CMS_SCHEMA_VERSION = "34";
 
 define('CMS_VERSION', $CMS_VERSION);

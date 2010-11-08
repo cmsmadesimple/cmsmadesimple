@@ -672,7 +672,7 @@ class Content extends ContentBase
       case 'template':
 	{
 	  $templateops =& $gCms->GetTemplateOperations();
-	  return array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"'));
+	  return array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.Edit_Content.submit()"'));
 	}
 	break;
 	

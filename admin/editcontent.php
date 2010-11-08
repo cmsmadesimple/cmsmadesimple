@@ -339,7 +339,7 @@ else
 		?>
 	</div>
 	<div style="clear: both;"></div>
-	<form method="post" name="Edit_Content" id="Edit_Content" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" ##FORMSUBMITSTUFFGOESHERE##>
+	<form method="post" name="Edit_Content" id="Edit_Content" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" ##FORMSUBMITSTUFFGOESHERE##>
 <div>
   <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
   <input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
@@ -353,12 +353,6 @@ $submit_buttons = '<div class="pageoverflow">
 <p class="pagetext">&nbsp;</p>
 <p class="pageinput">
  <input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('submitdescription').'" />';
-/* tsw - 7.5.2007
-if (isset($contentobj->mPreview) && $contentobj->mPreview == true)
-  {
-    $submit_buttons .= ' <input type="submit" name="previewbutton" value="'.lang('preview').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('previewdescription').'" onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;" />';
-  }
-*/
 $submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
 $submit_buttons .= ' <input type="submit" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
  if( $contentobj->IsViewable() && $contentobj->Active() ) {
