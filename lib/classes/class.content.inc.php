@@ -1581,11 +1581,11 @@ class ContentBase
 
       // alias
       $tmp = '';
-      if (isset($params['alias']))
+      if( isset($params['alias']) )
 	{
 	  $tmp = trim($params['alias']);
-	  $this->SetAlias($tmp);
 	}
+      $this->SetAlias($tmp);
 
       // target
       if (isset($params['target']))
