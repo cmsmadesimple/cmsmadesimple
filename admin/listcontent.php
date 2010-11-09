@@ -1121,7 +1121,7 @@ function display_content_list($themeObject = null)
 	$headoflist = '';
 
 	$headoflist .= '<div class="pageoverflow"><p class="pageoptions">';
-	if ((check_permission($userid, 'Add Pages') && count($mypages)) || check_permission($userid,'Manage All Content'))
+	if (check_permission($userid, 'Add Pages') || check_permission($userid,'Manage All Content'))
 	{
 	  $headoflist .=  '<a href="addcontent.php'.$urlext.'" class="pageoptions">';
 	  $headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
@@ -1260,7 +1260,7 @@ function display_content_list($themeObject = null)
 ?>
 			<div style="float: left;">
 <?php
-	if ((check_permission($userid, 'Add Pages') && count($mypages)) || check_permission($userid,'Manage All Content'))
+	if (check_permission($userid, 'Add Pages')|| check_permission($userid,'Manage All Content'))
 	{
 ?>
 			<a href="addcontent.php<?php echo $urlext ?>" class="pageoptions">
