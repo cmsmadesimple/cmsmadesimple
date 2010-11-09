@@ -247,6 +247,7 @@ if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PA
 }
 
 #Load all installed module code
+debug_buffer('','Loading Modules');
 if (! isset($CMS_INSTALL_PAGE))
   {
     $modload =& cmsms()->GetModuleLoader();

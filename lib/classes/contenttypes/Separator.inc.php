@@ -47,6 +47,7 @@ class Separator extends ContentBase
       $this->RemoveProperty('accesskey','');
       $this->RemoveProperty('titleattribute','');
       $this->RemoveProperty('cachable',true);
+	  $this->RemoveProperty('page_url','');
     }
 
     function FriendlyName()

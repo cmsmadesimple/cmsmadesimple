@@ -619,8 +619,14 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 
 	if (function_exists('memory_get_usage'))
 	{
-		$titleText .= ' - ('.memory_get_usage().')';
+		$titleText .= ' - (usage: '.memory_get_usage().')';
 	}
+
+	$memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():'');
+	if( $memory_peak )
+	  {
+	    $titleText .= ' - (peak: '.$memory_peak.')';
+	  }
 
 	ob_start();
 	if ($use_html)
