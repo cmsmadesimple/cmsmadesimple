@@ -379,7 +379,7 @@ function check_ownership($userid, $contentid = '', $strict = false)
 
 		while ($result && !$result->EOF)
 		{
-			$variables['ownerpages'][] =& $result->fields['content_id'];
+			$variables['ownerpages'][] = $result->fields['content_id'];
 			$result->MoveNext();
 		}
 		

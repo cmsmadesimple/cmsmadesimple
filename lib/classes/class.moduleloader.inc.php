@@ -80,6 +80,7 @@ class ModuleLoader
 			{
 				if (class_exists($onemodule))
 				{
+					debug_buffer('',"Instantiate: $onemodule");
 					$newmodule = new $onemodule;
 					$name = $newmodule->GetName();
 					$cmsmodules[$name]['object'] = $newmodule;
@@ -140,6 +141,7 @@ class ModuleLoader
 									include_once("$dir/$modulename/$modulename.module.php");
 									if (class_exists($modulename))
 									{
+										debug_buffer('',"Instantiate: $modulename");
 										$newmodule = new $modulename;
 										$name = $newmodule->GetName();
 
