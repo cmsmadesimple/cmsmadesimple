@@ -745,6 +745,8 @@ $lang['admin']['help_function_embed'] = <<<EOT
         </ul>
 EOT;
 $lang['admin']['help_function_edit'] = <<<EOT
+        <h3 style="color: red;">This plugin is Deprecated</h3>
+        <p>Since 1.9 this function has been deprecated and will be removed from distribution at a later date</p>
 	<h3>What does this do?</h3>
 	<p>Creates a link to edit the page</p>
 	<h3>How do I use it?</h3>

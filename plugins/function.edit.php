@@ -20,7 +20,7 @@ function smarty_cms_function_edit($params, &$smarty)
 {
 	global $gCms;
 
-	if (!check_permission(get_userid(false), 'Modify Any Page')
+	if (!check_permission(get_userid(false), 'Manage All Content')
 	    && !quick_check_authorship($gCms->variables['content_id'],
 				       author_pages(get_userid(false))))
 	  return;
