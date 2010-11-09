@@ -372,17 +372,18 @@ function check_ownership($userid, $contentid = '', $strict = false)
 		$db =& $gCms->GetDb();
 
 		$variables = &$gCms->variables;
-		$variables['ownerpages'] = array();
+		$tmpa = array();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
 		$result = &$db->Execute($query, array($userid));
 
 		while ($result && !$result->EOF)
 		{
-			$variables['ownerpages'][] = $result->fields['content_id'];
+			$tmpa[] = $result->fields['content_id'];
 			$result->MoveNext();
 		}
-		
+		$gCms->variables['ownerpages'] = $tmpa;
+
 		if ($result) $result->Close();
 	}
 
