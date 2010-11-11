@@ -26,8 +26,8 @@ function smarty_cms_function_page_image($params, &$smarty)
       $propname = 'thumbnail';
     }
 
-  global $gCms;
-  $content_obj = &$gCms->variables['content_obj'];
+  $gCms=cmsms();
+  $contentobj = &cms_utils::get_current_content();
   if( is_object($contentobj) )
     {
       $result = $contentobj->GetPropertyValue($propname);
@@ -54,7 +54,7 @@ function smarty_cms_about_function_page_image() {
 	<p>Version: 1.0</p>
 	<p>
 	Change History:<br/>
-	None
+	1.01, Fix for CMSMS 1.9
 	</p>
 	<?php
 }
