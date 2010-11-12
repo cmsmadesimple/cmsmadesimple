@@ -72,6 +72,8 @@ function smarty_cms_function_content_image($params,&$smarty)
   if( isset($params['height']) ) $height = $params['height'];
   if( isset($params['urlonly']) ) $urlonly = true;
 
+  if( !isset($params['alt']) ) $alt = $params['block'];
+  
   if( $urlonly ) return $img;
   $out = '<img src="'.$img.'" ';
   if( !empty($name) )
