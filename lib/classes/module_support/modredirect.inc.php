@@ -85,7 +85,7 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
 		//$text .= 'index.php';
 
 		$parts = parse_url($text);
-		if( isset($parts['path']) && strpos($parts['path'],'?') !== FALSE )
+		if( isset($parts['query']) && strpos($parts['query'],'?') !== FALSE )
 		{
 			$text .= '&';
 		}
