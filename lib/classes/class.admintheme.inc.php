@@ -872,7 +872,7 @@ debug_buffer('after menu items');
 
 
 	// slightly cleaner syntax
-	$this->menuItems['ecommerce'] = array('url'=>'topecomm','parent'=>-1,
+	$this->menuItems['ecommerce'] = array('url'=>'topecomm.php','parent'=>-1,
 					      'title'=>$this->FixSpaces(lang('ecommerce')),
 					      'description'=>lang('ecommerce_desc'),
 					      'show_in_menu'=>true);
