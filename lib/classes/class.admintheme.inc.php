@@ -872,7 +872,7 @@ debug_buffer('after menu items');
 
 
 	// slightly cleaner syntax
-	$this->menuItems['ecommerce'] = array('url'=>'topadmin.php?section=ecommerce','parent'=>-1,
+	$this->menuItems['ecommerce'] = array('url'=>'topecomm','parent'=>-1,
 					      'title'=>$this->FixSpaces(lang('ecommerce')),
 					      'description'=>lang('ecommerce_desc'),
 					      'show_in_menu'=>true);
@@ -1016,60 +1016,61 @@ debug_buffer('after menu items');
 
 	// resolve the tree to be doubly-linked,
 	// and make sure the selections are selected            
-        foreach ($this->menuItems as $sectionKey=>$sectionArray)
+	foreach ($this->menuItems as $sectionKey=>$sectionArray)
 	  {
-            // link the children to the parents; a little clumsy since we can't
-            // assume php5-style references in a foreach.
-            $this->menuItems[$sectionKey]['children'] = array();
-            foreach ($this->menuItems as $subsectionKey=>$subsectionArray)
-	      {
-            	if ($subsectionArray['parent'] == $sectionKey)
-		  {
-		    $this->menuItems[$sectionKey]['children'][] = $subsectionKey;
-		  }
-	      }
-            // set selected
-	    if ($this->script == 'moduleinterface.php')
-	      {
-                $a = preg_match('/(module|mact)=([^&,]+)/',$this->query,$matches);
-                if ($a > 0 && $matches[2] == $sectionKey)
-		  {
-		    $this->menuItems[$sectionKey]['selected'] = true;
-		    $this->title .= $sectionArray['title'];
-		    if ($sectionArray['parent'] != -1)
-		      {
-			$parent = $sectionArray['parent'];
-			while ($parent != -1)
+		  // link the children to the parents; a little clumsy since we can't
+		  // assume php5-style references in a foreach.
+		  $this->menuItems[$sectionKey]['children'] = array();
+		  foreach ($this->menuItems as $subsectionKey=>$subsectionArray)
 			  {
-			    $this->menuItems[$parent]['selected'] = true;
-			    $parent = $this->menuItems[$parent]['parent'];
+				  if ($subsectionArray['parent'] == $sectionKey)
+					  {
+						  $this->menuItems[$sectionKey]['children'][] = $subsectionKey;
+					  }
 			  }
-		      }
-		  }
-		else
-		  {
-		    $this->menuItems[$sectionKey]['selected'] = false;
-		  }
-	      }
-            else if (strstr($sectionArray['url'],$this->script) !== FALSE &&
-		     (!isset($sectionArray['type']) || $sectionArray['type'] != 'external'))
-	      {
-            	$this->menuItems[$sectionKey]['selected'] = true;
-            	$this->title .= $sectionArray['title'];
-            	if ($sectionArray['parent'] != -1)
-		  {
-		    $parent = $sectionArray['parent'];
-		    while ($parent != -1)
-		      {
-			$this->menuItems[$parent]['selected'] = true;
-			$parent = $this->menuItems[$parent]['parent'];
-		      }
-		  }
-	      }
-            else
-	      {
-            	$this->menuItems[$sectionKey]['selected'] = false;
-	      }
+
+		  // set selected
+		  if ($this->script == 'moduleinterface.php')
+			  {
+				  $a = preg_match('/(module|mact)=([^&,]+)/',$this->query,$matches);
+				  if ($a > 0 && $matches[2] == $sectionKey)
+					  {
+						  $this->menuItems[$sectionKey]['selected'] = true;
+						  $this->title .= $sectionArray['title'];
+						  if ($sectionArray['parent'] != -1)
+							  {
+								  $parent = $sectionArray['parent'];
+								  while ($parent != -1)
+									  {
+										  $this->menuItems[$parent]['selected'] = true;
+										  $parent = $this->menuItems[$parent]['parent'];
+									  }
+							  }
+					  }
+				  else
+					  {
+						  $this->menuItems[$sectionKey]['selected'] = false;
+					  }
+			  }
+		  else if (strstr($sectionArray['url'],$this->script) !== FALSE &&
+				   (!isset($sectionArray['type']) || $sectionArray['type'] != 'external'))
+			  {
+				  $this->menuItems[$sectionKey]['selected'] = true;
+				  $this->title .= $sectionArray['title'];
+				  if ($sectionArray['parent'] != -1)
+					  {
+						  $parent = $sectionArray['parent'];
+						  while ($parent != -1)
+							  {
+								  $this->menuItems[$parent]['selected'] = true;
+								  $parent = $this->menuItems[$parent]['parent'];
+							  }
+					  }
+			  }
+		  else
+			  {
+				  $this->menuItems[$sectionKey]['selected'] = false;
+			  }
 	  }
 	// fix subtitle, if any
 	if ($subtitle != '')
