@@ -83,20 +83,32 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
 		}
 		$text .= $content->GetURL();
 		//$text .= 'index.php';
+
+		$parts = parse_url($text);
+		if( isset($parts['path']) && strpos($parts['path'],'?') !== FALSE )
+		{
+			$text .= '&';
+		}
+		else
+		{
+			$text .= '?';
+		}		
 	}
 	else
 	{
-		$text .= 'moduleinterface.php';
+		$text .= 'moduleinterface.php?';
 	}
-	$text .= '?mact='.$name.','.$id.','.$action.','.($inline == true?1:0);
+
+	$text .= 'mact='.$name.','.$id.','.$action.','.($inline == true?1:0);
 	if ($returnid != '')
 	{
 		$text .= '&'.$id.'returnid='.$returnid;
 	}
 	else
-	  {
+	{
 	    $text .= '&'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-	  }
+	}
+
 	foreach ($params as $key=>$value)
 	{
 		$text .= '&'.$id.$key.'='.rawurlencode($value);
