@@ -48,7 +48,7 @@ function cms_module_RedirectToAdmin(&$modinstance, $page, $params=array())
  */
 function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=array(), $inline=false)
 {
-	global $gCms;
+	$gCms = cmsms();
 	$config = $gCms->config;
 
 	$name = $modinstance->GetName();
@@ -73,13 +73,21 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
 	$text = '';
 	if ($returnid != '')
 	{
-		$text .= 'index.php';
+		// gotta get the URL for this page.
+		$contentops = $gCms->GetContentOperations();
+		$content = $contentops->LoadContentFromId($returnid);
+		if( !is_object($content) )
+		{
+			// no destination content object
+			return;
+		}
+		$text .= $content->GetURL();
+		//$text .= 'index.php';
 	}
 	else
 	{
 		$text .= 'moduleinterface.php';
 	}
-	#$text .= '?module='.$name.'&'.$id.'action='.$action.'&id='.$id;
 	$text .= '?mact='.$name.','.$id.','.$action.','.($inline == true?1:0);
 	if ($returnid != '')
 	{
