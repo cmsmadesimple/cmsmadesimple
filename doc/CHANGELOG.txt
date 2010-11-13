@@ -4,6 +4,10 @@ Core:
   -
   -
   
+MenuManager:
+  -
+  -
+  
 TinyMCE:
   -
   -
