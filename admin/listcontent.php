@@ -188,10 +188,13 @@ function expandall()
 	$cs = '';
 	foreach ($all as $thisitem)
 	{
+	  if( is_object($thisItem) && $thisItem instanceof ContentBase )
+	    {
 		if ($thisitem->HasChildren())
 		{
 			$cs .= $thisitem->Id().'=1.';
 		}
+	    }
 	}
 	set_preference($userid, 'collapse', $cs);
 }
