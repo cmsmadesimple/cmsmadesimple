@@ -7,9 +7,14 @@ Core:
   - content_image plugin
   - Error with https and redirect function
   - Fatal error: Class 'CMSModule' not found 
+  - Admin theme class change - default theme
+  - Multiple top-levels active in Admin
+  
+Installer:
+  - Firing of events disabled during the install/upgrade process
   
 MenuManager:
-  - combination of collapse/number_of_levels
+  - Combination of collapse/number_of_levels
   
 Search:
   - TemplateId() on a non-object error  
