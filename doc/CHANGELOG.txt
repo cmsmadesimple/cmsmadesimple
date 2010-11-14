@@ -1,16 +1,23 @@
 Version 1.9.1 - Toopua
 -----------------------------
 Core:
-  -
-  -
+  - Permission issue for non-admins
+  - HasChildren() on a non-object error in listcontent
+  - function Id() on a non-object in re-order pages
+  - content_image plugin
+  - Error with https and redirect function
+  - Fatal error: Class 'CMSModule' not found 
   
 MenuManager:
-  -
-  -
+  - combination of collapse/number_of_levels
+  
+Search:
+  - TemplateId() on a non-object error  
   
 TinyMCE:
-  -
-  -
+  - FilePicker
+  - Non showing on base installs
+  - Language strings
 
   
 Version 1.9 - Bora Bora
