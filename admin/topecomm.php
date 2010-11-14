@@ -24,11 +24,11 @@ require_once("../include.php");
 
 check_login();
 
-$section = 'siteadmin';
+$section = 'ecommerce';
 include_once("header.php");
 $themeObject->ShowShortcuts();
 $themeObject->DisplaySectionMenuDivStart();
-$themeObject->DisplaySectionPages('ecommerce');
+$themeObject->DisplaySectionPages($section);
 $themeObject->DisplaySectionMenuDivEnd();
 include_once("footer.php");
 
