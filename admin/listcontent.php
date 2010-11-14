@@ -188,7 +188,7 @@ function expandall()
 	$cs = '';
 	foreach ($all as $thisitem)
 	{
-	  if( is_object($thisItem) && $thisItem instanceof ContentBase )
+	  if( is_object($thisitem) && $thisitem instanceof ContentBase )
 	    {
 		if ($thisitem->HasChildren())
 		{
