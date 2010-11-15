@@ -196,67 +196,44 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
 	}
 }
-
+$closestr = cms_html_entity_decode(lang('close'));
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
   // <![CDATA[
-window.Edit_UserPlugin_Apply = function(button)
-{
+jQuery(document).ready(function(){  
+  jQuery('input[name=apply]').click(function(){
 	$addlScriptSubmit
-	$('Edit_UserPlugin_Result').innerHTML = '';
-	button.disabled = 'disabled';
+	jQuery('#Edit_UserPlugin_Result').html('');
+	jQuery('input[name=apply]').attr("disabled", "disabled");
 
-	var data = new Array();
-	data.push('ajax=1');
-	data.push('apply=1');
+    var data = jQuery('#Edit_UserPlugin').find('input:not([type=submit]), select, textarea').serializeArray();
+    data.push({ 'name': 'ajax', 'value': 1});
+    data.push({ 'name': 'apply', 'value': 1 });
 
-	var elements = Form.getElements($('Edit_UserPlugin'));
-	for (var cnt = 0; cnt < elements.length; cnt++)
+    jQuery.post('{$_SERVER['REQUEST_URI']}',data,function(resultdata,text)
 	{
-		var elem = elements[cnt];
-		if (elem.type == 'submit')
-		{
-			continue;
-		}
-		var query = Form.Element.serialize(elem);
-		data.push(query);
-	}
-
-	new Ajax.Request(
-		'{$_SERVER['REQUEST_URI']}'
-		, {
-			method: 'post'
-			, parameters: data.join('&')
-			, onSuccess: function(t)
-			{
-				button.removeAttribute('disabled');
-				var response = t.responseXML.documentElement.childNodes[0];
-				var details = t.responseXML.documentElement.childNodes[1];
-				if (response.textContent) { response = response.textContent; } else { response = response.text; } 
-				if (details.textContent) { details = details.textContent; } else { details = details.text; }
-				
-				var htmlShow = '';
-				if (response == 'Success')
-				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
-				}
-				else
-				{
-					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details + '<\/ul><\/div>';
-				}
-				$('Edit_UserPlugin_Result').innerHTML = htmlShow;
-				$('origpluginname').value = $('plugin_name').value;
-				
-			}
-			, onFailure: function(t)
-			{
-				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
-			}
-		}
-	);
-
+	     var resp = jQuery(resultdata).find('Response').text();
+	     var details = jQuery(resultdata).find('Details').text();
+		 var htmlShow = '';
+		 if (resp == 'Success')
+		 {
+			htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
+			jQuery('input[name=cancel]').fadeOut();
+			jQuery('input[name=cancel]').attr('value','{$closestr}');
+			jQuery('input[name=cancel]').fadeIn();
+		 }
+		 else
+		 {
+			htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
+			htmlShow += details;
+			htmlShow += '<\/ul><\/div>';
+		 }
+		 jQuery('#Edit_UserPlugin_Result').html( htmlShow );
+		 jQuery('input[name=apply]').removeAttr("disabled");	
+	},'xml');
 	return false;
-}
+  });
+});
  // ]]>
 </script>
 EOSCRIPT;
@@ -300,7 +277,7 @@ else {
 						<input type="hidden" name="editplugin" value="true" />
 						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-						<input type="submit" onclick="return window.Edit_UserPlugin_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+						<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 
 				</p>
 			</div>
