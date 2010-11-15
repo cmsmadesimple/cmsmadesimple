@@ -23,6 +23,7 @@ TinyMCE:
   - FilePicker
   - Non showing on base installs
   - Language strings
+  - Fixes to call GetURL()
 
   
 Version 1.9 - Bora Bora
