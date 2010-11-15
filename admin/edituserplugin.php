@@ -204,7 +204,6 @@ jQuery(document).ready(function(){
   jQuery('input[name=apply]').click(function(){
 	$addlScriptSubmit
 	jQuery('#Edit_UserPlugin_Result').html('');
-	jQuery('input[name=apply]').attr("disabled", "disabled");
 
     var data = jQuery('#Edit_UserPlugin').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'ajax', 'value': 1});
@@ -229,7 +228,6 @@ jQuery(document).ready(function(){
 			htmlShow += '<\/ul><\/div>';
 		 }
 		 jQuery('#Edit_UserPlugin_Result').html( htmlShow );
-		 jQuery('input[name=apply]').removeAttr("disabled");	
 	},'xml');
 	return false;
   });
