@@ -2,6 +2,7 @@ Version 1.9.1 - Toopua
 -----------------------------
 Core:
   - #5235 bug auto alias with "Add Page" unique permission
+  - #5623 Navigation error after upgrading from 1.8.2 to 1.9
   - #5653 ADD NEW CONTENT with unique permission ADD PAGE
   - #5659 error with https and redirect function 
   - #5677 Extensions » User Defined Tags - "Apply" button issue
@@ -16,6 +17,9 @@ Core:
   
 Installer:
   - Firing of events disabled during the install/upgrade process
+  
+ThemeManager:
+  - Fixed issue with samenamed stylesheets
   
 MenuManager:
   - Combination of collapse/number_of_levels
