@@ -1,6 +1,10 @@
 Version 1.9.1 - Toopua
 -----------------------------
 Core:
+  - #5235 bug auto alias with "Add Page" unique permission
+  - #5653 ADD NEW CONTENT with unique permission ADD PAGE
+  - #5659 error with https and redirect function 
+  - #5677 Extensions » User Defined Tags - "Apply" button issue
   - Permission issue for non-admins
   - HasChildren() on a non-object error in listcontent
   - function Id() on a non-object in re-order pages
