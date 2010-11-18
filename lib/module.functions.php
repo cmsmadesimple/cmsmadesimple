@@ -66,7 +66,7 @@ function cms_module_plugin($params,&$smarty)
 	  {
 	    $returnid = $content_obj->Id();
 	  }
-	$params = array_merge($params, GetModuleParameters($id));
+	//$params = array_merge($params, GetModuleParameters($id));
 
 	$modulename = '';
 	$action = 'default';
@@ -111,6 +111,7 @@ function cms_module_plugin($params,&$smarty)
 		  // and we're inline (the results are supposed to replace
 		  // the tag, not {content}
 		  $action = $mactaction;
+	      $params = array_merge($params, GetModuleParameters($id));
 		}
 	    }
 	}
