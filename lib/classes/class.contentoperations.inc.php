@@ -714,7 +714,9 @@ class ContentOperations
 		$output = array();
 		foreach( $list as &$one )
 		{
-			$output[] =& $one->GetContent($loadprops);
+			$tmp = $one->GetContent();
+			if( is_object($one) )
+				$object[] = $tmp;
 		}
 
 		debug_buffer('end get all content...');
