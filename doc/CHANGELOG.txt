@@ -15,6 +15,7 @@ Core:
   - Fatal error: Class 'CMSModule' not found 
   - Admin theme class change - default theme
   - Multiple top-levels active in Admin
+  - Fix to ContentOperations::GetAllContent
   
 Installer:
   - Firing of events disabled during the install/upgrade process
