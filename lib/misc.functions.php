@@ -2017,8 +2017,8 @@ function cms_ipmatches($ip,$checklist)
       }
     } else {
       // range based
-      $maskocts = split("\.",$range);
-      $ipocts = split("\.",$ip);
+      $maskocts = explode("\.",$range);
+      $ipocts = explode("\.",$ip);
 
       // perform a range match
       for ($i=0; $i<4; $i++) {
