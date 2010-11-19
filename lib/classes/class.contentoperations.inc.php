@@ -716,7 +716,7 @@ class ContentOperations
 		{
 			$tmp = $one->GetContent();
 			if( is_object($one) )
-				$object[] = $tmp;
+				$output[] = $tmp;
 		}
 
 		debug_buffer('end get all content...');
