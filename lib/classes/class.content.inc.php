@@ -1807,7 +1807,7 @@ class ContentBase
 	  if( !$node->has_children() ) return false;
 	  if( $activeonly == false) return true;
 
-	  $children = $this->get_children();
+	  $children = $node->get_children();
 	  if( $children )
 	    {
 	      for( $i = 0; $i < count($children); $i++ )
