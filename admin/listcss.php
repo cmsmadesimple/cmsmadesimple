@@ -205,7 +205,7 @@ if (isset($_GET["message"])) {
 	  {
 ?>
 	    <span style="float: left;">
-	    <a href="addcontent.php<?php echo $urlext ?>">
+	    <a href="addcss.php<?php echo $urlext ?>">
 	    <?php 
 	    echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addstylesheet'),'','','systemicon').'</a>';
 	    echo ' <a class="pageoptions" href="addcss.php'.$urlext.'">'.lang("addstylesheet");
