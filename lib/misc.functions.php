@@ -1998,7 +1998,7 @@ function cms_ipmatches($ip,$checklist)
     // xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets not supported)
 
     $regs = array();
-    if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/([0-9]+)/",$range,$regs)) {
+    if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)\/([0-9]+)/",$range,$regs)) {
       // perform a mask match
       $ipl = ip2long($ip);
       $rangel = ip2long($regs[1] . "." . $regs[2] . "." . $regs[3] . "." . $regs[4]);
@@ -2020,6 +2020,11 @@ function cms_ipmatches($ip,$checklist)
       // range based
       $maskocts = explode("\.",$range);
       $ipocts = explode("\.",$ip);
+
+      if( count($maskocts) != count($ipocts) && count($maskocts) != 4 )
+	{
+	  return 0;
+	}
 
       // perform a range match
       for ($i=0; $i<4; $i++) {
