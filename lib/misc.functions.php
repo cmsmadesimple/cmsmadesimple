@@ -1997,7 +1997,8 @@ function cms_ipmatches($ip,$checklist)
     // Does not match:
     // xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets not supported)
 
-    if (ereg("([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/([0-9]+)",$range,$regs)) {
+    $regs = array();
+    if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/([0-9]+)/",$range,$regs)) {
       // perform a mask match
       $ipl = ip2long($ip);
       $rangel = ip2long($regs[1] . "." . $regs[2] . "." . $regs[3] . "." . $regs[4]);
@@ -2022,7 +2023,7 @@ function cms_ipmatches($ip,$checklist)
 
       // perform a range match
       for ($i=0; $i<4; $i++) {
-	if (ereg("\[([0-9]+)\-([0-9]+)\]",$maskocts[$i],$regs)) {
+	if (preg_match("/\[([0-9]+)\-([0-9]+)\]/",$maskocts[$i],$regs)) {
 	  if ( ($ipocts[$i] > $regs[2]) || ($ipocts[$i] < $regs[1])) {
 	    $result = 0;
 	  }
