@@ -16,9 +16,11 @@ Core:
   - Admin theme class change - default theme
   - Multiple top-levels active in Admin
   - Fix to ContentOperations::GetAllContent
+  - Site Down Message Fixed
   
 Installer:
   - Firing of events disabled during the install/upgrade process
+  - Fixed installer grabbing wring instance of smarty in certain PHP versions (scope issue)
   
 ThemeManager:
   - Fixed issue with samenamed stylesheets
