@@ -77,22 +77,22 @@ function cms_detect_browser_lang()
  */
 function cms_initialize_nls()
 {
-  #Read in all current languages...
-  global $gCms;
-  $nls =& $gCms->nls;
+	#Read in all current languages...
+	global $gCms;
+	$nls =& $gCms->nls;
 
-  if( !is_array($nls) || count($nls) == 0 )
-    {
-      $nls = array();
-      $dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'/lang');
-      $handle = opendir($dir);
-      while (false!==($file = readdir($handle))) {
-	if (is_file("$dir/$file") && strpos($file, "nls.php") != 0) {
-	  include("$dir/$file");
+	if( !is_array($nls) || count($nls) == 0 )
+	{
+		$nls = array();
+		$dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'/lang');
+		$handle = opendir($dir);
+		while ($handle && false !== ($file = readdir($handle))) {
+			if (is_file("$dir/$file") && strpos($file, "nls.php") != 0) {
+				include("$dir/$file");
+			}
+		}
+		closedir($handle);
 	}
-      }
-      closedir($handle);
-    }
 }
 
 
