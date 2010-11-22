@@ -715,7 +715,7 @@ class ContentOperations
 		foreach( $list as &$one )
 		{
 			$tmp = $one->GetContent();
-			if( is_object($one) )
+			if( is_object($tmp) )
 				$output[] = $tmp;
 		}
 
