@@ -1,3 +1,9 @@
+Version 1.9.2 - 
+-----------------------------
+Core:
+  - Fix content types dropdown stuff in addcontent, where FF didnt reload the page after content-type change.
+  - Fix to GetAllContent, which caused the Hierarchy() error.
+
 Version 1.9.1 - Toopua
 -----------------------------
 Core:
