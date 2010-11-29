@@ -628,7 +628,7 @@ class ModuleOperations
 	  }
       }
 
-    if( count($output) ) return FALSE;
+    if( !count($output) ) return FALSE;
     return $output;
   }
 }
