@@ -623,7 +623,7 @@ class ModuleOperations
 	    $obj =& $data['object'];
 	    if( $obj->HasCapability($capability,$args) )
 	      {
-		$output->append($obj);
+		$output[] = $obj;
 	      }
 	  }
       }
