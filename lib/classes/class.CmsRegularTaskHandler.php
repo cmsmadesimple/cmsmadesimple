@@ -80,6 +80,7 @@ class CmsRegularTaskHandler
 		global $gCms;
 		$opts = $gCms->GetModuleOperations();
 		$modules = $opts->get_modules_with_capability('tasks');
+		if (!$modules) return;
 		foreach( $modules as $one )
 			{
 				$tasks = $one->current()->get_tasks();
