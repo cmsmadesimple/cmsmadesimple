@@ -383,7 +383,7 @@ else
 
 
 if (!is_array($media_type)) {
-  $media_type = split (", " , $media_type);
+  $media_type = explode(", " , $media_type);
 }
 
 $existingtypes = array("all", 
