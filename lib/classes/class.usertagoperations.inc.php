@@ -158,7 +158,7 @@ class UserTagOperations
 		$smarty =& $gCms->GetSmarty();
 		$userpluginfunctions =& $gCms->userpluginfunctions;
 		
-		$code = UserTags::GetUserTag($name);
+		$code = UserTagOperations::GetUserTag($name);
 		
 		$result = FALSE;
 		

@@ -627,6 +627,7 @@ class Content extends ContentBase
 			  $this->_contentBlocks[$name]['type'] = 'module';
 			  $this->_contentBlocks[$name]['blocktype'] = $blocktype;
 			  $this->_contentBlocks[$name]['id'] = $id;
+			  $this->_contentBlocks[$name]['label'] = $label;
 			  $this->_contentBlocks[$name]['module'] = $module;
 			  $this->_contentBlocks[$name]['params'] = $parms;
 			}
