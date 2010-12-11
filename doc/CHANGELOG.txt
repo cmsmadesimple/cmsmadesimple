@@ -1,4 +1,4 @@
-Version 1.9.2 - 
+Version 1.9.2 - Tevairoa
 -----------------------------
 Core:
   - #5585 Add Stylesheet Image links to addcontent.php
