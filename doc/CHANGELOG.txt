@@ -5,9 +5,17 @@ Core:
   - #5715 Fix content types dropdown stuff in addcontent, where FF didnt reload the page after content-type change.
   - #5766 deprecated message in editcss
   - Fix to GetAllContent, which caused the Hierarchy() error.
+  - Fixes to menu-templates, in relation to SectionHeader.
+  - Fixes problem with labels on module generated content blocks
+  - Fixes E_STRICT issue wrt module generated content blocks
+  - Fixes minor issues in user tag operations.
+  - Handling if there are no modules with tasks capability
 
 MenuManager:
-  - multiple '-' signs in alias as parent, errors on simple_navigation.   
+  - multiple '-' signs in alias as parent, errors on simple_navigation. 
+
+TinyMCE:
+  - Fix comments that appeared after making changes to TinyMCE settings  
 
 Version 1.9.1 - Toopua
 -----------------------------
