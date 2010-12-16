@@ -305,6 +305,7 @@ class Content extends ContentBase
 	function ValidateData()
 	{
 		$errors = parent::ValidateData();
+		$gCms = cmsms();
 		if( $errors === FALSE )
 		{
 			$errors = array();
