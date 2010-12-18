@@ -133,6 +133,11 @@ if( !is_object($contentobj) )
 	ErrorHandler404();
 	return;
       }
+    else
+      {
+	header("HTTP/1.0 404 Not Found");
+	header("Status: 404 Not Found");
+      }
   }
 
 // $page cannot be empty here
