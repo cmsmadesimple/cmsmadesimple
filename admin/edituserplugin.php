@@ -105,7 +105,7 @@ if ($access) {
 		{
 			srand();
 			ob_start();
-			if (eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
+			if (eval('function testfunction'.rand().'() {'.$code."\n}") === FALSE)
 			{
 				$error[] = lang('invalidcode');
                                 //catch the error
