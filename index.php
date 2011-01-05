@@ -122,7 +122,6 @@ else
     $contentobj = $contentops->LoadContentFromAlias($page,true);
   }
 
-
 if( !is_object($contentobj) )
   {
     // specified page not found, load the 404 error page.
@@ -194,7 +193,6 @@ else
 }
 
 $html = '';
-$cached = '';
 $showtemplate = true;
 
 if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') ||
@@ -207,7 +205,6 @@ if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') |
 if (isset($_GET["print"]))
 {
   $pageinfo = cmsms()->get_variable('pageinfo');
-  ($smarty->is_cached('print:'.$page, '', $pageinfo->template_id)?$cached="":$cached="not ");
   $html = $smarty->fetch('print:'.$page, '', $pageinfo->template_id) . "\n";
 }
 else
@@ -233,7 +230,6 @@ else
 	{
 	  //$smarty->caching = false;
 	  //	$smarty->compile_check = true;
-		($smarty->is_cached('template:'.$contentobj->TemplateId())?$cached="":$cached="not ");
 
 		// we allow backward compatibility (for a while)
 		// for people that have hacks for setting page title
