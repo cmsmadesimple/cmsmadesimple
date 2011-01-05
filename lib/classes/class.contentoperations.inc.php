@@ -913,7 +913,7 @@ class ContentOperations
 	 */
 	function GetPageAliasFromID( $id )
 	{
-		$res = cms_content_cache::get_alias_from_id($alias);
+		$res = cms_content_cache::get_alias_from_id($id);
 		if( $res !== FALSE ) return $res;
 
 		global $gCms;
