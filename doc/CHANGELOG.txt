@@ -1,3 +1,13 @@
+Version 1.9.3 - 
+-----------------------------
+Core:
+  - 
+  
+Printing:
+  - #5209 Printing module causes fatal errors when used with gallery
+
+
+
 Version 1.9.2 - Tevairoa
 -----------------------------
 Core:
