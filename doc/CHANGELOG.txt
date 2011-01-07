@@ -1,11 +1,30 @@
 Version 1.9.3 - 
 -----------------------------
 Core:
+  - #5952 GetPageAliasFromID() Undefined variable "alias"
+  - #5619 Too short input fields
   - 
   
+Core Installer:
+  - 
+  
+MenuManager:
+  - #4978 upgrade.32.to.33
+  - #5447 Menu function childrenof breaks collapse
+  - #4237 Menu Separators not generated since v1.6.x
+  - #4186 Template error in simple_navigation.tpl causing invalid XHTML output
+  - #4089 "loadprops" doesn't work if "items" is set
+  - #3620 $node->image disapear in 1.6 version
+  - #3599 simple_menu not setting correct CSS selectors since 1.6
+  - #3460 'items=' active page not working correctly
+  - #2503 Sectionheader is displayed as Link when is activeparent
+  - #2488 Apply and Submit does not work in certain scenario
+  - #1761 Adding new template downloads moduleinterface.php
+  - 
+
 Printing:
   - #5209 Printing module causes fatal errors when used with gallery
-
+  - 
 
 
 Version 1.9.2 - Tevairoa
