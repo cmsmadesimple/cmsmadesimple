@@ -18,6 +18,7 @@ MenuManager:
   - #1761 Adding new template downloads moduleinterface.php
   - #2488 Apply and Submit does not work in certain scenario
   - #2503 Sectionheader is displayed as Link when is activeparent
+  - #2489 $node->current missing in Help description
   - #3460 'items=' active page not working correctly
   - #3599 simple_menu not setting correct CSS selectors since 1.6
   - #3620 $node->image disapear in 1.6 version
@@ -25,8 +26,9 @@ MenuManager:
   - #4186 Template error in simple_navigation.tpl causing invalid XHTML output
   - #4237 Menu Separators not generated since v1.6.x
   - #5447 Menu function childrenof breaks collapse
+  - #2489 $node->current missing in Help description
   - 
-
+  
 Printing:
   - #5209 Printing module causes fatal errors when used with gallery
   - 
