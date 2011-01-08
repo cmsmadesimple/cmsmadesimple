@@ -2,27 +2,29 @@
 Version 1.9.3 - 
 -----------------------------
 Core:
+  - #5329 Assigning language from locale is not correct
+  - #5619 Too short input fields
+  - #5794 Stylesheet url in header could be wrong
+  - #5865 Small issue with admin panel tab header id's.
   - #5888 Remove markedown plugins from distribution.
   - #5952 GetPageAliasFromID() Undefined variable "alias"
-  - #5619 Too short input fields
-  - #5865 Small issue with admin panel tab header id's. 
-  - #5784 Stylesheet url in header could be wrong.
-  
+  -
+
 Core Installer:
-  - 
-  
-MenuManager:
   - #4978 upgrade.32.to.33
-  - #5447 Menu function childrenof breaks collapse
-  - #4237 Menu Separators not generated since v1.6.x
-  - #4186 Template error in simple_navigation.tpl causing invalid XHTML output
-  - #4089 "loadprops" doesn't work if "items" is set
-  - #3620 $node->image disapear in 1.6 version
-  - #3599 simple_menu not setting correct CSS selectors since 1.6
-  - #3460 'items=' active page not working correctly
-  - #2503 Sectionheader is displayed as Link when is activeparent
-  - #2488 Apply and Submit does not work in certain scenario
+  -
+
+MenuManager:
   - #1761 Adding new template downloads moduleinterface.php
+  - #2488 Apply and Submit does not work in certain scenario
+  - #2503 Sectionheader is displayed as Link when is activeparent
+  - #3460 'items=' active page not working correctly
+  - #3599 simple_menu not setting correct CSS selectors since 1.6
+  - #3620 $node->image disapear in 1.6 version
+  - #4089 "loadprops" doesn't work if "items" is set
+  - #4186 Template error in simple_navigation.tpl causing invalid XHTML output
+  - #4237 Menu Separators not generated since v1.6.x
+  - #5447 Menu function childrenof breaks collapse
   - 
 
 Printing:
