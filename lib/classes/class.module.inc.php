@@ -2922,6 +2922,7 @@ class CMSModule
 			$a=" class='active'";
 			$this->mActiveTab = $tabid;
 		}
+		$tabid = strtolower(str_replace(' ','_',$tabid));
 	  return '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
 	}
 

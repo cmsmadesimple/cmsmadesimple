@@ -5,7 +5,7 @@ Core:
   - #5888 Remove markedown plugins from distribution.
   - #5952 GetPageAliasFromID() Undefined variable "alias"
   - #5619 Too short input fields
-  - 
+  - #5865 Small issue with admin panel tab header id's. 
   
 Core Installer:
   - 
