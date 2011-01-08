@@ -1,6 +1,8 @@
+<<<<<<< .mine
 Version 1.9.3 - 
 -----------------------------
 Core:
+  - #5888 Remove markedown plugins from distribution.
   - #5952 GetPageAliasFromID() Undefined variable "alias"
   - #5619 Too short input fields
   - 
@@ -27,6 +29,7 @@ Printing:
   - 
 
 
+>>>>>>> .r6837
 Version 1.9.2 - Tevairoa
 -----------------------------
 Core:
