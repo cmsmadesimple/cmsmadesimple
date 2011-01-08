@@ -81,7 +81,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		foreach ($res as $one)
 		{
 			$media_type = str_replace(' ','',$one['media_type']);
-			$filename = strtr($one['css_name'], $conv_filename).'_'.strtotime($one['modified_date']).'.css';
+			$filename = 'stylesheet_'.$one['css_id'].'_'.strtotime($one['modified_date']).'.css';
 			if ( !file_exists(cms_join_path($cache_dir,$filename)) )
 			{
 				$smarty = $gCms->GetSmarty();

@@ -6,6 +6,7 @@ Core:
   - #5952 GetPageAliasFromID() Undefined variable "alias"
   - #5619 Too short input fields
   - #5865 Small issue with admin panel tab header id's. 
+  - #5784 Stylesheet url in header could be wrong.
   
 Core Installer:
   - 
