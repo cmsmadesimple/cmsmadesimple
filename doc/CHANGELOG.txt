@@ -9,6 +9,7 @@ Core:
   - #5888 Remove markedown plugins from distribution.
   - #5952 GetPageAliasFromID() Undefined variable "alias"
   - #3766 Admin screens blank on new install (firewalled)
+  - #5846 When Power Users edit page content, the aliases change
 
 Core Installer:
   - #4978 upgrade.32.to.33
