@@ -8,7 +8,7 @@ Core:
   - #5865 Small issue with admin panel tab header id's.
   - #5888 Remove markedown plugins from distribution.
   - #5952 GetPageAliasFromID() Undefined variable "alias"
-  -
+  - #3766 Admin screens blank on new install (firewalled)
 
 Core Installer:
   - #4978 upgrade.32.to.33

@@ -1289,6 +1289,7 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 			{
 				$test->res = 'red';
 				getTestReturn($test, $required, '', '', $lang_fn('connection_error'));
+				$test->continueon = 0;
 				return $test;
 			}
 
