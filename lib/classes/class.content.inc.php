@@ -1525,7 +1525,7 @@ class ContentBase
     /**
      * Function for the subclass to parse out data for it's parameters (usually from $_POST)
      */
-    function FillParams($params)
+    function FillParams($params,$editing = false)
     {
       // content property parameters
       $parameters = array('extra1','extra2','extra3','image','thumbnail');
@@ -1585,7 +1585,13 @@ class ContentBase
 	{
 	  $tmp = trim($params['alias']);
 	}
-      $this->SetAlias($tmp);
+      if( !$editing || $tmp )
+	{
+	  // the alias param may not exist (depending upon permissions)
+	  // this method will set the alias to the supplied value if it is set
+	  // or auto-generate one, when adding a new page.
+	  $this->SetAlias($tmp);
+	}
 
       // target
       if (isset($params['target']))

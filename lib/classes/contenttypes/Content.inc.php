@@ -120,7 +120,7 @@ class Content extends ContentBase
 	 * @param array $params hash of parameters to load into content attributes
 	 * @return void
 	 */
-    function FillParams($params)
+    function FillParams($params,$editing = false)
     {
 	global $gCms;
 	$config =& $gCms->config;
@@ -174,7 +174,7 @@ class Content extends ContentBase
 
 	}
 
-	parent::FillParams($params);
+	parent::FillParams($params,$editing);
     }
 
 	/**

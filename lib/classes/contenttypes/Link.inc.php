@@ -57,9 +57,9 @@ class Link extends ContentBase
       $this->AddContentProperty('url',10,1);
     }
 
-    function FillParams($params)
+    function FillParams($params,$editing = false)
     {
-	parent::FillParams($params);
+		parent::FillParams($params,$editing);
 
 	if (isset($params))
 	{

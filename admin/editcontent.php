@@ -122,7 +122,7 @@ if ($access)
 	{
 	  #Fill contentobj with parameters
 	  // $contentobj->SetProperties();  // calguy should not be necessary
-	  $contentobj->FillParams($_POST);
+	  $contentobj->FillParams($_POST,true);
 	  $error = $contentobj->ValidateData();
 
 	  if ($error === FALSE)

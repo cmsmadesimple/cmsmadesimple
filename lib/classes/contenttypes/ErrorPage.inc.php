@@ -120,9 +120,9 @@ class ErrorPage extends Content
     return FALSE;
   }
 
-  function FillParams($params)
+  function FillParams($params,$editing = false)
   {
-    parent::FillParams($params);
+	  parent::FillParams($params,$editing);
     $this->mParentId = -1;
     $this->mShowInMenu = false;
     $this->mCachable = false;
