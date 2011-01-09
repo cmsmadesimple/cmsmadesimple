@@ -74,7 +74,7 @@ class ContentOperations
 	  $contenttype = 'content';
 	  if( isset($data['content_type']) ) $contenttype = $data['content_type'];
 
-	  $contentobj =& $this->CreateNewContent($contenttype);
+	  $contentobj = $this->CreateNewContent($contenttype);
 	  $contentobj = unserialize($data['serialized_content']);
 	  return $contentobj;
 	}
@@ -126,6 +126,7 @@ class ContentOperations
 				$type = $type->type;
 			}
 		$result = NULL;
+
 		$ctph = $this->_get_content_type($type);
 		if( is_object($ctph) )
 			{
@@ -162,7 +163,7 @@ class ContentOperations
 		if ($row)
 		{
 			$classtype = strtolower($row['type']);
-			$contentobj =& $this->CreateNewContent($classtype);
+			$contentobj = $this->CreateNewContent($classtype);
 			if ($contentobj)
 			{
 				$contentobj->LoadFromData($row, $loadprops);
@@ -189,7 +190,7 @@ class ContentOperations
 		}
 
 		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = $gCms->GetDb();
 
 		$row = '';
 		if (is_numeric($alias) && strpos($alias,'.') === FALSE && strpos($alias,',') === FALSE) //Fix for postgres
@@ -217,7 +218,7 @@ class ContentOperations
 			if (in_array($row['type'], array_keys($this->ListContentTypes())))
 			{
 				$classtype = strtolower($row['type']);
-				$contentobj =& $this->CreateNewContent($classtype);
+				$contentobj = $this->CreateNewContent($classtype);
 				$contentobj->LoadFromData($row, TRUE);
 				cms_content_cache::add_content($row['content_id'],$row['content_alias'],$contentobj);
 				return $contentobj;
@@ -246,7 +247,7 @@ class ContentOperations
 	    {
 	      return $gCms->variables['default_content_id'];
 	    }
-		$db =& $gCms->GetDb();
+		$db = $gCms->GetDb();
 
 		$result = -1;
 
@@ -413,7 +414,7 @@ class ContentOperations
 	function SetHierarchyPosition($contentid)
 	{
 		global $gCms;
-		$db =& $gCms->GetDb();
+		$db = $gCms->GetDb();
 
 		$current_hierarchy_position = '';
 		$current_id_hierarchy_position = '';
@@ -534,7 +535,7 @@ class ContentOperations
 		if (!$loadedcache)
 		{
 			$query = "SELECT id_hierarchy,content_alias FROM ".cms_db_prefix()."content ORDER BY hierarchy";
-			$dbresult =& $db->Execute($query);
+			$dbresult = $db->Execute($query);
 			$nodes = array();
 			if ($dbresult && $dbresult->RecordCount() > 0)
 			{
@@ -542,6 +543,7 @@ class ContentOperations
 				{
 					$nodes[] = $row['id_hierarchy'].','.$row['content_alias'];
 				}
+				$dbresult->Close();
 			}
 
 			debug_buffer('', 'Start Loading Children into Tree');
@@ -578,7 +580,7 @@ class ContentOperations
 	function LoadChildren($id, $loadprops = false, $all = false, $explicit_ids = array() )
 	{	
 		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = $gCms->GetDb();
 
 		$contentrows = '';
 		if( is_array($explicit_ids) && count($explicit_ids) )
@@ -587,7 +589,7 @@ class ContentOperations
 			if( !$all ) $expr .= ' AND active = 1';
 
 			$query = 'SELECT * FROM '.cms_db_prefix().'content WHERE '.$expr.' ORDER BY hierarchy';
-			$contentrows =& $db->GetArray($query);
+			$contentrows = $db->GetArray($query);
 		}
 		else 
 		{
@@ -596,7 +598,7 @@ class ContentOperations
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? AND active = 1 ORDER BY hierarchy";
 			if( $all )
 				$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
-			$contentrows =& $db->GetArray($query, array($id));
+			$contentrows = $db->GetArray($query, array($id));
 		}
 		$contentprops = '';
 
@@ -611,7 +613,7 @@ class ContentOperations
 		    
 		    // get all the properties for the child_ids
 		    $query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
-		    $tmp =& $db->GetArray($query);
+		    $tmp = $db->GetArray($query);
 
 		    // re-organize the tmp data into a hash of arrays of properties for each content id.
 		    if( $tmp )
@@ -637,11 +639,12 @@ class ContentOperations
 		// build the content objects
 		for( $i = 0; $i < count($contentrows); $i++ )
 		  {
-		    $row =& $contentrows[$i];
+		    $row = $contentrows[$i];
 		    $id = $row['content_id'];
 
 		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
-		    $contentobj =& $this->CreateNewContent($row['type']);
+
+		    $contentobj = $this->CreateNewContent($row['type']);
 
 		    if ($contentobj)
 		      {
@@ -746,7 +749,7 @@ class ContentOperations
 		$result = '';
 		$userid = -1;
 
-		$allcontent =& $this->GetAllContent(false);
+		$allcontent = $this->GetAllContent(false);
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{
@@ -986,7 +989,7 @@ class ContentOperations
 	function ClearCache()
 	{
 		global $gCms;
-		$smarty =& $gCms->GetSmarty();
+		$smarty = $gCms->GetSmarty();
 
 		cms_content_cache::clear();
 		unset($gCms->hrinstance);
