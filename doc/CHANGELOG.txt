@@ -10,10 +10,15 @@ Core:
   - #5888 Remove markedown plugins from distribution.
   - #5952 GetPageAliasFromID() Undefined variable "alias"
   - #5846 When Power Users edit page content, the aliases change
-  - #5971 Missing Image File in the default theme for CMSMS 
+  - #5971 Missing Image File in the default theme for CMSMS
+  -
 
 Core Installer:
   - #4978 upgrade.32.to.33
+  -
+  
+FileManager:
+  - #4046 Files too large won't upload
   -
 
 MenuManager:
