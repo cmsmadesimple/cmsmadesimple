@@ -2,14 +2,15 @@
 Version 1.9.3 - 
 -----------------------------
 Core:
+  - #3766 Admin screens blank on new install (firewalled)
   - #5329 Assigning language from locale is not correct
   - #5619 Too short input fields
   - #5794 Stylesheet url in header could be wrong
   - #5865 Small issue with admin panel tab header id's.
   - #5888 Remove markedown plugins from distribution.
   - #5952 GetPageAliasFromID() Undefined variable "alias"
-  - #3766 Admin screens blank on new install (firewalled)
   - #5846 When Power Users edit page content, the aliases change
+  - #5971 Missing Image File in the default theme for CMSMS 
 
 Core Installer:
   - #4978 upgrade.32.to.33
@@ -27,7 +28,6 @@ MenuManager:
   - #4186 Template error in simple_navigation.tpl causing invalid XHTML output
   - #4237 Menu Separators not generated since v1.6.x
   - #5447 Menu function childrenof breaks collapse
-  - #2489 $node->current missing in Help description
   - 
   
 Printing:
