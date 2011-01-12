@@ -35,6 +35,9 @@ MenuManager:
   - #5447 Menu function childrenof breaks collapse
   - 
   
+News:  
+  - #5987 Field Definition - Public option
+  
 Printing:
   - #5209 Printing module causes fatal errors when used with gallery
   - 
