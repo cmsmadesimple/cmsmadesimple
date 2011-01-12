@@ -205,6 +205,10 @@ class Events
 		$db = &$gCms->GetDb();
 
 		$q = "SELECT * FROM ".cms_db_prefix()."events ORDER BY originator,event_name";
+		$q = 'SELECT e.*, count(eh.event_id) as usage_count FROM '.cms_db_prefix().
+			'events e left outer join '.cms_db_prefix().
+			'event_handlers eh on e.event_id=eh.event_id GROUP BY e.event_id ORDER BY originator,event_name';
+		
 		$dbresult = $db->Execute( $q );
 		if( $dbresult == false )
 		{

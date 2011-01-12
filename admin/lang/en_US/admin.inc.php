@@ -1185,6 +1185,7 @@ $lang['admin']['errorupdatinguser'] = 'Error updating user';
 $lang['admin']['errorupdatingusertag'] = 'Error updating user tag';
 $lang['admin']['erroruserinuse'] = 'This user still owns content pages. Please change ownership to another user before deleting.';
 $lang['admin']['eventhandlers'] = 'Event Manager';
+$lang['admin']['eventhandler'] = 'Event Handlers'; // needs translation
 $lang['admin']['editeventhandler'] = 'Edit Event Handler';
 $lang['admin']['eventhandlerdescription'] = 'Associate user tags with events';
 $lang['admin']['export'] = 'Export';

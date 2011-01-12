@@ -100,6 +100,30 @@ switch( $action )
 		{
 			echo $text;
 		}
+		echo "<h4>".lang('eventhandler')."</h4>";
+		$hlist = Events::ListEventHandlers( $module, $event );
+		if ($hlist === false)
+			{
+			echo '<p>'.lang('none').'</p>';
+			}
+		else
+			{
+			echo '<ul>';
+			foreach ($hlist as $te)
+				{
+				echo '<li>'.$te['handler_order'].'. ';
+				if (!empty($te['tag_name']))
+					{
+					echo lang('user_tag').': '.$te['tag_name'];
+					}
+				else if (!empty($te['module_name']))
+					{
+					echo lang('module').': '.$te['module_name'];
+					}
+				echo '</li>';
+				}
+			echo '</ul>';
+			}
 		break;
 	}
 
@@ -138,6 +162,7 @@ switch( $action )
 		echo "  <tr>\n";
 		echo "    <th>".lang('originator')."</th>\n";
 		echo "    <th>".lang('event')."</th>\n";
+		echo "    <th>".lang('eventhandler')."</th>\n";
 		echo "    <th width='50%'>".lang('description')."</th>\n";
 		echo "    <th class=\"pageicon\">&nbsp;</th>\n";
 		echo "    <th class=\"pageicon\">&nbsp;</th>\n";
@@ -174,6 +199,13 @@ if ($access)
 {
 					echo "</a>";
 }
+					echo "</td>\n";
+					echo "    <td>";
+					if ($oneevent['usage_count'] > 0)
+						{
+						echo "<a href=\"eventhandlers.php".$urlext."&amp;action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".
+							$oneevent['usage_count']."</a>";
+						}
 					echo "</td>\n";
 					echo "    <td>".$desctext."</td>\n";
 					echo "    <td class=\"icons_wide\"><a href=\"eventhandlers.php".$urlext."&amp;action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
