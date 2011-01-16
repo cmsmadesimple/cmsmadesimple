@@ -46,18 +46,11 @@ class UserTagOperations
 		$code = false;
 
 		global $gCms;
-		$db =& $gCms->GetDb();
+		$db = cmsms()->GetDb();
 		
 		$query = 'SELECT userplugin_id, code FROM '.cms_db_prefix().'userplugins WHERE userplugin_name = ?';
-		$result = &$db->Execute($query, array($name));
-
-		while ($result && !$result->EOF)
-		{
-			$code = $result->fields['code'];
-			$result->MoveNext();
-		}
-		
-		return $code;
+		$result = $db->GetRow($query, array($name));
+		return $result;
 	}
 
 
@@ -71,14 +64,14 @@ class UserTagOperations
 	 */
 	function SetUserTag( $name, $text )
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db = cmsms()->GetDb();
 		
-		$existing = UserTagOperations::GetUserTag($name);
+		$existing = $this->GetUserTag($name);
 		if (!$existing)
 		{
-		  $query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_name, code, create_date, modified_date) VALUES (?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
-			$result = $db->Execute($query, array($name, $text));
+			$new_usertag_id = $db->GenID(cms_db_prefix()."userplugins_seq");
+			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, create_date, modified_date) VALUES (?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+			$result = $db->Execute($query, array($new_usertag_id, $name, $text));
 			if ($result)
 				return true;
 			else
