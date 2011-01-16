@@ -1403,21 +1403,19 @@ if(!function_exists("file_get_contents"))
 }
 
 
-if(!function_exists("readfile"))
+function cms_readfile($filename)
 {
-    function readfile($filename)
-    {
-      @ob_start();
-      echo file_get_contents($filename);
-      $result = @ob_get_contents();
-      @ob_end_clean();
-      if( !empty($result) ) {
-	echo $result;
-        return TRUE;
-      }
-      return FALSE;
-    }
+  @ob_start();
+  echo file_get_contents($filename);
+  $result = @ob_get_contents();
+  @ob_end_clean();
+  if( !empty($result) ) {
+    echo $result;
+    return TRUE;
+  }
+  return FALSE;
 }
+
 
 // create the array_walk_recursive function in PHP4
 // from http://www.php.net/manual/en/function.array-walk-recursive.php

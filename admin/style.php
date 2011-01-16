@@ -24,13 +24,13 @@ if (isset($_GET['ie']))
     }
 $style .= ".css";
 if (file_exists(dirname(__FILE__)."/themes/".$theme."/css/".$style))
-	{
-	readfile(dirname(__FILE__)."/themes/".$theme."/css/".$style);
-	}
+  {
+    cms_readfile(dirname(__FILE__)."/themes/".$theme."/css/".$style);
+  }
 else if (file_exists(dirname(__FILE__)."/themes/default/css/".$style))
-	{
-	readfile(dirname(__FILE__)."/themes/default/css/".$style);
-}
+  {
+    cms_readfile(dirname(__FILE__)."/themes/default/css/".$style);
+  }
 
 global $gCms;
 while (list($key) = each($gCms->modules))
