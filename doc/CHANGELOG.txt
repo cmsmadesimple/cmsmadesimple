@@ -1,8 +1,8 @@
-<<<<<<< .mine
 Version 1.9.3 - 
 -----------------------------
 Core:
   - #3766 Admin screens blank on new install (firewalled)
+  - #3848 Pages flashing on load - no-cache headers
   - #5329 Assigning language from locale is not correct
   - #5619 Too short input fields
   - #5794 Stylesheet url in header could be wrong
@@ -43,7 +43,6 @@ Printing:
   - 
 
 
->>>>>>> .r6837
 Version 1.9.2 - Tevairoa
 -----------------------------
 Core:
