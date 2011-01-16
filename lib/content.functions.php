@@ -625,7 +625,6 @@ class Smarty_CMS extends Smarty {
 			}
 			if( isset($_SESSION['cms_preview']) )
 			  {
-			    debug_to_log('template_get_template preview');
 			    // get serialized data filename
 			    $tpl_name = trim($_SESSION['cms_preview']);
 			    unset($_SESSION['cms_preview']);
@@ -651,8 +650,6 @@ class Smarty_CMS extends Smarty {
 			    unlink($fname);
 	
 			    $tpl_source = $data["template"];
-			    debug_to_log($tpl_source);
-
 			    return true;
 			  }
 			else
@@ -754,7 +751,6 @@ class Smarty_CMS extends Smarty {
 		}
 		else if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' )
 	        {
-		  debug_to_log('content_get_template for preview');
 		  if( !isset($_SESSION['cms_preview_data']['content_obj']) )
 		    {
 		      $contentops =& $gCms->GetContentOperations();
@@ -771,12 +767,10 @@ class Smarty_CMS extends Smarty {
 		      $tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
 		    }
 
-		  debug_to_log($tpl_source);
 		  return true;
 		}
 		else
 		{
-			$manager =& $gCms->GetHierarchyManager();
 			if (isset($contentobj) && $contentobj !== FALSE)
 			{
 
