@@ -14,6 +14,7 @@ Core:
   -
 
 Core Installer:
+  - #4136 admin gui breaks when isntalling update over https
   - #4978 upgrade.32.to.33
   -
   
