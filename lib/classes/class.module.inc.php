@@ -887,7 +887,7 @@ class CMSModule
 	 * secondary functions into other files.
 	 *
 	 * @abstract
-	 * @return boolean
+	 * @return mixed FALSE indicates no error.  Any other value will be used as an error message.
 	 */
 	function Install()
 	{
@@ -896,9 +896,9 @@ class CMSModule
 		{
 			{
 				global $gCms;
-				$db =& $gCms->GetDb();
+				$db = $gCms->GetDb();
 				$config = $gCms->GetConfig();
-				$smarty =& $gCms->GetSmarty();
+				$smarty = $gCms->GetSmarty();
 
 				$res = include($filename);
 				if( $res == 1 || $res == '' ) return FALSE;
@@ -934,7 +934,7 @@ class CMSModule
 	 * in your module directory to do uninstall operations.
 	 *
 	 * @abstract
-	 * @return boolean
+	 * @return mixed FALSE indicates that the module uninstalled correctly, any other value indicates an error message.
 	 */
 	function Uninstall()
 	{
@@ -947,7 +947,7 @@ class CMSModule
 		  $smarty =& $gCms->GetSmarty();
 		  
 		  $res = include($filename);
-		  if( $res == '1' || $res == '') return FALSE;
+		  if( $res == 1 || $res == '') return FALSE;
 		  if( is_string($res)) 
 		    {
 		      $modops = $gCms->GetModuleOperations();
@@ -997,7 +997,7 @@ class CMSModule
 	 *
 	 * @param string The version we are upgrading from
 	 * @param string The version we are upgrading to
-	 * @return void
+	 * @return boolean
 	 */
 	function Upgrade($oldversion, $newversion)
 	{
@@ -1011,10 +1011,10 @@ class CMSModule
 				$smarty =& $gCms->GetSmarty();
 
 				$res = include($filename);
-				if( $res == '1' || $res == '' ) return TRUE;
+				if( $res == 1 || $res == '' ) return TRUE;
 				$modops = $gCms->GetModuleOperations();
 				$modops->SetError($res);
-				return $res;
+				return FALSE;
 			}
 		}
 	}
