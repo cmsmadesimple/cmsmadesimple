@@ -1468,7 +1468,11 @@ class Smarty
     function _compile_source($resource_name, &$source_content, &$compiled_content, $cache_include_path=null)
     {
         if (file_exists(SMARTY_DIR . $this->compiler_file)) {
-            require_once(SMARTY_DIR . $this->compiler_file);
+	  // calguy1000: for some reason the $_REQUEST var was lost immediately once this require_once was executed
+	  // some sort of PHP bug I think... so I am copying it to a tmp var to get past this.
+	  $_tmp = $_REQUEST;
+	  require_once(SMARTY_DIR . $this->compiler_file);
+	  $_REQUEST = $_tmp;
         } else {
             // use include_path
             require_once($this->compiler_file);
@@ -1506,7 +1510,9 @@ class Smarty
         $smarty_compiler->_cache_include = $cache_include_path;
 
 
+	$_tmp = $_REQUEST;
         $_results = $smarty_compiler->_compile_file($resource_name, $source_content, $compiled_content);
+	$_REQUEST = $_tmp;
 
         if ($smarty_compiler->_cache_serial) {
             $this->_cache_include_info = array(
