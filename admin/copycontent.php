@@ -154,7 +154,7 @@ if( check_permission(get_userid(),'Manage All Content') )
     $smarty->assign('lang_pageaccesskey',lang('accesskey'));
   }
 
-$tmp = 	$contentops->CreateHierarchyDropdown(-100, '', 'to_parentid',1,1,1,true);
+$tmp = 	$contentops->CreateHierarchyDropdown(-100, $fromobj->ParentId(), 'to_parentid',1,1,1,true);
 if( empty($tmp) )
   {
     $tmp = '<input type="hidden" name="to_parentid" value="'.$fromobj->Id().'"/>'.$fromobj->Hierarchy().'&nbsp;'.$fromobj->Name();
