@@ -21,7 +21,7 @@
 $dirname = dirname(__FILE__);
 require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 
-define('CMS_DEFAULT_VERSIONCHECK_URL','http://dev.cmsmadesimple.org/latest_version.php');
+define('CMS_DEFAULT_VERSIONCHECK_URL','http://www.cmsmadesimple.org/latest_version.php');
 define('CMS_SECURE_PARAM_NAME','sp_');
 define('CMS_USER_KEY','cmsuserkey');
 

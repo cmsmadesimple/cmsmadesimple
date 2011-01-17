@@ -158,6 +158,16 @@ if (is_object($contentobj))
       redirect($contentobj->GetURL());
     }
 
+  if( $_SERVER['REQUEST_METHOD'] == 'POST' || !$contentobj->Cachable() )
+    {
+      // Here we adjust headers for non cachable pages
+      header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+      header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+      header("Cache-Control: no-store, no-cache, must-revalidate");
+      header("Cache-Control: post-check=0, pre-check=0", false);
+      header("Pragma: no-cache");
+    }
+
   cmsms()->set_variable('content_obj',$contentobj);
   $smarty->assign('content_obj',$contentobj);
 
