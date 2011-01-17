@@ -2,25 +2,30 @@ Version 1.9.3 -
 -----------------------------
 Core:
   - #3766 Admin screens blank on new install (firewalled)
+  - #3794 Remove use of readfile
+  - #3820 Included method.install.php cannot return an error message
   - #3848 Pages flashing on load - no-cache headers
   - #5329 Assigning language from locale is not correct
   - #5619 Too short input fields
   - #5794 Stylesheet url in header could be wrong
+  - #5861 Extra fields are cleared if a mandatory field is forgotten
   - #5865 Small issue with admin panel tab header id's.
   - #5888 Remove markedown plugins from distribution.
   - #5952 GetPageAliasFromID() Undefined variable "alias"
   - #5846 When Power Users edit page content, the aliases change
+  - #5959 UserTagOperations::SetUserTag() does not set ID
   - #5971 Missing Image File in the default theme for CMSMS
-  -
+  - #5996 {content_image} does not show in preview-tab
+  - 
 
 Core Installer:
   - #4136 admin gui breaks when isntalling update over https
   - #4978 upgrade.32.to.33
-  -
+  - 
   
 FileManager:
   - #4046 Files too large won't upload
-  -
+  - 
 
 MenuManager:
   - #1761 Adding new template downloads moduleinterface.php
@@ -34,10 +39,11 @@ MenuManager:
   - #4186 Template error in simple_navigation.tpl causing invalid XHTML output
   - #4237 Menu Separators not generated since v1.6.x
   - #5447 Menu function childrenof breaks collapse
-  - 
+  -  
   
 News:  
   - #5987 Field Definition - Public option
+  - 
   
 Printing:
   - #5209 Printing module causes fatal errors when used with gallery
