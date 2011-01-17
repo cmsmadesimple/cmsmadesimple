@@ -1408,6 +1408,7 @@ $lang['admin']['admindescription'] = 'Site Administration functions.'; //needs t
 $lang['admin']['contentdescription'] = 'This is where we add and edit content.'; //needs translation
 $lang['admin']['enablecustom404'] = 'Enable Custom 404 Message'; //needs translation
 $lang['admin']['enablesitedown'] = 'Enable Site Down Message'; //needs translation
+$lang['admin']['enablewysiwyg'] = 'Enable WYSIWYG on Site Down Message'; //needs translation
 $lang['admin']['bookmarks'] = 'Shortcuts'; //needs translation
 $lang['admin']['user_created'] = 'Custom Shortcuts';
 $lang['admin']['forums'] = 'Forums';

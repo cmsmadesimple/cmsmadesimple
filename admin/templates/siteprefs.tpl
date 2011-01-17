@@ -235,6 +235,13 @@
   <p class="pageinput"><input type="hidden" name="enablesitedownmessage" value="0"/><input class="pagenb" type="checkbox" value="1" name="enablesitedownmessage" {if $enablesitedownmessage == "1"}checked="checked"{/if}/></p>
 </div>
 <div class="pageoverflow">
+  <p class="pagetext">{$lang_enablewysiwyg}:</p>
+  <p class="pageinput"><input type="hidden" name="use_wysiwyg" value="0"/><input type="checkbox" name="use_wysiwyg" id='use_wysiwyg' value="1" class="pagenb" {if $use_wysiwyg == "1"}checked="checked"{/if}/></p>
+</div>
+
+
+
+<div class="pageoverflow">
   <p class="pagetext">{$lang_sitedownmessage}:</p>
   <p class="pageinput">{$textarea_sitedownmessage}</p>
 </div>
