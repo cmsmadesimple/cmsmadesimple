@@ -16,7 +16,9 @@ Core:
   - #5959 UserTagOperations::SetUserTag() does not set ID
   - #5971 Missing Image File in the default theme for CMSMS
   - #5996 {content_image} does not show in preview-tab
-  - 
+  - Caching - Important Change 
+    Now pages marked as 'cachable' will be cachable in the browser for a time period as specified in the session.cache_expire PHP configration variable.
+    Pages not marked as cachable, or those accessed via a POST request will not be cached.
 
 Core Installer:
   - #4136 admin gui breaks when isntalling update over https
