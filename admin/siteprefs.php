@@ -84,6 +84,8 @@ $nogcbwysiwyg = '0';
 $global_umask = '022';
 $logintheme = "default";
 $auto_clear_cache_age = 0;
+$allow_browser_cache = 0;
+$browser_cache_expiry = 60;
 $pseudocron_granularity = 60;
 $listcontent_showalias = 1;
 $listcontent_showurl = 1;
@@ -103,6 +105,8 @@ if (isset($_POST["cancel"])) {
 
 
 $pseudocron_granularity = get_site_preference('pseudocron_granularity',$pseudocron_granularity);
+$allow_browser_cache = get_site_preference('allow_browser_cache',$allow_browser_cache);
+$browser_cache_expiry = get_site_preference('browser_cache_expiry',$browser_cache_expiry);
 $auto_clear_cache_age = get_site_preference('auto_clear_cache_age',$auto_clear_cache_age);
 $thumbnail_width = get_site_preference('thumbnail_width',$thumbnail_width);
 $thumbnail_height = get_site_preference('thumbnail_height',$thumbnail_height);
@@ -297,6 +301,16 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('disablesafemodewarning',$disablesafemodewarning);
 	  set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
 	  set_site_preference('enablenotifications',$enablenotifications);
+	  if( isset($_POST['allow_browser_cache']) )
+	    {
+	      $allow_browser_cache = (int)$_POST['allow_browser_cache'];
+	      set_site_preference('allow_browser_cache',$allow_browser_cache);
+	    }
+	  if( isset($_POST['browser_cache_expiry']) )
+	    {
+	      $browser_cache_expiry = (int)$_POST['browser_cache_expiry'];
+	      set_site_preference('browser_cache_expiry',$browser_cache_expiry);
+	    }
 	  if( isset($_POST['auto_clear_cache_age']) )
 	    {
 	      $auto_clear_cache_age = (int)$_POST['auto_clear_cache_age'];
@@ -420,6 +434,8 @@ $smarty->assign('sitedownexcludeadmins',$sitedownexcludeadmins);
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));
 $smarty->assign('thumbnail_width',$thumbnail_width);
 $smarty->assign('thumbnail_height',$thumbnail_height);
+$smarty->assign('allow_browser_cache',$allow_browser_cache);
+$smarty->assign('browser_cache_expiry',$browser_cache_expiry);
 $smarty->assign('auto_clear_cache_age',$auto_clear_cache_age);
 $smarty->assign('pseudocron_granularity',$pseudocron_granularity);
 $smarty->assign('listcontent_showalias',$listcontent_showalias);

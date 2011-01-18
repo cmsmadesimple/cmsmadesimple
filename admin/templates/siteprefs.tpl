@@ -281,6 +281,22 @@
   <input type="hidden" name="editsiteprefs" value="true" />
 </div>
 
+<fieldset>
+<legend>{'browser_cache_settings'|lang}&nbsp;</legend>
+<div class="pageoverflow">
+  <p class="pagetext">{'allow_browser_cache'|lang}:</p>
+  <p class="pageinput">
+   <input type="hidden" name="allow_browser_cache" value="0"/><input class="pagenb" value="1" type="checkbox" name="allow_browser_cache" {if $allow_browser_cache}checked="checked"{/if} /><br/>{'info_browser_cache'|lang}</p>
+</div>  
+<div class="pageoverflow">
+  <p class="pagetext">{'browser_cache_expiry'|lang}:</p>
+  <p class="pageinput">
+   <input type="text" name="browser_cache_expiry" value="{$browser_cache_expiry}" size="6" maxlength="10"/><br/>{'info_browser_cache_expiry'|lang}</p>
+</div>  
+</fieldset>
+
+<fieldset>
+<legend>{'server_cache_settings'|lang}&nbsp;</legend>
 <div class="pageoverflow">
   <p class="pagetext">{$lang_clearcache}:</p>
   <p class="pageinput">
@@ -294,7 +310,8 @@
     <br/>
     {$lang_info_autoclearcache}
   </p>
-</div>  
+</div>
+</fieldset>
 
 <div class="pageoverflow">
   <p class="pagetext">{$lang_global_umask}:</p>

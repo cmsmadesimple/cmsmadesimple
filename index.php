@@ -158,7 +158,11 @@ if (is_object($contentobj))
       redirect($contentobj->GetURL());
     }
 
-  if( $_SERVER['REQUEST_METHOD'] == 'POST' || !$contentobj->Cachable() )
+  $allow_cache = (int)get_site_preference('allow_browser_cache',0);
+  $expiry = (int)max(0,get_site_preference('browser_cache_expiry',60));
+  $expiry *= $allow_cache;
+  if( $_SERVER['REQUEST_METHOD'] == 'POST' || !$contentobj->Cachable() ||
+      $page == '__CMS_PREVIEW_PAGE__' || $expiry == 0 )
     {
       // Here we adjust headers for non cachable pages
       header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -166,6 +170,12 @@ if (is_object($contentobj))
       header("Cache-Control: no-store, no-cache, must-revalidate");
       header("Cache-Control: post-check=0, pre-check=0", false);
       header("Pragma: no-cache");
+    }
+  else
+    {
+      // as far as we know, the output is cachable at this point... 
+      // so we mark it so that the output can be cached.
+      header('Expires: '.gmdate("D, d M Y H:i:s",time() + $expiry * 60).' GMT');
     }
 
   cmsms()->set_variable('content_obj',$contentobj);

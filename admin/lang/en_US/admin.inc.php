@@ -1,4 +1,10 @@
 <?php
+$lang['admin']['info_browser_cache_expiry'] = 'Specify the amount of time (in minutes) that browsers should cache pages for.  Setting this value to 0 disables the functionality';
+$lang['admin']['browser_cache_expiry'] = 'Browser Cache Expiry Period (minutes)</em>';
+$lang['admin']['info_browser_cache'] = 'Applicable only to cachable pages, this setting indicates that browsers should be allowed to cache the pages for an amount of time.  If enabled repeat visitors to your site may not immediately see changes to the content of the pages.';
+$lang['admin']['allow_browser_cache'] = 'Allow Browser to Cache Pages';
+$lang['admin']['server_cache_settings'] = 'Server Cache Settings';
+$lang['admin']['browser_cache_settings'] = 'Browser Cache Settings';
 $lang['admin']['help_function_browser_lang'] = <<<EOT
 <h3>What does this do?</h3>
   <p>This plugin detects and outputs the language that the users browser accepts, and cross references it with a list of allowed languages to determine a language value for the session.</p>

@@ -25,9 +25,9 @@ define('CMS_DEFAULT_VERSIONCHECK_URL','http://www.cmsmadesimple.org/latest_versi
 define('CMS_SECURE_PARAM_NAME','sp_');
 define('CMS_USER_KEY','cmsuserkey');
 
-$session_key = substr(md5($dirname), 0, 8);
 
 #Setup session with different id and start it
+$session_key = substr(md5($dirname), 0, 8);
 @session_cache_limiter('public');
 @session_name('CMSSESSID' . $session_key);
 @ini_set('url_rewriter.tags', '');
