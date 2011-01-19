@@ -1,6 +1,6 @@
 <?php
 $lang['admin']['info_browser_cache_expiry'] = 'Specify the amount of time (in minutes) that browsers should cache pages for.  Setting this value to 0 disables the functionality';
-$lang['admin']['browser_cache_expiry'] = 'Browser Cache Expiry Period (minutes)</em>';
+$lang['admin']['browser_cache_expiry'] = 'Browser Cache Expiry Period <em>(minutes)</em>';
 $lang['admin']['info_browser_cache'] = 'Applicable only to cachable pages, this setting indicates that browsers should be allowed to cache the pages for an amount of time.  If enabled repeat visitors to your site may not immediately see changes to the content of the pages.';
 $lang['admin']['allow_browser_cache'] = 'Allow Browser to Cache Pages';
 $lang['admin']['server_cache_settings'] = 'Server Cache Settings';
