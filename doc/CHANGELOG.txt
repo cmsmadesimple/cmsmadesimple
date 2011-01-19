@@ -7,6 +7,7 @@ Core:
   - #3848 Pages flashing on load - no-cache headers
   - #5329 Assigning language from locale is not correct
   - #5619 Too short input fields
+  - #5744 impossible to reload and save a valid sitedown html page.
   - #5747 Error when final line of UDT is a comment
   - #5794 Stylesheet url in header could be wrong
   - #5861 Extra fields are cleared if a mandatory field is forgotten

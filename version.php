@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.9.2";
-$CMS_VERSION_NAME = "Tevairoa";
+$CMS_VERSION = "1.9.3";
+$CMS_VERSION_NAME = "No-Name-Set-Yet";
 $CMS_SCHEMA_VERSION = "34";
 
 define('CMS_VERSION', $CMS_VERSION);
