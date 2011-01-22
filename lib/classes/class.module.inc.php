@@ -960,6 +960,18 @@ class CMSModule
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * Function that gets called upon module uninstall, and returns a boolean to indicate whether or
+	 * not the core should remove all module events, event handlers, module templates, and preferences.
+	 * The module must still remove its own database tables and permissions
+	 * @abstract
+	 * @return boolean whether the core may remove all module events, event handles, module templates, and preferences on uninstall (defaults to true)
+	 */
+	function AllowUninstallCleanup()
+	{
+		return true;
+	}
 
 	/**
 	 * Display a message and a Yes/No dialog before doing an uninstall.	 Returning noting

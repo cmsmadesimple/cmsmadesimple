@@ -215,36 +215,27 @@ if ($access)
 	{
 		if (isset($gCms->modules[$module]))
 		{
+			$modops =& $gCms->GetModuleOperations();
+			// get the postinstall message, so we have it if successful
 			$modinstance = $gCms->modules[$module]['object'];
-			$result = $modinstance->Uninstall();
-
-			#now insert a record
-			if (!isset($result) || $result === FALSE)
+			$postuninstall = $modinstance->UninstallPostMessage();
+			
+			$result = $modops->UninstallModule($module);
+			if ($result)
 			{
-				#now delete the record
-				$query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ?";
-				$db->Execute($query, array($module));
-
-				#delete any dependencies
-				$query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
-				$db->Execute($query, array($module));
-
-				Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
-
-				#and show the uninstallpost if necessary...
-				if ($modinstance->UninstallPostMessage() != FALSE)
+				// show the uninstallpost if necessary...
+				if ($postuninstall != FALSE)
 				{
-					//Redirect right away so that the uninstalled module is removed from the menu
+					// Redirect right away so that the uninstalled module is removed from the menu
 					redirect($thisurl.'&action=showpostuninstall&module='.$module);
 				}
+				redirect($thisurl);
 			}
 			else
 			{
-				//TODO: Echo error
+				echo $themeObject->ShowErrors($modops->GetLastError());
 			}
 		}
-
-		redirect($thisurl);
 	}
 
 	if ($action == 'showpostuninstall')

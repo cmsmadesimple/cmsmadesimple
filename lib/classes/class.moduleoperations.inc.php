@@ -588,6 +588,62 @@ class ModuleOperations
   }
 
   /**
+   * Uninstall a module
+   *
+   * @param string $module The name of the module to upgrade
+   * @return boolean Whether or not the upgrade was successful
+   */
+  function UninstallModule( $module)
+  {
+    global $gCms;
+    $db =& $gCms->GetDb();
+
+    if (!isset($gCms->modules[$module]))
+      {
+		return false;
+      }
+
+    $modinstance = $gCms->modules[$module]['object'];
+    $cleanup = $modinstance->AllowUninstallCleanup();
+	$result = $modinstance->Uninstall();
+	// clean up
+	if (!isset($result) || $result === FALSE)
+	{
+		// now delete the record
+		$query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ?";
+		$db->Execute($query, array($module));
+
+		// delete any dependencies
+		$query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
+		$db->Execute($query, array($module));
+		
+		// clean up, if permitted
+		if ($cleanup)
+			{
+			$db->Execute('DELETE FROM '.cms_db_prefix().
+				'module_templates where module_name=?',array($module));
+			$db->Execute('DELETE FROM '.cms_db_prefix().
+				'event_handlers where module_name=?',array($module));
+			$db->Execute('DELETE FROM '.cms_db_prefix().
+				'events where originator=?',array($module));
+			$db->Execute('DELETE FROM '.cms_db_prefix().
+				"siteprefs where sitepref_name like '".
+					str_replace("'",'',$db->qstr($module)).
+				"_mapi_pref%'");
+			}
+
+		Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
+	}
+	else
+	{
+		$this->setError($result);
+		return false;
+	}
+    return true;
+  }
+
+
+  /**
    * Returns a hash of all loaded modules.  This will include all
    * modules loaded by LoadModules, which could either be all or them,
    * or just ones that are active and installed.
