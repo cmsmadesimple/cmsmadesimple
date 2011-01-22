@@ -7,7 +7,7 @@ Core:
   - #3848 Pages flashing on load - no-cache headers
   - #5329 Assigning language from locale is not correct
   - #5619 Too short input fields
-  - #5744 impossible to reload and save a valid sitedown html page.
+  - #5744 Impossible to reload and save a valid sitedown html page.
   - #5747 Error when final line of UDT is a comment
   - #5794 Stylesheet url in header could be wrong
   - #5861 Extra fields are cleared if a mandatory field is forgotten
@@ -18,16 +18,17 @@ Core:
   - #5959 UserTagOperations::SetUserTag() does not set ID
   - #5971 Missing Image File in the default theme for CMSMS
   - #5996 {content_image} does not show in preview-tab
+  - 
   
   - Caching - Important Change 
     1. Now pages marked as 'cachable' will be cachable in the browser for a time period as specified in the global settings page.
        Pages not marked as 'cachable', or those accessed via a POST request will not be allowed to be cached by the browser.
     2. Adds two new settings to global settings to control browser cache capabilities.
-   
 
 Core Installer:
-  - #4136 admin gui breaks when isntalling update over https
-  - #4978 upgrade.32.to.33
+  - #4136 Admin gui breaks when isntalling update over https
+  - #4978 Upgrade.32.to.33
+  - #5406 Upgrade stops when locales not correct
   - 
   
 FileManager:
