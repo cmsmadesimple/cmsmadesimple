@@ -1,6 +1,6 @@
 Version 1.9.3 - 
 -----------------------------
-Core:
+Core - Bugreports:
   - #3766 Admin screens blank on new install (firewalled)
   - #3794 Remove use of readfile
   - #3820 Included method.install.php cannot return an error message
@@ -18,22 +18,37 @@ Core:
   - #5959 UserTagOperations::SetUserTag() does not set ID
   - #5971 Missing Image File in the default theme for CMSMS
   - #5996 {content_image} does not show in preview-tab
-  - 
   
+Core - Feature requests:
+  - #1133 Admin Panel: MenuText instead of page title in overview & hierarchy 
+  - #1654 Add additional options to the cmsmslink plug-in for WYSIWYG editors. 
+  - #1656 Add the "Character Map" to the TinyMCE WYSIWYG Basic toolbar by default. 
+  - #2635 Enable "reorder pages" tool to change parent id
+  - #2969 Install > integrity check > number of failed files 
+  - #3140 Improved Page Re-order
+  - #3194 Page_image and page_thumbnail sort order and/or path 
+  - #3282 Description field for GCB's
+  - #3670 Better solution for viewing when site is down
+  - #3689 Create config.php automatically if file does not exist 
+  - #3958 Pretty CSS URLs
+  - #3975 New checkbox for global content blocks
+  - #4172 Page_image setting
+  - #4554 Display ALL Global Content Blocks on One Page
+  - #5440 View website in maintenance mode.
+  - #5670 Pref to disable wywiwyg for sitedown message
+
   - Caching - Important Change 
     1. Now pages marked as 'cachable' will be cachable in the browser for a time period as specified in the global settings page.
        Pages not marked as 'cachable', or those accessed via a POST request will not be allowed to be cached by the browser.
     2. Adds two new settings to global settings to control browser cache capabilities.
-
+	
 Core Installer:
   - #4136 Admin gui breaks when isntalling update over https
   - #4978 Upgrade.32.to.33
   - #5406 Upgrade stops when locales not correct
-  - 
   
 FileManager:
   - #4046 Files too large won't upload
-  - 
 
 MenuManager:
   - #1761 Adding new template downloads moduleinterface.php
@@ -47,15 +62,12 @@ MenuManager:
   - #4186 Template error in simple_navigation.tpl causing invalid XHTML output
   - #4237 Menu Separators not generated since v1.6.x
   - #5447 Menu function childrenof breaks collapse
-  -  
   
 News:  
   - #5987 Field Definition - Public option
-  - 
   
 Printing:
   - #5209 Printing module causes fatal errors when used with gallery
-  - 
 
 
 Version 1.9.2 - Tevairoa
