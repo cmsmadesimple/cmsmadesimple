@@ -2,6 +2,9 @@
 
 
 global $CMS_INSTALL_PAGE;
+global $CMS_STYLESHEET;
+$CMS_STYLESHEET = 1;
+
 // Parse pretty URLS
 if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
 {

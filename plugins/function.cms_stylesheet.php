@@ -23,7 +23,8 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	// begin
 	//
 	global $gCms;
-	
+	global $CMS_STYLESHEET;
+	$CMS_STYLESHEET = 1;
 	$template_id = '';
 
 	if (isset($params["templateid"]) && $params["templateid"]!="")
@@ -118,6 +119,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		$stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
 	}
 
+	unset($CMS_STYLESHEET);
 	return $stylesheet;
 }
 
