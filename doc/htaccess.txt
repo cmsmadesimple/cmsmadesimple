@@ -43,3 +43,26 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)$ index.php?page=$1 [QSA]
 </IfModule>
+
+<IfModule mod_header.c>
+# Disable ETags
+Header unset ETag
+FileEtag None
+</IfModule>
+
+<IfModule mod_deflate.c>
+# Compress css, plaintext, xml, gif, and images in transport.
+AddOutputFilterByType DEFLATE text/css text/plain text/xml image/gif image/jpeg image/png
+</IfModule>
+
+<IfModule mod_expires.c>
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+# Set expires tags on various files... so that the browser wont attempt to reload them.
+ExpiresActive On
+ExpiresDefault "access plus 1 year"
+<IfModule mod_header.c>
+  # Setting cache control to public allowes proxy servers to cache the items too.
+  Header set Cache-Control "public"
+</IfModule>
+</FilesMatch>
+</IfModule>
