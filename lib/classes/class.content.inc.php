@@ -1428,7 +1428,7 @@ class ContentBase
 	  else if( $this->mURL != '' )
 	    {
 	      // page url is not empty, check for validity.
-	      $this->mURL = trim($this->mURL," /\t\r\n\0\x08"); // silently delete bad chars.
+	      $this->mURL = strtolower(trim($this->mURL," /\t\r\n\0\x08")); // silently delete bad chars. and convert to lowercase.
 	      if( $this->mURL != '' && !content_assistant::is_valid_url($this->mURL,$this->mId) )
 		{
 		  // and validate the URL.
