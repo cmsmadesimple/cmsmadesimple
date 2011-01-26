@@ -111,7 +111,7 @@ class CmsRoute
     $this->_result = null;
     if( $this->is_content() || $this->_absolute || $exact )
       {
-	if( $this->_term == $str )
+	if( stricmp($this->_term,$str) )
 	  {
 	    return TRUE;
 	  }
