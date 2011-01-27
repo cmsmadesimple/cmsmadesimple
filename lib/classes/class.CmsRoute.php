@@ -111,7 +111,7 @@ class CmsRoute
     $this->_result = null;
     if( $this->is_content() || $this->_absolute || $exact )
       {
-	if( stricmp($this->_term,$str) )
+	if( strcasecmp($this->_term,$str) )
 	  {
 	    return TRUE;
 	  }
