@@ -1,4 +1,4 @@
-Version 1.9.3 - 
+Version 1.9.3 - Motu Tane
 -----------------------------
 Core - Bugreports:
   - #3766 Admin screens blank on new install (firewalled)
@@ -18,6 +18,7 @@ Core - Bugreports:
   - #5959 UserTagOperations::SetUserTag() does not set ID
   - #5971 Missing Image File in the default theme for CMSMS
   - #5996 {content_image} does not show in preview-tab
+  - Page URLS are case in-sensitive but forced to lowercase on page submit.
   
 Core - Feature requests:
   - #1133 Admin Panel: MenuText instead of page title in overview & hierarchy 
@@ -36,7 +37,6 @@ Core - Feature requests:
   - #4554 Display ALL Global Content Blocks on One Page
   - #5440 View website in maintenance mode.
   - #5670 Pref to disable wywiwyg for sitedown message
-
   - Caching - Important Change 
     1. Now pages marked as 'cachable' will be cachable in the browser for a time period as specified in the global settings page.
        Pages not marked as 'cachable', or those accessed via a POST request will not be allowed to be cached by the browser.
@@ -69,6 +69,8 @@ News:
 Printing:
   - #5209 Printing module causes fatal errors when used with gallery
 
+CMSMailer:
+  - Remove misleading, and buggy cancel button.
 
 Version 1.9.2 - Tevairoa
 -----------------------------

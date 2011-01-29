@@ -19,7 +19,7 @@
 #$Id$
 
 $CMS_VERSION = "1.9.3";
-$CMS_VERSION_NAME = "No-Name-Set-Yet";
+$CMS_VERSION_NAME = "Motu Tane";
 $CMS_SCHEMA_VERSION = "34";
 
 define('CMS_VERSION', $CMS_VERSION);
