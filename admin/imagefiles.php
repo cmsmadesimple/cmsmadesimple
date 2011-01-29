@@ -106,11 +106,11 @@ if (isset($_POST['newdirsubmit']))
 		{
 			$errors .= "<li>".lang('filecreatedirnoname')."</li>";
 		}
-		else if (ereg('\.\.',$_POST['newdir']))
+		else if (preg_match('@\.\.@',$_POST['newdir']))
 		{
 			$errors .= "<li>".lang('filecreatedirnodoubledot')."</li>";
 		}
-		else if (ereg('/', $_POST['newdir']) || strpos($_POST['newdir'], '\\') !== false)
+		else if (preg_match('@/@', $_POST['newdir']) || strpos($_POST['newdir'], '\\') !== false)
 		{
 			$errors .= "<li>".lang('filecreatedirnoslash')."</li>";
 		}
