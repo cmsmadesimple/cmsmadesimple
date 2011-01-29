@@ -88,7 +88,7 @@ if( $output )
 $smarty->assign('udt_name',$udt_name);
 $usertagops = $gCms->GetUserTagOperations();
 $tmp = $usertagops->GetUserTag( $udt_name );
-$smarty->assign('code',create_textarea(false,$tmp,'code','pagebigtextarea','code','','','80','15','','php','readonly="readonly"'));
+$smarty->assign('code',create_textarea(false,$tmp['code'],'code','pagebigtextarea','code','','','80','15','','php','readonly="readonly"'));
 echo $smarty->fetch('runuserplugin.tpl');
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>'."\n";
 include_once("footer.php");

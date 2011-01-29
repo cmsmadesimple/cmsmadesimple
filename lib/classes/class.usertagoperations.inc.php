@@ -147,12 +147,10 @@ class UserTagOperations
 	
 	function CallUserTag($name, &$params)
 	{
-		global $gCms;
-		$smarty =& $gCms->GetSmarty();
-		$userpluginfunctions =& $gCms->userpluginfunctions;
-		
-		$code = UserTagOperations::GetUserTag($name);
-		
+		$smarty = cmsms()->GetSmarty();
+		$ops = cmsms()->GetUserTagOperations();
+		$tmp = UserTagOperations::GetUserTag($name);
+		$code = $tmp['code'];		
 		$result = FALSE;
 		
 		$functionname = "tmpcallusertag_".$name."_userplugin_function";
