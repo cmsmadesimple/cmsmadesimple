@@ -115,7 +115,7 @@ class Files
 	 * error if the directory is not empty.
 	 * @return boolean true if deleted.
 	 */
-	function delFolder($folder, $recursive=false) 
+	static public function delFolder($folder, $recursive=false) 
 	{
 		$deleted = true;
 		if($recursive) 
