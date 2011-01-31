@@ -19,6 +19,7 @@ Core - Bugreports:
   - #5971 Missing Image File in the default theme for CMSMS
   - #5996 {content_image} does not show in preview-tab
   - Page URLS are case in-sensitive but forced to lowercase on page submit.
+  - Fixes a minor problems with modules adding tasks to be executed with psuedocron
   
 Core - Feature requests:
   - #1133 Admin Panel: MenuText instead of page title in overview & hierarchy 

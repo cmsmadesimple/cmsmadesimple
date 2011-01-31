@@ -83,7 +83,9 @@ class CmsRegularTaskHandler
 		if (!$modules) return;
 		foreach( $modules as $one )
 			{
-				$tasks = $one->current()->get_tasks();
+				if( !method_exists($one,'get_tasks') ) continue;
+
+				$tasks = $one->get_tasks();
 				if( $tasks )
 					{
 						if( !is_array($tasks) )
