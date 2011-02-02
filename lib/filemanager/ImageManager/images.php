@@ -197,8 +197,11 @@ function drawErrorBase(&$manager)
 <html>
 <head>
         <title>Image List</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link href="assets/imagelist.css" rel="stylesheet" type="text/css" />
+<meta http-Equiv="Cache-Control" Content="no-cache">
+<meta http-Equiv="Pragma" Content="no-cache">
+<meta http-Equiv="Expires" Content="0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="assets/imagelist.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="assets/dialog.js"></script>
 <script type="text/javascript">
 
