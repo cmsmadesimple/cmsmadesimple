@@ -107,6 +107,16 @@ class ADODB2_mysqli extends ADODB_DataDict {
 		return $sql;
 	}
 
+	function CreateTableSQL($tabname, $flds, $tableoptions=false)
+	{
+	  $tableoptions = $this->_Options($tableoptions);
+	  if( isset($tableoptions['TYPE']) )
+	    {
+	      $tableoptions['ENGINE'] = $tableoptions['TYPE'];
+	      unset($tableoptions['TYPE']);
+	    }
+	  return parent::CreateTableSQL($tabname, $flds, $tableoptions);
+	}
 }
 
 ?>

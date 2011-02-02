@@ -665,7 +665,7 @@ class ADODB_DataDict {
 	}
 
 	// return string must begin with space
-	function _CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint)
+	function _CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint,$funsigned)
 	{	
 		$suffix = '';
 		if (strlen($fdefault)) $suffix .= " DEFAULT $fdefault";
@@ -834,6 +834,9 @@ class ADODB_DataDict {
 		}
 		return $sql;
 	}
+
+
+
 }
 
 ?>
