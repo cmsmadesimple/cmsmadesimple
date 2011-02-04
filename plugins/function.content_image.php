@@ -61,6 +61,8 @@ function smarty_cms_function_content_image($params,&$smarty)
   if( startswith($img,$basename) )
     {
       // old style url.
+      if( !startswith($img,'http') ) $img = str_replace('//','/',$img);
+      $img = substr($img,strlen($basename.'/'));
       $img = $config['uploads_url'] . '/'.$img;
     }
   else
