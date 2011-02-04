@@ -76,6 +76,9 @@ CMSMailer:
 Search:
   - Fixes problems with quotes in search terms
 
+ThemeManager:
+  - Fixes to importing themes wrt Menumanager calls... should now be completely flexible.
+
 Version 1.9.2 - Tevairoa
 -----------------------------
 Core:
