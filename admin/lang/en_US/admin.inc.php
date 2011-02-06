@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['lock_lost'] = 'It appears you have lost the lock on the page.  There is no way to save your changes';
 $lang['admin']['content_lock_deleted'] = 'User %s deleted the lock owned by %s on content page entitled %s';
 $lang['admin']['lock_deleted'] = 'User %d deleted a lock on section: %s record: %d that was owned by user %d';
 $lang['admin']['locking'] = 'Locking Subsystem';

@@ -146,15 +146,15 @@ class cms_lock_manager
     if( !$userid ) $userid = get_userid();
     if( !$signature ) $signature = md5(serialize($_SERVER).serialize($_GET).session_id());
 
-    $query = 'SELECT * FROM '.cms_db_prefix().'locks WHERE section = ? AND record = ? and uid = ? AND signature = ?';
-    $row = $db->GetRow($query,array($lock['module'],$lock['record'],$lock['uid'],$lock['signature']));
-    $tmp = '';
-    if( is_array($row) && count($row) )
+    $lock = self::get_lock($module,$record);
+    if( is_object($lock) )
       {
-	$query = 'UPDATE '.cms_db_prefix().'locks SET modified = NOW() 
-              WHERE section = ? AND record = ? AND uid = ? AND signature = ?';
-	$tmp = $db->Execute($query,array($lock['module'],$lock['record'],$lock['uid'],$lock['signature']));
+	if( $lock['uid'] != $userid ) return FALSE;
       }
+
+    $query = 'UPDATE '.cms_db_prefix().'locks SET modified = NOW() 
+              WHERE section = ? AND record = ? AND uid = ? AND signature = ?';
+    $tmp = $db->Execute($query,array($lock['module'],$lock['record'],$lock['uid'],$lock['signature']));
 
     if( !$tmp ) return FALSE;
     return TRUE;

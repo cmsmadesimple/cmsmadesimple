@@ -122,12 +122,20 @@ if ($access)
   if (is_object($contentobj)) $classname=get_class($contentobj);
 	if ($submit || $apply)
 	{
-	  cms_lock_manager::touch('Core::Content',$content_id,$userid,$signature);
+	  $res = cms_lock_manager::touch('Core::Content',$content_id,$userid,$signature);
+	  if( !$res )
+	    {
+	      // could not touch the lock
+	      $error = lang('lock_lost');
+	    }
 
-	  #Fill contentobj with parameters
-	  // $contentobj->SetProperties();  // calguy should not be necessary
-	  $contentobj->FillParams($_POST,true);
-	  $error = $contentobj->ValidateData();
+	  if( !$error )
+	    {
+	      // Fill contentobj with parameters
+	      // $contentobj->SetProperties();  // calguy should not be necessary
+	      $contentobj->FillParams($_POST,true);
+	      $error = $contentobj->ValidateData();
+	    }
 
 	  if ($error === FALSE)
 	    {
