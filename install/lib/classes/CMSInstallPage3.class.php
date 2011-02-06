@@ -1,13 +1,13 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-20066 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
 #the Free Software Foundation; either version 2 of the License, or
 #(at your option) any later version.
-
+#
 #This program is distributed in the hope that it will be useful,
 #but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,15 +16,23 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
+#$Id: CMSInstallPage3.class.php 296 2010-10-17 22:31:18Z calguy1000 $
 
-$CMS_VERSION = "1.10";
-$CMS_VERSION_NAME = "";
-$CMS_SCHEMA_VERSION = "35";
+class CMSInstallerPage3 extends CMSInstallerPage
+{
+	function assignVariables()
+	{
+		$umask = isset($_POST['umask']) ? $_POST['umask'] : '022';
 
-define('CMS_VERSION', $CMS_VERSION);
-define('CMS_VERSION_NAME', $CMS_VERSION_NAME);
-define('CMS_SCHEMA_VERSION', $CMS_SCHEMA_VERSION);
+		if( (isset($_POST['umask'])) && (! empty($_POST['umask'])) )
+		{
+			$test = testUmask(1, ilang('test_check_umask'), $umask, ilang('test_check_umask_failed'));
+			$this->smarty->assign('test', $test);
+		}
 
+		$this->smarty->assign('umask', $umask);
+		$this->smarty->assign('errors', $this->errors);
+	}
+}
 # vim:ts=4 sw=4 noet
 ?>

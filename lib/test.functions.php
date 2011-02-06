@@ -1287,6 +1287,7 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 			}
 		else
 			{
+				die('could not connect to '.$url_info['host']);
 				$test->res = 'red';
 				getTestReturn($test, $required, '', '', $lang_fn('connection_error'));
 				$test->continueon = 0;

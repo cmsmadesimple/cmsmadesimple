@@ -1,0 +1,134 @@
+------------------------------
+CMSMS Version 1.9 - Bora Bora
+------------------------------
+Once again the CMSMS(tm) Dev team has joined forces over hundreds or thousands of hours of effort to release yet another milestone version of CMS Made Simple(tm). This release is a feature version where we expanded the flexibility of your favorite package while maintaining its famous ease of use. We are confident that you find this version of your favorite content management system to be the best one yet.
+
+Complete Freedom in URLs now customizable in any way preferred:
+--
+We have addressed some long standing concerns and wish list items with respect to URLs in this issue. There is a new URL field for each and every content page, allowing you to specify the exact URL (relative to the start of your site) for each content page. i.e: if you want the URL to be 'blah' you can do that. if you want it to be 'a/really/complex/path' you can do that too. You can have two pages that end in the same string, like: 'toronto/restaraunts' and 'calgary/restaraunts'. The site developer has complete control over the URLs for each page. Developers have the option of leaving the URL field blank, and thereby using the old page-alias method of doing things, or URLs can automatically be filled in from the page alias. To make it easier to track your URLs or see them at a glance, the listcontent page has been enhanced to show the page alias, and the page URLs. This is a huge feature and we are sure will further cement your relationship with CMSMS.
+
+News Module allows customizing the URLs:
+--
+The News module has also been modified to allow customizing the URLs to the detail view on news articles. i.e: You can choose exactly what the URL will be to each news article. There is a preference as to which content page to use to display the detail view, and it will use the 'default' detail template. I am sure that this functionality will also appear in other third party modules like blog and e-commerce modules soon.
+
+MenuManager module improved:
+--
+The MenuManager module has been greatly improved with an eye on performance. Since building the navigation(s) is often the most memory and time consuming portion of every page request, but page structure doesn't change that often, we've added the ability for MenuManager's output to be cached. If the page that is being generated is cacheable, and the MenuManager template that is being used is cachable, and thirdly if the 'nocache' parameter (new in CMSMS 1.9) is NOT specified, then MenuManager's output can be cached. If a cache file does not exist then one will be generated to optimize the next request. In our tests this resulted in a significant performance increase. This is another huge feature for 1.9.
+
+The URL modifications we have made have finally allowed us to permanently resolve the 'use_hierarchy=false' issue that we have wanted to get rid of for a long time, but caused a bit of a stir in the 1.8 series. On upgrade, if you were using 'use_hierarchy=false' in the config.php all of your page aliases will be copied to the 'URL' field, thereby preserving your link structure. New preferences in site admin can control how URLs are defined for new content items.
+
+Features, Featues and more Features:
+--
+We also went through our feature request list, and picked off quite a few of the items that people have asked for. Included in this are: You can now add a description to Global Content Blocks, Additionally, developers can disable the WYSIWYG editor on each individual GCB to remove the risk that it may mess up some formatting. There is also a new option to 'run' a User Defined Tag from within the admin. This allows site developers to create a UDT that maybe does some database cleanups or queries, and to run it from within the admin console rather than having to create a dummy hidden page on the sites frontend. Additionally, a new preference allows displaying either the menu text, or the page title in the content list. The sitedown functionality has been improved. now you can display a 'Site Down' message to site visitors while logged in administrators can still see the site. And due to pupular request we have improved the behavior of the {content_image} and the thumbnail and image properties of each page.  These are just a few examples of the enhancements you will find in CMSMS 1.9 Bora Bora.
+
+jQuery Replaces script.aculo.us:
+--
+We've finally gotten rid of script.aculo.us and prototype (hooray) from CMS Made Simple, and replaced it with jQuery. This will make things a lot easier for module developers to do nice fancy ajaxy and javascripty things in their modules. Once we did this we were able to completely re-write the page re-ordering function. You can now order pages as you would expect, and change the parents of pages, etc. It's a fantastic benefit to using jQuery.
+
+New Admin Theme
+--
+We are also concerned about presentation, and therefore the NCleanGrey admin theme has gotten an overhaul. We really like the new look of this theme, and we think you will to. Many thanks to Nuno Costa for his contributions in this area.
+
+Optimization:
+--
+We also spent a great deal of time focusing on optimization. Though we are still not overly worried about a dozen lines of code here or there, we looked at the bigger picture like removing redundancies, optimizing things so that where possible data wasn't loaded from the database multiple times, etc. Particularly in the area of loading content. To that end we have new classes for managing loaded content objects, and loading them. This should result in slightly better memory utilization, and certainly better scalability.
+
+E_STRICT and E_DEPRECATED:
+--
+Though we still don't officially support the E_STRICT and E_DEPRECATED error reporting levels in php we have made a lot of effort to clean up whatever errors we have found. We will endeavor to do a review of each function to try to remove E_STRICT and E_DEPRECATED errors in the future.
+
+For security reasons, and because it is not good practice for modules, UDTs or plugins to modify internal CMSMS variables we have made some core API changes. The {$gCms} smarty variable has been removed, and it is no longer possible for third party modules to use $gCms->variables to store config data. Additionally, the configuration data is now stored in an object once loaded, and setting data at runtime into the config structure is deprecated, and that ability will be removed at a later date.
+
+In addition to the items listed above there are dozens of other changes that have been made to the core, including removing some deprecated plugins from the release, handling the timezone setting for PHP 5.3, rework of the cms_selflink tag and more. Please read the doc/CHANGELOG.TXT for a more complete list (though it is quite technical) of what has changed.
+
+IMPORTANT NOTE for sers that have created their own admin theme and developers of 3rd party modules: 
+--
+Removing script.aculo.us and using jQuery may cause difficulties for our users that have created their own admin themes. As well, there may be a few third party modules that relied on script.aculo.us, or did some non-standard things to include jQuery. Some module developers may need to release new versions of their modules because of the jQuery changes. Additionally, the changes to the core API functions and the removal of the {$gCms} smarty variable may cause problems on existing sites, and break the behaviour of some modules. As always, it is highly recommended that users make backups of sites before they upgrade, and to test this upgrade of CMSMS on a development server before upgrading your production sites.
+
+This release had the best beta testing cycle of all of the releases. The beta testers spent many many hours installing the release, testing upgrades, spotting issues and verifying that they were fixed, and generally being a great assistance to the CMSMS™ community. Although we did not close every single issue that was reported by the beta team, we did analyze each one for severity, and fixed what was important (especially in the days leading up to the release). Here we would like to give thanks to: alby, bertoost85, binarydesign, Dabnis, dc2, DIGI3, duketown, gdur, hexdj, janvi, jce76350, jd447, jos, lowell, milehigh, mww, NaN, Nullig, Peciura, pedes, seensite, Sonya, Stikki, uniqu3 and vilkis.
+
+The CMSMS Dev team has once again come together in a unified effort, and contributed hundreds of improvements to CMS Made Simple.  We have focused on ensuring stability, consistency, security, performance and presentation. Please give special thanks to your Dev Team:
+
+    * Ted Kulp - CMSMS Project Founder
+    * Robert Campbell (calguy1000) - Project Manager / Development
+    * Samuel Goldstein (SjG) - Development Morten
+    * Poulsen (Silmarillion) - Development
+    * Ronny Krijt (RonnyK) - QA Team Lead
+    * Jeremy Bass - QA Team
+    * Rolf - QA Team
+    * Reneh Helminsen (reneh) - Translation Team Lead
+    * Mark Reed (DrCss) - Support Team
+    * Lead Jeff Bosch (ajprog) - Support Team
+    * Anne-Mieke Bovelett (CompuFairy) - Marketing Team Lead
+    * Keith Lauchlan (Utter) - Marketing Team Member
+    * Bruce Marable - Marketing Team Member
+
+------------------------------
+CMSMS Version 1.8 - Madagascar
+------------------------------
+
+Onwards and upwards we go. The dev team is proud to announce the latest version of your favorite content management system.  This version is primarily aimed at rounding out some of the rough edges that our primary audience (experienced, professional web developers) have experienced with CMS Made Simple. There are a number of new features to enhance performance not only of the website itself, but to make doing some mundane tasks faster and easier. As well, we've added some power for the contributing programmers, and fixed quite a few nagging bugs. We will now have a lot more to talk about at the GeekMoot in Amsterdam this September.
+
+The development team, and our beta testers have contributed countless hours in testing each and every change under as many different environments as possible. They've found a lot of issues, and tested each and every fix.
+
+We've deprecated the {stylesheet} tag in favor of a {cms_stylesheet} tag.  The replacement works by grabbing the content of the individual style sheets and passing them through smarty before writing them to uniquely named files in the tmp/cache directory. This is a huge feature. Processing the style sheets (individually) through smarty means that you will no longer have to search through each of the style sheets for individual colors, you can give them names. There are a lot of other cool possibilities as well.  Additionally, developers can now be confident that browsers will be able to cache the style sheets properly to improve performance, and to reduce bandwidth. There is however a trade off. Because the style sheets are stored in the tmp/cache directory, the relative directory of the style sheets is not the same, users should use the [[root_url]] smarty tag in their style sheets to force absolute references to images that are specified in style sheets.
+
+We've added the ability to bulk-copy pages. This means that if you have a page structure that you want to duplicate it becomes much easier. This is a big time saver for people who have multiple similarly structured groups of pages.
+
+There's a new {content_module} tag that allows modules to provide different types of content blocks for use in Content pages. This is a huge feature, it means that a module developer could write a specific type of content block to provide specific type of content, and that content is stored with the page, not with the module (so copying the page will still work etc). Currently the CGContentUtils and Uploads modules support the {content_module} tag, but soon enough more modules will support it.
+
+Our half-baked attempt at getting SSL support built into CMSMS was re-visited. We've fixed the {stylesheet}/ and {metadata} tags, and made other improvements to ensure that once you've specified that a page is secure, all of the CMSMS generated URLS are secure.
+
+We've gone through the libraries and cleaned a bunch of unused code, and updated the documentation (the api doc stuff will be regenerated shortly after the release of CMSMS). This should help all of the budding module authors out there, however we still think that looking at a clean, well working module as a reference is the best way to learn how to do things. The API doc will only tell you what functions are available and what parameters they take, but not necessarily the context they should be used in.
+
+We have also removed some of the very old, long deprecated callback methods from the module API. We now require that developers use the equivalent events that replaced them when events were introduced. These callbacks have been deprecated for a long time so therefore should not break any modules. However, if you are using some modules that haven't been maintained for a long time...
+
+We've also cleaned up the language stuff a bit. This should provide a modest performance improvement in the front-end, and in the admin.
+
+Module Manager has gotten a lot of attention in this release. We've listened, and now it should be much easier to install or upgrade modules, including all of their dependencies.
+
+There are a lot of bug fixes, some of them related to stuff introduced in 1.7.x, and some very old ones. We hope that CMSMS 1.8 will be a very stable release. Please note that because the database schema has changed, and the upgrade procedure must be followed, there will be no diff packages in this release.
+
+There have been hundreds of hours of development, testing, and documentation effort put into this release, proving once again that the CMSMS user community is active, strong, and cooperative. We would like to give a big thanks to the following users:
+
+Ted (The Benevolent Dictator)
+calguy1000 (Project Manager)
+RonnyK (leader of the QA Project)
+reneh (leader of the translation team)
+Rolf
+DrCSS
+JeremyBass
+Nuno
+tyman00
+_SjG_
+Utter
+ajprog
+Nullig
+Peciura
+jce76350
+Duketown
+
+
+----------------------------
+CMSMS Version 1.7.1 - Escade
+----------------------------
+
+This version of CMSMS fixes numerous minor bugs and adds some important features.  We didn't feel that the list of changes were extensive enough to call it 1.8 even though we attempted to attack as many issues that would have the biggest bang for the least bucks as possible.  That meant we tackled changes that were probably easy to implement, had smaller impacts on existing sites but would make things alot easier for our user base.
+
+One of the biggest things this version adds is better support for SSL.  There is now an (optional) ssl_url parameter in the config.php and a checkbox in each edit content page to turn on HTTPS support on an individual page basis.  This was a long time coming.
+
+We tweaked the module API so that any form element created by a module (form tag, text input, checkbox etc) has classes associated with the tag.  This will make it much easier for designers to style forms.
+
+We have also added preferences to control the default imagemanager thumbnail size instead of having to edit a config file.  There are new user preferences to aide in pagination for GCB, stylesheet, and template lists. As well, the core modules have had minor tweaks and bug fixes to generally solve a few problems and make life just a little bit simpler.  TinyMCE has been upgraded to the latest version again (hopefully we'll avoid the normal pain with upgrading and TinyMCE this time).
+
+There has been a schema change this version to accomodate the SSL changes so no diff releases will be generated.  You will need to go through the upgrade process on each site.
+
+Again, we would like to thank the people that contributed to this release with countless hours of testing, bug reporting, translation and support.  In particular:
+    Ronny Krijt (ronnyk)
+    Nuno Costa (nuno)
+    Rene Helminsen (reneh)
+    Jeremy Bass (JeremyBass)
+    Tyler Boespflug (tyman00)
+    Mark Reed (DrCss)
+
+Enjoy, and happy CMSMS'ing!

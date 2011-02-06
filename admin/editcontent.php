@@ -39,11 +39,6 @@ $xajax->register(XAJAX_FUNCTION,'ajaxpreview');
 $xajax->processRequest();
 $headtext = $xajax->getJavascript('../lib/xajax')."\n";
 
-if (isset($_POST["cancel"]))
-{
-	redirect("listcontent.php".$urlext);
-}
-
 $error = FALSE;
 
 $content_id = "";
@@ -114,12 +109,21 @@ if (!$access)
 	$access = check_authorship($userid, $content_id);
 }
 
+$signature = md5($userid.$content_id.session_id());
+if (isset($_POST["cancel"]))
+{
+  cms_lock_manager::unlock('Core::Content',$content_id,$userid,$signature);
+  redirect("listcontent.php".$urlext);
+}
+
 if ($access)
 {
   $classname="";
   if (is_object($contentobj)) $classname=get_class($contentobj);
 	if ($submit || $apply)
 	{
+	  cms_lock_manager::touch('Core::Content',$content_id,$userid,$signature);
+
 	  #Fill contentobj with parameters
 	  // $contentobj->SetProperties();  // calguy should not be necessary
 	  $contentobj->FillParams($_POST,true);
@@ -135,6 +139,7 @@ if ($access)
 	      audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
 	      if ($submit)
 		{
+		  cms_lock_manager::unlock('Core::Content',$content_id,$userid,$signature);
 		  redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&message=contentupdated');
 		}
 	    }
@@ -166,16 +171,29 @@ if ($access)
 	}
 	else if ($content_id != -1 && strtolower($classname) != strtolower($content_type))
 	{
+	  if( !cms_lock_manager::lock('Core::Content',$content_id,$userid,$signature) )
+	    {
+	      // could not get a lock
+	      redirect('listcontent.php'.$urlext.'&error=problemlocking');
+	    }
+
 	  // handle changing content type
-		global $gCms;
-		$contentops =& $gCms->GetContentOperations();
-		$contentobj = $contentops->LoadContentFromId($content_id);
-		$content_type = $contentobj->Type();
+	  global $gCms;
+	  $contentops =& $gCms->GetContentOperations();
+	  $contentobj = $contentops->LoadContentFromId($content_id);
+	  $content_type = $contentobj->Type();
 	}
 	else
 	  {
+	    if( !cms_lock_manager::lock('Core::Content',$content_id,$userid,$signature) )
+	      {
+		// could not get a lock
+		redirect('listcontent.php'.$urlext.'&error=problemlocking');
+	      }
+
 	    // changing content type
 	    updatecontentobj($contentobj);
+	    cms_lock_manager::lock('Core::Content',$contentobj->Id(),$userid,$signature);
 	}
 }
 

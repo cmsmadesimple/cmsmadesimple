@@ -813,6 +813,25 @@ class ContentBase
     }
 
     /**
+     * Is this item currently being editied (locked)
+     *
+     * @since 1.10
+     */
+    function IsLocked()
+    {
+      $obj = $this->GetLock();
+      if( is_object($obj) ) return TRUE;
+      return FALSE;
+    }
+
+
+    public function GetLock()
+    {
+      if( !$this->Id() ) return;
+      return cms_lock_manager::get_lock('Core::Content',$this->Id());
+    }
+
+    /**
      * Is this content type copyable ?
      */
     function IsCopyable()

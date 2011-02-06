@@ -592,6 +592,32 @@ function check_children(&$root, &$mypages, &$userid)
 	return $result;
 }
 
+function get_lock_status($content_id,&$message)
+{
+  $lock = cms_lock_manager::get_lock('Core::Content',$content_id);
+  if( is_object($lock) && $lock['uid'] != get_userid() )
+    {
+      $userops = cmsms()->GetUserOperations();
+      $user = $userops->LoadUserById($lock['uid']);
+      $stale_age = (int)get_site_preference('listcontent_lockstaleage',30) * 60;
+      $db = cmsms()->GetDb();
+      $modified = $db->UnixTimestamp($lock['modified']);
+      if( $modified < (time() - $stale_age) )
+	{
+	  $message = lang('listcontent_lockstatus_stale',$user->username,$lock['modified']);
+	  return 'stale';
+	}
+
+      $message = lang('listcontent_lockstatus_locked',$user->username,$lock['modified']);
+      return 'locked';
+    }
+  else
+    {
+      $message = lang('listcontent_lockstatus_unlocked');
+      return;
+    }
+}
+
 function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$copyImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages, &$page, $columnstodisplay)
 {
   global $thisurl;
@@ -626,6 +652,16 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
       $users[$one->Owner()] =& $userops->LoadUserById($one->Owner());
     }
   
+  $lockmsg = '';
+  $lockstatus = get_lock_status($one->Id(),$lockmsg);
+  $editurl = 'editcontent.php'.$urlext.'&amp;content_id='.$one->Id();
+  $edittitle = cms_htmlentities($one->mName.' ('.$one->mAlias.')');
+  if( $lockstatus == 'stale')
+    {
+      $editurl = 'steallock.php'.$urlext.'&amp;content_id='.$one->Id();
+      $edittitle = lang('steal_content_lock',$edittitle);
+    }
+
   $display = 'none';
   if (check_modify_all($userid) || check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages))
     {
@@ -696,11 +732,31 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		  $str = $one->mName;
 		}
 	      if ($display == 'edit')
-		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($str, '', '', true) . '</a>';
+		if( $lockstatus == 'locked' )
+		  {
+		    $txt = cms_htmlentities($str,'','',true);
+		  }
+	        else
+		  {
+		    $txt .= '<a class="editcontent" href="'.$editurl.'" title="'.$edittitle.'">'. cms_htmlentities($str, '', '', true) . '</a>';
+		  }
 	      else
 		$txt .= cms_htmlentities($str, '', '', true);
 	    }
 	  if( !empty($txt) ) $columns['page'] = $txt;
+	}
+
+      /* locked column */
+      if( $columnstodisplay['locked'] )
+	{
+	  $columns['locked'] = '&nbsp';
+	  $txt = '';
+	  if( $lockstatus != '' && $lockstatus != 'unlocked' )
+	    {
+	      global $themeObject;
+	      $txt = $themeObject->DisplayImage('icons/system/lock.gif', $lockmsg,'','','systemicon');
+	    }
+	  if( !empty($txt) )  $columns['locked'] = $txt;
 	}
 
       /* alias column */
@@ -907,13 +963,14 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	{
 	  $columns['edit'] = '&nbsp;';
 	  $txt = '';
-	  if (check_modify_all($userid) || 
-	      check_ownership($userid, $one->Id()) || 
-	      quick_check_authorship($one->Id(), $mypages) ||
-	      check_permission($userid, 'Manage All Content'))
+	  if ((check_modify_all($userid) || 
+	       check_ownership($userid, $one->Id()) || 
+	       quick_check_authorship($one->Id(), $mypages) ||
+	       check_permission($userid, 'Manage All Content'))
+	      && $lockstatus != 'locked' )
 	    {
 	      // edit link
-	      $txt .= "<a href=\"editcontent.php".$urlext."&amp;content_id=".$one->Id()."\">";
+	      $txt .= "<a class=\"editconten\" href=\"{$editurl}\" title=\"".$edittitle."\">";
 	      $txt .= $editImg;
 	      $txt .= "</a>";
 	    }
@@ -939,7 +996,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		 )
 		{
 		  //$txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."');\">";
-		  $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
+		  $txt .= "<a class=\"deletecontent\" href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
 		  $txt .= $deleteImg;
 		  $txt .= "</a>";
 		}
@@ -962,7 +1019,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 			quick_check_authorship($one->Id(),$mypages) ||
 			check_ownership($userid,$one->Id()))?1:0;
 	  if ( (($structure == 1) || (($remove == 1) && ($editperms == 1))) &&
-	       ($one->Type() != 'errorpage' ))
+	       ($one->Type() != 'errorpage' && ($lockstatus == '' || $lockstatus == 'unlocked')))
 	    {
 	      $txt .= '<input type="checkbox" name="multicontent-'.$one->Id().'" />';
 	    }
@@ -979,6 +1036,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
 	  switch( $name )
 	    {
+	    case 'locked':
 	    case 'edit':
 	    case 'default':
 	    case 'view':
@@ -995,7 +1053,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	    case 'multiselect':
 	      $thelist .= '<td class="checkbox">'.$value."</td>\n";
 	      break;
-	      
+
 	    default:
 	      $thelist .= '<td>'.$value."</td>\n";
 	      break;
@@ -1031,6 +1089,7 @@ function display_content_list($themeObject = null)
 	$mypages = author_pages($userid);
 	$columnstodisplay = array();
 	$columnstodisplay['expand'] = 1;
+	$columnstodisplay['locked'] = 1;
 	$columnstodisplay['hier'] = 1;
 	$columnstodisplay['page'] = 1;
 	$columnstodisplay['alias'] = get_site_preference('listcontent_showalias',1);
@@ -1074,6 +1133,7 @@ function display_content_list($themeObject = null)
 	$editImg = $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 	$copyImg = $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
 	$deleteImg = $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+	
 
 	#Setup array so we don't load more templates than we need to
 	$templates = array();
@@ -1170,6 +1230,10 @@ function display_content_list($themeObject = null)
 		$str = lang('title');
 	      }
 	    $headoflist .= '<th class="pagew25" title="'.lang('lctitle_page').'">'.lang('page')." <em>({$str})</em></th>\n";
+	  }
+	if( $columnstodisplay['locked'] )
+	  {
+	    $headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	  }
 	if( $columnstodisplay['alias'] )
 	  {

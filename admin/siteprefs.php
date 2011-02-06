@@ -90,12 +90,14 @@ $pseudocron_granularity = 60;
 $listcontent_showalias = 1;
 $listcontent_showurl = 1;
 $listcontent_showtitle = 1;
+$listcontent_lockstaleage = 30;
 $content_autocreate_urls = 0;
 $content_autocreate_flaturls = 0;
 $content_mandatory_urls = 0;
 $contentimage_useimagepath = 0;
 $content_imagefield_path = '';
 $content_thumbnailfield_path = '';
+$content_ping_interval = 60;
 $contentimage_path = '';
 
 if (isset($_POST["cancel"])) {
@@ -133,11 +135,13 @@ $basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
 $listcontent_showalias = get_site_preference('listcontent_showalias',$listcontent_showalias);
 $listcontent_showurl = get_site_preference('listcontent_showurl',$listcontent_showurl);
 $listcontent_showtitle = get_site_preference('listcontent_showtitle',$listcontent_showtitle);
+$listcontent_lockstaleage = get_site_preference('listcontent_lockstaleage',$listcontent_lockstaleage);
 $content_autocreate_urls = get_site_preference('content_autocreate_urls',$content_autocreate_urls);
 $content_autocreate_flaturls = get_site_preference('content_autocreate_flaturls',$content_autocreate_flaturls);
 $content_mandatory_urls = get_site_preference('content_mandatory_urls',$content_mandatory_urls);
 $content_imagefield_path = get_site_preference('content_imagefield_path',$content_imagefield_path);
 $content_thumbnailfield_path = get_site_preference('content_thumbnailfield_path',$content_thumbnailfield_path);
+$content_ping_interval = get_site_preference('content_ping_interval',$content_ping_interval);
 $contentimage_path = get_site_preference('contentimage_path',$contentimage_path);
 
 $active_tab='unknown';
@@ -252,6 +256,8 @@ else if (isset($_POST["editsiteprefs"]))
 	      $basic_attributes = '';
 	    }
 	  set_site_preference('basic_attributes',$basic_attributes);
+	  $content_ping_interval = (int)$_POST['content_ping_interval'];
+	  set_site_preference('content_ping_interval',$content_ping_interval);
 	  break;
 
 	case 'listcontent':
@@ -261,6 +267,8 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('listcontent_showurl',$listcontent_showurl);
 	  $listcontent_showtitle = (int)$_POST['listcontent_showtitle'];
 	  set_site_preference('listcontent_showtitle',$listcontent_showtitle);
+	  $listcontent_lockstaleage = (int)$_POST['listcontent_lockstaleage'];
+	  set_site_preference('listcontent_lockstaleage',$listcontent_lockstaleage);
 	  break;
 
 	case 'sitedown':
@@ -441,11 +449,13 @@ $smarty->assign('pseudocron_granularity',$pseudocron_granularity);
 $smarty->assign('listcontent_showalias',$listcontent_showalias);
 $smarty->assign('listcontent_showurl',$listcontent_showurl);
 $smarty->assign('listcontent_showtitle',$listcontent_showtitle);
+$smarty->assign('listcontent_lockstaleage',$listcontent_lockstaleage);
 $smarty->assign('content_autocreate_urls',$content_autocreate_urls);
 $smarty->assign('content_autocreate_flaturls',$content_autocreate_flaturls);
 $smarty->assign('content_mandatory_urls',$content_mandatory_urls);
 $smarty->assign('content_imagefield_path',$content_imagefield_path);
 $smarty->assign('content_thumbnailfield_path',$content_thumbnailfield_path);
+$smarty->assign('content_ping_interval',$content_ping_interval);
 $smarty->assign('contentimage_path',$contentimage_path);
 
 $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),

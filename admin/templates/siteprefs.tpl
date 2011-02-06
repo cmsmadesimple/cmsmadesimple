@@ -125,6 +125,14 @@
 </div>
 
 <div class="pageoverflow">
+  <p class="pagetext">{'listcontent_lockstaleage'|lang}:</p>
+  <p class="pageinput">
+    <input type="text" name="listcontent_lockstaleage" size="3" maxlength="3" value="{$listcontent_lockstaleage}"/>&nbsp;{'minutes'|lang}
+    <br/>
+    {'info_listcontent_lockstaleage'|lang}
+  </p>
+</div>
+<div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
   <p class="pageinput">
     <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
@@ -196,6 +204,15 @@
     <input type="text" name="contentimage_path" size="50" maxlength="255" value="{$contentimage_path}"/>
     <br/>
     {'info_contentimage_path'|lang}
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{'content_ping_interval'|lang}:</p>
+  <p class="pageinput">
+    <input type="text" name="content_ping_interval" size="3" maxlength="3" value="{$content_ping_interval}"/>
+    <br/>
+    {'info_content_ping_interval'|lang}
   </p>
 </div>
 
