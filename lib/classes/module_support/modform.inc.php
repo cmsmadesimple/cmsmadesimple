@@ -171,7 +171,7 @@ function cms_module_CreateInputFile(&$modinstance, $id, $name, $accept='', $size
   $accept = cms_htmlentities($accept);
   $size = cms_htmlentities($size);
 
-	$text='<input type="file" class="cms_browse" name="'.$id.$name.'" size="'.$size.'"';
+	$text='<input type="file" class="cms_browse" id="'.$id.$name.'" name="'.$id.$name.'" size="'.$size.'"';
 	if ($accept != '')
 	{
 		$text .= ' accept="' . $accept.'"';
@@ -234,7 +234,7 @@ function cms_module_CreateInputCheckbox(&$modinstance, $id, $name, $value='', $s
   $value = cms_htmlentities($value);
   $selectedvalue = cms_htmlentities($selectedvalue);
 
-	$text = '<input type="checkbox" class="cms_checkbox" name="'.$id.$name.'" value="'.$value.'"';
+	$text = '<input type="checkbox" class="cms_checkbox" id="'.$id.$name.'" name="'.$id.$name.'" value="'.$value.'"';
 	if ($selectedvalue == $value)
 	{
 		$text .= ' ' . 'checked="checked"';
@@ -293,7 +293,7 @@ function cms_module_CreateInputReset(&$modinstance, $id, $name, $value='Reset', 
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
 
-  $text = '<input type="reset" class="cms_reset" name="'.$id.$name.'" value="'.$value.'"';
+  $text = '<input type="reset" class="cms_reset" id="'.$id.$name.'" name="'.$id.$name.'" value="'.$value.'"';
   if ($addttext != '')
     {
       $text .= ' '.$addttext;
@@ -311,7 +311,7 @@ function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
 
-	$text = '<input type="file" class="cms_browse" name="'.$id.$name.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+	$text = '<input type="file" class="cms_browse" id="'.$id.$name.'" name="'.$id.$name.'" size="'.$size.'" maxlength="'.$maxlength.'"';
 	if ($addttext != '')
 	{
 		$text .= ' '.$addttext;
@@ -330,7 +330,7 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
   $selectedindex = cms_htmlentities($selectedindex);
   $selectedvalue = cms_htmlentities($selectedvalue);
 
-	$text = '<select class="cms_dropdown" name="'.$id.$name.'"';
+	$text = '<select class="cms_dropdown" id="'.$id.$name.'" name="'.$id.$name.'"';
 	if ($addttext != '')
 	{
 		$text .= ' ' . $addttext;
@@ -372,7 +372,7 @@ function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $se
     {
       $name.='[]';
     }
-  $text = '<select class="cms_select" name="'.$id.$name.'"';
+  $text = '<select class="cms_select" id="'.$id.$name.'" name="'.$id.$name.'"';
 	if ($addttext != '')
 	{
 		$text .= ' ' . $addttext;
