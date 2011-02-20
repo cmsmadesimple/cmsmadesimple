@@ -112,8 +112,14 @@ if ($access)
 
   if( $content_id != -1 && strtolower(get_class($contentobj)) != strtolower($content_type) )
     {
-      // content type change... 
+      // content type change...
+      // this also updates the content object with the POST params.
       copycontentobj($contentobj, $content_type);
+    }
+  else if( strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' )
+    {
+      // we posted... so update the content object.
+      updatecontentobj($contentobj);
     }
 
 	if ($submit || $apply)
