@@ -111,11 +111,10 @@ class ADODB2_mysql extends ADODB_DataDict {
 	function CreateTableSQL($tabname, $flds, $tableoptions=false)
 	{
 	  $tableoptions = $this->_Options($tableoptions);
-	  if( isset($tableoptions['TYPE']) )
-	    {
-	      $tableoptions['ENGINE'] = $tableoptions['TYPE'];
-	      unset($tableoptions['TYPE']);
-	    }
+          foreach( $tableoptions as $key => &$value )
+          {
+            $value = str_replace('TYPE=MyISAM','ENGINE=MyISAM',$value);
+          }
 	  return parent::CreateTableSQL($tabname, $flds, $tableoptions);
 	}
 }
