@@ -108,11 +108,10 @@ class CmsRoute
    */
   public function matches($str,$exact = false)
   {
-    $this->_result = null;
+    $this->_results = null;
     if( $this->is_content() || $this->_absolute || $exact )
       {
 	if( !strcasecmp($this->_term,$str) )
-	  //if( $this->_term == $str )
 	  {
 	    return TRUE;
 	  }

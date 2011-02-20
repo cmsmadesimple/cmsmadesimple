@@ -28,7 +28,7 @@ define('CMS_USER_KEY','cmsuserkey');
 
 #Setup session with different id and start it
 $session_key = substr(md5($dirname), 0, 8);
-if( !isset($CMS_ADMIN_PAGE) )
+if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_INSTALL_PAGE) )
   {
     // admin pages can't be cached... period, at all.. never.
     @session_cache_limiter('public');

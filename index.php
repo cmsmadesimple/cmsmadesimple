@@ -176,6 +176,12 @@ if (is_object($contentobj))
       // as far as we know, the output is cachable at this point... 
       // so we mark it so that the output can be cached.
       header('Expires: '.gmdate("D, d M Y H:i:s",time() + $expiry * 60).' GMT');
+      $the_date = time();
+      if( !$contentobj->Cachable() )
+	{
+	  $the_date = $contentobj->GetModifiedDate();
+	}
+      header('Last-Modified: ' . gmdate('D, d M Y H:i:s',$the_date) . ' GMT');
     }
 
   cmsms()->set_variable('content_obj',$contentobj);
