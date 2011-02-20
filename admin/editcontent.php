@@ -68,41 +68,9 @@ if ($apply)
 
 
 #Get a list of content types and pick a default if necessary
-global $gCms;
+$gCms = cmsms();
 $contentops =& $gCms->GetContentOperations();
 $existingtypes = $contentops->ListContentTypes();
-$content_type = "";
-if (isset($_POST["content_type"]))
-{
-	$content_type = $_POST["content_type"];
-}
-else
-{
-	if (isset($existingtypes) && count($existingtypes) > 0)
-	{
-		$content_type = 'content';
-	}
-	else
-	{
-		$error = "<p>No content types loaded!</p>";	
-	}
-}
-
-$contentobj = "";
-if (isset($_POST["serialized_content"]))
-{
-	$contentops =& $gCms->GetContentOperations();
-	//$contentops->LoadContentType($_POST['orig_content_type']);
-	$contentobj = UnserializeObject($_POST["serialized_content"]);
-	if (strtolower(get_class($contentobj)) != strtolower($content_type))
-	{
-		#Fill up the existing object with values in form
-		#Create new object
-		#Copy important fields to new object
-		#Put new object on top of old one
-		copycontentobj($contentobj, $content_type);
-	}
-}
 
 #Get current userid and make sure they have permission to add something
 $userid = get_userid();
@@ -116,8 +84,38 @@ if (!$access)
 
 if ($access)
 {
-  $classname="";
-  if (is_object($contentobj)) $classname=get_class($contentobj);
+  // get the content object.
+  $contentobj = "";
+  $content_type = 'content'; // default content type.
+
+  if( !is_object($contentobj) && $content_id != -1 )
+    {
+      // load the content object from the database.
+      $contentobj = $contentops->LoadContentFromId($content_id);
+      $content_type = $contentobj->Type();
+    }
+
+  if( isset($_POST['content_type']) )
+    {
+      $content_type = $_POST['content_type'];
+    }
+
+  // validate the content type we want...
+  if( isset($existingtypes) && count($existingtypes) > 0 && in_array($content_type,array_keys($existingtypes)) )
+    {
+      // woot, it's a valid content type
+    }
+  else
+    {
+      $error = '<p>'.lang('error_contenttype').'</p>';
+    }
+
+  if( $content_id != -1 && strtolower(get_class($contentobj)) != strtolower($content_type) )
+    {
+      // content type change... 
+      copycontentobj($contentobj, $content_type);
+    }
+
 	if ($submit || $apply)
 	{
 	  #Fill contentobj with parameters
@@ -129,7 +127,6 @@ if ($access)
 	    {
 	      $contentobj->SetLastModifiedBy(get_userid());
 	      $contentobj->Save();
-	      global $gCms;
 	      $contentops =& $gCms->GetContentOperations();
 	      $contentops->SetAllHierarchyPositions();
 	      audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
@@ -163,19 +160,6 @@ if ($access)
 			print '</EditContent>';
 			exit;
 		}
-	}
-	else if ($content_id != -1 && strtolower($classname) != strtolower($content_type))
-	{
-	  // handle changing content type
-		global $gCms;
-		$contentops =& $gCms->GetContentOperations();
-		$contentobj = $contentops->LoadContentFromId($content_id);
-		$content_type = $contentobj->Type();
-	}
-	else
-	  {
-	    // changing content type
-	    updatecontentobj($contentobj);
 	}
 }
 
@@ -264,8 +248,7 @@ else
 	#Get a list of content_types and build the dropdown to select one
 	$typesdropdown = '<select name="content_type" onchange="document.Edit_Content.submit()" class="standard">';
 	$cur_content_type = '';
-	$content_types = $contentops->ListContentTypes();
-	foreach ($content_types as $onetype => $onetypename )
+	foreach ($existingtypes as $onetype => $onetypename )
 	{
 	  if( $onetype == 'errorpage' && !check_permission($userid,'Manage All Content') ) 
 	    {
