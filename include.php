@@ -222,7 +222,12 @@ if( $global_umask != '' )
 #either in the config, or as a site preference.
 if (isset($config['locale']) && $config['locale'] != '')
 {
-    @setlocale(LC_ALL, $config['locale']);
+  $str = trim($config['locale']);
+  $res = @setlocale(LC_ALL, $str);
+  if( $res === FALSE )
+    {
+      debug_buffer('IMPORTANT: SetLocale failed');
+    }
 }
 $frontendlang = get_site_preference('frontendlang');
 
