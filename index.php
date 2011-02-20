@@ -177,7 +177,7 @@ if (is_object($contentobj))
       // so we mark it so that the output can be cached.
       header('Expires: '.gmdate("D, d M Y H:i:s",time() + $expiry * 60).' GMT');
       $the_date = time();
-      if( !$contentobj->Cachable() )
+      if( $contentobj->Cachable() )
 	{
 	  $the_date = $contentobj->GetModifiedDate();
 	}
