@@ -306,8 +306,8 @@ class ContentBase
 
     function SetId($id)
     {
-	$this->DoReadyForEdit();
 	$this->mId = $id;
+	$this->DoReadyForEdit();
     }
 
     /**
@@ -2374,6 +2374,7 @@ class ContentProperties
 
 	function Load($content_id)
 	{
+	  if( $content_id <= 0 ) return;
 		if (count($this->mPropertyNames) > 0)
 		{
 			global $gCms, $sql_queries, $debug_errors;
