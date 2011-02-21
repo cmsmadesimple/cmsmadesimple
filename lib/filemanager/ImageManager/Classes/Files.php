@@ -99,7 +99,7 @@ class Files
 	 * @param string $file file to be deleted
 	 * @return boolean true if deleted, false otherwise.
 	 */
-	function delFile($file) 
+	static public function delFile($file) 
 	{
 		if(is_file($file)) 
 			Return unlink($file);
