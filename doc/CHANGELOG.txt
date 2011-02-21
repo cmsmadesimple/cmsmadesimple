@@ -1,3 +1,15 @@
+Version 1.9.4 - Fanuui
+-----------------------------
+Core - Bug Reports
+  - Fixes problem with image manager and caching in google chrome
+    and other webkit browsers.
+  - Fixes problem with caching on ANY and all admin pages
+  - Fixes problem with with installs using MySQL 5.5.x
+    (the solution was implemented in the adodb_lite library so
+     all modules should work).
+  - Fixes problems with switching content types when editing pages
+    and content blocks not being restored.
+
 Version 1.9.3 - Motu Tane
 -----------------------------
 Core - Bugreports:
