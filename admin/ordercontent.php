@@ -71,13 +71,9 @@ if( isset($_POST['data']) )
     }
 
     $data = json_decode($_POST['data']);
-    debug_to_log('ordercontent - from ajax');
-    debug_to_log($data);
 
     // step 1, create a flat list of the content items, and their new orders, and new parents.
     $data = ordercontent_create_flatlist($data);
-    debug_to_log('ordercontent - flat list');
-    debug_to_log($data);
 
     // step 2. merge in old orders, and old parents.
     global $gCms;
@@ -101,9 +97,6 @@ if( isset($_POST['data']) )
 	  }
       }
     
-    debug_to_log('ordercontent - after merge');
-    debug_to_log($data);
-
     // do the updates
     if( count($data2) > 0 )
       {

@@ -9,7 +9,6 @@ function ajaxpreview($params)
 
 	$content_type = $params['content_type'];
 
-	//$contentops->LoadContentType($content_type);
 	$contentobj = UnserializeObject($params["serialized_content"]);
 	if (strtolower(get_class($contentobj)) != strtolower($content_type))
 	{
@@ -82,7 +81,6 @@ function copycontentobj(&$contentobj, $content_type, $params = null)
 		$params = $_POST;
 
 	$newcontenttype = strtolower($content_type);
-	$contentobj->FillParams($params);
 	$tmpobj = $contentops->CreateNewContent($newcontenttype);
 	$tmpobj->SetId($contentobj->Id());
 	$tmpobj->SetName($contentobj->Name());
@@ -102,7 +100,9 @@ function copycontentobj(&$contentobj, $content_type, $params = null)
 	$tmpobj->SetHierarchy($contentobj->Hierarchy());
 	$tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
 	$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
+	$tmpobj->Properties();
 	$contentobj = $tmpobj;
+	$contentobj->FillParams($params);
 }
 
 function createtmpfname(&$contentobj)
