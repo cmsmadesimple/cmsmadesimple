@@ -49,7 +49,7 @@ class SectionHeader extends ContentBase
       //$this->RemoveProperty('showinmenu',true);
       $this->RemoveProperty('cachable',true);
       $this->RemoveProperty('target','');
-	  $this->RemoveProperty('alias','');
+	  //$this->RemoveProperty('alias','');
 	  $this->RemoveProperty('page_url','');
 
       #Turn off caching
