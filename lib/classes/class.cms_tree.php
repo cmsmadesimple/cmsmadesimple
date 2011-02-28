@@ -98,7 +98,7 @@ class cms_tree
    * @param mixed  The tag value to search for
    * @return cms_tree or null on failure.
    */
-  public function find_by_tag($tag_name,$value,$case_insenstive = false)
+  public function find_by_tag($tag_name,$value,$case_insensitive = false)
   {
     if( $this->_tags )
       {
