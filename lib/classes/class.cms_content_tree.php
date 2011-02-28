@@ -86,9 +86,9 @@ class cms_content_tree extends cms_tree
   {
 	  if( is_numeric($alias) )
 	  {
-		  return $this->find_by_tag('id',$alias);
+		  return $this->find_by_tag('id',$alias,true);
 	  }
-	  return $this->find_by_tag('alias',$alias);
+	  return $this->find_by_tag('alias',$alias,true);
   }
 
 
@@ -102,7 +102,7 @@ class cms_content_tree extends cms_tree
    */
   public function getNodeByAlias($alias)
   {
-    return $this->find_by_tag('alias',$alias);
+	  return $this->find_by_tag('alias',$alias,true);
   }
 
 

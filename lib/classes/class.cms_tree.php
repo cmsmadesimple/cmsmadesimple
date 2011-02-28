@@ -98,13 +98,23 @@ class cms_tree
    * @param mixed  The tag value to search for
    * @return cms_tree or null on failure.
    */
-  public function find_by_tag($tag_name,$value)
+  public function find_by_tag($tag_name,$value,$case_insenstive = false)
   {
     if( $this->_tags )
       {
-		  if( isset($this->_tags[$tag_name]) && $this->_tags[$tag_name] == $value )
+		  if( $case_insensitive )
 			  {
-				  return $this;
+				  if( isset($this->_tags[$tag_name]) && $this->_tags[$tag_name] == $value )
+					  {
+						  return $this;
+					  }
+			  }
+		  else
+			  {
+				  if( isset($this->_tags[$tag_name]) && strtolower($this->_tags[$tag_name]) == strtolower($value) )
+					  {
+						  return $this;
+					  }
 			  }
       }
     
