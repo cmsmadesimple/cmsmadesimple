@@ -100,9 +100,9 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 				$content = &$currentNode->getContent();
 				if (isset($content) && (strtolower($content->Alias()) == strtolower($root)))
 				{
-					$node = &$manager->sureGetNodeByAlias($root);
+					$node = $manager->sureGetNodeByAlias($root);
 					if (isset($node)) {
-						$content = &$node->getContent();
+						$content = $node->getContent();
 						if( $content && $content->Id() != $thispage) 
 							$path[] = $node; # do not add if this is the current page
 					}
