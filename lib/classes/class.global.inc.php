@@ -638,6 +638,9 @@ class CmsObject {
 					  }
 			  }
 	    }
+
+		@touch(cms_join_path(TMP_CACHE_LOCATION,'index.html'));
+		@touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
 	}
 }
 
