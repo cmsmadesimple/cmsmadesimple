@@ -1,6 +1,12 @@
 Version 1.9.4 - Fanuui
 -----------------------------
 Core - Bug Reports
+  - #6096 Content is not showing when changing type back to content
+  - #6098 Server Response Header `Last-Modified` not changing
+  - #6099 Deleting alias in editcontent and submitting restores old alias 
+  - #6106 no cache-control in login.php -> no logout!
+  - #6136 TinyMCE file-manager cache problem
+  - #6168 canonical tag for news ignoring news_url field
   - Fixes problem with image manager and caching in google chrome
     and other webkit browsers.
   - Fixes problem with caching on ANY and all admin pages
@@ -9,6 +15,11 @@ Core - Bug Reports
      all modules should work).
   - Fixes problems with switching content types when editing pages
     and content blocks not being restored.
+	
+MenuManager:
+  - #6188 using show_all with childrenof does not work	
+  
+  
 
 Version 1.9.3 - Motu Tane
 -----------------------------
