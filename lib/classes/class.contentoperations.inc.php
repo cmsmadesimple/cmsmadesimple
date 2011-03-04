@@ -515,8 +515,8 @@ class ContentOperations
 				$query = 'SELECT UNIX_TIMESTAMP(modified_date) FROM '.cms_db_prefix().'content ORDER BY modified_date DESC';
 				$gCms->variables['last_content_modification'] = $db->GetOne($query);
 			}
-			$last_modified = $Gcms->variables['last_content_modification'];
-			if (!$last_modified || $last_modified < filemtime($cachefilename))
+			$last_modified = $gCms->variables['last_content_modification'];
+			if ($last_modified > 0 && $last_modified < filemtime($cachefilename))
 			{
 				debug_buffer('file needs loading');
 				
