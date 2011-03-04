@@ -17,10 +17,15 @@ Core - Bug Reports
      all modules should work).
   - Fixes problems with switching content types when editing pages
     and content blocks not being restored.
+  - Minor optimization to adodb_lite for the GetOne and GetRow methods
+  - Fixes a problem where the contentcache was not being read.
 	
 MenuManager:
   - #6188 using show_all with childrenof does not work	
-  
+
+Modulemanager:
+  - Fixes a useability issue with the selected tab and the selected letter
+    after upgrading a module.  
   
 
 Version 1.9.3 - Motu Tane
