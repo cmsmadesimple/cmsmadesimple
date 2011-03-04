@@ -1,4 +1,4 @@
-Version 1.9.4 - Fanuui
+Version 1.9.4 - Faanui
 -----------------------------
 Core - Bug Reports
   - #6083 Imagemanager Don't show uploaded files
