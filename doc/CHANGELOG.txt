@@ -1,6 +1,8 @@
 Version 1.9.4 - Fanuui
 -----------------------------
 Core - Bug Reports
+  - #6083 Imagemanager Don't show uploaded files
+  - #6094 Page alias update old-value after copy-page
   - #6096 Content is not showing when changing type back to content
   - #6098 Server Response Header `Last-Modified` not changing
   - #6099 Deleting alias in editcontent and submitting restores old alias 
