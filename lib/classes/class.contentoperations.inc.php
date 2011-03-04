@@ -510,8 +510,13 @@ class ContentOperations
 
 		if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
 		{
-			$pageinfo =& $gCms->variables['pageinfo'];
-			if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
+			if( !isset($gCms->variables['last_content_modification']) )
+			{
+				$query = 'SELECT UNIX_TIMESTAMP(modified_date) FROM '.cms_db_prefix().'content ORDER BY modified_date DESC';
+				$gCms->variables['last_content_modification'] = $db->GetOne($query);
+			}
+			$last_modified = $Gcms->variables['last_content_modification'];
+			if (!$last_modified || $last_modified < filemtime($cachefilename))
 			{
 				debug_buffer('file needs loading');
 				
@@ -527,6 +532,7 @@ class ContentOperations
 				}
 				else
 				{
+					die('problem loading cache');
 					$loadedcache = false;
 				}
 			}
