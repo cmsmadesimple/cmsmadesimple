@@ -43,7 +43,7 @@ function updatecontentobj(&$contentobj, $preview = false, $params = null)
 //	$adminaccess = check_ownership($userid, $contentobj->Id()) || check_permission($userid, 'Modify Any Page');
 		
 	#Fill contentobj with parameters
-	$contentobj->FillParams($params);
+	$contentobj->FillParams($params,true);
 	if ($preview)
 	{
 		$error = $contentobj->ValidateData();
