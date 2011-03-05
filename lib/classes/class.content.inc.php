@@ -306,8 +306,8 @@ class ContentBase
 
     function SetId($id)
     {
-	$this->DoReadyForEdit();
 	$this->mId = $id;
+	$this->DoReadyForEdit();
     }
 
     /**
@@ -810,25 +810,6 @@ class ContentBase
     function HasUsableLink()
     {
 	return true;
-    }
-
-    /**
-     * Is this item currently being editied (locked)
-     *
-     * @since 1.10
-     */
-    function IsLocked()
-    {
-      $obj = $this->GetLock();
-      if( is_object($obj) ) return TRUE;
-      return FALSE;
-    }
-
-
-    public function GetLock()
-    {
-      if( !$this->Id() ) return;
-      return cms_lock_manager::get_lock('Core::Content',$this->Id());
     }
 
     /**
@@ -2393,6 +2374,7 @@ class ContentProperties
 
 	function Load($content_id)
 	{
+	  if( $content_id <= 0 ) return;
 		if (count($this->mPropertyNames) > 0)
 		{
 			global $gCms, $sql_queries, $debug_errors;

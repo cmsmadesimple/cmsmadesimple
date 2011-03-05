@@ -27,14 +27,16 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	$CMS_STYLESHEET = 1;
 	$template_id = '';
 
+	$secure = false;
 	if (isset($params["templateid"]) && $params["templateid"]!="")
 	{
 		$template_id = $params["templateid"];
 	}
 	else
 	{
-		$content_obj = &$gCms->variables['content_obj'];
+		$content_obj = $gCms->variables['content_obj'];
 		$template_id = $content_obj->TemplateId();
+		$secure      = $content_obj->Secure();
 	}
 	
 	$config =& $gCms->config;
@@ -103,13 +105,20 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 				//set the modified date to the template modified date
 				//touch($fname, $db->UnixTimeStamp($one['modified_date']));
 			}
+
+			$root_url = $config['root_url'];
+			if( $secure )
+				{
+					$root_url = $config['ssl_url'];
+				}
 			if ( empty($media_type) || isset($params['media']) )
-			{
-				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$config['root_url'].'/tmp/cache/'.$filename.'"/>'."\n";
+				{
+					
+				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'"/>'."\n";
 			}
 			else
 			{
-				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$config['root_url'].'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
+				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
 			}
 		}
 	}

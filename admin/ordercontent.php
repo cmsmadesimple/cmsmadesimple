@@ -4,7 +4,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-global $gCms;
+$gCms = cmsms();
 check_login();
 $userid = get_userid();
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
@@ -23,7 +23,7 @@ if( isset($_POST['data']) )
   {
     function ordercontent_get_node_rec($str,$prefix = 'page_')
     {
-      global $gCms;
+      $gCms = cmsms();
       $tree = $gCms->GetHierarchyManager();
 
       if( !is_numeric($str) && startswith($str,$prefix) )
@@ -71,16 +71,12 @@ if( isset($_POST['data']) )
     }
 
     $data = json_decode($_POST['data']);
-    debug_to_log('ordercontent - from ajax');
-    debug_to_log($data);
 
     // step 1, create a flat list of the content items, and their new orders, and new parents.
     $data = ordercontent_create_flatlist($data);
-    debug_to_log('ordercontent - flat list');
-    debug_to_log($data);
 
     // step 2. merge in old orders, and old parents.
-    global $gCms;
+    $gCms = cmsms();
     $tree = $gCms->GetHierarchyManager();
     $data2 = array();
     for( $i = 0; $i < count($data); $i++ )
@@ -101,9 +97,6 @@ if( isset($_POST['data']) )
 	  }
       }
     
-    debug_to_log('ordercontent - after merge');
-    debug_to_log($data);
-
     // do the updates
     if( count($data2) > 0 )
       {
@@ -116,7 +109,7 @@ if( isset($_POST['data']) )
 	  }
 	$contentops =& $gCms->GetContentOperations();
 	$contentops->SetAllHierarchyPositions();
-	//$contentops->ClearCache();
+	$contentops->ClearCache();
 	return;
       }
     else

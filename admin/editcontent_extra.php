@@ -9,7 +9,6 @@ function ajaxpreview($params)
 
 	$content_type = $params['content_type'];
 
-	//$contentops->LoadContentType($content_type);
 	$contentobj = UnserializeObject($params["serialized_content"]);
 	if (strtolower(get_class($contentobj)) != strtolower($content_type))
 	{
@@ -41,10 +40,10 @@ function updatecontentobj(&$contentobj, $preview = false, $params = null)
 		$params = $_POST;
 
 	$userid = get_userid();
-	$adminaccess = check_ownership($userid, $contentobj->Id()) || check_permission($userid, 'Modify Any Page');
+//	$adminaccess = check_ownership($userid, $contentobj->Id()) || check_permission($userid, 'Modify Any Page');
 		
 	#Fill contentobj with parameters
-	$contentobj->FillParams($params);
+	$contentobj->FillParams($params,true);
 	if ($preview)
 	{
 		$error = $contentobj->ValidateData();
@@ -82,7 +81,6 @@ function copycontentobj(&$contentobj, $content_type, $params = null)
 		$params = $_POST;
 
 	$newcontenttype = strtolower($content_type);
-	$contentobj->FillParams($params);
 	$tmpobj = $contentops->CreateNewContent($newcontenttype);
 	$tmpobj->SetId($contentobj->Id());
 	$tmpobj->SetName($contentobj->Name());
@@ -102,7 +100,9 @@ function copycontentobj(&$contentobj, $content_type, $params = null)
 	$tmpobj->SetHierarchy($contentobj->Hierarchy());
 	$tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
 	$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
+	$tmpobj->Properties();
 	$contentobj = $tmpobj;
+	$contentobj->FillParams($params);
 }
 
 function createtmpfname(&$contentobj)

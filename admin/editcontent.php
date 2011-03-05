@@ -39,6 +39,11 @@ $xajax->register(XAJAX_FUNCTION,'ajaxpreview');
 $xajax->processRequest();
 $headtext = $xajax->getJavascript('../lib/xajax')."\n";
 
+if (isset($_POST["cancel"]))
+{
+	redirect("listcontent.php".$urlext);
+}
+
 $error = FALSE;
 
 $content_id = "";
@@ -63,41 +68,9 @@ if ($apply)
 
 
 #Get a list of content types and pick a default if necessary
-global $gCms;
+$gCms = cmsms();
 $contentops =& $gCms->GetContentOperations();
 $existingtypes = $contentops->ListContentTypes();
-$content_type = "";
-if (isset($_POST["content_type"]))
-{
-	$content_type = $_POST["content_type"];
-}
-else
-{
-	if (isset($existingtypes) && count($existingtypes) > 0)
-	{
-		$content_type = 'content';
-	}
-	else
-	{
-		$error = "<p>No content types loaded!</p>";	
-	}
-}
-
-$contentobj = "";
-if (isset($_POST["serialized_content"]))
-{
-	$contentops =& $gCms->GetContentOperations();
-	//$contentops->LoadContentType($_POST['orig_content_type']);
-	$contentobj = UnserializeObject($_POST["serialized_content"]);
-	if (strtolower(get_class($contentobj)) != strtolower($content_type))
-	{
-		#Fill up the existing object with values in form
-		#Create new object
-		#Copy important fields to new object
-		#Put new object on top of old one
-		copycontentobj($contentobj, $content_type);
-	}
-}
 
 #Get current userid and make sure they have permission to add something
 $userid = get_userid();
@@ -109,45 +82,62 @@ if (!$access)
 	$access = check_authorship($userid, $content_id);
 }
 
-$signature = md5($userid.$content_id.session_id());
-if (isset($_POST["cancel"]))
-{
-  cms_lock_manager::unlock('Core::Content',$content_id,$userid,$signature);
-  redirect("listcontent.php".$urlext);
-}
-
 if ($access)
 {
-  $classname="";
-  if (is_object($contentobj)) $classname=get_class($contentobj);
+  // get the content object.
+  $contentobj = "";
+  $content_type = 'content'; // default content type.
+
+  if( !is_object($contentobj) && $content_id != -1 )
+    {
+      // load the content object from the database.
+      $contentobj = $contentops->LoadContentFromId($content_id);
+      $content_type = $contentobj->Type();
+    }
+
+  if( isset($_POST['content_type']) )
+    {
+      $content_type = $_POST['content_type'];
+    }
+
+  // validate the content type we want...
+  if( isset($existingtypes) && count($existingtypes) > 0 && in_array($content_type,array_keys($existingtypes)) )
+    {
+      // woot, it's a valid content type
+    }
+  else
+    {
+      $error = '<p>'.lang('error_contenttype').'</p>';
+    }
+
+  if( $content_id != -1 && strtolower(get_class($contentobj)) != strtolower($content_type) )
+    {
+      // content type change...
+      // this also updates the content object with the POST params.
+      copycontentobj($contentobj, $content_type);
+    }
+  else if( strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' )
+    {
+      // we posted... so update the content object.
+      updatecontentobj($contentobj);
+    }
+
 	if ($submit || $apply)
 	{
-	  $res = cms_lock_manager::touch('Core::Content',$content_id,$userid,$signature);
-	  if( !$res )
-	    {
-	      // could not touch the lock
-	      $error = lang('lock_lost');
-	    }
-
-	  if( !$error )
-	    {
-	      // Fill contentobj with parameters
-	      // $contentobj->SetProperties();  // calguy should not be necessary
-	      $contentobj->FillParams($_POST,true);
-	      $error = $contentobj->ValidateData();
-	    }
+	  #Fill contentobj with parameters
+	  // $contentobj->SetProperties();  // calguy should not be necessary
+	  $contentobj->FillParams($_POST,true);
+	  $error = $contentobj->ValidateData();
 
 	  if ($error === FALSE)
 	    {
 	      $contentobj->SetLastModifiedBy(get_userid());
 	      $contentobj->Save();
-	      global $gCms;
 	      $contentops =& $gCms->GetContentOperations();
 	      $contentops->SetAllHierarchyPositions();
 	      audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
 	      if ($submit)
 		{
-		  cms_lock_manager::unlock('Core::Content',$content_id,$userid,$signature);
 		  redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&message=contentupdated');
 		}
 	    }
@@ -176,32 +166,6 @@ if ($access)
 			print '</EditContent>';
 			exit;
 		}
-	}
-	else if ($content_id != -1 && strtolower($classname) != strtolower($content_type))
-	{
-	  if( !cms_lock_manager::lock('Core::Content',$content_id,$userid,$signature) )
-	    {
-	      // could not get a lock
-	      redirect('listcontent.php'.$urlext.'&error=problemlocking');
-	    }
-
-	  // handle changing content type
-	  global $gCms;
-	  $contentops =& $gCms->GetContentOperations();
-	  $contentobj = $contentops->LoadContentFromId($content_id);
-	  $content_type = $contentobj->Type();
-	}
-	else
-	  {
-	    if( !cms_lock_manager::lock('Core::Content',$content_id,$userid,$signature) )
-	      {
-		// could not get a lock
-		redirect('listcontent.php'.$urlext.'&error=problemlocking');
-	      }
-
-	    // changing content type
-	    updatecontentobj($contentobj);
-	    cms_lock_manager::lock('Core::Content',$contentobj->Id(),$userid,$signature);
 	}
 }
 
@@ -290,8 +254,7 @@ else
 	#Get a list of content_types and build the dropdown to select one
 	$typesdropdown = '<select name="content_type" onchange="document.Edit_Content.submit()" class="standard">';
 	$cur_content_type = '';
-	$content_types = $contentops->ListContentTypes();
-	foreach ($content_types as $onetype => $onetypename )
+	foreach ($existingtypes as $onetype => $onetypename )
 	{
 	  if( $onetype == 'errorpage' && !check_permission($userid,'Manage All Content') ) 
 	    {

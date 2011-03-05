@@ -28,11 +28,12 @@ define('CMS_USER_KEY','cmsuserkey');
 
 #Setup session with different id and start it
 $session_key = substr(md5($dirname), 0, 8);
-if( !isset($CMS_ADMIN_PAGE) )
+if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_INSTALL_PAGE) )
   {
-    // absolutely no caching for admin pages... ever..
+    // admin pages can't be cached... period, at all.. never.
     @session_cache_limiter('public');
   }
+
 @session_name('CMSSESSID' . $session_key);
 @ini_set('url_rewriter.tags', '');
 @ini_set('session.use_trans_sid', 0);
@@ -221,7 +222,12 @@ if( $global_umask != '' )
 #either in the config, or as a site preference.
 if (isset($config['locale']) && $config['locale'] != '')
 {
-    @setlocale(LC_ALL, $config['locale']);
+  $str = trim($config['locale']);
+  $res = @setlocale(LC_ALL, $str);
+  if( $res === FALSE )
+    {
+      debug_buffer('IMPORTANT: SetLocale failed');
+    }
 }
 $frontendlang = get_site_preference('frontendlang');
 

@@ -66,8 +66,11 @@ class pear_ADOConnection extends pear_EXTENDER
 
 	function &GetRow($sql, $inputarr = false, $getone = false)
 	{
+	  $nrows = 1;
+	  if( stripos($sql,'LIMIT') !== FALSE ) $nrows = -1;
+
 		$data = false;
-		$result =& $this->do_query($sql, -1, -1, $inputarr);
+		$result =& $this->do_query($sql, -1, $nrows, $inputarr);
 		if ($result) {
 			if ($getone)
 			{

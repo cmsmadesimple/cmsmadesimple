@@ -35,6 +35,7 @@ $contentops =& $gCms->GetContentOperations();
 $config = $gCms->GetConfig();
 $fromobj = $contentops->LoadContentFromId($fromid,true);
 $fromobj->GetAdditionalEditors();
+$fromobj->Properties();
 $parentobj = $contentops->LoadContentFromId($fromobj->ParentId());
 
 // handle form submission
@@ -83,12 +84,12 @@ if( isset($_GET['submit']) )
 
   // Stuff that needs to be changed
   $tmpobj->SetURL('');
+  $tmpobj->SetName($to_title);
+  $tmpobj->SetMenuText($to_menutext);
   $tmpobj->SetAlias($to_alias);
   $tmpobj->mOldAlias = ''; // no method for this.
-  $tmpobj->SetName($to_title);
   $tmpobj->SetParentId($to_parentid);
   $tmpobj->SetOldParentId($to_parentid);
-  $tmpobj->SetMenuText($to_menutext);
   $tmpobj->SetAccessKey($to_accesskey);
   
   $tmpobj->SetDefaultContent(0);
