@@ -451,7 +451,7 @@ class Events
 	 * @ignore
 	 * @return void
 	 */
-	function SetupCoreEvents()
+	static public function SetupCoreEvents()
 	{
 		$modulename = 'Core';
 

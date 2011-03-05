@@ -85,19 +85,20 @@ class CMSInstallerPage2 extends CMSInstallerPage
 		}
 
 
-		$settings['required'][] =
-		  testIntegerMask(1,ilang('test_error_estrict'), 'error_reporting',E_STRICT,ilang('test_estrict_failed'),true,true,false);
-
-		if( defined('E_DEPRECATED') )
-		  {
-		$settings['required'][] =
-		  testIntegerMask(1,ilang('test_error_edeprecated'), 'error_reporting',E_DEPRECATED,ilang('test_edeprecated_failed'),true,true,false);
-		  }
-
 		/*
 		 * Recommended Settings
 		 */
 		list($minimum, $recommended) = getTestValues('memory_limit');
+		$settings['recommended'][] =
+		  testIntegerMask(0,ilang('test_error_estrict'), 'error_reporting',E_STRICT,ilang('test_estrict_failed'),true,true,false);
+
+		if( defined('E_DEPRECATED') )
+		  {
+		$settings['recommended'][] =
+		  testIntegerMask(0,ilang('test_error_edeprecated'), 'error_reporting',E_DEPRECATED,ilang('test_edeprecated_failed'),true,true,false);
+		  }
+
+
 		$settings['recommended'][] =
 			testRange(0, ilang('test_check_memory') .'<br />'. ilang('test_min_recommend', $minimum, $recommended),
 				'memory_limit', ilang('test_check_memory_failed'), $minimum, $recommended, true, true, null, 'memory_limit_range');

@@ -80,7 +80,7 @@ class CMSInstallerPage6 extends CMSInstallerPage
 
 			if($handle) {
 				while(!feof($handle)) {
-					set_magic_quotes_runtime(false);
+					@set_magic_quotes_runtime(false);
 					$s = fgets($handle, 32768);
 					if ($s != "") {
 						$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));

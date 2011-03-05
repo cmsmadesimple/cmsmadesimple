@@ -151,7 +151,6 @@ class cms_config implements ArrayAccess
       case 'db_username':
       case 'db_password':
       case 'db_name':
-      case 'root_url':
 	// these guys have to be set
 	stack_trace();
 	die('FATAL ERROR: Could not find database connection key '.$key.' in the config file');
@@ -168,7 +167,24 @@ class cms_config implements ArrayAccess
 
       case 'root_path':
 	return dirname(dirname(dirname(__FILE__)));
-	
+
+      case 'root_url':
+	{
+	  $parts = parse_url($_SERVER['REQUEST_URI']);
+	  $path = '';
+	  if( !empty($parts['path']) )
+	    {
+	      $path = dirname($parts['path']);
+	      if( endswith($path,'install') )
+		{
+		  $path = substr($path,0,strlen($path)-strlen('install')-1);
+		}
+	    }
+	  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
+	  return $str;
+	}
+	break;
+
       case 'ssl_url':
 	$this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('root_url'));
 	return $this->_cache[$key];
@@ -215,7 +231,8 @@ class cms_config implements ArrayAccess
 	return '';
 
       case 'max_upload_size':
-	return 2000000;
+      case 'uplaod_max_filesize':
+	return $this->get_upload_size();
 
       case 'default_upload_permission':
 	return '664';
@@ -261,7 +278,14 @@ class cms_config implements ArrayAccess
 
   public function offsetSet($key,$value)
   {
-    trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
+    $tmp = debug_backtrace();
+    $class = $tmp[1]['class'];
+    $parent = get_parent_class($class);
+    if( $parent != 'CMSInstallerPage' )
+      {
+	trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
+	return;
+      }
     $this->_data[$key] = $value;
   }
 

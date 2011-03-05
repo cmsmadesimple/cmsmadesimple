@@ -19,6 +19,8 @@
 #$Id$
 
 global $gCms;
+date_default_timezone_set('UTC');
+
 
 $CMS_INSTALL_PAGE=1;
 $LOAD_ALL_MODULES = true;

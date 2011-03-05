@@ -37,10 +37,8 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		$this->smarty->assign('errors', $this->errors);
 	}
 
-	function preContent()
+	function preContent(&$db)
 	{
-		global $gCms;
-
 		require_once(cms_join_path(CMS_BASE, 'lib', 'config.functions.php'));
 		
 		// check if db info is correct as it should at this point to prevent an undeleted installation dir
@@ -53,88 +51,40 @@ class CMSInstallerPage7 extends CMSInstallerPage
 			return;
 		}
 
-		$newconfig = cms_config_load();
-		$newconfig['dbms'] = $_POST['dbms'];
-		$newconfig['db_hostname'] = $_POST['host'];
-		$newconfig['db_username'] = $_POST['username'];
-		$newconfig['db_password'] = $_POST['password'];
-		$newconfig['db_name'] = $_POST['database'];
-		$newconfig['db_prefix'] = $_POST['prefix'];
-		$newconfig['db_port'] = $_POST['db_port'];
-                // $newconfig['db_socket'] = $_POST['db_socket'];
-
-		$newconfig['root_url'] = rtrim($_POST['docroot'], '/');
-		$newconfig['ssl_url'] = (!startswith($newconfig['root_url'], 'https')) ? str_replace('http://','https://',$newconfig['root_url']) : $newconfig['root_url'];
-		$newconfig['root_path'] = rtrim($_POST['docpath'], '\\/');
-		$newconfig['query_var'] = $_POST['querystr'];
-		$newconfig['use_bb_code'] = false;
-		$newconfig['use_smarty_php_tags'] = false;
-		$newconfig['previews_path'] = TMP_CACHE_LOCATION;
-		$newconfig['uploads_path'] = cms_join_path($newconfig['root_path'], 'uploads');
-		// Note: leave the / slashes for the URLs
-		$newconfig['uploads_url'] = '/uploads';
-		$newconfig['ssl_uploads_url'] = (!startswith($newconfig['root_url'], 'https')) ? str_replace('http://','https://',$newconfig['uploads_url']) : $newconfig['uploads_url'];
-		$newconfig['image_uploads_path'] = cms_join_path($newconfig['uploads_path'], 'images');
-		// Note: leave the / slashes for the URLs
-		$newconfig['image_uploads_url'] = $newconfig['uploads_url'] . '/images';
-		$maxFileSize = ini_get('upload_max_filesize');
-		if (!is_numeric($maxFileSize))
-		{
-			$l=strlen($maxFileSize);
-			$i=0;$ss='';$x=0;
-			while ($i < $l)
-			{
-				if (is_numeric($maxFileSize[$i]))
-					{$ss .= $maxFileSize[$i];}
-				else
-				{
-					if (strtolower($maxFileSize[$i]) == 'm') $x=1000000;
-					if (strtolower($maxFileSize[$i]) == 'k') $x=1000;
-				}
-				$i ++;
-			}
-			$maxFileSize=$ss;
-			if ($x >0) $maxFileSize = $ss * $x;
-		}
-		else
-		{
-			$maxFileSize = 1000000;
-		}
-
+		$newconfig = cmsms()->GetConfig();
+		$newconfig['dbms'] = trim($_POST['dbms']);
+		$newconfig['db_hostname'] = trim($_POST['host']);
+		$newconfig['db_username'] = trim($_POST['username']);
+		$newconfig['db_password'] = trim($_POST['password']);
+		$newconfig['db_name'] = trim($_POST['database']);
+		$newconfig['db_prefix'] = trim($_POST['prefix']);
+		$newconfig['db_port'] = (int)$_POST['db_port'];
+		$newconfig['root_url'] = rtrim(trim($_POST['docroot']), '/');
+		$tmp = trim($_POST['querystr']);
+		if( $tmp != 'page' )
+		  {
+		    $newconfig['query_var'] = $_POST['querystr'];
+		  }
 		$newconfig['timezone'] = $_POST['timezone'];
-		$newconfig['max_upload_size'] = $maxFileSize;
-		$newconfig['debug'] = false;
-		//$newconfig['assume_mod_rewrite'] = false; //Not in use now
-		$newconfig['auto_alias_content'] = true;
-		$newconfig['image_manipulation_prog'] = 'GD';
-		$newconfig['image_transform_lib_path'] = ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) ? 'C:/Program Files/VisualMagick/bin/' : '/usr/bin/ImageMagick/';
-		$newconfig['default_encoding'] = $_POST['default_encoding'];
-		$newconfig['disable_htmlarea_translation'] = false;
-		$newconfig['admin_dir'] = 'admin';
-		$newconfig['persistent_db_conn'] = false;
-		$newconfig['default_upload_permission'] = '664';
-		$newconfig['page_extension'] = "";
-		$newconfig['locale'] = "";
-		$newconfig['admin_encoding'] = "utf-8";
-		$newconfig['use_adodb_lite'] = true;
-		//$newconfig['internal_pretty_urls'] = false; //Not in use now
-		$newconfig['use_hierarchy'] = true; //Now true
-		$newconfig['wiki_url'] = 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel';
-		$newconfig['set_names'] = true;
-		$newconfig['url_rewriting'] = 'none';
-		$newconfig['auto_create_url'] = 'none';
-	
-		$configfile = CONFIG_FILE_LOCATION;
-		## build the content for config file
-	
-		if ((file_exists($configfile) && is_writable($configfile)) || !file_exists($configfile)) {
-			cms_config_save($newconfig);
-		}
-		else 
-		{
-			echo ilang('cannot_write_config', $configfile);
-			exit;
-		}
+ 		$newconfig['default_encoding'] = $_POST['default_encoding'];
+// 		$newconfig['auto_alias_content'] = true;
+// 		$newconfig['image_manipulation_prog'] = 'GD';
+// 		$newconfig['image_transform_lib_path'] = ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) ? 'C:/Program Files/VisualMagick/bin/' : '/usr/bin/ImageMagick/';
+// 		$newconfig['disable_htmlarea_translation'] = false;
+// 		$newconfig['admin_dir'] = 'admin';
+// 		$newconfig['persistent_db_conn'] = false;
+// 		$newconfig['default_upload_permission'] = '664';
+// 		$newconfig['page_extension'] = "";
+// 		$newconfig['locale'] = "";
+// 		$newconfig['admin_encoding'] = "utf-8";
+// 		$newconfig['use_adodb_lite'] = true;
+// 		//$newconfig['internal_pretty_urls'] = false; //Not in use now
+// 		$newconfig['use_hierarchy'] = true; //Now true
+// 		$newconfig['wiki_url'] = 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel';
+// 		$newconfig['set_names'] = true;
+// 		$newconfig['url_rewriting'] = 'none';
+
+		$newconfig->save();
 
 		if (file_exists(cms_join_path(TMP_CACHE_LOCATION, 'SITEDOWN')))
 		{
@@ -148,20 +98,18 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		#Do module installation
 		if (isset($_POST["createtables"]) && $_POST['createtables'] != 0 )
 		{
-			global $DONT_SET_DB;
+		  //global $DONT_SET_DB;
 			echo '<p>' . ilang('install_admin_update_hierarchy');
-
-			#Set $gCms->config - somehow it doesn't get set by include.php
-			$gCms->config = $newconfig;
 
 			$db->SetFetchMode(ADODB_FETCH_ASSOC);
 			#$db->debug = true;
-			$gCms->db =& $db;
+			$gCms = cmsms();
+			$gCms->db = $db;
 			unset($GLOBALS['DONT_SET_DB']);
 			unset($DONT_SET_DB);
 
 
-			$contentops =& $gCms->GetContentOperations();
+			$contentops = cmsms()->GetContentOperations();
 			$contentops->SetAllHierarchyPositions();
 
 			echo " [" . ilang('done') . "]</p>";

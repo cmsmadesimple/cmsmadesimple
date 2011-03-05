@@ -150,6 +150,16 @@ class CmsObject {
 	var $modules;
 
 
+	public function __get($key)
+	{
+		switch($key)
+			{
+			case 'config':
+				return cms_config::get_instance();
+				break;
+			}
+	}
+
 	/**
 	 * Constructor
 	 */
@@ -331,11 +341,7 @@ class CmsObject {
 	*/
 	public function GetConfig()
 	{
-		if( !$this->config )
-		{
-			$this->config = cms_config::get_instance();
-		}
-		return $this->config;
+		return cms_config::get_instance();
 	}
 	
 	/**
@@ -351,8 +357,7 @@ class CmsObject {
         if (!isset($this->moduleloader))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.moduleloader.inc.php'));
-			$moduleloader = new ModuleLoader();
-			$this->moduleloader = &$moduleloader;
+			$this->moduleloader = new ModuleLoader();
 		}
 
 		return $this->moduleloader;
@@ -414,8 +419,7 @@ class CmsObject {
 		{
 			debug_buffer('', 'Load Content Operations');
 			require_once(cms_join_path(dirname(__FILE__), 'class.contentoperations.inc.php'));
-			$contentoperations = new ContentOperations();
-			$this->contentoperations = &$contentoperations;
+			$this->contentoperations = new ContentOperations();
 			debug_buffer('', 'End Load Content Operations');
 		}
 
@@ -455,8 +459,7 @@ class CmsObject {
         if (!isset($this->templateoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.templateoperations.inc.php'));
-			$templateoperations = new TemplateOperations();
-			$this->templateoperations = &$templateoperations;
+			$this->templateoperations = new TemplateOperations();
 		}
 
 		return $this->templateoperations;
@@ -475,8 +478,7 @@ class CmsObject {
         if (!isset($this->stylesheetoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.stylesheetoperations.inc.php'));
-			$stylesheetoperations = new StylesheetOperations();
-			$this->stylesheetoperations = &$stylesheetoperations;
+			$this->stylesheetoperations = new StylesheetOperations();
 		}
 
 		return $this->stylesheetoperations;
@@ -517,8 +519,7 @@ class CmsObject {
         if (!isset($this->globalcontentoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.globalcontentoperations.inc.php'));
-			$globalcontentoperations = new GlobalContentOperations();
-			$this->globalcontentoperations = &$globalcontentoperations;
+			$this->globalcontentoperations = new GlobalContentOperations();
 		}
 
 		return $this->globalcontentoperations;
@@ -537,8 +538,7 @@ class CmsObject {
         if (!isset($this->usertagoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.usertagoperations.inc.php'));
-			$usertagoperations = new UserTagOperations();
-			$this->usertagoperations = &$usertagoperations;
+			$this->usertagoperations = new UserTagOperations();
 		}
 
 		return $this->usertagoperations;

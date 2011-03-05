@@ -472,8 +472,7 @@ class ContentOperations
 	 */
 	function SetAllHierarchyPositions()
 	{
-		global $gCms;
-		$db = $gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content";
 		$dbresult = &$db->Execute($query);
