@@ -87,15 +87,27 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	$res = $db->GetArray($query, $qparms);
 	if( $res )
 	{
+
+		$modified_date = 0;
+		$media_changed = false;
+		$test_media = '';
+		for( $i = 0; $i < count($res); $i++ )
+		{
+			$modified_date = max($modified_date,strtotime($res[$i]['modified_date']));
+			if( $test_media == '' )
+			{
+				$test_media = $res[$i]['media_type'];
+			}
+			if( $res[$i]['media_type'] != $test_media )
+			{
+				$media_changed = TRUE;
+			}
+		}
+		if( $media_changed ) $combine_stylesheets = FALSE;
+
 		if( $combine_stylesheets && $template_id > 0 )
 		{
 			// combine all matches into one stylesheet.
-			$fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
-			$modified_date = 0;
-			for( $i = 0; $i < count($res); $i++ )
-			{
-				$modified_date = max($modified_date,strtotime($res[$i]['modified_date']));
-			}
 			$filename = 'stylesheet_combined_'.$template_id.'_'.$modified_date.'.css';
 			$fn = cms_join_path($cache_dir,$filename);
 			if( !file_exists($fn) )
