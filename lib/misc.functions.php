@@ -198,7 +198,7 @@ function cms_join_path()
  *
  * @return object
  */
-function cmsms()
+function &cmsms()
 {
 	global $gCms;
 	return $gCms;

@@ -39,22 +39,6 @@ class CMSModule
 	 * ------------------------------------------------------------------
 	 */
 
-        /**
-	 * Reference to the global CMS Object
-	 * use: global $gCms;
-	 *
-	 * @deprecated
-	 */
-	var $cms;
-
-	/**
-	 * Reference to the config array in the global CMS Object
-	 * use: global $gCms; $config = $gCms->GetConfig();
-         *
-	 * @deprecated
-	 */
-	var $config;
-
 	/**
 	 * A variable that indicates the current desired language
 	 * this is effected by the (optional) lang parameter on module action
@@ -147,12 +131,26 @@ class CMSModule
 	var $restrict_unknown_params;
 
 	/**
-	 * A reference to the global smarty object
-	 * use: global $gCms; $smarty = $gCms->GetSmarty();
-	 *
-	 * @deprecated
+	 * Magic methods
 	 */
-	var $smarty;
+
+	public function &__get($key)
+	{
+	  switch( $key )
+	    {
+	    case 'cms':
+	      return cmsms();
+
+	    case 'smarty':
+	      return cmsms()->GetSmarty();
+
+	    case 'config':
+	      return cmsms()->GetConfig();
+
+	    case 'db':
+	      return cmsms()->GetDb();
+	    }
+	}
 
 	/**
 	 * Constructor
@@ -160,11 +158,6 @@ class CMSModule
 	 */
 	function CMSModule()
 	{
-		global $gCms;
-		
-		$this->cms =& $gCms;
-		$this->config = $gCms->GetConfig(); // why?
-
 		global $CMS_STYLESHEET;
 		global $CMS_ADMIN_PAGE;
 		global $CMS_MODULE_PAGE;
@@ -181,9 +174,6 @@ class CMSModule
 					'name' => 'lang',
 					'default' => 'en_US',
 					'optional' => true);
-
-		#$smarty = new CMSModuleSmarty($config, $this->GetName());
-		$this->smarty = &$gCms->GetSmarty();
 
 		if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
 		  {
