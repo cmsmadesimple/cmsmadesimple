@@ -37,11 +37,11 @@ function redirect($to, $noappend=false)
 {
      $_SERVER['PHP_SELF'] = null;
 
-    global $gCms;
-	if (isset($gCms))
-		$config = $gCms->GetConfig();
-	else
-		$config = array();
+     $gCms = cmsms();
+     if (isset($gCms))
+       $config = $gCms->GetConfig();
+     else
+       $config = array();
 
     $schema = $_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http';
     $host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
@@ -148,7 +148,7 @@ function redirect($to, $noappend=false)
  */
 function redirect_to_alias($alias)
 {
-	global $gCms;
+  $gCms = cmsms();
 	$manager = $gCms->GetHierarchyManager();
 	$node = $manager->sureGetNodeByAlias($alias);
 	$content = $node->GetContent();
@@ -323,8 +323,7 @@ function cms_cleanfile($filename)
 
 	// This ensures that the file specified is somewhere
 	// underneath the cms root path
-	global $gCms;
-	$config = $gCms->GetConfig();
+	$config = cmsms()->GetConfig();
 	if( strpos($realpath, $config['root_path']) !== 0 ) {
 		return CLEANED_FILENAME;
 	}
@@ -343,30 +342,7 @@ function cms_calculate_url()
 {
 	$result = '';
 
-    global $gCms;
-    $config = $gCms->GetConfig();
-
-	//Apache
-	/*
-	if (isset($_SERVER["PHP_SELF"]) && !endswith($_SERVER['PHP_SELF'], 'index.php'))
-	{
-		$matches = array();
-
-		//Seems like PHP_SELF has whatever is after index.php in certain situations
-		if (strpos($_SERVER['PHP_SELF'], 'index.php') !== FALSE) {
-			if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
-			{
-				$result = $matches[1];
-			}
-		}
-		else
-		{
-			$result = $_SERVER['PHP_SELF'];
-		}
-	}
-	*/
-	//lighttpd
-	#else if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
+	$config = cmsms()->GetConfig();
 
 	//apache and lighttpd
 	if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
@@ -601,7 +577,7 @@ function debug_bt()
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true)
 {
-	global $gCms;
+  $gCms = cmsms();
 	$variables =& $gCms->variables;
 
 	$starttime = microtime();
@@ -693,8 +669,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
  */
 function debug_output($var, $title="")
 {
-	global $gCms;
-	if($gCms->config["debug"] == true)
+  if(cmsms()->config["debug"] == true)
 	{
 		debug_display($var, $title, true);
 	}
@@ -711,11 +686,8 @@ function debug_output($var, $title="")
  */
 function debug_to_log($var, $title='')
 {
-	global $gCms;
-
 	$errlines = explode("\n",debug_display($var, $title, false, false));
 	$filename = TMP_CACHE_LOCATION . '/debug.log';
-	//$filename = dirname(dirname(__FILE__)) . '/uploads/debug.log';
 	foreach ($errlines as $txt)
 	{
 		error_log($txt . "\n", 3, $filename);
@@ -731,7 +703,7 @@ function debug_to_log($var, $title='')
  */
 function debug_buffer($var, $title="")
 {
-	global $gCms;
+  $gCms = cmsms();
 	if ($gCms)
 	{
 		$config = $gCms->GetConfig();
@@ -755,7 +727,7 @@ function debug_buffer($var, $title="")
  */
 function debug_sql($str, $newline = false)
 {
-	global $gCms;
+  $gCms = cmsms();
 	if ($gCms)
 	{
 		$config = $gCms->GetConfig();
@@ -984,8 +956,7 @@ function create_encoding_dropdown($name = 'encoding', $selected = '')
  */
 function cms_mapi_remove_permission($permission_name)
 {
-  global $gCms;
-  $db =& $gCms->GetDB();
+  $db = cmsms()->GetDB();
 
   $query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
   $row = &$db->GetRow($query, array($permission_name));
@@ -1014,8 +985,7 @@ function cms_mapi_remove_permission($permission_name)
  */
 function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 {
-	global $gCms;
-	$db = &$gCms->GetDb();
+  $db = cmsms()->GetDb();
 
 	$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name =" . $db->qstr($permission_name);
 	$result = $db->Execute($query);
@@ -1681,7 +1651,7 @@ function can_users_upload()
   # and the uploads and modules directory.  if they all match, then we
   # can upload files.
   # if safe mode is off, then we just have to check the permissions.
-  global $gCms;
+  $gCms = cmsms();
   $file_index = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'index.php';
   $dir_uploads = $gCms->config['uploads_path'];
 
@@ -1733,7 +1703,7 @@ function can_admin_upload()
   # and the uploads and modules directory.  if they all match, then we
   # can upload files.
   # if safe mode is off, then we just have to check the permissions.
-  global $gCms;
+  $gCms = cmsms();
   $file_index = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'index.php';
   $file_moduleinterface = $gCms->config['root_path'].DIRECTORY_SEPARATOR.
     $gCms->config['admin_dir'].DIRECTORY_SEPARATOR.'moduleinterface.php';
@@ -1891,8 +1861,7 @@ function stack_trace()
  */
 function cms_move_uploaded_file( $tmpfile, $destination )
 {
-   global $gCms;
-   $config = $gCms->GetConfig();
+   $config = cmsms()->GetConfig();
 
    if( !@move_uploaded_file( $tmpfile, $destination ) )
    {

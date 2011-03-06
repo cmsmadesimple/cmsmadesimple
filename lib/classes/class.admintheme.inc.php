@@ -31,12 +31,6 @@
  */
 class AdminTheme
 {
-
-    /**
-     * CMS handle
-     */
-    var $cms;
-
 	/**
 	 * Title
 	 */
@@ -118,6 +112,15 @@ class AdminTheme
     protected $_viewsite_url;
 
 	/**
+	 * __get()
+	 */
+	public function __get($key)
+	{
+		if( $key == 'cms' ) return cmsms();
+		trigger_error("Attempt to access invalid member $key of admin theme object");
+	}
+
+	/**
 	 * Generic constructor.  Runs the SetInitialValues fuction.
 	 */
 	function AdminTheme($cms, $userid, $themeName)
@@ -130,7 +133,7 @@ class AdminTheme
 	 */
 	function SetInitialValues($cms, $userid, $themeName)
 	{
-	  global $gCms;
+		$gCms = cmsms();
 	  $contentops = $gCms->GetContentOperations();
 	  $dflt_content_id = $contentops->GetDefaultContent();
 	  $content_obj = $contentops->LoadContentFromId($dflt_content_id);
@@ -138,7 +141,6 @@ class AdminTheme
 
 		$this->title = '';
 		$this->subtitle = '';
-		$this->cms = $cms;
 		$this->url = $_SERVER['SCRIPT_NAME'];
 		$this->query = (isset($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:'');
 		if( $this->query == '' && isset($_POST['mact']) )
@@ -247,9 +249,9 @@ class AdminTheme
      */
     function SetModuleAdminInterfaces()
     {
-      global $gCms;
+		$gCms = cmsms();
     	# Are there any modules with an admin interface?
-        $cmsmodules =& $gCms->modules;
+        $cmsmodules = $gCms->modules;
 		reset($cmsmodules);
 		while (list($key) = each($cmsmodules))
 		{
@@ -305,8 +307,8 @@ class AdminTheme
                 check_permission($this->userid, 'Modify Global Content Blocks') |
                 check_permission($this->userid, 'Delete Global Content Blocks');
 
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
+		$gCms = cmsms();
+		$gcbops = $gCms->GetGlobalContentOperations();
 
         $thisUserBlobs = $gcbops->AuthorBlobs($this->userid);
         if (count($thisUserBlobs) > 0)
@@ -473,8 +475,8 @@ class AdminTheme
      */
     function DoBookmarks()
     {
-      global $gCms;
-      $bookops =& $gCms->GetBookmarkOperations();
+		$gCms = cmsms();
+      $bookops = $gCms->GetBookmarkOperations();
       $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
       $marks = array_reverse($bookops->LoadBookmarks($this->userid));
       $tmpMark = new Bookmark();
@@ -503,8 +505,8 @@ class AdminTheme
 	echo '<div class="itemoverflow">';
 	echo '<h2>'.lang('bookmarks').'</h2>';
 	echo '<p><a href="listbookmarks.php'.$urlext.'">'.lang('managebookmarks').'</a></p>';
-	global $gCms;
-	$bookops =& $gCms->GetBookmarkOperations();
+	$gCms = cmsms();
+	$bookops = $gCms->GetBookmarkOperations();
 	$marks = array_reverse($bookops->LoadBookmarks($this->userid));
 	$marks = array_reverse($marks);
 	if (FALSE == empty($marks))
@@ -903,7 +905,7 @@ debug_buffer('after menu items');
 
 
 	// add in all of the 'system' modules too
-	global $gCms;
+	$gCms = cmsms();
         foreach ($this->menuItems as $sectionKey=>$sectionArray)
 	  {
             $tmpArray = $this->MenuListSectionModules($sectionKey);
@@ -1415,8 +1417,8 @@ debug_buffer('after menu items');
      */
     function DisplayHTMLStartTag()
     {
-		global $gCms;
-		$nls =& $gCms->nls;
+		$gCms = cmsms();
+		$nls = $gCms->nls;
     	echo (isset($nls['direction']) && $nls['direction'] == 'rtl') ? "<html dir=\"rtl\"\n>" : "<html>\n";
     }
 	/**
@@ -1440,13 +1442,12 @@ debug_buffer('after menu items');
      */
     function DisplayHTMLHeader($showielink = false, $addt = '')
     {
-		global $gCms;
-		$config = $gCms->GetConfig();
+		$config = cmsms()->GetConfig();
 ?><head>
 <meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-9 Ted Kulp. All rights reserved." />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="robots" content="noindex, nofollow" />
-<title><?php echo $this->cms->siteprefs['sitename'] ." - ". $this->title ?></title>
+	   <title><?php echo cmsms()->siteprefs['sitename'] ." - ". $this->title ?></title>
 <link rel="stylesheet" type="text/css" href="style.php" />
 <?php
 	if ($showielink) {
@@ -1461,7 +1462,7 @@ debug_buffer('after menu items');
 <?php $this->OutputHeaderJavascript(); ?>
 <?php $this->ThemeHeader(); ?>
 <?php echo $addt ?>
-<base href="<?php echo $config['root_url'] . '/' . $config['admin_dir'] . '/'; ?>" />
+<base href="<?php echo $config['admin_url'] . '/'; ?>" />
 </head>
 <?php
     }
@@ -1664,7 +1665,7 @@ debug_buffer('after menu items');
     	   	   	$imagePath = '';
     	   	   }
     	   	
-    	   if (file_exists(dirname($this->cms->config['root_path'] . '/' . $this->cms->config['admin_dir'] .
+    	   if (file_exists(dirname(cmsms()->config['root_path'] . '/' . cmsms()->config['admin_dir'] .
                 '/themes/' . $this->themeName . '/images/' . $imagePath . $imageName) . '/'. $imageName))
     	       {
                 $this->imageLink[$imageName] = 'themes/' .
@@ -1710,7 +1711,7 @@ debug_buffer('after menu items');
 	*/
     function ShowHeader($title_name, $extra_lang_param=array(), $link_text = '', $module_help_type = FALSE)
     {
-      $cms = $this->cms;
+      $cms = cmsms();
       $config = $cms->GetConfig();             
       $header  = '<div class="pageheader">';
       if (FALSE != $module_help_type)
@@ -1726,10 +1727,10 @@ debug_buffer('after menu items');
 	      $module = $tmp[0];
 	    }
 	  $icon = "modules/{$module}/images/icon.gif";
-	  $path = cms_join_path($this->cms->config['root_path'],$icon);
+	  $path = cms_join_path(cmsms()->config['root_path'],$icon);
 	  if( file_exists($path) )
 	    {
-	      $header .= "<img src=\"{$this->cms->config['root_url']}/{$icon}\" class=\"itemicon\" />&nbsp;";
+	      $header .= "<img src=\"{cmsms()->config['root_url']}/{$icon}\" class=\"itemicon\" />&nbsp;";
 	    }
 	  $header .= $title_name;
 	}
@@ -1742,7 +1743,7 @@ debug_buffer('after menu items');
 	  $wikiUrl = $config['wiki_url'];
 // 	  // Include English translation of titles. (Can't find better way to get them)
 // 	  $dirname = dirname(__FILE__);
-// 	  include($dirname.'/../../'.$this->cms->config['admin_dir'].'/lang/en_US/admin.inc.php');
+// 	  include($dirname.'/../../'.cmsms()->config['admin_dir'].'/lang/en_US/admin.inc.php');
 	  foreach ($this->breadcrumbs AS $key => $value)
 	    {
 	      $title = $value['title'];
@@ -1785,7 +1786,7 @@ debug_buffer('after menu items');
 	    $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
 	    // Make link to go the translated version of page if lang is not en_US
 	    /* Disabled as suggested by westis
-	     $lang = get_preference($this->cms->variables['user_id'], 'default_cms_language');
+	     $lang = get_preference(cmsms()->variables['user_id'], 'default_cms_language');
 	     if ($lang != 'en_US') {
 	     $wikiUrl .= '/'.substr($lang, 0, 2);
 	     }
@@ -1804,7 +1805,7 @@ debug_buffer('after menu items');
 	    $image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('wikihelp'),'','','systemicon');		
 	    if ('both' == $module_help_type)
 	      {
-		$module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
+		$module_help_link = $config['admin_url'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
 		$header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a></span>';
 		//$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank" title="'.lang('wikihelp').'">'.lang('wikihelp').'</a>  ('.lang('new_window').')</span>';
 	      }
@@ -1858,8 +1859,7 @@ debug_buffer('after menu items');
      */
     function ShowErrors($errors, $get_var = '')
     {
-      global $gCms;
-      $config = $gCms->GetConfig();
+		$config = cmsms()->GetConfig();
       $wikiUrl = $config['wiki_url'];
       if ($wikiUrl !='none'){
 		      if (FALSE == empty($_REQUEST['module'])  || FALSE == empty($_REQUEST['mact']))
@@ -1943,7 +1943,7 @@ debug_buffer('after menu items');
 	 */
 	static function &GetThemeObject()
 	{
-		global $gCms;
+		$gCms = cmsms();
 		$config = $gCms->GetConfig();
 		$themeName = get_preference(get_userid(), 'admintheme', 'default');
 		$themeObjectName = $themeName."Theme";

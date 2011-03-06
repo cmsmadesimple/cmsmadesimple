@@ -22,8 +22,8 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 $error = "";
 $forgotmessage = "";
@@ -127,7 +127,7 @@ else if ( isset($_SESSION['redirect_url']) )
 	if (true == $is_logged_in)
 	{
 		$userid = get_userid();
-		$dest = $config['root_url'].'/'.$config['admin_dir'];
+		$dest = $config['admin_url'];
 		$homepage = get_preference($userid,'homepage');
 		if( $homepage == '' )
 		{
@@ -210,7 +210,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			  if( !strstr('.php',$tmp) || endswith($tmp,'/') )
 			    {
 			      // force the url to go to index.php
-			      $tmp = $config['root_url'].'/'.$config['admin_dir'].
+			      $tmp = $config['admin_url'].
 				'/index.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			    }
 			  redirect($tmp);

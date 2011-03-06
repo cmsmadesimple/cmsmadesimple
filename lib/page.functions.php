@@ -36,8 +36,8 @@
  */
 function check_login($no_redirect = false)
 {
-	global $gCms;
-	$config = $gCms->GetConfig();
+  
+  $config = cmsms()->GetConfig();
 
 	//Handle a current login if one is in queue in the SESSION
 	if (isset($_SESSION['login_user_id']))
@@ -71,7 +71,7 @@ function check_login($no_redirect = false)
 				$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
 				if (false == $no_redirect)
 				  {
-				    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+				    redirect($config['admin_url']."/login.php");
 				  }
 				return false;
 			}
@@ -82,7 +82,7 @@ function check_login($no_redirect = false)
 			$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
 			if (false == $no_redirect)
 			  {
-			    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+			    redirect($config['admin_url']."/login.php");
 			  }
 			return false;
 		}
@@ -123,7 +123,7 @@ function check_login($no_redirect = false)
 		    debug_buffer('Session key mismatch problem... redirect to login');
 		    if (false == $no_redirect)
 		      {
-			redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+			redirect($config['admin_url'].'/login.php');
 		      }
 		    return false;
 		  }
@@ -170,8 +170,7 @@ function check_passhash($userid, $checksum)
 {
 	$check = false;
 
-	global $gCms;
-	$db =& $gCms->GetDb();
+	$gCms = cmsms();
 	$config = $gCms->GetConfig();
 
 	$userops =& $gCms->GetUserOperations();
@@ -199,8 +198,7 @@ function check_passhash($userid, $checksum)
  */
 function generate_user_object($userid)
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
+  $gCms = cmsms();
 	$config = $gCms->GetConfig();
 
 	$userops =& $gCms->GetUserOperations();
@@ -229,7 +227,7 @@ function send_recovery_email($username)
 {
 	global $gCms;
 	$config = $gCms->GetConfig();
-	$userops =& $gCms->GetUserOperations();
+	$userops = $gCms->GetUserOperations();
 	$user = $userops->LoadUserByUsername($username);
 	
 	//Grab CMSMailer -- *cough* hack
@@ -249,7 +247,7 @@ function send_recovery_email($username)
 	$obj->AddAddress($user->email, $user->firstname . ' ' . $user->lastname);
 	$obj->SetSubject(lang('lostpwemailsubject',$gCms->siteprefs['sitename']));
 	
-	$url = $config['root_url'] . '/' . $config['admin_dir'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
+	$url = $config['admin_url'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
 	$body = lang('lostpwemail',$gCms->siteprefs['sitename'], $user->username, $url);
 	
 	$obj->SetBody($body);
@@ -293,9 +291,9 @@ function find_recovery_user($hash)
  */
 function load_all_permissions($userid)
 {
-	global $gCms;
-	$db = &$gCms->GetDb();
-	$variables = &$gCms->variables;
+  $gCms = cmsms();
+	$db = $gCms->GetDb();
+	$variables =& $gCms->variables;
 
 	$perms = array();
 
@@ -325,8 +323,8 @@ function check_permission($userid, $permname)
 {
 	$check = false;
 
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
+	$gCms = cmsms();
+	$userops = $gCms->GetUserOperations();
 	$adminuser = $userops->UserInGroup($userid,1);
 
 	if (!isset($gCms->variables['userperms']))
@@ -361,15 +359,15 @@ function check_permission($userid, $permname)
 function check_ownership($userid, $contentid = '', $strict = false)
 {
 	$check = false;
-	global $gCms;
+	$gCms = cmsms();
 
-	$userops =& $gCms->GetUserOperations();
+	$userops = $gCms->GetUserOperations();
 	$adminuser = $userops->UserInGroup($userid,1);
 	if( $adminuser ) return true;
 
 	if (!isset($gCms->variables['ownerpages']))
 	{
-		$db =& $gCms->GetDb();
+		$db = $gCms->GetDb();
 
 		$variables = &$gCms->variables;
 		$tmpa = array();
@@ -412,7 +410,7 @@ function check_ownership($userid, $contentid = '', $strict = false)
 function check_authorship($userid, $contentid = '')
 {
 	$check = false;
-	global $gCms;
+	$gCms = cmsms();
 
 	if (!isset($gCms->variables['authorpages']))
 	{
@@ -440,9 +438,9 @@ function check_authorship($userid, $contentid = '')
  */
 function author_pages($userid)
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
-	$userops =& $gCms->GetUserOperations();
+  $gCms = cmsms();
+  $db = $gCms->GetDb();
+  $userops = $gCms->GetUserOperations();
         $variables = &$gCms->variables;
 	if (!isset($variables['authorpages']))
 	{
@@ -513,8 +511,8 @@ function quick_check_authorship($contentid, $hispages)
  */
 function audit($itemid, $itemname, $action)
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
+  $gCms = cmsms();
+	$db = $gCms->GetDb();
 
 	$userid = 0;
 	$username = '';
@@ -555,8 +553,8 @@ function audit($itemid, $itemname, $action)
  */
 function load_site_preferences()
 {
-	global $gCms;
-	$db = &$gCms->GetDb();
+  $gCms = cmsms();
+	$db = $gCms->GetDb();
 	$siteprefs = &$gCms->siteprefs;
 
 	if ($db)
@@ -587,7 +585,7 @@ function get_site_preference($prefname, $defaultvalue = '') {
 
 	$value = $defaultvalue;
 
-	global $gCms;
+	$gCms = cmsms();
 	$siteprefs =& $gCms->siteprefs;
 	
 	if (count($siteprefs) == 0)
@@ -613,8 +611,8 @@ function get_site_preference($prefname, $defaultvalue = '') {
  */
 function remove_site_preference($prefname,$uselike=false)
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
+  $gCms = cmsms();
+	$db = $gCms->GetDb();
 $db->debug = true;
 	$siteprefs = &$gCms->siteprefs;
 
@@ -647,8 +645,8 @@ function set_site_preference($prefname, $value)
 {
 	$doinsert = true;
 
-	global $gCms;
-	$db =& $gCms->GetDb();
+	$gCms = cmsms();
+	$db = $gCms->GetDb();
 
 	$siteprefs = &$gCms->siteprefs;
 
@@ -686,8 +684,8 @@ function set_site_preference($prefname, $value)
  */
 function load_all_preferences($userid)
 {
-	global $gCms;
-	$db = &$gCms->GetDb();
+  $gCms = cmsms();
+	$db = $gCms->GetDb();
 	$variables = &$gCms->userprefs;
 
 	$query = 'SELECT preference, value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
@@ -713,8 +711,8 @@ function load_all_preferences($userid)
  */
 function get_preference($userid, $prefname, $default='')
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
+  $gCms = cmsms();
+	$db = $gCms->GetDb();
 
 	$result = '';
 
@@ -752,8 +750,8 @@ function set_preference($userid, $prefname, $value)
 {
 	$doinsert = true;
 
-	global $gCms;
-	$db =& $gCms->GetDb();
+	$gCms = cmsms();
+	$db = $gCms->GetDb();
 
 	if (!isset($gCms->userprefs))
 	{
@@ -802,8 +800,8 @@ function get_stylesheet($template_id, $media_type = '')
 	$result = array();
 	$css = "";
 
-	global $gCms;
-	$db =& $gCms->GetDb();
+	$gCms = cmsms();
+	$db = $gCms->GetDb();
 	$templateops =& $gCms->GetTemplateOperations();
 
 	$templateobj = FALSE;
@@ -877,8 +875,8 @@ function get_stylesheet_media_types($template_id)
 {
 	$result = array();
 
-	global $gCms;
-	$db =& $gCms->GetDb();
+	$gCms = cmsms();
+	$db = $gCms->GetDb();
 	$templateops =& $gCms->GetTemplateOperations();
 
 	$templateobj = FALSE;
@@ -959,7 +957,7 @@ function & stripslashes_deep(&$value)
  */
 function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
 {
-	global $gCms;
+  $gCms = cmsms();
 	$result = '';
 
 	if ($enablewysiwyg == true)
@@ -1176,8 +1174,7 @@ function textarea_highlight($use_javasyntax, $text, $name, $class_name="syntaxHi
  * @return string
  */
 function cms_db_prefix() {
-  global $gCms;
-  $config = $gCms->GetConfig();
+  $config = cmsms()->GetConfig();
   return $config["db_prefix"];
 }
 
@@ -1245,10 +1242,10 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
  */
 function get_pageid_or_alias_from_url()
 {
-  global $gCms;
+  $gCms = cmsms();
   $config = $gCms->GetConfig();
-  $contentops =& $gCms->GetContentOperations();
-  $smarty = &$gCms->smarty;
+  $contentops = $gCms->GetContentOperations();
+  $smarty = $gCms->GetSmarty();
 
   $params =& $_REQUEST;
   if (isset($params['mact']))
@@ -1414,7 +1411,7 @@ function get_pageid_or_alias_from_url()
  */
 function cms_get_current_pageid()
 {
-  global $gCms;
+  $gCms = cmsms();
 
   if( isset($gCms->variables['page_id']) )
     {

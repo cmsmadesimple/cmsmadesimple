@@ -31,7 +31,7 @@
  */
 function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 {
-	global $gCms;
+	$gCms = cmsms();
 
 	$formcount = 1;
 	$variables = &$gCms->variables;
@@ -256,7 +256,7 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
   $name = cms_htmlentities($name);
   $image = cms_htmlentities($image);
 
-	global $gCms;
+  $gCms = cmsms();
 	$config = $gCms->GetConfig();
 
 	$text = '<input class="cms_submit" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" type=';
@@ -447,7 +447,7 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
   $returnid = cms_htmlentities($returnid);
   $prettyurl = cms_htmlentities($prettyurl);
 
-	global $gCms;
+  $gCms = cmsms();
 	$config = $gCms->GetConfig();
 
 	$class = (isset($params['class'])?cms_htmlentities($params['class']):'');
@@ -531,10 +531,11 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 		{
 			$goto = 'moduleinterface.php';
 		}
-		$text .= $base_url;
-		if (!($returnid != '' && $returnid > -1))
+
+		$text = $base_url;
+		if( $returnid <= 0 )
 			{
-				$text .= '/'.$config['admin_dir'];
+				$text = $config['admin_url'];
 			}
 		
 		$secureparam = '';
@@ -571,7 +572,7 @@ function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
   $pageid = cms_htmlentities($pageid);
   $contents = cms_htmlentities($contents);
 
-	global $gCms;
+  $gCms = cmsms();
 	$config = $gCms->GetConfig();
 	$text = '<a href="';
 	if ($config["url_rewriting"] == 'mod_rewrite')
@@ -608,7 +609,7 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
   $contents = $contents;
 
 	$text = '';
-	global $gCms;
+	$gCms = cmsms();
 	$config = $gCms->GetConfig();
 	$manager =& $gCms->GetHierarchyManager();
 	$node = $manager->sureGetNodeById($returnid);

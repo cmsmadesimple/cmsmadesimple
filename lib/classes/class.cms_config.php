@@ -82,6 +82,7 @@ class cms_config implements ArrayAccess
     $this->_types['admin_encoding'] = self::TYPE_STRING;
     $this->_types['set_names'] = self::TYPE_BOOL;
     $this->_types['wiki_url'] = self::TYPE_BOOL;
+    $this->_types['admin_url'] = self::TYPE_STRING;
 
     $config = array();
     if (file_exists(CONFIG_FILE_LOCATION))
@@ -267,6 +268,9 @@ class cms_config implements ArrayAccess
 
       case 'wiki_url':
 	return 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel';
+
+      case 'admin_url':
+	return $this->offsetGet('root_url').'/'.$this->offsetGet('admin_dir');
 
       default:
 	// not a mandatory key for the config.php file... and one we don't understand.

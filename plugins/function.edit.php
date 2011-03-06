@@ -18,7 +18,7 @@
 
 function smarty_cms_function_edit($params, &$smarty)
 {
-	global $gCms;
+  $gCms = cmsms();
 
 	if (!check_permission(get_userid(false), 'Manage All Content')
 	    && !quick_check_authorship($gCms->variables['content_id'],
@@ -29,38 +29,12 @@ function smarty_cms_function_edit($params, &$smarty)
 	$text = isset($params['text']) ? $params['text']:'Edit This Page';
 	if (isset($params["showbutton"]))
 	{
-		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php'.$urlext.'&amp;content_id='.$gCms->variables['content_id'].'"><img src="'.$gCms->config['root_url'].'/images/cms/editbutton.png" alt="'.$text.'"/></a>';
+		return '<a href="'.$gCms->config['admin_url'].'/editcontent.php'.$urlext.'&amp;content_id='.$gCms->variables['content_id'].'"><img src="'.$gCms->config['root_url'].'/images/cms/editbutton.png" alt="'.$text.'"/></a>';
 	}
 	else
 	{
-		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php'.$urlext.'&amp;content_id='.$gCms->variables['content_id'].'">'.$text.'</a>';
+		return '<a href="'.$gCms->config['admin_url'].'/editcontent.php'.$urlext.'&amp;content_id='.$gCms->variables['content_id'].'">'.$text.'</a>';
 	}
-	/*
-	global $gCms;
-		
-	$userid = get_userid(false);
-	if(!$userid) return;
-
-	$access = check_permission($userid, 'Modify Any Page');
-	if (!$access) return;
-
-	$text = 'Edit This Page';
-
-	if (!empty($params['text']))
-	{
-		$text = $params['text'];
-	}
-
-	//will this work if using htaccess? (Yes! -Wishy)
-	if (isset($params["showbutton"]))
-	{
-		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php?content_id='.$gCms->variables['content_id'].'"><img src="'.$gCms->config['root_url'].'/images/cms/editbutton.png" alt="'.$text.'"/></a>';
-	}
-	else
-	{
-		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php?content_id='.$gCms->variables['content_id'].'">'.$text.'</a>';
-	}
-	*/
 }
 
 function smarty_cms_help_function_edit() {

@@ -26,8 +26,7 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 include_once("header.php");
 
 check_login();
-global $gCms;
-$config = $gCms->GetConfig();
+$config = cmsms()->GetConfig();
 $link = $_SERVER['HTTP_REFERER'];
 $newmark = new Bookmark();
 $newmark->user_id = get_userid();
@@ -37,7 +36,7 @@ $result = $newmark->save();
 
 if ($result)
 	{
-	header('HTTP_REFERER: '.$config['root_url'].'/'.$config['admin_dir'].'/index.php');
+	header('HTTP_REFERER: '.$config['admin_url'].'/index.php');
 	redirect($link);
 	}
 else
