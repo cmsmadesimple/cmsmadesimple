@@ -81,14 +81,15 @@ $lang['admin']['error_no_default_content_block'] = 'No default content block was
 $lang['admin']['help_function_cms_stylesheet'] = <<<EOT
 	<h3>What does this do?</h3>
   <p>A replacement for the {stylesheet} tag, this tag provides caching of css files by generating static files in the tmp/cache directory, and smarty processing of the individual stylesheets.</p>
-  <p>This plugin retrieves stylesheet information from the system.  By default, it grabs all of the stylesheets attached to the current template in the order specified by the designer, and generates stylesheet tags.</p>
-  <p>Generated stylesheets are uniquely named according to the last modification date in the database, and are only generated if the stylesheet has changed.</p>
+  <p>This plugin retrieves stylesheet information from the system.  By default, it grabs all of the stylesheets attached to the current template in the order specified by the designer, and combines them into a single stylesheet tag.</p>
+  <p>Generated stylesheets are uniquely named according to the last modification date in the database, and are only generated if a stylesheet has changed.</p>
   <p>This tag is the replacement for the {stylesheet} tag.</p>
   <h3>How do I use it?</h3>
   <p>Just insert the tag into your template/page's head section like: <code>{cms_stylesheet}</code></p>
   <h3>What parameters does it take?</h3>
   <ul>
   <li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one specifically named one, whether it's attached to the current template or not.</li>
+  <li><em>(optional)</em>nocombine - If set to a non zero value, and there are multiple stylesheets associated with the template, the stylesheets will be output as separate tags rather than combined into a single tag.</li>
   <li><em>(optional)</em>templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
   <li><em>(optional)</em>media - When used in conjunction with the name parameter this parameter will allow you to override the media type for that stylesheet.  When used in conjunction with the templateid parameter, the media parameter will only output stylesheet tags for those stylesheets that are marked as compatible with the specified media type.</li>
   </ul>

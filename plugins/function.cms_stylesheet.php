@@ -27,16 +27,14 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	$CMS_STYLESHEET = 1;
 	$template_id = '';
 
-	$secure = false;
 	if (isset($params["templateid"]) && $params["templateid"]!="")
 	{
 		$template_id = $params["templateid"];
 	}
 	else
 	{
-		$content_obj = $gCms->variables['content_obj'];
+		$content_obj = &$gCms->variables['content_obj'];
 		$template_id = $content_obj->TemplateId();
-		$secure      = $content_obj->Secure();
 	}
 	
 	$config =& $gCms->config;
@@ -49,6 +47,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	$where = array();
 	$query = '';
 	$order = '';
+	$combine_stylesheets = FALSE;
 	if( isset($params['media']) && strtolower($params['media']) != 'all' )
 	{
 		$where[] = '(media_type LIKE ? OR media_type LIKE ?)';
@@ -64,6 +63,10 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	}
 	else //No name?  Use the template_id instead
 	{
+		if( !isset($params['nocombine']) || $params['nocombine'] == 0 )
+			{
+				$combine_stylesheets = TRUE;
+			}
   	    $query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,
                		              A.media_type,B.assoc_order 
    	                FROM '.cms_db_prefix().'css A 
@@ -75,50 +78,86 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	}
 	$query .= " WHERE ".implode(' AND ',$where).' '.$order;
 
-	$conv_filename = array(' '=>'',':'=>'_');
+	if( isset($params['nocombine']) && $params['nocombine'] )
+	{
+		// forced not to combine.
+		$combine_stylesheets = FALSE;
+	}
+
 	$res = $db->GetArray($query, $qparms);
 	if( $res )
 	{
-		$fmt1 = '<link rel="stylesheet" type="text/css" media="%s" href="%s" />';
-		$fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
-		foreach ($res as $one)
+		if( $combine_stylesheets && $template_id > 0 )
 		{
-			$media_type = str_replace(' ','',$one['media_type']);
-			$filename = 'stylesheet_'.$one['css_id'].'_'.strtotime($one['modified_date']).'.css';
-			if ( !file_exists(cms_join_path($cache_dir,$filename)) )
+			// combine all matches into one stylesheet.
+			$fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
+			$modified_date = 0;
+			for( $i = 0; $i < count($res); $i++ )
 			{
-				$smarty = $gCms->GetSmarty();
+				$modified_date = max($modified_date,strtotime($res[$i]['modified_date']));
+			}
+			$filename = 'stylesheet_combined_'.$template_id.'_'.$modified_date.'.css';
+			$fn = cms_join_path($cache_dir,$filename);
+			if( !file_exists($fn) )
+			{
+				$fh = fopen($fn,'w');
+				$smarty = cmsms()->GetSmarty();
 				$smarty->left_delimiter = '[[';
 				$smarty->right_delimiter = ']]';
-				$smarty->_compile_source('temporary stylesheet', $one['css_text'], $_compiled );
-				@ob_start();
-				$smarty->_eval('?>' . $_compiled);
-				$_contents = @ob_get_contents();
-				@ob_end_clean();
+				for( $i = 0; $i < count($res); $i++ )
+				{
+					$one = $res[$i];
+					$smarty->_compile_source('temporary stylesheet', $one['css_text'], $_compiled );
+					@ob_start();
+					$smarty->_eval('?>' . $_compiled);
+					$_contents = @ob_get_contents();
+					@ob_end_clean();
+					fwrite($fh,'/* Stylesheet: '.$one['css_name'].' Modified On '.$one['modified_date']." */\n");
+					fwrite($fh,$_contents);
+				}
 				$smarty->left_delimiter = '{';
 				$smarty->right_delimiter = '}';
-				$fname = cms_join_path($cache_dir,$filename);
-				$fp = fopen($fname, 'w');
-				//we convert CRLF to LF for unix compatibility
-				fwrite($fp, str_replace("\r\n", "\n", $_contents));
-				fclose($fp);
-				//set the modified date to the template modified date
-				//touch($fname, $db->UnixTimeStamp($one['modified_date']));
+				fclose($fh);
 			}
-
-			$root_url = $config['root_url'];
-			if( $secure )
-				{
-					$root_url = $config['ssl_url'];
-				}
-			if ( empty($media_type) || isset($params['media']) )
-				{
-					
-				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'"/>'."\n";
-			}
-			else
+			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$config['root_url'].'/tmp/cache/'.$filename.'"/>'."\n";
+		}
+		else
+		{
+			// separete stylesheet records.
+			$fmt1 = '<link rel="stylesheet" type="text/css" media="%s" href="%s" />';
+			$fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
+			foreach ($res as $one)
 			{
-				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
+				$media_type = str_replace(' ','',$one['media_type']);
+				$filename = 'stylesheet_'.$one['css_id'].'_'.strtotime($one['modified_date']).'.css';
+				if ( !file_exists(cms_join_path($cache_dir,$filename)) )
+				{
+					$smarty = $gCms->GetSmarty();
+					$smarty->left_delimiter = '[[';
+					$smarty->right_delimiter = ']]';
+					$smarty->_compile_source('temporary stylesheet', $one['css_text'], $_compiled );
+					@ob_start();
+					$smarty->_eval('?>' . $_compiled);
+					$_contents = @ob_get_contents();
+					@ob_end_clean();
+					$smarty->left_delimiter = '{';
+					$smarty->right_delimiter = '}';
+					$fname = cms_join_path($cache_dir,$filename);
+					$fp = fopen($fname, 'w');
+					//we convert CRLF to LF for unix compatibility
+					fwrite($fp, str_replace("\r\n", "\n", $_contents));
+					fclose($fp);
+					//set the modified date to the template modified date
+					//touch($fname, $db->UnixTimeStamp($one['modified_date']));
+				}
+				if ( empty($media_type) || isset($params['media']) )
+				{
+					$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$config['root_url'].'/tmp/cache/'.$filename.'"/>'."\n";
+				}
+				else
+				{
+					$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$config['root_url'].'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
+				}
 			}
 		}
 	}
