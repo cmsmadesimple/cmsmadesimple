@@ -550,7 +550,7 @@ $lang['admin']['help_function_root_url'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like: <code>{root_url}</code></p>
 	<h3>What parameters does it take?</h3>
-	<p>None at this time.</p>
+	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
 $lang['admin']['help_function_repeat'] = <<<EOT
   <h3>What does this do?</h3>

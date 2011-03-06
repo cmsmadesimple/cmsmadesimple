@@ -18,9 +18,15 @@
 
 function smarty_function_root_url($params, &$smarty)
 {
-	global $gCms;
-	$config = $gCms->GetConfig();
-	return $config['root_url'];
+	$config = cmsms()->GetConfig();
+     
+        $str = $config['root_url'];
+        if( isset($params['assign']) )
+        {
+           $smarty->assign($params['assign'],$str);
+	   return;
+        }
+	return $str;
 }
 
 function smarty_cms_help_function_root_url() {
