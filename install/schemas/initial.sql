@@ -1,4 +1,4 @@
-INSERT INTO {DB_PREFIX}version VALUES (34);
+INSERT INTO {DB_PREFIX}version VALUES (35);
 INSERT INTO {DB_PREFIX}users VALUES (1,'admin','5f4dcc3b5aa765d61d8327deb882cf99',1,'','','',1,'2006-07-25 21:22:33','2009-05-13 07:43:16');
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'use_wysiwyg','1',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'wysiwyg','TinyMCE',NULL);
@@ -155,6 +155,8 @@ INSERT INTO {DB_PREFIX}events VALUES ('Core','SmartyPreCompile',54);
 INSERT INTO {DB_PREFIX}events VALUES ('Core','SmartyPostCompile',55);
 INSERT INTO {DB_PREFIX}events VALUES ('Core','ChangeGroupAssignPre',56);
 INSERT INTO {DB_PREFIX}events VALUES ('Core','ChangeGroupAssignPost',57);
+INSERT INTO {DB_PREFIX}events VALUES ('Core','StylesheetPreCompile',58);
+INSERT INTO {DB_PREFIX}events VALUES ('Core','StylesheetPostCompile',59);
 INSERT INTO {DB_PREFIX}css_assoc VALUES (22,47,'template','2009-05-06 14:31:14','2009-05-06 14:31:14',2);
 INSERT INTO {DB_PREFIX}css_assoc VALUES (22,48,'template','2009-05-06 14:31:08','2009-05-06 14:31:08',1);
 INSERT INTO {DB_PREFIX}css_assoc VALUES (22,49,'template','2009-05-06 14:31:20','2009-05-06 14:31:20',3);

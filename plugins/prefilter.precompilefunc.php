@@ -18,8 +18,6 @@
 
 function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 {
-	global $gCms;
-
 	$result = explode(':', $smarty->_current_file);
 	if (count($result) > 1)
 	{
@@ -27,44 +25,21 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 
 		switch ($result[0])
 		{
+		case 'stylesheet':
+		  debug_to_log('prefilter for '.$smarty->_current_file);
+		  Events::SendEvent('Core','StylesheetPreCompile',array('stylesheet'=>&$tpl_output));
+		  break;
+
 			case "content":
-// 				foreach($gCms->modules as $key=>$value)
-// 				{
-// 					if ($gCms->modules[$key]['installed'] == true &&
-// 						$gCms->modules[$key]['active'] == true)
-// 					{
-// 						$gCms->modules[$key]['object']->ContentPreCompile($tpl_output);
-// 					}
-// 				}
-				
 				Events::SendEvent('Core', 'ContentPreCompile', array('content' => &$tpl_output));
-				
 				break;
+
 			case "template":
-// 				foreach($gCms->modules as $key=>$value)
-// 				{
-// 					if ($gCms->modules[$key]['installed'] == true &&
-// 						$gCms->modules[$key]['active'] == true)
-// 					{
-// 						$gCms->modules[$key]['object']->TemplatePreCompile($tpl_output);
-// 					}
-// 				}
-				
 				Events::SendEvent('Core', 'TemplatePreCompile', array('template' => &$tpl_output));
-				
 				break;
+
 			case "globalcontent":
-// 				foreach($gCms->modules as $key=>$value)
-// 				{
-// 					if ($gCms->modules[$key]['installed'] == true &&
-// 						$gCms->modules[$key]['active'] == true)
-// 					{
-// 						$gCms->modules[$key]['object']->GlobalContentPreCompile($tpl_output);
-// 					}
-// 				}
-				
 				Events::SendEvent('Core', 'GlobalContentPreCompile', array('global_content' => &$tpl_output));
-				
 				break;
 			default:
 				break;
@@ -72,15 +47,6 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 
 	}
 
-	foreach($gCms->modules as $key=>$value)
-	{
-		if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-		{
-			$gCms->modules[$key]['object']->SmartyPreCompile($tpl_output);
-		}
-	}
-	
 	Events::SendEvent('Core', 'SmartyPreCompile', array('content' => &$tpl_output));
 
 	return $tpl_output;

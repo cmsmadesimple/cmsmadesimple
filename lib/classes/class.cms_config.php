@@ -297,6 +297,7 @@ class cms_config implements ArrayAccess
     $this->_data[$key] = $value;
   }
 
+
   public function offsetUnset($key)
   {
     trigger_error('Unsetting config variable '.$key.' is invalid',E_USER_ERROR);

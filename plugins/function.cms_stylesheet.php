@@ -112,24 +112,30 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 			$fn = cms_join_path($cache_dir,$filename);
 			if( !file_exists($fn) )
 			{
-				$fh = fopen($fn,'w');
-				$smarty = cmsms()->GetSmarty();
-				$smarty->left_delimiter = '[[';
-				$smarty->right_delimiter = ']]';
+				$text = '';
 				for( $i = 0; $i < count($res); $i++ )
 				{
 					$one = $res[$i];
-					$smarty->_compile_source('temporary stylesheet', $one['css_text'], $_compiled );
-					@ob_start();
-					$smarty->_eval('?>' . $_compiled);
-					$_contents = @ob_get_contents();
-					@ob_end_clean();
-					fwrite($fh,'/* Stylesheet: '.$one['css_name'].' Modified On '.$one['modified_date']." */\n");
-					fwrite($fh,$_contents);
+					$text .= '/* Stylesheet: '.$one['css_name'].' Modified On '.$one['modified_date']." */\n";
+					$text .= $one['css_text'];
+					if( !endswith($text,"\n") ) $text .= "\n";
 				}
+
+				$smarty = cmsms()->GetSmarty();
+				$smarty->left_delimiter = '[[';
+				$smarty->right_delimiter = ']]';
+				$smarty->_compile_source('stylesheet:combined', $text, $_compiled );
+				@ob_start();
+				$smarty->_eval('?>' . $_compiled);
+				$_contents = @ob_get_contents();
+				@ob_end_clean();
+
+				$fh = fopen($fn,'w');
+				fwrite($fh,$_contents);
+				fclose($fh);
+
 				$smarty->left_delimiter = '{';
 				$smarty->right_delimiter = '}';
-				fclose($fh);
 			}
 			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$config['root_url'].'/tmp/cache/'.$filename.'"/>'."\n";
 		}
@@ -147,7 +153,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 					$smarty = $gCms->GetSmarty();
 					$smarty->left_delimiter = '[[';
 					$smarty->right_delimiter = ']]';
-					$smarty->_compile_source('temporary stylesheet', $one['css_text'], $_compiled );
+					$smarty->_compile_source('stylesheet:'.$one['css_name'], $one['css_text'], $_compiled );
 					@ob_start();
 					$smarty->_eval('?>' . $_compiled);
 					$_contents = @ob_get_contents();
