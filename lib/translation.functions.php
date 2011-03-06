@@ -78,7 +78,7 @@ function cms_detect_browser_lang()
 function cms_initialize_nls()
 {
 	#Read in all current languages...
-	global $gCms;
+  $gCms = cmsms();
 	$nls =& $gCms->nls;
 
 	if( !is_array($nls) || count($nls) == 0 )

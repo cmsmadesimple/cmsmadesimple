@@ -40,12 +40,6 @@ require_once(dirname(__FILE__).'/class.cms_variables.php');
 class CmsObject {
 
 	/**
-	 * Config object - hash containing variables from config.php
-	 *	@access private
-	 */
-	var $config;
-
-	/**
 	 * Database object - adodb reference to the current database
 	 *	@access private
 	 */
@@ -376,8 +370,7 @@ class CmsObject {
         if (!isset($this->moduleoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.moduleoperations.inc.php'));
-			$moduleoperations = new ModuleOperations();
-			$this->moduleoperations = &$moduleoperations;
+			$this->moduleoperations = new ModuleOperations();
 		}
 
 		return $this->moduleoperations;
@@ -396,8 +389,7 @@ class CmsObject {
         if (!isset($this->useroperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.useroperations.inc.php'));
-			$useroperations = new UserOperations();
-			$this->useroperations = &$useroperations;
+			$this->useroperations = new UserOperations();
 		}
 
 		return $this->useroperations;
@@ -439,8 +431,7 @@ class CmsObject {
         if (!isset($this->bookmarkoperations))
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'class.bookmarkoperations.inc.php'));
-			$bookmarkoperations = new BookmarkOperations();
-			$this->bookmarkoperations = &$bookmarkoperations;
+			$this->bookmarkoperations = new BookmarkOperations();
 		}
 
 		return $this->bookmarkoperations;
