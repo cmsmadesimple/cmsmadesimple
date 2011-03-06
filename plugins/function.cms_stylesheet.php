@@ -22,7 +22,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	//
 	// begin
 	//
-	global $gCms;
+	$gCms = cmsms();
 	global $CMS_STYLESHEET;
 	$CMS_STYLESHEET = 1;
 	$template_id = '';
@@ -37,8 +37,8 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		$template_id = $content_obj->TemplateId();
 	}
 	
-	$config =& $gCms->config;
-	$db =& $gCms->GetDb();
+	$config = $gCms->config;
+	$db = $gCms->GetDb();
 
 	$cache_dir = TMP_CACHE_LOCATION;
 	$stylesheet = '';
@@ -64,9 +64,9 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	else //No name?  Use the template_id instead
 	{
 		if( !isset($params['nocombine']) || $params['nocombine'] == 0 )
-			{
-				$combine_stylesheets = TRUE;
-			}
+		{
+			$combine_stylesheets = TRUE;
+		}
   	    $query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,
                		              A.media_type,B.assoc_order 
    	                FROM '.cms_db_prefix().'css A 
