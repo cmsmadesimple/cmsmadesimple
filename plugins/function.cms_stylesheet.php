@@ -33,7 +33,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	}
 	else
 	{
-		$content_obj = &$gCms->variables['content_obj'];
+		$content_obj = $gCms->variables['content_obj'];
 		$template_id = $content_obj->TemplateId();
 	}
 	
