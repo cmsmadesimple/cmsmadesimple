@@ -283,8 +283,12 @@ class cms_config implements ArrayAccess
   public function offsetSet($key,$value)
   {
     $tmp = debug_backtrace();
-    $class = $tmp[1]['class'];
-    $parent = get_parent_class($class);
+    $parent = '';
+    if( isset($tmp[1]) && isset($tmp[1]['class']) )
+      {
+	$class = $tmp[1]['class'];
+	$parent = get_parent_class($class);
+      }
     if( $parent != 'CMSInstallerPage' )
       {
 	trigger_error('Modification of config variables is deprecated',E_USER_ERROR);

@@ -98,31 +98,33 @@ if( $config['timezone'] != '' )
     @date_default_timezone_set(trim($config['timezone']));
   }
 
-#Adjust the url stuff if we're using HTTPS
-if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
-{
-  // adjust the root url
-  if( !isset($config['ssl_url']) )
-  { 
-    $config['ssl_url'] = str_replace('http://','https://',$config['root_url']);
-  }
-  $config['root_url'] = $config['ssl_url'];
-}
-else if( startswith($config['root_url'],'https://') )
-{
-  // okay, not using SSL, but the root url is https...
-  if( !isset($config['non_ssl_url']) )
-    {
-      $config['non_ssl_url'] = str_replace('https://','http://',$config['root_url']);
-    }
-  $config['root_url'] = $config['non_ssl_url'];
 
-  if( !isset($config['non_ssl_uploads_url']) )
-    {
-      $config['non_ssl_uploads_url'] = str_replace('https://','http://',$config['uploads_url']);
-    }
-  $config['uploads_url'] = $config['non_ssl_uploads_url'];
-}
+// bad code, improper solution... fix before releasing 1.10
+// #Adjust the url stuff if we're using HTTPS
+// if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
+// {
+//   // adjust the root url
+//   if( !isset($config['ssl_url']) )
+//   { 
+//     $config['ssl_url'] = str_replace('http://','https://',$config['root_url']);
+//   }
+//   $config['root_url'] = $config['ssl_url'];
+// }
+// else if( startswith($config['root_url'],'https://') )
+// {
+//   // okay, not using SSL, but the root url is https...
+//   if( !isset($config['non_ssl_url']) )
+//     {
+//       $config['non_ssl_url'] = str_replace('https://','http://',$config['root_url']);
+//     }
+//   $config['root_url'] = $config['non_ssl_url'];
+
+//   if( !isset($config['non_ssl_uploads_url']) )
+//     {
+//       $config['non_ssl_uploads_url'] = str_replace('https://','http://',$config['uploads_url']);
+//     }
+//   $config['uploads_url'] = $config['non_ssl_uploads_url'];
+// }
 
 #Attempt to override the php memory limit
 if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  )
