@@ -42,8 +42,7 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 
 include_once("header.php");
-global $gCms;
-$db =& $gCms->GetDb();
+$db = cmsms()->GetDb();
 
 #******************************************************************************
 # global vars definition

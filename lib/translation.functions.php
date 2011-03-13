@@ -32,7 +32,7 @@
  */
 function cms_detect_browser_lang()
 {
-  global $gCms;
+  $gCms = cmsms();
   $nls =& $gCms->nls;
   $curlang = '';
 
@@ -104,7 +104,7 @@ function cms_initialize_nls()
  */
 function cms_admin_current_language()
 {
-  global $gCms;
+  $gCms = cmsms();
   $nls =& $gCms->nls;
   $lang = array();
   $current_language = '';
@@ -158,7 +158,7 @@ function cms_admin_current_language()
  */
 function cms_set_frontend_language($lang = '')
 {
-  global $gCms;
+  $gCms = cmsms();
   if( empty($lang) )
     {
       unset($gCms->variables['cms_frontend_cur_language']);
@@ -181,7 +181,7 @@ function cms_frontend_current_language()
 {
   cms_initialize_nls();
 
-  global $gCms;
+  $gCms = cmsms();
   if( isset($gCms->variables['cms_frontend_cur_language']) )
     {
       return $gCms->variables['cms_frontend_cur_language'];
@@ -231,7 +231,7 @@ function cms_current_language()
  */
 function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 0,$has_realm = 0, $is_custom = 0, $cur_lang = '')
 {
-	global $gCms;
+  $gCms = cmsms();
 	global $lang;
 	if( empty($realm) ) return fALSE;
 
@@ -334,7 +334,7 @@ function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 
  */
 function lang_by_realm()
 {
-  global $gCms;
+  $gCms = cmsms();
   global $lang;
 
   $name = '';
@@ -411,7 +411,7 @@ function lang_by_realm()
 function lang()
 {
   // uses the default admin realm.
-	global $gCms;
+  $gCms = cmsms();
 	global $lang;
 	$nls =& $gCms->nls;
 
@@ -462,7 +462,7 @@ function lang()
 function get_encoding($charset='', $defaultoverrides=true)
 {
 	global $current_language;
-	global $gCms;
+	$gCms = cmsms();
 	$variables =& $gCms->variables;
 	$config = $gCms->GetConfig();
 	$nls =& $gCms->nls;
@@ -498,7 +498,7 @@ function get_encoding($charset='', $defaultoverrides=true)
  */
 function set_encoding($charset)
 {
-  global $gCms;
+  $gCms = cmsms();
   $variables =& $gCms->variables;
   
   if( $charset == '' ) 
@@ -542,7 +542,7 @@ function get_language_list($allow_none = true)
       $tmp = array(''=>lang('nodefault'));
     }
 
-  global $gCms;
+  $gCms = cmsms();
   $config = $gCms->GetConfig();
   $nls = $gCms->nls;
   asort($nls["language"]);

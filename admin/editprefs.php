@@ -128,6 +128,7 @@ $modules = array();
 //Next 2 lines commented, to NOT show 'none' as a choice in the ignore list.
 //$modules[ucwords(lang('none'))] = '**none**';
 //$modules['---'] = '**none**';
+$gCms = cmsms();
 foreach($gCms->modules as $key=>$value)
 {
   if ($gCms->modules[$key]['installed'] == true &&

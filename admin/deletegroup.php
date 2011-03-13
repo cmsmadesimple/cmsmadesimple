@@ -50,9 +50,9 @@ if (isset($_GET["group_id"]))
 
 	$result = false;
 	
-	global $gCms;
-	$groupops =& $gCms->GetGroupOperations();
-	$userops =& $gCms->GetUserOperations();
+	$gCms = cmsms();
+	$groupops = $gCms->GetGroupOperations();
+	$userops = $gCms->GetUserOperations();
 	$groupobj = $groupops->LoadGroupByID($group_id);
 	$group_name = $groupobj->name;
 	

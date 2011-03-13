@@ -24,8 +24,8 @@ require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 $error = array();
 
@@ -50,7 +50,7 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User-defined Tags');
 
-$smarty = new Smarty_CMS($gCms->config);
+$smarty = new Smarty_CMS($gCms->config); // why?
 load_plugins($smarty);
 
 $ajax = false;

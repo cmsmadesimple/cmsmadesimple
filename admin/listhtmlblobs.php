@@ -39,8 +39,7 @@ if (isset($_GET["message"])) {
 <?php
 	$userid	= get_userid();
 
-	global $gCms;
-	$gcbops =& $gCms->GetGlobalContentOperations();
+$gcbops = cmsms()->GetGlobalContentOperations();
 
 	$modifyall = check_permission($userid, 'Modify Global Content Blocks');
 	$htmlbloblist = $gcbops->LoadHtmlBlobs();

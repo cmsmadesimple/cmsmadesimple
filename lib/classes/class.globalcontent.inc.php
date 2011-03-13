@@ -135,8 +135,7 @@ class GlobalContent
 	{
 		$result = false;
 		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
+		$gcbops = cmsms()->GetGlobalContentOperations();
 		
 		if ($this->id > -1)
 		{
@@ -164,8 +163,7 @@ class GlobalContent
 	{
 		$result = false;
 		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
+		$gcbops = cmsms()->GetGlobalContentOperations();
 
 		if ($this->id > -1)
 		{
@@ -189,8 +187,7 @@ class GlobalContent
 	{
 		$result = false;
 		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
+		$gcbops = cmsms()->GetGlobalContentOperations();
 
 		if ($this->id > -1)
 		{
@@ -211,8 +208,7 @@ class GlobalContent
 	{
 		$result = false;
 		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
+		$gcbops = cmsms()->GetGlobalContentOperations();
 
 		if ($this->id > -1)
 		{
@@ -232,8 +228,7 @@ class GlobalContent
 	{
 		$result = false;
 		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
+		$gcbops = cmsms()->GetGlobalContentOperations();
 
 		if ($this->id > -1)
 		{
@@ -255,8 +250,7 @@ class GlobalContent
 	{
 		$result = false;
 		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
+		$gcbops = cmsms()->GetGlobalContentOperations();
 
 		if ($this->id > -1)
 		{

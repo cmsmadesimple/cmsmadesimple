@@ -36,7 +36,7 @@
  */
 function cms_module_Lang(&$modinstance)
 {
-	global $gCms;
+	$gCms = cmsms();
 
 	$name = '';
 	$params = array();

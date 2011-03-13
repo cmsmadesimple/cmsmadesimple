@@ -104,8 +104,7 @@ class Stylesheet
 	{
 		$result = false;
 		
-		global $gCms;
-		$styleops =& $gCms->GetStylesheetOperations();
+		$styleops = cmsms()->GetStylesheetOperations();
 		
 		if ($this->id > -1)
 		{
@@ -136,8 +135,7 @@ class Stylesheet
 
 		if ($this->id > -1)
 		{
-			global $gCms;
-			$styleops =& $gCms->GetStylesheetOperations();
+			$styleops = cmsms()->GetStylesheetOperations();
 			$result = $styleops->DeleteStylesheetByID($this->id);
 			if ($result)
 			{

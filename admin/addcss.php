@@ -41,7 +41,7 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
-global $gCms;
+$gCms = cmsms();
 $styleops =& $gCms->GetStylesheetOperations();
 $db =& $gCms->GetDb();
 

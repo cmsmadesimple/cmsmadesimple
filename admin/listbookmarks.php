@@ -36,8 +36,7 @@ include_once("header.php");
 
 	$userid = get_userid();
 	
-	global $gCms;
-	$bookops =& $gCms->GetBookmarkOperations();
+$bookops = cmsms()->GetBookmarkOperations();
 	$marklist = $bookops->LoadBookmarks($userid);
 
 	$page = 1;

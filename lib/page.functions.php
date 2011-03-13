@@ -173,8 +173,8 @@ function check_passhash($userid, $checksum)
 	$gCms = cmsms();
 	$config = $gCms->GetConfig();
 
-	$userops =& $gCms->GetUserOperations();
-	$oneuser =& $userops->LoadUserByID($userid);
+	$userops = $gCms->GetUserOperations();
+	$oneuser = $userops->LoadUserByID($userid);
 
 	if ($oneuser && (string)$checksum != '' && $checksum == md5(md5($config['root_path'] . '--' . $oneuser->password)))
 	{
@@ -225,7 +225,7 @@ function generate_user_object($userid)
  */
 function send_recovery_email($username)
 {
-	global $gCms;
+  $gCms = cmsms();
 	$config = $gCms->GetConfig();
 	$userops = $gCms->GetUserOperations();
 	$user = $userops->LoadUserByUsername($username);
@@ -265,9 +265,9 @@ function send_recovery_email($username)
  */
 function find_recovery_user($hash)
 {
-	global $gCms;
+  $gCms = cmsms();
 	$config = $gCms->GetConfig();
-	$userops =& $gCms->GetUserOperations();
+	$userops = $gCms->GetUserOperations();
 	
 	foreach ($userops->LoadUsers() as $user)
 	{

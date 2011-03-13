@@ -37,12 +37,6 @@ function redirect($to, $noappend=false)
 {
      $_SERVER['PHP_SELF'] = null;
 
-     $gCms = cmsms();
-     if (isset($gCms))
-       $config = $gCms->GetConfig();
-     else
-       $config = array();
-
     $schema = $_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http';
     $host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
 
@@ -79,25 +73,16 @@ function redirect($to, $noappend=false)
         $to = $schema."://".$host."/".$to;
     }
 
-    //If session trans-id is being used, and they is on yo website, add it.
-	/*
-    if (ini_get("session.use_trans_sid") != "0" && $noappend == false && strpos($to,$host) !== false)
-    {
-        if(strpos($to,'?') !== false)//If there are no arguments start a querystring
-        {
-            //$to = $to."?".session_name()."=".session_id();
-        }
-        else//There are arguments, print an arg seperator
-        {
-            //$to = $to.ini_get('arg_separator.input').session_name()."=".session_id();
-        }
-    }
-	*/
-
     session_write_close();
 
+    $debug = false;
+    if( class_exists('CmsObject') )
+      {
+	$config = $gCms->GetConfig();
+	$debug = $config['debug'];
+      }
 
-    if (headers_sent() && !(isset($config) && $config['debug'] == true))
+    if (headers_sent() && !$debug)
     {
         // use javascript instead
         echo '<script type="text/javascript">
@@ -113,7 +98,7 @@ function redirect($to, $noappend=false)
     }
     else
     {
-        if (isset($config['debug']) && $config['debug'] == true)
+        if ( $debug )
         {
             echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
             echo "<a href=\"".$to."\">".$to."</a><br />";
@@ -200,8 +185,8 @@ function cms_join_path()
  */
 function &cmsms()
 {
-	global $gCms;
-	return $gCms;
+  if( class_exists('CmsObject') )
+    return CmsObject::get_instance();
 }
 
 
@@ -703,18 +688,11 @@ function debug_to_log($var, $title='')
  */
 function debug_buffer($var, $title="")
 {
-  $gCms = cmsms();
-	if ($gCms)
-	{
-		$config = $gCms->GetConfig();
-
-		//debug_to_log($var, $title='');
-
-		if($config["debug"] == true)
-		{
-		  cmsms()->add_error(debug_display($var, $title, false, true));
-		}
-	}
+  $config = cmsms()->GetConfig();
+  if($config["debug"] == true)
+    {
+      cmsms()->add_error(debug_display($var, $title, false, true));
+    }
 }
 
 
@@ -727,16 +705,11 @@ function debug_buffer($var, $title="")
  */
 function debug_sql($str, $newline = false)
 {
-  $gCms = cmsms();
-	if ($gCms)
-	{
-		$config = $gCms->GetConfig();
-
-		if($config["debug"] == true)
-		{
-		  cmsms()->add_error(debug_display($str, '', false, true));
-		}
-	}
+  $config = cmsms()->GetConfig();
+  if($config["debug"] == true)
+    {
+      cmsms()->add_error(debug_display($str, '', false, true));
+    }
 }
 
 /**

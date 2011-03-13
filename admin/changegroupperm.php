@@ -46,9 +46,9 @@ $group_name = '';
 $message = '';
 
 include_once("header.php");
-global $gCms;
-$db =& $gCms->GetDb();
-$smarty =& $gCms->GetSmarty();
+$gCms = cmsms();
+$db = $gCms->GetDb();
+$smarty = $gCms->GetSmarty();
 
 if (!$access) {
 	die('permission denied');
@@ -62,8 +62,7 @@ if( isset($_POST['filter']) )
 $disp_group = get_preference($userid,'changegroupassign_group',-1);
 
 // always display the group pull down
-global $gCms;
-$groupops =& $gCms->GetGroupOperations();
+$groupops = $gCms->GetGroupOperations();
 $tmp = new stdClass();
 $tmp->name = lang('all_groups');
 $tmp->id=-1;

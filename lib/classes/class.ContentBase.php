@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
+#$Id: class.content.inc.php 6905 2011-02-20 22:23:40Z calguy1000 $
 
 /**
  * @package CMS
@@ -511,8 +511,8 @@ class ContentBase
      */
     function Hierarchy()
     {
-		global $gCms;
-		$contentops =& $gCms->GetContentOperations();
+      $gCms = cmsms();
+		$contentops = $gCms->GetContentOperations();
 		return $contentops->CreateFriendlyHierarchyPosition($this->mHierarchy);
     }
 
@@ -672,7 +672,7 @@ class ContentBase
 	function SetAlias($alias, $doAutoAliasIfEnabled = true)
 	{
 		$this->DoReadyForEdit();
-		global $gCms;
+		$gCms = cmsms();
 		$config = $gCms->GetConfig();
 
 		$tolower = false;
@@ -857,8 +857,9 @@ class ContentBase
      */
 	function LoadFromId($id, $loadProperties = false)
 	{
-		global $gCms, $sql_queries, $debug_errors;
-		$db = &$gCms->GetDb();
+	  $gCms = cmsms();
+	  global $sql_queries, $debug_errors;
+	  $db = $gCms->GetDb();
 		$config = $gCms->GetConfig();
 
 		$result = false;
@@ -968,7 +969,8 @@ class ContentBase
      */
 	function LoadFromData(&$data, $loadProperties = false)
 	{
-	  global $gCms, $debug_errors;
+	  global $debug_errors;
+	  $gCms = cmsms();
 	  $config = $gCms->GetConfig();
 
 		$result = true;
@@ -1054,7 +1056,7 @@ class ContentBase
     # :TODO: This function should return something
 	function Save()
 	{
-		global $gCms;
+	  $gCms = cmsms();
 		foreach($gCms->modules as $key=>$value)
 		{
 			if ($gCms->modules[$key]['installed'] == true &&
@@ -1105,8 +1107,9 @@ class ContentBase
     # :TODO: This function should return something
 	function Update()
 	{
-		global $gCms, $sql_queries, $debug_errors;
-		$db = &$gCms->GetDb();
+	  $gCms = cmsms();
+		global $sql_queries, $debug_errors;
+		$db = $gCms->GetDb();
 		$config = $gCms->GetConfig();
 
 		$result = false;
@@ -1214,8 +1217,9 @@ class ContentBase
     # :TODO: Figure out proper item_order
 	function Insert()
 	{
-		global $gCms, $sql_queries, $debug_errors;
-		$db = &$gCms->GetDb();
+	  $gCms = cmsms();
+	  global $sql_queries, $debug_errors;
+		$db = $gCms->GetDb();
 		$config = $gCms->GetConfig();
 
 		$result = false;
@@ -1359,8 +1363,8 @@ class ContentBase
 	    {
 	      if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) 
 		{
-		  global $gCms;
-		  $contentops =& $gCms->GetContentOperations();
+		  $gCms = cmsms();
+		  $contentops = $gCms->GetContentOperations();
 		  $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
 		  if ($error !== FALSE)
 		    {
@@ -1384,7 +1388,7 @@ class ContentBase
 		  else
 		    {
 		      // if it don't explicitly say 'flat' we're creating a hierarchical url.
-		      global $gCms;
+		      $gCms = cmsms();
 		      $tree = $gCms->GetHierarchyManager();
 		      $node = $tree->find_by_tag('id',$this->ParentId());
 		      $stack = array($this->mAlias);
@@ -1445,7 +1449,8 @@ class ContentBase
     # :TODO: This function should return something
 	function Delete()
 	{
-		global $gCms, $sql_queries, $debug_errors;
+	  $gCms = cmsms();
+	  global $sql_queries, $debug_errors;
 		$config = $gCms->GetConfig();
 
 		foreach($gCms->modules as $key=>$value)
@@ -1459,7 +1464,7 @@ class ContentBase
 
 		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
 
-		$db = &$gCms->GetDb();
+		$db = $gCms->GetDb();
 
 		$result = false;
 
@@ -1678,7 +1683,7 @@ class ContentBase
      */
 	function GetURL($rewrite = true)
 	{
-		global $gCms;
+	  $gCms = cmsms();
 		$config = $gCms->GetConfig();
 		$url = "";
 		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
@@ -1831,8 +1836,8 @@ class ContentBase
 	{
 		if (!isset($this->mAdditionalEditors))
 		{
-			global $gCms;
-			$db = &$gCms->GetDb();
+		  $gCms = cmsms();
+			$db = $gCms->GetDb();
 
 			$this->mAdditionalEditors = array();
 
@@ -1863,7 +1868,7 @@ class ContentBase
 		$text = '<input name="additional_editors" type="hidden" value=""/>';
 		$text .= '<select name="additional_editors[]" multiple="multiple" size="5">';
 
-		global $gCms;
+		$gCms = cmsms();
 		$userops = $gCms->GetUserOperations();
 		$groupops = $gCms->GetGroupOperations();
 		$allusers = $userops->LoadUsers();
@@ -2109,7 +2114,7 @@ class ContentBase
 	/* protected */
 	function display_single_element($one,$adding)
 	{
-	  global $gCms;
+	  $gCms = cmsms();
 	  $config = $gCms->GetConfig();
 
 	  switch( $one )
@@ -2132,7 +2137,7 @@ class ContentBase
 	      
 	    case 'parent':
 		{
-		  $contentops =& $gCms->GetContentOperations();
+		  $contentops = $gCms->GetContentOperations();
 		  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1);
 		  if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
 		    return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
@@ -2253,7 +2258,7 @@ class ContentBase
 	    case 'owner':
 	      {
 		$showadmin = check_ownership(get_userid(), $this->Id());
-		$userops =& $gCms->GetUserOperations();
+		$userops = $gCms->GetUserOperations();
 		if (!$adding && $showadmin)
 		  {
 		    return array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
@@ -2377,8 +2382,9 @@ class ContentProperties
 	  if( $content_id <= 0 ) return;
 		if (count($this->mPropertyNames) > 0)
 		{
-			global $gCms, $sql_queries, $debug_errors;
-			$db = &$gCms->GetDb();
+		  $gCms = cmsms();
+		  global $sql_queries, $debug_errors;
+		  $db = $gCms->GetDb();
 
 			$query = "SELECT * FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
 			$dbresult = &$db->Execute($query, array($content_id));
@@ -2406,9 +2412,10 @@ class ContentProperties
 	{
 		if (count($this->mPropertyValues) > 0)
 		{
-			global $gCms, $sql_queries, $debug_errors;
-			
-			$db        =& $gCms->GetDb();
+		  $gCms = cmsms();
+		  global $sql_queries, $debug_errors;
+		  $db = $gCms->GetDb();
+
 			$config    = $gCms->GetConfig();
 			$concat    =  '';
 			$timestamp =  $db->DBTimeStamp(time());
@@ -2478,8 +2485,9 @@ class ContentProperties
     {
 	if (count($this->mPropertyValues) > 0)
 	{
-	    global $gCms, $sql_queries, $debug_errors;
-	    $db = &$gCms->GetDb();
+	  $gCms = cmsms();
+	  global $sql_queries, $debug_errors;
+	  $db = $gCms->GetDb();
 
 	    $query = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
 	    $db->Execute($query, array($content_id));
@@ -2524,7 +2532,7 @@ class CMSModuleContentType extends ContentBase
 
 	function Lang($name, $params=array())
 	{
-		global $gCms;
+	  $gCms = cmsms();
 		$cmsmodules = &$gCms->modules;
 		if (array_key_exists($this->ModuleName(), $cmsmodules))
 		{
@@ -2542,16 +2550,9 @@ class CMSModuleContentType extends ContentBase
 	*/
 	function GetModuleInstance() 
 	{
-		global $gCms;
-		$cmsmodules = &$gCms->modules;
-		if (array_key_exists($this->ModuleName(), $cmsmodules))
-		{
-			return $cmsmodules[$this->ModuleName()]['object'];
-		}
-		else
-		{
-			return 'ModuleName() not defined properly';
-		}
+	  $mod = cms_utils::get_module($this->ModuleName());
+	  if( $mod ) return $mod;
+	  return 'ModuleName() not defined properly';
 	}
 }
 

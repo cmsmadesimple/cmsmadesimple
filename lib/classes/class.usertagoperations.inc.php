@@ -45,7 +45,7 @@ class UserTagOperations
 	{
 		$code = false;
 
-		global $gCms;
+		$gCms = cmsms();
 		$db = cmsms()->GetDb();
 		
 		$query = 'SELECT userplugin_id, code FROM '.cms_db_prefix().'userplugins WHERE userplugin_name = ?';
@@ -98,8 +98,8 @@ class UserTagOperations
 	 */
 	function RemoveUserTag( $name )
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 		
 		$query = 'DELETE FROM '.cms_db_prefix().'userplugins WHERE userplugin_name = ?';
 		$result = &$db->Execute($query, array($name));
@@ -120,8 +120,8 @@ class UserTagOperations
 	 */
 	function ListUserTags()
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$plugins = array();
 		

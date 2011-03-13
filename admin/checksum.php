@@ -65,7 +65,7 @@ function check_checksum_data(&$report)
 	return false;
     }
   
-  global $gCms;
+  $gCms = cmsms();
   $config = $gCms->GetConfig();
   $filenotfound = array();
   $notreadable = 0;
@@ -172,7 +172,7 @@ function check_checksum_data(&$report)
 
 function generate_checksum_file(&$report)
 {
-  global $gCms;
+  $gCms = cmsms();
   $config = $gCms->GetConfig();
   $output = '';
 
@@ -209,8 +209,8 @@ function generate_checksum_file(&$report)
 }
 
 // Get ready
-global $gCms;
-$smarty =& $gCms->GetSmarty();
+$gCms = cmsms();
+$smarty = $gCms->GetSmarty();
 $smarty->register_function('lang','checksum_lang');
 $smarty->caching = false;
 $smarty->force_compile = true;

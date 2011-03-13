@@ -50,8 +50,8 @@ if ($access)
 {
 	if (isset($_POST["copystylesheet"]))
 	{
-		global $gCms;
-		$styleops =& $gCms->GetStylesheetOperations();
+	  $gCms = cmsms();
+		$styleops = $gCms->GetStylesheetOperations();
 		$validinfo = true;
 		if ($stylesheet == "")
 		{

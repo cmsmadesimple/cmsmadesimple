@@ -81,6 +81,7 @@ $infoImg = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','
 echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('eventhandlers');
+$gCms = cmsms();
 
 switch( $action )
 {

@@ -304,9 +304,9 @@ class CMSModule
 	 */
 	function RegisterModulePlugin()
 	{
-	  global $gCms;
+	  $gCms = cmsms();
 
-	  $smarty =& $gCms->GetSmarty();
+	  $smarty = $gCms->GetSmarty();
 	  $smarty->register_function($this->GetName(),
 				   array($this,'function_plugin'));
 	}
@@ -684,9 +684,7 @@ class CMSModule
 	 */
 	function GetConfig()
 	{
-		global $gCms;
-		$config = $gCms->GetConfig();
-		return $config;
+	  return cmsms()->GetConfig();
 	}
 
 	/**
@@ -698,9 +696,7 @@ class CMSModule
 	 */
 	function & GetDb()
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
-		return $db;
+	  return cmsms()->GetDb();
 	}
 
 	/**
@@ -885,7 +881,7 @@ class CMSModule
 		if (@is_file($filename))
 		{
 			{
-				global $gCms;
+			  $gCms = cmsms();
 				$db = $gCms->GetDb();
 				$config = $gCms->GetConfig();
 				$smarty = $gCms->GetSmarty();
@@ -931,10 +927,10 @@ class CMSModule
 		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.uninstall.php';
 		if (@is_file($filename))
 		{
-		  global $gCms;
-		  $db =& $gCms->GetDb();
+		  $gCms = cmsms();
+		  $db = $gCms->GetDb();
 		  $config = $gCms->GetConfig();
-		  $smarty =& $gCms->GetSmarty();
+		  $smarty = $gCms->GetSmarty();
 		  
 		  $res = include($filename);
 		  if( $res == 1 || $res == '') return FALSE;
@@ -1007,8 +1003,8 @@ class CMSModule
 		if (@is_file($filename))
 		{
 			{
-				global $gCms;
-				$db =& $gCms->GetDb();
+			  $gCms = cmsms();
+				$db = $gCms->GetDb();
 				$config = $gCms->GetConfig();
 				$smarty =& $gCms->GetSmarty();
 
@@ -1075,8 +1071,8 @@ class CMSModule
 	 */
 	function CheckForDependents()
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+	  $gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$result = false;
 
@@ -1099,8 +1095,8 @@ class CMSModule
 	 */
 	function CreateXMLPackage( &$message, &$filecount )
 	{
-		global $gCms;
-		$modops =& $gCms->GetModuleOperations();
+	  $gCms = cmsms();
+		$modops = $gCms->GetModuleOperations();
 		return $modops->CreateXmlPackage($this, $message, $filecount);
 	}
 
@@ -1973,10 +1969,10 @@ class CMSModule
 			if (@is_file($filename))
 			{
 				{
-					global $gCms;
-					$db =& $gCms->GetDb();
+				  $gCms = cmsms();
+					$db = $gCms->GetDb();
 					$config = $gCms->GetConfig();
-					$smarty =& $gCms->GetSmarty();
+					$smarty = $gCms->GetSmarty();
 
 					include($filename);
 
@@ -2027,8 +2023,8 @@ class CMSModule
 
 	  if( isset($params['assign']) )
 	    {
-	      global $gCms;
-	      $smarty =& $gCms->GetSmarty();
+	      $gCms = cmsms();
+	      $smarty = $gCms->GetSmarty();
 	      $smarty->assign(cms_htmlentities($params['assign']),$output);
 	      return;
 	    }
@@ -2455,7 +2451,7 @@ class CMSModule
 					 $onlyhref=false, $inline=true, $addtext='', $targetcontentonly=false, $prettyurl='' )
 	{
 	  return $this->CreateLink( $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref,
-					$inline, $addtext, $targetcontentonly, $prettyurl );
+				    $inline, $addtext, $targetcontentonly, $prettyurl );
 	}
 
 	/**
@@ -2610,17 +2606,7 @@ class CMSModule
 	 */
 	static public function &GetModuleInstance($module)
 	{
-		global $gCms;
-
-		if (isset($gCms->modules[$module]) &&
-			$gCms->modules[$module]['installed'] == true &&
-			$gCms->modules[$module]['active'] == true)
-		{
-			return $gCms->modules[$module]['object'];
-		}
-		// Fix only variable references should be returned by reference
-		$tmp = FALSE;
-		return $tmp;
+	  return cms_utils::get_module($module);
 	}
 
 	/**
@@ -2634,7 +2620,7 @@ class CMSModule
 	 */
 	function GetModulesWithCapability($capability, $params=array())
 	{
-	  global $gCms;
+	  $gCms = cmsms();
 	  $result=array();
 	  foreach ($gCms->modules as $module=>$values)
 	    {
@@ -2853,7 +2839,7 @@ class CMSModule
 	 */
 	function ListUserTags()
 	{
-		global $gCms;
+	  $gCms = cmsms();
 		$usertagops =& $gCms->GetUserTagOperations();
 		return $usertagops->ListUserTags();
 	}
@@ -2868,7 +2854,7 @@ class CMSModule
 	 */
 	function CallUserTag($name, $params = array())
 	{
-		global $gCms;
+	  $gCms = cmsms();
 		$usertagops =& $gCms->GetUserTagOperations();
 		return $usertagops->CallUserTag($name, $params);
 	}
@@ -3054,7 +3040,7 @@ class CMSModule
 	 */
 	function ShowMessage($message)
 	{
-	  global $gCms;
+	  $gCms = cmsms();
 	  if (isset($gCms->variables['admintheme']))
 	    {
 	      $admintheme =& $gCms->variables['admintheme']; //php4 friendly
@@ -3073,7 +3059,7 @@ class CMSModule
 	 */
 	function ShowErrors($errors)
 	{
-	  global $gCms;
+	  $gCms = cmsms();
 	  if (isset($gCms->variables['admintheme']))
 	    {
 	      $admintheme =& $gCms->variables['admintheme']; //php4 friendly
@@ -3100,8 +3086,8 @@ class CMSModule
 	 */
 	function CreatePermission($permission_name, $permission_text)
 	{
-		global $gCms;
-		$db =& $gCms->GetDB();
+	  $gCms = cmsms();
+		$db = $gCms->GetDB();
 
 		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
 		$count = $db->GetOne($query, array($permission_name));
@@ -3249,10 +3235,10 @@ class CMSModule
 			if (@is_file($filename))
 			{
 				{
-					global $gCms;
-					$db =& $gCms->GetDb();
+				  $gCms = cmsms();
+					$db = $gCms->GetDb();
 					$config = $gCms->GetConfig();
-					$smarty =& $gCms->GetSmarty();
+					$smarty = $gCms->GetSmarty();
 
 					include($filename);
 

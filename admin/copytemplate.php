@@ -57,8 +57,8 @@ if (isset($_POST["cancel"]))
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Templates');
 
-global $gCms;
-$templateops =& $gCms->GetTemplateOperations();
+$gCms = cmsms();
+$templateops = $gCms->GetTemplateOperations();
 
 if ($access)
 {

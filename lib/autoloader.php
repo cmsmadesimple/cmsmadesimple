@@ -42,6 +42,14 @@ function cms_autoloader($classname)
       return;
     }
 
+  $lowercase = strtolower($classname);
+  $fn = cms_join_path($config['root_path'],'lib','classes',"class.{$lowercase}.inc.php");
+  if( file_exists($fn) )
+    {
+      require_once($fn);
+      return;
+    }
+
   // standard interfaces
   $fn = cms_join_path($config['root_path'],'lib','classes',"interface.{$classname}.php");
   if( file_exists($fn) )

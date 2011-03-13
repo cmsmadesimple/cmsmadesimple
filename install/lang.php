@@ -95,7 +95,7 @@ if (isset($CMS_INSTALL_PAGE))
 
 	$nls['direction'] = (isset($nls['direction']) && $nls['direction'] == 'rtl') ? 'rtl' : 'ltr';
 
-	global $gCms;
+	$gCms = cmsms();
 	$gCms->nls = $nls;
 	$gCms->current_language = $current_language;
 }

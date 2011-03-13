@@ -10,6 +10,7 @@ else
     $themeObject->DisplayFooter();
   }
 
+$gCms = cmsms();
 if ($gCms->config["debug"] == true)
 {
 	echo '<div id="DebugFooter">';

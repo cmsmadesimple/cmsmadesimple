@@ -48,8 +48,10 @@ $access = check_permission($userid, "Modify Modules");
 return;
 }*/
 
-$smarty = new Smarty_CMS($gCms->config);
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$smarty = $gCms->GetSmarty();
+//$smarty = new Smarty_CMS($gCms->config);
+$db = $gCms->GetDb();
 
 //Messagestring (success) for module operations
 $modulemessage="";

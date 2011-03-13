@@ -38,8 +38,8 @@ if (isset($_GET["user_id"]))
 
 	if ($access && $user_id != $cur_userid)
 	{
-		global $gCms;
-		$userops =& $gCms->GetUserOperations();
+	  $gCms = cmsms();
+		$userops = $gCms->GetUserOperations();
 		$oneuser = $userops->LoadUserByID($user_id);
 		$user_name = $oneuser->username;
 		$ownercount = $userops->CountPageOwnershipByID($user_id);

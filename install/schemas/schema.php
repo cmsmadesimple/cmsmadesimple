@@ -207,6 +207,11 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_index', 'content', $ado_ret);
 
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_content_by_hierarchy', $db_prefix."content", 'hierarchy');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'content', $ado_ret);
+
 
 
 	$flds = "
@@ -334,6 +339,11 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo ilang('install_creating_index', 'content', $ado_ret);
     
 	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'event_name', $db_prefix."events", 'event_name');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'content', $ado_ret);
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'event_id', $db_prefix."events", 'event_id');
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_index', 'content', $ado_ret);

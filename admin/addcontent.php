@@ -60,8 +60,8 @@ $contentobj = '';
 $access = (check_permission($userid, 'Add Pages') || check_permission($userid, 'Manage All Content'));
 
 #Get a list of content types and pick a default if necessary
-global $gCms;
-$contentops =& $gCms->GetContentOperations();
+$gCms = cmsms();
+$contentops = $gCms->GetContentOperations();
 $existingtypes = $contentops->ListContentTypes();
 $content_type = "";
 if (isset($_POST["content_type"]))
@@ -158,8 +158,8 @@ if ($access)
 		if ($error === FALSE)
 		{
 			$contentobj->Save();
-			global $gCms;
-			$contentops =& $gCms->GetContentOperations();
+			$gCms = cmsms();
+			$contentops = $gCms->GetContentOperations();
 			$contentops->SetAllHierarchyPositions();
 			if ($submit)
 			{

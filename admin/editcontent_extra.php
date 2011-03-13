@@ -2,10 +2,10 @@
 
 function ajaxpreview($params)
 {
-	global $gCms;
+  $gCms = cmsms();
 	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	$config = $gCms->GetConfig();
-	$contentops =& $gCms->GetContentOperations();
+	$contentops = $gCms->GetContentOperations();
 
 	$content_type = $params['content_type'];
 
@@ -74,8 +74,7 @@ function updatecontentobj(&$contentobj, $preview = false, $params = null)
 
 function copycontentobj(&$contentobj, $content_type, $params = null)
 {
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
+  $contentops = cmsms()->GetContentOperations();
 	
 	if ($params == null)
 		$params = $_POST;
@@ -107,9 +106,9 @@ function copycontentobj(&$contentobj, $content_type, $params = null)
 
 function createtmpfname(&$contentobj)
 {
-	global $gCms;
+  $gCms = cmsms();
 	$config = $gCms->GetConfig();
-	$templateops =& $gCms->GetTemplateOperations();
+	$templateops = $gCms->GetTemplateOperations();
 
 	$data["content_id"] = $contentobj->Id();
 	$data['content_type'] = $contentobj->Type();

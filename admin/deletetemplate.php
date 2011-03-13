@@ -44,8 +44,8 @@ if (isset($_GET["template_id"]))
 
 	if ($access)
 	{
-		global $gCms;
-		$templateops =& $gCms->GetTemplateOperations();
+	  $gCms = cmsms();
+		$templateops = $gCms->GetTemplateOperations();
 		$onetemplate = $templateops->LoadTemplateByID($template_id);
 
 		if ($templateops->CountPagesUsingTemplateByID($template_id) > 0)

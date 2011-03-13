@@ -12,7 +12,7 @@
  */
 function load_adodb() 
 {
-  global $gCms;
+  $gCms = cmsms();
   global $ADODB_vers;
   $config = $gCms->GetConfig();
 
@@ -70,7 +70,7 @@ function load_adodb()
  */
 function & adodb_connect()
 {
-	global $gCms;
+  $gCms = cmsms();
 	$config = $gCms->GetConfig();
 	
 	$dbinstance =& ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
@@ -93,7 +93,6 @@ function & adodb_connect()
 	if ($config['debug'] == true)
 	{
 		$dbinstance->debug = true;
-		#$dbinstance->LogSQL();
 	}
 	
 	if ($config['dbms'] == 'sqlite')
@@ -109,8 +108,7 @@ function & adodb_connect()
 		}
 	}
 	
-	$db =& $dbinstance;
-	return $db;
+	return $dbinstance;
 }
 
 

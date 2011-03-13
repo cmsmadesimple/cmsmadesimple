@@ -29,9 +29,9 @@ $userid = get_userid();
 $access = check_permission($userid, 'Add Users');
 $assign_group_perm = check_permission($userid,'Modify Group Assignments');
 
-global $gCms;
-$db =& $gCms->GetDb();
-$groupops =& $gCms->GetGroupOperations();
+$gCms = cmsms();
+$db = $gCms->GetDb();
+$groupops = $gCms->GetGroupOperations();
 $group_list = $groupops->LoadGroups();
 
 $error = "";
@@ -233,7 +233,7 @@ else {
       <?php
 	     echo '<div class="group_memberships clear"><input type="hidden" name="groups" value="1" />';
 
-		$userops =& $gCms->GetUserOperations();
+		$userops = $gCms->GetUserOperations();
 		$adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
         foreach($group_list as $thisGroup)
             {

@@ -29,8 +29,8 @@ if (isset($_POST["htmlblob_id"])) $htmlblob_id = $_POST["htmlblob_id"];
 else if (isset($_GET["htmlblob_id"])) $htmlblob_id = $_GET["htmlblob_id"];
 
 check_login();
-global $gCms;
-$gcbops =& $gCms->GetGlobalContentOperations();
+$gCms = cmsms();
+$gcbops = $gCms->GetGlobalContentOperations();
 $userid = get_userid();
 $adminaccess = check_permission($userid, 'Modify Global Content Blocks');
 $isowner = $gcbops->CheckOwnership($htmlblob_id,$userid);
@@ -242,8 +242,8 @@ include_once("header.php");
 // Holder for AJAX apply result
 print '<div id="Edit_Blob_Result"></div>';
 
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 
 // get the current list of additional users
@@ -277,7 +277,7 @@ $owners .= "</select>";
 
 // Build the additional users list
 $addt_users = "";
-$groupops =& $gCms->GetGroupOperations();
+$groupops = $gCms->GetGroupOperations();
 $groups = $groupops->LoadGroups();
 foreach( $groups as $onegroup )
 {

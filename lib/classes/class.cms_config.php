@@ -110,7 +110,7 @@ class cms_config implements ArrayAccess
   }
 
 
-  public static function get_instance()
+  public static function &get_instance()
   {
     if (!isset(self::$_instance)) {
       $c = __CLASS__;

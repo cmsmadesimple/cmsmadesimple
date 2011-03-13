@@ -35,8 +35,8 @@ if( isset($_SESSION[CMS_USER_KEY]) && !isset($_GET[CMS_SECURE_PARAM_NAME]) )
 
 check_login();
 
-global $gCms;
-$db =& $gCms->GetDb();
+$db = cmsms()->GetDb();
+$gCms = cmsms();
 
 include_once("header.php");
 $themeObject->ShowShortcuts();

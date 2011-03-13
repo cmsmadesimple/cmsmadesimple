@@ -31,6 +31,7 @@
  * @param boolean Should single quotes be converted
  * @return string The converted string
  */
+die('got here');
 function cms_html_entity_decode_utf8( $string, $convert_single_quotes = false )
 {
 	static $trans_tbl;

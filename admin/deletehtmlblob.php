@@ -38,9 +38,9 @@ if (isset($_GET["htmlblob_id"]))
 	{
 		$result = false;
 		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
-		$templateops =& $gCms->GetTemplateOperations();
+		$gCms = cmsms();
+		$gcbops = $gCms->GetGlobalContentOperations();
+		$templateops = $gCms->GetTemplateOperations();
 
 		$blobobj = $gcbops->LoadHtmlBlobByID($htmlblob_id);
 		$htmlblob_name = $blobobj->name;

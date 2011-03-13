@@ -13,6 +13,7 @@ require_once("../lib/classes/class.user.inc.php");
 $theme=get_preference(get_userid(),"admintheme");
 $style="style";
 
+$gCms = cmsms();
 if (isset($gCms->nls['direction']) && $gCms->nls['direction'] == 'rtl')
 {
   $style.="-rtl";
@@ -32,7 +33,6 @@ else if (file_exists(dirname(__FILE__)."/themes/default/css/".$style))
     cms_readfile(dirname(__FILE__)."/themes/default/css/".$style);
   }
 
-global $gCms;
 while (list($key) = each($gCms->modules))
     {
 	$modptr =& $gCms->modules[$key];

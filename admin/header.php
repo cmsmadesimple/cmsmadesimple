@@ -8,6 +8,7 @@ if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 }
 include_once("../lib/classes/class.admintheme.inc.php");
 
+$gCms = cmsms();
 $config = $gCms->GetConfig();
 
 if (isset($USE_THEME) && $USE_THEME == false)

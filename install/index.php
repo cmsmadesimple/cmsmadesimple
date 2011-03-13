@@ -142,7 +142,7 @@ else if(! isset($_SESSION['test']))
 
 // First checks ok
 require_once cms_join_path(CMS_BASE, 'include.php');
-$smarty =& $gCms->GetSmarty();
+$smarty = cmsms()->GetSmarty();
 $smarty->caching = false;
 $smarty->force_compile = true;
 

@@ -81,8 +81,7 @@ class Bookmark
 	function Save()
 	{
 		$result = false;
-		global $gCms;
-		$bookops =& $gCms->GetBookmarkOperations();
+		$bookops = cmsms()->GetBookmarkOperations();
 		
 		if ($this->bookmark_id > -1)
 		{
@@ -111,8 +110,7 @@ class Bookmark
 	function Delete()
 	{
 		$result = false;
-		global $gCms;
-		$bookops =& $gCms->GetBookmarkOperations();
+		$bookops = cmsms()->GetBookmarkOperations();
 
 		if ($this->bookmark_id > -1)
 		{

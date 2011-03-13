@@ -32,8 +32,8 @@ if (!$access) {
 	die('Permission Denied');
 return;
 }
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 $error = "";
 $message = "";
@@ -208,7 +208,7 @@ if ($message != "") {
         <div class="pageoverflow">
           <?php 
 	    $my_addeditors = explode(',',$additional_editors);
-            $contentops =& $gCms->GetContentOperations();
+            $contentops = $gCms->GetContentOperations();
             $content = new ContentBase();
             $addeditors = $content->ShowAdditionalEditors($my_addeditors);
           ?>

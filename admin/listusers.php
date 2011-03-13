@@ -34,8 +34,8 @@ return;
 }
 
 include_once("header.php");
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 if (isset($_GET["message"])) {
 	$message = preg_replace('/\</','',$_GET['message']);
@@ -48,8 +48,7 @@ if (isset($_GET["toggleactive"]))
  if($_GET["toggleactive"]==1) {
    $error .= "<li>".lang('errorupdatinguser')."</li>";
  } else {
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
+   $userops = $gCms->GetUserOperations();
   $thisuser =& $userops->LoadUserByID($_GET["toggleactive"]);
 
   if($thisuser) {
@@ -116,8 +115,7 @@ if (FALSE == empty($error)) {
 	$query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
 	$result = $db->Execute($query);
 
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
+	$userops = $gCms->GetUserOperations();
 	$userlist =& $userops->LoadUsers();
 
 	$page = 1;

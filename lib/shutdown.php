@@ -18,32 +18,15 @@
 #
 #$Id$
 
-$CMS_ADMIN_PAGE=1;
-
-require_once("../include.php");
-require_once("../lib/classes/class.bookmark.inc.php");
-$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-
-check_login();
-
-$bookmark_id = -1;
-if (isset($_GET["bookmark_id"]))
+function cms_shutdown_function()
 {
-	$bookmark_id = $_GET["bookmark_id"];
-
-	$result = false;
-
-	$bookops = cmsms()->GetBookmarkOperations();
-	$markobj = $bookops->LoadBookmarkByID($bookmark_id);
-
-	if ($markobj)
-	{
-		$result = $markobj->Delete();
-	}
-
+  $info = error_get_last();
+  die();
 }
 
-redirect("listbookmarks.php".$urlext);
+register_shutdown_function('cms_shutdown_function');
 
-# vim:ts=4 sw=4 noet
+#
+# EOF
+#
 ?>

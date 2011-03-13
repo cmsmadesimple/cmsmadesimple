@@ -114,8 +114,8 @@ class cms_content_tree extends cms_tree
   function getNodeByHierarchy($position)
   {
     $result = null;
-    global $gCms;
-    $contentops =& $gCms->GetContentOperations();
+	$gCms = cmsms();
+    $contentops = $gCms->GetContentOperations();
     $id = $contentops->GetPageIDFromHierarchy($position);
     if ($id)
     {
@@ -237,8 +237,8 @@ class cms_content_tree extends cms_tree
 		  if( !$loadsiblings || !$parent )
 			  {
 				  // only load this content object
-				  global $gCms;
-				  $contentops =& $gCms->GetContentOperations();
+				  $gCms = cmsms();
+				  $contentops = $gCms->GetContentOperations();
 				  // todo: LoadContentFromId should use content cache.
 				  $content =& $contentops->LoadContentFromId($this->get_tag('id'), $deep);
 				  return $content;
@@ -331,7 +331,7 @@ class cms_content_tree extends cms_tree
 		  
 		  if( count($ids) )
 			  {
-				  global $gCms;
+				  $gCms = cmsms();
 				  $contentops = $gCms->GetContentOperations();
 				  $contentops->LoadChildren($this->get_tag('id'),$deep,$all,$ids);
 			  }

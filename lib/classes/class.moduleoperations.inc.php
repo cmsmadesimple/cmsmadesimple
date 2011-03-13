@@ -82,7 +82,7 @@ class ModuleOperations
    */
   function SetError($str = '')
   {
-	global $gCms;
+	  $gCms = cmsms();
 	$gCms->variables['error'] = $str;
   }
 
@@ -93,7 +93,7 @@ class ModuleOperations
    */
   function GetLastError()
   {
-	global $gCms;
+	  $gCms = cmsms();
 	if( isset( $gCms->variables['error'] ) )
 	  return $gCms->variables['error'];
 	return "";
@@ -181,7 +181,7 @@ class ModuleOperations
    */
   function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
   {
-	global $gCms;
+	  $gCms = cmsms();
 
 	// first make sure that we can actually write to the module directory
 	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
@@ -453,7 +453,7 @@ class ModuleOperations
    */
   function InstallModule($module, $loadifnecessary = false)
   {
-    global $gCms;
+	  $gCms = cmsms();
     if( !isset( $gCms->modules[$module] ) )
       {
 		  if( $loadifnecessary == false )
@@ -469,7 +469,7 @@ class ModuleOperations
 			  }
       }
  
-    $db =& $gCms->GetDb();
+    $db = $gCms->GetDb();
     if (isset($gCms->modules[$module]))
       {
 	$modinstance =& $gCms->modules[$module]['object'];
@@ -523,8 +523,8 @@ class ModuleOperations
    */
   private function LoadNewModule( $modulename )
   {
-    global $gCms;
-    $db =& $gCms->GetDb();
+	  $gCms = cmsms();
+    $db = $gCms->GetDb();
     $cmsmodules = &$gCms->modules;
     
     $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
@@ -562,8 +562,8 @@ class ModuleOperations
    */
   function UpgradeModule( $module, $oldversion, $newversion )
   {
-    global $gCms;
-    $db =& $gCms->GetDb();
+	  $gCms = cmsms();
+    $db = $gCms->GetDb();
 
     if (!isset($gCms->modules[$module]))
       {
@@ -595,8 +595,8 @@ class ModuleOperations
    */
   function UninstallModule( $module)
   {
-    global $gCms;
-    $db =& $gCms->GetDb();
+	  $gCms = cmsms();
+    $db = $gCms->GetDb();
 
     if (!isset($gCms->modules[$module]))
       {
@@ -652,7 +652,7 @@ class ModuleOperations
    */
   function & GetAllModules()
     {
-      global $gCms;
+		$gCms = cmsms();
       $cmsmodules = &$gCms->modules;
       return $cmsmodules;
     }
@@ -667,7 +667,7 @@ class ModuleOperations
    */
   public static function get_modules_with_capability($capability, $args= '')
   {
-    global $gCms;
+	  $gCms = cmsms();
 
     $output = array();
     foreach($gCms->modules as $key => $data)

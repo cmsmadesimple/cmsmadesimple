@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
+#$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 
 /**
  * Global class for easy access to all important variables.
@@ -35,9 +35,11 @@
  * @since 0.5
  */
 
-require_once(dirname(__FILE__).'/class.cms_variables.php');
+  //require_once(dirname(__FILE__).'/class.cms_variables.php');
 
 class CmsObject {
+
+	private static $_instance;
 
 	/**
 	 * Database object - adodb reference to the current database
@@ -55,25 +57,26 @@ class CmsObject {
 	 * Modules object - holds references to all registered modules
 	 * @access private
 	 */
-	var $cmsmodules;
+	var $cmsmodules = array();
 
 	/**
 	 * System Modules - a list (hardcoded) of all system modules
 	 *	@access private
 	 */
-	var $cmssystemmodules;
+	var $cmssystemmodules =  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'TinyMCE', 'Printing', 'ThemeManager' );
+
 
 	/**
 	 * Plugins object - holds list of all registered plugins 
 	 * @access private
 	 */
-	var $cmsplugins;
+	var $cmsplugins = array();
 
 	/**
 	 * User Plugins object - holds list and function pointers of all registered user plugins
 	 * @access private
 	 */
-	var $userplugins;
+	var $userplugins = array();
 
 	/**
 	 * BBCode object - for use in bbcode parsing
@@ -85,7 +88,7 @@ class CmsObject {
 	 * Site Preferences object - holds all current site preferences so they're only loaded once
 	 *	@access private
 	 */
-	var $siteprefs;
+	var $siteprefs = array();
 
 	/**
 	 * User Preferences object - holds user preferences as they're loaded so they're only loaded once
@@ -103,25 +106,25 @@ class CmsObject {
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
 	 *	@access private
 	 */
-	var $errors;
+	var $errors = array();
 
 	/**
      * nls array - This holds all of the nls information for different languages
 	 *	@access private
 	 */
-	var $nls;
+	var $nls = array();
 
 	/**
      * template cache array - If something's called LoadTemplateByID, we keep a copy around
 	 *	@access private
 	 */
-	var $TemplateCache;
+	var $TemplateCache = array();
 
 	/**
      * template cache array - If something's called LoadTemplateByID, we keep a copy around
 	 *	@access private
 	 */
-	var $StylesheetCache;
+	var $StylesheetCache = array();
 
 	/**
      * html blob cache array - If something's called LoadHtmlBlobByID, we keep a copy around
@@ -133,7 +136,7 @@ class CmsObject {
 	 * content types array - List of available content types
 	 *	@access private
 	 */
-	var $contenttypes;
+	var $contenttypes = array();
 
 	/**
 	 * module list - list of installed and available modules.
@@ -141,7 +144,7 @@ class CmsObject {
 	 *
 	 * @access private
 	 */
-	var $modules;
+	var $modules = array();
 
 
 	public function __get($key)
@@ -154,34 +157,26 @@ class CmsObject {
 			}
 	}
 
+
 	/**
 	 * Constructor
 	 */
-	public function CmsObject()
+	protected function __construct()
 	{
-		$this->cmssystemmodules = 
-		  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'TinyMCE', 'Printing', 'ThemeManager' );
-		$this->modules = array();
-		$this->errors = array();
-		$this->nls = array();
-		$this->contenttypes = array();
-		$this->TemplateCache = array();
-		$this->StylesheetCache = array();
-		$this->variables = cms_variables::get_instance();
-		$this->variables['content-type'] = 'text/html';
-		$this->variables['modulenum'] = 1;
-		$this->variables['routes'] = array();
-		
-		#Setup hash for storing all modules and plugins
-		$this->cmsmodules          = array();
-		$this->userplugins         = array();
-		$this->userpluginfunctions = array();
-		$this->cmsplugins          = array();
-		$this->siteprefs           = array();
+		$this->userpluginfunctions = array(); // unused??
 
 		register_shutdown_function(array(&$this, 'dbshutdown'));
 	}
 
+
+	public static function &get_instance()
+	{
+		if( !self::$_instance  )
+		{
+			self::$_instance = new CmsObject();
+		}
+		return self::$_instance;
+	}
 
 	/**
 	 * Retrieve the list of errors
@@ -333,7 +328,7 @@ class CmsObject {
 	* @final
 	* @return mixed an associative array of configuration values
 	*/
-	public function GetConfig()
+	public function &GetConfig()
 	{
 		return cms_config::get_instance();
 	}
@@ -350,7 +345,6 @@ class CmsObject {
 	{
         if (!isset($this->moduleloader))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.moduleloader.inc.php'));
 			$this->moduleloader = new ModuleLoader();
 		}
 
@@ -369,7 +363,6 @@ class CmsObject {
 	{
         if (!isset($this->moduleoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.moduleoperations.inc.php'));
 			$this->moduleoperations = new ModuleOperations();
 		}
 
@@ -388,7 +381,6 @@ class CmsObject {
 	{
         if (!isset($this->useroperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.useroperations.inc.php'));
 			$this->useroperations = new UserOperations();
 		}
 
@@ -410,7 +402,6 @@ class CmsObject {
         if (!isset($this->contentoperations))
 		{
 			debug_buffer('', 'Load Content Operations');
-			require_once(cms_join_path(dirname(__FILE__), 'class.contentoperations.inc.php'));
 			$this->contentoperations = new ContentOperations();
 			debug_buffer('', 'End Load Content Operations');
 		}
@@ -430,7 +421,6 @@ class CmsObject {
 	{
         if (!isset($this->bookmarkoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.bookmarkoperations.inc.php'));
 			$this->bookmarkoperations = new BookmarkOperations();
 		}
 
@@ -449,7 +439,6 @@ class CmsObject {
 	{
         if (!isset($this->templateoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.templateoperations.inc.php'));
 			$this->templateoperations = new TemplateOperations();
 		}
 
@@ -468,7 +457,6 @@ class CmsObject {
 	{
         if (!isset($this->stylesheetoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.stylesheetoperations.inc.php'));
 			$this->stylesheetoperations = new StylesheetOperations();
 		}
 
@@ -487,9 +475,7 @@ class CmsObject {
 	{
         if (!isset($this->groupoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.groupoperations.inc.php'));
-			$groupoperations = new GroupOperations();
-			$this->groupoperations = &$groupoperations;
+			$this->groupoperations = new GroupOperations();
 		}
 
 		return $this->groupoperations;
@@ -509,7 +495,6 @@ class CmsObject {
 	{
         if (!isset($this->globalcontentoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.globalcontentoperations.inc.php'));
 			$this->globalcontentoperations = new GlobalContentOperations();
 		}
 
@@ -528,7 +513,6 @@ class CmsObject {
 	{
         if (!isset($this->usertagoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.usertagoperations.inc.php'));
 			$this->usertagoperations = new UserTagOperations();
 		}
 
@@ -549,15 +533,9 @@ class CmsObject {
 	{
 		/* Check to see if a Smarty object has been instantiated yet,
 		  and, if not, go ahead an create the instance. */
-		if (!isset($this->smarty))
+		if (!$this->smarty)
 		{
 			$conf = $this->GetConfig();
-
-			if (!defined('SMARTY_DIR'))
-			{
-				define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
-			}
-
 			$this->smarty = new Smarty_CMS($conf);
 		}
 

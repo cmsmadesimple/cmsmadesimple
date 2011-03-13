@@ -122,8 +122,8 @@ class Content extends ContentBase
 	 */
     function FillParams($params,$editing = false)
     {
-	global $gCms;
-	$config =& $gCms->config;
+		$gCms = cmsms();
+	$config = $gCms->GetConfig();
 
 	if (isset($params))
 	{
@@ -226,10 +226,10 @@ class Content extends ContentBase
 	 */
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-	global $gCms;
+		$gCms = cmsms();
 	
 	$config = $gCms->GetConfig();
-	$templateops =& $gCms->GetTemplateOperations();
+	$templateops = $gCms->GetTemplateOperations();
 	$ret = array();
 	$this->stylesheet = '';
 	if ($this->TemplateId() > 0)
@@ -288,7 +288,7 @@ class Content extends ContentBase
 	    $tmp = get_preference(get_userid(),'date_format_string','%x %X');
 	    if( empty($tmp) ) $tmp = '%x %X';
 	    $ret[]=array(lang('last_modified_at').':', strftime($tmp, strtotime($this->mModifiedDate) ) );
-	    $userops =& $gCms->GetUserOperations();
+	    $userops = $gCms->GetUserOperations();
 	    $modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);
 	    if($modifiedbyuser) $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
 	}
@@ -380,10 +380,10 @@ class Content extends ContentBase
     private function parse_content_blocks()
     {
       $result = true;
-      global $gCms;
+	  $gCms = cmsms();
       if ($this->_contentBlocksLoaded) return TRUE;
 
-      $templateops =& $gCms->GetTemplateOperations();
+      $templateops = $gCms->GetTemplateOperations();
       {
 	  $this->_contentBlocks = array();
 	  if ($this->TemplateId() && $this->TemplateId() > -1)
@@ -668,12 +668,12 @@ class Content extends ContentBase
 	 */
     function display_single_element($one,$adding)
     {
-      global $gCms;
+		$gCms = cmsms();
 
       switch($one) {
       case 'template':
 	{
-	  $templateops =& $gCms->GetTemplateOperations();
+	  $templateops = $gCms->GetTemplateOperations();
 	  return array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.Edit_Content.submit()"'));
 	}
 	break;
@@ -760,7 +760,7 @@ class Content extends ContentBase
 	*/
 	private function _display_image_block($blockInfo,$value,$adding)
 	{
-		global $gCms;
+		$gCms = cmsms();
 		$config = $gCms->GetConfig();
 		$adddir = get_site_preference('contentimage_path');
 		if( $blockInfo['dir'] != '' )
@@ -791,7 +791,7 @@ class Content extends ContentBase
 */
 	private function _display_module_block($blockName,$blockInfo,$value,$adding)
 	{
-		global $gCms;
+		$gCms = cmsms();
 		$ret = '';
 		if( !isset($blockInfo['module']) ) return FALSE;
 		if( !isset($gCms->modules[$blockInfo['module']]['object']) ) return FALSE;

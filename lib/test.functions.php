@@ -357,8 +357,8 @@ function & testDummy( $title, $value, $return, $message = '', $error_fragment = 
 */
 function & testConfig( $title, $varname, $testfunc = '', $message = '' )
 {
-	global $gCms;
-	$config = $gCms->config;
+	$gCms = cmsms();
+	$config = $gCms->GetConfig();
 
 	if( (isset($config[$varname])) && (is_bool($config[$varname])) )
 	{

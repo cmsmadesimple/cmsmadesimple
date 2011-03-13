@@ -84,7 +84,8 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
 #******************************************************************************
 	if ($access)
 	{
-	  global $gCms; $db =& $gCms->GetDb();
+	  $gCms = cmsms();
+	  $db = cmsms();
 
           # first check if this association already exists
 	  $query = "SELECT * FROM ".cms_db_prefix().

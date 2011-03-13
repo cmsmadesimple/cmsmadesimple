@@ -51,7 +51,7 @@ if (isset($_POST["addbookmark"]))
 
 	if ($validinfo)
 		{
-		global $gCms;
+		  $gCms = cmsms();
 		$gCms->GetBookmarkOperations();
 		$markobj = new Bookmark();
 		$markobj->title = $title;

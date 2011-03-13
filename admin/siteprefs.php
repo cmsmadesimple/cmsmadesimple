@@ -53,8 +53,8 @@ if (!$access)
     return;
   }
 
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 $config = $gCms->GetConfig();
 
 $error = "";
@@ -196,7 +196,6 @@ if (isset($_POST["testumask"]))
   }
 else if (isset($_POST['clearcache']))
 {
-	global $gCms;
 	$gCms->clear_cached_files();
 // 	$contentops =& $gCms->GetContentOperations();
 // 	$contentops->ClearCache();

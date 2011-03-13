@@ -22,8 +22,8 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 $userid = get_userid();
 $access = check_permission($userid, "Modify Events");
@@ -207,9 +207,7 @@ if ($access)
 	}
 		
 	// get the event description
-	global $gCms;
-	$usertagops =& $gCms->GetUserTagOperations();
-	//$description = $gCms->modules[$module]['object']->GetEventDescription($event);
+	$usertagops = $gCms->GetUserTagOperations();
 	
 	$description = '';
 	$modulename = '';

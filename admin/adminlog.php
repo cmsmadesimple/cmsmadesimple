@@ -24,8 +24,8 @@ require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 $dateformat = trim(get_preference(get_userid(),'date_format_string','%x %X')); 
 		  if( empty($dateformat) )

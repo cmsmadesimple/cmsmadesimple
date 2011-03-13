@@ -123,14 +123,14 @@ class User
 		
 		if ($this->id > -1)
 		{
-			global $gCms;
-			$userops =& $gCms->GetUserOperations();
+			$gCms = cmsms();
+			$userops = $gCms->GetUserOperations();
 			$result = $userops->UpdateUser($this);
 		}
 		else
 		{
-			global $gCms;
-			$userops =& $gCms->GetUserOperations();
+			$gCms = cmsms();
+			$userops = $gCms->GetUserOperations();
 			$newid = $userops->InsertUser($this);
 			if ($newid > -1)
 			{
@@ -156,8 +156,8 @@ class User
 
 		if ($this->id > -1)
 		{
-			global $gCms;
-			$userops =& $gCms->GetUserOperations();
+			$gCms = cmsms();
+			$userops = $gCms->GetUserOperations();
 			$result = $userops->DeleteUserByID($this->id);
 			if ($result)
 			{

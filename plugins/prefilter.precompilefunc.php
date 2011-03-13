@@ -26,7 +26,6 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 		switch ($result[0])
 		{
 		case 'stylesheet':
-		  debug_to_log('prefilter for '.$smarty->_current_file);
 		  Events::SendEvent('Core','StylesheetPreCompile',array('stylesheet'=>&$tpl_output));
 		  break;
 

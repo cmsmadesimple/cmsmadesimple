@@ -69,6 +69,7 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 }
 
 require_once($dirname.'/include.php'); 
+
 // optionally enable output compression (as long as debug mode isn't on)
 if( isset($config['output_compression']) && ($config['output_compression']) && $config['debug'] != true )
   {
@@ -80,9 +81,10 @@ else
   }
 
 
+$gCms = cmsms();
 $params = array_merge($_GET, $_POST);
 
-$smarty = cmsms()->GetSmarty();
+$smarty = $gCms->GetSmarty();
 $smarty->params = $params;
 
 $page = get_pageid_or_alias_from_url();

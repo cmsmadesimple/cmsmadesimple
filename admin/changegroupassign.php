@@ -45,14 +45,14 @@ if (!$access) {
 	die('Permission Denied');
 	return;
 }
-$userops =& $gCms->GetUserOperations();
+$userops = $gCms->GetUserOperations();
 $adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
 $message = '';
 
 include_once("header.php");
 
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 
 if( isset($_POST['filter']) )
@@ -63,9 +63,9 @@ if( isset($_POST['filter']) )
 $disp_group = get_preference($userid,'changegroupassign_group',-1);
 
 // always display the group pulldown
-global $gCms;
-$groupops =& $gCms->GetGroupOperations();
-$userops =& $gCms->GetUserOperations();
+$gCms = cmsms();
+$groupops = $gCms->GetGroupOperations();
+$userops = $gCms->GetUserOperations();
 $tmp = new stdClass();
 $tmp->name = lang('all_groups');
 $tmp->id=-1;

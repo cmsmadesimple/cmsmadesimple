@@ -27,9 +27,9 @@ $userid = get_userid();
 $access = check_permission($userid, 'Modify User-defined Tags');
 if (!$access) die('Permission Denied');
 
-global $gCms;
-$db =& $gCms->GetDb();
-$smarty = new Smarty_CMS($gCms->config);
+$gCms = cmsms();
+$db = $gCms->GetDb();
+$smarty = new Smarty_CMS($gCms->config); // why?
 $usertagops = $gCms->GetUserTagOperations();
 
 include('header.php');

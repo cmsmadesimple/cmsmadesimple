@@ -66,8 +66,7 @@ class Group
 	{
 		$result = false;
 		
-		global $gCms;
-		$groupops =& $gCms->GetGroupOperations();
+		$groupops = cmsms()->GetGroupOperations();
 		
 		if ($this->id > -1)
 		{
@@ -98,8 +97,7 @@ class Group
 
 		if ($this->id > -1)
 		{
-			global $gCms;
-			$groupops =& $gCms->GetGroupOperations();
+			$groupops = cmsms()->GetGroupOperations();
 			$result = $groupops->DeleteGroupByID($this->id);
 			if ($result)
 			{

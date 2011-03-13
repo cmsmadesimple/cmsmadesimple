@@ -8,7 +8,12 @@ class cms_variables implements ArrayAccess
   private $_data = array();
 
   // this is a singleton.
-  private function __construct()  {}
+  private function __construct()
+  {
+    $this->_data['content-type'] = 'text/html';
+    $this->_data['modulenum'] = 1;
+    $this->_data['routes'] = array();
+  }
 
   public static function get_instance()
   {
@@ -34,6 +39,12 @@ class cms_variables implements ArrayAccess
       }
     if( isset($this->_data[$key]) )
       {
+	return $this->_data[$key];
+      }
+    switch( $key )
+      {
+      case 'convertclass':
+	$this->_data[$key] = new ConvertClass();
 	return $this->_data[$key];
       }
   }

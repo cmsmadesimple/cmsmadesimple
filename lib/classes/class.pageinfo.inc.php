@@ -38,23 +38,38 @@
  */
 class PageInfo
 {
-	function __get($name)
+	private $_template;
+	private $_content_id;
+
+	private function _get_template()
 	{
-		global $gCms;
-		$contentobj = $gCms->variables['content_obj'];
-		if ($contentobj != null)
+		// only get the template once...
+		$gCms = cmsms();
+		$cid = $gCms->variables['content_id'];
+		if( !$this->_content_id || !$this->_template || $cid != $this->_content_id )
 		{
-			$template = null;
-			$templateops =& $gCms->GetTemplateOperations();
+			$contentobj = $gCms->variables['content_obj'];
+			$templateops = $gCms->GetTemplateOperations();
 			if ($contentobj->TemplateId() && $contentobj->TemplateId() > -1)
 			{
-				$template = $templateops->LoadTemplateByID($contentobj->TemplateId());
+				$this->_template = $templateops->LoadTemplateByID($contentobj->TemplateId());
 			}
 			else
 			{
-				$template = $templateops->LoadDefaultTemplate();
+				$this->_template = $templateops->LoadDefaultTemplate();
 			}
-			
+			$this->_content_id = $cid;
+		}
+		return $this->_template;
+	}
+
+
+	public function __get($name)
+	{
+		$gCms = cmsms();
+		$contentobj = $gCms->variables['content_obj'];
+		if ($contentobj != null)
+		{
 			switch ($name)
 			{
 				case 'content_id':
@@ -115,18 +130,22 @@ class PageInfo
 				}
 				case 'template_id':
 				{
+					$template = $this->_get_template();
 					return ($template != null ? $template->Id() : null);
 				}
 				case 'template_encoding':
 				{
+					$template = $this->_get_template();
 					return ($template != null ? $template->encoding : null);
 				}
 				case 'template_modified_date':
 				{
+					$template = $this->_get_template();
 					return ($template != null ? $template->modified_date : null);
 				}
 				case 'cachable':
 				{
+					$template = $this->_get_template();
 					return $contentobj->Metadata();
 				}
 				default:

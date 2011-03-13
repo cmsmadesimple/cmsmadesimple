@@ -140,7 +140,7 @@ class cms_route_manager
   public static function load_routes()
   {
     // force modules to register their routes.
-    global $gCms;
+    $gCms = cmsms();
     global $CMS_ADMIN_PAGE;
     $flag = false;
     if( isset($CMS_ADMIN_PAGE) )

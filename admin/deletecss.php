@@ -39,9 +39,9 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
-global $gCms;
-$styleops =& $gCms->GetStylesheetOperations();
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$styleops = $gCms->GetStylesheetOperations();
+$db = $gCms->GetDb();
 
 #******************************************************************************
 # Definition of global vars
@@ -102,8 +102,7 @@ if (isset($_GET["css_id"]))
 		# everything should be ok
 		if ($dodelete)
 		{	
-			global $gCms;
-			$styleops =& $gCms->GetStylesheetOperations();
+		  $styleops = cmsms()->GetStylesheetOperations();
 			$onestylesheet = $styleops->LoadStylesheetByID($css_id);
 			
 			Events::SendEvent('Core', 'DeleteStylesheetPre', array('stylesheet' => &$onestylesheet));

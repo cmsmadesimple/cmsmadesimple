@@ -50,7 +50,7 @@ class ModuleLoader
 	 */
 	function LoadModules($loadall = false, $noadmin = false)
 	{
-		global $gCms;
+		$gCms = cmsms();
 		$db =& $gCms->GetDb();
 		$cmsmodules = &$gCms->modules;
 
@@ -185,7 +185,7 @@ class ModuleLoader
 					$result->MoveNext();
 				}
 			}
-			
+
 			if ($result) $result->Close();
 		}
 	}

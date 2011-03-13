@@ -25,8 +25,7 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
-global $gCms;
-$db =& $gCms->GetDb();
+$db = cmsms()->GetDb();
 
 $userplugin_id = -1;
 if (isset($_GET["userplugin_id"])) {

@@ -42,8 +42,8 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 
 include_once("header.php");
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 #******************************************************************************
 # global vars definition
@@ -184,7 +184,7 @@ else {
   $result = $db->Execute($query, array($type, $id));
 
   global $gcms;
-  $smarty =& $gCms->GetSmarty();
+  $smarty = $gCms->GetSmarty();
   $smarty->assign('text_move',lang('move'));
   $smarty->assign('text_template',lang('template'));
   $smarty->assign('text_title',lang('title'));

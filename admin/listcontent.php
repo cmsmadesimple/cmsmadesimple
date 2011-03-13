@@ -67,14 +67,14 @@ function check_modify_all($userid)
 
 function setdefault($contentid)
 {
-	global $gCms;
+  $gCms = cmsms();
 	$userid = get_userid();
 	
 	$result = false;
 
 	if (check_permission($userid,'Manage All Content'))
 	{
-		$hierManager =& $gCms->GetHierarchyManager();
+		$hierManager = $gCms->GetHierarchyManager();
 		$node = &$hierManager->getNodeById($contentid);
 		if (isset($node))
 		{
@@ -90,7 +90,7 @@ function setdefault($contentid)
 			}
 		}
 		
-		$db = &$gCms->GetDb();
+		$db = $gCms->GetDb();
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
 		$old_id = $db->GetOne($query);
 		if (isset($old_id))
@@ -119,8 +119,7 @@ function setdefault($contentid)
 		}
 
 		$result = true;
-		global $gCms;
-		$contentops =& $gCms->GetContentOperations();
+		$contentops = $gCms->GetContentOperations();
 		$contentops->ClearCache();
 	}
 	return $result;
@@ -182,8 +181,7 @@ function content_collapseall()
 function expandall()
 {
 	$userid = get_userid();
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
+	$contentops = cmsms()->GetContentOperations();
 	$all = $contentops->GetAllContent(false);
 	$cs = '';
 	foreach ($all as $thisitem)
@@ -262,10 +260,9 @@ function toggleexpand($contentid, $collapse = false)
 
 function setactive($contentid, $active = true)
 {
-	global $gCms;
 	$userid = get_userid();
 	
-	$hierManager =& $gCms->GetHierarchyManager();
+	$hierManager = cmsms()->GetHierarchyManager();
 	
 	// to activate a page, you must be admin, owner, or additional author
 	$permission = (	check_ownership($userid, $contentid) ||
@@ -279,8 +276,7 @@ function setactive($contentid, $active = true)
 		$value =& $node->getContent();
 		$value->SetActive($active);
 		$value->Save();
-		global $gCms;
-		$contentops =& $gCms->GetContentOperations();
+		$contentops = cmsms()->GetContentOperations();
 		$contentops->ClearCache();
 	}
 }
@@ -309,8 +305,7 @@ function content_move($contentid, $parentid, $direction)
 
 function movecontent($contentid, $parentid, $direction = 'down')
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
+  $db = cmsms()->GetDb();
 	$userid = get_userid();
 
 	if (check_permission($userid, 'Manage All Content'))
@@ -347,7 +342,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 		}
 
 		//sleep(15); //waiting for updating DB. Better 5 but 15 is good for testing concurrent processes and work!
-		$contentops =& $gCms->GetContentOperations();
+		$contentops = cmsms()->GetContentOperations();
 		$contentops->SetAllHierarchyPositions();
 		$contentops->ClearCache();
 	}
@@ -364,8 +359,8 @@ function deletecontent($contentid)
 	   quick_check_authorship($contentid,$mypages)))
 	  || check_permission($userid, 'Manage All Content');
 	
-	global $gCms;
-	$hierManager =& $gCms->GetHierarchyManager();
+	$gCms = cmsms();
+	$hierManager = $gCms->GetHierarchyManager();
 
 	if ($access)
 	{
@@ -405,7 +400,7 @@ function deletecontent($contentid)
 				$title = $contentobj->Name();
 				$contentobj->Delete();
 
-				$contentops =& $gCms->GetContentOperations();
+				$contentops = $gCms->GetContentOperations();
 				$contentops->SetAllHierarchyPositions();
 				
 				#See if this is the last child... if so, remove
@@ -433,8 +428,7 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 	$content = &$root->getContent();
 	if( !is_object($content) ) return;
 
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
+	$contentops = cmsms()->GetContentOperations();
 
 	$output .= '<li id="item_'.$content->mId.'">'."\n";
 	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->mHierarchy).') '.cms_htmlentities($content->mMenuText, '', '', true);
@@ -461,7 +455,7 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 function reorder_display_list()
 {
 	$objResponse = new xajaxResponse();
-	global $gCms;
+	$gCms = cmsms();
 	$config = $gCms->GetConfig();
 	
 	$userid = get_userid();
@@ -471,7 +465,7 @@ function reorder_display_list()
 
 	$sortableLists = new SLLists($config["root_url"].'/lib/scriptaculous');
 	
-	$hierManager =& $gCms->GetHierarchyManager();
+	$hierManager = $gCms->GetHierarchyManager();
 	$hierarchy = &$hierManager->getRootNode();
 	
 	$listArray = array();
@@ -509,13 +503,13 @@ function reorder_process($get)
 {
 	$userid = get_userid();
 	$objResponse = new xajaxResponse();
+	$gCms = cmsms();
 
 	if (check_permission($userid,'Manage All Content'))
 	{
-		global $gCms;
 		$config = $gCms->GetConfig();
-		$db =& $gCms->GetDb();
-		$contentops =& $gCms->GetContentOperations();
+		$db = $gCms->GetDb();
+		$contentops = $gCms->GetContentOperations();
 	    $hm = $contentops->GetAllContentAsHierarchy(false);
 		$hierarchy = &$hm->getRootNode();
 	
@@ -557,8 +551,7 @@ function reorder_process($get)
 			}
 		}
 		if (TRUE == $order_changed) {
-			global $gCms;
-			$contentops =& $gCms->GetContentOperations();
+			$contentops = $gCms->GetContentOperations();
 			$contentops->SetAllHierarchyPositions();
 			$contentops->ClearCache();
 		}
@@ -614,15 +607,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
   
   if (!array_key_exists($one->TemplateId(), $templates))
     {
-      global $gCms;
-      $templateops =& $gCms->GetTemplateOperations();
+      $templateops = cmsms()->GetTemplateOperations();
       $templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId());
     }
   
   if (!array_key_exists($one->Owner(), $users))
     {
-      global $gCms;
-      $userops =& $gCms->GetUserOperations();
+      $userops = cmsms()->GetUserOperations();
       $users[$one->Owner()] =& $userops->LoadUserById($one->Owner());
     }
   
@@ -1020,7 +1011,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
 function display_content_list($themeObject = null)
 {
-	global $gCms;
+  $gCms = cmsms();
 	global $thisurl;
 	global $urlext;
 
@@ -1095,7 +1086,7 @@ function display_content_list($themeObject = null)
 		}
 	}
 
-        $hierManager =& $gCms->GetHierarchyManager();
+        $hierManager = $gCms->GetHierarchyManager();
 	$hierarchy = &$hierManager;
 
 	$rowcount = 0;
@@ -1310,7 +1301,7 @@ echo $themeObject->ShowErrors('' ,'error');
 <div class="pagecontainer">
 <?php
 
-$hierManager =& $gCms->GetHierarchyManager();
+$hierManager = cmsms()->GetHierarchyManager();
 
 if (isset($_GET["makedefault"]))
 {

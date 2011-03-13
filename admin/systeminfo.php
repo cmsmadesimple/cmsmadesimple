@@ -62,12 +62,12 @@ function systeminfo_lang($params,&$smarty)
 	}
 }
 
-global $gCms;
-$smarty =& $gCms->GetSmarty();
+$gCms = cmsms();
+$smarty = $gCms->GetSmarty();
 $smarty->register_function('si_lang','systeminfo_lang');
 $smarty->caching = false;
 $smarty->force_compile = true;
-$db = &$gCms->GetDb();
+$db = $gCms->GetDb();
 
 
 

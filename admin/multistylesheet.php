@@ -31,8 +31,7 @@ check_login();
 $action = '';
 if (isset($_POST['multiaction'])) $action = $_POST['multiaction'];
 
-global $gCms;
-$styleops =& $gCms->GetStylesheetOperations();
+$styleops = cmsms()->GetStylesheetOperations();
 
 $nodelist = array();
 

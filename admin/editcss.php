@@ -40,9 +40,9 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
-global $gCms;
-$styleops =& $gCms->GetStylesheetOperations();
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$styleops = $gCms->GetStylesheetOperations();
+$db = $gCms->GetDb();
 $dateformat = trim(get_preference(get_userid(),'date_format_string','%x %X')); 
 		  if( empty($dateformat) )
 		   {
@@ -145,8 +145,7 @@ if ($access)
 			//$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?, css_text = ?, media_type = ?, modified_date = ? WHERE css_id = ?";
 			//$result = $db->Execute($query,array($css_name, $css_text, $media_type, $db->DBTimeStamp(time()), $css_id));
 			
-			global $gCms;
-			$styleops =& $gCms->GetStylesheetOperations();
+		  $styleops = cmsms()->GetStylesheetOperations();
 			
 			$onestylesheet = $styleops->LoadStylesheetByID($css_id);
 			$onestylesheet->name = $css_name;

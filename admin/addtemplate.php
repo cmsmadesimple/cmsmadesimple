@@ -62,9 +62,9 @@ if (isset($_POST["cancel"]))
 	return;
 }
 
-global $gCms;
-$db =& $gCms->GetDb();
-$templateops =& $gCms->GetTemplateOperations();
+$gCms = cmsms();
+$db = $gCms->GetDb();
+$templateops = $gCms->GetTemplateOperations();
 
 $userid = get_userid();
 $access = check_permission($userid, 'Add Templates');

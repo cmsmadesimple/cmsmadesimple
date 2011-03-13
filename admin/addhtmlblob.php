@@ -68,9 +68,9 @@ if( $gcb_wysiwyg )
 if ($access) {
 	if (isset($_POST["submit2"])) {
 		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
-		$templateops =& $gCms->GetTemplateOperations();
+	  $gCms = cmsms();
+		$gcbops = $gCms->GetGlobalContentOperations();
+		$templateops = $gCms->GetTemplateOperations();
 
 		$validinfo = true;
 		if ($htmlblob == ""){
@@ -88,10 +88,10 @@ if ($access) {
 
 
 		if ($validinfo) {
-			global $gCms;
-			$gcbops =& $gCms->GetGlobalContentOperations();
+		  $gCms = cmsms();
+			$gcbops = $gCms->GetGlobalContentOperations();
 
-			$blobobj =& new GlobalContent();
+			$blobobj = new GlobalContent();
 			$blobobj->name = $htmlblob;
 			$blobobj->content = $content;
 			$blobobj->owner = $userid;
@@ -144,11 +144,12 @@ if ($access) {
 
 include_once("header.php");
 
-global $gCms; $db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 // fill out additional users array
 $addt_users = "";
-$groupops =& $gCms->GetGroupOperations();
+$groupops = $gCms->GetGroupOperations();
 $groups = $groupops->LoadGroups();
 foreach( $groups as $onegroup )
 {

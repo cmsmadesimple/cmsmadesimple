@@ -19,12 +19,10 @@
 #$Id$
 
 $dirname = dirname(__FILE__);
-require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 
 define('CMS_DEFAULT_VERSIONCHECK_URL','http://www.cmsmadesimple.org/latest_version.php');
 define('CMS_SECURE_PARAM_NAME','sp_');
 define('CMS_USER_KEY','cmsuserkey');
-
 
 #Setup session with different id and start it
 $session_key = substr(md5($dirname), 0, 8);
@@ -69,25 +67,30 @@ if (version_compare(phpversion(),"5.3.0","<")) {
   set_magic_quotes_runtime(false);
 }
 
+
+// minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
+//require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_variables.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsObject.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'shutdown.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'autoloader.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.functions.php');
-debug_buffer('', 'Start of include');
+require_once($dirname.DIRECTORY_SEPARATOR.'version.php');
+debug_buffer('done loading required files');
+
 
 # sanitize $_GET
 array_walk_recursive($_GET, 'sanitize_get_var'); 
 
-#Make a new CMS object
-require(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
-require(cms_join_path($dirname,'lib','classes','class.cms_config.php'));
-$gCms = new CmsObject();
 if (isset($starttime))
 {
   cmsms()->set_variable('starttime',$starttime);
 }
 
 #Load the config file (or defaults if it doesn't exist)
-require(cms_join_path($dirname,'version.php'));
-require(cms_join_path($dirname,'lib','config.functions.php'));
+//require(cms_join_path($dirname,'lib','config.functions.php'));
 
 #Grab the current configuration
 $config = cmsms()->GetConfig();
@@ -151,8 +154,6 @@ if ($config["debug"] == true)
   }
 
 
-debug_buffer('loading smarty');
-require(cms_join_path($dirname,'lib','smarty','Smarty.class.php'));
 debug_buffer('loading adodb');
 require(cms_join_path($dirname,'lib','adodb.functions.php'));
 load_adodb();
@@ -162,14 +163,8 @@ debug_buffer('loading content functions');
 require_once(cms_join_path($dirname,'lib','content.functions.php'));
 debug_buffer('loading translation functions');
 require_once(cms_join_path($dirname,'lib','translation.functions.php'));
-debug_buffer('loading events functions');
-require_once(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 debug_buffer('loading php4 entity decode functions');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'autoloader.php');
-
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.pageinfo.inc.php');
-cmsms()->set_variable('pageinfo',new PageInfo());
 
 debug_buffer('done loading files');
 
@@ -242,19 +237,11 @@ if ($config['debug'] == true)
 	$smarty->debugging = true;
 	$smarty->error_reporting = 'E_ALL';
 }
-if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
-{
-	#This will only matter on upgrades now.  All new stuff (0.13 on) will be UTF-8.
-	if (is_file(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php')))
-	{
-		include(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php'));
-		cmsms()->set_variable('convertclass',new ConvertCharset());
-	}
-}
 
 #Setup content routes
 if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) )
 {
+  cmsms()->set_variable('pageinfo',new PageInfo());
   $contentops = cmsms()->GetContentOperations();
   $contentops->register_routes();
 }
@@ -283,6 +270,7 @@ function sanitize_get_var(&$value, $key)
     $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value); //the i makes it caseinsensitive
   }
 }
+
 
 # vim:ts=4 sw=4 noet
 ?>

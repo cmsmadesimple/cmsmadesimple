@@ -30,8 +30,8 @@ include_once("header.php");
 
 // Get the source object
 $fromid = (int)$_GET['content_id'];
-global $gCms;
-$contentops =& $gCms->GetContentOperations();
+$gCms = cmsms();
+$contentops = $gCms->GetContentOperations();
 $config = $gCms->GetConfig();
 $fromobj = $contentops->LoadContentFromId($fromid,true);
 $fromobj->GetAdditionalEditors();

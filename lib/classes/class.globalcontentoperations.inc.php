@@ -48,12 +48,11 @@ class GlobalContentOperations
 	 */
 	function AuthorBlobs($userid)
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 		$variables = &$gCms->variables;
 		if (!isset($variables['authorblobs']))
 		{
-			$db = &$gCms->GetDb();
 			$authorblobs = array();
 
 			// get the list of html blobs where this user is a direct owner
@@ -105,8 +104,7 @@ class GlobalContentOperations
 	 */
 	function LoadHtmlBlobs()
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$result = array();
 
@@ -140,8 +138,7 @@ class GlobalContentOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date, description, use_wysiwyg FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ?";
 		$row = &$db->GetRow($query, array($id));
@@ -172,9 +169,9 @@ class GlobalContentOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
-		$gcbops =& $gCms->GetGlobalContentOperations();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
+		$gcbops = $gCms->GetGlobalContentOperations();
 		$cache = &$gCms->HtmlBlobCache;
 
 		if (isset($cache[$name]))
@@ -216,8 +213,7 @@ class GlobalContentOperations
 	{
 		$result = -1; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$new_htmlblob_id = $db->GenID(cms_db_prefix()."htmlblobs_seq");
 		$time = $db->DBTimeStamp(time());
@@ -241,8 +237,7 @@ class GlobalContentOperations
 	{
 		$result = false; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$time = $db->DBTimeStamp(time());
 		$query = "UPDATE ".cms_db_prefix()."htmlblobs SET htmlblob_name = ?, html = ?, owner = ?, use_wysiwyg = ?, description = ?, modified_date = ".$time." WHERE htmlblob_id = ?";
@@ -265,8 +260,7 @@ class GlobalContentOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."htmlblobs where htmlblob_id = ?";
 		$dbresult = $db->Execute($query,array($id));
@@ -292,8 +286,7 @@ class GlobalContentOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 		$row = null;
 
 		$query = "SELECT htmlblob_id from ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
@@ -326,8 +319,7 @@ class GlobalContentOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ? AND owner = ?";
 		$row = &$db->GetRow($query, array($id, $user_id));
@@ -362,8 +354,7 @@ class GlobalContentOperations
 	 */
 	function ClearAdditionalEditors($id)
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ?";
 
@@ -379,8 +370,7 @@ class GlobalContentOperations
 	 */
 	function InsertAdditionalEditors($id, $user_id)
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$new_id = $db->GenID(cms_db_prefix()."additional_htmlblob_users_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."additional_htmlblob_users (additional_htmlblob_users_id, htmlblob_id, user_id) VALUES (?,?,?)";

@@ -28,7 +28,6 @@
 /**
  * Include the content class definition
  */
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
 
 /**
  * Class for static methods related to content
@@ -48,9 +47,9 @@ class ContentOperations
 	 * @since 1.9
 	 * @return getContentObject()
 	 */
-	function &getContentObject()
+	public function &getContentObject()
 	{
-		global $gCms;
+		$gCms = cmsms();
 		$res = null;
 		if( isset($gCms->variables['content_obj']) && is_object($gCms->variables['content_obj']) )
 		{
@@ -67,7 +66,7 @@ class ContentOperations
 	 *
 	 * @return mixed The unserialized content object
 	 */
-	function &LoadContentFromSerializedData(&$data)
+	public function &LoadContentFromSerializedData(&$data)
 	{
 	  if( !isset($data['content_type']) && !isset($data['serialized_content']) ) return FALSE;
 
@@ -119,7 +118,7 @@ class ContentOperations
 	 * @param mixed The type.  Either a string, or an instance of CmsContentTypePlaceHolder
 	 * @return mixed The new content object
 	 */
-	function &CreateNewContent($type)
+	public function &CreateNewContent($type)
 	{
 		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) 
 			{
@@ -155,11 +154,11 @@ class ContentOperations
 
 		$result = FALSE;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-		$row = &$db->GetRow($query, array($id));
+		$row = $db->GetRow($query, array($id));
 		if ($row)
 		{
 			$classtype = strtolower($row['type']);
@@ -189,7 +188,7 @@ class ContentOperations
 			return cms_content_cache::get_content($alias);
 		}
 
-		global $gCms;
+		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
 		$row = '';
@@ -242,7 +241,7 @@ class ContentOperations
 	 */
 	function GetDefaultContent()
 	{
-	  global $gCms;
+		$gCms = cmsms();
 	  if( isset($gCms->variables['default_content_id']) )
 	    {
 	      return $gCms->variables['default_content_id'];
@@ -413,7 +412,7 @@ class ContentOperations
      */
 	function SetHierarchyPosition($contentid)
 	{
-		global $gCms;
+		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
 		$current_hierarchy_position = '';
@@ -501,7 +500,7 @@ class ContentOperations
 	{
 		debug_buffer('', 'starting tree');
 
-		global $gCms;
+		$gCms = cmsms();
 		$db = &$gCms->GetDb();
 		$tree = null;
 		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
@@ -584,7 +583,7 @@ class ContentOperations
 	 */
 	function LoadChildren($id, $loadprops = false, $all = false, $explicit_ids = array() )
 	{	
-		global $gCms;
+		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
 		$contentrows = '';
@@ -685,8 +684,8 @@ class ContentOperations
 	 * @author Ted Kulp
 	 */
 	function SetDefaultContent($id) {
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
 		$old_id = $db->GetOne($query);
 		if (isset($old_id)) 
@@ -715,7 +714,7 @@ class ContentOperations
 	{
 		debug_buffer('get all content...');
 
-		global $gCms;
+		$gCms = cmsms();
 		$tree = $gCms->GetHierarchyManager();
 		$list = $tree->getFlatList();
 
@@ -870,8 +869,8 @@ class ContentOperations
 		$res = cms_content_cache::get_id_from_alias($alias);
 		if( $res !== FALSE ) return $res;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		if (is_numeric($alias) && strpos($alias,'.') == FALSE && strpos($alias,',') == FALSE)
 		{
@@ -899,8 +898,8 @@ class ContentOperations
 	 */
 	function GetPageIDFromHierarchy($position)
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE hierarchy = ?";
 		$row = $db->GetRow($query, array($this->CreateUnfriendlyHierarchyPosition($position)));
@@ -924,8 +923,8 @@ class ContentOperations
 		$res = cms_content_cache::get_alias_from_id($id);
 		if( $res !== FALSE ) return $res;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		if (!is_numeric($id) && strpos($id,'.') == TRUE && strpos($id,',') == TRUE)
 		{
@@ -953,8 +952,8 @@ class ContentOperations
 	 */
 	function CheckAliasError($alias, $content_id = -1)
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$error = FALSE;
 
@@ -993,7 +992,7 @@ class ContentOperations
 	 */
 	function ClearCache()
 	{
-		global $gCms;
+		$gCms = cmsms();
 		$smarty = $gCms->GetSmarty();
 
 		cms_content_cache::clear();
@@ -1063,7 +1062,7 @@ class ContentOperations
 	 */
 	public function register_routes()
 	{
- 		global $gCms;
+		$gCms = cmsms();
  		$db = $gCms->GetDb();
 
 		$query = 'SELECT content_id,page_url FROM '.cms_db_prefix().'content

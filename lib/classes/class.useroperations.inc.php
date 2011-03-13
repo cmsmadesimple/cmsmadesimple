@@ -49,7 +49,7 @@ class UserOperations
 	 */
 	function &LoadUsers()
 	{
-		global $gCms;
+		$gCms = cmsms();
 		$db = &$gCms->GetDb();
 
 		$result = array();
@@ -83,8 +83,8 @@ class UserOperations
 	 */
 	function &LoadUsersInGroup($groupid)
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 		$result = array();
 
 		$query = "SELECT u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.active, u.admin_access FROM ".cms_db_prefix()."users u, ".cms_db_prefix()."groups g, ".cms_db_prefix()."user_groups cg where cg.user_id = u.user_id and cg.group_id = g.group_id and g.group_id =? ORDER BY username";
@@ -122,8 +122,8 @@ class UserOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$params = array();
 		$where = array();
@@ -182,8 +182,8 @@ class UserOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".cms_db_prefix()."users WHERE user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
@@ -217,8 +217,8 @@ class UserOperations
 	{
 		$result = -1; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		// check for conflict in username
 		$query = 'SELECT user_id FROM '.cms_db_prefix().'users WHERE username = ?';
@@ -250,8 +250,8 @@ class UserOperations
 	{
 		$result = false; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		// check for username conflict
 		$query = 'SELECT user_id FROM '.cms_db_prefix().'users WHERE username = ? and user_id != ?';
@@ -285,8 +285,8 @@ class UserOperations
 	
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."user_groups where user_id = ?";
 		$db->Execute($query, array($id));
@@ -320,8 +320,8 @@ class UserOperations
 	{
 		$result = 0;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE owner_id = ?";
 		$dbresult = $db->Execute($query, array($id));
@@ -372,7 +372,7 @@ class UserOperations
 	 */
 	function UserInGroup($uid,$gid)
 	{
-	  global $gCms;
+		$gCms = cmsms();
 	  $data = array();
 	  if( isset($gCms->variables['user_in_group']) )
 	  {
@@ -385,7 +385,7 @@ class UserOperations
 	      return $data[$uid.','.$gid];
 	    }
 
-	  $db =& $gCms->GetDb();
+	  $db = cmsms()->GetDb();
 	  $query = "SELECT ug.user_id FROM ".cms_db_prefix()."user_groups ug
                      WHERE ug.user_id = ? AND ug.group_id = ?";
 	  $row = $db->GetRow( $query,array($uid,$gid));

@@ -86,9 +86,9 @@ if (isset($_POST['reorderpages'])) $action = 'reorder';
 
 include_once("header.php");
 
-global $gCms;
-$db =& $gCms->GetDb();
-$hm =& $gCms->GetHierarchyManager();
+$gCms = cmsms();
+$db = $gCms->GetDb();
+$hm = $gCms->GetHierarchyManager();
 
 $nodelist = array();
 $bulk = false;
@@ -323,8 +323,7 @@ else
 	      }
 	    if (TRUE == $order_changed)
 	    {
-			global $gCms;
-			$contentops =& $gCms->GetContentOperations();
+			$contentops = $gCms->GetContentOperations();
 			$contentops->SetAllHierarchyPositions();
 	    }
 	    else
@@ -396,7 +395,7 @@ else
 		$pages[] = array('name'=>$one->Name(),'hierarchy'=>$one->Hierarchy());
 		$idlist[] = $one->Id();
 	      }
-	    $templateops =& $gCms->GetTemplateOperations();
+	    $templateops = $gCms->GetTemplateOperations();
 	    $smarty->assign('input_template',$templateops->TemplateDropdown());
 	    $smarty->assign('pages',$pages);
 	    $smarty->assign('idlist',$idlist);
@@ -432,7 +431,6 @@ else
 		$access = check_permission($userid, 'Remove Pages' || check_persmission($userid, 'Manage All Content'));
 		if ($access)
 		{
-			global $gCms;
 			$db = $gCms->GetDb();
 			foreach (array_reverse($nodelist) as $node)
 			{

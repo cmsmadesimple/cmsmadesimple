@@ -46,8 +46,7 @@ class GroupOperations
 	 */
 	function LoadGroups()
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$result = array();
 
@@ -77,8 +76,7 @@ class GroupOperations
 
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups WHERE group_id = ? ORDER BY group_id";
 		$dbresult = $db->Execute($query, array($id));
@@ -105,8 +103,7 @@ class GroupOperations
 	{
 		$result = -1; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ?';
 		$tmp = $db->GetOne($query,array($group->name));
@@ -137,8 +134,7 @@ class GroupOperations
 	{
 		$result = false; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ? AND group_id != ?';
 		$tmp = $db->GetOne($query,array($group->name,$group->id));
@@ -168,8 +164,7 @@ class GroupOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = 'DELETE FROM '.cms_db_prefix().'user_groups where group_id = ?';
 		$dbresult = $db->Execute($query, array($id));

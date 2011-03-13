@@ -37,8 +37,7 @@ if ((isset($_REQUEST['forgotpwform']) || isset($_REQUEST['forgotpwchangeform']))
 }
 else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername']))
 {
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
+	$userops = $gCms->GetUserOperations();
 	$oneuser = $userops->LoadUserByUsername($_REQUEST['forgottenusername']);
 	
 	if ($oneuser != null)
@@ -156,9 +155,8 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	$password = "";
 	if (isset($_POST["password"])) $password = $_POST["password"];
 
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
-	$oneuser =& $userops->LoadUserByUsername($username, $password, true, true);
+	$userops = $gCms->GetUserOperations();
+	$oneuser = $userops->LoadUserByUsername($username, $password, true, true);
 	
 	debug_buffer("Got user by username");
 	debug_buffer($oneuser);

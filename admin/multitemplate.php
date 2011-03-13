@@ -31,12 +31,11 @@ check_login();
 $action = '';
 if (isset($_POST['multiaction'])) $action = $_POST['multiaction'];
 
-global $gCms;
 
 $nodelist = array();
 $badlist = array();
 
-$templateops =& $gCms->GetTemplateOperations();
+$templateops = cmsms()->GetTemplateOperations();
 
 if (isset($_POST['idlist']))
 {

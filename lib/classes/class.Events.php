@@ -40,8 +40,7 @@ class Events
 	 */
 	static public function CreateEvent( $modulename, $eventname )
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db = cmsms()->GetDb();
 		$count = $db->GetOne('SELECT count(*) from '.cms_db_prefix().'events where originator = ? and event_name = ?', array($modulename, $eventname));
 		if ($count < 1)
 		{
@@ -65,8 +64,8 @@ class Events
 	 */
 	static public function RemoveEvent( $modulename, $eventname )
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		// get the id
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
@@ -106,8 +105,8 @@ class Events
 		global $CMS_INSTALL_PAGE;
 		if( isset($CMS_INSTALL_PAGE) ) return;
 
-		global $gCms;
-		$usertagops =& $gCms->GetUserTagOperations();
+		$gCms = cmsms();
+		$usertagops = $gCms->GetUserTagOperations();
 
 		$results = Events::ListEventHandlers($modulename, $eventname);
 		
@@ -153,8 +152,8 @@ class Events
 	 */
 	static public function ListEventHandlers( $modulename, $eventname )
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 		$variables =& $gCms->variables;
 		
 		$params['module'] = $modulename;
@@ -201,8 +200,8 @@ class Events
 	 */
 	static public function ListEvents()
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$q = "SELECT * FROM ".cms_db_prefix()."events ORDER BY originator,event_name";
 		$q = 'SELECT e.*, count(eh.event_id) as usage_count FROM '.cms_db_prefix().
@@ -245,8 +244,8 @@ class Events
 			return false;
 		}
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		// find the id
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
@@ -344,8 +343,8 @@ class Events
 			$field = 'module_handler';
 		}
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		// find the id
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
@@ -390,8 +389,8 @@ class Events
 	 */
 	static public function RemoveAllEventHandlers( $modulename, $eventname )
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		// find the id
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 

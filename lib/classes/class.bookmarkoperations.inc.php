@@ -49,8 +49,7 @@ class BookmarkOperations
    */
   private function _prep_for_saving($url)
   {
-    global $gCms;
-    $config = $gCms->GetConfig();
+	  $config = cmsms()->GetConfig();
     $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
     $map = array('[SECURITYTAG]'=>$urlext,
@@ -71,8 +70,7 @@ class BookmarkOperations
    */
   private function _prep_for_display($url)
   {
-    global $gCms;
-    $config = $gCms->GetConfig();
+	  $config = cmsms()->GetConfig();
     $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
     $map = array('[SECURITYTAG]'=>$urlext,
@@ -93,8 +91,8 @@ class BookmarkOperations
 	 */
 	function LoadBookmarks($user_id)
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 		$config = $gCms->GetConfig();
 
 		$result = array();
@@ -125,8 +123,7 @@ class BookmarkOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = "SELECT bookmark_id, user_id, title, url FROM ".cms_db_prefix()."admin_bookmarks WHERE bookmark_id = ?";
 		$dbresult = $db->Execute($query, array($id));
@@ -154,8 +151,7 @@ class BookmarkOperations
 	{
 		$result = -1; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$bookmark->url = $this->_prep_for_saving($bookmark->url);
 		$new_bookmark_id = $db->GenID(cms_db_prefix()."admin_bookmarks_seq");
@@ -179,8 +175,7 @@ class BookmarkOperations
 	{
 		$result = false; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$bookmark->url = $this->_prep_for_saving($bookmark->url);
 		$query = "UPDATE ".cms_db_prefix()."admin_bookmarks SET user_id = ?, title = ?, url = ? WHERE bookmark_id = ?";
@@ -203,8 +198,7 @@ class BookmarkOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."admin_bookmarks where bookmark_id = ?";
 		$dbresult = $db->Execute($query, array($id));

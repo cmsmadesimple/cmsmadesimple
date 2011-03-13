@@ -24,8 +24,7 @@ require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
-global $gCms;
-$db =& $gCms->GetDb();
+$db = cmsms()->GetDb();
 
 $error = "";
 
@@ -62,8 +61,7 @@ if (isset($_POST["editbookmark"]))
 
 	if ($validinfo)
 		{
-		global $gCms;
-		$gCms->GetBookmarkOperations();
+		  cmsms()->GetBookmarkOperations();
 		$markobj =& new Bookmark();
 		$markobj->bookmark_id = $bookmark_id;
 		$markobj->title = $title;

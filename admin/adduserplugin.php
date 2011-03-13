@@ -47,8 +47,8 @@ if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 $smarty = new Smarty_CMS($gCms->config);
 load_plugins($smarty);
 
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 if ($access) {
 	if (isset($_POST["addplugin"])) {

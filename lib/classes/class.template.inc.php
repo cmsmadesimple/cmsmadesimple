@@ -72,8 +72,8 @@ class Template
 
 	function UsageCount()
 	{
-		global $gCms;
-		$templateops =& $gCms->GetTemplateOperations();
+		$gCms = cmsms();
+		$templateops = $gCms->GetTemplateOperations();
 		if ($this->id > -1)
 			return $templateops->UsageCount($this->id);
 		else
@@ -84,8 +84,8 @@ class Template
 	{
 		$result = false;
 		
-		global $gCms;
-		$templateops =& $gCms->GetTemplateOperations();
+		$gCms = cmsms();
+		$templateops = $gCms->GetTemplateOperations();
 		
 		if ($this->id > -1)
 		{
@@ -111,8 +111,8 @@ class Template
 
 		if ($this->id > -1)
 		{
-			global $gCms;
-			$templateops =& $gCms->GetTemplateOperations();
+			$gCms = cmsms();
+			$templateops = $gCms->GetTemplateOperations();
 			$result = $templateops->DeleteTemplateByID($this->id);
 			if ($result)
 			{

@@ -59,11 +59,11 @@ $user_id = $userid;
 if (isset($_POST["user_id"])) $user_id = cleanValue($_POST["user_id"]);
 else if (isset($_GET["user_id"])) $user_id = cleanValue($_GET["user_id"]);
 
-global $gCms;
-$userops =& $gCms->GetUserOperations();
-$groupops =& $gCms->GetGroupOperations();
+$gCms = cmsms();
+$userops = $gCms->GetUserOperations();
+$groupops = $gCms->GetGroupOperations();
 $group_list = $groupops->LoadGroups();
-$db =& $gCms->GetDb();
+$db = $gCms->GetDb();
 
 
 $thisuser = $userops->LoadUserByID($user_id);

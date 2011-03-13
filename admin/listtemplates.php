@@ -41,8 +41,8 @@ return;
 
 
 include_once("header.php");
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 if (isset($_GET["message"])) {
 	$message = preg_replace('/\</','',$_GET['message']);
@@ -66,8 +66,7 @@ if (isset($_GET["message"])) {
 	$all = check_permission($userid, 'Modify Any Page');
 	$remove	= check_permission($userid, 'Remove Templates');
 	
-	global $gCms;
-	$templateops =& $gCms->GetTemplateOperations();
+	$templateops = $gCms->GetTemplateOperations();
 
 	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
 		if( (isset($_GET["template_id"])) && (is_numeric($_GET["template_id"])) ) {
