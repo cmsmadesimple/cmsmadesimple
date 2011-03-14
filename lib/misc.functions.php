@@ -78,7 +78,7 @@ function redirect($to, $noappend=false)
     $debug = false;
     if( class_exists('CmsObject') )
       {
-	$config = $gCms->GetConfig();
+	$config = cmsms()->GetConfig();
 	$debug = $config['debug'];
       }
 
