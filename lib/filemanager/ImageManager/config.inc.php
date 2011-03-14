@@ -9,8 +9,7 @@
  * File basicly functions as a stub to facilitate future upgrading
  */
 
-global $gCms;
-$config = $gCms->GetConfig();
+$config = cmsms()->GetConfig();
 
 /* 
  File system path to the directory you want to manage the images
