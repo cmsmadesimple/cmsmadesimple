@@ -40,13 +40,14 @@ if (!$access) {
 	die('Permission Denied');
 	return;
 }
-$userops =& $gCms->GetUserOperations();
+
+$gCms = cmsms();
+$userops = $gCms->GetUserOperations();
 $adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
 $group_name = '';
 $message = '';
 
 include_once("header.php");
-$gCms = cmsms();
 $db = $gCms->GetDb();
 $smarty = $gCms->GetSmarty();
 
