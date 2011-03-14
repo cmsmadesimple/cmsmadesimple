@@ -17,7 +17,7 @@ $config = cmsms()->GetConfig();
 
  NOTE: This directory requires write access by PHP. That is, 
        PHP must be able to create files in this directory.
-	   Able to create directories is nice, but not necessary.
+	   Able to create directories is nice, but not necessary. 
 */
 $IMConfig['base_dir'] = $config["image_uploads_path"];
 
