@@ -73,6 +73,7 @@ if (strpos($reldir, '..') === false && strpos($reldir, '\\') === false)
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Files');
 
+$gCms = cmsms();
 $username = $gCms->variables["username"];
 
 #Did we upload a file?
