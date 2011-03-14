@@ -45,13 +45,13 @@ if (!$access) {
 	die('Permission Denied');
 	return;
 }
+$gCms = cmsms();
 $userops = $gCms->GetUserOperations();
 $adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
 $message = '';
 
 include_once("header.php");
 
-$gCms = cmsms();
 $db = $gCms->GetDb();
 
 
