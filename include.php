@@ -24,17 +24,21 @@ define('CMS_DEFAULT_VERSIONCHECK_URL','http://www.cmsmadesimple.org/latest_versi
 define('CMS_SECURE_PARAM_NAME','sp_');
 define('CMS_USER_KEY','cmsuserkey');
 
-#Setup session with different id and start it
 $session_key = substr(md5($dirname), 0, 8);
+if( !isset($CMS_INSTALL_PAGE) )
+  {
+    @session_name('CMSSESSID' . $session_key);
+    @ini_set('url_rewriter.tags', '');
+    @ini_set('session.use_trans_sid', 0);
+  }
+
+#Setup session with different id and start it
 if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_INSTALL_PAGE) )
   {
     // admin pages can't be cached... period, at all.. never.
     @session_cache_limiter('public');
   }
 
-@session_name('CMSSESSID' . $session_key);
-@ini_set('url_rewriter.tags', '');
-@ini_set('session.use_trans_sid', 0);
 if(!@session_id()) session_start();
 
 if( isset($CMS_ADMIN_PAGE) )
@@ -73,7 +77,10 @@ if (version_compare(phpversion(),"5.3.0","<")) {
 require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsObject.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'shutdown.php');
+if( !isset($CMS_INSTALL_PAGE) )
+{
+  require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'shutdown.php');
+}
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'autoloader.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.functions.php');

@@ -186,6 +186,7 @@ class CMSInstallerPage2 extends CMSInstallerPage
 		// assign settings
 		list($this->continueon, $this->special_failed) = testGlobal(array(true, false), true);
 
+		$this->smarty->assign('caution',ilang('caution'));
 		$this->smarty->assign('settings', $settings);
 		$this->smarty->assign('special_failed', $this->special_failed);
 		if(isset($_SESSION['advanceduser']))

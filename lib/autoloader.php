@@ -72,8 +72,17 @@ function cms_autoloader($classname)
   if( in_array(strtolower($classname),array_keys($types)) )
     {
       $contentops->LoadContentType(strtolower($classname));
+      return;
     }
 
+  // modules.
+  $moduleops = cmsms()->GetModuleOperations();
+  if( $moduleops->LoadNewModule($classname) )
+    {
+      return;
+    }
+
+  // module classes
   foreach( cmsms()->modules as $module => &$data )
     {
       if( !isset($data['object']) ) continue;
@@ -91,6 +100,8 @@ function cms_autoloader($classname)
 	  return;
 	}
     }
+
+  die('autoloader '.$classname);
 }
 
 spl_autoload_register('cms_autoloader');

@@ -166,7 +166,7 @@
 		</tr>
 		<tr>
 			<td class="col2">
-				<img src="images/yellow.gif" alt="{$caution}" title="{$caution}" />
+				<img src="images/yellow.gif" alt="{$caution|default:""}" title="{$caution|default:""}" />
 			</td>
 			<td>
 				{lang_install a=install_value_recommended}

@@ -66,7 +66,7 @@ class CMSMailer extends CMSModule
    ---------------------------------------------------------*/
   function GetVersion()
   {
-    return '2.0.1';
+    return '2.0.2';
   }
 
 
@@ -193,6 +193,14 @@ class CMSMailer extends CMSModule
   function InstallPostMessage()
   {
     return $this->Lang('postinstall');
+  }
+
+  /*---------------------------------------------------------
+   LazyLoadFrontend()
+   ---------------------------------------------------------*/
+  function LazyLoadFrontend()
+  {
+    return TRUE;
   }
 
 

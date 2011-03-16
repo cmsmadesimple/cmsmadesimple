@@ -147,41 +147,17 @@ class CMSInstallerPage7 extends CMSInstallerPage
 						#now insert a record
 						if (!isset($result) || $result === FALSE)
 						{
-							$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active, admin_only) VALUES (".$db->qstr($modulename).",".$db->qstr($modinstance->GetVersion()).",'installed',1,".($modinstance->IsAdminOnly()==true?1:0).")";
-							$db->Execute($query);
-							$gCms->modules[$modulename]['installed'] = true;
-							$gCms->modules[$modulename]['active'] = true;
-
-							/*
-							#and insert any dependancies
-							if (count($modinstance->GetDependencies()) > 0) #Check for any deps
-							{
-								#Now check to see if we can satisfy any deps
-								foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
-								{
-									$time = $db->DBTimeStamp(time());
-									$query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
-									$db->Execute($query, array($onedepkey, $module, $onedepvalue));
-								}
-							}
-
-							#and show the installpost if necessary...
-							if ($modinstance->InstallPostMessage() != FALSE)
-							{
-								@ob_start();
-								echo $modinstance->InstallPostMessage();
-								$content = @ob_get_contents();
-								@ob_end_clean();
-								echo '<div class="pagecontainer">';
-								echo '<p class="pageheader">'.ilang('moduleinstallmessage', array($module)).'</p>';
-								echo $content;
-								echo "</div>";
-								echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.ilang('back').'</a></p>';
-								include_once("footer.php");
-								exit;
-
-							}
-							*/
+						  $parms = array($modulename,$modinstance->GetVersion(),'installed',1,
+								 ($modinstance->IsAdminOnly())?1:0,
+								 ($modinstance->LazyLoadFrontend())?1:0,
+								 ($modinstance->LazyLoadAdmin())?1:0);
+						  $query = "INSERT INTO ".cms_db_prefix().'modules 
+                                                            (module_name,version,status,active,admin_only,allow_fe_lazyload,allow_admin_lazyload) 
+                                                            VALUES (?,?,?,?,?,?,?)';
+						  $db->Execute($query,$parms);
+						  $db->Execute($query);
+						  $gCms->modules[$modulename]['installed'] = true;
+						  $gCms->modules[$modulename]['active'] = true;
 						}
 					}
 				}

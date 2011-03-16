@@ -83,6 +83,7 @@ class cms_config implements ArrayAccess
     $this->_types['set_names'] = self::TYPE_BOOL;
     $this->_types['wiki_url'] = self::TYPE_BOOL;
     $this->_types['admin_url'] = self::TYPE_STRING;
+    $this->_types['ignore_lazy_load'] = self::TYPE_BOOL;
 
     $config = array();
     if (file_exists(CONFIG_FILE_LOCATION))
@@ -271,6 +272,9 @@ class cms_config implements ArrayAccess
 
       case 'admin_url':
 	return $this->offsetGet('root_url').'/'.$this->offsetGet('admin_dir');
+
+      case 'ignore_lazy_load':
+	return false;
 
       default:
 	// not a mandatory key for the config.php file... and one we don't understand.

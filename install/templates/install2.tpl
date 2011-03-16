@@ -166,7 +166,7 @@
 		</tr>
 		<tr>
 			<td class="col2">
-				<img src="images/yellow.gif" alt="{$caution}" title="{$caution}" />
+				<img src="images/yellow.gif" {if isset($caution)}alt="{$caution}" title="{$caution}"{/if}/>
 			</td>
 			<td>
 				{lang_install a=install_value_recommended}

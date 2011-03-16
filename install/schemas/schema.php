@@ -422,7 +422,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		status C(255),
 		version C(255),
 		admin_only I1 DEFAULT 0,
-		active I1
+		active I1,
+                allow_fe_lazyload I1,
+                allow_admin_lazyload I1
 	";
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."modules", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);

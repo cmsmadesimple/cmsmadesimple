@@ -453,65 +453,69 @@ class ModuleOperations
    */
   function InstallModule($module, $loadifnecessary = false)
   {
-	  $gCms = cmsms();
-    if( !isset( $gCms->modules[$module] ) )
-      {
+	  $modinstance = cge_utils::get_module($module);
+	  if( !$modinstance )
+	  {
 		  if( $loadifnecessary == false )
-			  {
-				  return array(false,lang('errormodulenotloaded'));
-			  }
+		  {
+			  return array(false,lang('errormodulenotloaded'));
+		  }
 		  else
+		  {
+			  if( !$this->LoadNewModule( $module ) )
 			  {
-				  if( !$this->LoadNewModule( $module ) )
-					  {
-						  return array(false,lang('errormodulewontload'));
-					  }
+				  return array(false,lang('errormodulewontload'));
 			  }
+		  }
       }
  
-    $db = $gCms->GetDb();
-    if (isset($gCms->modules[$module]))
-      {
-	$modinstance =& $gCms->modules[$module]['object'];
-	$result = $modinstance->Install();
-	
-        #now insert a record
-	if (!isset($result) || $result === FALSE)
+	  $modinstance = cge_utils::get_module($module);
+	  if (!isset($gCms->modules[$module]))
 	  {
-	    $query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, admin_only, active) VALUES (?,?,'installed',?,?)";
-	    $db->Execute($query, array($module,$modinstance->GetVersion(),($modinstance->IsAdminOnly()==true?1:0),1));
-	    
-            #and insert any dependancies
-	    if (count($modinstance->GetDependencies()) > 0) #Check for any deps
-	      {
-                #Now check to see if we can satisfy any deps
-		foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
+		  return array(false,lang('errormodulenotfound'));
+	  }
+
+	  $gCms = cmsms();
+	  $db = $gCms->GetDb();
+	  $result = $modinstance->Install();
+		  
+	  if (!isset($result) || $result === FALSE)
+	  {
+		  // now insert a record
+		  $lazyload_fe = (method_exists($modinstance,'LazyLoadFrontend') && $modinstance->LazyLoadFrontend())?1:0;
+		  $lazyload_admin = (method_exists($modinstance,'LazyLoadAdmin') && $modinstance->LazyLoadAdmin())?1:0;
+		  $query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, admin_only, active,allow_fe_lazyload,allow_admin_lazyload) VALUES (?,?,'installed',?,?)";
+		  $db->Execute($query, array($module,$modinstance->GetVersion(),
+									 ($modinstance->IsAdminOnly()==true?1:0)
+									 ,1,$lazyload_fe,$lazyload_admin));
+		  
+// 		  // and insert any dependancies
+// 		  if (count($modinstance->GetDependencies()) > 0) #Check for any deps
+// 		  {
+// 			  // Now check to see if we can satisfy any deps
+// 			  foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
+// 			  {
+// 				  // what the f*&* is this??  if anything we should be installing the dependencies first.
+// 				  $time = $db->DBTimeStamp(time());
+// 				  $query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
+// 				  $db->Execute($query, array($onedepkey, $module, $onedepvalue));
+// 			  }
+// 		  }
+				  
+		  // send an event saying the module has been installed
+		  Events::SendEvent('Core', 'ModuleInstalled', array('name' => &$module, 'version' => $modinstance->GetVersion()));
+		  
+		  // and we're done
+		  return array(true);
+	  }
+	  else
+	  {
+		  if( trim($result) == "" )
 		  {
-		    $time = $db->DBTimeStamp(time());
-		    $query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
-		    $db->Execute($query, array($onedepkey, $module, $onedepvalue));
+			  $result = lang('errorinstallfailed');
 		  }
-	      }
-	    
-            #send an event saying the module has been installed
-	    Events::SendEvent('Core', 'ModuleInstalled', array('name' => &$module, 'version' => $modinstance->GetVersion()));
-	    
-	    // and we're done
-	    return array(true);
+		  return array(false,$result);
 	  }
-	else
-	  {
-	    if( trim($result) == "" )
-	      {
-		$result = lang('errorinstallfailed');
-	      }
-	    return array(false,$result);
-	  }
-      }    
-    else
-      {
-	return array(false,lang('errormodulenotfound'));
-      }
   }
 
 
@@ -521,33 +525,34 @@ class ModuleOperations
    * @param string $modulename The name of the module to load
    * @return boolean Whether or not the module load was successful
    */
-  private function LoadNewModule( $modulename )
+  public function LoadNewModule( $modulename )
   {
-	  $gCms = cmsms();
+	$gCms = cmsms();
     $db = $gCms->GetDb();
     $cmsmodules = &$gCms->modules;
-    
+	if( isset($cmsmodules[$modulename]) ) return;
+
     $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
 
     if (@is_file("$dir/$modulename/$modulename.module.php"))
       {
-	// question: is this a potential XSS vulnerability
-	include("$dir/$modulename/$modulename.module.php");
-	if( !class_exists( $modulename ) )
-	  {
-	    return false;
-	  }
-
-	$newmodule = new $modulename;
-	$name = $newmodule->GetName();
-	$cmsmodules[$name]['object'] =& $newmodule;
-	$cmsmodules[$name]['installed'] = false;
-	$cmsmodules[$name]['active'] = false;
+		  // question: is this a potential XSS vulnerability
+		  include("$dir/$modulename/$modulename.module.php");
+		  if( !class_exists( $modulename ) )
+			  {
+				  return false;
+			  }
+		  
+		  $newmodule = new $modulename;
+		  $name = $newmodule->GetName();
+		  $cmsmodules[$name]['object'] =& $newmodule;
+		  $cmsmodules[$name]['installed'] = false;
+		  $cmsmodules[$name]['active'] = false;
       }
     else
       {
-	unset($cmsmodules[$modulename]);
-	return false;
+		  unset($cmsmodules[$modulename]);
+		  return false;
       }
     return true;
   }

@@ -37,10 +37,6 @@
  */
 function cms_module_plugin($params,&$smarty)
 {
-	$gCms = cmsms();
-	$cmsmodules = $gCms->modules;
-
-	//$id = 'm' . ++$gCms->variables["modulenum"];
 	$mid_cache = cms_utils::get_app_data('mid_cache');
 	if( empty($mid_cache) )
 	  {
@@ -118,51 +114,30 @@ function cms_module_plugin($params,&$smarty)
 
 	if( $action == '' ) $action = 'default'; // probably not needed, but safe
 
-	if (isset($cmsmodules))
+	class_exists($modulename);
+	$module = cms_utils::get_module($modulename);
+	if( $module && $module->isPluginModule() )
 	{
-		$modulename = $params['module'];
-
-		foreach ($cmsmodules as $key=>$value)
-		{
-		  if (!strcasecmp($modulename,$key))
-		    {
-		      $modulename = $key;
-		    }
-		}
-
-		if (isset($modulename))
-		{
-			if (isset($cmsmodules[$modulename]))
-			{
-				if (isset($cmsmodules[$modulename]['object'])
-					&& $cmsmodules[$modulename]['installed'] == true
-					&& $cmsmodules[$modulename]['active'] == true
-					&& $cmsmodules[$modulename]['object']->IsPluginModule())
-				{
-					@ob_start();
-
-					$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
-					if ($result !== FALSE)
-					{
-						echo $result;
-					}
-					$modresult = @ob_get_contents();
-					@ob_end_clean();
-
-					if( isset($params['assign']) )
-					  {
-					    $smarty->assign(trim($params['assign']),$modresult);
-					    return;
-					  }
-					return $modresult;
-
-				}
-				else
-				{
-					return "<!-- Not a tag module -->\n";
-				}
-			}
-		}
+	  @ob_start();
+	  $result = $module->DoActionBase($action, $id, $params, $returnid);
+	  if ($result !== FALSE)
+	    {
+	      echo $result;
+	    }
+	  $modresult = @ob_get_contents();
+	  @ob_end_clean();
+	  
+	  if( isset($params['assign']) )
+	    {
+	      $smarty->assign(trim($params['assign']),$modresult);
+	      return;
+	    }
+	  return $modresult;
+	  
+	}
+	else
+	{
+	  return "<!-- Not a tag module -->\n";
 	}
 }
 

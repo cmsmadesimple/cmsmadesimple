@@ -50,7 +50,6 @@ if(! extension_loaded_or('session') )
 @session_start();
 
 
-
 /* UNDOCUMENTED features... if this values are set in the session */
 /* Set DEBUG */
 $debug = false;

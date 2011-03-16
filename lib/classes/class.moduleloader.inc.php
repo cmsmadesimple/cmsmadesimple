@@ -51,7 +51,7 @@ class ModuleLoader
 	function LoadModules($loadall = false, $noadmin = false)
 	{
 		$gCms = cmsms();
-		$db =& $gCms->GetDb();
+		$db = $gCms->GetDb();
 		$cmsmodules = &$gCms->modules;
 
 		$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
@@ -98,6 +98,8 @@ class ModuleLoader
 		#Load them if loadall is false
 		if (isset($db))
 		{
+			$config = cmsms()->GetConfig();
+			global $CMS_ADMIN_PAGE;
 			$query = '';
 			$where = array();
 			if ($noadmin)
@@ -108,12 +110,16 @@ class ModuleLoader
 			  {
 			    $where[] = 'active = 1';
 			  }
+			if( !isset($CMS_ADMIN_PAGE) && !$config['ignore_lazy_load'] )
+			{
+				$where[] = 'allow_fe_lazyload = 0';
+			}
 			$query = 'SELECT * FROM '.cms_db_prefix().'modules ';
 			if( count($where) )
 			  {
 			    $query.= 'WHERE '.implode(' AND ',$where);
 			  }
-                        $query .= ' ORDER by module_name';
+			$query .= ' ORDER by module_name';
 
 			$result = &$db->Execute($query);
 			while ($result && !$result->EOF)
