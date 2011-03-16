@@ -527,6 +527,7 @@ class ModuleOperations
    */
   public function LoadNewModule( $modulename )
   {
+	  debug_buffer('LoadNewModule '.$modulename);
 	$gCms = cmsms();
     $db = $gCms->GetDb();
     $cmsmodules = &$gCms->modules;
