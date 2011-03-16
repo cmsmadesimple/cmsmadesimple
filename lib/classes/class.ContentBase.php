@@ -44,25 +44,25 @@ class ContentBase
      * The unique ID identifier of the element
      * Integer
      */
-    var $mId;
+  var $mId = -1;
 
     /**
      * The name of the element (like a filename)
      * String
      */
-     var $mName;
+  var $mName = '';
 
     /**
      * The type of content (page, url, etc..)
      * String
      */
-    var $mType;
+  var $mType = '';
 
     /**
      * The owner of the content
      * Integer
      */
-    var $mOwner;
+  var $mOwner = -1;
 
     /**
      * The properties part of the content. This is an object of the good type.
@@ -70,72 +70,72 @@ class ContentBase
      */
      var $mProperties;
      
-     var $mPropertiesLoaded;
+     var $mPropertiesLoaded = false;
 
     /**
      * The ID of the parent, 0 if none
      * Integer
      */
-    var $mParentId;
+     var $mParentId = -2;
 
     /**
      * The old parent id... only used on update
      */
-    var $mOldParentId;
+     var $mOldParentId = -1;
 
     /**
      * This is used too often to not be part of the base class
      */
-    var $mTemplateId;
+     var $mTemplateId = -1;
 
     /**
      * The item order of the content in his level
      * Integer
      */
-    var $mItemOrder;
+     var $mItemOrder = -1;
 
     /**
      * The old item order... only used on update
      */
-    var $mOldItemOrder;
+     var $mOldItemOrder = -1;
 
     /**
      * The metadata (head tags) fir this content
      */
-    var $mMetadata;
+     var $mMetadata = '';
 
-    var $mTitleAttribute;
-    var $mAccessKey;
-    var $mTabIndex;
+     var $mTitleAttribute = '';
+     var $mAccessKey = '';
+     var $mTabIndex = '';
 
     /**
      * The full hierarchy of the content
      * String of the form : 1.4.3
      */
-    var $mHierarchy;
+    var $mHierarchy = '';
 
     /**
      * The full hierarchy of the content ids
      * String of the form : 1.4.3
      */
-    var $mIdHierarchy;
+    var $mIdHierarchy = '';
 
     /**
      * The full path through the hierarchy
      * String of the form : parent/parent/child
      */
-    var $mHierarchyPath;
+    var $mHierarchyPath = '';
 
     /**
      * What should be displayed in a menu
      */
-    var $mMenuText;
+    var $mMenuText = '';
 
     /**
      * Is the content active ?
      * Integer : 0 / 1
      */
-    var $mActive;
+    var $mActive = false;
 
     /**
      * Alias of the content
@@ -152,49 +152,49 @@ class ContentBase
     /**
      * Secure?
      */
-    protected $mSecure;
+    protected $mSecure = 0;
 
     /**
      * URL
      */
-    protected $mURL;
+    protected $mURL = '';
 
     /**
      * Does this content have a preview function?
      */
-    var $mPreview;
+    var $mPreview = '';
 
     /**
      * Should it show up in the menu?
      */
-    var $mShowInMenu;
+    var $mShowInMenu = false;
 
     /**
      * Is this page the default?
      */
-    var $mDefaultContent;
+    var $mDefaultContent = false;
 	
     /**
      * What type of markup is ths?  HTML is the default
      */
-    var $mMarkup;
+    var $mMarkup = 'html';
 
     /**
      * Last user to modify this content
      */
-    var $mLastModifiedBy;
+    var $mLastModifiedBy = -1;
 
     /**
      * Creation date
      * Date
      */
-    var $mCreationDate;
+    var $mCreationDate = '';
 
     /**
      * Modification date
      * Date
      */
-    var $mModifiedDate;
+    var $mModifiedDate = '';
     
     var $mAdditionalEditors;
 	
@@ -214,7 +214,7 @@ class ContentBase
     /**
      * Generic constructor. Runs the SetInitialValues fuction.
      */
-    function ContentBase()
+    public function __construct()
     {
 	$this->SetInitialValues();
 	$this->SetProperties();
@@ -227,46 +227,15 @@ class ContentBase
      */
     function SetInitialValues()
     {
-	$this->mId             = -1 ;
-	$this->mName           = "" ;
-	$this->mAlias          = "" ;
-	$this->mOldAlias       = "" ;
-	$this->mType           = strtolower(get_class($this)) ;
-	$this->mOwner          = -1 ;
+ 	$this->mType           = strtolower(get_class($this)) ;
 	$this->mProperties     = new ContentProperties();
-	$this->mParentId       = -2 ;
-	$this->mOldParentId    = -1 ;
-	$this->mTemplateId     = -1 ;
-	$this->mItemOrder      = -1 ;
-	$this->mOldItemOrder   = -1 ;
-	$this->mLastModifiedBy = -1 ;
-	$this->mHierarchy      = "" ;
-	$this->mIdHierarchy    = "" ;
-	$this->mHierarchyPath  = "" ;
-	$this->mMetadata       = "" ;
-	$this->mTitleAttribute = "" ;
-	$this->mAccessKey      = "" ;
-	$this->mTabIndex       = "" ;
-	$this->mActive         = false ;
-	$this->mDefaultContent = false ;
-	$this->mShowInMenu     = false ;
-	$this->mCachable       = true;
-	$this->mSecure         = 0;
-	$this->mMenuText       = "" ;
-	$this->mCreationDate   = "" ;
-	$this->mModifiedDate   = "" ;
-	$this->mPreview        = false ;
-	$this->mMarkup         = 'html' ;
-	$this->mChildCount     = 0;
-	$this->mPropertiesLoaded = false;
-        $this->mURL = '';
     }
 
     /**
      * Subclasses should override this to set their property types using a lot
      * of mProperties.Add statements
      */
-    function SetProperties()
+    protected function SetProperties()
     {
       $this->AddContentProperty('target',10);
       $this->AddBaseProperty('title',1,1);
@@ -299,12 +268,12 @@ class ContentBase
     /**
      * Returns the ID
      */
-    function Id()
+    public function Id()
     {
 	return $this->mId;
     }
 
-    function SetId($id)
+    public function SetId($id)
     {
 	$this->mId = $id;
 	$this->DoReadyForEdit();
@@ -313,7 +282,7 @@ class ContentBase
     /**
      * Returns a friendly name for this content type
      */
-    function FriendlyName()
+    public function FriendlyName()
     {
 	return '';
     }
@@ -321,12 +290,12 @@ class ContentBase
     /**
      * Returns the Name
      */
-    function Name()
+    public function Name()
     {
 	return $this->mName;
     }
 
-    function SetName($name)
+    public function SetName($name)
     {
 	$this->DoReadyForEdit();
 	$this->mName = $name;
@@ -335,7 +304,7 @@ class ContentBase
     /**
      * Returns the Alias
      */
-    function Alias()
+    public function Alias()
     {
 	return $this->mAlias;
     }
@@ -343,12 +312,12 @@ class ContentBase
     /**
      * Returns the Type
      */
-    function Type()
+    public function Type()
     {
 	return strtolower($this->mType);
     }
 
-    function SetType($type)
+    public function SetType($type)
     {
 	$this->DoReadyForEdit();
 	$this->mType = strtolower($type);
@@ -357,12 +326,12 @@ class ContentBase
     /**
      * Returns the Owner
      */
-    function Owner()
+    public function Owner()
     {
 	return $this->mOwner;
     }
 
-    function SetOwner($owner)
+    public function SetOwner($owner)
     {
 	$this->DoReadyForEdit();
 	$this->mOwner = $owner;
@@ -371,7 +340,7 @@ class ContentBase
     /**
      * Returns the Metadata
      */
-    function Metadata()
+    public function Metadata()
     {
 	return $this->mMetadata;
     }
@@ -379,29 +348,29 @@ class ContentBase
     /**
      * Content object handles the alias
      */
-    function HandlesAlias()
+    public function HandlesAlias()
     {
       return false;
     }
 
-    function SetMetadata($metadata)
+    public function SetMetadata($metadata)
     {
 	$this->DoReadyForEdit();
 	$this->mMetadata = $metadata;
     }
 
-    function TabIndex()
+    public function TabIndex()
     {
 	return $this->mTabIndex;
     }
 
-    function SetTabIndex($tabindex)
+    public function SetTabIndex($tabindex)
     {
 	$this->DoReadyForEdit();
 	$this->mTabIndex = $tabindex;
     }
 
-    function TitleAttribute()
+    public function TitleAttribute()
     {
 	return $this->mTitleAttribute;
     }
@@ -412,7 +381,7 @@ class ContentBase
      *
      * @return int Unix Timestamp of the creation date
      */
-    function GetCreationDate()
+    public function GetCreationDate()
     {
       return strtotime($this->mCreationDate);
     }
@@ -423,23 +392,23 @@ class ContentBase
      *
      * @return int Unix Timestamp of the modification date.
      */
-    function GetModifiedDate()
+    public function GetModifiedDate()
     {
       return strtotime($this->mModifiedDate);
     }
 
-    function SetTitleAttribute($titleattribute)
+    public function SetTitleAttribute($titleattribute)
     {
 	$this->DoReadyForEdit();
 	$this->mTitleAttribute = $titleattribute;
     }
 
-    function AccessKey()
+    public function AccessKey()
     {
 	return $this->mAccessKey;
     }
 
-    function SetAccessKey($accesskey)
+    public function SetAccessKey($accesskey)
     {
 	$this->DoReadyForEdit();
 	$this->mAccessKey = $accesskey;
@@ -448,34 +417,34 @@ class ContentBase
     /**
      * Returns the ParentId
      */
-    function ParentId()
+    public function ParentId()
     {
 	return $this->mParentId;
     }
 
-    function SetParentId($parentid)
+    public function SetParentId($parentid)
     {
 	$this->DoReadyForEdit();
 	$this->mParentId = $parentid;
     }
 
-    function OldParentId()
+    public function OldParentId()
     {
 	return $this->mOldParentId;
     }
 
-    function SetOldParentId($parentid)
+    public function SetOldParentId($parentid)
     {
 	$this->DoReadyForEdit();
 	$this->mOldParentId = $parentid;
     }
 
-    function TemplateId()
+    public function TemplateId()
     {
 	return $this->mTemplateId;
     }
 
-    function SetTemplateId($templateid)
+    public function SetTemplateId($templateid)
     {
 	$this->DoReadyForEdit();
 	$this->mTemplateId = $templateid;
@@ -484,23 +453,23 @@ class ContentBase
     /**
      * Returns the ItemOrder
      */
-    function ItemOrder()
+    public function ItemOrder()
     {
 	return $this->mItemOrder;
     }
 
-    function SetItemOrder($itemorder)
+    public function SetItemOrder($itemorder)
     {
 	$this->DoReadyForEdit();
 	$this->mItemOrder = $itemorder;
     }
 
-    function OldItemOrder()
+    public function OldItemOrder()
     {
 	return $this->mOldItemOrder;
     }
 
-    function SetOldItemOrder($itemorder)
+    public function SetOldItemOrder($itemorder)
     {
 	$this->DoReadyForEdit();
 	$this->mOldItemOrder = $itemorder;
@@ -509,14 +478,14 @@ class ContentBase
     /**
      * Returns the Hierarchy
      */
-    function Hierarchy()
+    public function Hierarchy()
     {
       $gCms = cmsms();
 		$contentops = $gCms->GetContentOperations();
 		return $contentops->CreateFriendlyHierarchyPosition($this->mHierarchy);
     }
 
-    function SetHierarchy($hierarchy)
+    public function SetHierarchy($hierarchy)
     {
 	$this->DoReadyForEdit();
 	$this->mHierarchy = $hierarchy;
@@ -525,13 +494,13 @@ class ContentBase
     /**
      * Returns the Hierarchy
      */
-    function IdHierarchy()
+    public function IdHierarchy()
     {
 	return $this->mIdHierarchy;
     }
 
 
-    function SetIdHierarchy($idhierarchy)
+    public function SetIdHierarchy($idhierarchy)
     {
 	$this->DoReadyForEdit();
 	$this->mIdHierarchy = $idhierarchy;
@@ -541,13 +510,13 @@ class ContentBase
     /**
      * Returns the Hierarchy
      */
-    function HierarchyPath()
+    public function HierarchyPath()
     {
 	return $this->mHierarchyPath;
     }
 
 
-    function SetHierarchyPath($hierarchypath)
+    public function SetHierarchyPath($hierarchypath)
     {
 	$this->DoReadyForEdit();
 	$this->mHierarchyPath = $hierarchypath;
@@ -557,13 +526,13 @@ class ContentBase
     /**
      * Returns the Active state
      */
-    function Active()
+    public function Active()
     {
 	return $this->mActive;
     }
 
 
-    function SetActive($active)
+    public function SetActive($active)
     {
 	$this->DoReadyForEdit();
 	$this->mActive = $active;
@@ -573,13 +542,13 @@ class ContentBase
     /**
      * Returns whether it should show in the menu
      */
-    function ShowInMenu()
+    public function ShowInMenu()
     {
 	return $this->mShowInMenu;
     }
 
 
-    function SetShowInMenu($showinmenu)
+    public function SetShowInMenu($showinmenu)
     {
         $this->DoReadyForEdit();
 	$this->mShowInMenu = $showinmenu;
@@ -589,38 +558,38 @@ class ContentBase
     /**
      * Returns if the page is the default
      */
-    function DefaultContent()
+    public function DefaultContent()
     {
 	return $this->mDefaultContent;
     }
 
 
-    function SetDefaultContent($defaultcontent)
+    public function SetDefaultContent($defaultcontent)
     {
 	$this->DoReadyForEdit();
 	$this->mDefaultContent = $defaultcontent;
     }
 
 
-    function Cachable()
+    public function Cachable()
     {
 	return $this->mCachable;
     }
 
 
-    function SetCachable($cachable)
+    public function SetCachable($cachable)
     {
 	$this->DoReadyForEdit();
 	$this->mCachable = $cachable;
     }
 
 
-    function Secure()
+    public function Secure()
     {
       return $this->mSecure;
     }
 
-    function SetSecure($secure)
+    public function SetSecure($secure)
     {
 	$this->DoReadyForEdit();
 	$this->mSecure = $secure;
@@ -637,39 +606,39 @@ class ContentBase
       $this->mURL = $url;
     }
 
-	function Markup()
+    public function Markup()
+    {
+      return $this->mMarkup;
+    }
+
+	public function SetMarkup($markup)
 	{
-		return $this->mMarkup;
+	  $this->DoReadyForEdit();
+	  $this->mMarkup = $markup;
 	}
 
-	function SetMarkup($markup)
+	public function LastModifiedBy()
 	{
-		$this->DoReadyForEdit();
-		$this->mMarkup = $markup;
+	  return $this->mLastModifiedBy;
 	}
 
-	function LastModifiedBy()
+	public function SetLastModifiedBy($lastmodifiedby)
 	{
-		return $this->mLastModifiedBy;
+	  $this->DoReadyForEdit();
+	  $this->mLastModifiedBy = $lastmodifiedby;
 	}
 
-	function SetLastModifiedBy($lastmodifiedby)
-	{
-		$this->DoReadyForEdit();
-		$this->mLastModifiedBy = $lastmodifiedby;
-	}
-
-	function RequiresAlias()
-	{
-	  return TRUE;
-	}
-
-	function IsViewable()
+	public function RequiresAlias()
 	{
 	  return TRUE;
 	}
 
-	function SetAlias($alias, $doAutoAliasIfEnabled = true)
+	public function IsViewable()
+	{
+	  return TRUE;
+	}
+
+	public function SetAlias($alias, $doAutoAliasIfEnabled = true)
 	{
 		$this->DoReadyForEdit();
 		$gCms = cmsms();
@@ -687,13 +656,8 @@ class ContentBase
 			
 			$tolower = true;
 			$alias = munge_string_to_url($alias, $tolower);
-// 			if( empty($alias) )
-// 			  {
-// 			    // calguy: quick hack so that the alias is never empty...
-// 			    $alias = 'alias';
-// 			  }
 			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
-			$contentops =& $gCms->GetContentOperations();
+			$contentops = $gCms->GetContentOperations();
 			$error = $contentops->CheckAliasError($alias);
 			if ($error !== FALSE)
 			{
@@ -721,12 +685,12 @@ class ContentBase
     /**
      * Returns the menu text for this content
      */
-	function MenuText()
+	public function MenuText()
 	{
 		return $this->mMenuText;
 	}
 
-	function SetMenuText($menutext)
+	public function SetMenuText($menutext)
 	{
 		$this->DoReadyForEdit();
 		$this->mMenuText = $menutext;
@@ -735,7 +699,7 @@ class ContentBase
     /**
      * Returns number of immediate child-content items of this content
      */
-	function ChildCount()
+	public function ChildCount()
 	{
 	  $hm = cmsms()->GetHierarchyManager();
 	  $node = $hm->getNodeById($this->mId);
@@ -748,7 +712,7 @@ class ContentBase
     /**
      * Returns the properties
      */
-	function Properties()
+	public function Properties()
 	{
 		debug_buffer('properties called');
 		if ($this->mPropertiesLoaded == false)
@@ -759,12 +723,12 @@ class ContentBase
 		return $this->mProperties;
 	}
 
-	function HasProperty($name)
+	public function HasProperty($name)
 	{
 		return $this->mProperties->HasProperty($name);
 	}
 
-	function GetPropertyValue($name)
+	public function GetPropertyValue($name)
 	{
 		if ($this->mProperties->HasProperty($name))
 		{
@@ -778,7 +742,7 @@ class ContentBase
 		return '';
 	}
     
-	function SetPropertyValue($name, $value)
+	public function SetPropertyValue($name, $value)
 	{
 		debug_buffer('setpropertyvalue called');
 		$this->DoReadyForEdit();
@@ -798,7 +762,7 @@ class ContentBase
      * 
      * @since 0.11
      */
-    function WantsChildren()
+    public function WantsChildren()
     {
 	return true;
     }
@@ -807,7 +771,7 @@ class ContentBase
      * Should this link be used in various places where a link is the only
      * useful output?  (Like next/previous links in cms_selflink, for example)
      */
-    function HasUsableLink()
+    public function HasUsableLink()
     {
 	return true;
     }
@@ -815,12 +779,12 @@ class ContentBase
     /**
      * Is this content type copyable ?
      */
-    function IsCopyable()
+    public function IsCopyable()
     {
       return FALSE;
     }
 
-	function IsSystemPage()
+	public function IsSystemPage()
 	{
 		return FALSE;
 	}
@@ -833,11 +797,11 @@ class ContentBase
      * This is a callback function to handle any things that might need to be done before content is
      * edited.
      */
-    function ReadyForEdit()
+    public function ReadyForEdit()
     {
     }
 
-	function DoReadyForEdit()
+    public function DoReadyForEdit()
 	{
 		if ($this->mReadyForEdit == false)
 		{
@@ -855,7 +819,7 @@ class ContentBase
      * @returns bool		If it fails, the object comes back to initial values and returns FALSE
      *				If everything goes well, it returns TRUE
      */
-	function LoadFromId($id, $loadProperties = false)
+	public function LoadFromId($id, $loadProperties = false)
 	{
 	  $gCms = cmsms();
 	  global $sql_queries, $debug_errors;
@@ -969,10 +933,6 @@ class ContentBase
      */
 	function LoadFromData(&$data, $loadProperties = false)
 	{
-	  global $debug_errors;
-	  $gCms = cmsms();
-	  $config = $gCms->GetConfig();
-
 		$result = true;
 
 		$this->mId                         = $data["content_id"];
@@ -1023,6 +983,9 @@ class ContentBase
 			{
 				$result = false;
 
+				global $debug_errors;
+				$gCms = cmsms();
+				$config = $gCms->GetConfig();
 				# debug mode
 				if (true == $config["debug"])
 				{
@@ -1105,7 +1068,7 @@ class ContentBase
      * on the disk, it only knows its own content. It's the same here.
      */
     # :TODO: This function should return something
-	function Update()
+	protected function Update()
 	{
 	  $gCms = cmsms();
 		global $sql_queries, $debug_errors;
@@ -1215,7 +1178,7 @@ class ContentBase
     # :TODO: This function should return something
     # :TODO: Take care bout hierarchy here, it has no value !
     # :TODO: Figure out proper item_order
-	function Insert()
+	protected function Insert()
 	{
 	  $gCms = cmsms();
 	  global $sql_queries, $debug_errors;
@@ -1681,7 +1644,7 @@ class ContentBase
     /**
      * Function for content types to override to set their proper generated URL
      */
-	function GetURL($rewrite = true)
+    public function GetURL($rewrite = true)
 	{
 	  $gCms = cmsms();
 		$config = $gCms->GetConfig();
@@ -1748,14 +1711,14 @@ class ContentBase
     /**
      * Show the content
      */
-    function Show($param = '')
+    public function Show($param = '')
     {
     }
 	
     /**
      * Handle Auto Aliasing 
      */
-    function DoAutoAlias()
+    protected function DoAutoAlias()
     {
       return $this->_add_mode;
     }
@@ -1772,12 +1735,12 @@ class ContentBase
      * Returns the tab names used in the add and edit content page.  If it's an empty array, then
      * the tabs won't show at all.
      */
-    function TabNames()
+    public function TabNames()
     {
         return array();
     }
 
-    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    public function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
 	# :TODO:
 	return array(array('Error','Edit Not Defined!'));
@@ -1802,7 +1765,7 @@ class ContentBase
     /**
      * Show Help
      */
-    function Help()
+    public function Help()
     {
     	# :TODO:
     	return "<tr><td>Help Not Defined</td></tr>";
@@ -1811,7 +1774,7 @@ class ContentBase
     /**
      * Does this have children?
      */
-	function HasChildren($activeonly = false)
+	public function HasChildren($activeonly = false)
 	{
 	  $hm = cmsms()->GetHierarchyManager();
 	  $node = $hm->getNodeById($this->mId);
@@ -1832,7 +1795,7 @@ class ContentBase
 	}
 
 
-	function GetAdditionalEditors()
+	public function GetAdditionalEditors()
 	{
 		if (!isset($this->mAdditionalEditors))
 		{
@@ -1855,12 +1818,12 @@ class ContentBase
 		return $this->mAdditionalEditors;
 	}
 
-	function SetAdditionalEditors($editorarray)
+	public function SetAdditionalEditors($editorarray)
 	{
 		$this->mAdditionalEditors = $editorarray;
 	}
 
-	function ShowAdditionalEditors($addteditors = '')
+	public function ShowAdditionalEditors($addteditors = '')
 	{
 		$ret = array();
 
@@ -1908,18 +1871,18 @@ class ContentBase
 		return $ret;
 	}
 
-	function IsDefaultPossible()
+	public function IsDefaultPossible()
 	{
 		return FALSE;
 	}
 
-	function SetAddMode($flag = true)
+	public function SetAddMode($flag = true)
 	{
 	  $this->_add_mode = $flag;
 	}
 
 	/* private */
-	function _handleRemovedBaseProperty($name,$member)
+	private function _handleRemovedBaseProperty($name,$member)
 	{
 		if( !is_array($this->_attributes) ) return FALSE;
 		if( !in_array($name,$this->_attributes) )
@@ -1934,7 +1897,7 @@ class ContentBase
 	}
 
 	/* private */
-	function RemoveProperty($name,$dflt)
+	protected function RemoveProperty($name,$dflt)
 	{
 	  if( !is_array($this->_attributes) ) return;
 	  $tmp = array();
@@ -1954,7 +1917,7 @@ class ContentBase
 	/*
 	 * Add a property that is directly associtated with a field in the content table.
 	 */
-	function AddBaseProperty($name,$priority,$is_required = 0,$type = 'string')
+	protected function AddBaseProperty($name,$priority,$is_required = 0,$type = 'string')
 	{
 	  if( !is_array($this->_attributes) )
 	    {
@@ -1969,7 +1932,7 @@ class ContentBase
 	 * Add a property to the content_props table for this content item
 	 * This property will not be effected by the basic_attributes list.
 	 */
-	function AddExtraProperty($name,$type='string')
+	protected function AddExtraProperty($name,$type='string')
 	{
 	  $this->mProperties->add($type,$name);
 	}
@@ -1978,7 +1941,7 @@ class ContentBase
 	/*
 	 * Add a property to the content_props table for this content item
 	 */
-	function AddContentProperty($name,$priority,$is_required = 0,$type = 'string')
+	protected function AddContentProperty($name,$priority,$is_required = 0,$type = 'string')
 	{
 	  if( !is_array($this->_attributes) )
 	    {
@@ -1993,7 +1956,7 @@ class ContentBase
 	/*
 	 * Given a string, see if it's a known property name.
 	 */
-	function is_known_property($str)
+	protected function is_known_property($str)
 	{
 	  $tmp = array();
 	  foreach( $this->_attributes as $one )
@@ -2001,18 +1964,16 @@ class ContentBase
 	      $tmp[] = $one[0];
 	    }
 	  
-// 	  $props = $this->Properties();
-// 	  $tmp = array_merge(array_keys($props->mPropertyTypes),$tmp);
-// 	  $tmp = array_unique($tmp);
 	  return in_array($str,$tmp);
 	}
+
 
 	/* private */
 	/*
 	 * Given the list of registered properties, cross reference with our
 	 * basic attributes list, and figure out which ones should be displayed
 	 */
-	function display_attributes($adding,$negative = 0)
+	protected function display_attributes($adding,$negative = 0)
 	{
 	  // get our required attributes
 	  $basic_attributes = array();
@@ -2095,7 +2056,7 @@ class ContentBase
 	}
 
 	/* private */
-	function display_admin_attributes($attributelist,$adding)
+	private function display_admin_attributes($attributelist,$adding)
 	{
 	  // sort the attributes
 
@@ -2112,7 +2073,7 @@ class ContentBase
 	}
 
 	/* protected */
-	function display_single_element($one,$adding)
+	protected function display_single_element($one,$adding)
 	{
 	  $gCms = cmsms();
 	  $config = $gCms->GetConfig();
@@ -2516,45 +2477,4 @@ class ContentProperties
 
 } // end of class ContentProperties
 
-/**
- * Class that module defined content types must extend.
- *
- * @since		0.9
- * @package		CMS
- */
-class CMSModuleContentType extends ContentBase
-{
-	//What module do I belong to?  (needed for things like Lang to work right)
-	function ModuleName()
-	{
-		return '';
-	}
-
-	function Lang($name, $params=array())
-	{
-	  $gCms = cmsms();
-		$cmsmodules = &$gCms->modules;
-		if (array_key_exists($this->ModuleName(), $cmsmodules))
-		{
-			return $cmsmodules[$this->ModuleName()]['object']->Lang($name, $params);
-		}
-		else
-		{
-			return 'ModuleName() not defined properly';
-		}
-	}
-
-	/*
-	* Returns the instance of the module this content type belongs to
-	*
-	*/
-	function GetModuleInstance() 
-	{
-	  $mod = cms_utils::get_module($this->ModuleName());
-	  if( $mod ) return $mod;
-	  return 'ModuleName() not defined properly';
-	}
-}
-
-# vim:ts=4 sw=4 noet
 ?>

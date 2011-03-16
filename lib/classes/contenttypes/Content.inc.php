@@ -39,34 +39,23 @@ class Content extends ContentBase
 	 * @access private
 	 * @var array
 	 */
-    var $_contentBlocks;
+    var $_contentBlocks = array();
 	/**
 	 * @access private
 	 * @var array
 	 */
-    var $_contentBlocksLoaded;
+    var $_contentBlocksLoaded = false;
 	/**
 	 * @access private
 	 * @var boolean
 	 */
-    var $doAutoAliasIfEnabled;
+    var $doAutoAliasIfEnabled = true;
 	/**
 	 * @access private
 	 * @var string
 	 */
     var $stylesheet;
 	
-	/**
-	 * Constructor
-	 */
-    function Content()
-    {
-	$this->ContentBase();
-	$this->_contentBlocks = array();
-	$this->_contentBlocksLoaded = false;
-	$this->doAutoAliasIfEnabled = true;
-    }
-
 	/**
 	 * Indicate whether or not this content type may be copied
 	 *
@@ -422,6 +411,7 @@ class Content extends ContentBase
 		      $value = '';
 		      $label = '';
 		      $size = '50';
+			  $maxlength = '255';
 
 		      // get the arguments.
 		      $morematches = array();
@@ -450,6 +440,9 @@ class Content extends ContentBase
 				  break;
 				case 'size':
 				  $size = $val;
+				  break;
+				case 'maxlength':
+				  $maxlength = $val;
 				  break;
 				case 'label':
 				  $label = $val;
@@ -733,7 +726,8 @@ class Content extends ContentBase
 		if (isset($blockInfo['oneline']) && $blockInfo['oneline'] == '1' || $blockInfo['oneline'] == 'true')
 		{
 			$size = (isset($blockInfo['size']))?$blockInfo['size']:50;
-			$ret = '<input type="text" size="'.$size.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, get_encoding('')).'" />';
+			$maxlength = (isset($blockInfo['maxlength']))?$blockInfo['maxlength']:255;
+			$ret = '<input type="text" size="'.$size.'" maxlength="'.$maxlength.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, get_encoding('')).'" />';
 		}
 		else
 		{ 
@@ -813,7 +807,7 @@ class Content extends ContentBase
 	* the first is the string for the label for the field
 	* the second is the html for the input field
 */
-	public function display_content_block($blockName,$blockInfo,$value,$adding = false)
+	private function display_content_block($blockName,$blockInfo,$value,$adding = false)
 	{
 		// it'd be nice if the content block was an object..
 		// but I don't have the time to do it at the moment.

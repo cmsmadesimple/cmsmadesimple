@@ -576,7 +576,7 @@ class CmsObject {
 	{
 		if (isset($this->db))
 		{
-			$db =& $this->db;
+			$db = $this->db;
 			if ($db->IsConnected())
 				$db->Close();
 		}
