@@ -54,7 +54,7 @@ class CMSModule
 	 * @access private
 	 * @ignore
 	 */
-	var $langhash;
+	var $langhash = array();
 
 	/**
 	 * A hash of the parameters passed in to the module action
@@ -62,73 +62,73 @@ class CMSModule
 	 * @access private
 	 * @ignore
 	 */
-	var $params;
+	var $params = array(array('name'=>'lang','default'=>'en_US','optional'=>true));
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $wysiwygactive;
+	var $wysiwygactive = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $syntaxactive;
+	var $syntaxactive = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $error;
+	var $error = '';
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $modinstall;
+	var $modinstall = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $modtemplates;
+	var $modtemplates = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $modlang;
+	var $modlang = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $modform;
+	var $modform = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $modredirect;
+	var $modredirect = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $modmisc;
+	var $modmisc = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $param_map;
+	var $param_map = array();
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $restrict_unknown_params;
+	var $restrict_unknown_params = false;
 
 	/**
 	 * Magic methods
@@ -163,17 +163,6 @@ class CMSModule
 		global $CMS_MODULE_PAGE;
 		global $CMS_INSTALL_PAGE;
 		$this->curlang = cms_current_language(); // current language for this request.
-		$this->langhash = array();
-		$this->params = array();
-		$this->param_map = array();
-		$this->restrict_unknown_params = false;
-		$this->wysiwygactive = false;
-		$this->error = '';
-		
-		$this->params[] = array(
-					'name' => 'lang',
-					'default' => 'en_US',
-					'optional' => true);
 
 		if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
 		  {
@@ -184,19 +173,16 @@ class CMSModule
 		    $this->SetParameterType('action',CLEAN_STRING);
 		    $this->SetParameterType('showtemplate',CLEAN_STRING);
 		    $this->SetParameterType('inline',CLEAN_INT);
+
+		    // deprecated.
 		    $this->SetParameters();
+		    $this->InitializeFrontend();
 		  }
-		else
+		else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) )
 		  {
 		    $this->params[0]['help'] = lang('langparam');
+		    $this->InitializeAdmin();
 		  }
-		
-		$this->modinstall = false;
-		$this->modtemplates = false;
-		$this->modlang = false;
-		$this->modform = false;
-		$this->modredirect = false;
-		$this->modmisc = false;
 	}
 	
 	/**
@@ -517,12 +503,53 @@ class CMSModule
 	 * @see RegisterRoute
 	 * @see RestrictUnknownParams
 	 * @see RegisterModulePlugin
+	 * @deprecated
 	 * @return void
 	 */
 	function SetParameters()
 	{
 	}
 
+	/**
+	 * Called from within the constructor, ONLY for frontend module 
+         * actions.  This method should be overridden to create routes, and
+	 * set handled parameters, and perform other initialization tasks
+	 * that need to be setup for all frontend actions.
+	 * 
+	 * @abstract
+	 * @see SetParameterType
+	 * @see CreateParameter
+	 * @see RegisterRoute
+	 * @see RestrictUnknownParams
+	 * @see RegisterModulePlugin
+	 * @deprecated
+	 * @return void
+	 */
+	protected function InitializeFrontend()
+	{
+	}
+
+
+	/**
+	 * Called from within the constructor, ONLY for admin module 
+         * actions.  This method should be overridden to create routes, and
+	 * set handled parameters, and perform other initialization tasks
+	 * that need to be setup for all frontend actions.
+	 * 
+	 * @abstract
+	 * @see SetParameterType
+	 * @see CreateParameter
+	 * @see RegisterRoute
+	 * @see RestrictUnknownParams
+	 * @see RegisterModulePlugin
+	 * @deprecated
+	 * @return void
+	 */
+	protected function InitializeAdmin()
+	{
+	}
+
+	
 	/**
 	 * A method to indicate that the system should drop and optionally
 	 * generate an error about unknown parameters on frontend actions.
@@ -1195,15 +1222,42 @@ class CMSModule
 	/**
 	 * Returns true if the module may support lazy loading in the front end
 	 *
-	 * This functionality is not completely implemented in version 1.8
+	 * @since 1.8
+	 * @abstract
+	 * @return boolean
+	 * @deprecated
+	 */
+	public function SupportsLazyLoading()
+	{
+	  return LazyLoadFrontend();
+	}
+
+	/**
+	 * Returns true if the module may support lazy loading in the front end
 	 *
+	 * @since 1.10
 	 * @abstract
 	 * @return boolean
 	 */
-	function SupportsLazyLoading()
+	public function LazyLoadFrontend()
 	{
-	  return false;
+	  return FALSE;
 	}
+
+	/**
+	 * Returns true if the module may support lazy loading in the admin interface.
+	 *
+	 * This functionality is not completely implemented in version 1.8
+	 *
+	 * @since 1.10
+	 * @abstract
+	 * @return boolean
+	 */
+	public function LazyLoadAdmin()
+	{
+	  return FALSE;
+	}
+
 
 	/**
 	 * ------------------------------------------------------------------
