@@ -511,8 +511,7 @@ function quick_check_authorship($contentid, $hispages)
  */
 function audit($itemid, $itemname, $action)
 {
-  $gCms = cmsms();
-	$db = $gCms->GetDb();
+  $db = cmsms()->GetDb();
 
 	$userid = 0;
 	$username = '';
