@@ -1,3 +1,15 @@
+Version 1.10 - 
+-----------------------------
+Core - Bug Reports
+  - #6278 NCleanGrey Admin Theme typo
+  
+  
+Version 1.9.4.1 - Faanui
+-----------------------------
+Module Manager:
+  - Typo function.newversionstab.php
+
+  
 Version 1.9.4 - Faanui
 -----------------------------
 Core - Bug Reports
