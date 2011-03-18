@@ -2366,5 +2366,19 @@ function get_secure_param()
   $urlext .= CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
   return $urlext;
 }
+
+
+function cms_to_bool($str)
+{
+  if( is_numeric($str) )
+  {
+    return ((int)$str != 0)?TRUE:FALSE;
+  }
+
+  $str = strtolower($str);
+  if( $str == 'y' || $str == 'yes' || $str == 'true' ) return TRUE;
+  return FALSE;
+}
+
 # vim:ts=4 sw=4 noet
 ?>

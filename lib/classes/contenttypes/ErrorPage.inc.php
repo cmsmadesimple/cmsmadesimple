@@ -36,9 +36,9 @@ class ErrorPage extends Content
   var $doAliasCheck;
   var $error_types;
 	
-  function ErrorPage()
+  public function __construct()
   {
-    $this->ContentBase();
+	  parent::__construct();
     
     global $CMS_ADMIN_PAGE;
     if( isset($CMS_ADMIN_PAGE) )

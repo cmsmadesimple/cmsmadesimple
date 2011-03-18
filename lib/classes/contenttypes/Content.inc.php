@@ -417,16 +417,16 @@ class Content extends ContentBase
 		      $morematches = array();
 		      $result3 = preg_match_all($pattern2, $wholetag, $morematches);
 		      if ($result3)
-			{
-			  $keyval = array();
-			  for ($i = 0; $i < count($morematches[1]); $i++)
-			    {
-			      $keyval[$morematches[1][$i]] = $morematches[2][$i];
-			    }
-			  
-			  foreach ($keyval as $key=>$val)
-			    {
-			      switch($key)
+				  {
+					  $keyval = array();
+					  for ($i = 0; $i < count($morematches[1]); $i++)
+						  {
+							  $keyval[$morematches[1][$i]] = $morematches[2][$i];
+						  }
+					
+					  foreach ($keyval as $key=>$val)
+						  {
+							  switch($key)
 				{
 				case 'block':
 				  $id = str_replace(' ', '_', $val);
@@ -473,6 +473,7 @@ class Content extends ContentBase
 			  $this->_contentBlocks[$name]['default'] = $value;
 			  $this->_contentBlocks[$name]['label'] = $label;
 			  $this->_contentBlocks[$name]['size'] = $size;
+			  $this->_contentBlocks[$name]['maxlength'] = $maxlength;
 			}
 		    }
 		  
@@ -723,7 +724,8 @@ class Content extends ContentBase
 	private function _display_text_block($blockInfo,$value,$adding)
 	{
 		$ret = '';
-		if (isset($blockInfo['oneline']) && $blockInfo['oneline'] == '1' || $blockInfo['oneline'] == 'true')
+		$oneline = isset($blockInfo['oneline']) && cms_to_bool($blockInfo['oneline']);
+		if ($oneline)
 		{
 			$size = (isset($blockInfo['size']))?$blockInfo['size']:50;
 			$maxlength = (isset($blockInfo['maxlength']))?$blockInfo['maxlength']:255;
