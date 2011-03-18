@@ -363,7 +363,17 @@
     </select><br/>
     {$lang_info_pseudocron_granularity}
   </p>
-</div>  
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{$lang_adminlog_lifetime}:</p>
+  <p class="pageinput">
+    <select name="adminlog_lifetime">
+    {html_options options=$adminlog_options selected=$adminlog_lifetime}
+    </select><br/>
+    {$lang_info_adminlog_lifetime}
+  </p>
+</div>
 
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>

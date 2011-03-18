@@ -97,6 +97,7 @@ $contentimage_useimagepath = 0;
 $content_imagefield_path = '';
 $content_thumbnailfield_path = '';
 $contentimage_path = '';
+$adminlog_lifetime = (60*60*24*31);
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php".$urlext);
@@ -139,6 +140,7 @@ $content_mandatory_urls = get_site_preference('content_mandatory_urls',$content_
 $content_imagefield_path = get_site_preference('content_imagefield_path',$content_imagefield_path);
 $content_thumbnailfield_path = get_site_preference('content_thumbnailfield_path',$content_thumbnailfield_path);
 $contentimage_path = get_site_preference('contentimage_path',$contentimage_path);
+$adminlog_lifetime = get_site_preference('adminlog_lifetime',$adminlog_lifetime);
 
 $active_tab='unknown';
 if( isset($_POST['active_tab']) )
@@ -320,6 +322,10 @@ else if (isset($_POST["editsiteprefs"]))
 	      $pseudocron_granularity = (int)$_POST['pseudocron_granularity'];
 	      set_site_preference('pseudocron_granularity',$pseudocron_granularity);
 	    }
+      if (isset($_POST["adminlog_lifetime"])) {
+          $adminlog_lifetime = $_POST["adminlog_lifetime"];
+          set_site_preference('adminlog_lifetime',$adminlog_lifetime);
+      }
 	  break;
 	}
 
@@ -446,6 +452,7 @@ $smarty->assign('content_mandatory_urls',$content_mandatory_urls);
 $smarty->assign('content_imagefield_path',$content_imagefield_path);
 $smarty->assign('content_thumbnailfield_path',$content_thumbnailfield_path);
 $smarty->assign('contentimage_path',$contentimage_path);
+$smarty->assign('adminlog_lifetime',$adminlog_lifetime);
 
 $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
 	     60=>lang('cron_60m'),120=>lang('cron_120m'),
@@ -456,6 +463,20 @@ $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
 $smarty->assign('pseudocron_options',$tmp);	     
 $smarty->assign('lang_pseudocron_granularity',lang('pseudocron_granularity'));
 $smarty->assign('lang_info_pseudocron_granularity',lang('info_pseudocron_granularity'));
+
+$tmp = array(
+         60*60*24=>lang('adminlog_1day'),
+         60*60*24*7=>lang('adminlog_1week'),
+	     60*60*24*14=>lang('adminlog_2weeks'),
+	     60*60*24*31=>lang('adminlog_1month'),
+	     60*60*24*31*3=>lang('adminlog_3months'),
+	     60*60*24*31*6=>lang('adminlog_6months'),
+	     -1=>lang('adminlog_manual'));
+$smarty->assign('adminlog_options',$tmp);
+$smarty->assign('lang_adminlog_lifetime',lang('adminlog_lifetime'));
+$smarty->assign('lang_info_adminlog_lifetime',lang('info_adminlog_lifetime'));
+
+
 $smarty->assign('lang_info_autoclearcache',lang('info_autoclearcache'));
 $smarty->assign('lang_autoclearcache',lang('autoclearcache'));
 $smarty->assign('lang_thumbnail_width',lang('thumbnail_width'));
