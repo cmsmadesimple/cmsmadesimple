@@ -59,6 +59,8 @@ if (isset($_GET['download']))
 
 include_once("header.php");
 
+$smarty->assign("urlext",$urlext);
+
 $userid = get_userid();
 $access = check_permission($userid, 'Clear Admin Log');
 
@@ -80,75 +82,106 @@ if (check_permission($userid, 'Modify Site Preferences'))
 	$result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog ORDER BY timestamp DESC', $limit, $from);
 
 
-	echo '<div class="pagecontainer">';
-	echo '<div class="pageoverflow">';
+	//echo '<div class="pagecontainer">';
+	//echo '<div class="pageoverflow">';
+  $smarty->assign("header",$themeObject->ShowHeader('adminlog'));
 
 	if ($result && $result->RecordCount() > 0) 
 	{
 	
 		$page_string = pagination($page, $totalrows, $limit);
-		echo "<p class=\"pageshowrows\">".$page_string."</p>";
-		echo $themeObject->ShowHeader('adminlog').'</div>';
-		echo '<div class="pageoptions">';
-		echo '<p class="pageoptions">';
-		echo '<a href="adminlog.php'.$urlext.'&amp;download=1">';
-		echo $themeObject->DisplayImage('icons/system/attachment.gif', lang('download'),'','','systemicon').'</a>';
-		echo '<a class="pageoptions" href="adminlog.php'.$urlext.'&amp;download=1">'.lang('download').'</a>';
-		echo '</p>';
-		echo '</div>';
+		//echo "<p class=\"pageshowrows\">".$page_string."</p>";
+    $smarty->assign("pagestring",$page_string);
 
-		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-		echo '<thead>';
-		echo "<tr>\n";
-		echo "<th>".lang('user')."</th>\n";
-		echo "<th>".lang('itemid')."</th>\n";
-		echo "<th>".lang('itemname')."</th>\n";
-		echo "<th>".lang('action')."</th>\n";
-		echo "<th>".lang('date')."</th>\n";
-		echo "</tr>\n";
-		echo '</thead>';
-		echo '<tbody>';
+		//echo $themeObject->ShowHeader('adminlog').'</div>';
+		//echo '<div class="pageoptions">';
+		//echo '<p class="pageoptions">';
+		//echo '<a href="adminlog.php'.$urlext.'&amp;download=1">';
 
-	       $currow = "row1";
+    $smarty->assign("downloadlink",$themeObject->DisplayImage('icons/system/attachment.gif', lang('download'),'','','systemicon'));
+		//echo $themeObject->DisplayImage('icons/system/attachment.gif', lang('download'),'','','systemicon').'</a>';
+		//echo '<a class="pageoptions" href="adminlog.php'.$urlext.'&amp;download=1">'.lang('download').'</a>';
+    $smarty->assign("langdownload",lang("download"));
+		//echo '</p>';
+		//echo '</div>';
+
+//		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+//		echo '<thead>';
+//		echo "<tr>\n";
+//		echo "<th>".lang('user')."</th>\n";
+//		echo "<th>".lang('itemid')."</th>\n";
+//		echo "<th>".lang('itemname')."</th>\n";
+//		echo "<th>".lang('action')."</th>\n";
+//		echo "<th>".lang('date')."</th>\n";
+//		echo "</tr>\n";
+//		echo '</thead>';
+//		echo '<tbody>';
+
+    $smarty->assign("languser",lang("user"));
+    $smarty->assign("langitemid",lang("itemid"));
+    $smarty->assign("langitemname",lang("itemname"));
+    $smarty->assign("langaction",lang("action"));
+    $smarty->assign("langdate",lang("date"));
+
+
+    $loglines=array();
+//	       $currow = "row1";
 	       while ($row = $result->FetchRow()) {
-
-	               echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-	               echo "<td>".$row["username"]."</td>\n";
-	               echo "<td>".($row["item_id"]!=-1?$row["item_id"]:"&nbsp;")."</td>\n";
-	               echo "<td>".$row["item_name"]."</td>\n";
-	               echo "<td>".$row["action"]."</td>\n";
-				   echo "<td>".strftime($dateformat,$row['timestamp'])."</td>\n";
+           $one=array();
+           $one["username"]=$row["username"];
+           $one["itemid"]=($row["item_id"]!=-1?$row["item_id"]:"&nbsp;");
+           $one["itemname"]=$row["item_name"];
+           $one["action"]=$row["action"];
+           $one["date"]=strftime($dateformat,$row['timestamp']);
+	               //echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+	               //echo "<td>".$row["username"]."</td>\n";
+	               //echo "<td>".($row["item_id"]!=-1?$row["item_id"]:"&nbsp;")."</td>\n";
+	               //echo "<td>".$row["item_name"]."</td>\n";
+	               //echo "<td>".$row["action"]."</td>\n";
+				   //echo "<td>".strftime($dateformat,$row['timestamp'])."</td>\n";
 		       //               echo "<td>".date("D M j, Y G:i:s", $row["timestamp"])."</td>\n";
-	               echo "</tr>\n";
+	           //    echo "</tr>\n";
 
-	               ($currow == "row1"?$currow="row2":$currow="row1");
+	             //  ($currow == "row1"?$currow="row2":$currow="row1");
 
+           $loglines[]=$one;
 	       }
-	   
-		echo '</tbody>';
-		echo '</table>';
-
+	   $smarty->assign("loglines",$loglines);
+//		echo '</tbody>';
+	//	echo '</table>';
+      $smarty->assign("logempty",false);
+		}	else {
+			//echo '<p class="pageheader">'.lang('adminlog').'</p></div>';
+			//echo '<p>'.lang('adminlogempty').'</p>';
+      $smarty->assign("langlogempty",lang('adminlogempty'));
+      $smarty->assign("logempty",true);
 		}
-		else {
-			echo '<p class="pageheader">'.lang('adminlog').'</p></div>';
-			echo '<p>'.lang('adminlogempty').'</p>';
-		}
 
+  $smarty->assign("clearicon","");
 	if ($access && $result && $result->RecordCount() > 0) {
-		echo '<div class="pageoptions">';
-		echo '<p class="pageoptions">';
-		echo '<a href="adminlog.php'.$urlext.'&amp;clear=true">';
-		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon').'</a>';
-		echo '<a class="pageoptions" href="adminlog.php'.$urlext.'&amp;clear=true">'.lang('clearadminlog').'</a>';
-		echo '</p>';
-		echo '</div>';
+		//echo '<div class="pageoptions">';
+		//echo '<p class="pageoptions">';
+		//echo '<a href="adminlog.php'.$urlext.'&amp;clear=true">';
+		//echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon').'</a>';
+		//echo '<a class="pageoptions" href="adminlog.php'.$urlext.'&amp;clear=true">'.lang('clearadminlog').'</a>';
+		//echo '</p>';
+		//echo '</div>';
+    $smarty->assign("clearicon",$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon'));
+    $smarty->assign("langclear",lang('clearadminlog'));
 	}
 
-	echo '</div>';
+//	echo '</div>';
 
 }
 
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+
+$smarty->assign("backurl",$themeObject->BackUrl());
+$smarty->assign("langback",lang('back'));
+
+
+echo $smarty->fetch('adminlog.tpl');
+
+//echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 
 include_once("footer.php");
