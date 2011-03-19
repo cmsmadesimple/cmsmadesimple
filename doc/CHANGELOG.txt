@@ -2,6 +2,7 @@ Version 1.10 -
 -----------------------------
 Core - Bug Reports
   - #6278 NCleanGrey Admin Theme typo
+  - #6284 CMSMailer system message 'mail not setup' link leads to login page (Translation problem)
   
   
 Version 1.9.4.1 - Faanui
