@@ -119,6 +119,18 @@ $lang['admin']['cron_3h'] = '3 Hours';
 $lang['admin']['cron_6h'] = '6 Hours';
 $lang['admin']['cron_12h'] = '12 Hours';
 $lang['admin']['cron_24h'] = '24 Hours';
+
+$lang['admin']['adminlog_1day'] = '1 day';
+$lang['admin']['adminlog_1week'] = '1 week';
+$lang['admin']['adminlog_2weeks'] = '2 weeks';
+$lang['admin']['adminlog_1month'] = '1 month';
+$lang['admin']['adminlog_3months'] = '3 months';
+$lang['admin']['adminlog_6months'] = '6 months';
+$lang['admin']['adminlog_manual'] = 'Manual deletion';
+$lang['admin']['adminlog_lifetime']='Lifetime of log-entries';
+$lang['admin']['info_adminlog_lifetime']='This settings indicates after how long time the system will start deleting the oldest logentries';
+
+
 $lang['admin']['clearcache_taskdescription'] = 'Executed daily, this task will clear cached files that are older than the age preset in the global preferences';
 $lang['admin']['clearcache_taskname'] = 'Clear Cached Files';
 $lang['admin']['info_autoclearcache'] = 'Specify an integer value. Enter 0 to disable automatic cache clearing';
