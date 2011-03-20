@@ -40,7 +40,7 @@ class ClearCacheTask implements CmsRegularTask
     
     // do the task.
     $age_days = (int)get_site_preference(self::CACHEDFILEAGE_SITEPREF,0);
-    global $gCms;
+    $gCms = cmsms();
     $gCms->clear_cached_files($age_days);
     return TRUE;
   }
