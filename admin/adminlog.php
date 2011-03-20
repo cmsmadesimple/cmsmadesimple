@@ -19,7 +19,6 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-
 require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
@@ -79,9 +78,36 @@ if (check_permission($userid, 'Modify Site Preferences'))
 	$page_string = "";
 	$from = ($page * $limit) - $limit;
 
-	$result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog ORDER BY timestamp DESC', $limit, $from);
+  if (isset($_POST["filterreset"])) {
+    set_site_preference('adminlog_filteruser','');
+    set_site_preference('adminlog_filtername','');
+    set_site_preference('adminlog_filteraction','');
+  }
+  if (isset($_POST["filterapply"])) {
+    if (isset($_POST['filteruser'])) set_site_preference('adminlog_filteruser',trim($_POST["filteruser"]));
+    if (isset($_POST['filtername'])) set_site_preference('adminlog_filtername',trim($_POST["filtername"]));
+    if (isset($_POST['filteraction'])) set_site_preference('adminlog_filteraction',trim($_POST["filteraction"]));
+  }
 
-
+  $params=array();
+  $criteria ="";
+  if (get_site_preference('adminlog_filteruser')!='') {
+    $criteria.="WHERE username=?";
+    $params=array_merge($params,array(get_site_preference('adminlog_filteruser')));
+  }
+  if (get_site_preference('adminlog_filtername')!='') {
+    if ($criteria!="") $criteria.=" AND ";
+    $criteria.="WHERE item_name LIKE ?";
+    $params=array_merge($params,array("%".get_site_preference('adminlog_filtername')."%"));
+  }
+  if (get_site_preference('adminlog_filteraction')!='') {
+    if ($criteria!="") $criteria.=" AND ";
+    $criteria.="WHERE action LIKE ?";
+    $params=array_merge($params,array("%".get_site_preference('adminlog_filteraction')."%"));
+  }
+  
+	$result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog '.$criteria.' ORDER BY timestamp DESC', $limit, $from, $params);
+  echo $db->sql;
 	//echo '<div class="pagecontainer">';
 	//echo '<div class="pageoverflow">';
   $smarty->assign("header",$themeObject->ShowHeader('adminlog'));
@@ -168,7 +194,22 @@ if (check_permission($userid, 'Modify Site Preferences'))
 		//echo '</div>';
     $smarty->assign("clearicon",$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon'));
     $smarty->assign("langclear",lang('clearadminlog'));
+
 	}
+
+
+  $smarty->assign("langfilteruser",lang("filteruser"));
+  $smarty->assign("langfiltername",lang("filtername"));
+  $smarty->assign("langfilteraction",lang("filteraction"));
+  $smarty->assign("langfilterapply",lang("filterapply"));
+  $smarty->assign("langfilterreset",lang("filterreset"));
+  $smarty->assign("langfilters",lang("filters"));
+  $smarty->assign("langshowfilters",lang("showfilters"));
+  $smarty->assign("filteruservalue",get_site_preference("adminlog_filteruser"));
+  $smarty->assign("filternamevalue",get_site_preference("adminlog_filtername"));
+  $smarty->assign("filteractionvalue",get_site_preference("adminlog_filteraction"));
+  $smarty->assign('SECURE_PARAM_NAME',CMS_SECURE_PARAM_NAME);
+  $smarty->assign('CMS_USER_KEY',$_SESSION[CMS_USER_KEY]);
 
 //	echo '</div>';
 

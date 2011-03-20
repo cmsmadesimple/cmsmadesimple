@@ -130,6 +130,13 @@ $lang['admin']['adminlog_manual'] = 'Manual deletion';
 $lang['admin']['adminlog_lifetime']='Lifetime of log-entries';
 $lang['admin']['info_adminlog_lifetime']='This settings indicates after how long time the system will start deleting the oldest logentries';
 
+$lang['admin']['filteruser']='Username is';
+$lang['admin']['filtername']='Event name contains';
+$lang['admin']['filteraction']='Action contains';
+$lang['admin']['filterapply']='Apply filters';
+$lang['admin']['filterreset']='Reset filters';
+$lang['admin']['filters']='Filters';
+$lang['admin']['showfilters']='Show filters';
 
 $lang['admin']['clearcache_taskdescription'] = 'Executed daily, this task will clear cached files that are older than the age preset in the global preferences';
 $lang['admin']['clearcache_taskname'] = 'Clear Cached Files';

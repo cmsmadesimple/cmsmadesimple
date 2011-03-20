@@ -1,7 +1,45 @@
 <div class="pagecontainer">
   <div class="pageoverflow">
   {$header}
+    <input type="checkbox" id="toggle_filters"
+           onClick="if (this.checked) document.getElementById('adminlog_filters').style.display = 'block'; else document.getElementById('adminlog_filters').style.display = 'none';"/>
+    <label for="toggle_filters">{$langshowfilters}</label>
+
+    <div id="adminlog_filters" style="display: none">
+      <fieldset>
+        <legend>{$langfilters}</legend>
+        <form id="adminlog_filter" method="post" action="adminlog.php">
+          <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+
+          <div class="pageoverflow">
+  <p class="pagetext">{$langfilteruser}</p>
+  <p class="pageinput"><input type="text" name="filteruser" value="{$filteruservalue}"/></p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">{$langfiltername}</p>
+  <p class="pageinput"><input type="text" name="filtername" value="{$filternamevalue}"/></p>
+</div>
+          <div class="pageoverflow">
+  <p class="pagetext">{$langfilteraction}</p>
+  <p class="pageinput"><input type="text" name="filteraction" value="{$filteractionvalue}"/></p>
+</div>
+          <div class="pageoverflow">
+  <p class="pagetext"></p>
+  <p class="pageinput"><input type="submit" name="filterapply" value="{$langfilterapply}"/><input type="submit" name="filterreset"
+                                                                                     value="{$langfilterreset}"/></p>
+</div>
+
+
+
+
+        </form>
+      </fieldset>
+    </div>
+
   {if $logempty==false}
+
+
+
     <p class="pageshowrows">{$pagestring}</p>
 
     <table>
@@ -29,6 +67,7 @@
         </td></tr>
       {/if}
     </table>
+
 
     <table cellspacing="0" class="pagetable">
       <thead>
