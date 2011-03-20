@@ -1,5 +1,5 @@
 <?php
-class PruneAdminlog implements CmsRegularTask
+class PruneAdminlogTask implements CmsRegularTask
 {
   const  LASTEXECUTE_SITEPREF   = 'PruneAdminlog_lastexecute';
   const  LIFETIME_SITEPREF = 'adminlog_lifetime';
