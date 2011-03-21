@@ -1430,7 +1430,7 @@ debug_buffer('after menu items');
      */
 	function ThemeHeader(){
 		
-		if(file_exists('themes/'. $this->themeName. '/includes/stndard.js'))
+		if(file_exists('themes/'. $this->themeName. '/includes/standard.js'))
 		{
 			echo '<script type="text/javascript" src="themes/'. $this->themeName. '/includes/standard.js"></script>'."\n";
 		}else{
