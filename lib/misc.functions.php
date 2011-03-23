@@ -671,12 +671,15 @@ function debug_output($var, $title="")
  */
 function debug_to_log($var, $title='')
 {
-	$errlines = explode("\n",debug_display($var, $title, false, false));
-	$filename = TMP_CACHE_LOCATION . '/debug.log';
-	foreach ($errlines as $txt)
+  if( cmsms()->config['debug_to_log'] )
+    {
+      $errlines = explode("\n",debug_display($var, $title, false, false));
+      $filename = TMP_CACHE_LOCATION . '/debug.log';
+      foreach ($errlines as $txt)
 	{
-		error_log($txt . "\n", 3, $filename);
+	  error_log($txt . "\n", 3, $filename);
 	}
+    }
 }
 
 
