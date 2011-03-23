@@ -170,266 +170,218 @@ class ModuleOperations
 	  return $xmltxt;
 	}
 
-  /**
-   * Unpackage a module from an xml string
-   * does not touch the database
-   *
-   * @param string $xml The xml data for the package
-   * @param boolean $overwrite Should we overwrite files if they exist?
-   * @param boolean $brief If set to true, less checking is done and no errors are returned
-   * @return array A hash of details about the installed module
-   */
-  function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
-  {
-	  $gCms = cmsms();
+/**
+* Unpackage a module from an xml string
+* does not touch the database
+*
+* @param string $xml The xml data for the package
+* @param boolean $overwrite Should we overwrite files if they exist?
+* @param boolean $brief If set to true, less checking is done and no errors are returned
+* @return array A hash of details about the installed module
+*/
+function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
+{
+	$gCms = cmsms();
 
 	// first make sure that we can actually write to the module directory
 	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
 
 	if( !is_writable( $dir ) && $brief == 0 )
-	  {
-	    // directory not writable
-	    ModuleOperations::SetError( lang( 'errordirectorynotwritable' ) );
-	    return false;
-	  }
-
-	// start parsing xml
-	$parser = xml_parser_create();
-	$ret = xml_parse_into_struct( $parser, $xml, $val, $xt );
-	xml_parser_free( $parser );
-
+	{
+		// directory not writable
+		ModuleOperations::SetError( lang( 'errordirectorynotwritable' ) );
+		return false;
+	}
+	
+	$reader = new XMLReader();
+	$ret = $reader->open($xml);
 	if( $ret == 0 )
-	  {
-	    ModuleOperations::SetError( lang( 'errorcouldnotparsexml' ) );
-	    return false;
-	  }
+	{
+		ModuleOperations::SetError( lang( 'errorcouldnotparsexml' ) );
+		return false;
+	}
 
 	ModuleOperations::SetError( "" );
 	$havedtdversion = false;
 	$moduledetails = array();
 	$moduledetails['size'] = strlen($xml);
 	$required = array();
-	foreach( $val as $elem )
-	  {
-	    $value = (isset($elem['value'])?$elem['value']:'');
-	    $type = (isset($elem['type'])?$elem['type']:'');
-	    switch( $elem['tag'] )
-	      {
-	      case 'NAME':
+	while( $reader->read() )
+	{
+		switch($reader->nodeType)
 		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  // check if this module is already installed
-		  if( isset( $gCms->modules[$value] ) && $overwrite == 0 && $brief == 0 )
-		    {
-		      ModuleOperations::SetError( lang( 'moduleinstalled' ) );
-		      return false;
-		    }
-		  $moduledetails['name'] = $value;
-		  break;
-		}
-
-	      case 'DTDVERSION':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  if( $value != MODULE_DTD_VERSION )
-		    {
-		      ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
-		      return false;
-		    }
-		  $havedtdversion = true;
-		  break;
-		}
-
-	      case 'VERSION':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  $moduledetails['version'] = $value;
-		  if( isset( $gCms->modules[$moduledetails['name']] ) )
-		    {
-		      $version = $gCms->modules[$moduledetails['name']]['object']->GetVersion();
-		      if( version_compare($moduledetails['version'],$version) < 0 && $brief == 0)
+			case XMLREADER::ELEMENT:
 			{
-			  ModuleOperations::SetError( lang('errorattempteddowngrade') );
-			  return false;
-			}
-		      else if (version_compare($moduledetails['version'],$version) == 0 && $brief == 0 )
-			{
-			  ModuleOperations::SetError( lang('moduleinstalled') );
-			  return false;
-			}
-		    }
-		  break;
-		}
+				switch( strtoupper($reader->localName) )
+				{
+					case 'NAME':
+					{
+						$reader->read();
+						$moduledetails['name'] = $reader->value;
+						// check if this module is already installed
+						if( isset( $gCms->modules[$moduledetails['name']] ) && $overwrite == 0 && $brief == 0 )
+						{
+							ModuleOperations::SetError( lang( 'moduleinstalled' ) );
+							return false;
+						}
+						break;
+					}
+					case 'DTDVERSION':
+					{
+						$reader->read();
+						if( $reader->value != MODULE_DTD_VERSION )
+						{
+							ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
+							return false;
+						}
+						$havedtdversion = true;
+						break;
+					}
+
+					case 'VERSION':
+					{
+						$reader->read();
+						$moduledetails['version'] = $reader->value;
+						if( isset( $gCms->modules[$moduledetails['name']] ) )
+						{
+							$version = $gCms->modules[$moduledetails['name']]['object']->GetVersion();
+							if( version_compare($moduledetails['version'],$version) < 0 && $brief == 0)
+							{
+								ModuleOperations::SetError( lang('errorattempteddowngrade') );
+								return false;
+							}
+							else if (version_compare($moduledetails['version'],$version) == 0 && $brief == 0 )
+							{
+								ModuleOperations::SetError( lang('moduleinstalled') );
+								return false;
+							}
+						}
+						break;
+					}
 		
-	      case 'MINCMSVERSION':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  $moduledetails['mincmsversion'] = $value;
-		  break;
-		}
-		
-	      case 'MAXCMSVERSION':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  $moduledetails['maxcmsversion'] = $value;
-		  break;
-		}
-		
-	      case 'DESCRIPTION':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  $moduledetails['description'] = $value;
-		  break;
-		}
-		
-	      case 'HELP':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  $moduledetails['help'] = base64_decode($value);
-		  break;
-		}
-		
-	      case 'ABOUT':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  $moduledetails['about'] = base64_decode($value);
-		  break;
-		}
-	    
-	      case 'REQUIRES':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  if( count($requires) != 2 )
-		    {
-		      continue;
-		    }
-		  if( !isset( $moduledetails['requires'] ) )
-		    {
-		      $moduledetails['requires'] = array();
-		    }
-		  $moduledetails['requires'][] = $requires;
-		  $requires = array();
-		}
-	    
-	      case 'REQUIREDNAME':
-		$requires['name'] = $value;
-		break;
-
-	      case 'REQUIREDVERSION':
-		$requires['version'] = $value;
-		break;
-
-	      case 'FILE':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  if( $brief != 0 )
-		    {
-		      continue;
-		    }
-
-		  // finished a first file
-		  if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
-		      !isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) )
-		    {
-		      print_r( $moduledetails );
-		      ModuleOperations::SetError( lang('errorincompletexml') );
-		      return false;
-		    }
-
-		  // ready to go
-		  $moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
-		  $filename=$moduledir.$moduledetails['filename'];
-		  if( !file_exists( $moduledir ) )
-		    {
-		      if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) )
+					case 'MINCMSVERSION':
+					case 'MAXCMSVERSION':
+					case 'DESCRIPTION':
+					case 'FILENAME':
+					case 'ISDIR':
+					{
+					    $name = $reader->localName;
+						$reader->read();
+						$moduledetails[$name] = $reader->value;
+						break;
+					}
+					case 'HELP':
+					case 'ABOUT':
+					{
+					    $name = $reader->localName;
+						$reader->read();
+						$moduledetails[$name] = base64_decode($reader->value);
+						break;
+					}
+					case 'REQUIREDNAME':
+					{
+						$reader->read();
+						$requires['name'] = $reader->value;
+						break;
+					}
+					case 'REQUIREDVERSION':
+					{
+						$reader->read();
+						$requires['version'] = $reader->value;
+						break;
+					}
+					case 'DATA':
+					{
+						$reader->read();
+						$moduledetails['filedata'] = $reader->value;
+						break;
+					}
+				}
+				break;
+			}	
+			case XMLReader::END_ELEMENT:
 			{
-			  ModuleOperations::SetError(lang('errorcantcreatefile').' '.$moduledir);
-			  break;
-			}
-		    }
-		  else if( $moduledetails['isdir'] )
-		    {
-		      if( !@mkdir( $filename ) && !is_dir( $filename ) )
-			{
-			  ModuleOperations::SetError(lang('errorcantcreatefile').' '.$filename);
-			  break;
-			}
-		    }
-		  else
-		    {
-		      $data = $moduledetails['filedata'];
-		      if( strlen( $data ) )
-			{
-			  $data = base64_decode( $data );
-			}
-		      $fp = @fopen( $filename, "w" );
-		      if( !$fp )
-			{
-			  ModuleOperations::SetError(lang('errorcantcreatefile').' '.$filename);
-			}
-		      if( strlen( $data ) )
-			{
-			  @fwrite( $fp, $data );
-			}
-		      @fclose( $fp );
-		    }
-		  unset( $moduledetails['filedata'] );
-		  unset( $moduledetails['filename'] );
-		  unset( $moduledetails['isdir'] );
-		}
+				switch( strtoupper($reader->localName) )
+				{
+					case 'REQUIRES':
+					{
+						if( count($requires) != 2 )
+						{
+						  continue;
+						}
+						if( !isset( $moduledetails['requires'] ) )
+						{
+						  $moduledetails['requires'] = array();
+						}
+						$moduledetails['requires'][] = $requires;
+						$requires = array();
+						break;
+					}
+					case 'FILE':
+					{
+						if( $brief != 0 ) continue;
 
-	      case 'FILENAME':
-		$moduledetails['filename'] = $value;
-		break;
+						// finished a first file
+						if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
+							!isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) )
+						{
+							print_r( $moduledetails );
+							ModuleOperations::SetError( lang('errorincompletexml') );
+							return false;
+						}
 
-	      case 'ISDIR':
-		$moduledetails['isdir'] = $value;
-		break;
-
-	      case 'DATA':
-		if( $type != 'complete' && $type != 'close' )
-		  {
-		    continue;
-		  }
-		$moduledetails['filedata'] = $value;
-		break;
+						// ready to go
+						$moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
+						$filename=$moduledir.$moduledetails['filename'];
+						if( !file_exists( $moduledir ) )
+						{
+							if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) )
+							{
+								ModuleOperations::SetError(lang('errorcantcreatefile').' '.$moduledir);
+								break;
+							}
+						}
+						else if( $moduledetails['isdir'] )
+						{
+							if( !@mkdir( $filename ) && !is_dir( $filename ) )
+							{
+								ModuleOperations::SetError(lang('errorcantcreatefile').' '.$filename);
+								break;
+							}
+						}
+						else
+						{
+							$data = $moduledetails['filedata'];
+							if( strlen( $data ) )
+							{
+								$data = base64_decode( $data );
+							}
+							$fp = @fopen( $filename, "w" );
+							if( !$fp )
+							{
+								ModuleOperations::SetError(lang('errorcantcreatefile').' '.$filename);
+							}
+							if( strlen( $data ) )
+							{
+								@fwrite( $fp, $data );
+							}
+								@fclose( $fp );
+						}
+						unset( $moduledetails['filedata'] );
+						unset( $moduledetails['filename'] );
+						unset( $moduledetails['isdir'] );
+						break;
+					}
+				}
+				break;
+			}
 	      }
-	  } // foreach
+	} // while
 
 	if( $havedtdversion == false )
-	  {
-	    ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
-	  }
+	{
+		ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
+	}
 
 	// we've created the module's directory
 	unset( $moduledetails['filedata'] );
@@ -437,11 +389,12 @@ class ModuleOperations
 	unset( $moduledetails['isdir'] );
 
 	if( ModuleOperations::GetLastError() != "" )
-	  {
-	    return false;
-	  }
+	{
+		return false;
+	}
 	return $moduledetails;
-  }
+
+}
 
 
   /**
@@ -453,7 +406,7 @@ class ModuleOperations
    */
   function InstallModule($module, $loadifnecessary = false)
   {
-	  $modinstance = cge_utils::get_module($module);
+	  $modinstance = cms_utils::get_module($module);
 	  if( !$modinstance )
 	  {
 		  if( $loadifnecessary == false )
@@ -469,7 +422,7 @@ class ModuleOperations
 		  }
       }
  
-	  $modinstance = cge_utils::get_module($module);
+	  $modinstance = cms_utils::get_module($module);
 	  if (!isset($gCms->modules[$module]))
 	  {
 		  return array(false,lang('errormodulenotfound'));
