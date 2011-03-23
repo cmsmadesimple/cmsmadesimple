@@ -378,6 +378,7 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 	      }
 	} // while
 
+	$reader->close();
 	if( $havedtdversion == false )
 	{
 		ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
@@ -423,7 +424,7 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
       }
  
 	  $modinstance = cms_utils::get_module($module);
-	  if (!isset($gCms->modules[$module]))
+	  if (!isset(cmsms()->modules[$module]))
 	  {
 		  return array(false,lang('errormodulenotfound'));
 	  }
@@ -437,7 +438,7 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 		  // now insert a record
 		  $lazyload_fe = (method_exists($modinstance,'LazyLoadFrontend') && $modinstance->LazyLoadFrontend())?1:0;
 		  $lazyload_admin = (method_exists($modinstance,'LazyLoadAdmin') && $modinstance->LazyLoadAdmin())?1:0;
-		  $query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, admin_only, active,allow_fe_lazyload,allow_admin_lazyload) VALUES (?,?,'installed',?,?)";
+		  $query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, admin_only, active,allow_fe_lazyload,allow_admin_lazyload) VALUES (?,?,'installed',?,?,?,?)";
 		  $db->Execute($query, array($module,$modinstance->GetVersion(),
 									 ($modinstance->IsAdminOnly()==true?1:0)
 									 ,1,$lazyload_fe,$lazyload_admin));
