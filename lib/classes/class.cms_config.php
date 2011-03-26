@@ -278,9 +278,7 @@ class cms_config implements ArrayAccess
 
       default:
 	// not a mandatory key for the config.php file... and one we don't understand.
-	// we should never get here
-	stack_trace();
-	die('FATAL ERROR: '.$key.' does not exist in the config file');
+	return null;
       }
   }
 
