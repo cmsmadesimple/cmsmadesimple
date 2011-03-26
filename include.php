@@ -99,8 +99,10 @@ if (isset($starttime))
 #Load the config file (or defaults if it doesn't exist)
 //require(cms_join_path($dirname,'lib','config.functions.php'));
 
+# Create the global
+$gCms = cmsms();
 #Grab the current configuration
-$config = cmsms()->GetConfig();
+$config = $gCms->GetConfig();
 
 #Set the timezone
 if( $config['timezone'] != '' )
