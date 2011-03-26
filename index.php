@@ -299,8 +299,8 @@ if ( !is_sitedown() && $config["debug"] == true)
 }
 else if( isset($config['show_performance_info']) && ($showtemplate == true) )
 {
-echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak} -->\n";
-
+  debug_to_log('performance info: '.microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}");
+  echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak} -->\n";
 }
 
 if( is_sitedown() || $config['debug'] == true)

@@ -100,8 +100,6 @@ function cms_autoloader($classname)
 	  return;
 	}
     }
-
-  //die('autoloader '.$classname);
 }
 
 spl_autoload_register('cms_autoloader');

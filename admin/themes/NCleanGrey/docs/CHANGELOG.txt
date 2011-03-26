@@ -1,0 +1,53 @@
+Version 1.5
+-----------------
+- Some UI features
+- complete design re-work
+- LOT of bug fixes
+- Compatibility with more screens
+- New Icons Set thanks to DryIcons (http://dryicons.com/)
+- Re-order Pages Re-work
+- more ...
+
+
+Version 1.4
+-----------------
+- ToolsTips
+- Removed Vector Logo not fill into CMS license   (if someone want have to contact me)
+
+Version 1.3.1
+-----------------
+- opacity stuff now work ain all IEs (Hope so)
+- Better HOVER
+
+Version 1.3
+-----------------
+- out for cmsms 1.5
+ 
+
+Version 1.2.1
+-----------------
+- out for cmsms 1.4.1
+- Cleanup the css
+- update license 
+
+
+Version 1.2
+-----------------
+- minor fixes
+- Css Improvements
+- Implemented on Installer
+- Added small image Original Screen Design (/NCleanGrey/docs/screenNCleanGrey.jpg)
+
+Version 1.1
+-----------------
+- Added username in header (wellcome: username)
+- Added icons View site and Logout admin
+- Imported from class.template the helplinks block
+- Css Improvements
+- Logo in PNG (Fireworks) image for ppl
+  
+
+
+Version 1.0
+-----------------
+- Inicial

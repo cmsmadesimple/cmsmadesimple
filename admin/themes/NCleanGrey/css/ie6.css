@@ -1,0 +1,29 @@
+/* CMS Made Simple - NCleanGrey Theme version 1.4
+2008/2009 (c) Nuno Costa - nuno.mfcosta@sapo.pt [criacaoweb.net] 
+CSS for OLD and NO standard browser IE6
+*/
+	
+/* ------- Notifications ------- */
+div#MainContent div.full-Notifications
+{
+ width:98%;
+ padding-left:10px;
+}
+
+/* ------- Dashboard page ------- */
+div#MainContent .full-content
+{
+ width:99%;
+
+}
+.coredashboardcontent 
+{
+	width:98%;
+	margin:5px 0 5px 5px;
+}
+/*NOT CORE*/
+.moduledashboardcontent 
+ {
+  width:48.5%; 
+  margin:5px 0 5px 4px;
+ }
