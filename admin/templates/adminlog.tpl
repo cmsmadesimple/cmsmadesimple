@@ -1,11 +1,11 @@
 <div class="pagecontainer">
   <div class="pageoverflow">
   {$header}
-    <input type="checkbox" id="toggle_filters"
+    <input type="checkbox" id="toggle_filters" {if $filterdisplay=="block"}checked="1"  {/if}
            onClick="if (this.checked) document.getElementById('adminlog_filters').style.display = 'block'; else document.getElementById('adminlog_filters').style.display = 'none';"/>
     <label for="toggle_filters">{$langshowfilters}</label>
 
-    <div id="adminlog_filters" style="display: none">
+    <div id="adminlog_filters" style="display: {$filterdisplay}">
       <fieldset>
         <legend>{$langfilters}</legend>
         <form id="adminlog_filter" method="post" action="adminlog.php">
@@ -15,10 +15,12 @@
   <p class="pagetext">{$langfilteruser}</p>
   <p class="pageinput"><input type="text" name="filteruser" value="{$filteruservalue}"/></p>
 </div>
+{*
 <div class="pageoverflow">
   <p class="pagetext">{$langfiltername}</p>
   <p class="pageinput"><input type="text" name="filtername" value="{$filternamevalue}"/></p>
 </div>
+*}
           <div class="pageoverflow">
   <p class="pagetext">{$langfilteraction}</p>
   <p class="pageinput"><input type="text" name="filteraction" value="{$filteractionvalue}"/></p>
@@ -28,9 +30,6 @@
   <p class="pageinput"><input type="submit" name="filterapply" value="{$langfilterapply}"/><input type="submit" name="filterreset"
                                                                                      value="{$langfilterreset}"/></p>
 </div>
-
-
-
 
         </form>
       </fieldset>
