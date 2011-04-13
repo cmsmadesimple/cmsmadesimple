@@ -657,6 +657,7 @@ $lang['admin']['help_function_modified_date'] = <<<EOT
         <h3>What parameters does it take?</h3>
         <ul>
                 <li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
+                <li><em>(optional)</em>assign - Assign the results to the named smarty variable.</li>
         </ul>
 EOT;
 $lang['admin']['help_function_metadata'] = <<<EOT
@@ -800,6 +801,7 @@ $lang['admin']['help_function_created_date'] = <<<EOT
         <h3>What parameters does it take?</h3>
         <ul>
                 <li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
+                <li><em>(optional)</em>assign - Assign the results to the named smarty variable.</li>
         </ul>
 EOT;
 $lang['admin']['help_function_content'] = <<<EOT
