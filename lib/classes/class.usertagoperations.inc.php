@@ -70,7 +70,7 @@ class UserTagOperations
 		if (!$existing)
 		{
 			$new_usertag_id = $db->GenID(cms_db_prefix()."userplugins_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, create_date, modified_date) VALUES (?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, create_date, modified_date) VALUES (?,?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 			$result = $db->Execute($query, array($new_usertag_id, $name, $text));
 			if ($result)
 				return true;
