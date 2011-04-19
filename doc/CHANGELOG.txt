@@ -1,9 +1,12 @@
 Version 1.10 - 
 -----------------------------
 Core - Bug Reports
+  - #6257 cms_selflink adding space
   - #6272 tiny mce adjustments fail (Translation problem)
   - #6278 NCleanGrey Admin Theme typo
   - #6284 CMSMailer system message 'mail not setup' link leads to login page (Translation problem)
+  - #6322 wrong db query in SetUserTag method
+  - #6386 cms_htmlenities in created_date & modified_date
 
 
 Version 1.9.4.1 - Faanui
