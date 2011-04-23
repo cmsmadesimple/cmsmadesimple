@@ -82,6 +82,7 @@ INSERT INTO {DB_PREFIX}permissions VALUES (36,'View Tag Help','View Tag Help','2
 INSERT INTO {DB_PREFIX}permissions VALUES (40,'Approve News','Approve News For Frontend Display','2008-09-27 19:58:12','2008-09-27 19:58:12');
 INSERT INTO {DB_PREFIX}permissions VALUES (41,'Delete News','Delete News Articles','2008-09-27 19:58:12','2008-09-27 19:58:12');
 INSERT INTO {DB_PREFIX}permissions VALUES (44,'Manage All Content','Manage All Content','2009-05-06 15:04:11','2009-05-06 15:04:11');
+INSERT INTO {DB_PREFIX}permissions VALUES (46,'Reorder Content','Reorder Content','2009-05-06 15:04:11','2009-05-06 15:04:11');
 INSERT INTO {DB_PREFIX}htmlblobs VALUES (1,'footer','<p>&copy; Copyright {custom_copyright} - CMS Made Simple<br />\r\nThis site is powered by <a href=\"http://www.cmsmadesimple.org\">CMS Made Simple</a> version {cms_version}</p>','',0,1,'2006-07-25 21:22:32','2006-07-25 21:22:32');
 INSERT INTO {DB_PREFIX}groups VALUES (1,'Admin',1,'2006-07-25 21:22:32','2006-07-25 21:22:32');
 INSERT INTO {DB_PREFIX}groups VALUES (2,'Editor',1,'2006-07-25 21:22:32','2006-07-25 21:22:32');

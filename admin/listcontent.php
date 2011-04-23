@@ -585,7 +585,7 @@ function check_children(&$root, &$mypages, &$userid)
 	return $result;
 }
 
-function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$copyImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages, &$page, $columnstodisplay)
+function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$copyImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages, &$page, $columnstodisplay, $author_allpages )
 {
   global $thisurl;
   global $urlext;
@@ -816,7 +816,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	  // code for move up is simple
 	  $columns['move'] = '&nbsp;';
 	  $txt = '';
-	  if (check_permission($userid, 'Manage All Content'))
+	  if (check_permission($userid, 'Manage All Content') || $author_allpages )
 	    {
 	      $sameLevel = $root->getSiblingCount();
 	      if ($sameLevel>1)
@@ -1002,9 +1002,25 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
     if (in_array($one->Id(),$openedArray) && is_array($children) && count($children) )
     {
+      // count through all the children and see if we can display the move column.
+      $author_allpages = true;
+      if( check_permission($userid,'Reorder Content') )
+	{
+	  $mypages = author_pages($userid);
+	  foreach( $children as $childobj )
+	    {
+	      $child = $childobj->getId();
+	      if( !check_ownership($userid,$child) && !quick_check_authorship($child,$mypages) )
+		{
+		  $author_allpages = false;
+		  break;
+		}
+	    }
+	}
+
         foreach ($children as $child)
         { 
-	  display_hierarchy($child, $userid, $modifyall, $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay);
+	  display_hierarchy($child, $userid, $modifyall, $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay, $author_allpages);
         }
     }
 } // function display_hierarchy
@@ -1031,7 +1047,7 @@ function display_content_list($themeObject = null)
 	$columnstodisplay['owner'] = 1;
 	$columnstodisplay['active'] = check_permission($userid, 'Manage All Content');
 	$columnstodisplay['default'] = check_permission($userid, 'Manage All Content');
-	$columnstodisplay['move'] = check_permission($userid, 'Manage All Content');
+	$columnstodisplay['move'] = check_permission($userid, 'Manage All Content') || check_permission($userid,'Reorder Content');
 	$columnstodisplay['view'] = 1;
 	$columnstodisplay['copy'] = check_permission($userid,'Add Pages') || check_permission($userid,'Manage All Content');
 	$columnstodisplay['edit'] = 1;
@@ -1093,9 +1109,25 @@ function display_content_list($themeObject = null)
 	if ($hierarchy->hasChildren())
 	{
 		$pagelist = array();
-		foreach ($hierarchy->getChildren(false,true) as $child)
+
+		$author_allpages = true;
+		$children = $hierarchy->getChildren(false,true);
+		if( check_permission($userid,'Reorder Content') )
+		  {
+		    $mypages = author_pages($userid);
+		    foreach( $children as $child )
+		      {
+			if( !check_ownership($userid,$child) && !quick_check_authorship($child,$mypages) )
+			  {
+			    $author_allpages = false;
+			    break;
+			  }
+		      }
+		  }
+
+		foreach ($children as $child)
 		{ 
-		  display_hierarchy($child, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay);
+		  display_hierarchy($child, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay, $author_allpages );
 		}
 		$rowcount += count($pagelist);
 		foreach ($pagelist as $item)

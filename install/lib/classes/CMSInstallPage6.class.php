@@ -89,7 +89,7 @@ class CMSInstallerPage6 extends CMSInstallerPage
 						$s = str_replace('\\"', '"', $s);
 						$result = $db->Execute($s);
 						if (!$result) {
-							die(ilang('invalid_query', $s));
+						  die(ilang('invalid_query', $s).' -- '.$db->ErrorMsg());
 						}
 					}
 				}
