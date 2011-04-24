@@ -306,47 +306,42 @@ function content_move($contentid, $parentid, $direction)
 function movecontent($contentid, $parentid, $direction = 'down')
 {
   $db = cmsms()->GetDb();
-	$userid = get_userid();
+  $userid = get_userid();
 
-	if (check_permission($userid, 'Manage All Content'))
+  if (check_permission($userid, 'Manage All Content') ||
+      (check_permission($userid, 'Reorder Content') && check_peer_authorship($userid,$contentid)) )
+    {
+      $order = 1;
+      
+      // Grab necessary info for fixing the item_order
+      $query = "SELECT item_order FROM ".cms_db_prefix()."content WHERE content_id = ?";
+      $order = $db->GetOne($query, array($contentid));
+      
+      $time = $db->DBTimeStamp(time());
+      if ($direction == "down")
 	{
-		$order = 1;
-
-		#Grab necessary info for fixing the item_order
-		$query = "SELECT item_order FROM ".cms_db_prefix()."content WHERE content_id = ?";
-		$result = $db->Execute($query, array($contentid));
-		$row = $result->FetchRow();
-		if (isset($row["item_order"]))
-		{
-			$order = $row["item_order"];	
-		}
-
-		$time = $db->DBTimeStamp(time());
-		if ($direction == "down")
-		{
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
-			#echo $query, $order + 1, $parent_id;
-			$db->Execute($query, array($order + 1, $parentid));
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE content_id = ? AND parent_id = ?';
-			#echo $query, $content_id, $parent_id;
-			$db->Execute($query, array($contentid, $parentid));
-		}
-		else if ( ($direction == "up") && ($order > 1) )
-		{
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
-			#echo $query;
-			$db->Execute($query, array($order - 1, $parentid));
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE content_id = ? AND parent_id = ?';
-			#echo $query;
-			$db->Execute($query, array($contentid, $parentid));
-		}
-
-		//sleep(15); //waiting for updating DB. Better 5 but 15 is good for testing concurrent processes and work!
-		$contentops = cmsms()->GetContentOperations();
-		$contentops->SetAllHierarchyPositions();
-		$contentops->ClearCache();
+	  $query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
+	  // echo $query, $order + 1, $parent_id;
+	  $db->Execute($query, array($order + 1, $parentid));
+	  $query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE content_id = ? AND parent_id = ?';
+	  // echo $query, $content_id, $parent_id;
+	  $db->Execute($query, array($contentid, $parentid));
+	}
+      else if ( ($direction == "up") && ($order > 1) )
+	{
+	  $query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
+	  // echo $query;
+	  $db->Execute($query, array($order - 1, $parentid));
+	  $query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE content_id = ? AND parent_id = ?';
+	  // echo $query;
+	  $db->Execute($query, array($contentid, $parentid));
 	}
 
+      //sleep(15); //waiting for updating DB. Better 5 but 15 is good for testing concurrent processes and work!
+      $contentops = cmsms()->GetContentOperations();
+      $contentops->SetAllHierarchyPositions();
+      $contentops->ClearCache();
+    }
 }
 
 function deletecontent($contentid)
@@ -559,6 +554,45 @@ function reorder_process($get)
 	
 	$objResponse->assign("contentlist", "innerHTML", display_content_list());
 	return $objResponse;
+}
+
+
+/** check to make sure that the user has authorship of all of the peers of the
+ * specified page
+ *
+ * @author calguy1000
+ * @since 1.10
+ * @returns boolean
+ */
+function check_peer_authorship($userid,$contentid)
+{
+  if( $userid <= 0 || $contentid <= 0 ) return FALSE;
+  if( check_permission($userid,'Modify Any Page') ) return TRUE;
+
+  $hm = cmsms()->GetHierarchyManager();
+  $node = $hm->getNodeById($contentid);
+  if( !$node ) return FALSE;
+  
+  $parent = $node->getParentNode();
+  if( !$node )
+    {
+      // no parent means that $contentid is at the root level
+      $parent = $hm;
+    }
+
+  $children = $parent->getChildren();
+  if( !$children ) return FALSE;
+
+  $mypages = author_pages($userid);
+  for( $i = 0; $i < count($children); $i++ )
+    {
+      $the_id = $children[$i]->getId();
+      if( !check_ownership($userid,$the_id) && !quick_check_authorship($the_id,$mypages) )
+	{
+	  return FALSE;
+	}
+    }
+  return TRUE;
 }
 
 function check_children(&$root, &$mypages, &$userid)
@@ -1003,22 +1037,9 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
     if (in_array($one->Id(),$openedArray) && is_array($children) && count($children) )
     {
       // count through all the children and see if we can display the move column.
-      $author_allpages = true;
-      if( check_permission($userid,'Reorder Content') )
-	{
-	  $mypages = author_pages($userid);
-	  foreach( $children as $childobj )
-	    {
-	      $child = $childobj->getId();
-	      if( !check_ownership($userid,$child) && !quick_check_authorship($child,$mypages) )
-		{
-		  $author_allpages = false;
-		  break;
-		}
-	    }
-	}
+      $author_allpages = check_permission($userid,'Reorder Content') && check_peer_authorship($userid,$children[0]->getId());
 
-        foreach ($children as $child)
+      foreach ($children as $child)
         { 
 	  display_hierarchy($child, $userid, $modifyall, $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay, $author_allpages);
         }
@@ -1110,20 +1131,8 @@ function display_content_list($themeObject = null)
 	{
 		$pagelist = array();
 
-		$author_allpages = true;
 		$children = $hierarchy->getChildren(false,true);
-		if( check_permission($userid,'Reorder Content') )
-		  {
-		    $mypages = author_pages($userid);
-		    foreach( $children as $child )
-		      {
-			if( !check_ownership($userid,$child) && !quick_check_authorship($child,$mypages) )
-			  {
-			    $author_allpages = false;
-			    break;
-			  }
-		      }
-		  }
+		$author_allpages = check_permission($userid,'Reorder Content') && check_peer_authorship($userid,$children[0]->getId());
 
 		foreach ($children as $child)
 		{ 
