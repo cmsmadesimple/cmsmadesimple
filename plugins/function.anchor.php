@@ -18,7 +18,7 @@
 
 function smarty_cms_function_anchor($params, &$smarty)
 {
-	global $gCms;
+	$gCms = cmsms();
 	#Added by Russ for class, tabindex and title for anchor 2006/07/19
 	$class="";
 	$title="";

@@ -18,7 +18,7 @@
 
 function smarty_cms_function_modified_date($params, &$smarty)
 {
-	global $gCms;
+	$gCms = cmsms();
 	$content_obj = $gCms->variables['content_obj'];
 
 	if(empty($params['format']))

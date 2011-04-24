@@ -19,7 +19,7 @@
 #Author: Sorin Sbarnea / INTERSOL SRL
 function smarty_cms_function_embed($params, &$smarty)
 {
-  global $gCms;
+  $gCms = cmsms();
 
   $name = 'myframe';
   if(isset($params['name']) )

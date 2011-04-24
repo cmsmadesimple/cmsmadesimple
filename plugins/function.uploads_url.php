@@ -18,7 +18,7 @@
 
 function smarty_function_uploads_url($params, &$smarty)
 {
-	global $gCms;
+	$gCms = cmsms();
 	$config = $gCms->GetConfig();
 	return $config['uploads_url'];
 }

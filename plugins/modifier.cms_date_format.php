@@ -3,7 +3,7 @@
 function smarty_cms_modifier_cms_date_format($string, $format = '',
 					     $default_date = '')
 {
-  global $gCms;
+  $gCms = cmsms();
   if( $format == '' )
     {
       $format = get_site_preference('defaultdateformat');

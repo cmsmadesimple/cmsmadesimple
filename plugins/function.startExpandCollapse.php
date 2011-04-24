@@ -20,7 +20,7 @@ function smarty_cms_function_startExpandCollapse($params, &$smarty)
 {
 	static $firstExpandCollapse = true;//only gets set one time per page
 	
-	global $gCms;
+	$gCms = cmsms();
 	$config = $gCms->GetConfig();
 
 	if (!empty($params['id']) && !empty($params['title'])) {

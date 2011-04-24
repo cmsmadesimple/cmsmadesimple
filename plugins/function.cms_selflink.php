@@ -18,7 +18,7 @@
 
 function smarty_cms_function_cms_selflink($params, &$smarty) 
 {
-  global $gCms;
+  $gCms = cmsms();
 
   $rellink = (isset($params['rellink']) && $params['rellink'] == '1' ? true : false);
   $url = '';
@@ -142,7 +142,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 
       if ($condition )
 	{
-	  global $gCms;
+	  $gCms = cmsms();
 	  $hm =& $gCms->GetHierarchyManager();
 	  $flatcontent = array();
 	  if ($condition != '|') // uplink (we don't need the flatcontent for an uplink)

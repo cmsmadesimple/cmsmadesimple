@@ -20,7 +20,7 @@
 function smarty_cms_function_breadcrumbs($params, &$smarty)
 {
 
-	global $gCms; 
+	$gCms = cmsms(); 
 	$manager = &$gCms->GetHierarchyManager();
 
 	$thispage = $gCms->variables['content_id'];

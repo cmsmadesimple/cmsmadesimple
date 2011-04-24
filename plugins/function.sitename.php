@@ -21,7 +21,7 @@ function smarty_cms_function_sitename($params, &$smarty)
      $result = get_site_preference('sitename', 'CMSMS Site');
      if( isset($params['assign']) )
 	{
-	   global $gCms;
+	   $gCms = cmsms();
            $smarty =& $gCms->GetSmarty();
            $smarty->assign(trim($params['assign']),$result);
 	   return;

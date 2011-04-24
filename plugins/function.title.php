@@ -18,7 +18,7 @@
 
 function smarty_cms_function_title($params, &$smarty)
 {
-	global $gCms;
+	$gCms = cmsms();
 	$contentobj = $gCms->variables['content_obj'];
 	$config = $gCms->GetConfig();
 	$result = '';

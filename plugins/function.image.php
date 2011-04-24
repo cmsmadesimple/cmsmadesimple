@@ -18,7 +18,7 @@
 
 function smarty_cms_function_image($params, &$smarty)
 {
-	global $gCms;
+	$gCms = cmsms();
 
 	$text = '';
 	$imgstart = '<img src=';

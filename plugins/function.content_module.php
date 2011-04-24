@@ -24,7 +24,7 @@ function smarty_cms_function_content_module($params, &$smarty)
   if( isset($params['block']) ) {
     $block = $params['block'];
   }
-  global $gCms;
+  $gCms = cmsms();
   $content_obj = &$gCms->variables['content_obj'];
   $manager =& $gCms->GetHierarchyManager();
   $node = $manager->sureGetNodeById($content_obj->Id());

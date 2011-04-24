@@ -23,7 +23,7 @@ function smarty_cms_function_page_attr($params, &$smarty)
 
   if( isset($params['key']) ) {
     $key = $params['key'];
-    global $gCms;
+    $gCms = cmsms();
 	$contentops = $gCms->GetContentOperations();
 	$contentobj = $contentops->getContentObject();
     if( is_object($contentobj) )

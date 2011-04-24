@@ -18,7 +18,7 @@
 
 function smarty_cms_function_last_modified_by($params, &$smarty) 
 {
-        global $gCms;
+        $gCms = cmsms();
 	$content_obj = $gCms->variables['content_obj'];
 
         $id = "";

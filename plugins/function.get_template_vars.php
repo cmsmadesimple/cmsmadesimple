@@ -18,7 +18,7 @@
 
 function smarty_cms_function_get_template_vars($params, &$smarty)
 {
-	global $gCms;
+	$gCms = cmsms();
 	
 	$tpl_vars = $gCms->smarty->get_template_vars();
 	$str = '<pre>';

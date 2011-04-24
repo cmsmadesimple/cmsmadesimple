@@ -21,7 +21,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
   if( !function_exists('get_stylesheet_tag') ) {
   function get_stylesheet_tag($cssid,$media='')
   {
-    global $gCms;
+    $gCms = cmsms();
     $config = $gCms->GetConfig();
     
     $str = '';
@@ -50,7 +50,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
   }
   }
 
-  global $gCms;
+  $gCms = cmsms();
   $config = $gCms->GetConfig();
   $content_obj = &$gCms->variables['content_obj'];
   $template_id=$content_obj->TemplateId();

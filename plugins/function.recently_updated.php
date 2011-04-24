@@ -55,7 +55,7 @@ else {
 	$output = '<ul>';
 }
 
-global $gCms;
+$gCms = cmsms();
 $hm =& $gCms->GetHierarchyManager();
 $db = &$gCms->db;
 // Get list of most recently updated pages excluding the home page

@@ -18,7 +18,7 @@
 
 function smarty_cms_function_oldprint($params, &$smarty)
 {
-	global $gCms;
+	$gCms = cmsms();
 	$page_url = ''; // Initialize var to prevent errors on preview
 	$text = 'Print This Page';
 

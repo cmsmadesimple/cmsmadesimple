@@ -153,7 +153,7 @@ function smarty_cms_function_dump($params, &$smarty)
     }
 
 
-  global $gCms;
+  $gCms = cmsms();
   // get the item name (without any $)
   if( !isset($params['item']) )
     {

@@ -18,7 +18,7 @@
 
 function smarty_cms_function_content_image($params,&$smarty)
 {
-  global $gCms;
+  $gCms = cmsms();
   $config = $gCms->GetConfig();
 
   $contentobj = $gCms->variables['content_obj'];
