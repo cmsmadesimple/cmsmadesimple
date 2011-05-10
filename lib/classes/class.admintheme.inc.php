@@ -628,16 +628,33 @@ class AdminTheme
      * below into your own method if you override this -- it's used by the dropdown
      * menu in IE.
      */
-    function OutputHeaderJavascript()
+    function OutputHeaderJavascript($exclude = '')
     {
-		//echo '<script type="text/javascript" src="themes/default/includes/standard.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../lib/jquery/js/jquery-1.4.2.min.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../lib/jquery/js/jquery-ui-1.8.4.custom.min.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../lib/jquery/js/jquery.ui.nestedSortable.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../lib/jquery/js/jquery.json-2.2.js"></script>'."\n";
-//         echo "<script type=\"text/javascript\" src=\"";
-//         echo $this->cms->config['root_url'];
-//         echo "/lib/dynamic_tabs/tabs.js\"></script>\n";
+	
+		$config = cms_config::get_instance();
+		$scripts = array();
+		
+		// Scripts to include
+		$scripts['jquery-1.6.min.js'] = '<script type="text/javascript" src="'.$config['root_url'].'/lib/jquery/js/jquery-1.6.min.js"></script>'."\n";
+		$scripts['jquery-ui-1.8.12.custom.min.js'] = '<script type="text/javascript" src="'.$config['root_url'].'/lib/jquery/js/jquery-ui-1.8.12.custom.min.js"></script>'."\n";
+		$scripts['jquery.ui.nestedSortable.js'] = '<script type="text/javascript" src="'.$config['root_url'].'/lib/jquery/js/jquery.ui.nestedSortable.js"></script>'."\n";
+		$scripts['jquery.json-2.2.js'] = '<script type="text/javascript" src="'.$config['root_url'].'/lib/jquery/js/jquery.json-2.2.js"></script>'."\n";
+
+		// Check if we need exclude some script
+		if(!empty($exclude)) {
+		
+			$exclude_list = explode(",", trim(str_replace(' ','',$exclude)));
+			foreach($exclude_list as $one) {
+			
+				unset($scripts[$one]);
+			}		
+		}
+		
+		// Output
+		foreach($scripts as $script) {
+	
+			echo $script;		
+		}			
 	}
 
     /**
