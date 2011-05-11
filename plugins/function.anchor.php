@@ -56,14 +56,21 @@ function smarty_cms_function_anchor($params, &$smarty)
 		$url = str_replace('***','&amp;',$url);
 		if (isset($params['onlyhref']) && ($params['onlyhref'] == '1' || $params['onlyhref'] == 'true'))
 			#Note if you set 'onlyheref' that is what you get - no class or title or tabindex or text
-			echo $url;
+			$tmp =  $url;
 		else
 			#Line replaced by Russ
 			#	echo '<a href="'.$url.'">'.$params['text'].'</a>';
 			#Line replaced with -  by Russ to reflect class and title for anchor 2006/07/19
-			echo '<a href="'.$url.'"'.$class.$title.$tabindex.$accesskey.'>'.$params['text'].'</a>';
+			$tmp = '<a href="'.$url.'"'.$class.$title.$tabindex.$accesskey.'>'.$params['text'].'</a>';
 			#End of second part added by Russ 2006/07/19
 	}
+
+	if( isset($params['assign']) ){
+	    $smarty->assign($params['assign'],$tmp);
+	    return;
+        }
+	echo $tmp;
+	
 }
 	#Ammended by Russ for class, tabindex and title for anchor 2006/07/19
 function smarty_cms_help_function_anchor() {

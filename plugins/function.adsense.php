@@ -23,7 +23,14 @@ function smarty_cms_function_adsense($params, &$smarty) {
 	foreach( $parts as $part ) 
 		if( isset( $params[ $part ] ) and !empty( $params[ $part ] ) ) 
 			$result .= "google_{$part} = \"".$params[$part]."\";\n";
-	return "{$result}//--></script>\n<script type='text/javascript' src='http://pagead2.googlesyndication.com/pagead/show_ads.js'></script>\n";
+			
+			
+	$tmp= "{$result}//--></script>\n<script type='text/javascript' src='http://pagead2.googlesyndication.com/pagead/show_ads.js'></script>\n";
+	if( isset($params['assign']) ){
+	    $smarty->assign($params['assign'],$tmp);
+	    return;
+        }
+	return $tmp;
 }
 
 function smarty_cms_help_function_adsense() {

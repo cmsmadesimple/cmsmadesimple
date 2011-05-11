@@ -47,8 +47,14 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
     if ( isset($params['ext_info']) ) {
       $external_text ='( '.$params['ext_info'].' )';
     }
+	
+	$result='<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
+	if( isset($params['assign']) ){
+	    $smarty->assign($params['assign'],$result);
+	    return;
+        }
+        return $result;
 
-    return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
   }
 
   if (isset($params['lang']))
@@ -60,7 +66,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 
   $urlparams = '';
   if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
-    $urlparams = $params['urlparams'];
+    $urlparams = urlencode(trim($params['urlparams']));
   }
 
   $label = '';
@@ -103,7 +109,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 	 
 	  if (isset($params['urlparam']))
 	    {
-	      $url .= trim($params['urlparam']);
+	      $url .= urlencode(trim($params['urlparam']));
 	    }
 	}
     }
@@ -320,6 +326,10 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
   if( isset($params['href']) )
     {
       cms_set_frontend_language();
+	if( isset($params['assign']) ){
+	    $smarty->assign($params['assign'],$url);
+	    return;
+        }
       return $url;
     }
 
