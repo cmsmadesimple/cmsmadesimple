@@ -63,7 +63,7 @@ class CmsObject {
 	 * System Modules - a list (hardcoded) of all system modules
 	 *	@access private
 	 */
-	var $cmssystemmodules =  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'TinyMCE', 'Printing', 'ThemeManager' );
+	var $cmssystemmodules =  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'MicroTiny', 'CMSPrinting', 'ThemeManager' );
 
 
 	/**
