@@ -18,7 +18,7 @@
 
 function smarty_cms_function_print($params, &$smarty)
 {
-  $params['module'] = 'Printing';
+  $params['module'] = 'CMSPrinting';
   return cms_module_plugin($params,$smarty);
 }
 
