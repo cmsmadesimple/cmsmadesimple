@@ -1,6 +1,12 @@
 <?php
 global $gCms;
 
+echo '<p>Adding &quot;Reorder Content&quot; permission';
+$nid = $db->GenId()(cms_db_prefix().'permissions_seq');
+$db->Execute('Insert INTO '.cms_db_prefix()."permissions (permission_id,permission_name,permission_text,create_date,modified_date)
+              VALUES (?,?,?,NOW(),NOW())",array($nid,'Reorder Content','Reorder Content'));
+echo '[done]</p>';
+
 $dbdict = NewDataDictionary($db);
 echo '<p>Adding New Events';
 $auery 'INSERT INTO '.cms_db_prefix().'events (originator,event_name,event_id) VALUES (?,?,?)';
