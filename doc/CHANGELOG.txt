@@ -7,6 +7,7 @@ Core - Bug Reports:
   - #6284 CMSMailer system message 'mail not setup' link leads to login page (Translation problem)
   - #6322 wrong db query in SetUserTag method
   - #6386 cms_htmlenities in created_date & modified_date
+  - #6436 	MenuManager: wrong assignment of $node->depth
 
 Core - Feature requests:
   - 
