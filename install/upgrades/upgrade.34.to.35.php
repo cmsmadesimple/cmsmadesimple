@@ -22,6 +22,11 @@ $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix().'modules','allow_fe_lazyload I
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 echo "[done]</p>";
 
+echo '<p>Adding columns to userplugins table...';
+$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix().'userplugins','description X');
+$return = $dbdict->ExecuteSQLArray($sqlarray);
+echo "[done]</p>";
+
 $sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_content_by_hierarchy', $db_prefix."content", 'hierarchy');
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 $ado_ret = ($return == 2) ? ilang('done') : ilang('failed');

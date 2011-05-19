@@ -42,6 +42,9 @@ if (isset($_POST["origpluginname"])) $orig_plugin_name = $_POST["origpluginname"
 $code= "";
 if (isset($_POST["code"])) $code = $_POST["code"];
 
+$description= "";
+if (isset($_POST["description"])) $description = $_POST["description"];
+
 if (isset($_POST["cancel"])) {
 	redirect("listusertags.php".$urlext);
 	return;
@@ -50,7 +53,7 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User-defined Tags');
 
-$smarty = new Smarty_CMS($gCms->config); // why?
+//$smarty = new Smarty_CMS($gCms->config); // why? - Indeed -Stikki-
 load_plugins($smarty);
 
 $ajax = false;
@@ -122,10 +125,18 @@ if ($access) {
 		}
 
 		if ($validinfo) {
+		
+			// Send event EditUserDefinedTagPre
 			Events::SendEvent('Core', 'EditUserDefinedTagPre', array('id' => $userplugin_id, 'name' => &$plugin_name, 'code' => &$code));
-			$query = "UPDATE ".cms_db_prefix()."userplugins SET userplugin_name = ".$db->qstr($plugin_name).", code = ".$db->qstr($code).", modified_date = ".$db->DBTimeStamp(time())." WHERE userplugin_id = ". $db->qstr($userplugin_id);
+			
+			// Update database
+			$query = "UPDATE ".cms_db_prefix()."userplugins SET userplugin_name = ".$db->qstr($plugin_name).", code = ".$db->qstr($code).", 
+					description = ".$db->qstr($description).", modified_date = ".$db->DBTimeStamp(time())." WHERE userplugin_id = ". $db->qstr($userplugin_id);
 			$result = $db->Execute($query);
+			
 			if ($result) {
+			
+				// Send event EditUserDefinedTagPost & put mention to Admin Log
 				Events::SendEvent('Core', 'EditUserDefinedTagPost', array('id' => $userplugin_id, 'name' => &$plugin_name, 'code' => &$code));
 				audit($userplugin_id, $plugin_name, 'Edited User Defined Tag');
 
@@ -140,6 +151,7 @@ if ($access) {
 			}
 		}
 
+		// Check if we need ajax output
 		if ($ajax)
 		{
 			header('Content-Type: text/xml');
@@ -175,6 +187,7 @@ if ($access) {
 		$plugin_name = $row["userplugin_name"];
 		$orig_plugin_name = $plugin_name;
 		$code = $row['code'];
+		$description = $row['description'];
 	}
 }
 if (strlen($plugin_name)>0)
@@ -262,11 +275,13 @@ else {
 			</div>
 			<div class="pageoverflow">
 				<p class="pagetext">*<?php echo lang('code')?></p>
-				<p class="pageinput">
-				<?php echo create_textarea(false, $code, 'code', 'pagebigtextarea', 'code', '', '', '80', '15','','php')?>
-				
-				</p>
+				<p class="pageinput"><?php echo create_textarea(false, $code, 'code', 'pagebigtextarea', 'code', '', '', '80', '15','','php')?></p>
 			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('description')?></p>
+				<p class="pageinput"><?php echo create_textarea(false, $description, 'description', 'pagebigtextarea', 'description', '', '', '80', '15')?></p>
+			</div>			
+			
 			<div class="pageoverflow">
 				<p class="pagetext">&nbsp;</p>
 				<p class="pageinput">

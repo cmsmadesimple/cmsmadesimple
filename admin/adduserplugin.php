@@ -33,6 +33,9 @@ if (isset($_POST["plugin_name"])) $plugin_name = $_POST["plugin_name"];
 $code= "";
 if (isset($_POST["code"])) $code = $_POST["code"];
 
+$description = "";
+if (isset($_POST["description"])) $description = $_POST["description"];
+
 if (isset($_POST["cancel"])) {
 	redirect("listusertags.php".$urlext);
 	return;
@@ -44,7 +47,7 @@ $access = check_permission($userid, 'Modify User-defined Tags');
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
-$smarty = new Smarty_CMS(cmsms()->GetConfig());
+//$smarty = new Smarty_CMS(cmsms()->GetConfig());
 load_plugins($smarty);
 
 $gCms = cmsms();
@@ -114,11 +117,16 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$new_usertag_id = $db->GenID(cms_db_prefix()."userplugins_seq");
+		
+			$new_usertag_id = $db->GenID(cms_db_prefix()."userplugins_seq");		
 			Events::SendEvent('Core', 'AddUserDefinedTagPre', array('id' => $new_usertag_id, 'name' => &$plugin_name, 'code' => &$code));
-			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, create_date, modified_date) VALUES ($new_usertag_id, ".$db->qstr($plugin_name).", ".$db->qstr($code).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+			
+			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, description, create_date, modified_date) VALUES ($new_usertag_id, ".$db->qstr($plugin_name).", 
+					".$db->qstr($code).", ".$db->qstr($description).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
 			$result = $db->Execute($query);
+			
 			if ($result) {
+			
 				Events::SendEvent('Core', 'AddUserDefinedTagPost', array('id' => $new_usertag_id, 'name' => &$plugin_name, 'code' => &$code));
 				audit($new_usertag_id, $plugin_name, 'Added User Defined Tag');
 				redirect("listusertags.php".$urlext."&message=usertagadded");
@@ -161,6 +169,12 @@ else {
 			<!--  <textarea class="pagetextarea" name="code" rows="" cols=""><_?php echo $code ?></textarea>-->
 			</p>
 		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('description')?></p>
+			<p class="pageinput"><?php echo create_textarea(false, $description, 'description', 'pagebigtextarea', 'description', '', '', '80', '15')?></p>
+		</div>			
+					
+		
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">

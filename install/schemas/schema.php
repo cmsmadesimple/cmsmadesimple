@@ -575,6 +575,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		userplugin_id I KEY,
 		userplugin_name C(255),
 		code X,
+		description X,
 		create_date DT,
 		modified_date DT
 	";
