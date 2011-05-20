@@ -36,6 +36,7 @@ class CMSInstallerPage6 extends CMSInstallerPage
 		$values['umask'] = isset($_POST['umask']) ? $_POST['umask'] : '';
 		$values['admininfo']['username'] = $_POST['adminusername'];
 		$values['admininfo']['email'] = $_POST['adminemail'];
+		$values['admininfo']['salt'] = $_POST['adminsalt'];
 		$values['admininfo']['password'] = $_POST['adminpassword'];
 		$values['admininfo']['email_accountinfo'] = $_POST['email_accountinfo'];
 		$values['createtables'] = isset($_POST['createtables']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
@@ -105,9 +106,16 @@ class CMSInstallerPage6 extends CMSInstallerPage
 			echo "<p>" . ilang('install_admin_set_account');
 
 			$sql_error = false;
-
+			if ($_POST['adminsalt'] == '1') 
+			{
+				$salt = substr(str_shuffle("23456789ABCDEFGHJKMNPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#$%^&*"),0,16);
+			}
+			else
+			{
+				$salt = '';
+			}
 			$sql = 'UPDATE ' . $db_prefix . 'users SET username = ?, password = ?, email = ? WHERE user_id = 1';
-			$dbresult = $db->Execute($sql, array($_POST['adminusername'], md5($_POST['adminpassword']), $_POST['adminemail']));
+			$dbresult = $db->Execute($sql, array($_POST['adminusername'], md5($salt.$_POST['adminpassword']), $_POST['adminemail']));
 			if (!$dbresult)
 			{
 				echo ilang('invalid_query', $db->$sql) ."</p>";
@@ -131,6 +139,13 @@ class CMSInstallerPage6 extends CMSInstallerPage
 			{
 				echo " [" . ilang('done') . "]</p>";
 			}
+			$dbresult = $db->Execute($query, array('sitemask', $salt));
+			if (!$dbresult)
+			{
+				echo ilang('invalid_query', $db->sql) ."</p>";
+				$sql_error = true;
+			}
+
 
 			include_once(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'createseq.php'));
 

@@ -37,6 +37,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
 		$values['umask'] = isset($_POST['umask']) ? $_POST['umask'] : '';
 		$values['admininfo']['username'] = $_POST['adminusername'];
 		$values['admininfo']['email'] = $_POST['adminemail'];
+		$values['admininfo']['salt'] = $_POST['adminsalt'];
 		$values['admininfo']['password'] = $_POST['adminpassword'];
 		$values['email_accountinfo'] = empty($_POST['email_accountinfo']) ? 0 : 1;
 		$values['createtables'] = isset($_POST['createtables']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);

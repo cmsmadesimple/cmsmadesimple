@@ -1,4 +1,5 @@
 <?php
+$lang['admin_salt'] = 'Admin Password Salt';
 $lang['setup_flat_urls'] = 'Flat URLs are setup';
 $lang['install_timezone'] = 'Some servers running PHP 5.3 do not have the timezone set correctly. Please select the appropriate timezone from the list below before proceeding. If this is not necessary on your server, you may select &quot;None&quot;. <strong>Note:</strong> Please select your servers timezone, this is not a display setting, but is used in arithmatic related to dates.  This setting can be changed after installation by modifying the config.php file.';
 $lang['timezone'] = 'Timezone';

@@ -136,7 +136,7 @@ class UserOperations
 		if ($password != '')
 		{
 		  $where[] = 'password = ?';
-		  $params[] = md5($password);
+		  $params[] = md5(get_site_preference('sitemask','').$password);
 		}
 
 		if ($activeonly == true)

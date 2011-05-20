@@ -1162,7 +1162,7 @@ class ModuleManager extends CMSModule
 
 	function _DoRecursiveInstall($id, &$params, $returnid)
 		{
-		$allmods = $this->_GetRepositoryModules('');
+		$allmods = $this->_GetRepositoryModules('',0);
 		$deps = array(array('name'=>$params['name'],'version'=>$params['version'],'filename'=>$params['filename'],
 							'by'=>'','size'=>$params['size']));
 		if (! $allmods[0])
