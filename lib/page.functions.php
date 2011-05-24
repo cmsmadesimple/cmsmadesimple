@@ -935,6 +935,27 @@ function & stripslashes_deep(&$value)
         return $value;
 }
 
+function create_vanilla_textarea($text, $name, $classname = '', $id = '', $encoding = '', $width = '80', $height = '15', $addtext='')
+{
+  $result = '<textarea name="' . $name . '" cols="' . $width . '" rows="' . $height . '"';
+  if ($classname != '') {
+    $result .= ' class="' . $classname . '"';
+  }
+  else
+  {
+    $result .= ' class="cms_textarea"';
+  }
+  if ($id != '') {
+    $result .= ' id="' . $id . '"';
+  }
+  if (!empty($addtext)) {
+    $result .= ' ' . $addtext;
+  }
+
+  $result .= '>' . cms_htmlentities($text, ENT_NOQUOTES, get_encoding($encoding)) . '</textarea>';
+  return $result;
+}
+
 /**
  * A method to create a text area control
  *
@@ -957,9 +978,60 @@ function & stripslashes_deep(&$value)
 function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
 {
   $gCms = cmsms();
-	$result = '';
+	//$result = '';
 
-	if ($enablewysiwyg == true)
+  //setting up selections
+  $selectedwysiwyg='';
+  if (get_userid(false)==false) {
+    //not logged into admin
+    $selectedwysiwyg=get_site_preference('frontendwysiwyg');
+  } else {
+    //logged into admin
+    $selectedwysiwyg=get_preference(get_userid(false), 'wysiwyg');
+  }
+
+  if ($forcewysiwyg!="") $selectedwysiwyg=$forcewysiwyg;
+  
+  $selectedsyntax=get_preference(get_userid(false), 'syntaxhighlighter');
+
+  //check for missing selections
+  if ($enablewysiwyg && $selectedwysiwyg=="") return create_vanilla_textarea($text,$name,$classname,$id,$encoding,$width,$height,$addtext);
+  if ($wantedsyntax!="" && $selectedsyntax=="") return create_vanilla_textarea($text,$name,$classname,$id,$encoding,$width,$height,$addtext);
+
+
+  //First check if we should bother at all...
+  if ($enablewysiwyg || $wantedsyntax != "") {
+
+    //OK, module traversal is needed
+    foreach ($gCms->modules as $module) {
+
+      //First check for relevancy
+      if (!$module["installed"]) continue;
+      if (!$module["active"]) continue;
+      if (($module['object']->IsWYSIWYG()==false) && ($module['object']->IsSyntaxHighlighter()==false)) continue;
+
+//      echo $selectedwysiwyg;
+      //So far, so good... now, do we want wysiwyg as all?
+      if ($enablewysiwyg == true) {
+        //We do...
+        if ($module['object']->GetName()==$selectedwysiwyg) {
+          return $module['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
+          //done;
+        }
+      } else {
+        //We don't, then we must want syntaxhighlighting instead
+        if ($module['object']->GetName()==$selectedsyntax) {
+          return $module['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
+          //done;
+        }
+      }
+    }
+  }
+  //ok, don't bother, return a vanilla textarea
+  return create_vanilla_textarea($text,$name,$classname,$id,$encoding,$width,$height,$addtext);
+
+
+	/*if ($enablewysiwyg == true)
 	{
 		reset($gCms->modules);
 		while (list($key) = each($gCms->modules))
@@ -1042,7 +1114,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 		$result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
 	}
 
-	return $result;
+	return $result;*/
 }
 
 /*
