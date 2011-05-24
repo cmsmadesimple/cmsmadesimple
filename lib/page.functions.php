@@ -975,28 +975,33 @@ function create_vanilla_textarea($text, $name, $classname = '', $id = '', $encod
  * @param string  Optional additional text to include in the textarea tag
  * @return string
  */
-function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
+function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
 {
   $gCms = cmsms();
-	//$result = '';
+  //$result = '';
 
   //setting up selections
-  $selectedwysiwyg='';
-  if (get_userid(false)==false) {
+  $selectedwysiwyg = '';
+  if (get_userid(false) == false) {
     //not logged into admin
-    $selectedwysiwyg=get_site_preference('frontendwysiwyg');
+    $selectedwysiwyg = get_site_preference('frontendwysiwyg');
   } else {
     //logged into admin
-    $selectedwysiwyg=get_preference(get_userid(false), 'wysiwyg');
+    $selectedwysiwyg = get_preference(get_userid(false), 'wysiwyg');
   }
 
-  if ($forcewysiwyg!="") $selectedwysiwyg=$forcewysiwyg;
-  
-  $selectedsyntax=get_preference(get_userid(false), 'syntaxhighlighter');
+
+
+  $selectedsyntax = get_preference(get_userid(false), 'syntaxhighlighter');
+
+  if ($forcewysiwyg != "") {
+    $selectedwysiwyg = $forcewysiwyg;
+    $selectedsyntax = $forcewysiwyg;
+  }
 
   //check for missing selections
-  if ($enablewysiwyg && $selectedwysiwyg=="") return create_vanilla_textarea($text,$name,$classname,$id,$encoding,$width,$height,$addtext);
-  if ($wantedsyntax!="" && $selectedsyntax=="") return create_vanilla_textarea($text,$name,$classname,$id,$encoding,$width,$height,$addtext);
+  if ($enablewysiwyg && $selectedwysiwyg == "") return create_vanilla_textarea($text, $name, $classname, $id, $encoding, $width, $height, $addtext);
+  if ($wantedsyntax != "" && $selectedsyntax == "") return create_vanilla_textarea($text, $name, $classname, $id, $encoding, $width, $height, $addtext);
 
 
   //First check if we should bother at all...
@@ -1008,27 +1013,27 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
       //First check for relevancy
       if (!$module["installed"]) continue;
       if (!$module["active"]) continue;
-      if (($module['object']->IsWYSIWYG()==false) && ($module['object']->IsSyntaxHighlighter()==false)) continue;
+      if (($module['object']->IsWYSIWYG() == false) && ($module['object']->IsSyntaxHighlighter() == false)) continue;
 
-//      echo $selectedwysiwyg;
+      //      echo $selectedwysiwyg;
       //So far, so good... now, do we want wysiwyg as all?
       if ($enablewysiwyg == true) {
         //We do...
-        if ($module['object']->GetName()==$selectedwysiwyg) {
-          return $module['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
+        if ($module['object']->GetName() == $selectedwysiwyg) {
+          return $module['object']->WYSIWYGTextarea($name, $width, $height, $encoding, $text, $stylesheet, $addtext);
           //done;
         }
       } else {
         //We don't, then we must want syntaxhighlighting instead
-        if ($module['object']->GetName()==$selectedsyntax) {
-          return $module['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
+        if ($module['object']->GetName() == $selectedsyntax) {
+          return $module['object']->SyntaxTextarea($name, $wantedsyntax, $width, $height, $encoding, $text, $addtext);
           //done;
         }
       }
     }
   }
   //ok, don't bother, return a vanilla textarea
-  return create_vanilla_textarea($text,$name,$classname,$id,$encoding,$width,$height,$addtext);
+  return create_vanilla_textarea($text, $name, $classname, $id, $encoding, $width, $height, $addtext);
 
 
 	/*if ($enablewysiwyg == true)
