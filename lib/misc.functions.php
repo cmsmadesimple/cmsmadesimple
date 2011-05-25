@@ -580,7 +580,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 
 	if (function_exists('memory_get_usage'))
 	{
-		$titleText .= ' - (usage: '.memory_get_usage().')';
+	  $titleText .= ' - (usage: '.memory_get_usage().')';
 	}
 
 	$memory_peak = (function_exists('memory_get_peak_usage')?memory_get_peak_usage():'');

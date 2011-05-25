@@ -81,7 +81,7 @@ if( !isset($gCms) ) exit;
     }
   
   // get the xml file from soap
-  $xml = $nu_soapclient->call('ModuleRepository.soap_modulexml',array('name' => $xmlfile ));
+  $tmp_xmlfile = $this->_GetRepositoryXML($nu_soapclient,$xmlfile);
   if( $err = $nu_soapclient->GetError() )
     {
       $this->_DisplayErrorPage( $id, $params, $returnid,
@@ -100,7 +100,7 @@ if( !isset($gCms) ) exit;
   
   // calculate our own md5sum
   // and compare
-  $clientmd5 = md5( $xml );
+  $clientmd5 = md5_file( $tmp_xmlfile );
   
   if( $clientmd5 != $svrmd5 )
     {
@@ -112,7 +112,7 @@ if( !isset($gCms) ) exit;
   // woohoo, we're ready to rock and roll now
   // just gotta expand the module
   $modoperations = $gCms->GetModuleOperations();
-  if( !$modoperations->ExpandXMLPackage( $xml, 1 ) )
+  if( !$modoperations->ExpandXMLPackage( $tmp_xmlfile, 1 ) )
     {
       $this->_DisplayErrorPage( $id, $params, $returnid,
 				$modoperations->GetLastError());
@@ -129,7 +129,6 @@ if( !isset($gCms) ) exit;
 
   if( !isset( $gCms->modules[$name] ) )
     {
-      echo "DEBUG: module not loaded<br/>";
       if( !$modoperations->LoadNewModule( $name ) )
 	{
 	  // error

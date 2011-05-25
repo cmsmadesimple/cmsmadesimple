@@ -215,15 +215,15 @@ if ($access)
 		$description = Events::GetEventDescription($event);
 		$modulename = lang('core');
 	}
-	else if (isset($gCms->modules[$module])) {
-		$objinstance =& $gCms->modules[$module]['object'];
-		$description = $objinstance->GetEventDescription($event);
-		$modulename = $objinstance->GetFriendlyName();
+	else
+	{
+	  $objinstance = cms_utils::get_module($module);
+	  $description = $objinstance->GetEventDescription($event);
+	  $modulename  = $objinstance->GetFriendlyName();
 	}
 	
 	// and now get the list of handlers for this event
 	$handlers = Events::ListEventHandlers( $module, $event );
-	//print_r( $handlers ); echo "<br/><br/>";
 	
 	// and the list of all available handlers
 	$allhandlers = array();
@@ -231,20 +231,19 @@ if ($access)
 	$usertags = $usertagops->ListUserTags();
 	foreach( $usertags as $key => $value )
 	{
-	$allhandlers[$value] = $key;
+	  $allhandlers[$value] = $key;
 	}
+
 	// and the list of modules, and add them
-	foreach( $gCms->modules as $key => $value )
+	$allmodules = ModuleOperations::get_instance()->GetInstalledModules();
+	foreach( $allmodules as $key )
 	{
-	if( $key == $modulename )
-		{
-		continue;
-		}
-	
-	if( $gCms->modules[$key]['object']->HandlesEvents() )
-		{
-		$allhandlers[$key] = 'm:'.$key;
-		}
+	  if( $key == $modulename ) continue;
+	  $modobj = ModuleOperations::get_instance()->get_module_instance($key);
+	  if( $modobj->HandlesEvents() )
+	    {
+	      $allhandlers[$key] = 'm:'.$key;
+	    }
 	}
 	
 	echo "<div class=\"pageoverflow\">\n";

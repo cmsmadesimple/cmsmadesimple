@@ -1,7 +1,6 @@
 INSERT INTO {DB_PREFIX}version VALUES (35);
 INSERT INTO {DB_PREFIX}users VALUES (1,'admin','5f4dcc3b5aa765d61d8327deb882cf99',1,'','','',1,'2006-07-25 21:22:33','2009-05-13 07:43:16');
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'use_wysiwyg','1',NULL);
-INSERT INTO {DB_PREFIX}userprefs VALUES (1,'wysiwyg','TinyMCE',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'default_cms_language','en_US',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'date_format_string','%x %X',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'admintheme','NCleanGrey',NULL);
@@ -76,7 +75,6 @@ INSERT INTO {DB_PREFIX}permissions VALUES (29,'Clear Admin Log','Clear Admin Log
 INSERT INTO {DB_PREFIX}permissions VALUES (30,'Add Global Content Blocks','Add Global Content Blocks','2006-07-25 21:22:33','2006-07-25 21:22:33');
 INSERT INTO {DB_PREFIX}permissions VALUES (31,'Modify Global Content Blocks','Modify Global Content Blocks','2006-07-25 21:22:33','2006-07-25 21:22:33');
 INSERT INTO {DB_PREFIX}permissions VALUES (32,'Remove Global Content Blocks','Remove Global Content Blocks','2006-07-25 21:22:33','2006-07-25 21:22:33');
-INSERT INTO {DB_PREFIX}permissions VALUES (45,'allowadvancedprofile','Allow usage of advanced profile in TinyMCE','2009-05-06 15:04:13','2009-05-06 15:04:13');
 INSERT INTO {DB_PREFIX}permissions VALUES (35,'Modify Events','Modify Events','2006-01-27 20:06:58','2006-01-27 20:06:58');
 INSERT INTO {DB_PREFIX}permissions VALUES (36,'View Tag Help','View Tag Help','2006-01-27 20:06:58','2006-01-27 20:06:58');
 INSERT INTO {DB_PREFIX}permissions VALUES (40,'Approve News','Approve News For Frontend Display','2008-09-27 19:58:12','2008-09-27 19:58:12');

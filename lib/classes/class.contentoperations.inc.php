@@ -199,7 +199,7 @@ class ContentOperations
 			{
 				$query .= " AND active = 1";
 			}
-			$row = &$db->GetRow($query, array($alias));
+			$row = $db->GetRow($query, array($alias));
 		}
 		else
 		{
@@ -208,7 +208,7 @@ class ContentOperations
 			{
 				$query .= " AND active = 1";
 			}
-			$row = &$db->GetRow($query, array($alias));
+			$row = $db->GetRow($query, array($alias));
 		}
 
 		if ($row)
@@ -251,7 +251,7 @@ class ContentOperations
 		$result = -1;
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$row = &$db->GetRow($query);
+		$row = $db->GetRow($query);
 		if ($row)
 		{
 			$result = $row['content_id'];
@@ -260,7 +260,7 @@ class ContentOperations
 		{
 			#Just get something...
 			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
-			$row = &$db->GetRow($query);
+			$row = $db->GetRow($query);
 			if ($row)
 			{
 				$result = $row['content_id'];
@@ -424,7 +424,7 @@ class ContentOperations
 		while ($current_parent_id > -1)
 		{
 			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			$row = &$db->GetRow($query, array($current_parent_id));
+			$row = $db->GetRow($query, array($current_parent_id));
 			if ($row)
 			{
 				$current_hierarchy_position = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
@@ -474,7 +474,7 @@ class ContentOperations
 		$db = cmsms()->GetDb();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content";
-		$dbresult = &$db->Execute($query);
+		$dbresult = $db->Execute($query);
 
 		while ($dbresult && !$dbresult->EOF)
 		{
@@ -501,7 +501,7 @@ class ContentOperations
 		debug_buffer('', 'starting tree');
 
 		$gCms = cmsms();
-		$db = &$gCms->GetDb();
+		$db = $gCms->GetDb();
 		$tree = null;
 		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
 		$loadedcache = false;
@@ -639,7 +639,6 @@ class ContentOperations
 		      }
 		  }
 		
-
 		// build the content objects
 		for( $i = 0; $i < count($contentrows); $i++ )
 		  {
@@ -647,7 +646,6 @@ class ContentOperations
 		    $id = $row['content_id'];
 
 		    if (!in_array($row['type'], array_keys($this->ListContentTypes()))) continue;
-
 		    $contentobj = $this->CreateNewContent($row['type']);
 
 		    if ($contentobj)
@@ -656,7 +654,7 @@ class ContentOperations
 				  if( $loadprops && $contentprops && isset($contentprops[$id]) )
 					  {
 						  // load the properties from local cache.
-						  $props =& $contentprops[$id];
+						  $props = $contentprops[$id];
 						  $obj =& $contentobj->mProperties;
 						  $obj->mPropertyNames = array();
 						  $obj->mPropertyTypes = array();
@@ -974,7 +972,7 @@ class ContentOperations
 				$query .= " AND content_id != ?";
 				$params[] = $content_id;
 			}
-			$row = &$db->GetRow($query, $params);
+			$row = $db->GetRow($query, $params);
 
 			if ($row)
 			{

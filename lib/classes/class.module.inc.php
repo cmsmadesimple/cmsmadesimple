@@ -156,7 +156,7 @@ class CMSModule
 	 * Constructor
 	 *
 	 */
-	function CMSModule()
+	public function CMSModule()
 	{
 		global $CMS_STYLESHEET;
 		global $CMS_ADMIN_PAGE;
@@ -184,7 +184,8 @@ class CMSModule
 		    $this->InitializeAdmin();
 		  }
 	}
-	
+
+
 	/**
 	 * Private
 	 *
@@ -522,7 +523,6 @@ class CMSModule
 	 * @see RegisterRoute
 	 * @see RestrictUnknownParams
 	 * @see RegisterModulePlugin
-	 * @deprecated
 	 * @return void
 	 */
 	protected function InitializeFrontend()
@@ -542,7 +542,6 @@ class CMSModule
 	 * @see RegisterRoute
 	 * @see RestrictUnknownParams
 	 * @see RegisterModulePlugin
-	 * @deprecated
 	 * @return void
 	 */
 	protected function InitializeAdmin()
@@ -1261,470 +1260,9 @@ class CMSModule
 
 	/**
 	 * ------------------------------------------------------------------
-	 * User Related Functions
-	 * ------------------------------------------------------------------
-	 */
-
-	/**
-	 * Called before a user is added to the database.  Sends the user object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param User The user that was just created
-	 * @return void
-	 */
-	function AddUserPre(&$user)
-	{
-	}
-
-	/**
-	 * Called after a user is added to the database.  Sends the user object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param User The user that was just created
-	 * @return void
-	 */
-	function AddUserPost(&$user)
-	{
-	}
-
-	/**
-	 * Called before a user is saved to the database.  Sends the user object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param User The user that was just created
-	 * @return void
-	 */
-	function EditUserPre(&$user)
-	{
-	}
-
-	/**
-	 * Called after a user is saved to the database.  Sends the user object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param User The user that was just created
-	 * @return void
-	 */
-	function EditUserPost(&$user)
-	{
-	}
-
-	/**
-	 * Called before a user is deleted from the database.  Sends the user object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param User The user that was just created
-	 * @return void
-	 */
-	function DeleteUserPre(&$user)
-	{
-	}
-
-	/**
-	 * Called after a user is deleted from the database.  Sends the user object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param User The user that was just created
-	 * @return void
-	 */
-	function DeleteUserPost(&$user)
-	{
-	}
-
-	/**
-	 * ------------------------------------------------------------------
-	 * Group Related Functions
-	 * ------------------------------------------------------------------
-	 */
-
-	/**
-	 * Called before a group is added to the database.	Sends the group object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Group The group that was just created
-	 * @return void
-	 */
-	function AddGroupPre(&$group)
-	{
-	}
-
-	/**
-	 * Called after a group is added to the database.  Sends the group object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Group The group that was just created
-	 * @return void
-	 */
-	function AddGroupPost(&$group)
-	{
-	}
-
-	/**
-	 * Called before a group is saved to the database.	Sends the group object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Group The group that was just created
-	 * @return void
-	 */
-	function EditGroupPre(&$group)
-	{
-	}
-
-	/**
-	 * Called after a group is saved to the database.  Sends the group object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Group The group that was just created
-	 * @return void
-	 */
-	function EditGroupPost(&$group)
-	{
-	}
-
-	/**
-	 * Called before a group is deleted from the database.	Sends the group object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Group The group that was just created
-	 * @return void
-	 */
-	function DeleteGroupPre(&$group)
-	{
-	}
-
-	/**
-	 * Called after a group is deleted from the database.  Sends the group object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Group The group that was just created
-	 * @return void
-	 */
-	function DeleteGroupPost(&$group)
-	{
-	}
-
-	/**
-	 * ------------------------------------------------------------------
-	 * Template Related Functions
-	 * ------------------------------------------------------------------
-	 */
-
-	/**
-	 * Called before a template is added to the database.  Sends the template
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Template The template object.
-	 * @return void
-	 */
-	function AddTemplatePre(&$template)
-	{
-	}
-
-	/**
-	 * Called after a template is added to the database.  Sends the template
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Template The template object.
-	 * @return void
-	 */
-	function AddTemplatePost(&$template)
-	{
-	}
-
-	/**
-	 * Called before a template is saved to the database.  Sends the template
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Template The template object.
-	 * @return void
-	 */
-	function EditTemplatePre(&$template)
-	{
-	}
-
-	/**
-	 * Called after a template is saved to the database.  Sends the template
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Template The template object.
-	 * @return void
-	 */
-	function EditTemplatePost(&$template)
-	{
-	}
-
-	/**
-	 * Called before a template is deleted from the database.  Sends the template
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Template The template object.
-	 * @return void
-	 */
-	function DeleteTemplatePre(&$template)
-	{
-	}
-
-	/**
-	 * Called after a template is deleted from the database.  Sends the template
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Template The template object.
-	 * @return void
-	 */
-	function DeleteTemplatePost(&$template)
-	{
-	}
-
-	/**
-	 * ------------------------------------------------------------------
-	 * General Content Related Functions
-	 * ------------------------------------------------------------------
-	 */
-
-	/**
-	 * Called before a content edit is saved to the database.
-	 * Sends the content object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Content A content object
-	 * @return void
-	 */
-	function ContentEditPre(&$content)
-	{
-	}
-
-	/**
-	 * Called After a content edit is saved to the database.
-	 * Sends the content object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Content A content object
-	 * @return void
-	 */
-	function ContentEditPost(&$content)
-	{
-	}
-
-	/**
-	 * Called before a content edit is deleted
-	 * Sends the content object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Content A content object
-	 * @return void
-	 */
-	function ContentDeletePre(&$content)
-	{
-	}
-
-	/**
-	 * Called after a content edit is deleted
-	 * Sends the content object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Content A content object
-	 * @return void
-	 */
-	function ContentDeletePost(&$content)
-	{
-	}
-
-	/**
-	 * ------------------------------------------------------------------
-	 * Stylesheet Related Functions
-	 * ------------------------------------------------------------------
-	 */
-
-	/**
-	 * Called before a Stylesheet is added to the database.	 Sends the stylesheet
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Stylesheet The stylesheet that was just created
-	 * @return void
-	 */
-	function AddStylesheetPre(&$stylesheet)
-	{
-	}
-
-	/**
-	 * Called after a stylesheet is added to the database.	Sends the stylesheet
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Stylesheet The stylesheet that was just created
-	 * @return void
-	 */
-	function AddStylesheetPost(&$stylesheet)
-	{
-	}
-
-	/**
-	 * Called before a stylesheet is saved to the database.	 Sends the stylesheet
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Stylesheet The stylesheet that was just created
-	 * @return void
-	 */
-	function EditStylesheetPre(&$stylesheet)
-	{
-	}
-
-	/**
-	 * Called after a stylesheet is saved to the database.	Sends the stylesheet
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Stylesheet The stylesheet that was just created
-	 * @return void
-	 */
-	function EditStylesheetPost(&$stylesheet)
-	{
-	}
-
-	/**
-	 * Called before a stylesheet is deleted from the database.	 Sends the stylesheet
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Stylesheet The stylesheet that was just created
-	 * @return void
-	 */
-	function DeleteStylesheetPre(&$stylesheet)
-	{
-	}
-
-	/**
-	 * Called after a stylesheet is deleted from the database.	Sends the stylesheet
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param Stylesheet The stylesheet that was just created
-	 * @return void
-	 */
-	function DeleteStylesheetPost(&$stylesheet)
-	{
-	}
-
-	/**
-	 * ------------------------------------------------------------------
 	 * HTML Blob / GCB Related Functions
 	 * ------------------------------------------------------------------
 	 */
-
-	/**
-	 * Called before an HTML blob is added to the database.	 Sends the html blob
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param HtmlBlob The HTML blob
-	 * @return void
-	 */
-	function AddHtmlBlobPre(&$htmlblob)
-	{
-	}
-
-	/**
-	 * Called after an HTML blob is added to the database.	Sends the html blob
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param HtmlBlob The HTML blob
-	 * @return void
-	 */
-	function AddHtmlBlobPost(&$htmlblob)
-	{
-	}
-
-	/**
-	 * Called before an HTML blob is saved to the database.	 Sends the html blob
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param HtmlBlob The HTML blob
-	 * @return void
-	 */
-	function EditHtmlBlobPre(&$htmlblob)
-	{
-	}
-
-	/**
-	 * Called after an HTML blob is saved to the database.	Sends the html blob
-	 * object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param HtmlBlob The HTML blob
-	 * @return void
-	 */
-	function EditHtmlBlobPost(&$htmlblob)
-	{
-	}
-
-	/**
-	 * Called before an HTML blob is deleted from the database.	 Sends the html
-	 * blob object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param HtmlBlob The HTML blob
-	 * @return void
-	 */
-	function DeleteHtmlBlobPre(&$htmlblob)
-	{
-	}
-
-	/**
-	 * Called after an HTML blob is deleted from the database.	Sends the html
-	 * blob object.
-	 *
-	 * @deprecated
-	 * @abstract
-	 * @param HtmlBlob The HTML blob
-	 * @return void
-	 */
-	function DeleteHtmlBlobPost(&$htmlblob)
-	{
-	}
-
 
 	/**
 	 * ------------------------------------------------------------------
@@ -2674,15 +2212,13 @@ class CMSModule
 	 */
 	function GetModulesWithCapability($capability, $params=array())
 	{
-	  $gCms = cmsms();
 	  $result=array();
-	  foreach ($gCms->modules as $module=>$values)
+	  $tmp = ModuleOperations::get_modules_with_capability($capability,$params);
+	  if( is_array($tmp) && count($tmp) )
 	    {
-	      if ($gCms->modules[$module]['installed'] == true &&
-		  $gCms->modules[$module]['active'] == true &&
-		  $gCms->modules[$module]['object']->HasCapability($capability,$params))
+	      for( $i = 0; $i < count($tmp); $i++ )
 		{
-		  $result[]=$module;
+		  $result[] = get_class($tmp[$i]);
 		}
 	    }
 	  return $result;

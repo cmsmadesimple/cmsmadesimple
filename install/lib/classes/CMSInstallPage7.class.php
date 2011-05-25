@@ -39,8 +39,6 @@ class CMSInstallerPage7 extends CMSInstallerPage
 
 	function preContent(&$db)
 	{
-		require_once(cms_join_path(CMS_BASE, 'lib', 'config.functions.php'));
-		
 		// check if db info is correct as it should at this point to prevent an undeleted installation dir
 		// to be used for sending spam by messing up $_POST variables
 		$db = ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
@@ -98,72 +96,25 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		#Do module installation
 		if (isset($_POST["createtables"]) && $_POST['createtables'] != 0 )
 		{
-		  //global $DONT_SET_DB;
-			echo '<p>' . ilang('install_admin_update_hierarchy');
-
-			$db->SetFetchMode(ADODB_FETCH_ASSOC);
-			#$db->debug = true;
 			$gCms = cmsms();
-			$gCms->db = $db;
-			unset($GLOBALS['DONT_SET_DB']);
-			unset($DONT_SET_DB);
+			global $DONT_LOAD_DB;
+			$DONT_LOAD_DB = 'force';
+			$db = $gCms->GetDb();
+			$db->SetFetchMode(ADODB_FETCH_ASSOC);
 
-
+			echo '<p>' . ilang('install_admin_update_hierarchy');
 			$contentops = cmsms()->GetContentOperations();
 			$contentops->SetAllHierarchyPositions();
-
 			echo " [" . ilang('done') . "]</p>";
-
-
 			echo '<p>' . ilang('install_admin_set_core_event');
 
 			Events::SetupCoreEvents();
 
 			echo " [" . ilang('done') . "]</p>";
-
-
 			echo '<p>' . ilang('install_admin_install_modules');
-
-			$loader = $gCms->GetModuleLoader();
-			$loader->LoadModules(TRUE);
-			foreach ($gCms->modules as $modulename=>$value)
-			{
-			  // only deal with system modules
-			  if( !in_array($modulename,$gCms->cmssystemmodules) ) continue;
-
-				if ($gCms->modules[$modulename]['object']->AllowAutoInstall() == true)
-				{
-				$query = "SELECT * FROM ".cms_db_prefix()."modules WHERE module_name = ?";
-				$dbresult = $db->Execute($query, array($modulename));
-				if( $dbresult )
-				  {
-				    $count = $dbresult->RecordCount();
-				  }
-				if (!isset($count) || $count == 0)
-					{
-						$modinstance =& $gCms->modules[$modulename]['object'];
-						$result = $modinstance->Install();
-
-						#now insert a record
-						if (!isset($result) || $result === FALSE)
-						{
-						  $parms = array($modulename,$modinstance->GetVersion(),'installed',1,
-								 ($modinstance->IsAdminOnly())?1:0,
-								 ($modinstance->LazyLoadFrontend())?1:0,
-								 ($modinstance->LazyLoadAdmin())?1:0);
-						  $query = "INSERT INTO ".cms_db_prefix().'modules 
-                                                            (module_name,version,status,active,admin_only,allow_fe_lazyload,allow_admin_lazyload) 
-                                                            VALUES (?,?,?,?,?,?,?)';
-						  $db->Execute($query,$parms);
-						  $db->Execute($query);
-						  $gCms->modules[$modulename]['installed'] = true;
-						  $gCms->modules[$modulename]['active'] = true;
-						}
-					}
-				}
-			}
+			$loader = $gCms->GetModuleOperations();
+			$loader->LoadModules(TRUE); // this will load all modules, and install only system modules.
 			echo " [" . ilang('done') . "]</p>";
-
 
 			echo '<p>' . ilang('install_admin_clear_cache');
 			$contentops->ClearCache();

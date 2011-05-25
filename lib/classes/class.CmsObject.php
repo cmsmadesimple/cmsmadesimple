@@ -45,62 +45,49 @@ class CmsObject {
 	 * Database object - adodb reference to the current database
 	 *	@access private
 	 */
-	var $db;
+	private $db;
 
 	/**
 	 * Variables object - various objects and strings needing to be passed 
-	 *	@access private
-	 */
-	var $variables;
-
-	/**
-	 * Modules object - holds references to all registered modules
+	 *
+	 * @internal
 	 * @access private
 	 */
-	var $cmsmodules = array();
-
-	/**
-	 * System Modules - a list (hardcoded) of all system modules
-	 *	@access private
-	 */
-	var $cmssystemmodules =  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'MicroTiny', 'CMSPrinting', 'ThemeManager' );
+	public $variables;
 
 
 	/**
 	 * Plugins object - holds list of all registered plugins 
+	 *
+	 * @internal
 	 * @access private
 	 */
 	var $cmsplugins = array();
 
+
 	/**
 	 * User Plugins object - holds list and function pointers of all registered user plugins
+	 *
+	 * @internal
 	 * @access private
 	 */
 	var $userplugins = array();
+	var $userpluginfunctions = array();
 
-	/**
-	 * BBCode object - for use in bbcode parsing
-	 *	@access private
-	 */
-	var $bbcodeparser;
-
-	/**
-	 * Site Preferences object - holds all current site preferences so they're only loaded once
-	 *	@access private
-	 */
-	var $siteprefs = array();
 
 	/**
 	 * User Preferences object - holds user preferences as they're loaded so they're only loaded once
-	 *	@access private
+	 *
+	 * @internal
+	 * @access private
 	 */
-	var $userprefs;
+	private $userprefs;
 
 	/**
 	 * Smarty object - holds reference to the current smarty object -- will not be set in the admin
 	 *	@access private
 	 */
-	var $smarty;
+	private $smarty;
 
 	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
@@ -132,20 +119,26 @@ class CmsObject {
 	 */
 	var $HtmlBlobCache;
 	
+
 	/**
 	 * content types array - List of available content types
-	 *	@access private
+	 *
+	 * @internal
+	 * @access private
 	 */
-	var $contenttypes = array();
+	private $contenttypes = array();
+
 
 	/**
 	 * module list - list of installed and available modules.
 	 * includes references to the module objects.
 	 *
+	 * @internal
 	 * @access private
 	 */
-	var $modules = array();
-
+	//private $modules = array();
+	
+	private $_objects = array();
 
 	public function __get($key)
 	{
@@ -163,8 +156,6 @@ class CmsObject {
 	 */
 	protected function __construct()
 	{
-		$this->userpluginfunctions = array(); // unused??
-
 		register_shutdown_function(array(&$this, 'dbshutdown'));
 	}
 
@@ -250,16 +241,7 @@ class CmsObject {
 	 */
 	public function GetAvailableModules()
 	{
-		$results = array();
-		foreach( $this->modules as $module_name => &$data )
-		{
-			if( isset($data['installed']) && $data['installed'] &&
-				isset($data['object']) && is_object($data['object']) )
-			{
-				$results[] = $module_name;
-			}
-		}
-		return $results;
+		return ModuleOperations::get_instance()->get_available_modules();
 	}
 
 
@@ -274,27 +256,11 @@ class CmsObject {
 	 * @param string Module Name.
 	 * @param string (optional) version number for a check.  
 	 * @return object Reference to the module object, or null.
+	 * @deprecated
 	 */
 	public function & GetModuleInstance($module_name,$version = '')
 	{
-		if( empty($module_name) && isset($this->variables['module']))
-			{
-				$module_name = $this->variables['module'];
-			}
-
-		$obj = null;
-		if( isset($this->modules[$module_name]) &&
-			isset($this->modules[$module_name]['object']) )
-			{
-				$obj = $this->modules[$module_name]['object'];
-			}
-		if( is_object($obj) && !empty($version) )
-			{
-				$res = version_compare($obj->GetVersion,$version);
-				if( $res < 1 OR $res === FALSE ) 
-					$obj = null;
-			}
-		return $obj;
+		return ModuleOperations::get_instance()->get_module_instance($module_name,$version);
 	}
 
 
@@ -310,15 +276,15 @@ class CmsObject {
 	{
 		global $DONT_LOAD_DB;
 
+		$mem = memory_get_usage();
 		/* Check to see if we have a valid instance.
 		 * If not, build the connection */
-		if (!isset($this->db) && !isset($DONT_LOAD_DB))
+		if (!isset($this->db) && (!isset($DONT_LOAD_DB) || $DONT_LOAD_DB == 'force'))
 		{
-			$this->db =& adodb_connect();
+			$this->db = adodb_connect();
 		}
 		
-		$db =& $this->db;
-		return ($db);
+		return $this->db;
 	}
 
 	/**
@@ -332,24 +298,7 @@ class CmsObject {
 	{
 		return cms_config::get_instance();
 	}
-	
-	/**
-	* Get a handle to the CMS ModuleLoader object. If it does not yet,
-	* exist, this method will instantiate it.
-	*
-	* @final
-	* @see ModuleLoader
-	* @return ModuleLoader handle to the ModuleLoader object
-	*/
-	public function & GetModuleLoader()
-	{
-        if (!isset($this->moduleloader))
-		{
-			$this->moduleloader = new ModuleLoader();
-		}
 
-		return $this->moduleloader;
-	}
 	
 	/**
 	* Get a handle to the CMS ModuleOperations object. If it does not yet
@@ -361,13 +310,9 @@ class CmsObject {
 	*/
 	public function & GetModuleOperations()
 	{
-        if (!isset($this->moduleoperations))
-		{
-			$this->moduleoperations = new ModuleOperations();
-		}
-
-		return $this->moduleoperations;
+		return ModuleOperations::get_instance();
 	}
+
 	
 	/**
 	* Get a handle to the CMS UserOperations object. If it does not yet
@@ -379,12 +324,12 @@ class CmsObject {
 	*/
 	public function & GetUserOperations()
 	{
-        if (!isset($this->useroperations))
+        if (!isset($this->_objects['useroperations']))
 		{
-			$this->useroperations = new UserOperations();
+			$this->_objects['useroperations'] = new UserOperations();
 		}
 
-		return $this->useroperations;
+		return $this->_objects['useroperations'];
 	}
 	
 	/**

@@ -240,7 +240,7 @@ class cms_content_tree extends cms_tree
 				  $gCms = cmsms();
 				  $contentops = $gCms->GetContentOperations();
 				  // todo: LoadContentFromId should use content cache.
-				  $content =& $contentops->LoadContentFromId($this->get_tag('id'), $deep);
+				  $content = $contentops->LoadContentFromId($this->get_tag('id'), $deep);
 				  return $content;
 			  }
 		  else
@@ -336,6 +336,7 @@ class cms_content_tree extends cms_tree
 				  $contentops->LoadChildren($this->get_tag('id'),$deep,$all,$ids);
 			  }
       }
+	
 	
     return $children;
   }

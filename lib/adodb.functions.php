@@ -22,7 +22,7 @@ function load_adodb()
 		#@include_once(cms_join_path(dirname(__FILE__), $config['use_adodb_lite'] == true ? 'adodb_lite' : 'adodb', 'adodb-errorpear.inc.php'));
 	}
 	
-	define('ADODB_OUTP', 'debug_sql');
+	if( defined('ADODB_OUTP') ) define('ADODB_OUTP', 'debug_sql');
 	//define('ADODB_ERROR_HANDLER', 'adodb_error');
 	
 	$loaded_adodb = false;
@@ -50,7 +50,7 @@ function load_adodb()
 		if (file_exists($adodb_light))
 		{
 			# Load ADOdb Lite
-			require($adodb_light);
+			require_once($adodb_light);
 		}
 		else
 		{
@@ -59,7 +59,7 @@ function load_adodb()
 		}
 	}
 	
-	define('CMS_ADODB_DT', $config['use_adodb_lite'] ? 'DT' : 'T');
+	if( !defined('CMS_ADODB_DT') ) define('CMS_ADODB_DT', $config['use_adodb_lite'] ? 'DT' : 'T');
 }
 
 /**
@@ -68,12 +68,12 @@ function load_adodb()
  * than the standard CMSMS supplied database object to connect to a database.
  *
  */
-function & adodb_connect()
+function &adodb_connect()
 {
   $gCms = cmsms();
-	$config = $gCms->GetConfig();
+  $config = $gCms->GetConfig();
 	
-	$dbinstance =& ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
+  $dbinstance = ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
 	$dbinstance->raiseErrorFn = "adodb_error";
 	$conn_func = (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true) ? 'PConnect' : 'Connect';
 	if(!empty($config['db_port'])) $dbinstance->port = $config['db_port'];

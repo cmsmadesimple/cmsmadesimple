@@ -47,16 +47,6 @@ if (isset($_GET["htmlblob_id"]))
 
 		if ($blobobj)
 		{
-			#Perform the deletehtmlblob_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->DeleteHtmlBlobPre($blobobj);
-				}
-			}
-			
 			Events::SendEvent('Core', 'DeleteGlobalContentPre', array('global_content' => &$blobobj));
 
 			$result = $blobobj->Delete();
@@ -64,18 +54,7 @@ if (isset($_GET["htmlblob_id"]))
 
 		if ($result == true)
 		{
-			#Perform the deletehtmlblob_post callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->DeleteHtmlBlobPost($blobobj);
-				}
-			}
-			
 			Events::SendEvent('Core', 'DeleteGlobalContentPost', array('global_content' => &$blobobj));
-
 			audit($htmlblob_id, $htmlblob_name, 'Deleted Global Content Block');
 		}
 	}

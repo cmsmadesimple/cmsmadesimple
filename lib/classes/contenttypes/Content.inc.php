@@ -132,18 +132,17 @@ class Content extends ContentBase
 	  $this->parse_content_blocks();
 	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
-	      $this->AddExtraProperty($blockInfo['id']);
-	      $parameters[] = $blockInfo['id'];
-
-	      if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
-		{
-		  if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
-		  $module =& $gCms->modules[$blockInfo['module']]['object'];
-		  if( !is_object($module) ) continue;
-		  if( !$module->HasCapability('contentblocks') ) continue;
-		  $tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
-		  if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
-		}
+			$this->AddExtraProperty($blockInfo['id']);
+			$parameters[] = $blockInfo['id'];
+			
+			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
+				{
+					$module = cms_utils::get_module($blockInfo['module']);
+					if( !is_object($module) ) continue;
+					if( !$module->HasCapability('contentblocks') ) continue;
+					$tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
+					if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
+				}
 	    }
 	  
 	  // do the content property parameters
@@ -328,8 +327,7 @@ class Content extends ContentBase
 		    }
 			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
 			{
-				if( !isset($gCms->modules[$blockInfo['module']]['object']) ) continue;
-				$module =& $gCms->modules[$blockInfo['module']]['object'];
+				$module = cms_utils::get_module($blockInfo['module']);
 				if( !is_object($module) ) continue;
 				if( !$module->HasCapability('contentblocks') ) continue;
 				$value = $this->GetPropertyValue($blockInfo['id']);
@@ -790,8 +788,7 @@ class Content extends ContentBase
 		$gCms = cmsms();
 		$ret = '';
 		if( !isset($blockInfo['module']) ) return FALSE;
-		if( !isset($gCms->modules[$blockInfo['module']]['object']) ) return FALSE;
-		$module =& $gCms->modules[$blockInfo['module']]['object'];
+		$module = cms_utils::get_module($blockInfo['module']);
 		if( !is_object($module) ) continue;
 		if( !$module->HasCapability('contentblocks') ) return FALSE;
 		if( isset($blockInfo['inputname']) && !empty($blockInfo['inputname']) )

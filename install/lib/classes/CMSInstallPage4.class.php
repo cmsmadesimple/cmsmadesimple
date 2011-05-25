@@ -25,7 +25,7 @@ class CMSInstallerPage4 extends CMSInstallerPage
 		$values = array();
 		$values['username'] = isset($_POST['adminusername']) ? $_POST['adminusername'] : '';
 		$values['email'] = isset($_POST['adminemail']) ? $_POST['adminemail'] : '';
-		$values['salt'] = isset($_POST['adminsalt']) ? $_POST['adminsalt'] : '';
+		$values['salt'] = isset($_POST['adminsalt']) ? $_POST['adminsalt'] : '1';
 		$values['email_accountinfo'] = isset($_POST['email_accountinfo']) ? $_POST['email_accountinfo'] : false;
 
 		$values['umask'] = isset($_POST['umask']) ? $_POST['umask'] : '';

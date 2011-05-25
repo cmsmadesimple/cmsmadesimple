@@ -133,16 +133,6 @@ if ($access)
 			$onetemplate->encoding = $encoding;
 			$onetemplate->active = $active;
 
-			#Perform the edittemplate_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->EditTemplatePre($onetemplate);
-				}
-			}
-			
 			Events::SendEvent('Core', 'EditTemplatePre', array('template' => &$onetemplate));
 
 			$result = $onetemplate->Save();
@@ -152,16 +142,6 @@ if ($access)
 				#Make sure the new name is used if this is an apply
 				$orig_template = $template;
 
-				#Perform the edittemplate_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->EditTemplatePost($onetemplate);
-					}
-				}
-				
 				Events::SendEvent('Core', 'EditTemplatePost', array('template' => &$onetemplate));
 
 				audit($template_id, $onetemplate->name, 'Edited Template');
@@ -229,19 +209,14 @@ if (strlen($template) > 0)
     }
 
 $addlScriptSubmit = '';
-foreach (array_keys($gCms->modules) as $moduleKey)
-{
-	$module =& $gCms->modules[$moduleKey];
-	if (!($module['installed'] && $module['active'] && $module['object']->IsSyntaxHighlighter()))
-	{
-		continue;
-	}
-
-	if ($module['object']->SyntaxActive() or get_preference(get_userid(), 'syntaxhighlighter') == $module['object']->GetName())
-	{
-		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
-	}
-}
+if( ($modulename = get_preference(get_userid(false),'syntaxhighlighter')) )
+  {
+    $modobj = cms_utils::get_module($modulename);
+    if( is_object($modobj) )
+      {
+	$addlScriptSubmit .= $modobj->SyntaxPageFormSubmit();
+      }
+  }
 
 $closestr = cms_html_entity_decode(lang('close'));
 $headtext = <<<EOSCRIPT

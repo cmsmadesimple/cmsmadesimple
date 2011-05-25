@@ -44,11 +44,16 @@ if( FALSE == can_admin_upload() )
 	$caninstall = false;
 }
 
-$modules = array_keys($gCms->modules);
+$modules = array_keys(ModuleOperations::get_instance()->GetInstalledModules());
 if( !count($modules ) )
   {
     $smarty->assign('nvmessage',$this->Lang('error_nomodules'));
   }
+elseif( !$this->is_connection_ok() )
+{
+  echo $this->ShowErrors($this->lang('error_request_problem'));
+  return;
+}
 else
   {
     $url = $this->GetPreference('module_repository');
@@ -59,38 +64,24 @@ else
 	return;
       }
 
-    $nusoap =& $this->GetModuleInstance('nuSOAP');
-    $nusoap->Load();
-    $nu_soapclient = new nu_soapclient($url,false,false,false,false,false,90,90);
-    if( $err = $nu_soapclient->GetError() )
-      {
-	$this->_DisplayErrorPage( $id, $params, $returnid,
-				  'SOAP Error: '.$err);
-	return;
-      }
-    $repversion = $nu_soapclient->call('ModuleRepository.soap_version');
-    if( $err = $nu_soapclient->GetError() )
-    {
-      $this->_DisplayErrorPage( $id, $params, $returnid,$this->Lang('error_soaperror').' ('.$url.'): '.$err);
-      return;
-    }
-    if( version_compare( $repversion, MINIMUM_REPOSITORY_VERSION ) < 0 )
-    {
-      $this->_DisplayErrorPage( $id, $params, $returnid,$this->Lang('error_minimumrepository'));
-      return;
-    }
+    $qparms = array();
     $qparms['names'] =  implode(',',$modules);
     $qparms['newest'] = '1';
     $qparms['clientcmsversion'] = $CMS_VERSION;
-    $versions = $nu_soapclient->call('ModuleRepository.soap_upgradelistgetall',$qparms);
-    if( $err = $nu_soapclient->GetError() )
+    $url .= '/upgradelistgetall';
+    
+    $req = new cms_http_request();
+    $req->execute($url,'','POST',$qparms);
+    $status = $req->getStatus();
+    $result = $req->getResult();
+    if( $status != 200 || $result == '' )
       {
-        $this->_DisplayErrorPage( $id, $params, $returnid,
-                'SOAP Error: '.$err);
-        echo htmlspecialchars($nu_soapclient->response);
-        return;
+	$this->_DisplayErrorPage( $id, $params, $returnid, $this->Lang('error_request_problem'));
+	return;
       }
-    if( !$versions )
+
+    $versions = json_decode($result,true);
+    if( !$versions || !is_array($versions) )
       {
         $this->_DisplayErrorPage( $id, $params, $returnid,
                 $this->Lang('error_nomatchingmodules') );
@@ -105,7 +96,7 @@ else
     {
       $txt = '';
       $onerow = new stdClass();
-      $mod =& $this->GetModuleInstance($row['name']);
+      $mod = $this->GetModuleInstance($row['name']);
       if( !is_object($mod) )
       {
         $onerow->txt = $this->Lang('error_module_object',$row['name']);

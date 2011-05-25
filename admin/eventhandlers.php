@@ -90,8 +90,14 @@ switch( $action )
 	  $text = '';
 		if ($module == 'Core')
 		  $text = Events::GetEventHelp($event);
-		else if( isset($gCms->modules[$module]) )
-		  $text = $gCms->modules[$module]['object']->GetEventHelp( $event );
+		else
+		  {
+		    $moduleobj = cms_utils::get_moduel($module);
+		    if( is_object($moduleobs) )
+		      {
+			$text = $moduleobj->GetEventHelp( $event );
+		      }
+		  }
 		echo "<h3>$event</h3>";
 		if( $text == "" )
 		{
@@ -185,10 +191,9 @@ switch( $action )
 						$desctext = Events::GetEventDescription($oneevent['event_name']);
 						echo "    <td>".lang('core')."</td>\n";
 					}
-					else if (isset($gCms->modules[$oneevent['originator']])) {
-						$objinstance =& $gCms->modules[$oneevent['originator']]['object'];
-						$desctext = $objinstance->GetEventDescription($oneevent['event_name']);
-						echo "    <td>".$objinstance->GetFriendlyName()."</td>\n";
+					else if ( ($objinstance = cms_utils::get_module($oneevent['originator'])) ) {
+					  $desctext = $objinstance->GetEventDescription($oneevent['event_name']);
+					  echo "    <td>".$objinstance->GetFriendlyName()."</td>\n";
 					}
 					echo "    <td>";
 if ($access) 

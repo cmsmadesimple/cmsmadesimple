@@ -46,11 +46,11 @@ function load_plugins(&$smarty)
 {
   $gCms = cmsms();
 	$plugins = &$gCms->cmsplugins;
-	$userplugins = &$gCms->userplugins;
 	$userpluginfunctions = &$gCms->userpluginfunctions;
 	$db = $gCms->GetDb();
 	if (isset($db))
 	{
+	  $userplugins = array();
 		#if (@is_dir(dirname(dirname(__FILE__))."/plugins/cache"))
 		#{
 		#	search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins/cache", true);
@@ -79,6 +79,8 @@ function load_plugins(&$smarty)
 		}
 		if( $result ) $result->Close();
 		sort($plugins);
+
+		$gCms->userplugins = $userplugins;
 	}
 }
 
@@ -260,21 +262,7 @@ function global_content_regex_callback($matches)
 		if ($oneblob)
 		{
 			$text = $oneblob->content;
-
-			#Perform the content htmlblob callback
-			#reset($gCms->modules);
-			#while (list($key) = each($gCms->modules))
-			#{
-			#	$value =& $gCms->modules[$key];
-			#	if ($gCms->modules[$key]['installed'] == true &&
-			#		$gCms->modules[$key]['active'] == true)
-			#	{
-			#		$gCms->modules[$key]['object']->GlobalContentPreCompile($text);
-			#	}
-			#}
-			
 			Events::SendEvent('Core', 'GlobalContentPreCompile', array('content' => &$text));
-
 			return $text;
 		}
 		else
@@ -298,6 +286,10 @@ function global_content_regex_callback($matches)
  */
 function is_sitedown()
 {
+  global $CMS_INSTALL_PAGE;
+
+  if( isset($CMS_INSTALL_PAGE) ) return TRUE;
+
   if( get_site_preference('enablesitedownmessage') !== '1' ) return FALSE;
 
   if( get_site_preference('sitedownexcludeadmins') )

@@ -1,4 +1,6 @@
 <?php
+$lang['error_downloadxml'] = 'A problem occurred downloading the XML FILE: %s';
+$lang['error_request_problem'] = 'A problem occurred communicating with the module server';
 $lang['error_searchterm'] = 'You have entered an invalid search term.  The term must consist of ascii characters and be three or more characters long';
 $lang['search_noresults'] = 'Search succeeded but no results matched the expresssion';
 $lang['advancedsearch_help'] = 'Specify words to include or exclude from the search using a + or -, surround exact phrases with quotes.  i.e:  +red -apple +"some text"';

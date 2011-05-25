@@ -50,54 +50,38 @@ $bodytext = '';
 $userid = get_userid();
 $wysiwyg = get_preference($userid, 'wysiwyg');
 
-foreach($gCms->modules as $key=>$value)
+$modules = ModuleOperations::get_instance()->GetLoadedModules();
+foreach($modules as $key => &$object)
 {
-	if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true &&
-		$gCms->modules[$key]['object']->IsWYSIWYG()
-		)
-	{
-		$loadit=false;
-		if ($gCms->modules[$key]['object']->WYSIWYGActive()) {
-			$loadit=true;
-		} else {
-		 //Silmarillion: It shouldn't be loaded unless it's in use 
-		  /*if (get_preference(get_userid(), 'wysiwyg')==$gCms->modules[$key]['object']->GetName()) {
-		  	$loadit=true;
-		  }*/
-		}
-		if ($loadit) {
-		  $bodytext.=$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
-		  $footertext.=$gCms->modules[$key]['object']->WYSIWYGGenerateHeader($htmlresult);
-		  $formtext.=$gCms->modules[$key]['object']->WYSIWYGPageForm();
-		  $formsubmittext.=$gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
-		}
-	}
+  if( $object->IsWYSIWYG() ) {
+    $loadit=false;
+    if ($object->WYSIWYGActive()) {
+      $loadit=true;
+    } 
+    if ($loadit) {
+      $bodytext.=$object->WYSIWYGGenerateBody();
+      $footertext.=$object->WYSIWYGGenerateHeader($htmlresult);
+      $formtext.=$object->WYSIWYGPageForm();
+      $formsubmittext.=$object->WYSIWYGPageFormSubmit();
+    }
+  }
 }
 
-foreach($gCms->modules as $key=>$value)
+foreach($modules as $key=>$obect)
 {
-	if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true &&
-		$gCms->modules[$key]['object']->IsSyntaxHighlighter()
-		)
-	{
-		$loadit=false;
-		if ($gCms->modules[$key]['object']->SyntaxActive()) {
-			$loadit=true;
-		} else {
-		 //Silmarillion: It shouldn't be loaded unless it's in use
-		  /*if (get_preference(get_userid(), 'syntaxhightlighter')==$gCms->modules[$key]['object']->GetName()) {
-		  	$loadit=true;
-		  }*/
-		}
-		if ($loadit) {
-		  $bodytext.=$gCms->modules[$key]['object']->SyntaxGenerateBody();
-		  $footertext.=$gCms->modules[$key]['object']->SyntaxGenerateHeader($htmlresult);
-		  $formtext.=$gCms->modules[$key]['object']->SyntaxPageForm();
-		  $formsubmittext.=$gCms->modules[$key]['object']->SyntaxPageFormSubmit();
-		}
-	}
+  if ($object->IsSyntaxHighlighter())
+    {
+      $loadit=false;
+      if ($object->SyntaxActive()) {
+	$loadit=true;
+      }
+      if ($loadit) {
+	$bodytext.=$object->SyntaxGenerateBody();
+	$footertext.=$object->SyntaxGenerateHeader($htmlresult);
+	$formtext.=$object->SyntaxPageForm();
+	$formsubmittext.=$object->SyntaxPageFormSubmit();
+      }
+    }
 }
 
 $htmlresult = str_replace('<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->', $footertext, $htmlresult);

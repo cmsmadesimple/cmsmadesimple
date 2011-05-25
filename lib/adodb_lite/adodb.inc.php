@@ -40,7 +40,7 @@ function &ADONewConnection( $dbtype = 'mysql', $modules = '' )
 	global $ADODB_FETCH_MODE;
 	$false = false;
 
-	@include( ADODB_DIR . '/adodb.config.php' );
+	@include_once( ADODB_DIR . '/adodb.config.php' );
 
 	if (strpos($dbtype,'://')) {
 		$dsn_array = @parse_url(rawurldecode($dbtype));

@@ -97,7 +97,7 @@ class cms_tree_operations
 	    if( isset($node_list[$path]) ) continue;
 	    
 	    $obj = new cms_content_tree(array('id'=>(int)$path_parts[0],'alias'=>$alias));
-	    $node_list[$path] =& $obj;
+	    $node_list[$path] = $obj;
 	    $tree->add_node($obj);
 	  }
 	else

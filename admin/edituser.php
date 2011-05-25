@@ -134,17 +134,6 @@ if ($access) {
 					$thisuser->SetPassword($password);
 				}
 				
-				#Perform the edituser_pre callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-
-					{
-						$gCms->modules[$key]['object']->EditUserPre($thisuser);
-					}
-				}
-				
 				Events::SendEvent('Core', 'EditUserPre', array('user' => &$thisuser));
 
 
@@ -169,17 +158,6 @@ if ($access) {
 			if ($result)
 			{
 				audit($user_id, $thisuser->username, 'Edited User');
-
-				#Perform the edituser_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->EditUserPost($thisuser);
-					}
-				}
-				
 				Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
 				
                 if ($access_perm)

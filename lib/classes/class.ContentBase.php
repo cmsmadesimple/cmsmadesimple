@@ -611,32 +611,32 @@ class ContentBase
       return $this->mMarkup;
     }
 
-	public function SetMarkup($markup)
-	{
-	  $this->DoReadyForEdit();
-	  $this->mMarkup = $markup;
-	}
+    public function SetMarkup($markup)
+    {
+      $this->DoReadyForEdit();
+      $this->mMarkup = $markup;
+    }
 
-	public function LastModifiedBy()
-	{
-	  return $this->mLastModifiedBy;
-	}
+    public function LastModifiedBy()
+    {
+      return $this->mLastModifiedBy;
+    }
 
-	public function SetLastModifiedBy($lastmodifiedby)
-	{
-	  $this->DoReadyForEdit();
-	  $this->mLastModifiedBy = $lastmodifiedby;
-	}
+    public function SetLastModifiedBy($lastmodifiedby)
+    {
+      $this->DoReadyForEdit();
+      $this->mLastModifiedBy = $lastmodifiedby;
+    }
 
-	public function RequiresAlias()
-	{
-	  return TRUE;
-	}
+    public function RequiresAlias()
+    {
+      return TRUE;
+    }
 
-	public function IsViewable()
-	{
-	  return TRUE;
-	}
+    public function IsViewable()
+    {
+      return TRUE;
+    }
 
 	public function SetAlias($alias, $doAutoAliasIfEnabled = true)
 	{
@@ -784,10 +784,10 @@ class ContentBase
       return FALSE;
     }
 
-	public function IsSystemPage()
-	{
-		return FALSE;
-	}
+    public function IsSystemPage()
+    {
+      return FALSE;
+    }
 
     /************************************************************************/
     /* The rest																*/
@@ -831,7 +831,7 @@ class ContentBase
 		if (-1 < $id)
 		{
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			$row =& $db->Execute($query, array($id));
+			$row = $db->Execute($query, array($id));
 
 			if ($row && !$row->EOF)
 			{
@@ -1020,43 +1020,25 @@ class ContentBase
 	function Save()
 	{
 	  $gCms = cmsms();
-		foreach($gCms->modules as $key=>$value)
-		{
-			if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentEditPre($this);
-			}
-		}
+	  Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
 
-		Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
+	  if ($this->mPropertiesLoaded == false)
+	    {
+	      debug_buffer('save is loading properties');
+	      $this->mProperties->Load($this->mId);
+	      $this->mPropertiesLoaded = true;
+	    }
 
-		if ($this->mPropertiesLoaded == false)
-		{
-			debug_buffer('save is loading properties');
-			$this->mProperties->Load($this->mId);
-			$this->mPropertiesLoaded = true;
-		}
+	  if (-1 < $this->mId)
+	    {
+	      $this->Update();
+	    }
+	  else
+	    {
+	      $this->Insert();
+	    }
 
-		if (-1 < $this->mId)
-		{
-			$this->Update();
-		}
-		else
-		{
-			$this->Insert();
-		}
-
-		foreach($gCms->modules as $key=>$value)
-		{		
-			if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentEditPost($this);
-			}
-		}
-
-		Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
+	  Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
 	}
 
     /**
@@ -1081,7 +1063,7 @@ class ContentBase
 		if ($this->mItemOrder < 1)
 		{
 			$query = "SELECT ".$db->IfNull('max(item_order)','0')." as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-			$row = &$db->GetRow($query,array($this->mParentId));
+			$row = $db->GetRow($query,array($this->mParentId));
 
 			if ($row)
 			{
@@ -1191,7 +1173,7 @@ class ContentBase
 		if ($this->mItemOrder < 1)
 		{
 			$query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-			$row = &$db->Getrow($query, array($this->mParentId));
+			$row = $db->Getrow($query, array($this->mParentId));
 
 			if ($row)
 			{
@@ -1409,85 +1391,64 @@ class ContentBase
     /**
      * Delete the content
      */
-    # :TODO: This function should return something
+    // :TODO: This function should return something
 	function Delete()
 	{
 	  $gCms = cmsms();
 	  global $sql_queries, $debug_errors;
-		$config = $gCms->GetConfig();
+	  $config = $gCms->GetConfig();
+	  Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
+	  $db = $gCms->GetDb();
+	  $result = false;
 
-		foreach($gCms->modules as $key=>$value)
+	  if (-1 > $this->mId)
+	    {
+	      if (true == $config["debug"])
 		{
-			if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentDeletePre($this);
-			}
+		  # :TODO: Translate the error message
+		  $debug_errors .= "<p>Could not delete content : invalid Id</p>\n";
+		}
+	    }
+	  else
+	    {
+	      $query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
+	      $dbresult = $db->Execute($query, array($this->mId));
+
+	      if (! $dbresult)
+		{
+		  if (true == $config["debug"])
+		    {
+		      # :TODO: Translate the error message
+		      $debug_errors .= "<p>Error deleting content</p>\n";
+		    }
 		}
 
-		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
+	      // Fix the item_order if necessary
+	      $query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+	      $result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
 
-		$db = $gCms->GetDb();
+	      // Remove the cross references
+	      remove_cross_references($this->mId, 'content');
 
-		$result = false;
+	      $cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
+	      @unlink($cachefilename);
 
-		if (-1 > $this->mId)
+	      if (NULL != $this->mProperties)
 		{
-			if (true == $config["debug"])
-			{
-				# :TODO: Translate the error message
-				$debug_errors .= "<p>Could not delete content : invalid Id</p>\n";
-			}
+		  # :TODO: There might be some error checking there
+		  $this->mProperties->Delete($this->mId);
 		}
-		else
+	      else
 		{
-			$query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			$dbresult = $db->Execute($query, array($this->mId));
-
-			if (! $dbresult)
-			{
-				if (true == $config["debug"])
-				{
-					# :TODO: Translate the error message
-					$debug_errors .= "<p>Error deleting content</p>\n";
-				}
-			}
-
-			#Fix the item_order if necessary
-			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-			$result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
-
-			#Remove the cross references
-			remove_cross_references($this->mId, 'content');
-
-			$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-			@unlink($cachefilename);
-
-			if (NULL != $this->mProperties)
-			{
-				# :TODO: There might be some error checking there
-				$this->mProperties->Delete($this->mId);
-			}
-			else
-			{
-				if (true == $config["debug"])
-				{
-					# :TODO: Translate the error message
-					$debug_errors .= "<p>Error deleting : the content has no properties</p>\n";
-				}
-			}
+		  if (true == $config["debug"])
+		    {
+		      # :TODO: Translate the error message
+		      $debug_errors .= "<p>Error deleting : the content has no properties</p>\n";
+		    }
 		}
+	    }
 
-		foreach($gCms->modules as $key=>$value)
-		{
-			if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentDeletePost($this);
-			}
-		}
-
-		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
+	  Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
 	}
 
     /**
@@ -1805,7 +1766,7 @@ class ContentBase
 			$this->mAdditionalEditors = array();
 
 			$query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
-			$dbresult = &$db->Execute($query,array($this->mId));
+			$dbresult = $db->Execute($query,array($this->mId));
 
 			while ($dbresult && !$dbresult->EOF)
 			{
@@ -2348,7 +2309,7 @@ class ContentProperties
 		  $db = $gCms->GetDb();
 
 			$query = "SELECT * FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
-			$dbresult = &$db->Execute($query, array($content_id));
+			$dbresult = $db->Execute($query, array($content_id));
 
 			while ($dbresult && !$dbresult->EOF)
 			{

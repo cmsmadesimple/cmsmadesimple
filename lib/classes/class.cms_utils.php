@@ -193,6 +193,21 @@ class cms_utils
     return cmsms()->get_variable('content_id');
   }
 
+
+  /**
+   * A convenient method to get the class name of the calling function
+   *
+   *
+   * @since 1.10
+   * @author calguy1000
+   * @final
+   * @return string
+   */
+  public static function get_caller_class()
+  {
+	$trace = debug_backtrace();
+	if( isset($trace[2]['class']) ) return $trace[2]['class'];
+  }
 } // end of class
 
 ?>

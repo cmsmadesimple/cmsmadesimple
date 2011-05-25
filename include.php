@@ -75,6 +75,7 @@ if (version_compare(phpversion(),"5.3.0","<")) {
 // minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
 //require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_variables.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsException.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_config.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.CmsObject.php');
 if( !isset($CMS_INSTALL_PAGE) )
@@ -86,7 +87,6 @@ require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functi
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.functions.php');
 require_once($dirname.DIRECTORY_SEPARATOR.'version.php');
 debug_buffer('done loading required files');
-
 
 # sanitize $_GET
 array_walk_recursive($_GET, 'sanitize_get_var'); 
@@ -182,8 +182,8 @@ global $DONT_LOAD_DB;
 if (!isset($DONT_LOAD_DB))
 {
   cmsms()->GetDb();
-}
 
+}
 $smarty = cmsms()->GetSmarty();
 
 if (!defined('SMARTY_DIR')) {
@@ -259,8 +259,8 @@ if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PA
 debug_buffer('','Loading Modules');
 if (! isset($CMS_INSTALL_PAGE))
   {
-    $modload =& cmsms()->GetModuleLoader();
-    $modload->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
+     $modops = cmsms()->GetModuleOperations();
+     $modops->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
   }
 debug_buffer('', 'End of include');
 

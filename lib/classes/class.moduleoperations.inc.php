@@ -36,20 +36,23 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.module.inc.php');
  * @since		0.9
  * @package		CMS
  */
-class ModuleOperations
+final class ModuleOperations
 {
-  /**
-   * A member to hold an error string
-   */
-  var $error;
+	/**
+	 * System Modules - a list (hardcoded) of all system modules
+	 * TODO: MOVE ME.... someplace private.
+	 *	@access private
+	 *
+	 */
+	public $cmssystemmodules =  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'TinyMCE', 'Printing', 'ThemeManager' );
 
-  /**
-   * A member to hold the id of the active tab
-   */
-  var $mActiveTab = '';
 
-  var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
-  var $xmldtd = '
+	static private $_instance = null;
+	private $_modules = null;
+	private $_moduleinfo = null;
+	
+	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
+	private $xmldtd = '
 <!DOCTYPE module [
   <!ELEMENT module (dtdversion,name,version,description*,help*,about*,requires*,file+)>
   <!ELEMENT dtdversion (#PCDATA)>
@@ -73,6 +76,18 @@ class ModuleOperations
    * Error Functions
    * ------------------------------------------------------------------
    */
+  private function __construct() {}
+
+
+  public static function &get_instance()
+  {
+	  if( !isset(self::$_instance) ) {
+		  $c = __CLASS__;
+		  self::$_instance = new $c;
+	  }
+	  return self::$_instance;
+  }
+
 
   /**
    * Set an error condition
@@ -80,24 +95,26 @@ class ModuleOperations
    * @param string $str The string to set for the error
    * @return void
    */
-  function SetError($str = '')
+  protected function SetError($str = '')
   {
 	  $gCms = cmsms();
-	$gCms->variables['error'] = $str;
+	  $gCms->variables['error'] = $str;
   }
+
 
   /**
    * Return the last error
    *
    * @return string The last error, if any
    */
-  function GetLastError()
+  public function GetLastError()
   {
 	  $gCms = cmsms();
-	if( isset( $gCms->variables['error'] ) )
-	  return $gCms->variables['error'];
-	return "";
+	  if( isset( $gCms->variables['error'] ) )
+		  return $gCms->variables['error'];
+	  return "";
   }
+
 
 	/**
 	 * Creates an xml data package from the module directory.
@@ -119,7 +136,7 @@ class ModuleOperations
 	  $xmltxt  = '<?xml version="1.0" encoding="ISO-8859-1"?>';
 	  $xmltxt .= $this->xmldtd."\n";
 	  $xmltxt .= "<module>\n";
-		  $xmltxt .= "	<dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
+	  $xmltxt .= "	<dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
 	  $xmltxt .= "	<name>".$modinstance->GetName()."</name>\n";
 	  $xmltxt .= "	<version>".$modinstance->GetVersion()."</version>\n";
 	  $xmltxt .= "  <mincmsversion>".$modinstance->MinimumCMSVersion()."</mincmsversion>\n";
@@ -170,6 +187,7 @@ class ModuleOperations
 	  return $xmltxt;
 	}
 
+
 /**
 * Unpackage a module from an xml string
 * does not touch the database
@@ -179,7 +197,7 @@ class ModuleOperations
 * @param boolean $brief If set to true, less checking is done and no errors are returned
 * @return array A hash of details about the installed module
 */
-function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
+function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 {
 	$gCms = cmsms();
 
@@ -189,22 +207,23 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 	if( !is_writable( $dir ) && $brief == 0 )
 	{
 		// directory not writable
-		ModuleOperations::SetError( lang( 'errordirectorynotwritable' ) );
-		return false;
-	}
-	
-	$reader = new XMLReader();
-	$ret = $reader->open($xml);
-	if( $ret == 0 )
-	{
-		ModuleOperations::SetError( lang( 'errorcouldnotparsexml' ) );
+		$this->SetError( lang( 'errordirectorynotwritable' ) );
 		return false;
 	}
 
-	ModuleOperations::SetError( "" );
+	$reader = new XMLReader();
+	$ret = $reader->open($xmluri);
+	if( $ret == 0 )
+	{
+		$this->SetError( lang( 'errorcouldnotparsexml' ) );
+		return false;
+	}
+
+	$this->SetError('');
 	$havedtdversion = false;
 	$moduledetails = array();
-	$moduledetails['size'] = strlen($xml);
+	if( is_file($xmluri) )
+		$moduledetails['size'] = filesize($xmluri);
 	$required = array();
 	while( $reader->read() )
 	{
@@ -219,9 +238,9 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 						$reader->read();
 						$moduledetails['name'] = $reader->value;
 						// check if this module is already installed
-						if( isset( $gCms->modules[$moduledetails['name']] ) && $overwrite == 0 && $brief == 0 )
+						if( isset( $this->_modules[$moduledetails['name']] ) && $overwrite == 0 && $brief == 0 )
 						{
-							ModuleOperations::SetError( lang( 'moduleinstalled' ) );
+							$this->SetError( lang( 'moduleinstalled' ) );
 							return false;
 						}
 						break;
@@ -231,7 +250,7 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 						$reader->read();
 						if( $reader->value != MODULE_DTD_VERSION )
 						{
-							ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
+							$this->SetError( lang( 'errordtdmismatch' ) );
 							return false;
 						}
 						$havedtdversion = true;
@@ -242,17 +261,18 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 					{
 						$reader->read();
 						$moduledetails['version'] = $reader->value;
-						if( isset( $gCms->modules[$moduledetails['name']] ) )
+						$tmpinst = $this->get_module_instance($moduledetails['name']);
+						if( $tmpinst && $brief == 0 )
 						{
-							$version = $gCms->modules[$moduledetails['name']]['object']->GetVersion();
-							if( version_compare($moduledetails['version'],$version) < 0 && $brief == 0)
+							$version = $tmpinst->GetVersion();
+							if( version_compare($moduledetails['version'],$version) < 0 )
 							{
-								ModuleOperations::SetError( lang('errorattempteddowngrade') );
+								$this->SetError( lang('errorattempteddowngrade') );
 								return false;
 							}
-							else if (version_compare($moduledetails['version'],$version) == 0 && $brief == 0 )
+							else if (version_compare($moduledetails['version'],$version) == 0 )
 							{
-								ModuleOperations::SetError( lang('moduleinstalled') );
+								$this->SetError( lang('moduleinstalled') );
 								return false;
 							}
 						}
@@ -325,8 +345,7 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 						if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
 							!isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) )
 						{
-							print_r( $moduledetails );
-							ModuleOperations::SetError( lang('errorincompletexml') );
+							$this->SetError( lang('errorincompletexml') );
 							return false;
 						}
 
@@ -337,7 +356,7 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 						{
 							if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) )
 							{
-								ModuleOperations::SetError(lang('errorcantcreatefile').' '.$moduledir);
+								$this->SetError(lang('errorcantcreatefile').' '.$moduledir);
 								break;
 							}
 						}
@@ -345,7 +364,7 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 						{
 							if( !@mkdir( $filename ) && !is_dir( $filename ) )
 							{
-								ModuleOperations::SetError(lang('errorcantcreatefile').' '.$filename);
+								$this->SetError(lang('errorcantcreatefile').' '.$filename);
 								break;
 							}
 						}
@@ -359,7 +378,7 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 							$fp = @fopen( $filename, "w" );
 							if( !$fp )
 							{
-								ModuleOperations::SetError(lang('errorcantcreatefile').' '.$filename);
+								$this->SetError(lang('errorcantcreatefile').' '.$filename);
 							}
 							if( strlen( $data ) )
 							{
@@ -381,7 +400,7 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 	$reader->close();
 	if( $havedtdversion == false )
 	{
-		ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
+		$this->SetError( lang( 'errordtdmismatch' ) );
 	}
 
 	// we've created the module's directory
@@ -389,13 +408,67 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 	unset( $moduledetails['filename'] );
 	unset( $moduledetails['isdir'] );
 
-	if( ModuleOperations::GetLastError() != "" )
+	if( $this->GetLastError() != "" )
 	{
 		return false;
 	}
+
+	if( !$brief )
+	{
+		audit('','Module','Expanded XML file consisting of '.$moduledetails['name'].' '.$moduledetails['version']);
+	}
+
 	return $moduledetails;
 
 }
+
+
+ private function _install_module(CmsModule& $module_obj)
+ {
+	 debug_buffer('install_module '.$module_obj->GetName());
+
+	 $gCms = cmsms(); // preserve the global.
+	 $db = $gCms->GetDb();
+	 $result = $module_obj->Install();
+	 if( !isset($result) || $result === FALSE)
+	 {
+		 // install returned nothing, or FALSE
+		 $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
+		 $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
+		 $query = 'INSERT INTO '.cms_db_prefix().'modules 
+                   (module_name,version,status,admin_only,active,allow_fe_lazyload,allow_admin_lazyload)
+                   VALUES (?,?,?,?,?,?,?)';
+		 $dbr = $db->Execute($query,array($module_obj->GetName(),$module_obj->GetVersion(),'installed',
+										  ($module_obj->IsAdminOnly()==true)?1:0,
+										  1,$lazyload_fe,$lazyload_admin));
+
+		 $deps = $module_obj->GetDependencies();
+		 if( is_array($deps) )
+			 {
+				 $query = 'INSERT INTO '.cms_db_prefix().'module_deps
+                           (parent_module,child_module,minimum_version,create_date,modified_date)
+                           VALUES (?,?,?,NOW(),NOW())';
+				 foreach( $deps as $depname => $depversion )
+					 {
+						 if( !$depname || !$depversion ) continue;
+						 $dbr = $db->Execute($query,array($module_obj->GetName(),$depname,$depversion));
+					 }
+			 }
+
+		 $info = $this->_get_module_info();
+		 $info[$module_obj->GetName()] = array('module_name'=>$module_obj->GetName(),
+											   'version'=>$module_obj->GetVersion(),
+											   'status'=>'installed',
+											   ($module_obj->IsAdminOnly()==true)?1:0,1,
+											   $lazyload_fe,$lazyload_admin);
+
+		 audit('',$module_obj->GetName(),'Installed version '.$module_obj->GetVersion());
+		 // TODO: send an event.
+		 return TRUE;
+	 }
+
+	 return $result;
+ }
 
 
   /**
@@ -405,9 +478,9 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
    * @param boolean $loadifnecessary If true, loads the module before trying to install it
    * @return array Returns a tuple of whether the install was successful and a message if applicable
    */
-  function InstallModule($module, $loadifnecessary = false)
+  public function InstallModule($module, $loadifnecessary = false)
   {
-	  $modinstance = cms_utils::get_module($module);
+	  $modinstance = self::get_module_instance($module);
 	  if( !$modinstance )
 	  {
 		  if( $loadifnecessary == false )
@@ -416,51 +489,25 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 		  }
 		  else
 		  {
-			  if( !$this->LoadNewModule( $module ) )
+			  if( !$this->_load_module( $module, true ) )
 			  {
 				  return array(false,lang('errormodulewontload'));
 			  }
 		  }
       }
  
-	  $modinstance = cms_utils::get_module($module);
-	  if (!isset(cmsms()->modules[$module]))
+	  $modinstance = self::get_module_instance($module);
+	  if( !$modinstance )
 	  {
 		  return array(false,lang('errormodulenotfound'));
 	  }
 
-	  $gCms = cmsms();
-	  $db = $gCms->GetDb();
-	  $result = $modinstance->Install();
-		  
-	  if (!isset($result) || $result === FALSE)
+
+	  // todo: send an event?
+	  if( ($result = $this->_install_module($modinstance)) === TRUE )
 	  {
-		  // now insert a record
-		  $lazyload_fe = (method_exists($modinstance,'LazyLoadFrontend') && $modinstance->LazyLoadFrontend())?1:0;
-		  $lazyload_admin = (method_exists($modinstance,'LazyLoadAdmin') && $modinstance->LazyLoadAdmin())?1:0;
-		  $query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, admin_only, active,allow_fe_lazyload,allow_admin_lazyload) VALUES (?,?,'installed',?,?,?,?)";
-		  $db->Execute($query, array($module,$modinstance->GetVersion(),
-									 ($modinstance->IsAdminOnly()==true?1:0)
-									 ,1,$lazyload_fe,$lazyload_admin));
-		  
-// 		  // and insert any dependancies
-// 		  if (count($modinstance->GetDependencies()) > 0) #Check for any deps
-// 		  {
-// 			  // Now check to see if we can satisfy any deps
-// 			  foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
-// 			  {
-// 				  // what the f*&* is this??  if anything we should be installing the dependencies first.
-// 				  $time = $db->DBTimeStamp(time());
-// 				  $query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
-// 				  $db->Execute($query, array($onedepkey, $module, $onedepvalue));
-// 			  }
-// 		  }
-				  
-		  // send an event saying the module has been installed
-		  Events::SendEvent('Core', 'ModuleInstalled', array('name' => &$module, 'version' => $modinstance->GetVersion()));
-		  
-		  // and we're done
-		  return array(true);
+		  // todo: send an event?
+		  return array(true,$modinstance->InstallPostMessage());
 	  }
 	  else
 	  {
@@ -469,6 +516,126 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
 			  $result = lang('errorinstallfailed');
 		  }
 		  return array(false,$result);
+	  }
+  }
+
+
+  private function &_get_module_info()
+  {
+	  if( !is_array($this->_moduleinfo) )
+	  {
+		  $query = 'SELECT * FROM '.cms_db_prefix().'modules ORDER BY module_name';
+		  $db = cmsms()->GetDb();
+		  $tmp = $db->GetArray($query);
+		  if( is_array($tmp) )
+		  {
+			  $config = cmsms()->GetConfig();
+			  $dir = $config['root_path'].'/modules';
+			  $this->_moduleinfo = array();
+			  for( $i = 0; $i < count($tmp); $i++ )
+			  {
+				  $name = $tmp[$i]['module_name'];
+				  if( is_file($dir."/$name/$name.module.php") )
+				  {
+					  if( !isset($this->_moduleinfo[$name]) )
+					  {
+						  $this->_moduleinfo[$name] = $tmp[$i];
+					  }
+				  }
+			  }
+		  }
+	  }
+
+	  return $this->_moduleinfo;
+  }
+
+
+
+  private function _load_module($module_name,$allow_auto = true)
+  {
+	  $config = cmsms()->GetConfig();
+	  $dir = $config['root_path'].'/modules';
+	  
+	  global $CMS_VERSION;
+	  global $CMS_PREVENT_AUTOINSTALL;
+	  $allow_auto = ($allow_auto && !isset($CMS_PREVENT_AUTOINSTALL));
+	  $fname = $dir."/$module_name/$module_name.module.php";
+	  if( !is_file($fname) ) return FALSE;
+
+	  $gCms = cmsms(); // backwards compatibility.
+	  require_once($fname);
+	  $obj = new $module_name;
+	  if( !is_object($obj) ) 
+	  {
+		  // oops, some problem loading.
+		  return FALSE;
+	  }
+
+	  if (version_compare($obj->MinimumCMSVersion(),$CMS_VERSION) == 1 )
+	  {
+		  // oops, not compatible.... can't load.
+		  unset($obj);
+		  return FALSE;
+	  }
+
+	  $info = $this->_get_module_info();
+	  if( !isset($info[$module_name]) )
+	  {
+		  // not installed, can we auto-install it?
+		  if( (in_array($module_name,$this->cmssystemmodules) || $obj->AllowAutoInstall() == true) && $allow_auto )
+		  {
+			  $this->_install_module($obj);
+		  }
+	  }
+
+	  if( isset($info[$module_name]) )
+	  {
+		  $dbversion = $info[$module_name]['version'];
+		  // check for compatibility
+		  
+		  // check for upgrade needed.
+		  if( (version_compare($dbversion, $obj->GetVersion()) == -1 && $obj->AllowAutoUpgrade() == TRUE) && $allow_auto )
+			  {
+				  $this->_upgrade_module($obj);
+			  }
+	  }
+
+	  $this->_modules[$module_name] = $obj;
+	  return TRUE;
+  }
+
+
+  private function _load_all_modules()
+  {
+	  $names = $this->FindAllModules();
+	  foreach( $names as $name )
+	  {
+		  class_exists($name,true); // trigger the autoloader magic.
+	  }
+  }
+
+
+  public function LoadModules($loadall = false,$noadmin = false, $no_lazyload = false)
+  {
+	  if( $loadall ) return $this->_load_all_modules();
+
+	  global $CMS_ADMIN_PAGE;
+	  $moduleinfo = $this->_get_module_info();
+	  foreach( $moduleinfo as $name => $rec )
+	  {
+		  if( $rec['status'] != 'installed' ) continue;
+		  if( $rec['active'] == 0 ) continue;
+		  if( $rec['admin_only'] && $noadmin ) continue;
+		  if( isset($CMS_ADMIN_PAGE) && $no_lazyload == false && $rec['allow_admin_lazyload'] )
+		  {
+			  continue;
+		  }
+		  if( !isset($CMS_ADMIN_PAGE) && $no_lazyload == false && $rec['allow_fe_lazyload'] )
+		  {
+			  continue;
+		  }
+		  
+		  class_exists($name); // trigger the autoloader stuff.
 	  }
   }
 
@@ -482,70 +649,46 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
   public function LoadNewModule( $modulename )
   {
 	  debug_buffer('LoadNewModule '.$modulename);
-	$gCms = cmsms();
-    $db = $gCms->GetDb();
-    $cmsmodules = &$gCms->modules;
-	if( isset($cmsmodules[$modulename]) ) return;
-
-    $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
-
-    if (@is_file("$dir/$modulename/$modulename.module.php"))
-      {
-		  // question: is this a potential XSS vulnerability
-		  include("$dir/$modulename/$modulename.module.php");
-		  if( !class_exists( $modulename ) )
-			  {
-				  return false;
-			  }
-		  
-		  $newmodule = new $modulename;
-		  $name = $newmodule->GetName();
-		  $cmsmodules[$name]['object'] =& $newmodule;
-		  $cmsmodules[$name]['installed'] = false;
-		  $cmsmodules[$name]['active'] = false;
-      }
-    else
-      {
-		  unset($cmsmodules[$modulename]);
-		  return false;
-      }
-    return true;
+	  return $this->_load_module( $modulename );
   }
+
+
+  private function _upgrade_module( CmsModule& $module_obj )
+  {
+	  debug_buffer('upgrade_module '.$module_obj->GetName());
+
+	  $info = $this->_get_module_info();
+	  $dbversion = $info[$module_obj->GetName()]['version'];
+
+	  $result = $module_obj->Upgrade($dbversion,$module_obj->GetVersion());
+	  if( $result )
+	  {
+		  $db = cmsms()->GetDb();
+		  $query = 'UPDATE '.cms_db_prefix().'modules SET version = ? WHERE module_name = ?';
+		  $dbr = $db->Execute($query,array($module_obj->GetVersion(),$module_obj->GetName()));
+		  $info[$module_obj->GetName]['version'] = $module_obj->GetVersion();
+		  audit('',$module_obj->GetName().' Upgraded from Version '.$dbversion.' to '.$module_obj->GetVersion());
+		  Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
+		  return TRUE;
+	  }
+	  return FALSE;
+  }
+
 
   /**
    * Upgrade a module
    *
    * @param string $module The name of the module to upgrade
-   * @param string $oldversion The version number of the existing module
-   * @param string $newversion The version number of the new module
    * @return boolean Whether or not the upgrade was successful
    */
-  function UpgradeModule( $module, $oldversion, $newversion )
+  public function UpgradeModule( $module )
   {
-	  $gCms = cmsms();
-    $db = $gCms->GetDb();
+	  $modobj = $this->get_module_instance($module);
+	  if( !$modobj ) return FALSE;
 
-    if (!isset($gCms->modules[$module]))
-      {
-	return false;
-      }
-
-    $modinstance = $gCms->modules[$module]['object'];
-    $result = $modinstance->Upgrade($oldversion, $newversion);
-    if( $result === FALSE )
-      {
-	return false;
-      }
-
-    $query = "UPDATE ".cms_db_prefix()."modules SET version = ?, admin_only = ? WHERE module_name = ?";
-    $db->Execute($query,array($newversion,($modinstance->IsAdminOnly()==true?1:0),$module));
-    
-    Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module, 
-						      'oldversion' => $oldversion, 
-						      'newversion' => $oldversion));
-
-    return true;
+	  return $this->_upgrade_module( $modobj );
   }
+
 
   /**
    * Uninstall a module
@@ -553,53 +696,92 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
    * @param string $module The name of the module to upgrade
    * @return boolean Whether or not the upgrade was successful
    */
-  function UninstallModule( $module)
+  public function UninstallModule( $module)
   {
 	  $gCms = cmsms();
-    $db = $gCms->GetDb();
+	  $db = $gCms->GetDb();
 
-    if (!isset($gCms->modules[$module]))
-      {
-		return false;
-      }
+	  $modinstance = cms_utils::get_module($module);
+	  if( !$modinstance ) return FALSE;
 
-    $modinstance = $gCms->modules[$module]['object'];
-    $cleanup = $modinstance->AllowUninstallCleanup();
-	$result = $modinstance->Uninstall();
-	// clean up
-	if (!isset($result) || $result === FALSE)
-	{
-		// now delete the record
-		$query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ?";
-		$db->Execute($query, array($module));
+	  $cleanup = $modinstance->AllowUninstallCleanup();
+	  $result = $modinstance->Uninstall();
 
-		// delete any dependencies
-		$query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
-		$db->Execute($query, array($module));
-		
-		// clean up, if permitted
-		if ($cleanup)
-			{
-			$db->Execute('DELETE FROM '.cms_db_prefix().
-				'module_templates where module_name=?',array($module));
-			$db->Execute('DELETE FROM '.cms_db_prefix().
-				'event_handlers where module_name=?',array($module));
-			$db->Execute('DELETE FROM '.cms_db_prefix().
-				'events where originator=?',array($module));
-			$db->Execute('DELETE FROM '.cms_db_prefix().
-				"siteprefs where sitepref_name like '".
-					str_replace("'",'',$db->qstr($module)).
-				"_mapi_pref%'");
-			}
+	  if (!isset($result) || $result === FALSE)
+		  {
+			  // now delete the record
+			  $query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ?";
+			  $db->Execute($query, array($module));
+			  
+			  // delete any dependencies
+			  $query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
+			  $db->Execute($query, array($module));
+			  
+			  // clean up, if permitted
+			  if ($cleanup)
+				  {
+					  $db->Execute('DELETE FROM '.cms_db_prefix().
+								   'module_templates where module_name=?',array($module));
+					  $db->Execute('DELETE FROM '.cms_db_prefix().
+								   'event_handlers where module_name=?',array($module));
+					  $db->Execute('DELETE FROM '.cms_db_prefix().
+								   'events where originator=?',array($module));
+					  $db->Execute('DELETE FROM '.cms_db_prefix().
+								   "siteprefs where sitepref_name like '".
+								   str_replace("'",'',$db->qstr($module)).
+								   "_mapi_pref%'");
+				  }
 
-		Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
-	}
-	else
-	{
-		$this->setError($result);
-		return false;
-	}
-    return true;
+			  Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
+		  }
+	  else
+		  {
+			  $this->setError($result);
+			  return false;
+		  }
+	  return true;
+  }
+
+
+  /**
+   * Test if a module is active
+   */
+  public function IsModuleActive($module_name)
+  {
+	  if( !$module_name ) return FALSE;
+	  $info = $this->_get_module_info();
+	  if( !isset($info[$module_name]) ) return FALSE;
+
+	  return (bool)$info[$module_name]['active'];
+  }
+
+
+  /**
+   * Activate a module
+   *
+   */
+  public function ActivateModule($module_name,$activate = true)
+  {
+	  if( !$module_name ) return FALSE;
+	  $info = $this->_get_module_info();
+	  if( !isset($info[$module_name]) ) return FALSE;
+
+	  $o_state = $info['module_name']['active'];
+	  if( $activate ) 
+		  {  
+			  $info['module_name']['active'] = 1;
+		  }
+	  else
+		  {
+			  $info['module_name']['active'] = 0;
+		  }
+	  if( $info['module_name']['active'] != $o_state )
+		  {
+			  $db = cmsms()->GetDb();
+			  $query = 'UPDATE '.cms_db_prefix.' SET active = ? WHERE module_name = ?';
+			  $dbr = $db->Execute($query,array($info['module_name']['active'],$module_name));
+		  }
+	  return TRUE;
   }
 
 
@@ -610,12 +792,29 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
    *
    * @return array The hash of all loaded modules
    */
-  function & GetAllModules()
-    {
-		$gCms = cmsms();
-      $cmsmodules = &$gCms->modules;
-      return $cmsmodules;
-    }
+  public function &GetLoadedModules()
+  {
+	  return $this->_modules;
+  }
+
+
+  /**
+   * Returns an array of the names of all installed modules.
+   *
+   * @return array of strings
+   */
+  public function GetInstalledModules($include_all = FALSE)
+  {
+	  $result = array();
+	  $info = $this->_get_module_info();
+	  foreach( $info as $name => $rec )
+	  {
+		  if( $rec['status'] != 'installed' ) continue;
+		  if( !$rec['active'] && $include_all == FALSE ) continue;
+		  $result[] = $name;
+	  }
+	  return $result;
+  }
 
 
   /**
@@ -627,26 +826,72 @@ function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
    */
   public static function get_modules_with_capability($capability, $args= '')
   {
-	  $gCms = cmsms();
-
-    $output = array();
-    foreach($gCms->modules as $key => $data)
-      {
-	if( isset($data['installed']) &&
-	    isset($data['object']) && 
-	    is_object($data['object']) )
+	  $output = array();
+	  foreach( self::get_instance()->_modules as $module_name => &$obj )
 	  {
-	    $obj =& $data['object'];
-	    if( $obj->HasCapability($capability,$args) )
-	      {
-		$output[] = $obj;
-	      }
+		  if( $obj->HasCapability($capability,$args) )
+		  {
+			  $output[] = $obj;
+		  }
 	  }
-      }
 
-    if( !count($output) ) return FALSE;
-    return $output;
+	  if( !count($output) ) return FALSE;
+	  return $output;
   }
+
+
+  public function &get_module_instance($module_name,$version = '')
+  {
+	  if( empty($module_name) && isset($this->variables['module']))
+		  {
+			  $module_name = $this->variables['module'];
+		  }
+	  
+	  class_exists($module_name); // this will automagically load the module if it isn't there alrerady, neat eh.
+
+	  $obj = null;
+	  if( isset($this->_modules[$module_name]) )
+		  {
+			  $obj =& $this->_modules[$module_name];
+		  }
+	  if( is_object($obj) && !empty($version) )
+		  {
+			  $res = version_compare($obj->GetVersion(),$version);
+			  if( $res < 1 OR $res === FALSE ) 
+				  $obj = null;
+		  }
+	  return $obj;
+  }
+
+
+  public function IsSystemModule($module_name)
+  {
+	  return in_array($module_name,$this->cmssystemmodules);
+  }
+
+
+  public function FindAllModules()
+  {
+	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+	
+	$result = array();
+	if( $handle = @opendir($dir) )
+	{
+		while( ($file = readdir($handle)) !== false )
+		{
+			$fn = "$dir/$file/$file.module.php";
+			if( @is_file($fn) )
+			{
+				$result[] = $file;
+			}
+		}
+	}
+	
+	sort($result);
+	return $result;
+  }
+
+
 }
 
 # vim:ts=4 sw=4 noet

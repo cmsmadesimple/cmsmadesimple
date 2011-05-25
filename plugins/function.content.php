@@ -50,67 +50,68 @@ function smarty_cms_function_content($params, &$smarty)
 
 		if (!isset($params['block']) && ($id == 'cntnt01' || ($id != '' && $inline == false)))
 		{
-			$cmsmodules = &$gCms->modules;
-		
-			if (isset($cmsmodules))
+		  // todo, would be neat here if we could get a list of only frontend modules.
+		  $installedmodules = ModuleOperations::get_instance()->GetInstalledModules();
+		  if( count($installedmodules) )
+		    {
+		      // case insensitive module match.
+		      foreach( $installedmodules  as $key )
 			{
-				foreach ($cmsmodules as $key=>$value)
-				{
-					if (strtolower($modulename) == strtolower($key))
-					{
-						$modulename = $key;
-					}
-				}
-
-				if (!isset($modulename) || empty($modulename) ||
-				    !isset($cmsmodules[$modulename]))
-				  {
-				    // module not found
-				    @trigger_error('Attempt to access module '.$modulename.' which could not be foune (is it properly installed and configured?');
-				    return _smarty_cms_function_content_return('', $params, $smarty);
-				  }
-
-				if (isset($cmsmodules[$modulename]))
-				  {
-				    if (isset($cmsmodules[$modulename]['object'])
-					&& $cmsmodules[$modulename]['installed'] == true
-					&& $cmsmodules[$modulename]['active'] == true
-					&& $cmsmodules[$modulename]['object']->IsPluginModule())
-				      {
-					@ob_start();
-					unset($params['block']);
-					unset($params['label']);
-					unset($params['wysiwyg']);
-					unset($params['oneline']);
-					unset($params['default']);
-					unset($params['size']);
-					$params = array_merge($params, GetModuleParameters($id));
-					//$params = GetModuleParameters($id);
-					$returnid = '';
-					if (isset($params['returnid']))
-					  {
-					    $returnid = $params['returnid'];
-					  }
-					else
-					  {
-					    $returnid = $contentobj->Id();
-					  }
-					$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
-					if ($result !== FALSE)
-					  {
-					    echo $result;
-					  }
-					$modresult = @ob_get_contents();
-					@ob_end_clean();
-					return _smarty_cms_function_content_return($modresult, $params, $smarty);
-				      }
-				    else
-				      {
-					@trigger_error('Attempt to access module '.$key.' which could not be foune (is it properly installed and configured?');
-					return _smarty_cms_function_content_return("<!-- Not a tag module -->\n", $params, $smarty);
-				      }
-				  }
+			  if (strtolower($modulename) == strtolower($key))
+			    {
+			      $modulename = $key;
+			    }
 			}
+		      
+		      if (!isset($modulename) || empty($modulename) )
+			{
+			  // no module specified.
+			  @trigger_error('Attempt to call a module action, without specifying a valid module name');
+			  return _smarty_cms_function_content_return('', $params, $smarty);
+			}
+
+		      $modobj = ModuleOperations::get_instance()->get_module_instance($modulename);
+		      if( !$modobj )
+			{
+			  // module not found... couldn't even autoload it.
+			  @trigger_error('Attempt to access module '.$modulename.' which could not be foune (is it properly installed and configured?');
+			  return _smarty_cms_function_content_return('', $params, $smarty);
+			}
+
+		      if ($modobj->IsPluginModule() )
+			{
+			  @ob_start();
+			  unset($params['block']);
+			  unset($params['label']);
+			  unset($params['wysiwyg']);
+			  unset($params['oneline']);
+			  unset($params['default']);
+			  unset($params['size']);
+			  $params = array_merge($params, GetModuleParameters($id));
+			  $returnid = '';
+			  if (isset($params['returnid']))
+			    {
+			      $returnid = $params['returnid'];
+			    }
+			  else
+			    {
+			      $returnid = $contentobj->Id();
+			    }
+			  $result = $allmmodules[$modulename]->DoActionBase($action, $id, $params, $returnid);
+			  if ($result !== FALSE)
+			    {
+			      echo $result;
+			    }
+			  $modresult = @ob_get_contents();
+			  @ob_end_clean();
+			  return _smarty_cms_function_content_return($modresult, $params, $smarty);
+			}
+		      else
+			{
+			  @trigger_error('Attempt to access module '.$key.' which could not be foune (is it properly installed and configured?');
+			  return _smarty_cms_function_content_return("<!-- Not a tag module -->\n", $params, $smarty);
+			}
+		    }
 		}
 		else
 		{

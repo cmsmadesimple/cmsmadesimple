@@ -30,6 +30,7 @@
  * @param string A class name
  * @return boolean
  */
+
 function cms_autoloader($classname)
 {
   $config = cmsms()->GetConfig();
@@ -82,24 +83,20 @@ function cms_autoloader($classname)
       return;
     }
 
-  // module classes
-  foreach( cmsms()->modules as $module => &$data )
+  $list = $moduleops->GetInstalledModules();
+  if( is_array($list) && count($list) )
     {
-      if( !isset($data['object']) ) continue;
-      $obj =& $data['object'];
-      $fn = cms_join_path($obj->GetModulePath(),'lib',"class.{$classname}.php");
-      if( file_exists($fn) )
+      foreach( $list as $modname )
 	{
-	  require_once($fn);
-	  return;
-	}
-      $fn = cms_join_path($obj->GetModulePath(),'lib',"interface.{$classname}.php");
-      if( file_exists($fn) )
-	{
-	  require_once($fn);
-	  return;
+	  $fn = $config['root_path']."/modules/$modname/lib/class.$classname.php";
+	  if( file_exists( $fn ) )
+	    {
+	      require_once($fn);
+	      return;
+	    }
 	}
     }
+  // module classes
 }
 
 spl_autoload_register('cms_autoloader');

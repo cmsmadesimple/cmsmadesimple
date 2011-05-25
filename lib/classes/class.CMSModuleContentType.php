@@ -35,16 +35,15 @@ class CMSModuleContentType extends ContentBase
 
 	function Lang($name, $params=array())
 	{
-	  $gCms = cmsms();
-		$cmsmodules = &$gCms->modules;
-		if (array_key_exists($this->ModuleName(), $cmsmodules))
-		{
-			return $cmsmodules[$this->ModuleName()]['object']->Lang($name, $params);
-		}
-		else
-		{
-			return 'ModuleName() not defined properly';
-		}
+	  $obj = cms_utils::get_module($this->ModuleName());
+	  if( $obj )
+	    {
+	      return $cmsmodules[$this->ModuleName()]['object']->Lang($name, $params);
+	    }
+	  else
+	    {
+	      return 'ModuleName() not defined properly';
+	    }
 	}
 
 	/*

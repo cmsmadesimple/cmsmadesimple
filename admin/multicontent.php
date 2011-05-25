@@ -52,12 +52,8 @@ if (isset($_POST['reorderpages'])) $action = 'reorder';
     {
       // it's a module action.
       $gCms = cmsms();
-      if( !isset($gCms->modules[$tmp[0]]) )
-	{
-	  redirect("listcontent.php".$urlext.'&message='.lang('no_bulk_performed'));
-	}
-      $obj =& $gCms->modules[$tmp[0]]['object'];
-      if( !is_object($obj) )
+      $module = cms_utils::get_module($tmp[0]);
+      if( !is_object($module) )
 	{
 	  redirect("listcontent.php".$urlext.'&message='.lang('no_bulk_performed'));
 	}

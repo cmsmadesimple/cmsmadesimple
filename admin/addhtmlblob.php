@@ -98,16 +98,6 @@ if ($access) {
 			$blobobj->use_wysiwyg = $use_wysiwyg;
 			$blobobj->description = $description;
 
-			#Perform the addhtmlblob_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->AddHtmlBlobPre($blobobj);
-				}
-			}
-			
 			Events::SendEvent('Core', 'AddGlobalContentPre', array('global_content' => &$blobobj));
 
 			$result = $blobobj->save();
@@ -120,16 +110,6 @@ if ($access) {
 				}
 				audit($blobobj->id, $blobobj->name, 'Added Global Content Block');
 
-				#Perform the addhtmlblob_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->AddHtmlBlobPost($blobobj);
-					}
-				}
-				
 				Events::SendEvent('Core', 'AddGlobalContentPost', array('global_content' => &$blobobj));
 
 				redirect("listhtmlblobs.php".$urlext);

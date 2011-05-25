@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['confirm_uploadmodule'] = 'Are you sure you would like to upload the selected XML file.  Incorrectly uploading a module file may break a functionling website';
+$lang['admin']['error_module_mincmsversion'] = 'This module requires a newer version of CMS Made Smple';
 $lang['admin']['info_browser_cache_expiry'] = 'Specify the amount of time (in minutes) that browsers should cache pages for.  Setting this value to 0 disables the functionality';
 $lang['admin']['browser_cache_expiry'] = 'Browser Cache Expiry Period <em>(minutes)</em>';
 $lang['admin']['info_browser_cache'] = 'Applicable only to cachable pages, this setting indicates that browsers should be allowed to cache the pages for an amount of time.  If enabled repeat visitors to your site may not immediately see changes to the content of the pages.';

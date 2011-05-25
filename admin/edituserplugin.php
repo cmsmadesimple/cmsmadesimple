@@ -196,19 +196,19 @@ if (strlen($plugin_name)>0)
     }
 
 $addlScriptSubmit = '';
-foreach (array_keys($gCms->modules) as $moduleKey)
-{
-	$module =& $gCms->modules[$moduleKey];
-	if (!($module['installed'] && $module['active'] && $module['object']->IsSyntaxHighlighter()))
-	{
-		continue;
-	}
-
-	if ($module['object']->SyntaxActive() or get_preference(get_userid(), 'syntaxhighlighter') == $module['object']->GetName())
-	{
-		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
-	}
-}
+if( ($modulename = get_preference(get_userid(false),'syntaxhighlighter')) )
+  {
+    $module = cms_utils::get_module($modulename);
+    if( is_object($module) 
+  }
+$syntaxmodule = get_preference(get_userid(FALSE),'syntaxhighlighter');
+if( $syntaxmodule && ($module = ModuleOperations::get_instance()->get_module_instance($syntaxmodule)) )
+  {
+    if( $module->IsSyntaxHighlighter() && $module->SyntaxActive() )
+      {
+	$addlScriptSubmit .= $module->SyntaxPageFormSubmit();
+      }
+  }
 $closestr = cms_html_entity_decode(lang('close'));
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">

@@ -80,7 +80,6 @@ class CMS_Compiler extends Smarty_Compiler {
 
             }
         }
-
         if (!$found) {
             return parent::_compile_custom_tag($tag_command, $tag_args, $tag_modifier, $output);
         } else if (!$have_function) {

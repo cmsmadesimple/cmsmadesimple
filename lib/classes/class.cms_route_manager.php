@@ -150,13 +150,11 @@ class cms_route_manager
 	unset($CMS_ADMIN_PAGE);
       }
 
-    foreach( $gCms->modules as $name => $data )
+    // todo: 
+    $modules = ModuleOperations::get_instance()->GetLoadedModules();
+    foreach( $modules as $name => &$module )
       {
-	if( $name && isset($data['object'])  )
-	  {
-	    $module =& $data['object'];
-	    $module->SetParameters();
-	  }
+	$module->SetParameters();
       }
 
     if( $flag )

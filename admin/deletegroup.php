@@ -63,16 +63,6 @@ if (isset($_GET["group_id"]))
 	    redirect("listgroups.php".$urlext);
 	  }
 
-        #Perform the deletegroup_pre callback
-	foreach($gCms->modules as $key=>$value)
-	  {
-	    if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true)
-	      {
-		$gCms->modules[$key]['object']->DeleteGroupPre($groupobj);
-	      }
-	  }
-	
 	// now do the work.
 	Events::SendEvent('Core', 'DeleteGroupPre', array('group' => &$groupobj));
 	
@@ -81,16 +71,6 @@ if (isset($_GET["group_id"]))
 	    $result = $groupobj->Delete();
 	  }
 	
-        #Perform the deletegroup_post callback
-	foreach($gCms->modules as $key=>$value)
-	  {
-	    if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true)
-	      {
-		$gCms->modules[$key]['object']->DeleteGroupPost($groupobj);
-	      }
-	  }
-		
 	Events::SendEvent('Core', 'DeleteGroupPost', array('group' => &$groupobj));
 	
 	if ($result == true)

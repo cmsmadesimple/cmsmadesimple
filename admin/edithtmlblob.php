@@ -109,16 +109,6 @@ if ($access)
 			  }
 			}
 
-			#Perform the edithtmlblob_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->EditHtmlBlobPre($blobobj);
-				}
-			}
-			
 			Events::SendEvent('Core', 'EditGlobalContentPre', array('global_content' => &$the_blob));
 
 			$result = $the_blob->save();
@@ -132,16 +122,6 @@ if ($access)
 				$smarty->clear_all_cache();
 				$smarty->clear_compiled_tpl();
 
-				#Perform the edithtmlblob_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->EditHtmlBlobPost($the_blob);
-					}
-				}
-				
 				Events::SendEvent('Core', 'EditGlobalContentPost', array('global_content' => &$the_blob));
 
 				if (!isset($_POST['apply'])) {
@@ -183,19 +163,15 @@ if (strlen($htmlblob) > 0)
 
 // Detect if a WYSIWYG is in use, and grab its form submit action (copied from editcotent.php)
 $addlScriptSubmit = '';
-foreach (array_keys($gCms->modules) as $moduleKey)
-{
-	$module =& $gCms->modules[$moduleKey];
-	if (!($module['installed'] && $module['active'] && $module['object']->IsWYSIWYG()))
-	{
-		continue;
-	}
-
-	if (($gcb_wysiwyg && $use_wysiwyg) && ($module['object']->WYSIWYGActive() or get_preference(get_userid(), 'wysiwyg') == $module['object']->GetName()))
-	{
-		$addlScriptSubmit .= $module['object']->WYSIWYGPageFormSubmit();
-	}
-}
+if( $gcb_wysiwyg && $use_wysiwyg )
+  {
+    if( ($modname = get_user_preference(get_userid(false),'wysiwyg')) )
+      {
+	$modobj = cms_utils::get_module($modname);
+	if( is_object($modobj) && $modobj->IsWysiwyg() && $modobj->WYSIWYGActive() )
+	  $addlScriptSubmit .= $modobj->WYSIWYGPageFormSubmit();
+      }
+  }
 
 $closestr = cms_html_entity_decode(lang('close'));
 $headtext = <<<EOSCRIPT

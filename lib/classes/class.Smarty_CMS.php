@@ -41,6 +41,7 @@ class Smarty_CMS extends Smarty {
     $config = cmsms()->GetConfig();
     parent::__construct();
     global $CMS_ADMIN_PAGE;
+    global $CMS_INSTALL_PAGE;
 
     if( isset($CMS_ADMIN_PAGE) && $CMS_ADMIN_PAGE == 1 )
       {
@@ -84,6 +85,7 @@ class Smarty_CMS extends Smarty {
 	$this->force_compile = true;
       }
 
+    if( isset($CMS_INSTALL_PAGE) ) return;
     load_plugins($this);
 
     $this->register_resource("db", array(&$this, "template_get_template",
@@ -828,7 +830,8 @@ class Smarty_CMS extends Smarty {
     $config = $gCms->config;
 
 #Run the execute_user function and replace {content} with it's output 
-    if (isset($gCms->modules[$tpl_name]))
+    $obj = cms_utils::get_module($tpl_name);
+    if (is_object($obj))
       {
 	@ob_start();
 
@@ -840,7 +843,7 @@ class Smarty_CMS extends Smarty {
 	  {
 	    $action = $params['action'];
 	  }
-	echo $gCms->modules[$tpl_name]['object']->DoActionBase($action, $id, $params, is_object($contentobj)?$$contentobj->Id():'');
+	echo $obj->DoActionBase($action, $id, $params, is_object($contentobj)?$$contentobj->Id():'');
 	$modoutput = @ob_get_contents();
 	@ob_end_clean();
 

@@ -22,27 +22,17 @@ class CMSInstallerPage3 extends CMSInstallerPage
 {
 	function assignVariables()
 	{
-		//cms_config_upgrade();
-		$config = cms_config_load(true, true);
-		if( isset($config['use_hierarchy']) && $config['use_hierarchy'] == false )
-		  {
-		    $_SESSION['disable_hierarchy'] = 1;
-		  }
-		$result = cms_config_save($config);
-		if($result)
-		{
-			// Delete backup config file
-			@unlink(CONFIG_FILE_LOCATION .'.bakupg');
-		}
-		else
-		{
-			$this->smarty->assign('config_file', CONFIG_FILE_LOCATION);
-			$this->smarty->assign('error_fragment', 'config_php_error');
-		}
-
-		$this->smarty->assign('result', $result);
-
-		$this->smarty->assign('errors', $this->errors);
+	  $config = cmsms()->GetConfig();
+	  if( isset($config['use_hierarchy']) && $config['use_hierarchy'] == false )
+	    {
+	      $_SESSION['disable_hierarchy'] = 1;
+	    }
+	  $config->save();
+	  $this->smarty->assign('config_file', CONFIG_FILE_LOCATION);
+	  $this->smarty->assign('error_fragment', 'config_php_error');
+	  $this->smarty->assign('result', $result);
+	  
+	  $this->smarty->assign('errors', $this->errors);
 	}
 }
 # vim:ts=4 sw=4 noet

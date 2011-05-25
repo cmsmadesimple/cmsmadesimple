@@ -369,28 +369,26 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 }
 
 # give everything to smarty
-$tmp = array_keys($gCms->modules);
+$allmodules = ModuleOperations::get_instance()->GetLoadedModules();
+$tmp = array_keys($allmodules);
 if( !is_array($tmp) || count($tmp) == 0 )
 {
   echo $themeObject->ShowErrors(lang('error_nomodules'));
   return;
 }
 $firstmod = $tmp[0];
-$smarty->assign_by_ref('mod',$gCms->modules[$firstmod]['object']);
+$smarty->assign_by_ref('mod',$allmodules[$tmp[0]]);
 
 $smarty->assign('languages',get_language_list());
 $smarty->assign('templates',$templates);
 
 $tmp = array(''=>lang('none'));
-
-foreach($gCms->modules as $key=>$value)
+foreach( $allmodules as $key => &$object )
 {
-	if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true &&
-		$gCms->modules[$key]['object']->IsWYSIWYG())
-		{
-			if (isset($tmp[$key])) $tmp[$key].= $key; else $tmp[$key]=$key;
-		}
+  if( $object->IsWYSIWYG() )
+    {
+      if (isset($tmp[$key])) $tmp[$key].= $key; else $tmp[$key]=$key;
+    }
 }
 $smarty->assign('wysiwyg',$tmp);
 

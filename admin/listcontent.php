@@ -75,10 +75,10 @@ function setdefault($contentid)
 	if (check_permission($userid,'Manage All Content'))
 	{
 		$hierManager = $gCms->GetHierarchyManager();
-		$node = &$hierManager->getNodeById($contentid);
+		$node = $hierManager->getNodeById($contentid);
 		if (isset($node))
 		{
-			$value =& $node->getContent();
+			$value = $node->getContent();
 			if (isset($value))
 			{
 				if (!$value->Active())
@@ -95,10 +95,10 @@ function setdefault($contentid)
 		$old_id = $db->GetOne($query);
 		if (isset($old_id))
 		{
-			$node = &$hierManager->getNodeById($old_id);
+			$node = $hierManager->getNodeById($old_id);
 			if (isset($node))
 			{
-				$value =& $node->getContent();
+				$value = $node->getContent();
 				if (isset($value))
 				{
 					$value->SetDefaultContent(false);
@@ -107,10 +107,10 @@ function setdefault($contentid)
 			}
 		}
 		
-		$node = &$hierManager->getNodeById($contentid);
+		$node = $hierManager->getNodeById($contentid);
 		if (isset($node))
 		{
-			$value =& $node->getContent();
+			$value = $node->getContent();
 			if (isset($value))
 			{
 				$value->SetDefaultContent(true);
@@ -272,8 +272,8 @@ function setactive($contentid, $active = true)
 
 	if($permission)
 	  {
-		$node = &$hierManager->getNodeById($contentid);
-		$value =& $node->getContent();
+		$node = $hierManager->getNodeById($contentid);
+		$value = $node->getContent();
 		$value->SetActive($active);
 		$value->Save();
 		$contentops = cmsms()->GetContentOperations();
@@ -362,13 +362,13 @@ function deletecontent($contentid)
 		$node = $hierManager->getNodeById($contentid);
 		if ($node)
 		{
-			$contentobj =& $node->getContent(true);
+			$contentobj = $node->getContent(true);
 			$childcount = 0;
 			$parentid = -1;
 			$parent = $node->getParent();
 			if ($parent)
 			{
-			  $parentContent =& $parent->getContent();
+			  $parentContent = $parent->getContent();
 			  if (is_object($parentContent))
 			    {
 			      $parentid = $parentContent->Id();
@@ -420,7 +420,7 @@ function deletecontent($contentid)
 
 function show_h(&$root, &$sortableLists, &$listArray, &$output)
 {
-	$content = &$root->getContent();
+	$content = $root->getContent();
 	if( !is_object($content) ) return;
 
 	$contentops = cmsms()->GetContentOperations();
@@ -434,7 +434,7 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 		$listArray[$content->mId] = 'parent'.$content->mId.'ListOrder';
 		$output .= '<ul id="parent'.$content->mId.'" class="sortableList">'."\n";
 
-		$children = &$root->getChildren(false,true);
+		$children = $root->getChildren(false,true);
 		foreach ($children as $child)
 		{
 			show_h($child, $sortableLists, $listArray, $output);
@@ -461,7 +461,7 @@ function reorder_display_list()
 	$sortableLists = new SLLists($config["root_url"].'/lib/scriptaculous');
 	
 	$hierManager = $gCms->GetHierarchyManager();
-	$hierarchy = &$hierManager->getRootNode();
+	$hierarchy = $hierManager->getRootNode();
 	
 	$listArray = array();
 	$output = '';
@@ -506,7 +506,7 @@ function reorder_process($get)
 		$db = $gCms->GetDb();
 		$contentops = $gCms->GetContentOperations();
 	    $hm = $contentops->GetAllContentAsHierarchy(false);
-		$hierarchy = &$hm->getRootNode();
+		$hierarchy = $hm->getRootNode();
 	
 		require(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists','SLLists.class.php'));
 		$sortableLists = new SLLists( $config["root_url"].'/lib/scriptaculous');
@@ -531,10 +531,10 @@ function reorder_process($get)
 			$orderArray = SLLists::getOrderArray($get[$order], 'parent'.$parent_id);
 			foreach($orderArray as $item)
 			{
-				$node =& $hm->sureGetNodeById($item['element']);
+				$node = $hm->sureGetNodeById($item['element']);
 				if ($node != NULL)
 				{
-				    $one =& $node->getContent();
+				    $one = $node->getContent();
 				    // Only update if order has changed.
 				    if ($one->ItemOrder() != $item['order'])
 				    {
@@ -598,13 +598,13 @@ function check_peer_authorship($userid,$contentid)
 function check_children(&$root, &$mypages, &$userid)
 {
 	$result = false;
-	$content =& $root->getContent();
+	$content = $root->getContent();
 	if (isset($content))
 	{
 		$result = in_array($content->Id(), $mypages, false);
 		if (!$result)
 		{
-		  $children =& $root->getChildren(false,true);
+		  $children = $root->getChildren(false,true);
 		  if( is_array($children) && count($children) > 0 )
 		  {
 		    foreach ($children as $child)
@@ -648,7 +648,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
   if (!array_key_exists($one->Owner(), $users))
     {
       $userops = cmsms()->GetUserOperations();
-      $users[$one->Owner()] =& $userops->LoadUserById($one->Owner());
+      $users[$one->Owner()] = $userops->LoadUserById($one->Owner());
     }
   
   $display = 'none';
@@ -1030,7 +1030,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
       ($currow == "row1"?$currow="row2":$currow="row1");
     }
 
-    $pagelist[] = &$thelist;
+    $pagelist[] = $thelist;
 
     $indent = get_preference($userid, 'indent', true);
 
@@ -1088,7 +1088,7 @@ function display_content_list($themeObject = null)
 	$currow = "row1";
 	
 	if ($themeObject == null)
-		$themeObject =& AdminTheme::GetThemeObject();
+		$themeObject = AdminTheme::GetThemeObject();
 
 	// construct true/false button images
 	$image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
@@ -1123,8 +1123,7 @@ function display_content_list($themeObject = null)
 		}
 	}
 
-        $hierManager = $gCms->GetHierarchyManager();
-	$hierarchy = &$hierManager;
+        $hierarchy = $gCms->GetHierarchyManager();
 
 	$rowcount = 0;
 	if ($hierarchy->hasChildren())
@@ -1143,10 +1142,6 @@ function display_content_list($themeObject = null)
 		{
 			$thelist.=$item;
 		}
-
-		//$thelist .= '<tr class="invisible"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-		//<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-		//<td>&nbsp;</td><td><input type="submit" name="reorderpages" value="'.lang('reorderpages').'" /></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>';
 
 		$thelist .= '</tbody>';
 		$thelist .= "</table>\n";

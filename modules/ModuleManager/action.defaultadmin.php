@@ -43,6 +43,11 @@ if( !isset($gCms) ) exit;
   echo '<h3>'.$this->Lang('use_at_your_own_risk')."</h3>\n";
   echo '<p>'.$this->Lang('compatibility_disclaimer')."</p></div>\n";
 
+  if( !$this->is_connection_ok() )
+    {
+      echo $this->_DisplayErrorPage($id,$params,$returnid,$this->Lang('error_request_problem'));
+    }
+
   $active_tab = -1;
   if( isset($params['active_tab']))
     {
@@ -79,17 +84,18 @@ if( !isset($gCms) ) exit;
       echo $this->EndTab();
 
       echo $this->StartTab('search');
-      include(dirname(__FILE__).'/function.search.php');
+      echo 'TODO';
+      // include(dirname(__FILE__).'/function.search.php');
       echo $this->EndTab();
 
       echo $this->StartTab('modules');
-      $this->_DisplayAdminModulesTab( $id, $params, $returnid );
+      include(dirname(__FILE__).'/function.admin_modules_tab.php');
       echo $this->EndTab();
     }
   if( $this->CheckPermission('Modify Site Preferences') )
     {
       echo $this->StartTab('prefs');
-      $this->_DisplayAdminPrefsTab( $id, $params, $returnid );
+      include(dirname(__FILE__).'/function.admin_prefs_tab.php');
       echo $this->EndTab();
     }
   echo $this->EndTabContent();

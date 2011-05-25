@@ -54,17 +54,21 @@ elseif (isset($_REQUEST['mact']))
   $action = (isset($ary[2])?$ary[2]:'');
 }
 
-if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIWYG())
+$modinst = ModuleOperations::get_instance()->get_module_instance($module);
+if( !$modinst )
+  {
+    trigger_error('Module '.$module.' not found in memory. This could indicate that the module is in need of upgrade or that there are other problems');
+    redirect("index.php".$urlext);
+  }
+
+if( get_preference($userid,'use_wysiwyg') == '1' && $modinst->IsWYSIWYG() )
 {
-	if (get_preference($userid, 'use_wysiwyg') == "1")
-	{
-		$htmlarea_flag = "true";
-		$htmlarea_replaceall = true;
-	}
+  $htmlarea_flag = "true";
+  $htmlarea_replaceall = true;
 }
 
 $USE_OUTPUT_BUFFERING = true;
-if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->HasAdminBuffering() == false)
+if( $modinst->HasAdminBuffering() == false )
 {
 	$USE_OUTPUT_BUFFERING = false;
 }
@@ -93,96 +97,73 @@ if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false'))
   $USE_OUTPUT_BUFFERING = false;
 }
 
-if (isset($gCms->modules[$module]['object']) )
+$txt = $modinst->GetHeaderHTML();
+if( $txt !== false )
   {
-    $txt = $gCms->modules[$module]['object']->GetHeaderHTML();
-    if( $txt !== false )
+    $headtext = $txt;
+  }
+
+if( $modinst->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput']) )
+  {
+    $suppressOutput = true;
+  }
+else
+  {
+    include_once("header.php");
+  }
+
+if (isset($USE_THEME) && $USE_THEME == false)
+  {
+    echo '';
+  }
+else
+  {
+    $params = GetModuleParameters($id);
+    if (FALSE == empty($params['module_message']))
       {
-	$headtext = $txt;
+	echo $themeObject->ShowMessage($params['module_message']);
+      }
+    if (FALSE == empty($params['module_error']))
+      {
+	echo $themeObject->ShowErrors($params['module_error']);
+      }
+    if (!$suppressOutput)
+      {
+	echo '<div class="pagecontainer">';
+	echo '<div class="pageoverflow">';
+	echo $themeObject->ShowHeader($modinst->GetFriendlyName(), '', '', 'both').'</div>';
       }
   }
- else
-   {
-     $headtext = '';
-   }
-
-if (isset($gCms->modules[$module]['object']) && ($gCms->modules[$module]['object']->SuppressAdminOutput($_REQUEST) != false || isset($_REQUEST['suppressoutput'])))
-	{
-	$suppressOutput = true;
-	}
-else
-	{
-	include_once("header.php");
- 	}
-
-if (count($gCms->modules) > 0)
-{
-  if( !isset($gCms->modules[$module]) )
-    {
-      trigger_error('Module '.$module.' not found in memory. This could indicate that the module is in need of upgrade or that there are other problems');
-      redirect("index.php".$urlext);
-
-    }
-	if (isset($USE_THEME) && $USE_THEME == false)
-	{
-		echo '';
-	}
-	else
-	{
-	  $params = GetModuleParameters($id);
-	  if (FALSE == empty($params['module_message']))
-	    {
-	      echo $themeObject->ShowMessage($params['module_message']);
-	    }
-	  if (FALSE == empty($params['module_error']))
-	    {
-	      echo $themeObject->ShowErrors($params['module_error']);
-	    }
-	  if (!$suppressOutput)
-	    {
-	      echo '<div class="pagecontainer">';
-	      echo '<div class="pageoverflow">';
-	      echo $themeObject->ShowHeader($gCms->modules[$module]['object']->GetFriendlyName(), '', '', 'both').'</div>';
-	    }
-	}
-
-	if (isset($gCms->modules[$module]))
-	{
-		if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
-		{
-			@ob_start();
-		}
-		$id = 'm1_';
-		$params = GetModuleParameters($id);
-		echo $gCms->modules[$module]['object']->DoActionBase($action, $id, $params);
-		if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
-		{
-			$content = @ob_get_contents();
-			@ob_end_clean();
-			echo $content;
-		}
-		if (!$suppressOutput)
-			{
-			echo '</div>';
-			}
-	}
-	else
-	{
-		redirect("index.php".$urlext);
-	}
-}
+  
+if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
+  {
+    @ob_start();
+  }
+$id = 'm1_';
+$params = GetModuleParameters($id);
+echo $modinst->DoActionBase($action, $id, $params);
+if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
+  {
+    $content = @ob_get_contents();
+    @ob_end_clean();
+    echo $content;
+  }
+if (!$suppressOutput)
+  {
+    echo '</div>';
+  }
 
 if (isset($USE_THEME) && $USE_THEME == false)
 {
-	echo '';
+  echo '';
 }
 elseif (!$suppressOutput)
 {
-	echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+  echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 }
 if (!$suppressOutput)
-	{
-	include_once("footer.php");
- 	}
+  {
+    include_once("footer.php");
+  }
 # vim:ts=4 sw=4 noet
 ?>

@@ -274,19 +274,14 @@ if (isset($_POST["apply"]))
     }
 
 $addlScriptSubmit = '';
-foreach (array_keys($gCms->modules) as $moduleKey)
-{
-	$module =& $gCms->modules[$moduleKey];
-	if (!($module['installed'] && $module['active'] && $module['object']->IsSyntaxHighlighter()))
-	{
-		continue;
-	}
-
-	if ($module['object']->SyntaxActive() or get_preference(get_userid(), 'syntaxhighlighter') == $module['object']->GetName())
-	{
-		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
-	}
-}
+$syntaxmodule = get_preference(get_userid(FALSE),'syntaxhighlighter');
+if( $syntaxmodule && ($module = ModuleOperations::get_instance()->get_module_instance($syntaxmodule)) )
+  {
+    if( $module->IsSyntaxHighlighter() && $module->SyntaxActive() )
+      {
+	$addlScriptSubmit .= $module->SyntaxPageFormSubmit();
+      }
+  }
 
 $closestr = cms_html_entity_decode(lang('close'));
 $headtext = <<<EOSCRIPT

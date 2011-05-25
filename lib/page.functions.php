@@ -226,33 +226,25 @@ function generate_user_object($userid)
 function send_recovery_email($username)
 {
   $gCms = cmsms();
-	$config = $gCms->GetConfig();
-	$userops = $gCms->GetUserOperations();
-	$user = $userops->LoadUserByUsername($username);
+  $config = $gCms->GetConfig();
+  $userops = $gCms->GetUserOperations();
+  $user = $userops->LoadUserByUsername($username);
+  
+  $obj = cms_utils::get_module('CMSMailer');
+  if ($obj == null)
+    {
+      return false;
+    }
 	
-	//Grab CMSMailer -- *cough* hack
-	$obj = null;
-	if (isset($gCms->modules['CMSMailer']) &&
-		$gCms->modules['CMSMailer']['installed'] == true &&
-		$gCms->modules['CMSMailer']['active'] == true)
-	{
-		$obj = $gCms->modules['CMSMailer']['object'];
-	}
-	
-	if ($obj == null)
-	{
-		return false;
-	}
-	
-	$obj->AddAddress($user->email, $user->firstname . ' ' . $user->lastname);
-	$obj->SetSubject(lang('lostpwemailsubject',$gCms->siteprefs['sitename']));
-	
-	$url = $config['admin_url'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
-	$body = lang('lostpwemail',$gCms->siteprefs['sitename'], $user->username, $url);
-	
-	$obj->SetBody($body);
-	
-	return $obj->Send();
+  $obj->AddAddress($user->email, $user->firstname . ' ' . $user->lastname);
+  $obj->SetSubject(lang('lostpwemailsubject',$gCms->siteprefs['sitename']));
+  
+  $url = $config['admin_url'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
+  $body = lang('lostpwemail',$gCms->siteprefs['sitename'], $user->username, $url);
+  
+  $obj->SetBody($body);
+  
+  return $obj->Send();
 }
 
 /**
@@ -543,33 +535,6 @@ function audit($itemid, $itemname, $action)
 }
 
 
-/**
- * Loads a cache of site preferences so we only have to do it once.
- *
- * @since 0.6
- * @internal
- * @return void
- */
-function load_site_preferences()
-{
-  $gCms = cmsms();
-	$db = $gCms->GetDb();
-	$siteprefs = &$gCms->siteprefs;
-
-	if ($db)
-	{
-		$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
-		$result = &$db->Execute($query);
-
-		while ($result && !$result->EOF)
-		{
-			$siteprefs[$result->fields['sitepref_name']] = $result->fields['sitepref_value'];
-			$result->MoveNext();
-		}
-		
-		if ($result) $result->Close();
-	}
-}
 
 
 /**
@@ -580,24 +545,9 @@ function load_site_preferences()
  * @param mixed  The default value if the preference does not exist
  * @return mixed
  */
-function get_site_preference($prefname, $defaultvalue = '') {
-
-	$value = $defaultvalue;
-
-	$gCms = cmsms();
-	$siteprefs =& $gCms->siteprefs;
-	
-	if (count($siteprefs) == 0)
-	{
-		load_site_preferences();
-	}
-
-	if (isset($siteprefs[$prefname]))
-	{
-		$value = $siteprefs[$prefname];
-	}
-
-	return $value;
+function get_site_preference($prefname, $defaultvalue = '') 
+{
+  return cms_siteprefs::get($prefname,$defaultvalue);
 }
 
 
@@ -610,25 +560,7 @@ function get_site_preference($prefname, $defaultvalue = '') {
  */
 function remove_site_preference($prefname,$uselike=false)
 {
-  $gCms = cmsms();
-	$db = $gCms->GetDb();
-$db->debug = true;
-	$siteprefs = &$gCms->siteprefs;
-
-	$query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ?";
-	if( $uselike == true )
-	  {
-	    $query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name LIKE ?";
-		$prefname .= '%';
-	  }
-	$result = $db->Execute($query, array($prefname));
-
-	if (isset($siteprefs[$prefname]))
-	{
-		unset($siteprefs[$prefname]);
-	}
-	
-	if ($result) $result->Close();
+  return cms_siteprefs::remove($prefname,$uselike);
 }
 
 
@@ -642,62 +574,9 @@ $db->debug = true;
  */
 function set_site_preference($prefname, $value)
 {
-	$doinsert = true;
-
-	$gCms = cmsms();
-	$db = $gCms->GetDb();
-
-	$siteprefs = &$gCms->siteprefs;
-
-	$query = "SELECT sitepref_value from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ".$db->qstr($prefname);
-	$result = $db->Execute($query);
-
-	if ($result && $result->RecordCount() > 0)
-	{
-		$doinsert = false;
-	}
-	
-	if ($result) $result->Close();
-
-	if ($doinsert)
-	{
-		$query = "INSERT INTO ".cms_db_prefix()."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr($prefname).", ".$db->qstr($value).")";
-		$db->Execute($query);
-	}
-	else
-	{
-		$query = "UPDATE ".cms_db_prefix()."siteprefs SET sitepref_value = ".$db->qstr($value)." WHERE sitepref_name = ".$db->qstr($prefname);
-		$db->Execute($query);
-	}
-	$siteprefs[$prefname] = $value;
+  return cms_siteprefs::set($prefname,$value);
 }
 
-
-/**
- * A function to load all user preferences for the specified user ID
- *
- * @internal
- * @access private
- * @param integer The User ID
- * @return void
- */
-function load_all_preferences($userid)
-{
-  $gCms = cmsms();
-	$db = $gCms->GetDb();
-	$variables = &$gCms->userprefs;
-
-	$query = 'SELECT preference, value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
-	$result = &$db->Execute($query, array($userid));
-
-	while ($result && !$result->EOF)
-	{
-		$variables[$result->fields['preference']] = $result->fields['value'];
-		$result->MoveNext();
-	}
-	
-	if ($result) $result->Close();
-}
 
 /**
  * Gets the given preference for the given userid.
@@ -710,30 +589,7 @@ function load_all_preferences($userid)
  */
 function get_preference($userid, $prefname, $default='')
 {
-  $gCms = cmsms();
-	$db = $gCms->GetDb();
-
-	$result = '';
-
-	if (!isset($gCms->userprefs))
-	{
-		load_all_preferences($userid);
-	}
-
-	$userprefs = &$gCms->userprefs;
-	if (isset($gCms->userprefs))
-	{
-		if (isset($userprefs[$prefname]))
-		{
-			$result = $userprefs[$prefname];
-		}
-		else
-		{
-			$result = $default;
-		}
-	}
-
-	return $result;
+  return cms_userprefs::get_for_user($userid,$prefname,$default);
 }
 
 /**
@@ -747,40 +603,7 @@ function get_preference($userid, $prefname, $default='')
  */
 function set_preference($userid, $prefname, $value)
 {
-	$doinsert = true;
-
-	$gCms = cmsms();
-	$db = $gCms->GetDb();
-
-	if (!isset($gCms->userprefs))
-	{
-		load_all_preferences($userid);
-	}
-
-
-	$userprefs = &$gCms->userprefs;
-	$userprefs[$prefname] = $value;
-
-	$query = "SELECT value from ".cms_db_prefix()."userprefs WHERE user_id = ? AND preference = ?";
-	$result = $db->Execute($query, array($userid, $prefname));
-
-	if ($result && $result->RecordCount() > 0)
-	{
-		$doinsert = false;
-	}
-	
-	if ($result) $result->Close();
-
-	if ($doinsert)
-	{
-		$query = "INSERT INTO ".cms_db_prefix()."userprefs (user_id, preference, value) VALUES (?,?,?)";
-		$db->Execute($query, array($userid, $prefname, $value));
-	}
-	else
-	{
-		$query = "UPDATE ".cms_db_prefix()."userprefs SET value = ? WHERE user_id = ? AND preference = ?";
-		$db->Execute($query, array($value, $userid, $prefname));
-	}
+  return cms_userprefs::set_for_user($userid, $prefname,$value);
 }
 
 
@@ -978,196 +801,69 @@ function create_vanilla_textarea($text, $name, $classname = '', $id = '', $encod
 function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
 {
   $gCms = cmsms();
-  //$result = '';
+  $result = '';
+  $uid = get_userid(false);
 
-  //setting up selections
-  $selectedwysiwyg = '';
-  if (get_userid(false) == false) {
-    //not logged into admin
-    $selectedwysiwyg = get_site_preference('frontendwysiwyg');
-  } else {
-    //logged into admin
-    $selectedwysiwyg = get_preference(get_userid(false), 'wysiwyg');
-  }
-
-
-
-  $selectedsyntax = get_preference(get_userid(false), 'syntaxhighlighter');
-
-  if ($forcewysiwyg != "") {
-    $selectedwysiwyg = $forcewysiwyg;
-    $selectedsyntax = $forcewysiwyg;
-  }
-
-  //check for missing selections
-  if ($enablewysiwyg && $selectedwysiwyg == "") return create_vanilla_textarea($text, $name, $classname, $id, $encoding, $width, $height, $addtext);
-  if ($wantedsyntax != "" && $selectedsyntax == "") return create_vanilla_textarea($text, $name, $classname, $id, $encoding, $width, $height, $addtext);
-
-
-  //First check if we should bother at all...
-  if ($enablewysiwyg || $wantedsyntax != "") {
-
-    //OK, module traversal is needed
-    foreach ($gCms->modules as $module) {
-
-      //First check for relevancy
-      if (!$module["installed"]) continue;
-      if (!$module["active"]) continue;
-      if (($module['object']->IsWYSIWYG() == false) && ($module['object']->IsSyntaxHighlighter() == false)) continue;
-
-      //      echo $selectedwysiwyg;
-      //So far, so good... now, do we want wysiwyg as all?
-      if ($enablewysiwyg == true) {
-        //We do...
-        if ($module['object']->GetName() == $selectedwysiwyg) {
-          return $module['object']->WYSIWYGTextarea($name, $width, $height, $encoding, $text, $stylesheet, $addtext);
-          //done;
-        }
-      } else {
-        //We don't, then we must want syntaxhighlighting instead
-        if ($module['object']->GetName() == $selectedsyntax) {
-          return $module['object']->SyntaxTextarea($name, $wantedsyntax, $width, $height, $encoding, $text, $addtext);
-          //done;
-        }
-      }
+  if ($enablewysiwyg == true)
+    {
+      $module_name = get_site_preference('frontendwysiwyg');
+      if( $uid < 1 )
+	{
+	  $module_name = get_preference($uid,'wysiwyg');
+	}
+      if( $forcewysiwyg ) $module_name = $forcewysiwyg;
+      if( $module_name )
+	{
+	  $module = cms_utils::get_module($module_name);
+	  if( $module && $module->IsWYSIWYG() )
+	    {
+	      $result = $module->WYSIWYGTextArea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
+	    }
+	}
     }
-  }
-  //ok, don't bother, return a vanilla textarea
-  return create_vanilla_textarea($text, $name, $classname, $id, $encoding, $width, $height, $addtext);
 
-
-	/*if ($enablewysiwyg == true)
+  if( !$result && $wantedsyntax )
+    {
+      $module_name = get_preference($uid,'syntaxhighlighter');
+      if( $forcewysiwyg )
 	{
-		reset($gCms->modules);
-		while (list($key) = each($gCms->modules))
-		{
-			$value =& $gCms->modules[$key];
-			if ($gCms->modules[$key]['installed'] == true && //is the module installed?
-				$gCms->modules[$key]['active'] == true &&			 //us the module active?
-				$gCms->modules[$key]['object']->IsWYSIWYG())   //is it a wysiwyg module?
-			{
-			  
-				if ($forcewysiwyg=='') {
-				  
-				  if (get_userid(false)==false) {
-
-				    //echo "admin";
-					  //get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway					  
-				    if ($gCms->modules[$key]['object']->GetName()==get_site_preference('frontendwysiwyg')) {
-				      
-				      $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
-					  }					  
-				  } else {
-				    
-				    if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(false), 'wysiwyg')) {
-				      $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
-					  }
-				  }	 
-				} else {
-					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
-					  $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
-					}
-				}
-			}
-		}
+	  $module_name = $forcewysiwyg;
 	}
-	
-  if (($result=="") && ($wantedsyntax!=''))
-	{	  
-		reset($gCms->modules);
-		while (list($key) = each($gCms->modules))
-		{
-			$value =& $gCms->modules[$key];
-			if ($gCms->modules[$key]['installed'] == true && //is the module installed?
-				$gCms->modules[$key]['active'] == true &&			 //us the module active?
-				$gCms->modules[$key]['object']->IsSyntaxHighlighter())   //is it a syntaxhighlighter module module?
-			{
-				if ($forcewysiwyg=='') {
-					//get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway
-					if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(false), 'syntaxhighlighter')) {
-					  $result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
-					}
-				} else {
-					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
-					  $result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
-					}
-				}
-			}
-		}
-	}
-
-	if ($result == '')
+      if( $module_name )
 	{
-		$result = '<textarea name="'.$name.'" cols="'.$width.'" rows="'.$height.'"';
-		if ($classname != '')
-		{
-			$result .= ' class="'.$classname.'"';
-		}
-		else
-                {
-		  $result .= ' class="cms_textarea"';
-		}
-		if ($id != '')
-		{
-			$result .= ' id="'.$id.'"';
-		}
-		if( !empty( $addtext ) )
-		  {
-		    $result .= ' '.$addtext;
-		  }
-
-		$result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
+	  $module = cms_utils::get_module($module_name);
+	  if( $module && $module->IsSyntaxHighlighter() )
+	    {
+	      $result = $module->SyntaxTextArea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
+	    }
 	}
+    }
 
-	return $result;*/
+  if ($result == '')
+    {
+      $result = '<textarea name="'.$name.'" cols="'.$width.'" rows="'.$height.'"';
+      if ($classname != '')
+	{
+	  $result .= ' class="'.$classname.'"';
+	}
+      else
+	{
+	  $result .= ' class="cms_textarea"';
+	}
+      if ($id != '')
+	{
+	  $result .= ' id="'.$id.'"';
+	}
+      if( !empty( $addtext ) )
+	{
+	  $result .= ' '.$addtext;
+	}
+      
+      $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
+    }
+  
+  return $result;
 }
-
-/*
- * creates a textarea that does syntax highlighting on the source code.
- * The following also needs to be added to the <form> tag for submit to work.
- * if($use_javasyntax){echo 'onSubmit="textarea_submit(
- * this, \'custom404,sitedown\');"';}
- */
-/*
-OBSOLETE!!!
-
-function textarea_highlight($use_javasyntax, $text, $name, $class_name="syntaxHighlight", $syntax_type="HTML (Complex)", $id="", $encoding='')
-{
-    if ($use_javasyntax)
-	{
-        $text = ereg_replace("\r\n", "<CMSNewLine>", $text);
-        $text = ereg_replace("\r", "<CMSNewLine>", $text);
-        $text = cms_htmlentities(ereg_replace("\n", "<CMSNewLine>", $text));
-
-        // possible values for syntaxType are: Java, C/C++, LaTeX, SQL,
-        // Java Properties, HTML (Simple), HTML (Complex)
-
-        $output = '<applet name="CMSSyntaxHighlight"
-            code="org.CMSMadeSimple.Syntax.Editor.class" width="100%">
-                <param name="cache_option" VALUE="Plugin">
-                <param name="cache_archive" VALUE="SyntaxHighlight.jar">
-                <param name="cache_version" VALUE="612.0.0.0">
-                <param name="content" value="'.$text.'">
-                <param name="syntaxType" value="'.$syntax_type.'">
-                Sorry, the syntax highlighted textarea will not work with your
-                browser. Please use a different browser or turn off syntax
-                highlighting under user preferences.
-            </applet>
-            <input type="hidden" name="'.$name.'" value="">';
-
-    }
-	else
-	{
-        $output = '<textarea name="'.$name.'" cols="80" rows="24"
-            class="'.$class_name.'"';
-        if ($id<>"")
-            $output.=' id="'.$id.'"';
-        $output.='>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
-    }
-
-    return $output;
-}
-*/
 
 
 /**
@@ -1201,30 +897,6 @@ function textarea_highlight($use_javasyntax, $text, $name, $class_name="syntaxHi
 		}
 
 		$page_string .= '&nbsp;'.lang('page')."&nbsp;$page&nbsp;".lang('of')."&nbsp;$numofpages&nbsp;";
-		// links to individual pages
-// 		for($i = 1; $i <= $numofpages; $i++)
-// 		{
-// 			if($i == $page)
-// 			{
-// 				$page_string .= $i."&nbsp;";
-// 			}
-// 			else
-// 			{
-// 				$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$i\">$i</a>&nbsp;";
-// 			}
-// 		}
-
-// 		if(($totalrows % $limit) != 0)
-// 		{
-// 			if($i == $page)
-// 			{
-// 				$page_string .= $i."&nbsp;";
-// 			}
-// 			else
-// 			{
-// 				$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$i\">$i</a>&nbsp;";
-// 			}
-// 		}
 
 		if(($totalrows - ($limit * $page)) > 0)
 		{

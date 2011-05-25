@@ -111,6 +111,7 @@ class cms_tree
 			  }
 		  else
 			  {
+				  if( is_object($this->_tags[$tag_name]) ) { stack_trace(); die(); }
 				  if( isset($this->_tags[$tag_name]) && strtolower($this->_tags[$tag_name]) == strtolower($value) )
 					  {
 						  return $this;
@@ -309,11 +310,11 @@ class cms_tree
   public function get_level()
   {
     $n = -1;
-    $node =& $this;
+    $node = $this;
     while( $node->_parent )
       {
-	$n++;
-	$node = $node->_parent;
+		  $n++;
+		  $node = $node->_parent;
       }
     return $n;
   }

@@ -176,19 +176,14 @@ if (strlen($contentobj->Name()) > 0)
 
 // Detect if a WYSIWYG is in use, and grab its form submit action
 $addlScriptSubmit = '';
-foreach (array_keys($gCms->modules) as $moduleKey)
-{
-	$module =& $gCms->modules[$moduleKey];
-	if (!($module['installed'] && $module['active'] && $module['object']->IsWYSIWYG()))
-	{
-		continue;
-	}
-
-	if (!$contentobj->GetPropertyValue('disable_wysiwyg') && ($module['object']->WYSIWYGActive() or get_preference(get_userid(), 'wysiwyg') == $module['object']->GetName()))
-	{
-		$addlScriptSubmit .= $module['object']->WYSIWYGPageFormSubmit();
-	}
-}
+if( ($modulename = get_preference(get_userid(false),'wysiwyg')) )
+  {
+    $modobj = cms_utils::get_module($modulename);
+    if( $modobj && $modobj->IsWYSIWYG() && $modobj->WYSIWYGActive() )
+      {
+	$addlScriptSubmit .= $modobj->WYSIWYGPageFormSubmit();
+      }
+  }
 
 $closestr = cms_html_entity_decode(lang('close'));
 $cancelstr = cms_html_entity_decode(lang('confirmcancel'));

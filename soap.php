@@ -76,7 +76,7 @@ if( !isset( $params['module'] ) )
     echo soap_error('missing module parameter');
     exit;
   }
-if( !isset( $gCms->modules[$params['module']] ) )
+if( !cms_utils::get_module($params['module']) )
   {
     header('Content-Type: text/xml');
     echo soap_error("module ".$params['module']." not found");  
@@ -85,60 +85,50 @@ if( !isset( $gCms->modules[$params['module']] ) )
 
 // this code copied from function.cms_module.php
 // then slightly hacked
-$cmsmodules = &$gCms->modules;
-
+$installedmodules = ModuleOperations::get_instance()->GetInstalledModules();
 $modresult = '';
-if (isset($cmsmodules))
+$modulename = $params['module'];
+foreach ($installedmodules as $key)
+{
+  if (!strcasecmp($modulename,$key))
+    {
+      $modulename = $key;
+    }
+}
+    
+if( $modulename && ($modobj = ModuleOperations::get_instance()->get_module_instance($modulename)) )
   {
-    $modulename = $params['module'];
-    
-    foreach ($cmsmodules as $key=>$value)
+    if( $modobj->IsSoapModule() )
       {
-	if (!strcasecmp($modulename,$key))
+	//@ob_start();
+	$id = 'm' . ++$gCms->variables["modulenum"];
+	$params = array_merge($params, GetModuleParameters($id));
+	$action = 'soap';
+	if (isset($params['action']))
 	  {
-	    $modulename = $key;
+	    $action = $params['action'];
 	  }
+	
+	$returnid = '';
+	if (isset($gCms->variables['pageinfo']) && isset($gCms->variables['pageinfo']->content_id) )
+	  {
+	    $returnid = $gCms->variables['pageinfo']->content_id;
+	  }
+	$params['HTTP_RAW_POST_DATA'] = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
+	$result = $modobj->DoActionBase($action, $id, $params, $returnid);
+	if ($result !== FALSE)
+	  {
+	    echo $result;
+	  }
+	$modresult = @ob_get_contents();
+	//@ob_end_clean();
       }
-    
-    if (isset($modulename))
+    else
       {
-	if (isset($cmsmodules[$modulename]))
-	  {
-	    if (isset($cmsmodules[$modulename]['object'])
-		&& $cmsmodules[$modulename]['installed'] == true
-		&& $cmsmodules[$modulename]['active'] == true
-	        && $cmsmodules[$modulename]['object']->IsSoapModule())
-	      {
-		//@ob_start();
-		$id = 'm' . ++$gCms->variables["modulenum"];
-		$params = array_merge($params, GetModuleParameters($id));
-		$action = 'soap';
-		if (isset($params['action']))
-		  {
-		    $action = $params['action'];
-		  }
-		
-		$returnid = '';
-		if (isset($gCms->variables['pageinfo']) && isset($gCms->variables['pageinfo']->content_id) )
-		  {
-		    $returnid = $gCms->variables['pageinfo']->content_id;
-		  }
-		$params['HTTP_RAW_POST_DATA'] = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
-		$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
-		if ($result !== FALSE)
-		  {
-		    echo $result;
-		  }
-		$modresult = @ob_get_contents();
-		//@ob_end_clean();
-	      }
-	    else
-	      {
-		return "<!-- Not a tag module -->\n";
-	      }
-	  }
+	return "<!-- Not a tag module -->\n";
       }
   }
+}
 
 // here's the output
 echo $modresult;

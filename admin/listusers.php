@@ -60,35 +60,15 @@ if (isset($_GET["toggleactive"]))
     $result = false;
     if($permission)
       {
-
-    $thisuser->active == 1 ? $thisuser->active = 0 : $thisuser->active=1;
-
-        #Perform the edituser_pre callback
-        foreach($gCms->modules as $key=>$value)
-              {
-                 if ($gCms->modules[$key]['installed'] == true &&
-                       $gCms->modules[$key]['active'] == true)
-                        {
-                         $gCms->modules[$key]['object']->EditUserPre($thisuser);
-                        }
-                 }
-
+	$thisuser->active == 1 ? $thisuser->active = 0 : $thisuser->active=1;
+	Events::SendEvent('Core','EditUserPre',array('user'=>$thisuser));
         $result = $thisuser->save();
-
       }
 
       if ($result)
          {
            audit($userid, $thisuser->username, 'Edited User');
-           #Perform the edituser_post callback
-           foreach($gCms->modules as $key=>$value)
-                  {
-                   if ($gCms->modules[$key]['installed'] == true &&
-                          $gCms->modules[$key]['active'] == true)
-                       {
-                          $gCms->modules[$key]['object']->EditUserPost($thisuser);
-                       }
-                  }
+	   Events::SendEvent('Core','EditUserPost',array('user'=>$thisuser));
         } else {
            $error .= "<li>".lang('errorupdatinguser')."</li>";
         }

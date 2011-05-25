@@ -401,11 +401,11 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
       if (isset($params['image']) && ! empty($params['image'])) {
 	$width = (isset($params['width']) && !empty($params['width'])) ? (int)$params['width'] : '';
 	$height = (isset($params['height']) && !empty($params['height'])) ? (int)$params['height'] : '';
-	if( $width ) $width = max(1,$width);
-	if( $height ) $height = max(1,$height);
 	$alt = (isset($params['alt']) && ! empty($params['alt'])) ? $params['alt'] : '';
 	$result .= "<img src=\"{$params['image']}\" alt=\"$alt\"";
+	if( $width ) $width = max(1,$width);
 	if( $width ) $result .= " width=\"$width\"";
+	if( $height ) $height = max(1,$height);
 	if( $height ) $result .= " height=\"$height\"";
 	$result .= "/>";
 	if (! (isset($params['imageonly']) && $params['imageonly'])) {

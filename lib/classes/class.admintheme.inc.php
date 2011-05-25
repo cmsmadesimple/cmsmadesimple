@@ -250,45 +250,38 @@ class AdminTheme
      */
     function SetModuleAdminInterfaces()
     {
-		$gCms = cmsms();
-    	# Are there any modules with an admin interface?
-        $cmsmodules = $gCms->modules;
-		reset($cmsmodules);
-		while (list($key) = each($cmsmodules))
-		{
-			$value =& $cmsmodules[$key];
-            if (isset($cmsmodules[$key]['object'])
-                && $cmsmodules[$key]['installed'] == true
-                && $cmsmodules[$key]['active'] == true
-                && $cmsmodules[$key]['object']->HasAdmin()
-                && $cmsmodules[$key]['object']->VisibleToAdminUser())
-                {
-                $section = $cmsmodules[$key]['object']->GetAdminSection();
-                if (! isset($this->sectionCount[$section]))
-                    {
-                    $this->sectionCount[$section] = 0;
-                    }
-                $this->modulesBySection[$section][$this->sectionCount[$section]]['key'] = $key;
-                if ($cmsmodules[$key]['object']->GetFriendlyName() != '')
-                    {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['name'] =
-                       $cmsmodules[$key]['object']->GetFriendlyName();
-                    }
-                else
-                    {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $key;
-                    }
-                if ($cmsmodules[$key]['object']->GetAdminDescription() != '')
-                    {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['description'] =
-                        $cmsmodules[$key]['object']->GetAdminDescription();
-                    }
-                else
-                    {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['description'] = "";
-                    }
-                $this->sectionCount[$section]++;
-                }
+		// Are there any modules with an admin interface?
+		$modules = ModuleOperations::get_instance()->GetLoadedModules();
+		foreach( $modules as $key => $object )
+			{
+				if( $object->HasAdmin() && $object->VisibleToAdminUser() )
+					{
+						$section = $object->GetAdminSection();
+						if (! isset($this->sectionCount[$section]))
+							{
+								$this->sectionCount[$section] = 0;
+							}
+						$this->modulesBySection[$section][$this->sectionCount[$section]]['key'] = $key;
+						if ($object->GetFriendlyName() != '')
+							{
+								$this->modulesBySection[$section][$this->sectionCount[$section]]['name'] =
+									$object->GetFriendlyName();
+							}
+						else
+							{
+								$this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $key;
+							}
+						if ($object->GetAdminDescription() != '')
+							{
+								$this->modulesBySection[$section][$this->sectionCount[$section]]['description'] =
+									$object->GetAdminDescription();
+							}
+						else
+							{
+								$this->modulesBySection[$section][$this->sectionCount[$section]]['description'] = "";
+							}
+						$this->sectionCount[$section]++;
+					}
             }
     }
 
@@ -926,44 +919,34 @@ debug_buffer('after menu items');
 	$gCms = cmsms();
         foreach ($this->menuItems as $sectionKey=>$sectionArray)
 	  {
-            $tmpArray = $this->MenuListSectionModules($sectionKey);
-            $first = true;
-            foreach ($tmpArray as $thisKey=>$thisVal)
-	      {
-                $thisModuleKey = $thisKey;
-                $counter = 0;
-
-                // don't clobber existing keys
-                if (array_key_exists($thisModuleKey,$this->menuItems))
-		  {
-		    while (array_key_exists($thisModuleKey,$this->menuItems))
-		      {
-			$thisModuleKey = $thisKey.$counter;
-			$counter++;
-		      }
-		  }
-
-		// if it's not a system module...
-		if (array_search($thisModuleKey, $gCms->cmssystemmodules) !== FALSE)
-		  {
-		    $this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
-							   'parent'=>$sectionKey,
-							   'title'=>$this->FixSpaces($thisVal['name']),
-							   'description'=>$thisVal['description'],
-							   'show_in_menu'=>true);
-
-// 		    Commenting out this code ensures that the module is thought of as (built in)
-// 		    if ($first)
-// 		      {
-// 			$this->menuItems[$thisModuleKey]['firstmodule'] = 1;
-// 			$first = false;
-// 		      }
-// 		    else
-// 		      {
-// 			$this->menuItems[$thisModuleKey]['module'] = 1;
-// 		      }
-		  }
-	      }
+		  $tmpArray = $this->MenuListSectionModules($sectionKey);
+		  $first = true;
+		  foreach ($tmpArray as $thisKey=>$thisVal)
+			  {
+				  $thisModuleKey = $thisKey;
+				  $counter = 0;
+				  
+				  // don't clobber existing keys
+				  if (array_key_exists($thisModuleKey,$this->menuItems))
+					  {
+						  while (array_key_exists($thisModuleKey,$this->menuItems))
+							  {
+								  $thisModuleKey = $thisKey.$counter;
+								  $counter++;
+							  }
+					  }
+				  
+				  // if it's not a system module...
+				  if( !ModuleOperations::get_instance()->IsSystemModule($thisModuleKey) )
+					  {
+						  $this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
+																 'parent'=>$sectionKey,
+																 'title'=>$this->FixSpaces($thisVal['name']),
+																 'description'=>$thisVal['description'],
+																 'show_in_menu'=>true);
+						  
+					  }
+			  }
 	  }
 	
 	debug_buffer('before module menu items');

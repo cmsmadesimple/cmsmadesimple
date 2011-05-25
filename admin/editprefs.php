@@ -129,14 +129,10 @@ $modules = array();
 //$modules[ucwords(lang('none'))] = '**none**';
 //$modules['---'] = '**none**';
 $gCms = cmsms();
-foreach($gCms->modules as $key=>$value)
+$allmodules = ModuleOperations::get_instance()->GetLoadedModules();
+foreach( $allmodules as $key => &$obj )
 {
-  if ($gCms->modules[$key]['installed'] == true &&
-      $gCms->modules[$key]['active'] == true)
-    {
-      $obj =& $gCms->modules[$key]['object'];
-      $modules[$obj->GetFriendlyName()] = $obj->GetName();
-    }
+  $modules[$obj->GetFriendlyName()] = $obj->GetName();
 }
 
 
@@ -211,20 +207,18 @@ if (FALSE == empty($page_message)) {
 					<select name="wysiwyg">
 					<option value=""><?php echo lang('none'); ?></option>
 					<?php
-						foreach($gCms->modules as $key=>$value)
+					foreach( $allmodules as $key => &$object )
+                                        {
+					  if( $object->IsWYSIWYG() )
+					    {
+					      echo '<option value="'.$key.'"';
+					      if ($wysiwyg == $key)
 						{
-							if ($gCms->modules[$key]['installed'] == true &&
-								$gCms->modules[$key]['active'] == true &&
-								$gCms->modules[$key]['object']->IsWYSIWYG())
-							{
-								echo '<option value="'.$key.'"';
-								if ($wysiwyg == $key)
-								{
-									echo ' selected="selected"';
-								}
-								echo '>'.$key.'</option>';
-							}
+						  echo ' selected="selected"';
 						}
+					      echo '>'.$key.'</option>';
+					    }
+					}
 					?>
 					</select>
 				</div>
@@ -235,20 +229,18 @@ if (FALSE == empty($page_message)) {
 					<select name="syntaxhighlighter">
 					<option value=""><?php echo lang('none'); ?></option>
 					<?php
-						foreach($gCms->modules as $key=>$value)
+					foreach( $allmodules as $key => &$object )
+                                        {
+					  if( $object->IsSyntaxHighlighter() )
+					    {
+					      echo '<option value="'.$key.'"';
+					      if ($syntaxhighlighter == $key)
 						{
-							if ($gCms->modules[$key]['installed'] == true &&
-								$gCms->modules[$key]['active'] == true &&
-								$gCms->modules[$key]['object']->IsSyntaxHighlighter())
-							{
-								echo '<option value="'.$key.'"';
-								if ($syntaxhighlighter == $key)
-								{
-									echo ' selected="selected"';
-								}
-								echo '>'.$key.'</option>';
-							}
+						  echo ' selected="selected"';
 						}
+					      echo '>'.$key.'</option>';
+					    }
+					}
 					?>
 					</select>
 				</div>
@@ -290,7 +282,7 @@ foreach( $opts as $key => $value )
 	  <p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
 	  <p class="pageinput">
 	  <?php
-	    $contentops =& $gCms->GetContentOperations();
+	    $contentops = $gCms->GetContentOperations();
 echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1);
 	  ?>
 	  </p>

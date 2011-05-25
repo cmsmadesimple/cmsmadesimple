@@ -71,32 +71,12 @@ if ($access) {
 			$groupobj->name = $group;
 			$groupobj->active = $active;
 
-			#Perform the editgroup_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->EditGroupPre($groupobj);
-				}
-			}
-			
 			Events::SendEvent('Core', 'EditGroupPre', array('group' => &$groupobj));
 
 			$result = $groupobj->save();
 
 			if ($result)
 			{
-				#Perform the editgroup_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->EditGroupPost($groupobj);
-					}
-				}
-				
 				Events::SendEvent('Core', 'EditGroupPost', array('group' => &$groupobj));
 
 				audit($groupobj->id, $groupobj->name, 'Edited Group');

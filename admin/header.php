@@ -68,170 +68,167 @@ else
 	if( get_site_preference('enablenotifications',1) &&
 	    get_preference($userid,'enablenotifications',1) )
 	{
-		foreach( $gCms->modules as $modulename => $ext )
-		{
-		  if (!$gCms->modules[$modulename]['installed'] || !$gCms->modules[$modulename]['active']) continue;
-			if( in_array($modulename,$ignoredmodules) ) continue;
-			$mod =& $gCms->modules[$modulename]['object'];
-			if( !is_object($mod) ) continue;
+	  $modules = ModuleOperations::get_instance()->GetLoadedModules();
+	  foreach( $modules as $modulename => $mod )
+	    {
+	      if( in_array($modulename,$ignoredmodules) ) continue;
+	      if( !is_object($mod) ) continue;
 
-			$data = $mod->GetNotificationOutput(3); // todo, priority user preference
-			if( empty($data) ) continue;
-			if( is_object($data) )
+	      $data = $mod->GetNotificationOutput(3); // todo, priority user preference
+	      if( empty($data) ) continue;
+	      if( is_object($data) )
+		{
+		  $themeObject->AddNotification($data->priority,
+						$mod->GetName(),
+						$data->html);
+		}
+	      else
+		{
+		  // we have more than one item
+		  // for the dashboard from this module
+		  if( is_array($data) )
+		    {
+		      foreach( $data as $item )
 			{
-				$themeObject->AddNotification($data->priority,
-					$mod->GetName(),
-					$data->html);
-			}
-			else
-			{
-				// we have more than one item
-				// for the dashboard from this module
-				if( is_array($data) )
-				{
-					foreach( $data as $item )
-					{
-						$themeObject->AddNotification($item->priority,
+			  $themeObject->AddNotification($item->priority,
 							$mod->GetName(),
 							$item->html);
-					}
-				}
 			}
+		    }
 		}
+	    }
 		
-		debug_buffer('before notifications');
+	  debug_buffer('before notifications');
+	  
+	  // if the install directory still exists
+	  // add a priority 1 dashboard item
+	  if( file_exists(dirname(dirname(__FILE__)).'/install') )
+	    {
+	      $themeObject->AddNotification(1,'Core', lang('installdirwarning'));
+	    }
+	  
+	  // Display a warning if safe mode is enabled
+	  if( ini_get_boolean('safe_mode') && get_site_preference('disablesafemodewarning',0) == 0 )
+	    {
+	      $themeObject->AddNotification(1,'Core',lang('warning_safe_mode'));
+	    }
+	  
+	  // Display a warning sitedownwarning
+	  $sitedown_message = lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN');
+	  $sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';
+	  if (file_exists($sitedown_file))
+	    {
+	      $themeObject->AddNotification(1,'Core',$sitedown_message);
+	    }
+	  
+	  debug_buffer('after notifications');
+	  
+	  // Display a warning if CMSMS needs upgrading
+	  $db =& $gCms->GetDb();
+	  $current_version = $CMS_SCHEMA_VERSION;
+	  $query = "SELECT version from ".cms_db_prefix()."version";
+	  $row = $db->GetRow($query);
+	  if ($row)
+	    {
+	      $current_version = $row["version"];
+	    }
 
-		// if the install directory still exists
-		// add a priority 1 dashboard item
-		if( file_exists(dirname(dirname(__FILE__)).'/install') )
+	  $warning_upgrade = 
+	    lang('warning_upgrade') . "<br />" . lang('warning_upgrade_info1',$current_version,  
+						      $CMS_SCHEMA_VERSION) . "<br /> " . lang('warning_upgrade_info2',
+											      '<a href="'.$config['root_url'].'/install/upgrade.php">'.lang('start_upgrade_process').'</a>')
+	    ;
+
+
+	  if ($current_version < $CMS_SCHEMA_VERSION)
+	    {
+	      $themeObject->AddNotification(1,'Core', $warning_upgrade);
+	    }
+
+	  // Display an upgrade notification 
+	  // but only do a check once per day
+	  $timelastchecked = get_site_preference('lastcmsversioncheck',0);
+	  $tmpl = '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">%s</p></div></div>';
+	  $cms_is_uptodate = 1;
+	  $do_getpref = 0;
+	  $url = strtolower(trim(get_site_preference('urlcheckversion','')));
+	  //if( $url != 'none' && !empty($url) &&
+	  //    ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
+	  if( $url != 'none' && ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
+	    {
+	      // check forced
+	      // get the url
+	      $do_getpref = 1;
+	      $goodtest = false;
+	      if( empty($url) )
 		{
-			$themeObject->AddNotification(1,'Core', lang('installdirwarning'));
+		  $url = CMS_DEFAULT_VERSIONCHECK_URL;
 		}
-
-		// Display a warning if safe mode is enabled
-		if( ini_get_boolean('safe_mode') && get_site_preference('disablesafemodewarning',0) == 0 )
+	      if( $url == 'none')
 		{
-			$themeObject->AddNotification(1,'Core',lang('warning_safe_mode'));
+		  $cms_is_uptodate = 1;
+		  $do_getpref = 0;
 		}
-
-		// Display a warning sitedownwarning
-		$sitedown_message = lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN');
-		$sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';
-		if (file_exists($sitedown_file))
+	      else
 		{
-			$themeObject->AddNotification(1,'Core',$sitedown_message);
-		}
-		
-		debug_buffer('after notifications');
-
-		// Display a warning if CMSMS needs upgrading
-		$db =& $gCms->GetDb();
-		$current_version = $CMS_SCHEMA_VERSION;
-		$query = "SELECT version from ".cms_db_prefix()."version";
-		$row = $db->GetRow($query);
-		if ($row)
-		{
-			$current_version = $row["version"];
-		}
-
-		$warning_upgrade = 
-			lang('warning_upgrade') . "<br />" . lang('warning_upgrade_info1',$current_version,  
-			$CMS_SCHEMA_VERSION) . "<br /> " . lang('warning_upgrade_info2',
-			'<a href="'.$config['root_url'].'/install/upgrade.php">'.lang('start_upgrade_process').'</a>')
-			;
-
-
-		if ($current_version < $CMS_SCHEMA_VERSION)
-		{
-			$themeObject->AddNotification(1,'Core', $warning_upgrade);
-		}
-
-		// Display an upgrade notification 
-		// but only do a check once per day
-		$timelastchecked = get_site_preference('lastcmsversioncheck',0);
-		$tmpl = '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">%s</p></div></div>';
-		$cms_is_uptodate = 1;
-		$do_getpref = 0;
-		$url = strtolower(trim(get_site_preference('urlcheckversion','')));
-		//if( $url != 'none' && !empty($url) &&
-		//    ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
-		if( $url != 'none' && ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
-		{
-			// check forced
-			// get the url
-			$do_getpref = 1;
-			$goodtest = false;
-			if( empty($url) )
+		  include_once(cms_join_path($config['root_path'], 'lib', 'test.functions.php'));
+		  $remote_test = testRemoteFile(0, lang('test_remote_url'), $url, lang('test_remote_url_failed'), $config['debug']);
+		  if ($remote_test->continueon)
+		    {
+		      // we have a 'theoretically' valid url
+		      $txt = @file_get_contents($url);
+		      if( $txt !== FALSE )
 			{
-				$url = CMS_DEFAULT_VERSIONCHECK_URL;
-			}
-			if( $url == 'none')
-			{
-				$cms_is_uptodate = 1;
-				$do_getpref = 0;
-			}
-			else
-			{
-				include_once(cms_join_path($config['root_path'], 'lib', 'test.functions.php'));
-				$remote_test = testRemoteFile(0, lang('test_remote_url'), $url, lang('test_remote_url_failed'), $config['debug']);
-				if ($remote_test->continueon)
+			  // the url worked
+			  // do a version check
+			  $goodtest = true;
+			  $parts = explode(':',$txt);
+			  if( is_array( $parts ) && 
+			      strtolower($parts[0]) == 'cmsmadesimple' )
+			    {
+			      $ver = $parts[1];
+			      $res = version_compare( CMS_VERSION, $ver );
+			      if( $res < 0 )
 				{
-					// we have a 'theoretically' valid url
-					$txt = @file_get_contents($url);
-					if( $txt !== FALSE )
-					{
-						// the url worked
-						// do a version check
-						$goodtest = true;
-						$parts = explode(':',$txt);
-						if( is_array( $parts ) && 
-							strtolower($parts[0]) == 'cmsmadesimple' )
-						{
-							$ver = $parts[1];
-							$res = version_compare( CMS_VERSION, $ver );
-							if( $res < 0 )
-							{
-								// new version available
-								$cms_is_uptodate = 0;
-								set_site_preference('cms_is_uptodate',0);
-							}
-							else
-							{
-								// the version is valid.
-								set_site_preference('cms_is_uptodate',1);
-							}
-						} // if
-					} // if
+				  // new version available
+				  $cms_is_uptodate = 0;
+				  set_site_preference('cms_is_uptodate',0);
 				}
+			      else
+				{
+				  // the version is valid.
+				  set_site_preference('cms_is_uptodate',1);
+				}
+			    } // if
 			} // if
+		    }
+		} // if
 
-			// update the last check time
-			// to midnight of the current day
-			// if( $goodtest )
-			if( true )
-			{
-				set_site_preference('lastcmsversioncheck',
-					strtotime("23:59:55"));
-			}
-		}
-
-		if( $cms_is_uptodate == 0 || 
-			($do_getpref == 1 && get_site_preference('cms_is_uptodate',1) == 0) )
+	      // update the last check time
+	      // to midnight of the current day
+	      // if( $goodtest )
+	      if( true )
 		{
-			// it wasn't up-to-date last time either
-			$themeObject->AddNotification(1,'Core',lang('new_version_available'));
+		  set_site_preference('lastcmsversioncheck',
+				      strtotime("23:59:55"));
 		}
+	    }
+
+	  if( $cms_is_uptodate == 0 || 
+	      ($do_getpref == 1 && get_site_preference('cms_is_uptodate',1) == 0) )
+	    {
+	      // it wasn't up-to-date last time either
+	      $themeObject->AddNotification(1,'Core',lang('new_version_available'));
+	    }
 
 
-		// Display a warning about mail settings.
-		if( isset($gCms->modules['CMSMailer']) && 
-			isset($gCms->modules['CMSMailer']['object']) &&
-			isset($gCms->modules['CMSMailer']['installed']) &&
-			get_site_preference('mail_is_set',0) == 0 )
-		{
-			$urlCMSMailer = 'moduleinterface.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&amp;module=CMSMailer';
-			$themeObject->AddNotification(1,'Core',lang('warning_mail_settings', $urlCMSMailer));
-		}
+	  // Display a warning about mail settings.
+	  $mailer = cms_utils::get_module('CMSMailer');
+	  if( $mailer && !get_site_preference('mail_is_set',0) )
+	    {
+	      $urlCMSMailer = 'moduleinterface.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&amp;module=CMSMailer';
+	      $themeObject->AddNotification(1,'Core',lang('warning_mail_settings', $urlCMSMailer));
+	    }
 	}
 
 	// and display the dashboard.
@@ -241,14 +238,14 @@ else
 	// so I'll leave some of the logic there. We can remove it later if it makes sense. SjG
 	$marks = get_preference($userid, 'bookmarks');
 	if ($marks)
-	{
-		$themeObject->StartRighthandColumn();
-		if ($marks)
-		{
-			$themeObject->DoBookmarks();
-		}
+	  {
+	    $themeObject->StartRighthandColumn();
+	    if ($marks)
+	      {
+		$themeObject->DoBookmarks();
+	      }
 
-		$themeObject->EndRighthandColumn();
-	}
+	    $themeObject->EndRighthandColumn();
+	  }
 }
 ?>
