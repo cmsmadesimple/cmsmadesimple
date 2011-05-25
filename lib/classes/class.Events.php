@@ -424,7 +424,7 @@ class Events
 	 * @return string Returns the help string for the event.  Empty string if nothing
 	 *                is found.
 	 */
-	function GetEventHelp($eventname)
+	static function GetEventHelp($eventname)
 	{
 		return lang('event_help_'.strtolower($eventname));
 	}

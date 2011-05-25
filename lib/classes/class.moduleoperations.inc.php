@@ -433,6 +433,9 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	 if( !isset($result) || $result === FALSE)
 	 {
 		 // install returned nothing, or FALSE
+		 $query = 'DELETE FROM '.cms_db_prefix().'modules WHERE module_name = ?';
+		 $dbr = $db->Execute($query,array($module_obj->GetName()));
+
 		 $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
 		 $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
 		 $query = 'INSERT INTO '.cms_db_prefix().'modules 
@@ -462,8 +465,8 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 											   ($module_obj->IsAdminOnly()==true)?1:0,1,
 											   $lazyload_fe,$lazyload_admin);
 
+		 Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
 		 audit('',$module_obj->GetName(),'Installed version '.$module_obj->GetVersion());
-		 // TODO: send an event.
 		 return TRUE;
 	 }
 
@@ -664,10 +667,14 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  if( $result )
 	  {
 		  $db = cmsms()->GetDb();
-		  $query = 'UPDATE '.cms_db_prefix().'modules SET version = ? WHERE module_name = ?';
-		  $dbr = $db->Execute($query,array($module_obj->GetVersion(),$module_obj->GetName()));
-		  $info[$module_obj->GetName]['version'] = $module_obj->GetVersion();
-		  audit('',$module_obj->GetName().' Upgraded from Version '.$dbversion.' to '.$module_obj->GetVersion());
+		  $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
+		  $lazyload_admin = (method_exists($module_obj,'LazyLoadAdmin') && $module_obj->LazyLoadAdmin())?1:0;
+
+		  $query = 'UPDATE '.cms_db_prefix().'modules SET version = ?, allow_fe_lazyload = ?,allow_admin_lazyload = ? WHERE module_name = ?';
+		  $dbr = $db->Execute($query,array($module_obj->GetVersion(),$lazyload_fe,$lazyload_admin,$module_obj->GetName()));
+
+		  $info[$module_obj->GetName()]['version'] = $module_obj->GetVersion();
+		  audit('','Module',$module_obj->GetName().' Upgraded from Version '.$dbversion.' to '.$module_obj->GetVersion());
 		  Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
 		  return TRUE;
 	  }
@@ -733,6 +740,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 				  }
 
 			  Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
+			  audit('','Module','Uninstalled module '.$module);
 		  }
 	  else
 		  {
