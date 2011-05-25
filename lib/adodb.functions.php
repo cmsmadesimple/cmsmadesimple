@@ -22,7 +22,10 @@ function load_adodb()
 		#@include_once(cms_join_path(dirname(__FILE__), $config['use_adodb_lite'] == true ? 'adodb_lite' : 'adodb', 'adodb-errorpear.inc.php'));
 	}
 	
-	if( defined('ADODB_OUTP') ) define('ADODB_OUTP', 'debug_sql');
+	if( !defined('ADODB_OUTP') )
+	  {
+	    define('ADODB_OUTP', 'debug_sql');
+	  }
 	//define('ADODB_ERROR_HANDLER', 'adodb_error');
 	
 	$loaded_adodb = false;

@@ -28,6 +28,7 @@ class CMSInstallerPage3 extends CMSInstallerPage
 	      $_SESSION['disable_hierarchy'] = 1;
 	    }
 	  $config->save();
+	  $result = 1; // tempalte needs a result.
 	  $this->smarty->assign('config_file', CONFIG_FILE_LOCATION);
 	  $this->smarty->assign('error_fragment', 'config_php_error');
 	  $this->smarty->assign('result', $result);

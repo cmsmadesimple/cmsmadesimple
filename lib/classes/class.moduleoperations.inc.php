@@ -651,6 +651,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
    */
   public function LoadNewModule( $modulename )
   {
+	  if( $modulename == 'cge_tmpdata') { stack_trace(); die(); }
 	  debug_buffer('LoadNewModule '.$modulename);
 	  return $this->_load_module( $modulename );
   }
