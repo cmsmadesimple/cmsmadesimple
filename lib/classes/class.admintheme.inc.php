@@ -34,77 +34,77 @@ class AdminTheme
 	/**
 	 * Title
 	 */
-	var $title;
+	protected $title;
 
     /**
      * Subtitle, for use in breadcrumb trails
      */
-    var $subtitle;
+    protected $subtitle;
 
 	/**
 	 * Url
 	 */
-	var $url;
+	protected $url;
 	
     /**
 	 * Script
 	 */
-	var $script;
+	protected $script;
 
 	/**
 	 * Query String, for use in breadcrumb trails
 	 */
-	var $query;
+	protected $query;
 
     /**
      * Aggregation of modules by section
      */
-    var $modulesBySection;
+    protected $modulesBySection;
 
     /**
      * count of modules in each section
      */
-    var $sectionCount;
+    protected $sectionCount;
 
     /**
      * Aggregate Permissions
      */
-    var $perms;
+    protected $perms;
 
     /**
      * Recent Page List
      */
-    var $recent;
+    protected $recent;
 
     /**
      * Current Active User
      */
-    var $user;
+    protected $user;
 
     /**
      * Admin Section Menu cache
      */
-    var $menuItems;
+    protected $menuItems;
 
     /**
      * Admin Section Image cache
      */
-    var $imageLink;
+    protected $imageLink;
 
     /**
      * Theme Name
      */
-    var $themeName;
+    protected $themeName;
 
     /**
      * Breadcrumbs Array
      */
-    var $breadcrumbs;
+    protected $breadcrumbs;
 
     /**
      * Notification Items
      */
-    var $_notificationitems;
+    protected $_notificationitems;
 
     /**
      * View Site URL
@@ -251,9 +251,12 @@ class AdminTheme
     function SetModuleAdminInterfaces()
     {
 		// Are there any modules with an admin interface?
-		$modules = ModuleOperations::get_instance()->GetLoadedModules();
-		foreach( $modules as $key => $object )
+		$modules = ModuleOperations::get_instance()->GetInstalledModules();
+		foreach( $modules as $key )
 			{
+				$object = ModuleOperations::get_instance()->get_module_instance($key);
+				if( !$object ) continue;
+
 				if( $object->HasAdmin() && $object->VisibleToAdminUser() )
 					{
 						$section = $object->GetAdminSection();
@@ -910,14 +913,12 @@ debug_buffer('after menu items');
 		$this->menuItems[$sectionKey]['url'] = $url;
 	      }
 	  }
-	
-	
+		
 	debug_buffer('before syste modules');
-
 
 	// add in all of the 'system' modules too
 	$gCms = cmsms();
-        foreach ($this->menuItems as $sectionKey=>$sectionArray)
+	foreach ($this->menuItems as $sectionKey=>$sectionArray)
 	  {
 		  $tmpArray = $this->MenuListSectionModules($sectionKey);
 		  $first = true;
@@ -937,7 +938,7 @@ debug_buffer('after menu items');
 					  }
 				  
 				  // if it's not a system module...
-				  if( !ModuleOperations::get_instance()->IsSystemModule($thisModuleKey) )
+				  if( ModuleOperations::get_instance()->IsSystemModule($thisModuleKey) )
 					  {
 						  $this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
 																 'parent'=>$sectionKey,

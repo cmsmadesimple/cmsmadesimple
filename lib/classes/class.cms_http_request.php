@@ -25,7 +25,7 @@ class cms_http_request
      *
      * @var string
      */
-    var $target;
+    private $target;
 
     /**
      * socket
@@ -38,196 +38,196 @@ class cms_http_request
      *
      * @var string
      */
-    var $host;
+    private $host;
     
     /**
      * Contains the target port
      *
      * @var integer
      */
-    var $port;
+    private $port;
     
     /**
      * Contains the target path
      *
      * @var string
      */
-    var $path;
+    private $path;
     
     /**
      * Contains the target schema
      *
      * @var string
      */
-    var $schema;
+    private $schema;
     
     /**
      * Contains the http method (GET or POST)
      *
      * @var string
      */
-    var $method;
+    private $method;
 
     /**
      * Contains raw post data
      *
      * @var str
      */
-    var $rawPostData;
+    private $rawPostData;
 
     /**
      * Contains the parameters for request
      *
      * @var array
      */
-    var $params;
+    private $params;
     
     /**
      * Contains the cookies for request
      *
      * @var array
      */
-    var $cookies;
+    private $cookies;
     
     /**
      * Contains the cookies retrieved from response
      *
      * @var array
      */
-    var $_cookies;
+    private $_cookies;
     
     /**
      * Number of seconds to timeout
      *
      * @var integer
      */
-    var $timeout;
+    private $timeout;
     
     /**
      * Whether to use cURL or not
      *
      * @var boolean
      */
-    var $useCurl;
+    private $useCurl;
     
     /**
      * Contains the referrer URL
      *
      * @var string
      */
-    var $referrer;
+    private $referrer;
     
     /**
      * Contains the User agent string
      *
      * @var string
      */
-    var $userAgent;
+    private $userAgent;
     
     /**
      * Contains the cookie path (to be used with cURL)
      *
      * @var string
      */
-    var $cookiePath;
+    private $cookiePath;
     
     /**
      * Whether to use cookie at all
      *
      * @var boolean
      */
-    var $useCookie;
+    private $useCookie;
     
     /**
      * Whether to store cookie for subsequent requests
      *
      * @var boolean
      */
-    var $saveCookie;
+    private $saveCookie;
     
     /**
      * Contains the Username (for authentication)
      *
      * @var string
      */
-    var $username;
+    private $username;
     
     /**
      * Contains the Password (for authentication)
      *
      * @var string
      */
-    var $password;
+    private $password;
     
     /**
      * Contains the fetched web source
      *
      * @var string
      */
-    var $result;
+    private $result;
     
     /**
      * Contains the last headers 
      *
      * @var string
      */
-    var $headers;
+    private $headers;
     
     /**
      * Contains the last call's http status code
      *
      * @var string
      */
-    var $status;
+    private $status;
     
     /**
      * Whether to follow http redirect or not
      *
      * @var boolean
      */
-    var $redirect;
+    private $redirect;
     
     /**
      * The maximum number of redirect to follow
      *
      * @var integer
      */
-    var $maxRedirect;
+    private $maxRedirect;
     
     /**
      * The current number of redirects
      *
      * @var integer
      */
-    var $curRedirect;
+    private $curRedirect;
     
     /**
      * Contains any error occurred
      *
      * @var string
      */
-    var $error;
+    private $error;
     
     /**
      * Store the next token
      *
      * @var string
      */
-    var $nextToken;
+    private $nextToken;
     
     /**
      * Whether to keep debug messages
      *
      * @var boolean
      */
-    var $debug;
+    private $debug;
 
     /**
      * Stores optional http headers
      *
      * @var array
      */
-    var $headerArray;
+    private $headerArray;
 
     /**
      * Stores the debug messages
@@ -235,14 +235,14 @@ class cms_http_request
      * @var array
      * @todo will keep debug messages
      */
-    var $debugMsg;
+    private $debugMsg;
 
     /**
      * Stores proxy information (host:port)
      *
      * @var string
      */
-    var $proxy;
+    private $proxy;
 
     /**
      * Constructor for initializing the class with default values.
