@@ -64,8 +64,10 @@ class CMSInstallerPage5 extends CMSInstallerPage
 				$filename = cms_join_path(CMS_INSTALL_BASE, 'upgrades', "upgrade.{$current_version}.to." . ($current_version+1) . '.php');
 				if (file_exists($filename))
 				{
-					if($this->debug) include($filename);
-					else            @include($filename);
+					if($this->debug) 
+					  include($filename);
+					else
+					  @include($filename);
 				}
 				else
 				{

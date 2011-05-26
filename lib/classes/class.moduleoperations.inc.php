@@ -629,11 +629,11 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  if( $rec['status'] != 'installed' ) continue;
 		  if( $rec['active'] == 0 ) continue;
 		  if( $rec['admin_only'] && $noadmin ) continue;
-		  if( isset($CMS_ADMIN_PAGE) && $no_lazyload == false && $rec['allow_admin_lazyload'] )
+		  if( isset($CMS_ADMIN_PAGE) && $no_lazyload == false && isset($rec['allow_admin_lazyload']) && $rec['allow_admin_lazyload'] )
 		  {
 			  continue;
 		  }
-		  if( !isset($CMS_ADMIN_PAGE) && $no_lazyload == false && $rec['allow_fe_lazyload'] )
+		  if( !isset($CMS_ADMIN_PAGE) && $no_lazyload == false && isset($rec['allow_admin_lazyload']) && $rec['allow_fe_lazyload'] )
 		  {
 			  continue;
 		  }
@@ -665,7 +665,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  $dbversion = $info[$module_obj->GetName()]['version'];
 
 	  $result = $module_obj->Upgrade($dbversion,$module_obj->GetVersion());
-	  if( $result )
+	  if( $result !== FALSE )
 	  {
 		  $db = cmsms()->GetDb();
 		  $lazyload_fe    = (method_exists($module_obj,'LazyLoadFrontend') && $module_obj->LazyLoadFrontend())?1:0;
