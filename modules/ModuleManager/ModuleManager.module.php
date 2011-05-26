@@ -41,8 +41,6 @@ define('MINIMUM_REPOSITORY_VERSION','1.3');
 
 class ModuleManager extends CMSModule
 {
-  private $_connection_ok;
-
   function GetName()
   {
     return 'ModuleManager';
@@ -601,27 +599,31 @@ class ModuleManager extends CMSModule
 
   public function is_connection_ok()
   {
-    if( is_null($this->_connection_ok) )
+    if( !isset($_SESSION[$this->GetName()]) || 
+	!isset($_SESSION[$this->GetName()]['connection_check']) ||
+	!isset($_SESSION[$this->GetName()]['connection_time']) ||
+	(time() - $_SESSION[$this->GetName()]['connection_time']) > 3600 )
       {
 	$url = $this->GetPreference('module_repository');
 	if( $url )
 	  {
-	    $url .= '/version';
+	    $url .- '/version';
 	    $req = new cms_http_request();
 	    $req->setTimeout(3); // really quick
 	    $req->useCurl(FALSE);
-	    $req->execute($url,'','POST');
+	    $req->execute($url,'','GET');
 	    if( $req->getStatus() != 200 )
 	      {
-		$this->_connection_ok = FALSE;
+		$_SESSION[$this->GetName()]['connection_check'] = 0;
 	      }
 	    else
 	      {
-		$this->_connection_ok = TRUE;
+		$_SESSION[$this->GetName()]['connection_check'] = 1;
 	      }
+	    $_SESSION[$this->GetName()]['connection_time'] = time();
 	  }
       }
-    return $this->_connection_ok;
+    return $_SESSION[$this->GetName()]['connection_check'];
   }
 }
 

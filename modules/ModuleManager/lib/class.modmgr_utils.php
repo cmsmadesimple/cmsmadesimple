@@ -362,7 +362,7 @@ final class modmgr_utils
       }
     else
       {
-	$res = $ops->UpgradeModule($module_meta['name'],
+	$res = $ops->UpgradeModule($module_meta['name']);
       }
   }
 

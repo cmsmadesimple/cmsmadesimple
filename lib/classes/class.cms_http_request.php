@@ -249,7 +249,7 @@ class cms_http_request
      * 
      * @return void  
      */
-    function cms_http_request()
+    public function __construct()
     {
         $this->clear();    
     }
@@ -709,19 +709,6 @@ class cms_http_request
         else if(is_array($this->params) && count($this->params) > 0)
         {
 	    $queryString = http_build_query($this->params);
-//             // Get a blank slate
-//             $tempString = array();
-            
-//             // Convert data array into a query string (ie animal=dog&sport=baseball)
-//             foreach ($this->params as $key => $value) 
-//             {
-//                 if(strlen(trim($value))>0)
-//                 {
-//                     $tempString[] = $key . "=" . urlencode($value);
-//                 }
-//             }
-            
-//             $queryString = join('&', $tempString);
         }
         
         // If cURL is not installed, we'll force fscokopen
@@ -875,14 +862,14 @@ class cms_http_request
         }
         else
         {
-            // Get a file pointer
+	  // Get a file pointer
 	  $filePointer = @stream_socket_client($this->_socket, $errorNumber, $errorString, $this->timeout);
        
-            // We have an error if pointer is not there
-            if (!$filePointer)
+	  // We have an error if pointer is not there
+	  if (!$filePointer)
             {
-                $this->_setError('Failed opening http socket connection: ' . $errorString . ' (' . $errorNumber . ')');
-                return FALSE;
+	      $this->_setError('Failed opening http socket connection: ' . $errorString . ' (' . $errorNumber . ')');
+	      return FALSE;
             }
 
             // Set http headers with host, user-agent and content type
@@ -890,10 +877,10 @@ class cms_http_request
 	    $this->addRequestHeader("Host: " . $this->host);
 	    $this->addRequestHeader('Accept: */*');
  	    $this->addRequestHeader("User-Agent: " . $this->userAgent);
-	    if( !$this->requestHeaderExists('Content-Type') )
-	      {
-		$this->addRequestHeader("Content-Type: application/x-www-form-urlencoded");
-	      }
+// 	    if( !$this->requestHeaderExists('Content-Type') )
+// 	      {
+// 		$this->addRequestHeader("Content-Type: application/x-www-form-urlencoded");
+// 	      }
             
             // Specify the custom cookies
             if ($this->useCookie && $cookieString != '')
@@ -908,7 +895,7 @@ class cms_http_request
             }
             
             // Specify the referrer
-	      $this->addRequestHeader("Referer: " . $this->referrer);
+	    $this->addRequestHeader("Referer: " . $this->referrer);
             if ($this->referrer != '')
             {
 	      $this->addRequestHeader("Referer: " . $this->referrer);
@@ -938,6 +925,7 @@ class cms_http_request
             $responseContent = '';
 
             // 3...2...1...Launch !
+	    $n = 0;
             do
             {
                 $responseHeader .= fread($filePointer, 1);
@@ -986,17 +974,18 @@ class cms_http_request
             else
             {
                 // Nope...so lets get the rest of the contents (non-chunked)
-	      if (!isset($this->headers['transfer_encoding']) || $this->headers['transfer-encoding'] != 'chunked')
+	      if (!isset($this->headers['transfer-encoding']) || $this->headers['transfer-encoding'] != 'chunked')
                 {
                     while (!feof($filePointer))
                     {
                         $responseContent .= fgets($filePointer, 128);
+			debug_display($responseContent);
                     }
                 }
                 else
 		  {
                     // Get the contents (chunked)
-		  while (!feof($filePointer) && $chunkLength = hexdec(fgets($filePointer)))
+		    while (!feof($filePointer) && $chunkLength = hexdec(fgets($filePointer)))
                     {
                         $responseContentChunk = '';
                         $readLength = 0;
