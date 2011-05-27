@@ -384,10 +384,10 @@ echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1)
 			  <div class="pageinput">
 				 <?php
 					  
-					   $txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
+			  $txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
                           foreach( $modules as $key => $value )
                           {
-                            $txt .= '<option value="'.$value.'"';
+                            $txt .= '<option value="'.$key.'"';
                             if( in_array($value,$ignoredmodules) )
 			      {
 				$txt .= ' selected="selected"';
