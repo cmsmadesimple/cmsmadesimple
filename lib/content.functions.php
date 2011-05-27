@@ -62,7 +62,7 @@ function load_plugins(&$smarty)
 	    {
 	      if( in_array($row['userplugin_name'],$gCms->cmsplugins) ) continue;
 
-	      $functionname = 'cms_tmp'.$row['userplugin_name'].'_userplugin_function';
+	      $functionname = 'cms_tmp_'.$row['userplugin_name'].'_userplugin_function';
 	      $fn = 'function '.$functionname.'($params,&$smarty) {'.$row['code']."\n}";
 	      if( @eval($fn) !== FALSE )
 		{
