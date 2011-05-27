@@ -97,7 +97,7 @@ function smarty_cms_function_content($params, &$smarty)
 			    {
 			      $returnid = $contentobj->Id();
 			    }
-			  $result = $allmmodules[$modulename]->DoActionBase($action, $id, $params, $returnid);
+			  $result = $modobj->DoActionBase($action, $id, $params, $returnid);
 			  if ($result !== FALSE)
 			    {
 			      echo $result;
