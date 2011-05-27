@@ -25,7 +25,6 @@ require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
-
 $plugin = '';
 if (isset($_GET['plugin'])) $plugin = $_GET['plugin'];
 
@@ -35,11 +34,11 @@ if (isset($_GET['action'])) $action = $_GET['action'];
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User-defined Tags');
 if (!$access) {
-	die('Permission Denied');
-return;
+  die('Permission Denied');
+  return;
 }
-$smarty = new Smarty_CMS(cmsms()->GetConfig());
-
+$smarty = cmsms()->GetSmarty();
+//$smarty = new Smarty_CMS(cmsms()->GetConfig());
 include_once("header.php");
 
 if (FALSE == empty($_GET['message'])) {

@@ -53,8 +53,6 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User-defined Tags');
 
-//$smarty = new Smarty_CMS($gCms->config); // why? - Indeed -Stikki-
-load_plugins($smarty);
 
 $ajax = false;
 if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
@@ -196,16 +194,12 @@ if (strlen($plugin_name)>0)
     }
 
 $addlScriptSubmit = '';
-if( ($modulename = get_preference(get_userid(false),'syntaxhighlighter')) )
-  {
-    $module = cms_utils::get_module($modulename);
-    if( is_object($module) 
-  }
 $syntaxmodule = get_preference(get_userid(FALSE),'syntaxhighlighter');
 if( $syntaxmodule && ($module = ModuleOperations::get_instance()->get_module_instance($syntaxmodule)) )
   {
     if( $module->IsSyntaxHighlighter() && $module->SyntaxActive() )
       {
+	die($module->GetName());
 	$addlScriptSubmit .= $module->SyntaxPageFormSubmit();
       }
   }

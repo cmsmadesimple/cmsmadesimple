@@ -47,9 +47,6 @@ $access = check_permission($userid, 'Modify User-defined Tags');
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
-//$smarty = new Smarty_CMS(cmsms()->GetConfig());
-load_plugins($smarty);
-
 $gCms = cmsms();
 $db = $gCms->GetDb();
 
