@@ -906,16 +906,17 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
   public function &GetSyntaxHighlighter()
   {
+	  $res = null;
 	  global $CMS_ADMIN_PAGE;
-	  if( !isset($CMS_ADMIN_PAGE) ) return;
+	  if( !isset($CMS_ADMIN_PAGE) ) return $res;
 
 	  $module_name = get_preference(get_userid(FALSE),'syntaxhighlighter');
-	  if( !$module_name ) return;
+	  if( !$module_name ) return $res;
 
 	  $obj = $this->get_module_instance($module_name);
-	  if( !is_object($obj) ) return;
+	  if( !is_object($obj) ) return $res;
 
-	  if( !$obj->IsSyntaxHighlighter() ) return;
+	  if( !$obj->IsSyntaxHighlighter() ) return $res;
 	  return $obj;
   }
 
