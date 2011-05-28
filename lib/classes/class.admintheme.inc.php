@@ -117,6 +117,7 @@ class AdminTheme
 	public function __get($key)
 	{
 		if( $key == 'cms' ) return cmsms();
+		if( $key == 'themeName' ) return $this->themeName;
 		trigger_error("Attempt to access invalid member $key of admin theme object");
 	}
 
