@@ -44,7 +44,7 @@ final class ModuleOperations
 	 *	@access private
 	 *
 	 */
-	public $cmssystemmodules =  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'MicroTiny', 'CMSPrinting', 'ThemeManager' );
+	protected $cmssystemmodules =  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'MicroTiny', 'CMSPrinting', 'ThemeManager' );
 
 
 	static private $_instance = null;
