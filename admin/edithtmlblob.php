@@ -165,10 +165,9 @@ if (strlen($htmlblob) > 0)
 $addlScriptSubmit = '';
 if( $gcb_wysiwyg && $use_wysiwyg )
   {
-    if( ($modname = get_user_preference(get_userid(false),'wysiwyg')) )
+    $modobj = cms_utils::get_wysiwyg_module();
+    if( $modobj )
       {
-	$modobj = cms_utils::get_module($modname);
-	if( is_object($modobj) && $modobj->IsWysiwyg() && $modobj->WYSIWYGActive() )
 	  $addlScriptSubmit .= $modobj->WYSIWYGPageFormSubmit();
       }
   }
