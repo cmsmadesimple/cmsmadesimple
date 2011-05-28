@@ -2430,8 +2430,8 @@ class CMSModule
 	function ListUserTags()
 	{
 	  $gCms = cmsms();
-		$usertagops =& $gCms->GetUserTagOperations();
-		return $usertagops->ListUserTags();
+	  $usertagops = $gCms->GetUserTagOperations();
+	  return $usertagops->ListUserTags();
 	}
 
 	/**
@@ -2445,8 +2445,8 @@ class CMSModule
 	function CallUserTag($name, $params = array())
 	{
 	  $gCms = cmsms();
-		$usertagops =& $gCms->GetUserTagOperations();
-		return $usertagops->CallUserTag($name, $params);
+	  $usertagops = $gCms->GetUserTagOperations();
+	  return $usertagops->CallUserTag($name, $params);
 	}
 
 

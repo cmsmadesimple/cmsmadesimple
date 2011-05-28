@@ -76,14 +76,6 @@ final class CmsObject {
 
 
 	/**
-	 * User Preferences object - holds user preferences as they're loaded so they're only loaded once
-	 *
-	 * @internal
-	 * @access private
-	 */
-	private $userprefs;
-
-	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
 	 *	@access private
 	 */
@@ -105,15 +97,6 @@ final class CmsObject {
 	private $contenttypes = array();
 
 
-	/**
-	 * module list - list of installed and available modules.
-	 * includes references to the module objects.
-	 *
-	 * @internal
-	 * @access private
-	 */
-	//private $modules = array();
-	
 	public function __get($key)
 	{
 		switch($key)
@@ -249,8 +232,6 @@ final class CmsObject {
 	public function & GetDb()
 	{
 		global $DONT_LOAD_DB;
-
-		$mem = memory_get_usage();
 		/* Check to see if we have a valid instance.
 		 * If not, build the connection */
 		if (!isset($this->db) && (!isset($DONT_LOAD_DB) || $DONT_LOAD_DB == 'force'))
@@ -405,12 +386,7 @@ final class CmsObject {
 	*/
 	public function & GetUserTagOperations()
 	{
-        if (!isset($this->usertagoperations))
-		{
-			$this->usertagoperations = new UserTagOperations();
-		}
-
-		return $this->usertagoperations;
+		return UserTagOperations::get_instance();
 	}
 
 	/**

@@ -32,8 +32,22 @@
  * @package CMS
  * @license GPL
  */
-class UserTagOperations
+final class UserTagOperations
 {
+	private static $_instance;
+	
+	protected function __construct() {}
+
+	public static function &get_instance()
+	{
+		if( !isset(self::$_instance) )
+		{
+			self::$_instance = new UserTagOperations();
+		}
+		return self::$_instance;
+	}
+
+
 	/**
 	 * Retrieve the body of a user defined tag
 	 *
@@ -145,6 +159,7 @@ class UserTagOperations
 		return $plugins;
 	}
 	
+
 	function CallUserTag($name, &$params)
 	{
 		$smarty = cmsms()->GetSmarty();
@@ -171,8 +186,7 @@ class UserTagOperations
  * @version $Revision$
  * @license GPL
  */
-class UserTags extends UserTagOperations
-{}
+class_alias('UserTagOperations','UserTags');
 
 # vim:ts=4 sw=4 noet
 ?>

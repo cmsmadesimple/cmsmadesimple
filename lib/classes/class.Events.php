@@ -106,7 +106,6 @@ class Events
 		if( isset($CMS_INSTALL_PAGE) ) return;
 
 		$gCms = cmsms();
-		$usertagops = $gCms->GetUserTagOperations();
 
 		$results = Events::ListEventHandlers($modulename, $eventname);
 		
@@ -117,6 +116,7 @@ class Events
 				if( isset( $row['tag_name'] ) && $row['tag_name'] != '' )
 				{
 					debug_buffer('calling user tag ' . $row['tag_name'] . ' from event ' . $eventname);
+					$usertagops = $gCms->GetUserTagOperations();
 					$usertagops->CallUserTag( $row['tag_name'], $params );
 				}
 				else if( isset( $row['module_name'] ) && $row['module_name'] != '' )
