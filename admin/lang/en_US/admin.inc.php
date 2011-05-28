@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['event_desc_stylesheetpostcompile'] = 'An event called after a stylesheet is compiled through smarty';
+$lang['admin']['event_desc_stylesheetprecompile'] = 'An event called before a stylesheet is compiled through smarty';
 $lang['admin']['confirm_uploadmodule'] = 'Are you sure you would like to upload the selected XML file.  Incorrectly uploading a module file may break a functionling website';
 $lang['admin']['error_module_mincmsversion'] = 'This module requires a newer version of CMS Made Smple';
 $lang['admin']['info_browser_cache_expiry'] = 'Specify the amount of time (in minutes) that browsers should cache pages for.  Setting this value to 0 disables the functionality';
