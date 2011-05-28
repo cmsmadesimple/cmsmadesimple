@@ -40,6 +40,20 @@ include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.template.inc.php')
  */
 class TemplateOperations
 {
+	private static $_instance;
+	private $_templateCache = array();
+	protected function __construct() {}
+
+	public static function &get_instance()
+	{
+		if( !is_object(self::$_instance) )
+		{
+			self::$_instance = new TemplateOperations();
+		}
+		return self::$_instance;
+	}
+
+
 	function LoadTemplates()
 	{
 		$gCms = cmsms();
@@ -48,7 +62,7 @@ class TemplateOperations
 		$result = array();
 
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates ORDER BY template_name";
-		$dbresult = &$db->Execute($query);
+		$dbresult = $db->Execute($query);
 
 		while ($dbresult && !$dbresult->EOF)
 		{
@@ -70,19 +84,54 @@ class TemplateOperations
 		return $result;
 	}
 
-	function & LoadTemplateByID($id)
+
+	protected function &_findCachedDefault()
 	{
-		$result = false;
-
-		$gCms = cmsms();
-		$db = $gCms->GetDb();
-		$cache =& $gCms->TemplateCache;
-
-		if (isset($cache[$id]))
+		foreach( $this->_templateCache as $key => &$object )
 		{
-			return $cache[$id];
+			if( $object->default ) return $object;
+		}
+		$res = null;
+		return $res;
+	}
+
+
+	protected function &_fromCache($id)
+	{
+		
+		if( is_numeric($id) )
+		{
+			if( isset($this->_templateCache[$id]) )
+				return $this->_templateCache[$id];
+		}
+		else if( is_string($id) )
+		{
+			foreach( $this->_templateCache as $key => &$object )
+			{
+				if( $object->alias == $id ) return $this->_templateCache[$key];
+			}
 		}
 
+		$res = null;
+		return $res;
+	}
+
+
+	protected function _toCache(Template& $template)
+	{
+		$this->_templateCache[$template->id] = $template;
+	}
+
+
+	public function & LoadTemplateByID($id)
+	{
+		$onetemplate = null;
+		if( ($onetemplate = $this->_fromCache($id)) )
+		{
+			return $onetemplate;
+		}
+
+		$db = cmsms()->GetDb();
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
 		$row = &$db->GetRow($query, array($id));
 
@@ -97,20 +146,21 @@ class TemplateOperations
 			$onetemplate->default = $row['default_template'];
 			$onetemplate->active = $row['active'];
 			$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
-			$result = $onetemplate;
 
-			if (!isset($cache[$onetemplate->id]))
-			{
-				$cache[$onetemplate->id] = $onetemplate;
-			}
+			$this->_toCache($onetemplate);
 		}
 
-		return $result;
+		return $onetemplate;
 	}
+
 
 	function LoadTemplateByContentAlias($alias)
 	{
-		$result = false;
+		$result = null;
+		if( ($result = $this->_fromCache($alias)) )
+		{
+			return $result;
+		}
 
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
@@ -120,20 +170,21 @@ class TemplateOperations
 
 		if ($row)
 		{
-			$onetemplate = new Template();
-			$onetemplate->id = $row['template_id'];
-			$onetemplate->name = $row['template_name'];
-			$onetemplate->content = $row['template_content'];
-			$onetemplate->stylesheet = $row['stylesheet'];
-			$onetemplate->encoding = $row['encoding'];
-			$onetemplate->default = $row['default_template'];
-			$onetemplate->active = $row['active'];
-			$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
-			$result = $onetemplate;
+			$result = new Template();
+			$result->id = $row['template_id'];
+			$result->name = $row['template_name'];
+			$result->content = $row['template_content'];
+			$result->stylesheet = $row['stylesheet'];
+			$result->encoding = $row['encoding'];
+			$result->default = $row['default_template'];
+			$result->active = $row['active'];
+			$result->modified_date = $db->UnixTimeStamp($row['modified_date']);
+			$this->_toCache($result);
 		}
 
 		return $result;
 	}
+
 
 	function LoadTemplateAndContentDates($alias)
 	{
@@ -157,27 +208,31 @@ class TemplateOperations
 		return $result;
 	}
 
+
 	function LoadDefaultTemplate()
 	{
-		$result = false;
+		$result = null;
+		if( ($result = $this->_findCachedDefault()) )
+		{
+			return $result;
+		}
 
-		$gCms = cmsms();
-		$db = $gCms->GetDb();
-
+		$db = cmsms()->GetDb();
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template FROM ".cms_db_prefix()."templates WHERE default_template = 1";
 		$row = &$db->GetRow($query);
 
 		if($row)
 		{
-			$onetemplate = new Template();
-			$onetemplate->id = $row['template_id'];
-			$onetemplate->name = $row['template_name'];
-			$onetemplate->content = $row['template_content'];
-			$onetemplate->stylesheet = $row['stylesheet'];
-			$onetemplate->encoding = $row['encoding'];
-			$onetemplate->default = $row['default_template'];
-			$onetemplate->active = $row['active'];
-			$result = $onetemplate;
+			$result = new Template();
+			$result->id = $row['template_id'];
+			$result->name = $row['template_name'];
+			$result->content = $row['template_content'];
+			$result->stylesheet = $row['stylesheet'];
+			$result->encoding = $row['encoding'];
+			$result->default = $row['default_template'];
+			$result->active = $row['active'];
+
+			$this->_toCache($result);
 		}
 
 		return $result;

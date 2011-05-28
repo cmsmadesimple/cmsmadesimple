@@ -37,7 +37,7 @@
 
   //require_once(dirname(__FILE__).'/class.cms_variables.php');
 
-class CmsObject {
+final class CmsObject {
 
 	private static $_instance;
 
@@ -95,24 +95,6 @@ class CmsObject {
 	 */
 	var $nls = array();
 
-	/**
-     * template cache array - If something's called LoadTemplateByID, we keep a copy around
-	 *	@access private
-	 */
-	var $TemplateCache = array();
-
-	/**
-     * template cache array - If something's called LoadTemplateByID, we keep a copy around
-	 *	@access private
-	 */
-	var $StylesheetCache = array();
-
-	/**
-     * html blob cache array - If something's called LoadHtmlBlobByID, we keep a copy around
-	 *	@access private
-	 */
-	var $HtmlBlobCache;
-	
 
 	/**
 	 * content types array - List of available content types
@@ -362,13 +344,9 @@ class CmsObject {
 	*/
 	public function & GetTemplateOperations()
 	{
-        if (!isset($this->templateoperations))
-		{
-			$this->templateoperations = new TemplateOperations();
-		}
-
-		return $this->templateoperations;
+		return TemplateOperations::get_instance();
 	}
+
 
 	/**
 	* Get a handle to the CMS StylesheetOperations object. If it does not yet
@@ -380,12 +358,7 @@ class CmsObject {
 	*/	
 	public function & GetStylesheetOperations()
 	{
-        if (!isset($this->stylesheetoperations))
-		{
-			$this->stylesheetoperations = new StylesheetOperations();
-		}
-
-		return $this->stylesheetoperations;
+		return StylesheetOperations::get_instance();
 	}
 	
 	/**
@@ -418,13 +391,9 @@ class CmsObject {
 	*/
 	public function & GetGlobalContentOperations()
 	{
-        if (!isset($this->globalcontentoperations))
-		{
-			$this->globalcontentoperations = new GlobalContentOperations();
-		}
-
-		return $this->globalcontentoperations;
+		return GlobalContentOperations::get_instance();
 	}
+
 	
 	/**
 	* Get a handle to the CMS UserTagOperations object. If it does not yet

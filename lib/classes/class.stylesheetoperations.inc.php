@@ -38,8 +38,22 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.stylesheet.inc.php
  * @package		CMS
  * @license GPL
  */
-class StylesheetOperations
+final class StylesheetOperations
 {
+	private static $_instance;
+	private $_cache = array();
+
+	protected function __construct() {}
+	public static function &get_instance()
+	{
+		if( !is_object(self::$_instance) )
+		{
+			self::$_instance = new StylesheetOperations();
+		}
+		return self::$_instance;
+	}
+
+
 	function & LoadStylesheets()
 	{
 		$gCms = cmsms();
@@ -117,11 +131,10 @@ class StylesheetOperations
 
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
-		$cache = &$gCms->StylesheetCache;
 
-		if (isset($cache[$id]))
+		if (isset($this->_cache[$id]))
 		{
-			return $cache[$id];
+			return $this->_cache[$id];
 		}
 
 		$query = "SELECT css_id, css_name, css_text, media_type FROM ".cms_db_prefix()."css WHERE css_id = ?";
@@ -136,9 +149,9 @@ class StylesheetOperations
 			$onestylesheet->media_type = $row['media_type'];
 			$result =& $onestylesheet;
 
-			if (!isset($cache[$onestylesheet->id]))
+			if (!isset($this->_cache[$onestylesheet->id]))
 			{
-				$cache[$onestylesheet->id] =& $onestylesheet;
+				$this->_cache[$onestylesheet->id] =& $onestylesheet;
 			}
 		}
 

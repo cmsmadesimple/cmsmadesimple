@@ -55,7 +55,7 @@ class Content extends ContentBase
 	 * @var string
 	 */
     var $stylesheet;
-	
+
 	/**
 	 * Indicate whether or not this content type may be copied
 	 *

@@ -37,8 +37,22 @@ include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.globalcontent.inc.
  * @version $Revision$
  * @license GPL
  */
-class GlobalContentOperations
+final class GlobalContentOperations
 {
+	private static $_instance;
+	private $_cache = array();
+
+	protected function __construct() {}
+
+	public static function &get_instance()
+	{
+		if( !is_object(self::$_instance) )
+		{
+			self::$_instance = new GlobalContentOperations();
+		}
+		return self::$_instance;
+	}
+
 	/**
 	 * Prepares an array with the list of the global content blocks $userid is an author of 
 	 * or is authorized to edit.
@@ -105,7 +119,6 @@ class GlobalContentOperations
 	function LoadHtmlBlobs()
 	{
 		$db = cmsms()->GetDb();
-
 		$result = array();
 
 		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date, use_wysiwyg, description FROM ".cms_db_prefix()."htmlblobs ORDER BY htmlblob_name";
@@ -134,10 +147,9 @@ class GlobalContentOperations
 	 * @param string $id The id of the block to load
 	 * @return mixed If found, the global content block. If none is found, returns false.
 	 */
-	function LoadHtmlBlobByID($id)
+	function &LoadHtmlBlobByID($id)
 	{
 		$result = false;
-
 		$db = cmsms()->GetDb();
 
 		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date, description, use_wysiwyg FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ?";
@@ -172,31 +184,29 @@ class GlobalContentOperations
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 		$gcbops = $gCms->GetGlobalContentOperations();
-		$cache = &$gCms->HtmlBlobCache;
 
-		if (isset($cache[$name]))
+		if (isset($this->_cache[$name]))
 		{
-			return $cache[$name];
+			return $this->_cache[$name];
 		}
 
 		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, use_wysiwyg, description, modified_date FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
-		$row = &$db->GetRow($query, array($name));
+		$row = $db->GetRow($query, array($name));
 
 		if ($row)
 		{
-			$oneblob = new GlobalContent();
-			$oneblob->id = $row['htmlblob_id'];
-			$oneblob->name = $row['htmlblob_name'];
-			$oneblob->content = $row['html'];
-			$oneblob->owner = $row['owner'];
-			$oneblob->use_wysiwyg = $row['use_wysiwyg'];
-			$oneblob->description = $row['description'];
-			$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
-			$result =& $oneblob;
+			$result = new GlobalContent();
+			$result->id = $row['htmlblob_id'];
+			$result->name = $row['htmlblob_name'];
+			$result->content = $row['html'];
+			$result->owner = $row['owner'];
+			$result->use_wysiwyg = $row['use_wysiwyg'];
+			$result->description = $row['description'];
+			$result->modified_date = $db->UnixTimeStamp($row['modified_date']);
 
-			if (!isset($cache[$oneblob->name]))
+			if (!isset($this->_cache[$result->name]))
 			{
-				$cache[$oneblob->name] =& $oneblob;
+				$this->_cache[$result->name] =& $result;
 			}
 		}
 
@@ -384,9 +394,10 @@ class GlobalContentOperations
  * @version $Revision$
  * @license GPL
  */
-class HtmlBlobOperations extends GlobalContentOperations
-{
-}
+class_alias('GlobalContentOperations','HtmlBlobOperations');
+// class HtmlBlobOperations extends GlobalContentOperations
+// {
+// }
 
 # vim:ts=4 sw=4 noet
 ?>
