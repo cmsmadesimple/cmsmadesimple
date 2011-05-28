@@ -920,24 +920,27 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   }
 
 
-  public function &GetWYSIWYGModule()
+  public function &GetWYSIWYGModule($module_name = '')
   {
 	  global $CMS_ADMIN_PAGE;
-	  $module_name = '';
-	  if( !isset($CMS_ADMIN_PAGE) )
-	  {
-		  $module_name = get_site_preference('frontendwysiwyg');
-	  }
-	  else
-	  {
-		  $module_name = get_preference(get_userid(FALSE),'wysiwyg');
-	  }
+	  $obj = null;
+	  if( !$module_name )
+		  {
+			  if( !isset($CMS_ADMIN_PAGE) )
+				  {
+					  $module_name = get_site_preference('frontendwysiwyg');
+				  }
+			  else
+				  {
+					  $module_name = get_preference(get_userid(FALSE),'wysiwyg');
+				  }
+		  }
 
-	  if( !$module_name ) return;
+	  if( !$module_name ) return $obj;
 
 	  $obj = $this->get_module_instance($module_name);
-	  if( !$obj ) return;
-	  if( !$obj->IsWYSIWYG() ) return;
+	  if( !$obj ) return $obj;
+	  if( !$obj->IsWYSIWYG() ) return $obj;
 
 	  return $obj;
   }

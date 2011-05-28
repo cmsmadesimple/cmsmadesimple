@@ -219,9 +219,9 @@ class cms_utils
    *
    * @return object or null
    */
-  public static function &get_wysiwyg_module()
+  public static function &get_wysiwyg_module($module_name = '')
   {
-	  return ModuleOperations::get_instance()->GetWYSIWYGModule();
+	  return ModuleOperations::get_instance()->GetWYSIWYGModule($module_name);
   }
 
 

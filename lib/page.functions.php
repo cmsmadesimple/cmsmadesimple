@@ -806,36 +806,19 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
 
   if ($enablewysiwyg == true)
     {
-      $module_name = get_site_preference('frontendwysiwyg');
-      if( $uid < 1 )
+      $module = cms_utils::get_wysiwyg_module($forcewysiwyg);
+      if( $module )
 	{
-	  $module_name = get_preference($uid,'wysiwyg');
-	}
-      if( $forcewysiwyg ) $module_name = $forcewysiwyg;
-      if( $module_name )
-	{
-	  $module = cms_utils::get_module($module_name);
-	  if( $module && $module->IsWYSIWYG() )
-	    {
-	      $result = $module->WYSIWYGTextArea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
-	    }
+	  $result = $module->WYSIWYGTextArea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
 	}
     }
 
   if( !$result && $wantedsyntax )
     {
-      $module_name = get_preference($uid,'syntaxhighlighter');
-      if( $forcewysiwyg )
+      $module = cms_utils::get_syntax_highlighter_module();
+      if( $module )
 	{
-	  $module_name = $forcewysiwyg;
-	}
-      if( $module_name )
-	{
-	  $module = cms_utils::get_module($module_name);
-	  if( $module && $module->IsSyntaxHighlighter() )
-	    {
-	      $result = $module->SyntaxTextArea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
-	    }
+	  $result = $module->SyntaxTextArea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
 	}
     }
 
