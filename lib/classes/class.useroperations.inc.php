@@ -41,6 +41,20 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.user.inc.php');
  */
 class UserOperations
 {
+	protected function __construct() {}
+
+	private static $_instance;
+
+	public static function &get_instance()
+	{
+		if( !is_object(self::$_instance) )
+		{
+			self::$_instance = new UserOperations();
+		}
+		return self::$_instance;
+	}
+
+
 	/**
 	 * Gets a list of all users
 	 *

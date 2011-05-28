@@ -84,12 +84,6 @@ class CmsObject {
 	private $userprefs;
 
 	/**
-	 * Smarty object - holds reference to the current smarty object -- will not be set in the admin
-	 *	@access private
-	 */
-	private $smarty;
-
-	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
 	 *	@access private
 	 */
@@ -138,8 +132,6 @@ class CmsObject {
 	 */
 	//private $modules = array();
 	
-	private $_objects = array();
-
 	public function __get($key)
 	{
 		switch($key)
@@ -324,12 +316,7 @@ class CmsObject {
 	*/
 	public function & GetUserOperations()
 	{
-        if (!isset($this->_objects['useroperations']))
-		{
-			$this->_objects['useroperations'] = new UserOperations();
-		}
-
-		return $this->_objects['useroperations'];
+		return UserOperations::get_instance();
 	}
 	
 	/**
@@ -344,14 +331,7 @@ class CmsObject {
 	*/
 	public function & GetContentOperations()
 	{
-        if (!isset($this->contentoperations))
-		{
-			debug_buffer('', 'Load Content Operations');
-			$this->contentoperations = new ContentOperations();
-			debug_buffer('', 'End Load Content Operations');
-		}
-
-		return $this->contentoperations;
+		return ContentOperations::get_instance();
 	}
 
 	/**
@@ -478,13 +458,7 @@ class CmsObject {
 	{
 		/* Check to see if a Smarty object has been instantiated yet,
 		  and, if not, go ahead an create the instance. */
-		if (!$this->smarty)
-		{
-			$conf = $this->GetConfig();
-			$this->smarty = new Smarty_CMS($conf);
-		}
-
-        return $this->smarty;
+		return Smarty_CMS::get_instance();
 	}
 
 	/**

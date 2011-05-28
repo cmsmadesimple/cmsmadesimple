@@ -29,14 +29,17 @@
 
 require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
 
-class Smarty_CMS extends Smarty {
+class Smarty_CMS extends Smarty 
+{
 	
+  private static $_instance;
+
   /**
    * Constructor
    *
    * @param array The hash of CMSMS config settings
    */
-  public function __construct()
+  protected function __construct()
   {
     $config = cmsms()->GetConfig();
     parent::__construct();
@@ -136,6 +139,17 @@ class Smarty_CMS extends Smarty {
 						      "module_file_timestamp",
 						      "db_get_secure",
 						      "db_get_trusted"));
+  }
+
+  
+
+  public static function &get_instance()
+  {
+    if( !is_object(self::$_instance) )
+      {
+	self::$_instance = new Smarty_CMS();
+      }
+    return self::$_instance;
   }
 
 

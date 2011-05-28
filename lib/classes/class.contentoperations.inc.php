@@ -39,7 +39,19 @@
  */
 class ContentOperations
 {
+	protected function __construct() {}
 	private $_content_types;
+	private static $_instance;
+
+	public static function &get_instance()
+	{
+		if( !is_object( self::$_instance ) )
+		{
+			self::$_instance = new ContentOperations();
+		}
+		return self::$_instance;
+	}
+
 
 	/**
 	 * Return a content object for the currently requested page.

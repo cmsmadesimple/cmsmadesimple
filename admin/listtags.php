@@ -44,8 +44,6 @@ return;
 
 
 
-#$smarty = new Smarty_CMS($gCms->config);
-
 debug_buffer('before header');
 
 include_once("header.php");

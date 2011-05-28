@@ -38,7 +38,6 @@ if (!$access) {
   return;
 }
 $smarty = cmsms()->GetSmarty();
-//$smarty = new Smarty_CMS(cmsms()->GetConfig());
 include_once("header.php");
 
 if (FALSE == empty($_GET['message'])) {

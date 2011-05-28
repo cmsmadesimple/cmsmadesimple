@@ -118,7 +118,7 @@ if ($access)
 				audit($the_blob->id, $the_blob->name, 'Edited Global Content Block');
 
 				#Clear cache
-				$smarty = new Smarty_CMS($config);
+				$smarty = cmsms()->GetSmarty();
 				$smarty->clear_all_cache();
 				$smarty->clear_compiled_tpl();
 
