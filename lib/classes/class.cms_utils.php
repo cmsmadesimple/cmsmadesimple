@@ -208,6 +208,37 @@ class cms_utils
 	$trace = debug_backtrace();
 	if( isset($trace[2]['class']) ) return $trace[2]['class'];
   }
+
+
+  /**
+   * A convenient method to get the object pointer to the appropriate wysiwyg module
+   * This is a wrapper around a similar function in the ModuleOperations class.
+   *
+   * This method will return the currently selected frontend wysiwyg for frontend requests (or null if none is selected)
+   * For admin requests this method will return the users currently selected wysiwyg module, or null.
+   *
+   * @return object or null
+   */
+  public static function &get_wysiwyg_module()
+  {
+	  return ModuleOperations::get_instance()->GetWYSIWYGModule();
+  }
+
+
+  /*
+   * A convenient method to get the currently selected syntax highlighter
+   * This is a wrapper around a similar function in the ModuleOperations class.
+   *
+   * This method will return the currently selected frontend wysiwyg for frontend requests (or null if none is selected)
+   * For admin requests this method will return the users currently selected wysiwyg module, or null.
+   *
+   * @return object or null
+   */
+  public static function &get_syntax_highlighter_module()
+  {
+	  return ModuleOperations::get_instance()->GetSyntaxHighlighter();
+  }
+
 } // end of class
 
 ?>

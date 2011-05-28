@@ -904,6 +904,43 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   }
 
 
+  public function &GetSyntaxHighlighter()
+  {
+	  global $CMS_ADMIN_PAGE;
+	  if( !isset($CMS_ADMIN_PAGE) ) return;
+
+	  $module_name = get_preference(get_userid(FALSE),'syntaxhighlighter');
+	  if( !$module_name ) return;
+
+	  $obj = $this->get_module_instance($module_name);
+	  if( !is_object($obj) ) return;
+
+	  if( !$obj->IsSyntaxHighlighter() ) return;
+	  return $obj;
+  }
+
+
+  public function &GetWYSIWYGModule()
+  {
+	  global $CMS_ADMIN_PAGE;
+	  $module_name = '';
+	  if( !isset($CMS_ADMIN_PAGE) )
+	  {
+		  $module_name = get_site_preference('frontendwysiwyg');
+	  }
+	  else
+	  {
+		  $module_name = get_preference(get_userid(FALSE),'wysiwyg');
+	  }
+
+	  if( !$module_name ) return;
+
+	  $obj = $this->get_module_instance($module_name);
+	  if( !$obj ) return;
+	  if( !$obj->IsWYSIWYG() ) return;
+
+	  return $obj;
+  }
 }
 
 # vim:ts=4 sw=4 noet
