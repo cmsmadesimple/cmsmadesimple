@@ -36,7 +36,7 @@
 #END_LICENSE
 if (!isset($gCms)) exit;
 
-if( !isset($params['cancel']) )
+if( isset($params['cancel']) )
   {
     $this->Redirect($id,'defaultadmin');
   }

@@ -96,20 +96,20 @@ final class modulerep_client
   }
 
 
-  public static function get_repository_xml($filename, $size = -1)
+  public static function get_repository_xml($xmlfile, $size = -1)
   {
-    if( !$filename ) return FALSE;
+    if( !$xmlfile ) return FALSE;
 
     $mod = cms_utils::get_module('ModuleManager');
     $orig_chunksize = $mod->GetPreference('dl_chunksize',256);
-    $chunsize = $orig_chunksize * 1024;
+    $chunksize = $orig_chunksize * 1024;
     $url = $mod->GetPreference('module_repository');
     if( $url == '' ) return FALSE;
 
     $tmpname = tempnam(TMP_CACHE_LOCATION,'modmgr_');
     if( !$tmpname ) return FALSE;
 
-    if( $size > 0 && $size <= $chunksize )
+    if( $size <= $chunksize )
     {
       // downloading the whole file at one shot.
       $url .= '/modulexml';
@@ -131,12 +131,12 @@ final class modulerep_client
     // download in chunks
     $url .= '/modulegetpart';
     $nchunks = (int)($size / $chunksize);
-    if( $size % $chunksize ) $ncunks++;
-    $req = new cms_http_req();
+    if( $size % $chunksize ) $nchunks++;
+    $req = new cms_http_request();
     for( $i = 0; $i < $nchunks; $i++ )
       {
 	$req->execute($url,'','POST',
-		      array('name'=>$xmlfile,'partnum'=>$i,'sizekb'=>$orig_junksize));
+		      array('name'=>$xmlfile,'partnum'=>$i,'sizekb'=>$orig_chunksize));
 	$status = $req->GetStatus();
 	$result = $req->GetResult();
 	if( $status != 200 || $result == '' )
@@ -147,7 +147,7 @@ final class modulerep_client
 	  }
 
 	$fh = fopen($tmpname,'a');
-	fwrite($fh,$result);
+	fwrite($fh,base64_decode($result));
 	fclose($fh);
 	$req->clear();
       }

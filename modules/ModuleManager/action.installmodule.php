@@ -62,6 +62,9 @@ foreach( $deps as $onedep )
       $tmp[] = $onedep;
     }
 }
+
+$smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
+		
 if (count($tmp) > 1)
   {
     $txt = '<p>'.$this->Lang('notice_depends', modmgr_utils::file_to_module_name($allmods[1],$params['filename'])).'</p>';
@@ -86,20 +89,34 @@ if (count($tmp) > 1)
       }
     $txt .= '</ul>';
 
-    $this->smarty->assign('title_installation', $this->Lang('title_installation'));
-    $this->smarty->assign('message', $txt);
-    $this->smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
-		
-    $this->smarty->assign('form_start',$this->CreateFormStart($id, 'doinstall', $returnid).
+    $smarty->assign('title_installation', $this->Lang('title_installation'));
+    $smarty->assign('message', $txt);
+    $smarty->assign('form_start',$this->CreateFormStart($id, 'doinstall', $returnid).
 			  $this->CreateInputHidden($id,'modlist',base64_encode(serialize($deps))));
-    $this->smarty->assign('time_warning',$this->Lang('time_warning'));
-    $this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('install_submit')));
-    $this->smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
-		
+    $smarty->assign('time_warning',$this->Lang('time_warning'));
+    $smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('install_submit')));
+    $smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
+    $smarty->assign('formend',$this->CreateFormEnd());
     echo $this->ProcessTemplate('installinfo.tpl');
     return;
   }
 
+// only one module.
+$keys = array_keys($deps);
+$res = modmgr_utils::install_module($deps[$keys[0]]);
+if( !is_array($res) )
+  {
+    $smarty->assign('message',$this->ShowErrors($this->Lang('error_internal')));
+  }
+else if( $res[0] == FALSE )
+  {
+    $smarty->assign('message',$this->ShowErrors($res[1]));
+  }
+else
+  {
+    $smarty->assign('message',$this->ShowMessage($res[1]));
+  }
+echo $this->ProcessTemplate('installinfo.tpl');
 
 #
 # EOF

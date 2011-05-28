@@ -63,7 +63,7 @@ final class modmgr_utils
 	  }
 	else
 	  {
-	    $result[] = $details;
+	    $results[] = $details;
 	  }
       }
     return array(true,$results);
@@ -225,6 +225,7 @@ final class modmgr_utils
 		    $newDep = array('filename'=>$tm['filename'],'name'=>$tm['name'],
 				    'version'=>$tm['version'],'by'=>$startspec,
 				    'size'=>$tm['size']);
+		    debug_display($newDep,'found');
 		    $deplist[] = $newDep;
 		    self::add_dependencies_to_list($tm['filename'], $allmods, $deplist);
 		    break;
@@ -333,9 +334,9 @@ final class modmgr_utils
   {
     // get the module xml to a temporary location
     $mod = cms_utils::get_module('ModuleManager');
-    $xml_filename = modulerep_client::get_repository_xml($module_meta['filename']);
+    $xml_filename = modulerep_client::get_repository_xml($module_meta['filename'],$module_meta['size']);
     if( !$xml_filename )
-      return array(FALSE,$this->Lang('error_downloadxml',$module_meta['filename']));
+      return array(FALSE,$mod->Lang('error_downloadxml',$module_meta['filename']));
       
     // get the md5sum of the data from the server.
     $server_md5 = modulerep_client::get_module_md5($module_meta['filename']);
@@ -345,12 +346,12 @@ final class modmgr_utils
     if( $server_md5 != $dl_md5 )
       {
 	@unlink($xml_filename);
-	return array(FALSE,$this->Lang('error_checksum',array($server_md5,$dl_md5)));
+	return array(FALSE,$mod->Lang('error_checksum',array($server_md5,$dl_md5)));
       }
 
     // expand the xml
     $ops = cmsms()->GetModuleOperations();
-    if( !$ops->ExpandXMLPackage( $xml_file, 1 ) )
+    if( !$ops->ExpandXMLPackage( $xml_filename, 1 ) )
       {
 	return array(FALSE,$ops->GetLastError());
       }
@@ -364,6 +365,7 @@ final class modmgr_utils
       {
 	$res = $ops->UpgradeModule($module_meta['name']);
       }
+    return $res;
   }
 
 
@@ -371,6 +373,7 @@ final class modmgr_utils
   {
     if( !is_array($installs) || count($installs) == 0 ) return FALSE;
 
+    $mod = cms_utils::get_module('ModuleManager');
     $messages = array();
     $ok = true;
     $modops = cmsms()->GetModuleOperations();
@@ -385,13 +388,13 @@ final class modmgr_utils
 	      {
 		// activating
 		$modops->ActivateModule($this_inst['name']);
-		$thisRes->message = $this->Lang('action_activated',$this_inst['name']);
+		$thisRes->message = $mod->Lang('action_activated',$this_inst['name']);
 		$thisRes->success = true;
 	      }
 	    else if ($this_inst['status'] == 'u')
 	      {
 		// upgrading	
-		list($success, $msgs) = $this->_DoInstallOperation($this_inst, $nu_soapclient, true);
+		list($success, $msgs) = self::install_module($this_inst, true);
 		if (!$success)
 		  {
 		    $ok = false;
@@ -405,7 +408,7 @@ final class modmgr_utils
 	    else if ($this_inst['status'] == 'i')
 	      {
 		// installing
-		list($success, $msgs) = $this->_DoInstallOperation($this_inst, $nu_soapclient, false);
+		list($success, $msgs) = self::install_module($this_inst, false);
 		if (!$success)
 		  {
 		    $ok=false;
@@ -419,7 +422,7 @@ final class modmgr_utils
 	  }
 	else
 	  {
-	    $thisRes->message = $this->Lang('error_skipping',$this_inst['name']);
+	    $thisRes->message = $mod->Lang('error_skipping',$this_inst['name']);
 	  }
 	if ($this_inst['status'] != 's')
 	  {

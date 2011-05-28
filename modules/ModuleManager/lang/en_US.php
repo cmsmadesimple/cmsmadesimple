@@ -1,4 +1,5 @@
 <?php
+$lang['error_internal'] = 'Internal Error... Please report this to your system administrator';
 $lang['error_downloadxml'] = 'A problem occurred downloading the XML FILE: %s';
 $lang['error_request_problem'] = 'A problem occurred communicating with the module server';
 $lang['error_searchterm'] = 'You have entered an invalid search term.  The term must consist of ascii characters and be three or more characters long';
