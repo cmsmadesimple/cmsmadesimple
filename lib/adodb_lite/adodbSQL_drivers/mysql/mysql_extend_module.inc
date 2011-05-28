@@ -37,11 +37,10 @@ class mysql_extend_ADOConnection extends mysql_extend_EXTENDER
 	function GenID($seqname='adodbseq', $startID=1)
 	{
 		$getnext = sprintf($this->_genIDSQL, $seqname);
-		$holdtransOK = $this->transaction_status;
+		if( isset($this->transaction_status) ) $holdtransOK = $this->transaction_status;
 		$result = @$this->Execute($getnext);
 		if (!$result) {
-			if ($holdtransOK)
-				$this->transaction_status = true;
+		  if ($holdtransOK && isset($this->transaction_status)) 	$this->transaction_status = true;
 //			$u = strtoupper($seqname);
 			$this->Execute(sprintf($this->_genSeqSQL, $seqname));
 			$this->Execute(sprintf($this->_genSeq2SQL, $seqname, $startID-1));
