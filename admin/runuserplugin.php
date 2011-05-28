@@ -29,7 +29,6 @@ if (!$access) die('Permission Denied');
 
 $gCms = cmsms();
 $db = $gCms->GetDb();
-$smarty = new Smarty_CMS($gCms->config); // why?
 $usertagops = $gCms->GetUserTagOperations();
 
 include('header.php');
