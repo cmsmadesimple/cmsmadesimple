@@ -428,7 +428,7 @@ class NCleanGreyTheme extends AdminTheme
 	  // separate system modules from the rest.
 	  if( preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp) )
 	    {
-	      if( array_search( $tmp[1], $gCms->cmssystemmodules ) === FALSE && $firstmodule == true )
+	      if( !ModuleOperations::get_instance()->IsSystemModule($tmp[1]) && $firstmodule == true )
 		{
 		  echo "<hr width=\"90%\"/>";
 		  $firstmodule = false;
