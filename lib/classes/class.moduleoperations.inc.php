@@ -622,6 +622,9 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   {
 	  if( $loadall ) return $this->_load_all_modules();
 
+	  $config = cmsms()->GetConfig();
+	  $no_lazyload = $no_lazyload or $config['ignore_lazy_load'];
+
 	  global $CMS_ADMIN_PAGE;
 	  $moduleinfo = $this->_get_module_info();
 	  foreach( $moduleinfo as $name => $rec )
