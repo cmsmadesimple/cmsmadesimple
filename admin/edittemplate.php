@@ -321,8 +321,8 @@ else
 			<p class="pageinput"><input type="text" class="name" name="template" maxlength="255" value="<?php echo $template?>" /></p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('content')?>:</p>
-			<p class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagebigtextarea', 'content', $encoding, '', '80', '15','','html')?></p>
+			<div class="pagetext"><?php echo lang('content')?>:</div>
+			<div class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagebigtextarea', 'content', $encoding, '', '80', '15','','html')?></div>
 		</div>
 		<?php if ($templateops->StylesheetsUsed() > 0) { ?>
 		<div class="pageoverflow">
