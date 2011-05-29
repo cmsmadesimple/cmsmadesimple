@@ -1450,7 +1450,7 @@ debug_buffer('after menu items');
 <meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-9 Ted Kulp. All rights reserved." />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="robots" content="noindex, nofollow" />
-	   <title><?php echo cmsms()->siteprefs['sitename'] ." - ". $this->title ?></title>
+	   <title><?php echo get_site_preference('sitename') . " - ". $this->title ?></title>
 <link rel="stylesheet" type="text/css" href="style.php" />
 <?php
 	if ($showielink) {
