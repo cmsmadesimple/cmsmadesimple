@@ -437,9 +437,6 @@ function cms_utf8entities($val)
 	// $val = str_replace( chr(0xCA), "", $val );
 
 	$val = str_replace( "&"            , "\u0026"         , $val );
-#	$val = str_replace( "<!--"         , "&#60;&#33;--"  , $val );
-#	$val = str_replace( "-->"          , "--&#62;"       , $val );
-#	$val = preg_replace( "/<script/i"  , "&#60;script"   , $val );
 	$val = str_replace( ">"            , "\u003E"          , $val );
 	$val = str_replace( "<"            , "\u003C"          , $val );
 
