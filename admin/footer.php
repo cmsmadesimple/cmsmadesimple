@@ -67,7 +67,7 @@ foreach($modules as $key => &$object)
   }
 }
 
-foreach($modules as $key=>$obect)
+foreach($modules as $key=>$object)
 {
   if ($object->IsSyntaxHighlighter())
     {
