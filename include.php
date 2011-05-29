@@ -181,10 +181,14 @@ debug_buffer('done loading files');
 global $DONT_LOAD_DB;
 if (!isset($DONT_LOAD_DB))
 {
+  debug_buffer('Initialize Database');
   cmsms()->GetDb();
-
+  debug_buffer('Done Initializing Database');
 }
+
+debug_buffer('Initialize Smarty');
 $smarty = cmsms()->GetSmarty();
+debug_buffer('Done Initialiing Smarty');
 
 if (!defined('SMARTY_DIR')) {
     define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
@@ -243,26 +247,28 @@ $smarty->assign('encoding',get_encoding());
 
 if ($config['debug'] == true)
 {
-	$smarty->debugging = true;
-	$smarty->error_reporting = 'E_ALL';
+  $smarty->debugging = true;
+  $smarty->error_reporting = 'E_ALL';
 }
 
 #Setup content routes
 if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) )
 {
+  debug_buffer('','Loading Routes');
   cmsms()->set_variable('pageinfo',new PageInfo());
   $contentops = cmsms()->GetContentOperations();
   $contentops->register_routes();
+  debug_buffer('','End of Loading Routes');
 }
 
 #Load all installed module code
-debug_buffer('','Loading Modules');
 if (! isset($CMS_INSTALL_PAGE))
   {
-     $modops = cmsms()->GetModuleOperations();
-     $modops->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
+    debug_buffer('','Loading Modules');
+    $modops = cmsms()->GetModuleOperations();
+    $modops->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
+    debug_buffer('', 'End of Loading Modules');
   }
-debug_buffer('', 'End of include');
 
 #Do auto task stuff.
 if (! isset($CMS_INSTALL_PAGE))

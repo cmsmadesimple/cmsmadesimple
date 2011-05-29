@@ -30,8 +30,7 @@
 require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
 
 class Smarty_CMS extends Smarty 
-{
-	
+{	
   private static $_instance;
 
   /**
@@ -85,7 +84,6 @@ class Smarty_CMS extends Smarty
       }
 
     if( isset($CMS_INSTALL_PAGE) ) return;
-    //$this->_load_plugins();
 
     $this->register_resource("db", array(&$this, "template_get_template",
 					 "template_get_timestamp",
@@ -138,19 +136,6 @@ class Smarty_CMS extends Smarty
   }
 
 
-//   function _get_plugin_filepath($type,$name)
-//   {
-//     $str = parent::_get_plugin_filepath($type,$name);
-//     if( $str != '' ) return $str;
-
-//     $row = UserTagOperations::get_instance()->GetUserTag($name);
-//     if( is_array($row) && isset($row['code']) )
-//       {
-//       }
-//     debug_display("_get_plugin_filepath2 $type $name $str");
-//   }
-
-
   public static function &get_instance()
   {
     if( !is_object(self::$_instance) )
@@ -160,128 +145,6 @@ class Smarty_CMS extends Smarty
     return self::$_instance;
   }
 
-
-  private function _load_plugins()
-  {
-    $gCms = cmsms();
-    $db = $gCms->GetDb();
-    if (isset($db))
-      {
-	$plugins = array();
-	$userplugins = array();
-	$userpluginfunctions = array();
-
-	$this->_search_plugins($plugins, dirname(dirname(dirname(__FILE__)))."/plugins", false);
-
-	$query = "SELECT * FROM ".cms_db_prefix()."userplugins";
-	$results = $db->GetArray($query);
-	if( is_array($plugins) )
-	  {
-	    foreach( $results as $row )
-	      {
-		if( in_array($row['userplugin_name'],$gCms->cmsplugins) ) continue;
-
-		$functionname = 'cms_tmp_'.$row['userplugin_name'].'_userplugin_function';
-		$fn = 'function '.$functionname.'($params,&$smarty) {'.$row['code']."\n}";
-		if( @eval($fn) !== FALSE )
-		  {
-		    $plugins[] = $row['userplugin_name'];
-		    $userplugins[$row['userplugin_name']] = $row['userplugin_id'];
-		    $this->register_function($row['userplugin_name'],$functionname,false);
-		    $userpluginfunctions[$row['userplugin_name']] = $functionname;
-		  }
-	      }
-	  }
-	$gCms->cmsplugins = $plugins;
-	$gCms->userpluginfunctions = $userplugins;
-	$gCms->userplugins = $userplugins;
-      }
-  }
-
-
-
-  /**
-   * A function to load all valid plugins in the plugins directory.
-   *
-   * @internal
-   * @access private
-   * @param object The smarty object
-   * @param array  A reference to the $gCms->plugins array.
-   * @param string The directory name
-   * @param boolean Wether caching should be applied
-   * @return void
-   */
-  private function _search_plugins(&$plugins, $dir, $caching)
-  {
-    global $CMS_LOAD_ALL_PLUGINS;
-
-    $plugins = array();
-    $types=array('function','compiler','prefilter','postfilter','outputfilter','modifier','block');
-    $handle=opendir($dir);
-    while ($file = readdir($handle))
-      {
-	// This hides the dummy function.summarize.php
-	// (function.summarize.php was renamed to modifier.summarize.php in 1.0.3)
-	// This code can be deleted once the dummy is removed from the distribution
-	// TODO: DELETE
-	if ( $file == 'function.summarize.php' &&
-	     substr(file_get_contents(cms_join_path($dir, $file)), 9, 9) == '__DUMMY__'  )
-	  {
-	    continue;
-	  }
-	// END TODO: DELETE
-
-	$path_parts = pathinfo($file);
-	if (isset($path_parts['extension']) && $path_parts['extension'] == 'php')
-	  {
-	    //Valid plugins will always have a 3 part filename
-	    $filearray = explode('.', $path_parts['basename']);
-	    if (count($filearray == 3))
-	      {
-		$filename = cms_join_path($dir, $file);
-		//The part we care about is the middle one...
-		$file = $filearray[1];
-		if (!isset($plugins[$file]) && in_array($filearray[0],$types))
-		  {
-		    $key=array_search($filearray[0],$types);
-		    switch ($key)
-		      {
-		      case 0:
-			if (isset($CMS_LOAD_ALL_PLUGINS))
-			  {
-			    $this->register_function($file, "smarty_cms_function_" . $file, $caching);
-			    $plugins[] = $file;
-			    require_once($filename);
-			  }
-			break;
-		      case 1:
-			$this->register_compiler_function($file, "smarty_cms_compiler_" .  $file, $caching);
-			break;
-		      case 2:
-			$this->register_prefilter("smarty_cms_prefilter_" . $file);
-			break;
-		      case 3:
-			$this->register_postfilter("smarty_cms_postfilter_" . $file);
-			break;
-		      case 4:
-			$this->register_outputfilter("smarty_cms_outputfilter_" . $file);
-			break;
-		      case 5:
-			$this->register_modifier($file, "smarty_cms_modifier_" . $file);
-			break;
-		      case 6:
-			$this->register_block($file, "smarty_cms_block_" . $file);
-			break;
-		      }
-		  }
-	      }
-	  }
-      }
-    closedir($handle);
-
-    $gCms = cmsms();
-    $gCms->cmsplugins = $plugins;
-  }
 
   /**
    * wrapper for include() retaining $this

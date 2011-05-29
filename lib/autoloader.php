@@ -31,6 +31,16 @@
  * @return boolean
  */
 
+function __cms_load($filename)
+{
+  static $_cumulative = 0;
+  $mem = memory_get_usage();
+  require_once($filename);
+  $mem = memory_get_usage() - $mem;
+  $_cumulative += $mem;
+  debug_buffer("Loading $filename = $mem bytes for an approximate total of $_cumulative");
+}
+
 function cms_autoloader($classname)
 {
   $config = cmsms()->GetConfig();
@@ -39,7 +49,7 @@ function cms_autoloader($classname)
   $fn = cms_join_path($config['root_path'],'lib','classes',"class.{$classname}.php");
   if( file_exists($fn) )
     {
-      require_once($fn);
+      __cms_load($fn);
       return;
     }
 
@@ -47,7 +57,7 @@ function cms_autoloader($classname)
   $fn = cms_join_path($config['root_path'],'lib','classes',"class.{$lowercase}.inc.php");
   if( file_exists($fn) )
     {
-      require_once($fn);
+      __cms_load($fn);
       return;
     }
 
@@ -55,7 +65,7 @@ function cms_autoloader($classname)
   $fn = cms_join_path($config['root_path'],'lib','classes',"interface.{$classname}.php");
   if( file_exists($fn) )
     {
-      require_once($fn);
+      __cms_load($fn);
       return;
     }
 
@@ -63,7 +73,7 @@ function cms_autoloader($classname)
   $fn = cms_join_path($config['root_path'],'lib','classes','contenttypes',"{$classname}.inc.php");
   if( file_exists($fn) )
     {
-      require_once($fn);
+      __cms_load($fn);
       return;
     }
 
@@ -91,7 +101,7 @@ function cms_autoloader($classname)
 	  $fn = $config['root_path']."/modules/$modname/lib/class.$classname.php";
 	  if( file_exists( $fn ) )
 	    {
-	      require_once($fn);
+	      __cms_load($fn);
 	      return;
 	    }
 	}
