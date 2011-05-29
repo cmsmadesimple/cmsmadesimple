@@ -130,7 +130,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= lang('errorinsertingtag');
+			  $error[] = lang('errorinsertingtag').' '.$db->ErrorMsg();
 			}
 		}
 	}
