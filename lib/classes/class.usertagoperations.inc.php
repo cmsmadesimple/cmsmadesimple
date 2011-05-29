@@ -35,7 +35,8 @@
 final class UserTagOperations
 {
 	private static $_instance;
-	
+	private $_cache = array();
+
 	protected function __construct() {}
 
 	public static function &get_instance()
@@ -48,6 +49,44 @@ final class UserTagOperations
 	}
 
 
+	/*
+	 * Load all the information about user tags
+	 */
+	public function LoadUserTags()
+	{
+		if( count($this->_cache) == 0 )
+			{
+				$db = cmsms()->GetDb();
+				
+				$query = 'SELECT * FROM '.cms_db_prefix().'userplugins';
+				$data = $db->GetArray($query);
+				if( is_array($data) )
+					{
+						foreach( $data as $row )
+							{
+								$this->_cache[$row['userplugin_name']] = $row;
+							}
+					}
+			}
+	}
+
+	
+	/**
+	 * Get a user tag record (by name) from the cache 
+	 */
+	private function _get_from_cache($name)
+	{
+		$this->LoadUserTags();
+		if( isset($this->_cache[$name]) )
+		{
+			return $this->_cache[$name];
+		}
+		foreach( $this->_cache as $tagname => $row )
+		{
+			if( $name == $row['userplugin_id'] ) return $row;
+		}
+	}
+
 	/**
 	 * Retrieve the body of a user defined tag
 	 *
@@ -57,14 +96,24 @@ final class UserTagOperations
 	 */
 	function GetUserTag( $name )
 	{
-		$code = false;
+		$row = $this->_get_from_cache($name);
+		return $row;
+	}
 
-		$gCms = cmsms();
-		$db = cmsms()->GetDb();
-		
-		$query = 'SELECT userplugin_id, code FROM '.cms_db_prefix().'userplugins WHERE userplugin_name = ?';
-		$result = $db->GetRow($query, array($name));
-		return $result;
+
+	/**
+	 * Test if a user defined tag with a specific name exists
+	 *
+	 * @param string $name User defined tag name
+	 *
+	 * @return mixed If successfull the name of the user defined tag.  false otherwise
+	 * @since 1.10
+	 */
+	function UserTagExists($name)
+	{
+		$row = $this->_get_from_cache($name);
+		if( is_array($row) ) return $name;
+		return false;
 	}
 
 
@@ -79,10 +128,11 @@ final class UserTagOperations
 	function SetUserTag( $name, $text )
 	{
 		$db = cmsms()->GetDb();
-		
+
 		$existing = $this->GetUserTag($name);
 		if (!$existing)
 		{
+			$this->_cache = array(); // reset the cache.
 			$new_usertag_id = $db->GenID(cms_db_prefix()."userplugins_seq");
 			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, create_date, modified_date) VALUES (?,?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 			$result = $db->Execute($query, array($new_usertag_id, $name, $text));
@@ -93,7 +143,8 @@ final class UserTagOperations
 		}
 		else
 		{
-		  $query = 'UPDATE '.cms_db_prefix().'userplugins SET code = ?, modified_date = '.$db->DBTimeStamp(time()).' WHERE userplugin_name = ?';
+			$this->_cache = array(); // reset the cache.
+			$query = 'UPDATE '.cms_db_prefix().'userplugins SET code = ?, modified_date = '.$db->DBTimeStamp(time()).' WHERE userplugin_name = ?';
 			$result = $db->Execute($query, array($text, $name));
 			if ($result)
 				return true;
@@ -118,6 +169,7 @@ final class UserTagOperations
 		$query = 'DELETE FROM '.cms_db_prefix().'userplugins WHERE userplugin_name = ?';
 		$result = &$db->Execute($query, array($name));
 
+		$this->_cache = array();
 		if ($result)
 		{
 			return true;
@@ -134,47 +186,30 @@ final class UserTagOperations
 	 */
 	function ListUserTags()
 	{
-		$gCms = cmsms();
-		$db = $gCms->GetDb();
-
+		$this->LoadUserTags();
 		$plugins = array();
-		
-		//var_dump($db);
-
-		$query = 'SELECT userplugin_name FROM '.cms_db_prefix().'userplugins ORDER BY userplugin_name';
-		//var_dump($db->Execute($query));
-		$result = &$db->Execute($query);
-		
-		//var_dump($result);
-
-		while ($result && !$result->EOF)
+		foreach( $this->_cache as $key => $row )
 		{
-			$plugins[$result->fields['userplugin_name']] =& $result->fields['userplugin_name'];
-			$result->MoveNext();
+			$plugins[$row['userplugin_id']] = $row['userplugin_name'];
 		}
-		
-		if (count($plugins) == 0)
-			$plugins = false;
-
 		return $plugins;
 	}
 	
 
 	function CallUserTag($name, &$params)
 	{
-		$smarty = cmsms()->GetSmarty();
-		$ops = cmsms()->GetUserTagOperations();
-		$tmp = UserTagOperations::GetUserTag($name);
-		$code = $tmp['code'];		
+		$row = $this->_get_from_cache($name);
 		$result = FALSE;
-		
-		$functionname = "tmpcallusertag_".$name."_userplugin_function";
-		
-		if( (false !== $code) && ((function_exists($functionname) || !(@eval('function '.$functionname.'(&$params, &$smarty) {'.$code."\n}") === FALSE))) )
+		if( $row )
 		{
-			$result = call_user_func_array($functionname, array(&$params, &$smarty));
+			$smarty = cmsms()->GetSmarty();
+			$code = $row['code'];		
+			$functionname = "tmpcallusertag_".$name."_userplugin_function";
+			if( (false !== $code) && ((function_exists($functionname) || !(@eval('function '.$functionname.'(&$params, &$smarty) {'.$code."\n}") === FALSE))) )
+			{
+				$result = call_user_func_array($functionname, array(&$params, &$smarty));
+			}
 		}
-		
 		return $result;
 	}
 

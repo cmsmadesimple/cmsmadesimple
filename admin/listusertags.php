@@ -60,26 +60,26 @@ echo '<tbody>';
 
 $curclass = "row1";
 
-foreach($gCms->cmsplugins as $oneplugin)
-{
-	if (array_key_exists($oneplugin, $gCms->userplugins))
-	{
-		echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
-		echo "<td><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">$oneplugin</a></td>\n";
-		echo "<td class=\"icons_wide\"><a href=\"runuserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
-		echo $themeObject->DisplayImage('icons/system/run.gif', lang('run_udt'), '', '', 'systemicon')."</a></td>\n";
-		echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
-		echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-		echo "</a></td>\n";
-		echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneplugin),true)."');\">";
-		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-		echo "</a></td>\n";
+$tags = UserTagOperations::get_instance()->ListUserTags();
+if( count($tags) )
+  {
+    foreach( $tags as $oneplugin => $label  )
+      {
+	echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+	echo "<td><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">$label</a></td>\n";
+	echo "<td class=\"icons_wide\"><a href=\"runuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
+	echo $themeObject->DisplayImage('icons/system/run.gif', lang('run_udt'), '', '', 'systemicon')."</a></td>\n";
+	echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
+	echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+	echo "</a></td>\n";
+	echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneplugin),true)."');\">";
+	echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+	echo "</a></td>\n";
+	echo "</tr>\n";
 
-		echo "</tr>\n";
-
-		($curclass=="row1"?$curclass="row2":$curclass="row1");
-	}
-}
+	($curclass=="row1"?$curclass="row2":$curclass="row1");
+      }
+  }
 
 	?>
 	</tbody>

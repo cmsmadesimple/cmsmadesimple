@@ -15,8 +15,11 @@
 
 function smarty_core_load_plugins($params, &$smarty)
 {
-
     foreach ($params['plugins'] as $_plugin_info) {
+      if( !is_array($_plugin_info) )
+	{
+	  stack_trace();
+	}
         list($_type, $_name, $_tpl_file, $_tpl_line, $_delayed_loading) = $_plugin_info;
         $_plugin = &$smarty->_plugins[$_type][$_name];
 
@@ -76,10 +79,16 @@ function smarty_core_load_plugins($params, &$smarty)
                 continue;
             }
             if (!is_callable($_plugin_func) && is_callable($_cms_plugin_func))
-            {
+	    {
+	        // CMS Made Simple plugins start with smarty_cms instead of just smarty
                 $_plugin_func = $_cms_plugin_func;
             }
         }
+	else if ( ($udt_name = UserTagOperations::get_instance()->UserTagExists($_name)) ) 
+	{
+	  $_plugin_func = 'cms_call_udt';
+	  $_found = true;
+	}
         /*
          * In case of insert plugins, their code may be loaded later via
          * 'script' attribute.

@@ -37,82 +37,179 @@ include_once(dirname(__FILE__) . '/Smarty_Compiler.class.php');
 
 class CMS_Compiler extends Smarty_Compiler {
 
-    /**
-     * compile custom function tag
-     *
-     * @param string $tag_command
-     * @param string $tag_args
-     * @param string $tag_modifier
-     * @return string
+  /**
+   * compile custom function tag
+   *
+   * @param string $tag_command
+   * @param string $tag_args
+   * @param string $tag_modifier
+   * @return string
+   */
+  function _compile_custom_tag($tag_command, $tag_args, $tag_modifier, &$output)
+  {
+    $found = false;
+    $udt_name = '';
+    $have_function = false;
+    $delayed_loading = null;
+    
+    /*
+     * First we check if the custom function has already been registered
+     * or loaded from a plugin file.
      */
-    function _compile_custom_tag($tag_command, $tag_args, $tag_modifier, &$output)
-    {
-        $found = false;
-        $have_function = true;
-
-        /*
-         * First we check if the custom function has already been registered
-         * or loaded from a plugin file.
-         */
-        if (isset($this->_plugins['function'][$tag_command])) {
-            $found = true;
-            $plugin_func = $this->_plugins['function'][$tag_command][0];
-            if (!is_callable($plugin_func)) {
-                $message = "custom function '$tag_command' is not implemented";
-                $have_function = false;
-            }
-        }
-        /*
-         * Otherwise we need to load plugin file and look for the function
-         * inside it.
-         */
-        else if ($plugin_file = $this->_get_plugin_filepath('function', $tag_command)) {
-            $found = true;
-
-            include_once $plugin_file;
-
-            $plugin_func = 'smarty_cms_function_' . $tag_command;
-            if (!function_exists($plugin_func)) {
-                $message = "plugin function $plugin_func() not found in $plugin_file\n";
-                $have_function = false;
-            } else {
-                $this->_plugins['function'][$tag_command] = array($plugin_func, null, null, null, true);
-
-            }
-        }
-        if (!$found) {
-            return parent::_compile_custom_tag($tag_command, $tag_args, $tag_modifier, $output);
-        } else if (!$have_function) {
-            #$this->_syntax_error($message, E_USER_WARNING, __FILE__, __LINE__);
-            #return true;
-            return parent::_compile_custom_tag($tag_command, $tag_args, $tag_modifier, $output);
-        }
-
-        /* declare plugin to be loaded on display of the template that
-           we compile right now */
-        $this->_add_plugin('function', $tag_command);
-
-        $this->_plugins['function'][$tag_command][4] = false;
-        $this->_plugins['function'][$tag_command][5] = array();
-
-        $_cacheable_state = $this->_push_cacheable_state('function', $tag_command);
-        $attrs = $this->_parse_attrs($tag_args);
-        $arg_list = $this->_compile_arg_list('function', $tag_command, $attrs, $_cache_attrs );
-
-        $output = $this->_compile_plugin_call('function', $tag_command).'(array('.implode(',', $arg_list)."), \$this)";
-        if($tag_modifier != '') {
-            $this->_parse_modifiers($output, $tag_modifier);
-        }
-
-        if($output != '') {
-            $output =  '<?php ' . $_cacheable_state . $_cache_attrs . 'echo ' . $output . ';'
-                . $this->_pop_cacheable_state('function', $tag_command) . "?>" . $this->_additional_newline;
-        }
-
-        #var_dump($output);
-
-        return true;
+    if (isset($this->_plugins['function'][$tag_command])) {
+      $found = true;
+      $plugin_func = $this->_plugins['function'][$tag_command][0];
+      if (!is_callable($plugin_func)) {
+	$message = "custom function '$tag_command' is not implemented";
+	$have_function = false;
+      }
     }
+    /*
+     * Otherwise we need to load plugin file and look for the function
+     * inside it.
+     */
+    else if ($plugin_file = $this->_get_plugin_filepath('function', $tag_command)) {
+      $found = true;
+      
+      include_once $plugin_file;
+      
+      $plugin_func = 'smarty_cms_function_' . $tag_command;
+      if (!function_exists($plugin_func)) {
+	$message = "plugin function $plugin_func() not found in $plugin_file\n";
+	$have_function = false;
+      } else {
+	$this->_plugins['function'][$tag_command] = array($plugin_func, null, null, null, true);
+	
+      }
+    }
+    /*
+     * Lets' see if this is a UDT.
+     */
+    else if ( ($udt_name = UserTagOperations::get_instance()->UserTagExists($tag_command)) ) {
+      $found = true;
+
+      $plugin_func = 'cms_call_udt';
+      if( !function_exists($plugin_func) )
+	{
+	  // create a function for this.
+	  $message = "plugin function UDT $plugin_func() not found\n";
+	  $have_function = false;
+	}
+      else
+	{
+	  $have_function = true;
+	  $this->_plugins['function'][$tag_command] = array($plugin_func, null, null, null, true);
+	}
+    }
+    
+    if (!$found) {
+      return parent::_compile_custom_tag($tag_command, $tag_args, $tag_modifier, $output);
+    } else if (!$have_function) {
+      // $this->_syntax_error($message, E_USER_WARNING, __FILE__, __LINE__);
+      // return true;
+      return parent::_compile_custom_tag($tag_command, $tag_args, $tag_modifier, $output);
+    }
+
+    /* declare plugin to be loaded on display of the template that
+     we compile right now */
+    $this->_add_plugin('function', $tag_command );
+    
+    $this->_plugins['function'][$tag_command][4] = false;
+    $this->_plugins['function'][$tag_command][5] = array();
+
+    $_cacheable_state = $this->_push_cacheable_state('function', $tag_command);
+    $attrs = $this->_parse_attrs($tag_args);
+    if( $udt_name )
+      {
+        $attrs['udt'] = "'".$udt_name."'";
+      }
+    $arg_list = $this->_compile_arg_list('function', $tag_command, $attrs, $_cache_attrs );
+    
+    $output = $this->_compile_plugin_call('function', $tag_command).'(array('.implode(',', $arg_list)."), \$this)";
+    if($tag_modifier != '') {
+      $this->_parse_modifiers($output, $tag_modifier);
+    }
+    
+    if($output != '') {
+      $output =  '<?php ' . $_cacheable_state . $_cache_attrs . 'echo ' . $output . ';'
+	. $this->_pop_cacheable_state('function', $tag_command) . "?>" . $this->_additional_newline;
+    }
+    
+    // var_dump($output);
+
+    return true;
+  }
+
+
+  function _parse_modifiers(&$output,$modifier_string)
+  {
+    preg_match_all('~\|(@?\w+)((?>:(?:'. $this->_qstr_regexp . '|[^|]+))*)~', '|' . $modifier_string, $_match);
+    list(, $_modifiers, $modifier_arg_strings) = $_match;
+
+    for ($_i = 0, $_for_max = count($_modifiers); $_i < $_for_max; $_i++) {
+      $_modifier_name = $_modifiers[$_i];
+
+      if($_modifier_name == 'smarty') {
+	// skip smarty modifier
+	continue;
+      }
+
+      preg_match_all('~:(' . $this->_qstr_regexp . '|[^:]+)~', $modifier_arg_strings[$_i], $_match);
+      $_modifier_args = $_match[1];
+
+      if (substr($_modifier_name, 0, 1) == '@') {
+	$_map_array = false;
+	$_modifier_name = substr($_modifier_name, 1);
+      } else {
+	$_map_array = true;
+      }
+
+      if (empty($this->_plugins['modifier'][$_modifier_name])
+	  && !$this->_get_plugin_filepath('modifier', $_modifier_name)
+	  && function_exists($_modifier_name)) {
+	if ($this->security && !in_array($_modifier_name, $this->security_settings['MODIFIER_FUNCS'])) {
+	  $this->_trigger_fatal_error("[plugin] (secure mode) modifier '$_modifier_name' is not allowed" , $this->_current_file, $this->_current_line_no, __FILE__, __LINE__);
+	} else {
+	  $this->_plugins['modifier'][$_modifier_name] = array($_modifier_name,  null, null, false);
+	}
+      }
+
+      // hack for CMSMS... load the plugin now?
+      $this->_add_plugin('modifier', $_modifier_name);
+      {
+	$tmp = array('modifier',$_modifier_name,$this->_current_file,$this->_current_line_no,false);
+	$tmp = array('plugins'=>array($tmp));
+	require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
+	smarty_core_load_plugins($tmp,$this);
+      }
+
+      $this->_parse_vars_props($_modifier_args);
+
+      if($_modifier_name == 'default') {
+	// supress notifications of default modifier vars and args
+	if(substr($output, 0, 1) == '$') {
+	  $output = '@' . $output;
+	}
+	if(isset($_modifier_args[0]) && substr($_modifier_args[0], 0, 1) == '$') {
+	  $_modifier_args[0] = '@' . $_modifier_args[0];
+	}
+      }
+      if (count($_modifier_args) > 0)
+	$_modifier_args = ', '.implode(', ', $_modifier_args);
+      else
+	$_modifier_args = '';
+
+      if ($_map_array) {
+	$output = "((is_array(\$_tmp=$output)) ? \$this->_run_mod_handler('$_modifier_name', true, \$_tmp$_modifier_args) : " . $this->_compile_plugin_call('modifier', $_modifier_name) . "(\$_tmp$_modifier_args))";
+
+      } else {
+
+	$output = $this->_compile_plugin_call('modifier', $_modifier_name)."($output$_modifier_args)";
+
+      }
+    }
+  }
+
 
     /**
      * display Smarty syntax error
@@ -131,6 +228,7 @@ class CMS_Compiler extends Smarty_Compiler {
     {   
         var_dump("Smarty error: $error_msg");
     }
+
 }
 
 /* vim: set et: */

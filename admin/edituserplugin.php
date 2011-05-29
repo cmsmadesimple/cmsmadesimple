@@ -30,8 +30,8 @@ $db = $gCms->GetDb();
 $error = array();
 
 $userplugin_id = "";
-if (isset($_POST["userplugin_id"])) $userplugin_id = $_POST["userplugin_id"];
-else if (isset($_GET["userplugin_id"])) $userplugin_id = $_GET["userplugin_id"];
+if (isset($_POST["userplugin_id"])) $userplugin_id = (int)$_POST["userplugin_id"];
+ else if (isset($_GET["userplugin_id"])) $userplugin_id = (int)$_GET["userplugin_id"];
 
 $plugin_name= "";
 if (isset($_POST["plugin_name"])) $plugin_name = $_POST["plugin_name"];
@@ -58,27 +58,27 @@ $ajax = false;
 if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
 
 if ($access) {
-	if (isset($_POST["editplugin"])) {
-
-        $CMS_EXCLUDE_FROM_RECENT = 1;
-		$validinfo = true;
-		if ($plugin_name == "") {
-			$error[] = lang('nofieldgiven', array(lang('editusertag')));
-			$validinfo = false;
-		}
-		elseif(preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$>', $plugin_name) == 0)
-		{
-			$error[] = lang('error_udt_name_chars');
-			$validinfo = false;
-		}
-		else
-		{
-			if ($plugin_name != $orig_plugin_name && in_array($plugin_name, $gCms->cmsplugins))
-			{
-				$error[] = lang('usertagexists');
-				$validinfo = false;
-			}
-		}
+  if (isset($_POST["editplugin"])) {
+    
+    $CMS_EXCLUDE_FROM_RECENT = 1;
+    $validinfo = true;
+    if ($plugin_name == "") {
+      $error[] = lang('nofieldgiven', array(lang('editusertag')));
+      $validinfo = false;
+    }
+    elseif(preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$>', $plugin_name) == 0)
+      {
+	$error[] = lang('error_udt_name_chars');
+	$validinfo = false;
+      }
+    else
+      {
+	if( $plugin_name != $orig_plugin_name && UserTagOperations::get_instance()->UserTagExists($plugin_name) )
+	  {
+	    $error[] = lang('usertagexists');
+	    $validinfo = false;
+	  }
+      }
 		// Make sure no spaces are put into plugin name.
 		$without_spaces = str_replace(' ', '', $plugin_name);
 		if ($plugin_name != $without_spaces)
@@ -129,7 +129,7 @@ if ($access) {
 			
 			// Update database
 			$query = "UPDATE ".cms_db_prefix()."userplugins SET userplugin_name = ".$db->qstr($plugin_name).", code = ".$db->qstr($code).", 
-					description = ".$db->qstr($description).", modified_date = ".$db->DBTimeStamp(time())." WHERE userplugin_id = ". $db->qstr($userplugin_id);
+					description = ".$db->qstr($description).", modified_date = ".$db->DBTimeStamp(time())." WHERE userplugin_id = ". (int)$userplugin_id;
 			$result = $db->Execute($query);
 			
 			if ($result) {
@@ -177,15 +177,12 @@ if ($access) {
 	}
 	else if ($userplugin_id != -1) {
 
-		$query = "SELECT * from ".cms_db_prefix()."userplugins WHERE userplugin_id = ?";
-		$result = $db->Execute($query,array($userplugin_id));
-		
-		$row = $result->FetchRow();
+	  $row = UserTagOperations::get_instance()->GetUserTag($userplugin_id);
 
-		$plugin_name = $row["userplugin_name"];
-		$orig_plugin_name = $plugin_name;
-		$code = $row['code'];
-		$description = $row['description'];
+	  $plugin_name = $row["userplugin_name"];
+	  $orig_plugin_name = $plugin_name;
+	  $code = $row['code'];
+	  $description = $row['description'];
 	}
 }
 if (strlen($plugin_name)>0)

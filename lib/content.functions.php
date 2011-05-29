@@ -25,143 +25,13 @@
  */
 
 /**
- * @ignore
- */
-$sorted_sections = array();
-
-/**
- * @ignore
- */
-$sorted_content = array();
-
-
-/**
  * Loads all plugins into the system
  *
  * @since 0.5
  * @param object The smarty object
  * @return void
  */
-function load_plugins(&$smarty)
-{
-  $gCms = cmsms();
-  $db = $gCms->GetDb();
-  if (isset($db))
-    {
-      $plugins = array();
-      $userplugins = array();
-      $userpluginfunctions = array();
 
-      search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins", false);
-
-      $query = "SELECT * FROM ".cms_db_prefix()."userplugins";
-      $results = $db->GetArray($query);
-      if( is_array($plugins) )
-	{
-	  foreach( $results as $row )
-	    {
-	      if( in_array($row['userplugin_name'],$gCms->cmsplugins) ) continue;
-
-	      $functionname = 'cms_tmp_'.$row['userplugin_name'].'_userplugin_function';
-	      $fn = 'function '.$functionname.'($params,&$smarty) {'.$row['code']."\n}";
-	      if( @eval($fn) !== FALSE )
-		{
-		  $plugins[] = $row['userplugin_name'];
-		  $userplugins[$row['userplugin_name']] = $row['userplugin_id'];
-		  $smarty->register_function($row['userplugin_name'],$functionname,false);
-		  $userpluginfunctions[$row['userplugin_name']] = $functionname;
-		}
-	    }
-	}
-      $gCms->cmsplugins = $plugins;
-      $gCms->userpluginfunctions = $userplugins;
-      $gCms->userplugins = $userplugins;
-    }
-}
-
-
-/**
- * A function to load all valid plugins in the plugins directory.
- *
- * @internal
- * @access private
- * @param object The smarty object
- * @param array  A reference to the $gCms->plugins array.
- * @param string The directory name
- * @param boolean Wether caching should be applied
- * @return void
- */
-function search_plugins(&$smarty, &$plugins, $dir, $caching)
-{
-  global $CMS_LOAD_ALL_PLUGINS;
-
-  $plugins = array();
-  $types=array('function','compiler','prefilter','postfilter','outputfilter','modifier','block');
-  $handle=opendir($dir);
-  while ($file = readdir($handle))
-    {
-      // This hides the dummy function.summarize.php
-      // (function.summarize.php was renamed to modifier.summarize.php in 1.0.3)
-      // This code can be deleted once the dummy is removed from the distribution
-      // TODO: DELETE
-      if ( $file == 'function.summarize.php' &&
-	   substr(file_get_contents(cms_join_path($dir, $file)), 9, 9) == '__DUMMY__'  )
-	{
-	  continue;
-	}
-      // END TODO: DELETE
-
-      $path_parts = pathinfo($file);
-      if (isset($path_parts['extension']) && $path_parts['extension'] == 'php')
-	{
-	  //Valid plugins will always have a 3 part filename
-	  $filearray = explode('.', $path_parts['basename']);
-	  if (count($filearray == 3))
-	    {
-	      $filename = cms_join_path($dir, $file);
-	      //The part we care about is the middle one...
-	      $file = $filearray[1];
-	      if (!isset($plugins[$file]) && in_array($filearray[0],$types))
-		{
-		  $key=array_search($filearray[0],$types);
-		  $load=true;
-		  switch ($key)
-		    {
-		    case 0:
-		      if (isset($CMS_LOAD_ALL_PLUGINS))
-			$smarty->register_function($file, "smarty_cms_function_" . $file, $caching);
-		      else $load=false;
-		      break;
-		    case 1:
-		      $smarty->register_compiler_function($file, "smarty_cms_compiler_" .  $file, $caching);
-		      break;
-		    case 2:
-		      $smarty->register_prefilter("smarty_cms_prefilter_" . $file);
-		      break;
-		    case 3:
-		      $smarty->register_postfilter("smarty_cms_postfilter_" . $file);
-		      break;
-		    case 4:
-		      $smarty->register_outputfilter("smarty_cms_outputfilter_" . $file);
-		      break;
-		    case 5:
-		      $smarty->register_modifier($file, "smarty_cms_modifier_" . $file);
-		      break;
-		    case 6:
-		      $smarty->register_block($file, "smarty_cms_block_" . $file);
-		      break;
-		    }
-		  if ($load){ $plugins[]=$file;
-		    require_once($filename);}
-		}
-	    }
-	}
-    }
-  closedir($handle);
-
-  $gCms = cmsms();
-  $gCms->cmsplugins = $plugins;
-}
 
 /**
  * A function to generate cross references between content types
@@ -306,5 +176,15 @@ function is_sitedown()
   return TRUE;
 }
 
+
+function cms_call_udt($params,&$smarty)
+{
+  if( !isset($params['udt']) ) return;
+
+  $udt = $params['udt'];
+  unset($params['udt']);
+
+  return UserTagOperations::get_instance()->CallUserTag($udt,$params);
+}
 # vim:ts=4 sw=4 noet
 ?>
