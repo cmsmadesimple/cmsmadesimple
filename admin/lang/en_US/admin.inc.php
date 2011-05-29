@@ -1,7 +1,7 @@
 <?php
-$lang['admin']['event_desc_stylesheetpostcompile'] = 'An event called after a stylesheet is compiled through smarty';
-$lang['admin']['event_desc_stylesheetprecompile'] = 'An event called before a stylesheet is compiled through smarty';
-$lang['admin']['confirm_uploadmodule'] = 'Are you sure you would like to upload the selected XML file.  Incorrectly uploading a module file may break a functionling website';
+$lang['admin']['event_desc_stylesheetpostcompile'] = 'Sent after a stylesheet is compiled through smarty';
+$lang['admin']['event_desc_stylesheetprecompile'] = 'Sent before a stylesheet is compiled through smarty';
+$lang['admin']['confirm_uploadmodule'] = 'Are you sure you would like to upload the selected XML file. Incorrectly uploading a module file may break a functioning website';
 $lang['admin']['error_module_mincmsversion'] = 'This module requires a newer version of CMS Made Smple';
 $lang['admin']['info_browser_cache_expiry'] = 'Specify the amount of time (in minutes) that browsers should cache pages for.  Setting this value to 0 disables the functionality';
 $lang['admin']['browser_cache_expiry'] = 'Browser Cache Expiry Period <em>(minutes)</em>';
@@ -31,7 +31,7 @@ $lang['admin']['root'] = 'Root';
 $lang['admin']['info_content_autocreate_flaturls'] = 'If enabled, all urls will be created as a copy of the page alias (but not synchronized to the page alias)';
 $lang['admin']['content_autocreate_flaturls'] = 'Automatically created URL\'s are flat';
 $lang['admin']['content_autocreate_urls'] = 'Automatically create page URL\'s';
-$lang['admin']['content_mandatory_urls'] = 'Page URLS are required';
+$lang['admin']['content_mandatory_urls'] = 'Page URL\'s are required';
 $lang['admin']['content_imagefield_path'] = 'Path for image field';
 $lang['admin']['info_content_imagefield_path'] = 'Relative to the image uploads path, specify a directory name that contains the paths containing files for the image field';
 $lang['admin']['content_thumbnailfield_path'] = 'Path for thumbnail field';
