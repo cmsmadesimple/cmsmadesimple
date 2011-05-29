@@ -26,21 +26,21 @@ final class cms_userprefs
 
   private static function _read($userid)
   {
-    if( is_array(self::$_prefs) && is_array(self::$_prefs[$userid]) ) return;
+	  if( is_array(self::$_prefs) && isset(self::$_prefs[$userid]) && is_array(self::$_prefs[$userid]) ) return;
 
-    $db = cmsms()->GetDb();
-    $query = 'SELECT preference,value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
-    $dbr = $db->GetArray($query,array($userid));
-    if( is_array($dbr) )
-      {
-	if( !is_array(self::$_prefs) ) self::$_prefs = array();
-	self::$_prefs[$userid] = array();
-	for( $i = 0; $i < count($dbr); $i++ )
-	  {
-	    $row = $dbr[$i];
-	    self::$_prefs[$userid][$row['preference']] = $row['value'];
-	  }
-      }
+	  $db = cmsms()->GetDb();
+	  $query = 'SELECT preference,value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
+	  $dbr = $db->GetArray($query,array($userid));
+	  if( is_array($dbr) )
+		  {
+			  if( !is_array(self::$_prefs) ) self::$_prefs = array();
+			  self::$_prefs[$userid] = array();
+			  for( $i = 0; $i < count($dbr); $i++ )
+				  {
+					  $row = $dbr[$i];
+					  self::$_prefs[$userid][$row['preference']] = $row['value'];
+				  }
+		  }
   }
 
   private static function _userid($value = '')
