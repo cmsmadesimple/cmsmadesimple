@@ -394,7 +394,7 @@ final class GlobalContentOperations
  * @version $Revision$
  * @license GPL
  */
-class_alias('GlobalContentOperations','HtmlBlobOperations');
+//class_alias('GlobalContentOperations','HtmlBlobOperations');
 // class HtmlBlobOperations extends GlobalContentOperations
 // {
 // }

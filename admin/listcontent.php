@@ -642,7 +642,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
   if (!array_key_exists($one->TemplateId(), $templates))
     {
       $templateops = cmsms()->GetTemplateOperations();
-      $templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId());
+      $templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId(),false);
     }
   
   if (!array_key_exists($one->Owner(), $users))

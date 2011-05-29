@@ -123,7 +123,7 @@ class TemplateOperations
 	}
 
 
-	public function & LoadTemplateByID($id)
+	public function & LoadTemplateByID($id,$sparse = FALSE)
 	{
 		$onetemplate = null;
 		if( ($onetemplate = $this->_fromCache($id)) )
@@ -132,17 +132,25 @@ class TemplateOperations
 		}
 
 		$db = cmsms()->GetDb();
-		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
-		$row = &$db->GetRow($query, array($id));
+		$query = '';
+		if( $sparse )
+			{
+				$query = "SELECT template_id, template_name, stylesheet, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+			}
+		else
+			{
+				$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+			}
+		$row = $db->GetRow($query, array($id));
 
 		if($row)
 		{
 			$onetemplate = new Template();
 			$onetemplate->id = $row['template_id'];
 			$onetemplate->name = $row['template_name'];
-			$onetemplate->content = $row['template_content'];
+			if( isset($row['template_content']) ) $onetemplate->content = $row['template_content'];
 			$onetemplate->stylesheet = $row['stylesheet'];
-			$onetemplate->encoding = $row['encoding'];
+			if( isset($row['encoding']) ) $onetemplate->encoding = $row['encoding'];
 			$onetemplate->default = $row['default_template'];
 			$onetemplate->active = $row['active'];
 			$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);

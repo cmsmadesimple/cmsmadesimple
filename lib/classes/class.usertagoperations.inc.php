@@ -221,7 +221,7 @@ final class UserTagOperations
  * @version $Revision$
  * @license GPL
  */
-class_alias('UserTagOperations','UserTags');
+//class_alias('UserTagOperations','UserTags');
 
 # vim:ts=4 sw=4 noet
 ?>
