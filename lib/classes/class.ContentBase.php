@@ -1514,7 +1514,7 @@ class ContentBase
 	{
 	  $tmp = trim($params['alias']);
 	}
-      if( !$editing || $tmp )
+      if( !$editing || isset($params['alias']) )
 	{
 	  // the alias param may not exist (depending upon permissions)
 	  // this method will set the alias to the supplied value if it is set
