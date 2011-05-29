@@ -133,8 +133,6 @@ $lang['admin']['adminlog_6months'] = '6 months';
 $lang['admin']['adminlog_manual'] = 'Manual deletion';
 $lang['admin']['adminlog_lifetime']='Lifetime of log-entries';
 $lang['admin']['info_adminlog_lifetime']='This settings indicates after how long time the system will start deleting the oldest logentries';
-$lang['admin']['adminlog_taskdescription'] = 'This task will delete log entries older than a specified age. This age can be set in the site preferences.';
-$lang['admin']['adminlog_taskname'] = 'Delete old log entries';
 
 $lang['admin']['filteruser']='Username is';
 $lang['admin']['filtername']='Event name contains';
