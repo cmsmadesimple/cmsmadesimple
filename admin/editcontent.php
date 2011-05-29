@@ -176,14 +176,11 @@ if (strlen($contentobj->Name()) > 0)
 
 // Detect if a WYSIWYG is in use, and grab its form submit action
 $addlScriptSubmit = '';
-if( ($modulename = get_preference(get_userid(false),'wysiwyg')) )
-  {
-    $modobj = cms_utils::get_module($modulename);
-    if( $modobj && $modobj->IsWYSIWYG() && $modobj->WYSIWYGActive() )
-      {
-	$addlScriptSubmit .= $modobj->WYSIWYGPageFormSubmit();
-      }
-  }
+$modobj = cms_utils::get_wysiwyg_module();
+if( $modobj )
+{
+  $addlScriptSubmit .= $modobj->WYSIWYGPageFormSubmit();
+}
 
 $closestr = cms_html_entity_decode(lang('close'));
 $cancelstr = cms_html_entity_decode(lang('confirmcancel'));

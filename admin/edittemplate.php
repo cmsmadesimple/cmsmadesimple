@@ -209,13 +209,10 @@ if (strlen($template) > 0)
     }
 
 $addlScriptSubmit = '';
-if( ($modulename = get_preference(get_userid(false),'syntaxhighlighter')) )
+$modobj = cms_utils::get_syntax_highlighter_module();
+if( is_object($modobj) )
   {
-    $modobj = cms_utils::get_module($modulename);
-    if( is_object($modobj) )
-      {
-	$addlScriptSubmit .= $modobj->SyntaxPageFormSubmit();
-      }
+    $tmp = $modobj->SyntaxPageFormSubmit();
   }
 
 $closestr = cms_html_entity_decode(lang('close'));
@@ -223,8 +220,8 @@ $headtext = <<<EOSCRIPT
 <script type="text/javascript">
 // <![CDATA[
 jQuery(document).ready(function(){
+  $addlScriptSubmit
   jQuery('input[name=apply]').click(function(){
-    $addlScriptSubmit
     var data = jQuery('#Edit_Template').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'ajax', 'value': 1});
     data.push({ 'name': 'apply', 'value': 1 });
