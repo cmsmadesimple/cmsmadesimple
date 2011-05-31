@@ -80,7 +80,10 @@ function smarty_cms_function_valid_xhtml($params, &$smarty)
 	? '<img src="' . $image_src . '" alt="' . $image_alt . '"' . $image_size_html . $image_class_html . ' border="0" />' 
 	: $link_text;
     $html .= '</a>';
-    
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$html);
+		return;
+	}
     return $html;
 }
 

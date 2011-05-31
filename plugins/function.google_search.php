@@ -24,7 +24,7 @@ function smarty_cms_function_google_search($params, &$smarty) {
 	if (!empty($params['buttonText'])) 
 		$buttonText = $params['buttonText'];
 
-	return '<form method="get" action="http://www.google.com/search">
+	$out='<form method="get" action="http://www.google.com/search">
 	<div>
 	<input type="hidden" name="ie" value="utf-8" />
 	<input type="hidden" name="oe" value="utf-8" />
@@ -33,6 +33,12 @@ function smarty_cms_function_google_search($params, &$smarty) {
 	<input type="submit" id="buttonSearch" value="'.$buttonText.'" />
 	</div>
 	</form>';
+	
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$out);
+	    return;
+    }
+	return $out;
 
 }
 

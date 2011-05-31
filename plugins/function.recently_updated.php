@@ -56,8 +56,8 @@ else {
 }
 
 $gCms = cmsms();
-$hm =& $gCms->GetHierarchyManager();
-$db = &$gCms->db;
+$hm = $gCms->GetHierarchyManager();
+$db = $gCms->GetDb();
 // Get list of most recently updated pages excluding the home page
 $q = "SELECT * FROM ".cms_db_prefix()."content WHERE (type='content' OR type='link')
 AND default_content != 1 AND active = 1 AND show_in_menu = 1 
@@ -89,7 +89,10 @@ $output .= '</ul>';
 if (isset($params['css_class'])){
 		$output .= '</div>';
 		}
-		
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$output);
+		return;
+	}
 return $output;
 }
 

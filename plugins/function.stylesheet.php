@@ -45,7 +45,6 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 	$str .= 'media="'.$media.'" ';
       }
     $str .= 'href="'.$url.'" />';
-
     return $str;
   }
   }
@@ -98,7 +97,10 @@ function smarty_cms_function_stylesheet($params, &$smarty)
     {
       $stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
     }
-  
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$stylesheet);
+		return;
+	}
   return $stylesheet;
 }
 

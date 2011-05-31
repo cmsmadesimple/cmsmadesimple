@@ -39,7 +39,7 @@ function smarty_cms_function_title($params, &$smarty)
 	if( isset($params['assign']) )
 	{
 	    $smarty =& $gCms->GetSmarty();
-	    $smarty->assign($params['assign'],$result);
+	    $smarty->assign(trim($params['assign']),$result);
 	    return;
         }
         return $result;

@@ -29,12 +29,17 @@ function smarty_cms_function_edit($params, &$smarty)
 	$text = isset($params['text']) ? $params['text']:'Edit This Page';
 	if (isset($params["showbutton"]))
 	{
-		return '<a href="'.$gCms->config['admin_url'].'/editcontent.php'.$urlext.'&amp;content_id='.$gCms->variables['content_id'].'"><img src="'.$gCms->config['root_url'].'/images/cms/editbutton.png" alt="'.$text.'"/></a>';
+		$out='<a href="'.$gCms->config['admin_url'].'/editcontent.php'.$urlext.'&amp;content_id='.$gCms->variables['content_id'].'"><img src="'.$gCms->config['root_url'].'/images/cms/editbutton.png" alt="'.$text.'"/></a>';
 	}
 	else
 	{
-		return '<a href="'.$gCms->config['admin_url'].'/editcontent.php'.$urlext.'&amp;content_id='.$gCms->variables['content_id'].'">'.$text.'</a>';
+		$out='<a href="'.$gCms->config['admin_url'].'/editcontent.php'.$urlext.'&amp;content_id='.$gCms->variables['content_id'].'">'.$text.'</a>';
 	}
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$out);
+	    return;
+    }
+	return $out;
 }
 
 function smarty_cms_help_function_edit() {

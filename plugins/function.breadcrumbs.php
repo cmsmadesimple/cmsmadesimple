@@ -160,7 +160,10 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	{
 		$trail = $params['starttext'] . ': ' . $trail;
 	}
-
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$trail);
+	    return;
+    }
 	return $trail;  
 
 }

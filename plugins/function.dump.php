@@ -249,7 +249,12 @@ function smarty_cms_function_dump($params, &$smarty)
     {
       $str .= $obj.'<br/>';
     }
-  return $str.'</pre>';
+  $str.='</pre>';
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$str);
+	    return;
+    }
+	return $str;
 }
 
 

@@ -41,8 +41,13 @@ function smarty_cms_function_startExpandCollapse($params, &$smarty)
 	$url = str_replace('&', '&amp;', $url);
 	$url = str_replace('***','&amp;',$url);
 	//$url = str_replace('&', '&amp;',  $_SERVER['REQUEST_URI']);
-	echo '<a href="'. $url .'#'. $id .'" onclick="expandcontent(\''.$id.'\')" style="cursor:hand; cursor:pointer">'.$title.'</a><br />
+	$out= '<a href="'. $url .'#'. $id .'" onclick="expandcontent(\''.$id.'\')" style="cursor:hand; cursor:pointer">'.$title.'</a><br />
 	<div id="'.$id.'" class="expand">';
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$out);
+		return;
+	}
+	echo $out;
 }
 
 function smarty_cms_help_function_startExpandCollapse() {

@@ -134,7 +134,7 @@ function _smarty_cms_function_content_return($result, &$params, &$smarty)
 	}
 	else
 	{
-		$smarty->assign($params['assign'], $result);
+		$smarty->assign(trim($params['assign']), $result);
 		return '';
 	}
 }

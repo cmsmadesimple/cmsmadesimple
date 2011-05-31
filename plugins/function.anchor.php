@@ -66,7 +66,7 @@ function smarty_cms_function_anchor($params, &$smarty)
 	}
 
 	if( isset($params['assign']) ){
-	    $smarty->assign($params['assign'],$tmp);
+	    $smarty->assign(trim($params['assign']),$tmp);
 	    return;
         }
 	echo $tmp;

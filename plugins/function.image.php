@@ -65,6 +65,10 @@ function smarty_cms_function_image($params, &$smarty)
 	} else {
 		$text = '<!-- empty results from image plugin -->';
 	}
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$text);
+		return;
+	}
 	return $text;	
 }
 

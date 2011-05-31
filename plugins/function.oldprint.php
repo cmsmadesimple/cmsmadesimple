@@ -108,7 +108,12 @@ function smarty_cms_function_oldprint($params, &$smarty)
 	{
 		$output .=  $text;
 	}
-	return $output.'</a>';
+	$out=$output.'</a>';
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$out);
+	    return;
+    }
+	return $out;
 }
 
 function smarty_cms_help_function_oldprint() {

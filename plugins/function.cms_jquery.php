@@ -24,8 +24,15 @@ function smarty_cms_function_cms_jquery($params, &$smarty)
 
 		$exclude = $params['exclude'];
 	}
-
-	AdminTheme::OutputHeaderJavascript($exclude);
+ob_start(); ?>
+<?php AdminTheme::OutputHeaderJavascript($exclude); ?>
+<?php $out = ob_get_contents(); ob_end_clean();
+  if( isset($params['assign']) )
+    {
+      $smarty->assign(trim($params['assign']),$out);
+      return;
+    }
+  return $out;
 }
 
 function smarty_cms_help_function_cms_jquery()

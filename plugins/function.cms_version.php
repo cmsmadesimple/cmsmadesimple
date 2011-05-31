@@ -16,8 +16,12 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_cms_version() {
+function smarty_cms_function_cms_version($params, $smarty) {
     global $CMS_VERSION;
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$CMS_VERSION);
+		return;
+	}
     return $CMS_VERSION;
 } ## smarty_function_cms_version
 

@@ -17,6 +17,10 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 function smarty_cms_function_stopExpandCollapse($params, &$smarty) {
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),'</div>');
+		return;
+	}
 	echo '</div>';
 }
 

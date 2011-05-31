@@ -114,6 +114,10 @@ function smarty_cms_function_content_image($params,&$smarty)
       $out .= 'alt="'.$alt.'" ';
     }
   $out .= '/>';
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$out);
+		return;
+	}
   return $out;
 }
 

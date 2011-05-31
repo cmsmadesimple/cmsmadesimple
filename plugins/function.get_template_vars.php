@@ -18,9 +18,7 @@
 
 function smarty_cms_function_get_template_vars($params, &$smarty)
 {
-	$gCms = cmsms();
-	
-	$tpl_vars = $gCms->smarty->get_template_vars();
+	$tpl_vars = $smarty->get_template_vars();
 	$str = '<pre>';
 	foreach( $tpl_vars as $key => $value )
 	  {
@@ -37,7 +35,12 @@ function smarty_cms_function_get_template_vars($params, &$smarty)
 	       $str .= "$key = ".cms_htmlentities(trim($value))."<br/>";
              }
 	  }
-	return $str.'</pre>';
+	  $str.'</pre>';
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$str);
+	    return;
+    }
+	return $str;
 }
 
 function smarty_cms_help_function_get_template_vars() {

@@ -65,7 +65,10 @@ function smarty_cms_function_metadata($params, &$smarty)
 		$result = @ob_get_contents();
 		@ob_end_clean();
 	}
-
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$result);
+		return;
+	}
 	return $result;
 }
 

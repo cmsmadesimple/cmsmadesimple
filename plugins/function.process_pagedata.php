@@ -29,7 +29,10 @@ function smarty_cms_function_process_pagedata($params,&$smarty)
   $smarty->_eval('?>' . $_compiled);
   $result = @ob_get_contents();
   @ob_end_clean();
-
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$result);
+		return;
+	}
   return $result;
 }
 

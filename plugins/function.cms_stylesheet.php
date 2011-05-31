@@ -186,6 +186,10 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	}
 
 	unset($CMS_STYLESHEET);
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$stylesheet);
+	    return;
+    }
 	return $stylesheet;
 }
 

@@ -54,10 +54,11 @@ function smarty_cms_function_last_modified_by($params, &$smarty)
 
   if( isset($params['assign']) ) {
     $smarty = $gCms->GetSmarty();
-    $smarty->assign($params['assign'],$output);
+    $smarty->assign(trim($params['assign']),$output);
     return;
   }
   return $output;
+
 }
 
 function smarty_cms_help_function_last_modified_by()

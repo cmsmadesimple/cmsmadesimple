@@ -18,6 +18,10 @@
 
 function smarty_cms_function_html_blob($params, &$smarty)
 {
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$smarty->fetch('globalcontent:'.$params['name']));
+	    return;
+    }
 	return $smarty->fetch('globalcontent:'.$params['name']);
 }
 

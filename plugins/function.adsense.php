@@ -27,9 +27,9 @@ function smarty_cms_function_adsense($params, &$smarty) {
 			
 	$tmp= "{$result}//--></script>\n<script type='text/javascript' src='http://pagead2.googlesyndication.com/pagead/show_ads.js'></script>\n";
 	if( isset($params['assign']) ){
-	    $smarty->assign($params['assign'],$tmp);
+	    $smarty->assign(trim($params['assign']),$tmp);
 	    return;
-        }
+    }
 	return $tmp;
 }
 

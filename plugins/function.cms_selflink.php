@@ -50,7 +50,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 	
 	$result='<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
 	if( isset($params['assign']) ){
-	    $smarty->assign($params['assign'],$result);
+	    $smarty->assign(trim($params['assign']),$result);
 	    return;
         }
         return $result;
@@ -326,10 +326,10 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
   if( isset($params['href']) )
     {
       cms_set_frontend_language();
-	if( isset($params['assign']) ){
-	    $smarty->assign($params['assign'],$url);
-	    return;
-        }
+		if( isset($params['assign']) ){
+			$smarty->assign(trim($params['assign']),$url);
+			return;
+		}
       return $url;
     }
 
@@ -423,11 +423,10 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
     }
 
   cms_set_frontend_language();
-  if( isset($params['assign']) )
-    {
-      $smarty->assign($params['assign'],$result);
-      return;
-    }
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$result);
+		return;
+	}
   return $result;
 }
 

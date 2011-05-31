@@ -24,7 +24,7 @@ function smarty_cms_function_description($params, &$smarty)
 	if (is_object($content_obj) && $content_obj->Id() == -1)
 	{
 		#We've a custom error message...  set a message
-		return "404 Error";
+		$out="404 Error";
 	}
 	else
 	{
@@ -33,8 +33,13 @@ function smarty_cms_function_description($params, &$smarty)
 		{
 			$result = preg_replace("/\{\/?php\}/", "", $result);
 		}
-		return $result;
+		$out=$result;
 	}
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$out);
+	    return;
+    }
+	return $out;
 }
 
 function smarty_cms_help_function_description() {

@@ -23,7 +23,7 @@ function smarty_function_root_url($params, &$smarty)
         $str = $config['root_url'];
         if( isset($params['assign']) )
         {
-           $smarty->assign($params['assign'],$str);
+           $smarty->assign(trim($params['assign']),$str);
 	   return;
         }
 	return $str;

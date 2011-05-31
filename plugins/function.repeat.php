@@ -18,7 +18,13 @@
 
 function smarty_cms_function_repeat($params, &$smarty)
 {
-	return (isset($params['times']) && intval($params['times']) > 0 ? str_repeat($params['string'], $params['times']) : '');
+	$out=(isset($params['times']) && intval($params['times']) > 0 ? str_repeat($params['string'], $params['times']) : '');
+	
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$out);
+		return;
+	}
+	return $out;
 	#return str_repeat($params['string'], $params['times']);
 }
 
