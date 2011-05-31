@@ -756,9 +756,10 @@ class ContentOperations
 	 * @param boolean $ignore_current Ignores the value of $current totally by not marking any items as invalid.
 	 * @param boolean $allow_all If true, show all items, even if the content object 
 	 *                           doesn't have a valid link. Defaults to false.
+	 * @param boolean $use_name if true use Name() else use MenuText() Defaults to true.
 	 * @return string The html dropdown of the hierarchy
 	 */
-	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, $use_perms = 0, $ignore_current = 0, $allow_all = false)
+	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, $use_perms = 0, $ignore_current = 0, $allow_all = false, $use_name = true)
 	{
 		$result = '';
 		$userid = -1;
@@ -834,14 +835,14 @@ class ContentOperations
 			      {
 				$result .= ' selected="selected"';
 			      }
-			    
+			    $txt=$use_name?$one->Name():$one->MenuText();
 			    if( ($value == -1) && ($ignore_current == 0) )
 			      {
-				$result .= '>'.$one->Hierarchy().'. - '.$one->Name().' ('.lang('invalid').')</option>';
+				$result .= '>'.$one->Hierarchy().'. - '.$txt.' ('.lang('invalid').')</option>';
 			      }
 			    else
 			      {
-				$result .= '>'.$one->Hierarchy().'. - '.$one->Name().'</option>';
+				$result .= '>'.$one->Hierarchy().'. - '.$txt.'</option>';
 			      }
 			  }
 			}

@@ -1315,6 +1315,7 @@ $lang['admin']['send'] = 'Send';
 $lang['admin']['setallcontent'] = 'Set All Pages';
 $lang['admin']['setallcontentconfirm'] = 'Are you sure you want to set all pages to use this template?';
 $lang['admin']['showinmenu'] = 'Show in Menu';
+$lang['admin']['use_name'] = 'Use page name in parent dropdown else use the menu text';
 $lang['admin']['showsite'] = 'Show Site';
 $lang['admin']['sitedownmessage'] = 'Site Down Message';
 $lang['admin']['siteprefs'] = 'Global Settings';

@@ -50,6 +50,7 @@ if (isset($_POST["cancel"])) {
 $page_secure = get_site_preference('page_secure','0');
 $page_active = get_site_preference('page_active',"1");
 $page_showinmenu = get_site_preference('page_showinmenu',"1");
+$page_parent_use_name = get_site_preference('page_parent_use_name',"1");
 $page_extra1 = get_site_preference('page_extra1','');
 $page_extra2 = get_site_preference('page_extra2','');
 $page_extra3 = get_site_preference('page_extra3','');
@@ -70,6 +71,7 @@ if( isset( $_POST['submit'] ) )
     $page_secure = (isset($_POST['page_secure'])?"1":"0");
     $page_active = (isset($_POST['page_active'])?"1":"0");
     $page_showinmenu = (isset($_POST['page_showinmenu'])?"1":"0");
+	$page_parent_use_name = (isset($_POST['page_parent_use_name'])?"1":"0");
     $page_cachable = (isset($_POST['page_cachable'])?"1":"0");
     $page_metadata = $_POST['page_metadata'];
     $page_defaultcontent = $_POST['page_defaultcontent'];
@@ -92,6 +94,7 @@ if( isset( $_POST['submit'] ) )
     set_site_preference( 'page_secure', $page_secure );
     set_site_preference( 'page_active', $page_active );
     set_site_preference( 'page_showinmenu', $page_showinmenu );
+	set_site_preference( 'page_parent_use_name', $page_parent_use_name );
     set_site_preference( 'page_cachable', $page_cachable );
     set_site_preference( 'page_metadata', $page_metadata );
     set_site_preference( 'defaultpagecontent', $page_defaultcontent );
@@ -152,6 +155,12 @@ if ($message != "") {
 	  <p class="pagetext"><?php echo lang('showinmenu')?>:</p>
           <p class="pageinput">
 	    <input class="pagenb" type="checkbox" name="page_showinmenu" <?php if($page_showinmenu == "1") echo "checked=\"checked\""?> />
+          </p>
+        </div>
+        <div class="pageoverflow">
+	  <p class="pagetext"><?php echo lang('use_name')?>:</p>
+          <p class="pageinput">
+	    <input class="pagenb" type="checkbox" name="page_parent_use_name" <?php if($page_parent_use_name == "1") echo "checked=\"checked\""?> />
           </p>
         </div>
 
