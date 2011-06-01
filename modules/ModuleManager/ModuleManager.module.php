@@ -604,14 +604,16 @@ class ModuleManager extends CMSModule
 	!isset($_SESSION[$this->GetName()]['connection_time']) ||
 	(time() - $_SESSION[$this->GetName()]['connection_time']) > 3600 )
       {
-	$url = $this->GetPreference('module_repository');
+	$url = 'http://www.cmsmadesimple.org/latest_version.php';
+	//$url = $this->GetPreference('module_repository');
 	if( $url )
 	  {
-	    $url .- '/version';
+	    //$url .- '/version';
 	    $req = new cms_http_request();
 	    $req->setTimeout(3); // really quick
 	    $req->useCurl(FALSE);
 	    $req->execute($url,'','GET');
+	    $_SESSION[$this->GetName()] = array();
 	    if( $req->getStatus() != 200 )
 	      {
 		$_SESSION[$this->GetName()]['connection_check'] = 0;

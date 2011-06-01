@@ -106,8 +106,6 @@ final class modulerep_client
     $url = $mod->GetPreference('module_repository');
     if( $url == '' ) return FALSE;
 
-    $tmpname = tempnam(TMP_CACHE_LOCATION,'modmgr_');
-    if( !$tmpname ) return FALSE;
 
     if( $size <= $chunksize )
     {
@@ -122,13 +120,24 @@ final class modulerep_client
 	  $req->clear();
 	  return FALSE;
 	}
+      $tmpname = tempnam(TMP_CACHE_LOCATION,'modmgr_');
+      if( !$tmpname ) 
+	{
+	  $req->clear();
+	  return FALSE;
+	}
       $fh = fopen($tmpname,'w');
-      fwrite($tmpname,$result);
+      fwrite($fh,$result);
       fclose($fh);
-      return TRUE;
+      return $tmpname;
     }
 
     // download in chunks
+    $tmpname = tempnam(TMP_CACHE_LOCATION,'modmgr_');
+    if( !$tmpname ) 
+      {
+	return FALSE;
+      }
     $url .= '/modulegetpart';
     $nchunks = (int)($size / $chunksize);
     if( $size % $chunksize ) $nchunks++;

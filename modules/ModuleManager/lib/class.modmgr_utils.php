@@ -225,7 +225,6 @@ final class modmgr_utils
 		    $newDep = array('filename'=>$tm['filename'],'name'=>$tm['name'],
 				    'version'=>$tm['version'],'by'=>$startspec,
 				    'size'=>$tm['size']);
-		    debug_display($newDep,'found');
 		    $deplist[] = $newDep;
 		    self::add_dependencies_to_list($tm['filename'], $allmods, $deplist);
 		    break;
