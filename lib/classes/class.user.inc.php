@@ -106,7 +106,7 @@ class User
 	 */
 	function SetPassword($password)
 	{
-		$this->password = md5($password);
+		$this->password = md5(get_site_preference('sitemask','').$password);
 	}
 
 	/**

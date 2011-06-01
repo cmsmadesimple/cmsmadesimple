@@ -85,7 +85,7 @@ else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform
 		{
 			if ($_REQUEST['password'] == $_REQUEST['passwordagain'])
 			{
-				$user->password = md5($_REQUEST['password']);
+				$user->SetPassword($_REQUEST['password']);
 				$user->Save();
 				$acceptLogin = lang('passwordchangedlogin');
 				$changepwhash = '';
