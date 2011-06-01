@@ -124,7 +124,7 @@ class AdminTheme
 	/**
 	 * Generic constructor.  Runs the SetInitialValues fuction.
 	 */
-	function AdminTheme($cms, $userid, $themeName)
+	public function __construct($cms, $userid, $themeName)
 	{
 		$this->SetInitialValues($cms, $userid, $themeName);
 	}
@@ -135,10 +135,6 @@ class AdminTheme
 	function SetInitialValues($cms, $userid, $themeName)
 	{
 		$gCms = cmsms();
-// 		$contentops = $gCms->GetContentOperations();
-// 		$dflt_content_id = $contentops->GetDefaultContent();
-// 		$content_obj = $contentops->LoadContentFromId($dflt_content_id);
-// 		$this->_viewsite_url = $content_obj->GetURL();
  		$this->_viewsite_url = $gCms->config['root_url'];
 
 		$this->title = '';

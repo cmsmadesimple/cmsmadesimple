@@ -37,7 +37,7 @@ class mysqli_extend_ADOConnection extends mysqli_extend_EXTENDER
 	function GenID($seqname='adodbseq', $startID=1)
 	{
 		$getnext = sprintf($this->_genIDSQL, $seqname);
-		$holdtransOK = $this->transaction_status;
+		$holdtransOK = (isset($this->transaction_status))?$this->transaction_status:0;
 		$result = @$this->Execute($getnext);
 		if (!$result) {
 			if ($holdtransOK)

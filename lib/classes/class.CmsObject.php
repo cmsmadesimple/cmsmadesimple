@@ -57,25 +57,6 @@ final class CmsObject {
 
 
 	/**
-	 * Plugins object - holds list of all registered plugins 
-	 *
-	 * @internal
-	 * @access private
-	 */
-	var $cmsplugins = array();
-
-
-	/**
-	 * User Plugins object - holds list and function pointers of all registered user plugins
-	 *
-	 * @internal
-	 * @access private
-	 */
-	var $userplugins = array();
-	var $userpluginfunctions = array();
-
-
-	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
 	 *	@access private
 	 */

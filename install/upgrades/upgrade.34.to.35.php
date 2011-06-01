@@ -37,7 +37,7 @@ $ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 echo ilang('install_creating_index', 'content', $ado_ret);
 
 echo '<p>Updating schema version... ';
-$query = "UPDATE ".cms_db_prefix()."version SET version = 34";
+$query = "UPDATE ".cms_db_prefix()."version SET version = 35";
 $db->Execute($query);
 echo '[done]</p>';
 
