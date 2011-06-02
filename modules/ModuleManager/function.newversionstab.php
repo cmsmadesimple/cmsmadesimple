@@ -49,7 +49,7 @@ if( !count($modules ) )
   {
     $smarty->assign('nvmessage',$this->Lang('error_nomodules'));
   }
-elseif( !$this->is_connection_ok() )
+elseif( !modmgr_utils::is_connection_ok() )
 {
   echo $this->ShowErrors($this->lang('error_request_problem'));
   return;

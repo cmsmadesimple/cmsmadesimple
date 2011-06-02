@@ -52,7 +52,6 @@ if (!$ret[0])
   }
 // de-dupe list
 $deps = modmgr_utils::remove_duplicate_dependencies($deps);
-		
 modmgr_utils::find_unfulfilled_dependencies($deps);
 $tmp = array();
 foreach( $deps as $onedep )
@@ -67,30 +66,10 @@ $smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $thi
 		
 if (count($tmp) > 1)
   {
-    $txt = '<p>'.$this->Lang('notice_depends', modmgr_utils::file_to_module_name($allmods[1],$params['filename'])).'</p>';
-    $txt .= '<ul>';
-    foreach ( $tmp as $one )
-      {
-	if (isset($one['version']) && $one['filename'] != $params['filename'])
-	  {
-	    switch ($one['status'])
-	      {
-	      case 'i':
-		$txt .= '<li>'.$this->Lang('depend_install',array($one['name'],$one['version'])).'</li>';
-		break;
-	      case 'u':
-		$txt .= '<li>'.$this->Lang('depend_upgrade',array($one['name'],$one['version'])).'</li>';
-		break;
-	      case 'a':
-		$txt .= '<li>'.$this->Lang('depend_activate',$one['name']).'</li>';
-		break;
-	      }
-	  }
-      }
-    $txt .= '</ul>';
+    $smarty->assign('installmodule',modmgr_utils::file_to_module_name($allmods[1],$params['filename']));
+    $smarty->assign('dependencies',$tmp);
 
-    $smarty->assign('title_installation', $this->Lang('title_installation'));
-    $smarty->assign('message', $txt);
+    $smarty->assign('mod',$this);
     $smarty->assign('form_start',$this->CreateFormStart($id, 'doinstall', $returnid).
 			  $this->CreateInputHidden($id,'modlist',base64_encode(serialize($deps))));
     $smarty->assign('time_warning',$this->Lang('time_warning'));

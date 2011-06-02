@@ -227,7 +227,7 @@ final class modmgr_utils
 				    'size'=>$tm['size']);
 		    $deplist[] = $newDep;
 		    self::add_dependencies_to_list($tm['filename'], $allmods, $deplist);
-		    break;
+		    //break;
 		  }
 	      }
 	    if (! $found)
@@ -249,7 +249,7 @@ final class modmgr_utils
 	$name = $deps[$i]['name'];
 	if( isset($output[$name]) )
 	  {
-	    if( version_compare($output[$name]['version'],$deps[$i]['version'],'>') )
+	    if( version_compare($output[$name]['version'],$deps[$i]['version'],'<') )
 	      {
 		$output[$name] = $deps[$i];
 	      }
@@ -431,6 +431,40 @@ final class modmgr_utils
 
     return $messages;
   }
+
+
+  public static function is_connection_ok()
+  {
+    $mod = cms_utils::get_module('ModuleManager');
+    if( !isset($_SESSION[$mod->GetName()]) || 
+	!isset($_SESSION[$mod->GetName()]['connection_check']) ||
+	!isset($_SESSION[$mod->GetName()]['connection_time']) ||
+	(time() - $_SESSION[$mod->GetName()]['connection_time']) > 3600 )
+      {
+	$url = 'http://www.cmsmadesimple.org/latest_version.php';
+	//$url = $mod->GetPreference('module_repository');
+	if( $url )
+	  {
+	    //$url .- '/version';
+	    $req = new cms_http_request();
+	    $req->setTimeout(3); // really quick
+	    $req->useCurl(FALSE);
+	    $req->execute($url,'','GET');
+	    $_SESSION[$mod->GetName()] = array();
+	    if( $req->getStatus() != 200 )
+	      {
+		$_SESSION[$mod->GetName()]['connection_check'] = 0;
+	      }
+	    else
+	      {
+		$_SESSION[$mod->GetName()]['connection_check'] = 1;
+	      }
+	    $_SESSION[$mod->GetName()]['connection_time'] = time();
+	  }
+      }
+    return $_SESSION[$mod->GetName()]['connection_check'];
+  }
+    
 } // end of class
 
 #

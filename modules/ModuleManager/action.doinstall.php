@@ -49,7 +49,10 @@ if( !isset($params['modlist']) )
 
 $installs = array_reverse(unserialize(base64_decode($params['modlist'])));
 $messages = modmgr_utils::install_module_list($installs);
-debug_display($messages);
+$smarty->assign('messages',$messages);
+$smarty->assign('link_back',$this->CreateLink('defaultadmin',$returnid,$this->Lang('back_to_module_manager')));
+echo $this->ProcessTemplate('postinstall.tpl');
+
 #
 # EOF
 #

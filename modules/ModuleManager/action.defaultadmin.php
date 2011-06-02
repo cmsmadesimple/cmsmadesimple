@@ -43,7 +43,7 @@ if( !isset($gCms) ) exit;
   echo '<h3>'.$this->Lang('use_at_your_own_risk')."</h3>\n";
   echo '<p>'.$this->Lang('compatibility_disclaimer')."</p></div>\n";
 
-  if( !$this->is_connection_ok() )
+  if( !modmgr_utils::is_connection_ok() )
     {
       echo $this->_DisplayErrorPage($id,$params,$returnid,$this->Lang('error_request_problem'));
     }

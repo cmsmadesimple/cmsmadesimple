@@ -163,15 +163,15 @@ class ModuleManager extends CMSModule
   /*---------------------------------------------------------
    SetParameters()
    ---------------------------------------------------------*/
-  function SetParameters()
-  {
-	  $this->RestrictUnknownParams();
-	  $this->SetParameterType('curletter',CLEAN_STRING);
-	  $this->SetParameterType('name',CLEAN_STRING);
-	  $this->SetParameterType('version',CLEAN_STRING);
-	  $this->SetParameterType('filename',CLEAN_STRING);
-	  $this->SetParameterType('size',CLEAN_INT);
-  }
+//   function SetParameters()
+//   {
+//     $this->RestrictUnknownParams();
+//     $this->SetParameterType('curletter',CLEAN_STRING);
+//     $this->SetParameterType('name',CLEAN_STRING);
+//     $this->SetParameterType('version',CLEAN_STRING);
+//     $this->SetParameterType('filename',CLEAN_STRING);
+//     $this->SetParameterType('size',CLEAN_INT);
+//   }
   
 
 
@@ -276,11 +276,11 @@ class ModuleManager extends CMSModule
   function Uninstall()
   {
     $this->RemovePreference();
-
+    
     // put mention into the admin log
     $this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('uninstalled'));
   }
-
+  
 
   /*---------------------------------------------------------
    DoAction($action, $id, $params, $returnid)
@@ -301,182 +301,6 @@ class ModuleManager extends CMSModule
       }
   }
 
-
-  /*
-   function _DoInstallLoop($id, &$params, $returnid)
-		{
-		global $gCms;
-		$db = $gCms->GetDb();
-		
-		if (isset($params['cancel']))
-			{
-			return $this->DoAction('defaultadmin', $id, $params, $returnid);
-			}
-		
-		@set_time_limit(999);
-		$installs = array_reverse(unserialize(base64_decode($params['modlist'])));
-	    $url = $this->GetPreference('module_repository');
-	    if( $url == '' )
-			{
-			$this->_DisplayErrorPage( $id, $params, $returnid,
-					  $this->Lang('error_norepositoryurl'));
-			return;
-			}
-		
-		$nusoap = $this->GetModuleInstance('nuSOAP');
-	    $nusoap->Load();
-	    $nu_soapclient = new nu_soapclient($url,false,false,false,false,false,90,90);
-	    if( $err = $nu_soapclient->GetError() )
-	      {
-			$this->_DisplayErrorPage( $id, $params, $returnid,
-					  $this->Lang('soaperror',$err));
-			return;
-	      }
-		$messages = array();
-		$ok = true;
-		foreach($installs as $this_inst)
-			{
-			$thisRes = new stdClass();
-			$thisRes->success = false;
-			$thisRes->module_name = $this_inst['name'];
-			if ($ok)
-				{
-				if ($this_inst['status'] == 'a')
-					{
-					// activating
-					$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
-					$db->Execute($query, array(1,$this_inst['name']));
-					$thisRes->message = $this->Lang('action_activated',$this_inst['name']);
-					$thisRes->success = true;
-					}
-				else if ($this_inst['status'] == 'u')
-					{
-					// upgrading	
-					list($success, $msgs) = $this->_DoInstallOperation($this_inst, $nu_soapclient, true);
-					if (!$success)
-						{
-						$ok = false;
-						}
-					else
-						{
-						$thisRes->success = true;
-						}
-					$thisRes->message = $msgs;
-					}
-				else if ($this_inst['status'] == 'i')
-					{
-					// installing
-					list($success, $msgs) = $this->_DoInstallOperation($this_inst, $nu_soapclient, false);
-					if (!$success)
-						{
-						$ok=false;
-						}
-					else
-						{
-						$thisRes->success = true;
-						}
-					$thisRes->message = $msgs;
-					}
-				}
-			else
-				{
-				$thisRes->message = $this->Lang('error_skipping',$this_inst['name']);
-				}
-			if ($this_inst['status'] != 's')
-				{
-				$messages[] = $thisRes;
-				}
-			}
-		if ($ok)
-			{
-			$this->smarty->assign('title_installation_complete', $this->Lang('title_installation_complete'));	
-			}
-		else
-			{
-			$this->smarty->assign('title_installation_complete', $this->Lang('error_moduleinstallfailed'));
-			}
-	    
-	    $this->smarty->assign_by_ref('messages', $messages);
-		$this->smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
-	    echo $this->ProcessTemplate('postinstall.tpl');
-		return;		
-		}
-*/
-
-	/* actual install or upgrade process; adapted from Calguy's code, extended madly */
-	function _DoInstallOperation(&$mod, &$nu_soapclient, $upgrade=false)
-	{
-	  global $gCms;
-	  $db = $gCms->GetDb();
-	  
-	  // get the xml file from soap
-	  $xml_file = $this->_GetRepositoryXML($nu_soapclient,$mod['filename']);
-	  if( $err = $nu_soapclient->GetError() )
-	    {
-	      return array(false,"<pre>".htmlspecialchars($nu_soapclient->response)."</pre><br/>");
-	    }
-
-	  // get the md5sum from soap
-	  $svrmd5 = $nu_soapclient->call('ModuleRepository.soap_modulemd5sum',array('name' => $mod['filename']));
-	  if( $err = $nu_soapclient->GetError() )
-	    {
-	      return array(false,$this->Lang('soaperror',$err));
-	    }
-	  
-	  // calculate our own md5sum
-	  // and compare
-	  $clientmd5 = md5_file( $xml_file );
-	  
-	  if( $clientmd5 != $svrmd5 )
-	    {
-	      return array(false,$this->Lang('error_checksum',array($svrmd5,$clientmd5)));
-	    }
-	  
-		// woohoo, we're ready to rock and roll now
-		// just gotta expand the module
-		$modoperations = $gCms->GetModuleOperations();
-		if (!$modoperations->ExpandXMLPackage( $xml_file, 1 ) )
-			{
-			return array(false,$modoperations->GetLastError());
-			}
-		if ($upgrade)
-			{
-			// upgrade module
-			$query = "SELECT * FROM ".cms_db_prefix()."modules WHERE module_name = ?";
-		  	$dbresult = $db->Execute( $query, array( $mod['name'] ) );
-		  	$row = $dbresult->FetchRow();
-		  	$oldversion = $row['version'];
-			if ( !$modoperations->UpgradeModule( $mod['name'], $oldversion, $mod['version'] ) )
-				{
-				return array(false,$this->Lang('error_upgrade',$mod['name']).' '.$modoperations->GetLastError());	
-				}
-			return array(true,$this->Lang('action_upgraded',array($mod['name'])));
-			}
-		else
-			{
-			// and install it
-			$result = $modoperations->InstallModule( $mod['name'], true );	
-			}
-	 
-		if( $result[0] == true )
-			{
-			  if( !($module = cms_utils::get_module($name)) )
-			    {
-			      // hopefully this will never happen
-			      return array(false,$this->Lang('error_moduleinstallfailed'));
-			    }
-			  else
-			    {
-			      $msg = $module->InstallPostMessage();
-			      return array(true,$msg);
-			    }
-			}
-		else
-			{
-			return array(false,$this->Lang('error_moduleinstallfailed')."&nbsp;:".$result[1]);
-			}
-		}
-	
 
   /*----------------------------------------------------------
    _GetRepositoryXML
@@ -596,37 +420,9 @@ class ModuleManager extends CMSModule
     return array(true,$allmoduledetails);
   }
 
+} // end of class
 
-  public function is_connection_ok()
-  {
-    if( !isset($_SESSION[$this->GetName()]) || 
-	!isset($_SESSION[$this->GetName()]['connection_check']) ||
-	!isset($_SESSION[$this->GetName()]['connection_time']) ||
-	(time() - $_SESSION[$this->GetName()]['connection_time']) > 3600 )
-      {
-	$url = 'http://www.cmsmadesimple.org/latest_version.php';
-	//$url = $this->GetPreference('module_repository');
-	if( $url )
-	  {
-	    //$url .- '/version';
-	    $req = new cms_http_request();
-	    $req->setTimeout(3); // really quick
-	    $req->useCurl(FALSE);
-	    $req->execute($url,'','GET');
-	    $_SESSION[$this->GetName()] = array();
-	    if( $req->getStatus() != 200 )
-	      {
-		$_SESSION[$this->GetName()]['connection_check'] = 0;
-	      }
-	    else
-	      {
-		$_SESSION[$this->GetName()]['connection_check'] = 1;
-	      }
-	    $_SESSION[$this->GetName()]['connection_time'] = time();
-	  }
-      }
-    return $_SESSION[$this->GetName()]['connection_check'];
-  }
-}
-
+#
+# EOF
+#
 ?>

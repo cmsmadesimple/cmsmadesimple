@@ -37,7 +37,7 @@
 if (!isset($gCms)) exit;
 if( !$this->CheckPermission('Modify Modules') ) exit;
 
-if( !$this->is_connection_ok() )
+if( !modmgr_utils::is_connection_ok() )
   {
     echo $this->ShowErrors($this->Lang('error_request_problem'));
     return;
