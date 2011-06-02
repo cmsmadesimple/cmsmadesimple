@@ -69,7 +69,7 @@ if( !isset($gCms) ) exit;
     {
       $this->SetPreference('dl_chunksize',trim($params['input_dl_chunksize']));
     }
-    
+
   if( isset($params['onlynewest']) )
     {
       $this->SetPreference('onlynewest',trim($params['onlynewest']));
@@ -78,6 +78,9 @@ if( !isset($gCms) ) exit;
     {
       $this->SetPreference('onlynewest','0');
     }
+
+  $latestdepends = (isset($params['latestdepends']))?1:0;
+  $this->SetPreference('latestdepends',$latestdepends);
   $this->SetPreference('module_repository',trim($params['url']));
   $this->Redirect($id,'defaultadmin',$returnid,array('active_tab'=>'prefs',"module_message"=>$this->Lang("preferencessaved")));
 }

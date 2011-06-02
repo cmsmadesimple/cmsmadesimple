@@ -1,5 +1,7 @@
 <h3>{$mod->Lang('title_installation')}:</h3>
-<p class="pageerrorcontainer"><ul class="pageerror"><li>{$time_warning}</li></ul></p>
+<div class="pageewarning"><h3>{$mod->Lang('notice')}:</h3>
+  <p>{$time_warning}</p>
+</div>
 <div class="pageoverflow">
 <p class="pagetext">{$mod->Lang('notice_depends',$installmodule)}:</p>
 <ul class="pageinput">

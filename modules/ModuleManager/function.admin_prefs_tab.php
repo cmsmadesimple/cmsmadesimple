@@ -37,33 +37,36 @@
 if (!isset($gCms)) exit;
 if( !$this->CheckPermission('Modify Site Preferences') ) exit;
 
-$this->smarty->assign('formstart',$this->CreateFormStart( $id, 'setprefs', $returnid ));
-$this->smarty->assign('formend',$this->CreateFormEnd());
-$this->smarty->assign('prompt_url',$this->Lang('prompt_repository_url'));
-$this->smarty->assign('input_url',$this->CreateInputText($id, 'url', 
+$smarty->assign('formstart',$this->CreateFormStart( $id, 'setprefs', $returnid ));
+$smarty->assign('formend',$this->CreateFormEnd());
+$smarty->assign('prompt_url',$this->Lang('prompt_repository_url'));
+$smarty->assign('input_url',$this->CreateInputText($id, 'url', 
 							 $this->GetPreference('module_repository'),
 							 80, 255 ));
-$this->smarty->assign('extratext_url',$this->Lang('text_repository_url'));
+$smarty->assign('extratext_url',$this->Lang('text_repository_url'));
     
-$this->smarty->assign('prompt_onlynewest',$this->Lang('onlynewesttext'));
-$this->smarty->assign('input_onlynewest',$this->CreateInputCheckBox($id,'onlynewest',"1",$this->GetPreference("onlynewest","1")));
+$smarty->assign('prompt_onlynewest',$this->Lang('onlynewesttext'));
+$smarty->assign('input_onlynewest',$this->CreateInputCheckBox($id,'onlynewest',"1",$this->GetPreference("onlynewest","1")));
+
+$smarty->assign('prompt_latestdepends',$this->Lang('latestdepends'));
+$smarty->assign('input_latestdepends',$this->CreateInputCheckbox($id,'latestdepends','1',$this->GetPreference('latestdepends',1)));
+$smarty->assign('info_latestdepends',$this->Lang('info_latestdepends'));
     
-$this->smarty->assign('prompt_reseturl',$this->Lang('prompt_reseturl'));
-$this->smarty->assign('input_reseturl',$this->CreateInputSubmit($id,'reseturl',$this->Lang('reset')));
-    
+$smarty->assign('prompt_reseturl',$this->Lang('prompt_reseturl'));
+$smarty->assign('input_reseturl',$this->CreateInputSubmit($id,'reseturl',$this->Lang('reset')));
     
 
-$this->smarty->assign('prompt_chunksize',$this->Lang('prompt_dl_chunksize'));
-$this->smarty->assign('input_chunksize',$this->CreateInputText($id, 'input_dl_chunksize',
+$smarty->assign('prompt_chunksize',$this->Lang('prompt_dl_chunksize'));
+$smarty->assign('input_chunksize',$this->CreateInputText($id, 'input_dl_chunksize',
 							       $this->GetPreference('dl_chunksize',256),3,3));
-$this->smarty->assign('extratext_chunksize',$this->Lang('text_dl_chunksize'));
+$smarty->assign('extratext_chunksize',$this->Lang('text_dl_chunksize'));
 
-$this->smarty->assign('prompt_resetcache',$this->Lang('prompt_resetcache'));
-$this->smarty->assign('input_resetcache',$this->CreateInputSubmit($id,'resetcache',$this->Lang('reset')));
+$smarty->assign('prompt_resetcache',$this->Lang('prompt_resetcache'));
+$smarty->assign('input_resetcache',$this->CreateInputSubmit($id,'resetcache',$this->Lang('reset')));
 			  
-$this->smarty->assign('submit',$this->CreateInputSubmit( $id, 'submit', $this->Lang('submit')));
-$this->smarty->assign('prompt_otheroptions',$this->Lang('prompt_otheroptions'));
-$this->smarty->assign('prompt_settings',$this->Lang('prompt_settings'));
+$smarty->assign('submit',$this->CreateInputSubmit( $id, 'submit', $this->Lang('submit')));
+$smarty->assign('prompt_otheroptions',$this->Lang('prompt_otheroptions'));
+$smarty->assign('prompt_settings',$this->Lang('prompt_settings'));
 echo $this->ProcessTemplate('adminprefs.tpl');
 
 #

@@ -107,7 +107,7 @@ final class modmgr_utils
   }
 
 
-  public static function build_module_data( &$xmldetails, &$installdetails )
+  public static function build_module_data( &$xmldetails, &$installdetails, $newest = true )
   {
     if( !is_array($xmldetails) ) return;
 
@@ -123,7 +123,7 @@ final class modmgr_utils
     // Note: should be redundant with 1.2, but kept in here for
     // a while just in case..
     {
-      if( $mod->GetPreference('onlynewest',1) == 1 )
+      if( $newest && $mod->GetPreference('onlynewest',1) == 1 )
 	{
 	  $thexmldetails = array();
 	  $prev = '';
@@ -211,6 +211,7 @@ final class modmgr_utils
       {
 	return array(false, $this_file_deps);				
       }
+    $mod = cms_utils::get_module('ModuleManager');
     if (is_array($this_file_deps))
       {
 	foreach($this_file_deps as $this_dep)
@@ -227,12 +228,12 @@ final class modmgr_utils
 				    'size'=>$tm['size']);
 		    $deplist[] = $newDep;
 		    self::add_dependencies_to_list($tm['filename'], $allmods, $deplist);
-		    //break;
+
+		    if( !$mod->GetPreference('latestdepends',1) ) break;
 		  }
 	      }
 	    if (! $found)
 	      {
-		$mod = cms_utils::get_module('ModuleManager');
 		return array(false, $this->Lang('error_unsatisfiable_dependency', array($this_dep['name'],$this_dep['version'], $this->_ModNameFromFile($allmods[1],$startspec) )));				
 	      }
 	  }

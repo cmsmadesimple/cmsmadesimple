@@ -34,48 +34,21 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-if (!isset($gCms)) exit;
+if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Modules') ) exit;
-
-if( !modmgr_utils::is_connection_ok() )
+if( !isset($params['name']) ) 
   {
-    echo $this->ShowErrors($this->Lang('error_request_problem'));
-    return;
+    $this->Redirect($id,'defaultadmin');
   }
 
-$caninstall = true;
-if( FALSE == can_admin_upload() )
+$prefix = trim($params['name']);
+$repmodules = modulerep_client::get_repository_modules($prefix,FALSE);
+if( !is_array($repmodules) || $repmodules[0] === FALSE ) 
   {
-    echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">'.$this->Lang('error_permissions').'</p></div></div>';
-    $caninstall = false;
+    // for some reason, nothing matched.
+    $this->Redirect($id,'defaultadmin');
   }
-
-$curletter = 'A';
-if( isset( $params['curletter'] ) )
-  {
-    $curletter = $params['curletter'];
-    $_SESSION['mm_curletter'] = $curletter;
-  }
- else if (isset($_SESSION['mm_curletter']))
-   {
-     $curletter = $_SESSION['mm_curletter'];
-   }
-
-
-// get the modules available in the repository
-$repmodules = '';
-{
-  $newest = $this->GetPreference('onlynewest',1);
-  $result = modulerep_client::get_repository_modules($curletter,$newest);
-  if( ! $result[0] )
-    {
-      $this->_DisplayErrorPage( $id, $params, $returnid, $result[1] );
-      return;
-    }
-  $repmodules = $result[1];
-}
-
-// get the modules that are already installed
+$repmodules = $repmodules[1];
 $instmodules = '';
 {
   $result = modmgr_utils::get_installed_modules();
@@ -88,27 +61,14 @@ $instmodules = '';
   $instmodules = $result[1];
 }
 
-// build a letters list
-$letters = array();
-$tmp = explode(',','A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z');
-foreach( $tmp as $i )
-{
-  if( $i == $curletter )
-    {
-      $letters[] = "<strong>$i</strong>";
-    }
-  else
-    {
-      $letters[] = $this->CreateLink($id,'defaultadmin',$returnid, $i, array('curletter'=>$i,'active_tab'=>'modules'));
-    }
-}
-
-// cross reference them
-$data = array();
-if( count($repmodules ) )
+$caninstall = true;
+if( FALSE == can_admin_upload() )
   {
-    $data = modmgr_utils::build_module_data($repmodules, $instmodules);
+    echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">'.$this->Lang('error_permissions').'</p></div></div>';
+    $caninstall = false;
   }
+
+$data = modmgr_utils::build_module_data($repmodules,$instmodules,false);
 if( count( $data ) )
   {
     $size = count($data);
@@ -124,8 +84,7 @@ if( count( $data ) )
     foreach( $data as $row )
       {
 	$onerow = new stdClass();
-	$onerow->name = $this->CreateLink( $id, 'modulelist', $returnid, $row['name'],
-					   array('name'=>$row['name']));
+	$onerow->name = $row['name'];
 	$onerow->version = $row['version'];
 	$onerow->helplink = $this->CreateLink( $id, 'modulehelp', $returnid,
 					       $this->Lang('helptxt'), 
@@ -208,25 +167,8 @@ if( count( $data ) )
     $smarty->assign('items', $rowarray);
     $smarty->assign('itemcount', count($rowarray));
   }
- else
-   {
-     $smarty->assign('message', $this->Lang('error_connectnomodules'));
-   }
-// Setup search form
-$searchstart = $this->CreateFormStart( $id, 'searchmod', $returnid );
-$searchend = $this->CreateFormEnd();
-$searchfield = $this->CreateInputText($id, 'search_input', "Doesn't Work",  30, 100); //todo
-$searchsubmit = $this->CreateInputSubmit( $id, 'submit', 'Search'); // todo -- $this->Lang('search'));
-$smarty->assign('search',$searchstart.$searchfield.$searchsubmit.$searchend);
 
-// and display our page
-$smarty->assign('letters', implode('&nbsp;',array_values($letters)));
-$smarty->assign('nametext',$this->Lang('nametext'));
-$smarty->assign('vertext',$this->Lang('vertext'));
-$smarty->assign('sizetext',$this->Lang('sizetext'));
-$smarty->assign('statustext',$this->Lang('statustext'));
-echo $this->processTemplate('adminpanel.tpl');
-
+echo $this->ProcessTemplate('adminpanel.tpl');
 #
 # EOF
 #
