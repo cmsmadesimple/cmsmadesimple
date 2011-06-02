@@ -62,7 +62,7 @@ if (isset($_POST["editbookmark"]))
 	if ($validinfo)
 		{
 		  cmsms()->GetBookmarkOperations();
-		$markobj =& new Bookmark();
+		$markobj = new Bookmark();
 		$markobj->bookmark_id = $bookmark_id;
 		$markobj->title = $title;
 		$markobj->url = $myurl;
