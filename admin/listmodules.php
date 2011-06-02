@@ -451,7 +451,7 @@ else
       // construct true/false button images
       $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
       $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
-      
+
       foreach($allmodules as $key)
 	{
 	  $modinstance = $modops->get_module_instance($key);

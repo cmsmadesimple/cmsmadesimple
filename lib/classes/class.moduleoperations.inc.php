@@ -452,7 +452,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 				 foreach( $deps as $depname => $depversion )
 					 {
 						 if( !$depname || !$depversion ) continue;
-						 $dbr = $db->Execute($query,array($module_obj->GetName(),$depname,$depversion));
+						 $dbr = $db->Execute($query,array($depname,$module_obj->GetName(),$depversion));
 					 }
 			 }
 
@@ -659,8 +659,6 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
   private function _upgrade_module( CmsModule& $module_obj )
   {
-	  debug_buffer('upgrade_module '.$module_obj->GetName());
-
 	  $info = $this->_get_module_info();
 	  $dbversion = $info[$module_obj->GetName()]['version'];
 
