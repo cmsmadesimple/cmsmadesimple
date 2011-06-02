@@ -1,3 +1,7 @@
+{if isset($header)}
+<h3>{$header}</h3>
+{/if}
+
 {if isset($letters)}
 <p class="pagerows">{$letters}</p>
 {/if}

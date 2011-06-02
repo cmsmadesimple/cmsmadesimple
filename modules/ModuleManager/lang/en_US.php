@@ -1,4 +1,6 @@
 <?php
+$lang['versionsformodule'] = 'Available versions of the module %s';
+$lang['yourversion'] = 'Your Version';
 $lang['latestdepends'] = 'Always install the newest modules';
 $lang['info_latestdepends'] = 'When installing a module with dependencies, this option will make sure that the latest version of the dependency will be installed';
 $lang['error_internal'] = 'Internal Error... Please report this to your system administrator';

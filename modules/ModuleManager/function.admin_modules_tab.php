@@ -65,8 +65,7 @@ if( isset( $params['curletter'] ) )
 // get the modules available in the repository
 $repmodules = '';
 {
-  $newest = $this->GetPreference('onlynewest',1);
-  $result = modulerep_client::get_repository_modules($curletter,$newest);
+  $result = modulerep_client::get_repository_modules($curletter);
   if( ! $result[0] )
     {
       $this->_DisplayErrorPage( $id, $params, $returnid, $result[1] );

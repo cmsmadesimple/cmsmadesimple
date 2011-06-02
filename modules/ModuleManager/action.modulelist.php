@@ -168,6 +168,7 @@ if( count( $data ) )
     $smarty->assign('itemcount', count($rowarray));
   }
 
+$smarty->assign('header',$this->Lang('versionsformodule',$prefix));
 echo $this->ProcessTemplate('adminpanel.tpl');
 #
 # EOF

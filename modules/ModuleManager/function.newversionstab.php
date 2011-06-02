@@ -44,7 +44,7 @@ if( FALSE == can_admin_upload() )
 	$caninstall = false;
 }
 
-$modules = array_keys(ModuleOperations::get_instance()->GetInstalledModules());
+$modules = ModuleOperations::get_instance()->GetInstalledModules();
 if( !count($modules ) )
   {
     $smarty->assign('nvmessage',$this->Lang('error_nomodules'));
@@ -108,7 +108,12 @@ else
 		$mver = $mod->GetVersion();
 		if( version_compare($row['version'],$mver) > 0 )
 		  {
-		    $onerow->name = $row['name'];
+		    $modinst = cms_utils::get_module($row['name']);
+		    if( is_object($modinst) ) $onerow->haveversion = $modinst->GetVersion();
+
+		    $onerow->name = $this->CreateLink( $id, 'modulelist', $returnid, $row['name'],
+						       array('name'=>$row['name']));
+		    //$onerow->name = $row['name'];
 		    $onerow->version = $row['version'];
 		    $onerow->helplink = $this->CreateLink( $id, 'modulehelp', $returnid,
 							   $this->Lang('helptxt'), 
@@ -146,7 +151,7 @@ else
 			    $onerow->status = 'incompatible';
 			  }else
 			  {
-			    $onerow->status = $this->CreateLink( $id, 'upgrademodule', $returnid,
+			    $onerow->status = $this->CreateLink( $id, 'installmodule', $returnid,
 								 $this->Lang('upgrade'), 
 								 array('name' => $row['name'],
 								       'version' => $row['version'],
@@ -181,6 +186,7 @@ else
       }
   }
 
+$smarty->assign('haveversion',$this->Lang('yourversion'));
   $smarty->assign('nametext',$this->Lang('nametext'));
   $smarty->assign('vertext',$this->Lang('vertext'));
   $smarty->assign('sizetext',$this->Lang('sizetext'));
