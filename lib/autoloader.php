@@ -33,6 +33,7 @@
 
 function __cms_load($filename)
 {
+  $gCms = cmsms();
   static $_cumulative = 0;
   $mem = memory_get_usage();
   require_once($filename);
@@ -86,17 +87,17 @@ function cms_autoloader($classname)
       return;
     }
 
-  // modules.
-  $moduleops = cmsms()->GetModuleOperations();
-  if( $moduleops->LoadNewModule($classname) )
+  $fn = $config['root_path']."/modules/{$classname}/{$classname}.module.php";
+  if( file_exists($fn) )
     {
+      __cms_load($fn);
       return;
     }
 
-  $list = $moduleops->GetAvailableModules();
+  $list = ModuleOperations::get_instance()->GetLoadedModules();
   if( is_array($list) && count($list) )
     {
-      foreach( $list as $modname )
+      foreach( array_keys($list) as $modname )
 	{
 	  $fn = $config['root_path']."/modules/$modname/lib/class.$classname.php";
 	  if( file_exists( $fn ) )

@@ -70,7 +70,7 @@ if( !isset($gCms) ) exit;
     }
   $xmlfile = $name.'-'.$version.'.xml';
 
-  $nusoap =& $this->GetModuleInstance('nuSOAP');
+  $nusoap = $this->GetModuleInstance('nuSOAP');
   $nusoap->Load();
   $nu_soapclient =& new nu_soapclient($url,false,false,false,false,false,0,90);
   if( $err = $nu_soapclient->GetError() )

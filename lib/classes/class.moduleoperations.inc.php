@@ -47,7 +47,8 @@ final class ModuleOperations
 
 	static private $_instance = null;
 	private $_modules = null;
-	private $_moduleinfo = null;
+	private $_moduleinfo;
+	private $_errors = null;
 	
 	private $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
 	private $xmldtd = '
@@ -95,8 +96,7 @@ final class ModuleOperations
    */
   protected function SetError($str = '')
   {
-	  $gCms = cmsms();
-	  $gCms->variables['error'] = $str;
+	  $this->_errors = $str;
   }
 
 
@@ -107,10 +107,7 @@ final class ModuleOperations
    */
   public function GetLastError()
   {
-	  $gCms = cmsms();
-	  if( isset( $gCms->variables['error'] ) )
-		  return $gCms->variables['error'];
-	  return "";
+	  return $this->_errors;
   }
 
 
@@ -427,6 +424,9 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
 	 $gCms = cmsms(); // preserve the global.
 	 $db = $gCms->GetDb();
+
+	 // todo, check to make sure the module isn't already installed.
+
 	 $result = $module_obj->Install();
 	 if( !isset($result) || $result === FALSE)
 	 {
@@ -481,33 +481,14 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
    */
   public function InstallModule($module, $loadifnecessary = false)
   {
-	  $modinstance = self::get_module_instance($module);
+	  $modinstance = self::get_module_instance($module,'',TRUE);
 	  if( !$modinstance )
 	  {
-		  if( $loadifnecessary == false )
-		  {
-			  return array(false,lang('errormodulenotloaded'));
-		  }
-		  else
-		  {
-			  if( !$this->_load_module( $module, true ) )
-			  {
-				  return array(false,lang('errormodulewontload'));
-			  }
-		  }
+		  return array(false,lang('errormodulenotloaded'));
       }
  
-	  $modinstance = self::get_module_instance($module);
-	  if( !$modinstance )
-	  {
-		  return array(false,lang('errormodulenotfound'));
-	  }
-
-
-	  // todo: send an event?
 	  if( ($result = $this->_install_module($modinstance)) === TRUE )
 	  {
-		  // todo: send an event?
 		  return array(true,$modinstance->InstallPostMessage());
 	  }
 	  else
@@ -523,7 +504,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
   private function &_get_module_info()
   {
-	  if( !is_array($this->_moduleinfo) )
+	  if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 )
 	  {
 		  $query = 'SELECT * FROM '.cms_db_prefix().'modules ORDER BY module_name';
 		  $db = cmsms()->GetDb();
@@ -552,108 +533,136 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
 
 
-  private function _load_module($module_name,$allow_auto = true)
+  private function _load_module($module_name,$force_load = FALSE)
   {
 	  $config = cmsms()->GetConfig();
 	  $dir = $config['root_path'].'/modules';
-	  
+
+	  $info = $this->_get_module_info();
+	  if( !isset($info[$module_name]) && !$force_load )
+	  {
+		  debug_buffer("Nothing is known about $module_name... cant load it");
+		  return FALSE;
+	  }
+
+	  global $CMS_INSTALL_PAGE;
 	  global $CMS_VERSION;
 	  global $CMS_PREVENT_AUTOINSTALL;
-	  $allow_auto = ($allow_auto && !isset($CMS_PREVENT_AUTOINSTALL));
-	  $fname = $dir."/$module_name/$module_name.module.php";
-	  if( !is_file($fname) ) return FALSE;
+	  global $CMS_FORCE_MODULE_LOAD;
+	  $allow_auto = (isset($CMS_PREVENT_AUTOINSTALL) && $CMS_PREVENT_AUTOINSTALL)?0:1;
 
 	  $gCms = cmsms(); // backwards compatibility... set the global.
-	  require($fname); // use require instead of require_once because on upgrade the file may be loaded twice.
+	  if( !class_exists($module_name) )
+	  {
+		  $fname = $dir."/$module_name/$module_name.module.php";
+		  if( !is_file($fname) ) 
+			  {
+				  debug_buffer("Cannot load $module_name because the module file does not exist");
+				  return FALSE;
+			  }
+
+		  require($fname); // use require instead of require_once because on upgrade the file may be loaded twice.
+	  }
 	  $obj = new $module_name;
 	  if( !is_object($obj) ) 
 	  {
 		  // oops, some problem loading.
+		  debug_buffer("Cannot load $module_name ... some problem instantiating the class");
 		  return FALSE;
 	  }
 
 	  if (version_compare($obj->MinimumCMSVersion(),$CMS_VERSION) == 1 )
 	  {
 		  // oops, not compatible.... can't load.
+		  debug_buffer("Cannot load $module_name... It is not compatible with this version of CMSMS");
 		  unset($obj);
 		  return FALSE;
 	  }
 
-	  $info = $this->_get_module_info();
-	  if( !isset($info[$module_name]) )
+	  if( isset($info[$module_name]) && $info[$module_name]['status'] != 'installed' && isset($CMS_INSTALL_PAGE) )
 	  {
 		  // not installed, can we auto-install it?
 		  if( (in_array($module_name,$this->cmssystemmodules) || $obj->AllowAutoInstall() == true) && $allow_auto )
 		  {
 			  $this->_install_module($obj);
 		  }
+		  else if( !isset($CMS_FORCE_MODULE_LOAD) )
+		  {
+			  // nope, can't auto install...
+			  unset($obj);
+			  return FALSE;
+		  }
 	  }
 
-	  if( isset($info[$module_name]) )
+	  // check to see if an upgrade is needed.
+	  if( isset($info[$module_name]) && $info[$module_name]['status'] == 'installed' )
 	  {
 		  $dbversion = $info[$module_name]['version'];
-		  // check for compatibility
-		  
-		  // check for upgrade needed.
-		  if( (version_compare($dbversion, $obj->GetVersion()) == -1 && $obj->AllowAutoUpgrade() == TRUE) && $allow_auto )
+		  if( version_compare($dbversion, $obj->GetVersion()) == -1 )
+		  {
+			  if( ($obj->AllowAutoUpgrade() == TRUE) && $allow_auto )
 			  {
-				  $this->UpgradeModule($module_name);
+				  $res = $this->UpgradeModule($module_name);
+				  if( !$res )
+				  {
+					  // upgrade failed
+					  debug_buffer("Automatic upgrade of $module_name failed");
+					  unset($obj);
+					  return FALSE;
+				  }
 			  }
+			  else if( !isset($CMS_FORCE_MODULE_LOAD) )
+			  {
+				  // nope, can't auto upgrade either
+				  unset($obj);
+				  return FALSE;
+			  }
+		  }
 	  }
 
+	  // it all worked, module is loaded.
 	  $this->_modules[$module_name] = $obj;
 	  return TRUE;
   }
 
 
+  /**
+   * Finds all modules in the filesystem, and builds a database about them
+   * 
+   * @since 1.10
+   * @access private
+   */
   private function _load_all_modules()
   {
+	  $this->_moduleinfo = array();
+	  $info = $this->_get_module_info();
 	  $names = $this->FindAllModules();
 	  foreach( $names as $name )
 	  {
-		  class_exists($name,true); // trigger the autoloader magic to include the files.
-	  }
-  }
+		  if( isset($this->_moduleinfo[$name]) ) continue; // already know about this module.
 
-
-  public function LoadModules($loadall = false,$noadmin = false, $no_lazyload = false)
-  {
-	  if( $loadall ) return $this->_load_all_modules();
-
-	  $config = cmsms()->GetConfig();
-	  $no_lazyload = $no_lazyload or $config['ignore_lazy_load'];
-
-	  global $CMS_ADMIN_PAGE;
-	  $moduleinfo = $this->_get_module_info();
-	  foreach( $moduleinfo as $name => $rec )
-	  {
-		  if( $rec['status'] != 'installed' ) continue;
-		  if( $rec['active'] == 0 ) continue;
-		  if( $rec['admin_only'] && $noadmin ) continue;
-		  if( isset($CMS_ADMIN_PAGE) && $no_lazyload == false && isset($rec['allow_admin_lazyload']) && $rec['allow_admin_lazyload'] )
-		  {
-			  continue;
-		  }
-		  if( !isset($CMS_ADMIN_PAGE) && $no_lazyload == false && isset($rec['allow_admin_lazyload']) && $rec['allow_fe_lazyload'] )
-		  {
-			  continue;
-		  }
-		  
-		  class_exists($name); // trigger the autoloader stuff.
+		  // this module isn't in the database, but is in the filesystem... make up some dummy info.
+		  $rec = array('module_name'=>$name,'status'=>'not installed','version'=>'0.0',
+					   'admin_only'=>0,'active'=>0,'allow_fe_lazyload'=>0,'allow_admin_lazyload'=>0);
+		  $this->_moduleinfo[$name] = $rec;
 	  }
   }
 
 
   /**
-   * Load a single module from the filesystem
+   * Finds all modules that are available to be loaded...
    *
-   * @param string $modulename The name of the module to load
-   * @return boolean Whether or not the module load was successful
+   * @access public
+   * @param loadall boolean indicates wether ALL modules in the filesystem should be loaded, default is false
+   * @param noadmin boolean indicates that modules marked as admin_only in the database should not be loaded, default is false
+   * @param no_lazyload boolean indicates that modules marked as lazy_loadable should be loaded anywayz, default is falze
+   * @return void
    */
-  public function LoadNewModule( $modulename )
+  public function LoadModules($loadall = false,$noadmin = false, $no_lazyload = false)
   {
-	  debug_buffer('LoadNewModule '.$modulename);
-	  return $this->_load_module( $modulename );
+	  if( $loadall ) return $this->_load_all_modules();
+
+	  return; // don't need to do any more here, it's all in get_module_instance();
   }
 
 
@@ -800,6 +809,14 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
 
   /**
+   * Return an array of the names of all modules that we currently know about
+   */
+  public function GetAllModuleNames()
+  {
+	  return array_keys($this->_get_module_info());
+  }
+
+  /**
    * Returns an array of the names of all installed modules.
    *
    * @return array of strings
@@ -827,40 +844,48 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
    */
   public static function get_modules_with_capability($capability, $args= '')
   {
+	  $info = self::get_instance()->_get_module_info();
 	  $output = array();
-	  foreach( self::get_instance()->_modules as $module_name => &$obj )
+	  foreach( $info as $module_name => $rec )
 	  {
-		  if( $obj->HasCapability($capability,$args) )
+		  // do we have this info cached?
+		  $obj = self::get_instance()->get_module_instance($module_name);
+		  if( is_object($obj) && $obj->HasCapability($capability,$args) )
 		  {
+			  debug_display('found capability in '.$module_name);
 			  $output[] = $obj;
 		  }
 	  }
-
 	  if( !count($output) ) return FALSE;
 	  return $output;
   }
 
 
-  public function &get_module_instance($module_name,$version = '')
+  public function &get_module_instance($module_name,$version = '',$force = FALSE)
   {
 	  if( empty($module_name) && isset($this->variables['module']))
-		  {
-			  $module_name = $this->variables['module'];
-		  }
-
-	  class_exists($module_name); // this will automagically load the module if it isn't there alrerady, neat eh.
+	  {
+		  $module_name = $this->variables['module'];
+	  }
 
 	  $obj = null;
 	  if( isset($this->_modules[$module_name]) )
-		  {
-			  $obj =& $this->_modules[$module_name];
-		  }
+	  {
+		  $obj =& $this->_modules[$module_name];
+	  }
+	  if( !is_object($obj) )
+	  {
+		  // gotta load it.
+		  $this->_load_module($module_name,$force);
+		  $obj =& $this->_modules[$module_name];
+	  }
+
 	  if( is_object($obj) && !empty($version) )
-		  {
-			  $res = version_compare($obj->GetVersion(),$version);
-			  if( $res < 1 OR $res === FALSE ) 
-				  $obj = null;
-		  }
+	  {
+		  $res = version_compare($obj->GetVersion(),$version);
+		  if( $res < 1 OR $res === FALSE ) 
+			  $obj = null;
+	  }
 	  return $obj;
   }
 

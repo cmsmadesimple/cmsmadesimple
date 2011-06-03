@@ -53,7 +53,7 @@ $wysiwyg = get_preference($userid, 'wysiwyg');
 $modules = ModuleOperations::get_instance()->GetLoadedModules();
 foreach($modules as $key => &$object)
 {
-  if( $object->IsWYSIWYG() ) {
+  if( is_object($object) && $object->IsWYSIWYG() ) {
     $loadit=false;
     if ($object->WYSIWYGActive()) {
       $loadit=true;

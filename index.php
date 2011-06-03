@@ -330,6 +330,6 @@ if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temp
     unset($_SESSION['cms_preview']);
   }
 
-
+$loaded = array_keys(ModuleOperations::get_instance()->GetLoadedModules());
 # vim:ts=4 sw=4 noet
 ?>

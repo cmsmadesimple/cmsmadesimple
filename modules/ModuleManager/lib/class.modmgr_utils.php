@@ -449,6 +449,7 @@ final class modmgr_utils
   public static function is_connection_ok()
   {
     $mod = cms_utils::get_module('ModuleManager');
+    unset($_SESSION[$mod->GetName()]);
     if( !isset($_SESSION[$mod->GetName()]) || 
 	!isset($_SESSION[$mod->GetName()]['connection_check']) ||
 	!isset($_SESSION[$mod->GetName()]['connection_time']) ||

@@ -112,8 +112,16 @@ class CMSInstallerPage7 extends CMSInstallerPage
 
 			echo " [" . ilang('done') . "]</p>";
 			echo '<p>' . ilang('install_admin_install_modules');
-			$loader = $gCms->GetModuleOperations();
-			$loader->LoadModules(TRUE); // this will load all modules, and install only system modules.
+			$modops = $gCms->GetModuleOperations();
+			$modops->LoadModules(TRUE);
+			$allmodules = $modops->GetAllModuleNames();
+			if( is_array($allmodules) && count($allmodules) )
+			  {
+			    foreach( $allmodules as $module_name )
+			      {
+				$obj = $modops->get_module_instance($module_name);
+			      }
+			  }
 			echo " [" . ilang('done') . "]</p>";
 
 			echo '<p>' . ilang('install_admin_clear_cache');

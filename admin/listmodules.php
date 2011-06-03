@@ -20,7 +20,8 @@
 
 $CMS_ADMIN_PAGE=1;
 $CMS_PREVENT_AUTOINSTALL=1;
-//$LOAD_ALL_MODULES=1;
+$CMS_FORCE_MODULE_LOAD=1;
+$LOAD_ALL_MODULES=1;
 
 require_once("../include.php");
 require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
@@ -265,7 +266,7 @@ if ($access)
 	if ($action == 'showpostuninstall')
 	{
 		// this is probably dead code now
-	  $modinstance = cms_utils::get_module($module);
+	  $modinstance = ModuleOperations::get_instance()->get_module_instance($module);
 	  if (is_object($modinstance))
 	    {
 	      if ($modinstance->UninstallPostMessage() != FALSE)
@@ -400,8 +401,9 @@ else if ($action == 'missingdeps')
 else
 {
   if ($access) {
-    
-    $allmodules = $modops->FindAllModules();
+
+    $modops->LoadModules(TRUE);
+    $allmodules = $modops->GetAllModuleNames();
     if (count($allmodules) > 0) {
 
       $query = "SELECT * from ".cms_db_prefix()."modules ORDER BY module_name";
