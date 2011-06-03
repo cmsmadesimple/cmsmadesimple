@@ -45,9 +45,6 @@ $smarty->assign('input_url',$this->CreateInputText($id, 'url',
 							 80, 255 ));
 $smarty->assign('extratext_url',$this->Lang('text_repository_url'));
     
-$smarty->assign('prompt_onlynewest',$this->Lang('onlynewesttext'));
-$smarty->assign('input_onlynewest',$this->CreateInputCheckBox($id,'onlynewest',"1",$this->GetPreference("onlynewest","1")));
-
 $smarty->assign('prompt_latestdepends',$this->Lang('latestdepends'));
 $smarty->assign('input_latestdepends',$this->CreateInputCheckbox($id,'latestdepends','1',$this->GetPreference('latestdepends',1)));
 $smarty->assign('info_latestdepends',$this->Lang('info_latestdepends'));

@@ -214,7 +214,8 @@ if ($access)
 		}
 		else
 		{
-			redirect($thisurl);
+		  audit('','Module','Permanently removed '.$module);
+		  redirect($thisurl);
 		}
 	}
 

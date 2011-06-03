@@ -563,8 +563,8 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  $fname = $dir."/$module_name/$module_name.module.php";
 	  if( !is_file($fname) ) return FALSE;
 
-	  $gCms = cmsms(); // backwards compatibility.
-	  require_once($fname);
+	  $gCms = cmsms(); // backwards compatibility... set the global.
+	  require($fname); // use require instead of require_once because on upgrade the file may be loaded twice.
 	  $obj = new $module_name;
 	  if( !is_object($obj) ) 
 	  {
@@ -597,7 +597,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  // check for upgrade needed.
 		  if( (version_compare($dbversion, $obj->GetVersion()) == -1 && $obj->AllowAutoUpgrade() == TRUE) && $allow_auto )
 			  {
-				  $this->_upgrade_module($obj);
+				  $this->UpgradeModule($module_name);
 			  }
 	  }
 
@@ -611,7 +611,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  $names = $this->FindAllModules();
 	  foreach( $names as $name )
 	  {
-		  class_exists($name,true); // trigger the autoloader magic.
+		  class_exists($name,true); // trigger the autoloader magic to include the files.
 	  }
   }
 
@@ -657,12 +657,21 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   }
 
 
-  private function _upgrade_module( CmsModule& $module_obj )
+  /**
+   * Upgrade a module
+   *
+   * @param string $module The name of the module to upgrade
+   * @return boolean Whether or not the upgrade was successful
+   */
+  public function UpgradeModule( $module_name, $to_version = '')
   {
 	  $info = $this->_get_module_info();
-	  $dbversion = $info[$module_obj->GetName()]['version'];
+	  $dbversion = $info[$module_name]['version'];
 
-	  $result = $module_obj->Upgrade($dbversion,$module_obj->GetVersion());
+	  $module_obj = $this->get_module_instance($module_name);
+	  if( $to_version == '' ) $to_version = $module_obj->GetVersion();
+
+	  $result = $module_obj->Upgrade($dbversion,$to_version);
 	  if( $result !== FALSE )
 	  {
 		  $db = cmsms()->GetDb();
@@ -678,21 +687,6 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  return TRUE;
 	  }
 	  return FALSE;
-  }
-
-
-  /**
-   * Upgrade a module
-   *
-   * @param string $module The name of the module to upgrade
-   * @return boolean Whether or not the upgrade was successful
-   */
-  public function UpgradeModule( $module )
-  {
-	  $modobj = $this->get_module_instance($module);
-	  if( !$modobj ) return FALSE;
-
-	  return $this->_upgrade_module( $modobj );
   }
 
 
@@ -853,7 +847,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  {
 			  $module_name = $this->variables['module'];
 		  }
-	  
+
 	  class_exists($module_name); // this will automagically load the module if it isn't there alrerady, neat eh.
 
 	  $obj = null;

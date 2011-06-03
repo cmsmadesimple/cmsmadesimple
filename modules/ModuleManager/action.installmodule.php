@@ -36,6 +36,13 @@
 #END_LICENSE
 if (!isset($gCms)) exit;
 
+$active_tab = 'modules';
+if( isset($params['active_tab']) )
+  {
+    $active_tab = $params['active_tab'];
+  }
+$_SESSION[$this->GetName()]['active_tab'] = $active_tab;
+
 $allmods = modulerep_client::get_repository_modules('',0);
 $deps = array(array('name'=>$params['name'],'version'=>$params['version'],'filename'=>$params['filename'],
 		    'by'=>'','size'=>$params['size']));
@@ -61,13 +68,20 @@ foreach( $deps as $onedep )
       $tmp[] = $onedep;
     }
 }
+$deps = $tmp;
 
 $smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));	
 		
-if (count($tmp) > 1)
+if( count($deps) == 0 )
+  {
+    // nothing to upgrade?
+    $_SESSION[$this->GetName()]['tab_message'] = $this->Lang('error_noupgrade');
+    $this->Redirect($id,'defaultadmin');
+  }
+if (count($deps) > 1)
   {
     $smarty->assign('installmodule',modmgr_utils::file_to_module_name($allmods[1],$params['filename']));
-    $smarty->assign('dependencies',$tmp);
+    $smarty->assign('dependencies',$deps);
 
     $smarty->assign('mod',$this);
     $smarty->assign('form_start',$this->CreateFormStart($id, 'doinstall', $returnid).
@@ -82,7 +96,9 @@ if (count($tmp) > 1)
 
 // only one module.
 $keys = array_keys($deps);
-$res = modmgr_utils::install_module($deps[$keys[0]]);
+$key = $keys[0];
+$smarty->assign('mod',$this);
+$res = modmgr_utils::install_module($deps[$key],($deps[$key]['status'] == 'u')?1:0);
 if( !is_array($res) )
   {
     $smarty->assign('message',$this->ShowErrors($this->Lang('error_internal')));

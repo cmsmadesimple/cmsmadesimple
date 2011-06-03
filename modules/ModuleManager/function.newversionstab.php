@@ -157,6 +157,7 @@ else
 								       'version' => $row['version'],
 								       'filename' => $row['filename'],
 								       'size' => $row['size'],
+								       'active_tab'=>'newversions',
 								       'reset_prefs' => 1));
 			  }
 		      }

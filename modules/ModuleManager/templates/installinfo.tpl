@@ -2,6 +2,10 @@
 <div class="pageewarning"><h3>{$mod->Lang('notice')}:</h3>
   <p>{$time_warning}</p>
 </div>
+
+{if isset($message)}
+  <div class="pagemessage"><p>{$message}</p></div>
+{else}
 <div class="pageoverflow">
 <p class="pagetext">{$mod->Lang('notice_depends',$installmodule)}:</p>
 <ul class="pageinput">
@@ -18,6 +22,8 @@
 {/foreach}
 </ul>
 </div>
+{/if}
+
 {if isset($form_start)}
 <br />
 {$form_start}

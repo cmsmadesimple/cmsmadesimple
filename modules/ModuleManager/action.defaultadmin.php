@@ -43,12 +43,30 @@ if( !isset($gCms) ) exit;
   echo '<h3>'.$this->Lang('use_at_your_own_risk')."</h3>\n";
   echo '<p>'.$this->Lang('compatibility_disclaimer')."</p></div>\n";
 
+  if( isset($_SESSION[$this->GetName()]['tab_error']) )
+    {
+      echo $this->ShowErrors($_SESSION[$this->GetName()]['tab_error']);
+      unset($_SESSION[$this->GetName()]['tab_message']);
+      unset($_SESSION[$this->GetName()]['tab_error']);
+    }
+  if( isset($_SESSION[$this->GetName()]['tab_message']) )
+    {
+      echo $this->ShowMessage($_SESSION[$this->GetName()]['tab_message']);
+      unset($_SESSION[$this->GetName()]['tab_message']);
+      unset($_SESSION[$this->GetName()]['tab_error']);
+    }
+
   if( !modmgr_utils::is_connection_ok() )
     {
       echo $this->_DisplayErrorPage($id,$params,$returnid,$this->Lang('error_request_problem'));
     }
 
   $active_tab = -1;
+  if( isset($_SESSION[$this->GetName()]['active_tab']) )
+    {
+      $active_tab = $_SESSION[$this->GetName()]['active_tab'];
+      unset($_SESSION[$this->GetName()]['active_tab']);
+    }
   if( isset($params['active_tab']))
     {
       $active_tab = $params['active_tab'];

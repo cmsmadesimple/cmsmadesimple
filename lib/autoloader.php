@@ -93,7 +93,7 @@ function cms_autoloader($classname)
       return;
     }
 
-  $list = $moduleops->GetInstalledModules();
+  $list = $moduleops->GetAvailableModules();
   if( is_array($list) && count($list) )
     {
       foreach( $list as $modname )

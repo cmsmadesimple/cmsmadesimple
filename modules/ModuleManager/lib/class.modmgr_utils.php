@@ -49,7 +49,10 @@ final class modmgr_utils
     foreach( $module_list as $module_name )
       {
 	$inst = $modops->get_module_instance($module_name);
-	if( !$inst ) continue;
+	if( !$inst )
+	  {
+	    continue;
+	  }
 
 	$details = array();
 	$details['name'] = $inst->GetName();
@@ -353,6 +356,7 @@ final class modmgr_utils
     $ops = cmsms()->GetModuleOperations();
     if( !$ops->ExpandXMLPackage( $xml_filename, 1 ) )
       {
+	debug_display('error:'); die($ops->GetLastError());
 	return array(FALSE,$ops->GetLastError());
       }
 
@@ -364,6 +368,14 @@ final class modmgr_utils
     else
       {
 	$res = $ops->UpgradeModule($module_meta['name']);
+	if( $res )
+	  {
+	    $res = array($res,$mod->Lang('upgrade_successful'));
+	  }
+	else
+	  {
+	    $res = array($res,$mod->Lang('upgrade_failed'));
+	  }
       }
     return $res;
   }
