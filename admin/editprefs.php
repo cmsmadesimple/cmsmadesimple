@@ -124,14 +124,13 @@ if (isset($_POST["cancel"])) {
   return;
 }
 
-$modules = array();
-//Next 2 lines commented, to NOT show 'none' as a choice in the ignore list.
-//$modules[ucwords(lang('none'))] = '**none**';
-//$modules['---'] = '**none**';
 $gCms = cmsms();
-$allmodules = ModuleOperations::get_instance()->GetLoadedModules();
-foreach( $allmodules as $key => &$obj )
+$allmodules = ModuleOperations::get_instance()->GetInstalledModules();
+$modules = array();
+foreach( $allmodules as $key )
 {
+  $obj = ModuleOperations::get_instance()->get_module_instance($key);
+  if( !$obj ) continue;
   $modules[$obj->GetFriendlyName()] = $obj->GetName();
 }
 
@@ -207,8 +206,9 @@ if (FALSE == empty($page_message)) {
 					<select name="wysiwyg">
 					<option value=""><?php echo lang('none'); ?></option>
 					<?php
-					foreach( $allmodules as $key => &$object )
+					foreach( $allmodules as $key )
                                         {
+					  $object = cms_utils::get_module($key);
 					  if( $object->IsWYSIWYG() )
 					    {
 					      echo '<option value="'.$key.'"';
@@ -229,8 +229,9 @@ if (FALSE == empty($page_message)) {
 					<select name="syntaxhighlighter">
 					<option value=""><?php echo lang('none'); ?></option>
 					<?php
-					foreach( $allmodules as $key => &$object )
+					foreach( $allmodules as $key )
                                         {
+					  $object = cms_utils::get_module($key);
 					  if( $object->IsSyntaxHighlighter() )
 					    {
 					      echo '<option value="'.$key.'"';
