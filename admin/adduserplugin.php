@@ -65,11 +65,11 @@ if ($access) {
 		}
 		else
 		{
-			if (in_array($plugin_name, $gCms->cmsplugins))
-			{
-				$error[] = lang('usertagexists');
-				$validinfo = false;
-			}
+		  if( UserTagOperations::get_instance()->SmartyTagExists($plugin_name) )
+		    {
+		      $error[] = lang('usertagexists');
+		      $validinfo = false;
+		    }
 		}
 		// Make sure no spaces are put into plugin name.
 		$without_spaces = str_replace(' ', '', $plugin_name);

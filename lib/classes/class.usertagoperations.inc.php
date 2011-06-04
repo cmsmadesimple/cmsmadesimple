@@ -118,6 +118,40 @@ final class UserTagOperations
 
 
 	/**
+	 * Test if a plugin function by this name exists...
+	 */
+	function SmartyTagExists($name,$check_functions = true)
+	{
+		// get the list of smarty plugins that are known.
+		$config = cmsms()->GetConfig();
+		$phpfiles = glob($config['root_path'].'/plugins/function.*.php');
+		if( is_array($phpfiles) && count($phpfiles) )
+		{
+			for( $i = 0; $i < count($phpfiles); $i++ )
+			{
+				$fn = basename($phpfiles[$i]);
+				$parts = explode('.',$fn);
+				if( count($parts) < 3 ) continue;
+				$middle = array_slice($parts,1,count($parts)-2);
+				$middle = implode('.',$middle);
+				if( $name == $middle ) return TRUE;
+			}
+		}
+		
+		if( $check_functions )
+		{
+			// registered by something else... maybe a module.
+			$smarty = cmsms()->GetSmarty();
+			if( $smarty->is_registered($name) ) return TRUE;
+		}
+
+		if( $this->UserTagExists($name) ) return TRUE;
+
+		return FALSE;
+	}
+
+
+	/**
 	 * Add or update a named user defined tag into the database
 	 *
 	 * @param string $name User defined tag name

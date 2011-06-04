@@ -185,6 +185,25 @@ class Smarty_CMS extends Smarty
 
 
   /**
+   * Method to test if a function/item is registered
+   *
+   * @access public
+   * @param string The function/item name to test
+   * @param string An optional type (block,filter,...) default is function.
+   * @return bool
+   * @since 1.10
+   * @aturhor calguy1000
+   */
+  function is_registered($name,$type = 'function')
+  {
+    if( !$type ) return FALSE;
+    if( !isset($this->_plugins[$type]) ) return FALSE;
+    if( !isset($this->_plugins[$type][$name]) ) return FALSE;
+    return TRUE;
+  }
+
+
+  /**
    * Method to return module file template contents.
    * 
    * @access private
