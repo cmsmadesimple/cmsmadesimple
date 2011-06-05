@@ -646,6 +646,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 					   'admin_only'=>0,'active'=>0,'allow_fe_lazyload'=>0,'allow_admin_lazyload'=>0);
 		  $this->_moduleinfo[$name] = $rec;
 	  }
+	  ksort($this->_moduleinfo);
   }
 
 

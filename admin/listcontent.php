@@ -619,7 +619,7 @@ function check_children(&$root, &$mypages, &$userid)
 	return $result;
 }
 
-function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$copyImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages, &$page, $columnstodisplay, $author_allpages )
+function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$copyImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages, &$page, $columnstodisplay, $author_allpages )
 {
   global $thisurl;
   global $urlext;
@@ -639,11 +639,11 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
       return;
     }
   
-  if (!array_key_exists($one->TemplateId(), $templates))
-    {
-      $templateops = cmsms()->GetTemplateOperations();
-      $templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId(),false);
-    }
+//   if (!array_key_exists($one->TemplateId(), $templates))
+//     {
+//       $templateops = cmsms()->GetTemplateOperations();
+//       $templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId(),false,true);
+//     }
   
   if (!array_key_exists($one->Owner(), $users))
     {
@@ -767,14 +767,14 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	      $one->Type() != 'sectionheader' && 
 	      $one->Type() != 'separator' )
 	    {
-	      if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name &&
-		  check_permission($userid,'Modify Templates'))
+	      $template = TemplateOperations::get_instance()->LoadTemplateById($one->TemplateId());
+	      if( $template && check_permission($userid,'Modify Template') )
 		{
-		  $txt .= "<a href=\"edittemplate.php".$urlext."&amp;template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($templates[$one->TemplateId()]->name, '', '', true)."</a>";
+		  $txt .= "<a href=\"edittemplate.php".$urlext."&amp;template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($template->name, '', '', true)."</a>";
 		}
-	      else
+   	      else if( $template )
 		{
-		  $txt .= $templates[$one->TemplateId()]->name;
+		  $txt .= $template->name;
 		}
 	    }
 	  if( !empty($txt) )
@@ -1041,7 +1041,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
       foreach ($children as $child)
         { 
-	  display_hierarchy($child, $userid, $modifyall, $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay, $author_allpages);
+	  display_hierarchy($child, $userid, $modifyall, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay, $author_allpages);
         }
     }
 } // function display_hierarchy
@@ -1104,7 +1104,7 @@ function display_content_list($themeObject = null)
 	$deleteImg = $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 
 	#Setup array so we don't load more templates than we need to
-	$templates = array();
+	$templateops = TemplateOperations::get_instance()->LoadTemplates();
 
 	#Ditto with users
 	$users = array();
@@ -1135,7 +1135,7 @@ function display_content_list($themeObject = null)
 
 		foreach ($children as $child)
 		{ 
-		  display_hierarchy($child, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay, $author_allpages );
+		  display_hierarchy($child, $userid, check_modify_all($userid), $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $copyImg, $deleteImg, $expandImg, $contractImg, $mypages, $page, $columnstodisplay, $author_allpages );
 		}
 		$rowcount += count($pagelist);
 		foreach ($pagelist as $item)

@@ -76,6 +76,7 @@ class TemplateOperations
 			$onetemplate->stylesheet = $dbresult->fields['stylesheet'];
 			$onetemplate->modified_date = $db->UnixTimeStamp($dbresult->fields['modified_date']);
 			$result[] = $onetemplate;
+			$this->_toCache($onetemplate);
 			$dbresult->MoveNext();
 		}
 		
