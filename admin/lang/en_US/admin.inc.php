@@ -132,7 +132,7 @@ $lang['admin']['adminlog_3months'] = '3 months';
 $lang['admin']['adminlog_6months'] = '6 months';
 $lang['admin']['adminlog_manual'] = 'Manual deletion';
 $lang['admin']['adminlog_lifetime']='Lifetime of log-entries';
-$lang['admin']['info_adminlog_lifetime']='Remove log-entries that are older than the specified period:';
+$lang['admin']['info_adminlog_lifetime']='Remove log-entries that are older than the specified period.';
 
 $lang['admin']['filteruser']='Username is';
 $lang['admin']['filtername']='Event name contains';
