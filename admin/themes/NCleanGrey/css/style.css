@@ -975,7 +975,7 @@ th.pagew70 {
 	width: 70%;
 }
 table.pagetable th.pageicon {
-	min-width: 1;
+	min-width: 1px;
 	width: 1px;
 	border: 0 none;
 }
