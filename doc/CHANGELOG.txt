@@ -8,6 +8,7 @@ Core - Bug Reports:
   - #6322 wrong db query in SetUserTag method
   - #6386 cms_htmlenities in created_date & modified_date
   - #6436 	MenuManager: wrong assignment of $node->depth
+  - #6554 Mismatched DIV in edithtmlblob.php
 
 Core - Feature requests:
   - 
