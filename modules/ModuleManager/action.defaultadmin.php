@@ -61,21 +61,16 @@ if( !isset($gCms) ) exit;
       echo $this->_DisplayErrorPage($id,$params,$returnid,$this->Lang('error_request_problem'));
     }
 
-  $active_tab = -1;
-  if( isset($_SESSION[$this->GetName()]['active_tab']) )
+  $active_tab = 'newversions';
+  if( isset($params['active_tab']))
+    {
+      $active_tab = $params['active_tab'];
+    }
+  else if( isset($_SESSION[$this->GetName()]['active_tab']) )
     {
       $active_tab = $_SESSION[$this->GetName()]['active_tab'];
       unset($_SESSION[$this->GetName()]['active_tab']);
     }
-  if( isset($params['active_tab']))
-    {
-      $active_tab = $params['active_tab'];
-	  $_SESSION['mm_active_tab'] = $active_tab;
-    }
-  else if (isset($_SESSION['mm_active_tab']))
-	{
-	  $active_tab = $_SESSION['mm_active_tab'];
-	}
   
   echo $this->StartTabHeaders();
   if( $this->CheckPermission('Modify Modules') )

@@ -36,6 +36,8 @@
 #END_LICENSE
 if( !isset($gCms) ) exit;
 if( !$this->CheckPermission('Modify Modules') ) exit;
+
+$_SESSION[$this->GetName()]['active_tab'] = 'modules';
 if( !isset($params['name']) ) 
   {
     $this->Redirect($id,'defaultadmin');

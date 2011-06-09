@@ -99,18 +99,20 @@ $keys = array_keys($deps);
 $key = $keys[0];
 $smarty->assign('mod',$this);
 $res = modmgr_utils::install_module($deps[$key],($deps[$key]['status'] == 'u')?1:0);
-if( !is_array($res) )
-  {
-    $smarty->assign('message',$this->ShowErrors($this->Lang('error_internal')));
-  }
-else if( $res[0] == FALSE )
-  {
-    $smarty->assign('message',$this->ShowErrors($res[1]));
-  }
-else
-  {
-    $smarty->assign('message',$this->ShowMessage($res[1]));
-  }
+$this->Redirect($id,'display_install_results');
+
+// if( !is_array($res) )
+//   {
+//     $smarty->assign('message',$this->ShowErrors($this->Lang('error_internal')));
+//   }
+// else if( $res[0] == FALSE )
+//   {
+//     $smarty->assign('message',$this->ShowErrors($res[1]));
+//   }
+// else
+//   {
+//     $smarty->assign('message',$this->ShowMessage($res[1]));
+//   }
 echo $this->ProcessTemplate('installinfo.tpl');
 
 #

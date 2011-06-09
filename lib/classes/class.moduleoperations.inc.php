@@ -561,8 +561,9 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 				  return FALSE;
 			  }
 
-		  require($fname); // use require instead of require_once because on upgrade the file may be loaded twice.
+		  require_once($fname); 
 	  }
+
 	  $obj = new $module_name;
 	  if( !is_object($obj) ) 
 	  {
@@ -579,10 +580,12 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  return FALSE;
 	  }
 
-	  if( isset($info[$module_name]) && $info[$module_name]['status'] != 'installed' && isset($CMS_INSTALL_PAGE) )
+	  if( isset($info[$module_name]) && $info[$module_name]['status'] != 'installed' && 
+		  (isset($CMS_INSTALL_PAGE) || $this->_is_queued_for_install($module_name)) )
 	  {
 		  // not installed, can we auto-install it?
-		  if( (in_array($module_name,$this->cmssystemmodules) || $obj->AllowAutoInstall() == true) && $allow_auto )
+		  if( (in_array($module_name,$this->cmssystemmodules) || $obj->AllowAutoInstall() == true ||
+			   $this->_is_queued_for_install($module_name)) && $allow_auto )
 		  {
 			  $this->_install_module($obj);
 		  }
@@ -600,9 +603,11 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  $dbversion = $info[$module_name]['version'];
 		  if( version_compare($dbversion, $obj->GetVersion()) == -1 )
 		  {
-			  if( ($obj->AllowAutoUpgrade() == TRUE) && $allow_auto )
+			  // upgrade is needed
+			  if( ($obj->AllowAutoUpgrade() == TRUE || $this->_is_queued_for_install($module_name)) && $allow_auto )
 			  {
-				  $res = $this->UpgradeModule($module_name);
+				  // we're allowed to upgrade
+				  $res = $this->_upgrade_module($obj);
 				  if( !$res )
 				  {
 					  // upgrade failed
@@ -623,6 +628,29 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  // it all worked, module is loaded.
 	  $this->_modules[$module_name] = $obj;
 	  return TRUE;
+  }
+
+
+  // should be private??
+  public function FindAllModules()
+  {
+	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+	
+	$result = array();
+	if( $handle = @opendir($dir) )
+	{
+		while( ($file = readdir($handle)) !== false )
+		{
+			$fn = "$dir/$file/$file.module.php";
+			if( @is_file($fn) )
+			{
+				$result[] = $file;
+			}
+		}
+	}
+	
+	sort($result);
+	return $result;
   }
 
 
@@ -652,6 +680,9 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
   /**
    * Finds all modules that are available to be loaded...
+   * this method uses the information in the database to load the modules that are necessary to load
+   * it also, will go through any queued installs/upgrades and force those modules to load, which 
+   * will in turn do the upgrading and installing if necessary.
    *
    * @access public
    * @param loadall boolean indicates wether ALL modules in the filesystem should be loaded, default is false
@@ -663,22 +694,45 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   {
 	  if( $loadall ) return $this->_load_all_modules();
 
-	  return; // don't need to do any more here, it's all in get_module_instance();
+	  global $CMS_ADMIN_PAGE;
+	  $allinfo = $this->_get_module_info();
+	  foreach( $allinfo as $module_name => $info )
+	  {
+		  if( $info['status'] != 'installed' ) continue;
+		  if( !$info['active'] ) continue;
+		  if( ($info['admin_only'] || $info['allow_fe_lazyload']) && !isset($CMS_ADMIN_PAGE) ) continue;
+		  if( $info['allow_admin_lazyload'] && isset($CMS_ADMIN_PAGE) ) continue;
+
+		  $this->get_module_instance($module_name);
+	  }
+	  if( isset($_SESSION['moduleoperations']) && is_array($_SESSION['moduleoperations']) && count($_SESSION['moduleoperations']) )
+	  {
+		  // there are modules queued for install/upgrade that may not have been loaded.
+		  foreach($_SESSION['moduleoperations'] as $module_name => $info )
+		  {
+			  if( !isset($allmodules[$module_name]) )
+			  {
+				  // we don't know about this module yet...
+				  $rec = array('module_name'=>$module_name,'status'=>'not installed','version'=>'0.0',
+							   'admin_only'=>0,'active'=>0,'allow_fe_lazyload'=>0,'allow_admin_lazyload'=>0);
+				  $this->_moduleinfo[$module_name] = $rec;
+			  }
+			  $this->get_module_instance($module_name,'',TRUE);
+			  unset($_SESSION['moduleiperations'][$module_name]);
+		  }
+		  // by here... we should not have anything left queued
+		  unset($_SESSION['moduleoperations']);
+	  }
+	  return;
   }
 
 
-  /**
-   * Upgrade a module
-   *
-   * @param string $module The name of the module to upgrade
-   * @return boolean Whether or not the upgrade was successful
-   */
-  public function UpgradeModule( $module_name, $to_version = '')
+  private function _upgrade_module( &$module_obj, $to_version = '' )
   {
 	  $info = $this->_get_module_info();
+	  $module_name = $module_obj->GetName();
 	  $dbversion = $info[$module_name]['version'];
 
-	  $module_obj = $this->get_module_instance($module_name);
 	  if( $to_version == '' ) $to_version = $module_obj->GetVersion();
 
 	  $result = $module_obj->Upgrade($dbversion,$to_version);
@@ -697,6 +751,19 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  return TRUE;
 	  }
 	  return FALSE;
+  }
+
+
+  /**
+   * Upgrade a module
+   *
+   * @param string $module The name of the module to upgrade
+   * @return boolean Whether or not the upgrade was successful
+   */
+  public function UpgradeModule( $module_name, $to_version = '')
+  {
+	  $module_obj = $this->get_module_instance($module_name);
+	  return $this->_upgrade_module($module_obj,$to_version);
   }
 
 
@@ -837,7 +904,8 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
 
   /**
-   * Returns an array of modules that have a certain capabilies
+   * Returns an array of installed modules that have a certain capabilies
+   * This method will force the loading of all modules regardless of the module settings.
    * 
    * @param string $capability The capability name
    * @param mixed $args Capability arguments
@@ -862,6 +930,11 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   }
 
 
+  /**
+   * A function to return the object reference to the module object
+   * if the module is not already loaded, it will be loaded.
+   *
+   */
   public function &get_module_instance($module_name,$version = '',$force = FALSE)
   {
 	  if( empty($module_name) && isset($this->variables['module']))
@@ -894,28 +967,6 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   public function IsSystemModule($module_name)
   {
 	  return in_array($module_name,$this->cmssystemmodules);
-  }
-
-
-  public function FindAllModules()
-  {
-	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
-	
-	$result = array();
-	if( $handle = @opendir($dir) )
-	{
-		while( ($file = readdir($handle)) !== false )
-		{
-			$fn = "$dir/$file/$file.module.php";
-			if( @is_file($fn) )
-			{
-				$result[] = $file;
-			}
-		}
-	}
-	
-	sort($result);
-	return $result;
   }
 
 
@@ -959,6 +1010,29 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  if( !$obj->IsWYSIWYG() ) return $obj;
 
 	  return $obj;
+  }
+
+
+  private function _is_queued_for_install($module_name)
+  {
+	  if( !isset($_SESSION['moduleoperations']) ) return FALSE;
+	  if( !isset($_SESSION['moduleoperations'][$module_name]) ) return FALSE;
+	  return TRUE;
+  }
+
+
+  public function QueueForInstall($module_name)
+  {
+	  if( !$module_name ) return;
+	  if( !isset($_SESSION['moduleoperations']) )
+ 	  {
+		  $_SESSION['moduleoperations'] = array();
+	  }
+
+	  if( !isset($_SESSION['moduleoperations'][$module_name]) )
+	  {
+		  $_SESSION['moduleoperations'][$module_name] = 1;
+	  }
   }
 }
 

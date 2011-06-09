@@ -361,23 +361,24 @@ final class modmgr_utils
       }
 
     // update the database.
-    if( !$is_upgrade )
-      {
-	$res = $ops->InstallModule($module_meta['name'],TRUE);
-      }
-    else
-      {
-	$res = $ops->UpgradeModule($module_meta['name']);
-	if( $res )
-	  {
-	    $res = array($res,$mod->Lang('upgrade_successful'));
-	  }
-	else
-	  {
-	    $res = array($res,$mod->Lang('upgrade_failed'));
-	  }
-      }
-    return $res;
+    ModuleOperations::get_instance()->QueueForInstall($module_meta['name']);
+//     if( !$is_upgrade )
+//       {
+// 	$res = $ops->InstallModule($module_meta['name'],TRUE);
+//       }
+//     else
+//       {
+// 	$res = $ops->UpgradeModule($module_meta['name']);
+// 	if( $res )
+// 	  {
+// 	    $res = array($res,$mod->Lang('upgrade_successful'));
+// 	  }
+// 	else
+// 	  {
+// 	    $res = array($res,$mod->Lang('upgrade_failed'));
+// 	  }
+//       }
+    return array(true,'');
   }
 
 
