@@ -39,6 +39,30 @@ final class modulerep_client
 {
   protected function __construct() {}
 
+  public static function get_repository_version()
+  {
+    $mod = cms_utils::get_module('ModuleManager');
+    $url = $mod->GetPreference('module_repository');
+    if( !$url )
+      {
+	return array(false,$mod->Lang('error_norepositoryurl'));
+      }
+    $url .= '/version';
+
+    $req = new modmgr_cached_request();
+    $req->execute($url);
+    $status = $req->getStatus();
+    $result = $req->getResult();
+    if( $status != 200 || $result == '' )
+      {
+	return array(FALSE,$mod->Lang('error_request_problem'));
+      }
+
+    $data = json_decode($result,true);
+    return array(true,$data);
+  }
+
+
   public static function get_repository_modules($prefix = '',$newest = 1)
   {
     $mod = cms_utils::get_module('ModuleManager');
@@ -57,8 +81,8 @@ final class modulerep_client
       }
     $data['clientcmsversion'] = $CMS_VERSION;
 
-    $req = new cms_http_request();
-    $req->execute($url,'','POST',$data);
+    $req = new modmgr_cached_request();
+    $req->execute($url,$data);
     $status = $req->getStatus();
     $result = $req->getResult();
     if( $status != 200 || $result == '' )
@@ -82,8 +106,8 @@ final class modulerep_client
       }
     $url .= '/moduledepends';
 
-    $req = new cms_http_request();
-    $req->execute($url,'','POST',array('name'=>$xmlfile));
+    $req = new mkdmgr_cached_request();
+    $req->execute($url,array('name'=>$xmlfile));
     $status = $req->getStatus();
     $result = $req->getResult();
     if( $status != 200 || $result == '' )

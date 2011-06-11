@@ -36,7 +36,20 @@
 #END_LICENSE
 if (!isset($gCms)) exit;
 
-echo 'GOT HERE';
+$results = ModuleOperations::get_instance()->GetQueueResults();
+if( !is_array($results) || count($results) == 0 )
+  {
+    echo $this->ShowErrors($this->Lang('error_noresults'));
+    return;
+  }
+
+$smarty->assign('mod',$this);
+$smarty->assign('queue_results',$results);
+$smarty->assign('return_link',
+		$this->CreateLink($id,'defaultadmin',$returnid,$this->Lang('back_to_module_manager')));
+
+echo $this->ProcessTemplate('display_install_results.tpl');
+
 
 #
 # EOF

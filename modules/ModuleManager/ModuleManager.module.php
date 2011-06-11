@@ -36,7 +36,7 @@
 #END_LICENSE
 if (!isset($gCms)) exit;
 
-define('MINIMUM_REPOSITORY_VERSION','1.3');
+define('MINIMUM_REPOSITORY_VERSION','1.5');
 
 
 class ModuleManager extends CMSModule
@@ -159,21 +159,6 @@ class ModuleManager extends CMSModule
     return false;
   }
 	
-
-  /*---------------------------------------------------------
-   SetParameters()
-   ---------------------------------------------------------*/
-//   function SetParameters()
-//   {
-//     $this->RestrictUnknownParams();
-//     $this->SetParameterType('curletter',CLEAN_STRING);
-//     $this->SetParameterType('name',CLEAN_STRING);
-//     $this->SetParameterType('version',CLEAN_STRING);
-//     $this->SetParameterType('filename',CLEAN_STRING);
-//     $this->SetParameterType('size',CLEAN_INT);
-//   }
-  
-
 
   /*---------------------------------------------------------
    CheckAccess()
@@ -299,125 +284,6 @@ class ModuleManager extends CMSModule
 	parent::DoAction( $action, $id, $params, $returnid );
 	break;
       }
-  }
-
-
-  /*----------------------------------------------------------
-   _GetRepositoryXML
-   Get the xml file for a specific module from the repository
-   
-   if the expected file size is less than the block size
-   then the file will be downloaded in it's entirety
-   otherwise it will be downloaded in chunks
-   ---------------------------------------------------------*/
-  function _GetRepositoryXML( &$nu_soapclient, $filename, $size = -1)
-  {
-    $orig_chunksize = $this->GetPreference('dl_chunksize',256);
-    $chunksize = $orig_chunksize * 1024;
-    if( $size <= $chunksize && $size > 0 ) 
-      {
-	$tmpname = tempnam(TMP_CACHE_LOCATION,'modmgr_');
-	if( $tmpname === FALSE )
-	  {
-	    return false;
-	  }
-	$fh = fopen($tmpname,'w');
-	// we're downloading at one shot
-	$nbytes = @fwrite($fh, $nu_soapclient->call('ModuleRepository.soap_modulexml',
-				    array('name' => $filename )));
-	@fflush($fh);
-	@fclose($fh);
-	if( $nu_soapclient->GetError() )
-	  {
-	    return false;
-	  }
-      }
-    else
-      {
-	global $gCms;
-	$tmpname = tempnam(TMP_CACHE_LOCATION,'modmgr_');
-	if( $tmpname === FALSE )
-	  {
-	    return false;
-	  }
-
-	// we're downloading in chunks
-	// to a temporary file someplace
-	// that we will delete afterwards
-	$fh = fopen($tmpname,'w');
-	$nchunks = (int)($size / $chunksize) + 1;
-	for( $i = 0; $i < $nchunks; $i++ )
-	  {
- 	    $data = $nu_soapclient->call('ModuleRepository.soap_modulegetpart',
- 					 array('name' => $filename,
- 					       'partnum' => $i,
- 					       'sizekb' => $orig_chunksize));
- 	    if( $nu_soapclient->GetError() )
- 	      {
-		echo $nu_soapclient->GetError()."<br/><br/>";
-		echo htmlspecialchars($nu_soapclient->response);
- 		@fclose($fh);
- 		@unlink($tmpname);
- 		return false;
- 	      }
-	    $data = base64_decode( $data );
- 	    $nbytes = @fwrite($fh,$data);
-	  }
-	// we got here so everything theoretically worked
-	@fflush($fh);
-	@fclose($fh);
-      }
-    return $tmpname;
-  }
-
-
-  /*----------------------------------------------------------
-   _GetRepositoryModules
-   Get the xml modules from the repository, in an array of
-   hashes, each hash has name and version keys
-   ---------------------------------------------------------*/
-  function _GetRepositoryModules($prefix = '',$newest = 1)
-  {
-    global $CMS_VERSION;
-
-    $url = $this->GetPreference('module_repository');
-    if( $url == '' )
-      {
-	return array(false,$this->Lang('error_norepositoryurl'));
-      }
-
-    $nusoap = $this->GetModuleInstance('nuSOAP');
-    $nusoap->Load();
-    $nu_soapclient = new nu_soapclient($url,false,false,false,false,false,90,90);
-    if( $err = $nu_soapclient->GetError() )
-      {
-	return array(false,$this->Lang('error_nosoapconnect'));
-      }
-
-    $allmoduledetails = array();
-    $repversion = $nu_soapclient->call('ModuleRepository.soap_version');
-    if( $err = $nu_soapclient->GetError() )
-      {
-	return array(false,$this->Lang('error_soaperror').' ('.$url.'): '.$err);
-      }
-    if( version_compare( $repversion, MINIMUM_REPOSITORY_VERSION ) < 0 )
-      {
-	return array(false,$this->Lang('error_minimumrepository'));
-      }
-
-    $qparms = array();
-    if( !empty($prefix) )
-      {
-	$qparms['prefix'] = $prefix;
-      }
-    $qparms['newest'] = $newest;
-    $qparms['clientcmsversion'] = $CMS_VERSION;
-    $allmoduledetails = $nu_soapclient->call('ModuleRepository.soap_moduledetailsgetall',$qparms);
-    if( $err = $nu_soapclient->GetError() )
-      {
-	return array(false,$this->Lang('error_soaperror').' ('.$url.'): '.$err);
-      }
-    return array(true,$allmoduledetails);
   }
 
 } // end of class

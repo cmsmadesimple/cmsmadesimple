@@ -11,6 +11,10 @@
 		<p class="pageinput">{$input_latestdepends}<br/>{$info_latestdepends}</p>
 	</div>
 	<div class="pageoverflow">
+		<p class="pagetext">{$prompt_disable_caching}:</p>
+		<p class="pageinput">{$input_disable_caching}<br/>{$info_disable_caching}</p>
+	</div>
+	<div class="pageoverflow">
 		<p class="pagetext">{$prompt_chunksize}:</p>
 		<p class="pageinput">{$input_chunksize}<br/>{$extratext_chunksize}</p>
 	</div>

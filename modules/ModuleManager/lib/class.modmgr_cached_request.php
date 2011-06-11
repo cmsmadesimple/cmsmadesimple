@@ -1,7 +1,7 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: ModuleManager (c) 2008 by Robert Campbell 
+# Module: ModuleManager (c) 2011 by Robert Campbell 
 #         (calguy1000@cmsmadesimple.org)
 #  An addon module for CMS Made Simple to allow browsing remotely stored
 #  modules, viewing information about them, and downloading or upgrading
@@ -34,49 +34,68 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
-if( !isset($gCms) ) exit;
 
+final class modmgr_cached_request
 {
-  global $_SESSION;
+  private $_status;
+  private $_result;
+  private $_timeout;
 
-  if( !$this->CheckPermission('Modify Site Preferences' ) )
+  public function execute($target = '',$data = array(), $age = '')
+  {
+    $mod = cms_utils::get_module('ModuleManager');
+    if( !$age ) $age = get_site_preference('browser_cache_expiry',60);
+    if( $age ) $age = max(1,(int)$age);
+
+    // build a signature
+    $signature = md5(serialize(array($target,$data)));
+    $fn = TMP_CACHE_LOCATION.'/modmgr_'.$signature.'.dat';
+
+    // check for the cached file
+    $atime = time() - ($age * 60);
+    $status = '';
+    $resutl = '';
+    if( $mod->GetPreference('disable_caching',0) || !file_exists($fn) || filemtime($fn) <= $atime )
     {
-	$this->_DisplayErrorPage( $id, $params, $returnid,
-				  $this->Lang('accessdenied'));
-	return;
-    }
+      // execute the request
+      $req = new cms_http_request();
+      $req->execute($target,'','POST',$data);
+      if( $this->_timeout ) $req->setTimeout($this->_timeout);
+      $this->_status = $req->getStatus();
+      $this->_result = $req->getResult();
 
-  if( isset($params['resetcache']) )
+      // create a cache file
+      $fh = fopen($fn,'w');
+      fwrite($fh,serialize(array($this->_status,$this->_result)));
+      fclose($fh);
+    }
+    else
     {
-      unset($_SESSION['modulemanager_cache']);
-      $this->Redirect($id,'defaultadmin',$returnid,array('active_tab'=>'prefs'));
+      // get data from the cache.
+      $data = unserialize(file_get_contents($fn));
+      $this->_status = $data[0];
+      $this->_result = $data[1];
     }
-  else if( isset($params['reseturl']) )
-    {
-      $this->SetPreference('module_repository',
-			   'http://modules.cmsmadesimple.org/soap.php?module=ModuleRepository');
-      $this->Redirect($id,'defaultadmin',$returnid,array('active_tab'=>'prefs'));
-    }
+  }
 
-  if( !isset( $params['url'] ) )
-    {
-	$this->_DisplayErrorPage( $id, $params, $returnid,
-				  $this->Lang('error_insufficientparams'));
-	return;
-    }
 
-  if( isset($params['input_dl_chunksize']) )
-    {
-      $this->SetPreference('dl_chunksize',trim($params['input_dl_chunksize']));
-    }
+  public function setTimeout($val)
+  {
+    $this->_timeout = max(1,min(1000,(int)$val));
+  }
 
-  $latestdepends = (isset($params['latestdepends']))?1:0;
-  $this->SetPreference('latestdepends',$latestdepends);
+  public function getStatus()
+  {
+    return $this->_status;
+  }
 
-  $disable_caching = (isset($params['disable_caching']))?1:0;
-  $this->SetPreference('disable_caching',$disable_caching);
+  public function getResult()
+  {
+    return $this->_result;
+  }
+} // end of class.
 
-  $this->SetPreference('module_repository',trim($params['url']));
-  $this->Redirect($id,'defaultadmin',$returnid,array('active_tab'=>'prefs',"module_message"=>$this->Lang("preferencessaved")));
-}
+#
+# EOF
+#
 ?>

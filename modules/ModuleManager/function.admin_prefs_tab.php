@@ -58,6 +58,11 @@ $smarty->assign('input_chunksize',$this->CreateInputText($id, 'input_dl_chunksiz
 							       $this->GetPreference('dl_chunksize',256),3,3));
 $smarty->assign('extratext_chunksize',$this->Lang('text_dl_chunksize'));
 
+$smarty->assign('prompt_disable_caching',$this->Lang('prompt_disable_caching'));
+$smarty->assign('input_disable_caching',
+		$this->CreateInputCheckbox($id,'disable_caching',1,$this->GetPreference('disable_caching',0)));
+$smarty->assign('info_disable_caching',$this->Lang('info_disable_caching'));
+
 $smarty->assign('prompt_resetcache',$this->Lang('prompt_resetcache'));
 $smarty->assign('input_resetcache',$this->CreateInputSubmit($id,'resetcache',$this->Lang('reset')));
 			  

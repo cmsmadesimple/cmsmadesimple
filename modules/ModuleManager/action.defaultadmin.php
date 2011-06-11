@@ -97,8 +97,7 @@ if( !isset($gCms) ) exit;
       echo $this->EndTab();
 
       echo $this->StartTab('search');
-      echo 'TODO';
-      // include(dirname(__FILE__).'/function.search.php');
+      include(dirname(__FILE__).'/function.search.php');
       echo $this->EndTab();
 
       echo $this->StartTab('modules');

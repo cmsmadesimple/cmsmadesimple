@@ -1,4 +1,8 @@
 <?php
+$lang['prompt_disable_caching'] = 'Disable caching of requests from the server';
+$lang['info_disable_caching'] = '<strong>Not Recommended</strong>.  For performance reasons, ModuleManager will cache for (by default one hour) much of the information retrieved from the remote server';
+$lang['operation_results'] = 'Operation Results';
+$lang['error_noresults'] = 'We expected some results to be available from queued operations, but none were found.  Please try to reproduce this experience, and provide sufficient information to support personell for diagnoses';
 $lang['versionsformodule'] = 'Available versions of the module %s';
 $lang['yourversion'] = 'Your Version';
 $lang['latestdepends'] = 'Always install the newest modules';

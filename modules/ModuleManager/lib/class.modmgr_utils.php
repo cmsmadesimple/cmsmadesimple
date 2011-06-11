@@ -360,24 +360,10 @@ final class modmgr_utils
 	return array(FALSE,$ops->GetLastError());
       }
 
+    @unlink($xml_filename);
+
     // update the database.
     ModuleOperations::get_instance()->QueueForInstall($module_meta['name']);
-//     if( !$is_upgrade )
-//       {
-// 	$res = $ops->InstallModule($module_meta['name'],TRUE);
-//       }
-//     else
-//       {
-// 	$res = $ops->UpgradeModule($module_meta['name']);
-// 	if( $res )
-// 	  {
-// 	    $res = array($res,$mod->Lang('upgrade_successful'));
-// 	  }
-// 	else
-// 	  {
-// 	    $res = array($res,$mod->Lang('upgrade_failed'));
-// 	  }
-//       }
     return array(true,'');
   }
 
@@ -450,34 +436,23 @@ final class modmgr_utils
   public static function is_connection_ok()
   {
     $mod = cms_utils::get_module('ModuleManager');
-    unset($_SESSION[$mod->GetName()]);
-    if( !isset($_SESSION[$mod->GetName()]) || 
-	!isset($_SESSION[$mod->GetName()]['connection_check']) ||
-	!isset($_SESSION[$mod->GetName()]['connection_time']) ||
-	(time() - $_SESSION[$mod->GetName()]['connection_time']) > 3600 )
+    $url = $mod->GetPreference('module_repository');
+    if( $url )
       {
-	$url = 'http://www.cmsmadesimple.org/latest_version.php';
-	//$url = $mod->GetPreference('module_repository');
-	if( $url )
+	$url .= '/version';
+	$req = new modmgr_cached_request($url);
+	$req->execute($url);
+	$req->setTimeout(3);
+	if( $req->getStatus() == 200 )
 	  {
-	    //$url .- '/version';
-	    $req = new cms_http_request();
-	    $req->setTimeout(3); // really quick
-	    $req->useCurl(FALSE);
-	    $req->execute($url,'','GET');
-	    $_SESSION[$mod->GetName()] = array();
-	    if( $req->getStatus() != 200 )
+	    $data = json_decode($req->getResult(),true);
+	    if( version_compare($data,MINIMUM_REPOSITORY_VERSION) >= 0 )
 	      {
-		$_SESSION[$mod->GetName()]['connection_check'] = 0;
+		return TRUE;
 	      }
-	    else
-	      {
-		$_SESSION[$mod->GetName()]['connection_check'] = 1;
-	      }
-	    $_SESSION[$mod->GetName()]['connection_time'] = time();
 	  }
       }
-    return $_SESSION[$mod->GetName()]['connection_check'];
+    return FALSE;
   }
     
 } // end of class
