@@ -36,12 +36,43 @@
 #END_LICENSE
 if( !isset($gCms) ) exit;
 
+global $CMS_VERSION;
+$caninstall = true;
+if( FALSE == can_admin_upload() )
+{
+  echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">'.$this->Lang('error_permissions').'</p></div></div>';
+  $caninstall = false;
+}
+
 // see if there are saved results
 $search_data = '';
+$term = '';
+$advanced = 0;
 if( isset($_SESSION['modmgr_search']) )
   {
     $search_data = unserialize($_SESSION['modmgr_search']);
   }
+if( isset($_SESSION['modmgr_searchterm']) )
+  {
+    $term = $_SESSION['modmgr_searchterm'];
+  }
+if( isset($_SESSION['modmgr_searchadv']) )
+  {
+    $advanced = $_SESSION['modmgr_searchadv'];
+  }
+
+// get the modules that are already installed
+$instmodules = '';
+{
+  $result = modmgr_utils::get_installed_modules();
+  if( ! $result[0] )
+    {
+      $this->_DisplayErrorPage( $id, $params, $returnid, $result[1] );
+      return;
+    }
+      
+  $instmodules = $result[1];
+}
 
 if( isset($params['submit']) )
   {
@@ -51,102 +82,154 @@ if( isset($params['submit']) )
     if( strlen($term) < 3 )
       {
 	echo $this->ShowErrors($this->Lang('error_searchterm'));
-	$error = 1;
+	return;
       }
-
-    $nusoap =& $this->GetModuleInstance('nuSOAP');
-    $nusoap->Load();
-    $nu_soapclient = '';
-    if( !$error )
+    $advanced = (int)$params['advanced'];
+    
+    $res = modulerep_client::search($term,$advanced);
+    if( !is_array($res) || $res[0] == FALSE )
       {
-	$nu_soapclient = new nu_soapclient($url,false,false,false,false,false,90,90);
-	if( $err = $nu_soapclient->GetError() )
-	  {
-	    echo $this->ShowErrors('SOAP ERROR: '.$err);
-	    $error = 1;
-	  }
+	echo $this->ShowErrors($this->Lang('error_search').' '.$res[1]);
+	return;
       }
 
-    if( !$error )
+    if( !is_array($res[1]) )
       {
-	$repversion = $nu_soapclient->call('ModuleRepository.soap_version');
-	if( $err = $nu_soapclient->GetError() )
-	  {
-	    echo $this->ShowErrors('SOAP ERROR: '.$err);
-	    $error = 1;
-	  }
+	echo $this->ShowMessage($this->Lang('search_noresults'));
+	return;
       }
 
-    if( !$error )
+    $res = $res[1];
+    $data = array();
+    if( count($res) )
       {
-	if( version_compare($repversion,MINIMUM_REPOSITORY_VERSION) < 0 )
-	  {
-	    echo $this->ShowErrors($this->Lang('error_minimumrepository'));
-	    $error = 1;
-	  }
+	$res = modmgr_utils::build_module_data($res, $instmodules);
       }
 
-    $res = '';
-    if( !$error )
+    $search_data = array();
+    for( $i = 0; $i < count($res); $i++ )
       {
-	$qparms = array();
-	$filter = array();
-	$filter['term'] = $term;
-	$filter['advanced'] = $params['advanced'];
-	$filter['newest'] = 1;
-	$filter['sortby'] = 'score';
-	$qparms['filter'] = $filter;
-	$qparms['clientcmsversion'] = CMS_VERSION;
-
-	$res = $nu_soapclient->call('ModuleRepository.soap_search',$qparms);
-	if( $err = $nu_soapclient->GetError() )
+	$row =& $res[$i];
+	$obj = new stdClass();
+	foreach( $row as $k => $v )
 	  {
-	    echo $this->ShowErrors('SOAP Error: '.$err);
-	    echo $nu_soapclient->getDebug();
-	    $error = 1;
+	    $obj->$k = $v;
 	  }
+	
+	$obj->name = $this->CreateLink( $id, 'modulelist', $returnid, $row['name'],
+					array('name'=>$row['name']));
+
+	$obj->dependslink = $this->CreateLink( $id, 'moduledepends', $returnid,
+					       $this->Lang('dependstxt'), 
+					       array('name' => $row['name'],
+						     'version' => $row['version'],
+						     'filename' => $row['filename']));
+
+	$obj->helplink = $this->CreateLink( $id, 'modulehelp', $returnid,
+					    $this->Lang('helptxt'),
+					    array('name'=>$row['name'],
+						  'version'=>$row['version'],
+						  'filename'=>$row['filename']));
+	$obj->size = (int)((float) $row['size'] / 1024.0 + 0.5);
+
+
+	switch( $row['status'] ) 
+	  {
+	  case 'incompatible':
+	    $onerow->status = $this->Lang('incompatible');
+	    break;
+	  case 'uptodate':
+	    $onerow->status = $this->Lang('uptodate');
+	    break;
+	  case 'newerversion':
+	    $onerow->status = $this->Lang('newerversion');
+	    break;
+	  case 'notinstalled':
+	    {
+	      $mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
+	      if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
+		   ($writable && !file_exists( $mod ) )) && $caninstall )
+		{
+		  $obj->status = $this->CreateLink( $id, 'installmodule', $returnid,
+						       $this->Lang('download'), 
+						       array('name' => $row['name'],
+							     'version' => $row['version'],
+							     'filename' => $row['filename'],
+							     'size' => $row['size']));
+		}
+
+	      else
+		{
+		  $obj->status = $this->Lang('cantdownload');
+		}
+	      break;
+	    }
+	  case 'upgrade':
+	    {
+	      $mod = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
+	      if( (($writable && is_dir($mod) && is_directory_writable( $mod )) ||
+		   ($writable && !file_exists( $mod ) )) && $caninstall )
+		{
+		  $obj->status = $this->CreateLink( $id, 'upgrademodule', $returnid,
+						       $this->Lang('upgrade'), 
+						       array('name' => $row['name'],
+							     'version' => $row['version'],
+							     'filename' => $row['filename'],
+							     'size' => $row['size']));
+		}
+	      else
+		{
+		  $obj->status = $this->Lang('cantdownload');
+		}
+	      break;
+	    }
+	  }
+
+// 	$moddir = $moduledir.DIRECTORY_SEPARATOR.$row['name'];
+// 	if( (($writable && is_dir($moddir) && is_directory_writable( $moddir )) ||
+// 	     ($writable && !file_exists( $moddir ) )) && $caninstall )
+// 	  {
+// 	    if( (!empty($row['maxcmsversion']) && version_compare($CMS_VERSION,$row['maxcmsversion']) > 0) ||
+// 		(!empty($row['mincmsversion']) && version_compare($CMS_VERSION,$row['mincmsversion']) < 0) )
+// 	      {
+// 		$obj->status = 'incompatible';
+// 	      }
+// 	    else
+// 	      {
+// 		$obj->status = $this->CreateLink( $id, 'installmodule', $returnid,
+// 						     $this->Lang('upgrade'), 
+// 						     array('name' => $row['name'],
+// 							   'version' => $row['version'],
+// 							   'filename' => $row['filename'],
+// 							   'size' => $row['size'],
+// 							   'active_tab'=>'newversions',
+// 							   'reset_prefs' => 1));
+// 	      }
+// 	  }
+// 	else
+// 	  {
+// 	    $obj->status = $this->Lang('cantdownload');
+// 	  }
+
+	$obj->rowclass = $rowclass;
+	if( isset( $row['description'] ) )
+	  {
+	    $obj->description=$row['description'];
+	  }
+	
+	$search_data[] = $obj;
       }
-
-    if( !$error )
-      {
-	if( !$res || !is_array($res) )
-	  {
-	    echo $this->ShowMessage($this->Lang('search_noresults'));
-	  }
-	else
-	  {
-	    $search_data = array();
-	    for( $i = 0; $i < count($res); $i++ )
-	      {
-		$row =& $res[$i];
-		$obj = new stdClass();
-		foreach( $row as $k => $v )
-		  {
-		    $obj->$k = $v;
-		  }
-		$obj->helplink = $this->CreateLink( $id, 'modulehelp', $returnid,
-						    $this->Lang('helptxt'),
-						    array('name'=>$row['name'],
-							  'version'=>$row['version'],
-							  'filename'=>$row['filename']));
-		$obj->size = (int)((float) $row['size'] / 1024.0 + 0.5);
-		$obj->rowclass = $rowclass;
-		if( isset( $row['description'] ) )
-		  {
-		    $obj->description=$row['description'];
-		  }
-
-		$search_data[] = $obj;
-	      }
-	    $_SESSION['modmgr_search'] = serialize($search_data);
-	  }
-      }
+    $_SESSION['modmgr_search'] = serialize($search_data);
+    $_SESSION['mogmgr_searchterm'] = $term;
+    $_SESSION['modmgr_searchadv'] = $params['advanced'];
   }
 
 if( is_array($search_data) )
-  {
+  {  
     $smarty->assign('search_data',$search_data);
   }
+$smarty->assign('term',$term);
+$smarty->assign('advanced',$advanced);
 $smarty->assign('formstart',$this->CreateFormStart($id,'defaultadmin','','post','',false,'',
 						   array('active_tab'=>'search')));
 $smarty->assign('formend',$this->CreateFormEnd());

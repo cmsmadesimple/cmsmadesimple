@@ -1,4 +1,5 @@
 <?php
+$lang['error_search'] = 'Search Error';
 $lang['prompt_disable_caching'] = 'Disable caching of requests from the server';
 $lang['info_disable_caching'] = '<strong>Not Recommended</strong>.  For performance reasons, ModuleManager will cache for (by default one hour) much of the information retrieved from the remote server';
 $lang['operation_results'] = 'Operation Results';

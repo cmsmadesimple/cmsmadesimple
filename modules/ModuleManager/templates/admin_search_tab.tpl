@@ -20,7 +20,7 @@ function showhide_advanced()
 <div class="pageoverflow">
   <p class="pagetext">{$mod->Lang('searchterm')}</p>
   <p class="pageinput">
-    <input type="text" name="{$actionid}term" size="50"/>
+    <input type="text" name="{$actionid}term" size="50" value="{$term}"/>
   </p>
 </div>
 
@@ -28,8 +28,8 @@ function showhide_advanced()
   <p class="pagetext">{$mod->Lang('prompt_advancedsearch')}</p>
   <p class="pageinput">
     <input type="hidden" name="{$actionid}advanced" value="0"/>
-    <input type="checkbox" id="advanced" name="{$actionid}advanced" value="1" onclick="showhide_advanced();"/>
-    <span id="advhelp" style="display: none;"><br/>{$mod->Lang('advancedsearch_help')}</span>
+    <input type="checkbox" id="advanced" name="{$actionid}advanced" value="1" onclick="showhide_advanced();" {if $advanced}checked="checked"{/if}/>
+    <span id="advhelp" {if !$advanced}style="display: none;{/if}"><br/>{$mod->Lang('advancedsearch_help')}</span>
   </p>
 </div>
 

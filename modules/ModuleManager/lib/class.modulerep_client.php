@@ -106,7 +106,7 @@ final class modulerep_client
       }
     $url .= '/moduledepends';
 
-    $req = new mkdmgr_cached_request();
+    $req = new modmgr_cached_request();
     $req->execute($url,array('name'=>$xmlfile));
     $status = $req->getStatus();
     $result = $req->getResult();
@@ -211,6 +211,39 @@ final class modulerep_client
 
     $data = json_decode($result,true);
     return $data;
+  }
+
+
+  public static function search($term,$advanced)
+  {
+    $qparms = array();
+    $filter = array();
+    $filter['term'] = $term;
+    $filter['advanced'] = (int)$advanced;
+    $filter['newest'] = 1;
+    $filter['sortby'] = 'score';
+    $qparms['filter'] = $filter;
+    $qparms['clientcmsversion'] = CMS_VERSION;
+
+    $mod = cms_utils::get_module('ModuleManager');
+    $url = $mod->GetPreference('module_repository');
+    if( $url == '' )
+      {
+	return array(FALSE,$mod->Lang('error_norepositoryurl'));
+      }
+    $url .= '/modulesearch';
+
+    $req = new modmgr_cached_request();
+    $req->execute($url,array('json'=>json_encode($qparms)));
+    $status = $req->getStatus();
+    $result = $req->getResult();
+    if( $status != 200 || $result == '' )
+      {
+	return array(FALSE,$mod->Lang('error_request_problem'));
+      }
+
+    $data = json_decode($result,true);
+    return array(TRUE,$data);
   }
 
 } // end of class
