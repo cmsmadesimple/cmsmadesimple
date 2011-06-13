@@ -686,7 +686,7 @@ class cms_http_request
      * @param array Parameter array for GET or POST (optional)
      * @return string Response body of the target page
      */    
-    function execute($target = '', $referrer = '', $method = '', $data = array())
+    public function execute($target = '', $referrer = '', $method = '', $data = array())
     {
         // Populate the properties
         $this->target = ($target) ? $target : $this->target;

@@ -16,10 +16,9 @@
 function smarty_core_load_plugins($params, &$smarty)
 {
     foreach ($params['plugins'] as $_plugin_info) {
-      if( !is_array($_plugin_info) )
-	{
-	  stack_trace();
-	}
+
+      $_cachable = TRUE;
+
         list($_type, $_name, $_tpl_file, $_tpl_line, $_delayed_loading) = $_plugin_info;
         $_plugin = &$smarty->_plugins[$_type][$_name];
 
@@ -86,7 +85,8 @@ function smarty_core_load_plugins($params, &$smarty)
         }
 	else if ( ($udt_name = UserTagOperations::get_instance()->UserTagExists($_name)) ) 
 	{
-	  $_plugin_func = 'cms_call_udt';
+	  $_cachable = FALSE;
+	  $_plugin_func = UserTagOperations::get_instance()->CreateTagFunction($_name);
 	  $_found = true;
 	}
         /*
@@ -127,7 +127,7 @@ function smarty_core_load_plugins($params, &$smarty)
         }
 
         if ($_found) {
-            $smarty->_plugins[$_type][$_name] = array($_plugin_func, $_tpl_file, $_tpl_line, true, true);
+            $smarty->_plugins[$_type][$_name] = array($_plugin_func, $_tpl_file, $_tpl_line, true, $_cachable);
         } else {
             // output error
             $smarty->_trigger_fatal_error('[plugin] ' . $_message, $_tpl_file, $_tpl_line, __FILE__, __LINE__);

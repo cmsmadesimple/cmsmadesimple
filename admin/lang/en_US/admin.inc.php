@@ -1,4 +1,7 @@
 <?php
+$lang['admin']['nopluginabout'] = 'No about information available for this plugin';
+$lang['admin']['nopluginhelp'] = 'No help available for this plugin';
+$lang['admin']['moduleupgraded'] = 'Upgrade Successfull';
 $lang['admin']['event_desc_stylesheetpostcompile'] = 'Sent after a stylesheet is compiled through smarty';
 $lang['admin']['event_desc_stylesheetprecompile'] = 'Sent before a stylesheet is compiled through smarty';
 $lang['admin']['confirm_uploadmodule'] = 'Are you sure you would like to upload the selected XML file. Incorrectly uploading a module file may break a functioning website';

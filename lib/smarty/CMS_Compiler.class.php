@@ -48,10 +48,8 @@ class CMS_Compiler extends Smarty_Compiler {
   function _compile_custom_tag($tag_command, $tag_args, $tag_modifier, &$output)
   {
     $found = false;
-    $udt_name = '';
-    $have_function = false;
-    $delayed_loading = null;
-    
+    $have_function = true;
+
     /*
      * First we check if the custom function has already been registered
      * or loaded from a plugin file.
@@ -65,8 +63,7 @@ class CMS_Compiler extends Smarty_Compiler {
       }
     }
     /*
-     * Otherwise we need to load plugin file and look for the function
-     * inside it.
+     * See if we can find a plugin function for this tag...
      */
     else if ($plugin_file = $this->_get_plugin_filepath('function', $tag_command)) {
       $found = true;
@@ -78,8 +75,7 @@ class CMS_Compiler extends Smarty_Compiler {
 	$message = "plugin function $plugin_func() not found in $plugin_file\n";
 	$have_function = false;
       } else {
-	$this->_plugins['function'][$tag_command] = array($plugin_func, null, null, null, true);
-	
+	$this->_plugins['function'][$tag_command] = array($plugin_func, null, null, null, false);
       }
     }
     /*
@@ -88,27 +84,27 @@ class CMS_Compiler extends Smarty_Compiler {
     else if ( ($udt_name = UserTagOperations::get_instance()->UserTagExists($tag_command)) ) {
       $found = true;
 
-      $plugin_func = 'cms_call_udt';
-      if( !function_exists($plugin_func) )
+      $plugin_func = UserTagOperations::get_instance()->CreateTagFunction($tag_command);
+      if( !$plugin_func || !function_exists($plugin_func) )
 	{
-	  // create a function for this.
 	  $message = "plugin function UDT $plugin_func() not found\n";
 	  $have_function = false;
 	}
       else
 	{
-	  $have_function = true;
-	  $this->_plugins['function'][$tag_command] = array($plugin_func, null, null, null, true);
+	  $this->_plugins['function'][$tag_command] = array($plugin_func, null, null, null, false);
 	}
     }
+
     
     if (!$found) {
       return parent::_compile_custom_tag($tag_command, $tag_args, $tag_modifier, $output);
     } else if (!$have_function) {
-      // $this->_syntax_error($message, E_USER_WARNING, __FILE__, __LINE__);
-      // return true;
       return parent::_compile_custom_tag($tag_command, $tag_args, $tag_modifier, $output);
+//       $this->_syntax_error($message, E_USER_WARNING, __FILE__, __LINE__);
+//       return true;
     }
+
 
     /* declare plugin to be loaded on display of the template that
      we compile right now */
@@ -119,10 +115,6 @@ class CMS_Compiler extends Smarty_Compiler {
 
     $_cacheable_state = $this->_push_cacheable_state('function', $tag_command);
     $attrs = $this->_parse_attrs($tag_args);
-    if( $udt_name )
-      {
-        $attrs['udt'] = "'".$udt_name."'";
-      }
     $arg_list = $this->_compile_arg_list('function', $tag_command, $attrs, $_cache_attrs );
     
     $output = $this->_compile_plugin_call('function', $tag_command).'(array('.implode(',', $arg_list)."), \$this)";
@@ -136,7 +128,6 @@ class CMS_Compiler extends Smarty_Compiler {
     }
     
     // var_dump($output);
-
     return true;
   }
 

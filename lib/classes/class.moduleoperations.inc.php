@@ -465,10 +465,10 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
 		 Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
 		 audit('',$module_obj->GetName(),'Installed version '.$module_obj->GetVersion());
-		 return TRUE;
+		 return array(TRUE,$module_obj->InstallPostMessage());
 	 }
 
-	 return $result;
+	 return array(FALSE,$result);
  }
 
 
@@ -486,19 +486,13 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  {
 		  return array(false,lang('errormodulenotloaded'));
       }
- 
-	  if( ($result = $this->_install_module($modinstance)) === TRUE )
+
+	  $res = $this->_install_module($modinstance);
+	  if( $res[0] == FALSE && $res[1] == '')
 	  {
-		  return array(true,$modinstance->InstallPostMessage());
+		  $res[1] = lang('errorinstallfailed');
 	  }
-	  else
-	  {
-		  if( trim($result) == "" )
-		  {
-			  $result = lang('errorinstallfailed');
-		  }
-		  return array(false,$result);
-	  }
+	  return $res;
   }
 
 
@@ -587,7 +581,12 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  if( (in_array($module_name,$this->cmssystemmodules) || $obj->AllowAutoInstall() == true ||
 			   $this->_is_queued_for_install($module_name)) && $allow_auto )
 		  {
-			  $this->_install_module($obj);
+			  $res = $this->_install_module($obj);
+			  if( !isset($_SESSION['moduleoperations_result']) )
+			  {
+				  $_SESSION['moduleoperations_result'] = array();
+			  }
+			  $_SESSION['moduleoperations_result'][$module_name] = $res;
 		  }
 		  else if( !isset($CMS_FORCE_MODULE_LOAD) )
 		  {
@@ -608,6 +607,20 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 			  {
 				  // we're allowed to upgrade
 				  $res = $this->_upgrade_module($obj);
+				  $res2 = '';
+				  if( !isset($_SESSION['moduleoperations_result']) )
+				  {
+					  $_SESSION['moduleoperations_result'] = array();
+				  }
+				  if( $res )
+				  {
+					  $res2 = array(TRUE,lang('moduleupgraded'));
+				  }
+				  else
+				  {
+					  $res2 = array(FALSE,lang('moduleupgradeerror'));
+				  }
+				  $_SESSION['moduleoperations_result'][$module_name] = $res2;
 				  if( !$res )
 				  {
 					  // upgrade failed
@@ -1034,7 +1047,19 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  $_SESSION['moduleoperations'][$module_name] = 1;
 	  }
   }
-}
+
+
+  public function GetQueueResults()
+  {
+	  if( isset($_SESSION['moduleoperations_result']) )
+	  {
+		  $data = $_SESSION['moduleoperations_result'];
+		  unset($_SESSION['moduleoperations_result']);
+		  return $data;
+	  }
+  }
+
+} // end of class
 
 # vim:ts=4 sw=4 noet
 ?>

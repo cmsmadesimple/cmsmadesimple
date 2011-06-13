@@ -247,6 +247,20 @@ final class UserTagOperations
 		return $result;
 	}
 
+
+	function CreateTagFunction($name)
+	{
+		$row = $this->_get_from_cache($name);
+		if( !$row ) return;
+		$functionname = 'cms_user_tag_'.$name;
+		if( !function_exists($fn) )
+		{
+			$code = 'function '.$functionname.'($psrams,&$smarty) {'.$row['code']."\n}";
+			@eval($code);
+		}
+		return $functionname;
+	}
+
 } // class
 
 /**
