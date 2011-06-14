@@ -167,7 +167,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		generate_user_object($oneuser->id);
 		$_SESSION['login_user_id'] = $oneuser->id;
 		$_SESSION['login_user_username'] = $oneuser->username;
-		audit($oneuser->id, $oneuser->username, 'User Login');
+		audit($oneuser->id, $oneuser->username, lang_en('user_login'));
 
 		#Now call the event
 		Events::SendEvent('Core', 'LoginPost', array('user' => &$oneuser));
@@ -267,7 +267,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		$error .= lang('usernameincorrect');
 		debug_buffer("Login failed.  Error is: " . $error);
 
-		audit($username, $username, 'User Login Failed');
+		audit($username, $username, lang_en('login_failed'));
 
 		#Now call the event
 		Events::SendEvent('Core', 'LoginPost', $username);

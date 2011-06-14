@@ -144,7 +144,7 @@ if ($access)
 
 				Events::SendEvent('Core', 'EditTemplatePost', array('template' => &$onetemplate));
 
-				audit($template_id, $onetemplate->name, 'Edited Template');
+				audit($template_id, $onetemplate->name, lang_en('edited_template'));
 				if (!$apply)
 				{
 				  switch($from)

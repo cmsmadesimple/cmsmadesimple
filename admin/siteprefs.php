@@ -329,7 +329,7 @@ else if (isset($_POST["editsiteprefs"]))
 	  break;
 	}
 
-      audit(-1, '', 'Edited Site Preferences');
+      audit(-1, '', lang_en('prefsupdated'));
       $message .= lang('prefsupdated');
     }
   else

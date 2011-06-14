@@ -215,7 +215,7 @@ if ($access)
 		}
 		else
 		{
-		  audit('','Module','Permanently removed '.$module);
+		  audit('','Module', lang_en('deleted_module',$module));
 		  redirect($thisurl);
 		}
 	}

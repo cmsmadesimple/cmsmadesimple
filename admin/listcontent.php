@@ -408,7 +408,7 @@ function deletecontent($contentid)
 				#Do the same with this page as well
 				toggleexpand($contentid, true);
 				
-				audit($contentid, $title, 'Deleted Content');
+				audit($contentid, $title, lang_en('deleted_content'));
 				
 				$contentops->ClearCache();
 			

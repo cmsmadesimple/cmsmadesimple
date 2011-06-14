@@ -57,7 +57,7 @@ if (isset($_GET["user_id"]))
 
 			Events::SendEvent('Core', 'DeleteUserPost', array('user' => &$oneuser));
 
-			audit($user_id, $user_name, 'Deleted User');
+			audit($user_id, $user_name, lang_en('deleted_user'));
 		}
 	}
 }

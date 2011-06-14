@@ -410,7 +410,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
 	if( !$brief )
 	{
-		audit('','Module','Expanded XML file consisting of '.$moduledetails['name'].' '.$moduledetails['version']);
+		audit('','Module', lang_en('expanded_xml',$moduledetails['name'], $moduledetails['version']));
 	}
 
 	return $moduledetails;
@@ -464,7 +464,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 											   $lazyload_fe,$lazyload_admin);
 
 		 Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
-		 audit('',$module_obj->GetName(),'Installed version '.$module_obj->GetVersion());
+		 audit('',$module_obj->GetName(), lang_en('installed_mod',$module_obj->GetVersion()));
 		 return array(TRUE,$module_obj->InstallPostMessage());
 	 }
 
@@ -759,7 +759,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  $dbr = $db->Execute($query,array($module_obj->GetVersion(),$lazyload_fe,$lazyload_admin,$module_obj->GetName()));
 
 		  $info[$module_obj->GetName()]['version'] = $module_obj->GetVersion();
-		  audit('','Module',$module_obj->GetName().' Upgraded from Version '.$dbversion.' to '.$module_obj->GetVersion());
+		  audit('','Module', lang_en('upgraded_mod',$module_obj->GetName(),$dbversion,$module_obj->GetVersion()));
 		  Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
 		  return TRUE;
 	  }
@@ -823,7 +823,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 				  }
 
 			  Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
-			  audit('','Module','Uninstalled module '.$module);
+			  audit('','Module',lang_en('uninstalled_mod',$module));
 		  }
 	  else
 		  {

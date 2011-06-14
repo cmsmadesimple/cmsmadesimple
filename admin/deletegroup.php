@@ -75,7 +75,7 @@ if (isset($_GET["group_id"]))
 	
 	if ($result == true)
 	  {
-	    audit($group_id, $group_name, 'Deleted Group');
+	    audit($group_id, $group_name, lang_en('deleted_group'));
 	  }
 }
 

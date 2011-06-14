@@ -163,7 +163,7 @@ if ($access)
 			$contentops->SetAllHierarchyPositions();
 			if ($submit)
 			{
-				audit($contentobj->Id(), $contentobj->Name(), 'Added Content');
+				audit($contentobj->Id(), $contentobj->Name(), lang_en('added_content'));
 				redirect('listcontent.php'.$urlext.'&message=contentadded');
 			}
 		}

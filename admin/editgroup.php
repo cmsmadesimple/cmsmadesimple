@@ -79,7 +79,7 @@ if ($access) {
 			{
 				Events::SendEvent('Core', 'EditGroupPost', array('group' => &$groupobj));
 
-				audit($groupobj->id, $groupobj->name, 'Edited Group');
+				audit($groupobj->id, $groupobj->name, lang_en('edited_group'));
 				redirect("listgroups.php".$urlext);
 				return;
 			}

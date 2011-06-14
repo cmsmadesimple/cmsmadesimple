@@ -145,7 +145,7 @@ if (isset($_POST["adduser"]))
             }
 
 
-			audit($newuser->id, $newuser->username, 'Added User');
+			audit($newuser->id, $newuser->username, lang_en('added_user'));
 			redirect("listusers.php".$urlext);
 		}
 		else

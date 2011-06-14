@@ -76,7 +76,7 @@ if ($access)
 
 			if ($result)
 			{
-				audit($onestylesheet->id, $onestylesheet->name, 'Copied Stylesheet');
+				audit($onestylesheet->id, $onestylesheet->name, lang_en('stylesheetcopied'));
 				redirect("listcss.php".$urlext.'&message='.lang('stylesheetcopied'));
 				return;
 			}

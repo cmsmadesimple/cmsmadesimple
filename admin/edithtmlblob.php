@@ -115,7 +115,7 @@ if ($access)
 
 			if ($result)
 			{
-				audit($the_blob->id, $the_blob->name, 'Edited Global Content Block');
+				audit($the_blob->id, $the_blob->name, lang_en('edited_gcb'));
 
 				#Clear cache
 				$smarty = cmsms()->GetSmarty();

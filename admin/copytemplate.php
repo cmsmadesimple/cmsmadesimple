@@ -119,7 +119,7 @@ if ($access)
 					}
 				}
 
-				audit($onetemplate->id, $onetemplate->name, 'Copied Template');
+				audit($onetemplate->id, $onetemplate->name, lang_en('templatecopied'));
 				redirect($from.'&message='.lang('templatecopied'));
 				return;
 			}

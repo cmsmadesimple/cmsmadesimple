@@ -67,7 +67,7 @@ if ($access)
 			if ($result)
 			{
 				Events::SendEvent('Core', 'AddGroupPost', array('group' => &$groupobj));
-				audit($groupobj->id, $groupobj->name, 'Added Group');
+				audit($groupobj->id, $groupobj->name, lang_en('added_group'));
 				redirect("listgroups.php".$urlext);
 				return;
 			}

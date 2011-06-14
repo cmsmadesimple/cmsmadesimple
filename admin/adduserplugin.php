@@ -125,7 +125,7 @@ if ($access) {
 			if ($result) {
 			
 				Events::SendEvent('Core', 'AddUserDefinedTagPost', array('id' => $new_usertag_id, 'name' => &$plugin_name, 'code' => &$code));
-				audit($new_usertag_id, $plugin_name, 'Added User Defined Tag');
+				audit($new_usertag_id, $plugin_name, lang_en('added_udt'));
 				redirect("listusertags.php".$urlext."&message=usertagadded");
 				return;
 			}

@@ -136,7 +136,7 @@ if ($access) {
 			
 				// Send event EditUserDefinedTagPost & put mention to Admin Log
 				Events::SendEvent('Core', 'EditUserDefinedTagPost', array('id' => $userplugin_id, 'name' => &$plugin_name, 'code' => &$code));
-				audit($userplugin_id, $plugin_name, 'Edited User Defined Tag');
+				audit($userplugin_id, $plugin_name, lang_en('edited_udt'));
 
 				if( !isset( $_POST['apply'] ) )
 				  {

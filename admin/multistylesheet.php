@@ -122,7 +122,7 @@ else
 				$id = $node->id;
 				$title = $node->name;
 				$node->Delete();
-				audit($id, $title, 'Deleted Stylesheet');
+				audit($id, $title, lang_en('deleted_css'));
 			}
 		}
 		redirect("listcss.php".$urlext);

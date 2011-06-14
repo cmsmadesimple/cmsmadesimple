@@ -123,21 +123,21 @@ class CmsRegularTaskHandler
     $list = new ArrayIterator(self::$_tasks);
     foreach( $list as $task )
       {
-	if( $task->test($time) )
-	  {
-	    $res = $task->execute($time);
-	    if( !$res )
-	      {
-		// test failed.
-		audit('',lang_by_realm('automatedtask_failed','tasks'),$task->get_name());
-		$task->on_failure($time);
-	      }
-	    else
-	      {
-		audit('',lang_by_realm('automatedtask_success','tasks'),$task->get_name());
-		$task->on_success($time);
-	      }
-	  }
+		if( $task->test($time) )
+		  {
+			$res = $task->execute($time);
+			if( !$res )
+			  {
+			// test failed.
+			audit('',lang_by_realm_en('automatedtask_failed','tasks'),$task->get_name());
+			$task->on_failure($time);
+			  }
+			else
+			  {
+			audit('',lang_by_realm_en('automatedtask_success','tasks'),$task->get_name());
+			$task->on_success($time);
+			  }
+		  }
       }
   }
 

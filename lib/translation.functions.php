@@ -459,6 +459,153 @@ function lang()
 	return lang_by_realm($name,'admin',$params);
 }
 
+
+/**
+ * A method to return a translation for a specific string in a specific realm.
+ * called with the realm first, followed by the key, this method will attempt
+ * to load the specific realm data if necessary before doing translation.
+ *
+ * This method accepts a variable number of arguments.  Any arguments after
+ * the realm and the key are passed to the key via vsprintf
+ *
+ * i.e: lang_by_realm('tasks','my_string');
+ *
+ * @since 1.8
+ * @param string The realm
+ * @param string The lang key
+ * @return string
+ */
+function lang_by_realm_en()
+{
+  $gCms = cmsms();
+  global $lang;
+
+  $name = '';
+  $realm = 'admin';
+  $params = array();
+  $result = '';
+
+  $num = func_num_args();
+  if( $num == 0 ) return '';
+
+  $name = func_get_arg(0);
+  if( $num > 1 )
+    {
+      $realm = func_get_arg(1);
+      
+      if( $num > 2 && is_array(func_get_arg(2)) )
+	{
+	  $params = func_get_arg(2);
+	}
+      else if( $num > 2 )
+	{
+	  $params = array_slice(func_get_args(), 2);
+	}
+    }
+
+  // we now have a name, a realm, and possible additonal arguments.
+	$saved_lang = $lang;
+	$lang = array();
+  if( !isset($lang[$realm]) )
+    {
+      cms_load_lang_realm($realm,NULL,NULL,NULL,NULL,NULL,'en_US');
+    }
+
+  // do processing.
+  if (isset($lang[$realm][$name]))
+    {
+      if (count($params))
+	{
+	  $result = vsprintf($lang[$realm][$name], $params);
+	}
+      else
+	{
+	  $result = $lang[$realm][$name];
+	}
+    }
+  else
+    {
+      $result = "--Add Me - $name --";
+    }
+
+  // conversion.
+  if (isset($gCms->config['admin_encoding']) && isset($gCms->variables['convertclass']))
+    {
+      if (strcasecmp(get_encoding('', false),$gCms->config['admin_encoding']) )
+	{
+	  $class =& $gCms->variables['convertclass'];
+	  $result = $class->Convert($result, get_encoding('', false), $gCms->config['admin_encoding']);
+	}
+    }
+	$lang = $saved_lang;
+  return $result;
+
+}
+/**
+ * Return a translated string for the default 'admin' realm.
+ * This function is merely a wrapper around the lang_by_realm function
+ * that assumes the realm is 'admin'.
+ *
+ * This method will throw a notice if it is called from a frontend request
+ *
+ * @param string The key to translate
+ * @return string
+ */
+function lang_en()
+{
+  // uses the default admin realm.
+	$gCms = cmsms();
+	global $lang;
+	$nls =& $gCms->nls;
+
+	$dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'lang');
+	$customdir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'custom','lang');
+	
+	$saved_lang = $lang;
+	$lang = array();
+	if( !isset($lang['admin']) )
+	  {
+	    cms_load_lang_realm('admin',$dir,'admin.inc.php',1,1,0,'en_US');
+	    cms_load_lang_realm('admin',$customdir,'admin.inc.php',1,1,1,'en_US');			
+	  }
+	$name = '';
+	$params = array();
+	$realm = 'admin';
+
+	if (func_num_args() > 0)
+	{
+		$name = func_get_arg(0);
+		if (func_num_args() == 2 && is_array(func_get_arg(1)))
+		{
+			$params = func_get_arg(1);
+		}
+		else if (func_num_args() > 1)
+		{
+			$params = array_slice(func_get_args(), 1);
+		}
+	}
+	else
+	{
+		return '';
+	}
+
+	// quick test to see if we are on the frontend or admin.
+	global $CMS_ADMIN_PAGE;
+	global $CMS_STYLESHEET;
+	global $CMS_INSTALL_PAGE;
+
+	if (!isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
+	  {
+	    trigger_error('Attempt to load admin realm from non admin action');
+	    return '';
+	  }
+
+	// todo:
+	$result = lang_by_realm($name,'admin',$params);
+	$lang = $saved_lang;
+	return $result;
+}
+
 function get_encoding($charset='', $defaultoverrides=true)
 {
 	global $current_language;

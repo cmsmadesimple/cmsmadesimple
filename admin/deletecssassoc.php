@@ -119,7 +119,7 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 		  $res = $db->Execute($query,array($type,$id,$ord));
 		}
 
-	      audit($id, (isset($name)?$name:""), 'Deleted Stylesheet Association');
+	      audit($id, (isset($name)?$name:""), lang_en('deleted_css_association'));
 	      
               # now updating template
 	      if ("template" == $type)

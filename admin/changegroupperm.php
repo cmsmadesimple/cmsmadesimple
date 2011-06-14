@@ -134,7 +134,7 @@ if ($submitted == 1)
 	  }
       }
     
-    audit($userid, 'Group ID', lang('permissionschanged'));
+    audit($userid, 'Group ID', lang_en('permissionschanged'));
     $message = lang('permissionschanged');
   }
 

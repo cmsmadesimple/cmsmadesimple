@@ -33,7 +33,7 @@ if( isset($_SESSION['login_user_username'])) {
 }
 
 
-audit($userid, $username, 'User Logout');
+audit($userid, $username, lang_en('user_logout'));
 
 #unset($_SESSION['cms_admin_user_id']);
 #setcookie('cms_admin_user_id', '', time() - 3600);

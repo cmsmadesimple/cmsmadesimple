@@ -135,7 +135,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 			if ($result)
 			{
 				
-				audit($id, (isset($name)?$name:""), 'Added Stylesheet Association');
+				audit($id, (isset($name)?$name:""), lang_en('added_css_association'));
 
 				if ("template" == $type)
 				{

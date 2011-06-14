@@ -112,7 +112,7 @@ if (isset($_GET["css_id"]))
 			if ($result)
 			{
 				Events::SendEvent('Core', 'DeleteStylesheetPost', array('stylesheet' => &$onestylesheet));
-				audit($css_id, $css_name, 'Deleted CSS');
+				audit($css_id, $css_name, lang_en('deleted_css'));
 			}
 			else
 			{

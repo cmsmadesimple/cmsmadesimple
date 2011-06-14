@@ -137,7 +137,7 @@ else
 				$id = $node->id;
 				$title = $node->name;
 				$node->Delete();
-				audit($id, $title, 'Deleted Template');
+				audit($id, $title, lang_en('deleted_template'));
 			}
 		}
 		redirect("listtemplates.php".$urlext);

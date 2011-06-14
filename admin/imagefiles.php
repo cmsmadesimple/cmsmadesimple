@@ -88,7 +88,7 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 		else
 		{
 			chmod($dir."/".$_FILES['uploadfile']['name'], octdec('0'.$config['default_upload_permission']));
-			audit(-1, $_FILES['uploadfile']['name'], 'Uploaded File');
+			audit(-1, $_FILES['uploadfile']['name'], lang_en('uploaded_file'));
 		}
 	}
 	else
@@ -122,7 +122,7 @@ if (isset($_POST['newdirsubmit']))
 		else
 		{
 			mkdir($dir."/".$_POST['newdir'], 0777);
-			audit(-1, $_POST['newdir'], 'Created Directory');
+			audit(-1, $_POST['newdir'], lang_en('created_directory'));
 		}
 	}
 	else
@@ -143,7 +143,7 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 			}
 			else
 			{
-				audit(-1, $reldir . "/" . $_GET['file'], 'Deleted File');
+				audit(-1, $reldir . "/" . $_GET['file'], lang_en('deleted_file'));
 			}
 		}
 		else
@@ -168,7 +168,7 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 			}
 			else
 			{
-				audit(-1, $reldir . "/" . $_GET['file'], 'Deleted Directory');
+				audit(-1, $reldir . "/" . $_GET['file'], lang_en('deleted_directory'));
 			}
 		}
 		else

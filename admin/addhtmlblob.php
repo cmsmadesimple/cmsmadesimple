@@ -108,7 +108,7 @@ if ($access) {
 						$blobobj->AddAuthor($addt_user_id);
 					}
 				}
-				audit($blobobj->id, $blobobj->name, 'Added Global Content Block');
+				audit($blobobj->id, $blobobj->name, lang_en('added_gcb'));
 
 				Events::SendEvent('Core', 'AddGlobalContentPost', array('global_content' => &$blobobj));
 

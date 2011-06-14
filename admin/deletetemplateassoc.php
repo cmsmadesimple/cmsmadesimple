@@ -106,7 +106,7 @@ if (isset($_GET["template_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 
 			if ($result)
 			{
-				audit($id, (isset($name)?$name:""), 'Deleted Stylesheet Association');
+				audit($id, (isset($name)?$name:""), lang_en('deleted_css_association'));
 
 				# now updating template
 				if ("template" == $type)

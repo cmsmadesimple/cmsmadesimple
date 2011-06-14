@@ -157,7 +157,7 @@ if ($access)
 				Events::SendEvent('Core', 'AddStylesheetPost', array('stylesheet' => &$newstylesheet));
 				
 				# it's ok, we record the operation in the admin log
-				audit($newstylesheet->id, $css_name, 'Added CSS');
+				audit($newstylesheet->id, $css_name, lang_en('added_css'));
 
 				# and goes back to the css list
 				redirect("listcss.php".$urlext);

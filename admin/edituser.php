@@ -157,7 +157,7 @@ if ($access) {
 
 			if ($result)
 			{
-				audit($user_id, $thisuser->username, 'Edited User');
+				audit($user_id, $thisuser->username, lang_en('edited_user'));
 				Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
 				
                 if ($access_perm)

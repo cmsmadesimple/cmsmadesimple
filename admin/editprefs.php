@@ -153,7 +153,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'listtemplates_pagelimit', $listtemplates_pagelimit);
 	set_preference($userid, 'liststylesheets_pagelimit', $liststylesheets_pagelimit);
 	set_preference($userid, 'listgcbs_pagelimit', $listgcbs_pagelimit);
-	audit(-1, '', 'Edited User Preferences');
+	audit($userid, '', lang_en('edited_user_preferences'));
 	$page_message = lang('prefsupdated');
 	#redirect("index.php");
 	#return;

@@ -128,10 +128,10 @@ if ($submitted == 1)
 	Events::SendEvent('Core', 'ChangeGroupAssignPost',
 			  array('group' => $thisGroup,
 				'users' => $userops->LoadUsersInGroup($thisGroup->id)));
-	audit($group_id, 'Group ID', lang('assignmentchanged'));
+	audit($group_id, 'Group ID', lang_en('assignmentchanged'));
       }
 
-    audit($userid, 'Group ID', lang('assignmentchanged'));
+    audit($userid, 'User ID', lang_en('assignmentchanged'));
     $message = lang('assignmentchanged');
   }
 

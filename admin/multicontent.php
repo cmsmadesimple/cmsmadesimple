@@ -467,7 +467,7 @@ else
 				#Do the same with this page as well
 				toggleexpand($id, true);
 
-				audit($id, $title, 'Deleted Content');
+				audit($id, $title, lang_en('deleted_content'));
 			}
 			$ops = $gCms->GetContentOperations();
 			$ops->SetAllHierarchyPositions();

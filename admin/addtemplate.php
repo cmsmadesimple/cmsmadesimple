@@ -117,7 +117,7 @@ if ($access)
 			if ($result)
 			{
 				Events::SendEvent('Core', 'AddTemplatePost', array('template' => &$newtemplate));
-				audit($newtemplate->id, $template, 'Added Template');
+				audit($newtemplate->id, $template, lang_en('added_template'));
 				redirect($from);
 				return;
 			}
