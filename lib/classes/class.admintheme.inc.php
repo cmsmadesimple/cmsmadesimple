@@ -1496,17 +1496,18 @@ debug_buffer('after menu items');
     function DisplayHTMLHeader($showielink = false, $addt = '')
     {
 		$config = cmsms()->GetConfig();
+		$urlext = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 ?><head>
 <meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-9 Ted Kulp. All rights reserved." />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="robots" content="noindex, nofollow" />
 	   <title><?php echo get_site_preference('sitename') . " - ". $this->title ?></title>
-<link rel="stylesheet" type="text/css" href="style.php" />
+<link rel="stylesheet" type="text/css" href="style.php?<?php echo $urlext; ?>" />
 <?php
 	if ($showielink) {
 ?>
 <!--[if IE]>
-<link rel="stylesheet" type="text/css" href="style.php?ie=1" />
+<link rel="stylesheet" type="text/css" href="style.php?ie=1&<?php echo $urlext; ?>" />
 <![endif]-->
 <?php
 	}
