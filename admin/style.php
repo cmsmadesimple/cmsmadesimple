@@ -1,5 +1,6 @@
 <?php
 
+$CMS_ADMIN_PAGE = TRUE;
 $CMS_STYLESHEET = TRUE;
 
 if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))

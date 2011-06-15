@@ -507,7 +507,7 @@ function debug_bt_to_log()
     $bt = array_reverse($bt);
     foreach($bt as $trace)
     {
-      if( $elem['function'] == 'debug_bt_to_log' ) continue;
+      if( $trace['function'] == 'debug_bt_to_log' ) continue;
 
       $file = $trace['file'];
       $line = $trace['line'];

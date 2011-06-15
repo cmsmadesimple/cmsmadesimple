@@ -136,6 +136,7 @@ if ($submitted == 1)
     
     audit($userid, 'Group ID', lang_en('permissionschanged'));
     $message = lang('permissionschanged');
+    $gCms->clear_cached_files();
   }
 
 $query = "SELECT p.permission_id, p.permission_text, up.group_id FROM ".

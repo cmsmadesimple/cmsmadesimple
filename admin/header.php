@@ -62,11 +62,13 @@ else
 	
 	debug_buffer('after theme-y stuff');
 
+	/* calguy1000 - remove notification stuff
+	 * this could go into a regular task, and the output cached for display here
+	 * or could go into the system maintenance page.
 	// Display notification stuff from modules
 	// should be controlled by preferences or something
 	$ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
-	if( get_site_preference('enablenotifications',1) &&
-	    get_preference($userid,'enablenotifications',1) )
+	if( get_site_preference('enablenotifications',1) && get_preference($userid,'enablenotifications',1) )
 	{
 	  $modules = ModuleOperations::get_instance()->GetLoadedModules();
 	  foreach( $modules as $modulename => $mod )
@@ -117,14 +119,14 @@ else
 	  $sitedown_message = lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN');
 	  $sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';
 	  if (file_exists($sitedown_file))
-	    {
+ 	    {
 	      $themeObject->AddNotification(1,'Core',$sitedown_message);
 	    }
 	  
 	  debug_buffer('after notifications');
 	  
 	  // Display a warning if CMSMS needs upgrading
-	  $db =& $gCms->GetDb();
+	  $db = $gCms->GetDb();
 	  $current_version = $CMS_SCHEMA_VERSION;
 	  $query = "SELECT version from ".cms_db_prefix()."version";
 	  $row = $db->GetRow($query);
@@ -233,6 +235,7 @@ else
 
 	// and display the dashboard.
 	$themeObject->DisplayNotifications(3); // todo, a preference.
+	**/
 
 	// we've removed the Recent Pages stuff, but other things could go in this box
 	// so I'll leave some of the logic there. We can remove it later if it makes sense. SjG

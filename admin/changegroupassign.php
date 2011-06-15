@@ -133,6 +133,7 @@ if ($submitted == 1)
 
     audit($userid, 'User ID', lang_en('assignmentchanged'));
     $message = lang('assignmentchanged');
+    $gCms->clear_cached_files();
   }
 
 

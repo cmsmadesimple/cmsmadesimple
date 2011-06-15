@@ -155,8 +155,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'listgcbs_pagelimit', $listgcbs_pagelimit);
 	audit($userid, '', lang_en('edited_user_preferences'));
 	$page_message = lang('prefsupdated');
-	#redirect("index.php");
-	#return;
+	$gCms->clear_cached_files();
 } else if (!isset($_POST["edituserprefs"])) {
 	$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
 	$wysiwyg = get_preference($userid, 'wysiwyg');
@@ -183,6 +182,7 @@ if (isset($_POST["submit_form"])) {
 
 	$hide_help_links = get_preference($userid, 'hide_help_links');
 	$ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
+	$gCms->clear_cached_files();
 }
 
 include_once("header.php");

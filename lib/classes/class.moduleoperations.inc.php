@@ -465,6 +465,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
 		 Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
 		 audit('',$module_obj->GetName(), lang_en('installed_mod',$module_obj->GetVersion()));
+		 $gCms->clear_cached_files();
 		 return array(TRUE,$module_obj->InstallPostMessage());
 	 }
 
@@ -536,7 +537,6 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  if( !isset($info[$module_name]) && !$force_load )
 	  {
 		  debug_buffer("Nothing is known about $module_name... cant load it");
-		  return FALSE;
 	  }
 
 	  global $CMS_INSTALL_PAGE;
@@ -572,6 +572,31 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  debug_buffer("Cannot load $module_name... It is not compatible with this version of CMSMS");
 		  unset($obj);
 		  return FALSE;
+	  }
+
+	  // okay, lessee if we can load the dependants
+	  if( !isset($config['modules_noloaddependants']) )
+	  {
+		  $deps = $obj->GetDependencies();
+		  if( is_array($deps) && count($deps) )
+		  {
+			  $res = true;
+			  foreach( $deps as $name => $ver )
+			  {
+				  $obj2 = $this->get_module_instance($name);
+				  if( !is_object($obj2) )
+				  {
+					  $res = false;
+					  break;
+				  }
+			  }
+			  if( !$res )
+			  {		  
+				  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
+				  unset($obj);
+				  return FALSE;
+			  }
+		  }
 	  }
 
 	  if( isset($info[$module_name]) && $info[$module_name]['status'] != 'installed' && 
@@ -708,12 +733,16 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  if( $loadall ) return $this->_load_all_modules();
 
 	  global $CMS_ADMIN_PAGE;
+	  global $CMS_STYLESHEET;
+	  $config = cmsms()->GetConfig();
+
 	  $allinfo = $this->_get_module_info();
 	  foreach( $allinfo as $module_name => $info )
 	  {
 		  if( $info['status'] != 'installed' ) continue;
 		  if( !$info['active'] ) continue;
 		  if( ($info['admin_only'] || $info['allow_fe_lazyload']) && !isset($CMS_ADMIN_PAGE) ) continue;
+		  if( isset($config['admin_loadnomodules']) && isset($CMS_ADMIN_PAGE) ) continue;
 		  if( $info['allow_admin_lazyload'] && isset($CMS_ADMIN_PAGE) ) continue;
 
 		  $this->get_module_instance($module_name);
@@ -761,6 +790,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  $info[$module_obj->GetName()]['version'] = $module_obj->GetVersion();
 		  audit('','Module', lang_en('upgraded_mod',$module_obj->GetName(),$dbversion,$module_obj->GetVersion()));
 		  Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
+		  $cmsms()->clear_cached_files();
 		  return TRUE;
 	  }
 	  return FALSE;
@@ -926,20 +956,41 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
    */
   public static function get_modules_with_capability($capability, $args= '')
   {
-	  $info = self::get_instance()->_get_module_info();
-	  $output = array();
-	  foreach( $info as $module_name => $rec )
+	  $fn = TMP_CACHE_LOCATION.'/capability_'.md5($capability.serialize($args)).'dat';
+	  $names = array();
+	  if( !file_exists($fn) )
 	  {
-		  // do we have this info cached?
-		  $obj = self::get_instance()->get_module_instance($module_name);
-		  if( is_object($obj) && $obj->HasCapability($capability,$args) )
+		  $info = self::get_instance()->_get_module_info();
+		  foreach( $info as $module_name => $rec )
 		  {
-			  debug_display('found capability in '.$module_name);
-			  $output[] = $obj;
+			  $obj = self::get_instance()->get_module_instance($module_name);
+			  if( is_object($obj) && $obj->HasCapability($capability,$args) )
+			  {
+				  $names[] = $module_name;
+			  }
 		  }
+
+		  file_put_contents($fn,base64_encode(serialize($names)));
 	  }
-	  if( !count($output) ) return FALSE;
-	  return $output;
+	  else
+	  {
+		  $names = unserialize(base64_decode($fn));
+	  }
+	  if( is_array($names) && count($names) )
+	  {
+		  $output = array();
+		  foreach( $names as $one )
+		  {
+			  $obj = $this->get_module_instance($oen);
+			  if( is_object($obj) )
+			  {
+				  $output[] =& $obj;
+			  }
+		  }
+		  if( !count($output) ) return FALSE;
+		  return $output;
+	  }
+	  return FALSE;
   }
 
 
@@ -1026,6 +1077,28 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   }
 
 
+  public function &GetSyntaxModule($module_name = '')
+  {
+	  global $CMS_ADMIN_PAGE;
+	  $obj = null;
+	  if( !$module_name )
+		  {
+			  if( isset($CMS_ADMIN_PAGE) )
+				  {
+					  $module_name = get_preference(get_userid(FALSE),'syntaxhighlighter');
+				  }
+		  }
+
+	  if( !$module_name ) return $obj;
+
+	  $obj = $this->get_module_instance($module_name);
+	  if( !$obj ) return $obj;
+	  if( !$obj->IsSyntaxHighlighter() ) return $obj;
+
+	  return $obj;
+  }
+
+
   private function _is_queued_for_install($module_name)
   {
 	  if( !isset($_SESSION['moduleoperations']) ) return FALSE;
@@ -1057,6 +1130,14 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  unset($_SESSION['moduleoperations_result']);
 		  return $data;
 	  }
+  }
+
+
+  public function unload_module($module_name)
+  {
+	  if( !isset($this->_modules[$module_name]) || !is_object($this->_modules[$module_name]) )  return;
+	  
+	  unset($this->_modules[$module_name]);
   }
 
 } // end of class

@@ -19,7 +19,6 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-
 require_once("../include.php");
 require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
 
@@ -31,7 +30,6 @@ $thisurl=basename(__FILE__).$urlext;
 include_once("../lib/classes/class.admintheme.inc.php");
 
 define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
-
 
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax_core/xajax.inc.php');
 $xajax = new xajax();
@@ -49,8 +47,6 @@ $xajax->register(XAJAX_FUNCTION,'reorder_process');
 $xajax->processRequest();
 $headtext = $xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n";
 include_once("header.php");
-
-//echo '<a onclick="xajax_reorder_display_list();">Test</a>';
 
 function content_list_ajax()
 {
@@ -638,12 +634,6 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
     {
       return;
     }
-  
-//   if (!array_key_exists($one->TemplateId(), $templates))
-//     {
-//       $templateops = cmsms()->GetTemplateOperations();
-//       $templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId(),false,true);
-//     }
   
   if (!array_key_exists($one->Owner(), $users))
     {

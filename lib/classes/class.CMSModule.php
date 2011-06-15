@@ -150,6 +150,9 @@ class CMSModule
 	    case 'db':
 	      return cmsms()->GetDb();
 	    }
+
+	  $tmp = null;
+	  return $tmp;
 	}
 
 	/**

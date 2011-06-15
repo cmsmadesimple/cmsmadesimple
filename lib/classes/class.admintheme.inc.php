@@ -132,7 +132,7 @@ class AdminTheme
 	/**
 	 * Sets object to some sane initial values
 	 */
-	function SetInitialValues($cms, $userid, $themeName)
+	private function SetInitialValues($cms, $userid, $themeName)
 	{
 		$gCms = cmsms();
  		$this->_viewsite_url = $gCms->config['root_url'];
@@ -214,7 +214,7 @@ class AdminTheme
      *
      * @param section - section to display
      */
-    function MenuListSectionModules($section)
+    private function MenuListSectionModules($section)
     {
     	$modList = array();
         if (isset($this->sectionCount[$section]) && $this->sectionCount[$section] > 0)
@@ -238,6 +238,59 @@ class AdminTheme
         return $modList;
     }
 
+	/**
+	 * _get_user_module_info
+	 *
+	 * Given the currently logged in user, this will read cache information representing info for all avallable modules
+	 * for that particular user.   If cache information is not available, then modules will be loaded and the information
+	 * will be gleaned from the module for that user.
+	 *
+	 * 
+	 * @since 1.10
+	 * @access private
+	 * @author calguy1000
+	 */
+	private function _get_user_module_info()
+	{
+		$uid = get_userid(FALSE);
+		$fn = TMP_CACHE_LOCATION.'/themeinfo_'.$uid.'.cache';
+		$data = null;
+		if( !file_exists($fn) )
+		{
+			// data doesn't exist.. gotta build it.
+			$modules = ModuleOperations::get_instance()->GetInstalledModules();
+			$usermoduleinfo = array();
+			foreach( $modules as $key )
+			{
+				$object = ModuleOperations::get_instance()->get_module_instance($key);
+				if( $object && $object->HasAdmin() && $object->VisibleToAdminUser() )
+				{
+					$rec = array();
+					$rec['adminsection'] = $object->GetAdminSection();
+					$rec['friendlyname'] = $object->GetFriendlyName();
+					$rec['admindescription'] = $object->GetAdminDescription();
+					$usermoduleinfo[$key] = $rec;
+				}
+				ModuleOperations::get_instance()->unload_module($key);
+				unset($object);
+			}
+			unset($modules);
+
+			// even if the array is empty... serialize the info.
+			$data = $usermoduleinfo;
+			$tmp = serialize($data);
+			file_put_contents($fn,base64_encode($tmp));
+		}
+		else
+		{
+			$data = file_get_contents($fn);
+			$data = base64_decode($data);
+			$data = unserialize($data);
+		}
+		return $data;
+	}
+
+
     /**
      * SetModuleAdminInterfaces
      *
@@ -245,44 +298,45 @@ class AdminTheme
      * for display on section pages and menus.
      *
      */
-    function SetModuleAdminInterfaces()
+    private function SetModuleAdminInterfaces()
     {
-		// Are there any modules with an admin interface?
-		$modules = ModuleOperations::get_instance()->GetInstalledModules();
-		foreach( $modules as $key )
-			{
-				$object = ModuleOperations::get_instance()->get_module_instance($key);
-				if( !$object ) continue;
+		// get the info from the cache
+		$usermoduleinfo = $this->_get_user_module_info();
+		if( !is_array($usermoduleinfo) ) 
+		{
+			audit(get_userid(FALSE),'Admin Theme','No module information found for user');
+		}
 
-				if( $object->HasAdmin() && $object->VisibleToAdminUser() )
-					{
-						$section = $object->GetAdminSection();
-						if (! isset($this->sectionCount[$section]))
-							{
-								$this->sectionCount[$section] = 0;
-							}
-						$this->modulesBySection[$section][$this->sectionCount[$section]]['key'] = $key;
-						if ($object->GetFriendlyName() != '')
-							{
-								$this->modulesBySection[$section][$this->sectionCount[$section]]['name'] =
-									$object->GetFriendlyName();
-							}
-						else
-							{
-								$this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $key;
-							}
-						if ($object->GetAdminDescription() != '')
-							{
-								$this->modulesBySection[$section][$this->sectionCount[$section]]['description'] =
-									$object->GetAdminDescription();
-							}
-						else
-							{
-								$this->modulesBySection[$section][$this->sectionCount[$section]]['description'] = "";
-							}
-						$this->sectionCount[$section]++;
-					}
-            }
+		// Are there any modules with an admin interface?
+		foreach( $usermoduleinfo as $key => $rec )
+		{
+			$section = $rec['adminsection'];
+			if( $section == '' ) $section == 'extensions';
+
+			if (! isset($this->sectionCount[$section]))
+			{
+				$this->sectionCount[$section] = 0;
+			}
+			$this->modulesBySection[$section][$this->sectionCount[$section]]['key'] = $key;
+			if ($rec['friendlyname'] != '')
+			{
+				$this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $rec['friendlyname'];
+			}
+			else
+			{
+				$this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $key;
+			}
+			if ($rec['admindescription'] != '')
+			{
+				$this->modulesBySection[$section][$this->sectionCount[$section]]['description'] =
+					$rec['admindescription'];
+			}
+			else
+			{
+				$this->modulesBySection[$section][$this->sectionCount[$section]]['description'] = "";
+			}
+			$this->sectionCount[$section]++;
+		}
     }
 
     /**
@@ -294,7 +348,7 @@ class AdminTheme
      * that menu item is visible.
      *
      */
-    function SetAggregatePermissions()
+    private function SetAggregatePermissions()
     {
         # Content Permissions
         $this->perms['htmlPerms'] = check_permission($this->userid, 'Add Global Content Blocks') |

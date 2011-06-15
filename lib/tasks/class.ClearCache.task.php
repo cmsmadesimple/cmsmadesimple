@@ -7,7 +7,7 @@ class ClearCacheTask implements CmsRegularTask
 
   public function get_name()
   {
-    return lang_by_realm('clearcache_taskname','tasks');
+    return get_class();
   }
 
 

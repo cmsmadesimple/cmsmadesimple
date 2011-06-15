@@ -159,6 +159,7 @@ if ($access) {
 			{
 				audit($user_id, $thisuser->username, lang_en('edited_user'));
 				Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
+				$gCms->clear_cached_files();
 				
                 if ($access_perm)
                     {
