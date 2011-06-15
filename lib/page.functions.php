@@ -50,7 +50,7 @@ function check_login($no_redirect = false)
 	if (isset($_SESSION['login_cms_language']))
 	{
 		debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
-		setcookie('cms_language', $_SESSION['login_cms_language']);
+		cms_cookies::set('cms_language', $_SESSION['login_cms_language']);
 		unset($_SESSION['login_cms_language']);
 	}
 
@@ -208,9 +208,8 @@ function generate_user_object($userid)
 	{
 		$_SESSION['cms_admin_user_id'] = $userid;
 		$_SESSION['cms_admin_username'] = $oneuser->username;
-		setcookie('cms_admin_user_id', $oneuser->id);
-		setcookie('cms_passhash', md5(md5($config['root_path'] . '--' . $oneuser->password)));
-		//setcookie(CMS_SECURE_PARAM_NAME, '', time() - 3600);
+		cms_cookies::set('cms_admin_user_id', $oneuser->id);
+		cms_cookies::set('cms_passhash', md5(md5($config['root_path'] . '--' . $oneuser->password)));
 	}
 }
 

@@ -41,23 +41,6 @@ if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_INSTALL_PAGE) )
 
 if(!@session_id()) session_start();
 
-if( isset($CMS_ADMIN_PAGE) )
-  {
-     if( !isset($_SESSION[CMS_USER_KEY]) )
-       {
-	 if( isset($_COOKIE[CMS_SECURE_PARAM_NAME]) )
-	   {
-	     $_SESSION[CMS_USER_KEY] = $_COOKIE[CMS_SECURE_PARAM_NAME];
-	   }
-	 else
-	   {
-	     // maybe change this algorithm.
-	     $key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
-	     $_SESSION[CMS_USER_KEY] = $key;
-	     setcookie(CMS_SECURE_PARAM_NAME, $key);
-	   }
-       }
-  }
 
 /**
  * This file is included in every page.  It does all seutp functions including
@@ -70,7 +53,6 @@ if( isset($CMS_ADMIN_PAGE) )
 if (version_compare(phpversion(),"5.3.0","<")) {
   set_magic_quotes_runtime(false);
 }
-
 
 // minimum stuff to get started (autoloader needs the cmsms() and the config stuff.
 //require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'class.cms_variables.php');
@@ -96,8 +78,25 @@ if (isset($starttime))
   cmsms()->set_variable('starttime',$starttime);
 }
 
-#Load the config file (or defaults if it doesn't exist)
-//require(cms_join_path($dirname,'lib','config.functions.php'));
+
+if( isset($CMS_ADMIN_PAGE) )
+  {
+     if( !isset($_SESSION[CMS_USER_KEY]) )
+       {
+	 if( isset($_COOKIE[CMS_SECURE_PARAM_NAME]) )
+	   {
+	     $_SESSION[CMS_USER_KEY] = $_COOKIE[CMS_SECURE_PARAM_NAME];
+	   }
+	 else
+	   {
+	     // maybe change this algorithm.
+	     $key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
+	     $_SESSION[CMS_USER_KEY] = $key;
+	     cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);
+	   }
+       }
+  }
+
 
 # Create the global
 $gCms = cmsms();
@@ -276,7 +275,6 @@ if (! isset($CMS_INSTALL_PAGE))
     CmsRegularTaskHandler::handle_tasks();
   }
 
-
 function sanitize_get_var(&$value, $key)
 {
   if (version_compare(phpversion(),"5.3.0","<")) {
@@ -285,7 +283,6 @@ function sanitize_get_var(&$value, $key)
     $value = preg_replace('/\<\/?script[^\>]*\>/i', '', $value); //the i makes it caseinsensitive
   }
 }
-
 
 # vim:ts=4 sw=4 noet
 ?>

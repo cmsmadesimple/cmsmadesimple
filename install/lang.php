@@ -55,18 +55,18 @@ if (isset($CMS_INSTALL_PAGE))
 		$current_language = $_POST["default_cms_lang"];
 		if ($current_language == '')
 		{
-			setcookie("cms_language", '', time() - 3600);
+		  cms_cookies::erase("cms_language");
 		}
 		else if (isset($_POST["change_cms_lang"]))
 		{
-			setcookie("cms_language", $_POST["change_cms_lang"]);
+		  cms_cookies::set("cms_language", $_POST["change_cms_lang"]);
 		}
 	}
 	else if (isset($_SESSION['login_cms_language']))
 	{
 		debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
 		$current_language = $_SESSION['login_cms_language'];
-		setcookie('cms_language', $_SESSION['login_cms_language']);
+		cms_cookies::set('cms_language', $_SESSION['login_cms_language']);
 		unset($_SESSION['login_cms_language']);
 	}
 	else if (isset($_COOKIE["cms_language"]))

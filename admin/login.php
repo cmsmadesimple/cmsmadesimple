@@ -110,9 +110,9 @@ if (isset($_SESSION['logout_user_now']))
 	unset($_SESSION['logout_user_now']);
 	unset($_SESSION['cms_admin_user_id']);
 	unset($_SESSION[CMS_USER_KEY]);
-	setcookie('cms_admin_user_id', '', time() - 3600);
-	setcookie('cms_passhash', '', time() - 3600);
-        setcookie(CMS_SECURE_PARAM_NAME,'',time()-3600);
+	cms_cookies::erase('cms_admin_user_id');
+	cms_cookies::erase('cms_passhash');
+	cms_cookies::erase(CMS_SECURE_PARAM_NAME);
 }
 else if ( isset($_SESSION['redirect_url']) )
 {

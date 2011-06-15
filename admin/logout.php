@@ -35,9 +35,6 @@ if( isset($_SESSION['login_user_username'])) {
 
 audit($userid, $username, lang_en('user_logout'));
 
-#unset($_SESSION['cms_admin_user_id']);
-#setcookie('cms_admin_user_id', '', time() - 3600);
-#setcookie('cms_passhash', '', time() - 3600);
 
 #Now call the event
 Events::SendEvent('Core', 'LogoutPost');
