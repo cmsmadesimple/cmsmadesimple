@@ -974,7 +974,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  }
 	  else
 	  {
-		  $names = unserialize(base64_decode($fn));
+		  $names = unserialize(base64_decode(file_get_contents($fn)));
 	  }
 	  if( is_array($names) && count($names) )
 	  {
