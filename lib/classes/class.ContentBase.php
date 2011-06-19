@@ -2181,7 +2181,7 @@ class ContentBase
 	      {
 		$showadmin = check_ownership(get_userid(), $this->Id());
 		$userops = $gCms->GetUserOperations();
-		if (!$adding && $showadmin)
+		if (!$adding && ($showadmin || check_permission(get_userid(),'Manage All Content')) )
 		  {
 		    return array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
 		  }
@@ -2191,7 +2191,7 @@ class ContentBase
 	    case 'additionaleditors':
 	      {
 		// do owner/additional-editor stuff
-		if( $adding || check_ownership(get_userid(),$this->Id()) )
+		if( $adding || check_ownership(get_userid(),$this->Id()) || check_permission(get_userid(),'Manage All Content'))
 		  {
 		    return $this->ShowAdditionalEditors();
 		  }
