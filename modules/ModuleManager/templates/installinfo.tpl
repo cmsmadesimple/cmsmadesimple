@@ -1,5 +1,5 @@
 <h3>{$mod->Lang('title_installation')}:</h3>
-<div class="pageewarning"><h3>{$mod->Lang('notice')}:</h3>
+<div class="pagewarning"><h3>{$mod->Lang('notice')}:</h3>
   <p>{$time_warning}</p>
 </div>
 
