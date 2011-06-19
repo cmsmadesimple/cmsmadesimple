@@ -26,6 +26,9 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	global $CMS_STYLESHEET;
 	$CMS_STYLESHEET = 1;
 	$template_id = '';
+	$use_https = -1;
+
+	if( isset($params['https']) ) $use_https = (bool)$params['https'];
 
 	if (isset($params["templateid"]) && $params["templateid"]!="")
 	{
@@ -35,10 +38,19 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	{
 		$content_obj = $gCms->variables['content_obj'];
 		$template_id = $content_obj->TemplateId();
+		if( $use_https == -1 )
+		{
+			$use_https = (bool)$content_obj->Secure();
+		}	
 	}
 	
 	$config = $gCms->config;
 	$db = $gCms->GetDb();
+	$root_url = $config['root_url'];
+	if( $use_https && isset($config['ssl_url']) )
+	{
+		$root_url = $config['ssl_url'];
+	}
 
 	$cache_dir = TMP_CACHE_LOCATION;
 	$stylesheet = '';
@@ -137,7 +149,8 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 				$smarty->left_delimiter = '{';
 				$smarty->right_delimiter = '}';
 			}
-			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$config['root_url'].'/tmp/cache/'.$filename.'"/>'."\n";
+			
+			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'"/>'."\n";
 		}
 		else
 		{
@@ -170,11 +183,11 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 				}
 				if ( empty($media_type) || isset($params['media']) )
 				{
-					$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$config['root_url'].'/tmp/cache/'.$filename.'"/>'."\n";
+					$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'"/>'."\n";
 				}
 				else
 				{
-					$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$config['root_url'].'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
+					$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
 				}
 			}
 		}
