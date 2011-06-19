@@ -148,7 +148,7 @@ class cms_config implements ArrayAccess
     $calculated_root_path = dirname(dirname(dirname(__FILE__)));
     switch( $key )
       {
-      case 'dmbs':
+      case 'dbms':
       case 'db_hostname':
       case 'db_username':
       case 'db_password':
@@ -182,6 +182,7 @@ class cms_config implements ArrayAccess
 		  $path = substr($path,0,strlen($path)-strlen('install')-1);
 		}
 	    }
+	  // todo: here we could get the default content object and test if it's secure
 	  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
 	  return $str;
 	}
