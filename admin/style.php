@@ -34,12 +34,15 @@ else if (file_exists(dirname(__FILE__)."/themes/default/css/".$style))
   }
 
 $allmodules = ModuleOperations::get_instance()->GetLoadedModules();
-foreach( $allmodules as $key => &$object )
-{
-  if( $object->HasAdmin() )
-    {
-      echo $object->AdminStyle();
-    }
-}
+if( is_array($allmodules) && count($allmodules) )
+  {
+    foreach( $allmodules as $key => &$object )
+      {
+	if( $object->HasAdmin() )
+	  {
+	    echo $object->AdminStyle();
+	  }
+      }
+  }
 # vim:ts=4 sw=4 noet
 ?>
