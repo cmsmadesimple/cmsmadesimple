@@ -711,7 +711,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 		  $str = $one->mName;
 		}
 	      if ($display == 'edit')
-		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($str, '', '', true) . '</a>';
+		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '"><label for="multicontent-'.$one->mId.'">'. cms_htmlentities($str, '', '', true) . '</label></a>';
 	      else
 		$txt .= cms_htmlentities($str, '', '', true);
 	    }
@@ -979,7 +979,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	  if ( (($structure == 1) || (($remove == 1) && ($editperms == 1))) &&
 	       ($one->Type() != 'errorpage' ))
 	    {
-	      $txt .= '<input type="checkbox" name="multicontent-'.$one->Id().'" />';
+	      $txt .= '<input type="checkbox" id="multicontent-'.$one->Id().'" name="multicontent-'.$one->Id().'" />';
 	    }
 	  if( !empty($txt) )
 	    {
@@ -1238,7 +1238,7 @@ function display_content_list($themeObject = null)
 	  }
 	if( $columnstodisplay['multiselect'] )
 	  {
-	    $headoflist .= '<th title="'.lang('lctitle_multiselect').'" class="checkbox"><input id="selectall" type="checkbox" onclick="select_all();" /></th>'."\n"; // checkbox column
+	    $headoflist .= '<th title="'.lang('lctitle_multiselect').'" class="checkbox"><label for="selectall">'.lang('toogle').'</label><br /><input id="selectall" type="checkbox" onclick="select_all();" /></th>'."\n"; // checkbox column
 	  }
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';
@@ -1267,8 +1267,8 @@ function display_content_list($themeObject = null)
 	  {
 	    echo '<div class="pageoptions">'."\n";
 	    echo '<div style="margin-top: 0; float: right; text-align: right">'."\n";
-	    echo lang('selecteditems').':&nbsp;&nbsp;'; 
-	    echo '<select name="multiaction">';
+	    echo '<label for="multiaction">'.lang('selecteditems').'</label>:&nbsp;&nbsp;'; 
+	    echo '<select name="multiaction" id="multiaction">';
 	    foreach( $opts as $key => $value )
 	      {
 		echo '<option value="'.$key.'">'.$value.'</option>';

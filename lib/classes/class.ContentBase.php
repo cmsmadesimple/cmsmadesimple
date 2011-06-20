@@ -2047,13 +2047,13 @@ class ContentBase
 	
 	    case 'title':
 	      {
-		return array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
+		return array('<label for="title">'.lang('title').'</label>:','<input type="text" id="title" name="title" value="'.cms_htmlentities($this->mName).'" />');
 	      }
 	      break;
 	      
 	    case 'menutext':
 	      {
-		return array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
+		return array('<label for="menutext">'.lang('menutext').'</label:','<input type="text" name="menutext" id="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
 	      }
 	      break;
 	      
@@ -2063,19 +2063,19 @@ class ContentBase
 		  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('page_parent_use_name',true) );
 		  if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
 		    return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
-		  if( !empty($tmp) ) return array(lang('parent').':',$tmp);
+		  if( !empty($tmp) ) return array('<label for="parent_id">'.lang('parent').'</label>:',$tmp);
 		}
 	      break;
 
 	    case 'active':
 	      if( !$this->DefaultContent() )
 		{
-		  return array(lang('active').':','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" value="1"'.($this->mActive?' checked="checked"':'').' />');
+		  return array('<label for="active">'.lang('active').'</label>:','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" id="active" value="1"'.($this->mActive?' checked="checked"':'').' />');
 		}
 	      break;
 	      
 	    case 'showinmenu':
-	      return array(lang('showinmenu').':','<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+	      return array('<label for="showinmenu">'.lang('showinmenu').'</label>:','<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu" id="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 	      break;
 	      
 	    case 'target':
@@ -2085,14 +2085,14 @@ class ContentBase
 		$text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
 		$text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
 		$text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
-		return array(lang('target').':','<select name="target">'.$text.'</select>',
+		return array('<label for="target">'.lang('target').'</label>:','<select name="target" id="target">'.$text.'</select>',
 			     lang('info_target'));
 		
 	      }
 	      break;
 	      
 	    case 'alias':
-	      return array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />',lang('help_page_alias'));
+	      return array('<label for="alias">'.lang('pagealias').':','<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />',lang('help_page_alias'));
 	      break;
 	      
 	    case 'secure':
@@ -2103,16 +2103,16 @@ class ContentBase
 		    $opt = ' checked="checked"';
 		  }
 		$str  = '<input type="hidden" name="secure" value="0"/>';
-                $str .= '<input type="checkbox" name="secure" value="1"'.$opt.'/>';
-		return array(lang('secure_page').':',$str);
+                $str .= '<input type="checkbox" name="secure" id="secure" value="1"'.$opt.'/>';
+		return array('<label for="secure">'.lang('secure_page').'</label>:',$str);
 	      }
 	      break;
 
 	    case 'page_url':
 	      if( !$this->DefaultContent() )
 		{
-		  $str = '<input type="text" name="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
-		  $prompt = lang('page_url').':';
+		  $str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
+		  $prompt = '<label for="page_url">'.lang('page_url').'</label>:';
 		  if( get_site_preference('content_mandatory_urls',0) )
 		    {
 		      $prompt = '*'.$prompt;
@@ -2127,7 +2127,7 @@ class ContentBase
 		$data = $this->GetPropertyValue('image');
 		$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
 		if( !$dropdown ) return;
-		return array(lang('image').':',$dropdown);
+		return array('<label for="image">'.lang('image').'</label>:',$dropdown);
 	      }
 	      break;
 	      
@@ -2137,43 +2137,43 @@ class ContentBase
 		$data = $this->GetPropertyValue('thumbnail');
 		$dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
 		if( !$dropdown ) return FALSE;
-		return array(lang('thumbnail').':',$dropdown);
+		return array('<label for="thumbnail">'.lang('thumbnail').'</label>:',$dropdown);
 	      }
 	      break;
 	      
 	    case 'titleattribute':
 	      {
-		return array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
+		return array('<label for="titleattribute">'.lang('titleattribute').'</label>:','<input type="text" name="titleattribute" id="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
 	      }
 	      break;
 	      
 	    case 'accesskey':
 	      {
-		return array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+		return array('<label for="accesskey">'.lang('accesskey').'</label>:','<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
 	      }
 	      break;
 
 	    case 'tabindex':
 	      {
-		return array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
+		return array('<label for="tabindex">'.lang('tabindex').'</label>:','<input type="text" name="tabindex" id="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
 	      }
 	      break;
 	      
 	    case 'extra1':
 	      {
-		return array(lang('extra1').':','<input type="text" name="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
+		return array('<label for="extra1">'.lang('extra1').'</label>:','<input type="text" name="extra1" id="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
 	      }
 	      break;
 	      
 	    case 'extra2':
 	      {
-		return array(lang('extra2').':','<input type="text" name="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
+		return array('<label for="extra2">'.lang('extra2').'</label>:','<input type="text" name="extra2" id="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
 	      }
 	      break;
 	      
 	    case 'extra3':
 	      {
-		return array(lang('extra3').':','<input type="text" name="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
+		return array('<label for="extra3">'.lang('extra3').'</label>:','<input type="text" name="extra3" id="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
 	      }
 	      break;
 
@@ -2183,7 +2183,7 @@ class ContentBase
 		$userops = $gCms->GetUserOperations();
 		if (!$adding && ($showadmin || check_permission(get_userid(),'Manage All Content')) )
 		  {
-		    return array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
+		    return array('<label for="owner">'.lang('owner').'</label>:', $userops->GenerateDropdown($this->Owner()));
 		  }
 	      }
 	      break;

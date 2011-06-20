@@ -851,7 +851,7 @@ class ContentOperations
 
 		if( !empty($result) )
 			{
-				$result = '<select name="'.$name.'">'.$result.'</select>';
+				$result = '<select name="'.$name.'" id="'.$name.'">'.$result.'</select>';
 			}
 
 		return $result;

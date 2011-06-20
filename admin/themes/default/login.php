@@ -42,8 +42,8 @@
 							echo '<div class="warningLogin">'.lang('passwordchange').'</div>';
 					?>
 						<div class="lbfieldstext">
-							<p class="lbpass"><?php echo lang('password')?>:</p>
-							<p class="lbpass"><?php echo lang('passwordagain')?>:</p>
+							<p class="lbpass"><label for="lbpassword"><?php echo lang('password')?></label>:</p>
+							<p class="lbpass"><label for="lbpasswordagain"><?php echo lang('passwordagain')?></label:</p>
 						</div>
 						<div class="login-fields">
 							<form method="post" action="login.php">
@@ -58,7 +58,7 @@
 					<?php } else if (isset($_REQUEST['forgotpw']) && $_REQUEST['forgotpw']) { ?>
 						<p class="lbfieldstart"><?php echo lang('forgotpwprompt')?></p>
 						<div class="lbfieldstext">
-							<p class="lbuser"><?php echo lang('username')?>:</p>
+							<p class="lbuser"><label for="lbusername"><?php echo lang('username')?></label>:</p>
 						</div>
 						<div class="login-fields">
 							<form method="post" action="login.php">
@@ -70,15 +70,15 @@
 						</div>
 					<?php } else { ?>
 				<div class="lbfieldstext">
-					<p class="lbuser"><?php echo lang('username')?>:</p>
-					<p class="lbpass"><?php echo lang('password')?>:</p>
+					<p class="lbuser"><label for="lbusername"><?php echo lang('username')?></label>:</p>
+					<p class="lbpass"><label for="lbpassword"><?php echo lang('password')?></label>:</p>
 				</div>
 				<div class="lbinput">
 					<form method="post" action="login.php">
 						<p>
-							<input name="username" <?php if(!isset($_POST['username'])) echo 'class="defaultfocus"' ?> type="text" size="15" value="<?php echo htmlentities(isset($_POST['username'])?$_POST['username']:'')?>" /><br />
+							<input id="lbusername" name="username" <?php if(!isset($_POST['username'])) echo 'class="defaultfocus"' ?> type="text" size="15" value="<?php echo htmlentities(isset($_POST['username'])?$_POST['username']:'')?>" /><br />
 						<?php if(isset($error) && $error!='') {
-						  echo '<input class="lbpassword defaultfocus" name="password" type="password" size="15" /><br />';
+						  echo '<input class="lbpassword defaultfocus" id="lbpassword" name="password" type="password" size="15" /><br />';
 						} else {
 						  echo '<input class="lbpassword" name="password" type="password" size="15" /><br />';
 						} ?>

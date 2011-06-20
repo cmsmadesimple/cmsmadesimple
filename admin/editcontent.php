@@ -244,7 +244,7 @@ if (!$access)
 else
 {
 	#Get a list of content_types and build the dropdown to select one
-	$typesdropdown = '<select name="content_type" onchange="document.Edit_Content.submit()" class="standard">';
+	$typesdropdown = '<select name="content_type" id="content_type" onchange="document.Edit_Content.submit()" class="standard">';
 	$cur_content_type = '';
 	foreach ($existingtypes as $onetype => $onetypename )
 	{
@@ -360,7 +360,7 @@ $submit_buttons .= '</p></div>';
 				echo $submit_buttons;
 				?>
 				<div class="pageoverflow">
-					<div class="pagetext"><?php echo lang('contenttype'); ?>:</div>
+					<div class="pagetext"><label for="content_type"><?php echo lang('contenttype'); ?></label>:</div>
 					<div class="pageinput"><?php echo $typesdropdown; ?></div>
 				</div>
 				<?php
