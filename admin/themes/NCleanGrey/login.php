@@ -62,7 +62,7 @@
 					?>
 						<div class="lbfieldstext">
 							<p class="lbpass"><label for="lbpassword"><?php echo lang('password')?></label>:</p>
-							<p class="lbpass"><label for="lbpasswordagain"><?php echo lang('passwordagain')?></label:</p>
+							<p class="lbpass"><label for="lbpasswordagain"><?php echo lang('passwordagain')?></label>:</p>
 						</div>
 						<div class="login-fields">
 							<form method="post" action="login.php">

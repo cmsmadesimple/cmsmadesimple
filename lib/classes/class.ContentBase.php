@@ -2053,7 +2053,7 @@ class ContentBase
 	      
 	    case 'menutext':
 	      {
-		return array('<label for="menutext">'.lang('menutext').'</label:','<input type="text" name="menutext" id="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
+		return array('<label for="menutext">'.lang('menutext').'</label:>','<input type="text" name="menutext" id="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
 	      }
 	      break;
 	      
