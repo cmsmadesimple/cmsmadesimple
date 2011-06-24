@@ -50,7 +50,7 @@ $(".save").click(function(){
 {/literal}
 </script>
 <form action="ordercontent.php{$urlext}" method="post">
-<div class="pagoeverflow">
+<div class="pageoverflow">
  <input type="submit" name="submit" class="button save" value="{'submit'|lang}"/>
  <input type="submit" name="cancel" value="{'cancel'|lang}"/>
  <input type="submit" name="revert" value="{'revert'|lang}"/>
@@ -60,7 +60,7 @@ $(".save").click(function(){
 {include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1}
 </div>
 
-<div class="pagoeverflow">
+<div class="pageoverflow">
  <input type="submit" name="submit" class="button save" value="{'submit'|lang}"/>
  <input type="submit" name="cancel" value="{'cancel'|lang}"/>
  <input type="submit" name="revert" value="{'revert'|lang}"/>
