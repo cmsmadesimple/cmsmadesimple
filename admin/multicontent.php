@@ -424,7 +424,7 @@ else
 	else if ($action == 'dodelete')
 	{
 		$userid = get_userid();
-		$access = check_permission($userid, 'Remove Pages' || check_persmission($userid, 'Manage All Content'));
+		$access = check_permission($userid, 'Remove Pages' || check_permission($userid, 'Manage All Content'));
 		if ($access)
 		{
 			$db = $gCms->GetDb();
