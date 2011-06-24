@@ -518,14 +518,15 @@ class ContentOperations
 		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
 		$loadedcache = false;
 
-		if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
+		if (file_exists($cachefilename))
 		{
-			if( !isset($gCms->variables['last_content_modification']) )
+			$last_modified = cms_utils::get_app_date('last_content_modification');
+			if( !$last_modified );
 			{
-				$query = 'SELECT UNIX_TIMESTAMP(modified_date) FROM '.cms_db_prefix().'content ORDER BY modified_date DESC';
-				$gCms->variables['last_content_modification'] = $db->GetOne($query);
+				$query = 'SELECT UNIX_TIMESTAMP(modified_date) FROM '.cms_db_prefix().'content ORDER BY modified_date DESC LIMIT 1';
+				$last_modified = $db->GetOne($query);
+				cms_utils::set_app_data('last_content_modification',$last_modified);
 			}
-			$last_modified = $gCms->variables['last_content_modification'];
 			if ($last_modified > 0 && $last_modified < filemtime($cachefilename))
 			{
 				debug_buffer('file needs loading');
