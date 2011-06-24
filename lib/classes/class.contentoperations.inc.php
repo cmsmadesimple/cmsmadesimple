@@ -520,7 +520,7 @@ class ContentOperations
 
 		if (file_exists($cachefilename))
 		{
-			$last_modified = cms_utils::get_app_date('last_content_modification');
+			$last_modified = cms_utils::get_app_data('last_content_modification');
 			if( !$last_modified );
 			{
 				$query = 'SELECT UNIX_TIMESTAMP(modified_date) FROM '.cms_db_prefix().'content ORDER BY modified_date DESC LIMIT 1';
