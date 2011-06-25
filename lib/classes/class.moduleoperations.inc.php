@@ -736,6 +736,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  $config = cmsms()->GetConfig();
 
 	  $allinfo = $this->_get_module_info();
+	  if( !is_array($allinfo) ) return; // no modules installed, probably an empty database... edge case.
 	  foreach( $allinfo as $module_name => $info )
 	  {
 		  if( $info['status'] != 'installed' ) continue;
