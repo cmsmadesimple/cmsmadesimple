@@ -156,6 +156,7 @@ INSERT INTO {DB_PREFIX}events VALUES ('Core','ChangeGroupAssignPre',56);
 INSERT INTO {DB_PREFIX}events VALUES ('Core','ChangeGroupAssignPost',57);
 INSERT INTO {DB_PREFIX}events VALUES ('Core','StylesheetPreCompile',58);
 INSERT INTO {DB_PREFIX}events VALUES ('Core','StylesheetPostCompile',59);
+INSERT INTO {DB_PREFIX}events VALUES ('Core','LoginFailed',60);
 INSERT INTO {DB_PREFIX}css_assoc VALUES (22,47,'template','2009-05-06 14:31:14','2009-05-06 14:31:14',2);
 INSERT INTO {DB_PREFIX}css_assoc VALUES (22,48,'template','2009-05-06 14:31:08','2009-05-06 14:31:08',1);
 INSERT INTO {DB_PREFIX}css_assoc VALUES (22,49,'template','2009-05-06 14:31:20','2009-05-06 14:31:20',3);

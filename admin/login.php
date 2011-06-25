@@ -57,7 +57,8 @@ else if (isset($_REQUEST['forgotpwform']) && isset($_REQUEST['forgottenusername'
 	}
 	else
 	{
-		$error = lang('usernotfound');
+	  Events::SendEvent('Core','LoginFailed',array('user'=>$_REQUEST['forgottenusername']));
+	  $error = lang('usernotfound');
 	}
 }
 else if (isset($_REQUEST['recoverme']) && $_REQUEST['recoverme'])
@@ -115,8 +116,7 @@ if (isset($_SESSION['logout_user_now']))
 	cms_cookies::erase(CMS_SECURE_PARAM_NAME);
 }
 else if ( isset($_SESSION['redirect_url']) )
-{
-	
+{	
 	$_SESSION["t_redirect_url"] = $_SESSION["redirect_url"];
 	$no_redirect = true;
 	$is_logged_in = check_login($no_redirect);
@@ -267,10 +267,11 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		$error .= lang('usernameincorrect');
 		debug_buffer("Login failed.  Error is: " . $error);
 
+		Events::SendEvent('Core','LoginFailed',array('user'=>$_POST['username']));;
 		audit($username, $username, lang_en('login_failed'));
 
 		#Now call the event
-		Events::SendEvent('Core', 'LoginPost', $username);
+		//Events::SendEvent('Core', 'LoginPost', $username);
 
 	}
 	else
