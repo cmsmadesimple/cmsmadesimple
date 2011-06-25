@@ -59,6 +59,15 @@ class CMSInstallerPage2 extends CMSInstallerPage
 		 * Required Settings
 		 */
 		list($minimum, $recommended) = getTestValues('php_version');
+		$settings['recommended'][] =
+		  testIntegerMask(0,ilang('test_error_estrict'), 'error_reporting',E_STRICT,ilang('test_estrict_failed'),true,true,false);
+
+		if( defined('E_DEPRECATED') )
+		  {
+		    $settings['recommended'][] =
+		      testIntegerMask(0,ilang('test_error_edeprecated'), 'error_reporting',E_DEPRECATED,ilang('test_edeprecated_failed'),true,true,false);
+		  }
+
 		$settings['required'][] =
 			testVersionRange(1, ilang('test_check_php', $minimum) .'<br />'. ilang('test_min_recommend', $minimum, $recommended),
 				phpversion(), ilang('test_requires_php_version', phpversion(), $recommended), $minimum, $recommended, false);

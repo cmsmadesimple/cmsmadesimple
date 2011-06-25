@@ -579,7 +579,7 @@ else
 		    $dependentof[$row['child_module']] = "";
 		  }
 		  $str = implode(array_keys($dependentof),", ");
-		  $activecol = ($dbm[$key]['Active']==true?$image_true:"<a href='{$thisurl}&amp;action=settrue&amp;module=".$key."'>".$image_false."</a>");
+		  //$activecol = ($dbm[$key]['Active']==true?$image_true:"<a href='{$thisurl}&amp;action=settrue&amp;module=".$key."'>".$image_false."</a>");
 		  $statuscol[] = lang('hasdependents')." (<strong>$str</strong>)";
 		  // END HAS DEPENDENTS ===========
 		}

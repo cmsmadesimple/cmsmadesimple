@@ -50,22 +50,27 @@ $bodytext = '';
 $userid = get_userid();
 $wysiwyg = get_preference($userid, 'wysiwyg');
 
-$object = ModuleOperations::get_instance()->GetWYSIWYGModule();
-if( $object && $object->WYSIWYGActive() )
-  {
-    $bodytext.=$object->WYSIWYGGenerateBody();
-    $footertext.=$object->WYSIWYGGenerateHeader($htmlresult);
-    $formtext.=$object->WYSIWYGPageForm();
-    $formsubmittext.=$object->WYSIWYGPageFormSubmit();
-  }
-$object = ModuleOperations::get_instance()->GetSyntaxModule();
-if( is_object($object) && $object->SyntaxActive() )
-  {
-    $bodytext.=$object->SyntaxGenerateBody();
-    $footertext.=$object->SyntaxGenerateHeader($htmlresult);
-    $formtext.=$object->SyntaxPageForm();
-    $formsubmittext.=$object->SyntaxPageFormSubmit();
-  }
+// get the active wysiwyg
+$loaded = ModuleOperations::get_instance()->GetLoadedModules();
+foreach( $loaded as $name => &$object )
+{
+  if( $object->IsWYSIWYG() && $object->WYSIWYGActive() )
+    {
+      $bodytext.=$object->WYSIWYGGenerateBody();
+      $footertext.=$object->WYSIWYGGenerateHeader($htmlresult);
+      $formtext.=$object->WYSIWYGPageForm();
+      $formsubmittext.=$object->WYSIWYGPageFormSubmit();
+      break;
+    }
+  else if( $object->IsSyntaxHighlighter() && $object->SyntaxActive() )
+    {
+      $bodytext.=$object->SyntaxGenerateBody();
+      $footertext.=$object->SyntaxGenerateHeader($htmlresult);
+      $formtext.=$object->SyntaxPageForm();
+      $formsubmittext.=$object->SyntaxPageFormSubmit();
+      break;
+    }
+}
 
 $htmlresult = str_replace('<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->', $footertext, $htmlresult);
 $htmlresult = str_replace('##FORMSUBMITSTUFFGOESHERE##', ' '.$formtext, $htmlresult);

@@ -42,8 +42,7 @@ final class ModuleOperations
 	 *	@access private
 	 *
 	 */
-	protected $cmssystemmodules =  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer', 'News', 'MicroTiny', 'CMSPrinting', 'ThemeManager' );
-
+	protected $cmssystemmodules =  array( 'FileManager','MenuManager','ModuleManager','Search','CMSMailer','News','MicroTiny','CMSPrinting','ThemeManager' );
 
 	static private $_instance = null;
 	private $_modules = null;
@@ -741,9 +740,9 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  {
 		  if( $info['status'] != 'installed' ) continue;
 		  if( !$info['active'] ) continue;
-		  if( ($info['admin_only'] || $info['allow_fe_lazyload']) && !isset($CMS_ADMIN_PAGE) ) continue;
+		  if( ($info['admin_only'] || (isset($info['allow_fe_lazyload']) && $info['allow_fe_lazyload'])) && !isset($CMS_ADMIN_PAGE) ) continue;
 		  if( isset($config['admin_loadnomodules']) && isset($CMS_ADMIN_PAGE) ) continue;
-		  if( $info['allow_admin_lazyload'] && isset($CMS_ADMIN_PAGE) ) continue;
+		  if( isset($info['allow_admin_lazyload']) && $info['allow_admin_lazyload'] && isset($CMS_ADMIN_PAGE) ) continue;
 		  if( isset($CMS_STYLESHEET) ) continue;
 		  $this->get_module_instance($module_name);
 	  }
@@ -790,7 +789,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  $info[$module_obj->GetName()]['version'] = $module_obj->GetVersion();
 		  audit('','Module', lang_en('upgraded_mod',$module_obj->GetName(),$dbversion,$module_obj->GetVersion()));
 		  Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
-		  $cmsms()->clear_cached_files();
+		  cmsms()->clear_cached_files();
 		  return TRUE;
 	  }
 	  return FALSE;
