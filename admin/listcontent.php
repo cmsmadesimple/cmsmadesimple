@@ -1238,7 +1238,7 @@ function display_content_list($themeObject = null)
 	  }
 	if( $columnstodisplay['multiselect'] )
 	  {
-	    $headoflist .= '<th title="'.lang('lctitle_multiselect').'" class="checkbox"><label for="selectall">'.lang('toogle').'</label><br /><input id="selectall" type="checkbox" onclick="select_all();" /></th>'."\n"; // checkbox column
+	    $headoflist .= '<th title="'.lang('lctitle_multiselect').'" class="checkbox"><label for="selectall">'.lang('toggle').'</label><br /><input id="selectall" type="checkbox" onclick="select_all();" /></th>'."\n"; // checkbox column
 	  }
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';
