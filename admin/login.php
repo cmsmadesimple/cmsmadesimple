@@ -207,7 +207,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			  
 			  if( !strstr($tmp,'.php') || endswith($tmp,'/') )
 			    {
-			      die('tool');
 			      // force the url to go to index.php
 			      $tmp = $config['admin_url'].'/index.php';
 			    }
