@@ -65,22 +65,6 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		  }
 		$newconfig['timezone'] = $_POST['timezone'];
  		$newconfig['default_encoding'] = $_POST['default_encoding'];
-// 		$newconfig['auto_alias_content'] = true;
-// 		$newconfig['image_manipulation_prog'] = 'GD';
-// 		$newconfig['image_transform_lib_path'] = ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) ? 'C:/Program Files/VisualMagick/bin/' : '/usr/bin/ImageMagick/';
-// 		$newconfig['disable_htmlarea_translation'] = false;
-// 		$newconfig['admin_dir'] = 'admin';
-// 		$newconfig['persistent_db_conn'] = false;
-// 		$newconfig['default_upload_permission'] = '664';
-// 		$newconfig['page_extension'] = "";
-// 		$newconfig['locale'] = "";
-// 		$newconfig['admin_encoding'] = "utf-8";
-// 		$newconfig['use_adodb_lite'] = true;
-// 		//$newconfig['internal_pretty_urls'] = false; //Not in use now
-// 		$newconfig['use_hierarchy'] = true; //Now true
-// 		$newconfig['wiki_url'] = 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel';
-// 		$newconfig['set_names'] = true;
-// 		$newconfig['url_rewriting'] = 'none';
 
 		$newconfig->save();
 

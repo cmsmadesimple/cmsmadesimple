@@ -33,7 +33,15 @@ class CMSInstallerPage5 extends CMSInstallerPage
 		$values['db']['db_port'] = isset($_POST['db_port']) ? $_POST['db_port'] : '';
 		// $values['db']['db_socket'] = isset($_POST['db_socket']) ? $_POST['db_socket'] : '';
 
-		$values['timezone'] = isset($_POST['timezone']) ? $_POST['timezone'] : '';
+		if( isset($_SESSION['cms_orig_tz']) && $_SESSION['cms_orig_tz'] != '' )
+		  {
+		    $values['timezone'] = $_SESSION['cms_orig_tz'];
+		    $this->smarty->assign('current_timezone',$_SESSION['cms_orig_tz']);
+		  }
+		if( isset($_POST['timezone']) )
+		  {
+		    $values['timezone'] = $_POST['timezone'];
+		  }
 		$values['umask'] = isset($_POST['umask']) ? $_POST['umask'] : '';
 		$values['admininfo']['username'] = $_POST['adminusername'];
 		$values['admininfo']['email'] = $_POST['adminemail'];

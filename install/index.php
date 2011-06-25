@@ -18,9 +18,6 @@
 #
 #$Id$
 
-global $gCms;
-date_default_timezone_set('UTC');
-
 
 $CMS_INSTALL_PAGE=1;
 $LOAD_ALL_MODULES = true;
@@ -49,6 +46,13 @@ if(! extension_loaded_or('session') )
 }
 @session_start();
 
+$cms_orig_tz = date_default_timezone_get();
+if( !$cms_orig_tz )
+  {
+    date_default_timezone_set('UTC'); // if it's not set, this will hide any warning.
+  }
+
+$_SESSION['cms_orig_tz'] = $cms_orig_tz;
 
 /* UNDOCUMENTED features... if this values are set in the session */
 /* Set DEBUG */
