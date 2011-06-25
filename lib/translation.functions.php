@@ -95,6 +95,30 @@ function cms_initialize_nls()
 	}
 }
 
+/**
+ * A function to temporarily set the current admin language
+ *
+ * @since 1.10
+ * @internal
+ * @return boolean
+ */
+function cms_set_admin_language($new_lang = '')
+{
+  $gCms = cmsms();
+  $nls =& $gCms->nls;
+
+  if( $new_lang == '' ) 
+    {
+      cms_utils::set_app_data('cms_admin_lang','');
+      return TRUE;
+    }
+  if( isset($nls['language'][$new_lang]) || isset($nls['alias'][$new_lang]) )
+    {
+      cms_utils::set_app_data('cms_admin_lang',$new_lang);
+      return TRUE;
+    }
+  return FALSE;
+}
 
 /**
  * A function to return the current admin language
@@ -111,24 +135,31 @@ function cms_admin_current_language()
 
   cms_initialize_nls();
 
-  $uid = get_userid(false);
-  if( $uid )
+  if( cms_utils::get_app_data('cms_admin_lang') != '' )
     {
-      // user is logged in (this is after the admin login)
-      // get his preference.
-      $current_language = get_preference(get_userid(false),'default_cms_language');
-      if( $current_language == '' || 
-	  (!isset($nls['language'][$current_language]) && !isset($nls['alias'][$current_language])) )
-	{
-	  // preferred lang doesn't exist
-	  $current_language = '';
-	}
+      $current_language = cms_utils::get_app_data('cms_admin_lang');
     }
-
-  if ($current_language == '')
+  else
     {
-      // still nothing, see if we can get something from the browser.
-      $current_language = cms_detect_browser_lang();
+      $uid = get_userid(false);
+      if( $uid )
+	{
+	  // user is logged in (this is after the admin login)
+	  // get his preference.
+	  $current_language = get_preference(get_userid(false),'default_cms_language');
+	  if( $current_language == '' || 
+	      (!isset($nls['language'][$current_language]) && !isset($nls['alias'][$current_language])) )
+	    {
+	      // preferred lang doesn't exist
+	      $current_language = '';
+	    }
+	}
+      
+      if ($current_language == '')
+	{
+	  // still nothing, see if we can get something from the browser.
+	  $current_language = cms_detect_browser_lang();
+	}
     }
 
   if (isset($_POST['change_cms_lang']) && isset($_POST['default_cms_lang']) )
@@ -232,88 +263,115 @@ function cms_current_language()
 function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 0,$has_realm = 0, $is_custom = 0, $cur_lang = '')
 {
   $gCms = cmsms();
-	global $lang;
-	if( empty($realm) ) return fALSE;
+  if( empty($cur_lang) )
+    {
+      $cur_lang = cms_current_language();
+    }
 
-	if( empty($basedir) )
-	{
-		$basedir = cms_join_path($gCms->config['root_path'],'lib','lang',$realm);
-	}
-	if( empty($filename) )
-	{
-		$filename = 'en_US.php';
-	}
+  $all_langs = cms_utils::get_app_data('cms_loaded_realms');
+  if( $all_langs == '' )
+    {
+      // nothing loaded.
+      $all_langs = array();
+    }
+  if( !isset($all_langs[$cur_lang]) )
+    {
+      $all_langs[$cur_lang] = array();
+    }
+  
+  if( empty($realm) ) return fALSE;
+  if( isset($all_langs[$cur_lang][$realm]) ) return; // already loaded.
+  
+  if( empty($basedir) )
+    {
+      $basedir = cms_join_path($gCms->config['root_path'],'lib','lang',$realm);
+    }
+  if( empty($filename) )
+    {
+      $filename = 'en_US.php';
+    }
 
-	if( empty($cur_lang) )
-	  {
-	    $cur_lang = cms_current_language();
-	  }
 
-	// load the default (en_US) file first.
-	$fn = cms_join_path($basedir,$filename);
-	if( $lang_is_dir )
+  // load the default (en_US) file first.
+  $fn = cms_join_path($basedir,$filename);
+  if( $lang_is_dir )
+    {
+      $fn = cms_join_path($basedir,'en_US',$filename);
+    }
+  if( @file_exists($fn) )
+    {
+      $lang = array();
+      if( !$has_realm )
 	{
-		$fn = cms_join_path($basedir,'en_US',$filename);
+	  // the lang file doesn't create a realm array
+	  if( isset($all_langs[$cur_lang][$realm]) )
+	    {
+	      $lang = $all_langs[$cur_lang][$realm];
+	    }
+	  include($fn);
+	  $all_langs[$cur_lang][$realm] = $lang;
 	}
-	if (!isset($lang[$realm]) || $is_custom)
+      else
 	{
-		if( @file_exists($fn) )
+	  // the lang file defines the realm array itself.
+	  $lang = array();
+	  include($fn);
+	  foreach( array_keys($lang) as $t_realm )
+	    {
+	      if( !is_array($lang[$t_realm]) ) continue;
+	      $all_langs[$cur_lang][$t_realm] = $lang[$t_realm];
+	    }
+	}
+      unset($lang);
+      if( !isset($all_langs[$cur_lang][$realm]) ) return FALSE;
+    }
+  
+  // now load the lang file itself.
+  if( $cur_lang != 'en_US' )
+    {
+      $t_lang = basename($cur_lang);
+      $fn = cms_join_path($basedir,'ext',$t_lang.'.php');
+      if( $lang_is_dir && ! $is_custom)
+	{
+	  $fn = cms_join_path($basedir,'ext',$t_lang,$filename);
+	}
+      else if ($lang_is_dir && $is_custom)
+	{
+	  $fn = cms_join_path($basedir,$t_lang,$filename);
+	}
+      if( @file_exists($fn) )
+	{
+	  $lang = array();
+	  if( !$has_realm )
+	    {
+	      // the lang file doesn't create a realm array
+	      include($fn);
+	      if( !isset($all_langs[$cur_lang][$realm]) )
 		{
-			if( !$has_realm )
-			{
-				// the lang file doesn't create a subarray
-				$hold_lang = $lang;
-				$lang = array();
-				include($fn);
-				$hold_lang[$realm] = $lang;
-				$lang = $hold_lang;
-				unset($hold_lang);
-			}
-			else
-			{
-				// the lang file defines the sub-array itself.
-				include($fn);
-			}
-			if( !isset($lang[$realm]) ) return FALSE;
+		  $all_langs[$cur_lang][$realm] = $lang;
 		}
-
-		// now load the lang file itself.
-		if( $cur_lang != 'en_US' )
+	      else
 		{
-		  $cur_lang = basename($cur_lang);
-		  $fn = cms_join_path($basedir,'ext',$cur_lang.'.php');
-		  if( $lang_is_dir && ! $is_custom)
-		    {
-		      $fn = cms_join_path($basedir,'ext',$cur_lang,$filename);
-		    }
-		  else if ($lang_is_dir && $is_custom)
-		    {
-		      $fn = cms_join_path($basedir,$cur_lang,$filename);
-		    }
-		  if( @file_exists($fn) )
-			{
-				if( !$has_realm )
-				{
-					// the lang file doesn't create a subarray
-					$hold_lang = $lang;
-					$lang = array();
-					include($fn);
-					$hold_lang[$realm] = $lang;
-					$lang = $hold_lang;
-					unset($hold_lang);
-				}
-				else
-				{
-					// the lang file defines the sub-array itself.
-					include($fn);
-				}
-				if( !isset($lang[$realm]) ) return FALSE;
-			}
+		  $all_langs[$cur_lang][$realm] = array_merge($all_langs[$cur_lang][$realm],$lang);
 		}
-	
+	    }
+	  else
+	    {
+	      // the lang file defines the realm array itself.
+	      include($fn);
+	      foreach( array_keys($lang) as $t_realm )
+		{
+		  if( !is_array($lang[$t_realm]) ) continue;
+		  $all_langs[$cur_lang][$t_realm] = array_merge($all_langs[$cur_lang][$t_realm],$lang[$t_realm]);
+		}
+	    }
+	  unset($lang);
+	  if( !isset($all_langs[$cur_lang][$realm]) ) return FALSE;
 	}
+    }
 
-	return TRUE;
+  cms_utils::set_app_data('cms_loaded_realms',$all_langs);
+  return TRUE;
 }
 
 
@@ -335,8 +393,6 @@ function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 
 function lang_by_realm()
 {
   $gCms = cmsms();
-  global $lang;
-
   $name = '';
   $realm = 'admin';
   $params = array();
@@ -361,14 +417,14 @@ function lang_by_realm()
     }
 
   // we now have a name, a realm, and possible additonal arguments.
-  if( !isset($lang[$realm]) )
-    {
-      cms_load_lang_realm($realm);
-    }
+  cms_load_lang_realm($realm);
+  $all_langs = cms_utils::get_app_data('cms_loaded_realms');
+  $cur_lang = cms_current_language();
 
   // do processing.
-  if (isset($lang[$realm][$name]))
+  if( is_array($all_langs) && isset($all_langs[$cur_lang]) && isset($all_langs[$cur_lang][$realm]) && isset($all_langs[$cur_lang][$realm][$name]) )
     {
+      $lang = $all_langs[$cur_lang];
       if (count($params))
 	{
 	  $result = vsprintf($lang[$realm][$name], $params);
@@ -412,51 +468,48 @@ function lang()
 {
   // uses the default admin realm.
   $gCms = cmsms();
-	global $lang;
-	$nls =& $gCms->nls;
+  $nls =& $gCms->nls;
 
-	$dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'lang');
-	$customdir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'custom','lang');
+  $dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'lang');
+  $customdir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'custom','lang');
+  
+  cms_load_lang_realm('admin',$dir,'admin.inc.php',1,1);
+  cms_load_lang_realm('admin',$customdir,'admin.inc.php',1,1,1);			
 
-	if( !isset($lang['admin']) )
-	  {
-	    cms_load_lang_realm('admin',$dir,'admin.inc.php',1,1);
-	    cms_load_lang_realm('admin',$customdir,'admin.inc.php',1,1,1);			
-	  }
-	$name = '';
-	$params = array();
-	$realm = 'admin';
-
-	if (func_num_args() > 0)
+  $name = '';
+  $params = array();
+  $realm = 'admin';
+  
+  if (func_num_args() > 0)
+    {
+      $name = func_get_arg(0);
+      if (func_num_args() == 2 && is_array(func_get_arg(1)))
 	{
-		$name = func_get_arg(0);
-		if (func_num_args() == 2 && is_array(func_get_arg(1)))
-		{
-			$params = func_get_arg(1);
-		}
-		else if (func_num_args() > 1)
-		{
-			$params = array_slice(func_get_args(), 1);
-		}
+	  $params = func_get_arg(1);
 	}
-	else
+      else if (func_num_args() > 1)
 	{
-		return '';
+	  $params = array_slice(func_get_args(), 1);
 	}
-
-	// quick test to see if we are on the frontend or admin.
-	global $CMS_ADMIN_PAGE;
-	global $CMS_STYLESHEET;
-	global $CMS_INSTALL_PAGE;
-
-	if (!isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
-	  {
-	    trigger_error('Attempt to load admin realm from non admin action');
-	    return '';
-	  }
-
-	// todo:
-	return lang_by_realm($name,'admin',$params);
+    }
+  else
+    {
+      return '';
+    }
+  
+  // quick test to see if we are on the frontend or admin.
+  global $CMS_ADMIN_PAGE;
+  global $CMS_STYLESHEET;
+  global $CMS_INSTALL_PAGE;
+  
+  if (!isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
+    {
+      trigger_error('Attempt to load admin realm from non admin action');
+      return '';
+    }
+  
+  // todo:
+  return lang_by_realm($name,'admin',$params);
 }
 
 
