@@ -177,8 +177,6 @@ class CMSModule
 		    $this->SetParameterType('showtemplate',CLEAN_STRING);
 		    $this->SetParameterType('inline',CLEAN_INT);
 
-		    // deprecated.
-		    $this->SetParameters();
 		    $this->InitializeFrontend();
 		  }
 		else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) )
@@ -496,17 +494,17 @@ class CMSModule
 	}
 
 	/**
-	 * Called from within the constructor, ONLY for frontend module 
-         * actions.  This method should be overridden to create routes, and
-	 * set handled parameters, and perform other initialization tasks
-	 * that need to be setup for all frontend actions.
+	 * Called from within the constructor, ONLY for admin requests.
+         * This method should be overridden to call the CreaeteParameter
+	 * method for each parameter that the module understands.
+	 *
+	 * Note: As of Version 1.10 this module should not be used to create routes, 
+	 * for the SetParamterType methods.
 	 * 
 	 * @abstract
-	 * @see SetParameterType
 	 * @see CreateParameter
-	 * @see RegisterRoute
-	 * @see RestrictUnknownParams
-	 * @see RegisterModulePlugin
+	 * @see InitializeFrontend()
+	 * @see InitializeAdmin()
 	 * @deprecated
 	 * @return void
 	 */
@@ -522,7 +520,6 @@ class CMSModule
 	 * 
 	 * @abstract
 	 * @see SetParameterType
-	 * @see CreateParameter
 	 * @see RegisterRoute
 	 * @see RestrictUnknownParams
 	 * @see RegisterModulePlugin
@@ -540,11 +537,7 @@ class CMSModule
 	 * that need to be setup for all frontend actions.
 	 * 
 	 * @abstract
-	 * @see SetParameterType
 	 * @see CreateParameter
-	 * @see RegisterRoute
-	 * @see RestrictUnknownParams
-	 * @see RegisterModulePlugin
 	 * @return void
 	 */
 	protected function InitializeAdmin()

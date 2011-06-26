@@ -52,6 +52,7 @@ class cms_config implements ArrayAccess
     $this->_types['db_password'] = self::TYPE_STRING;
     $this->_types['db_name'] = self::TYPE_STRING;
     $this->_types['db_port'] = self::TYPE_INT;
+    $this->_types['db_prefix'] = self::TYPE_STRING;
     $this->_types['use_adodb_lite'] = self::TYPE_BOOL;
     $this->_types['root_url'] = self::TYPE_STRING;
     $this->_types['ssl_url'] = self::TYPE_STRING;

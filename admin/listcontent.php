@@ -421,14 +421,14 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 
 	$contentops = cmsms()->GetContentOperations();
 
-	$output .= '<li id="item_'.$content->mId.'">'."\n";
-	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->mHierarchy).') '.cms_htmlentities($content->mMenuText, '', '', true);
+	$output .= '<li id="item_'.$content->Id().'">'."\n";
+	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->Hierarchy()).') '.cms_htmlentities($content->MenuText(), '', '', true);
 
 	if ($root->getChildrenCount()>0)
 	{
-		$sortableLists->addList('parent'.$content->mId,'parent'.$content->mId.'ListOrder');
-		$listArray[$content->mId] = 'parent'.$content->mId.'ListOrder';
-		$output .= '<ul id="parent'.$content->mId.'" class="sortableList">'."\n";
+	  $sortableLists->addList('parent'.$content->Id(),'parent'.$content->Id().'ListOrder');
+	  $listArray[$content->Id()] = 'parent'.$content->Id().'ListOrder';
+	  $output .= '<ul id="parent'.$content->Id().'" class="sortableList">'."\n";
 
 		$children = $root->getChildren(false,true);
 		foreach ($children as $child)
@@ -696,7 +696,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	{
 	  $columns['page'] = '&nbsp;';
 	  $txt = '';
-	  if( $one->mMenuText != CMS_CONTENT_HIDDEN_NAME )
+	  if( $one->MenuText() != CMS_CONTENT_HIDDEN_NAME )
 	    {
 	      if ($indent)
 		{
@@ -705,13 +705,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 		      $txt .= "-&nbsp;&nbsp;&nbsp;";
 		    }
 		} 
-	      $str = $one->mMenuText;
+	      $str = $one->MenuText();
 	      if( get_site_preference('listcontent_showtitle',0) )
 		{
-		  $str = $one->mName;
+		  $str = $one->Name();
 		}
 	      if ($display == 'edit')
-		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '"><label for="multicontent-'.$one->mId.'">'. cms_htmlentities($str, '', '', true) . '</label></a>';
+		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'&amp;page='.$page.'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '"><label for="multicontent-'.$one->Id().'">'. cms_htmlentities($str, '', '', true) . '</label></a>';
 	      else
 		$txt .= cms_htmlentities($str, '', '', true);
 	    }
@@ -723,7 +723,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	{
 	  $columns['alias'] = '&nbsp;';
 	  $txt = '';
-	  if( $one->HasUsableLink() && $one->mAlias != '' )
+	  if( $one->HasUsableLink() && $one->Alias() != '' )
 	    {
 	      $txt = $one->Alias();
 	    }
@@ -824,7 +824,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	    {
 	      if ($one->IsDefaultPossible())
 		{
-		  $txt = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_html_entity_decode_utf8(lang("confirmdefault", $one->mName), true)."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>");
+		  $txt = ($one->DefaultContent()?$image_true:"<a href=\"{$thisurl}&amp;makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_html_entity_decode_utf8(lang("confirmdefault", $one->Name()), true)."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>");
 		}
 	    }
 	  if( !empty($txt) )
@@ -954,7 +954,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 		 )
 		{
 		  //$txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."');\">";
-		  $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->mName), true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
+		  $txt .= "<a href=\"{$thisurl}&amp;deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $one->Name()), true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
 		  $txt .= $deleteImg;
 		  $txt .= "</a>";
 		}
@@ -1113,6 +1113,7 @@ function display_content_list($themeObject = null)
 		}
 	}
 
+  debug_buffer('At Start of Display Content List');
         $hierarchy = $gCms->GetHierarchyManager();
 
 	$rowcount = 0;

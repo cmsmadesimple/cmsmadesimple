@@ -40,196 +40,197 @@ define('CMS_CONTENT_HIDDEN_NAME','--------');
  */
 class ContentBase
 {
-    /**
-     * The unique ID identifier of the element
-     * Integer
-     */
-  var $mId = -1;
+  /**
+   * The unique ID identifier of the element
+   * Integer
+   */
+  protected $mId = -1;
 
-    /**
-     * The name of the element (like a filename)
-     * String
-     */
-  var $mName = '';
+  /**
+   * The name of the element (like a filename)
+   * String
+   */
+  protected $mName = '';
 
-    /**
-     * The type of content (page, url, etc..)
-     * String
-     */
-  var $mType = '';
+  /**
+   * The type of content (page, url, etc..)
+   * String
+   */
+  protected $mType = '';
 
-    /**
-     * The owner of the content
-     * Integer
-     */
-  var $mOwner = -1;
+  /**
+   * The owner of the content
+   * Integer
+   */
+  protected $mOwner = -1;
 
-    /**
-     * The properties part of the content. This is an object of the good type.
-     * It should contain all treatments specific to this type of content
-     */
-     var $mProperties;
+  /**
+   * The properties part of the content. This is an object of the good type.
+   * It should contain all treatments specific to this type of content
+   */
+  protected $mProperties;
      
-     var $mPropertiesLoaded = false;
+  protected $mPropertiesLoaded = false;
 
-    /**
-     * The ID of the parent, 0 if none
-     * Integer
-     */
-     var $mParentId = -2;
+  /**
+   * The ID of the parent, 0 if none
+   * Integer
+   */
+  protected $mParentId = -2;
 
-    /**
-     * The old parent id... only used on update
-     */
-     var $mOldParentId = -1;
+  /**
+   * The old parent id... only used on update
+   */
+  protected $mOldParentId = -1;
 
-    /**
-     * This is used too often to not be part of the base class
-     */
-     var $mTemplateId = -1;
+  /**
+   * This is used too often to not be part of the base class
+   */
+  protected $mTemplateId = -1;
 
-    /**
-     * The item order of the content in his level
-     * Integer
-     */
-     var $mItemOrder = -1;
+  /**
+   * The item order of the content in his level
+   * Integer
+   */
+  protected $mItemOrder = -1;
 
-    /**
-     * The old item order... only used on update
-     */
-     var $mOldItemOrder = -1;
+  /**
+   * The old item order... only used on update
+   */
+  protected $mOldItemOrder = -1;
 
-    /**
-     * The metadata (head tags) fir this content
-     */
-     var $mMetadata = '';
+  /**
+   * The metadata (head tags) fir this content
+   */
+  protected $mMetadata = '';
 
-     var $mTitleAttribute = '';
-     var $mAccessKey = '';
-     var $mTabIndex = '';
+  protected $mTitleAttribute = '';
+  protected $mAccessKey = '';
+  protected $mTabIndex = '';
 
-    /**
-     * The full hierarchy of the content
-     * String of the form : 1.4.3
-     */
-    var $mHierarchy = '';
+  /**
+   * The full hierarchy of the content
+   * String of the form : 1.4.3
+   */
+  protected $mHierarchy = '';
 
-    /**
-     * The full hierarchy of the content ids
-     * String of the form : 1.4.3
-     */
-    var $mIdHierarchy = '';
+  /**
+   * The full hierarchy of the content ids
+   * String of the form : 1.4.3
+   */
+  protected $mIdHierarchy = '';
 
-    /**
-     * The full path through the hierarchy
-     * String of the form : parent/parent/child
-     */
-    var $mHierarchyPath = '';
+  /**
+   * The full path through the hierarchy
+   * String of the form : parent/parent/child
+   */
+  protected $mHierarchyPath = '';
 
-    /**
-     * What should be displayed in a menu
-     */
-    var $mMenuText = '';
+  /**
+   * What should be displayed in a menu
+   */
+  protected $mMenuText = '';
 
-    /**
-     * Is the content active ?
-     * Integer : 0 / 1
-     */
-    var $mActive = false;
+  /**
+   * Is the content active ?
+   * Integer : 0 / 1
+   */
+  protected $mActive = false;
 
-    /**
-     * Alias of the content
-     */
-    var $mAlias;
+  /**
+   * Alias of the content
+   */
+  protected $mAlias;
 
-    var $mOldAlias;
+  protected $mOldAlias;
 
-    /**
-     * Cachable?
-     */
-    var $mCachable;
+  /**
+   * Cachable?
+   */
+  protected $mCachable;
 
-    /**
-     * Secure?
-     */
-    protected $mSecure = 0;
+  /**
+   * Secure?
+   */
+  protected $mSecure = 0;
 
-    /**
-     * URL
-     */
-    protected $mURL = '';
+  /**
+   * URL
+   */
+  protected $mURL = '';
 
-    /**
-     * Does this content have a preview function?
-     */
-    var $mPreview = '';
+  /**
+   * Does this content have a preview function?
+   */
+  protected $mPreview = '';
 
-    /**
-     * Should it show up in the menu?
-     */
-    var $mShowInMenu = false;
+  /**
+   * Should it show up in the menu?
+   */
+  protected $mShowInMenu = false;
 
-    /**
-     * Is this page the default?
-     */
-    var $mDefaultContent = false;
+  /**
+   * Is this page the default?
+   */
+  protected $mDefaultContent = false;
 	
-    /**
-     * What type of markup is ths?  HTML is the default
-     */
-    var $mMarkup = 'html';
+  /**
+   * What type of markup is ths?  HTML is the default
+   */
+  protected $mMarkup = 'html';
 
-    /**
-     * Last user to modify this content
-     */
-    var $mLastModifiedBy = -1;
+  /**
+   * Last user to modify this content
+   */
+  protected $mLastModifiedBy = -1;
 
-    /**
-     * Creation date
-     * Date
-     */
-    var $mCreationDate = '';
+  /**
+   * Creation date
+   * Date
+   */
+  protected $mCreationDate = '';
 
-    /**
-     * Modification date
-     * Date
-     */
-    var $mModifiedDate = '';
+  /**
+   * Modification date
+   * Date
+   */
+  protected $mModifiedDate = '';
     
-    var $mAdditionalEditors;
+  protected $mAdditionalEditors;
 	
-    /*
-     * state or meta information
-     */
-    var $mReadyForEdit;
-    var $_attributes;
-    var $_prop_defaults;
-    var $_add_mode;
-    var $_error;
+  /*
+   * state or meta information
+   */
+  protected $mReadyForEdit;
 
-    /************************************************************************/
-    /* Constructor related													*/
-    /************************************************************************/
+  private $_attributes;
+  private $_prop_defaults;
+  private $_add_mode;
+  private $_error;
 
-    /**
-     * Generic constructor. Runs the SetInitialValues fuction.
-     */
-    public function __construct()
-    {
-	$this->SetInitialValues();
-	$this->SetProperties();
-	$this->mPropertiesLoaded = false;
-	$this->mReadyForEdit = false;
-    }
+  /************************************************************************/
+  /* Constructor related													*/
+  /************************************************************************/
 
-    /**
-     * Sets object to some sane initial values
-     */
-    function SetInitialValues()
-    {
- 	$this->mType           = strtolower(get_class($this)) ;
-	$this->mProperties     = new ContentProperties();
-    }
+  /**
+   * Generic constructor. Runs the SetInitialValues fuction.
+   */
+  public function __construct()
+  {
+    $this->SetInitialValues();
+    $this->SetProperties();
+    $this->mPropertiesLoaded = false;
+    $this->mReadyForEdit = false;
+  }
+
+  /**
+   * Sets object to some sane initial values
+   */
+  function SetInitialValues()
+  {
+    $this->mType           = strtolower(get_class($this)) ;
+    $this->mProperties     = new ContentProperties();
+  }
 
     /**
      * Subclasses should override this to set their property types using a lot
@@ -508,12 +509,21 @@ class ContentBase
 
 
     /**
-     * Returns the Hierarchy
+     * Returns the Hierarchy Path
      */
     public function HierarchyPath()
     {
 	return $this->mHierarchyPath;
     }
+
+
+//     /**
+//      * Returns the Hierarchy
+//      */
+//     public function Hierarchy()
+//     {
+// 	return $this->mHierarchy;
+//     }
 
 
     public function SetHierarchyPath($hierarchypath)
@@ -537,6 +547,16 @@ class ContentBase
 	$this->DoReadyForEdit();
 	$this->mActive = $active;
     }
+
+
+    /**
+     * Returns whether it should show in the menu
+     */
+    public function HasPreview()
+    {
+      return (bool) $this->mPreview;
+    }
+
 
 
     /**

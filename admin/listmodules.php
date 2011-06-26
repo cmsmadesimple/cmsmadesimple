@@ -312,6 +312,12 @@ else if ($action == "showmodulehelp")
   $modinstance = cms_utils::get_module($module);
   if( is_object($modinstance) )
     {
+      $orig_lang =  cms_admin_current_language();
+      if( isset($_GET['lang']) && $orig_lang != 'en_US' )
+	{
+	  cms_set_admin_language(trim($_GET['lang']));
+	}
+
       echo '<div class="pagecontainer">';
       // Commented out because of bug #914 and had to use code extra below
       // echo $themeObject->ShowHeader(lang('modulehelp', array($module)), '', lang('wikihelp', $module), 'wiki');
@@ -333,6 +339,12 @@ else if ($action == "showmodulehelp")
       // 		include($dirname.'/lang/en_US/admin.inc.php');
       $section = lang($modinstance->GetAdminSection());
       $wikiUrl .= '/'.$section.'/'.$moduleName;
+
+      if( $orig_lang != 'en_US' )
+	{
+	  $header .= '<span class="helptext"><a href="listmodules.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&action=showmodulehelp&module='.$module.'&lang=en_US">'.lang('modulehelp_english').'</a></span>';
+	}
+
       //		if (FALSE == get_preference($userid, 'hide_help_links'))
       if (FALSE)
 	{
@@ -349,9 +361,16 @@ else if ($action == "showmodulehelp")
       
       $header .= '</div>';
       echo $header;     
-      
+
+      // this is ugly hacky stuff to ajust the language temporarily.
+      $mod_old_lang = $modinstance->curlang;
+      $modinstance->params = array(array('name'=>'lang','default'=>'en_US','optional'=>true));
+      $modinstance->curlang = trim($_GET['lang']);
       echo $modinstance->GetHelpPage();
+      $modinstance->params = array(array('name'=>'lang','default'=>'en_US','optional'=>true));
+      $modinstance->curlang = $mod_old_lang;
       echo "</div>";
+      cms_set_admin_language($orig_lang);
     }
   
   echo '<p class="pageback"><a class="pageback" href="'.$thisurl.'">&#171; '.lang('back').'</a></p>';
