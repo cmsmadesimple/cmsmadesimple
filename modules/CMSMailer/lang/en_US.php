@@ -48,7 +48,6 @@ $lang['title_mod_prefs'] = 'Module Preferences';
 $lang['title_mod_admin'] = 'Module Admin Panel';
 $lang['title_admin_panel'] = 'CMSMailer Module';
 $lang['moddescription'] = 'This is a simple wrapper around PHPMailer, it has an equivalent API (function for function) and a simple interface for some defaults.';
-$lang['welcome_text'] = '<p>Welcome to the CMSMailer module admin section';
 $lang['changelog'] = '
 <ul>
 <li>Version 1.73.1. October, 2005. Initial Release.</li>
