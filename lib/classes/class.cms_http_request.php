@@ -880,10 +880,10 @@ class cms_http_request
 	    $this->addRequestHeader("Host: " . $this->host);
 	    $this->addRequestHeader('Accept: */*');
  	    $this->addRequestHeader("User-Agent: " . $this->userAgent);
-// 	    if( !$this->requestHeaderExists('Content-Type') )
-// 	      {
-// 		$this->addRequestHeader("Content-Type: application/x-www-form-urlencoded");
-// 	      }
+	    if( !$this->requestHeaderExists('Content-Type') )
+	      {
+		$this->addRequestHeader("Content-Type: application/x-www-form-urlencoded");
+	      }
             
             // Specify the custom cookies
             if ($this->useCookie && $cookieString != '')
@@ -910,7 +910,7 @@ class cms_http_request
 	      $this->addRequestheader("Authorization: Basic " . base64_encode($this->username . ':' . $this->password));
             }
        
-	    //$this->addRequestHeader("Connection: close");
+	    $this->addRequestHeader("Connection: close");
        
             // POST method configuration
 	    $requestHeader = implode("\r\n",$this->headerArray)."\r\n\r\n";
@@ -982,7 +982,6 @@ class cms_http_request
                     while (!feof($filePointer))
                     {
                         $responseContent .= fgets($filePointer, 128);
-			debug_display($responseContent);
                     }
                 }
                 else
