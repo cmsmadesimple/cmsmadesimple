@@ -94,6 +94,7 @@ $this->smarty->assign('modulename',$name);
 $this->smarty->assign('moduleversion',$version);
 $this->smarty->assign('xmlfile',$xmlfile);
 $this->smarty->assign('content',$about[1]);
+$this->smarty->assign('link_back',$this->CreateLink($id,'defaultadmin',$returnid, $this->Lang('back_to_module_manager')));
 echo $this->ProcessTemplate('remotecontent.tpl');
 
 #
