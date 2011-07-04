@@ -1187,19 +1187,19 @@ function display_content_list($themeObject = null)
 	      {
 		$str = lang('title');
 	      }
-	    $headoflist .= '<th scope=\"col\" class="pagew25" title="'.lang('lctitle_page').'">'.lang('page')." <em>({$str})</em></th>\n";
+	    $headoflist .= '<th scope="col" class="pagew25" title="'.lang('lctitle_page').'">'.lang('page')." <em>({$str})</em></th>\n";
 	  }
 	if( $columnstodisplay['alias'] )
 	  {
-	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_alias').'">'.lang('pagealias')."</th>\n";
+	    $headoflist .= '<th scope="col" title="'.lang('lctitle_alias').'">'.lang('pagealias')."</th>\n";
 	  }
 	if( $columnstodisplay['url'] )
 	  {
-	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_url').'">'.lang('url')."</th>\n";
+	    $headoflist .= '<th scope="col" title="'.lang('lctitle_url').'">'.lang('url')."</th>\n";
 	  }
 	if( $columnstodisplay['template'] )
 	  {
-	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_template').'">'.lang('template')."</th>\n";
+	    $headoflist .= '<th scope="col" title="'.lang('lctitle_template').'">'.lang('template')."</th>\n";
 	  }
 	if( $columnstodisplay['friendlyname'] )
 	  {
@@ -1207,19 +1207,19 @@ function display_content_list($themeObject = null)
 	  }
 	if( $columnstodisplay['owner'] )
 	  {
-	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_owner').'">'.lang('owner')."</th>\n";
+	    $headoflist .= '<th scope="col" title="'.lang('lctitle_owner').'">'.lang('owner')."</th>\n";
 	  }
 	if( $columnstodisplay['active'] )
 	  {
-	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_active').'" class="pagepos">'.lang('active')."</th>\n";
+	    $headoflist .= '<th scope="col" title="'.lang('lctitle_active').'" class="pagepos">'.lang('active')."</th>\n";
 	  }
 	if( $columnstodisplay['default'] )
 	  {
-	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_default').'" class="pagepos">'.lang('default')."</th>\n";
+	    $headoflist .= '<th scope="col" title="'.lang('lctitle_default').'" class="pagepos">'.lang('default')."</th>\n";
 	  }
 	if( $columnstodisplay['move'] )
 	  {
-	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_move').'" class="move">'.lang('move')."</th>\n";
+	    $headoflist .= '<th scope="col" title="'.lang('lctitle_move').'" class="move">'.lang('move')."</th>\n";
 	  }
 	if( $columnstodisplay['view'] )
 	  {
