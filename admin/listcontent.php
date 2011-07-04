@@ -711,7 +711,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 		  $str = $one->Name();
 		}
 	      if ($display == 'edit')
-		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'&amp;page='.$page.'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '"><label for="multicontent-'.$one->Id().'">'. cms_htmlentities($str, '', '', true) . '</label></a>';
+		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'&amp;page='.$page.'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '">' . cms_htmlentities($str, '', '', true) . '</a>';
 	      else
 		$txt .= cms_htmlentities($str, '', '', true);
 	    }
@@ -1187,39 +1187,39 @@ function display_content_list($themeObject = null)
 	      {
 		$str = lang('title');
 	      }
-	    $headoflist .= '<th class="pagew25" title="'.lang('lctitle_page').'">'.lang('page')." <em>({$str})</em></th>\n";
+	    $headoflist .= '<th scope=\"col\" class="pagew25" title="'.lang('lctitle_page').'">'.lang('page')." <em>({$str})</em></th>\n";
 	  }
 	if( $columnstodisplay['alias'] )
 	  {
-	    $headoflist .= '<th title="'.lang('lctitle_alias').'">'.lang('pagealias')."</th>\n";
+	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_alias').'">'.lang('pagealias')."</th>\n";
 	  }
 	if( $columnstodisplay['url'] )
 	  {
-	    $headoflist .= '<th title="'.lang('lctitle_url').'">'.lang('url')."</th>\n";
+	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_url').'">'.lang('url')."</th>\n";
 	  }
 	if( $columnstodisplay['template'] )
 	  {
-	    $headoflist .= '<th title="'.lang('lctitle_template').'">'.lang('template')."</th>\n";
+	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_template').'">'.lang('template')."</th>\n";
 	  }
 	if( $columnstodisplay['friendlyname'] )
 	  {
-	    $headoflist .= "<th>".lang('type')."</th>\n";
+	    $headoflist .= "<th scope=\"col\" >".lang('type')."</th>\n";
 	  }
 	if( $columnstodisplay['owner'] )
 	  {
-	    $headoflist .= '<th title="'.lang('lctitle_owner').'">'.lang('owner')."</th>\n";
+	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_owner').'">'.lang('owner')."</th>\n";
 	  }
 	if( $columnstodisplay['active'] )
 	  {
-	    $headoflist .= '<th title="'.lang('lctitle_active').'" class="pagepos">'.lang('active')."</th>\n";
+	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_active').'" class="pagepos">'.lang('active')."</th>\n";
 	  }
 	if( $columnstodisplay['default'] )
 	  {
-	    $headoflist .= '<th title="'.lang('lctitle_default').'" class="pagepos">'.lang('default')."</th>\n";
+	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_default').'" class="pagepos">'.lang('default')."</th>\n";
 	  }
 	if( $columnstodisplay['move'] )
 	  {
-	    $headoflist .= '<th title="'.lang('lctitle_move').'" class="move">'.lang('move')."</th>\n";
+	    $headoflist .= '<th scope=\"col\" title="'.lang('lctitle_move').'" class="move">'.lang('move')."</th>\n";
 	  }
 	if( $columnstodisplay['view'] )
 	  {
@@ -1239,7 +1239,7 @@ function display_content_list($themeObject = null)
 	  }
 	if( $columnstodisplay['multiselect'] )
 	  {
-	    $headoflist .= '<th title="'.lang('lctitle_multiselect').'" class="checkbox"><label for="selectall">'.lang('toggle').'</label><br /><input id="selectall" type="checkbox" onclick="select_all();" /></th>'."\n"; // checkbox column
+	    $headoflist .= '<th scope="col" title="'.lang('lctitle_multiselect').'" class="checkbox"><input id="selectall" type="checkbox" onclick="select_all();" /><label for="selectall">'.lang('toggle').'</label></th>'."\n"; // checkbox column
 	  }
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';
