@@ -711,7 +711,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 		  $str = $one->Name();
 		}
 	      if ($display == 'edit')
-		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'&amp;page='.$page.'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '">' . cms_htmlentities($str, '', '', true) . '</a>';
+		$txt .= '<a title="'.lang('edit').'" href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'&amp;page='.$page.'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '">' . cms_htmlentities($str, '', '', true) . '</a>';
 	      else
 		$txt .= cms_htmlentities($str, '', '', true);
 	    }
@@ -760,7 +760,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	      $template = TemplateOperations::get_instance()->LoadTemplateById($one->TemplateId());
 	      if( $template && check_permission($userid,'Modify Template') )
 		{
-		  $txt .= "<a href=\"edittemplate.php".$urlext."&amp;template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($template->name, '', '', true)."</a>";
+		  $txt .= "<a title=\"".lang('edittemplate')."\" href=\"edittemplate.php".$urlext."&amp;template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($template->name, '', '', true)."</a>";
 		}
    	      else if( $template )
 		{
@@ -979,7 +979,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	  if ( (($structure == 1) || (($remove == 1) && ($editperms == 1))) &&
 	       ($one->Type() != 'errorpage' ))
 	    {
-	      $txt .= '<input type="checkbox" id="multicontent-'.$one->Id().'" name="multicontent-'.$one->Id().'" />';
+	      $txt .= '<label class="invisible" for="multicontent-'.$one->Id().'">'.lang('toggle').'</label><input type="checkbox" id="multicontent-'.$one->Id().'" name="multicontent-'.$one->Id().'" title="'.lang('toggle').'"/>';
 	    }
 	  if( !empty($txt) )
 	    {
@@ -1239,7 +1239,7 @@ function display_content_list($themeObject = null)
 	  }
 	if( $columnstodisplay['multiselect'] )
 	  {
-	    $headoflist .= '<th scope="col" title="'.lang('lctitle_multiselect').'" class="checkbox"><input id="selectall" type="checkbox" onclick="select_all();" /><label for="selectall">'.lang('toggle').'</label></th>'."\n"; // checkbox column
+	    $headoflist .= '<th scope="col" title="'.lang('lctitle_multiselect').'" class="checkbox"><input id="selectall" type="checkbox" onclick="select_all();" /><label for="selectall" class="invisible">'.lang('toggle').'</label></th>'."\n"; // checkbox column
 	  }
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';
