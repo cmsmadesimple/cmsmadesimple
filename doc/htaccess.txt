@@ -14,7 +14,7 @@
 
 #Options +FollowSymLinks
 
-# To prevend E_STRICT problems with PHP 5.3+ you can uncomment the following lines
+# To prevent E_STRICT problems with PHP 5.3+ you can uncomment the following lines
 # Note: These settings should only be enabled for production sites!
 #php_flag display_startup_errors 0
 #php_flag display_errors 0
