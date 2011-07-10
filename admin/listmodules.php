@@ -479,7 +479,7 @@ else
 
       foreach($allmodules as $key)
 	{
-	  $modinstance = $modops->get_module_instance($key);
+	  $modinstance = $modops->get_module_instance($key,'',true);
 	  $is_sysmodule = $modops->IsSystemModule($key);
 	  $namecol = $key;
 	  $versioncol = "&nbsp;";
