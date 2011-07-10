@@ -455,16 +455,18 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 					 }
 			 }
 
-		 $info = $this->_get_module_info();
-		 $info[$module_obj->GetName()] = array('module_name'=>$module_obj->GetName(),
-											   'version'=>$module_obj->GetVersion(),
-											   'status'=>'installed',
-											   ($module_obj->IsAdminOnly()==true)?1:0,1,
-											   $lazyload_fe,$lazyload_admin);
+		 $this->_moduleinfo[$module_obj->GetName()] = array('module_name'=>$module_obj->GetName(),
+															'version'=>$module_obj->GetVersion(),
+															'status'=>'installed',
+															'active'=>1,
+															'admn_only'=>($module_obj->IsAdminOnly()==true)?1:0,
+															'allow_fe_lazyload'=>($module_obj->LazyLoadFrontend()==TRUE)?1:0,
+															'allow_admin_lazyload'=>($module_obj->LazyLoadAdmin()==TRUE)?1:0);
 
 		 Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
 		 audit('',$module_obj->GetName(), lang_en('installed_mod',$module_obj->GetVersion()));
 		 $gCms->clear_cached_files();
+
 		 return array(TRUE,$module_obj->InstallPostMessage());
 	 }
 
@@ -753,7 +755,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  // there are modules queued for install/upgrade that may not have been loaded.
 		  foreach($_SESSION['moduleoperations'] as $module_name => $info )
 		  {
-			  if( !isset($allmodules[$module_name]) )
+			  if( !isset($allinfo[$module_name]) )
 			  {
 				  // we don't know about this module yet...
 				  $rec = array('module_name'=>$module_name,'status'=>'not installed','version'=>'0.0',
@@ -852,6 +854,9 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 								   str_replace("'",'',$db->qstr($module)).
 								   "_mapi_pref%'");
 				  }
+
+			  // clear the cache.
+			  $gCms->clear_cached_files();
 
 			  Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
 			  audit('','Module',lang_en('uninstalled_mod',$module));

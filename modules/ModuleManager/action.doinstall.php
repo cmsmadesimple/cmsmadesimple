@@ -51,6 +51,7 @@ $installs = array_reverse(unserialize(base64_decode($params['modlist'])));
 $messages = modmgr_utils::install_module_list($installs);
 
 // now redirect to the action that will display the results
+$gCms->clear_cached_files();
 $this->Redirect($id,'display_install_results');
 
 // $smarty->assign('mod',$this);
