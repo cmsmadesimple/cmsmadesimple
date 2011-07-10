@@ -43,6 +43,7 @@
 
     <table>
     <tr>
+      {if isset($downloadlink)}
       <td>
         <div class="pageoptions">
           <p class="pageoptions">
@@ -55,6 +56,7 @@
           </p>
         </div>
       </td>
+      {/if}
       {if $clearicon!=""}
         <td>
           <div class="pageoptions">
@@ -63,8 +65,9 @@
               <a class="pageoptions" href="adminlog.php{$urlext}&amp;clear=true">{$langclear}</a>
             </p>
           </div>
-        </td></tr>
+        </td>
       {/if}
+    </tr>
     </table>
 
     <table cellspacing="0" class="pagetable">
