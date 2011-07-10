@@ -504,33 +504,35 @@ function audit($itemid, $itemname, $action)
 {
   $db = cmsms()->GetDb();
 
-	$userid = 0;
-	$username = '';
-
-	if (isset($_SESSION["cms_admin_user_id"]))
+  $userid = 0;
+  $username = '';
+  if( $itemid == '' ) $itemid = -1;
+  
+  if (isset($_SESSION["cms_admin_user_id"]))
+    {
+      $userid = $_SESSION["cms_admin_user_id"];
+    }
+  else
+    {
+      if (isset($_SESSION['login_user_id']))
 	{
-		$userid = $_SESSION["cms_admin_user_id"];
+	  $userid = $_SESSION['login_user_id'];
+	  $username = $_SESSION['login_user_username'];
 	}
-	else
-	{
-	    if (isset($_SESSION['login_user_id']))
-	    {
-		$userid = $_SESSION['login_user_id'];
-		$username = $_SESSION['login_user_username'];
-	    }
-	}
+    }
+  
+  if (isset($_SESSION["cms_admin_username"]))
+    {
+      $username = $_SESSION["cms_admin_username"];
+    }
+  
+  if (!isset($userid) || $userid == "") {
+    $userid = 0;
+  }
 
-	if (isset($_SESSION["cms_admin_username"]))
-	{
-		$username = $_SESSION["cms_admin_username"];
-	}
-
-	if (!isset($userid) || $userid == "") {
-		$userid = 0;
-	}
-
-	$query = "INSERT INTO ".cms_db_prefix()."adminlog (timestamp, user_id, username, item_id, item_name, action) VALUES (?,?,?,?,?,?)";
-	$db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action));
+  $ip_addr = cms_utils::get_real_ip();
+  $query = "INSERT INTO ".cms_db_prefix()."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
+  $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));
 }
 
 

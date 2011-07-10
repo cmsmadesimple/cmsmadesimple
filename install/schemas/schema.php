@@ -19,7 +19,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$db->DropSequence($db_prefix."module_templates_seq");
 	$db->DropSequence($db_prefix."permissions_seq");
 	$db->DropSequence($db_prefix."templates_seq");
-	#$db->DropSequence($db_prefix."sequence_seq");
 	$db->DropSequence($db_prefix."users_seq");
 	$db->DropSequence($db_prefix."userplugins_seq");
 
@@ -134,7 +133,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		username C(25),
 		item_id I,
 		item_name C(50),
-		action C(255)
+		action C(255),
+                ip_addr C(20)
 	";
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."adminlog", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);

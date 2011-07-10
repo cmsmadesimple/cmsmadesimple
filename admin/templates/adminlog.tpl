@@ -67,10 +67,10 @@
       {/if}
     </table>
 
-
     <table cellspacing="0" class="pagetable">
       <thead>
       <tr>
+        <th>{'ip_addr'|lang}</th>
         <th>{$languser}</th>
         <th>{$langitemid}</th>
         <th>{$langitemname}</th>
@@ -82,12 +82,12 @@
         {foreach from=$loglines item='line'}
           {cycle values='row1,row2' assign='currow'}
         <tr class="{$currow}" onmouseover="this.className='{$currow}.hover';" onmouseout="this.className='{$currow}';">
+          <td>{$line.ip_addr|default:''}</td>
           <td>{$line.username}</td>
           <td>{$line.itemid}</td>
           <td>{$line.itemname}</td>
           <td>{$line.action}</td>
           <td>{$line.date}</td>
-
         </tr>
         {/foreach}
 

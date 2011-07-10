@@ -2592,8 +2592,6 @@ class CMSModule
 	 */
 	function Audit($itemid, $itemname, $action)
 	{
-		#$userid = get_userid();
-		#$username = $_SESSION["cms_admin_username"];
 		audit($itemid,$itemname,$action);
 	}
 

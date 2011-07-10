@@ -916,6 +916,10 @@ ul.sortableList li li li li li {
 .important {
  color: red;
 }
+.smallgrey { 
+  font-weight: normal;
+  font-size: 0.8em;
+}
 /*FILEMANGER MESSAGES*/
 span.fm-messages{
 margin-left:20px;

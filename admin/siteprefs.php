@@ -199,6 +199,7 @@ if (isset($_POST["testumask"]))
 else if (isset($_POST['clearcache']))
 {
 	$gCms->clear_cached_files();
+	audit(-1,'Core',lang_en('cachecleared'));
 	$message .= lang('cachecleared');
 }
 else if (isset($_POST["editsiteprefs"]))

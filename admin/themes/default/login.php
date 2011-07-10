@@ -93,7 +93,9 @@
 				<?php } ?>
 			</div>	
 	</div>
-	<div class="lblayout footer"><a class="footer" href="http://www.cmsmadesimple.org">CMS Made Simple</a> is free software released under the General Public Licence.</div>
+	<div class="lblayout footer"><a class="footer" href="http://www.cmsmadesimple.org">CMS Made Simple</a> is free software released under the General Public Licence.
+         <p class="smallgrey"><?php echo lang('warn_admin_ipandcookies'); ?></p>
+        </div>
 </div>	
 </body>
 </html>

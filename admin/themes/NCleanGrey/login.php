@@ -115,6 +115,8 @@
 
 </div>
 <div class="login-footer"></div>
-<div id="copy"> &copy; <a rel="external" href="http://www.cmsmadesimple.org" >CMS Made Simple</a>&trade;</div>
+<div id="copy"> &copy; <a rel="external" href="http://www.cmsmadesimple.org" >CMS Made Simple</a>&trade;
+<p class="smallgrey"><?php echo lang('warn_admin_ipandcookies'); ?></p>
+</div>
 </body>
 </html>

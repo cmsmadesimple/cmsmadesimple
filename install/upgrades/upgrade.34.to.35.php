@@ -17,6 +17,11 @@ $db->Execute($query,array('Core','StylesheetPostCompile',$new_id));
 $new_id = $db->GenId( cms_db_prefix().'events_seq');
 $db->Execute($query,array('Core','LoginFailed',$new_id));
 
+echo '<p>Adding columns to adminlog table...';
+$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix().'adminlog','ip_addr C(20)');
+$return = $dbdict->ExecuteSQLArray($sqlarray);
+echo "[done]</p>";
+
 echo '<p>Adding columns to modules table...';
 $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix().'modules','allow_fe_lazyload I1,allow_admin_lazyload I1');
 $return = $dbdict->ExecuteSQLArray($sqlarray);

@@ -1,4 +1,7 @@
 <?php
+$lang['installed_module'] = 'Module Installed';
+$lang['automatedtask_success'] = 'Automated Task Succeeded';
+$lang['ip_addr'] = 'IP Address';
 $lang['install_admin_pwsalt_note'] = 'If you choose to enable password salts, there is absolutely no way to reset lost admin passwords, other than through the lost password functionality.   It is critical that you associate an email address with each admin account';
 $lang['admin_salt'] = 'Salt Admin Passwords';
 $lang['setup_flat_urls'] = 'Flat URLs are setup';
