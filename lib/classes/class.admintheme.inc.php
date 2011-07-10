@@ -1795,9 +1795,6 @@ debug_buffer('after menu items');
       if (FALSE == empty($this->breadcrumbs))
 	{
 	  $wikiUrl = $config['wiki_url'];
-// 	  // Include English translation of titles. (Can't find better way to get them)
-// 	  $dirname = dirname(__FILE__);
-// 	  include($dirname.'/../../'.cmsms()->config['admin_dir'].'/lang/en_US/admin.inc.php');
 	  foreach ($this->breadcrumbs AS $key => $value)
 	    {
 	      $title = $value['title'];
@@ -1839,19 +1836,13 @@ debug_buffer('after menu items');
 	    $wikiUrl = str_replace(' ', '_', $wikiUrl);
 	    $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
 	    // Make link to go the translated version of page if lang is not en_US
-	    /* Disabled as suggested by westis
-	     $lang = get_preference(cmsms()->variables['user_id'], 'default_cms_language');
-	     if ($lang != 'en_US') {
-	     $wikiUrl .= '/'.substr($lang, 0, 2);
-	     }
-	    */
 	    if (FALSE == empty($link_text))
 	      {
-		$help_title = $link_text;
+			  $help_title = $link_text;
 	      }
 	    else
 	      {
-		$help_title = lang('help_external');
+			  $help_title = lang('help_external');
 	      }
 
 	    $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
@@ -1859,14 +1850,13 @@ debug_buffer('after menu items');
 	    $image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('wikihelp'),'','','systemicon');		
 	    if ('both' == $module_help_type)
 	      {
-		$module_help_link = $config['admin_url'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
-		$header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a></span>';
-		//$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank" title="'.lang('wikihelp').'">'.lang('wikihelp').'</a>  ('.lang('new_window').')</span>';
+			  $module_help_link = $config['admin_url'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
+			  $header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a></span>';
 	      }
-	    else
-	      {
-			  //$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
-	      }
+// 	    else
+// 	      {
+// 			  //$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
+// 	      }
 	  }
     }
 	  $header .= '</div>';

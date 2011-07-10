@@ -506,11 +506,13 @@ function audit($itemid, $itemname, $action)
 
   $userid = 0;
   $username = '';
+  $ip_addr = '';
   if( $itemid == '' ) $itemid = -1;
   
   if (isset($_SESSION["cms_admin_user_id"]))
     {
       $userid = $_SESSION["cms_admin_user_id"];
+      $ip_addr = cms_utils::get_real_ip();
     }
   else
     {
@@ -530,7 +532,6 @@ function audit($itemid, $itemname, $action)
     $userid = 0;
   }
 
-  $ip_addr = cms_utils::get_real_ip();
   $query = "INSERT INTO ".cms_db_prefix()."adminlog (timestamp, user_id, username, item_id, item_name, action, ip_addr) VALUES (?,?,?,?,?,?,?)";
   $db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action,$ip_addr));
 }

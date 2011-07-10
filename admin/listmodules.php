@@ -365,7 +365,10 @@ else if ($action == "showmodulehelp")
       // this is ugly hacky stuff to ajust the language temporarily.
       $mod_old_lang = $modinstance->curlang;
       $modinstance->params = array(array('name'=>'lang','default'=>'en_US','optional'=>true));
-      $modinstance->curlang = trim($_GET['lang']);
+      if( isset($_GET['lang']) )
+	{
+	  $modinstance->curlang = trim($_GET['lang']);
+	}
       echo $modinstance->GetHelpPage();
       $modinstance->params = array(array('name'=>'lang','default'=>'en_US','optional'=>true));
       $modinstance->curlang = $mod_old_lang;

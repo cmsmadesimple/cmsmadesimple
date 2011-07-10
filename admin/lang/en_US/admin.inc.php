@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['siteprefsupdated'] = 'Site Settings Updated';
 $lang['admin']['installed_mod'] = 'Module Installed';
 $lang['admin']['ip_addr'] = 'IP Address';
 $lang['admin']['warn_admin_ipandcookies'] = 'Warning: Admin activities use cookies and tracks your IP address';
@@ -1093,7 +1094,6 @@ $lang['admin']['first'] = 'First';
 $lang['admin']['last'] = 'Last';
 $lang['admin']['adminspecialgroup'] = 'Warning: Members of this group automatically have all permissions';
 $lang['admin']['disablesafemodewarning'] = 'Disable admin safe mode warning';
-$lang['admin']['allowparamcheckwarnings'] = 'Allow parameter checks to create warning messages';
 $lang['admin']['date_format_string'] = 'Date Format String';
 $lang['admin']['date_format_string_help'] = '<em>strftime</em> formatted date format string.  Try googling \'strftime\'';
 $lang['admin']['last_modified_at'] = 'Last modified at';

@@ -86,7 +86,7 @@ function cms_module_GetHelpPage(&$modinstance)
 			{
 				$str .= '<em>(optional)</em> ';
 			}
-			$str .= $oneparam['name'].'="'.$oneparam['default'].'" - '.$oneparam['help'].'</li>';
+			$str .= $oneparam['name'].'="'.$oneparam['default'].'" - '.(isset($oneparam['help'])?$oneparam['help']:'').'</li>';
 		}
 		$str .= '</ul>';
 	}

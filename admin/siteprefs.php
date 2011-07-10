@@ -64,7 +64,6 @@ $thumbnail_width = 96;
 $thumbnail_height = 96;
 $clear_vc_cache = 0;
 $disablesafemodewarning = 0;
-$allowparamcheckwarnings = 0;
 $enablenotifications = 1;
 $sitedownexcludes = '';
 $sitedownexcludeadmins = '';
@@ -126,7 +125,6 @@ $metadata = get_site_preference('metadata',$metadata);
 $sitename = get_site_preference('sitename',$sitename);
 $clear_vc_cache = get_site_preference('clear_vc_cache',$clear_vc_cache);
 $disablesafemodewarning = get_site_preference('disablesafemodewarning',$disablesafemodewarning);
-$allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
 $enablenotifications = get_site_preference('enablenotifications',$enablenotifications);
 $sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
 $sitedownexcludeadmins = get_site_preference('sitedownexcludeadmins',$sitedownexcludeadmins);
@@ -282,7 +280,6 @@ else if (isset($_POST["editsiteprefs"]))
 	case 'setup':
 	  if (isset($_POST["clear_vc_cache"])) $clear_vc_cache = $_POST['clear_vc_cache'];
 	  if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = $_POST['disablesafemodewarning'];
-	  if (isset($_POST["allowparamcheckwarnings"])) $allowparamcheckwarnings = $_POST['allowparamcheckwarnings'];
 	  if (isset($_POST["enablenotifications"])) $enablenotifications = $_POST['enablenotifications'];
 	  if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
 	  if (isset($_POST["urlcheckversion"])) $urlcheckversion = $_POST["urlcheckversion"];
@@ -299,7 +296,6 @@ else if (isset($_POST["editsiteprefs"]))
 	    }
 	  set_site_preference('clear_vc_cache', $clear_vc_cache);
 	  set_site_preference('disablesafemodewarning',$disablesafemodewarning);
-	  set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
 	  set_site_preference('enablenotifications',$enablenotifications);
 	  if( isset($_POST['allow_browser_cache']) )
 	    {
@@ -328,8 +324,8 @@ else if (isset($_POST["editsiteprefs"]))
 	  break;
 	}
 
-      audit(-1, '', lang_en('prefsupdated'));
-      $message .= lang('prefsupdated');
+      audit(-1, '', lang_en('siteprefsupdated'));
+      $message .= lang('siteprefsupdated');
     }
   else
     {
@@ -428,7 +424,6 @@ $smarty->assign('textarea_sitedownmessage',create_textarea($use_wysiwyg,$sitedow
 $smarty->assign('urlcheckversion',$urlcheckversion);
 $smarty->assign('clear_vc_cache',$clear_vc_cache);
 $smarty->assign('disablesafemodewarning',$disablesafemodewarning);
-$smarty->assign('allowparamcheckwarnings',$allowparamcheckwarnings);
 $smarty->assign('defaultdateformat',$defaultdateformat);
 $smarty->assign('enablenotifications',$enablenotifications);
 $smarty->assign('sitedownexcludes',$sitedownexcludes);
@@ -502,7 +497,6 @@ $smarty->assign('lang_info_urlcheckversion',lang('info_urlcheckversion'));
 $smarty->assign('lang_clear_version_check_cache',lang('clear_version_check_cache'));
 $smarty->assign('lang_logintheme',lang('master_admintheme'));
 $smarty->assign('lang_disablesafemodewarning',lang('disablesafemodewarning'));
-$smarty->assign('lang_allowparamcheckwarnings',lang('allowparamcheckwarnings'));
 $smarty->assign('lang_date_format_string',lang('date_format_string'));
 $smarty->assign('lang_date_format_string_help',lang('date_format_string_help'));
 $smarty->assign('lang_admin_enablenotifications',lang('admin_enablenotifications'));

@@ -68,13 +68,13 @@ class CMSModule
 	 * @access private
 	 * @ignore
 	 */
-	var $wysiwygactive = false;
+	protected $wysiwygactive = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $syntaxactive = false;
+	protected $syntaxactive = false;
 
 	/**
 	 * @access private
@@ -86,49 +86,49 @@ class CMSModule
 	 * @access private
 	 * @ignore
 	 */
-	var $modinstall = false;
+	private $modinstall = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $modtemplates = false;
+	private $modtemplates = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $modlang = false;
+	private $modlang = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $modform = false;
+	private $modform = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $modredirect = false;
+	private $modredirect = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $modmisc = false;
+	private $modmisc = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $param_map = array();
+	private $param_map = array();
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	var $restrict_unknown_params = false;
+	private $restrict_unknown_params = false;
 
 	/**
 	 * Magic methods
@@ -1582,10 +1582,9 @@ class CMSModule
           $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
 	  if( $returnid != '' )
 	    {
-	      if( !$this->restrict_unknown_params && 
-		  get_site_preference('allowparamcheckwarnings',0))
+	      if( !$this->restrict_unknown_params )
 		{
-		  trigger_error('WARNING: '.$this->GetName().' is not properly cleaning input params.',E_USER_WARNING);
+		  audit('',$this->GetName(),'Module is not properly cleaning input params');
 		}
 	      // used to try to avert XSS flaws, this will
 	      // clean as many parameters as possible according
