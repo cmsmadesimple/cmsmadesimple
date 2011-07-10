@@ -662,11 +662,16 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 				  return FALSE;
 			  }
 		  }
+
 	  }
 
-	  // it all worked, module is loaded.
-	  $this->_modules[$module_name] = $obj;
-	  return TRUE;
+	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || $force_load )
+	  {
+		  $this->_modules[$module_name] = $obj;
+		  return TRUE;
+	  }
+
+	  return FALSE;
   }
 
 
