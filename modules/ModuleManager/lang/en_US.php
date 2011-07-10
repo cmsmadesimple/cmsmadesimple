@@ -64,7 +64,7 @@ $lang['download'] = 'Download &amp; Install';
 $lang['error_moduleinstallfailed'] = 'Module installation failed';
 $lang['error_connectnomodules'] = 'Although a connection was successfully made to the specified module repository.  It appears that this repository is not yet sharing any modules';
 $lang['submit'] = 'Submit';
-$lang['text_repository_url'] = 'The URL should be in the form http://www.mycmssite.com/path/soap.php?module=ModuleRepository';
+$lang['text_repository_url'] = 'The URL should be in the form http://www.mycmssite.com/ModuleRepository/request/v2 (assuming pretty urls are enabled on the repository server)';
 $lang['prompt_repository_url'] = 'ModuleRepository URL';
 $lang['title_installation'] = 'Installation';
 $lang['availmodules'] = 'Available Modules'; 
@@ -96,7 +96,7 @@ $lang['really_uninstall'] = 'Are you sure you want to uninstall? You will be mis
 $lang['uninstalled'] = 'Module Uninstalled.';
 $lang['installed'] = 'Module version %s installed.';
 $lang['upgraded'] = 'Module upgraded to version %s.';
-$lang['moddescription'] = 'A client for the ModuleRepository, this module allows previewing, and installing modules from remote sites without the need for ftping, or unzipping archives.  Module XML files are downloaded using SOAP, integrity verified, and then expanded automatically.';
+$lang['moddescription'] = 'A client for the ModuleRepository, this module allows previewing, and installing modules from remote sites without the need for ftping, or unzipping archives.  Module XML files are downloaded using a REST API, integrity verified, and then expanded automatically.';
 $lang['back_to_module_manager'] = '&#171; Return to Module Manager';
 
 $lang['error'] = 'Error!';
@@ -152,10 +152,17 @@ Added dependency checking.
   <li>Assorted usability improvements.</li>
   <li>Minor bug fixes.</li>
 </ul>
+<li>Version 1.5  - July, 2011
+<ul>
+  <li>Changes to REST API.. No longer uses nuSOAP.</li>
+  <li>Many optimizations to downloading and installing modules.</li>
+  <li>Can now install older versions of modules easily.</li>
+  <li>Handle automatic upgrading of ddependencies.</li>
+</ul>
 </li>
 </ul>';
 $lang['help'] = '<h3>What Does This Do?</h3>
-<p>A client for the ModuleRepository, this module allows previewing, and installing modules from remote sites without the need for ftping, or unzipping archives.  Module XML files are downloaded using SOAP, integrity verified, and then expanded automatically.</p>
+<p>A client for the ModuleRepository, this module allows previewing, and installing modules from remote sites without the need for ftping, or unzipping archives.  Module XML files are downloaded using REST, integrity verified, and then expanded automatically.</p>
 <h3>How Do I Use It</h3>
 <p>In order to use this module, you will need the \'Modify Modules\' permission, and you will also need the complete, and full URL to a \'Module Repository\' installation.  You can specify this url in the \'Extensions\' --&gt; \'Module Manager\' --&gt; \'Preferences\' page.</p><br/>
 <p>You can find the interface for this module under the \'Extensions\' menu.  When you select this module, the \'Module Repository\' installation will automatically be queried for a list of it\'s available xml modules.  This list will be cross referenced with the list of currently installed modules, and a summary page displayed.  From here, you can view the descriptive information, the help, and the about information for a module without physically installing it.  You can also choose to upgrade or install modules.</p>
