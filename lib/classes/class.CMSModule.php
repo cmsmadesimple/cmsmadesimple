@@ -68,13 +68,13 @@ class CMSModule
 	 * @access private
 	 * @ignore
 	 */
-	protected $wysiwygactive = false;
+	public $wysiwygactive = false;
 
 	/**
 	 * @access private
 	 * @ignore
 	 */
-	protected $syntaxactive = false;
+	public $syntaxactive = false;
 
 	/**
 	 * @access private
