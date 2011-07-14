@@ -1,6 +1,6 @@
 <?php
+$lang['admin']['automatedtask_success'] = 'Automated task performed';
 $lang['admin']['siteprefsupdated'] = 'Site Settings Updated';
-$lang['admin']['installed_mod'] = 'Module Installed';
 $lang['admin']['ip_addr'] = 'IP Address';
 $lang['admin']['warn_admin_ipandcookies'] = 'Warning: Admin activities use cookies and tracks your IP address';
 $lang['admin']['event_desc_loginfailed'] = 'Failed Login';
