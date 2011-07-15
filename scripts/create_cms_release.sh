@@ -229,15 +229,15 @@ tar zcf $_destdir/cmsmadesimple-$_version-full.tar.gz .
 echo "Creating language packs"
 create_lang_packs.sh -s ${_workdir} -d $_destdir >/dev/null
 
-# Create the base package checksum file
+# Create the base (english) package checksum file
 echo "Creating checksum file again"
-create_checksum_file $_destdir/cmsmadesimple-$_version-base-checksum.dat
+create_checksum_file $_destdir/cmsmadesimple-$_version-english-checksum.dat
 
 # Create the base package
 # it is created after the langpacks are created, because the langpack
 # generation removes files from the working directory.
-echo "Creating base package"
-tar zcf $_destdir/cmsmadesimple-$_version-base.tar.gz .
+echo "Creating base (english only) package"
+tar zcf $_destdir/cmsmadesimple-$_version-english.tar.gz .
 
 # Create a final checksum data file
 cd $_destdir

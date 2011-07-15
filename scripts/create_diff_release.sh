@@ -137,14 +137,14 @@ _tover=`echo $_to | cut -d- -f2-`
 #1.  Expand the base version of $_from
 echo "Processing base version";
 mkdir $_workdir
-_frombase=$basedir/$_from/${_from}-base.tar.gz 
+_frombase=$basedir/$_from/${_from}-english.tar.gz 
 cd $_workdir
 mkdir from_base
 cd from_base
 tar zxf $_frombase
 
 #2.  Expand the base version of $_to
-_tobase=$basedir/$_to/${_to}-base.tar.gz 
+_tobase=$basedir/$_to/${_to}-english.tar.gz 
 cd $_workdir
 mkdir to_base
 cd to_base
@@ -192,7 +192,7 @@ done
 
 #4 tar it up
 cd $_workdir/base_diff
-tar zcf ${basedir}/${_to}/cmsmadesimple-base-diff-${_fromver}-${_tover}.tar.gz . 2>/dev/null
+tar zcf ${basedir}/${_to}/cmsmadesimple-english-diff-${_fromver}-${_tover}.tar.gz . 2>/dev/null
 
 #5.  Expand the full version of $_from
 echo Processing full version
