@@ -38,7 +38,7 @@ class CMSModuleContentType extends ContentBase
 	  $obj = cms_utils::get_module($this->ModuleName());
 	  if( $obj )
 	    {
-	      return $cmsmodules[$this->ModuleName()]['object']->Lang($name, $params);
+	      return $obj->Lang($name, $params);
 	    }
 	  else
 	    {

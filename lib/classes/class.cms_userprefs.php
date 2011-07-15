@@ -86,13 +86,13 @@ final class cms_userprefs
     $db = cmsms()->GetDb();
     if( !self::exists_for_user($userid,$key) )
       {
-	$query = 'INSERT INTO '.cms_db_prefix().'userprefs (user_id,preference,value) VALUES (?,?,?)';
-	$dbr = $db->Execute($query,array(self::_userid(),$key,$value));
+		  $query = 'INSERT INTO '.cms_db_prefix().'userprefs (user_id,preference,value) VALUES (?,?,?)';
+		  $dbr = $db->Execute($query,array($userid,$key,$value));
       }
     else
       {
-	$query = 'UPDATE '.cms_db_prefix().'userprefs SET value = ? WHERE user_id = ? AND preference = ?';
-	$dbr = $db->Execute($query,array($value,$userid,$key));
+		  $query = 'UPDATE '.cms_db_prefix().'userprefs SET value = ? WHERE user_id = ? AND preference = ?';
+		  $dbr = $db->Execute($query,array($value,$userid,$key));
       }
     self::$_prefs[$userid][$key] = $value;
   }
@@ -102,17 +102,25 @@ final class cms_userprefs
     return self::set_for_user(self::_userid(),$key,$value);
   }
 
-  public static function remove_for_user($userid,$key,$like = FALSE)
+  public static function remove_for_user($userid,$key = '',$like = FALSE)
   {
     self::_read($userid);
-    $query = 'DELETE FROM '.cms_db_prefix().'userprefs WHERE preference = ? AND user_id = ?';
-    if( $like )
-      {
-	$query = 'DELETE FROM '.cms_db_prefix().'userprefs WHERE preference LIKEn ? AND user_id = ?';
-	$key .= '%';
-      }
+	$parms = array();
+	$query = 'DELETE FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
+	$parms[] = $userid;
+	if( $key )
+	{
+		$query2 = ' AND preference = ?';
+		if( $like )
+		{
+			$query2 = ' AND preference LIKE ?';
+			$key .= '%';
+		}
+		$query .= $query2;
+		$parms[] = $key;
+	}
     $db = cmsms()->GetDb();
-    $db->Execute($query,array($key,self::_userid()));
+    $db->Execute($query,$parms);
     self::_reset();
   }
 

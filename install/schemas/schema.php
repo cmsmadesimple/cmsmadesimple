@@ -535,8 +535,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-		user_id I,
-		preference C(50),
+		user_id I KEY,
+		preference C(50) KEY,
 		value X,
 		type C(25)
 	";

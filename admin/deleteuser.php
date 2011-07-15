@@ -39,10 +39,10 @@ if (isset($_GET["user_id"]))
 	if ($access && $user_id != $cur_userid)
 	{
 	  $gCms = cmsms();
-		$userops = $gCms->GetUserOperations();
-		$oneuser = $userops->LoadUserByID($user_id);
-		$user_name = $oneuser->username;
-		$ownercount = $userops->CountPageOwnershipByID($user_id);
+	  $userops = $gCms->GetUserOperations();
+	  $oneuser = $userops->LoadUserByID($user_id);
+	  $user_name = $oneuser->username;
+	  $ownercount = $userops->CountPageOwnershipByID($user_id);
 
 		if ($ownercount > 0)
 		{
@@ -53,6 +53,7 @@ if (isset($_GET["user_id"]))
 		{
 			Events::SendEvent('Core', 'DeleteUserPre', array('user' => &$oneuser));
 
+			cms_userprefs::remove_for_user($user_id);
 			$oneuser->Delete();
 
 			Events::SendEvent('Core', 'DeleteUserPost', array('user' => &$oneuser));
