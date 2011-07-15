@@ -776,6 +776,14 @@ div.pagecontainer {
 div.pagecontainer p {
 	margin-bottom: 1em;
 }
+div.pagecontainer ul {
+	margin-left: 0em;
+	padding-left: 20px;
+}
+div.pagecontainer ul li {
+	list-style-type: disc;
+	padding-bottom: 4px;
+}
 div.pageerrorcontainer , div.pageerrorinstalldir {
 	margin: 10px 20px;
 	padding: 10px;
