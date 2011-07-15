@@ -140,13 +140,14 @@ else
 		    {
 		      set_site_preference('cms_is_uptodate',0);
 		      $themeObject->AddNotification(1,'Core',lang('new_version_available'));
+		      audit('','Core','Tested for newer CMSMS Version.. None Available');
 		    }
 		  else
 		    {
 		      set_site_preference('cms_is_uptodate',1);
+		      audit('','Core','CMSMS version '.$remote_ver.' is avaliable');
 		    }
 		}
-	      audit('','Core','Tested for newer CMSMS Version');
 	      set_site_preference('lastcmsversioncheck',mktime(23,59,55));
 	    }
 	}
