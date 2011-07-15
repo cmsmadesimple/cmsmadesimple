@@ -313,9 +313,15 @@
 </div>
 </fieldset>
 
+<fieldset>
+<legend>{'general_operation_settings'|lang}:&nbsp;</legend>
 <div class="pageoverflow">
   <p class="pagetext">{$lang_global_umask}:</p>
-  <p class="pageinput"><input type="text" class="pagesmalltextarea" name="global_umask" size="4" value="{$global_umask}" /></p>
+  <p class="pageinput">
+    <input type="text" class="pagesmalltextarea" name="global_umask" size="4" value="{$global_umask}" />
+    <br/>
+    {'info_umask'|lang}
+  </p>
 </div>
 {if isset($testresults)}
 <div class="pageoverflow">
@@ -327,29 +333,14 @@
   <p class="pagetext">&nbsp;</p>
   <p class="pageinput"><input type="submit" name="testumask" value="{$lang_test}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" /></p>
 </div>
-
-<div class="pageoverflow">
-  <p class="pagetext">{$lang_urlcheckversion}:</p>
-  <p class="pageinput">
-    <input class="pagenb" type="text" name="urlcheckversion" size="80" maxlength="255" value="{$urlcheckversion}"/>
-    <br/>{$lang_info_urlcheckversion}
-  </p>
-</div>
-<div class="pageoverflow">
-  <p class="pagetext">{$lang_clear_version_check_cache}:</p>
-  <p class="pageinput"><input type="hidden" name="clear_vc_cache" value="0"/><input class="pagenb" value="1" type="checkbox" name="clear_vc_cache" {if $clear_vc_cache}checked="checked"{/if} /></p>
-</div>
-
 <div class="pageoverflow">
   <p class="pagetext">{$lang_disablesafemodewarning}:</p>
   <p class="pageinput"><input type="hidden" name="disablesafemodwarning" value="0"/><input class="pagenb" type="checkbox" value="1" name="disablesafemodewarning" {if $disablesafemodewarning}checked="checked"{/if} /></p>
 </div>
-
 <div class="pageoverflow">
   <p class="pagetext">{$lang_admin_enablenotifications}:</p>
   <p class="pageinput"><input type="hidden" name="enablenotifications" value="0"/><input class="pagenb" type="checkbox" value="1" name="enablenotifications" {if $enablenotifications}checked="checked"{/if} /></p>
 </div>
-
 <div class="pageoverflow">
   <p class="pagetext">{$lang_pseudocron_granularity}:</p>
   <p class="pageinput">
@@ -359,7 +350,6 @@
     {$lang_info_pseudocron_granularity}
   </p>
 </div>
-
 <div class="pageoverflow">
   <p class="pagetext">{$lang_adminlog_lifetime}:</p>
   <p class="pageinput">
@@ -369,6 +359,15 @@
     {$lang_info_adminlog_lifetime}
   </p>
 </div>
+<div class="pageoverflow">
+  <p class="pagetext">{$lang_checkversion}:</p>
+  <p class="pageinput">
+    <input type="hidden" name="urlcheckversion" value="0"/>
+    <input type="checkbox" name="urlcheckversion" value="1" {if $checkversion}checked="checked"{/if}/>
+    <br/>{'info_checkversion'|lang}
+  </p>
+</div>
+</fieldset>
 
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>

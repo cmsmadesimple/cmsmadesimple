@@ -101,8 +101,6 @@ else
 	    $themeObject->AddNotification(1,'Core',$sitedown_message);
 	  }
 	
-	debug_buffer('after notifications');
-	  
 	// Display a warning if CMSMS needs upgrading
 	{
 	  $db = $gCms->GetDb();
@@ -125,79 +123,33 @@ else
 	    $themeObject->AddNotification(1,'Core', $warning_upgrade);
 	  }
 
+	
 	// Display an upgrade notification 
 	// but only do a check once per day
-	$timelastchecked = get_site_preference('lastcmsversioncheck',0);
-	$tmpl = '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">%s</p></div></div>';
-	$cms_is_uptodate = 1;
-	$do_getpref = 0;
-	$url = strtolower(trim(get_site_preference('urlcheckversion','')));
-	if( $url != 'none' && ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
-	  {
-	    // check forced
-	    // get the url
-	    $do_getpref = 1;
-	    $goodtest = false;
-	    if( empty($url) )
-	      {
-		$url = CMS_DEFAULT_VERSIONCHECK_URL;
-	      }
-	    if( $url == 'none')
-	      {
-		$cms_is_uptodate = 1;
-		$do_getpref = 0;
-	      }
-	    else
-	      {
-		include_once(cms_join_path($config['root_path'], 'lib', 'test.functions.php'));
-		$remote_test = testRemoteFile(0, lang('test_remote_url'), $url, lang('test_remote_url_failed'), $config['debug']);
-		if ($remote_test->continueon)
-		  {
-		    // we have a 'theoretically' valid url
-		    $txt = @file_get_contents($url);
-		    if( $txt !== FALSE )
-		      {
-			// the url worked
-			// do a version check
-			$goodtest = true;
-			$parts = explode(':',$txt);
-			if( is_array( $parts ) && 
-			    strtolower($parts[0]) == 'cmsmadesimple' )
-			  {
-			    $ver = $parts[1];
-			    $res = version_compare( CMS_VERSION, $ver );
-			    if( $res < 0 )
-			      {
-				// new version available
-				$cms_is_uptodate = 0;
-				set_site_preference('cms_is_uptodate',0);
-			      }
-			    else
-			      {
-				// the version is valid.
-				set_site_preference('cms_is_uptodate',1);
-			      }
-			  } // if
-		      } // if
-		  }
-	      } // if
-	    
-	    // update the last check time
-	    // to midnight of the current day
-	    // if( $goodtest )
-	    if( true )
-	      {
-		set_site_preference('lastcmsversioncheck',
-				    strtotime("23:59:55"));
-	      }
-	  }
-
-	if( $cms_is_uptodate == 0 || 
-	    ($do_getpref == 1 && get_site_preference('cms_is_uptodate',1) == 0) )
-	  {
-	    // it wasn't up-to-date last time either
-	    $themeObject->AddNotification(1,'Core',lang('new_version_available'));
-	  }
+	{
+	  $timelastchecked = get_site_preference('lastcmsversioncheck',0);
+	  if( (get_site_preference('checkversion') && (time() - $timelastchecked) > (24 * 60 * 60)) || isset($_GET['forceversioncheck']) )
+	    {
+	      $req = new cms_http_request();
+	      $req->setTimeout(10);
+	      $req->execute(CMS_DEFAULT_VERSIONCHECK_URL);
+	      if( $req->getStatus() == 200 )
+		{
+		  $remote_ver = trim($req->getResult());
+		  if( version_compare(CMS_VERSION,$remote_ver) < 0 )
+		    {
+		      set_site_preference('cms_is_uptodate',0);
+		      $themeObject->AddNotification(1,'Core',lang('new_version_available'));
+		    }
+		  else
+		    {
+		      set_site_preference('cms_is_uptodate',1);
+		    }
+		}
+	      audit('','Core','Tested for newer CMSMS Version');
+	      set_site_preference('lastcmsversioncheck',mktime(23,59,55));
+	    }
+	}
 	
 
 	// Display a warning about mail settings.
@@ -211,6 +163,8 @@ else
 
 	// and display the dashboard.
 	$themeObject->DisplayNotifications(3); // todo, a preference.
+
+	debug_buffer('after notifications');
 
 	// we've removed the Recent Pages stuff, but other things could go in this box
 	// so I'll leave some of the logic there. We can remove it later if it makes sense. SjG

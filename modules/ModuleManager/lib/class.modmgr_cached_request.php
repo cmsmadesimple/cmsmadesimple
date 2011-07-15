@@ -59,8 +59,8 @@ final class modmgr_cached_request
     {
       // execute the request
       $req = new cms_http_request();
-      $req->execute($target,'','POST',$data);
       if( $this->_timeout ) $req->setTimeout($this->_timeout);
+      $req->execute($target,'','POST',$data);
       $this->_status = $req->getStatus();
       $this->_result = $req->getResult();
 

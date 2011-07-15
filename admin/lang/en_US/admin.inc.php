@@ -1,4 +1,8 @@
 <?php
+$lang['admin']['info_umask'] = 'The &quot;umask&quot; is an octal value that is used to specify the default permission for newly created files (this is used for files in the cache directory, and uploaded files.  For more information see the appropriate <a href="http://en.wikipedia.org/wiki/Umask">wikipedia article.</a>';
+$lang['admin']['general_operation_settings'] = 'General Operation Settings';
+$lang['admin']['info_checkversion'] = 'If enabled, a once daily check for a new release of CMSMS will be performed';
+$lang['admin']['checkversion'] = 'Allow periodic checks for new versions';
 $lang['admin']['actioncontains'] = 'Action Contains';
 $lang['admin']['filterapplied'] = 'Current Filter';
 $lang['admin']['automatedtask_success'] = 'Automated task performed';
@@ -452,10 +456,7 @@ $lang['admin']['minute'] = 'minute';
 $lang['admin']['help_css_max_age'] = 'This parameter should be set relatively high for static sites, and should be set to 0 for site development';
 $lang['admin']['css_max_age'] = 'Maximum amount of time (seconds) stylesheets can be cached in the browser';
 $lang['admin']['error'] = 'Error';
-$lang['admin']['clear_version_check_cache'] = 'Clear any cached version check information on submit';
 $lang['admin']['new_version_available'] = '<em>Notice:</em> A new version of CMS Made Simple&trade; is available.  Please notify your administrator.';
-$lang['admin']['info_urlcheckversion'] = 'If this url is the word &quot;none&quot; no checks will be made.<br/>An empty string will result in a default URL being used.';
-$lang['admin']['urlcheckversion'] = 'Check for new CMS versions using this URL';
 $lang['admin']['master_admintheme'] = 'Default Administration Theme (for the login page and new user accounts)';
 $lang['admin']['contenttype_separator'] = 'Separator';
 $lang['admin']['contenttype_sectionheader'] = 'Section Header';

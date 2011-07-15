@@ -62,14 +62,13 @@ $message = "";
 
 $thumbnail_width = 96;
 $thumbnail_height = 96;
-$clear_vc_cache = 0;
 $disablesafemodewarning = 0;
 $enablenotifications = 1;
 $sitedownexcludes = '';
 $sitedownexcludeadmins = '';
 $basic_attributes = '';
 $xmlmodulerepository = "";
-$urlcheckversion = "";
+$checkversion = 1;
 $defaultdateformat = "";
 $enablesitedownmessage = "0";
 $use_wysiwyg = "1";
@@ -118,12 +117,11 @@ $enablesitedownmessage = get_site_preference('enablesitedownmessage',$enablesite
 $use_wysiwyg = get_site_preference('sitedown_use_wysiwyg',$use_wysiwyg);
 $sitedownmessage = get_site_preference('sitedownmessage',$sitedownmessage);
 $xmlmodulerepository = get_site_preference('xmlmodulerepository',$xmlmodulerepository);
-$urlcheckversion = get_site_preference('urlcheckversion',$urlcheckversion);
+$checkversion = get_site_preference('checkversion',$checkversion);
 $defaultdateformat = get_site_preference('defaultdateformat',$defaultdateformat);
 $logintheme = get_site_preference('logintheme',$logintheme);
 $metadata = get_site_preference('metadata',$metadata);
 $sitename = get_site_preference('sitename',$sitename);
-$clear_vc_cache = get_site_preference('clear_vc_cache',$clear_vc_cache);
 $disablesafemodewarning = get_site_preference('disablesafemodewarning',$disablesafemodewarning);
 $enablenotifications = get_site_preference('enablenotifications',$enablenotifications);
 $sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
@@ -278,23 +276,17 @@ else if (isset($_POST["editsiteprefs"]))
 	  break;
 
 	case 'setup':
-	  if (isset($_POST["clear_vc_cache"])) $clear_vc_cache = $_POST['clear_vc_cache'];
 	  if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = $_POST['disablesafemodewarning'];
 	  if (isset($_POST["enablenotifications"])) $enablenotifications = $_POST['enablenotifications'];
 	  if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
-	  if (isset($_POST["urlcheckversion"])) $urlcheckversion = $_POST["urlcheckversion"];
+	  if (isset($_POST["checkversion"])) $checkversion = (int) $_POST["checkversion"];
 	  if (isset($_POST['global_umask'])) 
 	    {
 	      $global_umask = $_POST['global_umask'];
 	    }
 	  set_site_preference('global_umask', $global_umask);
 	  set_site_preference('xmlmodulerepository', $xmlmodulerepository);
-	  set_site_preference('urlcheckversion', $urlcheckversion);
-	  if( isset($_POST["clear_vc_cache"])) 
-	    {
-	      set_site_preference('lastcmsversioncheck',0);
-	    }
-	  set_site_preference('clear_vc_cache', $clear_vc_cache);
+	  set_site_preference('checkversion', $checkversion);
 	  set_site_preference('disablesafemodewarning',$disablesafemodewarning);
 	  set_site_preference('enablenotifications',$enablenotifications);
 	  if( isset($_POST['allow_browser_cache']) )
@@ -402,7 +394,6 @@ if ($dir=opendir(dirname(__FILE__)."/themes/"))
   $smarty->assign('logintheme',get_site_preference('logintheme','default'));
 }
 
-
 $smarty->assign('active_general',($active_tab == 'general')?1:0);
 $smarty->assign('active_listcontent',($active_tab == 'listcontent')?1:0);
 $smarty->assign('active_editcontent',($active_tab == 'editcontent')?1:0);
@@ -421,8 +412,7 @@ $smarty->assign('metadata',$metadata);
 $smarty->assign('enablesitedownmessage',$enablesitedownmessage);
 $smarty->assign('use_wysiwyg',$use_wysiwyg);
 $smarty->assign('textarea_sitedownmessage',create_textarea($use_wysiwyg,$sitedownmessage,'sitedownmessage','pagesmalltextarea'));
-$smarty->assign('urlcheckversion',$urlcheckversion);
-$smarty->assign('clear_vc_cache',$clear_vc_cache);
+$smarty->assign('checkversion',$checkversion);
 $smarty->assign('disablesafemodewarning',$disablesafemodewarning);
 $smarty->assign('defaultdateformat',$defaultdateformat);
 $smarty->assign('enablenotifications',$enablenotifications);
@@ -492,8 +482,7 @@ $smarty->assign('lang_globalmetadata',lang('globalmetadata'));
 $smarty->assign('lang_template',lang('template'));
 $smarty->assign('lang_enablesitedown',lang('enablesitedown'));
 $smarty->assign('lang_sitedownmessage',lang('sitedownmessage'));
-$smarty->assign('lang_urlcheckversion',lang('urlcheckversion'));
-$smarty->assign('lang_info_urlcheckversion',lang('info_urlcheckversion'));
+$smarty->assign('lang_checkversion',lang('checkversion'));
 $smarty->assign('lang_clear_version_check_cache',lang('clear_version_check_cache'));
 $smarty->assign('lang_logintheme',lang('master_admintheme'));
 $smarty->assign('lang_disablesafemodewarning',lang('disablesafemodewarning'));

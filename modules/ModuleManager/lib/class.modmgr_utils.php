@@ -441,8 +441,8 @@ final class modmgr_utils
       {
 	$url .= '/version';
 	$req = new modmgr_cached_request($url);
-	$req->execute($url);
 	$req->setTimeout(3);
+	$req->execute($url);
 	if( $req->getStatus() == 200 )
 	  {
 	    $data = json_decode($req->getResult(),true);
