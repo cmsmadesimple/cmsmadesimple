@@ -59,6 +59,12 @@ $contentobj = '';
 #Get current userid and make sure they have permission to add something
 $access = (check_permission($userid, 'Add Pages') || check_permission($userid, 'Manage All Content'));
 
+$modules = ModuleOperations::get_instance()->GetInstalledModules();
+foreach( $modules as $module_name )
+{
+  $obj = ModuleOperations::get_instance()->get_module_instance($module_name);
+}
+
 #Get a list of content types and pick a default if necessary
 $gCms = cmsms();
 $contentops = $gCms->GetContentOperations();

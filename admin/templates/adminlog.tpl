@@ -1,9 +1,15 @@
 <div class="pagecontainer">
   <div class="pageoverflow">
   {$header}
-    <input type="checkbox" id="toggle_filters" {if $filterdisplay=="block"}checked="1"  {/if}
-           onClick="if (this.checked) document.getElementById('adminlog_filters').style.display = 'block'; else document.getElementById('adminlog_filters').style.display = 'none';"/>
-    <label for="toggle_filters">{$langshowfilters}</label>
+    {if $filteruser != '' or $filteraction != ''}
+    <div>
+      <p class="pagetext">{'filterapplied'|lang}:</p>
+      {if $filteruser != ''}<p class="pageinput">{'user'|lang} = {$filteruser}</p>{/if}
+      {if $filteraction != ''}<p class="pageinput">{'actioncontains'|lang}: {$filteraction}</p>{/if}
+    </div>
+    {/if}
+    <p class="pageinput">
+    </p>
 
     <div id="adminlog_filters" style="display: {$filterdisplay}">
       <fieldset>
@@ -37,38 +43,23 @@
 
   {if $logempty==false}
 
-
-
-    <p class="pageshowrows">{$pagestring}</p>
-
-    <table>
-    <tr>
-      {if isset($downloadlink)}
-      <td>
-        <div class="pageoptions">
-          <p class="pageoptions">
-            <a href="adminlog.php{$urlext}&amp;download=1">
-              {$downloadlink}
-            </a>
-            <a class="pageoptions" href="adminlog.php{$urlext}&amp;download=1">
-              {$langdownload}
-            </a>
-          </p>
-        </div>
-      </td>
-      {/if}
-      {if $clearicon!=""}
-        <td>
-          <div class="pageoptions">
-            <p class="pageoptions">
-              <a href="adminlog.php{$urlext}&amp;clear=true">{$clearicon}</a>
-              <a class="pageoptions" href="adminlog.php{$urlext}&amp;clear=true">{$langclear}</a>
-            </p>
-          </div>
-        </td>
-      {/if}
-    </tr>
-    </table>
+    <div class="pageoptions">
+    <div style="float: left; width: 49%;">
+    <input type="checkbox" id="toggle_filters" {if $filterdisplay=="block"}checked="1"  {/if}
+           onClick="if (this.checked) document.getElementById('adminlog_filters').style.display = 'block'; else document.getElementById('adminlog_filters').style.display = 'none';"/>
+    <label for="toggle_filters">{$langshowfilters}</label>&nbsp;
+    {if isset($downloadlink)}
+      <a href="adminlog.php{$urlext}&amp;download=1">{$downloadlink}</a>
+      <a href="adminlog.php{$urlext}&amp;download=1">{$langdownload}</a>
+    {/if}
+    {if $clearicon != ''}
+      &nbsp;
+      <a href="adminlog.php{$urlext}&amp;clear=true">{$clearicon}</a>
+      <a href="adminlog.php{$urlext}&amp;clear=true">{$langclear}</a>
+    {/if}
+    </div>
+    <div style="text-align: right;">{$pagestring}</div>
+    </div>
 
     <table cellspacing="0" class="pagetable">
       <thead>

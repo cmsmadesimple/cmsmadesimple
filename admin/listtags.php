@@ -149,6 +149,13 @@ else
 	  $file_array[] = $rec;
 	}
       
+      function listtags_plugin_sort($a,$b)
+      {
+	return strcmp($a['name'],$b['name']);
+      }
+
+      usort($file_array,'listtags_plugin_sort');
+
       $smarty->assign('plugins',$file_array);
     }
 

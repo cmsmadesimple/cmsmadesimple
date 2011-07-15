@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['actioncontains'] = 'Action Contains';
+$lang['admin']['filterapplied'] = 'Current Filter';
 $lang['admin']['automatedtask_success'] = 'Automated task performed';
 $lang['admin']['siteprefsupdated'] = 'Site Settings Updated';
 $lang['admin']['ip_addr'] = 'IP Address';
@@ -193,7 +195,7 @@ $lang['admin']['filteraction']='Action contains';
 $lang['admin']['filterapply']='Apply filters';
 $lang['admin']['filterreset']='Reset filters';
 $lang['admin']['filters']='Filters';
-$lang['admin']['showfilters']='Show filters';
+$lang['admin']['showfilters']='Edit filter';
 
 $lang['admin']['clearcache_taskdescription'] = 'Executed daily, this task will clear cached files that are older than the age preset in the global preferences';
 $lang['admin']['clearcache_taskname'] = 'Clear Cached Files';

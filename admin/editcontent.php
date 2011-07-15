@@ -67,6 +67,13 @@ if ($apply)
 }
 
 
+#make sure we instantiate all the modules... incase they register a content type
+$modules = ModuleOperations::get_instance()->GetInstalledModules();
+foreach( $modules as $module_name )
+{
+  $obj = ModuleOperations::get_instance()->get_module_instance($module_name);
+}
+
 #Get a list of content types and pick a default if necessary
 $gCms = cmsms();
 $contentops =& $gCms->GetContentOperations();

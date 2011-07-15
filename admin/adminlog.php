@@ -84,7 +84,6 @@ if (check_permission($userid, 'Modify Site Preferences'))
   }
   if (isset($_POST["filterapply"])) {
     if (isset($_POST['filteruser'])) set_site_preference('adminlog_filteruser',trim($_POST["filteruser"]));
-    //if (isset($_POST['filtername'])) set_site_preference('adminlog_filtername',trim($_POST["filtername"]));
     if (isset($_POST['filteraction'])) set_site_preference('adminlog_filteraction',trim($_POST["filteraction"]));
   }
 
@@ -146,6 +145,8 @@ if (check_permission($userid, 'Modify Site Preferences'))
     $smarty->assign("langclear",lang('clearadminlog'));
   }
 
+  $smarty->assign('filteruser',get_site_preference('adminlog_filteruser',''));
+  $smarty->assign('filteraction',get_site_preference('adminlog_filteraction',''));
   $smarty->assign("langfilteruser",lang("filteruser"));
   $smarty->assign("langfilteraction",lang("filteraction"));
   $smarty->assign("langfilterapply",lang("filterapply"));

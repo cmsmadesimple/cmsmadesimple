@@ -26,7 +26,8 @@
       </thead> 
       {foreach from=$plugins item='one'}
       <tbody>
-       <tr>
+	{cycle values="row1,row2" assign='rowclass'}
+	<tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
          <td>
            {if isset($one.help_url)}
              <a href="{$one.help_url}">{$one.name}</a>
