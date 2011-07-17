@@ -78,6 +78,8 @@ if( count($deps) == 0 )
     $_SESSION[$this->GetName()]['tab_message'] = $this->Lang('error_noupgrade');
     $this->Redirect($id,'defaultadmin');
   }
+
+$smarty->assign('time_warning',$this->Lang('time_warning'));
 if (count($deps) > 1)
   {
     $smarty->assign('installmodule',modmgr_utils::file_to_module_name($allmods[1],$params['filename']));
@@ -86,7 +88,6 @@ if (count($deps) > 1)
     $smarty->assign('mod',$this);
     $smarty->assign('form_start',$this->CreateFormStart($id, 'doinstall', $returnid).
 			  $this->CreateInputHidden($id,'modlist',base64_encode(serialize($deps))));
-    $smarty->assign('time_warning',$this->Lang('time_warning'));
     $smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', $this->Lang('install_submit')));
     $smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
     $smarty->assign('formend',$this->CreateFormEnd());
