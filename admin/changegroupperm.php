@@ -141,7 +141,7 @@ if ($submitted == 1)
 
 $query = "SELECT p.permission_id, p.permission_text, up.group_id FROM ".
   cms_db_prefix()."permissions p LEFT JOIN ".cms_db_prefix().
-  "group_perms up ON p.permission_id = up.permission_id ORDER BY p.permission_name";
+  "group_perms up ON p.permission_id = up.permission_id ORDER BY p.permission_text";
 
 $result = $db->Execute($query);
 
