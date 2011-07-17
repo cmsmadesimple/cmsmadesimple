@@ -320,7 +320,7 @@ class cms_http_request
         $this->headers      = array();
         $this->cookies      = array();
         $this->_cookies     = array();
-	$this->headerarray  = array();
+	$this->headerArray  = array();
 	$this->proxy        = null;
         
         // Set the config details        
