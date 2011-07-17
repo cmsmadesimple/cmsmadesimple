@@ -1,5 +1,5 @@
 <?php
-global $gCms;
+$gCms = cmsms();
 
 echo "<p>Adding fields to users table...";
 

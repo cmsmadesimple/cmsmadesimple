@@ -18,7 +18,7 @@
 #
 #$Id: newupgrade.php 83 2008-09-20 14:41:52Z alby $
 
-global $gCms;
+$gCms = cmsms();
 
 $CMS_INSTALL_PAGE=1;
 $LOAD_ALL_MODULES = true;

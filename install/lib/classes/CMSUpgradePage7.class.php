@@ -22,7 +22,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
 {
 	function assignVariables()
 	{
-		global $gCms;
+		$gCms = cmsms();
 		$config =& $gCms->GetConfig();
 
 		$test =new StdClass();

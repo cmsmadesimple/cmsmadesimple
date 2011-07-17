@@ -2,7 +2,7 @@
 
 include_once(dirname(__FILE__)."/include.php");
 function execute_dump(&$result) {
-	global $gCms;
+	$gCms = cmsms();
 	$db = $gCms->db;
 	while ($row = $result->FetchRow()) {
 		$now = $db->DBTimeStamp(time());
@@ -14,7 +14,7 @@ function execute_dump(&$result) {
 	}
 }
 
-global $gCms;
+$gCms = cmsms();
 $db = $gCms->db;
 $tablelist = $db->MetaTables('TABLES');
 foreach ($tablelist as $tablename) {

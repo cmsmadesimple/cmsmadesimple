@@ -1,5 +1,5 @@
 <?php
-global $gCms;
+$gCms = cmsms();
 echo '<p>Adding &quot;Reorder Content&quot; permission';
 $nid = $db->GenId(cms_db_prefix().'permissions_seq');
 $db->Execute('Insert INTO '.cms_db_prefix()."permissions (permission_id,permission_name,permission_text,create_date,modified_date)

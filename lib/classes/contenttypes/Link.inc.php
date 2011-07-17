@@ -122,7 +122,7 @@ class Link extends ContentBase
 
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-      global $gCms;
+      $gCms = cmsms();
 
       switch($tab)
 	{

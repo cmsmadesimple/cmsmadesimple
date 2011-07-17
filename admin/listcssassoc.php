@@ -183,7 +183,7 @@ else {
   $query = "SELECT assoc_css_id, css_name, assoc_order FROM ".cms_db_prefix()."css_assoc ca INNER JOIN ".cms_db_prefix()."css ON assoc_css_id = css_id WHERE assoc_type=? AND assoc_to_id = ? ORDER BY ca.assoc_order";
   $result = $db->Execute($query, array($type, $id));
 
-  global $gcms;
+  $gCms = cmsms();
   $smarty = $gCms->GetSmarty();
   $smarty->assign('text_move',lang('move'));
   $smarty->assign('text_template',lang('template'));

@@ -289,7 +289,7 @@ class defaultTheme extends AdminTheme
 
     function DisplaySectionPages($section)
     {
-      global $gCms;
+      $gCms = cmsms();
       if (count($this->menuItems) < 1)
 	{
 	  // menu should be initialized before this gets called.

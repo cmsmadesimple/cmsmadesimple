@@ -104,7 +104,7 @@ class CMSInstaller
 	 */
 	function run($process = 'install')
 	{
-		global $gCms;
+		$gCms = cmsms();
 
 		$this->smarty = &$gCms->GetSmarty();
 		$this->smarty->template_dir = cms_join_path(CMS_INSTALL_BASE, 'templates');
@@ -292,7 +292,7 @@ class CMSInstaller
 						return;
 					}
 
-					global $gCms;
+					$gCms = cmsms();
 					$db =& $gCms->GetDB();
 					return $db;
 					break;
@@ -303,7 +303,7 @@ class CMSInstaller
 						return;
 					}
 
-					global $gCms;
+					$gCms = cmsms();
 					$db =& $gCms->GetDB();
 					return $db;
 					break;

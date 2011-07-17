@@ -246,7 +246,7 @@ class CMSMailer extends CMSModule
    ---------------------------------------------------------*/
   function DoAction($action, $id, $params, $returnid=-1)
   {
-    global $gCms;
+    $gCms = cmsms();
     $smarty =& $gCms->GetSmarty();
     $smarty->assign_by_ref('mod',$this);
 

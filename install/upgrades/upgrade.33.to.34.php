@@ -1,5 +1,5 @@
 <?php
-global $gCms;
+$gCms = cmsms();
 $dbdict = NewDataDictionary($db);
 
 echo '<p>Adding new field to content table...';

@@ -83,7 +83,7 @@ function installer_create_indexsql( $dbdict, $table, $arr_index )
 
 function installer_create_permission( $permission_name, $permission_text )
 {
-	global $gCms;
+	$gCms = cmsms();
 
 	$test = new StdClass();
 	$test->error = false;
@@ -112,7 +112,7 @@ function installer_create_permission( $permission_name, $permission_text )
 
 function upgrade_add_column_sql( $table, $schema )
 {
-	global $gCms;
+	$gCms = cmsms();
 	$db = $gCms->GetDB();
 	$dbdict = NewDataDictionary($db);
 
@@ -140,7 +140,7 @@ function upgrade_add_column_sql( $table, $schema )
 
 function upgrade_installing_module( $module )
 {
-	global $gCms;
+	$gCms = cmsms();
 
 	$test = new StdClass();
 	$test->error = false;
@@ -167,7 +167,7 @@ function upgrade_installing_module( $module )
 
 function upgrade_schema_version( $version )
 {
-	global $gCms;
+	$gCms = cmsms();
 	$db = $gCms->GetDB();
 
 	$test = new StdClass();

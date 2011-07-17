@@ -1,5 +1,5 @@
 <?php
-global $gCms;
+$gCms = cmsms();
 
 echo '<p>Installing new FileManager module... ';
 

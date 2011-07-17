@@ -209,7 +209,7 @@ class NCleanGreyTheme extends AdminTheme
 	echo '<div class="itemoverflow">';
 	echo '<h2>'.lang('bookmarks').'</h2>';
 	echo '<p><a href="listbookmarks.php'.$urlext.'">'.lang('managebookmarks').'</a></p>';
-	global $gCms;
+	$gCms = cmsms();
 	$bookops =& $gCms->GetBookmarkOperations();
 	$marks = array_reverse($bookops->LoadBookmarks($this->userid));
 	$marks = array_reverse($marks);
@@ -407,7 +407,7 @@ class NCleanGreyTheme extends AdminTheme
 
     function DisplaySectionPages($section)
     {
-      global $gCms;
+      $gCms = cmsms();
       if (count($this->menuItems) < 1)
 	{
 	  // menu should be initialized before this gets called.

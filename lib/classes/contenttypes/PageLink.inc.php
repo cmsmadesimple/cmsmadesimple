@@ -95,7 +95,7 @@ class PageLink extends ContentBase
 	  $errors = array();
 	}
 
-      global $gCms;
+      $gCms = cmsms();
       $contentops =& $gCms->GetContentOperations();		
 		
       $page = $this->GetPropertyValue('page');
@@ -144,7 +144,7 @@ class PageLink extends ContentBase
       switch($one) {
       case 'page':
 	{
-	  global $gCms;
+	  $gCms = cmsms();
 	  $contentops =& $gCms->GetContentOperations();
 	  
 	  $tmp = $contentops->CreateHierarchyDropdown($this->mId, 
@@ -183,7 +183,7 @@ class PageLink extends ContentBase
       $page = $this->GetPropertyValue('page');
       $params = $this->GetPropertyValue('params');
       
-      global $gCms;
+      $gCms = cmsms();
       $contentops =& $gCms->GetContentOperations();
       $destcontent =& $contentops->LoadContentFromId($page);
       if( is_object( $destcontent ) ) 
