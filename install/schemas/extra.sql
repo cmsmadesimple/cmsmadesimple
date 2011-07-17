@@ -75,7 +75,7 @@ INSERT INTO {DB_PREFIX}permissions VALUES (24,'Remove Stylesheets','Remove Style
 INSERT INTO {DB_PREFIX}permissions VALUES (25,'Add Stylesheet Assoc','Add Stylesheet Associations','2006-07-25 21:22:33','2006-07-25 21:22:33');
 INSERT INTO {DB_PREFIX}permissions VALUES (26,'Modify Stylesheet Assoc','Modify Stylesheet Associations','2006-07-25 21:22:33','2006-07-25 21:22:33');
 INSERT INTO {DB_PREFIX}permissions VALUES (27,'Remove Stylesheet Assoc','Remove Stylesheet Associations','2006-07-25 21:22:33','2006-07-25 21:22:33');
-INSERT INTO {DB_PREFIX}permissions VALUES (28,'Modify User-defined Tags','Modify User-defined Tags','2006-07-25 21:22:33','2006-07-25 21:22:33');
+INSERT INTO {DB_PREFIX}permissions VALUES (28,'Modify User-defined Tags','Modify User defined Tags','2006-07-25 21:22:33','2006-07-25 21:22:33');
 INSERT INTO {DB_PREFIX}permissions VALUES (29,'Clear Admin Log','Clear Admin Log','2006-07-25 21:22:33','2006-07-25 21:22:33');
 INSERT INTO {DB_PREFIX}permissions VALUES (30,'Add Global Content Blocks','Add Global Content Blocks','2006-07-25 21:22:33','2006-07-25 21:22:33');
 INSERT INTO {DB_PREFIX}permissions VALUES (31,'Modify Global Content Blocks','Modify Global Content Blocks','2006-07-25 21:22:33','2006-07-25 21:22:33');
