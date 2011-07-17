@@ -54,6 +54,7 @@ $wysiwyg = get_preference($userid, 'wysiwyg');
 $loaded = ModuleOperations::get_instance()->GetLoadedModules();
 foreach( $loaded as $name => &$object )
 {
+  if( !is_object($object) ) continue;
   if( $object->IsWYSIWYG() && $object->WYSIWYGActive() )
     {
       $bodytext.=$object->WYSIWYGGenerateBody();
