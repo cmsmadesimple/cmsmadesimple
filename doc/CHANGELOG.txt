@@ -6,9 +6,12 @@ Core - Bug Reports:
   - #6278 NCleanGrey Admin Theme typo
   - #6284 CMSMailer system message 'mail not setup' link leads to login page (Translation problem)
   - #6322 wrong db query in SetUserTag method
+  - #6374 Page alias not re-crated if alias deleted - old is used
   - #6386 cms_htmlenities in created_date & modified_date
   - #6436 MenuManager: wrong assignment of $node->depth
+  - #6465 can't delete text from the Page URL field
   - #6554 Mismatched DIV in edithtmlblob.php
+  - #6586 Only Admin can assign Additional Editors
 
 Core - Feature requests:
   - 
