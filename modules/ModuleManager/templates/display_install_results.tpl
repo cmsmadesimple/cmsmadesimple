@@ -1,10 +1,9 @@
 <h3>{$mod->Lang('operation_results')}</h3>
 
-
 {foreach from=$queue_results key='module_name' item='item'}
   <div class="pageoverflow">
     {if $item[0]}
-      {* error *}
+      {* success *}
       <p class="pagetext" style="color: blue;">{$module_name}</p>
       <p class="pageinput">{$item[1]}</p>
     {else}
@@ -15,8 +14,8 @@
     {/if}
   </div>
 {/foreach}
-</ul>
+
 <div class="pageoverflow">
-  <p class="pagetexT"></p>
+  <p class="pagetext"></p>
   <p class="pageinput">{$return_link}</p>
 </div>
