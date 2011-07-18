@@ -63,7 +63,7 @@ final class modulerep_client
   }
 
 
-  public static function get_repository_modules($prefix = '',$newest = 1)
+  public static function get_repository_modules($prefix = '',$newest = 1,$exact = FALSE)
   {
     $mod = cms_utils::get_module('ModuleManager');
     $url = $mod->GetPreference('module_repository');
@@ -78,6 +78,10 @@ final class modulerep_client
     if( $prefix )
       {
 	$data['prefix'] = ltrim($prefix);
+      }
+    if( $exact )
+      {
+	$data['exact'] = 1;
       }
     $data['clientcmsversion'] = $CMS_VERSION;
 

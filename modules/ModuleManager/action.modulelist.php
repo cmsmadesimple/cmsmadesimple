@@ -44,7 +44,7 @@ if( !isset($params['name']) )
   }
 
 $prefix = trim($params['name']);
-$repmodules = modulerep_client::get_repository_modules($prefix,FALSE);
+$repmodules = modulerep_client::get_repository_modules($prefix,FALSE,TRUE);
 if( !is_array($repmodules) || $repmodules[0] === FALSE ) 
   {
     // for some reason, nothing matched.
