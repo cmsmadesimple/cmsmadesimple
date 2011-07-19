@@ -18,6 +18,7 @@
 #
 #$Id: newupgrade.php 83 2008-09-20 14:41:52Z alby $
 
+require_once("../include.php");
 $gCms = cmsms();
 
 $CMS_INSTALL_PAGE=1;
