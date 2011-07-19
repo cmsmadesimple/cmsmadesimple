@@ -546,6 +546,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 		$text .= '/'.$goto.'?mact='.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).$secureparam;
 		foreach ($params as $key=>$value)
 			{
+				if( $key == 'assign' ) continue;
 				$key = cms_htmlentities($key);
 				$value = cms_htmlentities($value);
 				if ($key != 'module' && $key != 'action' && $key != 'id')
