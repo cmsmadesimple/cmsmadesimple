@@ -194,7 +194,7 @@ class ModuleManager extends CMSModule
    ---------------------------------------------------------*/
   function MinimumCMSVersion()
   {
-    return "1.10-beta1";
+    return "1.10-beta0";
   }
 
 
