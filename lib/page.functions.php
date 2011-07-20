@@ -235,11 +235,11 @@ function send_recovery_email($username)
       return false;
     }
 	
-  $obj->AddAddress($user->email, $user->firstname . ' ' . $user->lastname);
-  $obj->SetSubject(lang('lostpwemailsubject',get_site_preference('sitename','CMSMS Site')));
+  $obj->AddAddress($user->email, html_entity_decode($user->firstname . ' ' . $user->lastname));
+  $obj->SetSubject(lang('lostpwemailsubject',html_entity_decode(get_site_preference('sitename','CMSMS Site'))));
   
   $url = $config['admin_url'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
-  $body = lang('lostpwemail',get_site_preference('sitename','CMSMS Site'), $user->username, $url);
+  $body = lang('lostpwemail',html_entity_decode(get_site_preference('sitename','CMSMS Site')), $user->username, $url);
   
   $obj->SetBody($body);
   
