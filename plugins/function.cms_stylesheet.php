@@ -44,6 +44,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		}	
 	}
 	
+	if( $use_https < 0 ) $use_https = FALSE;
 	$config = $gCms->config;
 	$db = $gCms->GetDb();
 	$root_url = $config['root_url'];
