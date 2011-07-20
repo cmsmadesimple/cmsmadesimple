@@ -129,13 +129,13 @@ class CmsRegularTaskHandler
 			if( !$res )
 			  {
 			// test failed.
-			audit('',lang_by_realm_en('automatedtask_failed','tasks'),$task->get_name());
-			$task->on_failure($time);
+				  audit('','Automated Task Failed',$task->get_name());
+				  $task->on_failure($time);
 			  }
 			else
 			  {
-			audit('',lang_by_realm_en('automatedtask_success','tasks'),$task->get_name());
-			$task->on_success($time);
+				  audit('','Automated Task Succeeded',$task->get_name());
+				  $task->on_success($time);
 			  }
 		  }
       }
@@ -162,6 +162,14 @@ class CmsRegularTaskHandler
    */
   public static function handle_tasks()
   {
+	  global $CMS_STYLESHEET;
+	  global $CMS_INSTALL_PAGE;
+
+	  if( (isset($CMS_STYLESHEET) && $CMS_STYLESHEET == 1) || isset($CMS_INSTALL_PAGE) )
+	  {
+		  return;
+	  }
+
 	  $granularity = (int)get_site_preference('pseudocron_granularity',60);
 	  $last_check = get_site_preference('pseudocron_lastrun',0);
 	  if( (time() - $granularity * 60) >= $last_check )

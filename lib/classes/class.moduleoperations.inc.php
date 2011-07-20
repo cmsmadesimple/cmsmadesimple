@@ -464,7 +464,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 															'allow_admin_lazyload'=>($module_obj->LazyLoadAdmin()==TRUE)?1:0);
 
 		 Events::SendEvent('Core', 'ModuleInstalled', array('name' => $module_obj->GetName(), 'version' => $module_obj->GetVersion()));
-		 audit('',$module_obj->GetName(), lang_en('installed_mod',$module_obj->GetVersion()));
+		 audit('',$module_obj->GetName(), 'Installed version '.$module_obj->GetVersion());
 		 $gCms->clear_cached_files();
 
 		 return array(TRUE,$module_obj->InstallPostMessage());

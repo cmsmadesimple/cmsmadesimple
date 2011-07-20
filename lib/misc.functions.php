@@ -588,7 +588,13 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 
 	ob_start();
 	if ($use_html)
-		echo "<div><b>$titleText</b>\n";
+	  {
+	    echo "<div><b>$titleText</b>\n";
+	  }
+	else
+	  {
+	    echo "$titleText\n";
+	  }
 
 	if(FALSE == empty($var))
 	{
@@ -637,7 +643,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 
 	if($echo_to_screen)
 	{
-		echo $output;
+	  echo $output;
 	}
 
 	return $output;
@@ -666,12 +672,15 @@ function debug_output($var, $title="")
  * @param mixed data to display
  * @param string Optional title.
  */
-function debug_to_log($var, $title='')
+function debug_to_log($var, $title='',$filename = '')
 {
-  if( cmsms()->config['debug_to_log'] )
+  if( cmsms()->config['debug_to_log'] || check_login(TRUE) )
     {
+      if( $filename == '' )
+	{
+	  $filename = TMP_CACHE_LOCATION . '/debug.log';
+	}
       $errlines = explode("\n",debug_display($var, $title, false, false));
-      $filename = TMP_CACHE_LOCATION . '/debug.log';
       foreach ($errlines as $txt)
 	{
 	  error_log($txt . "\n", 3, $filename);

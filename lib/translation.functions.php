@@ -298,33 +298,33 @@ function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 
     {
       $fn = cms_join_path($basedir,'en_US',$filename);
     }
-  if( @file_exists($fn) )
-    {
-      $lang = array();
-      if( !$has_realm )
-	{
-	  // the lang file doesn't create a realm array
-	  if( isset($all_langs[$cur_lang][$realm]) )
-	    {
-	      $lang = $all_langs[$cur_lang][$realm];
-	    }
-	  include($fn);
-	  $all_langs[$cur_lang][$realm] = $lang;
-	}
-      else
-	{
-	  // the lang file defines the realm array itself.
-	  $lang = array();
-	  include($fn);
-	  foreach( array_keys($lang) as $t_realm )
-	    {
-	      if( !is_array($lang[$t_realm]) ) continue;
-	      $all_langs[$cur_lang][$t_realm] = $lang[$t_realm];
-	    }
-	}
-      unset($lang);
-      if( !isset($all_langs[$cur_lang][$realm]) ) return FALSE;
-    }
+  if( !file_exists($fn) ) return FALSE;
+  {
+    $lang = array();
+    if( !$has_realm )
+      {
+	// the lang file doesn't create a realm array
+	if( isset($all_langs[$cur_lang][$realm]) )
+	  {
+	    $lang = $all_langs[$cur_lang][$realm];
+	  }
+	include($fn);
+	$all_langs[$cur_lang][$realm] = $lang;
+      }
+    else
+      {
+	// the lang file defines the realm array itself.
+	$lang = array();
+	include($fn);
+	foreach( array_keys($lang) as $t_realm )
+	  {
+	    if( !is_array($lang[$t_realm]) ) continue;
+	    $all_langs[$cur_lang][$t_realm] = $lang[$t_realm];
+	  }
+      }
+    unset($lang);
+    if( !isset($all_langs[$cur_lang][$realm]) ) return FALSE;
+  }
   
   // now load the lang file itself.
   if( $cur_lang != 'en_US' )
@@ -557,10 +557,10 @@ function lang_by_realm_en()
     }
 
   // we now have a name, a realm, and possible additonal arguments.
-	$saved_lang = $lang;
-	$lang = array();
   if( !isset($lang[$realm]) )
     {
+      $saved_lang = $lang;
+      $lang = array();
       cms_load_lang_realm($realm,NULL,NULL,NULL,NULL,NULL,'en_US');
     }
 
@@ -590,7 +590,7 @@ function lang_by_realm_en()
 	  $result = $class->Convert($result, get_encoding('', false), $gCms->config['admin_encoding']);
 	}
     }
-	$lang = $saved_lang;
+  $lang = $saved_lang;
   return $result;
 
 }
