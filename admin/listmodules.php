@@ -342,7 +342,15 @@ else if ($action == "showmodulehelp")
 
       if( $orig_lang != 'en_US' )
 	{
+	  $cur_lang = cms_admin_current_language(trim($_GET['lang']));
+	  if( $cur_lang == 'en_US' )
+	    {
+	      $header .= '<span class="helptext"><a href="listmodules.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&action=showmodulehelp&module='.$module.'&lang='.$orig_lang.'">'.lang('modulehelp_yourlang').'</a></span>';
+	    }
+	  else
+	    {
 	  $header .= '<span class="helptext"><a href="listmodules.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&action=showmodulehelp&module='.$module.'&lang=en_US">'.lang('modulehelp_english').'</a></span>';
+	    }
 	}
 
       //		if (FALSE == get_preference($userid, 'hide_help_links'))

@@ -1,7 +1,8 @@
 <?php
+$lang['admin']['modulehelp_yourlang'] = 'View in Your Language';
 $lang['admin']['info_umask'] = 'The &quot;umask&quot; is an octal value that is used to specify the default permission for newly created files (this is used for files in the cache directory, and uploaded files.  For more information see the appropriate <a href="http://en.wikipedia.org/wiki/Umask">wikipedia article.</a>';
 $lang['admin']['general_operation_settings'] = 'General Operation Settings';
-$lang['admin']['info_checkversion'] = 'If enabled, a once daily check for a new release of CMSMS will be performed';
+$lang['admin']['info_checkversion'] = 'If enabled, the system will perform a daily check for a new release of CMSMS';
 $lang['admin']['checkversion'] = 'Allow periodic checks for new versions';
 $lang['admin']['actioncontains'] = 'Action Contains';
 $lang['admin']['filterapplied'] = 'Current Filter';
