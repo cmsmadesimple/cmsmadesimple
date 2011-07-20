@@ -1381,3 +1381,7 @@ a.admin-tooltip:hover span {
 	border: 1px solid #cccccc;
 	color: #6c6c6c;
 }
+/* REORDER PAGES */
+div.reorder-pages ul li { 
+  list-style: none;
+}

@@ -532,7 +532,6 @@ div.pagecontainer  {
 div.pagecontainer p {
    margin-bottom: 1em;
 }
-
 div.pageerrorcontainer  {
    background-color: #ba5a5a;
    margin: 10px;
@@ -1072,6 +1071,11 @@ visibility: hidden;
 {
 margin:7px 0;
 padding:0;
+}
+
+/* reorder pages */
+div.reorder-pages ul li { 
+  list-style: none;
 }
 
 /*CORE*/
