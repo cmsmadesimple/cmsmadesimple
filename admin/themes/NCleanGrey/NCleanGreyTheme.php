@@ -127,8 +127,8 @@ class NCleanGreyTheme extends AdminTheme
 	echo '<div id="ncleangrey-container">';
 	//LOGO
 	echo '<div id="logocontainer">
-	<img src="themes/NCleanGrey/images/layout/logoTM.png" alt="'. $this->cms->siteprefs['sitename'] .'" title="'. $this->cms->siteprefs['sitename'] .'" />
-	<div class="logotext">'.lang('adminpaneltitle').' - '. $this->cms->siteprefs['sitename'] .'<br />'.lang('welcome_user').': '.$this->cms->variables['username'];
+	<img src="themes/NCleanGrey/images/layout/logoTM.png" alt="'. get_site_preference('sitename') .'" title="'. get_site_preference('sitename') .'" />
+	<div class="logotext">'.lang('adminpaneltitle').' - '. get_site_preference('sitename') .'<br />'.lang('welcome_user').': '.$this->cms->variables['username'];
 	echo"</div>\n";
 	echo"</div>\n";
 	//MENU

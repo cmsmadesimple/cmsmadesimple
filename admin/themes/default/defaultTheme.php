@@ -83,7 +83,7 @@ class defaultTheme extends AdminTheme
 
     function DisplayTopMenu()
     {
-	echo '<div><p class="logocontainer"><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">'.lang('adminpaneltitle').' - '. $this->cms->siteprefs['sitename'] .' &nbsp;&nbsp; '.lang('welcome_user').': '.$this->cms->variables['username'].'</span></p></div>';
+      echo '<div><p class="logocontainer"><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">'.lang('adminpaneltitle').' - '. get_site_preference('sitename') .' &nbsp;&nbsp; '.lang('welcome_user').': '.$this->cms->variables['username'].'</span></p></div>';
         echo "<div class=\"topmenucontainer\">\n\t<ul id=\"nav\">";
         foreach ($this->menuItems as $key=>$menuItem) {
         	if ($menuItem['parent'] == -1) {
