@@ -119,18 +119,18 @@ Class Image_Transform
      * @see PEAR::isError()
      * @see Image_Transform::setOption()
      */
-    static public function &factory($driver)
+    public static function &factory($driver)
     {
         if ('' == $driver) {
             die("No image library specified... aborting.  You must call ::factory() with one parameter, the library to load.");
 
         }
-        $this->uid = md5($_SERVER['REMOTE_ADDR']);
 
         include_once (dirname(__FILE__)."/$driver.php");
 
         $classname = "Image_Transform_Driver_{$driver}";
         $obj = new $classname;
+        $obj->uid = md5($_SERVER['REMOTE_ADDR']);
         return $obj;
     }
 
