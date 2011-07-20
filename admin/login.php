@@ -88,6 +88,7 @@ else if (isset($_REQUEST['forgotpwchangeform']) && $_REQUEST['forgotpwchangeform
 			{
 				$user->SetPassword($_REQUEST['password']);
 				$user->Save();
+				audit('','Core','Completed lost password recovery for '.$user->username);
 				$acceptLogin = lang('passwordchangedlogin');
 				$changepwhash = '';
 			}
