@@ -711,7 +711,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 		  $str = $one->Name();
 		}
 	      if ($display == 'edit')
-		$txt .= '<a title="'.lang('edit').'" href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'&amp;page='.$page.'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '">' . cms_htmlentities($str, '', '', true) . '</a>';
+		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'&amp;page='.$page.'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '">' . cms_htmlentities($str, '', '', true) . '</a>';
 	      else
 		$txt .= cms_htmlentities($str, '', '', true);
 	    }

@@ -161,6 +161,7 @@ else
 
 }
 
+$smarty->assign('back_url',$themeObject->BackURL());
 echo $smarty->fetch('listtags.tpl');
 include_once("footer.php");
 

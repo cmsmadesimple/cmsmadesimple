@@ -226,6 +226,7 @@ final class UserTagOperations
 		{
 			$plugins[$row['userplugin_id']] = $row['userplugin_name'];
 		}
+		asort($plugins);
 		return $plugins;
 	}
 	

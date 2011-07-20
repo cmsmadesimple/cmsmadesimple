@@ -119,7 +119,7 @@ Class Image_Transform
      * @see PEAR::isError()
      * @see Image_Transform::setOption()
      */
-    function &factory($driver)
+    static public function &factory($driver)
     {
         if ('' == $driver) {
             die("No image library specified... aborting.  You must call ::factory() with one parameter, the library to load.");

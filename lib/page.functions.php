@@ -236,13 +236,14 @@ function send_recovery_email($username)
     }
 	
   $obj->AddAddress($user->email, $user->firstname . ' ' . $user->lastname);
-  $obj->SetSubject(lang('lostpwemailsubject',$gCms->siteprefs['sitename']));
+  $obj->SetSubject(lang('lostpwemailsubject',get_site_preference('sitename','CMSMS Site')));
   
   $url = $config['admin_url'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
-  $body = lang('lostpwemail',$gCms->siteprefs['sitename'], $user->username, $url);
+  $body = lang('lostpwemail',get_site_preference('sitename','CMSMS Site'), $user->username, $url);
   
   $obj->SetBody($body);
   
+  audit('','Core','Sent Lost Password Email for '.$username);
   return $obj->Send();
 }
 
