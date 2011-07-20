@@ -54,7 +54,7 @@ function deldir($dir)
 	return $success;  
 } 
 
-$errors = "";
+$errors = array();
 
 $dir = $config["image_uploads_path"];
 $url = $config["image_uploads_url"];
@@ -83,7 +83,7 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 	{
 		if (!move_uploaded_file($_FILES['uploadfile']['tmp_name'], $dir."/".$_FILES['uploadfile']['name']))
 		{
-			$errors .= "<li>".lang('filenotuploaded')."</li>";
+		  $errors[] = lang('filenotuploaded');
 		}
 		else
 		{
@@ -93,7 +93,7 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 	}
 	else
 	{
-		$errors .= "<li>".lang('needpermissionto', array('Modify Files'))."</li>";
+	  $errors[] = lang('needpermissions',array('Modify Files'));
 	}
 }
 
@@ -105,23 +105,23 @@ if (isset($_POST['newdirsubmit']))
 		#Make sure it isn't an empty dir name
 		if ($_POST['newdir'] == "")
 		{
-			$errors .= "<li>".lang('filecreatedirnoname')."</li>";
+		  $errors[] = lang('filecreatedirnoname');
 		}
 		else if (preg_match('@\.\.@',$_POST['newdir']))
 		{
-			$errors .= "<li>".lang('filecreatedirnodoubledot')."</li>";
+		  $errors[] = lang('filecreatedirnodoubledot');
 		}
 		else if (preg_match('@/@', $_POST['newdir']) || strpos($_POST['newdir'], '\\') !== false)
 		{
-			$errors .= "<li>".lang('filecreatedirnoslash')."</li>";
+		  $errors[] = lang('filecreatedirnoslash');
 		}
 		else if (preg_match('/[^0-9a-zA-Z\._\-]/i',$_POST['newdir']))
 		  {
-		    $errors  .= '<li>'.lang('filecreatedirbadchars').'</li>';
+		    $errors[] = lang('filecreatedirbadchars');
 		  }
 		else if (file_exists($dir."/".$_POST['newdir']))
 		{
-			$errors .= "<li>".lang('directoryexists')."</li>";
+		  $errors[] = lang('directoryexists');
 		}
 		else
 		{
@@ -131,7 +131,7 @@ if (isset($_POST['newdirsubmit']))
 	}
 	else
 	{
-		$errors .= "<li>".lang('needpermissionto', array('Modify Files'))."</li>";
+	  $errors[] = lang('needpermissionto', array('Modify Files'));
 	}
 }
 
@@ -143,7 +143,7 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 		{
 			if (!(unlink($dir . "/" . $_GET['file'])))
 			{
-				$errors .= "<li>".lang('errordeletingfile')."</li>";
+			  $errors[] = lang('errordeletingfile');
 			}
 			else
 			{
@@ -152,12 +152,12 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 		}
 		else
 		{
-			$errors .= "<li>".lang('norealfile')."</li>";
+		  $errors[] = lang('norealfile');
 		}
 	}
 	else
 	{
-		$errors .= "<li>".lang('needpermissionto', array('Modify Files'))."</li>";
+	  $errors[] = lang('needpermissionto', array('Modify Files'));
 	}
 }
 else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
@@ -168,7 +168,7 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 		{
 			if (!(deldir($dir . "/" . $_GET['file'])))
 			{
-				$errors .= "<li>".lang('errordeletingdirectory')."</li>";
+			  $errors[] = lang('errordeletingdirectory');
 			}
 			else
 			{
@@ -177,12 +177,12 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 		}
 		else
 		{
-			$errors .= "<li>".lang('norealdirectory')."</li>";
+		  $errors[] = lang('norealdirectory');
 		}
 	}
 	else
 	{
-		$errors .= "<li>".lang('needpermissionto', array('Modify Files'))."</li>";
+	  $errors[] = lang('needpermissionto', array('Modify Files'));
 	}
 }
 
@@ -230,10 +230,9 @@ $dirtext = "";
 $filetext = "";
 $file = "";
 
-if ($errors != "")
+if (count($errors) )
 {
-	// echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$errors."</ul></div>";
-	echo $themeObject->ShowErrors('<ul class="error">'.$errors.'</ul>');
+  echo $themeObject->ShowErrors($errors);
 }
 
 echo '<div class="pagecontainer">';
