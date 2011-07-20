@@ -783,6 +783,10 @@ div.pagecontainer ul {
 div.pagecontainer ul li {
 	list-style-type: disc;
 	padding-bottom: 4px;
+} 
+div.pagecontainer .reorder-pages ul li {
+	list-style-type: none;
+	padding-bottom: auto;
 }
 div.pageerrorcontainer , div.pageerrorinstalldir {
 	margin: 10px 20px;
