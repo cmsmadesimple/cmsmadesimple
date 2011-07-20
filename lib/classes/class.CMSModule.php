@@ -729,7 +729,7 @@ class CMSModule
 	 */
 	function & GetVariables()
 	{
-		return $this->cms->variables;
+	  return cmsms()->variables;
 	}
 
 	/**
@@ -2575,8 +2575,8 @@ class CMSModule
 	 */
 	function SetContentType($contenttype)
 	{
-		$variables = &$this->cms->variables;
-		$variables['content-type'] = $contenttype;
+	  $variables = cmsms()->variables;
+	  $variables['content-type'] = $contenttype;
 	}
 
 	/**
