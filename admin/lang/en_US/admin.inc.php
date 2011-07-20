@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['filecreatedirbadchars'] = 'Invalid characters were detected in the submitted directory name';
 $lang['admin']['modulehelp_yourlang'] = 'View in Your Language';
 $lang['admin']['info_umask'] = 'The &quot;umask&quot; is an octal value that is used to specify the default permission for newly created files (this is used for files in the cache directory, and uploaded files.  For more information see the appropriate <a href="http://en.wikipedia.org/wiki/Umask">wikipedia article.</a>';
 $lang['admin']['general_operation_settings'] = 'General Operation Settings';

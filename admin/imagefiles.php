@@ -115,6 +115,10 @@ if (isset($_POST['newdirsubmit']))
 		{
 			$errors .= "<li>".lang('filecreatedirnoslash')."</li>";
 		}
+		else if (preg_match('/[^0-9a-zA-Z\._\-]/i',$_POST['newdir']))
+		  {
+		    $errors  .= '<li>'.lang('filecreatedirbadchars').'</li>';
+		  }
 		else if (file_exists($dir."/".$_POST['newdir']))
 		{
 			$errors .= "<li>".lang('directoryexists')."</li>";
