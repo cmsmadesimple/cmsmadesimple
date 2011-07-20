@@ -149,8 +149,15 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 				$smarty->left_delimiter = '{';
 				$smarty->right_delimiter = '}';
 			}
-			
-			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'"/>'."\n";
+
+			if( isset($params['nolinks']) )
+			{
+				$stylesheet .= $root_url.'/tmp/cache/'.$filename;
+			}
+			else
+			{
+				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'"/>'."\n";
+			}
 		}
 		else
 		{
@@ -181,13 +188,21 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 					//set the modified date to the template modified date
 					//touch($fname, $db->UnixTimeStamp($one['modified_date']));
 				}
-				if ( empty($media_type) || isset($params['media']) )
+
+				if( isset($params['nolinks']) )
 				{
-					$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'"/>'."\n";
+					$stylesheet .= $root_url.'/tmp/cache/'.$filename.',';
 				}
 				else
-				{
-					$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
+				{	
+					if ( empty($media_type) || isset($params['media']) )
+						{
+							$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'"/>'."\n";
+						}
+					else
+						{
+							$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
+						}
 				}
 			}
 		}
@@ -198,7 +213,14 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		$stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
 	}
 
+	if( isset($params['nolinks']) && endswith($styleseet,',') )
+	{
+		$stylesheet = substr($stylesheet,0,strlen($stylesheet)-1);
+	}
+
+	$CMS_STYLESHEET = 0;
 	unset($CMS_STYLESHEET);
+	unset($_GLOBALS['CMS_STYLESHEET']);
 	if( isset($params['assign']) ){
 	    $smarty->assign(trim($params['assign']),$stylesheet);
 	    return;
