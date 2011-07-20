@@ -89,7 +89,7 @@ class Files
 	 * @param string $filename the orginal filename
 	 * @return string the escaped safe filename
 	 */
-	function escape($filename) 
+	static public function escape($filename) 
 	{
 		Return preg_replace('/[^\w\._]/', '_', $filename);
 	}

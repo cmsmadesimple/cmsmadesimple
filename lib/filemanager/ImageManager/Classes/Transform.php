@@ -538,7 +538,7 @@ Class Image_Transform
 
 
     /* Methods to add to the driver classes in the future */
-    function addText()
+    function addText($params)
     {
         return null; //PEAR::raiseError("No addText method exists", true);
     }
@@ -553,12 +553,12 @@ Class Image_Transform
         return null; //PEAR::raiseError("No addBorder method exists", true);
     }
 
-    function crop()
+    function crop($new_x, $new_y, $new_width, $new_height)
     {
         return null; //PEAR::raiseError("No crop method exists", true);
     }
 
-    function flip() 
+    function flip($horizontal) 
     {
         return null;
     }
