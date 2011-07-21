@@ -38,6 +38,7 @@ function smarty_cms_function_content($params, &$smarty)
 			$id = (isset($ary[1])?$ary[1]:'');
 			$action = (isset($ary[2])?$ary[2]:'');
 			$inline = (isset($ary[3]) && $ary[3] == 1?true:false);
+
 		}
 		if (isset($_REQUEST[$id.'action'])) $action = $_REQUEST[$id.'action'];
 		else if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
@@ -48,7 +49,7 @@ function smarty_cms_function_content($params, &$smarty)
 		//   1. $id is cntnt01
 		//   2. or inline is false
 
-		if (!isset($params['block']) && ($id == 'cntnt01' || ($id != '' && $inline == false)))
+		if (!isset($params['block']) && ($id == 'cntnt01' || $id == '_preview_' || ($id != '' && $inline == false)))
 		{
 		  // todo, would be neat here if we could get a list of only frontend modules.
 		  $installedmodules = ModuleOperations::get_instance()->GetInstalledModules();

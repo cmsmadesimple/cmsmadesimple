@@ -168,6 +168,8 @@ if ($access)
 			$result = $onestylesheet->Save();
 
 			// Update the css hash
+			// deprecated:  this was used by the stylesheet.php function which we no longer distribute
+			// as of CMSMS 1.10.
 			$config = $gCms->GetConfig();
 			$hashfile = cms_join_path($config['root_path'],'tmp','cache','csshash.dat');
 			$md5sum = md5($css_text);
