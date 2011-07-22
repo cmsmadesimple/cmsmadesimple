@@ -244,7 +244,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 
 	$CMS_STYLESHEET = 0;
 	unset($CMS_STYLESHEET);
-	unset($_GLOBALS['CMS_STYLESHEET']);
+	unset($GLOBALS['CMS_STYLESHEET']);
 	if( isset($params['assign']) ){
 	    $smarty->assign(trim($params['assign']),$stylesheet);
 	    return;
