@@ -97,6 +97,14 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		$combine_stylesheets = FALSE;
 	}
 
+	$fnsuffix = '';
+	$trimbackground = FALSE;
+	if( isset($params['adjustforeditor']) && $params['adjustforeditor'] )
+	{
+		$fnsuffix = '_e';
+		$trimbackground = TRUE;
+	}
+
 	$res = $db->GetArray($query, $qparms);
 	if( $res )
 	{
@@ -121,7 +129,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		if( $combine_stylesheets && $template_id > 0 )
 		{
 			// combine all matches into one stylesheet.
-			$filename = 'stylesheet_combined_'.$template_id.'_'.$modified_date.'.css';
+			$filename = 'stylesheet_combined_'.$template_id.'_'.$modified_date.$fnsuffix.'.css';
 			$fn = cms_join_path($cache_dir,$filename);
 			if( !file_exists($fn) )
 			{
@@ -142,6 +150,12 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 				$smarty->_eval('?>' . $_compiled);
 				$_contents = @ob_get_contents();
 				@ob_end_clean();
+
+				if( $trimbackground )
+				{
+					$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
+					$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
+				}
 
 				$fh = fopen($fn,'w');
 				fwrite($fh,$_contents);
@@ -168,7 +182,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 			foreach ($res as $one)
 			{
 				$media_type = str_replace(' ','',$one['media_type']);
-				$filename = 'stylesheet_'.$one['css_id'].'_'.strtotime($one['modified_date']).'.css';
+				$filename = 'stylesheet_'.$one['css_id'].'_'.strtotime($one['modified_date']).$fnsuffix.'.css';
 				if ( !file_exists(cms_join_path($cache_dir,$filename)) )
 				{
 					$smarty = $gCms->GetSmarty();
@@ -181,6 +195,13 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 					@ob_end_clean();
 					$smarty->left_delimiter = '{';
 					$smarty->right_delimiter = '}';
+
+					if( $trimbackground )
+					{
+						$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
+						$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
+					}
+
 					$fname = cms_join_path($cache_dir,$filename);
 					$fp = fopen($fname, 'w');
 					//we convert CRLF to LF for unix compatibility

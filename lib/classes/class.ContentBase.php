@@ -774,6 +774,13 @@ class ContentBase
 		$this->mProperties->SetValue($name, $value);
 	}
 	
+
+	public function SetPropertyValueNoLoad($name,$value)
+	{
+	  $this->mProperties->SetValue($name,$value);
+	  $this->mPropertiesLoaded = true;
+	}
+
     /**
      * Function content types to use to say whether or not they should show
      * up in lists where parents of content are set.  This will default to true,

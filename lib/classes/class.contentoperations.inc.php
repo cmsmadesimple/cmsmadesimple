@@ -668,17 +668,18 @@ class ContentOperations
 					  {
 						  // load the properties from local cache.
 						  $props = $contentprops[$id];
-						  $obj =& $contentobj->mProperties;
-						  $obj->mPropertyNames = array();
-						  $obj->mPropertyTypes = array();
-						  $obj->mPropertyValues = array();
+// 						  $obj =& $contentobj->mProperties;
+// 						  $obj->mPropertyNames = array();
+// 						  $obj->mPropertyTypes = array();
+// 						  $obj->mPropertyValues = array();
 						  foreach( $props as $oneprop )
 							  {
-								  $obj->mPropertyNames[] = $oneprop['prop_name'];
-								  $obj->mPropertyTypes[$oneprop['prop_name']] = $oneprop['type'];
-								  $obj->mPropertyValues[$oneprop['prop_name']] = $oneprop['content'];
+								  $contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
+// 								  $obj->mPropertyNames[] = $oneprop['prop_name'];
+// 								  $obj->mPropertyTypes[$oneprop['prop_name']] = $oneprop['type'];
+// 								  $obj->mPropertyValues[$oneprop['prop_name']] = $oneprop['content'];
 							  }
-						  $contentobj->mPropertiesLoaded = true;
+// 						  $contentobj->mPropertiesLoaded = true;
 					  }
 				  
 				  // cache the content objects
