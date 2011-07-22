@@ -99,7 +99,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 
 	$fnsuffix = '';
 	$trimbackground = FALSE;
-	if( isset($params['adjustforeditor']) && $params['adjustforeditor'] )
+	if( isset($params['adjustforeditor'])/* && $params['adjustforeditor']*/)
 	{
 		$fnsuffix = '_e';
 		$trimbackground = TRUE;
@@ -155,6 +155,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 				{
 					$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
 					$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
+          $_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
 				}
 
 				$fh = fopen($fn,'w');
@@ -200,6 +201,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 					{
 						$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
 						$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
+            $_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
 					}
 
 					$fname = cms_join_path($cache_dir,$filename);
