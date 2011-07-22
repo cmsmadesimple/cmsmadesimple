@@ -72,12 +72,17 @@ if ($access)
 		// get our xml
 		$message = '';
 		$files = 0;
+		$old_display_errors = ini_set('display_errors',0);
 		$modops = $gCms->GetModuleOperations();
 		$object = cms_utils::get_module($module);
 		$xmltxt = $modops->CreateXMLPackage($object,$message,$files);
 		if( $files == 0 )
 		{
 			echo "<p class=\"error\">".lang('errornofilesexported')."</p>";
+			if( $old_display_errors !== FALSE )
+			  {
+			    ini_set('display_errors',$old_display_errors);
+			  }
 		}
 		else 
 		{
@@ -313,6 +318,7 @@ else if ($action == "showmodulehelp")
   if( is_object($modinstance) )
     {
       $orig_lang =  cms_admin_current_language();
+      $modulehelp_yourlang = lang('modulehelp_yourlang');
       if( isset($_GET['lang']) && $orig_lang != 'en_US' )
 	{
 	  cms_set_admin_language(trim($_GET['lang']));
@@ -342,10 +348,10 @@ else if ($action == "showmodulehelp")
 
       if( $orig_lang != 'en_US' )
 	{
-	  $cur_lang = cms_admin_current_language(trim($_GET['lang']));
+	  $cur_lang = cms_admin_current_language();
 	  if( $cur_lang == 'en_US' )
 	    {
-	      $header .= '<span class="helptext"><a href="listmodules.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&action=showmodulehelp&module='.$module.'&lang='.$orig_lang.'">'.lang('modulehelp_yourlang').'</a></span>';
+	      $header .= '<span class="helptext"><a href="listmodules.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&action=showmodulehelp&module='.$module.'&lang='.$orig_lang.'">'.$modulehelp_yourlang.'</a></span>';
 	    }
 	  else
 	    {
