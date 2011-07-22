@@ -217,6 +217,7 @@ class cms_utils
    * This method will return the currently selected frontend wysiwyg for frontend requests (or null if none is selected)
    * For admin requests this method will return the users currently selected wysiwyg module, or null.
    *
+   * @since 1.10
    * @return object or null
    */
   public static function &get_wysiwyg_module($module_name = '')
@@ -225,13 +226,15 @@ class cms_utils
   }
 
 
-  /*
+  /**
    * A convenient method to get the currently selected syntax highlighter
    * This is a wrapper around a similar function in the ModuleOperations class.
    *
    * This method will return the currently selected frontend wysiwyg for frontend requests (or null if none is selected)
    * For admin requests this method will return the users currently selected wysiwyg module, or null.
    *
+   * @since 1.10
+   * @author calguy1000
    * @return object or null
    */
   public static function &get_syntax_highlighter_module()
@@ -240,11 +243,23 @@ class cms_utils
   }
 
 
+  /**
+   * A convenience method to get the currently selected search module.
+   *
+   * @since 1.10
+   * @author calguy1000
+   * @return object or null
+   */
+  public static function &get_search_module()
+  {
+	  return ModuleOperations::get_instance()->GetSearchModule();
+  }
+
   /*
    * Attempt to retreive the IP address of the connected user.
    * This function attempts to compensate for proxy servers.
    *
-   * @author Robert Campbell
+   * @author calguy1000
    * @since 1.10
    * @returns string IP address in dotted notation, or null
    */

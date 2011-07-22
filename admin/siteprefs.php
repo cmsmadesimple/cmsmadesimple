@@ -96,6 +96,7 @@ $content_imagefield_path = '';
 $content_thumbnailfield_path = '';
 $contentimage_path = '';
 $adminlog_lifetime = (60*60*24*31);
+$search_module = 'Search';
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php".$urlext);
@@ -137,6 +138,7 @@ $content_imagefield_path = get_site_preference('content_imagefield_path',$conten
 $content_thumbnailfield_path = get_site_preference('content_thumbnailfield_path',$content_thumbnailfield_path);
 $contentimage_path = get_site_preference('contentimage_path',$contentimage_path);
 $adminlog_lifetime = get_site_preference('adminlog_lifetime',$adminlog_lifetime);
+$search_module = get_site_preference('searchmodule',$search_module);
 
 $active_tab='unknown';
 if( isset($_POST['active_tab']) )
@@ -224,6 +226,8 @@ else if (isset($_POST["editsiteprefs"]))
 	  if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
 	  set_site_preference('thumbnail_width',$thumbnail_width);
 	  set_site_preference('thumbnail_height',$thumbnail_height);
+	  $search_module = trim($_POST['search_module']);
+	  set_site_preference('searchmodule',$search_module);
 	  break;
 
 	case 'editcontent':
@@ -356,16 +360,30 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 }
 
 # give everything to smarty
-$allmodules = ModuleOperations::get_instance()->GetLoadedModules();
-$tmp = array_keys($allmodules);
-if( !is_array($tmp) || count($tmp) == 0 )
 {
-  echo $themeObject->ShowErrors(lang('error_nomodules'));
-  return;
+  $allmodules = ModuleOperations::get_instance()->GetLoadedModules();
+  $tmp = array_keys($allmodules);
+  if( !is_array($tmp) || count($tmp) == 0 )
+    {
+      echo $themeObject->ShowErrors(lang('error_nomodules'));
+      return;
+    }
+  $firstmod = $tmp[0];
+  $smarty->assign_by_ref('mod',$allmodules[$tmp[0]]);
 }
-$firstmod = $tmp[0];
-$smarty->assign_by_ref('mod',$allmodules[$tmp[0]]);
-
+{
+  $modules = ModuleOperations::get_instance()->get_modules_with_capability('search');
+  if( is_array($modules) && count($modules) )
+    {
+      $tmp = array();
+      $tmp['-1'] = lang('none');
+      for( $i = 0; $i < count($modules); $i++ )
+	{
+	  $tmp[$modules[$i]->GetName()] = $modules[$i]->GetName();
+	}
+      $smarty->assign('search_modules',$tmp);
+    }
+}
 $smarty->assign('languages',get_language_list());
 $smarty->assign('templates',$templates);
 
@@ -435,6 +453,7 @@ $smarty->assign('content_imagefield_path',$content_imagefield_path);
 $smarty->assign('content_thumbnailfield_path',$content_thumbnailfield_path);
 $smarty->assign('contentimage_path',$contentimage_path);
 $smarty->assign('adminlog_lifetime',$adminlog_lifetime);
+$smarty->assign('search_module',$search_module);
 
 $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
 	     60=>lang('cron_60m'),120=>lang('cron_120m'),

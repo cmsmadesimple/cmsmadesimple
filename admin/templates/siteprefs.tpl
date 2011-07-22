@@ -79,6 +79,17 @@
   </p>
 </div>
 
+{if isset($search_modules)}
+  <p class="pagetext">{'search_module'|lang}:</p>
+  <p class="pageinput">
+    <select name="search_module">
+    {html_options options=$search_modules selected=$search_module}
+    </select>
+    <br/>
+    {'info_search_module'|lang}
+  </p>
+{/if}
+
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
   <p class="pageinput">

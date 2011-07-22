@@ -963,7 +963,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
    * 
    * @param string $capability The capability name
    * @param mixed $args Capability arguments
-   * @return array List of all the module with that capability
+   * @return array List of all the module objects with that capability
    */
   public static function get_modules_with_capability($capability, $args= '')
   {
@@ -992,7 +992,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  $output = array();
 		  foreach( $names as $one )
 		  {
-			  $obj = $this->get_module_instance($oen);
+			  $obj = self::get_instance()->get_module_instance($one);
 			  if( is_object($obj) )
 			  {
 				  $output[] =& $obj;
@@ -1084,9 +1084,21 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  if( !$obj ) return $obj;
 	  if( !$obj->IsWYSIWYG() ) return $obj;
 
+	  $obj = null;
 	  return $obj;
   }
 
+
+  public function &GetSearchModule()
+  {
+	  $obj = null;
+	  $module_name = get_site_preference('searchmodule','Search');
+	  if( $module_name && $module_name != 'none' && $module_name != '-1' )
+	  {
+		  $obj = $this->get_module_instance($module_name);
+	  }
+	  return $obj;
+  }
 
   public function &GetSyntaxModule($module_name = '')
   {
