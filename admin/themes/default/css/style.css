@@ -918,8 +918,9 @@ ul.sortableList li li li li li {
 .smallgrey { 
   font-weight: normal;
   font-size: 0.8em;
+  margin: 10px 0 0 0;
 }
-/*FILEMANGER MESSAGES*/
+/*FILEMANAGER MESSAGES*/
 span.fm-messages{
 margin-left:20px;
 padding: 0px 2px 2px 10px;
