@@ -39,22 +39,22 @@ class Content extends ContentBase
 	 * @access private
 	 * @var array
 	 */
-    var $_contentBlocks = array();
+    protected $_contentBlocks = array();
 	/**
 	 * @access private
 	 * @var array
 	 */
-    var $_contentBlocksLoaded = false;
+    protected $_contentBlocksLoaded = false;
 	/**
 	 * @access private
 	 * @var boolean
 	 */
-    var $doAutoAliasIfEnabled = true;
+    protected $doAutoAliasIfEnabled = true;
 	/**
 	 * @access private
 	 * @var string
 	 */
-    var $stylesheet;
+    protected $stylesheet;
 
 	/**
 	 * Indicate whether or not this content type may be copied
