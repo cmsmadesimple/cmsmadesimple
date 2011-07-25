@@ -1082,7 +1082,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
 	  $obj = $this->get_module_instance($module_name);
 	  if( !$obj ) return $obj;
-	  if( !$obj->IsWYSIWYG() ) return $obj;
+	  if( $obj->IsWYSIWYG() ) return $obj;
 
 	  $obj = null;
 	  return $obj;
