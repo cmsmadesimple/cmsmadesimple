@@ -1,5 +1,6 @@
 <?php
-class GatherNotifications implments CmsRegularTask
+
+class GatherNotificationsTask implements CmsRegularTask
 {
   const   PREFNAME = '__NOTIFICATIONS__';
   private $_notifications;
@@ -18,7 +19,9 @@ class GatherNotifications implments CmsRegularTask
 
   public function test($time = '')
   {
-    return TRUE;
+    global $CMS_ADMIN_PAGE;
+    if( isset($CMS_ADMIN_PAGE) ) return TRUE;
+    return FALSE;
   }
 
 
@@ -47,7 +50,7 @@ class GatherNotifications implments CmsRegularTask
 	if( !is_object($module) ) continue;
 
 	// now see if this module has notifications
-	$data = $mod->GetNotificationOutput(3);
+	$data = $module->GetNotificationOutput(3);
 	if( empty($data) ) continue;
 
 	if( is_object($data) )
@@ -60,6 +63,7 @@ class GatherNotifications implments CmsRegularTask
 	    if( !isset($data[$i]->friendlyname) )  $data[$i]->friendlyname = $module->GetFriendlyName();
 	  }
 	
+	if( !is_array($this->_notifications)) $this->_notifications = array();
 	$this->_notifications = array_merge($this->_notifications,$data);
       }
 

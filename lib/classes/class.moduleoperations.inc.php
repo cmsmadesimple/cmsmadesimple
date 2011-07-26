@@ -967,41 +967,18 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
    */
   public static function get_modules_with_capability($capability, $args= '')
   {
-	  $fn = TMP_CACHE_LOCATION.'/capability_'.md5($capability.serialize($args)).'dat';
-	  $names = array();
-	  if( !file_exists($fn) )
+	  if( !is_array($args) )
 	  {
-		  $info = self::get_instance()->_get_module_info();
-		  foreach( $info as $module_name => $rec )
+		  if( !empty($args) )
 		  {
-			  $obj = self::get_instance()->get_module_instance($module_name);
-			  if( is_object($obj) && $obj->HasCapability($capability,$args) )
-			  {
-				  $names[] = $module_name;
-			  }
+			  $args = array($args);
 		  }
-
-		  file_put_contents($fn,base64_encode(serialize($names)));
-	  }
-	  else
-	  {
-		  $names = unserialize(base64_decode(file_get_contents($fn)));
-	  }
-	  if( is_array($names) && count($names) )
-	  {
-		  $output = array();
-		  foreach( $names as $one )
+		  else
 		  {
-			  $obj = self::get_instance()->get_module_instance($one);
-			  if( is_object($obj) )
-			  {
-				  $output[] =& $obj;
-			  }
+			  $args = array();
 		  }
-		  if( !count($output) ) return FALSE;
-		  return $output;
 	  }
-	  return FALSE;
+	  return module_meta::get_instance()->module_list_by_capability($capability,$args);
   }
 
 

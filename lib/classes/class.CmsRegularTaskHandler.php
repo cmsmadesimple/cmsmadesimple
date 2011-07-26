@@ -50,10 +50,10 @@ class CmsRegularTaskHandler
 	private static function get_tasks()
 	{
 		if( !is_object(self::$_tasks) )
-			{
-				self::$_tasks = new ArrayObject();
-			}
-
+		{
+			self::$_tasks = new ArrayObject();
+		}
+		
 		// 1.  Get task objects from files.
 		$gCms = cmsms();
 		$dir = $gCms->config['root_path'].'/lib/tasks';
@@ -61,19 +61,19 @@ class CmsRegularTaskHandler
 		$tmp = new DirectoryIterator($dir);
 		$iterator = new RegexIterator($tmp,'/class\..+task\.php$/');
 		foreach( $iterator as $match )
+		{
+			$tmp = explode('.',basename($match->current()));
+			if( is_array($tmp) && count($tmp) == 4 )
 			{
-				$tmp = explode('.',basename($match->current()));
-				if( is_array($tmp) && count($tmp) == 4 )
-					{
-						$classname = $tmp[1].'Task';
-						require_once($dir.'/'.$match->current());
-						$obj = new $classname;
-						if( $obj instanceof CmsRegularTask )
-							{
-								self::$_tasks->append($obj);
-							}
-					}
+				$classname = $tmp[1].'Task';
+				require_once($dir.'/'.$match->current());
+				$obj = new $classname;
+				if( $obj instanceof CmsRegularTask )
+				{
+					self::$_tasks->append($obj);
+				}
 			}
+		}
 
 
 		// 2.  Get task objects from modules.
@@ -81,27 +81,27 @@ class CmsRegularTaskHandler
 		$modules = $opts->get_modules_with_capability('tasks');
 		if (!$modules) return;
 		foreach( $modules as $one )
+		{
+			if( !method_exists($one,'get_tasks') ) continue;
+			
+			$tasks = $one->get_tasks();
+			if( $tasks )
 			{
-				if( !method_exists($one,'get_tasks') ) continue;
+				if( !is_array($tasks) )
+				{
+					$tmp = array($tasks);
+					$tasks = $tmp;
+				}
 
-				$tasks = $one->get_tasks();
-				if( $tasks )
+				foreach( $tasks as $onetask )
+				{
+					if( is_object($onetask) && $onetask instanceof CmsRegularTask )
 					{
-						if( !is_array($tasks) )
-							{
-								$tmp = array($tasks);
-								$tasks = $tmp;
-							}
-
-						foreach( $tasks as $onetask )
-							{
-								if( is_object($onetask) && $onetask instanceof CmsRegularTask )
-									{
-										self::$_tasks->append($onetask);
-									}
-							}
+						self::$_tasks->append($onetask);
 					}
+				}
 			}
+		}
 	}
 
 
@@ -172,7 +172,7 @@ class CmsRegularTaskHandler
 
 	  $granularity = (int)get_site_preference('pseudocron_granularity',60);
 	  $last_check = get_site_preference('pseudocron_lastrun',0);
-	  if( (time() - $granularity * 60) >= $last_check )
+	  if( ((time() - $granularity * 60) >= $last_check) )
 		  {
 			  // 1.  Get Task objects.
 			  self::get_tasks();

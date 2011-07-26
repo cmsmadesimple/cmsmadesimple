@@ -74,7 +74,7 @@ else
 	      foreach( $data as $item )
 		{
 		  $themeObject->AddNotification($item->priority,
-						$mod->GetName(),
+						$item->name,
 						$item->html);
 		}
 	    }
@@ -112,16 +112,17 @@ else
 	      $current_version = $row["version"];
 	    }
 	  
-	if ($current_version < $CMS_SCHEMA_VERSION)
-	  {
-	    $warning_upgrade = 
-	      lang('warning_upgrade') . "<br />" . lang('warning_upgrade_info1',$current_version,  
-							$CMS_SCHEMA_VERSION) . "<br /> " . lang('warning_upgrade_info2',
-												'<a href="'.$config['root_url'].'/install/upgrade.php">'.lang('start_upgrade_process').'</a>')
-	      ;
-
-	    $themeObject->AddNotification(1,'Core', $warning_upgrade);
-	  }
+	  if ($current_version < $CMS_SCHEMA_VERSION)
+	    {
+	      $warning_upgrade = 
+		lang('warning_upgrade') . "<br />" . lang('warning_upgrade_info1',$current_version,  
+							  $CMS_SCHEMA_VERSION) . "<br /> " . lang('warning_upgrade_info2',
+												  '<a href="'.$config['root_url'].'/install/upgrade.php">'.lang('start_upgrade_process').'</a>')
+		;
+	      
+	      $themeObject->AddNotification(1,'Core', $warning_upgrade);
+	    }
+	}
 
 	
 	// Display an upgrade notification 
@@ -150,16 +151,6 @@ else
 		}
 	      set_site_preference('lastcmsversioncheck',mktime(23,59,55));
 	    }
-	}
-	
-
-	// Display a warning about mail settings.
-	$mailer = cms_utils::get_module('CMSMailer');
-	if( $mailer && !get_site_preference('mail_is_set',0) )
-	  {
-	    $urlCMSMailer = 'moduleinterface.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&amp;module=CMSMailer';
-	    $themeObject->AddNotification(1,'Core',lang('warning_mail_settings', $urlCMSMailer));
-	  }
 	}
 
 	// and display the dashboard.

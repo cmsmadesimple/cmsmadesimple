@@ -361,15 +361,14 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 
 # give everything to smarty
 {
-  $allmodules = ModuleOperations::get_instance()->GetLoadedModules();
-  $tmp = array_keys($allmodules);
+  $tmp = ModuleOperations::get_instance()->GetInstalledModules();
   if( !is_array($tmp) || count($tmp) == 0 )
     {
       echo $themeObject->ShowErrors(lang('error_nomodules'));
       return;
     }
   $firstmod = $tmp[0];
-  $smarty->assign_by_ref('mod',$allmodules[$tmp[0]]);
+  $smarty->assign('mod',cms_utils::get_module($firstmod));
 }
 {
   $modules = ModuleOperations::get_instance()->get_modules_with_capability('search');
@@ -379,7 +378,7 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
       $tmp['-1'] = lang('none');
       for( $i = 0; $i < count($modules); $i++ )
 	{
-	  $tmp[$modules[$i]->GetName()] = $modules[$i]->GetName();
+	  $tmp[$modules[$i]] = $modules[$i];
 	}
       $smarty->assign('search_modules',$tmp);
     }
@@ -387,14 +386,8 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 $smarty->assign('languages',get_language_list());
 $smarty->assign('templates',$templates);
 
-$tmp = array(''=>lang('none'));
-foreach( $allmodules as $key => &$object )
-{
-  if( $object->IsWYSIWYG() )
-    {
-      if (isset($tmp[$key])) $tmp[$key].= $key; else $tmp[$key]=$key;
-    }
-}
+// need a list of wysiwyg modules.
+$tmp = module_meta::get_instance()->module_list_by_method('IsWYSIWYG');
 $smarty->assign('wysiwyg',$tmp);
 
 if ($dir=opendir(dirname(__FILE__)."/themes/")) 

@@ -39,7 +39,6 @@ class CMSMailer extends CMSModule
   function __construct()
   {
     parent::__construct();
-    
   }
 
 
@@ -281,6 +280,22 @@ class CMSMailer extends CMSModule
     
     // Display the populated template
     echo $this->ProcessTemplate('error.tpl');
+  }
+
+  /*---------------------------------------------------------
+   GetNotificationOutput()
+   ---------------------------------------------------------*/
+  function GetNotificationOutput($priority = 3)
+  {
+    if( !get_site_preference('mail_is_set',0) )
+      {
+	$obj = new StdClass;
+	$obj->priority = 1;
+	$link = 'moduleinterface.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&amp;module=CMSMailer';
+	$obj->html = lang('warning_mail_settings', $link);
+	
+	return $obj;
+      }
   }
 
   //////////////////////////////////////////////////////////////////////
