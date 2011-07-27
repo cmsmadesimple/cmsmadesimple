@@ -27,7 +27,7 @@
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Andrei Zmievski <andrei@php.net>
  * @package Smarty
- * @version 2.6.25
+ * @version 2.6.26
  */
 
 /* $Id$ */
@@ -465,7 +465,7 @@ class Smarty
      *
      * @var string
      */
-    var $_version              = '2.6.25';
+    var $_version              = '2.6.26';
 
     /**
      * current template inclusion depth
@@ -562,14 +562,6 @@ class Smarty
      */
     var $_cache_including = false;
 
-    /**
-     * array of super globals internally
-     *
-     * @var array
-     */
-    var $_supers = array();
-
-
     /**#@-*/
     /**
      * The class constructor.
@@ -578,18 +570,6 @@ class Smarty
     {
       $this->assign('SCRIPT_NAME', isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME']
                     : @$GLOBALS['HTTP_SERVER_VARS']['SCRIPT_NAME']);
-                    
-      $this->_supers['get'] = $this->request_use_auto_globals ? $_GET : $GLOBALS['HTTP_GET_VARS'];
-      $this->_supers['post'] = $this->request_use_auto_globals ? $_POST : $GLOBALS['HTTP_POST_VARS'];
-      $this->_supers['server'] = $this->request_use_auto_globals ? $_SERVER : $GLOBALS['HTTP_SERVER_VARS'];
-      if(isset($_SESSION))
-        $this->_supers['session'] = $this->request_use_auto_globals ? $_SESSION : $GLOBALS['HTTP_SESSION_VARS'];
-      else
-        $this->_supers['session'] = array();
-      $this->_supers['request'] = $this->request_use_auto_globals ? $_REQUEST : $GLOBALS['HTTP_REQUEST_VARS'];
-      $this->_supers['cookies'] = $this->request_use_auto_globals ? $_COOKIE : $GLOBALS['HTTP_COOKIE_VARS'];
-      $this->_supers['env'] = $this->request_use_auto_globals ? $_ENV : $GLOBALS['HTTP_ENV_VARS'];
-                    
     }
 
     /**
@@ -1467,16 +1447,14 @@ class Smarty
      */
     function _compile_source($resource_name, &$source_content, &$compiled_content, $cache_include_path=null)
     {
+      $_tmp = $_REQUEST; // calguy1000
         if (file_exists(SMARTY_DIR . $this->compiler_file)) {
-	  // calguy1000: for some reason the $_REQUEST var was lost immediately once this require_once was executed
-	  // some sort of PHP bug I think... so I am copying it to a tmp var to get past this.
-	  $_tmp = $_REQUEST;
-	  require_once(SMARTY_DIR . $this->compiler_file);
-	  $_REQUEST = $_tmp;
+            require_once(SMARTY_DIR . $this->compiler_file);
         } else {
             // use include_path
             require_once($this->compiler_file);
         }
+	$_REQUEST = $_tmp; // calguy1000
 
 
         $smarty_compiler = new $this->compiler_class;
@@ -1510,9 +1488,9 @@ class Smarty
         $smarty_compiler->_cache_include = $cache_include_path;
 
 
-	$_tmp = $_REQUEST;
+	$_tmp = $_REQUEST ; // calguy1000
         $_results = $smarty_compiler->_compile_file($resource_name, $source_content, $compiled_content);
-	$_REQUEST = $_tmp;
+	$_REQUEST = $_tmp; // calguy1000
 
         if ($smarty_compiler->_cache_serial) {
             $this->_cache_include_info = array(
