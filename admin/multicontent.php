@@ -238,7 +238,7 @@ if (isset($_POST['idlist']))
 		  $content = $node->GetContent(false,false,true);
 		  if (isset($content))
 		    {
-		      $nodelist[] =& $content;
+		      $nodelist[] = $content;
 		    }
 		}
 	}
@@ -431,7 +431,7 @@ else
 			{
 				$id = $node->Id();
 				$title = $node->Name() . ' (' . $node->Hierarchy() . ') -- ' . $id;
-				
+
 				$childcount = 0;
 				$parentid = -1;
 
@@ -472,7 +472,6 @@ else
 			$ops->SetAllHierarchyPositions();
 			$bulk = true;
 		}
-		//include_once("footer.php");
 		if(! $bulk)
 		{
 			redirect("listcontent.php".$urlext.'&message=no_bulk_performed');
