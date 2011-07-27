@@ -20,6 +20,14 @@ cleanup()
 #
 # Setup
 #
+_htaccess=<<EOT
+# To deny PHPs
+<Files ~ "\.(php|php3|php4|php5|phtml|pl|cgi)$">                                                                              
+  order deny,allow                                                                                                            
+  deny from all                                                                                                               
+</Files>  
+EOT
+_htaccessdirs='tmp lib uploads images'
 _this=`basename $0`
 _svn=http://svn.cmsmadesimple.org/svn/cmsmadesimple/branches/1.6.x
 _workdir=/tmp/$_this.$$
@@ -90,7 +98,7 @@ while [ $# -gt 0 ]; do
       continue
       ;;
     '--nohtaccess' )
-      noremove=1
+      nohtaccess=1
       shift 1
       continue
       ;;
@@ -207,6 +215,14 @@ touch tmp/cache/SITEDOWN
 if [ ${noindex:-notset} = notset ]; then
   echo "Create index.html files"
   find * -type d -exec create_index_html.sh {} \;
+fi
+if [ ${nohtaccess:-notset} = notset ]; then
+  echo "Create .htaccess files";
+  for _f in $_htaccessdirs ; do
+    echo $_htaccess > ${_f}/.htaccess 2>&1
+  done
+else
+  find . -name '.htaccess' -exec rm -f {} \; 2>&1
 fi
 
 # Clean up permissions
