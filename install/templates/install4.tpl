@@ -29,7 +29,7 @@
 		<td>{lang_install a=admin_salt}</td>
 		<td>
                   <input type="checkbox" name="adminsalt"  value="1" {if $values.salt == 1} checked="checked"{/if} />
-                  <br/<br/><p class="row1">{lang_install a=install_admin_pwsalt_note}</p>
+                  <br/><p class="row1">{lang_install a=install_admin_pwsalt_note}</p>
                 </td>
 	</tr>
 	<tr class="row1">
