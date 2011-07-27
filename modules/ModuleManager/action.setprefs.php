@@ -53,8 +53,7 @@ if( !isset($gCms) ) exit;
     }
   else if( isset($params['reseturl']) )
     {
-      $this->SetPreference('module_repository',
-			   'http://modules.cmsmadesimple.org/soap.php?module=ModuleRepository');
+      $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
       $this->Redirect($id,'defaultadmin',$returnid,array('active_tab'=>'prefs'));
     }
 

@@ -41,6 +41,8 @@ define('MINIMUM_REPOSITORY_VERSION','1.5');
 
 class ModuleManager extends CMSModule
 {
+  const _dflt_request_url = 'http://www.cmsmadesimple.org/ModuleRepository/request/v2/';
+
   function GetName()
   {
     return 'ModuleManager';
@@ -203,8 +205,7 @@ class ModuleManager extends CMSModule
    ---------------------------------------------------------*/
   function Install()
   {
-    $this->SetPreference('module_repository',
-			 'http://calguy1000.dyndns.org/cms17/index.php/ModuleRepository/request/v2');
+    $this->SetPreference('module_repository',ModuelManager::_dflt_request_url);
 
     // put mention into the admin log
     $this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('installed',$this->GetVersion()));
