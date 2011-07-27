@@ -1784,7 +1784,7 @@ debug_buffer('after menu items');
 	  $path = cms_join_path(cmsms()->config['root_path'],$icon);
 	  if( file_exists($path) )
 	    {
-	      $header .= "<img src=\"{$config['root_url']}/{$icon}\" class=\"itemicon\" />&nbsp;";
+	      $header .= "<img src=\"{$config['root_url']}/{$icon}\" class=\"itemicon\" alt=\"{$icon}\" />&nbsp;";
 	    }
 	  $header .= $title_name;
 	}

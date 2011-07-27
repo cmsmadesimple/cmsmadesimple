@@ -239,7 +239,7 @@ echo '<div class="pagecontainer">';
 echo $themeObject->ShowHeader('imagemanagement');
 
 ?>
-<iframe class="imageframe" src="../lib/filemanager/ImageManager/images.php<?php echo $urlext ?>&dir=<?php echo "$reldir" ?>" name="imgManager" title="Image Selection"></iframe>
+<iframe class="imageframe" src="../lib/filemanager/ImageManager/images.php<?php echo $urlext ?>&amp;dir=<?php echo "$reldir" ?>" name="imgManager" title="Image Selection"></iframe>
 
 <?php
 

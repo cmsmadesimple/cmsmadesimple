@@ -24,8 +24,8 @@
          <th class="pagew10">{'about'|lang}</th>
        </tr>
       </thead> 
-      {foreach from=$plugins item='one'}
       <tbody>
+      {foreach from=$plugins item='one'}
 	{cycle values="row1,row2" assign='rowclass'}
 	<tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
          <td>

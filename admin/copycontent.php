@@ -87,7 +87,7 @@ if( isset($_GET['submit']) )
   $tmpobj->SetName($to_title);
   $tmpobj->SetMenuText($to_menutext);
   $tmpobj->SetAlias($to_alias);
-  $tmpobj->mOldAlias = ''; // no method for this.
+  //$tmpobj->mOldAlias = ''; // no method for this.
   $tmpobj->SetParentId($to_parentid);
   $tmpobj->SetOldParentId($to_parentid);
   $tmpobj->SetAccessKey($to_accesskey);
