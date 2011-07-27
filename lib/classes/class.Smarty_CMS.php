@@ -869,7 +869,7 @@ class Smarty_CMS extends Smarty
 	  {
 	    $action = $params['action'];
 	  }
-	echo $obj->DoActionBase($action, $id, $params, is_object($contentobj)?$$contentobj->Id():'');
+	echo $obj->DoActionBase($action, $id, $params, is_object($contentobj)?$contentobj->Id():'');
 	$modoutput = @ob_get_contents();
 	@ob_end_clean();
 
