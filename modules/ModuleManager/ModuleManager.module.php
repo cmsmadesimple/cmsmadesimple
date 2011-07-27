@@ -205,7 +205,7 @@ class ModuleManager extends CMSModule
    ---------------------------------------------------------*/
   function Install()
   {
-    $this->SetPreference('module_repository',ModuelManager::_dflt_request_url);
+    $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
 
     // put mention into the admin log
     $this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('installed',$this->GetVersion()));
