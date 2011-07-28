@@ -418,6 +418,20 @@ function testIni( &$test, $varname, $type, $opt = '' )
 			}
 			break;
 		case 'boolean':
+			if( !is_numeric($str) )
+			{
+				$str2 = strtolower($str);
+				switch( $str2 )
+				{
+				case 'on':
+				case 'yes':
+				case 'y':
+					$str = TRUE;
+					break;
+				default:
+					$str = FALSE;
+				}
+			}
 			$str = (bool) $str;
 			break;
 		case 'integer':

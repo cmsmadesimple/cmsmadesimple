@@ -167,14 +167,22 @@ if( defined('E_DEPRECATED') )
 $tmp[1]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
 
 list($minimum, $recommended) = getTestValues('memory_limit');
-$tmp[0]['memory_limit'] = testRange(0, 'memory_limit', 'memory_limit', '', $minimum, $recommended, true, true, null, 'memory_limit_range');
+$tmp[0]['memory_limit'] = testRange(0, 'memory_limit', 'memory_limit', '', $minimum, $recommended, true, true, -1, 'memory_limit_range');
 
 list($minimum, $recommended) = getTestValues('max_execution_time');
 $tmp[0]['max_execution_time'] = testRange(0, 'max_execution_time', 'max_execution_time', '', $minimum, $recommended, true, false, 0, 'max_execution_time_range');
 
 $tmp[1]['register_globals'] = testBoolean(0, lang('register_globals'), 'register_globals', '', true, true, 'register_globals_enabled');
 
-$tmp[0]['output_buffering'] = testInteger(0, lang('output_buffering'), 'output_buffering', '', true, true, 'output_buffering_disabled');
+$ob = ini_get('output_buffering');
+if( strtolower($ob) == 'off' || strtolower($ob) == 'on' )
+  {
+    $tmp[0]['output_buffering'] = testBoolean(0, lang('output_buffering'), 'output_buffering', '', true, false, 'output_buffering_disabled');
+  }
+else
+  {
+    $tmp[0]['output_buffering'] = testInteger(0, lang('output_buffering'), 'output_buffering', '', true, true, 'output_buffering_disabled');
+  }
 
 $tmp[1]['disable_functions'] = testString(0, lang('disable_functions'), 'disable_functions', '', true, 'green', 'yellow', 'disable_functions_not_empty');
 
@@ -232,19 +240,21 @@ $tmp[1]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('o
 
 switch($config['dbms']) //workaroud: ServerInfo() is unsupported in adodblite
 {
-	case 'postgres7': $tmp[0]['server_db_type'] = testDummy('', 'PostgreSQL ('.$config['dbms'].')', '');
-					$v = pg_version();
-					$_server_db = (isset($v['server_version'])) ? $v['server_version'] : $v['client'];
-					list($minimum, $recommended) = getTestValues('pgsql_version');
-					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
-					break;
-	case 'mysqli':	$v = $db->connectionId->server_info;
-	case 'mysql':	if(!isset($v)) $v = mysql_get_server_info();
-					$tmp[0]['server_db_type'] = testDummy('', 'MySQL ('.$config['dbms'].')', '');
-					$_server_db = (false === strpos($v, "-")) ? $v : substr($v, 0, strpos($v, "-"));
-					list($minimum, $recommended) = getTestValues('mysql_version');
-					$tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
-					break;
+	case 'postgres7': 
+	  $tmp[0]['server_db_type'] = testDummy('', 'PostgreSQL ('.$config['dbms'].')', '');
+	  $v = pg_version();
+	  $_server_db = (isset($v['server_version'])) ? $v['server_version'] : $v['client'];
+	  list($minimum, $recommended) = getTestValues('pgsql_version');
+	  $tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
+	  break;
+        case 'mysqli':	
+	case 'mysql':
+	  $v = $db->GetOne('SELECT version()');
+	  $tmp[0]['server_db_type'] = testDummy('', 'MySQL ('.$config['dbms'].')', '');
+	  $_server_db = (false === strpos($v, "-")) ? $v : substr($v, 0, strpos($v, "-"));
+	  list($minimum, $recommended) = getTestValues('mysql_version');
+	  $tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
+	  break;
 }
 $smarty->assign('count_server_info', count($tmp[0]));
 $smarty->assign('server_info', $tmp);

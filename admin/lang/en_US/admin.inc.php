@@ -1026,6 +1026,7 @@ Change History:<br/>
 1.5 - Modified to use new hierarchy manager<br />
 1.6 - Modified to skip any parents that are marked to be "not shown in menu" except for root<br />
 1.7 - Added root_url parameter (elijahlofgren)<br />
+1.8 - Fixes to the root param.<br/>
 </p>
 EOT;
 
