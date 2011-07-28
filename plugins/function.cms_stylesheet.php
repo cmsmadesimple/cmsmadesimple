@@ -61,12 +61,6 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	$query = '';
 	$order = '';
 	$combine_stylesheets = FALSE;
-	if( isset($params['media']) && strtolower($params['media']) != 'all' )
-	{
-		$where[] = '(media_type LIKE ? OR media_type LIKE ?)';
-		$qparms[] = '%'.trim($params['media']).'%';
-		$qparms[] = '%all%';
-	}
 	if (isset($params['name']) && $params['name'] != '')
 	{
 		$query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date, A.media_type
@@ -81,12 +75,28 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 			$combine_stylesheets = TRUE;
 		}
   	    $query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,
-               		              A.media_type,B.assoc_order 
+               		              A.media_type
    	                FROM '.cms_db_prefix().'css A 
                     LEFT JOIN '.cms_db_prefix().'css_assoc B ON A.css_id = B.assoc_css_id';
 		$where[] = 'B.assoc_type = ?
 		AND B.assoc_to_id = ?';
 		$qparms = array('template', $template_id);
+
+		if( isset($params['media']) && strtolower($params['media']) != 'all' )
+		{
+			$tmp = explode(',',$params['media']); 
+			$epr = array();
+			for( $i = 0; $i < count($tmp); $i++ )
+			{
+				$expr[] = 'media_type LIKE ?';
+				$qparms[] = '%'.trim($tmp[$i]).'%';
+			}
+			$expr[] = 'media type LIKE ?';
+			$qparms[] = '%all%';
+
+			$where[] = '('.implode(' OR ',$expr).')';
+		}
+
 		$order = 'ORDER BY B.assoc_order';
 	}
 	$query .= " WHERE ".implode(' AND ',$where).' '.$order;
@@ -112,19 +122,25 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		$modified_date = 0;
 		$media_changed = false;
 		$test_media = '';
-		for( $i = 0; $i < count($res); $i++ )
+		if( $combine_stylesheets )
 		{
-			$modified_date = max($modified_date,strtotime($res[$i]['modified_date']));
-			if( $test_media == '' )
+			// if we still think we can combine stylesheets, do a check through all of the media types
+			// to ensure that they are the same.. if they aren't do not combine them
+			// this could be smarter.
+			for( $i = 0; $i < count($res); $i++ )
 			{
-				$test_media = $res[$i]['media_type'];
+				$modified_date = max($modified_date,strtotime($res[$i]['modified_date']));
+				if( $test_media == '' )
+				{
+					$test_media = $res[$i]['media_type'];
+				}
+				if( $res[$i]['media_type'] != $test_media )
+				{
+					$media_changed = TRUE;
+				}
 			}
-			if( $res[$i]['media_type'] != $test_media )
-			{
-				$media_changed = TRUE;
-			}
+			if( $media_changed ) $combine_stylesheets = FALSE;
 		}
-		if( $media_changed ) $combine_stylesheets = FALSE;
 
 		if( $combine_stylesheets && $template_id > 0 )
 		{
@@ -153,9 +169,10 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 
 				if( $trimbackground )
 				{
+					// attempt to trim background stuff from stylesheets.
 					$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
 					$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
-          $_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
+					$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
 				}
 
 				$fh = fopen($fn,'w');
@@ -201,7 +218,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 					{
 						$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
 						$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
-            $_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
+						$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
 					}
 
 					$fname = cms_join_path($cache_dir,$filename);
@@ -219,7 +236,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 				}
 				else
 				{	
-					if ( empty($media_type) || isset($params['media']) )
+					if ( empty($media_type) )
 						{
 							$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'"/>'."\n";
 						}

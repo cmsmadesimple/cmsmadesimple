@@ -19,9 +19,8 @@
 
 function smarty_cms_function_breadcrumbs($params, &$smarty)
 {
-
 	$gCms = cmsms(); 
-	$manager = &$gCms->GetHierarchyManager();
+	$manager = $gCms->GetHierarchyManager();
 
 	$thispage = $gCms->variables['content_id'];
 
@@ -58,12 +57,12 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 # build path
 	if (isset($endNode))
 	{
-	        $content =& $endNode->getContent();
+	        $content = $endNode->getContent();
 		$path=array($endNode);
-		$currentNode = &$endNode->getParentNode();
+		$currentNode = $endNode->getParentNode();
 		while (isset($currentNode) && $currentNode->getLevel() >= 0)
 		{
-			$content = &$currentNode->getContent();
+			$content = $currentNode->getContent();
 			if (isset($content))
 			{
 			  //Add current node to the path and then check to see if
@@ -76,7 +75,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 			  if (strtolower($content->Alias())!=strtolower($root))
 			    {
 			      //Get the parent node and loop
-			      $currentNode = &$currentNode->getParentNode();
+			      $currentNode = $currentNode->getParentNode();
 			    }
 			  else
 			    {
@@ -91,33 +90,35 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 			}
 		}
 
-		if ($root!='##ROOT_NODE##') {
-			// check if the last added is root. if not, add id
-			$currentNode = $manager->sureGetNodeByAlias($root);
-
-			if (isset($currentNode))
-			{
-				$content = &$currentNode->getContent();
-				if (isset($content) && (strtolower($content->Alias()) == strtolower($root)))
-				{
-					$node = $manager->sureGetNodeByAlias($root);
-					if (isset($node)) {
-						$content = $node->getContent();
-						if( $content && $content->Id() != $thispage) 
-							$path[] = $node; # do not add if this is the current page
-					}
-				}
-			}
-		}
+		if ($root!='##ROOT_NODE##') 
+		  {
+		    // check if the last added is root. if not, add it
+		    $currentNode = $manager->sureGetNodeByAlias($root);
+		    
+		    if (isset($currentNode))
+		      {
+			$top_alias = '##garbage##';
+			if( count($path) ) $top_alias = $path[count($path)-1]->get_tag('alias');
+			
+			if( strtolower($top_alias) != strtolower($root) )
+			  {
+			    $content = $currentNode->getContent();
+			    if( is_object($content) && $content->Active() && $content->ShowInMenu() )
+			      {
+				$path[] = $currentNode;
+			      }
+			  }
+		      }
+		  }
 		$classid=isset($params['classid'])?(' class="' . $params['classid'] . '"'):'';
 		$currentclassid=isset($params['currentclassid'])?(' class="' . $params['currentclassid'] . '"'):'';
 
 		// now create the trail (by iterating through the path we built, backwards)
 		for ($i=count($path)-1;$i>=0;$i--) {
-			$node = &$path[$i];
+			$node = $path[$i];
 			if (isset($node))
 			{
-				$onecontent = &$node->getContent();
+				$onecontent = $node->getContent();
 				if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator') {
 					if (($onecontent->getURL() != "") && ($onecontent->Type() != 'sectionheader')) {
 					  if ($onecontent->DefaultContent() && false == empty($root_url))
@@ -163,7 +164,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	if( isset($params['assign']) ){
 	    $smarty->assign(trim($params['assign']),$trail);
 	    return;
-    }
+	}
 	return $trail;  
 
 }
