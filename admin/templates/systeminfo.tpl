@@ -18,19 +18,19 @@
 
 <table width="100%">
   <tr>
-  <td width="45%"><p class="pagetext">{si_lang a=cms_version}</p></td>
-  <td width="5%"></td>
+  <td width="45%"><p style="margin: 10px;">{si_lang a=cms_version}</p></td>
   <td width="50%"><p>{$cms_version}</p></td>
+  <td width="5%"></td>
   </tr>
 
   <tr>
   <td width="45%"><h4>{si_lang a=installed_modules}</h4></td></tr>
   {foreach from=$installed_modules item='module'}
   <tr>
-    <td width="45%"><p class="pagetext">{$module.module_name}</p></td>
-	<td width="5%"></td>
+    <td width="45%"><p style="margin: 10px;">{$module.module_name}</p></td>
     <td width="50%"><p>{$module.version}</p></td>
-  </tr>
+	<td width="5%"></td>
+	</tr>
   {/foreach}
 
   <tr><td width="45%"><h4>{si_lang a=config_information}</h4></td></tr>
@@ -38,14 +38,14 @@
   {foreach from=$config_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
 	<tr>
-    <td width="45%"><p class="pagetext">{$test->title}:</p></td>
-	<td width="5%">{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}</td>
+    <td width="45%"><p style="margin: 10px;">{$test->title}:</p></td>
 	<td width="50%"><p>
 	{if isset($test->value)}{$test->value|default:"&nbsp;"}{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue|default:"&nbsp;"}){/if}
 	{if isset($test->error_fragment)}<a class="external" rel="external" href="{$cms_install_help_url}#{$test->error_fragment}"><img src="themes/{$themename}/images/icons/system/info-external.gif" title="?" alt="?" /></a>{/if}
 	{if isset($test->message)}<br />{$test->message}{/if}
-		</p></td>
+	</p></td>
+	<td width="5%">{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}</td>
 	</tr>
   {/foreach}
 {/foreach}
@@ -61,8 +61,7 @@
 {foreach from=$php_information key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
 	<tr>
-    <td width="45%"><p class="pagetext">{si_lang a=$key} ({$key}):</p></td>
-	<td width="5%">{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}</td>
+    <td width="45%"><p style="margin: 10px;">{si_lang a=$key} ({$key}):</p></td>
 	<td width="50%"><p>
 	{if isset($test->value) && $test->display_value != 0}&nbsp;{$test->value}{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue}){/if}
@@ -74,6 +73,7 @@
 		{/foreach}
 	{/if}
 	</p></td>
+	<td width="5%">{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}</td>
 	</tr>
   {/foreach}
 {/foreach}
@@ -88,13 +88,13 @@
 {foreach from=$server_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
 	<tr>
-	<td width="45%"><p class="pagetext">{si_lang a=$key} ({$key}):</p></td>
-	<td width="5%">{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res|default:"space"}.gif" title="{$test->res_text|default:""}" alt="{$test->res_text|default:""}" />{/if}</td>
+	<td width="45%"><p style="margin: 10px;">{si_lang a=$key} ({$key}):</p></td>
 	<td width="50%"><p>
 	{if isset($test->value)}{$test->value}{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue}){/if}
 	{if isset($test->message)}<br />{$test->message}{/if}
 	</p></td>
+	<td width="5%">{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res|default:"space"}.gif" title="{$test->res_text|default:""}" alt="{$test->res_text|default:""}" />{/if}</td>
 	</tr>
   {/foreach}
 {/foreach}
@@ -103,13 +103,13 @@
 {foreach from=$permission_info key='view' item='tmp'}
   {foreach from=$tmp key='key' item='test'}
 	<tr>
-	<td width="45%"><p class="pagetext">{$key}:</p></td>
-	<td width="5%">{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}</td>
+	<td width="45%"><p style="margin: 10px;">{$key}:</p></td>
 	<td width="50%"><p>
 	{if isset($test->value)}{$test->value}{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue}){/if}
 	{if isset($test->message)}<br />{$test->message}{/if}
-		</p></td>
+	</p></td>
+	<td width="5%">{if isset($test->res)}<img class="icon-extra" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}</td>
 	</tr>
   {/foreach}
 {/foreach}
