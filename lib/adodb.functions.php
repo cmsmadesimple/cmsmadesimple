@@ -103,17 +103,9 @@ function &adodb_connect()
 		$dbinstance->debug = true;
 	}
 	
-	if ($config['dbms'] == 'sqlite')
+	if(!empty($config['default_encoding']) && $config['default_encoding'] == 'utf-8' && $config['set_names'] == true)
 	{
-		$dbinstance->Execute('PRAGMA short_column_names = 1;');
-		sqlite_create_function($config['use_adodb_lite'] ? $db->connectionId : $db->_connectionID, 'now', 'time', 0);
-	}
-	else
-	{
-		if(!empty($config['default_encoding']) && $config['default_encoding'] == 'utf-8' && $config['set_names'] == true)
-		{
-			$dbinstance->Execute("SET NAMES 'utf8'");
-		}
+		$dbinstance->Execute("SET NAMES 'utf8'");
 	}
 	
 	return $dbinstance;

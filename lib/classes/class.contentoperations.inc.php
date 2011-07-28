@@ -294,13 +294,8 @@ class ContentOperations
 	 * @access private
 	 * @internal
 	 */
-	private function _load_std_content_types()
+	private function _get_std_content_types()
 	{
-		if (isset(cmsms()->variables['contenttypes'])) 
-		{
-			return;
-		}
-
 		$result = array();
 		$dir = dirname(__FILE__).'/contenttypes';
 		$files = glob($dir.'/*.inc.php');
@@ -330,7 +325,33 @@ class ContentOperations
 			}
 		}
 
-		cmsms()->variables['contenttypes'] = $result;
+		return $result;
+	}
+
+
+	private function _get_content_types()
+	{
+		if( !is_array($this->_content_types) )
+		{
+			// get the standard ones.
+			$content_types = $this->_get_std_content_types();
+			$this->_content_types = $content_types;
+
+			// get the list of modules that have content types.
+			// and load them.  content types from modules are
+			// registered in the constructor.
+			$module_list = module_meta::get_instance()->module_list_by_method('HasContentType');
+			if( is_array($module_list) && count($module_list) )
+			{
+				foreach( $module_list as $module_name )
+					{
+						cms_utils::get_module($module_name);
+					}
+			}
+
+		}
+
+		return $this->_content_types;
 	}
 
 
@@ -346,17 +367,11 @@ class ContentOperations
 	private function _get_content_type($name)
 	{
 		$name = strtolower($name);
-		$this->_load_std_content_types();
-		$types = cmsms()->variables['contenttypes'];
-		if( is_array($types) )
+		$this->_get_content_types();
+		if( is_array($this->_content_types) )
 		{
-			foreach( $types as $key => $obj )
-			{
-				if( $key == $name && $obj instanceof CmsContentTypePlaceHolder )
-					{
-						return $obj;
-					}
-			}
+			if( isset($this->_content_types[$name]) && $this->_content_types[$name] instanceof CmsContentTypePlaceHolder )
+				return $this->_content_types[$name];
 		}
 	}
 
@@ -369,12 +384,11 @@ class ContentOperations
 	 */
 	public function register_content_type(CmsContentTypePlaceHolder& $obj)
 	{
-		$this->_load_std_content_types();
-		$types = cmsms()->variables['contenttypes'];
-		if( isset($types[$obj->type]) ) return;
+		$this->_get_content_types();
+		if( isset($this->_content_types[$obj->type]) ) return FALSE;
 
-		$types[$obj->type] = $obj;
-		cmsms()->variables['contenttypes'] = $types;
+		$this->_content_types[$obj->type] = $obj;
+		return TRUE;
 	}
 
 
@@ -389,8 +403,8 @@ class ContentOperations
 	 */
 	function ListContentTypes($byclassname = false)
 	{
-		$this->_load_std_content_types();
-		$types = cmsms()->variables['contenttypes'];
+		$this->_get_content_types();
+		$types = $this->_content_types;
 		if ( isset($types) )
 		{
 			$result = array();
@@ -668,18 +682,10 @@ class ContentOperations
 					  {
 						  // load the properties from local cache.
 						  $props = $contentprops[$id];
-// 						  $obj =& $contentobj->mProperties;
-// 						  $obj->mPropertyNames = array();
-// 						  $obj->mPropertyTypes = array();
-// 						  $obj->mPropertyValues = array();
 						  foreach( $props as $oneprop )
 							  {
 								  $contentobj->SetPropertyValueNoLoad($oneprop['prop_name'],$oneprop['content']);
-// 								  $obj->mPropertyNames[] = $oneprop['prop_name'];
-// 								  $obj->mPropertyTypes[$oneprop['prop_name']] = $oneprop['type'];
-// 								  $obj->mPropertyValues[$oneprop['prop_name']] = $oneprop['content'];
 							  }
-// 						  $contentobj->mPropertiesLoaded = true;
 					  }
 				  
 				  // cache the content objects
