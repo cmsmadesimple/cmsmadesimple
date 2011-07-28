@@ -632,6 +632,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 
   if (!(isset($one) && $one != NULL))
     {
+      audit($root->get_tag('id'),'Core','failed to get content for valid content id '.$root->get_tag('id'));
       return;
     }
   
@@ -654,7 +655,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
     {
       $display = 'structure';
     }
-  
+
   $columns = array();
   if ($display != 'none')
     {
@@ -1063,8 +1064,7 @@ function display_content_list($themeObject = null)
 	$columnstodisplay['copy'] = check_permission($userid,'Add Pages') || check_permission($userid,'Manage All Content');
 	$columnstodisplay['edit'] = 1;
 	$columnstodisplay['delete'] = check_permission($userid, 'Remove Pages') || check_permission($userid,'Manage All Content');
-	$columnstodisplay['multiselect'] = check_permission($userid, 'Remove Pages') ||
-	  check_permission($userid,'Manage All Content') || check_permission($userid,'Modify Any Page');
+	$columnstodisplay['multiselect'] = check_permission($userid, 'Remove Pages') || check_permission($userid,'Manage All Content');
 	
 	$page = 1;
 	if (isset($_GET['page']))
