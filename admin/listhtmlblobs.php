@@ -69,7 +69,7 @@ $gcbops = cmsms()->GetGlobalContentOperations();
 		echo "<tr>\n";
 		echo "<th>".lang('name')."</th>\n";
 		echo "<th>".lang('tagtousegcb')."</th>\n";
-		echo '<th>'.lang('description').'</th>\n';
+		echo '<th>'.lang('description')."</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
