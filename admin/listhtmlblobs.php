@@ -25,6 +25,18 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
+function listgcb_summarize($str,$numwords,$ets='...')
+{
+  $stringarray = explode(" ",$str);
+  if( $numwords >= count($stringarray) )
+    {
+      return $str;
+    }
+  $tmp = array_slice($stringarray,0,$numwords);
+  $tmp = implode(' ',$tmp).$etc;
+  return $tmp;
+}
+
 include_once("header.php");
 
 if (isset($_GET["message"])) {
@@ -57,6 +69,7 @@ $gcbops = cmsms()->GetGlobalContentOperations();
 		echo "<tr>\n";
 		echo "<th>".lang('name')."</th>\n";
 		echo "<th>".lang('tagtousegcb')."</th>\n";
+		echo '<th>'.lang('description').'</th>\n';
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
@@ -76,6 +89,7 @@ $gcbops = cmsms()->GetGlobalContentOperations();
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edithtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
 				echo "<td>{global_content name='".$onehtmlblob->name."'}</td>\n";
+                                echo '<td>'.listgcb_summarize($onehtmlblob->description,20).'</td>';
 				echo "<td><a href=\"edithtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\">";
                 echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
