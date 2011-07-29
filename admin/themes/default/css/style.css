@@ -677,6 +677,13 @@ table.pagetable  {
      /* end*/
    }
 
+table.pagetable caption {
+	text-align: left;
+	font-weight: bold;
+	font-size: 1.2em;
+	padding: 5px 0;
+}   
+
 table.pagetable th  {
    color: #fff;
    background-color: #385c72;

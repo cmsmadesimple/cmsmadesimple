@@ -145,6 +145,7 @@ div {
 th, td {
 	text-align: left;
 }
+
 code, tt, pre {
 	font-size: 120%;
 }
@@ -926,6 +927,15 @@ table.pagetable {
 	width: 100%;
 	margin: 5px auto;
 }
+
+table.pagetable caption {
+	color: #464646;
+	text-align: left;
+	font-weight: bold;
+	font-size: 1.2em;
+	padding: 5px 0;
+}
+
 table.pagetable th {
 	color: #464646;
 	text-shadow: 0 1px 0 #FFFFFF;
