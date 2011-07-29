@@ -22,7 +22,8 @@ Core - Bug Reports:
   - #6647 cms_stylesheet media parameter is not working correctly
 
 Core - Feature requests:
-  - 
+  - #5119 New event : LoginFailed
+  - #5622 Add Description Column to GCB List
   
 Core Installer:
   -
