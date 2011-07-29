@@ -2069,18 +2069,19 @@ class ContentBase
 	  switch( $one )
 	    {
 	    case 'cachable':
-	      return array(lang('cachable').':','<input type="hidden" name="cachable" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />',lang('help_page_cachable'));
+	      return array('<label for="in_cachable">'.lang('cachable').':</label>',
+			   '<input type="hidden" name="cachable" value="0"/><input id="in_cachable" class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />',lang('help_page_cachable'));
 	      break;
 	
 	    case 'title':
 	      {
-		return array('<label for="title">'.lang('title').'</label>:','<input type="text" id="title" name="title" value="'.cms_htmlentities($this->mName).'" />');
+		return array('<label for="in_title">'.lang('title').'</label>:','<input type="text" id="in_title" name="title" value="'.cms_htmlentities($this->mName).'" />');
 	      }
 	      break;
 	      
 	    case 'menutext':
 	      {
-		return array('<label for="menutext">'.lang('menutext').'</label>:','<input type="text" name="menutext" id="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
+		return array('<label for="in_menutext">'.lang('menutext').'</label>:','<input type="text" name="in_menutext" id="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
 	      }
 	      break;
 	      
@@ -2097,7 +2098,7 @@ class ContentBase
 	    case 'active':
 	      if( !$this->DefaultContent() )
 		{
-		  return array('<label for="active">'.lang('active').'</label>:','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" id="active" value="1"'.($this->mActive?' checked="checked"':'').' />');
+		  return array('<label for="id_active">'.lang('active').'</label>:','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" id="id_active" value="1"'.($this->mActive?' checked="checked"':'').' />');
 		}
 	      break;
 	      

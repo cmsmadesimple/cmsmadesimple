@@ -666,19 +666,20 @@ class Content extends ContentBase
       case 'template':
 	{
 	  $templateops = $gCms->GetTemplateOperations();
-	  return array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.Edit_Content.submit()"'));
+	  return array('<label for="template_id">'.lang('template').':</label>', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.Edit_Content.submit()"'));
 	}
 	break;
 	
       case 'pagemetadata':
 	{
-	  return array(lang('page_metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
+	  return array('<label for="id_pagemetadata">'.lang('page_metadata').':</lang>',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
 	}
 	break;
 	
       case 'pagedata':
 	{
-	  return array(lang('pagedata_codeblock').':',create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','pagedata','','','80','6'));
+	  return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</lang>',
+				   create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','id_pagedata','','','80','6'));
 	}
 	break;
 	
@@ -689,9 +690,9 @@ class Content extends ContentBase
 	    {
 	      $searchable = 1;
 	    }
-	  return array(lang('searchable').':',
+	  return array('<label for="id_searchable">'.lang('searchable').':</label>',
 			'<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
-            <input type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />',
+            <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />',
 				   lang('help_page_searchable'));
 	}
 	break;
@@ -703,9 +704,9 @@ class Content extends ContentBase
 	    {
 	      $disable_wysiwyg = 0;
 	    }
-	  return array(lang('disable_wysiwyg').':',
+	  return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>',
 		       '<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
-             <input type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
+             <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
 	}
 	break;
 
@@ -812,9 +813,9 @@ class Content extends ContentBase
 		// but I don't have the time to do it at the moment.
 		$field = '';
 		$label = '';
-		if( isset($blockInfo['label']) )
+		if( isset($blockInfo['label']) && $blockInfo['label'] != '')
 		{
-			$label = $blockInfo['label'];
+			$label = '<label for="'.$blockInfo['id'].'">'.$blockInfo['label'].'</label>';
 		}
 		switch( $blockInfo['type'] )
 		{
@@ -822,7 +823,7 @@ class Content extends ContentBase
 			{
 				if( $blockName == 'content_en' && $label == '' )
 				{
-					$label = lang('content').'*';
+					$label = '<label for="content_en">'.lang('content').'*</label>';
 				}
 				$field = $this->_display_text_block($blockInfo,$value,$adding);
 			}
