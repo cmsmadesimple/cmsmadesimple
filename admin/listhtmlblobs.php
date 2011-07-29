@@ -33,7 +33,7 @@ function listgcb_summarize($str,$numwords,$ets='...')
       return $str;
     }
   $tmp = array_slice($stringarray,0,$numwords);
-  $tmp = implode(' ',$tmp).$etc;
+  $tmp = implode(' ',$tmp).$ets;
   return $tmp;
 }
 
