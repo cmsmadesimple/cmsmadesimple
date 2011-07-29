@@ -1,6 +1,10 @@
 Version 1.10 - 
 -----------------------------
 Core - Bug Reports:
+  - #5138 Module Manager often can't upgrade modules
+  - #5853 server version not working with full Adodb and mysqli in systeminfo
+  - #5994 SSL in admin is thwarted when root_url and ssl_url are populated
+  - #6124 cms_utils::get_module  version check don't work
   - #6257 cms_selflink adding space
   - #6272 tiny mce adjustments fail (Translation problem)
   - #6278 NCleanGrey Admin Theme typo
@@ -9,9 +13,13 @@ Core - Bug Reports:
   - #6374 Page alias not re-crated if alias deleted - old is used
   - #6386 cms_htmlenities in created_date & modified_date
   - #6436 MenuManager: wrong assignment of $node->depth
+  - #6464 Buttons in Backend not visible in IE9
   - #6465 can't delete text from the Page URL field
+  - #6475 breadcrumbs can influence node tree
   - #6554 Mismatched DIV in edithtmlblob.php
   - #6586 Only Admin can assign Additional Editors
+  - #6637 Wrong check for memory_limit and output_buffering
+  - #6647 cms_stylesheet media parameter is not working correctly
 
 Core - Feature requests:
   - 
