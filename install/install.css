@@ -3,11 +3,11 @@ CMS Made Simple - NCleanGrey Theme version 1.3 for installer
 2008 (c) Nuno Costa - dev-team 
 */
 body {
+	border-radius: 5px;
 	font-size: 70%;
 	font-family: Tahoma,Verdana, Arial, Helvetica, sans-serif;
-	padding: 0px;
+	padding: 0 0 10px 0;
 	background:#fff url(images/body.jpg) repeat-x scroll left top;
-	text-align:center;
 	color: #333;
 	margin: 1em auto;
 	width: 800px;
@@ -27,8 +27,7 @@ a.external span {
 	left: -5000px;
 	width: 4000px;
 }
-.col2 a.external {
-	
+.col2 a.external {	
 	text-indent: -999em;
 	display: block;
 	height: 21px;
@@ -45,37 +44,36 @@ a.external span {
 	margin:10px 0 5px -30px;
 }
 .col2 img.yellow {
-	float:right;
-	height: 18px;
-	width: 22px;
+	height: 16px;
+	width: 16px;
 	margin:0 auto;
 }
 .col2 img.red {
-	float:right;
-	height: 20px;
-	width: 20px;
+	height: 16px;
+	width: 16px;
 	margin:0 auto;
 }
 a.external:link, a.external:visited, a.external:hover {
-	background: url(images/info-external.gif) no-repeat 100% 0;
+	background: url(images/help.png) no-repeat 100% 0;
 }
 
 .banner {
-	height:100px;
+	height:80px;
 	width:auto;
-	background: url(images/bg_banner.png) repeat-x left top;
+	background: #b9b9b9 url(images/bg_banner.png) repeat-x left top;
 	margin:0;
-	border-bottom: 1px solid #D9E2E6;
+	padding-left: 6px;
+	border-radius: 5px 5px 0 0;
 }
 .banner img {
     float:left;
-	padding: 0px;
-	margin: 0px;
+	padding: 0;
+	margin: 0;
 	
 }
 	
 img {
-	border: 0px none;
+	border: none;
 }
 legend {
 	font-weight: bold;
@@ -92,7 +90,6 @@ p {
 	color: #333; 
 	font-size: 1em; 
 	font-family: Verdana, serif; 
-	background-color: white;
 	padding:2px;
 	margin: 5px 0;
 	text-align:left;
@@ -102,17 +99,17 @@ h1 {
 	margin: 0 0 1em 0;
 	padding: 0 0 0 1em;
 	line-height: 2em;
-	background-color: #243135 !important;
+	background: #060606 url(images/bg_titles.png) repeat-x top !important;
 	font-size: 1.2em;
 	color: #fff;
-	font-weight: normal;
+	font-weight: normal;	
 }
 
 h2 {
-	color: #3D545A;
+	color: #58595b;
 	text-align: center;
 	font: bold 1.2em Verdana, serif;
-	padding: 0.5em;
+	padding: .5em;
 }
 
 h3 {
@@ -131,18 +128,19 @@ form {
 }
 
 td, th { 
-	padding: 0.4em; 
-	border: 1px solid #7F7F7F;
+	padding: .4em; 
+	border: 1px solid #b9b9b9;
 }
 .success {
-	margin: 2px 2px 5px 2px;
+	margin: 2px 2px 5px;
 	padding: 10px 10px 10px 35px;
-	border: 1px solid #BDD3A3;
+	border: 1px solid #b9b9b9;
 	color: #000;
 	width: auto;
 	background: #D6E4C5 url(images/accept.gif) no-repeat 5px 5px;
 	font-weight: bold;
 	height:1%; /*IE6*/	
+	border-radius: 10px;
 }
 .failed {
 
@@ -159,12 +157,12 @@ table {
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 2em;
-	padding: 0.2em;
+	padding: .2em;
 	font-family: Verdana, sans-serif;
 	background: #fff;
 	color: #000;
 	font-size: 1em;
-	border: 1px solid #243135;
+	border: 1px solid #b9b9b9;
 	border-spacing: 0px;
 	border-collapse: collapse;
 }
@@ -183,13 +181,13 @@ table {
 	padding: 1em 0;
 	border-spacing: 0px;
 	border-collapse: collapse;
-	border: 1px solid #212D30;
+	border: 1px solid #b9b9b9;
 	text-align:center;
 }
 .tbhead {
 	color: #FFFFFF;
 	font-weight: bold;
-	background:  #4D7073 !important;
+	background:  #f79838 !important;
 	margin-bottom: 1.5em;
 	width: 100%;
 	text-align: left;
@@ -200,7 +198,7 @@ table.countdown {
 }
 
 table.settings {
-	width: 50em;
+	width: 80%;
 }
 
 table.legend {
@@ -211,6 +209,7 @@ table.legend {
 	margin: 2px 2px 5px 2px;
 	padding: 10px 10px 10px 35px;
 	border: 1px solid #FD9999;
+	border-radius: 5px;
 	color: #000;
 	width: auto;
 	background: #FEDADA url(images/stop.gif) no-repeat 5px 5px;
@@ -220,7 +219,8 @@ table.legend {
 .warning {
 	margin: 2px 2px 5px 2px;
 	padding: 10px 10px 10px 35px;
-	border: 1px solid #D3C403;
+	border: 1px solid #FDEAD0;
+	border-radius: 5px;
 	color: #000;
 	width: auto;
 	background: #FDF166 url(images/warning.gif) no-repeat 5px 10px;
@@ -228,19 +228,17 @@ table.legend {
 	height:1%;
 }
 
-
-
 .have {
 	float: right;
 	color: #30529C;
 }
 
 .row1 {
-	background: #F1F5F5;
+	background: #fff;
 }
 
 .row2 {
-	background: #F9FBFB;
+	background: #e5e5e5;
 }
 
 .col2 {
@@ -253,11 +251,15 @@ table.legend {
 	margin-left: auto;
 }
 a:link, a:active, a:visited {
-	color: #638792;
+	color: #464646;
 	font-weight: bold;
 }
 
-a:hover { color: #e7ab0b; font-weight: bold; text-decoration: none }
+a:hover { 
+	color: #e7ab0b; 
+	font-weight: bold; 
+	text-decoration: none 
+}
 
 .main {
 	padding-right: 2em;
@@ -278,12 +280,13 @@ a:hover { color: #e7ab0b; font-weight: bold; text-decoration: none }
 }
 
 .countdown td {
-	padding: 0.5em;
+	padding: 0;
 	font-family: Verdana, sans-serif;
 	background: #fff;
 	color: #000;
 	font-size: 1.2em;
-	border: 0px;
+	border: none;
+	width:60px;
 }
 
 .countdown .todo {
@@ -293,13 +296,13 @@ a:hover { color: #e7ab0b; font-weight: bold; text-decoration: none }
 .continue a, .continue a:link, .continue a:active, .continue a:visited {
 	color: #fff; 
 	font-weight: normal; 
-	font-size: 0.9em; 
+	font-size: .9em; 
 	font-family: Arial; 
 	text-decoration: none; 
 	text-align: left;
 	background-color: #eea351; 
-	border: white 0.4em outset; 
-	padding: 0.2em 1.1em 0.2em 1em; 
+	border: white .4em outset; 
+	padding: .2em 1.1em .2em 1em; 
 	display: block; 
 	margin: 1px; 
 }
@@ -313,20 +316,22 @@ a:hover { color: #e7ab0b; font-weight: bold; text-decoration: none }
 .important {
 	margin: 2px 2px 5px 2px;
 	padding: 10px 10px 10px 35px;
-	border: 1px solid #F1DF03;
+	border: 1px solid #FEF4E7;
+	border-radius: 10px;
 	color: #000;
 	width: auto;
-	background: #FDF166 url(images/yellow.gif) no-repeat 5px 7px;
+	background: #FDEAD0 url(images/yellow.gif) no-repeat 5px 10px;
 	font-weight: bold;
 	height:1%;
 }
 .msg-botton {
 	margin: 2px 2px 5px 2px;
 	padding: 10px 10px 10px 35px;
-	border: 1px solid #F1DF03;
+	border: 1px solid #FDEAD0;
+	border-radius: 10px;
 	color: #000;
 	width: auto;
-	background: #FDF166;
+	background: #FEF4E7;
 	font-weight: bold;
 	height:1%;
 }
@@ -338,15 +343,15 @@ a:hover { color: #e7ab0b; font-weight: bold; text-decoration: none }
 
 input {
 	font-size: 1em;
-	border: 1px solid #ABC6DD;
-	background: #F8FAFA;
+	border: 1px solid #ccc;
+	background: #f0f0f0;
 	margin-right: 5px;
 	
 }
-input:hover,input:focus, textarea:hover, select:hover, checkbox:hover
+input:hover,input:focus, textarea:hover, select:hover, checkbox:hover, textarea:focus
 {
-	border: 1px solid #4E6972;
-	background: #E2EBEB;
+	border: 1px solid #a4a4a4;
+	background: #fff;
 }
 
 input[type="text"],input[type="password"] {
@@ -356,26 +361,30 @@ input[type="button"],input[type="submit"], input[type="reset"]
 {
 	cursor: pointer;
 	background: url(images/nav.png) repeat-x left -50px;
+	border-radius: 5px;
+	border: none;
 	color:#fff;
-	padding:4px;
+	padding: 5px 10px 6px;
+	margin: 4px 0;
 }
 input[type="button"]:hover,input[type="submit"]:hover, input[type="reset"]:hover{
 	cursor: pointer;
 	background: url(images/nav.png) repeat-x left 0px;
 }
 input[type="checkbox"] {
-	background: #F8FAFA;
+	background: #f0f0f0;
 }
 
 textarea {
 	font-size: 1em;
 	font-family:Verdana, Arial, Helvetica, sans-serif;
-	border: 1px solid #ABC6DD;
-	background: #F8FAFA;
+	border: 1px solid #a4a4a4;
+	background: #f0f0f0;
 	width: 48em;
 	height: 30em;
+	overflow: auto;
 }
 select {
-	border: 1px solid #ABC6DD;
-	background: #F8FAFA;
+	border: 1px solid #a4a4a4;
+	background: #f0f0f0;
 }
