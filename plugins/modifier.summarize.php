@@ -12,7 +12,7 @@
  **/
 function smarty_cms_modifier_summarize($string,$numwords='5',$etc='...')
 {
-  $stringarray = explode(" ",$str);
+  $stringarray = explode(" ",strip_tags($str));
   if( $numwords >= count($stringarray) )
     {
       return $str;
