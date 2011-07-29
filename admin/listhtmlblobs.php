@@ -65,16 +65,16 @@ $gcbops = cmsms()->GetGlobalContentOperations();
 
 	if ($htmlbloblist && count($htmlbloblist) > 0) {
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-		echo '<thead>';
+		echo "<thead>";
 		echo "<tr>\n";
 		echo "<th>".lang('name')."</th>\n";
 		echo "<th>".lang('tagtousegcb')."</th>\n";
-		echo '<th>'.lang('description')."</th>\n";
+		echo "<th>".lang('description')."</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
-		echo '</thead>';
-		echo '<tbody>';
+		echo "</thead>";
+		echo "<tbody>";
 
 		$currow = "row1";
 		// construct true/false button images
@@ -108,7 +108,7 @@ $gcbops = cmsms()->GetGlobalContentOperations();
 			$counter++;
 		}
 
-		echo '</tbody>';
+		echo "</tbody>";
 		echo "</table>\n";
 	}
 
