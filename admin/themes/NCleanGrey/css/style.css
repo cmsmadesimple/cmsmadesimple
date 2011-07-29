@@ -124,6 +124,7 @@ textarea {
 	background: #F0F0F0;
 	width: 48em;
 	height: 30em;
+	overflow: auto;
 	-moz-border-radius: 5px 5px 5px 5px;
 	-webkit-border-radius: 5px 5px 5px 5px;
 	border-radius: 5px 5px 5px 5px;

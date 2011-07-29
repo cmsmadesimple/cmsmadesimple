@@ -76,6 +76,7 @@ textarea  {
    font-size: 1.2em;
    font-family: Verdana, Arial, Helvetica, sans-serif;
    border: solid 1px #666666;
+   overflow: auto;
    width: 48em;
    height: 30em;
    }
