@@ -195,17 +195,6 @@
 </div>
 
 <div class="pageoverflow">
-  <p class="pagetext">{'default_contenttype'|lang}:</p>
-  <p class="pageinput">
-    <select name="default_contenttype">
-      {html_options options=$all_contenttypes selected=$default_contenttype}
-    </select>
-    <br/>
-    {'info_default_contenttype'|lang}
-  </p>
-</div>
-
-<div class="pageoverflow">
   <p class="pagetext">{$lang_basic_attributes}:</p>
   <p class="pageinput">
     <select name="basic_attributes[]" multiple="multiple" size="5">

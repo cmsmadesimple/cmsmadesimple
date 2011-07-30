@@ -61,6 +61,7 @@ $page_metadata = get_site_preference('page_metadata',
 $page_defaultcontent = get_site_preference("defaultpagecontent",
 		   "<!-- ".lang('msg_defaultcontent')." -->");
 $additional_editors = get_site_preference('additional_editors','');
+$default_contenttype = get_site_preference('default_contenttype','content');
 
 $message = '';
 if( isset( $_POST['submit'] ) )
@@ -87,6 +88,7 @@ if( isset( $_POST['submit'] ) )
     $page_extra1 = $_POST['page_extra1'];
     $page_extra2 = $_POST['page_extra2'];
     $page_extra3 = $_POST['page_extra3'];
+    $default_contenttype = trim($_POST['default_contenttype']);
 
     //
     // Store preferences
@@ -94,7 +96,7 @@ if( isset( $_POST['submit'] ) )
     set_site_preference( 'page_secure', $page_secure );
     set_site_preference( 'page_active', $page_active );
     set_site_preference( 'page_showinmenu', $page_showinmenu );
-	set_site_preference( 'page_parent_use_name', $page_parent_use_name );
+    set_site_preference( 'page_parent_use_name', $page_parent_use_name );
     set_site_preference( 'page_cachable', $page_cachable );
     set_site_preference( 'page_metadata', $page_metadata );
     set_site_preference( 'defaultpagecontent', $page_defaultcontent );
@@ -103,6 +105,7 @@ if( isset( $_POST['submit'] ) )
     set_site_preference( 'page_extra1', $page_extra1 );
     set_site_preference( 'page_extra2', $page_extra2 );
     set_site_preference( 'page_extra3', $page_extra3 );
+    set_site_preference( 'default_contenttype',$default_contenttype);
 
     $message = lang('prefsupdated');
   }
@@ -117,132 +120,39 @@ if ($error != "") {
 if ($message != "") {
 	echo $themeObject->ShowMessage($message);
 }
-?>
 
-<div class="pagecontainer">
-	<?php echo $themeObject->ShowHeader('pagedefaults'); ?>
-    <?php if( $access) { ?>
-	<form id="pagedefaultsform" method="post" action="pagedefaults.php">
-        <div>
-          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
-        </div>
+// give everything to smarty.
+$smarty = cmsms()->GetSmarty();
+$contentops = cmsms()->GetContentOperations();
+$all_contenttypes = $contentops->ListContentTypes(false,false);
+$smarty->assign('all_contenttypes',$all_contenttypes);
+$smarty->assign('page_secure',$page_secure);
+$smarty->assign('page_active',$page_active);
+$smarty->assign('page_showinmenu',$page_showinmenu);
+$smarty->assign('page_parent_use_name',$page_parent_use_name);
+$smarty->assign('page_searchable',$page_searchable);
+$smarty->assign('page_cachable',$page_cachable);
+$smarty->assign('page_metadata',$page_metadata);
+$smarty->assign('page_defaultcontent',$page_defaultcontent);
+$smarty->assign('page_extra1',$page_extra1);
+$smarty->assign('page_extra2',$page_extra1);
+$smarty->assign('page_extra3',$page_extra1);
+$smarty->assign('page_additionaleditors',$additional_editors);
+$smarty->assign('default_contenttype',$default_contenttype);
+$smarty->assign('header',$themeObject->showHeader('pagedefaults'));
+$smarty->assign('backurl',$themeObject->backUrl());
 
-        <!-- the submit/cancel buttons -->
-        <div class="pageoverflow">
-          <p class="pagetext">&nbsp;</p>
-	  <p class="pageinput">
-  	    <input type="hidden" name="editpagedefaults" value="true" />
-	    <input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-	    <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-          </p>
-        </div>
+$my_addeditors = explode(',',$additional_editors);
+$contentops = cmsms()->GetContentOperations();
+$content = new ContentBase();
+$tmp = $content->ShowAdditionalEditors($my_addeditors);
+$smarty->assign('input_additional_editors',$tmp[1]);
 
-        <div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('active')?>:</p>
-          <p class="pageinput">
-	    <input class="pagenb" type="checkbox" name="page_active" <?php if($page_active == "1") echo "checked=\"checked\""?> />
-          </p>
-        </div>
+$smarty->assign('CMS_SECURE_PARAM_NAME',CMS_SECURE_PARAM_NAME);
+$smarty->assign('CMS_KEY',$_SESSION[CMS_USER_KEY]);
+echo $smarty->fetch('pagedefaults.tpl');
+return;
 
-        <div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('secure_page')?>:</p>
-          <p class="pageinput">
-	    <input class="pagenb" type="checkbox" name="page_secure" <?php if($page_secure == "1") echo "checked=\"checked\""?> />
-          </p>
-        </div>
-
-        <div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('showinmenu')?>:</p>
-          <p class="pageinput">
-	    <input class="pagenb" type="checkbox" name="page_showinmenu" <?php if($page_showinmenu == "1") echo "checked=\"checked\""?> />
-          </p>
-        </div>
-        <div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('use_name')?>:</p>
-          <p class="pageinput">
-	    <input class="pagenb" type="checkbox" name="page_parent_use_name" <?php if($page_parent_use_name == "1") echo "checked=\"checked\""?> />
-          </p>
-        </div>
-
-        <div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('cachable')?>:</p>
-          <p class="pageinput">
-	    <input class="pagenb" type="checkbox" name="page_cachable" <?php if($page_cachable == "1") echo "checked=\"checked\""?> />
-          </p>
-        </div>
-
-        <div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('metadata')?>:</p>
-          <p class="pageinput">
-	    <textarea class="pagesmalltextarea" name="page_metadata" cols="80" rows="20"><?php echo $page_metadata?></textarea>
-          </p>
-        </div>
-
-        <div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('content')?>:</p>
-          <p class="pageinput">
-	    <textarea class="pagesmalltextarea" name="page_defaultcontent" cols="80" rows="20"><?php echo $page_defaultcontent?></textarea>
-          </p>
-        </div>
-
-        <div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('searchable')?>:</p>
-          <p class="pageinput">
-	    <input class="pagenb" type="checkbox" name="page_searchable" <?php if($page_searchable == "1") echo "checked=\"checked\""?> />
-          </p>
-        </div>
-
-
-        <div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('extra1')?>:</p>
-          <p class="pageinput">
-	      <input class="pagenb" type="text" name="page_extra1" value="<?php echo $page_extra1 ?>" size="50" maxlength="255" />
-          </p>
-        </div>
-
-        <div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('extra2')?>:</p>
-          <p class="pageinput">
-	      <input class="pagenb" type="text" name="page_extra2" value="<?php echo $page_extra2 ?>" size="50" maxlength="255" />
-          </p>
-        </div>
-
-        <div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('extra3')?>:</p>
-          <p class="pageinput">
-	      <input class="pagenb" type="text" name="page_extra3" value="<?php echo $page_extra3 ?>" size="50" maxlength="255" />
-          </p>
-        </div>
-
-        <div class="pageoverflow">
-          <?php 
-	    $my_addeditors = explode(',',$additional_editors);
-            $contentops = $gCms->GetContentOperations();
-            $content = new ContentBase();
-            $addeditors = $content->ShowAdditionalEditors($my_addeditors);
-          ?>
-	  <p class="pagetext"><?php echo $addeditors[0] ?>:</p>
-          <p class="pageinput">
-          <?php 
-	     echo $addeditors[1];
-          ?>
-          </p>
-        </div>
-
-        <!-- the submit/cancel buttons -->
-        <div class="pageoverflow">
-          <p class="pagetext">&nbsp;</p>
-	  <p class="pageinput">
-  	    <input type="hidden" name="editpagedefaults" value="true" />
-	    <input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-	    <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-          </p>
-        </div>
-      </form>
-    <?php } ?>
-</div><!-- pagecontainer -->
-<?php
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once('footer.php');
 
 // EOF

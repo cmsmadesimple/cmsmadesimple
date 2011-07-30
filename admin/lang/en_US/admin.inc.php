@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['info_pagedefaults'] = 'This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages';
 $lang['admin']['default_contenttype'] = 'Default Content Type';
 $lang['admin']['info_default_contenttype'] = 'Applicable when adding new content objects, this control specifies the type that is selected by default.  Please ensure that the selected item is not one of the &quot;disallowed types&quot; below.';
 $lang['admin']['error_contenttype'] = 'The content type associated with this page is invalid or not permitted';
