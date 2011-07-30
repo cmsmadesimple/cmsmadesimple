@@ -811,7 +811,7 @@ input.pagebutton  {
    cursor: pointer;
    }
 
-input.pagebuttonhover  {
+.pagebutton:hover  {
    background-color: #bbb;
    cursor: pointer;
    }

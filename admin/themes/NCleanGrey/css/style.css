@@ -1049,7 +1049,7 @@ input.pagebutton {
 	background: transparent url(themes/NCleanGrey/images/layout/nav.png) repeat-x left 0;
 	color: #fff;
 }
-input.pagebuttonhover {
+.pagebutton:hover {
 	background: transparent url(themes/NCleanGrey/images/layout/nav.png) repeat-x left 50px;
 	cursor: pointer;
 }

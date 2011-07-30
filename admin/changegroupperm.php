@@ -179,9 +179,9 @@ $smarty->assign('selectgroup',lang('selectgroup'));
 $smarty->assign('hidden2','<input type="hidden" name="sel_groups" value="'.base64_encode(serialize($sel_group_ids)).'"/>');
 $smarty->assign('hidden','<input type="hidden" name="submitted" value="1" />');
 $smarty->assign('submit','<input type="submit" name="changeperm" value="'.lang('submit').
-	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');
+	'" class="pagebutton" />');
 $smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('cancel').
-	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');
+	'" class="pagebutton" />');
 
 
 # begin output

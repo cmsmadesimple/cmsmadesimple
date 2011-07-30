@@ -334,9 +334,9 @@ else
 $submit_buttons = '<div class="pageoverflow">
 <p class="pagetext">&nbsp;</p>
 <p class="pageinput">
- <input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('submitdescription').'" />';
-$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
-$submit_buttons .= ' <input type="submit" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />';
+ <input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" title="'.lang('submitdescription').'" />';
+$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" title="'.lang('canceldescription').'" />';
+$submit_buttons .= ' <input type="submit" name="apply" value="'.lang('apply').'" class="pagebutton" title="'.lang('applydescription').'" />';
  if( $contentobj->IsViewable() && $contentobj->Active() ) {
    $submit_buttons .= ' <a rel="external" href="'.$contentobj->GetURL().'">'.$themeObject->DisplayImage('icons/system/view.gif',lang('view_page'),'','','systemicon').'</a>';
  }
