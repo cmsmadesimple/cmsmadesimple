@@ -675,17 +675,18 @@ class AdminTheme
      * below into your own method if you override this -- it's used by the dropdown
      * menu in IE.
      */
-    function OutputHeaderJavascript($exclude = '',$cdn=false,$append='')
+    function OutputHeaderJavascript($exclude = '',$ssl=false,$cdn=false,$append='',$custom_root='')
     {
 	
 		$config = cms_config::get_instance();
 		$scripts = array();
+		$basePath=$custom_root!=''?trim($custom_root,'/'):($ssl?$config['ssl_url']:$config['root_url']);
 		
 		// Scripts to include
-		$scripts['jquery-1.6.2.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js':$config['root_url'].'/lib/jquery/js/jquery-1.6.min.js').'"></script>'."\n";
-		$scripts['jquery-ui-1.8.14.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js':$config['root_url'].'/lib/jquery/js/jquery-ui-1.8.14.min.js').'"></script>'."\n";
-		$scripts['jquery.ui.nestedSortable-1.3.4.js'] = '<script type="text/javascript" src="'.$config['root_url'].'/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>'."\n";
-		$scripts['jquery.json-2.2.js'] = '<script type="text/javascript" src="'.$config['root_url'].'/lib/jquery/js/jquery.json-2.2.js"></script>'."\n";
+		$scripts['jquery-1.6.2.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js':$basePath.'/lib/jquery/js/jquery-1.6.min.js').'"></script>'."\n";
+		$scripts['jquery-ui-1.8.14.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js':$basePath.'/lib/jquery/js/jquery-ui-1.8.14.min.js').'"></script>'."\n";
+		$scripts['jquery.ui.nestedSortable-1.3.4.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>'."\n";
+		$scripts['jquery.json-2.2.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.json-2.2.js"></script>'."\n";
 
 		// Check if we need exclude some script
 		if(!empty($exclude)) {
