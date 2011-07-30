@@ -18,14 +18,11 @@
 
 function smarty_cms_function_cms_jquery($params, &$smarty)
 {
-
-	$exclude = '';
-	if(isset($params['exclude']) && !empty($params['exclude'])) {
-
-		$exclude = $params['exclude'];
-	}
+	$exclude = isset($params['exclude']) && !empty($params['exclude'])?$params['exclude']:'';
+	$cdn = isset($params['cdn']) && !empty($params['cdn'])?$params['cdn']:false;
+	$append = isset($params['append']) && !empty($params['append'])?$params['append']:'';
 ob_start(); ?>
-<?php AdminTheme::OutputHeaderJavascript($exclude); ?>
+<?php AdminTheme::OutputHeaderJavascript($exclude,$cdn,$append); ?>
 <?php $out = ob_get_contents(); ob_end_clean();
   if( isset($params['assign']) )
     {
