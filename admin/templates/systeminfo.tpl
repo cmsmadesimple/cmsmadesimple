@@ -17,7 +17,7 @@
   			<td width="5%"></td>
   		</tr>
   		<tr>
-  			<td><h4>{si_lang a=installed_modules}</4></td>
+  			<td><h4>{si_lang a=installed_modules}</h4></td>
   		</tr>
   		{foreach from=$installed_modules item='module'}
   		<tr class="{cycle values='row1,row2'}">
