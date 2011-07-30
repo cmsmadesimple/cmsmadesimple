@@ -263,6 +263,7 @@ $lang['admin']['help_function_page_attr'] = <<<EOT
 <h3>What parameters does it take?</h3>
 <ul>
   <li><strong>key [required]</strong> The key to return the attribute of.</li>
+  <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 EOT;
 $lang['admin']['forge'] = 'Forge';
@@ -275,6 +276,7 @@ $lang['admin']['help_function_page_image'] = <<<EOT
 <h3>What parameters does it take?</h3>
 <ul>
   <li>thumbnail - Optionally display the value of the thumbnail property instead of the image property.</li>
+  <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 EOT;
 $lang['admin']['pagelink_circular'] = 'A page link cannot list another page link as its destination';
@@ -291,6 +293,7 @@ $lang['admin']['help_function_dump'] = <<<EOT
 <li>nomethods - Skip output of methods from objects.</li>
 <li>novars - Skip output of object members.</li>
 <li>recurse - Recurse a maximum number of levels through the objects providing verbose output for each item until the maximum number of levels is reached.</li>
+<li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 EOT;
 $lang['admin']['sqlerror'] = 'SQL error in %s';
@@ -328,6 +331,7 @@ $lang['admin']['help_function_content_image'] = <<<EOT
 
   <li><em>(optional)</em> alt - Alternative text if the image cannot be found.</li>
   <li><em>(optional)</em> urlonly - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
+  <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 EOT;
 $lang['admin']['error_udt_name_chars'] = 'A valid UDT name starts with a letter or underscore, followed by any number of letters, numbers, or underscores.';
@@ -395,7 +399,7 @@ $lang['admin']['help_function_process_pagedata'] = <<<EOT
 </ol>
 <br/>
 <h3>What parameters does it take?</h3>
-<p>None at this time</p>
+<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
 $lang['admin']['page_metadata'] = 'Page Specific Metadata';
 $lang['admin']['pagedata_codeblock'] = 'Smarty data or logic that is specific to this page';
@@ -486,6 +490,7 @@ $lang['admin']['help_function_current_date'] = <<<EOT
 	<ul>
 		<li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
 		<li><em>(optional)</em>ucword - If true return uppercase the first character of each word.</li>
+		<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;
 $lang['admin']['help_function_valid_xhtml'] = <<<EOT
@@ -505,6 +510,7 @@ $lang['admin']['help_function_valid_xhtml'] = <<<EOT
 	<li><em>(optional)</em> width       (string)     - Only if 'image' is not set to false. The image width. Default is 88 (width of http://www.w3.org/Icons/valid-xhtml10)</li>
 	<li><em>(optional)</em> height      (string)     - Only if 'image' is not set to false. The image height. Default is 31 (height of http://www.w3.org/Icons/valid-xhtml10)</li>
 	<li><em>(optional)</em> alt         (string)     - Only if 'image' is not set to false. The alternate text ('alt' attribute) for the image (element). If none is given the link text will be used.</li>
+	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
     </ul>
 EOT;
 $lang['admin']['help_function_valid_css'] = <<<EOT
@@ -524,6 +530,7 @@ $lang['admin']['help_function_valid_css'] = <<<EOT
         <li><em>(optional)</em> width       (string)     - Only if 'image' is not set to false. The image width. Default is 88 (width of http://jigsaw.w3.org/css-validator/images/vcss)</li>
         <li><em>(optional)</em> height      (string)     - Only if 'image' is not set to false. The image height. Default is 31 (height of http://jigsaw.w3.org/css-validator/images/vcss)</li>
 	<li><em>(optional)</em> alt         (string)     - Only if 'image' is not set to false. The alternate text ('alt' attribute) for the image (element). If none is given the link text will be used.</li>
+	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
     </ul>
 EOT;
 $lang['admin']['help_function_title'] = <<<EOT
@@ -545,6 +552,7 @@ $lang['admin']['help_function_stylesheet'] = <<<EOT
 		<li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one spefically named one, whether it's attached to the current template or not.</li>
 		<li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
     <li><em>(optional)</em>templateid - If templateid is defined, this will return stylesheets associated with that template instead of the current one.</li>
+	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;
 $lang['admin']['help_function_stopexpandcollapse'] = <<<EOT
@@ -569,6 +577,7 @@ $lang['admin']['help_function_stopexpandcollapse'] = <<<EOT
 	&nbsp; &nbsp;id - A unique id for the expand/collapse section.<br />
 	&nbsp; &nbsp;title - The text that will be displayed to expand/collapse the content.<br />
 	<i>stopExpandCollapse takes no parameters</i><br />
+	<i><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</i><br/>
 	</p>
 EOT;
 $lang['admin']['help_function_startexpandcollapse'] = <<<EOT
@@ -595,6 +604,7 @@ $lang['admin']['help_function_startexpandcollapse'] = <<<EOT
 	&nbsp; &nbsp;id - A unique id for the expand/collapse section.<br />
 	&nbsp; &nbsp;title - The text that will be displayed to expand/collapse the content.<br />
 	<i>stopExpandCollapse takes no parameters</i><br />
+	<i><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</i><br/>
 	</p>
 EOT;
 $lang['admin']['help_function_adsense'] = <<<EOT
@@ -616,6 +626,7 @@ $lang['admin']['help_function_adsense'] = <<<EOT
 		<li>color_link - the color of the linktext. Use HEX color or type the color name (Ex. Red)</li>
 		<li>color_url - the color of the URL. Use HEX color or type the color name (Ex. Red)</li>
 		<li>color_text - the color of the text. Use HEX color or type the color name (Ex. Red)</li>
+		<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;
 $lang['admin']['help_function_sitename'] = <<<EOT
@@ -651,6 +662,7 @@ $lang['admin']['help_function_repeat'] = <<<EOT
   <ul>
   <li>string='text' - The string to repeat</li>
   <li>times='num' - The number of times to repeat it.</li>
+  <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
   </ul>
 EOT;
 $lang['admin']['help_function_recently_updated'] = <<<EOT
@@ -664,7 +676,8 @@ $lang['admin']['help_function_recently_updated'] = <<<EOT
  	 <li><p><em>(optional)</em> leadin='Last changed' - Text to show left of the modified date.</p><p>Example: {recently_updated leadin='Last Changed'}</p></li>
  	 <li><p><em>(optional)</em> showtitle='true' - Shows the titleattribute if it exists as well (true|false).</p><p>Example: {recently_updated showtitle='true'}</p></li>											 	
 	 <li><p><em>(optional)</em> css_class='some_name' - Warp a div tag with this class around the list.</p><p>Example: {recently_updated css_class='some_name'}</p></li>											 	
-	 <li><p><em>(optional)</em> dateformat='d.m.y h:m' - default is d.m.y h:m , use the format you whish (php -date- format)</p><p>Example: {recently_updated dateformat='D M j G:i:s T Y'}</p></li>											 	
+	 <li><p><em>(optional)</em> dateformat='d.m.y h:m' - default is d.m.y h:m , use the format you whish (php -date- format)</p><p>Example: {recently_updated dateformat='D M j G:i:s T Y'}</p></li>	
+	 <li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 	<p>or combined:</p>
 	<pre>{recently_updated number='15' showtitle='false' leadin='Last Change: ' css_class='my_changes' dateformat='D M j G:i:s T Y'}</pre>
@@ -736,6 +749,7 @@ $lang['admin']['help_function_metadata'] = <<<EOT
 	<h3>What parameters does it take?</h3>
 	<ul>
 		<li><em>(optional)</em>showbase (true/false) - If set to false, the base tag will not be sent to the browser.  Defaults to true if use_hierarchy is set to true in config.php.</li>
+		<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;
 $lang['admin']['help_function_menu_text'] = <<<EOT
@@ -744,7 +758,7 @@ $lang['admin']['help_function_menu_text'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like: <code>{menu_text}</code></p>
 	<h3>What parameters does it take?</h3>
-	<p>None at this time.</p>
+	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
 $lang['admin']['help_function_menu'] = <<<EOT
 	<h3>What does this do?</h3>
@@ -762,6 +776,7 @@ $lang['admin']['help_function_last_modified_by'] = <<<EOT
         <h3>What parameters does it take?</h3>
         <ul>
                 <li><em>(optional)</em>format - id, username, fullname</li>
+				<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
         </ul>
 EOT;
 $lang['admin']['help_function_image'] = <<<EOT
@@ -778,6 +793,7 @@ $lang['admin']['help_function_image'] = <<<EOT
      <li><em>(optional)</em>  <tt>class</tt> - CSS class for the image.</li>
      <li><em>(optional)</em>  <tt>title</tt> - Mouse over text for the image. Defaults to Alt text.</li>
      <li><em>(optional)</em>  <tt>addtext</tt> - Additional text to put into the tag</li>
+	 <li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
   </ul>
 EOT;
 $lang['admin']['help_function_html_blob'] = <<<EOT
@@ -798,6 +814,7 @@ $lang['admin']['help_function_google_search'] = <<<EOT
 	<ul>
 		<li><em>(optional)</em> domain - This tells google the website domain to search. This script tries to determine this automatically.</li>
 		<li><em>(optional)</em> buttonText - The text you want to display on the search button. The default is "Search Site".</li>
+		<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;
 $lang['admin']['help_function_global_content'] = <<<EOT
@@ -817,8 +834,18 @@ $lang['admin']['help_function_get_template_vars'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like: <code>{get_template_vars}</code></p>
 	<h3>What parameters does it take?</h3>
-											  <p>None at this time</p>
+	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
+
+$lang['admin']['help_function_uploads_url'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Prints the uploads url location for the site.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{uploads_url}</code></p>
+	<h3>What parameters does it take?</h3>
+	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
+EOT;
+
 $lang['admin']['help_function_embed'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Enable inclusion (embedding) of any other application into the CMS. The most usual use could be a forum. 
@@ -839,6 +866,7 @@ $lang['admin']['help_function_embed'] = <<<EOT
             <li><em>(required)</em>url - the url to be included</li> 
             <li><em>(required)</em>header=true - this will generate the header code for good resizing of the IFRAME.</li>
             <li>(optional)name - an optional name to use for the iframe (instead of myframe).<p>If this option is used, it must be used identically in both calls, i.e: {embed header=true name=foo} and {embed name=foo url=http://www.google.com} calls.</p></li>
+			
         </ul>
 EOT;
 $lang['admin']['help_function_edit'] = <<<EOT
@@ -851,6 +879,7 @@ $lang['admin']['help_function_edit'] = <<<EOT
         <h3>What parameters does it take?</h3>
         <ul>
                 <li><em>(optional)</em>showbutton - Set to "true" and will show a edit graphic instead of a text link.</li>
+				<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
         </ul>
 EOT;
 $lang['admin']['help_function_description'] = <<<EOT
@@ -859,7 +888,7 @@ $lang['admin']['help_function_description'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like: <code>{description}</code></p>
 	<h3>What parameters does it take?</h3>
-	<p>None at this time.</p>
+	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
 $lang['admin']['help_function_created_date'] = <<<EOT
         <h3>What does this do?</h3>
@@ -912,7 +941,7 @@ $lang['admin']['help_function_cms_versionname'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>This is just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_versionname}</code>
 	<h3>What parameters does it take?</h3>
-	<p>It takes no parameters.</p>
+	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
 
 $lang['admin']['help_function_cms_version'] = <<<EOT
@@ -921,7 +950,7 @@ $lang['admin']['help_function_cms_version'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>This is just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_version}</code></p>
 	<h3>What parameters does it take?</h3>
-	<p>It takes no parameters.</p>
+	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
 
 $lang['admin']['about_function_cms_selflink'] = <<<EOT
@@ -1051,6 +1080,7 @@ $lang['admin']['help_function_breadcrumbs'] = <<<EOT
 <li><em>(optional)</em> <tt>classid</tt> - The CSS class for the non current page names, i.e. the first n-1 pages in the list. If the name is a link it is added to the &lt;a href&gt; tags, otherwise it is added to the &lt;span&gt; tags.</li>
 <li><em>(optional)</em> <tt>currentclassid</tt> - The CSS class for the &lt;span&gt; tag surrounding the current page name.</li>
 <li><em>(optional)</em> <tt>starttext</tt> - Text to append to the front of the breadcrumbs list, something like &quot;You are here&quot;.</li>
+<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 </ul>
 EOT;
 
@@ -1078,6 +1108,7 @@ $lang['admin']['help_function_anchor'] = <<<EOT
 	<li><tt>tabindex</tt> - The numeric tabindex for the link, if any.</li>
 	<li><tt>accesskey</tt> - The accesskey for the link, if any.</li>
 	<li><em>(optional)</em> <tt>onlyhref</tt> - Only display the href and not the entire link. No other options will work</li>
+	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;
 
@@ -1132,7 +1163,7 @@ $lang['admin']['help_function_cms_jquery'] = <<<EOT
 	<li><em>(optional) </em><tt>exclude</tt> - use comma seperated value(CSV) list of scripts you would like to exclude. <code>'jquery.ui.nestedSortable.js,jquery.json-2.2.js'</code></li>
 	<li><em>(optional) </em><tt>append</tt> - use comma seperated value(CSV) list of script paths you would like to append. <code>'/uploade/jquery.ui.nestedSortable.js,http://code.jquery.com/jquery-1.6.2.min.js'</code></li>
 	<li><em>(optional) </em><tt>cdn</tt> - use to save the output in a smarty assignment.</li>
-	<li><em>(optional) </em><tt>assign</tt> - use to save the output in a smarty assignment.</li>
+	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 
 

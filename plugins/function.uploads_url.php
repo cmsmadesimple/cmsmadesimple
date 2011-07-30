@@ -28,14 +28,7 @@ function smarty_function_uploads_url($params, &$smarty)
 }
 
 function smarty_cms_help_function_uploads_url() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Prints the uploads url location for the site.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{uploads_url}</code></p>
-	<h3>What parameters does it take?</h3>
-	<p>None at this time.</p>
-	<?php
+	echo lang('help_function_uploads_url');
 }
 
 function smarty_cms_about_function_uploads_url() {
