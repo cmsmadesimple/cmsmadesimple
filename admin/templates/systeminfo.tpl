@@ -17,7 +17,7 @@
   			<td width="50%">{$cms_version}</td>
   		</tr>
   		<tr>
-  			<td><h4>{si_lang a=installed_modules}</h4></td>
+  			<td colspan="3"><h4>{si_lang a=installed_modules}</h4></td>
   		</tr>
   		{foreach from=$installed_modules item='module'}
   		<tr class="{cycle values='row1,row2'}">
@@ -27,7 +27,7 @@
   		</tr>
   		{/foreach}
   		<tr>
-  			<td><h4>{si_lang a=config_information}</h4></td>
+  			<td colspan="3"><h4>{si_lang a=config_information}</h4></td>
   		</tr>	
   	{foreach from=$config_info key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
@@ -56,7 +56,7 @@
 	{if isset($test->value) && $test->display_value != 0}&nbsp;{$test->value}{/if}
 	{if isset($test->secondvalue)}({$test->secondvalue}){/if}
 	{if isset($test->error_fragment)}<a class="external" rel="external" href="{$cms_install_help_url}#{$test->error_fragment}"><img src="themes/{$themename}/images/icons/system/info-external.gif" title="?" alt="?" /></a>{/if}
-	{if isset($test->message)}<br />{$test->message}{/if}
+	{if isset($test->message)}{$test->message}{/if}
 	{if isset($test->opt)}
 		{foreach from=$test->opt key='key' item='opt'}
 			<br />{$key}: {$opt.message} <img class="systemicon" src="themes/{$themename}/images/icons/extra/{$opt.res}.gif" alt="{$opt.res_text}" title="{$opt.res_text}" />
@@ -84,7 +84,7 @@
   		{/foreach}
 	{/foreach}
 	<tr>
-		<td width="45%"><h4>{si_lang a=permission_information}</h4></td>
+		<td colspan="3"><h4>{si_lang a=permission_information}</h4></td>
 	</tr>
 	{foreach from=$permission_info key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
