@@ -442,7 +442,7 @@ $lang['admin']['php_information'] = 'PHP Information';
 $lang['admin']['cms_install_information'] = 'CMS Install Information';
 $lang['admin']['cms_version'] = 'CMS Version';
 $lang['admin']['installed_modules'] = 'Installed Modules';
-$lang['admin']['config_information'] = 'Config Information';
+$lang['admin']['config_information'] = 'CMS Config Settings';
 $lang['admin']['systeminfo_copy_paste'] = 'Please copy and paste this selected text into your forum posting';
 $lang['admin']['help_systeminformation'] = <<<EOT
 The information displayed below is collected from a variety of locations, and summarized here so that you may be able to conveniently find some of the information required when trying to diagnose a problem or request help with your CMS Made Simple&trade; installation.
