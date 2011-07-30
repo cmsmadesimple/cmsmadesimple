@@ -184,6 +184,28 @@
 </div>
 
 <div class="pageoverflow">
+  <p class="pagetext">{'allowed_contenttypes'|lang}:</p>
+  <p class="pageinput">
+    <select name="allowed_contenttypes[]" multiple="multiple" size="5">
+      {html_options options=$all_contenttypes selected=$allowed_contenttypes}
+    </select>
+    <br/>
+    {'info_allowed_contenttypes'|lang}
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext">{$lang_basic_attributes}:</p>
+  <p class="pageinput">
+    <select name="basic_attributes[]" multiple="multiple" size="5">
+      {html_options options=$all_attributes selected=$basic_attributes}
+    </select>
+    <br/>
+    {$lang_info_basic_attributes}
+  </p>
+</div>
+
+<div class="pageoverflow">
   <p class="pagetext">{'content_imagefield_path'|lang}:</p>
   <p class="pageinput">
     <input type="text" name="content_imagefield_path" size="50" maxlength="255" value="{$content_imagefield_path}"/>
@@ -207,17 +229,6 @@
     <input type="text" name="contentimage_path" size="50" maxlength="255" value="{$contentimage_path}"/>
     <br/>
     {'info_contentimage_path'|lang}
-  </p>
-</div>
-
-<div class="pageoverflow">
-  <p class="pagetext">{$lang_basic_attributes}:</p>
-  <p class="pageinput">
-    <select name="basic_attributes[]" multiple="multiple" size="5">
-      {html_options options=$all_attributes selected=$basic_attributes}
-    </select>
-    <br/>
-    {$lang_info_basic_attributes}
   </p>
 </div>
 

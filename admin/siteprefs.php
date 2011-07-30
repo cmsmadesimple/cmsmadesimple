@@ -66,6 +66,7 @@ $disablesafemodewarning = 0;
 $enablenotifications = 1;
 $sitedownexcludes = '';
 $sitedownexcludeadmins = '';
+$allowed_contenttypes = '';
 $basic_attributes = '';
 $xmlmodulerepository = "";
 $checkversion = 1;
@@ -127,6 +128,7 @@ $disablesafemodewarning = get_site_preference('disablesafemodewarning',$disables
 $enablenotifications = get_site_preference('enablenotifications',$enablenotifications);
 $sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
 $sitedownexcludeadmins = get_site_preference('sitedownexcludeadmins',$sitedownexcludeadmins);
+$allowed_contenttypes = get_site_preference('allowed_contenttypes',$allowed_contenttypes);
 $basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
 $listcontent_showalias = get_site_preference('listcontent_showalias',$listcontent_showalias);
 $listcontent_showurl = get_site_preference('listcontent_showurl',$listcontent_showurl);
@@ -252,6 +254,12 @@ else if (isset($_POST["editsiteprefs"]))
 	      $basic_attributes = '';
 	    }
 	  set_site_preference('basic_attributes',$basic_attributes);
+	  $allowed_contenttypes = '';
+	  if( isset($_POST['allowed_contenttypes']) )
+	    {
+	      $allowed_contenttypes = implode(',',$_POST['allowed_contenttypes']);
+	    }
+	  set_site_preference('allowed_contenttypes',$allowed_contenttypes);
 	  break;
 
 	case 'listcontent':
@@ -430,6 +438,7 @@ $smarty->assign('enablenotifications',$enablenotifications);
 $smarty->assign('sitedownexcludes',$sitedownexcludes);
 $smarty->assign('sitedownexcludeadmins',$sitedownexcludeadmins);
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));
+$smarty->assign('allowed_contenttypes',explode(',',$allowed_contenttypes));
 $smarty->assign('thumbnail_width',$thumbnail_width);
 $smarty->assign('thumbnail_height',$thumbnail_height);
 $smarty->assign('allow_browser_cache',$allow_browser_cache);
@@ -530,6 +539,10 @@ $all_attributes['extra3'] = lang('extra3');
 $all_attributes['additionaleditors'] = lang('additionaleditors');
 $all_attributes['page_url'] = lang('page_url');
 $smarty->assign('all_attributes',$all_attributes);
+
+$contentops = cmsms()->GetContentOperations();
+$all_contenttypes = $contentops->ListContentTypes(false,false);
+$smarty->assign('all_contenttypes',$all_contenttypes);
 
 $yesno = array(0=>lang('no'),1=>lang('yes'));
 $smarty->assign('yesno',$yesno);

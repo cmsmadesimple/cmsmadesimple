@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['info_allowed_contenttypes'] = 'Select which content types to allow when editing or adding content.  Use CTRl+Click to select, unselect items.  Having no selected items will indicate that all content types aree allowed';
+$lang['admin']['allowed_contenttypes'] = 'Content Types to Allow';
 $lang['admin']['search_module'] = 'Search module';
 $lang['admin']['info_search_module'] = 'Select the module that should be used to index words for searching, and will provide the site search capabilities';
 $lang['admin']['filecreatedirbadchars'] = 'Invalid characters were detected in the submitted directory name';

@@ -399,10 +399,12 @@ class ContentOperations
      * value would be the text returned by the type's FriendlyName() method.
 	 *
 	 * @param boolean optionally return keys as class names.
+	 * @param boolean optionally trim the list of content types that are allowed by the site preference.
 	 * @return array List of content types registered in the system.
 	 */
-	function ListContentTypes($byclassname = false)
+	function ListContentTypes($byclassname = false,$allowed = true)
 	{
+		$allowed_a = explode(',',get_site_preference('allowed_contenttypes'));
 		$this->_get_content_types();
 		$types = $this->_content_types;
 		if ( isset($types) )
@@ -416,13 +418,16 @@ class ContentOperations
 							$txt = lang($obj->friendlyname_key); 
 							$obj->friendlyname = $txt;
 						}
-					if( $byclassname )
+					if( !$allowed || (count($allowed_a) == 0) || in_array($obj->type,$allowed_a) )
 						{
-							$result[$obj->class] = $obj->friendlyname;
-						}
-					else
-						{
-							$result[$obj->type] = $obj->friendlyname;
+							if( $byclassname )
+								{
+									$result[$obj->class] = $obj->friendlyname;
+								}
+							else
+								{
+									$result[$obj->type] = $obj->friendlyname;
+								}
 						}
 				}
 			return $result;
