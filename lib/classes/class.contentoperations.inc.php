@@ -402,7 +402,7 @@ class ContentOperations
 	 * @param boolean optionally trim the list of content types that are allowed by the site preference.
 	 * @return array List of content types registered in the system.
 	 */
-	function ListContentTypes($byclassname = false,$allowed = true)
+	function ListContentTypes($byclassname = false,$allowed = false)
 	{
 		$allowed_a = explode(',',get_site_preference('allowed_contenttypes'));
 		$this->_get_content_types();

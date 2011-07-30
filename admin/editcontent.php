@@ -70,7 +70,7 @@ if ($apply)
 #Get a list of content types and pick a default if necessary
 $gCms = cmsms();
 $contentops =& $gCms->GetContentOperations();
-$existingtypes = $contentops->ListContentTypes();
+$existingtypes = $contentops->ListContentTypes(false,true);
 
 #Get current userid and make sure they have permission to add something
 $userid = get_userid();
@@ -107,7 +107,8 @@ if ($access)
     }
   else
     {
-      $error = '<p>'.lang('error_contenttype').'</p>';
+      //$error = '<p>'.lang('error_contenttype').'</p>';
+      redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&error=error_contenttype');
     }
 
   if( $content_id != -1 && strtolower(get_class($contentobj)) != strtolower($content_type) )

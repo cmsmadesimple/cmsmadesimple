@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['error_contenttype'] = 'The content type associated with this page is invalid or not permitted';
 $lang['admin']['info_allowed_contenttypes'] = 'Select which content types to allow when editing or adding content.  Use CTRl+Click to select, unselect items.  Having no selected items will indicate that all content types aree allowed';
 $lang['admin']['allowed_contenttypes'] = 'Content Types to Allow';
 $lang['admin']['search_module'] = 'Search module';

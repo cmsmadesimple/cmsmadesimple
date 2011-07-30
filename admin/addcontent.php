@@ -196,7 +196,7 @@ else
 #Get a list of content_types and build the dropdown to select one
 $typesdropdown = '<select name="content_type" onchange="document.Edit_Content.submit()" class="standard">';
 $cur_content_type = '';
-$content_types = $contentops->ListContentTypes();
+$content_types = $contentops->ListContentTypes(false,true);
 foreach ($content_types as $onetype => $onetypename)
 {
   if( $onetype == 'errorpage' && !check_permission($userid,'Manage All Content') ) 
