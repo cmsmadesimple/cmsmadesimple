@@ -591,7 +591,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 					  break;
 				  }
 			  }
-			  if( !$res )
+			  if( !$res && !isset($CMS_FORCE_MODULE_LOAD))
 			  {		  
 				  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
 				  unset($obj);
