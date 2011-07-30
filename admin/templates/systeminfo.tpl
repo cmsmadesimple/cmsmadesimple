@@ -16,15 +16,21 @@
        </tr>
     </thead> 
 	<tbody>
-	<!-- caption>{si_lang a=cms_install_information}</caption -->
-  		<tr class="{cycle values='row1,row2'}">
+		<tr class="{cycle values='row1,row2'}">
   			<td width="45%">{si_lang a=cms_version}</td>
 			<td width="5%"></td>
   			<td width="50%">{$cms_version}</td>
   		</tr>
-  		<tr>
-  			<td colspan="3"><h4>{si_lang a=installed_modules}</h4></td>
-  		</tr>
+	</tbody>
+</table>
+<br /><br />
+<table class="pagetable" cellspacing="0" summary="{si_lang a=installed_modules}">
+    <thead> 
+       <tr>
+         <th colspan="3">{si_lang a=installed_modules}</th>
+       </tr>
+    </thead> 
+	<tbody>
   		{foreach from=$installed_modules item='module'}
   		<tr class="{cycle values='row1,row2'}">
     		<td width="45%">{$module.module_name}</td>
@@ -32,9 +38,16 @@
     		<td width="50%">{$module.version}</td>
   		</tr>
   		{/foreach}
-  		<tr>
-  			<td colspan="3"><h4>{si_lang a=config_information}</h4></td>
-  		</tr>	
+	</tbody>
+</table>
+<br /><br />
+<table class="pagetable" cellspacing="0" summary="{si_lang a=config_information}">
+    <thead> 
+       <tr>
+         <th colspan="3">{si_lang a=config_information}</th>
+       </tr>
+    </thead> 
+	<tbody>
   	{foreach from=$config_info key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
 		<tr class="{cycle values='row1,row2'}">
@@ -51,9 +64,14 @@
 	{/foreach}
 	</tbody>
 </table>
-
+<br /><br />
 <table class="pagetable" cellspacing="0" summary="{si_lang a=php_information}">
-	<caption>{si_lang a=php_information}</caption>
+    <thead> 
+       <tr>
+         <th colspan="3">{si_lang a=php_information}</th>
+       </tr>
+    </thead> 
+	<tbody>
 	{foreach from=$php_information key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
 		<tr class="{cycle values='row1,row2'}">
@@ -73,10 +91,16 @@
 		</tr>
   		{/foreach}
 	{/foreach}
+	</tbody>
 </table>
-
+<br /><br />
 <table class="pagetable" cellspacing="0" summary="{si_lang a=server_information}">
-	<caption>{si_lang a=server_information}</caption>
+    <thead> 
+       <tr>
+         <th colspan="3">{si_lang a=server_information}</th>
+       </tr>
+    </thead> 
+	<tbody>
 	{foreach from=$server_info key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
 		<tr class="{cycle values='row1,row2'}">
@@ -90,9 +114,16 @@
 		</tr>
   		{/foreach}
 	{/foreach}
-	<tr>
-		<td colspan="3"><h4>{si_lang a=permission_information}</h4></td>
-	</tr>
+	</tbody>
+</table>
+<br /><br />
+<table class="pagetable" cellspacing="0" summary="{si_lang a=permission_information}">
+    <thead> 
+       <tr>
+         <th colspan="3">{si_lang a=permission_information}</th>
+       </tr>
+    </thead> 
+	<tbody>
 	{foreach from=$permission_info key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
 	<tr class="{cycle values='row1,row2'}">
@@ -106,8 +137,10 @@
 	</tr>
   		{/foreach}
 	{/foreach}
+	</tbody>
 </table>
-
+<br />
 <p class="pageback"><a class="pageback" href="{$backurl}">&#171; {si_lang a=back}</a></p>
+
 	</div>
 </div>
