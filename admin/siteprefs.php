@@ -67,7 +67,7 @@ $enablenotifications = 1;
 $sitedownexcludes = '';
 $sitedownexcludeadmins = '';
 $default_contenttype = 'content';
-$allowed_contenttypes = '';
+$disallowed_contenttypes = '';
 $basic_attributes = '';
 $xmlmodulerepository = "";
 $checkversion = 1;
@@ -130,7 +130,7 @@ $enablenotifications = get_site_preference('enablenotifications',$enablenotifica
 $sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
 $sitedownexcludeadmins = get_site_preference('sitedownexcludeadmins',$sitedownexcludeadmins);
 $default_contenttype = get_site_preference('default_contenttype',$default_contenttype);
-$allowed_contenttypes = get_site_preference('allowed_contenttypes',$allowed_contenttypes);
+$disallowed_contenttypes = get_site_preference('disallowed_contenttypes',$disallowed_contenttypes);
 $basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
 $listcontent_showalias = get_site_preference('listcontent_showalias',$listcontent_showalias);
 $listcontent_showurl = get_site_preference('listcontent_showurl',$listcontent_showurl);
@@ -258,12 +258,12 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('basic_attributes',$basic_attributes);
 	  $default_contenttype = trim($_POST['default_contenttype']);
 	  set_site_preference('default_contenttype',$default_contenttype);
-	  $allowed_contenttypes = '';
-	  if( isset($_POST['allowed_contenttypes']) )
+	  $disallowed_contenttypes = '';
+	  if( isset($_POST['disallowed_contenttypes']) )
 	    {
-	      $allowed_contenttypes = implode(',',$_POST['allowed_contenttypes']);
+	      $disallowed_contenttypes = implode(',',$_POST['disallowed_contenttypes']);
 	    }
-	  set_site_preference('allowed_contenttypes',$allowed_contenttypes);
+	  set_site_preference('disallowed_contenttypes',$disallowed_contenttypes);
 	  break;
 
 	case 'listcontent':
@@ -443,7 +443,7 @@ $smarty->assign('sitedownexcludes',$sitedownexcludes);
 $smarty->assign('sitedownexcludeadmins',$sitedownexcludeadmins);
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));
 $smarty->assign('default_contenttype',$default_contenttype);
-$smarty->assign('allowed_contenttypes',explode(',',$allowed_contenttypes));
+$smarty->assign('disallowed_contenttypes',explode(',',$disallowed_contenttypes));
 $smarty->assign('thumbnail_width',$thumbnail_width);
 $smarty->assign('thumbnail_height',$thumbnail_height);
 $smarty->assign('allow_browser_cache',$allow_browser_cache);

@@ -404,11 +404,11 @@ class ContentOperations
 	 */
 	function ListContentTypes($byclassname = false,$allowed = false)
 	{
-		$allowed_a = array();
+		$disallowed_a = array();
 		{
-			$tmp = get_site_preference('allowed_contenttypes');
+			$tmp = get_site_preference('disallowed_contenttypes');
 			if( $tmp )
-				$allowed_a = explode(',',$tmp);
+				$disallowed_a = explode(',',$tmp);
 		}
 			
 		$this->_get_content_types();
@@ -424,7 +424,7 @@ class ContentOperations
 							$txt = lang($obj->friendlyname_key); 
 							$obj->friendlyname = $txt;
 						}
-					if( !$allowed || count($allowed_a) == 0 || in_array($obj->type,$allowed_a) )
+					if( !$allowed || count($disallowed_a) == 0 || !in_array($obj->type,$disallowed_a) )
 						{
 							if( $byclassname )
 								{

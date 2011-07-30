@@ -184,13 +184,13 @@
 </div>
 
 <div class="pageoverflow">
-  <p class="pagetext">{'allowed_contenttypes'|lang}:</p>
+  <p class="pagetext">{'disallowed_contenttypes'|lang}:</p>
   <p class="pageinput">
-    <select name="allowed_contenttypes[]" multiple="multiple" size="5">
-      {html_options options=$all_contenttypes selected=$allowed_contenttypes}
+    <select name="disallowed_contenttypes[]" multiple="multiple" size="5">
+      {html_options options=$all_contenttypes selected=$disallowed_contenttypes}
     </select>
     <br/>
-    {'info_allowed_contenttypes'|lang}
+    {'info_disallowed_contenttypes'|lang}
   </p>
 </div>
 
