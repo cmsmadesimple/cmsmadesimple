@@ -66,6 +66,7 @@ $disablesafemodewarning = 0;
 $enablenotifications = 1;
 $sitedownexcludes = '';
 $sitedownexcludeadmins = '';
+$default_contenttype = 'content';
 $allowed_contenttypes = '';
 $basic_attributes = '';
 $xmlmodulerepository = "";
@@ -128,6 +129,7 @@ $disablesafemodewarning = get_site_preference('disablesafemodewarning',$disables
 $enablenotifications = get_site_preference('enablenotifications',$enablenotifications);
 $sitedownexcludes = get_site_preference('sitedownexcludes',$sitedownexcludes);
 $sitedownexcludeadmins = get_site_preference('sitedownexcludeadmins',$sitedownexcludeadmins);
+$default_contenttype = get_site_preference('default_contenttype',$default_contenttype);
 $allowed_contenttypes = get_site_preference('allowed_contenttypes',$allowed_contenttypes);
 $basic_attributes = get_site_preference('basic_attributes',$basic_attributes);
 $listcontent_showalias = get_site_preference('listcontent_showalias',$listcontent_showalias);
@@ -254,6 +256,8 @@ else if (isset($_POST["editsiteprefs"]))
 	      $basic_attributes = '';
 	    }
 	  set_site_preference('basic_attributes',$basic_attributes);
+	  $default_contenttype = trim($_POST['default_contenttype']);
+	  set_site_preference('default_contenttype',$default_contenttype);
 	  $allowed_contenttypes = '';
 	  if( isset($_POST['allowed_contenttypes']) )
 	    {
@@ -438,6 +442,7 @@ $smarty->assign('enablenotifications',$enablenotifications);
 $smarty->assign('sitedownexcludes',$sitedownexcludes);
 $smarty->assign('sitedownexcludeadmins',$sitedownexcludeadmins);
 $smarty->assign('basic_attributes',explode(',',$basic_attributes));
+$smarty->assign('default_contenttype',$default_contenttype);
 $smarty->assign('allowed_contenttypes',explode(',',$allowed_contenttypes));
 $smarty->assign('thumbnail_width',$thumbnail_width);
 $smarty->assign('thumbnail_height',$thumbnail_height);

@@ -72,7 +72,7 @@ else
 {
 	if (isset($existingtypes) && count($existingtypes) > 0)
 	{
-		$content_type = 'content';
+	  $content_type = get_site_preference('default_contenttype','content');
 	}
 	else
 	{
