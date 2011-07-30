@@ -17,7 +17,7 @@
   			<td width="5%"></td>
   		</tr>
   		<tr>
-  			<td><h4>{si_lang|upper a=installed_modules}</4></td>
+  			<td><h4>{si_lang a=installed_modules}</4></td>
   		</tr>
   		{foreach from=$installed_modules item='module'}
   		<tr class="{cycle values='row1,row2'}">
@@ -27,7 +27,7 @@
   		</tr>
   		{/foreach}
   		<tr>
-  			<td><h4>{si_lang|upper a=config_information}</h4></td>
+  			<td><h4>{si_lang a=config_information}</h4></td>
   		</tr>	
   	{foreach from=$config_info key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
@@ -73,9 +73,9 @@
 	{foreach from=$server_info key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
 		<tr class="{cycle values='row1,row2'}">
-			<td width="45%">{si_lang|upper a=$key} ({$key}):</td>
+			<td width="45%">{si_lang a=$key} ({$key}):</td>
 			<td width="50%">
-			{if isset($test->value)}{$test->value}{/if}
+			{if isset($test->value)}{$test->value|lower}{/if}
 			{if isset($test->secondvalue)}({$test->secondvalue}){/if}
 			{if isset($test->message)}<br />{$test->message}{/if}
 			</td>
@@ -84,7 +84,7 @@
   		{/foreach}
 	{/foreach}
 	<tr>
-		<td width="45%"><h4>{si_lang|upper a=permission_information}</h4></td>
+		<td width="45%"><h4>{si_lang a=permission_information}</h4></td>
 	</tr>
 	{foreach from=$permission_info key='view' item='tmp'}
   		{foreach from=$tmp key='key' item='test'}
