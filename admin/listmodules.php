@@ -505,7 +505,7 @@ else
 	  $aboutcol = "&nbsp;";	  
 	  $xmlcol = "&nbsp;";
 
-	  $xmlcol = '<a href="'.$thisurl.'&amp;action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'" /></a>';
+	  $xmlcol = '<a href="'.$thisurl.'&amp;action=exportxml&amp;module='.$key.'"><img border="0" src="../modules/ModuleManager/images/xml_rss.gif" alt="'.lang('xml').'" /></a>';
 	  
 	  //Is there help?
 	  if ($modinstance->GetHelp() != '')
