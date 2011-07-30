@@ -2389,5 +2389,42 @@ function cms_to_bool($str)
   return FALSE;
 }
 
+
+function cms_get_jquery($exclude = '',$ssl = false,$cdn = false,$append = '',$custom_root='')
+{
+  $config = cms_config::get_instance();
+  $scripts = array();
+  $basePath=$custom_root!=''?trim($custom_root,'/'):($ssl?$config['ssl_url']:$config['root_url']);
+  
+  // Scripts to include
+  $scripts['jquery-1.6.2.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js':$basePath.'/lib/jquery/js/jquery-1.6.2.min.js').'"></script>'."\n";
+  $scripts['jquery-ui-1.8.14.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js':$basePath.'/lib/jquery/js/jquery-ui-1.8.14.min.js').'"></script>'."\n";
+  $scripts['jquery.ui.nestedSortable-1.3.4.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>'."\n";
+  $scripts['jquery.json-2.2.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.json-2.2.js"></script>'."\n";
+  
+  // Check if we need exclude some script
+  if(!empty($exclude)) {
+    
+    $exclude_list = explode(",", trim(str_replace(' ','',$exclude)));
+    foreach($exclude_list as $one) {
+      
+      unset($scripts[$one]);
+    }		
+  }
+  // let them add scripts to the end ie: a jQuery plugin
+  if(!empty($append)) {
+    $append_list = explode(",", trim(str_replace(' ','',$append)));
+    foreach($append_list as $key => $item) {
+      $scripts['user_'+$key]='<script type="text/javascript" src="'.($item).'"></script>'."\n";;
+    }		
+  }
+  // Output
+
+  $output = '';
+  foreach($scripts as $script) {
+    $output .= $script;		
+  }
+  return $output;
+}
 # vim:ts=4 sw=4 noet
 ?>

@@ -24,15 +24,14 @@ function smarty_cms_function_cms_jquery($params, &$smarty)
 	$ssl = isset($params['ssl']) && !empty($params['ssl'])?$params['ssl']:false;
 	$custom_root = isset($params['custom_root']) && !empty($params['custom_root'])?$params['custom_root']:'';
 
-ob_start(); ?>
-<?php AdminTheme::OutputHeaderJavascript($exclude,$ssl,$cdn,$append,$custom_root); ?>
-<?php $out = ob_get_contents(); ob_end_clean();
-  if( isset($params['assign']) )
-    {
-      $smarty->assign(trim($params['assign']),$out);
-      return;
-    }
-  return $out;
+	// get the output.
+	$out = cms_get_jquery($exclude,$ssl,$cdn,$append,$custom_root);
+	if( isset($params['assign']) )
+	{
+		$smarty->assign(trim($params['assign']),$out);
+		return;
+	}
+	return $out;
 }
 
 function smarty_cms_help_function_cms_jquery()

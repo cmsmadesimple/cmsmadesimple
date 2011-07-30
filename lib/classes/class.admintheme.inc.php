@@ -675,39 +675,12 @@ class AdminTheme
      * below into your own method if you override this -- it's used by the dropdown
      * menu in IE.
      */
-    function OutputHeaderJavascript($exclude = '',$ssl=false,$cdn=false,$append='',$custom_root='')
+    function OutputHeaderJavascript()
     {
-	
-		$config = cms_config::get_instance();
-		$scripts = array();
-		$basePath=$custom_root!=''?trim($custom_root,'/'):($ssl?$config['ssl_url']:$config['root_url']);
-		
-		// Scripts to include
-		$scripts['jquery-1.6.2.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js':$basePath.'/lib/jquery/js/jquery-1.6.2.min.js').'"></script>'."\n";
-		$scripts['jquery-ui-1.8.14.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js':$basePath.'/lib/jquery/js/jquery-ui-1.8.14.min.js').'"></script>'."\n";
-		$scripts['jquery.ui.nestedSortable-1.3.4.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>'."\n";
-		$scripts['jquery.json-2.2.js'] = '<script type="text/javascript" src="'.$basePath.'/lib/jquery/js/jquery.json-2.2.js"></script>'."\n";
-
-		// Check if we need exclude some script
-		if(!empty($exclude)) {
-		
-			$exclude_list = explode(",", trim(str_replace(' ','',$exclude)));
-			foreach($exclude_list as $one) {
-			
-				unset($scripts[$one]);
-			}		
-		}
-		// let them add scripts to the end ie: a jQuery plugin
-		if(!empty($append)) {
-			$append_list = explode(",", trim(str_replace(' ','',$append)));
-			foreach($append_list as $key => $item) {
-				$scripts['user_'+$key]='<script type="text/javascript" src="'.($item).'"></script>'."\n";;
-			}		
-		}
-		// Output
-		foreach($scripts as $script) {
-			echo $script;		
-		}			
+		$ssl = isset($_SERVER['https']) && (strtolower($_SERVER['https']) == 'on' || $_SERVER['https'] == 1);
+		$config = cmsms()->GetConfig();
+	    $ssl = $ssl && isset($config['ssl_url']);
+		echo cms_get_jquery('',$ssl);
 	}
 
     /**
@@ -1503,28 +1476,29 @@ debug_buffer('after menu items');
     {
 		$config = cmsms()->GetConfig();
 		$urlext = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-?><head>
-<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-9 Ted Kulp. All rights reserved." />
+		$title = get_site_preference('sitename').' - '.$this->title;
+		$str = <<<EOT
+<head>
+<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-11 Ted Kulp. All rights reserved." />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="robots" content="noindex, nofollow" />
-	   <title><?php echo get_site_preference('sitename') . " - ". $this->title ?></title>
-<link rel="stylesheet" type="text/css" href="style.php?<?php echo $urlext; ?>" />
-<?php
-	if ($showielink) {
-?>
+			<title>{$title}</title>
+<link rel="stylesheet" type="text/css" href="style.php?{$urlext}" />
+EOT;
+		if ($showielink) {
+$str .= <<<EOT
 <!--[if IE]>
-<link rel="stylesheet" type="text/css" href="style.php?ie=1&<?php echo $urlext; ?>" />
+<link rel="stylesheet" type="text/css" href="style.php?ie=1&{$urlext}" />
 <![endif]-->
-<?php
-	}
-?>
-<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
-<?php $this->OutputHeaderJavascript(); ?>
-<?php $this->ThemeHeader(); ?>
-<?php echo $addt ?>
-<base href="<?php echo $config['admin_url'] . '/'; ?>" />
-</head>
-<?php
+EOT;
+		}
+
+		$str .= "<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->\n";
+		$str .= $this->OutputHeaderJavascript()."\n";
+		$str .= $this->ThemeHeader();
+		$str .= $addt."\n";
+		$str .= '<base href="'.$config['admin_url'].'/"/>'."\n";
+		echo $str;
     }
 
     /**
