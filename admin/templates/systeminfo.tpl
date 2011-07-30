@@ -10,7 +10,13 @@
 	</div>
 <hr/>
 <table class="pagetable" cellspacing="0" summary="{si_lang a=cms_install_information}">
-	<caption>{si_lang a=cms_install_information}</caption>
+    <thead> 
+       <tr>
+         <th colspan="3">{si_lang a=cms_install_information}</th>
+       </tr>
+    </thead> 
+	<tbody>
+	<!-- caption>{si_lang a=cms_install_information}</caption -->
   		<tr class="{cycle values='row1,row2'}">
   			<td width="45%">{si_lang a=cms_version}</td>
 			<td width="5%"></td>
@@ -43,6 +49,7 @@
 		</tr>
   		{/foreach}
 	{/foreach}
+	</tbody>
 </table>
 
 <table class="pagetable" cellspacing="0" summary="{si_lang a=php_information}">
