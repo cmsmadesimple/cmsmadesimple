@@ -119,9 +119,6 @@ class NCleanGreyTheme extends AdminTheme
 		}
 		</style>
 		<![endif]-->
-		<!--[if lt IE 7]>
-		<link rel="stylesheet" type="text/css" href="themes/NCleanGrey/css/ie6.css" />
-		<![endif]-->
 		'."\n";
 	}
     /**
