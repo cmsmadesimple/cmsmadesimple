@@ -407,8 +407,8 @@ echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1)
 				<input type="hidden" name="edituserprefs" value="true" />
                 <input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
                 </div>
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="submit_form" value="<?php echo lang('submit'); ?>" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" />
+				<input class="pagebutton" type="submit" name="submit_form" value="<?php echo lang('submit'); ?>" />
+				<input class="pagebutton" type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" />
 			</div>
 			</div>			
 		</form>

@@ -659,7 +659,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
   $columns = array();
   if ($display != 'none')
     {
-      $thelist .= "<tr id=\"tr_".$one->Id()."\" class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+      $thelist .= "<tr id=\"tr_".$one->Id()."\" class=\"$currow\">\n";
       
       /* expand/collapse column */
       $columns['expand'] = '&nbsp;';

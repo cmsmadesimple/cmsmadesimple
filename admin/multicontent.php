@@ -367,8 +367,8 @@ else
 
 			echo '<input type="hidden" name="multiaction" value="core::dodelete" /><input type="hidden" name="idlist" value="'.implode(':', $idlist).'" />' . "\n";
 			?>
-								<input type="submit" name="confirm" value="<?php echo lang('submit') ?>"  class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-								<input type="submit" name="cancel" value="<?php echo lang('cancel') ?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+								<input type="submit" name="confirm" value="<?php echo lang('submit') ?>"  class="pagebutton" />
+								<input type="submit" name="cancel" value="<?php echo lang('cancel') ?>" class="pagebutton" />
 							</p>
 						</div>
 					</form>

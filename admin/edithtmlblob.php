@@ -298,9 +298,9 @@ else
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
-			<input type="submit" name="submit2" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			<input type="submit" name="submit2" value="<?php echo lang('submit')?>" class="pagebutton" />
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
+				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" />
 			</p>
 		</div>
 		<div class="pageoverflow">
@@ -341,12 +341,12 @@ else
 				<input type="hidden" name="edithtmlblob" value="true" />
 				<input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob; ?>" />
 				<input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id; ?>" />
-				<input type="submit" name="submit2" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="submit2" value="<?php echo lang('submit')?>" class="pagebutton" />
 				<?php if (!$adminaccess) { ?>
 					<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>" />
 				<?php } ?>
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
+				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" />
 			</p>
 		</div>
 	</form>

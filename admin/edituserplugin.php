@@ -279,9 +279,9 @@ else {
 						<input type="hidden" name="userplugin_id" value="<?php echo $userplugin_id?>" />
 						<input type="hidden" id="origpluginname" name="origpluginname" value="<?php echo $orig_plugin_name?>" />
 						<input type="hidden" name="editplugin" value="true" />
-						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-						<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
+						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
+						<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" />
 
 				</p>
 			</div>
