@@ -279,7 +279,7 @@ else {
       $hidden .= '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />';
       $smarty->assign('hidden',$hidden);
 
-      $submit = '<input type="submit" value="'.lang('addcss').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\';" onmouseout="this.className=\'pagebutton\';" />';
+      $submit = '<input type="submit" value="'.lang('addcss').'" class="pagebutton" />';
       $smarty->assign('submit',$submit);
 
     } # end of showing form

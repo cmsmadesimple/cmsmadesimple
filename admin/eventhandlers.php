@@ -184,7 +184,7 @@ switch( $action )
 			{
 				if ($modulefilter == '' || $modulefilter == $oneevent['originator'])
 				{
-					echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+					echo "<tr class=\"".$curclass."\">\n";
 
 					$desctext = '';
 					if ($oneevent['originator'] == 'Core') {

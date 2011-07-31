@@ -65,7 +65,7 @@ if( count($tags) )
   {
     foreach( $tags as $oneplugin => $label  )
       {
-	echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+	echo "<tr class=\"".$curclass."\">\n";
 	echo "<td><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">$label</a></td>\n";
 	echo "<td class=\"icons_wide\"><a href=\"runuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
 	echo $themeObject->DisplayImage('icons/system/run.gif', lang('run_udt'), '', '', 'systemicon')."</a></td>\n";

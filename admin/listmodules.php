@@ -637,7 +637,7 @@ else
 	  $aboutcol = "<a href=\"{$thisurl}&amp;action=showmoduleabout&amp;module=".$key."\">".lang('about')."</a>";
 	  
 	  // row output
-	  echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+	  echo "<tr class=\"".$curclass."\">\n";
 	  echo "<td>$namecol</td>";
 	  echo "<td>$versioncol</td>";
 	  if( $statusspans === true)

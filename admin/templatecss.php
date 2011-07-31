@@ -229,7 +229,7 @@ else {
 ?>
 			<input type="hidden" name="id" value="<?php echo $id?>" />
 			<input type="hidden" name="type" value="<?php echo $type?>" />
-			<input type="submit" value="<?php echo lang('attachtemplate')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover';" onmouseout="this.className='pagebutton';" />
+			<input type="submit" value="<?php echo lang('attachtemplate')?>" class="pagebutton" />
 			</p>
 			</div>
 			</form>
