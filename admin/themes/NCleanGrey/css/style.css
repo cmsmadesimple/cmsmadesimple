@@ -614,6 +614,8 @@ a.itemlink {
 	color: #000;
 	font-weight: bold;
 	font-size: 1.1em;
+	display: inline-block;
+	padding-bottom: 5px;
 }
 a.itemsublink {
 	color: #000;
