@@ -42,8 +42,8 @@ $xajax->register(XAJAX_FUNCTION,'content_collapseall');
 $xajax->register(XAJAX_FUNCTION,'content_toggleexpand');
 $xajax->register(XAJAX_FUNCTION,'content_move');
 $xajax->register(XAJAX_FUNCTION,'content_delete');
-$xajax->register(XAJAX_FUNCTION,'reorder_display_list');
-$xajax->register(XAJAX_FUNCTION,'reorder_process');
+// $xajax->register(XAJAX_FUNCTION,'reorder_display_list');
+// $xajax->register(XAJAX_FUNCTION,'reorder_process');
 $xajax->processRequest();
 $headtext = $xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n";
 include_once("header.php");
@@ -443,114 +443,114 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 	}
 }
 
-function reorder_display_list()
-{
-	$objResponse = new xajaxResponse();
-	$gCms = cmsms();
-	$config = $gCms->GetConfig();
+// function reorder_display_list()
+// {
+// 	$objResponse = new xajaxResponse();
+// 	$gCms = cmsms();
+// 	$config = $gCms->GetConfig();
 	
-	$userid = get_userid();
+// 	$userid = get_userid();
 	
-	$path = cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists', 'SLLists.class.php');
-	require($path);
+// 	$path = cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists', 'SLLists.class.php');
+// 	require($path);
 
-	$sortableLists = new SLLists($config["root_url"].'/lib/scriptaculous');
+// 	$sortableLists = new SLLists($config["root_url"].'/lib/scriptaculous');
 	
-	$hierManager = $gCms->GetHierarchyManager();
-	$hierarchy = $hierManager->getRootNode();
+// 	$hierManager = $gCms->GetHierarchyManager();
+// 	$hierarchy = $hierManager->getRootNode();
 	
-	$listArray = array();
-	$output = '';
+// 	$listArray = array();
+// 	$output = '';
 	
-	$sortableLists->addList('parent0','parent0ListOrder');
-	$listArray[0] = 'parent0ListOrder';
-	$output .= '<ul id="parent0" class="sortableList">'."\n";
+// 	$sortableLists->addList('parent0','parent0ListOrder');
+// 	$listArray[0] = 'parent0ListOrder';
+// 	$output .= '<ul id="parent0" class="sortableList">'."\n";
 	
-	foreach ($hierarchy->getChildren(false,true) as $child)
-	{
-		show_h($child, $sortableLists, $listArray, $output);
-	}
+// 	foreach ($hierarchy->getChildren(false,true) as $child)
+// 	{
+// 		show_h($child, $sortableLists, $listArray, $output);
+// 	}
 	
-	$output .= '</ul>';
+// 	$output .= '</ul>';
 
-	ob_start();
-	//$sortableLists->printTopJS();
-	$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', lang('submit'), 'button', 'sortableListForm', lang('cancel'), $output);
-	$contents = ob_get_contents();
-	ob_end_clean();
+// 	ob_start();
+// 	//$sortableLists->printTopJS();
+// 	$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', lang('submit'), 'button', 'sortableListForm', lang('cancel'), $output);
+// 	$contents = ob_get_contents();
+// 	ob_end_clean();
 	
-	ob_start();
-	$sortableLists->printBottomJs();
-	$script = ob_get_contents();
-	ob_end_clean();
+// 	ob_start();
+// 	$sortableLists->printBottomJs();
+// 	$script = ob_get_contents();
+// 	ob_end_clean();
 	
-	$objResponse->assign("contentlist", "innerHTML", $contents);
-	$objResponse->script($script);
+// 	$objResponse->assign("contentlist", "innerHTML", $contents);
+// 	$objResponse->script($script);
 
-	return $objResponse;
-}
+// 	return $objResponse;
+// }
 
-function reorder_process($get)
-{
-	$userid = get_userid();
-	$objResponse = new xajaxResponse();
-	$gCms = cmsms();
+// function reorder_process($get)
+// {
+// 	$userid = get_userid();
+// 	$objResponse = new xajaxResponse();
+// 	$gCms = cmsms();
 
-	if (check_permission($userid,'Manage All Content'))
-	{
-		$config = $gCms->GetConfig();
-		$db = $gCms->GetDb();
-		$contentops = $gCms->GetContentOperations();
-	    $hm = $contentops->GetAllContentAsHierarchy(false);
-		$hierarchy = $hm->getRootNode();
+// 	if (check_permission($userid,'Manage All Content'))
+// 	{
+// 		$config = $gCms->GetConfig();
+// 		$db = $gCms->GetDb();
+// 		$contentops = $gCms->GetContentOperations();
+// 	    $hm = $contentops->GetAllContentAsHierarchy(false);
+// 		$hierarchy = $hm->getRootNode();
 	
-		require(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists','SLLists.class.php'));
-		$sortableLists = new SLLists( $config["root_url"].'/lib/scriptaculous');
+// 		require(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists','SLLists.class.php'));
+// 		$sortableLists = new SLLists( $config["root_url"].'/lib/scriptaculous');
 	
-		$listArray = array();
-		$output = '';
+// 		$listArray = array();
+// 		$output = '';
 		
-		$sortableLists->addList('parent0','parent0ListOrder');
-		$listArray[0] = 'parent0ListOrder';
-		$output .= '<ul id="parent0" class="sortableList">'."\n";
+// 		$sortableLists->addList('parent0','parent0ListOrder');
+// 		$listArray[0] = 'parent0ListOrder';
+// 		$output .= '<ul id="parent0" class="sortableList">'."\n";
 
-		foreach ($hierarchy->getChildren(false,true) as $child)
-		{
-			show_h($child, $sortableLists, $listArray, $output);
-		}
+// 		foreach ($hierarchy->getChildren(false,true) as $child)
+// 		{
+// 			show_h($child, $sortableLists, $listArray, $output);
+// 		}
 		
-		$output .= '</ul>';
+// 		$output .= '</ul>';
 	
-		$order_changed = FALSE;
-		foreach ($listArray AS $parent_id => $order)
-		{
-			$orderArray = SLLists::getOrderArray($get[$order], 'parent'.$parent_id);
-			foreach($orderArray as $item)
-			{
-				$node = $hm->sureGetNodeById($item['element']);
-				if ($node != NULL)
-				{
-				    $one = $node->getContent();
-				    // Only update if order has changed.
-				    if ($one->ItemOrder() != $item['order'])
-				    {
-					$order_changed = TRUE;
-					$query = 'UPDATE '.cms_db_prefix().'content SET item_order = ? WHERE content_id = ?';
-					$db->Execute($query, array($item['order'], $item['element']));
-				    }
-				}
-			}
-		}
-		if (TRUE == $order_changed) {
-			$contentops = $gCms->GetContentOperations();
-			$contentops->SetAllHierarchyPositions();
-			$contentops->ClearCache();
-		}
-	}
+// 		$order_changed = FALSE;
+// 		foreach ($listArray AS $parent_id => $order)
+// 		{
+// 			$orderArray = SLLists::getOrderArray($get[$order], 'parent'.$parent_id);
+// 			foreach($orderArray as $item)
+// 			{
+// 				$node = $hm->sureGetNodeById($item['element']);
+// 				if ($node != NULL)
+// 				{
+// 				    $one = $node->getContent();
+// 				    // Only update if order has changed.
+// 				    if ($one->ItemOrder() != $item['order'])
+// 				    {
+// 					$order_changed = TRUE;
+// 					$query = 'UPDATE '.cms_db_prefix().'content SET item_order = ? WHERE content_id = ?';
+// 					$db->Execute($query, array($item['order'], $item['element']));
+// 				    }
+// 				}
+// 			}
+// 		}
+// 		if (TRUE == $order_changed) {
+// 			$contentops = $gCms->GetContentOperations();
+// 			$contentops->SetAllHierarchyPositions();
+// 			$contentops->ClearCache();
+// 		}
+// 	}
 	
-	$objResponse->assign("contentlist", "innerHTML", display_content_list());
-	return $objResponse;
-}
+// 	$objResponse->assign("contentlist", "innerHTML", display_content_list());
+// 	return $objResponse;
+// }
 
 
 /** check to make sure that the user has authorship of all of the peers of the
