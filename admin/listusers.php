@@ -132,7 +132,7 @@ if (FALSE == empty($error)) {
 		  $access_user = $this_user || $access_to_user;
 
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-  			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+  			    echo "<tr class=\"$currow\">\n";
 			    if( $access_user )
 			      {
 				echo "<td><a href=\"edituser.php".$urlext."&amp;user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";

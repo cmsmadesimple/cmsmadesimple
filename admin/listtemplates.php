@@ -179,7 +179,7 @@ if (isset($_GET["message"])) {
 			$default_false ="<a href=\"listtemplates.php".$urlext."&amp;setdefault=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/false.gif', lang('settrue'),'','','systemicon')."</a>";
 
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-  			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+  			    echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"edittemplate.php".$urlext."&amp;template_id=".$onetemplate->id."\">".$onetemplate->name."</a></td>\n";
 				echo "<td class=\"pagepos\">".($onetemplate->default == 1?$default_true:$default_false)."</td>\n";
 				if ($onetemplate->default)

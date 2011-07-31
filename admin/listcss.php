@@ -117,7 +117,7 @@ if (isset($_GET["message"])) {
 		$counter = 0;
 		while ($one = $result->FetchRow()){
 		  if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-		    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+		    echo "<tr class=\"$currow\">\n";
 		    if( $modify )
 		      {
 			echo "<td><a href=\"editcss.php".$urlext."&amp;css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";

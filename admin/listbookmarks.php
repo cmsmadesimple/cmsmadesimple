@@ -71,7 +71,7 @@ $bookops = cmsms()->GetBookmarkOperations();
 		$counter=0;
 		foreach ($marklist as $onemark){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"editbookmark.php".$urlext."&amp;bookmark_id=".$onemark->bookmark_id."\">".$onemark->title."</a></td>\n";
 				echo "<td>".$onemark->url."</td>\n";
 				echo "<td><a href=\"editbookmark.php".$urlext."&amp;bookmark_id=".$onemark->bookmark_id."\">";

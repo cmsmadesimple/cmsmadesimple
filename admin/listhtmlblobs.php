@@ -86,7 +86,7 @@ $gcbops = cmsms()->GetGlobalContentOperations();
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
             if ($modifyall ||  quick_check_authorship($onehtmlblob->id, $myblobs))
 				{
-				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"edithtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
 				echo "<td>{global_content name='".$onehtmlblob->name."'}</td>\n";
                                 echo '<td>'.listgcb_summarize($onehtmlblob->description,20).'</td>';
