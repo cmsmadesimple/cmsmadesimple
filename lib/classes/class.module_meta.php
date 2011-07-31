@@ -48,7 +48,8 @@ class module_meta
   private function _load_cache()
   {
 	  $config = cmsms()->GetConfig();
-	  if( !is_array($this->_data) && (!isset($config['debug']) || !$config['debug']))
+	  //if( count($this->_data) == 0 && (!isset($config['debug']) || !$config['debug']))
+	  if( count($this->_data) == 0 )
 	  {
 		  $this->_data = array();
 		  if( file_exists($this->_cache_fn) )

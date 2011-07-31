@@ -210,7 +210,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 		{
 		  for ($i = $number + 1; $i < count($flatcontent); $i++)
 		    {
-		      $content =& $flatcontent[$i]->getContent();
+		      $content = $flatcontent[$i]->getContent();
 		      if(isset($content) && $content != NULL)
 			{
 			  if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())
@@ -239,7 +239,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 		{
 		  for ($i = $number; $i < count($flatcontent); $i++)
 		    {
-		      $content =& $flatcontent[$i]->getContent();
+		      $content = $flatcontent[$i]->getContent();
 		      if (isset($content))
 			{
 			  if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())
@@ -263,14 +263,14 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 	  else if ($condition == '|') 
 	    {
 	      // Uplink
-	      $node =& $hm->getNodeById($gCms->variables['content_id']);
-	      $node =& $node->getParentNode();
+	      $node = $hm->getNodeById($gCms->variables['content_id']);
+	      $node = $node->getParentNode();
 	      if (!isset($node)) 
 		{
 		  cms_set_frontend_language();
 		  return;
 		}
-	      $content =& $node->GetContent();
+	      $content = $node->GetContent();
 	      if ($content != FALSE)
 		{
 		  if ($content->Active() && $content->HasUsableLink())
@@ -286,7 +286,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 	    } //* End uplink
 	  else if ($condition == '-')
 	    {
-	      $content =& $flatcontent[$number]->getContent();
+	      $content = $flatcontent[$number]->getContent();
 	      if (isset($content))
 		{
 		  $pageid = $content->Id();
