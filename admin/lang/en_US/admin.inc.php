@@ -795,19 +795,7 @@ $lang['admin']['help_function_embed'] = <<<EOT
 			
         </ul>
 EOT;
-$lang['admin']['help_function_edit'] = <<<EOT
-        <h3 style="color: red;">This plugin is Deprecated</h3>
-        <p>Since 1.9 this function has been deprecated and will be removed from distribution at a later date</p>
-	<h3>What does this do?</h3>
-	<p>Creates a link to edit the page</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{edit}</code><br /></p>
-        <h3>What parameters does it take?</h3>
-        <ul>
-                <li><em>(optional)</em>showbutton - Set to "true" and will show a edit graphic instead of a text link.</li>
-				<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
-        </ul>
-EOT;
+
 $lang['admin']['help_function_description'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Prints the description (title attribute) of the page.</p>
