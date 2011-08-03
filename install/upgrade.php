@@ -17,11 +17,11 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: newupgrade.php 83 2008-09-20 14:41:52Z alby $
+$CMS_INSTALL_PAGE=1;
 
 require_once("../include.php");
 $gCms = cmsms();
 
-$CMS_INSTALL_PAGE=1;
 $LOAD_ALL_MODULES = true;
 #$DONT_LOAD_DB = false;
 $USE_OLD_ADODB=1;
