@@ -36,7 +36,7 @@ $gCms = cmsms();
 $smarty = $gCms->GetSmarty();
 $smarty->assign('date_format_string',get_preference($userid,'date_format_string','%x %X'));
 
-$id = '';
+$id = 'm1_';
 $module = '';
 $action = 'defaultadmin';
 $suppressOutput = false;
@@ -50,7 +50,7 @@ elseif (isset($_REQUEST['mact']))
 {
   $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
   $module = (isset($ary[0])?$ary[0]:'');
-  $id = (isset($ary[1])?$ary[1]:'');
+  $id = (isset($ary[1])?$ary[1]:'m1_');
   $action = (isset($ary[2])?$ary[2]:'');
 }
 
@@ -139,7 +139,7 @@ if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
   {
     @ob_start();
   }
-$id = 'm1_';
+//$id = 'm1_';
 $params = GetModuleParameters($id);
 echo $modinst->DoActionBase($action, $id, $params);
 if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
