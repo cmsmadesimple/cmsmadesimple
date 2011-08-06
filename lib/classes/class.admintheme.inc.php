@@ -1453,6 +1453,7 @@ debug_buffer('after menu items');
 		$nls = $gCms->nls;
     	echo (isset($nls['direction']) && $nls['direction'] == 'rtl') ? "<html dir=\"rtl\"\n>" : "<html>\n";
     }
+	
 	/**
 	 * @since 1.9
      * ThemeHeader
@@ -1463,9 +1464,9 @@ debug_buffer('after menu items');
 		
 		if(file_exists('themes/'. $this->themeName. '/includes/standard.js'))
 		{
-			echo '<script type="text/javascript" src="themes/'. $this->themeName. '/includes/standard.js"></script>'."\n";
+			return '<script type="text/javascript" src="themes/'. $this->themeName. '/includes/standard.js"></script>'."\n";
 		}else{
-			echo '<script type="text/javascript" src="themes/default/includes/standard.js"></script>'."\n";
+			return '<script type="text/javascript" src="themes/default/includes/standard.js"></script>'."\n";
 		}
 	}
     /**
@@ -1477,27 +1478,39 @@ debug_buffer('after menu items');
 		$config = cmsms()->GetConfig();
 		$urlext = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 		$title = get_site_preference('sitename').' - '.$this->title;
-		$str = <<<EOT
-<head>
-<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-11 Ted Kulp. All rights reserved." />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="robots" content="noindex, nofollow" />
-			<title>{$title}</title>
-<link rel="stylesheet" type="text/css" href="style.php?{$urlext}" />
+		$str = "<head>\r\n";
+		$str .=
+<<<EOT
+	<title>{$title}</title>
+	<base href="{$config['admin_url']}/" />
+	<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-11 Ted Kulp. All rights reserved." />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />
+	<link rel="stylesheet" type="text/css" href="style.php?{$urlext}" />
 EOT;
+
 		if ($showielink) {
-$str .= <<<EOT
+			$str .=
+<<<EOT
 <!--[if IE]>
 <link rel="stylesheet" type="text/css" href="style.php?ie=1&{$urlext}" />
 <![endif]-->
 EOT;
 		}
-
 		$str .= "<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->\n";
 		$str .= $this->OutputHeaderJavascript()."\n";
-		$str .= $this->ThemeHeader();
+		
+		// this is to correct for improper retrun  of ThemeHeader() where it
+		// is echoed sometimes and retuned sometimes and was treated as if it
+		// should have been returned not returned. WE need to correct this-- JLB  TODO REMOVE STATEMENT
+		ob_start(); 
+		$this->ThemeHeader();
+		$str .= ob_get_contents();
+		ob_end_clean();
+		//End of fix
+		
 		$str .= $addt."\n";
-		$str .= '<base href="'.$config['admin_url'].'/"/>'."\n";
+		$str .= "</head>\n"; // fix to correct and add the end header tag -- JLB
 		echo $str;
     }
 
