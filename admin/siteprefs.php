@@ -328,7 +328,7 @@ else if (isset($_POST["editsiteprefs"]))
 	  break;
 	}
 
-      audit(-1, '', lang_en('siteprefsupdated'));
+      audit(-1, 'Core', lang_en('siteprefsupdated'));
       $message .= lang('siteprefsupdated');
     }
   else

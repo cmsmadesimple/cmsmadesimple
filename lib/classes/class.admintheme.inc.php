@@ -1469,6 +1469,7 @@ debug_buffer('after menu items');
 			return '<script type="text/javascript" src="themes/default/includes/standard.js"></script>'."\n";
 		}
 	}
+
     /**
      * DisplayHTMLHeader
      * This method outputs the HEAD section of the html page in the admin section.
@@ -1500,14 +1501,20 @@ EOT;
 		$str .= "<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->\n";
 		$str .= $this->OutputHeaderJavascript()."\n";
 		
-		// this is to correct for improper retrun  of ThemeHeader() where it
-		// is echoed sometimes and retuned sometimes and was treated as if it
-		// should have been returned not returned. WE need to correct this-- JLB  TODO REMOVE STATEMENT
 		ob_start(); 
-		$this->ThemeHeader();
-		$str .= ob_get_contents();
+		$tmp1 = $this->ThemeHeader();
+		$tmp2 = ob_get_contents();
 		ob_end_clean();
-		//End of fix
+		if( $tmp1 )
+		{
+			// data is returned
+			$str .= $tmp1;
+		}
+		else
+		{
+			// assume data is echoed
+			$str .= $tmp2;
+		}
 		
 		$str .= $addt."\n";
 		$str .= "</head>\n"; // fix to correct and add the end header tag -- JLB

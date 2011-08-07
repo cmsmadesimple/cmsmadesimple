@@ -616,28 +616,6 @@ $lang['admin']['help_function_print'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>Just put <code>{print}</code> on a page or in a template. For help about the Printing module, what parameters it takes etc., please refer to the Printing module help.</p>
 EOT;
-$lang['admin']['help_function_oldprint'] = <<<EOT
-	<h3>What does this do?</h3>
-	<p>Creates a link to only the content of the page.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{oldprint}</code><br /></p>
-        <h3>What parameters does it take?</h3>
-        <ul>
-                <li><em>(optional)</em> goback - Set to "true" to show a "Go Back" link on the page to print.</li>
-                <li><em>(optional)</em> popup - Set to "true" and page for printing will by opened in new window.</li>
-                <li><em>(optional)</em> script - Set to "true" and in print page will by used java script for run print of page.</li>
-                <li><em>(optional)</em> showbutton - Set to "true" and will show a printer graphic instead of a text link.</li>
-                <li><em>(optional)</em> class - class for the link, defaults to "noprint".</li>
-                <li><em>(optional)</em> text - Text to use instead of "Print This Page" for the print link.</li>
-                <li><em>(optional)</em> title - Text to show for title attribute. If blank show text parameter.</li>
-                <li><em>(optional)</em> more - Place additional options inside the &lt;a&gt; link.</li>
-                <li><em>(optional)</em> src_img - Show this image file. Default images/cms/printbutton.gif.</li>
-                <li><em>(optional)</em> class_img - Class of &lt;img&gt; tag if showbutton is sets.</li>
-        </ul>
-                    <p>Example:</p>
-                     <pre>{oldprint text="Printable Page"}</pre>      
-
-EOT;
 $lang['admin']['login_info_title'] = 'Information';
 $lang['admin']['login_info'] = 'For the Admin console to work properly';
 $lang['admin']['login_info_params'] = <<<EOT
