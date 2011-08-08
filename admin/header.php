@@ -141,7 +141,7 @@ else
 		    {
 		      set_site_preference('cms_is_uptodate',0);
 		      $themeObject->AddNotification(1,'Core',lang('new_version_available'));
-		      audit('','Core','CMSMS version '.$remote_ver.' is avaliable');
+		      audit('','Core','CMSMS version '.$remote_ver.' is available');
 		    }
 		  else
 		    {
