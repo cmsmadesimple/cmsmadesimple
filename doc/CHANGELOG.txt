@@ -37,13 +37,7 @@ MenuManager:
 
 ModuleManager:
   -
-
-Printing:
-  -
-  
-TinyMCE:
-  -
-  
+ 
 News:
   - #6215 custom field definitions checkboxes get unchecked  
   
