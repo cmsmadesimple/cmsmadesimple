@@ -351,11 +351,11 @@ else if ($action == "showmodulehelp")
 	  $cur_lang = cms_admin_current_language();
 	  if( $cur_lang == 'en_US' )
 	    {
-	      $header .= '<span class="helptext"><a href="listmodules.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&amp;action=showmodulehelp&amp;module='.$module.'&lang='.$orig_lang.'">'.$modulehelp_yourlang.'</a></span>';
+	      $header .= '<span class="helptext"><a href="listmodules.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&amp;action=showmodulehelp&amp;module='.$module.'&amp;lang='.$orig_lang.'">'.$modulehelp_yourlang.'</a></span>';
 	    }
 	  else
 	    {
-	  $header .= '<span class="helptext"><a href="listmodules.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&amp;action=showmodulehelp&amp;module='.$module.'&lang=en_US">'.lang('modulehelp_english').'</a></span>';
+	  $header .= '<span class="helptext"><a href="listmodules.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&amp;action=showmodulehelp&amp;module='.$module.'&amp;lang=en_US">'.lang('modulehelp_english').'</a></span>';
 	    }
 	}
 
