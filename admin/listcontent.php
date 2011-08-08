@@ -269,7 +269,7 @@ function setactive($contentid, $active = true)
 	if($permission)
 	  {
 		$node = $hierManager->getNodeById($contentid);
-		$value = $node->getContent();
+		$value = $node->getContent(false,false);
 		$value->SetActive($active);
 		$value->Save();
 		$contentops = cmsms()->GetContentOperations();

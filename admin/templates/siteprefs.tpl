@@ -384,8 +384,8 @@
 <div class="pageoverflow">
   <p class="pagetext">{$lang_checkversion}:</p>
   <p class="pageinput">
-    <input type="hidden" name="urlcheckversion" value="0"/>
-    <input type="checkbox" name="urlcheckversion" value="1" {if $checkversion}checked="checked"{/if}/>
+    <input type="hidden" name="checkversion" value="0"/>
+    <input type="checkbox" name="checkversion" value="1" {if $checkversion}checked="checked"{/if}/>
     <br/>{'info_checkversion'|lang}
   </p>
 </div>
