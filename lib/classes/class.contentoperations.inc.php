@@ -117,6 +117,7 @@ class ContentOperations
 					}
 			}
 
+		return $ctph;
 	}
 
 	/**
@@ -138,13 +139,10 @@ class ContentOperations
 			}
 		$result = NULL;
 
-		$ctph = $this->_get_content_type($type);
-		if( is_object($ctph) )
+		$ctph = $this->LoadContentType($type);
+		if( class_exists($ctph->class) )
 			{
-				if( class_exists($ctph->class) )
-					{
-						$result = new $ctph->class;
-					}
+				$result = new $ctph->class;
 			}
 		return $result;
 	}
