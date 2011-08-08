@@ -21,10 +21,13 @@ Core - Bug Reports:
   - #6586 Only Admin can assign Additional Editors
   - #6637 Wrong check for memory_limit and output_buffering
   - #6647 cms_stylesheet media parameter is not working correctly
+  - #6686 Missing check permission for Modify Any Page in admin/ listcontent.php
 
 Core - Feature requests:
   - #5119 New event : LoginFailed
+  - #5260 width/height parameters for cms_selflin
   - #5622 Add Description Column to GCB List
+  - #6301 Increase security with better session cookies
   
 Core Installer:
   -
