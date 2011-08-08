@@ -74,7 +74,7 @@ function setdefault($contentid)
 		$node = $hierManager->getNodeById($contentid);
 		if (isset($node))
 		{
-			$value = $node->getContent();
+		  $value = $node->getContent(false,false);
 			if (isset($value))
 			{
 				if (!$value->Active())
@@ -94,7 +94,7 @@ function setdefault($contentid)
 			$node = $hierManager->getNodeById($old_id);
 			if (isset($node))
 			{
-				$value = $node->getContent();
+			  $value = $node->getContent(false,false);
 				if (isset($value))
 				{
 					$value->SetDefaultContent(false);
@@ -106,7 +106,7 @@ function setdefault($contentid)
 		$node = $hierManager->getNodeById($contentid);
 		if (isset($node))
 		{
-			$value = $node->getContent();
+		  $value = $node->getContent(false,false);
 			if (isset($value))
 			{
 				$value->SetDefaultContent(true);
@@ -414,34 +414,34 @@ function deletecontent($contentid)
 	}
 }
 
-function show_h(&$root, &$sortableLists, &$listArray, &$output)
-{
-	$content = $root->getContent();
-	if( !is_object($content) ) return;
+// function show_h(&$root, &$sortableLists, &$listArray, &$output)
+// {
+// 	$content = $root->getContent();
+// 	if( !is_object($content) ) return;
 
-	$contentops = cmsms()->GetContentOperations();
+// 	$contentops = cmsms()->GetContentOperations();
 
-	$output .= '<li id="item_'.$content->Id().'">'."\n";
-	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->Hierarchy()).') '.cms_htmlentities($content->MenuText(), '', '', true);
+// 	$output .= '<li id="item_'.$content->Id().'">'."\n";
+// 	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->Hierarchy()).') '.cms_htmlentities($content->MenuText(), '', '', true);
 
-	if ($root->getChildrenCount()>0)
-	{
-	  $sortableLists->addList('parent'.$content->Id(),'parent'.$content->Id().'ListOrder');
-	  $listArray[$content->Id()] = 'parent'.$content->Id().'ListOrder';
-	  $output .= '<ul id="parent'.$content->Id().'" class="sortableList">'."\n";
+// 	if ($root->getChildrenCount()>0)
+// 	{
+// 	  $sortableLists->addList('parent'.$content->Id(),'parent'.$content->Id().'ListOrder');
+// 	  $listArray[$content->Id()] = 'parent'.$content->Id().'ListOrder';
+// 	  $output .= '<ul id="parent'.$content->Id().'" class="sortableList">'."\n";
 
-		$children = $root->getChildren(false,true);
-		foreach ($children as $child)
-		{
-			show_h($child, $sortableLists, $listArray, $output);
-		}
-		$output .= "</ul>\n";
-	}
-	else 
-	{
-		$output .= "</li>\n";
-	}
-}
+// 		$children = $root->getChildren(false,true);
+// 		foreach ($children as $child)
+// 		{
+// 			show_h($child, $sortableLists, $listArray, $output);
+// 		}
+// 		$output .= "</ul>\n";
+// 	}
+// 	else 
+// 	{
+// 		$output .= "</li>\n";
+// 	}
+// }
 
 // function reorder_display_list()
 // {
