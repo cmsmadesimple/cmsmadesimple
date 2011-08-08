@@ -146,7 +146,7 @@ else
 		  else
 		    {
 		      set_site_preference('cms_is_uptodate',1);
-		      audit('','Core','Tested for newer CMSMS Version.. None Available');
+		      audit('','Core','Tested for newer CMSMS Version. None Available.');
 		    }
 		}
 	      set_site_preference('lastcmsversioncheck',mktime(23,59,55));
