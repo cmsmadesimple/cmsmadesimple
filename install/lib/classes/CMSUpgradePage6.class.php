@@ -20,27 +20,31 @@
 
 class CMSInstallerPage6 extends CMSInstallerPage
 {
-	function assignVariables()
-	{
-	  //	$test = $this->module_autoupgrade();
-	  $test = new StdClass();
-	  $test->error = false;
-	  $test->messages = array();
-		$test->messages[] = ilang('noneed_upgrade_modules');
-		$this->smarty->assign('test', $test);
+  function assignVariables()
+  {
+    // do module upgrades and installs.
+    ModuleOperations::get_instance()->LoadModules(TRUE);
+    $allmodules = ModuleOperations::get_instance()->GetAllModuleNames();
+    $installed  = ModuleOperations::get_instance()->GetInstalledModules();
+    foreach( $allmodules as $name )
+      {
+	if( ModuleOperations::get_instance()->IsSystemModule($name) && !in_array($name,$installed) )
+	  {
+	    $module = ModuleOperations::get_instance()->get_module_instance($name,'',TRUE);
+	    debug_display('install: '.$name);
+	  }
+      }
 
-		$this->smarty->assign('errors', $this->errors);
-	}
+    // display a message.
+    $test = new StdClass();
+    $test->error = false;
+    $test->messages = array();
+    $test->messages[] = ilang('noneed_upgrade_modules');
+    $this->smarty->assign('test', $test);
+    
+    $this->smarty->assign('errors', $this->errors);
+  }
 
 
-	//Do module autoupgrades 
-	function module_autoupgrade()
-	{
-	  $db = cmsms()->GetDB();
-	  $test = new StdClass();
-	  $test->error = false;
-	  $test->messages = array();
-	  return $test;
-	}
 }
 ?>
