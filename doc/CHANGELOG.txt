@@ -1,4 +1,4 @@
-Version 1.10 - 
+Version 1.10 - Martinique
 -----------------------------
 Core - Bug Reports:
   - #5138 Module Manager often can't upgrade modules

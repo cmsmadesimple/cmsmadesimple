@@ -19,7 +19,7 @@
 #$Id$
 
 $CMS_VERSION = "1.10-beta0";
-$CMS_VERSION_NAME = "No Name Set";
+$CMS_VERSION_NAME = "Martinique";
 $CMS_SCHEMA_VERSION = "35";
 
 define('CMS_VERSION', $CMS_VERSION);
