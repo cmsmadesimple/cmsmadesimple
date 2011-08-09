@@ -208,7 +208,7 @@ class ModuleManager extends CMSModule
     $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
 
     // put mention into the admin log
-    $this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('installed',$this->GetVersion()));
+    // $this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('installed',$this->GetVersion())); Rolf: Seems redundant
   }
 
   /*---------------------------------------------------------
@@ -248,7 +248,7 @@ class ModuleManager extends CMSModule
       }
 
     // put mention into the admin log
-    $this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion()));
+    // $this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('upgraded',$this->GetVersion())); Rolf: Seems redundant
   }
 
 
@@ -269,7 +269,7 @@ class ModuleManager extends CMSModule
     $this->RemovePreference();
     
     // put mention into the admin log
-    $this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('uninstalled'));
+    // $this->Audit( 0, $this->Lang('friendlyname'), $this->Lang('uninstalled')); Rolf: Seems redundant
   }
   
 
