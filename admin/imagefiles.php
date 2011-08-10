@@ -126,7 +126,8 @@ if (isset($_POST['newdirsubmit']))
 		else
 		{
 			mkdir($dir."/".$_POST['newdir'], 0777);
-			audit(-1, $_POST['newdir'], lang_en('created_directory'));
+			// put mention into the admin log
+			audit(-1, lang('imagemanager'), "Created new directory");
 		}
 	}
 	else
