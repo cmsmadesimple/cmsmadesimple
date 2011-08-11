@@ -168,7 +168,8 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		generate_user_object($oneuser->id);
 		$_SESSION['login_user_id'] = $oneuser->id;
 		$_SESSION['login_user_username'] = $oneuser->username;
-		audit($oneuser->id, $oneuser->username, lang_en('user_login'));
+		// put mention into the admin log
+		audit($oneuser->id, "Admin Username: ".$oneuser->username, 'Logged In');
 
 		#Now call the event
 		Events::SendEvent('Core', 'LoginPost', array('user' => &$oneuser));
@@ -269,7 +270,8 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		debug_buffer("Login failed.  Error is: " . $error);
 
 		Events::SendEvent('Core','LoginFailed',array('user'=>$_POST['username']));;
-		audit($username, $username, lang_en('login_failed'));
+		// put mention into the admin log
+		audit('', "Admin Username: ".$username, 'Login Failed');
 
 		#Now call the event
 		//Events::SendEvent('Core', 'LoginPost', $username);

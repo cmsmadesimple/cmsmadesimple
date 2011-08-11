@@ -32,8 +32,8 @@ if( isset($_SESSION['login_user_username'])) {
   $username = $_SESSION['login_user_username'];
 }
 
-
-audit($userid, $username, lang_en('user_logout'));
+// put mention into the admin log
+audit($userid, "Admin Username: ".$username, 'Logged Out');
 
 
 #Now call the event
