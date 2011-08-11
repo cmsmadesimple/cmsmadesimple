@@ -271,7 +271,8 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 		Events::SendEvent('Core','LoginFailed',array('user'=>$_POST['username']));;
 		// put mention into the admin log
-		audit('', "Admin Username: ".$username, 'Login Failed');
+		$ip=$_SERVER['REMOTE_ADDR']; 
+		audit('', "Admin Username: ".$username.' (IP: '.$ip.')', 'Login Failed');
 
 		#Now call the event
 		//Events::SendEvent('Core', 'LoginPost', $username);

@@ -27,6 +27,7 @@ Core - Feature requests:
   - #5119 New event : LoginFailed
   - #5260 width/height parameters for cms_selflin
   - #5622 Add Description Column to GCB List
+  - #5964 Addition IP Address to User Login Failed in Admin Log
   - #6301 Increase security with better session cookies
   
 Core Installer:
