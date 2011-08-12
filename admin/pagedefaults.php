@@ -119,6 +119,8 @@ if ($error != "") {
 }
 if ($message != "") {
 	echo $themeObject->ShowMessage($message);
+	// put mention into the admin log
+	audit('', 'Page Defaults', 'Edited');
 }
 
 // give everything to smarty.
