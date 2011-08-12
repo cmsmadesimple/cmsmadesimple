@@ -430,7 +430,7 @@ else
 			foreach (array_reverse($nodelist) as $node)
 			{
 				$id = $node->Id();
-				$title = $node->Name() . ' (' . $node->Hierarchy() . ') -- ' . $id;
+				$title = $node->Name() . ' (Parent ID: ' . $node->Hierarchy() . ')';
 
 				$childcount = 0;
 				$parentid = -1;
@@ -467,7 +467,7 @@ else
 				toggleexpand($id, true);
 
 				// put mention into the admin log
-				audit($id, 'Content Items: '.$title, 'Deleted');
+				audit($id, 'Content Item: '.$title, 'Deleted');
 			}
 			$ops = $gCms->GetContentOperations();
 			$ops->SetAllHierarchyPositions();
