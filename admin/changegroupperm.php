@@ -134,7 +134,8 @@ if ($submitted == 1)
 	  }
       }
     
-    audit($userid, 'Group ID', lang_en('permissionschanged'));
+    // put mention into the admin log
+	audit($userid, 'Permission Group ID: '.$userid, 'Changed');
     $message = lang('permissionschanged');
     $gCms->clear_cached_files();
   }

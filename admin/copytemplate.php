@@ -119,7 +119,8 @@ if ($access)
 					}
 				}
 
-				audit($onetemplate->id, $onetemplate->name, lang_en('templatecopied'));
+				// put mention into the admin log
+				audit($onetemplate->id, 'HTML-Template: '.$onetemplate->name, 'Copied');
 				redirect($from.'&message='.lang('templatecopied'));
 				return;
 			}

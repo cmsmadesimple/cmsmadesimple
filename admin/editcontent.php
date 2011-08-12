@@ -136,7 +136,8 @@ if ($access)
 	      $contentobj->Save();
 	      $contentops =& $gCms->GetContentOperations();
 	      $contentops->SetAllHierarchyPositions();
-	      audit($contentobj->Id(), $contentobj->Name(), lang_en('edited_content'));
+	      // put mention into the admin log
+		  audit($contentobj->Id(), 'Content Item: '.$contentobj->Name(), 'Edited');
 	      if ($submit)
 		{
 		  redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&message=contentupdated');

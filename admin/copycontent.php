@@ -110,8 +110,8 @@ if( isset($_GET['submit']) )
       $tmpobj->Save();
       $contentops->SetAllHierarchyPositions();
 
-      // something for the audit log
-      audit($fromobj->Id(),$fromobj->Alias(), lang_en('content_copied',$tmpobj->Alias()));
+      // put mention into the admin log
+      audit($fromobj->Id(), 'Content Item: '.$fromobj->Alias(), 'Copied to: '.$tmpobj->Alias());
 
       // and redirect
       redirect('listcontent.php'.$urlext);

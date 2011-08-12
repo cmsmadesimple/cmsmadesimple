@@ -128,10 +128,12 @@ if ($submitted == 1)
 	Events::SendEvent('Core', 'ChangeGroupAssignPost',
 			  array('group' => $thisGroup,
 				'users' => $userops->LoadUsersInGroup($thisGroup->id)));
-	audit($group_id, 'Group ID', lang_en('assignmentchanged'));
+	// put mention into the admin log
+	audit($group_id, 'Assignment Group ID: '.$group_id, 'Changed'));
       }
 
-    audit($userid, 'User ID', lang_en('assignmentchanged'));
+    // put mention into the admin log
+	audit($userid, 'Assignment User ID: '.$userid, 'Changed');
     $message = lang('assignmentchanged');
     $gCms->clear_cached_files();
   }

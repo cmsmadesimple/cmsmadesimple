@@ -58,7 +58,8 @@ if (isset($_GET["user_id"]))
 
 			Events::SendEvent('Core', 'DeleteUserPost', array('user' => &$oneuser));
 
-			audit($user_id, $user_name, lang_en('deleted_user'));
+			// put mention into the admin log
+			audit($user_id, 'Admin Username: '.$user_name, 'Deleted');
 		}
 	}
 }

@@ -136,7 +136,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 			{
 				
 				// put mention into the admin log
-				audit($id, (isset($name)?$name:""), 'Added Stylesheet Association');
+				audit($id, 'Stylesheet Association: '.(isset($name)?$name:""), 'Added');
 
 				if ("template" == $type)
 				{

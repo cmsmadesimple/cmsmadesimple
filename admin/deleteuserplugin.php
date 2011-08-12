@@ -70,7 +70,8 @@ if (isset($_GET["userplugin_id"])) {
 		if ($result)
 		{
 			Events::SendEvent('Core', 'DeleteUserDefinedTagPost', array('id' => $userplugin_id, 'name' => &$userplugin_name));
-			audit($userplugin_id, $userplugin_name, lang_en('deleted_udt'));
+			// put mention into the admin log
+			audit($userplugin_id, 'User Defined Tag: '.$userplugin_name, 'Deleted');
 		}
 	}
 }

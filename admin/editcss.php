@@ -185,7 +185,8 @@ if ($access)
 				
 				Events::SendEvent('Core', 'EditStylesheetPost', array('stylesheet' => &$onestylesheet));
 
-				audit($css_id, $css_name, lang_en('added_css'));
+				// put mention into the admin log
+				audit($css_id, 'Stylesheet: '.$css_name, 'Changed');
 
 				# we now have to check which templates are associated with this CSS and update their modified date.
 				$cssquery = "SELECT assoc_to_id FROM ".cms_db_prefix()."css_assoc

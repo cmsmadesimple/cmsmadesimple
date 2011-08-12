@@ -55,7 +55,8 @@ if (isset($_GET["htmlblob_id"]))
 		if ($result == true)
 		{
 			Events::SendEvent('Core', 'DeleteGlobalContentPost', array('global_content' => &$blobobj));
-			audit($htmlblob_id, $htmlblob_name, lang_en('deleted_gcb'));
+			// put mention into the admin log
+			audit($htmlblob_id, 'Global Content Block: '.$htmlblob_name, 'Deleted');
 		}
 	}
 }

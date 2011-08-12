@@ -75,7 +75,8 @@ if (isset($_GET["group_id"]))
 	
 	if ($result == true)
 	  {
-	    audit($group_id, $group_name, lang_en('deleted_group'));
+	    // put mention into the admin log
+		audit($group_id, 'Admin User Group: '.$group_name, 'Deleted');
 	  }
 }
 
