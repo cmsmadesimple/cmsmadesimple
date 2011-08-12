@@ -28,6 +28,7 @@ function cms_shutdown_function()
       $db = cmsms()->GetDb();
       if( is_object($db) )
 	{
+	  // put mention into the admin log
 	  audit('','ERROR',$str);
 	}
     }

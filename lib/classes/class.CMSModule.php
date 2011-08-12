@@ -1584,6 +1584,7 @@ class CMSModule
 	    {
 	      if( !$this->restrict_unknown_params )
 		{
+		  // put mention into the admin log
 		  audit('',$this->GetName(),'Module is not properly cleaning input params');
 		}
 	      // used to try to avert XSS flaws, this will

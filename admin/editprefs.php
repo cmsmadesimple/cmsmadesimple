@@ -154,7 +154,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'liststylesheets_pagelimit', $liststylesheets_pagelimit);
 	set_preference($userid, 'listgcbs_pagelimit', $listgcbs_pagelimit);
 	// put mention into the admin log
-	audit($userid, 'Core, User Preferences', 'Edited');
+	audit($userid, 'Admin User Preferences', 'Edited');
 	$page_message = lang('prefsupdated');
 	$gCms->clear_cached_files();
 } else if (!isset($_POST["edituserprefs"])) {

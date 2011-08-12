@@ -304,6 +304,7 @@ class AdminTheme
 		$usermoduleinfo = $this->_get_user_module_info();
 		if( !is_array($usermoduleinfo) ) 
 		{
+			// put mention into the admin log
 			audit(get_userid(FALSE),'Admin Theme','No module information found for user');
 		}
 
