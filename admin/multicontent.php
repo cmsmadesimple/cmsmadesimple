@@ -466,7 +466,8 @@ else
 				#Do the same with this page as well
 				toggleexpand($id, true);
 
-				audit($id, $title, lang_en('deleted_content'));
+				// put mention into the admin log
+				audit($id, 'Content Items: '.$title, 'Deleted');
 			}
 			$ops = $gCms->GetContentOperations();
 			$ops->SetAllHierarchyPositions();

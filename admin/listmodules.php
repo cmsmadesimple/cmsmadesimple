@@ -220,7 +220,8 @@ if ($access)
 		}
 		else
 		{
-		  audit('','Module', lang_en('deleted_module',$module));
+		  // put mention into the admin log
+		  audit('','Module: '.$module, 'Deleted');
 		  redirect($thisurl);
 		}
 	}

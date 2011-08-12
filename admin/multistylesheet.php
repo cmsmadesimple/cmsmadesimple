@@ -122,7 +122,8 @@ else
 				$id = $node->id;
 				$title = $node->name;
 				$node->Delete();
-				audit($id, $title, lang_en('deleted_css'));
+				// put mention into the admin log
+				audit($id, 'Stylesheet: '.$title, 'Deleted');
 			}
 		}
 		redirect("listcss.php".$urlext);

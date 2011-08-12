@@ -67,7 +67,8 @@ if (isset($_GET["toggleactive"]))
 
       if ($result)
          {
-           audit($userid, $thisuser->username, lang_en('edited_user'));
+           // put mention into the admin log
+		   audit($userid, 'Admin Username: '.$thisuser->username, 'Edited');
 	   Events::SendEvent('Core','EditUserPost',array('user'=>$thisuser));
         } else {
            $error .= "<li>".lang('errorupdatinguser')."</li>";

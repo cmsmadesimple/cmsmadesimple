@@ -144,7 +144,8 @@ if ($access)
 
 				Events::SendEvent('Core', 'EditTemplatePost', array('template' => &$onetemplate));
 
-				audit($template_id, $onetemplate->name, lang_en('edited_template'));
+				// put mention into the admin log
+				audit($template_id, 'HTML-template: '.$onetemplate->name, 'Edited');
 				if (!$apply)
 				{
 				  switch($from)

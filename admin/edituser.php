@@ -157,7 +157,8 @@ if ($access) {
 
 			if ($result)
 			{
-				audit($user_id, $thisuser->username, lang_en('edited_user'));
+				// put mention into the admin log
+				audit($user_id, 'Admin Username: '.$thisuser->username, 'Edited');
 				Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
 				$gCms->clear_cached_files();
 				

@@ -79,7 +79,8 @@ if ($access) {
 			{
 				Events::SendEvent('Core', 'EditGroupPost', array('group' => &$groupobj));
 
-				audit($groupobj->id, $groupobj->name, lang_en('edited_group'));
+				// put mention into the admin log
+				audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Edited');
 				redirect("listgroups.php".$urlext);
 				return;
 			}

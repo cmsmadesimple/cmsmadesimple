@@ -404,7 +404,8 @@ function deletecontent($contentid)
 				#Do the same with this page as well
 				toggleexpand($contentid, true);
 				
-				audit($contentid, $title, lang_en('deleted_content'));
+				// put mention into the admin log
+				audit($contentid, 'Content Item: '.$title, 'Deleted');
 				
 				$contentops->ClearCache();
 			

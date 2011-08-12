@@ -63,7 +63,8 @@ if (isset($_GET["template_id"]))
 			{
 				Events::SendEvent('Core', 'DeleteTemplatePost', array('template' => &$onetemplate));
 
-				audit($template_id, $onetemplate->name, lang_en('deleted_template'));
+				// put mention into the admin log
+				audit($template_id, 'HTML-template: '.$onetemplate->name, 'Deleted');
 			}
 		}
 	}

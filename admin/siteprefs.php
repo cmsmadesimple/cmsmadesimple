@@ -199,7 +199,8 @@ if (isset($_POST["testumask"]))
 else if (isset($_POST['clearcache']))
 {
 	$gCms->clear_cached_files();
-	audit(-1,'Core',lang_en('cachecleared'));
+	// put mention into the admin log
+	audit(-1,'Core, Cache', 'Cleared');
 	$message .= lang('cachecleared');
 }
 else if (isset($_POST["editsiteprefs"]))
@@ -328,7 +329,8 @@ else if (isset($_POST["editsiteprefs"]))
 	  break;
 	}
 
-      audit(-1, 'Core', lang_en('siteprefsupdated'));
+      // put mention into the admin log
+	  audit(-1, 'Core, Site Preferences', 'Edited');
       $message .= lang('siteprefsupdated');
     }
   else

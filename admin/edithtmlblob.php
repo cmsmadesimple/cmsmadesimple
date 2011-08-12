@@ -115,7 +115,8 @@ if ($access)
 
 			if ($result)
 			{
-				audit($the_blob->id, $the_blob->name, lang_en('edited_gcb'));
+				// put mention into the admin log
+				audit($the_blob->id, 'Global Content Block: '.$the_blob->name, 'Edited');
 
 				#Clear cache
 				$smarty = cmsms()->GetSmarty();

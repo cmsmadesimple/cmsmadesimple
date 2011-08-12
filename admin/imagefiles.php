@@ -88,7 +88,8 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 		else
 		{
 			chmod($dir."/".$_FILES['uploadfile']['name'], octdec('0'.$config['default_upload_permission']));
-			audit(-1, $_FILES['uploadfile']['name'], lang_en('uploaded_file'));
+			// put mention into the admin log
+			audit(-1, 'File: '.$_FILES['uploadfile']['name'], 'Uploaded');
 		}
 	}
 	else
@@ -148,7 +149,8 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 			}
 			else
 			{
-				audit(-1, $reldir . "/" . $_GET['file'], lang_en('deleted_file'));
+				// put mention into the admin log
+				audit(-1, 'File: '.$reldir . "/" . $_GET['file'], 'Deleted');
 			}
 		}
 		else
@@ -173,7 +175,8 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 			}
 			else
 			{
-				audit(-1, $reldir . "/" . $_GET['file'], lang_en('deleted_directory'));
+				// put mention into the admin log
+				audit(-1, 'Directory: '.$reldir . "/" . $_GET['file'], 'Deleted');
 			}
 		}
 		else

@@ -137,7 +137,8 @@ else
 				$id = $node->id;
 				$title = $node->name;
 				$node->Delete();
-				audit($id, $title, lang_en('deleted_template'));
+				// put mention into the admin log
+				audit($id, 'HTML-template: '.$title, 'Deleted');
 			}
 		}
 		redirect("listtemplates.php".$urlext);
