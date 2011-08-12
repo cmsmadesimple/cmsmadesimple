@@ -163,7 +163,8 @@ if ($access)
 			$contentops->SetAllHierarchyPositions();
 			if ($submit)
 			{
-				audit($contentobj->Id(), $contentobj->Name(), lang_en('added_content'));
+				// put mention into the admin log
+				audit($contentobj->Id(), 'Content Item: '.$contentobj->Name(), 'Added');
 				redirect('listcontent.php'.$urlext.'&message=contentadded');
 			}
 		}

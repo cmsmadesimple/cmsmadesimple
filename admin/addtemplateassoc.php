@@ -129,7 +129,8 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
 
 			if ($result)
 			{
-				audit($id, (isset($name)?$name:""), lang_en('added_css_association'));
+				// put mention into the admin log
+				audit($id, (isset($name)?$name:""), 'Added Stylesheet Association');
 
 				if ("template" == $type)
 				{

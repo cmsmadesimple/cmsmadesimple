@@ -145,7 +145,8 @@ if (isset($_POST["adduser"]))
             }
 
 
-			audit($newuser->id, $newuser->username, lang_en('added_user'));
+			// put mention into the admin log
+			audit($newuser->id, 'Admin Username: '.$newuser->username, 'Added');
 			redirect("listusers.php".$urlext);
 		}
 		else

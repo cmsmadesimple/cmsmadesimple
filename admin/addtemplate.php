@@ -117,7 +117,8 @@ if ($access)
 			if ($result)
 			{
 				Events::SendEvent('Core', 'AddTemplatePost', array('template' => &$newtemplate));
-				audit($newtemplate->id, $template, lang_en('added_template'));
+				// put mention into the admin log
+				audit($newtemplate->id, 'HTML-template: '.$template, 'Added');
 				redirect($from);
 				return;
 			}
