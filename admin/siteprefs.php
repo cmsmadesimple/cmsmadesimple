@@ -200,7 +200,7 @@ else if (isset($_POST['clearcache']))
 {
 	$gCms->clear_cached_files();
 	// put mention into the admin log
-	audit(-1,'Core, Cache', 'Cleared');
+	audit(-1,'Website Cache', 'Cleared');
 	$message .= lang('cachecleared');
 }
 else if (isset($_POST["editsiteprefs"]))
@@ -330,7 +330,7 @@ else if (isset($_POST["editsiteprefs"]))
 	}
 
       // put mention into the admin log
-	  audit(-1, 'Core, Site Preferences', 'Edited');
+	  audit(-1, 'Global Settings', 'Edited');
       $message .= lang('siteprefsupdated');
     }
   else
