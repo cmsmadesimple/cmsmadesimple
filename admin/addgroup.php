@@ -68,7 +68,7 @@ if ($access)
 			{
 				Events::SendEvent('Core', 'AddGroupPost', array('group' => &$groupobj));
 				// put mention into the admin log
-				audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Added'));
+				audit($groupobj->id, 'Admin User Group: '.$groupobj->name, 'Added');
 				redirect("listgroups.php".$urlext);
 				return;
 			}

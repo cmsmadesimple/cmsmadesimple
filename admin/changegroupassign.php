@@ -129,7 +129,7 @@ if ($submitted == 1)
 			  array('group' => $thisGroup,
 				'users' => $userops->LoadUsersInGroup($thisGroup->id)));
 	// put mention into the admin log
-	audit($group_id, 'Assignment Group ID: '.$group_id, 'Changed'));
+	audit($group_id, 'Assignment Group ID: '.$group_id, 'Changed');
       }
 
     // put mention into the admin log
