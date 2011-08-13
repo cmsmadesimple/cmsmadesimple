@@ -229,8 +229,11 @@ else if (isset($_POST["editsiteprefs"]))
 	  if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
 	  set_site_preference('thumbnail_width',$thumbnail_width);
 	  set_site_preference('thumbnail_height',$thumbnail_height);
-	  $search_module = trim($_POST['search_module']);
-	  set_site_preference('searchmodule',$search_module);
+	  if( isset($_POST['search_module']) )
+	    {
+	      $search_module = trim($_POST['search_module']);
+	      set_site_preference('searchmodule',$search_module);
+	    }
 	  break;
 
 	case 'editcontent':

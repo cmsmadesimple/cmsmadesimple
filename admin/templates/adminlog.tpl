@@ -100,12 +100,10 @@
     <td>
       <div class="pageoptions">
         <p class="pageoptions">
-          <a href="adminlog.php{$urlext}&amp;download=1">
-          {$downloadlink}
-          </a>
-          <a class="pageoptions" href="adminlog.php{$urlext}&amp;download=1">
-          {$langdownload}
-          </a>
+	{if isset($downloadlink)}
+          <a href="adminlog.php{$urlext}&amp;download=1">{$downloadlink}</a>
+          <a href="adminlog.php{$urlext}&amp;download=1">{$langdownload}</a>
+        {/if}
         </p>
       </div>
     </td>
