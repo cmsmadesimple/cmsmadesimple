@@ -27,7 +27,7 @@ $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix().'modules','allow_fe_lazyload I
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 echo "[done]</p>";
 
-echo '<p>Making sure all modules (except nuSOAP) are neabled...';
+echo '<p>Making sure all modules (except nuSOAP) are enabled...';
 $query = 'UPDATE '.cms_db_prefix().'modules SET active = 1 WHERE module_name != ?';
 $return = $db->Execute($query,array('nuSOAP'));
 echo "[done]</p>";
