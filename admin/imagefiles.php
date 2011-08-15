@@ -49,7 +49,8 @@ function deldir($dir)
 	closedir($handle);
 	if(rmdir($dir))
 	{
-		$success = true;
+	  audit('','Core','Removed Directory '.$dir);
+	  $success = true;
 	}
 	return $success;  
 } 
@@ -150,7 +151,7 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 			else
 			{
 				// put mention into the admin log
-				audit(-1, 'File: '.$reldir . "/" . $_GET['file'], 'Deleted');
+			  audit(-1, 'Core', 'File: '.$reldir . "/" . $_GET['file'], 'Deleted');
 			}
 		}
 		else
