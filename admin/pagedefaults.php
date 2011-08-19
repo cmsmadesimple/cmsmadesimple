@@ -153,8 +153,6 @@ $smarty->assign('input_additional_editors',$tmp[1]);
 $smarty->assign('CMS_SECURE_PARAM_NAME',CMS_SECURE_PARAM_NAME);
 $smarty->assign('CMS_KEY',$_SESSION[CMS_USER_KEY]);
 echo $smarty->fetch('pagedefaults.tpl');
-return;
-
 include_once('footer.php');
 
 // EOF
