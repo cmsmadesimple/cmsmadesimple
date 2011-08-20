@@ -546,8 +546,9 @@ class ContentOperations
 			$last_modified = cms_utils::get_app_data('last_content_modification');
 			if( !$last_modified );
 			{
-				$query = 'SELECT UNIX_TIMESTAMP(modified_date) FROM '.cms_db_prefix().'content ORDER BY modified_date DESC LIMIT 1';
-				$last_modified = $db->GetOne($query);
+				$query = 'SELECT modified_date FROM '.cms_db_prefix().'content ORDER BY modified_date DESC';
+				$val = $db->GetOne($query);
+				$last_modified = $db->UnixTimeStamp($val);
 				cms_utils::set_app_data('last_content_modification',$last_modified);
 			}
 			if ($last_modified > 0 && $last_modified < filemtime($cachefilename))
