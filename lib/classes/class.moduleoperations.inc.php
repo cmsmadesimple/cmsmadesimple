@@ -947,11 +947,14 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   {
 	  $result = array();
 	  $info = $this->_get_module_info();
-	  foreach( $info as $name => $rec )
+	  if( is_array($info) )
 	  {
-		  if( $rec['status'] != 'installed' ) continue;
-		  if( !$rec['active'] && $include_all == FALSE ) continue;
-		  $result[] = $name;
+		  foreach( $info as $name => $rec )
+		  {
+			  if( $rec['status'] != 'installed' ) continue;
+			  if( !$rec['active'] && $include_all == FALSE ) continue;
+			  $result[] = $name;
+		  }
 	  }
 	  return $result;
   }
