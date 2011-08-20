@@ -82,7 +82,7 @@ class CmsRegularTaskHandler
 		if (!$modules) return;
 		foreach( $modules as $one )
 		{
-			if( !is_object($one) ) continue; // shouldn't happen, but meh.
+			if( !is_object($one) ) $one = cms_utils::get_module($one);
 			if( !method_exists($one,'get_tasks') ) continue;
 			
 			$tasks = $one->get_tasks();
