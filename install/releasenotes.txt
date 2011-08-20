@@ -1,3 +1,9 @@
+--------------------------------
+CMSMS Version 1.10 - Martinique
+--------------------------------
+
+Release notes will go here when 1.10 is released.
+
 ------------------------------
 CMSMS Version 1.9 - Bora Bora
 ------------------------------
