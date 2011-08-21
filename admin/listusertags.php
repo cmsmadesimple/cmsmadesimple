@@ -40,6 +40,18 @@ if (!$access) {
 $smarty = cmsms()->GetSmarty();
 include_once("header.php");
 
+function listudt_summarize($str,$numwords,$ets='...')
+{
+  $stringarray = explode(" ",$str);
+  if( $numwords >= count($stringarray) )
+    {
+      return $str;
+    }
+  $tmp = array_slice($stringarray,0,$numwords);
+  $tmp = implode(' ',$tmp).$ets;
+  return $tmp;
+}
+
 if (FALSE == empty($_GET['message'])) {
     echo $themeObject->ShowMessage(lang($_GET['message']));
 }
@@ -51,6 +63,7 @@ echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 echo '<thead>';
 echo "<tr>\n";
 echo "<th>".lang('name')."</th>\n";
+echo "<th>".lang('description')."</th>\n";
 echo "<th class=\"pageicon\">&nbsp;</th>\n";
 echo "<th class=\"pageicon\">&nbsp;</th>\n";
 echo "<th class=\"pageicon\">&nbsp;</th>\n";
@@ -65,8 +78,11 @@ if( count($tags) )
   {
     foreach( $tags as $oneplugin => $label  )
       {
+	$tag = UserTagOperations::get_instance()->GetUserTag($oneplugin);
+
 	echo "<tr class=\"".$curclass."\">\n";
 	echo "<td><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">$label</a></td>\n";
+	echo "<td>".listudt_summarize($tag['description'],20)."</td>\n";
 	echo "<td class=\"icons_wide\"><a href=\"runuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
 	echo $themeObject->DisplayImage('icons/system/run.gif', lang('run_udt'), '', '', 'systemicon')."</a></td>\n";
 	echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
