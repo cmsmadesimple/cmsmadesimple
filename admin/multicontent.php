@@ -192,7 +192,7 @@ function toggleexpand($contentid, $collapse = false)
 
 function DoContent(&$list, &$node, $checkdefault = true, $checkchildren = true)
 {
-	$content = $node->GetContent(true);
+  $content = $node->GetContent(false,true,true);
 	if (isset($content))
 	{
 		if (!$checkdefault || ($checkdefault && !$content->DefaultContent()))
@@ -257,7 +257,9 @@ else
 				  DoContent($nodelist, $node, true, false);
 				else if ($action == 'active' || $action == 'settemplate' || $action == 'setcachable' || $action == 'setnoncachable'
                                          || $action == 'showinmenu' || $action == 'hidefrommenu' || $action == 'secure' || $action == 'insecure')
-					DoContent($nodelist, $node, false, false);
+				  {
+				    DoContent($nodelist, $node, false, false);
+				  }
 				else if ($action == 'delete')
 				  {
 				    $nodelist[] = $node;
