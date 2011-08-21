@@ -494,7 +494,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called from within the constructor, ONLY for admin requests.
+	 * Called from within the constructor, ONLY for frontend requests.
          * This method should be overridden to call the CreaeteParameter
 	 * method for each parameter that the module understands.
 	 *
@@ -527,6 +527,7 @@ class CMSModule
 	 */
 	protected function InitializeFrontend()
 	{
+	  $this->SetParameters(); // for backwards compatibility purposes. may be removed.
 	}
 
 
@@ -542,6 +543,7 @@ class CMSModule
 	 */
 	protected function InitializeAdmin()
 	{
+	  $this->SetParameters(); // for backwards compatibility purposes. may be removed.
 	}
 
 	
