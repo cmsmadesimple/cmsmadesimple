@@ -254,7 +254,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		$stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
 	}
 
-	if( isset($params['nolinks']) && endswith($styleseet,',') )
+	if( isset($params['nolinks']) && endswith($stylesheet,',') )
 	{
 		$stylesheet = substr($stylesheet,0,strlen($stylesheet)-1);
 	}
