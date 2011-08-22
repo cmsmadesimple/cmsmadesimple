@@ -303,7 +303,7 @@ if ($access)
 
 if ($action == "showmoduleabout")
 {
-  $modinstance = cms_utils::get_module($module);
+  $modinstance = ModuleOperations::get_instance()->get_module_instance($module,'',TRUE);
   if( is_object($modinstance) )
     {
       echo '<div class="pagecontainer">';
@@ -315,7 +315,7 @@ if ($action == "showmoduleabout")
 }
 else if ($action == "showmodulehelp")
 {
-  $modinstance = cms_utils::get_module($module);
+  $modinstance = ModuleOperations::get_instance()->get_module_instance($module,'',TRUE);
   if( is_object($modinstance) )
     {
       $orig_lang =  cms_admin_current_language();
@@ -403,7 +403,7 @@ else if ($action == 'missingdeps')
 	echo '</thead>';
 	echo '<tbody>';
 
-	$modinstance = cms_utils::get_module($module);
+	$modinstance = $modops->get_module_instance($module,'',true);
 	if( is_object($modinstance) )
 	{
 		if (count($modinstance->GetDependencies()) > 0) #Check for any deps
@@ -418,7 +418,7 @@ else if ($action == 'missingdeps')
 				$havedep = false;
 
 				$newmod = cms_utils::get_module($onedepkey);
-				if( version_compare($newmod->GetVersion(),$onedepvalue) > -1 )
+				if( is_object($newmod) && version_compare($newmod->GetVersion(),$onedepvalue) > -1 )
 				{
 					$havedep = true;
 				}

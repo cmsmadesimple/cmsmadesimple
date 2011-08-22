@@ -13,10 +13,63 @@
 
 // $plugins
 
+function smarty_core_get_module_plugin($_name,&$smarty)
+{
+  $fn = TMP_CACHE_LOCATION.'/modulefunctions.cache.dat';
+  $found = FALSE;
+  $data = array();
+  if( !file_exists($fn) )
+    {
+      // build the cache list
+      $loaded = array();
+      $orig = array_keys($smarty->_plugins['function']);
+      $installed = ModuleOperations::get_instance()->GetInstalledModules();
+      $nloaded = ModuleOperations::get_instance()->GetInstalledModules();
+      foreach( $installed as $module )
+	{
+	  if( in_array($module,$nloaded) ) $nloaded[] = $module;
+	  cms_utils::get_module($module);
+// 	  if( in_array('CGCalendar',array_keys($smarty->_plugins['function'])) )
+// 	    {
+// 	      debug_display($smarty->_plugins['function']['CGCalendar']); die();
+// 	    }
+	  $tmp = array_keys($smarty->_plugins['function']);
+	  $tmp2 = array_diff($tmp,$orig);
+	  foreach( $tmp2 as $one )
+	    {
+	      $data[$one] = $module;
+	    }
+	  $orig = $tmp;
+	}
+
+      foreach( $nloaded as $module )
+	{
+	  ModuleOperations::get_instance()->unload_module($module);
+	}
+      
+      file_put_contents($fn,serialize($data));
+    }
+  else
+    {
+      $data = unserialize(file_get_contents($fn));
+    }
+
+  if( $found == FALSE && isset($data[$_name]) )
+    {
+      // we know which module this plugin is associated with.
+      // so make sure it's loaded.
+      cms_utils::get_module($data[$_name]);
+      return TRUE;
+    }
+  return FALSE;
+}
+
+
 function smarty_core_load_plugins($params, &$smarty)
 {
     foreach ($params['plugins'] as $_plugin_info) {
 
+      $_noadd = FALSE;
       $_cachable = TRUE;
 
         list($_type, $_name, $_tpl_file, $_tpl_line, $_delayed_loading) = $_plugin_info;
@@ -68,7 +121,9 @@ function smarty_core_load_plugins($params, &$smarty)
          * do not fall back on any other method.
          */
 
-        if ($_found) {
+        if ($_found) 
+	  {
+	    // its a plugin
             include_once $_plugin_file;
 
             $_plugin_func = 'smarty_' . $_type . '_' . $_name;
@@ -82,10 +137,20 @@ function smarty_core_load_plugins($params, &$smarty)
 	        // CMS Made Simple plugins start with smarty_cms instead of just smarty
                 $_plugin_func = $_cms_plugin_func;
             }
-        }
-	else if ( ($udt_name = UserTagOperations::get_instance()->UserTagExists($_name)) ) 
+	  }
+	if( !$_found )
+	  {
+	    // is it a module plugin?
+	    $_found = smarty_core_get_module_plugin($_name,$smarty);
+	    if( $_found ) 
+	      {
+		$_noadd = TRUE;
+	      }
+	  }
+	if ( !$_found && UserTagOperations::get_instance()->UserTagExists($_name) )
 	{
-	  $_cachable = FALSE;
+	  // see if it's a UDT
+	  $_cachable = FALSE; // UDTs are never cachable.
 	  $_plugin_func = UserTagOperations::get_instance()->CreateTagFunction($_name);
 	  $_found = true;
 	}
@@ -127,7 +192,10 @@ function smarty_core_load_plugins($params, &$smarty)
         }
 
         if ($_found) {
-            $smarty->_plugins[$_type][$_name] = array($_plugin_func, $_tpl_file, $_tpl_line, true, $_cachable);
+	  if( !$_noadd )
+	    {
+	      $smarty->_plugins[$_type][$_name] = array($_plugin_func, $_tpl_file, $_tpl_line, true, $_cachable);
+	    }
         } else {
             // output error
             $smarty->_trigger_fatal_error('[plugin] ' . $_message, $_tpl_file, $_tpl_line, __FILE__, __LINE__);
