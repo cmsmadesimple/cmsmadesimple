@@ -50,6 +50,15 @@ class CMS_Compiler extends Smarty_Compiler {
     $found = false;
     $have_function = true;
 
+    {
+      $tmp = array('function',$tag_command,$this->_current_file,$this->_current_line_no,false);
+      $tmp = array('plugins'=>array($tmp));
+      require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
+      smarty_core_load_plugins($tmp,$this);
+      $found = true;
+    }
+
+    if(0){
     /*
      * First we check if the custom function has already been registered
      * or loaded from a plugin file.
@@ -81,7 +90,7 @@ class CMS_Compiler extends Smarty_Compiler {
     /*
      * Lets' see if this is a UDT.
      */
-    else if ( ($udt_name = UserTagOperations::get_instance()->UserTagExists($tag_command)) ) {
+    else if ( UserTagOperations::get_instance()->UserTagExists($tag_command) ) {
       $found = true;
 
       $plugin_func = UserTagOperations::get_instance()->CreateTagFunction($tag_command);
@@ -104,7 +113,7 @@ class CMS_Compiler extends Smarty_Compiler {
 //       $this->_syntax_error($message, E_USER_WARNING, __FILE__, __LINE__);
 //       return true;
     }
-
+  } // commented out
 
     /* declare plugin to be loaded on display of the template that
      we compile right now */
@@ -116,7 +125,7 @@ class CMS_Compiler extends Smarty_Compiler {
     $_cacheable_state = $this->_push_cacheable_state('function', $tag_command);
     $attrs = $this->_parse_attrs($tag_args);
     $arg_list = $this->_compile_arg_list('function', $tag_command, $attrs, $_cache_attrs );
-    
+
     $output = $this->_compile_plugin_call('function', $tag_command).'(array('.implode(',', $arg_list)."), \$this)";
     if($tag_modifier != '') {
       $this->_parse_modifiers($output, $tag_modifier);

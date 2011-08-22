@@ -15,46 +15,47 @@
 
 function smarty_core_get_module_plugin($_name,&$smarty)
 {
+  static $data = array();
   $fn = TMP_CACHE_LOCATION.'/modulefunctions.cache.dat';
-  $found = FALSE;
-  $data = array();
-  if( !file_exists($fn) )
+  if( !count($data) )
     {
-      // build the cache list
-      $loaded = array();
-      $orig = array_keys($smarty->_plugins['function']);
-      $installed = ModuleOperations::get_instance()->GetInstalledModules();
-      $nloaded = ModuleOperations::get_instance()->GetInstalledModules();
-      foreach( $installed as $module )
+      if( !file_exists($fn) )
 	{
-	  if( in_array($module,$nloaded) ) $nloaded[] = $module;
-	  cms_utils::get_module($module);
-// 	  if( in_array('CGCalendar',array_keys($smarty->_plugins['function'])) )
-// 	    {
-// 	      debug_display($smarty->_plugins['function']['CGCalendar']); die();
-// 	    }
-	  $tmp = array_keys($smarty->_plugins['function']);
-	  $tmp2 = array_diff($tmp,$orig);
-	  foreach( $tmp2 as $one )
+	  // build the cache list
+	  $loaded = array();
+	  $orig = array_keys($smarty->_plugins['function']);
+	  $installed = ModuleOperations::get_instance()->GetInstalledModules();
+	  $preloaded = ModuleOperations::get_instance()->GetLoadedModules();
+	  foreach( $installed as $module )
 	    {
-	      $data[$one] = $module;
+	      if( !in_array($module,$preloaded) ) $loaded[] = $module;
+	      cms_utils::get_module($module);
+	      $tmp = array_keys($smarty->_plugins['function']);
+	      $tmp2 = array_diff($tmp,$orig);
+	      foreach( $tmp2 as $one )
+		{
+		  $data[$one] = $module;
+		}
+	      $orig = $tmp;
 	    }
-	  $orig = $tmp;
+	  
+	  foreach( $loaded as $module )
+	    {
+	      ModuleOperations::get_instance()->unload_module($module);
+	    }
+	  
+	  if( count($data) )
+	    {
+	      file_put_contents($fn,serialize($data));
+	    }
 	}
-
-      foreach( $nloaded as $module )
+      else
 	{
-	  ModuleOperations::get_instance()->unload_module($module);
+	  $data = unserialize(file_get_contents($fn));
 	}
-      
-      file_put_contents($fn,serialize($data));
-    }
-  else
-    {
-      $data = unserialize(file_get_contents($fn));
     }
 
-  if( $found == FALSE && isset($data[$_name]) )
+  if( isset($data[$_name]) )
     {
       // we know which module this plugin is associated with.
       // so make sure it's loaded.
@@ -68,7 +69,7 @@ function smarty_core_get_module_plugin($_name,&$smarty)
 function smarty_core_load_plugins($params, &$smarty)
 {
     foreach ($params['plugins'] as $_plugin_info) {
-
+      
       $_noadd = FALSE;
       $_cachable = TRUE;
 
