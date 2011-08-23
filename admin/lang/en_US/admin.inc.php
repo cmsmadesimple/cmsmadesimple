@@ -610,11 +610,11 @@ $lang['admin']['help_function_recently_updated'] = <<<EOT
 EOT;
 $lang['admin']['help_function_print'] = <<<EOT
 	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the Printing module to make the tag syntax easier. 
-	Instead of having to use <code>{cms_module module='Printing'}</code> you can now just use <code>{print}</code> to insert the module on pages and templates.
+	<p>This is actually just a wrapper tag for the CMSPrinting module to make the tag syntax easier. 
+	Instead of having to use <code>{cms_module module='CMSPrinting'}</code> you can now just use <code>{print}</code> to insert the module on pages and templates.
 	</p>
 	<h3>How do I use it?</h3>
-	<p>Just put <code>{print}</code> on a page or in a template. For help about the Printing module, what parameters it takes etc., please refer to the Printing module help.</p>
+	<p>Just put <code>{print}</code> on a page or in a template. For help about the CMSPrinting module, what parameters it takes etc., please refer to the CMSPrinting module help.</p>
 EOT;
 $lang['admin']['login_info_title'] = 'Information';
 $lang['admin']['login_info'] = 'For the Admin console to work properly';
