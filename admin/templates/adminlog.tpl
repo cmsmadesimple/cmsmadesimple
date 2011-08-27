@@ -14,9 +14,7 @@
     <div id="adminlog_filters" style="display: {$filterdisplay}">
       <fieldset>
         <legend>{$langfilters}</legend>
-        <form id="adminlog_filter" method="post" action="adminlog.php">
-          <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
-
+        <form id="adminlog_filter" method="post" action="adminlog.php?{$SECURE_PARAM_NAME}={$CMS_USER_KEY}">
           <div class="pageoverflow">
   <p class="pagetext">{$langfilteruser}</p>
   <p class="pageinput"><input type="text" name="filteruser" value="{$filteruservalue}"/></p>
