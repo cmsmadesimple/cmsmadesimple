@@ -42,6 +42,7 @@ include_once("header.php");
 
 function listudt_summarize($str,$numwords,$ets='...')
 {
+  $str = strip_tags($str);
   $stringarray = explode(" ",$str);
   if( $numwords >= count($stringarray) )
     {

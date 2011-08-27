@@ -27,6 +27,7 @@ check_login();
 
 function listgcb_summarize($str,$numwords,$ets='...')
 {
+  $str = strip_tags($str);
   $stringarray = explode(" ",$str);
   if( $numwords >= count($stringarray) )
     {
