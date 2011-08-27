@@ -304,7 +304,7 @@
 </div>
 
 <fieldset>
-<legend>{'browser_cache_settings'|lang}&nbsp;</legend>
+<legend>{'browser_cache_settings'|lang}:&nbsp;</legend>
 <div class="pageoverflow">
   <p class="pagetext">{'allow_browser_cache'|lang}:</p>
   <p class="pageinput">
@@ -318,7 +318,7 @@
 </fieldset>
 
 <fieldset>
-<legend>{'server_cache_settings'|lang}&nbsp;</legend>
+<legend>{'server_cache_settings'|lang}:&nbsp;</legend>
 <div class="pageoverflow">
   <p class="pagetext">{$lang_clearcache}:</p>
   <p class="pageinput">

@@ -1,9 +1,9 @@
 <?php
 $lang['admin']['info_pagedefaults'] = 'This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages';
 $lang['admin']['default_contenttype'] = 'Default Content Type';
-$lang['admin']['info_default_contenttype'] = 'Applicable when adding new content objects, this control specifies the type that is selected by default.  Please ensure that the selected item is not one of the &quot;disallowed types&quot; below.';
+$lang['admin']['info_default_contenttype'] = 'Applicable when adding new content objects, this control specifies the type that is selected by default.  Please ensure that the selected item is not one of the &quot;disallowed types&quot;.';
 $lang['admin']['error_contenttype'] = 'The content type associated with this page is invalid or not permitted';
-$lang['admin']['info_disallowed_contenttypes'] = 'Select which content types to remove from the content type dropdown when editing or adding content.  Use CTRL+Click to select, unselect items.  Having no selected items will indicate that all content types are allowed';
+$lang['admin']['info_disallowed_contenttypes'] = 'Select which content types to remove from the content type dropdown when editing or adding content.  Use CTRL+Click to select, unselect items.  Having no selected items will indicate that all content types are allowed. <em>(applies to all users)</em>';
 $lang['admin']['disallowed_contenttypes'] = 'Content Types that are not Allowed';
 $lang['admin']['search_module'] = 'Search module';
 $lang['admin']['info_search_module'] = 'Select the module that should be used to index words for searching, and will provide the site search capabilities';
@@ -1344,7 +1344,7 @@ $lang['admin']['send'] = 'Send';
 $lang['admin']['setallcontent'] = 'Set All Pages';
 $lang['admin']['setallcontentconfirm'] = 'Are you sure you want to set all pages to use this template?';
 $lang['admin']['showinmenu'] = 'Show in Menu';
-$lang['admin']['use_name'] = 'Use page name in parent dropdown else use the menu text';
+$lang['admin']['use_name'] = 'In the parent page dropdown, show the page title instead of the menu text';
 $lang['admin']['showsite'] = 'Show Site';
 $lang['admin']['sitedownmessage'] = 'Site Down Message';
 $lang['admin']['siteprefs'] = 'Global Settings';
