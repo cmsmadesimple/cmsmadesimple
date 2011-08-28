@@ -121,7 +121,7 @@ if ($access)
 
 				// put mention into the admin log
 				audit($onetemplate->id, 'HTML-Template: '.$onetemplate->name, 'Copied');
-				redirect($from.'&message='.lang('templatecopied'));
+				redirect($from.'&messagekey=templatecopied');
 				return;
 			}
 			else
