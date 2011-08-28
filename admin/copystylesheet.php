@@ -78,7 +78,7 @@ if ($access)
 			{
 				// put mention into the admin log
 				audit($onestylesheet->id, 'Stylesheet: '.$onestylesheet->name, 'Copied');
-				redirect("listcss.php".$urlext.'&message='.lang('stylesheetcopied'));
+				redirect("listcss.php".$urlext.'&messagkeye=stylesheetcopied');
 				return;
 			}
 			else

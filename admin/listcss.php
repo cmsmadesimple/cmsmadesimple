@@ -60,6 +60,10 @@ if (isset($_GET["message"])) {
 	$message = preg_replace('/\</','',$_GET['message']);
 	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
+else if( isset($_GET['messagekey']) ) {
+  $message = lang($_GET['messagekey']);
+  echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
+}
 
 ?>
 <form action="multistylesheet.php<?php echo $urlext ?>" method="post">
