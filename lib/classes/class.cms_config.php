@@ -235,7 +235,7 @@ class cms_config implements ArrayAccess
 	return '';
 
       case 'max_upload_size':
-      case 'uplaod_max_filesize':
+      case 'upload_max_filesize':
 	return $this->get_upload_size();
 
       case 'default_upload_permission':
