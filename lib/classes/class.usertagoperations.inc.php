@@ -256,7 +256,7 @@ final class UserTagOperations
 		$functionname = 'cms_user_tag_'.$name;
 		if( !function_exists($functionname) )
 		{
-			$code = 'function '.$functionname.'($psrams,&$smarty) {'.$row['code']."\n}";
+			$code = 'function '.$functionname.'($params,&$smarty) {'.$row['code']."\n}";
 			@eval($code);
 		}
 		return $functionname;
