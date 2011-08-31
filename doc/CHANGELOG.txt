@@ -30,7 +30,7 @@ Core - Feature requests:
   - #5964 Addition IP Address to User Login Failed in Admin Log
   - #6301 Increase security with better session cookies
 
-Core - General
+Core - General:
   - Improved interface in the system information page
   - Implements module lazy loading on admin and frontend
   - Admin navigation is cached for each user
@@ -77,12 +77,12 @@ Core - General
   - more
 
 Core Installer:
-  - Improved look and feel (thamks uniqu3)
+  - Improved look and feel (thanks uniqu3)
   - Attempts to implement timezone detection
   - Better handling of module installation
 
 MenuManager:
-  - Shrunkt he code as much as possible.
+  - Shrunk the code as much as possible.
 
 ModuleManager:
   - Significant rewrite to improve performance and reduce memory footprint
@@ -91,12 +91,23 @@ ModuleManager:
   - Now uses REST API as opposed to SOAP.
  
 News:
+  - #5884 node.depth not calculated properly
   - #6215 custom field definitions checkboxes get unchecked  
   - Module minization
   - Adds advanced preview capabilities.
   
-   
 
+Version 1.9.4.3 - Faanui
+-----------------------------
+News:
+  - Fixes issue with editarticle not performing a permission check.
+
+  
+Version 1.9.4.2 - Faanui
+-----------------------------  
+News: 
+  - Fixes SQL injection vulnerability.
+  
   
 Version 1.9.4.1 - Faanui
 -----------------------------
@@ -106,7 +117,7 @@ Module Manager:
   
 Version 1.9.4 - Faanui
 -----------------------------
-Core - Bug Reports
+Core - Bug Reports:
   - #6083 Imagemanager Don't show uploaded files
   - #6094 Page alias update old-value after copy-page
   - #6096 Content is not showing when changing type back to content
