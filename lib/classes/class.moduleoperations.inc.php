@@ -409,7 +409,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
 	if( !$brief )
 	{
-		audit('','Module', lang_en('expanded_xml',$moduledetails['name'], $moduledetails['version']));
+		audit('','Module', 'Expanded module: '.$moduledetails['name'].' version '.$moduledetails['version']);
 	}
 
 	return $moduledetails;
@@ -796,7 +796,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 		  $dbr = $db->Execute($query,array($module_obj->GetVersion(),$lazyload_fe,$lazyload_admin,$module_obj->GetName()));
 
 		  $info[$module_obj->GetName()]['version'] = $module_obj->GetVersion();
-		  audit('','Module', lang_en('upgraded_mod',$module_obj->GetName(),$dbversion,$module_obj->GetVersion()));
+		  audit('','Module', 'Upgraded module '.$module_obj->GetName().' to version '.$module_obj->GetVersion());
 		  Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module_obj->GetName(), 'oldversion' => $dbversion, 'newversion' => $module_obj->GetVersion()));
 		  cmsms()->clear_cached_files();
 		  return TRUE;
@@ -864,7 +864,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 			  $gCms->clear_cached_files();
 
 			  Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
-			  audit('','Module',lang_en('uninstalled_mod',$module));
+			  audit('','Module','Uninstalled module '.$module);
 		  }
 	  else
 		  {
