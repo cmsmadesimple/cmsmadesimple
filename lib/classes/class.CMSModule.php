@@ -274,7 +274,7 @@ class CMSModule
 	 * @final
 	 * @return mixed module call output.
 	 */
-	function function_plugin($params,&$smarty)
+	final public function function_plugin($params,&$smarty)
 	{
 	  $params['module'] = $this->GetName();
 	  return cms_module_plugin($params,$smarty);
@@ -286,11 +286,12 @@ class CMSModule
 	 * from the module constructor, or from the SetParameters
 	 * method.
 	 *
+	 * Note: 
 	 * @final
 	 * @return void
 	 * @see SetParameters
 	 */
-	function RegisterModulePlugin()
+	final public function RegisterModulePlugin()
 	{
 	  $gCms = cmsms();
 
@@ -324,7 +325,7 @@ class CMSModule
 	 * @return string The help page HTML text.
 	 * @final
 	 */
-	function GetHelpPage()
+	final public function GetHelpPage()
 	{
 		$this->LoadMiscMethods();
 		return cms_module_GetHelpPage($this);
@@ -338,7 +339,7 @@ class CMSModule
 	 */
 	function GetName()
 	{
-		return 'unset';
+	  return get_class();
 	}
 
 	/**
@@ -347,7 +348,7 @@ class CMSModule
 	 * @final
 	 * @return string The full path to the module directory.
 	 */
-	function GetModulePath()
+	final public function GetModulePath()
 	{
 		if (is_subclass_of($this, 'CMSModule'))
 		{
@@ -366,7 +367,7 @@ class CMSModule
 	 * @param boolean Optional generate an URL using HTTPS path
 	 * @return string The full path to the module directory.
 	 */
-	function GetModuleURLPath($use_ssl=false)
+	final public function GetModuleURLPath($use_ssl=false)
 	{
 		return ($use_ssl?$this->config['ssl_url']:$this->config['root_url']) . '/modules/' . $this->GetName();
 	}
@@ -468,7 +469,7 @@ class CMSModule
 	 * @param array Defaults for parameters that might not be included in the url
 	 * @return void
 	 */
-	function RegisterRoute($routeregex, $defaults = array())
+	final public function RegisterRoute($routeregex, $defaults = array())
 	{
 		$route = new CmsRoute($routeregex,$this->GetName(),$defaults);
 		cms_route_manager::register($route);
@@ -483,7 +484,7 @@ class CMSModule
 	 * @internal
 	 * @return array
 	 */
-	function GetParameters()
+	final public function GetParameters()
 	{
 	  if( count($this->params) == 1 && $this->params[0]['name'] == 'lang' )
 	    {
@@ -494,12 +495,13 @@ class CMSModule
 	}
 
 	/**
-	 * Called from within the constructor, ONLY for frontend requests.
-         * This method should be overridden to call the CreaeteParameter
+	 * Called from within the constructor,  This method should be overridden to call the CreaeteParameter
 	 * method for each parameter that the module understands.
 	 *
-	 * Note: As of Version 1.10 this module should not be used to create routes, 
-	 * for the SetParamterType methods.
+	 * Note: In past versions of CMSMS This method was used for both admin and frontend requests to
+         * register routes, and create parameters, and register a module plugin, etc.  As of version 1.10
+	 * this method is deprecated, and the appropriate functions are InitializeFrontend() and InitializeAdmin()
+	 * This method is scheduled for removal in version 1.11
 	 * 
 	 * @abstract
 	 * @see CreateParameter
@@ -556,7 +558,7 @@ class CMSModule
 	 * @final
 	 * @return void
 	 */
-	function RestrictUnknownParams($flag = true)
+	final public function RestrictUnknownParams($flag = true)
 	{
 	  $this->restrict_unknown_params = $flag;
 	}
@@ -579,7 +581,7 @@ class CMSModule
 	 * @param define Parameter type;
 	 * @return void;
 	 */
-	function SetParameterType($param, $type)
+	final public function SetParameterType($param, $type)
 	{
 	  switch($type)
 	    {
@@ -612,7 +614,7 @@ class CMSModule
 	 * @param boolean Flag indicating wether this parameter is optional or required.
 	 * @return void;
 	 */
-	function CreateParameter($param, $defaultval='', $helpstring='', $optional=true)
+	final public function CreateParameter($param, $defaultval='', $helpstring='', $optional=true)
 	{
 		//was: array_unshift(
 		array_push($this->params, array(
@@ -706,7 +708,7 @@ class CMSModule
 	 * @deprecated
 	 * @return array The config hash.
 	 */
-	function GetConfig()
+	final public function GetConfig()
 	{
 	  return cmsms()->GetConfig();
 	}
@@ -718,7 +720,7 @@ class CMSModule
 	 * @deprecated
 	 * @return object Adodb Database object.
 	 */
-	function & GetDb()
+	final public function & GetDb()
 	{
 	  return cmsms()->GetDb();
 	}
@@ -729,7 +731,7 @@ class CMSModule
 	 * @final
 	 * @return array a hash of CMSMS temporary variables.
 	 */
-	function & GetVariables()
+	final public function & GetVariables()
 	{
 	  return cmsms()->variables;
 	}
@@ -806,7 +808,7 @@ class CMSModule
 	 * @param string A module action name.
 	 * @return void
 	 */
-	function RegisterBulkContentFunction($label,$action)
+	final public function RegisterBulkContentFunction($label,$action)
 	{
 	  bulkcontentoperations::register_function($label,$action,$this->GetName());
 	}
@@ -843,7 +845,7 @@ class CMSModule
 	 * @param string A friendly name for this content type.
 	 * @return void
 	 */
-	function RegisterContentType($name, $file, $friendlyname = '')
+	final public function RegisterContentType($name, $file, $friendlyname = '')
 	{
 	  $contentops = cmsms()->GetContentOperations();
 	  $types = $contentops->ListContentTypes();
@@ -1093,7 +1095,7 @@ class CMSModule
 	 * @final
 	 * @return boolean
 	 */
-	function CheckForDependents()
+	final public function CheckForDependents()
 	{
 	  $gCms = cmsms();
 		$db = $gCms->GetDb();
@@ -1117,7 +1119,7 @@ class CMSModule
 	 * @final
 	 * @return string XML Text
 	 */
-	function CreateXMLPackage( &$message, &$filecount )
+	final public function CreateXMLPackage( &$message, &$filecount )
 	{
 	  $gCms = cmsms();
 		$modops = $gCms->GetModuleOperations();
@@ -1637,6 +1639,7 @@ class CMSModule
    * @param string The text to be shown as the link, default to a simple question mark
    * @param string Forces another width of the popupbox than the one set in admin css
    * @param string An alternative classname for the a-link of the tooltip
+   * @deprecated
    * @return string
    */
   function CreateTooltip($helptext, $linktext="?", $forcewidth="", $classname="admin-tooltip admin-tooltip-box", $href="")
@@ -1660,6 +1663,7 @@ class CMSModule
    * @param string The text that will have to be clicked to follow the link
    * @param string The helptext to be shown as tooltip-popup
    * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
+   * @deprecated
    * @return string
    */
   function CreateTooltipLink($id, $action, $returnid, $contents, $tooltiptext, $params=array())
@@ -2208,7 +2212,7 @@ class CMSModule
 	 * @param associative array further params to get more detailed info about the capabilities. Should be syncronized with other modules of same type
 	 * @return array
 	 */
-	function GetModulesWithCapability($capability, $params=array())
+	final public function GetModulesWithCapability($capability, $params=array())
 	{
 	  $result=array();
 	  $tmp = ModuleOperations::get_modules_with_capability($capability,$params);
@@ -2251,7 +2255,7 @@ class CMSModule
 	 *		  These params use the vsprintf command and it's style of replacement.
 	 * @return string
 	 */
-	function Lang()
+	final public function Lang()
 	{
 		$this->LoadLangMethods();
 
@@ -2276,7 +2280,7 @@ class CMSModule
 	 * @param string module name.  If empty the current module name is used.
 	 * @return array
 	 */
-	function ListTemplates($modulename = '')
+	final public function ListTemplates($modulename = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_ListTemplates($this, $modulename);
@@ -2291,7 +2295,7 @@ class CMSModule
 	 * @param string module name.  If empty the current module name is used.
 	 * @return string
 	 */
-	function GetTemplate($tpl_name, $modulename = '')
+	final public function GetTemplate($tpl_name, $modulename = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_GetTemplate($this, $tpl_name, $modulename);
@@ -2305,7 +2309,7 @@ class CMSModule
 	 * @param string template name
 	 * @return string
 	 */
-	function GetTemplateFromFile($template_name)
+	final public function GetTemplateFromFile($template_name)
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_GetTemplateFromFile($this, $template_name);
@@ -2321,7 +2325,7 @@ class CMSModule
 	 * @param string The module name, if empty the current module name is used.
 	 * @return boolean
 	 */
-	function SetTemplate($tpl_name, $content, $modulename = '')
+	final public function SetTemplate($tpl_name, $content, $modulename = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_SetTemplate($this, $tpl_name, $content, $modulename);
@@ -2335,7 +2339,7 @@ class CMSModule
 	 * @param string The module name, if empty the current module name is used.
 	 * @return boolean
 	 */
-	function DeleteTemplate($tpl_name = '', $modulename = '')
+	final public function DeleteTemplate($tpl_name = '', $modulename = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_DeleteTemplate($this, $tpl_name, $modulename);
@@ -2347,7 +2351,7 @@ class CMSModule
 	 * @final
 	 * @internal
 	 */
-	function IsFileTemplateCached($tpl_name, $designation = '', $timestamp = '', $cacheid = '')
+	final public function IsFileTemplateCached($tpl_name, $designation = '', $timestamp = '', $cacheid = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_IsFileTemplateCached($this, $tpl_name, $designation, $timestamp, $cacheid);
@@ -2363,7 +2367,7 @@ class CMSModule
 	 * @param string  Unique cache flag
 	 * @return string
 	 */
-	function ProcessTemplate($tpl_name, $designation = '', $cache = false, $cacheid = '')
+	final public function ProcessTemplate($tpl_name, $designation = '', $cache = false, $cacheid = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_ProcessTemplate($this, $tpl_name, $designation, $cache = false, $cacheid);
@@ -2375,7 +2379,7 @@ class CMSModule
 	 * @final
 	 * @internal
 	 */
-	function IsDatabaseTemplateCached($tpl_name, $designation = '', $timestamp = '')
+	final public function IsDatabaseTemplateCached($tpl_name, $designation = '', $timestamp = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_IsDatabaseTemplateCached($this, $tpl_name, $designation, $timestamp);
@@ -2389,7 +2393,7 @@ class CMSModule
 	 * @param data Input template
 	 * @return string
 	 */
-	function ProcessTemplateFromData( $data )
+	final public function ProcessTemplateFromData( $data )
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_ProcessTemplateFromData($this, $data);
@@ -2405,7 +2409,7 @@ class CMSModule
 	 * @param string (optional) module name, if empty the current module is used.
 	 * @return string
 	 */ 
-	function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false, $modulename = '')
+	final public function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false, $modulename = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_ProcessTemplateFromDatabase($this, $tpl_name, $designation, $cache, $modulename);
@@ -2425,7 +2429,7 @@ class CMSModule
 	 * @final
 	 * @return array
 	 */
-	function ListUserTags()
+	final public function ListUserTags()
 	{
 	  $gCms = cmsms();
 	  $usertagops = $gCms->GetUserTagOperations();
@@ -2440,7 +2444,7 @@ class CMSModule
 	 * @param array  Parameters for the user defined tag.
 	 * @return array
 	 */
-	function CallUserTag($name, $params = array())
+	final public function CallUserTag($name, $params = array())
 	{
 	  $gCms = cmsms();
 	  $usertagops = $gCms->GetUserTagOperations();
@@ -2592,7 +2596,7 @@ class CMSModule
 	 * @param string action name
 	 * @return void
 	 */
-	function Audit($itemid, $itemname, $action)
+	final public function Audit($itemid, $itemname, $action)
 	{
 		audit($itemid,$itemname,$action);
 	}
@@ -2670,7 +2674,7 @@ class CMSModule
 	 * @param string Description of the permission
 	 * @return void
 	 */
-	function CreatePermission($permission_name, $permission_text)
+	final public function CreatePermission($permission_name, $permission_text)
 	{
 	  $gCms = cmsms();
 		$db = $gCms->GetDB();
@@ -2694,7 +2698,7 @@ class CMSModule
 	 * @param string The name of the permission to check against the current user
 	 * @return boolean
 	 */
-	function CheckPermission($permission_name)
+	final public function CheckPermission($permission_name)
 	{
 		$userid = get_userid(false);
 		return check_permission($userid, $permission_name);
@@ -2708,7 +2712,7 @@ class CMSModule
 	 * @param string The name of the permission to remove
 	 * @return void
 	 */
-	function RemovePermission($permission_name)
+	final public function RemovePermission($permission_name)
 	{
 	  cms_mapi_remove_permission($permission_name);
 	}
@@ -2727,7 +2731,7 @@ class CMSModule
 	 * @param string The default value, just in case it doesn't exist
 	 * @return string
 	 */
-	function GetPreference($preference_name, $defaultvalue='')
+	final public function GetPreference($preference_name, $defaultvalue='')
 	{
 		return get_site_preference($this->GetName() . "_mapi_pref_" . $preference_name, $defaultvalue);
 	}
@@ -2740,7 +2744,7 @@ class CMSModule
 	 * @param string The value to set it to
 	 * @return boolean
 	 */
-	function SetPreference($preference_name, $value)
+	final public function SetPreference($preference_name, $value)
 	{
 	  return set_site_preference($this->GetName() . "_mapi_pref_" . $preference_name, $value);
 	}
@@ -2753,7 +2757,7 @@ class CMSModule
 	 * @param string The name of the preference to remove.  If empty all preferences associated with the module are removed.
 	 * @return boolean
 	 */
-	function RemovePreference($preference_name='')
+	final public function RemovePreference($preference_name='')
 	{
 	  if( $preference_name == '' )
 	    {
@@ -2778,7 +2782,7 @@ class CMSModule
 	* @param boolean $removable      Can this event be removed from the list?
 	* @returns mixed If successful, true.  If it fails, false.
 	*/
-	function AddEventHandler( $modulename, $eventname, $removable = true )
+	final public function AddEventHandler( $modulename, $eventname, $removable = true )
 	{
 		Events::AddEventHandler( $modulename, $eventname, false, $this->GetName(), $removable );
 	}
@@ -2791,7 +2795,7 @@ class CMSModule
 	 * @param string The name of the event
 	 * @returns nothing
 	 */
-	function CreateEvent( $eventname )
+	final public function CreateEvent( $eventname )
 	{
 		Events::CreateEvent($this->GetName(), $eventname);
 	}
@@ -2886,7 +2890,7 @@ class CMSModule
 	 * @param string The name of the event
 	 * @return void
 	 */
-	function RemoveEvent( $eventname )
+	final public function RemoveEvent( $eventname )
 	{
 		Events::RemoveEvent($this->GetName(), $eventname);
 	}
@@ -2903,7 +2907,7 @@ class CMSModule
 	 * @param string The name of the event
 	 * @return void
 	 */
-	function RemoveEventHandler( $modulename, $eventname )
+	final public function RemoveEventHandler( $modulename, $eventname )
 	{
 		Events::RemoveEventHandler($modulename, $eventname, false, $this->GetName());
 	}
@@ -2918,7 +2922,7 @@ class CMSModule
 	 * @param array  The parameters associated with this event.
 	 * @return void
 	 */
-	function SendEvent( $eventname, $params )
+	final public function SendEvent( $eventname, $params )
 	{
 		Events::SendEvent($this->GetName(), $eventname, $params);
 	}
