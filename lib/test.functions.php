@@ -1217,7 +1217,7 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 	global $lang_fn;
 	if(empty($url))
 	{
-		$url = 'http://dev.cmsmadesimple.org/latest_version.php';
+		$url = CMS_DEFAULT_VERSIONCHECK_URL;
 	}
 
 	$test = new CmsInstallTest();
