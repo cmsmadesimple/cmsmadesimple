@@ -70,13 +70,13 @@ $editor = new ImageEditor($manager);
 	<div id="tools_rotate" style="display:none;">
 		<div id="tool_inputs">
 			<select id="flip" name="flip" style="margin-left: 10px; vertical-align: middle;">
-              <option SELECTED>Flip Image</option>
+              <option selected>Flip Image</option>
               <option>-----------------</option>
               <option value="hoz">Flip Horizontal</option>
               <option value="ver">Flip Virtical</option>
          </select>
 			<select name="rotate" onchange="rotatePreset(this)" style="margin-left: 20px; vertical-align: middle;">
-              <option SELECTED>Rotate Image</option>
+              <option selected>Rotate Image</option>
               <option>-----------------</option>
 
               <option value="180">Rotate 180 &deg;</option>
@@ -107,7 +107,7 @@ $editor = new ImageEditor($manager);
 		<div id="tool_inputs">
 			<label for="save_filename">Filename:</label><input type="text" id="save_filename" value="<?php echo $editor->getDefaultSaveFile();?>"/>
 			<select name="format" id="save_format" style="margin-left: 10px; vertical-align: middle;" onchange="updateFormat(this)">
-            <option value="" SELECTED>Image Format</option>
+            <option value="" selected="selected">Image Format</option>
             <option value="">---------------------</option>
             <option value="jpeg,85">JPEG High</option>
             <option value="jpeg,60">JPEG Medium</option>
