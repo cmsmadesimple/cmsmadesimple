@@ -34,16 +34,6 @@ define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax_core/xajax.inc.php');
 require_once(dirname(__FILE__).'/editcontent_extra.php');
 
-$xajax = new xajax();
-$xajax->register(XAJAX_FUNCTION,'ajaxpreview');
-$xajax->processRequest();
-$headtext = $xajax->getJavascript('../lib/xajax')."\n";
-
-if (isset($_POST["cancel"]))
-{
-	redirect("listcontent.php".$urlext);
-}
-
 $error = FALSE;
 
 $content_id = "";
@@ -60,6 +50,18 @@ if (isset($_POST["apply"])) $apply = true;
 
 $ajax = false;
 if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
+
+$xajax = new xajax();
+$xajax->configure('requestURI',$config['admin_url'].'/editcontent.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&content_id='.$content_id);
+$xajax->register(XAJAX_FUNCTION,'ajaxpreview');
+$xajax->processRequest();
+$headtext = $xajax->getJavascript('../lib/xajax')."\n";
+
+if (isset($_POST["cancel"]))
+{
+	redirect("listcontent.php".$urlext);
+}
+
 
 if ($apply)
 {
