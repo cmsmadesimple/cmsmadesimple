@@ -55,14 +55,8 @@ class CMS_Compiler extends Smarty_Compiler {
       $tmp = array('plugins'=>array($tmp));
       require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
       smarty_core_load_plugins($tmp,$this);
-      $found = true;
     }
-
-    if(0){
-    /*
-     * First we check if the custom function has already been registered
-     * or loaded from a plugin file.
-     */
+    
     if (isset($this->_plugins['function'][$tag_command])) {
       $found = true;
       $plugin_func = $this->_plugins['function'][$tag_command][0];
@@ -71,49 +65,12 @@ class CMS_Compiler extends Smarty_Compiler {
 	$have_function = false;
       }
     }
-    /*
-     * See if we can find a plugin function for this tag...
-     */
-    else if ($plugin_file = $this->_get_plugin_filepath('function', $tag_command)) {
-      $found = true;
-      
-      include_once $plugin_file;
-      
-      $plugin_func = 'smarty_cms_function_' . $tag_command;
-      if (!function_exists($plugin_func)) {
-	$message = "plugin function $plugin_func() not found in $plugin_file\n";
-	$have_function = false;
-      } else {
-	$this->_plugins['function'][$tag_command] = array($plugin_func, null, null, null, false);
-      }
-    }
-    /*
-     * Lets' see if this is a UDT.
-     */
-    else if ( UserTagOperations::get_instance()->UserTagExists($tag_command) ) {
-      $found = true;
 
-      $plugin_func = UserTagOperations::get_instance()->CreateTagFunction($tag_command);
-      if( !$plugin_func || !function_exists($plugin_func) )
-	{
-	  $message = "plugin function UDT $plugin_func() not found\n";
-	  $have_function = false;
-	}
-      else
-	{
-	  $this->_plugins['function'][$tag_command] = array($plugin_func, null, null, null, false);
-	}
-    }
-
-    
     if (!$found) {
       return parent::_compile_custom_tag($tag_command, $tag_args, $tag_modifier, $output);
     } else if (!$have_function) {
       return parent::_compile_custom_tag($tag_command, $tag_args, $tag_modifier, $output);
-//       $this->_syntax_error($message, E_USER_WARNING, __FILE__, __LINE__);
-//       return true;
     }
-  } // commented out
 
     /* declare plugin to be loaded on display of the template that
      we compile right now */

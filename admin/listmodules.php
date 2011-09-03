@@ -290,6 +290,7 @@ if ($access)
 	{
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
 		$db->Execute($query, array(1,$module));
+		cmsms()->clear_cached_files();
 		redirect($thisurl);
 	}
 
@@ -297,6 +298,7 @@ if ($access)
 	{
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
 		$db->Execute($query, array(0,$module));
+		cmsms()->clear_cached_files();
 		redirect($thisurl);
 	}
 } // if access
