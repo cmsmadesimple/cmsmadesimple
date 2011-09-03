@@ -1072,9 +1072,10 @@ ul.pageerror {
 	margin: 0;
 	padding-left: 10px;
 }
-ul.pageerror li {
+div.pagecontainer ul.pageerror li, ul.pageerror li {
 	padding: 10px 10px 10px 35px;
 	margin-left: 5px;
+	list-style-type: none;
 	background: url(themes/NCleanGrey/images/icons/system/stop.gif) no-repeat left center;
 }
 div.pagewarning {
