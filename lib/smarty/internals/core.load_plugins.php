@@ -15,7 +15,8 @@
 
 function smarty_core_get_module_plugin($_name,&$smarty)
 {
-  static $data = array();
+  static $data;
+
   $fn = TMP_CACHE_LOCATION.'/modulefunctions.cache.dat';
   if( !count($data) )
     {
@@ -29,7 +30,7 @@ function smarty_core_get_module_plugin($_name,&$smarty)
 	  foreach( $installed as $module )
 	    {
 	      if( !in_array($module,$preloaded) ) $loaded[] = $module;
-	      cms_utils::get_module($module);
+	      $obj = cms_utils::get_module($module);
 	      $tmp = array_keys($smarty->_plugins['function']);
 	      $tmp2 = array_diff($tmp,$orig);
 	      foreach( $tmp2 as $one )
@@ -38,12 +39,12 @@ function smarty_core_get_module_plugin($_name,&$smarty)
 		}
 	      $orig = $tmp;
 	    }
-	  
+
 	  foreach( $loaded as $module )
 	    {
 	      ModuleOperations::get_instance()->unload_module($module);
 	    }
-	  
+
 	  if( count($data) )
 	    {
 	      file_put_contents($fn,serialize($data));
@@ -72,9 +73,13 @@ function smarty_core_load_plugins($params, &$smarty)
       
       $_noadd = FALSE;
       $_cachable = TRUE;
+      $_plugin = null;
 
         list($_type, $_name, $_tpl_file, $_tpl_line, $_delayed_loading) = $_plugin_info;
-        $_plugin = &$smarty->_plugins[$_type][$_name];
+	if( isset($smarty->_plugins[$_type][$_name]) )
+	  {
+	    $_plugin = &$smarty->_plugins[$_type][$_name];
+	  }
 
         /*
          * We do not load plugin more than once for each instance of Smarty.
@@ -86,7 +91,7 @@ function smarty_core_load_plugins($params, &$smarty)
          * whether the dynamically registered plugin function has been
          * checked for existence yet or not.
          */
-        if (isset($_plugin)) {
+        if (!is_null($_plugin)) {
             if (empty($_plugin[3])) {
                 if (!is_callable($_plugin[0])) {
                     $smarty->_trigger_fatal_error("[plugin] $_type '$_name' is not implemented", $_tpl_file, $_tpl_line, __FILE__, __LINE__);
@@ -141,6 +146,7 @@ function smarty_core_load_plugins($params, &$smarty)
 	  }
 	if( !$_found )
 	  {
+
 	    // is it a module plugin?
 	    $_found = smarty_core_get_module_plugin($_name,$smarty);
 	    if( $_found ) 
