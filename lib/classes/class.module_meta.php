@@ -72,7 +72,7 @@ class module_meta
 
     $this->_load_cache();
     $sig = md5($capability.serialize($params));
-    if( !isset($this->_data['capability']) || !isset($this->_data['methods'][$sig]) )
+    if( !isset($this->_data['capability']) || !isset($this->_data['capability'][$sig]) )
       {
 		  if( !isset($this->_data['capability']) )
 		  {
