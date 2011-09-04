@@ -538,6 +538,12 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  if( !isset($info[$module_name]) && !$force_load )
 	  {
 		  debug_buffer("Nothing is known about $module_name... cant load it");
+		  return FALSE;
+	  }
+	  if( (!isset($info[$module_name]['active']) || $info[$module_name]['active'] == 0) && !$force_load )
+	  {
+		  debug_buffer('Requested deactivated module '.$module_name);
+		  return FALSE;
 	  }
 
 	  global $CMS_INSTALL_PAGE;
@@ -1005,8 +1011,11 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  if( !is_object($obj) )
 	  {
 		  // gotta load it.
-		  $this->_load_module($module_name,$force);
-		  $obj =& $this->_modules[$module_name];
+		  $res = $this->_load_module($module_name,$force);
+		  if( $res )
+		  {
+			  $obj =& $this->_modules[$module_name];
+		  }
 	  }
 
 	  if( is_object($obj) && !empty($version) )
@@ -1058,7 +1067,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 				  }
 		  }
 
-	  if( !$module_name ) return $obj;
+	  if( !$module_name || $module_name == -1 ) return $obj;
 
 	  $obj = $this->get_module_instance($module_name);
 	  if( !$obj ) return $obj;
