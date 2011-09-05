@@ -29,7 +29,7 @@ function smarty_core_get_module_plugin($_name,&$smarty)
 	  $preloaded = ModuleOperations::get_instance()->GetLoadedModules();
 	  foreach( $installed as $module )
 	    {
-	      if( !in_array($module,$preloaded) ) $loaded[] = $module;
+	      if( is_array($preloaded) || !count($preloaded) || !in_array($module,$preloaded) ) $loaded[] = $module;
 	      $obj = cms_utils::get_module($module);
 	      $tmp = array_keys($smarty->_plugins['function']);
 	      $tmp2 = array_diff($tmp,$orig);
