@@ -103,7 +103,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
 			  {
 			    foreach( $allmodules as $module_name )
 			      {
-				$obj = $modops->get_module_instance($module_name);
+				$obj = $modops->get_module_instance($module_name,'',TRUE);
 			      }
 			  }
 			echo " [" . ilang('done') . "]</p>";
