@@ -54,7 +54,7 @@ a.external span {
 	margin:0 auto;
 }
 a.external:link, a.external:visited, a.external:hover {
-	background: url(images/help.png) no-repeat 100% 0;
+	background: url(images/info-external.png) no-repeat 100% 0;
 }
 
 .banner {
