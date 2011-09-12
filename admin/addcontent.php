@@ -267,9 +267,8 @@ if ($contentobj->HasPreview())
 		?>
 	</div>
 	<div style="clear: both;"></div>
-	<form method="post" action="addcontent.php" name="Edit_Content" enctype="multipart/form-data" id="Edit_Content"##FORMSUBMITSTUFFGOESHERE##>
+	<form method="post" action="addcontent.php<?php echo $urlext ?>" name="Edit_Content" enctype="multipart/form-data" id="Edit_Content"##FORMSUBMITSTUFFGOESHERE##>
         <div class="hidden">
-        <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
 	<input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
         </div>
 	<div id="page_content">
