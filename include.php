@@ -21,8 +21,8 @@
 $dirname = dirname(__FILE__);
 
 define('CMS_DEFAULT_VERSIONCHECK_URL','http://www.cmsmadesimple.org/latest_version.php');
-define('CMS_SECURE_PARAM_NAME','sp_');
-define('CMS_USER_KEY','cmsuserkey');
+define('CMS_SECURE_PARAM_NAME','_sx_');
+define('CMS_USER_KEY','_userkey_');
 
 $session_key = substr(md5($dirname), 0, 8);
 if( !isset($CMS_INSTALL_PAGE) )
