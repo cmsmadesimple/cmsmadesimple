@@ -742,7 +742,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
    */
   public function LoadModules($loadall = false,$noadmin = false, $no_lazyload = false)
   {
-	  if( $loadall ) return $this->_load_all_modules();
+	  if( $loadall ) $this->_load_all_modules();
 
 	  global $CMS_ADMIN_PAGE;
 	  global $CMS_STYLESHEET;
