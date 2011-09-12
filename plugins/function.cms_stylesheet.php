@@ -28,7 +28,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 	$template_id = '';
 	$use_https = -1;
 
-	if( isset($params['https']) ) $use_https = (bool)$params['https'];
+	if( isset($params['https']) ) $use_https = (int)$params['https'];
 
 	if (isset($params["templateid"]) && $params["templateid"]!="")
 	{
@@ -40,11 +40,11 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		$template_id = $content_obj->TemplateId();
 		if( $use_https == -1 )
 		{
-			$use_https = (bool)$content_obj->Secure();
+			$use_https = (int)$content_obj->Secure();
 		}	
 	}
 	
-	if( $use_https < 0 ) $use_https = FALSE;
+	if( $use_https < 0 ) $use_https = 0;
 	$config = $gCms->config;
 	$db = $gCms->GetDb();
 	$root_url = $config['root_url'];
@@ -145,7 +145,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 		if( $combine_stylesheets && $template_id > 0 )
 		{
 			// combine all matches into one stylesheet.
-			$filename = 'stylesheet_combined_'.$template_id.'_'.$modified_date.$fnsuffix.'.css';
+			$filename = 'stylesheet_combined_'.md5($template_id.$use_https.$modified_date.$fnsuffix).'.css';
 			$fn = cms_join_path($cache_dir,$filename);
 			if( !file_exists($fn) )
 			{
@@ -200,7 +200,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 			foreach ($res as $one)
 			{
 				$media_type = str_replace(' ','',$one['media_type']);
-				$filename = 'stylesheet_'.$one['css_id'].'_'.strtotime($one['modified_date']).$fnsuffix.'.css';
+				$filename = 'stylesheet_'.md5('single'.$one['css_id'].$use_https.strtotime($one['modified_date']).$fnsuffix).'.css';
 				if ( !file_exists(cms_join_path($cache_dir,$filename)) )
 				{
 					$smarty = $gCms->GetSmarty();

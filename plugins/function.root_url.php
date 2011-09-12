@@ -21,6 +21,15 @@ function smarty_function_root_url($params, &$smarty)
 	$config = cmsms()->GetConfig();
      
         $str = $config['root_url'];
+
+	if( !isset($params['autossl']) || $params['autossl'] == 0 )
+	  {
+	    if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
+	      {
+		$str = $config['ssl_url'];
+	      }
+	  }
+
         if( isset($params['assign']) )
         {
            $smarty->assign(trim($params['assign']),$str);
