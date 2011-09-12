@@ -38,7 +38,6 @@ function smarty_cms_function_content($params, &$smarty)
 			$id = (isset($ary[1])?$ary[1]:'');
 			$action = (isset($ary[2])?$ary[2]:'');
 			$inline = (isset($ary[3]) && $ary[3] == 1?true:false);
-
 		}
 		if (isset($_REQUEST[$id.'action'])) $action = $_REQUEST[$id.'action'];
 		else if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
@@ -75,7 +74,7 @@ function smarty_cms_function_content($params, &$smarty)
 		      if( !$modobj )
 			{
 			  // module not found... couldn't even autoload it.
-			  @trigger_error('Attempt to access module '.$modulename.' which could not be foune (is it properly installed and configured?');
+			  @trigger_error('Attempt to access module '.$modulename.' which could not be found (is it properly installed and configured?');
 			  return _smarty_cms_function_content_return('', $params, $smarty);
 			}
 
@@ -109,7 +108,7 @@ function smarty_cms_function_content($params, &$smarty)
 			}
 		      else
 			{
-			  @trigger_error('Attempt to access module '.$key.' which could not be foune (is it properly installed and configured?');
+			  @trigger_error('Attempt to access module '.$key.' which could not be found (is it properly installed and configured?');
 			  return _smarty_cms_function_content_return("<!-- Not a tag module -->\n", $params, $smarty);
 			}
 		    }
