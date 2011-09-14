@@ -26,12 +26,11 @@ if ($gCms->config["debug"] == true)
 	echo '</div> <!-- end DebugFooter -->';
 }
 
-?>
-
-</body>
-</html>
-
-<?php
+if (!isset($USE_THEME) || $USE_THEME != false)
+  {
+    echo '</html>';
+	echo '</body>';
+  }
 
 #Pull the stuff out of the buffer...
 $htmlresult = '';
