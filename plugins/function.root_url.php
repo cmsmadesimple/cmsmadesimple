@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#(c)2004-2011 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ function smarty_function_root_url($params, &$smarty)
      
         $str = $config['root_url'];
 
-	if( !isset($params['autossl']) || $params['autossl'] == 0 )
+	if( !isset($params['autossl']) || $params['autossl'] != 0 )
 	  {
 	    if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
 	      {
@@ -45,10 +45,14 @@ function smarty_cms_help_function_root_url() {
 function smarty_cms_about_function_root_url() {
 	?>
 	<p>Author: Ted Kulp&lt;ted@cmsmadesimple.org&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Version: 1.2</p>
 	<p>
-	Change History:<br/>
-	None
+	Change History:
+	<ul>
+          <li>Initial Version.</li>
+          <li>Added assign parameter for CMSMS 1.10</li>
+          <li>Added autossl parameter for CMSMS 1.10</li>
+        </ul>
 	</p>
 	<?php
 }
