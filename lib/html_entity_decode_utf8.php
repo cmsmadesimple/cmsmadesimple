@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004-2010 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 # Code copied from http://www.php.net/manual/en/function.html-entity-decode.php
 #
