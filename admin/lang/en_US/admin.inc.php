@@ -1,4 +1,17 @@
 <?php
+$lang['admin']['help_function_cms_init_editor'] = <<<EOT
+<h3>Waht does this do?</h3>
+  <p>This plugin is used to initialize the selected wysiwyg editor for display when wysiwyg functionalities are required for frontend data submission.  This module will find the selected frontend wysiwyg, determine if it has been requested, and if so generate the appropriate html code <em>(usually javascript links)</em> so that the wysiwyg will initialize properly when the page is loaded.  If no wysiwyg editors have been requested for the frontend request this plugin will produce no output.</p>
+  <p><strong>Note:</strong> This plugin will work properly given the default configuration of CMSMS.  If you have modified the &quot;process_whole_template&quot; configuration variable from its default value, you may have to adjust the parameters supplied to this plugin.</p>
+<h3>How do I use it?</h3>
+<p>The first thing you must do is select the frontend WYSIWYG editor to use in the global settings page of the admin console.  Next If you use frontend wysiwyg editors on numerous pages, it may be best to place the {cms_init_editor} plugin directly into your page template.  If you only require the wysiwyg editor to be enabled on a limited amount of pages you may just place it into the &quot;Page Specific Metadata&quot; field in each page.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li><em>(optional)wysiwyg</em> - Specify the name of the wysiwyg editor module to initialize.  Use with caution.  If you have a different wysiwyg editor selected in the global settings, this will force the specified  editor to be initialized.</li>
+<li><em>(optional)force=0</em> - Normally this plugin will not initialize the specified (or detected) editor if it has not been marked as &quot;active&quot;.  This parameter will override that behavior.  This parameter may be required of the &quot;process_whole_template&quot; configuration variable is set to a non default value.</li>
+<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
+</ul>
+EOT;
 $lang['admin']['info_pagedefaults'] = 'This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages';
 $lang['admin']['default_contenttype'] = 'Default Content Type';
 $lang['admin']['info_default_contenttype'] = 'Applicable when adding new content objects, this control specifies the type that is selected by default.  Please ensure that the selected item is not one of the &quot;disallowed types&quot;.';
@@ -577,6 +590,7 @@ $lang['admin']['help_function_root_url'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like: <code>{root_url}</code></p>
 	<h3>What parameters does it take?</h3>
+        <p><em>(optional)autossl=1</em> - Enabled by default, this option will detect if the request made to the server was over SSL, and if it was return the appropriately configured SSL url.  To disable this feature specify autossl=0.</p>
 	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
 $lang['admin']['help_function_repeat'] = <<<EOT
