@@ -28,8 +28,8 @@ if ($gCms->config["debug"] == true)
 
 if (!isset($USE_THEME) || $USE_THEME != false)
   {
+    echo '</body>';
     echo '</html>';
-	echo '</body>';
   }
 
 #Pull the stuff out of the buffer...
