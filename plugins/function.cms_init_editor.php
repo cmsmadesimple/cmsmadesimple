@@ -50,7 +50,7 @@ function smarty_function_cms_init_editor($params, &$smarty)
   
   // get the output
   $output = $mod->WYSIWYGGenerateHeader();
-  debug_to_log('cms_init_editor: got output: '$output);
+  debug_to_log('cms_init_editor: got output: '.$output);
 
   if( !$output ) return;
   debug_to_log('cms_init_editor: got stuff to output');
@@ -58,7 +58,7 @@ function smarty_function_cms_init_editor($params, &$smarty)
   // assign it or echo it.
   if( isset($params['assign']) )
     {
-      $smarty->assign(trim($params['assign']),$output);
+      $smarty->assign(trim($params['assign']).$output);
       return;
     }
   return $output;
