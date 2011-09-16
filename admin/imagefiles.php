@@ -49,10 +49,11 @@ function deldir($dir)
 	closedir($handle);
 	if(rmdir($dir))
 	{
-	  audit('','Core','Removed Directory '.$dir);
+	  // put mention into the admin log
+	  audit('','Image Manager','Removed Directory '.$dir);
 	  $success = true;
 	}
-	return $success;  
+	return $success; 
 } 
 
 $errors = array();
@@ -90,7 +91,7 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 		{
 			chmod($dir."/".$_FILES['uploadfile']['name'], octdec('0'.$config['default_upload_permission']));
 			// put mention into the admin log
-			audit(-1, 'File: '.$_FILES['uploadfile']['name'], 'Uploaded');
+			audit(-1, 'Image: '.$_FILES['uploadfile']['name'], 'Uploaded');
 		}
 	}
 	else
@@ -151,7 +152,7 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 			else
 			{
 				// put mention into the admin log
-			  audit(-1, 'Core', 'File: '.$reldir . "/" . $_GET['file'], 'Deleted');
+			  audit(-1, 'Image Manager', 'Image: '.$reldir . "/" . $_GET['file'], 'Deleted');
 			}
 		}
 		else
@@ -205,7 +206,7 @@ $nls =& $gCms->nls;
 	<script type="text/javascript">
     //<![CDATA[
 
-		//Create a new Imanager Manager, needs the directory where the manager is
+		//Create a new Image Manager, needs the directory where the manager is
 		//and which language translation to use.
 
 		var manager = new ImageManager('../lib/filemanager/ImageManager','en');
