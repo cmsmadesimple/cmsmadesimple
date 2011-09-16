@@ -52,6 +52,7 @@ function showhide_advanced()
    <th width="20%">{$mod->Lang('nametext')}</th>
    <th>{$mod->Lang('vertext')}</th>
    <th>{$mod->Lang('sizetext')}</th>
+   <th>{$statustext}</th>
    <th>&nbsp;</th>
    <th>&nbsp;</th>
    <th>&nbsp;</th>
