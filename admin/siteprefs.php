@@ -374,14 +374,16 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 
 # give everything to smarty
 {
-  $tmp = ModuleOperations::get_instance()->GetInstalledModules();
-  if( !is_array($tmp) || count($tmp) == 0 )
-    {
-      echo $themeObject->ShowErrors(lang('error_nomodules'));
-      return;
-    }
-  $firstmod = $tmp[0];
-  $smarty->assign('mod',cms_utils::get_module($firstmod));
+  // warning: uber hack.
+//   $tmp = ModuleOperations::get_instance()->GetInstalledModules();
+//   if( !is_array($tmp) || count($tmp) == 0 )
+//     {
+//       echo $themeObject->ShowErrors(lang('error_nomodules'));
+//       return;
+//     }
+//   $firstmod = $tmp[0];
+  $smarty->assign('mod',cms_utils::get_module('CMSMailer'));
+  //$smarty->assign('mod',cms_utils::get_module($firstmod));
 }
 {
   $modules = ModuleOperations::get_instance()->get_modules_with_capability('search');
@@ -400,8 +402,15 @@ $smarty->assign('languages',get_language_list());
 $smarty->assign('templates',$templates);
 
 // need a list of wysiwyg modules.
-$tmp = module_meta::get_instance()->module_list_by_method('IsWYSIWYG');
-$smarty->assign('wysiwyg',$tmp);
+{
+  $tmp = module_meta::get_instance()->module_list_by_method('IsWYSIWYG');
+  $tmp2 = array(-1=>lang('none'));
+  for( $i = 0; $i < count($tmp); $i++ )
+    {
+      $tmp2[$tmp[$i]] = $tmp[$i];
+    }
+  $smarty->assign('wysiwyg',$tmp2);
+}
 
 if ($dir=opendir(dirname(__FILE__)."/themes/")) 
 { 
