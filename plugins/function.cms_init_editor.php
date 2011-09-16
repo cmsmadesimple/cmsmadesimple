@@ -31,29 +31,22 @@ function smarty_function_cms_init_editor($params, &$smarty)
       $wysiwyg = get_site_preference('frontendwysiwyg');
     }
   
-  debug_to_log('cms_init_editor: start');
-  if( !$wysiwyg ) return;
+  if( !$wysiwyg || (int)$wysiwyg < 0 ) return;
   
-  debug_to_log('cms_init_editor: wysiwyg is '.$wysiwyg);
   $mod = cms_utils::get_module($wysiwyg);
   if( !is_object($mod) ) return;
-  debug_to_log('cms_init_editor: got module');
   if( !$mod->IsWYSIWYG() ) return;
-  debug_to_log('cms_init_editor: got wysiwyg');
 
   // check to see if it is active
   if( !isset($params['force']) || $params['force'] != 0 )
     {
-      debug_to_log('cms_init_editor: checking for active');
       if( !$mod->WYSIWYGActive() ) return;
     }
   
   // get the output
   $output = $mod->WYSIWYGGenerateHeader();
-  debug_to_log('cms_init_editor: got output: '.$output);
 
   if( !$output ) return;
-  debug_to_log('cms_init_editor: got stuff to output');
 
   // assign it or echo it.
   if( isset($params['assign']) )
