@@ -2120,7 +2120,7 @@ class ContentBase
 	      break;
 	      
 	    case 'alias':
-	      return array('<label for="alias">'.lang('pagealias').':','<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />',lang('help_page_alias'));
+	      return array('<label for="alias">'.lang('pagealias').'</label>:','<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />',lang('help_page_alias'));
 	      break;
 	      
 	    case 'secure':
