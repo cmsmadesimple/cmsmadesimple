@@ -40,6 +40,16 @@ final class modmgr_cached_request
   private $_status;
   private $_result;
   private $_timeout;
+  private $_signature;
+
+  private function _getCacheFile()
+  {
+    if( $this->_signature )
+      {
+	$fn = TMP_CACHE_LOCATION.'/modmgr_'.$this->_signature.'.dat';
+	return $fn;
+      }
+  }
 
   public function execute($target = '',$data = array(), $age = '')
   {
@@ -48,8 +58,9 @@ final class modmgr_cached_request
     if( $age ) $age = max(1,(int)$age);
 
     // build a signature
-    $signature = md5(serialize(array($target,$data)));
-    $fn = TMP_CACHE_LOCATION.'/modmgr_'.$signature.'.dat';
+    $this->_signature = md5(serialize(array($target,$data)));
+    $fn = $this->_getCacheFile();
+    if( !$fn ) return;
 
     // check for the cached file
     $atime = time() - ($age * 60);
@@ -96,6 +107,15 @@ final class modmgr_cached_request
   public function getResult()
   {
     return $this->_result;
+  }
+
+  public function clearCache()
+  {
+    $fn = $this->_getCacheFile();
+    if( $fn )
+      {
+	@unlink($fn);
+      }
   }
 } // end of class.
 

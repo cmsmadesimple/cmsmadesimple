@@ -439,12 +439,19 @@ final class modmgr_utils
     $url = $mod->GetPreference('module_repository');
     if( $url )
       {
-	$url .= '/version';
+	$url .= 'version';
 	$req = new modmgr_cached_request($url);
 	$req->setTimeout(3);
 	$req->execute($url);
 	if( $req->getStatus() == 200 )
 	  {
+	    $tmp = $req->getResult();
+	    if( empty($tmp) )
+	      {
+		$req->clearCache();
+		return FALSE;
+	      }
+
 	    $data = json_decode($req->getResult(),true);
 	    if( version_compare($data,MINIMUM_REPOSITORY_VERSION) >= 0 )
 	      {
