@@ -672,13 +672,13 @@ class Content extends ContentBase
 	
       case 'pagemetadata':
 	{
-	  return array('<label for="id_pagemetadata">'.lang('page_metadata').':</lang>',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
+	  return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
 	}
 	break;
 	
       case 'pagedata':
 	{
-	  return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</lang>',
+	  return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</label>',
 				   create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','id_pagedata','','','80','6'));
 	}
 	break;
