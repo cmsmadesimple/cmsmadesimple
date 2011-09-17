@@ -204,7 +204,7 @@ else
 			<p class="pageinput">
 				<input type="hidden" name="from" value="<?php echo $from?>" />
 				<input type="hidden" name="addtemplate" value="true"/>
-				<!--<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />-->
+				<!--<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="pagebutton"  />-->
 				<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
 			</p>

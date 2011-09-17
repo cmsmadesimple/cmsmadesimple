@@ -61,7 +61,7 @@ function showhide_advanced()
  <tbody>
  {foreach from=$search_data item=entry}
    {cycle values='row1,row2' assign='rowclass'}
-   <tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
+   <tr class="{$rowclass}">
      <td>{$entry->name}</td>
      <td>{$entry->version}</td>
      <td>{$entry->size}</td>
@@ -71,7 +71,7 @@ function showhide_advanced()
      <td>{if isset($entry->aboutlink)}{$entry->aboutlink}{/if}</td>
    </tr>
    {if isset($entry->description)}
-   <tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
+   <tr class="{$rowclass}">
      <td>&nbsp;</td>
      <td colspan="6">{$entry->description}</td>
    </tr>

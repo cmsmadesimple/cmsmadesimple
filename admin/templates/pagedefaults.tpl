@@ -9,8 +9,8 @@
   <div class="pageoverflow">
     <p class="pagetext"></p>
     <p class="pageinput">
-      <input type="submit" name="submit" value="{'submit'|lang}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'"/>
-      <input type="submit" name="cancel" value="{'cancel'|lang}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'"/>
+      <input type="submit" name="submit" value="{'submit'|lang}" class="pagebutton" />
+      <input type="submit" name="cancel" value="{'cancel'|lang}" class="pagebutton" />
     </p>
   </div>
 
@@ -112,8 +112,8 @@
   <div class="pageoverflow">
     <p class="pagetext"></p>
     <p class="pageinput">
-      <input type="submit" name="submit" value="{'submit'|lang}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'"/>
-      <input type="submit" name="cancel" value="{'cancel'|lang}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'"/>
+      <input type="submit" name="submit" value="{'submit'|lang}" class="pagebutton" />
+      <input type="submit" name="cancel" value="{'cancel'|lang}" class="pagebutton" />
     </p>
   </div>
 

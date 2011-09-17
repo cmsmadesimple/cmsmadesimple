@@ -73,7 +73,7 @@
       <tbody>
         {foreach from=$loglines item='line'}
           {cycle values='row1,row2' assign='currow'}
-        <tr class="{$currow}" onmouseover="this.className='{$currow}.hover';" onmouseout="this.className='{$currow}';">
+        <tr class="{$currow}">
           <td>{$line.ip_addr|default:''}</td>
           <td>{$line.username}</td>
           <td>{$line.itemid}</td>
