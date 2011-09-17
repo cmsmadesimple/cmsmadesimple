@@ -64,10 +64,14 @@ final class modmgr_cached_request
       $this->_status = $req->getStatus();
       $this->_result = $req->getResult();
 
-      // create a cache file
-      $fh = fopen($fn,'w');
-      fwrite($fh,serialize(array($this->_status,$this->_result)));
-      fclose($fh);
+      @unlink($fn);
+      if( $this->_status == 200 )
+	{
+	  // create a cache file
+	  $fh = fopen($fn,'w');
+	  fwrite($fh,serialize(array($this->_status,$this->_result)));
+	  fclose($fh);
+	}
     }
     else
     {
