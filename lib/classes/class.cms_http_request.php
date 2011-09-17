@@ -673,6 +673,32 @@ class cms_http_request
     }
 
 
+    private function _isCurlSuitable()
+    {
+      static $_curlgood = -1;
+
+      if( $_curlgood == -1 )
+	{
+	  $_curlgood = 0;
+	  if( in_array('curl',get_loaded_extensions()) ) 
+	    {
+	      if( function_exists('curl_version') )
+		{
+		  $tmp = curl_version();
+		  if( isset($tmp['version']) )
+		    {
+		      if( version_compare($tmp['version'],'7.19.7') >= 0 )
+			{
+			  $_curlgood = 1;
+			}
+		    }
+		}
+	    }
+	}
+
+      return $_curlgood;
+    }
+
     /**
      * Execute a HTTP request
      * 
@@ -712,7 +738,7 @@ class cms_http_request
         }
         
         // If cURL is not installed, we'll force fscokopen
-        $this->useCurl = $this->useCurl && in_array('curl', get_loaded_extensions());
+	$this->useCurl = $this->useCurl && $this->_isCurlSuitable();
         
         // GET method configuration
         if($this->method == 'GET')
