@@ -226,14 +226,14 @@ $lang['install_you_have'] = 'You have';
 $lang['install_legend'] = 'Legend';
 $lang['install_symbol'] = 'Symbol';
 $lang['install_definition'] = 'Definition';
-$lang['install_value_passed'] = 'A required test passed';
-$lang['install_value_failed'] = 'A required test failed';
+$lang['install_value_passed'] = 'A test passed';
+$lang['install_value_failed'] = 'A test failed';
 $lang['install_error_fragment'] = 'Info Installation Troubleshooting';
 
 $lang['install_value_required'] = 'A setting is below a required minimum value';
 $lang['install_value_recommended'] = 'A setting is above the required value, but below the recommended value<br />or... A capability that <em>may</em> be required for some optional functionality is unavailable';
 $lang['install_value_exceed'] = 'A setting meets or exceeds the recommended threshhold<br />or... A capability that <em>may</em> be required for some optional functionality is available';
-$lang['install_test_failed'] = 'One or more tests have failed or are in warning. You can still install the system but some functions may not work correctly.<br />Please try to correct the situation and click "Try Again", or click the "Continue" button if are recommended only.';
+$lang['install_test_failed'] = 'One or more tests have resulted in a failure or warning. You can still install the system but some functions may not work correctly.<br />Please try to correct the situation and click "Try Again", or click the "Continue" button if the tests are for "Recommended settings" only.';
 $lang['install_test_passed'] = 'All tests passed (at least at a minimum level). Please click the "Continue" button.';
 $lang['install_failed_again'] = 'One or more tests have failed. Please correct the problem and click the button below to recheck.';
 
@@ -283,7 +283,7 @@ $lang['test_allow_url_fopen_failed'] = 'When allow url fopen is disabled you wil
 $lang['test_remote_url'] = 'Test for remote URL';
 $lang['test_remote_url_failed'] = 'You will probably not be able to open a file on a remote web server.';
 
-$lang['connection_error'] = 'Outgoing http connections do not appear to work! There is a firewall or some ACL for external connections?. This will result in module manager, and potentially other functionality failing.';
+$lang['connection_error'] = 'Outgoing HTTP connections do not appear to work! Is there a firewall or some ACL for external connections? This will result in Module Manager, and potentially other functionality, failing.';
 $lang['remote_connection_timeout'] = 'Connection Timed Out!';
 $lang['search_string_find'] = 'Connection ok!';
 $lang['connection_failed'] = 'Connection failed!';
