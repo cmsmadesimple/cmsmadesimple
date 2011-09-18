@@ -83,7 +83,7 @@ class cms_cookies
 
   private static function __https()
   {
-    if( !isset($_SERVER['HTTPS']) || empty($_SERVER['https']) || $_SERVER['https'] == 'off' ) return FALSE;
+    if( !isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off' ) return FALSE;
     return TRUE;
   }
 
