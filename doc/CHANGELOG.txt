@@ -101,7 +101,10 @@ News:
   
   - Module minization
   - Adds advanced preview capabilities.
-  
+
+Search:
+  - #6721 Search module does not find decimal numbers
+
 
 Version 1.9.4.3 - Faanui
 -----------------------------
