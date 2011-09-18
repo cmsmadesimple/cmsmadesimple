@@ -22,6 +22,7 @@ Core - Bug Reports:
   - #6637 Wrong check for memory_limit and output_buffering
   - #6647 cms_stylesheet media parameter is not working correctly
   - #6686 Missing check permission for Modify Any Page in admin/ listcontent.php
+  - #6783 Possible injection when setting a preference
 
 Core - Feature requests:
   - #5119 New event : LoginFailed
@@ -74,14 +75,18 @@ Core - General:
   - Improve behavior of the {breadcrumbs} plugin
   - adds a maxlength param to the {content} plugin
   - drop the nuSOAP module.
-  - more
+  - more...
 
 Core Installer:
+  - #6663 Some install strings have typos and possible clarity issues
+  
   - Improved look and feel (thanks uniqu3)
   - Attempts to implement timezone detection
   - Better handling of module installation
 
 MenuManager:
+  - #6862 Notice: Undefined index: show_all in .../MenuManager/action.default.php on line 126
+  
   - Shrunk the code as much as possible.
 
 ModuleManager:
@@ -93,6 +98,7 @@ ModuleManager:
 News:
   - #5884 node.depth not calculated properly
   - #6215 custom field definitions checkboxes get unchecked  
+  
   - Module minization
   - Adds advanced preview capabilities.
   
