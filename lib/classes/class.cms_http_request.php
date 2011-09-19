@@ -340,10 +340,21 @@ class cms_http_request
         $this->useCookie    = TRUE;
         $this->saveCookie   = TRUE;
         $this->maxRedirect  = 3;
-        $this->cookiePath   = 'cookie.txt';
+        $this->cookiePath   = TMP_CACHE_LOCATION.'c'.md5(get_class().session_id()).'.dat'; // by default, use a cookie file that is unique only to this session.
         $this->userAgent    = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.9';
     }
     
+    /**
+     * Clear all cookies
+     *
+     * @return void
+     * @author Robert Campbell (calguy1000@gmail.com)
+     */
+    function resetCookies()
+    {
+      if( $this->cookiePath ) @unlink($this->cookiePath);
+    }
+
     /**
      * Set target URL
      *
@@ -736,7 +747,7 @@ class cms_http_request
         {
 	    $queryString = http_build_query($this->params);
         }
-        
+
         // If cURL is not installed, we'll force fscokopen
 	$this->useCurl = $this->useCurl && $this->_isCurlSuitable();
         
@@ -832,11 +843,22 @@ class cms_http_request
 	    }
 
             // Custom cookie configuration
-            if($this->useCookie && isset($cookieString))
+            if($this->useCookie)
             {
-                curl_setopt ($ch, CURLOPT_COOKIE, $cookieString);
+	      // we are sending cookies.
+	      if(isset($cookieString))
+		{
+		  curl_setopt ($ch, CURLOPT_COOKIE, $cookieString);
+		}
+	      else
+		{
+		  curl_setopt($ch, CURLOPT_COOKIEFILE, $this->cookiePath);
+		}
             }
-            
+            if($this->saveCookie) 
+	    {
+	      curl_setopt($ch, CURLOPT_COOKIEJAR,      $this->cookiePath);    // Save cookies here.
+	    }
 
 	    curl_setopt($ch, CURLOPT_HEADER,     TRUE);                 // No need of headers
 	    if( is_array($this->headerArray) )
@@ -848,7 +870,6 @@ class cms_http_request
 		curl_setopt($ch, CURLOPT_HEADER,     TRUE);                 // No need of headers
 	      }
 	    curl_setopt($ch, CURLOPT_NOBODY,         FALSE);                // Return body
-            curl_setopt($ch, CURLOPT_COOKIEJAR,      $this->cookiePath);    // Cookie management.
             curl_setopt($ch, CURLOPT_TIMEOUT,        $this->timeout);       // Timeout
             curl_setopt($ch, CURLOPT_USERAGENT,      $this->userAgent);     // Webbot name
             curl_setopt($ch, CURLOPT_URL,            $this->target);        // Target site
