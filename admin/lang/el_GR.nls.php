@@ -51,5 +51,5 @@ $nls['file']['el_GR'] = array(dirname(__FILE__).'/el_GR/admin.inc.php');
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['en_US'] = 'en';
+$nls['htmlarea']['el_GR'] = 'gr';
 ?>
