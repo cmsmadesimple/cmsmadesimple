@@ -678,8 +678,8 @@ class AdminTheme
      */
     function OutputHeaderJavascript()
     {
-		$ssl = isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on' || $_SERVER['HTTPS'] == 1);
 		$config = cmsms()->GetConfig();
+		$ssl = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off');
 	    $ssl = $ssl && isset($config['ssl_url']);
 		return cms_get_jquery('',$ssl);
 	}
