@@ -31,7 +31,6 @@ class CMSInstallerPage6 extends CMSInstallerPage
 	if( ModuleOperations::get_instance()->IsSystemModule($name) && !in_array($name,$installed) )
 	  {
 	    $module = ModuleOperations::get_instance()->get_module_instance($name,'',TRUE);
-	    debug_display('install: '.$name);
 	  }
       }
 
