@@ -237,9 +237,15 @@ final class modmgr_utils
 	      }
 	    if (! $found)
 	      {
-		return array(false, $mod->Lang('error_unsatisfiable_dependency', 
-					       array($this_dep['name'],$this_dep['version'], 
-						     self::file_to_module_name($allmods[1],$startspec) )));
+		// check if it's an installed module (maybe it's a core module that isn't distributed)
+		$tmp = array($this_dep);
+		$res = self::find_unfulfilled_dependencies($tmp);
+		if( !$res )
+		  {
+		    return array(false, $mod->Lang('error_unsatisfiable_dependency', 
+						   array($this_dep['name'],$this_dep['version'], 
+							 self::file_to_module_name($allmods[1],$startspec) )));
+		  }
 	      }
 	  }
       }
