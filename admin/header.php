@@ -79,28 +79,7 @@ else
 		}
 	    }
 	}
-	  
-	// if the install directory still existsx
-	// add a priority 1 dashboard item
-	if( file_exists(dirname(dirname(__FILE__)).'/install') )
-	  {
-	    $themeObject->AddNotification(1,'Core', lang('installdirwarning'));
-	  }
-	
-	// Display a warning if safe mode is enabled
-	if( ini_get_boolean('safe_mode') && get_site_preference('disablesafemodewarning',0) == 0 )
-	  {
-	    $themeObject->AddNotification(1,'Core',lang('warning_safe_mode'));
-	  }
-	
-	// Display a warning sitedownwarning
-	$sitedown_message = lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN');
-	$sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';
-	if (file_exists($sitedown_file))
-	  {
-	    $themeObject->AddNotification(1,'Core',$sitedown_message);
-	  }
-	
+
 	// Display a warning if CMSMS needs upgrading
 	{
 	  $db = $gCms->GetDb();
@@ -124,6 +103,27 @@ else
 	    }
 	}
 
+	  
+	// if the install directory still existsx
+	// add a priority 1 dashboard item
+	if( file_exists(dirname(dirname(__FILE__)).'/install') )
+	  {
+	    $themeObject->AddNotification(1,'Core', lang('installdirwarning'));
+	  }
+	
+	// Display a warning if safe mode is enabled
+	if( ini_get_boolean('safe_mode') && get_site_preference('disablesafemodewarning',0) == 0 )
+	  {
+	    $themeObject->AddNotification(1,'Core',lang('warning_safe_mode'));
+	  }
+	
+	// Display a warning sitedownwarning
+	$sitedown_message = lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN');
+	$sitedown_file = TMP_CACHE_LOCATION . '/SITEDOWN';
+	if (file_exists($sitedown_file))
+	  {
+	    $themeObject->AddNotification(1,'Core',$sitedown_message);
+	  }
 	
 	// Display an upgrade notification 
 	// but only do a check once per day

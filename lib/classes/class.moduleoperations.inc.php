@@ -629,6 +629,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  }
 
 	  // check to see if an upgrade is needed.
+	  allow_admin_lang(TRUE); // isn't this ugly.
 	  if( isset($info[$module_name]) && $info[$module_name]['status'] == 'installed' )
 	  {
 		  $dbversion = $info[$module_name]['version'];
@@ -656,6 +657,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 				  if( !$res )
 				  {
 					  // upgrade failed
+					  allow_admin_lang(FALSE); // isn't this ugly.
 					  debug_buffer("Automatic upgrade of $module_name failed");
 					  unset($obj);
 					  return FALSE;
@@ -664,6 +666,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 			  else if( !isset($CMS_FORCE_MODULE_LOAD) )
 			  {
 				  // nope, can't auto upgrade either
+				  allow_admin_lang(FALSE); // isn't this ugly.
 				  unset($obj);
 				  return FALSE;
 			  }

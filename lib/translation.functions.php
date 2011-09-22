@@ -453,6 +453,18 @@ function lang_by_realm()
 
 }
 
+/**
+ * Temporarily allow accessing admin realm from within a frontend action.
+ */
+function allow_admin_lang($flag = TRUE)
+{
+  cms_utils::set_app_data('__allow_admin_realm__',$flag);
+  if( !$flag )
+    {
+      global $lang;
+      if( isset($lang['admin']) ) unset($lang['admin']);
+    }
+}
 
 /**
  * Return a translated string for the default 'admin' realm.
@@ -502,7 +514,8 @@ function lang()
   global $CMS_STYLESHEET;
   global $CMS_INSTALL_PAGE;
   
-  if (!isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
+  $flag = cms_utils::get_app_data('__allow_admin_realm__');
+  if (!isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) && !$flag )
     {
       trigger_error('Attempt to load admin realm from non admin action');
       return '';
