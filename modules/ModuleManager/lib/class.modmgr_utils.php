@@ -237,7 +237,9 @@ final class modmgr_utils
 	      }
 	    if (! $found)
 	      {
-		return array(false, $mod->Lang('error_unsatisfiable_dependency', array($this_dep['name'],$this_dep['version'], $mod->_ModNameFromFile($allmods[1],$startspec) )));				
+		return array(false, $mod->Lang('error_unsatisfiable_dependency', 
+					       array($this_dep['name'],$this_dep['version'], 
+						     self::file_to_module_name($allmods[1],$startspec) )));
 	      }
 	  }
       }
