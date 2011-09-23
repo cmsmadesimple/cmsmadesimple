@@ -28,8 +28,7 @@
 define( "MODULE_DTD_VERSION", "1.3" );
 
 /**
- * "Static" module functions for internal use and module development.  CMSModule
- * extends this so that it has internal access to the functions.
+ * A singleton utility class to allow for working with modules.
  *
  * @since		0.9
  * @package		CMS
@@ -38,9 +37,10 @@ final class ModuleOperations
 {
 	/**
 	 * System Modules - a list (hardcoded) of all system modules
-	 * TODO: MOVE ME.... someplace private.
-	 *	@access private
 	 *
+	 * @access private
+	 * @internal
+	 * @ignore
 	 */
 	protected $cmssystemmodules =  array( 'FileManager','MenuManager','ModuleManager','Search','CMSMailer','News','MicroTiny','CMSPrinting','ThemeManager' );
 
@@ -77,6 +77,11 @@ final class ModuleOperations
   private function __construct() {}
 
 
+  /**
+   * Get the only permitted instance of this object.  It will be created if necessary
+   *
+   * @return object
+   */
   public static function &get_instance()
   {
 	  if( !isset(self::$_instance) ) {
@@ -90,6 +95,8 @@ final class ModuleOperations
   /**
    * Set an error condition
    *
+   * @ignore
+   * @deprecated
    * @param string $str The string to set for the error
    * @return void
    */
@@ -102,6 +109,8 @@ final class ModuleOperations
   /**
    * Return the last error
    *
+   * @ignore
+   * @deprecated
    * @return string The last error, if any
    */
   public function GetLastError()
@@ -110,18 +119,18 @@ final class ModuleOperations
   }
 
 
-	/**
-	 * Creates an xml data package from the module directory.
-	 *
-	 * @param mixed $modinstance The instance of the module object
-	 * @param string $message Reference to a string which will be filled with the message 
-	 *                        created by the run of the method
-	 * @param integer $filecount Reference to an interger which will be filled with the 
-	 *                           total # of files in the package
-	 * @return string an XML string comprising the module and its files
-	 */
-	function CreateXMLPackage( &$modinstance, &$message, &$filecount )
-	{
+  /**
+   * Creates an xml data package from the module directory.
+   *
+   * @param mixed $modinstance The instance of the module object
+   * @param string $message Reference to a string which will be filled with the message 
+   *                        created by the run of the method
+   * @param integer $filecount Reference to an interger which will be filled with the 
+   *                           total # of files in the package
+   * @return string an XML string comprising the module and its files
+   */
+  function CreateXMLPackage( &$modinstance, &$message, &$filecount )
+  {
 	  // get a file list
 	  $filecount = 0;
 	  $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
@@ -138,61 +147,61 @@ final class ModuleOperations
 	  $xmltxt .= "	<about><![CDATA[".base64_encode($modinstance->GetAbout())."]]></about>\n";
 	  $desc = $modinstance->GetAdminDescription();
 	  if( $desc != '' )
-		{
-		  $xmltxt .= "	<description><![CDATA[".$desc."]]></description>\n";
-		}
+		  {
+			  $xmltxt .= "	<description><![CDATA[".$desc."]]></description>\n";
+		  }
 	  $depends = $modinstance->GetDependencies();
 	  foreach( $depends as $key=>$val )
-		{
-		  $xmltxt .= "	<requires>\n";
+		  {
+			  $xmltxt .= "	<requires>\n";
 			  $xmltxt .= "	  <requiredname>$key</requiredname>\n";
 			  $xmltxt .= "	  <requiredversion>$val</requiredversion>\n";
-		  $xmltxt .= "	</requires>\n";
-		}
+			  $xmltxt .= "	</requires>\n";
+		  }
 	  foreach( $files as $file )
-		{
-		  // strip off the beginning
-		  if (substr($file,0,strlen($dir)) == $dir)
-			 {
-			 $file = substr($file,strlen($dir));
-			 }
-		  if( $file == '' ) continue;
+		  {
+			  // strip off the beginning
+			  if (substr($file,0,strlen($dir)) == $dir)
+				  {
+					  $file = substr($file,strlen($dir));
+				  }
+			  if( $file == '' ) continue;
 
-		  $xmltxt .= "	<file>\n";
-		  $filespec = $dir.DIRECTORY_SEPARATOR.$file;
-		  $xmltxt .= "	  <filename>$file</filename>\n";
-		  if( @is_dir( $filespec ) )
-		{
-		  $xmltxt .= "	  <isdir>1</isdir>\n";
-		}
-		  else
-		{
-		  $xmltxt .= "	  <isdir>0</isdir>\n";
-		  $data = base64_encode(file_get_contents($filespec));
-		  $xmltxt .= "	  <data><![CDATA[".$data."]]></data>\n";
-		}
+			  $xmltxt .= "	<file>\n";
+			  $filespec = $dir.DIRECTORY_SEPARATOR.$file;
+			  $xmltxt .= "	  <filename>$file</filename>\n";
+			  if( @is_dir( $filespec ) )
+				  {
+					  $xmltxt .= "	  <isdir>1</isdir>\n";
+				  }
+			  else
+				  {
+					  $xmltxt .= "	  <isdir>0</isdir>\n";
+					  $data = base64_encode(file_get_contents($filespec));
+					  $xmltxt .= "	  <data><![CDATA[".$data."]]></data>\n";
+				  }
 
-		  $xmltxt .= "	</file>\n";
-		  ++$filecount;
-		}
-		  $xmltxt .= "</module>\n";
+			  $xmltxt .= "	</file>\n";
+			  ++$filecount;
+		  }
+	  $xmltxt .= "</module>\n";
 	  $message = 'XML package of '.strlen($xmltxt).' bytes created for '.$modinstance->GetName();
 	  $message .= ' including '.$filecount.' files';
 	  return $xmltxt;
-	}
+  }
 
 
 /**
-* Unpackage a module from an xml string
-* does not touch the database
-*
-* @param string $xml The xml data for the package
-* @param boolean $overwrite Should we overwrite files if they exist?
-* @param boolean $brief If set to true, less checking is done and no errors are returned
-* @return array A hash of details about the installed module
-*/
-function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
-{
+ * Unpackage a module from an xml string
+ * does not touch the database
+ *
+ * @param string $xml The xml data for the package
+ * @param boolean $overwrite Should we overwrite files if they exist?
+ * @param boolean $brief If set to true, less checking is done and no errors are returned
+ * @return array A hash of details about the installed module
+ */
+  function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
+  {
 	$gCms = cmsms();
 
 	// first make sure that we can actually write to the module directory
@@ -477,6 +486,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   /**
    * Install a module into the database
    *
+   * @internal
    * @param string $module The name of the module to install
    * @param boolean $loadifnecessary If true, loads the module before trying to install it
    * @return array Returns a tuple of whether the install was successful and a message if applicable
@@ -685,7 +695,12 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   }
 
 
-  // should be private??
+  /**
+   * A function to return a list of all modules that appear to exist properly in the modules directory.
+   *
+   * @internal
+   * @return array of complete specifications to module files
+   */
   public function FindAllModules()
   {
 	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
@@ -713,6 +728,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
    * 
    * @since 1.10
    * @access private
+   * @internal
    */
   private function _load_all_modules()
   {
@@ -739,6 +755,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
    * will in turn do the upgrading and installing if necessary.
    *
    * @access public
+   * @internal
    * @param loadall boolean indicates wether ALL modules in the filesystem should be loaded, default is false
    * @param noadmin boolean indicates that modules marked as admin_only in the database should not be loaded, default is false
    * @param no_lazyload boolean indicates that modules marked as lazy_loadable should be loaded anywayz, default is falze
@@ -820,6 +837,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
    *
    * @param string $module The name of the module to upgrade
    * @return boolean Whether or not the upgrade was successful
+   * @internal
    */
   public function UpgradeModule( $module_name, $to_version = '')
   {
@@ -833,6 +851,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
    *
    * @param string $module The name of the module to upgrade
    * @return boolean Whether or not the upgrade was successful
+   * @internal
    */
   public function UninstallModule( $module)
   {
@@ -901,6 +920,9 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   /**
    * Activate a module
    *
+   * @param string module name
+   * @param boolean flag indicating wether to activate or deactivate the module
+   * @return boolean
    */
   public function ActivateModule($module_name,$activate = true)
   {
@@ -929,8 +951,7 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
   /**
    * Returns a hash of all loaded modules.  This will include all
-   * modules loaded by LoadModules, which could either be all or them,
-   * or just ones that are active and installed.
+   * modules loaded into memory at the current time
    *
    * @return array The hash of all loaded modules
    */
@@ -997,8 +1018,14 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 
   /**
    * A function to return the object reference to the module object
-   * if the module is not already loaded, it will be loaded.
+   * if the module is not already loaded, it will be loaded.  Version checks are done
+   * with the module to allow only loading versions of modules that are greater than the 
+   * specified value.
    *
+   * @param string The module name
+   * @param string an optional version string.
+   * @param boolean an optional flag to indicate wether the module should be force loaded if necesary.
+   * @return mixed  Null on failure, or an object of type CmsModule on success.
    */
   public function &get_module_instance($module_name,$version = '',$force = FALSE)
   {
@@ -1032,12 +1059,28 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   }
 
 
+  /**
+   * Test if the specified module name is a system module
+   *
+   * @param string The module name
+   * @return boolean
+   */
   public function IsSystemModule($module_name)
   {
 	  return in_array($module_name,$this->cmssystemmodules);
   }
 
 
+
+  /**
+   * Return the current syntax highlighter module object
+   * 
+   * This method retrieves the current user preference for the syntax hightlighter module.  If this preference is set, and indicates a 
+   * valid syntax highlighter module, it is loaded and the object returned.
+   *
+   * @return null on failure, an object of type CmsModule On success.
+   * @since 1.10
+   */
   public function &GetSyntaxHighlighter()
   {
 	  $res = null;
@@ -1055,6 +1098,16 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   }
 
 
+  /**
+   * Return the current syntax wysiwyg module object
+   * 
+   * This method makes an attempt to find the appropriate wysiwyg module given the current request context
+   * and admin user preference.
+   *
+   * @param string allows bypassing the automatic detection process and specifying a wysiwyg module.
+   * @return null on failure, an object of type CmsModule On success.
+   * @since 1.10
+   */
   public function &GetWYSIWYGModule($module_name = '')
   {
 	  global $CMS_ADMIN_PAGE;
@@ -1082,6 +1135,14 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   }
 
 
+  /**
+   * Return the current search module object
+   *
+   * This method returns module object for the currently selected search module.
+   *
+   * @return null on failure, an object of type CmsModule on success
+   * @since 1.10
+   */
   public function &GetSearchModule()
   {
 	  $obj = null;
@@ -1093,6 +1154,17 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 	  return $obj;
   }
 
+
+  /**
+   * Return the current syntax highlighter module object
+   * 
+   * This method retrieves the current user preference for the syntax hightlighter module.  If this preference is set, and indicates a 
+   * valid syntax highlighter module, it is loaded and the object returned.
+   *
+   * @param string allows bypassing the automatic detection process and specifying a wysiwyg module.
+   * @return null on failure, an object of type CmsModule On success.
+   * @since 1.10
+   */
   public function &GetSyntaxModule($module_name = '')
   {
 	  global $CMS_ADMIN_PAGE;
@@ -1123,6 +1195,14 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   }
 
 
+  /**
+   * Queue a module for install
+   * 
+   * @internal
+   * @since 1.10
+   * @param string module name
+   * @return void
+   */
   public function QueueForInstall($module_name)
   {
 	  if( !$module_name ) return;
@@ -1138,6 +1218,14 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   }
 
 
+  /**
+   * Get list of modules queued for install.
+   * 
+   * @internal
+   * @since 1.10
+   * @param string module name
+   * @return void
+   */
   public function GetQueueResults()
   {
 	  if( isset($_SESSION['moduleoperations_result']) )
@@ -1149,6 +1237,14 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
   }
 
 
+  /**
+   * Unload a module from memory
+   *
+   * @internal
+   * @since 1.10
+   * @param string module name
+   * @return void
+   */
   public function unload_module($module_name)
   {
 	  if( !isset($this->_modules[$module_name]) || !is_object($this->_modules[$module_name]) )  return;
