@@ -1043,7 +1043,7 @@ EOT;
 
 $lang['admin']['help_function_cms_jquery'] = <<<EOT
 <h3>What does this do?</h3>
- <p>This plugin allows you output the javascript liberies and plugins used from the admin.</p>
+ <p>This plugin allows you output the javascript libraries and plugins used from the admin.</p>
 <h3>How do I use it?</h3>
 <p>Simply insert this tage into your page or template: <code>{cms_jquery}</code></p>
 
