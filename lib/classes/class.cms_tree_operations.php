@@ -35,6 +35,10 @@
 #END_LICENSE
 
 /**
+ * @package CMS
+ */
+
+/**
  * A utility class to provide functions to populate a tree
  *
  * @package CMS

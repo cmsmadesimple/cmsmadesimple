@@ -18,6 +18,18 @@
 #
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 
+/**
+ * @package CMS
+ */
+
+
+/**
+ * A class for user preferences
+ *
+ * @package CMS
+ * @since 1.10
+ * @author Robert Campbell (calguy1000@gmail.com)
+ */
 final class cms_userprefs
 {
   private static $_prefs;
@@ -53,7 +65,15 @@ final class cms_userprefs
     self::$_prefs = null;
   }
 
-  public static function get_for_user($userid,$key,$dflt)
+  /**
+   * A method to get a preference for a specific user
+   *
+   * @param int The specified user id.
+   * @param string The preference name
+   * @param mixed The default value.
+   * @return string
+   */
+  public static function get_for_user($userid,$key,$dflt = '')
   {
     self::_read($userid);
     if( isset(self::$_prefs[$userid][$key]) )
@@ -63,11 +83,27 @@ final class cms_userprefs
     return $dflt;
   }
 
+  
+  /**
+   * Get a user preference
+   *
+   * @param string The preference name
+   * @param string A default value if the preference could not be found
+   * @return strung
+   */
   public static function get($key,$dflt = '')
   {
     return self::get_for_user(self::_userid(),$key,$dflt);
   }
 
+
+  /**
+   * A method to test if a preference exists for a user
+   *
+   * @param int the user id
+   * @param string The preference name
+   * @return boolean
+   */
   public static function exists_for_user($userid,$key)
   {
     self::_read($userid);
@@ -75,11 +111,27 @@ final class cms_userprefs
     return FALSE;
   }
 
+
+  /**
+   * A method to test if a preference exists for the current user
+   *
+   * @param string The preference name
+   * @return boolean
+   */
   public static function exists($key)
   {
     return self::exists_for_user(self::_userid(),$key);
   }
 
+
+  /**
+   * A method to set a preference for a specific user
+   *
+   * @param int The user id
+   * @param string The preference name
+   * @param string The preference value
+   * @return void
+   */
   public static function set_for_user($userid,$key,$value)
   {
     self::_read($userid);
@@ -97,11 +149,28 @@ final class cms_userprefs
     self::$_prefs[$userid][$key] = $value;
   }
 
+
+  /**
+   * A method to set a preference for the current logged in user.
+   *
+   * @param string The preference name
+   * @param string The preference value
+   * @return void
+   */
   public static function set($key,$value)
   {
     return self::set_for_user(self::_userid(),$key,$value);
   }
 
+
+  /**
+   * A method to remove a method for the user
+   *
+   * @param int The user id
+   * @param string (optional) The preference name.  If not specified, all preferences for this user will be removed.
+   * @param boolean (optional) wether or not to use approximation in the preference name
+   * @return void
+   */
   public static function remove_for_user($userid,$key = '',$like = FALSE)
   {
     self::_read($userid);
@@ -124,6 +193,14 @@ final class cms_userprefs
     self::_reset();
   }
 
+
+  /**
+   * A method to remove a preference for the current user
+   *
+   * @param string The preference name.
+   * @param boolean (optional) wether or not to use approximation in the preference name
+   * @return void
+   */
   public static function remove($key,$like = FALSE)
   {
     return self::remove_for_user(self::_userid(),$key,$like);

@@ -35,10 +35,14 @@
 #END_LICENSE
 
 /**
+ * @package CMS
+ */
+
+/**
  * A simple static class providing convenience utilities for working with cookies.
  *
  * @package CMS
- * @uthor Robert Campbell
+ * @author Robert Campbell
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.10
  */
@@ -98,18 +102,38 @@ class cms_cookies
   }
 
 
+  /**
+   * Set a cookie
+   *
+   * @param string The cookie name
+   * @param string The cookie value
+   * @param int    Unix timestamp of the time the cookie will expire.   By default cookies that expire when the browser closes will be created.
+   * @return boolean
+   */
   public static function set($key,$value,$expire = 0)
   {
     return self::__setcookie($key,$value,$expire);
   }
 
 
+  /**
+   * Get the value of a cookie
+   *
+   * @param string The cookie name
+   * @return mixed.  Null if the cookie does not exist, otherwise a string containing the cookie value.
+   */
   public static function get($key)
   {
     if( isset($_COOKIE[$key]) ) return $_COOKIE[$key];
   }
 
 
+  /**
+   * Erase a cookie
+   *
+   * @param string The cookie name
+   * @return void
+   */
   public static function erase($key)
   {
     unset($_COOKIE[$key]);

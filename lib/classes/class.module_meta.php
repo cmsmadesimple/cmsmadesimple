@@ -22,7 +22,17 @@
  * @package CMS 
  */
 
-class module_meta
+/**
+ * A singleton class for managing meta data acquired from modules.
+ * 
+ * This class caches information from modules as needed.
+ *
+ * @package CMS
+ * @since 1.10
+ * @author  Robert Campbell
+ * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
+ */
+final class module_meta
 {
   static private $_instance = null;
   private $_cache_fn;
@@ -34,6 +44,11 @@ class module_meta
   }
 
 
+  /**
+   * Get the instance of this object.  The object will be instantiated if necessary
+   *
+   * @return object
+   */
   public static function &get_instance()
   {
     if( !isset(self::$_instance) )
@@ -66,6 +81,14 @@ class module_meta
   }
 
 
+  /**
+   * List modules by their capabilities
+   *
+   * @param string capability name
+   * @param array optional capability parameters
+   * @param boolean optional test value.
+   * @return array of matching module names
+   */
   public function module_list_by_capability($capability,$params = array(),$returnvalue = TRUE)
   {
     if( empty($capability) ) return;
@@ -129,6 +152,16 @@ class module_meta
   }
 
 
+  /**
+   * Return a list of modules that have the supplied method.
+   *
+   * This method will query all available modules, check if the method name exists for that module, and if so, call the method and trap the
+   * return value.  
+   *
+   * @param string method name
+   * @param mixed  optional return value.
+   * @return array of matching module names
+   */
   public function module_list_by_method($method,$returnvalue = TRUE)
   {
     if( empty($method) ) return;

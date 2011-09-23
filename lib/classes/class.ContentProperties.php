@@ -19,6 +19,10 @@
 #$Id: class.content.inc.php 6905 2011-02-20 22:23:40Z calguy1000 $
 
 /**
+ * @package CMS
+ */
+
+/**
  * Class to represent content properties.  These are pretty much
  * separate beings that get used by a content object instance.
  *

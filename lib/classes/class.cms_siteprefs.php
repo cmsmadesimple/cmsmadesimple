@@ -18,6 +18,17 @@
 #
 #$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
 
+/**
+ * @package CMS
+ */
+
+/**
+ * A class for working with site preferences
+ *
+ * @package CMS
+ * @since 1.10
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ */
 final class cms_siteprefs
 {
   private static $_prefs;
@@ -48,6 +59,13 @@ final class cms_siteprefs
     self::$_prefs = null;
   }
 
+  /**
+   * Retrieve a site preference
+   *
+   * @param string The preference name
+   * @param string Optional default value
+   * @return string
+   */
   public static function get($key,$dflt = '')
   {
     self::_read();
@@ -56,6 +74,13 @@ final class cms_siteprefs
     return $dflt;
   }
 
+
+  /**
+   * Test if a site preference exists
+   *
+   * @param string The preference name
+   * @return boolean
+   */
   public static function exists($key)
   {
     self::_read();
@@ -66,6 +91,14 @@ final class cms_siteprefs
     return FALSE;
   }
 
+
+  /**
+   * Set a site preference
+   * 
+   * @param string The preference name
+   * @param string The preference value
+   * @return void
+   */
   public static function set($key,$value)
   {
     $db = cmsms()->GetDb();
@@ -83,13 +116,20 @@ final class cms_siteprefs
   }
 
 
+  /**
+   * Remove a site preference
+   *
+   * @param string The preference name
+   * @param boolean Wether to use preference name approximation
+   * @return void
+   */
   public static function remove($key,$like = FALSE)
   {
     $query = 'DELETE FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name = ?';
     if( $like )
       {
-	$query = 'DELETE FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name LIKEn ?';
-	$key .= '%';
+	  $query = 'DELETE FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name LIKE ?';
+	  $key .= '%';
       }
     $db = cmsms()->GetDb();
     $db->Execute($query,array($key));

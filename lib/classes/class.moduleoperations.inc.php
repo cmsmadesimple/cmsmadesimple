@@ -640,18 +640,19 @@ function ExpandXMLPackage( $xmluri, $overwrite = 0, $brief = 0 )
 			  {
 				  // we're allowed to upgrade
 				  $res = $this->_upgrade_module($obj);
-				  $res2 = '';
 				  if( !isset($_SESSION['moduleoperations_result']) )
 				  {
 					  $_SESSION['moduleoperations_result'] = array();
 				  }
 				  if( $res )
 				  {
-					  $res2 = array(TRUE,lang('moduleupgraded'));
+					  return TRUE;
+					  //$res2 = array(TRUE,lang('moduleupgraded'));
 				  }
 				  else
 				  {
-					  $res2 = array(FALSE,lang('moduleupgradeerror'));
+					  return FALSE;
+					  //$res2 = array(FALSE,lang('moduleupgradeerror'));
 				  }
 				  $_SESSION['moduleoperations_result'][$module_name] = $res2;
 				  if( !$res )

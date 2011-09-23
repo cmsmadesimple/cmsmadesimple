@@ -18,6 +18,8 @@
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
+require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
+
 /**
  * Extends the Smarty class for content.
  *
@@ -26,8 +28,6 @@
  * @package CMS
  * @since 0.1
  */
-
-require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
 
 class Smarty_CMS extends Smarty 
 {	
@@ -192,7 +192,7 @@ class Smarty_CMS extends Smarty
    * @param string An optional type (block,filter,...) default is function.
    * @return bool
    * @since 1.10
-   * @aturhor calguy1000
+   * @author calguy1000
    */
   function is_registered($name,$type = 'function')
   {

@@ -35,6 +35,10 @@
 #END_LICENSE
 
 /**
+ * @package CMS
+ */
+
+/**
  * A tree class that allows backward compatibility (somewhat) to the old Tree class used
  * in CMSMS versions prior to 1.9, and provides content retrieval abilities, with interface
  * into the content cache.

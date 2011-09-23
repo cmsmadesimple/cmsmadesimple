@@ -35,6 +35,10 @@
 #END_LICENSE
 
 /**
+ * @package CMS
+ */
+
+/**
  * A Simple Static class providing various convenience utilities.
  *
  * @package CMS

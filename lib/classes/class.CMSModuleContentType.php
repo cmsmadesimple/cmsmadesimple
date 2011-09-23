@@ -20,6 +20,10 @@
 #$Id: class.content.inc.php 6905 2011-02-20 22:23:40Z calguy1000 $
 
 /**
+ * @package CMS
+ */
+
+/**
  * Class that module defined content types must extend.
  *
  * @since		0.9

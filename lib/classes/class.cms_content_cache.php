@@ -35,6 +35,10 @@
 #END_LICENSE
 
 /**
+ * @package CMS
+ */
+
+/**
  * A static class to manage cachine content objects.
  *
  * @package CMS

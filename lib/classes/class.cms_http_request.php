@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @package CMS
+ */
+
+/**
  * HTTP Class
  *
  * This is a wrapper HTTP class that uses either cURL or fsockopen to 

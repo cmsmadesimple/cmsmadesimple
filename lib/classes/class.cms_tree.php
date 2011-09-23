@@ -35,6 +35,10 @@
 #END_LICENSE
 
 /**
+ * @package CMS
+ */
+
+/**
  * A Simple PHP Tree class that allows storing associative data along with each node.
  *
  * @package CMS

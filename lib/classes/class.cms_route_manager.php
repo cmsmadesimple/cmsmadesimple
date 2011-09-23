@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @package CMS
+ */
+
+
+/**
  * A class to manage all recognized routes in the system.
  * 
  * @package CMS
