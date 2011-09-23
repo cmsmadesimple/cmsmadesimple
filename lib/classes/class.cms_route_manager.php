@@ -11,6 +11,7 @@
  * @package CMS
  * @author Robert Campbell <calguy1000@cmsmadesimple.org>
  * @internal
+ * @access private
  * @since  1.9
  */
 class cms_route_manager
@@ -24,6 +25,7 @@ class cms_route_manager
    * @param boolean Flag to indicate that loading should be forced
    * @return boolean
    * @internal
+   * @access private
    */
   static public function load($force = false)
   {
@@ -55,6 +57,7 @@ class cms_route_manager
    * Save routes to a cache file
    *
    * @internal
+   * @access private
    */
   static public function save()
   {

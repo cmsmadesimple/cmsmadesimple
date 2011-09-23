@@ -97,6 +97,7 @@ class ContentOperations
 	 * This method is called from the autoloader.  There is no need to call it internally
 	 *
 	 * @internal
+	 * @access private
 	 * @final
 	 * @since 1.9
 	 * @param mixed The type.  Either a string, or an instance of CmsContentTypePlaceHolder
@@ -1088,6 +1089,7 @@ class ContentOperations
 	 * @since 1.9
 	 * @author Robert Campbell <calguy1000@hotmail.com>
 	 * @internal
+	 * @access private
 	 */
 	public function register_routes()
 	{

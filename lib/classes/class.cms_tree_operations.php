@@ -55,6 +55,7 @@ class cms_tree_operations
    * Add a unique key to the key index
    *
    * @internal
+   * @access private
    * @param string key to add
    */
   public static function add_key($key)
@@ -77,6 +78,7 @@ class cms_tree_operations
    * the_alias,gr_grandparent.grandparent.parent
    *
    * @internal
+   * @access private
    * @param array The csv data to import
    * @param char  The delimiter separating hierarchy paths
    * @param char  The delimiter separating the node alias from the path.

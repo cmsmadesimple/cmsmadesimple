@@ -127,6 +127,7 @@ class cms_config implements ArrayAccess
   /**
    * @ignore
    * @internal
+   * @access private
    */
   public function merge($newconfig)
   {

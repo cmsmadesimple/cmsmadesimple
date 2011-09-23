@@ -482,6 +482,7 @@ class CMSModule
 	 *
 	 * @final
 	 * @internal
+	 * @access private
 	 * @return array
 	 */
 	final public function GetParameters()
@@ -1092,6 +1093,7 @@ class CMSModule
 	 * before any modules depending on it are uninstalled first.
 	 *
 	 * @internal
+	 * @access private
 	 * @final
 	 * @return boolean
 	 */
@@ -2350,6 +2352,7 @@ class CMSModule
 	 *
 	 * @final
 	 * @internal
+	 * @access private
 	 */
 	final public function IsFileTemplateCached($tpl_name, $designation = '', $timestamp = '', $cacheid = '')
 	{
@@ -2378,6 +2381,7 @@ class CMSModule
 	 *
 	 * @final
 	 * @internal
+	 * @access private
 	 */
 	final public function IsDatabaseTemplateCached($tpl_name, $designation = '', $timestamp = '')
 	{

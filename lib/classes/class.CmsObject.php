@@ -106,12 +106,12 @@ final class CmsObject {
 		}
 		return self::$_instance;
 	}
-
 	/**
 	 * Retrieve the list of errors
 	 *
 	 * @since 1.9
 	 * @internal
+	 * @access private
 	 * return array
 	 */
 	public function get_errors()
@@ -125,6 +125,7 @@ final class CmsObject {
 	 *
 	 * @since 1.9
 	 * @internal
+	 * @access private
 	 * @param string The error message.
 	 */
 	public function add_error($str)
@@ -138,6 +139,7 @@ final class CmsObject {
 	 * Retrieve the value of an internal variable.
 	 *
 	 * @internal
+	 * @access private
 	 * @since 1.9
 	 * @param string The variable name to get
 	 * @return mixed The value of the internal variable, or null.
@@ -157,6 +159,7 @@ final class CmsObject {
 	 * Set a variable for later usage.
 	 *
 	 * @internal
+	 * @access private
 	 * @since 1.9
 	 * @param string The variable name to set
 	 * @param mixed  The value
