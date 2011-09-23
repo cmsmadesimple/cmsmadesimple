@@ -1045,7 +1045,7 @@ $lang['admin']['help_function_cms_jquery'] = <<<EOT
 <h3>What does this do?</h3>
  <p>This plugin allows you output the javascript libraries and plugins used from the admin.</p>
 <h3>How do I use it?</h3>
-<p>Simply insert this tage into your page or template: <code>{cms_jquery}</code></p>
+<p>Simply insert this tag into your page or template: <code>{cms_jquery}</code></p>
 
 <h3>Sample</h3>
 <pre><code>{cms_jquery cdn=true exclude='jquery.ui.nestedSortable-1.3.4.js' append='uploads/NCleanBlue/js/ie6fix.js'}</code></pre>
