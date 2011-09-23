@@ -1068,7 +1068,7 @@ $lang['admin']['help_function_cms_jquery'] = <<<EOT
 <ul>
 	<li><em>(optional) </em><tt>exclude</tt> - use comma seperated value(CSV) list of scripts you would like to exclude. <code>'jquery.ui.nestedSortable.js,jquery.json-2.2.js'</code></li>
 	<li><em>(optional) </em><tt>append</tt> - use comma seperated value(CSV) list of script paths you would like to append. <code>'/uploade/jquery.ui.nestedSortable.js,http://code.jquery.com/jquery-1.6.2.min.js'</code></li>
-	<li><em>(optional) </em><tt>cdn</tt> - cdn='true' will insert jQuery and jQueryUI Frameworks using Google's Content Delivery Netwok.</li>
+	<li><em>(optional) </em><tt>cdn</tt> - cdn='true' will insert jQuery and jQueryUI Frameworks using Google's Content Delivery Netwok. Default is false.</li>
 	<li><em>(optional) </em><tt>ssl</tt> - use to use the ssl_url as the base path.</li>
 	<li><em>(optional) </em><tt>custom_root</tt> - use to set any base path wished.<code>custom_root='http://test.domain.com/'</code> <br/>NOTE: over writes ssl option and works with the cdn option</li>
 	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>

@@ -19,9 +19,9 @@
 function smarty_cms_function_cms_jquery($params, &$smarty)
 {
 	$exclude = isset($params['exclude']) && !empty($params['exclude'])?$params['exclude']:'';
-	$cdn = isset($params['cdn']) && !empty($params['cdn'])?$params['cdn']:false;
+	$cdn = isset($params['cdn']) && ($params['cdn'])=='true'?true:false;
 	$append = isset($params['append']) && !empty($params['append'])?$params['append']:'';
-	$ssl = isset($params['ssl']) && !empty($params['ssl'])?$params['ssl']:false;
+	$ssl = isset($params['ssl']) && ($params['ssl'])=='true'?true:false;
 	$custom_root = isset($params['custom_root']) && !empty($params['custom_root'])?$params['custom_root']:'';
 
 	// get the output.
