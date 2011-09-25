@@ -181,6 +181,7 @@ function cms_join_path()
 /**
  * Return the global gCms object
  *
+ * @since 1.7
  * @return object
  */
 function &cmsms()
@@ -493,7 +494,10 @@ function nl2pnbr( $text )
 
 
 /**
- * A function to put a backtrace into the generated log file
+ * A function to put a backtrace into the generated log file.
+ * 
+ * @see debug_to_log, debug_bt
+ * @return void
  */
 function debug_bt_to_log()
 {
@@ -524,6 +528,8 @@ function debug_bt_to_log()
 
 /**
  * A function to generate a backtrace in a readable format.
+ *
+ * @return void
  */
 function debug_bt()
 {
@@ -731,6 +737,7 @@ function debug_sql($str, $newline = false)
 * @param string $value
 * @param mixed $default_value (optional)
 * @param string $session_key (optional)
+* @deprecated
 * @return mixed
 */
 function get_request_value($value, $default_value = '', $session_key = '')
@@ -766,6 +773,7 @@ function get_request_value($value, $default_value = '', $session_key = '')
 *
 * @param string $value
 * @param mixed $default_value
+* @deprecated
 * @return mixed
 */
 function get_value_with_default($value, $default_value = '', $session_key = '')
@@ -900,7 +908,7 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
 }
 
 /**
- * A convenience functo to create a dropdown control with supported encodings.
+ * A convenience function to create a dropdown control with supported encodings.
  *
  * @internal
  * @param string A name for the control
@@ -1425,6 +1433,7 @@ if (!function_exists("stripos")) {
  * Taken from cakephp (http://cakephp.org)
  * Licensed under the MIT License
  * 
+ * @internal
  * @param string input
  * @return string
  */
