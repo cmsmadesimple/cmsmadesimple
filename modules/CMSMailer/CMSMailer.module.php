@@ -292,7 +292,7 @@ class CMSMailer extends CMSModule
 	$obj = new StdClass;
 	$obj->priority = 1;
 	$link = 'moduleinterface.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&amp;module=CMSMailer';
-	$obj->html = lang('warning_mail_settings', $link);
+	$obj->html = lang('warning_mail_settings', $link).'&nbsp;'.$this->Lang('warning_cron_updated');
 	
 	return $obj;
       }

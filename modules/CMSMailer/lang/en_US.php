@@ -1,4 +1,5 @@
 <?php
+$lang['warning_cron_updated'] = 'This test is generated on an infrequent basis.  It may take some time for it to go away';
 $lang['none'] = 'None';
 $lang['ssl'] = 'SSL';
 $lang['tls'] = 'TLS';

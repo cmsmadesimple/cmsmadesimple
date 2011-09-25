@@ -65,4 +65,13 @@ class CmsPrivacyException extends CmsException {}
  */
 class CmsSingletonException extends CmsException {}
 
+/**
+ * An exception indicating invalid data was supplied to a function or class.
+ * 
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.10
+ */
+class CmsInvalidDataException extends CmsException {}
+
 ?>
