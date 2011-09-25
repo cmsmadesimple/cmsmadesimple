@@ -209,12 +209,23 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			  $tmp = $_SESSION["redirect_url"];
 			  unset($_SESSION["redirect_url"]);
 			  
+			  debug_to_log('got session var '.$tmp);
+			  if( strstr($tmp,CMS_SECURE_PARAM_NAME.'=') !== FALSE )
+			    {
+			      $the_url = new cms_url($tmp);
+			      $the_url->set_queryvar(CMS_SECURE_PARAM_NAME,$_SESSION[CMS_USER_KEY]);
+			      $tmp = (string)$the_url;
+			    }
+
+			  debug_to_log('rebuilt url to '.$tmp);
 			  if( !strstr($tmp,'.php') || endswith($tmp,'/') )
 			    {
 			      // force the url to go to index.php
-			      $tmp = $config['admin_url'].'/index.php';
+			      $tmp = $config['admin_url'].'/index.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+			      debug_to_log('change session var to '.$tmp);
 			    }
-			  $tmp = $tmp . '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+			  
+			  debug_to_log('final redirect to '.$tmp);
 			  redirect($tmp);
 			}
 			unset($_SESSION["redirect_url"]);
@@ -261,6 +272,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			    }
 
 			  $homepage = html_entity_decode($homepage);
+			  debug_to_log('redirect to homepage '.$homepage);
 			  redirect($homepage);
 			}
 		}
