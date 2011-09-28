@@ -505,7 +505,7 @@ class cms_http_request
      */
     function addParam($name, $value)
     {
-        if (!empty($name) && !empty($value))
+        if (!empty($name) && $value !== '')
         {
             $this->params[$name] = $value;
         }   
