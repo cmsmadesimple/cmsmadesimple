@@ -131,7 +131,7 @@ if( !isset($gCms) ) exit;
 		    $this->Lang('charset'));
     $this->smarty->assign('input_charset',
 		    $this->CreateInputText($id,'input_charset',
-					   $this->GetPreference('charset'),
+					   $this->GetPreference('charset','utf-8'),
 					   40,40));
 
     $this->smarty->assign('submit',

@@ -63,6 +63,7 @@ $lang['changelog'] = '
 <li>Version 1.73.10. August, 2006. Modified to use lazy loading to minimize memory footprint when CMSMailer is not being used.</li>
 <li>Version 1.73.13. January, 2008.  Added more permissions checks.</li>
 <li>Version 2.0.1 - January, 2011 - Remove cancel button.</li>
+<li>Version 2.0.2 - September, 2011 - Set default charset to utf-8.</li>
 </ul>';
 $lang['help'] = '<h3>What Does This Do?</h3>
 <p>This module provides no end user functionality.  It is designed to be integrated into other modules to provide email capabilities.  Thats it, nothing more.</p>
