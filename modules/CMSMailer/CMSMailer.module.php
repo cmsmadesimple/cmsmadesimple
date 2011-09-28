@@ -327,9 +327,8 @@ class CMSMailer extends CMSModule
     $this->the_mailer->ClearReplyTos();
     $this->the_mailer->SMTPSecure = $this->GetPreference('secure');
     $charset = $this->GetPreference('charset','utf-8');
-    if( !empty($charset) ) {
-      $this->SetCharSet($charset);
-    }
+    if( $charset == '' ) $charset = 'utf-8';
+    $this->SetCharSet($charset);
   }
 
 
