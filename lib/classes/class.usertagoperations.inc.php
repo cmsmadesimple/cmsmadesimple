@@ -58,7 +58,7 @@ final class UserTagOperations
 			{
 				$db = cmsms()->GetDb();
 				
-				$query = 'SELECT * FROM '.cms_db_prefix().'userplugins';
+				$query = 'SELECT * FROM '.cms_db_prefix().'userplugins'.' ORDER BY userplugin_name';
 				$data = $db->GetArray($query);
 				if( is_array($data) )
 					{
