@@ -71,6 +71,7 @@ if ($access)
 		}
 		if( $module && $event && $handler )
 		{
+
 		if( substr( $handler, 0, 2 ) == "m:" )
 		{
 			$handler = substr( $handler, 2 );
@@ -231,7 +232,7 @@ if ($access)
 	$usertags = $usertagops->ListUserTags();
 	foreach( $usertags as $key => $value )
 	{
-	  $allhandlers[$value] = $key;
+	  $allhandlers[$value] = $value;
 	}
 
 	// and the list of modules, and add them
