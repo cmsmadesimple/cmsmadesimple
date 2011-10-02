@@ -24,10 +24,7 @@ function smarty_function_root_url($params, &$smarty)
 
 	if( !isset($params['autossl']) || $params['autossl'] != 0 )
 	  {
-	    if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
-	      {
-		$str = $config['ssl_url'];
-	      }
+	    $str = $config->smart_root_url();
 	  }
 
         if( isset($params['assign']) )

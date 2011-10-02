@@ -1785,7 +1785,8 @@ EOT;
 	  $path = cms_join_path(cmsms()->config['root_path'],$icon);
 	  if( file_exists($path) )
 	    {
-	      $header .= "<img src=\"{$config['root_url']}/{$icon}\" class=\"itemicon\" alt=\"{$icon}\" />&nbsp;";
+			$url = $config->smart_root_url().'/'.$icon;
+			$header .= "<img src=\"{$url}\" class=\"itemicon\" alt=\"{$icon}\" />&nbsp;";
 	    }
 	  $header .= $title_name;
 	}

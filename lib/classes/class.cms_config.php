@@ -427,6 +427,15 @@ class cms_config implements ArrayAccess
       }
   }
 
+
+  public function smart_root_url()
+  {
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
+	  {
+		  return $this->offsetGet('ssl_url');
+	  }
+	  return $this->offsetGet('root_url');
+  }
 } // end of class
 
 ?>
