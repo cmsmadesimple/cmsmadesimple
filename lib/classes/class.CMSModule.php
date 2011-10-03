@@ -463,6 +463,8 @@ class CMSModule
 	/**
 	 * Register a route to use for pretty url parsing
 	 *
+	 * Note: This method is not compatible wih lazy loading in the front end.
+	 *
 	 * @final
 	 * @see SetParameters
 	 * @param string Regular Expression Route to register
@@ -1236,6 +1238,12 @@ class CMSModule
 	/**
 	 * Returns true if the module may support lazy loading in the front end
 	 *
+	 * Note: The results of this function are not read on each request, only during install and upgrade
+	 * therefore if the return value of this function changes the version number of the module should be
+	 * increased to force a re-load
+	 *
+	 * In CMSMS 1.10 routes are loaded upon each request, if a module registers routes it cannot be lazy loaded.
+	 *
 	 * @since 1.10
 	 * @abstract
 	 * @return boolean
@@ -1248,7 +1256,11 @@ class CMSModule
 	/**
 	 * Returns true if the module may support lazy loading in the admin interface.
 	 *
-	 * This functionality is not completely implemented in version 1.8
+	 * Note: The results of this function are not read on each request, only during install and upgrade
+	 * therefore if the return value of this function changes the version number of the module should be
+	 * increased to force a re-load
+	 *
+	 * In CMSMS 1.10 routes are loaded upon each request, if a module registers routes it cannot be lazy loaded.
 	 *
 	 * @since 1.10
 	 * @abstract

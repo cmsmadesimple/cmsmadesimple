@@ -39,12 +39,12 @@
  */
 
 /**
- * A static class to manage cachine content objects.
+ * A static class to manage caching content objects.
  *
  * @package CMS
  * @since 1.9
  */
-class cms_content_cache
+final class cms_content_cache
 {
   private static $_alias_map;
   private static $_id_map;
