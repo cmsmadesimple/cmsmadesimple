@@ -375,15 +375,14 @@ if (FALSE == is_writable(TMP_CACHE_LOCATION) ||
 # give everything to smarty
 {
   // warning: uber hack.
-//   $tmp = ModuleOperations::get_instance()->GetInstalledModules();
-//   if( !is_array($tmp) || count($tmp) == 0 )
-//     {
-//       echo $themeObject->ShowErrors(lang('error_nomodules'));
-//       return;
-//     }
-//   $firstmod = $tmp[0];
-  $smarty->assign('mod',cms_utils::get_module('CMSMailer'));
-  //$smarty->assign('mod',cms_utils::get_module($firstmod));
+  $tmp = ModuleOperations::get_instance()->GetInstalledModules();
+  for( $i = 0; $i < count($tmp); $i++ )
+    {
+      if( !ModuleOperations::get_instance()->IsSystemModule($tmp[$i]) ) continue;
+      $mod = cms_utils::get_module($tmp[$i]);
+      if( is_object($mod) ) break;
+    }
+  $smarty->assign('mod',$mod);
 }
 {
   $modules = ModuleOperations::get_instance()->get_modules_with_capability('search');
