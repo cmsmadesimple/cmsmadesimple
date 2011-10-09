@@ -138,6 +138,9 @@ _tover=`echo $_to | cut -d- -f2-`
 echo "Processing base version";
 mkdir $_workdir
 _frombase=$basedir/$_from/${_from}-english.tar.gz 
+if [ ! -r $_frombase ]; then
+ _frombase=$basedir/$_from/${_from}-base.tar.gz
+fi
 cd $_workdir
 mkdir from_base
 cd from_base
@@ -145,6 +148,9 @@ tar zxf $_frombase
 
 #2.  Expand the base version of $_to
 _tobase=$basedir/$_to/${_to}-english.tar.gz 
+if [ ! -r $_tobase ]; then
+  _tobase=$basedir/$_to/${_to}-base.tar.gz
+fi
 cd $_workdir
 mkdir to_base
 cd to_base

@@ -20,14 +20,16 @@ cleanup()
 #
 # Setup
 #
-_htaccess=<<EOT
+_htaccess=`cat <<EOT
 # To deny PHPs
 <Files ~ "\.(php|php3|php4|php5|phtml|pl|cgi)$">                                                                              
   order deny,allow                                                                                                            
   deny from all                                                                                                               
 </Files>  
 EOT
-_htaccessdirs='tmp lib uploads images'
+`
+
+_htaccessdirs='tmp lib uploads'
 _this=`basename $0`
 _svn=http://svn.cmsmadesimple.org/svn/cmsmadesimple/branches/1.6.x
 _workdir=/tmp/$_this.$$
@@ -219,7 +221,9 @@ fi
 if [ ${nohtaccess:-notset} = notset ]; then
   echo "Create .htaccess files";
   for _f in $_htaccessdirs ; do
-    echo $_htaccess > ${_f}/.htaccess 2>&1
+    if [ ! -f ${_f}/.ntaccess ]; then
+      echo $_htaccess > ${_f}/.htaccess 2>&1
+    fi
   done
 else
   find . -name '.htaccess' -exec rm -f {} \; 2>&1
