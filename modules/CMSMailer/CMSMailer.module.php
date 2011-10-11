@@ -421,6 +421,7 @@ class CMSMailer extends CMSModule
 	else
 	  {
 	    $this->AddAddress( $params['input_testaddress'] );
+	    $this->IsHTML(true);
 	    $this->SetBody( $this->Lang('testbody'));
 	    $this->SetSubject( $this->Lang('testsubject'));
 	    $this->Send();
