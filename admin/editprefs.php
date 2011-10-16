@@ -210,7 +210,7 @@ if (FALSE == empty($page_message)) {
 					foreach( $allmodules as $key )
                                         {
 					  $object = cms_utils::get_module($key);
-					  if( $object->IsWYSIWYG() )
+					  if( is_object($object) && $object->IsWYSIWYG() )
 					    {
 					      echo '<option value="'.$key.'"';
 					      if ($wysiwyg == $key)
@@ -233,7 +233,7 @@ if (FALSE == empty($page_message)) {
 					foreach( $allmodules as $key )
                                         {
 					  $object = cms_utils::get_module($key);
-					  if( $object->IsSyntaxHighlighter() )
+					  if( is_object($object) && $object->IsSyntaxHighlighter() )
 					    {
 					      echo '<option value="'.$key.'"';
 					      if ($syntaxhighlighter == $key)
