@@ -258,9 +258,9 @@ class AdminTheme
 		if( !file_exists($fn) )
 		{
 			// data doesn't exist.. gotta build it.
-			$modules = ModuleOperations::get_instance()->GetInstalledModules();
+			$allmodules = ModuleOperations::get_instance()->GetInstalledModules();
 			$usermoduleinfo = array();
-			foreach( $modules as $key )
+			foreach( $allmodules as $key )
 			{
 				$object = ModuleOperations::get_instance()->get_module_instance($key);
 				if( $object && $object->HasAdmin() && $object->VisibleToAdminUser() )
@@ -271,10 +271,9 @@ class AdminTheme
 					$rec['admindescription'] = $object->GetAdminDescription();
 					$usermoduleinfo[$key] = $rec;
 				}
-				ModuleOperations::get_instance()->unload_module($key);
-				unset($object);
+				//ModuleOperations::get_instance()->unload_module($key);
+				//unset($object);
 			}
-			unset($modules);
 
 			// even if the array is empty... serialize the info.
 			$data = $usermoduleinfo;
