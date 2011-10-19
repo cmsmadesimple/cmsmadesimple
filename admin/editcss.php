@@ -352,25 +352,25 @@ else
         </div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
+			<div class="pageinput">
 				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
 				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" />
-			</p>
+			</div>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('name')?>:</p>
-			<p class="pageinput">
+			<div class="pageinput">
 				<input type="hidden" name="orig_css_name" value="<?php echo $orig_css_name?>" />
 				<input type="text" class="name" name="css_name" maxlength="255" value="<?php echo $css_name?>" />				
-			</p>
+			</div>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			<p class="pageinput">
+			<div class="pageinput">
 			  <?php echo create_textarea(false, $css_text, 'css_text', 'pagebigtextarea', 'css_text', '', '', '80', '15','','css')?>
 			<!--  <textarea class="pagebigtextarea" name="css_text"><_?php echo $css_text?></textarea>-->
-			</p>
+			</div>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
@@ -424,11 +424,11 @@ $existingtypes = array("all",
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
-			<p class="pageinput"><?php echo  strftime( $dateformat , strtotime($lastmodified) )  ?></p>
+			<div class="pageinput"><?php echo  strftime( $dateformat , strtotime($lastmodified) )  ?></div>
 		</div>		
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
+			<div class="pageinput">
 				<input type="hidden" name="css_id" value="<?php echo $css_id?>" />
 				<input type="hidden" name="from" value="<?php echo $from?>" />
 				<input type="hidden" name="templateid" value="<?php echo $templateid?>" />
@@ -436,7 +436,7 @@ $existingtypes = array("all",
 				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
 				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" />
-			</p>
+			</div>
 		</div>
 	</form>
 </div>

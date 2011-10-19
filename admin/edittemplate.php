@@ -313,34 +313,34 @@ else
         </div>
 			<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
+			<div class="pageinput">
 			      <?php echo $submitbtns; ?><a href="listcssassoc.php<?php echo $urlext ?>&amp;type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>
-			</a><?php echo " [" . lang('new_window') . "]" ;?></p>
+			</a><?php echo " [" . lang('new_window') . "]" ;?></div>
             </div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" class="name" name="template" maxlength="255" value="<?php echo $template?>" /></p>
+			<div class="pageinput"><input type="text" class="name" name="template" maxlength="255" value="<?php echo $template?>" /></div>
 		</div>
 		<div class="pageoverflow">
-			<div class="pagetext"><?php echo lang('content')?>:</div>
+			<p class="pagetext"><?php echo lang('content')?>:</p>
 			<div class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagebigtextarea', 'content', $encoding, '', '80', '15','','html')?></div>
 		</div>
 		<?php if ($templateops->StylesheetsUsed() > 0) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('stylesheet')?>:</p>
-			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagebigtextarea', '', $encoding, '', '80', '15','','css')?></p>
+			<div class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagebigtextarea', '', $encoding, '', '80', '15','','css')?></div>
 		</div>
 	        <?php } if ($default == 0 ) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
-			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"") ?> /> </p>
+			<div class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"") ?> /> </div>
 		</div>
    	        <?php } else { ?>
 	          <div><input type="hidden" name="active" value="<?php echo $active; ?>">
   	        <?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
-			<p class="pageinput">
+			<div class="pageinput">
 			<?php 
 				$dateformat = trim(get_preference(get_userid(),'date_format_string','%x %X')); 
 					if( empty($dateformat) )
@@ -348,23 +348,23 @@ else
 					 $dateformat = '%x %X';
 					}
 				    echo strftime( $dateformat ,$lastedited); 
-             ?></p>
+             ?></div>
 		</div>
 		<?php if( $encoding != "" ){ ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('encoding')?>:</p>
-			<p class="pageinput"><?php echo create_encoding_dropdown('encoding', $encoding) ?></p>
+			<div class="pageinput"><?php echo create_encoding_dropdown('encoding', $encoding) ?></div>
 		</div>
                 <?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
+			<div class="pageinput">
 				<input type="hidden" name="orig_template" value="<?php echo $orig_template?>" />
 				<input type="hidden" name="template_id" value="<?php echo $template_id?>" />
 				<input type="hidden" name="from" value="<?php echo $from?>" />
 				<input type="hidden" name="cssid" value="<?php echo $cssid?>" />
 				<input type="hidden" name="edittemplate" value="true" />
-			      <?php echo $submitbtns; ?><a href="listcssassoc.php<?php echo $urlext ?>&amp;type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?></a><?php echo " [" . lang('new_window') . "]" ;?></p>
+			      <?php echo $submitbtns; ?><a href="listcssassoc.php<?php echo $urlext ?>&amp;type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?></a><?php echo " [" . lang('new_window') . "]" ;?></div>
 		</div>
 	</form>
 </div>

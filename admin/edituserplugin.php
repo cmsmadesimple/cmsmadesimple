@@ -263,20 +263,20 @@ else {
 		   </div>
 			<div class="pageoverflow">
 				<p class="pagetext">*<?php echo lang('name')?>:</p>
-				<p class="pageinput"><input type="text" id="plugin_name" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" /></p>
+				<div class="pageinput"><input type="text" id="plugin_name" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" /></div>
 			</div>
 			<div class="pageoverflow">
 				<p class="pagetext">*<?php echo lang('code')?></p>
-				<p class="pageinput"><?php echo create_textarea(false, $code, 'code', 'pagebigtextarea', 'code', '', '', '80', '15','','php')?></p>
+				<div class="pageinput"><?php echo create_textarea(false, $code, 'code', 'pagebigtextarea', 'code', '', '', '80', '15','','php')?></div>
 			</div>
 			<div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('description')?></p>
-				<p class="pageinput"><?php echo create_textarea(false, $description, 'description', 'pagebigtextarea', 'description', '', '', '80', '15')?></p>
+				<div class="pageinput"><?php echo create_textarea(false, $description, 'description', 'pagebigtextarea', 'description', '', '', '80', '15')?></div>
 			</div>			
 			
 			<div class="pageoverflow">
 				<p class="pagetext">&nbsp;</p>
-				<p class="pageinput">
+				<div class="pageinput">
 						<input type="hidden" name="userplugin_id" value="<?php echo $userplugin_id?>" />
 						<input type="hidden" id="origpluginname" name="origpluginname" value="<?php echo $orig_plugin_name?>" />
 						<input type="hidden" name="editplugin" value="true" />
@@ -284,7 +284,7 @@ else {
 						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
 						<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" />
 
-				</p>
+				</div>
 			</div>
 		</form>
 </div>
