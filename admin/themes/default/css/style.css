@@ -48,9 +48,15 @@ h3  {
    font-size: 1.2em;
    }
 
-h4  {
-   font-size: 1em;
-   }
+h4 {
+	font-size: 1.1em;
+}
+h5 {
+	font-size: 1em;
+}
+h6 {
+	font-size: .9em;
+}
 
 blockquote, input, li, select, th, td  {
    font-size: 1em;

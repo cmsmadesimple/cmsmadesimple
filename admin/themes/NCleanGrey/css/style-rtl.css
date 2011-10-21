@@ -74,9 +74,15 @@ h3  {
 	margin-bottom:10px;
 	}
 
-h4  {
-   font-size: 1em;
-   }
+h4 {
+	font-size: 1.1em;
+}
+h5 {
+	font-size: 1em;
+}
+h6 {
+	font-size: .9em;
+}
 blockquote, input, li, select, th, td  {
    font-size: 1em;
    }
@@ -1013,7 +1019,7 @@ th.pagew70  {
    width: 70%;
    }
 table.pagetable th.pageicon  {
-   min-width:1;
+   min-width:1px;
    width: 1px;
    border: 0 none ;
    }
@@ -1210,7 +1216,7 @@ div#nav-icons_all{
 	padding:0px;
 	float:right;
 	width:100px;
-	height:24;
+	height:24px;
 	height:auto;
 	}
 div#nav-icons_all ul#nav-icons
