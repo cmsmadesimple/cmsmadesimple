@@ -140,6 +140,11 @@ else
 		  if( $req->getStatus() == 200 )
 		    {
 		      $remote_ver = trim($req->getResult());
+		      if( strpos($remote_ver,':') !== FALSE )
+			{
+			  list($tmp,$remote_ver) = explode(':',$remote_ver,2);
+			  $remote_ver = trim($remote_ver);
+			}
 		      if( version_compare(CMS_VERSION,$remote_ver) < 0 )
 			{
 			  set_site_preference('cms_is_uptodate',0);
