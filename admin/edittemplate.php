@@ -213,7 +213,7 @@ $addlScriptSubmit = '';
 $modobj = cms_utils::get_syntax_highlighter_module();
 if( is_object($modobj) )
   {
-    $tmp = $modobj->SyntaxPageFormSubmit();
+    $addlScriptSubmit = $modobj->SyntaxPageFormSubmit();
   }
 
 $closestr = cms_html_entity_decode(lang('close'));
