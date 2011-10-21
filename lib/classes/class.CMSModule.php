@@ -2758,7 +2758,7 @@ class CMSModule
 	 * @final
 	 * @param string The name of the preference to set
 	 * @param string The value to set it to
-	 * @return boolean
+	 * @return void
 	 */
 	final public function SetPreference($preference_name, $value)
 	{
