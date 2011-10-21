@@ -23,6 +23,9 @@ Core - Bug Reports:
   - #6647 cms_stylesheet media parameter is not working correctly
   - #6686 Missing check permission for Modify Any Page in admin/ listcontent.php
   - #6783 Possible injection when setting a preference
+  - #6862 Notice: Undefined index: show_all in .../MenuManager/action.default.php on line 126
+  - #6933 News module : no more fields aliases and FieldsByName
+  - #6983 Checking for new version fails
 
 Core - Feature requests:
   - #5119 New event : LoginFailed
