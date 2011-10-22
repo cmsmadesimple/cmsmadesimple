@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -34,15 +34,14 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
-global $gCms;
-$styleops =& $gCms->GetStylesheetOperations();
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$styleops = $gCms->GetStylesheetOperations();
+$db = $gCms->GetDb();
 
 #******************************************************************************
 # Definition of global vars
@@ -103,8 +102,7 @@ if (isset($_GET["css_id"]))
 		# everything should be ok
 		if ($dodelete)
 		{	
-			global $gCms;
-			$styleops =& $gCms->GetStylesheetOperations();
+		  $styleops = cmsms()->GetStylesheetOperations();
 			$onestylesheet = $styleops->LoadStylesheetByID($css_id);
 			
 			Events::SendEvent('Core', 'DeleteStylesheetPre', array('stylesheet' => &$onestylesheet));
@@ -114,7 +112,8 @@ if (isset($_GET["css_id"]))
 			if ($result)
 			{
 				Events::SendEvent('Core', 'DeleteStylesheetPost', array('stylesheet' => &$onestylesheet));
-				audit($css_id, $css_name, 'Deleted CSS');
+				// put mention into the admin log
+				audit($css_id, 'Stylesheet: '.$css_name, 'Deleted');
 			}
 			else
 			{

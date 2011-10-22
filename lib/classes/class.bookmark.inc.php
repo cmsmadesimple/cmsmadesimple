@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (tedkulp@users.sf.net)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -19,9 +19,15 @@
 #$Id$
 
 /**
+ * @package CMS 
+ */
+
+/**
  * Bookmark class for admin
  *
  * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class Bookmark
 {
@@ -55,7 +61,6 @@ class Bookmark
 
 	/**
 	 * Sets object to some sane initial values
-	 *
 	 */
 	function SetInitialValues()
 	{
@@ -71,13 +76,12 @@ class Bookmark
 	 * is created.  If the id is set, then the record is updated to all values
 	 * in the Bookmark object.
 	 *
-	 * @returns mixed If successful, true.  If it fails, false.
+	 * @return mixed If successful, true.  If it fails, false.
 	 */
 	function Save()
 	{
 		$result = false;
-		global $gCms;
-		$bookops =& $gCms->GetBookmarkOperations();
+		$bookops = cmsms()->GetBookmarkOperations();
 		
 		if ($this->bookmark_id > -1)
 		{
@@ -101,13 +105,12 @@ class Bookmark
 	 * Delete the record for this Bookmark from the database and resets
 	 * all values to their initial values.
 	 *
-	 * @returns mixed If successful, true.  If it fails, false.
+	 * @return mixed If successful, true.  If it fails, false.
 	 */
 	function Delete()
 	{
 		$result = false;
-		global $gCms;
-		$bookops =& $gCms->GetBookmarkOperations();
+		$bookops = cmsms()->GetBookmarkOperations();
 
 		if ($this->bookmark_id > -1)
 		{

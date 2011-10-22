@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
@@ -60,11 +59,11 @@ $user_id = $userid;
 if (isset($_POST["user_id"])) $user_id = cleanValue($_POST["user_id"]);
 else if (isset($_GET["user_id"])) $user_id = cleanValue($_GET["user_id"]);
 
-global $gCms;
-$userops =& $gCms->GetUserOperations();
-$groupops =& $gCms->GetGroupOperations();
+$gCms = cmsms();
+$userops = $gCms->GetUserOperations();
+$groupops = $gCms->GetGroupOperations();
 $group_list = $groupops->LoadGroups();
-$db =& $gCms->GetDb();
+$db = $gCms->GetDb();
 
 
 $thisuser = $userops->LoadUserByID($user_id);
@@ -135,7 +134,6 @@ if ($access) {
 					$thisuser->SetPassword($password);
 				}
 				
-				
 				Events::SendEvent('Core', 'EditUserPre', array('user' => &$thisuser));
 
 
@@ -159,9 +157,10 @@ if ($access) {
 
 			if ($result)
 			{
-				audit($user_id, $thisuser->username, 'Edited User');
-
+				// put mention into the admin log
+				audit($user_id, 'Admin Username: '.$thisuser->username, 'Edited');
 				Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
+				$gCms->clear_cached_files();
 				
                 if ($access_perm)
                     {
@@ -289,8 +288,8 @@ else {
 			<div class="pageinput">
 				<input type="hidden" name="user_id" value="<?php echo $user_id?>" />
 				<input type="hidden" name="edituser" value="true" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" accesskey="s" value="<?php echo lang('submit')?>" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" />
+				<input class="pagebutton" type="submit" value="<?php echo lang('submit')?>" />
+				<input class="pagebutton" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
 			</div>
 		</div>
 	</form>

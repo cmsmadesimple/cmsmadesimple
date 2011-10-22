@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
@@ -46,14 +45,14 @@ if (!$access) {
 	die('Permission Denied');
 	return;
 }
-$userops =& $gCms->GetUserOperations();
+$gCms = cmsms();
+$userops = $gCms->GetUserOperations();
 $adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
 $message = '';
 
 include_once("header.php");
 
-global $gCms;
-$db =& $gCms->GetDb();
+$db = $gCms->GetDb();
 
 
 if( isset($_POST['filter']) )
@@ -64,9 +63,9 @@ if( isset($_POST['filter']) )
 $disp_group = get_preference($userid,'changegroupassign_group',-1);
 
 // always display the group pulldown
-global $gCms;
-$groupops =& $gCms->GetGroupOperations();
-$userops =& $gCms->GetUserOperations();
+$gCms = cmsms();
+$groupops = $gCms->GetGroupOperations();
+$userops = $gCms->GetUserOperations();
 $tmp = new stdClass();
 $tmp->name = lang('all_groups');
 $tmp->id=-1;
@@ -129,11 +128,14 @@ if ($submitted == 1)
 	Events::SendEvent('Core', 'ChangeGroupAssignPost',
 			  array('group' => $thisGroup,
 				'users' => $userops->LoadUsersInGroup($thisGroup->id)));
-	audit($group_id, 'Group ID', lang('assignmentchanged'));
+	// put mention into the admin log
+	audit($group_id, 'Assignment Group ID: '.$group_id, 'Changed');
       }
 
-    audit($userid, 'Group ID', lang('assignmentchanged'));
+    // put mention into the admin log
+	audit($userid, 'Assignment User ID: '.$userid, 'Changed');
     $message = lang('assignmentchanged');
+    $gCms->clear_cached_files();
   }
 
 
@@ -180,10 +182,10 @@ $smarty->assign('apply',lang('apply'));
 $smarty->assign('selectgroup',lang('selectgroup'));
 $smarty->assign('title_user',lang('user'));
 $smarty->assign('hidden','<input type="hidden" name="submitted" value="1" />');
-$smarty->assign('submit','<input type="submit" accesskey="s" name="changegrp" value="'.lang('submit').
-	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');
-$smarty->assign('cancel','<input type="submit" accesskey="c" name="cancel" value="'.lang('cancel').
-	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');
+$smarty->assign('submit','<input type="submit" name="changegrp" value="'.lang('submit').
+	'" class="pagebutton" />');
+$smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('cancel').
+	'" class="pagebutton" />');
 
 
 # begin output

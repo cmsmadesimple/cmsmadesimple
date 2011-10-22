@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_google_search($params, &$smarty) {
+function smarty_cms_function_google_search($params, &$smarty) {
 	$domain = $_SERVER['SERVER_NAME'];
 	$buttonText = 'Search Site';
 	if (!empty($params['domain']))
@@ -24,7 +24,7 @@ function smarty_function_google_search($params, &$smarty) {
 	if (!empty($params['buttonText'])) 
 		$buttonText = $params['buttonText'];
 
-	return '<form method="get" action="http://www.google.com/search">
+	$out='<form method="get" action="http://www.google.com/search">
 	<div>
 	<input type="hidden" name="ie" value="utf-8" />
 	<input type="hidden" name="oe" value="utf-8" />
@@ -33,14 +33,20 @@ function smarty_function_google_search($params, &$smarty) {
 	<input type="submit" id="buttonSearch" value="'.$buttonText.'" />
 	</div>
 	</form>';
+	
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$out);
+	    return;
+    }
+	return $out;
 
 }
 
-function smarty_help_function_google_search() {
+function smarty_cms_help_function_google_search() {
   echo lang('help_function_google_search');
 }
 
-function smarty_about_function_google_search() {
+function smarty_cms_about_function_google_search() {
 	?>
 	<p>Author: Brett Batie&lt;brett-cms@classicwebdevelopment.com&gt;</p>
 	<p>Version: 1.0</p>

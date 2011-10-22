@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,6 +20,26 @@
 
 $CMS_ADMIN_PAGE=1;
 
+function pagelimit_dropdown($name,$opts,$selected)
+{
+  $str = '<select name="'.$name.'">';
+  foreach( $opts as $key => $value )
+    {
+      if( $key == $selected )
+	{
+	  $str .= '<option value="'.$key.'" selected="selected">'.$value.'</option>';
+	}
+      else
+	{
+	  $str .= '<option value="'.$key.'">'.$value.'</option>';
+	}
+    }
+  $str .= '</select>';
+  return $str;
+}
+
+$pagelimit_opts = array(10=>10,20=>20,50=>50,100=>100);
+
 $default_cms_lang = '';
 if (isset($_POST['default_cms_lang'])) $default_cms_lang = $_POST['default_cms_lang'];
 $old_default_cms_lang = '';
@@ -30,8 +50,7 @@ if ($default_cms_lang != '')
 {
 	$_POST['change_cms_lang'] = $default_cms_lang;
 }
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 $thisurl=basename(__FILE__).$urlext;
 
@@ -72,6 +91,17 @@ if (isset($_POST['gcb_wysiwyg'])) $gcb_wysiwyg = 1;
 
 $date_format_string = '%x %X';
 if (isset($_POST['date_format_string'])) $date_format_string = $_POST['date_format_string'];
+$date_format_string = cms_htmlentities(strip_tags($date_format_string));
+
+$listtemplates_pagelimit = '20';
+if (isset($_POST['listtemplates_pagelimit'])) $listtemplates_pagelimit = $_POST['listtemplates_pagelimit'];
+
+$liststylesheets_pagelimit = '20';
+if (isset($_POST['liststylesheets_pagelimit'])) $liststylesheets_pagelimit = $_POST['liststylesheets_pagelimit'];
+
+$listgcbs_pagelimit = '20';
+if (isset($_POST['listgcbs_pagelimit'])) $listgcbs_pagelimit = $_POST['listgcbs_pagelimit'];
+
 
 $default_parent = '';
 if( isset($_POST['parent_id']) )
@@ -94,18 +124,14 @@ if (isset($_POST["cancel"])) {
   return;
 }
 
+$gCms = cmsms();
+$allmodules = ModuleOperations::get_instance()->GetInstalledModules();
 $modules = array();
-//Next 2 lines commented, to NOT show 'none' as a choice in the ignore list.
-//$modules[ucwords(lang('none'))] = '**none**';
-//$modules['---'] = '**none**';
-foreach($gCms->modules as $key=>$value)
+foreach( $allmodules as $key )
 {
-  if ($gCms->modules[$key]['installed'] == true &&
-      $gCms->modules[$key]['active'] == true)
-    {
-      $obj =& $gCms->modules[$key]['object'];
-      $modules[$obj->GetFriendlyName()] = $obj->GetName();
-    }
+  $obj = ModuleOperations::get_instance()->get_module_instance($key);
+  if( !$obj ) continue;
+  $modules[$obj->GetFriendlyName()] = $obj->GetName();
 }
 
 
@@ -124,10 +150,13 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'default_parent', $default_parent);
 	set_preference($userid, 'homepage', $homepage );
 	set_preference($userid, 'ignoredmodules', implode(',',$ignoredmodules));
-	audit(-1, '', 'Edited User Preferences');
+	set_preference($userid, 'listtemplates_pagelimit', $listtemplates_pagelimit);
+	set_preference($userid, 'liststylesheets_pagelimit', $liststylesheets_pagelimit);
+	set_preference($userid, 'listgcbs_pagelimit', $listgcbs_pagelimit);
+	// put mention into the admin log
+	audit($userid, 'Admin User Preferences', 'Edited');
 	$page_message = lang('prefsupdated');
-	#redirect("index.php");
-	#return;
+	$gCms->clear_cached_files();
 } else if (!isset($_POST["edituserprefs"])) {
 	$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
 	$wysiwyg = get_preference($userid, 'wysiwyg');
@@ -141,6 +170,9 @@ if (isset($_POST["submit_form"])) {
 	$paging = get_preference($userid, 'paging', 0);
 	$date_format_string = get_preference($userid, 'date_format_string','%x %X');
 	$default_parent = get_preference($userid,'default_parent',-2);
+	$listtemplates_pagelimit = get_preference($userid,'listtemplates_pagelimit',20);
+	$liststylesheets_pagelimit = get_preference($userid,'liststylesheets_pagelimit',20);
+	$listgcbs_pagelimit = get_preference($userid,'listgcbs_pagelimit',20);
 
 	$homepage = get_preference($userid,'homepage');
 	$to = '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
@@ -151,6 +183,7 @@ if (isset($_POST["submit_form"])) {
 
 	$hide_help_links = get_preference($userid, 'hide_help_links');
 	$ignoredmodules = explode(',',get_preference($userid,'ignoredmodules'));
+	$gCms->clear_cached_files();
 }
 
 include_once("header.php");
@@ -174,20 +207,19 @@ if (FALSE == empty($page_message)) {
 					<select name="wysiwyg">
 					<option value=""><?php echo lang('none'); ?></option>
 					<?php
-						foreach($gCms->modules as $key=>$value)
+					foreach( $allmodules as $key )
+                                        {
+					  $object = cms_utils::get_module($key);
+					  if( is_object($object) && $object->IsWYSIWYG() )
+					    {
+					      echo '<option value="'.$key.'"';
+					      if ($wysiwyg == $key)
 						{
-							if ($gCms->modules[$key]['installed'] == true &&
-								$gCms->modules[$key]['active'] == true &&
-								$gCms->modules[$key]['object']->IsWYSIWYG())
-							{
-								echo '<option value="'.$key.'"';
-								if ($wysiwyg == $key)
-								{
-									echo ' selected="selected"';
-								}
-								echo '>'.$key.'</option>';
-							}
+						  echo ' selected="selected"';
 						}
+					      echo '>'.$key.'</option>';
+					    }
+					}
 					?>
 					</select>
 				</div>
@@ -198,20 +230,19 @@ if (FALSE == empty($page_message)) {
 					<select name="syntaxhighlighter">
 					<option value=""><?php echo lang('none'); ?></option>
 					<?php
-						foreach($gCms->modules as $key=>$value)
+					foreach( $allmodules as $key )
+                                        {
+					  $object = cms_utils::get_module($key);
+					  if( is_object($object) && $object->IsSyntaxHighlighter() )
+					    {
+					      echo '<option value="'.$key.'"';
+					      if ($syntaxhighlighter == $key)
 						{
-							if ($gCms->modules[$key]['installed'] == true &&
-								$gCms->modules[$key]['active'] == true &&
-								$gCms->modules[$key]['object']->IsSyntaxHighlighter())
-							{
-								echo '<option value="'.$key.'"';
-								if ($syntaxhighlighter == $key)
-								{
-									echo ' selected="selected"';
-								}
-								echo '>'.$key.'</option>';
-							}
+						  echo ' selected="selected"';
 						}
+					      echo '>'.$key.'</option>';
+					    }
+					}
 					?>
 					</select>
 				</div>
@@ -226,17 +257,18 @@ if (FALSE == empty($page_message)) {
 				<div class="pagetext"><?php echo lang('language'); ?>:</div>
 				<div class="pageinput">
 					<select name="default_cms_lang" style="vertical-align: middle;">
-					<option value=""><?php echo lang('No Default'); ?></option>
 					<?php
-						$languages = CmsLanguage::get_language_list(true);
-						asort($languages);
-						foreach ($languages as $key=>$val) {
-							echo "<option value=\"$key\"";
-							if ($default_cms_lang == $key) {
-								echo " selected=\"selected\"";
-							}
-							echo ">$val</option>\n";
-						}
+					$opts = get_language_list();
+foreach( $opts as $key => $value )
+{
+  $str = "<option value=\"$key\"";
+  if( $default_cms_lang == $key )
+    { 
+      $str .= " selected=\"selected\"";
+    }
+  $str .= ">$value</option>\n";
+  echo $str;
+}
 					?>
 					</select>
 				</div>
@@ -244,7 +276,7 @@ if (FALSE == empty($page_message)) {
 	    <div class="pageoverflow">
 		<div class="pagetext"><?php echo lang('date_format_string'); ?>:</div>
 		<div class="pageinput">
-		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="255" /><?php echo lang('date_format_string_help') ?>
+		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="255" /><?php echo '<br/>'.lang('date_format_string_help') ?>
 		</div>
 	    </div>
 
@@ -280,7 +312,7 @@ echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1)
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('admincallout'); ?>:</div>
 				<div class="pageinput">
-					<input class="pagenb" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><?php echo lang('showbookmarks') ?>
+					<input class="pagenb" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><?php echo '<br/>'.lang('showbookmarks') ?>
 				</div>
 			</div>
 			<div class="pageoverflow">
@@ -296,6 +328,27 @@ echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1)
 						  <?php echo $themeObject->GetAdminPageDropdown('homepage',$homepage); ?>
 				</div>
 			</div>
+
+<div class="pageoverflow">
+  <div class="pagetext"><?php echo lang('listtemplates_pagelimit'); ?>:</div>
+  <div class="pageinput">
+    <?php echo pagelimit_dropdown('listtemplates_pagelimit',$pagelimit_opts,$listtemplates_pagelimit); ?>
+  </div>
+</div>
+
+<div class="pageoverflow">
+  <div class="pagetext"><?php echo lang('liststylesheets_pagelimit'); ?>:</div>
+  <div class="pageinput">
+    <?php echo pagelimit_dropdown('liststylesheets_pagelimit',$pagelimit_opts,$liststylesheets_pagelimit); ?>
+  </div>
+</div>
+
+<div class="pageoverflow">
+  <div class="pagetext"><?php echo lang('listgcbs_pagelimit'); ?>:</div>
+  <div class="pageinput">
+    <?php echo pagelimit_dropdown('listgcbs_pagelimit',$pagelimit_opts,$listgcbs_pagelimit); ?>
+  </div>
+</div>
 
 			<!--
 			<div class="pageoverflow">
@@ -333,10 +386,10 @@ echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1)
 			  <div class="pageinput">
 				 <?php
 					  
-					   $txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
+			  $txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
                           foreach( $modules as $key => $value )
                           {
-                            $txt .= '<option value="'.$value.'"';
+                            $txt .= '<option value="'.$key.'"';
                             if( in_array($value,$ignoredmodules) )
 			      {
 				$txt .= ' selected="selected"';
@@ -355,8 +408,8 @@ echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1)
 				<input type="hidden" name="edituserprefs" value="true" />
                 <input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
                 </div>
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="submit_form" value="<?php echo lang('submit'); ?>" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" />
+				<input class="pagebutton" type="submit" name="submit_form" value="<?php echo lang('submit'); ?>" />
+				<input class="pagebutton" type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" />
 			</div>
 			</div>			
 		</form>

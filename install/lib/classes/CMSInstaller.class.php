@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSInstaller.class.php 226 2009-08-09 20:01:18Z alby $
+#$Id: CMSInstaller.class.php 296 2010-10-17 22:31:18Z calguy1000 $
 
 /**
  * Uses the CMSInstallerPage class
@@ -32,6 +32,7 @@ class CMSInstaller
 	 * @var int the total number of installer pages
 	 */
 	var $numberOfPages;
+
 	/**
 	 * @var int the current page
 	 */
@@ -71,21 +72,24 @@ class CMSInstaller
 		$ext = cms_join_path($base, 'ext');
 		$languages = array();
 
-		if ($this->debug) $handle = opendir($ext);
-		else              $handle = @opendir($ext);
-		if ($handle)
-		{
+		if( is_dir($ext) )
+		  {
+		    if ($this->debug) $handle = opendir($ext);
+		    else              $handle = @opendir($ext);
+		    if ($handle)
+		      {
 			while (false !== ($file = readdir($handle)))
-			{
-				if ( ($file != '..') && ($file != '.') && ($file != basename($file, '.php')) &&
-					(is_file(cms_join_path($ext, $file))) )
-				{
-					$languages[] = basename($file, '.php');
-				}
-			}
+			  {
+			    if ( ($file != '..') && ($file != '.') && ($file != basename($file, '.php')) &&
+				 (is_file(cms_join_path($ext, $file))) )
+			      {
+				$languages[] = basename($file, '.php');
+			      }
+			  }
 			closedir($handle);
-		}
-		natsort($languages);
+		      }
+		    natsort($languages);
+		  }
 
 		if (is_readable(cms_join_path($base, 'en_US.php')))
 		{
@@ -100,9 +104,9 @@ class CMSInstaller
 	 */
 	function run($process = 'install')
 	{
-		global $gCms;
+		$gCms = cmsms();
 
-		$this->smarty = cms_smarty();
+		$this->smarty = &$gCms->GetSmarty();
 		$this->smarty->template_dir = cms_join_path(CMS_INSTALL_BASE, 'templates');
 		$this->smarty->caching = false;
 		$this->smarty->force_compile = true;
@@ -114,7 +118,7 @@ class CMSInstaller
 		// Create the (current) page object
 		require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'classes', 'CMS'.ucfirst($process).'Page'.$this->currentPage.'.class.php');
 		$classname = 'CMSInstallerPage' . $this->currentPage;
-		$page = new $classname($this->smarty, $this->errors, $this->debug);
+		$page = new $classname($this, $this->currentPage, $this->smarty, $this->errors, $this->debug);
 
 		// Assign smarty variables
 		$this->smarty->assign('number_of_pages', $this->numberOfPages);
@@ -155,7 +159,7 @@ class CMSInstaller
 				case 4:
 					if (isset($_POST['umask']) && trim($_POST['umask']) == '')
 					{
-						$this->errors[] = lang('test_umask_not_given');
+						$this->errors[] = ilang('test_umask_not_given');
 						$this->currentPage = 3;
 					}
 					if (isset($_POST['recheck']))
@@ -167,30 +171,30 @@ class CMSInstaller
 					$_POST['adminusername'] = cleanValue(trim($_POST['adminusername']));
 					if ($_POST['adminusername'] == '')
 					{
-						$this->errors[] = lang('test_username_not_given');
+						$this->errors[] = ilang('test_username_not_given');
 					}
 					elseif ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $_POST['adminusername']) )
 					{
-						$this->errors[] = lang('test_username_illegal');
+						$this->errors[] = ilang('test_username_illegal');
 					}
 
 					if (trim($_POST['adminpassword']) == '' || trim($_POST['adminpasswordagain']) == '')
 					{
-						$this->errors[] = lang('test_not_both_passwd');
+						$this->errors[] = ilang('test_not_both_passwd');
 					}
 					elseif ($_POST['adminpassword'] != $_POST['adminpasswordagain'])
 					{
-						$this->errors[] = lang('test_passwd_not_match');
+						$this->errors[] = ilang('test_passwd_not_match');
 					}
 
 					$_POST['adminemail'] = trim($_POST['adminemail']);
 					if (!empty($_POST['adminemail']) && !is_email($_POST['adminemail']))
 					{
-						$this->errors[] = lang('invalidemail');
+						$this->errors[] = ilang('invalidemail');
 					}
 					if (isset($_POST['email_accountinfo']) && empty($_POST['adminemail']))
 					{
-						$this->errors[] = lang('test_email_accountinfo');
+						$this->errors[] = ilang('test_email_accountinfo');
 					}
 
 					if (count($this->errors) > 0)
@@ -203,52 +207,45 @@ class CMSInstaller
 					    && $_POST['prefix'] != ''
 					    && !preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST['prefix'])) )
 					{
-						$this->errors[] = lang('test_database_prefix');
+						$this->errors[] = ilang('test_database_prefix');
 						$this->currentPage = 5;
 						return;
 					}
 					if (trim($_POST['dbms']) == '')
 					{
-						$this->errors[] = lang('test_no_dbms');
+						$this->errors[] = ilang('test_no_dbms');
 						$this->currentPage = 5;
 						return;
 					}
 
-					$dsn = $_POST['dbms'].'://';
-					if( $_POST['dbms'] == 'sqlite' )
+					$db =& ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
+					if(! empty($_POST['db_port']))
 					{
-						$dsn .= urlencode(cms_join_path(CMS_BASE,'tmp',$_POST['database'])) .'/';
+						$db->port = $_POST['db_port'];
 					}
-					else
+					if( (! empty($_POST['db_socket'])) && ($_POST['dbms'] == 'mysqli') )
 					{
-						$dsn .= $_POST['username'].':'.rawurlencode($_POST['password']).'@'.$_POST['host'].'/'.$_POST['database'];
-						if(! empty($_POST['db_port']))
-						{
-							$dsn .= '?port='.$_POST['db_port'];
-						}
-						elseif( (! empty($_POST['db_socket'])) && ($_POST['dbms'] == 'mysqli') )
-						{
-							$dsn .= '?socket='.$_POST['db_socket'];
-						}
+						$db->socket = $_POST['db_socket'];
 					}
-					$db = ADONewConnection( $dsn );
-					if (! $db)
+					$result = $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
+					if (! $result)
 					{
-						$this->errors[] = lang('test_could_not_connect_db');
+						$this->errors[] = ilang('test_could_not_connect_db');
 						$this->currentPage = 5;
 						return;
 					}
+
 					//Try to create and drop a dummy table (with appropriate prefix)
-					$db_prefix = trim($_POST['prefix']);
+					$db_prefix = $_POST['prefix'];
 					@$db->Execute('DROP TABLE ' . $db_prefix . 'dummyinstall');
-					@$result = $db->Execute('CREATE TABLE ' . $db_prefix . 'dummyinstall (i int)');
+					$result = $db->Execute('CREATE TABLE ' . $db_prefix . 'dummyinstall (i int)');
 					if ($result)
 					{
 						$result = $db->Execute('DROP TABLE ' . $db_prefix . 'dummyinstall');
 						if (!$result)
 						{
 							//could not drop table
-							$this->errors[] = lang('test_could_not_drop_table');
+							$this->errors[] = ilang('test_could_not_drop_table');
 							$this->currentPage = 5;
 							return;
 						}
@@ -256,7 +253,7 @@ class CMSInstaller
 					else
 					{
 						//could not create table
-						$this->errors[] = lang('test_could_not_create_table');
+						$this->errors[] = ilang('test_could_not_create_table');
 						$this->currentPage = 5;
 						return;
 					}
@@ -295,7 +292,7 @@ class CMSInstaller
 						return;
 					}
 
-					global $gCms;
+					$gCms = cmsms();
 					$db =& $gCms->GetDB();
 					return $db;
 					break;
@@ -306,7 +303,7 @@ class CMSInstaller
 						return;
 					}
 
-					global $gCms;
+					$gCms = cmsms();
 					$db =& $gCms->GetDB();
 					return $db;
 					break;

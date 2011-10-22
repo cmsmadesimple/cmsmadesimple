@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,25 +16,59 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_content_image($params,&$smarty)
+function smarty_cms_function_content_image($params,&$smarty)
 {
-  global $gCms;
-  $pageinfo =& $gCms->variables['pageinfo'];
-  if (!isset($pageinfo) || $pageinfo === FALSE || !isset($pageinfo->content_id) )
-    return _smarty_function_content_return('', $params, $smarty);
-    
+  $gCms = cmsms();
+  $config = $gCms->GetConfig();
+
+  $contentobj = $gCms->variables['content_obj'];
+  if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' )
+    {
+      // it's a preview.
+      if( !isset($_SESSION['cms_preview_data']['content_obj']) )
+	{
+	  $contentops =& $gCms->GetContentOperations();
+	  $_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
+	}
+      $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
+    }
+  if( !is_object($contentobj) || $contentobj->Id() <= 0 )
+    {
+      return _smarty_cms_function_content_return('', $params, $smarty);
+    }
+
+  $adddir = get_site_preference('contentimage_path');
+  if( $params['dir'] != '' )
+    {
+      $adddir = $params['dir'];
+    }
+  $dir = cms_join_path($config['uploads_path'],$adddir);
+  $basename = basename($config['uploads_path']);
 
   $result = '';
   if( isset($params['block']) )
     {
       $oldvalue = $smarty->caching;
       $smarty->caching = false;
-      $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $params['block']), '', $pageinfo->content_id);
+      $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $params['block']), '', $contentobj->Id());
       $smarty->caching = $oldvalue;
     }
-  $img = _smarty_function_content_return($result, $params, $smarty);
+  $img = _smarty_cms_function_content_return($result, $params, $smarty);
   if( $img == -1 || empty($img) )
     return;
+
+  // create the absolute url.
+  if( startswith($img,$basename) )
+    {
+      // old style url.
+      if( !startswith($img,'http') ) $img = str_replace('//','/',$img);
+      $img = substr($img,strlen($basename.'/'));
+      $img = $config['uploads_url'] . '/'.$img;
+    }
+  else
+    {
+      $img = $config['uploads_url'] . '/'.$adddir.'/'.$img;
+    }
 
   $name = $params['block'];
   $alt = '';
@@ -51,6 +85,8 @@ function smarty_function_content_image($params,&$smarty)
   if( isset($params['height']) ) $height = $params['height'];
   if( isset($params['urlonly']) ) $urlonly = true;
 
+  if( !isset($params['alt']) ) $alt = $params['block'];
+  
   if( $urlonly ) return $img;
   $out = '<img src="'.$img.'" ';
   if( !empty($name) )
@@ -78,15 +114,19 @@ function smarty_function_content_image($params,&$smarty)
       $out .= 'alt="'.$alt.'" ';
     }
   $out .= '/>';
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$out);
+		return;
+	}
   return $out;
 }
 
-function smarty_help_function_content_image()
+function smarty_cms_help_function_content_image()
 {
   echo lang('help_function_content_image');
 }
 
-function smarty_about_function_content_image()
+function smarty_cms_about_function_content_image()
 {
 	?>
 	<p>Author: Robert Campbell&lt;calguy1000@cmsmadesimple.org&gt;</p>

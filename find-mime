@@ -1,0 +1,154 @@
+#! /bin/bash
+
+#CMS - CMS Made Simple
+#(c)2004 by Leendert Meyer <leen.meyer@home.nl>
+#This project's homepage is: http://www.cmsmadesimple.org
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+VERSION="${0##*/} Version 0.1"
+
+USAGE="Usage: ${0##*/} -t|--text | -e|--exec | -b|--bin | -a|--all | -h|--help -v|--version -u|--usage [path]"
+
+HELP="This script displays filenames with their mime-types.
+
+You can use this to execute a command on each filename:
+
+\$ ${0##*/} --exec | xargs -i svn propset svn:executable '' {}
+
+\$ ${0##*/} --text | xargs -i svn propset svn:eol-style native {}
+"
+
+#---------------------------------------
+
+function mime_of()
+{
+  # read filenames from stdin, 1 per line
+  while read F; do
+    # get the mime type
+    M="`file --mime --brief \"$F\"`"
+    # get only the first part, before ',' (comma) ...
+    M="${M%,*}"
+    # ... and ';' (semicol)
+    M="${M%;*}"
+    # return filename and semicol on stdout
+    echo "$F: $M"
+  done
+}
+
+#---------------------------------------
+
+function find_mime_types()
+{
+  local dir="$1"
+  # find files only, but not in .svn directories
+  find "$dir" \( -name ".svn" -prune -or \( -type f -and -print \) \) |
+  # remove './' if line starts with it (beautify)
+  sed 's:^\./::' |
+  # find the mime types
+  mime_of
+}
+
+#---------------------------------------
+
+# mime types of files that contain readable text
+TEXT_MIME_TYPES=(
+"text/.*"
+"application/x-javascript"
+"application/x-perl"
+"application/x-shellscript"
+)
+
+# mime types of files that are executable
+# perhaps add mime types of .com, .exe, .bat
+# (then .bat belongs in TEXT_MIME_TYPES too)
+EXEC_MIME_TYPES=(
+"application/x-javascript"
+"application/x-perl"
+"application/x-shellscript"
+)
+
+
+EMPTY_MIME_TYPES=(
+"application/x-empty"
+)
+
+# perhaps add ${EXEC_MIME_TYPES[*]} too?
+NOT_BIN_MIME_TYPES="${TEXT_MIME_TYPES[*]} ${EMPTY_MIME_TYPES[*]}"
+
+# set a default
+_MIME_TYPES="${TEXT_MIME_TYPES[*]}"
+
+#---------------------------------------
+# main:
+
+while [ $# -gt 0 ]; do
+  case $1 in
+    -t|--txt|--text)
+  		_MIME_TYPES="${TEXT_MIME_TYPES[*]}"
+		REV=""
+		shift
+		;;
+    -e|--exe|--exec)
+  		_MIME_TYPES="${EXEC_MIME_TYPES[*]}"
+		REV=""
+		shift
+		;;
+    -b|--bin)
+  		_MIME_TYPES="${NOT_BIN_MIME_TYPES[*]}"
+		REV="-v"
+		shift
+		;;
+    -a|--all)
+  		_MIME_TYPES=".*"
+		shift
+		;;
+    -u|--usage)
+  		echo "$USAGE"
+		exit 1
+		;;
+    -v|--version)
+  		echo "$VERSION"
+		exit 1
+		;;
+    -h|--help)
+  		echo "$VERSION"
+		echo
+  		echo "$USAGE"
+		echo
+  		echo "$HELP"
+		exit 1
+		;;
+    -*)
+  		echo "${0##*/}: Error: Unknown switch: $1"
+		echo
+  		echo "$USAGE"
+		exit 2
+		;;
+    *)		break
+		;;
+  esac
+done
+
+# egrep is used, so no need to escape special re chars
+RE=": (${_MIME_TYPES// /|})$"
+
+# find all mime types
+find_mime_types "${1-.}" |
+# filter out the ones we need
+egrep $REV "$RE" |
+# print only the file name
+awk -F: '{print $1}'
+
+#- EOF ---------------------------------

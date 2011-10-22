@@ -57,7 +57,7 @@
 <?php if($IMConfig['safe_mode'] == false && $IMConfig['allow_new_dir']) { ?>
 	<a href="#" onclick="newFolder();" title="New Folder"><img src="img/btnFolderNew.gif" height="15" width="15" alt="New Folder" /></a>
 <?php } ?>
-	<div id="messages" style="display: none;"><span id="message"></span><img SRC="img/dots.gif" width="22" height="12" alt="..." /></div>
+	<div id="messages" style="display: none;"><span id="message"></span><img src="img/dots.gif" width="22" height="12" alt="..." /></div>
 	<iframe src="images.php" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
 </div>
 </fieldset>

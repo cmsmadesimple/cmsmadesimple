@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -23,28 +23,31 @@
  *
  * @package CMS
  */
-$sorted_sections = array();
-$sorted_content = array();
 
 /**
  * Loads all plugins into the system
  *
  * @since 0.5
+ * @param object The smarty object
+ * @return void
  */
-function load_plugins(&$smarty)
-{
-	return CmsSmarty::load_plugins();
-}
 
-function search_plugins(&$smarty, &$plugins, $dir, $caching)
-{
-	return CmsSmarty::search_plugins($plugins, $dir, $caching);
-}
 
+/**
+ * A function to generate cross references between content types
+ * This function can be used to generate which global content blocks are used by which content object
+ *
+ * @ignore
+ * @access private
+ * @param int the parent object id (usually a page template id or a page id.
+ * @param string The parent object type
+ * @param string The test content
+ * @return void
+ */
 function do_cross_reference($parent_id, $parent_type, $content)
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
+  $gCms = cmsms();
+	$db = $gCms->GetDb();
 	
 	//Delete old ones from the database
 	$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE parent_id = ? AND parent_type = ?';
@@ -60,7 +63,7 @@ function do_cross_reference($parent_id, $parent_type, $content)
 						VALUES (?,?,?,\'global_content\','.$db->DBTimeStamp(time()).','.$db->DBTimeStamp(time()).')';
 		foreach ($matches[1] as $name)
 		{
-			$result = $db->Execute($selquery, array($name));
+			$result = &$db->Execute($selquery, array($name));
 			while ($result && !$result->EOF)
 			{
 				$db->Execute($insquery, array($parent_id, $parent_type, $result->fields['htmlblob_id']));
@@ -71,29 +74,55 @@ function do_cross_reference($parent_id, $parent_type, $content)
 	}
 }
 
+/**
+ * A function to remove all cross references for a parent object
+ *
+ * @ignore
+ * @access private
+ * @param int The parent object id
+ * @param string The parent object type
+ * @return void
+ */
 function remove_cross_references($parent_id, $parent_type)
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
+  $gCms = cmsms();
+	$db = $gCms->GetDb();
 	
 	//Delete old ones from the database
 	$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE parent_id = ? AND parent_type = ?';
 	$db->Execute($query, array($parent_id, $parent_type));
 }
 
+/**
+ * A function to remove all cross references for a child
+ *
+ * @ignore
+ * @access private
+ * @param int The child object id
+ * @param string The child object type
+ * @return void
+ */
 function remove_cross_references_by_child($child_id, $child_type)
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
+  $gCms = cmsms();
+	$db = $gCms->GetDb();
 	
 	//Delete old ones from the database
 	$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE child_id = ? AND child_type = ?';
 	$db->Execute($query, array($child_id, $child_type));
 }
 
+/**
+ * A utility function to load the specified global content blocks and call the GlobalContentPrecompile method.
+ *
+ * @ignore
+ * @access private
+ * @param array Array containing the name of 1 global content block
+ * @return void
+ */
 function global_content_regex_callback($matches)
 {
-	global $gCms;
+  $gCms = cmsms();
 	if (isset($matches[1]))
 	{
 		$gcbops =& $gCms->GetGlobalContentOperations();
@@ -102,7 +131,6 @@ function global_content_regex_callback($matches)
 		{
 			$text = $oneblob->content;
 			Events::SendEvent('Core', 'GlobalContentPreCompile', array('content' => &$text));
-
 			return $text;
 		}
 		else
@@ -117,17 +145,46 @@ function global_content_regex_callback($matches)
 }
 
 
+/**
+ * A convenience function to test if the site is marked as down according to the config panel.
+ * This method includes handling the preference that indicates that site-down behaviour should
+ * be disabled for certain IP address ranges.
+ *
+ * @return boolean
+ */
 function is_sitedown()
 {
-	if( CmsApplication::get_preference('enablesitedownmessage', '0') !== '1' ) return FALSE;
-	$excludes = CmsApplication::get_preference('sitedownexcludes','');
-	if( !isset($_SERVER['REMOTE_ADDR']) ) return TRUE;
-	if( empty($excludes) ) return TRUE;
+  global $CMS_INSTALL_PAGE;
 
-	$ret = cms_ipmatches($_SERVER['REMOTE_ADDR'],$excludes);
-	if( $ret ) return FALSE;
-	return TRUE;
+  if( isset($CMS_INSTALL_PAGE) ) return TRUE;
+
+  if( get_site_preference('enablesitedownmessage') !== '1' ) return FALSE;
+
+  if( get_site_preference('sitedownexcludeadmins') )
+    {
+      $uid = get_userid(FALSE);
+      if( $uid ) return FALSE;
+    }
+
+  if( !isset($_SERVER['REMOTE_ADDR']) ) return TRUE;
+  $excludes = get_site_preference('sitedownexcludes','');
+  if( empty($excludes) ) return TRUE;
+ 
+  $tmp = explode(',',$excludes);
+  $ret = cms_ipmatches($_SERVER['REMOTE_ADDR'],$excludes);
+  if( $ret ) return FALSE;
+  return TRUE;
 }
 
+
+function cms_call_udt($params,&$smarty)
+{
+  if( !isset($params['udt']) ) return;
+
+  $udt = $params['udt'];
+  unset($params['udt']);
+
+  return UserTagOperations::get_instance()->CallUserTag($udt,$params);
+}
 # vim:ts=4 sw=4 noet
 ?>

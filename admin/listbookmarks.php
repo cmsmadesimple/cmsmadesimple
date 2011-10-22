@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
@@ -37,8 +36,7 @@ include_once("header.php");
 
 	$userid = get_userid();
 	
-	global $gCms;
-	$bookops =& $gCms->GetBookmarkOperations();
+$bookops = cmsms()->GetBookmarkOperations();
 	$marklist = $bookops->LoadBookmarks($userid);
 
 	$page = 1;
@@ -73,7 +71,7 @@ include_once("header.php");
 		$counter=0;
 		foreach ($marklist as $onemark){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"editbookmark.php".$urlext."&amp;bookmark_id=".$onemark->bookmark_id."\">".$onemark->title."</a></td>\n";
 				echo "<td>".$onemark->url."</td>\n";
 				echo "<td><a href=\"editbookmark.php".$urlext."&amp;bookmark_id=".$onemark->bookmark_id."\">";
@@ -95,7 +93,7 @@ include_once("header.php");
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="addbookmark.php<? echo $urlext ?>">
+			<a href="addbookmark.php<?php echo $urlext ?>">
 				<?php 
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addbookmark'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="addbookmark.php'.$urlext.'">'.lang("addbookmark");

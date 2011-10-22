@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -19,20 +19,34 @@
 #$Id$
 
 /**
- * Class for doing group related functions.  Maybe of the Group object functions are just wrappers around these.
- *
- * @since		0.6
- * @package		CMS
+ * Group related functions
+ * @package CMS 
+ * @license GPL
  */
 
+/**
+ * Include group class definition
+ */
 include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.group.inc.php');
 
+/**
+ * Class for doing group related functions.  Maybe of the Group object functions are just wrappers around these.
+ *
+ * @since 0.6
+ * @package CMS
+ * @version $Revision$
+ * @license GPL
+ */
 class GroupOperations
 {
+	/**
+	 * Loads all the groups from the database and returns them
+	 *
+	 * @return array The list of groups
+	 */
 	function LoadGroups()
 	{
-		$gCms = cmsms();
-		$db = cms_db();
+		$db = cmsms()->GetDb();
 
 		$result = array();
 
@@ -51,13 +65,18 @@ class GroupOperations
 		return $result;
 	}
 
+	/**
+	 * Load a group from the database by its id
+	 *
+	 * @param integer $id The id of the group to load
+	 * @return mixed The group if found. If it's not found, then false
+	 */
 	function & LoadGroupByID($id)
 	{
 
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups WHERE group_id = ? ORDER BY group_id";
 		$dbresult = $db->Execute($query, array($id));
@@ -74,12 +93,17 @@ class GroupOperations
 		return $result;
 	}
 
+	/**
+	 * Given a group object, inserts it into the database.
+	 *
+	 * @param mixed $group The group object to save to the database
+	 * @return integer The id of the newly created group. If none is created, -1
+	 */
 	function InsertGroup($group)
 	{
 		$result = -1; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ?';
 		$tmp = $db->GetOne($query,array($group->name));
@@ -100,12 +124,17 @@ class GroupOperations
 		return $result;
 	}
 
+	/**
+	 * Given a group object, update its attributes in the database.
+	 *
+	 * @param mixed $group The group to update
+	 * @return boolean True if the update was successful, false if not
+	 */
 	function UpdateGroup($group)
 	{
 		$result = false; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ? AND group_id != ?';
 		$tmp = $db->GetOne($query,array($group->name,$group->id));
@@ -125,12 +154,17 @@ class GroupOperations
 		return $result;
 	}
 
+	/**
+	 * Given a group id, delete it from the database along with all its associations.
+	 *
+	 * @param integer $id The group's id to delete
+	 * @return boolean True if the delete was successful. False if not.
+	 */
 	function DeleteGroupByID($id)
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$query = 'DELETE FROM '.cms_db_prefix().'user_groups where group_id = ?';
 		$dbresult = $db->Execute($query, array($id));
@@ -150,4 +184,5 @@ class GroupOperations
 	}
 }
 
+# vim:ts=4 sw=4 noet
 ?>

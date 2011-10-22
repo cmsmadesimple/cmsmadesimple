@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: translation.functions.php 61 2008-08-17 20:11:35Z alby $
+#$Id: translation.functions.php 287 2010-08-30 14:15:42Z calguy1000 $
+
 
 /**
  * Translation functions/classes
@@ -24,7 +25,7 @@
  * @package CMS
  */
 
-function lang()
+function ilang()
 {
 	global $lang;
 
@@ -69,10 +70,10 @@ function lang()
 	return $result;
 }
 
-function get_encoding($charset='', $defaultoverrides=true)
-{
-	return "UTF-8";
-}
+// function get_encoding($charset='', $defaultoverrides=true)
+// {
+// 	return "UTF-8";
+// }
 
 # vim:ts=4 sw=4 noet
 ?>

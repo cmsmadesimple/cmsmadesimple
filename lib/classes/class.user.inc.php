@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (tedkulp@users.sf.net)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -9,20 +9,28 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
+#
 #$Id$
+
+/**
+ * User class definition
+ * @package CMS
+ * @license GPL
+ */
 
 /**
  * Generic user class.  This can be used for any logged in user or user related function.
  *
  * @since 0.6.1
  * @package CMS
+ * @license GPL
  */
 class User
 {
@@ -98,7 +106,7 @@ class User
 	 */
 	function SetPassword($password)
 	{
-		$this->password = md5($password);
+		$this->password = md5(get_site_preference('sitemask','').$password);
 	}
 
 	/**
@@ -115,14 +123,14 @@ class User
 		
 		if ($this->id > -1)
 		{
-			global $gCms;
-			$userops =& $gCms->GetUserOperations();
+			$gCms = cmsms();
+			$userops = $gCms->GetUserOperations();
 			$result = $userops->UpdateUser($this);
 		}
 		else
 		{
-			global $gCms;
-			$userops =& $gCms->GetUserOperations();
+			$gCms = cmsms();
+			$userops = $gCms->GetUserOperations();
 			$newid = $userops->InsertUser($this);
 			if ($newid > -1)
 			{
@@ -148,8 +156,8 @@ class User
 
 		if ($this->id > -1)
 		{
-			global $gCms;
-			$userops =& $gCms->GetUserOperations();
+			$gCms = cmsms();
+			$userops = $gCms->GetUserOperations();
 			$result = $userops->DeleteUserByID($this->id);
 			if ($result)
 			{

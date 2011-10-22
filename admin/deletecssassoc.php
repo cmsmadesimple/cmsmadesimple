@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -37,14 +37,12 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
-global $gCms;
-$db =& $gCms->GetDb();
+$db = cmsms()->GetDb();
 
 #******************************************************************************
 # global vars definition
@@ -121,7 +119,8 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 		  $res = $db->Execute($query,array($type,$id,$ord));
 		}
 
-	      audit($id, (isset($name)?$name:""), 'Deleted Stylesheet Association');
+	      // put mention into the admin log
+		  audit($id, 'Stylesheet Association: '.(isset($name)?$name:""), 'Deleted');
 	      
               # now updating template
 	      if ("template" == $type)

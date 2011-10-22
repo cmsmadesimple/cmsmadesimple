@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 @set_time_limit(9999); // this may not work on all hosts
 
@@ -66,8 +65,8 @@ function check_checksum_data(&$report)
 	return false;
     }
   
-  global $gCms;
-  $config =& $gCms->GetConfig();
+  $gCms = cmsms();
+  $config = $gCms->GetConfig();
   $filenotfound = array();
   $notreadable = 0;
   $md5failed = 0;
@@ -173,8 +172,8 @@ function check_checksum_data(&$report)
 
 function generate_checksum_file(&$report)
 {
-  global $gCms;
-  $config =& $gCms->GetConfig();
+  $gCms = cmsms();
+  $config = $gCms->GetConfig();
   $output = '';
 
   $excludes = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$', '^uploads$', 
@@ -210,8 +209,8 @@ function generate_checksum_file(&$report)
 }
 
 // Get ready
-global $gCms;
-$smarty =& $gCms->GetSmarty();
+$gCms = cmsms();
+$smarty = $gCms->GetSmarty();
 $smarty->register_function('lang','checksum_lang');
 $smarty->caching = false;
 $smarty->force_compile = true;

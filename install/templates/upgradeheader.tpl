@@ -19,7 +19,7 @@
 
 <h2>{lang_install a=upgrade_thanks}<br />{$cms_version} ({$cms_version_name})</h2>
 
-<table class="countdown" cellspacing="2" cellpadding="2">
+<table class="countdown" cellspacing="0" cellpadding="0">
 	<tr>
 {section name=stepimages loop=$number_of_pages}
 {assign var='page' value=$smarty.section.stepimages.index+1}

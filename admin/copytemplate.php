@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 require_once("../lib/classes/class.template.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
@@ -36,6 +35,7 @@ $template_id = -1;
 if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
 else if (isset($_GET["template_id"])) $template_id = $_GET["template_id"];
 
+$template_name = '';
 if (isset($_REQUEST["template_name"])) { $template_name = $_REQUEST["template_name"]; }
 
 $from = 'listtemplates.php'.$urlext;
@@ -57,8 +57,8 @@ if (isset($_POST["cancel"]))
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Templates');
 
-global $gCms;
-$templateops =& $gCms->GetTemplateOperations();
+$gCms = cmsms();
+$templateops = $gCms->GetTemplateOperations();
 
 if ($access)
 {
@@ -119,8 +119,9 @@ if ($access)
 					}
 				}
 
-				audit($onetemplate->id, $onetemplate->name, 'Copied Template');
-				redirect($from);
+				// put mention into the admin log
+				audit($onetemplate->id, 'HTML-Template: '.$onetemplate->name, 'Copied');
+				redirect($from.'&messagekey=templatecopied');
 				return;
 			}
 			else
@@ -166,8 +167,8 @@ else
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 			      <input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="copytemplate" value="true" /><input type="hidden" name="from" value="<?php echo $from?>" />
-				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
 			</p>
 		</div>
 	</form>

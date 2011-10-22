@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_modified_date($params, &$smarty)
+function smarty_cms_function_modified_date($params, &$smarty)
 {
-	global $gCms;
-	$pageinfo = $gCms->variables['pageinfo'];
+	$gCms = cmsms();
+	$content_obj = $gCms->variables['content_obj'];
 
 	if(empty($params['format']))
 	{
@@ -30,27 +30,35 @@ function smarty_function_modified_date($params, &$smarty)
 		$format = $params['format'];
 	}
 
-	if (isset($pageinfo) && isset($pageinfo->modified_date) && $pageinfo->modified_date->timestamp() > -1)
+	if (is_object($content_obj) && $content_obj->GetModifiedDate() && $content_obj->GetModifiedDate() > -1)
 	{
-		return htmlentities(strftime($format, $pageinfo->modified_date->timestamp()));
-	}
-	else
-	{
-		return "";
+	  $time = $content_obj->GetModifiedDate();
+	  $str = cms_htmlentities(strftime($format, $time));
+
+	  if( isset($params['assign']) )
+	    {
+	      $smarty->assign($params['assign'],$str);
+	      return;
+	    }
+	  return $str;
 	}
 }
 
-function smarty_help_function_modified_date()
+
+function smarty_cms_help_function_modified_date()
 {
   echo lang('help_function_modified_date');
 }
 
-function smarty_about_function_modified_date() {
+function smarty_cms_about_function_modified_date() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Version: 1.1</p>
 	<p>
 	Change History:<br/>
+        <ul>
+          <li>v1.1 - (calguy1000) Added assign param</li>
+        </ul>
 	None
 	</p>
 	<?php

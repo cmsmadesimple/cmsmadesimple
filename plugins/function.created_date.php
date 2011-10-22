@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_created_date($params, &$smarty)
+function smarty_cms_function_created_date($params, &$smarty)
 {
-	global $gCms;
-	$pageinfo = $gCms->variables['pageinfo'];
+	$gCms = cmsms();
+	$content_obj = $gCms->variables['content_obj'];
 
 	if(empty($params['format']))
 	{
@@ -30,22 +30,27 @@ function smarty_function_created_date($params, &$smarty)
 		$format = $params['format'];
 	}
 
-	if (isset($pageinfo) && $pageinfo->content_created_date > -1)
+	if (is_object($content_obj) && $content_obj->GetCreationDate() > -1)
 	{
-		return htmlentities(strftime($format, $pageinfo->content_created_date));
+	  $time = $content_obj->GetCreationDate();
+	  $str = cms_htmlentities(strftime($format, $time));;
+
+	  if( isset($params['assign']) )
+	    {
+	      $smarty->assign(trim($params['assign']),$str);
+	      return;
+	    }
+	  return $str;
 	}
-	else
-	{
-		return "";
-	}
+
 }
 
-function smarty_help_function_created_date()
+function smarty_cms_help_function_created_date()
 {
   echo lang('help_function_created_date');
 }
 
-function smarty_about_function_created_date() {
+function smarty_cms_about_function_created_date() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 	<p>Version: 1.0</p>

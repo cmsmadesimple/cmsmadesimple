@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 if (isset($_POST['cancel']))
@@ -32,12 +31,11 @@ check_login();
 $action = '';
 if (isset($_POST['multiaction'])) $action = $_POST['multiaction'];
 
-global $gCms;
 
 $nodelist = array();
 $badlist = array();
 
-$templateops =& $gCms->GetTemplateOperations();
+$templateops = cmsms()->GetTemplateOperations();
 
 if (isset($_POST['idlist']))
 {
@@ -114,8 +112,8 @@ else
 
 			echo '<input type="hidden" name="multiaction" value="dodelete" /><input type="hidden" name="idlist" value="'.implode(':', $idlist).'" />' . "\n";
 			?>
-								<?php if (count($nodelist) > 0) { ?><input type="submit" accesskey="s" name="confirm" value="<?php echo lang('submit') ?>"  class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" /><?php } ?>
-								<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel') ?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+								<?php if (count($nodelist) > 0) { ?><input type="submit" name="confirm" value="<?php echo lang('submit') ?>"  class="pagebutton" /><?php } ?>
+								<input type="submit" name="cancel" value="<?php echo lang('cancel') ?>" class="pagebutton" />
 							</p>
 						</div>
 					</form>
@@ -139,7 +137,8 @@ else
 				$id = $node->id;
 				$title = $node->name;
 				$node->Delete();
-				audit($id, $title, 'Deleted Template');
+				// put mention into the admin log
+				audit($id, 'HTML-template: '.$title, 'Deleted');
 			}
 		}
 		redirect("listtemplates.php".$urlext);

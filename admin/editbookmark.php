@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,13 +20,11 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
-global $gCms;
-$db =& $gCms->GetDb();
+$db = cmsms()->GetDb();
 
 $error = "";
 
@@ -63,8 +61,7 @@ if (isset($_POST["editbookmark"]))
 
 	if ($validinfo)
 		{
-		global $gCms;
-		$gCms->GetBookmarkOperations();
+		  cmsms()->GetBookmarkOperations();
 		$markobj = new Bookmark();
 		$markobj->bookmark_id = $bookmark_id;
 		$markobj->title = $title;
@@ -127,8 +124,8 @@ if ($error != "")
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="bookmark_id" value="<?php echo $bookmark_id?>" /><input type="hidden" name="editbookmark" value="true" /><input type="hidden" name="userid" value="<?php echo $userid?>" />
-				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
 			</p>
 		</div>		
 	</form>

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSInstallerPage.class.php 68 2008-08-21 14:32:13Z alby $
+#$Id: CMSInstallerPage.class.php 296 2010-10-17 22:31:18Z calguy1000 $
 
 /**
  * CMS Made Simple installer page base class
@@ -27,16 +27,26 @@ class CMSInstallerPage
 	var $smarty;
 	var $errors;
 	var $debug;
+	private $_installer;
 
 	/**
 	 * Class constructor
 	*/
-	function CMSInstallerPage($number, &$smarty, $errors, $debug)
+	function CMSInstallerPage(CMSInstaller& $installer, $number, &$smarty, $errors, $debug)
 	{
-		$this->number = $number;
-		$this->smarty =& $smarty;
-		$this->errors = $errors;
-		$this->debug  = $debug;
+	  $this->_installer = $installer;
+	  $this->number = $number;
+	  $this->smarty =& $smarty;
+	  $this->errors = $errors;
+	  $this->debug  = $debug;
+	}
+
+	/**
+	 * Get the instance of the installer object
+	 */
+	public function &get_installer()
+	{
+	  return $this->_installer;
 	}
 
 	/**

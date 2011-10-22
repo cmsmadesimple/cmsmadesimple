@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,15 +16,12 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_process_pagedata($params,&$smarty)
+function smarty_cms_function_process_pagedata($params,&$smarty)
 {
-  global $gCms;
-  $manager = $gCms->GetHierarchyManager();
-  $node = $manager->getNodeById($gCms->variables['content_id']);
-  if( !isset($node) || $node === FALSE ) return;
-  $content = $node->get_content();
+  $content = cmsms()->get_variable('content_obj');
+  if (!is_object($content) ||  empty($content)) return;
 
-  $tpl = $content->get_property_value('pagedata','');
+  $tpl = $content->GetPropertyValue('pagedata','');
   if( empty($tpl) ) return;
 
   $smarty->_compile_source('preprocess template', $tpl, $_compiled);
@@ -32,15 +29,18 @@ function smarty_function_process_pagedata($params,&$smarty)
   $smarty->_eval('?>' . $_compiled);
   $result = @ob_get_contents();
   @ob_end_clean();
-
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$result);
+		return;
+	}
   return $result;
 }
 
-function smarty_help_function_process_pagedata() {
+function smarty_cms_help_function_process_pagedata() {
   echo lang('help_function_process_pagedata');
 }
 
-function smarty_about_function_process_pagedata() {
+function smarty_cms_about_function_process_pagedata() {
   ?>
   <p>Author: Robert Campbell&lt;calguy1000@cmsmadesimple.org&gt;</p>
   <p>Version: 1.0</p>

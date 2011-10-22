@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -9,30 +9,55 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
+#
 #$Id$
+
+/**
+ * Stylesheet related functions.
+ *
+ * @package CMS
+ * @license GPL
+ */
+
+/**
+ * Include stylesheet class definition
+ */
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.stylesheet.inc.php');
 
 /**
  * Class for doing stylesheet related functions.  Maybe of the Group object functions are just wrappers around these.
  *
  * @since		0.11
  * @package		CMS
+ * @license GPL
  */
-
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.stylesheet.inc.php');
-
-class StylesheetOperations
+final class StylesheetOperations
 {
+	private static $_instance;
+	private $_cache = array();
+
+	protected function __construct() {}
+	public static function &get_instance()
+	{
+		if( !is_object(self::$_instance) )
+		{
+			self::$_instance = new StylesheetOperations();
+		}
+		return self::$_instance;
+	}
+
+
 	function & LoadStylesheets()
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$result = array();
 
@@ -55,8 +80,8 @@ class StylesheetOperations
 
 	function AssociateStylesheetToTemplate( $stylesheetid, $templateid )
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$query = 'SELECT max(assoc_order) FROM '.cms_db_prefix().'css_assoc 
                            WHERE assoc_to_id = ?';
@@ -83,8 +108,8 @@ class StylesheetOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$query = 'SELECT assoc_css_id FROM '.cms_db_prefix().'css_assoc WHERE
 		           assoc_type = ? AND assoc_to_id = ? ORDER BY assoc_order';
@@ -104,13 +129,12 @@ class StylesheetOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
-		$cache = &$gCms->StylesheetCache;
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
-		if (isset($cache[$id]))
+		if (isset($this->_cache[$id]))
 		{
-			return $cache[$id];
+			return $this->_cache[$id];
 		}
 
 		$query = "SELECT css_id, css_name, css_text, media_type FROM ".cms_db_prefix()."css WHERE css_id = ?";
@@ -125,9 +149,9 @@ class StylesheetOperations
 			$onestylesheet->media_type = $row['media_type'];
 			$result =& $onestylesheet;
 
-			if (!isset($cache[$onestylesheet->id]))
+			if (!isset($this->_cache[$onestylesheet->id]))
 			{
-				$cache[$onestylesheet->id] =& $onestylesheet;
+				$this->_cache[$onestylesheet->id] =& $onestylesheet;
 			}
 		}
 
@@ -138,8 +162,8 @@ class StylesheetOperations
 	{
 		$result = -1; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$new_stylesheet_id = $db->GenID(cms_db_prefix()."css_seq");
 		$time = $db->DBTimeStamp(time());
@@ -157,8 +181,8 @@ class StylesheetOperations
 	{
 		$result = false; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$time = $db->DBTimeStamp(time());
 		$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?,css_text = ?, media_type = ?, modified_date = ".$time." WHERE css_id = ?";
@@ -175,8 +199,8 @@ class StylesheetOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."css_assoc where assoc_css_id = ?";
 		$dbresult = $db->Execute($query, array($id));
@@ -196,8 +220,8 @@ class StylesheetOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = ?";
 		$attrs = array($name);

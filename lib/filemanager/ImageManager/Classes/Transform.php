@@ -119,18 +119,18 @@ Class Image_Transform
      * @see PEAR::isError()
      * @see Image_Transform::setOption()
      */
-    function &factory($driver)
+    public static function &factory($driver)
     {
         if ('' == $driver) {
             die("No image library specified... aborting.  You must call ::factory() with one parameter, the library to load.");
 
         }
-        $this->uid = md5($_SERVER['REMOTE_ADDR']);
 
         include_once (dirname(__FILE__)."/$driver.php");
 
         $classname = "Image_Transform_Driver_{$driver}";
-        $obj =& new $classname;
+        $obj = new $classname;
+        $obj->uid = md5($_SERVER['REMOTE_ADDR']);
         return $obj;
     }
 
@@ -343,7 +343,7 @@ Class Image_Transform
         $id_length = strlen($id);
 
         while (false !== ($entry = $d->read())) {
-            if (is_file($dir.'/'.$entry) && substr($entry,0,1) == '.' && !ereg($entry, $this->image))
+            if (is_file($dir.'/'.$entry) && substr($entry,0,1) == '.' && !preg_match('@'.$entry.'@', $this->image))
             {
                 //echo filemtime($this->directory.'/'.$entry)."<br>"; 
                 //echo time();
@@ -538,7 +538,7 @@ Class Image_Transform
 
 
     /* Methods to add to the driver classes in the future */
-    function addText()
+    function addText($params)
     {
         return null; //PEAR::raiseError("No addText method exists", true);
     }
@@ -553,12 +553,12 @@ Class Image_Transform
         return null; //PEAR::raiseError("No addBorder method exists", true);
     }
 
-    function crop()
+    function crop($new_x, $new_y, $new_width, $new_height)
     {
         return null; //PEAR::raiseError("No crop method exists", true);
     }
 
-    function flip() 
+    function flip($horizontal) 
     {
         return null;
     }

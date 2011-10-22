@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,9 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_image($params, &$smarty)
+function smarty_cms_function_image($params, &$smarty)
 {
-	global $gCms;
+	$gCms = cmsms();
 
 	$text = '';
 	$imgstart = '<img src=';
@@ -65,17 +65,21 @@ function smarty_function_image($params, &$smarty)
 	} else {
 		$text = '<!-- empty results from image plugin -->';
 	}
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$text);
+		return;
+	}
 	return $text;	
 }
 
 
-function smarty_help_function_image()
+function smarty_cms_help_function_image()
 {
   echo lang('help_function_image');
 }
 
 
-function smarty_about_function_image() 
+function smarty_cms_about_function_image() 
 {
 ?>
   <p>Author:  Robert Campbell &lt;calguy1000@hotmail.com&gt;,</p>

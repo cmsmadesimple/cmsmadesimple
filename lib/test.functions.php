@@ -22,7 +22,33 @@
  * Handles test functions and values for CMSMS
  *
  * @package CMS
+ * @ignore
  */
+
+$lang_fn = 'lang';
+global $CMS_INSTALL_PAGE;
+if( isset($CMS_INSTALL_PAGE) )
+	{
+		$lang_fn = 'ilang';
+	}
+
+/**
+ * A class for working with tests
+ * 
+ * @package CMS
+ * @internal
+ */
+class CmsInstallTest
+{
+	public $title = null;
+	public $res = null;
+	public $value = null;
+	public $secondvalue = null;
+	public $message = null;
+	public $ini_val = null;
+	public $error = null;
+    public $display_value = true;
+}
 
 /**
  * Array with PHP driver => DB server
@@ -31,33 +57,30 @@
 */
 function getSupportedDBDriver()
 {
-	return array(
-		'mysqli'=>array('server'=>'mysql', 'label'=>'MySQL (compatibility)', 'extension' => 'mysql'),
-		'mysql'=>array('server'=>'mysql', 'label'=>'MySQL (4.1+)', 'extension' => 'mysql'),
-		'postgres7'=>array('server'=>'pgsql', 'label'=>'PostgreSQL 7/8', 'extension' => 'pgsql'),
-		'sqlite'=>array('server'=>'sqlite', 'label'=>'SQLite 2/3', 'extension' => 'sqlite'),
-	);
+	return array('mysqli'=>'mysql', 'mysql'=>'mysql', 'pgsql'=>'pgsql');
 }
+
 
 /**
  * Array with minimum and recommended values
  *
+ * @internal
  * @return array
- * @var string $property
-*/
+ * @param string $property
+ */
 function getTestValues( $property )
 {
 	$range = array(
-		'php_version'			=> array('minimum'=>'5.2', 'recommended'=>'5.2.5'),
+		'php_version'			=> array('minimum'=>'5.2.4', 'recommended'=>'5.2.12'),
 		'gd_version'			=> array('minimum'=>2),
 		'memory_limit'			=> array('minimum'=>'16M', 'recommended'=>'24M'),
 		'max_execution_time'	=> array('minimum'=>30, 'recommended'=>60),
 		'post_max_size'			=> array('minimum'=>'2M', 'recommended'=>'10M'),
 		'upload_max_filesize'	=> array('minimum'=>'2M', 'recommended'=>'10M'),
 
-		'mysql_version'			=> array('minimum'=>'4.1.5', 'recommended'=>'5.0'),
+		'mysql_version'			=> array('minimum'=>'3.23', 'recommended'=>'4.1'),
 		'pgsql_version'			=> array('minimum'=>'7.4', 'recommended'=>'8'),
-		'sqlite_version'		=> array('minimum'=>'2.8.10', 'recommended'=>'2.8.16'),
+		'sqlite_version'		=> array('minimum'=>'', 'recommended'=>''),
 	);
 
 	if(array_key_exists($property, $range))
@@ -73,10 +96,12 @@ function getTestValues( $property )
 }
 
 /**
+ * Test a php global.
+
  * @return array
- * @var mixed   $result
- * @var boolean $set
-*/
+ * @param mixed   $result
+ * @param boolean $set
+ */
 function testGlobal( $result, $set = false )
 {
 	static $continueon = true;
@@ -105,9 +130,10 @@ function testGlobal( $result, $set = false )
 	return array($continueon, $special_failed);
 }
 
+
 /**
  * @return boolean
- * @var string $test
+ * @param string $test
 */
 function extension_loaded_or( $test )
 {
@@ -118,30 +144,31 @@ function extension_loaded_or( $test )
 
 /**
  * @return string
- * @var object  $test
- * @var boolean $required
- * @var string  $message
- * @var string  $error_fragment
- * @var string  $error
+ * @param object  $test
+ * @param boolean $required
+ * @param string  $message
+ * @param string  $error_fragment
+ * @param string  $error
 */
 function getTestReturn( &$test, $required, $message = '', $error_fragment = '', $error = '' )
 {
+	global $lang_fn;
 	switch($test->res)
 	{
 		case 'green':
 			list($test->continueon, $test->special_failed) = testGlobal('');
-			$test->res_text = lang('success');
+			$test->res_text = $lang_fn('success');
 			break;
 		case 'yellow':
 		case 'red':
 			list($test->continueon, $test->special_failed) = testGlobal($required);
 			if($test->res == 'yellow')
 			{
-				$test->res_text = lang('caution');
+				$test->res_text = $lang_fn('caution');
 			}
 			elseif($test->res == 'red')
 			{
-				$test->res_text = lang('failure');
+				$test->res_text = $lang_fn('failure');
 			}
 
 			if(trim($message) != '')
@@ -164,13 +191,15 @@ function getTestReturn( &$test, $required, $message = '', $error_fragment = '', 
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $db
- * @var string  $message
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $db
+ * @param string  $message
 */
 function & testSupportedDatabase( $required, $title, $db = false, $message = '' )
 {
+	global $lang_fn;
+	
 	$drivers = getSupportedDBDriver();
 
 //TODO?
@@ -188,7 +217,7 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 			getTestReturn($test, $required);
 			return $test;
 		}
-		$test = new StdClass();
+		$test = new CmsInstallTest();
 		$test->title = $title;
 		if($required)
 		{
@@ -203,7 +232,7 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 	}
 //TODO
 
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if(count($drivers) > 0)
@@ -240,7 +269,7 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 	else
 	{
 		$test->res = 'red';
-		getTestReturn($test, $required, $message, 'DB_driver_missing', lang('no_db_driver'));
+		getTestReturn($test, $required, $message, 'DB_driver_missing', $lang_fn('no_db_driver'));
 	}
 
 	return $test;
@@ -248,7 +277,7 @@ function & testSupportedDatabase( $required, $title, $db = false, $message = '' 
 
 /**
  * @return string
- * @var integer $info
+ * @param integer $info
 */
 function getEmbedPhpInfo( $info = INFO_ALL )
 {
@@ -280,7 +309,7 @@ function getEmbedPhpInfo( $info = INFO_ALL )
 
 /**
  * @return mixed
- * @var string $module
+ * @param string $module
 */
 function getApacheModules( $module = false )
 {
@@ -300,16 +329,16 @@ function getApacheModules( $module = false )
 
 /**
  * @return object
- * @var string $title
- * @var string $value
- * @var string $return
- * @var string $message
- * @var string $error_fragment	
- * @var string $error
+ * @param string $title
+ * @param string $value
+ * @param string $return
+ * @param string $message
+ * @param string $error_fragment	
+ * @param string $error
 */
 function & testDummy( $title, $value, $return, $message = '', $error_fragment = '', $error = '' )
 {
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 	$test->value = $value;
 	$test->secondvalue = null;
@@ -321,15 +350,15 @@ function & testDummy( $title, $value, $return, $message = '', $error_fragment = 
 
 /**
  * @return object
- * @var string $title
- * @var string $varname
- * @var string $testfunc
- * @var string $message
+ * @param string $title
+ * @param string $varname
+ * @param string $testfunc
+ * @param string $message
 */
 function & testConfig( $title, $varname, $testfunc = '', $message = '' )
 {
-	global $gCms;
-	$config = $gCms->config;
+	$gCms = cmsms();
+	$config = $gCms->GetConfig();
 
 	if( (isset($config[$varname])) && (is_bool($config[$varname])) )
 	{
@@ -350,7 +379,7 @@ function & testConfig( $title, $varname, $testfunc = '', $message = '' )
 
 	if(! isset($test))
 	{
-		$test = new StdClass();
+		$test = new CmsInstallTest();
 		$test->title = $title;
 		$test->value = $value;
 		$test->secondvalue = null;
@@ -365,18 +394,44 @@ function & testConfig( $title, $varname, $testfunc = '', $message = '' )
 
 /**
  * @return boolean
- * @var object $test
- * @var string $varname
- * @var string $type
+ * @param object $test
+ * @param string $varname
+ * @param string $type
 */
-function testIni( &$test, $varname, $type )
+function testIni( &$test, $varname, $type, $opt = '' )
 {
 	$error = null;
 	$str = ini_get($varname);
 
 	switch($type)
 	{
+  	    case 'and':
+			if($str === '') break;
+			$str = (int) $str;
+			if( empty($str) )
+			{
+				$str = (int)$str;
+			}
+			else
+			{
+				$str = (int)$str & (int)$opt;
+			}
+			break;
 		case 'boolean':
+			if( !is_numeric($str) )
+			{
+				$str2 = strtolower($str);
+				switch( $str2 )
+				{
+				case 'on':
+				case 'yes':
+				case 'y':
+					$str = TRUE;
+					break;
+				default:
+					$str = FALSE;
+				}
+			}
 			$str = (bool) $str;
 			break;
 		case 'integer':
@@ -404,17 +459,80 @@ function testIni( &$test, $varname, $type )
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var mixed   $var
- * @var string  $message
- * @var boolean $ini
- * @var boolean $empty_is_ok
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param mixed   $var
+ * @param integer $bitmask
+ * @param string  $message
+ * @param boolean $ini
+ * @param boolean $empty_is_ok
+ * @param string  $error_fragment
+*/
+function & testIntegerMask($required,$title,$var,$mask,$message = '',$ini = true,$negate = false,$display_value = true,$error_fragment = '')
+{
+	$test = new CmsInstallTest();
+	$test->title = $title;
+	
+	if( $ini )
+	{
+		testIni($test,$var,'and',$mask);
+	}
+	else
+	{
+		$test->ini_val = $var;
+	}
+	
+	// did the ini test work.
+	if( $test->ini_val === '' )
+	{
+		$test->value = 0;
+	}
+	else
+	{
+		$test->value = $test->ini_val;
+	}
+
+	$res = $test->value;
+	if( $negate )
+	{
+		$res = !(int)$res;
+	}
+
+	if(empty($res))
+	{
+		if($required)
+		{
+			$test->res = 'red';
+		}
+		else
+		{
+			$test->res = 'yellow';
+		}
+	}
+	else
+	{
+		$test->res = 'green';
+	}
+
+	$test->display_value = $display_value;
+	getTestReturn($test, $required, $message, $error_fragment);
+	return $test;
+}
+
+/**
+ * @return object
+ * @param boolean $required
+ * @param string  $title
+ * @param mixed   $var
+ * @param string  $message
+ * @param boolean $ini
+ * @param boolean $empty_is_ok
+ * @param string  $error_fragment
 */
 function & testInteger( $required, $title, $var, $message = '', $ini = true, $empty_is_ok = true, $error_fragment = '' )
 {
-	$test = new StdClass();
+	global $lang_fn;
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if($ini)
@@ -428,7 +546,7 @@ function & testInteger( $required, $title, $var, $message = '', $ini = true, $em
 
 	if($test->ini_val === '')
 	{
-		if($empty_is_ok) $test->value = lang('on');
+		if($empty_is_ok) $test->value = $lang_fn('on');
 		else $test->value = 0;
 	}
 	else
@@ -458,18 +576,18 @@ function & testInteger( $required, $title, $var, $message = '', $ini = true, $em
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var mixed   $var
- * @var string  $message
- * @var boolean $ini
- * @var boolean $code_empty
- * @var boolean $code_not_empty
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param mixed   $var
+ * @param string  $message
+ * @param boolean $ini
+ * @param boolean $code_empty
+ * @param boolean $code_not_empty
+ * @param string  $error_fragment
 */
 function & testString( $required, $title, $var, $message = '', $ini = true, $code_empty = 'green', $code_not_empty = 'yellow', $error_fragment = '' )
 {
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if($ini)
@@ -498,17 +616,18 @@ function & testString( $required, $title, $var, $message = '', $ini = true, $cod
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var mixed   $var
- * @var string  $message
- * @var boolean $ini
- * @var boolean $negative_test
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param mixed   $var
+ * @param string  $message
+ * @param boolean $ini
+ * @param boolean $negative_test
+ * @param string  $error_fragment
 */
 function & testBoolean( $required, $title, $var, $message = '', $ini = true, $negative_test = false, $error_fragment = '' )
 {
-	$test = new StdClass();
+	global $lang_fn;
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if($ini)
@@ -523,8 +642,8 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
 
 	if($test->ini_val == false)
 	{
-		$test->value = $negative_test ? lang('on') : lang('off');
-		$test->secondvalue = $negative_test ? lang('true') : lang('false');
+		$test->value = $negative_test ? $lang_fn('on') : $lang_fn('off');
+		$test->secondvalue = $negative_test ? $lang_fn('true') : $lang_fn('false');
 		if($required)
 		{
 			$test->res = 'red';
@@ -536,8 +655,8 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
 	}
 	else
 	{
-		$test->value = $negative_test ? lang('off') : lang('on');
-		$test->secondvalue = $negative_test ? lang('false') : lang('true');
+		$test->value = $negative_test ? $lang_fn('off') : $lang_fn('on');
+		$test->secondvalue = $negative_test ? $lang_fn('false') : $lang_fn('true');
 		$test->res = 'green';
 	}
 
@@ -547,19 +666,19 @@ function & testBoolean( $required, $title, $var, $message = '', $ini = true, $ne
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var mixed   $var
- * @var string  $message
- * @var mixed   $minimum
- * @var mixed   $recommended
- * @var boolean $ini
- * @var int     $unlimited
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param mixed   $var
+ * @param string  $message
+ * @param mixed   $minimum
+ * @param mixed   $recommended
+ * @param boolean $ini
+ * @param int     $unlimited
+ * @param string  $error_fragment
 */
 function & testVersionRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $unlimited = null, $error_fragment='' )
 {
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if($ini)
@@ -580,7 +699,7 @@ function & testVersionRange( $required, $title, $var, $message = '', $minimum, $
 
 	if( (! is_null($unlimited)) && ($test->ini_val == (string) $unlimited) )
 	{
-		$test->value = lang('unlimited');
+		$test->value = $lang_fn('unlimited');
 		$test->res = 'green';
 		getTestReturn($test, $required);
 	}
@@ -605,21 +724,23 @@ function & testVersionRange( $required, $title, $var, $message = '', $minimum, $
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var mixed   $var
- * @var string  $message
- * @var mixed   $minimum
- * @var mixed   $recommended
- * @var boolean $ini
- * @var boolean $test_as_bytes
- * @var int     $unlimited
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param mixed   $var
+ * @param string  $message
+ * @param mixed   $minimum
+ * @param mixed   $recommended
+ * @param boolean $ini
+ * @param boolean $test_as_bytes
+ * @param int     $unlimited
+ * @param string  $error_fragment
 */
 function & testRange( $required, $title, $var, $message = '', $minimum, $recommended, $ini = true, $test_as_bytes = false, $unlimited = null, $error_fragment = '' )
 {
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
+	
+	global $lang_fn;
 
 	if($ini)
 	{
@@ -645,7 +766,7 @@ function & testRange( $required, $title, $var, $message = '', $minimum, $recomme
 
 	if( (! is_null($unlimited)) && ((int) $test->ini_val == (int) $unlimited) )
 	{
-		$test->value = lang('unlimited');
+		$test->value = $lang_fn('unlimited');
 		$test->res = 'green';
 		getTestReturn($test, $required);
 	}
@@ -670,7 +791,7 @@ function & testRange( $required, $title, $var, $message = '', $minimum, $recomme
 
 /**
  * @return int
- * @var string $val
+ * @param string $val
  */
 function returnBytes( $val )
 {
@@ -694,19 +815,21 @@ function returnBytes( $val )
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $umask
- * @var string  $message
- * @var boolean $debug
- * @var string  $dir
- * @var string  $file
- * @var string  $data
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $umask
+ * @param string  $message
+ * @param boolean $debug
+ * @param string  $dir
+ * @param string  $file
+ * @param string  $data
  */
 function & testUmask( $required, $title, $umask, $message = '', $debug = false, $dir = '', $file = '_test_umask_', $data = 'this is a test' )
 {
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
+	
+	global $lang_fn;
 
 	if(empty($dir))
 	{
@@ -727,7 +850,7 @@ function & testUmask( $required, $title, $umask, $message = '', $debug = false, 
 	if(! $_test)
 	{
 		$test->res = 'red';
-		getTestReturn($test, $required, $message, 'Directory_not_writable', lang('errordirectorynotwritable').' ('.$dir .')');
+		getTestReturn($test, $required, $message, 'Directory_not_writable', $lang_fn('errordirectorynotwritable').' ('.$dir .')');
 		return $test;
 	}
 	$_test = true;
@@ -768,7 +891,7 @@ function & testUmask( $required, $title, $umask, $message = '', $debug = false, 
 			{
 				$test->res = 'yellow';
 			}
-			getTestReturn($test, $required, $message, 'Can.27t_create_file', lang('errorcantcreatefile').' ('.$test_file.')');
+			getTestReturn($test, $required, $message, 'Can.27t_create_file', $lang_fn('errorcantcreatefile').' ('.$test_file.')');
 			return $test;
 		}
 
@@ -785,7 +908,7 @@ function & testUmask( $required, $title, $umask, $message = '', $debug = false, 
 	}
 
 	$test->res = 'red';
-	getTestReturn($test, $required, $message, 'Can.27t_create_file', lang('errorcantcreatefile').' ('.$test_file.')');
+	getTestReturn($test, $required, $message, 'Can.27t_create_file', $lang_fn('errorcantcreatefile').' ('.$test_file.')');
 	return $test;
 }
 
@@ -793,11 +916,12 @@ function & testUmask( $required, $title, $umask, $message = '', $debug = false, 
 
 /**
  * @return array
- * @var string  $file
- * @var boolean $debug
+ * @param string  $file
+ * @param boolean $debug
  */
 function permission_stat( $file, $debug = false )
 {
+	global $lang_fn;
 	$opt = array();
 	clearstatcache();
 	$filestat = stat($file);
@@ -826,13 +950,13 @@ function permission_stat( $file, $debug = false )
 			$userinfo = @posix_getpwuid($filestat[4]);
 			$groupinfo = @posix_getgrgid($filestat[5]);
 		}
-		$opt['username'] = isset($userinfo['name']) ? $userinfo['name'] : lang('unknown');
-		$opt['usergroup'] = isset($groupinfo['name']) ? $groupinfo['name'] : lang('unknown');
+		$opt['username'] = isset($userinfo['name']) ? $userinfo['name'] : $lang_fn('unknown');
+		$opt['usergroup'] = isset($groupinfo['name']) ? $groupinfo['name'] : $lang_fn('unknown');
 	}
 	else
 	{
-		$opt['username'] = lang('unknown');
-		$opt['usergroup'] = lang('unknown');
+		$opt['username'] = $lang_fn('unknown');
+		$opt['usergroup'] = $lang_fn('unknown');
 	}
 
 	return $opt;
@@ -840,7 +964,7 @@ function permission_stat( $file, $debug = false )
 
 /**
  * @return string
- * @var octal $mode
+ * @param octal $mode
  */
 function permission_octal2string( $mode )
 {
@@ -891,27 +1015,29 @@ function permission_octal2string( $mode )
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $message
- * @var boolean $debug
- * @var string  $dir
- * @var string  $file
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $message
+ * @param boolean $debug
+ * @param string  $dir
+ * @param string  $file
 */
 function & testCreateDirAndFile( $required, $title, $message = '', $debug = false, $dir = '_test_dir_file_', $file = '_test_dir_file_' )
 {
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 	$dir = cms_join_path(TMP_CACHE_LOCATION, $dir);
 	$file = cms_join_path($dir, $file);
+	
+	global $lang_fn;
 
 	if($debug)
 	{
 		if(file_exists($file)) unlink($file);
 		if( (is_dir($dir)) && (false !== strpos($dir, dirname(dirname(__FILE__)))) ) rmdir($dir);
 
-		if(! mkdir($dir)) $test->error = lang('errordirectorynotwritable') .' ('. $dir . ')';
-		if(! touch($file)) $test->error = lang('errorcantcreatefile') .' ('. $file . ')';
+		if(! mkdir($dir)) $test->error = $lang_fn('errordirectorynotwritable') .' ('. $dir . ')';
+		if(! touch($file)) $test->error = $lang_fn('errorcantcreatefile') .' ('. $file . ')';
 		$_test = file_exists($file);
 	}
 	else
@@ -942,18 +1068,18 @@ function & testCreateDirAndFile( $required, $title, $message = '', $debug = fals
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $dir
- * @var string  $message
- * @var boolean $quick
- * @var boolean $debug
- * @var string  $file
- * @var string  $data
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $dir
+ * @param string  $message
+ * @param boolean $quick
+ * @param boolean $debug
+ * @param string  $file
+ * @param string  $data
 */
 function & testDirWrite( $required, $title, $dir, $message = '', $quick = 0, $debug = false, $file = '_test_dir_write_', $data = 'this is a test' )
 {
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	if(empty($dir))
@@ -1014,26 +1140,29 @@ function & testDirWrite( $required, $title, $dir, $message = '', $quick = 0, $de
 	}
 
 	$test->res = 'red';
-	getTestReturn($test, $required, $message, 'Directory_not_writable', lang('errordirectorynotwritable').' ('.$dir.')');
+	global $lang_fn;
+	getTestReturn($test, $required, $message, 'Directory_not_writable', $lang_fn('errordirectorynotwritable').' ('.$dir.')');
 	return $test;
 }
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $file
- * @var string  $message
- * @var boolean $debug
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $file
+ * @param string  $message
+ * @param boolean $debug
 */
 function & testFileWritable( $required, $title, $file, $message = '', $debug = false )
 {
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
+	
+	global $lang_fn;
 
 	if(empty($file))
 	{
-		$test->error = lang('errorfilenot');
+		$test->error = $lang_fn('errorfilenot');
 		return $test;
 	}
 
@@ -1069,28 +1198,29 @@ function & testFileWritable( $required, $title, $file, $message = '', $debug = f
 	}
 
 	$test->res = 'red';
-	getTestReturn($test, $required, $message, 'File_not_writable', lang('errorfilenotwritable').' ('.$file.')');
+	getTestReturn($test, $required, $message, 'File_not_writable', $lang_fn('errorfilenotwritable').' ('.$file.')');
 	return $test;
 }
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $dir
- * @var string  $message
- * @var boolean $debug
- * @var int     $timeout
- * @var string  $search
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $dir
+ * @param string  $message
+ * @param boolean $debug
+ * @param int     $timeout
+ * @param string  $search
 */
 function & testRemoteFile( $required, $title, $url = '', $message = '', $debug = false, $timeout = 10, $search = 'cmsmadesimple' )
 {
+	global $lang_fn;
 	if(empty($url))
 	{
-		$url = 'http://dev.cmsmadesimple.org/latest_version.php';
+		$url = CMS_DEFAULT_VERSIONCHECK_URL;
 	}
 
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 	//$test->value = $url;
 
@@ -1098,200 +1228,211 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 	{
 		// Relative or invalid URL?
 		$test->res = 'red';
-		getTestReturn($test, $required, '', '', lang('invalid_test'));
+		getTestReturn($test, $required, '', '', $lang_fn('invalid_test'));
 		return $test;
 	}
 
-	switch($url_info['scheme'])
-	{
-		case 'https':
-			$scheme = 'ssl://';
-			$port = (isset($url_info['port'])) ? $url_info['port'] : 443;
-			break;
-		case 'http':
-		default:
-			$scheme = '';
-			$port = (isset($url_info['port'])) ? $url_info['port'] : 80;
-	}
-	$complete_url  = (isset($url_info['path'])) ? $url_info['path'] : '/';
-	$complete_url .= (isset($url_info['query'])) ? '?'.$url_info['query'] : '';
-
-
-	// TEST FSOCKOPEN
-	if($debug) $handle = fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, $timeout);
-	else       $handle = @fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, $timeout);
-	if($handle)
-	{
-		$out  = "GET " . $complete_url . " HTTP/1.1\r\n";
-		$out .= "Host: " . $url_info['host'] . "\r\n";
-		$out .= "Connection: Close\r\n\r\n";
-		if($debug)
-		{
-			fwrite($handle, $out);
-			stream_set_blocking($handle, 1);
-			stream_set_timeout($handle, $timeout);
-			$_info = stream_get_meta_data($handle);
-		}
-		else
-		{
-			@fwrite($handle, $out);
-			@stream_set_blocking($handle, 1);
-			@stream_set_timeout($handle, $timeout);
-			$_info = @stream_get_meta_data($handle);
-		}
-
-		$content_fsockopen = '';
-		while( (! feof($handle)) && (! $_info['timed_out']) )
-		{
-			if($debug) $content_fsockopen .= fgets($handle, 128);
-			else       $content_fsockopen .= @fgets($handle, 128);
-			$_info = stream_get_meta_data($handle);
-		}
-		@fclose($handle);
-
-		if($_info['timed_out'])
-		{
-			$test->opt['fsockopen']['ok'] = 1;
-			$test->opt['fsockopen']['res'] = 'yellow';
-			$test->opt['fsockopen']['res_text'] = lang('caution');
-			$test->opt['fsockopen']['message'] = lang('remote_connection_timeout');
-		}
-		else
-		{
-			$test->opt['fsockopen']['ok'] = 0;
-		}
-	}
-	else
+	if( !isset($url_info['scheme']) || !isset($url_info['host']) )
 	{
 		$test->res = 'red';
-		getTestReturn($test, $required, '', '', lang('connection_error'));
+		getTestReturn($test, $required, '', '', $lang_fn('invalid_url'));
 		return $test;
-	}
-
-	if($test->opt['fsockopen']['ok'] < 1)
-	{
-		if( (! empty($search)) && (false !== strpos($content_fsockopen, $search)) )
-		{
-			$test->opt['fsockopen']['res'] = 'green';
-			$test->opt['fsockopen']['res_text'] = lang('success');
-			$test->opt['fsockopen']['message'] = lang('search_string_find');
-		}
-		elseif(false !== strpos($content_fsockopen, '200 OK'))
-		{
-			$test->opt['fsockopen']['ok'] = 1;
-			$test->opt['fsockopen']['res'] = 'yellow';
-			$test->opt['fsockopen']['res_text'] = lang('caution');
-			$test->opt['fsockopen']['message'] = lang('remote_response_ok');
-		}
-		elseif(false !== strpos($content_fsockopen, '404 Not Found'))
-		{
-			$test->opt['fsockopen']['ok'] = 1;
-			$test->opt['fsockopen']['res'] = 'yellow';
-			$test->opt['fsockopen']['res_text'] = lang('caution');
-			$test->opt['fsockopen']['message'] = lang('remote_response_404');
-		}
-		else
-		{
-			$test->opt['fsockopen']['ok'] = 2;
-			$test->opt['fsockopen']['res'] = 'red';
-			$test->opt['fsockopen']['res_text'] = lang('failure');
-			$test->opt['fsockopen']['message'] = lang('remote_response_error');
-		}
-	}
-
-
-	// TEST FOPEN
-	$test->opt['fopen']['ok'] = 2;
-	$result = testBoolean('', '', 'allow_url_fopen', '', true, false);
-	if($result->res == 'green')
-	{
-		if($debug) $handle = fopen($url, 'rb');
-		else       $handle = @fopen($url, 'rb');
-		if(false == $handle)
-		{
-			$test->opt['fopen']['ok'] = 2;
-			$test->opt['fopen']['res'] = 'red';
-			$test->opt['fopen']['res_text'] = lang('failure');
-			$test->opt['fopen']['message'] = lang('connection_failed');
-		}
-		else
-		{
-			if($debug)
-			{
-				stream_set_blocking($handle, 1);
-				stream_set_timeout($handle, $timeout);
-				$_info = stream_get_meta_data($handle);
-			}
-			else
-			{
-				@stream_set_blocking($handle, 1);
-				@stream_set_timeout($handle, $timeout);
-				$_info = @stream_get_meta_data($handle);
-			}
-
-			$content_fopen = '';
-			while( (! feof($handle)) && (! $_info['timed_out']) )
-			{
-				if($debug) $content_fopen .= fgets($handle, 128);
-				else       $content_fopen .= @fgets($handle, 128);
-				$_info = stream_get_meta_data($handle);
-			}
-			@fclose($handle);
-
-			if($_info['timed_out'])
-			{
-				$test->opt['fopen']['ok'] = 1;
-				$test->opt['fopen']['res'] = 'yellow';
-				$test->opt['fopen']['res_text'] = lang('caution');
-				$test->opt['fopen']['message'] = lang('remote_connection_timeout');
-			}
-			else
-			{
-				$test->opt['fopen']['ok'] = 0;
-			}
-		}
 	}
 	else
 	{
-		$test->opt['fopen']['res'] = 'red';
-		$test->opt['fopen']['res_text'] = lang('failure');
-		$test->opt['fopen']['message'] = lang('test_allow_url_fopen_failed');
-	}
+		switch($url_info['scheme'])
+			{
+			case 'https':
+				$scheme = 'ssl://';
+				$port = (isset($url_info['port'])) ? $url_info['port'] : 443;
+				break;
+			case 'http':
+			default:
+				$scheme = '';
+				$port = (isset($url_info['port'])) ? $url_info['port'] : 80;
+			}
+		$complete_url  = (isset($url_info['path'])) ? $url_info['path'] : '/';
+		$complete_url .= (isset($url_info['query'])) ? '?'.$url_info['query'] : '';
 
 
-	if($test->opt['fopen']['ok'] < 1)
-	{
-		if( (! empty($search)) && (false !== strpos($content_fopen, $search)) )
-		{
-			$test->opt['fopen']['res'] = 'green';
-			$test->opt['fopen']['res_text'] = lang('success');
-			$test->opt['fopen']['message'] = lang('search_string_find');
-		}
-		elseif(false !== strpos($content_fopen, '200 OK'))
-		{
-			$test->opt['fopen']['ok'] = 1;
-			$test->opt['fopen']['res'] = 'yellow';
-			$test->opt['fopen']['res_text'] = lang('caution');
-			$test->opt['fopen']['message'] = lang('remote_response_ok');
-		}
-		elseif(false !== strpos($content_fopen, '404 Not Found'))
-		{
-			$test->opt['fopen']['ok'] = 1;
-			$test->opt['fopen']['res'] = 'yellow';
-			$test->opt['fopen']['res_text'] = lang('caution');
-			$test->opt['fopen']['message'] = lang('remote_response_404');
-		}
+		// TEST FSOCKOPEN
+		if($debug) $handle = fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, $timeout);
+		else       $handle = @fsockopen($scheme . $url_info['host'], $port, $errno, $errstr, $timeout);
+		if($handle)
+			{
+				$out  = "GET " . $complete_url . " HTTP/1.1\r\n";
+				$out .= "Host: " . $url_info['host'] . "\r\n";
+				$out .= "Connection: Close\r\n\r\n";
+				if($debug)
+					{
+						fwrite($handle, $out);
+						stream_set_blocking($handle, 1);
+						stream_set_timeout($handle, $timeout);
+						$_info = stream_get_meta_data($handle);
+					}
+				else
+					{
+						@fwrite($handle, $out);
+						@stream_set_blocking($handle, 1);
+						@stream_set_timeout($handle, $timeout);
+						$_info = @stream_get_meta_data($handle);
+					}
+
+				$content_fsockopen = '';
+				while( (! feof($handle)) && (! $_info['timed_out']) )
+					{
+						if($debug) $content_fsockopen .= fgets($handle, 128);
+						else       $content_fsockopen .= @fgets($handle, 128);
+						$_info = stream_get_meta_data($handle);
+					}
+				@fclose($handle);
+
+				if($_info['timed_out'])
+					{
+						$test->opt['fsockopen']['ok'] = 1;
+						$test->opt['fsockopen']['res'] = 'yellow';
+						$test->opt['fsockopen']['res_text'] = $lang_fn('caution');
+						$test->opt['fsockopen']['message'] = $lang_fn('remote_connection_timeout');
+					}
+				else
+					{
+						$test->opt['fsockopen']['ok'] = 0;
+					}
+			}
 		else
-		{
-			$test->opt['fopen']['ok'] = 2;
-			$test->opt['fopen']['res'] = 'red';
-			$test->opt['fopen']['res_text'] = lang('failure');
-			$test->opt['fopen']['message'] = lang('remote_response_error');
-		}
+			{
+				$test->res = 'red';
+				getTestReturn($test, $required, '', '', $lang_fn('connection_error'));
+				$test->continueon = 0;
+				return $test;
+			}
+
+		if($test->opt['fsockopen']['ok'] < 1)
+			{
+				if( (! empty($search)) && (false !== strpos($content_fsockopen, $search)) )
+					{
+						$test->opt['fsockopen']['res'] = 'green';
+						$test->opt['fsockopen']['res_text'] = $lang_fn('success');
+						$test->opt['fsockopen']['message'] = $lang_fn('search_string_find');
+					}
+				elseif(false !== strpos($content_fsockopen, '200 OK'))
+					{
+						$test->opt['fsockopen']['ok'] = 1;
+						$test->opt['fsockopen']['res'] = 'yellow';
+						$test->opt['fsockopen']['res_text'] = $lang_fn('caution');
+						$test->opt['fsockopen']['message'] = $lang_fn('remote_response_ok');
+					}
+				elseif(false !== strpos($content_fsockopen, '404 Not Found'))
+					{
+						$test->opt['fsockopen']['ok'] = 1;
+						$test->opt['fsockopen']['res'] = 'yellow';
+						$test->opt['fsockopen']['res_text'] = $lang_fn('caution');
+						$test->opt['fsockopen']['message'] = $lang_fn('remote_response_404');
+					}
+				else
+					{
+						$test->opt['fsockopen']['ok'] = 2;
+						$test->opt['fsockopen']['res'] = 'red';
+						$test->opt['fsockopen']['res_text'] = $lang_fn('failure');
+						$test->opt['fsockopen']['message'] = $lang_fn('remote_response_error');
+					}
+			}
+
+
+		// TEST FOPEN
+		$test->opt['fopen']['ok'] = 2;
+		$result = testBoolean('', '', 'allow_url_fopen', '', true, false);
+		if($result->res == 'green')
+			{
+				if($debug) $handle = fopen($url, 'rb');
+				else       $handle = @fopen($url, 'rb');
+				if(false == $handle)
+					{
+						$test->opt['fopen']['ok'] = 2;
+						$test->opt['fopen']['res'] = 'red';
+						$test->opt['fopen']['res_text'] = $lang_fn('failure');
+						$test->opt['fopen']['message'] = $lang_fn('connection_failed');
+					}
+				else
+					{
+						if($debug)
+							{
+								stream_set_blocking($handle, 1);
+								stream_set_timeout($handle, $timeout);
+								$_info = stream_get_meta_data($handle);
+							}
+						else
+							{
+								@stream_set_blocking($handle, 1);
+								@stream_set_timeout($handle, $timeout);
+								$_info = @stream_get_meta_data($handle);
+							}
+
+						$content_fopen = '';
+						while( (! feof($handle)) && (! $_info['timed_out']) )
+							{
+								if($debug) $content_fopen .= fgets($handle, 128);
+								else       $content_fopen .= @fgets($handle, 128);
+								$_info = stream_get_meta_data($handle);
+							}
+						@fclose($handle);
+
+						if($_info['timed_out'])
+							{
+								$test->opt['fopen']['ok'] = 1;
+								$test->opt['fopen']['res'] = 'yellow';
+								$test->opt['fopen']['res_text'] = $lang_fn('caution');
+								$test->opt['fopen']['message'] = $lang_fn('remote_connection_timeout');
+							}
+						else
+							{
+								$test->opt['fopen']['ok'] = 0;
+							}
+					}
+			}
+		else
+			{
+				$test->opt['fopen']['res'] = 'red';
+				$test->opt['fopen']['res_text'] = $lang_fn('failure');
+				$test->opt['fopen']['message'] = $lang_fn('test_allow_url_fopen_failed');
+			}
+
+
+		if($test->opt['fopen']['ok'] < 1)
+			{
+				if( (! empty($search)) && (false !== strpos($content_fopen, $search)) )
+					{
+						$test->opt['fopen']['res'] = 'green';
+						$test->opt['fopen']['res_text'] = $lang_fn('success');
+						$test->opt['fopen']['message'] = $lang_fn('search_string_find');
+					}
+				elseif(false !== strpos($content_fopen, '200 OK'))
+					{
+						$test->opt['fopen']['ok'] = 1;
+						$test->opt['fopen']['res'] = 'yellow';
+						$test->opt['fopen']['res_text'] = $lang_fn('caution');
+						$test->opt['fopen']['message'] = $lang_fn('remote_response_ok');
+					}
+				elseif(false !== strpos($content_fopen, '404 Not Found'))
+					{
+						$test->opt['fopen']['ok'] = 1;
+						$test->opt['fopen']['res'] = 'yellow';
+						$test->opt['fopen']['res_text'] = $lang_fn('caution');
+						$test->opt['fopen']['message'] = $lang_fn('remote_response_404');
+					}
+				else
+					{
+						$test->opt['fopen']['ok'] = 2;
+						$test->opt['fopen']['res'] = 'red';
+						$test->opt['fopen']['res_text'] = $lang_fn('failure');
+						$test->opt['fopen']['message'] = $lang_fn('remote_response_error');
+					}
+			}
+
+
+		$result = $test->opt['fsockopen']['ok'] + $test->opt['fopen']['ok'];
 	}
 
-
-	$result = $test->opt['fsockopen']['ok'] + $test->opt['fopen']['ok'];
 	switch($result)
 	{
 		case 0:
@@ -1315,33 +1456,35 @@ function & testRemoteFile( $required, $title, $url = '', $message = '', $debug =
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $file
- * @var string  $checksum
- * @var string  $message
- * @var string  $formattime
- * @var boolean $debug
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $file
+ * @param string  $checksum
+ * @param string  $message
+ * @param string  $formattime
+ * @param boolean $debug
 */
 function & testFileChecksum( $required, $title, $file, $checksum, $message = '', $formattime = '%c', $debug = false )
 {
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 	$test->value = $file;
+	
+	global $lang_fn;
 
 	if(is_dir($file))
 	{
-		$test->secondvalue = lang('is_directory');
+		$test->secondvalue = $lang_fn('is_directory');
 		$test->res = 'yellow';
-		getTestReturn($test, '', '', '', lang('is_directory').' ('.$file.')');
+		getTestReturn($test, '', '', '', $lang_fn('is_directory').' ('.$file.')');
 		return $test;
 	}
 
 	if(! file_exists($file))
 	{
-		$test->secondvalue = lang('nofiles');
+		$test->secondvalue = $lang_fn('nofiles');
 		$test->res = 'red';
-		getTestReturn($test, '', $message, '', lang('nofiles').' ('.$file.')');
+		getTestReturn($test, '', $message, '', $lang_fn('nofiles').' ('.$file.')');
 		return $test;
 	}
 
@@ -1349,9 +1492,9 @@ function & testFileChecksum( $required, $title, $file, $checksum, $message = '',
 	else       $_test = @is_readable($file);
 	if(! $_test)
 	{
-		$test->secondvalue = lang('is_readable_false');
+		$test->secondvalue = $lang_fn('is_readable_false');
 		$test->res = 'yellow';
-		getTestReturn($test, '', '', '', lang('is_readable_false').' ('.$file.')');
+		getTestReturn($test, '', '', '', $lang_fn('is_readable_false').' ('.$file.')');
 		return $test;
 	}
 
@@ -1359,15 +1502,15 @@ function & testFileChecksum( $required, $title, $file, $checksum, $message = '',
 	else       $file_checksum = @md5_file($file);
 	if(false == $file_checksum)
 	{
-		$test->secondvalue = lang('not_checksum');
+		$test->secondvalue = $lang_fn('not_checksum');
 		$test->res = 'yellow';
-		getTestReturn($test, '', '', '', lang('not_checksum').' ('.$file.')');
+		getTestReturn($test, '', '', '', $lang_fn('not_checksum').' ('.$file.')');
 		return $test;
 	}
 
 	if($file_checksum == $checksum)
 	{
-		$test->secondvalue = lang('checksum_match');
+		$test->secondvalue = $lang_fn('checksum_match');
 		$test->res = 'green';
 		getTestReturn($test, $required);
 		return $test;
@@ -1377,15 +1520,15 @@ function & testFileChecksum( $required, $title, $file, $checksum, $message = '',
 	else       $test->opt['file_timestamp'] = @filemtime($file);
 	$test->opt['format_timestamp'] = $formattime;
 
-	$test->secondvalue = lang('checksum_not_match');
+	$test->secondvalue = $lang_fn('checksum_not_match');
 	$test->res = 'red';
-	getTestReturn($test, $required, $message, '', lang('checksum_not_match'));
+	getTestReturn($test, $required, $message, '', $lang_fn('checksum_not_match'));
 	return $test;
 }
 
 /**
  * @return string
- * @var string $sess_path
+ * @param string $sess_path
 */
 function testSessionSavePath( $sess_path )
 {
@@ -1432,18 +1575,20 @@ function testSessionSavePath( $sess_path )
 
 /**
  * @return object
- * @var string $inputname
+ * @param string $inputname
 */
 function & testFileUploads( $inputname )
 {
+	global $lang_fn;
+	
 	$_errors = array(
-		UPLOAD_ERR_INI_SIZE => lang('upload_err_ini_size'),
-		UPLOAD_ERR_FORM_SIZE => lang('upload_err_form_size'),
-		UPLOAD_ERR_PARTIAL => lang('upload_err_partial'),
-		UPLOAD_ERR_NO_FILE => lang('upload_err_no_file'),
-		UPLOAD_ERR_NO_TMP_DIR => lang('upload_err_no_tmp_dir'), //at least PHP 4.3.10 or PHP 5.0.3
-		UPLOAD_ERR_CANT_WRITE => lang('upload_err_cant_write'), //at least PHP 5.1.0
-		UPLOAD_ERR_EXTENSION => lang('upload_err_extension'), //at least PHP 5.2.0
+		UPLOAD_ERR_INI_SIZE => $lang_fn('upload_err_ini_size'),
+		UPLOAD_ERR_FORM_SIZE => $lang_fn('upload_err_form_size'),
+		UPLOAD_ERR_PARTIAL => $lang_fn('upload_err_partial'),
+		UPLOAD_ERR_NO_FILE => $lang_fn('upload_err_no_file'),
+		UPLOAD_ERR_NO_TMP_DIR => $lang_fn('upload_err_no_tmp_dir'), //at least PHP 4.3.10 or PHP 5.0.3
+		UPLOAD_ERR_CANT_WRITE => $lang_fn('upload_err_cant_write'), //at least PHP 5.1.0
+		UPLOAD_ERR_EXTENSION => $lang_fn('upload_err_extension'), //at least PHP 5.2.0
 	);
 
 	function orderFiles(&$file_upl)
@@ -1459,21 +1604,21 @@ function & testFileUploads( $inputname )
 		return $_ary;
 	}
 
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->files = array();
 
 	$result = testBoolean('', '', 'file_uploads', '', true, false);
 	if($result->res != 'green')
 	{
 		$test->res = 'red';
-		getTestReturn($test, '', '', 'Function_file_uploads_disabled', lang('function_file_uploads_off'));
+		getTestReturn($test, '', '', 'Function_file_uploads_disabled', $lang_fn('function_file_uploads_off'));
 		return $test;
 	}
 
 	if(! isset($_FILES["$inputname"]))
 	{
 		$test->res = 'red';
-		getTestReturn($test, '', '', '', lang('error_nofileuploaded'));
+		getTestReturn($test, '', '', '', $lang_fn('error_nofileuploaded'));
 		return $test;
 	}
 
@@ -1493,15 +1638,15 @@ function & testFileUploads( $inputname )
 			}
 			elseif($_file['size'] == 0)
 			{
-				$_data['error_string'] = lang('upload_err_empty');
+				$_data['error_string'] = $lang_fn('upload_err_empty');
 			}
 			elseif(! is_readable($_file['tmp_name']))
 			{
-				$_data['error_string'] = lang('upload_file_no_readable');
+				$_data['error_string'] = $lang_fn('upload_file_no_readable');
             }
 			else
 			{
-				$_data['error_string'] = lang('upload_err_unknown');
+				$_data['error_string'] = $lang_fn('upload_err_unknown');
 			}
 		}
 
@@ -1513,15 +1658,15 @@ function & testFileUploads( $inputname )
 
 /**
  * @return object
- * @var boolean $required
- * @var string  $title
- * @var string  $minimum
- * @var string  $message
- * @var string  $error_fragment
+ * @param boolean $required
+ * @param string  $title
+ * @param string  $minimum
+ * @param string  $message
+ * @param string  $error_fragment
 */
 function & testGDVersion( $required, $title, $minimum, $message = '', $error_fragment = '' )
 {
-	$test = new StdClass();
+	$test = new CmsInstallTest();
 	$test->title = $title;
 
 	$gd_version_number = GDVersion();
@@ -1574,5 +1719,6 @@ function GDVersion()
 
 	return $gd_version_number;
 }
+
 # vim:ts=4 sw=4 noet
 ?>

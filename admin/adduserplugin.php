@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
@@ -34,6 +33,9 @@ if (isset($_POST["plugin_name"])) $plugin_name = $_POST["plugin_name"];
 $code= "";
 if (isset($_POST["code"])) $code = $_POST["code"];
 
+$description = "";
+if (isset($_POST["description"])) $description = $_POST["description"];
+
 if (isset($_POST["cancel"])) {
 	redirect("listusertags.php".$urlext);
 	return;
@@ -45,11 +47,8 @@ $access = check_permission($userid, 'Modify User-defined Tags');
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
-$smarty = new CmsSmarty($gCms->config);
-load_plugins($smarty);
-
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 if ($access) {
 	if (isset($_POST["addplugin"])) {
@@ -66,11 +65,11 @@ if ($access) {
 		}
 		else
 		{
-			if (in_array($plugin_name, $gCms->cmsplugins))
-			{
-				$error[] = lang('usertagexists');
-				$validinfo = false;
-			}
+		  if( UserTagOperations::get_instance()->SmartyTagExists($plugin_name) )
+		    {
+		      $error[] = lang('usertagexists');
+		      $validinfo = false;
+		    }
 		}
 		// Make sure no spaces are put into plugin name.
 		$without_spaces = str_replace(' ', '', $plugin_name);
@@ -98,7 +97,7 @@ if ($access) {
 		{
 			srand();
 			ob_start();
-			if (eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
+			if (eval('function testfunction'.rand().'() {'.$code."\n}") === FALSE)
 			{
 				$error[] = lang('invalidcode');
                 //catch the error
@@ -115,18 +114,24 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$new_usertag_id = $db->GenID(cms_db_prefix()."userplugins_seq");
+		
+			$new_usertag_id = $db->GenID(cms_db_prefix()."userplugins_seq");		
 			Events::SendEvent('Core', 'AddUserDefinedTagPre', array('id' => $new_usertag_id, 'name' => &$plugin_name, 'code' => &$code));
-			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, create_date, modified_date) VALUES ($new_usertag_id, ".$db->qstr($plugin_name).", ".$db->qstr($code).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+			
+			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, description, create_date, modified_date) VALUES ($new_usertag_id, ".$db->qstr($plugin_name).", 
+					".$db->qstr($code).", ".$db->qstr($description).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
 			$result = $db->Execute($query);
+			
 			if ($result) {
+			
 				Events::SendEvent('Core', 'AddUserDefinedTagPost', array('id' => $new_usertag_id, 'name' => &$plugin_name, 'code' => &$code));
-				audit($new_usertag_id, $plugin_name, 'Added User Defined Tag');
+				// put mention into the admin log
+				audit($new_usertag_id, 'User Defined Tag: '.$plugin_name, 'Added');
 				redirect("listusertags.php".$urlext."&message=usertagadded");
 				return;
 			}
 			else {
-				$error .= lang('errorinsertingtag');
+			  $error[] = lang('errorinsertingtag').' '.$db->ErrorMsg();
 			}
 		}
 	}
@@ -163,11 +168,17 @@ else {
 			</p>
 		</div>
 		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('description')?></p>
+			<p class="pageinput"><?php echo create_textarea(false, $description, 'description', 'pagebigtextarea', 'description', '', '', '80', '15')?></p>
+		</div>			
+					
+		
+		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="addplugin" value="true" />
-				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
 			</p>
 		</div>
 	</form>

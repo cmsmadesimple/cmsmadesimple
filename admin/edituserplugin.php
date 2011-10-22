@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,19 +20,18 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 $error = array();
 
 $userplugin_id = "";
-if (isset($_POST["userplugin_id"])) $userplugin_id = $_POST["userplugin_id"];
-else if (isset($_GET["userplugin_id"])) $userplugin_id = $_GET["userplugin_id"];
+if (isset($_POST["userplugin_id"])) $userplugin_id = (int)$_POST["userplugin_id"];
+ else if (isset($_GET["userplugin_id"])) $userplugin_id = (int)$_GET["userplugin_id"];
 
 $plugin_name= "";
 if (isset($_POST["plugin_name"])) $plugin_name = $_POST["plugin_name"];
@@ -43,6 +42,9 @@ if (isset($_POST["origpluginname"])) $orig_plugin_name = $_POST["origpluginname"
 $code= "";
 if (isset($_POST["code"])) $code = $_POST["code"];
 
+$description= "";
+if (isset($_POST["description"])) $description = $_POST["description"];
+
 if (isset($_POST["cancel"])) {
 	redirect("listusertags.php".$urlext);
 	return;
@@ -51,34 +53,32 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User-defined Tags');
 
-$smarty = new CmsSmarty($gCms->config);
-load_plugins($smarty);
 
 $ajax = false;
 if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
 
 if ($access) {
-	if (isset($_POST["editplugin"])) {
-
-        $CMS_EXCLUDE_FROM_RECENT = 1;
-		$validinfo = true;
-		if ($plugin_name == "") {
-			$error[] = lang('nofieldgiven', array(lang('editusertag')));
-			$validinfo = false;
-		}
-		elseif(preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$>', $plugin_name) == 0)
-		{
-			$error[] = lang('error_udt_name_chars');
-			$validinfo = false;
-		}
-		else
-		{
-			if ($plugin_name != $orig_plugin_name && in_array($plugin_name, $gCms->cmsplugins))
-			{
-				$error[] = lang('usertagexists');
-				$validinfo = false;
-			}
-		}
+  if (isset($_POST["editplugin"])) {
+    
+    $CMS_EXCLUDE_FROM_RECENT = 1;
+    $validinfo = true;
+    if ($plugin_name == "") {
+      $error[] = lang('nofieldgiven', array(lang('editusertag')));
+      $validinfo = false;
+    }
+    elseif(preg_match('<^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$>', $plugin_name) == 0)
+      {
+	$error[] = lang('error_udt_name_chars');
+	$validinfo = false;
+      }
+    else
+      {
+	if( $plugin_name != $orig_plugin_name && UserTagOperations::get_instance()->UserTagExists($plugin_name) )
+	  {
+	    $error[] = lang('usertagexists');
+	    $validinfo = false;
+	  }
+      }
 		// Make sure no spaces are put into plugin name.
 		$without_spaces = str_replace(' ', '', $plugin_name);
 		if ($plugin_name != $without_spaces)
@@ -106,7 +106,7 @@ if ($access) {
 		{
 			srand();
 			ob_start();
-			if (eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
+			if (eval('function testfunction'.rand().'() {'.$code."\n}") === FALSE)
 			{
 				$error[] = lang('invalidcode');
                                 //catch the error
@@ -123,12 +123,21 @@ if ($access) {
 		}
 
 		if ($validinfo) {
+		
+			// Send event EditUserDefinedTagPre
 			Events::SendEvent('Core', 'EditUserDefinedTagPre', array('id' => $userplugin_id, 'name' => &$plugin_name, 'code' => &$code));
-			$query = "UPDATE ".cms_db_prefix()."userplugins SET userplugin_name = ".$db->qstr($plugin_name).", code = ".$db->qstr($code).", modified_date = ".$db->DBTimeStamp(time())." WHERE userplugin_id = ". $db->qstr($userplugin_id);
+			
+			// Update database
+			$query = "UPDATE ".cms_db_prefix()."userplugins SET userplugin_name = ".$db->qstr($plugin_name).", code = ".$db->qstr($code).", 
+					description = ".$db->qstr($description).", modified_date = ".$db->DBTimeStamp(time())." WHERE userplugin_id = ". (int)$userplugin_id;
 			$result = $db->Execute($query);
+			
 			if ($result) {
+			
+				// Send event EditUserDefinedTagPost & put mention to Admin Log
 				Events::SendEvent('Core', 'EditUserDefinedTagPost', array('id' => $userplugin_id, 'name' => &$plugin_name, 'code' => &$code));
-				audit($userplugin_id, $plugin_name, 'Edited User Defined Tag');
+				// put mention into the admin log
+				audit($userplugin_id, 'User Defined Tag: '.$plugin_name, 'Edited');
 
 				if( !isset( $_POST['apply'] ) )
 				  {
@@ -141,6 +150,7 @@ if ($access) {
 			}
 		}
 
+		// Check if we need ajax output
 		if ($ajax)
 		{
 			header('Content-Type: text/xml');
@@ -168,14 +178,12 @@ if ($access) {
 	}
 	else if ($userplugin_id != -1) {
 
-		$query = "SELECT * from ".cms_db_prefix()."userplugins WHERE userplugin_id = ?";
-		$result = $db->Execute($query,array($userplugin_id));
-		
-		$row = $result->FetchRow();
+	  $row = UserTagOperations::get_instance()->GetUserTag($userplugin_id);
 
-		$plugin_name = $row["userplugin_name"];
-		$orig_plugin_name = $plugin_name;
-		$code = $row['code'];
+	  $plugin_name = $row["userplugin_name"];
+	  $orig_plugin_name = $plugin_name;
+	  $code = $row['code'];
+	  $description = $row['description'];
 	}
 }
 if (strlen($plugin_name)>0)
@@ -184,78 +192,51 @@ if (strlen($plugin_name)>0)
     }
 
 $addlScriptSubmit = '';
-foreach (array_keys($gCms->modules) as $moduleKey)
-{
-	$module =& $gCms->modules[$moduleKey];
-	if (!($module['installed'] && $module['active'] && $module['object']->IsSyntaxHighlighter()))
-	{
-		continue;
-	}
-
-	if ($module['object']->SyntaxActive() or get_preference(get_userid(), 'syntaxhighlighter') == $module['object']->GetName())
-	{
-		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
-	}
-}
-
+$syntaxmodule = get_preference(get_userid(FALSE),'syntaxhighlighter');
+if( $syntaxmodule && ($module = ModuleOperations::get_instance()->get_module_instance($syntaxmodule)) )
+  {
+    if( $module->IsSyntaxHighlighter() && $module->SyntaxActive() )
+      {
+	die($module->GetName());
+	$addlScriptSubmit .= $module->SyntaxPageFormSubmit();
+      }
+  }
+$closestr = cms_html_entity_decode(lang('close'));
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
   // <![CDATA[
-window.Edit_UserPlugin_Apply = function(button)
-{
+jQuery(document).ready(function(){  
+  jQuery('input[name=apply]').click(function(){
 	$addlScriptSubmit
-	$('Edit_UserPlugin_Result').innerHTML = '';
-	button.disabled = 'disabled';
+	jQuery('#Edit_UserPlugin_Result').html('');
 
-	var data = new Array();
-	data.push('ajax=1');
-	data.push('apply=1');
+    var data = jQuery('#Edit_UserPlugin').find('input:not([type=submit]), select, textarea').serializeArray();
+    data.push({ 'name': 'ajax', 'value': 1});
+    data.push({ 'name': 'apply', 'value': 1 });
 
-	var elements = Form.getElements($('Edit_UserPlugin'));
-	for (var cnt = 0; cnt < elements.length; cnt++)
+    jQuery.post('{$_SERVER['REQUEST_URI']}',data,function(resultdata,text)
 	{
-		var elem = elements[cnt];
-		if (elem.type == 'submit')
-		{
-			continue;
-		}
-		var query = Form.Element.serialize(elem);
-		data.push(query);
-	}
-
-	new Ajax.Request(
-		'{$_SERVER['REQUEST_URI']}'
-		, {
-			method: 'post'
-			, parameters: data.join('&')
-			, onSuccess: function(t)
-			{
-				button.removeAttribute('disabled');
-				var response = t.responseXML.documentElement.childNodes[0];
-				var details = t.responseXML.documentElement.childNodes[1];
-				if (response.textContent) { response = response.textContent; } else { response = response.text; } 
-				if (details.textContent) { details = details.textContent; } else { details = details.text; }
-				
-				var htmlShow = '';
-				if (response == 'Success')
-				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
-				}
-				else
-				{
-					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details + '<\/ul><\/div>';
-				}
-				$('Edit_UserPlugin_Result').innerHTML = htmlShow;
-			}
-			, onFailure: function(t)
-			{
-				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
-			}
-		}
-	);
-
+	     var resp = jQuery(resultdata).find('Response').text();
+	     var details = jQuery(resultdata).find('Details').text();
+		 var htmlShow = '';
+		 if (resp == 'Success')
+		 {
+			htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
+			jQuery('input[name=cancel]').fadeOut();
+			jQuery('input[name=cancel]').attr('value','{$closestr}');
+			jQuery('input[name=cancel]').fadeIn();
+		 }
+		 else
+		 {
+			htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
+			htmlShow += details;
+			htmlShow += '<\/ul><\/div>';
+		 }
+		 jQuery('#Edit_UserPlugin_Result').html( htmlShow );
+	},'xml');
 	return false;
-}
+  });
+});
  // ]]>
 </script>
 EOSCRIPT;
@@ -282,26 +263,28 @@ else {
 		   </div>
 			<div class="pageoverflow">
 				<p class="pagetext">*<?php echo lang('name')?>:</p>
-				<p class="pageinput"><input type="text" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" /></p>
+				<div class="pageinput"><input type="text" id="plugin_name" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" /></div>
 			</div>
 			<div class="pageoverflow">
 				<p class="pagetext">*<?php echo lang('code')?></p>
-				<p class="pageinput">
-				<?php echo create_textarea(false, $code, 'code', 'pagebigtextarea', 'code', '', '', '80', '15','','php')?>
-				
-				</p>
+				<div class="pageinput"><?php echo create_textarea(false, $code, 'code', 'pagebigtextarea', 'code', '', '', '80', '15','','php')?></div>
 			</div>
 			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('description')?></p>
+				<div class="pageinput"><?php echo create_textarea(false, $description, 'description', 'pagebigtextarea', 'description', '', '', '80', '15')?></div>
+			</div>			
+			
+			<div class="pageoverflow">
 				<p class="pagetext">&nbsp;</p>
-				<p class="pageinput">
+				<div class="pageinput">
 						<input type="hidden" name="userplugin_id" value="<?php echo $userplugin_id?>" />
-						<input type="hidden" name="origpluginname" value="<?php echo $orig_plugin_name?>" />
+						<input type="hidden" id="origpluginname" name="origpluginname" value="<?php echo $orig_plugin_name?>" />
 						<input type="hidden" name="editplugin" value="true" />
-						<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-						<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-						<input type="submit" onclick="return window.Edit_UserPlugin_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
+						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
+						<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" />
 
-				</p>
+				</div>
 			</div>
 		</form>
 </div>

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -17,9 +17,9 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #Author: Sorin Sbarnea / INTERSOL SRL
-function smarty_function_embed($params, &$smarty)
+function smarty_cms_function_embed($params, &$smarty)
 {
-  global $gCms;
+  $gCms = cmsms();
 
   $name = 'myframe';
   if(isset($params['name']) )
@@ -130,11 +130,11 @@ IFRAMECODE;
   
 }
 
-function smarty_help_function_embed() {
+function smarty_cms_help_function_embed() {
   echo lang('help_function_embed');
 }
 
-function smarty_about_function_embed() {
+function smarty_cms_about_function_embed() {
 	?>
 	<p>Author: Sorin Sbarnea&lt;sorin2000@intersol.ro&gt; (remove 2000)</p>
 	<p>Version: 1.0</p>

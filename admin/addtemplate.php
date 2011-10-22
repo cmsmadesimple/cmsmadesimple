@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,46 +20,14 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 require_once("../lib/classes/class.template.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
-$dflt_content='
-{process_pagedata}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
-<head>
-<title>{sitename} - {title}</title>
-{metadata}
-{stylesheet}
-</head>
-<body>
-
-<!-- start header -->
-<div id="header">
-  <h1>{sitename}</h1>
-</div>
-<!-- end header -->
-
-<!-- start menu -->
-<div id="menu">
-  {menu}
-</div>
-<!-- end menu -->
-
-<!-- start content -->
-<div id="content">
-  <h1>{title}</h1>
-  {content}
-</div>
-<!-- end content -->
-
-</body>
-</html>
-';
+$fn = dirname(__FILE__).'/templates/orig_new_template.tpl';
+$dflt_content = @file_get_contents($fn);
 
 $error = "";
 
@@ -94,9 +62,9 @@ if (isset($_POST["cancel"]))
 	return;
 }
 
-global $gCms;
-$db =& $gCms->GetDb();
-$templateops =& $gCms->GetTemplateOperations();
+$gCms = cmsms();
+$db = $gCms->GetDb();
+$templateops = $gCms->GetTemplateOperations();
 
 $userid = get_userid();
 $access = check_permission($userid, 'Add Templates');
@@ -149,8 +117,8 @@ if ($access)
 			if ($result)
 			{
 				Events::SendEvent('Core', 'AddTemplatePost', array('template' => &$newtemplate));
-
-				audit($newtemplate->id, $template, 'Added Template');
+				// put mention into the admin log
+				audit($newtemplate->id, 'HTML-template: '.$template, 'Added');
 				redirect($from);
 				return;
 			}
@@ -236,9 +204,9 @@ else
 			<p class="pageinput">
 				<input type="hidden" name="from" value="<?php echo $from?>" />
 				<input type="hidden" name="addtemplate" value="true"/>
-				<!--<input type="submit" accesskey="p" name="preview" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />-->
-				<input type="submit" accesskey="s" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<!--<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="pagebutton"  />-->
+				<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
 			</p>
 		</div>
 	</form>

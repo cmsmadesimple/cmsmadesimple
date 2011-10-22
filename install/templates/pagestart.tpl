@@ -4,7 +4,7 @@
 <table class="settings" border="0">
 	<thead class="tbcaption">
 	    <tr>
-	    	<td style="font-size: 0.8em; text-align:center;">Choose the language you would prefer to use<br /><em>This does effect in this process and your admin user preference</em></td>
+	    	<td style="font-size: 0.8em; text-align:center;">Choose the language you would prefer to use<br /><em>This setting affects the install process and sets your initial admin user preference</em></td>
 	    </tr>
     </thead>
 	<tbody>

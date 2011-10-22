@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
+require_once("../include.php");
 
 $userid = "";
 if( isset($_SESSION['cms_admin_user_id'])) {
@@ -32,12 +32,9 @@ if( isset($_SESSION['login_user_username'])) {
   $username = $_SESSION['login_user_username'];
 }
 
+// put mention into the admin log
+audit($userid, "Admin Username: ".$username, 'Logged Out');
 
-audit($userid, $username, 'User Logout');
-
-#unset($_SESSION['cms_admin_user_id']);
-#setcookie('cms_admin_user_id', '', time() - 3600);
-#setcookie('cms_passhash', '', time() - 3600);
 
 #Now call the event
 Events::SendEvent('Core', 'LogoutPost');

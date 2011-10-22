@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,40 +16,24 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSUpgradePage3.class.php 149 2009-03-17 22:22:13Z alby $
+#$Id: CMSUpgradePage3.class.php 296 2010-10-17 22:31:18Z calguy1000 $
 
 class CMSInstallerPage3 extends CMSInstallerPage
 {
-	/**
-	 * Class constructor
-	 * @var object $smarty
-	 * @var array  $errors
-	 * @var bool   $debug
-	 */
-	function CMSInstallerPage3(&$smarty, $errors, $debug)
-	{
-		$this->CMSInstallerPage(3, $smarty, $errors, $debug);
-	}
-
 	function assignVariables()
 	{
-		//cms_config_upgrade();
-		CmsConfig::load(true, true);
-		$result = CmsConfig::save();
-		if($result)
-		{
-			// Delete backup config file
-			@unlink(CONFIG_FILE_LOCATION .'.bakupg');
-		}
-		else
-		{
-			$this->smarty->assign('config_file', CONFIG_FILE_LOCATION);
-			$this->smarty->assign('error_fragment', 'config_php_error');
-		}
-
-		$this->smarty->assign('result', $result);
-
-		$this->smarty->assign('errors', $this->errors);
+	  $config = cmsms()->GetConfig();
+	  if( isset($config['use_hierarchy']) && $config['use_hierarchy'] == false )
+	    {
+	      $_SESSION['disable_hierarchy'] = 1;
+	    }
+	  $config->save();
+	  $result = 1; // tempalte needs a result.
+	  $this->smarty->assign('config_file', CONFIG_FILE_LOCATION);
+	  $this->smarty->assign('error_fragment', 'config_php_error');
+	  $this->smarty->assign('result', $result);
+	  
+	  $this->smarty->assign('errors', $this->errors);
 	}
 }
 # vim:ts=4 sw=4 noet

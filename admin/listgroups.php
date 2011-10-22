@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
 require_once("../lib/classes/class.group.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
@@ -61,9 +60,9 @@ include_once("header.php");
 	#$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
 	#$result = $db->Execute($query);
 
-	global $gCms;
-        $userops =& $gCms->GetUserOperations();
-	$groupops =& $gCms->GetGroupOperations();
+$gCms = cmsms();
+        $userops = $gCms->GetUserOperations();
+	$groupops = $gCms->GetGroupOperations();
 	$grouplist = $groupops->LoadGroups();
 
 	$page = 1;
@@ -104,7 +103,7 @@ include_once("header.php");
 		$counter=0;
 		foreach ($grouplist as $onegroup){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"editgroup.php".$urlext."&amp;group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
 				echo "<td class=\"pagepos\">";
 				if( $onegroup->id == 1 ) 

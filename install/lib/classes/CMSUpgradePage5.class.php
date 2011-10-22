@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,18 +16,10 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSUpgradePage5.class.php 210 2009-07-07 16:24:54Z alby $
+#$Id: CMSUpgradePage5.class.php 299 2010-10-26 01:34:26Z calguy1000 $
 
 class CMSInstallerPage5 extends CMSInstallerPage
 {
-	/**
-	 * Class constructor
-	*/
-	function CMSInstallerPage5(&$smarty, $errors, $debug)
-	{
-		$this->CMSInstallerPage(5, $smarty, $errors, $debug);
-	}
-
 	function assignVariables()
 	{
 		$this->smarty->assign('errors', $this->errors);
@@ -35,7 +27,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
 
 	function preContent(&$db)
 	{
-		$test = new StdClass();
+		$test =new StdClass();
 
 		$test->error = false;
 		$test->messages = array();
@@ -48,7 +40,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
 		$dbresult = $db->Execute($query);
 		if(! $dbresult)
 		{
-			$test->messages[] = lang('invalid_query', $query);
+			$test->messages[] = ilang('invalid_query', $query);
 			$test->error = true;
 		}
 		else
@@ -59,35 +51,49 @@ class CMSInstallerPage5 extends CMSInstallerPage
 			}
 			if ($current_version == 1)
 			{
-				$test->messages[] = lang('empty_query', $query);
+				$test->messages[] = ilang('empty_query', $query);
 				$test->error = true;
 			}
 		}
 
 		if ( (!$test->error) && ($current_version < CMS_SCHEMA_VERSION) )
 		{
-			$test->messages[] = lang('need_upgrade_schema', $current_version, CMS_SCHEMA_VERSION);
+			$test->messages[] = ilang('need_upgrade_schema', $current_version, CMS_SCHEMA_VERSION);
 			while ($current_version < CMS_SCHEMA_VERSION)
 			{
 				$filename = cms_join_path(CMS_INSTALL_BASE, 'upgrades', "upgrade.{$current_version}.to." . ($current_version+1) . '.php');
 				if (file_exists($filename))
 				{
-					if($this->debug) include($filename);
-					else            @include($filename);
+					if($this->debug) 
+					  include($filename);
+					else
+					  @include($filename);
 				}
 				else
 				{
-					$test->messages[] = lang('nofiles') . ": $filename";
+					$test->messages[] = ilang('nofiles') . ": $filename";
 				}
 				$current_version++;
 			}
-			$test->messages[] = lang('schema_ok',$current_version);
+			$test->messages[] = ilang('schema_ok',$current_version);
 		}
 		elseif (!$test->error)
 		{
-			$test->messages[] = lang('noneed_upgrade_schema', CMS_SCHEMA_VERSION);
+			$test->messages[] = ilang('noneed_upgrade_schema', CMS_SCHEMA_VERSION);
 		}
 
+		if( isset($_SESSION['disable_hierarchy']) )
+		  {
+		    // gotta move the hierarchy stuff 
+		    $query = 'UPDATE '.cms_db_prefix().'content SET page_url = content_alias';
+		    $db->Execute($query);
+
+		    set_site_preference('content_autocreate_urls',1);
+		    set_site_preference('content_autocreate_flaturls',1);
+
+		    $test->messages[] = ilang('setup_flat_urls');
+                    unset($_SESSION['disable_hierarchy']);
+		  }
 		$this->smarty->assign('test', $test);
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,10 +16,11 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_metadata($params, &$smarty)
+function smarty_cms_function_metadata($params, &$smarty)
 {
-	$config = cms_config();
-	$pageinfo = cmsms()->current_page;
+	$gCms = cmsms();
+	$config = $gCms->GetConfig();
+	$content_obj =& $gCms->variables['content_obj'];
 
 	$result = '';	
 
@@ -40,17 +41,20 @@ function smarty_function_metadata($params, &$smarty)
 
 	if ($showbase)
 	{
-		$result .= "\n<base href=\"".$config['root_url']."/\" />\n";
+	  $base = $config['root_url'];
+	  if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')
+	  {
+	    $base = $config['ssl_url'];
+	  }
+
+	  $result .= "\n<base href=\"".$base."/\" />\n";
 	}
 
 	$result .= get_site_preference('metadata', '');
 
-	if (isset($pageinfo) && $pageinfo !== FALSE)
+	if (is_object($content_obj) && $content_obj->Metadata() != '')
 	{
-		if (isset($pageinfo->metadata) && $pageinfo->metadata != '')
-		{
-			$result .= "\n" . $pageinfo->metadata;
-		}
+	  $result .= "\n" . $content_obj->Metadata();
 	}
 
 	if ((!strpos($result,$smarty->left_delimiter) === false) and (!strpos($result,$smarty->right_delimiter) === false))
@@ -61,15 +65,18 @@ function smarty_function_metadata($params, &$smarty)
 		$result = @ob_get_contents();
 		@ob_end_clean();
 	}
-
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$result);
+		return;
+	}
 	return $result;
 }
 
-function smarty_help_function_metadata() {
+function smarty_cms_help_function_metadata() {
   echo lang('help_function_metadata');
 }
 
-function smarty_about_function_metadata() {
+function smarty_cms_about_function_metadata() {
 	?>
 	<p>Author: Ted Kulp&lt;ted@cmsmadesimple.org&gt;</p>
 	<p>Version: 1.0</p>

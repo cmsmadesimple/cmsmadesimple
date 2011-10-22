@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,9 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_anchor($params, &$smarty)
+function smarty_cms_function_anchor($params, &$smarty)
 {
-	global $gCms;
+	$gCms = cmsms();
 	#Added by Russ for class, tabindex and title for anchor 2006/07/19
 	$class="";
 	$title="";
@@ -56,21 +56,28 @@ function smarty_function_anchor($params, &$smarty)
 		$url = str_replace('***','&amp;',$url);
 		if (isset($params['onlyhref']) && ($params['onlyhref'] == '1' || $params['onlyhref'] == 'true'))
 			#Note if you set 'onlyheref' that is what you get - no class or title or tabindex or text
-			echo $url;
+			$tmp =  $url;
 		else
 			#Line replaced by Russ
 			#	echo '<a href="'.$url.'">'.$params['text'].'</a>';
 			#Line replaced with -  by Russ to reflect class and title for anchor 2006/07/19
-			echo '<a href="'.$url.'"'.$class.$title.$tabindex.$accesskey.'>'.$params['text'].'</a>';
+			$tmp = '<a href="'.$url.'"'.$class.$title.$tabindex.$accesskey.'>'.$params['text'].'</a>';
 			#End of second part added by Russ 2006/07/19
 	}
+
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$tmp);
+	    return;
+        }
+	echo $tmp;
+	
 }
 	#Ammended by Russ for class, tabindex and title for anchor 2006/07/19
-function smarty_help_function_anchor() {
+function smarty_cms_help_function_anchor() {
   echo lang('help_function_anchor');
 }
 	#Amended by Russ for class, tabindex and title for anchor 2006/07/19
-function smarty_about_function_anchor() {
+function smarty_cms_about_function_anchor() {
   echo lang('about_function_anchor');
 }
 ?>

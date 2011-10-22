@@ -1,10 +1,8 @@
 <?php
 /**
  * Smarty plugin
- *
- * This plugin is only for Smarty2 BC
  * @package Smarty
- * @subpackage PluginsFunction
+ * @subpackage plugins
  */
 
 
@@ -17,35 +15,35 @@
  * @link http://smarty.php.net/manual/en/language.function.math.php {math}
  *          (Smarty online manual)
  * @author   Monte Ohrt <monte at ohrt dot com>
- * @param array $params parameters
- * @param object $smarty Smarty object
- * @param object $template template object
- * @return string|null
+ * @param array
+ * @param Smarty
+ * @return string
  */
-function smarty_function_math($params, $smarty, $template)
+function smarty_function_math($params, &$smarty)
 {
     // be sure equation parameter is present
     if (empty($params['equation'])) {
-        trigger_error("math: missing equation parameter",E_USER_WARNING);
+        $smarty->trigger_error("math: missing equation parameter");
         return;
     }
 
-    $equation = $params['equation'];
+    // strip out backticks, not necessary for math
+    $equation = str_replace('`','',$params['equation']);
 
     // make sure parenthesis are balanced
     if (substr_count($equation,"(") != substr_count($equation,")")) {
-        trigger_error("math: unbalanced parenthesis",E_USER_WARNING);
+        $smarty->trigger_error("math: unbalanced parenthesis");
         return;
     }
 
     // match all vars in equation, make sure all are passed
-    preg_match_all("!(?:0x[a-fA-F0-9]+)|([a-zA-Z][a-zA-Z0-9_]*)!",$equation, $match);
+    preg_match_all("!(?:0x[a-fA-F0-9]+)|([a-zA-Z][a-zA-Z0-9_]+)!",$equation, $match);
     $allowed_funcs = array('int','abs','ceil','cos','exp','floor','log','log10',
                            'max','min','pi','pow','rand','round','sin','sqrt','srand','tan');
     
     foreach($match[1] as $curr_var) {
         if ($curr_var && !in_array($curr_var, array_keys($params)) && !in_array($curr_var, $allowed_funcs)) {
-            trigger_error("math: function call $curr_var not allowed",E_USER_WARNING);
+            $smarty->trigger_error("math: function call $curr_var not allowed");
             return;
         }
     }
@@ -54,11 +52,11 @@ function smarty_function_math($params, $smarty, $template)
         if ($key != "equation" && $key != "format" && $key != "assign") {
             // make sure value is not empty
             if (strlen($val)==0) {
-                trigger_error("math: parameter $key is empty",E_USER_WARNING);
+                $smarty->trigger_error("math: parameter $key is empty");
                 return;
             }
             if (!is_numeric($val)) {
-                trigger_error("math: parameter $key: is not numeric",E_USER_WARNING);
+                $smarty->trigger_error("math: parameter $key: is not numeric");
                 return;
             }
             $equation = preg_replace("/\b$key\b/", " \$params['$key'] ", $equation);
@@ -71,14 +69,17 @@ function smarty_function_math($params, $smarty, $template)
         if (empty($params['assign'])) {
             return $smarty_math_result;
         } else {
-            $template->assign($params['assign'],$smarty_math_result);
+            $smarty->assign($params['assign'],$smarty_math_result);
         }
     } else {
         if (empty($params['assign'])){
             printf($params['format'],$smarty_math_result);
         } else {
-            $template->assign($params['assign'],sprintf($params['format'],$smarty_math_result));
+            $smarty->assign($params['assign'],sprintf($params['format'],$smarty_math_result));
         }
     }
 }
+
+/* vim: set expandtab: */
+
 ?>

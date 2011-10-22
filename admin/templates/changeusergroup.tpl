@@ -23,7 +23,7 @@
            {/if}
 	{/foreach}
 	</select>&nbsp;
-        <input type="submit" name="filter" accesskey="f" value="{$apply}"/>
+        <input type="submit" name="filter" value="{$apply}"/>
 </form>
 </div><br />
 
@@ -43,7 +43,7 @@
   <tbody>
   {foreach from=$users item=user}
     {cycle values='row1,row2' assign='currow'}
-    <tr class="{$currow}" onmouseover="this.className='{$currow}hover';" onmouseout="this.className='{$currow}';">
+    <tr class="{$currow}">
  		<td>{$user->name}</td>
 		{foreach from=$group_list item=thisgroup}
                     {if $user->id == $user_id}

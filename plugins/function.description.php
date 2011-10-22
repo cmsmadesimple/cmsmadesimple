@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,32 +16,37 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_description($params, &$smarty)
+function smarty_cms_function_description($params, &$smarty)
 {
-	global $gCms;
-	$pageinfo = &$gCms->variables['pageinfo'];
+	$gCms = cmsms();
+	$content_obj = &$gCms->variables['content_obj'];
 	$config = &$gCms->config;
-	if (isset($pageinfo) && $pageinfo->content_id == -1)
+	if (is_object($content_obj) && $content_obj->Id() == -1)
 	{
 		#We've a custom error message...  set a message
-		return "404 Error";
+		$out="404 Error";
 	}
 	else
 	{
-		$result = $pageinfo->content_titleattribute;
+	  $result = $content_obj->TitleAttribute();
 		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 		{
-			$result = ereg_replace("\{\/?php\}", "", $result);
+			$result = preg_replace("/\{\/?php\}/", "", $result);
 		}
-		return $result;
+		$out=$result;
 	}
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$out);
+	    return;
+    }
+	return $out;
 }
 
-function smarty_help_function_description() {
+function smarty_cms_help_function_description() {
   echo lang('help_function_description');
 }
 
-function smarty_about_function_description() {
+function smarty_cms_about_function_description() {
 	?>
 	<p>Author: Elijah Lofgren&lt;elijahlofgren@elijahlofgren.com&gt;</p>
 	<p>Version: 1.0</p>

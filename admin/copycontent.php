@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
@@ -31,11 +30,12 @@ include_once("header.php");
 
 // Get the source object
 $fromid = (int)$_GET['content_id'];
-global $gCms;
-$contentops =& $gCms->GetContentOperations();
-$config =& $gCms->GetConfig();
+$gCms = cmsms();
+$contentops = $gCms->GetContentOperations();
+$config = $gCms->GetConfig();
 $fromobj = $contentops->LoadContentFromId($fromid,true);
 $fromobj->GetAdditionalEditors();
+$fromobj->Properties();
 $parentobj = $contentops->LoadContentFromId($fromobj->ParentId());
 
 // handle form submission
@@ -74,7 +74,7 @@ if( isset($_GET['submit']) )
   //
   // Now do the copy
   //
-  $tmpobj = $fromobj;
+  $tmpobj = clone $fromobj;
 
   // trick some of the variables to handle
   // an insert properly.
@@ -83,12 +83,13 @@ if( isset($_GET['submit']) )
   $tmpobj->SetOldItemOrder(-1);
 
   // Stuff that needs to be changed
-  $tmpobj->SetAlias($to_alias);
-  $tmpobj->mOldAlias = ''; // no method for this.
+  $tmpobj->SetURL('');
   $tmpobj->SetName($to_title);
+  $tmpobj->SetMenuText($to_menutext);
+  $tmpobj->SetAlias($to_alias);
+  //$tmpobj->mOldAlias = ''; // no method for this.
   $tmpobj->SetParentId($to_parentid);
   $tmpobj->SetOldParentId($to_parentid);
-  $tmpobj->SetMenuText($to_menutext);
   $tmpobj->SetAccessKey($to_accesskey);
   
   $tmpobj->SetDefaultContent(0);
@@ -107,10 +108,10 @@ if( isset($_GET['submit']) )
       // everything is okay... save it
       // and make sure the hierarchy stuff works.
       $tmpobj->Save();
-      CmsPage::set_all_hierarchy_positions();
+      $contentops->SetAllHierarchyPositions();
 
-      // something for the audit log
-      audit($fromobj->Id(),$fromobj->Alias(),'Content Item Copied to '.$tmpobj->Alias());
+      // put mention into the admin log
+      audit($fromobj->Id(), 'Content Item: '.$fromobj->Alias(), 'Copied to: '.$tmpobj->Alias());
 
       // and redirect
       redirect('listcontent.php'.$urlext);
@@ -154,9 +155,7 @@ if( check_permission(get_userid(),'Manage All Content') )
     $smarty->assign('lang_pageaccesskey',lang('accesskey'));
   }
 
-$tmp = 	$contentops->CreateHierarchyDropdown(-100, /* $fromobj->Id(), */
-					     $fromobj->ParentId(),
-					     'to_parentid',1,1,1);
+$tmp = 	$contentops->CreateHierarchyDropdown(-100, $fromobj->ParentId(), 'to_parentid',1,1,1,true);
 if( empty($tmp) )
   {
     $tmp = '<input type="hidden" name="to_parentid" value="'.$fromobj->Id().'"/>'.$fromobj->Hierarchy().'&nbsp;'.$fromobj->Name();

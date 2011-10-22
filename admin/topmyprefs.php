@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,15 +20,15 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
+require_once("../include.php");
 
 check_login();
 
 include_once("header.php");
-//$themeObject->ShowShortcuts();
-//$themeObject->DisplaySectionMenuDivStart();
-$themeObject->display_section_pages('myprefs');
-//$themeObject->DisplaySectionMenuDivEnd();
+$themeObject->ShowShortcuts();
+$themeObject->DisplaySectionMenuDivStart();
+$themeObject->DisplaySectionPages('myprefs');
+$themeObject->DisplaySectionMenuDivEnd();
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

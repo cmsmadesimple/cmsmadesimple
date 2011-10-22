@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -18,16 +18,16 @@
 #
 #$Id$ 
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once('../include.php');
+global $CMS_ADMIN_PAGE;
+$CMS_ADMIN_PAGE = 1;
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 include_once("header.php");
 
 check_login();
-$origlink = $_SERVER['HTTP_REFERER'];
-$link = str_replace($urlext,'[SECURITYTAG]',$origlink);
-
+$config = cmsms()->GetConfig();
+$link = $_SERVER['HTTP_REFERER'];
 $newmark = new Bookmark();
 $newmark->user_id = get_userid();
 $newmark->url = $link;
@@ -36,8 +36,8 @@ $result = $newmark->save();
 
 if ($result)
 	{
-	header('HTTP_REFERER: '.$config['root_url'].'/'.$config['admin_dir'].'/index.php');
-	redirect($origlink);
+	header('HTTP_REFERER: '.$config['admin_url'].'/index.php');
+	redirect($link);
 	}
 else
 	{

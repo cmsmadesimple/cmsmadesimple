@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -9,30 +9,55 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
+#
 #$Id$
+
+/**
+ * Template related functions.
+ *
+ * @package CMS
+ * @license GPL
+ */
+
+/**
+ * Include template class definition
+ */
+include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.template.inc.php');
 
 /**
  * Class for doing template related functions.  Many of the Template object functions are just wrappers around these.
  *
  * @since		0.6
  * @package		CMS
+ * @license GPL
  */
-
-include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.template.inc.php');
-
 class TemplateOperations
 {
+	private static $_instance;
+	private $_templateCache = array();
+	protected function __construct() {}
+
+	public static function &get_instance()
+	{
+		if( !is_object(self::$_instance) )
+		{
+			self::$_instance = new TemplateOperations();
+		}
+		return self::$_instance;
+	}
+
+
 	function LoadTemplates()
 	{
 		$gCms = cmsms();
-		$db = cms_db();
+		$db = $gCms->GetDb();
 
 		$result = array();
 
@@ -51,6 +76,7 @@ class TemplateOperations
 			$onetemplate->stylesheet = $dbresult->fields['stylesheet'];
 			$onetemplate->modified_date = $db->UnixTimeStamp($dbresult->fields['modified_date']);
 			$result[] = $onetemplate;
+			$this->_toCache($onetemplate);
 			$dbresult->MoveNext();
 		}
 		
@@ -59,20 +85,63 @@ class TemplateOperations
 		return $result;
 	}
 
-	function & LoadTemplateByID($id)
+
+	protected function &_findCachedDefault()
 	{
-		$result = false;
-
-		$gCms = cmsms();
-		$db = cms_db();
-		$cache = &$gCms->TemplateCache;
-
-		if (isset($cache[$id]))
+		foreach( $this->_templateCache as $key => &$object )
 		{
-			return $cache[$id];
+			if( $object->default ) return $object;
+		}
+		$res = null;
+		return $res;
+	}
+
+
+	protected function &_fromCache($id)
+	{
+		
+		if( is_numeric($id) )
+		{
+			if( isset($this->_templateCache[$id]) )
+				return $this->_templateCache[$id];
+		}
+		else if( is_string($id) )
+		{
+			foreach( $this->_templateCache as $key => &$object )
+			{
+				if( $object->alias == $id ) return $this->_templateCache[$key];
+			}
 		}
 
-		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+		$res = null;
+		return $res;
+	}
+
+
+	protected function _toCache(Template& $template)
+	{
+		$this->_templateCache[$template->id] = $template;
+	}
+
+
+	public function & LoadTemplateByID($id,$sparse = FALSE)
+	{
+		$onetemplate = null;
+		if( ($onetemplate = $this->_fromCache($id)) )
+		{
+			return $onetemplate;
+		}
+
+		$db = cmsms()->GetDb();
+		$query = '';
+		if( $sparse )
+			{
+				$query = "SELECT template_id, template_name, stylesheet, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+			}
+		else
+			{
+				$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+			}
 		$row = $db->GetRow($query, array($id));
 
 		if($row)
@@ -80,59 +149,61 @@ class TemplateOperations
 			$onetemplate = new Template();
 			$onetemplate->id = $row['template_id'];
 			$onetemplate->name = $row['template_name'];
-			$onetemplate->content = $row['template_content'];
+			if( isset($row['template_content']) ) $onetemplate->content = $row['template_content'];
 			$onetemplate->stylesheet = $row['stylesheet'];
-			$onetemplate->encoding = $row['encoding'];
+			if( isset($row['encoding']) ) $onetemplate->encoding = $row['encoding'];
 			$onetemplate->default = $row['default_template'];
 			$onetemplate->active = $row['active'];
 			$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
-			$result =& $onetemplate;
 
-			if (!isset($cache[$onetemplate->id]))
-			{
-				$cache[$onetemplate->id] =& $onetemplate;
-			}
+			$this->_toCache($onetemplate);
 		}
 
-		return $result;
+		return $onetemplate;
 	}
+
 
 	function LoadTemplateByContentAlias($alias)
 	{
-		$result = false;
+		$result = null;
+		if( ($result = $this->_fromCache($alias)) )
+		{
+			return $result;
+		}
 
 		$gCms = cmsms();
-		$db = cms_db();
+		$db = $gCms->GetDb();
 
 		$query = "SELECT t.template_id, t.template_name, t.template_content, t.stylesheet, t.encoding, t.active, t.default_template, t.modified_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
-		$row = $db->GetRow($query, array($alias, $alias));
+		$row = &$db->GetRow($query, array($alias, $alias));
 
 		if ($row)
 		{
-			$onetemplate = new Template();
-			$onetemplate->id = $row['template_id'];
-			$onetemplate->name = $row['template_name'];
-			$onetemplate->content = $row['template_content'];
-			$onetemplate->stylesheet = $row['stylesheet'];
-			$onetemplate->encoding = $row['encoding'];
-			$onetemplate->default = $row['default_template'];
-			$onetemplate->active = $row['active'];
-			$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
-			$result = $onetemplate;
+			$result = new Template();
+			$result->id = $row['template_id'];
+			$result->name = $row['template_name'];
+			$result->content = $row['template_content'];
+			$result->stylesheet = $row['stylesheet'];
+			$result->encoding = $row['encoding'];
+			$result->default = $row['default_template'];
+			$result->active = $row['active'];
+			$result->modified_date = $db->UnixTimeStamp($row['modified_date']);
+			$this->_toCache($result);
 		}
 
 		return $result;
 	}
+
 
 	function LoadTemplateAndContentDates($alias)
 	{
 		$result = array();
 
 		$gCms = cmsms();
-		$db = cms_db();
+		$db = $gCms->GetDb();
 
 		$query = "SELECT c.modified_date AS c_date, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
-		$dbresult = $db->Execute($query, array($alias, $alias));
+		$dbresult = &$db->Execute($query, array($alias, $alias));
 
 		while ($dbresult && !$dbresult->EOF)
 		{
@@ -146,27 +217,31 @@ class TemplateOperations
 		return $result;
 	}
 
+
 	function LoadDefaultTemplate()
 	{
-		$result = false;
+		$result = null;
+		if( ($result = $this->_findCachedDefault()) )
+		{
+			return $result;
+		}
 
-		$gCms = cmsms();
-		$db = cms_db();
-
+		$db = cmsms()->GetDb();
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template FROM ".cms_db_prefix()."templates WHERE default_template = 1";
-		$row = $db->GetRow($query);
+		$row = &$db->GetRow($query);
 
 		if($row)
 		{
-			$onetemplate = new Template();
-			$onetemplate->id = $row['template_id'];
-			$onetemplate->name = $row['template_name'];
-			$onetemplate->content = $row['template_content'];
-			$onetemplate->stylesheet = $row['stylesheet'];
-			$onetemplate->encoding = $row['encoding'];
-			$onetemplate->default = $row['default_template'];
-			$onetemplate->active = $row['active'];
-			$result = $onetemplate;
+			$result = new Template();
+			$result->id = $row['template_id'];
+			$result->name = $row['template_name'];
+			$result->content = $row['template_content'];
+			$result->stylesheet = $row['stylesheet'];
+			$result->encoding = $row['encoding'];
+			$result->default = $row['default_template'];
+			$result->active = $row['active'];
+
+			$this->_toCache($result);
 		}
 
 		return $result;
@@ -177,10 +252,10 @@ class TemplateOperations
 		$result = 0;
 
 		$gCms = cmsms();
-		$db = cms_db();
+		$db = $gCms->GetDb();
 
 		$query = "SELECT count(*) as the_count FROM ".cms_db_prefix()."content WHERE template_id = ?";
-		$row = $db->GetRow($query, array($id));
+		$row = &$db->GetRow($query, array($id));
 
 		if($row)
 		{
@@ -195,7 +270,7 @@ class TemplateOperations
 		$result = -1; 
 
 		$gCms = cmsms();
-		$db = cms_db();
+		$db = $gCms->GetDb();
 
 		$time = $db->DBTimeStamp(time());
 		$new_template_id = $db->GenID(cms_db_prefix()."templates_seq");
@@ -215,7 +290,7 @@ class TemplateOperations
 		$result = false; 
 
 		$gCms = cmsms();
-		$db = cms_db();
+		$db = $gCms->GetDb();
 
 		$time = $db->DBTimeStamp(time());
 		$query = "UPDATE ".cms_db_prefix()."templates SET template_name = ?, template_content = ?, stylesheet = ?, encoding = ?, active = ?, default_template = ?, modified_date = ".$time." WHERE template_id = ?";
@@ -234,7 +309,7 @@ class TemplateOperations
 		$result = false;
 
 		$gCms = cmsms();
-		$db = cms_db();
+		$db = $gCms->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."css_assoc WHERE assoc_type = 'template' AND assoc_to_id = ?";
 		$dbresult = $db->Execute($query,array($id));
@@ -256,10 +331,10 @@ class TemplateOperations
 		$result = 0;
 
 		$gCms = cmsms();
-		$db = cms_db();
+		$db = $gCms->GetDb();
 
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE template_id = ?";
-        $row = $db->GetRow($query,array($id));
+        $row = &$db->GetRow($query,array($id));
 
 		if ($row)
 		{
@@ -277,10 +352,10 @@ class TemplateOperations
 		$result = 0;
 
 		$gCms = cmsms();
-		$db = cms_db();
+		$db = $gCms->GetDb();
 
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."templates WHERE stylesheet is not null and stylesheet != ''";
-        $row = $db->GetRow($query);
+        $row = &$db->GetRow($query);
 
 		if ($row)
 		{
@@ -298,7 +373,7 @@ class TemplateOperations
 		$result = false;
 
 		$gCms = cmsms();
-		$db = cms_db();
+		$db = $gCms->GetDb();
 
 		$dbresult = false;
 
@@ -327,7 +402,7 @@ class TemplateOperations
 		$result = false;
 
 		$gCms = cmsms();
-		$db = cms_db();
+		$db = $gCms->GetDb();
 
 		$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = ?";
 		$attrs = array($name);
@@ -336,7 +411,7 @@ class TemplateOperations
 			$query .= ' AND template_id != ?';
 			$attrs[] = $id;
 		}
-		$row = $db->GetRow($query,$attrs);
+		$row = &$db->GetRow($query,$attrs);
 
 		if ($row)
 		{
@@ -350,7 +425,7 @@ class TemplateOperations
 	{
 		$result = "";
 		
-		global $gCms;
+		$gCms = cmsms();
 		$templateops = $gCms->GetTemplateOperations();
 
 		$alltemplates = $templateops->LoadTemplates();

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -35,16 +35,14 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
 include_once("header.php");
-global $gCms;
-$db =& $gCms->GetDb();
+$db = cmsms()->GetDb();
 
 #******************************************************************************
 # global vars definition
@@ -154,7 +152,7 @@ else {
 			# we store ids of templates found for them not to appear in the dropdown
 			$csslist[] = $one["assoc_to_id"];
 		 
-			echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+			echo "<tr class=\"$currow\">\n";
 			if( $modifytpl )
 			  {
 			    echo "<td><a href=\"edittemplate.php".$urlext."&amp;template_id=".$one["assoc_to_id"]."&amp;from=cssassoc&amp;cssid=".$id."\">".$one["template_name"]."</a></td>\n";
@@ -231,7 +229,7 @@ else {
 ?>
 			<input type="hidden" name="id" value="<?php echo $id?>" />
 			<input type="hidden" name="type" value="<?php echo $type?>" />
-			<input type="submit" accesskey="s" value="<?php echo lang('attachtemplate')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover';" onmouseout="this.className='pagebutton';" />
+			<input type="submit" value="<?php echo lang('attachtemplate')?>" class="pagebutton" />
 			</p>
 			</div>
 			</form>

@@ -1,6 +1,6 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -16,412 +16,426 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: class.cms_config.php 5313 2008-12-04 20:04:11Z calguy1000 $
+#$Id$
 
 /**
- * Class to hold the configuration values found in the config.php file.
+ * @package CMS
+ */
+
+/**
+ * A singleton class for interacting with the CMSMS config.php file
  *
- * @author Ted Kulp
- * @since 2.0
- * @version $Revision$
- * @modifiedby $LastChangedBy$
- * @lastmodified $Date$
- * @license GPL
- **/
-class CmsConfig extends CmsObject implements ArrayAccess
+ * @since 1.9
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ */
+class cms_config implements ArrayAccess
 {
-	var $params;
-	static private $instance = NULL;
-	static private $config_file_location = '';
+  const TYPE_STRING = 'STRING';
+  const TYPE_INT = 'INT';
+  const TYPE_BOOL = 'BOOL';
+  
+  private static $_instance;
+  private $_types;
+  private $_data = array();
+  private $_cache = array();
+  private $_friends = array('CMSInstallerPage7','CMSUpgradePage3');
 
-	function __construct()
+  // this is a singleton.
+  private function __construct()  {}
+
+  private function get_upload_size()
+  {
+    $maxFileSize = ini_get('upload_max_filesize');
+    if (!is_numeric($maxFileSize))
+      {
+	$l=strlen($maxFileSize);
+	$i=0;$ss='';$x=0;
+	while ($i < $l)
+	  {
+	    if (is_numeric($maxFileSize[$i]))
+	      {$ss .= $maxFileSize[$i];}
+	    else
+	      {
+		if (strtolower($maxFileSize[$i]) == 'm') $x=1000000;
+		if (strtolower($maxFileSize[$i]) == 'k') $x=1000;
+	      }
+	    $i ++;
+	  }
+	$maxFileSize=$ss;
+	if ($x >0) $maxFileSize = $ss * $x;
+      }
+    else
+      {
+	$maxFileSize = 1000000;
+      }
+    return $maxFileSize;
+  }
+
+  private function load_config()
+  {
+    $this->_types = array();
+    $this->_types['dbms'] = self::TYPE_STRING;
+    $this->_types['db_hostname'] = self::TYPE_STRING;
+    $this->_types['db_username'] = self::TYPE_STRING;
+    $this->_types['db_password'] = self::TYPE_STRING;
+    $this->_types['db_name'] = self::TYPE_STRING;
+    $this->_types['db_port'] = self::TYPE_INT;
+    $this->_types['db_prefix'] = self::TYPE_STRING;
+    $this->_types['use_adodb_lite'] = self::TYPE_BOOL;
+    $this->_types['root_url'] = self::TYPE_STRING;
+    $this->_types['ssl_url'] = self::TYPE_STRING;
+    $this->_types['root_path'] = self::TYPE_STRING;
+    $this->_types['admin_dir'] = self::TYPE_STRING;
+    $this->_types['uploads_path'] = self::TYPE_STRING;
+    $this->_types['uploads_url'] = self::TYPE_STRING;
+    $this->_types['ssl_uploads_url'] = self::TYPE_STRING;
+    $this->_types['image_uploads_path'] = self::TYPE_STRING;
+    $this->_types['image_uploads_url'] = self::TYPE_STRING;
+    $this->_types['debug'] = self::TYPE_BOOL;
+    $this->_types['process_whole_template'] = self::TYPE_BOOL;
+    $this->_types['output_compression'] = self::TYPE_BOOL;
+    $this->_types['timezone'] = self::TYPE_STRING;
+    $this->_types['persist_db_conn'] = self::TYPE_BOOL;
+    $this->_types['previews_path'] = self::TYPE_STRING;
+    $this->_types['max_upload_size'] = self::TYPE_INT;
+    $this->_types['default_upload_permission'] = self::TYPE_STRING;
+    $this->_types['use_smarty_php_tags'] = self::TYPE_BOOL;
+    $this->_types['auto_alias_content'] = self::TYPE_BOOL;
+    $this->_types['url_rewriting'] = self::TYPE_STRING;
+    $this->_types['page_extension'] = self::TYPE_STRING;
+    $this->_types['query_var'] = self::TYPE_STRING;
+    $this->_types['image_manipulation_prog'] = self::TYPE_STRING;
+    $this->_types['image_transform_lib_path'] = self::TYPE_STRING;
+    $this->_types['locale'] = self::TYPE_STRING;
+    $this->_types['default_encoding'] = self::TYPE_STRING;
+    $this->_types['admin_encoding'] = self::TYPE_STRING;
+    $this->_types['set_names'] = self::TYPE_BOOL;
+    $this->_types['wiki_url'] = self::TYPE_STRING;
+    $this->_types['admin_url'] = self::TYPE_STRING;
+    $this->_types['ignore_lazy_load'] = self::TYPE_BOOL;
+
+    $config = array();
+    if (file_exists(CONFIG_FILE_LOCATION))
+      {
+	include(CONFIG_FILE_LOCATION);
+      }
+    $this->_data = $config;
+  }
+
+
+  /**
+   * @ignore
+   * @internal
+   * @access private
+   */
+  public function merge($newconfig)
+  {
+    if( !is_array($newconfig) ) return;
+    $trace = debug_backtrace(FALSE);
+    $class = '';
+    if( isset($trace[1]['class']) ) $class = $trace[1]['class'];
+    if( $class && in_array($class,$this->_friends) )
+      {
+	$this->_data = array_merge($this->_data,$newconfig);
+      }
+  }
+
+
+  /**
+   * Retrieve the global instance of the cms_config class
+   * This method will instantiate the object if necessary
+   *
+   * @return object
+   */
+  public static function &get_instance()
+  {
+    if (!isset(self::$_instance)) {
+      $c = __CLASS__;
+      self::$_instance = new $c;
+
+      // now load the config
+      self::$_instance->load_config();
+    }
+
+    return self::$_instance;
+  }
+
+
+  public function offsetExists($key)
+  {
+    return isset($this->_types[$key]) || isset($this->_data[$key]);
+  }
+
+
+  public function offsetGet($key)
+  {
+    if( isset($this->_data[$key]) )
+      {
+	return $this->_data[$key];
+      }
+
+    if( isset($this->_cache[$key]) )
+      {
+	// this saves recursion and dynamic calculations all the time.
+	return $this->_cache[$key];
+      }
+
+    // it's not explicitly specified in the config file.
+    $calculated_root_path = dirname(dirname(dirname(__FILE__)));
+    switch( $key )
+      {
+      case 'dbms':
+      case 'db_hostname':
+      case 'db_username':
+      case 'db_password':
+      case 'db_name':
+	// these guys have to be set
+	stack_trace();
+	die('FATAL ERROR: Could not find database connection key '.$key.' in the config file');
+	break;
+
+      case 'use_adodb_lite':
+	return true;
+
+      case 'persist_db_conn':
+	return false;
+
+      case 'set_names':
+	return true;
+
+      case 'root_path':
+	return dirname(dirname(dirname(__FILE__)));
+
+      case 'root_url':
 	{
-		parent::__construct();
-		$this->params = array();
-	}
-	
-	static public function get_instance()
-	{
-		if (self::$instance == NULL)
+	  $parts = parse_url($_SERVER['REQUEST_URI']);
+	  $path = '';
+	  if( !empty($parts['path']) )
+	    {
+	      $path = dirname($parts['path']);
+	      if( endswith($path,'install') )
 		{
-			self::$instance = new CmsConfig();
-			self::$instance->load();
+		  $path = substr($path,0,strlen($path)-strlen('install')-1);
 		}
-		return self::$instance;
+	    }
+	  // todo: here we could get the default content object and test if it's secure
+	  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
+	  return $str;
 	}
+	break;
+
+      case 'ssl_url':
+	$this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('root_url'));
+	return $this->_cache[$key];
 	
-	static public function get_config_filename()
+      case 'uploads_path':
+	$this->_cache[$key] = cms_join_path($this->offsetGet('root_path'),'uploads');
+	return $this->_cache[$key];
+
+      case 'uploads_url':
+	$this->_cache[$key] = $this->offsetGet('root_url').'/uploads';
+	return $this->_cache[$key];
+
+      case 'ssl_uploads_url':
+	$this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('uploads_url'));
+	return $this->_cache[$key];
+	
+      case 'image_uploads_path':
+	$this->_cache[$key] = cms_join_path($this->offsetGet('uploads_path'),'images');
+	return $this->_cache[$key];
+
+      case 'image_uploads_url':
+	$this->_cache[$key] = $this->offsetGet('uploads_url').'/images';
+	return $this->_cache[$key];
+
+      case 'previews_path':
+	return TMP_CACHE_LOCATION;
+
+      case 'admin_dir':
+	return 'admin';
+
+      case 'debug':
+	return false;
+
+      case 'process_whole_template':
+	return false;
+
+      case 'output_compression':
+	return false;
+
+      case 'timezone':
+	return '';
+
+      case 'db_port':
+	return '';
+
+      case 'max_upload_size':
+      case 'upload_max_filesize':
+	return $this->get_upload_size();
+
+      case 'default_upload_permission':
+	return '664';
+
+      case 'use_smarty_php_tags':
+	return false;
+
+      case 'auto_alias_content':
+	return true;
+
+      case 'url_rewriting':
+	return 'none';
+
+      case 'page_extension':
+	return '';
+
+      case 'query_var':
+	return 'page';
+
+      case 'image_manipulation_prog':
+	return 'GD';
+
+      case 'image_transform_lib_path':
+	return ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) ? 'C:/Program Files/VisualMagick/bin/' : '/usr/bin/ImageMagick/';
+
+      case 'locale':
+	return '';
+
+      case 'default_encoding':
+      case 'admin_encoding':
+	return 'utf-8';
+
+      case 'wiki_url':
+	return 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel';
+
+      case 'admin_url':
+	return $this->offsetGet('root_url').'/'.$this->offsetGet('admin_dir');
+
+      case 'ignore_lazy_load':
+	return false;
+
+      default:
+	// not a mandatory key for the config.php file... and one we don't understand.
+	return null;
+      }
+  }
+
+  public function offsetSet($key,$value)
+  {
+    $tmp = debug_backtrace();
+    $parent = '';
+    if( isset($tmp[1]) && isset($tmp[1]['class']) )
+      {
+	$class = $tmp[1]['class'];
+	$parent = get_parent_class($class);
+      }
+    if( $parent != 'CMSInstallerPage' )
+      {
+	trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
+	return;
+      }
+    $this->_data[$key] = $value;
+  }
+
+
+  public function offsetUnset($key)
+  {
+    trigger_error('Unsetting config variable '.$key.' is invalid',E_USER_ERROR);
+  }
+
+
+  private function _printable_value($key,$value)
+  {
+    $type = self::TYPE_STRING;
+
+    if( isset($this->_types[$key]) )
+      {
+	$type = $this->_types[$key];
+      }
+
+    $str = '';
+    switch( $type )
+      {
+      case self::TYPE_STRING:
+	$str = "'".$value."'";
+	break;
+
+      case self::TYPE_BOOL:
+	$str = ($value)?'true':'false';
+	break;
+
+      case self::TYPE_INT:
+	$str = (int)$value;
+	break;
+      }
+    return $str;
+  }
+
+
+  /**
+   * A function to save the current state of the config.php file.  Any existing file is backed up
+   * before overwriting.
+   *
+   *
+   * @param boolean indicates wether comments should be stored in the config.php file. 
+   * @param string  An optional complete file specification.  If not specified the standard config file location will be used.
+   */
+  public function save($verbose = true,$filename = '')
+  {
+    if( !$filename )
+      {
+	$filename = CONFIG_FILE_LOCATION;
+      }
+
+    // backup the original config.php file (just in case)
+    if( file_exists($filename) )
+      {
+	@copy($filename,cms_join_path(TMP_CACHE_LOCATION,basename($filename).time().'.bak'));
+      }
+
+    $output = "<?php\n# CMS Made Simple Configuration File\n# Documentation: /doc/CMSMS_config_reference.pdf\n#\n";
+    // output header to the config file.
+
+    foreach( $this->_data as $key => $value )
+    {
+      // we're writing this var to the config file.
+      if( $verbose )
 	{
-		if (self::$config_file_location == '')
+	  // see if we can get some help for the item.
+	  $fn = cms_join_path($this->offsetGet('root_path'),'doc','help_'.$key.'.txt');
+	  if( file_exists($fn) )
+	    {
+	      $output .= "\n".file_get_contents($fn);
+	      if( !endswith($output,"\n") )
 		{
-			$filename = dirname(CONFIG_FILE_LOCATION) . DS . 'config-' . CMS_VERSION . '.php';
-			if (file_exists($filename))
-			{
-				self::$config_file_location = $filename;
-			}
-			else
-			{
-				self::$config_file_location = CONFIG_FILE_LOCATION;
-			}
+		  $output .= "\n";
 		}
-		return self::$config_file_location;
+	    }
 	}
-	
-	static public function exists($key)
-	{
-		$config = CmsConfig::get_instance();
-		return array_key_exists($key, $config->params);
-	}
-	
-	static public function get($key)
-	{
-		$config = CmsConfig::get_instance();
-		return $config[$key];
-	}
-	
-	function offsetSet($key, $value)
-	{
-		$this->params[$key] = $value;
-	}
+      $outvalue = $this->_printable_value($key,$value);
+      $output .= "\$config['{$key}'] = $outvalue;\n";
+    }
 
-	function offsetGet($key)
-	{
-		if (array_key_exists($key, $this->params))
-		{
-			return $this->params[$key];
-		}
-	}
+    $output .= "?>\n";
 
-	function offsetUnset($key)
-	{
-		if (array_key_exists($key, $this->params))
-		{
-			unset($this->params[$key]);
-		}
-	}
-
-	function offsetExists($offset)
-	{
-		return array_key_exists($offset, $this->params);
-	}
-	
-	function load($loadLocal = true, $upgrade = false)
-	{
-		$config = array();
-
-		#Set some defaults, just in case the config file is corrupted or
-		#we're coming from an upgrade
-		$config["dbms"] = "mysql";
-		$config["db_hostname"] = "localhost";
-		$config["db_username"] = "cms";
-		$config["db_password"] = "cms";
-		$config["db_name"] = "cms";
-		$config["db_prefix"] = "cms_";
-		$config["root_url"] = CmsRequest::get_calculated_url_base();
-		$config["root_path"] = dirname(dirname(dirname(__FILE__)));
-		$config["query_var"] = "page";
-		$config["use_bb_code"] = false;
-		$config["smarty_security"] = false;
-		$config["previews_path"] = $config["root_path"] . "/tmp/cache";
-		$config["uploads_path"] = $config["root_path"] . "/uploads";
-		$config["uploads_url"] = $config["root_url"] . "/uploads";
-		$config["max_upload_size"] = 1000000;
-		$config["debug"] = false;
-		$config["assume_mod_rewrite"] = false;
-		$config['internal_pretty_urls'] = true;
-		$config["auto_alias_content"] = true;
-		$config["image_manipulation_prog"] = "GD";
-		$config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
-		$config["use_Indite"] = true;
-		$config["image_uploads_path"] = $config["root_path"] . "/uploads/images";
-		$config["image_uploads_url"] = $config["root_url"] . "/uploads/images";
-		$config["default_encoding"] = "";
-		$config["disable_htmlarea_translation"] = false;
-		$config["admin_dir"] = "admin";
-		$config["persistent_db_conn"] = false;
-		$config["default_upload_permission"] = '664';
-		$config["page_extension"] = "";
-		$config["locale"] = "";
-		$config['old_stylesheet'] = true;
-		$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
-		$config['backwards_compatible'] = true;
-		$config['timezone'] = 'Etc/GMT+0';
-		$config['function_caching'] = true;
-		$config['full_page_caching'] = false;
-		$config['use_memcache'] = false;
-		$config['memcache_server'] = 'localhost';
-		$config['memcache_port'] = '11211';
-
-		if ($loadLocal == true)
-		{
-			//if (file_exists(CONFIG_FILE_LOCATION) && !cms_config_check_old_config())
-			if (file_exists(self::get_config_filename()))
-			{
-				include(self::get_config_filename());
-			}
-		}
-
-		#Check to see if this exists in the config.php yet
-		if (!isset($config["admin_encoding"]))
-		{
-			#So this is our first setting of it.  Is default_encoding set already?
-			#If so, set admin_encoding to match (and admin encodings should behave as before)
-			if (isset($config["default_encoding"]) && $config["default_encoding"])
-			{
-				$config['admin_encoding'] = $config['default_encoding'];
-			}
-			else
-			{
-				#Ok, so last ditch effort.  Look for the encoding of the default template
-				if ($upgrade == true)
-				{
-					$db = cms_db();
-					$encoding = $db->GetOne('select encoding from '.cms_db_prefix().'templates where default_template = 1');
-					if (isset($encoding) && $encoding != '')
-					{
-						$config["admin_encoding"] = $encoding;
-					}
-					else
-					{
-						$config["admin_encoding"] = "utf-8";
-					}
-				}
-				else
-				{
-					$config["admin_encoding"] = "utf-8";
-				}
-			}
-		}
-		
-		// Begin Multisite Modifications
-		$subsite_config = $config['root_path'].DIRECTORY_SEPARATOR.'sites'.DIRECTORY_SEPARATOR.$_SERVER['HTTP_HOST'].DIRECTORY_SEPARATOR.'config.php';
-		if(file_exists($subsite_config))
-		{
-			include $subsite_config;
-			$config['is_subsite'] = true;
-		}
-		// End Multisite Modifications		
-
-		$this->params = $config;
-
-	}
-	
-	function save()
-	{
-		$newfiledir = dirname(self::get_config_filename());
-		$newfilename = self::get_config_filename();
-		if (is_writable($newfilename) || is_writable($newfiledir))
-		{
-			$handle = fopen($newfilename, "w");
-			if ($handle)
-			{
-				fwrite($handle, "<?php\n\n");
-				fwrite($handle, $this->config_text($this->params));
-				fwrite($handle, "\n?>");
-				fclose($handle);
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	function config_text($config)
-	{
-		$true = 'true';
-		$false = 'false';
-		$result = <<<EOF
-
-#CMS Made Simple Configuration File
-#Please clear the cache (Site Admin->Global Settings in the admin panel)
-#after making any changes to path or url related options
-
-#-----------------
-#Behaviour Settings
-#-----------------
-
-# These settings will effect the overall behaviour of the CMS application, please
-# use extreme caution when editing these.  Additionally, some settings may have 
-# no effect on servers with significantly restricted configurability.
-
-# If you are experiencing propblems with php memory limit errors, then you may
-# want to try enabling and/or adjusting this setting.  
-# Note: Your server may not allow the application to override memory limits.
-\$config['php_memory_limit'] = '{$config['php_memory_limit']}';
-
-# CMSMS Debug Mode?  Turn it on to get a better error when you
-# see {nocache} errors, or to allow seeing php notices, warnings, and errors in the html output.
-# This setting will also disable browser css caching.
-\$config['debug'] = ${$config['debug']?'true':'false'};
-
-# Output compression?
-# Turn this on to allow CMS to do output compression
-# this is not needed for apache servers that have mod_deflate enabled
-# and possibly other servers.  But may provide significant performance
-# increases on some sites.  Use caution when using this as there have
-# been reports of incompatibilities with some browsers.
-\$config['output_compression'] = ${$config['output_compression']?'true':'false'};
-
-#-----------------
-#Database Settings
-#-----------------
-
-#This is your database connection information.  Name of the server,
-#username, password and a database with proper permissions should
-#all be setup before CMS Made Simple is installed.
-\$config['dbms'] = '{$config['dbms']}';
-\$config['db_hostname'] = '{$config['db_hostname']}';
-\$config['db_username'] = '{$config['db_username']}';
-\$config['db_password'] = '{$config['db_password']}';
-\$config['db_name'] = '{$config['db_name']}';
-#Change this param only if you know what you are doing
-\$config["db_port"] = '{$config['db_port']}';
+    // and write it.
+    $fh = fopen($filename,'w');
+    if( $fh )
+      {
+	fwrite($fh,$output);
+	fclose($fh);
+      }
+  }
 
 
-#If app needs to coexist with other tables in the same db,
-#put a prefix here.  e.g. "cms_"
-\$config['db_prefix'] = '{$config['db_prefix']}';
-
-#Use persistent connections?  They're generally faster, but not all hosts
-#allow them.
-\$config['persistent_db_conn'] = ${$config['persistent_db_conn']?'true':'false'};
-
-#Use ADODB Lite?  This should be true in almost all cases.  Note, slight
-#tweaks might have to be made to date handling in a "regular" adodb
-#install before it can be used.
-\$config['use_adodb_lite'] = ${$config['use_adodb_lite']?'true':'false'};
-
-#-------------
-#Path Settings
-#-------------
-
-#Document root as seen from the webserver.  No slash at the end
-#If page is requested with https use https as root url
-#e.g. http://blah.com
-\$config['root_url'] = '{$config['root_url']}';
-if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
-{
-  \$config['root_url'] = str_replace('http','https',\$config['root_url']);
-}
-
-#Path to document root. This should be the directory this file is in.
-#e.g. /var/www/localhost
-\$config['root_path'] = '{$config['root_path']}';
-
-#Name of the admin directory
-\$config['admin_dir'] = '{$config['admin_dir']}';
-
-#Where do previews get stored temporarily?  It defaults to tmp/cache.
-\$config['previews_path'] = '{$config['previews_path']}';
-
-#Where are uploaded files put?  This defaults to uploads.
-\$config['uploads_path'] = '{$config['uploads_path']}';
-
-#Where is the url to this uploads directory?
-\$config['uploads_url'] = \$config['root_url'] . '{$config['uploads_url']}';
-
-#---------------
-#Upload Settings
-#---------------
-
-#Maxium upload size (in bytes)?
-\$config['max_upload_size'] = {$config['max_upload_size']};
-
-#Permissions for uploaded files.  This only really needs changing if your
-#host has a weird permissions scheme.
-\$config['default_upload_permission'] = '{$config['default_upload_permission']}';
-
-#------------------
-#Usability Settings
-#------------------
-
-#Allow smarty {php} tags?  These could be dangerous if you don't trust your users.
-\$config['use_smarty_php_tags'] = ${$config['use_smarty_php_tags']?'true':'false'};
-
-#Automatically assign alias based on page title?
-\$config['auto_alias_content'] = ${$config['auto_alias_content']?'true':'false'};
-
-#------------
-#URL Settings
-#------------
-
-#What type of URL rewriting should we be using for pretty URLs?  Valid options are: 
-#'none', 'internal', and 'mod_rewrite'.  'internal' will not work with IIS some CGI
-#configurations. 'mod_rewrite' requires proper apache configuration, a valid 
-#.htaccess file and most likely {metadata} in your page templates.  For more 
-#information, see:
-#http://wiki.cmsmadesimple.org/index.php/FAQ/Installation/Pretty_URLs#Pretty_URL.27s
-\$config['url_rewriting'] = '{$config['url_rewriting']}';
-
-#Extension to use if you're using mod_rewrite for pretty URLs.
-\$config['page_extension'] = '{$config['page_extension']}';
-
-#If you're using the internal pretty url mechanism or mod_rewrite, would you like to
-#show urls in their hierarchy?  (ex. http://www.mysite.com/parent/parent/childpage)
-\$config['use_hierarchy'] = ${$config['use_hierarchy']?'true':'false'};
-
-#If using none of the above options, what should we be using for the query string
-#variable?  (ex. http://www.mysite.com/index.php?page=somecontent)
-\$config['query_var'] = '{$config['query_var']}';
-
-#--------------
-#Image Settings
-#--------------
-
-#Which program should be used for handling thumbnails in the image manager.
-#See http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Content/Image_Manager for more
-#info on what this all means
-\$config['image_manipulation_prog'] = '{$config['image_manipulation_prog']}';
-\$config['image_transform_lib_path'] = '{$config['image_transform_lib_path']}';
-
-#Default path and URL for uploaded images in the image manager
-\$config['image_uploads_path'] = '{$config['image_uploads_path']}';
-\$config['image_uploads_url'] = \$config['root_url'] . '{$config['image_uploads_url']}'; 
-
-#------------------------
-#Locale/Encoding Settings
-#------------------------
-
-#Locale to use for various default date handling functions, etc.  Leaving
-#this blank will use the server's default.  This might not be good if the
-#site is hosted in a different country than it's intended audience.
-\$config['locale'] = '{$config['locale']}';
-
-#In almost all cases, default_encoding should be empty (which defaults to utf-8)
-#and admin_encoding should be utf-8.  If you'd like this to be different, change
-#both.  Keep in mind, however, that the admin interface translations are all in
-#utf-8, and will be converted on the fly to match the admin_encoding.  This
-#could seriously slow down the admin interfaces for users.
-\$config['default_encoding'] = '{$config['default_encoding']}';
-\$config['admin_encoding'] = '{$config['admin_encoding']}';
-
-#This is a mysql specific option that is generally defaulted to true.  Only 
-#disable this for backwards compatibility or the use of non utf-8 databases.
-\$config['set_names'] = ${$config['set_names']?'true':'false'};
-
-# URL of the Admin Panel section of the User Handbook
-# Set none if you want hide the link from Error 
-\$config['wiki_url'] = '{$config['wiki_url']}';
-
-#-----------------
-#Memcache Settings
-#-----------------
-
-#This section allows areas of caching to be handled by Memcached instead
-#of files or the database. This generally speeds up cache reads and writes
-#greatly, but requires special configuration, the memcached daemon to be
-#available and the memache module to be installed in your PHP. We recommend
-#this for production environments where you have control over the items that
-#are compiled and installed into your PHP. See http://memcached.org/ and
-#http://us3.php.net/manual/en/book.memcache.php for more details.
-#
-\$config['use_memcache'] = ${$config['use_memcache']?'true':'false'};
-\$config['memcache_server'] = '{$config['memcache_server']}';
-\$config['memcache_port'] = '{$config['memcache_port']}';
-
-EOF;
-		return $result;
-	}
-	
-}
+  public function smart_root_url()
+  {
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
+	  {
+		  return $this->offsetGet('ssl_url');
+	  }
+	  return $this->offsetGet('root_url');
+  }
+} // end of class
 
 ?>

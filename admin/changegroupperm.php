@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
@@ -41,15 +40,16 @@ if (!$access) {
 	die('Permission Denied');
 	return;
 }
-$userops =& $gCms->GetUserOperations();
+
+$gCms = cmsms();
+$userops = $gCms->GetUserOperations();
 $adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
 $group_name = '';
 $message = '';
 
 include_once("header.php");
-global $gCms;
-$db =& $gCms->GetDb();
-$smarty =& $gCms->GetSmarty();
+$db = $gCms->GetDb();
+$smarty = $gCms->GetSmarty();
 
 if (!$access) {
 	die('permission denied');
@@ -63,14 +63,14 @@ if( isset($_POST['filter']) )
 $disp_group = get_preference($userid,'changegroupassign_group',-1);
 
 // always display the group pull down
-global $gCms;
-$groupops =& $gCms->GetGroupOperations();
+$groupops = $gCms->GetGroupOperations();
 $tmp = new stdClass();
 $tmp->name = lang('all_groups');
 $tmp->id=-1;
 $allgroups = array($tmp);
-$groups = array($tmp);
+$sel_groups = array($tmp);
 $group_list = $groupops->LoadGroups();
+$sel_group_ids = array();
 foreach( $group_list as $onegroup )
 {
   if( $onegroup->id == 1 && $adminuser == false )
@@ -80,11 +80,12 @@ foreach( $group_list as $onegroup )
   $allgroups[] = $onegroup;
   if( $disp_group == -1 || $disp_group == $onegroup->id )
     {
-      $groups[] = $onegroup;
+      $sel_groups[] = $onegroup;
+      $sel_group_ids[] = $onegroup->id;
     }
 }
 
-$smarty->assign('group_list',$groups);
+$smarty->assign('group_list',$sel_groups);
 $smarty->assign('allgroups',$allgroups);
 
 if ($submitted == 1)
@@ -101,7 +102,7 @@ if ($submitted == 1)
 	if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false)
 	  {
 	    $keyparts = explode('_',$key);
-	    if ($keyparts[2] != '1' && $value != '0')
+	    if ($keyparts[2] != '1' && $value == '1')
 	      {
 		if( !in_array($keyparts[2],$groups) )
 		  {
@@ -111,8 +112,11 @@ if ($submitted == 1)
 	  }
       }
 
-    $query = 'DELETE FROM '.cms_db_prefix().'group_perms WHERE group_id IN ('.implode(',',$groups).')';
+    $selected_groups = unserialize(base64_decode($_POST['sel_groups']));
+    $query = 'DELETE FROM '.cms_db_prefix().'group_perms 
+               WHERE group_id IN ('.implode(',',$selected_groups).')';
     $db->Execute($query);
+    
     foreach ($_POST as $key=>$value)
       {
 	if (strpos($key,"pg") == 0 && strpos($key,"pg") !== false)
@@ -130,13 +134,15 @@ if ($submitted == 1)
 	  }
       }
     
-    audit($userid, 'Group ID', lang('permissionschanged'));
+    // put mention into the admin log
+	audit($userid, 'Permission Group ID: '.$userid, 'Changed');
     $message = lang('permissionschanged');
+    $gCms->clear_cached_files();
   }
 
 $query = "SELECT p.permission_id, p.permission_text, up.group_id FROM ".
   cms_db_prefix()."permissions p LEFT JOIN ".cms_db_prefix().
-  "group_perms up ON p.permission_id = up.permission_id ORDER BY p.permission_name";
+  "group_perms up ON p.permission_id = up.permission_id ORDER BY p.permission_text";
 
 $result = $db->Execute($query);
 
@@ -162,21 +168,22 @@ while($result && $row = $result->FetchRow())
       }
   }
 $smarty->assign_by_ref('perms',$perm_struct);		
-
 $smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
 $smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
 $smarty->assign('admin_group_warning',$themeObject->ShowErrors(lang('adminspecialgroup')));
 $smarty->assign('form_start','<form id="groupname" method="post" action="changegroupperm.php">');
+$smarty->assign('filter_action','changegroupperm.php');
 $smarty->assign('form_end','</form>');
 $smarty->assign('disp_group',$disp_group);
 $smarty->assign('apply',lang('apply'));
 $smarty->assign('title_permission',lang('permission'));
 $smarty->assign('selectgroup',lang('selectgroup'));
+$smarty->assign('hidden2','<input type="hidden" name="sel_groups" value="'.base64_encode(serialize($sel_group_ids)).'"/>');
 $smarty->assign('hidden','<input type="hidden" name="submitted" value="1" />');
-$smarty->assign('submit','<input type="submit" accesskey="s" name="changeperm" value="'.lang('submit').
-	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');
-$smarty->assign('cancel','<input type="submit" accesskey="c" name="cancel" value="'.lang('cancel').
-	'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />');
+$smarty->assign('submit','<input type="submit" name="changeperm" value="'.lang('submit').
+	'" class="pagebutton" />');
+$smarty->assign('cancel','<input type="submit" name="cancel" value="'.lang('cancel').
+	'" class="pagebutton" />');
 
 
 # begin output

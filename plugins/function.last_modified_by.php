@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,18 +16,18 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_last_modified_by($params, &$smarty) 
+function smarty_cms_function_last_modified_by($params, &$smarty) 
 {
-        global $gCms;
-	$pageinfo = $gCms->variables['pageinfo'];
+        $gCms = cmsms();
+	$content_obj = $gCms->variables['content_obj'];
 
         $id = "";
  
-	if (isset($pageinfo) && $pageinfo->content_last_modified_by_id > -1)
+	if (isset($content_obj) && $content_obj->LastModifiedBy() > -1)
 	{
-		$id = $pageinfo->content_last_modified_by_id;
+	  $id = $content_obj->LastModifiedBy();
 	} else {
-                return "";
+	  return "";
         }
 
 	if(empty($params['format']))
@@ -37,35 +37,44 @@ function smarty_function_last_modified_by($params, &$smarty)
 	else
 	{
 		$format = $params['format'];
-		global $gCms;
 		$userops =& $gCms->GetUserOperations();
 		$thisuser =& $userops->LoadUserByID($id);
 	}
 
 
 
+  $output = '';
   if($format==="id") {
-     return $id;
+     $output = $id;
   } else if ($format==="username") {
-     return cms_htmlentities($thisuser->username);
+     $output = cms_htmlentities($thisuser->username);
   } else if ($format==="fullname") {
-     return cms_htmlentities($thisuser->firstname ." ". $thisuser->lastname);
-  } else {
-     return "";
+     $output = cms_htmlentities($thisuser->firstname ." ". $thisuser->lastname);
   }
+
+  if( isset($params['assign']) ) {
+    $smarty = $gCms->GetSmarty();
+    $smarty->assign(trim($params['assign']),$output);
+    return;
+  }
+  return $output;
+
 }
 
-function smarty_help_function_last_modified_by()
+function smarty_cms_help_function_last_modified_by()
 {
   echo lang('help_function_last_modified_by');
 }
 
-function smarty_about_function_last_modified_by() {
+function smarty_cms_about_function_last_modified_by() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Version: 1.1</p>
 	<p>
 	Change History:<br/>
+        <ul>
+	   <li>v1.1 - (calguy) Added assign param.</li>
+        </ul>
 	</p>
 	<?php
 }

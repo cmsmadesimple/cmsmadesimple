@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2011 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -18,21 +18,38 @@
 
 function smarty_function_root_url($params, &$smarty)
 {
-	$config = cms_config();
-	return $config['root_url'];
+	$config = cmsms()->GetConfig();
+     
+        $str = $config['root_url'];
+
+	if( !isset($params['autossl']) || $params['autossl'] != 0 )
+	  {
+	    $str = $config->smart_root_url();
+	  }
+
+        if( isset($params['assign']) )
+        {
+           $smarty->assign(trim($params['assign']),$str);
+	   return;
+        }
+	return $str;
 }
 
-function smarty_help_function_root_url() {
-  echo CmsLanguage::translate('help_function_root_url');
+function smarty_cms_help_function_root_url() {
+  echo lang('help_function_root_url');
 }
 
-function smarty_about_function_root_url() {
+function smarty_cms_about_function_root_url() {
 	?>
 	<p>Author: Ted Kulp&lt;ted@cmsmadesimple.org&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Version: 1.2</p>
 	<p>
-	Change History:<br/>
-	None
+	Change History:
+	<ul>
+          <li>Initial Version.</li>
+          <li>Added assign parameter for CMSMS 1.10</li>
+          <li>Added autossl parameter for CMSMS 1.10</li>
+        </ul>
 	</p>
 	<?php
 }

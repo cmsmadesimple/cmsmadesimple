@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -22,12 +22,9 @@ $CMS_ADMIN_PAGE=1;
 
 // in filetypes.inc.php filetypes are defined 
 require_once(dirname(dirname(__FILE__))."/lib/filemanager/filetypes.inc.php");
-require_once(dirname(dirname(__FILE__))."/lib/file.functions.php");
+require_once("../include.php");
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
-$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-
+$urlext = get_secure_param();
 check_login();
 
 $action_done='';
@@ -52,12 +49,14 @@ function deldir($dir)
 	closedir($handle);
 	if(rmdir($dir))
 	{
-		$success = true;
+	  // put mention into the admin log
+	  audit('','Image Manager','Removed Directory '.$dir);
+	  $success = true;
 	}
-	return $success;  
+	return $success; 
 } 
 
-$errors = "";
+$errors = array();
 
 $dir = $config["image_uploads_path"];
 $url = $config["image_uploads_url"];
@@ -76,6 +75,7 @@ if (strpos($reldir, '..') === false && strpos($reldir, '\\') === false)
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Files');
 
+$gCms = cmsms();
 $username = $gCms->variables["username"];
 
 #Did we upload a file?
@@ -85,17 +85,18 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 	{
 		if (!move_uploaded_file($_FILES['uploadfile']['tmp_name'], $dir."/".$_FILES['uploadfile']['name']))
 		{
-			$errors .= "<li>".lang('filenotuploaded')."</li>";
+		  $errors[] = lang('filenotuploaded');
 		}
 		else
 		{
 			chmod($dir."/".$_FILES['uploadfile']['name'], octdec('0'.$config['default_upload_permission']));
-			audit(-1, $_FILES['uploadfile']['name'], 'Uploaded File');
+			// put mention into the admin log
+			audit(-1, 'Image: '.$_FILES['uploadfile']['name'], 'Uploaded');
 		}
 	}
 	else
 	{
-		$errors .= "<li>".lang('needpermissionto', array('Modify Files'))."</li>";
+	  $errors[] = lang('needpermissions',array('Modify Files'));
 	}
 }
 
@@ -107,29 +108,34 @@ if (isset($_POST['newdirsubmit']))
 		#Make sure it isn't an empty dir name
 		if ($_POST['newdir'] == "")
 		{
-			$errors .= "<li>".lang('filecreatedirnoname')."</li>";
+		  $errors[] = lang('filecreatedirnoname');
 		}
-		else if (ereg('\.\.',$_POST['newdir']))
+		else if (preg_match('@\.\.@',$_POST['newdir']))
 		{
-			$errors .= "<li>".lang('filecreatedirnodoubledot')."</li>";
+		  $errors[] = lang('filecreatedirnodoubledot');
 		}
-		else if (ereg('/', $_POST['newdir']) || strpos($_POST['newdir'], '\\') !== false)
+		else if (preg_match('@/@', $_POST['newdir']) || strpos($_POST['newdir'], '\\') !== false)
 		{
-			$errors .= "<li>".lang('filecreatedirnoslash')."</li>";
+		  $errors[] = lang('filecreatedirnoslash');
 		}
+		else if (preg_match('/[^0-9a-zA-Z\._\-]/i',$_POST['newdir']))
+		  {
+		    $errors[] = lang('filecreatedirbadchars');
+		  }
 		else if (file_exists($dir."/".$_POST['newdir']))
 		{
-			$errors .= "<li>".lang('directoryexists')."</li>";
+		  $errors[] = lang('directoryexists');
 		}
 		else
 		{
 			mkdir($dir."/".$_POST['newdir'], 0777);
-			audit(-1, $_POST['newdir'], 'Created Directory');
+			// put mention into the admin log
+			audit(-1, "Image Manager", "Created new directory: ".$_POST['newdir']);
 		}
 	}
 	else
 	{
-		$errors .= "<li>".lang('needpermissionto', array('Modify Files'))."</li>";
+	  $errors[] = lang('needpermissionto', array('Modify Files'));
 	}
 }
 
@@ -141,21 +147,22 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 		{
 			if (!(unlink($dir . "/" . $_GET['file'])))
 			{
-				$errors .= "<li>".lang('errordeletingfile')."</li>";
+			  $errors[] = lang('errordeletingfile');
 			}
 			else
 			{
-				audit(-1, $reldir . "/" . $_GET['file'], 'Deleted File');
+				// put mention into the admin log
+			  audit(-1, 'Image Manager', 'Image: '.$reldir . "/" . $_GET['file'], 'Deleted');
 			}
 		}
 		else
 		{
-			$errors .= "<li>".lang('norealfile')."</li>";
+		  $errors[] = lang('norealfile');
 		}
 	}
 	else
 	{
-		$errors .= "<li>".lang('needpermissionto', array('Modify Files'))."</li>";
+	  $errors[] = lang('needpermissionto', array('Modify Files'));
 	}
 }
 else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
@@ -166,37 +173,40 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 		{
 			if (!(deldir($dir . "/" . $_GET['file'])))
 			{
-				$errors .= "<li>".lang('errordeletingdirectory')."</li>";
+			  $errors[] = lang('errordeletingdirectory');
 			}
 			else
 			{
-				audit(-1, $reldir . "/" . $_GET['file'], 'Deleted Directory');
+				// put mention into the admin log
+				audit(-1, 'Directory: '.$reldir . "/" . $_GET['file'], 'Deleted');
 			}
 		}
 		else
 		{
-			$errors .= "<li>".lang('norealdirectory')."</li>";
+		  $errors[] = lang('norealdirectory');
 		}
 	}
 	else
 	{
-		$errors .= "<li>".lang('needpermissionto', array('Modify Files'))."</li>";
+	  $errors[] = lang('needpermissionto', array('Modify Files'));
 	}
 }
 
 include_once("header.php");
+$current_language = cms_admin_current_language();
+$gCms = cmsms();
+$nls =& $gCms->nls;
 ?>
 
 
 
 	<script type="text/javascript" src="../lib/filemanager/ImageManager/assets/dialog.js"></script>
 	<script type="text/javascript" src="../lib/filemanager/ImageManager/IMEStandalone.js"></script>
-  
-<?php echo "	<script type=\"text/javascript\" src=\"../lib/filemanager/ImageManager/lang/en.js\"></script>\n" ?>
+<?php echo "	<script type=\"text/javascript\" src=\"../lib/filemanager/ImageManager/lang/{$nls['htmlarea'][$current_language]}.js\"></script>\n" ?>
 	<script type="text/javascript">
     //<![CDATA[
 
-		//Create a new Imanager Manager, needs the directory where the manager is
+		//Create a new Image Manager, needs the directory where the manager is
 		//and which language translation to use.
 
 		var manager = new ImageManager('../lib/filemanager/ImageManager','en');
@@ -226,17 +236,16 @@ $dirtext = "";
 $filetext = "";
 $file = "";
 
-if ($errors != "")
+if (count($errors) )
 {
-	// echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$errors."</ul></div>";
-	echo $themeObject->ShowErrors('<ul class="error">'.$errors.'</ul>');
+  echo $themeObject->ShowErrors($errors);
 }
 
 echo '<div class="pagecontainer">';
 echo $themeObject->ShowHeader('imagemanagement');
 
 ?>
-<iframe class="imageframe" src="../lib/filemanager/ImageManager/images.php<?php echo $urlext ?>&dir=<?php echo "$reldir" ?>" name="imgManager" title="Image Selection"></iframe>
+<iframe class="imageframe" src="../lib/filemanager/ImageManager/images.php<?php echo $urlext ?>&amp;dir=<?php echo "$reldir" ?>" name="imgManager" title="Image Selection"></iframe>
 
 <?php
 
@@ -253,12 +262,12 @@ if ($access)
 		<p class="pageinput">
 			<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>" />
 			<input type="hidden" name="reldir" value="<?php echo $reldir?>" />
-			<input name="uploadfile" type="file" /> <input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('send')?>" />
+			<input name="uploadfile" type="file" /> <input class="pagebutton" type="submit" value="<?php echo lang('send')?>" />
 		</p>
 	</div>
 	<div class="pageoverflow">
 		<p class="pagetext"><?php echo lang('createnewfolder')?>:</p>
-		<p class="pageinput"><input type="text" name="newdir" /> <input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="newdirsubmit" value="<?php echo lang('create')?>" /></p>
+		<p class="pageinput"><input type="text" name="newdir" /> <input class="pagebutton" type="submit" name="newdirsubmit" value="<?php echo lang('create')?>" /></p>
 	</div>
 </form>
 

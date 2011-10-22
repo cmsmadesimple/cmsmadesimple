@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,11 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_get_template_vars($params, &$smarty)
+function smarty_cms_function_get_template_vars($params, &$smarty)
 {
-	global $gCms;
-	
-	$tpl_vars = $gCms->smarty->get_template_vars();
+	$tpl_vars = $smarty->get_template_vars();
 	$str = '<pre>';
 	foreach( $tpl_vars as $key => $value )
 	  {
@@ -37,14 +35,19 @@ function smarty_function_get_template_vars($params, &$smarty)
 	       $str .= "$key = ".cms_htmlentities(trim($value))."<br/>";
              }
 	  }
-	return $str.'</pre>';
+	  $str.'</pre>';
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$str);
+	    return;
+    }
+	return $str;
 }
 
-function smarty_help_function_get_template_vars() {
+function smarty_cms_help_function_get_template_vars() {
   echo lang('help_function_get_template_vars');
 }
 
-function smarty_about_function_get_template_vars() {
+function smarty_cms_about_function_get_template_vars() {
 	?>
 	<p>Author: Robert Campbell&lt;calguy1000@hotmail.com&gt;</p>
 	<p>Version: 1.0</p>

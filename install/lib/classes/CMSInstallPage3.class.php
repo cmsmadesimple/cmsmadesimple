@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,28 +16,17 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSInstallPage3.class.php 149 2009-03-17 22:22:13Z alby $
+#$Id: CMSInstallPage3.class.php 296 2010-10-17 22:31:18Z calguy1000 $
 
 class CMSInstallerPage3 extends CMSInstallerPage
 {
-	/**
-	 * Class constructor
-	 * @var object $smarty
-	 * @var array  $errors
-	 * @var bool   $debug
-	 */
-	function CMSInstallerPage3(&$smarty, $errors, $debug)
-	{
-		$this->CMSInstallerPage(3, $smarty, $errors, $debug);
-	}
-
 	function assignVariables()
 	{
 		$umask = isset($_POST['umask']) ? $_POST['umask'] : '022';
 
 		if( (isset($_POST['umask'])) && (! empty($_POST['umask'])) )
 		{
-			$test = testUmask(1, lang('test_check_umask'), $umask, lang('test_check_umask_failed'));
+			$test = testUmask(1, ilang('test_check_umask'), $umask, ilang('test_check_umask_failed'));
 			$this->smarty->assign('test', $test);
 		}
 

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -17,10 +17,9 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-function smarty_function_breadcrumbs($params, &$smarty)
+function smarty_cms_function_breadcrumbs($params, &$smarty)
 {
-
-	global $gCms; 
+	$gCms = cmsms(); 
 	$manager = $gCms->GetHierarchyManager();
 
 	$thispage = $gCms->variables['content_id'];
@@ -58,22 +57,22 @@ function smarty_function_breadcrumbs($params, &$smarty)
 # build path
 	if (isset($endNode))
 	{
-	        $content = $endNode->get_content();
+	        $content = $endNode->getContent();
 		$path=array($endNode);
 		$currentNode = $endNode->getParentNode();
 		while (isset($currentNode) && $currentNode->getLevel() >= 0)
 		{
-			$content = $currentNode->get_content();
+			$content = $currentNode->getContent();
 			if (isset($content))
 			{
 			  //Add current node to the path and then check to see if
 			  //current node is the set root
 			  //as long as it's not hidden
-			  if( $content->show_in_menu() && $content->active() )
+			  if( $content->ShowInMenu() && $content->Active() )
 			    {
 				$path[] = $currentNode;
 			    }
-			  if (strtolower($content->alias())!=strtolower($root))
+			  if (strtolower($content->Alias())!=strtolower($root))
 			    {
 			      //Get the parent node and loop
 			      $currentNode = $currentNode->getParentNode();
@@ -91,50 +90,52 @@ function smarty_function_breadcrumbs($params, &$smarty)
 			}
 		}
 
-		if ($root!='##ROOT_NODE##') {
-			// check if the last added is root. if not, add id
-			$currentNode = $manager->sureGetNodeByAlias($root);
-
-			if (isset($currentNode))
-			{
-				$content = $currentNode->get_content();
-				if (isset($content) && (strtolower($content->alias()) == strtolower($root)))
-				{
-					$node = $manager->sureGetNodeByAlias($root);
-					if (isset($node)) {
-						$content = $node->get_content();
-						if( $content && $content->id() != $thispage) 
-							$path[] = $node; # do not add if this is the current page
-					}
-				}
-			}
-		}
+		if ($root!='##ROOT_NODE##') 
+		  {
+		    // check if the last added is root. if not, add it
+		    $currentNode = $manager->sureGetNodeByAlias($root);
+		    
+		    if (isset($currentNode))
+		      {
+			$top_alias = '##garbage##';
+			if( count($path) ) $top_alias = $path[count($path)-1]->get_tag('alias');
+			
+			if( strtolower($top_alias) != strtolower($root) )
+			  {
+			    $content = $currentNode->getContent();
+			    if( is_object($content) && $content->Active() && $content->ShowInMenu() )
+			      {
+				$path[] = $currentNode;
+			      }
+			  }
+		      }
+		  }
 		$classid=isset($params['classid'])?(' class="' . $params['classid'] . '"'):'';
 		$currentclassid=isset($params['currentclassid'])?(' class="' . $params['currentclassid'] . '"'):'';
 
 		// now create the trail (by iterating through the path we built, backwards)
 		for ($i=count($path)-1;$i>=0;$i--) {
-			$node = &$path[$i];
+			$node = $path[$i];
 			if (isset($node))
 			{
-				$onecontent = $node->get_content();
-				if ($onecontent->id() != $thispage && $onecontent->type() != 'seperator') {
-				  if (($onecontent->get_url() != "") && ($onecontent->type() != 'sectionheader')) {
-					  if ($onecontent->default_content() && false == empty($root_url))
+				$onecontent = $node->getContent();
+				if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator') {
+					if (($onecontent->getURL() != "") && ($onecontent->Type() != 'sectionheader')) {
+					  if ($onecontent->DefaultContent() && false == empty($root_url))
 					    {
 					      $trail .= '<a href="' . $root_url . '"';     
 					    }
 					      else
 						{
-						  $trail .= '<a href="' . $onecontent->get_url() . '"';
+						  $trail .= '<a href="' . $onecontent->getURL() . '"';
 						}
 						$trail .= $classid;
 						$trail .= '>';
-						$trail .= cms_htmlentities($onecontent->menu_text()!=''?$onecontent->menu_text():$onecontent->name());
+						$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
 						$trail .= '</a> ';
 					} else {
 						$trail .= "<span $classid>";
-						$trail .= cms_htmlentities($onecontent->menu_text()!=''?$onecontent->menu_text():$onecontent->name());
+						$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
 						$trail .= '</span>';
 						$trail .= ' ';
 					}
@@ -145,7 +146,7 @@ function smarty_function_breadcrumbs($params, &$smarty)
 					} else {
 						$trail .= '<span class="lastitem">';
 					}
-					$trail .= cms_htmlentities($onecontent->menu_text()!=''?$onecontent->menu_text():$onecontent->Name());
+					$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
 					if (isset($params['currentclassid'])) {
 						$trail .= '</span>';
 					} else {
@@ -160,16 +161,19 @@ function smarty_function_breadcrumbs($params, &$smarty)
 	{
 		$trail = $params['starttext'] . ': ' . $trail;
 	}
-
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$trail);
+	    return;
+	}
 	return $trail;  
 
 }
 	
-function smarty_help_function_breadcrumbs() {
+function smarty_cms_help_function_breadcrumbs() {
   echo lang('help_function_breadcrumbs');
 }
 
-function smarty_about_function_breadcrumbs() {
+function smarty_cms_about_function_breadcrumbs() {
   echo lang('about_function_breadcrumbs');
 }
 # vim:ts=4 sw=4 noet

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,24 +16,16 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSUpgradePage7.class.php 210 2009-07-07 16:24:54Z alby $
+#$Id: CMSUpgradePage7.class.php 296 2010-10-17 22:31:18Z calguy1000 $
 
 class CMSInstallerPage7 extends CMSInstallerPage
 {
-	/**
-	 * Class constructor
-	*/
-	function CMSInstallerPage7(&$smarty, $errors, $debug)
-	{
-		$this->CMSInstallerPage(7, $smarty, $errors, $debug);
-	}
-
 	function assignVariables()
 	{
-		global $gCms;
+		$gCms = cmsms();
 		$config =& $gCms->GetConfig();
 
-		$test = new StdClass();
+		$test =new StdClass();
 
 		$test->error = false;
 		$test->messages = array();
@@ -45,13 +37,13 @@ class CMSInstallerPage7 extends CMSInstallerPage
 
 			if (! $_test)
 			{
-				$test->messages[] = lang('sitedown_not_removed');
+				$test->messages[] = ilang('sitedown_not_removed');
 				$test->error = true;
 			}
 		}
 
-		$test->messages[] = lang('upgrade_ok');
-		$test->messages[] = lang('upgrade_end', '<a href="../index.php">'.lang('here').'</a>', '<a href="../'.$config['admin_dir'].'">'.lang('go_to_admin').'</a>');
+		$test->messages[] = ilang('upgrade_ok');
+		$test->messages[] = ilang('upgrade_end', '<a href="../index.php">'.ilang('here').'</a>', '<a href="../'.$config['admin_dir'].'">'.ilang('go_to_admin').'</a>');
 		$this->smarty->assign('test', $test);
 
 		$this->smarty->assign('errors', $this->errors);

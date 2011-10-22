@@ -34,6 +34,8 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
+if( !isset($gCms) ) exit;
+
 {
   global $_SESSION;
 
@@ -51,8 +53,7 @@
     }
   else if( isset($params['reseturl']) )
     {
-      $this->SetPreference('module_repository',
-			   'http://modules.cmsmadesimple.org/soap.php?module=ModuleRepository');
+      $this->SetPreference('module_repository',ModuleManager::_dflt_request_url);
       $this->Redirect($id,'defaultadmin',$returnid,array('active_tab'=>'prefs'));
     }
 
@@ -67,15 +68,13 @@
     {
       $this->SetPreference('dl_chunksize',trim($params['input_dl_chunksize']));
     }
-    
-  if( isset($params['onlynewest']) )
-    {
-      $this->SetPreference('onlynewest',trim($params['onlynewest']));
-    }
-  else
-    {
-      $this->SetPreference('onlynewest','0');
-    }
+
+  $latestdepends = (isset($params['latestdepends']))?1:0;
+  $this->SetPreference('latestdepends',$latestdepends);
+
+  $disable_caching = (isset($params['disable_caching']))?1:0;
+  $this->SetPreference('disable_caching',$disable_caching);
+
   $this->SetPreference('module_repository',trim($params['url']));
   $this->Redirect($id,'defaultadmin',$returnid,array('active_tab'=>'prefs',"module_message"=>$this->Lang("preferencessaved")));
 }

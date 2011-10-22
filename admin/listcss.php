@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -30,9 +30,8 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
-require_once(cms_join_path(ROOT_DIR,'lib','html_entity_decode_utf8.php'));
+require_once("../include.php");
+require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
@@ -52,8 +51,7 @@ if (!$access) {
 
 
 include_once("header.php");
-$gCms = cmsms();
-$db = cms_db();
+$db = cmsms()->GetDb();
 
 #******************************************************************************
 # first : displaying error message, if any.
@@ -61,6 +59,10 @@ $db = cms_db();
 if (isset($_GET["message"])) {
 	$message = preg_replace('/\</','',$_GET['message']);
 	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
+}
+else if( isset($_GET['messagekey']) ) {
+  $message = lang($_GET['messagekey']);
+  echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
 
 ?>
@@ -88,12 +90,14 @@ if (isset($_GET["message"])) {
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
-	$limit = 20;
+        $limit = get_preference($userid,'liststylesheets_pagelimit',20);
 	if ($result->RecordCount() > $limit)
 	{
 		echo "<p class=\"pageshowrows\">".pagination($page, $result->RecordCount(), $limit)."</p>";
 	}
 	echo $themeObject->ShowHeader('liststylesheets').'</div>';
+
+
 	if ($result && $result->RecordCount() > 0)
 	{
 		# displaying the table header
@@ -117,7 +121,7 @@ if (isset($_GET["message"])) {
 		$counter = 0;
 		while ($one = $result->FetchRow()){
 		  if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-		    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+		    echo "<tr class=\"$currow\">\n";
 		    if( $modify )
 		      {
 			echo "<td><a href=\"editcss.php".$urlext."&amp;css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";
@@ -204,7 +208,7 @@ if (isset($_GET["message"])) {
 	  {
 ?>
 	    <span style="float: left;">
-	    <a href="addcontent.php<?php echo $urlext ?>">
+	    <a href="addcss.php<?php echo $urlext ?>">
 	    <?php 
 	    echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addstylesheet'),'','','systemicon').'</a>';
 	    echo ' <a class="pageoptions" href="addcss.php'.$urlext.'">'.lang("addstylesheet");
@@ -224,7 +228,7 @@ if (isset($_GET["message"])) {
 				<option value="inactive"><?php echo lang('inactive') ?></option>
 				-->
 				</select>
-				<input type="submit" accesskey="s" value="<?php echo lang('submit') ?>" />
+				<input type="submit" value="<?php echo lang('submit') ?>" />
 			</span>
 			<br />
 <?php

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
@@ -39,11 +38,11 @@ if (isset($_GET["user_id"]))
 
 	if ($access && $user_id != $cur_userid)
 	{
-		global $gCms;
-		$userops =& $gCms->GetUserOperations();
-		$oneuser = $userops->LoadUserByID($user_id);
-		$user_name = $oneuser->username;
-		$ownercount = $userops->CountPageOwnershipByID($user_id);
+	  $gCms = cmsms();
+	  $userops = $gCms->GetUserOperations();
+	  $oneuser = $userops->LoadUserByID($user_id);
+	  $user_name = $oneuser->username;
+	  $ownercount = $userops->CountPageOwnershipByID($user_id);
 
 		if ($ownercount > 0)
 		{
@@ -54,11 +53,13 @@ if (isset($_GET["user_id"]))
 		{
 			Events::SendEvent('Core', 'DeleteUserPre', array('user' => &$oneuser));
 
+			cms_userprefs::remove_for_user($user_id);
 			$oneuser->Delete();
 
 			Events::SendEvent('Core', 'DeleteUserPost', array('user' => &$oneuser));
 
-			audit($user_id, $user_name, 'Deleted User');
+			// put mention into the admin log
+			audit($user_id, 'Admin Username: '.$user_name, 'Deleted');
 		}
 	}
 }

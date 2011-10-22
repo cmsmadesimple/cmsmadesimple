@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 require_once("../lib/classes/class.group.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
@@ -51,9 +50,9 @@ if (isset($_GET["group_id"]))
 
 	$result = false;
 	
-	global $gCms;
-	$groupops =& $gCms->GetGroupOperations();
-	$userops =& $gCms->GetUserOperations();
+	$gCms = cmsms();
+	$groupops = $gCms->GetGroupOperations();
+	$userops = $gCms->GetUserOperations();
 	$groupobj = $groupops->LoadGroupByID($group_id);
 	$group_name = $groupobj->name;
 	
@@ -76,7 +75,8 @@ if (isset($_GET["group_id"]))
 	
 	if ($result == true)
 	  {
-	    audit($group_id, $group_name, 'Deleted Group');
+	    // put mention into the admin log
+		audit($group_id, 'Admin User Group: '.$group_name, 'Deleted');
 	  }
 }
 

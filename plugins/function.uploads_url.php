@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -18,23 +18,20 @@
 
 function smarty_function_uploads_url($params, &$smarty)
 {
-	global $gCms;
-	$config = &$gCms->GetConfig();
+	$gCms = cmsms();
+	$config = $gCms->GetConfig();
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$config['uploads_url']);
+		return;
+	}
 	return $config['uploads_url'];
 }
 
-function smarty_help_function_uploads_url() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Prints the uploads url location for the site.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{uploads_url}</code></p>
-	<h3>What parameters does it take?</h3>
-	<p>None at this time.</p>
-	<?php
+function smarty_cms_help_function_uploads_url() {
+	echo lang('help_function_uploads_url');
 }
 
-function smarty_about_function_uploads_url() {
+function smarty_cms_about_function_uploads_url() {
 	?>
 	<p>Author: Nuno Costa&lt nuno.mfcosta@sapo.pt&gt;</p>
 	<p>Version: 1.0</p>

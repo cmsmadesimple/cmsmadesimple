@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -36,13 +36,12 @@
  
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
-global $gCms;
+$gCms = cmsms();
 $styleops =& $gCms->GetStylesheetOperations();
 $db =& $gCms->GetDb();
 
@@ -158,7 +157,7 @@ if ($access)
 				Events::SendEvent('Core', 'AddStylesheetPost', array('stylesheet' => &$newstylesheet));
 				
 				# it's ok, we record the operation in the admin log
-				audit($newstylesheet->id, $css_name, 'Added CSS');
+				audit($newstylesheet->id, 'Stylesheet: '.$css_name, 'Added');
 
 				# and goes back to the css list
 				redirect("listcss.php".$urlext);
@@ -206,11 +205,11 @@ else
                   <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
                 </div>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('name')?>:</p>
+			<p class="pagetext">*<?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" class="name" name="css_name" maxlength="255" value="<?php echo $css_name?>" /></p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('content')?>:</p>
+			<p class="pagetext">*<?php echo lang('content')?>:</p>
 			<p class="pageinput">
 			<?php echo create_textarea(false, $css_text, 'css_text', 'pagebigtextarea', 'css_text', '', '', '80', '15','','css')?>
 			<!-- <textarea class="pagebigtextarea" name="css_text" cols="" rows=""><_?php echo $css_text?></textarea>  -->
@@ -263,8 +262,8 @@ else
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="addcss" value="true" />
-				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
 			</p>
 		</div>
 		</form>

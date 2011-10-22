@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (tedkulp@users.sf.net)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -9,14 +9,27 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
+#
 #$Id: class.user.inc.php 2961 2006-06-25 04:49:31Z wishy $
+
+/**
+ * User related functions.
+ *
+ * @package CMS
+ * @license GPL
+ */
+
+/**
+ * Include user class definition
+ */
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.user.inc.php');
 
 /**
  * Class for doing user related functions.  Maybe of the User object functions
@@ -24,22 +37,34 @@
  *
  * @since 0.6.1
  * @package CMS
+ * @license GPL
  */
-
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.user.inc.php');
-
 class UserOperations
 {
+	protected function __construct() {}
+
+	private static $_instance;
+
+	public static function &get_instance()
+	{
+		if( !is_object(self::$_instance) )
+		{
+			self::$_instance = new UserOperations();
+		}
+		return self::$_instance;
+	}
+
+
 	/**
 	 * Gets a list of all users
 	 *
 	 * @returns array An array of User objects
 	 * @since 0.6.1
 	 */
-	function LoadUsers()
+	function &LoadUsers()
 	{
 		$gCms = cmsms();
-		$db = cms_db();
+		$db = &$gCms->GetDb();
 
 		$result = array();
 
@@ -72,8 +97,8 @@ class UserOperations
 	 */
 	function &LoadUsersInGroup($groupid)
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 		$result = array();
 
 		$query = "SELECT u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.active, u.admin_access FROM ".cms_db_prefix()."users u, ".cms_db_prefix()."groups g, ".cms_db_prefix()."user_groups cg where cg.user_id = u.user_id and cg.group_id = g.group_id and g.group_id =? ORDER BY username";
@@ -90,7 +115,7 @@ class UserOperations
 			$oneuser->password = $row['password'];
 			$oneuser->active = $row['active'];
 			$oneuser->adminaccess = $row['admin_access'];
-			$result[] =& $oneuser;
+			$result[] = $oneuser;
 		}
 
 		return $result;
@@ -111,8 +136,8 @@ class UserOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$params = array();
 		$where = array();
@@ -125,7 +150,7 @@ class UserOperations
 		if ($password != '')
 		{
 		  $where[] = 'password = ?';
-		  $params[] = md5($password);
+		  $params[] = md5(get_site_preference('sitemask','').$password);
 		}
 
 		if ($activeonly == true)
@@ -171,8 +196,8 @@ class UserOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".cms_db_prefix()."users WHERE user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
@@ -188,7 +213,7 @@ class UserOperations
 			$oneuser->email = $row['email'];
 			$oneuser->adminaccess = $row['admin_access'];
 			$oneuser->active = $row['active'];
-			$result =& $oneuser;
+			$result = $oneuser;
 		}
 
 		return $result;
@@ -206,8 +231,8 @@ class UserOperations
 	{
 		$result = -1; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		// check for conflict in username
 		$query = 'SELECT user_id FROM '.cms_db_prefix().'users WHERE username = ?';
@@ -239,8 +264,8 @@ class UserOperations
 	{
 		$result = false; 
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		// check for username conflict
 		$query = 'SELECT user_id FROM '.cms_db_prefix().'users WHERE username = ? and user_id != ?';
@@ -269,10 +294,13 @@ class UserOperations
 	 */
 	function DeleteUserByID($id)
 	{
+ 		if( $id <= 1 ) return false;
+ 		if( !check_permission(get_userid(),'Remove Users') ) return false;
+	
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."user_groups where user_id = ?";
 		$db->Execute($query, array($id));
@@ -306,8 +334,8 @@ class UserOperations
 	{
 		$result = 0;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
 
 		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE owner_id = ?";
 		$dbresult = $db->Execute($query, array($id));
@@ -358,28 +386,31 @@ class UserOperations
 	 */
 	function UserInGroup($uid,$gid)
 	{
-	  global $gCms;
-	  if( isset($gCms->variables['user_in_group']) && 
-	      isset($gCms->variables['user_in_group'][$uid.','.$gid]) )
+		$gCms = cmsms();
+	  $data = array();
+	  if( isset($gCms->variables['user_in_group']) )
+	  {
+		  $data = $gCms->variables['user_in_group'];
+	  }
+	  
+	  if( isset($data[$uid.','.$gid]) )
 	    {
 	      // us cached result.
-	      return $gCms->variables['user_in_group'][$uid.','.$gid];
+	      return $data[$uid.','.$gid];
 	    }
-	  $db = cms_db();
-	 
+
+	  $db = cmsms()->GetDb();
 	  $query = "SELECT ug.user_id FROM ".cms_db_prefix()."user_groups ug
                      WHERE ug.user_id = ? AND ug.group_id = ?";
 	  $row = $db->GetRow( $query,array($uid,$gid));
-	  if( !isset($gCms->variables['user_in_group']) )
-	    {
-	      $gCms->variables['user_in_group'] = array();
-	    }
+
+	  $data[$uid.','.$gid] = true;
 	  if( !$row ) 
 	    {
-	      $gCms->variables['user_in_group'][$uid.','.$gid] = false;
-	      return false;
+			$data[$uid.','.$gid] = false;
+			return false;
 	    }
-	  $gCms->variables['user_in_group'][$uid.','.$gid] = true;
+	  $gCms->variables['user_in_group'] = $data;
 	  return true;
 	}
 }

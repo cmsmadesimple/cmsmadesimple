@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -35,16 +35,15 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
 include_once("header.php");
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 #******************************************************************************
 # global vars definition
@@ -184,8 +183,8 @@ else {
   $query = "SELECT assoc_css_id, css_name, assoc_order FROM ".cms_db_prefix()."css_assoc ca INNER JOIN ".cms_db_prefix()."css ON assoc_css_id = css_id WHERE assoc_type=? AND assoc_to_id = ? ORDER BY ca.assoc_order";
   $result = $db->Execute($query, array($type, $id));
 
-  global $gcms;
-  $smarty =& $gCms->GetSmarty();
+  $gCms = cmsms();
+  $smarty = $gCms->GetSmarty();
   $smarty->assign('text_move',lang('move'));
   $smarty->assign('text_template',lang('template'));
   $smarty->assign('text_title',lang('title'));
@@ -280,7 +279,7 @@ else {
       $hidden .= '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />';
       $smarty->assign('hidden',$hidden);
 
-      $submit = '<input type="submit" accesskey="s" value="'.lang('addcss').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\';" onmouseout="this.className=\'pagebutton\';" />';
+      $submit = '<input type="submit" value="'.lang('addcss').'" class="pagebutton" />';
       $smarty->assign('submit',$submit);
 
     } # end of showing form

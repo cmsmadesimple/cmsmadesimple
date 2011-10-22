@@ -41,16 +41,6 @@
 			<input type="text" name="default_encoding" value="{$default_encoding}" size="20" maxlength="20" />
 		</td>
 	</tr>
-	<tr class="row2">
-		<td>{lang_install a=install_timezone}</td>
-		<td>
-			<select name="timezone">
-{foreach from=$timezones item=tz}
-				<option value="{$tz}"{if $default_timezone==$tz} selected="selected"{/if}>{$tz}</option>
-{/foreach}
-			</select>
-		</td>
-	</tr>
    </table>
 
 	<div class="continue">
@@ -61,6 +51,7 @@
 		<input type="hidden" name="username" value="{$values.db.username}" />
 		<input type="hidden" name="password" value="{$values.db.password}" />
 		<input type="hidden" name="db_port" value="{$values.db.db_port}" />
+	        <input type="hidden" name="timezone" value="{$values.timezone}"/>
 		<!-- input type="hidden" name="db_socket" value="{$values.db.db_socket}" / -->
 		<input type="hidden" name="prefix" value="{$values.db.prefix}" />
 		<input type="hidden" name="createtables" value="{$values.createtables}" />

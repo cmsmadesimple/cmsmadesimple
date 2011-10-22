@@ -1,92 +1,126 @@
 <?php
 
+/**
+ * @package CMS
+ */
+
+/**
+ * A method to initialize the connection with the CMSMS configured database.
+ *
+ * @internal
+ * @access private
+ */
 function load_adodb() 
 {
-  global $gCms;
+  $gCms = cmsms();
   global $ADODB_vers;
-  $config =& $gCms->GetConfig();
+  $config = $gCms->GetConfig();
 
 	// @TODO: Remove dependence on PEAR for error handling	
-	define('ADODB_OUTP', 'debug_sql');
+	if ($config['debug'] == true)
+	{
+		#@include_once(cms_join_path(dirname(__FILE__), $config['use_adodb_lite'] == true ? 'adodb_lite' : 'adodb', 'adodb-errorpear.inc.php'));
+	}
 	
+	if( !defined('ADODB_OUTP') )
+	  {
+	    define('ADODB_OUTP', 'debug_sql');
+	  }
+	//define('ADODB_ERROR_HANDLER', 'adodb_error');
+	
+	$loaded_adodb = false;
+	
+	if ($config['use_adodb_lite'] == false || (isset($USE_OLD_ADODB) && $USE_OLD_ADODB == 1))
+	{
 	# CMSMS is configured to use full ADOdb
-	$full_adodb = cms_join_path(dirname(__FILE__),'adodb','adodb.inc.php');
-	if (! file_exists($full_adodb))
-	{
-		# Full ADOdb cannot be found, show a debug error message
-		$gCms->errors[] = 'CMS Made Simple is configured to use the full ADOdb Database Abstraction library, but it\'s not in the lib' .DIRECTORY_SEPARATOR. 'adodb directory!';
+		$full_adodb = cms_join_path(dirname(__FILE__),'adodb','adodb.inc.php');
+		if (! file_exists($full_adodb))
+		{
+			# Full ADOdb cannot be found, show a debug error message
+			$gCms->errors[] = 'CMS Made Simple is configured to use the full ADOdb Database Abstraction library, but it\'s not in the lib' .DIRECTORY_SEPARATOR. 'adodb directory. Switched back to ADOdb Lite.';
+		}
+		else
+		{
+			# Load (full) ADOdb
+			require($full_adodb);
+			$loaded_adodb = true;
+		}
 	}
-	else
+	if (!$loaded_adodb)
 	{
-		# Load (full) ADOdb
-		require($full_adodb);
-		$loaded_adodb = true;
+		$adodb_light = cms_join_path(dirname(__FILE__),'adodb_lite','adodb.inc.php');
+		# The ADOdb library is not yet included, try ADOdb Lite
+		if (file_exists($adodb_light))
+		{
+			# Load ADOdb Lite
+			require_once($adodb_light);
+		}
+		else
+		{
+			# ADOdb cannot be found, show a message and stop the script execution
+			die('The ADOdb Lite database abstraction library cannot be found, CMS Made Simple cannot load.');
+		}
 	}
 	
-	define('CMS_ADODB_DT', 'T');
+	if( !defined('CMS_ADODB_DT') ) define('CMS_ADODB_DT', $config['use_adodb_lite'] ? 'DT' : 'T');
 }
 
-function & adodb_connect()
+/**
+ * A method to re-initialize connections to the CMSMS configured database.
+ * This method should be used by any UDT's or other plugins that use any other method
+ * than the standard CMSMS supplied database object to connect to a database.
+ *
+ */
+function &adodb_connect()
 {
-	global $gCms;
-	$config =& $gCms->GetConfig();
+  $gCms = cmsms();
+  $config = $gCms->GetConfig();
 	
-	$dsn = $config['dbms'].'://';
-	if( $config['dbms'] == 'sqlite' )
+  $str = 'pear:date:extend';
+  if( isset($config['db_transactions']) )
+    {
+      $str .= ':transaction';
+    }
+  $dbinstance = ADONewConnection($config['dbms'], $str);
+	$dbinstance->raiseErrorFn = "adodb_error";
+	$conn_func = (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true) ? 'PConnect' : 'Connect';
+	if(!empty($config['db_port'])) $dbinstance->port = $config['db_port'];
+	$connect_result = $dbinstance->$conn_func($config['db_hostname'], $config['db_username'], $config['db_password'], $config['db_name']);
+	
+	if (FALSE == $connect_result)
 	{
-		$path = dirname(dirname(__FILE__));
-		$dsn .= urlencode(cms_join_path($path, 'tmp', $config['db_name'])) .'/';
-	}
-	else
-	{
-		$dsn .= $config['db_username'].':'.rawurlencode($config['db_password']).'@'.$config['db_hostname'].'/'.$config['db_name'];
-		$opt = array();
-		if(isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true) $opt[] = 'persist';
-		if( !empty($config['db_port']) )
-		{
-			$opt[] = 'port='.$config['db_port'];
-		}
-		elseif( !empty($config['db_socket']) && $config['dbms'] == 'mysqli')
-		{
-			$opt[] = 'socket='.$config['db_socket'];
-		}
-		$dsn .= ((count($opt) > 0) ? '?'.implode('&', $opt) : '');
+	  $str = "Attempt to connect to database {$config['db_name']} on {$config['db_username']}@{$config['db_hostname']} failed";
+	  trigger_error($str,E_USER_ERROR);
+	  die($str);
 	}
 
-	//define('ADODB_ERROR_HANDLER', 'adodb_error');
-	$dbinstance = ADONewConnection( $dsn );
+	$dbinstance->raiseErrorFn = null;
+	
 	$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
-	$dbinstance->query_count = 0;
-	$dbinstance->fnExecute = 'adodb_count_recs';
-	$dbinstance->fnCacheExecute = 'adodb_cache_count_recs';
 	
 	if ($config['debug'] == true)
 	{
 		$dbinstance->debug = true;
 	}
 	
-	if ($config['dbms'] == 'sqlite')
+	if(!empty($config['default_encoding']) && $config['default_encoding'] == 'utf-8' && $config['set_names'] == true)
 	{
-		$dbinstance->Execute('PRAGMA short_column_names = 1;');
-		sqlite_create_function($dbinstance->_connectionID, 'now', 'time', 0);
-	}
-	else
-	{
-		if(!empty($config['default_encoding']) && $config['default_encoding'] == 'utf-8' && $config['set_names'] == true)
-		{
-			$dbinstance->Execute("SET NAMES 'utf8'");
-		}
+		$dbinstance->Execute("SET NAMES 'utf8'");
 	}
 	
-	$db =& $dbinstance;
-	return $db;
+	return $dbinstance;
 }
 
+
+/**
+ * @ignore
+ */
 function adodb_error($dbtype, $function_performed, $error_number, $error_message, $host, $database, &$connection_obj)
 {
 	if(file_exists(cms_join_path(dirname(CONFIG_FILE_LOCATION), 'db_error.html')))
 	{
 		include_once cms_join_path(dirname(CONFIG_FILE_LOCATION), 'db_error.html');
+		exit;
 	}
 	else
 	{
@@ -96,17 +130,6 @@ function adodb_error($dbtype, $function_performed, $error_number, $error_message
 		echo "Host/DB: {$host}/{$database}<br />";
 		echo "Database Type: {$dbtype}<br />";
 	}
-	die();
-}
-
-function adodb_count_recs($db, $sql, $inputarray)
-{
-	$db->query_count++;
-}
-
-function adodb_cache_count_recs($db, $secs2cache, $sql, $inputarray)
-{
-	adodb_count_recs($db, $sql, $inputarray);
 }
 
 ?>

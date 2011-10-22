@@ -10,6 +10,7 @@ sh autogen.sh
 #perl findmissing.pl
 #cd ../..
 
+rm -fr .gitignore
 rm -fr CHECKLIST
 rm -fr build
 rm -fr config.php

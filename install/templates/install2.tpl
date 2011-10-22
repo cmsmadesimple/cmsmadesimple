@@ -51,7 +51,7 @@
 {foreach from=$settings.required item='test'}
 		<tr class="{cycle values='row1,row2'}">
 			<td>
-	{if isset($test->value) && $test->value != ''}
+	{if isset($test->value) && $test->value != '' && $test->display_value != 0}
 				<span class="have">{lang_install a=install_you_have} {$test->value}</span>
 	{/if}
 				{$test->title}
@@ -166,7 +166,7 @@
 		</tr>
 		<tr>
 			<td class="col2">
-				<img src="images/yellow.gif" alt="{$caution}" title="{$caution}" />
+				<img src="images/yellow.gif" {if isset($caution)}alt="{$caution}" title="{$caution}"{/if}/>
 			</td>
 			<td>
 				{lang_install a=install_value_recommended}

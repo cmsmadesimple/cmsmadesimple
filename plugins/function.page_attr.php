@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,42 +16,38 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_page_attr($params, &$smarty)
+function smarty_cms_function_page_attr($params, &$smarty)
 {
   $result = '';
   $key = '';
 
   if( isset($params['key']) ) {
-  $key = $params['key'];
+    $key = $params['key'];
+    $gCms = cmsms();
+	$contentops = $gCms->GetContentOperations();
+	$contentobj = $contentops->getContentObject();
+    if( is_object($contentobj) )
+      {
+	
+	$result = $contentobj->GetPropertyValue($key);
+	if( $result == -1 ) $result = '';
+      }
+    
+    if( isset($params['assign']) )
+      {
+	$smarty =& $gCms->GetSmarty();
+	$smarty->assign($params['assign'],$result);
+	return;
+      }
   }
-  global $gCms;
-  $pageinfo = &$gCms->variables['pageinfo'];
-  $manager =& $gCms->GetHierarchyManager();
-  $node =& $manager->sureGetNodeById($pageinfo->content_id);
-  if(is_object($node))
-    {
-      $contentobj =& $node->get_content();
-      if( is_object($contentobj) )
-	{
-	  $result = $contentobj->get_property_value($key);
-          if( $result == -1 ) $result = '';
-	}
-    }
-
-  if( isset($params['assign']) )
-    {
-      $smarty =& $gCms->GetSmarty();
-      $smarty->assign($params['assign'],$result);
-      return;
-    }
 
   return $result;
 }
-function smarty_help_function_page_attr() {
+function smarty_cms_help_function_page_attr() {
   echo lang('help_function_page_attr');
 }
 
-function smarty_about_function_page_attr() {
+function smarty_cms_about_function_page_attr() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 	<p>Version: 1.0</p>

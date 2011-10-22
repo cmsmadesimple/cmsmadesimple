@@ -7,6 +7,7 @@
  */
 //LOCAL: lib/filemanager/ImageManager/images.php
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/include.php');
+
 check_login();
 $userid = get_userid();
 if (!check_permission($userid, 'Modify Files')) die();
@@ -190,14 +191,23 @@ function drawErrorBase(&$manager)
 <?php
 }
 
+// absolutely disable caching.
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html>
 <head>
         <title>Image List</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link href="assets/imagelist.css" rel="stylesheet" type="text/css" />
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="assets/imagelist.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="assets/dialog.js"></script>
 <script type="text/javascript">
 

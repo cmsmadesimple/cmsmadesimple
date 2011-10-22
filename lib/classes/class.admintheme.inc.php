@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (tedkulp@users.sf.net)
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -19,97 +19,112 @@
 #$Id$
 
 /**
+ * @package CMS 
+ */
+
+/**
  * Class for Admin Theme
  *
  * @package CMS
+ * @version $Revision$
+ * @license GPL
  */
 class AdminTheme
 {
-
-    /**
-     * CMS handle
-     */
-    var $cms;
-
 	/**
 	 * Title
 	 */
-	var $title;
+	protected $title;
 
     /**
      * Subtitle, for use in breadcrumb trails
      */
-    var $subtitle;
+    protected $subtitle;
 
 	/**
 	 * Url
 	 */
-	var $url;
+	protected $url;
 	
     /**
 	 * Script
 	 */
-	var $script;
+	protected $script;
 
 	/**
 	 * Query String, for use in breadcrumb trails
 	 */
-	var $query;
+	protected $query;
 
     /**
      * Aggregation of modules by section
      */
-    var $modulesBySection;
+    protected $modulesBySection;
 
     /**
      * count of modules in each section
      */
-    var $sectionCount;
+    protected $sectionCount;
 
     /**
      * Aggregate Permissions
      */
-    var $perms;
+    protected $perms;
 
     /**
      * Recent Page List
      */
-    var $recent;
+    protected $recent;
 
     /**
      * Current Active User
      */
-    var $user;
+    protected $user;
 
     /**
      * Admin Section Menu cache
      */
-    var $menuItems;
+    protected $menuItems;
 
     /**
      * Admin Section Image cache
      */
-    var $imageLink;
+    protected $imageLink;
 
     /**
      * Theme Name
      */
-    var $themeName;
+    protected $themeName;
 
     /**
      * Breadcrumbs Array
      */
-    var $breadcrumbs;
+    protected $breadcrumbs;
 
     /**
      * Notification Items
      */
-    var $_notificationitems;
+    protected $_notificationitems;
+
+    /**
+     * View Site URL
+     */
+    protected $_viewsite_url;
+
+	/**
+	 * __get()
+	 */
+	public function __get($key)
+	{
+		if( $key == 'cms' ) return cmsms();
+		if( $key == 'themeName' ) return $this->themeName;
+		trigger_error("Attempt to access invalid member $key of admin theme object");
+	}
 
 	/**
 	 * Generic constructor.  Runs the SetInitialValues fuction.
 	 */
-	function AdminTheme($cms, $userid, $themeName)
+	public function __construct($cms, $userid, $themeName)
 	{
 		$this->SetInitialValues($cms, $userid, $themeName);
 	}
@@ -117,11 +132,13 @@ class AdminTheme
 	/**
 	 * Sets object to some sane initial values
 	 */
-	function SetInitialValues($cms, $userid, $themeName)
+	private function SetInitialValues($cms, $userid, $themeName)
 	{
+		$gCms = cmsms();
+ 		$this->_viewsite_url = $gCms->config['root_url'];
+
 		$this->title = '';
 		$this->subtitle = '';
-		$this->cms = $cms;
 		$this->url = $_SERVER['SCRIPT_NAME'];
 		$this->query = (isset($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:'');
 		if( $this->query == '' && isset($_POST['mact']) )
@@ -133,13 +150,13 @@ class AdminTheme
 		  {
 		  $this->query = 'module='.$_POST['module'];
 		  }
-        $this->userid = $userid;
+		$this->userid = $userid;
 		$this->themeName = $themeName;
 		$this->perms = array();
 		$this->recent = array();
 		$this->menuItems = array();
 		$this->breadcrumbs = array();
-        $this->imageLink = array();
+		$this->imageLink = array();
 		$this->modulesBySection = array();
 		$this->sectionCount = array();
         $this->SetModuleAdminInterfaces();
@@ -197,7 +214,7 @@ class AdminTheme
      *
      * @param section - section to display
      */
-    function MenuListSectionModules($section)
+    private function MenuListSectionModules($section)
     {
     	$modList = array();
         if (isset($this->sectionCount[$section]) && $this->sectionCount[$section] > 0)
@@ -221,6 +238,58 @@ class AdminTheme
         return $modList;
     }
 
+	/**
+	 * _get_user_module_info
+	 *
+	 * Given the currently logged in user, this will read cache information representing info for all avallable modules
+	 * for that particular user.   If cache information is not available, then modules will be loaded and the information
+	 * will be gleaned from the module for that user.
+	 *
+	 * 
+	 * @since 1.10
+	 * @access private
+	 * @author calguy1000
+	 */
+	private function _get_user_module_info()
+	{
+		$uid = get_userid(FALSE);
+		$fn = TMP_CACHE_LOCATION.'/themeinfo_'.$uid.'.cache';
+		$data = null;
+		if( !file_exists($fn) )
+		{
+			// data doesn't exist.. gotta build it.
+			$allmodules = ModuleOperations::get_instance()->GetInstalledModules();
+			$usermoduleinfo = array();
+			foreach( $allmodules as $key )
+			{
+				$object = ModuleOperations::get_instance()->get_module_instance($key);
+				if( $object && $object->HasAdmin() && $object->VisibleToAdminUser() )
+				{
+					$rec = array();
+					$rec['adminsection'] = $object->GetAdminSection();
+					$rec['friendlyname'] = $object->GetFriendlyName();
+					$rec['admindescription'] = $object->GetAdminDescription();
+					$usermoduleinfo[$key] = $rec;
+				}
+				//ModuleOperations::get_instance()->unload_module($key);
+				//unset($object);
+			}
+
+			// even if the array is empty... serialize the info.
+			$data = $usermoduleinfo;
+			$tmp = serialize($data);
+			file_put_contents($fn,base64_encode($tmp));
+		}
+		else
+		{
+			$data = file_get_contents($fn);
+			$data = base64_decode($data);
+			$data = unserialize($data);
+		}
+		return $data;
+	}
+
+
     /**
      * SetModuleAdminInterfaces
      *
@@ -228,48 +297,46 @@ class AdminTheme
      * for display on section pages and menus.
      *
      */
-    function SetModuleAdminInterfaces()
+    private function SetModuleAdminInterfaces()
     {
-      global $gCms;
-    	# Are there any modules with an admin interface?
-        $cmsmodules =& $gCms->modules;
-		reset($cmsmodules);
-		while (list($key) = each($cmsmodules))
+		// get the info from the cache
+		$usermoduleinfo = $this->_get_user_module_info();
+		if( !is_array($usermoduleinfo) ) 
 		{
-			$value =& $cmsmodules[$key];
-            if (isset($cmsmodules[$key]['object'])
-                && $cmsmodules[$key]['installed'] == true
-                && $cmsmodules[$key]['active'] == true
-                && $cmsmodules[$key]['object']->HasAdmin()
-                && $cmsmodules[$key]['object']->VisibleToAdminUser())
-                {
-                $section = $cmsmodules[$key]['object']->GetAdminSection();
-                if (! isset($this->sectionCount[$section]))
-                    {
-                    $this->sectionCount[$section] = 0;
-                    }
-                $this->modulesBySection[$section][$this->sectionCount[$section]]['key'] = $key;
-	        $tmp = $cmsmodules[$key]['object']->GetFriendlyName();
-                if ($tmp != '')
-                    {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $tmp;
-                    }
-                else
-                    {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $key;
-                    }
-                if ($cmsmodules[$key]['object']->GetAdminDescription() != '')
-                    {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['description'] =
-                        $cmsmodules[$key]['object']->GetAdminDescription();
-                    }
-                else
-                    {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['description'] = "";
-                    }
-                $this->sectionCount[$section]++;
-                }
-            }
+			// put mention into the admin log
+			audit(get_userid(FALSE),'Admin Theme','No module information found for user');
+		}
+
+		// Are there any modules with an admin interface?
+		foreach( $usermoduleinfo as $key => $rec )
+		{
+			$section = $rec['adminsection'];
+			if( $section == '' ) $section == 'extensions';
+
+			if (! isset($this->sectionCount[$section]))
+			{
+				$this->sectionCount[$section] = 0;
+			}
+			$this->modulesBySection[$section][$this->sectionCount[$section]]['key'] = $key;
+			if ($rec['friendlyname'] != '')
+			{
+				$this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $rec['friendlyname'];
+			}
+			else
+			{
+				$this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $key;
+			}
+			if ($rec['admindescription'] != '')
+			{
+				$this->modulesBySection[$section][$this->sectionCount[$section]]['description'] =
+					$rec['admindescription'];
+			}
+			else
+			{
+				$this->modulesBySection[$section][$this->sectionCount[$section]]['description'] = "";
+			}
+			$this->sectionCount[$section]++;
+		}
     }
 
     /**
@@ -281,15 +348,15 @@ class AdminTheme
      * that menu item is visible.
      *
      */
-    function SetAggregatePermissions()
+    private function SetAggregatePermissions()
     {
         # Content Permissions
         $this->perms['htmlPerms'] = check_permission($this->userid, 'Add Global Content Blocks') |
                 check_permission($this->userid, 'Modify Global Content Blocks') |
                 check_permission($this->userid, 'Delete Global Content Blocks');
 
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
+		$gCms = cmsms();
+		$gcbops = $gCms->GetGlobalContentOperations();
 
         $thisUserBlobs = $gcbops->AuthorBlobs($this->userid);
         if (count($thisUserBlobs) > 0)
@@ -456,8 +523,8 @@ class AdminTheme
      */
     function DoBookmarks()
     {
-      global $gCms;
-      $bookops =& $gCms->GetBookmarkOperations();
+		$gCms = cmsms();
+      $bookops = $gCms->GetBookmarkOperations();
       $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
       $marks = array_reverse($bookops->LoadBookmarks($this->userid));
       $tmpMark = new Bookmark();
@@ -481,12 +548,13 @@ class AdminTheme
     {
       if (get_preference($this->userid, 'bookmarks')) {
 	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+	echo "<div class=\"sections\">\n";
 	echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
 	echo '<div class="itemoverflow">';
 	echo '<h2>'.lang('bookmarks').'</h2>';
 	echo '<p><a href="listbookmarks.php'.$urlext.'">'.lang('managebookmarks').'</a></p>';
-	global $gCms;
-	$bookops =& $gCms->GetBookmarkOperations();
+	$gCms = cmsms();
+	$bookops = $gCms->GetBookmarkOperations();
 	$marks = array_reverse($bookops->LoadBookmarks($this->userid));
 	$marks = array_reverse($marks);
 	if (FALSE == empty($marks))
@@ -609,29 +677,10 @@ class AdminTheme
      */
     function OutputHeaderJavascript()
     {
-?>
-<script type="text/javascript" src="../lib/jquery/jquery.js"/></script>
-<script type="text/javascript">
-<!-- Needed for correct display in IE only -->
-<!--
-	cssHover = function() {
-		var sfEls = document.getElementById("nav").getElementsByTagName("LI");
-		for (var i=0; i<sfEls.length; i++) {
-			sfEls[i].onmouseover=function() {
-				this.className+=" cssHover";
-			}
-			sfEls[i].onmouseout=function() {
-				this.className=this.className.replace(new RegExp(" cssHover\\b"), "");
-			}
-		}
-	}
-	if (window.attachEvent) window.attachEvent("onload", cssHover);
--->
-</script>
-<?php
-        echo "<script type=\"text/javascript\" src=\"";
-        echo $this->cms->config['root_url'];
-        echo "/lib/dynamic_tabs/tabs.js\"></script>\n";
+		$config = cmsms()->GetConfig();
+		$ssl = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off');
+	    $ssl = $ssl && isset($config['ssl_url']);
+		return cms_get_jquery('',$ssl);
 	}
 
     /**
@@ -689,6 +738,8 @@ class AdminTheme
             return;
             }
         $this->subtitle = $subtitle;
+
+debug_buffer('before menu items');
     	    
     	$this->menuItems = array(
     	    // base main menu ---------------------------------------------------------
@@ -701,7 +752,7 @@ class AdminTheme
 //	    'dashboard'=>array('url'=>'dashboard.php','parent'=>'main',
 //			       'title'=>$this->FixSpaces(lang('dashboard')),
 //			       'description'=>'','show_in_menu'=>true),
-            'viewsite'=>array('url'=>'../index.php','parent'=>'main',
+            'viewsite'=>array('url'=>$this->_viewsite_url,'parent'=>'main',
 			      'title'=>$this->FixSpaces(lang('viewsite')),
 			      'type'=>'external',
                     'description'=>'','show_in_menu'=>true, 'target'=>'_blank'),
@@ -755,9 +806,6 @@ class AdminTheme
             'copytemplate'=>array('url'=>'copyemplate.php','parent'=>'template',
                     'title'=>$this->FixSpaces(lang('copytemplate')),
                     'description'=>lang('copytemplate'),'show_in_menu'=>false),
-			'modtemplate'=>array('url'=>'listmodtemplates.php','parent'=>'layout',
-                    'title'=>$this->FixSpaces(lang('modtemplates')),
-                    'description'=>lang('modtemplatesdescription'),'show_in_menu'=>$this->HasPerm('templatePerms')),
             'stylesheets'=>array('url'=>'listcss.php','parent'=>'layout',
                     'title'=>$this->FixSpaces(lang('stylesheets')),
                     'description'=>lang('stylesheetsdescription'),
@@ -866,61 +914,73 @@ class AdminTheme
                     'description'=>lang('editbookmark'),'show_in_menu'=>false),
     	);
 
+debug_buffer('after menu items');
 
+
+	// slightly cleaner syntax
+	$this->menuItems['ecommerce'] = array('url'=>'topecomm.php','parent'=>-1,
+					      'title'=>$this->FixSpaces(lang('ecommerce')),
+					      'description'=>lang('ecommerce_desc'),
+					      'show_in_menu'=>true);
+	
+	
 	// adjust all the urls to include the session key
 	foreach( $this->menuItems as $sectionKey => $sectionArray )
 	  {
 	    if( isset($sectionArray['url']) && 
 		(!isset($sectionArray['type']) || $sectionArray['type'] != 'external' ))
 	      {
-		$this->menuItems[$sectionKey]['url'] .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		$url = $this->menuItems[$sectionKey]['url'];
+		if( strpos($url,'?') !== FALSE )
+		  {
+		    $url .= '&';
+		  }
+		else
+		  {
+		    $url .= '?';
+		  }
+		$url .= CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		$this->menuItems[$sectionKey]['url'] = $url;
 	      }
 	  }
-
+		
+	debug_buffer('before syste modules');
 
 	// add in all of the 'system' modules too
-	global $gCms;
-        foreach ($this->menuItems as $sectionKey=>$sectionArray)
+	$gCms = cmsms();
+	foreach ($this->menuItems as $sectionKey=>$sectionArray)
 	  {
-            $tmpArray = $this->MenuListSectionModules($sectionKey);
-            $first = true;
-            foreach ($tmpArray as $thisKey=>$thisVal)
-	      {
-                $thisModuleKey = $thisKey;
-                $counter = 0;
-
-                // don't clobber existing keys
-                if (array_key_exists($thisModuleKey,$this->menuItems))
-		  {
-		    while (array_key_exists($thisModuleKey,$this->menuItems))
-		      {
-			$thisModuleKey = $thisKey.$counter;
-			$counter++;
-		      }
-		  }
-
-		// if it's not a system module...
-		if (array_search($thisModuleKey, $gCms->cmssystemmodules) !== FALSE)
-		  {
-		    $this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
-							   'parent'=>$sectionKey,
-							   'title'=>$this->FixSpaces($thisVal['name']),
-							   'description'=>$thisVal['description'],
-							   'show_in_menu'=>true);
-
-// 		    Commenting out this code ensures that the module is thought of as (built in)
-// 		    if ($first)
-// 		      {
-// 			$this->menuItems[$thisModuleKey]['firstmodule'] = 1;
-// 			$first = false;
-// 		      }
-// 		    else
-// 		      {
-// 			$this->menuItems[$thisModuleKey]['module'] = 1;
-// 		      }
-		  }
-	      }
+		  $tmpArray = $this->MenuListSectionModules($sectionKey);
+		  $first = true;
+		  foreach ($tmpArray as $thisKey=>$thisVal)
+			  {
+				  $thisModuleKey = $thisKey;
+				  $counter = 0;
+				  
+				  // don't clobber existing keys
+				  if (array_key_exists($thisModuleKey,$this->menuItems))
+					  {
+						  while (array_key_exists($thisModuleKey,$this->menuItems))
+							  {
+								  $thisModuleKey = $thisKey.$counter;
+								  $counter++;
+							  }
+					  }
+				  
+				  // if it's not a system module...
+				  if( ModuleOperations::get_instance()->IsSystemModule($thisModuleKey) )
+					  {
+						  $this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
+																 'parent'=>$sectionKey,
+																 'title'=>$this->FixSpaces($thisVal['name']),
+																 'description'=>$thisVal['description'],
+																 'show_in_menu'=>true);
+						  
+					  }
+			  }
 	  }
+	
+	debug_buffer('before module menu items');
 
 	// add in all of the modules
         foreach ($this->menuItems as $sectionKey=>$sectionArray)
@@ -961,63 +1021,90 @@ class AdminTheme
 		  }
 	      }
 	  }
+	
+	debug_buffer('after module menu items');
+
+	// remove any top level items that don't have children
+	$parents = array();
+	foreach ($this->menuItems as $sectionKey=>$sectionArray)
+	  {
+	    if( $this->menuItems[$sectionKey]['parent'] == -1 )
+	      {
+		$parents[] = $sectionKey;
+	      }
+	  }
+	foreach( $parents as $oneparent )
+	  {
+	    $found = 0;
+	    foreach ($this->menuItems as $sectionKey=>$sectionArray)
+	      {
+		if( $sectionArray['parent'] == $oneparent )
+		  {
+		    $found = 1;
+		    break;
+		  }
+	      }
+	    if( !$found ) unset($this->menuItems[$oneparent]);
+	  }
+	
 
 	// resolve the tree to be doubly-linked,
 	// and make sure the selections are selected            
-        foreach ($this->menuItems as $sectionKey=>$sectionArray)
+	foreach ($this->menuItems as $sectionKey=>$sectionArray)
 	  {
-            // link the children to the parents; a little clumsy since we can't
-            // assume php5-style references in a foreach.
-            $this->menuItems[$sectionKey]['children'] = array();
-            foreach ($this->menuItems as $subsectionKey=>$subsectionArray)
-	      {
-            	if ($subsectionArray['parent'] == $sectionKey)
-		  {
-		    $this->menuItems[$sectionKey]['children'][] = $subsectionKey;
-		  }
-	      }
-            // set selected
-	    if ($this->script == 'moduleinterface.php')
-	      {
-                $a = preg_match('/(module|mact)=([^&,]+)/',$this->query,$matches);
-                if ($a > 0 && $matches[2] == $sectionKey)
-		  {
-		    $this->menuItems[$sectionKey]['selected'] = true;
-		    $this->title .= $sectionArray['title'];
-		    if ($sectionArray['parent'] != -1)
-		      {
-			$parent = $sectionArray['parent'];
-			while ($parent != -1)
+		  // link the children to the parents; a little clumsy since we can't
+		  // assume php5-style references in a foreach.
+		  $this->menuItems[$sectionKey]['children'] = array();
+		  foreach ($this->menuItems as $subsectionKey=>$subsectionArray)
 			  {
-			    $this->menuItems[$parent]['selected'] = true;
-			    $parent = $this->menuItems[$parent]['parent'];
+				  if ($subsectionArray['parent'] == $sectionKey)
+					  {
+						  $this->menuItems[$sectionKey]['children'][] = $subsectionKey;
+					  }
 			  }
-		      }
-		  }
-		else
-		  {
-		    $this->menuItems[$sectionKey]['selected'] = false;
-		  }
-	      }
-            else if (strstr($sectionArray['url'],$this->script) !== FALSE &&
-		     (!isset($sectionArray['type']) || $sectionArray['type'] != 'external'))
-	      {
-            	$this->menuItems[$sectionKey]['selected'] = true;
-            	$this->title .= $sectionArray['title'];
-            	if ($sectionArray['parent'] != -1)
-		  {
-		    $parent = $sectionArray['parent'];
-		    while ($parent != -1)
-		      {
-			$this->menuItems[$parent]['selected'] = true;
-			$parent = $this->menuItems[$parent]['parent'];
-		      }
-		  }
-	      }
-            else
-	      {
-            	$this->menuItems[$sectionKey]['selected'] = false;
-	      }
+
+		  // set selected
+		  if ($this->script == 'moduleinterface.php')
+			  {
+				  $a = preg_match('/(module|mact)=([^&,]+)/',$this->query,$matches);
+				  if ($a > 0 && $matches[2] == $sectionKey)
+					  {
+						  $this->menuItems[$sectionKey]['selected'] = true;
+						  $this->title .= $sectionArray['title'];
+						  if ($sectionArray['parent'] != -1)
+							  {
+								  $parent = $sectionArray['parent'];
+								  while ($parent != -1)
+									  {
+										  $this->menuItems[$parent]['selected'] = true;
+										  $parent = $this->menuItems[$parent]['parent'];
+									  }
+							  }
+					  }
+				  else
+					  {
+						  $this->menuItems[$sectionKey]['selected'] = false;
+					  }
+			  }
+		  else if (strstr($sectionArray['url'],$this->script) !== FALSE &&
+				   (!isset($sectionArray['type']) || $sectionArray['type'] != 'external'))
+			  {
+				  $this->menuItems[$sectionKey]['selected'] = true;
+				  $this->title .= $sectionArray['title'];
+				  if ($sectionArray['parent'] != -1)
+					  {
+						  $parent = $sectionArray['parent'];
+						  while ($parent != -1)
+							  {
+								  $this->menuItems[$parent]['selected'] = true;
+								  $parent = $this->menuItems[$parent]['parent'];
+							  }
+					  }
+			  }
+		  else
+			  {
+				  $this->menuItems[$sectionKey]['selected'] = false;
+			  }
 	  }
 	// fix subtitle, if any
 	if ($subtitle != '')
@@ -1339,7 +1426,7 @@ class AdminTheme
     {
 ?>
 <div id="Footer">
-<a href="http://www.cmsmadesimple.org">CMS Made Simple</a> is Free Software released under the GNU/GPL License
+<a href="http://www.cmsmadesimple.org">CMS Made Simple&trade;</a> is Free Software released under the GNU/GPL License
 </div>
 <?php
     }
@@ -1362,8 +1449,26 @@ class AdminTheme
      */
     function DisplayHTMLStartTag()
     {
-    	echo $this->cms->nls['direction'] == 'rtl' ? "<html dir=\"rtl\"\n>" : "<html>\n";
+		$gCms = cmsms();
+		$nls = $gCms->nls;
+    	echo (isset($nls['direction']) && $nls['direction'] == 'rtl') ? "<html dir=\"rtl\"\n>" : "<html>\n";
     }
+	
+	/**
+	 * @since 1.9
+     * ThemeHeader
+     * This method outputs the HEAD section of the html page in the admin Theme section,
+     * after OutputHeaderJavascript() and before $addt.
+     */
+	function ThemeHeader(){
+		
+		if(file_exists('themes/'. $this->themeName. '/includes/standard.js'))
+		{
+			return '<script type="text/javascript" src="themes/'. $this->themeName. '/includes/standard.js"></script>'."\n";
+		}else{
+			return '<script type="text/javascript" src="themes/default/includes/standard.js"></script>'."\n";
+		}
+	}
 
     /**
      * DisplayHTMLHeader
@@ -1371,29 +1476,49 @@ class AdminTheme
      */
     function DisplayHTMLHeader($showielink = false, $addt = '')
     {
-		global $gCms;
-		$config =& $gCms->GetConfig();
-?><head>
-<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-9 Ted Kulp. All rights reserved." />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="robots" content="noindex, nofollow" />
-<title><?php echo $this->title ?></title>
-<link rel="stylesheet" type="text/css" href="style.php" />
-<?php
-	if ($showielink) {
-?>
+		$config = cmsms()->GetConfig();
+		$urlext = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		$title = get_site_preference('sitename').' - '.$this->title;
+		$str = "<head>\r\n";
+		$str .=
+<<<EOT
+	<title>{$title}</title>
+	<base href="{$config['admin_url']}/" />
+	<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-11 Ted Kulp. All rights reserved." />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />
+	<link rel="stylesheet" type="text/css" href="style.php?{$urlext}" />
+EOT;
+
+		if ($showielink) {
+			$str .=
+<<<EOT
 <!--[if IE]>
-<link rel="stylesheet" type="text/css" href="style.php?ie=1" />
+<link rel="stylesheet" type="text/css" href="style.php?ie=1&{$urlext}" />
 <![endif]-->
-<?php
-	}
-?>
-<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
-<?php $this->OutputHeaderJavascript(); ?>
-<?php echo $addt ?>
-<base href="<?php echo $config['root_url'] . '/' . $config['admin_dir'] . '/'; ?>" />
-</head>
-<?php
+EOT;
+		}
+		$str .= "<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->\n";
+		$str .= $this->OutputHeaderJavascript()."\n";
+		
+		ob_start(); 
+		$tmp1 = $this->ThemeHeader();
+		$tmp2 = ob_get_contents();
+		ob_end_clean();
+		if( $tmp1 )
+		{
+			// data is returned
+			$str .= $tmp1;
+		}
+		else
+		{
+			// assume data is echoed
+			$str .= $tmp2;
+		}
+		
+		$str .= $addt."\n";
+		$str .= "</head>\n"; // fix to correct and add the end header tag -- JLB
+		echo $str;
     }
 
     /**
@@ -1446,7 +1571,10 @@ class AdminTheme
      */
     function DisplaySectionMenuDivEnd()
     {
-        echo "</div>\n";
+        echo "</div><!-- END .MainMenu-->\n";
+		if (get_preference($this->userid, 'bookmarks')) {
+			echo "</div><!-- END .sections-->\n";
+		}
     }
 
 
@@ -1465,6 +1593,12 @@ class AdminTheme
       $this->_notificationitems[$priority-1][] = array($module,$html);
     }
 
+	/**
+	 * Display the available notifications
+	 *
+	 * @param string $priority Priority threshold
+	 * @return void
+	 */
     function DisplayNotifications($priority=2)
     {
       if( !is_array($this->_notificationitems) ) return;
@@ -1526,7 +1660,7 @@ class AdminTheme
      * Outputs warning if the install directory is still there.
      *
      * @param file file or dir to check for
-	   * @param message to display if it does exist
+	 * @param message to display if it does exist
      */
     function DisplayDashboardCallout($file, $message = '')
     {
@@ -1546,7 +1680,7 @@ class AdminTheme
      * Outputs an item on the dashboard page
      *
      * @param itemtype to display, start/end/core/module
-	   * @param output to display
+	 * @param output to display
      */
     function DisplayDashboardPageItem($item="module", $title='', $content = '')
     {
@@ -1569,6 +1703,7 @@ class AdminTheme
      * @param alt - alt text
      * @param width
      * @param height
+     * @param class
      */
     function DisplayImage($imageName, $alt='', $width='', $height='', $class='')
     {
@@ -1584,7 +1719,7 @@ class AdminTheme
     	   	   	$imagePath = '';
     	   	   }
     	   	
-    	   if (file_exists(dirname($this->cms->config['root_path'] . '/' . $this->cms->config['admin_dir'] .
+    	   if (file_exists(dirname(cmsms()->config['root_path'] . '/' . cmsms()->config['admin_dir'] .
                 '/themes/' . $this->themeName . '/images/' . $imagePath . $imageName) . '/'. $imageName))
     	       {
                 $this->imageLink[$imageName] = 'themes/' .
@@ -1630,8 +1765,8 @@ class AdminTheme
 	*/
     function ShowHeader($title_name, $extra_lang_param=array(), $link_text = '', $module_help_type = FALSE)
     {
-      $cms = $this->cms;
-      $config =& $cms->GetConfig();             
+      $cms = cmsms();
+      $config = $cms->GetConfig();             
       $header  = '<div class="pageheader">';
       if (FALSE != $module_help_type)
 	{
@@ -1646,10 +1781,11 @@ class AdminTheme
 	      $module = $tmp[0];
 	    }
 	  $icon = "modules/{$module}/images/icon.gif";
-	  $path = cms_join_path($this->cms->config['root_path'],$icon);
+	  $path = cms_join_path(cmsms()->config['root_path'],$icon);
 	  if( file_exists($path) )
 	    {
-	      $header .= "<img src=\"{$this->cms->config['root_url']}/{$icon}\" class=\"itemicon\" />&nbsp;";
+			$url = $config->smart_root_url().'/'.$icon;
+			$header .= "<img src=\"{$url}\" class=\"itemicon\" alt=\"{$icon}\" />&nbsp;";
 	    }
 	  $header .= $title_name;
 	}
@@ -1660,9 +1796,6 @@ class AdminTheme
       if (FALSE == empty($this->breadcrumbs))
 	{
 	  $wikiUrl = $config['wiki_url'];
-	  // Include English translation of titles. (Can't find better way to get them)
-	  $dirname = dirname(__FILE__);
-	  include($dirname.'/../../'.$this->cms->config['admin_dir'].'/lang/en_US/admin.inc.php');
 	  foreach ($this->breadcrumbs AS $key => $value)
 	    {
 	      $title = $value['title'];
@@ -1695,7 +1828,7 @@ class AdminTheme
 		  }
 		// Get the key of the title so we can use the en_US version for the URL
 		$title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
-		$wikiUrl .= '/'.$lang['admin'][$title_key[0]];
+		$wikiUrl .= '/'.lang($title_key[0]);
 		$help_title = $title;
 	      }
 	    }
@@ -1704,19 +1837,13 @@ class AdminTheme
 	    $wikiUrl = str_replace(' ', '_', $wikiUrl);
 	    $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
 	    // Make link to go the translated version of page if lang is not en_US
-	    /* Disabled as suggested by westis
-	     $lang = get_preference($this->cms->variables['user_id'], 'default_cms_language');
-	     if ($lang != 'en_US') {
-	     $wikiUrl .= '/'.substr($lang, 0, 2);
-	     }
-	    */
 	    if (FALSE == empty($link_text))
 	      {
-		$help_title = $link_text;
+			  $help_title = $link_text;
 	      }
 	    else
 	      {
-		$help_title = lang('help_external');
+			  $help_title = lang('help_external');
 	      }
 
 	    $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
@@ -1724,14 +1851,13 @@ class AdminTheme
 	    $image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('wikihelp'),'','','systemicon');		
 	    if ('both' == $module_help_type)
 	      {
-		$module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
-		$header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a> | ';
-		$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank" title="'.lang('wikihelp').'">'.lang('wikihelp').'</a>  ('.lang('new_window').')</span>';
+			  $module_help_link = $config['admin_url'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
+			  $header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a></span>';
 	      }
-	    else
-	      {
-		$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
-	      }
+// 	    else
+// 	      {
+// 			  //$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
+// 	      }
 	  }
     }
 	  $header .= '</div>';
@@ -1778,8 +1904,7 @@ class AdminTheme
      */
     function ShowErrors($errors, $get_var = '')
     {
-      global $gCms;
-      $config =& $gCms->GetConfig();
+		$config = cmsms()->GetConfig();
       $wikiUrl = $config['wiki_url'];
       if ($wikiUrl !='none'){
 		      if (FALSE == empty($_REQUEST['module'])  || FALSE == empty($_REQUEST['mact']))
@@ -1858,17 +1983,20 @@ class AdminTheme
       return $output;
     }
     
-	function &GetThemeObject()
+	/**
+	 * Based on the current user's prefernces, get the current theme object.
+	 */
+	static function &GetThemeObject()
 	{
-		global $gCms;
-		$config =& $gCms->GetConfig();
+		$gCms = cmsms();
+		$config = $gCms->GetConfig();
 		$themeName = get_preference(get_userid(), 'admintheme', 'default');
 		$themeObjectName = $themeName."Theme";
 		$userid = get_userid();
 	
 		if (file_exists(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$config['admin_dir']."/themes/${themeName}/${themeObjectName}.php"))
 		{
-			include_once(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$config['admin_dir']."/themes/${themeName}/${themeObjectName}.php");
+			include(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$config['admin_dir']."/themes/${themeName}/${themeObjectName}.php");
 			$themeObject = new $themeObjectName($gCms, $userid, $themeName);
 		}
 		else
@@ -1876,12 +2004,21 @@ class AdminTheme
 			$themeObject = new AdminTheme($gCms, $userid, $themeName);
 		}
 
-		$gCms->variables['admintheme']=&$themeObject;
+		$gCms->variables['admintheme'] = $themeObject;
 		
 		return $themeObject;
 	
 	}
 	
+	/**
+	 * Returns a select list of the pages in the system for use in
+	 * various admin pages.
+	 *
+	 * @param string $name - The html name of the select box
+	 * @param string $selected - If a matching id is found in the list, that item
+	 *                           is marked as selected.
+	 * @return string The select list of pages
+	 */
 	function GetAdminPageDropdown($name,$selected)
 	{
 	  $opts = array();

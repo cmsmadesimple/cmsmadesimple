@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 #
 #$Id$
 
-global $gCms;
 
 $CMS_INSTALL_PAGE=1;
 $LOAD_ALL_MODULES = true;
@@ -31,13 +30,11 @@ define('CMS_INSTALL_HELP_URL', 'http://wiki.cmsmadesimple.org/index.php/User_Han
 define('CMS_INSTALL_BASE', dirname(__FILE__));
 define('CMS_BASE', dirname(CMS_INSTALL_BASE));
 
-require_once CMS_BASE.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php';
+require_once CMS_BASE . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'misc.functions.php';
 require_once cms_join_path(CMS_BASE, 'fileloc.php');
 require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'functions.php');
-//require_once cms_join_path(CMS_INSTALL_BASE, 'translation.functions.php');
-CmsLanguage::set_current_module('installer');
-//CmsLanguage::translate('dummy',array(),'installer');
+require_once cms_join_path(CMS_INSTALL_BASE, 'translation.functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'classes', 'CMSInstaller.class.php');
 
 
@@ -49,7 +46,13 @@ if(! extension_loaded_or('session') )
 }
 @session_start();
 
+$cms_orig_tz = date_default_timezone_get();
+if( !$cms_orig_tz )
+  {
+    date_default_timezone_set('UTC'); // if it's not set, this will hide any warning.
+  }
 
+$_SESSION['cms_orig_tz'] = $cms_orig_tz;
 
 /* UNDOCUMENTED features... if this values are set in the session */
 /* Set DEBUG */
@@ -61,7 +64,6 @@ if( (isset($_GET['debug'])) || (isset($_SESSION['debug'])) )
 	@error_reporting(E_ALL);
 	$debug = true;
 }
-$debug = true;
 /* Set memory_limit without add in file */
 if( (isset($_GET['memory_limit'])) || (isset($_SESSION['memory_limit'])) )
 {
@@ -142,7 +144,10 @@ else if(! isset($_SESSION['test']))
 
 
 // First checks ok
-//require_once cms_join_path(CMS_BASE, 'include.php');
+require_once cms_join_path(CMS_BASE, 'include.php');
+$smarty = cmsms()->GetSmarty();
+$smarty->caching = false;
+$smarty->force_compile = true;
 
 if(isset($_POST['default_cms_lang']))
 {

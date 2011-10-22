@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: functions.php 226 2009-08-09 20:01:18Z alby $
+#$Id: functions.php 253 2010-03-16 18:45:57Z calguy1000 $
 
 function installerShowErrorPage( $error, $fragment='' )
 {
@@ -40,8 +40,8 @@ function installerHelpLanguage( $lang, $default_null=null )
 function installer_done_failed( $msg, $error )
 {
 	$test = new StdClass();
-	$test->error=$error;
-	$test->messages=array();
+	$test->error = $error;
+	$test->messages = array();
 
 	if(! $error)
 	{
@@ -59,12 +59,10 @@ function installer_done_failed( $msg, $error )
 function installer_create_tablesql( $dbdict, $table, $flds, $taboptarray )
 {
 	$_sqlarray = $dbdict->CreateTableSQL($table, $flds, $taboptarray);
-	try {
-		$_return = $dbdict->ExecuteSQLArray($_sqlarray);
-		return lang('install_creating_table', $table, lang('done'));
-	} catch (exception $e) {
-		return lang('install_creating_table', $table, lang('failed') .': '. $e->getMessage());
-	}
+	$_return = $dbdict->ExecuteSQLArray($_sqlarray);
+	$_ado_ret = ($_return == 2) ? lang('done') : lang('failed');
+
+	return lang('install_creating_table', $table, $_ado_ret);
 }
 
 
@@ -76,22 +74,21 @@ function installer_create_indexsql( $dbdict, $table, $arr_index )
 	$_indexflds = implode(',', $arr_index);
 
 	$_sqlarray = $dbdict->CreateIndexSQL($_indexname, $table, $_indexflds);
-	try {
-		$_return = $dbdict->ExecuteSQLArray($_sqlarray);
-		return lang('install_creating_index', $table, lang('done'));
-	} catch (exception $e) {
-		return lang('install_creating_index', $table, lang('failed') .': '. $e->getMessage());
-	}
+	$_return = $dbdict->ExecuteSQLArray($_sqlarray);
+	$_ado_ret = ($_return == 2) ? lang('done') : lang('failed');
+
+	return lang('install_creating_index', $table, $_ado_ret);
 }
 
 
 function installer_create_permission( $permission_name, $permission_text )
 {
-	global $gCms;
+	$gCms = cmsms();
 
 	$test = new StdClass();
-	$test->error=false;
-	$test->messages=array();
+	$test->error = false;
+	$test->messages = array();
+
 	$_msg = lang('create_permission', $permission_text);
 
 	$_return = cms_mapi_create_permission($gCms, $permission_name, $permission_text);
@@ -109,23 +106,31 @@ function installer_create_permission( $permission_name, $permission_text )
 }
 
 
+
+
+
+
 function upgrade_add_column_sql( $table, $schema )
 {
-	global $gCms;
-	$db =& $gCms->GetDB();
+	$gCms = cmsms();
+	$db = $gCms->GetDB();
 	$dbdict = NewDataDictionary($db);
 
 	$test = new StdClass();
-	$test->error=false;
-	$test->messages=array();
+	$test->error = false;
+	$test->messages = array();
+
 	$_msg = lang('add_column_sql', $table);
 
 	$_sqlarray = $dbdict->AddColumnSQL(cms_db_prefix().$table, $schema);
-	try {
-		$_return = $dbdict->ExecuteSQLArray($_sqlarray);
+	$_return = $dbdict->ExecuteSQLArray($_sqlarray);
+	if($_return == 2)
+	{
 		$test->messages[] = $_msg . lang('installer_done');
-	} catch (exception $e) {
-		$test->messages[] = $_msg . lang('installer_failed') .': '. $e->getMessage();
+	}
+	else
+	{
+		$test->messages[] = $_msg . lang('installer_failed');
 		$test->error = true;
 	}
 
@@ -135,14 +140,15 @@ function upgrade_add_column_sql( $table, $schema )
 
 function upgrade_installing_module( $module )
 {
-	global $gCms;
+	$gCms = cmsms();
 
 	$test = new StdClass();
-	$test->error=false;
-	$test->messages=array();
+	$test->error = false;
+	$test->messages = array();
+
 	$_msg = lang('installing_module', $module);
 
-	$modops =& $gCms->GetModuleOperations();
+	$modops = $gCms->GetModuleOperations();
 	$result = $modops->InstallModule($module, false);
 	if($result[0] == false)
 	{
@@ -161,20 +167,24 @@ function upgrade_installing_module( $module )
 
 function upgrade_schema_version( $version )
 {
-	global $gCms;
-	$db =& $gCms->GetDB();
+	$gCms = cmsms();
+	$db = $gCms->GetDB();
 
 	$test = new StdClass();
-	$test->error=false;
-	$test->messages=array();
+	$test->error = false;
+	$test->messages = array();
+
 	$_msg = lang('updating_schema_version', $version);
 
 	$query = 'UPDATE '.cms_db_prefix(). 'version SET version = ?';
-	try {
-		$_return = $db->Execute($query, $version);
+	$return = $db->Execute($query, $version);
+	if($return)
+	{
 		$test->messages[] = $_msg . lang('installer_done');
-	} catch (exception $e) {
-		$test->messages[] = $_msg . lang('installer_failed') .': '. $e->getMessage();
+	}
+	else
+	{
+		$test->messages[] = $_msg . lang('installer_failed');
 		$test->error = true;
 	}
 

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_recently_updated($params, &$smarty)
+function smarty_cms_function_recently_updated($params, &$smarty)
 {
   if(empty($params['number']))
     {
@@ -55,9 +55,9 @@ else {
 	$output = '<ul>';
 }
 
-global $gCms;
-$hm =& $gCms->GetHierarchyManager();
-$db = &$gCms->db;
+$gCms = cmsms();
+$hm = $gCms->GetHierarchyManager();
+$db = $gCms->GetDb();
 // Get list of most recently updated pages excluding the home page
 $q = "SELECT * FROM ".cms_db_prefix()."content WHERE (type='content' OR type='link')
 AND default_content != 1 AND active = 1 AND show_in_menu = 1 
@@ -70,9 +70,9 @@ if( !$dbresult )
 while ($dbresult && $updated_page = $dbresult->FetchRow())
 {
     $curnode =& $hm->getNodeById($updated_page['content_id']);
-    $curcontent =& $curnode->get_content();
+    $curcontent =& $curnode->GetContent();
     $output .= '<li>';
-    $output .= '<a href="'.$curcontent->get_url().'">'.$updated_page['content_name'].'</a>';
+    $output .= '<a href="'.$curcontent->GetURL().'">'.$updated_page['content_name'].'</a>';
     if ((FALSE == empty($updated_page['titleattribute'])) && ($showtitle=='true'))
       {
 	$output .= '<br />';
@@ -89,15 +89,18 @@ $output .= '</ul>';
 if (isset($params['css_class'])){
 		$output .= '</div>';
 		}
-		
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$output);
+		return;
+	}
 return $output;
 }
 
-function smarty_help_function_recently_updated() {
+function smarty_cms_help_function_recently_updated() {
   echo lang('help_function_recently_updated');
 }
 
-function smarty_about_function_recently_updated() {
+function smarty_cms_about_function_recently_updated() {
 	?>
 	<p>Author: Olaf Noehring &lt;http://www.team-noehring.de&gt;</p>
 	<p>Version: 1.1</p>

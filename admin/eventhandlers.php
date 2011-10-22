@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -21,8 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 $CMS_LOAD_ALL_PLUGINS=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 // function eventhandler_usertag_dropdown( $name, $selitem, $usertags )
@@ -82,15 +81,23 @@ $infoImg = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','
 echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('eventhandlers');
+$gCms = cmsms();
 
 switch( $action )
 {
 	case 'showeventhelp':
 	{
+	  $text = '';
 		if ($module == 'Core')
-			$text = Events::GetEventHelp($event);
+		  $text = Events::GetEventHelp($event);
 		else
-			$text = $gCms->modules[$module]['object']->GetEventHelp( $event );
+		  {
+		    $moduleobj = cms_utils::get_module($module);
+		    if( is_object($moduleobs) )
+		      {
+			$text = $moduleobj->GetEventHelp( $event );
+		      }
+		  }
 		echo "<h3>$event</h3>";
 		if( $text == "" )
 		{
@@ -100,6 +107,30 @@ switch( $action )
 		{
 			echo $text;
 		}
+		echo "<h4>".lang('eventhandler')."</h4>";
+		$hlist = Events::ListEventHandlers( $module, $event );
+		if ($hlist === false)
+			{
+			echo '<p>'.lang('none').'</p>';
+			}
+		else
+			{
+			echo '<ul>';
+			foreach ($hlist as $te)
+				{
+				echo '<li>'.$te['handler_order'].'. ';
+				if (!empty($te['tag_name']))
+					{
+					echo lang('user_tag').': '.$te['tag_name'];
+					}
+				else if (!empty($te['module_name']))
+					{
+					echo lang('module').': '.$te['module_name'];
+					}
+				echo '</li>';
+				}
+			echo '</ul>';
+			}
 		break;
 	}
 
@@ -138,6 +169,7 @@ switch( $action )
 		echo "  <tr>\n";
 		echo "    <th>".lang('originator')."</th>\n";
 		echo "    <th>".lang('event')."</th>\n";
+		echo "    <th>".lang('eventhandler')."</th>\n";
 		echo "    <th width='50%'>".lang('description')."</th>\n";
 		echo "    <th class=\"pageicon\">&nbsp;</th>\n";
 		echo "    <th class=\"pageicon\">&nbsp;</th>\n";
@@ -152,17 +184,16 @@ switch( $action )
 			{
 				if ($modulefilter == '' || $modulefilter == $oneevent['originator'])
 				{
-					echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+					echo "<tr class=\"".$curclass."\">\n";
 
 					$desctext = '';
 					if ($oneevent['originator'] == 'Core') {
 						$desctext = Events::GetEventDescription($oneevent['event_name']);
 						echo "    <td>".lang('core')."</td>\n";
 					}
-					else if (isset($gCms->modules[$oneevent['originator']])) {
-						$objinstance =& $gCms->modules[$oneevent['originator']]['object'];
-						$desctext = $objinstance->GetEventDescription($oneevent['event_name']);
-						echo "    <td>".$objinstance->GetFriendlyName()."</td>\n";
+					else if ( ($objinstance = cms_utils::get_module($oneevent['originator'])) ) {
+					  $desctext = $objinstance->GetEventDescription($oneevent['event_name']);
+					  echo "    <td>".$objinstance->GetFriendlyName()."</td>\n";
 					}
 					echo "    <td>";
 if ($access) 
@@ -174,6 +205,13 @@ if ($access)
 {
 					echo "</a>";
 }
+					echo "</td>\n";
+					echo "    <td>";
+					if ($oneevent['usage_count'] > 0)
+						{
+						echo "<a href=\"eventhandlers.php".$urlext."&amp;action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".
+							$oneevent['usage_count']."</a>";
+						}
 					echo "</td>\n";
 					echo "    <td>".$desctext."</td>\n";
 					echo "    <td class=\"icons_wide\"><a href=\"eventhandlers.php".$urlext."&amp;action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";

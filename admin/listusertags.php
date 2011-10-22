@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,13 +20,11 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 require_once(cms_join_path($dirname,'lib','html_entity_decode_utf8.php'));
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
-
 $plugin = '';
 if (isset($_GET['plugin'])) $plugin = $_GET['plugin'];
 
@@ -39,11 +37,21 @@ if (!$access) {
   die('Permission Denied');
   return;
 }
-
-$smarty = new CmsSmarty($gCms->config);
-CmsSmarty::load_plugins($smarty);
-
+$smarty = cmsms()->GetSmarty();
 include_once("header.php");
+
+function listudt_summarize($str,$numwords,$ets='...')
+{
+  $str = strip_tags($str);
+  $stringarray = explode(" ",$str);
+  if( $numwords >= count($stringarray) )
+    {
+      return $str;
+    }
+  $tmp = array_slice($stringarray,0,$numwords);
+  $tmp = implode(' ',$tmp).$ets;
+  return $tmp;
+}
 
 if (FALSE == empty($_GET['message'])) {
     echo $themeObject->ShowMessage(lang($_GET['message']));
@@ -56,6 +64,8 @@ echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 echo '<thead>';
 echo "<tr>\n";
 echo "<th>".lang('name')."</th>\n";
+echo "<th>".lang('description')."</th>\n";
+echo "<th class=\"pageicon\">&nbsp;</th>\n";
 echo "<th class=\"pageicon\">&nbsp;</th>\n";
 echo "<th class=\"pageicon\">&nbsp;</th>\n";
 echo "</tr>\n";
@@ -64,24 +74,29 @@ echo '<tbody>';
 
 $curclass = "row1";
 
-foreach($gCms->cmsplugins as $oneplugin)
-{
-	if (array_key_exists($oneplugin, $gCms->userplugins))
-	{
-		echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
-		echo "<td><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">$oneplugin</a></td>\n";
-		echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
-		echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-		echo "</a></td>\n";
-		echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneplugin),true)."');\">";
-		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-		echo "</a></td>\n";
+$tags = UserTagOperations::get_instance()->ListUserTags();
+if( count($tags) )
+  {
+    foreach( $tags as $oneplugin => $label  )
+      {
+	$tag = UserTagOperations::get_instance()->GetUserTag($oneplugin);
 
-		echo "</tr>\n";
+	echo "<tr class=\"".$curclass."\">\n";
+	echo "<td><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">$label</a></td>\n";
+	echo "<td>".listudt_summarize($tag['description'],20)."</td>\n";
+	echo "<td class=\"icons_wide\"><a href=\"runuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
+	echo $themeObject->DisplayImage('icons/system/run.gif', lang('run_udt'), '', '', 'systemicon')."</a></td>\n";
+	echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\">";
+	echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+	echo "</a></td>\n";
+	echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php".$urlext."&amp;userplugin_id=".$oneplugin."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('deleteconfirm', $oneplugin),true)."');\">";
+	echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+	echo "</a></td>\n";
+	echo "</tr>\n";
 
-		($curclass=="row1"?$curclass="row2":$curclass="row1");
-	}
-}
+	($curclass=="row1"?$curclass="row2":$curclass="row1");
+      }
+  }
 
 	?>
 	</tbody>

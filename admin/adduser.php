@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
@@ -30,9 +29,9 @@ $userid = get_userid();
 $access = check_permission($userid, 'Add Users');
 $assign_group_perm = check_permission($userid,'Modify Group Assignments');
 
-global $gCms;
-$db =& $gCms->GetDb();
-$groupops =& $gCms->GetGroupOperations();
+$gCms = cmsms();
+$db = $gCms->GetDb();
+$groupops = $gCms->GetGroupOperations();
 $group_list = $groupops->LoadGroups();
 
 $error = "";
@@ -115,14 +114,12 @@ if (isset($_POST["adduser"]))
 		$newuser->adminaccess = $adminaccess;
 		$newuser->SetPassword($password);
 
-		
 		Events::SendEvent('Core', 'AddUserPre', array('user' => &$newuser));
 
 		$result = $newuser->save();
 
 		if ($result)
 		{
-			
 			Events::SendEvent('Core', 'AddUserPost', array('user' => &$newuser));
 
 			# set some default preferences, based on the user creating this user
@@ -148,7 +145,8 @@ if (isset($_POST["adduser"]))
             }
 
 
-			audit($newuser->id, $newuser->username, 'Added User');
+			// put mention into the admin log
+			audit($newuser->id, 'Admin Username: '.$newuser->username, 'Added');
 			redirect("listusers.php".$urlext);
 		}
 		else
@@ -216,7 +214,7 @@ else {
       <?php
 	     echo '<div class="group_memberships clear"><input type="hidden" name="groups" value="1" />';
 
-		$userops =& $gCms->GetUserOperations();
+		$userops = $gCms->GetUserOperations();
 		$adminuser = ($userops->UserInGroup($userid,1) || $userid == 1);
         foreach($group_list as $thisGroup)
             {
@@ -240,8 +238,8 @@ else {
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="adduser" value="true" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" accesskey="s" value="<?php echo lang('submit')?>" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" />
+				<input class="pagebutton" type="submit" value="<?php echo lang('submit')?>" />
+				<input class="pagebutton" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
 			</p>
 		</div>
 	</form>

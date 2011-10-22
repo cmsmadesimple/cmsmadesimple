@@ -51,14 +51,14 @@ PATH_PROJECT=$PWD/lib/classes
 #  *
 #  * @var               string PATH_PHPDOC
 #  */
-PATH_PHPDOC=/usr/src/phpdocumentor-1.3.0rc3/phpdoc
+PATH_PHPDOC=/usr/bin/phpdoc
 
 #/**
 #  * where documentation will be put
 #  *
 #  * @var               string PATH_DOCS
 #  */
-PATH_DOCS=$PWD/docs
+PATH_DOCS=$PWD/apidoc
 
 #/**
 #  * what outputformat to use (html/pdf)

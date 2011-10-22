@@ -7,8 +7,12 @@
 		<p class="pageinput">{$input_url}<br/>{$extratext_url}</p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">{$prompt_onlynewest}:</p>
-		<p class="pageinput">{$input_onlynewest}</p>
+		<p class="pagetext">{$prompt_latestdepends}:</p>
+		<p class="pageinput">{$input_latestdepends}<br/>{$info_latestdepends}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">{$prompt_disable_caching}:</p>
+		<p class="pageinput">{$input_disable_caching}<br/>{$info_disable_caching}</p>
 	</div>
 	<div class="pageoverflow">
 		<p class="pagetext">{$prompt_chunksize}:</p>

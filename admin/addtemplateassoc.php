@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -51,8 +51,7 @@
 	
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 
@@ -85,7 +84,7 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
 #******************************************************************************
 	if ($access)
 	{
-	  global $gCms; $db =& $gCms->GetDb();
+	  $db = cmsms()->GetDb();
 
           # first check if this association already exists
 	  $query = "SELECT * FROM ".cms_db_prefix().
@@ -130,7 +129,8 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
 
 			if ($result)
 			{
-				audit($id, (isset($name)?$name:""), 'Added Stylesheet Association');
+				// put mention into the admin log
+				audit($id, 'Stylesheet Association: '.(isset($name)?$name:""), 'Added');
 
 				if ("template" == $type)
 				{

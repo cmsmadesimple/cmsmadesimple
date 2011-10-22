@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -35,15 +35,14 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
 $gCms = cmsms();
 $styleops = $gCms->GetStylesheetOperations();
-$db = cms_db();
+$db = $gCms->GetDb();
 $dateformat = trim(get_preference(get_userid(),'date_format_string','%x %X')); 
 		  if( empty($dateformat) )
 		   {
@@ -146,8 +145,7 @@ if ($access)
 			//$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?, css_text = ?, media_type = ?, modified_date = ? WHERE css_id = ?";
 			//$result = $db->Execute($query,array($css_name, $css_text, $media_type, $db->DBTimeStamp(time()), $css_id));
 			
-			global $gCms;
-			$styleops =& $gCms->GetStylesheetOperations();
+		  $styleops = cmsms()->GetStylesheetOperations();
 			
 			$onestylesheet = $styleops->LoadStylesheetByID($css_id);
 			$onestylesheet->name = $css_name;
@@ -170,7 +168,9 @@ if ($access)
 			$result = $onestylesheet->Save();
 
 			// Update the css hash
-			$config =& $gCms->GetConfig();
+			// deprecated:  this was used by the stylesheet.php function which we no longer distribute
+			// as of CMSMS 1.10.
+			$config = $gCms->GetConfig();
 			$hashfile = cms_join_path($config['root_path'],'tmp','cache','csshash.dat');
 			$md5sum = md5($css_text);
 			$csshash = csscache_csvfile_to_hash($hashfile);
@@ -185,7 +185,8 @@ if ($access)
 				
 				Events::SendEvent('Core', 'EditStylesheetPost', array('stylesheet' => &$onestylesheet));
 
-				audit($css_id, $css_name, 'Edited CSS');
+				// put mention into the admin log
+				audit($css_id, 'Stylesheet: '.$css_name, 'Changed');
 
 				# we now have to check which templates are associated with this CSS and update their modified date.
 				$cssquery = "SELECT assoc_to_id FROM ".cms_db_prefix()."css_assoc
@@ -276,77 +277,49 @@ if (isset($_POST["apply"]))
     }
 
 $addlScriptSubmit = '';
-foreach (array_keys($gCms->modules) as $moduleKey)
-{
-	$module =& $gCms->modules[$moduleKey];
-	if (!($module['installed'] && $module['active'] && $module['object']->IsSyntaxHighlighter()))
-	{
-		continue;
-	}
+$syntaxmodule = get_preference(get_userid(FALSE),'syntaxhighlighter');
+if( $syntaxmodule && ($module = ModuleOperations::get_instance()->get_module_instance($syntaxmodule)) )
+  {
+    if( $module->IsSyntaxHighlighter() && $module->SyntaxActive() )
+      {
+	$addlScriptSubmit .= $module->SyntaxPageFormSubmit();
+      }
+  }
 
-	if ($module['object']->SyntaxActive() or get_preference(get_userid(), 'syntaxhighlighter') == $module['object']->GetName())
-	{
-		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
-	}
-}
-
+$closestr = cms_html_entity_decode(lang('close'));
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
-  // <![CDATA[
-window.Edit_CSS_Apply = function(button)
-{
-	$addlScriptSubmit
-	$('Edit_CSS_Result').innerHTML = '';
-	button.disabled = 'disabled';
-
-	var data = new Array();
-	data.push('ajax=1');
-	data.push('apply=1');
-	var elements = Form.getElements($('Edit_CSS'));
-	for (var cnt = 0; cnt < elements.length; cnt++)
-	{
-		var elem = elements[cnt];
-		if (elem.type == 'submit')
-		{
-			continue;
-		}
-		var query = Form.Element.serialize(elem);
-		data.push(query);
-	}
-
-	new Ajax.Request(
-		'{$_SERVER['REQUEST_URI']}'
-		, {
-			method: 'post'
-			, parameters: data.join('&')
-			, onSuccess: function(t)
-			{
-				button.removeAttribute('disabled');
-				var response = t.responseXML.documentElement.childNodes[0];
-				var details = t.responseXML.documentElement.childNodes[1];
-				if (response.textContent) { response = response.textContent; } else { response = response.text; } 
-				if (details.textContent) { details = details.textContent; } else { details = details.text; }
-
-				var htmlShow = '';
-				if (response == 'Success')
-				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
-				}
-				else
-				{
-					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details + '<\/div>';
-				}
-				$('Edit_CSS_Result').innerHTML = htmlShow;
-			}
-			, onFailure: function(t)
-			{
-				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
-			}
-		}
-	);
-	return false;
-}
-  // ]]>
+// <![CDATA[
+jQuery(document).ready(function(){
+  jQuery('input[name=apply]').click(function(){
+    $addlScriptSubmit
+    var data = jQuery('#Edit_CSS').find('input:not([type=submit]), select, textarea').serializeArray();
+    data.push({ 'name': 'ajax', 'value': 1});
+    data.push({ 'name': 'apply', 'value': 1 });
+    $.post('{$_SERVER['REQUEST_URI']}',data,function(resultdata,text){
+	     var resp = $(resultdata).find('Response').text();
+	     var details = $(resultdata).find('Details').text();
+             var htmlShow = '';
+	     if( resp == 'Success' )
+	       {
+		 htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
+		 $('input[name=cancel]').fadeOut();
+		 $('input[name=cancel]').attr('value','{$closestr}');
+		 $('input[name=cancel]').fadeIn();
+	       }
+             else
+               {
+		 htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
+		 htmlShow += details;
+		 htmlShow += '<\/ul><\/div>';
+               }
+	     $('#Edit_CSS_Result').html(htmlShow);
+	   },
+	   'xml');
+    return false;
+  });
+});
+// ]]>
 </script>
 EOSCRIPT;
 
@@ -379,25 +352,25 @@ else
         </div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" onclick="return window.Edit_CSS_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			</p>
+			<div class="pageinput">
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
+				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" />
+			</div>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('name')?>:</p>
-			<p class="pageinput">
+			<p class="pagetext">*<?php echo lang('name')?>:</p>
+			<div class="pageinput">
 				<input type="hidden" name="orig_css_name" value="<?php echo $orig_css_name?>" />
 				<input type="text" class="name" name="css_name" maxlength="255" value="<?php echo $css_name?>" />				
-			</p>
+			</div>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('content')?>:</p>
-			<p class="pageinput">
+			<p class="pagetext">*<?php echo lang('content')?>:</p>
+			<div class="pageinput">
 			  <?php echo create_textarea(false, $css_text, 'css_text', 'pagebigtextarea', 'css_text', '', '', '80', '15','','css')?>
 			<!--  <textarea class="pagebigtextarea" name="css_text"><_?php echo $css_text?></textarea>-->
-			</p>
+			</div>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
@@ -408,7 +381,7 @@ else
 
 
 if (!is_array($media_type)) {
-  $media_type = split (", " , $media_type);
+  $media_type = explode(", " , $media_type);
 }
 
 $existingtypes = array("all", 
@@ -451,19 +424,19 @@ $existingtypes = array("all",
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
-			<p class="pageinput"><?php echo  strftime( $dateformat , strtotime($lastmodified) )  ?></p>
+			<div class="pageinput"><?php echo  strftime( $dateformat , strtotime($lastmodified) )  ?></div>
 		</div>		
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
+			<div class="pageinput">
 				<input type="hidden" name="css_id" value="<?php echo $css_id?>" />
 				<input type="hidden" name="from" value="<?php echo $from?>" />
 				<input type="hidden" name="templateid" value="<?php echo $templateid?>" />
 				<input type="hidden" name="editcss" value="true" />
-				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" onclick="return window.Edit_CSS_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			</p>
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
+				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" />
+			</div>
 		</div>
 	</form>
 </div>

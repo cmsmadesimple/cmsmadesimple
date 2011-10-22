@@ -24,7 +24,7 @@
            {/if}
 	{/foreach}
 	</select>&nbsp;
-        <input type="submit" name="filter" accesskey="f" value="{$apply}"/>
+        <input type="submit" name="filter" value="{$apply}"/>
 </form>
 </div><br />
 
@@ -34,7 +34,7 @@
 </div>
 <div class="pageoverflow">
   <p class="pageoptions">
-    {$hidden}
+    {$hidden}{$hidden2}
     {$submit} {$cancel}
   </p>
 </div>
@@ -43,14 +43,14 @@
   <tr>
     <th>{$title_permission}</th>
 	{foreach from=$group_list item=thisgroup}
-		{if $thisgroup->id != -1}<th class="g{$thisgroup->id}">{$thisgroup->name}<input type="hidden" name="pg_0_{$thisgroup->id}" value="-1"/></th>{/if}
+		{if $thisgroup->id != -1}<th class="g{$thisgroup->id}">{$thisgroup->name}</th>{/if}
 	{/foreach}
  </tr>
   </thead>
   <tbody>
   {foreach from=$perms item=perm}
     {cycle values='row1,row2' assign='currow'}
-    <tr class="{$currow}" onmouseover="this.className='{$currow}hover';" onmouseout="this.className='{$currow}';">
+    <tr class="{$currow}">
  		<td>{$perm->name}</td>
 		{foreach from=$group_list item=thisgroup}
 			{if $thisgroup->id != -1}

@@ -2,8 +2,8 @@
 /**
  * Smarty plugin
  * @package Smarty
- * @subpackage PluginsModifier
-*/
+ * @subpackage plugins
+ */
 
 
 /**
@@ -42,4 +42,7 @@ function _smarty_regex_replace_check($search)
     }
     return $search;
 }
+
+/* vim: set expandtab: */
+
 ?>

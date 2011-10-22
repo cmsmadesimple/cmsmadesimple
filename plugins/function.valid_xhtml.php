@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_valid_xhtml($params, &$smarty)
+function smarty_cms_function_valid_xhtml($params, &$smarty)
 {
 
     $link_url = 
@@ -80,16 +80,19 @@ function smarty_function_valid_xhtml($params, &$smarty)
 	? '<img src="' . $image_src . '" alt="' . $image_alt . '"' . $image_size_html . $image_class_html . ' border="0" />' 
 	: $link_text;
     $html .= '</a>';
-    
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$html);
+		return;
+	}
     return $html;
 }
 
-function smarty_help_function_valid_xhtml() 
+function smarty_cms_help_function_valid_xhtml() 
 {
   echo lang('help_function_valid_xhtml');
 }
 
-function smarty_about_function_valid_xhtml() 
+function smarty_cms_about_function_valid_xhtml() 
 {
 ?>
 <p>Author: Dick Ittmann&lt;dittmann2@users.sourceforge.net&gt;</p>

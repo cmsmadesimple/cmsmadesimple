@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,13 +16,19 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_repeat($params, &$smarty)
+function smarty_cms_function_repeat($params, &$smarty)
 {
-	return (isset($params['times']) && intval($params['times']) > 0 ? str_repeat($params['string'], $params['times']) : '');
+	$out=(isset($params['times']) && intval($params['times']) > 0 ? str_repeat($params['string'], $params['times']) : '');
+	
+	if( isset($params['assign']) ){
+		$smarty->assign(trim($params['assign']),$out);
+		return;
+	}
+	return $out;
 	#return str_repeat($params['string'], $params['times']);
 }
 
-function smarty_help_function_repeat()
+function smarty_cms_help_function_repeat()
 {
   echo lang('help_function_repeat');
 }

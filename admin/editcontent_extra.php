@@ -3,47 +3,35 @@
 function ajaxpreview($params)
 {
   $gCms = cmsms();
-  CmsContentOperations::load_content_types();
+	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+	$config = $gCms->GetConfig();
+	$contentops = $gCms->GetContentOperations();
 
-  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-  $config = cms_config();
-  
-  $content_type = $params['content_type'];
-  $contentobj = UnserializeObject($params["serialized_content"]);
-  if (get_class($contentobj) != $content_type)
-    {
-      copycontentobj($contentobj, $content_type, $params);
-    }
+	$content_type = $params['content_type'];
 
-  $editortype = CmsContentOperations::get_content_editor_type($contentobj);
-  $editor = new $editortype($contentobj);
-  $editor->fill_from_form_data($params);
+	$contentobj = UnserializeObject($params["serialized_content"]);
+	if (strtolower(get_class($contentobj)) != strtolower($content_type))
+	{
+		copycontentobj($contentobj, $content_type, $params);
+	}
+	updatecontentobj($contentobj, true, $params);
+	$tmpfname = createtmpfname($contentobj);
+	// str_replace is because of stupid windows machines.... when will they die.
+	$_SESSION['cms_preview'] = str_replace('\\','/',$tmpfname);
+	$tmpvar = substr(str_shuffle(md5($tmpfname)),-3);
+	$url = $config["root_url"].'/index.php?'.$config['query_var']."=__CMS_PREVIEW_PAGE__&r=$tmpvar"; // temporary
 
-
-  $tmpfname = createtmpfname($contentobj);
-  // str_replace is because of stupid windows machines.... when will they die.
-  $_SESSION['cms_preview'] = str_replace('\\','/',$tmpfname);
-  $tmpvar = substr(str_shuffle(md5($tmpfname)),-3);
-  $url = $config["root_url"].'/index.php?'.$config['query_var']."=__CMS_PREVIEW_PAGE__&r=$tmpvar"; // temporary
-	
-  $objResponse = new CmsAjaxResponse();
-  $objResponse->replace("#previewframe", "src", $url);
-  $objResponse->replace("#serialized_content", "value", SerializeObject($contentobj));
-  $count = 0;
-//   foreach ($contentobj->TabNames() as $tabname)
-//     {
-//       $objResponse->script("jQuery('#editteb{$count}').removeClass('active');");
-//       $objResponse->script("jQuery('#edittab{$count}_c').removeClass('active');");
-//       $objResponse->script("jQuery('#edittab{$count}_c').hide()");
-//       //$objResponse->script("Element.removeClassName('editab".$count."', 'active');Element.removeClassName('editab".$count."_c', 'active');$('editab".$count."_c').style.display = 'none';");
-//       $count++;
-//     }
-
-  $objResponse->script("jQuery('#edittabpreview').addClass('active');");
-  $objResponse->script("jQuery('#edittabpreview_c').addClass('active');");
-  $objResponse->script("jQuery('#edittabpreview_c').show();");
-  //$objResponse->script("Element.addClassName('edittabpreview', 'active');Element.addClassName('edittabpreview_c', 'active');$('edittabpreview_c').style.display = '';");
-  return $objResponse->get_result();
+	$objResponse = new xajaxResponse();
+	$objResponse->assign("previewframe", "src", $url);
+	$objResponse->assign("serialized_content", "value", SerializeObject($contentobj));
+	$count = 0;
+	foreach ($contentobj->TabNames() as $tabname)
+	{
+		$objResponse->script("Element.removeClassName('editab".$count."', 'active');Element.removeClassName('editab".$count."_c', 'active');$('editab".$count."_c').style.display = 'none';");
+		$count++;
+	}
+	$objResponse->script("Element.addClassName('edittabpreview', 'active');Element.addClassName('edittabpreview_c', 'active');$('edittabpreview_c').style.display = '';");
+	return $objResponse;
 }
 
 function updatecontentobj(&$contentobj, $preview = false, $params = null)
@@ -52,10 +40,10 @@ function updatecontentobj(&$contentobj, $preview = false, $params = null)
 		$params = $_POST;
 
 	$userid = get_userid();
-	$adminaccess = check_ownership($userid, $contentobj->Id()) || check_permission($userid, 'Modify Any Page');
+//	$adminaccess = check_ownership($userid, $contentobj->Id()) || check_permission($userid, 'Modify Any Page');
 		
 	#Fill contentobj with parameters
-	$contentobj->FillParams($params);
+	$contentobj->FillParams($params,true);
 	if ($preview)
 	{
 		$error = $contentobj->ValidateData();
@@ -86,25 +74,45 @@ function updatecontentobj(&$contentobj, $preview = false, $params = null)
 
 function copycontentobj(&$contentobj, $content_type, $params = null)
 {
-	global $gCms;
+  $contentops = cmsms()->GetContentOperations();
 	
 	if ($params == null)
 		$params = $_POST;
 
-	$tmpobj = CmsContentOperations::clone_content_as($contentobj,$content_type);
+	$newcontenttype = strtolower($content_type);
+	$tmpobj = $contentops->CreateNewContent($newcontenttype);
+	$tmpobj->SetId($contentobj->Id());
+	$tmpobj->SetName($contentobj->Name());
+	$tmpobj->SetMenuText($contentobj->MenuText());
+	$tmpobj->SetTemplateId($contentobj->TemplateId());
+	$tmpobj->SetParentId($contentobj->ParentId());
+	$tmpobj->SetOldParentId($contentobj->OldParentId());
+	$tmpobj->SetAlias($contentobj->Alias());
+	$tmpobj->SetOwner($contentobj->Owner());
+	$tmpobj->SetActive($contentobj->Active());
+	$tmpobj->SetItemOrder($contentobj->ItemOrder());
+	$tmpobj->SetOldItemOrder($contentobj->OldItemOrder());
+	$tmpobj->SetShowInMenu($contentobj->ShowInMenu());
+	$tmpobj->SetCachable($contentobj->Cachable());
+	$tmpobj->SetHierarchy($contentobj->Hierarchy());
+	$tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
+	$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
+	$tmpobj->Properties();
 	$contentobj = $tmpobj;
+	$contentobj->FillParams($params);
 }
 
 function createtmpfname(&$contentobj)
 {
-	global $gCms;
-	$config =& $gCms->GetConfig();
-	$templateops =& $gCms->GetTemplateOperations();
+  $gCms = cmsms();
+	$config = $gCms->GetConfig();
+	$templateops = $gCms->GetTemplateOperations();
 
 	$data["content_id"] = $contentobj->Id();
 	$data['content_type'] = $contentobj->Type();
 	$data["title"] = $contentobj->Name();
 	$data["menutext"] = $contentobj->MenuText();
+	$data["content"] = $contentobj->Show();
 	$data["template_id"] = $contentobj->TemplateId();
 	$data["hierarchy"] = $contentobj->Hierarchy();
 	

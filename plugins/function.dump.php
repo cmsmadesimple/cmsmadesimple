@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_dump($params, &$smarty)
+function smarty_cms_function_dump($params, &$smarty)
 {
   $ignore = array('cms','smarty','db','config','params','param_map','langhash','xml_exclude_files','xmldtd');
 
@@ -153,7 +153,7 @@ function smarty_function_dump($params, &$smarty)
     }
 
 
-  global $gCms;
+  $gCms = cmsms();
   // get the item name (without any $)
   if( !isset($params['item']) )
     {
@@ -249,16 +249,21 @@ function smarty_function_dump($params, &$smarty)
     {
       $str .= $obj.'<br/>';
     }
-  return $str.'</pre>';
+  $str.='</pre>';
+	if( isset($params['assign']) ){
+	    $smarty->assign(trim($params['assign']),$str);
+	    return;
+    }
+	return $str;
 }
 
 
-function smarty_help_function_dump() {
+function smarty_cms_help_function_dump() {
   echo lang('help_function_dump');
 }
 
 
-function smarty_about_function_dump() {
+function smarty_cms_about_function_dump() {
 	?>
 	<p>Author: Robert Campbell&lt;calguy1000@hotmail.com&gt;</p>
 	<p>Version: 1.0</p>

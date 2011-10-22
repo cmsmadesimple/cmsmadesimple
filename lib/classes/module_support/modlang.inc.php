@@ -1,33 +1,42 @@
-<?php
-# CMS - CMS Made Simple
-# (c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
-# This project's homepage is: http://cmsmadesimple.org
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+#CMS - CMS Made Simple
+#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
-# BUT withOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
-# GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA	02111-1307	USA
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id$
 
 /**
- * Methods for modules to do language related functions
+ * Loads appropriate language file if necessary.
  *
  * @since		1.0
- * @package		CMS
+ * @package CMS
+ * @license GPL
  */
 
+/**
+ * Loads appropriate language file if necessary. Returns translated string value for a module string.
+ * Included in the module class when needed.
+ *
+ * @param mixed $modinstance pointer to the module instance
+ * @since		1.0
+ * @return string translated 
+ */
 function cms_module_Lang(&$modinstance)
 {
-	global $gCms;
+	$gCms = cmsms();
 
 	$name = '';
 	$params = array();
@@ -50,24 +59,17 @@ function cms_module_Lang(&$modinstance)
 		return '';
 	}
 
-	if( isset($gCms->variables['desired_language']) )
-	  {
-	    // this variable overrides the modules default language.
-	    // or anything set in the lang parameter for the module.
-	    $modinstance->SetModuleLanguage($gCms->variables['desired_language']);
-	  }
-	else if ($modinstance->GetModuleLanguage() == '' && 
-		 isset($gCms->current_language))
+	if ($modinstance->curlang == '')
 	{
-	  $modinstance->SetModuleLanguage($gCms->current_language);
+		$modinstance->curlang = cms_current_language();
 	}
-	$ourlang = $modinstance->GetModuleLanguage();
+	$ourlang = $modinstance->curlang;
 
 	#Load the language if it's not loaded
 	if (!isset($modinstance->langhash[$ourlang]) || !is_array($modinstance->langhash[$ourlang]) || 
 	    (is_array($modinstance->langhash[$ourlang]) && count(array_keys($modinstance->langhash[$ourlang])) == 0))
 	{
-	  $dir = CmsConfig::get('root_path');
+		$dir = $gCms->config['root_path'];
 
 		$lang = array();
 

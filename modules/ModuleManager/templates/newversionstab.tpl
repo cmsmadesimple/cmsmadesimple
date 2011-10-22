@@ -6,12 +6,13 @@
 <p class="pageerror">{$message}</p>
 {/if}
 
-{if $itemcount > 0}
+{if isset($itemcount) && $itemcount > 0}
 <table cellspacing="0" class="pagetable">
 	<thead>
 		<tr>
 			<th width="20%">{$nametext}</th>
 			<th>{$vertext}</th>
+			<th>{$haveversion}</th>
 			<th>{$sizetext}</th>
 			<th>{$statustext}</th>
 			<th>&nbsp;</th>
@@ -24,6 +25,7 @@
 		<tr class="{$entry->rowclass}">
 			<td>{$entry->name}</td>
 			<td>{$entry->version}</td>
+			<td>{if isset($entry->haveversion)}{$entry->haveversion}{/if}</td>
 			<td>{$entry->size}</td>
 			<td>{$entry->status}</td>
 			<td>{$entry->dependslink}</td>
@@ -33,11 +35,13 @@
 	{if $entry->description}
 		<tr class="{$entry->rowclass}">
                 	<td>&nbsp;</td>
-                	<td colspan="6">{$entry->description}</td>
+                	<td colspan="7">{$entry->description}</td>
 	        </tr>
 	{/if}
 	 
 {/foreach}
 	</tbody>
 </table>
+{else}
+<p>{$nvmessage}</p>
 {/if}

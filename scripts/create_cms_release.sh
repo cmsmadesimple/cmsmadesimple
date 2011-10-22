@@ -20,11 +20,21 @@ cleanup()
 #
 # Setup
 #
+_htaccess=`cat <<EOT
+# To deny PHPs
+<Files ~ "\.(php|php3|php4|php5|phtml|pl|cgi)$">                                                                              
+  order deny,allow                                                                                                            
+  deny from all                                                                                                               
+</Files>  
+EOT
+`
+
+_htaccessdirs='tmp lib uploads'
 _this=`basename $0`
 _svn=http://svn.cmsmadesimple.org/svn/cmsmadesimple/branches/1.6.x
 _workdir=/tmp/$_this.$$
 _owd=`pwd`
-_rmfiles='CHECKLIST scripts build config.php autogen.sh mpd.sql mysql.sql makedoc.sh cleardb.sh generatedump.php images/cms/*.svg svn-propset* find-mime admin/lang/*sh admin/lang/*.bat admin/lang/*pl admin/editconfig.php lib/adodb lib/preview.functions.php plugins/cache release-cleanup.sh blank.htm';
+_rmfiles='CHECKLIST scripts build config.php autogen.sh mpd.sql mysql.sql makedoc.sh cleardb.sh generatedump.php images/cms/*.svg svn-propset* find-mime admin/lang/*sh admin/lang/*.bat admin/lang/*pl admin/editconfig.php lib/adodb lib/preview.functions.php plugins/cache release-cleanup.sh blank.htm .gitignore';
 _cmsurl='http://svn.cmsmadesimple.org/svn/cmsmadesimple';
 # basedir    (if set, specify the base directory to put generated releases).
 # nohtaccess (if set, disable htaccess generation)
@@ -90,7 +100,7 @@ while [ $# -gt 0 ]; do
       continue
       ;;
     '--nohtaccess' )
-      noremove=1
+      nohtaccess=1
       shift 1
       continue
       ;;
@@ -208,6 +218,16 @@ if [ ${noindex:-notset} = notset ]; then
   echo "Create index.html files"
   find * -type d -exec create_index_html.sh {} \;
 fi
+if [ ${nohtaccess:-notset} = notset ]; then
+  echo "Create .htaccess files";
+  for _f in $_htaccessdirs ; do
+    if [ ! -f ${_f}/.ntaccess ]; then
+      echo $_htaccess > ${_f}/.htaccess 2>&1
+    fi
+  done
+else
+  find . -name '.htaccess' -exec rm -f {} \; 2>&1
+fi
 
 # Clean up permissions
 if [ ${noperms:-notset} = notset ]; then
@@ -229,15 +249,15 @@ tar zcf $_destdir/cmsmadesimple-$_version-full.tar.gz .
 echo "Creating language packs"
 create_lang_packs.sh -s ${_workdir} -d $_destdir >/dev/null
 
-# Create the base package checksum file
+# Create the base (english) package checksum file
 echo "Creating checksum file again"
-create_checksum_file $_destdir/cmsmadesimple-$_version-base-checksum.dat
+create_checksum_file $_destdir/cmsmadesimple-$_version-english-checksum.dat
 
 # Create the base package
 # it is created after the langpacks are created, because the langpack
 # generation removes files from the working directory.
-echo "Creating base package"
-tar zcf $_destdir/cmsmadesimple-$_version-base.tar.gz .
+echo "Creating base (english only) package"
+tar zcf $_destdir/cmsmadesimple-$_version-english.tar.gz .
 
 # Create a final checksum data file
 cd $_destdir

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,15 +20,13 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 require_once("../lib/classes/class.template.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
-
 $gCms = cmsms();
-$db = cms_db();
+$db = $gCms->GetDb();
 
 $error = "";
 
@@ -103,7 +101,6 @@ $access = check_permission($userid, 'Modify Templates');
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
-$gCms = cmsms();
 $templateops = $gCms->GetTemplateOperations();
 
 if ($access)
@@ -147,7 +144,8 @@ if ($access)
 
 				Events::SendEvent('Core', 'EditTemplatePost', array('template' => &$onetemplate));
 
-				audit($template_id, $onetemplate->name, 'Edited Template');
+				// put mention into the admin log
+				audit($template_id, 'HTML-template: '.$onetemplate->name, 'Edited');
 				if (!$apply)
 				{
 				  switch($from)
@@ -212,81 +210,46 @@ if (strlen($template) > 0)
     }
 
 $addlScriptSubmit = '';
-foreach (array_keys($gCms->modules) as $moduleKey)
-{
-	$module =& $gCms->modules[$moduleKey];
-	if (!($module['installed'] && $module['active'] && $module['object']->IsSyntaxHighlighter()))
-	{
-		continue;
-	}
+$modobj = cms_utils::get_syntax_highlighter_module();
+if( is_object($modobj) )
+  {
+    $addlScriptSubmit = $modobj->SyntaxPageFormSubmit();
+  }
 
-	if ($module['object']->SyntaxActive() or get_preference(get_userid(), 'syntaxhighlighter') == $module['object']->GetName())
-	{
-		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
-	}
-}
-
+$closestr = cms_html_entity_decode(lang('close'));
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
-  // <![CDATA[
-window.Edit_Template_Apply = function(button)
-{
-	$addlScriptSubmit
-	$('Edit_Template_Result').innerHTML = '';
-	button.disabled = 'disabled';
-
-	var data = new Array();
-	data.push('ajax=1');
-	data.push('apply=1');
-	// Have to handle some of the serialization here (rather than Form.serialize()) because the cancel button can break things.
-	var elements = Form.getElements($('Edit_Template'));
-	for (var cnt = 0; cnt < elements.length; cnt++)
-	{
-		var elem = elements[cnt];
-		if (elem.type == 'submit')
-		{
-			// Leave off all submit buttons
-			continue;
-		}
-		var query = Form.Element.serialize(elem);
-		data.push(query);
-	}
-
-	new Ajax.Request(
-		'{$_SERVER['REQUEST_URI']}'
-		, {
-			method: 'post'
-			, parameters: data.join('&')
-			, onSuccess: function(t) 
-			{
-				button.removeAttribute('disabled');
-				var response = t.responseXML.documentElement.childNodes[0];
-				var details = t.responseXML.documentElement.childNodes[1];
-				if (response.textContent) { response = response.textContent; } else { response = response.text; } 
-				if (details.textContent) { details = details.textContent; } else { details = details.text; }
-				
-				var htmlShow = '';
-				if (response == 'Success')
-				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
-				}
-				else
-				{
-					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
-					htmlShow += details;
-					htmlShow += '<\/ul><\/div>';
-				}
-				$('Edit_Template_Result').innerHTML = htmlShow;
-			}
-			, onFailure: function(t) 
-			{
-				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
-			}
-		}
-	);
-	return false;
-}
-  // ]]>
+// <![CDATA[
+jQuery(document).ready(function(){
+  $addlScriptSubmit
+  jQuery('input[name=apply]').click(function(){
+    var data = jQuery('#Edit_Template').find('input:not([type=submit]), select, textarea').serializeArray();
+    data.push({ 'name': 'ajax', 'value': 1});
+    data.push({ 'name': 'apply', 'value': 1 });
+    $.post('{$_SERVER['REQUEST_URI']}',data,function(resultdata,text){
+	     var resp = $(resultdata).find('Response').text();
+	     var details = $(resultdata).find('Details').text();
+             var htmlShow = '';
+	     if( resp == 'Success' )
+	       {
+		 htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
+		 $('input[name=cancel]').fadeOut();
+		 $('input[name=cancel]').attr('value','{$closestr}');
+		 $('input[name=cancel]').fadeIn();
+	       }
+             else
+               {
+		 htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
+		 htmlShow += details;
+		 htmlShow += '<\/ul><\/div>';
+               }
+	     $('#Edit_Template_Result').html(htmlShow);
+	   },
+	   'xml');
+    return false;
+  });
+});
+// ]]>
 </script>
 EOSCRIPT;
 include_once("header.php");
@@ -294,9 +257,9 @@ print '<div id="Edit_Template_Result"></div>';
 
 $submitbtns = '
 <!--	<input type="submit" name="preview" value="'.lang('preview').'" class="button" onmouseover="this.className=\'buttonHover\'" onmouseout="this.className=\'button\'" /> -->
-	<input type="submit" accesskey="s" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
-	<input type="submit" accesskey="c" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
-	<input type="submit" onclick="return window.Edit_Template_Apply(this);" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
+	<input type="submit" value="'.lang('submit').'" class="pagebutton" />
+	<input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" />
+	<input type="submit" name="apply" value="'.lang('apply').'" class="pagebutton" />
 ';
 
 if (!$access)
@@ -350,34 +313,34 @@ else
         </div>
 			<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
+			<div class="pageinput">
 			      <?php echo $submitbtns; ?><a href="listcssassoc.php<?php echo $urlext ?>&amp;type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>
-			</a><?php echo " [" . lang('new_window') . "]" ;?></p>
+			</a><?php echo " [" . lang('new_window') . "]" ;?></div>
             </div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" class="name" name="template" maxlength="255" value="<?php echo $template?>" /></p>
+			<div class="pageinput"><input type="text" class="name" name="template" maxlength="255" value="<?php echo $template?>" /></div>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('content')?>:</p>
-			<p class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagebigtextarea', 'content', $encoding, '', '80', '15','','html')?></p>
+			<div class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagebigtextarea', 'content', $encoding, '', '80', '15','','html')?></div>
 		</div>
 		<?php if ($templateops->StylesheetsUsed() > 0) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('stylesheet')?>:</p>
-			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagebigtextarea', '', $encoding, '', '80', '15','','css')?></p>
+			<div class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagebigtextarea', '', $encoding, '', '80', '15','','css')?></div>
 		</div>
 	        <?php } if ($default == 0 ) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
-			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"") ?> /> </p>
+			<div class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"") ?> /> </div>
 		</div>
    	        <?php } else { ?>
 	          <div><input type="hidden" name="active" value="<?php echo $active; ?>">
   	        <?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
-			<p class="pageinput">
+			<div class="pageinput">
 			<?php 
 				$dateformat = trim(get_preference(get_userid(),'date_format_string','%x %X')); 
 					if( empty($dateformat) )
@@ -385,23 +348,23 @@ else
 					 $dateformat = '%x %X';
 					}
 				    echo strftime( $dateformat ,$lastedited); 
-             ?></p>
+             ?></div>
 		</div>
 		<?php if( $encoding != "" ){ ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('encoding')?>:</p>
-			<p class="pageinput"><?php echo create_encoding_dropdown('encoding', $encoding) ?></p>
+			<div class="pageinput"><?php echo create_encoding_dropdown('encoding', $encoding) ?></div>
 		</div>
                 <?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
+			<div class="pageinput">
 				<input type="hidden" name="orig_template" value="<?php echo $orig_template?>" />
 				<input type="hidden" name="template_id" value="<?php echo $template_id?>" />
 				<input type="hidden" name="from" value="<?php echo $from?>" />
 				<input type="hidden" name="cssid" value="<?php echo $cssid?>" />
 				<input type="hidden" name="edittemplate" value="true" />
-			      <?php echo $submitbtns; ?><a href="listcssassoc.php<?php echo $urlext ?>&amp;type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?></a><?php echo " [" . lang('new_window') . "]" ;?></p>
+			      <?php echo $submitbtns; ?><a href="listcssassoc.php<?php echo $urlext ?>&amp;type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?></a><?php echo " [" . lang('new_window') . "]" ;?></div>
 		</div>
 	</form>
 </div>

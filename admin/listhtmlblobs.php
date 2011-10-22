@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,11 +20,23 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
+
+function listgcb_summarize($str,$numwords,$ets='...')
+{
+  $str = strip_tags($str);
+  $stringarray = explode(" ",$str);
+  if( $numwords >= count($stringarray) )
+    {
+      return $str;
+    }
+  $tmp = array_slice($stringarray,0,$numwords);
+  $tmp = implode(' ',$tmp).$ets;
+  return $tmp;
+}
 
 include_once("header.php");
 
@@ -40,8 +52,7 @@ if (isset($_GET["message"])) {
 <?php
 	$userid	= get_userid();
 
-	global $gCms;
-	$gcbops =& $gCms->GetGlobalContentOperations();
+$gcbops = cmsms()->GetGlobalContentOperations();
 
 	$modifyall = check_permission($userid, 'Modify Global Content Blocks');
 	$htmlbloblist = $gcbops->LoadHtmlBlobs();
@@ -49,21 +60,22 @@ if (isset($_GET["message"])) {
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
-	$limit = 20;
+        $limit = get_preference($userid,'listgcbs_pagelimit',20);
 	echo "<p class=\"pageshowrows\">".pagination($page, count($htmlbloblist), $limit)."</p>";
 	echo $themeObject->ShowHeader('htmlblobs').'</div>';
 
 	if ($htmlbloblist && count($htmlbloblist) > 0) {
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-		echo '<thead>';
+		echo "<thead>";
 		echo "<tr>\n";
 		echo "<th>".lang('name')."</th>\n";
 		echo "<th>".lang('tagtousegcb')."</th>\n";
+		echo "<th>".lang('description')."</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
-		echo '</thead>';
-		echo '<tbody>';
+		echo "</thead>";
+		echo "<tbody>";
 
 		$currow = "row1";
 		// construct true/false button images
@@ -75,15 +87,20 @@ if (isset($_GET["message"])) {
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
             if ($modifyall ||  quick_check_authorship($onehtmlblob->id, $myblobs))
 				{
-				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"edithtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
 				echo "<td>{global_content name='".$onehtmlblob->name."'}</td>\n";
+                                echo '<td>'.listgcb_summarize($onehtmlblob->description,20).'</td>';
 				echo "<td><a href=\"edithtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\">";
                 echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
-				echo "<td><a href=\"deletehtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onehtmlblob->name)."');\">";
-                echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                echo "</a></td>\n";
+		echo "<td>";
+		if( $modifyall || check_permission($userid,'Remove Global Content Blocks') )
+		  {
+		    echo "<a href=\"deletehtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onehtmlblob->name)."');\">";
+		    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon')."</a>";
+		  }
+                echo "</td>\n";
 				echo "</tr>\n";
 
 				($currow=="row1"?$currow="row2":$currow="row1");
@@ -92,7 +109,7 @@ if (isset($_GET["message"])) {
 			$counter++;
 		}
 
-		echo '</tbody>';
+		echo "</tbody>";
 		echo "</table>\n";
 	}
 

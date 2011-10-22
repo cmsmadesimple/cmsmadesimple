@@ -2,7 +2,7 @@
 /**
  * Smarty shared plugin
  * @package Smarty
- * @subpackage PluginsShared
+ * @subpackage plugins
  */
 
 
@@ -11,31 +11,36 @@
  * Purpose:  used by other smarty functions to make a timestamp
  *           from a string.
  * @author   Monte Ohrt <monte at ohrt dot com>
- * @param string $string
+ * @param string
  * @return string
  */
 function smarty_make_timestamp($string)
 {
     if(empty($string)) {
         // use "now":
-        return time();
-    } elseif ($string instanceof DateTime) {
-        return $string->getTimestamp();
+        $time = time();
+
     } elseif (preg_match('/^\d{14}$/', $string)) {
         // it is mysql timestamp format of YYYYMMDDHHMMSS?            
-        return mktime(substr($string, 8, 2),substr($string, 10, 2),substr($string, 12, 2),
+        $time = mktime(substr($string, 8, 2),substr($string, 10, 2),substr($string, 12, 2),
                        substr($string, 4, 2),substr($string, 6, 2),substr($string, 0, 4));
+        
     } elseif (is_numeric($string)) {
         // it is a numeric string, we handle it as timestamp
-        return (int)$string;
+        $time = (int)$string;
+        
     } else {
         // strtotime should handle it
         $time = strtotime($string);
         if ($time == -1 || $time === false) {
             // strtotime() was not able to parse $string, use "now":
-            return time();
+            $time = time();
         }
-        return $time;
     }
+    return $time;
+
 }
+
+/* vim: set expandtab: */
+
 ?>

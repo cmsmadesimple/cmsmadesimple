@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,18 +16,10 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: CMSInstallPage7.class.php 245 2010-01-24 12:43:47Z wishy $
+#$Id: CMSInstallPage7.class.php 311 2011-01-16 22:55:19Z wishy $
 
 class CMSInstallerPage7 extends CMSInstallerPage
 {
-	/**
-	 * Class constructor
-	*/
-	function CMSInstallerPage7(&$smarty, $errors, $debug)
-	{
-		$this->CMSInstallerPage(7, $smarty, $errors, $debug);
-	}
-
 	function assignVariables()
 	{
 		$values = array();
@@ -36,8 +28,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		$values['admininfo']['email'] = $_POST['adminemail'];
 		$values['admininfo']['password'] = $_POST['adminpassword'];
 		$base_url = str_replace(" ", "%20", rtrim($_POST['docroot'], '/'));
-		$link = '<a href="'.$base_url.'">'.lang('cms_site').'</a>';
-		$values['timezone'] = $_POST['timezone'];
+		$link = '<a href="'.$base_url.'">'.ilang('cms_site').'</a>';
 
 		$this->smarty->assign('base_url', $base_url);
 		$this->smarty->assign('values', $values);
@@ -46,111 +37,42 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		$this->smarty->assign('errors', $this->errors);
 	}
 
-	function preContent()
+	function preContent(&$db)
 	{
-		global $gCms;
-
-		//require_once(cms_join_path(CMS_BASE, 'lib', 'config.functions.php'));
-		
 		// check if db info is correct as it should at this point to prevent an undeleted installation dir
 		// to be used for sending spam by messing up $_POST variables
 		$db = ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
 		if (! empty($_POST['db_port'])) $db->port = $_POST['db_port'];
-		if ($_POST['dbms'] == 'sqlite' )
-		  {
-		    $res = $db->Connect(cms_join_path(CMS_BASE,'tmp',$_POST['database']));
-		  }
-		else
-		  {
-		    $res = $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
-		  }
-		if( !$res )
-		  {
-		    $this->errors[] = lang('could_not_connect_db');
-		    return;
-		  }
-
-		$newconfig = CmsConfig::get_instance();
-		$newconfig['dbms'] = $_POST['dbms'];
-		$newconfig['db_hostname'] = $_POST['host'];
-		$newconfig['db_username'] = $_POST['username'];
-		$newconfig['db_password'] = $_POST['password'];
-		$newconfig['db_name'] = $_POST['database'];
-		$newconfig['db_prefix'] = $_POST['prefix'];
-		$newconfig['db_port'] = $_POST['db_port'];
-                // $newconfig['db_socket'] = $_POST['db_socket'];
-
-		$newconfig['root_url'] = rtrim($_POST['docroot'], '/');
-		$newconfig['secure_root_url'] = str_replace('http:','https:',rtrim($_POST['docroot'], '/'));
-		$newconfig['root_path'] = rtrim($_POST['docpath'], '\\/');
-		$newconfig['query_var'] = $_POST['querystr'];
-		$newconfig['use_bb_code'] = false;
-		$newconfig['use_smarty_php_tags'] = false;
-		$newconfig['previews_path'] = TMP_CACHE_LOCATION;
-		$newconfig['uploads_path'] = cms_join_path($newconfig['root_path'], 'uploads');
-		// Note: leave the / slashes for the URLs
-		$newconfig['uploads_url'] = '/uploads';
-		$newconfig['image_uploads_path'] = cms_join_path($newconfig['uploads_path'], 'images');
-		// Note: leave the / slashes for the URLs
-		$newconfig['image_uploads_url'] = $newconfig['uploads_url'] . '/images';
-		$maxFileSize = ini_get('upload_max_filesize');
-		if (!is_numeric($maxFileSize))
+		if (! $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']))
 		{
-			$l=strlen($maxFileSize);
-			$i=0;$ss='';$x=0;
-			while ($i < $l)
-			{
-				if (is_numeric($maxFileSize[$i]))
-					{$ss .= $maxFileSize[$i];}
-				else
-				{
-					if (strtolower($maxFileSize[$i]) == 'm') $x=1000000;
-					if (strtolower($maxFileSize[$i]) == 'k') $x=1000;
-				}
-				$i ++;
-			}
-			$maxFileSize=$ss;
-			if ($x >0) $maxFileSize = $ss * $x;
+			$this->errors[] = ilang('could_not_connect_db');
+			return;
 		}
-		else
-		{
-			$maxFileSize = 1000000;
-		}
-		$newconfig['max_upload_size'] = $maxFileSize;
-		$newconfig['debug'] = false;
-		//$newconfig['assume_mod_rewrite'] = false; //Not in use now
-		$newconfig['auto_alias_content'] = true;
-		$newconfig['image_manipulation_prog'] = 'GD';
-		$newconfig['image_transform_lib_path'] = ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) ? 'C:/Program Files/VisualMagick/bin/' : '/usr/bin/ImageMagick/';
-		$newconfig['default_encoding'] = $_POST['default_encoding'];
-		$newconfig['disable_htmlarea_translation'] = false;
-		$newconfig['admin_dir'] = 'admin';
-		$newconfig['persistent_db_conn'] = false;
-		$newconfig['default_upload_permission'] = '664';
-		$newconfig['page_extension'] = "";
-		$newconfig['locale'] = "";
+
+		$newconfig = cmsms()->GetConfig();
+		$newconfig['dbms'] = trim($_POST['dbms']);
+		$newconfig['db_hostname'] = trim($_POST['host']);
+		$newconfig['db_username'] = trim($_POST['username']);
+		$newconfig['db_password'] = trim($_POST['password']);
+		$newconfig['db_name'] = trim($_POST['database']);
+		$newconfig['db_prefix'] = trim($_POST['prefix']);
+		$newconfig['db_port'] = (int)$_POST['db_port'];
+		$newconfig['root_url'] = rtrim(trim($_POST['docroot']), '/');
+		$tmp = trim($_POST['querystr']);
+		if( $tmp != 'page' )
+		  {
+		    $newconfig['query_var'] = $_POST['querystr'];
+		  }
 		$newconfig['timezone'] = $_POST['timezone'];
-		$newconfig['admin_encoding'] = "utf-8";
-		$newconfig['use_adodb_lite'] = true;
-		$newconfig['wiki_url'] = 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel';
-		$newconfig['set_names'] = true;
-		$newconfig['url_rewriting'] = 'none';
-		
-		$newconfig['php_memory_limit'] = '';
-		$newconfig['output_compression'] = 'false';
-		
-		if (!$newconfig->save())
-		{
-			echo lang('cannot_write_config', $configfile);
-			exit;
-		}
+ 		$newconfig['default_encoding'] = $_POST['default_encoding'];
 
+		$newconfig->save();
 
 		if (file_exists(cms_join_path(TMP_CACHE_LOCATION, 'SITEDOWN')))
 		{
 			if (!unlink(cms_join_path(TMP_CACHE_LOCATION, 'SITEDOWN')))
 			{
-				echo lang('install_admin_sitedown');
+				echo ilang('install_admin_sitedown');
 			}
 		}
 
@@ -158,117 +80,37 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		#Do module installation
 		if (isset($_POST["createtables"]) && $_POST['createtables'] != 0 )
 		{
-			//global $DONT_SET_DB;
-			echo '<p>' . lang('install_admin_update_hierarchy');
-
-			#Set $gCms->config - somehow it doesn't get set by include.php
-			//$gCms->config = $newconfig;
-			$config = cms_config();
-			$config->load();
-			
-			//Set the instance up with the new parameters
-			CmsDatabase::unload();
-			$db = CmsDatabase::get_instance($newconfig['dbms'], $newconfig['db_hostname'], $newconfig['db_username'], $newconfig['db_password'], $newconfig['db_name']);
-			
-			/*
-
+			$gCms = cmsms();
+			global $DONT_LOAD_DB;
+			$DONT_LOAD_DB = 'force';
+			$db = $gCms->GetDb();
 			$db->SetFetchMode(ADODB_FETCH_ASSOC);
-			#$db->debug = true;
-			$gCms->db =& $db;
-			unset($GLOBALS['DONT_SET_DB']);
-			unset($DONT_SET_DB);
-			
-			*/
 
-
-			CmsPage::set_all_hierarchy_positions();
-			CmsContentOperations::reset_nested_set();
-
-			echo " [" . lang('done') . "]</p>";
-
-
-			echo '<p>' . lang('install_admin_set_core_event');
+			echo '<p>' . ilang('install_admin_update_hierarchy');
+			$contentops = cmsms()->GetContentOperations();
+			$contentops->SetAllHierarchyPositions();
+			echo " [" . ilang('done') . "]</p>";
+			echo '<p>' . ilang('install_admin_set_core_event');
 
 			Events::SetupCoreEvents();
 
-			echo " [" . lang('done') . "]</p>";
+			echo " [" . ilang('done') . "]</p>";
+			echo '<p>' . ilang('install_admin_install_modules');
+			$modops = $gCms->GetModuleOperations();
+			$modops->LoadModules(TRUE);
+			$allmodules = $modops->GetAllModuleNames();
+			if( is_array($allmodules) && count($allmodules) )
+			  {
+			    foreach( $allmodules as $module_name )
+			      {
+				$obj = $modops->get_module_instance($module_name,'',TRUE);
+			      }
+			  }
+			echo " [" . ilang('done') . "]</p>";
 
-
-			echo '<p>' . lang('install_admin_install_modules');
-			
-			foreach (CmsModuleLoader::$core_modules as $one_module)
-			{
-				CmsModuleOperations::install($one_module);
-			}
-			
-			/*
-			foreach ($gCms->modules as $modulename=>$value)
-			{
-			  // only deal with system modules
-			  if( !in_array($modulename,$gCms->cmssystemmodules) ) continue;
-
-				if ($gCms->modules[$modulename]['object']->AllowAutoInstall() == true)
-				{
-				$query = "SELECT * FROM ".cms_db_prefix()."modules WHERE module_name = ?";
-				$dbresult = $db->Execute($query, array($modulename));
-				if( $dbresult )
-				  {
-				    $count = $dbresult->RecordCount();
-				  }
-				if (!isset($count) || $count == 0)
-					{
-						$modinstance =& $gCms->modules[$modulename]['object'];
-						$result = $modinstance->Install();
-
-						#now insert a record
-						if (!isset($result) || $result === FALSE)
-						{
-							$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active, admin_only) VALUES (".$db->qstr($modulename).",".$db->qstr($modinstance->GetVersion()).",'installed',1,".($modinstance->IsAdminOnly()==true?1:0).")";
-							$db->Execute($query);
-							$gCms->modules[$modulename]['installed'] = true;
-							$gCms->modules[$modulename]['active'] = true;
-
-							/*
-							#and insert any dependancies
-							if (count($modinstance->GetDependencies()) > 0) #Check for any deps
-							{
-								#Now check to see if we can satisfy any deps
-								foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
-								{
-									$time = $db->DBTimeStamp(time());
-									$query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
-									$db->Execute($query, array($onedepkey, $module, $onedepvalue));
-								}
-							}
-
-							#and show the installpost if necessary...
-							if ($modinstance->InstallPostMessage() != FALSE)
-							{
-								@ob_start();
-								echo $modinstance->InstallPostMessage();
-								$content = @ob_get_contents();
-								@ob_end_clean();
-								echo '<div class="pagecontainer">';
-								echo '<p class="pageheader">'.lang('moduleinstallmessage', array($module)).'</p>';
-								echo $content;
-								echo "</div>";
-								echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-								include_once("footer.php");
-								exit;
-
-							}
-							*/ /*
-						}
-					}
-				}
-			}
-			*/
-			echo " [" . lang('done') . "]</p>";
-
-
-			echo '<p>' . lang('install_admin_clear_cache');
-			CmsContentOperations::clear_cache();
-			echo " [" . lang('done') . "]</p>";
+			echo '<p>' . ilang('install_admin_clear_cache');
+			$contentops->ClearCache();
+			echo " [" . ilang('done') . "]</p>";
 
 			// Insert new site preferences
 			set_site_preference('global_umask', $_POST['umask']);
@@ -286,15 +128,15 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		if ( ($_POST['email_accountinfo'] == 1) && (! empty($_POST['adminemail'])) )
 		{
 
-			echo '<p>' . lang('install_admin_emailing');
+			echo '<p>' . ilang('install_admin_emailing');
 			$to      = $_POST['adminemail'];
-			$subject = lang('email_accountinfo_subject');
-			$message = lang('email_accountinfo_message', $_POST['adminusername'], $_POST['adminpassword'], "$link/admin/");
+			$subject = ilang('email_accountinfo_subject');
+			$message = ilang('email_accountinfo_message', $_POST['adminusername'], $_POST['adminpassword'], "$link/admin/");
 			$message = html_entity_decode($message, ENT_QUOTES); // Encoded from TC
 			echo (
 				@mail($to, $subject, $message)
-					? " [" . lang('done') . "]"
-					: "<strong>[" . lang('failed') . "]</strong>"
+					? " [" . ilang('done') . "]"
+					: "<strong>[" . ilang('failed') . "]</strong>"
 			);
 			echo "</p>";
 

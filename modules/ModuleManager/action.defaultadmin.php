@@ -34,58 +34,82 @@
 #
 #-------------------------------------------------------------------------
 #END_LICENSE
+if( !isset($gCms) ) exit;
 {
-	echo '<div class="pagewarning">'."\n";
-	echo '<h3>'.$this->Lang('notice')."</h3>\n";
-	$link = '<a target="_blank" href="http://dev.cmsmadesimple.org">forge</a>';
-	echo '<p>'.$this->Lang('general_notice',$link,$link)."</p>\n";
-	echo '<h3>'.$this->Lang('use_at_your_own_risk')."</h3>\n";
-	echo '<p>'.$this->Lang('compatibility_disclaimer')."</p></div>\n";
+  echo '<div class="pagewarning">'."\n";
+  echo '<h3>'.$this->Lang('notice')."</h3>\n";
+  $link = '<a target="_blank" href="http://dev.cmsmadesimple.org">forge</a>';
+  echo '<p>'.$this->Lang('general_notice',$link,$link)."</p>\n";
+  echo '<h3>'.$this->Lang('use_at_your_own_risk')."</h3>\n";
+  echo '<p>'.$this->Lang('compatibility_disclaimer')."</p></div>\n";
 
-	$active_tab = -1;
-	if( isset($params['active_tab']))
-	{
-		$active_tab = $params['active_tab'];
-	}
+  if( isset($_SESSION[$this->GetName()]['tab_error']) )
+    {
+      echo $this->ShowErrors($_SESSION[$this->GetName()]['tab_error']);
+      unset($_SESSION[$this->GetName()]['tab_message']);
+      unset($_SESSION[$this->GetName()]['tab_error']);
+    }
+  if( isset($_SESSION[$this->GetName()]['tab_message']) )
+    {
+      echo $this->ShowMessage($_SESSION[$this->GetName()]['tab_message']);
+      unset($_SESSION[$this->GetName()]['tab_message']);
+      unset($_SESSION[$this->GetName()]['tab_error']);
+    }
 
-	echo $this->Tabs->start_tab_headers();
-	if( $this->Permission->check('Modify Modules') )
-	{
-		echo $this->Tabs->set_tab_header('installed_modules',$this->Lang('installed_modules'),
-			$active_tab == 'installed_modules' );
-		echo $this->Tabs->set_tab_header('newversions',$this->Lang('newversions'),
-			$active_tab == 'newversions' );
-		echo $this->Tabs->set_tab_header('modules',$this->Lang('availmodules'),
-			$active_tab == 'modules' );
-	}
-	if( $this->Permission->check('Modify Site Preferences') )
-	{
-		echo $this->Tabs->set_tab_header('prefs',$this->Lang('preferences'),
-			$active_tab == 'prefs' );
-	}
-	echo $this->Tabs->end_tab_headers();
+  if( !modmgr_utils::is_connection_ok() )
+    {
+      echo $this->_DisplayErrorPage($id,$params,$returnid,$this->Lang('error_request_problem'));
+    }
 
-	echo $this->Tabs->start_tab_content();
-	if( $this->Permission->check('Modify Modules') )
-	{
-		echo $this->Tabs->start_tab('installed_modules');
-		include(dirname(__FILE__).'/function.installed_modules.php');
-		echo $this->Tabs->end_tab();
-		
-		echo $this->Tabs->start_tab('newversions');
-		include(dirname(__FILE__).'/function.newversionstab.php');
-		echo $this->Tabs->end_tab();
+  $active_tab = 'newversions';
+  if( isset($params['active_tab']))
+    {
+      $active_tab = $params['active_tab'];
+    }
+  else if( isset($_SESSION[$this->GetName()]['active_tab']) )
+    {
+      $active_tab = $_SESSION[$this->GetName()]['active_tab'];
+      unset($_SESSION[$this->GetName()]['active_tab']);
+    }
+  
+  echo $this->StartTabHeaders();
+  if( $this->CheckPermission('Modify Modules') )
+    {
+      echo $this->SetTabHeader('newversions',$this->Lang('newversions'),
+			  $active_tab == 'newversions' );
+      echo $this->SetTabHeader('search',$this->Lang('search'),
+			       $active_tab == 'search');
+      echo $this->SetTabHeader('modules',$this->Lang('availmodules'),
+			  $active_tab == 'modules' );
+    }
+  if( $this->CheckPermission('Modify Site Preferences') )
+    {
+      echo $this->SetTabHeader('prefs',$this->Lang('preferences'),
+			  $active_tab == 'prefs' );
+    }
+  echo $this->EndTabHeaders();
 
-		echo $this->Tabs->start_tab('modules');
-		$this->_DisplayAdminModulesTab( $id, $params, $return_id );
-		echo $this->Tabs->end_tab();
-	}
-	if( $this->Permission->check('Modify Site Preferences') )
-	{
-		echo $this->Tabs->start_tab('prefs');
-		$this->_DisplayAdminPrefsTab( $id, $params, $return_id );
-		echo $this->Tabs->end_tab();
-	}
-	echo $this->Tabs->end_tab_content();
+  echo $this->StartTabContent();
+  if( $this->CheckPermission('Modify Modules') )
+    {
+      echo $this->StartTab('newversions');
+      include(dirname(__FILE__).'/function.newversionstab.php');
+      echo $this->EndTab();
+
+      echo $this->StartTab('search');
+      include(dirname(__FILE__).'/function.search.php');
+      echo $this->EndTab();
+
+      echo $this->StartTab('modules');
+      include(dirname(__FILE__).'/function.admin_modules_tab.php');
+      echo $this->EndTab();
+    }
+  if( $this->CheckPermission('Modify Site Preferences') )
+    {
+      echo $this->StartTab('prefs');
+      include(dirname(__FILE__).'/function.admin_prefs_tab.php');
+      echo $this->EndTab();
+    }
+  echo $this->EndTabContent();
 }
 ?>

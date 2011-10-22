@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ function smarty_lang($params, &$smarty)
 		for ($i = 1; $i < count($tmp); $i++)
 			$tmp2[] = $params[$i];
 
-		return lang($str, $tmp2);
+		return ilang($str, $tmp2);
 	}
 }
 
@@ -55,25 +55,24 @@ if (isset($CMS_INSTALL_PAGE))
 		$current_language = $_POST["default_cms_lang"];
 		if ($current_language == '')
 		{
-			setcookie("cms_language", '', time() - 3600);
+		  cms_cookies::erase("cms_language");
 		}
 		else if (isset($_POST["change_cms_lang"]))
 		{
-			setcookie("cms_language", $_POST["change_cms_lang"]);
+		  cms_cookies::set("cms_language", $_POST["change_cms_lang"]);
 		}
 	}
 	else if (isset($_SESSION['login_cms_language']))
 	{
 		debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
 		$current_language = $_SESSION['login_cms_language'];
-		setcookie('cms_language', $_SESSION['login_cms_language']);
+		cms_cookies::set('cms_language', $_SESSION['login_cms_language']);
 		unset($_SESSION['login_cms_language']);
 	}
 	else if (isset($_COOKIE["cms_language"]))
 	{
 		$current_language = $_COOKIE["cms_language"];
 	}
-
 
 	#First load the english one so that we have strings to fall back on
 	$base_lang = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR;
@@ -96,7 +95,7 @@ if (isset($CMS_INSTALL_PAGE))
 
 	$nls['direction'] = (isset($nls['direction']) && $nls['direction'] == 'rtl') ? 'rtl' : 'ltr';
 
-	global $gCms;
+	$gCms = cmsms();
 	$gCms->nls = $nls;
 	$gCms->current_language = $current_language;
 }

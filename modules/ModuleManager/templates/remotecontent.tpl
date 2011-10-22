@@ -5,3 +5,6 @@
 <p><b>{$xmltext}</b>:&nbsp;{$xmlfile}</p>
 <hr/>
 {$content}
+<br />
+<br />
+<p>{$link_back}</p>

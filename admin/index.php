@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -24,14 +24,25 @@ $CMS_ADMIN_TITLE='adminhome';
 $CMS_ADMIN_TITLE='mainmenu';
 $CMS_EXCLUDE_FROM_RECENT=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
+require_once("../include.php");
 
-CmsLogin::check_login();
+// if this page was accessed directly, and the secure param name is not in the URL
+// but it is in the session, assume it is correct.
+if( isset($_SESSION[CMS_USER_KEY]) && !isset($_GET[CMS_SECURE_PARAM_NAME]) )
+  {
+    $_GET[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
+  }
+
+check_login();
+
+$db = cmsms()->GetDb();
 $gCms = cmsms();
-$db = cms_db();
 
 include_once("header.php");
-$themeObject->display_all_section_pages();
+$themeObject->ShowShortcuts();
+$themeObject->DisplaySectionMenuDivStart();
+$themeObject->DisplayAllSectionPages();
+$themeObject->DisplaySectionMenuDivEnd();
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

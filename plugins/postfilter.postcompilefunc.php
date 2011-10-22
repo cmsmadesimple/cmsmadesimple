@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,15 +16,17 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_postfilter_postcompilefunc($tpl_output, &$smarty)
+function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 {
-	global $gCms;
-
 	$result = explode(':', $smarty->_current_file);
 	if (count($result) > 1)
 	{
 		switch ($result[0])
 		{
+		case 'stylesheet':
+		  Events::SendEvent('Core','StylesheetPostCompile',array('stylesheet'=>&$tpl_output));
+		  break;
+
 			case "content":
 				Events::SendEvent('Core', 'ContentPostCompile', array('content' => &$tpl_output));
 				break;
@@ -43,8 +45,7 @@ function smarty_postfilter_postcompilefunc($tpl_output, &$smarty)
 
 	}
 
-	//Events::SendEvent('Core', 'SmartyPostCompile', array('content' => &$tpl_output));
-	CmsEventManager::send_event('Core:SmartyPostCompile', array('content' => &$tpl_output));
+	Events::SendEvent('Core', 'SmartyPostCompile', array('content' => &$tpl_output));
 
 	return $tpl_output;
 }

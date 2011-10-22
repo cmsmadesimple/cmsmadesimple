@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 //require_once("../lib/classes/class.htmlblob.inc.php");
 require_once("../lib/classes/class.template.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
@@ -31,13 +30,18 @@ check_login();
 $error = "";
 
 $htmlblob = "";
-if (isset($_POST['htmlblob'])) $htmlblob = $_POST['htmlblob'];
+if (isset($_POST['htmlblob'])) $htmlblob = trim($_POST['htmlblob']);
 
 $content = "";
-if (isset($_POST['content'])) $content = $_POST['content'];
+if (isset($_POST['content'])) $content = trim(trim($_POST['content']));
 
-if (isset($_POST["cancel"]))
-{
+$use_wysiwyg = 1;
+if (isset($_POST['use_wysiwyg'])) $use_wysiwyg = (int)$_POST['use_wysiwyg'];
+
+$description = "";
+if (isset($_POST['description'])) $description = trim(trim($_POST['description']));
+
+if (isset($_POST["cancel"])) {
 	redirect("listhtmlblobs.php".$urlext);
 	return;
 }
@@ -54,42 +58,45 @@ if (get_preference($userid, 'use_wysiwyg') == "1") {
     $use_javasyntax = true;
 }
 */
-
 $gcb_wysiwyg = (get_site_preference('nogcbwysiwyg','0') == '0') ? 1 : 0;
 if( $gcb_wysiwyg )
-{
-	$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
-}
+  {
+    $gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
+  }
 
-if ($access)
-{
-	if (isset($_POST["addhtmlblob"]))
-	{
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
-		$templateops =& $gCms->GetTemplateOperations();
+
+if ($access) {
+	if (isset($_POST["submit2"])) {
+		
+	  $gCms = cmsms();
+		$gcbops = $gCms->GetGlobalContentOperations();
+		$templateops = $gCms->GetTemplateOperations();
 
 		$validinfo = true;
-		if ($htmlblob == "")
-		{
-			$error .= "<li>".lang('nofieldgiven', array('addhtmlblob'))."</li>";
+		if ($htmlblob == ""){
+			$error .= "<li>".lang('nofieldgiven', array('name'))."</li>";
 			$validinfo = false;
 		}
-		else if ($gcbops->CheckExistingHtmlBlobName($htmlblob))
-		{
+		else if ($gcbops->CheckExistingHtmlBlobName($htmlblob)){
 			$error .= "<li>".lang('blobexists')."</li>";
 			$validinfo = false;
 		}
+		else if($content == ""){
+		  $error .= '<li>'.lang('nofieldgiven',array('content')).'</li>';
+		  $validinfo = false;
+		}
 
-		if ($validinfo)
-		{
-			global $gCms;
-			$gcbops =& $gCms->GetGlobalContentOperations();
+
+		if ($validinfo) {
+		  $gCms = cmsms();
+			$gcbops = $gCms->GetGlobalContentOperations();
 
 			$blobobj = new GlobalContent();
 			$blobobj->name = $htmlblob;
 			$blobobj->content = $content;
 			$blobobj->owner = $userid;
+			$blobobj->use_wysiwyg = $use_wysiwyg;
+			$blobobj->description = $description;
 
 			Events::SendEvent('Core', 'AddGlobalContentPre', array('global_content' => &$blobobj));
 
@@ -101,15 +108,15 @@ if ($access)
 						$blobobj->AddAuthor($addt_user_id);
 					}
 				}
-				audit($blobobj->id, $blobobj->name, 'Added Html Blob');
+				// put mention into the admin log
+				audit($blobobj->id, 'Global Content Block: '.$blobobj->name, 'Added');
 
 				Events::SendEvent('Core', 'AddGlobalContentPost', array('global_content' => &$blobobj));
 
 				redirect("listhtmlblobs.php".$urlext);
 				return;
 			}
-			else
-			{
+			else {
 				$error .= "<li>".lang('errorinsertingblob')."</li>";
 			}
 		}
@@ -118,11 +125,12 @@ if ($access)
 
 include_once("header.php");
 
-global $gCms; $db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 // fill out additional users array
 $addt_users = "";
-$groupops =& $gCms->GetGroupOperations();
+$groupops = $gCms->GetGroupOperations();
 $groups = $groupops->LoadGroups();
 foreach( $groups as $onegroup )
 {
@@ -161,9 +169,17 @@ else
 			<p class="pagetext">*<?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
 		</div>
+                <div class="pageoverflow">
+		      <p class="pagetext"><?php echo lang('use_wysiwyg') ?>:</p>
+		      <p class="pagetext"><input type="hidden" name="use_wysiwyg" value="0"/><input type="checkbox" name="use_wysiwyg" onclick="this.form.submit();" value="1" <?php if($use_wysiwyg) echo ' checked="checked"' ?>/></p>
+                </div>						      
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content'); ?></p>
+			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg && $use_wysiwyg, $content, 'content', 'wysiwyg', 'content'); ?></p>
+		</div>
+		<div class="pageoverflow">
+		       <p class="pagetext"><?php echo lang('description')?>:</p>
+		       <p class="pageinput"><textarea name="description"><?php echo $description ?></textarea></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>
@@ -173,8 +189,8 @@ else
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="addhtmlblob" value="true" />
-				<input type="submit" accesskey="s" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" accesskey="c" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="submit2" value="<?php echo lang('submit')?>" class="pagebutton" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
 			</p>
 		</div>
 	</form>

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -17,12 +17,14 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: newupgrade.php 83 2008-09-20 14:41:52Z alby $
-
-global $gCms;
-
 $CMS_INSTALL_PAGE=1;
+
+require_once("../include.php");
+$gCms = cmsms();
+
 $LOAD_ALL_MODULES = true;
 #$DONT_LOAD_DB = false;
+$USE_OLD_ADODB=1;
 $process = 'upgrade';
 $max_pages = 7;
 
@@ -31,13 +33,12 @@ define('CMS_UPGRADE_HELP_URL', 'http://wiki.cmsmadesimple.org/index.php/User_Han
 define('CMS_INSTALL_BASE', dirname(__FILE__));
 define('CMS_BASE', dirname(CMS_INSTALL_BASE));
 
-require_once CMS_BASE . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php';
+require_once CMS_BASE . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'misc.functions.php';
 require_once cms_join_path(CMS_BASE, 'fileloc.php');
 require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'translation.functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'classes', 'CMSInstaller.class.php');
-
 
 
 /* Check SESSION */
@@ -46,7 +47,6 @@ if(! extension_loaded_or('session') )
 	installerShowErrorPage('Session module is disabled or missing in your PHP, you have problem with some modules and functionality! Ask your provider, exiting!', 'Session_module_is_disable_or_missing');
 }
 @session_start();
-
 
 
 /* UNDOCUMENTED features... if this values are set in the session */
@@ -82,10 +82,9 @@ if(isset($_GET['advanceduser']))
 }
 
 
-
 $installer = new CMSInstaller($max_pages, $debug);
 
-
+require_once cms_join_path(CMS_BASE, 'include.php');
 
 // Initial Tests
 if(! isset($_GET['sessiontest']) && (! isset($_POST['page'])) )
@@ -141,9 +140,7 @@ else if(! isset($_SESSION['test']))
 }
 
 
-
 // First checks ok
-require_once cms_join_path(CMS_BASE, 'include.php');
 
 if(isset($_POST['default_cms_lang']))
 {

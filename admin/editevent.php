@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,11 +20,10 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-global $gCms;
-$db =& $gCms->GetDb();
+$gCms = cmsms();
+$db = $gCms->GetDb();
 
 $userid = get_userid();
 $access = check_permission($userid, "Modify Events");
@@ -72,6 +71,7 @@ if ($access)
 		}
 		if( $module && $event && $handler )
 		{
+
 		if( substr( $handler, 0, 2 ) == "m:" )
 		{
 			$handler = substr( $handler, 2 );
@@ -208,9 +208,7 @@ if ($access)
 	}
 		
 	// get the event description
-	global $gCms;
-	$usertagops =& $gCms->GetUserTagOperations();
-	//$description = $gCms->modules[$module]['object']->GetEventDescription($event);
+	$usertagops = $gCms->GetUserTagOperations();
 	
 	$description = '';
 	$modulename = '';
@@ -218,15 +216,15 @@ if ($access)
 		$description = Events::GetEventDescription($event);
 		$modulename = lang('core');
 	}
-	else if (isset($gCms->modules[$module])) {
-		$objinstance =& $gCms->modules[$module]['object'];
-		$description = $objinstance->GetEventDescription($event);
-		$modulename = $objinstance->GetFriendlyName();
+	else
+	{
+	  $objinstance = cms_utils::get_module($module);
+	  $description = $objinstance->GetEventDescription($event);
+	  $modulename  = $objinstance->GetFriendlyName();
 	}
 	
 	// and now get the list of handlers for this event
 	$handlers = Events::ListEventHandlers( $module, $event );
-	//print_r( $handlers ); echo "<br/><br/>";
 	
 	// and the list of all available handlers
 	$allhandlers = array();
@@ -234,20 +232,19 @@ if ($access)
 	$usertags = $usertagops->ListUserTags();
 	foreach( $usertags as $key => $value )
 	{
-	$allhandlers[$value] = $key;
+	  $allhandlers[$value] = $value;
 	}
+
 	// and the list of modules, and add them
-	foreach( $gCms->modules as $key => $value )
+	$allmodules = ModuleOperations::get_instance()->GetInstalledModules();
+	foreach( $allmodules as $key )
 	{
-	if( $key == $modulename )
-		{
-		continue;
-		}
-	
-	if( $gCms->modules[$key]['object']->HandlesEvents() )
-		{
-		$allhandlers[$key] = 'm:'.$key;
-		}
+	  if( $key == $modulename ) continue;
+	  $modobj = ModuleOperations::get_instance()->get_module_instance($key);
+	  if( $modobj->HandlesEvents() )
+	    {
+	      $allhandlers[$key] = 'm:'.$key;
+	    }
 	}
 	
 	echo "<div class=\"pageoverflow\">\n";

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cmsms.api.php');
-
+require_once("../include.php");
 require_once("../lib/classes/class.template.inc.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
@@ -39,9 +38,9 @@ if (isset($_GET["htmlblob_id"]))
 	{
 		$result = false;
 		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
-		$templateops =& $gCms->GetTemplateOperations();
+		$gCms = cmsms();
+		$gcbops = $gCms->GetGlobalContentOperations();
+		$templateops = $gCms->GetTemplateOperations();
 
 		$blobobj = $gcbops->LoadHtmlBlobByID($htmlblob_id);
 		$htmlblob_name = $blobobj->name;
@@ -56,8 +55,8 @@ if (isset($_GET["htmlblob_id"]))
 		if ($result == true)
 		{
 			Events::SendEvent('Core', 'DeleteGlobalContentPost', array('global_content' => &$blobobj));
-
-			audit($htmlblob_id, $htmlblob_name, 'Deleted Html Blob');
+			// put mention into the admin log
+			audit($htmlblob_id, 'Global Content Block: '.$htmlblob_name, 'Deleted');
 		}
 	}
 }

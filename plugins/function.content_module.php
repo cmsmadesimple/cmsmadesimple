@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_content_module($params, &$smarty)
+function smarty_cms_function_content_module($params, &$smarty)
 {
   $result = '';
   $key = '';
@@ -24,16 +24,16 @@ function smarty_function_content_module($params, &$smarty)
   if( isset($params['block']) ) {
     $block = $params['block'];
   }
-  global $gCms;
-  $pageinfo = &$gCms->variables['pageinfo'];
+  $gCms = cmsms();
+  $content_obj = &$gCms->variables['content_obj'];
   $manager =& $gCms->GetHierarchyManager();
-  $node =& $manager->sureGetNodeById($pageinfo->content_id);
+  $node = $manager->sureGetNodeById($content_obj->Id());
   if(is_object($node))
     {
       $contentobj =& $node->GetContent();
       if( is_object($contentobj) )
 	{
-	  $result = $contentobj->get_property_value($block);
+	  $result = $contentobj->GetPropertyValue($block);
           if( $result == -1 ) $result = '';
 	}
     }
@@ -47,11 +47,11 @@ function smarty_function_content_module($params, &$smarty)
 
   return $result;
 }
-function smarty_help_function_content_module() {
+function smarty_cms_help_function_content_module() {
   echo lang('help_function_content_module');
 }
 
-function smarty_about_function_content_module() {
+function smarty_cms_about_function_content_module() {
 	?>
 	<p>Author: Robert Campbell&lt;calguy1000@cmsmadesimple.org&gt;</p>
 	<p>Version: 1.0</p>
