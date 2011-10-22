@@ -56,6 +56,7 @@ Core - General:
   - Remove IE6 conditionals from stylesheets and templates including default content
   - Removed the startExpandCollapse and endExpandCollapse tags due to potential license violation
   - Removed the adsense plugin
+  - Removed the root /images folder and redundant images
   - Add a new preference to disable some content types
   - GCB List now shows the description
   - Allow selecting a site wide search module via a preference
@@ -69,6 +70,7 @@ Core - General:
   - Rewrite the config classes
     - config.php is now sparse, most variables are defaulted.
     - adds the admin_url setting and support for admin via SSL
+  - Adds documentation for the config.php file: /doc/CMSMS_config_reference.pdf
   - Adds salting for admin passwords
   - Adds a new cookies class and modifies the code to use it, ensuring that the security of cookies is maintained
   - Ensure all applicable plugins have an assign parameter.
