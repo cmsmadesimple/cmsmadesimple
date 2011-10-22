@@ -13,6 +13,7 @@ Core - Bug Reports:
   - #6374 Page alias not re-crated if alias deleted - old is used
   - #6386 cms_htmlenities in created_date & modified_date
   - #6436 MenuManager: wrong assignment of $node->depth
+  - #6444 Calls to UNIX_TIMESTAMP SQL function which does not exist in Postgresql
   - #6464 Buttons in Backend not visible in IE9
   - #6465 can't delete text from the Page URL field
   - #6475 breadcrumbs can influence node tree
@@ -28,6 +29,7 @@ Core - Bug Reports:
   - #6983 Checking for new version fails
 
 Core - Feature requests:
+  - #1247 If user is not logged in and requests admin panel page, redirect there after login
   - #5119 New event : LoginFailed
   - #5260 width/height parameters for cms_selflink
   - #5622 Add Description Column to GCB List
