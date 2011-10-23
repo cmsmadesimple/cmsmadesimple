@@ -776,9 +776,8 @@ final class ModuleOperations
 		  if( !$info['active'] ) continue;
 		  if( ($info['admin_only'] || (isset($info['allow_fe_lazyload']) && $info['allow_fe_lazyload'])) && !isset($CMS_ADMIN_PAGE) ) continue;
 		  if( isset($config['admin_loadnomodules']) && isset($CMS_ADMIN_PAGE) ) continue;
-		  //if( isset($CMS_ADMIN_PAGE) ) continue;
 		  if( isset($info['allow_admin_lazyload']) && $info['allow_admin_lazyload'] && isset($CMS_ADMIN_PAGE) ) continue;
-		  if( isset($CMS_STYLESHEET) ) continue;
+		  if( isset($CMS_STYLESHEET) && !isset($CMS_STYLESHEET) ) continue;
 		  $this->get_module_instance($module_name);
 	  }
 	  if( isset($_SESSION['moduleoperations']) && is_array($_SESSION['moduleoperations']) && count($_SESSION['moduleoperations']) )
