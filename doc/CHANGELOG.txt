@@ -1,3 +1,9 @@
+Version 1.10.1 - NO NAME
+-----------------------------
+  - Fixed a problem with improper HTTPS detection in the metadata plugin
+  - Fixed a problem with modules not being loaded properly for admin stylesheets
+  - Fixed a minor problem with microtinyconfig
+
 Version 1.10 - Martinique
 -----------------------------
 Core - Bug Reports:
