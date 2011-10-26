@@ -750,7 +750,7 @@ class ContentOperations
 		$output = array();
 		foreach( $list as &$one )
 		{
-			$tmp = $one->GetContent();
+			$tmp = $one->GetContent(false,true,true);
 			if( is_object($tmp) )
 				$output[] = $tmp;
 		}
