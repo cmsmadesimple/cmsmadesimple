@@ -4,6 +4,7 @@ Version 1.10.1 - NO NAME
   - Fixed a problem with modules not being loaded properly for admin stylesheets
   - Fixed a minor problem with microtinyconfig
   - Fixed a minor issue in event handlers.
+  - Adds one more error check into MenuManager wrt to GetContent on inactive objects.
 
 Version 1.10 - Martinique
 -----------------------------
