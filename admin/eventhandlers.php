@@ -93,7 +93,7 @@ switch( $action )
 		else
 		  {
 		    $moduleobj = cms_utils::get_module($module);
-		    if( is_object($moduleobs) )
+		    if( is_object($moduleobj) )
 		      {
 			$text = $moduleobj->GetEventHelp( $event );
 		      }
