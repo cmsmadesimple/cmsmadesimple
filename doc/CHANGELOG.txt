@@ -7,6 +7,7 @@ Version 1.10.1 - NO NAME
   - Adds one more error check into MenuManager wrt to GetContent on inactive objects.
   - Fixes a problem with GetAllContent() which effects the parent dropdown stuff.
   - Fixes a problem with deleting inactive content.
+  - Fixes the summary modifier.
 
 Version 1.10 - Martinique
 -----------------------------
