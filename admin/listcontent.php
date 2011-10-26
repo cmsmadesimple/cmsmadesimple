@@ -358,13 +358,13 @@ function deletecontent($contentid)
 		$node = $hierManager->getNodeById($contentid);
 		if ($node)
 		{
-			$contentobj = $node->getContent(true);
+		        $contentobj = $node->getContent(true,false,true);
 			$childcount = 0;
 			$parentid = -1;
 			$parent = $node->getParent();
 			if ($parent)
 			{
-			  $parentContent = $parent->getContent();
+			  $parentContent = $parent->getContent(true,false,true);
 			  if (is_object($parentContent))
 			    {
 			      $parentid = $parentContent->Id();
