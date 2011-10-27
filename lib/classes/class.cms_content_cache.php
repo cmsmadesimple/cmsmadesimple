@@ -83,7 +83,13 @@ final class cms_content_cache
     $hash = self::content_exists($identifier);
     if( $hash === FALSE )
       {
-	return $res;
+		  // content doesn't exist...
+		  if( is_numeric($identifier) )
+		  {
+			  // so add a null object, so we don't request it from the database again.
+			  self::_add_content($identifier,'',$res);
+			  return $res;
+		  }
       }
 
     return self::get_content_obj($hash);
@@ -120,14 +126,17 @@ final class cms_content_cache
 
 
   /**
-   * Add the content object to the cache
+   * Add data to the cache
    *
+   * @access private
+   * @internal
+   * @since 1.10.1
    * @param integer The content Id.
    * @param string  The content alias
    * @param ContentBase The content object.
    * @return boolean
    */
-  public static function add_content($id,$alias,ContentBase& $obj)
+  private static function _add_content($id,$alias,&$obj)
   {
     if( !$id) return FALSE;
     if( !self::$_alias_map ) self::$_alias_map = array();
@@ -142,6 +151,19 @@ final class cms_content_cache
 		}
     self::$_id_map[$id] = $hash;
     return TRUE;
+  }
+
+  /**
+   * Add the content object to the cache
+   *
+   * @param integer The content Id.
+   * @param string  The content alias
+   * @param ContentBase The content object.
+   * @return boolean
+   */
+  public static function add_content($id,$alias,ContentBase& $obj)
+  {
+	  self::_add_content($id,$alias,$obj);
   }
 
 
