@@ -554,7 +554,7 @@ class ContentOperations
 			}
 			if ($last_modified > 0 && $last_modified < filemtime($cachefilename))
 			{
-				debug_buffer('file needs loading');
+				debug_buffer('Content tree file needs loading');
 				
 				$handle = fopen($cachefilename, "r");
 				$data = fread($handle, filesize($cachefilename));
@@ -568,7 +568,6 @@ class ContentOperations
 				}
 				else
 				{
-					die('problem loading cache');
 					$loadedcache = false;
 				}
 			}
@@ -576,19 +575,9 @@ class ContentOperations
 
 		if (!$loadedcache)
 		{
-			$query = "SELECT id_hierarchy,content_alias FROM ".cms_db_prefix()."content ORDER BY hierarchy";
-			$dbresult = $db->Execute($query);
-			$nodes = array();
-			if ($dbresult && $dbresult->RecordCount() > 0)
-			{
-				while ($row = $dbresult->FetchRow())
-				{
-					$nodes[] = $row['id_hierarchy'].','.$row['content_alias'];
-				}
-				$dbresult->Close();
-			}
-
 			debug_buffer('', 'Start Loading Children into Tree');
+			$query = 'SELECT content_id,parent_id,content_alias FROM '.cms_db_prefix().'content ORDER BY parent_id,item_order';
+			$nodes = $db->GetArray($query);
 			$tree = cms_tree_operations::load_from_list($nodes);
 			debug_buffer('', 'End Loading Children into Tree');
 		}
@@ -722,13 +711,11 @@ class ContentOperations
 			$one = new Content();
 			$one->LoadFromId($old_id);
 			$one->SetDefaultContent(false);
-			debug_buffer('save from ' . __LINE__);
 			$one->Save();
 		}
 		$one = new Content();
 		$one->LoadFromId($id);
 		$one->SetDefaultContent(true);
-		debug_buffer('save from ' . __LINE__);
 		$one->Save();
 	}
 

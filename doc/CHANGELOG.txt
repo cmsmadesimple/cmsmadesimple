@@ -8,6 +8,7 @@ Version 1.10.1 - NO NAME
   - Fixes a problem with GetAllContent() which effects the parent dropdown stuff.
   - Fixes a problem with deleting inactive content.
   - Fixes the summary modifier.
+  - Replaces the cms_tree_operations::load_from_list() method with a simpler, recursive function.
 
 Version 1.10 - Martinique
 -----------------------------
