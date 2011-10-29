@@ -14,6 +14,7 @@ Version 1.10.1 - NO NAME
   - ModuleManager - minor improvement to the is_connection_ok method.
   - adodb_lite - get rid of some files that are not needed (xmlschema, config etc).
   - Fixed problem with uninstalling deactivated modules.
+  - Fixes sorting for page_image and thumbnail dropdowns
 
 Version 1.10 - Martinique
 -----------------------------

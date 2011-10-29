@@ -929,7 +929,7 @@ function cms_db_prefix() {
  * @return string
  */
 function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='',$allownone=false,$extratext='',
-			      $fileprefix='',$excludefiles=1)
+			      $fileprefix='',$excludefiles=1,$sortresults = 0)
 {
   $files = array();
   $files = get_matching_files($dir,$allowed_extensions,true,true,$fileprefix,$excludefiles);
@@ -945,6 +945,10 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
       $out .= "  <option value=\"-1\" $txt>--- ".lang('none')." ---</option>\n";
     }
 
+  if( $sortresults )
+    {
+      asort($files);
+    }
   foreach( $files as $file )
     {
       $txt = '';

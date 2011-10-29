@@ -2153,7 +2153,7 @@ class ContentBase
 	      {
 		$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_imagefield_path'));
 		$data = $this->GetPropertyValue('image');
-		$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_');
+		$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
 		if( !$dropdown ) return;
 		return array('<label for="image">'.lang('image').'</label>:',$dropdown);
 	      }
@@ -2163,7 +2163,7 @@ class ContentBase
 	      {
 		$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_thumbnailfield_path'));
 		$data = $this->GetPropertyValue('thumbnail');
-		$dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0);
+		$dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
 		if( !$dropdown ) return FALSE;
 		return array('<label for="thumbnail">'.lang('thumbnail').'</label>:',$dropdown);
 	      }
