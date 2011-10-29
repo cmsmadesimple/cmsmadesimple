@@ -10,6 +10,7 @@ Version 1.10.1 - NO NAME
   - Fixes the summary modifier.
   - Replaces the cms_tree_operations::load_from_list() method with a simpler, recursive function.
   - Minor optimizations to the cms_content_cache class to reduce database queries when there are deactivated pages.
+  - Inactive pages now show up in order content, and in a different color.
 
 Version 1.10 - Martinique
 -----------------------------

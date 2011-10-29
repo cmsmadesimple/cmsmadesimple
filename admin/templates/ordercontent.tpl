@@ -58,7 +58,7 @@ $(".save").click(function(){
 </div>
 
 <div class="reorder-pages">
-{include file="ordercontent_tree.tpl" list=$tree->getChildren() depth=1}
+{include file="ordercontent_tree.tpl" list=$tree->getChildren(false,true) depth=1}
 </div>
 
 <div class="pageoverflow">
