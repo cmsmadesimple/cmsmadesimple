@@ -79,12 +79,16 @@ function cms_autoloader($classname)
     }
 
   // module loaded content types
-  $contentops = cmsms()->GetContentOperations();
-  $types = $contentops->ListContentTypes();
-  if( in_array(strtolower($classname),array_keys($types)) )
+  $contentops = ContentOperations::get_instance();
+  if( $contentops )
     {
-      $contentops->LoadContentType(strtolower($classname));
-      return;
+      // why would this ever NOT be true.. dunno, but hey.
+      $types = $contentops->ListContentTypes();
+      if( in_array(strtolower($classname),array_keys($types)) )
+	{
+	  $contentops->LoadContentType(strtolower($classname));
+	  return;
+	}
     }
 
   $fn = $config['root_path']."/modules/{$classname}/{$classname}.module.php";
