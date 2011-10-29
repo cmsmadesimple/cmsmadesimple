@@ -1,8 +1,103 @@
 --------------------------------
 CMSMS Version 1.10 - Martinique
 --------------------------------
+The dev team is proud to announce that CMSMS 1.10 (one point ten), the latest stable version of CMS Made Simple is now ready for download. This version continues the development of the 1.x series with some exciting new features that enhance the admin experience and make maintaining a site an even more efficient process. Our focus for this release has been to make CMSMS faster, lighter, and stronger.
 
-Release notes will go here when 1.10 is released.
+The development team has once again contributed many hundreds of hours of their time to create, enhance and rationalize the features and systems of this version. We are confident that as we push this release out the door that all the work that has been done during the development and beta processes will make CMSMS 1.10 the best version of this software yet.
+
+This version of the software has gone through an extensive beta process that resulted in 4 beta releases, lasting about two months. The various beta releases have been downloaded well over one thousand times by members of our community, which represents a great deal more hours of testing and contributions by our valued user community. We hope that this open beta will make CMSMS 1.10 the most stable release yet.
+
+By far the biggest changes in this release include adding support for lazy loading of modules, dropping TinyMCE in exchange for MicroTiny, A complete revamp of the module downloading code, and exchanging the Printing module with CmsPrinting. These changes have resulted in a dramatic reduction in the download size of CMSMS 1.10.
+
+Module Lazy Loading is a huge feature that will reduce system requirements and improve performance of your website. It means that modules that are not needed on a page will not be loaded (modules must undergo a few minor modifications to support this). Lazy loading also occurs in the admin interface. The admin navigation is cached for each user so that after the first request memory requirements are much smaller.
+
+MicroTiny as the default WYSIWYG. MicroTiny is a faster, stripped, and trimmed down version of the tinymce editor, optimized for the functionality that is needed by content editors on a majority of sites. The full TinyMCE module will continue to be available from the module manager as a third party module.
+
+CmsPrinting module which provides similar functionality without the bloat of the tcpdf library that proved to be used by only a small percentage of users. PDF Printing capabilities will continue to be provided by the use of a third party module.
+
+ModuleManager (and it,F"(Bs partner server component ModuleRepository) have been significantly revised to use a RESTFUL interface rather than a SOAP interface (sorry for the geek talk). Which results in a dramatic reduction in memory requirements for downloading modules from our forge. Additionally, the XML parsing functionality has been rewritten to use memory more optimally, and there are functionality improvements as well. As a side benefit to this effort we were able to completely remove the nuSOAP module from our distribution.
+
+Another huge feature for 1.10 is the new preview functionality in the News module. Here you can select a page, and a template to use for the preview. This will be huge for the sites that use the news module extensively and provide a reference so that module developers can implement similar features into their modules.
+
+To modernize the core system and streamline we have removed a series of old elements including: the depreciated {stylesheet} plug-in, stylesheet.php and the associated preference. Sites using the old {stylesheet} plugin should continue to operate fine, however it is no longer available for new sites built with CMSMS 1.10. Similarly, the adsense plug-in and startExpandCollapse/endExpandCollapse plugins have been removed from the core.
+
+1.10 is also now fully compatible with MySQL 5.5 which solves any database issues as your server hosts upgrade.
+
+For ease of site and admin maintenance we have improved many features. We have reworked the installation process layout for better theme consistency. The installer itself (and the system information page) has been updated to issue warnings instead of errors for E_STRICT and E_DEPRECATED. Finally we,F"(Bve made modifications to the installer to better handle modules.
+
+General enhancement of the admin interface has been a priority, starting with the login page. If you try to access an admin page when logged out, you will be auto-returned to that page upon login %G,Fb€“(B%@ great for those times your admin times out. Failure to login correctly now issues a login failed,F"(B event to allow for custom handling (email notifications maybe) of failed login events. For our international users there is now the ability to view module help in english in the event that the translated help for a module is not up to date, or not clear. Additionally, the Systeminfo page has been redesigned for better readability
+
+The auditing system has been significantly improved, we,F"(Bve rewritten the interface in smarty, added filtering, and IP address tracking for actions undertaken by a logged in administrator. Additionally there are now preferences for the lifetime of the admin log so that the history doesn,F"(Bt grow extraordinarily large, and ensured that most significant actions in the admin interface generate audit entries to ensure that the information in the audit log is more useful.
+
+For security we have added support for a separate admin URL that supports SSL, and added the ability to salt passwords for your admin users. As well, we,F"(Bve modified all cookie commands to ensure that the secure param is managed properly on SSL pages.
+
+JavaScript support is further improved with the {cms_jquery} tag to include the jquery provided with CMSMS, and we,F"(Bve updated the JQuery and JQueryUI that is distributed in the core.
+
+The {cms_stylesheet} tag has been improved to combine all stylesheets into one cached .css file by default, thus under normal circumstances reducing the number of requests to the server required by the browser to render a page. Combining stylesheets will only occur if the media types for all of the stylesheets attached to a page are identical.
+
+There have also been a lot of improvements in content. In the page edit screen -Y,A4(Bpage URL,A!(B is moved from ,A4(BOptions,A!(B tab to the ,A4(BMain,A!(B tab. The cms_selflink tag now allows for width and height parameters when using images. The content tag now allows for a max_length parameter so it is possible to control how much content can go into any given area. The parent dropdown now optionally uses the menu text as opposed to the longer title that was showing. We have also revamped the content permission mechanisms, User Defined Tags now contain a description area just like Global content blocks, so you can include notes as to what they do. Global content blocks themselves now show the description in the summary listings for fast reference.
+
+Along with a slew of bug fixes, we have also undertaken a number of housekeeping tasks to further improve the system and its efficiency: We have taken effort to minimize the core XXXXX.module.php files to result in less memory requirements for most actions. Version check now uses a new cms_http_request class to get past the allow_url_fopen limitation on some hosts. All distributed plugins have an assign parameter for better use in smarty. The NuSoap module has been removed as a core module.
+
+We have also cleaned up a large amount of classes to facilitate growth, enhance security, and manage performance going forward. This includes getting rid of the last of the deprecated callbacks from the module class itself, getting rid of a number of member variables that are now redundant ($gCms$B"*(Bmodules and the module$B"*(Bcms and module$B"*(Bsmarty etc members). We have cleaned up the content classes a fair bit, and additionally ie6 relevant conditional styles and inline JS has been removed from the distribution. Unfortunately, this means that we have broken some compatibility, and may cause difficulty for people in the upgrade process.
+
+Recommended Upgrade Procedure:
+------------------------------
+Users wishing to upgrade to CMSMS 1.10 should follow two similar, but different paths depending upon their sites current version of CMSMS.
+
+** It is always important to have a backup of your site, including the database and all relative files before proceeding with an upgrade. **
+If the version of CMSMS is less than 1.9.3:
+a) Perform an upgrade to CMSMS 1.9.4.3 and verify that everything is working fine.
+b) Backup your site again. It is always important to have a known-good-backup.
+
+For all users upgrading to CMSMS 1.10:
+c: Upgrade all modules to the latest available version.
+d: Look at all of the third party plugins you have installed into your sites plugins directory and ensure that they should be compatible with CMSMS 1.10 (you may need to refer to the information below or to the forum for this).
+e: Look at all of your User Defined Tags (UDT-F,F"(Bs) to insure that they should be compatible with CMSMS 1.10. See the technical information below to see what has changed.
+e: Ensure that each module that your site requires is compatible with CMSMS 1.10. As some modules have needed revisions to be compatible. If your site is using some older or less used modules, you may have to contact the modules author or enquire in the CMSMS forum to see if the module is compatible.
+
+What We Broke (Technical Stuff):
+--------------------------------
+1: Removing $gCms$B"*(Bsmarty, use cmsms()$B"*(BGetSmarty() instead.
+In older versions of CMSMS the $gCms object contained a reference to the global smarty object. The global smarty object is now a singleton to ensure that it cannot be instantiated more than once.
+
+2: Removed the $gCms$B"*(Bconfig, use cmsms()$B"*(BGetConfig() instead.
+Similar to the Smarty object, the config object is also a singleton. Therefore that method of accessing the config object has been removed.
+
+3: Removed the $gCms$B"*(Bmodules array. use cms_utils::get_module() instead.
+The public modules array, a throwback to the days of php4 has been removed, and replaced with a complete api (see the ModuleOperations class). A simple method to obtain a module object reference has been (since CMSMS 1.9) the cms_utils::get_module() method. This may effect your UDT,F"(Bs the most.
+
+4: Revised the content objects
+In CMSMS 1.10, as the first step in revising our object interface for the sake of efficiency we have revised the Content object to ensure that all member variables are private and that accessors exist for each data member. The most prominent of these is the ,F!(BmModifiedDate,F"(B member of the content object, which was public but had no accessor method.
+
+5: The CmsObject class is now final and a singleton.
+In CMSMS 1.10, the CmsObject class (aka the $gCms variable) is now a final, non-extendable class.
+
+6: Removed deprecated callbacks from the module api.
+The last of the long deprecated callbacks were removed from the module class as they have been replaced by events for a long time.
+
+7: Private, Protected, and final methods in the module API.
+Our first step in the cleanup of the module API was to clean up the interfaces for this class. We have declared most methods to be public or protected. Some methods are also final and cannot be overridden. We have also deprecated the Redirect methods of the module API.
+
+8: Replaced, but deprecated some members of the module class.
+The smarty, db, and config members of the module class (which were references to the global versions of those objects) have been removed, and replaced with access methods. Though this should not break compatibility the following is now deprecated:
+
+$this$B"*(Bsmarty %G,Fb€“(B%@ when $smarty is not provided to you in scope, you should use cmsms()$B"*(BGetSmarty()
+$this$B"*(Bdb %G,Fb€“(B%@ when $db not provided to you in scope, you should use cmsms()$B"*(BGetDb();
+$this$B"*(Bconfig %G,Fb€“(B%@ you should use cmsms()$B"*(BGetConfig();
+$this$B"*(Bcms %G,Fb€“(B%@ When not provided in scope, you should use $gCms = cmsms();
+
+Thanks:
+-------
+As always, massive amounts of effort has gone into creating this release, freely donated by the members of the development team and other volunteers. Special thanks to:
+Ronny Krijt, Rolf, Jeremy Bass, Ren,Ai(B Helminsen, Jeff Bosch, Robert Campbell
+John Scotcher, Ted Kulp, Samuel Goldstein, Morten Poulsen, Goran Ilic
+Mark Reed, Anne-Mieke Bovelett, Keith Lauchlan and to Jean-Claude Etiemble (jce76350)
+
+Also, The Dev Team cannot forget to thank the hundreds of members of our community that have volunteered their time to participate in the beta program to make their favorite content management system even that much better. Without their help CMSMS 1.10 would not have been as stable. Keep up the good work.
+
+,A)(B Copyright 2011 the CMS Made Simple Dev Team. All Rights Reserved.
+
 
 ------------------------------
 CMSMS Version 1.9 - Bora Bora
