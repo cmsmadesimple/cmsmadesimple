@@ -12,8 +12,7 @@ if(!defined('CMS_VERSION')) die('Attempt to use ADODB from outside of CMS');
 if (!defined('_ADODB_LAYER'))
 	define('_ADODB_LAYER',1);
 
-if (!defined('ADODB_DIR'))
-	define('ADODB_DIR', dirname(__FILE__));
+if (!defined('ADODB_DIR')) define('ADODB_DIR', dirname(__FILE__));
 
 $ADODB_vers = 'V1.42 ADOdb Lite 11 January 2007  (c) 2005-2007 Mark Dickenson. All rights reserved. Released LGPL.';
 
@@ -39,8 +38,6 @@ function &ADONewConnection( $dbtype = 'mysql', $modules = '' )
 {
 	global $ADODB_FETCH_MODE;
 	$false = false;
-
-	@include_once( ADODB_DIR . '/adodb.config.php' );
 
 	if (strpos($dbtype,'://')) {
 		$dsn_array = @parse_url(rawurldecode($dbtype));
@@ -347,7 +344,6 @@ class ADOConnection
 	function outp($text, $newline = true)
 	{
 		global $ADODB_OUTP;
-		//$this->debug_output = "<br>\n(" . $this->dbtype . "): ".htmlspecialchars($text)."<br>\n Error (" . $this->ErrorNo() .'): '. $this->ErrorMsg() . "<br>\n";
 		$this->debug_output = "(" . $this->dbtype . "): ".htmlspecialchars($text)."\n";
                 if( $this->ErrorNo() != 0 )
 		   $this->debug_output .= "Error (" . $this->ErrorNo() .'): '. $this->ErrorMsg() . "\n";

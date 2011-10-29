@@ -12,6 +12,7 @@ Version 1.10.1 - NO NAME
   - Minor optimizations to the cms_content_cache class to reduce database queries when there are deactivated pages.
   - Inactive pages now show up in order content, and in a different color.
   - ModuleManager - minor improvement to the is_connection_ok method.
+  - adodb_lite - get rid of some files that are not needed (xmlschema, config etc).
 
 Version 1.10 - Martinique
 -----------------------------
