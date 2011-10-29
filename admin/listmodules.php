@@ -244,7 +244,7 @@ if ($access)
 
 	if ($action == "uninstall")
 	{
-	  $modinstance = cms_utils::get_module($module);
+	  $modinstance = ModuleOperations::get_instance()->get_module_instance($module,'',TRUE);
 	  if( is_object($modinstance) )
 	    {
 	      $modops = $gCms->GetModuleOperations();
