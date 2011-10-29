@@ -466,6 +466,10 @@ final class modmgr_utils
 		return TRUE;
 	      }
 	  }
+	else
+	  {
+	    $req->clearCache();
+	  }
       }
     return FALSE;
   }
