@@ -36,7 +36,7 @@ if( isset($_POST['data']) )
       $content = '';
       if( $tmp )
 	{
-	  $content = $tmp->getContent();
+	  $content = $tmp->getContent(false,true,true);
 	  if( $content )
 	    {
 	      $rec = aray();
@@ -83,7 +83,7 @@ if( isset($_POST['data']) )
       {
 	$rec =& $data[$i];
 	$node = $tree->find_by_tag('id',$rec['id']);
-	$content = $node->getContent();
+	$content = $node->getContent(false,true,true);
 	if( $content )
 	  {
 	    $rec['old_parent'] = $content->ParentId();
@@ -107,7 +107,7 @@ if( isset($_POST['data']) )
 	    $rec =& $data2[$i];
 	    $db->Execute($query,array($rec['order'],$rec['parent_id'],$rec['id']));
 	  }
-	$contentops =& $gCms->GetContentOperations();
+	$contentops = $gCms->GetContentOperations();
 	$contentops->SetAllHierarchyPositions();
 	$contentops->ClearCache();
 	return;
