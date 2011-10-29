@@ -947,7 +947,7 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
 
   if( $sortresults )
     {
-      asort($files);
+      natcasesort($files);
     }
   foreach( $files as $file )
     {
