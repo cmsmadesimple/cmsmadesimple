@@ -20,6 +20,7 @@ Version 1.10.1 - Le Lorrain
   - Fixes pagination bug in news admin interface when category is selected.
   - Minor fix to upgrade in News.
   - Fixes minor problem with Pageinfo class.
+  - Fix to the GetModulesWithCapability method.
 
 Version 1.10 - Martinique
 -----------------------------

@@ -2234,7 +2234,14 @@ class CMSModule
 	    {
 	      for( $i = 0; $i < count($tmp); $i++ )
 		{
-		  $result[] = get_class($tmp[$i]);
+		  if( is_object($tmp[$i]) )
+		    {
+		      $result[] = get_class($tmp[$i]);
+		    }
+		  else
+		    {
+		      $result[] = $tmp[$i];
+		    }
 		}
 	    }
 	  return $result;
