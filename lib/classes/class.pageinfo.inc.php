@@ -112,14 +112,11 @@ class PageInfo
 				{
 					return $contentobj->Metadata();
 				}
-				case 'content_modified_date':
-				{
-					return $contentobj->Metadata();
-				}
 				case 'content_created_date':
 				{
 					return $contentobj->GetCreationDate();
 				}
+				case 'content_modified_date':
 				case 'content_last_modified_date':
 				{
 					return $contentobj->GetModifiedDate();

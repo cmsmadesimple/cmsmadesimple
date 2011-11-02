@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.10";
-$CMS_VERSION_NAME = "Martinique";
+$CMS_VERSION = "1.10.1";
+$CMS_VERSION_NAME = "Le Lorrain";
 $CMS_SCHEMA_VERSION = "35";
 
 define('CMS_VERSION', $CMS_VERSION);

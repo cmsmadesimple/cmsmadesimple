@@ -75,7 +75,7 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 			$combine_stylesheets = TRUE;
 		}
   	    $query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,
-               		              A.media_type
+               		              A.media_type,B.assoc_order
    	                FROM '.cms_db_prefix().'css A 
                     LEFT JOIN '.cms_db_prefix().'css_assoc B ON A.css_id = B.assoc_css_id';
 		$where[] = 'B.assoc_type = ?
