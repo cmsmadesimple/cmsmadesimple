@@ -16,6 +16,8 @@ Version 1.10.1 - Le Lorrain
   - Fixed problem with uninstalling deactivated modules.
   - Fixes sorting for page_image and thumbnail dropdowns
   - Fixes call to GetParameters in the module API that would hide parameters from the help if the module was using the new InitializAdmin method.
+  - Fixes postgres compatibility issue.
+  - Fixes pagination bug in news admin interface when category is selected.
 
 Version 1.10 - Martinique
 -----------------------------
