@@ -492,7 +492,7 @@ class CMSModule
 	  if( count($this->params) == 1 && $this->params[0]['name'] == 'lang' )
 	    {
 	      // quick hack to load parameters if they are not already loaded.
-	      $this->SetParameters();
+	      $this->InitializeAdmin();
 	    }
 	  return $this->params;
 	}
