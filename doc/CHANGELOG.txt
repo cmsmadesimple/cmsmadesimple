@@ -21,6 +21,8 @@ Version 1.10.1 - Le Lorrain
   - Minor fix to upgrade in News.
   - Fixes minor problem with Pageinfo class.
   - Fix to the GetModulesWithCapability method.
+  - Adds help for MicroTiny.
+  - Adds more help for the {content_module} tag.
 
 Version 1.10 - Martinique
 -----------------------------

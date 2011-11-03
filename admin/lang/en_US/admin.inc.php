@@ -158,6 +158,15 @@ $lang['admin']['help_function_content_module'] = <<<EOT
 <p>This content block type allows interfacing with different modules to create different content block types.</p>
 <p>Some modules can define content block types for use in module templates.  i.e: The FrontEndUsers module may define a group list content block type.  It will then indicate how you can use the content_module tag to utilize that block type within your templates.</p>
 <p><strong>Note:</strong> This block type must be used only with compatible modules.  You should not use this in any way except for as guided by addon modules.</p>
+<p>This tag accepts a few parameters, and passes all other paramters to the module for processing.</p>
+<p>Parameters:
+ <ul>
+ <li><strong>(required)</strong>module - The name of the module that will provide this content block. This module must be installed and available</li>
+ <li><strong>(required)</strong>block  - The name of the content block.</li>
+ <li><em>(optional)</em>label - A label for the content block for use when editing the page.</li>
+ <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
+ </ul>
+</p>
 EOT;
 
 
