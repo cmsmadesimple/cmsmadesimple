@@ -111,11 +111,12 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
 
 	foreach ($params as $key=>$value)
 	{
-		if( $key && $value )
+		if( $key !== '' && $value !== '' )
 		{
 			$text .= '&'.$id.$key.'='.rawurlencode($value);
 		}
 	}
+	debug_to_log('module redirect to '.$text);
 	#var_dump($text);
 	redirect($text);
 }

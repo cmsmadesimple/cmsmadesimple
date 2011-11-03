@@ -23,6 +23,7 @@ Version 1.10.1 - Le Lorrain
   - Fix to the GetModulesWithCapability method.
   - Adds help for MicroTiny.
   - Adds more help for the {content_module} tag.
+  - Fixes a problem in the Redirect method of the module api if a value of a parameter was 0
 
 Version 1.10 - Martinique
 -----------------------------
