@@ -1408,7 +1408,7 @@ class ContentBase
 	      if( $this->mURL != '' && !content_assistant::is_valid_url($this->mURL,$this->mId) )
 		{
 		  // and validate the URL.
-		  $errors[] = lang('invalid_url');
+		  $errors[] = lang('invalid_url2');
 		}
 	    }
 

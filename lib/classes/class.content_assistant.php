@@ -71,26 +71,44 @@ class content_assistant
     // check for starting or ending slashes
     if( startswith($url,'/') || endswith($url,'/') )
       {
-	return FALSE;
+		  return FALSE;
       }
 
     // first check for invalid chars.
-    $translated = munge_string_to_url($url,false,true);
-    if( strtolower($translated) != strtolower($url) )
-      {
-	return FALSE;
-      }
+	// strip off any extension (that is like 5 chars or less)
+	$pos = strrpos($url,'.');
+	if( $pos !== FALSE )
+	{
+		// have an extension.
+		$ext = substr($url,$pos+1);
+		if( strlen($ext) >= 5 || munge_string_to_url($ext,false,true) != strtolower($ext) )
+			{
+				return FALSE;
+			}
+		$tmp = substr($url,0,$pos);
+		if( munge_string_to_url($tmp,false,true) != strtolower($tmp) )
+			{
+				return FALSE;
+			}
+	}
+	else
+	{
+		$translated = munge_string_to_url($url,false,true);
+		if( strtolower($translated) != strtolower($url) )
+			{
+				return FALSE;
+			}
+	}
 
     cms_route_manager::load_routes();
     $route = cms_route_manager::find_match($url);
     if( !$route ) return TRUE;
     if( $route->is_content() )
-
       {
-	if($content_id == '' || ($route->get_content() == $content_id))
-	  {
-	    return TRUE;
-	  }
+		  if($content_id == '' || ($route->get_content() == $content_id))
+			  {
+				  return TRUE;
+			  }
       }
     return FALSE;
   }
