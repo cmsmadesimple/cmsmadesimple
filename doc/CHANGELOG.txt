@@ -25,6 +25,7 @@ Version 1.10.1 - Le Lorrain
   - Adds more help for the {content_module} tag.
   - Fixes a problem in the Redirect method of the module api if a value of a parameter was 0
   - now extend time limit in the module manager for time intensive operations. (some hosts may not allow this).
+  - Fixes some minor template issues in News.
 
 Version 1.10 - Martinique
 -----------------------------
