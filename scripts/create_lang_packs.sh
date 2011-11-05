@@ -75,7 +75,7 @@ _owd=`pwd`
 _workdir=/tmp/$_this.$$
 _destdir=/tmp
 _langs=''
-_coremodules='Search Printing News TinyMCE nuSOAP ModuleManager ThemeManager MenuManager FileManager CMSMailer'
+_coremodules='Search CMSPrinting News MicroTiny ModuleManager ThemeManager MenuManager FileManager CMSMailer'
 
 # Process command line arguments
 while [ $# -gt 1 ]; do
@@ -102,7 +102,6 @@ _version=`grep '^\$CMS_VERSION' version.php | grep -v _NAME | cut -d\" -f2`
 # find the list of languages (except english)
 cd admin/lang/ext
 _langs=`ls -1 | grep -v index`
-echo $_langs
 
 #
 # Process each language
@@ -110,10 +109,12 @@ echo $_langs
 for onelang in $_langs ; do
   echo "Processing $onelang"
   shortlang=`echo $onelang | cut -d_ -f1`
+  echo "shortlang is $shortlang"
 
   # build the file list
   file_list=''
   build_file_list $onelang $shortlang file_list
+ 
 
   # create the file archive
   _destfile=$_destdir/cmsmadesimple-$_version-langpack-$onelang.tar.gz

@@ -7,7 +7,8 @@ _owd=`pwd`
 _this=`basename $0`
 _workdir=/tmp/$_this.$$
 _owd=`pwd`
-_clean=0
+_clean=1
+_nostubs=0
 # basedir    (if set, specify the base directory to put generated releases).
 
 # adjust the path
@@ -45,6 +46,11 @@ while [ $# -gt 0 ]; do
     '--basedir' )
       basedir=$2
       shift 2
+      continue
+      ;;
+    '--nostubs' )
+      _nostubs=1
+      shift
       continue
       ;;
     '--noclean' )
@@ -189,12 +195,14 @@ done
 for _f in $_newfiles ; do
   tar cf - $_f 2>/dev/null | (cd $_workdir/base_diff && tar xf - )
 done
-for _f in $_delfiles ; do
-  _dn=`dirname $_f`
-  _fn=`basename $_f`
-  mkdir -p $_workdir/base_diff/$_dn
-  touch $_workdir/base_diff/$_dn/$_fn
-done
+if [ $_nostubs = 0 ]; then
+  for _f in $_delfiles ; do
+    _dn=`dirname $_f`
+    _fn=`basename $_f`
+    mkdir -p $_workdir/base_diff/$_dn
+    touch $_workdir/base_diff/$_dn/$_fn
+  done
+fi
 
 #4 tar it up
 cd $_workdir/base_diff
@@ -227,7 +235,6 @@ while read line ; do
   _n=`echo $line | grep -c '^Only in to_full'`
   _d=`echo $line | grep -c '^Only in from_full'`
   _fn=`echo $line | cut -d' ' -f4 | cut -d/ -f2-`
-
   _ci=`echo $line | grep -c 'install/'`
 
   if [ $_c = 1 -a $_ci = 0 ]; then
@@ -251,12 +258,14 @@ done
 for _f in $_newfiles ; do
   tar cf - $_f | (cd $_workdir/full_diff && tar xf - )
 done
-for _f in $_delfiles ; do
-  _dn=`dirname $_f`
-  _fn=`basename $_f`
-  mkdir -p $_workdir/full_diff/$_dn >/dev/null
-  touch $_workdir/full_diff/$_dn/$_fn
-done
+if [ $_nostubs = 0 ]; then
+  for _f in $_delfiles ; do
+    _dn=`dirname $_f`
+    _fn=`basename $_f`
+    mkdir -p $_workdir/full_diff/$_dn >/dev/null
+    touch $_workdir/full_diff/$_dn/$_fn
+  done
+fi
 
 #8 tar it up
 cd $_workdir/full_diff

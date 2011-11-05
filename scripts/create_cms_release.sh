@@ -44,6 +44,7 @@ _cmsurl='http://svn.cmsmadesimple.org/svn/cmsmadesimple';
 # noask      (if set, disable confirmation check)
 # noclean    (if set, don't perform cleanup of temporary files)
 # notag      (if set, don't create a tag for this release)
+# nolang     (if set, do not create langpacks)
 
 # adjust the path
 _t=`pwd`/scripts
@@ -114,6 +115,11 @@ while [ $# -gt 0 ]; do
       shift 1
       continue
       ;;
+    '--nolang' )
+      nolang=1
+      shift 1
+      continue
+      ;;
     '--basedir' )
       basedir=$2
       shift 2
@@ -172,6 +178,8 @@ if [ ${noask:-notset} = notset ]; then
   if [ ${noclean:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
   echo -n "CREATE CMS TAG ${_cmsurl}/tags/version-$_version? ";
   if [ ${notag:-notset} = notset ]; then echo 'YES'; else echo "NO"; fi;
+  echo -n "CREATE Language Packs ${_cmsurl}/tags/version-$_version? ";
+  if [ ${nolang:-notset} = notset ]; then echo 'YES'; else echo 'NO'; fi;
 
   echo
   echo -n "Is this correct? (yes/no) ";
@@ -246,18 +254,20 @@ echo "Creating full package"
 tar zcf $_destdir/cmsmadesimple-$_version-full.tar.gz .
 
 # run the create_lang_packs script
-echo "Creating language packs"
-create_lang_packs.sh -s ${_workdir} -d $_destdir >/dev/null
+if [ ${nolang:-notset} = notset ]; then
+  echo "Creating language packs"
+  create_lang_packs.sh -s ${_workdir} -d $_destdir >/dev/null
 
-# Create the base (english) package checksum file
-echo "Creating checksum file again"
-create_checksum_file $_destdir/cmsmadesimple-$_version-english-checksum.dat
+  # Create the base (english) package checksum file
+  echo "Creating checksum file again"
+  create_checksum_file $_destdir/cmsmadesimple-$_version-english-checksum.dat
 
-# Create the base package
-# it is created after the langpacks are created, because the langpack
-# generation removes files from the working directory.
-echo "Creating base (english only) package"
-tar zcf $_destdir/cmsmadesimple-$_version-english.tar.gz .
+  # Create the base package
+  # it is created after the langpacks are created, because the langpack
+  # generation removes files from the working directory.
+  echo "Creating base (english only) package"
+  tar zcf $_destdir/cmsmadesimple-$_version-english.tar.gz .
+fi
 
 # Create a final checksum data file
 cd $_destdir
