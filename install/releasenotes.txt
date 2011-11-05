@@ -1,3 +1,21 @@
+(c) Copyright 2011 the CMS Made Simple Dev Team. All Rights Reserved.
+---------------------------------
+CMSMS Version 1.10.1 - Le Lorrain
+---------------------------------
+
+Here we are again, straight out of a major functionality release, with a new point release for a significant bunch of bug fixes.  Named 1.10.1 - Le Lorrain (pronounced one point ten point one),  We had hoped that our longer, publicbeta process would have caught most of the issues like this.  However, as they say, the road to hell is paved with good intentions.  But that is how things go.  C'est La Vie.
+
+The prominent bugs we fixed were with respect to inactive content pages, and with respect to module functionality.  We also fixed the summarize modifier, and even a postgres compatibility issue.  As well, we added some help where it was missing, and managed to squeeze in some minor optimizations too.  Some missing help was added, and/or improved in some modules, and the translations should be much more up to date.
+
+We encourage everybody to upgrade their website(s) to CMSMS 1.10.1 As soon as possible, as this release marks the end of support for the 1.9 series of CMSMS.  As well, there are some important bug fixes for ALL users of CMSMS 1.10.
+
+There will be a diff package for this release, but only from CMSMS 1.10.  It is still recommended that you ensure that your modules are compatible with CMSMS 1.10.x before upgrading your production sites.  And always have a verified backup before doing any upgrades.  If you don't have a backup, there isn't much we can do to help you if things go bad, except to shake our heads.
+
+Thanks go out to all of those that found these issues amd to the members of the dev team who have again spent many hours testing, fixing and re-testing issues.
+
+Have fun with CMSMS 1.10.1
+
+
 --------------------------------
 CMSMS Version 1.10 - Martinique
 --------------------------------
@@ -95,8 +113,6 @@ John Scotcher, Ted Kulp, Samuel Goldstein, Morten Poulsen, Goran Ilic
 Mark Reed, Anne-Mieke Bovelett, Keith Lauchlan and to Jean-Claude Etiemble (jce76350)
 
 Also, The Dev Team cannot forget to thank the hundreds of members of our community that have volunteered their time to participate in the beta program to make their favorite content management system even that much better. Without their help CMSMS 1.10 would not have been as stable. Keep up the good work.
-
-(c) Copyright 2011 the CMS Made Simple Dev Team. All Rights Reserved.
 
 
 ------------------------------
