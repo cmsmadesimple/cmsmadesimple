@@ -270,6 +270,7 @@ class ModuleManager extends CMSModule
    ---------------------------------------------------------*/
   function DoAction($action, $id, $params, $returnid=-1)
   {
+    set_time_limit(9999);
     switch ($action)
       {
       case 'recurseinstall':
