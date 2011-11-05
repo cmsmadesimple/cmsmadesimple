@@ -1,3 +1,8 @@
+Version 1.11 *** NO NAME ***
+-----------------------------
+  - CMSModule class is now abstract
+  - Remove the $config['output_compression'] option.
+
 Version 1.10.1 - Le Lorrain
 -----------------------------
   - Fixed a problem with improper HTTPS detection in the metadata plugin

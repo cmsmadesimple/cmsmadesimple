@@ -69,16 +69,7 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 }
 
 require_once($dirname.'/include.php'); 
-
-// optionally enable output compression (as long as debug mode isn't on)
-if( isset($config['output_compression']) && ($config['output_compression']) && $config['debug'] != true )
-  {
-    @ob_start('ob_gzhandler');
-  }
-else
-  {
-    @ob_start();
-  }
+@ob_start();
 
 
 $gCms = cmsms();

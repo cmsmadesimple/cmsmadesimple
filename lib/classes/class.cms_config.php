@@ -94,7 +94,6 @@ class cms_config implements ArrayAccess
     $this->_types['image_uploads_url'] = self::TYPE_STRING;
     $this->_types['debug'] = self::TYPE_BOOL;
     $this->_types['process_whole_template'] = self::TYPE_BOOL;
-    $this->_types['output_compression'] = self::TYPE_BOOL;
     $this->_types['timezone'] = self::TYPE_STRING;
     $this->_types['persist_db_conn'] = self::TYPE_BOOL;
     $this->_types['previews_path'] = self::TYPE_STRING;
@@ -259,9 +258,6 @@ class cms_config implements ArrayAccess
 	return false;
 
       case 'process_whole_template':
-	return false;
-
-      case 'output_compression':
 	return false;
 
       case 'timezone':

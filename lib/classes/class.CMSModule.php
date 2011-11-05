@@ -31,7 +31,7 @@
  * @version             1.8
  * @package		CMS
  */
-class CMSModule
+abstract class CMSModule
 {
 	/**
 	 * ------------------------------------------------------------------
