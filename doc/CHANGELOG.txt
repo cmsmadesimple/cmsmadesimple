@@ -2,6 +2,7 @@ Version 1.11 *** NO NAME ***
 -----------------------------
   - CMSModule class is now abstract
   - Remove the $config['output_compression'] option.
+  - Remove the $config['use_adodb_lite'] option and the USE_OLD_ADODB global.
 
 Version 1.10.1 - Le Lorrain
 -----------------------------

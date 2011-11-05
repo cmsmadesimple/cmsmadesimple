@@ -23,11 +23,8 @@ require_once("../include.php");
 $gCms = cmsms();
 
 $LOAD_ALL_MODULES = true;
-#$DONT_LOAD_DB = false;
-$USE_OLD_ADODB=1;
 $process = 'upgrade';
 $max_pages = 7;
-
 
 define('CMS_UPGRADE_HELP_URL', 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Installation/Install_Process');
 define('CMS_INSTALL_BASE', dirname(__FILE__));
@@ -39,7 +36,6 @@ require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'translation.functions.php');
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'classes', 'CMSInstaller.class.php');
-
 
 /* Check SESSION */
 if(! extension_loaded_or('session') )
