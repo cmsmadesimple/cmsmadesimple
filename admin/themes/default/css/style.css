@@ -539,6 +539,28 @@ div.pagecontainer  {
 div.pagecontainer p {
    margin-bottom: 1em;
 }
+div.pagecontainer ol {
+	margin: 0 0 0 10px;
+}
+div.pagecontainer ol li{
+	list-style:decimal;
+	line-height: 1.4;
+}
+div.pagecontainer ol > li:before {
+    content: ')';
+    padding: 0 10px 0 0;
+}
+div.pagecontainer ul {
+	margin-left: 0em;
+	padding-left: 20px;
+}
+div.pagecontainer ul li {
+	list-style-type: disc;
+	padding-bottom: 4px;
+} 
+div.pagecontainer .reorder-pages ul li {
+	list-style-type: none;
+}
 div.pageerrorcontainer  {
    background-color: #ba5a5a;
    margin: 10px;
