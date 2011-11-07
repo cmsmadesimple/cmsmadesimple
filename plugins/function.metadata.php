@@ -42,7 +42,7 @@ function smarty_cms_function_metadata($params, &$smarty)
 	if ($showbase)
 	{
 	  $base = $config['root_url'];
-	  if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'on')
+	  if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off')
 	  {
 	    $base = $config['ssl_url'];
 	  }

@@ -68,7 +68,7 @@ else
     $qparms['names'] =  implode(',',$modules);
     $qparms['newest'] = '1';
     $qparms['clientcmsversion'] = $CMS_VERSION;
-    $url .= '/upgradelistgetall';
+    $url .= 'upgradelistgetall';
     
     $req = new cms_http_request();
     $req->execute($url,'','POST',$qparms);
