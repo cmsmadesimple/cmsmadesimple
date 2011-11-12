@@ -1576,6 +1576,8 @@ $lang['admin']['wontdeletetemplateinuse'] = 'These templates are in use and will
 $lang['admin']['deletetemplate'] = 'Delete Templates';
 $lang['admin']['stylesheetstodelete'] = 'These stylesheets will be deleted';
 $lang['admin']['sitename'] = 'Site Name';
+// Login
+$lang['admin']['goto'] = 'Back to:'; //needs translation 11/12/11
 // Only used by admintheme::ShowHeader
 $lang['admin']['siteadmin'] = $lang['admin']['admin'];
 $lang['admin']['images'] = $lang['admin']['imagemanager'];

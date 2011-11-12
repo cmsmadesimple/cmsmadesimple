@@ -52,7 +52,7 @@
 			<img src="themes/noname/images/layout/cmsms-login-logo.png" width="146" height="45" alt="CMS Made Simple" />
 		</a>
 		<h1><?php echo lang('logintitle')?> </h1>
-		<a class="home" href="<?php $config = cmsms() -> GetConfig(); echo $config['root_url'];?>" title="<?php $config = cmsms() -> GetConfig();	echo $config['root_url'];?>">
+		<a class="home" href="<?php $config = cmsms() -> GetConfig(); echo $config['root_url'];?>" title="<?php echo lang('goto'); $sitename = get_site_preference('sitename'); echo "&nbsp;". $sitename;?>">
 			<?php $config = cmsms() -> GetConfig();	echo $config['root_url'];?></a>
 	</div>
 	<div class="bottom">
