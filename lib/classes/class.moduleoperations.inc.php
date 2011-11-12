@@ -656,15 +656,16 @@ final class ModuleOperations
 				  }
 				  if( $res )
 				  {
+					  $res2 = array(TRUE,lang('moduleupgraded'));
+					  $_SESSION['moduleoperations_result'][$module_name] = $res2;
 					  return TRUE;
-					  //$res2 = array(TRUE,lang('moduleupgraded'));
 				  }
 				  else
 				  {
+					  $res2 = array(FALSE,lang('moduleupgradeerror'));
+					  $_SESSION['moduleoperations_result'][$module_name] = $res2;
 					  return FALSE;
-					  //$res2 = array(FALSE,lang('moduleupgradeerror'));
 				  }
-				  $_SESSION['moduleoperations_result'][$module_name] = $res2;
 				  if( !$res )
 				  {
 					  // upgrade failed
