@@ -89,7 +89,11 @@ final class modulerep_client
     $req->execute($url,$data);
     $status = $req->getStatus();
     $result = $req->getResult();
-    if( $status != 200 || $result == '' )
+    if( $status == 400 )
+      {
+	return array(true,array());
+      }
+    else if( $status != 200 || $result == '' )
       {
 	return array(FALSE,$mod->Lang('error_request_problem'));
       }
