@@ -83,7 +83,7 @@ class cms_variables implements ArrayAccess
     return isset($this->_data[$key]);
   }
 
-  public function &offsetGet($key)
+  public function offsetGet($key)
   {
     if( !in_array($key,$this->_allowed_variables) )
       {

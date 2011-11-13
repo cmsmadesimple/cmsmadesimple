@@ -35,7 +35,7 @@
  * @since 0.5
  */
 
-  //require_once(dirname(__FILE__).'/class.cms_variables.php');
+require_once(dirname(__FILE__).'/class.cms_variables.php');
 
 final class CmsObject {
 
@@ -46,15 +46,6 @@ final class CmsObject {
 	 *	@access private
 	 */
 	private $db;
-
-	/**
-	 * Variables object - various objects and strings needing to be passed 
-	 *
-	 * @internal
-	 * @access private
-	 */
-	public $variables;
-
 
 	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
@@ -85,6 +76,9 @@ final class CmsObject {
 			case 'config':
 				return cms_config::get_instance();
 				break;
+			case 'variables':
+				return cms_variables::get_instance();
+				break;
 			}
 	}
 
@@ -94,6 +88,7 @@ final class CmsObject {
 	 */
 	protected function __construct()
 	{
+		$this->variables = cms_variables::get_instance();
 		register_shutdown_function(array(&$this, 'dbshutdown'));
 	}
 
