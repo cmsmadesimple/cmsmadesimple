@@ -85,6 +85,8 @@ class Smarty_CMS extends Smarty
 
     if( isset($CMS_INSTALL_PAGE) ) return;
 
+    $this->load_file_plugins();
+
     $this->register_resource("db", array(&$this, "template_get_template",
 					 "template_get_timestamp",
 					 "db_get_secure",
@@ -145,6 +147,148 @@ class Smarty_CMS extends Smarty
     return self::$_instance;
   }
 
+
+  /**
+   * A method to load smarty plugins
+   *
+   */
+  protected function load_file_plugins($params = '')
+  {
+    $load_filter   = TRUE;
+    $load_compiler = TRUE;
+    $load_function = FALSE;
+    $load_modifier = FALSE;
+    $load_block    = FALSE;
+
+    $config = cmsms()->GetConfig();
+    $dirs = array($config['root_path'].'/plugins');
+    if( is_array($params) )
+      {
+	if( isset($params['dir']) )
+	  {
+	    if( !is_array($params['dir']) )
+	      {
+		$dirs = explode(',',trim($params['dir']));
+	      }
+	    else
+	      {
+		$dirs = $params['dir'];
+	      }
+	  }
+
+	if( isset($params['load_all']) && $params['load_all'])
+	  {
+	    $load_filter = $load_compilter = $load_function = $load_modifier = $load_block = TRUE;
+	  }
+	else
+	  {
+	    foreach( $params as $key => $value )
+	      {
+		switch( $key )
+		  {
+		  case 'load_filter':
+		    $load_filter = (int)$value;
+		    break;
+		  case 'load_compiler':
+		    $load_compiler = (int)$value;
+		    break;
+		  case 'load_function':
+		    $load_function = (int)$value;
+		    break;
+		  case 'load_modifier':
+		    $load_modifier = (int)$value;
+		    break;
+		  case 'load_block':
+		    $load_block = (int)$value;
+		    break;
+		  }
+	      }
+	  }
+      }
+
+    // now search through the dirs.
+    $caching = false;
+    foreach( $dirs as $onedir )
+      {
+	if( !is_dir($onedir) ) continue;
+
+	$it = new DirectoryIterator($onedir);
+	foreach( $it as $fi )
+	  {
+	    if( !$fi->isFile() ) continue;
+	    if( !endswith($fi->getFilename(),'.php') ) continue;
+	    
+	    $tmp = explode('.',$fi->getFilename());
+	    if( count($tmp) != 3 ) continue;
+
+	    $name = $tmp[1];
+	    $type = $tmp[0];
+
+	    switch( $type )
+	      {
+	      case 'function':
+		if( $load_function && !isset($this->_plugins[$type][$name]) )
+		  {
+		    $this->register_function($name,'smarty_cms_function_'.$name,$caching);
+		    require_once($fi->getPathname());
+		  }
+		break;
+
+	      case 'modifier':
+		if( $load_modifier && !isset($this->_plugins[$type][$name]) )
+		  {
+		    $this->register_modifier($name,'smarty_cms_modifier_'.$name);
+		    require_once($fi->getPathname());
+		  }
+		break;
+
+	      case 'compiler':
+		if( $load_compiler && !isset($this->_plugins[$type][$name]) )
+		  {
+		    $this->register_compiler_function($name,'smarty_cms_compiler_'.$name,$caching);
+		    require_once($fi->getPathname());
+		  }
+		break;
+
+	      case 'block':
+		if( $load_block && !isset($this->_plugins[$type][$name]) )
+		  {
+		    $this->register_block($name,'smarty_cms_block_'.$name,$caching);
+		    require_once($fi->getPathname());
+		  }
+		break;
+
+	      case 'postfilter':
+		if( $load_filter && !isset($this->_plugins[$type][$name]) )
+		  {
+		    $this->register_postfilter('smarty_cms_postfilter_'.$name);
+		    require_once($fi->getPathname());
+		  }
+		break;
+
+	      case 'prefilter':
+		if( $load_filter && !isset($this->_plugins[$type][$name]) )
+		  {
+		    $this->register_prefilter('smarty_cms_prefilter_'.$name);
+		    require_once($fi->getPathname());
+		  }
+		break;
+
+	      case 'outputfilter':
+		if( $load_filter && !isset($this->_plugins[$type][$name]) )
+		  {
+		    $this->register_outputfilter('smarty_cms_outputfilter_'.$name);
+		    require_once($fi->getPathname());
+		  }
+		break;
+
+	      default:
+		continue; // unknown file type.
+		break;
+	      }
+	  }
+      }
+  }
 
   /**
    * wrapper for include() retaining $this
