@@ -64,9 +64,9 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
       cms_set_frontend_language($lang);
     }
 
-  $urlparams = '';
-  if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
-    $urlparams = urlencode(trim($params['urlparams']));
+  $urlparam = '';
+  if ( isset($params['urlparam']) && ( strlen($params['urlparam'] > 0 ) ) ) {
+    $urlparam = trim($params['urlparam']);
   }
 
   $label = '';
@@ -107,10 +107,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
 	      $url .= '#' . ltrim($params['anchorlink'], '#');
 	    }
 	 
-	  if (isset($params['urlparam']))
-	    {
-	      $url .= urlencode(trim($params['urlparam']));
-	    }
+	  if( $urlparam != '' ) $url .= $urlparam;
 	}
     }
   elseif (isset($params['dir'])) 
