@@ -385,7 +385,8 @@ if (!is_array($media_type)) {
 }
 
 $existingtypes = array("all", 
-		       "aural", 
+		       "aural",
+		       "speech", 
 		       "braille", 
 		       "embossed", 
 		       "handheld", 

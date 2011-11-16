@@ -575,7 +575,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 		  $str = $one->Name();
 		}
 	      if ($display == 'edit')
-		$txt .= '<a href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'&amp;page='.$page.'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '">' . cms_htmlentities($str, '', '', true) . '</a>';
+		$txt .= '<a class="tooltip" href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'&amp;page='.$page.'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '" onmouseover="document.getElementById(\'' .$one->Id().'_info\').style.display = \'inline-block\';" onmouseout="document.getElementById(\''.$one->Id().'_info\').style.display = \'none\';">
+			' . cms_htmlentities($str, '', '', true) . '<span id="'.$one->Id().'_info"><strong>'.lang('content_id').':</strong> '.$one->Id().'<br /> <strong>'.lang('title').':</strong> '. cms_htmlentities($one->Name()).'<br /> <strong>'.lang('pagealias').':</strong> '.$one->Alias().'</span></a>';
 	      else
 		$txt .= cms_htmlentities($str, '', '', true);
 	    }

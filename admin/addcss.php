@@ -221,6 +221,7 @@ else
 <?php
 		   $existingtypes = array("all",
 					  "aural",
+					  "speech",
 					  "braille",
 					  "embossed",
 					  "handheld",
