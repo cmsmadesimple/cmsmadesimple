@@ -107,24 +107,24 @@ _langs=`ls -1 | grep -v index`
 # Process each language
 #
 for onelang in $_langs ; do
-  echo "Processing $onelang"
   shortlang=`echo $onelang | cut -d_ -f1`
-  echo "shortlang is $shortlang"
+  if [ $_shortlang != 'en' ]; then
+    echo "Processing $onelang / $shortlang"
 
-  # build the file list
-  file_list=''
-  build_file_list $onelang $shortlang file_list
+    # build the file list
+    file_list=''
+    build_file_list $onelang $shortlang file_list
  
-
-  # create the file archive
-  _destfile=$_destdir/cmsmadesimple-$_version-langpack-$onelang.tar.gz
-  create_file_archive $_destfile file_list
+    # create the file archive
+    _destfile=$_destdir/cmsmadesimple-$_version-langpack-$onelang.tar.gz
+    create_file_archive $_destfile file_list
   
-  # remove the files
-  delete_files_in_list file_list
+    # remove the files
+    delete_files_in_list file_list
 
-  echo 
-  echo
+    echo 
+    echo
+  fi
 done
 
 #
