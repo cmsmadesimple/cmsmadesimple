@@ -1,12 +1,13 @@
-Version 1.11 *** NO NAME ***
+Version 1.10.2 - Casa Pilote
 -----------------------------
-  - CMSModule class is now abstract
-  - Remove the $config['output_compression'] option.
-  - Remove the $config['use_adodb_lite'] option and the USE_OLD_ADODB global.
-  - Page URLS can now have small (5 chars or less) ASCII extensions.
-  - Fixes encoding of urlparams on the cms_selflink tag.  (#7172)
-  - Fixes toggling of page alias generation if an alias was cleared
-  - Fixes minor problem with default access key in copycontent.
+Core - Bug Reports:
+  - #7111 ordered lists in backend
+  - #7112 Missing content-type in printing module (CMSPrinting)
+  - #7172 (cms_selflink encoding the urlparam stuff).
+  - adds force_root_block to MicroTiny.
+  - Fixes a problem with page alias when it was cleared in editcontent
+  - Fixes a minor problem with copycontent
+  - Fixes problem with filters not being loaded.
 
 Version 1.10.1 - Le Lorrain
 -----------------------------
