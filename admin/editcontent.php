@@ -125,6 +125,8 @@ if ($access)
       updatecontentobj($contentobj);
     }
 
+  cms_utils::set_app_data('editing_content',$contentobj);
+
 	if ($submit || $apply)
 	{
 	  #Fill contentobj with parameters

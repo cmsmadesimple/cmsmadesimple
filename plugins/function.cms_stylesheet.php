@@ -170,9 +170,9 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 				if( $trimbackground )
 				{
 					// attempt to trim background stuff from stylesheets.
-					$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
 					$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
-					$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
+// 					$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
+// 					$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
 				}
 
 				$fh = fopen($fn,'w');

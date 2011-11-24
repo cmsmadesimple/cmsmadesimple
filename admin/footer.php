@@ -47,7 +47,7 @@ $formsubmittext = '';
 $bodytext = '';
 
 $userid = get_userid();
-$wysiwyg = get_preference($userid, 'wysiwyg');
+//$wysiwyg = get_preference($userid, 'wysiwyg');
 
 // get the active wysiwyg
 $loaded = ModuleOperations::get_instance()->GetLoadedModules();
