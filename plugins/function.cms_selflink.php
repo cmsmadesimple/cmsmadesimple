@@ -65,7 +65,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty)
     }
 
   $urlparam = '';
-  if ( isset($params['urlparam']) && ( strlen($params['urlparam'] > 0 ) ) ) {
+  if ( isset($params['urlparam']) && ( strlen($params['urlparam']) > 0 ) ) {
     $urlparam = trim($params['urlparam']);
   }
 
