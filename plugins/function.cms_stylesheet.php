@@ -18,7 +18,8 @@
 
 function smarty_cms_function_cms_stylesheet($params, &$smarty)
 {
-
+	debug_to_log('cms_stylesheet');
+	debug_to_log($params);
 	//
 	// begin
 	//
@@ -171,6 +172,9 @@ function smarty_cms_function_cms_stylesheet($params, &$smarty)
 				{
 					// attempt to trim background stuff from stylesheets.
 					$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
+					$_contents = preg_replace('/\w*?(background[-image]*[\s\w]*\:[\#\s\w]*)url\(.*/','$1;',$_contents);
+					$_contents = preg_replace('/\w*?(background[-image]*[\s\w]*\:[\s]*\;)/','',$_contents);
+//					$_contents = preg_replace('/\w*?(background[-image]*[\s\w]*\:[\s\w]*)url\(.*/','',$_contents);
 // 					$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
 // 					$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
 				}
