@@ -758,7 +758,7 @@ class cms_http_request
         // GET method configuration
         if($this->method == 'GET')
         {
-            if(isset($queryString))
+            if($queryString)
             {
                 $this->target = $this->target . "?" . $queryString;
             }
