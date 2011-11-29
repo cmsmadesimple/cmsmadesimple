@@ -749,7 +749,7 @@ class cms_http_request
 	}
         else if(is_array($this->params) && count($this->params) > 0)
         {
-	    $queryString = http_build_query($this->params);
+	    $queryString = http_build_query($this->params,'','&');
         }
 
         // If cURL is not installed, we'll force fscokopen
