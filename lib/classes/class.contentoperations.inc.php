@@ -1005,6 +1005,8 @@ class ContentOperations
 	/**
 	 * Clears the content cache
 	 *
+	 * @ignore
+         * @access private
 	 * @return void
 	 */
 	function ClearCache()
