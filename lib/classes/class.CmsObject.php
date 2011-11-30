@@ -431,9 +431,11 @@ final class CmsObject {
 	* directories.
 	*
 	* @final
+        * @internal
+        * @ignore
 	* @access private
 	*/
-	public function clear_cached_files($age_days = -100)
+	final public function clear_cached_files($age_days = -100)
 	{
 	  $the_time = time() - $age_days * 24*60*60;
 

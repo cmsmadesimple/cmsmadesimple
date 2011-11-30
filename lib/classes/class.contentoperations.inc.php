@@ -1006,6 +1006,7 @@ class ContentOperations
 	 * Clears the content cache
 	 *
 	 * @ignore
+         * @internal
          * @access private
 	 * @return void
 	 */
