@@ -164,6 +164,7 @@ $lang['admin']['help_function_content_module'] = <<<EOT
  <li><strong>(required)</strong>module - The name of the module that will provide this content block. This module must be installed and available</li>
  <li><strong>(required)</strong>block  - The name of the content block.</li>
  <li><em>(optional)</em>label - A label for the content block for use when editing the page.</li>
+ <li><em>(optional)</em> tab - The desired tab to display this field on in the edit form..</li>
  <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
  </ul>
 </p>
@@ -353,6 +354,7 @@ $lang['admin']['help_function_content_image'] = <<<EOT
 
   <li><em>(optional)</em> alt - Alternative text if the image cannot be found.</li>
   <li><em>(optional)</em> urlonly - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
+  <li><em>(optional)</em> tab - The desired tab to display this field on in the edit form..</li>
   <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 EOT;
@@ -834,6 +836,7 @@ $lang['admin']['help_function_content'] = <<<EOT
 <li><em>(optional) </em>maxlength - Applicable only when the oneline option is used this optional parameter allows you to specify the maximum length of input for the edit field.  The default value is 255.</li>
 		<li><em>(optional) </em>default - Allows you to specify default content for this content blocks (additional content blocks only).</li>
 		<li><em>(optional) </em>label - Allows specifying a label for display in the edit content page.</li>
+                <li><em>(optional)</em> tab - The desired tab to display this field on in the edit form..</li>
 		<li><em>(optional) </em>assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
 <p>Example of passing page content to a User Defined Tag as a parameter:</p></li>
 <pre>

@@ -55,6 +55,11 @@ class Content extends ContentBase
 	 * @var string
 	 */
     protected $stylesheet;
+	/**
+	 * @access private
+	 * @var array
+	 */
+	private $__fieldhash;
 
 	/**
 	 * Indicate whether or not this content type may be copied
@@ -186,8 +191,118 @@ class Content extends ContentBase
 	 */
     function IsDefaultPossible()
     {
-	return TRUE;
+		return TRUE;
     }
+
+
+	private function _tabsetup($adding = FALSE)
+	{
+		if( isset($this->__fieldhash) )
+		{
+			return array_keys($this->__fieldhash);
+		}
+
+		//
+		// setup
+		//
+		$hash = array();
+		$this->parse_content_blocks(); 
+
+		//
+		// main tab
+		//
+		$hash[lang('main')] = array();
+		$ret = array();
+		$tmp = $this->display_attributes($adding);
+		if( !empty($tmp) )
+		{
+			foreach( $tmp as $one ) {
+				$ret[] = $one;
+			}
+		}
+		foreach($this->_contentBlocks as $blockName => $blockInfo)
+		{
+			if( !isset($blockInfo['tab']) || $blockInfo['tab'] == '' || $blockInfo['tab'] == 'main' )
+			{
+				$this->AddExtraProperty($blockInfo['id']);
+				$parameters[] = $blockInfo['id'];
+				
+				$data = $this->GetPropertyValue($blockInfo['id']);
+				if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
+				$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
+				if( !$tmp ) continue;
+				$ret[] = $tmp;
+			}
+		}
+		$hash[lang('main')] = $ret;
+
+		// 
+		// other tabs.
+		//
+		foreach($this->_contentBlocks as $blockName => $blockInfo)
+		{
+			if( isset($blockInfo['tab']) && $blockInfo['tab'] != 'options')
+			{
+				$this->AddExtraProperty($blockInfo['id']);
+				$parameters[] = $blockInfo['id'];
+				
+				$data = $this->GetPropertyValue($blockInfo['id']);
+				if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
+				$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
+				if( !$tmp ) continue;
+
+				if( isset($hash[$blockInfo['tab']]) )
+				{
+					$hash[$blockInfo['tab']] = array();
+				}
+				$hash[$blockInfo['tab']][] = $tmp;
+			}
+		}
+
+		//
+		// options tab
+		//
+		if( check_permission(get_userid(),'Manage All Content') )
+		{
+			// now do advanced attributes
+			$ret = array();
+			$tmp = $this->display_attributes($adding,1);
+			if( !empty($tmp) )
+			{
+				foreach( $tmp as $one ) {
+					$ret[] = $one;
+				}
+			}
+
+			// and the content blocks
+			foreach($this->_contentBlocks as $blockName => $blockInfo)
+			{
+				if( isset($blockInfo['tab']) && $blockInfo['tab'] == 'options' )
+				{
+					$this->AddExtraProperty($blockInfo['id']);
+					$parameters[] = $blockInfo['id'];
+					
+					$data = $this->GetPropertyValue($blockInfo['id']);
+					if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
+					$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
+					if( !$tmp ) continue;
+					$ret[] = $tmp;
+				}
+			}
+
+			// and extra info.
+			$tmp = get_preference(get_userid(),'date_format_string','%x %X');
+			if( empty($tmp) ) $tmp = '%x %X';
+			$ret[]=array(lang('last_modified_at').':', strftime($tmp, strtotime($this->mModifiedDate) ) );
+			$userops = cmsms()->GetUserOperations();
+			$modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);
+			if($modifiedbyuser) $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
+
+			if( count($ret) ) $hash[lang('options')] = $ret;
+		}
+
+		$this->__fieldhash = $hash;
+	}
 
 	/**
 	 * Get a list of custom tabs this content type shows in the admin for adding / editing
@@ -196,12 +311,8 @@ class Content extends ContentBase
 	 */
     function TabNames()
     {
-      $res = array(lang('main'));
-      if( check_permission(get_userid(),'Manage All Content') )
-	{
-	  $res[] = lang('options');
-	}
-      return $res;
+		$this->_tabsetup();
+		return array_keys($this->__fieldhash);
     }
 
 	/**
@@ -214,74 +325,21 @@ class Content extends ContentBase
 	 */
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-		$gCms = cmsms();
+		$this->_tabsetup($adding);
+		$tabnames = $this->TabNames(); 
 	
-	$config = $gCms->GetConfig();
-	$templateops = $gCms->GetTemplateOperations();
-	$ret = array();
-	$this->stylesheet = '';
-	if ($this->TemplateId() > 0)
-	{
-	    $this->stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
-	}
+		$templateops = cmsms()->GetTemplateOperations();
+		$ret = array();
+		$this->stylesheet = '';
+		if ($this->TemplateId() > 0)
+		{
+			$this->stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
+		}
 
-
-	if ($tab == 0)
-	{
-	  // now do basic attributes
-	  $tmp = $this->display_attributes($adding);
-	  if( !empty($tmp) )
-	    {
-	      foreach( $tmp as $one ) {
-		$ret[] = $one;
-	      }
-	    }
-
-	  // and the content blocks
-	  $res = $this->parse_content_blocks(); // this is needed as this is the first time we get a call to our class when editing.
-	  if( $res === FALSE ) 
-	    {
-	      $this->SetError(lang('error_parsing_content_blocks'));
-	      return $ret;
-	    }
-
-	  foreach($this->_contentBlocks as $blockName => $blockInfo)
-	    {
-  		  $this->AddExtraProperty($blockInfo['id']);
-	      $parameters[] = $blockInfo['id'];
-	    }
-
-	  // add content blocks.
-	  foreach($this->_contentBlocks as $blockName => $blockInfo)
-	    {
-	      $data = $this->GetPropertyValue($blockInfo['id']);
-	      if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
-	      $tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
-	      if( !$tmp ) continue;
-	      $ret[] = $tmp;
-	    }
-	}
-
-	if ($tab == 1)
-	{
-	  // now do advanced attributes
-	  $tmp = $this->display_attributes($adding,1);
-	  if( !empty($tmp) )
-	    {
-	      foreach( $tmp as $one ) {
-		$ret[] = $one;
-	      }
-	    }
-
-	    $tmp = get_preference(get_userid(),'date_format_string','%x %X');
-	    if( empty($tmp) ) $tmp = '%x %X';
-	    $ret[]=array(lang('last_modified_at').':', strftime($tmp, strtotime($this->mModifiedDate) ) );
-	    $userops = $gCms->GetUserOperations();
-	    $modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);
-	    if($modifiedbyuser) $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
-	}
-
-	return $ret;
+		if( isset($tabnames[$tab]) )
+		{
+			return $this->__fieldhash[$tabnames[$tab]];
+		}
     }
 
 
@@ -409,6 +467,7 @@ class Content extends ContentBase
 		      $value = '';
 		      $label = '';
 		      $size = '50';
+			  $tab = '';
 			  $maxlength = '255';
 
 		      // get the arguments.
@@ -430,6 +489,9 @@ class Content extends ContentBase
 				  $id = str_replace(' ', '_', $val);
 				  $name = $val;
 				  break;
+				case 'tab':
+					$tab = trim($val);
+					break;
 				case 'wysiwyg':
 				  $usewysiwyg = $val;
 				  break;
@@ -463,7 +525,7 @@ class Content extends ContentBase
 			}
 		      $this->mProperties->Add('string',$id);
 		      if( !isset($this->_contentBlocks[$name]) )
-			{
+				  {
 			  $this->_contentBlocks[$name]['type'] = 'text';
 			  $this->_contentBlocks[$name]['id'] = $id;
 			  $this->_contentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
@@ -471,6 +533,7 @@ class Content extends ContentBase
 			  $this->_contentBlocks[$name]['default'] = $value;
 			  $this->_contentBlocks[$name]['label'] = $label;
 			  $this->_contentBlocks[$name]['size'] = $size;
+			  if( $tab ) $this->_contentBlocks[$name]['tab'] = $tab;
 			  $this->_contentBlocks[$name]['maxlength'] = $maxlength;
 			}
 		    }
@@ -506,6 +569,7 @@ class Content extends ContentBase
 			  $upload = true;
 			  $dir = ''; // default to uploads path
 			  $label = '';
+			  $tab = '';
 			  
 			  foreach ($keyval as $key=>$val)
 			    {
@@ -523,6 +587,9 @@ class Content extends ContentBase
 				case 'label':
 				  $label = $val;
 				  break;
+				case 'tab':
+					$tab = trim($val);
+					break;
 				case 'upload':
 				  $upload = $val;
 				  break;
@@ -550,6 +617,7 @@ class Content extends ContentBase
 			  $this->_contentBlocks[$name]['dir'] = $dir;
 			  $this->_contentBlocks[$name]['default'] = $value;
 			  $this->_contentBlocks[$name]['label'] = $label;
+			  if( $tab ) $this->_contentBlocks[$name]['tab'] = $tab;
 			}
 		    }
 		  
@@ -582,6 +650,7 @@ class Content extends ContentBase
 			  $module = '';
 			  $label = '';
 			  $blocktype = '';
+			  $tab = '';
 			  $parms = array();
 			  
 			  foreach ($keyval as $key=>$val)
@@ -596,6 +665,9 @@ class Content extends ContentBase
 				      $this->mProperties->Add("string", $id);
 				    }
 				  break;
+				case 'tab':
+					$tab = trim($val);
+					break;
 				case 'label':
 				  $label = $val;
 				  break;
@@ -623,6 +695,7 @@ class Content extends ContentBase
 			  $this->_contentBlocks[$name]['label'] = $label;
 			  $this->_contentBlocks[$name]['module'] = $module;
 			  $this->_contentBlocks[$name]['params'] = $parms;
+			  if( $tab ) $this->_contentBlocks[$name]['tab'] = $tab;
 			}
 		    }
 		  
