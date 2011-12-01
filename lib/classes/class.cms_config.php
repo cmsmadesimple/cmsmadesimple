@@ -115,7 +115,9 @@ class cms_config implements ArrayAccess
     $config = array();
     if (file_exists(CONFIG_FILE_LOCATION))
       {
-	include(CONFIG_FILE_LOCATION);
+		  include(CONFIG_FILE_LOCATION);
+		  unset($config['max_upload_size']);
+		  unset($config['upload_max_filesize']);
       }
     $this->_data = $config;
   }
@@ -260,7 +262,7 @@ class cms_config implements ArrayAccess
 
       case 'max_upload_size':
       case 'upload_max_filesize':
-	return $this->get_upload_size();
+		  return $this->get_upload_size();
 
       case 'default_upload_permission':
 	return '664';
