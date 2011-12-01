@@ -247,24 +247,10 @@ else
 	}
 	else
 	{
-	  //$smarty->caching = false;
-	  //	$smarty->compile_check = true;
-
-		// we allow backward compatibility (for a while)
-		// for people that have hacks for setting page title
-		// or header variables by capturing a modules output
-		// to a smarty variable, and then displaying it later.
-		if( isset($config['process_whole_template']) && $config['process_whole_template'] === false )
-		  {
-		    $top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
-		    $body = $smarty->fetch('tpl_body:'.$contentobj->TemplateId());
-		    $head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
-		    $html = $top.$head.$body;
-		  }
-		else
-		  {
-		    $html = $smarty->fetch('template:'.$contentobj->TemplateId());
-		  }
+	    $top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
+	    $body = $smarty->fetch('tpl_body:'.$contentobj->TemplateId());
+	    $head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
+	    $html = $top.$head.$body;
 	}
 }
 
