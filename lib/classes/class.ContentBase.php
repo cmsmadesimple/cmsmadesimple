@@ -68,9 +68,7 @@ class ContentBase
    * The properties part of the content. This is an object of the good type.
    * It should contain all treatments specific to this type of content
    */
-  protected $mProperties;
-     
-  protected $mPropertiesLoaded = false;
+  protected $_props;
 
   /**
    * The ID of the parent, 0 if none
@@ -219,7 +217,6 @@ class ContentBase
   {
     $this->SetInitialValues();
     $this->SetProperties();
-    $this->mPropertiesLoaded = false;
     $this->mReadyForEdit = false;
   }
 
@@ -229,7 +226,6 @@ class ContentBase
   function SetInitialValues()
   {
     $this->mType           = strtolower(get_class($this)) ;
-    $this->mProperties     = new ContentProperties();
   }
 
     /**
@@ -734,51 +730,89 @@ class ContentBase
      */
 	public function Properties()
 	{
-		debug_buffer('properties called');
-		if ($this->mPropertiesLoaded == false)
-		{
-			$this->mProperties->Load($this->mId);
-			$this->mPropertiesLoaded = true;
-		}
-		return $this->mProperties;
+	  return $this->_props;
 	}
 
 	public function HasProperty($name)
 	{
-		return $this->mProperties->HasProperty($name);
+	  if( !is_array($this->_props) ) return FALSE;
+	  return in_array($name,array_keys($this->_props));
 	}
 
 	public function GetPropertyValue($name)
 	{
-		if ($this->mProperties->HasProperty($name))
-		{
-			if ($this->mPropertiesLoaded == false)
-			{
-				$this->mProperties->Load($this->mId);
-				$this->mPropertiesLoaded = true;
-			}
-			return $this->mProperties->GetValue($name);
-		}
-		return '';
+	  if( $this->HasProperty($name) )
+	    {
+	      return $this->_props[$name];
+	    }
 	}
     
+	private function _load_properties()
+	{
+	  $this->_props = array();
+	  if( $this->mId <= 0 ) return FALSE;
+
+	  $db = cmsms()->GetDb();
+	  $query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
+	  $dbr = $db->Execute($query,array($this->mId));
+	  while( $dbr && !$dbr->EOF )
+	    {
+	      $row = $dbr->fields;
+	      $this->_props[$row['prop_name']] = $row['content'];
+	      $dbr->MoveNext();
+	    }
+	  return TRUE;
+	}
+
+	private function _save_properties()
+	{
+	  if( $this->mId <= 0 ) return FALSE;
+	  if( !is_array($this->_props) || count($this->_props) == 0 ) return FALSE;
+	    
+	  $db = cmsms()->GetDb();
+	  $query = 'SELECT prop_name FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
+	  $gotprops = $db->GetCol($query,array($this->mId));
+	  
+	  $now = $db->DbTimeStamp(time());
+	  $iquery = 'INSERT INTO '.cms_db_prefix()."content_props
+                    (content_id,type,prop_name',content,modified_date)
+                    VALUES (?,?,?,?,$now)";
+	  $uquery = 'UPDATE '.cms_db_prefix()."content_props SET content = ?, modified_date = $now WHERE content_id = ? AND prop_name = ?";
+	  
+	  foreach( $this->_props as $key => $value )
+	    {
+	      if( in_array($key,$gotprops) )
+		{
+		  // update
+		  $dbr = $db->Execute($uquery,array($value,$this->mId,$key));
+		}
+	      else
+		{
+		  // insert
+		  $dbr = $db->Execute($iquery,array($this->mId,'string',$key,$value));
+		}
+	    }
+	  return TRUE;
+	}
+
 	public function SetPropertyValue($name, $value)
 	{
-		debug_buffer('setpropertyvalue called');
-		$this->DoReadyForEdit();
-		if ($this->mPropertiesLoaded == false)
-		{
-			$this->mProperties->Load($this->mId);
-			$this->mPropertiesLoaded = true;
-		}
-		$this->mProperties->SetValue($name, $value);
+	  debug_buffer('setpropertyvalue called');
+	  if( !is_array($this->_props) ) $this->_props = array();
+	  
+	  $this->_props[$name] = $value;
+	  if( !is_array($this->_props) )
+	    {
+	      $this->_load_properties();
+	    }
+	  $this->_props[$name] = $value;
 	}
 	
 
 	public function SetPropertyValueNoLoad($name,$value)
 	{
-	  $this->mProperties->SetValue($name,$value);
-	  $this->mPropertiesLoaded = true;
+	  if( !is_array($this->_props) ) $this->_props = array();
+	  $this->_props[$name] = $value;
 	}
 
     /**
@@ -868,7 +902,6 @@ class ContentBase
 				$this->mOldAlias                   = $row->fields["content_alias"];
 				$this->mType                       = strtolower($row->fields["type"]);
 				$this->mOwner                      = $row->fields["owner_id"];
-				#$this->mProperties                = new ContentProperties();
 				$this->mParentId                   = $row->fields["parent_id"];
 				$this->mOldParentId                = $row->fields["parent_id"];
 				$this->mTemplateId                 = $row->fields["template_id"];
@@ -878,7 +911,6 @@ class ContentBase
 				$this->mHierarchy                  = $row->fields["hierarchy"];
 				$this->mIdHierarchy                = $row->fields["id_hierarchy"];
 				$this->mHierarchyPath              = $row->fields["hierarchy_path"];
-				$this->mProperties->mPropertyNames = explode(',',$row->fields["prop_names"]);
 				$this->mMenuText                   = $row->fields['menu_text'];
 				$this->mMarkup                     = $row->fields['markup'];
 				$this->mTitleAttribute             = $row->fields['titleattribute'];
@@ -909,24 +941,23 @@ class ContentBase
 
 			if ($result && $loadProperties)
 			{
-				if ($this->mPropertiesLoaded == false)
-				{
-					debug_buffer("load from id is loading properties");
-					$this->mProperties->Load($this->mId);
-					$this->mPropertiesLoaded = true;
-				}
+			  if( !is_array($this->_props) )
+			    {
+			      debug_buffer("load from id is loading properties");
+			      $this->_load_properties();
+			    }
 
-				if (NULL == $this->mProperties)
+			  if (!is_array($this->_props) )
+			    {
+			      $result = false;
+			      
+			      // debug mode
+			      if (true == $config["debug"])
 				{
-					$result = false;
-
-					# debug mode
-					if (true == $config["debug"])
-					{
-						# :TODO: Translate the error message
-						$debug_errors .= "<p>Could not load properties for content</p>\n";
-					}
+				  # :TODO: Translate the error message
+				  $debug_errors .= "<p>Could not load properties for content</p>\n";
 				}
+			    }
 			}
 
 			if (false == $result)
@@ -968,7 +999,6 @@ class ContentBase
 		$this->mOldAlias                   = $data["content_alias"];
 		$this->mType                       = strtolower($data["type"]);
 		$this->mOwner                      = $data["owner_id"];
-		#$this->mProperties                = new ContentProperties();
 		$this->mParentId                   = $data["parent_id"];
 		$this->mOldParentId                = $data["parent_id"];
 		$this->mTemplateId                 = $data["template_id"];
@@ -978,7 +1008,6 @@ class ContentBase
 		$this->mHierarchy                  = $data["hierarchy"];
 		$this->mIdHierarchy                = $data["id_hierarchy"];
 		$this->mHierarchyPath              = $data["hierarchy_path"];
-		$this->mProperties->mPropertyNames = explode(',',$data["prop_names"]);
 		$this->mMenuText                   = $data['menu_text'];
 		$this->mMarkup                     = $data['markup'];
 		$this->mTitleAttribute             = $data['titleattribute'];
@@ -998,28 +1027,22 @@ class ContentBase
 
 		if ($loadProperties == true)
 		{
-			#$this->mProperties = ContentManager::LoadPropertiesFromData(strtolower($this->mType), $data);
-			if ($this->mPropertiesLoaded == false)
-			{
-				debug_buffer("load from data is loading properties");
-				$this->mProperties->Load($this->mId);
-				$this->mPropertiesLoaded = true;
-			}
+		  $this->_load_properties();
 
-			if (NULL == $this->mProperties)
+		  if (!is_array($this->_props) )
+		    {
+		      $result = false;
+		      
+		      global $debug_errors;
+		      $gCms = cmsms();
+		      $config = $gCms->GetConfig();
+		      // debug mode
+		      if (true == $config["debug"])
 			{
-				$result = false;
-
-				global $debug_errors;
-				$gCms = cmsms();
-				$config = $gCms->GetConfig();
-				# debug mode
-				if (true == $config["debug"])
-				{
-					# :TODO: Translate the error message
-					$debug_errors .= "<p>Could not load properties for content</p>\n";
-				}
+			  # :TODO: Translate the error message
+			  $debug_errors .= "<p>Could not load properties for content</p>\n";
 			}
+		    }
 		}
 
 		if (false == $result)
@@ -1049,11 +1072,10 @@ class ContentBase
 	  $gCms = cmsms();
 	  Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
 
-	  if ($this->mPropertiesLoaded == false)
+	  if( !is_array($this->_props) )
 	    {
 	      debug_buffer('save is loading properties');
-	      $this->mProperties->Load($this->mId);
-	      $this->mPropertiesLoaded = true;
+	      $this->_load_properties();
 	    }
 
 	  if (-1 < $this->mId)
@@ -1165,11 +1187,11 @@ class ContentBase
 			}
 		}
 
-		if (NULL != $this->mProperties)
+		if( is_array($this->_props) && count($this->_props) )
 		{
-			# :TODO: There might be some error checking there
-			debug_buffer('save from ' . __LINE__);
-			$this->mProperties->Save($this->mId);
+		  // :TODO: There might be some error checking there
+		  debug_buffer('save from ' . __LINE__);
+		  $this->_save_properties();
 		}
 		else
 		{
@@ -1260,11 +1282,11 @@ class ContentBase
 			}
 		}
 
-		if (NULL != $this->mProperties)
+		if (is_array($this->_props) && count($this->_props))
 		{
-			# :TODO: There might be some error checking there
-			debug_buffer('save from ' . __LINE__);
-			$this->mProperties->Save($newid);
+		  // :TODO: There might be some error checking there
+		  debug_buffer('save from ' . __LINE__);
+		  $this->_save_properties();
 		}
 		else
 		{
@@ -1460,10 +1482,9 @@ class ContentBase
 	      $cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
 	      @unlink($cachefilename);
 
-	      if (NULL != $this->mProperties)
+	      if( is_array($this->_props) && count($this->_props) )
 		{
-		  # :TODO: There might be some error checking there
-		  $this->mProperties->Delete($this->mId);
+		  $this->_delete_properties();
 		}
 	      else
 		{
@@ -1884,6 +1905,15 @@ class ContentBase
 		return FALSE;
 	}
 
+	public function AddExtraProperty($name,$type = 'string')
+	{
+	  $this->_load_properties();
+	  if( !isset($this->_props[$name]) )
+	    {
+	      $this->_props[$name] = '';
+	    }
+	}
+
 	/* private */
 	protected function RemoveProperty($name,$dflt)
 	{
@@ -1918,16 +1948,6 @@ class ContentBase
 	/* private */
 	/*
 	 * Add a property to the content_props table for this content item
-	 * This property will not be effected by the basic_attributes list.
-	 */
-	protected function AddExtraProperty($name,$type='string')
-	{
-	  $this->mProperties->add($type,$name);
-	}
-
-	/* private */
-	/*
-	 * Add a property to the content_props table for this content item
 	 */
 	protected function AddContentProperty($name,$priority,$is_required = 0,$type = 'string')
 	{
@@ -1935,7 +1955,6 @@ class ContentBase
 	    {
 	      $this->_attributes = array();
 	    }
-	  $this->mProperties->add($type,$name);
 	  $this->_attributes[] = array($name,$priority,$is_required);
 	}
 

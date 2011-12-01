@@ -137,7 +137,6 @@ class Content extends ContentBase
 	  $this->parse_content_blocks();
 	  foreach($this->_contentBlocks as $blockName => $blockInfo)
 	    {
-			$this->AddExtraProperty($blockInfo['id']);
 			$parameters[] = $blockInfo['id'];
 			
 			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
@@ -224,7 +223,6 @@ class Content extends ContentBase
 		{
 			if( !isset($blockInfo['tab']) || $blockInfo['tab'] == '' || $blockInfo['tab'] == 'main' )
 			{
-				$this->AddExtraProperty($blockInfo['id']);
 				$parameters[] = $blockInfo['id'];
 				
 				$data = $this->GetPropertyValue($blockInfo['id']);
@@ -243,7 +241,6 @@ class Content extends ContentBase
 		{
 			if( isset($blockInfo['tab']) && $blockInfo['tab'] != 'options')
 			{
-				$this->AddExtraProperty($blockInfo['id']);
 				$parameters[] = $blockInfo['id'];
 				
 				$data = $this->GetPropertyValue($blockInfo['id']);
@@ -279,7 +276,6 @@ class Content extends ContentBase
 			{
 				if( isset($blockInfo['tab']) && $blockInfo['tab'] == 'options' )
 				{
-					$this->AddExtraProperty($blockInfo['id']);
 					$parameters[] = $blockInfo['id'];
 					
 					$data = $this->GetPropertyValue($blockInfo['id']);
@@ -523,7 +519,7 @@ class Content extends ContentBase
 			  // adding a duplicated content block.
 			  return FALSE;
 			}
-		      $this->mProperties->Add('string',$id);
+			  $this->AddExtraProperty($id);
 		      if( !isset($this->_contentBlocks[$name]) )
 				  {
 			  $this->_contentBlocks[$name]['type'] = 'text';
@@ -660,10 +656,7 @@ class Content extends ContentBase
 				case 'block':
 				  $id = str_replace(' ', '_', $val);
 				  $name = $val;
-				  if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
-				    {
-				      $this->mProperties->Add("string", $id);
-				    }
+				  $this->AddExtraProperty($id);
 				  break;
 				case 'tab':
 					$tab = trim($val);
@@ -700,7 +693,6 @@ class Content extends ContentBase
 		    }
 		  
 		  // force a load 
-		  $this->mProperties->Load($this->mId);
 		  $result = TRUE;
 		}
 	      
