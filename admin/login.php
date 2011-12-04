@@ -129,19 +129,23 @@ else if ( isset($_SESSION['redirect_url']) )
 	if (true == $is_logged_in)
 	{
 		$userid = get_userid();
-		$dest = $config['admin_url'];
 		$homepage = get_preference($userid,'homepage');
-		if( $homepage == '' )
-		{
-		  $homepage = 'index.php';
-		}
-		{
-		  $tmp = explode('?',$homepage);
-		  if( !file_exists($tmp[0]) ) $homepage = 'index.php';
-		}
-		$dest = $dest.'/'.$homepage;
-		$dest .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-		redirect($dest);
+		
+		$homepage = str_replace('&amp;','&',$homepage);
+		$tmp = explode('?',$homepage);
+		if( !file_exists($tmp[0]) ) $tmp[0] = 'index.php';
+		parse_str($tmp[1],$tmp2);
+		if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
+		if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
+		$tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
+		foreach( $tmp2 as $k => $v )
+		  {
+		    $tmp3[] = $k.'='.$v;
+		  }
+		$homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
+		
+		$homepage = html_entity_decode($homepage);
+		redirect($homepage);
 	}
 }
 if (isset($_POST["logincancel"]))
@@ -209,7 +213,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			  $tmp = $_SESSION["redirect_url"];
 			  unset($_SESSION["redirect_url"]);
 			  
-			  debug_to_log('got session var '.$tmp);
 			  if( strstr($tmp,CMS_SECURE_PARAM_NAME.'=') !== FALSE )
 			    {
 			      $the_url = new cms_url($tmp);
@@ -217,7 +220,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			      $tmp = (string)$the_url;
 			    }
 
-			  debug_to_log('rebuilt url to '.$tmp);
 			  if( !strstr($tmp,'.php') || endswith($tmp,'/') )
 			    {
 			      // force the url to go to index.php
@@ -225,7 +227,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			      debug_to_log('change session var to '.$tmp);
 			    }
 			  
-			  debug_to_log('final redirect to '.$tmp);
 			  redirect($tmp);
 			}
 			unset($_SESSION["redirect_url"]);
@@ -245,34 +246,24 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			else
 			{
 			  $homepage = get_preference($oneuser->id,'homepage');
-			  if( $homepage == '' )
-			    {
-			      $homepage = 'index.php';
-			    }
+
+			  // quick hacks to remove old secure param name from homepage url
+			  // and replace with the correct one.
+			  $homepage = str_replace('&amp;','&',$homepage);
 			  $tmp = explode('?',$homepage);
-			  if( !file_exists($tmp[0]) ) $homepage = 'index.php';
-
-			  // quick hack to remove old secure param name from homepage url
-			  $pos = strpos($homepage,'?_s_');
-			  if( $pos !== FALSE )
+			  if( !file_exists($tmp[0]) ) $tmp[0] = 'index.php';
+			  parse_str($tmp[1],$tmp2);
+			  if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
+			  if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
+			  $tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
+			  foreach( $tmp2 as $k => $v )
 			    {
-			      $homepage = substr($homepage,0,$pos);
+			      $tmp3[] = $k.'='.$v;
 			    }
+			  $homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
 
-			  $pos = strpos($homepage,CMS_SECURE_PARAM_NAME);
-			  if( $pos !== FALSE )
-			    {
-			      $str = substr($homepage,$pos-1,strlen(CMS_SECURE_PARAM_NAME)+strlen($_SESSION[CMS_USER_KEY])+2);
-			      $rep = '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-			      $homepage = str_replace($str,$rep,$homepage);
-			    }
-			  else
-			    {
-			      $homepage .= '?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-			    }
-
+			  // and redirect.
 			  $homepage = html_entity_decode($homepage);
-			  debug_to_log('redirect to homepage '.$homepage);
 			  redirect($homepage);
 			}
 		}
