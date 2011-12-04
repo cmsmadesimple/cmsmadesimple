@@ -1822,6 +1822,232 @@ abstract class CMSModule
 	}
 
 	/**
+	 * Returns the html5 equivalent of an input of type color.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the input field
+	 * @param string The predefined value of the textbox, if any
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */
+	
+	function CreateInputColor($id, $name, $value='', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputColor($this, $id, $name, $value, $addttext);
+	}	
+
+	/**
+	 * Returns the html5 equivalent of an input of type date.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the input field
+	 * @param string The predefined value of the textbox, if any
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */
+	
+	function CreateInputDate($id, $name, $value='', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputDate($this, $id, $name, $value, $addttext);
+	}
+	
+	/**
+	 * Returns the html5 equivalent of an input of type datetime.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the input field
+	 * @param string The predefined value of the textbox, if any
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */
+	
+	function CreateInputDatetime($id, $name, $value='', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputDatetime($this, $id, $name, $value, $addttext);
+	}
+	
+	/**
+	 * Returns the html5 equivalent of an input of type datetime-local.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the input field
+	 * @param string The predefined value of the textbox, if any
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */
+	
+	function CreateInputDatetimeLocal($id, $name, $value='', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputDatetimeLocal($this, $id, $name, $value, $addttext);
+	}
+
+	/**
+	 * Returns the html5 equivalent of an input of type month.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the input field
+	 * @param string The predefined value of the textbox, if any
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */
+	
+	function CreateInputMonth($id, $name, $value='', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputMonth($this, $id, $name, $value, $addttext);
+	}		
+
+	/**
+	 * Returns the html5 equivalent of an input of type week.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the input field
+	 * @param string The predefined value of the textbox, if any
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */
+	
+	function CreateInputWeek($id, $name, $value='', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputWeek($this, $id, $name, $value, $addttext);
+	}
+	
+	/**
+	 * Returns the html5 equivalent of an input of type time.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the input field
+	 * @param string The predefined value of the textbox, if any
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */
+	
+	function CreateInputTime($id, $name, $value='', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputTime($this, $id, $name, $value, $addttext);
+	}	
+	
+	/**
+	 * Returns the html5 equivalent of an input of type number.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the input field
+	 * @param string The predefined value of the textbox, if any
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */
+	
+	function CreateInputNumber($id, $name, $value='', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputNumber($this, $id, $name, $value, $addttext);
+	}	
+	
+	/**
+	 * Returns the html5 equivalent of an input of type range.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the input field
+	 * @param string The predefined value of the textbox, if any
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */
+	
+	function CreateInputRange($id, $name, $value='', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputRange($this, $id, $name, $value, $addttext);
+	}				
+
+	/**
+	 * Returns the html5 equivalent of an input textbox of type email.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the textbox
+	 * @param string The predefined value of the textbox, if any
+	 * @param string The number of columns wide the textbox should be displayed
+	 * @param string The maximum number of characters that should be allowed to be entered
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */	
+	function CreateInputEmail($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputEmail($this, $id, $name, $value, $size, $maxlength, $addttext);
+	}
+	
+	/**
+	 * Returns the html5 equivalent of an input textbox of type tel.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the textbox
+	 * @param string The predefined value of the textbox, if any
+	 * @param string The number of columns wide the textbox should be displayed
+	 * @param string The maximum number of characters that should be allowed to be entered
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */	
+	function CreateInputTel($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputTel($this, $id, $name, $value, $size, $maxlength, $addttext);
+	}	
+	
+	/**
+	 * Returns the xhtml equivalent of an input of type search.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the textbox
+	 * @param string The predefined value of the textbox, if any
+	 * @param string The number of columns wide the textbox should be displayed
+	 * @param string The maximum number of characters that should be allowed to be entered
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */
+	function CreateInputSearch($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputSearch($this, $id, $name, $value, $size, $maxlength, $addttext);
+	}
+	
+	/**
+	 * Returns the xhtml equivalent of an input of type url.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the textbox
+	 * @param string The predefined value of the textbox, if any
+	 * @param string The number of columns wide the textbox should be displayed
+	 * @param string The maximum number of characters that should be allowed to be entered
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */
+	function CreateInputUrl($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputUrl($this, $id, $name, $value, $size, $maxlength, $addttext);
+	}							
+			
+
+	/**
 	 * Returns the xhtml equivalent of a file-selector field.  This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *

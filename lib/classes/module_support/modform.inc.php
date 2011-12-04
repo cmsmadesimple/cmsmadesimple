@@ -164,6 +164,274 @@ function cms_module_CreateInputTextWithLabel(&$modinstance, $id, $name, $value='
 /**
  * @access private
  */
+function cms_module_CreateInputColor(&$modinstance, $id, $name, $value='', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="color" class="cms_colorfield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
+function cms_module_CreateInputDate(&$modinstance, $id, $name, $value='', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="date" class="cms_datefield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
+function cms_module_CreateInputDatetime(&$modinstance, $id, $name, $value='', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="datetime" class="cms_datefield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
+function cms_module_CreateInputDatetimeLocal(&$modinstance, $id, $name, $value='', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="datetime-local" class="cms_datefield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
+function cms_module_CreateInputMonth(&$modinstance, $id, $name, $value='', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="month" class="cms_datefield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
+function cms_module_CreateInputWeek(&$modinstance, $id, $name, $value='', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="week" class="cms_datefield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
+function cms_module_CreateInputTime(&$modinstance, $id, $name, $value='', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="time" class="cms_datefield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
+function cms_module_CreateInputNumber(&$modinstance, $id, $name, $value='', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="number" class="cms_numberfield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
+function cms_module_CreateInputRange(&$modinstance, $id, $name, $value='', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="range" class="cms_numberfield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
+function cms_module_CreateInputEmail(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $size = cms_htmlentities($size);
+  $maxlength = cms_htmlentities($maxlength);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="email" class="cms_emailfield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
+function cms_module_CreateInputTel(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $size = cms_htmlentities($size);
+  $maxlength = cms_htmlentities($maxlength);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="tel" class="cms_telfield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
+function cms_module_CreateInputSearch(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $size = cms_htmlentities($size);
+  $maxlength = cms_htmlentities($maxlength);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="search" class="cms_searchfield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
+function cms_module_CreateInputUrl(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $size = cms_htmlentities($size);
+  $maxlength = cms_htmlentities($maxlength);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="url" class="cms_urlfield" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
 function cms_module_CreateInputFile(&$modinstance, $id, $name, $accept='', $size='10',$addttext='')
 {
   $id = cms_htmlentities($id);
