@@ -203,7 +203,11 @@ if( $global_umask != '' )
 #either in the config, or as a site preference.
 if (isset($config['locale']) && $config['locale'] != '')
 {
-  $str = trim($config['locale']);
+  $str = $config['locale'];
+  if( is_string($str) )
+    {
+      $str = trim($str);
+    }
   $res = @setlocale(LC_ALL, $str);
   if( $res === FALSE )
     {
