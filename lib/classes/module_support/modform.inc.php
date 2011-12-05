@@ -639,7 +639,7 @@ function cms_module_CreateInputDataList(&$modinstance, $id, $name, $value='', $i
 
   $value = str_replace('"', '&quot;', $value);
   
-  $text = '<input type="text" class="cms_datalistfield" name="'.$id.$name.'" list="'.$id.$name.'" value="" size="'.$size.'" maxlength="'.$maxlength.'"';
+  $text = '<input type="text" class="cms_datalistfield" name="'.$id.$name.'" list="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
   if ($addttext != '')
     {
       $text .= ' ' . $addttext;
