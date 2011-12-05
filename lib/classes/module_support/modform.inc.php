@@ -629,6 +629,49 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
 /**
  * @access private
  */
+function cms_module_CreateInputDataList(&$modinstance, $id, $name, $value='', $items, $size='10', $maxlength='255', $addttext='')
+{
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $size = cms_htmlentities($size);
+  $maxlength = cms_htmlentities($maxlength);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="text" class="cms_datalistfield" name="'.$id.$name.'" list="'.$id.$name.'" value="" size="'.$size.'" maxlength="'.$maxlength.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  
+  	$text .= '<datalist class="cms_datalist" id="'.$id.$name.'"';
+	if ($addttext != '')
+	{
+		$text .= ' ' . $addttext;
+	}
+	$text .= '>';
+	$count = 0;
+	if (is_array($items) && count($items) > 0)
+	{
+		foreach ($items as $key=>$value)
+		{
+		  //		  $value = cms_htmlentities($value);
+		$text .= '<option value="'.$value.'"';
+			$text .= '>';
+			$text .= $key;
+			$text .= '</option>';
+			$count++;
+		}
+	}
+	$text .= '</datalist>'."\n";
+  return $text;
+}
+
+/**
+ * @access private
+ */
 function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true)
 {
   $id = cms_htmlentities($id);

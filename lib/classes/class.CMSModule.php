@@ -2011,8 +2011,8 @@ abstract class CMSModule
 	}	
 	
 	/**
-	 * Returns the xhtml equivalent of an input of type search.  This is basically a nice little wrapper
-	 * to make sure that id's are placed in names and also that it's xhtml compliant.
+	 * Returns the html5 equivalent of an input of type search.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
 	 *
 	 * @param string The id given to the module on execution
 	 * @param string The html name of the textbox
@@ -2029,7 +2029,7 @@ abstract class CMSModule
 	}
 	
 	/**
-	 * Returns the xhtml equivalent of an input of type url.  This is basically a nice little wrapper
+	 * Returns the html5 equivalent of an input of type url.  This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
@@ -2182,6 +2182,25 @@ abstract class CMSModule
 		$this->LoadFormMethods();
 		return cms_module_CreateInputDropdown($this, $id, $name, $items, $selectedindex, $selectedvalue, $addttext);
 	}
+	
+	/**
+	 * Returns the html5 equivalent input field with datalist options.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's html5 compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the textbox
+	 * @param string The predefined value of the textbox, if any
+	 * @param string An array of items to put into the list... they should be $key=>$value pairs
+	 * @param string The number of columns wide the textbox should be displayed
+	 * @param string The maximum number of characters that should be allowed to be entered
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @return string
+	 */
+	function CreateInputDataList($id, $name, $value='', $items, $size='10', $maxlength='255', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateInputDataList($this, $id, $name, $value, $items, $size, $maxlength, $addttext);
+	}	
 
 	/**
 	 * Returns the xhtml equivalent of a multi-select list.	 This is basically a nice little wrapper
