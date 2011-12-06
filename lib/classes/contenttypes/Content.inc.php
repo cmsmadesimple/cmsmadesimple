@@ -574,10 +574,9 @@ class Content extends ContentBase
 				case 'block':
 				  $id = str_replace(' ', '_', $val);
 				  $name = $val;
-				  
-				  if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
+				  if( !array_key_exists($id,$this->_props) )
 				    {
-				      $this->mProperties->Add("string", $id);
+						$this->AddExtraProperty($id);
 				    }
 				  break;
 				case 'label':

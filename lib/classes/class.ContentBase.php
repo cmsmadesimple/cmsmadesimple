@@ -772,10 +772,10 @@ class ContentBase
 	  $db = cmsms()->GetDb();
 	  $query = 'SELECT prop_name FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
 	  $gotprops = $db->GetCol($query,array($this->mId));
-	  
+
 	  $now = $db->DbTimeStamp(time());
 	  $iquery = 'INSERT INTO '.cms_db_prefix()."content_props
-                    (content_id,type,prop_name',content,modified_date)
+                    (content_id,type,prop_name,content,modified_date)
                     VALUES (?,?,?,?,$now)";
 	  $uquery = 'UPDATE '.cms_db_prefix()."content_props SET content = ?, modified_date = $now WHERE content_id = ? AND prop_name = ?";
 	  
