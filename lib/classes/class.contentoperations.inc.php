@@ -545,7 +545,7 @@ class ContentOperations
 		if (file_exists($cachefilename))
 		{
 			$last_modified = cms_utils::get_app_data('last_content_modification');
-			if( !$last_modified );
+			if( $last_modified <= 0 );
 			{
 				$query = 'SELECT modified_date FROM '.cms_db_prefix().'content ORDER BY modified_date DESC';
 				$val = $db->GetOne($query);
