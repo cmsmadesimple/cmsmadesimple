@@ -202,6 +202,48 @@ if (FALSE == empty($page_message)) {
 		</div>
 		
         <div>
+		
+		<fieldset>
+        <legend>Language related settings</legend>
+		
+			<!-- START Language -->
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('language'); ?>:</div>
+				<div class="pageinput">
+					<select name="default_cms_lang" style="vertical-align: middle;">
+					<?php
+					$opts = get_language_list();
+					foreach( $opts as $key => $value )
+					{
+					$str = "<option value=\"$key\"";
+					if( $default_cms_lang == $key )
+					{ 
+						$str .= " selected=\"selected\"";
+					}
+					$str .= ">$value</option>\n";
+					echo $str;
+					}
+					?>
+					</select>
+				</div>
+			</div>
+			<!-- START Language -->
+			
+			<!-- START Date Format String -->
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('date_format_string'); ?>:</div>
+				<div class="pageinput">
+				<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="255" /><?php echo '<br/>'.lang('date_format_string_help') ?>
+				</div>
+			</div>
+			<!-- END Date Format String -->	
+			
+		</fieldset>
+		
+		
+		<fieldset>
+        <legend>Content editor settings</legend>
+		
 			<!-- START WYSIWYG to use -->
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</div>
@@ -254,58 +296,30 @@ if (FALSE == empty($page_message)) {
 			</div>
 			<!-- END Syntaxhighlighter to use -->
 			
-			<!-- Enable GCB WYSIWYG -->
+			<!-- START -Enable GCB WYSIWYG -->
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('gcb_wysiwyg'); ?>:</div>
 				<div class="pageinput">
 				<input class="pagenb" type="checkbox" name="gcb_wysiwyg" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; if( get_site_preference('nogcbwysiwyg') == '1' ) echo "disabled=\"disabled\""; ?> /><?php echo lang('gcb_wysiwyg_help') ?>
 				</div>
 			</div>
-			
-			<!-- START Language -->
+			<!-- END Enable GCB WYSIWYG -->	
+
+			<!-- START Content Display -->
 			<div class="pageoverflow">
-				<div class="pagetext"><?php echo lang('language'); ?>:</div>
+				<div class="pagetext"><?php echo lang('adminindent'); ?>:</div>
 				<div class="pageinput">
-					<select name="default_cms_lang" style="vertical-align: middle;">
-					<?php
-					$opts = get_language_list();
-					foreach( $opts as $key => $value )
-					{
-					$str = "<option value=\"$key\"";
-					if( $default_cms_lang == $key )
-					{ 
-						$str .= " selected=\"selected\"";
-					}
-					$str .= ">$value</option>\n";
-					echo $str;
-					}
-					?>
-					</select>
+					<input class="pagenb" type="checkbox" name="indent" <?php if ($indent) echo "checked=\"checked\""; ?> /><?php echo lang('indent') ?>
 				</div>
 			</div>
-			<!-- START Language -->
+			<!-- END Content Display -->
 			
-			<!-- START Date Format String -->
-			<div class="pageoverflow">
-				<div class="pagetext"><?php echo lang('date_format_string'); ?>:</div>
-				<div class="pageinput">
-				<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="255" /><?php echo '<br/>'.lang('date_format_string_help') ?>
-				</div>
-			</div>
-			<!-- END Date Format String -->
+		</fieldset>
 
-			<!-- START Default Parent Page -->
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
-				<p class="pageinput">
-				<?php
-				$contentops = $gCms->GetContentOperations();
-				echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1);
-				?>
-				</p>
-			</div>
-			<!-- END Default Parent Page -->
-
+		
+		<fieldset>
+        <legend>Admin lay-out settings</legend>
+		
 			<!-- START Administration Theme -->
             <div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('admintheme');  ?>:</div>
@@ -328,6 +342,15 @@ if (FALSE == empty($page_message)) {
 			</div>
 			<!-- END Administration Theme -->
 			
+			<!-- START Homepage -->
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('homepage'); ?>:</div>
+				<div class="pageinput">
+						  <?php echo $themeObject->GetAdminPageDropdown('homepage',$homepage); ?>
+				</div>
+			</div>
+			<!-- END Homepage -->
+
 			<!-- START Administration Shortcuts -->
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('admincallout'); ?>:</div>
@@ -346,14 +369,17 @@ if (FALSE == empty($page_message)) {
 			</div>
 			<!-- END Hide module help link -->
 
-			<!-- START Homepage -->
+			<!-- START Default Parent Page -->
 			<div class="pageoverflow">
-				<div class="pagetext"><?php echo lang('homepage'); ?>:</div>
-				<div class="pageinput">
-						  <?php echo $themeObject->GetAdminPageDropdown('homepage',$homepage); ?>
-				</div>
+				<p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
+				<p class="pageinput">
+				<?php
+				$contentops = $gCms->GetContentOperations();
+				echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1);
+				?>
+				</p>
 			</div>
-			<!-- END Homepage -->
+			<!-- END Default Parent Page -->
 
 			<!-- START Number of rows per page when viewing templates -->
 			<div class="pageoverflow">
@@ -398,16 +424,7 @@ if (FALSE == empty($page_message)) {
 				</p>
 			</div>
 			-->
-			
-			<!-- START Content Display -->
-			<div class="pageoverflow">
-				<div class="pagetext"><?php echo lang('adminindent'); ?>:</div>
-				<div class="pageinput">
-					<input class="pagenb" type="checkbox" name="indent" <?php if ($indent) echo "checked=\"checked\""; ?> /><?php echo lang('indent') ?>
-				</div>
-			</div>
-			<!-- END Content Display -->
-							  
+						  
 			<!-- START Enable user notifications in the admin section -->
 			<?php if ($access) { ?>
 			<div class="pageoverflow">
@@ -442,6 +459,8 @@ if (FALSE == empty($page_message)) {
             </div> 
 			<?php } ?>
 			<!-- END Ignore notifications from these modules -->
+			
+		</fieldset>	
 			
 				
 			<p class="pagetext">&nbsp;</p>
