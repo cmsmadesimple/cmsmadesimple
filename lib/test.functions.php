@@ -57,7 +57,7 @@ class CmsInstallTest
 */
 function getSupportedDBDriver()
 {
-	return array('mysqli'=>'mysql', 'mysql'=>'mysql', 'pgsql'=>'pgsql');
+	return array('mysqli'=>'mysql', 'mysql'=>'mysql' );
 }
 
 
