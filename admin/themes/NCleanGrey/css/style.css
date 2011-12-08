@@ -16,7 +16,8 @@ legend {
 }
 fieldset {
 	border: 1px solid #CCCCCC;
-	padding: 5px;
+	padding: 5px 5px 25px 5px;
+	margin: 0 0 10px 0;
 	-moz-border-radius: 5px 5px 5px 5px;
 	-webkit-border-radius: 5px 5px 5px 5px;
 	border-radius: 5px 5px 5px 5px;
