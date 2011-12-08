@@ -102,7 +102,6 @@ if (isset($_POST['liststylesheets_pagelimit'])) $liststylesheets_pagelimit = $_P
 $listgcbs_pagelimit = '20';
 if (isset($_POST['listgcbs_pagelimit'])) $listgcbs_pagelimit = $_POST['listgcbs_pagelimit'];
 
-
 $default_parent = '';
 if( isset($_POST['parent_id']) )
   {
@@ -197,10 +196,13 @@ if (FALSE == empty($page_message)) {
 <div class="pagecontainer">
 	<div class="pageoverflow">
 	<?php echo $themeObject->ShowHeader('userprefs'); ?>
-	<form method="post" action="editprefs.php" name="prefsform">
-            <div class="invisible">
-	    <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" /></div>
-            <div>
+		<form method="post" action="editprefs.php" name="prefsform">
+        <div class="invisible">
+			<input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+		</div>
+		
+        <div>
+			<!-- START WYSIWYG to use -->
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</div>
 				<div class="pageinput">
@@ -224,6 +226,9 @@ if (FALSE == empty($page_message)) {
 					</select>
 				</div>
 			</div>
+			<!-- END WYSIWYG to use -->
+			
+			<!-- START Syntaxhighlighter to use -->
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('syntaxhighlightertouse'); ?>:</div>
 				<div class="pageinput">
@@ -247,49 +252,61 @@ if (FALSE == empty($page_message)) {
 					</select>
 				</div>
 			</div>
+			<!-- END Syntaxhighlighter to use -->
+			
+			<!-- Enable GCB WYSIWYG -->
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('gcb_wysiwyg'); ?>:</div>
 				<div class="pageinput">
-  <input class="pagenb" type="checkbox" name="gcb_wysiwyg" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; if( get_site_preference('nogcbwysiwyg') == '1' ) echo "disabled=\"disabled\""; ?> /><?php echo lang('gcb_wysiwyg_help') ?>
+				<input class="pagenb" type="checkbox" name="gcb_wysiwyg" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; if( get_site_preference('nogcbwysiwyg') == '1' ) echo "disabled=\"disabled\""; ?> /><?php echo lang('gcb_wysiwyg_help') ?>
 				</div>
 			</div>
-				<div class="pageoverflow">
+			
+			<!-- START Language -->
+			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('language'); ?>:</div>
 				<div class="pageinput">
 					<select name="default_cms_lang" style="vertical-align: middle;">
 					<?php
 					$opts = get_language_list();
-foreach( $opts as $key => $value )
-{
-  $str = "<option value=\"$key\"";
-  if( $default_cms_lang == $key )
-    { 
-      $str .= " selected=\"selected\"";
-    }
-  $str .= ">$value</option>\n";
-  echo $str;
-}
+					foreach( $opts as $key => $value )
+					{
+					$str = "<option value=\"$key\"";
+					if( $default_cms_lang == $key )
+					{ 
+						$str .= " selected=\"selected\"";
+					}
+					$str .= ">$value</option>\n";
+					echo $str;
+					}
 					?>
 					</select>
 				</div>
 			</div>
-	    <div class="pageoverflow">
-		<div class="pagetext"><?php echo lang('date_format_string'); ?>:</div>
-		<div class="pageinput">
-		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="255" /><?php echo '<br/>'.lang('date_format_string_help') ?>
-		</div>
-	    </div>
+			<!-- START Language -->
+			
+			<!-- START Date Format String -->
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('date_format_string'); ?>:</div>
+				<div class="pageinput">
+				<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="255" /><?php echo '<br/>'.lang('date_format_string_help') ?>
+				</div>
+			</div>
+			<!-- END Date Format String -->
 
-	<div class="pageoverflow">
-	  <p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
-	  <p class="pageinput">
-	  <?php
-	    $contentops = $gCms->GetContentOperations();
-echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1);
-	  ?>
-	  </p>
-	</div>	
+			<!-- START Default Parent Page -->
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
+				<p class="pageinput">
+				<?php
+				$contentops = $gCms->GetContentOperations();
+				echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1);
+				?>
+				</p>
+			</div>
+			<!-- END Default Parent Page -->
 
+			<!-- START Administration Theme -->
             <div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('admintheme');  ?>:</div>
 				<div class="pageinput">
@@ -309,46 +326,61 @@ echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1)
 					?>	
 				</div>					
 			</div>
+			<!-- END Administration Theme -->
+			
+			<!-- START Administration Shortcuts -->
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('admincallout'); ?>:</div>
 				<div class="pageinput">
 					<input class="pagenb" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><?php echo '<br/>'.lang('showbookmarks') ?>
 				</div>
 			</div>
+			<!-- END Administration Shortcuts -->
+			
+			<!-- START Hide module help link -->
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('hide_help_links'); ?>:</div>
 				<div class="pageinput">
 					<input class="pagenb" type="checkbox" name="hide_help_links" <?php if ($hide_help_links) echo "checked=\"checked\""; ?> /><?php echo lang('hide_help_links_help') ?>
 				</div>
 			</div>
+			<!-- END Hide module help link -->
 
+			<!-- START Homepage -->
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('homepage'); ?>:</div>
 				<div class="pageinput">
 						  <?php echo $themeObject->GetAdminPageDropdown('homepage',$homepage); ?>
 				</div>
 			</div>
+			<!-- END Homepage -->
 
-<div class="pageoverflow">
-  <div class="pagetext"><?php echo lang('listtemplates_pagelimit'); ?>:</div>
-  <div class="pageinput">
-    <?php echo pagelimit_dropdown('listtemplates_pagelimit',$pagelimit_opts,$listtemplates_pagelimit); ?>
-  </div>
-</div>
+			<!-- START Number of rows per page when viewing templates -->
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('listtemplates_pagelimit'); ?>:</div>
+				<div class="pageinput">
+					<?php echo pagelimit_dropdown('listtemplates_pagelimit',$pagelimit_opts,$listtemplates_pagelimit); ?>
+				</div>
+			</div>
+			<!-- END Number of rows per page when viewing templates -->
 
-<div class="pageoverflow">
-  <div class="pagetext"><?php echo lang('liststylesheets_pagelimit'); ?>:</div>
-  <div class="pageinput">
-    <?php echo pagelimit_dropdown('liststylesheets_pagelimit',$pagelimit_opts,$liststylesheets_pagelimit); ?>
-  </div>
-</div>
+			<!-- START Number of rows per page when viewing stylesheets -->
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('liststylesheets_pagelimit'); ?>:</div>
+				<div class="pageinput">
+					<?php echo pagelimit_dropdown('liststylesheets_pagelimit',$pagelimit_opts,$liststylesheets_pagelimit); ?>
+				</div>
+			</div>
+			<!-- END Number of rows per page when viewing stylesheets -->
 
-<div class="pageoverflow">
-  <div class="pagetext"><?php echo lang('listgcbs_pagelimit'); ?>:</div>
-  <div class="pageinput">
-    <?php echo pagelimit_dropdown('listgcbs_pagelimit',$pagelimit_opts,$listgcbs_pagelimit); ?>
-  </div>
-</div>
+			<!-- START Number of rows per page when viewing Global Content Blocks -->
+			<div class="pageoverflow">
+				<div class="pagetext"><?php echo lang('listgcbs_pagelimit'); ?>:</div>
+				<div class="pageinput">
+					<?php echo pagelimit_dropdown('listgcbs_pagelimit',$pagelimit_opts,$listgcbs_pagelimit); ?>
+				</div>
+			</div>
+			<!-- END Number of rows per page when viewing Global Content Blocks -->
 
 			<!--
 			<div class="pageoverflow">
@@ -366,55 +398,66 @@ echo $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1)
 				</p>
 			</div>
 			-->
+			
+			<!-- START Content Display -->
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('adminindent'); ?>:</div>
 				<div class="pageinput">
 					<input class="pagenb" type="checkbox" name="indent" <?php if ($indent) echo "checked=\"checked\""; ?> /><?php echo lang('indent') ?>
 				</div>
 			</div>
-               <?php  if ($access) 
-					  {
-					  ?>
+			<!-- END Content Display -->
+							  
+			<!-- START Enable user notifications in the admin section -->
+			<?php if ($access) { ?>
 			<div class="pageoverflow">
 				<div class="pagetext"><?php echo lang('enablenotifications'); ?>:</div>
 				<div class="pageinput">
 					<input class="pagenb" type="checkbox" name="enablenotifications" <?php if ($enablenotifications) echo "checked=\"checked\""; ?> /></div>
 			</div>
+			<?php } ?>
+			<!-- END Enable user notifications in the admin section -->
 
+			<!-- START Ignore notifications from these modules -->
+			<?php if ($access) { ?>
 			<div class="pageoverflow">
-			  <div class="pagetext"><?php echo lang('ignorenotificationsfrommodules'); ?>:</div>
-			  <div class="pageinput">
-				 <?php
+				<div class="pagetext"><?php echo lang('ignorenotificationsfrommodules'); ?>:</div>
+				<div class="pageinput">
+					<?php
 					  
-			  $txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
+					$txt = '<select name="ignoredmodules[]" multiple="multiple" size="5">'."\n";
                           foreach( $modules as $key => $value )
                           {
                             $txt .= '<option value="'.$key.'"';
                             if( in_array($value,$ignoredmodules) )
-			      {
-				$txt .= ' selected="selected"';
-			      }
+							{
+							$txt .= ' selected="selected"';
+							}
                             $txt .= ">{$key}</option>\n";
-                          }
-                          $txt .= "</select>\n";
-                          echo $txt;
-                         ?>
-			  </div>
-                        </div> 
-                <?php }?>
+							}
+							$txt .= "</select>\n";
+							echo $txt;
+                    ?>
+				</div>
+            </div> 
+			<?php } ?>
+			<!-- END Ignore notifications from these modules -->
+			
+				
 			<p class="pagetext">&nbsp;</p>
+			
 			<div class="pageinput">
-            <div class="invisible">
-				<input type="hidden" name="edituserprefs" value="true" />
-                <input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
+				<div class="invisible">
+					<input type="hidden" name="edituserprefs" value="true" />
+					<input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
                 </div>
 				<input class="pagebutton" type="submit" name="submit_form" value="<?php echo lang('submit'); ?>" />
 				<input class="pagebutton" type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" />
 			</div>
-			</div>			
+		</div>			
 		</form>
 	</div>
-</div>	
+</div>
 
 <?php
 
