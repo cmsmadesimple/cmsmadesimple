@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-20066 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2011 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 #$Id$
 
 $CMS_VERSION = "1.11-alpha0";
-$CMS_VERSION_NAME = "Le Lorrain";
+$CMS_VERSION_NAME = "NO NAME";
 $CMS_SCHEMA_VERSION = "35";
 
 define('CMS_VERSION', $CMS_VERSION);

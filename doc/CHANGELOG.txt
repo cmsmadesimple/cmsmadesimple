@@ -1,3 +1,30 @@
+Version 1.11 - NO NAME
+-----------------------------
+Core - Bug Reports:
+
+
+Core - Feature Requests:
+
+
+Core - General:
+
+
+Core - Installer:
+
+
+CMSMailer:
+
+
+MenuManager:
+
+
+MicroTiny:
+
+
+News:
+
+
+
 Version 1.10.2 - Casa Pilote
 -----------------------------
 Core - Bug Reports:
