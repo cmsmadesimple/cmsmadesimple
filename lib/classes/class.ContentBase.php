@@ -1,8 +1,7 @@
 <?php
-
 # CMS - CMS Made Simple
 # (c)2004 by Ted Kulp (tedkulp@users.sf.net)
-# This project's homepage is: http://cmsmadesimple.org
+# This project's homepage is: http://www.cmsmadesimple.org
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -234,27 +233,29 @@ class ContentBase
      */
     protected function SetProperties()
     {
-      $this->AddContentProperty('target',10);
       $this->AddBaseProperty('title',1,1);
       $this->AddBaseProperty('menutext',2,1);
-      $this->AddBaseProperty('page_url',3);
-      $this->AddBaseProperty('parent',4,1);
-      $this->AddBaseProperty('active',5);
-      $this->AddBaseProperty('showinmenu',5);
-      $this->AddBaseProperty('secure',6);
-      $this->AddBaseProperty('cachable',7);
-      $this->AddBaseProperty('alias',10);
-      $this->AddBaseProperty('titleattribute',55);
-      $this->AddBaseProperty('accesskey',56);
-      $this->AddBaseProperty('tabindex',57);
-      $this->AddBaseProperty('owner',90);
-      $this->AddBaseProperty('additionaleditors',91);
-
+	  $this->AddBaseProperty('alias',5);
+      $this->AddBaseProperty('page_url',6);
+      $this->AddBaseProperty('parent',7,1);
+      $this->AddBaseProperty('active',8);
+      $this->AddBaseProperty('showinmenu',9);
+      $this->AddBaseProperty('secure',10);
+      $this->AddBaseProperty('cachable',11);
+	  $this->AddContentProperty('target',12);
+      
       $this->AddContentProperty('image',50);
       $this->AddContentProperty('thumbnail',50);
+	  $this->AddBaseProperty('titleattribute',55);
+      $this->AddBaseProperty('accesskey',56);
+      $this->AddBaseProperty('tabindex',57);
+	  
       $this->AddContentProperty('extra1',80);
       $this->AddContentProperty('extra2',81);
       $this->AddContentProperty('extra3',82);
+	  
+	  $this->AddBaseProperty('owner',90);
+      $this->AddBaseProperty('additionaleditors',91);
     }
 
     
@@ -374,7 +375,7 @@ class ContentBase
 
 
     /**
-     * Retreive the creation date of this content object.
+     * Retrieve the creation date of this content object.
      *
      * @return int Unix Timestamp of the creation date
      */
@@ -385,7 +386,7 @@ class ContentBase
 	
 
     /**
-     * Retreive the date of the last modification of this content object.
+     * Retrieve the date of the last modification of this content object.
      *
      * @return int Unix Timestamp of the modification date.
      */
