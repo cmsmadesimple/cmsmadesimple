@@ -142,7 +142,7 @@ class cms_utils
   /**
    * A convenience function to return a handle to the CMSMS Smarty object.
    *
-   * @see CmsObject::GetSmarty()
+   * @see CmsApp::GetSmarty()
    * @since 1.9
    * @final
    * @return Smarty_CMS Handle to the Smarty object

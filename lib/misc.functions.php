@@ -76,7 +76,7 @@ function redirect($to, $noappend=false)
     session_write_close();
 
     $debug = false;
-    if( class_exists('CmsObject') )
+    if( class_exists('CmsApp') )
       {
 	$config = cmsms()->GetConfig();
 	$debug = $config['debug'];
@@ -186,8 +186,8 @@ function cms_join_path()
  */
 function &cmsms()
 {
-  if( class_exists('CmsObject') )
-    return CmsObject::get_instance();
+  if( class_exists('CmsApp') )
+    return CmsApp::get_instance();
 }
 
 

@@ -37,7 +37,7 @@
 
 require_once(dirname(__FILE__).'/class.cms_variables.php');
 
-final class CmsObject {
+final class CmsApp {
 
 	private static $_instance;
 
@@ -97,7 +97,7 @@ final class CmsObject {
 	{
 		if( !self::$_instance  )
 		{
-			self::$_instance = new CmsObject();
+			self::$_instance = new CmsApp();
 		}
 		return self::$_instance;
 	}
@@ -171,7 +171,7 @@ final class CmsObject {
 	 * This method will return an array of module names that are installed, loaded and ready for use.
 	 * suotable for iteration with GetModuleInstance
 	 *
-	 * @see CmsObject::GetModuleInstance()
+	 * @see CmsApp::GetModuleInstance()
 	 * @since 1.9
 	 * @return array
 	 */
