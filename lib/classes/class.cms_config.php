@@ -389,19 +389,20 @@ class cms_config implements ArrayAccess
     foreach( $this->_data as $key => $value )
     {
       // we're writing this var to the config file.
-      if( $verbose )
-	{
-	  // see if we can get some help for the item.
-	  $fn = cms_join_path($this->offsetGet('root_path'),'doc','help_'.$key.'.txt');
-	  if( file_exists($fn) )
-	    {
-	      $output .= "\n".file_get_contents($fn);
-	      if( !endswith($output,"\n") )
-		{
-		  $output .= "\n";
-		}
-	    }
-	}
+	// TODO: Redundant code? (ROLF)
+    //  if( $verbose )
+	//{
+	//  // see if we can get some help for the item.
+	//  $fn = cms_join_path($this->offsetGet('root_path'),'doc','help_'.$key.'.txt');
+	//  if( file_exists($fn) )
+	//    {
+	//      $output .= "\n".file_get_contents($fn);
+	//      if( !endswith($output,"\n") )
+	//	{
+	//	  $output .= "\n";
+	//	}
+	//    }
+	//}
       $outvalue = $this->_printable_value($key,$value);
       $output .= "\$config['{$key}'] = $outvalue;\n";
     }
