@@ -1,13 +1,14 @@
 <div class="pagecontainer">
+	{$header}
 	<form method="post" action="editprefs.php" name="prefsform">
-		<div class="invisible">
-			<input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}" />
-		</div>
 		<div class="pageoverflow">
-			<p class="pageinput">
+			<p class="pageinput" style="margin-left:0;">
 				<input type="submit" name="submit_form" value="{'submit'|lang}" class="pagebutton" />
 				<input type="submit" name="cancel" value="{'cancel'|lang}" class="pagebutton" />
 			</p>
+		</div>		
+		<div class="invisible">
+			<input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}" />
 		</div>	
 		<fieldset>
 			<legend>
@@ -19,8 +20,8 @@
 					{'language'|lang}
 				</p>
 				<p class="pageinput">
-					<select name="default_cms_lang">
-						{html_options options=$language_opts selected=$default_cms_lang}
+					<select name="default_cms_language">
+						{html_options options=$language_opts selected=$default_cms_language}
 					</select>
 				</p>
 			</div>
@@ -80,7 +81,7 @@
 					{'adminindent'|lang}:
 				</p>
 				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="indent" {if $indent == 1}checked="checked"{/if} />
+					<input class="pagenb" type="checkbox" name="indent" {if $indent == true}checked="checked"{/if} />
 					{'indent'|lang}
 				</p>
 			</div>
@@ -112,7 +113,7 @@
 					{'admincallout'|lang}:
 				</p>
 				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="bookmarks" {if $bookmarks == 1}checked="checked"{/if} />
+					<input class="pagenb" type="checkbox" name="bookmarks" {if $bookmarks == true}checked="checked"{/if} />
 					{'showbookmarks'|lang}
 				</p>
 			</div>
@@ -123,7 +124,7 @@
 					{'hide_help_links'|lang}:
 				</p>
 				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="hide_help_links" {if $hide_help_links == 1}checked="checked"{/if} />
+					<input class="pagenb" type="checkbox" name="hide_help_links" {if $hide_help_links == true}checked="checked"{/if} />
 					{'hide_help_links_help'|lang}
 				</p>
 			</div>
@@ -158,7 +159,7 @@
 			<!-- number of rows per page when viewing stylesheets //-->	
 			<!-- number of rows per page when viewing gcbs --> 
 			<div class="pageoverflow">
-				<p class="pagetext">{'liststylesheets_pagelimit'|lang}</p>
+				<p class="pagetext">{'listgcbs_pagelimit'|lang}</p>
 				<p class="pageinput">
 					<select name="listgcbs_pagelimit">
 						{html_options options=$pagelimit_opts selected=$listgcbs_pagelimit}

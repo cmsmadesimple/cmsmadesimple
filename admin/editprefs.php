@@ -55,10 +55,10 @@ $ignoredmodules = explode(',', get_preference($userid, 'ignoredmodules'));
 $gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
 $wysiwyg = get_preference($userid, 'wysiwyg');
 $syntaxhighlighter = get_preference($userid, 'syntaxhighlighter');
-$default_cms_lang = get_preference($userid, 'default_cms_lang');
-$old_default_cms_lang = $default_cms_lang;
+$default_cms_language = get_preference($userid, 'default_cms_language');
+$old_default_cms_lang = $default_cms_language;
 $admintheme = get_preference($userid, 'admintheme', 'default');
-$bookmarks = get_preference($userid, 'bookmarks', 1);
+$bookmarks = get_preference($userid, 'bookmarks', 0);
 $indent = get_preference($userid, 'indent', true);
 $enablenotifications = get_preference($userid, 'enablenotifications', 1);
 $paging = get_preference($userid, 'paging', 0);
@@ -87,16 +87,16 @@ if (isset($_POST["cancel"])) {
  * submit form
  */
 if (isset($_POST['submit_form'])) {
-	debug_display($_POST);
+	//debug_display($_POST);
 	/**
 	 * proces user prefs
 	 */
 	$gcb_wysiwyg = (isset($_POST['gcb_wysiwyg']) ? 1 : 0);
 	$wysiwyg = $_POST['wysiwyg'];
 	$syntaxhighlighter = $_POST['syntaxhighlighter'];
-	$default_cms_lang = '';
-	if (isset($_POST['default_cms_lang'])) {
-		$default_cms_lang = $_POST['default_cms_lang'];
+	$default_cms_language = '';
+	if (isset($_POST['default_cms_language'])) {
+		$default_cms_language = $_POST['default_cms_language'];
 	}
 	$old_default_cms_lang = '';
 	if (isset($_POST['old_default_cms_lang'])) {
@@ -140,7 +140,7 @@ if (isset($_POST['submit_form'])) {
 	set_preference($userid, 'gcb_wysiwyg', $gcb_wysiwyg);
 	set_preference($userid, 'wysiwyg', $wysiwyg);
 	set_preference($userid, 'syntaxhighlighter', $syntaxhighlighter);
-	set_preference($userid, 'default_cms_lang', $default_cms_lang);
+	set_preference($userid, 'default_cms_language', $default_cms_language);
 	set_preference($userid, 'admintheme', $admintheme);
 	set_preference($userid, 'bookmarks', $bookmarks);
 	set_preference($userid, 'hide_help_links', $hide_help_links);
@@ -229,7 +229,7 @@ $smarty -> assign('gcb_wysiwyg', $gcb_wysiwyg);
 $smarty -> assign('wysiwyg', $wysiwyg);
 $smarty -> assign('syntaxhighlighter', $syntaxhighlighter);
 $smarty -> assign('language_opts', get_language_list());
-$smarty -> assign('default_cms_lang', $default_cms_lang);
+$smarty -> assign('default_cms_language', $default_cms_language);
 $smarty -> assign('old_default_cms_lang', $old_default_cms_lang);
 $smarty -> assign('bookmarks', $bookmarks);
 $smarty -> assign('admintheme', $admintheme);
@@ -246,7 +246,7 @@ $smarty -> assign('listtemplates_pagelimit', $listtemplates_pagelimit);
 $smarty -> assign('liststylesheets_pagelimit', $liststylesheets_pagelimit);
 $smarty -> assign('listgcbs_pagelimit', $listgcbs_pagelimit);
 $smarty -> assign('ignoredmodules', $ignoredmodules);
-$smarty -> assign('header', $themeObject -> showHeader('pagedefaults'));
+$smarty -> assign('header', $themeObject -> showHeader('userprefs'));
 $smarty -> assign('backurl', $themeObject -> backUrl());
 
 /**
