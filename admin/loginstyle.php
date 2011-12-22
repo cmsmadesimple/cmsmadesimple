@@ -24,7 +24,7 @@ require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
 
 $theme=get_site_preference('logintheme', 'default');
-header("Content-type: text/css");
+header("Content-type: text/css; charset=" . get_encoding());
 if (file_exists(dirname(__FILE__)."/themes/$theme/css/style.css"))
   {
     echo file_get_contents(dirname(__FILE__)."/themes/$theme/css/style.css");

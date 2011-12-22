@@ -6,9 +6,9 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USE
   {
     @ini_set( 'zlib.output_compression','Off' );
   }
-header("Content-type: text/css");
 //$LOAD_ALL_MODULES = 1;
 require_once("../include.php");
+header("Content-type: text/css; charset=" . get_encoding());
 //require_once("../lib/classes/class.user.inc.php");
 $theme=get_preference(get_userid(),"admintheme");
 $style="style";
