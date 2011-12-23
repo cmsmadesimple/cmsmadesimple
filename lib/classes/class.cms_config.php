@@ -169,6 +169,14 @@ class cms_config implements ArrayAccess
 
   public function offsetGet($key)
   {
+    // hardcoded config variables
+    switch( $key )
+    {
+      case 'use_adodb_lite':
+        // backwares compatibility, this variable was removed in 1.11
+        return TRUE;
+    }
+
     if( isset($this->_data[$key]) )
       {
 	return $this->_data[$key];
