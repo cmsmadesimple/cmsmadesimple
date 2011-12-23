@@ -284,6 +284,19 @@ class cms_utils
     }
     return $ip;
   }
+
+  /**
+   * Get a reference to the current theme object
+   * only returns a valid value when in an admin request.
+   *
+   * @author calguy1000
+   * @since 1.11
+   * @returns CmsAdminThemeBase derived object, or null
+   */
+  public static function &get_theme_object()
+  {
+	  return CmsAdminThemeBase::GetThemeObject();
+  }
 } // end of class
 
 ?>

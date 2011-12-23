@@ -135,7 +135,6 @@ class NCleanGreyTheme extends AdminTheme
 
     function DisplayTopMenu()
     {
-	
       $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	echo '<div id="ncleangrey-container">';
 	//LOGO

@@ -5,9 +5,7 @@ if (isset($USE_THEME) && $USE_THEME == false)
   }
 else
   {
-    $themeObject->DisplayMainDivEnd();
-    $themeObject->OutputFooterJavascript();
-    $themeObject->DisplayFooter();
+    $themeObject->do_footer();
   }
 
 $gCms = cmsms();

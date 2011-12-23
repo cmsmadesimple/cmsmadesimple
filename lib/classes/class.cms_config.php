@@ -306,6 +306,9 @@ class cms_config implements ArrayAccess
       case 'wiki_url':
 	return 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel';
 
+	  case 'admin_path':
+		  return cms_join_path($this->offsetGet('root_path'),$this->offsetGet('admin_dir'));
+
       case 'admin_url':
 	return $this->offsetGet('root_url').'/'.$this->offsetGet('admin_dir');
 

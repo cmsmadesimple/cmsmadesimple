@@ -278,8 +278,9 @@ if ( !is_sitedown() && $config["debug"] == true)
 }
 else if( isset($config['show_performance_info']) && ($showtemplate == true) )
 {
-  debug_to_log('performance info: '.microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}");
-  echo "<!-- ".microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak} -->\n";
+  $txt = microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}";
+  debug_display($txt);
+  echo '<!-- '.$txt." -->\n";
 }
 
 if( is_sitedown() || $config['debug'] == true)
@@ -308,6 +309,8 @@ if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temp
   {
     unset($_SESSION['cms_preview']);
   }
+
+debug_display(array_keys(ModuleOperations::get_instance()->GetLoadedModules()));
 
 # vim:ts=4 sw=4 noet
 ?>
