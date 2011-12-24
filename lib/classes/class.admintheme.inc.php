@@ -28,6 +28,7 @@
  * @package CMS
  * @version $Revision$
  * @license GPL
+ * @deprecated
  */
 class AdminTheme extends CmsAdminThemeBase
 {

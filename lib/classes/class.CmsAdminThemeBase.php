@@ -810,6 +810,7 @@ abstract class CmsAdminThemeBase
 
   public function get_breadcrumbs()
   {
+	  $this->_populate_admin_navigation();
 	  return $this->_breadcrumbs;
   }
 
