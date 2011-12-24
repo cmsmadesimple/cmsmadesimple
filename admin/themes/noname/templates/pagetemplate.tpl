@@ -28,6 +28,7 @@
   <![endif]-->
 </head>
 <body>
+<div id="body">
 <div id="header">
   <div id="logocontainer">
     <img src="{$config.admin_url}/themes/NCleanGrey/images/layout/logoTM.png" alt="{sitename}" title="{sitename}" />
@@ -47,12 +48,25 @@
 
   {include file='notifications.tpl' items=$theme->get_notifications()}
 
-<div id="pagecontainer">
+<div id="pagecontainer">{strip}
+  <div id="pageheader">
+    {if isset($module_icon_url) or isset($pagetitle)}
+    {if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}"/>&nbsp;{/if}{$pagetitle|default:''}
+    {if isset($module_help_url) or isset($wiki_url)}
+      <span class="helptext">
+        {if isset($module_help_url)}<a href="{$module_help_url}">{'module_help'|lang}</a>{/if}
+	&nbsp;
+        {if isset($wiki_url)}<a href="{$wiki_url}" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if}
+      </span>
+    {/if}
+    {/if}
+  </div>
   {$content}
-</div>
+{/strip}</div>
 
 <div id="footer">
   <a rel="external" href="http://www.cmsmadesimple.org"><b>CMS Made Simple</b></a><b>&trade;</b> &nbsp;&nbsp;&nbsp; {cms_version} &nbsp;"{cms_versionname}"
 </div>
+</div>{* end if id=body *}
 </body>
 </html>

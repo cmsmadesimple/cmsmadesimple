@@ -781,7 +781,12 @@ abstract class CmsAdminThemeBase
 		  {
 			  if( (!isset($one['parent']) && $parent == -1) || (isset($one['parent']) && $one['parent'] == $parent) )
 				  {
-					  if( $maxdepth < 0 || $dpeth < $maxdepth )
+// 					  if( isset($one['children']) )
+// 						  {
+// 							  unset($one['children']);
+// 						  }
+
+					  if( $maxdepth < 0 || $depth + 1 < $maxdepth )
 						  {
 							  $children = $this->_get_navigation_tree_sub($key,$maxdepth,$depth+1);
 							  if( is_array($children) && count($children) )
@@ -796,12 +801,25 @@ abstract class CmsAdminThemeBase
 	  return $result;
   }
 
-  public function get_navigation_tree($parent = -1,$maxdepth = -1)
+  public function get_navigation_tree($parent = -1,$maxdepth = -1,$usecache = TRUE)
   {
-	  if( is_array($this->_nav_tree) ) return $this->_nav_tree;
+	  if( is_array($this->_nav_tree) && $usecache) return $this->_nav_tree;
 
-	  $this->_nav_tree = $this->_get_navigation_tree_sub($parent,$maxdepth);
-	  return $this->_nav_tree;
+	  $nodes = $this->_get_navigation_tree_sub($parent,$maxdepth);
+	  if( $usecache ) $this->_nav_tree = $nodes;
+	  return $nodes;
+  }
+
+  protected function find_menuitem_by_title($title)
+  {
+	  $nav = $this->get_admin_navigation();
+	  foreach( $nav as $key => $rec )
+	  {
+		  if( isset($rec['title']) && $rec['title'] == $title )
+		  {
+			  return $key;
+		  }
+	  }
   }
 
   public function get_bookmarks()
@@ -944,11 +962,7 @@ abstract class CmsAdminThemeBase
 	  // in base class should just add messages to the data
   }
 
-  public function ShowHeader($title_name,$extra_lang_params = array(),$link_text = '',$module_help_type = FALSE)
-  {
-	  debug_display('got header '.$title_name);
-	  // should not do anything in base class, other than set some data.
-  }
+  abstract public function ShowHeader($title_name,$extra_lang_params = array(),$link_text = '',$module_help_type = FALSE);
 
   static public function &GetThemeObject()
   {
