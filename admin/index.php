@@ -36,17 +36,8 @@ if( isset($_SESSION[CMS_USER_KEY]) && !isset($_GET[CMS_SECURE_PARAM_NAME]) )
 check_login();
 
 include_once("header.php");
-$themeObject->ShowShortcuts();
-$themeObject->DisplaySectionMenuDivStart();
-if( isset($_GET['section']) )
-  {
-    $themeObject->DisplaySectionPages(trim($_GET['section']));
-  }
-else
-  {
-    $themeObject->DisplayAllSectionPages();
-  }
-$themeObject->DisplaySectionMenuDivEnd();
+$section = (isset($_GET['section'])) ? trim($_GET['section']) : '';
+$themeObject->do_toppage($section);
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

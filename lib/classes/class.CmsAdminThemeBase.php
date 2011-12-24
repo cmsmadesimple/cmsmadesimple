@@ -5,6 +5,7 @@ abstract class CmsAdminThemeBase
 	private static $_instance;
 	private $_perms;
 	private $_menuItems;
+	private $_nav_tree;
 	private $_notifications;
 	private $_breadcrumbs;
 	private $_errors;
@@ -13,7 +14,7 @@ abstract class CmsAdminThemeBase
 	private $_script;
 	private $_url;
 	private $_query;
-	private $_flags;
+	private $_data;
 
 	// meta information
 	private $_sectionCount;
@@ -50,7 +51,12 @@ abstract class CmsAdminThemeBase
 	public function __get($key)
 	{
 		if( $key == 'cms' ) return cmsms();
-		if( $key == 'themeName' ) return get_class();
+		if( $key == 'themeName' ) 
+			{
+				$class = get_class();
+				if( endswith($class,'Theme') ) $class = substr($class,0,strlen($class)-5);
+				return $class;
+			}
 		if( $key == 'userid' ) return get_userid();
 		//trigger_error("Attempt to access invalid member $key of admin theme object");
 	}
@@ -764,17 +770,47 @@ abstract class CmsAdminThemeBase
 	  return $this->_menuItems;
   }
 
-  protected function get_bookmarks()
+  /**
+   * Return the menu items as a nested tree
+   */
+  private function _get_navigation_tree_sub($parent = -1,$maxdepth = -1, $depth = 0)
+  {
+	  $result = array();
+	  $flatitems = $this->get_admin_navigation();
+	  foreach( $flatitems as $key => $one )
+		  {
+			  if( (!isset($one['parent']) && $parent == -1) || (isset($one['parent']) && $one['parent'] == $parent) )
+				  {
+					  if( $maxdepth < 0 || $dpeth < $maxdepth )
+						  {
+							  $children = $this->_get_navigation_tree_sub($key,$maxdepth,$depth+1);
+							  if( is_array($children) && count($children) )
+								  {
+									  $one['children'] = $children;
+								  }
+						  }
+					  $one['name'] = $key;
+					  $result[] = $one;
+				  }
+		  }
+	  return $result;
+  }
+
+  public function get_navigation_tree($parent = -1,$maxdepth = -1)
+  {
+	  if( is_array($this->_nav_tree) ) return $this->_nav_tree;
+
+	  $this->_nav_tree = $this->_get_navigation_tree_sub($parent,$maxdepth);
+	  return $this->_nav_tree;
+  }
+
+  public function get_bookmarks()
   {
   }
 
-  protected function get_breadcrumbs()
+  public function get_breadcrumbs()
   {
 	  return $this->_breadcrumbs;
-  }
-
-  protected function get_recent_pages()
-  {
   }
 
   protected function SendHeaders($alreadySentCharset = FALSE, $encoding = '')
@@ -794,6 +830,45 @@ abstract class CmsAdminThemeBase
 	  
 	  if( !$encoding ) $encoding = get_encoding('',false);
 	  header("Content-Type: text/html; charset=$encoding");
+  }
+
+
+  /**
+   * set_value($key,$value)
+   * Attach some data to the admin theme.
+   *
+   * @param string key
+   * @param mixed value
+   * @returns void
+   */
+  public function set_value($key,$value)
+  {
+	  if( is_null($value) && is_array($this->_data) && isset($this->_data[$key]) )
+	  {
+		  unset($this->_data[$key]);
+		  return;
+	  }
+	  if( $value )
+	  {
+		  if( !is_array($this->_data) ) $this->_data = array();
+		  $this->_data[$key] = $value;
+	  }
+  }
+
+  /**
+   * get_value($key,$value)
+   * Return attached data
+   *
+   * @param string key
+   * @param mixed value
+   * @returns void
+   */
+  public function get_value($key)
+  {
+	  if( is_array($this->_data) && isset($this->_data[$key]) )
+		  {
+			  return $this->_data[$key];
+		  }
   }
 
 
@@ -890,6 +965,7 @@ abstract class CmsAdminThemeBase
 
   public function ShowHeader($title_name,$extra_lang_params = array(),$link_text = '',$module_help_type = FALSE)
   {
+	  debug_display('got header '.$title_name);
 	  // should not do anything in base class, other than set some data.
   }
 
@@ -926,7 +1002,19 @@ abstract class CmsAdminThemeBase
 	  $this->_notifications[] = $notification;
   }
 
-  protected function get_notifications()
+  /**
+   * AddNotification
+   */
+  public function AddNotification($priority,$module,$html)
+  {
+	  $notification = new CmsAdminThemeNotification;
+	  $notification->priority = max(1,min(3,$priority));
+	  $notification->module = $module;
+	  $notification->html = $html;
+	  $this->add_notification($notification);
+  }
+
+  public function get_notifications()
   {
 	  return $this->_notifications;
   }
@@ -1001,10 +1089,35 @@ abstract class CmsAdminThemeBase
 	  return $output;
   }
 
+  /**
+   *  BackUrl
+   *  "Back" Url - link to the next-to-last item in the breadcrumbs
+   *  for the back button.
+   */
+  public function BackUrl()
+  {
+	  $count = count($this->_breadcrumbs) - 2;
+	  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+	  if ($count > -1)
+		  {
+			  $txt = $this->_breadcrumbs[$count]['url'];
+			  return $txt;
+		  }
+	  else
+		  {
+			  // rely on base href to redirect back to the
+			  // admin home page
+			  return 'index.php'.$urlext;
+		  }
+  }
+
   abstract public function do_header();
 
-
   abstract public function do_footer();
+
+  abstract public function do_toppage($section_name);
+
+  abstract public function postprocess($html);
   
 } // end of class
 

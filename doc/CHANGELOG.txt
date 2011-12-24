@@ -1,5 +1,11 @@
 Version 1.11 - NO NAME
 -----------------------------
+ - Removed the HasAdminBuffering module method.
+ - If output buffering is disabled in the request, theme is also disabled.
+ - Revamp of admin theme.
+ - Remove the use_adodb_lite config variable
+ - Remove the process_whole_template config variable
+
 Core - Bug Reports:
 
 

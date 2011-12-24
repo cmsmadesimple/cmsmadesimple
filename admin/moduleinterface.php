@@ -67,29 +67,18 @@ if( get_preference($userid,'use_wysiwyg') == '1' && $modinst->IsWYSIWYG() )
   $htmlarea_replaceall = true;
 }
 
+$USE_THEME = true;
 $USE_OUTPUT_BUFFERING = true;
-if( $modinst->HasAdminBuffering() == false )
+if (isset($_REQUEST[$id . 'disable_buffer']) || isset($_REQUEST['disable_buffer']) )
 {
 	$USE_OUTPUT_BUFFERING = false;
+	$USE_THEME = false;
 }
-else if (isset($_REQUEST[$id . 'disable_buffer']))
+else if( isset($_REQUEST[$id . 'disable_theme']) || isset($_REQUEST['disable_theme']) )
 {
-	$USE_OUTPUT_BUFFERING = false;
-}
-else if (isset($_REQUEST['disable_buffer']))
-{
-	$USE_OUTPUT_BUFFERING = false;
+	$USE_THEME = false;
 }
 
-$USE_THEME = true;
-if( isset( $_REQUEST[$id . 'disable_theme'] ))
-{
-	$USE_THEME = false;
-}
-else if( isset( $_REQUEST['disable_theme'] ))
-{
-	$USE_THEME = false;
-}
 if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false'))
 {
   // for simplicity and compatibility with the frontend.
@@ -112,12 +101,9 @@ else
     include_once("header.php");
   }
 
-if (isset($USE_THEME) && $USE_THEME == false)
+if( !isset($USE_THEME) || $USE_THEME != false )
   {
-    echo '';
-  }
-else
-  {
+    $themeObject->set_value('headtext',$headtext);
     $params = GetModuleParameters($id);
     if (FALSE == empty($params['module_message']))
       {
@@ -133,37 +119,31 @@ else
 	echo '<div class="pageoverflow">';
 	echo $themeObject->ShowHeader($modinst->GetFriendlyName(), '', '', 'both').'</div>';
       }
-  }
-  
-if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
+  }  
+if( $USE_OUTPUT_BUFFERING )
   {
     @ob_start();
   }
-//$id = 'm1_';
+
+
 $params = GetModuleParameters($id);
 echo $modinst->DoActionBase($action, $id, $params);
-if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
+
+
+if( $USE_OUTPUT_BUFFERING )
   {
     $content = @ob_get_contents();
     @ob_end_clean();
     echo $content;
   }
-if (!$suppressOutput)
+if( !isset($USE_THEME) || $USE_THEME != false )
   {
-    echo '</div>';
-  }
-
-if (isset($USE_THEME) && $USE_THEME == false)
-{
-  echo '';
-}
-elseif (!$suppressOutput)
-{
-  echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
-}
-if (!$suppressOutput)
-  {
-    include_once("footer.php");
+    if (!$suppressOutput)
+      {
+	echo '</div>';
+	echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+	include_once("footer.php");
+      }
   }
 # vim:ts=4 sw=4 noet
 ?>

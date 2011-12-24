@@ -39,7 +39,7 @@ if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 }
 
 #Do any header replacements (this is for WYSIWYG stuff)
-$footertext = '';
+$headertext = '';
 $formtext = '';
 $formsubmittext = '';
 $bodytext = '';
@@ -57,7 +57,7 @@ if( is_array($loaded) && count($loaded) )
 	if( $object->IsWYSIWYG() && $object->WYSIWYGActive() )
 	  {
 	    $bodytext       .= $object->WYSIWYGGenerateBody();
-	    $footertext     .= $object->WYSIWYGGenerateHeader($htmlresult);
+	    $headertext     .= $object->WYSIWYGGenerateHeader($htmlresult);
 	    $formtext       .= $object->WYSIWYGPageForm();
 	    $formsubmittext .= $object->WYSIWYGPageFormSubmit();
 	    break;
@@ -65,7 +65,7 @@ if( is_array($loaded) && count($loaded) )
 	else if( $object->IsSyntaxHighlighter() && $object->SyntaxActive() )
 	  {
 	    $bodytext.=$object->SyntaxGenerateBody();
-	    $footertext.=$object->SyntaxGenerateHeader($htmlresult);
+	    $headertext.=$object->SyntaxGenerateHeader($htmlresult);
 	    $formtext.=$object->SyntaxPageForm();
 	    $formsubmittext.=$object->SyntaxPageFormSubmit();
 	    break;
@@ -73,12 +73,13 @@ if( is_array($loaded) && count($loaded) )
       }
   }
 
-$htmlresult = str_replace('<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->', $footertext, $htmlresult);
+$htmlresult = str_replace('<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->', $headertext, $htmlresult);
 $htmlresult = str_replace('##FORMSUBMITSTUFFGOESHERE##', ' '.$formtext, $htmlresult);
 $htmlresult = str_replace('##INLINESUBMITSTUFFGOESHERE##', ' '.$formsubmittext, $htmlresult);
 $htmlresult = str_replace('##BODYSUBMITSTUFFGOESHERE##', ' '.$bodytext, $htmlresult);
 
-echo $htmlresult;
+echo $themeObject->postprocess($htmlresult);
+
 $db = cmsms()->GetDb();
 $endtime = microtime();
 $memory = (function_exists('memory_get_usage')?memory_get_usage():0);

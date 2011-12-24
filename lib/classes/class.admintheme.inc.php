@@ -243,28 +243,6 @@ class AdminTheme extends CmsAdminThemeBase
 
     
     /**
-     *  BackUrl
-     *  "Back" Url - link to the next-to-last item in the breadcrumbs
-     *  for the back button.
-     */
-    public function BackUrl()
-     {
-     	$count = count($this->breadcrumbs) - 2;
-	$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-     	if ($count > -1)
-	  {
-     	    $txt = $this->breadcrumbs[$count]['url'];
-	    return $txt;
-	  }
-        else
-	  {
-	    // rely on base href to redirect back to the
-	    // admin home page
-     	    return 'index.php'.$urlext;
-	  }
-     }
-
-    /**
      * DisplaySectionPages
      * Shows admin section pages in the specified section, wrapped in a
      * MainMenuItem div. This is used in the top-level section pages.
@@ -651,18 +629,6 @@ EOT;
     }
 
 
-    /**
-     * AddToDashboard
-     */
-    public function AddNotification($priority,$module,$html)
-    {
-		$notification = new CmsAdminThemeNotification;
-		$notification->priority = max(1,min(3,$priority));
-		$notification->module = $module;
-		$notification->html = $html;
-		$this->add_notification($notification);
-	}
-
 	/**
 	 * Display the available notifications
 	 *
@@ -958,7 +924,8 @@ EOT;
 		$this->SendHeaders(isset($charsetsent), get_encoding('', false));
 		$this->DisplayDocType();
 		$this->DisplayHTMLStartTag();
-		$this->DisplayHTMLHeader(false, '');
+		$headtext = $this->get_value('headtext');
+		$this->DisplayHTMLHeader(false, $headtext);
 		$this->DisplayBodyTag();
 		$this->DisplayTopMenu();
 		$this->DisplayMainDivStart();
@@ -982,6 +949,26 @@ EOT;
 		$this->DisplayMainDivEnd();
 		$this->OutputFooterJavascript();
 		$this->DisplayFooter();
+	}
+
+	public function do_toppage($section_name)
+	{
+		$this->ShowShortcuts();
+		$this->DisplaySectionMenuDivStart();
+		if( $section_name )
+		{
+			$this->DisplaySectionPages( $section_name );
+		}
+		else
+		{
+			$this->DisplayAllSectionPages();
+		}
+		$this->DisplaySectionMenuDivEnd();
+	}
+
+	public function postprocess($html)
+	{
+		return $html;
 	}
 }
 
