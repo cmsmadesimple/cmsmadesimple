@@ -921,7 +921,6 @@ EOT;
 
 	public function do_header()
 	{
-		$this->SendHeaders(isset($charsetsent), get_encoding('', false));
 		$this->DisplayDocType();
 		$this->DisplayHTMLStartTag();
 		$headtext = $this->get_value('headtext');

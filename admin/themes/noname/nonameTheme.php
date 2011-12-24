@@ -93,6 +93,18 @@ class nonameTheme extends CmsAdminThemeBase
     $otd = $smarty->template_dir;
     $smarty->template_dir = dirname(__FILE__).'/templates';
 
+    $title = $this->get_value('pagetitle');
+    if( !$title )
+      {
+	// no title, get one from the breadcrumbs.
+	$bc = $this->get_breadcrumbs();
+	if( is_array($bc) && count($bc) )
+	  {
+	    $title = $bc[count($bc)-1]['title'];
+	  }
+      }
+
+    $smarty->assign('pagetitle',$title);
     $smarty->assign('content',$html);
     $smarty->assign('config',cmsms()->GetConfig());
     $smarty->assign('theme',$this);
