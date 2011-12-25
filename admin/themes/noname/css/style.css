@@ -1,341 +1,368 @@
 /*! normalize.css 2011-11-04T15:38 UTC - http://github.com/necolas/normalize.css */
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
-	display: block;
+	display: block
 }
 audio, canvas, video {
 	display: inline-block;
 	*display: inline;
-	*zoom: 1;
+	*zoom: 1
 }
 audio:not([controls]) {
-	display: none;
+	display: none
 }
 [hidden] {
-	display: none;
+	display: none
 }
 html {
 	font-size: 100%;
 	-webkit-text-size-adjust: 100%;
-	-ms-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%
 }
 body {
-	margin: 0;
+	margin: 0
 }
 body, button, input, select, textarea {
-	font-family: sans-serif;
+	font-family: sans-serif
 }
 a:focus {
-	outline: thin dotted;
+	outline: thin dotted
 }
 a:hover, a:active {
-	outline: 0;
+	outline: 0
 }
 h1 {
-	font-size: 2em;
+	font-size: 2em
 }
 abbr[title] {
-	border-bottom: 1px dotted;
+	border-bottom: 1px dotted
 }
 b, strong {
-	font-weight: bold;
+	font-weight: bold
 }
 blockquote {
-	margin: 1em 40px;
+	margin: 1em 40px
 }
 dfn {
-	font-style: italic;
+	font-style: italic
 }
 mark {
 	background: #ff0;
-	color: #000;
+	color: #000
 }
 pre, code, kbd, samp {
 	font-family: monospace, serif;
 	_font-family: 'courier new', monospace;
-	font-size: 1em;
+	font-size: 1em
 }
 pre {
 	white-space: pre;
 	white-space: pre-wrap;
-	word-wrap: break-word;
+	word-wrap: break-word
 }
 q {
-	quotes: none;
+	quotes: none
 }
 q:before, q:after {
 	content: '';
-	content: none;
+	content: none
 }
 small {
-	font-size: 75%;
+	font-size: 75%
 }
 sub, sup {
 	font-size: 75%;
 	line-height: 0;
 	position: relative;
-	vertical-align: baseline;
+	vertical-align: baseline
 }
 sup {
-	top: -0.5em;
+	top: -0.5em
 }
 sub {
-	bottom: -0.25em;
+	bottom: -0.25em
 }
 ul, ol {
 	margin-left: 0;
-	padding: 0 0 0 40px;
+	padding: 0 0 0 40px
 }
 dd {
-	margin: 0 0 0 40px;
+	margin: 0 0 0 40px
 }
 nav ul, nav ol {
 	list-style: none;
-	list-style-image: none;
+	list-style-image: none
 }
 img {
 	border: 0;
-	-ms-interpolation-mode: bicubic;
+	-ms-interpolation-mode: bicubic
 }
 svg:not(:root) {
-	overflow: hidden;
+	overflow: hidden
 }
 figure {
-	margin: 0;
+	margin: 0
 }
 form {
-	margin: 0;
+	margin: 0
 }
 fieldset {
 	border: 1px solid #c0c0c0;
 	margin: 0 2px;
-	padding: 0.35em 0.625em 0.75em;
+	padding: 0.35em 0.625em 0.75em
 }
 legend {
 	border: 0;
-	*margin-left: -7px;
+	*margin-left: -7px
 }
 button, input, select, textarea {
 	font-size: 100%;
 	margin: 0;
 	vertical-align: baseline;
-	*vertical-align: middle;
+	*vertical-align: middle
 }
 button, input {
-	line-height: normal;
+	line-height: normal
 }
 button, input[type="button"], input[type="reset"], input[type="submit"] {
 	cursor: pointer;
 	-webkit-appearance: button;
-	*
-	overflow: visible;
+	*overflow: visible
 }
 input[type="checkbox"], input[type="radio"] {
 	box-sizing: border-box;
-	padding: 0;
+	padding: 0
 }
 input[type="search"] {
 	-webkit-appearance: textfield;
 	-moz-box-sizing: content-box;
 	-webkit-box-sizing: content-box;
-	box-sizing: content-box;
+	box-sizing: content-box
 }
 input[type="search"]::-webkit-search-decoration {
-	-webkit-appearance: none;
+	-webkit-appearance: none
 }
 button::-moz-focus-inner, input::-moz-focus-inner {
 	border: 0;
-	padding: 0;
+	padding: 0
 }
 textarea {
 	overflow: auto;
-	vertical-align: top;
+	vertical-align: top
 }
 table {
 	border-collapse: collapse;
-	border-spacing: 0;
+	border-spacing: 0
 }
 /* CLEARFIX */
-
 * html .cf {
 	height: 1%;
-	overflow: visible;
+	overflow: visible
 }
 *+ html .cf {
-	min-height: 1%;
+	min-height: 1%
 }
 .cf:after {
 	clear: both;
 	content: ".";
 	display: block;
 	height: 0;
-	visibility: hidden;
+	visibility: hidden
 }
 .clear {
 	clear: both;
-	height: 0;
+	height: 0
 }
 /* COMMON STUFF */
-/* dont break layout */
+
+/*
+ * Colors
+ * #f6f6f6 Body Background
+ * #232323 Dark background
+ * #cecece Grey background
+ * #ddd Grey background
+ * #585858 Dark grey titles
+ * #fa8004 Orange (links, title)
+ * #147fdb Blue (links, titles)
+ */
+
+html, body {
+	margin: 0px;
+	padding: 0px;
+	min-height: 100%;
+	height: 100%
+}
+body {
+	min-width: 800px;
+	color: #232323;
+	line-height: 1.3;
+	font-size: 12px;
+	background: #f6f6f6
+}
+ul, ol {
+	list-style: none;
+	margin: 0;
+	padding: 0
+}
+/* dont break layout with to big images */
 img {
-	max-width: 100%;
+	max-width: 100%
 }
 /* Notification messages */
 .message {
 	display: block;
 	padding: 10px 10px 10px 55px;
-	margin: 10px 0;
+	margin: 10px 0
 }
-
 .message p {
 	color: #222;
-	margin:0;
+	margin: 0
 }
 .warning {
 	background: #feffc8 url(themes/noname/images/layout/warning.png) 10px 50% no-repeat;
 	border: 1px solid #f1aa2d;
-	border-radius: 3px;
+	border-radius: 3px
 }
 .error {
 	background: #fdcea4 url(themes/noname/images/layout/block.png) 10px 50% no-repeat;
 	border: 1px solid #c44509;
-	border-radius: 3px;
+	border-radius: 3px
 }
 .success {
 	background: #d4f684 url(themes/noname/images/layout/accept.png) 10px 50% no-repeat;
 	border: 1px solid #739f1d;
-	border-radius: 3px;
+	border-radius: 3px
 }
 .information {
 	background: #c3e4fd url(themes/noname/images/layout/info.png) 10px 50% no-repeat;
 	border: 1px solid #688fdc;
-	border-radius: 3px;
+	border-radius: 3px
 }
 .message:hover {
-	cursor: help;
+	cursor: help
 }
 /* LAYOUT */
+
 /* Login Page */
+/* TO DO, Rework login page, to much info, simple toggle of messages and other stuff should do it to */
 body.login {
 	background: #f6f6f6;
-	font: normal 14px /1.3 Tahoma, sans-serif;
+	font: normal 14px  /1.3 Tahoma, sans-serif;
 }
-	.login .top {
-		height: 45px;
-		background: #e5e5e5 url(themes/noname/images/layout/login-top-bg.gif) repeat-x;
-		color: #222;
-		border-bottom: 1px solid #fff;
-		padding: 0 20px;
-		line-height: 45px;
-	}
-		.login .top a.logo {
-			display: inline-block;
-			height: 45px;
-			width: 146px;
-			float: left;
-		}
-		.login .top a.home {
-			display: block;
-			height: 45px;
-			width: 32px;
-			float: right;
-			text-indent: -9999em;
-			background: url(themes/noname/images/layout/home-button.png) no-repeat center;
-		}
-		.login .top h1 {
-			display: inline-block;
-			font-size: 14px;
-			margin: 0 0 0 20px;
-			float:left;
-			height: 45px;
-			color: #8d8d8d;
-		}
-	.login .bottom {
-		width: 690px;
-		margin: 10em auto 20px auto;
-		padding-bottom: 18px;
-		font: normal 11px /1.3 sans-serif;
-		background: url(themes/noname/images/layout/bottom-shadow.png) no-repeat center bottom;
-	}
-		.login .bottom .container {
-			width: 500px;
-			padding: 15px;
-			margin: auto;
-			background: #ededed url(themes/noname/images/layout/login-bg.gif) repeat-x top;
-			border: 2px solid #efefef;
-			border-radius: 0 25px 0 0;
-		}
-			.login .bottom h2 {
-				color: #f79838;
-				margin-top: 0;
-			}
-			p.login-info {
-				background: url(themes/noname/images/layout/info-icon.png) no-repeat left;
-				padding-left: 38px;
-				font: bold 14px /30px sans-serif;
-				color: #8d8d8d;
-				text-shadow: 0 1px 1px #fff;
-			}
-			.login .bottom ol {
-				padding:0;
-				margin-left: 20px;
-			}
-			.login p.forgotpw {
-				text-align: right;
-				margin-bottom: 0;
-			}
-			.login p.forgotpw a{
-				padding-left: 20px;
-				background: url(themes/noname/images/layout/help.png) left 50% no-repeat;
-				color: #222;
-				text-decoration: none;
-			}
-	.login .copyright {
-		width: 690px;
-		margin: auto;
-		text-align: center;
-	}
-		.login .copyright .small {
-			background: #feffc8 url(themes/noname/images/layout/exclamation.png) no-repeat 10px 50%;
-			border: 1px solid #f1aa2d;
-			color: #8d8d8d;
-			border-radius: 3px;
-			display: inline-block;
-			text-align: center;
-			width: auto;
-			padding: 5px 5px 5px 30px;
-			font-size: 11px;
-		}
-		.login small {
-			text-align: center;
-			font-size: 12px;
-			color: #8d8d8d;
-			display: block;
-		}
-		.login small a {
-			color: #8d8d8d;
-			text-decoration: none;
-			font-weight: bold;
-		}
+.login .top {
+	height: 45px;
+	background: #e5e5e5 url(themes/noname/images/layout/login-top-bg.gif) repeat-x;
+	color: #222;
+	border-bottom: 1px solid #fff;
+	padding: 0 20px;
+	line-height: 45px
+}
+.login .top a.logo {
+	display: inline-block;
+	height: 45px;
+	width: 146px;
+	float: left
+}
+.login .top a.home {
+	display: block;
+	height: 45px;
+	width: 32px;
+	float: right;
+	text-indent: -9999em;
+	background: url(themes/noname/images/layout/home-button.png) no-repeat center
+}
+.login .top h1 {
+	display: inline-block;
+	font-size: 14px;
+	margin: 0 0 0 20px;
+	float: left;
+	height: 45px;
+	color: #8d8d8d
+}
+.login .bottom {
+	width: 690px;
+	margin: 10em auto 20px auto;
+	padding-bottom: 18px;
+	font: normal 11px  /1.3 sans-serif;
+	background: url(themes/noname/images/layout/bottom-shadow.png) no-repeat center bottom
+}
+.login .bottom .container {
+	width: 500px;
+	padding: 15px;
+	margin: auto;
+	background: #ededed url(themes/noname/images/layout/login-bg.gif) repeat-x top;
+	border: 2px solid #efefef;
+	border-radius: 0 25px 0 0
+}
+.login .bottom h2 {
+	color: #f79838;
+	margin-top: 0
+}
+p.login-info {
+	background: url(themes/noname/images/layout/info-icon.png) no-repeat left;
+	padding-left: 38px;
+	font: bold 14px  /30px sans-serif;
+	color: #8d8d8d;
+	text-shadow: 0 1px 1px #fff
+}
+.login .bottom ol {
+	padding: 0;
+	margin-left: 20px
+}
+.login p.forgotpw {
+	text-align: right;
+	margin-bottom: 0
+}
+.login p.forgotpw a {
+	padding-left: 20px;
+	background: url(themes/noname/images/layout/help.png) left 50% no-repeat;
+	color: #222;
+	text-decoration: none
+}
+.login .copyright {
+	width: 690px;
+	margin: auto;
+	text-align: center
+}
+.login .copyright .small {
+	background: #feffc8 url(themes/noname/images/layout/exclamation.png) no-repeat 10px 50%;
+	border: 1px solid #f1aa2d;
+	color: #8d8d8d;
+	border-radius: 3px;
+	display: inline-block;
+	text-align: center;
+	width: auto;
+	padding: 5px 5px 5px 30px;
+	font-size: 11px
+}
+.login small {
+	text-align: center;
+	font-size: 12px;
+	color: #8d8d8d;
+	display: block
+}
+.login small a {
+	color: #8d8d8d;
+	text-decoration: none;
+	font-weight: bold
+}
 /* login form */
 .login fieldset {
 	border: none;
-	border-bottom: 1px solid #fff;
+	border-bottom: 1px solid #fff
 }
 .login p.left, .login p.right {
-	float:left;
+	float: left;
 	width: 50%;
-	display: inline;
+	display: inline
 }
 .login label {
 	color: #8d8d8d;
 	font-size: 12px;
 	margin-bottom: 5px;
 	display: inline-block;
-	font-weight: bold;
+	font-weight: bold
 }
-.login input[type="password"],
-.login input.focus,
-.login input[type="text"] {
+.login input[type="password"], .login input.focus, .login input[type="text"] {
 	border: 1px solid #bbb;
 	border-radius: 3px;
 	line-height: 28px;
@@ -343,15 +370,12 @@ body.login {
 	width: 220px;
 	background: #efefef;
 	outline: 0;
-	text-indent: 10px;
-	font normal 11px/22px 'Lucida Console', 'Monaco', monospace;
-	margin-bottom: 5px;
+	text-indent: 10px;font normal 11px/22px 'Lucida Console', 'Monaco', monospace;
+	margin-bottom: 5px
 }
-.login input[type="password"]:focus,
-.login input[type="text"]:focus {
-	background: #fff;
+.login input[type="password"]:focus, .login input[type="text"]:focus {
+	background: #fff
 }
-
 .login input[type="submit"] {
 	height: 28px;
 	color: #8d8d8d;
@@ -364,15 +388,377 @@ body.login {
 	border-left: 1px solid #fff;
 	border-radius: 3px;
 	outline: 0;
-	background: #dddbdb url(themes/noname/images/layout/submit-bg.gif) repeat-x bottom;
+	background: #dddbdb url(themes/noname/images/layout/submit-bg.gif) repeat-x bottom
 }
-
-.login input[type="submit"]:focus, 
-.login input[type="submit"]:hover {
+.login input[type="submit"]:focus, .login input[type="submit"]:hover {
 	background: #ff9223 url(themes/noname/images/layout/submit-hover.gif) repeat-x bottom;
 	border: 1px solid #fd860d;
 	border-top: 1px solid #fdd580;
 	border-left: 1px solid #fdd580;
+	color: #fff
+}
+/* LAYOUT */
+/* full height */
+#container {
+	position: relative;
+	height: auto !important;
+	height: 100%;
+	margin: 0 0 -60px 0;
+	min-height: 100%
+}
+/* realign content */
+.spacer {
+	height: 60px;
+	clear: both
+}
+#content {
+	height: 100%
+}
+#content .shadow {
+	background: transparent url(themes/noname/images/layout/content-shadow.png) repeat-x top;
+	z-index: 9999;
+	position: absolute;
+	top: 100px;
+	left: 0;
+	width: 100%;
+	height: 7px
+}
+/*
+ * header
+ */
+header.header {
+	height: 100px;
+	background: #cecece
+}
+header .header-top {
+	height: 69px;
+	border-bottom: 1px solid #cecece;
+	background: #eee url(themes/noname/images/layout/header-top.gif) repeat-x top
+}
+header .cms-logo {
+	width: 240px;
+	height: 70px;
+	padding-left: 10px;
+	background: transparent url(themes/noname/images/layout/cms-logo-bg.gif) no-repeat top right;
+	float: left
+}
+header .admin-title {
+	text-align: right;
+	display: inline-block;
+	height: 70px;
+	font: bold 14px   /70px sans-serif;
+	line-height: 70px;
+	margin-right: 20px;
+	color: #585858;
+	text-shadow: 1px 1px 0 #fff;
+	float: right
+}
+header .header-bottom {
+	height: 29px;
+	line-height: 29px;
+	border-bottom: 1px solid #0f0f0f;
+	position: relative;
+	width: 100%;
+	background: #232323 url(themes/noname/images/layout/header-bottom.gif) repeat-x top
+}
+header .welcome {
+	width: 250px;
+	float: left;
 	color: #fff;
+	background: transparent url(themes/noname/images/layout/welcome-bg.gif) no-repeat top right
+}
+header .welcome span {
+	display: inline-block;
+	width: auto;
+	font-size: 11px;
+	line-height: 18px;
+	background: url(themes/noname/images/layout/user-icon.png) no-repeat left;
+	margin-left: 10px;
+	padding-left: 30px
+}
+/* breadcrumbs nav */
+header .breadcrumbs {
+	float: left;
+	height: 29px
+}
+header .breadcrumbs ul {
+	display: inline-block;
+	list-style: none;
+	line-height: 29px;
+	margin: 0 0 0 25px
+}
+header .breadcrumbs ul li {
+	float: left;
+	color: #fff;
+	font-size: 11px;
+	padding: 0 8px 0 4px
+}
+header .breadcrumbs ul li.first {
+	background: url(themes/noname/images/layout/home-icon.png) no-repeat left;
+	padding-left: 28px
+}
+header .breadcrumbs ul li a {
+	color: #fff;
+	text-decoration: none;
+	display: inline-block;
+	background: url(themes/noname/images/layout/breadcrubms-divider.png) no-repeat right;
+	padding-right: 24px
+}
+header .breadcrumbs ul li a:hover, header .breadcrumbs ul li a:active {
+	text-decoration: underline
+}
+header .breadcrumbs ul li.current, header .breadcrumbs ul li.current a {
+	color: #fa8004
+}
+/* shortcut icons */
+header .shortcuts {
+	float: right;
+}
+header .shortcuts ul {
+	width: auto;
+	line-height: 29px;
+	text-align: left;
+	margin-right: 20px
+}
+header .shortcuts li {
+	padding: 0 12px;
+	display: inline-block;
+	line-height: 29px;
+	float: left
+}
+header .shortcuts li:last-child, header .shortcuts li.last {
+	padding: 0 0 0 12px
+}
+header .shortcuts li a {
+	display: block;
+	margin-top: 5px;
+	width: 18px;
+	height: 18px;
+	text-indent: -9999em;
+	overflow: hidden
+}
+header .shortcuts li.help a {
+	background: url(themes/noname/images/layout/help-icon.png) no-repeat
+}
+header .shortcuts li.settings a {
+	background: url(themes/noname/images/layout/settings-icon.png) no-repeat
+}
+header .shortcuts li.logout a {
+	background: url(themes/noname/images/layout/logout-icon.png) no-repeat
+}
+header .shortcuts li.view-site a {
+	background: url(themes/noname/images/layout/view-icon.png) no-repeat
+}
+header .shortcuts li.favorites a {
+	background: url(themes/noname/images/layout/favorites-icon.png) no-repeat
+}
+/*
+ * sidebar
+ */
+#sidebar {
+	width: 249px;
+	border-right: 1px solid #fff;
+	background: #ddd url(themes/noname/images/layout/sidebar-shadow.png) repeat-y right;
+	position: absolute;
+	left: 0;
+	top: 100px;
+	bottom: 50px
+}
+#content.sidebar-off #sidebar {
+	overflow: hidden;
+	width: 40px
+}
+#sidebar aside {
+	position: relative
+}
+#sidebar .toggle-button {
+	text-indent: -9999em;
+	z-index: 999;
+	display: block;
+	cursor: pointer;
+	width: 24px;
+	height: 25px;
+	position: absolute;
+	right: 0;
+	top: 75px
+}
+#sidebar .toggle-button.close {
+	background: url(themes/noname/images/layout/close-sidebar.png)
+}
+#sidebar .toggle-button.open {
+	background: url(themes/noname/images/layout/open-sidebar.png)
+}
+/* sidebar notifications */
+#sidebar .notification a {
+	text-decoration: none;
+	color: #fff
+}
+#sidebar .notification {
+	height: 35px;
+	position: relative;
+	padding: 14px 10px;
+	background: #232323 url(themes/noname/images/layout/notifications-bg.gif) repeat-x top;
+	color: #fff
+}
+#sidebar .notification .box-shadow, #sidebar nav.navigation .box-shadow {
+	width: 11px;
+	z-index: 10;
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: url(themes/noname/images/layout/sidebar-shadow.png) repeat-y right
+}
+#sidebar .notification span {
+	background: url(themes/noname/images/layout/email-icon.png) no-repeat left;
+	font-size: 11px;
+	line-height: 35px;
+	height: 35px;
+	display: inline-block;
+	padding-left: 30px
+}
+#sidebar .alert-dialog {
+	visibility: hidden;
+	text-indent: -9999em
+}
+/* main navigation */
+nav.navigation ul {
+	border-bottom: 1px solid #adadad;
+	margin-top: 45px
+}
+nav.navigation ul li {
+	background: #cecece url(themes/noname/images/layout/navigation-bg.gif) repeat-x top;
+	line-height: 35px;
+	padding-left: 10px
+}
+nav.navigation ul li a {
+	color: #232323;
+	height: 36px;
+	font-weight: bold;
+	display: block;
+	text-shadow: 1px 1px 0 #fff;
+	padding-left: 30px;
+	text-decoration: none
+}
+nav.navigation ul li ul {
+	display: none  /*just for now */
+}
+nav.navigation ul li a:hover, nav.navigation ul li a:active {
+	color: #147fdb
+}
+nav.navigation ul li.current a {
+	color: #fa8004
+}
+/* we will spritify this later */
+nav.navigation ul li.main a {
+	background: url(themes/noname/images/layout/home-off.png) no-repeat left
+}
+nav.navigation ul li.content a {
+	background: url(themes/noname/images/layout/content-off.png) no-repeat left
+}
+nav.navigation ul li.layout a {
+	background: url(themes/noname/images/layout/layout-off.png) no-repeat left
+}
+nav.navigation ul li.usersgroups a {
+	background: url(themes/noname/images/layout/users-off.png) no-repeat left
+}
+nav.navigation ul li.extensions a {
+	background: url(themes/noname/images/layout/extensions-off.png) no-repeat left
+}
+nav.navigation ul li.siteadmin a {
+	background: url(themes/noname/images/layout/admin-off.png) no-repeat left
+}
+nav.navigation ul li.myprefs a {
+	background: url(themes/noname/images/layout/preferences-off.png) no-repeat left
+}
+/* hover, active */
+nav.navigation ul li.main a:hover, nav.navigation ul li.main.current a {
+	background: url(themes/noname/images/layout/home-on.png) no-repeat left
+}
+nav.navigation ul li.content a:hover, nav.navigation ul li.content.current a {
+	background: url(themes/noname/images/layout/content-on.png) no-repeat left
+}
+nav.navigation ul li.layout a:hover, nav.navigation ul li.layout.current a {
+	background: url(themes/noname/images/layout/layout-on.png) no-repeat left
+}
+nav.navigation ul li.usersgroups a:hover, nav.navigation ul li.usersgroups.current a {
+	background: url(themes/noname/images/layout/users-on.png) no-repeat left
+}
+nav.navigation ul li.extensions a:hover, nav.navigation ul li.extensions.current a {
+	background: url(themes/noname/images/layout/extensions-on.png) no-repeat left
+}
+nav.navigation ul li.siteadmin a:hover, nav.navigation ul li.siteadmin.current a {
+	background: url(themes/noname/images/layout/admin-on.png) no-repeat left
+}
+nav.navigation ul li.myprefs a:hover, nav.navigation ul li.myprefs.current a {
+	background: url(themes/noname/images/layout/preferences-on.png) no-repeat left
+}
+/*
+ * page content
+ */
+#main {
+	margin: 0 0 0 249px
+}
+#content.sidebar-off #main {
+	margin: 0 0 0 40px
+}
+#main section.content-inner {
+	padding: 0 20px 0 25px
+}
+/*
+ * footer
+ */
+footer#footer {
+	width: 100%;
+	height: 45px;
+	background: transparent url(themes/noname/images/layout/footer-bg.png) repeat-x bottom;
+	padding-top: 15px;
+	clear: both;
+	position: fixed;
+	bottom: 0
+}
+footer#footer a {
+	text-decoration: none;
+	color: #147fdb
+}
+footer#footer a:hover, footer#footer a:active {
+	color: #fa8004
+}
+#footer small {
+	font-size: 12px;
+	color: #fff
+}
+#footer .footer-left {
+	width: 350px;
+	padding: 10px;
+	line-height: 20px;
+	float: left
+}
+.footer-left {
+	margin: 0 0 0 260px
+}
+.footer-left.sidebar-off {
+	margin: 0 0 0 60px
+}
+#footer .footer-right {
+	float: right;
+	padding: 10px;
+	line-height: 20px;
+	display: inline;
+	width: auto
+}
+#footer ul.links {
+	display: inline-block;
+	margin-right: 20px;
+	font-size: 11px;
+	width: auto
+}
+#footer ul.links li {
+	display: block;
+	padding: 0 8px;
+	float: left
+}
+#footer ul.links li:last-child, #footer ul.links li.last {
+	padding: 0 0 0 8px
 }
 

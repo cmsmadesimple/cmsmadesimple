@@ -1,72 +1,123 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <title>{sitename} - {$pagetitle}</title>
-  <base href="{$config.admin_url}/" />
-  <meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-12 Ted Kulp. All rights reserved." />
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="robots" content="noindex, nofollow" />
-  <link rel="shortcut icon" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
-  <link rel="Bookmark" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
-  <link rel="stylesheet" type="text/css" href="style.php?{$secureparam}" />
-  <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
-  <script type="text/javascript" src="{root_url}/lib/jquery/js/jquery-1.6.2.min.js"></script>
-  <script type="text/javascript" src="{root_url}/lib/jquery/js/jquery-ui-1.8.14.min.js"></script>
-  <script type="text/javascript" src="{root_url}/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>
-  <script type="text/javascript" src="{root_url}/lib/jquery/js/jquery.json-2.2.js"></script>
-
-  <!--[if IE]>
-  <style type="text/css">{literal}
-  ul#nav li ul  {
-    filter: alpha(opacity=95);
-  }
-  /* Nav Tools  */
-  div.MainMenu { 
-    width:97%;
-  }
-  {/literal}</style>
-  <![endif]-->
-</head>
-<body##BODYSUBMITSTUFFGOESHERE##>
-<div id="body">
-<div id="header">
-  <div id="logocontainer">
-    <img src="{$config.admin_url}/themes/NCleanGrey/images/layout/logoTM.png" alt="{sitename}" title="{sitename}" />
-    <div class="logotext">CMS Made Simple&trade; Admin Console - {sitename}<br />{'welcome'|lang}: {$username}</div>
-  </div>
-</div>
-<div class="topnav">
-  {include file='navigation.tpl' nav=$theme->get_navigation_tree()}
-</div>
-<div id="secondnav">
-  {include file='breadcrumbs.tpl' items=$theme->get_breadcrumbs()}
-  <div id="nav-icons_all"><ul id="nav-icons">
-    <li class="viewsite-icon"><a  rel="external" title="View Site"  href="">View Site</a></li>
-    <li class="logout-icon"><a  title="Logout"  href="logout.php">Logout</a></li>
-  </ul></div>
-</div>
-
-  {include file='notifications.tpl' items=$theme->get_notifications()}
-
-<div id="pagecontainer">{strip}
-  <div id="pageheader">
-    {if isset($module_icon_url) or isset($pagetitle)}
-    {if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}"/>&nbsp;{/if}{$pagetitle|default:''}
-    {if isset($module_help_url) or isset($wiki_url)}
-      <span class="helptext">
-        {if isset($module_help_url)}<a href="{$module_help_url}">{'module_help'|lang}</a>{/if}
-	&nbsp;
-        {if isset($wiki_url)}<a href="{$wiki_url}" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if}
-      </span>
-    {/if}
-    {/if}
-  </div>
-  {$content}
-{/strip}</div>
-
-<div id="footer">
-  <a rel="external" href="http://www.cmsmadesimple.org"><b>CMS Made Simple</b></a><b>&trade;</b> &nbsp;&nbsp;&nbsp; {cms_version} &nbsp;"{cms_versionname}"
-</div>
-</div>{* end if id=body *}
-</body>
+<!doctype html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>{if !empty($pagetitle)}{$pagetitle} - {/if}{sitename}</title>
+		<base href="{$config.admin_url}/" />
+		<meta name="generator" content="CMS Made Simple - Copyright (C) 2004-12 Ted Kulp. All rights reserved." />
+		<meta name="robots" content="noindex, nofollow" />
+		<link rel="shortcut icon" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
+		<link rel="bookmark" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
+		<link rel="stylesheet" type="text/css" href="style.php?{$secureparam}" />
+		<!-- custom jQueryUI Theme 1.8.16 see style.css for color reference //-->
+		<link type="text/css" href="{$config.admin_url}/themes/noname/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+		<!-- learn IE html5 -->
+		<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/jquery-ui-1.8.16.custom.min.js"></script>
+		<script type="text/javascript" src="{root_url}/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>
+		<script type="text/javascript" src="{root_url}/lib/jquery/js/jquery.json-2.2.js"></script>
+		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/jquery.cookie.js"></script>
+		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/standard.js"></script>
+		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/functions.js"></script>
+	</head>
+	<body##BODYSUBMITSTUFFGOESHERE##>
+		<body>
+			<!-- start container -->
+			<div id="container">
+				<!-- start header -->
+				<header role="banner" class="cf header">
+					<!-- start header-top -->
+					<div class="header-top">
+						<!-- logo -->
+						<div class="cms-logo">
+							<img src="{$config.admin_url}/themes/noname/images/layout/cmsms-logo.jpg" width="205" height="69" alt="{sitename} - {$pagetitle}" title="{sitename}" />
+						</div>
+						<!-- title -->
+						<span class="admin-title"> CMS Made Simple&trade; Admin Console - {sitename} - {$pagetitle} </span>
+					</div>
+					<!-- end header-top //-->
+					<!-- start header-bottom -->
+					<div class="header-bottom cf">
+						<!-- welcome -->
+						<div class="welcome">
+							<span>{'welcome_user'|lang}: {$username}</span>
+						</div>
+						<!-- breadcrubms -->
+						{include file='breadcrumbs.tpl' items=$theme->get_breadcrumbs()} 
+						<!-- bookmarks -->
+						{include file='bookmarks.tpl'} 
+					</div>
+					<!-- end header-bottom //-->
+				</header>
+				<!-- end header //-->
+				<!-- start content -->
+				<div id="content" class="sidebar-on">
+					<div class="shadow">
+						&nbsp;
+					</div>
+					<!-- start sidebar -->
+					<div id="sidebar">
+						<aside>
+							<span title="Close / Open Sidebar" class="toggle-button close">Close / Open Sidebar</span>
+							<!-- notifications -->
+							{include file='notifications.tpl' items=$theme->get_notifications()} 
+							<!-- start navigation -->
+							{include file='navigation.tpl' nav=$theme->get_navigation_tree()} 
+							<!-- end navigation //-->
+						</aside>
+					</div>
+					<!-- end sidebar //-->
+					<!-- start main -->
+					<div id="main" class="cf sidebar-on">
+						<section role="main" class="content-inner">
+							<!-- TO DO, check and restyle -->
+							<div id="pageheader">
+								{if isset($module_icon_url) or isset($pagetitle)}
+								{if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}"/>&nbsp;{/if}{$pagetitle|default:''}
+								{if isset($module_help_url) or isset($wiki_url)} <span class="helptext"> {if isset($module_help_url)}<a href="{$module_help_url}">{'module_help'|lang}</a>{/if}
+									&nbsp;
+									{if isset($wiki_url)}<a href="{$wiki_url}" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if} </span>
+								{/if}
+								{/if}
+							</div>
+							<!-- end TO DO, check and restyle -->
+							{$content}
+						</section>
+					</div>
+					<!-- end main //-->
+					<div class="spacer">
+						&nbsp;
+					</div>
+				</div>
+				<!-- end content //-->
+				<!-- start footer -->
+				<footer id="footer" class="cf">
+					<div class="footer-left">
+						<small class="copyright">Copyright &copy; <a rel="external" href="http://www.cmsmadesimple.org">CMS Made Simple&trade; {cms_version} &ldquo;{cms_versionname}&rdquo;</a></small>
+					</div>
+					<div class="footer-right cf">
+						<ul class="links">
+							<li>
+								<a href="#" title="Support">Documentation</a>
+							</li>
+							<li>
+								<a href="#" title="Forums">Forums</a>
+							</li>
+							<li>
+								<a href="#" title="About">About</a>
+							</li>
+							<li>
+								<a href="#" title="Team">Team</a>
+							</li>
+						</ul>
+					</div>
+				</footer>
+				<!-- end footer //-->
+			</div>
+			<!-- end container //-->
+		</body>
 </html>
