@@ -924,7 +924,7 @@ abstract class CmsAdminThemeBase
 				$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 				$mark= new Bookmark();
 				$mark->title = lang('addbookmark');
-				$mark->url = 'makebookmark,php'.$urlext.'&amp;title='.urlencode($this->title);
+				$mark->url = 'makebookmark.php'.$urlext.'&amp;title='.urlencode($this->title);
 				$marks[] = $mark;
 
 				$mark = new Bookmark();

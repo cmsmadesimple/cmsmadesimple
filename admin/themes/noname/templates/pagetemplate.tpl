@@ -26,7 +26,7 @@
 	</head>
 	<body##BODYSUBMITSTUFFGOESHERE##>
 		<!-- start container -->
-		<div id="container">
+		<div id="container" class="sidebar-on">
 			<!-- start header -->
 			<header role="banner" class="cf header">
 				<!-- start header-top -->
@@ -43,18 +43,18 @@
 				<div class="header-bottom cf">
 					<!-- welcome -->
 					<div class="welcome">
-						<span>{'welcome_user'|lang}: {$username}</span>
+						<span>{'welcome_user'|lang}: {$user->username}</span>
 					</div>
 					<!-- breadcrubms -->
 					{include file='breadcrumbs.tpl' items=$theme->get_breadcrumbs()} 
 					<!-- bookmarks -->
-					{include file='bookmarks.tpl'}
+					{include file='shortcuts.tpl'}
 				</div>
 				<!-- end header-bottom //-->
 			</header>
 			<!-- end header //-->
 			<!-- start content -->
-			<div id="content" class="sidebar-on">
+			<div id="content">
 				<div class="shadow">
 					&nbsp;
 				</div>
@@ -72,9 +72,8 @@
 				<!-- end sidebar //-->
 				<!-- start main -->
 				<div id="main" class="cf sidebar-on">
-					<section role="main" class="content-inner">
-						<!-- TO DO, check and restyle -->
-						<div id="pageheader">
+					<article role="main" class="content-inner">
+						<header class="pageheader">
 							{if isset($module_icon_url) or isset($pagetitle)}
 							{if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}"/>&nbsp;{/if}{$pagetitle|default:''}
 							{if isset($module_help_url) or isset($wiki_url)} <span class="helptext"> {if isset($module_help_url)}<a href="{$module_help_url}">{'module_help'|lang}</a>{/if}
@@ -82,10 +81,11 @@
 								{if isset($wiki_url)}<a href="{$wiki_url}" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if} </span>
 							{/if}
 							{/if}
-						</div>
-						<!-- end TO DO, check and restyle -->
-						{$content}
-					</section>
+						</header>
+						<section>
+							{$content}
+						</section>
+					</article>
 				</div>
 				<!-- end main //-->
 				<div class="spacer">
@@ -94,8 +94,7 @@
 			</div>
 			<!-- end content //-->
 			<!-- start footer -->
-			{include file='footer.tpl'} 
-			<!-- end footer //-->
+			{include file='footer.tpl'} <!-- end footer //-->
 		</div>
 		<!-- end container //-->
 		</body>

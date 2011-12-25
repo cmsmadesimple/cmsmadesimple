@@ -203,6 +203,17 @@ ul, ol {
 	margin: 0;
 	padding: 0
 }
+
+a:link,
+a:visited {
+	color: #147fdb;
+	text-decoration: none
+}
+a:hover,
+a:active {
+	color: #fa8004;
+	text-decoration: underline
+}
 /* dont break layout with to big images */
 img {
 	max-width: 100%
@@ -564,7 +575,7 @@ header .shortcuts li.favorites a {
 	top: 100px;
 	bottom: 50px
 }
-#content.sidebar-off #sidebar {
+#container.sidebar-off #sidebar {
 	overflow: hidden;
 	width: 40px
 }
@@ -701,10 +712,10 @@ nav.navigation ul li.myprefs a:hover, nav.navigation ul li.myprefs.current a {
 #main {
 	margin: 0 0 0 249px
 }
-#content.sidebar-off #main {
+#container.sidebar-off #main {
 	margin: 0 0 0 40px
 }
-#main section.content-inner {
+#main .content-inner {
 	padding: 0 20px 0 25px
 }
 /*
@@ -739,7 +750,7 @@ footer#footer a:hover, footer#footer a:active {
 .footer-left {
 	margin: 0 0 0 260px
 }
-.footer-left.sidebar-off {
+#container.sidebar-off .footer-left {
 	margin: 0 0 0 60px
 }
 #footer .footer-right {
