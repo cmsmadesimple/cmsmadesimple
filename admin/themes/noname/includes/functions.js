@@ -1,7 +1,7 @@
 $(document).ready(function(){
+	// TOGGLE SIDEBAR
 	// Variables
 	var objMain = $('#content');
-	// Sidebar toggle
 	var objToggle = $('.toggle-button');
 	// Show sidebar
 	function showSidebar(){
@@ -34,5 +34,6 @@ $(document).ready(function(){
 		objMain.addClass('sidebar-off');
 		objMain.removeClass('sidebar-on');
 		$('.toggle-button').addClass('open');
+		$('.footer-left').addClass('sidebar-off');
 	}
 });

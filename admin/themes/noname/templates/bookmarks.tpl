@@ -1,3 +1,5 @@
+{strip}
+
 <div class="shortcuts">
 	<ul class="cf">
 		<li class="help">
@@ -17,3 +19,5 @@
 		</li>
 	</ul>
 </div>
+
+{/strip}
