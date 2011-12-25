@@ -8,8 +8,8 @@
   <meta name="robots" content="noindex, nofollow" />
   <link rel="shortcut icon" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
   <link rel="Bookmark" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
-  <link rel="stylesheet" type="text/css" href="style.php?_sx_=c9772250" />
-  {* microtiny stuff goes here *}
+  <link rel="stylesheet" type="text/css" href="style.php?{$secureparam}" />
+  <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
   <script type="text/javascript" src="{root_url}/lib/jquery/js/jquery-1.6.2.min.js"></script>
   <script type="text/javascript" src="{root_url}/lib/jquery/js/jquery-ui-1.8.14.min.js"></script>
   <script type="text/javascript" src="{root_url}/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>
@@ -27,7 +27,7 @@
   {/literal}</style>
   <![endif]-->
 </head>
-<body>
+<body##BODYSUBMITSTUFFGOESHERE##>
 <div id="body">
 <div id="header">
   <div id="logocontainer">

@@ -73,12 +73,14 @@ if( is_array($loaded) && count($loaded) )
       }
   }
 
+$htmlresult = $themeObject->postprocess($htmlresult);
+
 $htmlresult = str_replace('<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->', $headertext, $htmlresult);
 $htmlresult = str_replace('##FORMSUBMITSTUFFGOESHERE##', ' '.$formtext, $htmlresult);
 $htmlresult = str_replace('##INLINESUBMITSTUFFGOESHERE##', ' '.$formsubmittext, $htmlresult);
 $htmlresult = str_replace('##BODYSUBMITSTUFFGOESHERE##', ' '.$bodytext, $htmlresult);
 
-echo $themeObject->postprocess($htmlresult);
+echo $htmlresult;
 
 $db = cmsms()->GetDb();
 $endtime = microtime();

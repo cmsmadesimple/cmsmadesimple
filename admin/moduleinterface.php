@@ -86,6 +86,8 @@ if( isset($_REQUEST['showtemplate']) && ($_REQUEST['showtemplate'] == 'false'))
   $USE_OUTPUT_BUFFERING = false;
 }
 
+
+cms_admin_sendheaders();
 $txt = $modinst->GetHeaderHTML();
 if( $txt !== false )
   {

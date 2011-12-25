@@ -85,6 +85,27 @@ if (isset($starttime))
 
 if( isset($CMS_ADMIN_PAGE) )
   {
+    function cms_admin_sendheaders($content_type = 'text/html',$charset = '')
+    {
+      if( !$charset ) $charset = get_encoding();
+
+      // Date in the past
+      header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+
+      // always modified
+      header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+ 
+      // HTTP/1.1
+      header("Cache-Control: no-store, no-cache, must-revalidate");
+      header("Cache-Control: post-check=0, pre-check=0", false);
+
+      // HTTP/1.0
+      header("Pragma: no-cache");
+        
+      // Language shizzle
+      header("Content-Type: $content_type; charset=$charset");
+    }
+
      if( !isset($_SESSION[CMS_USER_KEY]) )
        {
 	 if( isset($_COOKIE[CMS_SECURE_PARAM_NAME]) )

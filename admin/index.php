@@ -35,6 +35,7 @@ if( isset($_SESSION[CMS_USER_KEY]) && !isset($_GET[CMS_SECURE_PARAM_NAME]) )
 
 check_login();
 
+cms_admin_sendheaders();
 include_once("header.php");
 $section = (isset($_GET['section'])) ? trim($_GET['section']) : '';
 $themeObject->do_toppage($section);

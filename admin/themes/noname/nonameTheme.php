@@ -260,6 +260,8 @@ class nonameTheme extends CmsAdminThemeBase
     $smarty->assign('content',$html);
     $smarty->assign('config',cmsms()->GetConfig());
     $smarty->assign('theme',$this);
+    $smarty->assign('secureparam',CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY]);
+
     if( is_array($this->_errors) && count($this->_errors) ) $smarty->assign('errors',$this->_errors);
     if( is_array($this->_messages) && count($this->_messages) ) $smarty->assign('messages',$this->_messages);
 
