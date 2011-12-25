@@ -1,5 +1,39 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+#CMS - CMS Made Simple
+#(c)2004-2011 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id: class.admintheme.inc.php 7596 2011-12-24 22:50:52Z calguy1000 $
 
+/**
+ * @package CMS 
+ */
+
+
+/**
+ * Base class for CMSMS Admin themes.
+ * This is an abstract class that is used for building CMSMS Admin Themes.
+ * This is also a singleton object.
+ *
+ * @package CMS
+ * @version $Revision$
+ * @license GPL
+ * @since   1.11
+ * @author  Robert Campbell
+ */
 abstract class CmsAdminThemeBase 
 {
 	private static $_instance;
@@ -20,6 +54,9 @@ abstract class CmsAdminThemeBase
 	private $_sectionCount;
 	private $_modulesBySection;
 
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
 		$this->_url = $_SERVER['SCRIPT_NAME'];
@@ -47,6 +84,11 @@ abstract class CmsAdminThemeBase
 
 	/**
 	 * __get()
+	 * A magic function that is used for backwards compatibility only
+	 *
+	 * @deprecated
+	 * @param string key - possible values are 'cms','themeName',and 'userid'
+	 * @return mixed
 	 */
 	public function __get($key)
 	{
@@ -67,6 +109,7 @@ abstract class CmsAdminThemeBase
      * It's used for making menus that work nicely
      *
      * @param str string to have its spaces converted
+	 * @ignore
      */
     private function _FixSpaces($str)
     {
@@ -86,6 +129,7 @@ abstract class CmsAdminThemeBase
 	 * 
 	 * @since 1.10
 	 * @access private
+	 * @ignore
 	 * @author calguy1000
 	 */
 	private function _get_user_module_info()
@@ -134,6 +178,9 @@ abstract class CmsAdminThemeBase
      * This function sets up data structures to place modules in the proper Admin sections
      * for display on section pages and menus.
      *
+	 * @since 1.10
+	 * @access private
+	 * @ignore
      */
     private function _SetModuleAdminInterfaces()
     {
@@ -191,6 +238,8 @@ abstract class CmsAdminThemeBase
      * which a user has permissions, the aggregate content permission is granted, so
      * that menu item is visible.
      *
+	 * @access private
+	 * @ignore
      */
 	private function _SetAggregatePermissions($force = FALSE)
 	{
@@ -293,6 +342,8 @@ abstract class CmsAdminThemeBase
      *   the module.
      *
      * @param section - section to display
+	 * @access private
+	 * @ignore 
      */
     private function _MenuListSectionModules($section)
     {
@@ -329,7 +380,8 @@ abstract class CmsAdminThemeBase
      * menus can show the user where they are.
      *
      * @param subtitle any info to add to the page title
-     *
+	 * @access private
+     * @ignore 
      */
     private function _populate_admin_navigation($subtitle='')
     {
@@ -748,7 +800,9 @@ abstract class CmsAdminThemeBase
      *
      * Check if the user has one of the aggregate permissions
      * 
+	 * @access private
      * @param permission the permission to check.
+	 * @return boolean
      */
     protected function HasPerm($permission)
     {
@@ -764,407 +818,546 @@ abstract class CmsAdminThemeBase
     	   }
     }
 
-  protected function get_admin_navigation()
-  {
-	  $this->_populate_admin_navigation();
-	  return $this->_menuItems;
-  }
+	/**
+	 * A function to return the admin navigation
+	 * This function returns a doubly linked list of arrays representing the admin navigation
+	 *
+	 * @deprecated
+	 * @access protected
+	 * @return array Doubly linked list of menu nodes.  The parent, and children members of each node represent the links.  a parent value of -1 represents a top level node.
+	 */
+	protected function get_admin_navigation()
+	{
+		$this->_populate_admin_navigation();
+		return $this->_menuItems;
+	}
 
-  /**
-   * Return the menu items as a nested tree
-   */
-  private function _get_navigation_tree_sub($parent = -1,$maxdepth = -1, $depth = 0)
-  {
-	  $result = array();
-	  $flatitems = $this->get_admin_navigation();
-	  foreach( $flatitems as $key => $one )
-		  {
-			  if( !$one['show_in_menu'] ) continue;
-			  if( (!isset($one['parent']) && $parent == -1) || (isset($one['parent']) && $one['parent'] == $parent) )
-				  {
-					  if( isset($one['children']) )
-						  {
-							  unset($one['children']);
-						  }
+	
+	/**
+	 * Return the menu items as a nested tree using recursion.
+	 *
+	 * @ignore
+	 */
+	private function _get_navigation_tree_sub($parent = -1,$maxdepth = -1, $depth = 0)
+	{
+		$result = array();
+		$flatitems = $this->get_admin_navigation();
+		foreach( $flatitems as $key => $one )
+			{
+				if( !$one['show_in_menu'] ) continue;
+				if( (!isset($one['parent']) && $parent == -1) || (isset($one['parent']) && $one['parent'] == $parent) )
+					{
+						if( isset($one['children']) )
+							{
+								unset($one['children']);
+							}
 
-					  if( $maxdepth < 0 || $depth + 1 < $maxdepth )
-						  {
-							  $children = $this->_get_navigation_tree_sub($key,$maxdepth,$depth+1);
-							  if( is_array($children) && count($children) )
-								  {
-									  $one['children'] = $children;
-								  }
-						  }
-					  $one['name'] = $key;
-					  $result[] = $one;
-				  }
-		  }
-	  return $result;
-  }
-
-  public function get_navigation_tree($parent = -1,$maxdepth = -1,$usecache = TRUE)
-  {
-	  if( is_array($this->_nav_tree) && $usecache) return $this->_nav_tree;
-
-	  $nodes = $this->_get_navigation_tree_sub($parent,$maxdepth);
-	  if( $usecache ) $this->_nav_tree = $nodes;
-
-	  return $nodes;
-  }
-
-  protected function find_menuitem_by_title($title)
-  {
-	  $nav = $this->get_admin_navigation();
-	  foreach( $nav as $key => $rec )
-	  {
-		  if( isset($rec['title']) && $rec['title'] == $title )
-		  {
-			  return $key;
-		  }
-	  }
-  }
-
-  public function get_bookmarks($pure = FALSE)
-  {
-	  $bookops = cmsms()->GetBookmarkOperations();
-      $marks = array_reverse($bookops->LoadBookmarks($this->userid));
-
-	  if( !$pure )
-	  {
-		  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-		  $mark= new Bookmark();
-		  $mark->title = lang('addbookmark');
-		  $mark->url = 'makebookmark,php'.$urlext.'&amp;title='.urlencode($this->title);
-		  $marks[] = $mark;
-
-		  $mark = new Bookmark();
-		  $mark->title = lang('managebookmarks');
-		  $mark->url = 'listbookmarks.php'.$urlext;
-		  $marks[] = $mark;
-	  }
-	  return $marks;
-
-  }
-
-  public function get_breadcrumbs()
-  {
-	  $this->_populate_admin_navigation();
-	  return $this->_breadcrumbs;
-  }
-
-  /**
-   * set_value($key,$value)
-   * Attach some data to the admin theme.
-   *
-   * @param string key
-   * @param mixed value
-   * @returns void
-   */
-  public function set_value($key,$value)
-  {
-	  if( is_null($value) && is_array($this->_data) && isset($this->_data[$key]) )
-	  {
-		  unset($this->_data[$key]);
-		  return;
-	  }
-	  if( $value )
-	  {
-		  if( !is_array($this->_data) ) $this->_data = array();
-		  $this->_data[$key] = $value;
-	  }
-  }
-
-  /**
-   * get_value($key,$value)
-   * Return attached data
-   *
-   * @param string key
-   * @param mixed value
-   * @returns void
-   */
-  public function get_value($key)
-  {
-	  if( is_array($this->_data) && isset($this->_data[$key]) )
-		  {
-			  return $this->_data[$key];
-		  }
-  }
+						if( $maxdepth < 0 || $depth + 1 < $maxdepth )
+							{
+								$children = $this->_get_navigation_tree_sub($key,$maxdepth,$depth+1);
+								if( is_array($children) && count($children) )
+									{
+										$one['children'] = $children;
+									}
+							}
+						$one['name'] = $key;
+						$result[] = $one;
+					}
+			}
+		return $result;
+	}
 
 
-  /**
-   * HasDisplayableChildren
-   * This method returns a boolean, based upon whether the section in question
-   * has displayable children.
-   *
-   * @param section - section to test
-   */
-  public function HasDisplayableChildren($section)
-  {
-	  $displayableChildren=false;
-	  foreach($this->_menuItems[$section]['children'] as $thisChild)
-		  {
-			  $thisItem = $this->_menuItems[$thisChild];
-			  if ($thisItem['show_in_menu'])
-				  {
-					  $displayableChildren = true;
-				  }
-		  }
-	  return $displayableChildren;
-  }
+	/**
+	 * Retrieve the admin navigation tree
+	 *
+	 * @since 1.11
+	 * @param string Indicates the parent to start at.  use a value of -1 to indicate the top node.
+	 * @param int    The maximum depth of the tree.  -1 indicates no maximum depth
+	 * @param bool   Indicates wether the cache should be used.  This should be FALSE when not retrieving the whole tree.
+	 * @return array A nested array of menu nodes.  The children member represents the nesting.
+	 */
+	public function get_navigation_tree($parent = -1,$maxdepth = -1,$usecache = TRUE)
+	{
+		if( is_array($this->_nav_tree) && $usecache) return $this->_nav_tree;
+		
+		$nodes = $this->_get_navigation_tree_sub($parent,$maxdepth);
+		if( $usecache ) $this->_nav_tree = $nodes;
+		
+		return $nodes;
+	}
+
+	/**
+	 * A functon to return the name (key) of a menu item given it's title
+	 * returns the first match.
+	 *
+	 * @access protected
+	 * @param string The title to search for
+	 * @return string The matching key, or null
+	 */
+	protected function find_menuitem_by_title($title)
+	{
+		$nav = $this->get_admin_navigation();
+		foreach( $nav as $key => $rec )
+			{
+				if( isset($rec['title']) && $rec['title'] == $title )
+					{
+						return $key;
+					}
+			}
+	}
 
 
-  /**
-   * DisplayImage will display the themed version of an image (if it exists),
-   * or the version from the default theme otherwise.
-   * @param imageName - name of image
-   * @param alt - alt text
-   * @param width
-   * @param height
-   * @param class
-   */
-  public function DisplayImage($imageName, $alt='', $width='', $height='', $class='')
-  {
-	  // @todo: fix me...
-	  if( !is_array($this->_iamgeLink) ) $this->_imageLink = array();
-	  if (! isset($this->_imageLink[$imageName]))
-		  {
-			  if (strpos($imageName,'/') !== false)
-				  {
-					  $imagePath = substr($imageName,0,strrpos($imageName,'/')+1);
-					  $imageName = substr($imageName,strrpos($imageName,'/')+1);
-				  }
-			  else
-				  {
-					  $imagePath = '';
-				  }
+	/**
+	 * Return the list of bookmarks
+	 *
+	 * @param bool if False the shortcuts for adding and managing bookmarks are added to the list.
+	 * @return array of Bookmark objects
+	 */
+	public function get_bookmarks($pure = FALSE)
+	{
+		$bookops = cmsms()->GetBookmarkOperations();
+		$marks = array_reverse($bookops->LoadBookmarks($this->userid));
+
+		if( !$pure )
+			{
+				$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+				$mark= new Bookmark();
+				$mark->title = lang('addbookmark');
+				$mark->url = 'makebookmark,php'.$urlext.'&amp;title='.urlencode($this->title);
+				$marks[] = $mark;
+
+				$mark = new Bookmark();
+				$mark->title = lang('managebookmarks');
+				$mark->url = 'listbookmarks.php'.$urlext;
+				$marks[] = $mark;
+			}
+		return $marks;
+	}
+
+	/**
+	 * Return list of breadcrumbs
+	 *
+	 * @return array of menu nodes representing the breadcrumb trail.
+	 */
+	public function get_breadcrumbs()
+	{
+		$this->_populate_admin_navigation();
+		return $this->_breadcrumbs;
+	}
+	
+
+	/**
+	 * Attach some data to the admin theme.
+	 *
+	 * @param string key
+	 * @param mixed value
+	 * @returns void
+	 */
+	public function set_value($key,$value)
+	{
+		if( is_null($value) && is_array($this->_data) && isset($this->_data[$key]) )
+			{
+				unset($this->_data[$key]);
+				return;
+			}
+		if( $value )
+			{
+				if( !is_array($this->_data) ) $this->_data = array();
+				$this->_data[$key] = $value;
+			}
+	}
+
+
+	/**
+	 * Return attached data
+	 *
+	 * @param string key
+	 * @param mixed value
+	 * @returns void
+	 */
+	public function get_value($key)
+	{
+		if( is_array($this->_data) && isset($this->_data[$key]) )
+			{
+				return $this->_data[$key];
+			}
+	}
+
+
+	/**
+	 * HasDisplayableChildren
+	 * This method returns a boolean, based upon whether the section in question
+	 * has displayable children.
+	 *
+	 * @deprecated
+	 * @param section - section to test
+	 * @return boolean
+	 */
+	public function HasDisplayableChildren($section)
+	{
+		$displayableChildren=false;
+		foreach($this->_menuItems[$section]['children'] as $thisChild)
+			{
+				$thisItem = $this->_menuItems[$thisChild];
+				if ($thisItem['show_in_menu'])
+					{
+						$displayableChildren = true;
+					}
+			}
+		return $displayableChildren;
+	}
+
+
+	/**
+	 * DisplayImage will display the themed version of an image (if it exists),
+	 * or the version from the default theme otherwise.
+	 * @param imageName - name of image
+	 * @param alt - alt text
+	 * @param width
+	 * @param height
+	 * @param class
+	 */
+	public function DisplayImage($imageName, $alt='', $width='', $height='', $class='')
+	{
+		// @todo: fix me...
+		if( !is_array($this->_iamgeLink) ) $this->_imageLink = array();
+		if (! isset($this->_imageLink[$imageName]))
+			{
+				if (strpos($imageName,'/') !== false)
+					{
+						$imagePath = substr($imageName,0,strrpos($imageName,'/')+1);
+						$imageName = substr($imageName,strrpos($imageName,'/')+1);
+					}
+				else
+					{
+						$imagePath = '';
+					}
     	   	
-			  if (file_exists(dirname(cmsms()->config['root_path'] . '/' . cmsms()->config['admin_dir'] .
-									  '/themes/' . $this->themeName . '/images/' . $imagePath . $imageName) . '/'. $imageName))
-				  {
-					  $this->_imageLink[$imageName] = 'themes/' .
-						  $this->themeName . '/images/' . $imagePath . $imageName;
-				  }
-			  else
-				  {
-					  $this->_imageLink[$imageName] = 'themes/default/images/' . $imagePath . $imageName;
-				  }
-		  }
+				if (file_exists(dirname(cmsms()->config['root_path'] . '/' . cmsms()->config['admin_dir'] .
+										'/themes/' . $this->themeName . '/images/' . $imagePath . $imageName) . '/'. $imageName))
+					{
+						$this->_imageLink[$imageName] = 'themes/' .
+							$this->themeName . '/images/' . $imagePath . $imageName;
+					}
+				else
+					{
+						$this->_imageLink[$imageName] = 'themes/default/images/' . $imagePath . $imageName;
+					}
+			}
 
-	  $retStr = '<img src="'.$this->_imageLink[$imageName].'"';
-	  if ($class != '')
-		  {
-			  $retStr .= ' class="'.$class.'"';
-		  }
-	  if ($width != '')
-		  {
-			  $retStr .= ' width="'.$width.'"';
-		  }
-	  if ($height != '')
-		  {
-			  $retStr .= ' height="'.$height.'"';
-		  }
-	  if ($alt != '')
-		  {
-			  $retStr .= ' alt="'.$alt.'" title="'.$alt.'"';
-		  }
-	  $retStr .= ' />';
-	  return $retStr;
-  }
+		$retStr = '<img src="'.$this->_imageLink[$imageName].'"';
+		if ($class != '')
+			{
+				$retStr .= ' class="'.$class.'"';
+			}
+		if ($width != '')
+			{
+				$retStr .= ' width="'.$width.'"';
+			}
+		if ($height != '')
+			{
+				$retStr .= ' height="'.$height.'"';
+			}
+		if ($alt != '')
+			{
+				$retStr .= ' alt="'.$alt.'" title="'.$alt.'"';
+			}
+		$retStr .= ' />';
+		return $retStr;
+	}
 
 
-  public function ShowErrors($errors,$get_var='')
-  {
-	  // in base class should just add errors to the data
-  }
+	/**
+	 * Abstrct function for showing errors in the admin theme.
+	 *
+	 * @abstract
+	 * @param mixed The errors, either a string, or an array of stri9ngs
+	 * @param string An optional get variable name that can contain an error string key.  If specified, errors is ignored.
+	 */
+	abstract public function ShowErrors($errors,$get_var='');
 
-  public function ShowMessage($message,$get_var='')
-  {
-	  // in base class should just add messages to the data
-  }
+	/**
+	 * Abstrct function for showing messages in the admin theme.
+	 *
+	 * @abstract
+	 * @param mixed The message, either a string, or an array of stri9ngs
+	 * @param string An optional get variable name that can contain an error string key.  If specified, message param is ignored.
+	 */
+	abstract public function ShowMessage($message,$get_var='');
 
-  abstract public function ShowHeader($title_name,$extra_lang_params = array(),$link_text = '',$module_help_type = FALSE);
+	/**
+	 * Abstract method for showing a header in the content area of a theme
+	 * This is usually an advanced function with some speciial behaviour based on the module_help_type
+	 *
+	 * @abstract
+	 * @deprecated
+	 * @param string The name to show on the header.  This will not be passed through the lang process if module_help_type is not FALSE.
+	 * @param array  Extra language parameters to pass to the title_name.  Ignored if module_help_type is not FALSE
+	 * @param string Text to show in the module help link (depends on the module_help_type param)
+	 * @param mixed  Flag for how to display module help types.   Possible values are TRUE to display a simple link, FALSE for no help, and 'both' for both types of links
+	 */
+	abstract public function ShowHeader($title_name,$extra_lang_params = array(),$link_text = '',$module_help_type = FALSE);
 
-  static public function GetDefaultTheme()
-  {
-	  $tmp = self::GetAvailableThemes();
-	  if( is_array($tmp) && count($tmp) ) 
-		  {
-			  $tmp = array_keys($tmp);
-			  return $tmp[0];
-		  }
-  }
 
-  static public function GetAvailableThemes()
-  {
-	  $config = cmsms()->GetConfig();
+	/**
+	 * A function to return the name of the default admin theme.
+	 *
+	 * @returns string
+	 */
+	static public function GetDefaultTheme()
+	{
+		$tmp = self::GetAvailableThemes();
+		if( is_array($tmp) && count($tmp) ) 
+			{
+				$tmp = array_keys($tmp);
+				return $tmp[0];
+			}
+	}
 
-	  $files = glob(cms_join_path($config['admin_path'],'themes').'/*');
-	  if( is_array($files) && count($files) )
-		  {
-			  $res = array();
-			  foreach( $files as $file )
-				  {
-					  if( !is_dir($file) ) continue;
-					  $name = basename($file);
-					  if( !is_readable(cms_join_path($file,"{$name}Theme.php")) ) continue;
-					  $res[$name] = $name;
-				  }
-			  return $res;
-		  }
-  }
+	
+	/**
+	 * Retrieve a list of the available admin themes.
+	 *
+	 * @return array a hash of strings.
+	 */
+	static public function GetAvailableThemes()
+	{
+		$config = cmsms()->GetConfig();
+			
+		$files = glob(cms_join_path($config['admin_path'],'themes').'/*');
+		if( is_array($files) && count($files) )
+			{
+				$res = array();
+				foreach( $files as $file )
+					{
+						if( !is_dir($file) ) continue;
+						$name = basename($file);
+						if( !is_readable(cms_join_path($file,"{$name}Theme.php")) ) continue;
+						$res[$name] = $name;
+					}
+				return $res;
+			}
+	}
 
-  static public function &GetThemeObject()
-  {
-	  if( is_object(self::$_instance) ) return self::$_instance;
 
-	  $name = get_preference(get_userid(),'admintheme','default');
-	  if( class_exists($name) )
-		  {
-			  self::$_instance = new $name;
-		  }
-	  else
-		  {
-			  $gCms = cmsms();
-			  $config = $gCms->GetConfig();
-			  $themeObjName = $name."Theme";
-			  $fn = $config['admin_path']."/themes/$name/{$themeObjName}.php";
-			  if( file_exists($fn) )
-				  {
-					  include_once($fn);
-					  self::$_instance = new $themeObjName($gCms,get_userid(),$name);
-				  }
-		  }
-	  return self::$_instance;
-  }
+	/**
+	 * A function to retrieve the global admin theme object.
+	 * This method will create the admin theme object if has not yet been created.  It will read the cms preferences and cross reference with available themes.
+	 *
+	 * @return object Reference to the initialized admin theme.
+	 */
+	static public function &GetThemeObject()
+	{
+		if( is_object(self::$_instance) ) return self::$_instance;
+		
+		$name = get_preference(get_userid(),'admintheme',self::GetDefaultTheme());
+		if( class_exists($name) )
+			{
+				self::$_instance = new $name;
+			}
+		else
+			{
+				$gCms = cmsms();
+				$config = $gCms->GetConfig();
+				$themeObjName = $name."Theme";
+				$fn = $config['admin_path']."/themes/$name/{$themeObjName}.php";
+				if( file_exists($fn) )
+					{
+						include_once($fn);
+						self::$_instance = new $themeObjName($gCms,get_userid(),$name);
+					}
+			}
+		return self::$_instance;
+	}
 
-  public function add_notification(CmsAdminThemeNotification& $notification)
-  {
-	  if( !is_array($this->_notifications) )
-	  {
-		  $this->_notifications = array();
-	  }
-	  $this->_notifications[] = $notification;
-  }
 
-  /**
-   * AddNotification
-   */
-  public function AddNotification($priority,$module,$html)
-  {
+	/**
+	 * A public function to add a notification for display in the theme.
+	 *
+	 * @param CmsAdminThemeNotification A reference to the new notification
+	 */
+	public function add_notification(CmsAdminThemeNotification& $notification)
+	{
+		if( !is_array($this->_notifications) )
+			{
+				$this->_notifications = array();
+			}
+		$this->_notifications[] = $notification;
+	}
+
+	/**
+	 * A public function to add a notification for display in the theme.
+	 * This is simply a compatibility wrapper around the add_notification method.
+	 *
+	 * @deprecated
+	 * @param int Priority level between 1 and 3
+	 * @param string The module name.
+	 * @param html The contents of the notification
+	 */
+	public function AddNotification($priority,$module,$html)
+	{
 	  $notification = new CmsAdminThemeNotification;
 	  $notification->priority = max(1,min(3,$priority));
 	  $notification->module = $module;
 	  $notification->html = $html;
 	  $this->add_notification($notification);
-  }
-
-  public function get_notifications()
-  {
-	  return $this->_notifications;
-  }
+	}
 
 
-  /**
-   * Returns a select list of the pages in the system for use in
-   * various admin pages.
-   *
-   * @param string $name - The html name of the select box
-   * @param string $selected - If a matching id is found in the list, that item
-   *                           is marked as selected.
-   * @return string The select list of pages
-   */
-  public function GetAdminPageDropdown($name,$selected)
-  {
-	  $opts = array();
-	  $opts[ucfirst(lang('none'))] = '';
+	/**
+	 * Retrieve the current list of notifications.
+	 *
+	 * @return Array of CmsAdminThemeNotification objects
+	 */
+	public function get_notifications()
+	{
+		return $this->_notifications;
+	}
 
-	  $depth = 0;
-	  $menuItems = $this->get_admin_navigation();
-	  foreach( $menuItems as $sectionKey=>$menuItem )
-		  {
-			  if( $menuItem['parent'] != -1 )
-				  {
-					  continue;
-				  }
-			  if( !$menuItem['show_in_menu'] || strlen($menuItem['url']) < 1 )
-				  {
-					  continue;
-				  }
+
+	/**
+	 * Returns a select list of the pages in the system for use in
+	 * various admin pages.
+	 *
+	 * @param string $name - The html name of the select box
+	 * @param string $selected - If a matching id is found in the list, that item
+	 *                           is marked as selected.
+	 * @return string The select list of pages
+	 */
+	public function GetAdminPageDropdown($name,$selected)
+	{
+		$opts = array();
+		$opts[ucfirst(lang('none'))] = '';
+
+		$depth = 0;
+		$menuItems = $this->get_admin_navigation();
+		foreach( $menuItems as $sectionKey=>$menuItem )
+			{
+				if( $menuItem['parent'] != -1 )
+					{
+						continue;
+					}
+				if( !$menuItem['show_in_menu'] || strlen($menuItem['url']) < 1 )
+					{
+						continue;
+					}
 	      
-			  $opts[$menuItem['title']] = $menuItem['url'];
+				$opts[$menuItem['title']] = $menuItem['url'];
 
-			  if( is_array($menuItem['children']) && 
-				  count($menuItem['children']) )
-				  {
-					  foreach( $menuItem['children'] as $thisChild )
-						  {
-							  if( $thisChild == 'home' || $thisChild == 'logout' ||
-								  $thisChild == 'viewsite')
-								  {
-									  continue;
-								  }
+				if( is_array($menuItem['children']) && 
+					count($menuItem['children']) )
+					{
+						foreach( $menuItem['children'] as $thisChild )
+							{
+								if( $thisChild == 'home' || $thisChild == 'logout' ||
+									$thisChild == 'viewsite')
+									{
+										continue;
+									}
 
-							  $menuChild = $menuItems[$thisChild];
-							  if( !$menuChild['show_in_menu'] || strlen($menuChild['url']) < 1 )
-								  {
-									  continue;
-								  }
+								$menuChild = $menuItems[$thisChild];
+								if( !$menuChild['show_in_menu'] || strlen($menuChild['url']) < 1 )
+									{
+										continue;
+									}
 
-							  $opts['&nbsp;&nbsp;'.$menuChild['title']] = cms_htmlentities($menuChild['url']);
-						  }
-				  }
-		  }
+								$opts['&nbsp;&nbsp;'.$menuChild['title']] = cms_htmlentities($menuChild['url']);
+							}
+					}
+			}
 
-	  $output = '<select name="'.$name.'">';
-	  foreach( $opts as $key => $value )
-		  {
-			  if( $value == $selected )
-				  {
-					  $output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>",
-										 $value,$key);
-				  }
-			  else
-				  {
-					  $output .= sprintf("<option value=\"%s\">%s</option>",
-										 $value,$key);
-				  }
-		  }
-	  $output .= '</select>';
-	  return $output;
-  }
+		$output = '<select name="'.$name.'">';
+		foreach( $opts as $key => $value )
+			{
+				if( $value == $selected )
+					{
+						$output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>",
+										   $value,$key);
+					}
+				else
+					{
+						$output .= sprintf("<option value=\"%s\">%s</option>",
+										   $value,$key);
+					}
+			}
+		$output .= '</select>';
+		return $output;
+	}
 
-  /**
-   *  BackUrl
-   *  "Back" Url - link to the next-to-last item in the breadcrumbs
-   *  for the back button.
-   */
-  public function BackUrl()
-  {
-	  $count = count($this->_breadcrumbs) - 2;
-	  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-	  if ($count > -1)
-		  {
-			  $txt = $this->_breadcrumbs[$count]['url'];
-			  return $txt;
-		  }
-	  else
-		  {
-			  // rely on base href to redirect back to the
-			  // admin home page
-			  return 'index.php'.$urlext;
-		  }
-  }
 
-  abstract public function do_header();
+	/**
+	 *  BackUrl
+	 *  "Back" Url - link to the next-to-last item in the breadcrumbs
+	 *  for the back button.
+	 */
+	public function BackUrl()
+	{
+		$count = count($this->_breadcrumbs) - 2;
+		$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		if ($count > -1)
+			{
+				$txt = $this->_breadcrumbs[$count]['url'];
+				return $txt;
+			}
+		else
+			{
+				// rely on base href to redirect back to the
+				// admin home page
+				return 'index.php'.$urlext;
+			}
+	}
 
-  abstract public function do_footer();
+	/**
+	 * An abstract function to output the header html
+	 * This function may not display anything, but may store data for use in the postprocess mechanism
+	 * it should store, or output all of the information required for the head section of the page,
+	 * and all admin navigation etc.  Many admin themes may not do anything here.
+	 *
+	 * @return string html contents.
+	 */
+	abstract public function do_header();
 
-  abstract public function do_toppage($section_name);
+	/**
+	 * An abstract function to output the themes footer html
+	 * This function may not display anything, but may store data for use in the postprocess mechanism
+	 * it should store, or output all of the information required for the head section of the page,
+	 * and all admin navigation etc.  Many admin themes may not do anything here.
+	 *
+	 * @return string html contents.
+	 */
+	abstract public function do_footer();
 
-  abstract public function postprocess($html);
+	/**
+	 * An abstract function to output the content for a top level navigation page
+	 * This method is called when the user has browsed to the root of the admin site, or to any top level navigation item
+	 *
+	 * @param string The section name.  An empty string indicates that a navigation of all top level items should be created.
+	 * @return string html contents.
+	 */
+	abstract public function do_toppage($section_name);
+
+	/**
+	 * An abstract function for processing the content area of the page.
+	 * Many admin themes will do most of their work in this method (passing the html contents through a smarty template etc).
+	 *
+	 * @param string html contents
+	 * @return string the HTML contents of the entire page.
+	 */
+	abstract public function postprocess($html);
   
 } // end of class
 
+
+/**
+ * A class representing a simple notification.
+ *
+ * @package CMS
+ * @version $Revision$
+ * @license GPL
+ * @since   1.11
+ * @author  Robert Campbell
+ */
 class CmsAdminThemeNotification
 {
 	private $_module;
