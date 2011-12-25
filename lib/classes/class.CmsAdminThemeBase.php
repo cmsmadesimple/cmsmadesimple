@@ -779,12 +779,13 @@ abstract class CmsAdminThemeBase
 	  $flatitems = $this->get_admin_navigation();
 	  foreach( $flatitems as $key => $one )
 		  {
+			  if( !$one['show_in_menu'] ) continue;
 			  if( (!isset($one['parent']) && $parent == -1) || (isset($one['parent']) && $one['parent'] == $parent) )
 				  {
-// 					  if( isset($one['children']) )
-// 						  {
-// 							  unset($one['children']);
-// 						  }
+					  if( isset($one['children']) )
+						  {
+							  unset($one['children']);
+						  }
 
 					  if( $maxdepth < 0 || $depth + 1 < $maxdepth )
 						  {
@@ -807,6 +808,7 @@ abstract class CmsAdminThemeBase
 
 	  $nodes = $this->_get_navigation_tree_sub($parent,$maxdepth);
 	  if( $usecache ) $this->_nav_tree = $nodes;
+
 	  return $nodes;
   }
 
@@ -822,8 +824,26 @@ abstract class CmsAdminThemeBase
 	  }
   }
 
-  public function get_bookmarks()
+  public function get_bookmarks($pure = FALSE)
   {
+	  $bookops = cmsms()->GetBookmarkOperations();
+      $marks = array_reverse($bookops->LoadBookmarks($this->userid));
+
+	  if( !$pure )
+	  {
+		  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		  $mark= new Bookmark();
+		  $mark->title = lang('addbookmark');
+		  $mark->url = 'makebookmark,php'.$urlext.'&amp;title='.urlencode($this->title);
+		  $marks[] = $mark;
+
+		  $mark = new Bookmark();
+		  $mark->title = lang('managebookmarks');
+		  $mark->url = 'listbookmarks.php'.$urlext;
+		  $marks[] = $mark;
+	  }
+	  return $marks;
+
   }
 
   public function get_breadcrumbs()

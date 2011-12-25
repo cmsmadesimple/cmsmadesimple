@@ -74,8 +74,11 @@ if ($access)
 		$files = 0;
 		$old_display_errors = ini_set('display_errors',0);
 		$modops = $gCms->GetModuleOperations();
+		$orig_lang = cms_admin_current_language();
+		cms_set_admin_language('en_US');
 		$object = cms_utils::get_module($module);
 		$xmltxt = $modops->CreateXMLPackage($object,$message,$files);
+		cms_set_admin_language($orig_lang);
 		if( $files == 0 )
 		{
 			echo "<p class=\"error\">".lang('errornofilesexported')."</p>";
