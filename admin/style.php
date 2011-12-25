@@ -2,15 +2,11 @@
 
 $CMS_ADMIN_PAGE = TRUE;
 $CMS_STYLESHEET = TRUE;
-if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
-  {
-    @ini_set( 'zlib.output_compression','Off' );
-  }
 //$LOAD_ALL_MODULES = 1;
 require_once("../include.php");
 header("Content-type: text/css; charset=" . get_encoding());
 //require_once("../lib/classes/class.user.inc.php");
-$theme=get_preference(get_userid(),"admintheme");
+$theme=get_preference(get_userid(),"admintheme",CmsAdminThemeBase::GetDefaulttheme());
 $style="style";
 
 $gCms = cmsms();

@@ -984,6 +984,35 @@ abstract class CmsAdminThemeBase
 
   abstract public function ShowHeader($title_name,$extra_lang_params = array(),$link_text = '',$module_help_type = FALSE);
 
+  static public function GetDefaultTheme()
+  {
+	  $tmp = self::GetAvailableThemes();
+	  if( is_array($tmp) && count($tmp) ) 
+		  {
+			  $tmp = array_keys($tmp);
+			  return $tmp[0];
+		  }
+  }
+
+  static public function GetAvailableThemes()
+  {
+	  $config = cmsms()->GetConfig();
+
+	  $files = glob(cms_join_path($config['admin_path'],'themes').'/*');
+	  if( is_array($files) && count($files) )
+		  {
+			  $res = array();
+			  foreach( $files as $file )
+				  {
+					  if( !is_dir($file) ) continue;
+					  $name = basename($file);
+					  if( !is_readable(cms_join_path($file,"{$name}Theme.php")) ) continue;
+					  $res[$name] = $name;
+				  }
+			  return $res;
+		  }
+  }
+
   static public function &GetThemeObject()
   {
 	  if( is_object(self::$_instance) ) return self::$_instance;

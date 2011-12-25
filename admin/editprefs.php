@@ -57,7 +57,7 @@ $wysiwyg = get_preference($userid, 'wysiwyg');
 $syntaxhighlighter = get_preference($userid, 'syntaxhighlighter');
 $default_cms_language = get_preference($userid, 'default_cms_language');
 $old_default_cms_lang = $default_cms_language;
-$admintheme = get_preference($userid, 'admintheme', 'default');
+$admintheme = get_preference($userid, 'admintheme', CmsAdminThemeBase::GetDefaultTheme());
 $bookmarks = get_preference($userid, 'bookmarks', 0);
 $indent = get_preference($userid, 'indent', true);
 $enablenotifications = get_preference($userid, 'enablenotifications', 1);
@@ -201,15 +201,8 @@ $smarty -> assign('CMS_USER_KEY', $_SESSION[CMS_USER_KEY]);
 /**
  * admin themes
  */
-if ($dir = opendir(dirname(__FILE__) . "/themes/")) {
-	$themes = array();
-	while (($file = readdir($dir)) !== false) {
-		if (@is_dir("themes/" . $file) && ($file[0] != '.') && @is_readable("themes/{$file}/{$file}Theme.php")) {
-			$themes[$file] = $file;
-		}
-	}
-	$smarty -> assign('themes_opts', $themes);
-}
+$smarty->assign('themes_opts',CmsAdminThemeBase::GetAvailableThemes());
+
 /**
  * get modules
  */
