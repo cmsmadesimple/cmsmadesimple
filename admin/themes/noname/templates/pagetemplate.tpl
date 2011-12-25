@@ -25,99 +25,78 @@
 		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/functions.js"></script>
 	</head>
 	<body##BODYSUBMITSTUFFGOESHERE##>
-		<body>
-			<!-- start container -->
-			<div id="container">
-				<!-- start header -->
-				<header role="banner" class="cf header">
-					<!-- start header-top -->
-					<div class="header-top">
-						<!-- logo -->
-						<div class="cms-logo">
-							<img src="{$config.admin_url}/themes/noname/images/layout/cmsms-logo.jpg" width="205" height="69" alt="{sitename} - {$pagetitle}" title="{sitename}" />
-						</div>
-						<!-- title -->
-						<span class="admin-title"> CMS Made Simple&trade; Admin Console - {sitename} - {$pagetitle} </span>
+		<!-- start container -->
+		<div id="container">
+			<!-- start header -->
+			<header role="banner" class="cf header">
+				<!-- start header-top -->
+				<div class="header-top">
+					<!-- logo -->
+					<div class="cms-logo">
+						<img src="{$config.admin_url}/themes/noname/images/layout/cmsms-logo.jpg" width="205" height="69" alt="{sitename} - {$pagetitle}" title="{sitename}" />
 					</div>
-					<!-- end header-top //-->
-					<!-- start header-bottom -->
-					<div class="header-bottom cf">
-						<!-- welcome -->
-						<div class="welcome">
-							<span>{'welcome_user'|lang}: {$username}</span>
-						</div>
-						<!-- breadcrubms -->
-						{include file='breadcrumbs.tpl' items=$theme->get_breadcrumbs()} 
-						<!-- bookmarks -->
-						{include file='bookmarks.tpl'} 
-					</div>
-					<!-- end header-bottom //-->
-				</header>
-				<!-- end header //-->
-				<!-- start content -->
-				<div id="content" class="sidebar-on">
-					<div class="shadow">
-						&nbsp;
-					</div>
-					<!-- start sidebar -->
-					<div id="sidebar">
-						<aside>
-							<span title="Close / Open Sidebar" class="toggle-button close">Close / Open Sidebar</span>
-							<!-- notifications -->
-							{include file='notifications.tpl' items=$theme->get_notifications()} 
-							<!-- start navigation -->
-							{include file='navigation.tpl' nav=$theme->get_navigation_tree()} 
-							<!-- end navigation //-->
-						</aside>
-					</div>
-					<!-- end sidebar //-->
-					<!-- start main -->
-					<div id="main" class="cf sidebar-on">
-						<section role="main" class="content-inner">
-							<!-- TO DO, check and restyle -->
-							<div id="pageheader">
-								{if isset($module_icon_url) or isset($pagetitle)}
-								{if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}"/>&nbsp;{/if}{$pagetitle|default:''}
-								{if isset($module_help_url) or isset($wiki_url)} <span class="helptext"> {if isset($module_help_url)}<a href="{$module_help_url}">{'module_help'|lang}</a>{/if}
-									&nbsp;
-									{if isset($wiki_url)}<a href="{$wiki_url}" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if} </span>
-								{/if}
-								{/if}
-							</div>
-							<!-- end TO DO, check and restyle -->
-							{$content}
-						</section>
-					</div>
-					<!-- end main //-->
-					<div class="spacer">
-						&nbsp;
-					</div>
+					<!-- title -->
+					<span class="admin-title"> CMS Made Simple&trade; Admin Console - {sitename} - {$pagetitle} </span>
 				</div>
-				<!-- end content //-->
-				<!-- start footer -->
-				<footer id="footer" class="cf">
-					<div class="footer-left">
-						<small class="copyright">Copyright &copy; <a rel="external" href="http://www.cmsmadesimple.org">CMS Made Simple&trade; {cms_version} &ldquo;{cms_versionname}&rdquo;</a></small>
+				<!-- end header-top //-->
+				<!-- start header-bottom -->
+				<div class="header-bottom cf">
+					<!-- welcome -->
+					<div class="welcome">
+						<span>{'welcome_user'|lang}: {$username}</span>
 					</div>
-					<div class="footer-right cf">
-						<ul class="links">
-							<li>
-								<a href="#" title="Support">Documentation</a>
-							</li>
-							<li>
-								<a href="#" title="Forums">Forums</a>
-							</li>
-							<li>
-								<a href="#" title="About">About</a>
-							</li>
-							<li>
-								<a href="#" title="Team">Team</a>
-							</li>
-						</ul>
-					</div>
-				</footer>
-				<!-- end footer //-->
+					<!-- breadcrubms -->
+					{include file='breadcrumbs.tpl' items=$theme->get_breadcrumbs()} 
+					<!-- bookmarks -->
+					{include file='bookmarks.tpl'}
+				</div>
+				<!-- end header-bottom //-->
+			</header>
+			<!-- end header //-->
+			<!-- start content -->
+			<div id="content" class="sidebar-on">
+				<div class="shadow">
+					&nbsp;
+				</div>
+				<!-- start sidebar -->
+				<div id="sidebar">
+					<aside>
+						<span title="Close / Open Sidebar" class="toggle-button close">Close / Open Sidebar</span>
+						<!-- notifications -->
+						{include file='notifications.tpl' items=$theme->get_notifications()} 
+						<!-- start navigation -->
+						{include file='navigation.tpl' nav=$theme->get_navigation_tree()} 
+						<!-- end navigation //-->
+					</aside>
+				</div>
+				<!-- end sidebar //-->
+				<!-- start main -->
+				<div id="main" class="cf sidebar-on">
+					<section role="main" class="content-inner">
+						<!-- TO DO, check and restyle -->
+						<div id="pageheader">
+							{if isset($module_icon_url) or isset($pagetitle)}
+							{if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}"/>&nbsp;{/if}{$pagetitle|default:''}
+							{if isset($module_help_url) or isset($wiki_url)} <span class="helptext"> {if isset($module_help_url)}<a href="{$module_help_url}">{'module_help'|lang}</a>{/if}
+								&nbsp;
+								{if isset($wiki_url)}<a href="{$wiki_url}" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if} </span>
+							{/if}
+							{/if}
+						</div>
+						<!-- end TO DO, check and restyle -->
+						{$content}
+					</section>
+				</div>
+				<!-- end main //-->
+				<div class="spacer">
+					&nbsp;
+				</div>
 			</div>
-			<!-- end container //-->
+			<!-- end content //-->
+			<!-- start footer -->
+			{include file='footer.tpl'} 
+			<!-- end footer //-->
+		</div>
+		<!-- end container //-->
 		</body>
 </html>
