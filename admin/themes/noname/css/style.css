@@ -332,6 +332,76 @@ pre {
 	display: inline-block;
 	width: auto
 	}
+/* forms */	
+form {
+	margin: 0px;
+	display: inline
+}
+input,
+textarea,
+select,
+menu {
+	font-family: sans-serif;
+	font-size: 12px;
+	border-top: 1px solid #aaa;
+	border-left: 1px solid #aaa;	
+	border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;	
+	background: #f0f0f0;
+	border-radius: 2px		
+}
+input {
+	text-indent: 5px;
+	margin-right: 5px;
+	border-radius: 2px
+}
+input:hover, 
+input:focus, 
+textarea:hover, 
+textarea:focus,
+select:hover,
+select:focus,
+menu:focus, 
+checkbox:hover {
+	border: 1px solid #aaa;
+	outline: 0;
+	background: #fff
+}
+input[type="text"], 
+input[type="password"] {
+	padding: 4px
+}
+input[type="button"], 
+input[type="submit"],
+.ui-button
+ {
+	cursor: pointer;
+	height: 28px;
+	font-size: 12px;
+	line-height: 28px
+}
+.ui-button-text {
+	font-size: 12px;
+	margin-left: 2px
+}
+input[type="button"]:hover, 
+input[type="submit"]:hover {
+	cursor: pointer
+}
+input[type="checkbox"] {
+	background: #fff;
+	border: none
+}
+textarea {
+	width: 48em;
+	height: 30em;
+	overflow: auto
+}
+select, 
+menu {
+	padding: 2px 5px;
+	border-radius: 2px
+}
 /* Notification messages */
 .message {
 	display: block;
@@ -878,6 +948,7 @@ nav ul#pagemenu li:hover a.myprefs {
 }
 /* second level & colapsed sidebar */
 nav ul#pagemenu ul {
+	padding: 8px 0;
 	background: #f0f0f0
 }
 nav ul#pagemenu li li {
@@ -1175,6 +1246,32 @@ a.pageback .ui-icon {
 a.pageback:hover {
 	color: #fff
 }
+div.pagecontainer .pagetext {
+	color: #585858;
+	margin: 10px 0 5px 0;
+	padding: 0;
+	width: auto;
+	font-weight: bold
+}
+div.pagecontainer .pageinput {
+	padding: 0;
+	margin: 0;
+	width: auto;
+	text-align: left
+}
+
+div.pagecontainer p.pageinput,
+div.pagecontainer .pageinput label {
+	font-size: 11px
+}
+p.pageinputwysiwyg {
+	padding-top: 5px
+}
+p.pagemessage {
+	margin-bottom: 0;
+	padding: 5px;
+	font-weight: bold
+}
 /*** tabs ***/
 #page_tabs {
 	overflow: hidden;
@@ -1182,6 +1279,7 @@ a.pageback:hover {
 }
 #page_tabs div {
 	color: #585858;
+	border-radius: 4px 4px 0 0;
 	background: #ddd;
 	font-weight: bold;
 	text-align: center;

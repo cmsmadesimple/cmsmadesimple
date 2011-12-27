@@ -70,13 +70,36 @@ jQuery(document).ready(function($) {
 	});
 	// BUTTONS
 	jQuery(function() {
-		$('a.pageback').addClass('ui-state-default ui-corner-all');
+		$('input[type="submit"], input[type="button"]').each(function() {
+			$(this).replaceWith('<button type="' + $(this).attr('type') +'" name="' + $(this).attr('name') + '">' + $(this).val() + '</button>');
+		});
+		$('button:submit').button({
+			icons : {
+				primary : 'ui-icon-circle-check'
+			}
+		});		
+		$('button[name="submit"]').button({
+			icons : {
+				primary : 'ui-icon-circle-check'
+			}
+		});
+		$('button[name="apply"]').button({
+			icons : {
+				primary : 'ui-icon-disk'
+			}
+		});		
+		$('button[name="cancel"]').button({
+			icons : {
+				primary : 'ui-icon-circle-close'
+			}
+		});
+		$('a.pageback,input[type="button"],input[type="submit"]').addClass('ui-state-default ui-corner-all');
 		$('a.pageback').prepend('<span class="ui-icon ui-icon-arrowreturnthick-1-w">');
-		$('a.pageback').hover(function() {
+		$('a.pageback,input[type="button"],input[type="submit"]').hover(function() {
 			$(this).addClass('ui-state-hover');
 		}, function() {
 			$(this).removeClass('ui-state-hover');
 		});
 	});
-	// end function
+// end
 });
