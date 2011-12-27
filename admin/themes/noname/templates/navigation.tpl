@@ -11,7 +11,7 @@
 			{$navitem.title}	
 		</a>
 		{if $depth == '0'}
-			<span class="open-nav" rel="{$navitem.name|lower}" title="{'open'|lang}/{'close'|lang} {$navitem.title}">{'open'|lang}/{'close'|lang} {$navitem.title}</span>
+			<span class="open-nav" title="{'open'|lang}/{'close'|lang} {$navitem.title}">{'open'|lang}/{'close'|lang} {$navitem.title}</span>
 		{/if}			
 		{if isset($navitem.children)}
 		{if $depth == '0'}

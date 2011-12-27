@@ -16,6 +16,7 @@
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
+		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/jquery-ui-1.8.16.custom.min.js"></script> 
 		<script type="text/javascript" src="{root_url}/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>
