@@ -272,7 +272,7 @@ h6 {
 }
 p {
 	font-size: 12px;
-	margin: 0px
+	margin: 2px 0
 }
 table,
 td,
@@ -343,8 +343,8 @@ select,
 menu {
 	font-family: sans-serif;
 	font-size: 12px;
-	border-top: 1px solid #aaa;
-	border-left: 1px solid #aaa;	
+	margin-right: 5px;
+	border: 1px solid #aaa;
 	border-bottom: 1px solid #ddd;
 	border-right: 1px solid #ddd;	
 	background: #f0f0f0;
@@ -414,13 +414,21 @@ menu {
 }
 .warning,
 .pagewarning {
-	background: #feffc8 url(themes/noname/images/layout/warning.png) 10px 50% no-repeat;
-	border: 1px solid #f1aa2d;
+	background: #faf6d4 url(themes/noname/images/layout/warning.png) 10px 50% no-repeat;
+	border: 1px solid #e6c26e;
 	border-radius: 3px
 }
 .pagewarning {
 	padding: 10px 10px 10px 55px;
 	font-size: 11px
+}
+.pagewarning p {
+	font-size: 11px
+}
+.pagewarning h3 {
+	margin: 2px 0;
+	font-size: 14px;
+	color: #e6c26e
 }
 .error {
 	background: #fdcea4 url(themes/noname/images/layout/block.png) 10px 50% no-repeat;
@@ -439,6 +447,12 @@ menu {
 }
 .message:hover {
 	cursor: help
+}
+/* close notification */
+.close-warning {
+	float:right;
+	cursor: pointer;
+	margin:5px
 }
 /* LAYOUT */
 
@@ -1253,13 +1267,19 @@ div.pagecontainer .pagetext {
 	width: auto;
 	font-weight: bold
 }
+/* content forms */
 div.pagecontainer .pageinput {
 	padding: 0;
 	margin: 0;
 	width: auto;
 	text-align: left
 }
-
+.pageinput input,
+.pageinput textarea,
+.pageinput select,
+.pageinput menu {
+	margin-bottom: 4px
+}
 div.pagecontainer p.pageinput,
 div.pagecontainer .pageinput label {
 	font-size: 11px
@@ -1304,7 +1324,9 @@ p.pagemessage {
 	background: transparent url(themes/noname/images/layout/tab-active.png) no-repeat center bottom
 }
 #page_content {
-	background: transparent;
-	padding: 20px 0;
+	background: #fff;
+	border-radius: 0 0 4px 4px;
+	padding: 20px 10px;
+	border: 1px solid #ddd;
 	border-top: 3px solid #ddd;
 }

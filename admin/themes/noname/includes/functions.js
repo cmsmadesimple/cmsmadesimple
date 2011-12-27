@@ -71,13 +71,13 @@ jQuery(document).ready(function($) {
 	// BUTTONS
 	jQuery(function() {
 		$('input[type="submit"], input[type="button"]').each(function() {
-			$(this).replaceWith('<button type="' + $(this).attr('type') +'" name="' + $(this).attr('name') + '">' + $(this).val() + '</button>');
+			$(this).replaceWith('<button type="' + $(this).attr('type') + '" name="' + $(this).attr('name') + '">' + $(this).val() + '</button>');
 		});
 		$('button:submit').button({
 			icons : {
 				primary : 'ui-icon-circle-check'
 			}
-		});		
+		});
 		$('button[name="submit"]').button({
 			icons : {
 				primary : 'ui-icon-circle-check'
@@ -87,7 +87,7 @@ jQuery(document).ready(function($) {
 			icons : {
 				primary : 'ui-icon-disk'
 			}
-		});		
+		});
 		$('button[name="cancel"]').button({
 			icons : {
 				primary : 'ui-icon-circle-close'
@@ -99,6 +99,15 @@ jQuery(document).ready(function($) {
 			$(this).addClass('ui-state-hover');
 		}, function() {
 			$(this).removeClass('ui-state-hover');
+		});
+	});
+	// HIDE NOTIFICATION
+	jQuery(function() {
+		$('.pagewarning').prepend('<span class="close-warning ui-icon ui-icon-circle-close"></span>');
+		$('.close-warning').click(function() {
+			$(this).parent().hide(0,function() {
+				$(this).hide();
+			});
 		});
 	});
 // end
