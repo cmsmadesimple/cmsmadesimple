@@ -17,9 +17,9 @@
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/jquery-1.7.1.min.js"></script>
-		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/jquery-ui-1.8.16.custom.min.js"></script>
+		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/jquery-ui-1.8.16.custom.min.js"></script> 
 		<script type="text/javascript" src="{root_url}/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>
-		<script type="text/javascript" src="{root_url}/lib/jquery/js/jquery.json-2.2.js"></script>
+		<script type="text/javascript" src="{root_url}/lib/jquery/js/jquery.json-2.2.js"></script> 
 		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/jquery.cookie.js"></script>
 		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/standard.js"></script>
 		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/functions.js"></script>
@@ -72,20 +72,22 @@
 				<!-- end sidebar //-->
 				<!-- start main -->
 				<div id="main" class="cf sidebar-on">
+					{strip}
 					<article role="main" class="content-inner">
-						<header class="pageheader">
-							{if isset($module_icon_url) or isset($pagetitle)}
-							{if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}"/>&nbsp;{/if}{$pagetitle|default:''}
+						<header class="pageheader cf">
+							{if isset($module_icon_url) or isset($pagetitle)} 
+							<h1>{if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}" class="module-icon" />{/if}
+							{$pagetitle|default:''}
+							</h1>
 							{if isset($module_help_url) or isset($wiki_url)} <span class="helptext"> {if isset($module_help_url)}<a href="{$module_help_url}">{'module_help'|lang}</a>{/if}
-								&nbsp;
-								{if isset($wiki_url)}<a href="{$wiki_url}" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if} </span>
-							{/if}
-							{/if}
+								{if isset($wiki_url)}<a href="{$wiki_url}" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if} </span> {/if}
+							{/if} 
 						</header>
 						<section>
 							{$content}
 						</section>
 					</article>
+					{/strip}
 				</div>
 				<!-- end main //-->
 				<div class="spacer">
@@ -94,7 +96,8 @@
 			</div>
 			<!-- end content //-->
 			<!-- start footer -->
-			{include file='footer.tpl'} <!-- end footer //-->
+			{include file='footer.tpl'} 
+			<!-- end footer //-->
 		</div>
 		<!-- end container //-->
 		</body>

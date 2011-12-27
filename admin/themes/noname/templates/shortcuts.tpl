@@ -27,22 +27,21 @@
 	</ul>
 </div>
 <div class="dialog" role="dialog" title="{'bookmarks'|lang}">
-    <h2>{'bookmarks'|lang}</h2>
     {assign var='marks' value=$theme->get_bookmarks()}
     {if count($marks)}
       <h3>{'user_created'|lang}</h3>
       <ul>
-      {foreach from=$marks item='mark'} 
-         <li><a href="{$mark->url}" title="{$mark->title}">{$mark->title}</a></li>
+      {foreach from=$marks item='mark'}
+         <li><a{if $mark->bookmark_id > 0} class="bookmark"{/if} href="{$mark->url}" title="{$mark->title}">{$mark->title}</a></li>
       {/foreach}
       </ul>
     {/if}
     <h3>{'help'|lang}</h3>
     <ul>
-      <li><a ref="external" href="http://forum.cmsmadesimple.org" title="{'forums'|lang}">{'forums'|lang}</a></li>
-      <li><a ref="external" href="http://wiki.cmsmadesimple.org" title="{'wiki'|lang}">{'wiki'|lang}</a></li>
-      <li><a rel="external" href="http://cmsmadesimple.org/main/support/IRC">{'irc'|lang}</a></li>
-      <li><a rel="external" href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Extensions/Modules">{'module_help'|lang}</a></li>
+      <li><a ref="external" class="external" href="http://forum.cmsmadesimple.org" title="{'forums'|lang}">{'forums'|lang}</a></li>
+      <li><a ref="external" class="external" href="http://wiki.cmsmadesimple.org" title="{'wiki'|lang}">{'wiki'|lang}</a></li>
+      <li><a rel="external" class="external" href="http://cmsmadesimple.org/main/support/IRC">{'irc'|lang}</a></li>
+      <li><a rel="external" class="external" href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Extensions/Modules">{'module_help'|lang}</a></li>
     </ul>
 </div> 
 {/strip}

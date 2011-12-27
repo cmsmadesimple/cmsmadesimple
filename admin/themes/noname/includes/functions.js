@@ -1,4 +1,4 @@
-$(document).ready(function() {
+jQuery(document).ready(function($) {
 	// TOGGLE SIDEBAR
 	// Variables
 	var objMain = $('#container');
@@ -7,7 +7,8 @@ $(document).ready(function() {
 	function showSidebar() {
 		objMain.addClass('sidebar-on');
 		objMain.removeClass('sidebar-off');
-		$('.toggle-button').removeClass('open');
+		$('.toggle-button').removeClass('open-sidebar');
+		$('#pagemenu li.current ul').show();
 		$.cookie('sidebar-pref', 'sidebar-on', {
 			expires : 60
 		});
@@ -17,7 +18,8 @@ $(document).ready(function() {
 	function hideSidebar() {
 		objMain.removeClass('sidebar-on');
 		objMain.addClass('sidebar-off');
-		$('.toggle-button').addClass('open');
+		$('.toggle-button').addClass('open-sidebar');
+		$('#pagemenu li ul').hide();
 		$.cookie('sidebar-pref', 'sidebar-off', {
 			expires : 60
 		});
@@ -36,10 +38,10 @@ $(document).ready(function() {
 	if($.cookie('sidebar-pref') == 'sidebar-off') {
 		objMain.addClass('sidebar-off');
 		objMain.removeClass('sidebar-on');
-		$('.toggle-button').addClass('open');
+		$('.toggle-button').addClass('open-sidebar');
 	}
 	// Jquery UI DIALOG
-	$(function() {
+	jQuery(function($) {
 		var dialogs = {};
 		$('.dialog').each(function() {
 			var dialog_id = $(this).prev('.open').attr('title');
@@ -54,4 +56,27 @@ $(document).ready(function() {
 			return false;
 		});
 	});
+	// SIDEBAR MENU
+	jQuery(function($) {
+		if($('#pagemenu li').hasClass('current')) {
+			$('#pagemenu li.current span').addClass('open-sub');
+		}
+		$('#pagemenu > li > span').click(function() {
+			if(false === $(this).next().is(':visible')) {
+				$('#container.sidebar-on #pagemenu ul').slideUp(0);
+			}
+			$(this).next().slideToggle(0);
+		});
+	});
+	// BUTTONS
+	jQuery(function() {
+		$('a.pageback').addClass('ui-state-default ui-corner-all');
+		$('a.pageback').prepend('<span class="ui-icon ui-icon-arrowreturnthick-1-w">');
+		$('a.pageback').hover(function() {
+			$(this).addClass('ui-state-hover');
+		}, function() {
+			$(this).removeClass('ui-state-hover');
+		});
+	});
+	// end function
 });
