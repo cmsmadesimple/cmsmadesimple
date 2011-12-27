@@ -52,7 +52,7 @@ jQuery(document).ready(function($) {
 		});
 		$('.open').click(function(event) {
 			event.preventDefault();
-			dialogs[$(this).attr('title')].dialog('open');
+			dialogs[$(this).attr('title')].dialog('open').removeClass('invisible');
 			return false;
 		});
 	});

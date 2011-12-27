@@ -37,7 +37,7 @@
 						<img src="{$config.admin_url}/themes/noname/images/layout/cmsms-logo.jpg" width="205" height="69" alt="{sitename} - {$pagetitle}" title="{sitename}" />
 					</div>
 					<!-- title -->
-					<span class="admin-title"> CMS Made Simple&trade; Admin Console - {sitename} - {$pagetitle} </span>
+					<span class="admin-title"> {'adminpaneltitle'|lang} - {sitename} - {$pagetitle} </span>
 				</div>
 				<!-- end header-top //-->
 				<!-- start header-bottom -->

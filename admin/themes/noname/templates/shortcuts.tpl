@@ -26,7 +26,7 @@
 		</li>
 	</ul>
 </div>
-<div class="dialog" role="dialog" title="{'bookmarks'|lang}">
+<div class="dialog invisible" role="dialog" title="{'bookmarks'|lang}">
     {assign var='marks' value=$theme->get_bookmarks()}
     {if count($marks)}
       <h3>{'user_created'|lang}</h3>

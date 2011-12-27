@@ -343,7 +343,8 @@ select,
 menu {
 	font-family: sans-serif;
 	font-size: 12px;
-	margin-right: 5px;
+	margin: 2px 5px 2px 0;
+	padding: 2px 5px;
 	border: 1px solid #aaa;
 	border-bottom: 1px solid #ddd;
 	border-right: 1px solid #ddd;	
@@ -396,11 +397,6 @@ textarea {
 	width: 48em;
 	height: 30em;
 	overflow: auto
-}
-select, 
-menu {
-	padding: 2px 5px;
-	border-radius: 2px
 }
 /* Notification messages */
 .message {
@@ -724,7 +720,7 @@ header .breadcrumbs ul li.current, header .breadcrumbs ul li.current a {
 }
 /* shortcut icons */
 header .shortcuts {
-	float: right;
+	float: right
 }
 header .shortcuts ul {
 	width: auto;
@@ -1106,17 +1102,25 @@ div.dialog a.bookmark {
 	background: url(themes/noname/images/icons/system/bookmark.png) no-repeat left
 }
 /*** tables ***/
+table tr:last-child td:first-child {
+	border-bottom-left-radius:4px
+	}
+table tr:last-child td:last-child {
+	border-bottom-right-radius:4px
+	}
 table.pagetable {
+	border-collapse: inherit;
 	font-size: 11px;
+	border-radius: 4px;
 	border: 1px solid #ddd;
 	width: 100%;
 	margin: 5px 0
 }
 table.pagetable caption {
-	color: #464646;
+	color: #585858;
 	text-align: left;
 	font-weight: bold;
-	font-size: 1.2em;
+	font-size: 12px;
 	padding: 5px 0
 }
 table.pagetable th {
@@ -1141,7 +1145,7 @@ table.pagetable th a:hover {
 	text-decoration: underline
 }
 table.pagetable tr {
-	height: 25px
+	height: 36px
 }
 table.pagetable td {
 	color: #585858;
@@ -1197,9 +1201,9 @@ th.pagew70 {
 	width: 70%
 }
 table.pagetable th.pageicon {
-	min-width: 1px;
-	width: 1px;
-	border: 0 none
+	min-width: 16px;
+	width: 16px;
+	border: none
 }
 td.pagew30 {
 	width: 30%
@@ -1208,10 +1212,10 @@ td.pagepos {
 	text-align: center
 }
 tr.row1 {
-	background: #fff
+	background: #f2f2f2
 }
 tr.row2 {
-	background: #f6f6f6
+	background: #fafafa
 }
 tr.row1:hover,
 tr.row2:hover,
@@ -1220,7 +1224,7 @@ tr.row2hover {
 	background: #ddd
 }
 td.pageicon {
-	background: #fff !important
+	background: #f2f2f2 !important
 }
 td.icons_wide {
 	width: 25px
@@ -1238,7 +1242,7 @@ iframe.preview {
 	width: 95%;
 	height: 400px
 }
-/*** text ***/
+/*** content text and forms ***/
 .pageback {
 	clear: both;
 	text-align: left
@@ -1267,12 +1271,23 @@ div.pagecontainer .pagetext {
 	width: auto;
 	font-weight: bold
 }
-/* content forms */
+/*** content forms ***/
 div.pagecontainer .pageinput {
 	padding: 0;
 	margin: 0;
 	width: auto;
 	text-align: left
+}
+div.pagecontainer fieldset {
+	border: 1px solid #ddd;
+	margin: 10px 0;
+	border-radius: 4px
+}
+div.pagecontainer legend {
+	font-weight: bold;
+	color: #585858;
+	padding: 0 5px;
+	font-size: 14px
 }
 .pageinput input,
 .pageinput textarea,
@@ -1291,6 +1306,22 @@ p.pagemessage {
 	margin-bottom: 0;
 	padding: 5px;
 	font-weight: bold
+}
+input.pagecheckbox {
+	border: none
+}
+textarea.pagebigtextarea {
+	height: 40em;
+	width: 55em
+}
+.pageinput textarea
+{
+	font-family: "Courier New", Courier, monospace, sans-serif;
+	line-height: 1.6
+}
+textarea.pagesmalltextarea {
+	height: 15em;
+	width: 48em
 }
 /*** tabs ***/
 #page_tabs {
