@@ -922,7 +922,7 @@ nav ul#pagemenu li a:active,
 nav ul#pagemenu li.current li a:hover,
 nav ul#pagemenu li.current li a:active {
 	color: #147fdb;
-	padding-left: 35px
+	/*padding-left: 35px*/
 }
 nav ul#pagemenu li.current a {
 	color: #fa8004
@@ -1459,15 +1459,21 @@ textarea.pagesmalltextarea {
 	#page_tabs div.active {
 		color: #147fdb;
 		background: #f2f2f2
-	}		
+	}	
+	textarea {
+		width: 43em;
+	}	
 }
-@media screen and (max-width: 768px) {	
+@media screen and (max-device-width: 768px) {	
 	/* override our predefined min-with for smaller screens and full height stuff */
 	body {
 		margin: 0;
 		min-width: 100%;
 		padding: 0;
 		
+	}
+	a {
+		outline: 0
 	}
 	img {
 		float: none;
@@ -1499,6 +1505,9 @@ textarea.pagesmalltextarea {
 	}
 	#content {
 		height: auto
+	}
+	header .welcome {
+		width: auto
 	}
 	#sidebar {
 		border: none;
@@ -1548,5 +1557,22 @@ textarea.pagesmalltextarea {
 	#footer small {
 		padding: 0;
 		font-size: .7em
+	}
+	fieldset,
+	form,
+	input,
+	textarea,
+	select,
+	menu {
+		width: 95%
+	}
+	iframe {
+		max-width: 90%
+	}
+	input,
+	textarea,
+	select,
+	menu {
+		height: auto
 	}
 }
