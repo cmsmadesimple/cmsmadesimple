@@ -84,7 +84,7 @@
 								{if isset($wiki_url)}<a href="{$wiki_url}" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if} </span> {/if}
 							{/if} 
 						</header>
-						<section>
+						<section class="cf">
 							{$content}
 						</section>
 					</article>

@@ -297,6 +297,24 @@ a.external {
 	background: url(themes/noname/images/icons/system/external-small.png) no-repeat right;
 	padding-right: 20px
 }
+.important {
+	color: red;
+	font-weight: normal;
+}
+.smallgrey { 
+        font-weight: normal;
+        font-size: 10px;
+		margin: 10px 0 0 0;
+} 
+div.pagecontainer .h-inside {
+	float: left;
+	padding-top: 8px;
+	padding-right: 10px;
+	margin-left: 10%;
+	width: 18em;
+	margin-bottom: 0.5em;
+	text-align: right;
+}
 .visible {
 	position: static
 }
@@ -332,6 +350,16 @@ pre {
 	display: inline-block;
 	width: auto
 	}
+/* border radius */	
+table.pagetable,
+table.pagetable a.tooltip span,
+div.pagecontainer fieldset,
+input,
+textarea,
+select,
+menu  {
+	border-radius: 4px
+}
 /* forms */	
 form {
 	margin: 0px;
@@ -344,17 +372,15 @@ menu {
 	font-family: sans-serif;
 	font-size: 12px;
 	margin: 2px 5px 2px 0;
-	padding: 2px 5px;
+	padding: 4px 5px;
 	border: 1px solid #aaa;
 	border-bottom: 1px solid #ddd;
 	border-right: 1px solid #ddd;	
-	background: #f0f0f0;
-	border-radius: 2px		
+	background: #f0f0f0		
 }
 input {
 	text-indent: 5px;
-	margin-right: 5px;
-	border-radius: 2px
+	margin-right: 5px
 }
 input:hover, 
 input:focus, 
@@ -1102,6 +1128,12 @@ div.dialog a.bookmark {
 	background: url(themes/noname/images/icons/system/bookmark.png) no-repeat left
 }
 /*** tables ***/
+table th:first-child {
+	border-top-left-radius: 4px
+}
+table th:last-child {
+	border-top-right-radius: 4px
+}
 table tr:last-child td:first-child {
 	border-bottom-left-radius:4px
 	}
@@ -1111,7 +1143,6 @@ table tr:last-child td:last-child {
 table.pagetable {
 	border-collapse: inherit;
 	font-size: 11px;
-	border-radius: 4px;
 	border: 1px solid #ddd;
 	width: 100%;
 	margin: 5px 0
@@ -1171,7 +1202,6 @@ table.pagetable a.tooltip span {
 	z-index: 999;	
 	min-width: 150px;
 	width: auto;
-	border-radius: 4px;
 	line-height: 1.3
 }
 table.pagetable th.pagepos {
@@ -1271,6 +1301,11 @@ div.pagecontainer .pagetext {
 	width: auto;
 	font-weight: bold
 }
+div.pagecontainer .pageshowrows {
+	color: #585858;
+	font-size: 11px;
+	margin-bottom: 5px
+}
 /*** content forms ***/
 div.pagecontainer .pageinput {
 	padding: 0;
@@ -1280,8 +1315,7 @@ div.pagecontainer .pageinput {
 }
 div.pagecontainer fieldset {
 	border: 1px solid #ddd;
-	margin: 10px 0;
-	border-radius: 4px
+	margin: 10px 0
 }
 div.pagecontainer legend {
 	font-weight: bold;
@@ -1360,4 +1394,34 @@ textarea.pagesmalltextarea {
 	padding: 20px 10px;
 	border: 1px solid #ddd;
 	border-top: 3px solid #ddd;
+}
+/* topcontent - dashboard */
+.dashboard-box {
+	min-height: 100px;
+	width: 31.333%;
+	float: left;
+	border-radius: 4px;
+	margin-right: 2.29%;
+	margin-bottom: 1%;
+	background: url(themes/noname/images/layout/toplevel-bg.gif) repeat-x top;
+	border: 1px solid #ddd
+}
+.dashboard-box.last {
+	margin-right: 0
+}
+.dashboard-box img {
+	padding: 20px;
+	box-shadow: inset 0px 1px 15px 1px #ddd;
+	margin: 10px;
+	float: left;
+	border-radius: 4px;
+	border: 1px solid #ddd;
+	background: #fff
+}
+.dashboard-box:hover img {
+	box-shadow: inset 0px 1px 15px 1px #ffd8b0;	
+	transition: all 600ms ease-in-out;	
+	-webkit-transition: all 600ms ease-in-out;
+	-moz-transition: all 600ms ease-in-out;
+	-o-transition: all 600ms ease-in-out;
 }
