@@ -95,7 +95,7 @@ abstract class CmsAdminThemeBase
 		if( $key == 'cms' ) return cmsms();
 		if( $key == 'themeName' ) 
 			{
-				$class = get_class();
+				$class = get_class($this); 
 				if( endswith($class,'Theme') ) $class = substr($class,0,strlen($class)-5);
 				return $class;
 			}
@@ -1025,7 +1025,7 @@ abstract class CmsAdminThemeBase
 	public function DisplayImage($imageName, $alt='', $width='', $height='', $class='')
 	{
 		// @todo: fix me...
-		if( !is_array($this->_iamgeLink) ) $this->_imageLink = array();
+		if( !is_array($this->_imageLink) ) $this->_imageLink = array();
 		if (! isset($this->_imageLink[$imageName]))
 			{
 				if (strpos($imageName,'/') !== false)
