@@ -7,23 +7,25 @@
 		<base href="{$config.admin_url}/" />
 		<meta name="generator" content="CMS Made Simple - Copyright (C) 2004-12 Ted Kulp. All rights reserved." />
 		<meta name="robots" content="noindex, nofollow" />
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no" />
+		<meta name="HandheldFriendly" content="True"/>
 		<link rel="shortcut icon" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
 		<link rel="bookmark" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
-		<link rel="stylesheet" type="text/css" href="style.php?{$secureparam}" />
+		<link rel="stylesheet" href="style.php?{$secureparam}" />
 		<!-- custom jQueryUI Theme 1.8.16 see style.css for color reference //-->
-		<link type="text/css" href="{$config.admin_url}/themes/noname/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+		<link href="{$config.admin_url}/themes/noname/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 		<!-- learn IE html5 -->
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
-		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/jquery-1.7.1.min.js"></script>
-		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/jquery-ui-1.8.16.custom.min.js"></script> 
-		<script type="text/javascript" src="{root_url}/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>
-		<script type="text/javascript" src="{root_url}/lib/jquery/js/jquery.json-2.2.js"></script> 
-		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/jquery.cookie.js"></script>
-		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/standard.js"></script>
-		<script type="text/javascript" src="{$config.admin_url}/themes/noname/includes/functions.js"></script>
+		<script src="{$config.admin_url}/themes/noname/includes/jquery-1.7.1.min.js"></script>
+		<script src="{$config.admin_url}/themes/noname/includes/jquery-ui-1.8.16.custom.min.js"></script> 
+		<script src="{root_url}/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>
+		<script src="{root_url}/lib/jquery/js/jquery.json-2.2.js"></script> 
+		<script src="{$config.admin_url}/themes/noname/includes/jquery.cookie.js"></script>
+		<script src="{$config.admin_url}/themes/noname/includes/standard.js"></script>
+		<script src="{$config.admin_url}/themes/noname/includes/functions.js"></script>
 	</head>
 	<body##BODYSUBMITSTUFFGOESHERE##>
 		<!-- start container -->

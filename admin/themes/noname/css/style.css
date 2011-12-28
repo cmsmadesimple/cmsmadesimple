@@ -357,7 +357,9 @@ div.pagecontainer fieldset,
 input,
 textarea,
 select,
-menu  {
+menu,
+.group_memberships,
+.dashboard-box img  {
 	border-radius: 4px
 }
 /* forms */	
@@ -1110,6 +1112,16 @@ footer#footer a:hover, footer#footer a:active {
 #main header.pageheader span.helptext:hover em {
 	display: inline
 }
+div.pageoverflow {
+	clear: left;
+	padding-top: 1px;
+	width: auto;
+	overflow: hidden
+}
+#copy_paste_in_forum {
+	width: 80%;
+	margin: 0 10%;
+}
 /*** dialogs ***/
 div.alert-dialog ul li {
 	margin: 10px 0
@@ -1329,6 +1341,18 @@ div.pagecontainer legend {
 .pageinput menu {
 	margin-bottom: 4px
 }
+.group {
+	padding-right: 3px;
+	padding-bottom: 3px;
+	padding-top: 3px;
+}
+.group_memberships {
+	margin: 0;
+	height: 1%; /*IE*/
+	padding: 5px  10px;
+	background: #fefefe;
+	border: 1px solid #ddd;
+}
 div.pagecontainer p.pageinput,
 div.pagecontainer .pageinput label {
 	font-size: 11px
@@ -1414,7 +1438,6 @@ textarea.pagesmalltextarea {
 	box-shadow: inset 0px 1px 15px 1px #ddd;
 	margin: 10px;
 	float: left;
-	border-radius: 4px;
 	border: 1px solid #ddd;
 	background: #fff
 }
@@ -1424,4 +1447,106 @@ textarea.pagesmalltextarea {
 	-webkit-transition: all 600ms ease-in-out;
 	-moz-transition: all 600ms ease-in-out;
 	-o-transition: all 600ms ease-in-out;
+}
+@media screen and (max-width: 1024px) {
+	/* change tabs to full width on smaller screen size */
+	#page_tabs div {
+		text-align: left;
+		float: none;
+		border-radius: 0;
+		margin-right: 0
+	}
+	#page_tabs div.active {
+		color: #147fdb;
+		background: #f2f2f2
+	}		
+}
+@media screen and (max-width: 768px) {	
+	/* override our predefined min-with for smaller screens and full height stuff */
+	body {
+		margin: 0;
+		min-width: 100%;
+		padding: 0;
+		
+	}
+	img {
+		float: none;
+	}
+	#container,
+	#header,
+	#main,
+	#sidebar,
+	#content {
+		margin: 0;
+		float: none;
+		display: block
+	}
+	#container {
+		width: 100%;
+		padding: 0;
+		position: static;
+		height: auto
+	}
+	.spacer,
+	#sidebar div.notification .box-shadow,
+	#sidebar nav.navigation .box-shadow,
+	header .breadcrumbs,
+	#footer .footer-right,
+	#sidebar .toggle-button,
+	header .admin-title,
+	#content .shadow   {
+		display: none
+	}
+	#content {
+		height: auto
+	}
+	#sidebar {
+		border: none;
+		width: 100%;
+		background: #ddd;
+		position: static
+	}
+	#sidebar aside {
+		padding: 0
+	}
+	#header.header {
+		overflow: hidden
+	}
+	#main {
+		width: 100%;
+		display: block
+	}
+	#main .content-inner {
+		padding: 0 5px
+	}
+	header .cms-logo {
+		background: none;
+		width: 100%
+	}
+	.dashboard-box {
+		float: none;
+		width: auto;
+		margin: 10px 0
+	}
+	.dashboard-box img {
+		display: inline
+	}
+	/* position:fixed doesn't work well with mobile devices */
+	footer#footer {
+		clear: both;
+		overflow: hidden;
+		position: static
+	}
+	#footer .footer-left {
+		float: none;
+		margin: 0;
+		padding:0;
+		width: 100%;
+		text-align: center;
+		display: block
+	}
+	#footer small {
+		padding: 0;
+		font-size: .7em
+	}
 }
