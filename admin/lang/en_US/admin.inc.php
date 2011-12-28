@@ -106,6 +106,7 @@ $lang['admin']['help_function_browser_lang'] = <<<EOT
 EOT;
 $lang['admin']['info_target'] = 'This option may used by the Menu Manager to indicate when and how new frames or windows should be opened.  Some menu manager templates may ignore this option.'; 
 $lang['admin']['close'] = 'Close';
+$lang['admin']['open'] = 'Open';
 $lang['admin']['revert'] = 'Revert all changes';
 $lang['admin']['autoclearcache2'] = 'Remove cache files that are older than the specified number of days';
 $lang['admin']['root'] = 'Root';
