@@ -1169,7 +1169,7 @@ table.pagetable caption {
 table.pagetable th {
 	color: #fa8004;
 	text-shadow: -1px -1px 0 #000;
-	background: #232323 url(themes/noname/images/layout/header-bottom.gif) repeat-x top;
+	background: #232323 url(themes/noname/images/layout/sprite_repeatx.png) 831px -99px repeat-x;
 	height: 45px;
 	text-align: left;
 	white-space: nowrap;
