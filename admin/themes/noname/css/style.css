@@ -651,7 +651,7 @@ p.login-info {
 	height: 100%
 }
 #content .shadow {
-	background: transparent url(themes/noname/images/layout/content-shadow.png) repeat-x top;
+	background: transparent url(themes/noname/images/layout/sprite_repeatx.png) 831px -148px repeat-x;
 	z-index: 9999;
 	position: absolute;
 	top: 100px;
@@ -667,7 +667,7 @@ header.header {
 header .header-top {
 	height: 69px;
 	border-bottom: 1px solid #cecece;
-	background: #eee url(themes/noname/images/layout/header-top.gif) repeat-x top
+	background: #eee url(themes/noname/images/layout/sprite_repeatx.png) 831px -10px repeat-x
 }
 header .cms-logo {
 	width: 240px;
@@ -680,8 +680,7 @@ header .admin-title {
 	text-align: right;
 	display: inline-block;
 	height: 70px;
-	font: bold 14px   /70px sans-serif;
-	line-height: 70px;
+	font: bold 14px/70px sans-serif;
 	margin-right: 20px;
 	color: #585858;
 	text-shadow: 1px 1px 0 #fff;
@@ -693,7 +692,7 @@ header .header-bottom {
 	border-bottom: 1px solid #0f0f0f;
 	position: relative;
 	width: 100%;
-	background: #232323 url(themes/noname/images/layout/header-bottom.gif) repeat-x top
+	background: #232323 url(themes/noname/images/layout/sprite_repeatx.png) 831px -99px repeat-x
 }
 header .welcome {
 	width: 250px;
@@ -706,7 +705,7 @@ header .welcome span {
 	width: auto;
 	font-size: 11px;
 	line-height: 18px;
-	background: url(themes/noname/images/layout/user-icon.png) no-repeat left;
+	background: url(themes/noname/images/layout/sprite_norepeat.png) -10px -336px no-repeat;
 	margin-left: 10px;
 	padding-left: 30px
 }
@@ -728,7 +727,7 @@ header .breadcrumbs ul li {
 	padding: 0 8px 0 4px
 }
 header .breadcrumbs ul li.first {
-	background: url(themes/noname/images/layout/home-icon.png) no-repeat left;
+	background: url(themes/noname/images/layout/sprite_norepeat.png) -10px -367px no-repeat;
 	padding-left: 28px
 }
 header .breadcrumbs ul li a {
@@ -769,22 +768,23 @@ header .shortcuts li a {
 	width: 18px;
 	height: 18px;
 	text-indent: -9999em;
+	background: url(themes/noname/images/layout/sprite_norepeat.png) no-repeat;
 	overflow: hidden
 }
 header .shortcuts li.help a {
-	background: url(themes/noname/images/layout/help-icon.png) no-repeat
+	background-position: -10px -737px
 }
 header .shortcuts li.settings a {
-	background: url(themes/noname/images/layout/settings-icon.png) no-repeat
+	background-position: -10px -10px
 }
 header .shortcuts li.logout a {
-	background: url(themes/noname/images/layout/logout-icon.png) no-repeat
+	background-position: -10px -86px
 }
 header .shortcuts li.view-site a {
-	background: url(themes/noname/images/layout/view-icon.png) no-repeat
+	background-position: -10px -124px
 }
 header .shortcuts li.favorites a {
-	background: url(themes/noname/images/layout/favorites-icon.png) no-repeat
+	background-position: -10px -48px
 }
 /*** sidebar ***/
 #sidebar {
@@ -821,24 +821,24 @@ header .shortcuts li.favorites a {
 	top: 75px
 }
 #sidebar .toggle-button.close {
-	background: url(themes/noname/images/layout/close-sidebar.png)
+	background: url(themes/noname/images/layout/sprite_norepeat.png) -9px -254px no-repeat
 }
 #sidebar .toggle-button.open-sidebar {
-	background: url(themes/noname/images/layout/open-sidebar.png)
+	background: url(themes/noname/images/layout/sprite_norepeat.png) -9px -216px no-repeat
 }
 /* sidebar notifications */
 #sidebar .notification a {
 	text-decoration: none;
 	display: block;
 	height: 35px;
-	background: url(themes/noname/images/layout/email-icon.png) no-repeat center left;	
+	background: url(themes/noname/images/layout/sprite_norepeat.png) -10px -449px no-repeat;	
 	color: #fff
 }
 #sidebar .notification {
 	height: 35px;
 	position: relative;
 	padding: 14px 10px;
-	background: #232323 url(themes/noname/images/layout/notifications-bg.gif) repeat-x top;
+	background: #232323 url(themes/noname/images/layout/sprite_repeatx.png) 122px -175px repeat-x;
 	color: #fff
 }
 #sidebar div.notification .box-shadow, 
@@ -886,14 +886,15 @@ nav ul#pagemenu li span.open-nav.open-sub,
 nav ul#pagemenu li.current span.open-nav,
 nav ul#pagemenu li:hover span.open-nav {
 	cursor: pointer;
-	background: url(themes/noname/images/layout/hover-arrow.png) no-repeat right 16px
+	background: url(themes/noname/images/layout/sprite_norepeat.png) -5px -176px no-repeat
 }
 nav ul#pagemenu li.current span.open-nav,
 nav ul#pagemenu li.current:hover span.open-nav {
-	background: url(themes/noname/images/layout/current-arrow.png) no-repeat right 16px
+	background: url(themes/noname/images/layout/sprite_norepeat.png) -5px -152px no-repeat
 }
 /*** menu style ***/
 nav ul#pagemenu li a {
+	background: url(themes/noname/images/layout/sprite_norepeat.png) no-repeat;
 	color: #232323;
 	outline: 0;
 	margin-left: 10px;
@@ -924,63 +925,62 @@ nav ul#pagemenu li.current li a:active {
 nav ul#pagemenu li.current a {
 	color: #fa8004
 }
-/* we will spritify this later */
 nav ul#pagemenu li a.main {
-	background: url(themes/noname/images/layout/home-off.png) no-repeat left
+	background-position: -10px -484px
 }
 nav ul#pagemenu li a.content {
-	background: url(themes/noname/images/layout/content-off.png) no-repeat left
+	background-position: -10px -520px
 }
 nav ul#pagemenu li a.layout {
-	background: url(themes/noname/images/layout/layout-off.png) no-repeat left
+	background-position: -10px -556px
 }
 nav ul#pagemenu li a.usersgroups {
-	background: url(themes/noname/images/layout/users-off.png) no-repeat left
+	background-position: -10px -592px
 }
 nav ul#pagemenu li a.extensions {
-	background: url(themes/noname/images/layout/extensions-off.png) no-repeat left
+	background-position: -10px -628px
 }
 nav ul#pagemenu li a.siteadmin {
-	background: url(themes/noname/images/layout/admin-off.png) no-repeat left
+	background-position: -10px -664px
 }
 nav ul#pagemenu li a.myprefs {
-	background: url(themes/noname/images/layout/preferences-off.png) no-repeat left
+	background-position: -10px -700px
 }
 /* hover, active */
 nav ul#pagemenu li a.main:hover, 
 nav ul#pagemenu li.current a.main,
 nav ul#pagemenu li:hover a.main {
-	background: url(themes/noname/images/layout/home-on.png) no-repeat left
+	background-position: -10px -278px
 }
 nav ul#pagemenu li a.content:hover, 
 nav ul#pagemenu li.current a.content,
 nav ul#pagemenu li:hover a.content {
-	background: url(themes/noname/images/layout/content-on.png) no-repeat left
+	background-position: -10px -758px
 }
 nav ul#pagemenu li a.layout:hover, 
 nav ul#pagemenu li.current a.layout,
 nav ul#pagemenu li:hover a.layout {
-	background: url(themes/noname/images/layout/layout-on.png) no-repeat left
+	background-position: -10px -790px
 }
 nav ul#pagemenu li a.usersgroups:hover, 
 nav ul#pagemenu li.current a.usersgroups,
 nav ul#pagemenu li:hover a.usersgroups {
-	background: url(themes/noname/images/layout/users-on.png) no-repeat left
+	background-position: -10px -823px
 }
 nav ul#pagemenu li a.extensions:hover, 
 nav ul#pagemenu li.current a.extensions,
 nav ul#pagemenu li:hover a.extensions {
-	background: url(themes/noname/images/layout/extensions-on.png) no-repeat left
+	background-position: -10px -854px
 }
 nav ul#pagemenu li a.siteadmin:hover, 
 nav ul#pagemenu li.current a.siteadmin,
 nav ul#pagemenu li:hover a.siteadmin  {
-	background: url(themes/noname/images/layout/admin-on.png) no-repeat left
+	background-position: -10px -921px
 }
 nav ul#pagemenu li a.myprefs:hover, 
 nav ul#pagemenu li.current a.myprefs ,
 nav ul#pagemenu li:hover a.myprefs {
-	background: url(themes/noname/images/layout/preferences-on.png) no-repeat left
+	background-position: -10px -885px
 }
 /* second level & colapsed sidebar */
 nav ul#pagemenu ul {
@@ -1028,7 +1028,7 @@ footer#footer {
 	width: 100%;
 	z-index: 100;
 	height: 45px;
-	background: transparent url(themes/noname/images/layout/footer-bg.png) repeat-x bottom;
+	background: transparent url(themes/noname/images/layout/sprite_repeatx.png) 829px -259px repeat-x;
 	padding-top: 15px;
 	clear: both;
 	position: fixed;
@@ -1196,8 +1196,8 @@ table.pagetable a.tooltip span {
 	background: #efefef;
 	left: 110%;
 	bottom: 10px;
-	box-shadow: 1px 1px 3px 1px #aaa;
-	border: 1px solid #585858;
+	box-shadow: 1px 1px 3px 1px #222;
+	border: 1px solid #ddd;
 	padding: 5px;
 	z-index: 999;	
 	min-width: 150px;
@@ -1403,7 +1403,7 @@ textarea.pagesmalltextarea {
 	border-radius: 4px;
 	margin-right: 2.29%;
 	margin-bottom: 1%;
-	background: url(themes/noname/images/layout/toplevel-bg.gif) repeat-x top;
+	background: url(themes/noname/images/layout/sprite_repeatx.png) 214px -339px repeat-x;
 	border: 1px solid #ddd
 }
 .dashboard-box.last {
