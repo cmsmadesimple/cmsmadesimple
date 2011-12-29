@@ -39,7 +39,7 @@ if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 }
 
 #Do any header replacements (this is for WYSIWYG stuff)
-$headertext = '';
+$headertext = cms_utils::get_app_data('theme_headertext');
 $formtext = '';
 $formsubmittext = '';
 $bodytext = '';
@@ -74,7 +74,6 @@ if( is_array($loaded) && count($loaded) )
   }
 
 $htmlresult = $themeObject->postprocess($htmlresult);
-
 $htmlresult = str_replace('<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->', $headertext, $htmlresult);
 $htmlresult = str_replace('##FORMSUBMITSTUFFGOESHERE##', ' '.$formtext, $htmlresult);
 $htmlresult = str_replace('##INLINESUBMITSTUFFGOESHERE##', ' '.$formsubmittext, $htmlresult);

@@ -12,6 +12,11 @@ $gCms = cmsms();
 $config = $gCms->GetConfig();
 $userid = get_userid();
 
+if( isset($headtext) && $headtext != '' )
+  {
+    cms_utils::set_app_data('theme_headertext',$headtext);
+  }
+
 if (isset($USE_THEME) && $USE_THEME == false)
 {
   //echo '<!-- admin theme disabled -->';

@@ -224,7 +224,7 @@ class nonameTheme extends CmsAdminThemeBase {
 		if (is_array($this -> _messages) && count($this -> _messages))
 			$smarty -> assign('messages', $this -> _messages);
 
-		$_contents = $smarty -> display('pagetemplate.tpl');
+		$_contents = $smarty -> fetch('pagetemplate.tpl');
 		$smarty -> template_dir = $otd;
 		return $_contents;
 	}
