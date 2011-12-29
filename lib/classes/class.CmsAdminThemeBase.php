@@ -207,24 +207,29 @@ abstract class CmsAdminThemeBase
 			{
 				$this->_sectionCount[$section] = 0;
 			}
-			$this->_modulesBySection[$section][$this->_sectionCount[$section]]['key'] = $key;
-			if ($rec['friendlyname'] != '')
+
+			$data = array();
+			$data['key'] = $key;
+			$data['name'] = $key;
+			$data['friendlyname'] = (isset($rec['friendlyname']))?$rec['friendlyname']:$key;
+			$data['description'] = ($rec['admindescription']!='')?$rec['admindescription']:'';
+			$config = cmsms()->GetConfig();
+
+			$tmp = array("modules/{$key}/images/icon.gif",
+						 "modules/{$key}/icons/icons.gif",
+						 "modules/{$key}/images/icon.png",
+						 "modules/{$key}/icons/icons.png");
+			foreach( $tmp as $one )
 			{
-				$this->_modulesBySection[$section][$this->_sectionCount[$section]]['name'] = $rec['friendlyname'];
+				$fn = cms_join_path($config['root_path'],$one);
+				if( file_exists($fn) )
+				{
+					$data['icon'] = $config['root_url'].'/'.$one;
+					break;
+				}
 			}
-			else
-			{
-				$this->_modulesBySection[$section][$this->_sectionCount[$section]]['name'] = $key;
-			}
-			if ($rec['admindescription'] != '')
-			{
-				$this->_modulesBySection[$section][$this->_sectionCount[$section]]['description'] =
-					$rec['admindescription'];
-			}
-			else
-			{
-				$this->_modulesBySection[$section][$this->_sectionCount[$section]]['description'] = "";
-			}
+
+			$this->_modulesBySection[$section][] = $data;
 			$this->_sectionCount[$section]++;
 		}
     }
@@ -582,6 +587,7 @@ abstract class CmsAdminThemeBase
 	
 	
 		// adjust all the urls to include the session key
+		// and set an icon if we can.
 		foreach( $this->_menuItems as $sectionKey => $sectionArray )
 			{
 				if( isset($sectionArray['url']) && 
@@ -597,6 +603,7 @@ abstract class CmsAdminThemeBase
 								$url .= '?';
 							}
 						$url .= CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+
 						$this->_menuItems[$sectionKey]['url'] = $url;
 					}
 			}
