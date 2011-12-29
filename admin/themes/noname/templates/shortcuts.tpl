@@ -15,9 +15,11 @@
 		<li class="settings">
 			<a href="editprefs.php?{$secureparam}" title="{'userprefs'|lang}">{'userprefs'|lang}</a>
 		</li>
+		{if isset($marks)}
 		<li class="favorites open">
 			<a href="listbookmarks.php?{$secureparam}" title="{'bookmarks'|lang}">{'bookmarks'|lang}</a>
 		</li>
+		{/if}
 		<li class="logout">
 			<a href="logout.php?{$secureparam}" title="{'logout'|lang}">{'logout'|lang}</a>
 		</li>
@@ -26,8 +28,8 @@
 		</li>
 	</ul>
 </div>
+{if isset($marks)}
 <div class="dialog invisible" role="dialog" title="{'bookmarks'|lang}">
-    {assign var='marks' value=$theme->get_bookmarks()}
     {if count($marks)}
       <h3>{'user_created'|lang}</h3>
       <ul>
@@ -44,4 +46,5 @@
       <li><a rel="external" class="external" href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Extensions/Modules">{'module_help'|lang}</a></li>
     </ul>
 </div> 
+{/if}
 {/strip}

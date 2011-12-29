@@ -120,4 +120,4 @@
 </form>
 </div>{* pagecontainer *}
 
-<p class="pageback"><a class="pageback" href="{$backurl}">&#171; {'back'|lang}</a></p>;
+<p class="pageback"><a class="pageback" href="{$backurl}">&#171; {'back'|lang}</a></p>

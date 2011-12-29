@@ -101,12 +101,21 @@ jQuery(document).ready(function($) {
 			$(this).removeClass('ui-state-hover');
 		});
 	});
-	// HIDE NOTIFICATION
+	// SHOW/HIDE NOTIFICATIONS
 	jQuery(function() {
-		$('.pagewarning').prepend('<span class="close-warning ui-icon ui-icon-circle-close"></span>');
+		$('.pagewarning, .message').prepend('<span class="close-warning ui-icon ui-icon-circle-close"></span>');
 		$('.close-warning').click(function() {
-			$(this).parent().hide(0,function() {
+			$(this).parent().hide(0, function() {
 				$(this).hide();
+			});
+		});
+		$('.message').each(function() {
+			var message = $(this);
+			$(message).hide();
+			$(message).slideDown(1000, function() {
+				window.setTimeout(function() {
+					message.slideUp();
+				}, 14000);
 			});
 		});
 	});

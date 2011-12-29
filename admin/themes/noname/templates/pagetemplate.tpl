@@ -64,7 +64,8 @@
 				<!-- start sidebar -->
 				<div id="sidebar">
 					<aside>
-						<span title="Close / Open Sidebar" class="toggle-button close">Close / Open Sidebar</span>
+						{assign var='is_notifications' value=$theme->get_notifications()}
+						<span title="Close / Open Sidebar" class="toggle-button close{if empty($is_notifications)} top{/if}">Close / Open Sidebar</span>
 						<!-- notifications -->
 						{include file='notifications.tpl' items=$theme->get_notifications()} 
 						<!-- start navigation -->
@@ -76,6 +77,7 @@
 				<!-- start main -->
 				<div id="main" class="cf sidebar-on">
 					{strip}
+					{include file='messages.tpl'}
 					<article role="main" class="content-inner">
 						<header class="pageheader cf">
 							{if isset($module_icon_url) or isset($pagetitle)} 
