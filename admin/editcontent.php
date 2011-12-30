@@ -194,7 +194,7 @@ $headtext .= <<<EOSCRIPT
 <script type="text/javascript">
 // <![CDATA[
 jQuery(document).ready(function(){ 
-  jQuery('input[name=cancel]').click(function(){
+  jQuery('[name=cancel]').click(function(){
     var tmp = jQuery(this).val();
     if( tmp == '{$closestr}' )
       {
@@ -205,32 +205,37 @@ jQuery(document).ready(function(){
 	return confirm('{$cancelstr}');
       }
   });
-  jQuery('input[name=apply]').click(function(){
+  jQuery('[name=apply]').live('click',function(){
     $addlScriptSubmit
     var data = jQuery('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'ajax', 'value': 1});
     data.push({ 'name': 'apply', 'value': 1 });
     jQuery.post('{$_SERVER['REQUEST_URI']}',data,function(resultdata,text){
-	     var resp = jQuery(resultdata).find('Response').text();
-	     var details = jQuery(resultdata).find('Details').text();
-             var htmlShow = '';
-	     if( resp == 'Success' )
-	       {
-		 htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
-		 jQuery('input[name=cancel]').fadeOut();
-		 jQuery('input[name=cancel]').attr('value','{$closestr}');
-		 jQuery('input[name=cancel]').fadeIn();
-	       }
-             else
-               {
-		 htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
-		 htmlShow += details;
-		 htmlShow += '<\/ul><\/div>';
-               }
-	     jQuery('#Edit_Content_Result').html(htmlShow);
-	   },
-	   'xml');
+       var event = jQuery.Event('cms_ajax_apply');
+       event.response = jQuery(resultdata).find('Response').text();
+       event.details = jQuery(resultdata).find('Details').text();
+       event.close = '{$closestr}';
+       jQuery('body').trigger(event);
+    },'xml');
     return false;
+  });
+  jQuery('body').on('cms_ajax_apply',function(e){
+    var htmlShow = '';
+    if( e.response == 'Success' )
+      {
+	// here we could fire a custom event, give the details and let something else handle it.
+	htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + e.details + '<\/p><\/div>';
+	jQuery('[name=cancel]').fadeOut();
+	jQuery('[name=cancel]').attr('value','{$closestr}');
+	jQuery('[name=cancel]').fadeIn();
+      }
+    else
+      {
+	htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
+	htmlShow += e.details;
+	htmlShow += '<\/ul><\/div>';
+      }
+    jQuery('#Edit_Content_Result').html(htmlShow);
   });
 });
 // ]]>

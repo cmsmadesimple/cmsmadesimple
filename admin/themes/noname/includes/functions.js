@@ -70,6 +70,7 @@ jQuery(document).ready(function($) {
 	});
 	// BUTTONS
 	jQuery(function() {
+                $('body').off('cms_ajax_apply');
 		$('input[type="submit"]').each(function() {
 			if($(this).attr('name') == 'apply') {
 				var icon = 'ui-icon-disk';
@@ -81,15 +82,14 @@ jQuery(document).ready(function($) {
 				var icon = 'ui-icon-circle-check';
 			}
 			//alert(icon);
+			var oname = $(this).attr('name');
 			$(this).hide().after('<button type="' + $(this).attr('type') + '" name="' + $(this).attr('name') + '">').next().button({
 				icons : {
 					primary : icon
 				},
-				label : $(this).val()
-			}).click(function(event) {
-				event.preventDefault();
-				$(this).prev().click();
-			});
+			      label : $(this).val()
+		        });
+			$(this).attr('name','o_'+oname); // change the name of the original object.
 		});
 		$('a.pageback').addClass('ui-state-default ui-corner-all');
 		$('a.pageback').prepend('<span class="ui-icon ui-icon-arrowreturnthick-1-w">');
@@ -98,6 +98,12 @@ jQuery(document).ready(function($) {
 		}, function() {
 			$(this).removeClass('ui-state-hover');
 		});
+
+   	        // Handle ajax apply
+  	        jQuery('body').on('cms_ajax_apply',function(e){
+		    // gotta get langified string here.
+		    $('button[name=cancel]').button('option','label',e.close);
+                });
 	});
 	// SHOW/HIDE NOTIFICATIONS
 	jQuery(function() {
