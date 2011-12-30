@@ -27,7 +27,7 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 $gCms = cmsms();
 $db = $gCms->GetDb();
-
+$lastedited = '';
 $error = "";
 
 $template = "";
@@ -342,12 +342,12 @@ else
 			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
 			<div class="pageinput">
 			<?php 
-				$dateformat = trim(get_preference(get_userid(),'date_format_string','%x %X')); 
-					if( empty($dateformat) )
-					{
-					 $dateformat = '%x %X';
-					}
-				    echo strftime( $dateformat ,$lastedited); 
+		   $dateformat = trim(get_preference(get_userid(),'date_format_string','%x %X')); 
+	if( empty($dateformat) )
+	  {
+	    $dateformat = '%x %X';
+	  }
+	echo strftime( $dateformat ,$lastedited); 
              ?></div>
 		</div>
 		<?php if( $encoding != "" ){ ?>
