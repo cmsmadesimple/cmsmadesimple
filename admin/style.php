@@ -4,7 +4,7 @@ $CMS_ADMIN_PAGE = TRUE;
 $CMS_STYLESHEET = TRUE;
 //$LOAD_ALL_MODULES = 1;
 require_once("../include.php");
-header("Content-type: text/css; charset=" . get_encoding());
+cms_admin_sendheaders('text/css');
 //require_once("../lib/classes/class.user.inc.php");
 $theme=get_preference(get_userid(),"admintheme",CmsAdminThemeBase::GetDefaulttheme());
 $style="style";
