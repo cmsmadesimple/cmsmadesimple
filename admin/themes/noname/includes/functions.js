@@ -82,14 +82,12 @@ jQuery(document).ready(function($) {
 				var icon = 'ui-icon-circle-check';
 			}
 			//alert(icon);
-			var oname = $(this).attr('name');
 			$(this).hide().after('<button type="' + $(this).attr('type') + '" name="' + $(this).attr('name') + '">').next().button({
 				icons : {
 					primary : icon
 				},
 			      label : $(this).val()
 		        });
-			$(this).attr('name','o_'+oname); // change the name of the original object.
 		});
 		$('a.pageback').addClass('ui-state-default ui-corner-all');
 		$('a.pageback').prepend('<span class="ui-icon ui-icon-arrowreturnthick-1-w">');
