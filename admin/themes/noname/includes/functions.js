@@ -70,32 +70,30 @@ jQuery(document).ready(function($) {
 	});
 	// BUTTONS
 	jQuery(function() {
-		$('input[type="submit"], input[type="button"]').each(function() {
-			$(this).replaceWith('<button type="' + $(this).attr('type') + '" name="' + $(this).attr('name') + '">' + $(this).val() + '</button>');
-		});
-		$('button:submit').button({
-			icons : {
-				primary : 'ui-icon-circle-check'
+		$('input[type="submit"]').each(function() {
+			if($(this).attr('name') == 'apply') {
+				var icon = 'ui-icon-disk';
 			}
-		});
-		$('button[name="submit"]').button({
-			icons : {
-				primary : 'ui-icon-circle-check'
+			else if($(this).attr('name') == 'cancel') {
+				var icon = 'ui-icon-circle-close';
+			}		
+			else {
+				var icon = 'ui-icon-circle-check';
 			}
+			//alert(icon);
+			$(this).hide().after('<button type="' + $(this).attr('type') + '" name="' + $(this).attr('name') + '">').next().button({
+				icons : {
+					primary : icon
+				},
+				label : $(this).val()
+			}).click(function(event) {
+				event.preventDefault();
+				$(this).prev().click();
+			});
 		});
-		$('button[name="apply"]').button({
-			icons : {
-				primary : 'ui-icon-disk'
-			}
-		});
-		$('button[name="cancel"]').button({
-			icons : {
-				primary : 'ui-icon-circle-close'
-			}
-		});
-		$('a.pageback,input[type="button"],input[type="submit"]').addClass('ui-state-default ui-corner-all');
+		$('a.pageback').addClass('ui-state-default ui-corner-all');
 		$('a.pageback').prepend('<span class="ui-icon ui-icon-arrowreturnthick-1-w">');
-		$('a.pageback,input[type="button"],input[type="submit"]').hover(function() {
+		$('a.pageback').hover(function() {
 			$(this).addClass('ui-state-hover');
 		}, function() {
 			$(this).removeClass('ui-state-hover');
@@ -119,5 +117,5 @@ jQuery(document).ready(function($) {
 			});
 		});
 	});
-// end
+	// end
 });

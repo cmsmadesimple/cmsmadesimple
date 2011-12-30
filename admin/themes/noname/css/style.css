@@ -415,6 +415,12 @@ input[type="submit"],
 	font-size: 12px;
 	margin-left: 2px
 }
+button.ui-button.ui-state-active {
+	border: 1px solid #d3d3d3; 
+	background: #cecece url(themes/noname/css/default-cmsms/images/ui-bg_highlight-soft_75_cecece_1x100.png) 50% 50% repeat-x; 
+	font-weight: normal; 
+	color: #147fdb
+}
 input[type="button"]:hover, 
 input[type="submit"]:hover {
 	cursor: pointer
@@ -429,27 +435,30 @@ textarea {
 	overflow: auto
 }
 /* Notification messages */
-.message {
+.message,
+.pagewarning,
+.pagemcontainer,
+.pageerrorcontainer,
+.pageerrorinstalldir {
 	display: inline-block;
 	width: auto;
 	font-size: 11px;
 	padding: 10px 10px 10px 40px;
 	margin: 10px 0
 }
-.pagewarning {
-	padding: 10px 10px 10px 40px;
-	font-size: 11px
-}
 .warning,
 .pagewarning {
 	background: #faf6d4 url(themes/noname/images/icons/extra/warning.png) 10px 50% no-repeat;
 	border: 1px solid #e6c26e
 }
-.error {
+.error,
+.pageerrorcontainer,
+.pageerrorinstalldir {
 	background: #f2d4ce url(themes/noname/images/icons/extra/block.png) 10px 50% no-repeat;
 	border: 1px solid #ae432e
 }
-.success {
+.success,
+.pagemcontainer {
 	background: #d9e6c3 url(themes/noname/images/icons/extra/accept.png) 10px 50% no-repeat;
 	border: 1px solid #77ab13
 }
@@ -471,13 +480,16 @@ textarea {
 	font-size: 14px;
 	color: #e6c26e
 }
-aside.message {
+aside.message,
+.pagemcontainer,
+.pageerrorcontainer,
+.pageerrorinstalldir  {
 	position: absolute;
 	border-top: none;
 	width: 30%;
 	font-size: 11px;
 	border-radius: 0 0 4px 4px;
-	box-shadow: 1px 1px 3px 1px #aaa;
+	box-shadow: 1px 1px 3px 1px #444;
 	top:0;
 	margin:0;
 	left: 35%
@@ -1112,6 +1124,7 @@ footer#footer a:hover, footer#footer a:active {
 }
 #main header.pageheader .module-icon {
 	vertical-align: middle;
+	margin-right: 15px;
 	max-height: 32px
 }
 #main header.pageheader span.helptext {
@@ -1136,9 +1149,42 @@ div.pageoverflow {
 	width: auto;
 	overflow: hidden
 }
+div.pageoverflow img {
+	border: 0px
+}
+div.pageoptions,
+p.pageoptions {
+	padding: 2px 0
+}
+div.pageoptions a,
+p.pageoptions a,
+a.pageoptions {
+	padding: 2px 0;
+	color: #585858;
+	display: inline-block
+}
+img.systemicon {
+	border: none;
+	vertical-align: top
+}
 #copy_paste_in_forum {
 	width: 80%;
-	margin: 0 10%;
+	margin: 0 10%
+}
+.pagerows a {
+	display: inline-block;
+	background: #eee;
+	padding: 2px 4px;
+	margin: 0 1px;
+	color: #585858;
+	border: 1px solid #ccc
+}
+.pagerows strong {
+	background: #147fdb;
+	padding: 2px 4px;
+	margin: 0 1px;	
+	color: #fff;
+	border: 1px solid #147fdb 
 }
 /*** dialogs ***/
 div.alert-dialog ul li {
@@ -1343,6 +1389,10 @@ div.pagecontainer .pageinput {
 	width: auto;
 	text-align: left
 }
+.pageinput img {
+	line-height: 28px;
+	vertical-align: middle
+}
 div.pagecontainer fieldset {
 	border: 1px solid #ddd;
 	margin: 10px 0
@@ -1437,24 +1487,28 @@ textarea.pagesmalltextarea {
 	border: 1px solid #ddd;
 	border-top: 3px solid #ddd;
 }
-/* topcontent - dashboard */
+/*** topcontent - dashboard ***/
 .dashboard-box {
 	min-height: 100px;
-	width: 31.333%;
+	width: 31.633%;
 	float: left;
 	border-radius: 4px;
 	margin-right: 2.29%;
 	margin-bottom: 1%;
-	background: url(themes/noname/images/layout/sprite_repeatx.png) 214px -339px repeat-x;
+	background: #d5d5d5 url(themes/noname/images/layout/sprite_repeatx.png) 214px -339px repeat-x;
 	border: 1px solid #ddd
 }
 .dashboard-box.last {
 	margin-right: 0
 }
+.dashboard-box nav {
+	padding: 10px
+}
 .dashboard-box img {
+	max-height: 48px;
 	padding: 20px;
 	box-shadow: inset 0px 1px 15px 1px #ddd;
-	margin: 10px;
+	margin-right: 10px;
 	float: left;
 	border: 1px solid #ddd;
 	background: #fff
@@ -1464,7 +1518,71 @@ textarea.pagesmalltextarea {
 	transition: all 600ms ease-in-out;	
 	-webkit-transition: all 600ms ease-in-out;
 	-moz-transition: all 600ms ease-in-out;
-	-o-transition: all 600ms ease-in-out;
+	-o-transition: all 600ms ease-in-out
+}
+.dashboard-box h3 {
+	text-shadow: 0 1px 0 #fff;
+	margin:0 0 5px 0
+}
+.dashboard-box span.description {
+	color: #585858;
+	font-style: italic
+}
+.dashboard-box h4 {
+	margin: 5px 0;
+	font-size: 11px;
+	color: #232323
+}
+#main .dashboard-box ul.subitems {
+	margin: 0;
+	padding: 0
+}
+.dashboard-box ul.subitems li {
+	list-style: none;
+	margin: 0 4px;
+	line-height: 1.4;	
+	float:left
+}
+.dashboard-box ul.subitems li a {
+	font-size: 11px
+}
+/*** reorder pages ***/
+.reorder-pages {
+	margin: 20px 0
+}
+ul.sortableList,
+.reorder-pages ul {
+	list-style-type: none;
+	width: 450px;
+	margin: 0;
+	padding: 0
+}
+ul.sortableList li { 
+	list-style-type: none;
+	display: block;
+	margin: 10px 0
+}
+ul.sortableList div.label {
+	border: solid 1px #ddd;
+	word-wrap: break-word;
+	border-radius: 4px;
+	cursor: move;
+	padding: 3px 10px 3px 35px;
+	background: #eee url(themes/noname/images/icons/extra/reorder.gif) no-repeat  10px 50%;
+	text-shadow: 0 1px 0 #fff;
+	font-weight: bold;
+	color: #585858
+}
+ul.sortableList li div.label em {
+	display: block;
+	text-indent: 10px;
+	font-weight: normal;
+	color: #147fdb;
+	font-size: 11px
+}
+ul.sortable .placeholder {
+	border: 2px dashed #ddd;
+	background: #f2f2f2
 }
 @media screen and (max-width: 1024px) {
 	/* change tabs to full width on smaller screen size */
@@ -1558,6 +1676,9 @@ textarea.pagesmalltextarea {
 	.dashboard-box img {
 		display: inline
 	}
+	table.pagetable {
+		max-width: 768px
+		}
 	/* position:fixed doesn't work well with mobile devices */
 	footer#footer {
 		clear: both;

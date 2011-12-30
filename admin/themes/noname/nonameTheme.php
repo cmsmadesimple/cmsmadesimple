@@ -147,9 +147,9 @@ class nonameTheme extends CmsAdminThemeBase {
 		$smarty -> template_dir = dirname(__FILE__) . '/templates';
 		if ($section_name) {
 			$smarty -> assign('section_name', $section_name);
-			$smarty -> assign('nodes', $this -> get_navigation_tree($section_name, 1, FALSE));
+			$smarty -> assign('nodes', $this -> get_navigation_tree($section_name, -1, FALSE));
 		} else {
-			$nodes = $this -> get_navigation_tree(-1, 1, FALSE);
+			$nodes = $this -> get_navigation_tree(-1, -1, FALSE);
 			$smarty -> assign('nodes', $nodes);
 		}
 

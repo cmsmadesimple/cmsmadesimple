@@ -1,14 +1,40 @@
-	{strip}
+{strip}
 
-	{foreach from=$nodes item='node' name='box'}
+{foreach from=$nodes item='node' name='box'}
+{assign var='icon' value="themes/noname/images/icons/topfiles/`$node.name`"}
+{assign var='module' value="../modules/`$node.name`/images/icon"}
 	{if $node.show_in_menu && $node.url && $node.title}
 	<div class="dashboard-box{if $smarty.foreach.box.index % 3 == 2} last{/if}">
-		<img src="themes/noname/images/icons/topfiles/{$node.name}.png" width="48" height="48" alt="{$node.title}"} />
-		<a href="{$node.url}"{if isset($node.target)} target="{$node.target}"{/if}{if $node.selected} class="selected"{/if}>{$node.title}</a>
-		{if $node.description}<span class="description">{$node.description}</span>{/if}
+		<nav class="cf">
+			{if file_exists($module|cat:'.gif')}
+			<img src="{$module}.gif" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />	
+			{elseif file_exists($module|cat:'.png')}
+			<img src="{$module}.png" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />						
+			{elseif file_exists($icon|cat:'.png')}
+			<img src="{$icon}.png" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />
+			{elseif file_exists($icon|cat:'.gif')}
+			<img src="{$icon}.gif" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />
+			{else}
+			<img src="themes/noname/images/icons/topfiles/modules.png" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />	
+			{/if}		
+			<h3>
+				<a href="{$node.url}"{if isset($node.target)} target="{$node.target}"{/if}{if $node.selected} class="selected"{/if}>{$node.title}</a>
+			</h3>
+			{if $node.description}
+			<span class="description">{$node.description}</span>
+			{if isset($node.children)}
+			<h4>{'subitems'|lang}</h4>
+			<ul class="subitems cf">
+			{foreach from=$node.children item='one'}
+			 	<li><a href="{$one.url}">{$one.title}</a></li>
+			{/foreach} 
+			</ul>
+			{/if}
+			{/if}
+		</nav>
 	</div>
 	{/if}
-	{/foreach}
-	
-	{/strip}
+{/foreach}
+	{*<pre>{$nodes|print_r}</pre>*}
+{/strip}
 
