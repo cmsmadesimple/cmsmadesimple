@@ -672,10 +672,10 @@ p.login-info {
 	height: 60px;
 	clear: both
 }
-#content {
+#admin-content {
 	height: 100%
 }
-#content .shadow {
+#admin-content .shadow {
 	background: transparent url(themes/noname/images/layout/sprite_repeatx.png) 831px -148px repeat-x;
 	z-index: 9999;
 	position: absolute;
@@ -1665,7 +1665,7 @@ ul.sortable .placeholder {
 	#header,
 	#main,
 	#sidebar,
-	#content {
+	#admin-content {
 		margin: 0;
 		float: none;
 		display: block
@@ -1683,10 +1683,10 @@ ul.sortable .placeholder {
 	#footer .footer-right,
 	#sidebar .toggle-button,
 	header .admin-title,
-	#content .shadow   {
+	#admin-content .shadow   {
 		display: none
 	}
-	#content {
+	#admin-content {
 		height: auto
 	}
 	header .welcome {

@@ -57,7 +57,7 @@
 			</header>
 			<!-- end header //-->
 			<!-- start content -->
-			<div id="content">
+			<div id="admin-content">
 				<div class="shadow">
 					&nbsp;
 				</div>
