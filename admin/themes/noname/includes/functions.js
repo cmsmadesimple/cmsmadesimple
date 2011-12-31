@@ -133,8 +133,10 @@ jQuery(document).ready(function($) {
 		});
 	});
 	// Equal height 
-	jQuery(function() {
-		equalHeight($('.dashboard-box'));
-	});
+	jQuery.event.add(window, "load", resizeFrame);
+	jQuery.event.add(window, "resize", resizeFrame);
+	function resizeFrame() {
+		equalHeight($('.dashboard-inner'));
+	}
 	// end
 });

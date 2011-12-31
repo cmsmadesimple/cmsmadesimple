@@ -5,7 +5,7 @@
 {assign var='module' value="../modules/`$node.name`/images/icon"}
 	{if $node.show_in_menu && $node.url && $node.title}
 	<div class="dashboard-box{if $smarty.foreach.box.index % 3 == 2} last{/if}">
-		<nav class="cf">
+		<nav class="dashboard-inner cf">
 			{if file_exists($module|cat:'.gif')}
 			<img src="{$module}.gif" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />	
 			{elseif file_exists($module|cat:'.png')}
@@ -16,7 +16,7 @@
 			<img src="{$icon}.gif" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />
 			{else}
 			<img src="themes/noname/images/icons/topfiles/modules.png" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />	
-			{/if}		
+			{/if}
 			<h3>
 				<a href="{$node.url}"{if isset($node.target)} target="{$node.target}"{/if}{if $node.selected} class="selected"{/if}>{$node.title}</a>
 			</h3>
@@ -33,8 +33,11 @@
 			{/if}
 		</nav>
 	</div>
+	{if $smarty.foreach.box.index % 3 == 2}
+	<div class="clear"></div>
+	{/if}
 	{/if}
 {/foreach}
-	{*<pre>{$nodes|print_r}</pre>*}
+
 {/strip}
 

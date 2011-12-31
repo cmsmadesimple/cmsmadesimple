@@ -1510,7 +1510,7 @@ textarea.pagesmalltextarea {
 /*** topcontent - dashboard ***/
 .dashboard-box {
 	min-height: 100px;
-	width: 31.633%;
+	width: 31.513%;
 	float: left;
 	border-radius: 4px;
 	margin-right: 2.29%;
@@ -1630,6 +1630,11 @@ ul.sortable .placeholder {
 	}
 	#sidebar aside {
 		padding: 0
+	}
+	.dashboard-box {
+		float: none;
+		width: auto;
+		margin: 10px 0
 	}	
 	footer#footer {
 		clear: both;
