@@ -7,9 +7,6 @@
 			{if isset($module_help_url)}
 			<a href="{$module_help_url}" title="{'module_help'|lang}">{'module_help'|lang}</a>
 			{/if}
-			{if isset($wiki_url)}
-			<a href="{$wiki_url}" target="_blank" title="{'help'|lang} - {'new_window'|lang}">{'help'|lang}</a>
-			{/if}
 		</li>
 		{/if}
 		<li class="settings">

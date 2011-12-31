@@ -1135,9 +1135,18 @@ footer#footer a:hover, footer#footer a:active {
 	float:right;
 	width: auto;
 	color: #232323;
-	font-size: 12px;
+	font-size: 12px
+}
+span.helptext a.external,
+span.helptext a {
+	display: inline-block;
+	width: auto;
 	padding-right: 20px;
-	background: url(themes/noname/images/icons/system/info-external.png) no-repeat right
+	margin-left: 8px;
+	background: url(themes/noname/images/icons/system/info-external.gif) no-repeat right
+}
+span.helptext a {
+	background: url(themes/noname/images/icons/system/info.gif) no-repeat right
 }
 .pageheader span.helptext {
 	display: inline-block;
@@ -1153,12 +1162,6 @@ footer#footer a:hover, footer#footer a:active {
 	margin:0;
 	padding:0;
 	color: #147fdb	
-}
-#main header.pageheader span.helptext em {
-	display: none
-}
-#main header.pageheader span.helptext:hover em {
-	display: inline
 }
 div.pageoverflow {
 	clear: left;

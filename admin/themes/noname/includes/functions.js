@@ -1,4 +1,15 @@
 jQuery(document).ready(function($) {
+	// EQUAL HEIGHT COLS
+	function equalHeight(group) {
+		var tallest = 0;
+		group.each(function() {
+			var thisHeight = $(this).height();
+			if(thisHeight > tallest) {
+				tallest = thisHeight;
+			}
+		});
+		group.height(tallest);
+	}	
 	// TOGGLE SIDEBAR
 	// Variables
 	var objMain = $('#container');
@@ -120,6 +131,10 @@ jQuery(document).ready(function($) {
 				}, 14000);
 			});
 		});
+	});
+	// Equal height 
+	jQuery(function() {
+		equalHeight($('.dashboard-box'));
 	});
 	// end
 });
