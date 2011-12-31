@@ -27,7 +27,7 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 check_login();
 $gCms = cmsms();
 $db = $gCms->GetDb();
-$lastedited = '';
+$lastedited = time();
 $error = "";
 
 $template = "";
@@ -272,37 +272,6 @@ else
 	{
 		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";	
 	}
-/*
-	if ($preview)
-	{
-		$data["title"] = "TITLE HERE";
-		$data["content"] = "Test Content";
-		$data["template_id"] = $template_id;
-		$data["stylesheet"] = $stylesheet;
-		$data["encoding"] = $encoding;
-		$data["template"] = $content;
-
-		$tmpfname = '';
-		if (is_writable($config["previews_path"]))
-		{
-			$tmpfname = tempnam($config["previews_path"], "cmspreview");
-		}
-		else
-		{
-			$tmpfname = tempnam(TMP_CACHE_LOCATION, "cmspreview");
-		}
-		$handle = fopen($tmpfname, "w");
-		fwrite($handle, serialize($data));
-		fclose($handle);
-
-//?>
-<div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('preview')?></p>
-	<iframe class="preview" name="preview" src="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
-</div>
-//<?php
-	}
-*/
 ?>
 
 <div class="pagecontainer">
