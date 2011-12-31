@@ -1715,6 +1715,12 @@ ul.sortable .placeholder {
 		background: none;
 		width: 100%
 	}
+	header .shortcuts li {
+		padding: 0 5px;
+	}
+	header .shortcuts li:last-child, header .shortcuts li.last {
+		padding: 0 0 0 5px
+	}		
 	.dashboard-box {
 		float: none;
 		width: auto;
