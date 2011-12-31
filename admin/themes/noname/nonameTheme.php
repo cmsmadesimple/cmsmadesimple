@@ -129,7 +129,7 @@ class nonameTheme extends CmsAdminThemeBase {
 			// set the module help url (this should be supplied TO the theme)
 			if ($module_help_type == 'both') {
 				$urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
-				$module_help_url = $config['admin_url'] . '/listmodules.php?' . $urlext . '&amp;action=showmodulehelp&amp;module=' . $orig_module_name;
+				$module_help_url = $config['admin_url'] . '/listmodules.php' . $urlext . '&amp;action=showmodulehelp&amp;module=' . $orig_module_name;
 				$this -> set_value('module_help_url', $module_help_url);
 			}
 		}
@@ -210,6 +210,7 @@ class nonameTheme extends CmsAdminThemeBase {
 			$marks = $this -> get_bookmarks();
 			$smarty -> assign('marks', $marks);
 		}
+	
 
 		// and some other common variables,.
 		$smarty -> assign('content', $html);
@@ -218,6 +219,13 @@ class nonameTheme extends CmsAdminThemeBase {
 		$smarty -> assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
 		$userops = cmsms() -> GetUserOperations();
 		$smarty -> assign('user', $userops -> LoadUserByID(get_userid()));
+		$smarty -> assign('lang',get_preference(get_userid(), 'default_cms_language'));
+		// how do i get to direction?
+		if (isset(cmsms() -> nls['direction']) && cmsms() -> nls['direction'] == 'rtl') {
+			$smarty -> assign('lang_dir', 'rtl');
+		} else {
+			$smarty -> assign('lang_dir', 'ltr');
+		}	
 
 		if (is_array($this -> _errors) && count($this -> _errors))
 			$smarty -> assign('errors', $this -> _errors);
