@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{$lang|truncate:'2':''}" dir="{foreach from=$lang_dir item='one'}{$one}{/foreach}">
+<html lang="{$lang|truncate:'2':''}" dir="{$lang_dir}">
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
