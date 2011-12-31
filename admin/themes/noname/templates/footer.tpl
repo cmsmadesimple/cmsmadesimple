@@ -4,6 +4,7 @@
 	<div class="footer-left">
 		<small class="copyright">Copyright &copy; <a rel="external" href="http://www.cmsmadesimple.org">CMS Made Simple&trade; {cms_version} &ldquo;{cms_versionname}&rdquo;</a></small>
 	</div>
+	{if isset($marks)}
 	<div class="footer-right cf">
 		<ul class="links">
 			<li>
@@ -20,6 +21,7 @@
 			</li>
 		</ul>
 	</div>
+	{/if}
 </footer>
 
 {/strip}
