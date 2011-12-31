@@ -1128,7 +1128,8 @@ footer#footer a:hover, footer#footer a:active {
 	margin-right: 15px;
 	max-height: 32px
 }
-#main header.pageheader span.helptext {
+#main header.pageheader span.helptext,
+.pageheader span.helptext  {
 	display: inline;
 	line-height: 63px;
 	float:right;
@@ -1137,6 +1138,21 @@ footer#footer a:hover, footer#footer a:active {
 	font-size: 12px;
 	padding-right: 20px;
 	background: url(themes/noname/images/icons/system/info-external.png) no-repeat right
+}
+.pageheader span.helptext {
+	display: inline-block;
+	line-height: 1.3;
+	background: none
+}
+.pageheader span.helptext a img{
+	margin-right: 10px
+}
+.pageheader {
+	font-size: 18px;
+	font-weight: normal;
+	margin:0;
+	padding:0;
+	color: #147fdb	
 }
 #main header.pageheader span.helptext em {
 	display: none
