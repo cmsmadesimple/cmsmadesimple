@@ -189,6 +189,7 @@ table {
  */
 
 html, body {
+	width: 100%;
 	margin: 0px;
 	padding: 0px;
 	min-height: 100%;
@@ -281,7 +282,7 @@ tr {
 }
 form {
 	margin: 0px;
-	display: inline;
+	display: inline
 }
 a:link,
 a:visited {
@@ -299,12 +300,12 @@ a.external {
 }
 .important {
 	color: red;
-	font-weight: normal;
+	font-weight: normal
 }
 .smallgrey { 
         font-weight: normal;
         font-size: 10px;
-		margin: 10px 0 0 0;
+		margin: 10px 0 0 0
 } 
 div.pagecontainer .h-inside {
 	float: left;
@@ -313,7 +314,7 @@ div.pagecontainer .h-inside {
 	margin-left: 10%;
 	width: 18em;
 	margin-bottom: 0.5em;
-	text-align: right;
+	text-align: right
 }
 .visible {
 	position: static
@@ -1135,7 +1136,7 @@ footer#footer a:hover, footer#footer a:active {
 	color: #232323;
 	font-size: 12px;
 	padding-right: 20px;
-    background: url(themes/noname/images/icons/system/info-external.png) no-repeat right
+	background: url(themes/noname/images/icons/system/info-external.png) no-repeat right
 }
 #main header.pageheader span.helptext em {
 	display: none
@@ -1452,7 +1453,7 @@ textarea.pagesmalltextarea {
 /*** tabs ***/
 #page_tabs {
 	overflow: hidden;
-	margin-top: 20px;
+	margin-top: 20px
 }
 #page_tabs div {
 	color: #585858;
@@ -1485,7 +1486,7 @@ textarea.pagesmalltextarea {
 	border-radius: 0 0 4px 4px;
 	padding: 20px 10px;
 	border: 1px solid #ddd;
-	border-top: 3px solid #ddd;
+	border-top: 3px solid #ddd
 }
 /*** topcontent - dashboard ***/
 .dashboard-box {
@@ -1610,16 +1611,41 @@ ul.sortable .placeholder {
 	}
 	#sidebar aside {
 		padding: 0
-	}
-	.spacer {
-		display: none
 	}	
 	footer#footer {
 		clear: both;
 		z-index: 999;
 		overflow: hidden;
-		position: static
+		position: absolute;
+		bottom:0
 	}	
+	#footer .footer-left {
+		margin-left: 0
+	}
+	th.pagepos,
+	td.pagepos,
+	.move {
+		padding:0;
+		max-width: 16px
+	}
+	.move,
+	table.pagetable th.pageicon,
+	table.pagetable th,
+	table.pagetable td,
+	th.pagew10,
+	th.pagew25,
+	th.pagew50,
+	th.pagew60,
+	th.pagew70,
+	td.pagew30 {
+		max-width: 30px;
+		word-wrap: break-word;
+		text-overflow: elipsis;
+		overflow: hidden
+	}
+	.checkbox {
+		padding-left: 0
+	}
 }
 @media screen and (max-device-width: 768px) {	
 	/* override our predefined min-with for smaller screens and full height stuff */
@@ -1699,7 +1725,7 @@ ul.sortable .placeholder {
 	}
 	table.pagetable {
 		max-width: 768px
-		}
+	}
 	/* position:fixed doesn't work well with mobile devices */
 	footer#footer {
 		clear: both;
