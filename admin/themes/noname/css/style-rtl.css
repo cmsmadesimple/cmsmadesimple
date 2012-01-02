@@ -927,7 +927,7 @@ nav ul#pagemenu li span.open-nav {
 	height: 35px;
 	z-index:50;
 	position: absolute;
-	right: 5px;
+	left: 5px;
 	top: 0;
 	text-indent: -9999em
 }
@@ -943,15 +943,14 @@ nav ul#pagemenu li.current:hover span.open-nav {
 }
 /*** menu style ***/
 nav ul#pagemenu li a {
-	background: url(../images/layout/sprite_norepeat.png) no-repeat;
 	color: #232323;
 	outline: 0;
-	margin-left: 10px;
+	margin-right: 10px;
 	height: 36px;
 	font-weight: bold;
 	display: block;
 	text-shadow: 1px 1px 0 #fff;
-	padding-left: 30px;
+	padding-right: 30px;
 	text-decoration: none
 }
 nav ul#pagemenu li.current li a {
@@ -975,61 +974,61 @@ nav ul#pagemenu li.current a {
 	color: #fa8004
 }
 nav ul#pagemenu li a.main {
-	background-position: -10px -484px
+	background: url(../images/layout/home-off.png) right no-repeat;
 }
 nav ul#pagemenu li a.content {
-	background-position: -10px -520px
+	background: url(../images/layout/content-off.png) right no-repeat;
 }
 nav ul#pagemenu li a.layout {
-	background-position: -10px -556px
+	background: url(../images/layout/layout-off.png) right no-repeat;
 }
 nav ul#pagemenu li a.usersgroups {
-	background-position: -10px -592px
+	background: url(../images/layout/users-off.png) right no-repeat;
 }
 nav ul#pagemenu li a.extensions {
-	background-position: -10px -628px
+	background: url(../images/layout/extensions-off.png) right no-repeat;
 }
 nav ul#pagemenu li a.siteadmin {
-	background-position: -10px -664px
+	background: url(../images/layout/admin-off.png) right no-repeat;
 }
 nav ul#pagemenu li a.myprefs {
-	background-position: -10px -700px
+	background: url(../images/layout/preferences-off.png) right no-repeat;
 }
 /* hover, active */
 nav ul#pagemenu li a.main:hover, 
 nav ul#pagemenu li.current a.main,
 nav ul#pagemenu li:hover a.main {
-	background-position: -10px -278px
+	background: url(../images/layout/home-on.png) right no-repeat;
 }
 nav ul#pagemenu li a.content:hover, 
 nav ul#pagemenu li.current a.content,
 nav ul#pagemenu li:hover a.content {
-	background-position: -10px -758px
+	background: url(../images/layout/content-on.png) right no-repeat;
 }
 nav ul#pagemenu li a.layout:hover, 
 nav ul#pagemenu li.current a.layout,
 nav ul#pagemenu li:hover a.layout {
-	background-position: -10px -790px
+	background: url(../images/layout/layout-on.png) right no-repeat;
 }
 nav ul#pagemenu li a.usersgroups:hover, 
 nav ul#pagemenu li.current a.usersgroups,
 nav ul#pagemenu li:hover a.usersgroups {
-	background-position: -10px -823px
+	background: url(../images/layout/users-on.png) right no-repeat;
 }
 nav ul#pagemenu li a.extensions:hover, 
 nav ul#pagemenu li.current a.extensions,
 nav ul#pagemenu li:hover a.extensions {
-	background-position: -10px -854px
+	background: url(../images/layout/extensions-on.png) right no-repeat;
 }
 nav ul#pagemenu li a.siteadmin:hover, 
 nav ul#pagemenu li.current a.siteadmin,
 nav ul#pagemenu li:hover a.siteadmin  {
-	background-position: -10px -921px
+	background: url(../images/layout/admin-on.png) right no-repeat;
 }
 nav ul#pagemenu li a.myprefs:hover, 
 nav ul#pagemenu li.current a.myprefs ,
 nav ul#pagemenu li:hover a.myprefs {
-	background-position: -10px -885px
+	background: url(../images/layout/preferences-on.png) right no-repeat;
 }
 /* second level & colapsed sidebar */
 nav ul#pagemenu ul {
@@ -1052,7 +1051,7 @@ nav ul#pagemenu li li a:hover,
 nav ul#pagemenu li li a:active,
 nav ul#pagemenu li.current li a:hover,
 nav ul#pagemenu li.current li a:active  {
-	padding-left: 30px
+	padding-right: 30px
 }
 nav ul#pagemenu li li.current a {
 	color: #fa8004
@@ -1122,7 +1121,7 @@ footer#footer a:hover, footer#footer a:active {
 #footer ul.links li {
 	display: block;
 	padding: 0 8px;
-	float: left
+	float: right
 }
 #footer ul.links li:last-child, #footer ul.links li.last {
 	padding: 0 0 0 8px
@@ -1135,7 +1134,7 @@ footer#footer a:hover, footer#footer a:active {
 	width: auto;
 	margin:0;
 	padding:0;
-	float: left;
+	float: right;
 	display: inline;
 	color: #147fdb
 }
@@ -1148,7 +1147,7 @@ footer#footer a:hover, footer#footer a:active {
 .pageheader span.helptext  {
 	display: inline;
 	line-height: 63px;
-	float:right;
+	float:left;
 	width: auto;
 	color: #232323;
 	font-size: 12px
@@ -1157,12 +1156,12 @@ span.helptext a.external,
 span.helptext a {
 	display: inline-block;
 	width: auto;
-	padding-right: 20px;
-	margin-left: 8px;
-	background: url(../images/icons/system/info-external.gif) no-repeat right
+	padding-left: 20px;
+	margin-right: 8px;
+	background: url(../images/icons/system/info-external.gif) no-repeat left
 }
 span.helptext a {
-	background: url(../images/icons/system/info.gif) no-repeat right
+	background: url(../images/icons/system/info.gif) no-repeat left
 }
 .pageheader span.helptext {
 	display: inline-block;
@@ -1170,7 +1169,7 @@ span.helptext a {
 	background: none
 }
 .pageheader span.helptext a img{
-	margin-right: 10px
+	margin-left: 10px
 }
 .pageheader {
 	font-size: 18px;
@@ -1227,7 +1226,7 @@ div.alert-dialog ul li {
 	margin: 10px 0
 }
 div.alert-dialog span.ui-icon {
-	float:left
+	float:right
 }
 div.dialog h3 {
 	margin:5px 0;
@@ -1235,9 +1234,9 @@ div.dialog h3 {
 	font-size: 14px
 }
 div.dialog a.bookmark {
-	padding-left: 20px;
+	padding-right: 20px;
 	line-height: 20px;
-	background: url(../images/icons/system/bookmark.png) no-repeat left
+	background: url(../images/icons/system/bookmark.png) no-repeat right
 }
 /*** tables ***/
 table th:first-child {
@@ -1261,7 +1260,7 @@ table.pagetable {
 }
 table.pagetable caption {
 	color: #585858;
-	text-align: left;
+	text-align: right;
 	font-weight: bold;
 	font-size: 12px;
 	padding: 5px 0
@@ -1271,7 +1270,7 @@ table.pagetable th {
 	text-shadow: -1px -1px 0 #000;
 	background: #232323 url(../images/layout/sprite_repeatx.png) 831px -99px repeat-x;
 	height: 45px;
-	text-align: left;
+	text-align: right;
 	white-space: nowrap;
 	padding-left: 5px;
 	padding-right: 5px
@@ -1306,7 +1305,7 @@ table.pagetable a.tooltip span {
 	text-decoration: none;
 	position: absolute;
 	background: #efefef;
-	left: 110%;
+	right: 110%;
 	bottom: 10px;
 	box-shadow: 1px 1px 3px 1px #222;
 	border: 1px solid #ddd;
@@ -1321,11 +1320,11 @@ table.pagetable th.pagepos {
 }
 .move {
 	width: 60px;
-	text-align: left;
-	padding-left: 5px
+	text-align: right;
+	padding-right: 5px
 }
 .checkbox {
-	padding-left: 10px
+	padding-right: 10px
 }
 table.pagetable th.pageicon {
 	min-width: 16px;
@@ -1387,7 +1386,7 @@ iframe.preview {
 /*** content text and forms ***/
 .pageback {
 	clear: both;
-	text-align: left
+	text-align: right
 }
 a.pageback {
 	display: inline-block;
@@ -1400,7 +1399,7 @@ a.pageback {
 }
 a.pageback .ui-icon {
 	position: absolute;
-	left: 0;
+	right: 0;
 	top: 6px
 }
 a.pageback:hover {
@@ -1423,7 +1422,7 @@ div.pagecontainer .pageinput {
 	padding: 0;
 	margin: 0;
 	width: auto;
-	text-align: left
+	text-align: right
 }
 .pageinput img {
 	line-height: 28px;
@@ -1446,7 +1445,7 @@ div.pagecontainer legend {
 	margin-bottom: 4px
 }
 .group {
-	padding-right: 3px;
+	padding-left: 3px;
 	padding-bottom: 3px;
 	padding-top: 3px;
 }
@@ -1496,12 +1495,12 @@ textarea.pagesmalltextarea {
 	background: #ddd;
 	font-weight: bold;
 	text-align: center;
-	float: left;
+	float: right;
 	cursor: pointer;
 	white-space: nowrap;
 	padding: 11px;
 	margin-top: 1px;
-	margin-right: 1px
+	margin-left: 1px
 }
 #page_tabs div img {
 	height: 14px;
@@ -1527,15 +1526,15 @@ textarea.pagesmalltextarea {
 .dashboard-box {
 	min-height: 100px;
 	width: 31.513%;
-	float: left;
+	float: right;
 	border-radius: 4px;
-	margin-right: 2.29%;
+	margin-left: 2.29%;
 	margin-bottom: 1%;
 	background: #d5d5d5 url(../images/layout/sprite_repeatx.png) 214px -339px repeat-x;
 	border: 1px solid #ddd
 }
 .dashboard-box.last {
-	margin-right: 0
+	margin-left: 0
 }
 .dashboard-box nav {
 	padding: 10px
@@ -1544,8 +1543,8 @@ textarea.pagesmalltextarea {
 	max-height: 48px;
 	padding: 20px;
 	box-shadow: inset 0px 1px 15px 1px #ddd;
-	margin-right: 10px;
-	float: left;
+	margin-left: 10px;
+	float: right;
 	border: 1px solid #ddd;
 	background: #fff
 }
@@ -1603,8 +1602,8 @@ ul.sortableList div.label {
 	word-wrap: break-word;
 	border-radius: 4px;
 	cursor: move;
-	padding: 3px 10px 3px 35px;
-	background: #eee url(../images/icons/extra/reorder.gif) no-repeat  10px 50%;
+	padding: 3px 35px 3px 10px;
+	background: #eee url(../images/icons/extra/reorder.gif) no-repeat  430px 50%;
 	text-shadow: 0 1px 0 #fff;
 	font-weight: bold;
 	color: #585858
@@ -1623,7 +1622,7 @@ ul.sortable .placeholder {
 @media screen and (max-width: 1024px) {
 	/* change tabs to full width on smaller screen size */
 	#page_tabs div {
-		text-align: left;
+		text-align: right;
 		float: none;
 		border-radius: 0;
 		margin-right: 0
