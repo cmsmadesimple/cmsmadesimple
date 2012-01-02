@@ -10,7 +10,7 @@ $theme=get_preference(get_userid(),"admintheme",CmsAdminThemeBase::GetDefaultthe
 $style="style";
 
 $gCms = cmsms();
-if (isset($gCms->nls['direction']) && $gCms->nls['direction'] == 'rtl')
+if (isset ($gCms -> nls['direction'][get_preference(get_userid(), 'default_cms_language')]) && ($gCms -> nls['direction'][get_preference(get_userid(), 'default_cms_language')]) == 'rtl')
   {
     $style.="-rtl";
   }

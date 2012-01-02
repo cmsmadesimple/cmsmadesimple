@@ -11,11 +11,7 @@
 		<meta name="HandheldFriendly" content="True"/>
 		<link rel="shortcut icon" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
 		<link rel="bookmark" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
-		{if $lang_dir == 'rtl'}
-		<link rel="stylesheet" href="{$config.admin_url}/themes/noname/css/style-rtl.css?{$secureparam}" />	
-		{else}
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
-		{/if}	
 		<!-- learn IE html5 -->
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>

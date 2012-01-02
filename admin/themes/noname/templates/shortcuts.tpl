@@ -6,7 +6,7 @@
 		<li class="help">
 			{if isset($module_help_url)}
 			<a href="{$module_help_url}" title="{'module_help'|lang}">{'module_help'|lang}</a>
-			{/if}
+		{/if}
 		</li>
 		{/if}
 		<li class="settings">
