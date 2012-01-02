@@ -11,7 +11,11 @@
 		<meta name="HandheldFriendly" content="True"/>
 		<link rel="shortcut icon" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
 		<link rel="bookmark" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
+		{if $lang_dir == 'rtl'}
+		<link rel="stylesheet" href="{$config.admin_url}/themes/noname/css/style-rtl.css?{$secureparam}" />	
+		{else}
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
+		{/if}	
 		<!-- learn IE html5 -->
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -27,7 +31,7 @@
 		<!-- custom jQueryUI Theme 1.8.16 see style.css for color reference //-->
 		<link href="{$config.admin_url}/themes/noname/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />		
 	</head>
-	<body##BODYSUBMITSTUFFGOESHERE##>
+	<body##BODYSUBMITSTUFFGOESHERE## lang="{$lang|truncate:'2':''}">
 		<!-- start container -->
 		<div id="container" class="sidebar-on">
 			<!-- start header -->

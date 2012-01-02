@@ -221,8 +221,9 @@ class nonameTheme extends CmsAdminThemeBase {
 		$smarty -> assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
 		$userops = cmsms() -> GetUserOperations();
 		$smarty -> assign('user', $userops -> LoadUserByID(get_userid()));
+		// get user selected language
 		$smarty -> assign('lang',get_preference(get_userid(), 'default_cms_language'));
-		// how do i get to direction?
+		// if direction is set in language file
 		if (isset (cmsms() -> nls['direction'][get_preference(get_userid(), 'default_cms_language')])) {
 			$smarty -> assign('lang_dir', cmsms() -> nls['direction'][get_preference(get_userid(), 'default_cms_language')]);
 		} else {
