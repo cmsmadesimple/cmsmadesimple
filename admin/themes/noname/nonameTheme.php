@@ -210,7 +210,9 @@ class nonameTheme extends CmsAdminThemeBase {
 			$marks = $this -> get_bookmarks();
 			$smarty -> assign('marks', $marks);
 		}
-	
+
+		$headtext = $this->get_value('headertext');
+		$smarty->assign('headertext',$headtext);
 
 		// and some other common variables,.
 		$smarty -> assign('content', $html);

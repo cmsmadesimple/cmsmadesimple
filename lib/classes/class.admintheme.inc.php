@@ -913,7 +913,7 @@ EOT;
 	{
 		$this->DisplayDocType();
 		$this->DisplayHTMLStartTag();
-		$headtext = cms_utils::get_app_data('theme_headertext');
+		$headtext = $this->get_value('headertext');
 		$this->DisplayHTMLHeader(false, $headtext);
 		$this->DisplayBodyTag();
 		$this->DisplayTopMenu();

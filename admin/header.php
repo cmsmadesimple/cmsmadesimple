@@ -13,11 +13,6 @@ $gCms = cmsms();
 $config = $gCms->GetConfig();
 $userid = get_userid();
 
-if( isset($headtext) && $headtext != '' )
-  {
-    cms_utils::set_app_data('theme_headertext',$headtext);
-  }
-
 if (isset($USE_THEME) && $USE_THEME == false)
 {
   //echo '<!-- admin theme disabled -->';
@@ -27,6 +22,12 @@ else
   debug_buffer('before theme load');
   $themeObject = cms_utils::get_theme_object();
   debug_buffer('after theme load');
+
+  if( isset($headtext) && $headtext != '' )
+    {
+      $themeObject->set_value('headertext',$headtext);
+    }
+
 
   // Display notification stuff from modules
   // should be controlled by preferences or something

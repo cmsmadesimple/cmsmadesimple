@@ -23,6 +23,7 @@
 		<script src="{$config.admin_url}/themes/noname/includes/jquery.cookie.min.js"></script>
 		<script src="{$config.admin_url}/themes/noname/includes/standard.js"></script>
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
+	 	{$headertext|default:''}
 		<!-- custom jQueryUI Theme 1.8.16 see style.css for color reference //-->
 		<link href="{$config.admin_url}/themes/noname/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />		
 	</head>
