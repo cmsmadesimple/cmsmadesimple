@@ -39,7 +39,7 @@ if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 }
 
 #Do any header replacements (this is for WYSIWYG stuff)
-$headertext = cms_utils::get_app_data('theme_headertext');
+$headertext = '';
 $formtext = '';
 $formsubmittext = '';
 $bodytext = '';

@@ -80,6 +80,7 @@ class cms_variables implements ArrayAccess
 
   public function offsetExists($key)
   {
+    if( $key == 'admintheme' ) return TRUE; // special case
     return isset($this->_data[$key]);
   }
 
@@ -87,6 +88,7 @@ class cms_variables implements ArrayAccess
   {
     if( $key == 'admintheme' )
       {
+	// special case, for compatibility.
 	return cms_utils::get_theme_object();
       }
 

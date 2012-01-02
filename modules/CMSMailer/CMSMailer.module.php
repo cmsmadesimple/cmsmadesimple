@@ -65,7 +65,7 @@ class CMSMailer extends CMSModule
    ---------------------------------------------------------*/
   function GetVersion()
   {
-    return '2.0.2';
+    return '2.0.3';
   }
 
 
@@ -319,13 +319,14 @@ class CMSMailer extends CMSModule
     $this->the_mailer->SMTPAuth = $this->GetPreference('smtpauth');
     $this->the_mailer->Username = $this->GetPreference('username');
     $this->the_mailer->Password = $this->GetPreference('password');
+    $this->the_mailer->SMTPSecure = $this->GetPreference('secure');
+    $this->the_mailer->ErrorInfo = '';
     $this->the_mailer->ClearAddresses();
     $this->the_mailer->ClearAttachments();
     $this->the_mailer->ClearCustomHeaders();
     $this->the_mailer->ClearBCCs();
     $this->the_mailer->ClearCCs();
     $this->the_mailer->ClearReplyTos();
-    $this->the_mailer->SMTPSecure = $this->GetPreference('secure');
     $charset = $this->GetPreference('charset','utf-8');
     if( $charset == '' ) $charset = 'utf-8';
     $this->SetCharSet($charset);

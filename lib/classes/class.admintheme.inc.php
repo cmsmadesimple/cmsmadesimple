@@ -550,9 +550,8 @@ EOT;
 <![endif]-->
 EOT;
 		}
-		$str .= "<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->\n";
 		$str .= $this->OutputHeaderJavascript()."\n";
-		
+		$str .= "<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->\n";
 		ob_start(); 
 		$tmp1 = $this->ThemeHeader();
 		$tmp2 = ob_get_contents();
@@ -914,7 +913,7 @@ EOT;
 	{
 		$this->DisplayDocType();
 		$this->DisplayHTMLStartTag();
-		$headtext = $this->get_value('headtext');
+		$headtext = cms_utils::get_app_data('theme_headertext');
 		$this->DisplayHTMLHeader(false, $headtext);
 		$this->DisplayBodyTag();
 		$this->DisplayTopMenu();

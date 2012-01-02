@@ -105,7 +105,6 @@ else
 
 if( !isset($USE_THEME) || $USE_THEME != false )
   {
-    $themeObject->set_value('headtext',$headtext);
     $params = GetModuleParameters($id);
     if (FALSE == empty($params['module_message']))
       {
