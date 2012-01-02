@@ -221,11 +221,12 @@ class nonameTheme extends CmsAdminThemeBase {
 		$smarty -> assign('user', $userops -> LoadUserByID(get_userid()));
 		$smarty -> assign('lang',get_preference(get_userid(), 'default_cms_language'));
 		// how do i get to direction?
-		if (isset(cmsms() -> nls['direction']) && cmsms() -> nls['direction'] == 'rtl') {
-			$smarty -> assign('lang_dir', 'rtl');
+		if (isset (cmsms() -> nls['direction'][get_preference(get_userid(), 'default_cms_language')])) {
+			$smarty -> assign('lang_dir', cmsms() -> nls['direction'][get_preference(get_userid(), 'default_cms_language')]);
 		} else {
 			$smarty -> assign('lang_dir', 'ltr');
-		}	
+		}
+
 
 		if (is_array($this -> _errors) && count($this -> _errors))
 			$smarty -> assign('errors', $this -> _errors);
