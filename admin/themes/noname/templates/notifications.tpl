@@ -9,7 +9,7 @@
 		<ul>
 		{foreach from=$items item='one'}
 			<li>
-				{if !empty($one->module)}<strong><span class="ui-icon ui-icon-alert"></span>{$one->module}: </strong><br />{/if}
+				{if !empty($one->module)}<p class="ui-corner-all {if $one->priority == '1'}ui-state-error red{elseif $one->priority == '2'}ui-state-highlight orange{else}ui-state-highlightblue{/if}"><strong><span class="ui-icon {if $one->priority < 3}ui-icon-alert{else}ui-icon-info{/if}"></span>{$one->module}: </strong></p>{/if}
 				{$one->html}
 			</li>
 		{/foreach}	

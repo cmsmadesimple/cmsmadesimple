@@ -298,6 +298,9 @@ a.external {
 	background: url(themes/noname/images/icons/system/external-small.png) no-repeat right;
 	padding-right: 20px
 }
+.alert-dialog a {
+	text-decoration: underline
+}
 .important {
 	color: red;
 	font-weight: normal
@@ -436,6 +439,15 @@ textarea {
 	overflow: auto
 }
 /* Notification messages */
+.orange {
+	color: #e6c26e
+}
+.red {
+	color: #ae432e
+}
+.blue {
+	color: #058dc7
+}
 .message,
 .pagewarning,
 .pagemcontainer,
@@ -892,6 +904,9 @@ header .shortcuts li.favorites a {
 #sidebar .alert-dialog {
 	visibility: hidden;
 	text-indent: -9999em
+}
+#sidebar .alert-dialog strong {
+	padding: 4px 0
 }
 /* main navigation */
 nav ul#pagemenu {

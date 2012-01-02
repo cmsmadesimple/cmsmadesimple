@@ -12,8 +12,6 @@
 		<link rel="shortcut icon" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
 		<link rel="bookmark" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
-		<!-- custom jQueryUI Theme 1.8.16 see style.css for color reference //-->
-		<link href="{$config.admin_url}/themes/noname/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 		<!-- learn IE html5 -->
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -22,10 +20,11 @@
 		<script src="{$config.admin_url}/themes/noname/includes/jquery-ui-1.8.16.custom.min.js"></script> 
 		<script src="{root_url}/lib/jquery/js/jquery.ui.nestedSortable-1.3.4.js"></script>
 		<script src="{root_url}/lib/jquery/js/jquery.json-2.2.js"></script> 
-		<script src="{$config.admin_url}/themes/noname/includes/jquery.cookie.js"></script>
+		<script src="{$config.admin_url}/themes/noname/includes/jquery.cookie.min.js"></script>
 		<script src="{$config.admin_url}/themes/noname/includes/standard.js"></script>
-		<script src="{$config.admin_url}/themes/noname/includes/functions.js"></script>		
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
+		<!-- custom jQueryUI Theme 1.8.16 see style.css for color reference //-->
+		<link href="{$config.admin_url}/themes/noname/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />		
 	</head>
 	<body##BODYSUBMITSTUFFGOESHERE##>
 		<!-- start container -->
