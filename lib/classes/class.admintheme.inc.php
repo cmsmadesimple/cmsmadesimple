@@ -955,6 +955,19 @@ EOT;
 		$this->DisplaySectionMenuDivEnd();
 	}
 
+	public function do_login($params)
+	{
+		// by default we're gonna grab the theme name
+		foreach( $params as $key => $val )
+		{
+			$$key = $val;
+		}
+		$config = cmsms()->GetConfig();
+		$config = cmsms()->GetConfig();
+		$fn = $config['admin_path']."/themes/".$this->themeName."/login.php";
+		include($fn);
+	}
+
 	public function postprocess($html)
 	{
 		return $html;

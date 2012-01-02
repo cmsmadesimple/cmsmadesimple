@@ -564,7 +564,7 @@ abstract class CmsAdminThemeBase
 													'description'=>lang('myaccountdescription'),'show_in_menu'=>true),
 								 'preferences'=>array('url'=>'editprefs.php','parent'=>'myprefs',
 													  'title'=>$this->_FixSpaces(lang('adminprefs')),
-													  'description'=>lang('adminprefsdescription'),'show_in_menu'=>true),
+													  'description'=>lang('adminprefsdescription'),'show_in_menu'=>$this->HasPerm('sitePrefPerms')),
 								 'managebookmarks'=>array('url'=>'listbookmarks.php','parent'=>'myprefs',
 														  'title'=>$this->_FixSpaces(lang('managebookmarks')),
 														  'description'=>lang('managebookmarksdescription'),'show_in_menu'=>true),
@@ -1162,7 +1162,7 @@ abstract class CmsAdminThemeBase
 	{
 		if( is_object(self::$_instance) ) return self::$_instance;
 		
-		$name = get_preference(get_userid(),'admintheme',self::GetDefaultTheme());
+		$name = get_preference(get_userid(FALSE),'admintheme',self::GetDefaultTheme());
 		if( class_exists($name) )
 			{
 				self::$_instance = new $name;
@@ -1176,7 +1176,7 @@ abstract class CmsAdminThemeBase
 				if( file_exists($fn) )
 					{
 						include_once($fn);
-						self::$_instance = new $themeObjName($gCms,get_userid(),$name);
+						self::$_instance = new $themeObjName($gCms,get_userid(FALSE),$name);
 					}
 			}
 		return self::$_instance;
@@ -1348,6 +1348,13 @@ abstract class CmsAdminThemeBase
 	 */
 	abstract public function do_toppage($section_name);
 
+	/**
+	 * An abstract function for processing the login form.
+	 *
+	 * @return string html contents for the login page.
+	 */
+
+	abstract public function do_login($params);
 	/**
 	 * An abstract function for processing the content area of the page.
 	 * Many admin themes will do most of their work in this method (passing the html contents through a smarty template etc).

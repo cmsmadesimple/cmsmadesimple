@@ -291,19 +291,23 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 }
 
 // Language shizzle
-//header("Content-Encoding: " . get_encoding());
+cms_admin_sendheaders();
 header("Content-Language: " . $current_language);
-header("Content-Type: text/html; charset=" . get_encoding());
 
 //CHANGED
-$theme=get_site_preference('logintheme', 'default');
-//echo "theme:$theme";
 debug_buffer('debug is:' . $error);
-if (file_exists(dirname(__FILE__)."/themes/$theme/login.php")) {
-	include(dirname(__FILE__)."/themes/$theme/login.php");
-} else {
-	include(dirname(__FILE__)."/themes/default/login.php");
-}
+$themeObject = cms_utils::get_theme_object();
+
+$vars = array('error'=>$error);
+if( isset($warningLogin) ) $vars['warningLogin'] = $warningLogin;
+if( isset($acceptLogin) ) $vars['acceptLogin'] = $acceptLogin;
+if( isset($changepwhash) ) $vars['changepwhash'] = $changepwhash;
+$themeObject->do_login($vars);
+// if (file_exists(dirname(__FILE__)."/themes/$theme/login.php")) {
+// 	include(dirname(__FILE__)."/themes/$theme/login.php");
+// } else {
+// 	include(dirname(__FILE__)."/themes/default/login.php");
+// }
 //STOP
 ?>
 

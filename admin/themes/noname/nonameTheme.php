@@ -160,6 +160,17 @@ class nonameTheme extends CmsAdminThemeBase {
 		echo $_contents;
 	}
 
+
+	public function do_login($params) 
+	{
+	  // by default we're gonna grab the theme name
+	  $config = cmsms()->GetConfig();
+	  global $error,$warningLogin,$acceptLogin,$changepwhash;
+	  $config = cmsms()->GetConfig();
+	  $fn = $config['admin_path']."/themes/".$this->themeName."/login.php";
+	  include($fn);
+	}
+
 	public function postprocess($html) {
 		$smarty = cmsms() -> GetSmarty();
 		$otd = $smarty -> template_dir;
