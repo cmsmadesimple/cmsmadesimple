@@ -1051,7 +1051,7 @@ final class ModuleOperations
 	  if( is_object($obj) && !empty($version) )
 	  {
 		  $res = version_compare($obj->GetVersion(),$version);
-		  if( $res < 1 OR $res === FALSE ) 
+		  if( $res < 0 OR $res === FALSE ) 
 			  $obj = null;
 	  }
 	  return $obj;
