@@ -1619,7 +1619,7 @@ ul.sortable .placeholder {
 	border: 2px dashed #ddd;
 	background: #f2f2f2
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1024px) and (min-device-width: 768px) {
 	/* change tabs to full width on smaller screen size */
 	#page_tabs div {
 		text-align: left;
@@ -1686,7 +1686,7 @@ ul.sortable .placeholder {
 		padding-left: 0
 	}
 }
-@media screen and (max-device-width: 768px) {	
+@media screen and (max-width: 768px) {	
 	/* override our predefined min-with for smaller screens and full height stuff */
 	body {
 		margin: 0;
