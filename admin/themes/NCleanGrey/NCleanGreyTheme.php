@@ -135,6 +135,7 @@ class NCleanGreyTheme extends AdminTheme
 
     function DisplayTopMenu()
     {
+      $config = cmsms()->GetConfig();	
       $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 	echo '<div id="ncleangrey-container">';
 	//LOGO
@@ -159,7 +160,7 @@ class NCleanGreyTheme extends AdminTheme
 		echo '<div class="breadcrumbs">';
      	//ICON VIEW SITE
 	echo "\n\t<div id=\"nav-icons_all\"><ul id=\"nav-icons\">\n";
-	echo "\n\t<li class=\"viewsite-icon\"><a  rel=\"external\" title=\"".lang('viewsite')."\"  href=\"".$this->_viewsite_url."\">".lang('viewsite')."</a></li>\n";
+	echo "\n\t<li class=\"viewsite-icon\"><a  rel=\"external\" title=\"".lang('viewsite')."\"  href=\"".$config['root_url']."\">".lang('viewsite')."</a></li>\n";
 	//ICON LAGOUT
 	echo "\n\t<li class=\"logout-icon\"><a  title=\"".lang('logout')."\"  href=\"logout.php\">".lang('logout')."</a></li>\n";
 	echo "\n\t</ul></div>\n";     

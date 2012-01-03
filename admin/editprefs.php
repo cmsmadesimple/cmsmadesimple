@@ -27,11 +27,13 @@ $thisurl = basename(__FILE__) . $urlext;
 
 check_login();
 $userid = get_userid();
+/* let editor edit suser ettings
 $access = check_permission($userid, 'Modify Site Preferences');
 if (!$access) {
 	die('Permission Denied');
 	return;
 }
+*/
 
 $gCms = cmsms();
 $db = $gCms -> GetDb();
