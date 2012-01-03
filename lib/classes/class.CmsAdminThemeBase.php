@@ -1122,6 +1122,9 @@ abstract class CmsAdminThemeBase
 		if( is_array($tmp) && count($tmp) ) 
 			{
 				$tmp = array_keys($tmp);
+				$logintheme = get_site_preference('logintheme');
+				if( $logintheme && in_array($logintheme,$tmp) )
+					return $logintheme;
 				return $tmp[0];
 			}
 	}
@@ -1156,13 +1159,14 @@ abstract class CmsAdminThemeBase
 	 * A function to retrieve the global admin theme object.
 	 * This method will create the admin theme object if has not yet been created.  It will read the cms preferences and cross reference with available themes.
 	 *
+	 * @param  String optional theme name.
 	 * @return object Reference to the initialized admin theme.
 	 */
-	static public function &GetThemeObject()
+	static public function &GetThemeObject($name = '')
 	{
 		if( is_object(self::$_instance) ) return self::$_instance;
 		
-		$name = get_preference(get_userid(FALSE),'admintheme',self::GetDefaultTheme());
+		if( !$name ) $name = get_preference(get_userid(FALSE),'admintheme',self::GetDefaultTheme());
 		if( class_exists($name) )
 			{
 				self::$_instance = new $name;
@@ -1177,6 +1181,11 @@ abstract class CmsAdminThemeBase
 					{
 						include_once($fn);
 						self::$_instance = new $themeObjName($gCms,get_userid(FALSE),$name);
+					}
+				else
+					{
+						$res = null;
+						return $res;
 					}
 			}
 		return self::$_instance;

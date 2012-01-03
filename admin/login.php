@@ -296,7 +296,8 @@ header("Content-Language: " . $current_language);
 
 //CHANGED
 debug_buffer('debug is:' . $error);
-$themeObject = cms_utils::get_theme_object();
+$themeName = CmsAdminThemeBase::GetDefaultTheme();
+$themeObject = CmsAdminThemeBase::GetThemeObject($themeName);
 
 $vars = array('error'=>$error);
 if( isset($warningLogin) ) $vars['warningLogin'] = $warningLogin;
