@@ -9,18 +9,18 @@
 		<meta name="robots" content="noindex, nofollow" />
 		<meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; user-scalable=no" />
 		<meta name="HandheldFriendly" content="True"/>
-		<link rel="shortcut icon" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
-		<link rel="bookmark" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
+		<link rel="shortcut icon" href="{$config.admin_url}/themes/OneEleven/images/favicon/cmsms-favicon.ico"/>
+		<link rel="bookmark" href="{$config.admin_url}/themes/OneEleven/images/favicon/cmsms-favicon.ico"/>
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
 		<!-- learn IE html5 -->
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-		{cms_jquery append="`$config.admin_url`/themes/noname/includes/jquery.cookie.min.js,`$config.admin_url`/themes/noname/includes/standard.js"}
+		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/jquery.cookie.min.js,`$config.admin_url`/themes/OneEleven/includes/standard.js"}
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
 		<!-- custom jQueryUI Theme 1.8.16 see style.css for color reference //-->
-		<link href="{$config.admin_url}/themes/noname/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />		
+		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />		
 	</head>
 	<body##BODYSUBMITSTUFFGOESHERE## lang="{$lang|truncate:'2':''}">
 		<!-- start container -->
@@ -31,7 +31,7 @@
 				<div class="header-top">
 					<!-- logo -->
 					<div class="cms-logo">
-						<img src="{$config.admin_url}/themes/noname/images/layout/cmsms-logo.jpg" width="205" height="69" alt="{sitename} - {$pagetitle}" title="{sitename}" />
+						<img src="{$config.admin_url}/themes/OneEleven/images/layout/cmsms-logo.jpg" width="205" height="69" alt="{sitename} - {$pagetitle}" title="{sitename}" />
 					</div>
 					<!-- title -->
 					<span class="admin-title"> {'adminpaneltitle'|lang} - {sitename} - {$pagetitle} </span>

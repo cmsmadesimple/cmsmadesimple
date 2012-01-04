@@ -9,21 +9,21 @@
 		<meta name="robots" content="noindex, nofollow" />
 		<meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; user-scalable=no" />
 		<meta name="HandheldFriendly" content="True"/>
-		<link rel="shortcut icon" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
-		<link rel="bookmark" href="{$config.admin_url}/themes/noname/images/layout/favicon.ico"/>
+		<link rel="shortcut icon" href="{$config.admin_url}/themes/OneEleven/images/favicon/cmsms-favicon.ico"/>
+		<link rel="bookmark" href="{$config.admin_url}/themes/OneEleven/images/favicon/cmsms-favicon.ico"/>
 		<link rel="stylesheet" href="loginstyle.php" />
 		<!-- learn IE html5 -->
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-		{cms_jquery exclude="jquery.ui.nestedSortable-1.3.4.js,jquery.json-2.2.js" append="`$config.admin_url`/themes/noname/includes/login.js"}
+		{cms_jquery exclude="jquery.ui.nestedSortable-1.3.4.js,jquery.json-2.2.js" append="`$config.admin_url`/themes/OneEleven/includes/login.js"}
 	</head>
 	<body id="login">
 		<div id="wrapper">
 			<div class="login-container">
 				<div class="login-box cf"{if isset($error)} id="error"{/if}>
 					<div class="logo">
-						<img src="{$config.admin_url}/themes/noname/images/layout/cmsms_login_logo.png" width="180" height="36" alt="CMS Made Simple&trade;" />
+						<img src="{$config.admin_url}/themes/OneEleven/images/layout/cmsms_login_logo.png" width="180" height="36" alt="CMS Made Simple&trade;" />
 					</div>
 					<div class="info-wrapper open">
 					<aside class="info">
@@ -35,7 +35,7 @@
 						</p>					
 						<p class="warning">{'warn_admin_ipandcookies'|lang}</p>
 					</aside>
-					<a href="#" class="toggle-info">Open/Close</a>
+					<a href="#" class="toggle-info">{'open'|lang}/{'close'|lang}</a>
 					</div>					
 					<header>
 						<h1>{'logintitle'|lang}</h1>
@@ -85,7 +85,7 @@
 						<div class="warning message">
 							{'passwordchange'|lang}
 						</div>
-					{/if} <a href="{root_url}" title="{'goto'|lang} {sitename}"> <img class="goback" width="16" height="16" src="{$config.admin_url}/themes/noname/images/layout/goback.png" alt="{'goto'|lang} {sitename}" /> </a>
+					{/if} <a href="{root_url}" title="{'goto'|lang} {sitename}"> <img class="goback" width="16" height="16" src="{$config.admin_url}/themes/OneEleven/images/layout/goback.png" alt="{'goto'|lang} {sitename}" /> </a>
 					<p class="forgotpw">
 						<a href="login.php?forgotpw=1">{'lostpw'|lang}</a>
 					</p>

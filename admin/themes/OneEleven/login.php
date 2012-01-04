@@ -1,7 +1,7 @@
 <?php
 #-------------------------------------------------------------------------
-# Noname set Theme - An admin theme for CMS Made Simple
-# (c)2012 by Author: Goran Ilic (ja@ich-mach-das.at) http://dev.cmsmadesimple.org/users/uniqu3
+# OneEleven- An admin theme for CMS Made Simple
+# (c) 2012 by Author: Goran Ilic (ja@ich-mach-das.at) http://dev.cmsmadesimple.org/users/uniqu3
 #
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)

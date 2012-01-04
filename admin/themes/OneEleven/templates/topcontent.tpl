@@ -1,7 +1,7 @@
 {strip}
 
 {foreach from=$nodes item='node' name='box'}
-{assign var='icon' value="themes/noname/images/icons/topfiles/`$node.name`"}
+{assign var='icon' value="themes/OneEleven/images/icons/topfiles/`$node.name`"}
 {assign var='module' value="../modules/`$node.name`/images/icon"}
 	{if $node.show_in_menu && $node.url && $node.title}
 	<div class="dashboard-box{if $smarty.foreach.box.index % 3 == 2} last{/if}">
@@ -16,7 +16,7 @@
 			{elseif file_exists($icon|cat:'.gif')}
 			<img src="{$icon}.gif" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />
 			{else}
-			<img src="themes/noname/images/icons/topfiles/modules.png" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />	
+			<img src="themes/OneEleven/images/icons/topfiles/modules.png" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />	
 			{/if}
 			</a>
 			<h3>
