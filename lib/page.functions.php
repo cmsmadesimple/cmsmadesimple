@@ -787,7 +787,7 @@ function create_vanilla_textarea($text, $name, $classname = '', $id = '', $encod
  *
  * @internal
  * @access private
- * @param boolean Wether the currently selected wysiwyg area should be enabled (depends on user, and site preferences
+ * @param boolean Wether or not we are enabling a wysiwyg.  If false, and forcewysiwyg is not empty then a syntax area is used.
  * @param string  The contents of the text area
  * @param string  The name of the text area
  * @param string  An optional class name
@@ -796,20 +796,19 @@ function create_vanilla_textarea($text, $name, $classname = '', $id = '', $encod
  * @param string  Optional style information
  * @param integer Width (the number of columns) (CSS can and will override this)
  * @param integer Hieght (the number of rows) (CSS can and will override this)
- * @param string  A flag to indicate that the wysiwyg should be forced to a different type independant of user settings
- * @param string  The name of the syntax hilighter to use (if empty it is assumed that a wysiwyg text area is requested instead of a syntax hiliter)
+ * @param string  Optional name of the syntax hilighter or wysiwyg to use.  If empty, preferences indicate which a syntax editor or wysiwyg should be used.
+ * @param string  Optional name of the language used.  If non empty it indicates that a syntax highlihter will be used.
  * @param string  Optional additional text to include in the textarea tag
- * @param string  Optional language string to pass to syntax highlighter (if empty wantedsyntax is used).
  * @return string
  */
-function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '', $language = '')
+function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
 {
   // todo: rewrite me with var args... to accept a numeric array of arguments, or a hash.
   $gCms = cmsms();
   $result = '';
   $uid = get_userid(false);
 
-  if ($enablewysiwyg == true)
+  if ($enablewysiwyg == true || $forcewysiwyg)
     {
       $module = cms_utils::get_wysiwyg_module($forcewysiwyg);
       if( $module )
@@ -820,11 +819,11 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
 
   if( !$result && $wantedsyntax )
     {
-      $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($wantedsyntax);
+      // here we should get a list of installed/available modules.
+      $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($forcewysiwyg);
       if( $module )
 	{
-	  if( $language == '' ) $language = $wantedsyntax;
-	  $result = $module->SyntaxTextArea($name,$language,$width,$height,$encoding,$text,$addtext);
+	  $result = $module->SyntaxTextArea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
 	}
     }
 
