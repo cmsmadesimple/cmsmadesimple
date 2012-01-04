@@ -1074,31 +1074,37 @@ final class ModuleOperations
   /**
    * Return the current syntax highlighter module object
    * 
-   * This method retrieves the current user preference for the syntax hightlighter module.  If this preference is set, and indicates a 
-   * valid syntax highlighter module, it is loaded and the object returned.
+   * This method retrieves the specified syntax highlighter module, or uses the current current user preference for the syntax hightlighter module
+   * for a name.
    *
+   * @param string allows bypassing the automatic detection process and specifying a wysiwyg module.
    * @return null on failure, an object of type CmsModule On success.
    * @since 1.10
    */
-  public function &GetSyntaxHighlighter()
+  public function &GetSyntaxHighlighter($module_name = '')
   {
-	  $res = null;
-	  global $CMS_ADMIN_PAGE;
-	  if( !isset($CMS_ADMIN_PAGE) ) return $res;
+	  $obj = null;
+	  if( !$module_name )
+		  {
+			  global $CMS_ADMIN_PAGE;
+			  if( isset($CMS_ADMIN_PAGE) )
+				  {
+					  $module_name = get_preference(get_userid(FALSE),'syntaxhighlighter');
+				  }
+		  }
 
-	  $module_name = get_preference(get_userid(FALSE),'syntaxhighlighter');
-	  if( !$module_name ) return $res;
+	  if( !$module_name ) return $obj;
 
 	  $obj = $this->get_module_instance($module_name);
-	  if( !is_object($obj) ) return $res;
+	  if( !$obj ) return $obj;
+	  if( !$obj->IsSyntaxHighlighter() ) return $obj;
 
-	  if( !$obj->IsSyntaxHighlighter() ) return $res;
 	  return $obj;
   }
 
 
   /**
-   * Return the current syntax wysiwyg module object
+   * Return the current wysiwyg module object
    * 
    * This method makes an attempt to find the appropriate wysiwyg module given the current request context
    * and admin user preference.
@@ -1106,6 +1112,7 @@ final class ModuleOperations
    * @param string allows bypassing the automatic detection process and specifying a wysiwyg module.
    * @return null on failure, an object of type CmsModule On success.
    * @since 1.10
+   * @deprecated
    */
   public function &GetWYSIWYGModule($module_name = '')
   {
@@ -1137,7 +1144,7 @@ final class ModuleOperations
   /**
    * Return the current search module object
    *
-   * This method returns module object for the currently selected search module.
+   * This method returns module object for the currently selected search module.  
    *
    * @return null on failure, an object of type CmsModule on success
    * @since 1.10
@@ -1155,34 +1162,15 @@ final class ModuleOperations
 
 
   /**
-   * Return the current syntax highlighter module object
+   * Alias for the GetSyntaxHiglighter method.
    * 
-   * This method retrieves the current user preference for the syntax hightlighter module.  If this preference is set, and indicates a 
-   * valid syntax highlighter module, it is loaded and the object returned.
-   *
-   * @param string allows bypassing the automatic detection process and specifying a wysiwyg module.
-   * @return null on failure, an object of type CmsModule On success.
+   * @see GetSyntaxHighlighter
+   * @deprecated.
    * @since 1.10
    */
   public function &GetSyntaxModule($module_name = '')
   {
-	  global $CMS_ADMIN_PAGE;
-	  $obj = null;
-	  if( !$module_name )
-		  {
-			  if( isset($CMS_ADMIN_PAGE) )
-				  {
-					  $module_name = get_preference(get_userid(FALSE),'syntaxhighlighter');
-				  }
-		  }
-
-	  if( !$module_name ) return $obj;
-
-	  $obj = $this->get_module_instance($module_name);
-	  if( !$obj ) return $obj;
-	  if( !$obj->IsSyntaxHighlighter() ) return $obj;
-
-	  return $obj;
+	  return $this->GetSyntaxHighlighter($module_name);
   }
 
 

@@ -234,9 +234,6 @@ class cms_utils
    * A convenient method to get the currently selected syntax highlighter
    * This is a wrapper around a similar function in the ModuleOperations class.
    *
-   * This method will return the currently selected frontend wysiwyg for frontend requests (or null if none is selected)
-   * For admin requests this method will return the users currently selected wysiwyg module, or null.
-   *
    * @since 1.10
    * @author calguy1000
    * @return object or null

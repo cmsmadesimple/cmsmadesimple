@@ -799,10 +799,12 @@ function create_vanilla_textarea($text, $name, $classname = '', $id = '', $encod
  * @param string  A flag to indicate that the wysiwyg should be forced to a different type independant of user settings
  * @param string  The name of the syntax hilighter to use (if empty it is assumed that a wysiwyg text area is requested instead of a syntax hiliter)
  * @param string  Optional additional text to include in the textarea tag
+ * @param string  Optional language string to pass to syntax highlighter (if empty wantedsyntax is used).
  * @return string
  */
-function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
+function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '', $language = '')
 {
+  // todo: rewrite me with var args... to accept a numeric array of arguments, or a hash.
   $gCms = cmsms();
   $result = '';
   $uid = get_userid(false);
@@ -818,10 +820,11 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
 
   if( !$result && $wantedsyntax )
     {
-      $module = cms_utils::get_syntax_highlighter_module();
+      $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($wantedsyntax);
       if( $module )
 	{
-	  $result = $module->SyntaxTextArea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
+	  if( $language == '' ) $language = $wantedsyntax;
+	  $result = $module->SyntaxTextArea($name,$language,$width,$height,$encoding,$text,$addtext);
 	}
     }
 
