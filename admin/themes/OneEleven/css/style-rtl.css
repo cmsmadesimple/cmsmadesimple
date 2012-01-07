@@ -251,6 +251,9 @@ ul, ol {
 #main li {
 	line-height: 1.5
 }
+#main ol li{
+	list-style:decimal
+}
 h1,
 h2,
 h3,

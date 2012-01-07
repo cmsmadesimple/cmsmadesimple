@@ -251,6 +251,9 @@ ul, ol {
 #main li {
 	line-height: 1.5
 }
+#main ol li{
+	list-style:decimal
+}
 h1,
 h2,
 h3,
@@ -516,6 +519,10 @@ aside.message,
 	margin:0;
 	left: 35%
 }
+.pageerrorcontainer ul {
+	border: none;
+	background: none
+}
 /* close notification */
 .close-warning {
 	float:right;
@@ -585,6 +592,7 @@ header .header-bottom {
 }
 header .welcome {
 	width: 250px;
+	overflow: hidden;
 	float: left;
 	color: #fff;
 	background: transparent url(themes/OneEleven/images/layout/welcome-bg.gif) no-repeat top right
