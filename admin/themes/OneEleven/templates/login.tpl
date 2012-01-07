@@ -35,7 +35,7 @@
 						</p>					
 						<p class="warning">{'warn_admin_ipandcookies'|lang}</p>
 					</aside>
-					<a href="#" class="toggle-info">{'open'|lang}/{'close'|lang}</a>
+					<a href="#" title="{'open'|lang}/{'close'|lang}" class="toggle-info">{'open'|lang}/{'close'|lang}</a>
 					</div>					
 					<header>
 						<h1>{'logintitle'|lang}</h1>
