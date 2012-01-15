@@ -359,7 +359,7 @@ pre {
 	background: #eee;
 	margin: 5px;
 	overflow: auto;
-	display: inline-block;
+	display: block;
 	width: auto
 	}
 /* border radius */	
@@ -1698,7 +1698,8 @@ ul.sortable .placeholder {
 		padding-left: 0
 	}
 }
-@media screen and (max-device-width: 768px) {	
+/* --- SCREEN UP TO 768px --- */
+@media screen and (max-width: 768px) {	
 	/* override our predefined min-with for smaller screens and full height stuff */
 	body {
 		margin: 0;
@@ -1770,7 +1771,7 @@ ul.sortable .placeholder {
 		padding: 0 5px;
 	}
 	header .shortcuts li:last-child, header .shortcuts li.last {
-		padding: 0 0 0 5px
+		padding: 0 5px 0 0
 	}		
 	.dashboard-box {
 		float: none;
@@ -1817,5 +1818,32 @@ ul.sortable .placeholder {
 	select,
 	menu {
 		height: auto
+	}
+	#login #wrapper {
+		padding-top: 2%
+	}	
+}
+@media screen and (max-width: 480px) {
+	aside.message,
+	.pagemcontainer,
+	.pageerrorcontainer,
+	.pageerrorinstalldir {
+		left:5%;
+		right:5%;
+		width:auto
+	}
+	#login div.login-container,
+	#login div.login-container#error {
+		width: 302px
+	}
+	#login div.login-box {
+		width: 260px
+	}
+	#login input[type="text"],
+	#login input[type="password"] {
+		width: 250px
+	}
+	#login div.info-wrapper {
+		display: none
 	}
 }
