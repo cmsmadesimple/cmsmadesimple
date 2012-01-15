@@ -1453,3 +1453,14 @@ a.admin-tooltip:hover span {
   border:1px solid #cccccc;
   color:#6c6c6c;
 }
+/* FILE MANAGER */
+.ui-progressbar { height:2em; text-align: right; border-radius: 4px;}
+.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; }
+.ui-progressbar-value {
+	color: #333;
+	text-align: right;
+	padding-right: 10px;
+	border: 1px solid #eee;	
+	border-radius: 4px;
+	background:#b3f83d
+}	

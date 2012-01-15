@@ -1479,6 +1479,10 @@ ul.sortable .placeholder {
 	border: 2px dashed #ddd;
 	background: #f2f2f2
 }
+/*** file manager ***/
+#dropzone {
+	background: #fafafa
+}
 /* --- LOGIN PAGE --- */
 #login #wrapper {
 	padding-top: 10%

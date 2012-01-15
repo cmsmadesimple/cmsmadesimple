@@ -1631,6 +1631,10 @@ ul.sortable .placeholder {
 	border: 2px dashed #ddd;
 	background: #f2f2f2
 }
+/*** file manager ***/
+#dropzone {
+	background: #fafafa
+}
 @media screen and (max-width: 1024px) {
 	/* change tabs to full width on smaller screen size */
 	#page_tabs div {
