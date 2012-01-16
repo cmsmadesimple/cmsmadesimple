@@ -257,7 +257,7 @@ else
 
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
-$ct = cmsms()->get_variable['content-type'];
+$ct = cmsms()->get_variable('content-type');
 if( !$ct ) $ct = 'text/html';
 header("Content-Type: $ct; charset=" . get_encoding());
 
