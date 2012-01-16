@@ -181,12 +181,12 @@ jQuery(document).ready(function($) {
 	// BUTTONS
 	jQuery(function() {
 		$('body').off('cms_ajax_apply');
-		$('input[type="submit"]').each(function() {
+		$('input[type="submit"], input[type="button"]').each(function() {
 			if($(this).attr('name') == 'apply' || $(this).attr('name') == 'm1_apply') {
 				var icon = 'ui-icon-disk';
 			} else if($(this).attr('name') == 'cancel' || $(this).attr('name') == 'm1_cancel') {
 				var icon = 'ui-icon-circle-close';
-			} else if($(this).attr('resettodefault') || $(this).attr('name') == 'm1_resettodefault') {
+			} else if($(this).attr('resettodefault') || $(this).attr('name') == 'm1_resettodefault' || $(this).attr('id') == 'refresh') {
 				var icon = 'ui-icon-refresh';
 			} else {
 				var icon = 'ui-icon-circle-check';
