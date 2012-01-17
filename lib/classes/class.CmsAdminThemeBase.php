@@ -1184,8 +1184,21 @@ abstract class CmsAdminThemeBase
 					}
 				else
 					{
-						$res = null;
-						return $res;
+						// theme not found... use default
+						$name = self::GetDefaultTheme();
+						$themeObjName = $name."Theme";
+						$fn = $config['admin_path']."/themes/$name/{$themeObjName}.php";
+						if( file_exists($fn) )
+							{
+								include_once($fn);
+								self::$_instance = new $themeObjName($gCms,get_userid(FALSE),$name);
+							}
+						else
+							{
+								// still not found
+								$res = null;
+								return $res;
+							}
 					}
 			}
 		return self::$_instance;
