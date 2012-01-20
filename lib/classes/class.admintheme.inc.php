@@ -642,7 +642,7 @@ EOT;
     function DisplayNotifications($priority=2)
     {
 		$tnotifications = $this->get_notifications();
-		
+		if( count($tnotifications) == 0 ) return;
 		// count the total number of notifications
 		$count=0;
 		for( $i = 0; $i < count($tnotifications); $i++ )
