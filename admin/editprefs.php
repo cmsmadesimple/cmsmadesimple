@@ -70,15 +70,20 @@ $listtemplates_pagelimit = get_preference($userid, 'listtemplates_pagelimit', 20
 $liststylesheets_pagelimit = get_preference($userid, 'liststylesheets_pagelimit', 20);
 $listgcbs_pagelimit = get_preference($userid, 'listgcbs_pagelimit', 20);
 $homepage = get_preference($userid, 'homepage');
-$to = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
-$pos = strpos($homepage, '?' . CMS_SECURE_PARAM_NAME);
-$from = substr($homepage, $pos, strlen($to));
-$homepage = str_replace($from, $to, $homepage);
-$homepage = str_replace('&', '&amp;', $homepage);
+if( strpos($homepage,'&') !== FALSE && strpos($homepage,'&amp;' === FALSE ) )
+  {
+    $homepage = str_replace('&','&amp;',$homepage);
+  }
+$to = CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
+$pos = strpos($homepage, CMS_SECURE_PARAM_NAME.'=');
+if( $pos !== FALSE ) 
+  {
+    $from = substr($homepage, $pos, strlen($to));
+    $homepage = str_replace($from, $to, $homepage);
+  }
 $hide_help_links = get_preference($userid, 'hide_help_links', 0);
 
 $message = '';
-$gCms -> clear_cached_files();
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php" . $urlext);
