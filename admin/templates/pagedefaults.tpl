@@ -47,13 +47,6 @@
   </div>
 
   <div class="pageoverflow">
-    <p class="pagetext">{'use_name'|lang}:</p>
-    <p class="pageinput">
-      <input class="pagenb" type="checkbox" name="page_parent_use_name" {if $page_parent_use_name==1}checked="checked"{/if}/>
-    </p>
-  </div>
-
-  <div class="pageoverflow">
     <p class="pagetext">{'cachable'|lang}:</p>
     <p class="pageinput">
       <input class="pagenb" type="checkbox" name="page_cachable" {if $page_cachable==1}checked="checked"{/if}/>

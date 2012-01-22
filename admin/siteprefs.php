@@ -98,6 +98,7 @@ $content_thumbnailfield_path = '';
 $contentimage_path = '';
 $adminlog_lifetime = (60*60*24*31);
 $search_module = 'Search';
+$page_parent_use_name = 1;
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php".$urlext);
@@ -141,6 +142,7 @@ $content_thumbnailfield_path = get_site_preference('content_thumbnailfield_path'
 $contentimage_path = get_site_preference('contentimage_path',$contentimage_path);
 $adminlog_lifetime = get_site_preference('adminlog_lifetime',$adminlog_lifetime);
 $search_module = get_site_preference('searchmodule',$search_module);
+$page_parent_use_name = get_site_preference('page_parent_use_name',$page_parent_use_name);
 
 $active_tab='unknown';
 if( isset($_POST['active_tab']) )
@@ -229,6 +231,11 @@ else if (isset($_POST["editsiteprefs"]))
 	  if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
 	  set_site_preference('thumbnail_width',$thumbnail_width);
 	  set_site_preference('thumbnail_height',$thumbnail_height);
+	  if( isset($_POST['page_parent_use_name']) )
+	    {
+	      $page_parent_use_name = (int)$_POST['page_parent_use_name'];
+	      set_site_preference('page_parent_use_name',$page_parent_use_name);
+	    }
 	  if( isset($_POST['search_module']) )
 	    {
 	      $search_module = trim($_POST['search_module']);
@@ -469,6 +476,7 @@ $smarty->assign('content_thumbnailfield_path',$content_thumbnailfield_path);
 $smarty->assign('contentimage_path',$contentimage_path);
 $smarty->assign('adminlog_lifetime',$adminlog_lifetime);
 $smarty->assign('search_module',$search_module);
+$smarty->assign('page_parent_use_name',$page_parent_use_name);
 
 $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
 	     60=>lang('cron_60m'),120=>lang('cron_120m'),
