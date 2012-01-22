@@ -809,7 +809,7 @@ nav ul#pagemenu li a {
 	height: 36px;
 	font-weight: bold;
 	display: block;
-	text-shadow: 1px 1px 0 #fff;
+	text-shadow: 1px 1px 0px #fff;
 	padding-left: 30px;
 	text-decoration: none
 }
@@ -1372,8 +1372,8 @@ textarea.pagesmalltextarea {
 	color: #147fdb
 }
 #page_tabs div.active {
-	color: #147fdb;
-	background: transparent url(themes/OneEleven/images/layout/tab-active.png) no-repeat center bottom
+	color: #fff;
+	background: #147fdb url(themes/OneEleven/images/layout/tab-active.png) no-repeat center bottom
 }
 #page_content {
 	background: #fff;
