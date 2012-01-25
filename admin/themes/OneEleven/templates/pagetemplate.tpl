@@ -20,7 +20,8 @@
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
 		<!-- custom jQueryUI Theme 1.8.16 see style.css for color reference //-->
-		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />		
+		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+                {FileManager action='javascript'}
 	</head>
 	<body##BODYSUBMITSTUFFGOESHERE## lang="{$lang|truncate:'2':''}">
 		<!-- start container -->
@@ -45,6 +46,8 @@
 					</div>
 					<!-- breadcrubms -->
 					{include file='breadcrumbs.tpl' items=$theme->get_breadcrumbs()} 
+					{* filemanager dropzone *}
+					{FileManager action='dropzone' id='dropzone'}
 					<!-- bookmarks -->
 					{include file='shortcuts.tpl'}
 				</div>
@@ -63,7 +66,7 @@
 						<span title="Close / Open Sidebar" class="toggle-button close{if empty($is_notifications)} top{/if}">Close / Open Sidebar</span>
 						<!-- notifications -->
 						{include file='notifications.tpl' items=$theme->get_notifications()} 
-						<!-- start navigation -->
+							<!-- start navigation -->
 						{include file='navigation.tpl' nav=$theme->get_navigation_tree()} 
 						<!-- end navigation //-->
 					</aside>

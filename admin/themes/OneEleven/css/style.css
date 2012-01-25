@@ -1483,6 +1483,13 @@ ul.sortable .placeholder {
 #dropzone {
 	background: #fafafa
 }
+#theme_dropzone { 
+  float: left;
+  width: 24%;
+  text-align: center;
+  color: black;
+  background-color: #e0e0e0;
+}
 /* --- LOGIN PAGE --- */
 #login #wrapper {
 	padding-top: 10%
