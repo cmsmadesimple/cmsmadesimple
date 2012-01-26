@@ -85,7 +85,7 @@
 							{/if}
 							{* filemanager dropzone *}
 							{FileManager action='dropzone' id='dropzone' assign='droparea'}
-							{if isset($droparea)}
+							{if isset($droparea) && !isset($is_ie)}
 							<div class="drop">
 								<div class="drop-inner cf">
 								<span class="folder-selection open" title="Select a folder"></span>
