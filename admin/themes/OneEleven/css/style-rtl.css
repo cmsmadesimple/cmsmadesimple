@@ -1835,7 +1835,8 @@ ul.sortable .placeholder {
 	#footer .footer-right,
 	#sidebar .toggle-button,
 	header .admin-title,
-	#admin-content .shadow   {
+	#admin-content .shadow,
+	.drop   {
 		display: none
 	}
 	#admin-content {
