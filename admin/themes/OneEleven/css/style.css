@@ -416,16 +416,19 @@ checkbox:hover {
 }
 input[type="text"], 
 input[type="password"] {
-	padding: 4px
+	padding: 8px
 }
 input[type="button"], 
 input[type="submit"],
 .ui-button
  {
+	border: 1px solid #d3d3d3; 
+	background: #cecece url(themes/OneEleven/css/default-cmsms/images/ui-bg_highlight-soft_75_cecece_1x100.png) 50% 50% repeat-x; 
+	font-weight: normal; 
+	color: #555; 	
 	cursor: pointer;
 	height: 28px;
-	font-size: 12px;
-	line-height: 28px
+	font-size: 12px
 }
 .ui-button-text {
 	font-size: 12px;
@@ -515,6 +518,7 @@ aside.message,
 	font-size: 11px;
 	border-radius: 0 0 4px 4px;
 	box-shadow: 1px 1px 3px 1px #444;
+	-webkit-box-shadow: 1px 1px 3px 1px #444;
 	top:0;
 	margin:0;
 	left: 35%
@@ -790,15 +794,22 @@ nav ul#pagemenu li span.open-nav {
 	top: 0;
 	text-indent: -9999em
 }
+/*
 nav ul#pagemenu li span.open-nav.open-sub,
 nav ul#pagemenu li.current span.open-nav,
 nav ul#pagemenu li:hover span.open-nav {
 	cursor: pointer;
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -176px no-repeat
 }
+*/
+nav ul#pagemenu li span.open-nav.open-sub,
+nav ul#pagemenu li.current span.open-nav,
+nav ul#pagemenu li:hover span.open-nav,
 nav ul#pagemenu li.current span.open-nav,
 nav ul#pagemenu li.current:hover span.open-nav {
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -152px no-repeat
+	cursor: pointer;
+	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -176px no-repeat
+	/*background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -152px no-repeat*/
 }
 /*** menu style ***/
 nav ul#pagemenu li a {
@@ -823,16 +834,20 @@ nav ul#pagemenu li ul,
 #container.sidebar-on nav ul#pagemenu li.current ul {
 	display: block
 }
+
+nav ul#pagemenu li.current a,
 nav ul#pagemenu li a:hover, 
 nav ul#pagemenu li a:active,
 nav ul#pagemenu li.current li a:hover,
-nav ul#pagemenu li.current li a:active {
+nav ul#pagemenu li.current li a:active,
+nav ul#pagemenu li.current li a {
 	color: #147fdb;
-	/*padding-left: 35px*/
 }
+/*
 nav ul#pagemenu li.current a {
 	color: #fa8004
-}
+}*/
+
 nav ul#pagemenu li a.main {
 	background-position: -10px -484px
 }
@@ -913,9 +928,11 @@ nav ul#pagemenu li.current li a:hover,
 nav ul#pagemenu li.current li a:active  {
 	padding-left: 30px
 }
+/*
 nav ul#pagemenu li li.current a {
 	color: #fa8004
 }
+*/
 /*** page content ***/
 #main {
 	margin: 0 0 0 249px
@@ -929,6 +946,7 @@ nav ul#pagemenu li li.current a {
 #main header.pageheader {
 	height: 63px;
 	margin-bottom: 15px;
+	position: relative;
 	border-bottom: 1px solid #fa8004
 }
 /*** footer ***/
@@ -1012,6 +1030,9 @@ footer#footer a:hover, footer#footer a:active {
 	color: #232323;
 	font-size: 12px
 }
+#main header.pageheader span.helptext {
+	margin-right: 210px
+}
 span.helptext a.external,
 span.helptext a {
 	display: inline-block;
@@ -1026,6 +1047,8 @@ span.helptext a {
 .pageheader span.helptext {
 	display: inline-block;
 	line-height: 1.3;
+	padding-right: 0;
+	margin-left: 8px;	
 	background: none
 }
 .pageheader span.helptext a img{
@@ -1168,6 +1191,7 @@ table.pagetable a.tooltip span {
 	left: 110%;
 	bottom: 10px;
 	box-shadow: 1px 1px 3px 1px #222;
+	-webkit-box-shadow: 1px 1px 3px 1px #222;
 	border: 1px solid #ddd;
 	padding: 5px;
 	z-index: 999;	
@@ -1403,6 +1427,7 @@ textarea.pagesmalltextarea {
 	max-height: 48px;
 	padding: 20px;
 	box-shadow: inset 0px 1px 15px 1px #ddd;
+	-webkit-box-shadow: inset 0px 1px 15px 1px #ddd;
 	margin-right: 10px;
 	float: left;
 	border: 1px solid #ddd;
@@ -1410,6 +1435,7 @@ textarea.pagesmalltextarea {
 }
 .dashboard-box:hover img {
 	box-shadow: inset 0px 1px 15px 1px #ffd8b0;	
+	-webkit-box-shadow: inset 0px 1px 15px 1px #ddd;
 	transition: all 600ms ease-in-out;	
 	-webkit-transition: all 600ms ease-in-out;
 	   -moz-transition: all 600ms ease-in-out;
@@ -1479,10 +1505,7 @@ ul.sortable .placeholder {
 	border: 2px dashed #ddd;
 	background: #f2f2f2
 }
-/*** file manager ***/
-#dropzone {
-	background: #fafafa
-}
+/*** theme dropzone ***/
 #theme_dropzone { 
   float: left;
   width: 24%;
@@ -1490,6 +1513,81 @@ ul.sortable .placeholder {
   color: black;
   background-color: #e0e0e0;
 }
+
+.drop {
+	position: absolute;
+	width: 192px;
+	padding-top:1px;
+	padding-bottom: 14px;
+	right: 0;
+	top:0
+}
+
+.drop a.toggle-dropzone {
+	background: transparent url(themes/OneEleven/images/layout/toggle-dropzone.png) no-repeat -15px 0;
+	border: 1px solid #ccc;
+	border-top: none;	
+	text-indent: -9999em;
+	width: 15px;
+	height: 14px;
+	position: absolute;
+	bottom: 0;
+	right:0
+}
+.drop.hidden a.toggle-dropzone {
+	background: transparent url(themes/OneEleven/images/layout/toggle-dropzone.png) no-repeat 0 0;
+}
+.drop .drop-inner {
+	float:none;
+	border: 1px solid #ccc;
+	border-top: none;
+	background: #ddd;
+	font-size: 10px;
+	color: #585858;
+	text-shadow: 1px 1px 0 #fff;
+	padding: 5px 10px;
+	width: 170px	
+}
+.drop span.zone {
+	display: block;
+	float:left;
+	width: 140px;
+	border: 1px dashed #ccc;
+	text-align: center;
+}
+.drop #theme_dropzone {
+	width: 130px;
+	line-height: 30px;
+	height: 30px;
+	background: #ddd;
+}
+.drop span.folder-selection {
+	display: inline-block;
+	float:left;
+	margin-right: 10px;
+	width: 16px;
+	cursor: pointer;
+	height: 30px;
+	text-align: left;
+	background: transparent url(themes/OneEleven/images/layout/folder-horizontal-open.png) no-repeat left
+}
+.drop.hidden .drop-inner {
+	display: none
+}
+.drop #theme_dropzone .ui-progressbar-value { 
+	margin: 10px 5px 5px 0;
+	max-width: 130px;
+	text-shadow: none;
+	height: 12px;
+	line-height: 12px;
+	font-weight: normal;
+	font-size: 11px;
+	text-align: center; 
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	display: none
+	}
+	
 /* --- LOGIN PAGE --- */
 #login #wrapper {
 	padding-top: 10%
@@ -1513,6 +1611,7 @@ ul.sortable .placeholder {
   border-radius: 4px 4px 0 4px;
   border: 1px solid #aaa;
   box-shadow: #999 0 0 6px;
+  -webkit-box-shadow: #999 0 0 6px;
   margin: 0 auto;
   padding: 10px 20px;
   width: 310px
@@ -1547,6 +1646,7 @@ ul.sortable .placeholder {
 	margin: 5px 0;
 	border: 1px solid #147fdb;
 	box-shadow:0 0 5px #147fdb;
+	-webkit-box-shadow:0 0 5px #147fdb;
 	transition: all 0.2s ease-in-out;
 	-webkit-transition: all 200ms ease-in-out;
 	   -moz-transition: all 200ms ease-in-out;

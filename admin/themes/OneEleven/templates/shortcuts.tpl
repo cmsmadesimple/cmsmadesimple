@@ -2,13 +2,13 @@
 
 <div class="shortcuts">
 	<ul class="cf">
-		{if isset($module_help_url) or isset($wiki_url)}
 		<li class="help">
-			{if isset($module_help_url)}
+		{if isset($module_help_url)}
 			<a href="{$module_help_url}" title="{'module_help'|lang}">{'module_help'|lang}</a>
+		{else}
+			<a href="http://wiki.cmsmadesimple.org/index.php/Main_Page" rel="external" title="{'module_help'|lang}">{'module_help'|lang}</a>	
 		{/if}
 		</li>
-		{/if}
 		<li class="settings">
 			<a href="editprefs.php?{$secureparam}" title="{'userprefs'|lang}">{'userprefs'|lang}</a>
 		</li>

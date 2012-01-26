@@ -150,6 +150,26 @@ jQuery(document).ready(function($) {
 		objMain.removeClass('sidebar-on');
 		$('.toggle-button').addClass('open-sidebar');
 	}
+
+	// toggle dropzone
+	$('.toggle-dropzone').click(function() {
+		$('.drop').toggleClass('hidden');
+		if($('.drop').hasClass('hidden')) {
+			$.cookie('dropzone-pref', 'hidden', {
+				expires : 60
+			});
+		} else {
+			$.cookie('dropzone-pref', 'visible', {
+				expires : 60
+			});
+		}
+		return false;
+	});
+	if($.cookie('dropzone-pref') != 'hidden') {
+		$('.drop').addClass('visible');
+	} else {
+		$('.drop').addClass('hidden');
+	}
 	// Jquery UI DIALOG
 	jQuery(function() {
 		var dialogs = {};

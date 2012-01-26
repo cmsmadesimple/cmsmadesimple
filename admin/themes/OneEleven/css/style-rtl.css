@@ -515,6 +515,7 @@ aside.message,
 	font-size: 11px;
 	border-radius: 0 0 4px 4px;
 	box-shadow: 1px 1px 3px 1px #444;
+	-webkit-box-shadow: 1px 1px 3px 1px #444;
 	top:0;
 	margin:0;
 	right: 35%
@@ -943,15 +944,22 @@ nav ul#pagemenu li span.open-nav {
 	top: 0;
 	text-indent: -9999em
 }
+/*
 nav ul#pagemenu li span.open-nav.open-sub,
 nav ul#pagemenu li.current span.open-nav,
 nav ul#pagemenu li:hover span.open-nav {
 	cursor: pointer;
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -176px no-repeat
 }
+*/
+nav ul#pagemenu li span.open-nav.open-sub,
+nav ul#pagemenu li.current span.open-nav,
+nav ul#pagemenu li:hover span.open-nav,
 nav ul#pagemenu li.current span.open-nav,
 nav ul#pagemenu li.current:hover span.open-nav {
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -152px no-repeat
+	cursor: pointer;
+	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -176px no-repeat
+	/*background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -152px no-repeat*/
 }
 /*** menu style ***/
 nav ul#pagemenu li a {
@@ -978,13 +986,15 @@ nav ul#pagemenu li ul,
 nav ul#pagemenu li a:hover, 
 nav ul#pagemenu li a:active,
 nav ul#pagemenu li.current li a:hover,
-nav ul#pagemenu li.current li a:active {
+nav ul#pagemenu li.current li a:active,
+nav ul#pagemenu li.current li.current a  {
 	color: #147fdb;
-	/*padding-left: 35px*/
 }
+/*
 nav ul#pagemenu li.current a {
 	color: #fa8004
 }
+*/
 nav ul#pagemenu li a.main {
 	background: url(themes/OneEleven/images/layout/home-off.png) right no-repeat;
 }
@@ -1065,9 +1075,11 @@ nav ul#pagemenu li.current li a:hover,
 nav ul#pagemenu li.current li a:active  {
 	padding-right: 30px
 }
+/*
 nav ul#pagemenu li li.current a {
 	color: #fa8004
 }
+*/
 /*** page content ***/
 #main {
 	margin: 0 249px 0 0
@@ -1081,6 +1093,7 @@ nav ul#pagemenu li li.current a {
 #main header.pageheader {
 	height: 63px;
 	margin-bottom: 15px;
+	position: relative;
 	border-bottom: 1px solid #fa8004
 }
 /*** footer ***/
@@ -1163,6 +1176,9 @@ footer#footer a:hover, footer#footer a:active {
 	width: auto;
 	color: #232323;
 	font-size: 12px
+}
+#main header.pageheader span.helptext {
+	margin-left: 210px
 }
 span.helptext a.external,
 span.helptext a {
@@ -1252,22 +1268,23 @@ div.dialog a.bookmark {
 }
 /*** tables ***/
 table th:first-child {
-	border-top-left-radius: 4px
-}
-table th:last-child {
 	border-top-right-radius: 4px
 }
+table th:last-child {
+	border-top-left-radius: 4px
+}
 table tr:last-child td:first-child {
-	border-bottom-left-radius:4px
+	border-bottom-right-radius:4px
 	}
 table tr:last-child td:last-child {
-	border-bottom-right-radius:4px
+	border-bottom-left-radius:4px
 	}
 table.pagetable {
 	border-collapse: inherit;
 	font-size: 11px;
 	border: 1px solid #ddd;
 	width: 100%;
+	direction: rtl;
 	margin: 5px 0
 }
 table.pagetable caption {
@@ -1282,7 +1299,6 @@ table.pagetable th {
 	text-shadow: -1px -1px 0 #000;
 	background: #232323 url(themes/OneEleven/images/layout/sprite_repeatx.png) 831px -99px repeat-x;
 	height: 45px;
-	text-align: right;
 	white-space: nowrap;
 	padding-left: 5px;
 	padding-right: 5px
@@ -1320,6 +1336,7 @@ table.pagetable a.tooltip span {
 	right: 110%;
 	bottom: 10px;
 	box-shadow: 1px 1px 3px 1px #222;
+	-webkit-box-shadow: 1px 1px 3px 1px #222;
 	border: 1px solid #ddd;
 	padding: 5px;
 	z-index: 999;	
@@ -1555,6 +1572,7 @@ textarea.pagesmalltextarea {
 	max-height: 48px;
 	padding: 20px;
 	box-shadow: inset 0px 1px 15px 1px #ddd;
+	-webkit-box-shadow: inset 0px 1px 15px 1px #ddd;
 	margin-left: 10px;
 	float: right;
 	border: 1px solid #ddd;
@@ -1562,6 +1580,7 @@ textarea.pagesmalltextarea {
 }
 .dashboard-box:hover img {
 	box-shadow: inset 0px 1px 15px 1px #ffd8b0;	
+	-webkit-box-shadow: inset 0px 1px 15px 1px #ffd8b0;	
 	transition: all 600ms ease-in-out;	
 	-webkit-transition: all 600ms ease-in-out;
 	-moz-transition: all 600ms ease-in-out;
@@ -1631,10 +1650,87 @@ ul.sortable .placeholder {
 	border: 2px dashed #ddd;
 	background: #f2f2f2
 }
-/*** file manager ***/
-#dropzone {
-	background: #fafafa
+/*** theme dropzone ***/
+#theme_dropzone { 
+  float: left;
+  width: 24%;
+  text-align: center;
+  color: black;
+  background-color: #e0e0e0;
 }
+.drop {
+	position: absolute;
+	width: 192px;
+	padding-top:1px;
+	padding-bottom: 14px;
+	left: 0;
+	top:0
+}
+.drop a.toggle-dropzone {
+	background: transparent url(themes/OneEleven/images/layout/toggle-dropzone.png) no-repeat -15px 0;
+	border: 1px solid #ccc;
+	border-top: none;	
+	text-indent: -9999em;
+	width: 15px;
+	height: 14px;
+	position: absolute;
+	bottom: 0;
+	left:0
+}
+.drop.hidden a.toggle-dropzone {
+	background: transparent url(themes/OneEleven/images/layout/toggle-dropzone.png) no-repeat 0 0;
+}
+.drop .drop-inner {
+	float:none;
+	border: 1px solid #ccc;
+	border-top: none;
+	background: #ddd;
+	font-size: 10px;
+	color: #585858;
+	text-shadow: 1px 1px 0 #fff;
+	padding: 5px 10px;
+	width: 170px	
+}
+.drop span.zone {
+	display: block;
+	float:right;
+	width: 140px;
+	border: 1px dashed #ccc;
+	text-align: center;
+}
+.drop #theme_dropzone {
+	width: 130px;
+	line-height: 30px;
+	height: 30px;
+	background: #ddd;
+}
+.drop span.folder-selection {
+	display: inline-block;
+	float:right;
+	margin-right: 10px;
+	width: 16px;
+	cursor: pointer;
+	height: 30px;
+	text-align: left;
+	background: transparent url(themes/OneEleven/images/layout/folder-horizontal-open.png) no-repeat left
+}
+.drop.hidden .drop-inner {
+	display: none
+}
+.drop #theme_dropzone .ui-progressbar-value { 
+	margin: 10px 5px 5px 0;
+	max-width: 130px;
+	text-shadow: none;
+	height: 12px;
+	line-height: 12px;
+	font-weight: normal;
+	font-size: 11px;
+	text-align: center; 
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	display: none
+	}
+	
 @media screen and (max-width: 1024px) {
 	/* change tabs to full width on smaller screen size */
 	#page_tabs div {

@@ -21,7 +21,7 @@
 	 	{$headertext|default:''}
 		<!-- custom jQueryUI Theme 1.8.16 see style.css for color reference //-->
 		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
-                {FileManager action='javascript'}
+        {FileManager action='javascript'}
 	</head>
 	<body##BODYSUBMITSTUFFGOESHERE## lang="{$lang|truncate:'2':''}">
 		<!-- start container -->
@@ -46,8 +46,6 @@
 					</div>
 					<!-- breadcrubms -->
 					{include file='breadcrumbs.tpl' items=$theme->get_breadcrumbs()} 
-					{* filemanager dropzone *}
-					{FileManager action='dropzone' id='dropzone'}
 					<!-- bookmarks -->
 					{include file='shortcuts.tpl'}
 				</div>
@@ -84,6 +82,21 @@
 							</h1>
 							{if isset($module_help_url) or isset($wiki_url)} <span class="helptext"> {if isset($module_help_url)}<a href="{$module_help_url}">{'module_help'|lang}</a>{/if}
 								{if isset($wiki_url)}<a href="{$wiki_url}" class="external" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if} </span> {/if}
+							{/if}
+							{* filemanager dropzone *}
+							{FileManager action='dropzone' id='dropzone' assign='droparea'}
+							{if isset($droparea)}
+							<div class="drop">
+								<div class="drop-inner cf">
+								<span class="folder-selection open" title="Select a folder"></span>
+									<div class="dialog invisible" role="dialog" title="Select a folder">
+										<h3>Select a folder</h3>
+										<p>A folder list or whatever</p>
+									</div>										
+									<span class="zone">{$droparea}</span>
+								</div>									
+								<a href="#" title="{'open'|lang}/{'close'|lang}" class="toggle-dropzone">{'open'|lang}/{'close'|lang}</a>
+							</div>
 							{/if} 
 						</header>
 						<section class="cf">
