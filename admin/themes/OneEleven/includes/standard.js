@@ -192,7 +192,6 @@ jQuery(document).ready(function($) {
 	});
 	// SIDEBAR MENU
 	jQuery(function() {
-		$('#pagemenu ul').css('display','none');
 		if($('#pagemenu li').hasClass('current')) {
 			$('#pagemenu li.current span').addClass('open-sub');
 		}
