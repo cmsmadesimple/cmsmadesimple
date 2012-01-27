@@ -86,27 +86,7 @@
 							{/if}
 							{* filemanager dropzone *}							
 							{if isset($droparea) && !isset($is_ie)}
-							<div class="drop">
-								<div class="drop-inner cf">
-								<span class="folder-selection open" title="{'open'|lang}"></span>
-									<div class="dialog invisible" role="dialog" title="FileManager Folder selection">
-										<form>
-											<fieldset>
-												<legend>Select a folder</legend>
-												<label>Folder: </label>
-												<select>
-													<option value="#">Select</option>
-													<option value="#">/Folder</option>
-													<option value="#">/Folder</option>
-												</select>
-												<input type="submit" id="#" name="" value="Save" />
-											</fieldset>
-										</form>
-									</div>										
-									<span class="zone">{$droparea}</span>
-								</div>									
-								<a href="#" title="{'open'|lang}/{'close'|lang}" class="toggle-dropzone">{'open'|lang}/{'close'|lang}</a>
-							</div>
+								{$droparea}
 							{/if} 
 						</header>
 						<section class="cf">
