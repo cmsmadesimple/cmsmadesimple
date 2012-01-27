@@ -867,7 +867,7 @@ header .shortcuts li.favorites a {
 	width: 24px;
 	height: 25px;
 	position: absolute;
-	left: 0;
+	left: -1px;
 	top: 75px
 }
 #sidebar .toggle-button.top {
@@ -929,6 +929,7 @@ nav ul#pagemenu {
 }
 nav ul#pagemenu li {
 	position: relative;
+	zoom: 1;
 	background: url(themes/OneEleven/images/layout/navigation-bg.gif) repeat-x top;
 	line-height: 35px;
 	padding: 0
@@ -936,7 +937,7 @@ nav ul#pagemenu li {
 /* toggle submenu */
 nav ul#pagemenu li span.open-nav {
 	display: block;
-	width: 24px;
+	width: 210px;
 	height: 35px;
 	z-index:50;
 	position: absolute;
@@ -944,14 +945,6 @@ nav ul#pagemenu li span.open-nav {
 	top: 0;
 	text-indent: -9999em
 }
-/*
-nav ul#pagemenu li span.open-nav.open-sub,
-nav ul#pagemenu li.current span.open-nav,
-nav ul#pagemenu li:hover span.open-nav {
-	cursor: pointer;
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -176px no-repeat
-}
-*/
 nav ul#pagemenu li span.open-nav.open-sub,
 nav ul#pagemenu li.current span.open-nav,
 nav ul#pagemenu li:hover span.open-nav,
@@ -959,7 +952,6 @@ nav ul#pagemenu li.current span.open-nav,
 nav ul#pagemenu li.current:hover span.open-nav {
 	cursor: pointer;
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -176px no-repeat
-	/*background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -152px no-repeat*/
 }
 /*** menu style ***/
 nav ul#pagemenu li a {
@@ -978,23 +970,25 @@ nav ul#pagemenu li.current li a {
 } 
 nav ul#pagemenu li ul,
 #container.sidebar-off nav ul#pagemenu li span.open-nav {
-	display: none	
+	display: none
 }
 #container.sidebar-on nav ul#pagemenu li.current ul {
 	display: block
 }
-nav ul#pagemenu li a:hover, 
+#container.sidebar-on nav ul#pagemenu li {
+	zoom:1
+}
+nav ul#pagemenu li.current a,
+nav ul#pagemenu li a:hover,
+nav ul#pagemenu li:hover a,
 nav ul#pagemenu li a:active,
 nav ul#pagemenu li.current li a:hover,
 nav ul#pagemenu li.current li a:active,
-nav ul#pagemenu li.current li.current a  {
+nav ul#pagemenu li.current li a,
+nav ul#pagemenu li li a:hover {
 	color: #147fdb;
 }
-/*
-nav ul#pagemenu li.current a {
-	color: #fa8004
-}
-*/
+
 nav ul#pagemenu li a.main {
 	background: url(themes/OneEleven/images/layout/home-off.png) right no-repeat;
 }
@@ -1069,17 +1063,15 @@ nav ul#pagemenu li li a{
 	background-image: none;
 	background: none
 }
+nav ul#pagemenu li li a:hover {
+	color: #147fdb;
+}
 nav ul#pagemenu li li a:hover,
 nav ul#pagemenu li li a:active,
 nav ul#pagemenu li.current li a:hover,
 nav ul#pagemenu li.current li a:active  {
 	padding-right: 30px
 }
-/*
-nav ul#pagemenu li li.current a {
-	color: #fa8004
-}
-*/
 /*** page content ***/
 #main {
 	margin: 0 249px 0 0
@@ -1179,6 +1171,9 @@ footer#footer a:hover, footer#footer a:active {
 }
 #main header.pageheader span.helptext {
 	margin-left: 210px
+}
+#main header.pageheader.drop-hidden span.helptext {
+	margin-left: 0
 }
 span.helptext a.external,
 span.helptext a {
@@ -1857,6 +1852,9 @@ ul.sortable .placeholder {
 	#header.header {
 		overflow: hidden
 	}
+	#main header.pageheader span.helptext {
+		margin-left: 0
+	}		
 	#main {
 		width: 100%;
 		display: block
