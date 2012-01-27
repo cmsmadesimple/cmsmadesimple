@@ -61,7 +61,7 @@
 				<div id="sidebar">
 					<aside>
 						{assign var='is_notifications' value=$theme->get_notifications()}
-						<span title="Close / Open Sidebar" class="toggle-button close{if empty($is_notifications)} top{/if}">Close / Open Sidebar</span>
+						<span title="{'open'|lang}/{'close'|lang}" class="toggle-button close{if empty($is_notifications)} top{/if}">{'open'|lang}/{'close'|lang}</span>
 						<!-- notifications -->
 						{include file='notifications.tpl' items=$theme->get_notifications()} 
 							<!-- start navigation -->
@@ -74,8 +74,9 @@
 				<div id="main" class="cf sidebar-on">
 					{strip}
 					{include file='messages.tpl'}
+					{FileManager action='dropzone' id='dropzone' assign='droparea'}
 					<article role="main" class="content-inner">
-						<header class="pageheader cf">
+						<header class="pageheader{if isset($is_ie)} drop-hidden{/if} cf">
 							{if isset($module_icon_url) or isset($pagetitle)} 
 							<h1>{if isset($module_icon_url)}<img src="{$module_icon_url}" alt="{$module_name|default:''}" class="module-icon" />{/if}
 							{$pagetitle|default:''}
@@ -83,8 +84,7 @@
 							{if isset($module_help_url) or isset($wiki_url)} <span class="helptext"> {if isset($module_help_url)}<a href="{$module_help_url}">{'module_help'|lang}</a>{/if}
 								{if isset($wiki_url)}<a href="{$wiki_url}" class="external" target="_blank">{'help'|lang}</a> <em>({'new_window'|lang})</em>{/if} </span> {/if}
 							{/if}
-							{* filemanager dropzone *}
-							{FileManager action='dropzone' id='dropzone' assign='droparea'}
+							{* filemanager dropzone *}							
 							{if isset($droparea) && !isset($is_ie)}
 							<div class="drop">
 								<div class="drop-inner cf">
