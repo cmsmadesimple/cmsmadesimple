@@ -702,7 +702,7 @@ p.login-info {
 }
 #admin-content .shadow {
 	background: transparent url(themes/OneEleven/images/layout/sprite_repeatx.png) 831px -148px repeat-x;
-	z-index: 9999;
+	z-index: 900;
 	position: absolute;
 	top: 100px;
 	right: 0;
@@ -861,7 +861,7 @@ header .shortcuts li.favorites a {
 /* toggle sidebar */
 #sidebar .toggle-button {
 	text-indent: -9999em;
-	z-index: 999;
+	z-index: 900;
 	display: block;
 	cursor: pointer;
 	width: 24px;
@@ -1233,7 +1233,7 @@ img.systemicon {
 	display: inline-block;
 	background: #eee;
 	padding: 2px 4px;
-	margin: 0 1px;
+	margin: 2px 1px;
 	color: #585858;
 	border: 1px solid #ccc
 }
@@ -1334,7 +1334,7 @@ table.pagetable a.tooltip span {
 	-webkit-box-shadow: 1px 1px 3px 1px #222;
 	border: 1px solid #ddd;
 	padding: 5px;
-	z-index: 999;	
+	z-index: 900;	
 	min-width: 150px;
 	width: auto;
 	line-height: 1.3
@@ -1760,7 +1760,7 @@ ul.sortable .placeholder {
 	}	
 	footer#footer {
 		clear: both;
-		z-index: 999;
+		z-index: 900;
 		overflow: hidden;
 		position: absolute;
 		bottom:0
