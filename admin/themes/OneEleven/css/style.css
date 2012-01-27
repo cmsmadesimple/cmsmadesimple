@@ -1763,8 +1763,8 @@ ul.sortable .placeholder {
 		margin-right: 0
 	}
 	#page_tabs div.active {
-		color: #147fdb;
-		background: #f2f2f2
+		color: #fff;
+		background: #147fdb
 	}	
 	textarea {
 		width: 43em;
@@ -1935,7 +1935,10 @@ ul.sortable .placeholder {
 	textarea,
 	select,
 	menu {
-		width: 95%
+		max-width: 90%
+	}
+	textarea {
+		max-width: 40em
 	}
 	iframe {
 		max-width: 90%
@@ -1955,10 +1958,17 @@ ul.sortable .placeholder {
 	.pagemcontainer,
 	.pageerrorcontainer,
 	.pageerrorinstalldir {
-		left:5%;
-		right:5%;
-		width:auto
+		left: 5%;
+		right: 5%;
+		width: auto
 	}
+	#main header.pageheader span.helptext {
+		display: none;
+	}
+	textarea,
+	select {
+		max-width: 23em
+	}		
 	#login div.login-container,
 	#login div.login-container#error {
 		width: 302px

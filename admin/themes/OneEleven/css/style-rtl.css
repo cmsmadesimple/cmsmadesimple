@@ -1907,10 +1907,10 @@ ul.sortable .placeholder {
 	textarea,
 	select,
 	menu {
-		width: 95%
-	}
-	iframe {
 		max-width: 90%
+	}
+	textarea {
+		max-width: 40em
 	}
 	input,
 	textarea,
@@ -1931,6 +1931,13 @@ ul.sortable .placeholder {
 		right:5%;
 		width:auto
 	}
+	#main header.pageheader span.helptext {
+		display: none;
+	}
+	textarea,
+	select {
+		max-width: 23em
+	}	
 	#login div.login-container,
 	#login div.login-container#error {
 		width: 302px
