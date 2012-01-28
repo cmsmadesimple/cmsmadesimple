@@ -920,7 +920,8 @@ nav ul#pagemenu li:hover li a {
 	background-image: none;
 	background: none
 }
-nav ul#pagemenu li li a:hover {
+nav ul#pagemenu li li a:hover,
+nav ul#pagemenu li li.current a {
 	color: #147fdb;
 }
 nav ul#pagemenu li li a:hover,
@@ -1027,7 +1028,7 @@ footer#footer a:hover, footer#footer a:active {
 	font-size: 12px
 }
 #main header.pageheader span.helptext {
-	margin-right: 210px
+	margin-right: 270px
 }
 #main header.pageheader.drop-hidden span.helptext {
 	margin-right: 0
@@ -1375,6 +1376,7 @@ textarea.pagesmalltextarea {
 #page_tabs div {
 	color: #585858;
 	border-radius: 4px 4px 0 0;
+	text-shadow: -1px 1px 0 #fff;
 	background: #ddd;
 	font-weight: bold;
 	text-align: center;
@@ -1396,6 +1398,7 @@ textarea.pagesmalltextarea {
 }
 #page_tabs div.active {
 	color: #fff;
+	text-shadow: -1px -1px 0 #054882;
 	background: #147fdb url(themes/OneEleven/images/layout/tab-active.png) no-repeat center bottom
 }
 #page_content {
@@ -1434,7 +1437,7 @@ textarea.pagesmalltextarea {
 }
 .dashboard-box:hover img {
 	box-shadow: inset 0px 1px 15px 1px #ffd8b0;	
-	-webkit-box-shadow: inset 0px 1px 15px 1px #ddd;
+	-webkit-box-shadow: inset 0px 1px 15px 1px #ffd8b0;
 	transition: all 600ms ease-in-out;	
 	-webkit-transition: all 600ms ease-in-out;
 	   -moz-transition: all 600ms ease-in-out;
@@ -1505,17 +1508,9 @@ ul.sortable .placeholder {
 	background: #f2f2f2
 }
 /*** theme dropzone ***/
-#theme_dropzone { 
-  float: left;
-  width: 24%;
-  text-align: center;
-  color: black;
-  background-color: #e0e0e0;
-}
-
 .drop {
 	position: absolute;
-	width: 192px;
+	width: 262px;
 	padding-top:1px;
 	padding-bottom: 14px;
 	right: 0;
@@ -1545,20 +1540,21 @@ ul.sortable .placeholder {
 	color: #585858;
 	text-shadow: 1px 1px 0 #fff;
 	padding: 5px 10px;
-	width: 170px	
+	width: 240px	
 }
 .drop span.zone {
 	display: block;
 	float:left;
-	width: 140px;
+	width: 210px;
 	border: 1px dashed #ccc;
-	text-align: center;
+	text-align: center
 }
 .drop #theme_dropzone {
-	width: 130px;
+	width: 200px;
 	line-height: 30px;
+	text-align: center;
 	height: 30px;
-	background: #ddd;
+	background: #ddd
 }
 .drop span.folder-selection {
 	display: inline-block;
@@ -1575,7 +1571,7 @@ ul.sortable .placeholder {
 }
 .drop #theme_dropzone .ui-progressbar-value { 
 	margin: 10px 5px 5px 0;
-	max-width: 130px;
+	max-width: 190px;
 	text-shadow: none;
 	height: 12px;
 	line-height: 12px;
@@ -1781,6 +1777,9 @@ ul.sortable .placeholder {
 	#sidebar aside {
 		padding: 0
 	}
+	#main header.pageheader span.helptext em{
+		display: none
+	}		
 	.dashboard-box {
 		float: none;
 		width: auto;

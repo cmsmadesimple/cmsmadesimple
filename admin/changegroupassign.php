@@ -174,7 +174,7 @@ $smarty->assign('disp_group',$disp_group);
 $smarty->assign('user_id',$userid);
 $smarty->assign('cms_secure_param_name',CMS_SECURE_PARAM_NAME);
 $smarty->assign('cms_user_key',$_SESSION[CMS_USER_KEY]);
-$smarty->assign('admin_group_warning',$themeObject->ShowErrors(lang('adminspecialgroup')));
+//$smarty->assign('admin_group_warning',$themeObject->ShowErrors(lang('adminspecialgroup')));
 $smarty->assign('form_start','<form id="groupname" method="post" action="changegroupassign.php">');
 $smarty->assign('filter_action','changegroupassign.php');
 $smarty->assign('form_end','</form>');

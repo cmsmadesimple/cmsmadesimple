@@ -8,16 +8,16 @@
 	<div class="footer-right cf">
 		<ul class="links">
 			<li>
-				<a href="http://wiki.cmsmadesimple.org/index.php/Main_Page" rel="external" title="Support">Documentation</a>
+				<a href="http://wiki.cmsmadesimple.org/index.php/Main_Page" rel="external" title="{'wiki'|lang}">{'wiki'|lang}</a>
 			</li>
 			<li>
-				<a href="http://forum.cmsmadesimple.org/" rel="external" title="Forums">Forums</a>
+				<a href="http://forum.cmsmadesimple.org/" rel="external" title="{'forums'|lang}">{'forums'|lang}</a>
 			</li>
 			<li>
-				<a href="http://www.cmsmadesimple.org/about-link/" rel="external" title="About">About</a>
+				<a href="http://www.cmsmadesimple.org/about-link/" rel="external" title="{'about'|lang}">{'about'|lang}</a>
 			</li>
 			<li>
-				<a href="http://www.cmsmadesimple.org/about-link/about-us/" rel="external" title="Team">Team</a>
+				<a href="http://www.cmsmadesimple.org/about-link/about-us/" rel="external" title="{'team'|lang}">{'team'|lang}</a>
 			</li>
 		</ul>
 	</div>

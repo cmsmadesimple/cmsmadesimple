@@ -1071,8 +1071,8 @@ $lang['admin']['help_function_cms_jquery'] = <<<EOT
 
 <h3><em>Included Defaults</em></h3>
 <ul>
-	<li><tt>jQuery</tt><em>(1.6.2)</em> - jquery-1.7.1.min.js</li>
-	<li><tt>jQuery UI</tt><em>(1.8.14)</em> - jquery-ui-1.8.16.custom.min.js</li>
+	<li><tt>jQuery</tt><em>(1.7.1)</em> - jquery-1.7.1.min.js</li>
+	<li><tt>jQuery UI</tt><em>(1.8.16)</em> - jquery-ui-1.8.16.custom.min.js</li>
 	<li><tt>nestedSortable</tt>(1.3.4) - jquery/js/jquery.ui.nestedSortable-1.3.4.js</li>
 	<li><tt>jQuery json</tt><em>(2.2)</em> - jquery/js/jquery.json-2.2.js</li>
 </ul>
@@ -1512,6 +1512,8 @@ $lang['admin']['user_created'] = 'Custom Shortcuts';
 $lang['admin']['forums'] = 'Forums';
 $lang['admin']['wiki'] = 'Wiki';
 $lang['admin']['irc'] = 'IRC';
+$lang['admin']['about'] = 'About';
+$lang['admin']['team'] = 'Team';
 $lang['admin']['module_help'] = 'Module Help';
 $lang['admin']['managebookmarks'] = 'Manage Shortcuts'; //needs translation
 $lang['admin']['editbookmark'] = 'Edit Shortcut'; //needs translation
