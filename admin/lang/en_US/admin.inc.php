@@ -1525,6 +1525,7 @@ $lang['admin']['user_created'] = 'Custom Shortcuts';
 $lang['admin']['forums'] = 'Forums';
 $lang['admin']['wiki'] = 'Wiki';
 $lang['admin']['irc'] = 'IRC';
+$lang['admin']['team'] = 'Team';
 $lang['admin']['module_help'] = 'Module Help';
 $lang['admin']['managebookmarks'] = 'Manage Shortcuts'; //needs translation
 $lang['admin']['editbookmark'] = 'Edit Shortcut'; //needs translation
