@@ -82,6 +82,7 @@ $frontendwysiwyg = '';
 $nogcbwysiwyg = '0';
 $global_umask = '022';
 $logintheme = "default";
+$backendwysiwyg = '';
 $auto_clear_cache_age = 0;
 $allow_browser_cache = 0;
 $browser_cache_expiry = 60;
@@ -99,6 +100,10 @@ $contentimage_path = '';
 $adminlog_lifetime = (60*60*24*31);
 $search_module = 'Search';
 $page_parent_use_name = 1;
+$use_smartycache = 0;
+$use_smartycompilecheck = 1;
+$smarty_cachemodules = 'never';
+$smarty_cacheudt = 'never';
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php".$urlext);
@@ -123,6 +128,7 @@ $xmlmodulerepository = get_site_preference('xmlmodulerepository',$xmlmodulerepos
 $checkversion = get_site_preference('checkversion',$checkversion);
 $defaultdateformat = get_site_preference('defaultdateformat',$defaultdateformat);
 $logintheme = get_site_preference('logintheme',$logintheme);
+$backendwysiwyg = get_site_preference('backendwysiwyg',$backendwysiwyg);
 $metadata = get_site_preference('metadata',$metadata);
 $sitename = get_site_preference('sitename',$sitename);
 $disablesafemodewarning = get_site_preference('disablesafemodewarning',$disablesafemodewarning);
@@ -143,6 +149,10 @@ $contentimage_path = get_site_preference('contentimage_path',$contentimage_path)
 $adminlog_lifetime = get_site_preference('adminlog_lifetime',$adminlog_lifetime);
 $search_module = get_site_preference('searchmodule',$search_module);
 $page_parent_use_name = get_site_preference('page_parent_use_name',$page_parent_use_name);
+$use_smartycache = get_site_preference('use_smartycache',$use_smartycache);
+$use_smartycompilecheck = get_site_preference('use_smartycompilecheck',$use_smartycompilecheck);
+$smarty_cachemodules = get_site_preference('smarty_cachemodules',$smarty_cachemodules);
+$smarty_cacheudt = get_site_preference('smarty_cacheudt',$smarty_cacheudt);
 
 $active_tab='unknown';
 if( isset($_POST['active_tab']) )
@@ -223,6 +233,8 @@ else if (isset($_POST["editsiteprefs"]))
 	  set_site_preference('metadata', $metadata);
 	  if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
 	  set_site_preference('logintheme', $logintheme);
+	  if (isset($_POST['backendwysiwyg'])) $backendwysiwyg = $_POST['backendwysiwyg'];
+	  set_site_preference('backendwysiwyg', $backendwysiwyg);	  
 	  if (isset($_POST["defaultdateformat"])) $defaultdateformat = $_POST["defaultdateformat"];
 	  set_site_preference('defaultdateformat', $defaultdateformat);
 	  if (isset($_POST['nogcbwysiwyg'])) $nogcbwysiwyg = $_POST['nogcbwysiwyg'];
@@ -332,15 +344,34 @@ else if (isset($_POST["editsiteprefs"]))
 	      $pseudocron_granularity = (int)$_POST['pseudocron_granularity'];
 	      set_site_preference('pseudocron_granularity',$pseudocron_granularity);
 	    }
-      if (isset($_POST["adminlog_lifetime"])) {
-          $adminlog_lifetime = $_POST["adminlog_lifetime"];
-          set_site_preference('adminlog_lifetime',$adminlog_lifetime);
-      }
+	  if (isset($_POST["adminlog_lifetime"])) {
+	    $adminlog_lifetime = $_POST["adminlog_lifetime"];
+	    set_site_preference('adminlog_lifetime',$adminlog_lifetime);
+	  }
 	  break;
+	  
+	case 'smarty':
+	  if( isset($_POST['use_smartycache']) ) {
+	    $use_smartycache = $_POST['use_smartycache'];
+	    set_site_preference('use_smartycache',$use_smartycache);
+	  }
+	  if( isset($_POST['use_smartycompilecheck']) ) {
+	    $use_smartycompilecheck = $_POST['use_smartycompilecheck'];
+	    set_site_preference('use_smartycompilecheck',$use_smartycompilecheck);
+	  }
+	  if( isset($_POST['smarty_cachemodules']) ) {
+	    $smarty_cachemodules = $_POST['smarty_cachemodules'];
+	    set_site_preference('smarty_cachemodules',$smarty_cachemodules);
+	  }
+	  if( isset($_POST['smarty_cacheudt']) ) {
+	    $smarty_cacheudt = $_POST['smarty_cacheudt'];
+	    set_site_preference('smarty_cacheudt',$smarty_cacheudt);
+	  }
+	  $gCms->clear_cached_files();
 	}
 
       // put mention into the admin log
-	  audit(-1, 'Global Settings', 'Edited');
+      audit(-1, 'Global Settings', 'Edited');
       $message .= lang('siteprefsupdated');
     }
   else
@@ -438,6 +469,7 @@ $smarty->assign('active_listcontent',($active_tab == 'listcontent')?1:0);
 $smarty->assign('active_editcontent',($active_tab == 'editcontent')?1:0);
 $smarty->assign('active_sitedown',($active_tab == 'sitedown')?1:0);
 $smarty->assign('active_setup',($active_tab == 'setup')?1:0);
+$smarty->assign('active_smarty',($active_tab == 'smarty')?1:0);
 
 $smarty->assign('SECURE_PARAM_NAME',CMS_SECURE_PARAM_NAME);
 $smarty->assign('CMS_USER_KEY',$_SESSION[CMS_USER_KEY]);
@@ -446,6 +478,7 @@ $smarty->assign('global_umask',$global_umask);
 $smarty->assign('testresults',$testresults);
 $smarty->assign('frontendlang',$frontendlang);
 $smarty->assign('frontendwysiwyg',$frontendwysiwyg);
+$smarty->assign('backendwysiwyg',$backendwysiwyg);
 $smarty->assign('nogcbwysiwyg',$nogcbwysiwyg);
 $smarty->assign('metadata',$metadata);
 $smarty->assign('enablesitedownmessage',$enablesitedownmessage);
@@ -477,6 +510,10 @@ $smarty->assign('contentimage_path',$contentimage_path);
 $smarty->assign('adminlog_lifetime',$adminlog_lifetime);
 $smarty->assign('search_module',$search_module);
 $smarty->assign('page_parent_use_name',$page_parent_use_name);
+$smarty->assign('use_smartycache',$use_smartycache);
+$smarty->assign('use_smartycompilecheck',$use_smartycompilecheck);
+$smarty->assign('smarty_cachemodules',$smarty_cachemodules);
+$smarty->assign('smarty_cacheudt',$smarty_cacheudt);
 
 $tmp = array(15=>lang('cron_15m'),30=>lang('cron_30m'),
 	     60=>lang('cron_60m'),120=>lang('cron_120m'),
@@ -513,6 +550,7 @@ $smarty->assign('lang_submit',lang('submit'));
 $smarty->assign('lang_clearcache',lang('clearcache'));
 $smarty->assign('lang_clear',lang('clear'));
 $smarty->assign('lang_setup',lang('setup'));
+$smarty->assign('lang_smarty',lang('smarty_settings'));
 $smarty->assign('lang_sitename',lang('sitename'));
 $smarty->assign('lang_global_umask',lang('global_umask'));
 $smarty->assign('lang_test',lang('test'));
@@ -522,6 +560,7 @@ $smarty->assign('lang_frontendwysiwygtouse',lang('frontendwysiwygtouse'));
 $smarty->assign('lang_nogcbwysiwyg',lang('nogcbwysiwyg'));
 $smarty->assign('lang_globalmetadata',lang('globalmetadata'));
 $smarty->assign('lang_template',lang('template'));
+$smarty->assign('lang_backendwysiwygtouse',lang('backendwysiwygtouse'));
 $smarty->assign('lang_enablesitedown',lang('enablesitedown'));
 $smarty->assign('lang_sitedownmessage',lang('sitedownmessage'));
 $smarty->assign('lang_checkversion',lang('checkversion'));
@@ -560,6 +599,9 @@ $all_attributes['extra3'] = lang('extra3');
 $all_attributes['additionaleditors'] = lang('additionaleditors');
 $all_attributes['page_url'] = lang('page_url');
 $smarty->assign('all_attributes',$all_attributes);
+
+$smarty->assign('smarty_cacheoptions',array('always'=>lang('always'),'never'=>lang('never'),'moduledecides'=>lang('moduledecides')));
+$smarty->assign('smarty_cacheoptions2',array('always'=>lang('always'),'never'=>lang('never')));
 
 $contentops = cmsms()->GetContentOperations();
 $all_contenttypes = $contentops->ListContentTypes(false,false);

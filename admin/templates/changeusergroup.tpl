@@ -55,7 +55,7 @@
                           {if ($thisgroup->id == 1 && $user->id == 1)}
   			    <td class="g{$thisgroup->id}">&nbsp;</td>
                           {else}
-			    {assign var="gid" value=`$thisgroup->id`}
+			    {assign var="gid" value=$thisgroup->id}
 			    <td class="g{$thisgroup->id}">
                               <input type="checkbox" name="ug_{$user->id}_{$gid}" value="1"{if isset($user->group[$gid])} checked="checked"{/if}  />
                             </td>

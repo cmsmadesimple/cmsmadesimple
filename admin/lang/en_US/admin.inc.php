@@ -1,4 +1,17 @@
 <?php
+$lang['admin']['info_smarty_cacheudt'] = 'If enabled, all calls to user defined tags will be cached.  This will be useful for tags that display the output of database queries.  You can disable caching using the nocache parameter in the udt call.  i.e: <code>{myusertag nocache}</code>';
+$lang['admin']['prompt_smarty_cacheudt'] = 'Cache UDT Calls';
+$lang['admin']['always'] = 'Always';
+$lang['admin']['never'] = 'Never';
+$lang['admin']['moduledecides'] = 'Module Decides';
+$lang['admin']['info_smarty_cachemodules'] = 'Select how to cache tags in various templates that call module actions.  If enabled, all module calls will be cached.  This may have negative effects on some modules, or modules with forms.  <em>(note: you can override this using the nocache option as described in the smarty manual).  If disabled no module calls will be cached which may have an effect on performance.   If you select to allow the module to decide, the default is that caching is not performed.  The module can override this, and you can disable caching using the nocache parameter when calling the module.';
+$lang['admin']['prompt_smarty_cachemodules'] = 'Cache module calls';
+$lang['admin']['info_smarty_compilecheck'] = 'If disabled, smarty will not check the modification dates of templates to see if they have been modified.  This can significantly improve performance.  However performing any template change (or even some content changes) may require a cache clearing';
+$lang['admin']['prompt_smarty_compilecheck'] = 'Do a Compilation Check';
+$lang['admin']['info_smarty_options'] = 'The following options have effect only when the above caching optionis enabled';
+$lang['admin']['info_smarty_caching'] = 'When enabled, the output from various plugins will be cached to increase performance.  This only applies to output on content pages marked as cachable, and only for non-admin users.  Note, this functionality may interfere with the behavior of some modules or plugins, or plugins that use non-inline forms.';
+$lang['admin']['prompt_use_smartycaching'] = 'Enable Smarty Caching';
+$lang['admin']['smarty_settings'] = 'Smarty Settings';
 $lang['admin']['help_function_cms_init_editor'] = <<<EOT
 <h3>What does this do?</h3>
   <p>This plugin is used to initialize the selected wysiwyg editor for display when wysiwyg functionalities are required for frontend data submission.  This module will find the selected frontend wysiwyg, determine if it has been requested, and if so generate the appropriate html code <em>(usually javascript links)</em> so that the wysiwyg will initialize properly when the page is loaded.  If no wysiwyg editors have been requested for the frontend request this plugin will produce no output.</p>
@@ -1071,8 +1084,8 @@ $lang['admin']['help_function_cms_jquery'] = <<<EOT
 
 <h3><em>Included Defaults</em></h3>
 <ul>
-	<li><tt>jQuery</tt><em>(1.7.1)</em> - jquery-1.7.1.min.js</li>
-	<li><tt>jQuery UI</tt><em>(1.8.16)</em> - jquery-ui-1.8.16.min.js</li>
+	<li><tt>jQuery</tt><em>(1.6.2)</em> - jquery-1.7.1.min.js</li>
+	<li><tt>jQuery UI</tt><em>(1.8.14)</em> - jquery-ui-1.8.16.custom.min.js</li>
 	<li><tt>nestedSortable</tt>(1.3.4) - jquery/js/jquery.ui.nestedSortable-1.3.4.js</li>
 	<li><tt>jQuery json</tt><em>(2.2)</em> - jquery/js/jquery.json-2.2.js</li>
 </ul>
@@ -1512,8 +1525,6 @@ $lang['admin']['user_created'] = 'Custom Shortcuts';
 $lang['admin']['forums'] = 'Forums';
 $lang['admin']['wiki'] = 'Wiki';
 $lang['admin']['irc'] = 'IRC';
-$lang['admin']['about'] = 'About';
-$lang['admin']['team'] = 'Team';
 $lang['admin']['module_help'] = 'Module Help';
 $lang['admin']['managebookmarks'] = 'Manage Shortcuts'; //needs translation
 $lang['admin']['editbookmark'] = 'Edit Shortcut'; //needs translation
@@ -1951,6 +1962,7 @@ $lang['admin']['permissions'] = 'Permissions';
 $lang['admin']['unknown'] = 'Unknown';
 $lang['admin']['download'] = 'Download';
 $lang['admin']['frontendwysiwygtouse']="Frontend wysiwyg";
+$lang['admin']['backendwysiwygtouse']="Default backend wysiwyg";
 $lang['admin']['all_groups'] = 'All Groups'; //needs translation
 $lang['admin']['error_type'] = 'Error Type';
 $lang['admin']['contenttype_errorpage'] = 'Error Page';

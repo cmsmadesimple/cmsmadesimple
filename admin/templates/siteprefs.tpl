@@ -4,6 +4,7 @@
 {$mod->SetTabHeader('editcontent',$lang_editcontent_settings,$active_editcontent)}
 {$mod->SetTabHeader('sitedown',$lang_sitedown,$active_sitedown)}
 {$mod->SetTabHeader('setup',$lang_setup,$active_setup)}
+{$mod->SetTabHeader('smarty',$lang_smarty,$active_smarty)}
 {$mod->EndTabHeaders()}
 {$mod->StartTabContent()}
 
@@ -56,7 +57,14 @@
   </p>
 </div>
 {/if}
-
+<div class="pageoverflow">
+	<p class="pagetext">{$lang_backendwysiwygtouse}:</p>
+	<p class="pageinput">
+		<select name="backendwysiwyg">
+		{html_options options=$wysiwyg selected=$backendwysiwyg}
+		</select>
+	</p>
+</div>
 <div class="pageoverflow">
   <p class="pagetext">{$lang_date_format_string}:</p>
   <p class="pageinput">
@@ -399,6 +407,67 @@
   </p>
 </div>
 </fieldset>
+
+<div class="pageoverflow">
+  <p class="pagetext">&nbsp;</p>
+  <p class="pageinput">
+    <input type="submit" name="submit" value="{$lang_submit}" class="pagebutton"  />
+    <input type="submit" name="cancel" value="{$lang_cancel}" class="pagebutton"  />
+  </p>
+</div>
+</form>
+{$mod->EndTab()}
+
+{$mod->StartTab('smarty')}
+<form id="siteprefform_setup" method="post" action="siteprefs.php">
+<div>
+  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
+  <input type="hidden" name="active_tab" value="smarty" />
+  <input type="hidden" name="editsiteprefs" value="true" />
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">{'prompt_use_smartycaching'|lang}</p>
+  <p class="pageinput">
+    <select name="use_smartycache">
+      {html_options options=$yesno selected=$use_smartycache}
+    </select>
+    <br/>
+    {'info_smarty_caching'|lang}
+  </p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">{'info_smarty_options'|lang}</p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">{'prompt_smarty_compilecheck'|lang}</p>
+  <p class="pageinput">
+    <select name="use_smartycompilecheck">
+      {html_options options=$yesno selected=$use_smartycompilecheck}
+    </select>
+    <br/>
+    {'info_smarty_compilecheck'|lang}
+  </p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">{'prompt_smarty_cachemodules'|lang}</p>
+  <p class="pageinput">
+    <select name="smarty_cachemodules">
+      {html_options options=$smarty_cacheoptions selected=$smarty_cachemodules}
+    </select>
+    <br/>
+    {'info_smarty_cachemodules'|lang}
+  </p>
+</div>
+<div class="pageoverflow">
+  <p class="pagetext">{'prompt_smarty_cacheudt'|lang}</p>
+  <p class="pageinput">
+    <select name="smarty_cacheudt">
+      {html_options options=$smarty_cacheoptions2 selected=$smarty_cacheudt}
+    </select>
+    <br/>
+    {'info_smarty_cacheudt'|lang}
+  </p>
+</div>
 
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>

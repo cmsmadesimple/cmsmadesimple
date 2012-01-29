@@ -511,7 +511,7 @@ final class ModuleOperations
   private function &_get_module_info()
   {
 	  if( !is_array($this->_moduleinfo) || count($this->_moduleinfo) == 0 )
-	  {
+	  {	  
 		  $query = 'SELECT * FROM '.cms_db_prefix().'modules ORDER BY module_name';
 		  $db = cmsms()->GetDb();
 		  $tmp = $db->GetArray($query);

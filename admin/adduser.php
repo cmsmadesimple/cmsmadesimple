@@ -54,6 +54,9 @@ if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
 $email = "";
 if (isset($_POST["email"])) $email = trim($_POST["email"]);
 
+$wysiwyg = '';
+if (isset($_POST["wysiwyg"])) $wysiwyg = $_POST["wysiwyg"];
+
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
 
@@ -125,7 +128,7 @@ if (isset($_POST["adduser"]))
 			# set some default preferences, based on the user creating this user
 			$adminid = get_userid();
 			$userid = $newuser->id;
-			set_preference($userid, 'wysiwyg', get_preference($adminid, 'wysiwyg'));
+			set_preference($userid, 'wysiwyg', $wysiwyg);
 			set_preference($userid, 'default_cms_language', get_preference($adminid, 'default_cms_language'));
 			set_preference($userid, 'admintheme', get_site_preference('logintheme',CmsAdminThemeBase::GetDefaultTheme()));
 			set_preference($userid, 'bookmarks', get_preference($adminid, 'bookmarks'));
@@ -200,6 +203,26 @@ else {
 			<p class="pagetext"><?php echo lang('email')?>:</p>
 			<p class="pageinput"><input type="text" name="email" maxlength="255" value="<?php echo $email ?>" /></p>
 		</div>
+		<div class="pageoverflow">
+			<div class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</div>
+			<div class="pageinput">
+				<select name="wysiwyg">
+				<option value="-1"><?php echo lang('none'); ?></option>
+				<?php
+				$modules = module_meta::get_instance() -> module_list_by_method('IsWYSIWYG');
+				foreach( $modules as $key )
+				{
+					echo '<option value="'.$key.'"';
+					if (get_site_preference('backendwysiwyg') == $key)
+					{
+					  echo ' selected="selected"';
+					}
+				      echo '>'.$key.'</option>';
+				}
+				?>
+				</select>
+			</div>
+		</div>		
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
 			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>

@@ -49,6 +49,16 @@ final class UserTagOperations
 	}
 
 
+	public function __call($name,$arguments)
+	{
+		die('test');
+		$this->LoadUserTag();
+		if( !isset($this->_cache[$name]) ) return;
+
+		// it's a UDT alright
+		$this->CallUserTag($name,$arguments);
+	}
+
 	/*
 	 * Load all the information about user tags
 	 */
@@ -238,12 +248,8 @@ final class UserTagOperations
 		if( $row )
 		{
 			$smarty = cmsms()->GetSmarty();
-			$code = $row['code'];		
-			$functionname = "tmpcallusertag_".$name."_userplugin_function";
-			if( (false !== $code) && ((function_exists($functionname) || !(@eval('function '.$functionname.'(&$params, &$smarty) {'.$code."\n}") === FALSE))) )
-			{
-				$result = call_user_func_array($functionname, array(&$params, &$smarty));
-			}
+			$functionname = $this->CreateTagFunction($name);
+			$result = call_user_func_array($functionname, array(&$params, &$smarty));
 		}
 		return $result;
 	}

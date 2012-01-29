@@ -214,13 +214,27 @@ else
 $html = '';
 $showtemplate = true;
 
-if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') ||
-    (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false'))
+if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false')) 
+//|| (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false'))
 {
   $showtemplate = false;
 }
 
+$smarty->set_global_cacheid('p'.$contentobj->Id());
+$uid = get_userid(FALSE);
+if( $contentobj->Cachable() && $showtemplate && !$uid && get_site_preference('use_smartycache',0) )
+  {
+    // this content is cachable...  so enable smarty caching of this page data, for this user.
+    $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
+  }
+else
+  {
+    // do not cache anything on this page... also means we have to get rid of any cached data for this page.
+    $smarty->clearCache(null);
+  }
 
+
+/*
 if (isset($_GET["print"]))
 {
   $pageinfo = cmsms()->get_variable('pageinfo');
@@ -247,13 +261,15 @@ else
 	}
 	else
 	{
-	    $top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
-	    $body = $smarty->fetch('tpl_body:'.$contentobj->TemplateId());
-	    $head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
-	    $html = $top.$head.$body;
+*/	
+$top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
+$body = $smarty->fetch('tpl_body:'.$contentobj->TemplateId());
+$head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
+$html = $top.$head.$body;
+/*	
 	}
 }
-
+*/
 
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
@@ -286,7 +302,6 @@ else if( isset($config['show_performance_info']) && ($showtemplate == true) )
 if( is_sitedown() || $config['debug'] == true)
 {
 	$smarty->clear_compiled_tpl();
-	#$smarty->clear_all_cache();
 }
 
 if ( !is_sitedown() && $config["debug"] == true)
@@ -310,7 +325,12 @@ if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temp
     unset($_SESSION['cms_preview']);
   }
 
-debug_display(array_keys(ModuleOperations::get_instance()->GetLoadedModules()));
+
+//print_r(cmsms()->variables);  
+  
+//debug_display(array_keys(ModuleOperations::get_instance()->GetLoadedModules()));
+
+//print_r($smarty->registered_plugins);
 
 # vim:ts=4 sw=4 noet
 ?>

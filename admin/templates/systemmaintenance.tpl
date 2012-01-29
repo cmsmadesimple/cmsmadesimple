@@ -1,6 +1,6 @@
 {$mod->StartTabHeaders()}
-{$mod->SetTabHeader('database',$lang_database,$active_general)}
-{$mod->SetTabHeader('changelog',$lang_changelog,$active_listcontent)}
+{$mod->SetTabHeader('database',$lang_database,isset($active_general))}
+{$mod->SetTabHeader('changelog',$lang_changelog,isset($active_listcontent))}
 {*{$mod->SetTabHeader('editcontent',$lang_editcontent_settings,$active_editcontent)}
 {$mod->SetTabHeader('sitedown',$lang_sitedown,$active_sitedown)}
 {$mod->SetTabHeader('setup',$lang_setup,$active_setup)}

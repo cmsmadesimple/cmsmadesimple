@@ -280,6 +280,7 @@ abstract class CMSModule
 	  return cms_module_plugin($params,$smarty);
 	}
 
+
 	/**
 	 * Register a plugin to smarty with the
 	 * name of the module.  This method should be called
@@ -290,14 +291,41 @@ abstract class CMSModule
 	 * @final
 	 * @return void
 	 * @see SetParameters
+	 * @see can_cache_output
 	 */
 	final public function RegisterModulePlugin()
 	{
 	  $gCms = cmsms();
 
+	  $cache_flag = false;
+	  $do_cache = get_site_preference('smarty_cachemodules','never');
+	  if( $do_cache == 'always' )
+	    {
+	      $cache_flag = true;
+	    }
+	  else if( $do_cache == 'moduledecides' )
+	    {
+	      $check_flag = $this->can_cache_output();
+	    }
 	  $smarty = $gCms->GetSmarty();
 	  $smarty->register_function($this->GetName(),
-				   array($this,'function_plugin'));
+				     array($this,'function_plugin'),
+				     $cache_flag
+				     );
+	}
+
+	/**
+	 * Determins if the output from calls to this module can be cached by smarty or any other means.
+	 * primarily useful for modules that output static output.  By default, returns false.
+	 *
+	 * @abstract
+	 * @since 1.11
+	 * @author Robert Campbell
+	 * @return boolean
+	 */
+	public function can_cache_output()
+	{
+	  return FALSE;
 	}
 
 	/**

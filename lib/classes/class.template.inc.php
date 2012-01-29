@@ -43,6 +43,7 @@ class Template
 	var $encoding;
 	var $active;
 	var $default;
+	var $modified_date;
 
 	function Template()
 	{
@@ -58,6 +59,7 @@ class Template
 		$this->encoding = '';
 		$this->active = false;
 		$this->default = false;
+		$this->modified_date = 0;
 	}
 
 	function Id()
@@ -90,6 +92,7 @@ class Template
 		if ($this->id > -1)
 		{
 			$result = $templateops->UpdateTemplate($this);
+			$this->modified_date = time();
 		}
 		else
 		{
@@ -97,6 +100,7 @@ class Template
 			if ($newid > -1)
 			{
 				$this->id = $newid;
+				$this->modified_date = time();
 				$result = true;
 			}
 

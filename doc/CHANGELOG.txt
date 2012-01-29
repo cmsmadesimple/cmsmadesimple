@@ -5,7 +5,15 @@ Version 1.11 - NO NAME
  - Revamp of admin theme.
  - Remove the use_adodb_lite config variable
  - Remove the process_whole_template config variable
-
+ - Plugins revamp, removed _cms_ from smarty function header. General plugin cleanup.
+ - Removed smarty plugin google_search
+ - Moved smarty plugin search to Search module
+ - Moved smarty plugin print to CMSPrinting module
+ - Added default backend wysiwyg as a preference
+ - Backend wysiwyg option on add user
+ - Smartified editprefs
+ - Updated /lib/jquery and cms_jquery plugin with latest jQuery and jQuery UI Frameworks
+ 
 Core - Bug Reports:
 
 
@@ -22,7 +30,7 @@ CMSMailer:
 
 
 MenuManager:
-
+	
 
 MicroTiny:
 

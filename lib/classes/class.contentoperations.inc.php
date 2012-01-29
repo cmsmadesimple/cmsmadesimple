@@ -41,6 +41,7 @@ class ContentOperations
 {
 	protected function __construct() {}
 	private $_content_types;
+	private $_default_content_id;
 	private static $_instance;
 
 	public static function &get_instance()
@@ -252,11 +253,9 @@ class ContentOperations
 	 */
 	function GetDefaultContent()
 	{
+		if( $this->_default_content_id ) return $this->_default_content_id;
+
 		$gCms = cmsms();
-	  if( isset($gCms->variables['default_content_id']) )
-	    {
-	      return $gCms->variables['default_content_id'];
-	    }
 		$db = $gCms->GetDb();
 
 		$result = -1;
@@ -278,7 +277,7 @@ class ContentOperations
 			}
 		}
 
-		$gCms->variables['default_content_id'] = $result;
+		$this->_default_content_id = $result;
 		return $result;
 	}
 
@@ -605,6 +604,7 @@ class ContentOperations
 	 * @param integer $id The parent of the content objects to load into the tree
 	 * @param boolean $loadprops If true, load the properties of all loaded content objects
 	 * @param boolean $all If true, load all content objects, even inactive ones.
+	 * @param array   (optional) array of explicit content ids to load
 	 * @return void
 	 * @author Ted Kulp
 	 */

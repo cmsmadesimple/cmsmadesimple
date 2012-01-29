@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
-require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
+require_once(dirname(dirname(__FILE__)).'/smarty/SmartyBC.class.php');
 
 /**
  * Extends the Smarty class for content.
@@ -29,1059 +29,277 @@ require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
  * @since 0.1
  */
 
-class Smarty_CMS extends Smarty 
+class Smarty_CMS extends SmartyBC 
 {	
-  private static $_instance;
+	public $id; // <- triggers error without | do search why this is needed
+	public $params; // <- triggers error without | do search why this is needed
+	private $_global_cache_id;
+	private static $_instance;
 
-  /**
-   * Constructor
-   *
-   * @param array The hash of CMSMS config settings
-   */
-  protected function __construct()
-  {
-    $config = cmsms()->GetConfig();
-    parent::__construct();
-    global $CMS_ADMIN_PAGE;
-    global $CMS_INSTALL_PAGE;
+	/**
+	* Constructor
+	*
+	* @param array The hash of CMSMS config settings
+	*/
+	public function __construct()
+	{ 
+		parent::__construct();
 
-    if( isset($CMS_ADMIN_PAGE) && $CMS_ADMIN_PAGE == 1 )
-      {
-	$this->template_dir = $config["root_path"].'/'.$config['admin_dir'].'/templates/';
-	$this->config_dir = $config["root_path"].'/'.$config['admin_dir'].'/configs/';
-      }
-    else
-      {
-	$this->template_dir = $config["root_path"].'/tmp/templates/';
-	$this->config_dir = $config["root_path"].'/tmp/configs/';
-      }
-    $this->compile_dir = TMP_TEMPLATES_C_LOCATION;
-    $this->cache_dir = TMP_CACHE_LOCATION;
-    $this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins',$config["root_path"].'/plugins');
+		global $CMS_ADMIN_PAGE;
+		global $CMS_INSTALL_PAGE;  
+		$config = cmsms()->GetConfig();
 
-    $this->compiler_file = 'CMS_Compiler.class.php';
-    $this->compiler_class = 'CMS_Compiler';
+		// Set template and config dirs according witch instance we are at.
+		if( isset($CMS_ADMIN_PAGE) && $CMS_ADMIN_PAGE == 1 ) {
+		
+			$this->setTemplateDir(cms_join_path($config['root_path'],$config['admin_dir'],'templates'));
+			$this->setConfigDir(cms_join_path($config['root_path'],$config['admin_dir'],'/configs'));;
+		} else {
+		
+		    $this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
+		    $this->setConfigDir(cms_join_path($config['root_path'],'tmp','templates'));
+		}
 
-    $this->assign('app_name','CMS');
+		// Set template_c and canche dirs
+		$this->setCompileDir(TMP_TEMPLATES_C_LOCATION);
+		$this->setCacheDir(TMP_CACHE_LOCATION);
 
-    if ($config["debug"] == true)
-      {
-	//$this->caching = false;
-	$this->force_compile = true;
-	$this->debugging = true;
-      }
+		// Set plugins dirs
+		$this->addPluginsDir(cms_join_path($config['root_path'],'plugins'));
 
-    if (is_sitedown())
-      {
-	$this->caching = false;
-	$this->force_compile = true;
-      }
+		// register default plugin handler
+		$this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
 
-    if (isset($CMS_ADMIN_PAGE) && $CMS_ADMIN_PAGE == 1)
-      {
-	$this->caching = false;
-	$this->force_compile = true;
-      }
+		$this->assign('app_name','CMS');
+		/* Disabling for now -Stikki- */
+		if ($config["debug"] == true) {
+		  $this->force_compile = true;
+		  $this->debugging = true;
+		}
+		
+		if (is_sitedown()) {
+			$this->setCaching(false);
+			$this->force_compile = true;
+		}
 
-    if( isset($CMS_INSTALL_PAGE) ) return;
+		// Check if we are at install page, don't register anything if so, cause nothing below is needed.
+		if(isset($CMS_INSTALL_PAGE)) return;
 
-    $this->load_file_plugins();
-
-    $this->register_resource("db", array(&$this, "template_get_template",
-					 "template_get_timestamp",
-					 "db_get_secure",
-					 "db_get_trusted"));
-    $this->register_resource("print", array(&$this, "template_get_template",
-					    "template_get_timestamp",
-					    "db_get_secure",
-					    "db_get_trusted"));
-    $this->register_resource("template", array(&$this, "template_get_template",
-					       "template_get_timestamp",
-					       "db_get_secure",
-					       "db_get_trusted"));
-    $this->register_resource("tpl_top", array(&$this, "template_top_get_template",
-					      "template_get_timestamp",
-					      "db_get_secure",
-					      "db_get_trusted"));
-    $this->register_resource("tpl_head", array(&$this, "template_head_get_template",
-					       "template_get_timestamp",
-					       "db_get_secure",
-					       "db_get_trusted"));
-    $this->register_resource("tpl_body", array(&$this, "template_body_get_template",
-					       "template_get_timestamp",
-					       "db_get_secure",
-					       "db_get_trusted"));
-    $this->register_resource("htmlblob", array(&$this, "global_content_get_template",
-					       "global_content_get_timestamp",
-					       "db_get_secure",
-					       "db_get_trusted"));
-    $this->register_resource("globalcontent", array(&$this, "global_content_get_template",
-						    "global_content_get_timestamp",
-						    "db_get_secure",
-						    "db_get_trusted"));
-    $this->register_resource("content", array(&$this, "content_get_template",
-					      "content_get_timestamp",
-					      "db_get_secure",
-					      "db_get_trusted"));
-    $this->register_resource("module", array(&$this, "module_get_template",
-					     "module_get_timestamp",
-					     "db_get_secure",
-					     "db_get_trusted"));
-    $this->register_resource("module_db_tpl", array(&$this, "module_db_template",
-						    "module_db_timestamp",
-						    "db_get_secure",
-						    "db_get_trusted"));
-    $this->register_resource("module_file_tpl", array(&$this, "module_file_template",
-						      "module_file_timestamp",
-						      "db_get_secure",
-						      "db_get_trusted"));
-  }
+		if( isset($CMS_ADMIN_PAGE) && $CMS_ADMIN_PAGE == 1 ) {
+		  $this->setCaching(false);
+		  //$this->force_compile = true;
+		}
 
 
-  public static function &get_instance()
-  {
-    if( !is_object(self::$_instance) )
-      {
-	self::$_instance = new Smarty_CMS();
-      }
-    return self::$_instance;
-  }
+		// Load User Defined Tags	
+		$utops = cmsms()->GetUserTagOperations();
+		$usertags = $utops->ListUserTags();
+		$caching = (get_site_preference('smarty_cache_udt','never') == 'always')?true:false;
+		foreach( $usertags as $id => $name )
+		{
+			$function = $utops->CreateTagFunction($name);
+			$this->registerPlugin('function',$name,$function,$caching);
+		}
+		
 
+		// Load resources
+		$this->registerResource('template',new CMSPageTemplateResource(''));
+		$this->registerResource('tpl_top',new CMSPageTemplateResource('top'));
+		$this->registerResource('tpl_head',new CMSPageTemplateResource('head'));
+		$this->registerResource('tpl_body',new CMSPageTemplateResource('body'));
+		$this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
+		$this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
+		$this->registerResource('content',new CMSContentTemplateResource());
+		$this->registerResource('htmlblob',new CMSGlobalContentTemplateResource());
+		$this->registerResource('globalcontent',new CMSGlobalContentTemplateResource());
+		
+		if( !isset($CMS_ADMIN_PAGE) )
+		{
+		    // just for frontend actions.
+		    $this->registerPlugin('function','content','CMS_Content_Block::smarty_fetch_contentblock',false);
+		    $this->registerPlugin('function','process_pagedata','CMS_Content_Block::smarty_fetch_pagedata',false);
+		    $this->registerPlugin('function','content_image','CMS_Content_Block::smarty_fetch_imageblock',false);
+		    $this->registerPlugin('function','content_module','CMS_Content_Block::smarty_fetch_moduleblock',false);
 
-  /**
-   * A method to load smarty plugins
-   *
-   */
-  protected function load_file_plugins($params = '')
-  {
-    $load_filter   = TRUE;
-    $load_compiler = TRUE;
-    $load_function = FALSE;
-    $load_modifier = FALSE;
-    $load_block    = FALSE;
+		    $this->autoload_filters = array('pre'=>'precompilefunc', 'post'=>'postcompilefunc');
 
-    $config = cmsms()->GetConfig();
-    $dirs = array($config['root_path'].'/plugins');
-    if( is_array($params) )
-      {
-	if( isset($params['dir']) )
-	  {
-	    if( !is_array($params['dir']) )
-	      {
-		$dirs = explode(',',trim($params['dir']));
-	      }
-	    else
-	      {
-		$dirs = $params['dir'];
-	      }
-	  }
+		    if( get_site_preference('use_smartycache',0) )
+		    {
+				// compile check can only be enabled, if using smarty cache... just for safety.
+				$this->setCompileCheck(get_site_preference('use_smartycompilecheck',1));
+		    }
+		}
 
-	if( isset($params['load_all']) && $params['load_all'])
-	  {
-	    $load_filter = $load_compilter = $load_function = $load_modifier = $load_block = TRUE;
-	  }
-	else
-	  {
-	    foreach( $params as $key => $value )
-	      {
-		switch( $key )
-		  {
-		  case 'load_filter':
-		    $load_filter = (int)$value;
-		    break;
-		  case 'load_compiler':
-		    $load_compiler = (int)$value;
-		    break;
-		  case 'load_function':
-		    $load_function = (int)$value;
-		    break;
-		  case 'load_modifier':
-		    $load_modifier = (int)$value;
-		    break;
-		  case 'load_block':
-		    $load_block = (int)$value;
-		    break;
-		  }
-	      }
-	  }
-      }
-
-    // now search through the dirs.
-    $caching = false;
-    foreach( $dirs as $onedir )
-      {
-	if( !is_dir($onedir) ) continue;
-
-	$it = new DirectoryIterator($onedir);
-	foreach( $it as $fi )
-	  {
-	    if( !$fi->isFile() ) continue;
-	    if( !endswith($fi->getFilename(),'.php') ) continue;
-	    
-	    $tmp = explode('.',$fi->getFilename());
-	    if( count($tmp) != 3 ) continue;
-
-	    $name = $tmp[1];
-	    $type = $tmp[0];
-
-	    switch( $type )
-	      {
-	      case 'function':
-		if( $load_function && !isset($this->_plugins[$type][$name]) )
-		  {
-		    $this->register_function($name,'smarty_cms_function_'.$name,$caching);
-		    require_once($fi->getPathname());
-		  }
-		break;
-
-	      case 'modifier':
-		if( $load_modifier && !isset($this->_plugins[$type][$name]) )
-		  {
-		    $this->register_modifier($name,'smarty_cms_modifier_'.$name);
-		    require_once($fi->getPathname());
-		  }
-		break;
-
-	      case 'compiler':
-		if( $load_compiler && !isset($this->_plugins[$type][$name]) )
-		  {
-		    $this->register_compiler_function($name,'smarty_cms_compiler_'.$name,$caching);
-		    require_once($fi->getPathname());
-		  }
-		break;
-
-	      case 'block':
-		if( $load_block && !isset($this->_plugins[$type][$name]) )
-		  {
-		    $this->register_block($name,'smarty_cms_block_'.$name,$caching);
-		    require_once($fi->getPathname());
-		  }
-		break;
-
-	      case 'postfilter':
-		if( $load_filter && !isset($this->_plugins[$type][$name]) )
-		  {
-		    $this->register_postfilter('smarty_cms_postfilter_'.$name);
-		    require_once($fi->getPathname());
-		  }
-		break;
-
-	      case 'prefilter':
-		if( $load_filter && !isset($this->_plugins[$type][$name]) )
-		  {
-		    $this->register_prefilter('smarty_cms_prefilter_'.$name);
-		    require_once($fi->getPathname());
-		  }
-		break;
-
-	      case 'outputfilter':
-		if( $load_filter && !isset($this->_plugins[$type][$name]) )
-		  {
-		    $this->register_outputfilter('smarty_cms_outputfilter_'.$name);
-		    require_once($fi->getPathname());
-		  }
-		break;
-
-	      default:
-		continue; // unknown file type.
-		break;
-	      }
-	  }
-      }
-  }
-
-  /**
-   * wrapper for include() retaining $this
-   *
-   * @ignore
-   * @access private
-   * @param  string The input filename
-   * @param  boolean A flag wether include_once should be called or just include
-   * @return mixed
-   */
-  function _include($filename, $once=false, $params=null)
-  {
-    if ($filename != '')
-      {
-	if ($once) {
-	  return include_once($filename);
-	} else {
-	  return include($filename);
+		// Enable security object
+		$this->enableSecurity('CMSSmartySecurityPolicy');
 	}
-      }
-  }
 
+	/**
+	* loadPlugin method
+	* NOTE: Overwrites parent
+	*
+	* @param string $plugin_name
+	* @param boolean $check
+	* @return mixed
+	*/
+	public function loadPlugin($plugin_name,$check = true)
+	{
+	  $res = parent::loadPlugin($plugin_name,$check);
+	  if( $res ) 
+	    {
+	      if( !function_exists($plugin_name) )
+		{
+		  $parts = explode('_',$plugin_name);
+		  if( $parts[0] != 'smarty' || $parts[1] == 'internal' ) return $res;
+		  return false;
+		}
+	    }
+	  return $res;
+	}
 
-  /**
-   * Wrapper for the trigger_error method
-   *
-   * @ignore
-   * @access private
-   * @param string The error message
-   * @param int    The error type E_USER_WARNING or E_USER_NOTICE
-   * @return void
-   */
-  function trigger_error($error_msg, $error_type = E_USER_WARNING)
-  {   
-    stack_trace();
-    var_dump("Smarty error: $error_msg");
-  }
+	/**
+	* defaultPluginHandler
+	* NOTE: Registered in constructor
+	*
+	* @param string $name
+	* @param string $type
+	* @param string $template
+	* @param string $callback
+	* @param string $script
+	* @return boolean true on success, false on failure
+	*/	
+	public function defaultPluginHandler($name, $type, $template, &$callback, &$script)
+	{
+	  $config = cmsms()->GetConfig();
+	  $fn = cms_join_path($config['root_path'],'plugins',$type.'.'.$name.'.php');
+	  if( file_exists($fn) )
+	    {
+	      // plugins with the smarty_cms_function
+	      $callback = 'smarty_cms_'.$type.'_'.$name;
+	      $script = $fn;
+	      require_once($fn);
+	      if( function_exists('smarty_cms_'.$type.'_'.$name) )
+		{
+		  $callback = 'smarty_cms_'.$type.'_'.$name;
+		  return TRUE;
+		}
+	    }
 
+	  // maybe it was loaded by a module
+	  $modulename = module_meta::get_instance()->find_module_by_plugin($name);
+	  if( $modulename )
+	    {
+	      $obj = cms_utils::get_module($modulename);
+	      if( is_object($obj) ) return TRUE;
+	    }
+	  return FALSE;
+	}
 
-  /**
-   * Method to test if a function/item is registered
-   *
-   * @access public
-   * @param string The function/item name to test
-   * @param string An optional type (block,filter,...) default is function.
-   * @return bool
-   * @since 1.10
-   * @author calguy1000
-   */
-  function is_registered($name,$type = 'function')
-  {
-    if( !$type ) return FALSE;
-    if( !isset($this->_plugins[$type]) ) return FALSE;
-    if( !isset($this->_plugins[$type][$name]) ) return FALSE;
-    return TRUE;
-  }
-
-
-  /**
-   * Method to return module file template contents.
-   * 
-   * @access private
-   * @param string The module template name
-   * @param string (returned) template contents
-   * @param object The smarty object
-   * @return boolean
-   */
-  function module_file_template($tpl_name, &$tpl_source, &$smarty_obj)
-  {
-    $params = preg_split('/;/', $tpl_name);
-
-    $config = cmsms()->GetConfig();
-    $files = array();
-    $files[] = cms_join_path($config['root_path'],'module_custom',$params[0],'templates',$params[1]);
-    $files[] = cms_join_path($config['root_path'],'modules',$params[0],'templates',$params[1]);
-    foreach( $files as $one )
-      {
-	if( file_exists($one) )
-	  {
-	    $tpl_source = @file_get_contents($one);
-	    return true;
-	  }
-      }
-    return false;
-  }
-
-  /** 
-   *  A method to return the timestamp of a module file template
-   *
-   *  @access private
-   *  @param  string The filename of the module template
-   *  @param  int    (returned) The file timestamp
-   *  @param  object The smarty object
-   *  @return boolean
-   */
-  function module_file_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
-  {
-      
-    $params = preg_split('/;/', $tpl_name);
-      
-    $config = cmsms()->GetConfig();
-    $files = array();
-    $files[] = cms_join_path($config['root_path'],'module_custom',$params[0],'templates',$params[1]);
-    $files[] = cms_join_path($config['root_path'],'modules',$params[0],'templates',$params[1]);
-    foreach( $files as $one )
-      {
-	if( file_exists($one) )
-	  {
-	    $tpl_timestamp = filemtime($one);
-	    return true;
-	  }
-      }
-    return false;
-  }
-
-  /**
-   * A method to return a module database template.
-   *
-   * @access private
-   * @param string The database template name.
-   * @param  string (returned) The database template contents
-   * @param  object The smarty object.
-   * @return boolean
-   */
-  function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)
-  {   
-    $db = cmsms()->GetDb();
-    $query = "SELECT * from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-    $row = $db->GetRow($query, preg_split('/;/', $tpl_name));
-    if ($row)
-      {
-	$tpl_source = $row['content'];
-	return true;
-      }
-
-    return false;
-  }
-
-  /** 
-   *  A method to return the timestamp of a module database template
-   *
-   *  @access private
-   *  @param  string The name of the module template
-   *  @param  int    (returned) The file timestamp
-   *  @param  object The smarty object
-   *  @return boolean
-   */
-  function module_db_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
-  {
-
-    $db = cmsms()->GetDb();
-    $module_template_cache = cms_utils::get_app_data('module_template_cache');
-    if( isset($module_template_cache) && isset($module_template_cache[$tpl_name]) )
-      {
-	$tpl_timestamp = $module_template_cache[$tpl_name];
-	return true;
-      }
+	/**
+	* get_instance method
+	*
+	* @return object $this
+	*/
+	public static function &get_instance()
+	{
+		if( !is_object(self::$_instance) ) {
+			
+			self::$_instance = new Smarty_CMS();
+		}
 		
-    $query = "SELECT module_name,template_name,modified_date 
-                            FROM ".cms_db_prefix()."module_templates";
-    $results = $db->GetArray($query);
+		return self::$_instance;
+	}
 
-    if( !count($results) ) return false;
+	/**
+	* get_instance method
+	*
+	* @param int $id
+	* @return void
+	*/
+	public function set_global_cacheid($id)
+	{
+	  if( is_null($id) || $id === '' )
+	    {
+	      $this->_global_cache_id = null;
+	    }
+	  else
+	    {
+	      $this->_global_cache_id = $id;
+	    }
+	}
 
-    if( empty($module_template_cache) )
-      {
-	$module_template_cache = array();
-      }
-    foreach( $results as $row )
-      {
-	$key = $row['module_name'].';'.$row['template_name'];
-	$val = $db->UnixTimeStamp($row['modified_date']);
-	$module_template_cache[$key] = $val;
-      }
+	/**
+	* fetch method
+	* NOTE: Overwrites parent
+	*
+	* @param mixed $template
+	* @param int $cache_id
+	* @param mixed $parent
+	* @param boolean $display
+	* @param boolean $merge_tpl_vars
+	* @param boolean $no_output_filter
+	* @return mixed
+	*/	
+	public function fetch($template = null,$cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
+	{
+	  if( is_null($cache_id) || $cache_id === '' )
+	    {
+	      $cache_id = $this->_global_cache_id;
+	    }
+	  else if( $cache_id[0] == '|' )
+	    {
+	      $cache_id = $this->_global_cache_id . $cache_id;
+	    }
+	  return parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
+	}
 
-    $tpl_timestamp = $module_template_cache[$tpl_name];
-    cms_utils::set_app_data('module_template_cache',$module_template_cache);
-    return true;
-  }
+	/**
+	* clearCache method
+	* NOTE: Overwrites parent
+	*
+	* @param mixed $template_name
+	* @param int $cache_id
+	* @param int $compile_id
+	* @param mixed $exp_time
+	* @param mixed $type
+	* @return mixed
+	*/	
+	public function clearCache($template_name = null,$cache_id = null,$compile_id = null,$exp_time = null,$type = null)
+	{
+	  if( is_null($cache_id) || $cache_id === '' )
+	    {
+	      $cache_id = $this->_global_cache_id;
+	    }
+	  else if( $cache_id[0] == '|' )
+	    {
+	      $cache_id = $this->_global_cache_id . $cache_id;
+	    }
+	  return parent::clearCache($template_name,$cache_id,$compile_id,$exp_time,$type);
+	}
 
-
-  /**
-   * A method to return the contents of a global content block.
-   *
-   * @access private
-   * @param string The global content block name.
-   * @param  string (returned) The database template contents
-   * @param  object The smarty object.
-   * @return boolean
-   */
-  function global_content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
-  {
-    debug_buffer('start global_content_get_template');
-    $gCms = cmsms();
-    $config = $gCms->GetConfig();
-    $gcbops = $gCms->GetGlobalContentOperations();
-
-    $oneblob = $gcbops->LoadHtmlBlobByName($tpl_name);
-    if ($oneblob)
-      {
-	$text = $oneblob->content;
-	$tpl_source = $text;
-
-	// So no one can do anything nasty, take out the php smarty tags.  Use a user
-	// defined plugin instead.
-	if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-	  {
-	    $tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
-	  }
-      }
-    else
-      {
-	$tpl_source = "<!-- Html blob '" . $tpl_name . "' does not exist  -->";
-      }
-    debug_buffer('end global_content_get_template');
-    return true;
-  }
-
-
-  /** 
-   *  A method to return the timestamp of a global content block.
-   *
-   *  @access private
-   *  @param  string The name of the global content block.
-   *  @param  int    (returned) The file timestamp
-   *  @param  object The smarty object
-   *  @return boolean
-   */
-  function global_content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
-  {
-    debug_buffer('start global_content_get_timestamp');
-    $gCms = cmsms();
-    $gcbops = $gCms->GetGlobalContentOperations();
-    $oneblob = $gcbops->LoadHtmlBlobByName($tpl_name);
-    if ($oneblob)
-      {
-	$tpl_timestamp = $oneblob->modified_date;
-	debug_buffer('end global_content_get_timestamp');
-	return true;
-      }
-    else
-      {
-	return false;
-      }
-  }
-
-
-  /**
-   * Given a page template, return the portion of a page template before the head tag.
-   *
-   * @access private
-   * @param string The page template name.
-   * @param  string (returned) The database template contents
-   * @param  object The smarty object.
-   * @return boolean
-   */
-  function template_top_get_template($tpl_name, &$tpl_source, $smarty_obj)
-  {
-    $gCms = cmsms();
-    $config = $gCms->GetConfig();
-	  
-    if (is_sitedown())
-      {
-	$tpl_source = '';
-	return true;
-      }
-    else
-      {
-	if ($tpl_name == 'notemplate')
-	  {
-	    $tpl_source = '';
-	    return true;
-	  }
-
-	if( isset($gCms->variables['template']) )
-	  {
-	    $tpl_source = $gCms->variables['template'];
-	  }
-	else
-	  {
-	    $contentobj = $gCms->variables['content_obj'];
-	    $templateops = $gCms->GetTemplateOperations();
-	    $templateobj = $templateops->LoadTemplateByID($contentobj->TemplateId());
-	    if (isset($templateobj) && $templateobj !== FALSE)
-	      {
-		$tpl_source = $templateobj->content;
-		$gCms->variables['template'] = $tpl_source;
-	      }
-	  }
-		 
-	$pos = stripos($tpl_source,'<head');
-	if( $pos === FALSE )
-	  {
-	    // return the whole template
-	    return true;
-	  }
-	$tpl_source = substr($tpl_source,0,$pos);
-	return true;
-      }
-    return false;
-  }
-
-
-  /**
-   * Given a page template, return the head portion of a page template.
-   *
-   * @access private
-   * @param string The page template name.
-   * @param  string (returned) The database template contents
-   * @param  object The smarty object.
-   * @return boolean
-   */
-  function template_head_get_template($tpl_name, &$tpl_source, &$smarty_obj)
-  {
-    $gCms = cmsms();
-    $config = $gCms->GetConfig();
-	  
-    if (is_sitedown())
-      {
-	$tpl_source = '';
-	return true;
-      }
-    else
-      {
-	if ($tpl_name == 'notemplate')
-	  {
-	    $tpl_source = '';
-	    return true;
-	  }
-
-	if( isset($gCms->variables['template']) )
-	  {
-	    $tpl_source = $gCms->variables['template'];
-	  }
-	else
-	  {
-	    $contentobj = $gCms->variables['content_obj'];
-	    $templateops = $gCms->GetTemplateOperations();
-	    $templateobj = $templateops->LoadTemplateByID($contentobj->TemplateId());
-	    if (isset($templateobj) && $templateobj !== FALSE)
-	      {
-		$tpl_source = $templateobj->content;
-		$gCms->variables['template'] = $tpl_source;
-	      }
-	  }
-		 
-	$pos1 = stripos($tpl_source,'<head');
-	$pos2 = stripos($tpl_source,'</head>');
-	if( $pos1 === FALSE || $pos2 === FALSE )
-	  {
-	    // return an empty string
-	    // assume it was processed in the top
-	    $tpl_source = '';
-	    return true;
-	  }
-	$tpl_source = substr($tpl_source,$pos1,$pos2-$pos1+7);
-	return true;
-      }
-    return false;
-  }
-
-
-  /**
-   * Given a page template, return the body portion of a page template.
-   *
-   * @access private
-   * @param string The page template name.
-   * @param  string (returned) The database template contents
-   * @param  object The smarty object.
-   * @return boolean
-   */
-  function template_body_get_template($tpl_name, &$tpl_source, $smarty_obj)
-  {
-    $gCms = cmsms();
-    $config = $gCms->GetConfig();
-	  
-    if (is_sitedown())
-      {
-	header('HTTP/1.0 503 Service Unavailable');
-	header('Status: 503 Service Unavailable');
-
-	$tpl_source = get_site_preference('sitedownmessage');
-	return true;
-      }
-    else
-      {
-	if ($tpl_name == 'notemplate')
-	  {
-	    $tpl_source = '{content}';
-	    return true;
-	  }
-
-	if( isset($gCms->variables['template']) )
-	  {
-	    $tpl_source = $gCms->variables['template'];
-	  }
-	else
-	  {
-	    $contentobj = $gCms->variables['content_obj'];
-	    $templateops = $gCms->GetTemplateOperations();
-	    $templateobj = $templateops->LoadTemplateByID($contentobj->TemplateId());
-	    if (isset($templateobj) && $templateobj !== FALSE)
-	      {
-		$tpl_source = $templateobj->content;
-		$gCms->variables['template'] = $tpl_source;
-	      }
-	  }
-	      
-	$pos = stripos($tpl_source,'</head>');
-	if( $pos === FALSE )
-	  {
-	    // this probably means it's not an html template
-	    // just return an empty string
-	    // and assume that the tpl_head stuff
-	    // returned the entire template
-	    $tpl_source = '';
-	    return true;
-	  }
-
-	$tpl_source = substr($tpl_source,$pos+7);
-	return true;
-      }
-    return false;
-  }
-
-  /**
-   * Given a page template name, return it's entire contents.
-   *
-   * @access private
-   * @param string The page template name.
-   * @param  string (returned) The database template contents
-   * @param  object The smarty object.
-   * @return boolean
-   */
-  function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
-  {
-    $gCms = cmsms();
-    $config = $gCms->GetConfig();
-
-    if (is_sitedown())
-      {
-	$tpl_source = get_site_preference('sitedownmessage');
-	return true;
-      }
-    else
-      {
-	if ($tpl_name == 'notemplate')
-	  {
-	    $tpl_source = '{content}';
-
-	    return true;
-	  }
-	else if (isset($_GET["print"]))
-	  {
-	    // this should really just go.
-	    $script = '';
-
-	    if (isset($_GET["js"]) and $_GET["js"] == 1)
-	      $script = '<script type="text/javascript">window.print();</script>';
-
-	    if (isset($_GET["goback"]) and $_GET["goback"] == 0)
-	      {
-		$tpl_source = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n".'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'.'<head><title>{title}</title><meta name="robots" content="noindex"></meta>{metadata}{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none; text-align: left;">{content}'.$script.'</body></html>';
-	      }
-	    else
-	      {
-		$hm = $gCms->GetHierarchyManager();
-		if ('mod_rewrite' == $config['url_rewriting'])
-		  {
-		    $curnode = $hm->getNodeByAlias($tpl_name);
-		  }
-		else
-		  {
-		    $curnode = $hm->getNodeById($tpl_name);
-		  }
-		$curcontent = $curnode->GetContent();
-		$page_url = $curcontent->GetURL();
-				  
-		$tpl_source = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n".'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'.'<head><title>{title}</title><meta name="robots" content="noindex"></meta>{metadata}{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none; text-align: left;"><p><a id="back" href="'.$page_url.'">&laquo; Go Back</a></p>{content}'.$script.'</body></html>';
-	      }
-
-	    return true;
-	  }
-	if( isset($_SESSION['cms_preview']) )
-	  {
-	    // get serialized data filename
-	    $tpl_name = trim($_SESSION['cms_preview']);
-	    unset($_SESSION['cms_preview']);
-	    $fname = '';
-	    if (is_writable($config["previews_path"]))
-	      {
-		$fname = cms_join_path($config["previews_path"] , $tpl_name);
-	      }
-	    else
-	      {
-		$fname = cms_join_path(TMP_CACHE_LOCATION , $tpl_name);
-	      }
-	    if( !file_exists($fname) )
-	      {
-		$tpl_source = 'Error: Cache file: '.$tpl_name.' does not exist.';
-		return false;
-	      }
-
-	    // get the serialized data
-	    $handle = fopen($fname, "r");
-	    $data = unserialize(fread($handle, filesize($fname)));
-	    fclose($handle);
-	    unlink($fname);
+	/**
+	* isCached method
+	* NOTE: Overwrites parent
+	*
+	* @param mixed $template_name
+	* @param int $cache_id
+	* @param int $compile_id
+	* @param mixed $parent
+	* @return mixed
+	*/	
+	public function isCached($template = null,$cache_id = null,$compile_id = null, $parent = null)
+	{
+	  if( is_null($cache_id) || $cache_id === '' )
+	    {
+	      $cache_id = $this->_global_cache_id;
+	    }
+	  else if( $cache_id[0] == '|' )
+	    {
+	      $cache_id = $this->_global_cache_id . $cache_id;
+	    }
+	  return parent::isCached($template,$cache_id,$compile_id,$parent);
+	}
 	
-	    $tpl_source = $data["template"];
-	    return true;
-	  }
-	else
-	  {
-	    $gCms = cmsms();
-	    $contentobj = $gCms->variables['content_obj'];
-	    $templateops =& $gCms->GetTemplateOperations();
-	    $templateobj =& $templateops->LoadTemplateByID($contentobj->TemplateId());
-	    if (isset($templateobj) && $templateobj !== FALSE)
-	      {
-		$tpl_source = $templateobj->content;
-
-#So no one can do anything nasty, take out the php smarty tags.  Use a user
-#defined plugin instead.
-		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-		  {
-		    $tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
-		  }
-					
-		return true;
-	      }
-	  }
-	return false;
-      }
-  }
-
-
-  /**
-   * Given a page template name, return it's modification date.
-   *
-   * @access private
-   * @param string The page template name.
-   * @param  int (returned) The database template modification time.
-   * @param  object The smarty object.
-   * @return boolean
-   */
-  function template_get_timestamp($tpl_name, &$tpl_timestamp, $smarty_obj)
-  {
-    $gCms = cmsms();
-
-    if (is_sitedown() || $tpl_name == 'notemplate')
-      {
-	$tpl_timestamp = time();
-	return true;
-      }
-    else if (isset($_GET['id']) && isset($_GET[$_GET['id'].'showtemplate']) && $_GET[$_GET['id'].'showtemplate'] == 'false')
-      {
-	$tpl_timestamp = time();
-	return true;
-      }
-    else if (isset($_GET['print']))
-      {
-	$tpl_timestamp = time();
-	return true;
-      }
-    else
-      {
-	$contentobj = $gCms->variables['content_obj'];
-	$templateops =& $gCms->GetTemplateOperations();
-	$templateobj =& $templateops->LoadTemplateByID($contentobj->TemplateId());
-	if (isset($templateobj) && $templateobj !== FALSE)
-	  {
-	    $tpl_timestamp = $templateobj->modified_date;
-	    return true;
-	  }
-      }
-  }
-
-
-  /**
-   * Given the name of a content block, return it's content.
-   * This method assumes the use of the pageinfo information that is created in the CMSMS index.php
-   * to determine the page id that should be used to identify which content object to use.
-   * if the pageinfo is not set, it is possible for a 404 error message to be displayed.
-   * This method also handles returning preview content if the data exists in the session.
-   *
-   * @access private
-   * @param string The page template name.
-   * @param  string (returned) The database template contents
-   * @param  object The smarty object.
-   * @return boolean
-   */
-  function content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
-  {
-    $gCms = cmsms();
-    $config = $gCms->GetConfig();
-    $contentobj = $gCms->variables['content_obj'];
-
-    if (!is_object($contentobj))
-      {
-#We've a custom error message...  return it here
-	header("HTTP/1.0 404 Not Found");
-	header("Status: 404 Not Found");
-	if ($tpl_name == 'content_en')
-	  $tpl_source = get_site_preference('custom404');
-	else
-	  $tpl_source = '';
-	return true;
-      }
-    else if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' )
-      {
-	if( !isset($_SESSION['cms_preview_data']['content_obj']) )
-	  {
-	    $contentops =& $gCms->GetContentOperations();
-	    $_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
-	    $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
-	  }
-	$contentobj =& $_SESSION['cms_preview_data']['content_obj'];
-	$tpl_source = $contentobj->Show($tpl_name);
-
-#So no one can do anything nasty, take out the php smarty tags.  Use a user
-#defined plugin instead.
-	if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-	  {
-	    $tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
-	  }
-
-	return true;
-      }
-    else
-      {
-	if (isset($contentobj) && $contentobj !== FALSE)
-	  {
-
-	    $tpl_source = $contentobj->Show($tpl_name);
-
-#So no one can do anything nasty, take out the php smarty tags.  Use a user
-#defined plugin instead.
-	    if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-	      {
-		$tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
-	      }
-				
-	    //do_cross_reference($pageinfo->content_id, 'content', $tpl_source);
-
-	    return true;
-	  }
-      }
-    return false;
-  }
-
-  /**
-   * Return the modified date of the current page id (as specified in the pageinfo)
-   * This method is used by smarty to indicate wether a content page should be recompiled and cached
-   *
-   * @access private
-   * @param string The page template name (ignored)
-   * @param  int (returned) The timestamp of the modification date of the matching content object.
-   * @param  object The smarty object.
-   * @return boolean
-   */
-  function content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
-  {
-    $gCms = cmsms();
-
-    $contentobj = $gCms->variables['content_obj'];
-
-    if (!is_object($contentobj))
-      {
-#We've a custom error message...  set a current timestamp
-	$tpl_timestamp = time();
-      }
-    else if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' )
-      {
-	$tpl_timestamp = time();
-      }
-    else
-      {
-	if ($contentobj->Cachable())
-	  {
-	    $db = $gCms->GetDb();
-	    $tpl_timestamp = $contentobj->GetModifiedDate();
-	  }
-	else
-	  {
-	    $tpl_timestamp = time();
-	  }
-      }
-    return true;
-  }
-	
-  /**
-   * Retrieve output from a module.
-   * This method grabs parameters from the request, and given the module name
-   * will call the module with the specified parameters to retrieve the module output.
-   * This is used to replace the contents of the {content} tag when a module action is
-   * called in a non inline manner.
-   *
-   * @access private
-   * @param string The module name.
-   * @param  string (returned) The moduleoutput.
-   * @param  object The smarty object.
-   * @return boolean
-   */
-  function module_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
-  {
-    $gCms = cmsms();
-    $contentobj = $gCms->variables['content_obj'];
-    $config = $gCms->config;
-
-#Run the execute_user function and replace {content} with it's output 
-    $obj = cms_utils::get_module($tpl_name);
-    if (is_object($obj))
-      {
-	@ob_start();
-
-	$id = $smarty_obj->id;
-	$returnid = is_object($contentobj)?$contentobj->Id():'';
-	$params = GetModuleParameters($id);
-	$action = 'default';
-	if (isset($params['action']))
-	  {
-	    $action = $params['action'];
-	  }
-	echo $obj->DoActionBase($action, $id, $params, is_object($contentobj)?$contentobj->Id():'');
-	$modoutput = @ob_get_contents();
-	@ob_end_clean();
-
-	$tpl_source = $modoutput;
-      }
-		
-    header("Content-Type: ".$gCms->variables['content-type']."; charset=" . get_encoding());
-    if (isset($gCms->variables['content-filename']) && $gCms->variables['content-filename'] != '')
-      {
-	header('Content-Disposition: attachment; filename="'.$gCms->variables['content-filename'].'"');
-	header("Pragma: public");
-      }
-
-#So no one can do anything nasty, take out the php smarty tags.  Use a user
-#defined plugin instead.
-    if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-      {
-	$tpl_source = preg_replace("/\{\/?php\}/", "", $tpl_source);
-      }
-
-    return true;
-  }
-
-  /**
-   * A dummy function to return the modified date of the latest module output.  
-   * This function always returns the current time which essentially disables smarty compile caching
-   * for non-inline module output.
-   *
-   * @access private
-   * @param string The page template name (ignored)
-   * @param  int (returned) The timestamp of the modification date of the matching template (always current time)
-   * @param  object The smarty object.
-   * @return boolean
-   */
-  function module_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
-  {
-    $tpl_timestamp = time();
-    return true;
-  }
-
-  /** 
-   * A dummy function that indicates that all db templates are secure.
-   * (always returns true)
-   *
-   * @access private
-   * @param  string The template name (ignored)
-   * @param  object The smarty object
-   * @return boolean
-   */
-  function db_get_secure($tpl_name, &$smarty_obj)
-  {
-    // assume all templates are secure
-    return true;
-  }
-
-  /** 
-   * A dummy function that indicates that all db templates are truested.
-   * (always returns true)
-   *
-   * @access private
-   * @param  string The template name (ignored)
-   * @param  object The smarty object
-   * @return boolean
-   */
-  function db_get_trusted($tpl_name, &$smarty_obj)
-  {
-    // not used for templates
-  }
-}
+} // end of class
 
 ?>

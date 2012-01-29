@@ -270,6 +270,8 @@ if (! isset($CMS_INSTALL_PAGE))
     debug_buffer('', 'End of Loading Modules');
   }
 
+$CMS_LAZYLOAD_MODULES = 1;
+
 #Do auto task stuff.
 if (! isset($CMS_INSTALL_PAGE))
   {
