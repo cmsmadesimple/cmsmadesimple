@@ -262,9 +262,25 @@ else
 	else
 	{
 */	
-$top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
-$body = $smarty->fetch('tpl_body:'.$contentobj->TemplateId());
-$head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
+
+try {
+	$top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
+	$body = $smarty->fetch('tpl_body:'.$contentobj->TemplateId());
+	$head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
+	
+} catch (SmartyCompilerException $e) {
+
+	echo "Error: " . preg_replace('!expected one of:.*!','',$e->getMessage());
+	
+} catch (SmartyException $e) {
+
+	echo "Error: " . $e->getMessage();
+	
+} catch (Exception $e) {
+
+	echo "Error: " . $e->getMessage();
+}
+
 $html = $top.$head.$body;
 /*	
 	}
