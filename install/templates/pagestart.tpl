@@ -20,7 +20,7 @@
 	</tbody>
 </table>
 
-{if $release_notes}
+{if isset($release_notes)}
 <table class="settings" border="0">
 	<thead class="tbcaption">
 		<tr>
