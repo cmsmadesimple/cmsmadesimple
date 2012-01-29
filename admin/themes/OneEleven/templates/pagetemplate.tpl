@@ -35,7 +35,7 @@
 						<img src="{$config.admin_url}/themes/OneEleven/images/layout/cmsms-logo.jpg" width="205" height="69" alt="{sitename} - {$pagetitle}" title="{sitename}" />
 					</div>
 					<!-- title -->
-					<span class="admin-title"> {'adminpaneltitle'|lang} - {sitename} - {$pagetitle} </span>
+					<span class="admin-title"> {'adminpaneltitle'|lang} - {sitename}{if !empty($pagetitle)} - {$pagetitle}{/if}</span>
 				</div>
 				<!-- end header-top //-->
 				<!-- start header-bottom -->
