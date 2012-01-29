@@ -1528,6 +1528,10 @@ ul.sortable .placeholder {
 	bottom: 0;
 	right:0
 }
+a.toggle-dropzone:active,
+a.toggle-dropzone:focus {
+	outline: none
+}
 .drop.hidden a.toggle-dropzone {
 	background: transparent url(themes/OneEleven/images/layout/toggle-dropzone.png) no-repeat 0 0;
 }
