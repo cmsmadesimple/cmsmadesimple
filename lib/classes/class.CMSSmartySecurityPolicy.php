@@ -33,8 +33,8 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
     parent::__construct($smarty);
     $config = cmsms()->GetConfig();
     $this->allow_php_tag = $config['use_smarty_php_tags'];
-    $this->php_functions = array('isset', 'empty','count', 'sizeof','in_array', 'is_array','time',
-								'nl2br','file_exists', 'is_string', 'is_object', 'is_file');
+    $this->php_functions = array('empty','count', 'sizeof','in_array', 'is_array','time',
+								'nl2br','file_exists', 'is_string', 'is_object', 'is_file', 'ucwords');
   }
 } // end of class
 

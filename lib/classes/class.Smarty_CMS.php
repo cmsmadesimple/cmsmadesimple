@@ -302,4 +302,7 @@ class Smarty_CMS extends SmartyBC
 	
 } // end of class
 
+
+
+
 ?>
