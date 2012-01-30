@@ -43,6 +43,7 @@
 				font-family: "Courier New", Courier, monospace, sans-serif;
 				padding: 15px;
 				overflow: auto;
+				word-wrap: break-word;
 				border-radius: 6px
 			}
 			#wrapper span.important {
