@@ -271,16 +271,13 @@ try {
 	
 } catch (SmartyCompilerException $e) {
 
-	echo "Error: " . preg_replace('!expected one of:.*!','',$e->getMessage());
+	echo $smarty->errorConsole($e);
 	
 } catch (SmartyException $e) {
 
-	echo "Error: " . $e->getMessage();
+	echo $smarty->errorConsole($e);
 	
-} catch (Exception $e) {
-
-	echo "Error: " . $e->getMessage();
-}
+} 
 
 /*	
 	}

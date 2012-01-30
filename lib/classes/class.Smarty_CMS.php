@@ -300,6 +300,40 @@ class Smarty_CMS extends SmartyBC
 	  return parent::isCached($template,$cache_id,$compile_id,$parent);
 	}
 	
+	/**
+	* Error console
+	*
+	* @param object Exception $e
+	* @return html
+	* @author Stikki
+	*/	
+	public function errorConsole(Exception $e)
+	{
+		$config = cmsms()->GetConfig();
+		$odir = $this->template_dir;
+
+		$this->force_compile = true;
+		$this->debugging = true;
+		$this->template_dir = cms_join_path($config['root_path'], 'lib', 'smarty');
+			
+		$this->assign('e_line', $e->getLine());
+		$this->assign('e_file', $e->getFile());
+		$this->assign('e_message', $e->getMessage());
+				
+		if($config['debug']) {
+		
+			$this->assign('e_trace', $e->getTraceAsString());	
+		}
+		
+		$output = $this->fetch('error-console.tpl');
+
+		$this->force_compile = false;
+		$this->debugging = false;		
+		$this->template_dir = $odir;
+		
+		return $output;
+	}	
+	
 } // end of class
 
 ?>
