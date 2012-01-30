@@ -187,6 +187,7 @@ jQuery(document).ready(function($) {
 		$('.open').click(function(event) {
 			event.preventDefault();
 			dialogs[$(this).attr('title')].dialog('open').removeClass('invisible');
+			$('.ui-dialog').css('top', '120px');
 			return false;
 		});
 	});
