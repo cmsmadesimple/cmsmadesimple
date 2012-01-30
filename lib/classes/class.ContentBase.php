@@ -1483,18 +1483,16 @@ class ContentBase
 	      $cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
 	      @unlink($cachefilename);
 
-	      if( is_array($this->_props) && count($this->_props) )
-		{
-		  $this->_delete_properties();
-		}
-	      else
-		{
-		  if (true == $config["debug"])
-		    {
-		      # :TODO: Translate the error message
-		      $debug_errors .= "<p>Error deleting : the content has no properties</p>\n";
-		    }
-		}
+	      // DELETE properties
+	      $query = 'DELETE FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
+	      $result = $db->Execute($query,array($this->mId));
+	      $this->_props = null;
+
+	      // Delete additional editors.
+	      $query = 'DELETE FROM '.cms_db_prefix().'additional_users WHERE content_id = ?';
+	      $result = $db->Execute($query,array($this->mId));
+	      $this->mAdditionalEditors = null;
+
 	    }
 
 	  Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
