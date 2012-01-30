@@ -22,7 +22,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
 {
   public $php_handling = Smarty::PHP_REMOVE;
   public $static_classes = null;
-  public $php_modifiers = array('escape','count','preg_replace','lang', 'ucwords');
+  public $php_modifiers = array('escape','count','preg_replace','lang', 'ucwords','print_r','var_dump','trim','htmlspecialchars','explode');
   public $streams = null;
   public $allow_contsnts = false;
   //public $allow_super_globals = false;
@@ -34,7 +34,7 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
     $config = cmsms()->GetConfig();
     $this->allow_php_tag = $config['use_smarty_php_tags'];
     $this->php_functions = array('isset', 'empty','count', 'sizeof','in_array', 'is_array','time',
-								'nl2br','file_exists', 'is_string', 'is_object', 'is_file');
+								'nl2br','file_exists', 'is_string', 'is_object', 'is_file','print_r','var_dump');
   }
 } // end of class
 

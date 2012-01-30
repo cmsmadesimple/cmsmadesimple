@@ -20,7 +20,7 @@ function smarty_modifier_summarize($string,$numwords='5',$etc='...')
   }
   if( $numwords >= count($stringarray) )
     {
-      return $str;
+      return $string;
     }
   $tmp = array_slice($stringarray,0,$numwords);
   $tmp = implode(' ',$tmp).$etc;

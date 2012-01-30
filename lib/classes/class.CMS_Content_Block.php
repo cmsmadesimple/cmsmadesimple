@@ -291,9 +291,9 @@ final class CMS_Content_Block
 
     $gCms = cmsms();
     $content_obj = &$gCms->variables['content_obj'];
-    if( is_object($contentobj) )
+    if( is_object($content_obj) )
       {
-	$result = $contentobj->GetPropertyValue($block);
+	$result = $content_obj->GetPropertyValue($block);
 	if( $result == -1 ) $result = '';
       }
 

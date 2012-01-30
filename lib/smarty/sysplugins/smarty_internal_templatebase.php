@@ -424,7 +424,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
     public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null)
     {
         if (isset($this->smarty->registered_plugins[$type][$tag])) {
-	  stack_trace(); 
             throw new SmartyException("Plugin tag \"{$tag}\" already registered");
         } elseif (!is_callable($callback)) {
             throw new SmartyException("Plugin \"{$tag}\" not callable");

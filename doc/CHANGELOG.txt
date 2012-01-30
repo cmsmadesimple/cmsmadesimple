@@ -9,6 +9,8 @@ Version 1.11 - NO NAME
  - Removed smarty plugin google_search
  - Moved smarty plugin search to Search module
  - Moved smarty plugin print to CMSPrinting module
+ - Moved smarty plugin {menu} to MenuManager module
+ - Moved smarty plugin {news} to News module
  - Added default backend wysiwyg as a preference
  - Backend wysiwyg option on add user
  - Smartified editprefs
@@ -30,6 +32,7 @@ CMSMailer:
 
 
 MenuManager:
+- Added the {cms_breadcrumbs} action (which is templatable).  deprecates {breadcrumbs}
 	
 
 MicroTiny:

@@ -134,6 +134,16 @@ class Smarty_CMS extends SmartyBC
 		$this->enableSecurity('CMSSmartySecurityPolicy');
 	}
 
+	public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null)
+	{
+	  if( !isset($this->smarty->registered_plugins[$type][$tag]) ) {
+            $this->smarty->registered_plugins[$type][$tag] = array($callback, (bool) $cacheable, (array) $cache_attr);
+	  }
+	  
+	  return $this;
+	}
+
+
 	/**
 	* loadPlugin method
 	* NOTE: Overwrites parent
