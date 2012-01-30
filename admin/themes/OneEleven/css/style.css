@@ -1467,7 +1467,8 @@ textarea.pagesmalltextarea {
 	float:left
 }
 .dashboard-box ul.subitems li a {
-	font-size: 11px
+	font-size: 11px;
+	text-decoration: underline
 }
 /*** reorder pages ***/
 .reorder-pages {
