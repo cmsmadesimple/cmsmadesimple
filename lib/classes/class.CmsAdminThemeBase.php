@@ -1300,21 +1300,21 @@ abstract class CmsAdminThemeBase
 					}
 			}
 
-		$output = '<select name="'.$name.'">';
+		$output = '<select name="'.$name.'">'."\n";
 		foreach( $opts as $key => $value )
 			{
 				if( $value == $selected )
 					{
-						$output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>",
+						$output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>\n",
 										   $value,$key);
 					}
 				else
 					{
-						$output .= sprintf("<option value=\"%s\">%s</option>",
+						$output .= sprintf("<option value=\"%s\">%s</option>\n",
 										   $value,$key);
 					}
 			}
-		$output .= '</select>';
+		$output .= '</select>'."\n";
 		return $output;
 	}
 
