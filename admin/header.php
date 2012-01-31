@@ -7,7 +7,6 @@ if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 {
 	@ob_start();
 }
-include_once("../lib/classes/class.admintheme.inc.php");
 
 $gCms = cmsms();
 $config = $gCms->GetConfig();

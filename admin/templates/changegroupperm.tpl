@@ -1,9 +1,3 @@
-{*
-<div id="admin_group_warning" style="display:none">
-{$admin_group_warning}
-</div>
-*}
-
 {if isset($message)}
 <p class="pageheader">{$message}</p>
 {/if}
