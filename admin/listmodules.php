@@ -241,6 +241,8 @@ if ($access)
 			@ob_end_clean();
 			echo $themeObject->ShowErrors(lang('moduleupgradeerror'));
 		}
+		debug_display('module is '.$module);
+		die('test');
 		redirect($thisurl);
 	}
 

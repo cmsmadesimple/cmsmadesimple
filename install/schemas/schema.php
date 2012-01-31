@@ -594,8 +594,22 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', 'version', $ado_ret);
 
-
-
+	
+	
+	$flds = "
+                sig  C(80) KEY NOT NULL,
+                name C(80) NOT NULL,
+                module C(160) NOT NULL,
+                type C(40) NOT NULL,
+                callback C(255) NOT NULL,
+                usage I,
+                cachable I1
+        ";
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_smarty_plugins", $flds, $taboptarray);
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_table', 'module_smarty_plugins', $ado_ret);
+        
 	/*
 	$flds = "
 		sequence_id I KEY,

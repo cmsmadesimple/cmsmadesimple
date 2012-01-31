@@ -883,6 +883,8 @@ final class ModuleOperations
 					  $db->Execute('DELETE FROM '.cms_db_prefix().
 								   'events where originator=?',array($module));
 					  $db->Execute('DELETE FROM '.cms_db_prefix().
+								   'module_smarty_plugins where module=?',array($module));
+					  $db->Execute('DELETE FROM '.cms_db_prefix().
 								   "siteprefs where sitepref_name like '".
 								   str_replace("'",'',$db->qstr($module)).
 								   "_mapi_pref%'");

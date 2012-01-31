@@ -30,7 +30,6 @@ class CMSPageTemplateResource extends Smarty_Resource_Custom
       {
 	$this->_section = $section;
       }
-    $this->compiler_class = 'CMSSmartyCompiler';
   }
 
   protected function buildUniqueResourceName(Smarty $smarty,$resource_name)

@@ -1,4 +1,4 @@
-INSERT INTO {DB_PREFIX}version VALUES (35);
+INSERT INTO {DB_PREFIX}version VALUES (36);
 INSERT INTO {DB_PREFIX}users VALUES (1,'admin','5f4dcc3b5aa765d61d8327deb882cf99',1,'','','',1,'2006-07-25 21:22:33','2009-05-13 07:43:16');
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'use_wysiwyg','1',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'default_cms_language','en_US',NULL);

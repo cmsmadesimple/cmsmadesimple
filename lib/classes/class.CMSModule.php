@@ -274,12 +274,41 @@ abstract class CMSModule
 	 * @final
 	 * @return mixed module call output.
 	 */
-	final public function function_plugin($params,&$smarty)
+	final static public function function_plugin($params,&$smarty)
 	{
-	  $params['module'] = $this->GetName();
+	  $class = get_called_class();
+	  $params['module'] = $class;
 	  return cms_module_plugin($params,$smarty);
 	}
 
+
+	/**
+	 * Register a smarty plugin and attach it to this module.
+	 *
+	 */
+	public function RegisterSmartyPlugin($name,$type,$callback,$cachable = TRUE,$usage = 0)
+	{
+	  if( !$name || !$type || !$callback )
+	    {
+	      throw new CmsException('Invalid data passed to RegisterSmartyPlugin');
+	    }
+
+	  // todo: check name, and type
+	  if( $usage == 0 ) $usage = cms_module_smarty_plugin_manager::AVAIL_FRONTEND;
+	  cms_module_smarty_plugin_manager::addStatic($this->GetName(),$name,$type,$callback,$cachable,$usage);
+	}
+
+	public function RemoveSmartyPlugin($name = '')
+	{
+	  if( $name == '' )
+	    {
+	      cms_module_smarty_plugin_manager::remove_by_module($this->GetName());
+	    }
+	  else
+	    {
+	      cms_module_smarty_plugin_manager::remove_by_name($name);
+	    }
+	}
 
 	/**
 	 * Register a plugin to smarty with the
@@ -292,26 +321,44 @@ abstract class CMSModule
 	 * @return void
 	 * @see SetParameters
 	 * @see can_cache_output
+	 * @deprecated
 	 */
-	final public function RegisterModulePlugin()
+	final public function RegisterModulePlugin($forcedb = FALSE)
 	{
-	  $gCms = cmsms();
+	  global $CMS_ADMIN_PAGE;
+	  global $CMS_INSTALL_PAGE;
 
-	  $cache_flag = false;
 	  $do_cache = get_site_preference('smarty_cachemodules','never');
+	  $cache_flag = false;
 	  if( $do_cache == 'always' )
 	    {
 	      $cache_flag = true;
 	    }
 	  else if( $do_cache == 'moduledecides' )
 	    {
-	      $check_flag = $this->can_cache_output();
+	      $cache_flag = $this->can_cache_output();
 	    }
-	  $smarty = $gCms->GetSmarty();
-	  $smarty->register_function($this->GetName(),
-				     array($this,'function_plugin'),
-				     $cache_flag
-				     );
+
+	  if( isset($cMS_INSTALL_PAGE) ) return;
+	  // frontend request.
+	  $admin_req = (isset($CMS_ADMIN_PAGE) && !$this->LazyLoadAdmin())?1:0;
+	  $fe_req = (!isset($CMS_ADMIN_PAGE) && !$this->LazyLoadFrontend())?1:0;
+	  if( ($fe_req || $admin_req) && !$forcedb )
+	    {
+	      // no lazy loading.
+	      $gCms = cmsms();
+	      $smarty = $gCms->GetSmarty();
+	      $smarty->register_function($this->GetName(),
+					 array($this->GetName(),'function_plugin'),
+					 $cache_flag
+					 );
+	    }
+	  else
+	    {
+	      cms_module_smarty_plugin_manager::addStatic($this->GetName(),$this->GetName(),'function',
+						    'function_plugin',$cache_flag);
+	    }
+
 	}
 
 	/**

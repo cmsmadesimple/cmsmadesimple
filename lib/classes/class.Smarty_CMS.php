@@ -134,15 +134,25 @@ class Smarty_CMS extends SmartyBC
 		$this->enableSecurity('CMSSmartySecurityPolicy');
 	}
 
-	public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null)
-	{
-	  if( !isset($this->smarty->registered_plugins[$type][$tag]) ) {
+    /**
+     * Registers plugin to be used in templates
+     *
+     * @param string   $type       plugin type
+     * @param string   $tag        name of template tag
+     * @param callback $callback   PHP callback to register
+     * @param boolean  $cacheable  if true (default) this fuction is cachable
+     * @param array    $cache_attr caching attributes if any
+     * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining
+     * @throws SmartyException when the plugin tag is invalid
+     */
+    public function registerPlugin($type, $tag, $callback, $cacheable = true, $cache_attr = null)
+    {
+        if (!isset($this->smarty->registered_plugins[$type][$tag])) {
             $this->smarty->registered_plugins[$type][$tag] = array($callback, (bool) $cacheable, (array) $cache_attr);
-	  }
-	  
-	  return $this;
-	}
-
+        }
+        
+        return $this;
+    }
 
 	/**
 	* loadPlugin method
@@ -152,6 +162,7 @@ class Smarty_CMS extends SmartyBC
 	* @param boolean $check
 	* @return mixed
 	*/
+    /*
 	public function loadPlugin($plugin_name,$check = true)
 	{
 	  $res = parent::loadPlugin($plugin_name,$check);
@@ -159,6 +170,7 @@ class Smarty_CMS extends SmartyBC
 	    {
 	      if( !function_exists($plugin_name) )
 		{
+		  // see if it uses the old smarty_cms stuff.
 		  $parts = explode('_',$plugin_name);
 		  if( $parts[0] != 'smarty' || $parts[1] == 'internal' ) return $res;
 		  return false;
@@ -166,6 +178,7 @@ class Smarty_CMS extends SmartyBC
 	    }
 	  return $res;
 	}
+    */
 
 	/**
 	* defaultPluginHandler
@@ -195,13 +208,13 @@ class Smarty_CMS extends SmartyBC
 		}
 	    }
 
-	  // maybe it was loaded by a module
-	  $modulename = module_meta::get_instance()->find_module_by_plugin($name);
-	  if( $modulename )
+	  $row = cms_module_smarty_plugin_manager::load_plugin($name,$type);
+	  if( is_array($row) && is_callable($row['callback']) )
 	    {
-	      $obj = cms_utils::get_module($modulename);
-	      if( is_object($obj) ) return TRUE;
+	      $callback = $row['callback'];
+	      return TRUE;
 	    }
+
 	  return FALSE;
 	}
 
@@ -213,7 +226,6 @@ class Smarty_CMS extends SmartyBC
 	public static function &get_instance()
 	{
 		if( !is_object(self::$_instance) ) {
-			
 			self::$_instance = new Smarty_CMS();
 		}
 		
