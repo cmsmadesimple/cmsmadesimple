@@ -86,7 +86,7 @@ if ($action == "showpluginhelp")
       
       // Get and display the plugin's help
       @ob_start();
-      call_user_func_array('smarty_cms_help_function_'.$plugin, array());
+      call_user_func_array('smarty_cms_help_'.$type.'_'.$plugin, array());
       $content = @ob_get_contents();
       @ob_end_clean();
       
