@@ -63,6 +63,18 @@ abstract class Smarty_Resource {
     public $template_parser_class = 'Smarty_Internal_Templateparser';
 
     /**
+     * Constructor
+     */
+    public function __construct(Smarty $smarty = null)
+    {
+      if( is_object($smarty) && $smarty instanceof Smarty )
+	{
+	  if( isset($smarty->compiler_class) && $smarty->compiler_class )
+	    $this->compiler_class = $smarty->compiler_class;
+	}
+    }
+     
+    /**
      * Load template's source into current template object
      *
      * {@internal The loaded source is assigned to $_template->source->content directly.}}
@@ -353,7 +365,7 @@ abstract class Smarty_Resource {
             }
 
             if (!isset(self::$resources['registered'])) {
-                self::$resources['registered'] = new Smarty_Internal_Resource_Registered();
+                self::$resources['registered'] = new Smarty_Internal_Resource_Registered($smarty);
             }
             if (!isset($smarty->_resource_handlers[$type])) {
                 $smarty->_resource_handlers[$type] = self::$resources['registered'];
@@ -366,7 +378,7 @@ abstract class Smarty_Resource {
         if (isset(self::$sysplugins[$type])) {
             if (!isset(self::$resources[$type])) {
                 $_resource_class = 'Smarty_Internal_Resource_' . ucfirst($type);
-                self::$resources[$type] = new $_resource_class();
+                self::$resources[$type] = new $_resource_class($smarty);
             }
             return $smarty->_resource_handlers[$type] = self::$resources[$type];
         }
@@ -379,7 +391,7 @@ abstract class Smarty_Resource {
             }
 
             if (class_exists($_resource_class, false)) {
-                self::$resources[$type] = new $_resource_class();
+                self::$resources[$type] = new $_resource_class($smarty);
                 return $smarty->_resource_handlers[$type] = self::$resources[$type];
             } else {
                 $smarty->registerResource($type, array(
@@ -402,7 +414,7 @@ abstract class Smarty_Resource {
                 $smarty->security_policy->isTrustedStream($type);
             }
             if (!isset(self::$resources['stream'])) {
-                self::$resources['stream'] = new Smarty_Internal_Resource_Stream();
+                self::$resources['stream'] = new Smarty_Internal_Resource_Stream($smarty);
             }
             return $smarty->_resource_handlers[$type] = self::$resources['stream'];
         }
