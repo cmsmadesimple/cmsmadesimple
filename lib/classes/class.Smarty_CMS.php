@@ -122,6 +122,7 @@ class Smarty_CMS extends SmartyBC
 		    $this->registerPlugin('function','content_module','CMS_Content_Block::smarty_fetch_moduleblock',false);
 
 		    $this->autoload_filters = array('pre'=>'precompilefunc', 'post'=>'postcompilefunc');
+		    $this->merge_compiled_includes = TRUE;
 
 		    if( get_site_preference('use_smartycache',0) )
 		    {
@@ -162,6 +163,7 @@ class Smarty_CMS extends SmartyBC
 	* @param boolean $check
 	* @return mixed
 	*/
+    /*
 	public function loadPlugin($plugin_name,$check = true)
 	{
 	  $res = parent::loadPlugin($plugin_name,$check);
@@ -177,6 +179,7 @@ class Smarty_CMS extends SmartyBC
 	    }
 	  return $res;
 	}
+    */
 
 	/**
 	* defaultPluginHandler

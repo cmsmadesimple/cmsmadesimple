@@ -177,8 +177,7 @@ function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '',
 	$smarty = $gCms->GetSmarty();
 
 	$oldcache = $smarty->caching;
-	$smarty->caching = false;
-
+	$smarty->caching = ($modinstance->can_cache_output())?Smarty::CACHING_LIFETIME_CURRENT:Smarty::CACHING_OFF;
 	$result = $smarty->fetch('module_file_tpl:'.$modinstance->GetName().';'.$tpl_name, $cacheid, ($designation != ''?$designation:$modinstance->GetName()));
 	$smarty->caching = $oldcache;
 
@@ -233,7 +232,7 @@ function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $desig
 	if( $modulename == '' ) $modulename = $modinstance->GetName();
 
 	$oldcache = $smarty->caching;
-	$smarty->caching = false;
+	$smarty->caching = ($modinstance->can_cache_output())?Smarty::CACHING_LIFETIME_CURRENT:Smarty::CACHING_OFF;
 	$result = $smarty->fetch('module_db_tpl:'.$modulename.';'.$tpl_name, '', ($designation != ''?$designation:$modulename));
 	$smarty->caching = $oldcache;
 

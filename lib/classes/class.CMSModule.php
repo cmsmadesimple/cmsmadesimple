@@ -364,8 +364,7 @@ abstract class CMSModule
 	}
 
 	/**
-	 * Determins if the output from calls to this module can be cached by smarty or any other means.
-	 * primarily useful for modules that output static output.  By default, returns false.
+	 * Callback to determine if the output from a call module can be cached by smarty. 
 	 *
 	 * @abstract
 	 * @since 1.11
