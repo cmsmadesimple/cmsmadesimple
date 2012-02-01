@@ -162,7 +162,6 @@ class Smarty_CMS extends SmartyBC
 	* @param boolean $check
 	* @return mixed
 	*/
-    /*
 	public function loadPlugin($plugin_name,$check = true)
 	{
 	  $res = parent::loadPlugin($plugin_name,$check);
@@ -178,7 +177,6 @@ class Smarty_CMS extends SmartyBC
 	    }
 	  return $res;
 	}
-    */
 
 	/**
 	* defaultPluginHandler

@@ -264,8 +264,11 @@ else
 */	
 
 try {
+  debug_buffer('process template top');
 	$top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
+  debug_buffer('process template body');
 	$body = $smarty->fetch('tpl_body:'.$contentobj->TemplateId());
+  debug_buffer('process template head');
 	$head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
 	$html = $top.$head.$body;
 	
