@@ -61,11 +61,6 @@ final class cms_module_smarty_plugin_manager
 
   protected function __construct() {}
 
-  public function __destruct()
-  {
-    if( $this->_modified ) $this->_save();
-  }
-
   protected static function &get_instance()
   {
     if( !self::$_instance ) self::$_instance = new cms_module_smarty_plugin_manager();

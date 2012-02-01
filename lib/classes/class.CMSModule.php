@@ -323,23 +323,25 @@ abstract class CMSModule
 	 * @see can_cache_output
 	 * @deprecated
 	 */
-	final public function RegisterModulePlugin($forcedb = FALSE)
+	final public function RegisterModulePlugin($forcedb = FALSE,$cachable = null)
 	{
 	  global $CMS_ADMIN_PAGE;
 	  global $CMS_INSTALL_PAGE;
 
-	  $do_cache = get_site_preference('smarty_cachemodules','never');
-	  $cache_flag = false;
-	  if( $do_cache == 'always' )
+	  if( is_null($cachable) )
 	    {
-	      $cache_flag = true;
-	    }
-	  else if( $do_cache == 'moduledecides' )
-	    {
-	      $cache_flag = $this->can_cache_output();
+	      $do_cache = get_site_preference('smarty_cachemodules','never');
+	      $cachable = false;
+	      if( $do_cache == 'always' )
+		{
+		  $cachable = true;
+		}
+	      else if( $do_cache == 'moduledecides' )
+		{
+		  $cachable = $this->can_cache_output();
+		}
 	    }
 
-	  if( isset($cMS_INSTALL_PAGE) ) return;
 	  // frontend request.
 	  $admin_req = (isset($CMS_ADMIN_PAGE) && !$this->LazyLoadAdmin())?1:0;
 	  $fe_req = (!isset($CMS_ADMIN_PAGE) && !$this->LazyLoadFrontend())?1:0;
@@ -350,13 +352,13 @@ abstract class CMSModule
 	      $smarty = $gCms->GetSmarty();
 	      $smarty->register_function($this->GetName(),
 					 array($this->GetName(),'function_plugin'),
-					 $cache_flag
+					 $cachable
 					 );
 	    }
 	  else
 	    {
 	      cms_module_smarty_plugin_manager::addStatic($this->GetName(),$this->GetName(),'function',
-						    'function_plugin',$cache_flag);
+						    'function_plugin',$cachable);
 	    }
 
 	}

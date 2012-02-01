@@ -2464,7 +2464,7 @@ if(!function_exists('get_called_class')) {
     function get_called_class() {
         return cms53_class_tools::get_called_class();
     }
-}
+ }
 
 # vim:ts=4 sw=4 noet
 ?>
