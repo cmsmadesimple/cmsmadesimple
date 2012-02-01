@@ -232,7 +232,10 @@ function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $desig
 
 	if( $modulename == '' ) $modulename = $modinstance->GetName();
 
+	$oldcache = $smarty->caching;
+	$smarty->caching = false;
 	$result = $smarty->fetch('module_db_tpl:'.$modulename.';'.$tpl_name, '', ($designation != ''?$designation:$modulename));
+	$smarty->caching = $oldcache;
 
 	return $result;
 }

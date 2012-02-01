@@ -131,7 +131,12 @@ final class CMS_Content_Block
 		      {
 			$returnid = $contentobj->Id();
 		      }
+
+		    $oldcache = $smarty->caching;
+		    $smarty->caching = false;
 		    $result = $modobj->DoActionBase($action, $id, $params, $returnid);
+		    $smarty->caching = $oldcache;
+
 		    if ($result !== FALSE)
 		      {
 			echo $result;
@@ -153,7 +158,9 @@ final class CMS_Content_Block
 	    $result = '';
 	    $oldvalue = $smarty->caching;
 	    $smarty->caching = false;
+
 	    $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $contentobj->Id().$block);
+
 	    $smarty->caching = $oldvalue;
 	    return self::content_return($result, $params, $smarty);
 	  }

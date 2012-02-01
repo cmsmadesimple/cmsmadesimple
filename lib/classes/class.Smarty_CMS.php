@@ -74,7 +74,7 @@ class Smarty_CMS extends SmartyBC
 		/* Disabling for now -Stikki- */
 		if ($config["debug"] == true) {
 		  $this->force_compile = true;
-		  $this->debugging = true;
+		  //$this->debugging = true;
 		}
 		
 		if (is_sitedown()) {
