@@ -220,6 +220,18 @@ class Smarty_CMS extends SmartyBC
 	}
 
 	/**
+	 * Test if a smarty plugin with the specified name already exists.
+	 *
+	 * @param string the plugin name
+	 * @return boolean
+	 */
+	public function is_registered($name)
+	{
+	  return isset($this->registered_plugins['function'][$name]);
+	}
+
+
+	/**
 	* get_instance method
 	*
 	* @return object $this
