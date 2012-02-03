@@ -63,6 +63,7 @@ if ($access)
 		}
 		else
 		{
+		  audit('','Core','Changed permissions on '.$module.' directory');
 			redirect($thisurl);
 		}
 	}
@@ -90,6 +91,7 @@ if ($access)
 		else 
 		{
 			$xmlname = $object->GetName().'-'.$object->GetVersion().'.xml';
+			audit('','Core','Exported '.$object->GetName().' to '.$xmlname);
 
 			// and send the file
 			ob_end_clean();
@@ -158,6 +160,7 @@ if ($access)
 			    else if( $autoinstallupgrade == 0 )
 			      {
 				// no auto install or upgrade
+				audit('','Core','Expanded XML Package '.$file['name']);
 				redirect($thisurl);
 			      }
 			  }
@@ -241,8 +244,6 @@ if ($access)
 			@ob_end_clean();
 			echo $themeObject->ShowErrors(lang('moduleupgradeerror'));
 		}
-		debug_display('module is '.$module);
-		die('test');
 		redirect($thisurl);
 	}
 
@@ -295,6 +296,7 @@ if ($access)
 	{
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
 		$db->Execute($query, array(1,$module));
+		audit('','Core','Activated module '.$module);
 		cmsms()->clear_cached_files();
 		redirect($thisurl);
 	}
@@ -303,6 +305,7 @@ if ($access)
 	{
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
 		$db->Execute($query, array(0,$module));
+		audit('','Core','Deactivated module '.$module);
 		cmsms()->clear_cached_files();
 		redirect($thisurl);
 	}
