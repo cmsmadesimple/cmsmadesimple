@@ -72,9 +72,9 @@ class Smarty_CMS extends SmartyBC
 
 		$this->assign('app_name','CMS');
 		/* Disabling for now -Stikki- */
+		$this->debugging = true;
 		if ($config["debug"] == true) {
 		  $this->force_compile = true;
-		  //$this->debugging = true;
 		}
 		
 		if (is_sitedown()) {
@@ -194,6 +194,7 @@ class Smarty_CMS extends SmartyBC
 	*/	
 	public function defaultPluginHandler($name, $type, $template, &$callback, &$script)
 	{
+	  debug_buffer('',"Start Load Smarty Plugin $name/$type");
 	  $config = cmsms()->GetConfig();
 	  $fn = cms_join_path($config['root_path'],'plugins',$type.'.'.$name.'.php');
 	  if( file_exists($fn) )
@@ -205,6 +206,7 @@ class Smarty_CMS extends SmartyBC
 	      if( function_exists('smarty_cms_'.$type.'_'.$name) )
 		{
 		  $callback = 'smarty_cms_'.$type.'_'.$name;
+		  debug_buffer('',"End Load Smarty Plugin $name/$type");
 		  return TRUE;
 		}
 	    }
@@ -213,9 +215,11 @@ class Smarty_CMS extends SmartyBC
 	  if( is_array($row) && is_callable($row['callback']) )
 	    {
 	      $callback = $row['callback'];
+	      debug_buffer('',"End Load Smarty Plugin $name/$type");
 	      return TRUE;
 	    }
 
+	  debug_buffer('',"End Load Smarty Plugin $name/$type");
 	  return FALSE;
 	}
 
@@ -277,6 +281,8 @@ class Smarty_CMS extends SmartyBC
 	*/	
 	public function fetch($template = null,$cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
 	{
+	  $name = $template; if( startswith($name,'string:') ) $name = 'string:';
+	  debug_buffer('','Fetch '.$name.' start');
 	  if( is_null($cache_id) || $cache_id === '' )
 	    {
 	      $cache_id = $this->_global_cache_id;
@@ -285,7 +291,9 @@ class Smarty_CMS extends SmartyBC
 	    {
 	      $cache_id = $this->_global_cache_id . $cache_id;
 	    }
-	  return parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
+	  $tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
+	  debug_buffer('','Fetch '.$name.' end');
+	  return $tmp;
 	}
 
 	/**
@@ -299,7 +307,7 @@ class Smarty_CMS extends SmartyBC
 	* @param mixed $type
 	* @return mixed
 	*/	
-	public function clearCache($template_name = null,$cache_id = null,$compile_id = null,$exp_time = null,$type = null)
+	public function clearCache($template_name,$cache_id = null,$compile_id = null,$exp_time = null,$type = null)
 	{
 	  if( is_null($cache_id) || $cache_id === '' )
 	    {
