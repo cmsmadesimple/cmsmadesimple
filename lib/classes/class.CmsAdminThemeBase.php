@@ -559,7 +559,7 @@ abstract class CmsAdminThemeBase
 								 'myprefs'=>array('url'=>'index.php?section=myprefs','parent'=>-1,
 												  'title'=>$this->_FixSpaces(lang('myprefs')),
 												  'description'=>lang('myprefsdescription'),'show_in_menu'=>true),
-								 'myaccount'=>array('url'=>'myaccount.php','parent'=>'myprefs',
+								 'myaccount'=>array('url'=>'edituser.php','parent'=>'myprefs',
 													'title'=>$this->_FixSpaces(lang('myaccount')),
 													'description'=>lang('myaccountdescription'),'show_in_menu'=>true),
 								/* 'preferences'=>array('url'=>'editprefs.php','parent'=>'myprefs',
