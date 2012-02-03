@@ -602,7 +602,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
                 module C(160) NOT NULL,
                 type C(40) NOT NULL,
                 callback C(255) NOT NULL,
-                usage I,
+                available I,
                 cachable I1
         ";
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_smarty_plugins", $flds, $taboptarray);
