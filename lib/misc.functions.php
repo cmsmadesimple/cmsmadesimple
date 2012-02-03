@@ -2441,7 +2441,7 @@ if(!function_exists('get_called_class')) {
         static $i = 0;
         static $fl = null;
         
-        static function get_called() {
+        static function get_called_class() {
             $bt = debug_backtrace();
             
             if(self::$fl == $bt[2]['file'].$bt[2]['line']) {
