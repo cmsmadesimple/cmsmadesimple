@@ -24,7 +24,7 @@ if ($gCms->config["debug"] == true)
 	echo '</div> <!-- end DebugFooter -->';
 }
 
-if (isset($USE_THEME) && $USE_THEME == false)
+if (!isset($USE_THEME) || $USE_THEME != false)
   {
     echo '</body>';
     echo '</html>';
