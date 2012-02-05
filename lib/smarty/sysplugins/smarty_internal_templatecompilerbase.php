@@ -339,7 +339,9 @@ abstract class Smarty_Internal_TemplateCompilerBase {
                     if (!$found) {
                         // call default handler
                         foreach ($this->smarty->plugin_search_order as $plugin_type) {
-                            if ($this->getPluginFromDefaultHandler($tag, $plugin_type)) {
+			  $tmp = null; // hack: cachable param
+			  if ($this->getPluginFromDefaultHandler($tag, $plugin_type, $tmp)) { // hack: cachable param
+			    $this->tag_nocache = $tmp; // hack: cachable param
                                 $found = true;
                                 break;
                             }
@@ -501,14 +503,13 @@ abstract class Smarty_Internal_TemplateCompilerBase {
      * @param string $plugin_type type of plugin
      * @return boolean true if found
      */
-    public function getPluginFromDefaultHandler($tag, $plugin_type)
+    public function getPluginFromDefaultHandler($tag, $plugin_type, &$cachable = null) // hack: cachable param added
     {
         $callback = null;
         $script = null;
         $result = call_user_func_array(
             $this->smarty->default_plugin_handler_func,
-            array($tag, $plugin_type, $this->template, &$callback, &$script)
-        );
+            array($tag, $plugin_type, $this->template, &$callback, &$script, $cachable)); // hack: cachabke param added
         if ($result) {
             if ($script !== null) {
                 if (is_file($script)) {
