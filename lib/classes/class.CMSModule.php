@@ -321,6 +321,8 @@ abstract class CMSModule
 	 * @return void
 	 * @see SetParameters
 	 * @see can_cache_output
+	 * @param boolean Indicate wether this registration should be forced to be entered in the database. Default value is false (for compatibility)
+	 * @param mixed Indicate wether this plugins output should be cachable.  If null, use the site preferences, and the can_cache_output method.  Otherwise a boolean is expected.
 	 * @deprecated
 	 */
 	final public function RegisterModulePlugin($forcedb = FALSE,$cachable = null)

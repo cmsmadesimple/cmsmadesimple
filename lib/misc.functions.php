@@ -2437,7 +2437,6 @@ function cms_get_jquery($exclude = '',$ssl = false,$cdn = false,$append = '',$cu
 }
 	
 if(!function_exists('get_called_class')) {
-
     function get_called_class() {
         return cms_function_help::get_called_class();
     }

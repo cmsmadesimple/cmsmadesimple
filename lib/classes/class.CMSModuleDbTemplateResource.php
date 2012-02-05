@@ -42,6 +42,7 @@ class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
 {
   protected function fetch($name,&$source,&$mtime)
   {
+    debug_buffer('','CMSModuleDbTemplateResource start'.$name);
     $db = cmsms()->GetDb();
     
     $tmp = explode(';',$name);
@@ -52,6 +53,7 @@ class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
 	$source = $row['content'];
 	$mtime = $db->UnixTimeStamp($row['modified_date']);
       }
+    debug_buffer('','CMSModuleDbTemplateResource end'.$name);
   }
 } // end of class
 

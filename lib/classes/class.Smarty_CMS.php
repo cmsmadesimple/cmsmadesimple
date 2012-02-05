@@ -122,7 +122,7 @@ class Smarty_CMS extends SmartyBC
 		    $this->registerPlugin('function','content_module','CMS_Content_Block::smarty_fetch_moduleblock',false);
 
 		    $this->autoload_filters = array('pre'=>'precompilefunc', 'post'=>'postcompilefunc');
-		    $this->merge_compiled_includes = TRUE;
+		    //$this->merge_compiled_includes = TRUE;
 
 		    if( get_site_preference('use_smartycache',0) )
 		    {
@@ -192,9 +192,10 @@ class Smarty_CMS extends SmartyBC
 	* @param string $script
 	* @return boolean true on success, false on failure
 	*/	
-	public function defaultPluginHandler($name, $type, $template, &$callback, &$script)
+        public function defaultPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
 	{
 	  debug_buffer('',"Start Load Smarty Plugin $name/$type");
+	  $cachable = TRUE;
 	  $config = cmsms()->GetConfig();
 	  $fn = cms_join_path($config['root_path'],'plugins',$type.'.'.$name.'.php');
 	  if( file_exists($fn) )
@@ -205,7 +206,6 @@ class Smarty_CMS extends SmartyBC
 	      require_once($fn);
 	      if( function_exists('smarty_cms_'.$type.'_'.$name) )
 		{
-		  $callback = 'smarty_cms_'.$type.'_'.$name;
 		  debug_buffer('',"End Load Smarty Plugin $name/$type");
 		  return TRUE;
 		}
@@ -214,6 +214,7 @@ class Smarty_CMS extends SmartyBC
 	  $row = cms_module_smarty_plugin_manager::load_plugin($name,$type);
 	  if( is_array($row) && is_callable($row['callback']) )
 	    {
+	      $cachable = $row['cachable'];
 	      $callback = $row['callback'];
 	      debug_buffer('',"End Load Smarty Plugin $name/$type");
 	      return TRUE;
