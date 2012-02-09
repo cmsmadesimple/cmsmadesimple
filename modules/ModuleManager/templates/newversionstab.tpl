@@ -23,16 +23,16 @@
 	<tbody>
 {foreach from=$items item=entry}
 		<tr class="{$entry->rowclass}">
-			<td>{$entry->name}</td>
-			<td>{$entry->version}</td>
+			<td>{$entry->name|default:''}</td>
+			<td>{$entry->version|default:''}</td>
 			<td>{if isset($entry->haveversion)}{$entry->haveversion}{/if}</td>
-			<td>{$entry->size}</td>
-			<td>{$entry->status}</td>
-			<td>{$entry->dependslink}</td>
-			<td>{$entry->helplink}</td>
-			<td>{$entry->aboutlink}</td>
+			<td>{$entry->size|default:''}</td>
+			<td>{$entry->status|default:''}</td>
+			<td>{$entry->dependslink|default:''}</td>
+			<td>{$entry->helplink|default:''}</td>
+			<td>{$entry->aboutlink|default:''}</td>
 		</tr>
-	{if $entry->description}
+	{if isset($entry->description) && $entry->description != ''}
 		<tr class="{$entry->rowclass}">
                 	<td>&nbsp;</td>
                 	<td colspan="7">{$entry->description}</td>
