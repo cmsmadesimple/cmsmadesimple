@@ -18,6 +18,10 @@
 #
 #$Id$
 
+/**
+ * Init variables / objects
+ */
+
 $CMS_ADMIN_PAGE=1;
 $CMS_TOP_MENU='admin';
 $CMS_ADMIN_TITLE='preferences';
@@ -25,6 +29,7 @@ $CMS_ADMIN_TITLE='preferences';
 require_once("../include.php");
 $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 $thisurl=basename(__FILE__).$urlext;
+$userid = get_userid(); // <- Checks also login
 
 function siteprefs_display_permissions($permsarr)
 {
@@ -42,16 +47,12 @@ function siteprefs_display_permissions($permsarr)
   return $str;
 }
 
-check_login();
-$userid = get_userid();
 $access = check_permission($userid, 'Modify Site Preferences');
+if (!$access) {
 
-
-if (!$access) 
-  {
-    die('Permission Denied');
+    die('Permission Denied'); // <- Pretty cruel huh? maybe redirection and message, or something. -Stikki-
     return;
-  }
+}
 
 $gCms = cmsms();
 $db = $gCms->GetDb();
@@ -110,7 +111,9 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
-
+/**
+ * Get preferences
+ */
 $pseudocron_granularity = get_site_preference('pseudocron_granularity',$pseudocron_granularity);
 $allow_browser_cache = get_site_preference('allow_browser_cache',$allow_browser_cache);
 $browser_cache_expiry = get_site_preference('browser_cache_expiry',$browser_cache_expiry);
@@ -154,11 +157,18 @@ $use_smartycompilecheck = get_site_preference('use_smartycompilecheck',$use_smar
 $smarty_cachemodules = get_site_preference('smarty_cachemodules',$smarty_cachemodules);
 $smarty_cacheudt = get_site_preference('smarty_cacheudt',$smarty_cacheudt);
 
-$active_tab='unknown';
-if( isset($_POST['active_tab']) )
-  {
-    $active_tab = trim($_POST['active_tab']);
-  }
+/**
+ * Check tab
+ */
+$tab='';
+if( isset($_POST['active_tab']) ) {
+
+    $tab = trim($_POST['active_tab']);
+}
+
+/**
+ * Submit 
+ */
 $testresults = lang('untested');
 if (isset($_POST["testumask"]))
 {
@@ -210,7 +220,7 @@ if (isset($_POST["testumask"]))
   }
 else if (isset($_POST['clearcache']))
 {
-	$gCms->clear_cached_files();
+	cmsms()->clear_cached_files();
 	// put mention into the admin log
 	audit(-1,'Website Cache', 'Cleared');
 	$message .= lang('cachecleared');
@@ -380,9 +390,21 @@ else if (isset($_POST["editsiteprefs"]))
     }
 } 
 
-//
-// build the form
-//
+/**
+ * Build page
+ */
+ 
+include_once("header.php");
+
+if ($error != "") {
+	
+	$themeObject->ShowErrors($error);
+}
+if ($message != "") {
+	
+	$themeObject->ShowMessage($message);
+}
+ 
 $templates = array();
 $templates['-1'] = lang('none');
 
@@ -394,47 +416,37 @@ while ($result && $row = $result->FetchRow())
 	$templates[$row['template_id']] = $row['template_name'];
 }
 
-include_once("header.php");
-
-if ($error != "") {
-	echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";	
-}
-if ($message != "") {
-	echo $themeObject->ShowMessage($message);
-}
-
 // Make sure cache folder is writable
 if (FALSE == is_writable(TMP_CACHE_LOCATION) || 
     FALSE == is_writable(TMP_TEMPLATES_C_LOCATION) )
 {
-  echo $themeObject->ShowErrors(lang('cachenotwritable'));
+  $themeObject->ShowErrors(lang('cachenotwritable'));
 }
 
-# give everything to smarty
+/*
+// warning: uber hack.
+$tmp = ModuleOperations::get_instance()->GetInstalledModules();
+for( $i = 0; $i < count($tmp); $i++ )
 {
-  // warning: uber hack.
-  $tmp = ModuleOperations::get_instance()->GetInstalledModules();
-  for( $i = 0; $i < count($tmp); $i++ )
-    {
-      if( !ModuleOperations::get_instance()->IsSystemModule($tmp[$i]) ) continue;
-      $mod = cms_utils::get_module($tmp[$i]);
-      if( is_object($mod) ) break;
-    }
-  $smarty->assign('mod',$mod);
+  if( !ModuleOperations::get_instance()->IsSystemModule($tmp[$i]) ) continue;
+  $mod = cms_utils::get_module($tmp[$i]);
+  if( is_object($mod) ) break;
 }
+$smarty->assign('mod',$mod);
+*/
+
+$modules = ModuleOperations::get_instance()->get_modules_with_capability('search');
+if( is_array($modules) && count($modules) )
 {
-  $modules = ModuleOperations::get_instance()->get_modules_with_capability('search');
-  if( is_array($modules) && count($modules) )
-    {
-      $tmp = array();
-      $tmp['-1'] = lang('none');
-      for( $i = 0; $i < count($modules); $i++ )
-	{
-	  $tmp[$modules[$i]] = $modules[$i];
-	}
-      $smarty->assign('search_modules',$tmp);
-    }
+  $tmp = array();
+  $tmp['-1'] = lang('none');
+  for( $i = 0; $i < count($modules); $i++ )
+{
+  $tmp[$modules[$i]] = $modules[$i];
 }
+  $smarty->assign('search_modules',$tmp);
+}
+
 $smarty->assign('languages',get_language_list());
 $smarty->assign('templates',$templates);
 
@@ -464,12 +476,24 @@ if ($dir=opendir(dirname(__FILE__)."/themes/"))
   $smarty->assign('logintheme',get_site_preference('logintheme','default'));
 }
 
-$smarty->assign('active_general',($active_tab == 'general')?1:0);
-$smarty->assign('active_listcontent',($active_tab == 'listcontent')?1:0);
-$smarty->assign('active_editcontent',($active_tab == 'editcontent')?1:0);
-$smarty->assign('active_sitedown',($active_tab == 'sitedown')?1:0);
-$smarty->assign('active_setup',($active_tab == 'setup')?1:0);
-$smarty->assign('active_smarty',($active_tab == 'smarty')?1:0);
+#Tabs
+$smarty->assign('tab_start',$themeObject->StartTabHeaders().
+							$themeObject->SetTabHeader('general',lang('general_settings'), ('general' == $tab)?true:false).
+							$themeObject->SetTabHeader('listcontent',lang('listcontent_settings'), ('listcontent' == $tab)?true:false).
+							$themeObject->SetTabHeader('editcontent',lang('editcontent_settings'), ('editcontent' == $tab)?true:false).
+							$themeObject->SetTabHeader('sitedown',lang('sitedown_settings'), ('sitedown' == $tab)?true:false).
+							$themeObject->SetTabHeader('setup',lang('setup'), ('setup' == $tab)?true:false).
+							$themeObject->SetTabHeader('smarty',lang('smarty_settings'), ('smarty' == $tab)?true:false).
+							$themeObject->EndTabHeaders() . 
+							$themeObject->StartTabContent());
+$smarty->assign('tabs_end',$themeObject->EndTabContent());
+$smarty->assign('general_start',$themeObject->StartTab("general"));
+$smarty->assign('listcontent_start',$themeObject->StartTab("listcontent"));
+$smarty->assign('editcontent_start',$themeObject->StartTab("editcontent"));
+$smarty->assign('sitedown_start',$themeObject->StartTab("sitedown"));
+$smarty->assign('setup_start',$themeObject->StartTab("setup"));
+$smarty->assign('smarty_start',$themeObject->StartTab("smarty"));
+$smarty->assign('tab_end',$themeObject->EndTab());
 
 $smarty->assign('SECURE_PARAM_NAME',CMS_SECURE_PARAM_NAME);
 $smarty->assign('CMS_USER_KEY',$_SESSION[CMS_USER_KEY]);
@@ -534,23 +558,23 @@ $tmp = array(
 	     60*60*24*31*6=>lang('adminlog_6months'),
 	     -1=>lang('adminlog_manual'));
 $smarty->assign('adminlog_options',$tmp);
+
 $smarty->assign('lang_adminlog_lifetime',lang('adminlog_lifetime'));
 $smarty->assign('lang_info_adminlog_lifetime',lang('info_adminlog_lifetime'));
-
-
 $smarty->assign('lang_info_autoclearcache',lang('info_autoclearcache'));
 $smarty->assign('lang_autoclearcache',lang('autoclearcache'));
 $smarty->assign('lang_thumbnail_width',lang('thumbnail_width'));
 $smarty->assign('lang_thumbnail_height',lang('thumbnail_height'));
-$smarty->assign('lang_general',lang('general_settings'));
-$smarty->assign('lang_listcontent',lang('listcontent_settings'));
-$smarty->assign('lang_sitedown',lang('sitedown_settings'));
+
+//$smarty->assign('lang_general',lang('general_settings'));
+//$smarty->assign('lang_listcontent',lang('listcontent_settings'));
+//$smarty->assign('lang_sitedown',lang('sitedown_settings'));
 $smarty->assign('lang_cancel',lang('cancel'));
 $smarty->assign('lang_submit',lang('submit'));
 $smarty->assign('lang_clearcache',lang('clearcache'));
 $smarty->assign('lang_clear',lang('clear'));
-$smarty->assign('lang_setup',lang('setup'));
-$smarty->assign('lang_smarty',lang('smarty_settings'));
+//$smarty->assign('lang_setup',lang('setup'));
+//$smarty->assign('lang_smarty',lang('smarty_settings'));
 $smarty->assign('lang_sitename',lang('sitename'));
 $smarty->assign('lang_global_umask',lang('global_umask'));
 $smarty->assign('lang_test',lang('test'));
@@ -574,7 +598,7 @@ $smarty->assign('lang_sitedownexcludes',lang('sitedownexcludes'));
 $smarty->assign('lang_info_sitedownexcludes',lang('info_sitedownexcludes'));
 $smarty->assign('lang_basic_attributes',lang('basic_attributes'));
 $smarty->assign('lang_info_basic_attributes',lang('info_basic_attributes'));
-$smarty->assign('lang_editcontent_settings',lang('editcontent_settings'));
+//$smarty->assign('lang_editcontent_settings',lang('editcontent_settings'));
 $smarty->assign('lang_enablewysiwyg',lang('enablewysiwyg'));
 
 $all_attributes = array();
@@ -613,13 +637,15 @@ $smarty->assign('yesno',$yesno);
 $titlemenu = array(0=>lang('menutext'),1=>lang('title'));
 $smarty->assign('titlemenu',$titlemenu);
 
-# begin output
-echo '<div class="pagecontainer">'.$themeObject->ShowHeader('siteprefs')."\n";
-echo $smarty->fetch('siteprefs.tpl');
-echo '</div>'."\n";
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>'."\n";
-include_once("footer.php");
+$smarty->assign('backurl', $themeObject->backUrl());
+$smarty->assign('formurl', $thisurl);
 
+# begin output
+//echo '<div class="pagecontainer">'.$themeObject->ShowHeader('siteprefs')."\n";
+$smarty->display('siteprefs.tpl');
+//echo '</div>'."\n";
+//echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>'."\n";
+include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
 ?>
