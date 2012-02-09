@@ -3,7 +3,7 @@
 {$tab_start}
 
 {$general_start}
-	<form id="siteprefform_general" method="post" action="{$thisurl}">
+	<form id="siteprefform_general" method="post" action="{$formurl}">
 		<div>
 		  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
 		  <input type="hidden" name="active_tab" value="general" />
@@ -112,7 +112,7 @@
 {$tab_end}
 
 {$listcontent_start}
-	<form id="siteprefform_general" method="post" action="{$thisurl}">
+	<form id="siteprefform_general" method="post" action="{$formurl}">
 		<div>
 		  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
 		  <input type="hidden" name="active_tab" value="listcontent" />
@@ -157,7 +157,7 @@
 {$tab_end}
 
 {$editcontent_start}
-	<form id="siteprefform_editcontent" method="post" action="{$thisurl}">
+	<form id="siteprefform_editcontent" method="post" action="{$formurl}">
 		<div>
 		  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
 		  <input type="hidden" name="active_tab" value="editcontent" />
@@ -254,7 +254,7 @@
 {$tab_end}
 
 {$sitedown_start}
-	<form id="siteprefform_sitedown" method="post" action="{$thisurl}">
+	<form id="siteprefform_sitedown" method="post" action="{$formurl}">
 		<div>
 		  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
 		  <input type="hidden" name="active_tab" value="sitedown" />
@@ -304,7 +304,7 @@
 {$tab_end}
 
 {$setup_start}
-	<form id="siteprefform_setup" method="post" action="{$thisurl}">
+	<form id="siteprefform_setup" method="post" action="{$formurl}">
 		<div>
 		  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
 		  <input type="hidden" name="active_tab" value="setup" />
@@ -410,7 +410,7 @@
 {$tab_end}
 
 {$smarty_start}
-	<form id="siteprefform_setup" method="post" action="{$thisurl}">
+	<form id="siteprefform_setup" method="post" action="{$formurl}">
 		<div>
 		  <input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}"/>
 		  <input type="hidden" name="active_tab" value="smarty" />
