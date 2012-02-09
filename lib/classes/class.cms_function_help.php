@@ -5,7 +5,7 @@ class cms_function_help {
 	static $i = 0;
 	static $fl = null;
 	
-	static function get_called_class() {
+	public static function get_called_class() {
 	
 		$bt = debug_backtrace();
 		

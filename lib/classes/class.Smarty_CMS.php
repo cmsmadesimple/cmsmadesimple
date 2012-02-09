@@ -72,7 +72,7 @@ class Smarty_CMS extends SmartyBC
 
 		$this->assign('app_name','CMS');
 		/* Disabling for now -Stikki- */
-		$this->debugging = true;
+		$this->debugging = false;
 		if ($config["debug"] == true) {
 		  $this->force_compile = true;
 		}

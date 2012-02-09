@@ -53,6 +53,9 @@ abstract class CmsAdminThemeBase
 	// meta information
 	private $_sectionCount;
 	private $_modulesBySection;
+	
+	// tab variables
+	private $_activetab;
 
 	/**
 	 * Constructor
@@ -559,7 +562,7 @@ abstract class CmsAdminThemeBase
 								 'myprefs'=>array('url'=>'index.php?section=myprefs','parent'=>-1,
 												  'title'=>$this->_FixSpaces(lang('myprefs')),
 												  'description'=>lang('myprefsdescription'),'show_in_menu'=>true),
-								 'myaccount'=>array('url'=>'edituser.php','parent'=>'myprefs',
+								 'myaccount'=>array('url'=>'myaccount.php','parent'=>'myprefs',
 													'title'=>$this->_FixSpaces(lang('myaccount')),
 													'description'=>lang('myaccountdescription'),'show_in_menu'=>true),
 								/* 'preferences'=>array('url'=>'editprefs.php','parent'=>'myprefs',
@@ -1385,7 +1388,115 @@ abstract class CmsAdminThemeBase
 	 * @return string the HTML contents of the entire page.
 	 */
 	abstract public function postprocess($html);
-  
+
+	/**
+	 * ------------------------------------------------------------------
+	 * Tab Functions
+	 * ------------------------------------------------------------------
+	 */
+
+	/**
+	 * Output a string suitable for staring tab headers
+	 * i.e:  echo $this->StartTabHeaders();
+	 *
+	 * @final
+	 * @return string
+	 */ 
+	public final function StartTabHeaders()
+	{
+		return '<div id="page_tabs">';
+	}
+
+	/**
+	 * Set a specific tab header.
+	 * i.e:  echo $this->SetTabHeader('preferences',$this->Lang('preferences'));
+	 *
+	 * @final
+	 * @param string The tab id
+	 * @param string The tab title
+	 * @param boolean A flag indicating wether this tab is active.
+	 * @return string
+	 */ 
+	public final function SetTabHeader($tabid,$title,$active=false)
+	{
+		$a="";
+		if (TRUE == $active)
+		{
+			$a=" class='active'";
+			$this->_activetab = $tabid;
+		}
+		
+		$tabid = strtolower(str_replace(' ','_',$tabid));
+		return '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
+	}
+
+	/**
+	 * Output a string to stop the output of headers and close the necessary XHTML div.
+	 *
+	 * @final
+	 * @return string
+	 */
+	public final function EndTabHeaders()
+	{
+		return "</div><!-- EndTabHeaders -->";
+	}
+
+	/**
+	 * Output a string to indicate the start of XHTML areas for tabs.
+	 *
+	 * @final
+	 * @return string
+	 */
+	public final function StartTabContent()
+	{
+		return '<div class="clearb"></div><div id="page_content">';
+	}
+
+	/**
+	 * Output a string to indicate the end of XHTML areas for tabs.
+	 *
+	 * @final
+	 * @return string
+	 */
+	public final function EndTabContent()
+	{
+		return '</div> <!-- EndTabContent -->';
+	}
+
+	/**
+	 * Output a string to indicate the start of the output for a specific tab
+	 *
+	 * @final
+	 * @param string tabid (see SetTabHeader)
+	 * @param arrray Parameters
+	 * @return string
+	 */
+	public final function StartTab($tabid, $params = array())
+	{
+		if (FALSE == empty($this->_activetab) && $tabid == $this->_activetab && FALSE == empty($params['tab_message'])) {
+		
+			$message = $this->ShowMessage($this->Lang($params['tab_message']));
+		} else {
+		
+			$message = '';
+		}
+		
+		return '<div id="' . strtolower(str_replace(' ', '_', $tabid)) . '_c">'.$message;
+	}
+
+	/**
+	 * Output a string to indicate the end of the output for a specific tab.
+	 *
+	 * @final
+	 * @return string
+	 */
+	public final function EndTab()
+	{
+		return '</div> <!-- EndTab -->';
+	}
+
+
+	
 } // end of class
 
 

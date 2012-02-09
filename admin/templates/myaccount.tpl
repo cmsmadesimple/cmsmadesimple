@@ -1,15 +1,59 @@
 <div class="pagecontainer">
-	{$header}
-	<form method="post" action="myaccount.php" name="myaccountform">
+
+{$tab_start}
+{$maintab_start}
+
+	<form method="post" action="{$thisurl}">
+	
+		<input type="hidden" name="active_tab" value="maintab" />
+	
 		<div class="pageoverflow">
-			<p class="pageinput" style="margin-left:0;">
-				<input type="submit" name="submit_form" value="{'submit'|lang}" class="pagebutton" />
-				<input type="submit" name="cancel" value="{'cancel'|lang}" class="pagebutton" />
-			</p>
-		</div>		
-		<div class="invisible">
-			<input type="hidden" name="{$SECURE_PARAM_NAME}" value="{$CMS_USER_KEY}" />
-		</div>	
+			<p class="pagetext">{lang('name')}:</p>
+			<p class="pageinput"><input type="text" name="user" maxlength="25" value="{$userobj->username}" class="standard" /></p>
+		</div>
+		
+		<div class="pageoverflow">
+			<p class="pagetext">{lang('password')}:</p>
+			<p class="pageinput"><input type="password" name="password" maxlength="25" value="" />&nbsp;{lang('info_edituser_password')}</p>
+		</div>
+		
+		<div class="pageoverflow">
+			<p class="pagetext">{lang('passwordagain')}:</p>
+			<p class="pageinput"><input type="password" name="passwordagain" maxlength="25" value="" class="standard" />&nbsp;{lang('info_edituser_passwordagain')}</p>
+		</div>
+		
+		<div class="pageoverflow">
+			<p class="pagetext">{lang('firstname')}:</p>
+			<p class="pageinput"><input type="text" name="firstname" maxlength="50" value="{$userobj->firstname}" class="standard" /></p>
+		</div>
+		
+		<div class="pageoverflow">
+			<p class="pagetext">{lang('lastname')}:</p>
+			<p class="pageinput"><input type="text" name="lastname" maxlength="50" value="{$userobj->lastname}" class="standard" /></p>
+		</div>
+		
+		<div class="pageoverflow">
+			<p class="pagetext">{lang('email')}:</p>
+			<p class="pageinput"><input type="text" name="email" maxlength="255" value="{$userobj->email}" class="standard" /></p>
+		</div>
+	
+		<div class="pageoverflow">
+			<div class="pagetext">&nbsp;</div>
+			<div class="pageinput">
+				<input class="pagebutton" type="submit" name="submit_account" value="{lang('submit')}" />
+				<input class="pagebutton" type="submit" name="cancel" value="{lang('cancel')}" />
+			</div>
+		</div>
+	</form>
+
+{$tab_end}
+
+{$advancedtab_start}
+
+	<form method="post" action="{$thisurl}">
+	
+		<input type="hidden" name="active_tab" value="advtab" />
+		
 		<fieldset>
 			<legend>
 				{'lang_settings_legend'|lang}
@@ -194,11 +238,15 @@
 				<input type="hidden" name="edituserprefs" value="true" />
 				<input type="hidden" name="old_default_cms_lang" value="{$old_default_cms_lang}" />
                 </div>				
-				<input type="submit" name="submit_form" value="{'submit'|lang}" class="pagebutton" />
+				<input type="submit" name="submit_prefs" value="{'submit'|lang}" class="pagebutton" />
 				<input type="submit" name="cancel" value="{'cancel'|lang}" class="pagebutton" />
 			</p>
 		</div>		
 	</form>
+	
+{$tab_end}	
+{$tabs_end}
+
 	<p class="pageback">
 		<a class="pageback" href="{$backurl}">&#171; {'back'|lang}</a>
 	</p>

@@ -29,28 +29,10 @@ require_once ("../include.php");
 $urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
 $thisurl = basename(__FILE__) . $urlext;
 $userid = get_userid(); // Checks also login
+$userobj = UserOperations::get_instance()->LoadUserByID($userid); // <- Safe to do, cause if $userid fails, it redirects automatically to login.
 $db = cmsms()->GetDb();
 $error = '';
 $message = '';
-
-/**
- * Get installed modules
- */
- /*
-$allmodules = ModuleOperations::get_instance()->GetInstalledModules();
-$modules = array();
-foreach ($allmodules as $key) {
-
-	$obj = ModuleOperations::get_instance()->get_module_instance($key);	
-	if (!is_object($obj)) {
-		
-		continue;
-	}
-	
-	$modules[$obj->GetFriendlyName()] = $obj->GetName();
-}
-*/
-
 
 /**
  * Get preferences
@@ -97,10 +79,107 @@ if (isset($_POST["cancel"])) {
 }
 
 /**
- * Submit
+ * Check tab
  */
-if (isset($_POST['submit_form'])) {
+$tab='';
+if( isset($_POST['active_tab']) ) {
 
+    $tab = trim($_POST['active_tab']);
+}
+
+/**
+ * Submit account
+ *
+ * NOTE: Assumes that we succesfully acquired user object.
+ */
+ if (isset($_POST['submit_account'])) {
+
+	// Collect params
+ 
+	$username = '';
+	if (isset($_POST["user"])) $username = cleanValue($_POST["user"]);
+
+	$password = '';
+	if (isset($_POST["password"])) $password = $_POST["password"];
+
+	$passwordagain = '';
+	if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
+
+	$firstname = '';
+	if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
+
+	$lastname = '';
+	if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
+
+	$email = '';
+	if (isset($_POST["email"])) $email = trim($_POST["email"]);	
+	
+	// Do validations
+	
+	$validinfo = true;
+	
+	if ($username == "") {
+	
+		$validinfo = false;
+		$error = lang('nofieldgiven', array(lang('username')));
+	}
+
+	else if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $username) ) {
+	
+		$validinfo = false;
+		$error = lang('illegalcharacters', array(lang('username')));
+	} 
+
+	else if ($password != $passwordagain) {
+	
+		$validinfo = false;
+		$error = lang('nopasswordmatch');
+	}
+
+	else if (!empty($email) && !is_email($email)) {
+	
+		$validinfo = false;
+		$error = lang('invalidemail').': '.$email;
+	}
+ 
+	// If success do action
+ 
+	if($validinfo) {
+ 
+		$userobj->username = $username;
+		$userobj->firstname = $firstname;
+		$userobj->lastname = $lastname;
+		$userobj->email = $email;
+		
+		if ($password != '') {
+		
+			$userobj->SetPassword($password);
+		}
+		
+		Events::SendEvent('Core', 'EditUserPre', array('user' => &$userobj));
+
+		$result = $userobj->Save();
+		
+		if($result) {
+		
+			// put mention into the admin log
+			audit($user_id, 'Admin Username: '.$userobj->username, 'Edited');
+			Events::SendEvent('Core', 'EditUserPost', array('user' => &$userobj));	
+			$message = lang('accountupdated');			
+			
+		} else {
+		
+			// throw exception? update just failed.
+		}
+	}
+	
+} // end of account submit
+ 
+/**
+ * Submit prefs
+ */ 
+if (isset($_POST['submit_prefs'])) {
+	
 	# Get values from request and drive em to variables
 	$gcb_wysiwyg = (isset($_POST['gcb_wysiwyg']) ? 1 : 0);
 	$wysiwyg = $_POST['wysiwyg'];
@@ -175,7 +254,7 @@ if (isset($_POST['submit_form'])) {
 	$message = lang('prefsupdated');
 	cmsms()->clear_cached_files();
 
-} // end of submit
+} // end of prefs submit
 
 /**
  * Build page
@@ -184,10 +263,12 @@ if (isset($_POST['submit_form'])) {
 include_once ("header.php");
 
 if ($error != "") {
-	echo $themeObject->ShowErrors($error);
+	
+	$themeObject->ShowErrors($error);
 }
 if ($message != "") {
-	echo $themeObject->ShowMessage($message);
+	
+	$themeObject->ShowMessage($message);
 }
 
 $smarty = cmsms()->GetSmarty();
@@ -217,14 +298,23 @@ $smarty->assign('syntax_opts', $tmp2);
 $smarty->assign('themes_opts',CmsAdminThemeBase::GetAvailableThemes());
 
 # Modules
-//$modules = ModuleOperations::get_instance() -> GetInstalledModules();
 $allmodules = ModuleOperations::get_instance()->GetInstalledModules();
 $modules = array();
-#$modules[-1] = lang('none');
 foreach ((array)$allmodules as $onemodule) {
 
 	$modules[$onemodule] = $onemodule;
 }
+
+#Tabs
+$smarty->assign('tab_start',$themeObject->StartTabHeaders().
+							$themeObject->SetTabHeader('maintab',lang('useraccount'), ('maintab' == $tab)?true:false).
+							$themeObject->SetTabHeader('advancedtab',lang('userprefs'), ('advtab' == $tab)?true:false).
+							$themeObject->EndTabHeaders() . 
+							$themeObject->StartTabContent());
+$smarty->assign('tabs_end',$themeObject->EndTabContent());
+$smarty->assign('maintab_start',$themeObject->StartTab("maintab"));
+$smarty->assign('advancedtab_start',$themeObject->StartTab("advancedtab"));
+$smarty->assign('tab_end',$themeObject->EndTab());
 
 # Prefs
 $smarty->assign('module_opts', $modules);
@@ -241,19 +331,21 @@ $smarty->assign('indent', $indent);
 $smarty->assign('enablenotifications', $enablenotifications);
 $smarty->assign('paging', $paging);
 $smarty->assign('date_format_string', $date_format_string);
-$smarty->assign('default_parent', $contentops -> CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1));
-$smarty->assign('homepage', $themeObject -> GetAdminPageDropdown('homepage', $homepage));
+$smarty->assign('default_parent', $contentops->CreateHierarchyDropdown(0, $default_parent, 'parent_id', 0, 1));
+$smarty->assign('homepage', $themeObject->GetAdminPageDropdown('homepage', $homepage));
 $tmp = array(10 => 10, 20 => 20, 50 => 50, 100 => 100);
-$smarty -> assign('pagelimit_opts', $tmp);
-$smarty -> assign('listtemplates_pagelimit', $listtemplates_pagelimit);
-$smarty -> assign('liststylesheets_pagelimit', $liststylesheets_pagelimit);
-$smarty -> assign('listgcbs_pagelimit', $listgcbs_pagelimit);
-$smarty -> assign('ignoredmodules', $ignoredmodules);
-$smarty -> assign('header', $themeObject -> showHeader('userprefs'));
-$smarty -> assign('backurl', $themeObject -> backUrl());
+$smarty->assign('pagelimit_opts', $tmp);
+$smarty->assign('listtemplates_pagelimit', $listtemplates_pagelimit);
+$smarty->assign('liststylesheets_pagelimit', $liststylesheets_pagelimit);
+$smarty->assign('listgcbs_pagelimit', $listgcbs_pagelimit);
+$smarty->assign('ignoredmodules', $ignoredmodules);
+//$smarty->assign('header', $themeObject -> showHeader('userprefs')); // <- Totally useless as far i can see -Stikki-
+$smarty->assign('backurl', $themeObject -> backUrl());
+$smarty->assign('formurl', $thisurl);
+$smarty->assign('userobj', $userobj);
 
 # Output
-$smarty->display('editprefs.tpl');
+$smarty->display('myaccount.tpl');
 include_once ("footer.php");
 # vim:ts=4 sw=4 noet
 ?>
