@@ -1048,14 +1048,16 @@ abstract class CmsAdminThemeBase
 						$imagePath = '';
 					}
     	   	
-				if (file_exists(dirname(cmsms()->config['root_path'] . '/' . cmsms()->config['admin_dir'] .
-										'/themes/' . $this->themeName . '/images/' . $imagePath . $imageName) . '/'. $imageName))
+				$config = cmsms()->GetConfig();
+				$str = dirname($config['root_path'].'/'.$config['admin_dir']."/themes/{$this->themeName}/images/{$imagePath}{$imageName}");
+				if (file_exists("{$str}/{$imageName}"))
 					{
-						$this->_imageLink[$imageName] = 'themes/' .
-							$this->themeName . '/images/' . $imagePath . $imageName;
+						$str = "themes/{$this->themeName}/images/{$imagePath}{$imageName}";
+						$this->_imageLink[$imageName] = $str;
 					}
 				else
 					{
+						// todo: uses default theme.
 						$this->_imageLink[$imageName] = 'themes/default/images/' . $imagePath . $imageName;
 					}
 			}
