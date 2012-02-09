@@ -3,7 +3,7 @@
 {$tab_start}
 {$maintab_start}
 
-	<form method="post" action="{$thisurl}">
+	<form method="post" action="{$formurl}">
 	
 		<input type="hidden" name="active_tab" value="maintab" />
 	
@@ -50,7 +50,7 @@
 
 {$advancedtab_start}
 
-	<form method="post" action="{$thisurl}">
+	<form method="post" action="{$formurl}">
 	
 		<input type="hidden" name="active_tab" value="advtab" />
 		
