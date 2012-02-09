@@ -163,7 +163,7 @@ if( isset($_POST['active_tab']) ) {
 		if($result) {
 		
 			// put mention into the admin log
-			audit($user_id, 'Admin Username: '.$userobj->username, 'Edited');
+			audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
 			Events::SendEvent('Core', 'EditUserPost', array('user' => &$userobj));	
 			$message = lang('accountupdated');			
 			
