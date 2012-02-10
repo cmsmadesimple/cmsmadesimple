@@ -856,6 +856,7 @@ header .shortcuts li.favorites a {
 }
 #sidebar nav.navigation {
 	height: auto;
+	margin-top: 45px;
 	position: relative
 }
 /* toggle sidebar */
@@ -925,7 +926,7 @@ header .shortcuts li.favorites a {
 /* main navigation */
 nav ul#pagemenu {
 	border-bottom: 1px solid #adadad;
-	margin-top: 45px
+	/*margin-top: 45px*/
 }
 nav ul#pagemenu li {
 	position: relative;
@@ -933,6 +934,14 @@ nav ul#pagemenu li {
 	background: url(themes/OneEleven/images/layout/navigation-bg.gif) repeat-x top;
 	line-height: 35px;
 	padding: 0
+}
+/* position sticky menu */
+#sidebar nav.navigation.on {
+	width: 249px
+}
+#sidebar nav.navigation.off {
+	width: 40px;
+	overflow: hidden
 }
 /* toggle submenu */
 nav ul#pagemenu li span.open-nav {
@@ -1697,6 +1706,10 @@ a.toggle-dropzone:focus {
 	width: 140px;
 	border: 1px dashed #ccc;
 	text-align: center;
+}
+.drop span.zone:hover,
+.drop span.zone:focus {
+	border: 1px dashed #77ab13
 }
 .drop #theme_dropzone {
 	width: 130px;

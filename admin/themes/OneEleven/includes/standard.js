@@ -112,11 +112,14 @@ jQuery(document).ready(function($) {
 	// TOGGLE SIDEBAR
 	// Variables
 	var objMain = $('#container');
+	var objSide = $('#menu');
 	var objToggle = $('.toggle-button');
 	// Show sidebar
 	function showSidebar() {
 		objMain.addClass('sidebar-on');
 		objMain.removeClass('sidebar-off');
+		objSide.addClass('on');
+		objSide.removeClass('off');
 		$('.toggle-button').removeClass('open-sidebar');
 		$('#pagemenu li.current ul').show();
 		$.cookie('sidebar-pref', 'sidebar-on', {
@@ -128,6 +131,8 @@ jQuery(document).ready(function($) {
 	function hideSidebar() {
 		objMain.removeClass('sidebar-on');
 		objMain.addClass('sidebar-off');
+		objSide.removeClass('on');
+		objSide.addClass('off');
 		$('.toggle-button').addClass('open-sidebar');
 		$('#pagemenu li ul').hide();
 		$.cookie('sidebar-pref', 'sidebar-off', {
@@ -147,6 +152,8 @@ jQuery(document).ready(function($) {
 	// Load preference
 	if($.cookie('sidebar-pref') == 'sidebar-off') {
 		objMain.addClass('sidebar-off');
+		objSide.addClass('off');
+		objSide.removeClass('on');
 		objMain.removeClass('sidebar-on');
 		$('.toggle-button').addClass('open-sidebar');
 	}
@@ -203,6 +210,30 @@ jQuery(document).ready(function($) {
 			$(this).next().slideToggle(0);
 		});
 	});
+	// STICKY MENU
+	var obj = $('#menu');
+	var offset = obj.offset();
+	var topOffset = offset.top;
+	var leftOffset = offset.left;
+	var marginTop = obj.css("marginTop");
+	var marginLeft = obj.css("marginLeft");
+	
+	$(window).scroll(function() {
+		var scrollTop = $(window).scrollTop();
+		
+		if (scrollTop >= topOffset){
+			obj.css({
+			marginTop: '-150px',
+			position: 'fixed',
+			});
+		}
+		if (scrollTop < topOffset){
+			obj.css({
+			marginTop: marginTop,
+			position: 'relative',
+			});
+		}
+	});	
 	// BUTTONS
 	jQuery(function() {
 		$('body').off('cms_ajax_apply');
@@ -237,9 +268,9 @@ jQuery(document).ready(function($) {
 			$('button[name=cancel]').button('option', 'label', e.close);
 			var htmlShow = '';
 			if(e.response == 'Success') {
-				htmlShow = '<aside class="message pagemcontainer" role="status"><p>' + e.details + '<\/p><\/aside>';
+				htmlShow = '<aside class="message pagemcontainer" role="status"><span class="close-warning ui-icon ui-icon-circle-close">Close</span><p>' + e.details + '<\/p><\/aside>';
 			} else {
-				htmlShow = '<aside class="message pageerrorcontainer" role="alert"><ul>';
+				htmlShow = '<aside class="message pageerrorcontainer" role="alert"><span class="close-warning ui-icon ui-icon-circle-close">Close</span><ul>';
 				htmlShow += e.details;
 				htmlShow += '<\/ul><\/aside>';
 			}
@@ -248,13 +279,16 @@ jQuery(document).ready(function($) {
 					$('.message').slideUp();
 				}, 10000);
 			});
+			$('.close-warning').click(function() {
+				$('.message').slideUp();
+			});
 		});
 	});
 	// SHOW/HIDE NOTIFICATIONS
 	jQuery(function() {
-		$('.pagewarning').prepend('<span class="close-warning ui-icon ui-icon-circle-close"></span>');
+		$('.pagewarning, .message').prepend('<span class="close-warning ui-icon ui-icon-circle-close"></span>');
 		$('.close-warning').click(function() {
-			$(this).parent().hide(0, function() {
+			$(this).parent().slideUp(1000, function() {
 				$(this).hide();
 			});
 		});
