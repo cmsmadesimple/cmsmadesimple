@@ -523,6 +523,11 @@ aside.message,
 /* close notification */
 .close-warning {
 	float:right;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	text-indent: -9999em;
+	background: transparent url(themes/OneEleven/images/icons/extra/red.gif) no-repeat;
 	cursor: pointer;
 	margin:5px
 }
@@ -1867,6 +1872,13 @@ a.toggle-dropzone:focus {
 	#sidebar aside {
 		padding: 0
 	}
+	#sidebar nav.navigation.on {
+		width: auto
+	}
+	#sidebar nav.navigation.off {
+		width: auto;
+		overflow: hidden
+	}	
 	#header.header {
 		overflow: hidden
 	}

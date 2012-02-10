@@ -217,7 +217,11 @@ jQuery(document).ready(function($) {
 	var leftOffset = offset.left;
 	var marginTop = obj.css("marginTop");
 	var marginLeft = obj.css("marginLeft");
-	
+	if (navigator.userAgent.match(/(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini)/))
+		{
+			return;
+		}
+	else {
 	$(window).scroll(function() {
 		var scrollTop = $(window).scrollTop();
 		
@@ -234,6 +238,7 @@ jQuery(document).ready(function($) {
 			});
 		}
 	});	
+	};
 	// BUTTONS
 	jQuery(function() {
 		$('body').off('cms_ajax_apply');
@@ -268,9 +273,9 @@ jQuery(document).ready(function($) {
 			$('button[name=cancel]').button('option', 'label', e.close);
 			var htmlShow = '';
 			if(e.response == 'Success') {
-				htmlShow = '<aside class="message pagemcontainer" role="status"><span class="close-warning ui-icon ui-icon-circle-close">Close</span><p>' + e.details + '<\/p><\/aside>';
+				htmlShow = '<aside class="message pagemcontainer" role="status"><span class="close-warning">Close</span><p>' + e.details + '<\/p><\/aside>';
 			} else {
-				htmlShow = '<aside class="message pageerrorcontainer" role="alert"><span class="close-warning ui-icon ui-icon-circle-close">Close</span><ul>';
+				htmlShow = '<aside class="message pageerrorcontainer" role="alert"><span class="close-warning">Close</span><ul>';
 				htmlShow += e.details;
 				htmlShow += '<\/ul><\/aside>';
 			}
@@ -279,14 +284,14 @@ jQuery(document).ready(function($) {
 					$('.message').slideUp();
 				}, 10000);
 			});
-			$('.close-warning').click(function() {
+			$('.message').click(function() {
 				$('.message').slideUp();
 			});
 		});
 	});
 	// SHOW/HIDE NOTIFICATIONS
 	jQuery(function() {
-		$('.pagewarning, .message').prepend('<span class="close-warning ui-icon ui-icon-circle-close"></span>');
+		$('.pagewarning, .message').prepend('<span class="close-warning"></span>');
 		$('.close-warning').click(function() {
 			$(this).parent().slideUp(1000, function() {
 				$(this).hide();
