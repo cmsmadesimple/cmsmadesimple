@@ -150,7 +150,7 @@
 		</tr>
 		<tr>
 			<td class="col2">
-				<img src="images/green.gif" alt="{$success}" title="{$success}" />
+				<img src="images/green.gif" alt="{if isset($success)}{$success}{/if}" title="{if isset($success)}{$success}{/if}" />
 			</td>
 			<td>
 				{lang_install a=install_value_passed}
@@ -158,7 +158,7 @@
 		</tr>
 		<tr>
 			<td class="col2">
-				<img src="images/red.gif" alt="{$failure}" title="{$failure}" />
+				<img src="images/red.gif" alt="{if isset($failure)}{$failure}{/if}" title="{if isset($failure)}{$failure}{/if}" />
 			</td>
 			<td>
 				{lang_install a=install_value_failed}
@@ -166,7 +166,7 @@
 		</tr>
 		<tr>
 			<td class="col2">
-				<img src="images/yellow.gif" {if isset($caution)}alt="{$caution}" title="{$caution}"{/if}/>
+				<img src="images/yellow.gif" alt="{if isset($caution)}{$caution}{/if}" title="{if isset($caution)}{$caution}{/if}"{/if}/>
 			</td>
 			<td>
 				{lang_install a=install_value_recommended}
