@@ -161,6 +161,7 @@ $smarty_cacheudt = get_site_preference('smarty_cacheudt',$smarty_cacheudt);
  * Check tab
  */
 $tab='';
+$active_tab = '';
 if( isset($_POST['active_tab']) ) {
 
     $tab = trim($_POST['active_tab']);
