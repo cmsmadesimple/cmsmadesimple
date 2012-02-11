@@ -2437,9 +2437,36 @@ function cms_get_jquery($exclude = '',$ssl = false,$cdn = false,$append = '',$cu
 }
 	
 if(!function_exists('get_called_class')) {
-    function get_called_class() {
-        return cms_function_help::get_called_class();
+  function get_called_class() {
+    return cms_function_help::get_called_class();
+  }
+  // this class must exist in this file until CMSMS 1.12 when we dont have to worry abut PHP 5.2
+  // this file is loaded before the autoloader runs.
+  class cms_function_help {
+
+    static $i = 0;
+    static $fl = null;
+	
+    public static function get_called_class() {
+	
+      $bt = debug_backtrace();
+		
+      if(self::$fl == $bt[2]['file'].$bt[2]['line']) {
+	self::$i++;
+      } else {
+	self::$i = 0;
+	self::$fl = $bt[2]['file'].$bt[2]['line'];
+      }
+		
+      $lines = file($bt[2]['file']);
+		
+      preg_match_all('/([a-zA-Z0-9\_]+)::'.$bt[2]['function'].'/',
+		     $lines[$bt[2]['line']-1],
+		     $matches);
+		
+      return $matches[1][self::$i];
     }
+  }
 }
 
 # vim:ts=4 sw=4 noet

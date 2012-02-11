@@ -736,6 +736,10 @@ class ContentBase
 
 	public function HasProperty($name)
 	{
+	  if( !is_array($this->_props) )
+	    {
+	      $this->_load_properties();
+	    }
 	  if( !is_array($this->_props) ) return FALSE;
 	  return in_array($name,array_keys($this->_props));
 	}
@@ -798,7 +802,6 @@ class ContentBase
 
 	public function SetPropertyValue($name, $value)
 	{
-	  debug_buffer('setpropertyvalue called');
 	  if( !is_array($this->_props) ) $this->_props = array();
 	  
 	  $this->_props[$name] = $value;

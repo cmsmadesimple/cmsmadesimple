@@ -929,17 +929,14 @@ abstract class CMSModule
 	final public function RegisterContentType($name, $file, $friendlyname = '')
 	{
 	  $contentops = cmsms()->GetContentOperations();
-	  $types = $contentops->ListContentTypes();
-	  if( !in_array(strtolower($name),array_keys($types)) )
-	    {
-	      $obj = new CmsContentTypePlaceholder();
-	      $obj->class = $name;
-	      $obj->type  = strtolower($name);
-	      $obj->filename = $file;
-	      $obj->loaded = false;
-	      $obj->friendlyname = ($friendlyname != '' ? $friendlyname : $name);
-	      $contentops->register_content_type($obj);
-	    }
+
+	  $obj = new CmsContentTypePlaceholder();
+	  $obj->class = $name;
+	  $obj->type  = strtolower($name);
+	  $obj->filename = $file;
+	  $obj->loaded = false;
+	  $obj->friendlyname = ($friendlyname != '' ? $friendlyname : $name);
+	  $contentops->register_content_type($obj);
 	}
 
 	/**
