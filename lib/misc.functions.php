@@ -2464,7 +2464,10 @@ if(!function_exists('get_called_class')) {
 		     $lines[$bt[2]['line']-1],
 		     $matches);
 		
-      return $matches[1][self::$i];
+      if( isset($matches[1][self::$i]) )
+	{
+	  return $matches[1][self::$i];
+	}
     }
   }
 }
