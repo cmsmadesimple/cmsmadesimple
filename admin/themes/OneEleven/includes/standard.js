@@ -293,10 +293,11 @@ jQuery(document).ready(function($) {
 	jQuery(function() {
 		$('.pagewarning, .message').prepend('<span class="close-warning"></span>');
 		$('.close-warning').click(function() {
-			$(this).parent().slideUp(1000, function() {
-				$(this).hide();
-			});
+			$(this).parent().hide();
 		});
+		$('.message').click(function() {
+				$('.message').slideUp();
+			});
 		$('.message').each(function() {
 			var message = $(this);
 			$(message).hide();
