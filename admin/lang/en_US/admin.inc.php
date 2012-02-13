@@ -497,6 +497,9 @@ The information displayed below is collected from a variety of locations, and su
 EOT;
 $lang['admin']['systeminfo'] = 'System Information';
 $lang['admin']['systeminfodescription'] = 'Display various pieces of information about your system that may be useful in diagnosing problems';
+$lang['admin']['sysmaintab_database'] = 'Database';
+$lang['admin']['sysmaintab_changelog'] = 'Changelog';
+
 
 $lang['admin']['systemmaintenance'] = 'System Maintenance';
 $lang['admin']['systemmaintenancedescription'] = 'Various functions for maintaining the health of your system. You can also browser the changelog of CMSMadeSimple';
