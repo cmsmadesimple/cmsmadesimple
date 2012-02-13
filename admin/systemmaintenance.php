@@ -82,6 +82,43 @@ $db = $gCms->GetDb();
   $smarty->assign('mod',$mod);
 }
 
+$query = "SHOW TABLES";
+$tablestmp=$db->GetArray($query);
+$tables=array();
+foreach($tablestmp as $table) {
+  foreach($table as $tabeinfo=>$tablename) {
+    $tables[]=$tablename;
+  }
+
+}
+echo count($tables). " tables found<br><br>";
+
+function MakeCommaList($tables) {
+  $out="";
+  foreach($tables as $table) {
+    if ($out!="") $out.=" ,";
+    $out.="`".$table."`";
+  }
+  return $out;
+}
+
+$query = "CHECK TABLE ".MakeCommaList($tables);
+//echo $query;
+$checkarray=$db->GetArray($query);
+//print_r($checkarray);
+$errorsfound=0;
+$errordetails="";
+foreach ($checkarray as $check) {
+  if (isset($check["Msg_text"]) && $check["Msg_text"]!="OK") {
+    $errorsfound++;
+    $errordetails.="MySQL reports that table ".$check["Table"]." does not checkout OK.<br>";
+  }
+}
+echo $errorsfound." errors found in tables<br>";
+if ($errorsfound>0) {
+  echo $$errordetails;
+}
+echo "<br>";
 /*
 
 //smartyfier
