@@ -18,6 +18,13 @@
 #
 #$Id: supportinfo.php 4216 2007-10-06 19:28:55Z wishy $
 
+
+
+
+
+
+
+
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
@@ -85,13 +92,16 @@ $db = $gCms->GetDb();
 $query = "SHOW TABLES";
 $tablestmp=$db->GetArray($query);
 $tables=array();
+$nonseqtables=array();
 foreach($tablestmp as $table) {
   foreach($table as $tabeinfo=>$tablename) {
     $tables[]=$tablename;
+    if (!stripos($tablename,"_seq")) {
+      $nonseqtables[]=$tablename;
+    }
   }
-
 }
-echo count($tables). " tables found<br><br>";
+echo count($tables). " tables found (".count($nonseqtables)." non-seq tables)<br><br>";
 
 function MakeCommaList($tables) {
   $out="";
@@ -102,7 +112,43 @@ function MakeCommaList($tables) {
   return $out;
 }
 
-$query = "CHECK TABLE ".MakeCommaList($tables);
+function CheckForErrors($dbarray) {
+
+}
+
+if (isset($_GET["optimizeall"])) {
+  $query = "OPTIMIZE TABLE ".MakeCommaList($nonseqtables);
+  $optimizearray=$db->GetArray($query);
+  //print_r($optimizearray);
+  $errorsfound=0;
+  $errordetails="";
+  foreach ($optimizearray as $check) {
+    if (isset($check["Msg_text"]) && $check["Msg_text"]!="OK") {
+      $errorsfound++;
+      $errordetails.="MySQL reports that table ".$check["Table"]." does not checkout OK.<br>";
+    }
+  }
+  //echo $errorsfound." errors found in tables: ".$errordetails."<br>";
+  $themeObject->ShowMessage("All non-seq tables optimized");
+}
+
+if (isset($_GET["repairall"])) {
+  $query = "REPAIR TABLE ".MakeCommaList($tables);
+  $repairarray=$db->GetArray($query);
+  $errorsfound=0;
+  $errordetails="";
+  foreach ($repairarray as $check) {
+    if (isset($check["Msg_text"]) && $check["Msg_text"]!="OK") {
+      $errorsfound++;
+      $errordetails.="MySQL reports that table ".$check["Table"]." does not checkout OK.<br>";
+    }
+  }
+  //echo $errorsfound." errors found in tables: ".$errordetails."<br>";
+  $themeObject->ShowMessage("All tables repaired");
+  //$themeObject->ShowErrors("All tables repairs");
+}
+
+$query = "CHECK TABLE ".MakeCommaList($nonseqtables);
 //echo $query;
 $checkarray=$db->GetArray($query);
 //print_r($checkarray);
@@ -114,11 +160,52 @@ foreach ($checkarray as $check) {
     $errordetails.="MySQL reports that table ".$check["Table"]." does not checkout OK.<br>";
   }
 }
-echo $errorsfound." errors found in tables<br>";
-if ($errorsfound>0) {
-  echo $$errordetails;
+echo $errorsfound." errors found in tables: ".$errordetails."<br>";
+
+echo '<a href="systemmaintenance.php'.$urlext.'&amp;optimizeall=1">Optimize all non-seq tables</a>';
+echo '<br>';
+echo '<a href="systemmaintenance.php'.$urlext.'&amp;repairall=1">Optimize all tables</a>';
+echo '<br>';
+
+$smarty->assign('systeminfo_cleanreport', 'systeminfo.php'.$urlext.'&amp;cleanreport=1');
+
+$contentops = cmsms()->GetContentOperations();
+$all = $contentops->GetAllContent(false);
+$pages=array();
+$withoutalias=array();
+foreach ($all as $thisitem) {
+  if( is_object($thisitem) && $thisitem instanceof ContentBase ) {
+ 	  $pages[]=$thisitem->Name();
+    if (trim($thisitem->Alias())=="") {
+      $withoutalias[]=$thisitem->Name();
+    }
+  }
 }
-echo "<br>";
+echo "<br><br>";
+echo count($pages). " contentpages found, ";
+echo count($withoutalias)." of which did not have an alias";
+
+
+
+
+
+$smarty->assign("lang_changelog",lang("sysmaintab_changelog"));
+$smarty->assign("lang_database",lang("sysmaintab_database"));
+
+$ch_filename= cms_join_path(CMS_BASE, 'doc', 'CHANGELOG.txt');
+$changelog=file_get_contents($ch_filename);
+$changelog=nl2br($changelog);
+$smarty->assign("changelog",$changelog);
+$smarty->assign("changelogfilename",$ch_filename);
+
+
+echo $smarty->fetch('systemmaintenance.tpl');
+
+
+include_once("footer.php");
+
+
+
 /*
 
 //smartyfier
@@ -339,19 +426,7 @@ else echo $smarty->fetch('systeminfo.tpl');
 
 */
 
-$smarty->assign("lang_changelog",lang("sysmaintab_changelog"));
-$smarty->assign("lang_database",lang("sysmaintab_database"));
 
-$ch_filename= cms_join_path(CMS_BASE, 'doc', 'CHANGELOG.txt');
-$changelog=file_get_contents($ch_filename);
-$changelog=nl2br($changelog);
-$smarty->assign("changelog",$changelog);
-$smarty->assign("changelogfilename",$ch_filename);
-
-
-echo $smarty->fetch('systemmaintenance.tpl');
-
-include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
 ?>

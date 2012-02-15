@@ -1,3 +1,4 @@
+
 {$mod->StartTabHeaders()}
 {$mod->SetTabHeader('database',$lang_database,isset($active_general))}
 {$mod->SetTabHeader('changelog',$lang_changelog,isset($active_listcontent))}
