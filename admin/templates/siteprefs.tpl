@@ -327,12 +327,7 @@
 
 		<fieldset>
 		<legend>{'server_cache_settings'|lang}:&nbsp;</legend>
-		<div class="pageoverflow">
-		  <p class="pagetext">{$lang_clearcache}:</p>
-		  <p class="pageinput">
-			<input class="pagebutton"  type="submit" name="clearcache" value="{$lang_clear}" />
-		  </p>
-		</div>  
+
 		<div class="pageoverflow">
 		  <p class="pagetext">{'autoclearcache2'|lang}:</p>
 		  <p class="pageinput">
@@ -341,6 +336,7 @@
 			{$lang_info_autoclearcache}
 		  </p>
 		</div>
+
 		</fieldset>
 
 		<fieldset>

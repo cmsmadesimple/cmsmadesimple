@@ -218,14 +218,14 @@ if (isset($_POST["testumask"]))
 	}	
     }
   }
-else if (isset($_POST['clearcache']))
+else /*if (isset($_POST['clearcache']))
 {
 	cmsms()->clear_cached_files();
 	// put mention into the admin log
 	audit(-1,'Website Cache', 'Cleared');
 	$message .= lang('cachecleared');
 }
-else if (isset($_POST["editsiteprefs"]))
+else*/ if (isset($_POST["editsiteprefs"]))
 {
   if ($access)
     {

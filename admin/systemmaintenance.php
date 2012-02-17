@@ -44,14 +44,7 @@ include_once("header.php");
 define('CMS_BASE', dirname(dirname(__FILE__)));
 require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 
-
-function installerHelpLanguage( $lang, $default_null=null )
-{
-  if( (!is_null($default_null)) && ($default_null == $lang) ) return '';
-  return substr($lang, 0, 2);
-}
-
-function systeminfo_lang($params,&$smarty)
+function sitemaintenance_lang($params,&$smarty)
 {
   if( count($params) )
   {
@@ -71,7 +64,7 @@ function systeminfo_lang($params,&$smarty)
 
 $gCms = cmsms();
 $smarty = $gCms->GetSmarty();
-$smarty->register_function('si_lang','systeminfo_lang');
+$smarty->register_function('sm_lang','sitemaintenance_lang');
 $smarty->caching = false;
 $smarty->force_compile = true;
 $db = $gCms->GetDb();
@@ -116,7 +109,7 @@ function CheckForErrors($dbarray) {
 
 }
 
-if (isset($_GET["optimizeall"])) {
+if (isset($_POST["optimizeall"])) {
   $query = "OPTIMIZE TABLE ".MakeCommaList($nonseqtables);
   $optimizearray=$db->GetArray($query);
   //print_r($optimizearray);
@@ -129,10 +122,12 @@ if (isset($_GET["optimizeall"])) {
     }
   }
   //echo $errorsfound." errors found in tables: ".$errordetails."<br>";
+  // put mention into the admin log
+  audit(-1,'Database', 'All non-seq tables optimized');
   $themeObject->ShowMessage("All non-seq tables optimized");
 }
 
-if (isset($_GET["repairall"])) {
+if (isset($_POST["repairall"])) {
   $query = "REPAIR TABLE ".MakeCommaList($tables);
   $repairarray=$db->GetArray($query);
   $errorsfound=0;
@@ -144,9 +139,20 @@ if (isset($_GET["repairall"])) {
     }
   }
   //echo $errorsfound." errors found in tables: ".$errordetails."<br>";
+  // put mention into the admin log
+  audit(-1,'Database', 'All tables repaired');
   $themeObject->ShowMessage("All tables repaired");
   //$themeObject->ShowErrors("All tables repairs");
 }
+
+
+$smarty->assign("formurl","systemmaintenance.php".$urlext);
+
+/*
+ *
+ * Database
+ *
+ */
 
 $query = "CHECK TABLE ".MakeCommaList($nonseqtables);
 //echo $query;
@@ -167,9 +173,30 @@ echo '<br>';
 echo '<a href="systemmaintenance.php'.$urlext.'&amp;repairall=1">Optimize all tables</a>';
 echo '<br>';
 
-$smarty->assign('systeminfo_cleanreport', 'systeminfo.php'.$urlext.'&amp;cleanreport=1');
-
+/*
+ *
+ * Cache and content
+ *
+ */
 $contentops = cmsms()->GetContentOperations();
+
+if (isset($_POST['clearcache'])) {
+  cmsms()->clear_cached_files(-1);
+  // put mention into the admin log
+  audit(-1,'System maintenance', 'Cache cleared');
+  $themeObject->ShowMessage(lang("cachecleared"));
+  $smarty->assign("active_content","true");
+}
+
+if (isset($_POST["updatehierarchy"])) {
+  $contentops->SetAllHierarchyPositions();
+  audit(-1,'System maintenance', 'Page hierarchy positions updated');
+  $themeObject->ShowMessage(lang("sysmain_hierarchyupdated"));
+  $smarty->assign("active_content","true");
+}
+
+
+
 $all = $contentops->GetAllContent(false);
 $pages=array();
 $withoutalias=array();
@@ -181,23 +208,34 @@ foreach ($all as $thisitem) {
     }
   }
 }
-echo "<br><br>";
-echo count($pages). " contentpages found, ";
-echo count($withoutalias)." of which did not have an alias";
+
+$smarty->assign("pagecount",count($pages));
+/*echo "<br><br>";
+echo count($pages). " contentpages found, ";*/
+//echo count($withoutalias)." of which did not have an alias";
 
 
 
-
-
-$smarty->assign("lang_changelog",lang("sysmaintab_changelog"));
-$smarty->assign("lang_database",lang("sysmaintab_database"));
-
+/*
+ *
+ * Changelog
+ *
+ */
 $ch_filename= cms_join_path(CMS_BASE, 'doc', 'CHANGELOG.txt');
-$changelog=file_get_contents($ch_filename);
-$changelog=nl2br($changelog);
+$changelog=file($ch_filename);
+
+for($i=0; $i<count($changelog); $i++) {
+  if (substr($changelog[$i],0,7)=="Version") {
+    $changelog[$i]="<strong>".$changelog[$i]."</strong>";
+  }
+}
+
+
+$changelog=implode("<br/>",$changelog);
+
 $smarty->assign("changelog",$changelog);
 $smarty->assign("changelogfilename",$ch_filename);
-
+$smarty->assign('backurl', $themeObject->BackUrl());
 
 echo $smarty->fetch('systemmaintenance.tpl');
 

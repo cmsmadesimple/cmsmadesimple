@@ -502,6 +502,16 @@ $lang['admin']['systemmaintenance'] = 'System Maintenance';
 $lang['admin']['systemmaintenancedescription'] = 'Various functions for maintaining the health of your system. You can also browser the changelog of CMSMadeSimple';
 $lang['admin']['sysmaintab_database'] = 'Database';
 $lang['admin']['sysmaintab_changelog'] = 'Changelog';
+$lang['admin']['sysmaintab_content'] = 'Cache and content';
+$lang['admin']['sysmain_content_status'] = 'Content status';
+$lang['admin']['sysmain_cache_status'] = 'Cache status';
+$lang['admin']['sysmain_database_status'] = 'Database status';
+$lang['admin']['sysmain_updatehierarchy'] = 'Update page hierarchy positions';
+
+$lang['admin']['sysmain_update'] = 'Update';
+
+$lang['admin']['sysmain_hierarchyupdated'] = 'Page hierarchy positions updated';
+
 
 $lang['admin']['welcome_user'] = 'Welcome';
 $lang['admin']['itsbeensincelogin'] = 'It has been %s since you last logged in';

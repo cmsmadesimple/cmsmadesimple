@@ -1,7 +1,9 @@
-
+<div class="pagecontainer">
 {$mod->StartTabHeaders()}
-{$mod->SetTabHeader('database',$lang_database,isset($active_general))}
-{$mod->SetTabHeader('changelog',$lang_changelog,isset($active_listcontent))}
+{$mod->SetTabHeader('database',lang('sysmaintab_database'),isset($active_database))}
+{$mod->SetTabHeader('content',lang('sysmaintab_content'),isset($active_content))}
+{$mod->SetTabHeader('changelog',lang('sysmaintab_changelog'),isset($active_changelog))}
+
 {*{$mod->SetTabHeader('editcontent',$lang_editcontent_settings,$active_editcontent)}
 {$mod->SetTabHeader('sitedown',$lang_sitedown,$active_sitedown)}
 {$mod->SetTabHeader('setup',$lang_setup,$active_setup)}
@@ -10,24 +12,68 @@
 {$mod->StartTabContent()}
 
 
+
+
 {$mod->StartTab('database')}
-nothing yet
+
+  <form action="{$formurl}" method="post">
+
+  <fieldset>
+    <legend>{'sysmain_database_status'|lang}:&nbsp;</legend>
+  </fieldset>
+
+  </form>
+
 {$mod->EndTab()}
 
-{* editcontent tab *}
+{$mod->StartTab('content')}
+  <form action="{$formurl}" method="post" onsubmit="return confirm('are you sure?')" >
+  <fieldset>
+    <legend>{'sysmain_cache_status'|lang}&nbsp;</legend>
+    <div class="pageoverflow">
+      <p class="pagetext">{'clearcache'|lang}:</p>
+
+      <p class="pageinput">
+        <input class="pagebutton" type="submit" name="clearcache" value="{'clear'|lang}"/>
+      </p>
+    </div>
+  </fieldset>
+    </form>
+  <fieldset>
+    <legend>{'sysmain_content_status'|lang}&nbsp;</legend>
+
+
+    <div class="pageoverflow">
+      <p class="pagetext">{'sysmain_updatehierarchy'|lang}:</p>
+
+      <p class="pageinput">
+        <input onclick="alert('are you sure?')" class="pagebutton" type="submit" name="updatehierarchy" value="{'sysmain_update'|lang}"/>
+      </p>
+    </div>
+  </fieldset>
+
+
+{$mod->EndTab()}
+
+
+{* changelog tab *}
 {$mod->StartTab('changelog')}
 
+{$changelogfilename}
 
-<strong>Changelog</strong><br/>
-({$changelogfilename})
-(may be slightly formatted?)
+  <br><br>
 
-    <br><br>
-
-<tt>{$changelog}</tt>
+  <tt>{$changelog}</tt>
 
 
 {$mod->EndTab()}
+
+{$mod->EndTabContent()}
+</form>
+
+<p class="pageback"><a class="pageback" href="{$backurl}">&#171; {sm_lang a=back}</a></p>
+
+</div> {*pagecontainer*}
 
 {* sitedown tab *}
 {*
@@ -188,5 +234,3 @@ nothing yet
 </form>
 {$mod->EndTab()}
 *}
-
-{$mod->EndTabContent()}
