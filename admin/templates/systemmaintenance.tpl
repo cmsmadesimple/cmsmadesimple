@@ -1,15 +1,15 @@
 <div class="pagecontainer">
-{$mod->StartTabHeaders()}
+{$theme->StartTabHeaders()}
 
-{$mod->SetTabHeader('database',lang('sysmaintab_database'),isset($active_database))}
-{$mod->SetTabHeader('content',lang('sysmaintab_content'),isset($active_content))}
-{$mod->SetTabHeader('changelog',lang('sysmaintab_changelog'),isset($active_changelog))}
+{$theme->SetTabHeader('database',lang('sysmaintab_database'),isset($active_database))}
+{$theme->SetTabHeader('content',lang('sysmaintab_content'),isset($active_content))}
+{$theme->SetTabHeader('changelog',lang('sysmaintab_changelog'),isset($active_changelog))}
 
-{$mod->EndTabHeaders()}
+{$theme->EndTabHeaders()}
 
-{$mod->StartTabContent()}
+{$theme->StartTabContent()}
 
-{$mod->StartTab('database')}
+{$theme->StartTab('database')}
 
 
 
@@ -46,9 +46,9 @@
 
   </form>
 
-{$mod->EndTab()}
+{$theme->EndTab()}
 
-{$mod->StartTab('content')}
+{$theme->StartTab('content')}
   <form action="{$formurl}" method="post" onsubmit="return confirm('are you sure?')" >
   <fieldset>
     <legend>{'sysmain_cache_status'|lang}&nbsp;</legend>
@@ -80,11 +80,11 @@
     </form>
 
 
-{$mod->EndTab()}
+{$theme->EndTab()}
 
 
 {* changelog tab *}
-{$mod->StartTab('changelog')}
+{$theme->StartTab('changelog')}
 
 {$changelogfilename}
 
@@ -93,12 +93,12 @@
   <tt>{$changelog}</tt>
 
 
-{$mod->EndTab()}
+{$theme->EndTab()}
 
-{$mod->EndTabContent()}
+{$theme->EndTabContent()}
 </form>
 
-<p class="pageback"><a class="pageback" href="{$backurl}">&#171; {sm_lang a=back}</a></p>
+<p class="pageback"><a class="pageback" href="{$backurl}">&#171; {lang('back')}</a></p>
 
 </div> {*pagecontainer*}
 

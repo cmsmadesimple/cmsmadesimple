@@ -44,7 +44,7 @@ include_once("header.php");
 define('CMS_BASE', dirname(dirname(__FILE__)));
 require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 
-function sitemaintenance_lang($params,&$smarty)
+/*function sitemaintenance_lang($params,&$smarty)
 {
   if( count($params) )
   {
@@ -60,15 +60,15 @@ function sitemaintenance_lang($params,&$smarty)
       $tmp2[] = $params[$i];
     return lang($str,$tmp2);
   }
-}
+}*/
 
 $gCms = cmsms();
 $smarty = $gCms->GetSmarty();
-$smarty->register_function('sm_lang','sitemaintenance_lang');
+//$smarty->register_function('sm_lang','sitemaintenance_lang');
 $smarty->caching = false;
 $smarty->force_compile = true;
 $db = $gCms->GetDb();
-
+/*
 # give everything to smarty
 {
   // warning: uber hack.
@@ -81,6 +81,9 @@ $db = $gCms->GetDb();
   }
   $smarty->assign('mod',$mod);
 }
+*/
+
+$smarty->assign('theme',$themeObject);
 
 /*
  *
