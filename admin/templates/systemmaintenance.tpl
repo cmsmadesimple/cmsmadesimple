@@ -1,26 +1,48 @@
 <div class="pagecontainer">
 {$mod->StartTabHeaders()}
+
 {$mod->SetTabHeader('database',lang('sysmaintab_database'),isset($active_database))}
 {$mod->SetTabHeader('content',lang('sysmaintab_content'),isset($active_content))}
 {$mod->SetTabHeader('changelog',lang('sysmaintab_changelog'),isset($active_changelog))}
 
-{*{$mod->SetTabHeader('editcontent',$lang_editcontent_settings,$active_editcontent)}
-{$mod->SetTabHeader('sitedown',$lang_sitedown,$active_sitedown)}
-{$mod->SetTabHeader('setup',$lang_setup,$active_setup)}
-*}
 {$mod->EndTabHeaders()}
+
 {$mod->StartTabContent()}
-
-
-
 
 {$mod->StartTab('database')}
 
-  <form action="{$formurl}" method="post">
 
-  <fieldset>
-    <legend>{'sysmain_database_status'|lang}:&nbsp;</legend>
-  </fieldset>
+
+    <form action="{$formurl}" method="post">
+      <fieldset>
+        <legend>{'sysmain_database_status'|lang}:&nbsp;</legend>
+        {$tablecount} tables found (out of which {$nonseqcount} are not seq-tables)
+        <br/>
+        {if $errorcount==0}
+        No errors were detected in the database
+        {else}
+        {$errorcount} error{if $errorcount>1}s{/if} were detected in these tables: {$errortables}
+        {/if}
+
+        <div class="pageoverflow">
+          <p class="pagetext">{'sysmain_optimizetables'|lang}:</p>
+
+          <p class="pageinput">
+            <input class="pagebutton" type="submit" name="optimizeall" value="{'sysmain_optimize'|lang}"/>
+          </p>
+        </div>
+        <div class="pageoverflow">
+          <p class="pagetext">{'sysmain_repairtables'|lang}:</p>
+
+          <p class="pageinput">
+            <input class="pagebutton" type="submit" name="repairall" value="{'sysmain_repair'|lang}"/>
+          </p>
+        </div>
+
+
+      </fieldset>
+        </form>
+
 
   </form>
 
@@ -39,9 +61,13 @@
     </div>
   </fieldset>
     </form>
+  <form action="{$formurl}" method="post" onsubmit="return confirm('are you sure?')" >
   <fieldset>
     <legend>{'sysmain_content_status'|lang}&nbsp;</legend>
-
+    {$pagecount} pages found
+    <br/>
+    {$invalidtypes} pages with invalid content type found
+    <br/>
 
     <div class="pageoverflow">
       <p class="pagetext">{'sysmain_updatehierarchy'|lang}:</p>
@@ -51,6 +77,7 @@
       </p>
     </div>
   </fieldset>
+    </form>
 
 
 {$mod->EndTab()}

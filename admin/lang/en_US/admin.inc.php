@@ -512,6 +512,16 @@ $lang['admin']['sysmain_update'] = 'Update';
 
 $lang['admin']['sysmain_hierarchyupdated'] = 'Page hierarchy positions updated';
 
+$lang['admin']['sysmain_repair'] = 'Repair';
+$lang['admin']['sysmain_repairtables'] = 'Repair tables';
+$lang['admin']['sysmain_tablesrepaired'] = 'Tables repaired';
+$lang['admin']['sysmain_optimizetables'] = 'Optimize tables';
+$lang['admin']['sysmain_tablesoptimized'] = 'Tables optimized';
+$lang['admin']['sysmain_optimize'] = 'Optimize';
+
+
+
+
 
 $lang['admin']['welcome_user'] = 'Welcome';
 $lang['admin']['itsbeensincelogin'] = 'It has been %s since you last logged in';
