@@ -572,6 +572,7 @@ final class ModuleOperations
 				  return FALSE;
 			  }
 
+		  debug_buffer('loading module '.$module_name);
 		  require_once($fname); 
 	  }
 

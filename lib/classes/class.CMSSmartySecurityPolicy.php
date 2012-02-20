@@ -22,7 +22,8 @@ final class CMSSmartySecurityPolicy extends Smarty_Security
 {
   public $php_handling = Smarty::PHP_REMOVE;
   public $static_classes = null;
-  public $php_modifiers = array('escape','count','preg_replace','lang', 'ucwords','print_r','var_dump','trim','htmlspecialchars','explode','htmlspecialchars_decode','strpos','strrpos','startswith','endswith');
+  public $php_modifiers = array();
+  //public $php_modifiers = array('escape','count','preg_replace','lang', 'ucwords','print_r','var_dump','trim','htmlspecialchars','explode','htmlspecialchars_decode','strpos','strrpos','startswith','endswith');
   public $streams = null;
   public $allow_contsnts = false;
   //public $allow_super_globals = false;

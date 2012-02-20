@@ -214,8 +214,8 @@ else
 $html = '';
 $showtemplate = true;
 
-if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false')) 
-//|| (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false'))
+if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false')
+    || (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false'))
 {
   $showtemplate = false;
 }
@@ -234,44 +234,24 @@ else
   }
 
 
-/*
-if (isset($_GET["print"]))
-{
-  $pageinfo = cmsms()->get_variable('pageinfo');
-  $html = $smarty->fetch('print:'.$page, '', $pageinfo->template_id) . "\n";
-}
-else
-{
-	#If this is a case where a module doesn't want a template to be shown, just disable caching
-        if( !$showtemplate )
-	{
-	  // snarfed from process_pagedata plugin
-	  $tpl = $contentobj->GetPropertyValue('pagedata','');
-	  if( !empty($tpl) ) 
-	    {
-	      $smarty->_compile_source('preprocess template', $tpl, $_compiled);
-	      @ob_start();
-	      $smarty->_eval('?>' . $_compiled);
-	      $result = @ob_get_contents();
-	      @ob_end_clean();
-	    }
-
-	  // now parse the default content block.
-	  $html = $smarty->fetch('template:notemplate') . "\n";
-	}
-	else
-	{
-*/	
-
 try {
-  debug_buffer('process template top');
-	$top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
-  debug_buffer('process template body');
-	$body = $smarty->fetch('tpl_body:'.$contentobj->TemplateId());
-  debug_buffer('process template head');
-	$head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
-	$html = $top.$head.$body;
-	
+  if( !$showtemplate )
+    {
+      $smarty->setCaching(false);
+      // in smarty 3, we could use eval:{content} I think.
+      //$html = $smarty->fetch('eval:{content}')."\n";
+      $html = $smarty->fetch('template:notemplate')."\n";
+    }
+  else
+    {
+      debug_buffer('process template top');
+      $top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
+      debug_buffer('process template body');
+      $body = $smarty->fetch('tpl_body:'.$contentobj->TemplateId());
+      debug_buffer('process template head');
+      $head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
+      $html = $top.$head.$body;
+    }
 } catch (SmartyCompilerException $e) {
 
 	echo $smarty->errorConsole($e);
@@ -281,11 +261,6 @@ try {
 	echo $smarty->errorConsole($e);
 	
 } 
-
-/*	
-	}
-}
-*/
 
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
@@ -341,12 +316,6 @@ if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) // temp
     unset($_SESSION['cms_preview']);
   }
 
-
-//print_r(cmsms()->variables);  
-  
-//debug_display(array_keys(ModuleOperations::get_instance()->GetLoadedModules()));
-
-//print_r($smarty->registered_plugins);
 
 # vim:ts=4 sw=4 noet
 ?>

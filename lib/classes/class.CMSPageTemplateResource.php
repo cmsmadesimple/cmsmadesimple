@@ -68,9 +68,14 @@ class CMSPageTemplateResource extends Smarty_Resource_Custom
 	return;
       }
 
-    if( $name == 'notemplate' ) return '{content}';
+    if( $name == 'notemplate' )
+      {
+	$source = '{content}';
+	$mtime = time(); // never cache...
+	return;
+      }
 
-    $source = null;
+    $source = '';
     $mtime = null;
     
     $tpl = $this->get_template($name);
@@ -79,25 +84,31 @@ class CMSPageTemplateResource extends Smarty_Resource_Custom
     switch( $this->_section )
       {
       case 'top':
+	$mtime = $tpl->modified_date;
 	$pos = stripos($tpl->content,'<head>');
 	if( $pos === FALSE ) return;
 	$source = substr($tpl->content,0,$pos);
-	$mtime = $tpl->modified_date;
 	return;
 
       case 'head':
+	$mtime = $tpl->modified_date;
 	$pos1 = stripos($tpl->content,'<head');
 	$pos2 = stripos($tpl->content,'</head>');
 	if( $pos1 === FALSE || $pos2 === FALSE ) return;
 	$source = substr($tpl->content,$pos1,$pos2-$pos1+7);
-	$mtime = $tpl->modified_date;
 	return;
 
       case 'body':
-	$pos = stripos($tpl->content,'</head>');
-	if( $pos === FALSE ) return;
-	$source = substr($tpl->content,$pos+7);
 	$mtime = $tpl->modified_date;
+	$pos = stripos($tpl->content,'</head>');
+	if( $pos !== FALSE )
+	  {
+	    $source = substr($tpl->content,$pos+7);
+	  }
+	else
+	  {
+	    $source = $tpl->content;
+	  }
 	return;
 
       default:
