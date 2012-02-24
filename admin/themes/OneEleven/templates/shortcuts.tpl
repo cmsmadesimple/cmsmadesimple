@@ -10,7 +10,7 @@
 		{/if}
 		</li>
 		<li class="settings">
-			<a href="myaccount.php?{$secureparam}" title="{'userprefs'|lang}">{'userprefs'|lang}</a>
+			<a href="myaccount.php?{$secureparam}" title="{'myaccount'|lang}">{'myaccount'|lang}</a>
 		</li>
 		{if isset($marks)}
 		<li class="favorites open">
