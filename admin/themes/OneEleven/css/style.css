@@ -1135,6 +1135,12 @@ div.dialog a.bookmark {
 	line-height: 20px;
 	background: url(themes/OneEleven/images/icons/system/bookmark.png) no-repeat left
 }
+div.dialog form#chdir_form {
+	display: block
+}
+div.dialog form#chdir_form select {
+	width: 200px
+}
 /*** tables ***/
 table th:first-child {
 	border-top-left-radius: 4px
