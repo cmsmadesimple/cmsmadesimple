@@ -63,7 +63,7 @@ class ModuleManager extends CMSModule
    ---------------------------------------------------------*/
   function GetVersion()
   {
-    return '1.5.3';
+    return '1.5.4';
   }
 
 
@@ -147,6 +147,8 @@ class ModuleManager extends CMSModule
     return $this->Lang('admindescription');
   }
 
+
+  function LazyLoadAdmin() { return TRUE; }
 
   /*---------------------------------------------------------
    VisibleToAdminUser()
