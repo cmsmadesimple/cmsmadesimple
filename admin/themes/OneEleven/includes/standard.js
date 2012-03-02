@@ -188,6 +188,7 @@ jQuery(document).ready(function($) {
 			var dialog_id = $(this).prev('.open').attr('title');
 			dialogs[dialog_id] = $(this).dialog({
 				autoOpen : false,
+				modal: true,
 				title : '<strong> ' + $(this).attr('title') + ' </strong>'
 			});
 		});
@@ -253,13 +254,13 @@ jQuery(document).ready(function($) {
 				var icon = 'ui-icon-circle-check';
 			}
 			//alert(icon);
-			$(this).hide().after('<button type="' + $(this).attr('type') + '" name="' + $(this).attr('name') + '">').next().button({
+			$(this).hide().after('<button type="' + $(this).attr('type') + '" name="' + $(this).attr('name') + '" id="' + $(this).attr('id') + '">').next().button({
 				icons : {
 					primary : icon
 				},
 				label : $(this).val()
 			});
-		});
+		}); 
 		$('a.pageback').addClass('ui-state-default ui-corner-all');
 		$('a.pageback').prepend('<span class="ui-icon ui-icon-arrowreturnthick-1-w">');
 		$('a.pageback').hover(function() {
