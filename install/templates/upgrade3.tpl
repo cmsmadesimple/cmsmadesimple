@@ -1,4 +1,4 @@
-{foreach from=$errors item=error}
+{foreach from=$errors item='error'}
 <div class="error">{$error}</div>
 {/foreach}
 
@@ -23,7 +23,7 @@
 				<img src="images/green.gif" alt="{lang_install a=success}" title="{lang_install a=success}" />
 		{else}
 				<img class="{$test->res}" src="images/red.gif" alt="{lang_install a=failure}" title="{lang_install a=failue}" />
-				<a class="external" rel="external" href="{$cms_upgrade_help_url}#{$error_fragment}">?</a>
+				<a class="external" rel="external" href="{$cms_upgrade_help_url}{if isset($error_fragment)}#{$error_fragment}{/if}">?</a>
 		{/if}
 			</td>
 		</tr>
