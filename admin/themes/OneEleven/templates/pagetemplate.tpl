@@ -19,8 +19,8 @@
 		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/jquery.cookie.min.js,`$config.admin_url`/themes/OneEleven/includes/standard.js"}
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
-		<!-- custom jQueryUI Theme 1.8.16 see style.css for color reference //-->
-		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+		<!-- custom jQueryUI Theme 1.8.18 see style.css for color reference //-->
+		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.8.18.custom.css" rel="stylesheet" />
         {FileManager action='javascript'}
 	</head>
 	<body##BODYSUBMITSTUFFGOESHERE## lang="{$lang|truncate:'2':''}">

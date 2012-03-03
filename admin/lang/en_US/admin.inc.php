@@ -1103,7 +1103,7 @@ $lang['admin']['help_function_cms_jquery'] = <<<EOT
 <pre><code>{cms_jquery cdn='true' exclude='jquery.ui.nestedSortable-1.3.4.js' append='uploads/NCleanBlue/js/ie6fix.js'}</code></pre>
 <h4><em>Outputs</em></h4>
 <pre><code>&lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"&gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"&gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="http://localhost/1.10.x/lib/jquery/js/jquery.json-2.2.js"&gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="uploads/NCleanBlue/js/ie6fix.js"&gt;&lt;/script&gt;
 </code></pre>
@@ -1111,7 +1111,7 @@ $lang['admin']['help_function_cms_jquery'] = <<<EOT
 <h3><em>Included Defaults</em></h3>
 <ul>
 	<li><tt>jQuery</tt><em>(1.6.2)</em> - jquery-1.7.1.min.js</li>
-	<li><tt>jQuery UI</tt><em>(1.8.14)</em> - jquery-ui-1.8.16.custom.min.js</li>
+	<li><tt>jQuery UI</tt><em>(1.8.14)</em> - jquery-ui-1.8.18.min.js</li>
 	<li><tt>nestedSortable</tt>(1.3.4) - jquery/js/jquery.ui.nestedSortable-1.3.4.js</li>
 	<li><tt>jQuery json</tt><em>(2.2)</em> - jquery/js/jquery.json-2.2.js</li>
 </ul>
