@@ -206,39 +206,57 @@ if (isset($_POST["updatehierarchy"])) {
   $smarty->assign("active_content","true");
 }
 
-
-
-$all = $contentops->GetAllContent(false);
-$pages=array();
-$withoutalias=array();
-foreach ($all as $thisitem) {
-  if( is_object($thisitem) && $thisitem instanceof ContentBase ) {
- 	  $pages[]=$thisitem->Name();
-    if (trim($thisitem->Alias())=="") {
-      $withoutalias[]=$thisitem->Name();
-    }
-   // echo $thisitem->Type();
-  }
-}
-
-$smarty->assign("pagecount",count($pages));
-
+//Setting up types
 $contenttypes = $contentops->ListContentTypes(false,true);
 //print_r($contenttypes);
 $simpletypes=array();
 foreach ($contenttypes as $typeid=>$typename) {
   $simpletypes[]=$typeid;
 }
-$invalidtypes=0;
-foreach ($all as $thisitem) {
+
+$query = "SELECT * FROM ".cms_db_prefix()."content";
+$allcontent=$db->Execute($query);
+//echo $db->ErrorMsg();
+//$all = $contentops->GetAllContent(false);
+$pages=array();
+$withoutalias=array();
+$invalidtypes=array();
+while ($contentpiece = $allcontent->FetchRow()) {
+  $pages[]=$contentpiece["content_name"];
+  if (trim($contentpiece["content_alias"])=="") {
+    $withoutalias[]=$contentpiece;
+  }
+  if (!in_array($contentpiece["type"],$simpletypes)) {
+    $invalidtypes[]=$contentpiece;
+  }
+  //print_r($contentpiece);
+}
+//foreach ($allcontent as $contentpiece) {
+  /*if( is_object($thisitem) && $thisitem instanceof ContentBase ) {
+ 	  $pages[]=$thisitem->Name();
+    if (trim($thisitem->Alias())=="") {
+      $withoutalias[]=$thisitem->Name();
+    }
+   // echo $thisitem->Type();
+  }*/
+//}
+
+$smarty->assign("pagecount",count($pages));
+$smarty->assign("invalidtypes",count($invalidtypes));
+$smarty->assign("withoutalias",count($withoutalias));
+
+//$invalidtypes=0;
+/*foreach ($all as $thisitem) {
+  echo $thisitem->Type();
   if( is_object($thisitem) && $thisitem instanceof ContentBase ) {
+    //echo $thisitem->Type();
     if (!in_array($thisitem->Type(),$simpletypes)) {
       $invalidtypes++;
     }
   }
-}
+}*/
 
-$smarty->assign("invalidtypes",$invalidtypes);
+
 
 /*echo "<br><br>";
 echo count($pages). " contentpages found, ";*/

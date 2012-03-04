@@ -65,9 +65,13 @@
   <fieldset>
     <legend>{'sysmain_content_status'|lang}&nbsp;</legend>
     {$pagecount} pages found
+      <br/>
+  {$withoutalias} pages without a valid alias found
+
     <br/>
     {$invalidtypes} pages with invalid content type found
     <br/>
+
 
     <div class="pageoverflow">
       <p class="pagetext">{'sysmain_updatehierarchy'|lang}:</p>
