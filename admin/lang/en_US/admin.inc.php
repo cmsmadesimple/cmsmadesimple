@@ -507,6 +507,7 @@ $lang['admin']['sysmain_content_status'] = 'Content status';
 $lang['admin']['sysmain_cache_status'] = 'Cache status';
 $lang['admin']['sysmain_database_status'] = 'Database status';
 $lang['admin']['sysmain_updatehierarchy'] = 'Update page hierarchy positions';
+$lang['admin']['sysmain_confirmupdatehierarchy'] = 'Are you sure you want to update page hierarchy positions?';
 
 $lang['admin']['sysmain_update'] = 'Update';
 
@@ -518,9 +519,16 @@ $lang['admin']['sysmain_tablesrepaired'] = 'Tables repaired';
 $lang['admin']['sysmain_optimizetables'] = 'Optimize tables';
 $lang['admin']['sysmain_tablesoptimized'] = 'Tables optimized';
 $lang['admin']['sysmain_optimize'] = 'Optimize';
-
-
-
+$lang['admin']['sysmain_confirmclearcache'] = 'Are you sure you want to clear the cache?';
+$lang['admin']['sysmain_nocontenterrors'] = 'No content errors detected';
+$lang['admin']['sysmain_pagesmissinalias'] = 'pages missing aliases';
+$lang['admin']['sysmain_confirmfixaliases'] = 'Are you sure you want to add aliases to pages missing?';
+$lang['admin']['sysmain_fixaliases'] = 'Add aliases where missed';
+$lang['admin']['sysmain_aliasesfixed'] = 'aliases fixed';
+$lang['admin']['sysmain_pagesinvalidtypes'] = 'pages with invalid content type';
+$lang['admin']['sysmain_confirmfixtypes'] = 'Are you sure you want to convert all with invalid content into standard content pages?';
+$lang['admin']['sysmain_fixtypes'] = 'Convert into standard content pages';
+$lang['admin']['sysmain_typesfixed'] = 'page content types fixed';
 
 
 $lang['admin']['welcome_user'] = 'Welcome';

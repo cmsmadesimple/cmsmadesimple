@@ -37,11 +37,11 @@ if (isset($_POST["template"])) $template = $_POST["template"];
 $content = $dflt_content;
 if (isset($_POST["content"])) $content = $_POST["content"];
 
-$stylesheet = "";
+/*$stylesheet = "";
 if (isset($_POST["stylesheet"])) $stylesheet = $_POST["stylesheet"];
-
-$preview = false;
-if (isset($_POST["preview"])) $preview = true;
+*/
+/*$preview = false;
+if (isset($_POST["preview"])) $preview = true;*/
 
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addsection"])) $active = 0;
@@ -65,16 +65,18 @@ if (isset($_POST["cancel"]))
 $gCms = cmsms();
 $db = $gCms->GetDb();
 $templateops = $gCms->GetTemplateOperations();
-
+$smarty = $gCms->GetSmarty();
+$smarty->caching = false;
+$smarty->force_compile = true;
 $userid = get_userid();
 $access = check_permission($userid, 'Add Templates');
 
-$use_javasyntax = false;
+/*$use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
-
+*/
 if ($access)
 {
-	if (isset($_POST["addtemplate"]) && !$preview)
+	if (isset($_POST["addtemplate"])/* && !$preview*/)
 	{
 		$validinfo = true;
 
@@ -134,87 +136,22 @@ include_once("header.php");
 
 if (!$access)
 {
-	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addtemplate')))."</p></div>";
+	//echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addtemplate')))."</p></div>";
+  $themeObject->ShowErrors(lang('noaccessto', lang('noaccessto', array(lang('addtemplate')))));
+  return;
 }
 else
 {
 	if ($error != "")
 	{
-		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
+		//echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
+    $themeObject->ShowErrors(lang('noaccessto',$error));
 	}
-
-	if ($preview)
-	{
-		$data["title"] = "TITLE HERE";
-		$data["content"] = "Test Content";
-		#$data["template_id"] = $template_id;
-		$data["stylesheet"] = $stylesheet;
-		$data["template"] = $content;
-
-		$tmpfname = '';
-		if (is_writable($config["previews_path"]))
-		{
-			$tmpfname = tempnam($config["previews_path"], "cmspreview");
-		}
-		else
-		{
-			$tmpfname = tempnam(TMP_CACHE_LOCATION, "cmspreview");
-		}
-		$handle = fopen($tmpfname, "w");
-		fwrite($handle, serialize($data));
-		fclose($handle);
-
-?>
-<div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('preview')?></p>
-	<iframe class="preview" name="preview" src="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
-</div>
-<?php
-
-	}
-?>
-
-<div class="pagecontainer">
-	<?php echo $themeObject->ShowHeader('addtemplate'); ?>
-	<form method="post" action="addtemplate.php">
-        <div>
-          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
-        </div>
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('name')?>:</p>
-			<p class="pageinput"><input class="name" type="text" name="template" maxlength="255" value="<?php echo $template?>" /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			
-			<p class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagebigtextarea', 'content', '', '', '80', '15','','html')?></p>
-		</div>
-		<?php if ($templateops->StylesheetsUsed() > 0) { ?>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('stylesheet')?>:</p>
-			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagebigtextarea', '', '', '', '80', '15','','css')?></p>
-		</div>
-		<?php } ?>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('active')?>:</p>
-			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-				<input type="hidden" name="from" value="<?php echo $from?>" />
-				<input type="hidden" name="addtemplate" value="true"/>
-				<!--<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="pagebutton"  />-->
-				<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" />
-			</p>
-		</div>
-	</form>
-</div>
-
-<?php
 }
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+$smarty->assign("themeobj",$themeObject);
+$smarty->assign("formurl","addtemplate.php".$urlext);
+
+echo $smarty->fetch('addtemplate.tpl');
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

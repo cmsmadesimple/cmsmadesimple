@@ -206,6 +206,23 @@ if (isset($_POST["updatehierarchy"])) {
   $smarty->assign("active_content","true");
 }
 
+
+if (isset($_POST["addaliases"])) {
+  //$contentops->SetAllHierarchyPositions();
+  $count=0;
+  audit(-1,'System maintenance', 'Fixed pages missing aliases, count:'.$count);
+  $themeObject->ShowMessage($count." ".lang("sysmain_aliasesfixed"));
+  $smarty->assign("active_content","true");
+}
+
+if (isset($_POST["fixtypes"])) {
+  //$contentops->SetAllHierarchyPositions();
+  $count=0;
+  audit(-1,'System maintenance', 'Converted pages with invalid content types, count:'.$count);
+  $themeObject->ShowMessage($count." ".lang("sysmain_typesfixed"));
+  $smarty->assign("active_content","true");
+}
+
 //Setting up types
 $contenttypes = $contentops->ListContentTypes(false,true);
 //print_r($contenttypes);
