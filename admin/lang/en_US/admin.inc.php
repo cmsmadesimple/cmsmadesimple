@@ -510,7 +510,7 @@ $lang['admin']['sysmain_updatehierarchy'] = 'Update page hierarchy positions';
 $lang['admin']['sysmain_confirmupdatehierarchy'] = 'Are you sure you want to update page hierarchy positions?';
 
 $lang['admin']['sysmain_update'] = 'Update';
-
+$lang['admin']['sysmain_pagesfound'] = 'pages found';
 $lang['admin']['sysmain_hierarchyupdated'] = 'Page hierarchy positions updated';
 
 $lang['admin']['sysmain_repair'] = 'Repair';

@@ -61,7 +61,7 @@
   <form action="{$formurl}" method="post" onsubmit="return confirm('{'sysmain_confirmupdatehierarchy'|lang}')" >
   <fieldset>
     <legend>{'sysmain_content_status'|lang}&nbsp;</legend>
-    {$pagecount} pages found
+    {$pagecount} {'sysmain_pagesfound'|lang}
 
     <div class="pageoverflow">
       <p class="pagetext">{'sysmain_updatehierarchy'|lang}:</p>
@@ -71,30 +71,39 @@
       </p>
     </div>
     </form>
-    {if $withoutalias!="0"}
+    {if $withoutaliascount!="0"}
     <form action="{$formurl}" method="post" onsubmit="return confirm('{'sysmain_confirmfixaliases'|lang}')" >
     <div class="pageoverflow">
-          <p class="pagetext">{$withoutalias} {'sysmain_pagesmissinalias'|lang}:</p>
+          <p class="pagetext">{$withoutaliascount} {'sysmain_pagesmissinalias'|lang}:</p>
 
           <p class="pageinput">
+            {foreach from=$pagesmissingalias item='page'}
+              {*{$page.count}.*} {$page.content_name}<br/>
+            {/foreach}
+            <br/>
             <input class="pagebutton" type="submit" name="addaliases" value="{'sysmain_fixaliases'|lang}"/>
           </p>
         </div>
     </form>
     {/if}
-{if $invalidtypes!="0"}
+    {if $invalidtypescount!="0"}
     <form action="{$formurl}" method="post" onsubmit="return confirm('{'sysmain_confirmfixtypes'|lang}')" >
     <div class="pageoverflow">
-          <p class="pagetext">{$invalidtypes} {'sysmain_pagesinvalidtypes'|lang}:</p>
+          <p class="pagetext">{$invalidtypescount} {'sysmain_pagesinvalidtypes'|lang}:</p>
 
           <p class="pageinput">
+            {foreach from=$pageswithinvalidtype item='page'}
+              {*{$page.count}.*} {$page.content_name} ({$page.content_alias})<br/>
+            {/foreach}
+            <br/>
             <input class="pagebutton" type="submit" name="fixtypes" value="{'sysmain_fixtypes'|lang}"/>
           </p>
         </div>
     </form>
     {/if}
 
-  {if $invalidtypes=="0" && withoutalias==""}
+  {if $invalidtypescount=="0" && $withoutaliascount==""}
+    <br/>
     {'sysmain_nocontenterrors'|lang}
   {/if}
 
