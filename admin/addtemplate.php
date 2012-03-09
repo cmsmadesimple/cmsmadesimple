@@ -149,6 +149,8 @@ else
 	}
 }
 $smarty->assign("themeobj",$themeObject);
+$smarty->assign("template",$template);
+$smarty->assign("content",$content);
 $smarty->assign("formurl","addtemplate.php".$urlext);
 
 echo $smarty->fetch('addtemplate.tpl');
