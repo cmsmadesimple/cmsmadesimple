@@ -38,44 +38,13 @@ include_once("header.php");
 define('CMS_BASE', dirname(dirname(__FILE__)));
 require_once cms_join_path(CMS_BASE, 'lib', 'test.functions.php');
 
-/*function sitemaintenance_lang($params,&$smarty)
-{
-  if( count($params) )
-  {
-    $tmp = array();
-    foreach( $params as $k=>$v)
-    {
-      $tmp[] = $v;
-    }
-
-    $str = $tmp[0];
-    $tmp2 = array();
-    for( $i = 1; $i < count($tmp); $i++ )
-      $tmp2[] = $params[$i];
-    return lang($str,$tmp2);
-  }
-}*/
 
 $gCms = cmsms();
 $smarty = $gCms->GetSmarty();
-//$smarty->register_function('sm_lang','sitemaintenance_lang');
 $smarty->caching = false;
 $smarty->force_compile = true;
 $db = $gCms->GetDb();
-/*
-# give everything to smarty
-{
-  // warning: uber hack.
-  $tmp = ModuleOperations::get_instance()->GetInstalledModules();
-  for( $i = 0; $i < count($tmp); $i++ )
-  {
-    if( !ModuleOperations::get_instance()->IsSystemModule($tmp[$i]) ) continue;
-    $mod = cms_utils::get_module($tmp[$i]);
-    if( is_object($mod) ) break;
-  }
-  $smarty->assign('mod',$mod);
-}
-*/
+
 
 $smarty->assign('theme', $themeObject);
 
@@ -102,7 +71,6 @@ foreach ($tablestmp as $table) {
 $smarty->assign("tablecount", count($tables));
 $smarty->assign("nonseqcount", count($nonseqtables));
 
-//echo count($tables). " tables found (".count($nonseqtables)." non-seq tables)<br><br>";
 
 function MakeCommaList($tables)
 {
@@ -126,7 +94,7 @@ if (isset($_POST["optimizeall"])) {
       $errordetails .= "MySQL reports that table " . $check["Table"] . " does not checkout OK.<br>";
     }
   }
-  //echo $errorsfound." errors found in tables: ".$errordetails."<br>";
+
   // put mention into the admin log
   audit(-1, 'System Maintenance', 'All db-tables optimized');
   $themeObject->ShowMessage(lang("sysmain_tablesoptimized"));
@@ -143,11 +111,11 @@ if (isset($_POST["repairall"])) {
       $errordetails .= "MySQL reports that table " . $check["Table"] . " does not checkout OK.<br>";
     }
   }
-  //echo $errorsfound." errors found in tables: ".$errordetails."<br>";
+
   // put mention into the admin log
   audit(-1, 'System Maintenance', 'All db-tables repaired');
   $themeObject->ShowMessage(lang("sysmain_tablesrepaired"));
-  //$themeObject->ShowErrors("All tables repairs");
+
 }
 
 
@@ -171,14 +139,6 @@ if (count($errortables) > 0) {
   $smarty->assign("errortables", implode(",", $errortables));
 }
 
-
-//echo $errorsfound." errors found in tables: ".$errordetails."<br>";
-
-/*echo '<a href="systemmaintenance.php'.$urlext.'&amp;optimizeall=1">Optimize all non-seq tables</a>';
-echo '<br>';
-echo '<a href="systemmaintenance.php'.$urlext.'&amp;repairall=1">Optimize all tables</a>';
-echo '<br>';
-*/
 /*
  *
  * Cache and content
@@ -271,19 +231,15 @@ if (isset($_POST["fixtypes"])) {
 
 $query = "SELECT * FROM " . cms_db_prefix() . "content";
 $allcontent = $db->Execute($query);
-//echo $db->ErrorMsg();
-//$all = $contentops->GetAllContent(false);
 $pages = array();
 $withoutalias = array();
 $invalidtypes = array();
 while ($contentpiece = $allcontent->FetchRow()) {
   $pages[] = $contentpiece["content_name"];
   if (trim($contentpiece["content_alias"]) == "") {
-    //$contentpiece["count"]=count($withoutalias)+1;
     $withoutalias[] = $contentpiece;
   }
   if (!in_array($contentpiece["type"], $simpletypes)) {
-    //$contentpiece["count"]=count($invalidtypes)+1;
     $invalidtypes[] = $contentpiece;
   }
   //print_r($contentpiece);
@@ -291,36 +247,9 @@ while ($contentpiece = $allcontent->FetchRow()) {
 $smarty->assign_by_ref("pagesmissingalias", $withoutalias);
 $smarty->assign_by_ref("pageswithinvalidtype", $invalidtypes);
 
-//foreach ($allcontent as $contentpiece) {
-/*if( is_object($thisitem) && $thisitem instanceof ContentBase ) {
-   $pages[]=$thisitem->Name();
-  if (trim($thisitem->Alias())=="") {
-    $withoutalias[]=$thisitem->Name();
-  }
- // echo $thisitem->Type();
-}*/
-//}
-
 $smarty->assign("pagecount", count($pages));
 $smarty->assign("invalidtypescount", count($invalidtypes));
 $smarty->assign("withoutaliascount", count($withoutalias));
-
-//$invalidtypes=0;
-/*foreach ($all as $thisitem) {
-  echo $thisitem->Type();
-  if( is_object($thisitem) && $thisitem instanceof ContentBase ) {
-    //echo $thisitem->Type();
-    if (!in_array($thisitem->Type(),$simpletypes)) {
-      $invalidtypes++;
-    }
-  }
-}*/
-
-
-/*echo "<br><br>";
-echo count($pages). " contentpages found, ";*/
-//echo count($withoutalias)." of which did not have an alias";
-
 
 /*
 *
@@ -348,74 +277,4 @@ echo $smarty->fetch('systemmaintenance.tpl');
 
 include_once("footer.php");
 
-
-function deletecontent($contentid)
-{
-  $userid = get_userid();
-  $mypages = author_pages($userid);
-
-  $access = (check_permission($userid, 'Remove Pages') &&
-          (check_ownership($userid, $contentid) ||
-                  quick_check_authorship($contentid, $mypages)))
-          || check_permission($userid, 'Manage All Content');
-
-  $gCms = cmsms();
-  $hierManager = $gCms->GetHierarchyManager();
-
-  if ($access) {
-    $node = $hierManager->getNodeById($contentid);
-    if ($node) {
-      $contentobj = $node->getContent(true, false, true);
-      $childcount = 0;
-      $parentid = -1;
-      $parent = $node->getParent();
-      if ($parent) {
-        $parentContent = $parent->getContent(true, false, true);
-        if (is_object($parentContent)) {
-          $parentid = $parentContent->Id();
-          $childcount = $parent->getChildrenCount();
-        }
-      }
-
-      if ($contentobj) {
-        $title = $contentobj->Name();
-
-        #Check for children
-        if ($contentobj->HasChildren()) {
-          $_GET['error'] = 'errorchildcontent';
-        }
-
-        #Check for default
-        if ($contentobj->DefaultContent()) {
-          $_GET['error'] = 'errordefaultpage';
-        }
-
-        $title = $contentobj->Name();
-        $contentobj->Delete();
-
-        $contentops = $gCms->GetContentOperations();
-        $contentops->SetAllHierarchyPositions();
-
-        #See if this is the last child... if so, remove
-        #the expand for it
-        if ($childcount == 1 && $parentid > -1) {
-          toggleexpand($parentid, true);
-        }
-
-        #Do the same with this page as well
-        toggleexpand($contentid, true);
-
-        // put mention into the admin log
-        audit($contentid, 'Content Item: ' . $title, 'Deleted');
-
-        $contentops->ClearCache();
-
-        $_GET['message'] = 'contentdeleted';
-      }
-    }
-  }
-}
-
-
-# vim:ts=4 sw=4 noet
 ?>
