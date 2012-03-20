@@ -1328,8 +1328,15 @@ function munge_string_to_url($alias, $tolower = false, $withslash = false)
 	    $expr = '/[^a-z0-9-_\/]+/i';
 	  }
 	$alias = preg_replace($expr,'-',$alias);
-	//$alias = preg_replace("/[^\w-]+/", "-", $alias);
+
+	for( $i = 0; $i < 5; $i++ )
+	  {
+	    $tmp = str_replace('--','-',$alias);
+	    if( $tmp == $alias ) break;
+	    $alias = $tmp;
+	  }
 	$alias = trim($alias, '-');
+	$alias = trim($alias);
 
 	return $alias;
 }
