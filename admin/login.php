@@ -129,21 +129,25 @@ else if ( isset($_SESSION['redirect_url']) )
 	if (true == $is_logged_in)
 	{
 		$userid = get_userid();
-		$homepage = get_preference($userid,'homepage');
+		$homepage = get_preference($userid,'homepage'.'index.php');
 		
 		$homepage = str_replace('&amp;','&',$homepage);
 		$tmp = explode('?',$homepage);
 		if( !file_exists($tmp[0]) ) $tmp[0] = 'index.php';
-		parse_str($tmp[1],$tmp2);
-		if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
-		if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
+		$tmp2 = array();
+		if( isset($tmp[1]) )
+                {
+		  parse_str($tmp[1],$tmp2);
+		  if( in_array('_s_',array_keys($tmp2)) ) unset($tmp2['_s_']);
+		  if( in_array('sp_',array_keys($tmp2)) ) unset($tmp2['sp_']);
+                }
 		$tmp2[CMS_SECURE_PARAM_NAME] = $_SESSION[CMS_USER_KEY];
+		$tmp3 = array();
 		foreach( $tmp2 as $k => $v )
 		  {
-		    $tmp3[] = $k.'='.$v;
+		     $tmp3[] = $k.'='.$v;
 		  }
 		$homepage = $tmp[0].'?'.implode('&amp;',$tmp3);
-		
 		$homepage = html_entity_decode($homepage);
 		redirect($homepage);
 	}
