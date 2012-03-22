@@ -1,4 +1,167 @@
 /*CMS Made Simple - NCleanGrey Theme version 1.5-cmsms1.9x2008/2010 (c) Nuno Costa - nuno@cmsmadesimple.org [criacaoweb.net]*/
+/* GRID SYSTEM
+ * Fluid Grid based on Based on 960 Grid System - http://www.960.gs 
+ * Helper Styles for Module Developer, make aligning modules easier.
+ * (To bad Robert didn't request this earlier i could of saved myself
+ * from writing a bunch of Styles)
+ * For Demo see /admin/themes/OneEleven/doc/grid.html 
+ */
+
+/* Container - Wrapping all grids inside, 
+ * use .cf class to clear floated elements 
+ */
+.c_full { width: 100% }
+
+/* Global Grid style, the actual grid */
+.grid_1,
+.grid_2,
+.grid_3,
+.grid_4,
+.grid_5,
+.grid_6,
+.grid_7,
+.grid_8,
+.grid_9,
+.grid_10,
+.grid_11,
+.grid_12 {
+	display: inline;
+	float: left;
+	position: relative;
+	margin-left: 1%;
+	margin-right: 1%
+}
+
+/* Alpha = no margin left, Omega = no margin right  */
+.alpha { margin-left: 0 }
+.omega { margin-right: 0 }
+
+/* Grids up to 12 columns */
+.c_full .grid_1 { width: 6.333% }
+.c_full .grid_2 { width: 14.667% }
+.c_full .grid_3 { width: 23.0% }
+.c_full .grid_4 { width: 31.333% }
+.c_full .grid_5 { width: 39.667% }
+.c_full .grid_6 { width: 48.0% }
+.c_full .grid_7 { width: 56.333% }
+.c_full .grid_8 { width: 64.667% }
+.c_full .grid_9 { width: 73.0% }
+.c_full .grid_10 { width: 81.333% }
+.c_full .grid_11 { width: 89.667% }
+.c_full .grid_12 { width: 98.0% }
+
+/* Prefix to add extra space left
+ * Example (same for other like suffix, push or pull): <div class='grid_1 prefix_1'>
+ */
+.c_full .prefix_1 {	padding-left: 8.333% }
+.c_full .prefix_2 {	padding-left: 16.667% }
+.c_full .prefix_3 {	padding-left: 25.0% }
+.c_full .prefix_4 {	padding-left: 33.333% }
+.c_full .prefix_5 {	padding-left: 41.667% }
+.c_full .prefix_6 {	padding-left: 50.0% }
+.c_full .prefix_7 {	padding-left: 58.333% }
+.c_full .prefix_8 {	padding-left: 66.667% }
+.c_full .prefix_9 {	padding-left: 75.0% }
+.c_full .prefix_10 { padding-left: 83.333% }
+.c_full .prefix_11 { padding-left: 91.667% }
+
+/* Suffix to add extra space right */
+.c_full .suffix_1 {	padding-right: 8.333% }
+.c_full .suffix_2 {	padding-right: 16.667% }
+.c_full .suffix_3 {	padding-right: 25.0% }
+.c_full .suffix_4 {	padding-right: 33.333% }
+.c_full .suffix_5 {	padding-right: 41.667% }
+.c_full .suffix_6 {	padding-right: 50.0% }
+.c_full .suffix_7 {	padding-right: 58.333% }
+.c_full .suffix_8 {	padding-right: 66.667% }
+.c_full .suffix_9 {	padding-right: 75.0% }
+.c_full .suffix_10 { padding-right: 83.333% }
+.c_full .suffix_11 { padding-right: 91.667% }
+
+/* Push to right */
+.c_full .push_1 { left: 8.333% }
+.c_full .push_2 { left: 16.667% }
+.c_full .push_3 { left: 25.0% }
+.c_full .push_4 { left: 33.333% }
+.c_full .push_5 { left: 41.667% }
+.c_full .push_6 { left: 50.0% }
+.c_full .push_7 { left: 58.333% }
+.c_full .push_8 { left: 66.667% }
+.c_full .push_9 { left: 75.0% }
+.c_full .push_10 { left: 83.333% }
+.c_full .push_11 { left: 91.667% }
+
+/* Pull to left */
+.c_full .pull_1 { left: -8.333% }
+.c_full .pull_2 { left: -16.667% }
+.c_full .pull_3 { left: -25.0% }
+.c_full .pull_4 { left: -33.333% }
+.c_full .pull_5 { left: -41.667% }
+.c_full .pull_6 { left: -50.0% }
+.c_full .pull_7 { left: -58.333% }
+.c_full .pull_8 { left: -66.667% }
+.c_full .pull_9 { left: -75.0% }
+.c_full .pull_10 { left: -83.333% }
+.c_full .pull_11 { left: -91.667% }
+
+/* Margin top */
+.m_top_5 { margin-top: 5px !important }
+.m_top_10 { margin-top: 10px !important }
+.m_top_15 { margin-top: 15px !important }
+.m_top_25 { margin-top: 25px !important }
+.m_top_30 { margin-top: 30px !important }
+.m_top_35 { margin-top: 35px !important }
+.m_top_45 { margin-top: 45px !important }
+.m_top_60 { margin-top: 60px !important }
+.m_top_90 { margin-top: 90px !important }
+.m_top_120 { margin-top: 120px !important }
+
+/* Margin bottom */
+.m_bottom_5 { margin-bottom: 5px !important }
+.m_bottom_10 { margin-bottom: 10px !important }
+.m_bottom_15 { margin-bottom: 15px !important }
+.m_bottom_25 { margin-bottom: 25px !important }
+.m_bottom_30 { margin-bottom: 30px !important }
+.m_bottom_35 { margin-bottom: 35px !important }
+.m_bottom_45 { margin-bottom: 45px !important }
+.m_bottom_60 { margin-bottom: 60px !important }
+.m_bottom_90 { margin-bottom: 90px !important }
+.m_bottom_120 { margin-bottom: 120px !important }
+
+/* Padding top */
+.p_top_5 { padding-top: 5px !important }
+.p_top_10 { padding-top: 10px !important }
+.p_top_15 { padding-top: 15px !important }
+.p_top_30 { padding-top: 30px !important }
+.p_top_45 { padding-top: 45px !important }
+.p_top_60 { padding-top: 60px !important }
+.p_top_90 { padding-top: 90px !important }
+.p_top_120 { padding-top: 120px !important }
+.p_top_130 { padding-top: 130px !important }
+
+/* Padding bottom */
+.p_bottom_5 { padding-bottom: 5px !important }
+.p_bottom_10 { padding-bottom: 10px !important }
+.p_bottom_15 { padding-bottom: 15px !important }
+.p_bottom_30 { padding-bottom: 30px !important }
+.p_bottom_45 { padding-bottom: 45px !important }
+.p_bottom_60 { padding-bottom: 60px !important }
+.p_bottom_90 { padding-bottom: 90px !important }
+.p_bottom_120 { padding-bottom: 120px !important }
+.p_bottom_130 { padding-bottom: 130px !important }
+/* CLEARFIX */
+* html .cf {
+	height: 1%;
+	overflow: visible
+}
+*+ html .cf { min-height: 1% }
+.cf:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden
+}
 /************General tags************/
 * {
 	margin: 0;
