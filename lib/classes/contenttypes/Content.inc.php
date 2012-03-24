@@ -178,10 +178,10 @@ class Content extends ContentBase
 	 */
     function Show($param = 'content_en')
     {
-	// check for additional content blocks
-	$this->get_content_blocks();
+		// check for additional content blocks
+		$this->get_content_blocks();
 	
-	return $this->GetPropertyValue($param);
+		return $this->GetPropertyValue($param);
     }
 
 	/**
@@ -421,9 +421,9 @@ class Content extends ContentBase
 	 */
     private function parse_content_blocks()
     {
+      if ($this->_contentBlocksLoaded) return TRUE;
       $result = true;
 	  $gCms = cmsms();
-      if ($this->_contentBlocksLoaded) return TRUE;
 
       $templateops = $gCms->GetTemplateOperations();
       {

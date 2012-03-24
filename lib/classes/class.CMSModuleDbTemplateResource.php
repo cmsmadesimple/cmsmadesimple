@@ -106,7 +106,7 @@ class CMSContentTemplateResource extends Smarty_Resource_Custom
       {
 	if( !isset($_SESSION['cms_preview_data']['content_obj']) )
 	  {
-	    $contentops =& $gCms->GetContentOperations();
+	    $contentops = $gCms->GetContentOperations();
 	    $_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
 	    $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
 	  }

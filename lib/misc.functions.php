@@ -186,8 +186,7 @@ function cms_join_path()
  */
 function &cmsms()
 {
-  if( class_exists('CmsApp') )
-    return CmsApp::get_instance();
+   return CmsApp::get_instance();
 }
 
 

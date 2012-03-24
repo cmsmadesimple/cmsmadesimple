@@ -189,7 +189,7 @@ class cms_config implements ArrayAccess
       }
 
     // it's not explicitly specified in the config file.
-    $calculated_root_path = dirname(dirname(dirname(__FILE__)));
+    //$calculated_root_path = dirname(dirname(dirname(__FILE__)));
     switch( $key )
       {
       case 'dbms':
@@ -209,7 +209,9 @@ class cms_config implements ArrayAccess
 	return true;
 
       case 'root_path':
-	return dirname(dirname(dirname(__FILE__)));
+	$out = dirname(dirname(dirname(__FILE__)));
+	$this->_cache[$key] = $out;
+	return $out;
 
       case 'root_url':
 	{
@@ -225,6 +227,7 @@ class cms_config implements ArrayAccess
 	    }
 	  // todo: here we could get the default content object and test if it's secure
 	  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
+	  $this->_cache[$key] = $str;
 	  return $str;
 	}
 	break;
@@ -270,7 +273,7 @@ class cms_config implements ArrayAccess
 
       case 'max_upload_size':
       case 'upload_max_filesize':
-		  return $this->get_upload_size();
+	  return $this->get_upload_size();
 
       case 'default_upload_permission':
 	return '664';

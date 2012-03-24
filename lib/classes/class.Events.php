@@ -29,8 +29,10 @@
  * @version $Revision$
  * @license GPL
  */
-class Events
+final class Events
 { 
+	static private $_handlercache;
+
 	/**
 	 * Inform the system about a new event that can be generated
 	 *
@@ -154,31 +156,22 @@ class Events
 	{
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
-		$variables =& $gCms->variables;
 		
 		$params['module'] = $modulename;
 		$params['event'] = $eventname;
 		
 		$handlers = array();
 		
-		if (!isset($variables['handlercache']))
+		if( !is_array(self::$_handlercache) )
 		{
 			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable FROM ".cms_db_prefix()."event_handlers eh
 				INNER JOIN ".cms_db_prefix()."events e ON e.event_id = eh.event_id
 				ORDER BY eh.handler_order ASC";
 
-			$dbresult = $db->Execute( $q );
-			
-			$result = array();
-
-			while( $dbresult && $row = $dbresult->FetchRow() )
-			{
-				$result[] = $row;
-			}
-			$variables['handlercache'] = $result;
+			self::$_handlercache = $db->GetArray( $q );
 		}
 
-		foreach ($variables['handlercache'] as $row)
+		foreach (self::$_handlercache as $row)
 		{
 			if ($row['originator'] == $modulename && $row['event_name'] == $eventname)
 			{

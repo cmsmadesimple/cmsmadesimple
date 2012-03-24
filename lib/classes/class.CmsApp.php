@@ -88,7 +88,6 @@ final class CmsApp {
 	 */
 	protected function __construct()
 	{
-		$this->variables = cms_variables::get_instance();
 		register_shutdown_function(array(&$this, 'dbshutdown'));
 	}
 
@@ -101,6 +100,8 @@ final class CmsApp {
 		}
 		return self::$_instance;
 	}
+
+
 	/**
 	 * Retrieve the list of errors
 	 *
