@@ -19,8 +19,9 @@ class GatherNotificationsTask implements CmsRegularTask
 
   public function test($time = '')
   {
+    global $CMS_LOGIN_PAGE;
     global $CMS_ADMIN_PAGE;
-    if( isset($CMS_ADMIN_PAGE) ) return TRUE;
+    if( isset($CMS_ADMIN_PAGE) && !isset($CMS_LOGIN_PAGE) ) return TRUE;
     return FALSE;
   }
 

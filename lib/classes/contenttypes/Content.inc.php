@@ -105,7 +105,7 @@ class Content extends ContentBase
      */
     function ReadyForEdit()
     {
-	$this->get_content_blocks();
+		$this->get_content_blocks();
     }
 
 	/**
@@ -117,56 +117,57 @@ class Content extends ContentBase
     function FillParams($params,$editing = false)
     {
 		$gCms = cmsms();
-	$config = $gCms->GetConfig();
+		$config = $gCms->GetConfig();
 
-	if (isset($params))
-	{
-	  $parameters = array('pagedata','searchable','disable_wysiwyg');
+		if (isset($params))
+			{
+				$this->__fieldhash = null; // clear the field hash.
+				$parameters = array('pagedata','searchable','disable_wysiwyg');
 
-	  //pick up the template id before we do parameters
-	  if (isset($params['template_id']))
-	    {
-	      if ($this->mTemplateId != $params['template_id'])
-		{
-		  $this->_contentBlocksLoaded = false;
-		}
-	      $this->mTemplateId = $params['template_id'];
-	    }
+				//pick up the template id before we do parameters
+				if (isset($params['template_id']))
+					{
+						if ($this->mTemplateId != $params['template_id'])
+							{
+								$this->_contentBlocksLoaded = false;
+							}
+						$this->mTemplateId = $params['template_id'];
+					}
 	  
-	  // add content blocks
-	  $this->parse_content_blocks();
-	  foreach($this->_contentBlocks as $blockName => $blockInfo)
-	    {
-			$parameters[] = $blockInfo['id'];
+				// add content blocks
+				$this->parse_content_blocks();
+				foreach($this->_contentBlocks as $blockName => $blockInfo)
+					{
+						$parameters[] = $blockInfo['id'];
 			
-			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
-				{
-					$module = cms_utils::get_module($blockInfo['module']);
-					if( !is_object($module) ) continue;
-					if( !$module->HasCapability('contentblocks') ) continue;
-					$tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
-					if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
-				}
-	    }
+						if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
+							{
+								$module = cms_utils::get_module($blockInfo['module']);
+								if( !is_object($module) ) continue;
+								if( !$module->HasCapability('contentblocks') ) continue;
+								$tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
+								if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
+							}
+					}
 	  
-	  // do the content property parameters
-	  foreach ($parameters as $oneparam)
-	    {
-	      if (isset($params[$oneparam]))
-		{
-		  $this->SetPropertyValue($oneparam, $params[$oneparam]);
-		}
-	    }
+				// do the content property parameters
+				foreach ($parameters as $oneparam)
+					{
+						if (isset($params[$oneparam]))
+							{
+								$this->SetPropertyValue($oneparam, $params[$oneparam]);
+							}
+					}
 
-	  // metadata
-	  if (isset($params['metadata']))
-	    {
-	      $this->mMetadata = $params['metadata'];
-	    }
+				// metadata
+				if (isset($params['metadata']))
+					{
+						$this->mMetadata = $params['metadata'];
+					}
 
-	}
+			}
 
-	parent::FillParams($params,$editing);
+		parent::FillParams($params,$editing);
     }
 
 	/**
@@ -196,7 +197,7 @@ class Content extends ContentBase
 
 	private function _tabsetup($adding = FALSE)
 	{
-		if( isset($this->__fieldhash) )
+		if( isset($this->__fieldhash) && is_array($this->__fieldhash) )
 		{
 			return array_keys($this->__fieldhash);
 		}
@@ -854,7 +855,7 @@ class Content extends ContentBase
 		$ret = '';
 		if( !isset($blockInfo['module']) ) return FALSE;
 		$module = cms_utils::get_module($blockInfo['module']);
-		if( !is_object($module) ) continue;
+		if( !is_object($module) ) return FALSE;
 		if( !$module->HasCapability('contentblocks') ) return FALSE;
 		if( isset($blockInfo['inputname']) && !empty($blockInfo['inputname']) )
 		{

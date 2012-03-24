@@ -45,9 +45,6 @@ $tmpfname = '';
 
 $error = FALSE;
 
-$firsttime = "1"; #Flag to make sure we're not trying to fill params on the first display
-if (isset($_POST["firsttime"])) $firsttime = $_POST["firsttime"];
-
 $submit = false;
 if (isset($_POST["submitbutton"])) $submit = true;
 
@@ -145,74 +142,61 @@ else
   $contentobj->SetAdditionalEditors($tmp2);
 }
 
-if ($access)
-{
-	if ($submit || $apply)
-	{
-		#Fill contentobj with parameters
-	  $contentobj->SetAddMode();
-		$contentobj->FillParams($_POST);
-		$contentobj->SetOwner($userid);
-
-		$error = $contentobj->ValidateData();
-		if ($error === FALSE)
-		{
-			$contentobj->Save();
-			$gCms = cmsms();
-			$contentops = $gCms->GetContentOperations();
-			$contentops->SetAllHierarchyPositions();
-			if ($submit)
-			{
-				// put mention into the admin log
-				audit($contentobj->Id(), 'Content Item: '.$contentobj->Name(), 'Added');
-				redirect('listcontent.php'.$urlext.'&message=contentadded');
-			}
-		}
-	}
-	else if ($firsttime == "0") #Either we're a preview or a template postback
-	{
-		$contentobj->FillParams($_POST);
-// 		if (isset($_POST["additional_editors"]))
-// 		{
-// 			$addtarray = array();
-// 			foreach ($_POST["additional_editors"] as $addt_user_id)
-// 			{
-// 				$addtarray[] = $addt_user_id;
-// 			}
-// 			$contentobj->SetAdditionalEditors($addtarray);
-// 		}
-	}
-	else
-	{
-		$firsttime = "0";
-	}
-}
+if ($access && strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' )
+  {
+    if ($submit || $apply)
+      {
+	// Fill contentobj with parameters
+	$contentobj->SetAddMode();
+	$contentobj->FillParams($_POST);
+	$contentobj->SetOwner($userid);
+      
+	$error = $contentobj->ValidateData();
+	if ($error === FALSE)
+	  {
+	    $contentobj->Save();
+	    $gCms = cmsms();
+	    $contentops = $gCms->GetContentOperations();
+	    $contentops->SetAllHierarchyPositions();
+	    if ($submit)
+	      {
+		// put mention into the admin log
+		audit($contentobj->Id(), 'Content Item: '.$contentobj->Name(), 'Added');
+		redirect('listcontent.php'.$urlext.'&message=contentadded');
+	      }
+	  }
+      }
+    else 
+      {
+	$contentobj->FillParams($_POST);
+      }
+  }
 
 if (!$access)
 {
-	echo "<div class=\"pageerrorcontainer pageoverflow\"><p class=\"pageerror\">".lang('noaccessto',array(lang('addcontent')))."</p></div>";
+  echo "<div class=\"pageerrorcontainer pageoverflow\"><p class=\"pageerror\">".lang('noaccessto',array(lang('addcontent')))."</p></div>";
 }
 else
 {
-#Get a list of content_types and build the dropdown to select one
-$typesdropdown = '<select name="content_type" onchange="document.Edit_Content.submit()" class="standard">';
-$cur_content_type = '';
-$content_types = $contentops->ListContentTypes(false,true);
-foreach ($content_types as $onetype => $onetypename)
-{
-  if( $onetype == 'errorpage' && !check_permission($userid,'Manage All Content') ) 
+  // Get a list of content_types and build the dropdown to select one
+  $typesdropdown = '<select name="content_type" onchange="document.Edit_Content.submit()" class="standard">';
+  $cur_content_type = '';
+  $content_types = $contentops->ListContentTypes(false,true);
+  foreach ($content_types as $onetype => $onetypename)
     {
-      continue;
+      if( $onetype == 'errorpage' && !check_permission($userid,'Manage All Content') ) 
+	{
+	  continue;
+	}
+      $typesdropdown .= '<option value="' . $onetype . '"';
+      if ($onetype == $content_type)
+	{
+	  $typesdropdown .= ' selected="selected" ';
+	  $cur_content_type = $onetype;
+	}
+      $typesdropdown .= ">".$onetypename."</option>";
     }
-  $typesdropdown .= '<option value="' . $onetype . '"';
-  if ($onetype == $content_type)
-    {
-      $typesdropdown .= ' selected="selected" ';
-      $cur_content_type = $onetype;
-    }
-  $typesdropdown .= ">".$onetypename."</option>";
-}
-$typesdropdown .= "</select>";
+  $typesdropdown .= "</select>";
 
 if (FALSE == empty($error))
 {

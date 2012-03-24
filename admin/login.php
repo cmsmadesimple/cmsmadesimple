@@ -19,6 +19,7 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_LOGIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
@@ -230,7 +231,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			      $tmp = $config['admin_url'].'/index.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			      debug_to_log('change session var to '.$tmp);
 			    }
-			  
+			 
 			  redirect($tmp);
 			}
 			unset($_SESSION["redirect_url"]);
