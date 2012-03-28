@@ -65,7 +65,6 @@ final class UserTagOperations
 	{
 		if( count($this->_cache) == 0 )
 		{
-			debug_display('LoadUserTags');
 			$db = cmsms()->GetDb();
 				
 			$query = 'SELECT * FROM '.cms_db_prefix().'userplugins'.' ORDER BY userplugin_name';

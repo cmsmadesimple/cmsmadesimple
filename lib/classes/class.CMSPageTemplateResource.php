@@ -25,7 +25,6 @@ class CMSPageTemplateResource extends Smarty_Resource_Custom
 
   public function __construct($section)
   {
-    parent::__construct();
     if( in_array($section,array('top','head','body')) )
       {
 	$this->_section = $section;
