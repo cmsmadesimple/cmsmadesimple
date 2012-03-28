@@ -176,19 +176,23 @@ abstract class Smarty_Internal_TemplateCompilerBase {
         self::$_tag_objects = array();
         // return compiled code to template object
         $merged_code = '';
-        if (!$this->suppressMergedTemplates) {
+        if (!$this->suppressMergedTemplates && !empty($this->merged_templates)) {
             foreach ($this->merged_templates as $code) {
                 $merged_code .= $code;
             }
+            // run postfilter if required on merged code
+            if (isset($this->smarty->autoload_filters['post']) || isset($this->smarty->registered_filters['post'])) {
+                $merged_code = Smarty_Internal_Filter_Handler::runFilter('post', $merged_code, $template);
+            }
+        }
+        // run postfilter if required on compiled template code
+        if (isset($this->smarty->autoload_filters['post']) || isset($this->smarty->registered_filters['post'])) {
+            $_compiled_code = Smarty_Internal_Filter_Handler::runFilter('post', $_compiled_code, $template);
         }
         if ($this->suppressTemplatePropertyHeader) {
             $code = $_compiled_code . $merged_code;
         } else {
             $code = $template_header . $template->createTemplateCodeFrame($_compiled_code) . $merged_code;
-        }
-        // run postfilter if required
-        if (isset($this->smarty->autoload_filters['post']) || isset($this->smarty->registered_filters['post'])) {
-            $code = Smarty_Internal_Filter_Handler::runFilter('post', $code, $template);
         }
         return $code;
     }
@@ -339,9 +343,7 @@ abstract class Smarty_Internal_TemplateCompilerBase {
                     if (!$found) {
                         // call default handler
                         foreach ($this->smarty->plugin_search_order as $plugin_type) {
-			  $cache = true; // hack: cachable param
-			  if ($this->getPluginFromDefaultHandler($tag, $plugin_type, $cache)) { // hack: cachable param
-			    $this->tag_nocache = !$cache; // hack: cachable param
+                            if ($this->getPluginFromDefaultHandler($tag, $plugin_type)) {
                                 $found = true;
                                 break;
                             }
@@ -503,14 +505,17 @@ abstract class Smarty_Internal_TemplateCompilerBase {
      * @param string $plugin_type type of plugin
      * @return boolean true if found
      */
-    public function getPluginFromDefaultHandler($tag, $plugin_type, &$cachable ) // hack: cachable param added
+    public function getPluginFromDefaultHandler($tag, $plugin_type)
     {
         $callback = null;
         $script = null;
+        $cacheable = true;
         $result = call_user_func_array(
             $this->smarty->default_plugin_handler_func,
-            array($tag, $plugin_type, $this->template, &$callback, &$script, $cachable)); // hack: cachabke param added
+            array($tag, $plugin_type, $this->template, &$callback, &$script, &$cacheable)
+        );
         if ($result) {
+            $this->tag_nocache = $this->tag_nocache || !$cacheable;
             if ($script !== null) {
                 if (is_file($script)) {
                     if ($this->template->caching && ($this->nocache || $this->tag_nocache)) {
@@ -558,7 +563,7 @@ abstract class Smarty_Internal_TemplateCompilerBase {
             ($this->nocache || $this->tag_nocache || $this->forceNocache == 2)) {
                 $this->template->has_nocache_code = true;
                 $_output = str_replace("'", "\'", $content);
-                $_output = str_replace('\\\\', '\\\\\\\\', $_output);
+                $_output = str_replace('\\\\', '\\\\\\', $_output);
                 $_output = str_replace("^#^", "'", $_output);
                 $_output = "<?php echo '/*%%SmartyNocache:{$this->nocache_hash}%%*/" . $_output . "/*/%%SmartyNocache:{$this->nocache_hash}%%*/';?>\n";
                 // make sure we include modifer plugins for nocache code

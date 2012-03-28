@@ -45,7 +45,6 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         $_template = ($template instanceof $this->template_class)
         ? $template
         : $this->smarty->createTemplate($template, $cache_id, $compile_id, $parent, false);
-
         // if called by Smarty object make sure we use current caching status
         if ($this instanceof Smarty) {
             $_template->caching = $this->caching;
@@ -243,7 +242,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
                         $output .= preg_replace("!/\*/?%%SmartyNocache:{$_template->properties['nocache_hash']}%%\*/!", '', $cache_parts[0][$curr_idx]);
                     }
                 }
-                if (!$no_output_filter && (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output']))) {
+                if (!$no_output_filter && !$_template->has_nocache_code && (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output']))) {
                     $output = Smarty_Internal_Filter_Handler::runFilter('output', $output, $_template);
                 }
                 // rendering (must be done before writing cache file because of {function} nocache handling)
@@ -265,7 +264,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
                 // var_dump('renderTemplate', $_template->has_nocache_code, $_template->template_resource, $_template->properties['nocache_hash'], $_template->parent->properties['nocache_hash'], $_output);
                 if (!empty($_template->properties['nocache_hash']) && !empty($_template->parent->properties['nocache_hash'])) {
                     // replace nocache_hash
-                    $_output = preg_replace("/{$_template->properties['nocache_hash']}/", $_template->parent->properties['nocache_hash'], $_output);
+                    $_output = str_replace("{$_template->properties['nocache_hash']}", $_template->parent->properties['nocache_hash'], $_output);
                     $_template->parent->has_nocache_code = $_template->parent->has_nocache_code || $_template->has_nocache_code;
                 }
             }
@@ -294,7 +293,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
                 Smarty_Internal_Debug::end_cache($_template);
             }
         }
-        if ((!$this->caching || $_template->source->recompiled) && !$no_output_filter && (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output']))) {
+        if ((!$this->caching || $_template->has_nocache_code || $_template->source->recompiled) && !$no_output_filter && (isset($this->smarty->autoload_filters['output']) || isset($this->smarty->registered_filters['output']))) {
             $_output = Smarty_Internal_Filter_Handler::runFilter('output', $_output, $_template);
         }
         if (isset($this->error_reporting)) {
@@ -430,7 +429,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         } else {
             $this->smarty->registered_plugins[$type][$tag] = array($callback, (bool) $cacheable, (array) $cache_attr);
         }
-        
+
         return $this;
     }
 
@@ -446,7 +445,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         if (isset($this->smarty->registered_plugins[$type][$tag])) {
             unset($this->smarty->registered_plugins[$type][$tag]);
         }
-        
+
         return $this;
     }
 
@@ -474,7 +473,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         if (isset($this->smarty->registered_resources[$type])) {
             unset($this->smarty->registered_resources[$type]);
         }
-        
+
         return $this;
     }
 
@@ -502,7 +501,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         if (isset($this->smarty->registered_cache_resources[$type])) {
             unset($this->smarty->registered_cache_resources[$type]);
         }
-        
+
         return $this;
     }
 
@@ -571,7 +570,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         if (isset($this->smarty->registered_objects[$name])) {
             unset($this->smarty->registered_objects[$name]);
         }
-        
+
         return $this;
     }
 
@@ -608,7 +607,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         } else {
             throw new SmartyException("Default plugin handler '$callback' not callable");
         }
-        
+
         return $this;
     }
 
@@ -626,7 +625,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         } else {
             throw new SmartyException("Default template handler '$callback' not callable");
         }
-        
+
         return $this;
     }
 
@@ -644,7 +643,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         } else {
             throw new SmartyException("Default config handler '$callback' not callable");
         }
-        
+
         return $this;
     }
 
@@ -674,7 +673,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         if (isset($this->smarty->registered_filters[$type][$name])) {
             unset($this->smarty->registered_filters[$type][$name]);
         }
-        
+
         return $this;
     }
 
@@ -731,7 +730,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
         if (isset($this->smarty->registered_filters[$type][$_filter_name])) {
             unset ($this->smarty->registered_filters[$type][$_filter_name]);
         }
-        
+
         return $this;
     }
 

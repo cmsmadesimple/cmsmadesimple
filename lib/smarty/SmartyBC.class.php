@@ -56,7 +56,7 @@ class SmartyBC extends Smarty {
     {
         parent::__construct($options);
         // register {php} tag
-      //  $this->registerPlugin('block', 'php', 'smarty_php_tag');
+        $this->registerPlugin('block', 'php', 'smarty_php_tag');
     }
 
     /**

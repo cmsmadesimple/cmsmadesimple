@@ -63,18 +63,6 @@ abstract class Smarty_Resource {
     public $template_parser_class = 'Smarty_Internal_Templateparser';
 
     /**
-     * Constructor
-     */
-    public function __construct(Smarty $smarty = null)
-    {
-      if( is_object($smarty) && $smarty instanceof Smarty )
-	{
-	  if( isset($smarty->compiler_class) && $smarty->compiler_class )
-	    $this->compiler_class = $smarty->compiler_class;
-	}
-    }
-     
-    /**
      * Load template's source into current template object
      *
      * {@internal The loaded source is assigned to $_template->source->content directly.}}
@@ -266,6 +254,8 @@ abstract class Smarty_Resource {
                 }
             }
         }
+        
+        $_stream_resolve_include_path = function_exists('stream_resolve_include_path');
 
         // relative file name?
         if (!preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $file)) {
@@ -276,7 +266,13 @@ abstract class Smarty_Resource {
                 }
                 if ($source->smarty->use_include_path && !preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $_directory)) {
                     // try PHP include_path
-                    if (($_filepath = Smarty_Internal_Get_Include_Path::getIncludePath($_filepath)) !== false) {
+                    if ($_stream_resolve_include_path) {
+                        $_filepath = stream_resolve_include_path($_filepath);
+                    } else {
+                        $_filepath = Smarty_Internal_Get_Include_Path::getIncludePath($_filepath);
+                    }
+                    
+                    if ($_filepath !== false) {
                         if ($this->fileExists($source, $_filepath)) {
                             return $_filepath;
                         }
@@ -365,7 +361,7 @@ abstract class Smarty_Resource {
             }
 
             if (!isset(self::$resources['registered'])) {
-                self::$resources['registered'] = new Smarty_Internal_Resource_Registered($smarty);
+                self::$resources['registered'] = new Smarty_Internal_Resource_Registered();
             }
             if (!isset($smarty->_resource_handlers[$type])) {
                 $smarty->_resource_handlers[$type] = self::$resources['registered'];
@@ -378,7 +374,7 @@ abstract class Smarty_Resource {
         if (isset(self::$sysplugins[$type])) {
             if (!isset(self::$resources[$type])) {
                 $_resource_class = 'Smarty_Internal_Resource_' . ucfirst($type);
-                self::$resources[$type] = new $_resource_class($smarty);
+                self::$resources[$type] = new $_resource_class();
             }
             return $smarty->_resource_handlers[$type] = self::$resources[$type];
         }
@@ -391,7 +387,7 @@ abstract class Smarty_Resource {
             }
 
             if (class_exists($_resource_class, false)) {
-                self::$resources[$type] = new $_resource_class($smarty);
+                self::$resources[$type] = new $_resource_class();
                 return $smarty->_resource_handlers[$type] = self::$resources[$type];
             } else {
                 $smarty->registerResource($type, array(
@@ -414,7 +410,7 @@ abstract class Smarty_Resource {
                 $smarty->security_policy->isTrustedStream($type);
             }
             if (!isset(self::$resources['stream'])) {
-                self::$resources['stream'] = new Smarty_Internal_Resource_Stream($smarty);
+                self::$resources['stream'] = new Smarty_Internal_Resource_Stream();
             }
             return $smarty->_resource_handlers[$type] = self::$resources['stream'];
         }
