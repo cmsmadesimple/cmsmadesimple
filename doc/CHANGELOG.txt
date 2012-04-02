@@ -16,6 +16,7 @@ Version 1.11 - NO NAME
  - Smartified editprefs
  - Updated /lib/jquery and cms_jquery plugin with latest jQuery and jQuery UI Frameworks
  - Added jQuery UI Smoothness Stylesheet to NCLeanGrey
+ - System information page, and the installer now check for the XMLReader class.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue

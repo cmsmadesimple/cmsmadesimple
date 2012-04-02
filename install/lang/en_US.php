@@ -1,4 +1,7 @@
 <?php
+$lang['test_xmlreader_class'] = 'Checking if the XMLReader class exists';
+$lang['test_xmlreader_failed'] = 'The XMLReader class is not enabled in your php install.  You can still use the system but will not be able to use any of the remote module installation functions.';
+$lang['test_check_xml_failed'] = 'XML support is not compiled into your php install. You can still use the system, but will not be able to use any of the remote module installation functions.';
 $lang['installed_module'] = 'Module Installed';
 $lang['automatedtask_success'] = 'Automated Task Succeeded';
 $lang['ip_addr'] = 'IP Address';
