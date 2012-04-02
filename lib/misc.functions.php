@@ -134,9 +134,13 @@ function redirect($to, $noappend=false)
 function redirect_to_alias($alias)
 {
   $gCms = cmsms();
-	$manager = $gCms->GetHierarchyManager();
-	$node = $manager->sureGetNodeByAlias($alias);
-	$content = $node->GetContent();
+  $manager = $gCms->GetHierarchyManager();
+  $node = $manager->sureGetNodeByAlias($alias);
+  if( !$node ) {
+    audit('','Core','Attempt to redirect to invalid alias: '.$alias);
+    return;
+  }
+  $content = $node->GetContent();
 	if (isset($content))
 	{
 		if ($content->GetURL() != '')
