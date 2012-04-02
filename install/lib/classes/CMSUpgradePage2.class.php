@@ -169,6 +169,10 @@ class CMSInstallerPage2 extends CMSInstallerPage
 				extension_loaded_or('xml'), ilang('test_check_xml_failed'), false, false, 'Function_xml_disabled');
 
 		$settings['recommended'][] =
+		  testBoolean(0,ilang('test_xmlreader_class'),class_exists('XMLReader',false), 
+			      ilang('test_xmlreader_failed'), false, false, 'class_xmlreader_unavailable');
+
+		$settings['recommended'][] =
 			testBoolean(0, ilang('test_check_file_get_contents'),
 				function_exists('file_get_contents'), ilang('test_check_file_get_contents_failed'), false, false, 'Function_file_get_content_disabled');
 

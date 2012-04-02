@@ -134,11 +134,16 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		item_id I,
 		item_name C(50),
 		action C(255),
-                ip_addr C(20)
+                ip_addr C(40)
 	";
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."adminlog", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	if( $return == 2 )
+	  {
+	    $sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_adminlog1',$db_prefix."adminlog",'timestamp');
+	    $return = $dbdict->ExecuteSQLArray($sqlarray);
+	  }
 	echo ilang('install_creating_table', 'adminlog', $ado_ret);
 
 

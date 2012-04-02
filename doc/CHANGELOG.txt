@@ -17,6 +17,8 @@ Version 1.11 - NO NAME
  - Updated /lib/jquery and cms_jquery plugin with latest jQuery and jQuery UI Frameworks
  - Added jQuery UI Smoothness Stylesheet to NCLeanGrey
  - System information page, and the installer now check for the XMLReader class.
+ - Admin log ip_addr field is now bigger.  
+ - Admin log now has an index (woot).
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue

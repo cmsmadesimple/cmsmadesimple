@@ -42,6 +42,7 @@ $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix().'userplugins','description X')
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 echo "[done]</p>";
 
+echo '<p>Adding an index to the content table...';
 $sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'index_content_by_hierarchy', cms_db_prefix()."content", 'hierarchy');
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 $ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
@@ -51,6 +52,18 @@ $sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'event_id', cms_db_prefix().
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 $ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 echo ilang('install_creating_index', 'content', $ado_ret);
+echo "[done]</p>";
+
+echo '<p>Enhancing the adminlog table...';
+$sqlarray = $dbdict->AlterColumnSQL(cms_db_prefix().'adminlog','ip_addr C(40)');
+$return = $dbdict->ExecuteSQLArray($sqlarray);
+$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+if( $return == 2 )
+  {
+    $sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'index_adminlog1', cms_db_prefix()."adminlog", 'timestamp');
+    $return = $dbdict->ExecuteSQLArray($sqlarray);
+  }
+echo "[done]</p>";
 
 echo '<p>Updating schema version... ';
 $query = "UPDATE ".cms_db_prefix()."version SET version = 35";
