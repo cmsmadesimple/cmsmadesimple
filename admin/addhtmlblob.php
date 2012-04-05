@@ -69,8 +69,7 @@ if ($access) {
 	if (isset($_POST["submit2"])) {
 		
 	  $gCms = cmsms();
-		$gcbops = $gCms->GetGlobalContentOperations();
-		$templateops = $gCms->GetTemplateOperations();
+	  $gcbops = $gCms->GetGlobalContentOperations();
 
 		$validinfo = true;
 		if ($htmlblob == ""){
