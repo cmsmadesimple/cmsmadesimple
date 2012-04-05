@@ -84,13 +84,13 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 		if( isset($params['media']) && strtolower($params['media']) != 'all' )
 		{
 			$tmp = explode(',',$params['media']); 
-			$epr = array();
+			$expr = array();
 			for( $i = 0; $i < count($tmp); $i++ )
 			{
 				$expr[] = 'media_type LIKE ?';
 				$qparms[] = '%'.trim($tmp[$i]).'%';
 			}
-			$expr[] = 'media type LIKE ?';
+			$expr[] = 'media_type LIKE ?';
 			$qparms[] = '%all%';
 
 			$where[] = '('.implode(' OR ',$expr).')';
