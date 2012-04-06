@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['text_changeowner'] = 'Set Selected Pages to a different User';
+$lang['admin']['changeowner'] = 'Change Owner';
 $lang['admin']['xmlreader_class'] = 'Checking for the XMLReader class';
 $lang['admin']['info_smarty_cacheudt'] = 'If enabled, all calls to user defined tags will be cached.  This will be useful for tags that display the output of database queries.  You can disable caching using the nocache parameter in the udt call.  i.e: <code>{myusertag nocache}</code>';
 $lang['admin']['prompt_smarty_cacheudt'] = 'Cache UDT Calls';

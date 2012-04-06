@@ -1126,6 +1126,7 @@ function display_content_list($themeObject = null)
 	    bulkcontentoperations::register_function(lang('secure'),'secure');
 	    bulkcontentoperations::register_function(lang('insecure'),'insecure');
 	    bulkcontentoperations::register_function(lang('settemplate'),'settemplate');
+		bulkcontentoperations::register_function(lang('changeowner'),'changeowner');
 	  }
 	$opts = bulkcontentoperations::get_operation_list();
 	if( !empty($opts) )

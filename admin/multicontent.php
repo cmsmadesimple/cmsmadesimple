@@ -255,7 +255,7 @@ else
 			{
 				if ($action == 'inactive')
 				  DoContent($nodelist, $node, true, false);
-				else if ($action == 'active' || $action == 'settemplate' || $action == 'setcachable' || $action == 'setnoncachable'
+				else if ($action == 'active' || $action == 'settemplate' || $action == 'changeowner' || $action == 'setcachable' || $action == 'setnoncachable'
                                          || $action == 'showinmenu' || $action == 'hidefrommenu' || $action == 'secure' || $action == 'insecure')
 				  {
 				    DoContent($nodelist, $node, false, false);
@@ -422,6 +422,48 @@ else
 	      }
 	    redirect('listcontent.php'.$urlext.'&message=bulk_success');
 	  }
+	  
+	  else if ($action == 'changeowner')
+	  {
+	    $pages = array();
+	    $idlist = array();
+	    foreach( $nodelist as $one )
+	      {
+		$pages[] = array('name'=>$one->Name(),'hierarchy'=>$one->Hierarchy());
+		$idlist[] = $one->Id();
+	      }
+	    $userops = $gCms->GetUserOperations();
+	    $smarty->assign('input_changeowner',$userops->GenerateDropdown());
+	    $smarty->assign('pages',$pages);
+	    $smarty->assign('idlist',$idlist);
+	    $smarty->assign('text_changeowner',lang('text_changeowner'));
+	    $smarty->assign('text_pages',lang('pages'));
+	    $smarty->assign('text_owner',lang('owner'));
+            $smarty->assign('text_submit',lang('submit'));
+	    $smarty->assign('text_cancel',lang('cancel'));
+	    $smarty->assign('formurl',$thisurl);
+	    echo $smarty->fetch('multicontent_owner.tpl');
+	  }
+        else if ($action == 'dochangeowner')
+	  {
+	    $ownerid = $_POST['ownerid'];
+		$modifyall = check_permission($userid, 'Modify Any Page');
+	    foreach( $nodelist as $node )
+	      {
+		$permission = ($modifyall || check_ownership($userid, $node->Id()) || 
+			       check_authorship($userid, $node->Id()) || 
+			       check_permission($userid, 'Manage All Content'));
+
+		if( $permission )
+		  {
+		    $node->SetOwner($ownerid);
+		    $node->Save();
+		  }
+	      }
+	    redirect('listcontent.php'.$urlext.'&message=bulk_success');
+	  }
+	  
+	  
 	else if ($action == 'dodelete')
 	{
 		$userid = get_userid();
