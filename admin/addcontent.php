@@ -102,7 +102,6 @@ else
   $parent_id = get_preference($userid, 'default_parent', -2);
   if (isset($_GET["parent_id"])) $parent_id = $_GET["parent_id"];
 
-  $contentops =& $gCms->GetContentOperations();
   $contentobj = $contentops->CreateNewContent($content_type);
   $contentobj->SetAddMode();
   $contentobj->SetOwner($userid);
@@ -112,7 +111,7 @@ else
   $contentobj->SetLastModifiedBy($userid);
 
   {
-    $templateops =& $gCms->GetTemplateOperations();
+    $templateops = $gCms->GetTemplateOperations();
     $dflt = $templateops->LoadDefaultTemplate();
     if( isset($dflt) )
       {

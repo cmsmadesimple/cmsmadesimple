@@ -135,8 +135,8 @@ class Content extends ContentBase
 					}
 	  
 				// add content blocks
-				$this->parse_content_blocks();
-				foreach($this->_contentBlocks as $blockName => $blockInfo)
+				$blocks = $this->get_content_blocks();
+				foreach($blocks as $blockName => $blockInfo)
 					{
 						$parameters[] = $blockInfo['id'];
 			
@@ -206,7 +206,7 @@ class Content extends ContentBase
 		// setup
 		//
 		$hash = array();
-		$this->parse_content_blocks(); 
+		$blocks = $this->get_content_blocks(); 
 
 		//
 		// main tab
@@ -220,7 +220,8 @@ class Content extends ContentBase
 				$ret[] = $one;
 			}
 		}
-		foreach($this->_contentBlocks as $blockName => $blockInfo)
+
+		foreach($blocks as $blockName => $blockInfo)
 		{
 			if( !isset($blockInfo['tab']) || $blockInfo['tab'] == '' || $blockInfo['tab'] == 'main' )
 			{
@@ -240,7 +241,7 @@ class Content extends ContentBase
 		//
 		foreach($this->_contentBlocks as $blockName => $blockInfo)
 		{
-			if( isset($blockInfo['tab']) && $blockInfo['tab'] != 'options')
+			if( isset($blockInfo['tab']) && $blockInfo['tab'] != '' && $blockInfo['tab'] != 'options')
 			{
 				$parameters[] = $blockInfo['id'];
 				
@@ -249,7 +250,7 @@ class Content extends ContentBase
 				$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
 				if( !$tmp ) continue;
 
-				if( isset($hash[$blockInfo['tab']]) )
+				if( !isset($hash[$blockInfo['tab']]) )
 				{
 					$hash[$blockInfo['tab']] = array();
 				}
@@ -366,15 +367,15 @@ class Content extends ContentBase
 			$result = false;
 		}
 
-		$res = $this->parse_content_blocks();
-		if( $res === FALSE )
+		$blocks = $this->get_content_blocks();
+		if( !$blocks )
 		  {
 		    $errors[] = lang('error_parsing_content_blocks');
 		    $result = false;
 		  }
 
 		$have_content_en = FALSE;
-		foreach($this->_contentBlocks as $blockName => $blockInfo)
+		foreach($blocks as $blockName => $blockInfo)
 		{
 		  if( $blockInfo['id'] == 'content_en' )
 		    {
@@ -410,8 +411,10 @@ class Content extends ContentBase
      */
     public function get_content_blocks()
     {
-      $this->parse_content_blocks();
-      return $this->_contentBlocks;
+		if( $this->parse_content_blocks() )
+		{
+			return $this->_contentBlocks;
+		}
     }
 
 	/**
@@ -421,21 +424,45 @@ class Content extends ContentBase
 	 */
     private function parse_content_blocks()
     {
-      if ($this->_contentBlocksLoaded) return TRUE;
-      $result = true;
+		if ($this->_contentBlocksLoaded) return TRUE;
+
+// 		$templateops = $gCms->GetTemplateOperations();
+// 		if ($this->TemplateId() && $this->TemplateId() > -1)
+// 		{
+// 			$template = $templateops->LoadTemplateByID($this->TemplateId());
+// 	    }
+// 		else
+// 	    {
+// 			$template = $templateops->LoadDefaultTemplate();
+// 	    }
+		
+// 		if( !is_object($template) ) return FALSE;
+// 		$content = $template->content;
+// 		if( !$content ) return FALSE;
+
+		$smarty = cmsms()->GetSmarty();
+		$smarty->force_compile = TRUE;
+		
+		class_exists('CMS_Content_Block');
+		$smarty->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
+		$smarty->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
+		$smarty->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
+		$smarty->fetch('template:'.$this->TemplateId()); // do the magic.
+
+		$this->_contentBlocks = CMS_Content_block::get_content_blocks();
+
+		if( !is_array($this->_contentBlocks) || !count($this->_contentBlocks) ) 
+			return FALSE;
+
+		$this->_contentBlocksLoaded = TRUE;
+		return TRUE;
+
+		/*
+		$result = true;
 	  $gCms = cmsms();
 
-      $templateops = $gCms->GetTemplateOperations();
       {
 	  $this->_contentBlocks = array();
-	  if ($this->TemplateId() && $this->TemplateId() > -1)
-	    {
-	      $template = $templateops->LoadTemplateByID($this->TemplateId());
-	    }
-	  else
-	    {
-	      $template = $templateops->LoadDefaultTemplate();
-	    }
 	  if($template !== false)
 	    {
 	      $content = $template->content;
@@ -700,20 +727,23 @@ class Content extends ContentBase
 	    }
 
 	  return $result;
-	}
+	  }
+		*/
     }
 	
 	/**
 	 * undocumented function
 	 *
 	 * @param string $tpl_source 
+	 * @deprecated
+	 * @internal
 	 */
     function ContentPreRender($tpl_source)
     {
-	// check for additional content blocks
-	$this->get_content_blocks();
+		// check for additional content blocks
+		$this->get_content_blocks();
 
-	return $tpl_source;
+		return $tpl_source;
     }
 
 	/**
@@ -722,63 +752,64 @@ class Content extends ContentBase
 	 * @param string $one 
 	 * @param string $adding 
 	 * @return void
+	 * @internal
 	 */
-    function display_single_element($one,$adding)
+    protected function display_single_element($one,$adding)
     {
 		$gCms = cmsms();
 
-      switch($one) {
-      case 'template':
-	{
-	  $templateops = $gCms->GetTemplateOperations();
-	  return array('<label for="template_id">'.lang('template').':</label>', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.Edit_Content.submit()"'));
-	}
-	break;
-	
-      case 'pagemetadata':
-	{
-	  return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
-	}
-	break;
-	
-      case 'pagedata':
-	{
-	  return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</label>',
-				   create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','id_pagedata','','','80','6'));
-	}
-	break;
-	
-      case 'searchable':
-	{
-	  $searchable = $this->GetPropertyValue('searchable');
-	  if( $searchable == '' )
-	    {
-	      $searchable = 1;
-	    }
-	  return array('<label for="id_searchable">'.lang('searchable').':</label>',
-			'<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
+		switch($one) {
+		case 'template':
+			{
+				$templateops = $gCms->GetTemplateOperations();
+				return array('<label for="template_id">'.lang('template').':</label>', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.Edit_Content.submit()"'));
+			}
+			break;
+			
+		case 'pagemetadata':
+			{
+				return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
+			}
+			break;
+			
+		case 'pagedata':
+			{
+				return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</label>',
+							 create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','id_pagedata','','','80','6'));
+			}
+			break;
+			
+		case 'searchable':
+			{
+				$searchable = $this->GetPropertyValue('searchable');
+				if( $searchable == '' )
+					{
+						$searchable = 1;
+					}
+				return array('<label for="id_searchable">'.lang('searchable').':</label>',
+							 '<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
             <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />',
-				   lang('help_page_searchable'));
-	}
-	break;
-	
-      case 'disable_wysiwyg':
-	{
-	  $disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
-	  if( $disable_wysiwyg == '' )
-	    {
-	      $disable_wysiwyg = 0;
-	    }
-	  return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>',
-		       '<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
+							 lang('help_page_searchable'));
+			}
+			break;
+			
+		case 'disable_wysiwyg':
+			{
+				$disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
+				if( $disable_wysiwyg == '' )
+					{
+						$disable_wysiwyg = 0;
+					}
+				return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>',
+							 '<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
              <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
-	}
-	break;
-
-      default:
-	return parent::display_single_element($one,$adding);
-      }
-      
+			}
+			break;
+			
+		default:
+			return parent::display_single_element($one,$adding);
+		}
+		
     }
 
 	/*

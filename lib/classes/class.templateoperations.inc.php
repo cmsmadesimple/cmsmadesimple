@@ -227,7 +227,7 @@ class TemplateOperations
 		}
 
 		$db = cmsms()->GetDb();
-		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template FROM ".cms_db_prefix()."templates WHERE default_template = 1";
+		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, create_date, modified_date FROM ".cms_db_prefix()."templates WHERE default_template = 1";
 		$row = &$db->GetRow($query);
 
 		if($row)
@@ -240,6 +240,7 @@ class TemplateOperations
 			$result->encoding = $row['encoding'];
 			$result->default = $row['default_template'];
 			$result->active = $row['active'];
+			$result->modified_date = $db->UnixTimeStamp($row['modified_date']);
 
 			$this->_toCache($result);
 		}

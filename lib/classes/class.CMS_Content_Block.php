@@ -34,6 +34,7 @@
  */
 final class CMS_Content_Block
 {
+  private static $_contentBlocks;
   private function __construct() {}
 
   private static function content_return($result, &$params, &$smarty)
@@ -47,6 +48,143 @@ final class CMS_Content_Block
 	$smarty->assign(trim($params['assign']), $result);
 	return '';
       }
+  }
+
+  public static function get_content_blocks()
+  {
+    return self::$_contentBlocks;
+  }
+
+
+  public static function smarty_compiler_contentblock($params,$smarty)
+  {
+    // {content} tag encountered.
+    $rec = array('type'=>'text','id'=>'','name'=>'','usewysiwyg'=>'true','oneline'=>'false','default'=>'','label'=>'',
+		 'size'=>'50','tab'=>'','maxlength'=>'255');
+    foreach( $params as $key => $value )
+      {
+	if( $key == 'type' ) continue;
+	if( $key == 'block' )
+	  {
+	    $key = 'name';
+	  }
+
+	if( isset($rec[$key]) )
+	  {
+	    $rec[$key] = $value;
+	  }
+      }
+
+    if( !$rec['name'] ) 
+      {
+	$rec['name'] = 'content_en';
+	$rec['id'] = 'content_en';
+      }
+    if( !$rec['id'] )
+      {
+	$rec['id'] = str_replace(' ','_',$rec['name']);
+      }
+
+    // check for duplicate.
+    if( isset(self::$_contentBlocks[$rec['name']]) )
+      {
+	throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
+      }
+
+    if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
+    self::$_contentBlocks[$rec['name']] = $rec;
+  }
+
+
+  public static function smarty_compiler_imageblock($params,&$smarty)
+  {
+    // {content_image} tag encountered.
+    $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'',
+		 'upload'=>true,'dir'=>'','default'=>'','tab'=>'');
+    foreach( $params as $key => $value )
+      {
+	if( $key == 'type' ) continue;
+	if( $key == 'block' )
+	  {	
+	    $key = 'name';
+	  }
+
+	if( isset($rec[$key]) )
+	  {
+	    $rec[$key] = $value;
+	  }
+      }
+
+    if( !$rec['name'] ) 
+      {
+	$n = count(self::$_contentBlocks)+1;
+	$rec['id'] = $rec['name'] = 'image_'+$n;
+      }
+    if( !$rec['id'] )
+      {	
+	$rec['id'] = str_replace(' ','_',$rec['name']);
+      }
+
+    // check for duplicate.
+    if( isset(self::$_contentBlocks[$rec['name']]) )
+      {
+	throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
+      }
+
+    if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
+    self::$_contentBlocks[$rec['name']] = $rec;
+  }
+
+
+  public static function smarty_compiler_moduleblock($params,&$smarty)
+  {
+    // {content_image} tag encountered.
+    $rec = array('type'=>'module','id'=>'','name'=>'','module'=>'','label'=>'',
+		 'blocktype'=>'','tab'=>'');
+    $parms = array();
+    foreach( $params as $key => $value )
+      {
+	if( $key == 'block' )
+	  {	
+	    $key = 'name';
+	  }
+
+	if( isset($rec[$key]) )
+	  {
+	    $rec[$key] = $value;
+	  }
+	else
+	  {
+	    $parms[$key] = $value;
+	  }
+      }
+
+    if( !$rec['name'] )
+      {
+	$n = count(self::$_contentBlocks)+1;
+	$rec['id'] = $rec['name'] = 'module_'+$n;
+      }
+    if( !$rec['id'] )
+      {	
+	$rec['id'] = str_replace(' ','_',$rec['name']);
+      }
+    if( count($parms) )
+      {
+	$rec['params'] = $parms;
+      }
+    if( $rec['module'] == '' )
+      {
+	throw new CmsEditContentException('Missing module param for content_module tag');
+      }
+
+    // check for duplicate.
+    if( isset(self::$_contentBlocks[$rec['name']]) )
+      {
+	throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
+      }
+
+    if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
+    self::$_contentBlocks[$rec['name']] = $rec;
   }
 
   public static function smarty_fetch_contentblock($params,&$smarty)
