@@ -468,11 +468,17 @@ $existingtypes = array("all",
 <script type="text/javascript">
 $(document).ready(function() {
     if ($('#media_query').val() !== '') {
-        $(":checkbox").attr('disabled', 'disabled');
+        $(":checkbox").attr({
+            disabled: 'disabled',
+            checked: false
+        });
     }
     $('#media_query').keyup(function(e) {
         if ($(media_query).val() !== '') {
-            $(":checkbox").attr('disabled', 'disabled');
+            $(":checkbox").attr({
+                disabled: 'disabled',
+                checked: false
+            });
         } else {
             $(":checkbox").removeAttr('disabled');
         }
