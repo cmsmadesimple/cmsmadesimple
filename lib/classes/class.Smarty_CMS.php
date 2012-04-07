@@ -87,7 +87,7 @@ class Smarty_CMS extends SmartyBC
 
 		if( isset($CMS_ADMIN_PAGE) && $CMS_ADMIN_PAGE == 1 ) {
 		  $this->setCaching(false);
-		  //$this->force_compile = true;
+		  $this->force_compile = true;
 		}
 
 

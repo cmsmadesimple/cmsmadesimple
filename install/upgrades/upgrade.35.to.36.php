@@ -11,8 +11,6 @@ $flds = "
          available I,
          cachable I1
 ";
-
-
 $dbdict = NewDataDictionary($db);
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."module_smarty_plugins", $flds, $taboptarray);
