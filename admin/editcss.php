@@ -89,6 +89,9 @@ else if (isset($_GET["css_id"])) $css_id = $_GET["css_id"];
 $media_type = array();
 if (isset($_POST['media_type'])) $media_type = $_POST['media_type'];
 
+$media_query = '';
+if (isset($_POST['media_query'])) $media_query = $_POST['media_query'];
+
 $ajax = false;
 if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
 
@@ -162,6 +165,7 @@ if ($access)
                         $types='';
                         }
 			$onestylesheet->media_type = $types;
+            $onestylesheet->media_query = $media_query;
 			
 			Events::SendEvent('Core', 'EditStylesheetPre', array('stylesheet' => &$onestylesheet));
 			
@@ -258,6 +262,7 @@ if ($access)
 			$orig_css_name	= $row["css_name"];
 			$css_text		= $row["css_text"];
 			$media_type		= $row["media_type"];
+            $media_query    = $row["media_query"];
 			$lastmodified		= $row["modified_date"];
 		}
 		else
@@ -372,6 +377,22 @@ else
 			<!--  <textarea class="pagebigtextarea" name="css_text"><_?php echo $css_text?></textarea>-->
 			</div>
 		</div>
+	<div id="page_tabs">
+		<div id="editab0"><?php echo lang('media_query')?></div>
+		<div id="editab1"><?php echo lang('mediatype')?></div>
+    </div>
+    <div class="clearb"></div>
+    <div id="page_content">
+	<div id="editab0_c">
+        <div class="pageoverflow">
+            <p class="pagetext"><?php echo lang('media_query')?>:</p>
+            <?php echo lang('media_query_description'); ?>
+            <div class="pageinput">
+              <?php echo create_textarea(false, $media_query, 'media_query', 'pageextrasmalltextarea', 'media_query', '', '', '30', '5','','')?>
+            </div>
+        </div> 
+   </div>
+   <div id="editab1_c">	
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
 			<div class="pageinput">
@@ -423,6 +444,9 @@ $existingtypes = array("all",
 
 			</div>
 		</div>
+		</div>
+	<div class="clearb"></div>	
+	</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
 			<div class="pageinput"><?php echo  strftime( $dateformat , strtotime($lastmodified) )  ?></div>
@@ -441,7 +465,20 @@ $existingtypes = array("all",
 		</div>
 	</form>
 </div>
-
+<script type="text/javascript">
+$(document).ready(function() {
+    if ($('#media_query').val() !== '') {
+        $(":checkbox").attr('disabled', 'disabled');
+    }
+    $('#media_query').keyup(function(e) {
+        if ($(media_query).val() !== '') {
+            $(":checkbox").attr('disabled', 'disabled');
+        } else {
+            $(":checkbox").removeAttr('disabled');
+        }
+    });
+});
+</script>
 <?php
 
 } # end of displaying form

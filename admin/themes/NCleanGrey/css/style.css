@@ -1298,6 +1298,10 @@ textarea.pagesmalltextarea {
 	height: 15em;
 	width: 48em;
 }
+textarea.pageextrasmalltextarea {
+	height: 8em;
+	width: 28em;
+}
 textarea.pageheadtags {
 	height: 5em;
 }

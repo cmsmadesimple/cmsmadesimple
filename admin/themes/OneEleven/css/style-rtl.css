@@ -1635,6 +1635,10 @@ textarea.pagesmalltextarea {
 	height: 15em;
 	width: 48em
 }
+textarea.pageextrasmalltextarea {
+	height: 8em;
+	width: 28em;
+}
 /*** tabs ***/
 #page_tabs {
 	overflow: hidden;

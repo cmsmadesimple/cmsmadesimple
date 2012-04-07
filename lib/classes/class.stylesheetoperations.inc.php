@@ -61,7 +61,7 @@ final class StylesheetOperations
 
 		$result = array();
 
-		$query = "SELECT css_id, css_name, css_text, media_type, modified_date FROM ".cms_db_prefix()."css ORDER BY css_id";
+		$query = "SELECT css_id, css_name, css_text, media_type, media_query, modified_date FROM ".cms_db_prefix()."css ORDER BY css_id";
 		$dbresult = $db->Execute($query);
 
 		while ($dbresult && $row = $dbresult->FetchRow())
@@ -71,6 +71,7 @@ final class StylesheetOperations
 			$onestylesheet->name = $row['css_name'];
 			$onestylesheet->value = $row['css_text'];
 			$onestylesheet->media_type = $row['media_type'];
+            $onestylesheet->media_query = $row['media_query'];
 			$onestylesheet->modified_date = $db->UnixTimeStamp($row['modified_date']);
 			$result[] = $onestylesheet;
 		}
@@ -137,7 +138,7 @@ final class StylesheetOperations
 			return $this->_cache[$id];
 		}
 
-		$query = "SELECT css_id, css_name, css_text, media_type FROM ".cms_db_prefix()."css WHERE css_id = ?";
+		$query = "SELECT css_id, css_name, css_text, media_type, media_query FROM ".cms_db_prefix()."css WHERE css_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
 		while ($dbresult && $row = $dbresult->FetchRow())
@@ -147,6 +148,7 @@ final class StylesheetOperations
 			$onestylesheet->name = $row['css_name'];
 			$onestylesheet->value = $row['css_text'];
 			$onestylesheet->media_type = $row['media_type'];
+            $onestylesheet->media_query = $row['media_query'];
 			$result =& $onestylesheet;
 
 			if (!isset($this->_cache[$onestylesheet->id]))
@@ -167,8 +169,8 @@ final class StylesheetOperations
 
 		$new_stylesheet_id = $db->GenID(cms_db_prefix()."css_seq");
 		$time = $db->DBTimeStamp(time());
-		$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, media_type, create_date, modified_date) VALUES (?,?,?,?,".$time.",".$time.")";
-		$dbresult = $db->Execute($query, array($new_stylesheet_id, $stylesheet->name, $stylesheet->value, $stylesheet->media_type));
+		$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, media_type, media_query, create_date, modified_date) VALUES (?,?,?,?,?,".$time.",".$time.")";
+		$dbresult = $db->Execute($query, array($new_stylesheet_id, $stylesheet->name, $stylesheet->value, $stylesheet->media_type, $stylesheet->media_query));
 		if ($dbresult !== false)
 		{
 			$result = $new_stylesheet_id;
@@ -185,8 +187,8 @@ final class StylesheetOperations
 		$db = $gCms->GetDb();
 
 		$time = $db->DBTimeStamp(time());
-		$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?,css_text = ?, media_type = ?, modified_date = ".$time." WHERE css_id = ?";
-		$dbresult = $db->Execute($query, array($stylesheet->name, $stylesheet->value, $stylesheet->media_type, $stylesheet->id));
+		$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?,css_text = ?, media_type = ?, media_query = ?, modified_date = ".$time." WHERE css_id = ?";
+		$dbresult = $db->Execute($query, array($stylesheet->name, $stylesheet->value, $stylesheet->media_type, $stylesheet->media_query, $stylesheet->id));
 		if ($dbresult !== false)
 		{
 			$result = true;

@@ -70,6 +70,10 @@ $css_name = htmlspecialchars($css_name, ENT_QUOTES);
 $media_type = array();
 if (isset($_POST['media_type'])) $media_type = $_POST['media_type'];
 
+// media queries
+$media_query = '';
+if (isset($_POST['media_query'])) $media_query = $_POST['media_query'];
+
 #******************************************************************************
 # if the form was cancelled, we get back to the CSS list
 #******************************************************************************
@@ -145,6 +149,7 @@ if ($access)
 			}
 
 			$newstylesheet->media_type = $types;
+            $newstylesheet->media_query = $media_query;
 			
 			Events::SendEvent('Core', 'AddStylesheetPre', array('stylesheet' => &$newstylesheet));
 
@@ -215,6 +220,22 @@ else
 			<!-- <textarea class="pagebigtextarea" name="css_text" cols="" rows=""><_?php echo $css_text?></textarea>  -->
 			</p>
 		</div>
+    <div id="page_tabs">
+        <div id="editab0"><?php echo lang('media_query')?></div>
+        <div id="editab1"><?php echo lang('mediatype')?></div>
+    </div>
+    <div class="clearb"></div>
+    <div id="page_content">
+    <div id="editab0_c">		
+        <div class="pageoverflow">
+            <p class="pagetext"><?php echo lang('media_query')?>:</p>
+            <?php echo lang('media_query_description'); ?>
+            <p class="pageinput">
+            <?php echo create_textarea(false, $media_query, 'media_query', 'pageextrasmalltextarea', 'media_query', '', '', '30', '5','','')?>
+            </p>
+        </div>
+    </div>
+   <div id="editab1_c">     		
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
 			<div class="pageinput">
@@ -259,6 +280,9 @@ else
 
 			</div>
 		</div>
+	</div>
+    <div class="clearb"></div>  
+    </div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
@@ -269,7 +293,20 @@ else
 		</div>
 		</form>
 </div>
-
+<script type="text/javascript">
+$(document).ready(function() {
+    if ($('#media_query').val() !== '') {
+        $(":checkbox").attr('disabled', 'disabled');
+    }
+    $('#media_query').keyup(function(e) {
+        if ($(media_query).val() !== '') {
+            $(":checkbox").attr('disabled', 'disabled');
+        } else {
+            $(":checkbox").removeAttr('disabled');
+        }
+    });
+});
+</script>
 <?php
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 } # end of displaying the form

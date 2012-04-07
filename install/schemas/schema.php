@@ -273,6 +273,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		css_name C(255),
 		css_text X,
 		media_type C(255),
+		media_query X,
 		create_date DT,
 		modified_date DT
 	";

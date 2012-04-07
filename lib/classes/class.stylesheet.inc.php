@@ -54,6 +54,11 @@ class Stylesheet
 	 */
 	var $media_type;
 
+    /**
+     * CSS Media Type
+     */
+    var $media_query;    
+
 	/**
 	 * Sets some initial values
 	 */
@@ -73,6 +78,7 @@ class Stylesheet
 		$this->name = '';
 		$this->value = '';
 		$this->media_type = '';
+        $this->media_query = '';
 	}
 	
 	/**

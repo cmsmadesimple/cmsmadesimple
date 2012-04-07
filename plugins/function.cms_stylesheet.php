@@ -62,7 +62,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	$combine_stylesheets = FALSE;
 	if (isset($params['name']) && $params['name'] != '')
 	{
-		$query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date, A.media_type
+		$query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,A.media_type,A.media_query
                     FROM '.cms_db_prefix().'css A';
 		$where[] = 'A.css_name = ?';
 		$qparms[] = trim($params['name']);
@@ -74,32 +74,36 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 			$combine_stylesheets = TRUE;
 		}
   	    $query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,
-               		              A.media_type,B.assoc_order
+               		              A.media_type,A.media_query,B.assoc_order
    	                FROM '.cms_db_prefix().'css A 
                     LEFT JOIN '.cms_db_prefix().'css_assoc B ON A.css_id = B.assoc_css_id';
 		$where[] = 'B.assoc_type = ?
 		AND B.assoc_to_id = ?';
 		$qparms = array('template', $template_id);
-
-		if( isset($params['media']) && strtolower($params['media']) != 'all' )
+        
+		if( isset($params['media']) && strtolower($params['media']) != 'all')
 		{
 			$tmp = explode(',',$params['media']); 
 			$expr = array();
+            $expr2 = array();
 			for( $i = 0; $i < count($tmp); $i++ )
 			{
-				$expr[] = 'media_type LIKE ?';
-				$qparms[] = '%'.trim($tmp[$i]).'%';
-			}
-			$expr[] = 'media_type LIKE ?';
+				$expr[]   = 'media_type LIKE ?)';
+				$qparms[] = trim($tmp[$i]);
+ 			}
+ 			for( $i = 0; $i < count($tmp); $i++ )
+            {
+                $expr2[]   = 'media_query LIKE ?';
+                $qparms[] = trim($tmp[$i]);
+            }
+			$expr[]   = '(media_type OR media_query LIKE ?';
 			$qparms[] = '%all%';
 
-			$where[] = '('.implode(' OR ',$expr).')';
+			$where[] = '(('.implode(' OR ',$expr).') OR ('.implode(' OR ',$expr2).'))';
 		}
-
 		$order = 'ORDER BY B.assoc_order';
 	}
 	$query .= " WHERE ".implode(' AND ',$where).' '.$order;
-
 	if( isset($params['nocombine']) && $params['nocombine'] )
 	{
 		// forced not to combine.
@@ -117,7 +121,6 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	$res = $db->GetArray($query, $qparms);
 	if( $res )
 	{
-
 		$modified_date = 0;
 		$media_changed = false;
 		$test_media = '';
@@ -152,8 +155,9 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 				for( $i = 0; $i < count($res); $i++ )
 				{
 					$one = $res[$i];
-					$text .= '/* Stylesheet: '.$one['css_name'].' Modified On '.$one['modified_date']." */\n";
 					$text .= $one['css_text'];
+                    // moved this to bottom, comments on top of stylesheets cause invalid css when using @charset
+                    $text .= "\n/* Stylesheet: ".$one['css_name']." Modified On ".$one['modified_date']." */\n";
 					if( !endswith($text,"\n") ) $text .= "\n";
 				}
 
@@ -187,7 +191,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 			}
 			else
 			{
-				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'"/>'."\n";
+				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" />'."\n";
 			}
 		}
 		else
@@ -197,7 +201,13 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 			$fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
 			foreach ($res as $one)
 			{
-				$media_type = str_replace(' ','',$one['media_type']);
+			    if (isset($params['media'])) {
+			        $media_type  = $params['media'];
+			        $media_query = $params['media'];
+                } else {
+                    $media_type  = str_replace(' ','',$one['media_type']);
+                    $media_query = ($one['media_query']);
+                }
 				$filename = 'stylesheet_'.md5('single'.$one['css_id'].$use_https.strtotime($one['modified_date']).$fnsuffix).'.css';
 				if ( !file_exists(cms_join_path($cache_dir,$filename)) )
 				{
@@ -230,14 +240,13 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 				}
 				else
 				{	
-					if ( empty($media_type) )
-						{
-							$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'"/>'."\n";
-						}
-					else
-						{
-							$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
-						}
+					if ( empty($media_type) && empty($media_query)) {
+					    $stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" />'."\n";
+                    } else if (!empty($media_query)) {
+                        $stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" media="'.$media_query.'"/>'."\n";
+                    } else {
+                        $stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
+                    }
 				}
 			}
 		}

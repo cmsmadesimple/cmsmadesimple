@@ -1603,6 +1603,8 @@ $lang['admin']['options'] = 'Options'; //needs translation
 $lang['admin']['langparam'] = 'Parameter is used to specify what language to use for display on the frontend. Not all modules support or need this.'; //needs translation
 $lang['admin']['parameters'] = 'Parameters'; //needs translation
 $lang['admin']['mediatype'] = 'Media Type'; //needs translation
+$lang['admin']['media_query'] = 'Media Query'; //needs translation 04.06.2012
+$lang['admin']['media_query_description'] = '<strong>Notice:</strong> When Media Query is used, Media Type selection will be ignored.<br /> Use any valid expression as recommended by <a href="http://www.w3.org/TR/css3-mediaqueries/" rel="_blank" title="W3C">W3C</a>.'; //needs translation 04.06.2012
 $lang['admin']['mediatype_'] = 'None set : will affect everywhere ';
 $lang['admin']['mediatype_all'] = 'all : Suitable for all devices.';
 $lang['admin']['mediatype_aural'] = 'aural : Intended for speech synthesizers.';
