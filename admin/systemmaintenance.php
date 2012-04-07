@@ -146,6 +146,10 @@ if (count($errortables) > 0) {
  */
 $contentops = cmsms()->GetContentOperations();
 
+if (isset($_POST['updateurls'])) {
+  cms_route_manager::rebuild_static_routes();
+}
+
 if (isset($_POST['clearcache'])) {
   cmsms()->clear_cached_files(-1);
   // put mention into the admin log

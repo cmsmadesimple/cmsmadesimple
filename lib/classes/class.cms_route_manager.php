@@ -34,192 +34,354 @@
 #-------------------------------------------------------------------------
 #END_LICENSE
 
-
 /**
  * @package CMS
  */
-
 
 /**
  * A class to manage all recognized routes in the system.
  * 
  * @package CMS
  * @author Robert Campbell <calguy1000@cmsmadesimple.org>
- * @internal
- * @access private
  * @since  1.9
  */
-class cms_route_manager
+final class cms_route_manager
 {
-  private static $_routes;
+	// this class cannot be instantiated.
+	private function __construct() {}
 
-  /**
-   * A function to load routes from a cache file.
-   * This function will test if routes already exist, and will not load them (unless told to force loading).
-   *
-   * @param boolean Flag to indicate that loading should be forced
-   * @return boolean
-   * @internal
-   * @access private
-   */
-  static public function load($force = false)
-  {
-    if( (!is_array(self::$_routes) || count(self::$_routes) == 0) && $force == false )
-      {
-	return TRUE;
-      }
-
-    $fn = self::get_filename();
-    if(! file_exists($fn) )
-      {
-	return FALSE;
-      }
-
-    $data = @file($self);
-    self::$_routes = array();
-    foreach( $data as $line )
-      {
-	$obj = unserialize($line);
-	if( is_object($obj) ) self::$_routes[] = $obj;
-      }
-
-    if( !count(self::$_routes) ) return FALSE;
-    return TRUE;
-  }
+	private static $_routes_loaded = FALSE;
+	private static $_routes;
+	private static $_dynamic_routes;
 
 
-  /**
-   * Save routes to a cache file
-   *
-   * @internal
-   * @access private
-   */
-  static public function save()
-  {
-    if( !is_array(self::$_routes) || count(self::$_routes) == 0 )
-      {
-	return FALSE;
-      }
+	/**
+	 * Test wether the specified route exists.
+	 *
+	 * @param CmsRoute The route object
+	 * @param boolean  A flag indicating that only static routes should be checked.
+	 * @return boolean
+	 */
+	static public function route_exists(CmsRoute $route,$static_only = FALSE)
+	{
+		self::_load_static_routes();
 
-    $fn = self::get_filename();
-    $fp = fopen($fn,'w');
-    if( !$fp ) return FALSE;
-    foreach( self::$_routes as &$route )
-      {
-	fwrite($fp,serialize($route)."\n");
-      }
-    fclose($fp);
-  }
+		if( is_array(self::$_routes) )
+		{
+			foreach( self::$_routes as $test )
+			{
+				if( $test == $route ) return TRUE;
+			}
+		}
+
+		if( $static_only ) return FALSE;
+
+		if( is_array(self::$_dynamic_routes) )
+		{
+			foreach( self::$_dynamic_routes as $test )
+			{
+				if( $test == $route ) return TRUE;
+			}
+		}
+
+		return FALSE;
+	}
+
+
+	/**
+	 * Find a route that matches the specified string
+	 *
+	 * @param string The string to test against (usually an incoming url request)
+	 * @param boolean Perform an exact string match rather than a regex match.
+	 * @param boolean A flag indicating that only static routes should be checked.
+	 * @return CmsRoute the matching route, or null.
+	 */
+	static public function find_match($str,$exact = false,$static_only = FALSE)
+	{
+		self::_load_static_routes();
+
+		if( is_array(self::$_routes) )
+		{
+			foreach( self::$_routes as $route )
+			{
+				if( $route->matches($str,$exact) )
+				{
+					return $route;
+				}
+			}
+		}
+
+		if( $static_only ) return;
+
+		if( is_array(self::$_dynamic_routes) )
+		{
+			foreach( self::$_dynamic_routes as $route )
+			{
+				if( $route->matches($str,$exact) )
+				{
+					return $route;
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * Add a static route.
+	 * This method will return TRUE, and do nothing if the route already exists.
+	 * The route cache will be removed if the route is successfully added to the database.
+	 *
+	 * @author Robert Campbell <calguy1000@cmsmadesimple.org>
+	 * @since 1.11
+	 * @param CmsRoute the route to add.
+	 * @return boolean
+	 */
+	public static function add_static(CmsRoute& $route)
+	{
+		self::_load_static_routes();
+		if( self::route_exists($route) ) return TRUE;
+
+		$query = 'INSERT INTO '.cms_db_prefix().'routes (term,key1,key2,key3,data,created)
+                  VALUES (?,?,?,?,?,NOW())';
+		
+		$db = cmsms()->GetDb();
+		$dbr = $db->Execute($query,array($route['term'],
+										 $route['key1'],
+										 $route['key2'],
+										 $route['key3'],
+										 serialize($route)));
+		if( !$dbr )
+		{
+			die($db->sql.' -- '.$db->ErrorMsg());
+			return FALSE;
+		}
+
+		self::_clear_cache();
+		return TRUE;
+	}
+  
+
+	/**
+	 * Delete a static route
+	 * The route cache will be removed if the route is successfully removed from the database.
+	 *
+	 * @author Robert Campbell <calguy1000@cmsmadesimple.org>
+	 * @since 1.11
+	 * @param mixed If a CmsRoute object is passed in, it can be removed directly.  Otherwise the term of a route (a string) can be passed in.
+	 * @return boolean
+	 */
+	public static function del_static($term,$key1 = null,$key2 = null,$key3 = null)
+	{
+		$query = 'DELETE FROM '.cms_db_prefix().'routes WHERE ';
+		$where = array();
+		$parms = array();
+		if( $term )
+		{
+			$where[] = 'term = ?';
+			$parms[] = $term;
+		}
+
+		if( !is_null($key1) )
+		{
+			$where[] = 'key1 = ?';
+			$parms[] = $key1;
+
+			if( !is_null($key2) )
+			{
+				$where[] = 'key2 = ?';
+				$parms[] = $key2;
+
+				if( !is_null($key3) )
+				{
+					$where[] = 'key3 = ?';
+					$parms[] = $key3;
+				}
+			}
+		}
+
+		if( count($where) == 0 ) return FALSE;
+
+		$db = cmsms()->GetDb();
+		$query .= implode(' AND ',$where);
+		$dbr = $db->Execute($query,$parms);
+		if( $dbr )
+		{
+			self::_clear_cache();
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
+
+	/**
+	 * Add a dynamic route
+	 * Dynamic routes are not stored to the database, and are checked after static routes when searching for a match.
+	 * This method will return TRUE if the route already exists (static, or dynamic)
+	 *
+	 * @author Robert Campbell <calguy1000@cmsmadesimple.org>
+	 * @since 1.11
+	 * @param CmsRoute The dynamic route object to add
+	 * @return boolean.
+	 */
+	public static function add_dynamic(CmsRoute& $route)
+	{
+		if( self::route_exists($route) ) return TRUE;
+
+		if( !is_array(self::$_routes) )
+		{
+			self::$_dynamic_routes = array();
+		}
+		self::$_dynamic_routes[] = $route;
+		return TRUE;
+	}
 
   
-  /**
-   * Test wether the specified route exists.
-   *
-   * @param CmsRoute The route object
-   * @return boolean
-   */
-  static public function route_exists(CmsRoute $route)
-  {
-    if( !is_array(self::$_routes) ) return FALSE;
-
-    foreach( self::$_routes as $test )
-      {
-	if( $test == $route ) return TRUE;
-      }
-    return FALSE;
-  }
+	/**
+	 * Register a new route.
+	 * This is just an alias (for compatibility reasons) to the add_dynamc method.
+	 *
+	 * @see add_dynamic
+	 * @param CmsRoute The route to register
+	 * @return boolean
+	 */
+	static public function register(CmsRoute $route)
+	{
+		return self::add_dynamic($route);
+	}
 
 
-  /**
-   * Register a new route.
-   * This method will not register duplicate routes.
-   *
-   * @param CmsRoute The route to register
-   * @return boolean
-   */
-  static public function register(CmsRoute $route)
-  {
-    if( self::route_exists($route) ) return TRUE;
+	/**
+	 * Load dynamic routes from the modules.
+	 * typically called by modules or places where static urls are added
+	 * this method will load all modules and call setparameters to ensure
+	 * that their dynamic routes are created.
+	 *
+	 * @deprecated
+	 */
+	public static function load_routes()
+	{
+		global $CMS_ADMIN_PAGE;
+		$flag = false;
+		if( isset($CMS_ADMIN_PAGE) )
+		{
+			// hack to force modules to register their routes.
+			$flag = $CMS_ADMIN_PAGE;
+			unset($CMS_ADMIN_PAGE);
+		}
 
-    if( !is_array(self::$_routes) )
-      {
-	self::$_routes = array();
-      }
-    self::$_routes[] = $route;
-    return TRUE;
-  }
+		// todo: 
+		$modules = ModuleOperations::get_instance()->GetLoadedModules();
+		foreach( $modules as $name => &$module )
+		{
+			$module->SetParameters();
+		}
+
+		if( $flag )
+		{
+			$CMS_ADMIN_PAGE = $flag;
+		}
+	}
+
+	/**
+	 * Reset the static route table.
+	 *
+	 * @sincce 1.11
+	 * @author Robert Campbell
+	 * @internal
+	 */
+	public static function rebuild_static_routes()
+	{
+		// clear the route table.
+		$db = cmsms()->GetDb();
+		$query = 'TRUNCATE TABLE '.cms_db_prefix().'routes';
+		$db->Execute($query);
+
+		// get content routes
+		$query = 'SELECT content_id,page_url FROM '.cms_db_prefix()."content 
+             WHERE active=1 AND COALESCE(page_url,'') != ''";
+		$tmp = $db->GetArray($query);
+		if( is_array($tmp) && count($tmp) )
+			{
+				for( $i = 0; $i < count($tmp); $i++ )
+					{
+						$route = CmsRoute::new_builder($tmp[$i]['page_url'],'__CONTENT__',$tmp[$i]['content_id'],'',TRUE);
+						cms_route_manager::add_static($route);
+					}
+			}
+
+		// get the module routes
+		$installed = ModuleOperations::get_instance()->GetInstalledModules();
+		foreach( $installed as $module_name )
+			{
+				$modobj = cms_utils::get_module($module_name);
+				if( !$modobj ) continue;
+
+				$routes = $modobj->CreateStaticRoutes();
+			}
+	}
+
+	/**
+	 * Load existing static routes from the cache
+	 * This method will also refresh the cache from the database if the cache cannot be found.
+	 * Note: It should not be necessary to load routes, as this method is called internally.
+	 *
+	 * @return void
+	 */
+	private static function _load_static_routes()
+	{
+		if( self::$_routes_loaded ) return;
+
+		$data = self::_get_routes_from_cache();
+		if( is_array($data) && count($data) )
+		{
+			self::$_routes = array();
+			for( $i = 0; $i < count($data); $i++ )
+			{
+				self::$_routes[] = unserialize($data[$i]['data']);
+			}
+			self::$_routes_loaded = TRUE;
+		}
+	}
 
 
-  /**
-   * Find a route that matches the specified string
-   *
-   * @param string The string to test against (usually an incoming url request)
-   * @param boolean Perform an exact string match rather than a regex match.
-   * @return CmsRouteMatch the matching route, or null.
-   */
-  static public function find_match($str,$exact = false)
-  {
-    $res = null;
-    if( !is_array(self::$_routes) )
-      {
-	return $res;
-      }
-    
-    foreach( self::$_routes as $route )
-      {
-	if( $route->matches($str,$exact) )
-	  {
-	    return $route;
-	  }
-      }
-
-    return $res;
-  }
+	private static function _get_routes_from_cache()
+	{
+		$fn = self::_get_cache_filespec();
+		if( !file_exists($fn) )
+		{
+			$db = cmsms()->GetDb();
+			$query = 'SELECT * FROM '.cms_db_prefix().'routes';
+			$tmp = $db->GetArray($query);
+			self::$_routes_loaded = TRUE;
+			if( is_array($tmp) && count($tmp) )
+				{
+					$fn = self::_get_cache_filespec();
+					file_put_contents($fn,serialize($tmp));
+					return $tmp;
+				}
+		}
+		else
+		{
+			self::$_routes_loaded = TRUE;
+			return unserialize(file_get_contents($fn));
+		}
+	}
 
 
-  /**
-   * Load existing routes from modules
-   */
-  public static function load_routes()
-  {
-    // force modules to register their routes.
-    $gCms = cmsms();
-    global $CMS_ADMIN_PAGE;
-    $flag = false;
-    if( isset($CMS_ADMIN_PAGE) )
-      {
-	// hack to force modules to register their routes.
-	$flag = $CMS_ADMIN_PAGE;
-	unset($CMS_ADMIN_PAGE);
-      }
+	private static function _get_cache_filespec()
+	{
+		return TMP_CACHE_LOCATION.'/'.md5(TMP_CACHE_LOCATION.get_class()).'.dat';
+	}
 
-    // todo: 
-    $modules = ModuleOperations::get_instance()->GetLoadedModules();
-    foreach( $modules as $name => &$module )
-      {
-	$module->SetParameters();
-      }
 
-    if( $flag )
-      {
-	$CMS_ADMIN_PAGE = $flag;
-      }
-
-    // force content to register routes.
-    $contentops = $gCms->GetContentOperations();
-    $contentops->register_routes();
-  }
-
-  /**
-   * Retrieve the cache filename.
-   *
-   * @ignore
-   * @return string
-   */
-  private static function get_filename()
-  {
-    return TMP_CACHE_LOCATION.'/routes.dat';
-  }
+	private static function _clear_cache()
+	{
+		@unlink(self::_get_cache_filespec());
+		self::$_routes = null;
+		self::$_routes_loaded = FALSE;
+		// note: dynamic routes don't get cleared.
+	}
 } // end of class
 
 

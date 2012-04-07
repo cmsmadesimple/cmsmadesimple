@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['sysmain_updateurls'] = 'Update Routes';
+$lang['admin']['sysmain_confirmupdateurls'] = 'Are you sure you want to refresh the route database';
 $lang['admin']['text_changeowner'] = 'Set Selected Pages to a different User';
 $lang['admin']['changeowner'] = 'Change Owner';
 $lang['admin']['xmlreader_class'] = 'Checking for the XMLReader class';

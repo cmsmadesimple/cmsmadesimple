@@ -20,6 +20,31 @@ $return = $dbdict->ExecuteSQLArray($sqlarray);
 $ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 echo '[done]</p>';
 
+echo '<p>Enhancing the adminlog table...';
+$sqlarray = $dbdict->AlterColumnSQL(cms_db_prefix().'adminlog','ip_addr C(40)');
+$return = $dbdict->ExecuteSQLArray($sqlarray);
+$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+if( $return == 2 )
+  {
+    $sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'index_adminlog1', cms_db_prefix()."adminlog", 'timestamp');
+    $return = $dbdict->ExecuteSQLArray($sqlarray);
+  }
+echo "[done]</p>";
+
+$flds = "
+          term C(255) KEY NOT NULL,
+          key1 C(50) KEY NOT NULL,
+          key2 C(50),
+          key3 C(50),
+          data X, 
+          created ".CMS_ADODB_DT;
+$sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."routes", $flds, $taboptarray);
+$return = $dbdict->ExecuteSQLArray($sqlarray);
+$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+echo ilang('install_creating_table', 'routes', $ado_ret);
+
+cms_route_manager::rebuild_static_routes();
+
 echo '<p>Updating schema version... ';
 $query = "UPDATE ".cms_db_prefix()."version SET version = 36";
 $db->Execute($query);

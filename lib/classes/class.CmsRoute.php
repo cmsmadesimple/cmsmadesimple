@@ -45,49 +45,105 @@
  * @author Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since  1.9
  */
-class CmsRoute
+class CmsRoute implements ArrayAccess
 {
-  private $_dest;
-  private $_content_id;
-  private $_term;
-  private $_defaults;
-  private $_absolute;
-  private $_results;
+	private $_data;
+	private $_results;
+	static private $_keys = array('term','key1','key2','key3','defaults','absolute','results');
 
   /**
    * Construct a new route object.
    *
    * @param string The route string (or regular expression)
-   * @param mixed  The destination.  Either a module name, or an integer page id.
+   * @param mixed  The first key. Usually a module name.
    * @param array  An array of parameter defaults for this module.  Only applicable when the destination is a module.
    * @param boolean Flag indicating wether the term is a regular expression or an absolute string.
+   * @param string The second key.
    */
-  public function __construct($term,$dest = '',$defaults = '',$is_absolute = FALSE)
+  public function __construct($term,$key1 = '',$defaults = '',$is_absolute = FALSE,$key2 = null,$key3 = null)
   {
-    $this->_term  = $term;
-    $this->_absolute = $is_absolute;
-    if( is_numeric($dest) )
-      {
-	$this->_content_id = $dest;
-      }
-    else
-      {
-	$this->_dest = $dest;
-	if( is_array($defaults) )
+	  $this->_data['term'] = $term;
+	  $this->_data['absolute'] = $is_absolute;
+
+	  if( is_numeric($key1) && empty($key2) )
 	  {
-	    $this->_defaults = $defaults;
+		  $this->_data['key1'] = '__CONTENT__';
+		  $this->_data['key2'] = (int)$key1;
 	  }
+	  else
+	  {
+		  $this->_data['key1'] = $key1;
+		  $this->_data['key2'] = $key2;
+	  }
+	  if( is_array($defaults) )
+	  {
+	    $this->_data['defaults'] = $defaults;
       }
+	  if( !empty($key3) )
+	  {
+		  $this->_data['key3'] = $key3;
+	  }
+  }
+
+
+  public static function &new_builder($term,$key1,$key2 = '',$defaults = '',$is_absolute = FALSE,$key3 = null)
+  {
+	  $obj = new CmsRoute($term,$key1,$defaults,$is_absolute,$key2,$key3);
+	  return $obj;
+  }
+
+  public function OffsetGet($key)
+  {
+	  if( in_array($key,self::$_keys) && isset($this->_data[$key]) )
+	  {
+		  return $this->_data[$key];
+	  }
+  }
+
+  public function OffsetSet($key,$value)
+  {
+	  if( in_array($key,self::$_keys) )
+	  {
+		  $this->_data[$key] = $value;
+	  }
+  }
+
+  public function OffsetExists($key)
+  {
+	  if( in_array($key,self::$_keys) && isset($this->_data[$key]) )
+	  {
+		  return TRUE;
+	  }
+	  return FALSE;
+  }
+
+  public function OffsetUnset($key)
+  {
+	  if( in_array($key,self::$_keys) && isset($this->_data[$key]) )
+	  {
+		  unset($this->_data[$keys]);
+	  }
+  }
+
+  /**
+   * Returns the route term (string or regex)
+   *
+   * @deprecated
+   */
+  public function get_term()
+  {
+	  return $this->_term;
   }
 
   /**
    * Retrieve the destination module name.
    *
    * @return string Destination module name. or null.
+   * @deprecated
    */
   public function get_dest()
   {
-    return $this->_dest;
+	  return $this->_data['key1'];
   }
 
 
@@ -95,10 +151,11 @@ class CmsRoute
    * Retrieve the page id, if the destination is a content page.
    *
    * @return integer Page id, or null.
+   * @deprecated
    */
   public function get_content()
   {
-    return $this->_content_id;
+	  if( $this->is_content() ) return $this->_data['key2'];
   }
 
 
@@ -106,20 +163,23 @@ class CmsRoute
    * Retrieve the default parameters for this route
    *
    * @return array The default parameters for the route.. Null if no defaults specified.
+   * @deprecated
    */
   public function get_defaults()
   {
-    return $this->_defaults;
+	  if( isset($this->_data['defaults']) )
+		  return $this->_data['defaults'];
   }
 
   /**
    * Test wether this route is for a page.
    *
    * @return boolean
+   * @deprecated
    */
   public function is_content()
   {
-    return (bool)($this->_content_id != null);
+	  return ($this->_data['key1'] == '__CONTENT__')?TRUE:FALSE;
   }
 
 
@@ -127,10 +187,11 @@ class CmsRoute
    * Get matching parameter results.
    *
    * @return array Matching parameters... or Null
+   * @deprecated
    */
   public function get_results()
   {
-    return $this->_results;
+	  return $this->_results;
   }
 
   /**
@@ -147,20 +208,20 @@ class CmsRoute
   public function matches($str,$exact = false)
   {
     $this->_results = null;
-    if( $this->is_content() || $this->_absolute || $exact )
-      {
-	if( !strcasecmp($this->_term,$str) )
-	  {
-	    return TRUE;
-	  }
-	return FALSE;
-      }
+	if( (isset($this->_data['absolute']) && $this->_data['absolute']) || $exact )
+	{
+		if( !strcasecmp($this->_data['term'],$str) )
+		{
+			return TRUE;
+		}
+		return FALSE;
+	}
 
     $tmp = array();
-    $res = (bool)preg_match($this->_term,$str,$tmp);
+    $res = (bool)preg_match($this->_data['term'],$str,$tmp);
     if( $res && is_array($tmp) )
       {
-	$this->_results = $tmp;
+		  $this->_results = $tmp;
       }
     return $res;
   }

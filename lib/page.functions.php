@@ -1061,10 +1061,10 @@ function get_pageid_or_alias_from_url()
   if( is_object($route) )
     {
       $matched = true;
-      if( $route->is_content() )
+      if( $route['key1'] == '__CONTENT__' )
 	{
 	  // a route to a page.
-	  $page = $route->get_content();
+	  $page = (int)$route['key2'];
 	}
       else
 	{

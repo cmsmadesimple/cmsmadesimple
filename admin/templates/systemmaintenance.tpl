@@ -58,9 +58,9 @@
     </div>
   </fieldset>
     </form>
-  <form action="{$formurl}" method="post" onsubmit="return confirm('{'sysmain_confirmupdatehierarchy'|lang}')" >
   <fieldset>
     <legend>{'sysmain_content_status'|lang}&nbsp;</legend>
+    <form action="{$formurl}" method="post" onsubmit="return confirm('{'sysmain_confirmupdatehierarchy'|lang}')" >
     {$pagecount} {'sysmain_pagesfound'|lang}
 
     <div class="pageoverflow">
@@ -71,12 +71,23 @@
       </p>
     </div>
     </form>
+
+    <form action="{$formurl}" method="post" onsubmit="return confirm('{'sysmain_confirmupdateurls'|lang}')" >
+    <div class="pageoverflow">
+      <p class="pagetext">{'sysmain_updateurls'|lang}:</p>
+
+      <p class="pageinput">
+        <input class="pagebutton" type="submit" name="updateurls" value="{'sysmain_update'|lang}"/>
+      </p>
+    </div>
+    </form>
+
     {if $withoutaliascount!="0"}
     <form action="{$formurl}" method="post" onsubmit="return confirm('{'sysmain_confirmfixaliases'|lang}')" >
     <div class="pageoverflow">
-          <p class="pagetext">{$withoutaliascount} {'sysmain_pagesmissinalias'|lang}:</p>
+       <p class="pagetext">{$withoutaliascount} {'sysmain_pagesmissinalias'|lang}:</p>
 
-          <p class="pageinput">
+       <p class="pageinput">
             {foreach from=$pagesmissingalias item='page'}
               {*{$page.count}.*} {$page.content_name}<br/>
             {/foreach}

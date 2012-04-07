@@ -1073,7 +1073,6 @@ class ContentBase
     # :TODO: This function should return something
 	function Save()
 	{
-	  $gCms = cmsms();
 	  Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
 
 	  if( !is_array($this->_props) )
@@ -1205,6 +1204,13 @@ class ContentBase
 				$debug_errors .= "<p>Error updating : the content has no properties</p>\n";
 			}
 		}
+
+		if( $this->mURL != '' )
+		  {
+		    cms_route_manager::del_static('','__CONTENT__',$this->mId);
+		    $route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,null,TRUE);;
+		    cms_route_manager::add_static($route);
+		  }
 	}
 
     /**
@@ -1309,6 +1315,14 @@ class ContentBase
 				$db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
 			}
 		}
+
+		if( $this->mURL != '' )
+		  {
+		    $route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,'',TRUE);
+		    cms_route_manager::add_static($route);
+		  }
+
+
 	}
 
     /**
@@ -1496,6 +1510,11 @@ class ContentBase
 	      $result = $db->Execute($query,array($this->mId));
 	      $this->mAdditionalEditors = null;
 
+	      // Delete route
+	      if( $this->mURL != '' )
+		{
+		  cms_route_manager::del_static($this->mURL);
+		}
 	    }
 
 	  Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));

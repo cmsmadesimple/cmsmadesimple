@@ -19,6 +19,14 @@ Version 1.11 - NO NAME
  - System information page, and the installer now check for the XMLReader class.
  - Admin log ip_addr field is now bigger.  
  - Admin log now has an index (woot).
+ - Modified index.php to handle 404 pages better
+   (Now catches the CmsError404Exception )
+ - Static routes are now stored in the cms_routes table, and cached to a file in tmp/cache
+ - Rewrote the CmsRoutes class (but maintained compatibility)
+ - Added functionality in system maintenance page to rebuild static routes.
+ - Uninstalling a module now clears any module specific routes and smarty plugins
+ - Content pages now register and work with static urls.
+ - 
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
@@ -43,7 +51,11 @@ MicroTiny:
 
 
 News:
-
+ - All routes are now registered statically
+ - The {news} plugin is now part of the News module
+ - The detail page now handles caching well.
+ - The detail page now throws a 404 exception for attempts to view expired/draft articles.
+ - Full lazyload is now supported.
 
 Search: 
  - Moved "Stop Words" to language file

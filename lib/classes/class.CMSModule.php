@@ -362,7 +362,6 @@ abstract class CMSModule
 	      cms_module_smarty_plugin_manager::addStatic($this->GetName(),$this->GetName(),'function',
 						    'function_plugin',$cachable);
 	    }
-
 	}
 
 	/**
@@ -554,6 +553,16 @@ abstract class CMSModule
 		$route = new CmsRoute($routeregex,$this->GetName(),$defaults);
 		cms_route_manager::register($route);
 	}
+
+
+	/**
+	 * Register all static routes for this module.
+	 *
+	 * @since 1.11
+	 * @author Robert Campbell
+	 * @return void
+	 */
+	public function CreateStaticRoutes() {}
 
 
 	/**
@@ -2602,6 +2611,17 @@ abstract class CMSModule
 	 * Template/Smarty Functions
 	 * ------------------------------------------------------------------
 	 */
+
+	final public function GetDatabaseResource($template)
+	{
+	  return 'module_db_tpl:'.$this->GetName().';'.$template;
+	}
+
+
+	final public function GetFileResource($template)
+	{
+	  return 'module_file_tpl:'.$this->GetName().';'.$template;
+	}
 
 	/**
 	 * List Templates associated with a module

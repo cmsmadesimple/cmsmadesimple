@@ -252,6 +252,7 @@ if ($config['debug'] == true)
 }
 
 #Setup content routes
+/* not needed
 if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) )
 {
   debug_buffer('','Loading Routes');
@@ -260,6 +261,7 @@ if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PA
   $contentops->register_routes();
   debug_buffer('','End of Loading Routes');
 }
+*/
 
 #Load all installed module code
 if (! isset($CMS_INSTALL_PAGE))

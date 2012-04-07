@@ -598,8 +598,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', 'version', $ado_ret);
-
 	
+
 	
 	$flds = "
                 sig  C(80) KEY NOT NULL,
@@ -614,22 +614,20 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', 'module_smarty_plugins', $ado_ret);
-        
-	/*
+
+
+
 	$flds = "
-		sequence_id I KEY,
-		sequence_name C(25),
-		sequence_actions X,
-		sequence_panic X,
-		active I1,
-		create_date DT,
-		modified_date DT
-	";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."sequence", $flds, $taboptarray);
+                term C(255) KEY NOT NULL,
+                key1 C(50) KEY NOT NULL,
+                key2 C(50),
+                key3 C(50),
+                data X, 
+                created ".CMS_ADODB_DT;
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."routes", $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_table', 'sequence', $ado_ret);
-	*/
+	echo ilang('install_creating_table', 'routes', $ado_ret);
 }
 
 # vim:ts=4 sw=4 noet

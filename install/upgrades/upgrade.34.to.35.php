@@ -54,17 +54,6 @@ $ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 echo ilang('install_creating_index', 'content', $ado_ret);
 echo "[done]</p>";
 
-echo '<p>Enhancing the adminlog table...';
-$sqlarray = $dbdict->AlterColumnSQL(cms_db_prefix().'adminlog','ip_addr C(40)');
-$return = $dbdict->ExecuteSQLArray($sqlarray);
-$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-if( $return == 2 )
-  {
-    $sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'index_adminlog1', cms_db_prefix()."adminlog", 'timestamp');
-    $return = $dbdict->ExecuteSQLArray($sqlarray);
-  }
-echo "[done]</p>";
-
 echo '<p>Updating schema version... ';
 $query = "UPDATE ".cms_db_prefix()."version SET version = 35";
 $db->Execute($query);
