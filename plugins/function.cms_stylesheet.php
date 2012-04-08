@@ -16,278 +16,340 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+/**********************************************************
+	Main function
+**********************************************************/
+
 function smarty_function_cms_stylesheet($params, &$smarty)
 {
-	//
-	// begin
-	//
-	$gCms = cmsms();
+
+	#---------------------------------------------
+	# Initials
+	#---------------------------------------------
+
+	$config = cmsms()->GetConfig();
+	$db = cmsms()->GetDb();
+	$smarty = cmsms()->GetSmarty();	
+	
 	global $CMS_STYLESHEET;
 	$CMS_STYLESHEET = 1;
-	$template_id = '';
-	$use_https = -1;
+	$template_id = -1;
+	$use_https = 0;
+	$cache_dir = TMP_CACHE_LOCATION;
+	$stylesheet = '';
+	$combine_stylesheets = true;
+	$fnsuffix = '';
+	$trimbackground = FALSE;	
+	$root_url = $config['root_url'];
 
-	if( isset($params['https']) ) $use_https = (int)$params['https'];
-
-	if (isset($params["templateid"]) && $params["templateid"]!="")
-	{
+	#---------------------------------------------
+	# Read parameters
+	#---------------------------------------------	
+	
+	if (isset($params["templateid"]) && $params["templateid"]!="") {
+		
 		$template_id = $params["templateid"];
-	}
-	else
-	{
-		$content_obj = $gCms->variables['content_obj'];
+	} else {
+	
+		$content_obj = cmsms()->variables['content_obj'];
 		$template_id = $content_obj->TemplateId();
-		if( $use_https == -1 )
-		{
-			$use_https = (int)$content_obj->Secure();
-		}	
+		$use_https = (int)$content_obj->Secure();
 	}
 	
-	if( $use_https < 0 ) $use_https = 0;
-	$config = $gCms->config;
-	$db = $gCms->GetDb();
-	$root_url = $config['root_url'];
-	if( $use_https && isset($config['ssl_url']) )
-	{
+	if(isset($params['https'])) {
+	
+		$use_https = (int)$params['https'];
+	}
+	
+	if($use_https && isset($config['ssl_url'])) {
+	
 		$root_url = $config['ssl_url'];
 	}
 
-	$cache_dir = TMP_CACHE_LOCATION;
-	$stylesheet = '';
+	if(isset($params['nocombine']) && $params['nocombine'] == 1) {
+	
+		$combine_stylesheets = FALSE;
+	}	
+	
+	if(isset($params['adjustforeditor'])) {
+	
+		$fnsuffix = '_e';
+		$trimbackground = TRUE;
+	}	
+	
+	#---------------------------------------------
+	# Build query
+	#---------------------------------------------	
 
 	$qparms = array();
 	$where = array();
 	$query = '';
 	$order = '';
-	$combine_stylesheets = FALSE;
-	if (isset($params['name']) && $params['name'] != '')
-	{
-		$query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,A.media_type,A.media_query
-                    FROM '.cms_db_prefix().'css A';
+
+	if (isset($params['name']) && $params['name'] != '') {
+	
+		$query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,A.media_type,A.media_query 
+					FROM '.cms_db_prefix().'css A';
 		$where[] = 'A.css_name = ?';
 		$qparms[] = trim($params['name']);
-	}
-	else //No name?  Use the template_id instead
-	{
-		if( !isset($params['nocombine']) || $params['nocombine'] == 0 )
-		{
-			$combine_stylesheets = TRUE;
-		}
-  	    $query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,
-               		              A.media_type,A.media_query,B.assoc_order
+	
+	} else {
+
+  	    $query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,A.media_type,A.media_query,B.assoc_order
    	                FROM '.cms_db_prefix().'css A 
                     LEFT JOIN '.cms_db_prefix().'css_assoc B ON A.css_id = B.assoc_css_id';
-		$where[] = 'B.assoc_type = ?
-		AND B.assoc_to_id = ?';
+		$where[] = 'B.assoc_type = ? AND B.assoc_to_id = ?';
 		$qparms = array('template', $template_id);
-        
-		if( isset($params['media']) && strtolower($params['media']) != 'all')
-		{
-			$tmp = explode(',',$params['media']); 
+
+		if( isset($params['media']) && strtolower($params['media']) != 'all' ) {
+		
+			$types = explode(',',$params['media']); 
 			$expr = array();
-            $expr2 = array();
-			for( $i = 0; $i < count($tmp); $i++ )
+			foreach($types as $type)
 			{
-				$expr[]   = 'media_type LIKE ?)';
-				$qparms[] = trim($tmp[$i]);
- 			}
- 			for( $i = 0; $i < count($tmp); $i++ )
-            {
-                $expr2[]   = 'media_query LIKE ?';
-                $qparms[] = trim($tmp[$i]);
-            }
-			$expr[]   = '(media_type OR media_query LIKE ?';
+				$expr[] = 'media_type LIKE ?';
+				$qparms[] = '%'.trim($type).'%';
+			}
+			
+			$expr[] = 'media_type LIKE ?';
 			$qparms[] = '%all%';
 
-			$where[] = '(('.implode(' OR ',$expr).') OR ('.implode(' OR ',$expr2).'))';
+			$where[] = '('.implode(' OR ',$expr).')';
 		}
+       	
 		$order = 'ORDER BY B.assoc_order';
 	}
+	
 	$query .= " WHERE ".implode(' AND ',$where).' '.$order;
-	if( isset($params['nocombine']) && $params['nocombine'] )
-	{
-		// forced not to combine.
-		$combine_stylesheets = FALSE;
-	}
 
-	$fnsuffix = '';
-	$trimbackground = FALSE;
-	if( isset($params['adjustforeditor'])/* && $params['adjustforeditor']*/)
-	{
-		$fnsuffix = '_e';
-		$trimbackground = TRUE;
-	}
-
+	#---------------------------------------------
+	# Execute
+	#---------------------------------------------		
+	
 	$res = $db->GetArray($query, $qparms);
-	if( $res )
-	{
-		$modified_date = 0;
-		$media_changed = false;
-		$test_media = '';
-		if( $combine_stylesheets )
-		{
-			// if we still think we can combine stylesheets, do a check through all of the media types
-			// to ensure that they are the same.. if they aren't do not combine them
-			// this could be smarter.
-			for( $i = 0; $i < count($res); $i++ )
-			{
-				$modified_date = max($modified_date,strtotime($res[$i]['modified_date']));
-				if( $test_media == '' )
-				{
-					$test_media = $res[$i]['media_type'];
-				}
-				if( $res[$i]['media_type'] != $test_media )
-				{
-					$media_changed = TRUE;
-				}
-			}
-			if( $media_changed ) $combine_stylesheets = FALSE;
-		}
-
-		if( $combine_stylesheets && $template_id > 0 )
-		{
-			// combine all matches into one stylesheet.
-			$filename = 'stylesheet_combined_'.md5($template_id.$use_https.$modified_date.$fnsuffix).'.css';
-			$fn = cms_join_path($cache_dir,$filename);
-			if( !file_exists($fn) )
-			{
-				$text = '';
-				for( $i = 0; $i < count($res); $i++ )
-				{
-					$one = $res[$i];
-					$text .= $one['css_text'];
-                    // moved this to bottom, comments on top of stylesheets cause invalid css when using @charset
-                    $text .= "\n/* Stylesheet: ".$one['css_name']." Modified On ".$one['modified_date']." */\n";
-					if( !endswith($text,"\n") ) $text .= "\n";
+	
+	if($res) {
+	
+		// Combine stylesheets
+		if($combine_stylesheets) {
+		
+			// Group queries & types
+			$all_media = array();
+			$all_timestamps = array();
+			$all_timestamps_string = '';
+			foreach($res as $one) {
+			
+				if(!empty($one['media_query'])) {
+				
+					$key = md5($one['media_query']);
+					$all_media[$key][] = $one;
+					$all_timestamps[$key][] = strtotime($one['modified_date']);
+					
+				} elseif(!empty($one['media_type'])) {
+			
+					$key = md5($one['media_type']);
+					$all_media[$key][] = $one;
+					$all_timestamps[$key][] = strtotime($one['modified_date']);
+					
+				} else {
+				
+					$all_media['all'][] = $one;
+					$all_timestamps['all'][] = strtotime($one['modified_date']);
 				}
 
-				$smarty = cmsms()->GetSmarty();
-				$smarty->left_delimiter = '[[';
-				$smarty->right_delimiter = ']]';
-				$_contents = $smarty->fetch('string:'.$text);
+				$all_timestamps_string .= strtotime($one['modified_date']); // <- This is for media param
+			}			
+		
+			// Stupid media parameter...
+			if (isset($params['media'])) {
 
-				if( $trimbackground )
-				{
-					// attempt to trim background stuff from stylesheets.
-					$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
-					$_contents = preg_replace('/\w*?(background[-image]*[\s\w]*\:[\#\s\w]*)url\(.*\)/','$1;',$_contents);
-					$_contents = preg_replace('/\w*?(background[-image]*[\s\w]*\:[\s]*\;)/','',$_contents);
-//					$_contents = preg_replace('/\w*?(background[-image]*[\s\w]*\:[\s\w]*)url\(.*/','',$_contents);
-// 					$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
-// 					$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
-				}
-
-				$fh = fopen($fn,'w');
-				fwrite($fh,$_contents);
-				fclose($fh);
-
-				$smarty->left_delimiter = '{';
-				$smarty->right_delimiter = '}';
-			}
-
-			if( isset($params['nolinks']) )
-			{
-				$stylesheet .= $root_url.'/tmp/cache/'.$filename;
-			}
-			else
-			{
-				$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" />'."\n";
-			}
-		}
-		else
-		{
-			// separete stylesheet records.
-			$fmt1 = '<link rel="stylesheet" type="text/css" media="%s" href="%s" />';
-			$fmt2 = '<link rel="stylesheet" type="text/css" href="%s" />';
-			foreach ($res as $one)
-			{
-			    if (isset($params['media'])) {
-			        $media_type  = $params['media'];
-			        $media_query = $params['media'];
-                } else {
-                    $media_type  = str_replace(' ','',$one['media_type']);
-                    $media_query = ($one['media_query']);
-                }
-				$filename = 'stylesheet_'.md5('single'.$one['css_id'].$use_https.strtotime($one['modified_date']).$fnsuffix).'.css';
-				if ( !file_exists(cms_join_path($cache_dir,$filename)) )
-				{
-					$smarty = $gCms->GetSmarty();
-					$smarty->left_delimiter = '[[';
-					$smarty->right_delimiter = ']]';
-					$_contents = $smarty->fetch('string:'.$one['css_text']); // todo, deal with caching?
-					$smarty->left_delimiter = '{';
-					$smarty->right_delimiter = '}';
-
-					if( $trimbackground )
-					{
-						$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
-						$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
-						$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
+				// combine all matches into one stylesheet.
+				$filename = 'stylesheet_combined_'.md5($template_id.$use_https.$all_timestamps_string.$fnsuffix).'.css';
+				$fn = cms_join_path($cache_dir,$filename);	
+	
+				if(!file_exists($fn)) {			
+				
+					$text = '';
+					foreach ($res as $one) {
+					
+							$text .= $one['css_text'];
+							// moved this to bottom, comments on top of stylesheets cause invalid css when using @charset
+							$text .= "\n/* Stylesheet: ".$one['css_name']." Modified On ".$one['modified_date']." */\n";
+							if( !endswith($text,"\n") ) $text .= "\n";
 					}
 
-					$fname = cms_join_path($cache_dir,$filename);
-					$fp = fopen($fname, 'w');
-					//we convert CRLF to LF for unix compatibility
-					fwrite($fp, str_replace("\r\n", "\n", $_contents));
-					fclose($fp);
-					//set the modified date to the template modified date
-					//touch($fname, $db->UnixTimeStamp($one['modified_date']));
+					cms_stylesheet_writeCache($fn, $text, $trimbackground, $smarty);
 				}
 
-				if( isset($params['nolinks']) )
-				{
-					$stylesheet .= $root_url.'/tmp/cache/'.$filename.',';
+				cms_stylesheet_toString($filename, $params['media'], '', $root_url, $stylesheet, $params);
+					
+			} else {
+		
+				// Group timestamps
+				foreach($all_timestamps as $k=>$v) {
+				
+					$all_timestamps[$k] = implode($v);
 				}
-				else
-				{	
-					if ( empty($media_type) && empty($media_query)) {
-					    $stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" />'."\n";
-                    } else if (!empty($media_query)) {
-                        $stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" media="'.$media_query.'"/>'."\n";
-                    } else {
-                        $stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" media="'.$media_type.'"/>'."\n";
-                    }
+				
+				foreach($all_media as $hash=>$onemedia) {
+				
+					// combine all matches into one stylesheet.
+					$filename = 'stylesheet_combined_'.md5($template_id.$use_https.$all_timestamps[$hash].$fnsuffix).'.css';
+					$fn = cms_join_path($cache_dir,$filename);
+					
+					// Get media_type and media_query
+					$media_query = $onemedia[0]['media_query'];
+					$media_type = $onemedia[0]['media_type'];
+					
+					if(!file_exists($fn)) {
+					
+						$text = '';
+						foreach($onemedia as $one) {
+						
+							$text .= $one['css_text'];
+							// moved this to bottom, comments on top of stylesheets cause invalid css when using @charset
+							$text .= "\n/* Stylesheet: ".$one['css_name']." Modified On ".$one['modified_date']." */\n";
+							if( !endswith($text,"\n") ) $text .= "\n";
+						}
+
+						cms_stylesheet_writeCache($fn, $text, $trimbackground, $smarty);
+					}
+
+					cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
 				}
+			}
+			
+		// Do not combine stylesheets	
+		} else {
+
+			foreach ($res as $one) {
+			
+			    if (isset($params['media'])) {
+				
+			        $media_query = $params['media'];				
+			        $media_type  = '';
+                } else {
+				
+                    $media_query = $one['media_query'];				
+                    $media_type  = $one['media_type'];
+                }
+				
+				$filename = 'stylesheet_'.md5('single'.$one['css_id'].$use_https.strtotime($one['modified_date']).$fnsuffix).'.css';
+				$fn = cms_join_path($cache_dir,$filename);
+				
+				if (!file_exists($fn)) {
+		
+					cms_stylesheet_writeCache($fn, $one['css_text'], $trimbackground, $smarty);					
+				}
+
+				cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
 			}
 		}
 	}
 
-	if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-	{
+	#---------------------------------------------
+	# Cleanup & output
+	#---------------------------------------------		
+	
+	// Deprecate this
+	if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true)) {
+	
 		$stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
 	}
 
-	if( isset($params['nolinks']) && endswith($stylesheet,',') )
-	{
+	// Remove last comma at the end when $params['nolinks'] is set
+	if( isset($params['nolinks']) && endswith($stylesheet,',') ) {
+	
 		$stylesheet = substr($stylesheet,0,strlen($stylesheet)-1);
 	}
 
+	// Notify core that we are no longer at stylesheet, pretty ugly way to do this. -Stikki-
 	$CMS_STYLESHEET = 0;
 	unset($CMS_STYLESHEET);
 	unset($GLOBALS['CMS_STYLESHEET']);
+	
 	if( isset($params['assign']) ){
-	    $smarty->assign(trim($params['assign']),$stylesheet);
+	
+	    $smarty->assign(trim($params['assign']), $stylesheet);
 	    return;
     }
+	
 	return $stylesheet;
-}
+	
+} // end of main
+
+/**********************************************************
+	Misc functions
+**********************************************************/
+
+function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty)
+{
+	// Smarty processing
+	$smarty->left_delimiter = '[[';
+	$smarty->right_delimiter = ']]';
+	$_contents = $smarty->fetch('string:'.$string);
+	$smarty->left_delimiter = '{';
+	$smarty->right_delimiter = '}';					
+
+	// Fix background
+	if($trimbackground) {
+	
+		$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
+		$_contents = preg_replace('/\w*?(background[-image]*[\s\w]*\:[\#\s\w]*)url\(.*\)/','$1;',$_contents);
+		$_contents = preg_replace('/\w*?(background[-image]*[\s\w]*\:[\s]*\;)/','',$_contents);
+		$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
+		$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
+		$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
+	}
+
+	// Write file
+	$fh = fopen($filename,'w');
+	fwrite($fh, $_contents);
+	fclose($fh);
+
+} // end of writeCache
+
+function cms_stylesheet_toString($filename, $media_query = '', $media_type = '', $root_url, &$stylesheet, &$params)
+{
+	if( isset($params['nolinks']) )
+	{
+		$stylesheet .= $root_url.'/tmp/cache/'.$filename.',';
+	} else {
+	
+		if (!empty($media_query)) {
+			
+			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" media="'.$media_query.'" />'."\n";
+		} elseif (!empty($media_type)) {
+		
+			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" media="'.$media_type.'" />'."\n";
+		} else {
+		
+			$stylesheet .= '<link rel="stylesheet" type="text/css" href="'.$root_url.'/tmp/cache/'.$filename.'" />'."\n";
+		}
+	}
+	
+} // end of toString
+
+/**********************************************************
+	Help functions
+**********************************************************/
 
 function smarty_cms_help_function_cms_stylesheet()
 {
 	echo lang('help_function_cms_stylesheet');
-}
+} // end of help
 
 function smarty_cms_about_function_cms_stylesheet()
 {
 	?>
 	<p>Author: jeff&lt;jeff@ajprogramming.com&gt;</p>
-	<p>Version: 0.6</p>
-	<p>
-	Change History:<br/>
-	Rework from {stylesheet}
+	<p>Version: 0.7</p>
+	<p>Change History:<br/>
+	<ul>
+		<li>0.6 - Rework from {stylesheet}</li>
+		<li>0.7 - Code cleanup, Added grouping by media type / media query, Fixed cache issues</li>
+	</ul>
 	</p>
 	<?php
-}
-
-# vim:ts=4 sw=4 noet
+} // end of about
 ?>
