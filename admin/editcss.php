@@ -258,12 +258,12 @@ if ($access)
 		if ($result && $result->RecordCount() > 0)
 		{
 			$row = $result->FetchRow();
-			$css_name		= $row["css_name"];
+			$css_name	= $row["css_name"];
 			$orig_css_name	= $row["css_name"];
-			$css_text		= $row["css_text"];
-			$media_type		= $row["media_type"];
-            $media_query    = $row["media_query"];
-			$lastmodified		= $row["modified_date"];
+			$css_text	= $row["css_text"];
+			$media_type	= $row["media_type"];
+            		$media_query    = $row["media_query"];
+			$lastmodified	= $row["modified_date"];
 		}
 		else
 		{
@@ -385,10 +385,10 @@ else
     <div id="page_content">
 	<div id="editab0_c">
         <div class="pageoverflow">
-            <p class="pagetext"><?php echo lang('media_query')?>:</p>
-            <?php echo lang('media_query_description'); ?>
+            <p class="pagetext"><?php echo lang('media_query')?>:<br/>
             <div class="pageinput">
               <?php echo create_textarea(false, $media_query, 'media_query', 'pageextrasmalltextarea', 'media_query', '', '', '30', '5','','')?>
+	      <br/><?php echo lang('media_query_description'); ?>
             </div>
         </div> 
    </div>
