@@ -26,7 +26,7 @@ Version 1.11 - NO NAME
  - Added functionality in system maintenance page to rebuild static routes.
  - Uninstalling a module now clears any module specific routes and smarty plugins
  - Content pages now register and work with static urls.
- - 
+ - Total re-write of {cms_stylesheet} tag. Cache working as it should now. Media queries / types combine correctly now.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
