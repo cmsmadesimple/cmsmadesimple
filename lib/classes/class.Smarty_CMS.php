@@ -63,6 +63,9 @@ class Smarty_CMS extends SmartyBC
     $this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
     $this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
 
+    // Set plugins dirs
+    $this->addPluginsDir(cms_join_path($config['root_path'],'plugins'));
+
     // register default plugin handler
     $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
 
@@ -70,9 +73,6 @@ class Smarty_CMS extends SmartyBC
       {
 	$this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
 	$this->setConfigDir(cms_join_path($config['root_path'],'tmp','templates'));
-
-	// Set plugins dirs
-	$this->addPluginsDir(cms_join_path($config['root_path'],'plugins'));
 
 	if (is_sitedown()) {
 	  $this->setCaching(false);
