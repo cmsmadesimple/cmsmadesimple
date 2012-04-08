@@ -140,17 +140,22 @@ if ($access)
 			$validinfo = false;
 		}
 
-#******************************************************************************
-# everything looks ok, we can update the CSS
-#******************************************************************************
+		$styleops = cmsms()->GetStylesheetOperations();
+		$onestylesheet = $styleops->LoadStylesheetByID($css_id);
+		if( !is_object($onestylesheet) )
+		  {
+		    $error .= '<li>'.lang('stylesheetnotfound',$css_id).'</li>';
+		    $validinfo = FALSE;
+		  }
+
+		// ******************************************************************************
+	        // everything looks ok, we can update the CSS
+		// ******************************************************************************
+		//$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?, css_text = ?, media_type = ?, modified_date = ? WHERE css_id = ?";
+		 //$result = $db->Execute($query,array($css_name, $css_text, $media_type, $db->DBTimeStamp(time()), $css_id));
+			
 		if ($validinfo)
 		{
-			//$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?, css_text = ?, media_type = ?, modified_date = ? WHERE css_id = ?";
-			//$result = $db->Execute($query,array($css_name, $css_text, $media_type, $db->DBTimeStamp(time()), $css_id));
-			
-		  $styleops = cmsms()->GetStylesheetOperations();
-			
-			$onestylesheet = $styleops->LoadStylesheetByID($css_id);
 			$onestylesheet->name = $css_name;
 			$onestylesheet->value = $css_text;
 
@@ -165,7 +170,7 @@ if ($access)
                         $types='';
                         }
 			$onestylesheet->media_type = $types;
-            $onestylesheet->media_query = $media_query;
+			$onestylesheet->media_query = $media_query;
 			
 			Events::SendEvent('Core', 'EditStylesheetPre', array('stylesheet' => &$onestylesheet));
 			

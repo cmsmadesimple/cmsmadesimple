@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['stylesheetnotfound'] = 'Stylesheet %d not found';
 $lang['admin']['sysmain_updateurls'] = 'Update Routes';
 $lang['admin']['sysmain_confirmupdateurls'] = 'Are you sure you want to refresh the route database';
 $lang['admin']['text_changeowner'] = 'Set Selected Pages to a different User';
