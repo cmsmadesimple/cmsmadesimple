@@ -179,7 +179,7 @@ class Content extends ContentBase
     function Show($param = 'content_en')
     {
 		// check for additional content blocks
-		$this->get_content_blocks();
+		//$this->get_content_blocks();
 	
 		return $this->GetPropertyValue($param);
     }
@@ -424,6 +424,7 @@ class Content extends ContentBase
 	 */
     private function parse_content_blocks()
     {
+		stack_trace(); die();
 		if ($this->_contentBlocksLoaded) return TRUE;
 
 // 		$templateops = $gCms->GetTemplateOperations();
