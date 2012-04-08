@@ -274,7 +274,7 @@ class Content extends ContentBase
 			}
 
 			// and the content blocks
-			foreach($this->_contentBlocks as $blockName => $blockInfo)
+			foreach($blocks as $blockName => $blockInfo)
 			{
 				if( isset($blockInfo['tab']) && $blockInfo['tab'] == 'options' )
 				{
@@ -424,7 +424,6 @@ class Content extends ContentBase
 	 */
     private function parse_content_blocks()
     {
-		stack_trace(); die();
 		if ($this->_contentBlocksLoaded) return TRUE;
 
 // 		$templateops = $gCms->GetTemplateOperations();

@@ -109,7 +109,7 @@ class TemplateOperations
 		{
 			foreach( $this->_templateCache as $key => &$object )
 			{
-				if( $object->alias == $id ) return $this->_templateCache[$key];
+				if( $object->name == $id ) return $this->_templateCache[$key];
 			}
 		}
 
@@ -134,15 +134,22 @@ class TemplateOperations
 
 		$db = cmsms()->GetDb();
 		$query = '';
+		$where = ' WHERE template_id = ?';
+		if( !is_numeric($id) )
+		{
+			$where = ' WHERE template_name = ?';
+		}
+
 		if( $sparse )
-			{
-				$query = "SELECT template_id, template_name, stylesheet, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
-			}
+		{
+			$query = "SELECT template_id, template_name, stylesheet, active, default_template, modified_date FROM ".cms_db_prefix().'templates';
+		}
 		else
-			{
-				$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
-			}
-		$row = $db->GetRow($query, array($id));
+		{
+			$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date 
+                      FROM ".cms_db_prefix()."templates";
+		}
+		$row = $db->GetRow($query.$where, array($id));
 
 		if($row)
 		{

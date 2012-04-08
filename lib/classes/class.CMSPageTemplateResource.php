@@ -46,13 +46,17 @@ class CMSPageTemplateResource extends Smarty_Resource_Custom
 	$templateops = $gCms->GetTemplateOperations();
 	if( $name == -1 )
 	  $templateobj = $templateops->LoadDefaultTemplate();
-	else
+	else 
 	  $templateobj = $templateops->LoadTemplateByID($name);
 
 	if( is_object($templateobj) && $templateobj !== FALSE )
 	  {
 	    $name = $templateobj->name;
 	    self::$_templates[$name] = $templateobj;
+	  }
+	else
+	  {
+	    debug_display('no template '.$name);
 	  }
       }
     if( isset(self::$_templates[$name]) )

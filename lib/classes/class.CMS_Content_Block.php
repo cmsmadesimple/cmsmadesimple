@@ -63,6 +63,7 @@ final class CMS_Content_Block
 		 'size'=>'50','tab'=>'','maxlength'=>'255');
     foreach( $params as $key => $value )
       {
+	$value = trim($value,'"\'');
 	if( $key == 'type' ) continue;
 	if( $key == 'block' )
 	  {
