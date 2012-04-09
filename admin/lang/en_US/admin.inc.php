@@ -506,7 +506,7 @@ $lang['admin']['systeminfo'] = 'System Information';
 $lang['admin']['systeminfodescription'] = 'Display various pieces of information about your system that may be useful in diagnosing problems';
 
 $lang['admin']['systemmaintenance'] = 'System Maintenance';
-$lang['admin']['systemmaintenancedescription'] = 'Various functions for maintaining the health of your system. You can also browser the changelog of CMSMadeSimple';
+$lang['admin']['systemmaintenancedescription'] = 'Various functions for maintaining the health of your system. You can also browse the changelog for all releases.';
 $lang['admin']['sysmaintab_database'] = 'Database';
 $lang['admin']['sysmaintab_changelog'] = 'Changelog';
 $lang['admin']['sysmaintab_content'] = 'Cache and content';
