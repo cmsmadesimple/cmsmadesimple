@@ -2,7 +2,7 @@
 {* checksum verification template *}
 
 {if isset($error)}
-<div class="pageerrorcontainer">
+<div class="pageerrorcontainer message">
  <div class="pageoverflow">
    <p class="pageerror">{$error}</p>
  </div>
@@ -10,9 +10,9 @@
 {/if}
 
 {if isset($message)}
-<div class="pagecontainer">
+<div class="pagemcontainer success message">
  <div class="pageoverflow">
-   <p style="color: green;">{$message}</p>
+   <p>{$message}</p>
  </div>
  </div>
 {/if}
