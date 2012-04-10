@@ -68,6 +68,8 @@ if (check_permission($userid, 'Modify Site Preferences'))
     $query = "DELETE FROM ".cms_db_prefix()."adminlog";
     $db->Execute($query);
     echo $themeObject->ShowMessage(lang('adminlogcleared'));
+	// put mention into the admin log
+    audit('', 'Admin Log', 'Cleared');
   }
 
   $page = 1;
