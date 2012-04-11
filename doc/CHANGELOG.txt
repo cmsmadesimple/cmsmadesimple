@@ -27,6 +27,9 @@ Version 1.11 - NO NAME
  - Uninstalling a module now clears any module specific routes and smarty plugins
  - Content pages now register and work with static urls.
  - Total re-write of {cms_stylesheet} tag. Cache working as it should now. Media queries / types combine correctly now.
+ - cms_http class now sends a referrer.
+ - Fixes mysqli to be default option for installation.
+ - Fixes the pseudocron stuff to not run during the install or login process.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
