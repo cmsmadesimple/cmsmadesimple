@@ -34,7 +34,8 @@
  */
 class CmsRegularTaskHandler
 {
- 
+	private function __construct() {}
+
 	/**
 	 * A list of tasks that have been found
 	 */
@@ -165,8 +166,9 @@ class CmsRegularTaskHandler
   {
 	  global $CMS_STYLESHEET;
 	  global $CMS_INSTALL_PAGE;
+      global $CMS_LOGIN_PAGE;
 
-	  if( (isset($CMS_STYLESHEET) && $CMS_STYLESHEET == 1) || isset($CMS_INSTALL_PAGE) )
+	  if( (isset($CMS_STYLESHEET) && $CMS_STYLESHEET == 1) || isset($CMS_INSTALL_PAGE) || isset($CMS_LOGIN_PAGE) )
 	  {
 		  return;
 	  }

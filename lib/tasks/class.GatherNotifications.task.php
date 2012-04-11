@@ -67,7 +67,6 @@ class GatherNotificationsTask implements CmsRegularTask
 	if( !is_array($this->_notifications)) $this->_notifications = array();
 	$this->_notifications = array_merge($this->_notifications,$data);
       }
-
     return TRUE;
   }
 

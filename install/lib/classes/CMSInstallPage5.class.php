@@ -24,7 +24,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
 	{
 		$values = array();
 		$values['sitename'] = isset($_POST['sitename'])? htmlentities($_POST['sitename'], ENT_QUOTES, 'UTF-8'):'CMS Made Simple Site';
- 		$values['db']['dbms'] = isset($_POST['dbms']) ? $_POST['dbms'] : 'mysql';
+ 		$values['db']['dbms'] = isset($_POST['dbms']) ? $_POST['dbms'] : 'mysqli';
  		$values['db']['host'] = isset($_POST['host']) ? $_POST['host'] : 'localhost';
 		$values['db']['database'] = isset($_POST['database']) ? $_POST['database'] : 'cms';
 		$values['db']['username'] = isset($_POST['username']) ? $_POST['username'] : '';
@@ -54,8 +54,8 @@ class CMSInstallerPage5 extends CMSInstallerPage
 		$values['createtables'] = isset($_POST['createtables']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
 		$values['createextra'] = isset($_POST['createextra']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
 		$databases = array(
-			array('name' => 'mysqli', 'title' => 'MySQL (4.1+)'),
-			array('name' => 'mysql', 'title' => 'MySQL (compatibility)'),
+			array('name' => 'mysqli', 'title' => 'MySQLi (4.1+)'),
+			array('name' => 'mysql', 'title' => 'MySQL (compatibility)')
 		);
 		$dbms_options = array();
 		foreach ($databases as $db)

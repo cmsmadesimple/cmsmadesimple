@@ -504,29 +504,32 @@ function nl2pnbr( $text )
  */
 function debug_bt_to_log()
 {
-    $bt=debug_backtrace();
-    $file = $bt[0]['file'];
-    $line = $bt[0]['line'];
-
-    $out = array();
-    $out[] = "Backtrace in $file on line $line";
-
-    $bt = array_reverse($bt);
-    foreach($bt as $trace)
+  if( cmsms()->config['debug_to_log'] || check_login(TRUE) )
     {
-      if( $trace['function'] == 'debug_bt_to_log' ) continue;
+      $bt=debug_backtrace();
+      $file = $bt[0]['file'];
+      $line = $bt[0]['line'];
 
-      $file = $trace['file'];
-      $line = $trace['line'];
-      $function = $trace['function'];
-      $out[] = "$function at $file:$line"; 
+      $out = array();
+      $out[] = "Backtrace in $file on line $line";
+
+      $bt = array_reverse($bt);
+      foreach($bt as $trace)
+	{
+	  if( $trace['function'] == 'debug_bt_to_log' ) continue;
+
+	  $file = $trace['file'];
+	  $line = $trace['line'];
+	  $function = $trace['function'];
+	  $out[] = "$function at $file:$line"; 
+	}
+
+      $filename = TMP_CACHE_LOCATION . '/debug.log';
+      foreach ($out as $txt)
+	{
+	  error_log($txt . "\n", 3, $filename);
+	}
     }
-
-    $filename = TMP_CACHE_LOCATION . '/debug.log';
-    foreach ($out as $txt)
-      {
-	error_log($txt . "\n", 3, $filename);
-      }
 }
 
 /**

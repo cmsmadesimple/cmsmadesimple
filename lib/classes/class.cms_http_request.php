@@ -313,6 +313,8 @@ class cms_http_request
      */
     function clear()
     {
+      $config = cmsms()->GetConfig();
+
         // Set the request defaults
         $this->host         = '';
         $this->port         = 0;
@@ -333,7 +335,7 @@ class cms_http_request
         $this->status       = 0;
         $this->timeout      = '25';
         $this->useCurl      = TRUE;
-        $this->referrer     = '';
+        $this->referrer     = $config['root_url'];
         $this->username     = '';
         $this->password     = '';
         $this->redirect     = FALSE;
