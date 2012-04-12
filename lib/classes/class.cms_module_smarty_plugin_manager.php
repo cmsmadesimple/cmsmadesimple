@@ -147,7 +147,11 @@ final class cms_module_smarty_plugin_manager
 			  $row['callback'] = array($row['module'],$row['callback']);
 		  }
 	  }
-	  if( !is_callable($row['callback']) ) {debug_display($row); die('uhoh');}
+	  if( !is_callable($row['callback']) ) 
+	  {
+		  audit('','cms_module_smarty_plugin_manager','Cannot load plugin '.$row['name'].' from module '.$row['module'].' because callback not callable (module disabled?)');
+		  return;
+	  }
 	  return $row;
   }
 

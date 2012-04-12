@@ -129,7 +129,7 @@ class Smarty_CMS extends SmartyBC
 	$this->registerResource('tpl_top',$null_rsrc);
 	$this->registerResource('tpl_head',$null_rsrc);
 	$this->registerResource('tpl_body',$null_rsrc);
-	$this->registerResource('content',$null_rsrc);
+// 	$this->registerResource('content',$null_rsrc);
 	$this->registerResource('htmlblob',$null_rsrc);
 	$this->registerResource('globalcontent',$null_rsrc);
       }
