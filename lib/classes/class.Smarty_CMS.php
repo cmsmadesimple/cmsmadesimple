@@ -64,6 +64,9 @@ class Smarty_CMS extends SmartyBC
     // register default plugin handler
     $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
 
+    // Set plugins dirs
+    $this->addPluginsDir(cms_join_path($config['root_path'],'plugins'));
+
     if( !isset($CMS_ADMIN_PAGE) )
       {
 	$this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
@@ -76,9 +79,6 @@ class Smarty_CMS extends SmartyBC
 		  
 	// Check if we are at install page, don't register anything if so, cause nothing below is needed.
 	if(isset($CMS_INSTALL_PAGE)) return;
-
-	// Set plugins dirs
-	$this->addPluginsDir(cms_join_path($config['root_path'],'plugins'));
 
 	// Load User Defined Tags
 	$utops = cmsms()->GetUserTagOperations();
