@@ -67,6 +67,10 @@ class Smarty_CMS extends SmartyBC
     // Set plugins dirs
     $this->addPluginsDir(cms_join_path($config['root_path'],'plugins'));
 
+    // common resources.
+    $this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
+    $this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
+
     if( !isset($CMS_ADMIN_PAGE) )
       {
 	$this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
@@ -97,8 +101,6 @@ class Smarty_CMS extends SmartyBC
 	$this->registerResource('content',new CMSContentTemplateResource());
 	$this->registerResource('htmlblob',new CMSGlobalContentTemplateResource());
 	$this->registerResource('globalcontent',new CMSGlobalContentTemplateResource());
-	$this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
-	$this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
 		
 	// just for frontend actions.
 	$this->registerPlugin('function','content','CMS_Content_Block::smarty_fetch_contentblock',false);
@@ -130,8 +132,6 @@ class Smarty_CMS extends SmartyBC
 	$this->registerResource('content',$null_rsrc);
 	$this->registerResource('htmlblob',$null_rsrc);
 	$this->registerResource('globalcontent',$null_rsrc);
-	$this->registerResource('module_db_tpl',$null_rsrc);
-	$this->registerResource('module_file_tpl',$null_rsrc);
       }
 
     // Enable security object
