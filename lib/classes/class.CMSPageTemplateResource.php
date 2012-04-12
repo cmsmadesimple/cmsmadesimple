@@ -42,8 +42,7 @@ class CMSPageTemplateResource extends Smarty_Resource_Custom
       {
 	if( !is_array(self::$_templates) ) self::$_templates = array();
 
-	global $gCms;
-	$templateops = $gCms->GetTemplateOperations();
+	$templateops = cmsms()->GetTemplateOperations();
 	if( $name == -1 )
 	  $templateobj = $templateops->LoadDefaultTemplate();
 	else 

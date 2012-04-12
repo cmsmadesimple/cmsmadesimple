@@ -105,7 +105,7 @@ class Content extends ContentBase
      */
     function ReadyForEdit()
     {
-		$this->get_content_blocks();
+		//$this->get_content_blocks();
     }
 
 	/**
@@ -425,7 +425,6 @@ class Content extends ContentBase
     private function parse_content_blocks()
     {
 		if ($this->_contentBlocksLoaded) return TRUE;
-
 // 		$templateops = $gCms->GetTemplateOperations();
 // 		if ($this->TemplateId() && $this->TemplateId() > -1)
 // 		{

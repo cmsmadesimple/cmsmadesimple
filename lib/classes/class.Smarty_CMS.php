@@ -29,7 +29,7 @@ require_once(dirname(dirname(__FILE__)).'/smarty/SmartyBC.class.php');
  * @since 0.1
  */
 
-class Smarty_CMS extends SmartyBC 
+class Smarty_CMS extends SmartyBC
 {	
   public $id; // <- triggers error without | do search why this is needed
   public $params; // <- triggers error without | do search why this is needed
@@ -59,12 +59,7 @@ class Smarty_CMS extends SmartyBC
       $this->debugging = false;
     }
 		
-    $this->registerResource('template',new CMSPageTemplateResource(''));
-    $this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
-    $this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
-
-    // Set plugins dirs
-    $this->addPluginsDir(cms_join_path($config['root_path'],'plugins'));
+    $this->merge_compiled_includes = TRUE;
 
     // register default plugin handler
     $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
@@ -82,7 +77,10 @@ class Smarty_CMS extends SmartyBC
 	// Check if we are at install page, don't register anything if so, cause nothing below is needed.
 	if(isset($CMS_INSTALL_PAGE)) return;
 
-	// Load User Defined Tags	
+	// Set plugins dirs
+	$this->addPluginsDir(cms_join_path($config['root_path'],'plugins'));
+
+	// Load User Defined Tags
 	$utops = cmsms()->GetUserTagOperations();
 	$usertags = $utops->ListUserTags();
 	$caching = (get_site_preference('smarty_cache_udt','never') == 'always')?true:false;
@@ -99,6 +97,8 @@ class Smarty_CMS extends SmartyBC
 	$this->registerResource('content',new CMSContentTemplateResource());
 	$this->registerResource('htmlblob',new CMSGlobalContentTemplateResource());
 	$this->registerResource('globalcontent',new CMSGlobalContentTemplateResource());
+	$this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
+	$this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
 		
 	// just for frontend actions.
 	$this->registerPlugin('function','content','CMS_Content_Block::smarty_fetch_contentblock',false);
@@ -107,7 +107,6 @@ class Smarty_CMS extends SmartyBC
 	$this->registerPlugin('function','process_pagedata','CMS_Content_Block::smarty_fetch_pagedata',false);
 
 	$this->autoload_filters = array('pre'=>'precompilefunc', 'post'=>'postcompilefunc');
-	$this->merge_compiled_includes = TRUE;
 		  
 	if( get_site_preference('use_smartycache',0) )
 	  {
@@ -119,9 +118,20 @@ class Smarty_CMS extends SmartyBC
       {
 	$this->setCaching(false);
 	$this->force_compile = true;
+	$this->registerResource('template',new CMSPageTemplateResource(''));
 
 	$this->setTemplateDir(cms_join_path($config['root_path'],$config['admin_dir'],'templates'));
 	$this->setConfigDir(cms_join_path($config['root_path'],$config['admin_dir'],'/configs'));;
+
+	$null_rsrc = new CMSNullTemplateResource();
+	$this->registerResource('tpl_top',$null_rsrc);
+	$this->registerResource('tpl_head',$null_rsrc);
+	$this->registerResource('tpl_body',$null_rsrc);
+	$this->registerResource('content',$null_rsrc);
+	$this->registerResource('htmlblob',$null_rsrc);
+	$this->registerResource('globalcontent',$null_rsrc);
+	$this->registerResource('module_db_tpl',$null_rsrc);
+	$this->registerResource('module_file_tpl',$null_rsrc);
       }
 
     // Enable security object
@@ -147,32 +157,6 @@ class Smarty_CMS extends SmartyBC
         
         return $this;
     }
-
-	/**
-	* loadPlugin method
-	* NOTE: Overwrites parent
-	*
-	* @param string $plugin_name
-	* @param boolean $check
-	* @return mixed
-	*/
-    /*
-	public function loadPlugin($plugin_name,$check = true)
-	{
-	  $res = parent::loadPlugin($plugin_name,$check);
-	  if( $res ) 
-	    {
-	      if( !function_exists($plugin_name) )
-		{
-		  // see if it uses the old smarty_cms stuff.
-		  $parts = explode('_',$plugin_name);
-		  if( $parts[0] != 'smarty' || $parts[1] == 'internal' ) return $res;
-		  return false;
-		}
-	    }
-	  return $res;
-	}
-    */
 
     /**
      * _dflt_plugin
@@ -212,11 +196,20 @@ class Smarty_CMS extends SmartyBC
 	  if( file_exists($fn) )
 	    {
 	      // plugins with the smarty_cms_function
-	      $callback = 'smarty_cms_'.$type.'_'.$name;
-	      $script = $fn;
 	      require_once($fn);
-	      if( function_exists('smarty_cms_'.$type.'_'.$name) )
+	      $func = 'smarty_'.$type.'_'.$name;
+	      if( function_exists($func) )
 		{
+		  $callback = $func;
+		  debug_buffer('',"End Load Smarty Plugin $name/$type");
+		  return TRUE;
+		}
+	      $func = 'smarty_cms_'.$type.'_'.$name;
+	      $script = $fn;
+	      if( function_exists($func) )
+		{
+		  $callback = $func;
+		  $cachable = FALSE;
 		  debug_buffer('',"End Load Smarty Plugin $name/$type");
 		  return TRUE;
 		}
@@ -388,7 +381,6 @@ class Smarty_CMS extends SmartyBC
 		
 		return $output;
 	}	
-	
 } // end of class
 
 ?>

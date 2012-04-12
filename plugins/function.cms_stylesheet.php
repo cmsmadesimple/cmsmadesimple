@@ -31,6 +31,8 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	$db = cmsms()->GetDb();
 	$smarty = cmsms()->GetSmarty();	
 	
+	global $CMS_ADMIN_PAGE;
+	global $CMS_LOGIN_PAGE;
 	global $CMS_STYLESHEET;
 	$CMS_STYLESHEET = 1;
 	$template_id = -1;
@@ -41,6 +43,11 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	$fnsuffix = '';
 	$trimbackground = FALSE;	
 	$root_url = $config['root_url'];
+
+	#---------------------------------------------
+	# Trivial Exclusion
+	#---------------------------------------------	
+	if( isset($CMS_ADMIN_PAGE) || isset($CMS_LOGIN_PAGE) ) return;
 
 	#---------------------------------------------
 	# Read parameters
