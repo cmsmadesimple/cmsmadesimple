@@ -30,6 +30,7 @@
  * of extra properties should first test if the properties object exist.
  *
  * @since		1.11
+ * @internal
  * @package		CMS
  */
 final class CMS_Content_Block
@@ -188,10 +189,11 @@ final class CMS_Content_Block
     self::$_contentBlocks[$rec['name']] = $rec;
   }
 
+
   public static function smarty_fetch_contentblock($params,&$smarty)
   {
     $gCms = cmsms();
-    $smarty = $gCms->GetSmarty();
+    //$smarty = $gCms->GetSmarty();
     $contentobj = $gCms->variables['content_obj'];
     if (is_object($contentobj))
       {
@@ -309,7 +311,7 @@ final class CMS_Content_Block
 
   public static function smarty_fetch_pagedata($params,&$smarty)
   {
-    $smarty = cmsms()->GetSmarty();
+    //$smarty = cmsms()->GetSmarty();
     $result = $smarty->fetch('content:pagedata');
     if( isset($params['assign']) ){
       $smarty->assign(trim($params['assign']),$result);
@@ -321,7 +323,7 @@ final class CMS_Content_Block
   public static function smarty_fetch_imageblock($params,&$smarty)
   {
     $gCms = cmsms();
-    $smarty = $gCms->GetSmarty();
+    //$smarty = $gCms->GetSmarty();
     $config = $gCms->GetConfig();
 
     $contentobj = $gCms->variables['content_obj'];
@@ -426,7 +428,7 @@ final class CMS_Content_Block
 
   public static function smarty_fetch_moduleblock($params,&$smarty)
   {
-    $smarty = cmsms()->GetSmarty();
+    //$smarty = cmsms()->GetSmarty();
     $result = '';
     $key = '';
 
@@ -445,7 +447,6 @@ final class CMS_Content_Block
 
     if( isset($params['assign']) )
       {
-	$smarty =& $gCms->GetSmarty();
 	$smarty->assign($params['assign'],$result);
 	return;
       }

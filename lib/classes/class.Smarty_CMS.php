@@ -49,7 +49,7 @@ class Smarty_CMS extends SmartyBC
     global $CMS_INSTALL_PAGE;  
     $config = cmsms()->GetConfig();
 
-    // Set template_c and canche dirs
+    // Set template_c and cache dirs
     $this->setCompileDir(TMP_TEMPLATES_C_LOCATION);
     $this->setCacheDir(TMP_CACHE_LOCATION);
     $this->assign('app_name','CMS');
@@ -59,11 +59,6 @@ class Smarty_CMS extends SmartyBC
       $this->debugging = false;
     }
 		
-    $this->merge_compiled_includes = TRUE;
-
-    // register default plugin handler
-    $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
-
     // Set plugins dirs
     $this->addPluginsDir(cms_join_path($config['root_path'],'plugins'));
 
@@ -71,19 +66,24 @@ class Smarty_CMS extends SmartyBC
     $this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
     $this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
 
+    $this->merge_compiled_includes = TRUE;
+
+    // register default plugin handler
+    $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
+
     if( !isset($CMS_ADMIN_PAGE) )
       {
 	$this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
 	$this->setConfigDir(cms_join_path($config['root_path'],'tmp','templates'));
+
+	// Check if we are at install page, don't register anything if so, cause nothing below is needed.
+	if(isset($CMS_INSTALL_PAGE)) return;
 
 	if (is_sitedown()) {
 	  $this->setCaching(false);
 	  $this->force_compile = true;
 	}
 		  
-	// Check if we are at install page, don't register anything if so, cause nothing below is needed.
-	if(isset($CMS_INSTALL_PAGE)) return;
-
 	// Load User Defined Tags
 	$utops = cmsms()->GetUserTagOperations();
 	$usertags = $utops->ListUserTags();
@@ -120,18 +120,9 @@ class Smarty_CMS extends SmartyBC
       {
 	$this->setCaching(false);
 	$this->force_compile = true;
-	$this->registerResource('template',new CMSPageTemplateResource(''));
-
 	$this->setTemplateDir(cms_join_path($config['root_path'],$config['admin_dir'],'templates'));
-	$this->setConfigDir(cms_join_path($config['root_path'],$config['admin_dir'],'/configs'));;
-
-	$null_rsrc = new CMSNullTemplateResource();
-	$this->registerResource('tpl_top',$null_rsrc);
-	$this->registerResource('tpl_head',$null_rsrc);
-	$this->registerResource('tpl_body',$null_rsrc);
-// 	$this->registerResource('content',$null_rsrc);
-	$this->registerResource('htmlblob',$null_rsrc);
-	$this->registerResource('globalcontent',$null_rsrc);
+	$this->setConfigDir(cms_join_path($config['root_path'],$config['admin_dir'],'configs'));;
+	$this->registerResource('globalcontent',new CMSNullTemplateResource());
       }
 
     // Enable security object
@@ -197,13 +188,6 @@ class Smarty_CMS extends SmartyBC
 	    {
 	      // plugins with the smarty_cms_function
 	      require_once($fn);
-	      $func = 'smarty_'.$type.'_'.$name;
-	      if( function_exists($func) )
-		{
-		  $callback = $func;
-		  debug_buffer('',"End Load Smarty Plugin $name/$type");
-		  return TRUE;
-		}
 	      $func = 'smarty_cms_'.$type.'_'.$name;
 	      $script = $fn;
 	      if( function_exists($func) )

@@ -29,7 +29,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 
 	$config = cmsms()->GetConfig();
 	$db = cmsms()->GetDb();
-	$smarty = cmsms()->GetSmarty();	
+	//$smarty = cmsms()->GetSmarty();	
 	
 	global $CMS_ADMIN_PAGE;
 	global $CMS_LOGIN_PAGE;
