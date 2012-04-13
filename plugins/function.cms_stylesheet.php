@@ -22,7 +22,6 @@
 
 function smarty_function_cms_stylesheet($params, &$smarty)
 {
-
 	#---------------------------------------------
 	# Initials
 	#---------------------------------------------
@@ -37,28 +36,29 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	$CMS_STYLESHEET = 1;
 	$template_id = -1;
 	$use_https = 0;
-	$cache_dir = TMP_CACHE_LOCATION;
+	$cache_dir = $config['css_path'];
 	$stylesheet = '';
 	$combine_stylesheets = true;
 	$fnsuffix = '';
 	$trimbackground = FALSE;	
-	$root_url = $config['root_url'];
+	$root_url = $config['css_url'];
 
 	#---------------------------------------------
 	# Trivial Exclusion
 	#---------------------------------------------	
-	if( isset($CMS_ADMIN_PAGE) || isset($CMS_LOGIN_PAGE) ) return;
+	if( isset($CMS_LOGIN_PAGE) ) return;
 
+	debug_to_log('cms_stylesheet a');
+	debug_to_log($params);
 	#---------------------------------------------
 	# Read parameters
 	#---------------------------------------------	
 	
 	if (isset($params["templateid"]) && $params["templateid"]!="") {
-		
 		$template_id = $params["templateid"];
 	} else {
-	
 		$content_obj = cmsms()->variables['content_obj'];
+		if( !is_object($content_obj) ) return;
 		$template_id = $content_obj->TemplateId();
 		$use_https = (int)$content_obj->Secure();
 	}
@@ -70,7 +70,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	
 	if($use_https && isset($config['ssl_url'])) {
 	
-		$root_url = $config['ssl_url'];
+		$root_url = $config['ssl_css_url'];
 	}
 
 	if(isset($params['nocombine']) && $params['nocombine'] == 1) {
@@ -80,7 +80,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	
 	if(isset($params['adjustforeditor'])) {
 	
-		$fnsuffix = '_e';
+		$fnsuffix = '_e_';
 		$trimbackground = TRUE;
 	}	
 	
@@ -128,13 +128,11 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	}
 	
 	$query .= " WHERE ".implode(' AND ',$where).' '.$order;
-
 	#---------------------------------------------
 	# Execute
 	#---------------------------------------------		
 	
 	$res = $db->GetArray($query, $qparms);
-	
 	if($res) {
 	
 		// Combine stylesheets
@@ -181,7 +179,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 					
 							$text .= $one['css_text'];
 							// moved this to bottom, comments on top of stylesheets cause invalid css when using @charset
-							$text .= "\n/* Stylesheet: ".$one['css_name']." Modified On ".$one['modified_date']." */\n";
+							$text .= "\n/* End of Stylesheet: ".$one['css_name']." Modified On ".$one['modified_date']." */\n";
 							if( !endswith($text,"\n") ) $text .= "\n";
 					}
 
@@ -307,6 +305,8 @@ function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty
 		$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
 		$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
 		$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
+
+		$_contents .= 'body.mceContentBody { background: #fff; color: 000; !important }'."\n";
 	}
 
 	// Write file
