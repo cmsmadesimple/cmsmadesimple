@@ -141,8 +141,9 @@ $result = $db->Execute($query, array($userid));
 if ($result && $result->RecordCount() > 0) {
   while($row = $result->FetchRow()) {
     if( $row['user_id'] == 1 ) continue;
-		$addt_users .= "<option value=\"".$row["user_id"]."\">".$row["username"]."</option>";
-	}
+    if( $row['user_id'] == $userid ) continue;
+    $addt_users .= "<option value=\"".$row["user_id"]."\">".$row["username"]."</option>";
+  }
 }else{
 	$addt_users .= "<option>&nbsp;</option>";
 }
