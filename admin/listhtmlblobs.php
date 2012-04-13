@@ -85,7 +85,7 @@ $gcbops = cmsms()->GetGlobalContentOperations();
 		$counter = 0;
 		foreach ($htmlbloblist as $onehtmlblob){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-            if ($modifyall ||  quick_check_authorship($onehtmlblob->id, $myblobs))
+			  if ($modifyall || quick_check_authorship($onehtmlblob->id, $myblobs))
 				{
 				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"edithtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";

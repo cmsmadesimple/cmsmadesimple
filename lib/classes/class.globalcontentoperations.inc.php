@@ -70,41 +70,42 @@ final class GlobalContentOperations
 			$authorblobs = array();
 
 			// get the list of html blobs where this user is a direct owner
-			// todo.
+			$query = 'SELECT htmlblob_id FROM '.cms_db_prefix().'htmlblobs WHERE owner = ?';
+			$result = $db->GetCol($query,array($userid));
+			if( is_array($result) && count($result) )
+			{
+				$authorblobs = $result;
+			}
 
 			// get the list of html blobs where this user is a direct additional editor.
 			$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ?";
-			$result = &$db->Execute($query, array($userid));
-			while ($result && !$result->EOF)
+			$result = $db->GetCol($query,array($userid));
+			if( is_array($result) && count($result) )
 			{
-				$authorblobs[] = $result->fields['htmlblob_id'];
-				$result->MoveNext();
+				$authorblobs[] = array_merge($authorblobs,$result);
 			}
-			if( $result ) $result->Close();
 
 			// get the list of html blobs where this users member groups are listed as an additional editor
 			// in additional_htmlblob_users groupid's are indicated with a negative value.
 			$query = 'SELECT group_id FROM '.cms_db_prefix().'user_groups WHERE user_id = ?';
-			$result = &$db->Execute($query, array($userid));
-			$tmp = array();
-			while ($result && !$result->EOF)
-			  {
-				  $tmp[] = $result->fields['group_id'] * -1;
-				  $result->MoveNext();
-			  }
-			if( $result ) $result->Close();
-			if( count($tmp) > 0 ) {
+			$result = $db->GetCol($query, array($userid));
+			if( is_array($result) && count($result) )
+			{
+				for( $i = 0; $i < count($result); $i++ )
+				{
+					$result[$i] = $result[$i] * -1;
+				}
+
 				$query = 'SELECT htmlblob_id FROM '.cms_db_prefix().'additional_htmlblob_users WHERE user_id IN (';
-				$query .= implode(',',$tmp).')';
-				$result = &$db->Execute($query);
-				while ($result && !$result->EOF)
-					{
-						$authorblobs[] = $result->fields['htmlblob_id'];
-						$result->MoveNext();
-					}
-				if( $result ) $result->Close();
+				$query .= implode(',',$result).')';
+				$result = $db->GetCol($query); // overwrites $result
+				if( is_array($result) && count($result) )
+				{
+					$authorblobs = array_merge($authorblobs,$result);
+				}
 			}
 
+			$authorblobs = array_unique($authorblobs);
 			$variables['authorblobs'] = $authorblobs;
 		}
 
@@ -165,7 +166,7 @@ final class GlobalContentOperations
 			$oneblob->description = $row['description'];
 			$oneblob->use_wysiwyg = $row['use_wysiwyg'];
 			$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
-			$result =& $oneblob;
+			return $oneblob;
 		}
 
 		return $result;
@@ -206,7 +207,7 @@ final class GlobalContentOperations
 
 			if (!isset($this->_cache[$result->name]))
 			{
-				$this->_cache[$result->name] =& $result;
+				$this->_cache[$result->name] = $result;
 			}
 		}
 
