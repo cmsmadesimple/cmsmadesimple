@@ -1443,7 +1443,6 @@ class ContentBase
      * Callback function for content types to use to preload content or other things if necessary.  This
      * is called right after the content is loaded from the database.
      *
-     * @abstract
      */
     protected function Load()
     {
@@ -1843,7 +1842,7 @@ class ContentBase
      *
      * @todo: this function should return something, or throw an exception
      */
-    public function Delete()
+    function Delete()
     {
       $gCms = cmsms();
       global $debug_errors;

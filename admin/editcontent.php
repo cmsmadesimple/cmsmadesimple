@@ -286,12 +286,6 @@ else
 	  {
 	    $contentarray = $contentobj->EditAsArray(false, $currenttab, $adminaccess);
 	    $tab_contents_array[$currenttab] = $contentarray;
-
-	    if( $tmp = $contentobj->GetError() )
-	      {
-		echo $themeObject->ShowErrors($tmp);
-		break;
-	      }
 	  }
 
 ?>

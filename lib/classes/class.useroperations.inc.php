@@ -385,7 +385,7 @@ class UserOperations
 	 */
 	function UserInGroup($uid,$gid)
 	{
-		$key = $uid.'.'$gid;
+		$key = $uid.'.'.$gid;
 		if( !is_array(self::$_user_in_group) || !isset(self::$_user_in_group[$key]) )
 		{
 			$db = cmsms()->GetDb();
