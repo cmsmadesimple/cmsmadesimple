@@ -65,14 +65,6 @@ class Separator extends ContentBase
 	return false;
     }
 
-    /**
-     * Handle Auto Aliasing 
-     */
-    function DoAutoAlias()
-    {
-      return FALSE;
-    }
-
     function RequiresAlias()
     {
       return FALSE;

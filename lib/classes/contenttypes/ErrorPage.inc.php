@@ -112,14 +112,6 @@ class ErrorPage extends Content
     return true;
   }
 
-  /**
-   * Handle Auto Aliasing 
-   */
-  function DoAutoAlias()
-  {
-    return FALSE;
-  }
-
   function FillParams($params,$editing = false)
   {
 	  parent::FillParams($params,$editing);

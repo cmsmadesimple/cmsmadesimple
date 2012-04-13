@@ -317,7 +317,7 @@ class Content extends ContentBase
 	 * Get a form for editing the content in the admin
 	 *
 	 * @param boolean $adding  true if the content is being added for the first time
-	 * @param string $tab which tab to display
+	 * @param boolean $tab which tab to display
 	 * @param string $showadmin 
 	 * @return array 
 	 */
@@ -443,21 +443,6 @@ class Content extends ContentBase
 		return TRUE;
     }
 	
-	/**
-	 * undocumented function
-	 *
-	 * @param string $tpl_source 
-	 * @deprecated
-	 * @internal
-	 */
-    function ContentPreRender($tpl_source)
-    {
-		// check for additional content blocks
-		$this->get_content_blocks();
-
-		return $tpl_source;
-    }
-
 	/**
 	 * undocumented function
 	 *

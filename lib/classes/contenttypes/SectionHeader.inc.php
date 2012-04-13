@@ -51,6 +51,7 @@ class SectionHeader extends ContentBase
       $this->RemoveProperty('target','');
 	  //$this->RemoveProperty('alias','');
 	  $this->RemoveProperty('page_url','');
+	  $this->SetURL(''); // url will be lost when going back to a content page.
 
       #Turn off caching
       $this->mCachable = false;

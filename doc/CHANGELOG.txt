@@ -30,6 +30,7 @@ Version 1.11 - NO NAME
  - cms_http class now sends a referrer.
  - Fixes mysqli to be default option for installation.
  - Fixes the pseudocron stuff to not run during the install or login process.
+ - Documented the ContentBase class.  Many methods marked as protected or private... will be marking some as final in the future.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
