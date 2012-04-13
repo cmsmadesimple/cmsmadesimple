@@ -280,7 +280,7 @@ function cms_load_lang_realm($realm,$basedir = '',$filename = '',$lang_is_dir = 
     }
   
   if( empty($realm) ) return fALSE;
-  if( isset($all_langs[$cur_lang][$realm]) ) return; // already loaded.
+  if( isset($all_langs[$cur_lang][$realm]) && !$custom ) return; // already loaded.
   
   if( empty($basedir) )
     {
