@@ -44,6 +44,7 @@ class UserOperations
 	protected function __construct() {}
 
 	private static $_instance;
+	private static $_user_in_group;
 
 	public static function &get_instance()
 	{
@@ -64,7 +65,7 @@ class UserOperations
 	function &LoadUsers()
 	{
 		$gCms = cmsms();
-		$db = &$gCms->GetDb();
+		$db = $gCms->GetDb();
 
 		$result = array();
 
@@ -156,9 +157,7 @@ class UserOperations
 		if ($activeonly == true)
 		{
 		  $joins[] = cms_db_prefix()."user_groups ug ON u.user_id = ug.user_id";
-		  //$joins[] = cms_db_prefix()."groups g ON ug.group_id = g.group_id";
 		  $where[] = "u.active = 1";	
-		  //$where[] = "g.active = 1";
 		}
 
 		if ($adminaccessonly == true)
@@ -178,7 +177,7 @@ class UserOperations
 		$id = $db->GetOne($query,$params);
 		if( $id )
 		{
-		  $result =& UserOperations::LoadUserByID($id);
+		  return self::LoadUserByID($id);
 		}
 
 		return $result;
@@ -386,32 +385,17 @@ class UserOperations
 	 */
 	function UserInGroup($uid,$gid)
 	{
-		$gCms = cmsms();
-	  $data = array();
-	  if( isset($gCms->variables['user_in_group']) )
-	  {
-		  $data = $gCms->variables['user_in_group'];
-	  }
-	  
-	  if( isset($data[$uid.','.$gid]) )
-	    {
-	      // us cached result.
-	      return $data[$uid.','.$gid];
-	    }
+		$key = $uid.'.'$gid;
+		if( !is_array(self::$_user_in_group) || !isset(self::$_user_in_group[$key]) )
+		{
+			$db = cmsms()->GetDb();
+			$query = "SELECT ug.user_id FROM ".cms_db_prefix()."user_groups ug
+                      WHERE ug.user_id = ? AND ug.group_id = ?";
+			$flag = $db->GetOne( $query,array($uid,$gid));
 
-	  $db = cmsms()->GetDb();
-	  $query = "SELECT ug.user_id FROM ".cms_db_prefix()."user_groups ug
-                     WHERE ug.user_id = ? AND ug.group_id = ?";
-	  $row = $db->GetRow( $query,array($uid,$gid));
-
-	  $data[$uid.','.$gid] = true;
-	  if( !$row ) 
-	    {
-			$data[$uid.','.$gid] = false;
-			return false;
-	    }
-	  $gCms->variables['user_in_group'] = $data;
-	  return true;
+			self::$_user_in_group[$key] = $flag;
+		}
+	  return self::$_user_in_group[$key];
 	}
 }
 
