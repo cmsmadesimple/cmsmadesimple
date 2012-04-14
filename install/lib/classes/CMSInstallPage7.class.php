@@ -130,7 +130,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
 
 			echo '<p>' . ilang('install_admin_emailing');
 			$to      = $_POST['adminemail'];
-			$subject = ilang('email_accountinfo_subject');
+			$subject = html_entity_decode(ilang('email_accountinfo_subject'));
 			$message = ilang('email_accountinfo_message', $_POST['adminusername'], $_POST['adminpassword'], "$link/admin/");
 			$message = html_entity_decode($message, ENT_QUOTES); // Encoded from TC
 			echo (
