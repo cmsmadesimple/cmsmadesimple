@@ -42,6 +42,7 @@ Version 1.11 - NO NAME
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
+ - #7740 HTML entities in the language string aren't getting converted back when sending the email during install
 
 Core - Feature Requests:
 
