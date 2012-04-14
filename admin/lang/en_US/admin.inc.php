@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['lines_in_error'] = '%d lines with errors';
+$lang['admin']['no_files_scanned'] = 'No files were scanned during the verification process (maybe the file is invalid)';
 $lang['admin']['stylesheetnotfound'] = 'Stylesheet %d not found';
 $lang['admin']['sysmain_updateurls'] = 'Update Routes';
 $lang['admin']['sysmain_confirmupdateurls'] = 'Are you sure you want to refresh the route database';
