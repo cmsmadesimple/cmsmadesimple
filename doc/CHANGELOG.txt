@@ -28,9 +28,17 @@ Version 1.11 - NO NAME
  - Content pages now register and work with static urls.
  - Total re-write of {cms_stylesheet} tag. Cache working as it should now. Media queries / types combine correctly now.
  - cms_http class now sends a referrer.
- - Fixes mysqli to be default option for installation.
  - Fixes the pseudocron stuff to not run during the install or login process.
  - Documented the ContentBase class.  Many methods marked as protected or private... will be marking some as final in the future.
+ - Minor improvements to site verification
+ - Fixes for Add GCB wysiwyg options.
+ - Adopt smarty 3 (currently Smarty 3.1.8) (stock, unmodified).
+ - Adds options for smarty caching.
+ - All plugins with functions named smarty_cms_function_foo are not cachable
+ - All plugins with functions named smarty_function_foo are cachable.
+ - UDT's are never cachable
+ - Fix permissions issues with GCB's
+ - Add checks in system information for xml capabilities.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
@@ -42,7 +50,8 @@ Core - General:
 
 
 Core - Installer:
-
+  - mysqli option now selected by default.
+  - Add checks for xml handling.
 
 CMSMailer:
 
@@ -52,7 +61,7 @@ MenuManager:
 	
 
 MicroTiny:
-
+ - Two new preferences to assist in managing stylesheet and other background settings.
 
 News:
  - All routes are now registered statically
@@ -60,6 +69,10 @@ News:
  - The detail page now handles caching well.
  - The detail page now throws a 404 exception for attempts to view expired/draft articles.
  - Full lazyload is now supported.
+ - Now supports smarty caching
+ - optimization of code to minimize queries (preload field data for summary views).
+ - begin more oopification.
+ - Generates 404 errors if routed to an invalid article, or an article that is expired/draft.
 
 Search: 
  - Moved "Stop Words" to language file
