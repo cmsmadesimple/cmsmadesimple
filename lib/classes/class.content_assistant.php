@@ -101,7 +101,7 @@ class content_assistant
 	}
 
     cms_route_manager::load_routes();
-    $route = cms_route_manager::find_match($url);
+    $route = cms_route_manager::find_match($url,TRUE);
     if( !$route ) return TRUE;
     if( $route->is_content() )
       {

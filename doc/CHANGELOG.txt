@@ -74,6 +74,8 @@ News:
  - optimization of code to minimize queries (preload field data for summary views).
  - begin more oopification.
  - Generates 404 errors if routed to an invalid article, or an article that is expired/draft.
+ - Fixes #7713 - Apply button doesn't work.
+ - Fixes #7457 - Duplicate news url
 
 Search: 
  - Moved "Stop Words" to language file
