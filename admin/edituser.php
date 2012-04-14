@@ -87,7 +87,7 @@ $use_wysiwyg = "";
 if ($access) {
 
 	if (isset($_POST["cancel"])) {
-		redirect("topmyprefs.php".$urlext);
+		redirect("index.php".$urlext.'&section=myprefs');
 		return;
 	}
 
@@ -168,7 +168,7 @@ if ($access) {
 				    }
 				else
 				    {
-                    redirect("topmyprefs.php".$urlext);
+                    redirect('index.php'.$urlext.'&section=myprefs');
                     }
 
 			}
