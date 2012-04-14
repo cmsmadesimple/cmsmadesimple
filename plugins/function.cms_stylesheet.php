@@ -41,6 +41,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	$combine_stylesheets = true;
 	$fnsuffix = '';
 	$trimbackground = FALSE;	
+	$forceblackandwhite = FALSE;	
 	$root_url = $config['css_url'];
 
 	#---------------------------------------------
@@ -48,8 +49,6 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	#---------------------------------------------	
 	if( isset($CMS_LOGIN_PAGE) ) return;
 
-	debug_to_log('cms_stylesheet a');
-	debug_to_log($params);
 	#---------------------------------------------
 	# Read parameters
 	#---------------------------------------------	
@@ -78,11 +77,14 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 		$combine_stylesheets = FALSE;
 	}	
 	
-	if(isset($params['adjustforeditor'])) {
-	
+	if(isset($params['stripbackground'])) {
 		$fnsuffix = '_e_';
 		$trimbackground = TRUE;
 	}	
+	if( isset($params['forceblackonwhite']) ) {
+		$fnsuffix = '_e_';
+		$forceblackandwhite = TRUE;
+	}
 	
 	#---------------------------------------------
 	# Build query
@@ -183,7 +185,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 							if( !endswith($text,"\n") ) $text .= "\n";
 					}
 
-					cms_stylesheet_writeCache($fn, $text, $trimbackground, $smarty);
+					cms_stylesheet_writeCache($fn, $text, $trimbackground, $smarty, $forceblackandwhite);
 				}
 
 				cms_stylesheet_toString($filename, $params['media'], '', $root_url, $stylesheet, $params);
@@ -217,7 +219,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 							if( !endswith($text,"\n") ) $text .= "\n";
 						}
 
-						cms_stylesheet_writeCache($fn, $text, $trimbackground, $smarty);
+						cms_stylesheet_writeCache($fn, $text, $trimbackground, $smarty, $forceblackandwhite);
 					}
 
 					cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
@@ -244,7 +246,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 				
 				if (!file_exists($fn)) {
 		
-					cms_stylesheet_writeCache($fn, $one['css_text'], $trimbackground, $smarty);					
+					cms_stylesheet_writeCache($fn, $one['css_text'], $trimbackground, $smarty, $forceblackandwhite);					
 				}
 
 				cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);
@@ -287,7 +289,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	Misc functions
 **********************************************************/
 
-function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty)
+function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty, $forceblackandwhite = false)
 {
 	// Smarty processing
 	$smarty->left_delimiter = '[[';
@@ -305,7 +307,8 @@ function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty
 		$_contents = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $_contents);
 		$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
 		$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
-
+	}
+	if( $forceblackandwhite ) {
 		$_contents .= 'body.mceContentBody { background: #fff; color: 000; !important }'."\n";
 	}
 
