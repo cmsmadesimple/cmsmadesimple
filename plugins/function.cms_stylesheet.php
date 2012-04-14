@@ -76,15 +76,19 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	
 		$combine_stylesheets = FALSE;
 	}	
-	
-	if(isset($params['stripbackground'])) {
-		$fnsuffix = '_e_';
-		$trimbackground = TRUE;
-	}	
-	if( isset($params['forceblackonwhite']) ) {
-		$fnsuffix = '_e_';
-		$forceblackandwhite = TRUE;
+
+	if( isset($params['stripbackground']) )
+	{
+		$trimbackground = (int)$params['stripbackground'];
 	}
+	if( isset($params['forceblackonwhite']) )
+	{
+		$forceblackandwhite = (int)$params['forceblackonwhite'];
+	}
+	if( $trimbackground || $forceblackandwhite )
+	{
+		$fnsuffix = '_e_';
+	}	
 	
 	#---------------------------------------------
 	# Build query
