@@ -59,6 +59,8 @@ CMSMailer:
 
 MenuManager:
 - Added the {cms_breadcrumbs} action (which is templatable).  deprecates {breadcrumbs}
+- Fixes #7306 - haschildren always fals
+- Adds the action=items capability.
 	
 
 MicroTiny:
