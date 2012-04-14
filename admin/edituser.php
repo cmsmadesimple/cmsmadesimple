@@ -22,7 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
-$urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+$urlext=CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
 check_login();
 
@@ -86,106 +86,105 @@ $use_wysiwyg = "";
 
 if ($access) {
 
-	if (isset($_POST["cancel"])) {
-		redirect("index.php".$urlext.'&section=myprefs');
-		return;
-	}
+  if (isset($_POST["cancel"])) {
+    redirect("index.php?section=usersgroups&".$urlext);
+    return;
+  }
 
-	if (isset($_POST["edituser"])) {
+  if (isset($_POST["edituser"])) {
 	
-		$validinfo = true;
+    $validinfo = true;
 
-		if ($user == "") {
-			$validinfo = false;
-			$error .= "<li>".lang('nofieldgiven', array(lang('username')))."</li>";
-		}
+    if ($user == "") {
+      $validinfo = false;
+      $error .= "<li>".lang('nofieldgiven', array(lang('username')))."</li>";
+    }
 
-		if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $user) ) {
-			$validinfo = false;
-			$error .= "<li>".lang('illegalcharacters', array(lang('username')))."</li>";
-		} 
+    if ( !preg_match("/^[a-zA-Z0-9\._ ]+$/", $user) ) {
+      $validinfo = false;
+      $error .= "<li>".lang('illegalcharacters', array(lang('username')))."</li>";
+    } 
 
-		if ($password != $passwordagain) {
-			$validinfo = false;
-			$error .= "<li>".lang('nopasswordmatch')."</li>";
-		}
+    if ($password != $passwordagain) {
+      $validinfo = false;
+      $error .= "<li>".lang('nopasswordmatch')."</li>";
+    }
 
-		if (!empty($email) && !is_email($email))
-		  {
-		    $validinfo = false;
-		    $error .= '<li>'.lang('invalidemail').': '.$email.'</li>';
-		  }
+    if (!empty($email) && !is_email($email))
+      {
+	$validinfo = false;
+	$error .= '<li>'.lang('invalidemail').': '.$email.'</li>';
+      }
 
-		if ($validinfo) {
-			#set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
-			#audit(-1, '', 'Edited User');
+    if ($validinfo) {
+#set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
+#audit(-1, '', 'Edited User');
 
-			$result = false;
-			if ($thisuser)
-			{
-				$thisuser->username = $user;
-				$thisuser->firstname = $firstname;
-				$thisuser->lastname = $lastname;
-				$thisuser->email = $email;
-				$thisuser->adminaccess = $adminaccess;
-				$thisuser->active = $active;
-				if ($password != "")
-				{
-					$thisuser->SetPassword($password);
-				}
+      $result = false;
+      if ($thisuser)
+	{
+	  $thisuser->username = $user;
+	  $thisuser->firstname = $firstname;
+	  $thisuser->lastname = $lastname;
+	  $thisuser->email = $email;
+	  $thisuser->adminaccess = $adminaccess;
+	  $thisuser->active = $active;
+	  if ($password != "")
+	    {
+	      $thisuser->SetPassword($password);
+	    }
 				
-				Events::SendEvent('Core', 'EditUserPre', array('user' => &$thisuser));
+	  Events::SendEvent('Core', 'EditUserPre', array('user' => &$thisuser));
 
 
-				$result = $thisuser->save();
+	  $result = $thisuser->save();
 				
-				if ($assign_group_perm && isset($_POST['groups']))
-               {
-               $dquery = "delete from ".cms_db_prefix()."user_groups where user_id=?";
-               $iquery = "insert into ".cms_db_prefix().
-                  "user_groups (user_id,group_id) VALUES (?,?)";
-               $result = $db->Execute($dquery,array($thisuser->id));
-               foreach($group_list as $thisGroup)
-                  {
+	  if ($assign_group_perm && isset($_POST['groups']))
+	    {
+	      $dquery = "delete from ".cms_db_prefix()."user_groups where user_id=?";
+	      $iquery = "insert into ".cms_db_prefix().
+		"user_groups (user_id,group_id) VALUES (?,?)";
+	      $result = $db->Execute($dquery,array($thisuser->id));
+	      foreach($group_list as $thisGroup)
+		{
                   if (isset($_POST['g'.$thisGroup->id]) && $_POST['g'.$thisGroup->id] == 1)
-                     {
-                     $result = $db->Execute($iquery,array($thisuser->id,$thisGroup->id));
-                     }
-                  }
-               }
-			}
-
-			if ($result)
-			{
-				// put mention into the admin log
-				audit($user_id, 'Admin Username: '.$thisuser->username, 'Edited');
-				Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
-				$gCms->clear_cached_files();
-				
-                if ($access_perm)
-                    {
-				    redirect("listusers.php".$urlext);
-				    }
-				else
-				    {
-                    redirect('index.php'.$urlext.'&section=myprefs');
-                    }
-
-			}
-			else {
-				$error .= "<li>".lang('errorupdatinguser')."</li>";
-			}
+		    {
+		      $result = $db->Execute($iquery,array($thisuser->id,$thisGroup->id));
+		    }
 		}
+	    }
+	}
+
+      if ($result)
+	{
+	  // put mention into the admin log
+	  audit($user_id, 'Admin Username: '.$thisuser->username, 'Edited');
+	  Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
+	  $gCms->clear_cached_files();
+				
+	  if ($access_perm)
+	    {
+	      redirect("listusers.php".$urlext);
+	    }
+	  else
+	    {
+	      redirect("index.php?section=usersgroups&".$urlext);
+	    }
 
 	}
-	else if ($user_id != -1) {
-		$user = $thisuser->username;
-		$firstname = $thisuser->firstname;
-		$lastname = $thisuser->lastname;
-		$email = $thisuser->email;
-		$adminaccess = $thisuser->adminaccess;
-		$active = $thisuser->active;
-	}
+      else {
+	$error .= "<li>".lang('errorupdatinguser')."</li>";
+      }
+    }
+  }
+  else if ($user_id != -1) {
+    $user = $thisuser->username;
+    $firstname = $thisuser->firstname;
+    $lastname = $thisuser->lastname;
+    $email = $thisuser->email;
+    $adminaccess = $thisuser->adminaccess;
+    $active = $thisuser->active;
+  }
 }
 
 include_once("header.php");
