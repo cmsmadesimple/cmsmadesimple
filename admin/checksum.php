@@ -57,6 +57,11 @@ function check_checksum_data(&$report)
         $report = lang('error_uploadproblem');
 	return false;
     }
+  else if( $_FILES['cksumdat']['size'] == 0 )
+    {
+        $report = lang('error_uploadproblem');
+	return false;
+    }
   
   $fh = fopen($_FILES['cksumdat']['tmp_name'],'r');
   if( !$fh )
@@ -71,6 +76,8 @@ function check_checksum_data(&$report)
   $notreadable = 0;
   $md5failed = 0;
   $filesfailed = array();
+  $filespassed = 0;
+  $errorlines = 0;
   while( !feof($fh) )
     {
       // get a line
@@ -78,7 +85,7 @@ function check_checksum_data(&$report)
 
       // strip out comments
       $pos = strpos($line,'#');
-      if( $pos )
+      if( $pos !== FALSE )
 	{
 	  $line = substr($line,0,$pos);
 	}
@@ -96,10 +103,16 @@ function check_checksum_data(&$report)
 	{
 	  list($md5sum,$file) = explode(' *.',$line,2);
 	}
-      else
+      else if( strstr($line,'--:--') !== FALSE )
 	{
 	  list($md5sum,$file) = explode('--:--',$line,2);
 	}
+      if( !$md5sum || !$file )
+	{
+	  $errorlines++;
+	  continue;
+        }
+
       $md5sum = trim($md5sum);
       $file = trim($file);
 
@@ -129,13 +142,24 @@ function check_checksum_data(&$report)
 	{
 	  $filesfailed[] = $file;
 	}
+
+      // it passed.
+      $filespassed++;
     }
   fclose($fh);
 
-  if( count($filenotfound) || $notreadable || $md5failed || count($filesfailed) )
+  if( $filespassed == 0 || count($filenotfound) || $errorlines || $notreadable || $md5failed || count($filesfailed) )
     {
       // build the error report
       $tmp2 = array();
+      if( $filespassed == 0 )
+	{
+	  $tmp2[] = lang('no_files_scanned');
+	}
+      if( $errorlines )
+	{
+	  $tmp2[] = lang('lines_in_error',$errorlines);
+	}
       if( count($filenotfound) )
 	{
 	  $tmp2[] = sprintf("%d %s",count($filenotfound),lang('files_not_found'));
