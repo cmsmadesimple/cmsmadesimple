@@ -39,6 +39,7 @@ Version 1.11 - NO NAME
  - UDT's are never cachable
  - Fix permissions issues with GCB's
  - Add checks in system information for xml capabilities.
+ - Fixes #7212 - Error in CreateReturnLink api method.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue

@@ -944,19 +944,19 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
 				{
 				  $key = cms_htmlentities($key);
 				  $value = cms_htmlentities($value);
-					if ($count > 0)
-					{
-						if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true)
-							$text .= '?';
-						else
-							$text .= '&amp;';
-					}
-					else
-					{
-						$text .= '&amp;';
-					}
-					$text .= $id.$key.'='.$value;
-					$count++;
+				  if ($count == 0)
+					  {
+						  if ($config["url_rewriting"] != 'none')
+							  $text .= '?';
+						  else
+							  $text .= '&amp;';
+					  }
+				  else
+					  {
+						  $text .= '&amp;';
+					  }
+				  $text .= $id.$key.'='.$value;
+				  $count++;
 				}
 				if (!$onlyhref)
 				{
