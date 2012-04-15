@@ -26,7 +26,7 @@ INSERT INTO {DB_PREFIX}siteprefs VALUES ('enablesitedownmessage','0','2006-07-25
 INSERT INTO {DB_PREFIX}siteprefs VALUES ('sitedownmessage','<p>Site is currently down for maintenance.</p>','2006-07-25 21:22:33','2006-07-25 21:22:33');
 INSERT INTO {DB_PREFIX}siteprefs VALUES ('sitedownmessagetemplate','-1','2006-07-25 21:22:33','2006-07-25 21:22:33');
 INSERT INTO {DB_PREFIX}siteprefs VALUES ('useadvancedcss','1','2006-07-25 21:22:33','2006-07-25 21:22:33');
-INSERT INTO {DB_PREFIX}siteprefs VALUES ('metadata','<meta name=\"Generator\" content=\"CMS Made Simple - Copyright (C) 2004-11 Ted Kulp. All rights reserved.\" />\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n ','2006-07-25 21:22:33','2006-07-25 21:22:33');
+INSERT INTO {DB_PREFIX}siteprefs VALUES ('metadata','<meta name=\"Generator\" content=\"CMS Made Simple - Copyright (C) 2004-12 Ted Kulp. All rights reserved.\" />\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n ','2006-07-25 21:22:33','2006-07-25 21:22:33');
 INSERT INTO {DB_PREFIX}siteprefs VALUES ('xmlmodulerepository','','2006-07-25 21:22:33','2006-07-25 21:22:33');
 INSERT INTO {DB_PREFIX}siteprefs VALUES ('logintheme','NCleanGrey','2006-07-25 21:22:33','2006-07-25 21:22:33');
 INSERT INTO {DB_PREFIX}siteprefs VALUES ('global_umask','022',NULL,NULL);
