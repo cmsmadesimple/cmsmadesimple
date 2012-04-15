@@ -43,6 +43,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 	$trimbackground = FALSE;	
 	$forceblackandwhite = FALSE;	
 	$root_url = $config['css_url'];
+	$auto_https = 1;
 
 	#---------------------------------------------
 	# Trivial Exclusion
@@ -61,19 +62,27 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 		$template_id = $content_obj->TemplateId();
 		$use_https = (int)$content_obj->Secure();
 	}
-	
+
+	if( isset($params['auto_https']) && $params['auto_https'] == 0 )
+	{
+		$auto_https = 0;
+	}
+
 	if(isset($params['https'])) {
-	
 		$use_https = (int)$params['https'];
 	}
 	
+	if( $auto_https ) {
+		if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off') {
+			$use_https = 1;
+		}
+	}
+
 	if($use_https && isset($config['ssl_url'])) {
-	
 		$root_url = $config['ssl_css_url'];
 	}
 
 	if(isset($params['nocombine']) && $params['nocombine'] == 1) {
-	
 		$combine_stylesheets = FALSE;
 	}	
 

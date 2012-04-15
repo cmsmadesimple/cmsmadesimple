@@ -65,6 +65,7 @@ MenuManager:
 
 MicroTiny:
  - Two new preferences to assist in managing stylesheet and other background settings.
+ - #7223 (fixes for secure admin).
 
 News:
  - All routes are now registered statically
