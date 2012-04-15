@@ -13,12 +13,12 @@
     <form action="{$formurl}" method="post">
       <fieldset>
         <legend>{'sysmain_database_status'|lang}:&nbsp;</legend>
-        {$tablecount} tables found (out of which {$nonseqcount} are not seq-tables)
-        <br/>
+        <p>{$tablecount} tables found (out of which {$nonseqcount} are not seq-tables)</p>
+        
         {if $errorcount==0}
-        No structural errors were detected in the database
+        <p style="font-weight: bold;">No structural errors were detected in the database</p>
         {else}
-        {$errorcount} structural error{if $errorcount>1}s{/if} were detected in these tables: {$errortables}
+        <p style="font-weight: bold; color: #f00;">{$errorcount} Structural error{if $errorcount>1}s{/if} detected in table{if $errorcount>1}s{/if}:  {$errortables}</p>
         {/if}
 
         <div class="pageoverflow">
