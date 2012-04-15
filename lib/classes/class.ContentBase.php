@@ -341,9 +341,10 @@ class ContentBase
    * Set the numeric id of the content item
    *
    * @param integer Integer id
+   * @access private
    * @internal
    */
-  protected function SetId($id)
+  public function SetId($id)
   {
     if( $id <= 0 ) return;
     $this->mId = $id;

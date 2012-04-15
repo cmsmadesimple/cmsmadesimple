@@ -40,6 +40,7 @@ Version 1.11 - NO NAME
  - Fix permissions issues with GCB's
  - Add checks in system information for xml capabilities.
  - Fixes #7212 - Error in CreateReturnLink api method.
+ - Fixes #7334 - Changing a content page with a url specified to a section header.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
@@ -80,6 +81,7 @@ News:
  - Generates 404 errors if routed to an invalid article, or an article that is expired/draft.
  - Fixes #7713 - Apply button doesn't work.
  - Fixes #7457 - Duplicate news url
+ - Access to the Categories and custom fields tab is now controlled by the 'Modify Site Preferences' permission.
 
 Search: 
  - Moved "Stop Words" to language file
