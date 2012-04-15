@@ -493,12 +493,29 @@ final class ModuleOperations
    */
   public function InstallModule($module, $loadifnecessary = false)
   {
-	  $modinstance = self::get_module_instance($module,'',TRUE);
+	  // get an instance of the object (force it).
+	  $modinstance = $this->get_module_instance($module,'',TRUE);
 	  if( !$modinstance )
 	  {
 		  return array(false,lang('errormodulenotloaded'));
       }
 
+	  // check for dependencies
+	  $deps = $modinstance->GetDependencies();
+	  if( is_array($deps) && count($deps) )
+	  {
+		  foreach( $deps as $mname => $mversion )
+		  {
+			  if( $mname == '' || $mversion == '' ) continue; // invalid entry.
+			  $newmod = $this->get_module_instance($mname);
+			  if( !is_object($newmod) || version_compare($newmod->GetVersion(),$mversion) < 0 )
+			  {
+				  return array(false,lang('missingdependency').': '.$mname);
+			  }
+		  }
+	  }
+
+	  // do the actual installation stuff.
 	  $res = $this->_install_module($modinstance);
 	  if( $res[0] == FALSE && $res[1] == '')
 	  {
