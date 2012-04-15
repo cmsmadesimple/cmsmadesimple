@@ -56,7 +56,6 @@ class CMSContentTemplateResource extends Smarty_Resource_Custom
 	  {
 	    $source = preg_replace("/\{\/?php\}/", "", $source);
 	  }
-
 	return;
       }
     else

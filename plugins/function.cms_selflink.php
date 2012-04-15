@@ -16,8 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_cms_selflink($params, &$smarty) 
+function smarty_function_cms_selflink($params, &$template) 
 {
+  $smarty = $template->smarty;
   $gCms = cmsms();
 
   $rellink = (isset($params['rellink']) && $params['rellink'] == '1' ? true : false);

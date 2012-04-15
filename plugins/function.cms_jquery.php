@@ -16,8 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_cms_jquery($params, &$smarty)
+function smarty_function_cms_jquery($params, &$template)
 {
+	$smarty = $template->smarty;
 	$exclude = isset($params['exclude']) && !empty($params['exclude'])?$params['exclude']:'';
 	$cdn = isset($params['cdn']) && ($params['cdn'])=='true'?true:false;
 	$append = isset($params['append']) && !empty($params['append'])?$params['append']:'';

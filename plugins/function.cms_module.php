@@ -16,9 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_cms_module($params, &$smarty)
+function smarty_function_cms_module($params, &$template)
 {
-  return cms_module_plugin($params,$smarty);
+  return cms_module_plugin($params,$template);
 }
 
 function smarty_cms_help_function_cms_module() {

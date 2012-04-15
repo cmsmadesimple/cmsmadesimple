@@ -16,8 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_cms_init_editor($params, &$smarty)
+function smarty_function_cms_init_editor($params, &$template)
 {
+  $smarty = $template->smarty;
   // if the editor is not specified.
   $wysiwyg = '';
   if( isset($params['wysiwyg']) )

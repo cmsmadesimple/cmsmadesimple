@@ -16,11 +16,12 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_description($params, &$smarty)
+function smarty_function_description($params, &$template)
 {
+  $smarty = $template->smarty;
 	$gCms = cmsms();
 	$content_obj = &$gCms->variables['content_obj'];
-	$config = &$gCms->config;
+	$config = $gCms->config;
 	if (is_object($content_obj) && $content_obj->Id() == -1)
 	{
 		#We've a custom error message...  set a message

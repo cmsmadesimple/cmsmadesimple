@@ -215,7 +215,7 @@ while( $trycount < 2 )
 	else
 	  {
 	    // do not cache anything on this page... also means we have to get rid of any cached data for this page.
-	    $smarty->clearCache(null);
+	    //$smarty->clearCache(null);
 	  }
   
   

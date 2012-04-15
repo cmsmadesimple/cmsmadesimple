@@ -16,8 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_repeat($params, &$smarty)
+function smarty_function_repeat($params, &$template)
 {
+  $smarty = $template->smarty;
 	$out=(isset($params['times']) && intval($params['times']) > 0 ? str_repeat($params['string'], $params['times']) : '');
 	
 	if( isset($params['assign']) ){

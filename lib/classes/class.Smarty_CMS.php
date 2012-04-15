@@ -280,9 +280,21 @@ class Smarty_CMS extends SmartyBC
 	    {
 	      $cache_id = $this->_global_cache_id . $cache_id;
 	    }
-	  $tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
+	  //$tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
+	  //$tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,false,false);
+	  $tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,false,$no_output_filter);
 	  debug_buffer('','Fetch '.$name.' end');
 	  return $tmp;
+	}
+
+	public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
+	{
+	  $tpl = parent::createTemplate($template, $cache_id, $compile_id, $parent, $do_clone);
+	  if ($parent instanceof Smarty) {
+            $tpl->tpl_vars = &$parent->tpl_vars;
+            $tpl->config_vars = &$config->tpl_vars;
+	  }
+	  return $tpl;
 	}
 
 	/**

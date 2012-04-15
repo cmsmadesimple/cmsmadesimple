@@ -16,9 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_global_content($params, &$smarty)
+function smarty_function_global_content($params, &$template)
 {
-  $smarty = cmsms()->GetSmarty();
+  $smarty = $template->smarty;
   $smarty->assign('gcb_params',$params);
   $txt = $smarty->fetch('globalcontent:'.$params['name']);
   if( isset($params['assign']) )

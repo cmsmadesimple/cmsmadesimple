@@ -16,8 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_postfilter_postcompilefunc($tpl_output, &$smarty)
+function smarty_postfilter_postcompilefunc($tpl_output, &$template)
 {
+  $smarty = $template->smarty;
 	$result = explode(':', $smarty->_current_file);
 	if (count($result) > 1)
 	{

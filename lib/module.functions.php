@@ -35,8 +35,9 @@
  * @param object The smarty object
  * @return string The module output
  */
-function cms_module_plugin($params,&$smarty)
+function cms_module_plugin($params,&$template)
 {
+  $smarty = $template->smarty;
 	$mid_cache = cms_utils::get_app_data('mid_cache');
 	if( empty($mid_cache) )
 	  {

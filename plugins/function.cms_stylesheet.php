@@ -20,15 +20,15 @@
 	Main function
 **********************************************************/
 
-function smarty_function_cms_stylesheet($params, &$smarty)
+function smarty_function_cms_stylesheet($params, &$template)
 {
 	#---------------------------------------------
 	# Initials
 	#---------------------------------------------
 
+	$smarty = $template->smarty;
 	$config = cmsms()->GetConfig();
 	$db = cmsms()->GetDb();
-	//$smarty = cmsms()->GetSmarty();	
 	
 	global $CMS_ADMIN_PAGE;
 	global $CMS_LOGIN_PAGE;
@@ -370,7 +370,7 @@ function smarty_cms_about_function_cms_stylesheet()
 	<p>Change History:<br/>
 	<ul>
 		<li>0.6 - Rework from {stylesheet}</li>
-		<li>0.7 - Code cleanup, Added grouping by media type / media query, Fixed cache issues</li>
+		<li>0.7 - (Stikki and Calguy1000) Code cleanup, Added grouping by media type / media query, Fixed cache issues</li>
 	</ul>
 	</p>
 	<?php

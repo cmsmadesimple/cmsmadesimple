@@ -16,8 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_browser_lang($params, &$smarty)
+function smarty_function_browser_lang($params, &$template)
 {
+  $smarty = $template->smarty;
   $default = 'en';
 
   //

@@ -16,8 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_last_modified_by($params, &$smarty) 
+function smarty_function_last_modified_by($params, &$template) 
 {
+  $smarty = $template->smarty;
         $gCms = cmsms();
 	$content_obj = $gCms->variables['content_obj'];
 
@@ -53,7 +54,6 @@ function smarty_function_last_modified_by($params, &$smarty)
   }
 
   if( isset($params['assign']) ) {
-    $smarty = $gCms->GetSmarty();
     $smarty->assign(trim($params['assign']),$output);
     return;
   }

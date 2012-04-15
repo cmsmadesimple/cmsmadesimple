@@ -16,17 +16,17 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_sitename($params, &$smarty)
+function smarty_function_sitename($params, &$template)
 {
-     $result = get_site_preference('sitename', 'CMSMS Site');
-     if( isset($params['assign']) )
-	{
-	   $gCms = cmsms();
-           $smarty =& $gCms->GetSmarty();
-           $smarty->assign(trim($params['assign']),$result);
-	   return;
-	}
-     return $result;
+  $smarty = $template->smarty;
+  $result = get_site_preference('sitename', 'CMSMS Site');
+  if( isset($params['assign']) )
+    {
+      $gCms = cmsms();
+      $smarty->assign(trim($params['assign']),$result);
+      return;
+    }
+  return $result;
 }
 
 function smarty_cms_help_function_sitename()

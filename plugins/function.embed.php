@@ -17,7 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #Author: Sorin Sbarnea / INTERSOL SRL
-function smarty_function_embed($params, &$smarty)
+function smarty_function_embed($params, &$template)
 {
   $gCms = cmsms();
 

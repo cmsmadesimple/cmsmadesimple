@@ -274,11 +274,11 @@ abstract class CMSModule
 	 * @final
 	 * @return mixed module call output.
 	 */
-	final static public function function_plugin($params,&$smarty)
+	final static public function function_plugin($params,&$template)
 	{
 	  $class = get_called_class();
 	  $params['module'] = $class;
-	  return cms_module_plugin($params,$smarty);
+	  return cms_module_plugin($params,$template);
 	}
 
 
@@ -1638,26 +1638,26 @@ abstract class CMSModule
 	 */
 	function DoAction($name, $id, $params, $returnid='')
 	{
-		if ($name != '')
-		{
-			//Just in case DoAction is called directly and it's not overridden.
-			//See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
-			$name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
+	  if ($name != '')
+	    {
+	      //Just in case DoAction is called directly and it's not overridden.
+	      //See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
+	      $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
 			
-			$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
-			if (@is_file($filename))
-			{
-				{
-				  $gCms = cmsms();
-					$db = $gCms->GetDb();
-					$config = $gCms->GetConfig();
-					$smarty = $gCms->GetSmarty();
+	      $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
+	      if (@is_file($filename))
+		{
+		  {
+		    $gCms = cmsms();
+		    $db = $gCms->GetDb();
+		    $config = $gCms->GetConfig();
+		    $smarty = $gCms->GetSmarty();
 
-					include($filename);
+		    include($filename);
 
-				}
-			}
+		  }
 		}
+	    }
 	}
 
 	/**

@@ -38,8 +38,9 @@ final class CMS_Content_Block
   private static $_contentBlocks;
   private function __construct() {}
 
-  private static function content_return($result, &$params, &$smarty)
+  private static function content_return($result, &$params, &$template)
   {
+    $smarty = $template->smarty;
     if ( empty($params['assign']) )
       {
 	return $result;
@@ -98,7 +99,7 @@ final class CMS_Content_Block
   }
 
 
-  public static function smarty_compiler_imageblock($params,&$smarty)
+  public static function smarty_compiler_imageblock($params,$smarty)
   {
     // {content_image} tag encountered.
     $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'',
@@ -138,7 +139,7 @@ final class CMS_Content_Block
   }
 
 
-  public static function smarty_compiler_moduleblock($params,&$smarty)
+  public static function smarty_compiler_moduleblock($params,$smarty)
   {
     // {content_image} tag encountered.
     $rec = array('type'=>'module','id'=>'','name'=>'','module'=>'','label'=>'',
@@ -190,10 +191,11 @@ final class CMS_Content_Block
   }
 
 
-  public static function smarty_fetch_contentblock($params,&$smarty)
+  public static function smarty_fetch_contentblock($params,&$template)
   {
+    $smarty = $template->smarty;
     $gCms = cmsms();
-    //$smarty = $gCms->GetSmarty();
+
     $contentobj = $gCms->variables['content_obj'];
     if (is_object($contentobj))
       {
@@ -301,17 +303,17 @@ final class CMS_Content_Block
 	    $smarty->caching = false;
 
 	    $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $contentobj->Id().$block);
-
 	    $smarty->caching = $oldvalue;
+
 	    return self::content_return($result, $params, $smarty);
 	  }
       }
     return _smarty_cms_function_content_return('', $params, $smarty);
   }
 
-  public static function smarty_fetch_pagedata($params,&$smarty)
+  public static function smarty_fetch_pagedata($params,&$template)
   {
-    //$smarty = cmsms()->GetSmarty();
+    $smarty = $template->smarty;
     $result = $smarty->fetch('content:pagedata');
     if( isset($params['assign']) ){
       $smarty->assign(trim($params['assign']),$result);
@@ -320,10 +322,10 @@ final class CMS_Content_Block
     return $result;
   }
 
-  public static function smarty_fetch_imageblock($params,&$smarty)
+  public static function smarty_fetch_imageblock($params,&$template)
   {
+    $smarty = $template->smarty;
     $gCms = cmsms();
-    //$smarty = $gCms->GetSmarty();
     $config = $gCms->GetConfig();
 
     $contentobj = $gCms->variables['content_obj'];
@@ -426,9 +428,9 @@ final class CMS_Content_Block
     return $out;
   }
 
-  public static function smarty_fetch_moduleblock($params,&$smarty)
+  public static function smarty_fetch_moduleblock($params,&$template)
   {
-    //$smarty = cmsms()->GetSmarty();
+    $smarty = $template->smarty;
     $result = '';
     $key = '';
 
