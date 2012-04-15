@@ -732,7 +732,7 @@ EOT;
 		  {
 			  $header .= lang($title_name, $extra_lang_param);
 		  }
-      if (FALSE == empty($this->breadcrumbs))
+      if (count($this->breadcrumbs))
 		  {
 			  $wikiUrl = $config['wiki_url'];
 			  foreach ($this->breadcrumbs AS $key => $value)
@@ -769,7 +769,8 @@ EOT;
 						  $wikiUrl .= '/'.lang($title_key[0]);
 					  }
 				  }
-			  if (FALSE == get_preference($this->userid, 'hide_help_links')) {
+
+			  if (FALSE == get_preference($this->userid, 'hide_help_links', 0)) {
 				  // Clean up URL
 				  $wikiUrl = str_replace(' ', '_', $wikiUrl);
 				  $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);

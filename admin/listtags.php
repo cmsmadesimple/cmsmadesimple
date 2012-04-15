@@ -135,8 +135,10 @@ else
 	  $rec = array();
 	  $rec['type'] = $parts[0];
 	  $rec['name'] = $parts[1];
-	  require_once($onefile);
+	  include_once($onefile);
 	  
+	  if( !function_exists('smarty_'.$rec['type'].'_'.$rec['name']) ) continue;
+
 	  if( function_exists("smarty_cms_help_".$rec['type']."_".$rec['name']) )
 	    {
 	      $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];

@@ -1,1 +1,1 @@
-// This is a stub file
+<?php // This is a stub file ?>
