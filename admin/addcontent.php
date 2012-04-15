@@ -212,6 +212,7 @@ if (FALSE == empty($error))
 <?php
 }
 
+cms_utils::set_app_data('editing_content',$contentobj);
 $tabnames = $contentobj->TabNames();
 
 ?>

@@ -184,7 +184,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 			if (isset($params['media'])) {
 
 				// combine all matches into one stylesheet.
-				$filename = 'stylesheet_combined_'.md5($template_id.$use_https.$all_timestamps_string.$fnsuffix).'.css';
+				$filename = 'stylesheet_combined_'.md5($template_id.$use_https.serialize($params).$all_timestamps_string.$fnsuffix).'.css';
 				$fn = cms_join_path($cache_dir,$filename);	
 	
 				if(!file_exists($fn)) {			
@@ -214,7 +214,7 @@ function smarty_function_cms_stylesheet($params, &$smarty)
 				foreach($all_media as $hash=>$onemedia) {
 				
 					// combine all matches into one stylesheet.
-					$filename = 'stylesheet_combined_'.md5($template_id.$use_https.$all_timestamps[$hash].$fnsuffix).'.css';
+					$filename = 'stylesheet_combined_'.md5($template_id.$use_https.serialize($params).$all_timestamps[$hash].$fnsuffix).'.css';
 					$fn = cms_join_path($cache_dir,$filename);
 					
 					// Get media_type and media_query
