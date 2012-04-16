@@ -138,6 +138,7 @@ function redirect_to_alias($alias)
   $manager = cmsms()->GetHierarchyManager();
   $node = $manager->sureGetNodeByAlias($alias);
   if( !$node ) {
+	// put mention into the admin log
     audit('','Core','Attempt to redirect to invalid alias: '.$alias);
     return;
   }
@@ -187,7 +188,7 @@ function cms_join_path()
 
 
 /**
- * Return the global gCms object
+ * Return the global cmsms() object
  *
  * @since 1.7
  * @return object
@@ -209,6 +210,7 @@ function &cmsms()
  * @since 0.3
  * @deprecated
  * @internal
+ * Rolf: function used in /index.php
  */
 function ErrorHandler404()
 {
@@ -1367,6 +1369,9 @@ if (!function_exists('array_walk_recursive'))
 
 
 
+/**
+ *
+ */
 if (!function_exists("stripos")) {
   function stripos($str,$needle,$offset=0)
   {
@@ -2415,7 +2420,10 @@ function cms_get_jquery($exclude = '',$ssl = false,$cdn = false,$append = '',$cu
 }
 	
 	
-	
+
+/**
+ *
+ */	
 if(!function_exists('get_called_class')) {
   function get_called_class() {
     return cms_function_help::get_called_class();
