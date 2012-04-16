@@ -522,6 +522,10 @@ $lang['admin']['sysmain_update'] = 'Update';
 $lang['admin']['sysmain_pagesfound'] = 'pages found';
 $lang['admin']['sysmain_hierarchyupdated'] = 'Page hierarchy positions updated';
 
+$lang['admin']['sysmain_nostr_errors'] = 'No structural errors were detected in the database';
+$lang['admin']['sysmain_str_error'] = 'Structural error detected in table';
+$lang['admin']['sysmain_str_errors'] = 'Structural errors detected in tables';
+$lang['admin']['sysmain_tablesfound'] = 'tables found (out of which %d are not seq-tables)';
 $lang['admin']['sysmain_repair'] = 'Repair';
 $lang['admin']['sysmain_repairtables'] = 'Repair tables';
 $lang['admin']['sysmain_tablesrepaired'] = 'Tables repaired';
