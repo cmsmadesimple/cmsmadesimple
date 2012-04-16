@@ -297,7 +297,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 // Language shizzle
 cms_admin_sendheaders();
-header("Content-Language: " . $current_language);
+header("Content-Language: " . CmsNlsOperations::get_current_language());
 
 //CHANGED
 debug_buffer('debug is:' . $error);

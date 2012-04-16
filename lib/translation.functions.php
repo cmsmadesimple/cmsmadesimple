@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -24,163 +24,6 @@
  * @package CMS
  */
 
-/**
- * A function to attempt to find a language given browser settings
- *
- * @internal
- * @return string
- */
-function cms_detect_browser_lang()
-{
-  $gCms = cmsms();
-  $nls =& $gCms->nls;
-  $curlang = '';
-
-  # take a stab at figuring out the default language...
-  # Figure out default language and set it if it exists
-  if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) 
-    {
-      $alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
-      if (strpos($alllang, ";") !== FALSE)
-	$alllang = substr($alllang,0,strpos($alllang, ";"));
-      $langs = explode(",", $alllang);
-	  
-      foreach ($langs as $onelang)
-	{
-	  // Check to see if lang exists...
-	  if (isset($nls['language'][$onelang]))
-	    {
-	      $curlang = $onelang;
-	      break;
-	    }
-#Check to see if alias exists...
-	  if (isset($nls['alias'][$onelang]))
-	    {
-	      $alias = $nls['alias'][$onelang];
-	      if (isset($nls['language'][$alias]))
-		{
-		  $curlang = $alias;
-		  break;
-		}
-	    }
-	}
-    }
-
-  return $curlang;
-}
-
-/** 
- * A function to initialize the nls array
- *
- * @internal
- * @return void
- */
-function cms_initialize_nls()
-{
-	#Read in all current languages...
-  $gCms = cmsms();
-	$nls =& $gCms->nls;
-
-	if( !is_array($nls) || count($nls) == 0 )
-	{
-		$nls = array();
-		$dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'/lang');
-		$handle = opendir($dir);
-		while ($handle && false !== ($file = readdir($handle))) {
-			if (is_file("$dir/$file") && strpos($file, "nls.php") != 0) {
-				include("$dir/$file");
-			}
-		}
-		closedir($handle);
-	}
-}
-
-/**
- * A function to temporarily set the current admin language
- *
- * @since 1.10
- * @internal
- * @return boolean
- */
-function cms_set_admin_language($new_lang = '')
-{
-  $gCms = cmsms();
-  $nls =& $gCms->nls;
-
-  if( $new_lang == '' ) 
-    {
-      cms_utils::set_app_data('cms_admin_lang','');
-      return TRUE;
-    }
-  if( isset($nls['language'][$new_lang]) || isset($nls['alias'][$new_lang]) )
-    {
-      cms_utils::set_app_data('cms_admin_lang',$new_lang);
-      return TRUE;
-    }
-  return FALSE;
-}
-
-/**
- * A function to return the current admin language
- *
- * @internal
- * @return string
- */
-function cms_admin_current_language()
-{
-  $gCms = cmsms();
-  $nls =& $gCms->nls;
-  $lang = array();
-  $current_language = '';
-
-  cms_initialize_nls();
-
-  if( cms_utils::get_app_data('cms_admin_lang') != '' )
-    {
-      $current_language = cms_utils::get_app_data('cms_admin_lang');
-    }
-  else
-    {
-      $uid = get_userid(false);
-      if( $uid )
-	{
-	  // user is logged in (this is after the admin login)
-	  // get his preference.
-	  $current_language = get_preference(get_userid(false),'default_cms_language');
-	  if( $current_language == '' || 
-	      (!isset($nls['language'][$current_language]) && !isset($nls['alias'][$current_language])) )
-	    {
-	      // preferred lang doesn't exist
-	      $current_language = '';
-	    }
-	}
-      
-      if ($current_language == '')
-	{
-	  // still nothing, see if we can get something from the browser.
-	  $current_language = cms_detect_browser_lang();
-	}
-    }
-
-  if (isset($_POST['change_cms_lang']) && isset($_POST['default_cms_lang']) )
-    {
-      // a hack to handle the editpref case of the user changing his language
-      // this is needed because the lang stuff is included before the preference may
-      // actually be set.
-      $a1 = basename(trim($_POST['change_cms_lang']));
-      $a2 = basename(trim($_POST['default_cms_lang']));
-      if( $a1 == $a2 && 
-	  (isset($nls['language'][$a1]) || isset($nls['alias'][$a1])) )
-	{
-	  $current_language = $a1;
-	}
-    }
-
-  // if it's still not set, this will use the 
-  // current locale.. maybe we should hardcode to en_US ??
-  return $current_language;
-}
-
 
 /**
  * Temporarily override the current frontend language
@@ -189,41 +32,7 @@ function cms_admin_current_language()
  */
 function cms_set_frontend_language($lang = '')
 {
-  $gCms = cmsms();
-  if( empty($lang) )
-    {
-      unset($gCms->variables['cms_frontend_cur_language']);
-    }
-  else if( isset($gCms->nls['language'][$lang]) || isset($gCms->nls['alias'][$lang]) )
-    {
-      // todo: check here if the language exists.
-      $gCms->variables['cms_frontend_cur_language'] = $lang;
-    }
-}
-
-
-/**
- * A function to return the current frontend language
- *
- * @internal
- * @return string
- */
-function cms_frontend_current_language()
-{
-  cms_initialize_nls();
-
-  $gCms = cmsms();
-  if( isset($gCms->variables['cms_frontend_cur_language']) )
-    {
-      return $gCms->variables['cms_frontend_cur_language'];
-    }
-
-  $curlang = get_site_preference('frontendlang','');
-  if( $curlang == '' ) {
-    $curlang = 'en_US';
-  }
-
-  return $curlang;
+  return CmsNlsOperations::set_language($lang);
 }
 
 
@@ -235,15 +44,7 @@ function cms_frontend_current_language()
  */
 function cms_current_language()
 {
-  global $CMS_ADMIN_PAGE;
-  global $CMS_STYLESHEET;
-  global $CMS_INSTALL_PAGE;
-
-  if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE))
-    {
-      return cms_admin_current_language();
-    }
-  return cms_frontend_current_language();
+  return CmsNlsOperations::get_current_language();
 }
 
 
@@ -674,53 +475,12 @@ function lang_en()
 
 function get_encoding($charset='', $defaultoverrides=true)
 {
-	global $current_language;
-	$gCms = cmsms();
-	$variables =& $gCms->variables;
-	$config = $gCms->GetConfig();
-	$nls =& $gCms->nls;
-
-	if ($charset != '')
-	{
-		return $charset;
-	}
-        else if (isset($variables['current_encoding']) && $variables['current_encoding'] != "" )
-        {
-	  return $variables['current_encoding'];
-        }
-	else if (isset($config['default_encoding']) && $config['default_encoding'] != "" && $defaultoverrides == true)
-	{
-		return $config['default_encoding'];
-	}
-	else if (isset($nls['encoding'][$current_language]))
-	{
-		return $nls['encoding'][$current_language];
-	}
-	else
-	{
-		return "UTF-8"; //can't hurt
-	}
+  return CmsNlsOperations::get_encoding();
 }
 
-
-/**
- * Set the current encoding
- *
- * @internal
- * @access private
- */
-function set_encoding($charset)
+function get_locale()
 {
-  $gCms = cmsms();
-  $variables =& $gCms->variables;
-  
-  if( $charset == '' ) 
-    {
-      if( isset($variables['current_encoding']) )
-	unset($variables['current_encoding']);
-      return;
-    }
-  $variables['current_encoding'] =  $charset;
+  return CmsNlsOperations::get_locale();
 }
 
 /**
@@ -733,6 +493,7 @@ function set_encoding($charset)
 function is_utf8($string)
 {
    // From http://w3.org/International/questions/qa-forms-utf-8.html
+   // don't think this is used in cmsms 1.10.x or later.
    return preg_match('%^(?:
          [\x09\x0A\x0D\x20-\x7E]            # ASCII
        | [\xC2-\xDF][\x80-\xBF]            # non-overlong 2-byte
@@ -755,22 +516,17 @@ function get_language_list($allow_none = true)
       $tmp = array(''=>lang('nodefault'));
     }
 
-  $gCms = cmsms();
-  $config = $gCms->GetConfig();
-  $nls = $gCms->nls;
-  asort($nls["language"]);
-  foreach( $nls['language'] as $key=>$value )
+  $langs = CmsNlsOperations::get_installed_languages();
+  asort($langs);
+  foreach( $langs as $key  )
     {
-      if( is_dir($config['root_path'].'/'.$config['admin_dir'].'/lang/ext/'.$key) ||
-	  is_dir($config['root_path'].'/'.$config['admin_dir'].'/lang/'.$key) ||
-	  file_exists($config['root_path'].'/'.$config['admin_dir'].'/lang/'.$key.'/admin.inc.php') )
+      $obj = CmsNlsOperations::get_language_info($key);
+      $value = $obj->display();
+      if( $obj->fullname() )
 	{
-	  if( isset($nls['englishlang'][$key]) )
-	    {
-	      $value .= ' ('.$nls['englishlang'][$key].')';
-	    }
-	  $tmp[$key] = $value;
+	  $value .= ' ('.$obj->fullname().')';
 	}
+      $tmp[$key] = $value;
     }
 
   return $tmp;

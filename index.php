@@ -196,6 +196,8 @@ while( $trycount < 2 )
 	$smarty->assign('page_alias', $contentobj->Alias());
 	$smarty->assign('position', $contentobj->Hierarchy());
 	$smarty->assign('friendly_position', $gCms->variables['friendly_position']);
+	$smarty->assign('lang',CmsNlsOperations::get_current_language());
+	$smarty->assign('encoding',CmsNlsOperations::get_encoding());
 
 	$html = '';
 	$showtemplate = true;  

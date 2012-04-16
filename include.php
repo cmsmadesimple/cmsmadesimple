@@ -224,27 +224,6 @@ if( $global_umask != '' )
   @umask( octdec($global_umask) );
 }
 
-#Set the locale if it's set
-#either in the config, or as a site preference.
-if (isset($config['locale']) && $config['locale'] != '')
-{
-  $str = $config['locale'];
-  if( is_string($str) )
-    {
-      $str = trim($str);
-    }
-  $res = @setlocale(LC_ALL, $str);
-  if( $res === FALSE )
-    {
-      debug_buffer('IMPORTANT: SetLocale failed');
-    }
-}
-$frontendlang = get_site_preference('frontendlang');
-
-$smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
-$smarty->assign('lang',$frontendlang);
-$smarty->assign('encoding',get_encoding());
-
 if ($config['debug'] == true)
 {
   $smarty->debugging = true;
@@ -272,6 +251,22 @@ if (! isset($CMS_INSTALL_PAGE))
     debug_buffer('', 'End of Loading Modules');
   }
 
+#Set the locale if it's set
+#either in the config, or as a site preference.
+$locale = CmsNlsOperations::get_locale();
+if( $locale )
+  {
+    $res = @setlocale(LC_ALL,$str);
+    if( $res === FALSE )
+      {
+	debug_buffer('IMPORTANT: SetLocale failed');
+      }
+  }
+$frontendlang = get_site_preference('frontendlang');
+$smarty->assign('lang',$frontendlang);
+$smarty->assign('encoding',get_encoding());
+
+
 $CMS_LAZYLOAD_MODULES = 1;
 
 #Do auto task stuff.
@@ -279,6 +274,8 @@ if (! isset($CMS_INSTALL_PAGE))
   {
     CmsRegularTaskHandler::handle_tasks();
   }
+
+$smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 
 function sanitize_get_var(&$value, $key)
 {

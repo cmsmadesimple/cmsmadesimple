@@ -193,7 +193,7 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 }
 
 include_once("header.php");
-$current_language = cms_admin_current_language();
+$current_language = CmsNlsOperations::get_current_language();
 $gCms = cmsms();
 $nls =& $gCms->nls;
 ?>

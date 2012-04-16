@@ -75,11 +75,11 @@ if ($access)
 		$files = 0;
 		$old_display_errors = ini_set('display_errors',0);
 		$modops = $gCms->GetModuleOperations();
-		$orig_lang = cms_admin_current_language();
-		cms_set_admin_language('en_US');
+		$orig_lang = CmsNlsOperations::get_current_language();
+		CmsNlsOperations::set_language('en_US');
 		$object = cms_utils::get_module($module);
 		$xmltxt = $modops->CreateXMLPackage($object,$message,$files);
-		cms_set_admin_language($orig_lang);
+		CmsNlsOperations::set_language($orig_lang);
 		if( $files == 0 )
 		{
 			echo "<p class=\"error\">".lang('errornofilesexported')."</p>";
@@ -332,7 +332,7 @@ else if ($action == "showmodulehelp")
       $modulehelp_yourlang = lang('modulehelp_yourlang');
       if( isset($_GET['lang']) && $orig_lang != 'en_US' )
 	{
-	  cms_set_admin_language(trim($_GET['lang']));
+	  CmsNlsOperations::set_language(trim($_GET['lang']));
 	}
 
       echo '<div class="pagecontainer">';
@@ -398,7 +398,7 @@ else if ($action == "showmodulehelp")
       $modinstance->params = array(array('name'=>'lang','default'=>'en_US','optional'=>true));
       $modinstance->curlang = $mod_old_lang;
       echo "</div>";
-      cms_set_admin_language($orig_lang);
+      CmsNlsOperations::set_language($orig_lang);
     }
   
   echo '<p class="pageback"><a class="pageback" href="'.$thisurl.'">&#171; '.lang('back').'</a></p>';
