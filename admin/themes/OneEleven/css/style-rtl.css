@@ -420,6 +420,10 @@ a.external {
 .alert-dialog a {
 	text-decoration: underline
 }
+.file {
+	background: url(themes/OneEleven/images/icons/system/document-list.png) no-repeat right;
+	padding-right: 25px
+}
 .important {
 	color: red;
 	font-weight: normal
@@ -484,7 +488,10 @@ menu,
 .information,
 .message,
 .success,
-.pagewarning  {
+.pagewarning,
+.green,
+.red,
+.yellow  {
 	border-radius: 4px
 }
 /* forms */	
@@ -571,16 +578,29 @@ textarea {
 .pagewarning,
 .pagemcontainer,
 .pageerrorcontainer,
-.pageerrorinstalldir {
+.pageerrorinstalldir,
+.green,
+.red,
+.yellow {
 	display: inline-block;
 	width: auto;
 	font-size: 11px;
 	padding: 10px 40px 10px 10px;
 	margin: 10px 0
 }
+.green,
+.red,
+.yellow {
+	padding: 10px;
+}
 .warning,
 .pagewarning {
 	background: #faf6d4 url(themes/OneEleven/images/icons/extra/warning.png) right 50% no-repeat;
+	border: 1px solid #e6c26e
+}
+.yellow {
+	background: #faf6d4;
+	color: #e6c26e;
 	border: 1px solid #e6c26e
 }
 .error,
@@ -589,10 +609,20 @@ textarea {
 	background: #f2d4ce url(themes/OneEleven/images/icons/extra/block.png) right 50% no-repeat;
 	border: 1px solid #ae432e
 }
+.red {
+	background: #f2d4ce;
+	color: #ae432e;
+	border: 1px solid #ae432e	
+}
 .success,
 .pagemcontainer {
 	background: #d9e6c3 url(themes/OneEleven/images/icons/extra/accept.png) right 50% no-repeat;
 	border: 1px solid #77ab13
+}
+.green {
+	background: #d9e6c3;
+	color: #77ab13;
+	border: 1px solid #77ab13	
 }
 .information {
 	background: #cee6f2 url(themes/OneEleven/images/icons/extra/info.png) right 50% no-repeat;
@@ -1776,6 +1806,22 @@ ul.sortableList li div.label em {
 ul.sortable .placeholder {
 	border: 2px dashed #ddd;
 	background: #f2f2f2
+}
+/* Changelog, System Maintenance page */
+.version { 
+	background: #f1f1f1;
+	border: 1px solid #ddd;
+	margin: 15px  0;
+	padding: 20px;
+	font-family: Monaco,"Bitstream Vera Sans Mono","Lucida Console",Terminal,monospace;
+	line-height: 1.5
+}
+.version h3 {
+	text-transform: uppercase;
+	color: #147fdb;
+	margin: 0;
+	padding: 0;	
+	font-family: sans-serif;
 }
 /*** theme dropzone ***/
 #theme_dropzone { 

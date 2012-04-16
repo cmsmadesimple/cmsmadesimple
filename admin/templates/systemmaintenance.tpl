@@ -16,9 +16,9 @@
         <p>{$tablecount} tables found (out of which {$nonseqcount} are not seq-tables)</p>
         
         {if $errorcount==0}
-        <p style="font-weight: bold;">No structural errors were detected in the database</p>
+        <p class='green'><strong>No structural errors were detected in the database</strong></p>
         {else}
-        <p style="font-weight: bold; color: #f00;">{$errorcount} Structural error{if $errorcount>1}s{/if} detected in table{if $errorcount>1}s{/if}:  {$errortables}</p>
+        <p class='red'><strong>{$errorcount} Structural error{if $errorcount>1}s{/if} detected in table{if $errorcount>1}s{/if}:  {$errortables}</strong></p>
         {/if}
 
         <div class="pageoverflow">
@@ -114,8 +114,7 @@
     {/if}
 
   {if $invalidtypescount=="0" && $withoutaliascount==""}
-    <br/>
-    {'sysmain_nocontenterrors'|lang}
+   <p class='green'><strong>{'sysmain_nocontenterrors'|lang}</strong></p>
   {/if}
 
   </fieldset>
@@ -128,11 +127,9 @@
 {* changelog tab *}
 {$theme->StartTab('changelog')}
 
-{$changelogfilename}
+<p class='file'>{$changelogfilename}</p>
 
-  <br><br>
-
-  <tt>{$changelog}</tt>
+  <div class="changelog">{$changelog}</div>
 
 
 {$theme->EndTab()}

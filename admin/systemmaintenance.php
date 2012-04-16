@@ -265,7 +265,12 @@ $changelog = file($ch_filename);
 
 for ($i = 0; $i < count($changelog); $i++) {
   if (substr($changelog[$i], 0, 7) == "Version") {
-    $changelog[$i] = "<strong>" . $changelog[$i] . "</strong>";
+      if ($i == 0) {
+          $changelog[$i] = "<div class=\"version\"><h3>" . $changelog[$i] . "</h3>";
+      } else {
+          $changelog[$i] = "</div><div class=\"version\"><h3>" . $changelog[$i] . "</h3>";
+      }
+      
   }
 }
 
