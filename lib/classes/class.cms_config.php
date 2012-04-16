@@ -97,7 +97,6 @@ class cms_config implements ArrayAccess
     $this->_types['previews_path'] = self::TYPE_STRING;
     $this->_types['max_upload_size'] = self::TYPE_INT;
     $this->_types['default_upload_permission'] = self::TYPE_STRING;
-    $this->_types['use_smarty_php_tags'] = self::TYPE_BOOL;
     $this->_types['auto_alias_content'] = self::TYPE_BOOL;
     $this->_types['url_rewriting'] = self::TYPE_STRING;
     $this->_types['page_extension'] = self::TYPE_STRING;
@@ -178,8 +177,12 @@ class cms_config implements ArrayAccess
 		  case 'use_hierarchy':
 			  return TRUE;
 
+		  case 'use_smarty_php_tags':
 		  case 'output_compression':
 			  return FALSE;
+
+		  case 'default_upload_permission':
+			  return '664';
 		  }
 
 	  // from the config file.
@@ -281,12 +284,6 @@ class cms_config implements ArrayAccess
 	  case 'max_upload_size':
 	  case 'upload_max_filesize':
 		  return $this->get_upload_size();
-
-	  case 'default_upload_permission':
-		  return '664';
-
-	  case 'use_smarty_php_tags':
-		  return false;
 
 	  case 'auto_alias_content':
 		  return true;

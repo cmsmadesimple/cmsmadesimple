@@ -110,7 +110,6 @@ $tmp[1]['debug'] = testConfig('debug', 'debug');
 $tmp[0]['output_compression'] = testConfig('output_compression', 'output_compression');
 
 $tmp[0]['max_upload_size'] = testConfig('max_upload_size', 'max_upload_size');
-$tmp[0]['default_upload_permission'] = testConfig('default_upload_permission', 'default_upload_permission');
 $tmp[0]['url_rewriting'] = testConfig('url_rewriting', 'url_rewriting');
 $tmp[0]['page_extension'] = testConfig('page_extension', 'page_extension');
 $tmp[0]['query_var'] = testConfig('query_var', 'query_var');

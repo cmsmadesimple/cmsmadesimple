@@ -4,6 +4,7 @@ Version 1.11 - NO NAME
  - If output buffering is disabled in the request, theme is also disabled.
  - Revamp of admin theme.
  - Remove the use_adodb_lite config variable
+ - Removed the use_smarty_php_tags config variable.
  - Remove the process_whole_template config variable
  - Plugins revamp, removed _cms_ from smarty function header. General plugin cleanup.
  - Removed smarty plugin google_search
