@@ -46,8 +46,9 @@ final class CmsNlsOperations
       {
 	self::$_nls = array();
 	$config = cmsms()->GetConfig();
-	$dir = cms_join_path($config['root_path'],$config['admin_dir'],'lang');
-	$files = glob($dir.'/*nls*php');
+	$nlsdir = cms_join_path($config['root_path'],'lib','nls');
+	$langdir = cms_join_path($config['root_path'],$config['admin_dir'],'lang');
+	$files = glob($nlsdir.'/*nls.php');
 	if( is_array($files) && count($files) )
 	  {
 	    for( $i = 0; $i < count($files); $i++ )
@@ -55,7 +56,7 @@ final class CmsNlsOperations
 		if( !is_file($files[$i]) ) continue;
 		$fn = basename($files[$i]);
 		$tlang = substr($fn,0,strpos($fn,'.'));
-		if( $tlang != 'en_US' && !file_exists(cms_join_path($dir,'ext',$tlang,'admin.inc.php')) )
+		if( $tlang != 'en_US' && !file_exists(cms_join_path($langdir,'ext',$tlang,'admin.inc.php')) )
 		  {
 		    continue;
 		  }
