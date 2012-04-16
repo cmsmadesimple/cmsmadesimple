@@ -43,6 +43,10 @@ Version 1.11 - NO NAME
  - Fixes #7212 - Error in CreateReturnLink api method.
  - Fixes #7334 - Changing a content page with a url specified to a section header.
  - Fixes #7030 - Installing modules in listmodules skips dependency check.
+ - Adds new CmsNlsOperations and CmsNls classes to better support language serverices
+ - Adds new abstract CmsLanguageDetector class to handle language detection on the frontend.
+ - locale can now be configured in the NLS information
+ - Encoding can now be configured in the NLS information
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
