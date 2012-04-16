@@ -289,10 +289,16 @@ class Smarty_CMS extends SmartyBC
 
 	public function createTemplate($template, $cache_id = null, $compile_id = null, $parent = null, $do_clone = true)
 	{
+	  if ($parent instanceof Smarty) {
+	    $saved_tpl_vars = $parent->tpl_vars;
+            $saved_config_vars = $parent->config_vars;
+	  }
 	  $tpl = parent::createTemplate($template, $cache_id, $compile_id, $parent, $do_clone);
 	  if ($parent instanceof Smarty) {
+            $parent->tpl_vars = $saved_tpl_vars;
+            $parent->config_vars = $saved_config_vars;
             $tpl->tpl_vars = &$parent->tpl_vars;
-            $tpl->config_vars = &$config->tpl_vars;
+            $tpl->config_vars = &$parent->config_vars;
 	  }
 	  return $tpl;
 	}
