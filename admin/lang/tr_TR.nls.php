@@ -38,6 +38,9 @@ $nls['alias']['trk'] = 'tr_TR' ;
 $nls['alias']['tr_TR.ISO8859-9'] = 'tr_TR' ;
 $nls['alias']['tr_TR.UTF-8'] = 'tr_TR' ;
 
+#Possible locale for language
+$nls['locale']['tr_TR'] = 'tr_TR,tr_TR.utf8,turkish,Turkish_Turkey.1254';
+
 #Encoding of the language
 $nls['encoding']['tr_TR'] = 'UTF-8';
 

@@ -34,6 +34,9 @@ $nls['alias']['kz'] = 'kz_KZ';
 $nls['alias']['kazak'] = 'kz_KZ' ;
 $nls['alias']['kazakh'] = 'kz_KZ' ;
 
+#Possible locale for language
+$nls['locale']['kz_KZ'] = 'kk_KZ,kk_KZ.utf-8,kazakh';
+
 #Encoding of the language
 $nls['encoding']['kz_KZ'] = 'UTF-8';
 

@@ -42,6 +42,9 @@ $nls['alias']['no_NO'] = 'nb_NO' ;
 $nls['alias']['nb_NO.ISO8859-1'] = 'nb_NO' ;
 $nls['alias']['nb_NO.ISO8859-15'] = 'nb_NO' ;
 
+#Possible locale for language
+$nls['locale']['nb_NO'] = 'nb_NO,nb_NO.utf8,norwegian,Norwegian_Norway.1252';
+
 #Encoding of the language
 $nls['encoding']['nb_NO'] = 'UTF-8';
 

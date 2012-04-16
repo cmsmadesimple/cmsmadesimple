@@ -40,6 +40,9 @@ $nls['alias']['sv_SE'] = 'sv_SE' ;
 $nls['alias']['sv_SE.ISO8859-1'] = 'sv_SE' ;
 $nls['alias']['sv_SE.ISO8859-15'] = 'sv_SE' ;
 
+#Possible locale for language
+$nls['locale']['sv_SE'] = 'sv_SE,sv_SE.utf8,sv_SE.iso885915,swedish,Swedish_Sweden.1252';
+
 #Encoding of the language
 $nls['encoding']['sv_SE'] = 'UTF-8';
 

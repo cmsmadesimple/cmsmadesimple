@@ -31,8 +31,11 @@ $nls['englishlang']['fa_IR'] = 'Farsi';
 
 #Possible aliases for language
 $nls['alias']['fa'] = 'fa_IR';
-$nls['alias']['farsi'] = 'fa_IR' ;
-$nls['alias']['fa_IR.UTF-8'] = 'fa_IR' ;
+$nls['alias']['farsi'] = 'fa_IR';
+$nls['alias']['fa_IR.UTF-8'] = 'fa_IR';
+
+#Possible locale for language
+$nls['locale']['fa_IR'] = 'fa_IR,fa_IR.utf-8,farsi,Farsi_Iran.1256';
 
 #Encoding of the language
 $nls['encoding']['fa_IR'] = 'UTF-8';

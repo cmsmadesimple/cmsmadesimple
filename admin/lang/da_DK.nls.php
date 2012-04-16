@@ -13,6 +13,9 @@ $nls['alias']['da_DK'] = 'da_DK' ;
 $nls['alias']['da_DK'] = 'da_DK' ;
 $nls['alias']['da_DK.ISO8859-1'] = 'da_DK' ;
 
+#Possible locale for language
+$nls['locale']['da_DK'] = 'da_DK,da_DK.utf8,danish,Danish_Denmark.1252';
+
 #Encoding of the language
 $nls['encoding']['da_DK'] = 'UTF-8';
 

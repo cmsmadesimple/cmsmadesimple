@@ -15,6 +15,9 @@ $nls['alias']['port'] = 'pt_PT' ;
 $nls['alias']['pt-PT'] = 'pt_PT' ;
 $nls['alias']['pt_PT'] = 'pt_PT' ;
 
+#Possible locale for language
+$nls['locale']['pt_PT'] = 'pt_PT,pt_PT.utf8,pt_PT@euro,portuguese,Portuguese_Portugal.1252';
+
 #Encoding of the language
 $nls['encoding']['pt_PT'] = 'UTF-8';
 

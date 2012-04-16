@@ -39,6 +39,9 @@ $nls['alias']['et_EE.ISO8859-1'] = 'et_EE' ;
 $nls['alias']['et_EE.ISO8859-15'] = 'et_EE' ;
 $nls['alias']['et_EE.UTF-8'] = 'et_EE' ;
 
+#Possible locale for language
+$nls['locale']['et_EE'] = 'et_EE,et_EE.iso885915,et_EE.utf8,estonian,Estonian_Estonia.1257';
+
 #Encoding of the language
 $nls['encoding']['et_EE'] = "UTF-8";
 

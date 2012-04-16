@@ -41,6 +41,9 @@ $nls['alias']['sr_YU'] = 'sr_YU' ;
 $nls['alias']['sr_YU.WINDOWS-1250'] = 'sr_YU' ;
 $nls['alias']['sr_YU.ISO8859-2'] = 'sr_YU' ;
 
+#Possible locale for language
+$nls['locale']['sr_YU'] = 'sr_YU,sr_YU.utf-8,sr_RS.sr_RS.utf-8,serbian';
+
 #Encoding of the language
 $nls['encoding']['sr_YU'] = 'UTF-8';
 

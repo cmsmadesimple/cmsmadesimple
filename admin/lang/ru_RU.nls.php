@@ -39,6 +39,9 @@ $nls['alias']['ru'] = 'ru_RU';
 $nls['alias']['russian'] = 'ru_RU' ;
 $nls['alias']['rus'] = 'ru_RU' ;
 
+#Possible locale for language
+$nls['locale']['ru_RU'] = 'ru_RU,ru_RU.cp1251,ru_RU.koi8r,ru_RU.utf8,russian,Russian_Russia.1251';
+
 #Encoding of the language
 $nls['encoding']['ru_RU'] = "utf-8";
 

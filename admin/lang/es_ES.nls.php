@@ -43,6 +43,9 @@ $nls['alias']['es_PE'] = 'es_ES' ;
 $nls['alias']['es_MX'] = 'es_ES' ;
 $nls['alias']['es_US.ISO8859-1'] = 'es_ES' ;
 
+#Possible locale for language
+$nls['locale']['es_ES'] = 'es_ES,es_ES.utf8,es_ES@euro,spanish,Spanish_Spain.1252';
+
 #Encoding of the language
 $nls['encoding']['es_ES'] = 'UTF-8';
 

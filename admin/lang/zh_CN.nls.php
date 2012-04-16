@@ -38,6 +38,9 @@ $nls['englishlang']['zh_CN'] = 'Simplified Chinese';
 $nls['alias']['zh_CN.EUC'] = 'zh_CN' ;
 $nls['alias']['chinese_gb2312'] = 'zh_CN' ;
 
+#Possible locale for language
+$nls['locale']['zh_CN'] = 'zh_CN,zh_CN.utf8,zh_CN.gb18030,zh_CN.gbk,chinese,chinese-simplified,Chinese_China.936';
+
 #Encoding of the language
 $nls['encoding']['zh_CN'] = 'UTF-8';
 

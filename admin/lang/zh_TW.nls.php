@@ -38,6 +38,9 @@ $nls['englishlang']['zh_TW'] = 'Traditional Chinese';
 $nls['alias']['chinese'] = 'zh_TW' ;
 $nls['alias']['zh_TW.Big5'] = 'zh_TW' ;
 
+#Possible locale for language
+$nls['locale']['zh_TW'] = 'zh_TW,zh_TW.euctw,zh_TW.utf8,chinese-traditional,Chinese_Taiwan.950';
+
 #Encoding of the language
 $nls['encoding']['zh_TW'] = 'UTF-8';
 

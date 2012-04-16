@@ -42,6 +42,9 @@ $nls['alias']['italian'] = 'it_IT' ;
 $nls['alias']['it_IT.ISO8859-1'] = 'it_IT' ;
 $nls['alias']['it_IT.ISO8859-15'] = 'it_IT' ;
 
+#Possible locale for language
+$nls['locale']['it_IT'] = 'it_IT,it_IT.utf8,it_IT@euro,italian,Italian_Italy.1252';
+
 #Encoding of the language
 $nls['encoding']['it_IT'] = 'UTF-8';
 

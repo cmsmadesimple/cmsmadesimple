@@ -41,6 +41,9 @@ $nls['alias']['eus'] = 'eu_ES' ;
 $nls['alias']['eu_ES'] = 'eu_ES' ;
 $nls['alias']['eu_ES.ISO8859-1'] = 'eu_ES' ;
 
+#Possible locale for language
+$nls['locale']['eu_ES'] = 'eu_ES,eu_ES.utf8,eu_ES@euro,basque,Basque_Spain.1252';
+
 #Encoding of the language
 $nls['encoding']['eu_ES'] = 'UTF-8';
 

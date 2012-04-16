@@ -41,6 +41,9 @@ $nls['alias']['hr_HR'] = 'hr_HR' ;
 $nls['alias']['hr_HR.WINDOWS-1250'] = 'hr_HR' ;
 $nls['alias']['hr_HR.ISO8859-2'] = 'hr_HR' ;
 
+#Possible locale for language
+$nls['locale']['hr_HR'] = 'hr_HR,hr_HR.utf8,croatian,Croatian_Croatia.1250';
+
 #Encoding of the language
 $nls['encoding']['hr_HR'] = 'UTF-8';
 

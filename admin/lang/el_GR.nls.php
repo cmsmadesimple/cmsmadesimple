@@ -41,6 +41,9 @@ $nls['alias']['hellenic'] = 'el_GR' ;
 $nls['alias']['el'] = 'el_GR' ;
 $nls['alias']['el_GR.ISO8859-7'] = 'el_GR' ;
 
+#Possible locale for language
+$nls['locale']['el_GR'] = 'el_GR,el_GR.utf8,greek,Greek_Greece.1253';
+
 #Encoding of the language
 $nls['encoding']['el_GR'] = "UTF-8";
 

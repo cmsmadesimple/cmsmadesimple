@@ -39,6 +39,9 @@ $nls['alias']['fr_LU'] = 'fr_FR' ;
 $nls['alias']['fr_CH'] = 'fr_FR' ;
 $nls['alias']['fr_FR.ISO8859-1'] = 'fr_FR' ;
 
+#Possible locale for language
+$nls['locale']['fr_FR'] = 'fr_FR,fr_FR.utf8,fr_FR@euro,french,French_France.1252';
+
 #Encoding of the language
 $nls['encoding']['fr_FR'] = 'UTF-8';
 

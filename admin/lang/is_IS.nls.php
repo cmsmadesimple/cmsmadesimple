@@ -42,6 +42,9 @@ $nls['alias']['is_IS'] = 'is_IS' ;
 $nls['alias']['is_IS.ISO8859-1'] = 'is_IS' ;
 $nls['alias']['is_IS.ISO8859-15'] = 'is_IS' ;
 
+#Possible locale for language
+$nls['locale']['is_IS'] = 'is_IS,is_IS.utf8,icelandic,Icelandic_Iceland.1252';
+
 #Encoding of the language
 $nls['encoding']['is_IS'] = 'UTF-8';
 

@@ -42,6 +42,9 @@ $nls['alias']['romanian'] = 'ro_RO' ;
 $nls['alias']['ro_RO.ISO8859-2'] = 'ro_RO' ;
 $nls['alias']['ro_RO.ISO8859-16'] = 'ro_RO' ;
 
+#Possible locale for language
+$nls['locale']['ro_RO'] = 'ro_RO,ro_RO.utf8,romanian,Romanian_Romania.1250';
+
 #Encoding of the language
 $nls['encoding']['ro_RO'] = 'UTF-8';
 

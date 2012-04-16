@@ -15,6 +15,9 @@ $nls['englishlang']['pt_BR'] = 'Brazilian Portuguese';
 $nls['alias']['pt-BR'] = 'pt_BR' ;
 $nls['alias']['pt_BR'] = 'pt_BR' ;
 
+#Possible locale for language
+$nls['locale']['pt_BR'] = 'pt_BR,pt_BR.utf8,portuguese-brazil,Portuguese_Brazil.1252';
+
 #Encoding of the language
 $nls['encoding']['pt_BR'] = 'UTF-8';
 

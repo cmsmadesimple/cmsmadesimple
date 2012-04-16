@@ -41,6 +41,9 @@ $nls['alias']['hu_HU'] = 'hu_HU' ;
 $nls['alias']['hu_HU.WINDOWS-1250'] = 'hu_HU' ;
 $nls['alias']['hu_HU.ISO8859-2'] = 'hu_HU' ;
 
+#Possible locale for language
+$nls['locale']['hu_HU'] = 'hu_HU,hu_HU.utf8,hungarian,Hungarian_Hungary.1250';
+
 #Encoding of the language
 $nls['encoding']['hu_HU'] = 'UTF-8';
 

@@ -40,6 +40,9 @@ $nls['alias']['afr'] = 'af_ZA';
 $nls['alias']['afrikaans'] = 'af_ZA';
 $nls['alias']['af_ZA.ISO8859-1'] = 'af_ZA' ;
 
+#Possible locale for language
+$nls['locale']['af_ZA'] = 'af_ZA,af_ZA.utf8,afrikaans,Afrikaans_South Africa.1252';
+
 #Encoding of the language
 $nls['encoding']['af_ZA'] = 'UTF-8';
 
