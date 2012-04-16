@@ -323,6 +323,14 @@ final class CmsNlsOperations
 	$val = $config['locale'];
 	if( is_string($val) ) 
 	  $val = trim($val);
+	if( strpos($val,',') !== FALSE )
+	  {
+	    $val = explode(',',$val);
+	    for( $i = 0; $i < count($val); $i++ )
+	      {
+		$val[$i] = trim($val[$i]);
+	      }
+	  }
 	return $val;
       }
 

@@ -256,7 +256,7 @@ if (! isset($CMS_INSTALL_PAGE))
 $locale = CmsNlsOperations::get_locale();
 if( $locale )
   {
-    $res = @setlocale(LC_ALL,$str);
+    $res = @setlocale(LC_ALL,$locale);
     if( $res === FALSE )
       {
 	debug_buffer('IMPORTANT: SetLocale failed');
