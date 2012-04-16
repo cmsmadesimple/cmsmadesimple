@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004-2010 by Ted Kulp (wishy@users.sf.net)
+#(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,7 @@
  */
 
 
+ 
 /**
  * Redirects to relative URL on the current site
  *
@@ -124,6 +125,7 @@ function redirect($to, $noappend=false)
 }
 
 
+
 /**
  * Given a page ID or an alias, redirect to it
  * Retrieves the URL of the specified page, and performs a redirect
@@ -133,8 +135,7 @@ function redirect($to, $noappend=false)
  */
 function redirect_to_alias($alias)
 {
-  $gCms = cmsms();
-  $manager = $gCms->GetHierarchyManager();
+  $manager = cmsms()->GetHierarchyManager();
   $node = $manager->sureGetNodeByAlias($alias);
   if( !$node ) {
     audit('','Core','Attempt to redirect to invalid alias: '.$alias);
@@ -151,6 +152,7 @@ function redirect_to_alias($alias)
 }
 
 
+
 /**
  * Calculate the difference in seconds between two microtime() values
  *
@@ -164,6 +166,7 @@ function microtime_diff($a, $b) {
 	list($b_dec, $b_sec) = explode(" ", $b);
 	return $b_sec - $a_sec + $b_dec - $a_dec;
 }
+
 
 
 /**
@@ -182,6 +185,7 @@ function cms_join_path()
 }
 
 
+
 /**
  * Return the global gCms object
  *
@@ -192,6 +196,7 @@ function &cmsms()
 {
    return CmsApp::get_instance();
 }
+
 
 
 /**
@@ -205,10 +210,8 @@ function &cmsms()
  * @deprecated
  * @internal
  */
-#function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
 function ErrorHandler404()
 {
-	#if ($errno == E_USER_WARNING) {
 		@ob_end_clean();
 		header("HTTP/1.0 404 Not Found");
 		header("Status: 404 Not Found");
@@ -220,54 +223,8 @@ function ErrorHandler404()
 <p>The requested URL was not found on this server.</p>
 </body></html>';
 		exit();
-	#}
 }
 
-/**
- * Simple template parser
- *
- * @since 0.6.1
-
-	function parse_template ($template, $tpl_array, $warn=0)
-	{
-		while ( list ($key,$val) = each ($tpl_array) )
-		{
-			if (!(empty($key)))
-			{
-				if(gettype($val) != "string")
-				{
-					settype($val,"string");
-				}
-				$template = eregi_replace('\{' . $key . '\}',$val,$template);
-			}
-		}
-
-		if(!$warn)
-		{
-			// Silently remove anything not already found
-
-			$template = ereg_replace('\{[A-Z0-9_]+\}', "", $template);
-		}
-		else
-		{
-			// Warn about unresolved template variables
-			if (ereg('\{[A-Z0-9_]+\}',$template))
-			{
-				$unknown = split("\n",$template);
-				while (list ($Element,$Line) = each($unknown) )
-				{
-					$UnkVar = $Line;
-					if(!(empty($UnkVar)))
-					{
-						$this->show_unknowns($UnkVar);
-					}
-				}
-			}
-		}
-		return $template;
-
-	}	// end parse_template();
- */
 
 
 /**
@@ -283,16 +240,18 @@ function ErrorHandler404()
 function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8", $convert_single_quotes = false)
 {
 	$result = "";
-	#$result = htmlentities($string, $param, $charset);
 	$result = my_htmlentities($string, $convert_single_quotes);
 	return $result;
 }
+
 
 
 /**
  * @ignore
  */
 define('CLEANED_FILENAME','BAD_FILE');
+
+
 
 /**
  * Clean up the filename, and ensure that the filename resides underneath
@@ -319,6 +278,8 @@ function cms_cleanfile($filename)
 	return $realpath;
 }
 
+
+
 /**
  * Figures out the page name from the uri string.  Has to use different logic
  * based on the type of httpd server.
@@ -340,11 +301,7 @@ function cms_calculate_url()
 		if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['REQUEST_URI'], $matches))
 		{
 			$result = $matches[1];
-		}/*
-		else
-		{
-			$result = $_SERVER['PHP_SELF'];
-		}*/
+		}
 	}
 
 	//trim off the extension, if there is one set
@@ -356,6 +313,8 @@ function cms_calculate_url()
 	return $result;
 
 }
+
+
 
 /**
  * A replacement for the built in htmlentities method.
@@ -372,40 +331,16 @@ function my_htmlentities($val, $convert_single_quotes = false)
 		return "";
 	}
 	$val = str_replace( "&#032;", " ", $val );
-
-	//Remove sneaky spaces
-	// $val = str_replace( chr(0xCA), "", $val );
-
 	$val = str_replace( "&"            , "&amp;"         , $val );
 	$val = str_replace( "<!--"         , "&#60;&#33;--"  , $val );
 	$val = str_replace( "-->"          , "--&#62;"       , $val );
 	$val = preg_replace( "/<script/i"  , "&#60;script"   , $val );
 	$val = str_replace( ">"            , "&gt;"          , $val );
 	$val = str_replace( "<"            , "&lt;"          , $val );
-
-
 	$val = str_replace( "\""           , "&quot;"        , $val );
-
-	// Uncomment it if you need to convert literal newlines
-	//$val = preg_replace( "/\n/"        , "<br>"          , $val );
-
 	$val = preg_replace( "/\\$/"      , "&#036;"        , $val );
-
-	// Uncomment it if you need to remove literal carriage returns
-	//$val = preg_replace( "/\r/"        , ""              , $val );
-
 	$val = str_replace( "!"            , "&#33;"         , $val );
 	$val = str_replace( "'"            , "&#39;"         , $val );
-
-	// Uncomment if you need to convert unicode chars
-	//$val = preg_replace("/&#([0-9]+);/s", "&#\1;", $val );
-
-	// Strip slashes if not already done so.
-
-	//if ( get_magic_quotes_gpc() )
-	//{
-	//	$val = stripslashes($val);
-	//}
 
 	if ($convert_single_quotes)
 	{
@@ -413,12 +348,9 @@ function my_htmlentities($val, $convert_single_quotes = false)
 		$val = str_replace("'", "&apos;", $val);
 	}
 
-	// Swop user inputted backslashes
-
-	//$val = preg_replace( "/\(?!&#|?#)/", "&#092;", $val );
-
 	return $val;
 }
+
 
 
 /**
@@ -436,64 +368,18 @@ function cms_utf8entities($val)
 		return "";
 	}
 	$val = str_replace( "&#032;", " ", $val );
-
-	//Remove sneaky spaces
-	// $val = str_replace( chr(0xCA), "", $val );
-
 	$val = str_replace( "&"            , "\u0026"         , $val );
 	$val = str_replace( ">"            , "\u003E"          , $val );
 	$val = str_replace( "<"            , "\u003C"          , $val );
 
 
 	$val = str_replace( "\""           , "\u0022"        , $val );
-
-	// Uncomment it if you need to convert literal newlines
-	//$val = preg_replace( "/\n/"        , "<br>"          , $val );
-
-	#$val = preg_replace( "/\\$/"      , "&#036;"        , $val );
-
-	// Uncomment it if you need to remove literal carriage returns
-	//$val = preg_replace( "/\r/"        , ""              , $val );
-
 	$val = str_replace( "!"            , "\u0021"         , $val );
 	$val = str_replace( "'"            , "\u0027"         , $val );
-
-	// Uncomment if you need to convert unicode chars
-	//$val = preg_replace("/&#([0-9]+);/s", "&#\1;", $val );
-
-	// Strip slashes if not already done so.
-
-	//if ( get_magic_quotes_gpc() )
-	//{
-	//	$val = stripslashes($val);
-	//}
-
-	// Swop user inputted backslashes
-
-	//$val = preg_replace( "/\(?!&#|?#)/", "&#092;", $val );
 
 	return $val;
 }
 
-
-//Taken from http://www.webmasterworld.com/forum88/164.htm
-/*
-function nl2pnbr( $text )
-{
-	// Use \n for newline on all systems
-	$text = preg_replace("/(\r\n|\n|\r)/", "\n", $text);
-
-	// Only allow two newlines in a row.
-	$text = preg_replace("/\n\n+/", "\n\n", $text);
-
-	// Put <p>..</p> around paragraphs
-	$text = preg_replace('/\n?(.+?)(\n\n|\z)/s', "<p>$1</p>", $text);
-
-	// Convert newlines not preceded by </p> to a <br /> tag
-	$text = preg_replace('|(?<!</p>)\s*\n|', "<br />", $text);
-
-	return $text;
-}*/
 
 
 /**
@@ -532,6 +418,8 @@ function debug_bt_to_log()
     }
 }
 
+
+
 /**
  * A function to generate a backtrace in a readable format.
  *
@@ -561,6 +449,8 @@ function debug_bt()
     echo "</dl></pre>\n";
 }
 
+
+
 /**
 * Debug function to display $var nicely in html.
 *
@@ -571,8 +461,7 @@ function debug_bt()
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true)
 {
-  $gCms = cmsms();
-	$variables =& $gCms->variables;
+	$variables =& cmsms()->variables;
 
 	$starttime = microtime();
 	if (isset($variables['starttime']))
@@ -661,6 +550,8 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 	return $output;
 }
 
+
+
 /**
  * Display $var nicely only if $config["debug"] is set
  *
@@ -675,6 +566,7 @@ function debug_output($var, $title="")
 	}
 
 }
+
 
 
 /**
@@ -701,8 +593,9 @@ function debug_to_log($var, $title='',$filename = '')
 }
 
 
+
 /**
- * Display $var nicely to the $gCms->errors array if $config['debug'] is set
+ * Display $var nicely to the cmsms()->errors array if $config['debug'] is set
  *
  * @param mixed $var
  * @param string $title
@@ -715,6 +608,7 @@ function debug_buffer($var, $title="")
       cmsms()->add_error(debug_display($var, $title, false, true));
     }
 }
+
 
 
 /**
@@ -732,6 +626,8 @@ function debug_sql($str, $newline = false)
       cmsms()->add_error(debug_display($str, '', false, true));
     }
 }
+
+
 
 /**
 * Retrieve value from $_REQUEST. Returns $default_value if
@@ -771,6 +667,8 @@ function get_request_value($value, $default_value = '', $session_key = '')
 
 	return $result;
 }
+
+
 
 /**
 * Return $value if it's set and same basic type as $default_value,
@@ -829,6 +727,7 @@ function get_value_with_default($value, $default_value = '', $session_key = '')
 
 	return $return_value;
 }
+
 
 
 /**
@@ -913,6 +812,8 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
 	return $return_value;
 }
 
+
+
 /**
  * A convenience function to create a dropdown control with supported encodings.
  *
@@ -943,6 +844,7 @@ function create_encoding_dropdown($name = 'encoding', $selected = '')
 }
 
 
+
 /**
  * A method to remove a permission from the database.
  *
@@ -968,6 +870,7 @@ function cms_mapi_remove_permission($permission_name)
       $db->Execute($query, array($id));
     }
 }
+
 
 
 /**
@@ -1002,6 +905,7 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 }
 
 
+
 /**
  * A function to test if a file specification matches an array of
  * file specifications that indicate it should be excluded
@@ -1026,6 +930,7 @@ function filespec_is_excluded( $file, $excludes )
     }
   return false;
 }
+
 
 
 /**
@@ -1079,6 +984,7 @@ function is_directory_writable( $path )
 }
 
 
+
 /**
  * Return an array containing a list of files in a directory
  * performs a non recursive search
@@ -1088,10 +994,8 @@ function is_directory_writable( $path )
  * @param extensions - include only files matching these extensions
  *                     case insensitive, comma delimited
  */
-function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true,
-			    $fileprefix='',$excludefiles=1)
+function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true, $fileprefix='',$excludefiles=1)
 {
-
   $dh = @opendir($dir);
   if( !$dh ) return false;
 
@@ -1120,6 +1024,7 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
   if( !count($results) ) return false;
   return $results;
 }
+
 
 
 /**
@@ -1161,6 +1066,7 @@ function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "
 }
 
 
+
 /**
  * A function to recursively delete all files and folders in a directory
  * synonymous with rm -r
@@ -1197,6 +1103,7 @@ function recursive_delete( $dirname )
     }
   return true;
 }
+
 
 
 /**
@@ -1240,6 +1147,8 @@ function chmod_r( $path, $mode )
   return @chmod( $path, $mode );
 }
 
+
+
 /**
  * A method to serialize an object and encode it for storage or transport.
  *
@@ -1252,6 +1161,8 @@ function SerializeObject(&$object)
 	return base64_encode(serialize($object));
 }
 
+
+
 /**
  * A function unserialize data into an object
  *
@@ -1263,6 +1174,7 @@ function UnserializeObject(&$serialized)
 {
 	return  unserialize(base64_decode($serialized));
 }
+
 
 
 /**
@@ -1279,6 +1191,8 @@ function startswith( $str, $sub )
 	return ( substr( $str, 0, strlen( $sub ) ) == $sub );
 }
 
+
+
 /**
  * Similar to the startswith method, this function tests with string A ends with string B
  *
@@ -1293,6 +1207,8 @@ function endswith( $str, $sub )
 	return ( substr( $str, strlen( $str ) - strlen( $sub ) ) == $sub );
 }
 
+
+
 /**
  * A convenience function to display the memory usage
  *
@@ -1304,6 +1220,7 @@ function showmem($string = '')
 {
 	var_dump($string . ' -- ' . memory_get_usage());
 }
+
 
 
 /**
@@ -1347,7 +1264,11 @@ function munge_string_to_url($alias, $tolower = false, $withslash = false)
 	return $alias;
 }
 
-// I'm not gonna document these.
+
+
+/**
+ * I'm not gonna document this
+ */
 if (!function_exists('file_put_contents')) {
     function file_put_contents($filename, $data) {
         $f = @fopen($filename, 'w');
@@ -1361,6 +1282,11 @@ if (!function_exists('file_put_contents')) {
     }
 }
 
+
+
+/**
+ * I'm not gonna document this
+ */
 if(!function_exists("file_get_contents"))
 {
    function file_get_contents($filename)
@@ -1376,6 +1302,10 @@ if(!function_exists("file_get_contents"))
 }
 
 
+
+/**
+ *
+ */
 function cms_readfile($filename)
 {
   @ob_start();
@@ -1388,6 +1318,7 @@ function cms_readfile($filename)
   }
   return FALSE;
 }
+
 
 
 // create the array_walk_recursive function in PHP4
@@ -1434,12 +1365,16 @@ if (!function_exists('array_walk_recursive'))
 	}
 }
 
+
+
 if (!function_exists("stripos")) {
   function stripos($str,$needle,$offset=0)
   {
       return strpos(strtolower($str),strtolower($needle),$offset);
   }
 }
+
+
 
 /*
  * Sanitize input to prevent against XSS and other nasty stuff.
@@ -1474,6 +1409,8 @@ function cleanValue($val) {
 	return $val;
 }
 
+
+
 /*
  * Method to sanitize incoming html.
  * Take from cakephp (http://cakephp.org)
@@ -1494,13 +1431,14 @@ function cleanHtml($string, $remove = false) {
 	return $string;
 }
 
-
 define('CLEAN_INT','CLEAN_INT');
 define('CLEAN_FLOAT','CLEAN_FLOAT');
 define('CLEAN_NONE','CLEAN_NONE');
 define('CLEAN_STRING','CLEAN_STRING');
 define('CLEAN_REGEXP','regexp:');
 define('CLEAN_FILE','CLEAN_FILE');
+
+
 
 /**
  * Method to sanitize all entries in a hash
@@ -1609,6 +1547,7 @@ function cleanParamHash($modulename,$data,$map = false,
 }
 
 
+
 /**
  * Returns all parameters sent that are destined for the module with
  * the given $id.  This method reads the parameters directly from the $_REQUEST
@@ -1641,6 +1580,7 @@ function GetModuleParameters($id)
 }
 
 
+
 /**
  * A function to test if permissions are set correctly, and the server is set properly
  * to allow users to upload to CMSMS.
@@ -1655,9 +1595,8 @@ function can_users_upload()
   # and the uploads and modules directory.  if they all match, then we
   # can upload files.
   # if safe mode is off, then we just have to check the permissions.
-  $gCms = cmsms();
-  $file_index = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'index.php';
-  $dir_uploads = $gCms->config['uploads_path'];
+  $file_index = cmsms()->config['root_path'].DIRECTORY_SEPARATOR.'index.php';
+  $dir_uploads = cmsms()->config['uploads_path'];
 
   $stat_index = @stat($file_index);
   $stat_uploads = @stat($dir_uploads);
@@ -1693,6 +1632,7 @@ function can_users_upload()
 }
 
 
+
 /**
  * A function to test if permissions, and php configuration is setup correctly
  * to allow an administrator to upload files to CMSMS
@@ -1707,12 +1647,11 @@ function can_admin_upload()
   # and the uploads and modules directory.  if they all match, then we
   # can upload files.
   # if safe mode is off, then we just have to check the permissions.
-  $gCms = cmsms();
-  $file_index = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'index.php';
-  $file_moduleinterface = $gCms->config['root_path'].DIRECTORY_SEPARATOR.
-    $gCms->config['admin_dir'].DIRECTORY_SEPARATOR.'moduleinterface.php';
-  $dir_uploads = $gCms->config['uploads_path'];
-  $dir_modules = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'modules';
+  $file_index = cmsms()->config['root_path'].DIRECTORY_SEPARATOR.'index.php';
+  $file_moduleinterface = cmsms()->config['root_path'].DIRECTORY_SEPARATOR.
+    cmsms()->config['admin_dir'].DIRECTORY_SEPARATOR.'moduleinterface.php';
+  $dir_uploads = cmsms()->config['uploads_path'];
+  $dir_modules = cmsms()->config['root_path'].DIRECTORY_SEPARATOR.'modules';
 
   $stat_index = @stat($file_index);
   $stat_moduleinterface = @stat($file_moduleinterface);
@@ -1732,7 +1671,6 @@ function can_admin_upload()
   $safe_mode = ini_get_boolean('safe_mode');
   if( $safe_mode )
     {
-
       // we're in safe mode.
       if( ($stat_moduleinterface[4] != $stat_modules[4]) ||
 	  ($stat_moduleinterface[4] != $stat_uploads[4]) ||
@@ -1758,6 +1696,7 @@ function can_admin_upload()
 }
 
 
+
 /** 
  * A convenience function to interpret octal permissions, and return 
  * a human readable string.  Uses the lang() function for translation.
@@ -1776,10 +1715,12 @@ function interpret_permissions($perms)
     {
       $owner[] = lang('read');
     }
+	
   if( $perms & 0200 )
     {
       $owner[] = lang('write');
     }
+	
   if( $perms & 0100 )
     {
       $owner[] = lang('execute');
@@ -1789,10 +1730,12 @@ function interpret_permissions($perms)
     {
       $group[] = lang('read');
     }
+	
   if( $perms & 0020 )
     {
       $group[] = lang('write');
     }
+	
   if( $perms & 0010 )
     {
       $group[] = lang('execute');
@@ -1802,10 +1745,12 @@ function interpret_permissions($perms)
     {
       $other[] = lang('read');
     }
+	
   if( $perms & 0002 )
     {
       $other[] = lang('write');
     }
+	
   if( $perms & 0001 )
     {
       $other[] = lang('execute');
@@ -1813,6 +1758,7 @@ function interpret_permissions($perms)
 
   return array($owner,$group,$other);
 }
+
 
 
 /**
@@ -1831,6 +1777,8 @@ function ini_get_boolean($str)
      $ret = 1;
   return $ret;
 }
+
+
 
 /**
  * Another convenience function to output a human readable function stack trace
@@ -1855,6 +1803,7 @@ function stack_trace()
 }
 
 
+
 /** 
  * A wrapper around move_uploaded_file that attempts to ensure permissions on uploaded
  * files are set correctly.
@@ -1875,6 +1824,7 @@ function cms_move_uploaded_file( $tmpfile, $destination )
    @chmod($destination,octdec($config['default_upload_permission']));
    return true;
 }
+
 
 
 /**
@@ -1900,6 +1850,8 @@ function csscache_csvfile_to_hash($filename)
   return $result;
 }
 
+
+
 /**
  * A function to take hash information representing CSS cache data and store it in a CSV file
  *
@@ -1922,6 +1874,8 @@ function csscache_hash_to_csvfile($filename,$hash)
   fclose($fh);
 }
 
+
+
 /**
  * A function to clear clear the cached CSS information
  *
@@ -1934,6 +1888,7 @@ function css_cache_clear($filename)
 {
   @unlink($filename);
 }
+
 
 
 /**
@@ -2026,6 +1981,7 @@ function cms_ipmatches($ip,$checklist)
     }
   return FALSE;
 }
+
 
 
 /**
@@ -2380,6 +2336,7 @@ function is_email( $email, $checkDNS=false ) {
 }
 
 
+
 /**
  * A convenience method to output the secure param tag that is used on all admin links
  *
@@ -2399,6 +2356,10 @@ function get_secure_param()
 }
 
 
+
+/**
+ *
+ */
 function cms_to_bool($str)
 {
   if( is_numeric($str) )
@@ -2412,6 +2373,10 @@ function cms_to_bool($str)
 }
 
 
+
+/**
+ *
+ */
 function cms_get_jquery($exclude = '',$ssl = false,$cdn = false,$append = '',$custom_root='')
 {
   $config = cms_config::get_instance();
@@ -2448,6 +2413,8 @@ function cms_get_jquery($exclude = '',$ssl = false,$cdn = false,$append = '',$cu
   }
   return $output;
 }
+	
+	
 	
 if(!function_exists('get_called_class')) {
   function get_called_class() {
