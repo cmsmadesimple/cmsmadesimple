@@ -328,7 +328,7 @@ else if ($action == "showmodulehelp")
   $modinstance = ModuleOperations::get_instance()->get_module_instance($module,'',TRUE);
   if( is_object($modinstance) )
     {
-      $orig_lang =  cms_admin_current_language();
+      $orig_lang =  CmsNlsOperations::get_current_language();
       $modulehelp_yourlang = lang('modulehelp_yourlang');
       if( isset($_GET['lang']) && $orig_lang != 'en_US' )
 	{
@@ -359,7 +359,7 @@ else if ($action == "showmodulehelp")
 
       if( $orig_lang != 'en_US' )
 	{
-	  $cur_lang = cms_admin_current_language();
+	  $cur_lang = CmsNlsOperations::get_current_language();
 	  if( $cur_lang == 'en_US' )
 	    {
 	      $header .= '<span class="helptext"><a href="listmodules.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&amp;action=showmodulehelp&amp;module='.$module.'&amp;lang='.$orig_lang.'">'.$modulehelp_yourlang.'</a></span>';
