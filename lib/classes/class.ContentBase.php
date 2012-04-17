@@ -2335,16 +2335,14 @@ class ContentBase
       return FALSE;
     }
 
-    /** is this used
-     public function AddExtraProperty($name,$type = 'string')
-     {
-     if( !is_array($this->_props) )  $this->_load_properties();
-     if( !isset($this->_props[$name]) )
-     {
-     $this->_props[$name] = '';
-     }
-     }
-    */
+    public function AddExtraProperty($name,$type = 'string')
+    {
+      if( !is_array($this->_props) )  $this->_load_properties();
+      if( !isset($this->_props[$name]) )
+	{
+	  $this->_props[$name] = '';
+	}
+    }
 
     /**
      * Remove a property from the known property list.
