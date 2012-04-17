@@ -194,17 +194,14 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 
 include_once("header.php");
 $current_language = CmsNlsOperations::get_current_language();
-$gCms = cmsms();
-$nls =& $gCms->nls;
+$langinfo = CmsNlsOperations::get_language_info($current_language);
 ?>
 
-
-
-	<script type="text/javascript" src="../lib/filemanager/ImageManager/assets/dialog.js"></script>
-	<script type="text/javascript" src="../lib/filemanager/ImageManager/IMEStandalone.js"></script>
-<?php echo "	<script type=\"text/javascript\" src=\"../lib/filemanager/ImageManager/lang/{$nls['htmlarea'][$current_language]}.js\"></script>\n" ?>
-	<script type="text/javascript">
-    //<![CDATA[
+<script type="text/javascript" src="../lib/filemanager/ImageManager/assets/dialog.js"></script>
+<script type="text/javascript" src="../lib/filemanager/ImageManager/IMEStandalone.js"></script>
+<script type="text/javascript" src="../lib/filemanager/ImageManager/lang/<?php $langinfo->htmlarea(); ?>.js"></script>
+<script type="text/javascript">
+//<![CDATA[
 
 		//Create a new Image Manager, needs the directory where the manager is
 		//and which language translation to use.

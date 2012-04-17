@@ -54,13 +54,6 @@ final class CmsApp {
 	var $errors = array();
 
 	/**
-     * nls array - This holds all of the nls information for different languages
-	 *	@access private
-	 */
-	var $nls = array();
-
-
-	/**
 	 * content types array - List of available content types
 	 *
 	 * @internal

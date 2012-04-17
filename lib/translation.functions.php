@@ -281,7 +281,6 @@ function lang()
 {
   // uses the default admin realm.
   $gCms = cmsms();
-  $nls =& $gCms->nls;
 
   $dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'lang');
   $customdir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'custom','lang');
@@ -423,7 +422,6 @@ function lang_en()
   // uses the default admin realm.
 	$gCms = cmsms();
 	global $lang;
-	$nls =& $gCms->nls;
 
 	$dir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'lang');
 	$customdir = cms_join_path($gCms->config['root_path'],$gCms->config['admin_dir'],'custom','lang');

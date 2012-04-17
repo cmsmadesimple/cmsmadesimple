@@ -82,10 +82,10 @@ if (isset($CMS_INSTALL_PAGE))
 	if ($current_language != 'en_US')
 	{
 	    $file = $base_lang . 'ext' . DIRECTORY_SEPARATOR . $current_language . '.php';
-		if (!is_file($file))
-		{
-			$file = $base_lang . $current_language . '.php';
-		}
+	    if (!is_file($file))
+	      {
+		$file = $base_lang . $current_language . '.php';
+	      }
 
 	    if (is_file($file) && strlen($current_language) == 5 && strpos($current_language, ".") === false)
 	    {
@@ -93,11 +93,7 @@ if (isset($CMS_INSTALL_PAGE))
 	    }
 	}
 
-	$nls['direction'] = (isset($nls['direction']) && $nls['direction'] == 'rtl') ? 'rtl' : 'ltr';
-
-	$gCms = cmsms();
-	$gCms->nls = $nls;
-	$gCms->current_language = $current_language;
+	$info = CmsNlsOperations::set_language($current_language);
 }
 
 # vim:ts=4 sw=4 noet

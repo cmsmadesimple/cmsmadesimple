@@ -164,7 +164,7 @@ final class CmsNlsOperations
     self::_load_nls();
     if( isset(self::$_nls[$lang]) )
       {
-	self::$_cur_fe_lang = $lang;
+	self::$_cur_lang = $lang;
 	return TRUE;
       }
     return FALSE;

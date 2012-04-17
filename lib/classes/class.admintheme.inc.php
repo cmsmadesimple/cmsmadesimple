@@ -505,9 +505,8 @@ class AdminTheme extends CmsAdminThemeBase
      */
     function DisplayHTMLStartTag()
     {
-		$gCms = cmsms();
-		$nls = $gCms->nls;
-    	echo (isset($nls['direction']) && $nls['direction'] == 'rtl') ? "<html dir=\"rtl\"\n>" : "<html>\n";
+		$info = CmsNlsOperations::get_language_info(CmsNlsOperations::get_current_language());
+    	echo ($info->direction() == 'rtl') ? "<html dir=\"rtl\"\n>" : "<html>\n";
     }
 	
 	/**

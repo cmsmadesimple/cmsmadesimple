@@ -28,6 +28,7 @@ class CmsNls
   protected $_display;
   protected $_key;
   protected $_direction;
+  protected $_htmlarea;
 
   public function __construct() {}
 
@@ -116,6 +117,13 @@ class CmsNls
     return 'ltr';
   }
 
+  public function htmlarea()
+  {
+    if( $this->_htmlarea )
+      return $this->_htmlarea;
+    return substr($this->_fullname,0,2);
+  }
+
   public static function &from_array($data)
   {
     $obj = new CmsNls();
@@ -161,6 +169,11 @@ class CmsNls
     if( isset($data['encoding'][$obj->_key]) )
       {
 	$obj->_encoding = $data['encoding'][$obj->_key];
+      }
+
+    if( isset($data['htmlarea'][$obj->_key]) )
+      {
+	$obj->_htmlarea = $data['htmlarea'][$obj->_key];
       }
 
     // get the direction
