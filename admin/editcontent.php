@@ -284,6 +284,8 @@ else
 	}
 	$typesdropdown .= "</select>";
 
+	$tabnames = $contentobj->TabNames();
+
 	if( !$error )
 	  {
 	    $error = $contentobj->GetError();
@@ -293,7 +295,6 @@ else
 	    echo $themeObject->ShowErrors($error);
 	  }
 
-	$tabnames = $contentobj->TabNames();
 	$numberoftabs = count($tabnames);
 	$tab_contents_array = array();
 	for ($currenttab = 0; $currenttab < $numberoftabs; $currenttab++)
