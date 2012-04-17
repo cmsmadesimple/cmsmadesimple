@@ -200,17 +200,16 @@ final class CmsNlsOperations
 	if( !$lang ) $lang = 'en_US';
       }
 
-    if( isset($_POST['change_cms_lang']) && isset($_POST['default_cms_lang']) )
+    if( isset($_POST['default_cms_language']) )
       {
 	// a hack to handle the editpref case of the user changing his language
 	// this is needed because the lang stuff is included before the preference may
 	// actually be set.
 	self::_load_nls();
-	$a1 = basename(trim($_POST['change_cms_lang']));
-	$a2 = basename(trim($_POST['default_cms_lang']));
-	if( $a1 == $a2 && isset(self::$_nls[$a1]) )
+	$a2 = basename(trim($_POST['default_cms_language']));
+	if( $a2 && isset(self::$_nls[$a2]) )
 	  {
-	    $lang == $a1;
+	    $lang = $a2;
 	  }
       }
 
