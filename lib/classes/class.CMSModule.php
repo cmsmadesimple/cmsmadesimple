@@ -365,14 +365,27 @@ abstract class CMSModule
 	}
 
 	/**
-	 * Callback to determine if the output from a call module can be cached by smarty. 
+	 * Callback to determine if the output from a call to the module can be cached by smarty. 
 	 *
-	 * @abstract
 	 * @since 1.11
 	 * @author Robert Campbell
 	 * @return boolean
 	 */
-	public function can_cache_output()
+	final public function can_cache_output()
+	{
+	  global $CMS_ADMIN_PAGE, $CMS_INSTALL_PAGE, $CMS_STYLESHEET;
+	  if( isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) || isset($CMS_STYLESHEET) ) return FALSE;
+	  return $this->AllowSmartyCaching();
+	}
+
+	/**
+	 * Callback to determine if the output from a call to the module can be cached by smarty.
+	 *
+	 * @since 1.11
+	 * @author Robert Campbell
+	 * @return boolean
+	 */
+	public function AllowSmartyCaching()
 	{
 	  return FALSE;
 	}

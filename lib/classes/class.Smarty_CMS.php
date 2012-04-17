@@ -280,8 +280,6 @@ class Smarty_CMS extends SmartyBC
 	    {
 	      $cache_id = $this->_global_cache_id . $cache_id;
 	    }
-	  //$tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
-	  //$tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,false,false);
 	  $tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,false,$no_output_filter);
 	  debug_buffer('','Fetch '.$name.' end');
 	  return $tmp;
