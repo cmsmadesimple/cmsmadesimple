@@ -84,11 +84,18 @@ if (isset($_POST["serialized_content"]))
 	$contentobj->SetAddMode();
 	if (strtolower(get_class($contentobj)) != $content_type)
 	{
+	  try
+	    {
 		#Fill up the existing object with values in form
 		#Create new object
 		#Copy important fields to new object
 		#Put new object on top of old on
 		copycontentobj($contentobj, $content_type);
+	    }
+	  catch( CmsEditContentException $e )
+	    {
+	      $error = $e->getMessage();
+	    }
 	}
 }
 else
@@ -143,33 +150,40 @@ else
 
 if ($access && strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' )
   {
-    if ($submit || $apply)
-      {
-	// Fill contentobj with parameters
-	$contentobj->SetAddMode();
-	$contentobj->FillParams($_POST);
-	$contentobj->SetOwner($userid);
-      
-	$error = $contentobj->ValidateData();
-	if ($error === FALSE)
-	  {
-	    $contentobj->Save();
-	    $gCms = cmsms();
-	    $contentops = $gCms->GetContentOperations();
-	    $contentops->SetAllHierarchyPositions();
-	    if ($submit)
-	      {
-		// put mention into the admin log
-		audit($contentobj->Id(), 'Content Item: '.$contentobj->Name(), 'Added');
-		redirect('listcontent.php'.$urlext.'&message=contentadded');
-	      }
-	  }
-      }
-    else 
-      {
-	$contentobj->FillParams($_POST);
-      }
+    try {
+      if ($submit || $apply)
+	{
+	  // Fill contentobj with parameters
+	  $contentobj->SetAddMode();
+	  $contentobj->FillParams($_POST);
+	  $contentobj->SetOwner($userid);
+	    
+	  $error = $contentobj->ValidateData();
+	  if ($error === FALSE)
+	    {
+	      $contentobj->Save();
+	      $gCms = cmsms();
+	      $contentops = $gCms->GetContentOperations();
+	      $contentops->SetAllHierarchyPositions();
+	      if ($submit)
+		{
+		  // put mention into the admin log
+		  audit($contentobj->Id(), 'Content Item: '.$contentobj->Name(), 'Added');
+		  redirect('listcontent.php'.$urlext.'&message=contentadded');
+		}
+	    }
+	}
+      else 
+	{
+	  $contentobj->FillParams($_POST);
+	}
+    }
+    catch( CmsEditContentException $e)
+    {
+      $error = $e->getMessage();
+    }
   }
+
 
 if (!$access)
 {
@@ -197,9 +211,14 @@ else
     }
   $typesdropdown .= "</select>";
 
+if( empty($error) && $contentobj->GetError() )
+{
+  $error = $contentobj->GetError();
+}
+
 if (FALSE == empty($error))
 {
-	echo $themeObject->ShowErrors($error);
+  echo $themeObject->ShowErrors($error);
 }
 ?>
 

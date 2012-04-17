@@ -206,7 +206,14 @@ class Content extends ContentBase
 		// setup
 		//
 		$hash = array();
-		$blocks = $this->get_content_blocks(); 
+		$blocks = null;
+		try {
+			$blocks = $this->get_content_blocks(); 
+		}
+		catch( CmsEditContentException $e ) 
+		{
+			$this->SetError($e->getMessage());
+		}
 
 		//
 		// main tab
@@ -216,46 +223,54 @@ class Content extends ContentBase
 		$tmp = $this->display_attributes($adding);
 		if( !empty($tmp) )
 		{
-			foreach( $tmp as $one ) {
+			foreach( $tmp as $one ) 
+			{
 				$ret[] = $one;
 			}
 		}
 
-		foreach($blocks as $blockName => $blockInfo)
+		if( is_array($blocks) && count($blocks) )
 		{
-			if( !isset($blockInfo['tab']) || $blockInfo['tab'] == '' || $blockInfo['tab'] == 'main' )
+			foreach($blocks as $blockName => $blockInfo)
 			{
-				$parameters[] = $blockInfo['id'];
+				if( !isset($blockInfo['tab']) || $blockInfo['tab'] == '' || $blockInfo['tab'] == 'main' )
+				{
+					$parameters[] = $blockInfo['id'];
 				
-				$data = $this->GetPropertyValue($blockInfo['id']);
-				if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
-				$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
-				if( !$tmp ) continue;
-				$ret[] = $tmp;
+					$data = $this->GetPropertyValue($blockInfo['id']);
+					if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
+					$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
+					if( !$tmp ) continue;
+					$ret[] = $tmp;
+				}
 			}
 		}
+			
 		$hash[lang('main')] = $ret;
 
 		// 
 		// other tabs.
 		//
-		foreach($this->_contentBlocks as $blockName => $blockInfo)
+		if( is_array($blocks) && count($blocks) )
 		{
-			if( isset($blockInfo['tab']) && $blockInfo['tab'] != '' && $blockInfo['tab'] != 'options')
-			{
-				$parameters[] = $blockInfo['id'];
-				
-				$data = $this->GetPropertyValue($blockInfo['id']);
-				if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
-				$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
-				if( !$tmp ) continue;
-
-				if( !isset($hash[$blockInfo['tab']]) )
+			foreach($blocks as $blockName => $blockInfo)
 				{
-					$hash[$blockInfo['tab']] = array();
+					if( isset($blockInfo['tab']) && $blockInfo['tab'] != '' && $blockInfo['tab'] != 'options')
+					{
+						$parameters[] = $blockInfo['id'];
+						
+						$data = $this->GetPropertyValue($blockInfo['id']);
+						if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
+						$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
+						if( !$tmp ) continue;
+						
+						if( !isset($hash[$blockInfo['tab']]) )
+						{
+							$hash[$blockInfo['tab']] = array();
+						}
+						$hash[$blockInfo['tab']][] = $tmp;
+					}
 				}
-				$hash[$blockInfo['tab']][] = $tmp;
-			}
 		}
 
 		//
@@ -273,18 +288,21 @@ class Content extends ContentBase
 				}
 			}
 
-			// and the content blocks
-			foreach($blocks as $blockName => $blockInfo)
+			if( is_array($blocks) && count($blocks) )
 			{
-				if( isset($blockInfo['tab']) && $blockInfo['tab'] == 'options' )
+				// and the content blocks
+				foreach($blocks as $blockName => $blockInfo)
 				{
-					$parameters[] = $blockInfo['id'];
-					
-					$data = $this->GetPropertyValue($blockInfo['id']);
-					if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
-					$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
-					if( !$tmp ) continue;
-					$ret[] = $tmp;
+					if( isset($blockInfo['tab']) && $blockInfo['tab'] == 'options' )
+					{
+						$parameters[] = $blockInfo['id'];
+						
+						$data = $this->GetPropertyValue($blockInfo['id']);
+						if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
+						$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
+						if( !$tmp ) continue;
+						$ret[] = $tmp;
+					}
 				}
 			}
 
@@ -295,7 +313,7 @@ class Content extends ContentBase
 			$userops = cmsms()->GetUserOperations();
 			$modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);
 			if($modifiedbyuser) $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
-
+			
 			if( count($ret) ) $hash[lang('options')] = $ret;
 		}
 

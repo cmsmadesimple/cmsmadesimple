@@ -37,7 +37,7 @@ define('CMS_CONTENT_HIDDEN_NAME','--------');
  * @since		0.8
  * @package		CMS
  */
-class ContentBase
+abstract class ContentBase
 {
   /**
    * The unique ID identifier of the element
@@ -268,6 +268,7 @@ class ContentBase
   private $_attributes;
   private $_prop_defaults;
   private $_add_mode;
+  private $_error;
 
   /************************************************************************/
   /* Constructor related													*/
@@ -2693,6 +2694,18 @@ class ContentBase
 	  stack_trace();
 	  die('unknown property '.$one);
 	}
+    }
+
+    protected function SetError($str)
+    {
+      // we don't need this being serialized.
+      cms_utils::set_app_data('content_error',$str);
+    }
+
+    public function GetError()
+    {
+      $str = cms_utils::get_app_data('content_error');
+      return $str;
     }
 }
 ?>

@@ -109,70 +109,80 @@ if ($access)
     }
   else
     {
-      //$error = '<p>'.lang('error_contenttype').'</p>';
       redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&error=error_contenttype');
     }
 
-  if( $content_id != -1 && strtolower(get_class($contentobj)) != strtolower($content_type) )
-    {
-      // content type change...
-      // this also updates the content object with the POST params.
-      copycontentobj($contentobj, $content_type);
-    }
-  else if( strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' )
-    {
-      // we posted... so update the content object.
-      updatecontentobj($contentobj);
-    }
+  try {
+    if( $content_id != -1 && strtolower(get_class($contentobj)) != strtolower($content_type) )
+      {
+	// content type change...
+	// this also updates the content object with the POST params.
+	copycontentobj($contentobj, $content_type);
+      }
+    else if( strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' )
+      {
+	// we posted... so update the content object.
+	updatecontentobj($contentobj);
+      }
 
-  cms_utils::set_app_data('editing_content',$contentobj);
+    cms_utils::set_app_data('editing_content',$contentobj);
+  }
+  catch( CmsEditContentException $e ) {
+    $error = $e->getMessage();
+  }
+      
 
-	if ($submit || $apply)
+  if ($submit || $apply)
+    {
+      try {
+	// Fill contentobj with parameters
+	// $contentobj->SetProperties();  // calguy should not be necessary
+	$contentobj->FillParams($_POST,true);
+	$error = $contentobj->ValidateData();
+	
+	if ($error === FALSE)
+	  {
+	    $contentobj->SetLastModifiedBy(get_userid());
+	    $contentobj->Save();
+	    $contentops =& $gCms->GetContentOperations();
+	    $contentops->SetAllHierarchyPositions();
+	    // put mention into the admin log
+	    audit($contentobj->Id(), 'Content Item: '.$contentobj->Name(), 'Edited');
+	    if ($submit)
+	      {
+		redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&message=contentupdated');
+	      }
+	  }
+      }
+      catch( CmsEditContentException $e ) {
+	$error = $e->getMessage();
+      }
+	
+      if ($ajax)
 	{
-	  #Fill contentobj with parameters
-	  // $contentobj->SetProperties();  // calguy should not be necessary
-	  $contentobj->FillParams($_POST,true);
-	  $error = $contentobj->ValidateData();
-
-	  if ($error === FALSE)
+	  header('Content-Type: text/xml');
+	  print '<?xml version="1.0" encoding="UTF-8"?>';
+	  print '<EditContent>';
+	  if ($error !== false)
 	    {
-	      $contentobj->SetLastModifiedBy(get_userid());
-	      $contentobj->Save();
-	      $contentops =& $gCms->GetContentOperations();
-	      $contentops->SetAllHierarchyPositions();
-	      // put mention into the admin log
-		  audit($contentobj->Id(), 'Content Item: '.$contentobj->Name(), 'Edited');
-	      if ($submit)
+	      print '<Response>Error</Response>';
+	      print '<Details><![CDATA[';
+	      if (!is_array($error))
 		{
-		  redirect("listcontent.php".$urlext."&page=".$pagelist_id.'&message=contentupdated');
+		  $error = array($error);
 		}
+	      print '<li>' . join('</li><li>', $error) . '</li>';
+	      print ']]></Details>';
 	    }
-
-		if ($ajax)
-		{
-			header('Content-Type: text/xml');
-			print '<?xml version="1.0" encoding="UTF-8"?>';
-			print '<EditContent>';
-			if ($error !== false)
-			{
-				print '<Response>Error</Response>';
-				print '<Details><![CDATA[';
-				if (!is_array($error))
-				{
-					$error = array($error);
-				}
-				print '<li>' . join('</li><li>', $error) . '</li>';
-				print ']]></Details>';
-			}
-			else
-			{
-				print '<Response>Success</Response>';
-				print '<Details><![CDATA[' . lang('contentupdated') . ']]></Details>';
-			}
-			print '</EditContent>';
-			exit;
-		}
+	  else
+	    {
+	      print '<Response>Success</Response>';
+	      print '<Details><![CDATA[' . lang('contentupdated') . ']]></Details>';
+	    }
+	  print '</EditContent>';
+	  exit;
 	}
+    }
 }
 
 if (strlen($contentobj->Name()) > 0)
@@ -274,10 +284,14 @@ else
 	}
 	$typesdropdown .= "</select>";
 
+	if( !$error )
+	  {
+	    $error = $contentobj->GetError();
+	  }
 	if (FALSE == empty($error))
-	{
-	  echo $themeObject->ShowErrors($error);
-	}
+	  {
+	    echo $themeObject->ShowErrors($error);
+	  }
 
 	$tabnames = $contentobj->TabNames();
 	$numberoftabs = count($tabnames);
