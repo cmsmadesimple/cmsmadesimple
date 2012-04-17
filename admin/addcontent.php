@@ -191,6 +191,8 @@ if (!$access)
 }
 else
 {
+  $tabnames = $contentobj->TabNames();
+
   // Get a list of content_types and build the dropdown to select one
   $typesdropdown = '<select name="content_type" onchange="document.Edit_Content.submit()" class="standard">';
   $cur_content_type = '';
@@ -210,12 +212,12 @@ else
       $typesdropdown .= ">".$onetypename."</option>";
     }
   $typesdropdown .= "</select>";
+  cms_utils::set_app_data('editing_content',$contentobj);
 
 if( empty($error) && $contentobj->GetError() )
 {
   $error = $contentobj->GetError();
 }
-
 if (FALSE == empty($error))
 {
   echo $themeObject->ShowErrors($error);
@@ -231,8 +233,6 @@ if (FALSE == empty($error))
 <?php
 }
 
-cms_utils::set_app_data('editing_content',$contentobj);
-$tabnames = $contentobj->TabNames();
 
 ?>
 
