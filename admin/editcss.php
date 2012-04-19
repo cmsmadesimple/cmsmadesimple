@@ -301,32 +301,36 @@ $headtext = <<<EOSCRIPT
 <script type="text/javascript">
 // <![CDATA[
 jQuery(document).ready(function(){
-  jQuery('input[name=apply]').click(function(){
+  jQuery('[name=apply]').live('click',function(){
     $addlScriptSubmit
     var data = jQuery('#Edit_CSS').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'ajax', 'value': 1});
     data.push({ 'name': 'apply', 'value': 1 });
     $.post('{$_SERVER['REQUEST_URI']}',data,function(resultdata,text){
-	     var resp = $(resultdata).find('Response').text();
-	     var details = $(resultdata).find('Details').text();
-             var htmlShow = '';
-	     if( resp == 'Success' )
-	       {
-		 htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '<\/p><\/div>';
-		 $('input[name=cancel]').fadeOut();
-		 $('input[name=cancel]').attr('value','{$closestr}');
-		 $('input[name=cancel]').fadeIn();
-	       }
-             else
-               {
-		 htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
-		 htmlShow += details;
-		 htmlShow += '<\/ul><\/div>';
-               }
-	     $('#Edit_CSS_Result').html(htmlShow);
-	   },
-	   'xml');
+      var event = jQuery.Event('cms_ajax_apply');
+      event.response = $(resultdata).find('Response').text();
+      event.details  = $(resultdata).find('Details').text();
+      event.close = '{$closestr}';
+      jQuery('body').trigger(event);
+    },'xml');
     return false;
+  });
+  jQuery('body').on('cms_ajax_apply',function(e){
+     var htmlShow = '';
+     if( e.response == 'Success' )
+     {
+       htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + e.details + '<\/p><\/div>';
+       $('[name=cancel]').fadeOut();
+       $('[name=cancel]').attr('value','{$closestr}');
+       $('[name=cancel]').fadeIn();
+     }
+     else
+     {
+       htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
+       htmlShow += e.details;
+       htmlShow += '<\/ul><\/div>';
+     }
+     jQuery('#Edit_CSS_Result').html(htmlShow);
   });
 });
 // ]]>

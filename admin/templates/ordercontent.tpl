@@ -31,7 +31,7 @@ $('ul.sortable').nestedSortable({
 				});
 
      
-$(".save").click(function(){
+jQuery('[name=submit]').live('click',function(){
     var tree = $.toJSON(parseTree($('ul.sortable')));
     var ajax_res = false;
     $.ajax({
