@@ -242,6 +242,7 @@ jQuery(document).ready(function($) {
 	};
 	// BUTTONS
 	jQuery(function() {
+		jQuery('body').off('cms_ajax_apply');
 		$('input[type="submit"], input[type="button"]').each(function() {
 			if($(this).attr('name') == 'apply' || $(this).attr('name') == 'm1_apply') {
 				var icon = 'ui-icon-disk';
@@ -252,13 +253,8 @@ jQuery(document).ready(function($) {
 			} else {
 				var icon = 'ui-icon-circle-check';
 			}
-			if($(this).attr('id') !== undefined) {
-				var id = 'id="' + $(this).attr('id') + '"';
-			} else {
-				var id = 'id="' + $(this).attr('name') + '"';
-			}
 			//alert(icon);
-			$(this).hide().after('<button type="' + $(this).attr('type') + '" name="' + $(this).attr('name') + '" class="' + $(this).attr('class') +'" ' + id + '>').next().button({
+			$(this).hide().after('<button type="' + $(this).attr('type') + '" name="' + $(this).attr('name') + '" id="' + $(this).attr('id') + '">').next().button({
 				icons : {
 					primary : icon
 				},
@@ -273,7 +269,7 @@ jQuery(document).ready(function($) {
 			$(this).removeClass('ui-state-hover');
 		});
 		// Handle ajax apply
-		jQuery('body').on('click','cms_ajax_apply', function(e) {
+		jQuery('body').on('cms_ajax_apply', function(e) {
 			// gotta get langified string here.
 			$('button[name=cancel]').button('option', 'label', e.close);
 			var htmlShow = '';
@@ -294,7 +290,6 @@ jQuery(document).ready(function($) {
 				$('.message').slideUp();
 			});
 		});
-		jQuery('body').off('click','cms_ajax_apply');
 	});
 	// SHOW/HIDE NOTIFICATIONS
 	jQuery(function() {
