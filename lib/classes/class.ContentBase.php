@@ -2246,7 +2246,7 @@ abstract class ContentBase
       $this->mAdditionalEditors = $editorarray;
     }
 
-    static public function GetAdditionalEditorInput($addteditors,$owner_id)
+    static public function GetAdditionalEditorInput($addteditors,$owner_id = -1)
     {
       $ret[] = lang('additionaleditors');
       $text = '<input name="additional_editors" type="hidden" value=""/>';
