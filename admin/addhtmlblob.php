@@ -73,7 +73,7 @@ if ($access) {
 
 		$validinfo = true;
 		if ($htmlblob == ""){
-			$error .= "<li>".lang('nofieldgiven', array('name'))."</li>";
+		  $error .= "<li>".lang('nofieldgiven', array(lang('name')))."</li>";
 			$validinfo = false;
 		}
 		else if ($gcbops->CheckExistingHtmlBlobName($htmlblob)){
@@ -81,7 +81,7 @@ if ($access) {
 			$validinfo = false;
 		}
 		else if($content == ""){
-		  $error .= '<li>'.lang('nofieldgiven',array('content')).'</li>';
+		  $error .= '<li>'.lang('nofieldgiven',array(lang('content'))).'</li>';
 		  $validinfo = false;
 		}
 

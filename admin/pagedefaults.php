@@ -142,8 +142,7 @@ $smarty->assign('backurl',$themeObject->backUrl());
 
 $my_addeditors = explode(',',$additional_editors);
 $contentops = cmsms()->GetContentOperations();
-$content = new ContentBase();
-$tmp = $content->ShowAdditionalEditors($my_addeditors);
+$tmp = ContentBase::GetAdditionalEditorInput($my_addeditors);
 $smarty->assign('input_additional_editors',$tmp[1]);
 
 $smarty->assign('CMS_SECURE_PARAM_NAME',CMS_SECURE_PARAM_NAME);

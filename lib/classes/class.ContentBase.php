@@ -2246,17 +2246,8 @@ abstract class ContentBase
       $this->mAdditionalEditors = $editorarray;
     }
 
-    /**
-     * Provides an input element to display the list of additional editors.
-     * This method is usually called from within this object.
-     *
-     * @param mixed An optional array of additional editor id's (group ids specified with negative values)
-     * @return string The input element.
-     */
-    public function ShowAdditionalEditors($addteditors = '')
+    static public function GetAdditionalEditorInput($addteditors,$owner_id)
     {
-      $ret = array();
-
       $ret[] = lang('additionaleditors');
       $text = '<input name="additional_editors" type="hidden" value=""/>';
       $text .= '<select name="additional_editors[]" multiple="multiple" size="5">';
@@ -2266,10 +2257,6 @@ abstract class ContentBase
       $groupops = $gCms->GetGroupOperations();
       $allusers = $userops->LoadUsers();
       $allgroups = $groupops->LoadGroups();
-      if( $addteditors == '' )
-	{
-	  $addteditors = $this->GetAdditionalEditors();
-	}
       foreach ($allgroups as $onegroup)
 	{
 	  if( $onegroup->id == 1 ) continue;
@@ -2285,7 +2272,7 @@ abstract class ContentBase
 
       foreach ($allusers as $oneuser)
 	{
-	  if ($oneuser->id != $this->Owner() && $oneuser->id != 1)
+	  if ($oneuser->id != $owner_id && $oneuser->id != 1)
 	    {
 	      $text .= '<option value="'.$oneuser->id.'"';
 	      if (in_array($oneuser->id, $addteditors))
@@ -2299,6 +2286,24 @@ abstract class ContentBase
       $text .= '</select>';
       $ret[] = $text;
       return $ret;
+    }
+
+
+    /**
+     * Provides an input element to display the list of additional editors.
+     * This method is usually called from within this object.
+     *
+     * @param mixed An optional array of additional editor id's (group ids specified with negative values)
+     * @return string The input element.
+     */
+    public function ShowAdditionalEditors($addteditors = '')
+    {
+      $ret = array();
+      if( $addteditors == '' )
+	{
+	  $addteditors = $this->GetAdditionalEditors();
+	}
+      return self::GetAdditionalEditorInput($addteditors,$this->Owner());
     }
 
     /**

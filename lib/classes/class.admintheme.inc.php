@@ -1,6 +1,6 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-2010 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2012 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -539,7 +539,7 @@ class AdminTheme extends CmsAdminThemeBase
 <<<EOT
 	<title>{$title}</title>
 	<base href="{$config['admin_url']}/" />
-	<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-11 Ted Kulp. All rights reserved." />
+	<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-12 Ted Kulp. All rights reserved." />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	<link rel="stylesheet" type="text/css" href="style.php?{$urlext}" />
