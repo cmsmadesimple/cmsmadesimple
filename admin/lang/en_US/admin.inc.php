@@ -738,7 +738,7 @@ $lang['admin']['help_function_metadata'] = <<<EOT
 	<p>Just insert the tag into your template like: <code>{metadata}</code></p>
 	<h3>What parameters does it take?</h3>
 	<ul>
-		<li><em>(optional)</em>showbase (true/false) - If set to false, the base tag will not be sent to the browser.  Defaults to true if use_hierarchy is set to true in config.php.</li>
+		<li><em>(optional)</em>showbase (true/false) - If set to false, The base tag will not be output.</li>
 		<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;
