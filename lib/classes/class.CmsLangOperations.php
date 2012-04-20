@@ -43,7 +43,7 @@ final class CmsLangOperations
   {
     if( !$realm ) $realm = 'admin';
     if( is_array(self::$_langdata) && isset(self::$_langdata[$realm]) ) return;
-    if( !is_array(self::$_langdata) ) self:;$_langdata = array();
+    if( !is_array(self::$_langdata) ) self::$_langdata = array();
 
     $config = cmsms()->GetConfig();
     $curlang = CmsNlsOperations::get_current_language();

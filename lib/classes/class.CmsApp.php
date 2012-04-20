@@ -143,9 +143,7 @@ final class CmsApp {
 
 	
 	/**
-	 * Set a variable
-	 *
-	 * Set a variable for later usage.
+	 * Set the value of an internal variable
 	 *
 	 * @internal
 	 * @access private
