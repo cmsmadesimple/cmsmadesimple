@@ -48,6 +48,7 @@ Version 1.11 - NO NAME
  - locale can now be configured in the NLS information
  - Encoding can now be configured in the NLS information
  - Remove more stuff from the cms_variables class (slowly getting rid of this).
+ - Installer and system information pages now check curl, and curl version.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
