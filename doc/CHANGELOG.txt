@@ -89,6 +89,7 @@ News:
  - Generates 404 errors if routed to an invalid article, or an article that is expired/draft.
  - Fixes #7713 - Apply button doesn't work.
  - Fixes #7457 - Duplicate news url
+ - Adds detailtemplate param capabilities to SearchResultWithParams
  - Access to the Categories and custom fields tab is now controlled by the 'Modify Site Preferences' permission.
 
 Search: 

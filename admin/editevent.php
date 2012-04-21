@@ -241,7 +241,7 @@ if ($access)
 	{
 	  if( $key == $modulename ) continue;
 	  $modobj = ModuleOperations::get_instance()->get_module_instance($key);
-	  if( $modobj->HandlesEvents() )
+	  if( $modobj && $modobj->HandlesEvents() )
 	    {
 	      $allhandlers[$key] = 'm:'.$key;
 	    }

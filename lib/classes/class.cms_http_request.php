@@ -383,6 +383,7 @@ class cms_http_request
      */
     function setMethod($method)
     {
+      $method = strtoupper($method);
         if ($method == 'GET' || $method == 'POST')
         {
             $this->method = $method;
@@ -447,6 +448,7 @@ class cms_http_request
 
     function setRawPostData($data)
     {
+      $this->setMethod('POST');
       $this->rawPostData = $data;
     }
 
