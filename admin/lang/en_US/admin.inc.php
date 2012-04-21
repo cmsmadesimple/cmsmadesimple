@@ -1,4 +1,9 @@
 <?php
+$lang['admin']['curlversion'] = 'Test curl version';
+$lang['admin']['curl'] = 'Test for the curl library';
+$lang['admin']['test_curl'] = 'Test for curl availability';
+$lang['admin']['test_curlversion'] = 'Test Curl Version';
+$lang['admin']['curl_versionstr'] = 'version %s, minimum recommended version is %s';
 $lang['admin']['lines_in_error'] = '%d lines with errors';
 $lang['admin']['no_files_scanned'] = 'No files were scanned during the verification process (maybe the file is invalid)';
 $lang['admin']['stylesheetnotfound'] = 'Stylesheet %d not found';

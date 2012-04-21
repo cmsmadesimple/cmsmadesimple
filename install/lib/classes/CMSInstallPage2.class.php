@@ -185,6 +185,38 @@ class CMSInstallerPage2 extends CMSInstallerPage
 		$result = (ini_get('log_errors_max_len') == $_log_errors_max_len);
 		$settings['recommended'][] = testBoolean(0, ilang('test_check_ini_set'), $result, ilang('test_check_ini_set_failed'), false, false, 'ini_set_disabled');
 
+		// curl tests
+		$hascurl = 0;
+		$curlgood = 0;
+		$curl_version = '';
+		$min_curlversion = '7.19.7';
+		if( in_array('curl',get_loaded_extensions()) ) {
+		  $hascurl = 1;
+		  if( function_exists('curl_version') ) {
+		    $t = curl_version();
+		    if( isset($t['version']) ) {
+		      $curl_version = $t['version'];
+		      if( version_compare($t['version'],$min_curlversion) >= 0 ) {
+			$curlgood = 1;
+		      }
+		    }
+		  }
+		}
+		if( !$hascurl ) {
+		  $settings['recommended'][] = testDummy(lang('curl'),lang('off'),'yellow','','curl_not_available','');
+		}
+		else {
+		  $settings['recommended'][] = testDummy(lang('curl'),lang('on'),'green');
+		  if( $curlgood ) {
+		    $settings['recommended'][] = testDummy(lang('curlversion'),
+							   lang('curl_versionstr',$curl_version,$min_curlversion),
+							   'green');
+		  }
+		  else {
+		    $settings['recommended'][] = testDummy(lang('curlversion'),lang('test_curlversion'),'yellow',
+							   lang('curl_versionstr',$curl_version,$min_curlversion));
+		  }
+		}
 
 
 		// assign settings

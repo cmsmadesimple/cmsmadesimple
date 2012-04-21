@@ -690,7 +690,7 @@ class cms_http_request
     }
 
 
-    private function _isCurlSuitable()
+    public static function is_curl_suitable()
     {
       static $_curlgood = -1;
 
@@ -755,7 +755,7 @@ class cms_http_request
         }
 
         // If cURL is not installed, we'll force fscokopen
-	$this->useCurl = $this->useCurl && $this->_isCurlSuitable();
+	$this->useCurl = $this->useCurl && self::is_curl_suitable();
         
         // GET method configuration
         if($this->method == 'GET')
