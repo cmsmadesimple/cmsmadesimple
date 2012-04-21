@@ -182,7 +182,6 @@ while( $trycount < 2 )
       
 	cmsms()->set_variable('content_obj',$contentobj);
 	cmsms()->set_variable('content_id',$contentobj->Id());
-	cmsms()->set_variable('page',$page);
 	cmsms()->set_variable('page_id',$page);
 	cmsms()->set_variable('page_name',$contentobj->Alias());
 	cmsms()->set_variable('position',$contentobj->Hierarchy());

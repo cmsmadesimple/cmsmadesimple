@@ -47,6 +47,7 @@ Version 1.11 - NO NAME
  - Adds new abstract CmsLanguageDetector class to handle language detection on the frontend.
  - locale can now be configured in the NLS information
  - Encoding can now be configured in the NLS information
+ - Remove more stuff from the cms_variables class (slowly getting rid of this).
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue

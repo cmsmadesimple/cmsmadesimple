@@ -210,13 +210,6 @@ if (!isset($_SERVER['REQUEST_URI']))
     }
 }
 
-#Setup the object sent to modules
-cmsms()->set_variable('pluginnum',1);
-if (isset($page))
-{
-  cmsms()->set_variable('page',$page);
-}
-
 #Set a umask
 $global_umask = get_site_preference('global_umask','');
 if( $global_umask != '' )

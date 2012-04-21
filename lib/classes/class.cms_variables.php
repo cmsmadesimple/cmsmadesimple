@@ -43,13 +43,17 @@
  * A singleton class to manage internal CMSMS Variables
  *
  * @package CMS
+ * @deprecated
  * @internal
  * @author Robert Campbell
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  */
 class cms_variables implements ArrayAccess
 {
-  private $_allowed_variables = array('content_obj','content_id','page','page_id','page_name','position','friendly_position','starttime','user_id','username','pageinfo','pluginnum','convertclass','user_in_group','routes','content-type','module-num','modulenum','error','cms_frontend_cur_language','admin_encoding','current_encoding','formcount','mid_cache','userperms','ownerpages','authorpages','bulkcontent','authorblobs','module_template_cache','template','content-filename','last_content_modification');
+  private $_allowed_variables = 
+    array('content_obj','content_id','page','page_id','page_name','position','friendly_position','starttime','user_id','username','pageinfo',
+	  'user_in_group','content-type','modulenum','error','formcount','mid_cache','userperms','ownerpages','authorpages','bulkcontent','authorblobs',
+	  'template','last_content_modification');
 
   private static $_instance;
   private $_data = array();
@@ -58,8 +62,6 @@ class cms_variables implements ArrayAccess
   private function __construct()
   {
     $this->_data['content-type'] = 'text/html';
-    $this->_data['modulenum'] = 1;
-    $this->_data['routes'] = array();
   }
 
 
