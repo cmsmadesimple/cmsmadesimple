@@ -130,10 +130,13 @@ abstract class CMSModule
 	 */
 	private $restrict_unknown_params = false;
 
+	private $__errors;
+	private $__messages;
+	private $__current_tab;
+
 	/**
 	 * Magic methods
 	 */
-
 	public function &__get($key)
 	{
 	  switch( $key )
@@ -235,7 +238,7 @@ abstract class CMSModule
 	 *
 	 * @ignore
 	 */
-	function LoadRedirectMethods()
+        function LoadRedirectMethods()
 	{
 		if (!$this->modredirect)
 		{
@@ -1651,12 +1654,31 @@ abstract class CMSModule
 	 */
 	function DoAction($name, $id, $params, $returnid='')
 	{
+	  if( $id == '' ) {
+	    if( isset($params['__activetab']) ) {
+	      $this->__current_tab = trim($params['__activetab']);
+	    }
+	    if( isset($params['__errors']) ) {
+	      $this->__errors = explode('::err::',$params['__errors']);
+	    }
+	    if( isset($params['__messages']) ) {
+	      $this->__errors = explode('::msg::',$params['__messages']);
+	    }
+
+	    if( is_array($this->__errors) && count($this->__errors) ) {
+	      echo $this->ShowErrors($this->__errors);
+	    }
+	    if( is_array($this->__messages) && count($this->__messages) ) {
+	      echo $this->ShowMessages($this->__messages);
+	    }
+	  }
+
 	  if ($name != '')
 	    {
 	      //Just in case DoAction is called directly and it's not overridden.
 	      //See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
 	      $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
-			
+		
 	      $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
 	      if (@is_file($filename))
 		{
@@ -1681,7 +1703,7 @@ abstract class CMSModule
 	 * @final
 	 * @access private
 	 */
-	function DoActionBase($name, $id, $params, $returnid='')
+	final public function DoActionBase($name, $id, $params, $returnid='')
 	{
           $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
 	  if( $returnid != '' )
@@ -1698,6 +1720,18 @@ abstract class CMSModule
 				       !$this->restrict_unknown_params);
 	    }
 
+	  // handle the stupid input type='image' problem.
+	  foreach( $params as $key => $value )
+	    {
+	      if( endswith($key,'_x') ) {
+		$base = substr($key,0,strlen($key)-2);
+		if( isset($params[$base.'_y']) && !isset($params[$base]) )
+		  {
+		    $params[$base] = $base;
+		  }
+	      }
+	    }
+
 	  if (isset($params['lang']))
 	    {
 	      $this->curlang = $params['lang'];
@@ -1711,6 +1745,13 @@ abstract class CMSModule
 	  $returnid = cms_htmlentities($returnid);
 	  $id = cms_htmlentities($id);
 	  $name = cms_htmlentities($name);
+
+	  $smarty = cmsms()->GetSmarty();
+	  $smarty->assign('actionid',$id);
+	  $smarty->assign('actionparams',$params);
+	  $smarty->assign('returnid',$returnid);
+	  $smarty->assign('actionmodule',$this->GetName());
+
 	  $output = $this->DoAction($name, $id, $params, $returnid);
 
 	  if( isset($params['assign']) )
@@ -2477,6 +2518,31 @@ abstract class CMSModule
    */
 
 	/**
+	 * Redirect to the specified tab.
+	 * Applicable only to admin actions.
+	 *
+	 * @since 1.11
+	 * @author Robert Campbell
+	 * @param string The tab name.  If empty, the current tab is used.
+	 * @param mixed  An assoiciative array of params, or null
+	 * @param string The action name (if not specified, defaultadmin is assumed)
+	 */
+	function RedirectToAdminTab($tab = '',$params = '',$action = '')
+	{
+	  if( $tab == '' ) {
+	    if( $this->__current_tab ) {
+	      $tab = $this->__current_tab;
+	    }
+	  }
+	  if( $tab == '' )
+	    {
+	      $params['__activetab'] = $tab;
+	    }
+	  if( empty($action) ) $action = 'defaultadmin';
+	  $this->Redirect('',$action,'',$params,TRUE);
+	}
+
+	/**
 	 * Redirects the user to another action of the module.
 	 * This function is optimized for frontend use.
 	 *
@@ -2502,8 +2568,17 @@ abstract class CMSModule
 	 */
 	function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
 	{
-		$this->LoadRedirectMethods();
-		return cms_module_Redirect($this, $id, $action, $returnid, $params, $inline);
+	  if( $id == '' ) {
+	    if( is_array($this->__errors) && count($this->__errors) ) {
+	      $params['__errors'] = implode('::err::',$this->__errors);
+	    }
+	    if( is_array($this->__messages) && count($this->__messages) ) {
+	      $params['__messages'] = implode('::msg::',$this->__messages);
+	    }
+	  }
+
+	  $this->LoadRedirectMethods();
+	  return cms_module_Redirect($this, $id, $action, $returnid, $params, $inline);
 	}
 	
   /**
@@ -2823,6 +2898,16 @@ abstract class CMSModule
 	 * ------------------------------------------------------------------
 	 */
 
+	/*
+	 * Set the current action
+	 * Used for the various template forms.
+	 */
+	function SetCurrentTab($tab)
+	{
+	  $this->__current_tab = $tab;
+	}
+
+
 	/**
 	 * Output a string suitable for staring tab headers
 	 * i.e:  echo $this->StartTabHeaders();
@@ -2847,13 +2932,18 @@ abstract class CMSModule
 	 */ 
 	function SetTabHeader($tabid,$title,$active=false)
 	{
-		$a="";
-		if (TRUE == $active)
-		{
-			$a=" class='active'";
-			$this->mActiveTab = $tabid;
-		}
-		$tabid = strtolower(str_replace(' ','_',$tabid));
+	  if( $active == FALSE )
+	    {
+	      $active = ($name == $this->__current_tab);
+	    }
+
+	  $a="";
+	  if (TRUE == $active)
+	    {
+	      $a=" class='active'";
+	      $this->mActiveTab = $tabid;
+	    }
+	  $tabid = strtolower(str_replace(' ','_',$tabid));
 	  return '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
 	}
 
@@ -3005,6 +3095,19 @@ abstract class CMSModule
 	}
 
 	/**
+	 * Set a display  message.
+	 *
+	 * @since 1.11
+	 * @author Robert Campbell
+	 * @param mixed The message.  Accepts either an array of messages or a single string.
+	 */
+	public function SetMessage($str)
+	{
+	  if( !is_array($this->__messages) ) $this->__messages = array();
+	  $this->__messages = array_merge($this->__messages,$str);
+	}
+
+	/**
 	 * ShowErrors
 	 * Outputs errors in a nice error box with a troubleshooting link to the wiki
 	 *
@@ -3021,6 +3124,19 @@ abstract class CMSModule
 	      return $admintheme->ShowErrors($errors);
 	    }
 	  return '';
+	}
+
+	/**
+	 * Set an error  message.
+	 *
+	 * @since 1.11
+	 * @author Robert Campbell
+	 * @param mixed The message.  Accepts either an array of messages or a single string.
+	 */
+	public function SetError($str)
+	{
+	  if( !is_array($this->__errors) ) $this->__errors = array();
+	  $this->__errors = array_merge($this->__errors,$str);
 	}
 
 
