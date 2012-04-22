@@ -82,6 +82,14 @@ class CMSPageTemplateResource extends Smarty_Resource_Custom
 	$mtime = time(); // never cache...
 	return;
       }
+    else if( startswith($name,'appdata;') )
+      {
+	$name = substr($name,8);
+	$source = cms_utils::get_app_data($name);
+	$mtime = time();
+	return;
+      }
+
 
     $source = '';
     $mtime = null;

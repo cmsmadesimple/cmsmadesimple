@@ -80,27 +80,43 @@ if ($access)
 	{
 		$validinfo = true;
 
-		if ($template == "")
-		{
-			$error .= "<li>".lang("nofieldgiven",array(lang('name')))."</li>";
-			$validinfo = false;
+		if ($template == "") {
+		  $error .= "<li>".lang("nofieldgiven",array(lang('name')))."</li>";
+		  $validinfo = false;
 		}
-		else
-		{
-			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
-			$result = $db->Execute($query);
+		else {
+		  $query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
+		  $result = $db->Execute($query);
 
-			if ($result && $result->RecordCount() > 0)
-			{
-				$error .= "<li>".lang('templateexists')."</li>";
-				$validinfo = false;
-			}
+		  if ($result && $result->RecordCount() > 0) {
+		    $error .= "<li>".lang('templateexists')."</li>";
+		    $validinfo = false;
+		  }
 		}
 
-		if ($content == "")
-		{
-			$error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
-			$validinfo = false;
+		if ($content == "") {
+		  $error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
+		  $validinfo = false;
+		}
+
+		if ($validinfo) {
+		  try {
+		    $smarty = cmsms()->GetSmarty();
+		    $smarty->force_compile = TRUE;
+		    
+		    cms_utils::set_app_data('tmp_template',$content);
+		    $smarty->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
+		    $smarty->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
+		    $smarty->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
+		    $smarty->registerResource('template',new CMSPageTemplateResource(''));
+		    $smarty->fetch('template:appdata;tmp_template'); // do the magic.
+
+		    // if we got here, we're golden.
+		  }
+		  catch( CmsEditContentException $e ) {
+		    $error .= "<li>".$e->getMessage();
+		    $validinfo = false;
+		  }
 		}
 
 		if ($validinfo)
