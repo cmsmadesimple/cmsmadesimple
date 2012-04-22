@@ -49,6 +49,7 @@ Version 1.11 - NO NAME
  - Encoding can now be configured in the NLS information
  - Remove more stuff from the cms_variables class (slowly getting rid of this).
  - Installer and system information pages now check curl, and curl version.
+ - Change the alt tag in {content_image} to return the image name by default.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue

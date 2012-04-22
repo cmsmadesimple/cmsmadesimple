@@ -2934,7 +2934,7 @@ abstract class CMSModule
 	{
 	  if( $active == FALSE )
 	    {
-	      $active = ($name == $this->__current_tab);
+	      $active = ($tabid == $this->__current_tab);
 	    }
 
 	  $a="";

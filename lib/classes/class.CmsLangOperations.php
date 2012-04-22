@@ -194,6 +194,10 @@ final class CmsLangOperations
       {
 	$params = array_slice($args,2);
       }
+    if( count($params) == 1 && is_array($params[0]) )
+      {
+	$params = $params[0];
+      }
 
     self::_load_realm($realm);
     if( !isset(self::$_langdata[$realm][$key]) ) return "-- Add me: $key --";

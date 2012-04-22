@@ -392,7 +392,7 @@ final class CMS_Content_Block
     if( isset($params['height']) ) $height = $params['height'];
     if( isset($params['urlonly']) ) $urlonly = true;
 
-    if( !isset($params['alt']) ) $alt = $params['block'];
+    if( !isset($params['alt']) ) $alt = $img;
   
     if( $urlonly ) return $img;
     $out = '<img src="'.$img.'" ';
