@@ -101,7 +101,7 @@
 		<input type="hidden" name="umask" value="{$values.umask}" />
 		<input type="hidden" name="adminusername" value="{$values.admininfo.username}" />
 		<input type="hidden" name="adminemail" value="{$values.admininfo.email}" />
-		<input type="hidden" name="adminsalt" value="{$values.admininfo.salt}" />
+		<input type="hidden" name="adminsalt" value="{$values.admininfo.salt|default:''}" />
 		<input type="hidden" name="adminpassword" value="{$values.admininfo.password}" />
 		<input type="hidden" name="email_accountinfo" value="{$values.email_accountinfo}" />
 
