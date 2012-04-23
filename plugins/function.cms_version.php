@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -19,14 +19,14 @@
 function smarty_function_cms_version($params, $template) {
 
   $smarty = $template->smarty;
-    global $CMS_VERSION;
+  global $CMS_VERSION;
 	
-	if( isset($params['assign']) ){
-		$smarty->assign(trim($params['assign']),$CMS_VERSION);
-		return;
-	}
+  if( isset($params['assign']) ){
+    $smarty->assign(trim($params['assign']),$CMS_VERSION);
+    return;
+  }
 	
-    return $CMS_VERSION;
+  return $CMS_VERSION;
 }
 
 function smarty_cms_help_function_cms_version() {

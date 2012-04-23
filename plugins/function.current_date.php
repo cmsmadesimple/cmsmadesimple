@@ -18,7 +18,7 @@
 
   // this method is deprecated and should be removed.
   // it is redundant.
-function smarty_function_current_date($params, &$template) {
+function smarty_cms_function_current_date($params, &$template) {
   $smarty = $template->smarty;
   $format = '%b %c, %Y';
   if( isset($params['format']) && !empty($params['format']) )
