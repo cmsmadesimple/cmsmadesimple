@@ -123,12 +123,12 @@ function smarty_function_cms_selflink($params, &$template)
 	{
 	case 'next':
 	  $condition = '>';
-	  $label=lang_by_realm('next_label','cms_selflink');
+	  $label=lang_by_realm('cms_selflink','next_label');
 	  break;
 	case 'prev':
 	case 'previous':
 	  $condition = '<';
-	  $label=lang_by_realm('prev_label','cms_selflink');
+	  $label=lang_by_realm('cms_selflink','prev_label');
 	  break;
 	case 'anchor': // Start Russ addition
 	  $condition = '^';
