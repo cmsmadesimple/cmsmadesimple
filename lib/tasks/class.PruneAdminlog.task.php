@@ -13,7 +13,7 @@ class PruneAdminlogTask implements CmsRegularTask
 
   public function get_description()
   {
-    return lang_by_realm('adminlog_taskdescription','tasks');
+    return lang_by_realm('tasks','adminlog_taskdescription');
   }
 
 

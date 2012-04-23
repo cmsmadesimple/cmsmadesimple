@@ -13,7 +13,7 @@ class GatherNotificationsTask implements CmsRegularTask
 
   public function get_description()
   {
-    return lang_by_realm('notifications_taskdescription','tasks');
+    return lang_by_realm('tasks','notifications_taskdescription');
   }
 
 
