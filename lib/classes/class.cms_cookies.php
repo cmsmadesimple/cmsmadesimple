@@ -46,7 +46,7 @@
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.10
  */
-class cms_cookies
+final class cms_cookies
 {
   private static $_parts;
   /**
@@ -127,6 +127,18 @@ class cms_cookies
     if( isset($_COOKIE[$key]) ) return $_COOKIE[$key];
   }
 
+
+  /**
+   * Test if a cookie exists.
+   *
+   * @since 1.11
+   * @param string The cookie name.
+   * @return boolean
+   */
+  public static function isset($key)
+  {
+	  return isset($_COOKIE[$key]);
+  }
 
   /**
    * Erase a cookie
