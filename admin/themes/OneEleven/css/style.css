@@ -1202,6 +1202,9 @@ span.helptext a {
 .pageheader span.helptext a img{
 	margin-right: 10px
 }
+#main a.helpicon {
+	display: none;
+}
 .pageheader {
 	font-size: 18px;
 	font-weight: normal;
