@@ -135,7 +135,7 @@ final class cms_cookies
    * @param string The cookie name.
    * @return boolean
    */
-  public static function isset($key)
+  public static function exists($key)
   {
 	  return isset($_COOKIE[$key]);
   }
