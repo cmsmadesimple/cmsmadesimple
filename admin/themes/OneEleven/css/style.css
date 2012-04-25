@@ -789,18 +789,17 @@ header .breadcrumbs ul li.current, header .breadcrumbs ul li.current a {
 }
 /* shortcut icons */
 header .shortcuts {
+	line-height: 29px;
 	float: right
 }
 header .shortcuts ul {
 	width: auto;
-	line-height: 29px;
 	text-align: left;
 	margin-right: 20px
 }
 header .shortcuts li {
 	padding: 0 12px;
 	display: inline-block;
-	line-height: 29px;
 	float: left
 }
 header .shortcuts li:last-child, header .shortcuts li.last {
@@ -810,7 +809,7 @@ header .shortcuts li a {
 	display: block;
 	margin-top: 5px;
 	width: 18px;
-	height: 18px;
+	height: 29px;
 	text-indent: -9999em;
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) no-repeat;
 	overflow: hidden
@@ -1014,6 +1013,9 @@ nav ul#pagemenu li a.siteadmin {
 nav ul#pagemenu li a.myprefs {
 	background-position: -10px -700px
 }
+nav ul#pagemenu li a.ecommerce {
+	background-position: -10px -990px
+}
 /* hover, active */
 nav ul#pagemenu li a.main:hover, 
 nav ul#pagemenu li.current a.main,
@@ -1046,9 +1048,14 @@ nav ul#pagemenu li:hover a.siteadmin  {
 	background-position: -10px -921px
 }
 nav ul#pagemenu li a.myprefs:hover, 
-nav ul#pagemenu li.current a.myprefs ,
+nav ul#pagemenu li.current a.myprefs,
 nav ul#pagemenu li:hover a.myprefs {
 	background-position: -10px -885px
+}
+nav ul#pagemenu li a.ecommerce:hover, 
+nav ul#pagemenu li.current a.ecommerce,
+nav ul#pagemenu li:hover a.ecommerce {
+	background-position: -10px -953px
 }
 /* second level & colapsed sidebar */
 nav ul#pagemenu ul {

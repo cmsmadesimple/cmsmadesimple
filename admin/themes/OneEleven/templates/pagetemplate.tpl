@@ -29,7 +29,7 @@
 			<!-- start header -->
 			<header role="banner" class="cf header">
 				<!-- start header-top -->
-				<div class="header-top">
+				<div class="header-top cf">
 					<!-- logo -->
 					<div class="cms-logo">
 						<img src="{$config.admin_url}/themes/OneEleven/images/layout/cmsms-logo.jpg" width="205" height="69" alt="{sitename} - {$pagetitle}" title="{sitename}" />
@@ -37,6 +37,7 @@
 					<!-- title -->
 					<span class="admin-title"> {'adminpaneltitle'|lang} - {sitename}{if !empty($pagetitle)} - {$pagetitle}{/if}</span>
 				</div>
+				<div class='clear'></div>
 				<!-- end header-top //-->
 				<!-- start header-bottom -->
 				<div class="header-bottom cf">
