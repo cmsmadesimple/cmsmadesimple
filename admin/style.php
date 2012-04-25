@@ -52,6 +52,7 @@ if( is_array($allmodules) && count($allmodules) )
   {
     foreach( $allmodules as $key => &$object )
       {
+	if( !is_object($object) ) continue;
 	if( $object->HasAdmin() )
 	  {
 	    echo $object->AdminStyle();

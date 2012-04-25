@@ -168,16 +168,6 @@ final class CmsLangOperations
 
   public static function lang_from_realm()
   {
-    global $CMS_ADMIN_PAGE;
-    global $CMS_STYLESHEET;
-    global $CMS_INSTALL_PAGE;
-    
-    if (!isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) && !self::$_allow_nonadmin_lang )
-      {
-	trigger_error('Attempt to load admin realm from non admin action');
-	return '';
-      }
-  
     $args = func_get_args();
     if( count($args) == 1 && is_array($args[0]) )
       {
@@ -189,6 +179,15 @@ final class CmsLangOperations
     $key    = $args[1];
     if( !$realm || !$key ) return;
 
+    global $CMS_ADMIN_PAGE;
+    global $CMS_STYLESHEET;
+    global $CMS_INSTALL_PAGE;    
+    if ('admin' == $realm && !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) && !self::$_allow_nonadmin_lang )
+      {
+	trigger_error('Attempt to load admin realm from non admin action');
+	return '';
+      }
+  
     $params = array();
     if( count($args) > 2 )
       {

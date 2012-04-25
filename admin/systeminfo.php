@@ -100,7 +100,6 @@ $query = "SELECT * FROM ".cms_db_prefix()."modules WHERE active=1";
 $modules = $db->GetArray($query);
 $smarty->assign('installed_modules', $modules);
 
-
 clearstatcache();
 $tmp = array(0=>array(), 1=>array());
 

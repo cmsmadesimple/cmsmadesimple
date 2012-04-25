@@ -302,7 +302,6 @@ $headtext = <<<EOSCRIPT
 // <![CDATA[
 jQuery(document).ready(function(){
   jQuery('[name=apply]').live('click',function(){
-    $addlScriptSubmit
     var data = jQuery('#Edit_CSS').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'ajax', 'value': 1});
     data.push({ 'name': 'apply', 'value': 1 });

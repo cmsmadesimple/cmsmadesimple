@@ -49,25 +49,25 @@ class cms_config implements ArrayAccess
     $maxFileSize = ini_get('upload_max_filesize');
     if (!is_numeric($maxFileSize))
       {
-	$l=strlen($maxFileSize);
-	$i=0;$ss='';$x=0;
-	while ($i < $l)
-	  {
-	    if (is_numeric($maxFileSize[$i]))
-	      {$ss .= $maxFileSize[$i];}
-	    else
-	      {
-		if (strtolower($maxFileSize[$i]) == 'm') $x=1000000;
-		if (strtolower($maxFileSize[$i]) == 'k') $x=1000;
-	      }
-	    $i ++;
-	  }
-	$maxFileSize=$ss;
-	if ($x >0) $maxFileSize = $ss * $x;
+		  $l=strlen($maxFileSize);
+		  $i=0;$ss='';$x=0;
+		  while ($i < $l)
+			  {
+				  if (is_numeric($maxFileSize[$i]))
+					  {$ss .= $maxFileSize[$i];}
+				  else
+					  {
+						  if (strtolower($maxFileSize[$i]) == 'm') $x=1000000;
+						  if (strtolower($maxFileSize[$i]) == 'k') $x=1000;
+					  }
+				  $i ++;
+			  }
+		  $maxFileSize=$ss;
+		  if ($x >0) $maxFileSize = $ss * $x;
       }
     else
       {
-	$maxFileSize = 1000000;
+		  $maxFileSize = 1000000;
       }
     return $maxFileSize;
   }

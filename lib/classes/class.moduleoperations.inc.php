@@ -706,7 +706,7 @@ final class ModuleOperations
 
 	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || $force_load )
 	  {
-		  $this->_modules[$module_name] = $obj;
+		  if( is_object($obj) ) $this->_modules[$module_name] = $obj;
 		  return TRUE;
 	  }
 
