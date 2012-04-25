@@ -53,6 +53,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		} else if (is_string($errors)) {
 			$this -> _errors[] = $errors;
 		}
+		return '<!-- OneEleven::ShowErrors() called -->';
 	}
 
 	public function ShowMessage($message, $get_var = '') {
