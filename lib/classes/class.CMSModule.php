@@ -3121,7 +3121,8 @@ abstract class CMSModule
 	  if (isset($gCms->variables['admintheme']))
 	    {
 	      $admintheme =& $gCms->variables['admintheme']; //php4 friendly
-	      return $admintheme->ShowErrors($errors);
+	      $x = $admintheme->ShowErrors($errors);
+	      return $x;
 	    }
 	  return '';
 	}

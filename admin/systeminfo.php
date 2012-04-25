@@ -276,6 +276,31 @@ switch($config['dbms']) //workaroud: ServerInfo() is unsupported in adodblite
 	  $_server_db = (false === strpos($v, "-")) ? $v : substr($v, 0, strpos($v, "-"));
 	  list($minimum, $recommended) = getTestValues('mysql_version');
 	  $tmp[0]['server_db_version'] = testVersionRange(0, 'server_db_version', $_server_db, '', $minimum, $recommended, false);
+
+	  $grants = $db->GetArray('SHOW GRANTS FOR CURRENT_USER');
+	  if( !is_array($grants) || count($grants) == 0 ) {
+	    $tmp[0]['server_db_grants'] = testDummy('db_grants',lang('os_db_grants'),'yellow','','error_no_grantall_info');
+	  }
+	  else {
+	    $found_grantall = 0;
+	    function __check_grant_all($item,$key) 
+	    {
+	      $item = strtoupper($item);
+	      if( strstr($item,'GRANT ALL PRIVILEGES') !== FALSE )
+		{
+		  global $found_grantall;
+		  $found_grantall = 1;
+		}
+	    }
+	    array_walk_recursive($grants,'__check_grant_all');
+	    if( !$found_grantall ) {
+	      $tmp[0]['server_db_grants'] = testDummy('db_grants',lang('error_nograntall_found'),'yellow');
+	    }
+	    else {
+	      $tmp[0]['server_db_grants'] = testDummy('db_grants',lang('msg_grantall_found'),'green');
+	      $tmp[0]['server_db_grants'] = testDummy('db_grants',lang('error_nograntall_found'),'yellow');
+	    }
+	  }
 	  break;
 }
 $smarty->assign('count_server_info', count($tmp[0]));

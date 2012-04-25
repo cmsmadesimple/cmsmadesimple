@@ -1,4 +1,7 @@
 <?php
+$lang['admin']['server_db_grants'] = 'Check database access levels';
+$lang['admin']['error_nograntall_found'] = 'Could not find a suitable &quot;GRANT ALL&quot; permission.  This may mean you could have problems installing or removing modules.  Or even adding and deleting items, including pages';
+$lang['msg_grantall_found'] = 'Found a &quot;GRANT ALL&quot; statement that appears to be suitable';
 $lang['admin']['curlversion'] = 'Test curl version';
 $lang['admin']['curl'] = 'Test for the curl library';
 $lang['admin']['test_curl'] = 'Test for curl availability';

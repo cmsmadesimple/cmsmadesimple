@@ -50,6 +50,7 @@ Version 1.11 - NO NAME
  - Remove more stuff from the cms_variables class (slowly getting rid of this).
  - Installer and system information pages now check curl, and curl version.
  - Change the alt tag in {content_image} to return the image name by default.
+ - System informatin page now attempts to determine if there are sufficient mysql privileges for normal operation (warning only on failure).
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
