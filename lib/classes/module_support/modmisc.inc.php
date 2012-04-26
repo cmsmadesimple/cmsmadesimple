@@ -86,7 +86,13 @@ function cms_module_GetHelpPage(&$modinstance)
 			{
 				$str .= '<em>(optional)</em> ';
 			}
-			$str .= $oneparam['name'].'="'.$oneparam['default'].'" - '.(isset($oneparam['help'])?$oneparam['help']:'').'</li>';
+			$help = '';
+			if( isset($oneparam['help']) ) {
+				$help = $oneparam['help'];
+			} else if( $oneparam['name'] == 'lang' ) {
+				$help = lang('module_param_lang');
+			}
+			$str .= $oneparam['name'].'="'.$oneparam['default'].'" - '.$help.'</li>';
 		}
 		$str .= '</ul>';
 	}
