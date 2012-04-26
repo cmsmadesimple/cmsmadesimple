@@ -263,6 +263,7 @@ define('CLEANED_FILENAME','BAD_FILE');
  * @internal
  * @param string The complete file specification
  * @return string the cleaned file path.
+ * Rolf: only used in this file
  */
 function cms_cleanfile($filename)
 {
@@ -289,6 +290,7 @@ function cms_cleanfile($filename)
  * @ignore
  * @access private
  * @return string
+ * Rolf: looks like not used
  */
 function cms_calculate_url()
 {
@@ -362,6 +364,7 @@ function my_htmlentities($val, $convert_single_quotes = false)
  * @deprecated
  * @param string Input string
  * @return string
+ * Rolf: used in admin/listmodules.php
  */
 function cms_utf8entities($val)
 {
@@ -389,6 +392,7 @@ function cms_utf8entities($val)
  * 
  * @see debug_to_log, debug_bt
  * @return void
+ * Rolf: Looks like not used
  */
 function debug_bt_to_log()
 {
@@ -426,6 +430,7 @@ function debug_bt_to_log()
  * A function to generate a backtrace in a readable format.
  *
  * @return void
+ * Rolf: looks like not used
  */
 function debug_bt()
 {
@@ -619,6 +624,7 @@ function debug_buffer($var, $title="")
  * @internal
  * @param string SQL query
  * @param boolean (unused)
+ * Rolf: only used in lib/adodb.functions.php
  */
 function debug_sql($str, $newline = false)
 {
@@ -643,6 +649,7 @@ function debug_sql($str, $newline = false)
 * @param string $session_key (optional)
 * @deprecated
 * @return mixed
+* Rolf: looks like not used
 */
 function get_request_value($value, $default_value = '', $session_key = '')
 {
@@ -681,6 +688,7 @@ function get_request_value($value, $default_value = '', $session_key = '')
 * @param mixed $default_value
 * @deprecated
 * @return mixed
+* Rolf: only used in this file
 */
 function get_value_with_default($value, $default_value = '', $session_key = '')
 {
@@ -743,6 +751,7 @@ function get_value_with_default($value, $default_value = '', $session_key = '')
  * @param mixed $default_value
  * @param string $session_key
  * @return mixed
+ * Rolf: looks like not used
  */
 function get_parameter_value($parameters, $value, $default_value = '', $session_key = '')
 {
@@ -823,6 +832,7 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
  * @param string A name for the control
  * @param string The name of the option that should be selected.
  * @return string
+ * Rolf: only used in admin/edittemplate.php
  */
 function create_encoding_dropdown($name = 'encoding', $selected = '')
 {
@@ -918,6 +928,7 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text)
  * @param string Flle specification
  * @param array  Array of regular expressions.
  * @return boolean
+ * Rolf: only used in this file
  */
 function filespec_is_excluded( $file, $excludes )
 {
@@ -995,6 +1006,7 @@ function is_directory_writable( $path )
  * @param path - path to search
  * @param extensions - include only files matching these extensions
  *                     case insensitive, comma delimited
+ * Rolf: only used in this file
  */
 function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true, $fileprefix='',$excludefiles=1)
 {
@@ -1114,6 +1126,7 @@ function recursive_delete( $dirname )
  * @see chmod
  * @param string The start location
  * @param integer The mode
+ * Rolf: only used in admin/listmodules.php
  */
 function chmod_r( $path, $mode )
 {
@@ -1171,6 +1184,7 @@ function SerializeObject(&$object)
  * @internal
  * @param string The serialized text.
  * @return object  A valid object on success, or null
+ * Rolf: only used in admin/editcontent_extra.php
  */
 function UnserializeObject(&$serialized)
 {
@@ -1217,6 +1231,7 @@ function endswith( $str, $sub )
  * @internal
  * @param string A prefix to display before the memory output
  * @return void
+ * Rolf: looks like not used
  */
 function showmem($string = '')
 {
@@ -1306,7 +1321,7 @@ if(!function_exists("file_get_contents"))
 
 
 /**
- *
+ * Rolf: only used in admin/style.php
  */
 function cms_readfile($filename)
 {
@@ -1424,6 +1439,7 @@ function cleanValue($val) {
  * @param string Input HTML code.
  * @param boolean Wether HTML tags should be removed.
  * @return string
+ * Rolf: only used in this file
  */
 function cleanHtml($string, $remove = false) {
 	if ($remove) {
@@ -1456,6 +1472,7 @@ define('CLEAN_FILE','CLEAN_FILE');
  * @param array  A map of param names and type information
  * @param boolean A flag indicating wether unknown keys in the input data should be allowed.
  * @param boolean A flag indicating wether keys should be treated as strings and cleaned.
+ * Rolf: only used in lib/classes/class.CMSModule.php
 */
 function cleanParamHash($modulename,$data,$map = false,
 			$allow_unknown = false,$clean_keys = true)
@@ -1592,6 +1609,7 @@ function GetModuleParameters($id)
  *
  * @internal
  * @return boolean
+ * Rolf: looks like not used
  */
 function can_users_upload()
 {
@@ -1709,6 +1727,7 @@ function can_admin_upload()
  * @internal
  * @param int The permissions to test.
  * @return string
+ * Rolf: only used in admin/siteprefs.php
  */
 function interpret_permissions($perms)
 {
@@ -1771,6 +1790,7 @@ function interpret_permissions($perms)
  *
  * @param string  The php ini key
  * @return integer
+ * Rolf: only used in admin/header.php
  */
 function ini_get_boolean($str)
 {
@@ -1839,6 +1859,7 @@ function cms_move_uploaded_file( $tmpfile, $destination )
  * @internal
  * @param string Filename containing cash information
  * @return array of css cache information
+ * Rolf: only used in admin/editcss.php
  */
 function csscache_csvfile_to_hash($filename)
 {
@@ -1865,6 +1886,7 @@ function csscache_csvfile_to_hash($filename)
  * @param string Filename to output information to
  * @param array  Hash of CSS cache information.
  * @return void
+ * Rolf: only used in admin/editcss.php
  */
 function csscache_hash_to_csvfile($filename,$hash)
 {
@@ -1888,6 +1910,7 @@ function csscache_hash_to_csvfile($filename,$hash)
  * @internal
  * @param string Filename containing CSS cache information
  * @return void
+ * Rolf: looks like not used
  */
 function css_cache_clear($filename)
 {
@@ -1908,6 +1931,7 @@ function css_cache_clear($filename)
  * @param string IP address to test
  * @param array  Array of match expressions
  * @return boolean
+ * Rolf: only used in lib/content.functions.php
  */
 function cms_ipmatches($ip,$checklist)
 {
@@ -2348,6 +2372,7 @@ function is_email( $email, $checkDNS=false ) {
  * @internal
  * @access private
  * @return string
+ * Rolf: only used in admin/imagefiles.php
  */
 function get_secure_param()
 {
@@ -2363,7 +2388,7 @@ function get_secure_param()
 
 
 /**
- *
+ * Rolf: only used in lib/classes/contenttypes/Content.inc.php
  */
 function cms_to_bool($str)
 {
@@ -2422,7 +2447,7 @@ function cms_get_jquery($exclude = '',$ssl = false,$cdn = false,$append = '',$cu
 	
 
 /**
- *
+ * Rolf: only used in lib/classes/class.CMSModule.php
  */	
 if(!function_exists('get_called_class')) {
   function get_called_class() {
