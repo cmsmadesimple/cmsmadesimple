@@ -505,6 +505,7 @@ else
       foreach($allmodules as $key)
 	{
 	  $modinstance = $modops->get_module_instance($key,'',true);
+	  if( !is_object($modinstance) ) continue; // interesting.
 	  $is_sysmodule = $modops->IsSystemModule($key);
 	  $namecol = $key;
 	  $versioncol = "&nbsp;";
