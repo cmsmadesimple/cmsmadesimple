@@ -48,6 +48,7 @@ function smarty_function_cms_stylesheet($params, &$template)
 	#---------------------------------------------
 	# Trivial Exclusion
 	#---------------------------------------------	
+	
 	if( isset($CMS_LOGIN_PAGE) ) return;
 
 	#---------------------------------------------
@@ -321,6 +322,7 @@ function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty
 		$_contents = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $_contents);
 		$_contents = preg_replace('/(\w*?background.*?\:\w*?).*?(;.*?)/', '', $_contents);
 	}
+	
 	if( $forceblackandwhite ) {
 		$_contents .= 'body.mceContentBody { background: #fff; color: 000; !important }'."\n";
 	}
