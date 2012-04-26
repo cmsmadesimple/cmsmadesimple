@@ -141,7 +141,9 @@ final class CmsNlsOperations
       {
 	return self::$_fe_language_detector->find_language();
       }
-    return get_site_preference('frontendlang','en_US');
+    $x = trim(get_site_preference('frontendlang'));
+    if( !$x ) $x = 'en_US';
+    return $x;
   }
 
   /**

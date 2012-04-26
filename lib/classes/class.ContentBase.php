@@ -2097,11 +2097,6 @@ abstract class ContentBase
       if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true)
 	{
 	  $str = $this->HierarchyPath();
-	  if( isset($config['use_hierarchy']) && $config['use_hierarchy'] == false )
-	    {
-	      $str = $alias;
-	    }
-
 	  if( $this->mURL != '')
 	    {
 	      // we have a url path
@@ -2112,11 +2107,6 @@ abstract class ContentBase
       else if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal' && $rewrite == true)
 	{
 	  $str = $this->HierarchyPath();
-	  if( isset($config['use_hierarchy']) && $config['use_hierarchy'] == false )
-	    {
-	      $str = $alias;
-	    }
-
 	  if( $this->mURL != '')
 	    {
 	      // we have a url path

@@ -41,12 +41,14 @@ final class CmsLangOperations
 
   private static function _load_realm($realm)
   {
+    $curlang = CmsNlsOperations::get_current_language();
     if( !$realm ) $realm = 'admin';
-    if( is_array(self::$_langdata) && isset(self::$_langdata[$realm]) ) return;
+
+    if( is_array(self::$_langdata) && isset(self::$_langdata[$curlang][$realm]) ) return;
     if( !is_array(self::$_langdata) ) self::$_langdata = array();
+    if( !isset(self::$_langdata[$curlang]) ) self::$_langdata[$curlang] = array();
 
     $config = cmsms()->GetConfig();
-    $curlang = CmsNlsOperations::get_current_language();
 
     // load the english file first.
     $dir = '';
@@ -72,7 +74,7 @@ final class CmsLangOperations
 	include($fn);
 	if( isset($lang[$realm]) )
 	  {
-	    self::$_langdata[$realm] = $lang[$realm];
+	    self::$_langdata[$curlang][$realm] = $lang[$realm];
 	  }
 	unset($lang);
       }
@@ -80,16 +82,17 @@ final class CmsLangOperations
       {
 	$lang = array();
 	include($fn);
-	self::$_langdata[$realm] = $lang;
+	self::$_langdata[$curlang][$realm] = $lang;
 	unset($lang);
       }
 
-    // backup the english data... in case we need to get it later.
-    if( !is_array(self::$_engdata) ) self::$_engdata = array();
-    self::$_engdata[$realm] = self::$_langdata[$realm];
-
     if( $curlang != 'en_US' )
       {
+	$filename = $curlang.'.php';
+	if( !is_array(self::$_engdata) ) self::$_engdata = array();
+	// backup the english data... in case we need to get it later.
+	self::$_engdata[$realm] = self::$_langdata[$curlang][$realm];
+
 	// load the lang file itself.
 	if( $realm == 'admin' )
 	  {
@@ -108,7 +111,7 @@ final class CmsLangOperations
 		include($fn);
 		if( isset($lang[$realm]) )
 		  {
-		    self::$_langdata[$realm] = array_merge(self::$_langdata[$realm],$lang[$realm]);
+		    self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang[$realm]);
 		  }
 		unset($lang);
 	      }
@@ -116,9 +119,9 @@ final class CmsLangOperations
 	      {
 		$lang = array();
 		include($fn);
-		if( isset($lang[$realm]) )
+		if( isset($lang) )
 		  {
-		    self::$_langdata[$realm] = array_merge(self::$_langdata[$realm],$lang[$realm]);
+		    self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
 		  }
 		unset($lang);
 	      }	
@@ -134,9 +137,9 @@ final class CmsLangOperations
 	
     $lang = array();
     include($fn);
-    if( isset($lang[$realm]) )
+    if( isset($lang) )
       {
-	self::$_langdata[$realm] = array_merge(self::$_langdata[$realm],$lang[$realm]);
+	self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
       }
     unset($lang);
 
@@ -198,16 +201,17 @@ final class CmsLangOperations
 	$params = $params[0];
       }
 
+    $curlang = CmsNlsOperations::get_current_language();
     self::_load_realm($realm);
-    if( !isset(self::$_langdata[$realm][$key]) ) return "-- Add me: $key --";
+    if( !isset(self::$_langdata[$curlang][$realm][$key]) ) return "-- Add me: $key --";
 
     if( count($params) )
       {
-	$result = vsprintf(self::$_langdata[$realm][$key], $params);
+	$result = vsprintf(self::$_langdata[$curlang][$realm][$key], $params);
       }
     else
       {
-	$result = self::$_langdata[$realm][$key];
+	$result = self::$_langdata[$curlang][$realm][$key];
       }
 
     // conversion?
