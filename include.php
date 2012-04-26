@@ -244,23 +244,10 @@ if (! isset($CMS_INSTALL_PAGE))
     debug_buffer('', 'End of Loading Modules');
   }
 
-#Set the locale if it's set
-#either in the config, or as a site preference.
-$locale = CmsNlsOperations::get_locale();
-if( $locale )
-  {
-    $res = @setlocale(LC_ALL,$locale);
-    if( $res === FALSE )
-      {
-	debug_buffer('IMPORTANT: SetLocale failed');
-      }
-  }
-$frontendlang = get_site_preference('frontendlang');
-$smarty->assign('lang',$frontendlang);
-$smarty->assign('encoding',get_encoding());
+#Setup language stuff.... will auto-detect languages
+CmsNlsOperations::set_language();
 
-
-$CMS_LAZYLOAD_MODULES = 1;
+$CMS_LAZYLOAD_MODULES = 1; // still used ??
 
 #Do auto task stuff.
 if (! isset($CMS_INSTALL_PAGE))

@@ -105,6 +105,47 @@ final class CmsNlsOperations
   }
 
   /**
+   * Set a current language.
+   * The language specified may be an empty string, which will assume that the system
+   * should try to detect an appropriate language.  If no default can be found for
+   * some reason, en_US will be assumed. 
+   *
+   * When a language is found, the system will automatically set the locale for the request.
+   * 
+   * Note: CMSMS 1.11 and above will not support multiple languages per request.
+   * therefore, it should be assumed that this function can only be called once per request.
+   *
+   * @internal
+   * @see set_locale
+   * @param string The desired language.
+   * @return boolean
+   */
+  public static function set_language($lang = null)
+  {
+    $curlang = '';
+    if( self::$_cur_lang != '') {
+      // lang has been previously set.
+      $curlang = self::$_cur_lang;
+    }
+    if( $lang == '' ) $lang = self::get_default_language();
+
+    // todo: find the lang (maybe via alias or whatever)
+
+    if( $curlang == $lang ) return TRUE; // nothing to do.
+    
+    self::_load_nls();
+    if( isset(self::$_nls[$lang]) )
+      {
+	// lang is okay... now we can set it.
+	self::$_cur_lang = $lang;
+	// and set the locale along with this language.
+	self::set_locale();
+	return TRUE;
+      }
+    return FALSE;
+  }
+
+  /**
    * Get the current language.
    * If not explicitly set this method will try to detect the current language.
    * different detection mechanisms are used for admin requests vs. frontend requests.
@@ -114,18 +155,44 @@ final class CmsNlsOperations
    */
   public static function get_current_language()
   {
+    if( isset(self::$_cur_lang) ) return self::$_cur_lang;
+
+    return self::get_default_language();
+  }
+
+  /**
+   * Get a default language.
+   * This method will behave differently for admin or frontend requests.
+   *
+   * For admin requests first the preference is checked.  Secondly, 
+   * an attempt is made to find a language understood by the browser that is compatible
+   * with what is avaialable.  If no match can be found, en_US is assumed.
+   *
+   * For frontend requests if a language detector has been set into this object it will
+   * be called to attempt to find a language.  If that fails, then the frontend language preference
+   * is used.  Thirdly, if no match is found en_US is assumed.
+   *
+   * @see set_language_detector
+   * @return string
+   */
+  public static function get_default_language()
+  {
     global $CMS_ADMIN_PAGE;
     global $CMS_STYLESHEET;
     global $CMS_INSTALL_PAGE;
     
-    if( isset(self::$_cur_lang) ) return self::$_cur_lang;
-
     self::_load_nls();
+    $lang = '';
     if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE))
       {
-	return self::get_admin_language();
+	 $lang = self::get_admin_language();
       }
-    return self::get_frontend_language();
+    else
+      {
+	$lang = self::get_frontend_language();
+      }
+    if( !$lang ) $lang = 'en_US';
+    return $lang;
   }
 
   /**
@@ -145,33 +212,6 @@ final class CmsNlsOperations
     if( !$x ) $x = 'en_US';
     return $x;
   }
-
-  /**
-   * Set a current language.
-   * The language specified must be an empty string, which will assume detection
-   * or must be an available language as identified in the NLS FIles. If no suitable
-   * value is detected, this function will return en_US.
-   *
-   * @param string The desired language.
-   * @return boolean
-   */
-  public static function set_language($lang)
-  {
-    if( empty($lang) )
-      {
-	self::$_cur_lang = null;
-	return TRUE;
-      }
-
-    self::_load_nls();
-    if( isset(self::$_nls[$lang]) )
-      {
-	self::$_cur_lang = $lang;
-	return TRUE;
-      }
-    return FALSE;
-  }
-
 
   /**
    * Use detection mechanisms to find a suitable language for an admin request.
@@ -280,8 +320,10 @@ final class CmsNlsOperations
    */
   public static function get_encoding()
   {
+    // has it been explicity set somewhere?
     if( self::$_encoding ) return self::$_encoding;
 
+    // is it specified in the config.php?
     $config = cmsms()->GetConfig();
     if( isset($config['default_encoding']) && $config['default_encoding'] != '' )
       return $config['default_encoding'];
@@ -289,6 +331,7 @@ final class CmsNlsOperations
     $lang = self::get_current_language();
     if( !$lang ) return 'UTF-8'; // no language.. weird.
 
+    // get it from the nls stuff.
     return self::$_nls[$lang]->encoding();
   }
 
@@ -308,58 +351,47 @@ final class CmsNlsOperations
   }
 
   /**
-   * Return the currently active locale
-   * If an locale has not been explicitly set, the locale value from the config file will be used
-   * If that value is empty, the locale associated with the current language will be used.
-   * If no suitable locale can be found an empty string is returned.
-   *
-   * @return mixed  Either an array, or a string representing the possible locale values, or an empty string.
-   */
-  public static function get_locale()
-  {
-    if( self::$_locale ) return self::$_locale;
-
-    $config = cmsms()->GetConfig();
-    if( isset($config['locale']) && $config['locale'] != '' ) 
-      {
-	$val = $config['locale'];
-	if( is_string($val) ) 
-	  $val = trim($val);
-	if( strpos($val,',') !== FALSE )
-	  {
-	    $val = explode(',',$val);
-	    for( $i = 0; $i < count($val); $i++ )
-	      {
-		$val[$i] = trim($val[$i]);
-	      }
-	  }
-	return $val;
-      }
-
-    $lang = self::get_current_language();
-    if( !$lang ) return ''; // no language... weird.
-
-    return self::$_nls[$lang]->locale();
-  }
-
-  /**
-   * Set the current locale.
-   * Note this does not call the setlocale php function.  It only sets a value
-   * that can be used by the setlocale php function.
-   * CMSMS calls setlocale with the information from this class directly after loading modules.
+   * Set the locale for the current language.
+   * if language has not been set... does nothing.
+   * will use the locale from the nls information for the current locale
+   * if config entry is set... it will be used, but subsequent calls to this
+   * method will do nothing.
    *
    * @return void
    */
-  public static function set_locale($str)
+  protected static function set_locale()
   {
-    if( !$str ) 
-      {
-	self::$_locale = null;
-	return;
-      }
-    self::$_locale = $str;
+    $config = cmsms()->GetConfig();
+    static $_locale_set;
+
+    $locale = '';
+    if( isset($config['locale']) && $config['locale'] != '' ) {
+      if( $_locale_set ) return;
+
+      $locale = $config['locale'];
+    }
+    else {
+      if( self::$_cur_lang == '' ) return;
+
+      self::_load_nls();
+      $locale = self::$_nls[self::$_cur_lang]->locale();
+    }
+
+    if( $locale ) {
+      setlocale(LC_ALL,$locale);
+      $_locale_set = 1;
+    }
   }
 
+  /**
+   * Used to allow third party software to override the language detection mechanism for frontend requests
+   * the module can provide an object derived from CmsLanguageDetector to this method.
+   *
+   * Note, this module must return a language for which there is an available NLS file.
+   *
+   * @param CmsLanguageDetector Object containing methods to detect a compatible, desired language
+   * @return void
+   */
   public static function set_language_detector(CmsLanguageDetector& $obj)
   {
     if( is_object(self::$_fe_language_detector) )

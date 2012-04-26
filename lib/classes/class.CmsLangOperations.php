@@ -88,7 +88,6 @@ final class CmsLangOperations
 
     if( $curlang != 'en_US' )
       {
-	$filename = $curlang.'.php';
 	if( !is_array(self::$_engdata) ) self::$_engdata = array();
 	// backup the english data... in case we need to get it later.
 	self::$_engdata[$realm] = self::$_langdata[$curlang][$realm];
@@ -101,6 +100,7 @@ final class CmsLangOperations
 	else
 	  {
 	    $dir = cms_join_path($dir,'ext');
+	    $filename = $curlang.'.php';
 	  }
 	$fn = cms_join_path($dir,$filename);
 	if( file_exists($fn) )
@@ -169,6 +169,18 @@ final class CmsLangOperations
     return $str;
   }
 
+  /**
+   * Given a realm name, a key, and optional parameters return a translated string
+   * This function accepts variable arguments.  If no key/realm combination can be found
+   * then an -- Add-Me string will be returned indicating that this key needs translating.
+   * This function uses the currently set language, and will load the translations from disk
+   * if necessary.
+   *
+   * @param string The realm name (required)
+   * @param string The language string key (required)
+   * @param mixed  Further arguments to this function are passed to vsprintf
+   * @return string
+   */
   public static function lang_from_realm()
   {
     $args = func_get_args();
@@ -218,53 +230,16 @@ final class CmsLangOperations
     return self::_convert_encoding($result);
   }
 
-
-  public static function lang_from_realm_en()
-  {
-    global $CMS_ADMIN_PAGE;
-    global $CMS_STYLESHEET;
-    global $CMS_INSTALL_PAGE;
-    
-    if (!isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) && !self::$_allow_nonadmin_lang )
-      {
-	trigger_error('Attempt to load admin realm from non admin action');
-	return '';
-      }
-  
-    $args = func_get_args();
-    if( count($args) == 1 && is_array($args[0]) )
-      {
-	$args = $args[0];
-      }
-    if( count($args) < 2 ) return;
-
-    $realm  = $args[0];
-    $key    = $args[1];
-    if( !$realm || !$key ) return;
-
-    $params = array();
-    if( count($args) > 2 )
-      {
-	$params = array_slice($args,2);
-      }
-
-    self::_load_realm($realm);
-    if( !isset(self::$_engdata[$realm][$key]) ) return '-- Add me: $key --';
-
-    if( count($params) )
-      {
-	$result = vsprintf(self::$_engdata[$realm][$name], $params);
-      }
-    else
-      {
-	$result = self::$_engdata[$realm][$name];
-      }
-
-    // conversion?
-    return self::_convert_encoding($result);
-  }
-
-
+  /**
+   * A simple around the lang_from_realm method that assumes the 'admin' realm.
+   * Note, under normal circumstances this will generate an error if called from a frontend action.
+   * This function accepts variable arguments.
+   *
+   * @see lang_from_realm
+   * @param string Key (required) the language string key
+   * @param mixed  Optional further arguments.
+   * @return string
+   */
   public static function lang()
   {
     $args = func_get_args();
@@ -277,28 +252,35 @@ final class CmsLangOperations
   }
 
 
-  public static function lang_en()
-  {
-    $args = func_get_args();
-    if( count($args) == 1 && is_array($args[0]) )
-      {
-	$args = $args[0];
-      }
-    array_unshift($args,'admin');
-    return self::lang_from_realm_en($args);
-  }
-
-
   /**
    * Allow nonadmin requests to call lang functions.
    * normally, an error would be generated if calling core lang functions from an frontend action.
    * this method will disable or enable that check.
    *
    * @internal
+   * @param boolean flag
+   * @return void.
    */
   public static function allow_nonadmin_lang($flag = TRUE)
   {
     self::$_allow_nonadmin_lang = $flag;
+  }
+
+  
+  /**
+   * Test to see if a language key exists in the current lang file.
+   * This function uses the current language.
+   *
+   * @param string The language key
+   * @return boolean
+   */
+  public static function key_exists($key)
+  {
+    self::_load_realm('admin');
+    $curlang = CmsNlsOperations::get_current_language();
+
+    if( isset(self::$_langdata[$curlang]['admin']) ) return TRUE;
+    return FALSE;
   }
 } // end of class
 

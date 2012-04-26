@@ -98,77 +98,10 @@ function lang()
 }
 
 
-/**
- * A method to return a translation for a specific string in a specific realm.
- * called with the realm first, followed by the key, this method will attempt
- * to load the specific realm data if necessary before doing translation.
- *
- * This method accepts a variable number of arguments.  Any arguments after
- * the realm and the key are passed to the key via vsprintf
- *
- * i.e: lang_by_realm('tasks','my_string');
- *
- * @since 1.8
- * @param string The realm
- * @param string The lang key
- * @return string
- */
-function lang_by_realm_en()
-{
-  $args = func_get_args();
-  return CmsLangOperations::lang_from_realm_en($args);
-}
-
-
-/**
- * Return a translated string for the default 'admin' realm.
- * This function is merely a wrapper around the lang_by_realm function
- * that assumes the realm is 'admin'.
- *
- * This method will throw a notice if it is called from a frontend request
- *
- * @param string The key to translate
- * @return string
- */
-function lang_en()
-{
-  $args = func_get_args();
-  return CmsLangOperations::lang_en($args);
-}
-
 function get_encoding($charset='', $defaultoverrides=true)
 {
   return CmsNlsOperations::get_encoding();
 }
-
-function get_locale()
-{
-  return CmsNlsOperations::get_locale();
-}
-
-/**
- * Test wether a string is valid UTF-8
- *
- * @internal
- * @param string The string to test
- * @return boolean
- */
-function is_utf8($string)
-{
-   // From http://w3.org/International/questions/qa-forms-utf-8.html
-   // don't think this is used in cmsms 1.10.x or later.
-   return preg_match('%^(?:
-         [\x09\x0A\x0D\x20-\x7E]            # ASCII
-       | [\xC2-\xDF][\x80-\xBF]            # non-overlong 2-byte
-       |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
-       | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
-       |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
-       |  \xF0[\x90-\xBF][\x80-\xBF]{2}    # planes 1-3
-       | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
-       |  \xF4[\x80-\x8F][\x80-\xBF]{2}    # plane 16
-   )*$%xs', $string);
-   
-} // function is_utf8
 
 
 function get_language_list($allow_none = true)
