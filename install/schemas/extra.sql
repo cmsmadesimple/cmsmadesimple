@@ -3,7 +3,7 @@ INSERT INTO {DB_PREFIX}users VALUES (1,'admin','5f4dcc3b5aa765d61d8327deb882cf99
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'use_wysiwyg','1',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'default_cms_language','en_US',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'date_format_string','%x %X',NULL);
-INSERT INTO {DB_PREFIX}userprefs VALUES (1,'admintheme','NCleanGrey',NULL);
+INSERT INTO {DB_PREFIX}userprefs VALUES (1,'admintheme','OneEleven',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'bookmarks','on',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'recent','on',NULL);
 INSERT INTO {DB_PREFIX}userprefs VALUES (1,'indent','on',NULL);
