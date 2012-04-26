@@ -53,12 +53,26 @@ $smarty->assign('back_url'.$themeObject->BackURL());
 
 if ($action == "showpluginhelp")
 {
+  $content = '';
   $file = $config['root_path']."/plugins/$type.$plugin.php";
   if( file_exists($file) )
     {
       require_once($file);
     }
   if( function_exists('smarty_cms_help_'.$type.'_'.$plugin) )
+    {
+      // Get and display the plugin's help
+      @ob_start();
+      call_user_func_array('smarty_cms_help_'.$type.'_'.$plugin, array());
+      $content = @ob_get_contents();
+      @ob_end_clean();
+    }
+  else if( CmsLangOperations::key_exists("help_{$type}_{$plugin}") )
+    {
+      $content = lang("help_{$type}_{$plugin}");
+    }
+
+  if( $content )
     {
       $smarty->assign('subheader',lang('pluginhelp',array($plugin)));
       
@@ -83,12 +97,6 @@ if ($action == "showpluginhelp")
 	  $smarty->assign('wiki_url',$wikiUrl);
 	  $smarty->assign('image_help_external',$image_help_external);
 	}
-      
-      // Get and display the plugin's help
-      @ob_start();
-      call_user_func_array('smarty_cms_help_'.$type.'_'.$plugin, array());
-      $content = @ob_get_contents();
-      @ob_end_clean();
       
       $smarty->assign('content',$content);
     }
@@ -143,6 +151,11 @@ else
 	    {
 	      $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
 	    }
+	  else if( CmsLangOperations::key_exists('help_'.$rec['type'].'_'.$rec['name']) )
+	    {
+	      $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+	    }
+
 	  if( function_exists("smarty_cms_about_".$rec['type']."_".$rec['name']) )
 	    {
 	      $rec['about_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginabout&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
@@ -150,17 +163,33 @@ else
 	  
 	  $file_array[] = $rec;
 	}
-      
-      function listtags_plugin_sort($a,$b)
-      {
-	return strcmp($a['name'],$b['name']);
-      }
-
-      usort($file_array,'listtags_plugin_sort');
-
-      $smarty->assign('plugins',$file_array);
     }
 
+  // add in standard tags...
+  $rec = array('type'=>'function','name'=>'content');
+  $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+  $file_array[] = $rec;
+  
+  $rec = array('type'=>'function','name'=>'content_image');
+  $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+  $file_array[] = $rec;
+
+  $rec = array('type'=>'function','name'=>'content_module');
+  $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+  $file_array[] = $rec;
+
+  $rec = array('type'=>'function','name'=>'process_pagedata');
+  $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+  $file_array[] = $rec;
+
+  function listtags_plugin_sort($a,$b)
+  {
+    return strcmp($a['name'],$b['name']);
+  }
+  
+  usort($file_array,'listtags_plugin_sort');
+  
+  $smarty->assign('plugins',$file_array);
 }
 
 $smarty->assign('back_url',$themeObject->BackURL());
