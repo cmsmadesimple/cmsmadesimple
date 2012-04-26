@@ -23,6 +23,7 @@
  */
 function smarty_modifier_cms_escape($string, $esc_type = 'html', $char_set = 'utf-8')
 {
+  $esc_type = strtolower($esc_type);
     switch ($esc_type) {
         case 'html':
             return htmlspecialchars($string, ENT_QUOTES, $char_set);

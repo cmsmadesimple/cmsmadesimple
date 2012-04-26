@@ -143,6 +143,9 @@ else
 	  $rec = array();
 	  $rec['type'] = $parts[0];
 	  $rec['name'] = $parts[1];
+
+	  if( $rec['type'] == 'prefilter' || $rec['type'] == 'postfilter' ) continue;
+
 	  include_once($onefile);
 	  
 	  if( !function_exists('smarty_'.$rec['type'].'_'.$rec['name']) ) continue;

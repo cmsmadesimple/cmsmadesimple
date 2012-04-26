@@ -279,7 +279,7 @@ final class CmsLangOperations
     self::_load_realm('admin');
     $curlang = CmsNlsOperations::get_current_language();
 
-    if( isset(self::$_langdata[$curlang]['admin']) ) return TRUE;
+    if( isset(self::$_langdata[$curlang]['admin'][$key]) ) return TRUE;
     return FALSE;
   }
 } // end of class
