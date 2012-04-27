@@ -45,6 +45,7 @@ Version 1.11 - NO NAME
  - Fixes #7030 - Installing modules in listmodules skips dependency check.
  - Adds new CmsNlsOperations and CmsNlsOperations classes to better support language serverices
    - deprecated the lang parameter to all plugins and modules.
+   - adds {cms_get_language} {cms_set_language} and {cms_lang_info} smarty plugins.
  - Adds new abstract CmsLanguageDetector class to handle language detection on the frontend.
  - locale can now be configured in the NLS information
  - Encoding can now be configured in the NLS information
@@ -52,6 +53,7 @@ Version 1.11 - NO NAME
  - Installer and system information pages now check curl, and curl version.
  - Change the alt tag in {content_image} to return the image name by default.
  - System information page now attempts to determine if there are sufficient mysql privileges for normal operation (warning only on failure).
+ - Ensure all tags in list tags get help.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue

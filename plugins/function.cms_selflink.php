@@ -90,7 +90,7 @@ function smarty_function_cms_selflink($params, &$template)
       $node = $manager->sureGetNodeByAlias($page);
       if (!isset($node)) 
 	{
-	  cms_set_frontend_language();
+	  if (isset($params['lang'])) cms_set_frontend_language();
 	  return;
 	}
       $content =& $node->GetContent();
@@ -265,7 +265,7 @@ function smarty_function_cms_selflink($params, &$template)
 	      $node = $node->getParentNode();
 	      if (!isset($node)) 
 		{
-		  cms_set_frontend_language();
+		  if (isset($params['lang'])) cms_set_frontend_language();
 		  return;
 		}
 	      $content = $node->GetContent();
@@ -317,13 +317,13 @@ function smarty_function_cms_selflink($params, &$template)
   if( empty($url) )
     {
       // no url to link to, therefore nothing to do.
-      cms_set_frontend_language();
+      if (isset($params['lang'])) cms_set_frontend_language();
       return;
     }
 
   if( isset($params['href']) )
     {
-      cms_set_frontend_language();
+      if (isset($params['lang'])) cms_set_frontend_language();
 		if( isset($params['assign']) ){
 			$smarty->assign(trim($params['assign']),$url);
 			return;
@@ -420,7 +420,7 @@ function smarty_function_cms_selflink($params, &$template)
 	}
     }
 
-  cms_set_frontend_language();
+  if (isset($params['lang'])) cms_set_frontend_language();
 	if( isset($params['assign']) ){
 		$smarty->assign(trim($params['assign']),$result);
 		return;

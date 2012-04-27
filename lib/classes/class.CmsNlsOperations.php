@@ -122,6 +122,14 @@ final class CmsNlsOperations
    */
   public static function set_language($lang = null)
   {
+    static $c = 0;
+
+    if( $c > 0 && $lang == '')
+      {
+	stack_trace(); die();
+      }
+    $c++;
+
     $curlang = '';
     if( self::$_cur_lang != '') {
       // lang has been previously set.

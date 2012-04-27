@@ -1,4 +1,33 @@
 <?php
+$lang['admin']['help_function_cms_lang_info'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin returns an object containing the information that CMSMS has about the selected language.  This can include locale information, encodings, language aliases etc.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li><em>(optional)lang</em> - The language to return information for.  If the lang parameter is not specified then the information for the current CMSMS language is used.</li>
+<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre>{cms_lang_info assign='nls'}{\$nls->locale()}</pre>
+<h3>See Also:</h3>
+<p>the CmsNls class documentation.</p>
+EOT;
+$lang['admin']['help_function_cms_set_language'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin attempts to set the current language for use by translation strings and date formatting to the desired language.  The language specified must be known to CMSMS (The nls file must exist).  When this function is called, (and unless overridden in the config.php) an attempt will be made to set the locale to the local associated with the language.  The locale for the language must be installed on the server.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li><strong>(required)lang</em> - The desired language.  The language must be known to the CMSMS installation (nls file must exist).</li>
+</ul>
+EOT;
+$lang['admin']['help_function_cms_get_language'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin returns the current CMSMS language name. The language is used for translation strings and date formatting.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
+</ul>
+EOT;
 $lang['admin']['help_modifier_cms_escape'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This modifier is used to escape the string in one of many ways.  This can be used for converting the string to multiple different display formats, or to make user entered data with special characters displayable on a standard web page.</p>
