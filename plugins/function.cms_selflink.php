@@ -421,10 +421,10 @@ function smarty_function_cms_selflink($params, &$template)
     }
 
   if (isset($params['lang'])) cms_set_frontend_language();
-	if( isset($params['assign']) ){
-		$smarty->assign(trim($params['assign']),$result);
-		return;
-	}
+  if( isset($params['assign']) ){
+    $smarty->assign(trim($params['assign']),$result);
+    return;
+  }
   return $result;
 }
 

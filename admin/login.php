@@ -30,6 +30,66 @@ $error = "";
 $forgotmessage = "";
 $changepwhash = "";
 
+/**
+ * A function to send lost password recovery email to a specified admin user (by name)
+ *
+ * @internal
+ * @access private
+ * @param string the username
+ * @return results from the attempt to send a message.
+ */
+function send_recovery_email($username)
+{
+  $gCms = cmsms();
+  $config = $gCms->GetConfig();
+  $userops = $gCms->GetUserOperations();
+  $user = $userops->LoadUserByUsername($username);
+  
+  $obj = cms_utils::get_module('CMSMailer');
+  if ($obj == null)
+    {
+      return false;
+    }
+	
+  $obj->AddAddress($user->email, html_entity_decode($user->firstname . ' ' . $user->lastname));
+  $obj->SetSubject(lang('lostpwemailsubject',html_entity_decode(get_site_preference('sitename','CMSMS Site'))));
+  
+  $url = $config['admin_url'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
+  $body = lang('lostpwemail',html_entity_decode(get_site_preference('sitename','CMSMS Site')), $user->username, $url);
+  
+  $obj->SetBody($body);
+  
+  audit('','Core','Sent Lost Password Email for '.$username);
+  return $obj->Send();
+}
+
+/**
+ * A function find a matching user id given an identity hash
+ *
+ * @internal
+ * @access private
+ * @param string the hash
+ * @return object The matching user object if found, or null otherwise.
+ */
+function find_recovery_user($hash)
+{
+  $gCms = cmsms();
+	$config = $gCms->GetConfig();
+	$userops = $gCms->GetUserOperations();
+	
+	foreach ($userops->LoadUsers() as $user)
+	{
+		if ($hash == md5(md5($config['root_path'] . '--' . $user->username . md5($user->password))))
+		{
+			return $user;
+		}
+	}
+	
+	return null;
+}
+
+
+
 //Redirect to the normal login screen if we hit cancel on the forgot pw one
 //Otherwise, see if we have a forgotpw hit
 if ((isset($_REQUEST['forgotpwform']) || isset($_REQUEST['forgotpwchangeform'])) && isset($_REQUEST['logincancel']))

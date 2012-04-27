@@ -250,7 +250,7 @@ if (isset($_POST['submit_prefs'])) {
 	set_preference($userid, 'ignoredmodules', implode(',', $ignoredmodules));
 
 	# Audit, message, cleanup
-	audit($userid, 'Admin User Preferences', 'Edited');
+	audit($userid, 'Admin Username: '.$userobj->username, 'Edited');
 	$message = lang('prefsupdated');
 	cmsms()->clear_cached_files();
 

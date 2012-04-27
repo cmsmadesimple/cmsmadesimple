@@ -1879,9 +1879,6 @@ abstract class ContentBase
 	  $query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
 	  $result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
 
-	  // Remove the cross references
-	  remove_cross_references($this->mId, 'content');
-
 	  $cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
 	  @unlink($cachefilename);
 

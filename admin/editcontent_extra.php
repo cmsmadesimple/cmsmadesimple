@@ -119,8 +119,7 @@ function createtmpfname(&$contentobj)
 	$templateobj = $templateops->LoadTemplateById($contentobj->TemplateId());
 	$data['template'] = $templateobj->content;
 
-	$stylesheetobj = get_stylesheet($contentobj->TemplateId());
-	$data['encoding'] = $stylesheetobj['encoding'];
+	$data['encoding'] = get_encoding();
 	$data['serialized_content'] = serialize($contentobj);
 
 	$tmpfname = '';

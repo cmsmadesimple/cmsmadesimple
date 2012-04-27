@@ -279,7 +279,6 @@ final class GlobalContentOperations
 		if ($dbresult !== false)
 		{
 			$result = true;
-			remove_cross_references_by_child($id, 'global_content');
 		}
 
 		return $result;

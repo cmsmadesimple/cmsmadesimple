@@ -239,11 +239,29 @@ function ErrorHandler404()
  * @param boolean A flag indicating wether single quotes should be converted to entities.
  * @return string the converted string.
  */
-function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8", $convert_single_quotes = false)
+function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8", $convert_single_quotes = false)
 {
-	$result = "";
-	$result = my_htmlentities($string, $convert_single_quotes);
-	return $result;
+  if ($val == "") return "";
+
+  $val = str_replace( "&#032;", " ", $val );
+  $val = str_replace( "&"            , "&amp;"         , $val );
+  $val = str_replace( "<!--"         , "&#60;&#33;--"  , $val );
+  $val = str_replace( "-->"          , "--&#62;"       , $val );
+  $val = preg_replace( "/<script/i"  , "&#60;script"   , $val );
+  $val = str_replace( ">"            , "&gt;"          , $val );
+  $val = str_replace( "<"            , "&lt;"          , $val );
+  $val = str_replace( "\""           , "&quot;"        , $val );
+  $val = preg_replace( "/\\$/"      , "&#036;"        , $val );
+  $val = str_replace( "!"            , "&#33;"         , $val );
+  $val = str_replace( "'"            , "&#39;"         , $val );
+
+  if ($convert_single_quotes)
+    {
+      $val = str_replace("\\'", "&apos;", $val);
+      $val = str_replace("'", "&apos;", $val);
+    }
+
+  return $val;
 }
 
 
@@ -283,76 +301,19 @@ function cms_cleanfile($filename)
 
 
 
-/**
- * Figures out the page name from the uri string.  Has to use different logic
- * based on the type of httpd server.
- *
- * @ignore
- * @access private
- * @return string
- * Rolf: looks like not used
- */
-function cms_calculate_url()
-{
-	$result = '';
-
-	$config = cmsms()->GetConfig();
-
-	//apache and lighttpd
-	if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
-	{
-		$matches = array();
-		if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['REQUEST_URI'], $matches))
-		{
-			$result = $matches[1];
-		}
-	}
-
-	//trim off the extension, if there is one set
-	if ($config['page_extension'] != '' && endswith($result, $config['page_extension']))
-	{
-		$result = substr($result, 0, strlen($result) - strlen($config['page_extension']));
-	}
-
-	return $result;
-
-}
-
-
 
 /**
  * A replacement for the built in htmlentities method.
  *
  * @ignore
+ * @deprecated
  * @param string  input string
  * @param boolean A flag wether or not to handle single quotes.
- * @return unknown
+ * @return string
  */
 function my_htmlentities($val, $convert_single_quotes = false)
 {
-	if ($val == "")
-	{
-		return "";
-	}
-	$val = str_replace( "&#032;", " ", $val );
-	$val = str_replace( "&"            , "&amp;"         , $val );
-	$val = str_replace( "<!--"         , "&#60;&#33;--"  , $val );
-	$val = str_replace( "-->"          , "--&#62;"       , $val );
-	$val = preg_replace( "/<script/i"  , "&#60;script"   , $val );
-	$val = str_replace( ">"            , "&gt;"          , $val );
-	$val = str_replace( "<"            , "&lt;"          , $val );
-	$val = str_replace( "\""           , "&quot;"        , $val );
-	$val = preg_replace( "/\\$/"      , "&#036;"        , $val );
-	$val = str_replace( "!"            , "&#33;"         , $val );
-	$val = str_replace( "'"            , "&#39;"         , $val );
-
-	if ($convert_single_quotes)
-	{
-		$val = str_replace("\\'", "&apos;", $val);
-		$val = str_replace("'", "&apos;", $val);
-	}
-
-	return $val;
+  return cms_htmlentities($val,ENT_QUOTES,'UTF-8',$confvert_single_quotes);
 }
 
 
@@ -1226,21 +1187,6 @@ function endswith( $str, $sub )
 
 
 /**
- * A convenience function to display the memory usage
- *
- * @internal
- * @param string A prefix to display before the memory output
- * @return void
- * Rolf: looks like not used
- */
-function showmem($string = '')
-{
-	var_dump($string . ' -- ' . memory_get_usage());
-}
-
-
-
-/**
  * convert a human readable string into something that is suitable for use in URLS
  * because many browsers don't support UTF-8 characters in URLS
  *
@@ -1282,44 +1228,6 @@ function munge_string_to_url($alias, $tolower = false, $withslash = false)
 }
 
 
-
-/**
- * I'm not gonna document this
- */
-if (!function_exists('file_put_contents')) {
-    function file_put_contents($filename, $data) {
-        $f = @fopen($filename, 'w');
-        if (!$f) {
-            return false;
-        } else {
-            $bytes = fwrite($f, $data);
-            fclose($f);
-            return $bytes;
-        }
-    }
-}
-
-
-
-/**
- * I'm not gonna document this
- */
-if(!function_exists("file_get_contents"))
-{
-   function file_get_contents($filename)
-   {
-	   if(($contents = file($filename)))
-	   {
-		   $contents = implode('', $contents);
-		   return $contents;
-	   }
-	   else
-		   return false;
-   }
-}
-
-
-
 /**
  * Rolf: only used in admin/style.php
  */
@@ -1335,65 +1243,6 @@ function cms_readfile($filename)
   }
   return FALSE;
 }
-
-
-
-// create the array_walk_recursive function in PHP4
-// from http://www.php.net/manual/en/function.array-walk-recursive.php
-if (!function_exists('array_walk_recursive'))
-{
-   function array_walk_recursive(&$input, $funcname, $userdata = "")
-   {
-       if (!is_callable($funcname))
-       {
-           return false;
-       }
-
-       if (!is_array($input))
-       {
-           return false;
-       }
-
-       foreach ($input AS $key => $value)
-       {
-           if (is_array($input[$key]))
-           {
-               array_walk_recursive($input[$key], $funcname, $userdata);
-           }
-           else
-           {
-               $saved_value = $value;
-               if (!empty($userdata))
-               {
-                   $funcname($value, $key, $userdata);
-               }
-               else
-               {
-                   $funcname($value, $key);
-               }
-
-               if ($value != $saved_value)
-               {
-                   $input[$key] = $value;
-               }
-           }
-       }
-       return true;
-	}
-}
-
-
-
-/**
- *
- */
-if (!function_exists("stripos")) {
-  function stripos($str,$needle,$offset=0)
-  {
-      return strpos(strtolower($str),strtolower($needle),$offset);
-  }
-}
-
 
 
 /*
@@ -1599,59 +1448,6 @@ function GetModuleParameters($id)
     }
 
   return $params;
-}
-
-
-
-/**
- * A function to test if permissions are set correctly, and the server is set properly
- * to allow users to upload to CMSMS.
- *
- * @internal
- * @return boolean
- * Rolf: looks like not used
- */
-function can_users_upload()
-{
-  # first, check to see if safe mode is enabled
-  # if it is, then check to see the owner of the index.php, moduleinterface.php
-  # and the uploads and modules directory.  if they all match, then we
-  # can upload files.
-  # if safe mode is off, then we just have to check the permissions.
-  $file_index = cmsms()->config['root_path'].DIRECTORY_SEPARATOR.'index.php';
-  $dir_uploads = cmsms()->config['uploads_path'];
-
-  $stat_index = @stat($file_index);
-  $stat_uploads = @stat($dir_uploads);
-
-  if( $stat_index == FALSE || $stat_uploads == FALSE )
-    {
-      // couldn't get some necessary information.
-      return false;
-    }
-
-  $safe_mode = ini_get_boolean('safe_mode');
-  if( $safe_mode )
-    {
-      // we're in safe mode.
-      if( $stat_index[4] != $stat_uploads[4] )
-	{
-	  return FALSE;
-	}
-    }
-
-  // now check to see if we can write to the directories
-  if( !is_writable( $dir_modules ) )
-    {
-      return FALSE;
-    }
-  if( !is_writable( $dir_uploads ) )
-    {
-      return FALSE;
-    }
-
-  // It all worked.
-  return TRUE;
 }
 
 
@@ -1902,23 +1698,6 @@ function csscache_hash_to_csvfile($filename,$hash)
 }
 
 
-
-/**
- * A function to clear clear the cached CSS information
- *
- * @deprecated
- * @internal
- * @param string Filename containing CSS cache information
- * @return void
- * Rolf: looks like not used
- */
-function css_cache_clear($filename)
-{
-  @unlink($filename);
-}
-
-
-
 /**
  * A function to test wether an IP address matches a list of expressions
  * Credits to J.Adams <jna@retins.net>
@@ -2010,8 +1789,6 @@ function cms_ipmatches($ip,$checklist)
     }
   return FALSE;
 }
-
-
 
 /**
  * @author	Dominic Sayers <dominic_sayers@hotmail.com>

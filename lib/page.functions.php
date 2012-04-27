@@ -35,8 +35,7 @@
  * @return boolean
  */
 function check_login($no_redirect = false)
-{
-  
+{  
   $config = cmsms()->GetConfig();
 
 	//Handle a current login if one is in queue in the SESSION
@@ -213,64 +212,6 @@ function generate_user_object($userid)
 	}
 }
 
-
-/**
- * A function to send lost password recovery email to a specified admin user (by name)
- *
- * @internal
- * @access private
- * @param string the username
- * @return results from the attempt to send a message.
- */
-function send_recovery_email($username)
-{
-  $gCms = cmsms();
-  $config = $gCms->GetConfig();
-  $userops = $gCms->GetUserOperations();
-  $user = $userops->LoadUserByUsername($username);
-  
-  $obj = cms_utils::get_module('CMSMailer');
-  if ($obj == null)
-    {
-      return false;
-    }
-	
-  $obj->AddAddress($user->email, html_entity_decode($user->firstname . ' ' . $user->lastname));
-  $obj->SetSubject(lang('lostpwemailsubject',html_entity_decode(get_site_preference('sitename','CMSMS Site'))));
-  
-  $url = $config['admin_url'] . '/login.php?recoverme=' . md5(md5($config['root_path'] . '--' . $user->username . md5($user->password)));
-  $body = lang('lostpwemail',html_entity_decode(get_site_preference('sitename','CMSMS Site')), $user->username, $url);
-  
-  $obj->SetBody($body);
-  
-  audit('','Core','Sent Lost Password Email for '.$username);
-  return $obj->Send();
-}
-
-/**
- * A function find a matching user id given an identity hash
- *
- * @internal
- * @access private
- * @param string the hash
- * @return object The matching user object if found, or null otherwise.
- */
-function find_recovery_user($hash)
-{
-  $gCms = cmsms();
-	$config = $gCms->GetConfig();
-	$userops = $gCms->GetUserOperations();
-	
-	foreach ($userops->LoadUsers() as $user)
-	{
-		if ($hash == md5(md5($config['root_path'] . '--' . $user->username . md5($user->password))))
-		{
-			return $user;
-		}
-	}
-	
-	return null;
-}
 
 /**
  * Loads all permissions for a particular user into a global variable so we don't hit the db for every one.
@@ -611,144 +552,13 @@ function set_preference($userid, $prefname, $value)
 
 
 /**
- * Returns the stylesheet for the given templateid.  Returns a hash with encoding and stylesheet entries.
- *
- * @since 0.1
- * @internal
- * @deprecated
- * @param integer template id
- * @param string  An optional media type
- * @return string
- */
-function get_stylesheet($template_id, $media_type = '')
-{
-	$result = array();
-	$css = "";
-
-	$gCms = cmsms();
-	$db = $gCms->GetDb();
-	$templateops =& $gCms->GetTemplateOperations();
-
-	$templateobj = FALSE;
-
-	#Grab template id and make sure it's actually "somewhat" valid
-	if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
-	{
-		#Ok, it's valid, let's load the bugger
-		$templateobj =& $templateops->LoadTemplateById($template_id);
-	}
-
-	#If it's valid after loading, then start the process...
-	if ($templateobj !== FALSE && ($templateobj->active == '1' || $templateobj->active == TRUE) )
-	{
-		#Grab the encoding
-		if ($templateobj->encoding !== FALSE && $templateobj->encoding != '')
-		{
-			$result['encoding'] = $templateobj->encoding;
-		}
-		else
-		{
-			$result['encoding'] = get_encoding();
-		}
-
-		#Load in the "standard" template CSS if media type is empty
-		if ($media_type == '')
-		{
-			if (isset($templateobj->stylesheet) && $templateobj->stylesheet != '')
-			{
-				$css .= $templateobj->stylesheet;
-			}
-		}
-
-		#Handle "advanced" CSS Management
-		$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css c, ".cms_db_prefix()."css_assoc ca
-			WHERE	css_id		= assoc_css_id
-			AND		assoc_type	= 'template'
-			AND		assoc_to_id = ?
-			AND		c.media_type = ? ORDER BY ca.create_date";
-		$cssresult =& $db->Execute($cssquery, array($template_id, $media_type));
-
-		while ($cssresult && $cssline = $cssresult->FetchRow())
-		{
-			$css .= "\n".$cssline['css_text']."\n";
-		}
-		
-		if ($cssresult) $cssresult->Close();
-	}
-	else
-	{
-		$result['nostylesheet'] = true;
-		$result['encoding'] = get_encoding();
-	}
-
-	#$css = preg_replace("/[\r\n]/", "", $css); //hack for tinymce
-	$result['stylesheet'] = $css;
-
-	return $result;
-}
-
-
-/**
- * Return a list of the media types supported for the specified template
- *
- * @internal
- * @access private
- * @param integer The template ID
- * @return array
- */
-function get_stylesheet_media_types($template_id)
-{
-	$result = array();
-
-	$gCms = cmsms();
-	$db = $gCms->GetDb();
-	$templateops =& $gCms->GetTemplateOperations();
-
-	$templateobj = FALSE;
-
-	#Grab template id and make sure it's actually "somewhat" valid
-	if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
-	{
-		#Ok, it's valid, let's load the bugger
-		$templateobj = $templateops->LoadTemplateById($template_id);
-		if (isset($templateobj->stylesheet) && $templateobj->stylesheet != '')
-		{
-			$result[] = '';
-		}
-	}
-
-	#If it's valid after loading, then start the process...
-	if ($templateobj !== FALSE && ($templateobj->active == '1' || $templateobj->active == TRUE) )
-	{
-		#Handle "advanced" CSS Management
-		$cssquery = "SELECT DISTINCT media_type FROM ".cms_db_prefix()."css c, ".cms_db_prefix()."css_assoc
-			WHERE	css_id		= assoc_css_id
-			AND		assoc_type	= 'template'
-			AND		assoc_to_id = ?";
-		$cssresult = &$db->Execute($cssquery, array($template_id));
-
-		while ($cssresult && !$cssresult->EOF)
-		{
-			if (!in_array($cssresult->fields['media_type'], $result))
-				$result[] =& $cssresult->fields['media_type'];
-			$cssresult->MoveNext();
-		}
-		
-		if ($cssresult) $cssresult->Close();
-	}
-
-	return $result;
-}
-
-
-/**
  * Strips slashes from an array of values.
  *
  * @internal
  * @param array A reference to an array of strings
  * @return reference to the cleaned values
  */
-function & stripslashes_deep(&$value) 
+function & stripslashes_deep(&$value)
 { 
         if (is_array($value)) 
         { 
@@ -759,27 +569,6 @@ function & stripslashes_deep(&$value)
                 $value = stripslashes($value); 
         } 
         return $value;
-}
-
-function create_vanilla_textarea($text, $name, $classname = '', $id = '', $encoding = '', $width = '80', $height = '15', $addtext='')
-{
-  $result = '<textarea name="' . $name . '" cols="' . $width . '" rows="' . $height . '"';
-  if ($classname != '') {
-    $result .= ' class="' . $classname . '"';
-  }
-  else
-  {
-    $result .= ' class="cms_textarea"';
-  }
-  if ($id != '') {
-    $result .= ' id="' . $id . '"';
-  }
-  if (!empty($addtext)) {
-    $result .= ' ' . $addtext;
-  }
-
-  $result .= '>' . cms_htmlentities($text, ENT_NOQUOTES, get_encoding($encoding)) . '</textarea>';
-  return $result;
 }
 
 /**
@@ -1141,23 +930,5 @@ function get_pageid_or_alias_from_url()
   return $page;
 }
 
-
-/**
- * Function to return the current page id.
- * 
- * Will return FALSE if in an admin action.
- *
- * @return integer pageid indicating the current page, or FALSE.
- */
-function cms_get_current_pageid()
-{
-  $gCms = cmsms();
-
-  if( isset($gCms->variables['page_id']) )
-    {
-      return (int)$gCms->variables['page_id'];
-    }
-  return FALSE;
-}
 # vim:ts=4 sw=4 noet
 ?>
