@@ -2,7 +2,15 @@
 
   {$showheader}
 
-  <fieldset>
+  <div class="pageoverflow">
+    <p class="pagetext">&nbsp;</p>
+    <p class="pageinput"><input type="submit" name="submit" value="{$lang_submit}" />&nbsp;<input type="submit" name="cancel" value="{$lang_cancel}" /></p>
+  </div>
+
+  <table width="100%">
+  <tr>
+    <td valign="top" width="50%">
+    <fieldset>
     <legend><strong>{$lang_copyfrom}:</strong></legend>
 
     <div class="pageoverflow">
@@ -34,10 +42,11 @@
       <p class="pagetext">{$lang_pageparent}:</p>
       <p class="pageinput">{$parentinfo}</p>
     </div>
+    </fieldset>
+    </td>
 
-  </fieldset>
-
-  <fieldset>
+    <td valign="top">
+    <fieldset>
     <legend><strong>{$lang_copyto}:</strong></legend>
     <form action="copycontent.php">
     <div>
@@ -76,11 +85,10 @@
     </div>
     {/if}
 
-    <div class="pageoverflow">
-      <p class="pagetext">&nbsp;</p>
-      <p class="pageinput"><input type="submit" name="submit" value="{$lang_submit}" /><input type="submit" name="cancel" value="{$lang_cancel}" /></p>
-    </div>
     </form>
-  </fieldset>
+    </fieldset>
+    </td>
+  </tr>
+  </table>
 
 </div>

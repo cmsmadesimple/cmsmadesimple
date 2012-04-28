@@ -76,12 +76,6 @@ if( isset($_GET['submit']) )
   //
   $tmpobj = clone $fromobj;
 
-  // trick some of the variables to handle
-  // an insert properly.
-  $tmpobj->SetId(-1); // force new object
-  $tmpobj->SetItemOrder(-1);
-  $tmpobj->SetOldItemOrder(-1);
-
   // Stuff that needs to be changed
   $tmpobj->SetURL('');
   $tmpobj->SetName($to_title);

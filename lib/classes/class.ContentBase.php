@@ -330,6 +330,15 @@ abstract class ContentBase
   /* Functions giving access to needed elements of the content			*/
   /************************************************************************/
   
+  public function __clone()
+  {
+    $this->mId = -1;
+    $this->mItemOrder = -1;
+    $this->mOldItemOrder = -1;
+    $this->mURL = '';
+    $this->mAlias = '';
+  }
+
   /**
    * Returns the ID
    */
