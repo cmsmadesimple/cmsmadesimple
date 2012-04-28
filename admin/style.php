@@ -42,10 +42,14 @@ if (file_exists(dirname(__FILE__)."/themes/".$theme."/css/".$style))
   {
     cms_readfile(dirname(__FILE__)."/themes/".$theme."/css/".$style);
   }
-else if (file_exists(dirname(__FILE__)."/themes/default/css/".$style))
+if (file_exists(dirname(__FILE__)."/themes/".$theme."/extcss/".$style))
   {
-    cms_readfile(dirname(__FILE__)."/themes/default/css/".$style);
+    cms_readfile(dirname(__FILE__)."/themes/".$theme."/extcss/".$style);
   }
+// else if (file_exists(dirname(__FILE__)."/themes/default/css/".$style))
+//   {
+//     cms_readfile(dirname(__FILE__)."/themes/default/css/".$style);
+//   }
 
 $allmodules = ModuleOperations::get_instance()->GetLoadedModules();
 if( is_array($allmodules) && count($allmodules) )

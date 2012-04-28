@@ -314,7 +314,25 @@ final class CMS_Content_Block
   public static function smarty_fetch_pagedata($params,&$template)
   {
     $smarty = $template->smarty;
-    $result = $smarty->fetch('content:pagedata');
+    $gCms = cmsms();
+
+    $contentobj = $gCms->variables['content_obj'];
+    if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' )
+      {
+	// it's a preview.
+	if( !isset($_SESSION['cms_preview_data']['content_obj']) )
+	  {
+	    $contentops =& $gCms->GetContentOperations();
+	    $_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
+	  }
+	$contentobj =& $_SESSION['cms_preview_data']['content_obj'];
+      }
+    if( !is_object($contentobj) || $contentobj->Id() <= 0 )
+      {
+	return self::content_return('', $params, $smarty);
+      }
+
+    $result = $smarty->fetch('content:pagedata','',$contentobj->Id());
     if( isset($params['assign']) ){
       $smarty->assign(trim($params['assign']),$result);
       return;

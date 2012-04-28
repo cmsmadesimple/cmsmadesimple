@@ -51,12 +51,13 @@ class CmsNls
 
   public function name()
   {
-    $name = get_class();
-    if( endswith($name,'_nls') )
-      {
-	$name = substr($name,0,strlen($name)-4);
-      }
-    return $name;
+    return $this->_key;
+//     $name = get_class();
+//     if( endswith($name,'_nls') )
+//       {
+// 	$name = substr($name,0,strlen($name)-4);
+//       }
+//     return $name;
   }
 
   public function isocode()
@@ -78,8 +79,10 @@ class CmsNls
 
   public function locale()
   {
-    if( !$this->_locale )
-      return $this->name();
+//     if( !$this->_locale ) {
+//       debug_display($this);
+//       return $this->name();
+//     }
     return $this->_locale;
   }
 

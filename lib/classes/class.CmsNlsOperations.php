@@ -378,7 +378,11 @@ final class CmsNlsOperations
     }
 
     if( $locale ) {
-      setlocale(LC_ALL,$locale);
+      if( !is_array($locale) )
+	{
+	  $locale = explode(',',$locale);
+	}
+      $res = setlocale(LC_ALL,$locale);
       $_locale_set = 1;
     }
   }
