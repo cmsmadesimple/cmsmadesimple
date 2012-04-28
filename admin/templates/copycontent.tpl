@@ -2,6 +2,7 @@
 
   {$showheader}
 
+  <form action="copycontent.php">
   <div class="pageoverflow">
     <p class="pagetext">&nbsp;</p>
     <p class="pageinput"><input type="submit" name="submit" value="{$lang_submit}" />&nbsp;<input type="submit" name="cancel" value="{$lang_cancel}" /></p>
@@ -48,7 +49,6 @@
     <td valign="top">
     <fieldset>
     <legend><strong>{$lang_copyto}:</strong></legend>
-    <form action="copycontent.php">
     <div>
       <input type="hidden" name="{$cms_secure_param_name}" value="{$cms_user_key}" />
     </div>
@@ -85,10 +85,10 @@
     </div>
     {/if}
 
-    </form>
     </fieldset>
     </td>
   </tr>
   </table>
+  </form>
 
 </div>
