@@ -127,9 +127,12 @@ final class CmsNlsOperations
       // lang has been previously set.
       $curlang = self::$_cur_lang;
     }
-    if( $lang == '' ) $lang = self::get_default_language();
-
-    // todo: find the lang (maybe via alias or whatever)
+    if( $lang != '' ) {
+      $lang = self::find_nls_match($lang);
+    }
+    if( $lang == '' ) {
+      $lang = self::get_default_language();
+    }
 
     if( $curlang == $lang ) return TRUE; // nothing to do.
     
@@ -239,22 +242,19 @@ final class CmsNlsOperations
 	    $lang = self::detect_browser_language();
 	  }
 
-	if( !$lang ) $lang = 'en_US';
-      }
-
-    if( isset($_POST['default_cms_language']) )
-      {
-	// a hack to handle the editpref case of the user changing his language
-	// this is needed because the lang stuff is included before the preference may
-	// actually be set.
-	self::_load_nls();
-	$a2 = basename(trim($_POST['default_cms_language']));
-	if( $a2 && isset(self::$_nls[$a2]) )
+	if( isset($_POST['default_cms_language']) )
 	  {
-	    $lang = $a2;
+	    // a hack to handle the editpref case of the user changing his language
+	    // this is needed because the lang stuff is included before the preference may
+	    // actually be set.
+	    self::_load_nls();
+	    $a2 = basename(trim($_POST['default_cms_language']));
+	    if( $a2 && isset(self::$_nls[$a2]) )
+	      {
+		$lang = $a2;
+	      }
 	  }
       }
-
     if( $lang == '' ) $lang = 'en_US';
     return $lang;
   }
@@ -405,6 +405,14 @@ final class CmsNlsOperations
     self::$_fe_language_detector($obj);
   }
 
+
+  protected static function find_nls_match($str)
+  {
+    self::_load_nls();
+    foreach( self::$_nls as $key => $obj ) {
+      if( $obj->matches($str) ) return $obj->name();
+    }
+  }
 } // end of class
 #
 # EOF

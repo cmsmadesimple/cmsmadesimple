@@ -139,7 +139,12 @@ final class CmsLangOperations
     include($fn);
     if( isset($lang) )
       {
-	self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
+	if( isset($lang[$realm]) && is_array($lang[$realm]) && count($lang[$realm]) ) {
+	  self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang[$realm]);
+        }
+        else {
+	  self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
+	}
       }
     unset($lang);
 
