@@ -54,6 +54,7 @@ Version 1.11 - NO NAME
  - Change the alt tag in {content_image} to return the image name by default.
  - System information page now attempts to determine if there are sufficient mysql privileges for normal operation (warning only on failure).
  - Ensure all tags in list tags get help.
+ - re-organized the copycontent template to make it look a bit more logical.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
