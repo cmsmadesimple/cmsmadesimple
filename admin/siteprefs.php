@@ -100,7 +100,6 @@ $content_thumbnailfield_path = '';
 $contentimage_path = '';
 $adminlog_lifetime = (60*60*24*31);
 $search_module = 'Search';
-$page_parent_use_name = 1;
 $use_smartycache = 0;
 $use_smartycompilecheck = 1;
 $smarty_cachemodules = 'never';
@@ -151,7 +150,6 @@ $content_thumbnailfield_path = get_site_preference('content_thumbnailfield_path'
 $contentimage_path = get_site_preference('contentimage_path',$contentimage_path);
 $adminlog_lifetime = get_site_preference('adminlog_lifetime',$adminlog_lifetime);
 $search_module = get_site_preference('searchmodule',$search_module);
-$page_parent_use_name = get_site_preference('page_parent_use_name',$page_parent_use_name);
 $use_smartycache = get_site_preference('use_smartycache',$use_smartycache);
 $use_smartycompilecheck = get_site_preference('use_smartycompilecheck',$use_smartycompilecheck);
 $smarty_cachemodules = get_site_preference('smarty_cachemodules',$smarty_cachemodules);
@@ -253,11 +251,6 @@ else*/ if (isset($_POST["editsiteprefs"]))
 	  if( isset($_POST['thumbnail_height']) ) $thumbnail_height = (int)$_POST['thumbnail_height'];
 	  set_site_preference('thumbnail_width',$thumbnail_width);
 	  set_site_preference('thumbnail_height',$thumbnail_height);
-	  if( isset($_POST['page_parent_use_name']) )
-	    {
-	      $page_parent_use_name = (int)$_POST['page_parent_use_name'];
-	      set_site_preference('page_parent_use_name',$page_parent_use_name);
-	    }
 	  if( isset($_POST['search_module']) )
 	    {
 	      $search_module = trim($_POST['search_module']);
@@ -533,7 +526,6 @@ $smarty->assign('content_thumbnailfield_path',$content_thumbnailfield_path);
 $smarty->assign('contentimage_path',$contentimage_path);
 $smarty->assign('adminlog_lifetime',$adminlog_lifetime);
 $smarty->assign('search_module',$search_module);
-$smarty->assign('page_parent_use_name',$page_parent_use_name);
 $smarty->assign('use_smartycache',$use_smartycache);
 $smarty->assign('use_smartycompilecheck',$use_smartycompilecheck);
 $smarty->assign('smarty_cachemodules',$smarty_cachemodules);

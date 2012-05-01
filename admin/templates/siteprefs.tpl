@@ -93,15 +93,6 @@
 		{/if}
 
 		<div class="pageoverflow">
-		  <p class="pagetext">{'use_name'|lang}:</p>
-		  <p class="pageinput">
-			<select name="page_parent_use_name">
-			  {html_options options=$yesno selected=$page_parent_use_name}
-			</select>
-		  </p>
-		</div>
-
-		<div class="pageoverflow">
 		  <p class="pagetext">&nbsp;</p>
 		  <p class="pageinput">
 			<input type="submit" name="submit" value="{$lang_submit}" class="pagebutton"  />
