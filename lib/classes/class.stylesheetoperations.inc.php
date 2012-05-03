@@ -125,7 +125,9 @@ final class StylesheetOperations
 		return $result;
 	}
 
-
+	/**
+	* NOTE: Static or not? -Stikki-
+	*/
 	function & LoadStylesheetByID($id)
 	{
 		$result = false;
@@ -159,6 +161,32 @@ final class StylesheetOperations
 
 		return $result;
 	}
+	
+	/**
+	* Author: Stikki - stikki@cmsmadesimple.org
+	*/
+	function & LoadStylesheetByName($name)
+	{
+		$result = false;
+		$name = trim($name);
+	
+		$db = cmsms()->GetDb();
+
+		$query = "SELECT css_id FROM ".cms_db_prefix()."css WHERE css_name = ?";
+		$id = $db->GetOne($query, array($name));
+		
+		if($id) {
+		
+			if (isset($this->_cache[$id])) {
+			
+				return $this->_cache[$id];
+			}			
+		
+			$result = $this->LoadStylesheetByID($id);
+		}
+		
+		return $result;
+	}	
 
 	function InsertStylesheet($stylesheet)
 	{
@@ -196,7 +224,10 @@ final class StylesheetOperations
 
 		return $result;
 	}
-
+	
+	/**
+	* NOTE: Static or not? -Stikki-
+	*/
 	function DeleteStylesheetByID($id)
 	{
 		$result = false;
@@ -217,6 +248,27 @@ final class StylesheetOperations
 
 		return $result;
 	}
+
+	/**
+	* Author: Stikki - stikki@cmsmadesimple.org
+	*/
+	function DeleteStylesheetByName($name)
+	{
+		$result = false;
+		$name = trim($name);
+	
+		$db = cmsms()->GetDb();
+
+		$query = "SELECT css_id FROM ".cms_db_prefix()."css WHERE css_name = ?";
+		$id = $db->GetOne($query, array($name));
+
+		if($id) {
+		
+			$result = $this->DeleteStylesheetByID($id);
+		}
+		
+		return $result;
+	}	
 
 	function CheckExistingStylesheetName($name, $id = -1)
 	{
