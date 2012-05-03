@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['prettyurls_noeffect'] = 'Pretty URLS are not configured... this url will have no effect';
 $lang['admin']['help_function_cms_lang_info'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This plugin returns an object containing the information that CMSMS has about the selected language.  This can include locale information, encodings, language aliases etc.</p>

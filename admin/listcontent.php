@@ -48,6 +48,19 @@ $xajax->processRequest();
 $headtext = $xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n";
 include_once("header.php");
 
+function prettyurls_ok()
+{
+  static $_prettyurls_ok = -1;
+  if( -1 < $_prettyurls_ok ) return $_prettyurls_ok;
+
+  $config = cmsms()->GetConfig();
+  if( isset($config['url_rewriting']) && $config['url_rewriting'] != 'none' )
+    $_prettyurls_ok = 1;
+  else
+    $_prettyurls_ok = 0;
+  return $_prettyurls_ok;
+}
+
 function content_list_ajax()
 {
 	$objResponse = new xajaxResponse();
@@ -609,6 +622,11 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 		}
 	      $txt = $url;
 	    }
+	  if( !empty($txt) ) {
+	    if( !prettyurls_ok() ) {
+	      $txt = '<span style="color: red;" title="'.lang('prettyurls_noeffect').'">'.$txt.'<span>';
+	    }
+	  }
 	  if( !empty($txt) ) $columns['url'] = $txt;
 	}
 

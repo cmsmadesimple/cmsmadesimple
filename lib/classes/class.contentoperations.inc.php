@@ -762,13 +762,17 @@ class ContentOperations
 	 * @param boolean $ignore_current Ignores the value of $current totally by not marking any items as invalid.
 	 * @param boolean $allow_all If true, show all items, even if the content object 
 	 *                           doesn't have a valid link. Defaults to false.
-	 * @param boolean $use_name if true use Name() else use MenuText() Defaults to true.
+	 * @param boolean $use_name if true use Name() else use MenuText() Defaults to using the system preference.
 	 * @return string The html dropdown of the hierarchy
 	 */
-	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, $use_perms = 0, $ignore_current = 0, $allow_all = false, $use_name = true)
+	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id', $allowcurrent = 0, $use_perms = 0, $ignore_current = 0, $allow_all = false, $use_name = null)
 	{
 		$result = '';
 		$userid = -1;
+
+		if( is_null($use_name) ) {
+			$use_name = get_site_preference('listcontent_showtitle',true);
+		}
 
 		$allcontent = $this->GetAllContent(false);
 
