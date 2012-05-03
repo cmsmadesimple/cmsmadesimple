@@ -55,6 +55,7 @@ Version 1.11 - NO NAME
  - System information page now attempts to determine if there are sufficient mysql privileges for normal operation (warning only on failure).
  - Ensure all tags in list tags get help.
  - re-organized the copycontent template to make it look a bit more logical.
+ - Adding two new methods to Stylesheetoperations. DeleteStylesheetByName() and LoadStylesheetByName()
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
