@@ -148,7 +148,8 @@ else
 
 	  include_once($onefile);
 	  
-	  if( !function_exists('smarty_'.$rec['type'].'_'.$rec['name']) ) continue;
+	  if( !function_exists('smarty_'.$rec['type'].'_'.$rec['name']) &&
+	      !function_exists('smarty_cms_'.$rec['type'].'_'.$rec['name']) ) continue;
 
 	  if( function_exists("smarty_cms_help_".$rec['type']."_".$rec['name']) )
 	    {
