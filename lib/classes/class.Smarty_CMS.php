@@ -95,6 +95,7 @@ class Smarty_CMS extends SmartyBC
 	  }
 		
 	// Load resources
+	$this->registerResource('template',new CMSPageTemplateResource(''));
 	$this->registerResource('tpl_top',new CMSPageTemplateResource('top'));
 	$this->registerResource('tpl_head',new CMSPageTemplateResource('head'));
 	$this->registerResource('tpl_body',new CMSPageTemplateResource('body'));
