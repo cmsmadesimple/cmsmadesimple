@@ -1085,11 +1085,12 @@ abstract class ContentBase
      */
     public function HasProperty($name)
     {
-      if( !is_array($this->_props) )
-	{
-	  $this->_load_properties();
-	}
-      if( !is_array($this->_props) ) return FALSE;
+      if( !is_array($this->_props) ) {
+	$this->_load_properties();
+      }
+      if( !is_array($this->_props) ) {
+	return FALSE;
+      }
       return in_array($name,array_keys($this->_props));
     }
 
@@ -1110,9 +1111,9 @@ abstract class ContentBase
     
     private function _load_properties()
     {
-      $this->_props = array();
       if( $this->mId <= 0 ) return FALSE;
 
+      $this->_props = array();
       $db = cmsms()->GetDb();
       $query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
       $dbr = $db->Execute($query,array($this->mId));
@@ -1168,10 +1169,7 @@ abstract class ContentBase
       if( !is_array($this->_props) ) $this->_props = array();
 	  
       $this->_props[$name] = $value;
-      if( !is_array($this->_props) )
-	{
-	  $this->_load_properties();
-	}
+      if( !is_array($this->_props) ) $this->_load_properties();
       $this->_props[$name] = $value;
     }
 	
@@ -1335,11 +1333,7 @@ abstract class ContentBase
 
 	  if ($result && $loadProperties)
 	    {
-	      if( !is_array($this->_props) )
-		{
-		  debug_buffer("load from id is loading properties");
-		  $this->_load_properties();
-		}
+	      if( !is_array($this->_props) ) $this->_load_properties();
 
 	      if (!is_array($this->_props) )
 		{
@@ -1387,7 +1381,6 @@ abstract class ContentBase
     function LoadFromData(&$data, $loadProperties = false)
     {
       $result = true;
-
       $this->mId                         = $data["content_id"];
       $this->mName                       = $data["content_name"];
       $this->mAlias                      = $data["content_alias"];
@@ -2337,13 +2330,12 @@ abstract class ContentBase
       return FALSE;
     }
 
+    /**
+     * @deprecated 
+     */
     public function AddExtraProperty($name,$type = 'string')
     {
-      if( !is_array($this->_props) )  $this->_load_properties();
-      if( !isset($this->_props[$name]) )
-	{
-	  $this->_props[$name] = '';
-	}
+      return; // debug
     }
 
     /**
