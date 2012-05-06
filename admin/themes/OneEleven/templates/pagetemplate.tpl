@@ -15,14 +15,14 @@
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/jquery.cookie.min.js,`$config.admin_url`/themes/OneEleven/includes/standard.js"}
+		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/jquery.cookie.min.js,`$config.admin_url`/themes/OneEleven/includes/standard.min.js"}
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
 		<!-- custom jQueryUI Theme 1.8.18 see style.css for color reference //-->
 		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.8.18.custom.css" rel="stylesheet" />
         {FileManager action='javascript'}
 	</head>
-	<body##BODYSUBMITSTUFFGOESHERE## lang="{$lang|truncate:'2':''}">
+	<body##BODYSUBMITSTUFFGOESHERE## lang="{$lang|truncate:'2':''}" id="{$pagetitle|md5}">
 		<!-- start container -->
 		<div id="container" class="sidebar-on">
 			<!-- start header -->

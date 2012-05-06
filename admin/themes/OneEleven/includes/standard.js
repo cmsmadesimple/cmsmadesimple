@@ -297,6 +297,20 @@ jQuery(document).ready(function($) {
 		$('.close-warning').click(function() {
 			$(this).parent().hide();
 		});
+		// pagewarning status hidden?
+		var loc = $('body').attr('id') + '_notification';
+		$('.pagewarning .close-warning').click(function() {
+			$.cookie(loc, 'hidden', {
+				expires : 60
+			});
+		});
+		// if cookie is not hidden show pagewarning
+		if($.cookie(loc) != 'hidden') {
+			$('.pagewarning').addClass('visible');
+		} else {
+			$('.pagewarning').addClass('hidden');
+		}
+		
 		$('.message').click(function() {
 				$('.message').slideUp();
 			});
