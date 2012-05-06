@@ -2,12 +2,11 @@
 <html>
 	<head>
 		<meta charset="{$encoding}" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<title>{'logintitle'|lang} - {sitename}</title>
 		<base href="{$config.admin_url}/" />
 		<meta name="generator" content="CMS Made Simple - Copyright (C) 2004-12 Ted Kulp. All rights reserved." />
 		<meta name="robots" content="noindex, nofollow" />
-		<meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; user-scalable=no" />
+		<meta name="viewport" content="initial-scale=1.0 maximum-scale=1.0 user-scalable=no" />
 		<meta name="HandheldFriendly" content="True"/>
 		<link rel="shortcut icon" href="{$config.admin_url}/themes/OneEleven/images/favicon/cmsms-favicon.ico"/>
 		<link rel="bookmark" href="{$config.admin_url}/themes/OneEleven/images/favicon/cmsms-favicon.ico"/>

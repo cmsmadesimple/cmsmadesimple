@@ -588,9 +588,16 @@ textarea {
 	padding: 10px 40px 10px 10px;
 	margin: 10px 0
 }
+.dialog .green,
+.dialog .red,
+.dialog .yellow,
+.dialog .orange {
+	display: block
+}
 .green,
 .red,
-.yellow {
+.yellow,
+.orange {
 	padding: 10px;
 }
 .warning,
@@ -941,7 +948,7 @@ header .shortcuts {
 }
 header .shortcuts ul {
 	width: auto;
-	line-height: 29px;
+	line-height: 25px;
 	text-align: right;
 	margin-left: 20px
 }
@@ -959,6 +966,7 @@ header .shortcuts li a {
 	margin-top: 5px;
 	width: 18px;
 	height: 18px;
+	height: 25px;
 	text-indent: -9999em;
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) no-repeat;
 	overflow: hidden
@@ -1205,6 +1213,10 @@ nav ul#pagemenu ul {
 nav ul#pagemenu li li {
 	background: none;
 	line-height: 22px
+}
+nav ul#pagemenu li li.module {
+	background-color: #e5e5e5;
+	border-bottom: 1px dotted #f0f0f0
 }
 nav ul#pagemenu li.current li a,
 nav ul#pagemenu li li a{

@@ -6,7 +6,8 @@
 	<ul{if $depth == '0'} id="pagemenu"{/if}>
 {/if}
 {foreach from=$nav item='navitem' name='pos'}
-	<li{if !empty($navitem.selected)} class="current"{/if}>
+{*<pre>{$nav|print_r}</pre>*}
+	<li class="nav{if isset($navitem.module) || isset($navitem.firstmodule)} module{/if}{if !empty($navitem.selected)} current{/if}">
 		<a href="{$navitem.url}" class="{$navitem.name|lower}{if isset($navitem.children)} parent{/if}"{if isset($navitem.target)} target="_blank"{/if} title="{if !empty($navitem.description)}{$navitem.description}{else}{$navitem.title}{/if}">
 			{$navitem.title}	
 		</a>
