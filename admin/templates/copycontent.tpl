@@ -1,4 +1,4 @@
-<div class="pagecontainer">
+<div class="pagecontainer c_full cf">
 
   {$showheader}
 
@@ -8,9 +8,7 @@
     <p class="pageinput"><input type="submit" name="submit" value="{$lang_submit}" />&nbsp;<input type="submit" name="cancel" value="{$lang_cancel}" /></p>
   </div>
 
-  <table width="100%">
-  <tr>
-    <td valign="top" width="50%">
+  <div class='grid_6 alpha'>
     <fieldset>
     <legend><strong>{$lang_copyfrom}:</strong></legend>
 
@@ -44,9 +42,9 @@
       <p class="pageinput">{$parentinfo}</p>
     </div>
     </fieldset>
-    </td>
+    </div>
 
-    <td valign="top">
+    <div class='grid_6'>
     <fieldset>
     <legend><strong>{$lang_copyto}:</strong></legend>
     <div>
@@ -86,9 +84,7 @@
     {/if}
 
     </fieldset>
-    </td>
-  </tr>
-  </table>
+    </div>
   </form>
 
 </div>
