@@ -65,6 +65,7 @@ Core - Feature Requests:
 
 
 Core - General:
+ - Adds new front end theme "Simplex"
 
 
 Core - Installer:
@@ -78,6 +79,7 @@ MenuManager:
 - Added the {cms_breadcrumbs} action (which is templatable).  deprecates {breadcrumbs}
 - Fixes #7306 - haschildren always fals
 - Adds the action=items capability.
+- Adds new Template for Simplex Theme
 	
 
 MicroTiny:
@@ -98,6 +100,7 @@ News:
  - Fixes #7457 - Duplicate news url
  - Adds detailtemplate param capabilities to SearchResultWithParams
  - Access to the Categories and custom fields tab is now controlled by the 'Modify Site Preferences' permission.
+ - Adds sample HTML5 summary and detail tempaltes for Simplex Theme
 
 Search: 
  - Moved "Stop Words" to language file
