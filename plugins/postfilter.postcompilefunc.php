@@ -32,9 +32,12 @@ function smarty_postfilter_postcompilefunc($tpl_output, &$template)
 				Events::SendEvent('Core', 'ContentPostCompile', array('content' => &$tpl_output));
 				break;
 
-			case "template":
-				Events::SendEvent('Core', 'TemplatePostCompile', array('template' => &$tpl_output));
-				break;
+		case "template":
+		case 'tpl_top':
+		case 'tpl_body':
+		case 'tpl_head':
+		  Events::SendEvent('Core','TemplatePostCompile',array('template'=>&$tpl_output,'type'=>$result[0]));
+		  break;
 
 			case "globalcontent":
 				Events::SendEvent('Core', 'GlobalContentPostCompile', array('global_content' => &$tpl_output));

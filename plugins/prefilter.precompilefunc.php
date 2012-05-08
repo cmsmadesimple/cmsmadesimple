@@ -34,9 +34,12 @@ function smarty_prefilter_precompilefunc($tpl_output, &$template)
 				Events::SendEvent('Core', 'ContentPreCompile', array('content' => &$tpl_output));
 				break;
 
-			case "template":
-				Events::SendEvent('Core', 'TemplatePreCompile', array('template' => &$tpl_output));
-				break;
+		case 'tpl_top':
+		case 'tpl_body':
+		case 'tpl_head':
+		case "template":
+		  Events::SendEvent('Core', 'TemplatePreCompile', array('template' => &$tpl_output,'type'=>$result[0]));
+		  break;
 
 			case "globalcontent":
 				Events::SendEvent('Core', 'GlobalContentPreCompile', array('global_content' => &$tpl_output));

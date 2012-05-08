@@ -1960,12 +1960,14 @@ $lang['admin']['event_help_templateprecompile'] = '<p>Sent before a template is 
 <h4>Parameters</h4>
 <ul>
 <li>\'template\' - Reference to the affected template text.</li>
+<li>\'type\' - The type of template call.  i.e: template for a whole template, tpl_head, tpl_body, or tpl_top for a partial template.</li>
 </ul>
 ';
 $lang['admin']['event_help_templatepostcompile'] = '<p>Sent after a template has been processed by smarty.</p>
 <h4>Parameters</h4>
 <ul>
 <li>\'template\' - Reference to the affected template text.</li>
+<li>\'type\' - The type of template call.  i.e: template for a whole template, tpl_head, tpl_body, or tpl_top for a partial template.</li>
 </ul>
 ';
 $lang['admin']['event_help_addglobalcontentpre'] = '<p>Sent before a new global content block is created.</p>

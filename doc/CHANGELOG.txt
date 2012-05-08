@@ -56,6 +56,7 @@ Version 1.11 - NO NAME
  - Ensure all tags in list tags get help.
  - re-organized the copycontent template to make it look a bit more logical.
  - Adding two new methods to Stylesheetoperations. DeleteStylesheetByName() and LoadStylesheetByName()
+ - TemplatePrecompile and TemplatePostCompile events now have a 'type' parameter to indicate what template type they are compiling.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
