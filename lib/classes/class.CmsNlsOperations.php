@@ -236,25 +236,26 @@ final class CmsNlsOperations
 	    self::_load_nls();
 	    if( !isset(self::$_nls[$lang]) ) $lang = '';
 	  }
+      }
 
-	if( !$lang )
-	  {
-	    $lang = self::detect_browser_language();
-	  }
+    if( !$lang )
+      {
+	$lang = self::detect_browser_language();
+      }
 
-	if( isset($_POST['default_cms_language']) )
+    if( $uid && isset($_POST['default_cms_language']) )
+      {
+	// a hack to handle the editpref case of the user changing his language
+	// this is needed because the lang stuff is included before the preference may
+	// actually be set.
+	self::_load_nls();
+	$a2 = basename(trim($_POST['default_cms_language']));
+	if( $a2 && isset(self::$_nls[$a2]) )
 	  {
-	    // a hack to handle the editpref case of the user changing his language
-	    // this is needed because the lang stuff is included before the preference may
-	    // actually be set.
-	    self::_load_nls();
-	    $a2 = basename(trim($_POST['default_cms_language']));
-	    if( $a2 && isset(self::$_nls[$a2]) )
-	      {
-		$lang = $a2;
-	      }
+	    $lang = $a2;
 	  }
       }
+
     if( $lang == '' ) $lang = 'en_US';
     return $lang;
   }
