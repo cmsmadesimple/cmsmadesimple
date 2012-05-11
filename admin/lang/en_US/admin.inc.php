@@ -18,7 +18,7 @@ $lang['admin']['help_function_cms_set_language'] = <<<EOT
 <p>This plugin attempts to set the current language for use by translation strings and date formatting to the desired language.  The language specified must be known to CMSMS (The nls file must exist).  When this function is called, (and unless overridden in the config.php) an attempt will be made to set the locale to the local associated with the language.  The locale for the language must be installed on the server.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-<li><strong>(required)lang</em> - The desired language.  The language must be known to the CMSMS installation (nls file must exist).</li>
+<li><strong>(required)lang</strong> - The desired language.  The language must be known to the CMSMS installation (nls file must exist).</li>
 </ul>
 EOT;
 $lang['admin']['help_function_cms_get_language'] = <<<EOT
