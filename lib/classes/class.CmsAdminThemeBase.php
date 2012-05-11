@@ -213,8 +213,8 @@ abstract class CmsAdminThemeBase
 
 			$data = array();
 			$data['key'] = $key;
-			$data['name'] = $key;
 			$data['friendlyname'] = (isset($rec['friendlyname']))?$rec['friendlyname']:$key;
+			$data['name'] = $data['friendlyname'];
 			$data['description'] = ($rec['admindescription']!='')?$rec['admindescription']:'';
 			$config = cmsms()->GetConfig();
 
