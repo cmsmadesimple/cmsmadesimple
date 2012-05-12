@@ -94,7 +94,7 @@ function cms_module_GetTemplateFromFile(&$modinstance, $template_name)
 	}
 	else
 	{
-		return lang('errorinsertingtemplate');
+		return null;
 	}
 }
 
