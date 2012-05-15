@@ -73,7 +73,7 @@ function cms_module_Lang(&$modinstance)
 
 		$lang = array();
 
-		//First load the default language to remove any "Add Me's"
+		//First load the default language to remove any "Missing Languagestrings"
 		if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage()."/".$modinstance->DefaultLanguage().".php"))
 		{
 			include("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage()."/".$modinstance->DefaultLanguage().".php");
@@ -112,7 +112,7 @@ function cms_module_Lang(&$modinstance)
 			else
 			{
 				# Sucks to be here...  Don't use Lang unless there are language files...
-				# Get ready for a lot of Add Me's
+				# Get ready for a lot of Missing Languagestrings
 			}
 		}
 
@@ -144,7 +144,7 @@ function cms_module_Lang(&$modinstance)
 	}
 	else
 	{
-		$result = "--Add Me - module:".$modinstance->GetName()." string:$name--";
+		$result = "-- Missing Languagestring - module:".$modinstance->GetName()." string:$name--";
 	}
 
 	if (isset($gCms->config['admin_encoding']) && isset($gCms->variables['convertclass']))

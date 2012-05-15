@@ -64,7 +64,7 @@ function ilang()
 	}
 	else
 	{
-		$result = "--Add Me - $name --";
+		$result = "-- Missing Languagestring - $name --";
 	}
 
 	return $result;
