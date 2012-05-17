@@ -71,7 +71,7 @@
 				</div>
 				<!-- end sidebar //-->
 				<!-- start main -->
-				<div id="main" class="cf sidebar-on">
+				<div id="main" class="cf">
 					{strip}
 					{include file='messages.tpl'}
 					{FileManager action='dropzone' id='dropzone' assign='droparea'}

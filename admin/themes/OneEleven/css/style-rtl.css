@@ -1089,10 +1089,10 @@ nav ul#pagemenu li {
 	padding: 0
 }
 /* position sticky menu */
-#sidebar nav.navigation.on {
+.sidebar-on #sidebar nav.navigation {
 	width: 249px
 }
-#sidebar nav.navigation.off {
+.sidebar-off #sidebar nav.navigation{
 	width: 40px;
 	overflow: hidden
 }
@@ -1932,13 +1932,13 @@ a.toggle-dropzone:focus {
 	
 @media screen and (max-width: 1024px) {
 	/* change tabs to full width on smaller screen size */
-	#page_tabs div {
+	.sidebar-on #page_tabs div {
 		text-align: right;
 		float: none;
 		border-radius: 0;
 		margin-right: 0
 	}
-	#page_tabs div.active {
+	.sidebar-on #page_tabs div.active {
 		color: #147fdb;
 		background: #f2f2f2
 	}	
@@ -2056,7 +2056,7 @@ a.toggle-dropzone:focus {
 	#sidebar nav.navigation.on {
 		width: auto
 	}
-	#sidebar nav.navigation.off {
+	.sidebar-off #sidebar nav.navigation {
 		width: auto;
 		overflow: hidden
 	}	

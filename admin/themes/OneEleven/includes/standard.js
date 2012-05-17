@@ -1,102 +1,41 @@
-window.onload = function() {
-	linksExternal();
-	defaultFocus();
-	if(document.getElementById('navt_tabs')) {
-		var el = document.getElementById('navt_tabs');
-		_add_show_handlers(el);
-	}
-	if(document.getElementById('page_tabs')) {
-		var el = document.getElementById('page_tabs');
-		_add_show_handlers(el);
-	}
-}
-function _add_show_handlers(navbar) {
-	var tabs = navbar.getElementsByTagName('div');
-	for(var i = 0; i < tabs.length; i += 1) {
-		tabs[i].onmousedown = function() {
-			for(var j = 0; j < tabs.length; j += 1) {
-				tabs[j].className = '';
-				document.getElementById(tabs[j].id + "_c").style.display = 'none';
-			}
-			this.className = 'active';
-			document.getElementById(this.id + "_c").style.display = 'block';
-			return true;
-		};
-	}
-	var activefound = 0;
-	for(var i = 0; i < tabs.length; i += 1) {
-		if(tabs[i].className == 'active')
-			activefound = i;
-	}
-	tabs[activefound].onmousedown();
-}
-
+// ACTIVATE A TAB
 function activatetab(index) {
-	var el = 0;
-	if(document.getElementById('navt_tabs')) {
-		el = document.getElementById('navt_tabs');
-
-	} else {
-		if(document.getElementById('page_tabs')) {
-			el = document.getElementById('page_tabs');
-		}
+	var container = jQuery('#navt_tabs');
+	if(container.length === 0)
+	{
+		container = jQuery('#page_tabs');
 	}
-	if(el == 0)
-		return;
-	var tabs = navbar.getElementsByTagName('div');
-	tabs[index].onmousedown();
+	container.find('div:eq(' + index + ')').mousedown();
 }
 
-function linksExternal() {
-	if(document.getElementsByTagName) {
-		var anchors = document.getElementsByTagName("a");
-		for(var i = 0; i < anchors.length; i++) {
-			var anchor = anchors[i];
-			if(anchor.getAttribute("rel") == "external") {
-				anchor.target = "_blank";
-			}
-		}
-	}
-}
-
-//use <input class="defaultfocus" ...>
-function defaultFocus() {
-
-	if(!document.getElementsByTagName) {
-		return;
-	}
-
-	var anchors = document.getElementsByTagName("input");
-	for(var i = 0; i < anchors.length; i++) {
-		var anchor = anchors[i];
-		var classvalue;
-
-		//IE is broken!
-		if(navigator.appName == 'Microsoft Internet Explorer') {
-			classvalue = anchor.getAttribute('className');
-		} else {
-			classvalue = anchor.getAttribute('class');
-		}
-
-		if(classvalue != null) {
-			var defaultfocuslocation = classvalue.indexOf("defaultfocus");
-			if(defaultfocuslocation != -1) {
-				anchor.focus();
-				var defaultfocusselect = classvalue.indexOf("selectall");
-				if(defaultfocusselect != -1) {
-					anchor.select();
-				}
-			}
-		}
-	}
-}
-
+// JQUERY WRAPPER FOR BACKWARDS COMPATIBILITY
 function togglecollapse(cid) {
-	document.getElementById(cid).style.display = (document.getElementById(cid).style.display != "block") ? "block" : "none";
+	jQuery('#' + cid).toggle();
 }
-
 
 jQuery(document).ready(function($) {
+
+	// EXTERNAL LINKS
+	$('a[rel=external]').attr('target', '_blank');
+	// AUTOFOCUS
+	$('input.defaultfocus:eq(0)').focus();
+
+	// INIT NAV TABS
+	var tabs = $('#navt_tabs, #page_tabs').find('div');
+	tabs.mousedown(function(){
+		tabs.each(function(){
+			$(this).removeClass('active');
+			$('#' + $(this).attr('id') + '_c').hide();
+		});
+		$(this).addClass('active');
+		$('#' + $(this).attr('id') + '_c').show();
+		return true;
+	});
+	tabs.filter('.active').mousedown();
+	if(tabs.filter('.active').mousedown().length === 0){
+		activatetab(0);
+		}
+
 	// EQUAL HEIGHT COLS
 	function equalHeight(group) {
 		var tallest = 0;
@@ -109,19 +48,14 @@ jQuery(document).ready(function($) {
 		group.height(tallest);
 	}
 
-	// TOGGLE SIDEBAR
-	// Variables
+	// SIDEBAR
 	var objMain = $('#container');
 	var objSide = $('#menu');
 	var objToggle = $('.toggle-button');
 	// Show sidebar
 	function showSidebar() {
-		objMain.addClass('sidebar-on');
-		objMain.removeClass('sidebar-off');
-		objSide.addClass('on');
-		objSide.removeClass('off');
-		$('.toggle-button').removeClass('open-sidebar');
-		$('#pagemenu li.current ul').show();
+		objMain.addClass('sidebar-on').removeClass('sidebar-off');
+		$('#pagemenu').find('li.current ul').show();
 		$.cookie('sidebar-pref', 'sidebar-on', {
 			expires : 60
 		});
@@ -129,17 +63,12 @@ jQuery(document).ready(function($) {
 
 	// Hide sidebar
 	function hideSidebar() {
-		objMain.removeClass('sidebar-on');
-		objMain.addClass('sidebar-off');
-		objSide.removeClass('on');
-		objSide.addClass('off');
-		$('.toggle-button').addClass('open-sidebar');
-		$('#pagemenu li ul').hide();
+		objMain.removeClass('sidebar-on').addClass('sidebar-off');
+		$('#pagemenu').find('li ul').hide();
 		$.cookie('sidebar-pref', 'sidebar-off', {
 			expires : 60
 		});
 	}
-
 
 	objToggle.click(function(e) {
 		e.preventDefault();
@@ -149,11 +78,10 @@ jQuery(document).ready(function($) {
 			showSidebar();
 		}
 	});
+
 	// Load preference
 	if($.cookie('sidebar-pref') == 'sidebar-off') {
 		objMain.addClass('sidebar-off');
-		objSide.addClass('off');
-		objSide.removeClass('on');
 		objMain.removeClass('sidebar-on');
 		$('.toggle-button').addClass('open-sidebar');
 	}
@@ -181,6 +109,7 @@ jQuery(document).ready(function($) {
 		$('.drop').addClass('hidden');
 		$('.pageheader').addClass('drop-hidden');
 	}
+
 	// Jquery UI DIALOG
 	jQuery(function() {
 		var dialogs = {};
@@ -201,14 +130,14 @@ jQuery(document).ready(function($) {
 	});
 	// SIDEBAR MENU
 	jQuery(function() {
-		if($('#pagemenu li').hasClass('current')) {
-			$('#pagemenu li.current span').addClass('open-sub');
-		}
-		$('#pagemenu > li > span').click(function() {
-			if(false === $(this).next().is(':visible')) {
-				$('#container.sidebar-on #pagemenu ul').slideUp(0);
+		var pagemenu = $('#pagemenu');
+		pagemenu.find('li.current span').addClass('open-sub');
+		pagemenu.find('> li > span').click(function() {
+			var ul = $(this).next();
+			if(ul.is(':visible') === false) {
+				pagemenu.find('ul').slideUp(0);
 			}
-			$(this).next().slideToggle(0);
+			ul.slideToggle(0);
 		});
 	});
 	// STICKY MENU
@@ -228,18 +157,18 @@ jQuery(document).ready(function($) {
 		
 		if (scrollTop >= topOffset){
 			obj.css({
-			marginTop: '-150px',
-			position: 'fixed',
+				marginTop: '-150px',
+				position: 'fixed'
 			});
 		}
 		if (scrollTop < topOffset){
 			obj.css({
-			marginTop: marginTop,
-			position: 'relative',
+				marginTop: marginTop,
+				position: 'relative'
 			});
 		}
-	});	
-	};
+	});
+	}
 	// BUTTONS
 	jQuery(function() {
 		jQuery('body').off('cms_ajax_apply');
@@ -253,21 +182,26 @@ jQuery(document).ready(function($) {
 			} else {
 				var icon = 'ui-icon-circle-check';
 			}
-			//alert(icon);
-			$(this).hide().after('<button type="' + $(this).attr('type') + '" name="' + $(this).attr('name') + '" id="' + $(this).attr('id') + '">').next().button({
+			var btn = $('<button />');
+			// ADOPT ALL ATTRIBUTES
+			$(this.attributes).each(function(index, attribute){
+				btn.attr(attribute.name, attribute.value);
+			})
+			btn.button({
 				icons : {
 					primary : icon
 				},
 				label : $(this).val()
 			});
-		}); 
-		$('a.pageback').addClass('ui-state-default ui-corner-all');
-		$('a.pageback').prepend('<span class="ui-icon ui-icon-arrowreturnthick-1-w">');
-		$('a.pageback').hover(function() {
-			$(this).addClass('ui-state-hover');
-		}, function() {
-			$(this).removeClass('ui-state-hover');
+			$(this).replaceWith(btn);
 		});
+		$('a.pageback').addClass('ui-state-default ui-corner-all')
+			.prepend('<span class="ui-icon ui-icon-arrowreturnthick-1-w">')
+			.hover(function() {
+				$(this).addClass('ui-state-hover');
+			}, function() {
+				$(this).removeClass('ui-state-hover');
+			});
 		// Handle ajax apply
 		jQuery('body').on('cms_ajax_apply', function(e) {
 			// gotta get langified string here.
@@ -316,12 +250,12 @@ jQuery(document).ready(function($) {
 			});
 		$('.message').each(function() {
 			var message = $(this);
-			$(message).hide();
-			$(message).slideDown(1000, function() {
-				window.setTimeout(function() {
-					message.slideUp();
-				}, 10000);
-			});
+			$(message).hide()
+				.slideDown(1000, function() {
+					window.setTimeout(function() {
+						message.slideUp();
+					}, 10000);
+				});
 		});
 	}); 
 	// Equal height
@@ -329,9 +263,6 @@ jQuery(document).ready(function($) {
 		equalHeight($('.dashboard-inner'));
 	}
 
-
 	jQuery.event.add(window, "load", resizeFrame);
 	jQuery.event.add(window, "resize", resizeFrame);
-
-	// end
 });

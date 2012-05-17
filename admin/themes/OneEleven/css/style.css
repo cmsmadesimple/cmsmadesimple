@@ -877,11 +877,15 @@ header .shortcuts li.favorites a {
 #sidebar .toggle-button.top {
 	top: -33px
 }
-#sidebar .toggle-button.close {
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -9px -254px no-repeat
+#sidebar .toggle-button{
+	background-image: url(themes/OneEleven/images/layout/sprite_norepeat.png);
+	background-repeat: no-repeat
 }
-#sidebar .toggle-button.open-sidebar {
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -9px -216px no-repeat
+.sidebar-on #sidebar .toggle-button {
+	background-position: -9px -254px
+}
+.sidebar-off #sidebar .toggle-button {
+	background-position: -9px -216px
 }
 /* sidebar notifications */
 #sidebar .notification a {
@@ -938,10 +942,10 @@ nav ul#pagemenu li {
 	padding: 0
 }
 /* position sticky menu */
-#sidebar nav.navigation.on {
+.sidebar-on #sidebar nav.navigation {
 	width: 249px
 }
-#sidebar nav.navigation.off {
+.sidebar-off #sidebar nav.navigation {
 	width: 40px;
 	overflow: hidden
 }
@@ -1959,13 +1963,13 @@ a.toggle-dropzone:focus {
 /* --- SCREEN UP TO 1024px --- */
 @media screen and (max-width: 1024px) {
 	/* change tabs to full width on smaller screen size */
-	#page_tabs div {
+	.sidebar-on #page_tabs div {
 		text-align: left;
 		float: none;
 		border-radius: 0;
 		margin-right: 0
 	}
-	#page_tabs div.active {
+	.sidebar-on #page_tabs div.active {
 		color: #fff;
 		background: #147fdb
 	}	
@@ -2083,10 +2087,10 @@ a.toggle-dropzone:focus {
 	#sidebar aside {
 		padding: 0
 	}
-	#sidebar nav.navigation.on {
+	.sidebar-on #sidebar nav.navigation {
 		width: auto
 	}
-	#sidebar nav.navigation.off {
+	.sidebar-off #sidebar nav.navigation {
 		width: auto;
 		overflow: hidden
 	}	
@@ -2181,7 +2185,7 @@ a.toggle-dropzone:focus {
 	textarea,
 	select {
 		max-width: 23em
-	}		
+	}
 	#login div.login-container,
 	#login div.login-container#error {
 		width: 302px
