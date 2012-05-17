@@ -164,7 +164,7 @@ if ($access) {
 				
 	  if ($access_perm)
 	    {
-	      redirect("listusers.php".$urlext);
+	      redirect("listusers.php?".$urlext);
 	    }
 	  else
 	    {
