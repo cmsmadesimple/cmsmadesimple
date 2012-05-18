@@ -195,13 +195,15 @@ class Content extends ContentBase
     }
 
 
-	private function _tabsetup($adding = FALSE)
+	/**
+	 * Setup form elements for adding or editing.
+	 * This method is called internally when adding or editing a content page of this type
+	 * to build a hash of editable fields.
+	 *
+	 * @return hash of array fields.
+	 */
+	protected function SetupForm($adding = FALSE)
 	{
-		if( isset($this->__fieldhash) && is_array($this->__fieldhash) )
-		{
-			return array_keys($this->__fieldhash);
-		}
-
 		//
 		// setup
 		//
@@ -317,7 +319,14 @@ class Content extends ContentBase
 			if( count($ret) ) $hash[lang('options')] = $ret;
 		}
 
-		$this->__fieldhash = $hash;
+		return $hash;
+	}
+
+	private function _get_form_data()
+	{
+		if( isset($this->__fieldhash) && is_array($this->__fieldhash) ) return;
+		$tmp = $this->SetupForm();
+		if( is_array($tmp) && count($tmp) ) $this->__fieldhash = $tmp;
 	}
 
 	/**
@@ -327,7 +336,7 @@ class Content extends ContentBase
 	 */
     function TabNames()
     {
-		$this->_tabsetup();
+		$this->_get_form_data();
 		return array_keys($this->__fieldhash);
     }
 
@@ -341,7 +350,7 @@ class Content extends ContentBase
 	 */
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-		$this->_tabsetup($adding);
+		$this->_get_form_data();
 		$tabnames = $this->TabNames(); 
 	
 		$templateops = cmsms()->GetTemplateOperations();
