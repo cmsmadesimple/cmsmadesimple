@@ -273,15 +273,15 @@ final class CmsNlsOperations
     if( !is_array($langs) || !count($langs) ) return;
 
     self::_load_nls();
-    foreach( $langs as $onelang )
-      {
-	if( isset(self::$_nls[$onelang]) ) return $onelang;
+    foreach( $langs as $onelang => $weight ) {
+      if( isset(self::$_nls[$onelang]) ) return $onelang;
 
-	foreach( self::$_nls as $key => $obj )
-	  {
-	    if( $obj->matches($onelang) ) return $obj->name();
-	  }
+      foreach( self::$_nls as $key => $obj ) {
+	if( $obj->matches($onelang) ) {
+	  return $obj->name();
+	}
       }
+    }
   }
 
   /**
