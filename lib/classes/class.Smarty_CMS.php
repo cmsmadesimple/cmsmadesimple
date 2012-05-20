@@ -175,12 +175,12 @@ class Smarty_CMS extends SmartyBC
 	{
 	  debug_buffer('',"Start Load Smarty Plugin $name/$type");
 	  global $CMS_ADMIN_PAGE;
-	  if( isset($CMS_ADMIN_PAGE) )
-	    {
-	      $callback = 'Smarty_CMS::_dflt_plugin';
-	      $cachable = '';
-	      return TRUE;
-	    }
+// 	  if( isset($CMS_ADMIN_PAGE) )
+// 	    {
+// 	      $callback = 'Smarty_CMS::_dflt_plugin';
+// 	      $cachable = '';
+// 	      return TRUE;
+// 	    }
 
 	  $cachable = TRUE;
 	  $config = cmsms()->GetConfig();
