@@ -31,10 +31,9 @@ jQuery(document).ready(function($) {
 		$('#' + $(this).attr('id') + '_c').show();
 		return true;
 	});
-	tabs.filter('.active').mousedown();
 	if(tabs.filter('.active').mousedown().length === 0){
 		activatetab(0);
-		}
+	}
 
 	// EQUAL HEIGHT COLS
 	function equalHeight(group) {

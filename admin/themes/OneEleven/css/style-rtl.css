@@ -1616,6 +1616,10 @@ div.pagecontainer .pageshowrows {
 	font-size: 11px;
 	margin-bottom: 5px
 }
+/* in tags page help is displayed twice, let's hide one*/
+div.pagecontainer span.helptext {
+	display: none
+}
 /*** content forms ***/
 div.pagecontainer .pageinput {
 	padding: 0;
@@ -1842,16 +1846,9 @@ ul.sortable .placeholder {
 	font-family: sans-serif;
 }
 /*** theme dropzone ***/
-#theme_dropzone { 
-  float: left;
-  width: 24%;
-  text-align: center;
-  color: black;
-  background-color: #e0e0e0;
-}
 .drop {
 	position: absolute;
-	width: 192px;
+	width: 262px;
 	padding-top:1px;
 	padding-bottom: 14px;
 	left: 0;
@@ -1884,12 +1881,12 @@ a.toggle-dropzone:focus {
 	color: #585858;
 	text-shadow: 1px 1px 0 #fff;
 	padding: 5px 10px;
-	width: 170px	
+	width: 240px	
 }
 .drop span.zone {
 	display: block;
-	float:right;
-	width: 140px;
+	float:left;
+	width: 200px;
 	border: 1px dashed #ccc;
 	text-align: center;
 }
@@ -1898,7 +1895,8 @@ a.toggle-dropzone:focus {
 	border: 1px dashed #77ab13
 }
 .drop #theme_dropzone {
-	width: 130px;
+	width: 200px;
+	overflow: visible;
 	line-height: 30px;
 	height: 30px;
 	background: #ddd;

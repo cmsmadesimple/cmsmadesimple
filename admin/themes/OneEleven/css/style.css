@@ -1483,6 +1483,9 @@ div.pagecontainer .pageshowrows {
 	font-size: 11px;
 	margin-bottom: 5px
 }
+div.pagecontainer span.helptext {
+	display: none
+}
 /*** content forms ***/
 div.pagecontainer .pageinput {
 	padding: 0;
@@ -1762,6 +1765,7 @@ a.toggle-dropzone:focus {
 }
 .drop #theme_dropzone {
 	width: 200px;
+	overflow: visible;
 	line-height: 30px;
 	text-align: center;
 	height: 30px;
@@ -1792,7 +1796,7 @@ a.toggle-dropzone:focus {
 	border: 1px solid #aaa;
 	border-radius: 4px;
 	display: none
-	}
+}
 	
 /* --- LOGIN PAGE --- */
 #login #wrapper {
