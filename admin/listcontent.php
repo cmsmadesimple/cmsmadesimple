@@ -127,6 +127,8 @@ function setdefault($contentid)
 			}
 		}
 
+		audit($contentid,'Core','Content item set as default');
+
 		$result = true;
 		$contentops = $gCms->GetContentOperations();
 		$contentops->ClearCache();
@@ -418,7 +420,7 @@ function deletecontent($contentid)
 				toggleexpand($contentid, true);
 				
 				// put mention into the admin log
-				audit($contentid, 'Content Item: '.$title, 'Deleted');
+				audit($contentid, 'Core', 'Content Item: '.$title, 'Deleted');
 				
 				$contentops->ClearCache();
 			

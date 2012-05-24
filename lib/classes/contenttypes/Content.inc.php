@@ -444,10 +444,32 @@ class Content extends ContentBase
 		}
     }
 
+	public static function _dflt_compiler_tag($params,$template)
+	{
+		return '';
+	}
+
+	/**
+	 * Dummy default plugin handler for smarty.
+	 *
+	 * @access private
+	 * @internal
+	 */
+	public function _dummyDfltPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
+	{
+		if( $type == 'compiler' ) {
+			$callback = array('Content','_dflt_compiler_tag');
+			$cachable = '';
+			return TRUE;
+		}
+		return FALSE;
+	}
+
 	/**
 	 * parse content blocks
 	 *
 	 * @access private
+	 * @internal
 	 */
     private function parse_content_blocks()
     {
@@ -455,11 +477,13 @@ class Content extends ContentBase
 		$smarty = cmsms()->GetSmarty();
 		$smarty->force_compile = TRUE;
 		
+		$smarty->registerDefaultPluginHandler(array(&$this,'_dummyDfltPluginHandler'));
 		$smarty->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
 		$smarty->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
 		$smarty->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
 		$smarty->registerResource('template',new CMSPageTemplateResource(''));
 		$smarty->fetch('template:'.$this->TemplateId()); // do the magic.
+		$smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
 
 		$this->_contentBlocks = CMS_Content_block::get_content_blocks();
 

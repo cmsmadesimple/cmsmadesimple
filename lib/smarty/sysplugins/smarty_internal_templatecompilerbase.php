@@ -402,6 +402,14 @@ abstract class Smarty_Internal_TemplateCompilerBase {
                     }
                     throw new SmartyException("Plugin \"{$tag}\" not callable");
                 }
+		// begin calguy1000
+		// call default handler
+		foreach ($this->smarty->plugin_search_order as $plugin_type) {
+		  if ($this->getPluginFromDefaultHandler($tag, $plugin_type)) {
+		    return $this->callTagCompiler('private_registered_' . $plugin_type, $args, $parameter, $tag);
+		  }
+		}
+		// end calguy1000
             }
             $this->trigger_template_error ("unknown tag \"" . $tag . "\"", $this->lex->taglineno);
         }
