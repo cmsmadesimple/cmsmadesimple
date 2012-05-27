@@ -43,7 +43,6 @@ class CMSInstallerPage6 extends CMSInstallerPage
 
 		$this->smarty->assign('docroot', 'http://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - 18));
 		$this->smarty->assign('docpath', CMS_BASE);
-		$this->smarty->assign('default_encoding', 'utf-8');
 
 		$this->smarty->assign('values', $values);
 

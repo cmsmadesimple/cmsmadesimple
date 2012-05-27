@@ -35,12 +35,6 @@
 			</select>
 		</td>
 	</tr>
-	<tr class="row1">
-		<td>{lang_install a=install_default_encoding}</td>
-		<td>
-			<input type="text" name="default_encoding" value="{$default_encoding}" size="20" maxlength="20" />
-		</td>
-	</tr>
    </table>
 
 	<div class="continue">

@@ -71,9 +71,9 @@ function &adodb_connect()
 		$dbinstance->debug = true;
 	}
 	
-	if(!empty($config['default_encoding']) && $config['default_encoding'] == 'utf-8' && $config['set_names'] == true)
+	if($config['set_names'] == true)
 	{
-		$dbinstance->Execute("SET NAMES 'utf8'");
+	  $dbinstance->Execute("SET NAMES 'utf8'");
 	}
 	
 	return $dbinstance;

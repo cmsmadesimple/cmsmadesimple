@@ -64,8 +64,6 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		    $newconfig['query_var'] = $_POST['querystr'];
 		  }
 		$newconfig['timezone'] = $_POST['timezone'];
- 		$newconfig['default_encoding'] = $_POST['default_encoding'];
-
 		$newconfig->save();
 
 		if (file_exists(cms_join_path(TMP_CACHE_LOCATION, 'SITEDOWN')))
