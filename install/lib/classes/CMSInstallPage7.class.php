@@ -56,8 +56,14 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		$newconfig['db_password'] = trim($_POST['password']);
 		$newconfig['db_name'] = trim($_POST['database']);
 		$newconfig['db_prefix'] = trim($_POST['prefix']);
-		$newconfig['db_port'] = (int)$_POST['db_port'];
+
+		$n = (int)$_POST['db_port'];
+		if( $n > 0 ) {
+		  $newconfig['db_port'] = $n;
+		}
+
 		$newconfig['root_url'] = rtrim(trim($_POST['docroot']), '/');
+
 		$tmp = trim($_POST['querystr']);
 		if( $tmp != 'page' )
 		  {
