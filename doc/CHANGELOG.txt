@@ -78,6 +78,10 @@ Core - Installer:
 CMSMailer:
 
 
+FileManager
+ - Now uses drag/drop upload for all browsers except IE and maybe opera
+ - Now has concept of a 'cwd' that is stored as user preference.
+ 
 MenuManager:
 - Added the {cms_breadcrumbs} action (which is templatable).  deprecates {breadcrumbs}
 - Fixes #7306 - haschildren always fals
@@ -88,6 +92,8 @@ MenuManager:
 MicroTiny:
  - Two new preferences to assist in managing stylesheet and other background settings.
  - #7223 (fixes for secure admin).
+ - Now uses the filemanager cwd() in file picker
+ - Now sets the filemanager cwd() in the file picker. 
 
 News:
  - All routes are now registered statically
