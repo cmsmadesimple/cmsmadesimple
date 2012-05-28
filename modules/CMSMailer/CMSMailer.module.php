@@ -292,7 +292,7 @@ class CMSMailer extends CMSModule
 	$obj = new StdClass;
 	$obj->priority = 1;
 	$obj->link = $this->create_url('m1_','defaultadmin');
-	$obj->html = lang('warning_mail_settings', $link).'&nbsp;'.$this->Lang('warning_cron_updated');
+	$obj->html = lang('warning_mail_settings', $obj->link).'&nbsp;'.$this->Lang('warning_cron_updated');
 	
 	return $obj;
       }
