@@ -27,7 +27,11 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		$values['admininfo']['username'] = $_POST['adminusername'];
 		$values['admininfo']['email'] = $_POST['adminemail'];
 		$values['admininfo']['password'] = $_POST['adminpassword'];
-		$base_url = str_replace(" ", "%20", rtrim($_POST['docroot'], '/'));
+
+		$base_url = 'http://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - 18);
+		if( $_POST['docroot'] ) {
+		  $base_url = str_replace(" ", "%20", rtrim($_POST['docroot'], '/'));
+		}
 		$link = '<a href="'.$base_url.'">'.ilang('cms_site').'</a>';
 
 		$this->smarty->assign('base_url', $base_url);
@@ -62,7 +66,10 @@ class CMSInstallerPage7 extends CMSInstallerPage
 		  $newconfig['db_port'] = $n;
 		}
 
-		$newconfig['root_url'] = rtrim(trim($_POST['docroot']), '/');
+		$t = trim($_POST['docroot']);
+		if( $t ) {
+		  $newconfig['root_url'] = rtim($t,'/');
+		}
 
 		$tmp = trim($_POST['querystr']);
 		if( $tmp != 'page' )

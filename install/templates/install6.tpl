@@ -9,7 +9,10 @@
 	<tr class="row1">
 		<td>{lang_install a=install_admin_docroot}</td>
 		<td>
-			<input type="text" name="docroot" value="{$docroot}" size="50" maxlength="100" />
+			{'detected'|ilang}:&nbsp;{$docroot}
+			<input type="text" name="docroot" value="" size="50" maxlength="100" />
+                        <br/>
+                        {'docroot_leaveblank'|ilang}
 		</td>
 	</tr>
 	<tr class="row2">

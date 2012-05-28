@@ -225,15 +225,17 @@ class cms_config implements ArrayAccess
 
 	  case 'root_url':
 		  {
-			  $parts = parse_url($_SERVER['REQUEST_URI']);
+			  $parts = parse_url($_SERVER['PHP_SELF']);
 			  $path = '';
 			  if( !empty($parts['path']) )
 				  {
 					  $path = dirname($parts['path']);
-					  if( endswith($path,'install') )
-						  {
-							  $path = substr($path,0,strlen($path)-strlen('install')-1);
-						  }
+					  if( endswith($path,'install') ) {
+						  $path = substr($path,0,strlen($path)-strlen('install')-1);
+					  }
+					  else if( endswith($path,$this->offsetGet('admin_dir')) ) {
+						  $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
+					  }
 				  }
 			  // todo: here we could get the default content object and test if it's secure
 			  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
