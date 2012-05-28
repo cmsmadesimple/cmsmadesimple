@@ -294,6 +294,50 @@ class cms_utils
   {
 	  return CmsAdminThemeBase::GetThemeObject();
   }
+
+  /**
+   * Create a thumbnail for an image.
+   * This is a fairly smart routine that first detects if a thumbnail already exists, or if one can be written anyways, and then uses the system preferences
+   * to generate the thumbnail file.
+   *
+   * @param string complete file specification to a source image
+   * @author calguy1000
+   * @since 1.11
+   * @returns string complete file specification to a thumbnail for an image.  Or null.
+   */
+  public static function generate_thumbnail($srcfile)
+  {
+	  if( !file_exists($srcfile) ) return;
+	  $dn = dirname($srcfile);
+	  $bn = basename($srcfile);
+	  if( startswith($bn,'thumb_') ) {
+		  return; // not gonna create a thumb on a thumb.
+	  }
+
+	  $thumb = cms_join_path($dn,'thumb_'.$bn);
+	  if( file_exists($thumb) && filemtime($thumb) > filemtime($srcfile) ) {
+		  // nothing to do, thumb exists and is newer than the source.
+		  return $thumb;
+	  }
+
+	  if( !is_writable($dn) ) {
+		  // can't write.
+		  return;
+	  }
+
+	  $config = cmsms()->GetConfig();
+	  require_once($config['root_path'].'/lib/filemanager/ImageManager/Classes/Transform.php');
+	  $width = get_site_preference('thumbnail_width',96);
+	  $height = get_site_preference('thumbnail_height',96);
+
+	  $transform = new Image_Transform;
+	  $img = $transform->factory($config['image_manipulation_prog']);
+	  $img->load($srcfile);
+	  
+	  $img->resize($width,$height);
+	  $img->save($thumb);
+	  return $thumb;
+  }
 } // end of class
 
 ?>

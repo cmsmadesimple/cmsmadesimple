@@ -493,7 +493,7 @@ Class Image_Transform
      * @param string filename
      * @return PEAR_error
      */
-    function save($filename, $type, $quality) {
+    function save($filename, $type='', $quality=85) {
         return null; //PEAR::raiseError("No Save method exists", true);
     }
 

@@ -29,7 +29,10 @@ class CMSInstallerPage6 extends CMSInstallerPage
 		$values['db']['username'] = isset($_POST['username']) ? $_POST['username'] : '';
 		$values['db']['password'] = isset($_POST['password']) ? $_POST['password'] : '';
 		$values['db']['prefix'] = isset($_POST['prefix']) ? $_POST['prefix'] : '';
-		$values['db']['db_port'] = isset($_POST['db_port']) ? $_POST['db_port'] : '';
+		if( isset($_POST['db_port']) ) {
+		  {
+		    $values['db']['db_port'] = (int)$_POST['db_port'];
+		  }
 		// $values['db']['db_socket'] = isset($_POST['db_socket']) ? $_POST['db_socket'] : '';
 
 		$values['timezone'] = isset($_POST['timezone']) ? $_POST['timezone'] : '';
