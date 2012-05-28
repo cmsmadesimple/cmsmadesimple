@@ -43,10 +43,12 @@ class CMSPageTemplateResource extends Smarty_Resource_Custom
 	if( !is_array(self::$_templates) ) self::$_templates = array();
 
 	$templateops = cmsms()->GetTemplateOperations();
-	if( $name == -1 )
+	if( $name == -1 ) {
 	  $templateobj = $templateops->LoadDefaultTemplate();
-	else 
+	}
+	else {
 	  $templateobj = $templateops->LoadTemplateByID($name);
+	}
 
 	if( is_object($templateobj) && $templateobj !== FALSE )
 	  {

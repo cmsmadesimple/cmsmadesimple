@@ -717,6 +717,7 @@ function cms_db_prefix() {
  * @param string Text containing additional parameters for the dropdown element
  * @param string A prefix to use when filtering files
  * @param boolean A flag indicating wether the files matching the extension and the prefix should be included or excluded from the result set
+ * @param boolean A flag indicating wether the output should be sorted.
  * @return string
  */
 function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='',$allownone=false,$extratext='',

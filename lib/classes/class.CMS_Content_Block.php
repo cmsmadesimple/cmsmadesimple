@@ -103,7 +103,8 @@ final class CMS_Content_Block
   {
     // {content_image} tag encountered.
     $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'',
-		 'upload'=>true,'dir'=>'','default'=>'','tab'=>'');
+		 'upload'=>true,'dir'=>'','default'=>'','tab'=>'',
+		 'exclude'=>'','sort'=>0);
     foreach( $params as $key => $value )
       {
 	if( $key == 'type' ) continue;
@@ -114,7 +115,7 @@ final class CMS_Content_Block
 
 	if( isset($rec[$key]) )
 	  {
-	    $rec[$key] = $value;
+	    $rec[$key] = trim($value,"'");
 	  }
       }
 

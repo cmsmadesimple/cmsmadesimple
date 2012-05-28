@@ -458,6 +458,8 @@ $lang['admin']['help_function_content_image'] = <<<EOT
   <li><em>(optional)</em> alt - Alternative text if the image cannot be found.</li>
   <li><em>(optional)</em> urlonly - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
   <li><em>(optional)</em> tab - The desired tab to display this field on in the edit form..</li>
+  <li><em>(optional)</em> exclude - Specify a prefix of files to exclude.  i.e: thumb_</li>
+  <li><em>(optional)</em> sort - optionally sort the options. Default is to not sort.</li>
   <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 EOT;

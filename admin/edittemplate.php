@@ -125,11 +125,13 @@ if ($access)
 		    $smarty->force_compile = TRUE;
 		    
 		    cms_utils::set_app_data('tmp_template',$content);
+		    $smarty->registerDefaultPluginHandler(array(&$smarty,'_dummyDfltPluginHandler'));
 		    $smarty->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
 		    $smarty->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
 		    $smarty->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
 		    $smarty->registerResource('template',new CMSPageTemplateResource(''));
 		    $smarty->fetch('template:appdata;tmp_template'); // do the magic.
+		    $smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
 
 		    // if we got here, we're golden.
 		  }

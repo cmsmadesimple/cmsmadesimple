@@ -444,27 +444,6 @@ class Content extends ContentBase
 		}
     }
 
-	public static function _dflt_compiler_tag($params,$template)
-	{
-		return '';
-	}
-
-	/**
-	 * Dummy default plugin handler for smarty.
-	 *
-	 * @access private
-	 * @internal
-	 */
-	public function _dummyDfltPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
-	{
-		if( $type == 'compiler' ) {
-			$callback = array('Content','_dflt_compiler_tag');
-			$cachable = '';
-			return TRUE;
-		}
-		return FALSE;
-	}
-
 	/**
 	 * parse content blocks
 	 *
@@ -477,7 +456,7 @@ class Content extends ContentBase
 		$smarty = cmsms()->GetSmarty();
 		$smarty->force_compile = TRUE;
 		
-		$smarty->registerDefaultPluginHandler(array(&$this,'_dummyDfltPluginHandler'));
+		$smarty->registerDefaultPluginHandler(array(&$smarty,'_dummyDfltPluginHandler'));
 		$smarty->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
 		$smarty->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
 		$smarty->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
@@ -615,7 +594,15 @@ class Content extends ContentBase
 		{
 			$inputname = $blockInfo['inputname'];
 		}
-		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',$optprefix,true);
+		$prefix = '';
+		if( isset($blockInfo['exclude']) ) {
+			$prefix = $blockInfo['exclude'];
+		}
+		if( isset($blockInfo['sort']) ) {
+			$sort = (int)$blockInfo['sort'];
+		}
+		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',$optprefix,true,'',
+										 $prefix,1,$sort);
 		if( $dropdown === false )
 		{
 			$dropdown = lang('error_retrieving_file_list');

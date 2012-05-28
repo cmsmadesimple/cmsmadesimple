@@ -160,6 +160,22 @@ class Smarty_CMS extends SmartyBC
       return '';
     }
 
+    /**
+     * Dummy default plugin handler for smarty.
+     *
+     * @access private
+     * @internal
+     */
+    public function _dummyDfltPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
+    {
+      if( $type == 'compiler' ) {
+	$callback = array('Smarty_CMS','_dflt_plugin');
+	$cachable = '';
+	return TRUE;
+      }
+      return FALSE;
+    }
+
 	/**
 	* defaultPluginHandler
 	* NOTE: Registered in constructor

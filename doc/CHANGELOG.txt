@@ -59,6 +59,7 @@ Version 1.11 - NO NAME
  - TemplatePrecompile and TemplatePostCompile events now have a 'type' parameter to indicate what template type they are compiling.
  - Changing GetTemplateFromFile method return null instead of string
  - Changing the default page now adds an audit entry
+ - Improvements to the content_image option.
  
 Core - Bug Reports:
  - #6161 Core Printing Module - Compression issue
