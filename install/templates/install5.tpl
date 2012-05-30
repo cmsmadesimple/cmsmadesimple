@@ -71,7 +71,7 @@
 		<!-- tr class="row2">
 			<td>{lang_install a=install_admin_db_socket}</td>
 			<td>
-				<input type="text" name="db_socket" value="{$values.db.db_socket}" size="20" maxlength="50" />
+				<input type="text" name="db_socket" value="{$values.db.db_socket|default:''}" size="20" maxlength="50" />
 				{lang_install a=install_admin_db_socket_info}
 			</td>
 		</tr -->
