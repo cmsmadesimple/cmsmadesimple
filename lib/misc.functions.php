@@ -143,13 +143,13 @@ function redirect_to_alias($alias)
     return;
   }
   $content = $node->GetContent();
-	if (isset($content))
-	{
-		if ($content->GetURL() != '')
-		{
-			redirect($content->GetURL());
-		}
-	}
+  if (!is_object($content)) {
+    audit('','Core','Attempt to redirect to invalid alias: '.$alias);
+    return;
+  }
+  if ($content->GetURL() != '') {
+    redirect($content->GetURL());
+  }
 }
 
 
