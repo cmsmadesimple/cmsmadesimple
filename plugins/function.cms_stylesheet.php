@@ -324,7 +324,7 @@ function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty
 	}
 	
 	if( $forceblackandwhite ) {
-		$_contents .= 'body.mceContentBody { background: #fff; color: 000; !important }'."\n";
+		$_contents .= 'body.mceContentBody { background: #fff; color: #000; !important }'."\n";
 	}
 
 	// Write file
