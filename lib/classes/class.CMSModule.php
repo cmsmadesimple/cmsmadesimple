@@ -359,11 +359,12 @@ abstract class CMSModule
 					 array($this->GetName(),'function_plugin'),
 					 $cachable
 					 );
+	      return TRUE;
 	    }
 	  else
 	    {
-	      cms_module_smarty_plugin_manager::addStatic($this->GetName(),$this->GetName(),'function',
-						    'function_plugin',$cachable);
+	      return cms_module_smarty_plugin_manager::addStatic($this->GetName(),$this->GetName(),'function',
+								 'function_plugin',$cachable);
 	    }
 	}
 

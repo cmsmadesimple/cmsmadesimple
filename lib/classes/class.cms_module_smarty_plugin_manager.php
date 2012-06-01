@@ -104,8 +104,10 @@ final class cms_module_smarty_plugin_manager
 		  $query .= sprintf($fmt,$row['sig'],$row['name'],$row['module'],$row['type'],serialize($row['callback']),$row['cachable'],$row['available']);
       }
 	if( endswith($query,',') ) $query = substr($query,0,-1);
-    $db->Execute($query);
+    $dbr = $db->Execute($query);
+	if( !$dbr ) return FALSE;
 	$this->_modified = FALSE;
+	reeturn TRUE;
   }
 
   public static function load_plugin($name,$type)
@@ -201,7 +203,7 @@ final class cms_module_smarty_plugin_manager
 						'cachable'=>(int)$cachable,
 						'available'=>$available);
 			  $this->_modified = TRUE;
-			  $this->_save();
+			  return $this->_save();
 		  }
 	  }
   }
