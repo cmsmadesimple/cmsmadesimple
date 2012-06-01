@@ -1141,7 +1141,7 @@ abstract class CMSModule
 				$res = include($filename);
 				if( $res == 1 || $res == '' ) return TRUE;
 				$modops = $gCms->GetModuleOperations();
-				$modops->SetError($res);
+				//$modops->SetError($res);
 				return FALSE;
 			}
 		}
