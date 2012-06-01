@@ -107,7 +107,7 @@ final class cms_module_smarty_plugin_manager
     $dbr = $db->Execute($query);
 	if( !$dbr ) return FALSE;
 	$this->_modified = FALSE;
-	reeturn TRUE;
+	return TRUE;
   }
 
   public static function load_plugin($name,$type)
