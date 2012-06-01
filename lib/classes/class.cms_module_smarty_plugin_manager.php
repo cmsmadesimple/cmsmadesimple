@@ -105,7 +105,10 @@ final class cms_module_smarty_plugin_manager
       }
 	if( endswith($query,',') ) $query = substr($query,0,-1);
     $dbr = $db->Execute($query);
-	if( !$dbr ) return FALSE;
+	die($db->sql.'<br/>'.$db->ErrorMsg());
+	if( !$dbr ) {
+		return FALSE;
+	}
 	$this->_modified = FALSE;
 	return TRUE;
   }
@@ -189,7 +192,7 @@ final class cms_module_smarty_plugin_manager
 	  if( !is_array($this->_data) ) $this->_data = array();
 	  
 	  // todo... check valid input
-	  
+
 	  $sig = md5($name.$module_name.$callback);
 	  if( !isset($this->_data[$sig]) ) {
 		  {
@@ -206,6 +209,7 @@ final class cms_module_smarty_plugin_manager
 			  return $this->_save();
 		  }
 	  }
+	  return TRUE;
   }
 
   public static function remove_by_module($module_name)
