@@ -105,7 +105,6 @@ final class cms_module_smarty_plugin_manager
       }
 	if( endswith($query,',') ) $query = substr($query,0,-1);
     $dbr = $db->Execute($query);
-	die($db->sql.'<br/>'.$db->ErrorMsg());
 	if( !$dbr ) {
 		return FALSE;
 	}
