@@ -1,116 +1,112 @@
 Version 1.11 - NO NAME
 -----------------------------
+Core - General:
+ - Adds new frontend theme "Simplex"
  - Removed the HasAdminBuffering module method.
- - If output buffering is disabled in the request, theme is also disabled.
- - Revamp of admin theme.
+ - If output buffering is disabled in the request, theme is also disabled
+ - Revamp of admin theme
  - Remove the use_adodb_lite config variable
- - Removed the use_smarty_php_tags config variable.
+ - Removed the use_smarty_php_tags config variable
  - Remove the process_whole_template config variable
- - Plugins revamp, removed _cms_ from smarty function header. General plugin cleanup.
- - Removed smarty plugin google_search
- - Moved smarty plugin search to Search module
- - Moved smarty plugin print to CMSPrinting module
+ - Plugins revamp, removed _cms_ from smarty function header. General plugin cleanup
+ - Removed smarty plugin {google_search}
+ - Moved smarty plugin {search} to Search module
+ - Moved smarty plugin {print} to CMSPrinting module
  - Moved smarty plugin {menu} to MenuManager module
  - Moved smarty plugin {news} to News module
  - Added default backend wysiwyg as a preference
  - Backend wysiwyg option on add user
  - Smartified editprefs
  - Updated /lib/jquery and cms_jquery plugin with latest jQuery and jQuery UI Frameworks
- - Added jQuery UI Smoothness Stylesheet to NCLeanGrey
- - System information page, and the installer now check for the XMLReader class.
+ - Added jQuery UI Smoothness Stylesheet to NCleanGrey
+ - System Information page, and the installer now check for the XMLReader class.
  - Admin log ip_addr field is now bigger.  
- - Admin log now has an index (woot).
- - Modified index.php to handle 404 pages better
-   (Now catches the CmsError404Exception )
+ - Admin log now has an index (woot)
+ - Modified index.php to handle 404 pages better (Now catches the CmsError404Exception)
  - Static routes are now stored in the cms_routes table, and cached to a file in tmp/cache
  - Rewrote the CmsRoutes class (but maintained compatibility)
- - Added functionality in system maintenance page to rebuild static routes.
+ - Added functionality in system maintenance page to rebuild static routes
  - Uninstalling a module now clears any module specific routes and smarty plugins
- - Content pages now register and work with static urls.
- - Total re-write of {cms_stylesheet} tag. Cache working as it should now. Media queries / types combine correctly now.
- - cms_http class now sends a referrer.
- - Fixes the pseudocron stuff to not run during the install or login process.
- - Documented the ContentBase class.  Many methods marked as protected or private... will be marking some as final in the future.
+ - Content pages now register and work with static urls
+ - Total re-write of {cms_stylesheet} tag. Cache working as it should now. Media queries/types combine correctly now
+ - cms_http class now sends a referrer
+ - Fixes the pseudocron stuff to not run during the install or login process
+ - Documented the ContentBase class.  Many methods marked as protected or private... will be marking some as final in the future
  - Minor improvements to site verification
- - Fixes for Add GCB wysiwyg options.
- - Adopt smarty 3 (currently Smarty 3.1.8) (stock, unmodified).
- - Adds options for smarty caching.
+ - Fixes for Add GCB wysiwyg options
+ - Adopt smarty 3 (currently Smarty 3.1.8) (stock, unmodified)
+ - Adds options for smarty caching
  - All plugins with functions named smarty_cms_function_foo are not cachable
- - All plugins with functions named smarty_function_foo are cachable.
+ - All plugins with functions named smarty_function_foo are cachable
  - UDT's are never cachable
  - Fix permissions issues with GCB's
- - Add checks in system information for xml capabilities.
- - Fixes #7212 - Error in CreateReturnLink api method.
- - Fixes #7334 - Changing a content page with a url specified to a section header.
- - Fixes #7030 - Installing modules in listmodules skips dependency check.
- - Adds new CmsNlsOperations and CmsNlsOperations classes to better support language serverices
-   - deprecated the lang parameter to all plugins and modules.
-   - adds {cms_get_language} {cms_set_language} and {cms_lang_info} smarty plugins.
- - Adds new abstract CmsLanguageDetector class to handle language detection on the frontend.
- - locale can now be configured in the NLS information
+ - Add checks in system information for xml capabilities
+ - Adds new CmsNlsOperations and CmsNlsOperations classes to better support language services
+   - deprecated the lang parameter to all plugins and modules
+   - adds {cms_get_language} {cms_set_language} and {cms_lang_info} smarty plugins
+ - Adds new abstract CmsLanguageDetector class to handle language detection on the frontend
+ - Locale can now be configured in the NLS information
  - Encoding can now be configured in the NLS information
- - Remove more stuff from the cms_variables class (slowly getting rid of this).
- - Installer and system information pages now check curl, and curl version.
- - Change the alt tag in {content_image} to return the image name by default.
- - System information page now attempts to determine if there are sufficient mysql privileges for normal operation (warning only on failure).
- - Ensure all tags in list tags get help.
- - re-organized the copycontent template to make it look a bit more logical.
- - Adding two new methods to Stylesheetoperations. DeleteStylesheetByName() and LoadStylesheetByName()
- - TemplatePrecompile and TemplatePostCompile events now have a 'type' parameter to indicate what template type they are compiling.
+ - Remove more stuff from the cms_variables class (slowly getting rid of this)
+ - Installer and System Information pages now check curl, and curl version
+ - Change the alt tag in {content_image} to return the image name by default
+ - System Information page now attempts to determine if there are sufficient mysql privileges for normal operation (warning only on failure)
+ - Ensure all tags in list tags get help
+ - Re-organized the copycontent template to make it look a bit more logical
+ - Adding two new methods to Stylesheetoperations: DeleteStylesheetByName() and LoadStylesheetByName()
+ - TemplatePrecompile and TemplatePostCompile events now have a 'type' parameter to indicate what template type they are compiling
  - Changing GetTemplateFromFile method return null instead of string
  - Changing the default page now adds an audit entry
- - Improvements to the content_image option.
+ - Improvements to the content_image option
  
 Core - Bug Reports:
- - #6161 Core Printing Module - Compression issue
- - #7740 HTML entities in the language string aren't getting converted back when sending the email during install
+ - #6161 - Core Printing Module - Compression issue
+ - #7030 - Installing modules in listmodules skips dependency check
+ - #7212 - Error in CreateReturnLink api method
+ - #7334 - Changing a content page with a url specified to a section header
+ - #7740 - HTML entities in the language string aren't getting converted back when sending the email during install
 
 Core - Feature Requests:
 
 
-Core - General:
- - Adds new front end theme "Simplex"
-
-
 Core - Installer:
-  - mysqli option now selected by default.
-  - Add checks for xml handling.
-
-CMSMailer:
-
+  - mysqli option now selected by default
+  - Add checks for xml handling
 
 FileManager
  - Now uses drag/drop upload for all browsers except IE and maybe opera
- - Now has concept of a 'cwd' that is stored as user preference.
+ - Now has concept of a 'cwd' that is stored as user preference
  
 MenuManager:
-- Added the {cms_breadcrumbs} action (which is templatable).  deprecates {breadcrumbs}
-- Fixes #7306 - haschildren always fals
+- Added the {cms_breadcrumbs} action (which is templatable).  Deprecates {breadcrumbs}
 - Adds the action=items capability.
 - Adds new Template for Simplex Theme
-	
+
+- #7306 - haschildren always false
 
 MicroTiny:
  - Two new preferences to assist in managing stylesheet and other background settings.
- - #7223 (fixes for secure admin).
  - Now uses the filemanager cwd() in file picker
- - Now sets the filemanager cwd() in the file picker. 
+ - Now sets the filemanager cwd() in the file picker
+ 
+  - #7223 - fixes for secure admin
 
 News:
  - All routes are now registered statically
  - The {news} plugin is now part of the News module
- - The detail page now handles caching well.
- - The detail page now throws a 404 exception for attempts to view expired/draft articles.
- - Full lazyload is now supported.
+ - The detail page now handles caching well
+ - The detail page now throws a 404 exception for attempts to view expired/draft articles
+ - Full lazyload is now supported
  - Now supports smarty caching
- - optimization of code to minimize queries (preload field data for summary views).
- - begin more oopification.
- - Generates 404 errors if routed to an invalid article, or an article that is expired/draft.
- - Fixes #7713 - Apply button doesn't work.
- - Fixes #7457 - Duplicate news url
+ - Optimization of code to minimize queries (preload field data for summary views)
+ - Begin more oopification
+ - Generates 404 errors if routed to an invalid article, or an article that is expired/draft
  - Adds detailtemplate param capabilities to SearchResultWithParams
- - Access to the Categories and custom fields tab is now controlled by the 'Modify Site Preferences' permission.
- - Adds sample HTML5 summary and detail tempaltes for Simplex Theme
+ - Access to the Categories and custom fields tab is now controlled by the 'Modify Site Preferences' permission
+ - Adds sample HTML5 summary and detail templates for Simplex Theme
+ 
+ - #7713 - Apply button doesn't work
+ - #7457 - Duplicate news url
 
 Search: 
  - Moved "Stop Words" to language file
