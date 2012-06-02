@@ -155,7 +155,7 @@ class Smarty_CMS extends SmartyBC
      *
      * @internal
      */
-    public static function _dflt_plugin($params,&$smarty)
+    public static function _dflt_plugin($params,$smarty)
     {
       return '';
     }
