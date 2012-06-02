@@ -75,7 +75,11 @@ Core - Installer:
 
 FileManager
  - Now uses drag/drop upload for all browsers except IE and maybe opera
- - Now has concept of a 'cwd' that is stored as user preference
+ - Now has concept of a 'current working directory' that is stored as user preference and is restored between sessions.
+ - Complete overhaul of the user interface
+ - Now select files to operate on, and perform an operation.  Available options are intelligent based on what is selected.
+ - Adds the ability to create thumbnails for missing images.
+ - Thumbnails are now visible in all directories, and if permissions allow can be created anywhere.
  
 MenuManager:
 - Added the {cms_breadcrumbs} action (which is templatable).  Deprecates {breadcrumbs}
