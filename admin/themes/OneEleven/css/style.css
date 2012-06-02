@@ -1481,6 +1481,7 @@ div.pagecontainer .pagetext {
 div.pagecontainer .pageshowrows {
 	color: #585858;
 	font-size: 11px;
+	text-align: right;
 	margin-bottom: 5px
 }
 div.pagecontainer span.helptext {
