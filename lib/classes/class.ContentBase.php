@@ -2532,13 +2532,13 @@ abstract class ContentBase
 	
 	case 'title':
 	  {
-	    return array('<label for="in_title">'.lang('title').'</label>:','<input type="text" id="in_title" name="title" value="'.cms_htmlentities($this->mName).'" />');
+	    return array('<label for="in_title">*'.lang('title').'</label>:','<input type="text" id="in_title" name="title" value="'.cms_htmlentities($this->mName).'" />');
 	  }
 	  break;
 	      
 	case 'menutext':
 	  {
-	    return array('<label for="in_menutext">'.lang('menutext').'</label>:','<input type="text" name="menutext" id="in_menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
+	    return array('<label for="in_menutext">*'.lang('menutext').'</label>:','<input type="text" name="menutext" id="in_menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
 	  }
 	  break;
 	      

@@ -199,7 +199,7 @@ $langinfo = CmsNlsOperations::get_language_info($current_language);
 
 <script type="text/javascript" src="../lib/filemanager/ImageManager/assets/dialog.js"></script>
 <script type="text/javascript" src="../lib/filemanager/ImageManager/IMEStandalone.js"></script>
-<script type="text/javascript" src="../lib/filemanager/ImageManager/lang/<?php $langinfo->htmlarea(); ?>.js"></script>
+<script type="text/javascript" src="../lib/filemanager/ImageManager/lang/<?php echo $langinfo->htmlarea(); ?>.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 

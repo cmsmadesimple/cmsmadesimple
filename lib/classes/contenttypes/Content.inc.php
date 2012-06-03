@@ -654,7 +654,7 @@ class Content extends ContentBase
 			{
 				if( $blockName == 'content_en' && $label == '' )
 				{
-					$label = '<label for="content_en">'.lang('content').'*</label>';
+					$label = '<label for="content_en">*'.lang('content').'</label>';
 				}
 				$field = $this->_display_text_block($blockInfo,$value,$adding);
 			}
