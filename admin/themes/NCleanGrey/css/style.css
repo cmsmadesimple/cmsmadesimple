@@ -283,6 +283,11 @@ input[type="button"]:hover, input[type="submit"]:hover {
 	cursor: pointer;
 	background: url(themes/NCleanGrey/images/layout/nav.png) repeat-x left -50px;
 }
+input[type="button"].disabled, input[type="submit"].disabled {
+	opacity: .7;
+	filter: alpha(opacity=70); 
+	-ms-filter: "alpha(opacity=70)";
+} 
 input[type="checkbox"] {
 	background: #fff;
 	border: none;
