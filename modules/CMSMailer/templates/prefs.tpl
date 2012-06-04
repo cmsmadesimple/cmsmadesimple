@@ -1,6 +1,8 @@
 {if isset($message)}<p>{$message}</p>{/if}
 <p>{$mod->Lang('info_cmsmailer')}</p>
 {$startform}
+<fieldset>
+	<legend>{$mod->Lang('friendlyname')} {$mod->Lang('settings_title')}</legend>
 	<div class="pageoverflow">
 		<p class="pagetext">{$prompt_charset}:</p>
 		<p class="pageinput">{$input_charset}</p>
@@ -49,14 +51,16 @@
 		<p class="pagetext">{$prompt_password}:</p>
 		<p class="pageinput">{$input_password}<br/>{$info_password}</p>
 	</div>
-	<hr/>
 	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>
 		<p class="pageinput">{if isset($hidden)}{$hidden}{/if}{$submit}</p>
 	</div>
-	<hr/>
+</fieldset>
+<fieldset>
+	<legend>{$mod->Lang('friendlyname')} {$mod->Lang('test_title')}</legend>
 	<div class="pageoverflow">
 		<p class="pagetext">{$prompt_testaddress}:</p>
 		<p class="pageinput">{$input_testaddress}&nbsp;{$sendtest}</p>
 	</div>
+</fieldset>
 {$endform}
