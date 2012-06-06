@@ -128,8 +128,13 @@ if (FALSE == empty($error)) {
 		$counter=0;
 		foreach ($userlist as $oneuser){
 
+		  // can access user if: i have edit permission AND user is not in group1 unless I am also in group 1
+		  // except, I can always edit my own account.  can't delete myself though.
 		  $this_user = $userid == $oneuser->id;
-		  $access_to_user = $edit && ($userops->UserInGroup($userid,1) || (!$userops->UserInGroup($oneuser->id,1)));
+		  $access_to_user = $edit;
+		  if( $userops->UserInGroup($oneuser->id,1) && !$userops->UserInGroup($userid,1) ) {
+		    $access_to_user = FALSE;
+		  }
 		  $access_user = $this_user || $access_to_user;
 
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
