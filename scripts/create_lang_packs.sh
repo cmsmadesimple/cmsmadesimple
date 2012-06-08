@@ -25,6 +25,8 @@ build_file_list()
       _files="$onefile $_files" 
     elif [ `echo $onefile | grep -c install/lang` = 1 ]; then
       _files="$onefile $_files"
+    elif [ `echo $onefile | grep -c lib/nls` = 1 ]; then
+      _files="$onefile $_files"
     else
       for coremod in $_coremodules ; do
         if [ `echo $onefile | grep -c $coremod` = 1 ]; then
@@ -70,7 +72,7 @@ delete_files_in_list()
 # Setup
 #
 _this=`basename $0`
-_startdir=''
+_startdir=`pwd`
 _owd=`pwd`
 _workdir=/tmp/$_this.$$
 _destdir=/tmp
@@ -108,7 +110,7 @@ _langs=`ls -1 | grep -v index`
 #
 for onelang in $_langs ; do
   shortlang=`echo $onelang | cut -d_ -f1`
-  if [ $_shortlang != 'en' ]; then
+  if [ $shortlang != 'en' ]; then
     echo "Processing $onelang / $shortlang"
 
     # build the file list
