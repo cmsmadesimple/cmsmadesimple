@@ -433,7 +433,7 @@ abstract class CMSModule
 	 */
 	function GetName()
 	{
-	  return get_class();
+	  return get_class($this);
 	}
 
 	/**
