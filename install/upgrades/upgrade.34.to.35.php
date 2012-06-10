@@ -45,13 +45,12 @@ echo "[done]</p>";
 echo '<p>Adding an index to the content table...';
 $sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'index_content_by_hierarchy', cms_db_prefix()."content", 'hierarchy');
 $return = $dbdict->ExecuteSQLArray($sqlarray);
-$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-echo ilang('install_creating_index', 'content', $ado_ret);
+echo "[done]</p>";
 
 $sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'event_id', cms_db_prefix()."events", 'event_id');
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 $ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-echo ilang('install_creating_index', 'content', $ado_ret);
+echo ilang('install_creating_index', 'events', $ado_ret);
 echo "[done]</p>";
 
 echo '<p>Updating schema version... ';

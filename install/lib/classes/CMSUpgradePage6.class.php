@@ -23,6 +23,7 @@ class CMSInstallerPage6 extends CMSInstallerPage
   function assignVariables()
   {
     // do module upgrades and installs.
+    ModuleOperations::get_instance()->LoadModules(TRUE);
     $allmodules = ModuleOperations::get_instance()->GetAllModuleNames();
     foreach( $allmodules as $name )
       {
