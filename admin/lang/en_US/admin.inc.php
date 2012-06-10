@@ -8,7 +8,9 @@ $lang['admin']['help_function_module_available'] = <<<EOT
 <li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
 </ul>
 <h3>Example:</h3>
-{module_available module='News' assign='havenews'}{if \$havenews}{News}{/if}
+{module_available module='News' assign='havenews'}{if \$havenews}{cms_module module=News}{/if}
+<h3>Note:</h3>
+<p>You cannot use the short form of the module call, i.e: <em>{News}</em> in this type of expression.</p>
 EOT;
 $lang['admin']['prettyurls_noeffect'] = 'Pretty URLS are not configured... this url will have no effect';
 $lang['admin']['help_function_cms_lang_info'] = <<<EOT

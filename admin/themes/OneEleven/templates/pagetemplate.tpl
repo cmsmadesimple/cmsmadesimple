@@ -21,7 +21,7 @@
 		<!-- custom jQueryUI Theme 1.8.18 see style.css for color reference //-->
 		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.8.18.custom.css" rel="stylesheet" />
         {module_available name='FileManager' assign='fmgood'}
-        {if $fmgood}{FileManager action='javascript'}{/if}
+        {if $fmgood}{cms_module module=FileManager action='javascript'}{/if}
 	</head>
 	<body##BODYSUBMITSTUFFGOESHERE## lang="{$lang|truncate:'2':''}" id="{$pagetitle|md5}">
 		<!-- start container -->
@@ -75,7 +75,7 @@
 				<div id="main" class="cf">
 					{strip}
 					{include file='messages.tpl'}
-					{if $fmgood}{FileManager action='dropzone' id='dropzone' assign='droparea'}{/if}
+					{if $fmgood}{cms_module module=FileManager action='dropzone' id='dropzone' assign='droparea'}{/if}
 					<article role="main" class="content-inner">
 						<header class="pageheader{if isset($is_ie)} drop-hidden{/if} cf">
 							{if isset($module_icon_url) or isset($pagetitle)} 
