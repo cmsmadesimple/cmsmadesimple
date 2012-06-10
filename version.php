@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.11-alpha2";
+$CMS_VERSION = "1.11-alpha3";
 $CMS_VERSION_NAME = "NO NAME";
 $CMS_SCHEMA_VERSION = "36";
 
