@@ -1,4 +1,15 @@
 <?php
+$lang['admin']['help_function_module_available'] = <<<EOT
+<h3>What does this do?</h3>
+<p>A plugin to test wether a given module (by name) is installed, and available for use.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li><strong>(required)module</strong> - (string) The name of the module.</li>
+<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+{module_available module='News' assign='havenews'}{if \$havenews}{News}{/if}
+EOT;
 $lang['admin']['prettyurls_noeffect'] = 'Pretty URLS are not configured... this url will have no effect';
 $lang['admin']['help_function_cms_lang_info'] = <<<EOT
 <h3>What does this do?</h3>

@@ -113,6 +113,22 @@ class cms_utils
 
 
   /**
+   * A convenience function to return an indication if a module is availalbe.
+   *
+   * @see get_module()
+   * @final
+   * @author calguy1000
+   * @since 1.11
+   * @param string The module name
+   * @return boolean
+   */
+  final public static function module_available($name)
+  {
+	  return ModuleOperations::get_instance()->IsModuleActive($name);
+  }
+
+
+  /**
    * A convenience function to return the current database instance.
    *
    * @link http://phplens.com/lens/adodb/docs-adodb.htm
