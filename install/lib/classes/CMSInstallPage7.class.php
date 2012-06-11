@@ -68,7 +68,7 @@ class CMSInstallerPage7 extends CMSInstallerPage
 
 		$t = trim($_POST['docroot']);
 		if( $t ) {
-		  $newconfig['root_url'] = rtim($t,'/');
+		  $newconfig['root_url'] = trim($t,'/');
 		}
 
 		$tmp = trim($_POST['querystr']);
