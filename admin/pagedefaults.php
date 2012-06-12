@@ -104,7 +104,7 @@ if( isset( $_POST['submit'] ) )
     set_site_preference( 'page_extra3', $page_extra3 );
     set_site_preference( 'default_contenttype',$default_contenttype);
 
-    $message = lang('prefsupdated');
+    $message = lang('pagedefaultsupdated');
   }
 
 //

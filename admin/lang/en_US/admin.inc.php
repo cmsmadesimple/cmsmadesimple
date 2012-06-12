@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['pagedefaultsupdated'] = 'Page default settings updated';
 $lang['admin']['help_function_module_available'] = <<<EOT
 <h3>What does this do?</h3>
 <p>A plugin to test wether a given module (by name) is installed, and available for use.</p>
