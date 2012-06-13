@@ -58,6 +58,7 @@ Core - General:
  - Changing GetTemplateFromFile method return null instead of string
  - Changing the default page now adds an audit entry
  - Improvements to the content_image option
+ - Changed language files fa_FA to fa_IR
  
 Core - Bug Reports:
  - #6161 - Core Printing Module - Compression issue
