@@ -19,27 +19,25 @@
 function smarty_function_menu_text($params, &$template)
 {
   $smarty = $template->smarty;
-	$gCms = cmsms();
-	$content_obj = &$gCms->variables['content_obj'];
-	$config = &$gCms->config;
-	if (is_object($content_obj) && $content_obj->Id() == -1)
-	{
-		#We've a custom error message...  set a message
-		$result="404 Error";
-	}
-	else
-	{
-	  $result = $content_obj->MenuText();
-		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-		{
-			$result = preg_replace("/\{\/?php\}/", "", $result);
-		}
-	}
-	if( isset($params['assign']) ){
-		$smarty->assign(trim($params['assign']),$result);
-		return;
-	}
-	return $result;
+  $gCms = cmsms();
+  $content_obj = &$gCms->variables['content_obj'];
+  $config = $gCms->config;
+  if (!is_object($content_obj) || $content_obj->Id() == -1)
+    {
+      // We've a custom error message...  set a message
+      $result="404 Error";
+    }
+  else {
+    $result = $content_obj->MenuText();
+    if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true)) {
+      $result = preg_replace("/\{\/?php\}/", "", $result);
+    }
+  }
+  if( isset($params['assign']) ){
+    $smarty->assign(trim($params['assign']),$result);
+    return;
+  }
+  return $result;
 }
 
 function smarty_cms_help_function_menu_text() {
