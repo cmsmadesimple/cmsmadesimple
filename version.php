@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.11-alpha3";
-$CMS_VERSION_NAME = "NO NAME";
+$CMS_VERSION = "1.11-alpha4";
+$CMS_VERSION_NAME = "Galapagos";
 $CMS_SCHEMA_VERSION = "36";
 
 define('CMS_VERSION', $CMS_VERSION);
