@@ -1217,25 +1217,25 @@ $lang['admin']['help_function_cms_jquery'] = <<<EOT
 <p>Simply insert this tag into your page or template: <code>{cms_jquery}</code></p>
 
 <h3>Sample</h3>
-<pre><code>{cms_jquery cdn='true' exclude='jquery.ui.nestedSortable-1.3.4.js' append='uploads/NCleanBlue/js/ie6fix.js'}</code></pre>
+<pre><code>{cms_jquery cdn='true' exclude='jquery.ui.nestedSortable.js' append='uploads/NCleanBlue/js/ie6fix.js'}</code></pre>
 <h4><em>Outputs</em></h4>
-<pre><code>&lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"&gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"&gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="http://localhost/1.10.x/lib/jquery/js/jquery.json-2.2.js"&gt;&lt;/script&gt;
+<pre><code>&lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="http://localhost/1.10.x/lib/jquery/js/jquery.json-2.3.js"&gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="uploads/NCleanBlue/js/ie6fix.js"&gt;&lt;/script&gt;
 </code></pre>
 
 <h3><em>Included Defaults</em></h3>
 <ul>
-	<li><tt>jQuery</tt><em>(1.6.2)</em> - jquery-1.7.1.min.js</li>
-	<li><tt>jQuery UI</tt><em>(1.8.14)</em> - jquery-ui-1.8.18.min.js</li>
-	<li><tt>nestedSortable</tt>(1.3.4) - jquery/js/jquery.ui.nestedSortable-1.3.4.js</li>
-	<li><tt>jQuery json</tt><em>(2.2)</em> - jquery/js/jquery.json-2.2.js</li>
+	<li><tt>jQuery</tt><em>(1.7.2)</em> - jquery.min.js</li>
+	<li><tt>jQuery UI</tt><em>(1.8.21)</em> - jquery-ui.min.js</li>
+	<li><tt>nestedSortable</tt>(1.3.4) - jquery.ui.nestedSortable.js</li>
+	<li><tt>jQuery json</tt><em>(2.3)</em> - jquery.json.min.js</li>
 </ul>
     
 <h3>What parameters does it take?</h3>
 <ul>
-	<li><em>(optional) </em><tt>exclude</tt> - use comma seperated value(CSV) list of scripts you would like to exclude. <code>'jquery.ui.nestedSortable.js,jquery.json-2.2.js'</code></li>
+	<li><em>(optional) </em><tt>exclude</tt> - use comma seperated value(CSV) list of scripts you would like to exclude. <code>'jquery.ui.nestedSortable.js,jquery.json.min.js'</code></li>
 	<li><em>(optional) </em><tt>append</tt> - use comma seperated value(CSV) list of script paths you would like to append. <code>'/uploads/jquery.ui.nestedSortable.js,http://code.jquery.com/jquery-1.7.1.min.js'</code></li>
 	<li><em>(optional) </em><tt>cdn</tt> - cdn='true' will insert jQuery and jQueryUI Frameworks using Google's Content Delivery Netwok. Default is false.</li>
 	<li><em>(optional) </em><tt>ssl</tt> - use to use the ssl_url as the base path.</li>
