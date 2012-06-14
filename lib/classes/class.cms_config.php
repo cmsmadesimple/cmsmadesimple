@@ -175,14 +175,25 @@ class cms_config implements ArrayAccess
 		  {
 		  case 'use_adodb_lite':
 		  case 'use_hierarchy':
+			  // deprecated, backwards compat only
 			  return TRUE;
 
 		  case 'use_smarty_php_tags':
 		  case 'output_compression':
+			  // deprecated, backwards compat only
 			  return FALSE;
 
 		  case 'default_upload_permission':
+			  // deprecated, backwards compat only
 			  return '664';
+
+		  case 'assume_mod_rewrite':
+			  // deprecated, backwards compat only
+			  return ($this['url_rewriting'] == 'mod_rewrite')?true:false;
+
+		  case 'internal_pretty_urls':
+			  // deprecated, backwards compat only
+			  return ($this['url_rewriting'] == 'internal')?true:false;
 		  }
 
 	  // from the config file.
