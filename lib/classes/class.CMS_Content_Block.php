@@ -364,7 +364,7 @@ final class CMS_Content_Block
       }
 
     $adddir = get_site_preference('contentimage_path');
-    if( $params['dir'] != '' )
+    if( isset($params['dir']) && $params['dir'] != '' )
       {
 	$adddir = $params['dir'];
       }
