@@ -39,7 +39,7 @@ function smarty_function_browser_lang($params, &$template)
   $tmp = trim($params['accepted']);
   $tmp = trim($tmp,',');
   $tmp2 = explode(',',$tmp);
-  if( !is_array($accepted) || count($accepted) == 0 )
+  if( !is_array($tmp2) || count($tmp2) == 0 )
     {
       return $default;
     }
