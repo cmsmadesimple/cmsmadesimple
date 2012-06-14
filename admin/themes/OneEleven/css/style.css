@@ -471,7 +471,7 @@ pre {
 	background: #eee;
 	margin: 5px;
 	overflow: auto;
-	display: block;
+	display: inline-block;
 	width: auto
 	}
 /* border radius */	
