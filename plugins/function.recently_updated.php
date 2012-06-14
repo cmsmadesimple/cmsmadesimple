@@ -70,7 +70,7 @@ if( !$dbresult )
 }
 while ($dbresult && $updated_page = $dbresult->FetchRow())
 {
-    $curnode =& $hm->getNodeById($updated_page['content_id']);
+    $curnode = $hm->getNodeById($updated_page['content_id']);
     $curcontent =& $curnode->GetContent();
     $output .= '<li>';
     $output .= '<a href="'.$curcontent->GetURL().'">'.$updated_page['content_name'].'</a>';
