@@ -28,7 +28,7 @@ function smarty_function_page_image($params, &$template)
     }
 
   $gCms=cmsms();
-  $contentobj = &cms_utils::get_current_content();
+  $contentobj = cms_utils::get_current_content();
   if( is_object($contentobj) )
     {
       $result = $contentobj->GetPropertyValue($propname);
