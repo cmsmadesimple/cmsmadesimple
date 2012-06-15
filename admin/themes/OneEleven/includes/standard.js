@@ -226,7 +226,7 @@ jQuery(document).ready(function($) {
 	});
 	// SHOW/HIDE NOTIFICATIONS
 	jQuery(function() {
-		$('.pagewarning, .message').prepend('<span class="close-warning"></span>');
+		$('.pagewarning, .message, .pageerrorcontainer').prepend('<span class="close-warning"></span>');
 		$('.close-warning').click(function() {
 			$(this).parent().hide();
 		});
@@ -247,7 +247,7 @@ jQuery(document).ready(function($) {
 		$('.message').click(function() {
 				$('.message').slideUp();
 			});
-		$('.message').each(function() {
+		$('.message, .pageerrorcontainer').each(function() {
 			var message = $(this);
 			$(message).hide()
 				.slideDown(1000, function() {
