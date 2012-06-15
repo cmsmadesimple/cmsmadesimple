@@ -371,7 +371,7 @@ else
 				<input type="hidden" name="from" value="<?php echo $from?>" />
 				<input type="hidden" name="cssid" value="<?php echo $cssid?>" />
 				<input type="hidden" name="edittemplate" value="true" />
-			      <?php echo $submitbtns; ?><a href="listcssassoc.php<?php echo $urlext ?>&amp;type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?></a><?php echo " [" . lang('new_window') . "]" ;?></div>
+			      <?php echo $submitbtns; ?><a href="listcssassoc.php<?php echo $urlext ?>&amp;type=template&amp;id=<?php echo $template_id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?></a><?php echo " [" . lang('new_window') . "]" ;?></div>
 		</div>
 	</form>
 </div>
