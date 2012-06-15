@@ -321,7 +321,7 @@ else
 			<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<div class="pageinput">
-			      <?php echo $submitbtns; ?><a href="listcssassoc.php<?php echo $urlext ?>&amp;type=template&amp;id=<?php echo $onetemplate->id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>
+			      <?php echo $submitbtns; ?><a href="listcssassoc.php<?php echo $urlext ?>&amp;type=template&amp;id=<?php echo $template_id ?>" rel="external"><?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>
 			</a><?php echo " [" . lang('new_window') . "]" ;?></div>
             </div>
 		<div class="pageoverflow">
