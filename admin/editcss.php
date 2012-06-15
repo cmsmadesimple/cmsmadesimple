@@ -359,10 +359,8 @@ else
 
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('editstylesheet'); ?>
-	<form id="Edit_CSS" method="post" action="editcss.php">
-        <div>
-          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
-        </div>
+	<form id="Edit_CSS" method="post" action="editcss.php?<?php echo CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY] ?>">
+
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<div class="pageinput">

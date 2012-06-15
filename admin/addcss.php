@@ -205,10 +205,8 @@ else
 
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('addstylesheet'); ?>
-		<form method="post" action="addcss.php">
-		<div>
-                  <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
-                </div>
+		<form method="post" action="addcss.php?<?php echo CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY] ?>">
+
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" class="name" name="css_name" maxlength="255" value="<?php echo $css_name?>" /></p>

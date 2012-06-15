@@ -23,7 +23,7 @@ class CMSPageTemplateResource extends Smarty_Resource_Custom
   static private $_templates;
   private $_section;
 
-  public function __construct($section)
+  public function __construct($section = '')
   {
     if( in_array($section,array('top','head','body')) )
       {

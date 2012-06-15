@@ -62,10 +62,9 @@ if (isset($_POST["cancel"]))
 	return;
 }
 
-$gCms = cmsms();
-$db = $gCms->GetDb();
-$templateops = $gCms->GetTemplateOperations();
-$smarty = $gCms->GetSmarty();
+$db = cmsms()->GetDb();
+$templateops = cmsms()->GetTemplateOperations();
+$smarty = cmsms()->GetSmarty();
 $smarty->caching = false;
 $smarty->force_compile = true;
 $userid = get_userid();
@@ -101,22 +100,31 @@ if ($access)
 
 		if ($validinfo) {
 		  try {
-		    $smarty = cmsms()->GetSmarty();
-		    $smarty->force_compile = TRUE;
+		    //$smarty = cmsms()->GetSmarty();
+		    //$smarty->force_compile = TRUE;
 		    
 		    cms_utils::set_app_data('tmp_template',$content);
 		    $smarty->registerDefaultPluginHandler(array(&$smarty,'_dummyDfltPluginHandler'));
 		    $smarty->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
 		    $smarty->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
 		    $smarty->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
-		    $smarty->registerResource('template',new CMSPageTemplateResource(''));
-		    $smarty->fetch('template:appdata;tmp_template'); // do the magic.
+		    $smarty->registerResource('template',new CMSPageTemplateResource());
+			
+			try {
+				$smarty->fetch('template:appdata;tmp_template'); // do the magic.
+			} 
+			catch ( SmartyCompilerException $e ) {
+
+				$error .= "<li>".$e->getMessage().'</li>';
+				$validinfo = false;
+			}
+			
 		    $smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
 
 		    // if we got here, we're golden.
 		  }
 		  catch( CmsEditContentException $e ) {
-		    $error .= "<li>".$e->getMessage();
+		    $error .= "<li>".$e->getMessage()."</li>";
 		    $validinfo = false;
 		  }
 		}

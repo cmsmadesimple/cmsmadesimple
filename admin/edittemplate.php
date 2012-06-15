@@ -129,16 +129,27 @@ if ($access)
 		    $smarty->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
 		    $smarty->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
 		    $smarty->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
-		    $smarty->registerResource('template',new CMSPageTemplateResource(''));
-		    $smarty->fetch('template:appdata;tmp_template'); // do the magic.
-		    $smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
+		    $smarty->registerResource('template',new CMSPageTemplateResource());
+		    
+			try {
+				$smarty->fetch('template:appdata;tmp_template'); // do the magic.
+			} 
+			catch ( SmartyCompilerException $e ) {
 
+				$error .= "<li>".$e->getMessage().'</li>';
+				$validinfo = false;
+			}
+
+			$smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
+		
 		    // if we got here, we're golden.
 		  }
 		  catch( CmsEditContentException $e ) {
+		  
 		    $error .= "<li>".$e->getMessage().'</li>';
 		    $validinfo = false;
-		  }
+		  } 
+
 		}
 
 		if ($content == "")
@@ -149,6 +160,7 @@ if ($access)
 
 		if ($validinfo)
 		{
+		
 			$onetemplate = $templateops->LoadTemplateByID($template_id);
 			$onetemplate->name = $template;
 			$onetemplate->content = $content;
@@ -302,9 +314,9 @@ else
 
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('edittemplate'); ?>
-	<form id="Edit_Template" method="post" action="edittemplate.php">
+	<form id="Edit_Template" method="post" action="edittemplate.php?<?php echo CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY] ?>">
         <div>
-          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+			<input type="hidden" name="template_id" value="<?php echo $template_id ?>" />
         </div>
 			<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
