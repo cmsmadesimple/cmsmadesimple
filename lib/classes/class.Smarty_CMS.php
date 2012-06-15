@@ -155,7 +155,7 @@ class Smarty_CMS extends SmartyBC
      *
      * @internal
      */
-    public function _dflt_plugin($params,$smarty)
+    public static function _dflt_plugin($params,$smarty)
     {
       return '';
     }
@@ -169,9 +169,9 @@ class Smarty_CMS extends SmartyBC
     public function _dummyDfltPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
     {
       if( $type == 'compiler' ) {
-	$callback = array('Smarty_CMS','_dflt_plugin');
-	$cachable = '';
-	return TRUE;
+		$callback = array('Smarty_CMS','_dflt_plugin');
+		$cachable = '';
+		return TRUE;
       }
       return FALSE;
     }
