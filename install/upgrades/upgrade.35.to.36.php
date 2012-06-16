@@ -46,6 +46,11 @@ $return = $dbdict->ExecuteSQLArray($sqlarray);
 $ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 echo ilang('install_creating_table', 'routes', $ado_ret);
 
+$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_content_by_idhier', $db_prefix."content", 'hierarchy');
+$return = $dbdict->ExecuteSQLArray($sqlarray);
+$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+echo ilang('install_creating_index', 'content', $ado_ret);
+
 cms_route_manager::rebuild_static_routes();
 
 echo '<p>Updating schema version... ';

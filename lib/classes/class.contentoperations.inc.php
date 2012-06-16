@@ -619,7 +619,8 @@ class ContentOperations
 			$expr = 'content_id IN ('.implode(',',$explicit_ids).')';
 			if( !$all ) $expr .= ' AND active = 1';
 
-			$query = 'SELECT * FROM '.cms_db_prefix().'content WHERE '.$expr.' ORDER BY hierarchy';
+			// note, this is mysql specific...
+			$query = 'SELECT * FROM '.cms_db_prefix().'content FORCE INDEX (index_content_by_idhier) WHERE '.$expr.' ORDER BY hierarchy';
 			$contentrows = $db->GetArray($query);
 		}
 		else 
