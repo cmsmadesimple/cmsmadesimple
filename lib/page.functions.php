@@ -87,8 +87,6 @@ function check_login($no_redirect = false)
 		}
 	}
 
-	debug_buffer('Session found.  Moving on...');
-
 	global $CMS_ADMIN_PAGE;
 	if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE) )
 	  {
