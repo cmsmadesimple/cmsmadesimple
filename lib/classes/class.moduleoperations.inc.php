@@ -452,7 +452,7 @@ final class ModuleOperations
 										  1,$lazyload_fe,$lazyload_admin));
 
 		 $deps = $module_obj->GetDependencies();
-		 if( is_array($deps) )
+		 if( is_array($deps) && count($deps) )
 			 {
 				 $query = 'INSERT INTO '.cms_db_prefix().'module_deps
                            (parent_module,child_module,minimum_version,create_date,modified_date)

@@ -247,6 +247,11 @@ class cms_config implements ArrayAccess
 					  else if( endswith($path,$this->offsetGet('admin_dir')) ) {
 						  $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
 					  }
+					  else if (strstr($path,'/lib') !== FALSE) {
+						  while( strstr($path,'/lib') !== FALSE ) {
+							  $path = dirname($path);
+						  }
+					  }
 				  }
 			  // todo: here we could get the default content object and test if it's secure
 			  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
