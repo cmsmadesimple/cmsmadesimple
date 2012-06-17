@@ -484,14 +484,15 @@ else
       <table cellspacing="0" class="pagetable">
 	 <thead>
 	 <tr>
-	 <th><?php echo lang('name')?></th>
-	 <th><?php echo lang('version')?></th>
-	 <th><?php echo lang('status')?></th>
+	 <th class="modname"><?php echo lang('name')?></th>
+	 <th class="modvers"><?php echo lang('version')?></th>
+	 <th class="modstatus"><?php echo lang('status')?></th>
 	 <th class="pagepos"><?php echo lang('active')?></th>
-	 <th><?php echo lang('action')?></th>
-	 <th><?php echo lang('help')?></th>
-	 <th><?php echo lang('about')?></th>
-	 <th><?php echo lang('export')?></th>
+	 <th class="modaction"><?php echo lang('action')?></th>
+	 <th class="modcachable"><?php echo lang('cachable')?></th>
+	 <th class="modhelp"><?php echo lang('help')?></th>
+	 <th class="modabout"><?php echo lang('about')?></th>
+	 <th class="modexport"><?php echo lang('export')?></th>
 	 </tr>
 	 </thead>
 	 <tbody>
@@ -516,6 +517,7 @@ else
 	  $helpcol = "&nbsp;";
 	  $aboutcol = "&nbsp;";	  
 	  $xmlcol = "&nbsp;";
+	  $cachablecol = '&nbsp;';
 
 	  $xmlcol = '<a href="'.$thisurl.'&amp;action=exportxml&amp;module='.$key.'"><img border="0" src="../modules/ModuleManager/images/xml_rss.gif" alt="'.lang('xml').'" /></a>';
 	  
@@ -608,6 +610,7 @@ else
 	    {
 	      $versioncol = $dbm[$key]['Version'];
 	      $statuscol[]  = lang('installed');
+	      $cachablecol = $modinstance->AllowSmartyCaching()?lang('yes'):lang('no');
 	      //$actioncol  = "&nbsp;";
 	      
 	      // Can't be removed if it has a dependency...
@@ -662,6 +665,7 @@ else
 	      echo '<td class="pagepos">'.$activecol.'</td>';
 	      echo '<td>'.implode('<br/>',$actioncol).'</td>';
 	    }
+	  echo "<td>$cachablecol</td>";
 	  echo "<td>$helpcol</td>";
 	  echo "<td>$aboutcol</td>";
 	  echo "<td>$xmlcol</td>";

@@ -20,6 +20,7 @@
        <tr>
          <th>{'name'|lang}</th>
          <th>{'type'|lang}</th>
+         <th class="pagew10">{'cachable'|lang}</th>
          <th class="pagew10">{'help'|lang}</th>
          <th class="pagew10">{'about'|lang}</th>
        </tr>
@@ -38,6 +39,7 @@
          <td>
             {$one.type}
          </td>
+         <td>{if isset($one.cachable) && $one.cachable != ''}{$one.cachable|lang}{/if}</td>
          <td>
            {if isset($one.help_url)}
              <a href="{$one.help_url}">{'help'|lang}</a>

@@ -130,7 +130,7 @@ else
 {
   $config = cmsms()->GetConfig();
   $files = glob($config['root_path'].'/plugins/*php');
-  
+
   if( is_array($files) && count($files) )
     {
       $file_array = array();
@@ -150,6 +150,16 @@ else
 	  
 	  if( !function_exists('smarty_'.$rec['type'].'_'.$rec['name']) &&
 	      !function_exists('smarty_cms_'.$rec['type'].'_'.$rec['name']) ) continue;
+
+	  $rec['cachable'] = '';
+	  if( $rec['type'] == 'function' ) {
+	    if( function_exists('smarty_cms_'.$rec['type'].'_'.$rec['name']) ) {
+	      $rec['cachable'] = 'no';
+	    }
+	    else if( function_exists('smarty_'.$rec['type'].'_'.$rec['name']) ) {
+	      $rec['cachable'] = 'yes';
+	    }
+	  }
 
 	  if( function_exists("smarty_cms_help_".$rec['type']."_".$rec['name']) )
 	    {
@@ -172,18 +182,22 @@ else
   // add in standard tags...
   $rec = array('type'=>'function','name'=>'content');
   $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+  $rec['cachable'] = 'no';
   $file_array[] = $rec;
   
   $rec = array('type'=>'function','name'=>'content_image');
   $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+  $rec['cachable'] = 'no';
   $file_array[] = $rec;
 
   $rec = array('type'=>'function','name'=>'content_module');
   $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+  $rec['cachable'] = 'no';
   $file_array[] = $rec;
 
   $rec = array('type'=>'function','name'=>'process_pagedata');
   $rec['help_url'] = 'listtags.php'.$urlext.'&amp;action=showpluginhelp&amp;plugin='.$rec['name'].'&amp;type='.$rec['type'];
+  $rec['cachable'] = 'no';
   $file_array[] = $rec;
 
   function listtags_plugin_sort($a,$b)
