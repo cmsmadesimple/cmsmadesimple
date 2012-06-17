@@ -2830,9 +2830,12 @@ abstract class CMSModule
 	 * Given a template in a variable, this method processes it through smarty
 	 * note, there is no caching involved.
 	 *
+	 * Note: this function is deprecated and scheduled for removal.
+	 *
 	 * @final
 	 * @param data Input template
 	 * @return string
+	 * @deprecated
 	 */
 	final public function ProcessTemplateFromData( $data )
 	{
