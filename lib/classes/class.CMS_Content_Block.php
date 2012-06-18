@@ -265,6 +265,7 @@ final class CMS_Content_Block
 		    unset($params['oneline']);
 		    unset($params['default']);
 		    unset($params['size']);
+                    unset($params['tab']);
 		    $params = array_merge($params, GetModuleParameters($id));
 		    $returnid = '';
 		    if (isset($params['returnid']))
