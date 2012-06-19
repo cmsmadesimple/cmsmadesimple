@@ -192,9 +192,13 @@ if (isset($_GET["message"])) {
 					echo "<td class=\"pagepos\">".($onetemplate->active == 1?$image_true:$image_false)."</td>\n";
 
 				# set template to all content
-				if ($all)
-					echo "<td class=\"pagepos\"><a href=\"listtemplates.php".$urlext."&amp;action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('setallcontentconfirm'),true)."');\">".lang('setallcontent')."</a></td>\n";
-
+				if ($all) {
+				  echo "<td class=\"pagepos\">";
+				  if( $onetemplate->active == 1 ) {
+				    echo "<a href=\"listtemplates.php".$urlext."&amp;action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".cms_html_entity_decode_utf8(lang('setallcontentconfirm'),true)."');\">".lang('setallcontent')."</a>";
+				  }
+				  echo "</td>\n";
+				}
 				# view css association
 				echo "<td class=\"icons_wide\"><a href=\"listcssassoc.php".$urlext."&amp;type=template&amp;id=".$onetemplate->id."\">";
                 echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon');
