@@ -153,6 +153,7 @@ final class CMS_Content_Block
 	    $key = 'name';
 	  }
 
+	$value = trim(trim($value,'"\''));
 	if( isset($rec[$key]) )
 	  {
 	    $rec[$key] = $value;
