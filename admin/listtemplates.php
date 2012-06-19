@@ -87,7 +87,7 @@ if (isset($_GET["message"])) {
 				echo '<div class="pageerrorcontainer"><div class="pageoverflow">'.lang('errorupdatingpages').'</div></div>';
 			}
 			} else {
-				echo '<p class="error">'.lang('errorupdatetemplateallpages').'</p>';
+				echo '<div class="pageerrorcontainer">'.lang('errorupdatetemplateallpages').'</div>';
 			}
 		}
 	}
