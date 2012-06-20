@@ -1,4 +1,4 @@
-Version 1.11 - NO NAME
+Version 1.11 - Galapagos 
 -----------------------------
 Core - General:
  - Adds new frontend theme "Simplex"
@@ -59,6 +59,7 @@ Core - General:
  - Changing the default page now adds an audit entry
  - Improvements to the content_image option
  - Changed language files fa_FA to fa_IR
+ - You can no longer set all pages to a disabled page template.
  
 Core - Bug Reports:
  - #6161 - Core Printing Module - Compression issue
@@ -66,9 +67,6 @@ Core - Bug Reports:
  - #7212 - Error in CreateReturnLink api method
  - #7334 - Changing a content page with a url specified to a section header
  - #7740 - HTML entities in the language string aren't getting converted back when sending the email during install
-
-Core - Feature Requests:
-
 
 Core - Installer:
   - mysqli option now selected by default
@@ -86,15 +84,13 @@ MenuManager:
 - Added the {cms_breadcrumbs} action (which is templatable).  Deprecates {breadcrumbs}
 - Adds the action=items capability.
 - Adds new Template for Simplex Theme
-
 - #7306 - haschildren always false
 
 MicroTiny:
  - Two new preferences to assist in managing stylesheet and other background settings.
  - Now uses the filemanager cwd() in file picker
  - Now sets the filemanager cwd() in the file picker
- 
-  - #7223 - fixes for secure admin
+ - #7223 - fixes for secure admin
 
 News:
  - All routes are now registered statically
@@ -109,13 +105,20 @@ News:
  - Adds detailtemplate param capabilities to SearchResultWithParams
  - Access to the Categories and custom fields tab is now controlled by the 'Modify Site Preferences' permission
  - Adds sample HTML5 summary and detail templates for Simplex Theme
- 
  - #7713 - Apply button doesn't work
  - #7457 - Duplicate news url
 
 Search: 
  - Moved "Stop Words" to language file
  - Added "Load Stop Words" from user language
+
+CMSPrinting:
+ - Now lazy load in the admin console
+
+ThemeManager:
+ - Now lazy load in the admin console
+ - Imported themes are now enabled by default.
+
 
 Version 1.10.3 - Hyacinthe
 -----------------------------
