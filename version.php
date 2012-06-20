@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.11-alpha5";
+$CMS_VERSION = "1.11-beta1";
 $CMS_VERSION_NAME = "Galapagos";
 $CMS_SCHEMA_VERSION = "36";
 
