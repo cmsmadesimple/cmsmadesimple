@@ -221,7 +221,7 @@ $lang['install_thanks'] = 'Thanks for installing CMS Made Simple';
 $lang['upgrade_title'] = 'CMS Made Simple Upgrade (step %s)';
 $lang['upgrade_system'] = 'Upgrade System';
 $lang['upgrade_thanks'] = 'Thanks for upgrading CMS Made Simple to';
-$lang['install_please_read'] = 'Please read the <a rel="external" href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Installation/Troubleshooting">Installation Troubleshooting</a> page in the CMS Made Simple Documentation Wiki.';
+$lang['install_please_read'] = 'Please read the <a rel="external" href="http://docs.cmsmadesimple.org/installation/requirements">Installation Troubleshooting</a> page in the CMS Made Simple&trade; Official Documentation.';
 $lang['install_checking'] = 'Checking permissions and PHP settings';
 $lang['install_test'] = 'Test';
 $lang['install_result'] = 'Result';
