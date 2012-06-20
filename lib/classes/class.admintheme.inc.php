@@ -517,11 +517,8 @@ class AdminTheme extends CmsAdminThemeBase
      */
 	function ThemeHeader(){
 		
-		if(file_exists('themes/'. $this->themeName. '/includes/standard.js'))
-		{
+		if(file_exists('themes/'. $this->themeName. '/includes/standard.js')) {
 			return '<script type="text/javascript" src="themes/'. $this->themeName. '/includes/standard.js"></script>'."\n";
-		}else{
-			return '<script type="text/javascript" src="themes/default/includes/standard.js"></script>'."\n";
 		}
 	}
 
