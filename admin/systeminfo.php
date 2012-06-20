@@ -298,7 +298,6 @@ switch($config['dbms']) //workaroud: ServerInfo() is unsupported in adodblite
 	    }
 	    else {
 	      $tmp[0]['server_db_grants'] = testDummy('db_grants',lang('msg_grantall_found'),'green');
-	      $tmp[0]['server_db_grants'] = testDummy('db_grants',lang('error_nograntall_found'),'yellow');
 	    }
 	  }
 	  break;
