@@ -759,7 +759,10 @@ header .welcome span {
 	width: auto;
 	font-size: 11px;
 	line-height: 18px;
-	margin-left: 10px;
+	margin-left: 10px
+}
+header .welcome a {
+	color: #fff
 }
 header a.welcome-user {
 	height: 18px;
@@ -767,7 +770,7 @@ header a.welcome-user {
 	display: inline-block;
 	text-indent: -999em;
 	margin-right: 10px;
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -10px -336px no-repeat;
+	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -10px -336px no-repeat
 }
 /* breadcrumbs nav */
 header .breadcrumbs {

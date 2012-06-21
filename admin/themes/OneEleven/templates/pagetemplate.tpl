@@ -43,7 +43,7 @@
 				<div class="header-bottom cf">
 					<!-- welcome -->
 					<div class="welcome">
-						<span><a class="welcome-user" href="myaccount.php?{$secureparam}" title="{'myaccount'|lang}">{'myaccount'|lang}</a> {'welcome_user'|lang}: {$user->username}</span>
+						<span><a class="welcome-user" href="myaccount.php?{$secureparam}" title="{'myaccount'|lang}">{'myaccount'|lang}</a> {'welcome_user'|lang}: <a href="myaccount.php?{$secureparam}">{$user->username}</a></span>
 					</div>
 					<!-- breadcrubms -->
 					{include file='breadcrumbs.tpl' items=$theme->get_breadcrumbs()} 
