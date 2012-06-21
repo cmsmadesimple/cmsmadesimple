@@ -217,7 +217,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_index', 'content', $ado_ret);
 
-	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_content_by_idhier', $db_prefix."content", 'hierarchy');
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_content_by_idhier', $db_prefix."content", 'content_id, hierarchy');
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_index', 'content', $ado_ret);
