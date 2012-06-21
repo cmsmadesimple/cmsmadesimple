@@ -456,13 +456,16 @@ class Content extends ContentBase
 		$smarty = cmsms()->GetSmarty();
 		$smarty->force_compile = TRUE;
 		
+		$ocompid = $smarty->compile_id;
+		$smarty->compile_id = 'c'.time();
 		$smarty->registerDefaultPluginHandler(array(&$smarty,'_dummyDfltPluginHandler'));
 		$smarty->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
 		$smarty->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
 		$smarty->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
 		$smarty->registerResource('template',new CMSPageTemplateResource(''));
-		$smarty->fetch('template:'.$this->TemplateId()); // do the magic.
+		$smarty->fetch('template:'.$this->TemplateId(),'x'.time(),'c'.time()); // do the magic.
 		$smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
+		$smarty->compile_id = $ocompid;
 
 		$this->_contentBlocks = CMS_Content_block::get_content_blocks();
 

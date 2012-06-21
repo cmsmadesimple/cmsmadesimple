@@ -116,8 +116,6 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
 			$text .= '&'.$id.$key.'='.rawurlencode($value);
 		}
 	}
-	debug_to_log('module redirect to '.$text);
-	#var_dump($text);
 	redirect($text);
 }
 

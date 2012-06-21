@@ -43,7 +43,8 @@ final class CMS_Content_Block
     $smarty = $template->smarty;
     if ( empty($params['assign']) )
       {
-	return $result;
+	echo $result;
+	//return $result;
       }
     else
       {
@@ -192,8 +193,25 @@ final class CMS_Content_Block
     self::$_contentBlocks[$rec['name']] = $rec;
   }
 
+  public static function smarty_compile_fecontentblock($params,$template)
+  {
+    $ptext = 'array(';
+    $tmp = array();
+    foreach($params as $k => $v) {
+      $tmp[] .= '\''.$k.'\'=>'.$v;
+    }
+    $ptext .= implode(',',$tmp);
+    $ptext .= ')';
+    return '<?php CMS_Content_Block::smarty_internal_fetch_contentblock('.$ptext.',$_smarty_tpl); ?>';
+  }
 
-  public static function smarty_fetch_contentblock($params,&$template)
+  /**
+   * @since 1.11
+   * @author calguy1000
+   * @internal
+   * @ignore
+   */
+  public static function smarty_internal_fetch_contentblock($params,$template)
   {
     $smarty = $template->smarty;
     $gCms = cmsms();
@@ -301,11 +319,13 @@ final class CMS_Content_Block
 	else
 	  {
 	    $block = (isset($params['block']))?$params['block']:'content_en';
+	    $val = $contentobj->Show($block);
 	    $result = '';
 	    $oldvalue = $smarty->caching;
 	    $smarty->caching = false;
 
-	    $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $contentobj->Id().$block);
+	    $result = $smarty->fetch('string:'.$val);
+	    //$result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $contentobj->Id().$block);
 	    $smarty->caching = $oldvalue;
 
 	    return self::content_return($result, $params, $smarty);
