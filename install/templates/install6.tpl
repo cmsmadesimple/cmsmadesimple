@@ -48,8 +48,8 @@
 		<input type="hidden" name="username" value="{$values.db.username}" />
 		<input type="hidden" name="password" value="{$values.db.password}" />
 		<input type="hidden" name="db_port" value="{$values.db.db_port}" />
-	        <input type="hidden" name="timezone" value="{$values.timezone}"/>
-		<!-- input type="hidden" name="db_socket" value="{$values.db.db_socket}" / -->
+	    <input type="hidden" name="timezone" value="{$values.timezone}"/>
+		{*<!-- input type="hidden" name="db_socket" value="{$values.db.db_socket|default:''}" / -->*}
 		<input type="hidden" name="prefix" value="{$values.db.prefix}" />
 		<input type="hidden" name="createtables" value="{$values.createtables}" />
 		<input type="hidden" name="email_accountinfo" value="{$values.admininfo.email_accountinfo}" />
