@@ -57,7 +57,7 @@ class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
   }
 } // end of class
 
-class CMSModuleFileTemplateResource extends Smarty_Resource_Custom
+class CMSModuleFileTemplateResource extends CMS_Fixed_Resource_Custom
 {
   protected function fetch($name,&$source,&$mtime)
   {
