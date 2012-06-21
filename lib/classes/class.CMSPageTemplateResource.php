@@ -18,7 +18,7 @@
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
-class CMSPageTemplateResource extends Smarty_Resource_Custom
+class CMSPageTemplateResource extends CMS_Fixed_Resource_Custom
 {
   static private $_templates;
   private $_section;

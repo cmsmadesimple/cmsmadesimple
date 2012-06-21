@@ -31,8 +31,7 @@ abstract class CMS_Fixed_Resource_Custom extends Smarty_Resource_Custom
         } else {
             $this->fetch($source->name, $content, $timestamp);
             $source->timestamp = isset($timestamp) ? $timestamp : false;
-            if( isset($content) )
-                $source->content = $content;
+            if( isset($content) ) $source->content = $content;
         }
         $source->exists = !!$source->timestamp;
   }
@@ -48,11 +47,10 @@ class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
     $tmp = explode(';',$name);
     $query = "SELECT * from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
     $row = $db->GetRow($query, preg_split('/;/', $name));
-    if ($row)
-      {
-	$source = $row['content'];
-	$mtime = $db->UnixTimeStamp($row['modified_date']);
-      }
+    if ($row) {
+      $source = $row['content'];
+      $mtime = $db->UnixTimeStamp($row['modified_date']);
+    }
     debug_buffer('','CMSModuleDbTemplateResource end'.$name);
   }
 } // end of class
