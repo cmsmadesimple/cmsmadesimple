@@ -18,7 +18,7 @@
 		{cms_jquery append="`$config.admin_url`/themes/OneEleven/includes/jquery.cookie.min.js,`$config.admin_url`/themes/OneEleven/includes/standard.js"}
 		<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 	 	{$headertext|default:''}
-		<!-- custom jQueryUI Theme 1.8.18 see style.css for color reference //-->
+		<!-- custom jQueryUI Theme 1.8.21 see style.css or link in UI Stylesheet for color reference //-->
 		<link href="{$config.admin_url}/themes/OneEleven/css/default-cmsms/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
         {module_available name='FileManager' assign='fmgood'}
         {if isset($fmgood) && $fmgood}{cms_module module=FileManager action='javascript'}{/if}
@@ -32,7 +32,7 @@
 				<div class="header-top cf">
 					<!-- logo -->
 					<div class="cms-logo">
-						<img src="{$config.admin_url}/themes/OneEleven/images/layout/cmsms-logo.jpg" width="205" height="69" alt="{sitename} - {$pagetitle}" title="{sitename}" />
+						<a href="http://www.cmsmadesimple.org" rel="external"><img src="{$config.admin_url}/themes/OneEleven/images/layout/cmsms-logo.jpg" width="205" height="69" alt="{sitename} - {$pagetitle}" title="{sitename}" /></a>
 					</div>
 					<!-- title -->
 					<span class="admin-title"> {'adminpaneltitle'|lang} - {sitename}{if !empty($pagetitle)} - {$pagetitle}{/if}</span>
@@ -43,7 +43,7 @@
 				<div class="header-bottom cf">
 					<!-- welcome -->
 					<div class="welcome">
-						<span>{'welcome_user'|lang}: {$user->username}</span>
+						<span><a class="welcome-user" href="myaccount.php?{$secureparam}" title="{'myaccount'|lang}">{'myaccount'|lang}</a> {'welcome_user'|lang}: {$user->username}</span>
 					</div>
 					<!-- breadcrubms -->
 					{include file='breadcrumbs.tpl' items=$theme->get_breadcrumbs()} 

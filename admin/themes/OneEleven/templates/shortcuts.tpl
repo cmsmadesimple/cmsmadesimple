@@ -17,11 +17,11 @@
 			<a href="listbookmarks.php?{$secureparam}" title="{'bookmarks'|lang}">{'bookmarks'|lang}</a>
 		</li>
 		{/if}
-		<li class="logout">
-			<a href="logout.php?{$secureparam}" title="{'logout'|lang}">{'logout'|lang}</a>
-		</li>
 		<li class="view-site">
 			<a href="{root_url}" rel="external" target="_blank" title="{'viewsite'|lang}">{'viewsite'|lang}</a>
+		</li>		
+		<li class="logout">
+			<a href="logout.php?{$secureparam}" title="{'logout'|lang}">{'logout'|lang}</a>
 		</li>
 	</ul>
 </div>

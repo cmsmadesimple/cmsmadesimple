@@ -669,7 +669,7 @@ aside.message,
 }
 /* close notification */
 .close-warning {
-	float:right;
+	float:left;
 	display: inline-block;
 	width: 16px;
 	height: 16px;
@@ -684,7 +684,7 @@ aside.message,
 /* TO DO, Rework login page, to much info, simple toggle of messages and other stuff should do it to */
 body.login {
 	background: #f6f6f6;
-	font: normal 14px  /1.3 Tahoma, sans-serif;
+	font: normal 14px/1.3 Tahoma, sans-serif;
 }
 .login .top {
 	height: 45px;
@@ -907,9 +907,15 @@ header .welcome span {
 	width: auto;
 	font-size: 11px;
 	line-height: 18px;
-	background: url(themes/OneEleven/images/layout/user-icon.png) right no-repeat;
-	margin-right: 20px;
-	padding-right: 30px
+	margin-right: 10px;
+}
+header a.welcome-user {
+	height: 18px;
+	width: 18px;
+	display: inline-block;
+	text-indent: -999em;
+	margin-left: 10px;
+	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -10px -336px no-repeat;
 }
 /* breadcrumbs nav */
 header .breadcrumbs {
@@ -928,9 +934,17 @@ header .breadcrumbs ul li {
 	font-size: 11px;
 	padding: 0 8px 0 4px
 }
-header .breadcrumbs ul li.first {
+header .breadcrumbs ul li.home {
+	padding: 0 0 0 10px;
+	background: url(themes/OneEleven/images/layout/breadcrubms-divider-rtl.png) no-repeat left;
+}
+header .breadcrumbs ul li.home a {
 	background: url(themes/OneEleven/images/layout/home-icon.png) right no-repeat;
-	padding-right: 24px
+	width: 18px;
+	text-indent: -999em
+}
+header .breadcrumbs ul li.first {
+	padding-right: 14px
 }
 header .breadcrumbs ul li a {
 	color: #fff;
@@ -997,7 +1011,7 @@ header .shortcuts li.favorites a {
 	position: absolute;
 	right: 0;
 	top: 100px;
-	bottom: 40px
+	bottom: 25px
 }
 #container.sidebar-off #sidebar {
 	overflow: hidden;
@@ -1258,9 +1272,9 @@ nav ul#pagemenu li.current li a:active  {
 footer#footer {
 	width: 100%;
 	z-index: 100;
-	height: 45px;
+	height: 30px;
 	background: transparent url(themes/OneEleven/images/layout/sprite_repeatx.png) 829px -259px repeat-x;
-	padding-top: 15px;
+	padding-top: 5px;
 	clear: both;
 	position: fixed;
 	bottom: 0
@@ -1273,13 +1287,13 @@ footer#footer a:hover, footer#footer a:active {
 	color: #fa8004
 }
 #footer small {
-	font-size: 12px;
+	font-size: 11px;
 	color: #fff
 }
 #footer .footer-left {
-	width: 350px;
+	width: 450px;
 	padding: 10px;
-	line-height: 20px;
+	line-height: 15px;
 	float: right
 }
 .footer-left {
@@ -1291,7 +1305,7 @@ footer#footer a:hover, footer#footer a:active {
 #footer .footer-right {
 	float: left;
 	padding: 10px;
-	line-height: 20px;
+	line-height: 15px;
 	display: inline;
 	width: auto
 }

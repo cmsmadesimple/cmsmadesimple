@@ -759,9 +759,15 @@ header .welcome span {
 	width: auto;
 	font-size: 11px;
 	line-height: 18px;
-	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -10px -336px no-repeat;
 	margin-left: 10px;
-	padding-left: 30px
+}
+header a.welcome-user {
+	height: 18px;
+	width: 18px;
+	display: inline-block;
+	text-indent: -999em;
+	margin-right: 10px;
+	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -10px -336px no-repeat;
 }
 /* breadcrumbs nav */
 header .breadcrumbs {
@@ -780,9 +786,17 @@ header .breadcrumbs ul li {
 	font-size: 11px;
 	padding: 0 8px 0 4px
 }
-header .breadcrumbs ul li.first {
+header .breadcrumbs ul li.home {
+	padding: 0 10px 0 0;
+	background: url(themes/OneEleven/images/layout/breadcrubms-divider.png) no-repeat right;
+}
+header .breadcrumbs ul li.home a {
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -10px -367px no-repeat;
-	padding-left: 28px
+	width: 18px;
+	text-indent: -999em
+}
+header .breadcrumbs ul li.first {
+	padding-left: 18px
 }
 header .breadcrumbs ul li a {
 	color: #fff;
@@ -847,7 +861,7 @@ header .shortcuts li.favorites a {
 	position: absolute;
 	left: 0;
 	top: 100px;
-	bottom: 40px
+	bottom: 25px
 }
 #container.sidebar-off #sidebar {
 	overflow: hidden;
@@ -1123,9 +1137,9 @@ nav ul#pagemenu li.current li a:active  {
 footer#footer {
 	width: 100%;
 	z-index: 100;
-	height: 45px;
+	height: 30px;
 	background: transparent url(themes/OneEleven/images/layout/sprite_repeatx.png) 829px -259px repeat-x;
-	padding-top: 15px;
+	padding-top: 5px;
 	clear: both;
 	position: fixed;
 	bottom: 0
@@ -1138,13 +1152,13 @@ footer#footer a:hover, footer#footer a:active {
 	color: #fa8004
 }
 #footer small {
-	font-size: 12px;
+	font-size: 11px;
 	color: #fff
 }
 #footer .footer-left {
-	width: 350px;
+	width: 450px;
 	padding: 10px;
-	line-height: 20px;
+	line-height: 15px;
 	float: left
 }
 .footer-left {
@@ -1156,7 +1170,7 @@ footer#footer a:hover, footer#footer a:active {
 #footer .footer-right {
 	float: right;
 	padding: 10px;
-	line-height: 20px;
+	line-height: 15px;
 	display: inline;
 	width: auto
 }

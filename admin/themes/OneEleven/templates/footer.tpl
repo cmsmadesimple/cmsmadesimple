@@ -8,6 +8,9 @@
 	<div class="footer-right cf">
 		<ul class="links">
 			<li>
+				<a href="http://docs.cmsmadesimple.org/" rel="external" title="{'documentation'|lang}">{'documentation'|lang}</a>
+			</li>			
+			<li>
 				<a href="http://wiki.cmsmadesimple.org/index.php/Main_Page" rel="external" title="{'wiki'|lang}">{'wiki'|lang}</a>
 			</li>
 			<li>

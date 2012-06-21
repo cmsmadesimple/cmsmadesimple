@@ -26,7 +26,7 @@
 #Ideas from Gallery's implementation made to CMS by Ted Kulp
 
 #Native language name
-$nls['language']['fa_IR'] = '%Gفارسي%@';
+$nls['language']['fa_IR'] = 'فارسی';
 $nls['englishlang']['fa_IR'] = 'Farsi';
 
 #Possible aliases for language
@@ -39,6 +39,9 @@ $nls['locale']['fa_IR'] = 'fa_IR,fa_IR.utf-8,farsi,Farsi_Iran.1256';
 
 #Encoding of the language
 $nls['encoding']['fa_IR'] = 'UTF-8';
+
+#Direction of the language
+$nls['direction']['fa_IR'] = 'rtl';
 
 #Location of the file(s)
 $nls['file']['fa_IR'] = array(dirname(__FILE__).'/fa_IR/admin.inc.php');
