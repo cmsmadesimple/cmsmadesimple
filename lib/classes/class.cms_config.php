@@ -252,8 +252,10 @@ class cms_config implements ArrayAccess
 							  $path = dirname($path);
 						  }
 					  }
+					  while(endswith($path,'/')) {
+						  $path = substr($path,-1);
+					  }
 				  }
-			  // todo: here we could get the default content object and test if it's secure
 			  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
 			  $this->_cache[$key] = $str;
 			  return $str;
