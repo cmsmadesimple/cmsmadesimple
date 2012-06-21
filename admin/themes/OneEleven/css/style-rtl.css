@@ -352,13 +352,13 @@ ul, ol {
 	margin: 0;
 	padding: 0
 }
-#main ul, ol {
+#oe_mainarea ul, ol {
 	margin: 10px 25px 10px 0
 }
-#main li {
+#oe_mainarea li {
 	line-height: 1.5
 }
-#main ol li{
+#oe_mainarea ol li{
 	list-style:decimal
 }
 h1,
@@ -369,7 +369,7 @@ h5,
 h6 {
 	color: #585858
 }
-#main ul {
+#oe_mainarea ul {
 	list-style: square
 }
 h1 {
@@ -1257,16 +1257,16 @@ nav ul#pagemenu li.current li a:active  {
 	padding-right: 30px
 }
 /*** page content ***/
-#main {
+#oe_mainarea {
 	margin: 0 249px 0 0
 }
-#container.sidebar-off #main {
+#container.sidebar-off #oe_mainarea {
 	margin: 0 40px 0 0
 }
-#main .content-inner {
+#oe_mainarea .content-inner {
 	padding: 0 20px 0 25px
 }
-#main header.pageheader {
+#oe_mainarea header.pageheader {
 	height: 63px;
 	margin-bottom: 15px;
 	position: relative;
@@ -1328,7 +1328,7 @@ footer#footer a:hover, footer#footer a:active {
 	padding: 0 0 0 8px
 }
 /* --- CONTENT --- */
-#main header.pageheader h1 {
+#oe_mainarea header.pageheader h1 {
 	font-size: 18px;
 	line-height: 63px;
 	font-weight: normal;
@@ -1339,12 +1339,12 @@ footer#footer a:hover, footer#footer a:active {
 	display: inline;
 	color: #147fdb
 }
-#main header.pageheader .module-icon {
+#oe_mainarea header.pageheader .module-icon {
 	vertical-align: middle;
 	margin-right: 15px;
 	max-height: 32px
 }
-#main header.pageheader span.helptext,
+#oe_mainarea header.pageheader span.helptext,
 .pageheader span.helptext  {
 	display: inline;
 	line-height: 63px;
@@ -1353,10 +1353,10 @@ footer#footer a:hover, footer#footer a:active {
 	color: #232323;
 	font-size: 12px
 }
-#main header.pageheader span.helptext {
+#oe_mainarea header.pageheader span.helptext {
 	margin-left: 210px
 }
-#main header.pageheader.drop-hidden span.helptext {
+#oe_mainarea header.pageheader.drop-hidden span.helptext {
 	margin-left: 0
 }
 span.helptext a.external,
@@ -1378,7 +1378,7 @@ span.helptext a {
 .pageheader span.helptext a img{
 	margin-left: 10px
 }
-#main a.helpicon {
+#oe_mainarea a.helpicon {
 	display: none;
 }
 .pageheader {
@@ -1796,7 +1796,7 @@ textarea.pageextrasmalltextarea {
 	font-size: 11px;
 	color: #232323
 }
-#main .dashboard-box ul.subitems {
+#oe_mainarea .dashboard-box ul.subitems {
 	margin: 0;
 	padding: 0
 }
@@ -1981,10 +1981,9 @@ a.toggle-dropzone:focus {
 	}	
 	footer#footer {
 		clear: both;
-		z-index: 900;
 		overflow: hidden;
-		position: absolute;
-		bottom:0
+		line-height: 20px;
+		position: static
 	}	
 	#footer .footer-left {
 		margin-left: 0
@@ -2031,7 +2030,7 @@ a.toggle-dropzone:focus {
 	}
 	#container,
 	#header,
-	#main,
+	#oe_mainarea,
 	#sidebar,
 	#admin-content {
 		margin: 0;
@@ -2080,14 +2079,14 @@ a.toggle-dropzone:focus {
 	#header.header {
 		overflow: hidden
 	}
-	#main header.pageheader span.helptext {
+	#oe_mainarea header.pageheader span.helptext {
 		margin-left: 0
 	}		
-	#main {
+	#oe_mainarea {
 		width: 100%;
 		display: block
 	}
-	#main .content-inner {
+	#oe_mainarea .content-inner {
 		padding: 0 5px
 	}
 	header .cms-logo {
@@ -2161,7 +2160,7 @@ a.toggle-dropzone:focus {
 		right:5%;
 		width:auto
 	}
-	#main header.pageheader span.helptext {
+	#oe_mainarea header.pageheader span.helptext {
 		display: none;
 	}
 	textarea,

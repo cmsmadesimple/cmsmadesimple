@@ -214,7 +214,7 @@ jQuery(document).ready(function($) {
 				htmlShow += '<\/ul><\/aside>';
 			}
 
-			$('#main').append(htmlShow).slideDown(1000, function() {
+			$('#oe_mainarea').append(htmlShow).slideDown(1000, function() {
 				window.setTimeout(function() {
 					$('.message').slideUp();
 				}, 10000);

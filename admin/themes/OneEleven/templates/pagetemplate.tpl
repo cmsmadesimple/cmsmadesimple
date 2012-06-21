@@ -72,7 +72,7 @@
 				</div>
 				<!-- end sidebar //-->
 				<!-- start main -->
-				<div id="main" class="cf">
+				<div id="oe_mainarea" class="cf">
 					{strip}
 					{include file='messages.tpl'}
 					{if isset($fmgood) && $fmgood}{cms_module module=FileManager action='dropzone' id='dropzone' assign='droparea'}{/if}
