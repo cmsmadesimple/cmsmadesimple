@@ -60,6 +60,9 @@ Core - General:
  - Improvements to the content_image option
  - Changed language files fa_FA to fa_IR
  - You can no longer set all pages to a disabled page template.
+ - {content} tag is now a compiler tag, and cannot be cached.
+ - cms_config class is now a bit smarter... more stuff is auto-calculated if not included in the config file.
+   including 'root_url'..
  
 Core - Bug Reports:
  - #6161 - Core Printing Module - Compression issue
@@ -71,6 +74,7 @@ Core - Bug Reports:
 Core - Installer:
   - mysqli option now selected by default
   - Add checks for xml handling
+  - modified so that root_url and a few other variables are not placed into the config file if not specified.
 
 FileManager
  - Now uses drag/drop upload for all browsers except IE and maybe opera
