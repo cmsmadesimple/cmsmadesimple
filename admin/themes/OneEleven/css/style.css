@@ -2005,7 +2005,7 @@ a.toggle-dropzone:focus {
 		font-size: 12px
 	}
 	#sidebar {
-		bottom: 55px
+		bottom: 30px
 	}
 	#sidebar aside {
 		padding: 0
@@ -2154,6 +2154,7 @@ a.toggle-dropzone:focus {
 	footer#footer {
 		clear: both;
 		overflow: hidden;
+		line-height: 20px;
 		position: static
 	}
 	#footer .footer-left {
@@ -2165,7 +2166,9 @@ a.toggle-dropzone:focus {
 		display: block
 	}
 	#footer small {
-		padding: 0;
+		padding: 10px 0 0 0;
+		margin: 0;
+		display: block;
 		font-size: .7em
 	}
 	fieldset,
