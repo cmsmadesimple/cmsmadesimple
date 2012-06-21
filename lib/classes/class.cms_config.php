@@ -241,6 +241,7 @@ class cms_config implements ArrayAccess
 			  if( !empty($parts['path']) )
 				  {
 					  $path = dirname($parts['path']);
+					  $path = str_replace('\/','/',$path); // I hate windoze, can you tell.
 					  if( endswith($path,'install') ) {
 						  $path = substr($path,0,strlen($path)-strlen('install')-1);
 					  }
