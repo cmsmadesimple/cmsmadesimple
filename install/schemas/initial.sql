@@ -29,6 +29,7 @@ INSERT INTO {DB_PREFIX}siteprefs VALUES ('nogcbwysiwyg','0',NULL,NULL);
 INSERT INTO {DB_PREFIX}siteprefs VALUES ('urlcheckversion','',NULL,NULL);
 INSERT INTO {DB_PREFIX}siteprefs VALUES ('defaultdateformat','',NULL,NULL);
 INSERT INTO {DB_PREFIX}siteprefs VALUES ('css_max_age','0',NULL,NULL);
+INSERT INTO {DB_PREFIX}siteprefs VALUES ('backendwysiwyg','MicroTiny',NULL,NULL);
 INSERT INTO {DB_PREFIX}siteprefs VALUES ('disablesafemodewarning','0',NULL,NULL);
 INSERT INTO {DB_PREFIX}siteprefs VALUES ('allowparamcheckwarnings','0',NULL,NULL);
 INSERT INTO {DB_PREFIX}siteprefs VALUES ('enablenotifications','1',NULL,NULL);
@@ -77,7 +78,7 @@ INSERT INTO {DB_PREFIX}permissions VALUES (35,'Modify Events','Modify Events','2
 INSERT INTO {DB_PREFIX}permissions VALUES (36,'View Tag Help','View Tag Help','2006-01-27 20:06:58','2006-01-27 20:06:58');
 INSERT INTO {DB_PREFIX}permissions VALUES (44,'Manage All Content','Manage All Content','2009-05-06 15:04:11','2009-05-06 15:04:11');
 INSERT INTO {DB_PREFIX}permissions VALUES (46,'Reorder Content','Reorder Content','2009-05-06 15:04:11','2009-05-06 15:04:11');
-INSERT INTO {DB_PREFIX}htmlblobs VALUES (1,'footer','<p>&copy; Copyright {custom_copyright} - CMS Made Simple<br />\r\nThis site is powered by <a href=\"http://www.cmsmadesimple.org\">CMS Made Simple</a> version {cms_version}</p>','',0,1,'2006-07-25 21:22:32','2006-07-25 21:22:32');
+INSERT INTO {DB_PREFIX}htmlblobs VALUES (1,'footer','<p>&copy; Copyright {custom_copyright} - CMS Made Simple<br />\r\nThis site is powered by <a href=\"http://www.cmsmadesimple.org\">CMS Made Simple</a> version {cms_version}</p>','',1,1,'2006-07-25 21:22:32','2006-07-25 21:22:32');
 INSERT INTO {DB_PREFIX}groups VALUES (1,'Admin',1,'2006-07-25 21:22:32','2006-07-25 21:22:32');
 INSERT INTO {DB_PREFIX}groups VALUES (2,'Editor',1,'2006-07-25 21:22:32','2006-07-25 21:22:32');
 INSERT INTO {DB_PREFIX}groups VALUES (3,'Designer',1,'2006-07-25 21:22:32','2006-07-25 21:22:32');
