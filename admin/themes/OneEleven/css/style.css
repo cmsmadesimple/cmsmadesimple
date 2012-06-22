@@ -673,6 +673,7 @@ aside.message,
 }
 .pageerrorcontainer ul {
 	border: none;
+	margin-left: 25px;
 	background: none
 }
 /* close notification */

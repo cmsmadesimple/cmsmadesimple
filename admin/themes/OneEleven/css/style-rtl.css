@@ -667,6 +667,11 @@ aside.message,
 	margin:0;
 	right: 35%
 }
+.pageerrorcontainer ul {
+	border: none;
+	margin-right: 25px;
+	background: none
+}
 /* close notification */
 .close-warning {
 	float:left;
