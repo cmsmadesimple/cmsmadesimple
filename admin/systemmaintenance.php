@@ -17,9 +17,11 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #$Id: supportinfo.php 4216 2007-10-06 19:28:55Z wishy $
-
-
 $CMS_ADMIN_PAGE = 1;
+
+//
+// note, much of this code is mysql specific
+//
 
 require_once("../include.php");
 $urlext = '?' . CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY];
@@ -55,8 +57,8 @@ $smarty->assign('theme', $themeObject);
  */
 
 
-$query = "SHOW TABLES";
-$tablestmp = $db->GetArray($query);
+$query = "SHOW TABLES LIKE ?";
+$tablestmp = $db->GetArray($query,array(cms_db_prefix().'%');
 $tables = array();
 $nonseqtables = array();
 foreach ($tablestmp as $table) {
