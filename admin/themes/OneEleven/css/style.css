@@ -2191,6 +2191,10 @@ a.toggle-dropzone:focus {
 	menu {
 		height: auto
 	}
+	select {
+    	-webkit-appearance: listbox;
+    	-moz-appearance: listbox;
+    }
 	#login #wrapper {
 		padding-top: 2%
 	}	
