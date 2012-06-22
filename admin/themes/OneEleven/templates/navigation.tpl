@@ -15,13 +15,9 @@
 			<span class="open-nav" title="{'open'|lang}/{'close'|lang} {$navitem.title}">{'open'|lang}/{'close'|lang} {$navitem.title}</span>
 		{/if}			
 		{if isset($navitem.children)}
-		{if $depth == '0'}
-		<ul>
-			{/if}
+		{if $depth == '0'}<ul>{/if}
 			{include file=$smarty.template nav=$navitem.children depth=$depth+1}
-			{if $depth == '0'}
-		</ul>
-		{/if}
+		{if $depth == '0'}</ul>{/if}
 		{/if}
 	</li>
 {/foreach}

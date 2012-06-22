@@ -17,8 +17,7 @@
 			<img src="{$icon}.gif" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />
 			{else}
 			<img src="themes/OneEleven/images/icons/topfiles/modules.png" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />	
-			{/if}
-			</a>
+			{/if}</a>
 			<h3>
 				<a href="{$node.url}"{if isset($node.target)} target="{$node.target}"{/if}{if $node.selected} class="selected"{/if}>{$node.title}</a>
 			</h3>

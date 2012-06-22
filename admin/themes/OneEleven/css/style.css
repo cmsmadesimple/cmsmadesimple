@@ -1770,15 +1770,15 @@ a.toggle-dropzone:focus {
 	padding: 5px 10px;
 	width: 240px	
 }
-.drop span.zone {
+.drop div.zone {
 	display: block;
 	float:left;
 	width: 210px;
 	border: 1px dashed #ccc;
 	text-align: center
 }
-.drop span.zone:hover,
-.drop span.zone:focus {
+.drop div.zone:hover,
+.drop div.zone:focus {
 	border: 1px dashed #77ab13
 }
 .drop #theme_dropzone {
