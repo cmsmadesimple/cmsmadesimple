@@ -79,12 +79,12 @@ $smarty->params = $params;
 $page = get_pageid_or_alias_from_url();
 $contentops = cmsms()->GetContentOperations();
 $contentobj = '';
-/*$trycount = 0;
+$trycount = 0;
 
 while( $trycount < 2 )
   {
     $trycount++;
-*/
+
 try {
 
 	if( !is_object($contentobj) ) 
@@ -239,7 +239,7 @@ try {
 		$head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
 		
 		$html = $top.$head.$body;
-		//$trycount = 99; // no more iterations.
+		$trycount = 99; // no more iterations.
 		//debug_display('display content2 '.$contentobj->Alias().' '.$page);
 		//if( $page == 'error404' ) debug_display('html is '.$html);
 	}
@@ -247,10 +247,12 @@ try {
 catch (SmartyCompilerException $e) // <- Catch Smarty compile errors 
 {
 	echo $smarty->errorConsole($e);	
+	return;
 } 
 catch (SmartyException $e) // <- Catch rest of Smarty errors
 {
 	echo $smarty->errorConsole($e);
+	return;
 }
 catch (CmsError404Exception $e) // <- Catch CMSMS 404 error
 {
@@ -279,7 +281,7 @@ catch (CmsError404Exception $e) // <- Catch CMSMS 404 error
 		return;
 	}
 }
- // } // while trycount
+} // while trycount
 
 Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
