@@ -27,11 +27,9 @@
 					<div class="info-wrapper open">
 					<aside class="info">
 					<h2>{'login_info_title'|lang}</h2>
-						<p>
-							{'login_info'|lang}
+						<p>{'login_info'|lang}</p>
 							{'login_info_params'|lang}
-							<strong>({$smarty.server.HTTP_HOST})</strong>
-						</p>					
+							<p><strong>({$smarty.server.HTTP_HOST})</strong></p>					
 						<p class="warning">{'warn_admin_ipandcookies'|lang}</p>
 					</aside>
 					<a href="#" title="{'open'|lang}/{'close'|lang}" class="toggle-info">{'open'|lang}/{'close'|lang}</a>
