@@ -228,6 +228,7 @@ try {
 	}
 	else
 	{
+	
 		//debug_display('display content '.$contentobj->Alias().' '.$page);
 		debug_buffer('process template top');
 		$top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
@@ -238,7 +239,7 @@ try {
 		debug_buffer('process template head');
 		$head = $smarty->fetch('tpl_head:'.$contentobj->TemplateId());
 		
-		$html = $top.$head.$body;
+		$html = $top.$head.$body;		
 		$trycount = 99; // no more iterations.
 		//debug_display('display content2 '.$contentobj->Alias().' '.$page);
 		//if( $page == 'error404' ) debug_display('html is '.$html);
@@ -246,14 +247,18 @@ try {
 } 
 catch (SmartyCompilerException $e) // <- Catch Smarty compile errors 
 {
+	$handlers = ob_list_handlers(); 
+	for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 	echo $smarty->errorConsole($e);	
 	return;
 } 
 catch (SmartyException $e) // <- Catch rest of Smarty errors
 {
+	$handlers = ob_list_handlers(); 
+	for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 	echo $smarty->errorConsole($e);
 	return;
-}
+}	
 catch (CmsError404Exception $e) // <- Catch CMSMS 404 error
 {
 	//debug_display('handle 404 exception '.$e->getFile().' at '.$e->getLine().' -- '.$e->getMessage());
