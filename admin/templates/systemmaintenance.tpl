@@ -104,7 +104,7 @@
 
           <p class="pageinput">
             {foreach from=$pageswithinvalidtype item='page'}
-              {*{$page.count}.*} {$page.content_name} ({$page.content_alias})<br/>
+              {$page.count} {$page.content_name} <em>({$page.content_alias}) - {$page.type}</em><br/>
             {/foreach}
             <br/>
             <input class="pagebutton" type="submit" name="fixtypes" value="{'sysmain_fixtypes'|lang}"/>
