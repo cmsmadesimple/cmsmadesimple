@@ -25,19 +25,19 @@
 
 #Ideas from Gallery's implementation made to CMS by Ted Kulp
 
-#Dutch (Cyprus)
+#Welsh (Wales)
 
 #Native language name
-$nls['language']['en_CY'] = 'Nederlands';
-$nls['englishlang']['en_CY'] = 'Dutch';
+$nls['language']['en_CY'] = 'Wales';
+$nls['englishlang']['en_CY'] = 'Welsh';
 
 #Possible aliases for language
-$nls['alias']['nl'] = 'en_CY';
-$nls['alias']['dutch'] = 'en_CY';
+$nls['alias']['cy'] = 'en_CY';
+$nls['alias']['welsh'] = 'en_CY';
 $nls['alias']['en_CY.ISO8859-1'] = 'en_CY' ;
 
 #Possible locale for language
-$nls['locale']['en_CY'] = 'en_CY,en_CY.utf8,en_CY@euro,dutch,Dutch_Netherlands.1252';
+$nls['locale']['en_CY'] = 'en_CY,en_CY.utf8,en_CY@pound,welsh,Welsh_Wales.1252';
 
 #Encoding of the language
 $nls['encoding']['en_CY'] = 'UTF-8';
@@ -48,8 +48,5 @@ $nls['file']['en_CY'] = array(dirname(__FILE__).'/en_CY/admin.inc.php');
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
-$nls['htmlarea']['en_CY'] = 'nl';
-
-
-
+$nls['htmlarea']['en_CY'] = 'cy';
 ?>
