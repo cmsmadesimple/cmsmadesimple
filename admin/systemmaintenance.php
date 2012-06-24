@@ -98,7 +98,7 @@ if (isset($_POST["optimizeall"])) {
   }
 
   // put mention into the admin log
-  audit(-1, 'System Maintenance', 'All db-tables optimized');
+  audit('', 'System Maintenance', 'All db-tables optimized');
   $themeObject->ShowMessage(lang("sysmain_tablesoptimized"));
 }
 
@@ -115,7 +115,7 @@ if (isset($_POST["repairall"])) {
   }
 
   // put mention into the admin log
-  audit(-1, 'System Maintenance', 'All db-tables repaired');
+  audit('', 'System Maintenance', 'All db-tables repaired');
   $themeObject->ShowMessage(lang("sysmain_tablesrepaired"));
 
 }
@@ -150,19 +150,22 @@ $contentops = cmsms()->GetContentOperations();
 
 if (isset($_POST['updateurls'])) {
   cms_route_manager::rebuild_static_routes();
+  audit('', 'System maintenance', 'Static routes rebuilt');
+  $themeObject->ShowMessage(lang("routesrebuilt"));
+  $smarty->assign("active_content", "true");
 }
 
 if (isset($_POST['clearcache'])) {
   cmsms()->clear_cached_files(-1);
   // put mention into the admin log
-  audit(-1, 'System maintenance', 'Cache cleared');
+  audit('', 'System maintenance', 'Cache cleared');
   $themeObject->ShowMessage(lang("cachecleared"));
   $smarty->assign("active_content", "true");
 }
 
 if (isset($_POST["updatehierarchy"])) {
   $contentops->SetAllHierarchyPositions();
-  audit(-1, 'System maintenance', 'Page hierarchy positions updated');
+  audit('', 'System maintenance', 'Page hierarchy positions updated');
   $themeObject->ShowMessage(lang("sysmain_hierarchyupdated"));
   $smarty->assign("active_content", "true");
 }
@@ -183,7 +186,7 @@ if (isset($_POST["addaliases"])) {
   $allcontent = $db->Execute($query);
   while ($contentpiece = $allcontent->FetchRow()) {
     $content_id = $contentpiece["content_id"];
-    if (trim($contentpiece["content_alias"]) == "" /*|| !$contentops->CheckAliasError($contentpiece["content_alias"])*/) {
+    if (trim($contentpiece["content_alias"]) == '' && $contentpiece['type'] != 'separator' ) {
 
       $alias = trim($contentpiece["menu_text"]);
       if ($alias == '') {
@@ -208,7 +211,7 @@ if (isset($_POST["addaliases"])) {
 
     }
   }
-  audit(-1, 'System maintenance', 'Fixed pages missing aliases, count:' . $count);
+  audit('', 'System maintenance', 'Fixed pages missing aliases, count:' . $count);
   $themeObject->ShowMessage($count . " " . lang("sysmain_aliasesfixed"));
   $smarty->assign("active_content", "true");
 }
@@ -229,7 +232,7 @@ if (isset($_POST["fixtypes"])) {
     }
   }
 
-  audit(-1, 'System maintenance', 'Converted pages with invalid content types, count:' . $count);
+  audit('', 'System maintenance', 'Converted pages with invalid content types, count:' . $count);
   $themeObject->ShowMessage($count . " " . lang("sysmain_typesfixed"));
   $smarty->assign("active_content", "true");
 }
@@ -242,7 +245,7 @@ $withoutalias = array();
 $invalidtypes = array();
 while ($contentpiece = $allcontent->FetchRow()) {
   $pages[] = $contentpiece["content_name"];
-  if (trim($contentpiece["content_alias"]) == "") {
+  if (trim($contentpiece["content_alias"]) == "" && $contentpiece['type'] != 'separator') {
     $withoutalias[] = $contentpiece;
   }
   if (!in_array($contentpiece["type"], $simpletypes)) {

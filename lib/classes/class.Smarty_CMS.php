@@ -66,7 +66,7 @@ class Smarty_CMS extends SmartyBC
     $this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
     $this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
 
-    $this->merge_compiled_includes = TRUE;
+    //$this->merge_compiled_includes = TRUE;
 
     // register default plugin handler
     $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));

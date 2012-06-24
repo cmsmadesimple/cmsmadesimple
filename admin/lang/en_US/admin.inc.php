@@ -116,13 +116,12 @@ $lang['admin']['smarty_settings'] = 'Smarty Settings';
 $lang['admin']['help_function_cms_init_editor'] = <<<EOT
 <h3>What does this do?</h3>
   <p>This plugin is used to initialize the selected wysiwyg editor for display when wysiwyg functionalities are required for frontend data submission.  This module will find the selected frontend wysiwyg, determine if it has been requested, and if so generate the appropriate html code <em>(usually javascript links)</em> so that the wysiwyg will initialize properly when the page is loaded.  If no wysiwyg editors have been requested for the frontend request this plugin will produce no output.</p>
-  <p><strong>Note:</strong> This plugin will work properly given the default configuration of CMSMS.  If you have modified the &quot;process_whole_template&quot; configuration variable from its default value, you may have to adjust the parameters supplied to this plugin.</p>
 <h3>How do I use it?</h3>
 <p>The first thing you must do is select the frontend WYSIWYG editor to use in the global settings page of the admin console.  Next If you use frontend wysiwyg editors on numerous pages, it may be best to place the {cms_init_editor} plugin directly into your page template.  If you only require the wysiwyg editor to be enabled on a limited amount of pages you may just place it into the &quot;Page Specific Metadata&quot; field in each page.</p>
 <h3>What parameters does it take?</h3>
 <ul>
 <li><em>(optional)wysiwyg</em> - Specify the name of the wysiwyg editor module to initialize.  Use with caution.  If you have a different wysiwyg editor selected in the global settings, this will force the specified  editor to be initialized.</li>
-<li><em>(optional)force=0</em> - Normally this plugin will not initialize the specified (or detected) editor if it has not been marked as &quot;active&quot;.  This parameter will override that behavior.  This parameter may be required of the &quot;process_whole_template&quot; configuration variable is set to a non default value.</li>
+<li><em>(optional)force=0</em> - Normally this plugin will not initialize the specified (or detected) editor if it has not been marked as &quot;active&quot;.  This parameter will override that behavior.</li>
 <li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
 </ul>
 EOT;
@@ -210,7 +209,7 @@ $lang['admin']['help_function_browser_lang'] = <<<EOT
   <p>This plugin detects and outputs the language that the users browser accepts, and cross references it with a list of allowed languages to determine a language value for the session.</p>
 <h3>How do I use it?</h3>
 <p>Insert the tag early into your page template <em>(it can go above the &lt;head&gt; section if you want)</em> and provide it the name of the default language, and the accepted languages (only two character language names are accepted), then do something with the result.  i.e:</p>
-<pre><code>{browser_lang accepted=de,fr,en,es default=en assign=tmp}{session_put var=lang val=\$tmp}</code></pre>
+	     <pre><code>{browser_lang accepted=&quot;de,fr,en,es&quot; default=en assign=tmp}{session_put var=lang val=\$tmp}</code></pre>
 <p><em>({session_put} is a plugin provided by the CGSimpleSmarty module)</em></p>
 <h3>What Parameters does it Take?</h3>
 <ul>
