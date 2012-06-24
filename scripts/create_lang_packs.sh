@@ -110,7 +110,7 @@ _langs=`ls -1 | grep -v index`
 #
 for onelang in $_langs ; do
   shortlang=`echo $onelang | cut -d_ -f1`
-  if [ $shortlang != 'en' ]; then
+  if [ $onelang != 'en_US' ]; then
     echo "Processing $onelang / $shortlang"
 
     # build the file list
