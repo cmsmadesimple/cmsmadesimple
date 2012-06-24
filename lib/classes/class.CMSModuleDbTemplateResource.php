@@ -18,6 +18,15 @@
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
+/**
+ * @package CMS
+ */
+
+/**
+ * A simple class to resolve an issue with smarty
+ * 
+ * @ignore
+ */
 abstract class CMS_Fixed_Resource_Custom extends Smarty_Resource_Custom
 {
   public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
@@ -37,6 +46,12 @@ abstract class CMS_Fixed_Resource_Custom extends Smarty_Resource_Custom
   }
 }
 
+/**
+ * A simple class to handle a module database template.
+ * 
+ * @ignore
+ * @inernal
+ */
 class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
 {
   protected function fetch($name,&$source,&$mtime)
@@ -55,6 +70,13 @@ class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
   }
 } // end of class
 
+
+/**
+ * A simple class to handle a module file template.
+ * 
+ * @ignore
+ * @inernal
+ */
 class CMSModuleFileTemplateResource extends CMS_Fixed_Resource_Custom
 {
   protected function fetch($name,&$source,&$mtime)

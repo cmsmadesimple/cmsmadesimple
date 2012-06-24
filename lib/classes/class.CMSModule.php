@@ -130,12 +130,29 @@ abstract class CMSModule
 	 */
 	private $restrict_unknown_params = false;
 
+	/**
+	 * @access private
+	 * @ignore 
+	 */
 	private $__errors;
+
+	/**
+	 * @access private
+	 * @ignore 
+	 */
 	private $__messages;
+
+	/**
+	 * @access private
+	 * @ignore 
+	 */
 	private $__current_tab;
 
 	/**
-	 * Magic methods
+	 * Magic methods. This handles the deprecated. $this->db etc, syntax.
+	 *
+	 * @param string The key to get.  possible values are cms,db,smarty.config
+	 * @deprecated
 	 */
 	public function &__get($key)
 	{
@@ -276,6 +293,7 @@ abstract class CMSModule
 	 *
 	 * @final
 	 * @return mixed module call output.
+	 * @ignore
 	 */
 	final static public function function_plugin($params,&$template)
 	{
@@ -287,7 +305,18 @@ abstract class CMSModule
 
 	/**
 	 * Register a smarty plugin and attach it to this module.
+	 * This method registers a static plugin to the plugins database table, and should be used only when a module
+	 * is installed or upgraded.
 	 *
+	 * @see smarty documentation.
+	 * @author calguy1000
+	 * @since 1.11
+	 * @param string The plugin name
+	 * @param string The plugin type (function,compiler,block, etc)
+	 * @param mixed  The function callback (must be a static function)
+	 * @param boolean Wether this function is cachable.
+	 * @param integer Indicates frontend (0), or frontend and backend (1) availability.
+	 * @return void
 	 */
 	public function RegisterSmartyPlugin($name,$type,$callback,$cachable = TRUE,$usage = 0)
 	{
@@ -301,6 +330,15 @@ abstract class CMSModule
 	  cms_module_smarty_plugin_manager::addStatic($this->GetName(),$name,$type,$callback,$cachable,$usage);
 	}
 
+	/**
+	 * Unregister a smarty plugin from the system.
+	 * This method removes any matching rows from the database, and should only be used in a modules uninstall or upgrade routine.
+	 * 
+	 * @author calguy1000
+	 * @since 1.11
+	 * @param string The smarty plugin name.  If no name is specified all smarty plugins registered to this module will be removed.
+	 * @return void
+	 */
 	public function RemoveSmartyPlugin($name = '')
 	{
 	  if( $name == '' )
@@ -663,6 +701,7 @@ abstract class CMSModule
 	 * @see SetParameterType
 	 * @see CreateParameter
 	 * @final
+	 * @param boolean Flag indicating wether unknown params should be restricted.
 	 * @return void
 	 */
 	final public function RestrictUnknownParams($flag = true)
@@ -749,11 +788,8 @@ abstract class CMSModule
 	 * Returns a description of what the admin link does.
 	 *
 	 * @abstract
-	 * @param string Optional language that the admin is using.	 If that language
-	 * is not defined, use en_US.
 	 * @return string
 	 */
-	//	function GetAdminDescription($lang = 'en_US')
 	function GetAdminDescription()
 	{
 		return '';
@@ -1223,6 +1259,8 @@ abstract class CMSModule
 	 *
 	 * @final
 	 * @return string XML Text
+	 * @param string reference to returned message.
+	 * @param integer reference to returned file count.
 	 */
 	final public function CreateXMLPackage( &$message, &$filecount )
 	{
@@ -1496,6 +1534,7 @@ abstract class CMSModule
 	 * @param string Encoding of the content
 	 * @param string Content to show in the textarea
 	 * @param string Stylesheet for content, if available
+	 * @param string additional attributes to include in textarea tag.
 	 * @return string
 	 */
 	  function SyntaxTextarea($name='textarea',$syntax='html',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='')
@@ -1610,6 +1649,7 @@ abstract class CMSModule
 	   * @param string Encoding of the content
 	   * @param string Content to show in the textarea
 	   * @param string Stylesheet for content, if available
+	   * @param string Additional attributes to include in textarea tag.
 	   * @return string
 	   */
 	  function WYSIWYGTextarea($name='textarea',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='')
@@ -1651,6 +1691,7 @@ abstract class CMSModule
 	 * @param string Name of the action to perform
 	 * @param string The ID of the module
 	 * @param string The parameters targeted for this module
+	 * @param integer The current page id that is being displayed.
 	 * @return string output XHTML.
 	 */
 	function DoAction($name, $id, $params, $returnid='')
@@ -1701,8 +1742,14 @@ abstract class CMSModule
 	 * calling a module action.
 	 *
 	 * @internal
+	 * @ignore
 	 * @final
 	 * @access private
+	 * @param string The action name
+	 * @param string The action identifier
+	 * @param array  The action params
+	 * @param integer The current page id.
+	 * @return string The action output.
 	 */
 	final public function DoActionBase($name, $id, $params, $returnid='')
 	{
@@ -1781,6 +1828,7 @@ abstract class CMSModule
    * @param string The text to be shown as the link, default to a simple question mark
    * @param string Forces another width of the popupbox than the one set in admin css
    * @param string An alternative classname for the a-link of the tooltip
+   * @param string The URL or url portion to use in the href portion of the generated link.
    * @deprecated
    * @return string
    */
@@ -2253,6 +2301,7 @@ abstract class CMSModule
 	 * @param string The predefined value of the button, if any
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param string Use an image instead of a regular button
+	 * @param string Optional text to display in a confirmation message.
 	 * @return string
 	 */
 	function CreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
@@ -2284,6 +2333,8 @@ abstract class CMSModule
 	 * @param string The id given to the module on execution
 	 * @param string The html name of the input
 	 * @param string Any additional text that should be added into the tag when rendered
+	 * @param integer The size of the text field associated with the file upload field.  Some browsers may not respect this value.
+	 * @param integer The maximim length of the content of the text field associated with the file upload field.  Some browsers may not respect this value.
 	 * @return string
 	 */
 	function CreateFileUploadInput($id, $name, $addttext='',$size='10', $maxlength='255')
@@ -2382,6 +2433,7 @@ abstract class CMSModule
 	 * @param string The number of characters high (rows) the resulting textarea should be
 	 * @param string The wysiwyg-system to be forced even if the user has chosen another one
 	 * @param string The language the content should be syntaxhightlighted as
+	 * @param string Any additional text to include with the textarea field.
 	 * @return string
 	 */
 	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='80', $rows='15',$forcewysiwyg='',$wantedsyntax='',$addtext='')
@@ -2426,6 +2478,8 @@ abstract class CMSModule
 	 * @param boolean A flag to determine if only the href section should be returned
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 * @param string Any additional text that should be added into the tag when rendered
+	 * @param boolean A flag indicating that the output of this link should target the content area of the destination page.
+	 * @param string An optional pretty url segment (relative to the root of the site) to use when generating the link.
 	 * @return string
 	 */
 	function CreateFrontendLink( $id, $returnid, $action, $contents='', $params=array(), $warn_message='',
@@ -2448,6 +2502,8 @@ abstract class CMSModule
 	 * @param boolean A flag to determine if only the href section should be returned
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 * @param string Any additional text that should be added into the tag when rendered
+	 * @param boolean A flag to determine if the link should target the default content are of the destination page.
+	 * @param string An optional pretty url segment (related to the root of the website) for a pretty url.
 	 * @return string
 	 */
 	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false, $prettyurl='')
@@ -2459,7 +2515,17 @@ abstract class CMSModule
 
 	/**
 	 * Returns a URL to a module action
+	 * This method is called by the CreateLink methods when creating a link to a module action.
 	 *
+	 * @since 1.10
+	 * @param string The module action id (cntnt01 indicates that the defaul content block of the destination page should be used).
+	 * @param string The module action name
+	 * @param integer The destination page.
+	 * @param hash   Areay of parameters for the URL.  These will be ignored if the prettyurl argument is specified.
+	 * @param boolean Wether the target of the output link is the same tag on the same page.
+	 * @param boolean Wether the target of the output link targets the content area of the destination page.
+	 * @param string  An optional url segment related to the root of the page for pretty url purposes.
+	 * @return string.
 	 */
 	public function create_url($id,$action,$returnid='',$params=array(),
 				   $inline=false,$targetcontentonly=false,$prettyurl='')
@@ -2471,8 +2537,16 @@ abstract class CMSModule
 
 	/**
 	 * Return a pretty url string for a module action
+	 * This method is called by the create_url and the CreateLink methods if the pretty url argument is not specified in order
+	 * to attempt automating a pretty url for an action.
 	 * 
+	 * @since 1.10
 	 * @abstract
+	 * @param string The module action id (cntnt01 indicates that the defaul content block of the destination page should be used).
+	 * @param string The module action name
+	 * @param integer The destination page.
+	 * @param hash   Areay of parameters for the URL.  These will be ignored if the prettyurl argument is specified.
+	 * @param boolean Wether the target of the output link is the same tag on the same page.
 	 * @return string
 	 */
 	public function get_pretty_url($id,$action,$returnid='',$params=array(),$inline=false)
@@ -2485,6 +2559,7 @@ abstract class CMSModule
 	* little wrapper to make sure that we go back to where we want and that it's xhtml complient
 	*
 	* @param string the page id of the page we want to direct to
+	* @param string The optional text or XHTML contents of the generated link
 	* @return string
 	*/
 	function CreateContentLink($pageid, $contents='')
@@ -2676,11 +2751,10 @@ abstract class CMSModule
 
 	/**
 	 * Returns the corresponding translated string for the id given.
+	 * This method accepts variable arguments.  The first argument (required) is the language string key (a string)
+	 * Further arguments may be sprintf arguments matching the specified key.
 	 *
 	 * @final
-	 * @param string Id of the string to lookup and return
-	 * @param array Corresponding params for string that require replacement.
-	 *		  These params use the vsprintf command and it's style of replacement.
 	 * @return string
 	 */
 	final public function Lang()
@@ -2701,12 +2775,28 @@ abstract class CMSModule
 	 * ------------------------------------------------------------------
 	 */
 
+	/**
+	 * A function to return a resource identifier to a module specific database template
+	 *
+	 * @since 1.11
+	 * @author calguy1000
+	 * @param string The template name.
+	 * @return string
+	 */
 	final public function GetDatabaseResource($template)
 	{
 	  return 'module_db_tpl:'.$this->GetName().';'.$template;
 	}
 
 
+	/**
+	 * A function to return a resource identifier to a module specific file template
+	 *
+	 * @since 1.11
+	 * @author calguy1000
+	 * @param string The template name.
+	 * @return string
+	 */
 	final public function GetFileResource($template)
 	{
 	  return 'module_file_tpl:'.$this->GetName().';'.$template;
@@ -2790,6 +2880,11 @@ abstract class CMSModule
 	 * @final
 	 * @internal
 	 * @access private
+	 * @deprecated
+	 * @param string The template name
+	 * @param string The cache designation
+	 * @param string The cache timestamp
+	 * @param string The cache id (for caching).
 	 */
 	final public function IsFileTemplateCached($tpl_name, $designation = '', $timestamp = '', $cacheid = '')
 	{
@@ -2801,6 +2896,7 @@ abstract class CMSModule
 	 * Process A File template through smarty
 	 *
 	 * @final
+	 * @deprecated
 	 * @param string Template name
 	 * @param string Cache Designation
 	 * @param boolean Cache flag
@@ -2819,6 +2915,10 @@ abstract class CMSModule
 	 * @final
 	 * @internal
 	 * @access private
+	 * @deprecated
+	 * @param string The template name
+	 * @param string The cache designation
+	 * @param string The cache timestamp
 	 */
 	final public function IsDatabaseTemplateCached($tpl_name, $designation = '', $timestamp = '')
 	{
@@ -2902,9 +3002,15 @@ abstract class CMSModule
 	 * ------------------------------------------------------------------
 	 */
 
-	/*
-	 * Set the current action
-	 * Used for the various template forms.
+	/**
+	 * Set the current tab for the action.
+	 * Used for the various template forms, this method can be used to control the tab that is displayed by default
+	 * when redirecting to an action that displays multiple tabs.
+	 *
+	 * @since 1.11
+	 * @author calguy1000
+	 * @param string The tab name
+	 * @return void
 	 */
 	function SetCurrentTab($tab)
 	{

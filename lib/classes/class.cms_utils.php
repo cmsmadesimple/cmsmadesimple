@@ -48,6 +48,9 @@
  */
 class cms_utils
 {
+  /**
+   * @ignore 
+   */
   private static $_vars;
 
   /**
@@ -238,6 +241,7 @@ class cms_utils
    * For admin requests this method will return the users currently selected wysiwyg module, or null.
    *
    * @since 1.10
+   * @param string The module name.
    * @return object or null
    */
   public static function &get_wysiwyg_module($module_name = '')
@@ -272,7 +276,7 @@ class cms_utils
 	  return ModuleOperations::get_instance()->GetSearchModule();
   }
 
-  /*
+  /**
    * Attempt to retreive the IP address of the connected user.
    * This function attempts to compensate for proxy servers.
    *

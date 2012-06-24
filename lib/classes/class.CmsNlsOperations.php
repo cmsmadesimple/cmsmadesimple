@@ -33,13 +33,39 @@
  */
 final class CmsNlsOperations
 {
+  /**
+   * @ignore
+   */
   private function __construct() {}
+
+  /**
+   * @ignore
+   */
   private static $_nls;
+
+  /**
+   * @ignore
+   */
   private static $_cur_lang; // each request is either for the admin or for the frontend.
+
+  /**
+   * @ignore
+   */
   private static $_encoding;
+
+  /**
+   * @ignore
+   */
   private static $_locale;
+
+  /**
+   * @ignore
+   */
   private static $_fe_language_detector;
   
+  /**
+   * @ignore
+   */
   private static function _load_nls()
   {
     if( !is_array(self::$_nls) )
@@ -339,6 +365,7 @@ final class CmsNlsOperations
   /**
    * Set the current encoding
    *
+   * @param mixed The encoding (comma separated encodings is acceptable.
    * @return void
    */
   public static function set_encoding($str)
@@ -407,6 +434,13 @@ final class CmsNlsOperations
   }
 
 
+  /**
+   * Find a match for a specific language
+   * This method will try to find the NLS information closest to the language specified.
+   *
+   * @param string An approximate language specification (an alias matchis done if possible).
+   * @return hash containing NLS information.
+   */
   protected static function find_nls_match($str)
   {
     self::_load_nls();

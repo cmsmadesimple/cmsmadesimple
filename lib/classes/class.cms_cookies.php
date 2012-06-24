@@ -48,13 +48,18 @@
  */
 final class cms_cookies
 {
+  /**
+   * @ignore
+   */
   private static $_parts;
   /**
    * @ignore
    */
   final private function __construct() {}
 
-
+  /**
+   * @ignore
+   */
   private static function __path()
   {
     if( !is_array(self::$_parts) )
@@ -69,7 +74,9 @@ final class cms_cookies
     return self::$_parts['path'];
   }
 
-
+  /**
+   * @ignore
+   */
   private static function __domain()
   {
     if( !is_array(self::$_parts) )
@@ -84,14 +91,18 @@ final class cms_cookies
     return self::$_parts['host'];
   }
 
-
+  /**
+   * @ignore
+   */
   private static function __https()
   {
     if( !isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off' ) return FALSE;
     return TRUE;
   }
 
-
+  /**
+   * @ignore
+   */
   private static function __setcookie($key,$value,$expire)
   {
     $res = setcookie($key,$value,$expire,
