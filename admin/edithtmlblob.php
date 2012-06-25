@@ -75,7 +75,7 @@ if( $gcb_wysiwyg )
 
 if ($access)
 {
-	if (isset($_POST["submit2"]) || $ajax)
+  if (isset($_POST["submit2"]) || isset($_POST['apply']) || $ajax)
 	{
 		$validinfo = true;
 		if ($htmlblob == "")
