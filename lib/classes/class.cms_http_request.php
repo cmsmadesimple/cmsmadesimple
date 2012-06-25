@@ -54,7 +54,7 @@ class cms_http_request
     /**
      * Contains the target path
      *
-     * @var string
+o     * @var string
      */
     private $path;
     
@@ -335,7 +335,7 @@ class cms_http_request
         $this->status       = 0;
         $this->timeout      = '25';
         $this->useCurl      = TRUE;
-        $this->referrer     = $config['root_url'];
+        $this->referrer     = $config['root_url'].'::'.CMS_VERSION;
         $this->username     = '';
         $this->password     = '';
         $this->redirect     = FALSE;
@@ -953,7 +953,6 @@ class cms_http_request
             }
             
             // Specify the referrer
-	    $this->addRequestHeader("Referer: " . $this->referrer);
             if ($this->referrer != '')
             {
 	      $this->addRequestHeader("Referer: " . $this->referrer);

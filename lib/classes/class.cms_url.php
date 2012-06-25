@@ -46,13 +46,28 @@
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.9
  */
-
 class cms_url
 {
+  /**
+   * @ignore
+   */
   private $_orig;
+
+  /**
+   * @ignore
+   */
   private $_parts;
+
+  /**
+   * @ignore
+   */
   private $_query = array();
 
+  /**
+   * Constructor
+   * 
+   * @param string the url to work with
+   */
   public function __construct($url)
   {
     $this->_orig = $url;
@@ -63,6 +78,9 @@ class cms_url
       }
   }
 
+  /**
+   * @ignore
+   */
   private function _get_part($key)
   {
     if( isset($this->_parts[$key]) ) 
@@ -71,6 +89,9 @@ class cms_url
       }
   }
 
+  /**
+   * @ignore
+   */
   private function _set_part($key,$value)
   {
     if( !$value && isset($this->_parts[$key]) )
@@ -83,76 +104,160 @@ class cms_url
       }
   }
 
+  /**
+   * Return the original url
+   *
+   * @return string
+   */
   public function get_orig()
   {
     return $this->_orig;
   }
-
+  
+  /**
+   * Return the URL scheme.  i.e: HTTP, HTTPS, ftp etc.
+   *
+   * @return string (may be empty)
+   */
   public function get_scheme()
   {
     return $this->_get_part('scheme');
   }
 
+
+  /**
+   * Set the URL scheme
+   *
+   * @param string The url scheme.
+   */
   public function set_scheme($val)
   {
     return $this->_set_part('scheme',$val);
   }
 
+  /**
+   * Return the host part of the URL
+   * may return an empty string if the input url does not have a host part.
+   *
+   * @return string (may be empty)
+   */
   public function get_host()
   {
     return $this->_get_part('host');
   }
 
+
+  /**
+   * Set the URL host
+   *
+   * @param string The url hostname.
+   */
   public function set_host($val)
   {
     $this->_set_part('host',$val);
   }
 
+
+  /**
+   * Return the port part of the URL
+   * may return an empty string if the input url does not have a port portion.
+   *
+   * @return integer (may be empty)
+   */
   public function get_port()
   {
     return $this->_get_part('port');
   }
 
+  /**
+   * Set the URL port
+   *
+   * @param integer the URL port number.
+   */
   public function set_port($val)
   {
     return $this->_set_part('port',(int)$val);
   }
 
+  /**
+   * Return the user part of the URL, if any.
+   * may return an empty string if the input url does not have a username portion.
+   *
+   * @return string (may be empty)
+   */
   public function get_user()
   {
     return $this->_get_part('user');
   }
 
+  /**
+   * Set the user portion of the URL. An empty string is accepted
+   * Note: usually one must set the password if setting the username.
+   *
+   * @param string The username
+   */
   public function set_user($val)
   {
     return $this->_set_part('user',$val);
   }
 
+
+  /**
+   * Retrieve the password portion of the URL, if any.
+   *
+   * @return string (may be empty)
+   */
   public function get_pass()
   {
     return $this->_get_part('pass');
   }
 
+  /**
+   * Set the password portion of the URL.  Empty string is accepted
+   * Usually when setting the password, the username portion is also required on a URL.
+   *
+   * @param string The password
+   */
   public function set_pass($val)
   {
     return $this->_set_part('pass',$val);
   }
 
+  /**
+   * Return the path portion of the URL.  This may be empty
+   *
+   * @return string
+   */
   public function get_path()
   {
     return $this->_get_part('path');
   }
 
+  /**
+   * Set the path portion of the URL.  An empty string is accepted.
+   *
+   * @param string (may be empty)
+   */
   public function set_path($val)
   {
     return $this->_set_part('path',$val);
   }
 
+  /**
+   * Return the the query portion of the URL, if any is set.
+   *
+   * @return string (may be empty)
+   */
   public function get_query()
   {
     return $this->_get_part('query');
   }
 
+  /**
+   * Set the query portion of the URL.  An empty string is accepted
+   *
+   * @param string (may be empty)
+   */
   public function set_query($val)
   {
     return $this->_set_part('query',$val);
