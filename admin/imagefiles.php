@@ -101,7 +101,7 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 }
 
 #Did we create a new dir?
-if (isset($_POST['newdirsubmit']))
+if (isset($_POST['newdir']) && $_POST['newdir'] != '')
 {
 	if ($access)
 	{
@@ -202,26 +202,13 @@ $langinfo = CmsNlsOperations::get_language_info($current_language);
 <script type="text/javascript" src="../lib/filemanager/ImageManager/lang/<?php echo $langinfo->htmlarea(); ?>.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-
-		//Create a new Image Manager, needs the directory where the manager is
-		//and which language translation to use.
-
-		var manager = new ImageManager('../lib/filemanager/ImageManager','en');
-			
-		var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
-		var base_url = "<?php echo $url; ?>";	
-		//Image Manager wrapper. Simply calls the ImageManager
-
-
-    //]]>
-    </script>
-
-<script type="text/javascript">
-/*<![CDATA[*/
-
-
-
-/*]]>*/
+//Create a new Image Manager, needs the directory where the manager is
+//and which language translation to use.
+var manager = new ImageManager('../lib/filemanager/ImageManager','en');
+var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
+var base_url = "<?php echo $url; ?>";	
+//Image Manager wrapper. Simply calls the ImageManager
+//]]>
 </script>
 
 <?php
@@ -250,9 +237,10 @@ if ($access)
 {
 ?>
 
-<form enctype="multipart/form-data" action="imagefiles.php<?php echo $urlext ?>" method="post" name="uploader">
+<form enctype="multipart/form-data" action="imagefiles.php<?php echo $urlext ?>" method="post" name="uploader" id="upload_form">
         <div>
           <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
+          <input type="hidden" id="tmp_hidden" value=""/>
         </div>
 	<div class="pageoverflow">
 		<p class="pagetext"><?php echo lang('uploadfile')?>:</p>
@@ -264,7 +252,7 @@ if ($access)
 	</div>
 	<div class="pageoverflow">
 		<p class="pagetext"><?php echo lang('createnewfolder')?>:</p>
-		<p class="pageinput"><input type="text" name="newdir" /> <input class="pagebutton" type="submit" name="newdirsubmit" value="<?php echo lang('create')?>" /></p>
+		<p class="pageinput"><input type="text" id="newdir" name="newdir" /> <input class="pagebutton" type="submit" id="newdirsubmit" name="newdirsubmit" value="<?php echo lang('create')?>" /></p>
 	</div>
 </form>
 
