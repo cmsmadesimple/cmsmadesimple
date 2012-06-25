@@ -79,7 +79,7 @@ jQuery(document).ready(function($) {
 	});
 
 	// Load preference
-	if($.cookie('sidebar-pref') == 'sidebar-off') {
+	if(($.cookie('sidebar-pref') == 'sidebar-off') && ($(window).width() > 768)) {
 		objMain.addClass('sidebar-off');
 		objMain.removeClass('sidebar-on');
 		$('.toggle-button').addClass('open-sidebar');
@@ -140,34 +140,58 @@ jQuery(document).ready(function($) {
 		});
 	});
 	// STICKY MENU
-	var obj = $('#menu');
-	var offset = obj.offset();
-	var topOffset = offset.top;
+    var obj 	   = $('#menu');
+    var offset 	   = obj.offset();
+	var topOffset  = offset.top;
 	var leftOffset = offset.left;
-	var marginTop = obj.css("marginTop");
+	var marginTop  = obj.css("marginTop");
 	var marginLeft = obj.css("marginLeft");
-	if (navigator.userAgent.match(/(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini)/))
-		{
-			return;
-		}
-	else {
-	$(window).scroll(function() {
-		var scrollTop = $(window).scrollTop();
-		
-		if (scrollTop >= topOffset){
-			obj.css({
-				marginTop: '-150px',
-				position: 'fixed'
-			});
-		}
-		if (scrollTop < topOffset){
-			obj.css({
-				marginTop: marginTop,
-				position: 'relative'
-			});
-		}
-	});
+
+	function stickyMenu(width) {
+		width = parseInt(width);
+		if(width < 768) {
+			var scrollTop = $(window).scrollTop();
+			if(scrollTop >= topOffset){
+				obj.css({
+					marginTop: marginTop,
+    				position: 'relative'
+    			});
+  			}
+  			if(scrollTop < topOffset){
+  				obj.css({
+  					marginTop: marginTop,
+  					position: 'relative'
+  				});
+  			} 
+  			showSidebar();
+  			
+    	} else if(width >= 768) {
+    		var scrollTop = $(window).scrollTop();
+    		if(scrollTop >= topOffset){
+    			obj.css({
+    				marginTop: '-150px',
+    				position: 'fixed'
+    			});
+  			}
+  			if(scrollTop < topOffset){
+  				obj.css({
+  					marginTop: marginTop,
+  					position: 'relative'
+  				});
+  			}
+    	}
 	}
+	
+	if(navigator.userAgent.match(/(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini)/)) {
+		return;
+	} else {
+		$(window).scroll(function() {
+			stickyMenu($(window).width());
+				$(window).resize(function() {
+					stickyMenu($(window).width());
+			});
+		});
+	}  	
 	// BUTTONS
 	jQuery(function() {
 		jQuery('body').off('cms_ajax_apply');
