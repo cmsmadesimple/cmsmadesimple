@@ -54,6 +54,7 @@ a.external span {
 	margin:0 auto;
 }
 a.external:link, a.external:visited, a.external:hover {
+	margin: 0 auto;
 	background: url(images/info-external.gif) no-repeat 100% 0;
 }
 
