@@ -1910,6 +1910,7 @@ a.toggle-dropzone:focus {
 }
 #login a.toggle-info {
 	width: 25px;
+	outline: none;
 	border-radius: 4px 0 0 4px;
 	position: absolute;
 	top:0;
