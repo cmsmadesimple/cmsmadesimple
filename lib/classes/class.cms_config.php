@@ -241,7 +241,7 @@ class cms_config implements ArrayAccess
 			  if( !empty($parts['path']) )
 				  {
 					  $path = dirname($parts['path']);
-					  $path = str_replace('\/','/',$path); // I hate windoze, can you tell.
+					  $path = str_replace('\\','/',$path); // I hate windoze, can you tell.
 					  if( endswith($path,'install') ) {
 						  $path = substr($path,0,strlen($path)-strlen('install')-1);
 					  }
@@ -254,7 +254,7 @@ class cms_config implements ArrayAccess
 						  }
 					  }
 					  while(endswith($path,'/')) {
-						  $path = substr($path,-1);
+						  $path = substr($path,0,strlen($path)-1);
 					  }
 				  }
 			  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;

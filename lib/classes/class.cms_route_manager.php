@@ -66,20 +66,16 @@ final class cms_route_manager
 	{
 		self::_load_static_routes();
 
-		if( is_array(self::$_routes) )
-		{
-			foreach( self::$_routes as $test )
-			{
+		if( is_array(self::$_routes) ) {
+			foreach( self::$_routes as $test ) {
 				if( $test == $route ) return TRUE;
 			}
 		}
 
 		if( $static_only ) return FALSE;
 
-		if( is_array(self::$_dynamic_routes) )
-		{
-			foreach( self::$_dynamic_routes as $test )
-			{
+		if( is_array(self::$_dynamic_routes) ) {
+			foreach( self::$_dynamic_routes as $test ) {
 				if( $test == $route ) return TRUE;
 			}
 		}
@@ -100,12 +96,9 @@ final class cms_route_manager
 	{
 		self::_load_static_routes();
 
-		if( is_array(self::$_routes) )
-		{
-			foreach( self::$_routes as $route )
-			{
-				if( $route->matches($str,$exact) )
-				{
+		if( is_array(self::$_routes) ) {
+			foreach( self::$_routes as $route ) {
+				if( $route->matches($str,$exact) ) {
 					return $route;
 				}
 			}
@@ -113,12 +106,9 @@ final class cms_route_manager
 
 		if( $static_only ) return;
 
-		if( is_array(self::$_dynamic_routes) )
-		{
-			foreach( self::$_dynamic_routes as $route )
-			{
-				if( $route->matches($str,$exact) )
-				{
+		if( is_array(self::$_dynamic_routes) ) {
+			foreach( self::$_dynamic_routes as $route ) {
+				if( $route->matches($str,$exact) ) {
 					return $route;
 				}
 			}
@@ -150,8 +140,7 @@ final class cms_route_manager
 										 $route['key2'],
 										 $route['key3'],
 										 serialize($route)));
-		if( !$dbr )
-		{
+		if( !$dbr ) {
 			die($db->sql.' -- '.$db->ErrorMsg());
 			return FALSE;
 		}
@@ -175,24 +164,20 @@ final class cms_route_manager
 		$query = 'DELETE FROM '.cms_db_prefix().'routes WHERE ';
 		$where = array();
 		$parms = array();
-		if( $term )
-		{
+		if( $term ) {
 			$where[] = 'term = ?';
 			$parms[] = $term;
 		}
 
-		if( !is_null($key1) )
-		{
+		if( !is_null($key1) ) {
 			$where[] = 'key1 = ?';
 			$parms[] = $key1;
 
-			if( !is_null($key2) )
-			{
+			if( !is_null($key2) ) {
 				$where[] = 'key2 = ?';
 				$parms[] = $key2;
 
-				if( !is_null($key3) )
-				{
+				if( !is_null($key3) ) {
 					$where[] = 'key3 = ?';
 					$parms[] = $key3;
 				}
@@ -204,8 +189,7 @@ final class cms_route_manager
 		$db = cmsms()->GetDb();
 		$query .= implode(' AND ',$where);
 		$dbr = $db->Execute($query,$parms);
-		if( $dbr )
-		{
+		if( $dbr ) {
 			self::_clear_cache();
 			return TRUE;
 		}
@@ -226,10 +210,10 @@ final class cms_route_manager
 	 */
 	public static function add_dynamic(CmsRoute& $route)
 	{
-		if( self::route_exists($route) ) return TRUE;
+		if( self::route_exists($route) )
+			return TRUE;
 
-		if( !is_array(self::$_routes) )
-		{
+		if( !is_array(self::$_dynamic_routes) ) {
 			self::$_dynamic_routes = array();
 		}
 		self::$_dynamic_routes[] = $route;
@@ -263,8 +247,7 @@ final class cms_route_manager
 	{
 		global $CMS_ADMIN_PAGE;
 		$flag = false;
-		if( isset($CMS_ADMIN_PAGE) )
-		{
+		if( isset($CMS_ADMIN_PAGE) ) {
 			// hack to force modules to register their routes.
 			$flag = $CMS_ADMIN_PAGE;
 			unset($CMS_ADMIN_PAGE);
@@ -272,13 +255,11 @@ final class cms_route_manager
 
 		// todo: 
 		$modules = ModuleOperations::get_instance()->GetLoadedModules();
-		foreach( $modules as $name => &$module )
-		{
+		foreach( $modules as $name => &$module ) {
 			$module->SetParameters();
 		}
 
-		if( $flag )
-		{
+		if( $flag ) {
 			$CMS_ADMIN_PAGE = $flag;
 		}
 	}
@@ -301,24 +282,21 @@ final class cms_route_manager
 		$query = 'SELECT content_id,page_url FROM '.cms_db_prefix()."content 
              WHERE active=1 AND COALESCE(page_url,'') != ''";
 		$tmp = $db->GetArray($query);
-		if( is_array($tmp) && count($tmp) )
-			{
-				for( $i = 0; $i < count($tmp); $i++ )
-					{
-						$route = CmsRoute::new_builder($tmp[$i]['page_url'],'__CONTENT__',$tmp[$i]['content_id'],'',TRUE);
-						cms_route_manager::add_static($route);
-					}
+		if( is_array($tmp) && count($tmp) ) {
+			for( $i = 0; $i < count($tmp); $i++ ) {
+				$route = CmsRoute::new_builder($tmp[$i]['page_url'],'__CONTENT__',$tmp[$i]['content_id'],'',TRUE);
+				cms_route_manager::add_static($route);
 			}
+		}
 
 		// get the module routes
 		$installed = ModuleOperations::get_instance()->GetInstalledModules();
-		foreach( $installed as $module_name )
-			{
-				$modobj = cms_utils::get_module($module_name);
-				if( !$modobj ) continue;
-
-				$routes = $modobj->CreateStaticRoutes();
-			}
+		foreach( $installed as $module_name ) {
+			$modobj = cms_utils::get_module($module_name);
+			if( !$modobj ) continue;
+			
+			$routes = $modobj->CreateStaticRoutes();
+		}
 	}
 
 	/**
@@ -333,11 +311,9 @@ final class cms_route_manager
 		if( self::$_routes_loaded ) return;
 
 		$data = self::_get_routes_from_cache();
-		if( is_array($data) && count($data) )
-		{
+		if( is_array($data) && count($data) ) {
 			self::$_routes = array();
-			for( $i = 0; $i < count($data); $i++ )
-			{
+			for( $i = 0; $i < count($data); $i++ ) {
 				self::$_routes[] = unserialize($data[$i]['data']);
 			}
 			self::$_routes_loaded = TRUE;
@@ -348,21 +324,18 @@ final class cms_route_manager
 	private static function _get_routes_from_cache()
 	{
 		$fn = self::_get_cache_filespec();
-		if( !file_exists($fn) )
-		{
+		if( !file_exists($fn) ) {
 			$db = cmsms()->GetDb();
 			$query = 'SELECT * FROM '.cms_db_prefix().'routes';
 			$tmp = $db->GetArray($query);
 			self::$_routes_loaded = TRUE;
-			if( is_array($tmp) && count($tmp) )
-				{
-					$fn = self::_get_cache_filespec();
-					file_put_contents($fn,serialize($tmp));
-					return $tmp;
-				}
+			if( is_array($tmp) && count($tmp) ) {
+				$fn = self::_get_cache_filespec();
+				file_put_contents($fn,serialize($tmp));
+				return $tmp;
+			}
 		}
-		else
-		{
+		else {
 			self::$_routes_loaded = TRUE;
 			return unserialize(file_get_contents($fn));
 		}
