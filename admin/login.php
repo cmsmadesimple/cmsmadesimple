@@ -342,7 +342,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		Events::SendEvent('Core','LoginFailed',array('user'=>$_POST['username']));;
 		// put mention into the admin log
 		$ip_login_failed = cms_utils::get_real_ip(); 
-		audit('', "Admin Username: ".$username.' (IP: '.$ip_login_failed.')', 'Login Failed');
+		audit('', '(IP: ' . $ip_login_failed . ') ' . "Admin Username: " . $username, 'Login Failed');
 
 		#Now call the event
 		//Events::SendEvent('Core', 'LoginPost', $username);
