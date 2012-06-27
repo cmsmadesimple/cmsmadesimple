@@ -1141,8 +1141,9 @@ Change History:<br/>
 EOT;
 
 $lang['admin']['help_function_breadcrumbs'] = <<<EOT
+<h3 style="font-weight:bold;color:#f00;">DEPRECATED Use &#123;cms_breadcrumbs&#125; now!</h3>
 <h3>What does this do?</h3>
-<p>Prints a breadcrumb trail .</p>
+<p>Prints a breadcrumb trail.</p>
 <h3>How do I use it?</h3>
 <p>Just insert the tag into your template/page like: <code>{breadcrumbs}</code></p>
 <h3>What parameters does it take?</h3>
