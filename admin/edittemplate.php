@@ -120,8 +120,8 @@ if ($access)
 		}
 
 		if( $validinfo ) {
+		  $smarty = cmsms()->GetSmarty();
 		  try {
-		    $smarty = cmsms()->GetSmarty();
 		    $smarty->force_compile = TRUE;
 		    
 		    cms_utils::set_app_data('tmp_template',$content);
@@ -129,27 +129,24 @@ if ($access)
 		    $smarty->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
 		    $smarty->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
 		    $smarty->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
-		    $smarty->registerResource('template',new CMSPageTemplateResource());
-		    
-			try {
-				$smarty->fetch('template:appdata;tmp_template'); // do the magic.
-			} 
-			catch ( SmartyCompilerException $e ) {
-
-				$error .= "<li>".$e->getMessage().'</li>';
-				$validinfo = false;
-			}
-
-			$smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
+		    $smarty->registerResource('template',new CMSPageTemplateResource());	    
+		    $smarty->fetch('template:appdata;tmp_template'); // do the magic.
+		    $smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
 		
+		    $contentBlocks = CMS_Content_Block::get_content_blocks();
+		    if( !is_array($contentBlocks) || count($contentBlocks) == 0 ) {
+		      throw new CmsEditContentException('No content blocks defined in template');
+		    }
+		    if( !isset($contentBlocks['content_en']) ) {
+		      throw new CmsEditContentException('No default content block {content} or {content block=\'content_en\'} defined in template');
+		    }
 		    // if we got here, we're golden.
 		  }
 		  catch( CmsEditContentException $e ) {
-		  
+		    $smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
 		    $error .= "<li>".$e->getMessage().'</li>';
 		    $validinfo = false;
 		  } 
-
 		}
 
 		if ($content == "")
@@ -160,7 +157,6 @@ if ($access)
 
 		if ($validinfo)
 		{
-		
 			$onetemplate = $templateops->LoadTemplateByID($template_id);
 			$onetemplate->name = $template;
 			$onetemplate->content = $content;
@@ -269,7 +265,7 @@ jQuery(document).ready(function(){
     },'xml');
     return false;
   });
-  jQuery('body').on('cms_ajax_apply',function(e){
+  jQuery('body').bind('cms_ajax_apply',function(e){
      var htmlShow = '';
      if( e.response == 'Success' )
      {
