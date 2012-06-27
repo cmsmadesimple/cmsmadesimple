@@ -46,7 +46,7 @@ if (isset($_GET['download']))
 		{
 		  echo strftime($dateformat,$row['timestamp'])."|";
 		  echo $row['username'] . "|";
-		  echo ((int)$row['item_id']==-1)?'':$row['item_id'] . "|";
+		  echo (((int)$row['item_id']==-1)?'':$row['item_id']) . "|";
 		  echo $row['item_name'] . "|";
 		  echo $row['action'];
 		  echo "\n";
