@@ -70,11 +70,14 @@ class CMSPageTemplateResource extends CMS_Fixed_Resource_Custom
   {
     if( is_sitedown() )
       {
-	header('HTTP/1.0 503 Service Unavailable');
-	header('Status: 503 Service Unavailable');
-
-	$source = get_site_preference('sitedownmessage');
+	$source = '';
 	$mtime = time();
+	if( $this->_section == 'body' ) {
+	  header('HTTP/1.0 503 Service Unavailable');
+	  header('Status: 503 Service Unavailable');
+	  
+	  $source = get_site_preference('sitedownmessage');
+	}
 	return;
       }
 
