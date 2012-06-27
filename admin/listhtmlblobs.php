@@ -95,7 +95,7 @@ $gcbops = cmsms()->GetGlobalContentOperations();
                 echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
 		echo "<td>";
-		if( $modifyall || check_permission($userid,'Remove Global Content Blocks') )
+		if( check_permission($userid,'Remove Global Content Blocks') )
 		  {
 		    echo "<a href=\"deletehtmlblob.php".$urlext."&amp;htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onehtmlblob->name)."');\">";
 		    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon')."</a>";
