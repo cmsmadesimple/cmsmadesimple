@@ -678,6 +678,7 @@ aside.message,
 	display: inline-block;
 	width: 16px;
 	height: 16px;
+	overflow: hidden;
 	text-indent: -9999em;
 	background: transparent url(themes/OneEleven/images/icons/extra/red.gif) no-repeat;
 	cursor: pointer;
@@ -710,6 +711,7 @@ body.login {
 	height: 45px;
 	width: 32px;
 	float: right;
+	overflow: hidden;
 	text-indent: -9999em;
 	background: url(themes/OneEleven/images/layout/home-button.png) no-repeat center
 }
@@ -922,6 +924,7 @@ header a.welcome-user {
 	height: 18px;
 	width: 18px;
 	display: inline-block;
+	overflow: hidden;
 	text-indent: -999em;
 	margin-left: 10px;
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -10px -336px no-repeat
@@ -950,6 +953,7 @@ header .breadcrumbs ul li.home {
 header .breadcrumbs ul li.home a {
 	background: url(themes/OneEleven/images/layout/home-icon.png) right no-repeat;
 	width: 18px;
+	overflow: hidden;
 	text-indent: -999em
 }
 header .breadcrumbs ul li.first {
@@ -1038,6 +1042,7 @@ header .shortcuts li.favorites a {
 /* toggle sidebar */
 #sidebar .toggle-button {
 	text-indent: -9999em;
+	overflow: hidden;
 	z-index: 900;
 	display: block;
 	cursor: pointer;
@@ -1094,6 +1099,7 @@ header .shortcuts li.favorites a {
 #sidebar .alert-dialog {
 	visibility: hidden;
 	display: block;
+	overflow: hidden;
 	text-indent: -9999em
 }
 #sidebar .alert-dialog strong {
@@ -1128,6 +1134,7 @@ nav ul#pagemenu li span.open-nav {
 	position: absolute;
 	left: 5px;
 	top: 0;
+	overflow: hidden;
 	text-indent: -9999em
 }
 nav ul#pagemenu li span.open-nav.open-sub,
@@ -1993,9 +2000,8 @@ a.toggle-dropzone:focus {
 	#footer .footer-left {
 		margin-left: 0
 	}
-	th.pagepos,
-	td.pagepos,
 	.move {
+		width: auto;
 		padding:0;
 		max-width: 16px
 	}
@@ -2009,9 +2015,13 @@ a.toggle-dropzone:focus {
 	th.pagew60,
 	th.pagew70,
 	td.pagew30 {
+		width: auto;
+		padding: 0;
 		max-width: 30px;
 		word-wrap: break-word;
-		text-overflow: elipsis;
+		text-overflow: elipsis
+	}
+	table.pagetable th {
 		overflow: hidden
 	}
 	.checkbox {
@@ -2059,6 +2069,10 @@ a.toggle-dropzone:focus {
 	.drop   {
 		display: none
 	}
+	#sidebar,
+	#sidebar aside {
+		width: 100%
+	}
 	#admin-content {
 		height: auto
 	}
@@ -2074,11 +2088,11 @@ a.toggle-dropzone:focus {
 	#sidebar aside {
 		padding: 0
 	}
-	#sidebar nav.navigation.on {
-		width: auto
+	.sidebar-on #sidebar nav.navigation {
+		width: 100%
 	}
 	.sidebar-off #sidebar nav.navigation {
-		width: auto;
+		width: 100%;
 		overflow: hidden
 	}	
 	#header.header {
@@ -2113,7 +2127,19 @@ a.toggle-dropzone:focus {
 		display: inline
 	}
 	table.pagetable {
-		max-width: 768px
+		max-width: 100%
+	}
+	body.currentpages table.pagetable td:nth-child(4),
+	body.currentpages table.pagetable th:nth-child(4),
+	body.currentpages table.pagetable td:nth-child(5),
+	body.currentpages table.pagetable th:nth-child(5),
+	body.currentpages table.pagetable td:nth-child(6),
+	body.currentpages table.pagetable th:nth-child(6),
+	body.currentpages table.pagetable td:nth-child(7),
+	body.currentpages table.pagetable th:nth-child(7),
+	body.currentpages table.pagetable td:nth-child(8),
+	body.currentpages table.pagetable th:nth-child(8) {
+		display: none
 	}
 	/* position:fixed doesn't work well with mobile devices */
 	footer#footer {

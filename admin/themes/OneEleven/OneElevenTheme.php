@@ -203,6 +203,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 
 		// get a page title
 		$title = $this->get_value('pagetitle');
+        $alias = $this->get_value('pagetitle');
 		if ($title) {
 			if (!$module_help_type) {
 				// if not doing module help, translate the string.
@@ -218,7 +219,9 @@ class OneElevenTheme extends CmsAdminThemeBase {
 				$title = $bc[count($bc) - 1]['title'];
 			}
 		}
+        // page title and alias
 		$smarty->assign('pagetitle', $title);
+        $smarty->assign('pagealias', munge_string_to_url($alias));
 
 		// module name?
 		if (($module_name = $this->get_value('module_name'))) {
@@ -273,6 +276,5 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		$smarty->template_dir = $otd;
 		return $_contents;
 	}
-
 }
 ?>

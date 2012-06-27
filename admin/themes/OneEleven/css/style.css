@@ -545,6 +545,9 @@ input[type="submit"],
 	height: 28px;
 	font-size: 12px
 }
+.ui-button {
+	margin: 4px 0
+}
 .ui-button-text {
 	font-size: 12px;
 	margin-left: 2px
@@ -2029,9 +2032,8 @@ a.toggle-dropzone:focus {
 	#footer .footer-left {
 		margin-left: 0
 	}
-	th.pagepos,
-	td.pagepos,
 	.move {
+		width: auto;
 		padding:0;
 		max-width: 16px
 	}
@@ -2045,9 +2047,13 @@ a.toggle-dropzone:focus {
 	th.pagew60,
 	th.pagew70,
 	td.pagew30 {
+		width: auto;
+		padding: 0;
 		max-width: 30px;
 		word-wrap: break-word;
-		text-overflow: elipsis;
+		text-overflow: elipsis
+	}
+	table.pagetable th {
 		overflow: hidden
 	}
 	.checkbox {
@@ -2149,7 +2155,19 @@ a.toggle-dropzone:focus {
 		display: inline
 	}
 	table.pagetable {
-		max-width: 768px
+		max-width: 100%
+	}
+	body.currentpages table.pagetable td:nth-child(4),
+	body.currentpages table.pagetable th:nth-child(4),
+	body.currentpages table.pagetable td:nth-child(5),
+	body.currentpages table.pagetable th:nth-child(5),
+	body.currentpages table.pagetable td:nth-child(6),
+	body.currentpages table.pagetable th:nth-child(6),
+	body.currentpages table.pagetable td:nth-child(7),
+	body.currentpages table.pagetable th:nth-child(7),
+	body.currentpages table.pagetable td:nth-child(8),
+	body.currentpages table.pagetable th:nth-child(8) {
+		display: none
 	}
 	/* position:fixed doesn't work well with mobile devices */
 	footer#footer {
