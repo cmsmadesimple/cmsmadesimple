@@ -1,5 +1,5 @@
 {if !empty($updatestxt)}
-<h4>{$updatestxt}</h4>
+<div class="information"><p>{$updatestxt}</p></div>
 {/if}
 <div style="clear:both;">&nbsp;</div>
 {if isset($message)}

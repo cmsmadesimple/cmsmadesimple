@@ -581,7 +581,9 @@ textarea {
 .pageerrorinstalldir,
 .green,
 .red,
-.yellow {
+.yellow,
+.warning,
+.information {
 	display: inline-block;
 	width: auto;
 	font-size: 11px;
