@@ -82,7 +82,8 @@ if (isset($_GET["message"])) {
 			if ($result) {
 				$query = "UPDATE ".cms_db_prefix()."content SET modified_date = ".$db->DBTimeStamp(time());
 				$db->Execute($query);
-				echo '<div class="pagemcontainer"><div class="pagemessage">' .$themeObject->DisplayImage('icons/system/accept.gif', lang('allpagesmodified'),'','','systemicon') . '&nbsp;' .  lang('allpagesmodified'). '</div></div>';
+				//echo '<div class="pagemcontainer"><div class="pagemessage">' .$themeObject->DisplayImage('icons/system/accept.gif', lang('allpagesmodified'),'','','systemicon') . '&nbsp;' .  lang('allpagesmodified'). '</div></div>';
+				echo '<div class="pagemcontainer"><div class="pagemessage">' . lang('allpagesmodified'). '</div></div>';
 			} else {
 				echo '<div class="pageerrorcontainer"><div class="pageoverflow">'.lang('errorupdatingpages').'</div></div>';
 			}
