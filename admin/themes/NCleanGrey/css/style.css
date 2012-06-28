@@ -1320,7 +1320,8 @@ div.pagecontainer ul.pageerror li, ul.pageerror li {
 	list-style-type: none;
 	background: url(themes/NCleanGrey/images/icons/system/stop.gif) no-repeat left center;
 }
-div.pagewarning {
+div.pagewarning,
+div.information {
 	margin: 2px 2px 5px 2px;
 	padding: 10px 10px 10px 35px;
 	border: 1px solid #FDEAD0;
@@ -1329,6 +1330,10 @@ div.pagewarning {
 	-moz-border-radius: 10px 10px 10px 10px;
 	-webkit-border-radius: 10px 10px 10px 10px;
 	border-radius: 10px 10px 10px 10px;
+}
+div.information {
+	background: #cee6f2 url(themes/NCleanGrey/images/icons/system/info.gif) 10px 50% no-repeat;
+	border: 1px solid #058dc7
 }
 div.pageerrorcontainer a {
 	color: #fff;
