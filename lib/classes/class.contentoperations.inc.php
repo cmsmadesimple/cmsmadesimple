@@ -105,19 +105,16 @@ class ContentOperations
 	 */
 	final public function LoadContentType($type)
 	{
-		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) 
-			{
-				$type = $type->type;
-			}
+		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) {
+			$type = $type->type;
+		}
 
 		$ctph = $this->_get_content_type($type);
-		if( is_object($ctph) )
-			{
-				if( !class_exists( $ctph->class ) && file_exists( $ctph->filename ) )
-					{
-						include_once( $ctph->filename );
-					}
+		if( is_object($ctph) ) {
+			if( !class_exists( $ctph->class ) && file_exists( $ctph->filename ) ) {
+				include_once( $ctph->filename );
 			}
+		}
 
 		return $ctph;
 	}
@@ -135,17 +132,15 @@ class ContentOperations
 	 */
 	public function &CreateNewContent($type)
 	{
-		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) 
-			{
-				$type = $type->type;
-			}
+		if( is_object($type) && $type instanceof CmsContentTypePlaceHolder ) {
+			$type = $type->type;
+		}
 		$result = NULL;
 
 		$ctph = $this->LoadContentType($type);
-		if( class_exists($ctph->class) )
-			{
-				$result = new $ctph->class;
-			}
+		if( is_object($ctph) && class_exists($ctph->class) ) {
+			$result = new $ctph->class;
+		}
 		return $result;
 	}
 
