@@ -8,15 +8,15 @@
 		<nav class="dashboard-inner cf">
 			<a href="{$node.url}"{if isset($node.target)} target="{$node.target}"{/if}{if $node.selected} class="selected"{/if}>
 			{if file_exists($module|cat:'.gif')}
-			<img src="{$module}.gif" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />	
+			<img src="{$module}.gif" alt="{$node.title}"{if $node.description} title="{$node.description|strip_tags}"{/if} />	
 			{elseif file_exists($module|cat:'.png')}
-			<img src="{$module}.png" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />						
+			<img src="{$module}.png" alt="{$node.title}"{if $node.description} title="{$node.description|strip_tags}"{/if} />						
 			{elseif file_exists($icon|cat:'.png')}
-			<img src="{$icon}.png" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />
+			<img src="{$icon}.png" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description|strip_tags}"{/if} />
 			{elseif file_exists($icon|cat:'.gif')}
-			<img src="{$icon}.gif" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />
+			<img src="{$icon}.gif" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description|strip_tags}"{/if} />
 			{else}
-			<img src="themes/OneEleven/images/icons/topfiles/modules.png" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description}"{/if} />	
+			<img src="themes/OneEleven/images/icons/topfiles/modules.png" width="48" height="48" alt="{$node.title}"{if $node.description} title="{$node.description|strip_tags}"{/if} />	
 			{/if}</a>
 			<h3>
 				<a href="{$node.url}"{if isset($node.target)} target="{$node.target}"{/if}{if $node.selected} class="selected"{/if}>{$node.title}</a>
@@ -41,4 +41,3 @@
 {/foreach}
 
 {/strip}
-
