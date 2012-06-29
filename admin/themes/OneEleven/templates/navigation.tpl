@@ -8,11 +8,11 @@
 {foreach from=$nav item='navitem' name='pos'}
 {*<pre>{$nav|print_r}</pre>*}
 	<li class="nav{if isset($navitem.module) || isset($navitem.firstmodule)} module{/if}{if !empty($navitem.selected)} current{/if}">
-		<a href="{$navitem.url}" class="{$navitem.name|lower}{if isset($navitem.children)} parent{/if}"{if isset($navitem.target)} target="_blank"{/if} title="{if !empty($navitem.description)}{$navitem.description}{else}{$navitem.title}{/if}">
+		<a href="{$navitem.url}" class="{$navitem.name|lower}{if isset($navitem.children)} parent{/if}"{if isset($navitem.target)} target="_blank"{/if} title="{if !empty($navitem.description)}{$navitem.description|strip_tags}{else}{$navitem.title|strip_tags}{/if}">
 			{$navitem.title}	
 		</a>
 		{if $depth == '0'}
-			<span class="open-nav" title="{'open'|lang}/{'close'|lang} {$navitem.title}">{'open'|lang}/{'close'|lang} {$navitem.title}</span>
+			<span class="open-nav" title="{'open'|lang}/{'close'|lang} {$navitem.title|strip_tags}">{'open'|lang}/{'close'|lang} {$navitem.title}</span>
 		{/if}			
 		{if isset($navitem.children)}
 		{if $depth == '0'}<ul>{/if}
