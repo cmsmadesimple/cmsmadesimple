@@ -253,7 +253,7 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		$smarty->assign('headertext',$headtext);
 
 		// and some other common variables,.
-		$smarty->assign('content', $html);
+		$smarty->assign('content', str_replace('</body></html>', '', $html));
 		$smarty->assign('config', cmsms()->GetConfig());
 		$smarty->assign('theme', $this);
 		$smarty->assign('secureparam', CMS_SECURE_PARAM_NAME . '=' . $_SESSION[CMS_USER_KEY]);
