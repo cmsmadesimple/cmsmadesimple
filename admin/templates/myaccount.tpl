@@ -55,11 +55,11 @@
 		<input type="hidden" name="active_tab" value="advtab" />
 		
 		<div class="pageoverflow">
-			<p class="pageinput">
 				<div class="invisible">
 				<input type="hidden" name="edituserprefs" value="true" />
 				<input type="hidden" name="old_default_cms_lang" value="{$old_default_cms_lang}" />
-                </div>				
+                </div>	
+            <p class="pageinput">			
 				<input type="submit" name="submit_prefs" value="{'submit'|lang}" class="pagebutton" />
 				<input type="submit" name="cancel" value="{'cancel'|lang}" class="pagebutton" />
 			</p>
@@ -243,11 +243,11 @@
 			<!-- ignore notifications from these modules //-->																
 		</fieldset>
 		<div class="pageoverflow">
-			<p class="pageinput">
 				<div class="invisible">
 				<input type="hidden" name="edituserprefs" value="true" />
 				<input type="hidden" name="old_default_cms_lang" value="{$old_default_cms_lang}" />
-                </div>				
+                </div>
+            <p class="pageinput">				
 				<input type="submit" name="submit_prefs" value="{'submit'|lang}" class="pagebutton" />
 				<input type="submit" name="cancel" value="{'cancel'|lang}" class="pagebutton" />
 			</p>
