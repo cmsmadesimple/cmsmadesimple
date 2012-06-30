@@ -442,6 +442,7 @@ function quick_check_authorship($contentid, $hispages)
  */
 function audit($itemid, $itemname, $action)
 {
+  if( !isset($action) ) $action = '-- unset --';
   $db = cmsms()->GetDb();
 
   $userid = 0;
