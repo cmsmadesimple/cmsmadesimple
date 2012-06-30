@@ -44,7 +44,7 @@
     <div class="pageoptions">
     <div style="float: left; width: 49%;">
     <input type="checkbox" id="toggle_filters" {if $filterdisplay=="block"}checked="1"  {/if}
-           onClick="if (this.checked) document.getElementById('adminlog_filters').style.display = 'block'; else document.getElementById('adminlog_filters').style.display = 'none';"/>
+           onclick="if (this.checked) document.getElementById('adminlog_filters').style.display = 'block'; else document.getElementById('adminlog_filters').style.display = 'none';"/>
     <label for="toggle_filters">{$langshowfilters}</label>&nbsp;
     {if isset($downloadlink)}
       <a href="adminlog.php{$urlext}&amp;download=1">{$downloadlink}</a>
@@ -59,7 +59,7 @@
     <div style="text-align: right;">{$pagestring}</div>
     </div>
 
-    <table cellspacing="0" class="pagetable">
+    <table class="pagetable">
       <thead>
       <tr>
         <th>{'ip_addr'|lang}</th>
