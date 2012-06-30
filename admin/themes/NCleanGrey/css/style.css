@@ -1134,16 +1134,18 @@ p.pageoptions {
 .pagerows {
 	font-size: 1.3em;
 }
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
 table.pagetable {
-	-moz-border-radius: 5px 5px 5px 5px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	border-radius: 5px 5px 5px 5px;
 	font-size: 1em;
+	border-radius: 5px;
+	border-collapse: inherit;
 	border: 1px solid #ccc;
 	width: 100%;
 	margin: 5px auto;
 }
-
 table.pagetable caption {
 	color: #464646;
 	text-align: left;
@@ -1186,6 +1188,18 @@ table.pagetable td {
 }
 table.pagetable a {
 	color: #000;
+}
+table.pagetable th:first-child {
+	border-top-left-radius: 5px
+}
+table.pagetable th:last-child {
+	border-top-right-radius: 5px
+}
+table.pagetable tr:last-child td:first-child {
+	border-bottom-left-radius: 5px
+}
+table.pagetable tr:last-child td:last-child {
+	border-bottom-right-radius: 5px
 }
 table.pagetable a.tooltip {
 	position: relative;
