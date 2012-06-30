@@ -599,7 +599,7 @@ abstract class CmsAdminThemeBase
 						$url = $this->_menuItems[$sectionKey]['url'];
 						if( strpos($url,'?') !== FALSE )
 							{
-								$url .= '&';
+								$url .= '&amp;';
 							}
 						else
 							{
