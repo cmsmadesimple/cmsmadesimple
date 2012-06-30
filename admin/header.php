@@ -98,7 +98,7 @@ else
       // but only do a check once per day
       {
 	$timelastchecked = get_site_preference('lastcmsversioncheck',0);
-	if( (get_site_preference('checkversion') && (time() - $timelastchecked) > (24 * 60 * 60)) || isset($_GET['forceversioncheck']) )
+	if( (get_site_preference('checkversion',1) && (time() - $timelastchecked) > (24 * 60 * 60)) || isset($_GET['forceversioncheck']) )
 	  {
 	    $req = new cms_http_request();
 	    $req->setTimeout(10);
