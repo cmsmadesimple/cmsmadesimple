@@ -15,7 +15,6 @@ $dbdict = NewDataDictionary($db);
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."module_smarty_plugins", $flds, $taboptarray);
 $return = $dbdict->ExecuteSQLArray($sqlarray);
-$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 echo '[done]</p>';
 
 echo '<p>Enhancing the adminlog table...';
@@ -33,7 +32,6 @@ echo '<p>Enhancing the css table table...';
 $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix().'css','media_query X');
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 echo "[done]</p>";
-
 $flds = "
           term C(255) KEY NOT NULL,
           key1 C(50) KEY NOT NULL,
@@ -44,14 +42,16 @@ $flds = "
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."routes", $flds, $taboptarray);
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 $ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-echo ilang('install_creating_table', 'routes', $ado_ret);
+echo '[done]</p>';
 
 $sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'index_content_by_idhier', cms_db_prefix()."content", 'content_id, hierarchy');
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 $ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-echo ilang('install_creating_index', 'content', $ado_ret);
+echo '[done]</p>';
 
+echo '<p>Building static route database... ';
 cms_route_manager::rebuild_static_routes();
+echo '[done]</p>';
 
 echo '<p>Updating schema version... ';
 $query = "UPDATE ".cms_db_prefix()."version SET version = 36";
