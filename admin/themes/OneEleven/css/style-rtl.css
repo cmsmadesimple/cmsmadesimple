@@ -113,7 +113,8 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 }
 textarea {
 	overflow: auto;
-	vertical-align: top
+	vertical-align: top;
+	direction: ltr
 }
 table {
 	border-collapse: collapse;
