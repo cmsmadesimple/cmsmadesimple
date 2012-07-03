@@ -1174,7 +1174,7 @@ nav ul#pagemenu li ul,
 }
 nav ul#pagemenu li.current a,
 nav ul#pagemenu li a:hover,
-/*nav ul#pagemenu li:hover a,*/
+nav ul#pagemenu li:hover a,
 nav ul#pagemenu li a:active,
 nav ul#pagemenu li.current li a:hover,
 nav ul#pagemenu li.current li a:active,
@@ -1254,7 +1254,8 @@ nav ul#pagemenu li li.module {
 	border-bottom: 1px dotted #f0f0f0
 }
 nav ul#pagemenu li.current li a,
-nav ul#pagemenu li li a{
+nav ul#pagemenu li li a,
+nav ul#pagemenu li:hover li a {
 	height: 22px;
 	color: #232323;
 	font-weight: normal;
