@@ -1262,7 +1262,7 @@ nav ul#pagemenu li:hover li a {
 	background-image: none;
 	background: none
 }
-nav ul#pagemenu li:hover li a,
+nav ul#pagemenu li li:hover a,
 nav ul#pagemenu li li.current a {
 	color: #147fdb;
 }
