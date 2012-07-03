@@ -1178,7 +1178,7 @@ nav ul#pagemenu li a:hover,
 nav ul#pagemenu li a:active,
 nav ul#pagemenu li.current li a:hover,
 nav ul#pagemenu li.current li a:active,
-nav ul#pagemenu li.current li a
+nav ul#pagemenu li.current li a,
 nav ul#pagemenu li li a:hover {
 	color: #147fdb;
 }
