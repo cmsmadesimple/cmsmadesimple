@@ -231,6 +231,7 @@ class cms_config implements ArrayAccess
 
 	  case 'root_path':
 		  $out = dirname(dirname(dirname(__FILE__)));
+		  $out = str_replace('\\','/',$out); // I hate windoze, can you tell.
 		  $this->_cache[$key] = $out;
 		  return $out;
 
