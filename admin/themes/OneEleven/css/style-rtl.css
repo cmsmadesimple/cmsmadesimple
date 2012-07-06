@@ -1430,6 +1430,14 @@ img.systemicon {
 	direction: rtl;
 	vertical-align: top
 }
+.expand {
+	text-indent: -999em;
+	overflow: hidden;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background: url(themes/OneEleven/images/icons/system/expand-rtl.gif) no-repeat 
+}
 #copy_paste_in_forum {
 	width: 80%;
 	margin: 0 10%

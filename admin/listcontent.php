@@ -548,13 +548,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	    {
 	      if (!in_array($one->Id(),$openedArray))
 		{
-		  $txt .= "<a href=\"{$thisurl}&amp;content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'false'); return false;\">";
+		  $txt .= "<a class=\"expand\" href=\"{$thisurl}&amp;content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'false'); return false;\">";
 		  $txt .= $expandImg;
 		  $txt .= "</a>";
 		}
 	      else
 		{
-		  $txt .= "<a href=\"{$thisurl}&amp;content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'true'); return false;\">";
+		  $txt .= "<a class=\"contract\" href=\"{$thisurl}&amp;content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'true'); return false;\">";
 		  $txt .= $contractImg;
 		  $txt .= "</a>";
 		}
