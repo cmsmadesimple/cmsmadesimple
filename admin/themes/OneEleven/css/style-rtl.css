@@ -21,7 +21,7 @@ html {
 	-ms-text-size-adjust: 100%
 }
 body { margin: 0 }
-body, button, input, select, textarea {	font-family: sans-serif }
+body, button, input, select, textarea {	font-family: tahoma }
 a:focus { outline: thin dotted }
 a:hover, a:active {	outline: 0 }
 h1 { font-size: 2em }
@@ -398,7 +398,7 @@ p {
 table,
 td,
 tr {
-	text-align: left
+	text-align: right
 }
 form {
 	margin: 0px;
@@ -1427,6 +1427,7 @@ a.pageoptions {
 }
 img.systemicon {
 	border: none;
+	direction: rtl;
 	vertical-align: top
 }
 #copy_paste_in_forum {
