@@ -231,8 +231,7 @@ class cms_config implements ArrayAccess
 
 	  case 'root_path':
 		  $out = dirname(dirname(dirname(__FILE__)));
-		  $out = str_replace('\\','/',$out); // I hate windoze, can you tell.
-		  $this->_cache[$key] = $out;
+                  $this->_cache[$key] = $out;
 		  return $out;
 
 	  case 'root_url':
@@ -242,8 +241,7 @@ class cms_config implements ArrayAccess
 			  if( !empty($parts['path']) )
 				  {
 					  $path = dirname($parts['path']);
-					  $path = str_replace('\\','/',$path); // I hate windoze, can you tell.
-					  if( endswith($path,'install') ) {
+                                          if( endswith($path,'install') ) {
 						  $path = substr($path,0,strlen($path)-strlen('install')-1);
 					  }
 					  else if( endswith($path,$this->offsetGet('admin_dir')) ) {

@@ -182,7 +182,7 @@ function microtime_diff($a, $b) {
 function cms_join_path()
 {
 	$args = func_get_args();
-	return implode('/',$args);
+        return implode(DIRECTORY_SEPARATOR,$args);
 }
 
 
