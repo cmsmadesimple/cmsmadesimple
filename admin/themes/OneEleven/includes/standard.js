@@ -285,7 +285,7 @@ jQuery(document).ready(function($) {
 		equalHeight($('.dashboard-inner'));
 	}
 	// fix footer, breaks when max-width 1024 kicks in and there is less content then height of menu 
-	$('#admin-content').css('min-height', ($('#sidebar').height() + 30));
+	$('#admin-content').css('min-height', ($('#sidebar').height()));
 	
 	jQuery.event.add(window, "load", resizeFrame);
 	jQuery.event.add(window, "resize", resizeFrame);
