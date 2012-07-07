@@ -1,5 +1,14 @@
 (c) Copyright 2012 the CMS Made Simple Dev Team. All Rights Reserved.
 --------------------------------------
+CMSMS Version 1.11 Beta3 - Galapagos
+-------------------------------------
+Please read the doc/CHANGELOG.txt for more specifics as to what changed.
+Brief report of changes will be displayed here for final release.
+
+Note: during upgrade compatibility problems have been noticed with plugins whos name ends in 'close'.  This is an issue with smarty3
+and not an issue with CMSMS itself.
+
+--------------------------------------
 CMSMS Version 1.11 Beta1 - Galapagos
 -------------------------------------
 Please read the doc/CHANGELOG.txt for more specifics as to what changed.
