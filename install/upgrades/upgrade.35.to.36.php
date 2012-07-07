@@ -1,4 +1,4 @@
-<?php
+<?php  
 $gCms = cmsms();
 
 echo '<p>Adding module_smarty_plugins table...';
