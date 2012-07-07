@@ -28,7 +28,7 @@ if( $return == 2 )
   }
 echo "[done]</p>";
 
-echo '<p>Enhancing the css table table...';
+echo '<p>Enhancing the css table table... ';
 $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix().'css','media_query X');
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 echo "[done]</p>";
@@ -44,7 +44,7 @@ $return = $dbdict->ExecuteSQLArray($sqlarray);
 $ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 echo '[done]</p>';
 
-echo '<p>Adding an index to the content table....';
+echo '<p>Adding an index to the content table.... ';
 $sqlarray = $dbdict->CreateIndexSQL(cms_db_prefix().'index_content_by_idhier', cms_db_prefix()."content", 'content_id, hierarchy');
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 $ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
