@@ -32,6 +32,8 @@ echo '<p>Enhancing the css table table... ';
 $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix().'css','media_query X');
 $return = $dbdict->ExecuteSQLArray($sqlarray);
 echo "[done]</p>";
+
+echo '<p>Creating routes table... ';
 $flds = "
           term C(255) KEY NOT NULL,
           key1 C(50) KEY NOT NULL,
