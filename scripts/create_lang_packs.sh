@@ -12,10 +12,14 @@ build_file_list()
   slang=$2
   _x="*$thelang*";
   _files_1=`find . -name $_x 2>/dev/null | grep -v .svn`
-  _x="$slang.js";
-  _files_2=`find . -name $_x 2>/dev/null | grep -v .svn`
-  _x="${slang}_dlg.js"
-  _files_3=`find . -name $_x 2>/dev/null | grep -v .svn`
+  _files_2=''
+  _files_3=''
+  if [ $slang != 'en' ]; then
+    _x="$slang.js";
+    _files_2=`find . -name $_x 2>/dev/null | grep -v .svn`
+    _x="${slang}_dlg.js"
+    _files_3=`find . -name $_x 2>/dev/null | grep -v .svn`
+  fi
   _files1="$_files_1 $_files_2 $_files_3"
 
   # preprocess the files
