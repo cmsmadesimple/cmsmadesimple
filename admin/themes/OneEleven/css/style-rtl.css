@@ -517,6 +517,9 @@ input {
 	text-indent: 5px;
 	margin-left: 5px
 }
+input[type='text'] {
+	min-width: 25%
+}
 input:hover, 
 input:focus, 
 textarea:hover, 
