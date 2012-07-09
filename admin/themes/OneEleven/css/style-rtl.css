@@ -852,12 +852,12 @@ p.login-info {
 	position: relative;
 	height: auto !important;
 	height: 100%;
-	margin: 0 0 -60px 0;
+	margin: 0 0 -30px 0;
 	min-height: 100%
 }
 /* realign content */
 .spacer {
-	height: 60px;
+	height: 30px;
 	clear: both
 }
 #admin-content {
@@ -1027,14 +1027,14 @@ header .shortcuts li.favorites a {
 	position: absolute;
 	right: 0;
 	top: 100px;
-	bottom: 25px
+	bottom: 0
 }
 #container.sidebar-off #sidebar {
 	overflow: hidden;
 	width: 40px
 }
 #sidebar aside {
-	padding-bottom: 60px;
+	padding-bottom: 30px;
 	position: relative
 }
 #sidebar nav.navigation {

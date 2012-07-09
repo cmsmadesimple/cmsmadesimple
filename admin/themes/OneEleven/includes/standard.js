@@ -84,6 +84,50 @@ jQuery(document).ready(function($) {
 		objMain.removeClass('sidebar-on');
 		$('.toggle-button').addClass('open-sidebar');
 	}
+	
+	// STICKY MENU
+    var obj 	   = $('#menu');
+    var offset 	   = obj.offset();
+	var topOffset  = offset.top;
+	var leftOffset = offset.left;
+	var marginTop  = obj.css("marginTop");
+	var marginLeft = obj.css("marginLeft");
+
+	function stickyMenu(width) {
+		width  = parseInt(width);
+		height = $(window).height();
+		if(width < 768) {
+			var scrollTop = $(window).scrollTop();
+			if(scrollTop >= topOffset){
+				obj.css({
+					marginTop: marginTop,
+    				position: 'relative'
+    			});
+  			}
+  			if(scrollTop < topOffset){
+  				obj.css({
+  					marginTop: marginTop,
+  					position: 'relative'
+  				});
+  			} 
+  			showSidebar();
+  			
+    	} else if((width >= 768) && (height >= $('#menu').height())) {
+    		var scrollTop = $(window).scrollTop();
+    		if(scrollTop >= topOffset){
+    			obj.css({
+    				marginTop: '-150px',
+    				position: 'fixed'
+    			});
+  			}
+  			if(scrollTop < topOffset){
+  				obj.css({
+  					marginTop: marginTop,
+  					position: 'relative'
+  				});
+  			}
+    	}
+	}	
 
 	// toggle dropzone
 	$('.toggle-dropzone').click(function() {
@@ -139,58 +183,18 @@ jQuery(document).ready(function($) {
 			ul.slideToggle(0);
 		});
 	});
-	// STICKY MENU
-    var obj 	   = $('#menu');
-    var offset 	   = obj.offset();
-	var topOffset  = offset.top;
-	var leftOffset = offset.left;
-	var marginTop  = obj.css("marginTop");
-	var marginLeft = obj.css("marginLeft");
-
-	function stickyMenu(width) {
-		width = parseInt(width);
-		if(width < 768) {
-			var scrollTop = $(window).scrollTop();
-			if(scrollTop >= topOffset){
-				obj.css({
-					marginTop: marginTop,
-    				position: 'relative'
-    			});
-  			}
-  			if(scrollTop < topOffset){
-  				obj.css({
-  					marginTop: marginTop,
-  					position: 'relative'
-  				});
-  			} 
-  			showSidebar();
-  			
-    	} else if(width >= 768) {
-    		var scrollTop = $(window).scrollTop();
-    		if(scrollTop >= topOffset){
-    			obj.css({
-    				marginTop: '-150px',
-    				position: 'fixed'
-    			});
-  			}
-  			if(scrollTop < topOffset){
-  				obj.css({
-  					marginTop: marginTop,
-  					position: 'relative'
-  				});
-  			}
-    	}
-	}
-	
-	if(navigator.userAgent.match(/(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini|Opera Tablet|Mobile|Fennec)/)) {
-	} else {
-		$(window).scroll(function() {
-			stickyMenu($(window).width());
-				$(window).resize(function() {
-					stickyMenu($(window).width());
+	// SIDEBAR MENU Mobile check
+	jQuery(function() {
+		if(navigator.userAgent.match(/(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini|Opera Tablet|Mobile|Fennec)/)) {
+		} else {
+			$(window).scroll(function() {
+				stickyMenu($(window).width());
+					$(window).resize(function() {
+						stickyMenu($(window).width());
+				});
 			});
-		});
-	}  	
+		} 
+	});
 	// BUTTONS
 	jQuery(function() {
 		jQuery('body').off('cms_ajax_apply');
