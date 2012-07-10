@@ -195,10 +195,6 @@ function smarty_function_cms_selflink($params, &$template)
 			      break;
 			    }
 			}
-		      else
-			{
-			  break;
-			}
 		    }
 		}
 	    }
