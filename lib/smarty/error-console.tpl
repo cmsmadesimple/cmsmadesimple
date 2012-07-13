@@ -1,6 +1,7 @@
-<!doctype>
+<!doctype html>
+<html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta charset="utf-8" />
 		<title>CMS Made Simple - Error console</title>
 		<style>
 			body {
