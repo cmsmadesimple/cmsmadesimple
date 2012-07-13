@@ -116,7 +116,7 @@ jQuery(document).ready(function($) {
     		var scrollTop = $(window).scrollTop();
     		if(scrollTop >= topOffset){
     			obj.css({
-    				marginTop: '-150px',
+    				marginTop: '-100px',
     				position: 'fixed'
     			});
   			}
