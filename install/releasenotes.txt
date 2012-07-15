@@ -1,16 +1,24 @@
 (c) Copyright 2012 the CMS Made Simple Dev Team. All Rights Reserved.
 --------------------------------------
+CMSMS Version 1.11 Galapagos
+--------------------------------------
+
+
+
+
+--------------------------------------
 CMSMS Version 1.11 Beta3 - Galapagos
--------------------------------------
+--------------------------------------
 Please read the doc/CHANGELOG.txt for more specifics as to what changed.
 Brief report of changes will be displayed here for final release.
 
 Note: during upgrade compatibility problems have been noticed with plugins whos name ends in 'close'.  This is an issue with smarty3
 and not an issue with CMSMS itself.
 
+
 --------------------------------------
 CMSMS Version 1.11 Beta1 - Galapagos
--------------------------------------
+--------------------------------------
 Please read the doc/CHANGELOG.txt for more specifics as to what changed.
 Brief report of changes will be displayed here for final release.
 
@@ -18,7 +26,6 @@ Brief report of changes will be displayed here for final release.
 ---------------------------------
 CMSMS Version 1.10.1 - Le Lorrain
 ---------------------------------
-
 Here we are again, straight out of a major functionality release, with a new point release for a significant bunch of bug fixes.  Named 1.10.1 - Le Lorrain (pronounced one point ten point one),  We had hoped that our longer, publicbeta process would have caught most of the issues like this.  However, as they say, the road to hell is paved with good intentions.  But that is how things go.  C'est La Vie.
 
 The prominent bugs we fixed were with respect to inactive content pages, and with respect to module functionality.  We also fixed the summarize modifier, and even a postgres compatibility issue.  As well, we added some help where it was missing, and managed to squeeze in some minor optimizations too.  Some missing help was added, and/or improved in some modules, and the translations should be much more up to date.
