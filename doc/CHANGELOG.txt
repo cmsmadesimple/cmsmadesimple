@@ -1,10 +1,11 @@
 Version 1.11 - Galapagos 
 -----------------------------
 Core - General:
- - Adds new frontend theme "Simplex"
+ - Adds new html5 frontend sample theme "Simplex" thanks to Goran
  - Removed the HasAdminBuffering module method.
  - If output buffering is disabled in the request, theme is also disabled
- - Revamp of admin theme
+ - Revamp of admin theme base class
+ - Adds new OneEleven adin theme (thanks to Goran)
  - Remove the use_adodb_lite config variable
  - Removed the use_smarty_php_tags config variable
  - Remove the process_whole_template config variable
@@ -34,7 +35,7 @@ Core - General:
  - Documented the ContentBase class.  Many methods marked as protected or private... will be marking some as final in the future
  - Minor improvements to site verification
  - Fixes for Add GCB wysiwyg options
- - Adopt smarty 3 (currently Smarty 3.1.8) (stock, unmodified)
+ - Adopt smarty 3 (currently Smarty 3.1.10) (stock, unmodified)
  - Adds options for smarty caching
  - All plugins with functions named smarty_cms_function_foo are not cachable
  - All plugins with functions named smarty_function_foo are cachable
@@ -63,6 +64,8 @@ Core - General:
  - {content} tag is now a compiler tag, and cannot be cached.
  - cms_config class is now a bit smarter... more stuff is auto-calculated if not included in the config file.
    including 'root_url'..
+ - Added more config variable to allow {cms_stylesheet} to output in different directories.  
+ - Many more actions in the admin generate admin log entries, for auditing.
  
 Core - Bug Reports:
  - #6161 - Core Printing Module - Compression issue
@@ -72,7 +75,7 @@ Core - Bug Reports:
  - #7740 - HTML entities in the language string aren't getting converted back when sending the email during install
 
 Core - Installer:
-  - mysqli option now selected by default
+  - mysqli option now selected by default. Postgres option removed
   - Add checks for xml handling
   - modified so that root_url and a few other variables are not placed into the config file if not specified.
 
