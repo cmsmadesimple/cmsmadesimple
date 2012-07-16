@@ -146,10 +146,9 @@ class ErrorPage extends Content
 
   function ValidateData()
   {
+	  // $this->SetPropertyValue('searchable',0);
 	  // force not searchable.
-	  $this->SetPropertyValue('searchable',0);
 
-	  // debug
 	  $errors = parent::ValidateData();
 	  if ($errors == FALSE)
 		  {
