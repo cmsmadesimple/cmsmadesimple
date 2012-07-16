@@ -117,7 +117,7 @@ if ($access)
 			// normalize the file variable
 			$file = $_FILES[$fieldName];
 			if( !isset($file['tmp_name']) || trim($file['tmp_name']) == '' ) {
-			  echo $themeObject->ShowError(lang('noxmlfileuploaded').' (empty tmp_name)');
+			  echo $themeObject->ShowErrors(lang('noxmlfileuploaded').' (empty tmp_name)');
 			}
 
 			// and parse it
