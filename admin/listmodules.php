@@ -116,9 +116,9 @@ if ($access)
 		{
 			// normalize the file variable
 			$file = $_FILES[$fieldName];
-
-			// $file['tmp_name'] is the file we have to parse
-			// $xml = file_get_contents( $file['tmp_name'] );
+			if( !isset($file['tmp_name']) || trim($file['tmp_name']) == '' ) {
+			  echo $themeObject->ShowError(lang('noxmlfileuploaded').' (empty tmp_name)');
+			}
 
 			// and parse it
 			$modops = $gCms->GetModuleOperations();
