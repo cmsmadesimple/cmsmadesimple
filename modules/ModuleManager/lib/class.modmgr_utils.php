@@ -443,6 +443,9 @@ final class modmgr_utils
 
   public static function is_connection_ok()
   {
+    static $ok = -1;
+    if( $ok != -1 ) return $ok;
+
     $mod = cms_utils::get_module('ModuleManager');
     $url = $mod->GetPreference('module_repository');
     if( $url )
@@ -457,12 +460,14 @@ final class modmgr_utils
 	    if( empty($tmp) )
 	      {
 		$req->clearCache();
+		$ok = FALSE;
 		return FALSE;
 	      }
 
 	    $data = json_decode($req->getResult(),true);
 	    if( version_compare($data,MINIMUM_REPOSITORY_VERSION) >= 0 )
 	      {
+		$ok = TRUE;
 		return TRUE;
 	      }
 	  }
@@ -471,6 +476,7 @@ final class modmgr_utils
 	    $req->clearCache();
 	  }
       }
+    $ok = FALSE;
     return FALSE;
   }
     
