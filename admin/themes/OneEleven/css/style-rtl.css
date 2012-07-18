@@ -663,6 +663,7 @@ aside.message,
 .pageerrorcontainer,
 .pageerrorinstalldir  {
 	position: fixed;
+	z-index: 9999;
 	border-top: none;
 	width: 30%;
 	font-size: 11px;
