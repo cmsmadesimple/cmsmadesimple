@@ -662,7 +662,7 @@ aside.message,
 .pagemcontainer,
 .pageerrorcontainer,
 .pageerrorinstalldir  {
-	position: absolute;
+	position: fixed;
 	border-top: none;
 	width: 30%;
 	font-size: 11px;

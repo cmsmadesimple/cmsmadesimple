@@ -231,7 +231,10 @@ jQuery(document).ready(function($) {
 		// Handle ajax apply
 		jQuery('body').on('cms_ajax_apply', function(e) {
 			// gotta get langified string here.
+			$('button[name=cancel]').fadeOut();
 			$('button[name=cancel]').button('option', 'label', e.close);
+			$('button[name=cancel]').fadeIn();
+
 			var htmlShow = '';
 			if(e.response == 'Success') {
 				htmlShow = '<aside class="message pagemcontainer" role="status"><span class="close-warning">Close</span><p>' + e.details + '<\/p><\/aside>';
