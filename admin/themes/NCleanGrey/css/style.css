@@ -1154,7 +1154,8 @@ table.pagetable caption {
 	padding: 5px 0;
 }
 
-table.pagetable th {
+table.pagetable th,
+table.pagetable thead tr {
 	color: #464646;
 	text-shadow: 0 1px 0 #FFFFFF;
 	background: #CCCCCC url(themes/NCleanGrey/images/layout/banner.png) repeat-x left -33px;

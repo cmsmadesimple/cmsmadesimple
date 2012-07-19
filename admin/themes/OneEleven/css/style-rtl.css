@@ -1512,7 +1512,8 @@ table.pagetable caption {
 	font-size: 12px;
 	padding: 5px 0
 }
-table.pagetable th {
+table.pagetable th,
+table.pagetable thead tr {
 	color: #fa8004;
 	text-shadow: -1px -1px 0 #000;
 	background: #232323 url(themes/OneEleven/images/layout/sprite_repeatx.png) 831px -99px repeat-x;
