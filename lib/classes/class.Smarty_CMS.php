@@ -127,7 +127,8 @@ class Smarty_CMS extends SmartyBC
       }
 
     // Enable security object
-    $this->enableSecurity('CMSSmartySecurityPolicy');
+    // Note: Buggy, disabled prior to release of CMSMS 1.11
+    //$this->enableSecurity('CMSSmartySecurityPolicy');
   }
 
     /**
