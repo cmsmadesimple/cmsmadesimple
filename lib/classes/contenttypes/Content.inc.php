@@ -178,9 +178,7 @@ class Content extends ContentBase
 	 */
     function Show($param = 'content_en')
     {
-		// check for additional content blocks
-		//$this->get_content_blocks();
-	
+		$param = str_replace(' ','_',$param);
 		return $this->GetPropertyValue($param);
     }
 
