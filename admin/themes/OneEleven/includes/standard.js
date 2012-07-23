@@ -48,13 +48,13 @@ jQuery(document).ready(function($) {
 	}
 
 	// SIDEBAR
-	var objMain = $('#container');
-	var objSide = $('#menu');
+	var objMain = $('#oe_container');
+	var objSide = $('#oe_menu');
 	var objToggle = $('.toggle-button');
 	// Show sidebar
 	function showSidebar() {
 		objMain.addClass('sidebar-on').removeClass('sidebar-off');
-		$('#pagemenu').find('li.current ul').show();
+		$('#oe_pagemenu').find('li.current ul').show();
 		$.cookie('sidebar-pref', 'sidebar-on', {
 			expires : 60
 		});
@@ -63,7 +63,7 @@ jQuery(document).ready(function($) {
 	// Hide sidebar
 	function hideSidebar() {
 		objMain.removeClass('sidebar-on').addClass('sidebar-off');
-		$('#pagemenu').find('li ul').hide();
+		$('#oe_pagemenu').find('li ul').hide();
 		$.cookie('sidebar-pref', 'sidebar-off', {
 			expires : 60
 		});
@@ -86,7 +86,7 @@ jQuery(document).ready(function($) {
 	}
 	
 	// STICKY MENU
-    var obj 	   = $('#menu');
+    var obj 	   = $('#oe_menu');
     var offset 	   = obj.offset();
 	var topOffset  = offset.top;
 	var leftOffset = offset.left;
@@ -112,7 +112,7 @@ jQuery(document).ready(function($) {
   			} 
   			showSidebar();
   			
-    	} else if((width >= 768) && (height >= $('#menu').height())) {
+    	} else if((width >= 768) && (height >= $('#oe_menu').height())) {
     		var scrollTop = $(window).scrollTop();
     		if(scrollTop >= topOffset){
     			obj.css({
@@ -173,7 +173,7 @@ jQuery(document).ready(function($) {
 	});
 	// SIDEBAR MENU
 	jQuery(function() {
-		var pagemenu = $('#pagemenu');
+		var pagemenu = $('#oe_pagemenu');
 		pagemenu.find('li.current span').addClass('open-sub');
 		pagemenu.find('> li > span').click(function() {
 			var ul = $(this).next();
@@ -292,7 +292,7 @@ jQuery(document).ready(function($) {
 		equalHeight($('.dashboard-inner'));
 	}
 	// fix footer, breaks when max-width 1024 kicks in and there is less content then height of menu 
-	$('#admin-content').css('min-height', ($('#sidebar').height()));
+	$('#oe_admin-content').css('min-height', ($('#oe_sidebar').height()));
 	
 	jQuery.event.add(window, "load", resizeFrame);
 	jQuery.event.add(window, "resize", resizeFrame);

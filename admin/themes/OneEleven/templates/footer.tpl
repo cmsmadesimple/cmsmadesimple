@@ -1,6 +1,6 @@
 {strip}
 
-<footer id="footer" class="cf">
+<footer id="oe_footer" class="cf">
 	<div class="footer-left">
 		<small class="copyright">Copyright &copy; <a rel="external" href="http://www.cmsmadesimple.org">CMS Made Simple&trade; {cms_version} &ldquo;{cms_versionname}&rdquo;</a></small>
 	</div>

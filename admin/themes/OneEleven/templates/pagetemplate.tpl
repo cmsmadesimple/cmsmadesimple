@@ -24,7 +24,7 @@
 	</head>
 	<body##BODYSUBMITSTUFFGOESHERE## lang="{$lang|truncate:'2':''}" id="{$pagetitle|md5}" class="{$pagealias}">
 		<!-- start container -->
-		<div id="container" class="sidebar-on">
+		<div id="oe_container" class="sidebar-on">
 			<!-- start header -->
 			<header role="banner" class="cf header">
 				<!-- start header-top -->
@@ -53,12 +53,12 @@
 			</header>
 			<!-- end header //-->
 			<!-- start content -->
-			<div id="admin-content">
+			<div id="oe_admin-content">
 				<div class="shadow">
 					&nbsp;
 				</div>
 				<!-- start sidebar -->
-				<div id="sidebar">
+				<div id="oe_sidebar">
 					<aside>
 						{assign var='is_notifications' value=$theme->get_notifications()}
 						<span title="{'open'|lang}/{'close'|lang}" class="toggle-button close{if empty($is_notifications)} top{/if}">{'open'|lang}/{'close'|lang}</span>

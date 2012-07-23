@@ -852,7 +852,7 @@ p.login-info {
 }
 /* --- LAYOUT --- */
 /* full height */
-#container {
+#oe_container {
 	position: relative;
 	height: auto !important;
 	height: 100%;
@@ -864,10 +864,10 @@ p.login-info {
 	height: 30px;
 	clear: both
 }
-#admin-content {
+oe_admin-content {
 	height: 100%
 }
-#admin-content .shadow {
+oe_admin-content .shadow {
 	background: transparent url(themes/OneEleven/images/layout/sprite_repeatx.png) 831px -148px repeat-x;
 	z-index: 900;
 	position: absolute;
@@ -1024,7 +1024,7 @@ header .shortcuts li.favorites a {
 	background-position: -10px -48px
 }
 /*** sidebar ***/
-#sidebar {
+#oe_sidebar {
 	width: 249px;
 	border-left: 1px solid #fff;
 	background: #ddd url(themes/OneEleven/images/layout/sidebar-shadow-rtl.png) -3px repeat-y;
@@ -1033,21 +1033,21 @@ header .shortcuts li.favorites a {
 	top: 100px;
 	bottom: 0
 }
-#container.sidebar-off #sidebar {
+#oe_container.sidebar-off #oe_sidebar {
 	overflow: hidden;
 	width: 40px
 }
-#sidebar aside {
+#oe_sidebar aside {
 	padding-bottom: 30px;
 	position: relative
 }
-#sidebar nav.navigation {
+#oe_sidebar nav.navigation {
 	height: auto;
 	margin-top: 45px;
 	position: relative
 }
 /* toggle sidebar */
-#sidebar .toggle-button {
+#oe_sidebar .toggle-button {
 	text-indent: -9999em;
 	overflow: hidden;
 	z-index: 900;
@@ -1059,27 +1059,27 @@ header .shortcuts li.favorites a {
 	left: -1px;
 	top: 75px
 }
-#sidebar .toggle-button.top {
+#oe_sidebar .toggle-button.top {
 	top: -33px
 }
-#sidebar .toggle-button.close {
+#oe_sidebar .toggle-button.close {
 	background: url(themes/OneEleven/images/layout/close-sidebar-rtl.png) no-repeat
 }
-#sidebar .toggle-button.open-sidebar {
+#oe_sidebar .toggle-button.open-sidebar {
 	background: url(themes/OneEleven/images/layout/open-sidebar-rtl.png) no-repeat
 }
 /* sidebar notifications */
-#sidebar .notification a {
+#oe_sidebar .notification a {
 	text-decoration: none;
 	display: block;
 	height: 35px;
 	background: url(themes/OneEleven/images/layout/email-icon.png) right no-repeat;	
 	color: #fff
 }
-#sidebar .notification a span {
+#oe_sidebar .notification a span {
 	line-height: 1.3
 }
-#sidebar .notification {
+#oe_sidebar .notification {
 	overflow: hidden;
 	height: 35px;
 	line-height: 35px;
@@ -1088,8 +1088,8 @@ header .shortcuts li.favorites a {
 	background: #232323 url(themes/OneEleven/images/layout/sprite_repeatx.png) 122px -175px repeat-x;
 	color: #fff
 }
-#sidebar div.notification .box-shadow, 
-#sidebar nav.navigation .box-shadow {
+#oe_sidebar div.notification .box-shadow, 
+#oe_sidebar nav.navigation .box-shadow {
 	width: 11px;
 	z-index: 10;
 	position: absolute;
@@ -1098,26 +1098,26 @@ header .shortcuts li.favorites a {
 	bottom: 0;
 	background: url(themes/OneEleven/images/layout/sidebar-shadow-rtl.png) -3px repeat-y
 }
-#sidebar .notification span {
+#oe_sidebar .notification span {
 	font-size: 11px;
 	display: inline-block;
 	padding-right: 30px
 }
-#sidebar .alert-dialog {
+#oe_sidebar .alert-dialog {
 	visibility: hidden;
 	display: block;
 	overflow: hidden;
 	text-indent: -9999em
 }
-#sidebar .alert-dialog strong {
+#oe_sidebar .alert-dialog strong {
 	padding: 4px 0
 }
 /* main navigation */
-nav ul#pagemenu {
+nav ul#oe_pagemenu {
 	border-bottom: 1px solid #adadad;
 	/*margin-top: 45px*/
 }
-nav ul#pagemenu li {
+nav ul#oe_pagemenu li {
 	position: relative;
 	zoom: 1;
 	background: url(themes/OneEleven/images/layout/navigation-bg.gif) repeat-x top;
@@ -1125,15 +1125,15 @@ nav ul#pagemenu li {
 	padding: 0
 }
 /* position sticky menu */
-.sidebar-on #sidebar nav.navigation {
+.sidebar-on #oe_sidebar nav.navigation {
 	width: 249px
 }
-.sidebar-off #sidebar nav.navigation{
+.sidebar-off #oe_sidebar nav.navigation{
 	width: 40px;
 	overflow: hidden
 }
 /* toggle submenu */
-nav ul#pagemenu li span.open-nav {
+nav ul#oe_pagemenu li span.open-nav {
 	display: block;
 	width: 210px;
 	height: 35px;
@@ -1144,16 +1144,16 @@ nav ul#pagemenu li span.open-nav {
 	overflow: hidden;
 	text-indent: -9999em
 }
-nav ul#pagemenu li span.open-nav.open-sub,
-nav ul#pagemenu li.current span.open-nav,
-nav ul#pagemenu li:hover span.open-nav,
-nav ul#pagemenu li.current span.open-nav,
-nav ul#pagemenu li.current:hover span.open-nav {
+nav ul#oe_pagemenu li span.open-nav.open-sub,
+nav ul#oe_pagemenu li.current span.open-nav,
+nav ul#oe_pagemenu li:hover span.open-nav,
+nav ul#oe_pagemenu li.current span.open-nav,
+nav ul#oe_pagemenu li.current:hover span.open-nav {
 	cursor: pointer;
 	background: url(themes/OneEleven/images/layout/sprite_norepeat.png) -5px -176px no-repeat
 }
 /*** menu style ***/
-nav ul#pagemenu li a {
+nav ul#oe_pagemenu li a {
 	color: #232323;
 	outline: 0;
 	margin-right: 10px;
@@ -1164,124 +1164,124 @@ nav ul#pagemenu li a {
 	padding-right: 30px;
 	text-decoration: none
 }
-nav ul#pagemenu li.current li a {
+nav ul#oe_pagemenu li.current li a {
 	color: #232323
 } 
-nav ul#pagemenu li ul,
-#container.sidebar-off nav ul#pagemenu li span.open-nav {
+nav ul#oe_pagemenu li ul,
+#oe_container.sidebar-off nav ul#oe_pagemenu li span.open-nav {
 	display: none
 }
-#container.sidebar-on nav ul#pagemenu li.current ul {
+#oe_container.sidebar-on nav ul#oe_pagemenu li.current ul {
 	display: block
 }
-#container.sidebar-on nav ul#pagemenu li {
+#oe_container.sidebar-on nav ul#oe_pagemenu li {
 	zoom:1
 }
-nav ul#pagemenu li.current a,
-nav ul#pagemenu li a:hover,
-nav ul#pagemenu li:hover a,
-nav ul#pagemenu li a:active,
-nav ul#pagemenu li.current li a:hover,
-nav ul#pagemenu li.current li a:active,
-nav ul#pagemenu li.current li a,
-nav ul#pagemenu li li a:hover {
+nav ul#oe_pagemenu li.current a,
+nav ul#oe_pagemenu li a:hover,
+nav ul#oe_pagemenu li:hover a,
+nav ul#oe_pagemenu li a:active,
+nav ul#oe_pagemenu li.current li a:hover,
+nav ul#oe_pagemenu li.current li a:active,
+nav ul#oe_pagemenu li.current li a,
+nav ul#oe_pagemenu li li a:hover {
 	color: #147fdb;
 }
 
-nav ul#pagemenu li a.main {
+nav ul#oe_pagemenu li a.main {
 	background: url(themes/OneEleven/images/layout/home-off.png) right no-repeat;
 }
-nav ul#pagemenu li a.content {
+nav ul#oe_pagemenu li a.content {
 	background: url(themes/OneEleven/images/layout/content-off.png) right no-repeat;
 }
-nav ul#pagemenu li a.layout {
+nav ul#oe_pagemenu li a.layout {
 	background: url(themes/OneEleven/images/layout/layout-off.png) right no-repeat;
 }
-nav ul#pagemenu li a.usersgroups {
+nav ul#oe_pagemenu li a.usersgroups {
 	background: url(themes/OneEleven/images/layout/users-off.png) right no-repeat;
 }
-nav ul#pagemenu li a.extensions {
+nav ul#oe_pagemenu li a.extensions {
 	background: url(themes/OneEleven/images/layout/extensions-off.png) right no-repeat;
 }
-nav ul#pagemenu li a.siteadmin {
+nav ul#oe_pagemenu li a.siteadmin {
 	background: url(themes/OneEleven/images/layout/admin-off.png) right no-repeat;
 }
-nav ul#pagemenu li a.myprefs {
+nav ul#oe_pagemenu li a.myprefs {
 	background: url(themes/OneEleven/images/layout/preferences-off.png) right no-repeat;
 }
 /* hover, active */
-nav ul#pagemenu li a.main:hover, 
-nav ul#pagemenu li.current a.main,
-nav ul#pagemenu li:hover a.main {
+nav ul#oe_pagemenu li a.main:hover, 
+nav ul#oe_pagemenu li.current a.main,
+nav ul#oe_pagemenu li:hover a.main {
 	background: url(themes/OneEleven/images/layout/home-on.png) right no-repeat;
 }
-nav ul#pagemenu li a.content:hover, 
-nav ul#pagemenu li.current a.content,
-nav ul#pagemenu li:hover a.content {
+nav ul#oe_pagemenu li a.content:hover, 
+nav ul#oe_pagemenu li.current a.content,
+nav ul#oe_pagemenu li:hover a.content {
 	background: url(themes/OneEleven/images/layout/content-on.png) right no-repeat;
 }
-nav ul#pagemenu li a.layout:hover, 
-nav ul#pagemenu li.current a.layout,
-nav ul#pagemenu li:hover a.layout {
+nav ul#oe_pagemenu li a.layout:hover, 
+nav ul#oe_pagemenu li.current a.layout,
+nav ul#oe_pagemenu li:hover a.layout {
 	background: url(themes/OneEleven/images/layout/layout-on.png) right no-repeat;
 }
-nav ul#pagemenu li a.usersgroups:hover, 
-nav ul#pagemenu li.current a.usersgroups,
-nav ul#pagemenu li:hover a.usersgroups {
+nav ul#oe_pagemenu li a.usersgroups:hover, 
+nav ul#oe_pagemenu li.current a.usersgroups,
+nav ul#oe_pagemenu li:hover a.usersgroups {
 	background: url(themes/OneEleven/images/layout/users-on.png) right no-repeat;
 }
-nav ul#pagemenu li a.extensions:hover, 
-nav ul#pagemenu li.current a.extensions,
-nav ul#pagemenu li:hover a.extensions {
+nav ul#oe_pagemenu li a.extensions:hover, 
+nav ul#oe_pagemenu li.current a.extensions,
+nav ul#oe_pagemenu li:hover a.extensions {
 	background: url(themes/OneEleven/images/layout/extensions-on.png) right no-repeat;
 }
-nav ul#pagemenu li a.siteadmin:hover, 
-nav ul#pagemenu li.current a.siteadmin,
-nav ul#pagemenu li:hover a.siteadmin  {
+nav ul#oe_pagemenu li a.siteadmin:hover, 
+nav ul#oe_pagemenu li.current a.siteadmin,
+nav ul#oe_pagemenu li:hover a.siteadmin  {
 	background: url(themes/OneEleven/images/layout/admin-on.png) right no-repeat;
 }
-nav ul#pagemenu li a.myprefs:hover, 
-nav ul#pagemenu li.current a.myprefs ,
-nav ul#pagemenu li:hover a.myprefs {
+nav ul#oe_pagemenu li a.myprefs:hover, 
+nav ul#oe_pagemenu li.current a.myprefs ,
+nav ul#oe_pagemenu li:hover a.myprefs {
 	background: url(themes/OneEleven/images/layout/preferences-on.png) right no-repeat;
 }
 /* second level & colapsed sidebar */
-nav ul#pagemenu ul {
+nav ul#oe_pagemenu ul {
 	padding: 8px 0;
 	background: #f0f0f0
 }
-nav ul#pagemenu li li {
+nav ul#oe_pagemenu li li {
 	background: none;
 	line-height: 22px
 }
-nav ul#pagemenu li li.module {
+nav ul#oe_pagemenu li li.module {
 	background-color: #e5e5e5;
 	border-bottom: 1px dotted #f0f0f0
 }
-nav ul#pagemenu li.current li a,
-nav ul#pagemenu li li a,
-nav ul#pagemenu li:hover li a {
+nav ul#oe_pagemenu li.current li a,
+nav ul#oe_pagemenu li li a,
+nav ul#oe_pagemenu li:hover li a {
 	height: 22px;
 	color: #232323;
 	font-weight: normal;
 	background-image: none;
 	background: none
 }
-nav ul#pagemenu li li:hover a,
-nav ul#pagemenu li li.current a {
+nav ul#oe_pagemenu li li:hover a,
+nav ul#oe_pagemenu li li.current a {
 	color: #147fdb;
 }
-nav ul#pagemenu li li a:hover,
-nav ul#pagemenu li li a:active,
-nav ul#pagemenu li.current li a:hover,
-nav ul#pagemenu li.current li a:active  {
+nav ul#oe_pagemenu li li a:hover,
+nav ul#oe_pagemenu li li a:active,
+nav ul#oe_pagemenu li.current li a:hover,
+nav ul#oe_pagemenu li.current li a:active  {
 	padding-right: 30px
 }
 /*** page content ***/
 #oe_mainarea {
 	margin: 0 249px 0 0
 }
-#container.sidebar-off #oe_mainarea {
+#oe_container.sidebar-off #oe_mainarea {
 	margin: 0 40px 0 0
 }
 #oe_mainarea .content-inner {
@@ -1294,7 +1294,7 @@ nav ul#pagemenu li.current li a:active  {
 	border-bottom: 1px solid #fa8004
 }
 /*** footer ***/
-footer#footer {
+footer#oe_footer {
 	width: 100%;
 	z-index: 100;
 	height: 30px;
@@ -1304,18 +1304,18 @@ footer#footer {
 	position: fixed;
 	bottom: 0
 }
-footer#footer a {
+footer#oe_footer a {
 	text-decoration: none;
 	color: #147fdb
 }
-footer#footer a:hover, footer#footer a:active {
+footer#oe_footer a:hover, footer#oe_footer a:active {
 	color: #fa8004
 }
-#footer small {
+#oe_footer small {
 	font-size: 11px;
 	color: #fff
 }
-#footer .footer-left {
+#oe_footer .footer-left {
 	width: 450px;
 	padding: 10px;
 	line-height: 15px;
@@ -1324,28 +1324,28 @@ footer#footer a:hover, footer#footer a:active {
 .footer-left {
 	margin: 0 260px 0 0
 }
-#container.sidebar-off .footer-left {
+#oe_container.sidebar-off .footer-left {
 	margin: 0 60px 0 0
 }
-#footer .footer-right {
+#oe_footer .footer-right {
 	float: left;
 	padding: 10px;
 	line-height: 15px;
 	display: inline;
 	width: auto
 }
-#footer ul.links {
+#oe_footer ul.links {
 	display: inline-block;
 	margin-left: 20px;
 	font-size: 11px;
 	width: auto
 }
-#footer ul.links li {
+#oe_footer ul.links li {
 	display: block;
 	padding: 0 8px;
 	float: right
 }
-#footer ul.links li:last-child, #footer ul.links li.last {
+#oe_footer ul.links li:last-child, #oe_footer ul.links li.last {
 	padding: 0 0 0 8px
 }
 /* --- CONTENT --- */
@@ -1999,10 +1999,10 @@ a.toggle-dropzone:focus {
 	header .admin-title {
 		font-size: 12px
 	}
-	#sidebar {
+	#oe_sidebar {
 		bottom: 55px
 	}
-	#sidebar aside {
+	#oe_sidebar aside {
 		padding: 0
 	}
 	.dashboard-box {
@@ -2010,13 +2010,13 @@ a.toggle-dropzone:focus {
 		width: auto;
 		margin: 10px 0
 	}	
-	footer#footer {
+	footer#oe_footer {
 		clear: both;
 		overflow: hidden;
 		line-height: 20px;
 		position: static
 	}	
-	#footer .footer-left {
+	#oe_footer .footer-left {
 		margin-left: 0
 	}
 	.move {
@@ -2062,55 +2062,55 @@ a.toggle-dropzone:focus {
 	img {
 		float: none;
 	}
-	#container,
+	#oe_container,
 	#header,
 	#oe_mainarea,
-	#sidebar,
-	#admin-content {
+	#oe_sidebar,
+	oe_admin-content {
 		margin: 0;
 		float: none;
 		display: block
 	}
-	#container {
+	#oe_container {
 		width: 100%;
 		padding: 0;
 		position: static;
 		height: auto
 	}
 	.spacer,
-	#sidebar div.notification .box-shadow,
-	#sidebar nav.navigation .box-shadow,
+	#oe_sidebar div.notification .box-shadow,
+	#oe_sidebar nav.navigation .box-shadow,
 	header .breadcrumbs,
-	#footer .footer-right,
-	#sidebar .toggle-button,
+	#oe_footer .footer-right,
+	#oe_sidebar .toggle-button,
 	header .admin-title,
-	#admin-content .shadow,
+	oe_admin-content .shadow,
 	.drop   {
 		display: none
 	}
-	#sidebar,
-	#sidebar aside {
+	#oe_sidebar,
+	#oe_sidebar aside {
 		width: 100%
 	}
-	#admin-content {
+	oe_admin-content {
 		height: auto
 	}
 	header .welcome {
 		width: auto
 	}
-	#sidebar {
+	#oe_sidebar {
 		border: none;
 		width: 100%;
 		background: #ddd;
 		position: static
 	}
-	#sidebar aside {
+	#oe_sidebar aside {
 		padding: 0
 	}
-	.sidebar-on #sidebar nav.navigation {
+	.sidebar-on #oe_sidebar nav.navigation {
 		width: 100%
 	}
-	.sidebar-off #sidebar nav.navigation {
+	.sidebar-off #oe_sidebar nav.navigation {
 		width: 100%;
 		overflow: hidden
 	}	
@@ -2161,12 +2161,12 @@ a.toggle-dropzone:focus {
 		display: none
 	}
 	/* position:fixed doesn't work well with mobile devices */
-	footer#footer {
+	footer#oe_footer {
 		clear: both;
 		overflow: hidden;
 		position: static
 	}
-	#footer .footer-left {
+	#oe_footer .footer-left {
 		float: none;
 		margin: 0;
 		padding:0;
@@ -2174,7 +2174,7 @@ a.toggle-dropzone:focus {
 		text-align: center;
 		display: block
 	}
-	#footer small {
+	#oe_footer small {
 		padding: 10px 0 0 0;
 		margin: 0;
 		display: block;

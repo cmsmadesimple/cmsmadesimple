@@ -1,9 +1,9 @@
 {strip}
 {if !isset($depth)}{assign var='depth' value='0'}{/if}
 {if $depth == '0'}
-<nav class="navigation" id="menu" role="navigation">
+<nav class="navigation" id="oe_menu" role="navigation">
 	<div class="box-shadow">&nbsp;</div>
-	<ul{if $depth == '0'} id="pagemenu"{/if}>
+	<ul{if $depth == '0'} id="oe_pagemenu"{/if}>
 {/if}
 {foreach from=$nav item='navitem' name='pos'}
 {*<pre>{$nav|print_r}</pre>*}
