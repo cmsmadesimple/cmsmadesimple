@@ -88,11 +88,10 @@ class Smarty_CMS extends SmartyBC
 	$utops = cmsms()->GetUserTagOperations();
 	$usertags = $utops->ListUserTags();
 	$caching = (get_site_preference('smarty_cache_udt','never') == 'always')?true:false;
-	foreach( $usertags as $id => $name )
-	  {
-	    $function = $utops->CreateTagFunction($name);
-	    $this->registerPlugin('function',$name,$function,$caching);
-	  }
+	foreach( $usertags as $id => $name ) {
+	  $function = $utops->CreateTagFunction($name);
+	  $this->registerPlugin('function',$name,$function,$caching);
+	}
 		
 	// Load resources
 	$this->registerResource('template',new CMSPageTemplateResource(''));
@@ -109,8 +108,39 @@ class Smarty_CMS extends SmartyBC
 	$this->registerPlugin('function','content_module','CMS_Content_Block::smarty_fetch_moduleblock',false);
 	$this->registerPlugin('function','process_pagedata','CMS_Content_Block::smarty_fetch_pagedata',false);
 
-	$this->autoload_filters = array('pre'=>'precompilefunc', 'post'=>'postcompilefunc');
-		  
+	// find filters in the plugins directories.
+	$pre = array();
+	$post = array();
+	$output = array();
+	foreach( $this->plugins_dir as $onedir ) {
+	  if( !is_dir($onedir) ) continue;
+
+	  $files = glob($onedir.'/*php');
+	  if( !is_array($files) || count($files) == 0 ) continue;
+
+	  foreach( $files as $onefile ) {
+	    $onefile = basename($onefile);
+	    $parts = explode('.',$onefile);
+	    if( !is_array($parts) || count($parts) != 3 ) {
+	      continue;
+	    }
+
+	    switch( $parts[0] ) {
+	    case 'output':
+	      $output[] = $parts[1];
+	      break;
+	    case 'prefilter':
+	      $pre[] = $parts[1];
+	      break;
+	    case 'postfilter':
+	      $post[] = $parts[1];
+	      break;
+	    }
+	  }
+	}
+
+	$this->autoload_filters = array('pre'=>$pre,'post'=>$post,'output'=>$output);
+
 	if( get_site_preference('use_smartycache',0) )
 	  {
 	    // compile check can only be enabled, if using smarty cache... just for safety.
