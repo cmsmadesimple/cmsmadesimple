@@ -2083,7 +2083,7 @@ a.toggle-dropzone:focus {
 		float: none;
 	}
 	#oe_container,
-	#header,
+	.header,
 	#oe_mainarea,
 	#oe_sidebar,
 	#oe_admin-content {
@@ -2130,7 +2130,7 @@ a.toggle-dropzone:focus {
 		width: auto;
 		overflow: hidden
 	}	
-	#header.header {
+	header.header {
 		overflow: hidden
 	}
 	#oe_mainarea header.pageheader span.helptext {

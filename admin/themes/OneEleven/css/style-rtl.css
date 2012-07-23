@@ -864,10 +864,10 @@ p.login-info {
 	height: 30px;
 	clear: both
 }
-oe_admin-content {
+#oe_admin-content {
 	height: 100%
 }
-oe_admin-content .shadow {
+#oe_admin-content .shadow {
 	background: transparent url(themes/OneEleven/images/layout/sprite_repeatx.png) 831px -148px repeat-x;
 	z-index: 900;
 	position: absolute;
@@ -2063,10 +2063,10 @@ a.toggle-dropzone:focus {
 		float: none;
 	}
 	#oe_container,
-	#header,
+	.header,
 	#oe_mainarea,
 	#oe_sidebar,
-	oe_admin-content {
+	#oe_admin-content {
 		margin: 0;
 		float: none;
 		display: block
@@ -2084,7 +2084,7 @@ a.toggle-dropzone:focus {
 	#oe_footer .footer-right,
 	#oe_sidebar .toggle-button,
 	header .admin-title,
-	oe_admin-content .shadow,
+	#oe_admin-content .shadow,
 	.drop   {
 		display: none
 	}
@@ -2092,7 +2092,7 @@ a.toggle-dropzone:focus {
 	#oe_sidebar aside {
 		width: 100%
 	}
-	oe_admin-content {
+	#oe_admin-content {
 		height: auto
 	}
 	header .welcome {
@@ -2114,7 +2114,7 @@ a.toggle-dropzone:focus {
 		width: 100%;
 		overflow: hidden
 	}	
-	#header.header {
+	header.header {
 		overflow: hidden
 	}
 	#oe_mainarea header.pageheader span.helptext {
