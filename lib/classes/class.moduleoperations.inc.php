@@ -852,9 +852,12 @@ final class ModuleOperations
   /**
    * Upgrade a module
    *
+   * This is an internal method, subject to change in later releases.  It should never be called for upgrading arbitrary modules.
+   * Any use of this function by third party code will not be supported.  Use at your own risk and do not report bugs or issues
+   * related to your use of this module.
+   *
    * @param string $module The name of the module to upgrade
    * @return boolean Whether or not the upgrade was successful
-   * @internal
    */
   public function UpgradeModule( $module_name, $to_version = '')
   {

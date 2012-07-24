@@ -40,7 +40,10 @@
  */
 
 /**
- * A singleton class to manage internal CMSMS Variables
+ * A singleton class to manage internal CMSMS Variables.
+ *
+ * This is an internal class.  Using this class to adjust internal variables from third party code is not supported
+ * and constites a violation of forge rules.  This class is slowly being removed.
  *
  * @package CMS
  * @deprecated
