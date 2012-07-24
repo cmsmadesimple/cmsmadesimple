@@ -231,15 +231,15 @@ jQuery(document).ready(function($) {
 		// Handle ajax apply
 		jQuery('body').on('cms_ajax_apply', function(e) {
 			// gotta get langified string here.
-			$('button[name=cancel]').fadeOut();
-			$('button[name=cancel]').button('option', 'label', e.close);
-			$('button[name=cancel]').fadeIn();
+			$('button[name=cancel], button[name=m1_cancel]').fadeOut();
+			$('button[name=cancel], button[name=m1_cancel]').button('option', 'label', e.close);
+			$('button[name=cancel], button[name=m1_cancel]').fadeIn();
 
 			var htmlShow = '';
 			if(e.response == 'Success') {
-				htmlShow = '<aside class="message pagemcontainer" role="status"><span class="close-warning">Close</span><p>' + e.details + '<\/p><\/aside>';
+				htmlShow = '<aside class="message pagemcontainer" role="status"><span class="close-warning">Close</span><p class="pagemessage">' + e.details + '<\/p><\/aside>';
 			} else {
-				htmlShow = '<aside class="message pageerrorcontainer" role="alert"><span class="close-warning">Close</span><ul>';
+				htmlShow = '<aside class="message pageerrorcontainer" role="alert"><span class="close-warning">Close</span><ul class="pageerror">';
 				htmlShow += e.details;
 				htmlShow += '<\/ul><\/aside>';
 			}
