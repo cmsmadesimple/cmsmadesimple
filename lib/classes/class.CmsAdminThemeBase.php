@@ -251,6 +251,7 @@ abstract class CmsAdminThemeBase
      */
 	private function _SetAggregatePermissions($force = FALSE)
 	{
+		$this->_SetModuleAdminInterfaces();
 		if( is_array($this->_perms && $force == FALSE ) ) return;
 
 		$this->_perms = array();
@@ -355,8 +356,6 @@ abstract class CmsAdminThemeBase
      */
     private function _MenuListSectionModules($section)
     {
-		$this->_SetModuleAdminInterfaces();
-
     	$modList = array();
         if (isset($this->_sectionCount[$section]) && $this->_sectionCount[$section] > 0)
             {
@@ -634,7 +633,7 @@ abstract class CmsAdminThemeBase
 									}
 							}
 				  
-						// if it's not a system module...
+						// if it's a system module...
 						if( ModuleOperations::get_instance()->IsSystemModule($thisModuleKey) )
 							{
 								$this->_menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
@@ -714,7 +713,6 @@ abstract class CmsAdminThemeBase
 				if( !$found ) unset($this->_menuItems[$oneparent]);
 			}
 	
-
 		// resolve the tree to be doubly-linked,
 		// and make sure the selections are selected            
 		foreach ($this->_menuItems as $sectionKey=>$sectionArray)
@@ -779,7 +777,7 @@ abstract class CmsAdminThemeBase
 				$this->title .= ': '.$subtitle;
 			}
 		// generate breadcrumb array
-	
+
 		$count = 0;
 		foreach ($this->_menuItems as $key=>$menuItem)
 			{
@@ -1017,6 +1015,7 @@ abstract class CmsAdminThemeBase
 				if ($thisItem['show_in_menu'])
 					{
 						$displayableChildren = true;
+						break;
 					}
 			}
 		return $displayableChildren;
