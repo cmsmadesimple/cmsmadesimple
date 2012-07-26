@@ -72,6 +72,11 @@ if (strpos($reldir, '..') === false && strpos($reldir, '\\') === false)
 	$dir .= $reldir;
 }
 
+if( isset($_GET['file']) && (strstr($_GET['file'],'..') !== FALSE || strstr($_GET['file'].'/') !== FALSE) ) {
+  // XSS attempt?
+  return;
+}
+
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Files');
 
