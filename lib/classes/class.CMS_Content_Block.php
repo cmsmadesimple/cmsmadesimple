@@ -319,13 +319,13 @@ final class CMS_Content_Block
 	else
 	  {
 	    $block = (isset($params['block']))?$params['block']:'content_en';
-	    $val = $contentobj->Show($block);
+	    //$val = $contentobj->Show($block);
 	    $result = '';
+
 	    $oldvalue = $smarty->caching;
 	    $smarty->caching = false;
-
-	    $result = $smarty->fetch('string:'.$val);
-	    //$result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $contentobj->Id().$block);
+	    //$result = $smarty->fetch('string:'.$val);
+	    $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block), '|'.$block, $contentobj->Id().$block);
 	    $smarty->caching = $oldvalue;
 
 	    return self::content_return($result, $params, $smarty);
