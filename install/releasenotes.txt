@@ -108,7 +108,6 @@ Once again, massive amounts of effort has gone into creating and testing this re
 
 There were many other people that participated in a very successful beta program and we would like to thank all of them collectively. We really appreciate your dedication and thoroughness in testing to ensure that 1.11 would be a very stable, fast, and feature rich release.
 
-
 ---------------------------------
 CMSMS Version 1.10.1 - Le Lorrain
 ---------------------------------
