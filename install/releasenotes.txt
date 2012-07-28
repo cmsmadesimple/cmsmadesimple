@@ -104,7 +104,7 @@ For a much more complete list of what has changed please view the CHANGELOG.txt 
 
 Thanks
 ------
-Once again, massive amounts of effort has gone into creating and testing this release, freely donated by the members of the development team and other volunteers. Special thanks to: Ronny Krijt, Rolf, René Helminsen, Jeff Bosch, Robert Campbell, Ted Kulp, Morten Poulsen, Goran Ilic, Mark Reed, Anne-Mieke Bovelett, Tapio Löytty, John Scotcher, Jonathan Schmid and Jean-Claude Etiemble.
+Once again, massive amounts of effort has gone into creating and testing this release, freely donated by the members of the development team and other volunteers. Special thanks to: Ronny Krijt, Rolf, René Helminsen, Jeff Bosch, Robert Campbell, Matt Hornsby, Ted Kulp, Morten Poulsen, Goran Ilic, Mark Reed, Anne-Mieke Bovelett, Tapio Löytty, John Scotcher, Ken Griffith, Jonathan Schmid and Jean-Claude Etiemble.
 
 There were many other people that participated in a very successful beta program and we would like to thank all of them collectively. We really appreciate your dedication and thoroughness in testing to ensure that 1.11 would be a very stable, fast, and feature rich release.
 
