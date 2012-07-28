@@ -1,26 +1,111 @@
 (c) Copyright 2012 the CMS Made Simple Dev Team. All Rights Reserved.
 --------------------------------------
-CMSMS Version 1.11 Galapagos
+CMSMS Version 1.11 - Galapagos
 --------------------------------------
+The CMSMS Dev Team is delighted to announce the official release of our next major version CMS Made Simple 1.11. There have been some significant and important changes. This release has undergone months of active, and careful development by the CMSMS Dev Team. Additionally, a very active six week public beta program resulting in more testing than in any other CMSMS release should ensure that this version the stable, fast, powerful, feature rich and easy to use content management system that you have come to expect.
 
+So here’s some of the major changes in CMSMS 1.11
 
+Smarty 3:
+---------
+The biggest change in CMSMS 1.11 is that we are now using Smarty3. Smarty3 brings some new functionality for Smarty templates, such as improved parsing, which should help with embedded javascript; smarty functions; and advanced cache control.
 
+The CMSMS Dev Team worked extensively in conjunction with the developers of Smarty to implement an unmodified version Smarty 3.1.10 into CMSMS. The important part of this transition was to retain the power of the variable scoping we have become accustomed to in CMSMS; e.g. being able to set a variable in a module template that is called from the body, and to use that variable in the page head.
 
---------------------------------------
-CMSMS Version 1.11 Beta3 - Galapagos
---------------------------------------
-Please read the doc/CHANGELOG.txt for more specifics as to what changed.
-Brief report of changes will be displayed here for final release.
+CMSMS 1.11 enables Smarty caching in a very flexible way to give the power of caching all or parts of individual pages. This is almost as good as full page caching, but retains the dynamic power of CMSMS.
 
-Note: during upgrade compatibility problems have been noticed with plugins whos name ends in 'close'.  This is an issue with smarty3
-and not an issue with CMSMS itself.
+In 1.11, most plugins in the plugins folder are ‘cachable’, i.e., the output of those plugins can be cached on the page and not re-executed. The obvious exception being the {content*} plugins which will not cache.
 
+The News module has also been modified to take better advantage of Smarty3’s caching capabilities, and to serve as an example for module developers.
 
---------------------------------------
-CMSMS Version 1.11 Beta1 - Galapagos
---------------------------------------
-Please read the doc/CHANGELOG.txt for more specifics as to what changed.
-Brief report of changes will be displayed here for final release.
+There are some detriments to the adoption of Smarty3 however. We have noticed that the initial compilation (converting Smarty templates into PHP code) and rendering of a stock CMSMS page is noticeably slower. This performance degradation is due to the complexity of the lexer and parser in Smarty3 and is a known limitation in the library.
+
+However, once caching is enabled, we are noticing a significant performance improvement. We feel that this trade-off will be beneficial in the long run to all users of CMSMS.
+
+Language and locale improvements:
+---------------------------------
+We have rewritten the language detection and selection mechanisms into a class to allow for more flexibility. The NLS data set now contain locale and encoding information so that the $config[‘locale’] and $config[‘encoding’] information will be optional even for non-English sites.
+
+We have reorganized some of the language detection mechanisms so that it is called AFTER modules (the ones that can’t lazy load) are initialized. This, in conjunction with the new CmsNlsOperations::set_language_detector() method, allows third party modules to specify how the current frontend language should be detected. Modules can then use session variables, cookies, a variable on the URL, or user or module preferences to determine what language to use for that frontend request.
+
+The importance of this cannot be understated. This allows third party modules to create proper multi-language capabilities within CMSMS and we are sure that there are many module developers and thousands of website developers that will be extremely happy.
+
+CSS Improvements:
+-----------------
+Each stylesheet can now have an a media query string. This allows you to better make responsive websites, or webpages for mobile devices. As well, some new config variables will allow you to control the output directory for generated stylesheets.
+
+New Admin Theme:
+----------------
+Goran Ilic, a valued member of the CMSMS Dev team, has created a new, HTML5, responsive admin theme for CMSMS that is completely Smarty controlled, and extendable. This is the new admin theme for all fresh CMSMS installs, and the old ‘default’ admin theme has been removed. This leaves the NCleanGrey and OneEleven admin themes.
+
+The new “OneEleven” admin theme is responsive and has been tested on various tablets. Though we do not officially support using CMSMS on lower resolution smartphones such as the iphone.
+
+New Frontend Theme:
+-------------------
+We are also delighted that CMSMS 1.11 comes with the new ‘Simplex’ frontend theme. Simplex Theme has been created to demonstrate HTML5 and CSS3 functionality within CMSMS. We envision slowly replacing the sample HTML4 transitional themes in the distribution with HTML5 examples. Many thanks again to Goran Ilic.
+
+Drag and Drop Upload:
+---------------------
+Along with the new admin theme, we’ve upgraded the jquery and jquery.ui that is shipped with CMSMS and have added support for uploading files via drag and drop (for most non-IE browsers). This makes the file upload capabilities in wysiwyg editors all but redundant, and solves a long standing difficulty with CMSMS. The OneEleven admin theme has a dropzone in its main area, allowing you to drag files from your desktop into CMSMS and then select the file from within the wysiwyg editor. Additionally, you can change working directories from within the OneEleven admin theme.
+
+Better Module Lazy Loading:
+---------------------------
+Continuing with what was started in the 1.10 series, we have improved the module lazy loading capabilities to improve performance on your websites. To that end we’ve also re-worked the routing functionality.
+
+Improved auditing:
+------------------
+Audit trails are becoming more and more important in our websites (who did what, and when). For that reason, we’ve gone through all of the important pieces of functionality and ensured there’s is a line placed in the audit log for each of them.
+
+A System Maintenance page:
+--------------------------
+A brand new system maintenance page in the admin interface allows you to perform periodic maintenance tasks like database repairs and optimizations, clearing the cache, etc.
+
+Improved Content class:
+-----------------------
+a. As mentioned at the start of this release we have re-organized the Content class again to improve performance, and lay the foundation for some work planned in the future. To that end we’ve reworked the property classes in the base content object (the methods that retrieve the content blocks, etc). We have also marked all of the content object methods and members as public, protected, or private, as appropriate.
+
+In the past, the editcontent form used regular expressions to parse the page template in order to detect the content blocks. This has changed, and we are actually now using Smarty. This improves the flexibility, and reduces the possibility for error when editing page templates. Additionally, it is now possible for content block definitions to be inserted into sub templates (i.e: via {include} or via global content blocks) which gives us much more flexibility for re-use of templates.
+c. It is now possible, when adding content blocks, to specify a tab within the edit content form that should contain the content block text area.
+
+Improvements in core modules: MenuManager:
+------------------------------------------
+MenuManager now has a new breadcrumbs action (and the breadcrumbs tag is now depeciated). The new breadcrumbs action allows for template customization of the appearance of breadcrumbs, and even its behaviour.
+
+Additionally, MenuManager has a new “items” action to replace the “items=” method in previous versions. This allows naming specific page aliases and having them, and their children, in your navigation.
+
+Improvements in core modules: News module:
+The news module has gone through extensive “under the hood” modifications:
+
+a: The news module now uses Smarty caching so that on cached pages no database queries are necessary (for summary views):
+
+b: The news module now preloads field information for all articles displayed in a summary view to reduce the number of queries required and significantly improve performance.
+
+c: Category information is now preloaded and cached and can be shared between summary and detail views.
+
+Bits and pieces:
+----------------
+- XML Module export only exports the English version of the help and about.
+- A new bulk action in listcontent for changing page ownership.
+- Improved user settings pages.
+- Adding a new user allows you to specify the default wysiwyg for that user.
+- Custom page URLs can now include an extension.
+- Removed the ‘output_compression’ config option.
+- Removed the ‘process_whole_template’ config option.
+- Removed the ‘use_adodb_lite’ config option.
+- Removed support for Postgres.
+- Removed the ‘max_upload_size’ config option.
+- Removed the google_search plugin.
+- Moved the {menu}, {news,} {search}, and other plugins to their respective modules.
+- Some general re-organization of various admin pages.
+- Dozens of bug fixes.
+- Lots more.
+For a much more complete list of what has changed please view the CHANGELOG.txt file in the docs directory of your beta installation.
+
+Thanks
+------
+Once again, massive amounts of effort has gone into creating and testing this release, freely donated by the members of the development team and other volunteers. Special thanks to: Ronny Krijt, Rolf, René Helminsen, Jeff Bosch, Robert Campbell, Ted Kulp, Morten Poulsen, Goran Ilic, Mark Reed, Anne-Mieke Bovelett, Tapio Löytty, John Scotcher, Jonathan Schmid and Jean-Claude Etiemble.
+
+There were many other people that participated in a very successful beta program and we would like to thank all of them collectively. We really appreciate your dedication and thoroughness in testing to ensure that 1.11 would be a very stable, fast, and feature rich release.
 
 
 ---------------------------------
