@@ -64,7 +64,8 @@ Improved Content class:
 -----------------------
 a. As mentioned at the start of this release we have re-organized the Content class again to improve performance, and lay the foundation for some work planned in the future. To that end we’ve reworked the property classes in the base content object (the methods that retrieve the content blocks, etc). We have also marked all of the content object methods and members as public, protected, or private, as appropriate.
 
-In the past, the editcontent form used regular expressions to parse the page template in order to detect the content blocks. This has changed, and we are actually now using Smarty. This improves the flexibility, and reduces the possibility for error when editing page templates. Additionally, it is now possible for content block definitions to be inserted into sub templates (i.e: via {include} or via global content blocks) which gives us much more flexibility for re-use of templates.
+b. In the past, the editcontent form used regular expressions to parse the page template in order to detect the content blocks. This has changed, and we are actually now using Smarty. This improves the flexibility, and reduces the possibility for error when editing page templates. Additionally, it is now possible for content block definitions to be inserted into sub templates (i.e: via {include} or via global content blocks) which gives us much more flexibility for re-use of templates.
+
 c. It is now possible, when adding content blocks, to specify a tab within the edit content form that should contain the content block text area.
 
 Improvements in core modules: MenuManager:
