@@ -24,7 +24,7 @@ However, once caching is enabled, we are noticing a significant performance impr
 
 Language and locale improvements:
 ---------------------------------
-We have rewritten the language detection and selection mechanisms into a class to allow for more flexibility. The NLS data set now contain locale and encoding information so that the $config[‘locale’] and $config[‘encoding’] information will be optional even for non-English sites.
+We have rewritten the language detection and selection mechanisms into a class to allow for more flexibility. The NLS data set now contains locale and encoding information so that the $config[‘locale’] and $config[‘encoding’] information will be optional even for non-English sites.  Additionally, the behavior of these config options has changed.
 
 We have reorganized some of the language detection mechanisms so that it is called AFTER modules (the ones that can’t lazy load) are initialized. This, in conjunction with the new CmsNlsOperations::set_language_detector() method, allows third party modules to specify how the current frontend language should be detected. Modules can then use session variables, cookies, a variable on the URL, or user or module preferences to determine what language to use for that frontend request.
 
