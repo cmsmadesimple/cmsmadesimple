@@ -4,7 +4,7 @@ CMSMS Version 1.11 - Galapagos
 --------------------------------------
 The CMSMS Dev Team is delighted to announce the official release of our next major version CMS Made Simple 1.11. There have been some significant and important changes. This release has undergone months of active, and careful development by the CMSMS Dev Team. Additionally, a very active six week public beta program resulting in more testing than in any other CMSMS release should ensure that this version the stable, fast, powerful, feature rich and easy to use content management system that you have come to expect.
 
-So here’s some of the major changes in CMSMS 1.11
+So here are some of the major changes in CMSMS 1.11
 
 Smarty 3:
 ---------
