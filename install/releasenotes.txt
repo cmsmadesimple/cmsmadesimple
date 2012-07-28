@@ -32,7 +32,7 @@ The importance of this cannot be understated. This allows third party modules to
 
 CSS Improvements:
 -----------------
-Each stylesheet can now have an a media query string. This allows you to better make responsive websites, or webpages for mobile devices. As well, some new config variables will allow you to control the output directory for generated stylesheets.
+Each stylesheet can now have a media query string. This allows you to better make responsive websites, or webpages for mobile devices. As well, some new config variables will allow you to control the output directory for generated stylesheets.
 
 New Admin Theme:
 ----------------
