@@ -1,3 +1,10 @@
+Version 1.11 - No Name
+-----------------------------
+Core - General:
+  - Minor fix to the GetChildren method when loading properties of inactive page.
+  - Fixes to smarty error_eporting.  Should now listen to the PHP error level
+  - Minor typo fix.
+
 Version 1.11 - Galapagos 
 -----------------------------
 Core - General:

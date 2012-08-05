@@ -637,11 +637,14 @@ class ContentOperations
 		      {
 				  $child_ids[] = $contentrows[$i]['content_id'];
 		      }
-		    
-		    // get all the properties for the child_ids
-		    $query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
-		    $tmp = $db->GetArray($query);
 
+			$tmp = null;
+			if( count($child_ids) ) {
+				// get all the properties for the child_ids
+				$query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id IN ('.implode(',',$child_ids).') ORDER BY content_id';
+				$tmp = $db->GetArray($query);
+			}
+				
 		    // re-organize the tmp data into a hash of arrays of properties for each content id.
 		    if( $tmp )
 		      {
