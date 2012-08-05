@@ -68,10 +68,12 @@ final class CMS_Content_Block
       {
 	$value = trim($value,'"\'');
 	if( $key == 'type' ) continue;
-	if( $key == 'block' )
-	  {
-	    $key = 'name';
-	  }
+	if( $key == 'block' ) {
+	  $key = 'name';
+	}
+	if( $key == 'wysiwyg' ) {
+	  $key = 'usewysiwyg';
+	}
 
 	if( isset($rec[$key]) )
 	  {
