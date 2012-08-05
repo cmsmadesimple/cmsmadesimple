@@ -4,6 +4,7 @@ Core - General:
   - Minor fix to the GetChildren method when loading properties of inactive page.
   - Fixes to smarty error_eporting.  Should now listen to the PHP error level
   - Minor typo fix.
+  - Fix an issue with {content wysiwyg=false}
 
 Version 1.11 - Galapagos 
 -----------------------------
