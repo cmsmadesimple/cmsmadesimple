@@ -872,6 +872,7 @@ abstract class CMSModule
 	 * Returns CMSMS temporary and state variables.
 	 *
 	 * @final
+	 * @deprecated Subject for removal in CMSMS 1.12
 	 * @return array a hash of CMSMS temporary variables.
 	 */
 	final public function & GetVariables()
@@ -1722,18 +1723,14 @@ abstract class CMSModule
 	      $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
 		
 	      $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
-	      if (@is_file($filename))
-		{
-		  {
-		    $gCms = cmsms();
-		    $db = $gCms->GetDb();
-		    $config = $gCms->GetConfig();
-		    $smarty = $gCms->GetSmarty();
-
-		    include($filename);
-
-		  }
-		}
+	      if (@is_file($filename)) {
+		$gCms = cmsms();
+		$db = $gCms->GetDb();
+		$config = $gCms->GetConfig();
+		$smarty = $gCms->GetSmarty();
+		
+		include($filename);
+	      }
 	    }
 	}
 
@@ -2270,8 +2267,8 @@ abstract class CMSModule
 	 */
 	function CreateInputHidden($id, $name, $value='', $addttext='')
 	{
-		$this->LoadFormMethods();
-		return cms_module_CreateInputHidden($this, $id, $name, $value, $addttext);
+	  $this->LoadFormMethods();
+	  return cms_module_CreateInputHidden($this, $id, $name, $value, $addttext);
 	}
 
 	/**
@@ -2287,10 +2284,10 @@ abstract class CMSModule
 	 */
 	function CreateInputCheckbox($id, $name, $value='', $selectedvalue='', $addttext='')
 	{
-		$this->LoadFormMethods();
-		return cms_module_CreateInputCheckbox($this, $id, $name, $value, $selectedvalue, $addttext);
+	  $this->LoadFormMethods();
+	  return cms_module_CreateInputCheckbox($this, $id, $name, $value, $selectedvalue, $addttext);
 	}
-
+	
 
 	/**
 	 * Returns the xhtml equivalent of a submit button.	 This is basically a nice little wrapper
