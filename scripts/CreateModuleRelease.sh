@@ -9,7 +9,7 @@ _pwd=`pwd`
 _name=`basename $_pwd`
 _destdir=${HOME}
 _version=0
-_excludes="*~ #*# .svn CVS *.bak .git* *.tmp"
+_excludes='*~ #*# .svn CVS *.bak .git* *.tmp .cms_ignore'
 _tmpdir="/tmp/$_this.$$"
 _yes=0
 _svn=1
@@ -183,6 +183,18 @@ if [ $_svn = 1 -a ${_vc_type:-bad} != 'bad' ]; then
   fi
 fi
 
+# expand the excludes by the contents of the .cms_ignore file(s)
+_x=`find . -name '.cms_ignore' 2>/dev/null`;
+for x in $_x ; do
+ _f=`basename $x`
+ _d=`dirname $x`
+ _d=`basename $_d`
+ _fi=`cat $x`
+ for x2 in $_fi ; do
+   _excludes="$_excludes ${_d}/${x2}";
+ done
+done
+
 # create dummy index.html files in each directory
 #_dirs=`find . -type d | grep -v \.svn`
 #for i in $_dirs ; do
@@ -190,6 +202,7 @@ fi
 #    echo '<!-- dummy -->' > ${i}/index.html
 #  fi
 #done
+
 
 # do an svn tag command
 if [ $_tag = 1 -a ${_vc_type:-bad} != 'bad' ]; then
@@ -252,4 +265,4 @@ fi
 tar zcf ${_destname} ${_name}
 
 # and cleanup
-rm -rf $_tmpdir 2>/dev/null
+#rm -rf $_tmpdir 2>/dev/null
