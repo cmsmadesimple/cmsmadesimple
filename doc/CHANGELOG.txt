@@ -5,6 +5,7 @@ Core - General:
   - Fixes to smarty error_eporting.  Should now listen to the PHP error level
   - Minor typo fix.
   - Fix an issue with {content wysiwyg=false}
+  - Fixing typo in CmsNlsOperations. Admin and Frontend has now own separated language detection spots. Language detector class now works as it should.
 
 Version 1.11 - Galapagos 
 -----------------------------
