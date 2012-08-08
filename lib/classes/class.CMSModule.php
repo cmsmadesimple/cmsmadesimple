@@ -185,7 +185,7 @@ abstract class CMSModule
 		global $CMS_ADMIN_PAGE;
 		global $CMS_MODULE_PAGE;
 		global $CMS_INSTALL_PAGE;
-		$this->curlang = cms_current_language(); // current language for this request.
+		//$this->curlang = cms_current_language(); // current language for this request. <- Messes up frontend NLS stuff
 
 		if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
 		  {
@@ -875,7 +875,7 @@ abstract class CMSModule
 	 * @deprecated Subject for removal in CMSMS 1.12
 	 * @return array a hash of CMSMS temporary variables.
 	 */
-	final public function & GetVariables()
+	final public function GetVariables()
 	{
 	  return cmsms()->variables;
 	}

@@ -249,8 +249,8 @@ if (! isset($CMS_INSTALL_PAGE))
     debug_buffer('', 'End of Loading Modules');
   }
 
-#Setup language stuff.... will auto-detect languages
-CmsNlsOperations::set_language();
+#Setup language stuff.... will auto-detect languages (Launch only to admin at this point)
+if(isset($CMS_ADMIN_PAGE)) CmsNlsOperations::set_language();
 
 $CMS_LAZYLOAD_MODULES = 1; // still used ??
 

@@ -430,7 +430,7 @@ final class CmsNlsOperations
       {
 	die('language detector already set');
       }
-    self::$_fe_language_detector($obj);
+    self::$_fe_language_detector = $obj;
   }
 
 
