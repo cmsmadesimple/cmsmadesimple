@@ -144,7 +144,7 @@ else
 	  $rec['type'] = $parts[0];
 	  $rec['name'] = $parts[1];
 
-	  if( $rec['type'] == 'prefilter' || $rec['type'] == 'postfilter' ) continue;
+	  //if( $rec['type'] == 'prefilter' || $rec['type'] == 'postfilter' ) continue;
 
 	  include_once($onefile);
 	  
