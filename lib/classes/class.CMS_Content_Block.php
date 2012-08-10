@@ -176,10 +176,7 @@ final class CMS_Content_Block
       {	
 	$rec['id'] = str_replace(' ','_',$rec['name']);
       }
-    if( count($parms) )
-      {
-	$rec['params'] = $parms;
-      }
+    $rec['params'] = $parms;
     if( $rec['module'] == '' )
       {
 	throw new CmsEditContentException('Missing module param for content_module tag');
@@ -408,7 +405,7 @@ final class CMS_Content_Block
 	$result = $smarty->fetch(str_replace(' ', '_', 'content:' . $params['block']), '|'.$params['block'], $contentobj->Id().$params['block']);
 	$smarty->caching = $oldvalue;
       }
-    $img = self::content_return($result, $params, $smarty);
+    $img = $result;
     if( $img == -1 || empty($img) )
       return;
 
