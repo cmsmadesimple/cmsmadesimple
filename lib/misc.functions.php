@@ -2240,7 +2240,12 @@ function cms_get_jquery($exclude = '',$ssl = false,$cdn = false,$append = '',$cu
  */	
 if(!function_exists('get_called_class')) {
   function get_called_class() {
-    return cms_function_help::get_called_class();
+    try {
+      return cms_function_help::get_called_class();
+    }
+    catch( Exception $e ) {
+      // ignore
+    }
   }
   // this class must exist in this file until CMSMS 1.12 when we dont have to worry abut PHP 5.2
   // this file is loaded before the autoloader runs.
@@ -2250,8 +2255,13 @@ if(!function_exists('get_called_class')) {
     {
       if (!$bt) $bt = debug_backtrace();
       if (!isset($bt[$l])) throw new Exception("Cannot find called class -> stack level too deep.");
-      if (!isset($bt[$l]['type'])) {
-	throw new Exception ('type not set');
+      if (!isset($bt[$l]['type'])) { 
+        if( $l >= 2 ) {
+	  throw new Exception ('type not set');
+        }
+        else {
+          return self::get_called_class($bt,$l+1);
+        }
       }
       else switch ($bt[$l]['type']) {
       case '::':
@@ -2266,6 +2276,7 @@ if(!function_exists('get_called_class')) {
 		   $callerLine,
 		   $matches);
 	if (!isset($matches[1])) {
+         
 	  // must be an edge case.
 	  throw new Exception ("Could not find caller class: originating method call is obscured.");
 	}
