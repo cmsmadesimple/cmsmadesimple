@@ -2246,10 +2246,7 @@ if(!function_exists('get_called_class')) {
   // this file is loaded before the autoloader runs.
   class cms_function_help {
 
-    static $i = 0;
-    static $fl = null;
-	
-    public static function get_called_class() 
+    public static function get_called_class($bt = false,$l = 1) 
     {
       if (!$bt) $bt = debug_backtrace();
       if (!isset($bt[$l])) throw new Exception("Cannot find called class -> stack level too deep.");
