@@ -19,7 +19,7 @@
 #$Id$
 
 $CMS_VERSION = "1.11";
-$CMS_VERSION_NAME = "Galapagos";
+$CMS_VERSION_NAME = "Baltra";
 $CMS_SCHEMA_VERSION = "36";
 
 define('CMS_VERSION', $CMS_VERSION);

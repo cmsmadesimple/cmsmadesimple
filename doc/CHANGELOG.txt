@@ -1,4 +1,4 @@
-Version 1.11.1 - No Name
+Version 1.11.1 - Baltra
 -----------------------------
 Core - General:
   - Minor fix to the GetChildren method when loading properties of inactive page
@@ -10,9 +10,13 @@ Core - General:
   - Minor fix to notice for module generated content blocks.
   - Fixes the {content_image} tag.
   - prefilters and postfilters can now be displayed in the listtags admin page.
+  - Fixes to the get_called_class() method wrt php 5.2
 
 News
   - Fix problem with category parameter
+
+Printing
+  - fix a problem with the {print} tag wrt php 5.2
 
   
 Version 1.11 - Galapagos 
