@@ -28,6 +28,7 @@
  * A singleton class to provide simple, generic mechanism for dealing with languages
  * encodings, and locales.  This class does not handle translation strings.
  *
+ * @package CMS
  * @author Robert Campbell
  * @since 1.11
  */

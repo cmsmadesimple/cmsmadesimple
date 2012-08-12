@@ -25,7 +25,8 @@
 /**
  * A simple class to resolve an issue with smarty
  * 
- * @ignore
+ * @since 1.11
+ * @package CMS
  */
 abstract class CMS_Fixed_Resource_Custom extends Smarty_Resource_Custom
 {
@@ -50,7 +51,9 @@ abstract class CMS_Fixed_Resource_Custom extends Smarty_Resource_Custom
  * A simple class to handle a module database template.
  * 
  * @ignore
- * @inernal
+ * @internal
+ * @since 1.11
+ * @package CMS
  */
 class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
 {
@@ -75,7 +78,9 @@ class CMSModuleDbTemplateResource extends CMS_Fixed_Resource_Custom
  * A simple class to handle a module file template.
  * 
  * @ignore
- * @inernal
+ * @internal
+ * @package CMS
+ * @since 1.11
  */
 class CMSModuleFileTemplateResource extends CMS_Fixed_Resource_Custom
 {

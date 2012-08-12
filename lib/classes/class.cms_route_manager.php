@@ -267,7 +267,7 @@ final class cms_route_manager
 	/**
 	 * Reset the static route table.
 	 *
-	 * @sincce 1.11
+	 * @since 1.11
 	 * @author Robert Campbell
 	 * @internal
 	 */

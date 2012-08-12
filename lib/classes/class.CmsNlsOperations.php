@@ -30,6 +30,8 @@
  *
  * @author Robert Campbell
  * @since 1.11
+ * @package CMS
+ * @license GPL
  */
 final class CmsNlsOperations
 {

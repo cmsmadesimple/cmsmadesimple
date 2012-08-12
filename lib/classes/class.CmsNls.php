@@ -18,6 +18,20 @@
 #
 #$Id: translation.functions.php 7867 2012-04-13 18:00:14Z calguy1000 $
 
+/**
+ * Translation functions/classes
+ *
+ * @package CMS
+ */
+
+/**
+ * A class to provide data and methods for encapsulating a single language
+ *
+ * @author Robert Campbell
+ * @since 1.11
+ * @package CMS
+ * @license GPL
+ */
 class CmsNls
 {
   protected $_isocode;

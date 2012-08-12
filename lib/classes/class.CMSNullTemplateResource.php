@@ -18,6 +18,20 @@
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
+/**
+ * @package CMS
+ */
+
+/**
+ * A simple class for handling null resources.
+ *
+ * @package CMS
+ * @author Robert Campbell
+ * @internal
+ * @ignore
+ * @copyright Copyright (c) 2012, Robert Campbell <calguy1000@cmsmadesimple.org>
+ * @since 1.11
+ */
 class CMSNullTemplateResource extends Smarty_Resource_Custom
 {
   protected function fetch($name,&$source,&$mtime)

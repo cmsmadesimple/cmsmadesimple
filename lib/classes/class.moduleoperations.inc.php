@@ -1192,7 +1192,7 @@ final class ModuleOperations
    * Alias for the GetSyntaxHiglighter method.
    * 
    * @see GetSyntaxHighlighter
-   * @deprecated.
+   * @deprecated
    * @since 1.10
    */
   public function &GetSyntaxModule($module_name = '')

@@ -25,6 +25,9 @@
 /**
  * Class for Admin Theme
  *
+ * This class is deprecated and subject to removal.  See the CmsAdminThemeBase class for the
+ * new mechanism.
+ *
  * @package CMS
  * @version $Revision$
  * @license GPL

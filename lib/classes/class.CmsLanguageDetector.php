@@ -31,6 +31,7 @@
  *
  * @see CmsNlsOperations::set_language_detector()
  * @author Robert Campbell
+ * @package CMS
  * @since 1.11
  */
 abstract class CmsLanguageDetector

@@ -649,7 +649,7 @@ abstract class ContentBase
     * The ItemOrder is used to specify the order of this page within the parent.
     *
     * @internal
-    * @paraa int the itemorder.
+    * @param int the itemorder.
     */
    public function SetItemOrder($itemorder)
    {
@@ -1455,7 +1455,7 @@ abstract class ContentBase
     /**
      * Save or update the content
      *
-     * @todo: This function should return something (or throw an exception)
+     * @todo This function should return something (or throw an exception)
      */
     function Save()
     {
@@ -1602,7 +1602,7 @@ abstract class ContentBase
     /**
      * Insert the content in the db
      *
-     * @todo: this function should return something
+     * @todo this function should return something
      */
     # :TODO: This function should return something
     # :TODO: Take care bout hierarchy here, it has no value !
@@ -1844,7 +1844,7 @@ abstract class ContentBase
     /**
      * Delete the current content object from the database.
      *
-     * @todo: this function should return something, or throw an exception
+     * @todo this function should return something, or throw an exception
      */
     function Delete()
     {

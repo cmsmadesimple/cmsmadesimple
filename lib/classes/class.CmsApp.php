@@ -24,6 +24,8 @@
  * @package CMS
  */
 
+require_once(dirname(__FILE__).'/class.cms_variables.php');
+
 /**
  * Simple global object to hold references to other objects
  *
@@ -31,25 +33,24 @@
  * needed by classes/functions in CMS.  Initialized in include.php
  * as $gCms for use in every page.
  *
+ * This class was named CmsObject before version 1.10
+ *
  * @package CMS
  * @since 0.5
  */
-
-require_once(dirname(__FILE__).'/class.cms_variables.php');
-
 final class CmsApp {
 
 	private static $_instance;
 
 	/**
 	 * Database object - adodb reference to the current database
-	 *	@access private
+	 * @ignore
 	 */
 	private $db;
 
 	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
-	 *	@access private
+	 * @ignore
 	 */
 	var $errors = array();
 
@@ -57,7 +58,7 @@ final class CmsApp {
 	 * content types array - List of available content types
 	 *
 	 * @internal
-	 * @access private
+	 * @ignore
 	 */
 	private $contenttypes = array();
 
@@ -85,6 +86,11 @@ final class CmsApp {
 	}
 
 
+	/**
+	 * Retrieve the single app instancce.
+	 *
+	 * @since 1.10
+	 */
 	public static function &get_instance()
 	{
 		if( !self::$_instance  )
@@ -100,7 +106,7 @@ final class CmsApp {
 	 *
 	 * @since 1.9
 	 * @internal
-	 * @access private
+	 * @access private.
 	 * return array
 	 */
 	public function get_errors()
@@ -423,8 +429,8 @@ final class CmsApp {
 	* directories.
 	*
 	* @final
-        * @internal
-        * @ignore
+    * @internal
+    * @ignore
 	* @access private
 	*/
 	final public function clear_cached_files($age_days = -100)

@@ -18,6 +18,18 @@
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
+/**
+ * @package CMS
+ */
+
+/**
+ * A simple class to handle fetching global content resources.
+ * 
+ * @ignore
+ * @internal
+ * @since 1.11
+ * @package CMS
+ */
 class CMSGlobalContentTemplateResource extends CMS_Fixed_Resource_Custom
 {
   protected function fetch($name,&$source,&$mtime)

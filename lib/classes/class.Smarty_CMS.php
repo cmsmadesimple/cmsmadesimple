@@ -18,17 +18,18 @@
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
+/**
+ * @package CMS
+ */
+
 require_once(dirname(dirname(__FILE__)).'/smarty/SmartyBC.class.php');
 
 /**
  * Extends the Smarty class for content.
  *
- * Extends the Smarty class for checking timestamps and rendering content to the browser.
- *
  * @package CMS
  * @since 0.1
  */
-
 class Smarty_CMS extends SmartyBC
 {	
   public $id; // <- triggers error without | do search why this is needed

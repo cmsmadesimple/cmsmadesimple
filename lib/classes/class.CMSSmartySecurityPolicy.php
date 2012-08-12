@@ -18,6 +18,19 @@
 #
 #$Id: content.functions.php 6863 2011-01-18 02:34:48Z calguy1000 $
 
+/**
+ * @package CMS
+ */
+
+
+/**
+ * Generic smarty security policy.
+ *
+ * @since		1.11
+ * @package		CMS
+ * @internal
+ * @ignore
+ */
 final class CMSSmartySecurityPolicy extends Smarty_Security 
 {
   public $php_handling = Smarty::PHP_REMOVE;
