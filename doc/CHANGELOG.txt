@@ -12,6 +12,7 @@ Core - General:
   - prefilters and postfilters can now be displayed in the listtags admin page.
   - Fixes to the get_called_class() method wrt php 5.2
   - Fixes expression for caching of UDT's
+  - {content_image} and {content_module} will now generate errors if a block param is not specified.
 
 News
   - Fix problem with category parameter
