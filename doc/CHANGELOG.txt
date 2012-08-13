@@ -15,6 +15,7 @@ Core - General:
   - {content_image} and {content_module} will now generate errors if a block param is not specified.
   - Fixes issue with addtemplate & edittemplate smarty fetching process, now using own compile id for temporal template data.  
   - The view site link in admin navigation now points to the <root url>/index.php rather than just <root url>
+  - Minor fix to the OneEleven thme when a node had no description.
 
 News
   - Fix problem with category parameter
