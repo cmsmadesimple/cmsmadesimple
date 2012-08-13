@@ -13,6 +13,7 @@ Core - General:
   - Fixes to the get_called_class() method wrt php 5.2
   - Fixes expression for caching of UDT's
   - {content_image} and {content_module} will now generate errors if a block param is not specified.
+  - Fixes issue with addtemplate & edittemplate smarty fetching process, now using own compile id for temporal template data.  
 
 News
   - Fix problem with category parameter
