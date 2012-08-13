@@ -23,6 +23,7 @@
 			</h3>
 			{if $node.description}
 			<span class="description">{$node.description}</span>
+			{/if}
 			{if isset($node.children)}
 			<h4>{'subitems'|lang}</h4>
 			<ul class="subitems cf">
@@ -30,7 +31,6 @@
 			 	<li><a href="{$one.url}">{$one.title}</a></li>
 			{/foreach} 
 			</ul>
-			{/if}
 			{/if}
 		</nav>
 	</div>
