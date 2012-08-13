@@ -152,18 +152,10 @@ if ($access)
 		    }
 		    // if we got here, we're golden.
 		  }
-		  catch( CmsEditContentException $e ) {
+		  catch( Exception $e ) {
 		    $error .= "<li>".$e->getMessage().'</li>';
 		    $validinfo = false;
 		  } 
-		  catch (SmartyCompilerException $e) {
-		    $error .= "<li>".$e->getMessage().'</li>';
-		    $validinfo = false;  
-		  }
-		  catch (SmartyException $e) {
-		    $error .= "<li>".$e->getMessage().'</li>';
-		    $validinfo = false;		  
-		  }
 		}
 
 		if ($validinfo)
