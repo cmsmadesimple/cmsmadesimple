@@ -28,7 +28,7 @@
 			<h4>{'subitems'|lang}</h4>
 			<ul class="subitems cf">
 			{foreach from=$node.children item='one'}
-			 	<li><a href="{$one.url}">{$one.title}</a></li>
+			 	<li><a href="{$one.url}"{if isset($one.target)} target="{$one.target}"{/if}>{$one.title}</a></li>
 			{/foreach} 
 			</ul>
 			{/if}
