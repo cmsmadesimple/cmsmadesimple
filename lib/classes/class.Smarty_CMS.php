@@ -89,7 +89,10 @@ class Smarty_CMS extends SmartyBC
 	// Load User Defined Tags
 	$utops = cmsms()->GetUserTagOperations();
 	$usertags = $utops->ListUserTags();
-	$caching = (get_site_preference('smarty_cache_udt','never') == 'always')?true:false;
+	$caching = false;
+	if( get_site_preference('smarty_cacheudt','never') == 'always' ) {
+	  $caching = true;
+	}
 	foreach( $usertags as $id => $name ) {
 	  $function = $utops->CreateTagFunction($name);
 	  $this->registerPlugin('function',$name,$function,$caching);

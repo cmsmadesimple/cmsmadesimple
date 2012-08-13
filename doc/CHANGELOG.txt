@@ -11,6 +11,7 @@ Core - General:
   - Fixes the {content_image} tag.
   - prefilters and postfilters can now be displayed in the listtags admin page.
   - Fixes to the get_called_class() method wrt php 5.2
+  - Fixes expression for caching of UDT's
 
 News
   - Fix problem with category parameter
