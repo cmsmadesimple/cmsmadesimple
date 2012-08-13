@@ -119,9 +119,18 @@ if ($access)
 			$validinfo = false;
 		}
 
+		if ($content == "")
+		{
+			$error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
+			$validinfo = false;
+		}		
+		
 		if( $validinfo ) {
+		
 		  $smarty = cmsms()->GetSmarty();
+		  
 		  try {
+		  
 		    $smarty->force_compile = TRUE;
 		    
 		    cms_utils::set_app_data('tmp_template',$content);
@@ -131,7 +140,10 @@ if ($access)
 		    $smarty->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
 		    $smarty->registerResource('template',new CMSPageTemplateResource());	    
 		    $smarty->fetch('template:appdata;tmp_template'); // do the magic.
-		    $smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
+		    //$smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler')); // ?????????????????
+		
+			$smarty->clear_all_cache(); // <- Clear cache data, so frontend has correct cache files.
+			$smarty->clear_compiled_tpl();	// <- Clear tpl data, so frontend ain't overlapping with previous fetch results.
 		
 		    $contentBlocks = CMS_Content_Block::get_content_blocks();
 		    if( !is_array($contentBlocks) || count($contentBlocks) == 0 ) {
@@ -143,16 +155,18 @@ if ($access)
 		    // if we got here, we're golden.
 		  }
 		  catch( CmsEditContentException $e ) {
-		    $smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
+		    //$smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler')); // ?????????????
 		    $error .= "<li>".$e->getMessage().'</li>';
 		    $validinfo = false;
 		  } 
-		}
-
-		if ($content == "")
-		{
-			$error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
-			$validinfo = false;
+		  catch (SmartyCompilerException $e) {
+		    $error .= "<li>".$e->getMessage().'</li>';
+		    $validinfo = false;  
+		  }
+		  catch (SmartyException $e) {
+		    $error .= "<li>".$e->getMessage().'</li>';
+		    $validinfo = false;		  
+		  }
 		}
 
 		if ($validinfo)
@@ -172,7 +186,7 @@ if ($access)
 			{
 				#Make sure the new name is used if this is an apply
 				$orig_template = $template;
-
+				
 				Events::SendEvent('Core', 'EditTemplatePost', array('template' => &$onetemplate));
 
 				// put mention into the admin log
