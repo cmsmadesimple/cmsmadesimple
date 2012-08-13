@@ -100,9 +100,10 @@ if ($access)
 
 		if ($validinfo) {
 		  try {
-		    //$smarty = cmsms()->GetSmarty();
-		    //$smarty->force_compile = TRUE;
-		    
+
+			$ocompid = $smarty->compile_id;
+			$smarty->compile_id = 'tmp_template';		  
+		  
 		    cms_utils::set_app_data('tmp_template',$content);
 		    $smarty->registerDefaultPluginHandler(array(&$smarty,'_dummyDfltPluginHandler'));
 		    $smarty->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
@@ -120,7 +121,15 @@ if ($access)
 			}
 			
 		    $smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
+			$smarty->compile_id = $ocompid;			
 
+		    $contentBlocks = CMS_Content_Block::get_content_blocks();
+		    if( !is_array($contentBlocks) || count($contentBlocks) == 0 ) {
+		      throw new CmsEditContentException('No content blocks defined in template');
+		    }
+		    if( !isset($contentBlocks['content_en']) ) {
+		      throw new CmsEditContentException('No default content block {content} or {content block=\'content_en\'} defined in template');
+		    }
 		    // if we got here, we're golden.
 		  }
 		  catch( CmsEditContentException $e ) {
@@ -170,8 +179,8 @@ else
 {
 	if ($error != "")
 	{
-		//echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
-    $themeObject->ShowErrors(lang('noaccessto',$error));
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
+    //$themeObject->ShowErrors(lang('noaccessto',$error));
 	}
 }
 $smarty->assign("themeobj",$themeObject);
