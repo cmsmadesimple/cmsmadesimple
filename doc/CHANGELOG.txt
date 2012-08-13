@@ -21,6 +21,8 @@ News
 Printing
   - fix a problem with the {print} tag wrt php 5.2
 
+Search
+  - Fixes E_STRICT errors
   
 Version 1.11 - Galapagos 
 -----------------------------
