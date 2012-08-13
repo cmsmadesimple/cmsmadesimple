@@ -105,6 +105,10 @@ final class CMS_Content_Block
   public static function smarty_compiler_imageblock($params,$smarty)
   {
     // {content_image} tag encountered.
+    if( !isset($params['block']) || empty($params['block']) ) {
+      throw new CmsEditContentException('{content_image} tag requires block parameter');
+    }
+
     $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'',
 		 'upload'=>true,'dir'=>'','default'=>'','tab'=>'',
 		 'exclude'=>'','sort'=>0);
@@ -133,10 +137,9 @@ final class CMS_Content_Block
       }
 
     // check for duplicate.
-    if( isset(self::$_contentBlocks[$rec['name']]) )
-      {
-	throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
-      }
+    if( isset(self::$_contentBlocks[$rec['name']]) ) {
+      throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
+    }
 
     if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
     self::$_contentBlocks[$rec['name']] = $rec;
@@ -146,6 +149,10 @@ final class CMS_Content_Block
   public static function smarty_compiler_moduleblock($params,$smarty)
   {
     // {content_image} tag encountered.
+    if( !isset($params['block']) || empty($params['block']) ) {
+      throw new CmsEditContentException('{content_module} tag requires block parameter');
+    }
+
     $rec = array('type'=>'module','id'=>'','name'=>'','module'=>'','label'=>'',
 		 'blocktype'=>'','tab'=>'');
     $parms = array();
