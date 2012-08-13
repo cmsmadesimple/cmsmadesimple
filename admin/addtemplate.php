@@ -143,7 +143,7 @@ if ($access)
 			$newtemplate = new Template();
 			$newtemplate->name = $template;
 			$newtemplate->content = $content;
-			$newtemplate->stylesheet = $stylesheet;
+			//$newtemplate->stylesheet = $stylesheet;
 			$newtemplate->active = $active;
 			$newtemplate->default = 0;
 
