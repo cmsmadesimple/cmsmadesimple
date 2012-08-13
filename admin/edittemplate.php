@@ -132,6 +132,7 @@ if ($access)
 		  try {
 		  
 		    $smarty->force_compile = TRUE;
+			$smarty->compile_id = 'tmp_template';
 		    
 		    cms_utils::set_app_data('tmp_template',$content);
 		    $smarty->registerDefaultPluginHandler(array(&$smarty,'_dummyDfltPluginHandler'));
@@ -141,10 +142,7 @@ if ($access)
 		    $smarty->registerResource('template',new CMSPageTemplateResource());	    
 		    $smarty->fetch('template:appdata;tmp_template'); // do the magic.
 		    //$smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler')); // ?????????????????
-		
-			$smarty->clear_all_cache(); // <- Clear cache data, so frontend has correct cache files.
-			$smarty->clear_compiled_tpl();	// <- Clear tpl data, so frontend ain't overlapping with previous fetch results.
-		
+				
 		    $contentBlocks = CMS_Content_Block::get_content_blocks();
 		    if( !is_array($contentBlocks) || count($contentBlocks) == 0 ) {
 		      throw new CmsEditContentException('No content blocks defined in template');
@@ -155,7 +153,6 @@ if ($access)
 		    // if we got here, we're golden.
 		  }
 		  catch( CmsEditContentException $e ) {
-		    //$smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler')); // ?????????????
 		    $error .= "<li>".$e->getMessage().'</li>';
 		    $validinfo = false;
 		  } 
