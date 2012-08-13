@@ -415,7 +415,7 @@ abstract class CmsAdminThemeBase
 								 //	    'dashboard'=>array('url'=>'dashboard.php','parent'=>'main',
 								 //			       'title'=>$this->_FixSpaces(lang('dashboard')),
 								 //			       'description'=>'','show_in_menu'=>true),
-								 'viewsite'=>array('url'=>$config['root_url'],'parent'=>'main',
+								 'viewsite'=>array('url'=>$config['root_url'].'/index.php','parent'=>'main',
 												   'title'=>$this->_FixSpaces(lang('viewsite')),
 												   'type'=>'external',
 												   'description'=>'','show_in_menu'=>true, 'target'=>'_blank'),
