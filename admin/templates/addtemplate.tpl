@@ -1,9 +1,6 @@
 <div class="pagecontainer">
 	{$themeobj->ShowHeader('addtemplate')}
 	<form method="post" action="{$formurl}">
-        <div>
-          <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
-        </div>
 		<div class="pageoverflow">
 			<p class="pagetext">*{lang('name')}:</p>
 			<p class="pageinput"><input class="name" type="text" name="template" maxlength="255" value="{$template}" /></p>
