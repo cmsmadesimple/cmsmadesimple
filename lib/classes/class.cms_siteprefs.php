@@ -43,15 +43,13 @@ final class cms_siteprefs
 	if( !$db ) return;
     $query = 'SELECT sitepref_name,sitepref_value FROM '.cms_db_prefix().'siteprefs';
     $dbr = $db->GetArray($query);
-    if( is_array($dbr) )
-      {
-		  self::$_prefs = array();
-		  for( $i = 0; $i < count($dbr); $i++ )
-			  {
-				  $row = $dbr[$i];
-				  self::$_prefs[$row['sitepref_name']] = $row['sitepref_value'];
-			  }
-      }
+    if( is_array($dbr) ) {
+		self::$_prefs = array();
+		for( $i = 0; $i < count($dbr); $i++ ) {
+			$row = $dbr[$i];
+			self::$_prefs[$row['sitepref_name']] = $row['sitepref_value'];
+		}
+	}
   }
 
   private static function _reset()
@@ -84,10 +82,9 @@ final class cms_siteprefs
   public static function exists($key)
   {
     self::_read();
-    if( isset(self::$_prefs[$key]) )
-      {
-	return TRUE;
-      }
+    if( in_array($key,array_keys(self::$_prefs)) ) {
+		return TRUE;
+	}
     return FALSE;
   }
 
@@ -104,13 +101,13 @@ final class cms_siteprefs
     $db = cmsms()->GetDb();
     if( !self::exists($key) )
       {
-	$query = 'INSERT INTO '.cms_db_prefix().'siteprefs (sitepref_name, sitepref_value) VALUES (?,?)';
-	$dbr = $db->Execute($query,array($key,$value));
+		  $query = 'INSERT INTO '.cms_db_prefix().'siteprefs (sitepref_name, sitepref_value) VALUES (?,?)';
+		  $dbr = $db->Execute($query,array($key,$value));
       }
     else
       {
-	$query = 'UPDATE '.cms_db_prefix().'siteprefs SET sitepref_value = ? WHERE sitepref_name = ?';
-	$dbr = $db->Execute($query,array($value,$key));
+		  $query = 'UPDATE '.cms_db_prefix().'siteprefs SET sitepref_value = ? WHERE sitepref_name = ?';
+		  $dbr = $db->Execute($query,array($value,$key));
       }
     self::$_prefs[$key] = $value;
   }
