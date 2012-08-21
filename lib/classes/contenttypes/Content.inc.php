@@ -465,7 +465,7 @@ class Content extends ContentBase
 		$smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
 		$smarty->compile_id = $ocompid;
 
-		$this->_contentBlocks = CMS_Content_block::get_content_blocks();
+		$this->_contentBlocks = CMS_Content_Block::get_content_blocks();
 
 		if( !is_array($this->_contentBlocks) || !count($this->_contentBlocks) ) 
 			return FALSE;
