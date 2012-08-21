@@ -1,3 +1,17 @@
+Version 1.11.2 - 
+-----------------------------
+Core - General:
+  - Minor fix to the en_US.nls file
+  - Fixes issue with miss spelled class name resulted in error when editing/adding content when sitedown was enabled.
+
+MenuManager
+  - Fixes minor expression issue wrt the show_all parameter in the breadcrumb action.
+
+News
+  - Minor fixes.
+
+
+
 Version 1.11.1 - Baltra
 -----------------------------
 Core - General:
