@@ -39,6 +39,7 @@ $nls['englishlang']['en_US'] = 'English';
 $nls['alias']['en'] = 'en_US';
 $nls['alias']['english'] = 'en_US' ;
 $nls['alias']['eng'] = 'en_US' ;
+$nls['alias']['en-US'] = 'en_US';
 $nls['alias']['en_CA'] = 'en_US' ;
 $nls['alias']['en_GB'] = 'en_US' ;
 $nls['alias']['en_US.ISO8859-1'] = 'en_US' ;
