@@ -1705,7 +1705,7 @@ abstract class CMSModule
 	      $this->__errors = explode('::err::',$params['__errors']);
 	    }
 	    if( isset($params['__messages']) ) {
-	      $this->__errors = explode('::msg::',$params['__messages']);
+	      $this->__messages = explode('::msg::',$params['__messages']);
 	    }
 
 	    if( is_array($this->__errors) && count($this->__errors) ) {
