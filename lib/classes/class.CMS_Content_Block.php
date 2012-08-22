@@ -381,53 +381,46 @@ final class CMS_Content_Block
     $config = $gCms->GetConfig();
 
     $contentobj = $gCms->variables['content_obj'];
-    if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' )
-      {
-	// it's a preview.
-	if( !isset($_SESSION['cms_preview_data']['content_obj']) )
-	  {
-	    $contentops =& $gCms->GetContentOperations();
-	    $_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
-	  }
-	$contentobj =& $_SESSION['cms_preview_data']['content_obj'];
+    if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' ) {
+      // it's a preview.
+      if( !isset($_SESSION['cms_preview_data']['content_obj']) ) {
+	$contentops =& $gCms->GetContentOperations();
+	$_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
       }
-    if( !is_object($contentobj) || $contentobj->Id() <= 0 )
-      {
-	return self::content_return('', $params, $smarty);
-      }
+      $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
+    }
+    if( !is_object($contentobj) || $contentobj->Id() <= 0 ) {
+      return self::content_return('', $params, $smarty);
+    }
 
     $adddir = get_site_preference('contentimage_path');
-    if( isset($params['dir']) && $params['dir'] != '' )
-      {
-	$adddir = $params['dir'];
-      }
+    if( isset($params['dir']) && $params['dir'] != '' ) {
+      $adddir = $params['dir'];
+    }
     $dir = cms_join_path($config['uploads_path'],$adddir);
     $basename = basename($config['uploads_path']);
 
     $result = '';
-    if( isset($params['block']) )
-      {
-	$oldvalue = $smarty->caching;
-	$smarty->caching = false;
-	$result = $smarty->fetch(str_replace(' ', '_', 'content:' . $params['block']), '|'.$params['block'], $contentobj->Id().$params['block']);
-	$smarty->caching = $oldvalue;
-      }
+    if( isset($params['block']) ) {
+      $oldvalue = $smarty->caching;
+      $smarty->caching = false;
+      $result = $smarty->fetch(str_replace(' ', '_', 'content:' . $params['block']), '|'.$params['block'], $contentobj->Id().$params['block']);
+      $smarty->caching = $oldvalue;
+    }
     $img = $result;
     if( $img == -1 || empty($img) )
       return;
 
     // create the absolute url.
-    if( startswith($img,$basename) )
-      {
-	// old style url.
-	if( !startswith($img,'http') ) $img = str_replace('//','/',$img);
-	$img = substr($img,strlen($basename.'/'));
-	$img = $config['uploads_url'] . '/'.$img;
-      }
-    else
-      {
-	$img = $config['uploads_url'] . '/'.$adddir.'/'.$img;
-      }
+    if( startswith($img,$basename) ) {
+      // old style url.
+      if( !startswith($img,'http') ) $img = str_replace('//','/',$img);
+      $img = substr($img,strlen($basename.'/'));
+      $img = $config['uploads_url'] . '/'.$img;
+    }
+    else {
+      $img = $config['uploads_url'] . '/'.$adddir.'/'.$img;
+    }
 
     $name = $params['block'];
     $alt = '';
@@ -443,36 +436,34 @@ final class CMS_Content_Block
     if( isset($params['width']) ) $width = $params['width'];
     if( isset($params['height']) ) $height = $params['height'];
     if( isset($params['urlonly']) ) $urlonly = true;
-
     if( !isset($params['alt']) ) $alt = $img;
   
-    if( $urlonly ) return $img;
-    $out = '<img src="'.$img.'" ';
-    if( !empty($name) )
-      {
+    $out = '';
+    if( $urlonly ) {
+      $out = $img;
+    }
+    else {
+      $out = '<img src="'.$img.'" ';
+      if( !empty($name) ) {
 	$out .= 'name="'.$name.'" ';
       }
-    if( !empty($class) )
-      {
+      if( !empty($class) ) {
 	$out .= 'class="'.$class.'" ';
       }
-    if( !empty($xid) )
-      {
+      if( !empty($xid) ) {
 	$out .= 'id="'.$xid.'" ';
       }
-    if( !empty($width) )
-      {
+      if( !empty($width) ) {
 	$out .= 'width="'.$width.'" ';
       }
-    if( !empty($height) )
-      {
+      if( !empty($height) ) {
 	$out .= 'height="'.$height.'" ';
       }
-    if( !empty($alt) )
-      {
+      if( !empty($alt) ) {
 	$out .= 'alt="'.$alt.'" ';
       }
-    $out .= '/>';
+      $out .= '/>';
+    }
     if( isset($params['assign']) ){
       $smarty->assign(trim($params['assign']),$out);
       return;
