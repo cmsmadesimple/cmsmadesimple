@@ -1281,6 +1281,10 @@ td.pageicon {
 td.icons_wide {
 	width: 25px;
 }
+/*** File Manager ***/
+#filesarea img {
+	max-width: 32px;
+}
 iframe.imageframe {
 	margin-top: 10px;
 	border: none;
