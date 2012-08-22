@@ -2,22 +2,22 @@ Version 1.11.2 -
 -----------------------------
 Core - General:
   - Minor fix to the en_US.nls file
-  - Fixes issue with miss spelled class name resulted in error when editing/adding content when sitedown was enabled.
-  - Fixes issue with {content_image urlonly=1 ...} and the assign param.
-  - Fixes to the RedirectToAdminTab stuff.
-  - Fixes thumbnail creation stuff to do some file extension checking.
+  - Fixes issue with misspelled class name resulted in error when editing/adding content when sitedown was enabled
+  - Fixes issue with {content_image urlonly=1 ...} and the assign param
+  - Fixes to the RedirectToAdminTab stuff
+  - Fixes thumbnail creation stuff to do some file extension checking
+  - Missing button "View in English" in OneEleven theme
+  
+FileManager
+  - Minor adjustments to the savesettings action
 
 MenuManager
-  - Fixes minor expression issue wrt the show_all parameter in the breadcrumb action.
-
-FileManager
-  - Minor adjustments to the savesettings action.
+  - Fixes minor expression issue wrt the show_all parameter in the breadcrumb action
 
 News
   - Minor fixes.
   - fesubmit action now documented as deprecated
-  - minor fesubmit fix.
-
+  - Minor fesubmit fix
 
 
 Version 1.11.1 - Baltra
@@ -47,6 +47,7 @@ Printing
 
 Search
   - Fixes E_STRICT errors
+
   
 Version 1.11 - Galapagos 
 -----------------------------
