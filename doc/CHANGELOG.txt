@@ -5,6 +5,7 @@ Core - General:
   - Fixes issue with miss spelled class name resulted in error when editing/adding content when sitedown was enabled.
   - Fixes issue with {content_image urlonly=1 ...} and the assign param.
   - Fixes to the RedirectToAdminTab stuff.
+  - Fixes thumbnail creation stuff to do some file extension checking.
 
 MenuManager
   - Fixes minor expression issue wrt the show_all parameter in the breadcrumb action.

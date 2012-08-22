@@ -328,6 +328,13 @@ class cms_utils
   public static function generate_thumbnail($srcfile)
   {
 	  if( !file_exists($srcfile) ) return;
+          $ext =  strtolower(strrchr($srcfile,'.'));
+          while( startswith($ext,'.') ) {
+            $ext = substr($ext,1);
+          }
+          if( !in_array($ext,array('jpg','jpeg','png','bmp','gif')) ) {
+             return; // not gonna create a thumb on anything but an image.
+          } 
 	  $dn = dirname($srcfile);
 	  $bn = basename($srcfile);
 	  if( startswith($bn,'thumb_') ) {
