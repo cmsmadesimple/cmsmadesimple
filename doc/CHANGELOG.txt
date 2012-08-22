@@ -10,6 +10,9 @@ Core - General:
 MenuManager
   - Fixes minor expression issue wrt the show_all parameter in the breadcrumb action.
 
+FileManager
+  - Minor adjustments to the savesettings action.
+
 News
   - Minor fixes.
   - fesubmit action now documented as deprecated
