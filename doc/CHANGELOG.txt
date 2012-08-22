@@ -8,11 +8,12 @@ Core - General:
   - Fixes thumbnail creation stuff to do some file extension checking
   - Missing button "View in English" in OneEleven theme
   
-FileManager
-  - Minor adjustments to the savesettings action
-
 MenuManager
   - Fixes minor expression issue wrt the show_all parameter in the breadcrumb action
+
+FileManager
+  - Minor adjustments to the savesettings action.
+  - Fixes for advanced mode.
 
 News
   - Minor fixes.
