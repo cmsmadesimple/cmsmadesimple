@@ -14,6 +14,7 @@ MenuManager
 FileManager
   - Minor adjustments to the savesettings action.
   - Fixes for advanced mode.
+  - File upload now places a note in the admin log.
 
 News
   - Minor fixes.
