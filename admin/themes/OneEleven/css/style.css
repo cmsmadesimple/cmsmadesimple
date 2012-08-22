@@ -1513,7 +1513,7 @@ div.pagecontainer .pageshowrows {
 	margin-bottom: 5px
 }
 div.pagecontainer span.helptext {
-	display: none
+	display: inline-block
 }
 /*** content forms ***/
 div.pagecontainer .pageinput {
