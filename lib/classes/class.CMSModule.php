@@ -1697,7 +1697,7 @@ abstract class CMSModule
 	 */
 	function DoAction($name, $id, $params, $returnid='')
 	{
-	  if( $id == '' ) {
+	  if( $returnid == '' ) {
 	    if( isset($params['__activetab']) ) {
 	      $this->__current_tab = trim($params['__activetab']);
 	    }
@@ -2607,12 +2607,15 @@ abstract class CMSModule
 	      $tab = $this->__current_tab;
 	    }
 	  }
-	  if( $tab == '' )
+          if( $params == '' ) {
+            $params = array();
+          }
+	  if( $tab != '' )
 	    {
 	      $params['__activetab'] = $tab;
 	    }
 	  if( empty($action) ) $action = 'defaultadmin';
-	  $this->Redirect('',$action,'',$params,TRUE);
+	  $this->Redirect('m1_',$action,'',$params,TRUE);
 	}
 
 	/**
@@ -2641,7 +2644,7 @@ abstract class CMSModule
 	 */
 	function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
 	{
-	  if( $id == '' ) {
+	  if( $returnid == '' ) {
 	    if( is_array($this->__errors) && count($this->__errors) ) {
 	      $params['__errors'] = implode('::err::',$this->__errors);
 	    }
@@ -3032,9 +3035,10 @@ abstract class CMSModule
 	 * i.e:  echo $this->SetTabHeader('preferences',$this->Lang('preferences'));
 	 *
 	 * @final
+
 	 * @param string The tab id
 	 * @param string The tab title
-	 * @param boolean A flag indicating wether this tab is active.
+	 * @param booleban A flag indicating wether this tab is active.
 	 * @return string
 	 */ 
 	function SetTabHeader($tabid,$title,$active=false)
@@ -3211,6 +3215,7 @@ abstract class CMSModule
 	public function SetMessage($str)
 	{
 	  if( !is_array($this->__messages) ) $this->__messages = array();
+          if( !is_array($str) ) $str = array($str);
 	  $this->__messages = array_merge($this->__messages,$str);
 	}
 
@@ -3244,6 +3249,7 @@ abstract class CMSModule
 	public function SetError($str)
 	{
 	  if( !is_array($this->__errors) ) $this->__errors = array();
+          if( !is_array($str) ) $str = array($str);
 	  $this->__errors = array_merge($this->__errors,$str);
 	}
 
