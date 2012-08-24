@@ -19,7 +19,8 @@ FileManager
 News
   - Minor fixes.
   - fesubmit action now documented as deprecated
-  - Minor fesubmit fix
+  - Minor fesubmit fix.
+  - fesubmit action is now officially deprecated and won't receive much love in the future.
 
 
 Version 1.11.1 - Baltra
