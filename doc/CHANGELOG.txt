@@ -22,6 +22,7 @@ News
   - fesubmit action now documented as deprecated
   - Minor fesubmit fix.
   - fesubmit action is now officially deprecated and won't receive much love in the future.
+  - Adds a new preference (on by default) that indicates if expired articles should be viewable in detail view.
 
 
 Version 1.11.1 - Baltra
