@@ -7,6 +7,7 @@ Core - General:
   - Fixes to the RedirectToAdminTab stuff
   - Fixes thumbnail creation stuff to do some file extension checking
   - Missing button "View in English" in OneEleven theme
+  - Minor adjustment to page template parsing to detect <head instead of <head>
   
 MenuManager
   - Fixes minor expression issue wrt the show_all parameter in the breadcrumb action
