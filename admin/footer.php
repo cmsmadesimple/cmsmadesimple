@@ -60,7 +60,7 @@ if( is_array($loaded) && count($loaded) )
 	    $headertext     .= $object->WYSIWYGGenerateHeader($htmlresult);
 	    $formtext       .= $object->WYSIWYGPageForm();
 	    $formsubmittext .= $object->WYSIWYGPageFormSubmit();
-	    break;
+	    //break;
 	  }
 	else if( $object->IsSyntaxHighlighter() && $object->SyntaxActive() )
 	  {
@@ -68,7 +68,7 @@ if( is_array($loaded) && count($loaded) )
 	    $headertext.=$object->SyntaxGenerateHeader($htmlresult);
 	    $formtext.=$object->SyntaxPageForm();
 	    $formsubmittext.=$object->SyntaxPageFormSubmit();
-	    break;
+	   // break;
 	  }
       }
   }
