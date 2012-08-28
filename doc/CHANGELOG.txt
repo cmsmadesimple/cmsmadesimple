@@ -9,6 +9,7 @@ Core - General:
   - Missing button "View in English" in OneEleven theme
   - Minor adjustment to page template parsing to detect <head instead of <head>
   - Fixes to login and admin behavior if users admin theme (or default theme) cannot be found.
+  - Minor modification to smarty to handle closing blocks for block plugins in add/edit template/content.
   
 MenuManager
   - Fixes minor expression issue wrt the show_all parameter in the breadcrumb action
