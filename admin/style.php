@@ -22,10 +22,11 @@ $CMS_ADMIN_PAGE = TRUE;
 $CMS_STYLESHEET = TRUE;
 
 require_once("../include.php");
-cms_admin_sendheaders('text/css');
 
-$theme=get_preference(get_userid(),"admintheme",CmsAdminThemeBase::GetDefaulttheme());
+$themeObject = cms_utils::get_theme_object();
+$theme = $themeObject->themeName;
 $style="style";
+cms_admin_sendheaders('text/css');
 
 $thelang = CmsNlsOperations::get_language_info(CmsNlsOperations::get_current_language());
 if( is_object($thelang) && $thelang->direction() == 'rtl' )

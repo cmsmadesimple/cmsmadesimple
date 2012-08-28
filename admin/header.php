@@ -22,11 +22,9 @@ else
   $themeObject = cms_utils::get_theme_object();
   debug_buffer('after theme load');
 
-  if( isset($headtext) && $headtext != '' )
-    {
-      $themeObject->set_value('headertext',$headtext);
-    }
-
+  if( isset($headtext) && $headtext != '' ) {
+    $themeObject->set_value('headertext',$headtext);
+  }
 
   // Display notification stuff from modules
   // should be controlled by preferences or something
@@ -34,7 +32,6 @@ else
   if( get_site_preference('enablenotifications',1) && get_preference($userid,'enablenotifications',1) )
     {
       debug_buffer('before notifications');
-
       if( ($data = get_site_preference('__NOTIFICATIONS__')) )
 	{
 	  $data = unserialize($data);
@@ -42,6 +39,11 @@ else
 	    {
 	      foreach( $data as $item )
 		{
+		  $old = $item->html;
+		  $regex = '/'.CMS_SECURE_PARAM_NAME.'\=[0-9a-z]{8}/';
+		  $to = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		  $new = preg_replace($regex,$to,$old);
+
 		  $themeObject->AddNotification($item->priority,
 						$item->name,
 						$item->html);
