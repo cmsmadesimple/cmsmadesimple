@@ -437,6 +437,47 @@ abstract class Smarty_Internal_TemplateCompilerBase {
                     }
                     throw new SmartyException("Plugin \"{$tag}\" not callable");
                 }
+		// CALGUY1000 BEGIN 
+		// THIS CODE WAS COPIED AND PASTED FROM ABOVE
+                if (is_callable($this->smarty->default_plugin_handler_func)) {
+		  $found = false;
+		  // look for already resolved tags
+		  foreach ($this->smarty->plugin_search_order as $plugin_type) {
+		    if (isset($this->default_handler_plugins[$plugin_type][$tag])) {
+		      $found = true;
+		      break;
+		    }
+		  }
+		  if (!$found) {
+		    // call default handler
+		    foreach ($this->smarty->plugin_search_order as $plugin_type) {
+		      if ($this->getPluginFromDefaultHandler($tag, $plugin_type)) {
+			$found = true;
+			break;
+		      }
+		    }
+		  }
+		  if ($found) {
+		    // if compiler function plugin call it now
+		    if ($plugin_type == Smarty::PLUGIN_COMPILER) {
+		      $new_args = array();
+		      foreach ($args as $mixed) {
+			$new_args = array_merge($new_args, $mixed);
+		      }
+		      $function = $this->default_handler_plugins[$plugin_type][$tag][0];
+		      if (!is_array($function)) {
+			return $function($new_args, $this);
+		      } else if (is_object($function[0])) {
+			return $this->default_handler_plugins[$plugin_type][$tag][0][0]->$function[1]($new_args, $this);
+		      } else {
+			return call_user_func_array($function, array($new_args, $this));
+		      }
+		    } else {
+		      return $this->callTagCompiler('private_registered_' . $plugin_type, $args, $parameter, $tag);
+		    }
+		  }
+                }
+		// CALGUY1000 END
             }
             $this->trigger_template_error("unknown tag \"" . $tag . "\"", $this->lex->taglineno);
         }
