@@ -120,7 +120,7 @@ class CMSPageTemplateResource extends CMS_Fixed_Resource_Custom
       {
       case 'top':
 	$mtime = $tpl->modified_date;
-	$pos = stripos($tpl->content,'<head>');
+	$pos = stripos($tpl->content,'<head');
 	if( $pos === FALSE ) return;
 	$source = substr($tpl->content,0,$pos);
 	return;
