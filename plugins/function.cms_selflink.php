@@ -18,6 +18,9 @@
 
 function smarty_function_cms_selflink($params, &$template) 
 {
+  global $CMS_ADMIN_PAGE;
+  if( isset($CMS_ADMIN_PAGE) ) return;
+
   $smarty = $template->smarty;
   $gCms = cmsms();
 
@@ -254,12 +257,14 @@ function smarty_function_cms_selflink($params, &$template)
 	    {
 	      // Uplink
 	      $node = $hm->getNodeById($gCms->variables['content_id']);
+	      if( !isset($node) ) {
+                return;
+              }
 	      $node = $node->getParentNode();
-	      if (!isset($node)) 
-		{
-		  if (isset($params['lang'])) cms_set_frontend_language();
-		  return;
-		}
+	      if (!isset($node)) {
+	        if (isset($params['lang'])) cms_set_frontend_language();
+	        return;
+              }
 	      $content = $node->GetContent();
 	      if ($content != FALSE)
 		{
