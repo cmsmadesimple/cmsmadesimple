@@ -11,6 +11,7 @@ Core - General:
   - Fixes to login and admin behavior if users admin theme (or default theme) cannot be found.
   - Minor modification to smarty to handle closing blocks for block plugins in add/edit template/content.
   - Fixed problem with forgotten password form in the OneEleven admin theme.
+  - Fixes {cms_selflink} to do nothing in an admin request.
   
 MenuManager
   - Fixes minor expression issue wrt the show_all parameter in the breadcrumb action
