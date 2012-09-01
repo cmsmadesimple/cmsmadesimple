@@ -38,8 +38,10 @@
 					</header>
 					<form method="post" action="login.php">
 						<fieldset>
+                                                        {assign var='usernamefld' value='username'}
+							{if isset($smarty.get.forgotpw)}{assign var='usernamefld' value='forgottenusername'}{/if}
 							<label for="lbusername">{'username'|lang}</label>
-							<input id="lbusername"{if !isset($smarty.post.lbusername)} class="focus"{/if} placeholder="{'username'|lang}" name="username" type="text" size="15" value="" />
+							<input id="lbusername"{if !isset($smarty.post.lbusername)} class="focus"{/if} placeholder="{'username'|lang}" name="{$usernamefld}" type="text" size="15" value="" />
 						{if isset($smarty.get.forgotpw) && !empty($smarty.get.forgotpw)}
 							<input type="hidden" name="forgotpwform" value="1" />
 						{/if}
