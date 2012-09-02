@@ -43,7 +43,7 @@ $nls['alias']['sk_SK.WINDOWS-1250'] = 'sk_SK' ;
 $nls['alias']['sk_SK.ISO8859-2'] = 'sk_SK' ;
 
 #Possible locale for language
-$nls['locale']['sk_SK'] = 'sk_SK,sk_SK.utf8,slovak,Slovak_Slovakia.1250';
+$nls['locale']['sk_SK'] = 'sk_SK,sk_SK.utf8,sk_SK.UTF-8,sk_SK.utf-8,slovak,Slovak_Slovakia.1250';
 
 #Encoding of the language
 $nls['encoding']['sk_SK'] = "UTF-8";

@@ -37,7 +37,7 @@ $nls['alias']['dutch'] = 'nl_NL';
 $nls['alias']['nl_NL.ISO8859-1'] = 'nl_NL' ;
 
 #Possible locale for language
-$nls['locale']['nl_NL'] = 'nl_NL,nl_NL.utf8,nl_NL@euro,dutch,Dutch_Netherlands.1252';
+$nls['locale']['nl_NL'] = 'nl_NL,nl_NL.utf8,nl_NL.UTF-8,nl_NL.utf.8,nl_NL@euro,dutch,Dutch_Netherlands.1252';
 
 #Encoding of the language
 $nls['encoding']['nl_NL'] = 'UTF-8';

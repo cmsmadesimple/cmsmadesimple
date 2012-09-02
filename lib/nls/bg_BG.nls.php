@@ -40,7 +40,7 @@ $nls['alias']['bulgarian'] = 'bg_BG' ;
 $nls['alias']['bul'] = 'bg_BG' ;
 
 #Possible locale for language
-$nls['locale']['bg_BG'] = 'bg_BG,bg_BG.utf8,bulgarian,Bulgarian_Bulgaria.1251';
+$nls['locale']['bg_BG'] = 'bg_BG,bg_BG.utf8,bg_BG.utf-8,bg_BG.UTF-8,bulgarian,Bulgarian_Bulgaria.1251';
 
 #Encoding of the language
 $nls['encoding']['bg_BG'] = 'UTF-8';

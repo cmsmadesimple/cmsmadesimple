@@ -41,7 +41,7 @@ $nls['alias']['fi_FI.ISO8859-1'] = 'fi_FI' ;
 $nls['alias']['fi_FI.ISO8859-15'] = 'fi_FI' ;
 
 #Possible locale for language
-$nls['locale']['fi_FI'] = 'fi_FI,fi_FI.utf8,fi_FI@euro,finnish,Finnish_Finland.1252';
+$nls['locale']['fi_FI'] = 'fi_FI,fi_FI.utf8,fi_FI.utf-8,fi_FI.UTF-8,fi_FI@euro,finnish,Finnish_Finland.1252';
 
 #Encoding of the language
 $nls['encoding']['fi_FI'] = 'UTF-8';

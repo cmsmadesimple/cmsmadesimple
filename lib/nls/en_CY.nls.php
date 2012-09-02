@@ -37,7 +37,7 @@ $nls['alias']['welsh'] = 'en_CY';
 $nls['alias']['en_CY.ISO8859-1'] = 'en_CY' ;
 
 #Possible locale for language
-$nls['locale']['en_CY'] = 'en_CY,en_CY.utf8,en_CY@pound,welsh,Welsh_Wales.1252';
+$nls['locale']['en_CY'] = 'en_CY,en_CY.utf8,en_CY.utf-8,en_CY.UTF-8,en_CY@pound,welsh,Welsh_Wales.1252';
 
 #Encoding of the language
 $nls['encoding']['en_CY'] = 'UTF-8';

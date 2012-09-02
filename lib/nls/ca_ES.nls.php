@@ -40,7 +40,7 @@ $nls['alias']['catal&agrave;'] = 'ca_ES' ;
 $nls['alias']['ca_ES.ISO8859-1'] = 'ca_ES' ;
 
 #Possible locale for language
-$nls['locale']['ca_ES'] = 'ca_ES,ca_ES.utf8,ca_ES.utf8@valencia,ca_ES@euro,ca_ES@valencia,catalan,Catalan_Spain.1252';
+$nls['locale']['ca_ES'] = 'ca_ES,ca_ES.utf8,ca_ES.utf8@valencia,ca_ES.utf-8,ca_ES.UTF-8,ca_ES@euro,ca_ES@valencia,catalan,Catalan_Spain.1252';
 
 #Encoding of the language
 $nls['encoding']['ca_ES'] = 'UTF-8';

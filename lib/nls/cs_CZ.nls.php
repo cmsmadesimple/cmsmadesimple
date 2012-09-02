@@ -43,7 +43,7 @@ $nls['alias']['cs_CZ.WINDOWS-1250'] = 'cs_CZ' ;
 $nls['alias']['cs_CZ.ISO8859-2'] = 'cs_CZ' ;
 
 #Possible locale for language
-$nls['locale']['cs_CZ'] = 'cs_CZ,cs_CZ.utf8,czech,Czech_Czech Republic.1250';
+$nls['locale']['cs_CZ'] = 'cs_CZ,cs_CZ.utf8,cs_CZ.utf-8,cs_CZ.UTF-8,czech,Czech_Czech Republic.1250';
 
 #Encoding of the language
 $nls['encoding']['cs_CZ'] = 'UTF-8';

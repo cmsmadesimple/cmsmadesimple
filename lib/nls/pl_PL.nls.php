@@ -39,7 +39,7 @@ $nls['alias']['polish'] = 'pl_PL' ;
 $nls['alias']['pl_PL.ISO8859-2'] = 'pl_PL' ;
 
 #Possible locale for language
-$nls['locale']['pl_PL'] = 'pl_PL,pl_PL.utf8,polish,Polish_Poland.1250';
+$nls['locale']['pl_PL'] = 'pl_PL,pl_PL.utf8,pl_PL.UTF-8,pl_PL.utf.8,polish,Polish_Poland.1250';
 
 #Encoding of the language
 $nls['encoding']['pl_PL'] = 'UTF-8';

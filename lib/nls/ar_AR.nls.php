@@ -45,7 +45,7 @@ $nls['alias']['ar_AR.ISO8859-6'] = 'ar_AR';
 $nls['alias']['ar_AR.windows-1256'] = 'ar_AR';
 
 #Possible locale for language
-$nls['locale']['ar_AR'] = 'ar_AR,ar_AR.utf8,arabic,Arabic_Saudi Arabia.1256';
+$nls['locale']['ar_AR'] = 'ar_AR,ar_AR.utf8,ar_AR.utf-8,ar_AR.UTF-8,ar_AE.utf-8,ar_AE.UTF-8,arabic,Arabic_Saudi Arabia.1256';
 
 #Encoding of the language
 $nls['encoding']['ar_AR'] = 'UTF-8';

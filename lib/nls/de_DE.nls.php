@@ -41,7 +41,7 @@ $nls['alias']['deu'] = 'de_DE' ;
 $nls['alias']['de_DE.ISO8859-1'] = 'de_DE' ;
 
 #Possible locale for language
-$nls['locale']['de_DE'] = 'de_DE,de_DE.utf-8,de_DE.UTF-8,de_DE@euro,deu,german,German_Germany.1252';
+$nls['locale']['de_DE'] = 'de_DE,de_DE.utf8,de_DE.utf-8,de_DE.UTF-8,de_DE@euro,deu,german,German_Germany.1252';
 
 #Encoding of the language
 $nls['encoding']['de_DE'] = 'UTF-8';

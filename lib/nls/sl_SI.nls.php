@@ -42,7 +42,7 @@ $nls['alias']['sl_SI.WINDOWS-1250'] = 'sl_SI' ;
 $nls['alias']['sl_SI.ISO8859-2'] = 'sl_SI' ;
 
 #Possible locale for language
-$nls['locale']['sl_SI'] = 'sl_SI,sl_SI.utf8,slovenian,Slovenian_Slovenia.1250';
+$nls['locale']['sl_SI'] = 'sl_SI,sl_SI.utf8,sl_SI.UTF-8,sl_SI.utf-8,slovenian,Slovenian_Slovenia.1250';
 
 #Encoding of the language
 $nls['encoding']['sl_SI'] = 'UTF-8';

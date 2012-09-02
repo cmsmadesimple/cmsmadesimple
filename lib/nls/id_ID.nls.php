@@ -39,7 +39,7 @@ $nls['alias']['id_ID'] = 'id_ID' ;
 $nls['alias']['id_ID.ISO8859-15'] = 'id_ID' ;
 
 #Possible locale for language
-$nls['locale']['id_ID'] = 'id_ID,id_ID.utf8,indonesian,Indonesian_indonesia.1252';
+$nls['locale']['id_ID'] = 'id_ID,id_ID.utf8,id_ID.utf-8,id_ID.UTF-8,indonesian,Indonesian_indonesia.1252';
 
 #Encoding of the language
 $nls['encoding']['id_ID'] = 'UTF-8';

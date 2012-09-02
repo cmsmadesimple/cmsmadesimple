@@ -40,7 +40,7 @@ $nls['alias']['ja_JP.Shift_JIS'] = 'ja_JP' ;
 $nls['alias']['ja_JP.UTF-8'] = 'ja_JP' ;
 
 #Possible locale for language
-$nls['locale']['ja_JP'] = 'ja_JP,ja_JP.utf8,ja_JP.eucjp,japanese,Japanese_Japan.932';
+$nls['locale']['ja_JP'] = 'ja_JP,ja_JP.utf8,ja_JP.utf-8,ja_JP.UTF-8,ja_JP.SJIS,ja_JP.eucjp,japanese,Japanese_Japan.932';
 
 #Encoding of the language
 $nls['encoding']['ja_JP'] = 'UTF-8';

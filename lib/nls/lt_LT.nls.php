@@ -10,7 +10,7 @@ $nls['alias']['lt_LT'] = 'lt_LT' ;
 $nls['alias']['lt_LT.ISO8859-13'] = 'lt_LT' ;
 
 #Possible locale for language
-$nls['locale']['lt_LT'] = 'lt_LT,lt_LT.utf8,lithuanian,Lithuanian_Lithuania.1257';
+$nls['locale']['lt_LT'] = 'lt_LT,lt_LT.utf8,lt_LT.utf-8,lt_LT.UTF-8,lt_LT.ISO8859-13,lt_LT.ISO8859-4,lithuanian,Lithuanian_Lithuania.1257';
 
 #Encoding of the language
 $nls['encoding']['lt_LT'] = 'UTF-8';
