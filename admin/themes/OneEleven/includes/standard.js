@@ -154,7 +154,7 @@ jQuery(document).ready(function($) {
 	}
 
 	// Jquery UI DIALOG
-	jQuery(function() {
+	$(function() {
 		var dialogs = {};
 		$('.dialog').each(function() {
 			var dialog_id = $(this).prev('.open').attr('title');
@@ -172,7 +172,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 	// SIDEBAR MENU
-	jQuery(function() {
+	$(function() {
 		var pagemenu = $('#oe_pagemenu');
 		pagemenu.find('li.current span').addClass('open-sub');
 		pagemenu.find('> li > span').click(function() {
@@ -184,7 +184,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 	// SIDEBAR MENU Mobile check
-	jQuery(function() {
+	$(function() {
 		if(navigator.userAgent.match(/(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini|Opera Tablet|Mobile|Fennec)/)) {
 		} else {
 			$(window).scroll(function() {
@@ -196,8 +196,8 @@ jQuery(document).ready(function($) {
 		} 
 	});
 	// BUTTONS
-	jQuery(function() {
-		jQuery('body').off('cms_ajax_apply');
+	$(function() {
+		$('body').off('cms_ajax_apply');
 		$('input[type="submit"], input[type="button"]').each(function() {
 			if($(this).attr('name') == 'apply' || $(this).attr('name') == 'm1_apply') {
 				var icon = 'ui-icon-disk';
@@ -229,7 +229,7 @@ jQuery(document).ready(function($) {
 				$(this).removeClass('ui-state-hover');
 			});
 		// Handle ajax apply
-		jQuery('body').on('cms_ajax_apply', function(e) {
+		$('body').on('cms_ajax_apply', function(e) {
 			// gotta get langified string here.
 			$('button[name=cancel], button[name=m1_cancel]').fadeOut();
 			$('button[name=cancel], button[name=m1_cancel]').button('option', 'label', e.close);
@@ -255,7 +255,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 	// SHOW/HIDE NOTIFICATIONS
-	jQuery(function() {
+	$(function() {
 		$('.pagewarning, .message, .pageerrorcontainer, .pagemcontainer').prepend('<span class="close-warning"></span>');
 		$('.close-warning').click(function() {
 			$(this).parent().hide();

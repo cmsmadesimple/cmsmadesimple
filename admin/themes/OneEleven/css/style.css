@@ -517,9 +517,15 @@ input {
 	text-indent: 5px;
 	margin-right: 5px
 }
+/*
 input[type='text'] {
 	min-width: 25%
 }
+*/
+input[type='text']#in_title,
+input[type='text']#in_menutext {
+	min-width: 30%
+} 
 input:hover, 
 input:focus, 
 textarea:hover, 
