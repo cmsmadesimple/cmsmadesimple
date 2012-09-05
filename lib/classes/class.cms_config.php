@@ -252,7 +252,7 @@ class cms_config implements ArrayAccess
 							  $path = dirname($path);
 						  }
 					  }
-					  while(endswith($path,'/')) {
+					  while(endswith($path, DIRECTORY_SEPARATOR)) {
 						  $path = substr($path,0,strlen($path)-1);
 					  }
 				  }
