@@ -18,7 +18,7 @@
 		</li>
 		{/if}
 		<li class="view-site">
-			<a href="{root_url}" rel="external" target="_blank" title="{'viewsite'|lang}">{'viewsite'|lang}</a>
+			<a href="{root_url}/index.php" rel="external" target="_blank" title="{'viewsite'|lang}">{'viewsite'|lang}</a>
 		</li>		
 		<li class="logout">
 			<a href="logout.php?{$secureparam}" title="{'logout'|lang}">{'logout'|lang}</a>
