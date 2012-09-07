@@ -55,98 +55,84 @@ final class CmsLangOperations
     $dir = '';
     $has_realm = 0;
     $filename = 'en_US.php';
-    if( $realm == 'admin' )
-      {
-	$dir = cms_join_path($config['root_path'],$config['admin_dir'],'lang');
-	$filename = 'admin.inc.php';
-	$fn = cms_join_path($dir,'en_US',$filename);
-	$has_realm = 1;
-      }
-    else
-      {
-	$dir = cms_join_path($config['root_path'],'lib','lang',$realm);
-	$fn = cms_join_path($dir,$filename);
-      }
+    if( $realm == 'admin' ) {
+      $dir = cms_join_path($config['root_path'],$config['admin_dir'],'lang');
+      $filename = 'admin.inc.php';
+      $fn = cms_join_path($dir,'en_US',$filename);
+      $has_realm = 1;
+    }
+    else {
+      $dir = cms_join_path($config['root_path'],'lib','lang',$realm);
+      $fn = cms_join_path($dir,$filename);
+    }
     if( !file_exists($fn) ) return FALSE;
 
-    if( $has_realm )
-      {
-	$lang = array();
-	include($fn);
-	if( isset($lang[$realm]) )
-	  {
-	    self::$_langdata[$curlang][$realm] = $lang[$realm];
-	  }
-	unset($lang);
+    if( $has_realm ) {
+      $lang = array();
+      include($fn);
+      if( isset($lang[$realm]) ) {
+	self::$_langdata[$curlang][$realm] = $lang[$realm];
       }
-    else
-      {
-	$lang = array();
-	include($fn);
-	self::$_langdata[$curlang][$realm] = $lang;
-	unset($lang);
+      unset($lang);
+    }
+    else {
+      $lang = array();
+      include($fn);
+      self::$_langdata[$curlang][$realm] = $lang;
+      unset($lang);
+    }
+
+    if( $curlang != 'en_US' ) {
+      if( !is_array(self::$_engdata) ) self::$_engdata = array();
+      // backup the english data... in case we need to get it later.
+      self::$_engdata[$realm] = self::$_langdata[$curlang][$realm];
+      
+      // load the lang file itself.
+      if( $realm == 'admin' ) {
+	$dir = cms_join_path($dir,'ext',$curlang);
       }
-
-    if( $curlang != 'en_US' )
-      {
-	if( !is_array(self::$_engdata) ) self::$_engdata = array();
-	// backup the english data... in case we need to get it later.
-	self::$_engdata[$realm] = self::$_langdata[$curlang][$realm];
-
-	// load the lang file itself.
-	if( $realm == 'admin' )
-	  {
-	    $dir = cms_join_path($dir,'ext',$curlang);
+      else {
+	$dir = cms_join_path($dir,'ext');
+	$filename = $curlang.'.php';
+      }
+      $fn = cms_join_path($dir,$filename);
+      if( file_exists($fn) ) {
+	if( $has_realm ) {
+	  $lang = array();
+	  include($fn);
+	  if( isset($lang[$realm]) ) {
+	    self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang[$realm]);
 	  }
-	else
-	  {
-	    $dir = cms_join_path($dir,'ext');
-	    $filename = $curlang.'.php';
+	  unset($lang);
+	}
+	else {
+	  $lang = array();
+	  include($fn);
+	  if( isset($lang) ) {
+	    self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
 	  }
-	$fn = cms_join_path($dir,$filename);
-	if( file_exists($fn) )
-	  {
-	    if( $has_realm )
-	      {
-		$lang = array();
-		include($fn);
-		if( isset($lang[$realm]) )
-		  {
-		    self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang[$realm]);
-		  }
-		unset($lang);
-	      }
-	    else
-	      {
-		$lang = array();
-		include($fn);
-		if( isset($lang) )
-		  {
-		    self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
-		  }
-		unset($lang);
-	      }	
-	  } // file exists.
-      } // not english
-	
+	  unset($lang);
+	}	
+      } // file exists.
+    } // not english
+    
     if( $realm  != 'admin' ) return TRUE;
 
     // load custom admin realm.
-    $dir = cms_join_path($config['root_path'],$config['admin_dir'],'custom',$curlang);
+    $dir = cms_join_path($config['root_path'],$config['admin_dir'],'custom/lang',$curlang);
     $fn = cms_join_path($dir,$filename);
     if( !file_exists($fn) ) return TRUE;
 	
     $lang = array();
     include($fn);
-    if( isset($lang) )
-      {
-	if( isset($lang[$realm]) && is_array($lang[$realm]) && count($lang[$realm]) ) {
-	  self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang[$realm]);
-        }
-        else {
-	  self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
-	}
+    if( isset($lang) ) {
+      if( isset($lang[$realm]) && is_array($lang[$realm]) && count($lang[$realm]) ) {
+	self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang[$realm]);
       }
+      else {
+	self::$_langdata[$curlang][$realm] = array_merge(self::$_langdata[$curlang][$realm],$lang);
+      }
+    }
     unset($lang);
 
     return TRUE;
@@ -190,10 +176,9 @@ final class CmsLangOperations
   public static function lang_from_realm()
   {
     $args = func_get_args();
-    if( count($args) == 1 && is_array($args[0]) )
-      {
-	$args = $args[0];
-      }
+    if( count($args) == 1 && is_array($args[0]) ) {
+      $args = $args[0];
+    }
     if( count($args) < 2 ) return;
 
     $realm  = $args[0];
@@ -203,34 +188,31 @@ final class CmsLangOperations
     global $CMS_ADMIN_PAGE;
     global $CMS_STYLESHEET;
     global $CMS_INSTALL_PAGE;    
-    if ('admin' == $realm && !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) && !self::$_allow_nonadmin_lang )
-      {
-	trigger_error('Attempt to load admin realm from non admin action');
-	return '';
-      }
+    if ('admin' == $realm && !isset($CMS_ADMIN_PAGE) && 
+	!isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) && 
+	!self::$_allow_nonadmin_lang ) {
+      trigger_error('Attempt to load admin realm from non admin action');
+      return '';
+    }
   
     $params = array();
-    if( count($args) > 2 )
-      {
-	$params = array_slice($args,2);
-      }
-    if( count($params) == 1 && is_array($params[0]) )
-      {
-	$params = $params[0];
-      }
+    if( count($args) > 2 ) {
+      $params = array_slice($args,2);
+    }
+    if( count($params) == 1 && is_array($params[0]) ) {
+      $params = $params[0];
+    }
 
     $curlang = CmsNlsOperations::get_current_language();
     self::_load_realm($realm);
     if( !isset(self::$_langdata[$curlang][$realm][$key]) ) return "-- Add me: $key --";
 
-    if( count($params) )
-      {
-	$result = vsprintf(self::$_langdata[$curlang][$realm][$key], $params);
-      }
-    else
-      {
-	$result = self::$_langdata[$curlang][$realm][$key];
-      }
+    if( count($params) ) {
+      $result = vsprintf(self::$_langdata[$curlang][$realm][$key], $params);
+    }
+    else {
+      $result = self::$_langdata[$curlang][$realm][$key];
+    }
 
     // conversion?
     return self::_convert_encoding($result);
@@ -249,10 +231,9 @@ final class CmsLangOperations
   public static function lang()
   {
     $args = func_get_args();
-    if( count($args) == 1 && is_array($args[0]) )
-      {
-	$args = $args[0];
-      }
+    if( count($args) == 1 && is_array($args[0]) ) {
+      $args = $args[0];
+    }
     array_unshift($args,'admin');
     return self::lang_from_realm($args);
   }
