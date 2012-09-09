@@ -9,13 +9,13 @@ Core - General:
   - Missing button "View in English" in OneEleven theme
   - Minor adjustment to page template parsing to detect <head instead of <head>
   - Fixes to login and admin behavior if users admin theme (or default theme) cannot be found.
-  - Minor modification to smarty to handle closing blocks for block plugins in add/edit template/content.
-  - Fixed problem with forgotten password form in the OneEleven admin theme.
-  - Fixes {cms_selflink} to do nothing in an admin request.
-  - Fixes an error where custom admin lang strings were loaded from the wrong file (according to the docs).
+  - Minor modification to smarty to handle closing blocks for block plugins in add/edit template/content
+  - Fixed problem with forgotten password form in the OneEleven admin theme
+  - Fixes {cms_selflink} to do nothing in an admin request
+  - Fixes an error where custom admin lang strings were loaded from the wrong file (according to the docs)
   - Updated translations redirect_url tag documentation
+  - Fix #8368 - Global Content Blocks: Additional editors reset on edit
 
->>>>>>> .r8287
 MenuManager
   - Fixes minor expression issue wrt the show_all parameter in the breadcrumb action
 
