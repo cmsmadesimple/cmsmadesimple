@@ -102,11 +102,15 @@ if ($access)
 			$the_blob->content = $content;
 			$the_blob->owner = $owner_id;
 
+			if ($adminaccess || $isowner) 
+				$the_blob->ClearAuthors();
+			
 			if (isset($_POST["additional_editors"])) {
-			$the_blob->ClearAuthors();
-			  foreach ($_POST["additional_editors"] as $addt_user_id) {
-			    $the_blob->AddAuthor($addt_user_id);
-			  }
+				
+				foreach ($_POST["additional_editors"] as $addt_user_id) {
+				
+					$the_blob->AddAuthor($addt_user_id);
+				}
 			}
 
 			Events::SendEvent('Core', 'EditGlobalContentPre', array('global_content' => &$the_blob));

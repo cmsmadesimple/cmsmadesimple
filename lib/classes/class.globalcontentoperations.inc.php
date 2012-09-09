@@ -82,7 +82,7 @@ final class GlobalContentOperations
 			$result = $db->GetCol($query,array($userid));
 			if( is_array($result) && count($result) )
 			{
-				$authorblobs[] = array_merge($authorblobs,$result);
+				$authorblobs = array_merge($authorblobs,$result);
 			}
 
 			// get the list of html blobs where this users member groups are listed as an additional editor

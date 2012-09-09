@@ -917,6 +917,9 @@ final class ModuleOperations
 
 			  // clear the cache.
 			  $gCms->clear_cached_files();
+			  
+			  // Removing module from info
+			  unset($this->_moduleinfo[$module]);
 
 			  Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
 			  audit('','Module','Uninstalled module '.$module);
