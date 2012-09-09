@@ -15,6 +15,8 @@ Core - General:
   - Fixes an error where custom admin lang strings were loaded from the wrong file (according to the docs)
   - Updated translations redirect_url tag documentation
   - Fix #8368 - Global Content Blocks: Additional editors reset on edit
+  - Fixes permission problems single user selected as additional editor in GCB. 
+  - Fixes problem with module Uninstall process not setting module uninstalled in certain state, even it should.  
 
 MenuManager
   - Fixes minor expression issue wrt the show_all parameter in the breadcrumb action
