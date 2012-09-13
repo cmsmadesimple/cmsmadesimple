@@ -1269,55 +1269,46 @@ abstract class CmsAdminThemeBase
 
 		$depth = 0;
 		$menuItems = $this->get_admin_navigation();
-		foreach( $menuItems as $sectionKey=>$menuItem )
-			{
-				if( $menuItem['parent'] != -1 )
-					{
-						continue;
-					}
-				if( !$menuItem['show_in_menu'] || strlen($menuItem['url']) < 1 )
-					{
-						continue;
-					}
-	      
-				$opts[$menuItem['title']] = $menuItem['url'];
-
-				if( is_array($menuItem['children']) && 
-					count($menuItem['children']) )
-					{
-						foreach( $menuItem['children'] as $thisChild )
-							{
-								if( $thisChild == 'home' || $thisChild == 'logout' ||
-									$thisChild == 'viewsite')
-									{
-										continue;
-									}
-
-								$menuChild = $menuItems[$thisChild];
-								if( !$menuChild['show_in_menu'] || strlen($menuChild['url']) < 1 )
-									{
-										continue;
-									}
-
-								$opts['&nbsp;&nbsp;'.$menuChild['title']] = cms_htmlentities($menuChild['url']);
-							}
-					}
+		foreach( $menuItems as $sectionKey=>$menuItem ) {
+			if( $menuItem['parent'] != -1 ) {
+				continue;
 			}
+			if( !$menuItem['show_in_menu'] || strlen($menuItem['url']) < 1 ) {
+				continue;
+			}
+	     
+			$opts[$menuItem['title']] = $menuItem['url'];
+
+			if( is_array($menuItem['children']) && 
+				count($menuItem['children']) ) {
+				foreach( $menuItem['children'] as $thisChild ) {
+					if( $thisChild == 'home' || $thisChild == 'logout' ||
+						$thisChild == 'viewsite') {
+						continue;
+					}
+
+					$menuChild = $menuItems[$thisChild];
+					if( !$menuChild['show_in_menu'] || strlen($menuChild['url']) < 1 ) {
+						continue;
+					}
+
+					//$opts['&nbsp;&nbsp;'.$menuChild['title']] = cms_htmlentities($menuChild['url']);
+					$opts['&nbsp;&nbsp;'.$menuChild['title']] = $menuChild['url'];
+				}
+			}
+		}
 
 		$output = '<select name="'.$name.'">'."\n";
-		foreach( $opts as $key => $value )
-			{
-				if( $value == $selected )
-					{
-						$output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>\n",
-										   $value,$key);
-					}
-				else
-					{
-						$output .= sprintf("<option value=\"%s\">%s</option>\n",
-										   $value,$key);
-					}
+		foreach( $opts as $key => $value ) {
+			if( $value == $selected ) {
+				$output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>\n",
+								   $value,$key);
 			}
+			else {
+				$output .= sprintf("<option value=\"%s\">%s</option>\n",
+								   $value,$key);
+			}
+		}
 		$output .= '</select>'."\n";
 		return $output;
 	}
