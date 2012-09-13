@@ -17,10 +17,12 @@ Core - General:
   - Fix #8368 - Global Content Blocks: Additional editors reset on edit
   - Fixes permission problems single user selected as additional editor in GCB
   - Fixes problem with module Uninstall process not setting module uninstalled in certain state, even it should
+  - Compressed all images in OneEleven theme (probably not needed in changelog)
+  - $nls['locale'] fixes in language .nls files
 
 MenuManager
   - Fixes minor expression issue wrt the show_all parameter in the breadcrumb action
-  - Fix breadcrumbs template with using sectionheaders
+  - Fixed breadcrumbs templates with using sectionheaders
 
 FileManager
   - Minor adjustments to the savesettings action
