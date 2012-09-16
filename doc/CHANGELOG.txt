@@ -1,4 +1,4 @@
-Version 1.11.2 - 
+Version 1.11.2 - Isabela 
 -----------------------------
 Core - General:
   - Minor fix to the en_US.nls file
