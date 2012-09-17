@@ -326,10 +326,10 @@ code, tt, pre {
 }
 /* Format code chunks */
 pre, code, samp, kbd {
-	font-family: "Courier New", Courier, monospace, sans-serif;
+	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
 	text-align: left;
 	color: #222;
-	font-size: 11px;
+	font-size: 12px;
 	}
 pre code {
 	line-height: 1.6em;
@@ -1315,7 +1315,8 @@ textarea.pagebigtextarea {
 }
 .pageinput textarea
 {
-	font-family: "Courier New", Courier, monospace, sans-serif;
+	font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', monospace;
+	font-size: 12px;
 	line-height: 1.6;
 }
 textarea.pagesmalltextarea {
