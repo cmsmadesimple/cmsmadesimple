@@ -40,7 +40,20 @@ require_once(dirname(__FILE__).'/class.cms_variables.php');
  */
 final class CmsApp {
 
+	const STATE_ADMIN_PAGE = 'admin_request';
+	const STATE_INSTALL    = 'install_request';
+	const STATE_STYLESHEET = 'stylesheet_request';
+    const STATE_PARSE_TEMPLATE = 'parse_page_template';
+
 	private static $_instance;
+
+	/**
+	 * List of currrent states.
+	 * @ignore
+	 */
+	private $_states;
+	private static $_statelist = array(self::STATE_ADMIN_PAGE,self::STATE_STYLESHEET,
+									   self::STATE_INSTALL,self::STATE_PARSE_TEMPLATE);
 
 	/**
 	 * Database object - adodb reference to the current database
@@ -453,6 +466,134 @@ final class CmsApp {
 
 		@touch(cms_join_path(TMP_CACHE_LOCATION,'index.html'));
 		@touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
+	}
+
+	
+	/**
+	 * Set all known states from global variables.
+	 *
+	 * @since 1.11.2
+	 * @deprecated
+	 * @ignore
+	 */
+	private function set_states()
+	{
+		if( !isset($this->_states) ) {
+			// build the array.
+			global $CMS_ADMIN_PAGE;
+			global $CMS_INSTALL;
+			global $CMS_STYLESHEET;
+
+			$this->_states = array();
+			if( isset($CMS_ADMIN_PAGE) ) {
+				$this->_states[] = self::STATE_ADMIN_PAGE;
+			}
+			if( isset($CMS_INSTALL) ) {
+				$this->_states[] = self::STATE_INSTALL;
+			}
+			if( isset($CMS_STYLESHEET) ) {
+				$this->_states[] = self::STATE_STYLESHEET;
+			}
+			$smarty = cmsms()->GetSmarty();
+			if( isset($smarty->pase_template) && $smarty->parse_template == 1)
+				$this->_states[] = self::STATE_PARSE_TEMPLATE;
+		}
+	}
+
+    /** 
+	 * Test if the current application state matches the requested value.
+
+	 * This method will throw an exception if invalid data is passed in.
+	 *
+	 * @since 1.11.2
+	 * @author Robert Campbell
+	 * @param string A valid state name (see the state list above).  It is recommended that the class constants be used.
+	 * @return boolean
+	 */
+	public function test_state($state)
+	{
+		if( !in_array($state,self::$_statelist) ) {
+			throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
+		}
+		$this->set_states();
+		if( is_array($this->_states) && in_array($state,$this->_states) ) return TRUE;
+		return FALSE;
+	}
+
+    /**
+	 * Get a list of all current states.
+	 *
+	 * @since 1.11.2
+	 * @author Robert Campbell
+	 * @return Array of state strings, or null.
+	 */
+    public function get_states()
+    {
+		$this->set_states();
+		if( isset($this->_states) ) return $this->_states;
+	}
+
+    /**
+	 * Add a state to the list of states.
+	 *
+	 * This method will throw an exception if an invalid state is passed in.
+	 *
+	 * @ignore
+	 * @internal
+	 * @since 1.11.2
+	 * @author Robert Campbell
+	 * @param string The state.  We recommend you use the class constants for this.
+	 * @return void
+	 */
+    public function add_state($state)
+    {
+		if( !in_array($state,self::$_statelist) ) {
+			throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
+		}
+		$this->set_states();
+		$this->_states[] = $state;
+    }
+
+    /**
+	 * Remove a state to the list of states.
+	 *
+	 * This method will throw an exception if an invalid state is passed in.
+	 *
+	 * @ignore
+	 * @internal
+	 * @since 1.11.2
+	 * @author Robert Campbell
+	 * @param string The state.  We recommend you use the class constants for this.
+	 * @return void
+	 */
+    public function remove_state($state)
+    {
+		if( !in_array($state,self::$_statelist) ) {
+			throw new CmsInvalidDataException($state.' is an invalid CMSMS state');
+		}
+		$this->set_states();
+		if( !is_array($this->_states) || !in_array($state,$this->_states) ) {
+			$key = array_search($state,$this->_states);
+			if( $key !== FALSE ) unset($this->_states[$key]);
+			return TRUE;
+		}
+		return FALSE;
+    }
+
+    /**
+	 * A convenience method to test if the current request is a frontend request.
+	 *
+	 * @since 1.11.2
+	 * @author Robert Campbell
+	 * @return boolean
+	 */
+    public function is_frontend_request()
+    {
+		$tmp = $this->get_states();
+		if( !is_array($tmp) || count($tmp) == 0 ) {
+			return TRUE;
+		}
+		return FALSE;
 	}
 }
 
