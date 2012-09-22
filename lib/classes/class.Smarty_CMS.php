@@ -46,7 +46,7 @@ class Smarty_CMS extends SmartyBC
 	{ 
 		parent::__construct();
 
-		global $CMS_ADMIN_PAGE;
+		global $CMS_ADMIN_PAGE; // <- Still needed?
 		global $CMS_INSTALL_PAGE;
 		
 		$config = cmsms()->GetConfig();
@@ -107,7 +107,7 @@ class Smarty_CMS extends SmartyBC
 			$this->registerResource('tpl_head',new CMSPageTemplateResource('head'));
 			$this->registerResource('tpl_body',new CMSPageTemplateResource('body'));
 			$this->registerResource('content',new CMSContentTemplateResource());
-			$this->registerResource('htmlblob',new CMSGlobalContentTemplateResource());
+			//$this->registerResource('htmlblob',new CMSGlobalContentTemplateResource());
 			$this->registerResource('globalcontent',new CMSGlobalContentTemplateResource());
 
 			// just for frontend actions.
@@ -116,44 +116,8 @@ class Smarty_CMS extends SmartyBC
 			$this->registerPlugin('function','content_module','CMS_Content_Block::smarty_fetch_moduleblock',false);
 			$this->registerPlugin('function','process_pagedata','CMS_Content_Block::smarty_fetch_pagedata',false);
 
-			// find filters in the plugins directories.
-			$pre = array();
-			$post = array();
-			$output = array();
-			foreach( $this->plugins_dir as $onedir ) {
-			
-				if( !is_dir($onedir) ) 
-					continue;
-
-				$files = glob($onedir.'/*php');
-				if( !is_array($files) || count($files) == 0 ) 
-					continue;
-
-				foreach( $files as $onefile ) {
-				
-					$onefile = basename($onefile);
-					$parts = explode('.',$onefile);
-					if( !is_array($parts) || count($parts) != 3 )
-						continue;
-					
-					switch( $parts[0] ) {
-					
-						case 'output':
-							$output[] = $parts[1];
-							break;
-							
-						case 'prefilter':
-							$pre[] = $parts[1];
-							break;
-							
-						case 'postfilter':
-							$post[] = $parts[1];
-							break;
-					}
-				}
-			}
-
-			$this->autoload_filters = array('pre'=>$pre,'post'=>$post,'output'=>$output);
+			// Autoload filters
+			$this->autoloadFilters();
 
 			// compile check can only be enabled, if using smarty cache... just for safety.
 			if( get_site_preference('use_smartycache',0) )
@@ -173,7 +137,68 @@ class Smarty_CMS extends SmartyBC
 		// Note: Buggy, disabled prior to release of CMSMS 1.11
 		//$this->enableSecurity('CMSSmartySecurityPolicy');
 	}
+	
+	/**
+	* get_instance method
+	*
+	* @return object $this
+	*/
+	public static function &get_instance()
+	{
+		if( !is_object(self::$_instance) ) {
+			self::$_instance = new self;
+		}
+		
+		return self::$_instance;
+	}	
 
+	/**
+	* Load filters from CMSMS plugins folder
+	*
+	* @return void
+	*/	
+	private function autoloadFilters()
+	{
+		$pre = array();
+		$post = array();
+		$output = array();
+		
+		foreach( $this->plugins_dir as $onedir ) {
+		
+			if( !is_dir($onedir) ) 
+				continue;
+
+			$files = glob($onedir.'/*php');
+			if( !is_array($files) || count($files) == 0 ) 
+				continue;
+
+			foreach( $files as $onefile ) {
+			
+				$onefile = basename($onefile);
+				$parts = explode('.',$onefile);
+				if( !is_array($parts) || count($parts) != 3 )
+					continue;
+				
+				switch( $parts[0] ) {
+				
+					case 'output':
+						$output[] = $parts[1];
+						break;
+						
+					case 'prefilter':
+						$pre[] = $parts[1];
+						break;
+						
+					case 'postfilter':
+						$post[] = $parts[1];
+						break;
+				}
+			}
+		}
+
+		$this->autoload_filters = array('pre'=>$pre,'post'=>$post,'output'=>$output);
+	}
+	
     /**
      * Registers plugin to be used in templates
      *
@@ -247,21 +272,6 @@ class Smarty_CMS extends SmartyBC
 	public function is_registered($name)
 	{
 	  return isset($this->registered_plugins['function'][$name]);
-	}
-
-
-	/**
-	* get_instance method
-	*
-	* @return object $this
-	*/
-	public static function &get_instance()
-	{
-		if( !is_object(self::$_instance) ) {
-			self::$_instance = new self;
-		}
-		
-		return self::$_instance;
 	}
 
 	/**

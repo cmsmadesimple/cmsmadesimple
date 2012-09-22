@@ -47,6 +47,9 @@ class Smarty_Parser extends Smarty_CMS
 	
 		$config = cmsms()->GetConfig();
 
+		$this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
+		$this->setConfigDir(cms_join_path($config['root_path'],'tmp','templates'));		
+		
 		$this->setCaching(false);
 		$this->force_compile = true;
 		$this->compile_id = 'parser' . time();
@@ -160,8 +163,8 @@ class Smarty_Parser extends Smarty_CMS
 			
 			foreach ($names as $file) {
 			
-				if (file_exists($file) && 
-					(in_array($_name_parts[2], self::$_allowed_static_plugins) || startswith($file, SMARTY_PLUGINS_DIR))) {
+				if (file_exists($file)) {/* && 
+					(in_array($_name_parts[2], self::$_allowed_static_plugins) || startswith($file, SMARTY_PLUGINS_DIR))) {*/
 				
 					require_once($file);
 					if( is_callable($plugin_name) || class_exists($plugin_name, false) )
