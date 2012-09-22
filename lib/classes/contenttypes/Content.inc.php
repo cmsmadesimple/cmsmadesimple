@@ -451,19 +451,9 @@ class Content extends ContentBase
     private function parse_content_blocks()
     {
 		if ($this->_contentBlocksLoaded) return TRUE;
-		$smarty = cmsms()->GetSmarty();
-		$smarty->force_compile = TRUE;
 		
-		$ocompid = $smarty->compile_id;
-		$smarty->compile_id = 'c'.time();
-		$smarty->registerDefaultPluginHandler(array(&$smarty,'_dummyDfltPluginHandler'));
-		$smarty->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
-		$smarty->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
-		$smarty->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
-		$smarty->registerResource('template',new CMSPageTemplateResource(''));
-		$smarty->fetch('template:'.$this->TemplateId(),'x'.time(),'c'.time()); // do the magic.
-		$smarty->registerDefaultPluginHandler(array(&$smarty,'defaultPluginHandler'));
-		$smarty->compile_id = $ocompid;
+		$parser = cmsms()->get_template_parser();
+		$parser->fetch('template:'.$this->TemplateId()); // do the magic.
 
 		$this->_contentBlocks = CMS_Content_Block::get_content_blocks();
 

@@ -167,12 +167,16 @@ if ($config["debug"] == true)
 debug_buffer('loading adodb');
 require(cms_join_path($dirname,'lib','adodb.functions.php'));
 load_adodb();
+
 debug_buffer('loading page functions');
 require_once(cms_join_path($dirname,'lib','page.functions.php'));
+
 debug_buffer('loading content functions');
 require_once(cms_join_path($dirname,'lib','content.functions.php'));
+
 debug_buffer('loading translation functions');
 require_once(cms_join_path($dirname,'lib','translation.functions.php'));
+
 debug_buffer('loading php4 entity decode functions');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'html_entity_decode_php4.php');
 
@@ -191,9 +195,12 @@ debug_buffer('Initialize Smarty');
 $smarty = cmsms()->GetSmarty();
 debug_buffer('Done Initialiing Smarty');
 
+/*
+// Neccery? -Stikki-
 if (!defined('SMARTY_DIR')) {
     define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
 }
+*/
 
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())
@@ -250,7 +257,8 @@ if (! isset($CMS_INSTALL_PAGE))
   }
 
 #Setup language stuff.... will auto-detect languages (Launch only to admin at this point)
-if(isset($CMS_ADMIN_PAGE)) CmsNlsOperations::set_language();
+if(isset($CMS_ADMIN_PAGE)) 
+	CmsNlsOperations::set_language();
 
 $CMS_LAZYLOAD_MODULES = 1; // still used ??
 

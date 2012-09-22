@@ -44,7 +44,7 @@ function __cms_load($filename)
 
 function cms_autoloader($classname)
 {
-  if( $classname != 'Smarty_CMS' && startswith($classname,'Smarty') ) return;
+  //if( $classname != 'Smarty_CMS' && $classname != 'Smarty_Parser' && startswith($classname,'Smarty') ) return;
 
   $config = cmsms()->GetConfig();
 

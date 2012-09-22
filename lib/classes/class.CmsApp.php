@@ -390,10 +390,8 @@ final class CmsApp {
 	* @return Smarty_CMS handle to the Smarty object
 	*/
 	public function & GetSmarty()
-	{
-		/* Check to see if a Smarty object has been instantiated yet,
-		  and, if not, go ahead an create the instance. */
-		return Smarty_CMS::get_instance();
+	{	
+		return Smarty_CMS::get_instance();	
 	}
 
 	/**
@@ -468,6 +466,25 @@ final class CmsApp {
 		@touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
 	}
 
+	/**
+	 * Get handle to Smarty parser object, ment for template parsing
+	 *
+	 * @final
+	 * @internal
+	 * @since 1.11.3
+	 * @author Tapio Löytty
+	 * @return Smarty_Parser handle to the Smarty object	 
+	 * @ignore
+	 */
+	final public function & get_template_parser()
+	{
+		$smarty_obj = $this->GetSmarty();
+		
+		$parser_obj = Smarty_Parser::get_instance();
+		$parser_obj->tpl_vars = array_merge($parser_obj->tpl_vars, $smarty_obj->tpl_vars);
+	
+		return $parser_obj;	
+	}
 	
 	/**
 	 * Set all known states from global variables.
@@ -485,18 +502,16 @@ final class CmsApp {
 			global $CMS_STYLESHEET;
 
 			$this->_states = array();
-			if( isset($CMS_ADMIN_PAGE) ) {
+			
+			if( isset($CMS_ADMIN_PAGE) ) 
 				$this->_states[] = self::STATE_ADMIN_PAGE;
-			}
-			if( isset($CMS_INSTALL) ) {
+						
+			if( isset($CMS_INSTALL) ) 
 				$this->_states[] = self::STATE_INSTALL;
-			}
-			if( isset($CMS_STYLESHEET) ) {
+			
+			if( isset($CMS_STYLESHEET) )
 				$this->_states[] = self::STATE_STYLESHEET;
-			}
-			$smarty = cmsms()->GetSmarty();
-			if( isset($smarty->pase_template) && $smarty->parse_template == 1)
-				$this->_states[] = self::STATE_PARSE_TEMPLATE;
+			
 		}
 	}
 
