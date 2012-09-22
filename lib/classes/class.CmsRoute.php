@@ -65,22 +65,18 @@ class CmsRoute implements ArrayAccess
 	  $this->_data['term'] = $term;
 	  $this->_data['absolute'] = $is_absolute;
 
-	  if( is_numeric($key1) && empty($key2) )
-	  {
+	  if( is_numeric($key1) && empty($key2) ) {
 		  $this->_data['key1'] = '__CONTENT__';
 		  $this->_data['key2'] = (int)$key1;
 	  }
-	  else
-	  {
+	  else {
 		  $this->_data['key1'] = $key1;
 		  $this->_data['key2'] = $key2;
 	  }
-	  if( is_array($defaults) )
-	  {
-	    $this->_data['defaults'] = $defaults;
+	  if( is_array($defaults) ) {
+		  $this->_data['defaults'] = $defaults;
       }
-	  if( !empty($key3) )
-	  {
+	  if( !empty($key3) ) {
 		  $this->_data['key3'] = $key3;
 	  }
   }
@@ -94,24 +90,21 @@ class CmsRoute implements ArrayAccess
 
   public function OffsetGet($key)
   {
-	  if( in_array($key,self::$_keys) && isset($this->_data[$key]) )
-	  {
+	  if( in_array($key,self::$_keys) && isset($this->_data[$key]) ) {
 		  return $this->_data[$key];
 	  }
   }
 
   public function OffsetSet($key,$value)
   {
-	  if( in_array($key,self::$_keys) )
-	  {
+	  if( in_array($key,self::$_keys) ) {
 		  $this->_data[$key] = $value;
 	  }
   }
 
   public function OffsetExists($key)
   {
-	  if( in_array($key,self::$_keys) && isset($this->_data[$key]) )
-	  {
+	  if( in_array($key,self::$_keys) && isset($this->_data[$key]) ) {
 		  return TRUE;
 	  }
 	  return FALSE;
@@ -119,8 +112,7 @@ class CmsRoute implements ArrayAccess
 
   public function OffsetUnset($key)
   {
-	  if( in_array($key,self::$_keys) && isset($this->_data[$key]) )
-	  {
+	  if( in_array($key,self::$_keys) && isset($this->_data[$key]) ) {
 		  unset($this->_data[$keys]);
 	  }
   }
@@ -208,10 +200,13 @@ class CmsRoute implements ArrayAccess
   public function matches($str,$exact = false)
   {
     $this->_results = null;
-	if( (isset($this->_data['absolute']) && $this->_data['absolute']) || $exact )
-	{
-		if( !strcasecmp($this->_data['term'],$str) )
-		{
+	if( (isset($this->_data['absolute']) && $this->_data['absolute']) || $exact ) {
+		$a = trim($this->_data['term']);
+		$a = trim($a,'/');
+		$b = trim($str);
+		$b = trim($b,'/');
+		
+		if( !strcasecmp($a,$b) ) {
 			return TRUE;
 		}
 		return FALSE;
@@ -219,10 +214,9 @@ class CmsRoute implements ArrayAccess
 
     $tmp = array();
     $res = (bool)preg_match($this->_data['term'],$str,$tmp);
-    if( $res && is_array($tmp) )
-      {
-		  $this->_results = $tmp;
-      }
+    if( $res && is_array($tmp) ) {
+		$this->_results = $tmp;
+	}
     return $res;
   }
 
