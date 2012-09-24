@@ -1288,7 +1288,7 @@ abstract class CMSModule
 	 * this is used to place the module in the appropriate admin navigation
 	 * section. Valid options are currently:
 	 *
-	 * content, layout, files, usersgroups, extensions, preferences, admin
+	 * content, layout, files, usersgroups, extensions, preferences, siteadmin, ecommerce
 	 *
 	 * @abstract
 	 * @return string
