@@ -71,9 +71,11 @@ class Smarty_Parser extends Smarty_CMS
 	*/
 	public static function &get_instance()
 	{
-		if( !is_object(self::$_instance) ) {
+		if( !is_object(self::$_instance) ) 
 			self::$_instance = new self;
-		}
+		
+		// Merge variables
+		self::$_instance->tpl_vars = array_merge(self::$_instance->tpl_vars, Smarty_CMS::get_instance()->tpl_vars);
 		
 		return self::$_instance;
 	}	

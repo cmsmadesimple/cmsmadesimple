@@ -477,13 +477,8 @@ final class CmsApp {
 	 * @ignore
 	 */
 	final public function & get_template_parser()
-	{
-		$smarty_obj = $this->GetSmarty();
-		
-		$parser_obj = Smarty_Parser::get_instance();
-		$parser_obj->tpl_vars = array_merge($parser_obj->tpl_vars, $smarty_obj->tpl_vars);
-	
-		return $parser_obj;	
+	{	
+		return Smarty_Parser::get_instance();
 	}
 	
 	/**
