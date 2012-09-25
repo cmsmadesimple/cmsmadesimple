@@ -95,8 +95,6 @@ function adodb_error($dbtype, $function_performed, $error_number, $error_message
 		echo "<strong>Database Connection Failed</strong><br />";
 		echo "Error: {$error_message} ({$error_number})<br />";
 		echo "Function Performed: {$function_performed}<br />";
-		echo "Host/DB: {$host}/{$database}<br />";
-		echo "Database Type: {$dbtype}<br />";
 	}
 }
 
