@@ -1,0 +1,88 @@
+body {
+  margin:0;
+  padding:0; 
+ }
+#full-fp {
+	margin:5px;
+	border:1px solid #97B1B9;
+	width:auto;
+	padding: 5px;
+	background-color: #fff;
+	}
+ .header {
+    margin:5px;
+	padding: 0px;
+	background-color: #fff;
+}
+.header fieldset{
+	 margin:10px 0;
+	 width:auto;
+	 border:1px solid #97B1B9;
+}
+.filelist {
+	/*float:left;*/
+	margin:5px;
+	padding:5px;
+	border:1px solid #97B1B9;
+	width:97%;
+	background-color: #fff;
+}
+.filelist table tr td{
+	padding-top: 5px;
+	padding-right: 5px;
+	empty-cells:show;
+}
+
+.thumbnail {
+	width:100px;
+	height:auto;
+	float:left;
+	margin:2px;
+	text-align:center;
+	vertical-align: middle;
+	background:#FFFFFF;
+}
+.thumbnail img {
+   margin:2px;
+   padding:2px;
+   border:none;
+   border:1px solid #999999;
+}
+/*File operations*/
+/*error*/
+fieldset.fp-error{
+   	padding: 5px 5px 10px 10px;
+	border: 1px solid #FD9999;
+	color: #000;
+	background: #FEDADA;
+	font-weight: bold;
+}
+fieldset.fp-error legend{
+	color: #CC0000;
+	font-weight: bold;
+	font-size: 1.1em;
+}
+/*sucess*/
+fieldset.fp-success{
+   	padding: 5px 5px 10px 10px;
+	color: #000;
+	font-weight: bold;
+	border: 1px solid #BDD3A3;
+	background: #D6E4C5;
+}
+fieldset.fp-success legend{
+	color: #435829;
+	font-weight: bold;
+	font-size: 1.1em;
+}
+/*form input's in normal css*/
+#full-fp input{
+	color:#333;
+	border:1px solid #3C5157;
+	background: #DFE4E6;
+}
+#full-fp input:hover, #full-fp input:focus{
+	color:#000000;
+	border:1px solid #3C5157;
+	background: #CAD1D5;
+}
