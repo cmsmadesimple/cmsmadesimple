@@ -75,7 +75,7 @@ class Smarty_Parser extends Smarty_CMS
 			self::$_instance = new self;
 		
 		// Merge variables
-		self::$_instance->tpl_vars = array_merge(self::$_instance->tpl_vars, Smarty_CMS::get_instance()->tpl_vars);
+		self::$_instance->tpl_vars = array_merge(self::$_instance->tpl_vars, parent::get_instance()->tpl_vars);
 		
 		return self::$_instance;
 	}	
