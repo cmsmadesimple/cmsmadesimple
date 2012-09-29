@@ -62,7 +62,7 @@ abstract class CMSModule
 	 * @access private
 	 * @ignore
 	 */
-	var $params = array(array('name'=>'lang','default'=>'en_US','optional'=>true));
+	var $params = array();
 
 	/**
 	 * @access private
@@ -156,20 +156,19 @@ abstract class CMSModule
 	 */
 	public function &__get($key)
 	{
-	  switch( $key )
-	    {
-	    case 'cms':
-	      return cmsms();
+	  switch( $key ) {
+	  case 'cms':
+	    return cmsms();
 
-	    case 'smarty':
-	      return cmsms()->GetSmarty();
+	  case 'smarty':
+	    return cmsms()->GetSmarty();
 
-	    case 'config':
-	      return cmsms()->GetConfig();
+	  case 'config':
+	    return cmsms()->GetConfig();
 
-	    case 'db':
-	      return cmsms()->GetDb();
-	    }
+	  case 'db':
+	    return cmsms()->GetDb();
+	  }
 
 	  $tmp = null;
 	  return $tmp;
@@ -179,31 +178,29 @@ abstract class CMSModule
 	 * Constructor
 	 *
 	 */
-	public function CMSModule()
+	public function __construct()
 	{
-		global $CMS_STYLESHEET;
-		global $CMS_ADMIN_PAGE;
-		global $CMS_MODULE_PAGE;
-		global $CMS_INSTALL_PAGE;
-		//$this->curlang = cms_current_language(); // current language for this request. <- Messes up frontend NLS stuff
+	  global $CMS_STYLESHEET;
+	  global $CMS_ADMIN_PAGE;
+	  global $CMS_MODULE_PAGE;
+	  global $CMS_INSTALL_PAGE;
+	  
+	  if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) 
+	      && !isset($CMS_INSTALL_PAGE)) {
+	    $this->SetParameterType('assign',CLEAN_STRING);
+	    $this->SetParameterType('module',CLEAN_STRING);
+	    $this->SetParameterType('lang',CLEAN_STRING); // this will be ignored.
+	    $this->SetParameterType('returnid',CLEAN_INT);
+	    $this->SetParameterType('action',CLEAN_STRING);
+	    $this->SetParameterType('showtemplate',CLEAN_STRING);
+	    $this->SetParameterType('inline',CLEAN_INT);
 
-		if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE))
-		  {
-		    $this->SetParameterType('assign',CLEAN_STRING);
-		    $this->SetParameterType('module',CLEAN_STRING);
-		    $this->SetParameterType('lang',CLEAN_STRING);
-		    $this->SetParameterType('returnid',CLEAN_INT);
-		    $this->SetParameterType('action',CLEAN_STRING);
-		    $this->SetParameterType('showtemplate',CLEAN_STRING);
-		    $this->SetParameterType('inline',CLEAN_INT);
-
-		    $this->InitializeFrontend();
-		  }
-		else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) )
-		  {
-		    $this->params[0]['help'] = lang('langparam');
-		    $this->InitializeAdmin();
-		  }
+	    $this->InitializeFrontend();
+	  }
+	  else if( isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) 
+		   && !isset($CMS_INSTALL_PAGE) ) {
+	    $this->InitializeAdmin();
+	  }
 	}
 
 
@@ -214,11 +211,10 @@ abstract class CMSModule
 	 */
 	function LoadTemplateMethods()
 	{
-		if (!$this->modtemplates)
-		{
-			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modtemplates.inc.php'));
-			$this->modtemplates = true;
-		}
+	  if (!$this->modtemplates) {
+	    require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modtemplates.inc.php'));
+	    $this->modtemplates = true;
+	  }
 	}
 
 	
@@ -229,11 +225,10 @@ abstract class CMSModule
 	 */
 	function LoadLangMethods()
 	{
-		if (!$this->modlang)
-		{
-			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modlang.inc.php'));
-			$this->modlang = true;
-		}
+	  if (!$this->modlang) {
+	    require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modlang.inc.php'));
+	    $this->modlang = true;
+	  }
 	}
 	
 	/**
@@ -243,11 +238,10 @@ abstract class CMSModule
 	 */
 	function LoadFormMethods()
 	{
-		if (!$this->modform)
-		{
-			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modform.inc.php'));
-			$this->modform = true;
-		}
+	  if (!$this->modform) {
+	    require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modform.inc.php'));
+	    $this->modform = true;
+	  }
 	}
 	
 	/**
@@ -257,11 +251,10 @@ abstract class CMSModule
 	 */
         function LoadRedirectMethods()
 	{
-		if (!$this->modredirect)
-		{
-			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modredirect.inc.php'));
-			$this->modredirect = true;
-		}
+	  if (!$this->modredirect) {
+	    require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modredirect.inc.php'));
+	    $this->modredirect = true;
+	  }
 	}
 	
 	/**
@@ -271,11 +264,10 @@ abstract class CMSModule
 	 */
 	function LoadMiscMethods()
 	{
-		if (!$this->modmisc)
-		{
-			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modmisc.inc.php'));
-			$this->modmisc = true;
-		}
+	  if (!$this->modmisc) {
+	    require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modmisc.inc.php'));
+	    $this->modmisc = true;
+	  }
 	}
 
 	/**
@@ -631,11 +623,10 @@ abstract class CMSModule
 	 */
 	final public function GetParameters()
 	{
-	  if( count($this->params) == 1 && $this->params[0]['name'] == 'lang' )
-	    {
-	      // quick hack to load parameters if they are not already loaded.
-	      $this->InitializeAdmin();
-	    }
+	  if( count($this->params) == 0 ) {
+	    // quick hack to load parameters if they are not already loaded.
+	    $this->InitializeAdmin();
+	  }
 	  return $this->params;
 	}
 
@@ -1751,41 +1742,31 @@ abstract class CMSModule
 	final public function DoActionBase($name, $id, $params, $returnid='')
 	{
           $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
-	  if( $returnid != '' )
-	    {
-	      if( !$this->restrict_unknown_params )
-		{
-		  // put mention into the admin log
-		  audit('',$this->GetName(),'Module is not properly cleaning input params');
-		}
-	      // used to try to avert XSS flaws, this will
-	      // clean as many parameters as possible according
-	      // to a map specified with the SetParameterType metods.
-	      $params = cleanParamHash($this->GetName(),$params,$this->param_map,
-				       !$this->restrict_unknown_params);
+	  if( $returnid != '' ) {
+	    if( !$this->restrict_unknown_params ) {
+	      // put mention into the admin log
+	      audit('',$this->GetName(),'Module is not properly cleaning input params');
 	    }
+	    // used to try to avert XSS flaws, this will
+	    // clean as many parameters as possible according
+	    // to a map specified with the SetParameterType metods.
+	    $params = cleanParamHash($this->GetName(),$params,$this->param_map,
+				     !$this->restrict_unknown_params);
+	  }
 
 	  // handle the stupid input type='image' problem.
-	  foreach( $params as $key => $value )
-	    {
-	      if( endswith($key,'_x') ) {
-		$base = substr($key,0,strlen($key)-2);
-		if( isset($params[$base.'_y']) && !isset($params[$base]) )
-		  {
-		    $params[$base] = $base;
-		  }
+	  foreach( $params as $key => $value ) {
+	    if( endswith($key,'_x') ) {
+	      $base = substr($key,0,strlen($key)-2);
+	      if( isset($params[$base.'_y']) && !isset($params[$base]) ) {
+		$params[$base] = $base;
 	      }
 	    }
+	  }
 
-	  if (isset($params['lang']))
-	    {
-	      $this->curlang = $params['lang'];
-	      $this->langhash = array();
-	    }
-	  if( !isset($params['action']) )
-	    {
-	      $params['action'] = $name;
-	    }
+	  if( !isset($params['action']) ) {
+	    $params['action'] = $name;
+	  }
 	  $params['action'] = cms_htmlentities($params['action']);
 	  $returnid = cms_htmlentities($returnid);
 	  $id = cms_htmlentities($id);
@@ -1799,16 +1780,14 @@ abstract class CMSModule
 
 	  $output = $this->DoAction($name, $id, $params, $returnid);
 
-	  if( isset($params['assign']) )
-	    {
-	      $gCms = cmsms();
-	      $smarty = $gCms->GetSmarty();
-	      $smarty->assign(cms_htmlentities($params['assign']),$output);
-	      return;
-	    }
+	  if( isset($params['assign']) ) {
+	    $gCms = cmsms();
+	    $smarty = $gCms->GetSmarty();
+	    $smarty->assign(cms_htmlentities($params['assign']),$output);
+	    return;
+	  }
 	  return $output;
 	}
-
 
 
   /**

@@ -41,29 +41,20 @@ function cms_module_Lang(&$modinstance)
 	$name = '';
 	$params = array();
 
-	if (func_num_args() > 0)
-	{
-		
+	if (func_num_args() > 0) {
 		$name = func_get_arg(1);
-		if (func_num_args() == 3 && is_array(func_get_arg(2)))
-		{
+		if (func_num_args() == 3 && is_array(func_get_arg(2))) {
 			$params = func_get_arg(2);
 		}
-		else if (func_num_args() > 2)
-		{
+		else if (func_num_args() > 2) {
 			$params = array_slice(func_get_args(), 2);
 		}
 	}
-	else
-	{
+	else {
 		return '';
 	}
 
-	if ($modinstance->curlang == '')
-	{
-		$modinstance->curlang = cms_current_language();
-	}
-	$ourlang = $modinstance->curlang;
+	$ourlang = cms_current_language();
 
 	#Load the language if it's not loaded
 	if (!isset($modinstance->langhash[$ourlang]) || !is_array($modinstance->langhash[$ourlang]) || 
@@ -74,55 +65,43 @@ function cms_module_Lang(&$modinstance)
 		$lang = array();
 
 		//First load the default language to remove any "Missing Languagestrings"
-		if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage()."/".$modinstance->DefaultLanguage().".php"))
-		{
+		if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage()."/".$modinstance->DefaultLanguage().".php")) {
 			include("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage()."/".$modinstance->DefaultLanguage().".php");
 		}
-		else if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage().".php"))
-		{
+		else if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage().".php")) {
 			include("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage().".php");
 		}
 
 		//Now load the other language if necessary
-		if (count($lang) == 0 || $modinstance->DefaultLanguage() != $ourlang)
-		{
-			if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/$ourlang/$ourlang.php"))
-			{
+		if (count($lang) == 0 || $modinstance->DefaultLanguage() != $ourlang) {
+			if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/$ourlang/$ourlang.php")) {
 				include("$dir/modules/".$modinstance->GetName()."/lang/$ourlang/$ourlang.php");
 			}
-			else if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/ext/$ourlang.php"))
-			{
+			else if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/ext/$ourlang.php")) {
 				include("$dir/modules/".$modinstance->GetName()."/lang/ext/$ourlang.php");
 			}
-			else if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/$ourlang.php"))
-			{
+			else if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/$ourlang.php")) {
 				include("$dir/modules/".$modinstance->GetName()."/lang/$ourlang.php");
 			}
-			else if (count($lang) == 0)
-			{
-				if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage()."/".$modinstance->DefaultLanguage().".php"))
-				{
+			else if (count($lang) == 0) {
+				if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage()."/".$modinstance->DefaultLanguage().".php")) {
 					include("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage()."/".$modinstance->DefaultLanguage().".php");
 				}
-				else if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage().".php"))
-				{
+				else if (@is_file("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage().".php")) {
 					include("$dir/modules/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage().".php");
 				}
 			}
-			else
-			{
+			else {
 				# Sucks to be here...  Don't use Lang unless there are language files...
 				# Get ready for a lot of Missing Languagestrings
 			}
 		}
 
 		# try to load an admin modifiable version of the lang file if one exists
-		if( @is_file("$dir/module_custom/".$modinstance->GetName()."/lang/$ourlang.php") )
-		  {
+		if( @is_file("$dir/module_custom/".$modinstance->GetName()."/lang/$ourlang.php") ) {
 		    include("$dir/module_custom/".$modinstance->GetName()."/lang/$ourlang.php");
 		  }
-		else if( @is_file("$dir/module_custom/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage().".php") )
-		{
+		else if( @is_file("$dir/module_custom/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage().".php") ) {
 			include("$dir/module_custom/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage().".php");
 		}
 
@@ -131,26 +110,20 @@ function cms_module_Lang(&$modinstance)
 
 	$result = '';
 
-	if (isset($modinstance->langhash[$ourlang][$name]))
-	{
-		if (count($params))
-		{
+	if (isset($modinstance->langhash[$ourlang][$name])) {
+		if (count($params)) {
 			$result = @vsprintf($modinstance->langhash[$ourlang][$name], $params);
 		}
-		else
-		{
+		else {
 			$result = $modinstance->langhash[$ourlang][$name];
 		}
 	}
-	else
-	{
+	else {
 		$result = "-- Missing Languagestring - module:".$modinstance->GetName()." string:$name--";
 	}
 
-	if (isset($gCms->config['admin_encoding']) && isset($gCms->variables['convertclass']))
-	{
-		if (strtolower(get_encoding('', false)) != strtolower($gCms->config['admin_encoding']))
-		{
+	if (isset($gCms->config['admin_encoding']) && isset($gCms->variables['convertclass'])) {
+		if (strtolower(get_encoding('', false)) != strtolower($gCms->config['admin_encoding'])) {
 			$class =& $gCms->variables['convertclass'];
 			$result = $class->Convert($result, get_encoding('', false), $gCms->config['admin_encoding']);
 		}
