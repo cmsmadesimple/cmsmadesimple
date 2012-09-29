@@ -38,108 +38,89 @@
 function cms_module_plugin($params,&$template)
 {
   $smarty = $template->smarty;
-	$mid_cache = cms_utils::get_app_data('mid_cache');
-	if( empty($mid_cache) )
-	  {
-	    $mid_cache = array();
-	  }
-	for( $i = 0; $i < 10; $i++ )
-	{
-	  $tmp = $i;
-	  foreach($params as $key=>$value)
-	    $tmp .= $key.'='.$value;
-	  $id = 'm'.substr(md5($tmp),0,5);
-	  if( !isset($mid_cache[$id]) )
-	    {
-	      $mid_cache[$id] = $id;
-	      break;
-	    }
-	}
-	cms_utils::set_app_data('mid_cache',$mid_cache);
+  $mid_cache = cms_utils::get_app_data('mid_cache');
+  if( empty($mid_cache) ) {
+    $mid_cache = array();
+  }
+  for( $i = 0; $i < 10; $i++ ) {
+    $tmp = $i;
+    foreach($params as $key=>$value)
+      $tmp .= $key.'='.$value;
+    $id = 'm'.substr(md5($tmp),0,5);
+    if( !isset($mid_cache[$id]) ) {
+      $mid_cache[$id] = $id;
+      break;
+    }
+  }
+  cms_utils::set_app_data('mid_cache',$mid_cache);
 
-	$returnid = '';
-	$content_obj = cmsms()->get_variable('content_obj');
-	if (isset($content_obj) && $content_obj->Id())
-	  {
-	    $returnid = $content_obj->Id();
-	  }
-	//$params = array_merge($params, GetModuleParameters($id));
+  $returnid = '';
+  $content_obj = cmsms()->get_variable('content_obj');
+  if (isset($content_obj) && $content_obj->Id()) {
+    $returnid = $content_obj->Id();
+  }
 
-	$modulename = '';
-	$action = 'default';
-	$inline = false;
+  $modulename = '';
+  $action = 'default';
+  $inline = false;
+  $checkid = '';
 
-	$checkid = '';
+  if (isset($params['module'])) 
+    $modulename = $params['module'];
+  else
+    return '<!-- ERROR: module name not specified -->';
 
-	if (isset($params['module'])) 
-	  $modulename = $params['module'];
-	else
-	  return '<!-- ERROR: module name not specified -->';
+  if (isset($params['idprefix'])) $id = trim($params['idprefix']);
+  if (isset($params['action']) && $params['action'] != '') {
+    // action was set in the module tag
+    $action = $params['action'];
+  }
 
-	if (isset($params['idprefix'])) $id = trim($params['idprefix']);
-	if (isset($params['action']) && $params['action'] != '')
-	{
-	  // action was set in the module tag
-	  $action = $params['action'];
-	}
+  if (isset($_REQUEST['mact'])) {
+    // we're handling an action
+    $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
+    $mactmodulename = (isset($ary[0])?$ary[0]:'');
+    if (!strcasecmp($mactmodulename,$params['module'])) {
+      $checkid = (isset($ary[1])?$ary[1]:'');
+      $mactaction = (isset($ary[2])?$ary[2]:'');
+    }
+    $mactinline = (isset($ary[3]) && $ary[3] == 1?true:false);
+    
+    if ($checkid == $id) {
+      // the action is for this instance of the module
+      $inline = $mactinline;
+      if( $inline == true ) {
+	// and we're inline (the results are supposed to replace
+	// the tag, not {content}
+	$action = $mactaction;
+	$params = array_merge($params, GetModuleParameters($id));
+      }
+    }
+  }
 
-	if (isset($_REQUEST['id'])) //Not really needed now...
-	{
-	  $checkid = $_REQUEST['id'];
-	}
-	else if (isset($_REQUEST['mact']))
-	{
-	  // we're handling an action
-	  $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
-	  $mactmodulename = (isset($ary[0])?$ary[0]:'');
-	  if (!strcasecmp($mactmodulename,$params['module']))
-	    {
-	      $checkid = (isset($ary[1])?$ary[1]:'');
-	      $mactaction = (isset($ary[2])?$ary[2]:'');
-	    }
-	  $mactinline = (isset($ary[3]) && $ary[3] == 1?true:false);
+  if( $action == '' ) $action = 'default'; // probably not needed, but safe
+  
+  class_exists($modulename);
+  $module = cms_utils::get_module($modulename);
+  if( $module && $module->isPluginModule() ) {
+    @ob_start();
+    $result = $module->DoActionBase($action, $id, $params, $returnid);
+    if ($result !== FALSE) {
+      echo $result;
+    }
+    $modresult = @ob_get_contents();
+    @ob_end_clean();
+    
+    if( isset($params['assign']) ) {
+      $smarty->assign(trim($params['assign']),$modresult);
+      return;
+    }
+    return $modresult;
 	  
-	  if ($checkid == $id)
-	    {
-	      // the action is for this instance of the module
-	      $inline = $mactinline;
-	      if( $inline == true )
-		{
-		  // and we're inline (the results are supposed to replace
-		  // the tag, not {content}
-		  $action = $mactaction;
-	      $params = array_merge($params, GetModuleParameters($id));
-		}
-	    }
-	}
-
-	if( $action == '' ) $action = 'default'; // probably not needed, but safe
-
-	class_exists($modulename);
-	$module = cms_utils::get_module($modulename);
-	if( $module && $module->isPluginModule() )
-	{
-	  @ob_start();
-	  $result = $module->DoActionBase($action, $id, $params, $returnid);
-	  if ($result !== FALSE)
-	    {
-	      echo $result;
-	    }
-	  $modresult = @ob_get_contents();
-	  @ob_end_clean();
-	  
-	  if( isset($params['assign']) )
-	    {
-	      $smarty->assign(trim($params['assign']),$modresult);
-	      return;
-	    }
-	  return $modresult;
-	  
-	}
-	else
-	{
-	  return "<!-- Not a tag module -->\n";
-	}
+  }
+  else {
+    return "<!-- Not a tag module -->\n";
+  }
 }
 
 # vim:ts=4 sw=4 noet

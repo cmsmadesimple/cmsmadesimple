@@ -1,3 +1,8 @@
+Version 1.12 - NO NAME SeT
+-----------------------------
+Core - Genneral:
+  - Remove old code that handles the 'id' REQUEST parameter.
+
 Version 1.11.2 - Isabela 
 -----------------------------
 Core - General:
