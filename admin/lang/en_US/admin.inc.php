@@ -1,19 +1,666 @@
 <?php
-$lang['admin']['pagedefaultsupdated'] = 'Page default settings updated';
-$lang['admin']['help_function_module_available'] = <<<EOT
+//  AA
+// A  A
+// AAAA
+// A  A
+// A  A
+
+$lang['admin']['accountupdated'] = 'User account has been updated.';
+$lang['admin']['actioncontains'] = 'Action Contains';
+$lang['admin']['added_css'] = 'Added CSS';
+$lang['admin']['added_group'] = 'Added Group';
+$lang['admin']['adminlog_1day'] = '1 day';
+$lang['admin']['adminlog_1week'] = '1 week';
+$lang['admin']['adminlog_2weeks'] = '2 weeks';
+$lang['admin']['adminlog_1month'] = '1 month';
+$lang['admin']['adminlog_3months'] = '3 months';
+$lang['admin']['adminlog_6months'] = '6 months';
+$lang['admin']['adminlog_lifetime']='Lifetime of log-entries';
+$lang['admin']['adminlog_manual'] = 'Manual deletion';
+$lang['admin']['always'] = 'Always';
+$lang['admin']['automatedtask_success'] = 'Automated task performed';
+
+$lang['admin']['addcss'] = 'Add a Stylesheet';
+$lang['admin']['addgroup'] = 'Add New Group';
+$lang['admin']['addhtmlblob'] = 'Add Global Content Block';
+$lang['admin']['additionaleditors'] = 'Additional Editors';
+$lang['admin']['addtemplate'] = 'Add New Template';
+$lang['admin']['adduser'] = 'Add New User';
+$lang['admin']['addusertag'] = 'Add User Defined Tag';
+$lang['admin']['adminaccess'] = 'Access to login to admin';
+$lang['admin']['adminlog'] = 'Admin Log';
+$lang['admin']['adminlogcleared'] = 'The Admin Log was successfully cleared';
+$lang['admin']['adminlogempty'] = 'The Admin Log is empty';
+$lang['admin']['adminsystemtitle'] = 'CMS Admin System';
+$lang['admin']['adminpaneltitle'] = 'CMS Made Simple&trade; Admin Console'; // needs translation
+$lang['admin']['advanced'] = 'Advanced';
+$lang['admin']['aliasalreadyused'] = 'The supplied "Page Alias" is already in use on another page.  Change the "Page Alias" to something else.';
+$lang['admin']['aliasmustbelettersandnumbers'] = 'Alias must be all letters and numbers';
+$lang['admin']['aliasnotaninteger'] = 'Alias cannot be an integer';
+$lang['admin']['allpagesmodified'] = 'All pages modified!';
+$lang['admin']['assignments'] = 'Assign Users';
+$lang['admin']['associationexists'] = 'This association already exists';
+$lang['admin']['autoinstallupgrade'] = 'Automatically install or upgrade';
+
+$lang['admin']['add'] = 'Add';
+$lang['admin']['about'] = 'About';
+$lang['admin']['action'] = 'Action';
+$lang['admin']['actionstatus'] = 'Action/Status';
+$lang['admin']['active'] = 'Active';
+$lang['admin']['addcontent'] = 'Add New Content';
+$lang['admin']['attachtotemplate'] = 'Attach Stylesheet to Template';
+$lang['admin']['attachstylesheets'] = 'Attach Stylesheets';
+$lang['admin']['admintheme'] = 'Administration Theme';
+$lang['admin']['addstylesheet'] = 'Add a Stylesheet';
+$lang['admin']['admin_layout_legend'] = 'Admin lay-out settings';
+$lang['admin']['all_groups'] = 'All Groups';
+$lang['admin']['apply'] = 'Apply';
+$lang['admin']['applydescription'] = 'Save changes and continue to edit';
+$lang['admin']['adminhome'] = 'Administration Home';
+$lang['admin']['accesskey'] = 'Access Key';
+
+
+// BBB
+// B  B 
+// BBB
+// B  B
+// BBB
+
+$lang['admin']['back'] = 'Back to Menu';
+$lang['admin']['backtoplugins'] = 'Back to Plugins List';
+
+
+//  CCC
+// C
+// C
+// C
+//  CCC
+
+$lang['admin']['changeowner'] = 'Change Owner';
+$lang['admin']['checkversion'] = 'Allow periodic checks for new versions';
+$lang['admin']['cron_request'] = 'Each Request';
+$lang['admin']['cron_15m'] = '15 Minutes';
+$lang['admin']['cron_30m'] = '30 Minutes';
+$lang['admin']['cron_60m'] = '1 Hour';
+$lang['admin']['cron_120m'] = '2 Hours';
+$lang['admin']['cron_3h'] = '3 Hours';
+$lang['admin']['cron_6h'] = '6 Hours';
+$lang['admin']['cron_12h'] = '12 Hours';
+$lang['admin']['cron_24h'] = '24 Hours';
+$lang['admin']['curl'] = 'Test for the curl library';
+$lang['admin']['curl_versionstr'] = 'version %s, minimum recommended version is %s';
+$lang['admin']['curlversion'] = 'Test curl version';
+$lang['admin']['cancel'] = 'Cancel';
+$lang['admin']['cantchmodfiles'] = 'Couldn\'t change permissions on some files';
+$lang['admin']['cantremovefiles'] = 'Problem Removing Files (permissions?)';
+$lang['admin']['confirmcancel'] = 'Are you sure you want to discard your changes? Click OK to discard all changes. Click Cancel to continue editing.';
+$lang['admin']['canceldescription'] = 'Discard Changes';
+$lang['admin']['clearadminlog'] = 'Clear Admin Log';
+$lang['admin']['code'] = 'Code';
+$lang['admin']['confirmdefault'] = 'Are you sure you want to set - %s - as site default page?';
+$lang['admin']['confirmdeletedir'] = 'Are you sure you want to delete this dir and all of its contents?';
+$lang['admin']['content'] = 'Content';
+$lang['admin']['content_id'] = 'Content ID';
+$lang['admin']['contentmanagement'] = 'Content Management';
+$lang['admin']['contenttype'] = 'Content Type';
+$lang['admin']['copy'] = 'Copy';
+$lang['admin']['copytemplate'] = 'Copy Template';
+$lang['admin']['core'] = 'Core';
+$lang['admin']['create'] = 'Create';
+$lang['admin']['createnewfolder'] = 'Create New Folder';
+$lang['admin']['cssalreadyused'] = 'CSS name already in use';
+$lang['admin']['cssmanagement'] = 'CSS Management';
+$lang['admin']['currentassociations'] = 'Current Associations';
+$lang['admin']['currentdirectory'] = 'Current Directory';
+$lang['admin']['currentgroups'] = 'Current Groups';
+$lang['admin']['currentpages'] = 'Current Pages';
+$lang['admin']['currenttemplates'] = 'Current Templates';
+$lang['admin']['currentusers'] = 'Current Users';
+$lang['admin']['custom404'] = 'Custom 404 Error Message';
+
+$lang['admin']['cantremove'] = 'Cannot Remove';
+$lang['admin']['changepermissions'] = 'Change Permissions';
+$lang['admin']['changepermissionsconfirm'] = 'USE CAUTION\n\nThis action will attempt to ensure that all of the files making up the module are writable by the web server.\nAre you sure you want to continue?';
+$lang['admin']['contentadded'] = 'The content was successfully added to the database.';
+$lang['admin']['contentupdated'] = 'The content was successfully updated.';
+$lang['admin']['contentdeleted'] = 'The content was successfully removed from the database.';
+
+
+// DDD
+// D  D
+// D  D
+// D  D
+// DDDD
+
+$lang['admin']['default_contenttype'] = 'Default Content Type';
+$lang['admin']['disallowed_contenttypes'] = 'Content Types that are NOT allowed';
+$lang['admin']['database'] = 'Database';
+$lang['admin']['databaseprefix'] = 'Database Prefix';
+$lang['admin']['databasetype'] = 'Database Type';
+$lang['admin']['date'] = 'Date';
+$lang['admin']['default'] = 'Default';
+$lang['admin']['delete'] = 'Delete';
+$lang['admin']['deleteconfirm'] = 'Are you sure you want to delete - %s - ?';
+$lang['admin']['deleteassociationconfirm'] = 'Are you sure you want to delete association to - %s - ?';
+$lang['admin']['deletecss'] = 'Delete CSS';
+$lang['admin']['dependencies'] = 'Dependencies';
+$lang['admin']['description'] = 'Description';
+$lang['admin']['directoryexists'] = 'This directory already exists.';
+$lang['admin']['down'] = 'Down';
+
+
+// EEEE
+// E
+// EEEE
+// E
+// EEEE
+
+$lang['admin']['error_contenttype'] = 'The content type associated with this page is invalid or not permitted';
+$lang['admin']['event_desc_loginfailed'] = 'Sent after a user failed to login into the admin panel';
+$lang['admin']['event_help_loginfailed'] = '<p>Sent after a user failed to login into the admin panel.</p>';
+$lang['admin']['event_desc_moduleupgraded'] = 'Sent after a module is upgraded';
+$lang['admin']['event_help_moduleupgraded'] = '<p>Sent after a module is upgraded.</p>';
+$lang['admin']['event_desc_moduleinstalled'] = 'Sent after a module is installed';
+$lang['admin']['event_help_moduleinstalled'] = '<p>Sent after a module is installed.</p>';
+$lang['admin']['event_desc_moduleuninstalled'] = 'Sent after a module is uninstalled';
+$lang['admin']['event_help_moduleuninstalled'] = '<p>Sent after a module is uninstalled.</p>';
+$lang['admin']['event_desc_edituserdefinedtagpost'] = 'Sent after a user defined tag is updated';
+$lang['admin']['event_help_edituserdefinedtagpost'] = '<p>Sent after a user defined tag is updated.</p>';
+$lang['admin']['event_desc_edituserdefinedtagpre'] = 'Sent prior to a user defined tag update';
+$lang['admin']['event_help_edituserdefinedtagpre'] = '<p>Sent prior to a user defined tag update.</p>';
+$lang['admin']['event_desc_deleteuserdefinedtagpre'] = 'Sent prior to deleting a user defined tag';
+$lang['admin']['event_help_deleteuserdefinedtagpre'] = '<p>Sent prior to deleting a user defined tag.</p>';
+$lang['admin']['event_desc_deleteuserdefinedtagpost'] = 'Sent after a user defined tag is deleted';
+$lang['admin']['event_help_deleteuserdefinedtagpost'] = '<p>Sent after a user defined tag is deleted.</p>';
+$lang['admin']['event_desc_adduserdefinedtagpost'] = 'Sent after a user defined tag is inserted';
+$lang['admin']['event_help_adduserdefinedtagpre'] = '<p>Sent after a user defined tag is inserted.</p>';
+$lang['admin']['event_desc_adduserdefinedtagpre'] = 'Sent prior to a user defined tag insert';
+$lang['admin']['event_help_adduserdefinedtagpost'] = '<p>Sent prior to a user defined tag insert.</p>';
+$lang['admin']['event_desc_loginpost'] = 'Sent after a user logs into the admin panel';
+$lang['admin']['event_desc_logoutpost'] = 'Sent after a user logs out of the admin panel';
+$lang['admin']['event_desc_adduserpre'] = 'Sent before a new user is created';
+$lang['admin']['event_desc_adduserpost'] = 'Sent after a new user is created';
+$lang['admin']['event_desc_edituserpre'] = 'Sent before edits to a user are saved';
+$lang['admin']['event_desc_edituserpost'] = 'Sent after edits to a user are saved';
+$lang['admin']['event_desc_deleteuserpre'] = 'Sent before a user is deleted from the system';
+$lang['admin']['event_desc_deleteuserpost'] = 'Sent after a user is deleted from the system';
+$lang['admin']['event_desc_addgrouppre'] = 'Sent before a new group is created';
+$lang['admin']['event_desc_addgrouppost'] = 'Sent after a new group is created';
+$lang['admin']['event_desc_changegroupassignpre'] = 'Sent before group assignments are saved';
+$lang['admin']['event_desc_changegroupassignpost'] = 'Sent after group assignments are saved';
+$lang['admin']['event_desc_editgrouppre'] = 'Sent before edits to a group are saved';
+$lang['admin']['event_desc_editgrouppost'] = 'Sent after edits to a group are saved';
+$lang['admin']['event_desc_deletegrouppre'] = 'Sent before a group is deleted from the system';
+$lang['admin']['event_desc_deletegrouppost'] = 'Sent after a group is deleted from the system';
+$lang['admin']['event_desc_addstylesheetpre'] = 'Sent before a new stylesheet is created';
+$lang['admin']['event_desc_addstylesheetpost'] = 'Sent after a new stylesheet is created';
+$lang['admin']['event_desc_editstylesheetpre'] = 'Sent before edits to a stylesheet are saved';
+$lang['admin']['event_desc_editstylesheetpost'] = 'Sent after edits to a stylesheet are saved';
+$lang['admin']['event_desc_deletestylesheetpre'] = 'Sent before a stylesheet is deleted from the system';
+$lang['admin']['event_desc_deletestylesheetpost'] = 'Sent after a stylesheet is deleted from the system';
+$lang['admin']['event_desc_addtemplatepre'] = 'Sent before a new template is created';
+$lang['admin']['event_desc_addtemplatepost'] = 'Sent after a new template is created';
+$lang['admin']['event_desc_edittemplatepre'] = 'Sent before edits to a template are saved';
+$lang['admin']['event_desc_edittemplatepost'] = 'Sent after edits to a template are saved';
+$lang['admin']['event_desc_deletetemplatepre'] = 'Sent before a template is deleted from the system';
+$lang['admin']['event_desc_deletetemplatepost'] = 'Sent after a template is deleted from the system';
+$lang['admin']['event_desc_templateprecompile'] = 'Sent before a template is sent to smarty for processing';
+$lang['admin']['event_desc_templatepostcompile'] = 'Sent after a template has been processed by smarty';
+$lang['admin']['event_desc_addglobalcontentpre'] = 'Sent before a new global content block is created';
+$lang['admin']['event_desc_addglobalcontentpost'] = 'Sent after a new global content block is created';
+$lang['admin']['event_desc_editglobalcontentpre'] = 'Sent before edits to a global content block are saved';
+$lang['admin']['event_desc_editglobalcontentpost'] = 'Sent after edits to a global content block are saved';
+$lang['admin']['event_desc_deleteglobalcontentpre'] = 'Sent before a global content block is deleted from the system';
+$lang['admin']['event_desc_deleteglobalcontentpost'] = 'Sent after a global content block is deleted from the system';
+$lang['admin']['event_desc_globalcontentprecompile'] = 'Sent before a global content block is sent to smarty for processing';
+$lang['admin']['event_desc_globalcontentpostcompile'] = 'Sent after a global content block has been processed by smarty';
+$lang['admin']['event_desc_contenteditpre'] = 'Sent before edits to content are saved';
+$lang['admin']['event_desc_contenteditpost'] = 'Sent after edits to content are saved';
+$lang['admin']['event_desc_contentdeletepre'] = 'Sent before content is deleted from the system';
+$lang['admin']['event_desc_contentdeletepost'] = 'Sent after content is deleted from the system';
+$lang['admin']['event_desc_contentstylesheet'] = 'Sent before the stylesheet is sent to the browser';
+$lang['admin']['event_desc_contentprecompile'] = 'Sent before content is sent to smarty for processing';
+$lang['admin']['event_desc_contentpostcompile'] = 'Sent after content has been processed by smarty';
+$lang['admin']['event_desc_contentpostrender'] = 'Sent before the combined html is sent to the browser';
+$lang['admin']['event_desc_smartyprecompile'] = 'Sent before any content destined for smarty is sent for processing';
+$lang['admin']['event_desc_smartypostcompile'] = 'Sent after any content destined for smarty has been processed';
+
+$lang['admin']['error_nograntall_found'] = 'Could not find a suitable &quot;GRANT ALL&quot; permission.  This may mean you could have problems installing or removing modules.  Or even adding and deleting items, including pages';
+
+$lang['admin']['edit'] = 'Edit';
+$lang['admin']['editconfiguration'] = 'Edit Configuration';
+$lang['admin']['editcontent'] = 'Edit Content';
+$lang['admin']['editcss'] = 'Edit Stylesheet';
+$lang['admin']['editcsssuccess'] = 'Stylesheet updated';
+$lang['admin']['editgroup'] = 'Edit Group';
+$lang['admin']['editpage'] = 'Edit Page';
+$lang['admin']['edittemplate'] = 'Edit Template';
+$lang['admin']['edittemplatesuccess'] = 'Template updated';
+$lang['admin']['edituser'] = 'Edit User';
+$lang['admin']['editusertag'] = 'Edit User Defined Tag';
+$lang['admin']['email'] = 'Email Address';
+$lang['admin']['errorattempteddowngrade'] = 'Installing this module would result in a downgrade.  Operation aborted';
+$lang['admin']['errorchildcontent'] = 'Content still contains child contents. Please remove them first.';
+$lang['admin']['errorcopyingtemplate'] = 'Error Copying Template';
+$lang['admin']['errorcouldnotparsexml'] = 'Error parsing XML file. Please make sure you are uploading a .xml file and not a .tar.gz or zip file.';
+$lang['admin']['errorcreatingassociation'] = 'Error creating association';
+$lang['admin']['errorcssinuse'] = 'This Stylesheet is still used by template or pages. Please remove those associations first.';
+$lang['admin']['errordefaultpage'] = 'Can not delete the current default page. Please set a different one first.';
+$lang['admin']['errordeletingassociation'] = 'Error deleting association';
+$lang['admin']['errordeletingcss'] = 'Error deleting css';
+$lang['admin']['errordeletingdirectory'] = 'Could not delete directory. Permissions problem?';
+$lang['admin']['errordeletingfile'] = 'Could not delete file. Permissions Problem?';
+$lang['admin']['errordirectorynotwritable'] = 'No permission to write in directory.  This could be caused by file permissions and ownership.  Safe mode may also be in effect.';
+$lang['admin']['errordtdmismatch'] = 'DTD Version missing or incompatible in the XML file';
+$lang['admin']['errorgettingcssname'] = 'Error getting Stylesheet name';
+$lang['admin']['errorgettingtemplatename'] = 'Error getting template name';
+$lang['admin']['errorincompletexml'] = 'XML File is incomplete or invalid';
+
+$lang['admin']['errorinsertingcss'] = 'Error inserting Stylesheet';
+$lang['admin']['errorinsertinggroup'] = 'Error inserting group';
+$lang['admin']['errorinsertingtag'] = 'Error inserting user tag';
+$lang['admin']['errorinsertingtemplate'] = 'Error inserting template';
+$lang['admin']['errorinsertinguser'] = 'Error inserting user';
+$lang['admin']['errornofilesexported'] = 'Error exporting files to xml';
+$lang['admin']['errorretrievingcss'] = 'Error retrieving Stylesheet';
+$lang['admin']['errorretrievingtemplate'] = 'Error retrieving template';
+$lang['admin']['errortemplateinuse'] = 'This template is still in use by a page. Please remove it first.';
+$lang['admin']['errorupdatingcss'] = 'Error updating Stylesheet';
+$lang['admin']['errorupdatinggroup'] = 'Error updating group';
+$lang['admin']['errorupdatingpages'] = 'Error updating pages';
+$lang['admin']['errorupdatingtemplate'] = 'Error updating template';
+$lang['admin']['errorupdatinguser'] = 'Error updating user';
+$lang['admin']['errorupdatingusertag'] = 'Error updating user tag';
+$lang['admin']['erroruserinuse'] = 'This user still owns content pages. Please change ownership to another user before deleting.';
+$lang['admin']['eventhandlers'] = 'Event Manager';
+$lang['admin']['eventhandler'] = 'Event Handlers';
+$lang['admin']['editeventhandler'] = 'Edit Event Handler';
+$lang['admin']['eventhandlerdescription'] = 'Associate user tags with events';
+$lang['admin']['export'] = 'Export';
+$lang['admin']['event'] = 'Event';
+
+$lang['admin']['errorcantcreatefile'] = 'Could not create a file (permissions problem?)';
+$lang['admin']['errormoduleversionincompatible'] = 'Module is incompatible with this version of CMS';
+$lang['admin']['errormodulenotloaded'] = 'Internal error, the module has not been instantiated';
+$lang['admin']['errormodulenotfound'] = 'Internal error, could not find the instance of a module';
+$lang['admin']['errorinstallfailed'] = 'Module installation failed';
+$lang['admin']['errormodulewontload'] = 'Problem instantiating an available module';
+
+$lang['admin']['enablecustom404'] = 'Enable Custom 404 Message';
+$lang['admin']['enablesitedown'] = 'Enable Site Down Message';
+$lang['admin']['enablewysiwyg'] = 'Enable WYSIWYG on Site Down Message';
+
+$lang['admin']['event_help_loginpost'] = '<p>Sent after a user logs into the admin panel.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_logoutpost'] = '<p>Sent after a user logs out of the admin panel.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_adduserpre'] = '<p>Sent before a new user is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_adduserpost'] = '<p>Sent after a new user is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_edituserpre'] = '<p>Sent before edits to a user are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_edituserpost'] = '<p>Sent after edits to a user are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_deleteuserpre'] = '<p>Sent before a user is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_deleteuserpost'] = '<p>Sent after a user is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_addgrouppre'] = '<p>Sent before a new group is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+</ul>
+';
+$lang['admin']['event_help_addgrouppost'] = '<p>Sent after a new group is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+</ul>
+';
+$lang['admin']['event_help_changegroupassignpre'] = '<p>Sent before group assignments are saved.</p>
+<h4>Parameters></h4>
+<ul>
+<li>\'group\' - Reference to the group object.</li>
+<li>\'users\' - Array of references to user objects belonging to the group.</li>
+';
+$lang['admin']['event_help_changegroupassignpost'] = '<p>Sent after group assignments are saved.</p>
+<h4>Parameters></h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+<li>\'users\' - Array of references to user objects now belonging to the affected group.</li>
+';
+$lang['admin']['event_help_editgrouppre'] = '<p>Sent before edits to a group are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+</ul>
+';
+$lang['admin']['event_help_editgrouppost'] = '<p>Sent after edits to a group are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+</ul>
+';
+$lang['admin']['event_help_deletegrouppre'] = '<p>Sent before a group is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+</ul>
+';
+$lang['admin']['event_help_deletegrouppost'] = '<p>Sent after a group is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+</ul>
+';
+$lang['admin']['event_help_addstylesheetpre'] = '<p>Sent before a new stylesheet is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
+</ul>
+';
+$lang['admin']['event_help_addstylesheetpost'] = '<p>Sent after a new stylesheet is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
+</ul>
+';
+$lang['admin']['event_help_editstylesheetpre'] = '<p>Sent before edits to a stylesheet are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
+</ul>
+';
+$lang['admin']['event_help_editstylesheetpost'] = '<p>Sent after edits to a stylesheet are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
+</ul>
+';
+$lang['admin']['event_help_deletestylesheetpre'] = '<p>Sent before a stylesheet is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
+</ul>
+';
+$lang['admin']['event_help_deletestylesheetpost'] = '<p>Sent after a stylesheet is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
+</ul>
+';
+$lang['admin']['event_help_addtemplatepre'] = '<p>Sent before a new template is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template object.</li>
+</ul>
+';
+$lang['admin']['event_help_addtemplatepost'] = '<p>Sent after a new template is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template object.</li>
+</ul>
+';
+$lang['admin']['event_help_edittemplatepre'] = '<p>Sent before edits to a template are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template object.</li>
+</ul>
+';
+$lang['admin']['event_help_edittemplatepost'] = '<p>Sent after edits to a template are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template object.</li>
+</ul>
+';
+$lang['admin']['event_help_deletetemplatepre'] = '<p>Sent before a template is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template object.</li>
+</ul>
+';
+$lang['admin']['event_help_deletetemplatepost'] = '<p>Sent after a template is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template object.</li>
+</ul>
+';
+$lang['admin']['event_help_templateprecompile'] = '<p>Sent before a template is sent to smarty for processing.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template text.</li>
+<li>\'type\' - The type of template call.  i.e: template for a whole template, tpl_head, tpl_body, or tpl_top for a partial template.</li>
+</ul>
+';
+$lang['admin']['event_help_templatepostcompile'] = '<p>Sent after a template has been processed by smarty.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template text.</li>
+<li>\'type\' - The type of template call.  i.e: template for a whole template, tpl_head, tpl_body, or tpl_top for a partial template.</li>
+</ul>
+';
+$lang['admin']['event_help_addglobalcontentpre'] = '<p>Sent before a new global content block is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block object.</li>
+</ul>
+';
+$lang['admin']['event_help_addglobalcontentpost'] = '<p>Sent after a new global content block is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block object.</li>
+</ul>
+';
+$lang['admin']['event_help_editglobalcontentpre'] = '<p>Sent before edits to a global content block are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block object.</li>
+</ul>
+';
+$lang['admin']['event_help_editglobalcontentpost'] = '<p>Sent after edits to a global content block are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block object.</li>
+</ul>
+';
+$lang['admin']['event_help_deleteglobalcontentpre'] = '<p>Sent before a global content block is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block object.</li>
+</ul>
+';
+$lang['admin']['event_help_deleteglobalcontentpost'] = '<p>Sent after a global content block is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block object.</li>
+</ul>
+';
+$lang['admin']['event_help_globalcontentprecompile'] = '<p>Sent before a global content block is sent to smarty for processing.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block text.</li>
+</ul>
+';
+$lang['admin']['event_help_globalcontentpostcompile'] = '<p>Sent after a global content block has been processed by smarty.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block text.</li>
+</ul>
+';
+$lang['admin']['event_help_contenteditpre'] = '<p>Sent before edits to content are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected content object.</li>
+</ul>
+';
+$lang['admin']['event_help_contenteditpost'] = '<p>Sent after edits to content are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'content\' - Reference to the affected content object.</li>
+</ul>
+';
+$lang['admin']['event_help_contentdeletepre'] = '<p>Sent before content is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'content\' - Reference to the affected content object.</li>
+</ul>
+';
+$lang['admin']['event_help_contentdeletepost'] = '<p>Sent after content is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'content\' - Reference to the affected content object.</li>
+</ul>
+';
+$lang['admin']['event_help_contentstylesheet'] = '<p>Sent before the sytlesheet is sent to the browser.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'content\' - Reference to the affected stylesheet text.</li>
+</ul>
+';
+$lang['admin']['event_help_contentprecompile'] = '<p>Sent before content is sent to smarty for processing.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'content\' - Reference to the affected content text.</li>
+</ul>
+';
+$lang['admin']['event_help_contentpostcompile'] = '<p>Sent after content has been processed by smarty.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'content\' - Reference to the affected content text.</li>
+</ul>
+';
+$lang['admin']['event_help_contentpostrender'] = '<p>Sent before the combined html is sent to the browser.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'content\' - Reference to the html text.</li>
+</ul>
+';
+$lang['admin']['event_help_smartyprecompile'] = '<p>Sent before any content destined for smarty is sent to for processing.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'content\' - Reference to the affected text.</li>
+</ul>
+';
+$lang['admin']['event_help_smartypostcompile'] = '<p>Sent after any content destined for smarty has been processed.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'content\' - Reference to the affected text.</li>
+</ul>
+';
+
+$lang['admin']['expand'] = 'Expand Section';
+$lang['admin']['expandall'] = 'Expand All Sections';
+$lang['admin']['expanded_xml'] = 'Expanded XML file consisting of %s %s';
+$lang['admin']['extra1'] = 'Extra Page Attribute 1';
+$lang['admin']['extra2'] = 'Extra Page Attribute 2';
+$lang['admin']['extra3'] = 'Extra Page Attribute 3';
+
+
+// FFFF
+// F
+// FFF
+// F
+// F
+
+$lang['admin']['filecreatedirbadchars'] = 'Invalid characters were detected in the submitted directory name';
+$lang['admin']['filterapplied'] = 'Current Filter';
+$lang['admin']['filteruser'] = 'Username is';
+$lang['admin']['filtername'] = 'Event name contains';
+$lang['admin']['filteraction'] = 'Action contains';
+$lang['admin']['filterapply'] = 'Apply filters';
+$lang['admin']['filterreset'] = 'Reset filters';
+$lang['admin']['filters'] = 'Filters';
+
+$lang['admin']['filecreatedirnodoubledot'] = 'Directory cannot contain \'..\'.';
+$lang['admin']['filecreatedirnoname'] = 'Cannot create a directory with no name.';
+$lang['admin']['filecreatedirnoslash'] = 'Directory cannot contain \'/\' or \'\\\'.';
+$lang['admin']['filemanagement'] = 'File Management';
+$lang['admin']['filename'] = 'Filename';
+$lang['admin']['filenotuploaded'] = 'File could not be uploaded. This could be a permissions or Safe mode problem?';
+$lang['admin']['filesize'] = 'File Size';
+$lang['admin']['firstname'] = 'First Name';
+
+
+//  GGG
+// G
+// G GG
+// G  G
+// G  G
+//  GGG
+
+$lang['admin']['general_operation_settings'] = 'General Operation Settings';
+$lang['admin']['groups'] = 'Groups';
+$lang['admin']['groupsdescription'] = 'This is where you manage groups.';
+$lang['admin']['groupassignments'] = 'Group Assignments';
+$lang['admin']['groupassignmentdescription'] = 'Here you can assign users to groups.';
+$lang['admin']['groupperms'] = 'Group Permissions';
+$lang['admin']['grouppermsdescription'] = 'Set permissions and access levels for groups';
+
+$lang['admin']['groupmanagement'] = 'Group Management';
+$lang['admin']['grouppermissions'] = 'Group Permissions';
+
+
+// H  H
+// H  H
+// HHHH
+// H  H
+// H  H
+
+$lang['admin']['help_function_cms_get_language'] = <<<EOT
 <h3>What does this do?</h3>
-<p>A plugin to test wether a given module (by name) is installed, and available for use.</p>
+<p>This plugin returns the current CMSMS language name. The language is used for translation strings and date formatting.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-<li><strong>(required)module</strong> - (string) The name of the module.</li>
 <li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
 </ul>
-<h3>Example:</h3>
-{module_available module='News' assign='havenews'}{if \$havenews}{cms_module module=News}{/if}
-<h3>Note:</h3>
-<p>You cannot use the short form of the module call, i.e: <em>{News}</em> in this type of expression.</p>
 EOT;
-$lang['admin']['prettyurls_noeffect'] = 'Pretty URLS are not configured... this url will have no effect';
+
+$lang['admin']['help_function_cms_init_editor'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin is used to initialize the selected wysiwyg editor for display when wysiwyg functionalities are required for frontend data submission.  This module will find the selected frontend wysiwyg, determine if it has been requested, and if so generate the appropriate html code <em>(usually javascript links)</em> so that the wysiwyg will initialize properly when the page is loaded.  If no wysiwyg editors have been requested for the frontend request this plugin will produce no output.</p>
+<h3>How do I use it?</h3>
+<p>The first thing you must do is select the frontend WYSIWYG editor to use in the global settings page of the admin console.  Next If you use frontend wysiwyg editors on numerous pages, it may be best to place the {cms_init_editor} plugin directly into your page template.  If you only require the wysiwyg editor to be enabled on a limited amount of pages you may just place it into the &quot;Page Specific Metadata&quot; field in each page.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li><em>(optional)wysiwyg</em> - Specify the name of the wysiwyg editor module to initialize.  Use with caution.  If you have a different wysiwyg editor selected in the global settings, this will force the specified  editor to be initialized.</li>
+<li><em>(optional)force=0</em> - Normally this plugin will not initialize the specified (or detected) editor if it has not been marked as &quot;active&quot;.  This parameter will override that behavior.</li>
+<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
+</ul>
+EOT;
+
 $lang['admin']['help_function_cms_lang_info'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This plugin returns an object containing the information that CMSMS has about the selected language.  This can include locale information, encodings, language aliases etc.</p>
@@ -27,6 +674,21 @@ $lang['admin']['help_function_cms_lang_info'] = <<<EOT
 <h3>See Also:</h3>
 <p>the CmsNls class documentation.</p>
 EOT;
+
+$lang['admin']['help_function_module_available'] = <<<EOT
+<h3>What does this do?</h3>
+<p>A plugin to test wether a given module (by name) is installed, and available for use.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li><strong>(required)module</strong> - (string) The name of the module.</li>
+<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+{module_available module='News' assign='havenews'}{if \$havenews}{cms_module module=News}{/if}
+<h3>Note:</h3>
+<p>You cannot use the short form of the module call, i.e: <em>{News}</em> in this type of expression.</p>
+EOT;
+
 $lang['admin']['help_function_cms_set_language'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This plugin attempts to set the current language for use by translation strings and date formatting to the desired language.  The language specified must be known to CMSMS (The nls file must exist).  When this function is called, (and unless overridden in the config.php) an attempt will be made to set the locale to the local associated with the language.  The locale for the language must be installed on the server.</p>
@@ -35,14 +697,17 @@ $lang['admin']['help_function_cms_set_language'] = <<<EOT
 <li><strong>(required)lang</strong> - The desired language.  The language must be known to the CMSMS installation (nls file must exist).</li>
 </ul>
 EOT;
-$lang['admin']['help_function_cms_get_language'] = <<<EOT
+
+$lang['admin']['help_modifier_cms_date_format'] = <<<EOT
 <h3>What does this do?</h3>
-<p>This plugin returns the current CMSMS language name. The language is used for translation strings and date formatting.</p>
-<h3>What parameters does it take?</h3>
-<ul>
-<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
-</ul>
+<p>This modifier is used to format dates in a suitable format. It uses the standard strftime parameters. If no format string is specified, the system will use the date format string user preference (for logged in users) or the system date format preference.</p>
+<p>This modifier is capable of understanding dates in many formats.  i.e: date-time strings output from the database or integer timestamps generated by the time() function.</p>
+<h3>Usage:</h3>
+<pre><code>{\$some_date_var|cms_date_format[:&lt;format string&gt;]}</code></pre>
+<h3>Example:</h3>
+<pre><code>{'2012-03-24 22:44:22'|cms_date_format}</code></pre>
 EOT;
+
 $lang['admin']['help_modifier_cms_escape'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This modifier is used to escape the string in one of many ways.  This can be used for converting the string to multiple different display formats, or to make user entered data with special characters displayable on a standard web page.</p>
@@ -65,15 +730,7 @@ $lang['admin']['help_modifier_cms_escape'] = <<<EOT
 <h4>Character Set::</h4>
 <p>If the character set is not specified, utf-8 is assumed. The character set is only applicable to the &quot;html&quot; and &quot;htmlall&quot; escape types.</p>
 EOT;
-$lang['admin']['help_modifier_cms_date_format'] = <<<EOT
-<h3>What does this do?</h3>
-<p>This modifier is used to format dates in a suitable format. It uses the standard strftime parameters. If no format string is specified, the system will use the date format string user preference (for logged in users) or the system date format preference.</p>
-<p>This modifier is capable of understanding dates in many formats.  i.e: date-time strings output from the database or integer timestamps generated by the time() function.</p>
-<h3>Usage:</h3>
-<pre><code>{\$some_date_var|cms_date_format[:&lt;format string&gt;]}</code></pre>
-<h3>Example:</h3>
-<pre><code>{'2012-03-24 22:44:22'|cms_date_format}</code></pre>
-EOT;
+
 $lang['admin']['help_modifier_summarize'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This modifier is used to truncate a long sequence of text to a limited number of &quot;words&quot;.</p>
@@ -83,92 +740,407 @@ $lang['admin']['help_modifier_summarize'] = <<<EOT
 <p>The following example would strip all html tags from the content and truncate it after 50 words.</p>
 <pre><code>{content|strip_tags|summarize:50}</code></pre>
 EOT;
-$lang['admin']['module_param_lang'] = '<strong>Deprecated</strong> - Override the current language that is used for selecting translated strings.';
-$lang['admin']['server_db_grants'] = 'Check database access levels';
-$lang['admin']['error_nograntall_found'] = 'Could not find a suitable &quot;GRANT ALL&quot; permission.  This may mean you could have problems installing or removing modules.  Or even adding and deleting items, including pages';
-$lang['admin']['msg_grantall_found'] = 'Found a &quot;GRANT ALL&quot; statement that appears to be suitable';
-$lang['admin']['curlversion'] = 'Test curl version';
-$lang['admin']['curl'] = 'Test for the curl library';
-$lang['admin']['test_curl'] = 'Test for curl availability';
-$lang['admin']['test_curlversion'] = 'Test Curl Version';
-$lang['admin']['curl_versionstr'] = 'version %s, minimum recommended version is %s';
+
+$lang['admin']['handler'] = 'Handler (user defined tag)';
+$lang['admin']['headtags'] = 'Head Tags';
+$lang['admin']['help'] = 'Help';
+$lang['admin']['helpwithsection'] = '%s Help';
+$lang['admin']['helpaddtemplate'] = '<p>A template is what controls the look and feel of your site\'s content.</p><p>Create the layout here and also add your CSS in the Stylesheet section to control the look of your various elements.</p>';
+$lang['admin']['helplisttemplate'] = '<p>This page allows you to edit, delete, and create templates.</p><p>To create a new template, click on the <u>Add New Template</u> button.</p><p>If you wish to set all content pages to use the same template, click on the <u>Set All Content</u> link.</p><p>If you wish to duplicate a template, click on the <u>Copy</u> icon and you will be prompted to name the new duplicate template.</p>';
+$lang['admin']['home'] = 'Home';
+$lang['admin']['homepage'] = 'Homepage';
+$lang['admin']['hostname'] = 'Hostname';
+
+
+//    I
+//    I
+//    I
+//    I
+//    I
+
+$lang['admin']['info_checkversion'] = 'If enabled, the system will perform a daily check for a new release of CMSMS';
+
+$lang['admin']['info_default_contenttype'] = 'Applicable when adding new content objects, this control specifies the type that is selected by default.  Please ensure that the selected item is not one of the &quot;disallowed types&quot;.';
+
+$lang['admin']['info_disallowed_contenttypes'] = 'Select which content types to remove from the content type dropdown when editing or adding content.  Use CTRL+Click to select, unselect items.  Having no selected items will indicate that all content types are allowed. <em>(applies to all users)</em>';
+
+$lang['admin']['info_pagedefaults'] = 'This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages';
+
+$lang['admin']['info_search_module'] = 'Select the module that should be used to index words for searching, and will provide the site search capabilities';
+
+$lang['admin']['info_smarty_cachemodules'] = 'Select how to cache tags in various templates that call module actions.  If enabled, all module calls will be cached.  This may have negative effects on some modules, or modules with forms.  <em>(note: you can override this using the nocache option as described in the smarty manual)</em>.  If disabled no module calls will be cached which may have an effect on performance.   If you select to allow the module to decide, the default is that caching is not performed.  The module can override this, and you can disable caching using the nocache parameter when calling the module.'
+
+$lang['admin']['info_smarty_cacheudt'] = 'If enabled, all calls to user defined tags will be cached.  This will be useful for tags that display the output of database queries.  You can disable caching using the nocache parameter in the udt call.  i.e: <code>{myusertag nocache}</code>';
+
+$lang['admin']['info_smarty_caching'] = 'When enabled, the output from various plugins will be cached to increase performance.  This only applies to output on content pages marked as cachable, and only for non-admin users.  Note, this functionality may interfere with the behavior of some modules or plugins, or plugins that use non-inline forms.';
+
+$lang['admin']['info_smarty_compilecheck'] = 'If disabled, smarty will not check the modification dates of templates to see if they have been modified.  This can significantly improve performance.  However performing any template change (or even some content changes) may require a cache clearing';
+
+$lang['admin']['info_smarty_options'] = 'The following options have effect only when the above caching options are enabled';
+
+$lang['admin']['info_umask'] = 'The &quot;umask&quot; is an octal value that is used to specify the default permission for newly created files (this is used for files in the cache directory, and uploaded files.  For more information see the appropriate <a href="http://en.wikipedia.org/wiki/Umask">wikipedia article.</a>';
+
+$lang['admin']['ip_addr'] = 'IP Address';
+
+$lang['admin']['idnotvalid'] = 'The given id is not valid';
+$lang['admin']['imagemanagement'] = 'Image Manager';
+$lang['admin']['informationmissing'] = 'Information missing';
+$lang['admin']['install'] = 'Install';
+$lang['admin']['invalidcode'] = 'Invalid code entered.';
+$lang['admin']['illegalcharacters'] = 'Invalid characters in field %s.';
+$lang['admin']['invalidcode_brace_missing'] = 'Uneven amount of braces';
+$lang['admin']['invalidtemplate'] = 'The template is not valid';
+$lang['admin']['itemid'] = 'Item ID';
+$lang['admin']['itemname'] = 'Item Name';
+
+
+//    J
+//    J
+//    J
+//    J
+// JJJJ
+
+
+
+// K  K
+// K K
+// KK
+// K K
+// K  K
+
+
+
+// L
+// L
+// L
+// L
+// LLLL
+
+$lang['admin']['lctitle_page'] = 'The title of existing content items';
+$lang['admin']['lctitle_alias'] = "The alias of existing content items. Some content items do not have aliases";
+$lang['admin']['lctitle_url'] = 'The URL suffix for the content item.  If set';
+$lang['admin']['lctitle_template'] = "The selected template for the content item. Some content items do not have templates";
+$lang['admin']['lctitle_owner'] = 'The owner of the content item';
+$lang['admin']['lctitle_active'] = "Indicates whether the content item is active. Inactive items cannot be displayed.";
+$lang['admin']['lctitle_default'] = "Specify the content item that is accessed when the root url is requested.  Only one item can be default";
+$lang['admin']['lctitle_move'] = 'Allows arranging your content hierarchy';
+$lang['admin']['lctitle_multiselect'] = 'Select all visible items / Select none';
 $lang['admin']['lines_in_error'] = '%d lines with errors';
+$lang['admin']['listcontent_showalias'] = 'Display the &quot;Alias&quot; column';
+$lang['admin']['listcontent_showurl'] = 'Display the &quot;URL&quot; column';
+$lang['admin']['listcontent_showtitle'] = 'Display the Page Title or Menu Text';
+$lang['admin']['listcontent_settings'] = 'Content List Settings';
+
+$lang['admin']['language'] = 'Language';
+$lang['admin']['lastname'] = 'Last Name';
+$lang['admin']['logout'] = 'Logout';
+$lang['admin']['loginprompt'] = 'Enter a valid user credential to get access to the Admin Console.';
+$lang['admin']['logintitle'] = 'Login to CMS Made Simple&trade;';
+
+$lang['admin']['lostpw'] = 'Forgot your password?';
+$lang['admin']['lostpwemailsubject'] = '[%s] Password Recovery';
+$lang['admin']['lostpwemail'] = <<<EOT
+You are recieving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the link below or paste it into the url field on your favorite browser:
+%s
+
+If you feel this is incorrect or made in error, simply ignore the email and nothing will change.
+EOT;
+
+
+// M   M
+// MM MM
+// M M M
+// M   M
+// M   M
+
+$lang['admin']['mediatype'] = 'Media Type';
+$lang['admin']['media_query'] = 'Media Query';
+$lang['admin']['media_query_description'] = '<strong>Notice:</strong> When Media Query is used, Media Type selection will be ignored.<br /> Use any valid expression as recommended by <a href="http://www.w3.org/TR/css3-mediaqueries/" rel="external" title="W3C">W3C</a>.';
+$lang['admin']['mediatype_'] = 'None set : will affect everywhere ';
+$lang['admin']['mediatype_all'] = 'all : Suitable for all devices.';
+$lang['admin']['mediatype_aural'] = 'aural : Intended for speech synthesizers.';
+$lang['admin']['mediatype_braille'] = 'braille : Intended for braille tactile feedback devices.';
+$lang['admin']['mediatype_embossed'] = 'embossed : Intended for paged braille printers.';
+$lang['admin']['mediatype_handheld'] = 'handheld : Intended for handheld devices';
+$lang['admin']['mediatype_print'] = 'print : Intended for paged, opaque material and for documents viewed on screen in print preview mode.';
+$lang['admin']['mediatype_projection'] = 'projection : Intended for projected presentations, for example projectors or print to transparencies.';
+$lang['admin']['mediatype_screen'] = 'screen : Intended primarily for color computer screens.';
+$lang['admin']['mediatype_tty'] = 'tty : Intended for media using a fixed-pitch character grid, such as teletypes and terminals.';
+$lang['admin']['mediatype_speech'] = 'speech : Intended for speech synthesizers.';
+$lang['admin']['mediatype_tv'] = 'tv : Intended for television-type devices.';
+$lang['admin']['msg_grantall_found'] = 'Found a &quot;GRANT ALL&quot; statement that appears to be suitable';
+$lang['admin']['moduledecides'] = 'Module Decides';
+$lang['admin']['modulehelp_english'] = 'View In English';
+$lang['admin']['modulehelp_yourlang'] = 'View in Your Language';
+$lang['admin']['module_param_lang'] = '<strong>Deprecated</strong> - Override the current language that is used for selecting translated strings.';
+$lang['admin']['moduleupgraded'] = 'Upgrade Successful';
+
+$lang['admin']['menutext'] = 'Menu Text';
+$lang['admin']['missingparams'] = 'Some parameters were missing or invalid';
+$lang['admin']['modifygroupassignments'] = 'Modify Group Assignments';
+$lang['admin']['moduleabout'] = 'About the %s module';
+$lang['admin']['modulehelp'] = 'Help for the %s module';
+$lang['admin']['msg_defaultcontent'] = 'Add code here that should appear as the default content of all new pages';
+$lang['admin']['msg_defaultmetadata'] = 'Add code here that should appear in the metadata section of all new pages';
+$lang['admin']['moduleinstalled'] = 'Module already installed';
+$lang['admin']['moduleinterface'] = '%s Interface';
+$lang['admin']['modules'] = 'Modules';
+$lang['admin']['move'] = 'Move';
+
+$lang['admin']['myprefs'] = 'My Preferences';
+$lang['admin']['myprefsdescription'] = 'This is where you can customize the site admin area to work the way you want.';
+$lang['admin']['myaccount'] = 'My Account';
+$lang['admin']['myaccountdescription'] = 'This is where you can update your personal account details.';
+
+
+// N   N
+// NN  N
+// N N N
+// N  NN
+// N   N
+
+$lang['admin']['never'] = 'Never';
+$lang['admin']['new_window'] = 'new window';
+$lang['admin']['nopluginabout'] = 'No about information available for this plugin';
+$lang['admin']['nopluginhelp'] = 'No help available for this plugin';
 $lang['admin']['no_files_scanned'] = 'No files were scanned during the verification process (maybe the file is invalid)';
+
+$lang['admin']['name'] = 'Name';
+$lang['admin']['needpermissionto'] = 'You need the \'%s\' permission to perform that function.';
+$lang['admin']['needupgrade'] = 'Needs Upgrade';
+$lang['admin']['newtemplatename'] = 'New Template Name';
+$lang['admin']['next'] = 'Next';
+$lang['admin']['noaccessto'] = 'No Access to %s';
+$lang['admin']['nocss'] = 'No Stylesheet';
+$lang['admin']['noentries'] = 'No Entries';
+$lang['admin']['nofieldgiven'] = 'No %s given!';
+$lang['admin']['nofiles'] = 'No Files';
+$lang['admin']['nopasswordmatch'] = 'Passwords do not match';
+$lang['admin']['norealdirectory'] = 'No real directory given';
+$lang['admin']['norealfile'] = 'No real file given';
+$lang['admin']['notinstalled'] = 'Not Installed';
+
+$lang['admin']['no_file_url'] = 'None (Use URL Above)';
+$lang['admin']['none'] = 'none';
+
+
+//  OO
+// O  O
+// O  O
+// O  O
+//  OO
+
+$lang['admin']['overwritemodule'] = 'Overwrite existing modules';
+$lang['admin']['owner'] = 'Owner';
+$lang['admin']['output_buffering'] = 'PHP output_buffering';
+
+
+// PPPP
+// P  P
+// PPPP
+// P
+// P
+
+$lang['admin']['pagedefaultsupdated'] = 'Page default settings updated';
+$lang['admin']['prettyurls_noeffect'] = 'Pretty URLS are not configured... this url will have no effect';
+$lang['admin']['prompt_smarty_cachemodules'] = 'Cache module calls';
+$lang['admin']['prompt_smarty_cacheudt'] = 'Cache UDT Calls';
+$lang['admin']['prompt_smarty_compilecheck'] = 'Do a Compilation Check';
+$lang['admin']['prompt_use_smartycaching'] = 'Enable Smarty Caching';
+
+$lang['admin']['pagealias'] = 'Page Alias';
+$lang['admin']['pagedefaults'] = 'Page Defaults';
+$lang['admin']['pagedefaultsdescription'] = 'Set default values for new pages';
+$lang['admin']['parent'] = 'Parent';
+$lang['admin']['password'] = 'Password';
+$lang['admin']['passwordagain'] = 'Password (again)';
+$lang['admin']['permission'] = 'Permission';
+$lang['admin']['permissions'] = 'Permissions';
+$lang['admin']['permissionschanged'] = 'Permissions have been updated.';
+$lang['admin']['pluginabout'] = 'About the %s tag';
+$lang['admin']['pluginhelp'] = 'Help for the %s tag';
+$lang['admin']['pluginmanagement'] = 'Plugin Management';
+$lang['admin']['prefsupdated'] = 'User preferences have been updated.';
+$lang['admin']['preview'] = 'Preview';
+$lang['admin']['previewdescription'] = 'Preview changes';
+$lang['admin']['previous'] = 'Previous';
+
+
+//  QQQ
+// Q   Q
+// Q   Q
+// Q   Q
+//  QQQ Q
+
+
+
+// RRRR
+// R  R
+// RRRR
+// R R
+// R  R
+
+$lang['admin']['remote_response_ok'] = 'Remote response: ok!';
+$lang['admin']['remote_response_404'] = 'Remote response: not found!';
+$lang['admin']['remote_response_error'] = 'Remote response: error!';
+$lang['admin']['remove'] = 'Remove';
+$lang['admin']['removeconfirm'] = 'This action will permanently remove the files making up this module from this installation.\nAre you sure you want to proceed?';
+$lang['admin']['removecssassociation'] = 'Remove Stylesheet Association';
+$lang['admin']['routesrebuilt'] = 'The database routes are rebuilt';
+
+
+// SSSS
+// S
+// SSSS
+//    S
+// SSSS
+
+$lang['admin']['search_module'] = 'Search module';
+$lang['admin']['server_db_grants'] = 'Check database access levels';
+$lang['admin']['setfalse'] = 'Set False';
+$lang['admin']['siteprefsupdated'] = 'Global Settings Updated';
+$lang['admin']['smarty_settings'] = 'Smarty Settings';
 $lang['admin']['stylesheetnotfound'] = 'Stylesheet %d not found';
 $lang['admin']['sysmain_updateurls'] = 'Update Routes';
 $lang['admin']['sysmain_confirmupdateurls'] = 'Are you sure you want to refresh the route database';
-$lang['admin']['routesrebuilt'] = 'The database routes are rebuilt';
+
+$lang['admin']['saveconfig'] = 'Save Config';
+$lang['admin']['send'] = 'Send';
+$lang['admin']['setallcontent'] = 'Set All Pages';
+$lang['admin']['setallcontentconfirm'] = 'Are you sure you want to set all pages to use this template?';
+$lang['admin']['showinmenu'] = 'Show in Menu';
+$lang['admin']['showsite'] = 'Show Site';
+$lang['admin']['sitedownmessage'] = 'Site Down Message';
+$lang['admin']['siteprefs'] = 'Global Settings';
+$lang['admin']['status'] = 'Status';
+$lang['admin']['stylesheet'] = 'Stylesheet';
+$lang['admin']['submit'] = 'Submit';
+$lang['admin']['submitdescription'] = 'Save changes';
+
+
+// SSSSS
+//   S
+//   S
+//   S
+//   S
+
+$lang['admin']['test_curl'] = 'Test for curl availability';
+$lang['admin']['test_curlversion'] = 'Test Curl Version';
 $lang['admin']['text_changeowner'] = 'Set Selected Pages to a different User';
-$lang['admin']['changeowner'] = 'Change Owner';
-$lang['admin']['xmlreader_class'] = 'Checking for the XMLReader class';
-$lang['admin']['info_smarty_cacheudt'] = 'If enabled, all calls to user defined tags will be cached.  This will be useful for tags that display the output of database queries.  You can disable caching using the nocache parameter in the udt call.  i.e: <code>{myusertag nocache}</code>';
-$lang['admin']['prompt_smarty_cacheudt'] = 'Cache UDT Calls';
-$lang['admin']['always'] = 'Always';
-$lang['admin']['never'] = 'Never';
-$lang['admin']['moduledecides'] = 'Module Decides';
-$lang['admin']['info_smarty_cachemodules'] = 'Select how to cache tags in various templates that call module actions.  If enabled, all module calls will be cached.  This may have negative effects on some modules, or modules with forms.  <em>(note: you can override this using the nocache option as described in the smarty manual)</em>.  If disabled no module calls will be cached which may have an effect on performance.   If you select to allow the module to decide, the default is that caching is not performed.  The module can override this, and you can disable caching using the nocache parameter when calling the module.';
-$lang['admin']['prompt_smarty_cachemodules'] = 'Cache module calls';
-$lang['admin']['info_smarty_compilecheck'] = 'If disabled, smarty will not check the modification dates of templates to see if they have been modified.  This can significantly improve performance.  However performing any template change (or even some content changes) may require a cache clearing';
-$lang['admin']['prompt_smarty_compilecheck'] = 'Do a Compilation Check';
-$lang['admin']['info_smarty_options'] = 'The following options have effect only when the above caching options are enabled';
-$lang['admin']['info_smarty_caching'] = 'When enabled, the output from various plugins will be cached to increase performance.  This only applies to output on content pages marked as cachable, and only for non-admin users.  Note, this functionality may interfere with the behavior of some modules or plugins, or plugins that use non-inline forms.';
-$lang['admin']['prompt_use_smartycaching'] = 'Enable Smarty Caching';
-$lang['admin']['smarty_settings'] = 'Smarty Settings';
-$lang['admin']['help_function_cms_init_editor'] = <<<EOT
-<h3>What does this do?</h3>
-  <p>This plugin is used to initialize the selected wysiwyg editor for display when wysiwyg functionalities are required for frontend data submission.  This module will find the selected frontend wysiwyg, determine if it has been requested, and if so generate the appropriate html code <em>(usually javascript links)</em> so that the wysiwyg will initialize properly when the page is loaded.  If no wysiwyg editors have been requested for the frontend request this plugin will produce no output.</p>
-<h3>How do I use it?</h3>
-<p>The first thing you must do is select the frontend WYSIWYG editor to use in the global settings page of the admin console.  Next If you use frontend wysiwyg editors on numerous pages, it may be best to place the {cms_init_editor} plugin directly into your page template.  If you only require the wysiwyg editor to be enabled on a limited amount of pages you may just place it into the &quot;Page Specific Metadata&quot; field in each page.</p>
-<h3>What parameters does it take?</h3>
-<ul>
-<li><em>(optional)wysiwyg</em> - Specify the name of the wysiwyg editor module to initialize.  Use with caution.  If you have a different wysiwyg editor selected in the global settings, this will force the specified  editor to be initialized.</li>
-<li><em>(optional)force=0</em> - Normally this plugin will not initialize the specified (or detected) editor if it has not been marked as &quot;active&quot;.  This parameter will override that behavior.</li>
-<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
-</ul>
-EOT;
-$lang['admin']['info_pagedefaults'] = 'This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages';
-$lang['admin']['default_contenttype'] = 'Default Content Type';
-$lang['admin']['info_default_contenttype'] = 'Applicable when adding new content objects, this control specifies the type that is selected by default.  Please ensure that the selected item is not one of the &quot;disallowed types&quot;.';
-$lang['admin']['error_contenttype'] = 'The content type associated with this page is invalid or not permitted';
-$lang['admin']['info_disallowed_contenttypes'] = 'Select which content types to remove from the content type dropdown when editing or adding content.  Use CTRL+Click to select, unselect items.  Having no selected items will indicate that all content types are allowed. <em>(applies to all users)</em>';
-$lang['admin']['disallowed_contenttypes'] = 'Content Types that are NOT allowed';
-$lang['admin']['search_module'] = 'Search module';
-$lang['admin']['info_search_module'] = 'Select the module that should be used to index words for searching, and will provide the site search capabilities';
-$lang['admin']['filecreatedirbadchars'] = 'Invalid characters were detected in the submitted directory name';
-$lang['admin']['modulehelp_yourlang'] = 'View in Your Language';
-$lang['admin']['info_umask'] = 'The &quot;umask&quot; is an octal value that is used to specify the default permission for newly created files (this is used for files in the cache directory, and uploaded files.  For more information see the appropriate <a href="http://en.wikipedia.org/wiki/Umask">wikipedia article.</a>';
-$lang['admin']['general_operation_settings'] = 'General Operation Settings';
-$lang['admin']['info_checkversion'] = 'If enabled, the system will perform a daily check for a new release of CMSMS';
-$lang['admin']['checkversion'] = 'Allow periodic checks for new versions';
-$lang['admin']['actioncontains'] = 'Action Contains';
-$lang['admin']['filterapplied'] = 'Current Filter';
-$lang['admin']['automatedtask_success'] = 'Automated task performed';
-$lang['admin']['siteprefsupdated'] = 'Global Settings Updated';
-$lang['admin']['ip_addr'] = 'IP Address';
-$lang['admin']['warn_admin_ipandcookies'] = 'Warning: Admin activities use cookies and tracks your IP address';
-$lang['admin']['event_desc_loginfailed'] = 'Sent after a user failed to login into the admin panel';
-$lang['admin']['event_help_loginfailed'] = '<p>Sent after a user failed to login into the admin panel.</p>';
-$lang['admin']['modulehelp_english'] = 'View In English';
-$lang['admin']['nopluginabout'] = 'No about information available for this plugin';
-$lang['admin']['nopluginhelp'] = 'No help available for this plugin';
-$lang['admin']['moduleupgraded'] = 'Upgrade Successful';
-$lang['admin']['added_css'] = 'Added CSS';
 $lang['admin']['toggle'] = 'Toggle';
-$lang['admin']['added_group'] = 'Added Group';
-$lang['admin']['expanded_xml'] = 'Expanded XML file consisting of %s %s';
+
+$lang['admin']['tags'] = 'Tags';
+$lang['admin']['template'] = 'Template';
+$lang['admin']['templateexists'] = 'Template name already exists';
+$lang['admin']['templatemanagement'] = 'Template Management';
+$lang['admin']['title'] = 'Title';
+$lang['admin']['tools'] = 'Tools';
+$lang['admin']['true'] = 'True';
+$lang['admin']['type'] = 'Type';
+$lang['admin']['typenotvalid'] = 'Type is not valid';
+
+
+// U   U
+// U   U
+// U   U
+// U   U
+// UUUUU
+
+$lang['admin']['usertagadded'] = 'The User Defined Tag was successfully added.';
+$lang['admin']['usertagupdated'] = 'The User Defined Tag was successfully updated.';
+$lang['admin']['usertagdeleted'] = 'The User Defined Tag was successfully removed.';
+$lang['admin']['use_name'] = 'In the parent page dropdown, show the page title instead of the menu text';
+
+$lang['admin']['uninstall'] = 'Uninstall';
+$lang['admin']['uninstallconfirm'] = 'Are you sure you want to uninstall this module? Name:';
+$lang['admin']['up'] = 'Up';
+$lang['admin']['upgrade'] = 'Upgrade';
+$lang['admin']['upgradeconfirm'] = 'Are you sure you want to upgrade this?';
+$lang['admin']['uploadfile'] = 'Upload File';
+$lang['admin']['url'] = 'URL';
+$lang['admin']['useadvancedcss'] = 'Use Advanced Stylesheet Management';
+$lang['admin']['user'] = 'User';
+$lang['admin']['userdefinedtags'] = 'User Defined Tags';
+$lang['admin']['usermanagement'] = 'User Management';
+$lang['admin']['username'] = 'Username';
+$lang['admin']['usernameincorrect'] = 'Username or password incorrect';
+$lang['admin']['userprefs'] = 'User Preferences';
+$lang['admin']['useraccount'] = 'User Account';
+
+$lang['admin']['usersassignedtogroup'] = 'Users Assigned to Group %s';
+$lang['admin']['usertagexists'] = 'A tag with this name already exists. Please choose another.';
+$lang['admin']['usewysiwyg'] = 'Use WYSIWYG editor for content';
+
+
+// V   V
+// V   V
+// V   V
+//  V V
+//   V
+
+$lang['admin']['version'] = 'Version';
+$lang['admin']['view'] = 'View';
+
+
+// W   W   W
+// W   W   W
+// W   W   W
+//  W W W W
+//   W   W
+
+$lang['admin']['warn_admin_ipandcookies'] = 'Warning: Admin activities use cookies and tracks your IP address';
+$lang['admin']['wikihelp'] = 'Community Help';
+
+
+// X   X
+//  X X
+//   X
+//  X X
+// X   X
+
+$lang['admin']['xml'] = 'XML';
+$lang['admin']['xmlmodulerepository'] = 'URL of ModuleRepository soap server';
+$lang['admin']['xmlreader_class'] = 'Checking for the XMLReader class';
+
+
+// Y   Y
+//  Y Y
+//   Y
+//   Y
+//   Y
+
+
+
+// ZZZZZ
+//    Z
+//   Z
+//  Z
+// ZZZZZ
+
+
+
+
 $lang['admin']['installed_mod'] = 'Installed version %s';
+
 $lang['admin']['uninstalled_mod'] = 'Uninstalled module %s';
 $lang['admin']['upgraded_mod'] = '%s Upgraded from Version %s to %s';
+
 $lang['admin']['edited_gcb'] = 'Edited Global Content Block';
 $lang['admin']['edited_content'] = 'Edited Content';
+
 $lang['admin']['added_content'] = 'Added Content';
 $lang['admin']['added_css_association'] = 'Added Stylesheet Association';
+
 $lang['admin']['deleted_group'] = 'Deleted Group';
 $lang['admin']['deleted_content'] = 'Deleted Content';
+
 $lang['admin']['edited_user'] = 'Edited User';
 $lang['admin']['edited_udt'] = 'Edited User Defined Tag';
+
 $lang['admin']['content_copied'] = 'Content Item Copied to %s';
+
 $lang['admin']['edited_user'] = 'Edited User';
+
 $lang['admin']['deleted_template'] = 'Deleted Template';
 $lang['admin']['added_udt'] = 'Added User Defined Tag';
 $lang['admin']['deleted_udt'] ='Deleted User Defined Tag';
@@ -246,19 +1218,7 @@ $lang['admin']['use_wysiwyg'] = 'Use WYSIWYG';
 $lang['admin']['contenttype_redirlink'] = 'Redirecting Link';
 $lang['admin']['yes'] = 'Yes';
 $lang['admin']['no'] = 'No';
-$lang['admin']['listcontent_showalias'] = 'Display the &quot;Alias&quot; column';
-$lang['admin']['listcontent_showurl'] = 'Display the &quot;URL&quot; column';
-$lang['admin']['listcontent_showtitle'] = 'Display the Page Title or Menu Text';
-$lang['admin']['listcontent_settings'] = 'Content List Settings';
-$lang['admin']['lctitle_page'] = 'The title of existing content items';
-$lang['admin']['lctitle_alias'] = "The alias of existing content items. Some content items do not have aliases";
-$lang['admin']['lctitle_url'] = 'The URL suffix for the content item.  If set';
-$lang['admin']['lctitle_template'] = "The selected template for the content item. Some content items do not have templates";
-$lang['admin']['lctitle_owner'] = 'The owner of the content item';
-$lang['admin']['lctitle_active'] = "Indicates whether the content item is active. Inactive items cannot be displayed.";
-$lang['admin']['lctitle_default'] = "Specify the content item that is accessed when the root url is requested.  Only one item can be default";
-$lang['admin']['lctitle_move'] = 'Allows arranging your content hierarchy';
-$lang['admin']['lctitle_multiselect'] = 'Select all visible items / Select none';
+
 $lang['admin']['invalid_url2'] = 'The page URL specified is invalid.  It should contain only alphanumeric characters, or - or /.  Extensions must contain only alphanumeric chars and be less than 5 characters in length.  It is also possible that the URL specified is already in use.';
 $lang['admin']['page_url'] = 'Page URL';
 $lang['admin']['runuserplugin'] = 'Run User Plugin';
@@ -323,32 +1283,11 @@ h3 .error { background: url([[root_url]]/uploads/images/error_background.gif); }
 EOT;
 $lang['admin']['pseudocron_granularity'] = 'Pseudocron Granularity';
 $lang['admin']['info_pseudocron_granularity'] = 'This setting indicates how often the system will attempt to handle regularly scheduled tasks';
-$lang['admin']['cron_request'] = 'Each Request';
-$lang['admin']['cron_15m'] = '15 Minutes';
-$lang['admin']['cron_30m'] = '30 Minutes';
-$lang['admin']['cron_60m'] = '1 Hour';
-$lang['admin']['cron_120m'] = '2 Hours';
-$lang['admin']['cron_3h'] = '3 Hours';
-$lang['admin']['cron_6h'] = '6 Hours';
-$lang['admin']['cron_12h'] = '12 Hours';
-$lang['admin']['cron_24h'] = '24 Hours';
 
-$lang['admin']['adminlog_1day'] = '1 day';
-$lang['admin']['adminlog_1week'] = '1 week';
-$lang['admin']['adminlog_2weeks'] = '2 weeks';
-$lang['admin']['adminlog_1month'] = '1 month';
-$lang['admin']['adminlog_3months'] = '3 months';
-$lang['admin']['adminlog_6months'] = '6 months';
-$lang['admin']['adminlog_manual'] = 'Manual deletion';
-$lang['admin']['adminlog_lifetime']='Lifetime of log-entries';
+
 $lang['admin']['info_adminlog_lifetime']='Remove log-entries that are older than the specified period.';
 
-$lang['admin']['filteruser']='Username is';
-$lang['admin']['filtername']='Event name contains';
-$lang['admin']['filteraction']='Action contains';
-$lang['admin']['filterapply']='Apply filters';
-$lang['admin']['filterreset']='Reset filters';
-$lang['admin']['filters']='Filters';
+
 $lang['admin']['showfilters']='Edit filter';
 
 $lang['admin']['clearcache_taskdescription'] = 'Executed daily, this task will clear cached files that are older than the age preset in the global preferences';
@@ -483,7 +1422,7 @@ $lang['admin']['copycontent'] = 'Copy Content Item';
 $lang['admin']['md5_function'] = 'md5 function';
 $lang['admin']['tempnam_function'] = 'tempnam function';
 $lang['admin']['register_globals'] = 'PHP register_globals';
-$lang['admin']['output_buffering'] = 'PHP output_buffering';
+
 $lang['admin']['disable_functions'] = 'disable_functions in PHP';
 $lang['admin']['xml_function'] = 'Basic XML (expat) support';
 $lang['admin']['magic_quotes_gpc'] = 'Magic quotes for Get/Post/Cookie';
@@ -501,9 +1440,7 @@ $lang['admin']['connection_error'] = 'Outgoing http connections do not appear to
 $lang['admin']['remote_connection_timeout'] = 'Connection Timed Out!';
 $lang['admin']['search_string_find'] = 'Connection ok!';
 $lang['admin']['connection_failed'] = 'Connection failed!';
-$lang['admin']['remote_response_ok'] = 'Remote response: ok!';
-$lang['admin']['remote_response_404'] = 'Remote response: not found!';
-$lang['admin']['remote_response_error'] = 'Remote response: error!';
+
 
 $lang['admin']['notifications_to_handle'] = 'You have <b>%d</b> unhandled notifications';
 $lang['admin']['notification_to_handle'] = 'You have <b>%d</b> unhandled notification';
@@ -554,9 +1491,7 @@ $lang['admin']['perform_validation'] = 'Perform Validation';
 $lang['admin']['upload_cksum_file'] = 'Upload Checksum File';
 $lang['admin']['checksumdescription'] = 'Validate the integrity of CMS files by comparing against known checksums';
 $lang['admin']['system_verification'] = 'System Verification';
-$lang['admin']['extra1'] = 'Extra Page Attribute 1';
-$lang['admin']['extra2'] = 'Extra Page Attribute 2';
-$lang['admin']['extra3'] = 'Extra Page Attribute 3';
+
 $lang['admin']['start_upgrade_process'] = 'Start Upgrade Process';
 $lang['admin']['warning_upgrade'] = '<em><strong>Warning:</strong></em> CMSMS is in need of an upgrade.';
 $lang['admin']['warning_upgrade_info1'] = 'You are now running schema version %s. and you need to be upgraded to version %s';
@@ -1251,31 +2186,11 @@ $lang['admin']['write'] = 'Write';
 $lang['admin']['execute'] = 'Execute';
 $lang['admin']['group'] = 'Group';
 $lang['admin']['other'] = 'Other';
-$lang['admin']['event_desc_moduleupgraded'] = 'Sent after a module is upgraded';
-$lang['admin']['event_help_moduleupgraded'] = '<p>Sent after a module is upgraded.</p>';
-$lang['admin']['event_desc_moduleinstalled'] = 'Sent after a module is installed';
-$lang['admin']['event_help_moduleinstalled'] = '<p>Sent after a module is installed.</p>';
-$lang['admin']['event_desc_moduleuninstalled'] = 'Sent after a module is uninstalled';
-$lang['admin']['event_help_moduleuninstalled'] = '<p>Sent after a module is uninstalled.</p>';
-$lang['admin']['event_desc_edituserdefinedtagpost'] = 'Sent after a user defined tag is updated';
-$lang['admin']['event_help_edituserdefinedtagpost'] = '<p>Sent after a user defined tag is updated.</p>';
-$lang['admin']['event_desc_edituserdefinedtagpre'] = 'Sent prior to a user defined tag update';
-$lang['admin']['event_help_edituserdefinedtagpre'] = '<p>Sent prior to a user defined tag update.</p>';
-$lang['admin']['event_desc_deleteuserdefinedtagpre'] = 'Sent prior to deleting a user defined tag';
-$lang['admin']['event_help_deleteuserdefinedtagpre'] = '<p>Sent prior to deleting a user defined tag.</p>';
-$lang['admin']['event_desc_deleteuserdefinedtagpost'] = 'Sent after a user defined tag is deleted';
-$lang['admin']['event_help_deleteuserdefinedtagpost'] = '<p>Sent after a user defined tag is deleted.</p>';
-$lang['admin']['event_desc_adduserdefinedtagpost'] = 'Sent after a user defined tag is inserted';
-$lang['admin']['event_help_adduserdefinedtagpre'] = '<p>Sent after a user defined tag is inserted.</p>';
-$lang['admin']['event_desc_adduserdefinedtagpre'] = 'Sent prior to a user defined tag insert';
-$lang['admin']['event_help_adduserdefinedtagpost'] = '<p>Sent prior to a user defined tag insert.</p>';
+
 $lang['admin']['global_umask'] = 'File Creation Mask (umask)';
-$lang['admin']['errorcantcreatefile'] = 'Could not create a file (permissions problem?)';
-$lang['admin']['errormoduleversionincompatible'] = 'Module is incompatible with this version of CMS';
-$lang['admin']['errormodulenotloaded'] = 'Internal error, the module has not been instantiated';
-$lang['admin']['errormodulenotfound'] = 'Internal error, could not find the instance of a module';
-$lang['admin']['errorinstallfailed'] = 'Module installation failed';
-$lang['admin']['errormodulewontload'] = 'Problem instantiating an available module';
+
+
+
 $lang['admin']['frontendlang'] = 'Default language for the frontend';
 $lang['admin']['info_edituser_password'] = 'Change this field to change the user\'s password';
 $lang['admin']['info_edituser_passwordagain'] = 'Change this field to change the user\'s password';
@@ -1295,277 +2210,31 @@ $lang['admin']['no_orders_changed'] = 'You chose to reorder pages, but you did n
 $lang['admin']['order_too_small'] = 'A page order cannot be zero. Pages were not reordered.';
 $lang['admin']['order_too_large'] = 'A page order cannot be larger than the number of pages in that level. Pages were not reordered.';
 $lang['admin']['user_tag'] = 'User Tag';
-$lang['admin']['add'] = 'Add';
-$lang['admin']['CSS'] = 'CSS';
-$lang['admin']['about'] = 'About';
-$lang['admin']['action'] = 'Action';
-$lang['admin']['actionstatus'] = 'Action/Status';
-$lang['admin']['active'] = 'Active';
-$lang['admin']['addcontent'] = 'Add New Content';
-$lang['admin']['cantremove'] = 'Cannot Remove';
-$lang['admin']['changepermissions'] = 'Change Permissions';
-$lang['admin']['changepermissionsconfirm'] = 'USE CAUTION\n\nThis action will attempt to ensure that all of the files making up the module are writable by the web server.\nAre you sure you want to continue?';
-$lang['admin']['contentadded'] = 'The content was successfully added to the database.';
-$lang['admin']['contentupdated'] = 'The content was successfully updated.';
-$lang['admin']['contentdeleted'] = 'The content was successfully removed from the database.';
+
 $lang['admin']['success'] = 'Success';
-$lang['admin']['addcss'] = 'Add a Stylesheet';
-$lang['admin']['addgroup'] = 'Add New Group';
-$lang['admin']['additionaleditors'] = 'Additional Editors';
-$lang['admin']['addtemplate'] = 'Add New Template';
-$lang['admin']['adduser'] = 'Add New User';
-$lang['admin']['addusertag'] = 'Add User Defined Tag';
-$lang['admin']['adminaccess'] = 'Access to login to admin';
-$lang['admin']['adminlog'] = 'Admin Log';
-$lang['admin']['adminlogcleared'] = 'The Admin Log was successfully cleared';
-$lang['admin']['adminlogempty'] = 'The Admin Log is empty';
-$lang['admin']['adminsystemtitle'] = 'CMS Admin System';
-$lang['admin']['adminpaneltitle'] = 'CMS Made Simple&trade; Admin Console'; // needs translation
-$lang['admin']['advanced'] = 'Advanced';
-$lang['admin']['aliasalreadyused'] = 'The supplied "Page Alias" is already in use on another page.  Change the "Page Alias" to something else.';
-$lang['admin']['aliasmustbelettersandnumbers'] = 'Alias must be all letters and numbers';
-$lang['admin']['aliasnotaninteger'] = 'Alias cannot be an integer';
-$lang['admin']['allpagesmodified'] = 'All pages modified!';
-$lang['admin']['assignments'] = 'Assign Users';
-$lang['admin']['associationexists'] = 'This association already exists';
-$lang['admin']['autoinstallupgrade'] = 'Automatically install or upgrade';
-$lang['admin']['back'] = 'Back to Menu';
-$lang['admin']['backtoplugins'] = 'Back to Plugins List';
-$lang['admin']['cancel'] = 'Cancel';
-$lang['admin']['cantchmodfiles'] = 'Couldn\'t change permissions on some files';
-$lang['admin']['cantremovefiles'] = 'Problem Removing Files (permissions?)';
-$lang['admin']['confirmcancel'] = 'Are you sure you want to discard your changes? Click OK to discard all changes. Click Cancel to continue editing.';
-$lang['admin']['canceldescription'] = 'Discard Changes';
-$lang['admin']['clearadminlog'] = 'Clear Admin Log';
-$lang['admin']['code'] = 'Code';
-$lang['admin']['confirmdefault'] = 'Are you sure you want to set - %s - as site default page?';
-$lang['admin']['confirmdeletedir'] = 'Are you sure you want to delete this dir and all of its contents?';
-$lang['admin']['content'] = 'Content';
-$lang['admin']['contentmanagement'] = 'Content Management';
-$lang['admin']['contenttype'] = 'Content Type';
-$lang['admin']['copy'] = 'Copy';
-$lang['admin']['copytemplate'] = 'Copy Template';
-$lang['admin']['create'] = 'Create';
-$lang['admin']['createnewfolder'] = 'Create New Folder';
-$lang['admin']['cssalreadyused'] = 'CSS name already in use';
-$lang['admin']['cssmanagement'] = 'CSS Management';
-$lang['admin']['currentassociations'] = 'Current Associations';
-$lang['admin']['currentdirectory'] = 'Current Directory';
-$lang['admin']['currentgroups'] = 'Current Groups';
-$lang['admin']['currentpages'] = 'Current Pages';
-$lang['admin']['currenttemplates'] = 'Current Templates';
-$lang['admin']['currentusers'] = 'Current Users';
-$lang['admin']['custom404'] = 'Custom 404 Error Message';
-$lang['admin']['database'] = 'Database';
-$lang['admin']['databaseprefix'] = 'Database Prefix';
-$lang['admin']['databasetype'] = 'Database Type';
-$lang['admin']['date'] = 'Date';
-$lang['admin']['default'] = 'Default';
-$lang['admin']['delete'] = 'Delete';
-$lang['admin']['deleteconfirm'] = 'Are you sure you want to delete - %s - ?';
-$lang['admin']['deleteassociationconfirm'] = 'Are you sure you want to delete association to - %s - ?';
-$lang['admin']['deletecss'] = 'Delete CSS';
-$lang['admin']['dependencies'] = 'Dependencies';
-$lang['admin']['description'] = 'Description';
-$lang['admin']['directoryexists'] = 'This directory already exists.';
-$lang['admin']['down'] = 'Down';
-$lang['admin']['edit'] = 'Edit';
-$lang['admin']['editconfiguration'] = 'Edit Configuration';
-$lang['admin']['editcontent'] = 'Edit Content';
-$lang['admin']['editcss'] = 'Edit Stylesheet';
-$lang['admin']['editcsssuccess'] = 'Stylesheet updated';
-$lang['admin']['editgroup'] = 'Edit Group';
-$lang['admin']['editpage'] = 'Edit Page';
-$lang['admin']['edittemplate'] = 'Edit Template';
-$lang['admin']['edittemplatesuccess'] = 'Template updated';
-$lang['admin']['edituser'] = 'Edit User';
-$lang['admin']['editusertag'] = 'Edit User Defined Tag';
-$lang['admin']['usertagadded'] = 'The User Defined Tag was successfully added.';
-$lang['admin']['usertagupdated'] = 'The User Defined Tag was successfully updated.';
-$lang['admin']['usertagdeleted'] = 'The User Defined Tag was successfully removed.';
-$lang['admin']['email'] = 'Email Address';
-$lang['admin']['errorattempteddowngrade'] = 'Installing this module would result in a downgrade.  Operation aborted';
-$lang['admin']['errorchildcontent'] = 'Content still contains child contents. Please remove them first.';
-$lang['admin']['errorcopyingtemplate'] = 'Error Copying Template';
-$lang['admin']['errorcouldnotparsexml'] = 'Error parsing XML file. Please make sure you are uploading a .xml file and not a .tar.gz or zip file.';
-$lang['admin']['errorcreatingassociation'] = 'Error creating association';
-$lang['admin']['errorcssinuse'] = 'This Stylesheet is still used by template or pages. Please remove those associations first.';
-$lang['admin']['errordefaultpage'] = 'Can not delete the current default page. Please set a different one first.';
-$lang['admin']['errordeletingassociation'] = 'Error deleting association';
-$lang['admin']['errordeletingcss'] = 'Error deleting css';
-$lang['admin']['errordeletingdirectory'] = 'Could not delete directory. Permissions problem?';
-$lang['admin']['errordeletingfile'] = 'Could not delete file. Permissions Problem?';
-$lang['admin']['errordirectorynotwritable'] = 'No permission to write in directory.  This could be caused by file permissions and ownership.  Safe mode may also be in effect.';
-$lang['admin']['errordtdmismatch'] = 'DTD Version missing or incompatible in the XML file';
-$lang['admin']['errorgettingcssname'] = 'Error getting Stylesheet name';
-$lang['admin']['errorgettingtemplatename'] = 'Error getting template name';
-$lang['admin']['errorincompletexml'] = 'XML File is incomplete or invalid';
+
+
 $lang['admin']['uploadxmlfile'] = 'Install module via XML file';
+
+$lang['admin']['CSS'] = 'CSS';
 $lang['admin']['cachenotwritable'] = 'Cache folder is not writable. Clearing cache will not work. Please make the tmp/cache folder have full read/write/execute permissions (chmod 777).  You may also have to disable safe mode.';
+
 $lang['admin']['error_nomodules'] = 'No modules installed! Check Extensions > Modules';
 $lang['admin']['modulesnotwritable'] = 'The modules folder <em>(and/or the uploads folder)</em> is not writable, if you would like to install modules by uploading an XML file you need ensure that these folders have full read/write/execute permissions (chmod 777).  Safe mode may also be in effect.';
 $lang['admin']['noxmlfileuploaded'] = 'No file was uploaded. To install a module via XML you must choose and upload an module .xml file from your computer.';
-$lang['admin']['errorinsertingcss'] = 'Error inserting Stylesheet';
-$lang['admin']['errorinsertinggroup'] = 'Error inserting group';
-$lang['admin']['errorinsertingtag'] = 'Error inserting user tag';
-$lang['admin']['errorinsertingtemplate'] = 'Error inserting template';
-$lang['admin']['errorinsertinguser'] = 'Error inserting user';
-$lang['admin']['errornofilesexported'] = 'Error exporting files to xml';
-$lang['admin']['errorretrievingcss'] = 'Error retrieving Stylesheet';
-$lang['admin']['errorretrievingtemplate'] = 'Error retrieving template';
-$lang['admin']['errortemplateinuse'] = 'This template is still in use by a page. Please remove it first.';
-$lang['admin']['errorupdatingcss'] = 'Error updating Stylesheet';
-$lang['admin']['errorupdatinggroup'] = 'Error updating group';
-$lang['admin']['errorupdatingpages'] = 'Error updating pages';
-$lang['admin']['errorupdatingtemplate'] = 'Error updating template';
-$lang['admin']['errorupdatinguser'] = 'Error updating user';
-$lang['admin']['errorupdatingusertag'] = 'Error updating user tag';
-$lang['admin']['erroruserinuse'] = 'This user still owns content pages. Please change ownership to another user before deleting.';
-$lang['admin']['eventhandlers'] = 'Event Manager';
-$lang['admin']['eventhandler'] = 'Event Handlers';
-$lang['admin']['editeventhandler'] = 'Edit Event Handler';
-$lang['admin']['eventhandlerdescription'] = 'Associate user tags with events';
-$lang['admin']['export'] = 'Export';
-$lang['admin']['event'] = 'Event';
+
 $lang['admin']['false'] = 'False';
 $lang['admin']['settrue'] = 'Set True';
-$lang['admin']['filecreatedirnodoubledot'] = 'Directory cannot contain \'..\'.';
-$lang['admin']['filecreatedirnoname'] = 'Cannot create a directory with no name.';
-$lang['admin']['filecreatedirnoslash'] = 'Directory cannot contain \'/\' or \'\\\'.';
-$lang['admin']['filemanagement'] = 'File Management';
-$lang['admin']['filename'] = 'Filename';
-$lang['admin']['filenotuploaded'] = 'File could not be uploaded. This could be a permissions or Safe mode problem?';
-$lang['admin']['filesize'] = 'File Size';
-$lang['admin']['firstname'] = 'First Name';
-$lang['admin']['groupmanagement'] = 'Group Management';
-$lang['admin']['grouppermissions'] = 'Group Permissions';
-$lang['admin']['handler'] = 'Handler (user defined tag)';
-$lang['admin']['headtags'] = 'Head Tags';
-$lang['admin']['help'] = 'Help';
-$lang['admin']['new_window'] = 'new window';
-$lang['admin']['helpwithsection'] = '%s Help';
-$lang['admin']['helpaddtemplate'] = '<p>A template is what controls the look and feel of your site\'s content.</p><p>Create the layout here and also add your CSS in the Stylesheet section to control the look of your various elements.</p>';
-$lang['admin']['helplisttemplate'] = '<p>This page allows you to edit, delete, and create templates.</p><p>To create a new template, click on the <u>Add New Template</u> button.</p><p>If you wish to set all content pages to use the same template, click on the <u>Set All Content</u> link.</p><p>If you wish to duplicate a template, click on the <u>Copy</u> icon and you will be prompted to name the new duplicate template.</p>';
-$lang['admin']['home'] = 'Home';
-$lang['admin']['homepage'] = 'Homepage';
-$lang['admin']['hostname'] = 'Hostname';
-$lang['admin']['idnotvalid'] = 'The given id is not valid';
-$lang['admin']['imagemanagement'] = 'Image Manager';
-$lang['admin']['informationmissing'] = 'Information missing';
-$lang['admin']['install'] = 'Install';
-$lang['admin']['invalidcode'] = 'Invalid code entered.';
-$lang['admin']['illegalcharacters'] = 'Invalid characters in field %s.';
-$lang['admin']['invalidcode_brace_missing'] = 'Uneven amount of braces';
-$lang['admin']['invalidtemplate'] = 'The template is not valid';
-$lang['admin']['itemid'] = 'Item ID';
-$lang['admin']['itemname'] = 'Item Name';
-$lang['admin']['language'] = 'Language';
-$lang['admin']['lastname'] = 'Last Name';
-$lang['admin']['logout'] = 'Logout';
-$lang['admin']['loginprompt'] = 'Enter a valid user credential to get access to the Admin Console.';
-$lang['admin']['logintitle'] = 'Login to CMS Made Simple&trade;';
-$lang['admin']['menutext'] = 'Menu Text';
-$lang['admin']['missingparams'] = 'Some parameters were missing or invalid';
-$lang['admin']['modifygroupassignments'] = 'Modify Group Assignments';
-$lang['admin']['moduleabout'] = 'About the %s module';
-$lang['admin']['modulehelp'] = 'Help for the %s module';
-$lang['admin']['msg_defaultcontent'] = 'Add code here that should appear as the default content of all new pages';
-$lang['admin']['msg_defaultmetadata'] = 'Add code here that should appear in the metadata section of all new pages';
-$lang['admin']['wikihelp'] = 'Community Help';
-$lang['admin']['moduleinstalled'] = 'Module already installed';
-$lang['admin']['moduleinterface'] = '%s Interface';
-$lang['admin']['modules'] = 'Modules';
-$lang['admin']['move'] = 'Move';
-$lang['admin']['name'] = 'Name';
-$lang['admin']['needpermissionto'] = 'You need the \'%s\' permission to perform that function.';
-$lang['admin']['needupgrade'] = 'Needs Upgrade';
-$lang['admin']['newtemplatename'] = 'New Template Name';
-$lang['admin']['next'] = 'Next';
-$lang['admin']['noaccessto'] = 'No Access to %s';
-$lang['admin']['nocss'] = 'No Stylesheet';
-$lang['admin']['noentries'] = 'No Entries';
-$lang['admin']['nofieldgiven'] = 'No %s given!';
-$lang['admin']['nofiles'] = 'No Files';
-$lang['admin']['nopasswordmatch'] = 'Passwords do not match';
-$lang['admin']['norealdirectory'] = 'No real directory given';
-$lang['admin']['norealfile'] = 'No real file given';
-$lang['admin']['notinstalled'] = 'Not Installed';
-$lang['admin']['overwritemodule'] = 'Overwrite existing modules';
-$lang['admin']['owner'] = 'Owner';
-$lang['admin']['pagealias'] = 'Page Alias';
-$lang['admin']['content_id'] = 'Content ID';
-$lang['admin']['pagedefaults'] = 'Page Defaults';
-$lang['admin']['pagedefaultsdescription'] = 'Set default values for new pages';
-$lang['admin']['parent'] = 'Parent';
-$lang['admin']['password'] = 'Password';
-$lang['admin']['passwordagain'] = 'Password (again)';
-$lang['admin']['permission'] = 'Permission';
-$lang['admin']['permissions'] = 'Permissions';
-$lang['admin']['permissionschanged'] = 'Permissions have been updated.';
-$lang['admin']['pluginabout'] = 'About the %s tag';
-$lang['admin']['pluginhelp'] = 'Help for the %s tag';
-$lang['admin']['pluginmanagement'] = 'Plugin Management';
-$lang['admin']['prefsupdated'] = 'User preferences have been updated.';
-$lang['admin']['accountupdated'] = 'User account has been updated.';
-$lang['admin']['preview'] = 'Preview';
-$lang['admin']['previewdescription'] = 'Preview changes';
-$lang['admin']['previous'] = 'Previous';
-$lang['admin']['remove'] = 'Remove';
-$lang['admin']['removeconfirm'] = 'This action will permanently remove the files making up this module from this installation.\nAre you sure you want to proceed?';
-$lang['admin']['removecssassociation'] = 'Remove Stylesheet Association';
-$lang['admin']['saveconfig'] = 'Save Config';
-$lang['admin']['send'] = 'Send';
-$lang['admin']['setallcontent'] = 'Set All Pages';
-$lang['admin']['setallcontentconfirm'] = 'Are you sure you want to set all pages to use this template?';
-$lang['admin']['showinmenu'] = 'Show in Menu';
-$lang['admin']['use_name'] = 'In the parent page dropdown, show the page title instead of the menu text';
-$lang['admin']['showsite'] = 'Show Site';
-$lang['admin']['sitedownmessage'] = 'Site Down Message';
-$lang['admin']['siteprefs'] = 'Global Settings';
-$lang['admin']['status'] = 'Status';
-$lang['admin']['stylesheet'] = 'Stylesheet';
-$lang['admin']['submit'] = 'Submit';
-$lang['admin']['submitdescription'] = 'Save changes';
-$lang['admin']['tags'] = 'Tags';
-$lang['admin']['template'] = 'Template';
-$lang['admin']['templateexists'] = 'Template name already exists';
-$lang['admin']['templatemanagement'] = 'Template Management';
-$lang['admin']['title'] = 'Title';
-$lang['admin']['tools'] = 'Tools';
-$lang['admin']['true'] = 'True';
-$lang['admin']['setfalse'] = 'Set False';
-$lang['admin']['type'] = 'Type';
-$lang['admin']['typenotvalid'] = 'Type is not valid';
-$lang['admin']['uninstall'] = 'Uninstall';
-$lang['admin']['uninstallconfirm'] = 'Are you sure you want to uninstall this module? Name:';
-$lang['admin']['up'] = 'Up';
-$lang['admin']['upgrade'] = 'Upgrade';
-$lang['admin']['upgradeconfirm'] = 'Are you sure you want to upgrade this?';
-$lang['admin']['uploadfile'] = 'Upload File';
-$lang['admin']['url'] = 'URL';
-$lang['admin']['useadvancedcss'] = 'Use Advanced Stylesheet Management';
-$lang['admin']['user'] = 'User';
-$lang['admin']['userdefinedtags'] = 'User Defined Tags';
-$lang['admin']['usermanagement'] = 'User Management';
-$lang['admin']['username'] = 'Username';
-$lang['admin']['usernameincorrect'] = 'Username or password incorrect';
-$lang['admin']['userprefs'] = 'User Preferences';
-$lang['admin']['useraccount'] = 'User Account';
+
 $lang['admin']['lang_settings_legend'] = 'Language related settings';
 $lang['admin']['content_editor_legend'] = 'Content editor settings';
-$lang['admin']['admin_layout_legend'] = 'Admin lay-out settings';
-$lang['admin']['usersassignedtogroup'] = 'Users Assigned to Group %s';
-$lang['admin']['usertagexists'] = 'A tag with this name already exists. Please choose another.';
-$lang['admin']['usewysiwyg'] = 'Use WYSIWYG editor for content';
-$lang['admin']['version'] = 'Version';
-$lang['admin']['view'] = 'View';
 $lang['admin']['welcomemsg'] = 'Welcome %s';
 $lang['admin']['directoryabove'] = 'directory above current level';
 $lang['admin']['nodefault'] = 'No Default Selected';
 $lang['admin']['blobexists'] = 'Global Content Block name already exists';
 $lang['admin']['blobmanagement'] = 'Global Content Block Management';
 $lang['admin']['errorinsertingblob'] = 'There was an error inserting the Global Content Block';
-$lang['admin']['addhtmlblob'] = 'Add Global Content Block';
+
 $lang['admin']['edithtmlblob'] = 'Edit Global Content Block';
 $lang['admin']['edithtmlblobsuccess'] = 'Global content block updated';
 $lang['admin']['tagtousegcb'] = 'Tag to Use this Block';
@@ -1577,8 +2246,7 @@ $lang['admin']['encoding'] = 'Encoding';
 $lang['admin']['clearcache'] = 'Clear Cache';
 $lang['admin']['clear'] = 'Clear';
 $lang['admin']['cachecleared'] = 'Cache Cleared';
-$lang['admin']['apply'] = 'Apply';
-$lang['admin']['applydescription'] = 'Save changes and continue to edit';
+
 $lang['admin']['none'] = 'None';
 $lang['admin']['wysiwygtouse'] = 'Select WYSIWYG to use';
 $lang['admin']['syntaxhighlightertouse'] = 'Select syntax highlighter to use'; 
@@ -1597,8 +2265,7 @@ $lang['admin']['moduleerrormessage'] = 'Error Message for %s Module';
 $lang['admin']['moduleupgradeerror'] = 'There was an error upgrading the module.';
 $lang['admin']['moduleinstallmessage'] = 'Install Message for %s Module';
 $lang['admin']['moduleuninstallmessage'] = 'Uninstall Message for %s Module';
-$lang['admin']['admintheme'] = 'Administration Theme';
-$lang['admin']['addstylesheet'] = 'Add a Stylesheet';
+
 $lang['admin']['editstylesheet'] = 'Edit Stylesheet';
 $lang['admin']['addcssassociation'] = 'Add Stylesheet Association';
 $lang['admin']['attachstylesheet'] = 'Attach This Stylesheet';
@@ -1619,19 +2286,13 @@ $lang['admin']['movecontent'] = 'Move Pages';
 $lang['admin']['module'] = 'Module';
 $lang['admin']['usertags'] = 'User Defined Tags';
 $lang['admin']['htmlblobs'] = 'Global Content Blocks';
-$lang['admin']['adminhome'] = 'Administration Home';
+
 $lang['admin']['liststylesheets'] = 'Stylesheets';
 $lang['admin']['preferencesdescription'] = 'This is where you set various site-wide preferences.';
 $lang['admin']['adminlogdescription'] = 'Shows a log of who did what in the admin.';
 $lang['admin']['mainmenu'] = 'Main Menu';
 $lang['admin']['users'] = 'Users';
 $lang['admin']['usersdescription'] = 'This is where you manage users.';
-$lang['admin']['groups'] = 'Groups';
-$lang['admin']['groupsdescription'] = 'This is where you manage groups.';
-$lang['admin']['groupassignments'] = 'Group Assignments';
-$lang['admin']['groupassignmentdescription'] = 'Here you can assign users to groups.';
-$lang['admin']['groupperms'] = 'Group Permissions';
-$lang['admin']['grouppermsdescription'] = 'Set permissions and access levels for groups';
 $lang['admin']['pagesdescription'] = 'This is where we add and edit pages and other content.';
 $lang['admin']['htmlblobdescription'] = 'Global Content Blocks are chunks of content you can place in your pages or templates.';
 $lang['admin']['templates'] = 'Templates';
@@ -1650,9 +2311,8 @@ $lang['admin']['usersgroupsdescription'] = 'User and Group related items.';
 $lang['admin']['layoutdescription'] = 'Site layout options.';
 $lang['admin']['admindescription'] = 'Site Administration functions.';
 $lang['admin']['contentdescription'] = 'This is where we add and edit content.';
-$lang['admin']['enablecustom404'] = 'Enable Custom 404 Message';
-$lang['admin']['enablesitedown'] = 'Enable Site Down Message';
-$lang['admin']['enablewysiwyg'] = 'Enable WYSIWYG on Site Down Message';
+
+
 $lang['admin']['bookmarks'] = 'Shortcuts';
 $lang['admin']['user_created'] = 'Custom Shortcuts';
 $lang['admin']['forums'] = 'Forums';
@@ -1673,56 +2333,32 @@ $lang['admin']['showbookmarks'] = 'Show Admin Shortcuts';
 $lang['admin']['hide_help_links'] = 'Hide module help link';
 $lang['admin']['hide_help_links_help'] = 'Disable the module help link in page headers.';
 $lang['admin']['showrecent'] = 'Show Recently Used Pages';
-$lang['admin']['attachtotemplate'] = 'Attach Stylesheet to Template';
-$lang['admin']['attachstylesheets'] = 'Attach Stylesheets';
 $lang['admin']['indent'] = 'Indent Pagelist to Emphasize Hierarchy';
 $lang['admin']['adminindent'] = 'Content Display';
 $lang['admin']['contract'] = 'Collapse Section';
-$lang['admin']['expand'] = 'Expand Section';
-$lang['admin']['expandall'] = 'Expand All Sections';
 $lang['admin']['contractall'] = 'Collapse All Sections';
 $lang['admin']['menu_bookmarks'] = '[+]';
 $lang['admin']['globalconfig'] = 'Global Settings';
 $lang['admin']['adminpaging'] = 'Number of Content Items to show per/page in Page List';
 $lang['admin']['nopaging'] = 'Show All Items';
-$lang['admin']['myprefs'] = 'My Preferences';
-$lang['admin']['myprefsdescription'] = 'This is where you can customize the site admin area to work the way you want.';
-$lang['admin']['myaccount'] = 'My Account';
-$lang['admin']['myaccountdescription'] = 'This is where you can update your personal account details.';
 $lang['admin']['adminprefs'] = 'User Preferences';
 $lang['admin']['adminprefsdescription'] = 'This is where you set your specific preferences for site administration.';
 $lang['admin']['managebookmarksdescription'] = 'This is where you can manage your administration shortcuts.';
 $lang['admin']['options'] = 'Options';
 $lang['admin']['langparam'] = 'Parameter is used to specify what language to use for display on the frontend. Not all modules support or need this.';
 $lang['admin']['parameters'] = 'Parameters';
-$lang['admin']['mediatype'] = 'Media Type';
-$lang['admin']['media_query'] = 'Media Query';
-$lang['admin']['media_query_description'] = '<strong>Notice:</strong> When Media Query is used, Media Type selection will be ignored.<br /> Use any valid expression as recommended by <a href="http://www.w3.org/TR/css3-mediaqueries/" rel="external" title="W3C">W3C</a>.';
-$lang['admin']['mediatype_'] = 'None set : will affect everywhere ';
-$lang['admin']['mediatype_all'] = 'all : Suitable for all devices.';
-$lang['admin']['mediatype_aural'] = 'aural : Intended for speech synthesizers.';
-$lang['admin']['mediatype_braille'] = 'braille : Intended for braille tactile feedback devices.';
-$lang['admin']['mediatype_embossed'] = 'embossed : Intended for paged braille printers.';
-$lang['admin']['mediatype_handheld'] = 'handheld : Intended for handheld devices';
-$lang['admin']['mediatype_print'] = 'print : Intended for paged, opaque material and for documents viewed on screen in print preview mode.';
-$lang['admin']['mediatype_projection'] = 'projection : Intended for projected presentations, for example projectors or print to transparencies.';
-$lang['admin']['mediatype_screen'] = 'screen : Intended primarily for color computer screens.';
-$lang['admin']['mediatype_tty'] = 'tty : Intended for media using a fixed-pitch character grid, such as teletypes and terminals.';
-$lang['admin']['mediatype_speech'] = 'speech : Intended for speech synthesizers.';
-$lang['admin']['mediatype_tv'] = 'tv : Intended for television-type devices.';
 $lang['admin']['assignmentchanged'] = 'Group Assignments have been updated.';
 $lang['admin']['stylesheetexists'] = 'Stylesheet Exists';
 $lang['admin']['errorcopyingstylesheet'] = 'Error Copying Stylesheet';
 $lang['admin']['copystylesheet'] = 'Copy Stylesheet';
 $lang['admin']['newstylesheetname'] = 'New Stylesheet Name';
 $lang['admin']['target'] = 'Target';
-$lang['admin']['xml'] = 'XML';
-$lang['admin']['xmlmodulerepository'] = 'URL of ModuleRepository soap server';
+
 $lang['admin']['metadata'] = 'Metadata';
 $lang['admin']['globalmetadata'] = 'Global Metadata';
 $lang['admin']['titleattribute'] = 'Description (title attribute)';
 $lang['admin']['tabindex'] = 'Tab Index';
-$lang['admin']['accesskey'] = 'Access Key';
+
 $lang['admin']['sitedownwarning'] = '<strong>Warning:</strong> Your site is currently showing a "Site Down for Maintenance" message. Remove the %s file to resolve this.';
 $lang['admin']['deletecontent'] = 'Delete Content';
 $lang['admin']['deletepages'] = 'Delete these pages?';
@@ -1735,361 +2371,23 @@ $lang['admin']['wontdeletetemplateinuse'] = 'These templates are in use and will
 $lang['admin']['deletetemplate'] = 'Delete Templates';
 $lang['admin']['stylesheetstodelete'] = 'These stylesheets will be deleted';
 $lang['admin']['sitename'] = 'Site Name';
-// Login
 $lang['admin']['goto'] = 'Back to:';
-// Only used by admintheme::ShowHeader
 $lang['admin']['siteadmin'] = $lang['admin']['admin'];
 $lang['admin']['images'] = $lang['admin']['imagemanager'];
 $lang['admin']['blobs'] = $lang['admin']['htmlblobs'];
 $lang['admin']['groupmembers'] = $lang['admin']['groupassignments'];
-// Used in adminTheme:showErrors
 $lang['admin']['troubleshooting'] = '(Troubleshooting)';
 $lang['admin']['originator'] = 'Originator';
-$lang['admin']['event_desc_loginpost'] = 'Sent after a user logs into the admin panel';
-$lang['admin']['event_desc_logoutpost'] = 'Sent after a user logs out of the admin panel';
-$lang['admin']['event_desc_adduserpre'] = 'Sent before a new user is created';
-$lang['admin']['event_desc_adduserpost'] = 'Sent after a new user is created';
-$lang['admin']['event_desc_edituserpre'] = 'Sent before edits to a user are saved';
-$lang['admin']['event_desc_edituserpost'] = 'Sent after edits to a user are saved';
-$lang['admin']['event_desc_deleteuserpre'] = 'Sent before a user is deleted from the system';
-$lang['admin']['event_desc_deleteuserpost'] = 'Sent after a user is deleted from the system';
-$lang['admin']['event_desc_addgrouppre'] = 'Sent before a new group is created';
-$lang['admin']['event_desc_addgrouppost'] = 'Sent after a new group is created';
-$lang['admin']['event_desc_changegroupassignpre'] = 'Sent before group assignments are saved';
-$lang['admin']['event_desc_changegroupassignpost'] = 'Sent after group assignments are saved';
-$lang['admin']['event_desc_editgrouppre'] = 'Sent before edits to a group are saved';
-$lang['admin']['event_desc_editgrouppost'] = 'Sent after edits to a group are saved';
-$lang['admin']['event_desc_deletegrouppre'] = 'Sent before a group is deleted from the system';
-$lang['admin']['event_desc_deletegrouppost'] = 'Sent after a group is deleted from the system';
-$lang['admin']['event_desc_addstylesheetpre'] = 'Sent before a new stylesheet is created';
-$lang['admin']['event_desc_addstylesheetpost'] = 'Sent after a new stylesheet is created';
-$lang['admin']['event_desc_editstylesheetpre'] = 'Sent before edits to a stylesheet are saved';
-$lang['admin']['event_desc_editstylesheetpost'] = 'Sent after edits to a stylesheet are saved';
-$lang['admin']['event_desc_deletestylesheetpre'] = 'Sent before a stylesheet is deleted from the system';
-$lang['admin']['event_desc_deletestylesheetpost'] = 'Sent after a stylesheet is deleted from the system';
-$lang['admin']['event_desc_addtemplatepre'] = 'Sent before a new template is created';
-$lang['admin']['event_desc_addtemplatepost'] = 'Sent after a new template is created';
-$lang['admin']['event_desc_edittemplatepre'] = 'Sent before edits to a template are saved';
-$lang['admin']['event_desc_edittemplatepost'] = 'Sent after edits to a template are saved';
-$lang['admin']['event_desc_deletetemplatepre'] = 'Sent before a template is deleted from the system';
-$lang['admin']['event_desc_deletetemplatepost'] = 'Sent after a template is deleted from the system';
-$lang['admin']['event_desc_templateprecompile'] = 'Sent before a template is sent to smarty for processing';
-$lang['admin']['event_desc_templatepostcompile'] = 'Sent after a template has been processed by smarty';
-$lang['admin']['event_desc_addglobalcontentpre'] = 'Sent before a new global content block is created';
-$lang['admin']['event_desc_addglobalcontentpost'] = 'Sent after a new global content block is created';
-$lang['admin']['event_desc_editglobalcontentpre'] = 'Sent before edits to a global content block are saved';
-$lang['admin']['event_desc_editglobalcontentpost'] = 'Sent after edits to a global content block are saved';
-$lang['admin']['event_desc_deleteglobalcontentpre'] = 'Sent before a global content block is deleted from the system';
-$lang['admin']['event_desc_deleteglobalcontentpost'] = 'Sent after a global content block is deleted from the system';
-$lang['admin']['event_desc_globalcontentprecompile'] = 'Sent before a global content block is sent to smarty for processing';
-$lang['admin']['event_desc_globalcontentpostcompile'] = 'Sent after a global content block has been processed by smarty';
-$lang['admin']['event_desc_contenteditpre'] = 'Sent before edits to content are saved';
-$lang['admin']['event_desc_contenteditpost'] = 'Sent after edits to content are saved';
-$lang['admin']['event_desc_contentdeletepre'] = 'Sent before content is deleted from the system';
-$lang['admin']['event_desc_contentdeletepost'] = 'Sent after content is deleted from the system';
-$lang['admin']['event_desc_contentstylesheet'] = 'Sent before the stylesheet is sent to the browser';
-$lang['admin']['event_desc_contentprecompile'] = 'Sent before content is sent to smarty for processing';
-$lang['admin']['event_desc_contentpostcompile'] = 'Sent after content has been processed by smarty';
-$lang['admin']['event_desc_contentpostrender'] = 'Sent before the combined html is sent to the browser';
-$lang['admin']['event_desc_smartyprecompile'] = 'Sent before any content destined for smarty is sent for processing';
-$lang['admin']['event_desc_smartypostcompile'] = 'Sent after any content destined for smarty has been processed';
-$lang['admin']['event_help_loginpost'] = '<p>Sent after a user logs into the admin panel.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_logoutpost'] = '<p>Sent after a user logs out of the admin panel.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_adduserpre'] = '<p>Sent before a new user is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_adduserpost'] = '<p>Sent after a new user is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_edituserpre'] = '<p>Sent before edits to a user are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_edituserpost'] = '<p>Sent after edits to a user are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_deleteuserpre'] = '<p>Sent before a user is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_deleteuserpost'] = '<p>Sent after a user is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_addgrouppre'] = '<p>Sent before a new group is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
-</ul>
-';
-$lang['admin']['event_help_addgrouppost'] = '<p>Sent after a new group is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
-</ul>
-';
-$lang['admin']['event_help_changegroupassignpre'] = '<p>Sent before group assignments are saved.</p>
-<h4>Parameters></h4>
-<ul>
-<li>\'group\' - Reference to the group object.</li>
-<li>\'users\' - Array of references to user objects belonging to the group.</li>
-';
-$lang['admin']['event_help_changegroupassignpost'] = '<p>Sent after group assignments are saved.</p>
-<h4>Parameters></h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
-<li>\'users\' - Array of references to user objects now belonging to the affected group.</li>
-';
-$lang['admin']['event_help_editgrouppre'] = '<p>Sent before edits to a group are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
-</ul>
-';
-$lang['admin']['event_help_editgrouppost'] = '<p>Sent after edits to a group are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
-</ul>
-';
-$lang['admin']['event_help_deletegrouppre'] = '<p>Sent before a group is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
-</ul>
-';
-$lang['admin']['event_help_deletegrouppost'] = '<p>Sent after a group is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
-</ul>
-';
-$lang['admin']['event_help_addstylesheetpre'] = '<p>Sent before a new stylesheet is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
-</ul>
-';
-$lang['admin']['event_help_addstylesheetpost'] = '<p>Sent after a new stylesheet is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
-</ul>
-';
-$lang['admin']['event_help_editstylesheetpre'] = '<p>Sent before edits to a stylesheet are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
-</ul>
-';
-$lang['admin']['event_help_editstylesheetpost'] = '<p>Sent after edits to a stylesheet are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
-</ul>
-';
-$lang['admin']['event_help_deletestylesheetpre'] = '<p>Sent before a stylesheet is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
-</ul>
-';
-$lang['admin']['event_help_deletestylesheetpost'] = '<p>Sent after a stylesheet is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
-</ul>
-';
-$lang['admin']['event_help_addtemplatepre'] = '<p>Sent before a new template is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template object.</li>
-</ul>
-';
-$lang['admin']['event_help_addtemplatepost'] = '<p>Sent after a new template is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template object.</li>
-</ul>
-';
-$lang['admin']['event_help_edittemplatepre'] = '<p>Sent before edits to a template are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template object.</li>
-</ul>
-';
-$lang['admin']['event_help_edittemplatepost'] = '<p>Sent after edits to a template are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template object.</li>
-</ul>
-';
-$lang['admin']['event_help_deletetemplatepre'] = '<p>Sent before a template is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template object.</li>
-</ul>
-';
-$lang['admin']['event_help_deletetemplatepost'] = '<p>Sent after a template is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template object.</li>
-</ul>
-';
-$lang['admin']['event_help_templateprecompile'] = '<p>Sent before a template is sent to smarty for processing.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template text.</li>
-<li>\'type\' - The type of template call.  i.e: template for a whole template, tpl_head, tpl_body, or tpl_top for a partial template.</li>
-</ul>
-';
-$lang['admin']['event_help_templatepostcompile'] = '<p>Sent after a template has been processed by smarty.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template text.</li>
-<li>\'type\' - The type of template call.  i.e: template for a whole template, tpl_head, tpl_body, or tpl_top for a partial template.</li>
-</ul>
-';
-$lang['admin']['event_help_addglobalcontentpre'] = '<p>Sent before a new global content block is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block object.</li>
-</ul>
-';
-$lang['admin']['event_help_addglobalcontentpost'] = '<p>Sent after a new global content block is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block object.</li>
-</ul>
-';
-$lang['admin']['event_help_editglobalcontentpre'] = '<p>Sent before edits to a global content block are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block object.</li>
-</ul>
-';
-$lang['admin']['event_help_editglobalcontentpost'] = '<p>Sent after edits to a global content block are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block object.</li>
-</ul>
-';
-$lang['admin']['event_help_deleteglobalcontentpre'] = '<p>Sent before a global content block is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block object.</li>
-</ul>
-';
-$lang['admin']['event_help_deleteglobalcontentpost'] = '<p>Sent after a global content block is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block object.</li>
-</ul>
-';
-$lang['admin']['event_help_globalcontentprecompile'] = '<p>Sent before a global content block is sent to smarty for processing.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block text.</li>
-</ul>
-';
-$lang['admin']['event_help_globalcontentpostcompile'] = '<p>Sent after a global content block has been processed by smarty.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block text.</li>
-</ul>
-';
-$lang['admin']['event_help_contenteditpre'] = '<p>Sent before edits to content are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected content object.</li>
-</ul>
-';
-$lang['admin']['event_help_contenteditpost'] = '<p>Sent after edits to content are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'content\' - Reference to the affected content object.</li>
-</ul>
-';
-$lang['admin']['event_help_contentdeletepre'] = '<p>Sent before content is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'content\' - Reference to the affected content object.</li>
-</ul>
-';
-$lang['admin']['event_help_contentdeletepost'] = '<p>Sent after content is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'content\' - Reference to the affected content object.</li>
-</ul>
-';
-$lang['admin']['event_help_contentstylesheet'] = '<p>Sent before the sytlesheet is sent to the browser.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'content\' - Reference to the affected stylesheet text.</li>
-</ul>
-';
-$lang['admin']['event_help_contentprecompile'] = '<p>Sent before content is sent to smarty for processing.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'content\' - Reference to the affected content text.</li>
-</ul>
-';
-$lang['admin']['event_help_contentpostcompile'] = '<p>Sent after content has been processed by smarty.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'content\' - Reference to the affected content text.</li>
-</ul>
-';
-$lang['admin']['event_help_contentpostrender'] = '<p>Sent before the combined html is sent to the browser.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'content\' - Reference to the html text.</li>
-</ul>
-';
-$lang['admin']['event_help_smartyprecompile'] = '<p>Sent before any content destined for smarty is sent to for processing.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'content\' - Reference to the affected text.</li>
-</ul>
-';
-$lang['admin']['event_help_smartypostcompile'] = '<p>Sent after any content destined for smarty has been processed.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'content\' - Reference to the affected text.</li>
-</ul>
-';
+
+
+
+
 $lang['admin']['filterbymodule'] = 'Filter By Module';
 $lang['admin']['showall'] = 'Show All';
-$lang['admin']['core'] = 'Core';
 $lang['admin']['defaultpagecontent'] = 'Default Page Content';
 $lang['admin']['file_url'] = 'Link to file (instead of URL)';
-$lang['admin']['no_file_url'] = 'None (Use URL Above)';
-$lang['admin']['none'] = 'none';
+
+
 $lang['admin']['defaultparentpage'] = 'Default Parent Page';
 $lang['admin']['error_udt_name_whitespace'] = 'Error: User Defined Tags cannot have spaces in their name.';
 $lang['admin']['warning_safe_mode'] = '<strong><em>WARNING:</em></strong> PHP Safe mode is enabled.  This will cause difficulty with files uploaded via the web browser interface, including images, theme and module XML packages.  You are advised to contact your site administrator to see about disabling safe mode.';
@@ -2102,7 +2400,7 @@ $lang['admin']['unknown'] = 'Unknown';
 $lang['admin']['download'] = 'Download';
 $lang['admin']['frontendwysiwygtouse']="Frontend wysiwyg";
 $lang['admin']['backendwysiwygtouse']="Default backend wysiwyg (for new user accounts)";
-$lang['admin']['all_groups'] = 'All Groups';
+
 $lang['admin']['error_type'] = 'Error Type';
 $lang['admin']['contenttype_errorpage'] = 'Error Page';
 $lang['admin']['errorpagealreadyinuse'] = 'Error Code Already in Use';
@@ -2113,12 +2411,5 @@ $lang['admin']['recoveryemailsent'] = 'Email sent to recorded address.  Please c
 $lang['admin']['errorsendingemail'] = 'There was an error sending the email.  Contact your administrator.';
 $lang['admin']['passwordchangedlogin'] = 'Password changed.  Please log in using the new credentials.';
 $lang['admin']['nopasswordforrecovery'] = 'No email address set for this user.  Password recovery is not possible.  Please contact your administrator.';
-$lang['admin']['lostpw'] = 'Forgot your password?';
-$lang['admin']['lostpwemailsubject'] = '[%s] Password Recovery';
-$lang['admin']['lostpwemail'] = <<<EOT
-You are recieving this e-mail because a request has been made to change the (%s) password associated with this user account (%s).  If you would like to reset the password for this account simply click on the link below or paste it into the url field on your favorite browser:
-%s
 
-If you feel this is incorrect or made in error, simply ignore the email and nothing will change.
-EOT;
 ?>
