@@ -52,7 +52,7 @@
 <div class="pageoverflow" id="progress_area"></div>
 <div class="pageoverflow" id="status_area"></div>
 <fieldset id="searchresults_cont">
-  <legend>{$mod->Lang('search_text')}:</legend>
+  <legend>{$mod->Lang('search_results')}:</legend>
   <div id="searchresults_cont2">
     <ul id="searchresults">
     </ul>

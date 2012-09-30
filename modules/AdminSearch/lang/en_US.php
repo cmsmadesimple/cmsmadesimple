@@ -20,6 +20,7 @@ $lang['postuninstall'] = 'Admin Search module uninstalled';
 
 $lang['search'] = 'Search';
 $lang['search_text'] = 'Search Text';
+$lang['search_results'] = 'Search Results';
 $lang['settings'] = 'Settings';
 $lang['starting'] = 'Starting';
 
