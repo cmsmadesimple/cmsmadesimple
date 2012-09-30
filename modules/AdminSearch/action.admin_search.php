@@ -41,10 +41,11 @@ function begin_section($txt)
   echo '<script type="text/javascript">parent.begin_section(\''.$txt.'\')</script>';
 }
 
-function add_result($txt)
+function add_result($content,$title,$url)
 {
   debug_to_log("add_result($msg)");
-  echo '<script type="text/javascript">parent.add_result(\''.$txt.'\')</script>';
+  $tmp = "parent.add_result('".$content."','".$title."','".$url."')";
+  echo '<script type="text/javascript">'.$tmp.'</script>';
 }
 
 function end_section()
@@ -60,6 +61,13 @@ $searchtext = trim($params['search_text']);
 if( $searchtext == '' ) {
   status_error($this->Lang('error_nosearchtext')); return;
 }
+
+// save the search
+$userid = get_userid();
+$tmp = $params;
+unset($tmp['submit']);
+unset($tmp['action']);
+set_preference($userid,$this->GetName().'saved_search',serialize($tmp));
 
 // find search slave classes
 status_msg($this->Lang('starting'));
@@ -80,8 +88,7 @@ if( is_array($slaves) && count($slaves) ) {
     $results = $obj->get_matches();
     begin_section($obj->get_name());
     foreach( $results as $one ) {
-      $txt = '<a href="'.$one['edit_url'].'" title="'.$this->Lang('edit').'">'.$one['title'].'</a>';
-      add_result($txt);
+      add_result($one['title'],$one['description'],$one['edit_url']);
     }
     end_section();
   }

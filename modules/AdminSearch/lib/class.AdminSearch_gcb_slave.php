@@ -39,7 +39,7 @@ final class AdminSearch_gcb_slave extends AdminSearch_slave
       foreach( $dbr as $row ) {
 	$one = $row['htmlblob_id'];
 	if( !check_permission('Modify Global Content Blocks') &&
-	    !$gcbops->CheckOwnershhip($one,$userid) &&
+	    !$gcbops->CheckOwnership($one,$userid) &&
 	    !$gcbops->CheckAuthorship($one,$userid) ) {
 	  // no access to this blob.
 	  continue;

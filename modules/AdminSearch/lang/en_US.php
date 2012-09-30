@@ -22,4 +22,6 @@ $lang['search'] = 'Search';
 $lang['search_text'] = 'Search Text';
 $lang['settings'] = 'Settings';
 $lang['starting'] = 'Starting';
+
+$lang['warn_clickthru'] = 'This will open another form.  Cancelling from that form may not return you to this page.  Your search results may be lost.';
 ?>

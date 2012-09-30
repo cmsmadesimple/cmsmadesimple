@@ -26,6 +26,13 @@ $smarty->assign('formend',$this->CreateFormEnd());
 $url = $this->create_url($id,'admin_search');
 $url = str_replace('&amp;','&',$url).'&showtemplate=false';
 $smarty->assign('ajax_url',$url);
+$smarty->assign('js_url',$this->GetModuleURLPath().'/lib/admin_search_tab.js');
+
+$userid = get_userid();
+$tmp = get_preference($userid,$this->GetName().'saved_search');
+if( $tmp ) {
+  $smarty->assign('saved_search',unserialize($tmp));
+}
 
 $slaves = AdminSearch_tools::get_slave_classes();
 $smarty->assign('slaves',$slaves);

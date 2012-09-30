@@ -1,4 +1,4 @@
-<style type="text/css">{literal}
+<style type="text/css">
 #status_area,#searchresults_cont,#workarea {
   display: none;
 }
@@ -6,49 +6,17 @@
   max-height: 25em;
   overflow:   auto;
 }
-{/literal}</style>
+</style>
 
-<script type="text/javascript">{literal}
-function status_error(text) {
-  var html = '<p class="status_error">'+text+'</p>';
-  _update_status(html);
-}
-function status_msg(text) {
-  var html = '<p class="pagetext">'+text+'</p>';
-  _update_status(html);
-}
-function _update_status(html) {
-  $('#status_area').html(html);
-  $('#status_area').show();
-}
-function begin_section(lbl) {
-  $('#searchresults').append('<li>'+lbl+'<ul>');
-}
-function add_result(html) {
-  $('#searchresults_cont').show();
-  $('#searchresults').append('<li>'+html+'</li>');
-}
-function end_section() {
-  $('#searchresult').append('</ul></li>');
-}
-$(document).ready(function(){
-  $('#adminsearchform > form').attr('target','workarea');
-  $('#workarea').attr('src','{/literal}{$ajax_url}{literal}');
-  $('#filter_all').live('click',function(e){
-    var t = $(this).attr('checked');
-    if( t == 'checked' ) {
-      $('.filter_toggle').attr('checked',t);
-    }
-    else {
-      $('.filter_toggle').removeAttr('checked');
-    }
-  });
-  $('#searchbtn').live('click',function(e){
-    $('#searchresults').html('');
-  });
-});
-{/literal}</script>
-	
+<script type="text/javascript">
+ var ajax_url = '{$ajax_url}';
+ var clickthru_msg = '{$mod->Lang('warn_clickthru')}';
+ {if isset($saved_search) && in_array(-1,$saved_search.slaves)}
+ var sel_all = 1;
+ {/if}
+</script>	
+<script type="text/javascript" src="{$js_url}"></script>
+
 <div id="adminsearchform">
 {$formstart}
 
@@ -57,7 +25,7 @@ $(document).ready(function(){
 <div class="pageoverflow">
   <p class="pagetext">{$mod->Lang('search_text')}:</p>
   <p class="pageinput">
-    <input type="text" name="{$actionid}search_text" value="" size="80" maxlength="80" id="searchtext"/>
+    <input type="text" name="{$actionid}search_text" value="{$saved_search.search_text|default:''}" size="80" maxlength="80" id="searchtext"/>
   </p>
 </div>
 <div class="pageoverflow">
@@ -69,12 +37,12 @@ $(document).ready(function(){
 </td>
 <td>
 <td width="50%">
-<div class="pageoverflow">
+<div class="pageoverflow" id="filter_box">
   <p class="pagetext">{$mod->Lang('filter')}:</p>
   <p class="pageinput" style="min-height: 3em; max-height: 7em; overflow: auto;">
-    <input id="filter_all" type="checkbox" value="-1"/>&nbsp;<label for="filter_all" title="{$mod->Lang('desc_filter_all')}">{$mod->Lang('all')}</label><br/>
+    <input id="filter_all" type="checkbox" name="{$actionid}slaves[]" value="-1"/>&nbsp;<label for="filter_all" title="{$mod->Lang('desc_filter_all')}">{$mod->Lang('all')}</label><br/>
     {foreach from=$slaves item='slave' name='slaves'}
-      <input class="filter_toggle" id="{$slave.class}" type="checkbox" name="{$actionid}slaves[]" value="{$slave.class}"/>&nbsp;<label for="{$slave.class}" title="{$slave.description}">{$slave.name}</label>{if !$smarty.foreach.slaves.last}<br/>{/if}
+      <input class="filter_toggle" id="{$slave.class}" type="checkbox" name="{$actionid}slaves[]" value="{$slave.class}" {if isset($saved_search.slaves) && in_array($slave.class,$saved_search.slaves)}checked="checked"{/if}/>&nbsp;<label for="{$slave.class}" title="{$slave.description}">{$slave.name}</label>{if !$smarty.foreach.slaves.last}<br/>{/if}
     {/foreach}
   </p>
 </div>
