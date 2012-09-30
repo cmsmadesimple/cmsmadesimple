@@ -24,7 +24,7 @@ class AdminSearch extends CMSModule
 {
   function GetFriendlyName()  { return $this->Lang('friendlyname');  }
   function GetVersion()  { return '1.0'; }
-  function MinimumCMSVersion()  { return '1.11-alpha0';  }
+  function MinimumCMSVersion()  { return '1.12-alpha0';  }
   function LazyLoadAdmin() { return TRUE; }
   function LazyLoadFrontend() { return TRUE; }
   function GetAuthor() { return 'Calguy1000'; }

@@ -39,22 +39,30 @@ include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.group.inc.php');
  */
 class GroupOperations
 {
+	protected function __construct() {}
+
+	private static $_instance;
+
+	public static function &get_instance()
+	{
+		if( !is_object(self::$_instance) ) {
+			self::$_instance = new GroupOperations();
+		}
+		return self::$_instance;
+	}
+
 	/**
 	 * Loads all the groups from the database and returns them
 	 *
 	 * @return array The list of groups
 	 */
-	function LoadGroups()
+	public function LoadGroups()
 	{
 		$db = cmsms()->GetDb();
-
 		$result = array();
-
 		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
 		$dbresult = $db->Execute($query);
-
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
+		while ($dbresult && $row = $dbresult->FetchRow()) {
 			$onegroup = new Group();
 			$onegroup->id = $row['group_id'];
 			$onegroup->name = $row['group_name'];
@@ -71,18 +79,15 @@ class GroupOperations
 	 * @param integer $id The id of the group to load
 	 * @return mixed The group if found. If it's not found, then false
 	 */
-	function & LoadGroupByID($id)
+	public function & LoadGroupByID($id)
 	{
-
 		$result = false;
-
 		$db = cmsms()->GetDb();
 
 		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups WHERE group_id = ? ORDER BY group_id";
 		$dbresult = $db->Execute($query, array($id));
 
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
+		while ($dbresult && $row = $dbresult->FetchRow()) {
 			$onegroup = new Group();
 			$onegroup->id = $row['group_id'];
 			$onegroup->name = $row['group_name'];
@@ -99,25 +104,22 @@ class GroupOperations
 	 * @param mixed $group The group object to save to the database
 	 * @return integer The id of the newly created group. If none is created, -1
 	 */
-	function InsertGroup($group)
+	public function InsertGroup($group)
 	{
 		$result = -1; 
-
 		$db = cmsms()->GetDb();
 
 		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ?';
 		$tmp = $db->GetOne($query,array($group->name));
-		if( $tmp )
-		  {
+		if( $tmp ) {
 		    return $result;
-		  }
+		}
 
 		$new_group_id = $db->GenID(cms_db_prefix()."groups_seq");
 		$time = $db->DBTimeStamp(time());
 		$query = "INSERT INTO ".cms_db_prefix()."groups (group_id, group_name, active, create_date, modified_date) VALUES (?,?,?,".$time.", ".$time.")";
 		$dbresult = $db->Execute($query, array($new_group_id, $group->name, $group->active));
-		if ($dbresult !== false)
-		{
+		if ($dbresult !== false) {
 			$result = $new_group_id;
 		}
 
@@ -130,24 +132,21 @@ class GroupOperations
 	 * @param mixed $group The group to update
 	 * @return boolean True if the update was successful, false if not
 	 */
-	function UpdateGroup($group)
+	public function UpdateGroup($group)
 	{
 		$result = false; 
-
 		$db = cmsms()->GetDb();
 
 		$query = 'SELECT group_id FROM '.cms_db_prefix().'groups WHERE group_name = ? AND group_id != ?';
 		$tmp = $db->GetOne($query,array($group->name,$group->id));
-		if( $tmp )
-		  {
+		if( $tmp ) {
 		    return $result;
 		  }
 
 		$time = $db->DBTimeStamp(time());
 		$query = "UPDATE ".cms_db_prefix()."groups SET group_name = ?, active = ?, modified_date = ".$time." WHERE group_id = ?";
 		$dbresult = $db->Execute($query, array($group->name, $group->active, $group->id));
-		if ($dbresult !== false)
-		{
+		if ($dbresult !== false) {
 			$result = true;
 		}
 
@@ -160,10 +159,9 @@ class GroupOperations
 	 * @param integer $id The group's id to delete
 	 * @return boolean True if the delete was successful. False if not.
 	 */
-	function DeleteGroupByID($id)
+	public function DeleteGroupByID($id)
 	{
 		$result = false;
-
 		$db = cmsms()->GetDb();
 
 		$query = 'DELETE FROM '.cms_db_prefix().'user_groups where group_id = ?';
@@ -175,8 +173,7 @@ class GroupOperations
 		$query = "DELETE FROM ".cms_db_prefix()."groups where group_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult !== false)
-		{
+		if ($dbresult !== false) {
 			$result = true;
 		}
 

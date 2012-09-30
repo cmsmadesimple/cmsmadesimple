@@ -3,12 +3,16 @@ Version 1.12 - NO NAME SET
 Core - General:
   - Remove old code that handles the 'id' REQUEST parameter
   - Remove all functionality for the module 'lang' parameter... silently ignore this parameter, for now
+  - Adds three new methods to the group class (for internal use only).
 
 Core - Bug Reports:
 
 
 Core - Installer:
 
+
+AdminSearch:
+  - New core module provides searching directly within tables to find items to remove or edit.
 
 CMSMailer:
 
@@ -38,8 +42,6 @@ Search:
 
 
 ThemeManager:
-
-
 
 
 Version 1.11.2 - Isabela 

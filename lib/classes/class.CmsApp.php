@@ -342,12 +342,7 @@ final class CmsApp {
 	*/
 	public function & GetGroupOperations()
 	{
-        if (!isset($this->groupoperations))
-		{
-			$this->groupoperations = new GroupOperations();
-		}
-
-		return $this->groupoperations;
+		return GroupOperations::get_instance();
 	}
 	
 	/**

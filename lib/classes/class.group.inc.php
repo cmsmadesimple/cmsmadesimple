@@ -32,6 +32,7 @@
  */
 class Group
 {
+	private static $_perm_cache = array();
 	var $id;
 	var $name;
 	var $active;
@@ -68,15 +69,12 @@ class Group
 		
 		$groupops = cmsms()->GetGroupOperations();
 		
-		if ($this->id > -1)
-		{
+		if ($this->id > -1) {
 			$result = $groupops->UpdateGroup($this);
 		}
-		else
-		{
+		else {
 			$newid = $groupops->InsertGroup($this);
-			if ($newid > -1)
-			{
+			if ($newid > -1) {
 				$this->id = $newid;
 				$result = true;
 			}
@@ -95,18 +93,116 @@ class Group
 	{
 		$result = false;
 
-		if ($this->id > -1)
-		{
+		if ($this->id > -1) {
 			$groupops = cmsms()->GetGroupOperations();
 			$result = $groupops->DeleteGroupByID($this->id);
-			if ($result)
-			{
+			if ($result) {
 				$this->SetInitialValues();
 			}
 		}
 
 		return $result;
 	}
+
+
+	private static function GetPermissionId($perm_name)
+	{
+		if( !isset(self::$_perm_cache[$perm_name]) ) {
+			$query = 'SELECT permission_id FROM '.cms_db_prefix().'permissions
+                      WHERE permission_name = ?';
+			$perm = $db->GetOne($query,array($perm));
+			if( !$perm ) return;
+			self::$_perm_cache[$perm_name] = $perm;
+		}
+		return self::$_perm_cache[$perm_name];
+	}
+
+	/**
+	 * Check if the group has the specified permission.
+	 *
+	 * @since 1.11
+	 * @author Robert Campbell
+	 * @internal
+	 * @access private
+	 * @ignore
+	 * @param mixed Either the permission id, or permission name to test.
+	 * @return boolean True if the group has the specified permission, false otherwise.
+	 */
+	public function HasPermission($perm)
+	{
+		if( $this->id <= 0 ) return FALSE;
+		
+		$db = cmsms()->GetDb();
+		if( (int)$perm == 0 ) {
+			$perm = self::GetPermissionId($perm);
+		}
+
+		if( $perm > 0 ) {
+			$query = 'SELECT group_perm_id FROM '.cms_db_prefix().'group_perms
+                      WHERE group_id = ? AND permission_id = ?';
+			$tmp = $db->GetOne($query,array($this->id,$perm));
+			if( $tmp > 0 ) return TRUE;
+		}
+		return FALSE;
+	}
+
+	/**
+	 * Ensure this group has the specified permission.
+	 *
+	 * @since 1.11
+	 * @author Robert Campbell
+	 * @internal
+	 * @access private
+	 * @ignore
+	 * @param mixed Either the permission id, or permission name to test.
+	 */
+	public function GrantPermission($perm)
+	{
+		if( $this->id <= 0 ) return;
+		if( $this->HasPermission($perm) ) return;
+
+		$db = cmsms()->GetDb();
+		if( (int)$perm == 0 ) {
+			$perm = self::GetPermissionId($perm);
+		}
+
+		if( $perm <= 0 ) return;
+		$new_id = $db->GenId(cms_db_prefix().'group_perm');
+		if( !$new_id ) return;
+		$now = $db->DbTimeStamp(time());
+		$query = 'INSERT INTO '.cms_db_prefix()."group_perm
+                  (group_perm_id,group_id,permission_id,create_date,modified_date)
+                  VALUES (?,?,?,$now,$now)";
+ 
+		$dbr = $db->Execute($query,array($new_id,$this->id,$perm));
+	}
+
+	/**
+	 * Ensure this group does not have the specified permission.
+	 *
+	 * @since 1.11
+	 * @author Robert Campbell
+	 * @internal
+	 * @access private
+	 * @ignore
+	 * @param mixed Either the permission id, or permission name to test.
+	 */
+	public function RemovePermission($perm)
+	{
+		if( $this->id <= 0 ) return;
+
+		$db = cmsms()->GetDb();
+		if( (int)$perm == 0 ) {
+			$perm = self::GetPermissionId($perm);
+		}
+
+		if( $perm > 0 ) {
+			$query = 'DELETE FROM '.cms_db_prefix().'group_perm
+                      WHERE group_id =  ? AND permission_id = ?';
+			$db->Execute($query,array($this->id,$perm));
+		}
+	}
+
 }
 
 # vim:ts=4 sw=4 noet
