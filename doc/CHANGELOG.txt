@@ -1,8 +1,46 @@
-Version 1.12 - NO NAME SeT
+Version 1.12 - NO NAME SET
 -----------------------------
-Core - Genneral:
-  - Remove old code that handles the 'id' REQUEST parameter.
-  - Remove all functionality for the module 'lang' parameter... silently ignore this parameter, for now.
+Core - General:
+  - Remove old code that handles the 'id' REQUEST parameter
+  - Remove all functionality for the module 'lang' parameter... silently ignore this parameter, for now
+
+Core - Bug Reports:
+
+
+Core - Installer:
+
+
+CMSMailer:
+
+
+CMSPrinting:
+
+
+FileManager:
+
+
+ImageManager:
+
+
+MenuManager:
+
+
+MicroTiny:
+
+
+ModuleManager:
+
+
+News:
+
+
+Search:
+
+
+ThemeManager:
+
+
+
 
 Version 1.11.2 - Isabela 
 -----------------------------
