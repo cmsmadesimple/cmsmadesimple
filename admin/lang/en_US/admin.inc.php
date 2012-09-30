@@ -19,7 +19,7 @@ $lang['admin']['help_function_cms_lang_info'] = <<<EOT
 <p>This plugin returns an object containing the information that CMSMS has about the selected language.  This can include locale information, encodings, language aliases etc.</p>
 <h3>What parameters does it take?</h3>
 <ul>
-<li><em>(optional)lang</em> - The language to return information for.  If the lang parameter is not specified then the information for the current CMSMS language is used.</li>
+<li><em>(optional)lang</em> - The language to return information for. If the lang parameter is not specified then the information for the current CMSMS language is used.</li>
 <li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
 </ul>
 <h3>Example:</h3>
@@ -451,24 +451,17 @@ $lang['admin']['help_function_content_image'] = <<<EOT
   <p>Example:</p>
   <pre>{content_image block='image1'}</pre><br/>
   </li>
-
   <li><em>(optional)</em> label - A label or prompt for this content block in the edit content page.  If not specified, the block name will be used.</li>
- 
+
   <li><em>(optional)</em> dir - The name of a directory (relative to the uploads directory, from which to select image files. If not specified, the uploads directory will be used.
   <p>Example: use images from the uploads/images directory.</p>
   <pre>{content_image block='image1' dir='images'}</pre><br/>
   </li>
-
   <li><em>(optional)</em> class - The css class name to use on the img tag in frontend display.</li>
-
   <li><em>(optional)</em> id - The id name to use on the img tag in frontend display.</li> 
-
   <li><em>(optional)</em> name - The tag name to use on the img tag in frontend display.</li> 
-
   <li><em>(optional)</em> width - The desired width of the image.</li>
-
   <li><em>(optional)</em> height - The desired height of the image.</li>
-
   <li><em>(optional)</em> alt - Alternative text if the image cannot be found.</li>
   <li><em>(optional)</em> urlonly - output only the url to the image, ignoring all parameters like id, name, width, height, etc.</li>
   <li><em>(optional)</em> tab - The desired tab to display this field on in the edit form..</li>
@@ -1242,12 +1235,7 @@ $lang['admin']['help_function_cms_jquery'] = <<<EOT
 	<li><em>(optional) </em><tt>custom_root</tt> - use to set any base path wished.<code>custom_root='http://test.domain.com/'</code> <br/>NOTE: overwrites ssl option and works with the cdn option</li>
 	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
-
-
 EOT;
-
-
-
 
 $lang['admin']['of'] = 'of';
 $lang['admin']['first'] = 'First';
@@ -1434,7 +1422,7 @@ $lang['admin']['errorupdatinguser'] = 'Error updating user';
 $lang['admin']['errorupdatingusertag'] = 'Error updating user tag';
 $lang['admin']['erroruserinuse'] = 'This user still owns content pages. Please change ownership to another user before deleting.';
 $lang['admin']['eventhandlers'] = 'Event Manager';
-$lang['admin']['eventhandler'] = 'Event Handlers'; // needs translation
+$lang['admin']['eventhandler'] = 'Event Handlers';
 $lang['admin']['editeventhandler'] = 'Edit Event Handler';
 $lang['admin']['eventhandlerdescription'] = 'Associate user tags with events';
 $lang['admin']['export'] = 'Export';
@@ -1474,8 +1462,8 @@ $lang['admin']['itemname'] = 'Item Name';
 $lang['admin']['language'] = 'Language';
 $lang['admin']['lastname'] = 'Last Name';
 $lang['admin']['logout'] = 'Logout';
-$lang['admin']['loginprompt'] = 'Enter a valid user credential to get access to the Admin Console.'; // needs translation
-$lang['admin']['logintitle'] = 'Login to CMS Made Simple&trade;'; // needs translation
+$lang['admin']['loginprompt'] = 'Enter a valid user credential to get access to the Admin Console.';
+$lang['admin']['logintitle'] = 'Login to CMS Made Simple&trade;';
 $lang['admin']['menutext'] = 'Menu Text';
 $lang['admin']['missingparams'] = 'Some parameters were missing or invalid';
 $lang['admin']['modifygroupassignments'] = 'Modify Group Assignments';
@@ -1505,7 +1493,7 @@ $lang['admin']['notinstalled'] = 'Not Installed';
 $lang['admin']['overwritemodule'] = 'Overwrite existing modules';
 $lang['admin']['owner'] = 'Owner';
 $lang['admin']['pagealias'] = 'Page Alias';
-$lang['admin']['content_id'] = 'Content ID'; // needs translation 11/16/11
+$lang['admin']['content_id'] = 'Content ID';
 $lang['admin']['pagedefaults'] = 'Page Defaults';
 $lang['admin']['pagedefaultsdescription'] = 'Set default values for new pages';
 $lang['admin']['parent'] = 'Parent';
@@ -1518,7 +1506,7 @@ $lang['admin']['pluginabout'] = 'About the %s tag';
 $lang['admin']['pluginhelp'] = 'Help for the %s tag';
 $lang['admin']['pluginmanagement'] = 'Plugin Management';
 $lang['admin']['prefsupdated'] = 'User preferences have been updated.';
-$lang['admin']['accountupdated'] = 'User account has been updated.'; // 9/2/2012
+$lang['admin']['accountupdated'] = 'User account has been updated.';
 $lang['admin']['preview'] = 'Preview';
 $lang['admin']['previewdescription'] = 'Preview changes';
 $lang['admin']['previous'] = 'Previous';
@@ -1562,10 +1550,10 @@ $lang['admin']['usermanagement'] = 'User Management';
 $lang['admin']['username'] = 'Username';
 $lang['admin']['usernameincorrect'] = 'Username or password incorrect';
 $lang['admin']['userprefs'] = 'User Preferences';
-$lang['admin']['useraccount'] = 'User Account'; // 9/2/2012
-$lang['admin']['lang_settings_legend'] = 'Language related settings'; //12/17/2011
-$lang['admin']['content_editor_legend'] = 'Content editor settings'; //12/17/2011
-$lang['admin']['admin_layout_legend'] = 'Admin lay-out settings'; //12/17/2011
+$lang['admin']['useraccount'] = 'User Account';
+$lang['admin']['lang_settings_legend'] = 'Language related settings';
+$lang['admin']['content_editor_legend'] = 'Content editor settings';
+$lang['admin']['admin_layout_legend'] = 'Admin lay-out settings';
 $lang['admin']['usersassignedtogroup'] = 'Users Assigned to Group %s';
 $lang['admin']['usertagexists'] = 'A tag with this name already exists. Please choose another.';
 $lang['admin']['usewysiwyg'] = 'Use WYSIWYG editor for content';
@@ -1615,57 +1603,57 @@ $lang['admin']['editstylesheet'] = 'Edit Stylesheet';
 $lang['admin']['addcssassociation'] = 'Add Stylesheet Association';
 $lang['admin']['attachstylesheet'] = 'Attach This Stylesheet';
 $lang['admin']['attachtemplate'] = 'Attach to this Template';
-$lang['admin']['main'] = 'Main'; //needs translation
-$lang['admin']['pages'] = 'Pages'; //needs translation
-$lang['admin']['page'] = 'Page'; //needs translation
-$lang['admin']['files'] = 'Files'; //needs translation
-$lang['admin']['layout'] = 'Layout'; //needs translation
-$lang['admin']['usersgroups'] = 'Users &amp; Groups'; //needs translation
-$lang['admin']['extensions'] = 'Extensions'; //needs translation
-$lang['admin']['preferences'] = 'Preferences'; //needs translation
-$lang['admin']['admin'] = 'Site Admin'; //needs translation
-$lang['admin']['viewsite'] = 'View Site'; //needs translation
-$lang['admin']['templatecss'] = 'Assign Templates to Stylesheet'; //needs translation
-$lang['admin']['plugins'] = 'Plugins'; //needs translation
-$lang['admin']['movecontent'] = 'Move Pages'; //needs translation
-$lang['admin']['module'] = 'Module'; //needs translation
-$lang['admin']['usertags'] = 'User Defined Tags'; //needs translation
-$lang['admin']['htmlblobs'] = 'Global Content Blocks'; //needs translation
-$lang['admin']['adminhome'] = 'Administration Home'; //needs translation
-$lang['admin']['liststylesheets'] = 'Stylesheets'; //needs translation
-$lang['admin']['preferencesdescription'] = 'This is where you set various site-wide preferences.'; //needs translation
-$lang['admin']['adminlogdescription'] = 'Shows a log of who did what in the admin.'; //needs translation
-$lang['admin']['mainmenu'] = 'Main Menu'; //needs translation
-$lang['admin']['users'] = 'Users'; //needs translation
-$lang['admin']['usersdescription'] = 'This is where you manage users.'; //needs translation
-$lang['admin']['groups'] = 'Groups'; //needs translation
-$lang['admin']['groupsdescription'] = 'This is where you manage groups.'; //needs translation
-$lang['admin']['groupassignments'] = 'Group Assignments'; //needs translation
-$lang['admin']['groupassignmentdescription'] = 'Here you can assign users to groups.'; //needs translation
-$lang['admin']['groupperms'] = 'Group Permissions'; //needs translation
-$lang['admin']['grouppermsdescription'] = 'Set permissions and access levels for groups'; //needs translation
-$lang['admin']['pagesdescription'] = 'This is where we add and edit pages and other content.'; //needs translation
-$lang['admin']['htmlblobdescription'] = 'Global Content Blocks are chunks of content you can place in your pages or templates.'; //needs translation
-$lang['admin']['templates'] = 'Templates'; //needs translation
-$lang['admin']['templatesdescription'] = 'This is where we add and edit templates. Templates define the look and feel of your site.'; //needs translation
-$lang['admin']['stylesheets'] = 'Stylesheets'; //needs translation
-$lang['admin']['stylesheetsdescription'] = 'Stylesheet management is an advanced way to handle cascading Stylesheets (CSS) separately from templates.'; //needs translation
-$lang['admin']['filemanagerdescription'] = 'Upload and manage files.'; //needs translation
-$lang['admin']['imagemanagerdescription'] = 'Upload/edit and remove images.'; //needs translation
-$lang['admin']['moduledescription'] = 'Modules extend CMS Made Simple&trade; to provide all kinds of custom functionality.'; //needs translation
-$lang['admin']['tagdescription'] = 'Tags are little bits of functionality that can be added to your content and/or templates.'; //needs translation
-$lang['admin']['usertagdescription'] = 'Tags that you can create and modify yourself to perform specific tasks, right from your browser.'; //needs translation
-$lang['admin']['installdirwarning'] = '<em><strong>Warning:</strong></em> install directory still exists. Please remove it completely.'; //needs translation
-$lang['admin']['subitems'] = 'Subitems'; //needs translation
-$lang['admin']['extensionsdescription'] = 'Modules, tags, and other assorted fun.'; //needs translation
-$lang['admin']['usersgroupsdescription'] = 'User and Group related items.'; //needs translation
-$lang['admin']['layoutdescription'] = 'Site layout options.'; //needs translation
-$lang['admin']['admindescription'] = 'Site Administration functions.'; //needs translation
-$lang['admin']['contentdescription'] = 'This is where we add and edit content.'; //needs translation
-$lang['admin']['enablecustom404'] = 'Enable Custom 404 Message'; //needs translation
-$lang['admin']['enablesitedown'] = 'Enable Site Down Message'; //needs translation
-$lang['admin']['enablewysiwyg'] = 'Enable WYSIWYG on Site Down Message'; //needs translation
-$lang['admin']['bookmarks'] = 'Shortcuts'; //needs translation
+$lang['admin']['main'] = 'Main';
+$lang['admin']['pages'] = 'Pages';
+$lang['admin']['page'] = 'Page';
+$lang['admin']['files'] = 'Files';
+$lang['admin']['layout'] = 'Layout';
+$lang['admin']['usersgroups'] = 'Users &amp; Groups';
+$lang['admin']['extensions'] = 'Extensions';
+$lang['admin']['preferences'] = 'Preferences';
+$lang['admin']['admin'] = 'Site Admin';
+$lang['admin']['viewsite'] = 'View Site';
+$lang['admin']['templatecss'] = 'Assign Templates to Stylesheet';
+$lang['admin']['plugins'] = 'Plugins';
+$lang['admin']['movecontent'] = 'Move Pages';
+$lang['admin']['module'] = 'Module';
+$lang['admin']['usertags'] = 'User Defined Tags';
+$lang['admin']['htmlblobs'] = 'Global Content Blocks';
+$lang['admin']['adminhome'] = 'Administration Home';
+$lang['admin']['liststylesheets'] = 'Stylesheets';
+$lang['admin']['preferencesdescription'] = 'This is where you set various site-wide preferences.';
+$lang['admin']['adminlogdescription'] = 'Shows a log of who did what in the admin.';
+$lang['admin']['mainmenu'] = 'Main Menu';
+$lang['admin']['users'] = 'Users';
+$lang['admin']['usersdescription'] = 'This is where you manage users.';
+$lang['admin']['groups'] = 'Groups';
+$lang['admin']['groupsdescription'] = 'This is where you manage groups.';
+$lang['admin']['groupassignments'] = 'Group Assignments';
+$lang['admin']['groupassignmentdescription'] = 'Here you can assign users to groups.';
+$lang['admin']['groupperms'] = 'Group Permissions';
+$lang['admin']['grouppermsdescription'] = 'Set permissions and access levels for groups';
+$lang['admin']['pagesdescription'] = 'This is where we add and edit pages and other content.';
+$lang['admin']['htmlblobdescription'] = 'Global Content Blocks are chunks of content you can place in your pages or templates.';
+$lang['admin']['templates'] = 'Templates';
+$lang['admin']['templatesdescription'] = 'This is where we add and edit templates. Templates define the look and feel of your site.';
+$lang['admin']['stylesheets'] = 'Stylesheets';
+$lang['admin']['stylesheetsdescription'] = 'Stylesheet management is an advanced way to handle cascading Stylesheets (CSS) separately from templates.';
+$lang['admin']['filemanagerdescription'] = 'Upload and manage files.';
+$lang['admin']['imagemanagerdescription'] = 'Upload/edit and remove images.';
+$lang['admin']['moduledescription'] = 'Modules extend CMS Made Simple&trade; to provide all kinds of custom functionality.';
+$lang['admin']['tagdescription'] = 'Tags are little bits of functionality that can be added to your content and/or templates.';
+$lang['admin']['usertagdescription'] = 'Tags that you can create and modify yourself to perform specific tasks, right from your browser.';
+$lang['admin']['installdirwarning'] = '<em><strong>Warning:</strong></em> install directory still exists. Please remove it completely.';
+$lang['admin']['subitems'] = 'Subitems';
+$lang['admin']['extensionsdescription'] = 'Modules, tags, and other assorted fun.';
+$lang['admin']['usersgroupsdescription'] = 'User and Group related items.';
+$lang['admin']['layoutdescription'] = 'Site layout options.';
+$lang['admin']['admindescription'] = 'Site Administration functions.';
+$lang['admin']['contentdescription'] = 'This is where we add and edit content.';
+$lang['admin']['enablecustom404'] = 'Enable Custom 404 Message';
+$lang['admin']['enablesitedown'] = 'Enable Site Down Message';
+$lang['admin']['enablewysiwyg'] = 'Enable WYSIWYG on Site Down Message';
+$lang['admin']['bookmarks'] = 'Shortcuts';
 $lang['admin']['user_created'] = 'Custom Shortcuts';
 $lang['admin']['forums'] = 'Forums';
 $lang['admin']['wiki'] = 'Wiki';
@@ -1673,43 +1661,43 @@ $lang['admin']['irc'] = 'IRC';
 $lang['admin']['team'] = 'Team';
 $lang['admin']['documentation'] = 'Documentation';
 $lang['admin']['module_help'] = 'Module Help';
-$lang['admin']['managebookmarks'] = 'Manage Shortcuts'; //needs translation
-$lang['admin']['editbookmark'] = 'Edit Shortcut'; //needs translation
-$lang['admin']['addbookmark'] = 'Add Shortcut'; //needs translation
-$lang['admin']['recentpages'] = 'Recent Pages'; //needs translation
-$lang['admin']['groupname'] = 'Group Name'; // needs translation
-$lang['admin']['selectgroup'] = 'Select Group'; //needs translation
-$lang['admin']['updateperm'] = 'Update Permissions'; //needs translation
-$lang['admin']['admincallout'] = 'Administration Shortcuts'; //needs translation
-$lang['admin']['showbookmarks'] = 'Show Admin Shortcuts'; //needs translation
+$lang['admin']['managebookmarks'] = 'Manage Shortcuts';
+$lang['admin']['editbookmark'] = 'Edit Shortcut';
+$lang['admin']['addbookmark'] = 'Add Shortcut';
+$lang['admin']['recentpages'] = 'Recent Pages';
+$lang['admin']['groupname'] = 'Group Name';
+$lang['admin']['selectgroup'] = 'Select Group';
+$lang['admin']['updateperm'] = 'Update Permissions';
+$lang['admin']['admincallout'] = 'Administration Shortcuts';
+$lang['admin']['showbookmarks'] = 'Show Admin Shortcuts';
 $lang['admin']['hide_help_links'] = 'Hide module help link';
 $lang['admin']['hide_help_links_help'] = 'Disable the module help link in page headers.';
-$lang['admin']['showrecent'] = 'Show Recently Used Pages'; //needs translation
-$lang['admin']['attachtotemplate'] = 'Attach Stylesheet to Template'; //needs translation
-$lang['admin']['attachstylesheets'] = 'Attach Stylesheets'; //needs translation
-$lang['admin']['indent'] = 'Indent Pagelist to Emphasize Hierarchy'; // needs translation
-$lang['admin']['adminindent'] = 'Content Display'; // needs translation
-$lang['admin']['contract'] = 'Collapse Section'; // needs translation
-$lang['admin']['expand'] = 'Expand Section'; // needs translation
-$lang['admin']['expandall'] = 'Expand All Sections'; // needs translation;
-$lang['admin']['contractall'] = 'Collapse All Sections'; // needs translation;
-$lang['admin']['menu_bookmarks'] = '[+]'; //needs translation
-$lang['admin']['globalconfig'] = 'Global Settings'; //needs translation
-$lang['admin']['adminpaging'] = 'Number of Content Items to show per/page in Page List'; //needs translation
-$lang['admin']['nopaging'] = 'Show All Items'; //needs translation
-$lang['admin']['myprefs'] = 'My Preferences'; //needs translation
-$lang['admin']['myprefsdescription'] = 'This is where you can customize the site admin area to work the way you want.'; //needs translation
-$lang['admin']['myaccount'] = 'My Account'; //needs translation
-$lang['admin']['myaccountdescription'] = 'This is where you can update your personal account details.'; //needs translation
-$lang['admin']['adminprefs'] = 'User Preferences'; //needs translation
-$lang['admin']['adminprefsdescription'] = 'This is where you set your specific preferences for site administration.'; //needs translation
-$lang['admin']['managebookmarksdescription'] = 'This is where you can manage your administration shortcuts.'; //needs translation
-$lang['admin']['options'] = 'Options'; //needs translation
-$lang['admin']['langparam'] = 'Parameter is used to specify what language to use for display on the frontend. Not all modules support or need this.'; //needs translation
-$lang['admin']['parameters'] = 'Parameters'; //needs translation
-$lang['admin']['mediatype'] = 'Media Type'; //needs translation
-$lang['admin']['media_query'] = 'Media Query'; //needs translation 04.06.2012
-$lang['admin']['media_query_description'] = '<strong>Notice:</strong> When Media Query is used, Media Type selection will be ignored.<br /> Use any valid expression as recommended by <a href="http://www.w3.org/TR/css3-mediaqueries/" rel="external" title="W3C">W3C</a>.'; //needs translation 04.06.2012
+$lang['admin']['showrecent'] = 'Show Recently Used Pages';
+$lang['admin']['attachtotemplate'] = 'Attach Stylesheet to Template';
+$lang['admin']['attachstylesheets'] = 'Attach Stylesheets';
+$lang['admin']['indent'] = 'Indent Pagelist to Emphasize Hierarchy';
+$lang['admin']['adminindent'] = 'Content Display';
+$lang['admin']['contract'] = 'Collapse Section';
+$lang['admin']['expand'] = 'Expand Section';
+$lang['admin']['expandall'] = 'Expand All Sections';
+$lang['admin']['contractall'] = 'Collapse All Sections';
+$lang['admin']['menu_bookmarks'] = '[+]';
+$lang['admin']['globalconfig'] = 'Global Settings';
+$lang['admin']['adminpaging'] = 'Number of Content Items to show per/page in Page List';
+$lang['admin']['nopaging'] = 'Show All Items';
+$lang['admin']['myprefs'] = 'My Preferences';
+$lang['admin']['myprefsdescription'] = 'This is where you can customize the site admin area to work the way you want.';
+$lang['admin']['myaccount'] = 'My Account';
+$lang['admin']['myaccountdescription'] = 'This is where you can update your personal account details.';
+$lang['admin']['adminprefs'] = 'User Preferences';
+$lang['admin']['adminprefsdescription'] = 'This is where you set your specific preferences for site administration.';
+$lang['admin']['managebookmarksdescription'] = 'This is where you can manage your administration shortcuts.';
+$lang['admin']['options'] = 'Options';
+$lang['admin']['langparam'] = 'Parameter is used to specify what language to use for display on the frontend. Not all modules support or need this.';
+$lang['admin']['parameters'] = 'Parameters';
+$lang['admin']['mediatype'] = 'Media Type';
+$lang['admin']['media_query'] = 'Media Query';
+$lang['admin']['media_query_description'] = '<strong>Notice:</strong> When Media Query is used, Media Type selection will be ignored.<br /> Use any valid expression as recommended by <a href="http://www.w3.org/TR/css3-mediaqueries/" rel="external" title="W3C">W3C</a>.';
 $lang['admin']['mediatype_'] = 'None set : will affect everywhere ';
 $lang['admin']['mediatype_all'] = 'all : Suitable for all devices.';
 $lang['admin']['mediatype_aural'] = 'aural : Intended for speech synthesizers.';
@@ -1720,14 +1708,14 @@ $lang['admin']['mediatype_print'] = 'print : Intended for paged, opaque material
 $lang['admin']['mediatype_projection'] = 'projection : Intended for projected presentations, for example projectors or print to transparencies.';
 $lang['admin']['mediatype_screen'] = 'screen : Intended primarily for color computer screens.';
 $lang['admin']['mediatype_tty'] = 'tty : Intended for media using a fixed-pitch character grid, such as teletypes and terminals.';
-$lang['admin']['mediatype_speech'] = 'speech : Intended for speech synthesizers.'; //needs translation 11/16/11
+$lang['admin']['mediatype_speech'] = 'speech : Intended for speech synthesizers.';
 $lang['admin']['mediatype_tv'] = 'tv : Intended for television-type devices.';
-$lang['admin']['assignmentchanged'] = 'Group Assignments have been updated.'; //needs translation
-$lang['admin']['stylesheetexists'] = 'Stylesheet Exists'; //needs translation
-$lang['admin']['errorcopyingstylesheet'] = 'Error Copying Stylesheet'; //needs translation
-$lang['admin']['copystylesheet'] = 'Copy Stylesheet'; //needs translation
-$lang['admin']['newstylesheetname'] = 'New Stylesheet Name'; //needs translation
-$lang['admin']['target'] = 'Target'; //needs translation
+$lang['admin']['assignmentchanged'] = 'Group Assignments have been updated.';
+$lang['admin']['stylesheetexists'] = 'Stylesheet Exists';
+$lang['admin']['errorcopyingstylesheet'] = 'Error Copying Stylesheet';
+$lang['admin']['copystylesheet'] = 'Copy Stylesheet';
+$lang['admin']['newstylesheetname'] = 'New Stylesheet Name';
+$lang['admin']['target'] = 'Target';
 $lang['admin']['xml'] = 'XML';
 $lang['admin']['xmlmodulerepository'] = 'URL of ModuleRepository soap server';
 $lang['admin']['metadata'] = 'Metadata';
@@ -1748,7 +1736,7 @@ $lang['admin']['deletetemplate'] = 'Delete Templates';
 $lang['admin']['stylesheetstodelete'] = 'These stylesheets will be deleted';
 $lang['admin']['sitename'] = 'Site Name';
 // Login
-$lang['admin']['goto'] = 'Back to:'; //needs translation 11/12/11
+$lang['admin']['goto'] = 'Back to:';
 // Only used by admintheme::ShowHeader
 $lang['admin']['siteadmin'] = $lang['admin']['admin'];
 $lang['admin']['images'] = $lang['admin']['imagemanager'];
@@ -2114,7 +2102,7 @@ $lang['admin']['unknown'] = 'Unknown';
 $lang['admin']['download'] = 'Download';
 $lang['admin']['frontendwysiwygtouse']="Frontend wysiwyg";
 $lang['admin']['backendwysiwygtouse']="Default backend wysiwyg (for new user accounts)";
-$lang['admin']['all_groups'] = 'All Groups'; //needs translation
+$lang['admin']['all_groups'] = 'All Groups';
 $lang['admin']['error_type'] = 'Error Type';
 $lang['admin']['contenttype_errorpage'] = 'Error Page';
 $lang['admin']['errorpagealreadyinuse'] = 'Error Code Already in Use';
