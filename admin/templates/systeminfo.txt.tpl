@@ -11,11 +11,11 @@
 
 <p>----------------------------------------------</p>
 
-<p><strong>{'cms_version'|replace:'_':' '|ucwords}</strong>: [b]{$cms_version}[/b]</p>
+<p><strong>{'cms_version'|replace:'_':' '|ucwords}</strong>: {$cms_version}</p>
 <p><strong>{'installed_modules'|replace:'_':' '|ucwords}</strong>:</p>
 <ul>
 {foreach from=$installed_modules item='module'}
-	<li>{$module.module_name}: [b]{$module.version}[/b]</li>
+	<li>{$module.module_name}: {$module.version}</li>
 {/foreach}
 </ul>
 <br />
@@ -26,7 +26,7 @@
 		{if $view < 1}
 			{foreach from=$tmp key='key' item='test'}
 	<li>{$key}:
-				{if isset($test->value)}[b]{$test->value}[/b]
+				{if isset($test->value)}{$test->value}
 				{/if}
 	</li>
 			{/foreach}
@@ -44,8 +44,8 @@
 		{if $view < 1}
 			{foreach from=$tmp key='key' item='test'}
 	<li>{$key}:
-				{if isset($test->secondvalue)}[b]{$test->value}[/b] ({$test->secondvalue})
-				{elseif isset($test->value)}[b]{$test->value}[/b]
+				{if isset($test->secondvalue)}{$test->value} ({$test->secondvalue})
+				{elseif isset($test->value)}{$test->value}
 				{/if}
 	</li>
 			{/foreach}
@@ -63,7 +63,7 @@
 		{if $view < 1}
 			{foreach from=$tmp key='key' item='test'}
 	<li>{$key|replace:'_':' '|ucwords}:
-				{if isset($test->value)}[b]{$test->value}[/b]
+				{if isset($test->value)}{$test->value}
 				{/if}
 	</li>
 			{/foreach}
@@ -79,8 +79,8 @@
 		{if $view < 1}
 			{foreach from=$tmp key='key' item='test'}
 	<li>{$key}:
-				{if isset($test->secondvalue)}[b]{$test->value}[/b] ({$test->secondvalue})
-				{elseif isset($test->value)}[b]{$test->value}[/b]
+				{if isset($test->secondvalue)}{$test->value} ({$test->secondvalue})
+				{elseif isset($test->value)}{$test->value}
 				{/if}
 	</li>
 			{/foreach}
@@ -122,5 +122,3 @@
 
 </div>
 </div>
-
-
