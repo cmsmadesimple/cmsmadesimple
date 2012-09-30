@@ -35,13 +35,18 @@ $(document).ready(function(){
   if( typeof(sel_all) != undefined ) {
     $('#filter_box input:checkbox').attr('checked','checked');
   }
-  $('#filter_all').live('click',function(e){
-    var t = $(this).attr('checked');
-    if( t == 'checked' ) {
-      $('.filter_toggle').attr('checked',t);
-    }
-    else {
-      $('.filter_toggle').removeAttr('checked');
+  $('#filter_box input:checkbox').live('click',function(e){
+    var v = $(this).val();
+    if( v == -1 ) {
+      var t = $(this).attr('checked');
+      if( t == 'checked' ) {
+        $('.filter_toggle').attr('checked',t);
+      }
+      else {
+        $('.filter_toggle').removeAttr('checked');
+      }
+    } else {
+      $('#filter_all').removeAttr('checked');
     }
   });
   $('#searchbtn').live('click',function(e){
