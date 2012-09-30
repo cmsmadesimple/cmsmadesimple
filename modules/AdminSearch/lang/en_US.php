@@ -10,6 +10,7 @@ $lang['finished'] = 'Finished';
 $lang['friendlyname'] = 'Admin side search';
 
 $lang['lbl_content_search'] = 'Search Content Pages';
+$lang['lbl_css_search'] = 'Search Stylesheets';
 $lang['lbl_gcb_search'] = 'Search Global Content Blocks';
 $lang['lbl_template_search'] = 'Search Page Templates';
 
