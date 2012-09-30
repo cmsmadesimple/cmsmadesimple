@@ -35,16 +35,16 @@ function status_msg($msg)
   echo '<script type="text/javascript">parent.status_msg(\''.$msg.'\')</script>';
 }
 
-function begin_section($txt)
+function begin_section($id,$txt)
 {
-  debug_to_log("begin_section($msg)");
-  echo '<script type="text/javascript">parent.begin_section(\''.$txt.'\')</script>';
+  debug_to_log("begin_section($id,$txt)");
+  echo "<script type=\"text/javascript\">parent.begin_section('{$id}','{$txt}')</script>";
 }
 
-function add_result($content,$title,$url)
+function add_result($listid,$content,$title,$url)
 {
   debug_to_log("add_result($msg)");
-  $tmp = "parent.add_result('".$content."','".$title."','".$url."')";
+  $tmp = "parent.add_result('{$listid}','{$content}','{$title}','{$url}')";
   echo '<script type="text/javascript">'.$tmp.'</script>';
 }
 
@@ -86,9 +86,9 @@ if( is_array($slaves) && count($slaves) ) {
 
     $obj->set_text($searchtext);
     $results = $obj->get_matches();
-    begin_section($obj->get_name());
+    begin_section($one_slave['class'],$obj->get_name());
     foreach( $results as $one ) {
-      add_result($one['title'],$one['description'],$one['edit_url']);
+      add_result($one_slave['class'],$one['title'],$one['description'],$one['edit_url']);
     }
     end_section();
   }

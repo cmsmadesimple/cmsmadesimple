@@ -1,3 +1,5 @@
+var cur_section = '';
+
 function status_error(text) {
   var html = '<p class="status_error">'+text+'</p>';
   _update_status(html);
@@ -10,13 +12,17 @@ function _update_status(html) {
   $('#status_area').html(html);
   $('#status_area').show();
 }
-function begin_section(lbl) {
-  $('#searchresults').append('<li>'+lbl+'<ul>');
+function begin_section(id,lbl) {
+  cur_section = lbl;
+  $('#searchresults').append('<li class="section">'+lbl+'&nbsp;(<span class="section_count">0</span>)<ul class="section_children" id="'+id+'" style="display: none;"><ul>');
 }
-function add_result(content,title,url) {
+function add_result(listid,content,title,url) {
   $('#searchresults_cont').show();
   var html = '<li><a href="'+url+'" target="_blank" title="'+title+'">'+content+'</a></li>';
-  $('#searchresults').append(html);
+  var c = $('ul#'+listid).children().length + 1;
+  $('ul#'+listid).prev('.section_count').html(c);
+  $('ul#'+listid).append(html);
+   
   $('#searchresults').find('a').each(function(){
     var t = $(this).data('events');
     if( t == undefined || t.length == 0 ) {
@@ -27,7 +33,7 @@ function add_result(content,title,url) {
   });
 }
 function end_section() {
-  $('#searchresult').append('</ul></li>');
+  cur_section = '';
 }
 $(document).ready(function(){
   $('#adminsearchform > form').attr('target','workarea');
@@ -50,7 +56,10 @@ $(document).ready(function(){
     }
   });
   $('#searchbtn').live('click',function(e){
-    alert('test');
     $('#searchresults').html('');
+  });
+  $('li.section').live('click',function(){
+    $('.section_children').hide();
+    $(this).children('ul').show();
   });
 });
