@@ -9,6 +9,8 @@ $lang['admin']['accountupdated'] = 'User account has been updated.';
 $lang['admin']['actioncontains'] = 'Action Contains';
 $lang['admin']['added_css'] = 'Added CSS';
 $lang['admin']['added_group'] = 'Added Group';
+$lang['admin']['added_content'] = 'Added Content';
+$lang['admin']['added_css_association'] = 'Added Stylesheet Association';
 $lang['admin']['adminlog_1day'] = '1 day';
 $lang['admin']['adminlog_1week'] = '1 week';
 $lang['admin']['adminlog_2weeks'] = '2 weeks';
@@ -58,6 +60,10 @@ $lang['admin']['apply'] = 'Apply';
 $lang['admin']['applydescription'] = 'Save changes and continue to edit';
 $lang['admin']['adminhome'] = 'Administration Home';
 $lang['admin']['accesskey'] = 'Access Key';
+$lang['admin']['adminlogdescription'] = 'Shows a log of who did what in the admin.';
+$lang['admin']['adminspecialgroup'] = 'Warning: Members of this group automatically have all permissions';
+$lang['admin']['added_content'] = 'Added Content';
+$lang['admin']['added_css_association'] = 'Added Stylesheet Association';
 
 
 // BBB
@@ -67,7 +73,10 @@ $lang['admin']['accesskey'] = 'Access Key';
 // BBB
 
 $lang['admin']['back'] = 'Back to Menu';
+$lang['admin']['backendwysiwygtouse']="Default backend wysiwyg (for new user accounts)";
 $lang['admin']['backtoplugins'] = 'Back to Plugins List';
+$lang['admin']['blobexists'] = 'Global Content Block name already exists';
+$lang['admin']['blobmanagement'] = 'Global Content Block Management';
 
 
 //  CCC
@@ -103,6 +112,7 @@ $lang['admin']['content'] = 'Content';
 $lang['admin']['content_id'] = 'Content ID';
 $lang['admin']['contentmanagement'] = 'Content Management';
 $lang['admin']['contenttype'] = 'Content Type';
+$lang['admin']['contenttype_errorpage'] = 'Error Page';
 $lang['admin']['copy'] = 'Copy';
 $lang['admin']['copytemplate'] = 'Copy Template';
 $lang['admin']['core'] = 'Core';
@@ -124,6 +134,11 @@ $lang['admin']['changepermissionsconfirm'] = 'USE CAUTION\n\nThis action will at
 $lang['admin']['contentadded'] = 'The content was successfully added to the database.';
 $lang['admin']['contentupdated'] = 'The content was successfully updated.';
 $lang['admin']['contentdeleted'] = 'The content was successfully removed from the database.';
+$lang['admin']['content_editor_legend'] = 'Content editor settings';
+$lang['admin']['cachable'] = 'Cachable';
+$lang['admin']['clearcache'] = 'Clear Cache';
+$lang['admin']['clear'] = 'Clear';
+$lang['admin']['cachecleared'] = 'Cache Cleared';
 
 
 // DDD
@@ -132,6 +147,9 @@ $lang['admin']['contentdeleted'] = 'The content was successfully removed from th
 // D  D
 // DDDD
 
+$lang['admin']['disablesafemodewarning'] = 'Disable admin safe mode warning';
+$lang['admin']['date_format_string'] = 'Date Format String';
+$lang['admin']['date_format_string_help'] = '<em>strftime</em> formatted date format string.  Try googling \'strftime\'';
 $lang['admin']['default_contenttype'] = 'Default Content Type';
 $lang['admin']['disallowed_contenttypes'] = 'Content Types that are NOT allowed';
 $lang['admin']['database'] = 'Database';
@@ -147,6 +165,8 @@ $lang['admin']['dependencies'] = 'Dependencies';
 $lang['admin']['description'] = 'Description';
 $lang['admin']['directoryexists'] = 'This directory already exists.';
 $lang['admin']['down'] = 'Down';
+$lang['admin']['deleted_group'] = 'Deleted Group';
+$lang['admin']['deleted_content'] = 'Deleted Content';
 
 
 // EEEE
@@ -156,6 +176,10 @@ $lang['admin']['down'] = 'Down';
 // EEEE
 
 $lang['admin']['error_contenttype'] = 'The content type associated with this page is invalid or not permitted';
+$lang['admin']['errorsendingemail'] = 'There was an error sending the email.  Contact your administrator.';
+$lang['admin']['errorinsertingblob'] = 'There was an error inserting the Global Content Block';
+$lang['admin']['edithtmlblob'] = 'Edit Global Content Block';
+$lang['admin']['edithtmlblobsuccess'] = 'Global content block updated';
 $lang['admin']['event_desc_loginfailed'] = 'Sent after a user failed to login into the admin panel';
 $lang['admin']['event_help_loginfailed'] = '<p>Sent after a user failed to login into the admin panel.</p>';
 $lang['admin']['event_desc_moduleupgraded'] = 'Sent after a module is upgraded';
@@ -232,6 +256,8 @@ $lang['admin']['editconfiguration'] = 'Edit Configuration';
 $lang['admin']['editcontent'] = 'Edit Content';
 $lang['admin']['editcss'] = 'Edit Stylesheet';
 $lang['admin']['editcsssuccess'] = 'Stylesheet updated';
+$lang['admin']['edited_user'] = 'Edited User';
+$lang['admin']['edited_udt'] = 'Edited User Defined Tag';
 $lang['admin']['editgroup'] = 'Edit Group';
 $lang['admin']['editpage'] = 'Edit Page';
 $lang['admin']['edittemplate'] = 'Edit Template';
@@ -581,6 +607,14 @@ $lang['admin']['event_help_smartypostcompile'] = '<p>Sent after any content dest
 </ul>
 ';
 
+$lang['admin']['edited_gcb'] = 'Edited Global Content Block';
+$lang['admin']['edited_content'] = 'Edited Content';
+$lang['admin']['error_type'] = 'Error Type';
+$lang['admin']['errorpagealreadyinuse'] = 'Error Code Already in Use';
+$lang['admin']['event_name'] = 'Event Name';
+$lang['admin']['event_description'] = 'Event Description';
+$lang['admin']['error_delete_default_parent'] = 'You cannot delete the default page, or a parent of the default page.';
+
 $lang['admin']['expand'] = 'Expand Section';
 $lang['admin']['expandall'] = 'Expand All Sections';
 $lang['admin']['expanded_xml'] = 'Expanded XML file consisting of %s %s';
@@ -612,6 +646,9 @@ $lang['admin']['filename'] = 'Filename';
 $lang['admin']['filenotuploaded'] = 'File could not be uploaded. This could be a permissions or Safe mode problem?';
 $lang['admin']['filesize'] = 'File Size';
 $lang['admin']['firstname'] = 'First Name';
+$lang['admin']['file_url'] = 'Link to file (instead of URL)';
+$lang['admin']['frontendwysiwygtouse']="Frontend wysiwyg";
+$lang['admin']['filterbymodule'] = 'Filter By Module';
 
 
 //  GGG
@@ -741,6 +778,9 @@ $lang['admin']['help_modifier_summarize'] = <<<EOT
 <pre><code>{content|strip_tags|summarize:50}</code></pre>
 EOT;
 
+$lang['admin']['hide_help_links'] = 'Hide module help link';
+$lang['admin']['hide_help_links_help'] = 'Disable the module help link in page headers.';
+
 $lang['admin']['handler'] = 'Handler (user defined tag)';
 $lang['admin']['headtags'] = 'Head Tags';
 $lang['admin']['help'] = 'Help';
@@ -759,29 +799,17 @@ $lang['admin']['hostname'] = 'Hostname';
 //    I
 
 $lang['admin']['info_checkversion'] = 'If enabled, the system will perform a daily check for a new release of CMSMS';
-
 $lang['admin']['info_default_contenttype'] = 'Applicable when adding new content objects, this control specifies the type that is selected by default.  Please ensure that the selected item is not one of the &quot;disallowed types&quot;.';
-
 $lang['admin']['info_disallowed_contenttypes'] = 'Select which content types to remove from the content type dropdown when editing or adding content.  Use CTRL+Click to select, unselect items.  Having no selected items will indicate that all content types are allowed. <em>(applies to all users)</em>';
-
 $lang['admin']['info_pagedefaults'] = 'This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages';
-
 $lang['admin']['info_search_module'] = 'Select the module that should be used to index words for searching, and will provide the site search capabilities';
-
 $lang['admin']['info_smarty_cachemodules'] = 'Select how to cache tags in various templates that call module actions.  If enabled, all module calls will be cached.  This may have negative effects on some modules, or modules with forms.  <em>(note: you can override this using the nocache option as described in the smarty manual)</em>.  If disabled no module calls will be cached which may have an effect on performance.   If you select to allow the module to decide, the default is that caching is not performed.  The module can override this, and you can disable caching using the nocache parameter when calling the module.'
-
 $lang['admin']['info_smarty_cacheudt'] = 'If enabled, all calls to user defined tags will be cached.  This will be useful for tags that display the output of database queries.  You can disable caching using the nocache parameter in the udt call.  i.e: <code>{myusertag nocache}</code>';
-
 $lang['admin']['info_smarty_caching'] = 'When enabled, the output from various plugins will be cached to increase performance.  This only applies to output on content pages marked as cachable, and only for non-admin users.  Note, this functionality may interfere with the behavior of some modules or plugins, or plugins that use non-inline forms.';
-
 $lang['admin']['info_smarty_compilecheck'] = 'If disabled, smarty will not check the modification dates of templates to see if they have been modified.  This can significantly improve performance.  However performing any template change (or even some content changes) may require a cache clearing';
-
 $lang['admin']['info_smarty_options'] = 'The following options have effect only when the above caching options are enabled';
-
 $lang['admin']['info_umask'] = 'The &quot;umask&quot; is an octal value that is used to specify the default permission for newly created files (this is used for files in the cache directory, and uploaded files.  For more information see the appropriate <a href="http://en.wikipedia.org/wiki/Umask">wikipedia article.</a>';
-
 $lang['admin']['ip_addr'] = 'IP Address';
-
 $lang['admin']['idnotvalid'] = 'The given id is not valid';
 $lang['admin']['imagemanagement'] = 'Image Manager';
 $lang['admin']['informationmissing'] = 'Information missing';
@@ -792,6 +820,9 @@ $lang['admin']['invalidcode_brace_missing'] = 'Uneven amount of braces';
 $lang['admin']['invalidtemplate'] = 'The template is not valid';
 $lang['admin']['itemid'] = 'Item ID';
 $lang['admin']['itemname'] = 'Item Name';
+$lang['admin']['info_edituser_password'] = 'Change this field to change the user\'s password';
+$lang['admin']['info_edituser_passwordagain'] = 'Change this field to change the user\'s password';
+$lang['admin']['installed_mod'] = 'Installed version %s';
 
 
 //    J
@@ -816,6 +847,8 @@ $lang['admin']['itemname'] = 'Item Name';
 // L
 // LLLL
 
+$lang['admin']['last_modified_at'] = 'Last modified at';
+$lang['admin']['last_modified_by'] = 'Last modified by';
 $lang['admin']['lctitle_page'] = 'The title of existing content items';
 $lang['admin']['lctitle_alias'] = "The alias of existing content items. Some content items do not have aliases";
 $lang['admin']['lctitle_url'] = 'The URL suffix for the content item.  If set';
@@ -915,6 +948,7 @@ $lang['admin']['nocss'] = 'No Stylesheet';
 $lang['admin']['noentries'] = 'No Entries';
 $lang['admin']['nofieldgiven'] = 'No %s given!';
 $lang['admin']['nofiles'] = 'No Files';
+$lang['admin']['nopasswordforrecovery'] = 'No email address set for this user. Password recovery is not possible. Please contact your administrator.';
 $lang['admin']['nopasswordmatch'] = 'Passwords do not match';
 $lang['admin']['norealdirectory'] = 'No real directory given';
 $lang['admin']['norealfile'] = 'No real file given';
@@ -930,9 +964,12 @@ $lang['admin']['none'] = 'none';
 // O  O
 //  OO
 
+$lang['admin']['options'] = 'Options';
 $lang['admin']['overwritemodule'] = 'Overwrite existing modules';
 $lang['admin']['owner'] = 'Owner';
 $lang['admin']['output_buffering'] = 'PHP output_buffering';
+$lang['admin']['order_too_small'] = 'A page order cannot be zero. Pages were not reordered.';
+$lang['admin']['order_too_large'] = 'A page order cannot be larger than the number of pages in that level. Pages were not reordered.';
 
 
 // PPPP
@@ -942,6 +979,8 @@ $lang['admin']['output_buffering'] = 'PHP output_buffering';
 // P
 
 $lang['admin']['pagedefaultsupdated'] = 'Page default settings updated';
+$lang['admin']['passwordchange'] = 'Please, provide the new password';
+$lang['admin']['passwordchangedlogin'] = 'Password changed.  Please log in using the new credentials.';
 $lang['admin']['prettyurls_noeffect'] = 'Pretty URLS are not configured... this url will have no effect';
 $lang['admin']['prompt_smarty_cachemodules'] = 'Cache module calls';
 $lang['admin']['prompt_smarty_cacheudt'] = 'Cache UDT Calls';
@@ -980,6 +1019,7 @@ $lang['admin']['previous'] = 'Previous';
 // R R
 // R  R
 
+$lang['admin']['recoveryemailsent'] = 'Email sent to recorded address.  Please check your inbox for further instructions.';
 $lang['admin']['remote_response_ok'] = 'Remote response: ok!';
 $lang['admin']['remote_response_404'] = 'Remote response: not found!';
 $lang['admin']['remote_response_error'] = 'Remote response: error!';
@@ -1016,6 +1056,43 @@ $lang['admin']['status'] = 'Status';
 $lang['admin']['stylesheet'] = 'Stylesheet';
 $lang['admin']['submit'] = 'Submit';
 $lang['admin']['submitdescription'] = 'Save changes';
+$lang['admin']['stylesheetstodelete'] = 'These stylesheets will be deleted';
+$lang['admin']['sitename'] = 'Site Name';
+$lang['admin']['systeminfo'] = 'System Information';
+$lang['admin']['systeminfodescription'] = 'Display various pieces of information about your system that may be useful in diagnosing problems';
+$lang['admin']['systemmaintenance'] = 'System Maintenance';
+$lang['admin']['systemmaintenancedescription'] = 'Various functions for maintaining the health of your system. You can also browse the changelog for all releases.';
+$lang['admin']['sysmaintab_database'] = 'Database';
+$lang['admin']['sysmaintab_changelog'] = 'Changelog';
+$lang['admin']['sysmaintab_content'] = 'Cache and content';
+$lang['admin']['sysmain_content_status'] = 'Content status';
+$lang['admin']['sysmain_cache_status'] = 'Cache status';
+$lang['admin']['sysmain_database_status'] = 'Database status';
+$lang['admin']['sysmain_updatehierarchy'] = 'Update page hierarchy positions';
+$lang['admin']['sysmain_confirmupdatehierarchy'] = 'Are you sure you want to update page hierarchy positions?';
+$lang['admin']['sysmain_update'] = 'Update';
+$lang['admin']['sysmain_pagesfound'] = 'pages found';
+$lang['admin']['sysmain_hierarchyupdated'] = 'Page hierarchy positions updated';
+$lang['admin']['sysmain_nostr_errors'] = 'No structural errors were detected in the database';
+$lang['admin']['sysmain_str_error'] = 'Structural error detected in table';
+$lang['admin']['sysmain_str_errors'] = 'Structural errors detected in tables';
+$lang['admin']['sysmain_tablesfound'] = 'tables found (out of which %d are not seq-tables)';
+$lang['admin']['sysmain_repair'] = 'Repair';
+$lang['admin']['sysmain_repairtables'] = 'Repair tables';
+$lang['admin']['sysmain_tablesrepaired'] = 'Tables repaired';
+$lang['admin']['sysmain_optimizetables'] = 'Optimize tables';
+$lang['admin']['sysmain_tablesoptimized'] = 'Tables optimized';
+$lang['admin']['sysmain_optimize'] = 'Optimize';
+$lang['admin']['sysmain_confirmclearcache'] = 'Are you sure you want to clear the cache?';
+$lang['admin']['sysmain_nocontenterrors'] = 'No content errors detected';
+$lang['admin']['sysmain_pagesmissinalias'] = 'pages missing aliases';
+$lang['admin']['sysmain_confirmfixaliases'] = 'Are you sure you want to add aliases to pages missing it?';
+$lang['admin']['sysmain_fixaliases'] = 'Add aliases where missed';
+$lang['admin']['sysmain_aliasesfixed'] = 'aliases fixed';
+$lang['admin']['sysmain_pagesinvalidtypes'] = 'pages with invalid content type';
+$lang['admin']['sysmain_confirmfixtypes'] = 'Are you sure you want to convert all with invalid content into standard content pages?';
+$lang['admin']['sysmain_fixtypes'] = 'Convert into standard content pages';
+$lang['admin']['sysmain_typesfixed'] = 'page content types fixed';
 
 
 // SSSSS
@@ -1064,12 +1141,23 @@ $lang['admin']['userdefinedtags'] = 'User Defined Tags';
 $lang['admin']['usermanagement'] = 'User Management';
 $lang['admin']['username'] = 'Username';
 $lang['admin']['usernameincorrect'] = 'Username or password incorrect';
+$lang['admin']['usernotfound'] = 'User Not Found.';
 $lang['admin']['userprefs'] = 'User Preferences';
 $lang['admin']['useraccount'] = 'User Account';
 
 $lang['admin']['usersassignedtogroup'] = 'Users Assigned to Group %s';
 $lang['admin']['usertagexists'] = 'A tag with this name already exists. Please choose another.';
 $lang['admin']['usewysiwyg'] = 'Use WYSIWYG editor for content';
+$lang['admin']['uninstalled_mod'] = 'Uninstalled module %s';
+$lang['admin']['upgraded_mod'] = '%s Upgraded from Version %s to %s';
+$lang['admin']['untested'] = 'Not Tested';
+$lang['admin']['unknown'] = 'Unknown';
+$lang['admin']['usertagdescription'] = 'Tags that you can create and modify yourself to perform specific tasks, right from your browser.';
+$lang['admin']['users'] = 'Users';
+$lang['admin']['usersdescription'] = 'This is where you manage users.';
+$lang['admin']['usersgroupsdescription'] = 'User and Group related items.';
+$lang['admin']['user_created'] = 'Custom Shortcuts';
+$lang['admin']['updateperm'] = 'Update Permissions';
 
 
 // V   V
@@ -1088,8 +1176,10 @@ $lang['admin']['view'] = 'View';
 //  W W W W
 //   W   W
 
+$lang['admin']['warning_safe_mode'] = '<strong><em>WARNING:</em></strong> PHP Safe mode is enabled. This will cause difficulty with files uploaded via the web browser interface, including images, theme and module XML packages.  You are advised to contact your site administrator to see about disabling safe mode.';
 $lang['admin']['warn_admin_ipandcookies'] = 'Warning: Admin activities use cookies and tracks your IP address';
 $lang['admin']['wikihelp'] = 'Community Help';
+$lang['admin']['wontdeletetemplateinuse'] = 'These templates are in use and will not be deleted';
 
 
 // X   X
@@ -1120,26 +1210,30 @@ $lang['admin']['xmlreader_class'] = 'Checking for the XMLReader class';
 
 
 
-$lang['admin']['installed_mod'] = 'Installed version %s';
 
-$lang['admin']['uninstalled_mod'] = 'Uninstalled module %s';
-$lang['admin']['upgraded_mod'] = '%s Upgraded from Version %s to %s';
+$lang['admin']['404description'] = 'Page Not Found';
 
-$lang['admin']['edited_gcb'] = 'Edited Global Content Block';
-$lang['admin']['edited_content'] = 'Edited Content';
 
-$lang['admin']['added_content'] = 'Added Content';
-$lang['admin']['added_css_association'] = 'Added Stylesheet Association';
 
-$lang['admin']['deleted_group'] = 'Deleted Group';
-$lang['admin']['deleted_content'] = 'Deleted Content';
 
-$lang['admin']['edited_user'] = 'Edited User';
-$lang['admin']['edited_udt'] = 'Edited User Defined Tag';
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 $lang['admin']['content_copied'] = 'Content Item Copied to %s';
 
-$lang['admin']['edited_user'] = 'Edited User';
+
+
 
 $lang['admin']['deleted_template'] = 'Deleted Template';
 $lang['admin']['added_udt'] = 'Added User Defined Tag';
@@ -1528,44 +1622,8 @@ $lang['admin']['systeminfo_copy_paste'] = 'Please copy and paste this selected t
 $lang['admin']['help_systeminformation'] = <<<EOT
 The information displayed below is collected from a variety of locations, and summarized here so that you may be able to conveniently find some of the information required when trying to diagnose a problem or request help with your CMS Made Simple&trade; installation.
 EOT;
-$lang['admin']['systeminfo'] = 'System Information';
-$lang['admin']['systeminfodescription'] = 'Display various pieces of information about your system that may be useful in diagnosing problems';
 
-$lang['admin']['systemmaintenance'] = 'System Maintenance';
-$lang['admin']['systemmaintenancedescription'] = 'Various functions for maintaining the health of your system. You can also browse the changelog for all releases.';
-$lang['admin']['sysmaintab_database'] = 'Database';
-$lang['admin']['sysmaintab_changelog'] = 'Changelog';
-$lang['admin']['sysmaintab_content'] = 'Cache and content';
-$lang['admin']['sysmain_content_status'] = 'Content status';
-$lang['admin']['sysmain_cache_status'] = 'Cache status';
-$lang['admin']['sysmain_database_status'] = 'Database status';
-$lang['admin']['sysmain_updatehierarchy'] = 'Update page hierarchy positions';
-$lang['admin']['sysmain_confirmupdatehierarchy'] = 'Are you sure you want to update page hierarchy positions?';
 
-$lang['admin']['sysmain_update'] = 'Update';
-$lang['admin']['sysmain_pagesfound'] = 'pages found';
-$lang['admin']['sysmain_hierarchyupdated'] = 'Page hierarchy positions updated';
-
-$lang['admin']['sysmain_nostr_errors'] = 'No structural errors were detected in the database';
-$lang['admin']['sysmain_str_error'] = 'Structural error detected in table';
-$lang['admin']['sysmain_str_errors'] = 'Structural errors detected in tables';
-$lang['admin']['sysmain_tablesfound'] = 'tables found (out of which %d are not seq-tables)';
-$lang['admin']['sysmain_repair'] = 'Repair';
-$lang['admin']['sysmain_repairtables'] = 'Repair tables';
-$lang['admin']['sysmain_tablesrepaired'] = 'Tables repaired';
-$lang['admin']['sysmain_optimizetables'] = 'Optimize tables';
-$lang['admin']['sysmain_tablesoptimized'] = 'Tables optimized';
-$lang['admin']['sysmain_optimize'] = 'Optimize';
-$lang['admin']['sysmain_confirmclearcache'] = 'Are you sure you want to clear the cache?';
-$lang['admin']['sysmain_nocontenterrors'] = 'No content errors detected';
-$lang['admin']['sysmain_pagesmissinalias'] = 'pages missing aliases';
-$lang['admin']['sysmain_confirmfixaliases'] = 'Are you sure you want to add aliases to pages missing it?';
-$lang['admin']['sysmain_fixaliases'] = 'Add aliases where missed';
-$lang['admin']['sysmain_aliasesfixed'] = 'aliases fixed';
-$lang['admin']['sysmain_pagesinvalidtypes'] = 'pages with invalid content type';
-$lang['admin']['sysmain_confirmfixtypes'] = 'Are you sure you want to convert all with invalid content into standard content pages?';
-$lang['admin']['sysmain_fixtypes'] = 'Convert into standard content pages';
-$lang['admin']['sysmain_typesfixed'] = 'page content types fixed';
 
 
 $lang['admin']['welcome_user'] = 'Welcome';
@@ -2175,30 +2233,16 @@ EOT;
 $lang['admin']['of'] = 'of';
 $lang['admin']['first'] = 'First';
 $lang['admin']['last'] = 'Last';
-$lang['admin']['adminspecialgroup'] = 'Warning: Members of this group automatically have all permissions';
-$lang['admin']['disablesafemodewarning'] = 'Disable admin safe mode warning';
-$lang['admin']['date_format_string'] = 'Date Format String';
-$lang['admin']['date_format_string_help'] = '<em>strftime</em> formatted date format string.  Try googling \'strftime\'';
-$lang['admin']['last_modified_at'] = 'Last modified at';
-$lang['admin']['last_modified_by'] = 'Last modified by';
+
 $lang['admin']['read'] = 'Read';
 $lang['admin']['write'] = 'Write';
 $lang['admin']['execute'] = 'Execute';
 $lang['admin']['group'] = 'Group';
 $lang['admin']['other'] = 'Other';
-
 $lang['admin']['global_umask'] = 'File Creation Mask (umask)';
-
-
-
 $lang['admin']['frontendlang'] = 'Default language for the frontend';
-$lang['admin']['info_edituser_password'] = 'Change this field to change the user\'s password';
-$lang['admin']['info_edituser_passwordagain'] = 'Change this field to change the user\'s password';
 $lang['admin']['originator'] = 'Originator';
 $lang['admin']['module_name'] = 'Module Name';
-$lang['admin']['event_name'] = 'Event Name';
-$lang['admin']['event_description'] = 'Event Description';
-$lang['admin']['error_delete_default_parent'] = 'You cannot delete the default page, or a parent of the default page.';
 $lang['admin']['jsdisabled'] = 'Sorry, this function requires that you have Javascript enabled.';
 $lang['admin']['order'] = 'Order';
 $lang['admin']['reorderpages'] = 'Reorder Pages';
@@ -2207,18 +2251,11 @@ $lang['admin']['page_reordered'] = 'Page was successfully reordered.';
 $lang['admin']['pages_reordered'] = 'Pages were successfully reordered';
 $lang['admin']['sibling_duplicate_order'] = 'Two sibling pages can not have the same order. Pages were not reordered.';
 $lang['admin']['no_orders_changed'] = 'You chose to reorder pages, but you did not change the order of any of them. Pages were not reordered.';
-$lang['admin']['order_too_small'] = 'A page order cannot be zero. Pages were not reordered.';
-$lang['admin']['order_too_large'] = 'A page order cannot be larger than the number of pages in that level. Pages were not reordered.';
 $lang['admin']['user_tag'] = 'User Tag';
-
 $lang['admin']['success'] = 'Success';
-
-
 $lang['admin']['uploadxmlfile'] = 'Install module via XML file';
-
 $lang['admin']['CSS'] = 'CSS';
 $lang['admin']['cachenotwritable'] = 'Cache folder is not writable. Clearing cache will not work. Please make the tmp/cache folder have full read/write/execute permissions (chmod 777).  You may also have to disable safe mode.';
-
 $lang['admin']['error_nomodules'] = 'No modules installed! Check Extensions > Modules';
 $lang['admin']['modulesnotwritable'] = 'The modules folder <em>(and/or the uploads folder)</em> is not writable, if you would like to install modules by uploading an XML file you need ensure that these folders have full read/write/execute permissions (chmod 777).  Safe mode may also be in effect.';
 $lang['admin']['noxmlfileuploaded'] = 'No file was uploaded. To install a module via XML you must choose and upload an module .xml file from your computer.';
@@ -2227,30 +2264,29 @@ $lang['admin']['false'] = 'False';
 $lang['admin']['settrue'] = 'Set True';
 
 $lang['admin']['lang_settings_legend'] = 'Language related settings';
-$lang['admin']['content_editor_legend'] = 'Content editor settings';
+
 $lang['admin']['welcomemsg'] = 'Welcome %s';
 $lang['admin']['directoryabove'] = 'directory above current level';
 $lang['admin']['nodefault'] = 'No Default Selected';
-$lang['admin']['blobexists'] = 'Global Content Block name already exists';
-$lang['admin']['blobmanagement'] = 'Global Content Block Management';
-$lang['admin']['errorinsertingblob'] = 'There was an error inserting the Global Content Block';
 
-$lang['admin']['edithtmlblob'] = 'Edit Global Content Block';
-$lang['admin']['edithtmlblobsuccess'] = 'Global content block updated';
+
+
 $lang['admin']['tagtousegcb'] = 'Tag to Use this Block';
 $lang['admin']['gcb_wysiwyg'] = 'Enable GCB WYSIWYG';
 $lang['admin']['gcb_wysiwyg_help'] = 'Enable the WYSIWYG editor while editing Global Content Blocks';
 $lang['admin']['filemanager'] = 'File Manager';
 $lang['admin']['imagemanager'] = 'Image Manager';
 $lang['admin']['encoding'] = 'Encoding';
-$lang['admin']['clearcache'] = 'Clear Cache';
-$lang['admin']['clear'] = 'Clear';
-$lang['admin']['cachecleared'] = 'Cache Cleared';
+
+
 
 $lang['admin']['none'] = 'None';
 $lang['admin']['wysiwygtouse'] = 'Select WYSIWYG to use';
 $lang['admin']['syntaxhighlightertouse'] = 'Select syntax highlighter to use'; 
-$lang['admin']['cachable'] = 'Cachable';
+
+
+
+
 $lang['admin']['hasdependents'] = 'Has Dependents';
 $lang['admin']['missingdependency'] = 'Missing Dependency';
 $lang['admin']['minimumversion'] = 'Minimum Version';
@@ -2289,10 +2325,10 @@ $lang['admin']['htmlblobs'] = 'Global Content Blocks';
 
 $lang['admin']['liststylesheets'] = 'Stylesheets';
 $lang['admin']['preferencesdescription'] = 'This is where you set various site-wide preferences.';
-$lang['admin']['adminlogdescription'] = 'Shows a log of who did what in the admin.';
+
 $lang['admin']['mainmenu'] = 'Main Menu';
-$lang['admin']['users'] = 'Users';
-$lang['admin']['usersdescription'] = 'This is where you manage users.';
+
+
 $lang['admin']['pagesdescription'] = 'This is where we add and edit pages and other content.';
 $lang['admin']['htmlblobdescription'] = 'Global Content Blocks are chunks of content you can place in your pages or templates.';
 $lang['admin']['templates'] = 'Templates';
@@ -2303,18 +2339,22 @@ $lang['admin']['filemanagerdescription'] = 'Upload and manage files.';
 $lang['admin']['imagemanagerdescription'] = 'Upload/edit and remove images.';
 $lang['admin']['moduledescription'] = 'Modules extend CMS Made Simple&trade; to provide all kinds of custom functionality.';
 $lang['admin']['tagdescription'] = 'Tags are little bits of functionality that can be added to your content and/or templates.';
-$lang['admin']['usertagdescription'] = 'Tags that you can create and modify yourself to perform specific tasks, right from your browser.';
+
+
 $lang['admin']['installdirwarning'] = '<em><strong>Warning:</strong></em> install directory still exists. Please remove it completely.';
 $lang['admin']['subitems'] = 'Subitems';
 $lang['admin']['extensionsdescription'] = 'Modules, tags, and other assorted fun.';
-$lang['admin']['usersgroupsdescription'] = 'User and Group related items.';
+
 $lang['admin']['layoutdescription'] = 'Site layout options.';
 $lang['admin']['admindescription'] = 'Site Administration functions.';
 $lang['admin']['contentdescription'] = 'This is where we add and edit content.';
 
 
 $lang['admin']['bookmarks'] = 'Shortcuts';
-$lang['admin']['user_created'] = 'Custom Shortcuts';
+
+
+
+
 $lang['admin']['forums'] = 'Forums';
 $lang['admin']['wiki'] = 'Wiki';
 $lang['admin']['irc'] = 'IRC';
@@ -2327,12 +2367,12 @@ $lang['admin']['addbookmark'] = 'Add Shortcut';
 $lang['admin']['recentpages'] = 'Recent Pages';
 $lang['admin']['groupname'] = 'Group Name';
 $lang['admin']['selectgroup'] = 'Select Group';
-$lang['admin']['updateperm'] = 'Update Permissions';
+
 $lang['admin']['admincallout'] = 'Administration Shortcuts';
+
 $lang['admin']['showbookmarks'] = 'Show Admin Shortcuts';
-$lang['admin']['hide_help_links'] = 'Hide module help link';
-$lang['admin']['hide_help_links_help'] = 'Disable the module help link in page headers.';
 $lang['admin']['showrecent'] = 'Show Recently Used Pages';
+
 $lang['admin']['indent'] = 'Indent Pagelist to Emphasize Hierarchy';
 $lang['admin']['adminindent'] = 'Content Display';
 $lang['admin']['contract'] = 'Collapse Section';
@@ -2344,7 +2384,7 @@ $lang['admin']['nopaging'] = 'Show All Items';
 $lang['admin']['adminprefs'] = 'User Preferences';
 $lang['admin']['adminprefsdescription'] = 'This is where you set your specific preferences for site administration.';
 $lang['admin']['managebookmarksdescription'] = 'This is where you can manage your administration shortcuts.';
-$lang['admin']['options'] = 'Options';
+
 $lang['admin']['langparam'] = 'Parameter is used to specify what language to use for display on the frontend. Not all modules support or need this.';
 $lang['admin']['parameters'] = 'Parameters';
 $lang['admin']['assignmentchanged'] = 'Group Assignments have been updated.';
@@ -2355,24 +2395,40 @@ $lang['admin']['newstylesheetname'] = 'New Stylesheet Name';
 $lang['admin']['target'] = 'Target';
 
 $lang['admin']['metadata'] = 'Metadata';
+
+
 $lang['admin']['globalmetadata'] = 'Global Metadata';
+
+
 $lang['admin']['titleattribute'] = 'Description (title attribute)';
 $lang['admin']['tabindex'] = 'Tab Index';
 
-$lang['admin']['sitedownwarning'] = '<strong>Warning:</strong> Your site is currently showing a "Site Down for Maintenance" message. Remove the %s file to resolve this.';
-$lang['admin']['deletecontent'] = 'Delete Content';
-$lang['admin']['deletepages'] = 'Delete these pages?';
 $lang['admin']['selectall'] = 'Select All';
 $lang['admin']['selecteditems'] = 'With Selected';
-$lang['admin']['inactive'] = 'Inactive';
-$lang['admin']['deletetemplates'] = 'Delete Templates';
-$lang['admin']['templatestodelete'] = 'These templates will be deleted';
-$lang['admin']['wontdeletetemplateinuse'] = 'These templates are in use and will not be deleted';
-$lang['admin']['deletetemplate'] = 'Delete Templates';
-$lang['admin']['stylesheetstodelete'] = 'These stylesheets will be deleted';
-$lang['admin']['sitename'] = 'Site Name';
-$lang['admin']['goto'] = 'Back to:';
+$lang['admin']['sitedownwarning'] = '<strong>Warning:</strong> Your site is currently showing a "Site Down for Maintenance" message. Remove the %s file to resolve this.';
 $lang['admin']['siteadmin'] = $lang['admin']['admin'];
+$lang['admin']['showall'] = 'Show All';
+
+
+$lang['admin']['deletecontent'] = 'Delete Content';
+$lang['admin']['deletepages'] = 'Delete these pages?';
+$lang['admin']['deletetemplates'] = 'Delete Templates';
+$lang['admin']['deletetemplate'] = 'Delete Templates';
+$lang['admin']['download'] = 'Download';
+$lang['admin']['defaultpagecontent'] = 'Default Page Content';
+$lang['admin']['defaultparentpage'] = 'Default Parent Page';
+
+
+
+$lang['admin']['inactive'] = 'Inactive';
+
+
+
+$lang['admin']['templatestodelete'] = 'These templates will be deleted';
+
+
+
+$lang['admin']['goto'] = 'Back to:';
 $lang['admin']['images'] = $lang['admin']['imagemanager'];
 $lang['admin']['blobs'] = $lang['admin']['htmlblobs'];
 $lang['admin']['groupmembers'] = $lang['admin']['groupassignments'];
@@ -2382,34 +2438,23 @@ $lang['admin']['originator'] = 'Originator';
 
 
 
-$lang['admin']['filterbymodule'] = 'Filter By Module';
-$lang['admin']['showall'] = 'Show All';
-$lang['admin']['defaultpagecontent'] = 'Default Page Content';
-$lang['admin']['file_url'] = 'Link to file (instead of URL)';
 
 
-$lang['admin']['defaultparentpage'] = 'Default Parent Page';
 $lang['admin']['error_udt_name_whitespace'] = 'Error: User Defined Tags cannot have spaces in their name.';
-$lang['admin']['warning_safe_mode'] = '<strong><em>WARNING:</em></strong> PHP Safe mode is enabled.  This will cause difficulty with files uploaded via the web browser interface, including images, theme and module XML packages.  You are advised to contact your site administrator to see about disabling safe mode.';
+
 $lang['admin']['test'] = 'Test';
 $lang['admin']['results'] = 'Results';
-$lang['admin']['untested'] = 'Not Tested';
+
 $lang['admin']['owner'] = 'Owner';
 $lang['admin']['permissions'] = 'Permissions';
-$lang['admin']['unknown'] = 'Unknown';
-$lang['admin']['download'] = 'Download';
-$lang['admin']['frontendwysiwygtouse']="Frontend wysiwyg";
-$lang['admin']['backendwysiwygtouse']="Default backend wysiwyg (for new user accounts)";
 
-$lang['admin']['error_type'] = 'Error Type';
-$lang['admin']['contenttype_errorpage'] = 'Error Page';
-$lang['admin']['errorpagealreadyinuse'] = 'Error Code Already in Use';
-$lang['admin']['404description'] = 'Page Not Found';
-$lang['admin']['usernotfound'] = 'User Not Found.';
-$lang['admin']['passwordchange'] = 'Please, provide the new password';
-$lang['admin']['recoveryemailsent'] = 'Email sent to recorded address.  Please check your inbox for further instructions.';
-$lang['admin']['errorsendingemail'] = 'There was an error sending the email.  Contact your administrator.';
-$lang['admin']['passwordchangedlogin'] = 'Password changed.  Please log in using the new credentials.';
-$lang['admin']['nopasswordforrecovery'] = 'No email address set for this user.  Password recovery is not possible.  Please contact your administrator.';
+
+
+
+
+
+
+
+
 
 ?>
