@@ -2184,55 +2184,6 @@ $lang['admin']['help_function_cms_selflink'] = <<<EOT
 		</ul>
 EOT;
 
-
-
-$lang['admin']['about_function_cms_selflink'] = <<<EOT
-		<p>Author: Ted Kulp &lt;tedkulp@users.sf.net&gt;</p>
-		<p>Version: 1.1</p>
-		<p>Modified: Martin B. Vestergaard &lt;mbv@nospam.dk&gt;</p>
-		<p>Version: 1.41</p>
-		<p>Modified: Russ Baldwin</p>
-		<p>Version: 1.42</p>
-		<p>Modified: Marcus Bointon &lt;coolbru@users.sf.net&gt;</p>
-		<p>Version: 1.43</p>
-		<p>Modified: Tatu Wikman &lt;tsw@backspace.fi&gt;</p>
-		<p>Version: 1.44</p>
-		<p>Modified: Hans Mogren &lt;http://hans.bymarken.net/&gt;</p>
-		<p>Version: 1.45</p>
-
-		<p>
-		Change History:<br/>
-		1.47 - Adds width and height parameters.<br/>
-		1.46 - Fixes a problem with too many queries when using the dir=start option.<br/>
-		1.45 - Added a new option for &quot;dir&quot;, &quot;up&quot;, for links to the parent page e.g. dir=&quot;up&quot; (Hans Mogren).<br />
-		1.44 - Added new parameters &quot;ext&quot; and &quot;ext_info&quot; to allow external links with class=&quot;external&quot; and info text after the link, ugly hack but works thinking about rewriting this(Tatu Wikman)<br />
-		1.43 - Added new parameters &quot;image&quot; and &quot;imageonly&quot; to allow attachment of images to be used for page links, either instead of or in addition to text links. (Marcus Bointon)<br />
-		1.42 - Added new parameter &quot;anchorlink&quot; and a new option for &quot;dir&quot; namely, &quot;anchor&quot;, for internal page links. e.g. dir=&quot;anchor&quot; anchorlink=&quot;internal_link&quot;. (Russ)<br />
-		1.41 - added new parameter &quot;href&quot; (LeisureLarry)<br />
-		1.4 - fixed bug next/prev linking to non-content pages. (Thanks Teemu Koistinen for this fix)<br />
-		1.3 - added option &quot;more&quot;<br />
-		1.2 - by Martin B. Vestergaard
-		<ul>
-		<li>changed default text to Page Name (was Page Alias)</li>
-		<li>added option dir=next/prev to display next or previous item in the hierachy - thanks to 100rk</li>
-		<li>added option class to add a class= statement to the a-tag.</li>
-		<li>added option menu to display menu-text in sted of Page Name</li>
-		<li>added option lang to display link-labels in different languages</li>
-		</ul>
-		1.1 - Changed to new content system<br />
-		1.0 - Initial release
-		</p>
-EOT;
-
-$lang['admin']['about_function_cms_module'] = <<<EOT
-	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-EOT;
-
 $lang['admin']['help_function_cms_module'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This tag is used to insert modules into your templates and pages. If a module is created to be used as a tag plugin (check it's help for details), then you should be able to insert it with this tag.</p>
@@ -2243,22 +2194,6 @@ $lang['admin']['help_function_cms_module'] = <<<EOT
 	<ul>
 		<li>module - Name of the module to insert.  This is not case sensitive.</li>
 	</ul>
-EOT;
-
-$lang['admin']['about_function_breadcrumbs'] = <<<EOT
-<p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
-<p>Version: 1.7</p>
-<p>
-Change History:<br/>
-1.1 - Modified to use new content rewrite (wishy)<br />
-1.2 - Added parameters: delimiter, initial, and root (arl)<br />
-1.3 - Added parameter: classid (tdh / perl4ever)<br />
-1.4 - Added parameter currentclassid and fixed some bugs (arl)<br />
-1.5 - Modified to use new hierarchy manager<br />
-1.6 - Modified to skip any parents that are marked to be "not shown in menu" except for root<br />
-1.7 - Added root_url parameter (elijahlofgren)<br />
-1.8 - Fixes to the root param.<br/>
-</p>
 EOT;
 
 $lang['admin']['help_function_breadcrumbs'] = <<<EOT
@@ -2355,7 +2290,5 @@ $lang['admin']['help_function_cms_jquery'] = <<<EOT
 	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;
-
-
 
 ?>

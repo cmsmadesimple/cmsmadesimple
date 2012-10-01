@@ -82,7 +82,8 @@ function smarty_cms_about_function_anchor() {
 	<p>Version: 1.1</p>
 	<p>Change History:<br />
 	<strong>Update to version 1.1 from 1.0</strong> <em>2006/07/19</em><br />
-	Russ added the means to insert a title, a tabindex and a class for the anchor link. Westis added accesskey and changed parameter names to not include 'anchorlink'.<br />
+	Russ added the means to insert a title, a tabindex and a class for the anchor link.<br />
+	Westis added accesskey and changed parameter names to not include 'anchorlink'.<br />
 	</p>
 <?php
 }

@@ -175,7 +175,20 @@ function smarty_cms_help_function_breadcrumbs() {
 }
 
 function smarty_cms_about_function_breadcrumbs() {
-  echo lang('about_function_breadcrumbs');
+?>
+<p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
+<p>Version: 1.7</p>
+<p>Change History:<br />
+1.1 - Modified to use new content rewrite (wishy)<br />
+1.2 - Added parameters: delimiter, initial, and root (arl)<br />
+1.3 - Added parameter: classid (tdh / perl4ever)<br />
+1.4 - Added parameter currentclassid and fixed some bugs (arl)<br />
+1.5 - Modified to use new hierarchy manager<br />
+1.6 - Modified to skip any parents that are marked to be "not shown in menu" except for root<br />
+1.7 - Added root_url parameter (elijahlofgren)<br />
+1.8 - Fixes to the root param.<br />
+</p>
+<?php
 }
 # vim:ts=4 sw=4 noet
 ?>
