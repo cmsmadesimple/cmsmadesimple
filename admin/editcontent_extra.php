@@ -1,5 +1,31 @@
 <?php
 
+/**
+ * A method to serialize an object and encode it for storage or transport.
+ *
+ * @internal
+ * @param object The object to serialize
+ * @return string
+ */
+function SerializeObject(&$object)
+{
+  return base64_encode(serialize($object));
+}
+
+
+/**
+ * A function unserialize data into an object
+ *
+ * @internal
+ * @param string The serialized text.
+ * @return object  A valid object on success, or null
+ */
+function UnserializeObject(&$serialized)
+{
+  return  unserialize(base64_decode($serialized));
+}
+
+
 function ajaxpreview($params)
 {
   $gCms = cmsms();

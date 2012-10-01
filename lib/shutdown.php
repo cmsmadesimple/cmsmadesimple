@@ -21,17 +21,16 @@
 function cms_shutdown_function()
 {
   $error = error_get_last();
-  if( $error['type'] == E_ERROR || $error['type'] == E_USER_ERROR )
-    {
-      $str = 'ERROR DETECTED: '.$error['message'].' at '.$error['file'].':'.$error['line'];
-      debug_to_log($str);
-      $db = cmsms()->GetDb();
-      if( is_object($db) )
-	{
-	  // put mention into the admin log
-	  audit('','ERROR',$str);
-	}
+  if( $error['type'] == E_ERROR || $error['type'] == E_USER_ERROR ) {
+    $str = 'ERROR DETECTED: '.$error['message'].' at '.$error['file'].':'.$error['line'];
+    debug_bt_to_log();
+    debug_to_log($str);
+    $db = cmsms()->GetDb();
+    if( is_object($db) ) {
+      // put mention into the admin log
+      audit('','ERROR',$str);
     }
+  }
 }
 
 register_shutdown_function('cms_shutdown_function');

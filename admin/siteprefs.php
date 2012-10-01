@@ -31,6 +31,60 @@ $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 $thisurl=basename(__FILE__).$urlext;
 $userid = get_userid(); // <- Checks also login
 
+/** 
+ * A convenience function to interpret octal permissions, and return 
+ * a human readable string.  Uses the lang() function for translation.
+ *
+ * @internal
+ * @param int The permissions to test.
+ * @return string
+ */
+function siteprefs_interpret_permissions($perms)
+{
+  $owner = array();
+  $group = array();
+  $other = array();
+
+  if( $perms & 0400 ) {
+    $owner[] = lang('read');
+  }
+	
+  if( $perms & 0200 ) {
+    $owner[] = lang('write');
+  }
+	
+  if( $perms & 0100 ) {
+    $owner[] = lang('execute');
+  }
+
+  if( $perms & 0040 ) {
+    $group[] = lang('read');
+  }
+	
+  if( $perms & 0020 ) {
+    $group[] = lang('write');
+  }
+	
+  if( $perms & 0010 ) {
+    $group[] = lang('execute');
+  }
+
+  if( $perms & 0004 ) {
+    $other[] = lang('read');
+  }
+	
+  if( $perms & 0002 ) {
+    $other[] = lang('write');
+  }
+	
+  if( $perms & 0001 ) {
+    $other[] = lang('execute');
+  }
+
+  return array($owner,$group,$other);
+}
+
+
 function siteprefs_display_permissions($permsarr)
 {
   $tmparr = array(lang('owner'),lang('group'),lang('other'));
@@ -200,7 +254,7 @@ if (isset($_POST["testumask"]))
 	      $userinfo = @posix_getpwuid($filestat[4]);
 	      
 	      $username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
-	      $permsstr = siteprefs_display_permissions(interpret_permissions($filestat[2]));
+	      $permsstr = siteprefs_display_permissions(siteprefs_interpret_permissions($filestat[2]));
 	      $testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",
 				     lang('owner'),$username,
 				     lang('permissions'),$permsstr);

@@ -256,37 +256,44 @@ catch (SmartyCompilerException $e) // <- Catch Smarty compile errors
 } 
 catch (SmartyException $e) // <- Catch rest of Smarty errors
 {
-	$handlers = ob_list_handlers(); 
-	for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
-	echo $smarty->errorConsole($e);
-	return;
+  $handlers = ob_list_handlers(); 
+  for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+  echo $smarty->errorConsole($e);
+  return;
 }	
 catch (CmsError404Exception $e) // <- Catch CMSMS 404 error
 {
-	//debug_display('handle 404 exception '.$e->getFile().' at '.$e->getLine().' -- '.$e->getMessage());
-	// 404 error thrown... gotta do this process all over again.
-	$page = 'error404';
-	$showtemplate = true;
-	unset($_REQUEST['mact']);
-	unset($_REQUEST['module']);
-	unset($_REQUEST['action']);
-	$handlers = ob_list_handlers(); 
-	for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+  //debug_display('handle 404 exception '.$e->getFile().' at '.$e->getLine().' -- '.$e->getMessage());
+  // 404 error thrown... gotta do this process all over again.
+  $page = 'error404';
+  $showtemplate = true;
+  unset($_REQUEST['mact']);
+  unset($_REQUEST['module']);
+  unset($_REQUEST['action']);
+  $handlers = ob_list_handlers(); 
+  for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
-	// specified page not found, load the 404 error page.
-	$contentobj = $contentops->LoadContentFromAlias('error404',true);
-	if( is_object($contentobj) )
-	{
-		// we have a 404 error page.
-		header("HTTP/1.0 404 Not Found");
-		header("Status: 404 Not Found");
-	}
-	else
-	{
-		// no 404 error page.
-		ErrorHandler404();
-		return;
-	}
+  // specified page not found, load the 404 error page.
+  $contentobj = $contentops->LoadContentFromAlias('error404',true);
+  if( is_object($contentobj) ) {
+    // we have a 404 error page.
+    header("HTTP/1.0 404 Not Found");
+    header("Status: 404 Not Found");
+  }
+  else {
+    // no 404 error page.
+    @ob_end_clean();
+    header("HTTP/1.0 404 Not Found");
+    header("Status: 404 Not Found");
+    echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL was not found on this server.</p>
+</body></html>';
+    exit();
+  }
 }
 } // while trycount
 

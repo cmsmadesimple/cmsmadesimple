@@ -40,15 +40,6 @@ abstract class CMSModule
 	 */
 
 	/**
-	 * A variable that indicates the current desired language
-	 * this is effected by the (optional) lang parameter on module action
-	 * calls. 
-	 *
-	 * @access private
-	 */
-	var $curlang;
-
-	/**
 	 * An array of loaded lang strings
 	 *
 	 * @access private
@@ -629,6 +620,118 @@ abstract class CMSModule
 	  }
 	  return $this->params;
 	}
+
+
+	/**
+	 * Method to sanitize all entries in a hash
+	 * This method is called by the module api to clean incomming parameters in the frontend.
+	 * It uses the map created with the SetParameterType() method in the module api.
+	 *
+	 * @internal
+	 * @param string Module Name
+	 * @param array  Hash data
+	 * @param array  A map of param names and type information
+	 * @param boolean A flag indicating wether unknown keys in the input data should be allowed.
+	 * @param boolean A flag indicating wether keys should be treated as strings and cleaned.
+	 * Rolf: only used in lib/classes/class.CMSModule.php
+	 */
+	private function _cleanParamHash($modulename,$data,$map = false,
+					 $allow_unknown = false,$clean_keys = true)
+	{
+	  $mappedcount = 0;
+	  $result = array();
+	  foreach( $data as $key => $value ) {
+	    $mapped = false;
+	    $paramtype = '';
+	    if( is_array($map) ) {
+	      if( isset($map[$key]) ) {
+		$paramtype = $map[$key];
+	      }
+	      else {
+		// Key not found in the map
+		// see if one matches via regular expressions
+		foreach( $map as $mk => $mv ) {
+		  if(strstr($mk,CLEAN_REGEXP) === FALSE) continue;
+
+		  // mk is a regular expression
+		  $ss = substr($mk,strlen(CLEAN_REGEXP));
+		  if( $ss !== FALSE ) {
+		    if( preg_match($ss, $key) ) {
+		      // it matches, we now know what type to use
+		      $paramtype = $mv;
+		      break;
+		    }
+		  }
+		}
+	      } // else
+
+	      if( $paramtype != '' ) {
+		switch( $paramtype ) {
+		case 'CLEAN_INT':
+		  $mappedcount++;
+		  $mapped = true;
+		  $value = (int) $value;
+		  break;
+		case 'CLEAN_FLOAT':
+		  $mappedcount++;
+		  $mapped = true;
+		  $value = (float) $value;
+		  break;
+		case 'CLEAN_NONE':
+		  // pass through without cleaning.
+		  $mappedcount++;
+		  $mapped = true;
+		  break;
+		case 'CLEAN_STRING':
+		  $value = cms_htmlentities($value);
+		  $mappedcount++;
+		  $mapped = true;
+		  break;
+		case 'CLEAN_FILE':
+		  $value = realpath($value);
+		  if( $realpath === FALSE ) {
+		    $value = CLEANED_FILENAME;
+		  }
+		  else {
+		    $config = cmsms()->GetConfig();
+		    if( strpos($realpath, $config['root_path']) !== 0 ) {
+		      $value = CLEANED_FILENAME;
+		    }
+		  }
+		  $mappedcount++;
+		  $mapped = true;
+		  break;
+		default:
+		  $mappedcount++;
+		  $mapped = true;
+		  $value = cms_htmlentities($value);
+		  break;
+		} // switch
+	      } // if $paramtype
+	    }
+
+	    // we didn't clean this yet
+	    if( $allow_unknown && !$mapped ) {
+	      // but we're allowing unknown stuff so we'll just clean it.
+	      $value = cms_htmlentities($value);
+	      $mappedcount++;
+	      $mapped = true;
+	    }
+
+	    if( $clean_keys ) {
+	      $key = cms_htmlentities($key);
+	    }
+
+	    if( !$mapped && !$allow_unknown ) {
+	      trigger_error('Parameter '.$key.' is not known by module '.$modulename.' dropped',E_USER_WARNING);
+	      continue;
+	    }
+	    $result[$key]=$value;
+	  }
+	  return $result;
+	}
+
+
 
 	/**
 	 * Called from within the constructor,  This method should be overridden to call the CreaeteParameter
@@ -1750,8 +1853,8 @@ abstract class CMSModule
 	    // used to try to avert XSS flaws, this will
 	    // clean as many parameters as possible according
 	    // to a map specified with the SetParameterType metods.
-	    $params = cleanParamHash($this->GetName(),$params,$this->param_map,
-				     !$this->restrict_unknown_params);
+	    $params = $this->_cleanParamHash($this->GetName(),$params,$this->param_map,
+					     !$this->restrict_unknown_params);
 	  }
 
 	  // handle the stupid input type='image' problem.
