@@ -110,6 +110,7 @@ class Group
 		if( !isset(self::$_perm_cache[$perm_name]) ) {
 			$query = 'SELECT permission_id FROM '.cms_db_prefix().'permissions
                       WHERE permission_name = ?';
+			$db = cmsms()->GetDb();
 			$perm = $db->GetOne($query,array($perm));
 			if( !$perm ) return;
 			self::$_perm_cache[$perm_name] = $perm;
