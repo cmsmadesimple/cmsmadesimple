@@ -20,7 +20,7 @@ function smarty_function_anchor($params, &$template)
 {
   $smarty = $template->smarty;
 	$gCms = cmsms();
-	#Added by Russ for class, tabindex and title for anchor 2006/07/19
+	
 	$class="";
 	$title="";
 	$tabindex="";
@@ -29,9 +29,7 @@ function smarty_function_anchor($params, &$template)
     if (isset($params['title'])) $title = ' title="'.$params['title'].'"';
     if (isset($params['tabindex'])) $tabindex = ' tabindex="'.$params['tabindex'].'"';
 	if (isset($params['accesskey'])) $accesskey = ' accesskey="'.$params['accesskey'].'"';
-	#End of first part added by Russ 2006/07/19
-	
-	
+
 	
 	 $pageURL = 'http';
 	 if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
@@ -73,12 +71,17 @@ function smarty_function_anchor($params, &$template)
 	echo $tmp;
 	
 }
-	#Ammended by Russ for class, tabindex and title for anchor 2006/07/19
+
 function smarty_cms_help_function_anchor() {
   echo lang('help_function_anchor');
 }
-	#Amended by Russ for class, tabindex and title for anchor 2006/07/19
+
 function smarty_cms_about_function_anchor() {
-  echo lang('about_function_anchor');
+	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
+	<p>Version: 1.1</p>
+	<p>Change History:<br />
+	<strong>Update to version 1.1 from 1.0</strong> <em>2006/07/19</em><br />
+	Russ added the means to insert a title, a tabindex and a class for the anchor link. Westis added accesskey and changed parameter names to not include 'anchorlink'.<br />
+	</p>
 }
 ?>

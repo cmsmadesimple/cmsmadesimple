@@ -514,12 +514,14 @@ $lang['admin']['event_help_changegroupassignpre'] = '<p>Sent before group assign
 <ul>
 <li>\'group\' - Reference to the group object.</li>
 <li>\'users\' - Array of references to user objects belonging to the group.</li>
+</ul>
 ';
 $lang['admin']['event_help_changegroupassignpost'] = '<p>Sent after group assignments are saved.</p>
 <h4>Parameters></h4>
 <ul>
 <li>\'group\' - Reference to the affected group object.</li>
 <li>\'users\' - Array of references to user objects now belonging to the affected group.</li>
+</ul>
 ';
 $lang['admin']['event_help_editgrouppre'] = '<p>Sent before edits to a group are saved.</p>
 <h4>Parameters</h4>
@@ -984,11 +986,20 @@ $lang['admin']['info_edeprecated_failed'] = 'If E_DEPRECATED is enabled in your 
 $lang['admin']['info_edituser_password'] = 'Change this field to change the user\'s password';
 $lang['admin']['info_edituser_passwordagain'] = 'Change this field to change the user\'s password';
 $lang['admin']['info_estrict_failed'] = 'Some libraries that CMSMS uses do not work well with E_STRICT.  Please disable this before continuing';
+$lang['admin']['info_generate_cksum_file'] = <<<EOT
+This function will allow you to generate a checksum file and save it on your local computer for later validation.  This should be done just prior to rolling out the website, and/or after any upgrades, or major modifications.
+EOT;
 $lang['admin']['info_pagealias'] = 'Specify a unique alias for this page.';
 $lang['admin']['info_pagedefaults'] = 'This form allows specifying various options as to the initial settings when creating new content pages.  The items in this page have no effect when editing existing pages';
 $lang['admin']['info_preview_notice'] = 'Warning: This preview panel behaves much like a browser window allowing you to navigate away from the initially previewed page. However, if you do that, you may experience unexpected behaviour. If you navigate away from the initial display and return, you may not see the un-committed content until you make a change to the content in the main tab, and then reload this tab. When adding content, if you navigate away from this page, you will be unable to return, and must refresh this panel.';
 $lang['admin']['info_pseudocron_granularity'] = 'This setting indicates how often the system will attempt to handle regularly scheduled tasks';
 $lang['admin']['info_search_module'] = 'Select the module that should be used to index words for searching, and will provide the site search capabilities';
+$lang['admin']['info_sitedownexcludes'] = <<<EOT
+This parameter allows listing a comma separated list of ip addresses or networks that should not be subject to the Site Down mechanism.  This allows administrators to work on a site whilst anonymous visitors receive a Site Down message.<br/><br/>Addresses can be specified in the following formats:<br />
+1. xxx.xxx.xxx.xxx -- (exact IP address)<br />
+2. xxx.xxx.xxx.[yyy-zzz] -- (IP address range)<br />
+3. xxx.xxx.xxx.xxx/nn -- (nnn = number of bits, cisco style.  i.e:  192.168.0.100/24 = entire 192.168.0 class C subnet)
+EOT;
 $lang['admin']['info_smarty_cachemodules'] = 'Select how to cache tags in various templates that call module actions.  If enabled, all module calls will be cached.  This may have negative effects on some modules, or modules with forms.  <em>(note: you can override this using the nocache option as described in the smarty manual)</em>.  If disabled no module calls will be cached which may have an effect on performance.   If you select to allow the module to decide, the default is that caching is not performed.  The module can override this, and you can disable caching using the nocache parameter when calling the module.';
 $lang['admin']['info_smarty_cacheudt'] = 'If enabled, all calls to user defined tags will be cached.  This will be useful for tags that display the output of database queries.  You can disable caching using the nocache parameter in the udt call.  i.e: <code>{myusertag nocache}</code>';
 $lang['admin']['info_smarty_caching'] = 'When enabled, the output from various plugins will be cached to increase performance.  This only applies to output on content pages marked as cachable, and only for non-admin users.  Note, this functionality may interfere with the behavior of some modules or plugins, or plugins that use non-inline forms.';
@@ -996,6 +1007,9 @@ $lang['admin']['info_smarty_compilecheck'] = 'If disabled, smarty will not check
 $lang['admin']['info_smarty_options'] = 'The following options have effect only when the above caching options are enabled';
 $lang['admin']['info_target'] = 'This option may used by the Menu Manager to indicate when and how new frames or windows should be opened.  Some menu manager templates may ignore this option.'; 
 $lang['admin']['info_umask'] = 'The &quot;umask&quot; is an octal value that is used to specify the default permission for newly created files (this is used for files in the cache directory, and uploaded files.  For more information see the appropriate <a href="http://en.wikipedia.org/wiki/Umask">wikipedia article.</a>';
+$lang['admin']['info_validation'] = <<<EOT
+This function will compare the checksums found in the uploaded file with the files on the current installation.  It can assist in finding problems with uploads, or exactly what files were modified if your system has been hacked.
+EOT;
 $lang['admin']['insecure'] = 'Insecure (HTTP)';
 $lang['admin']['install'] = 'Install';
 $lang['admin']['installdirwarning'] = '<em><strong>Warning:</strong></em> install directory still exists. Please remove it completely.';
@@ -1071,6 +1085,13 @@ $lang['admin']['loginprompt'] = 'Enter a valid user credential to get access to 
 $lang['admin']['logintitle'] = 'Login to CMS Made Simple&trade;';
 $lang['admin']['login_failed'] = 'User Login Failed';
 $lang['admin']['login_info'] = 'For the Admin console to work properly';
+$lang['admin']['login_info_params'] = <<<EOT
+<ol> 
+  <li>Cookies must be enabled in your browser</li> 
+  <li>Javascript must be enabled in your browser</li> 
+  <li>Popup windows must be allowed for the following address:</li> 
+</ol>
+EOT;
 $lang['admin']['login_info_title'] = 'Information';
 $lang['admin']['logout'] = 'Logout';
 $lang['admin']['lostpw'] = 'Forgot your password?';
@@ -1593,7 +1614,7 @@ $lang['admin']['404description'] = 'Page Not Found';
 
 
 
-
+// help_function...
 
 $lang['admin']['help_function_browser_lang'] = <<<EOT
 <h3>What does this do?</h3>
@@ -1626,7 +1647,6 @@ $lang['admin']['help_function_content_module'] = <<<EOT
  </ul>
 </p>
 EOT;
-
 
 $lang['admin']['help_function_cms_stylesheet'] = <<<EOT
 	<h3>What does this do?</h3>
@@ -1661,15 +1681,6 @@ h3 .error { background: url([[root_url]]/uploads/images/error_background.gif); }
 <p><strong>Note:</strong> Due to the caching nature of the plugin, smarty variables should be placed at the top of EACH stylesheet that is attached to a template.</p>
 EOT;
 
-
-
-$lang['admin']['info_sitedownexcludes'] = <<<EOT
-This parameter allows listing a comma separated list of ip addresses or networks that should not be subject to the Site Down mechanism.  This allows administrators to work on a site whilst anonymous visitors receive a Site Down message.<br/><br/>Addresses can be specified in the following formats:<br/>
-1. xxx.xxx.xxx.xxx -- (exact IP address)<br/>
-2. xxx.xxx.xxx.[yyy-zzz] -- (IP address range)<br/>
-3. xxx.xxx.xxx.xxx/nn -- (nnn = number of bits, cisco style.  i.e:  192.168.0.100/24 = entire 192.168.0 class C subnet)
-EOT;
-
 $lang['admin']['help_function_page_attr'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This tag can be used to return the value of the attributes of a certain page.</p>
@@ -1681,7 +1692,6 @@ $lang['admin']['help_function_page_attr'] = <<<EOT
   <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 EOT;
-
 
 $lang['admin']['help_function_page_image'] = <<<EOT
 <h3>What does this do?</h3>
@@ -1710,7 +1720,6 @@ $lang['admin']['help_function_dump'] = <<<EOT
 <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
 </ul>
 EOT;
-
 
 $lang['admin']['help_function_content_image'] = <<<EOT
 <h3>What does this do?</h3>
@@ -1743,7 +1752,6 @@ $lang['admin']['help_function_content_image'] = <<<EOT
 </ul>
 EOT;
 
-
 $lang['admin']['help_function_process_pagedata'] = <<<EOT
 <h3>What does this do?</h3>
 <p>This plugin will process the data in the &quot;pagedata&quot; block of content pages through smarty.  It allows you to specify page specific data to smarty without changing the template for each page.</p>
@@ -1755,14 +1763,6 @@ $lang['admin']['help_function_process_pagedata'] = <<<EOT
 <br/>
 <h3>What parameters does it take?</h3>
 <p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
-EOT;
-
-$lang['admin']['info_generate_cksum_file'] = <<<EOT
-This function will allow you to generate a checksum file and save it on your local computer for later validation.  This should be done just prior to rolling out the website, and/or after any upgrades, or major modifications.
-EOT;
-
-$lang['admin']['info_validation'] = <<<EOT
-This function will compare the checksums found in the uploaded file with the files on the current installation.  It can assist in finding problems with uploads, or exactly what files were modified if your system has been hacked.
 EOT;
 
 $lang['admin']['help_function_current_date'] = <<<EOT
@@ -1779,6 +1779,7 @@ $lang['admin']['help_function_current_date'] = <<<EOT
 		<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;
+
 $lang['admin']['help_function_valid_xhtml'] = <<<EOT
 <h3>What does this do?</h3>
 <p>Returns a link to the w3c HTML validator.</p>
@@ -1799,6 +1800,7 @@ $lang['admin']['help_function_valid_xhtml'] = <<<EOT
 	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
     </ul>
 EOT;
+
 $lang['admin']['help_function_valid_css'] = <<<EOT
 <h3>What does this do?</h3>
 <p>Returns a link to the w3c CSS validator.</p>
@@ -1819,6 +1821,7 @@ $lang['admin']['help_function_valid_css'] = <<<EOT
 	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
     </ul>
 EOT;
+
 $lang['admin']['help_function_title'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Prints the title of the page.</p>
@@ -1827,6 +1830,7 @@ $lang['admin']['help_function_title'] = <<<EOT
 	<h3>What parameters does it take?</h3>
 	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
+
 $lang['admin']['help_function_stylesheet'] = <<<EOT
 	<h3>What does this do?</h3>
         <p><strong>Deprecated:</strong> This function is deprecated and will be removed in later versions of CMSMS.</p>
@@ -1841,6 +1845,7 @@ $lang['admin']['help_function_stylesheet'] = <<<EOT
 	<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;
+
 $lang['admin']['help_function_sitename'] = <<<EOT
         <h3>What does this do?</h3>
         <p>Shows the name of the site.  This is defined during install and can be modified in the Global Settings section of the admin panel.</p>
@@ -1849,6 +1854,7 @@ $lang['admin']['help_function_sitename'] = <<<EOT
         <h3>What parameters does it take?</h3>
 	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
+
 $lang['admin']['help_function_search'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This is actually just a wrapper tag for the Search module to make the tag syntax easier. 
@@ -1857,6 +1863,7 @@ $lang['admin']['help_function_search'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>Just put <code>{search}</code> in a template where you want the search input box to appear. For help about the Search module, please refer to the Search module help.</p>
 EOT;
+
 $lang['admin']['help_function_root_url'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Prints the root url location for the site.</p>
@@ -1866,6 +1873,7 @@ $lang['admin']['help_function_root_url'] = <<<EOT
         <p><em>(optional)autossl=1</em> - Enabled by default, this option will detect if the request made to the server was over SSL, and if it was return the appropriately configured SSL url.  To disable this feature specify autossl=0.</p>
 	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
+
 $lang['admin']['help_function_repeat'] = <<<EOT
   <h3>What does this do?</h3>
   <p>Repeats a specified sequence of characters, a specified number of times</p>
@@ -1878,6 +1886,7 @@ $lang['admin']['help_function_repeat'] = <<<EOT
   <li><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</li>
   </ul>
 EOT;
+
 $lang['admin']['help_function_recently_updated'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Outputs a list of recently updated pages.</p>
@@ -1895,6 +1904,7 @@ $lang['admin']['help_function_recently_updated'] = <<<EOT
 	<p>or combined:</p>
 	<pre>{recently_updated number='15' showtitle='false' leadin='Last Change: ' css_class='my_changes' dateformat='D M j G:i:s T Y'}</pre>
 EOT;
+
 $lang['admin']['help_function_print'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This is actually just a wrapper tag for the CMSPrinting module to make the tag syntax easier. 
@@ -1902,14 +1912,6 @@ $lang['admin']['help_function_print'] = <<<EOT
 	</p>
 	<h3>How do I use it?</h3>
 	<p>Just put <code>{print}</code> on a page or in a template. For help about the CMSPrinting module, what parameters it takes etc., please refer to the CMSPrinting module help.</p>
-EOT;
-
-$lang['admin']['login_info_params'] = <<<EOT
-<ol> 
-  <li>Cookies must be enabled in your browser</li> 
-  <li>Javascript must be enabled in your browser</li> 
-  <li>Popup windows must be allowed for the following address:</li> 
-</ol>
 EOT;
 
 $lang['admin']['help_function_news'] = <<<EOT
@@ -1920,6 +1922,7 @@ $lang['admin']['help_function_news'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>Just put <code>{news}</code> on a page or in a template. For help about the News module, what parameters it takes etc., please refer to the News module help.</p>
 EOT;
+
 $lang['admin']['help_function_modified_date'] = <<<EOT
         <h3>What does this do?</h3>
         <p>Prints the date and time the page was last modified.  If no format is given, it will default to a format similar to 'Jan 01, 2004'.</p>
@@ -1931,6 +1934,7 @@ $lang['admin']['help_function_modified_date'] = <<<EOT
                 <li><em>(optional)</em>assign - Assign the results to the named smarty variable.</li>
         </ul>
 EOT;
+
 $lang['admin']['help_function_metadata'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Displays the metadata for this page. Both global metdata from the global settings page and metadata for each page will be shown.</p>
@@ -1942,6 +1946,7 @@ $lang['admin']['help_function_metadata'] = <<<EOT
 		<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;
+
 $lang['admin']['help_function_menu_text'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Prints the menu text of the page.</p>
@@ -1950,6 +1955,7 @@ $lang['admin']['help_function_menu_text'] = <<<EOT
 	<h3>What parameters does it take?</h3>
 	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
+
 $lang['admin']['help_function_menu'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This is actually just a wrapper tag for the Menu Manager module to make the tag syntax easier. 
@@ -1958,6 +1964,7 @@ $lang['admin']['help_function_menu'] = <<<EOT
 	<h3>How do I use it?</h3>
 	<p>Just put <code>{menu}</code> on a page or in a template. For help about the Menu Manager module, what parameters it takes etc., please refer to the Menu Manager module help.</p>
 EOT;
+
 $lang['admin']['help_function_last_modified_by'] = <<<EOT
         <h3>What does this do?</h3>
         <p>Prints last person that edited this page.  If no format is given, it will default to a ID number of user .</p>
@@ -1969,6 +1976,7 @@ $lang['admin']['help_function_last_modified_by'] = <<<EOT
 				<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
         </ul>
 EOT;
+
 $lang['admin']['help_function_image'] = <<<EOT
   <h3>What does this do?</h3>
   <p>Creates an image tag to an image stored within your images directory</p>
@@ -1986,10 +1994,12 @@ $lang['admin']['help_function_image'] = <<<EOT
 	 <li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
   </ul>
 EOT;
+
 $lang['admin']['help_function_html_blob'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>See the help for global_content for a description.</p>
 EOT;
+
 $lang['admin']['help_function_google_search'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Search's your website using Google's search engine.</p>
@@ -2007,6 +2017,7 @@ $lang['admin']['help_function_google_search'] = <<<EOT
 		<li><em>(optional)</em> <tt>assign</tt> - Assign the results to the named smarty variable.</li>
 	</ul>
 EOT;
+
 $lang['admin']['help_function_global_content'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Inserts a global content block into your template or page.</p>
@@ -2018,6 +2029,7 @@ $lang['admin']['help_function_global_content'] = <<<EOT
           <li><em>(optional)</em> assign - The name of a smarty variable that the global content block should be assigned to.</li>
 	</ul>
 EOT;
+
 $lang['admin']['help_function_get_template_vars'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Dumps all the known smarty variables into your page</p>
@@ -2068,6 +2080,7 @@ $lang['admin']['help_function_description'] = <<<EOT
 	<h3>What parameters does it take?</h3>
 	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
+
 $lang['admin']['help_function_created_date'] = <<<EOT
         <h3>What does this do?</h3>
         <p>Prints the date and time the page was created.  If no format is given, it will default to a format similar to 'Jan 01, 2004'.</p>
@@ -2079,6 +2092,7 @@ $lang['admin']['help_function_created_date'] = <<<EOT
                 <li><em>(optional)</em>assign - Assign the results to the named smarty variable.</li>
         </ul>
 EOT;
+
 $lang['admin']['help_function_content'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This is where the content for your page will be displayed. It's inserted into the template and changed based on the current page being displayed.</p>
@@ -2132,43 +2146,6 @@ $lang['admin']['help_function_cms_version'] = <<<EOT
 	<p><em>(optional)</em> assign (string) - Assign the results to a smarty variable with that name.</p>
 EOT;
 
-$lang['admin']['about_function_cms_selflink'] = <<<EOT
-		<p>Author: Ted Kulp &lt;tedkulp@users.sf.net&gt;</p>
-		<p>Version: 1.1</p>
-		<p>Modified: Martin B. Vestergaard &lt;mbv@nospam.dk&gt;</p>
-		<p>Version: 1.41</p>
-		<p>Modified: Russ Baldwin</p>
-		<p>Version: 1.42</p>
-		<p>Modified: Marcus Bointon &lt;coolbru@users.sf.net&gt;</p>
-		<p>Version: 1.43</p>
-		<p>Modified: Tatu Wikman &lt;tsw@backspace.fi&gt;</p>
-		<p>Version: 1.44</p>
-		<p>Modified: Hans Mogren &lt;http://hans.bymarken.net/&gt;</p>
-		<p>Version: 1.45</p>
-
-		<p>
-		Change History:<br/>
-		1.47 - Adds width and height parameters.<br/>
-		1.46 - Fixes a problem with too many queries when using the dir=start option.<br/>
-		1.45 - Added a new option for &quot;dir&quot;, &quot;up&quot;, for links to the parent page e.g. dir=&quot;up&quot; (Hans Mogren).<br />
-		1.44 - Added new parameters &quot;ext&quot; and &quot;ext_info&quot; to allow external links with class=&quot;external&quot; and info text after the link, ugly hack but works thinking about rewriting this(Tatu Wikman)<br />
-		1.43 - Added new parameters &quot;image&quot; and &quot;imageonly&quot; to allow attachment of images to be used for page links, either instead of or in addition to text links. (Marcus Bointon)<br />
-		1.42 - Added new parameter &quot;anchorlink&quot; and a new option for &quot;dir&quot; namely, &quot;anchor&quot;, for internal page links. e.g. dir=&quot;anchor&quot; anchorlink=&quot;internal_link&quot;. (Russ)<br />
-		1.41 - added new parameter &quot;href&quot; (LeisureLarry)<br />
-		1.4 - fixed bug next/prev linking to non-content pages. (Thanks Teemu Koistinen for this fix)<br />
-		1.3 - added option &quot;more&quot;<br />
-		1.2 - by Martin B. Vestergaard
-		<ul>
-		<li>changed default text to Page Name (was Page Alias)</li>
-		<li>added option dir=next/prev to display next or previous item in the hierachy - thanks to 100rk</li>
-		<li>added option class to add a class= statement to the a-tag.</li>
-		<li>added option menu to display menu-text in sted of Page Name</li>
-		<li>added option lang to display link-labels in different languages</li>
-		</ul>
-		1.1 - Changed to new content system<br />
-		1.0 - Initial release
-		</p>
-EOT;
 $lang['admin']['help_function_cms_selflink'] = <<<EOT
 		<h3>What does this do?</h3>
 		<p>Creates a link to another CMSMS content page inside your template or content. Can also be used for external links with the ext parameter.</p>
@@ -2207,6 +2184,46 @@ $lang['admin']['help_function_cms_selflink'] = <<<EOT
 		</ul>
 EOT;
 
+
+
+$lang['admin']['about_function_cms_selflink'] = <<<EOT
+		<p>Author: Ted Kulp &lt;tedkulp@users.sf.net&gt;</p>
+		<p>Version: 1.1</p>
+		<p>Modified: Martin B. Vestergaard &lt;mbv@nospam.dk&gt;</p>
+		<p>Version: 1.41</p>
+		<p>Modified: Russ Baldwin</p>
+		<p>Version: 1.42</p>
+		<p>Modified: Marcus Bointon &lt;coolbru@users.sf.net&gt;</p>
+		<p>Version: 1.43</p>
+		<p>Modified: Tatu Wikman &lt;tsw@backspace.fi&gt;</p>
+		<p>Version: 1.44</p>
+		<p>Modified: Hans Mogren &lt;http://hans.bymarken.net/&gt;</p>
+		<p>Version: 1.45</p>
+
+		<p>
+		Change History:<br/>
+		1.47 - Adds width and height parameters.<br/>
+		1.46 - Fixes a problem with too many queries when using the dir=start option.<br/>
+		1.45 - Added a new option for &quot;dir&quot;, &quot;up&quot;, for links to the parent page e.g. dir=&quot;up&quot; (Hans Mogren).<br />
+		1.44 - Added new parameters &quot;ext&quot; and &quot;ext_info&quot; to allow external links with class=&quot;external&quot; and info text after the link, ugly hack but works thinking about rewriting this(Tatu Wikman)<br />
+		1.43 - Added new parameters &quot;image&quot; and &quot;imageonly&quot; to allow attachment of images to be used for page links, either instead of or in addition to text links. (Marcus Bointon)<br />
+		1.42 - Added new parameter &quot;anchorlink&quot; and a new option for &quot;dir&quot; namely, &quot;anchor&quot;, for internal page links. e.g. dir=&quot;anchor&quot; anchorlink=&quot;internal_link&quot;. (Russ)<br />
+		1.41 - added new parameter &quot;href&quot; (LeisureLarry)<br />
+		1.4 - fixed bug next/prev linking to non-content pages. (Thanks Teemu Koistinen for this fix)<br />
+		1.3 - added option &quot;more&quot;<br />
+		1.2 - by Martin B. Vestergaard
+		<ul>
+		<li>changed default text to Page Name (was Page Alias)</li>
+		<li>added option dir=next/prev to display next or previous item in the hierachy - thanks to 100rk</li>
+		<li>added option class to add a class= statement to the a-tag.</li>
+		<li>added option menu to display menu-text in sted of Page Name</li>
+		<li>added option lang to display link-labels in different languages</li>
+		</ul>
+		1.1 - Changed to new content system<br />
+		1.0 - Initial release
+		</p>
+EOT;
+
 $lang['admin']['about_function_cms_module'] = <<<EOT
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 	<p>Version: 1.0</p>
@@ -2215,6 +2232,7 @@ $lang['admin']['about_function_cms_module'] = <<<EOT
 	None
 	</p>
 EOT;
+
 $lang['admin']['help_function_cms_module'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This tag is used to insert modules into your templates and pages. If a module is created to be used as a tag plugin (check it's help for details), then you should be able to insert it with this tag.</p>
@@ -2263,16 +2281,6 @@ $lang['admin']['help_function_breadcrumbs'] = <<<EOT
 </ul>
 EOT;
 
-$lang['admin']['about_function_anchor'] = <<<EOT
-	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.1</p>
-	<p>
-	Change History:<br/>
-	<strong>Update to version 1.1 from 1.0</strong> <em>2006/07/19</em><br/>
-	Russ added the means to insert a title, a tabindex and a class for the anchor link. Westis added accesskey and changed parameter names to not include 'anchorlink'.<br/>
-	</hr>
-	</p>
-EOT;
 $lang['admin']['help_function_anchor'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Makes a proper anchor link.</p>
