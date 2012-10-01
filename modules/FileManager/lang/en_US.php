@@ -120,7 +120,7 @@ $lang['insufficientpermission'] = 'Insufficient permission to %s';
 $lang['internalerror'] = 'Internal error (meaning something didn\'t make sense at all, please report what you did)';
 $lang['invaliddestname'] = 'Destination name specified is empty or invalid';
 $lang['invalidmovedir'] = 'The destination directory specified is invalid';
-$lang['invalidnewdir'] = 'Name of new directory cannot contain chars like /, \\ and '..' ';
+$lang['invalidnewdir'] = 'Name of new directory cannot contain chars like /, \\ and \'..\' ';
 $lang['itemstocopy'] = 'Copy these Items';
 $lang['itemstomove'] = 'Move these Items';
 
