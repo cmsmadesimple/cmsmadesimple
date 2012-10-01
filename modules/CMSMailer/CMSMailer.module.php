@@ -110,7 +110,7 @@ class CMSMailer extends CMSModule
    ---------------------------------------------------------*/
   function GetChangeLog()
   {
-    return file_get_contents(dirname(__FILE__).'/changelog.txt');
+    return file_get_contents(dirname(__FILE__).'/changelog.inc');
   }
 
   
