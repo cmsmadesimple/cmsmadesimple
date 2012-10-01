@@ -35,7 +35,7 @@ class AdminSearch extends CMSModule
 
   function GetHelp()
   {
-    return file_get_contents(dirname(__FILE__).'/help.inc');
+    return $this->Lang('help');
   }
 
   function GetChangeLog()
