@@ -110,7 +110,7 @@ class CMSMailer extends CMSModule
    ---------------------------------------------------------*/
   function GetChangeLog()
   {
-    return $this->Lang('changelog');
+    return file_get_contents(dirname(__FILE__).'/changelog.txt');
   }
 
   
