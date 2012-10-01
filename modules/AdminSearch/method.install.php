@@ -22,7 +22,7 @@
 $this->CreatePermission('Use Admin Search','Use Admin Search');
 
 $groupops = GroupOperations::get_instance();
-$groups = $groupops->GetList();
+$groups = $groupops->LoadGroups();
 
 if( is_array($groups) && count($groups) ) {
   foreach( $groups as $one_group ) {
