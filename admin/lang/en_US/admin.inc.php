@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['404description'] = 'Page Not Found';
+
 //  AA
 // A  A
 // AAAA
@@ -53,7 +55,7 @@ $lang['admin']['adminlog_6months'] = '6 months';
 $lang['admin']['adminlog_lifetime']='Lifetime of log-entries';
 $lang['admin']['adminlog_manual'] = 'Manual deletion';
 $lang['admin']['adminpaging'] = 'Number of Content Items to show per/page in Page List';
-$lang['admin']['adminpaneltitle'] = 'CMS Made Simple&trade; Admin Console'; // needs translation
+$lang['admin']['adminpaneltitle'] = 'CMS Made Simple&trade; Admin Console';
 $lang['admin']['adminprefs'] = 'User Preferences';
 $lang['admin']['adminprefsdescription'] = 'This is where you set your specific preferences for site administration.';
 $lang['admin']['adminspecialgroup'] = 'Warning: Members of this group automatically have all permissions';
@@ -218,7 +220,7 @@ $lang['admin']['databaseprefix'] = 'Database Prefix';
 $lang['admin']['databasetype'] = 'Database Type';
 $lang['admin']['date'] = 'Date';
 $lang['admin']['date_format_string'] = 'Date Format String';
-$lang['admin']['date_format_string_help'] = '<em>strftime</em> formatted date format string.  Try googling \'strftime\'';
+$lang['admin']['date_format_string_help'] = '<em>strftime</em> formatted date format string. Try googling \'strftime\'';
 $lang['admin']['day'] = 'day';
 $lang['admin']['days'] = 'days';
 $lang['admin']['default'] = 'Default';
@@ -349,9 +351,9 @@ $lang['admin']['error_contenttype'] = 'The content type associated with this pag
 $lang['admin']['error_delete_default_parent'] = 'You cannot delete the default page, or a parent of the default page.';
 $lang['admin']['error_module_mincmsversion'] = 'This module requires a newer version of CMS Made Simple';
 $lang['admin']['error_nofileuploaded'] = 'No File has been uploaded';
-$lang['admin']['error_nograntall_found'] = 'Could not find a suitable &quot;GRANT ALL&quot; permission.  This may mean you could have problems installing or removing modules.  Or even adding and deleting items, including pages';
+$lang['admin']['error_nograntall_found'] = 'Could not find a suitable &quot;GRANT ALL&quot; permission. This may mean you could have problems installing or removing modules.  Or even adding and deleting items, including pages';
 $lang['admin']['error_nomodules'] = 'No modules installed! Check Extensions > Modules';
-$lang['admin']['error_no_default_content_block'] = 'No default content block was detected in this template.  Please ensure that you have a {content} tag in the page template.';
+$lang['admin']['error_no_default_content_block'] = 'No default content block was detected in this template. Please ensure that you have a {content} tag in the page template.';
 $lang['admin']['error_parsing_content_blocks'] = 'An error occurred parsing content blocks (perhaps duplicated block names)';
 $lang['admin']['error_retrieving_file_list'] = 'Error retrieving file list';
 $lang['admin']['error_type'] = 'Error Type';
@@ -423,39 +425,57 @@ $lang['admin']['event_desc_stylesheetpostcompile'] = 'Sent after a stylesheet is
 $lang['admin']['event_desc_stylesheetprecompile'] = 'Sent before a stylesheet is compiled through smarty';
 $lang['admin']['event_desc_templatepostcompile'] = 'Sent after a template has been processed by smarty';
 $lang['admin']['event_desc_templateprecompile'] = 'Sent before a template is sent to smarty for processing';
-$lang['admin']['event_help_adduserdefinedtagpost'] = '<p>Sent prior to a user defined tag insert.</p>';
-$lang['admin']['event_help_adduserdefinedtagpre'] = '<p>Sent after a user defined tag is inserted.</p>';
-$lang['admin']['event_help_deleteuserdefinedtagpost'] = '<p>Sent after a user defined tag is deleted.</p>';
-$lang['admin']['event_help_deleteuserdefinedtagpre'] = '<p>Sent prior to deleting a user defined tag.</p>';
-$lang['admin']['event_help_edituserdefinedtagpost'] = '<p>Sent after a user defined tag is updated.</p>';
-$lang['admin']['event_help_edituserdefinedtagpre'] = '<p>Sent prior to a user defined tag update.</p>';
-$lang['admin']['event_help_loginfailed'] = '<p>Sent after a user failed to login into the admin panel.</p>';
-$lang['admin']['event_help_moduleinstalled'] = '<p>Sent after a module is installed.</p>';
-$lang['admin']['event_help_moduleuninstalled'] = '<p>Sent after a module is uninstalled.</p>';
-$lang['admin']['event_help_moduleupgraded'] = '<p>Sent after a module is upgraded.</p>';
-$lang['admin']['event_name'] = 'Event Name';
-$lang['admin']['execute'] = 'Execute';
-$lang['admin']['expand'] = 'Expand Section';
-$lang['admin']['expandall'] = 'Expand All Sections';
-$lang['admin']['expanded_xml'] = 'Expanded XML file consisting of %s %s';
-$lang['admin']['export'] = 'Export';
-$lang['admin']['extensions'] = 'Extensions';
-$lang['admin']['extensionsdescription'] = 'Modules, tags, and other assorted fun.';
-$lang['admin']['extra1'] = 'Extra Page Attribute 1';
-$lang['admin']['extra2'] = 'Extra Page Attribute 2';
-$lang['admin']['extra3'] = 'Extra Page Attribute 3';
-$lang['admin']['E_DEPRECATED'] = 'Is E_DEPRECATED disabled in error_reporting';
-$lang['admin']['E_STRICT'] = 'Is E_STRICT disabled in error_reporting';
-
-
-
-$lang['admin']['event_help_loginpost'] = '<p>Sent after a user logs into the admin panel.</p>
+$lang['admin']['event_help_addglobalcontentpost'] = '<p>Sent after a new global content block is created.</p>
 <h4>Parameters</h4>
 <ul>
-<li>\'user\' - Reference to the affected user object.</li>
+<li>\'global_content\' - Reference to the affected global content block object.</li>
 </ul>
 ';
-$lang['admin']['event_help_logoutpost'] = '<p>Sent after a user logs out of the admin panel.</p>
+$lang['admin']['event_help_addglobalcontentpre'] = '<p>Sent before a new global content block is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block object.</li>
+</ul>
+';
+$lang['admin']['event_help_addgrouppost'] = '<p>Sent after a new group is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+</ul>
+';
+$lang['admin']['event_help_addgrouppre'] = '<p>Sent before a new group is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+</ul>
+';
+$lang['admin']['event_help_addstylesheetpost'] = '<p>Sent after a new stylesheet is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
+</ul>
+';
+$lang['admin']['event_help_addstylesheetpre'] = '<p>Sent before a new stylesheet is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
+</ul>
+';
+$lang['admin']['event_help_addtemplatepost'] = '<p>Sent after a new template is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template object.</li>
+</ul>
+';
+$lang['admin']['event_help_addtemplatepre'] = '<p>Sent before a new template is created.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template object.</li>
+</ul>
+';
+$lang['admin']['event_help_adduserdefinedtagpost'] = '<p>Sent prior to a user defined tag insert.</p>';
+$lang['admin']['event_help_adduserdefinedtagpre'] = '<p>Sent after a user defined tag is inserted.</p>';
+$lang['admin']['event_help_adduserpost'] = '<p>Sent after a new user is created.</p>
 <h4>Parameters</h4>
 <ul>
 <li>\'user\' - Reference to the affected user object.</li>
@@ -467,46 +487,11 @@ $lang['admin']['event_help_adduserpre'] = '<p>Sent before a new user is created.
 <li>\'user\' - Reference to the affected user object.</li>
 </ul>
 ';
-$lang['admin']['event_help_adduserpost'] = '<p>Sent after a new user is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_edituserpre'] = '<p>Sent before edits to a user are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_edituserpost'] = '<p>Sent after edits to a user are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_deleteuserpre'] = '<p>Sent before a user is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_deleteuserpost'] = '<p>Sent after a user is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'user\' - Reference to the affected user object.</li>
-</ul>
-';
-$lang['admin']['event_help_addgrouppre'] = '<p>Sent before a new group is created.</p>
-<h4>Parameters</h4>
+$lang['admin']['event_help_changegroupassignpost'] = '<p>Sent after group assignments are saved.</p>
+<h4>Parameters></h4>
 <ul>
 <li>\'group\' - Reference to the affected group object.</li>
-</ul>
-';
-$lang['admin']['event_help_addgrouppost'] = '<p>Sent after a new group is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
+<li>\'users\' - Array of references to user objects now belonging to the affected group.</li>
 </ul>
 ';
 $lang['admin']['event_help_changegroupassignpre'] = '<p>Sent before group assignments are saved.</p>
@@ -516,178 +501,7 @@ $lang['admin']['event_help_changegroupassignpre'] = '<p>Sent before group assign
 <li>\'users\' - Array of references to user objects belonging to the group.</li>
 </ul>
 ';
-$lang['admin']['event_help_changegroupassignpost'] = '<p>Sent after group assignments are saved.</p>
-<h4>Parameters></h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
-<li>\'users\' - Array of references to user objects now belonging to the affected group.</li>
-</ul>
-';
-$lang['admin']['event_help_editgrouppre'] = '<p>Sent before edits to a group are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
-</ul>
-';
-$lang['admin']['event_help_editgrouppost'] = '<p>Sent after edits to a group are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
-</ul>
-';
-$lang['admin']['event_help_deletegrouppre'] = '<p>Sent before a group is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
-</ul>
-';
-$lang['admin']['event_help_deletegrouppost'] = '<p>Sent after a group is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'group\' - Reference to the affected group object.</li>
-</ul>
-';
-$lang['admin']['event_help_addstylesheetpre'] = '<p>Sent before a new stylesheet is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
-</ul>
-';
-$lang['admin']['event_help_addstylesheetpost'] = '<p>Sent after a new stylesheet is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
-</ul>
-';
-$lang['admin']['event_help_editstylesheetpre'] = '<p>Sent before edits to a stylesheet are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
-</ul>
-';
-$lang['admin']['event_help_editstylesheetpost'] = '<p>Sent after edits to a stylesheet are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
-</ul>
-';
-$lang['admin']['event_help_deletestylesheetpre'] = '<p>Sent before a stylesheet is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
-</ul>
-';
-$lang['admin']['event_help_deletestylesheetpost'] = '<p>Sent after a stylesheet is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
-</ul>
-';
-$lang['admin']['event_help_addtemplatepre'] = '<p>Sent before a new template is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template object.</li>
-</ul>
-';
-$lang['admin']['event_help_addtemplatepost'] = '<p>Sent after a new template is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template object.</li>
-</ul>
-';
-$lang['admin']['event_help_edittemplatepre'] = '<p>Sent before edits to a template are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template object.</li>
-</ul>
-';
-$lang['admin']['event_help_edittemplatepost'] = '<p>Sent after edits to a template are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template object.</li>
-</ul>
-';
-$lang['admin']['event_help_deletetemplatepre'] = '<p>Sent before a template is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template object.</li>
-</ul>
-';
-$lang['admin']['event_help_deletetemplatepost'] = '<p>Sent after a template is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template object.</li>
-</ul>
-';
-$lang['admin']['event_help_templateprecompile'] = '<p>Sent before a template is sent to smarty for processing.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template text.</li>
-<li>\'type\' - The type of template call.  i.e: template for a whole template, tpl_head, tpl_body, or tpl_top for a partial template.</li>
-</ul>
-';
-$lang['admin']['event_help_templatepostcompile'] = '<p>Sent after a template has been processed by smarty.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'template\' - Reference to the affected template text.</li>
-<li>\'type\' - The type of template call.  i.e: template for a whole template, tpl_head, tpl_body, or tpl_top for a partial template.</li>
-</ul>
-';
-$lang['admin']['event_help_addglobalcontentpre'] = '<p>Sent before a new global content block is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block object.</li>
-</ul>
-';
-$lang['admin']['event_help_addglobalcontentpost'] = '<p>Sent after a new global content block is created.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block object.</li>
-</ul>
-';
-$lang['admin']['event_help_editglobalcontentpre'] = '<p>Sent before edits to a global content block are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block object.</li>
-</ul>
-';
-$lang['admin']['event_help_editglobalcontentpost'] = '<p>Sent after edits to a global content block are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block object.</li>
-</ul>
-';
-$lang['admin']['event_help_deleteglobalcontentpre'] = '<p>Sent before a global content block is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block object.</li>
-</ul>
-';
-$lang['admin']['event_help_deleteglobalcontentpost'] = '<p>Sent after a global content block is deleted from the system.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block object.</li>
-</ul>
-';
-$lang['admin']['event_help_globalcontentprecompile'] = '<p>Sent before a global content block is sent to smarty for processing.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block text.</li>
-</ul>
-';
-$lang['admin']['event_help_globalcontentpostcompile'] = '<p>Sent after a global content block has been processed by smarty.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected global content block text.</li>
-</ul>
-';
-$lang['admin']['event_help_contenteditpre'] = '<p>Sent before edits to content are saved.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'global_content\' - Reference to the affected content object.</li>
-</ul>
-';
-$lang['admin']['event_help_contenteditpost'] = '<p>Sent after edits to content are saved.</p>
+$lang['admin']['event_help_contentdeletepost'] = '<p>Sent after content is deleted from the system.</p>
 <h4>Parameters</h4>
 <ul>
 <li>\'content\' - Reference to the affected content object.</li>
@@ -699,22 +513,16 @@ $lang['admin']['event_help_contentdeletepre'] = '<p>Sent before content is delet
 <li>\'content\' - Reference to the affected content object.</li>
 </ul>
 ';
-$lang['admin']['event_help_contentdeletepost'] = '<p>Sent after content is deleted from the system.</p>
+$lang['admin']['event_help_contenteditpost'] = '<p>Sent after edits to content are saved.</p>
 <h4>Parameters</h4>
 <ul>
 <li>\'content\' - Reference to the affected content object.</li>
 </ul>
 ';
-$lang['admin']['event_help_contentstylesheet'] = '<p>Sent before the sytlesheet is sent to the browser.</p>
+$lang['admin']['event_help_contenteditpre'] = '<p>Sent before edits to content are saved.</p>
 <h4>Parameters</h4>
 <ul>
-<li>\'content\' - Reference to the affected stylesheet text.</li>
-</ul>
-';
-$lang['admin']['event_help_contentprecompile'] = '<p>Sent before content is sent to smarty for processing.</p>
-<h4>Parameters</h4>
-<ul>
-<li>\'content\' - Reference to the affected content text.</li>
+<li>\'global_content\' - Reference to the affected content object.</li>
 </ul>
 ';
 $lang['admin']['event_help_contentpostcompile'] = '<p>Sent after content has been processed by smarty.</p>
@@ -729,18 +537,209 @@ $lang['admin']['event_help_contentpostrender'] = '<p>Sent before the combined ht
 <li>\'content\' - Reference to the html text.</li>
 </ul>
 ';
-$lang['admin']['event_help_smartyprecompile'] = '<p>Sent before any content destined for smarty is sent to for processing.</p>
+$lang['admin']['event_help_contentprecompile'] = '<p>Sent before content is sent to smarty for processing.</p>
 <h4>Parameters</h4>
 <ul>
-<li>\'content\' - Reference to the affected text.</li>
+<li>\'content\' - Reference to the affected content text.</li>
 </ul>
 ';
+$lang['admin']['event_help_contentstylesheet'] = '<p>Sent before the sytlesheet is sent to the browser.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'content\' - Reference to the affected stylesheet text.</li>
+</ul>
+';
+$lang['admin']['event_help_deleteglobalcontentpost'] = '<p>Sent after a global content block is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block object.</li>
+</ul>
+';
+$lang['admin']['event_help_deleteglobalcontentpre'] = '<p>Sent before a global content block is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block object.</li>
+</ul>
+';
+$lang['admin']['event_help_deletegrouppost'] = '<p>Sent after a group is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+</ul>
+';
+$lang['admin']['event_help_deletegrouppre'] = '<p>Sent before a group is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+</ul>
+';
+$lang['admin']['event_help_deletestylesheetpost'] = '<p>Sent after a stylesheet is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
+</ul>
+';
+$lang['admin']['event_help_deletestylesheetpre'] = '<p>Sent before a stylesheet is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
+</ul>
+';
+$lang['admin']['event_help_deletetemplatepost'] = '<p>Sent after a template is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template object.</li>
+</ul>
+';
+$lang['admin']['event_help_deletetemplatepre'] = '<p>Sent before a template is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template object.</li>
+</ul>
+';
+$lang['admin']['event_help_deleteuserdefinedtagpost'] = '<p>Sent after a user defined tag is deleted.</p>';
+$lang['admin']['event_help_deleteuserdefinedtagpre'] = '<p>Sent prior to deleting a user defined tag.</p>';
+$lang['admin']['event_help_deleteuserpost'] = '<p>Sent after a user is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_deleteuserpre'] = '<p>Sent before a user is deleted from the system.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_editglobalcontentpost'] = '<p>Sent after edits to a global content block are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block object.</li>
+</ul>
+';
+$lang['admin']['event_help_editglobalcontentpre'] = '<p>Sent before edits to a global content block are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block object.</li>
+</ul>
+';
+$lang['admin']['event_help_editgrouppost'] = '<p>Sent after edits to a group are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+</ul>
+';
+$lang['admin']['event_help_editgrouppre'] = '<p>Sent before edits to a group are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+</ul>
+';
+$lang['admin']['event_help_editstylesheetpost'] = '<p>Sent after edits to a stylesheet are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
+</ul>
+';
+$lang['admin']['event_help_editstylesheetpre'] = '<p>Sent before edits to a stylesheet are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'stylesheet\' - Reference to the affected stylesheet object.</li>
+</ul>
+';
+$lang['admin']['event_help_edittemplatepost'] = '<p>Sent after edits to a template are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template object.</li>
+</ul>
+';
+$lang['admin']['event_help_edittemplatepre'] = '<p>Sent before edits to a template are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template object.</li>
+</ul>
+';
+$lang['admin']['event_help_edituserdefinedtagpost'] = '<p>Sent after a user defined tag is updated.</p>';
+$lang['admin']['event_help_edituserdefinedtagpre'] = '<p>Sent prior to a user defined tag update.</p>';
+$lang['admin']['event_help_edituserpost'] = '<p>Sent after edits to a user are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_edituserpre'] = '<p>Sent before edits to a user are saved.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_globalcontentpostcompile'] = '<p>Sent after a global content block has been processed by smarty.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block text.</li>
+</ul>
+';
+$lang['admin']['event_help_globalcontentprecompile'] = '<p>Sent before a global content block is sent to smarty for processing.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'global_content\' - Reference to the affected global content block text.</li>
+</ul>
+';
+$lang['admin']['event_help_loginfailed'] = '<p>Sent after a user failed to login into the admin panel.</p>';
+$lang['admin']['event_help_loginpost'] = '<p>Sent after a user logs into the admin panel.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_logoutpost'] = '<p>Sent after a user logs out of the admin panel.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_moduleinstalled'] = '<p>Sent after a module is installed.</p>';
+$lang['admin']['event_help_moduleuninstalled'] = '<p>Sent after a module is uninstalled.</p>';
+$lang['admin']['event_help_moduleupgraded'] = '<p>Sent after a module is upgraded.</p>';
 $lang['admin']['event_help_smartypostcompile'] = '<p>Sent after any content destined for smarty has been processed.</p>
 <h4>Parameters</h4>
 <ul>
 <li>\'content\' - Reference to the affected text.</li>
 </ul>
 ';
+$lang['admin']['event_help_smartyprecompile'] = '<p>Sent before any content destined for smarty is sent to for processing.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'content\' - Reference to the affected text.</li>
+</ul>
+';
+$lang['admin']['event_help_templatepostcompile'] = '<p>Sent after a template has been processed by smarty.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template text.</li>
+<li>\'type\' - The type of template call.  i.e: template for a whole template, tpl_head, tpl_body, or tpl_top for a partial template.</li>
+</ul>
+';
+$lang['admin']['event_help_templateprecompile'] = '<p>Sent before a template is sent to smarty for processing.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'template\' - Reference to the affected template text.</li>
+<li>\'type\' - The type of template call.  i.e: template for a whole template, tpl_head, tpl_body, or tpl_top for a partial template.</li>
+</ul>
+';
+$lang['admin']['event_name'] = 'Event Name';
+$lang['admin']['execute'] = 'Execute';
+$lang['admin']['expand'] = 'Expand Section';
+$lang['admin']['expandall'] = 'Expand All Sections';
+$lang['admin']['expanded_xml'] = 'Expanded XML file consisting of %s %s';
+$lang['admin']['export'] = 'Export';
+$lang['admin']['extensions'] = 'Extensions';
+$lang['admin']['extensionsdescription'] = 'Modules, tags, and other assorted fun.';
+$lang['admin']['extra1'] = 'Extra Page Attribute 1';
+$lang['admin']['extra2'] = 'Extra Page Attribute 2';
+$lang['admin']['extra3'] = 'Extra Page Attribute 3';
+$lang['admin']['E_DEPRECATED'] = 'Is E_DEPRECATED disabled in error_reporting';
+$lang['admin']['E_STRICT'] = 'Is E_STRICT disabled in error_reporting';
 
 
 // FFFF
@@ -820,112 +819,6 @@ $lang['admin']['groupsdescription'] = 'This is where you manage groups.';
 // H  H
 // H  H
 
-$lang['admin']['help_function_cms_get_language'] = <<<EOT
-<h3>What does this do?</h3>
-<p>This plugin returns the current CMSMS language name. The language is used for translation strings and date formatting.</p>
-<h3>What parameters does it take?</h3>
-<ul>
-<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
-</ul>
-EOT;
-
-$lang['admin']['help_function_cms_init_editor'] = <<<EOT
-<h3>What does this do?</h3>
-<p>This plugin is used to initialize the selected wysiwyg editor for display when wysiwyg functionalities are required for frontend data submission.  This module will find the selected frontend wysiwyg, determine if it has been requested, and if so generate the appropriate html code <em>(usually javascript links)</em> so that the wysiwyg will initialize properly when the page is loaded.  If no wysiwyg editors have been requested for the frontend request this plugin will produce no output.</p>
-<h3>How do I use it?</h3>
-<p>The first thing you must do is select the frontend WYSIWYG editor to use in the global settings page of the admin console.  Next If you use frontend wysiwyg editors on numerous pages, it may be best to place the {cms_init_editor} plugin directly into your page template.  If you only require the wysiwyg editor to be enabled on a limited amount of pages you may just place it into the &quot;Page Specific Metadata&quot; field in each page.</p>
-<h3>What parameters does it take?</h3>
-<ul>
-<li><em>(optional)wysiwyg</em> - Specify the name of the wysiwyg editor module to initialize.  Use with caution.  If you have a different wysiwyg editor selected in the global settings, this will force the specified  editor to be initialized.</li>
-<li><em>(optional)force=0</em> - Normally this plugin will not initialize the specified (or detected) editor if it has not been marked as &quot;active&quot;.  This parameter will override that behavior.</li>
-<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
-</ul>
-EOT;
-
-$lang['admin']['help_function_cms_lang_info'] = <<<EOT
-<h3>What does this do?</h3>
-<p>This plugin returns an object containing the information that CMSMS has about the selected language.  This can include locale information, encodings, language aliases etc.</p>
-<h3>What parameters does it take?</h3>
-<ul>
-<li><em>(optional)lang</em> - The language to return information for. If the lang parameter is not specified then the information for the current CMSMS language is used.</li>
-<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
-</ul>
-<h3>Example:</h3>
-<pre>{cms_lang_info assign='nls'}{\$nls->locale()}</pre>
-<h3>See Also:</h3>
-<p>the CmsNls class documentation.</p>
-EOT;
-
-$lang['admin']['help_function_module_available'] = <<<EOT
-<h3>What does this do?</h3>
-<p>A plugin to test wether a given module (by name) is installed, and available for use.</p>
-<h3>What parameters does it take?</h3>
-<ul>
-<li><strong>(required)module</strong> - (string) The name of the module.</li>
-<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
-</ul>
-<h3>Example:</h3>
-{module_available module='News' assign='havenews'}{if \$havenews}{cms_module module=News}{/if}
-<h3>Note:</h3>
-<p>You cannot use the short form of the module call, i.e: <em>{News}</em> in this type of expression.</p>
-EOT;
-
-$lang['admin']['help_function_cms_set_language'] = <<<EOT
-<h3>What does this do?</h3>
-<p>This plugin attempts to set the current language for use by translation strings and date formatting to the desired language.  The language specified must be known to CMSMS (The nls file must exist).  When this function is called, (and unless overridden in the config.php) an attempt will be made to set the locale to the local associated with the language.  The locale for the language must be installed on the server.</p>
-<h3>What parameters does it take?</h3>
-<ul>
-<li><strong>(required)lang</strong> - The desired language.  The language must be known to the CMSMS installation (nls file must exist).</li>
-</ul>
-EOT;
-
-$lang['admin']['help_modifier_cms_date_format'] = <<<EOT
-<h3>What does this do?</h3>
-<p>This modifier is used to format dates in a suitable format. It uses the standard strftime parameters. If no format string is specified, the system will use the date format string user preference (for logged in users) or the system date format preference.</p>
-<p>This modifier is capable of understanding dates in many formats.  i.e: date-time strings output from the database or integer timestamps generated by the time() function.</p>
-<h3>Usage:</h3>
-<pre><code>{\$some_date_var|cms_date_format[:&lt;format string&gt;]}</code></pre>
-<h3>Example:</h3>
-<pre><code>{'2012-03-24 22:44:22'|cms_date_format}</code></pre>
-EOT;
-
-$lang['admin']['help_modifier_cms_escape'] = <<<EOT
-<h3>What does this do?</h3>
-<p>This modifier is used to escape the string in one of many ways.  This can be used for converting the string to multiple different display formats, or to make user entered data with special characters displayable on a standard web page.</p>
-<h3>Usage:</h3>
-<pre><code>{\$some_var_with_text|cms_escape[:&lt;escape type&gt;|[&lt;character set&gt;]]}</code></pre>
-<h4>Valid escape types:</h4>
-<ul>
-<li>html <em>(default)</em> - use htmlspecialchars.</li>
-<li>htmlall - use htmlentities.</li>
-<li>url - raw url encode all entities.</li>
-<li>urlpathinfo - Similar to the url escape type, but also encode /.</li>
-<li>quotes - Escape unescaped single quotes.</li>
-<li>hex - Escape every character into hex.</li>
-<li>hexentity - Hex encode every character.</li>
-<li>decentity - Decimal encode every character.</li>
-<li>javascript - Escape quotes, backslashes, newlines etc.</li>
-<li>mail - Encode an email address into something that is safe to display.</li>
-<li>nonstd - Escape non standard characters, such as document quotes.</li>
-</ul>
-<h4>Character Set::</h4>
-<p>If the character set is not specified, utf-8 is assumed. The character set is only applicable to the &quot;html&quot; and &quot;htmlall&quot; escape types.</p>
-EOT;
-
-$lang['admin']['help_modifier_summarize'] = <<<EOT
-<h3>What does this do?</h3>
-<p>This modifier is used to truncate a long sequence of text to a limited number of &quot;words&quot;.</p>
-<h3>Usage:</h3>
-<pre><code>{\$some_var_with_long_text|summarize:&lt;number&gt;}</code></pre>
-<h3>Example:</h3>
-<p>The following example would strip all html tags from the content and truncate it after 50 words.</p>
-<pre><code>{content|strip_tags|summarize:50}</code></pre>
-EOT;
-
-$lang['admin']['help_systeminformation'] = <<<EOT
-The information displayed below is collected from a variety of locations, and summarized here so that you may be able to conveniently find some of the information required when trying to diagnose a problem or request help with your CMS Made Simple&trade; installation.
-EOT;
-
 $lang['admin']['handler'] = 'Handler (user defined tag)';
 $lang['admin']['handle_404'] = 'Custom 404 Handling';
 $lang['admin']['hasdependents'] = 'Has Dependents';
@@ -939,6 +832,9 @@ $lang['admin']['help_page_alias'] = 'The alias is used as an alternate to the pa
 $lang['admin']['help_page_cachable'] = 'Performance can be increased by setting as many pages as possible to cachable.  However this cannot be used for pages where content may change on a per request basis';
 $lang['admin']['help_page_searchable'] = 'This setting indicates whether the content of this page should be indexed by the Search module';
 $lang['admin']['help_page_url'] = 'Specify an alternate URL (relative to the root of your website) that can be used to uniquely identify this page.  i.e: path/to/mypage.  The page url is only useful when pretty urls are enabled.';
+$lang['admin']['help_systeminformation'] = <<<EOT
+The information displayed below is collected from a variety of locations, and summarized here so that you may be able to conveniently find some of the information required when trying to diagnose a problem or request help with your CMS Made Simple&trade; installation.
+EOT;
 $lang['admin']['hidefrommenu'] = 'Hide From Menu';
 $lang['admin']['hide_help_links'] = 'Hide module help link';
 $lang['admin']['hide_help_links_help'] = 'Disable the module help link in page headers.';
@@ -1603,18 +1499,116 @@ $lang['admin']['your_ipaddress'] = 'Your IP Address is';
 
 
 
-// Other
-$lang['admin']['404description'] = 'Page Not Found';
+// *******************************************
+//             Modifier Help Text
+// *******************************************
+
+$lang['admin']['help_modifier_cms_date_format'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This modifier is used to format dates in a suitable format. It uses the standard strftime parameters. If no format string is specified, the system will use the date format string user preference (for logged in users) or the system date format preference.</p>
+<p>This modifier is capable of understanding dates in many formats.  i.e: date-time strings output from the database or integer timestamps generated by the time() function.</p>
+<h3>Usage:</h3>
+<pre><code>{\$some_date_var|cms_date_format[:&lt;format string&gt;]}</code></pre>
+<h3>Example:</h3>
+<pre><code>{'2012-03-24 22:44:22'|cms_date_format}</code></pre>
+EOT;
+
+$lang['admin']['help_modifier_cms_escape'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This modifier is used to escape the string in one of many ways.  This can be used for converting the string to multiple different display formats, or to make user entered data with special characters displayable on a standard web page.</p>
+<h3>Usage:</h3>
+<pre><code>{\$some_var_with_text|cms_escape[:&lt;escape type&gt;|[&lt;character set&gt;]]}</code></pre>
+<h4>Valid escape types:</h4>
+<ul>
+<li>html <em>(default)</em> - use htmlspecialchars.</li>
+<li>htmlall - use htmlentities.</li>
+<li>url - raw url encode all entities.</li>
+<li>urlpathinfo - Similar to the url escape type, but also encode /.</li>
+<li>quotes - Escape unescaped single quotes.</li>
+<li>hex - Escape every character into hex.</li>
+<li>hexentity - Hex encode every character.</li>
+<li>decentity - Decimal encode every character.</li>
+<li>javascript - Escape quotes, backslashes, newlines etc.</li>
+<li>mail - Encode an email address into something that is safe to display.</li>
+<li>nonstd - Escape non standard characters, such as document quotes.</li>
+</ul>
+<h4>Character Set::</h4>
+<p>If the character set is not specified, utf-8 is assumed. The character set is only applicable to the &quot;html&quot; and &quot;htmlall&quot; escape types.</p>
+EOT;
+
+$lang['admin']['help_modifier_summarize'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This modifier is used to truncate a long sequence of text to a limited number of &quot;words&quot;.</p>
+<h3>Usage:</h3>
+<pre><code>{\$some_var_with_long_text|summarize:&lt;number&gt;}</code></pre>
+<h3>Example:</h3>
+<p>The following example would strip all html tags from the content and truncate it after 50 words.</p>
+<pre><code>{content|strip_tags|summarize:50}</code></pre>
+EOT;
 
 
+// *******************************************
+//             Plugin Help Text
+// *******************************************
 
+$lang['admin']['help_function_cms_get_language'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin returns the current CMSMS language name. The language is used for translation strings and date formatting.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
+</ul>
+EOT;
 
+$lang['admin']['help_function_cms_init_editor'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin is used to initialize the selected wysiwyg editor for display when wysiwyg functionalities are required for frontend data submission.  This module will find the selected frontend wysiwyg, determine if it has been requested, and if so generate the appropriate html code <em>(usually javascript links)</em> so that the wysiwyg will initialize properly when the page is loaded.  If no wysiwyg editors have been requested for the frontend request this plugin will produce no output.</p>
+<h3>How do I use it?</h3>
+<p>The first thing you must do is select the frontend WYSIWYG editor to use in the global settings page of the admin console.  Next If you use frontend wysiwyg editors on numerous pages, it may be best to place the {cms_init_editor} plugin directly into your page template.  If you only require the wysiwyg editor to be enabled on a limited amount of pages you may just place it into the &quot;Page Specific Metadata&quot; field in each page.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li><em>(optional)wysiwyg</em> - Specify the name of the wysiwyg editor module to initialize.  Use with caution.  If you have a different wysiwyg editor selected in the global settings, this will force the specified  editor to be initialized.</li>
+<li><em>(optional)force=0</em> - Normally this plugin will not initialize the specified (or detected) editor if it has not been marked as &quot;active&quot;.  This parameter will override that behavior.</li>
+<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
+</ul>
+EOT;
 
+$lang['admin']['help_function_cms_lang_info'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin returns an object containing the information that CMSMS has about the selected language.  This can include locale information, encodings, language aliases etc.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li><em>(optional)lang</em> - The language to return information for. If the lang parameter is not specified then the information for the current CMSMS language is used.</li>
+<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+<pre>{cms_lang_info assign='nls'}{\$nls->locale()}</pre>
+<h3>See Also:</h3>
+<p>the CmsNls class documentation.</p>
+EOT;
 
+$lang['admin']['help_function_module_available'] = <<<EOT
+<h3>What does this do?</h3>
+<p>A plugin to test wether a given module (by name) is installed, and available for use.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li><strong>(required)module</strong> - (string) The name of the module.</li>
+<li><em>(optional)assign</em> - Assign the output of the plugin to the named smarty variable.</li>
+</ul>
+<h3>Example:</h3>
+{module_available module='News' assign='havenews'}{if \$havenews}{cms_module module=News}{/if}
+<h3>Note:</h3>
+<p>You cannot use the short form of the module call, i.e: <em>{News}</em> in this type of expression.</p>
+EOT;
 
-
-
-// help_function...
+$lang['admin']['help_function_cms_set_language'] = <<<EOT
+<h3>What does this do?</h3>
+<p>This plugin attempts to set the current language for use by translation strings and date formatting to the desired language.  The language specified must be known to CMSMS (The nls file must exist).  When this function is called, (and unless overridden in the config.php) an attempt will be made to set the locale to the local associated with the language.  The locale for the language must be installed on the server.</p>
+<h3>What parameters does it take?</h3>
+<ul>
+<li><strong>(required)lang</strong> - The desired language.  The language must be known to the CMSMS installation (nls file must exist).</li>
+</ul>
+EOT;
 
 $lang['admin']['help_function_browser_lang'] = <<<EOT
 <h3>What does this do?</h3>
