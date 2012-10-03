@@ -4,7 +4,7 @@ $lang['755style'] = '755 style';
 // A
 $lang['actiondelete'] = 'Delete one or more items';
 $lang['actions']= 'Actions';
-$lang['advancedhelp'] = 'Lets you gain access to whole cmsms filesystem, not just /uploads/ (if allowed)';
+$lang['advancedhelp'] = 'Lets you gain access to whole CMSMS filesystem, not just /uploads/ (if allowed)';
 $lang['afilecontainsillegalchars'] = 'A filename contains one or more illegal characters (\',",+,*,\\,/,&,$). Upload cancelled.';
 $lang['afileistoobig'] = 'A file is too big. Upload cancelled.';
 $lang['and'] = 'and';
@@ -102,9 +102,9 @@ $lang['group'] = 'Group';
 // H
 $lang['help']=<<<EOF
 		<h3>What does this do?</h3>
-		<p>This module provides file management functions</p>
+		<p>This module provides file management functions.</p>
 		<h3>How do I use it?</h3>
-		<p>Select it from the content-menu from in the admin. </p>
+		<p>Select it from the content-menu from in the admin.</p>
 EOF;
 
 // I
@@ -219,7 +219,7 @@ $lang['thumberror'] = 'Problem creating thumbnail';
 $lang['thumbnail'] = 'Create Thumbnail';
 $lang['thumbsuccess'] = 'Thumbnail successfully created';
 
-// T
+// U
 $lang['uninstalled'] = 'FileManager module uninstalled';
 $lang['unknown'] = 'Unknown';
 $lang['unknownfileaction'] = 'Internal error: unknown file action';

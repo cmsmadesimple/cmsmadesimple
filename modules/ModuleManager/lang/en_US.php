@@ -1,6 +1,6 @@
 <?php
 // A
-$land['admin_title'] = 'Module Manager Admin Panel';
+$lang['admin_title'] = 'Module Manager Admin Panel';
 $lang['abouttxt'] = 'About';
 $lang['accessdenied'] = 'Access Denied. Please check your permissions.';
 $lang['action_activated'] = 'Module %s has been activated.';
@@ -101,7 +101,6 @@ $lang['operation_results'] = 'Operation Results';
 
 // P
 $lang['postinstall'] = 'Module Manager has been successfully installed.';
-$lang['postinstall'] = 'Post Install Message.';
 $lang['postuninstall'] = 'Module Manager has been uninstalled.  Users will no longer have the ability to install modules from remote repositories.  However, local installation is still possible.';
 $lang['preferences'] = 'Preferences';
 $lang['preferencessaved'] = 'Preferences saved';
@@ -149,8 +148,10 @@ $lang['use_at_your_own_risk'] = 'Use at Your Own Risk';
 $lang['versionsformodule'] = 'Available versions of the module %s';
 $lang['vertext'] = 'Version';
 
-// Y
+// X
 $lang['xmltext'] = 'XML File';
+
+// Y
 $lang['yourversion'] = 'Your Version';
 
 ?>

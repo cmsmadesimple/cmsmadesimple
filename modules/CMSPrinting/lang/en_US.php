@@ -7,7 +7,7 @@ $lang["confirmresetstyle"] = "Are you sure the stylesheet should be reset?";
 $lang["confirmresettemplate"] = "Are you sure the template should be reset to its default value?";
 $lang["confirmuninstall"] = "Are you sure the module should be uninstalled?";
 
-// C
+// D
 $lang["defaultlinktext"] = "Print this page";
 $lang["description"] = "This module is an easily customizable way of providing printer friendly pages for CMSMS";
 
