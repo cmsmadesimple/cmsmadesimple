@@ -323,7 +323,6 @@ $lang['test_check_upload_max_failed'] = 'You will probably not be able to upload
 $lang['test_check_writable'] = 'Checking if %s is writable';
 $lang['test_check_write'] = 'Checking write permission on';
 $lang['test_check_xml_failed'] = 'XML support is not compiled into your php install. You can still use the system, but will not be able to use any of the remote module installation functions.';
-$lang['test_check_xml_failed'] = 'XML support is not compiled into your php install. You can still use the system, but will not be able to use any of the remote module installation functions.';
 $lang['test_check_xml_func'] = 'Checking for basic XML (expat) support';
 $lang['test_could_not_connect_db'] = 'Could not connect to the database. Verify that username and password are correct, and that the user has access to the given database.';
 $lang['test_could_not_create_table'] = 'Could not create a table. Verify that the user has privileges to create tables in the given database.';
