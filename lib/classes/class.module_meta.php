@@ -124,12 +124,6 @@ final class module_meta
 			  // now do the test
 			  $res = $object->HasCapability($capability,$params);
 			  $this->_data['capability'][$sig][$onemodule] = $res;
-			  
-// 			  if( $loaded_it )
-// 			  {
-// 				  debug_display('unload '.$onemodule);
-// 				  ModuleOperations::get_instance()->unload_module($onemodule);
-// 			  }
 		  }
 
 		  debug_buffer('done building module capability list');
@@ -200,12 +194,6 @@ final class module_meta
 				  // now do the test
 				  $res = $object->$method();
 				  $this->_data['methods'][$method][$onemodule] = $res;
-
-				  // 	    if( $loaded_it )
-				  // 	      {
-				  // 			  debug_display('unload '.$onemodule);
-				  // 			  ModuleOperations::get_instance()->unload_module($onemodule);
-				  // 	      }
 			  }
 
 		  // store it.

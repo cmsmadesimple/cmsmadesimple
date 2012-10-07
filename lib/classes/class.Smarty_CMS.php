@@ -126,6 +126,10 @@ class Smarty_CMS extends SmartyBC
 		}
 		else if(cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE)) {
 		
+		  $this->addPluginsDir(cms_join_path($config['root_path'],
+						     $config['admin_dir'],
+						     'plugins'));
+
 			$this->setCaching(false);
 			$this->force_compile = true;
 			$this->setTemplateDir(cms_join_path($config['root_path'],$config['admin_dir'],'templates'));

@@ -53,50 +53,36 @@ class CmsNls
     if( $str == $this->fullname() ) return TRUE;
     $aliases = $this->aliases();
     if( !is_array($aliases) ) $aliases = explode(',',$aliases);
-    if( is_array($aliases) && count($aliases) )
-      {
-	for( $i = 0; $i < count($aliases); $i++ )
-	  {
-	    if( $aliases[$i] == $str ) return TRUE;
-	  }
+    if( is_array($aliases) && count($aliases) ) {
+      for( $i = 0; $i < count($aliases); $i++ ) {
+	if( $aliases[$i] == $str ) return TRUE;
       }
+    }
     return FALSE;
   }
 
   public function name()
   {
     return $this->_key;
-//     $name = get_class();
-//     if( endswith($name,'_nls') )
-//       {
-// 	$name = substr($name,0,strlen($name)-4);
-//       }
-//     return $name;
   }
 
   public function isocode()
   {
-    if( !$this->_isocode )
-      {
-	return substr($this->_fullname,0,2);
-      }
+    if( !$this->_isocode ) {
+      return substr($this->_fullname,0,2);
+    }
     return $this->_isocode;
   }
 
   public function display()
   {
-    if( $this->_display )
-      {
-	return $this->_display;
-      }
+    if( $this->_display ) {
+      return $this->_display;
+    }
   }
 
   public function locale()
   {
-//     if( !$this->_locale ) {
-//       debug_display($this);
-//       return $this->name();
-//     }
     return $this->_locale;
   }
 
@@ -115,12 +101,11 @@ class CmsNls
 
   public function aliases()
   {
-    if( $this->_aliases )
-      {
-	if( is_array($this->_aliases) )
-	  return $this->_aliases;
-	return explode(',',$this->_aliases);
-      }
+    if( $this->_aliases ) {
+      if( is_array($this->_aliases) )
+	return $this->_aliases;
+      return explode(',',$this->_aliases);
+    }
   }
 
   public function key()
@@ -146,70 +131,58 @@ class CmsNls
     $obj = new CmsNls();
 
     // name and key
-    if( isset($data['englishlang']) )
-      {
-	foreach( $data['englishlang'] as $k => $v )
-	  {
-	    $obj->_fullname = $v;
-	    $obj->_key = $k;
-	    break;
-	  }
+    if( isset($data['englishlang']) ) {
+      foreach( $data['englishlang'] as $k => $v ) {
+	$obj->_fullname = $v;
+	$obj->_key = $k;
+	break;
       }
+    }
 
     // get the display value
-    if( isset($data['language'][$obj->_key]) )
-      {
-	$obj->_display = $data['language'][$obj->_key];
-      }
+    if( isset($data['language'][$obj->_key]) ) {
+      $obj->_display = $data['language'][$obj->_key];
+    }
 
     // get the isocode?
-    if( isset($data['isocode'][$obj->_key]) )
-      {
-	$obj->_isocode = $data['isocode'][$obj->_key];
+    if( isset($data['isocode'][$obj->_key]) ) {
+      $obj->_isocode = $data['isocode'][$obj->_key];
+    }
+    else {
+      $t = explode('_',$obj->_key);
+      if( is_array($t) && count($t) ) {
+	$obj->_isocode = $t[0];
       }
-    else
-      {
-	$t = explode('_',$obj->_key);
-	if( is_array($t) && count($t) )
-	  {
-	    $obj->_isocode = $t[0];
-	  }
-      }
+    }
 
     // get the locale
-    if( isset($data['locale'][$obj->_key]) )
-      {
-	$obj->_locale = $data['locale'][$obj->_key];
-      }
+    if( isset($data['locale'][$obj->_key]) ) {
+      $obj->_locale = $data['locale'][$obj->_key];
+    }
 
     // get the encoding
-    if( isset($data['encoding'][$obj->_key]) )
-      {
-	$obj->_encoding = $data['encoding'][$obj->_key];
-      }
+    if( isset($data['encoding'][$obj->_key]) ) {
+      $obj->_encoding = $data['encoding'][$obj->_key];
+    }
 
-    if( isset($data['htmlarea'][$obj->_key]) )
-      {
-	$obj->_htmlarea = $data['htmlarea'][$obj->_key];
-      }
+    if( isset($data['htmlarea'][$obj->_key]) ) {
+      $obj->_htmlarea = $data['htmlarea'][$obj->_key];
+    }
 
     // get the direction
-    if( isset($data['direction'][$obj->_key]) )
-      {
-	$obj->_direction = $data['direction'][$obj->_key];
-      }
+    if( isset($data['direction'][$obj->_key]) ) {
+      $obj->_direction = $data['direction'][$obj->_key];
+    }
 
     // get aliases
-    if( isset($data['alias']) )
-      {
-	$obj->_aliases= array_keys($data['alias']);
-      }
+    if( isset($data['alias']) ) {
+      $obj->_aliases= array_keys($data['alias']);
+    }
 
-    if( $obj->_key == '' )
-      {
-	debug_display($data);
-	debug_display($obj); die();
-      }
+    if( $obj->_key == '' ) {
+      debug_display($data);
+      debug_display($obj); die();
+    }
     return $obj;
   }
 } // end of class

@@ -23,14 +23,6 @@
  * @ignore
  */
 
-/**
- * A function for auto-loading classes.
- *
- * @since 1.7
- * @param string A class name
- * @return boolean
- */
-
 function __cms_load($filename)
 {
   $gCms = cmsms();
@@ -42,6 +34,15 @@ function __cms_load($filename)
   debug_buffer("Loading $filename = $mem bytes for an approximate total of $_cumulative");
 }
 
+/**
+ * A function for auto-loading classes.
+ *
+ * @since 1.7
+ * @internal
+ * @ignore
+ * @param string A class name
+ * @return boolean
+ */
 function cms_autoloader($classname)
 {
   //if( $classname != 'Smarty_CMS' && $classname != 'Smarty_Parser' && startswith($classname,'Smarty') ) return;
@@ -50,27 +51,24 @@ function cms_autoloader($classname)
 
   // standard classes
   $fn = cms_join_path($config['root_path'],'lib','classes',"class.{$classname}.php");
-  if( file_exists($fn) )
-    {
-      __cms_load($fn);
-      return;
-    }
+  if( file_exists($fn) ) {
+    __cms_load($fn);
+    return;
+  }
 
   $lowercase = strtolower($classname);
   $fn = cms_join_path($config['root_path'],'lib','classes',"class.{$lowercase}.inc.php");
-  if( file_exists($fn) && $classname != 'Content' )
-    {
-      __cms_load($fn);
-      return;
-    }
+  if( file_exists($fn) && $classname != 'Content' ) {
+    __cms_load($fn);
+    return;
+  }
 
   // standard interfaces
   $fn = cms_join_path($config['root_path'],'lib','classes',"interface.{$classname}.php");
-  if( file_exists($fn) )
-    {
-      __cms_load($fn);
-      return;
-    }
+  if( file_exists($fn) ) {
+    __cms_load($fn);
+    return;
+  }
 
   global $CMS_LAZYLOAD_MODULES;
   global $CMS_INSTALL_PAGE;
@@ -78,45 +76,38 @@ function cms_autoloader($classname)
 
   // standard content types
   $fn = cms_join_path($config['root_path'],'lib','classes','contenttypes',"{$classname}.inc.php");
-  if( file_exists($fn) )
-    {
-      __cms_load($fn);
-      return;
-    }
+  if( file_exists($fn) ) {
+    __cms_load($fn);
+    return;
+  }
 
   // module loaded content types
   $contentops = ContentOperations::get_instance();
-  if( $contentops )
-    {
-      // why would this ever NOT be true.. dunno, but hey.
-      $types = $contentops->ListContentTypes();
-      if( in_array(strtolower($classname),array_keys($types)) )
-	{
-	  $contentops->LoadContentType(strtolower($classname));
-	  return;
-	}
-    }
-
-  $fn = $config['root_path']."/modules/{$classname}/{$classname}.module.php";
-  if( file_exists($fn) )
-    {
-      __cms_load($fn);
+  if( $contentops ) {
+    // why would this ever NOT be true.. dunno, but hey.
+    $types = $contentops->ListContentTypes();
+    if( in_array(strtolower($classname),array_keys($types)) ) {
+      $contentops->LoadContentType(strtolower($classname));
       return;
     }
+  }
+
+  $fn = $config['root_path']."/modules/{$classname}/{$classname}.module.php";
+  if( file_exists($fn) ) {
+    __cms_load($fn);
+    return;
+  }
 
   $list = ModuleOperations::get_instance()->GetLoadedModules();
-  if( is_array($list) && count($list) )
-    {
-      foreach( array_keys($list) as $modname )
-	{
-	  $fn = $config['root_path']."/modules/$modname/lib/class.$classname.php";
-	  if( file_exists( $fn ) )
-	    {
-	      __cms_load($fn);
-	      return;
-	    }
-	}
+  if( is_array($list) && count($list) ) {
+    foreach( array_keys($list) as $modname ) {
+      $fn = $config['root_path']."/modules/$modname/lib/class.$classname.php";
+      if( file_exists( $fn ) ) {
+	__cms_load($fn);
+	return;
+      }
     }
+  }
   // module classes
 }
 

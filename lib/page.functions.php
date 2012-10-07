@@ -38,95 +38,80 @@ function check_login($no_redirect = false)
 {  
   $config = cmsms()->GetConfig();
 
-	//Handle a current login if one is in queue in the SESSION
-	if (isset($_SESSION['login_user_id']))
-	{
-		debug_buffer("Found login_user_id.  Going to generate the user object.");
-		generate_user_object($_SESSION['login_user_id']);
-		unset($_SESSION['login_user_id']);
+  //Handle a current login if one is in queue in the SESSION
+  if (isset($_SESSION['login_user_id'])) {
+    debug_buffer("Found login_user_id.  Going to generate the user object.");
+    generate_user_object($_SESSION['login_user_id']);
+    unset($_SESSION['login_user_id']);
+  }
+
+  if (isset($_SESSION['login_cms_language'])) {
+    debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
+    cms_cookies::set('cms_language', $_SESSION['login_cms_language']);
+    unset($_SESSION['login_cms_language']);
+  }
+
+  if (!isset($_SESSION["cms_admin_user_id"])) {
+    debug_buffer('No session found.  Now check for cookies');
+    if( cms_cookies::exists('cms_admin_user_id') && 
+	cms_cookies::exists('cms_passhash') ) {
+      debug_buffer('Cookies found, do a passhash check');
+      if (check_passhash(cms_cookies::get('cms_admin_user_id'), 
+			 cms_cookies::get('cms_passhash'))) {
+	debug_buffer('passhash check succeeded...  creating session object');
+	generate_user_object(cms_cookies::get('cms_admin_user_id'));
+      }
+      else {
+	debug_buffer('passhash check failed...  redirect to login');
+	$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
+	if (false == $no_redirect) {
+	  redirect($config['admin_url']."/login.php");
 	}
+	return false;
+      }
+    }
+    else {
+      debug_buffer('No cookies found.  Redirect to login.');
+      $_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
+      if (false == $no_redirect) {
+	redirect($config['admin_url']."/login.php");
+      }
+      return false;
+    }
+  }
 
-	if (isset($_SESSION['login_cms_language']))
-	{
-		debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
-		cms_cookies::set('cms_language', $_SESSION['login_cms_language']);
-		unset($_SESSION['login_cms_language']);
+  global $CMS_ADMIN_PAGE;
+  if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE) ) {
+    if( !isset($_SESSION[CMS_USER_KEY]) ) {
+      // it's not in the session, try to grab something from cookies
+      if( cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) {
+	$_SESSION[CMS_USER_KEY] = cms_cookies::get(CMS_SECURE_PARAM_NAME);
+      }
+    }
+
+    // now we've got to check the request
+    // and make sure it matches the session key
+    if( !isset($_SESSION[CMS_USER_KEY]) || 
+	!isset($_GET[CMS_SECURE_PARAM_NAME]) ||
+	!isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
+      $v = '<no$!tgonna!$happen>';
+      if( isset($_GET[CMS_SECURE_PARAM_NAME]) ) {
+	$v = $_GET[CMS_SECURE_PARAM_NAME];
+      }
+      else if( isset($_POST[CMS_SECURE_PARAM_NAME]) ) {
+	$v = $_POST[CMS_SECURE_PARAM_NAME];
+      }
+
+      if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) ) {
+	debug_buffer('Session key mismatch problem... redirect to login');
+	if (false == $no_redirect) {
+	  redirect($config['admin_url'].'/login.php');
 	}
-
-	if (!isset($_SESSION["cms_admin_user_id"]))
-	{
-		debug_buffer('No session found.  Now check for cookies');
-		if (isset($_COOKIE["cms_admin_user_id"]) && isset($_COOKIE["cms_passhash"]))
-		{
-			debug_buffer('Cookies found, do a passhash check');
-			if (check_passhash($_COOKIE["cms_admin_user_id"], $_COOKIE["cms_passhash"]))
-			{
-				debug_buffer('passhash check succeeded...  creating session object');
-				generate_user_object($_COOKIE["cms_admin_user_id"]);
-			}
-			else
-			{
-				debug_buffer('passhash check failed...  redirect to login');
-				$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-				if (false == $no_redirect)
-				  {
-				    redirect($config['admin_url']."/login.php");
-				  }
-				return false;
-			}
-		}
-		else
-		{
-			debug_buffer('No cookies found.  Redirect to login.');
-			$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-			if (false == $no_redirect)
-			  {
-			    redirect($config['admin_url']."/login.php");
-			  }
-			return false;
-		}
-	}
-
-	global $CMS_ADMIN_PAGE;
-	if( ($config['debug'] === false) && isset($CMS_ADMIN_PAGE) )
-	  {
-	    if( !isset($_SESSION[CMS_USER_KEY]) )
-	      {
-		// it's not in the session, try to grab something from cookies
-		if( isset($_COOKIE[CMS_SECURE_PARAM_NAME]) )
-		  {
-		    $_SESSION[CMS_USER_KEY] = $_COOKIE[CMS_SECURE_PARAM_NAME];
-		  }
-	      }
-
-	    // now we've got to check the request
-	    // and make sure it matches the session key
-	    if( !isset($_SESSION[CMS_USER_KEY]) || 
-		!isset($_GET[CMS_SECURE_PARAM_NAME]) ||
-                !isset($_POST[CMS_SECURE_PARAM_NAME]) )
-	      {
-		$v = '<no$!tgonna!$happen>';
-		if( isset($_GET[CMS_SECURE_PARAM_NAME]) )
-		  {
-		    $v = $_GET[CMS_SECURE_PARAM_NAME];
-		  }
-		else if( isset($_POST[CMS_SECURE_PARAM_NAME]) )
-		  {
-		    $v = $_POST[CMS_SECURE_PARAM_NAME];
-		  }
-
-		if( $v != $_SESSION[CMS_USER_KEY] && !isset($config['stupidly_ignore_xss_vulnerability']) )
-		  {
-		    debug_buffer('Session key mismatch problem... redirect to login');
-		    if (false == $no_redirect)
-		      {
-			redirect($config['admin_url'].'/login.php');
-		      }
-		    return false;
-		  }
-	      }
-	  }
-	return true;
+	return false;
+      }
+    }
+  }
+  return true;
 }
 
 
@@ -139,19 +124,14 @@ function check_login($no_redirect = false)
  */
 function get_userid($check = true)
 {
-	if ($check)
-	{
-		check_login(); //It'll redirect out to login if it fails
-	}
+  if ($check) {
+    check_login(); //It'll redirect out to login if it fails
+  }
 
-	if (isset($_SESSION["cms_admin_user_id"]))
-	{
-		return $_SESSION["cms_admin_user_id"];
-	}
-	else
-	{
-		return false;
-	}
+  if (isset($_SESSION["cms_admin_user_id"])) {
+    return $_SESSION["cms_admin_user_id"];
+  }
+  return false;
 }
 
 /**
@@ -165,20 +145,20 @@ function get_userid($check = true)
  */
 function check_passhash($userid, $checksum)
 {
-	$check = false;
+  $check = false;
 
-	$gCms = cmsms();
-	$config = $gCms->GetConfig();
+  $gCms = cmsms();
+  $config = $gCms->GetConfig();
 
-	$userops = $gCms->GetUserOperations();
-	$oneuser = $userops->LoadUserByID($userid);
+  $userops = $gCms->GetUserOperations();
+  $oneuser = $userops->LoadUserByID($userid);
 
-	if ($oneuser && (string)$checksum != '' && $checksum == md5(md5($config['root_path'] . '--' . $oneuser->password)))
-	{
-		$check = true;
-	}
+  if ($oneuser && (string)$checksum != '' && 
+      $checksum == md5(md5($config['root_path'] . '--' . $oneuser->password))) {
+    $check = true;
+  }
 
-	return $check;
+  return $check;
 }
 
 /**
@@ -188,6 +168,7 @@ function check_passhash($userid, $checksum)
  * the details.
  *
  * @internal
+ * @ignore
  * @access private
  * @since 0.5
  * @param integer The admin user id
@@ -196,18 +177,17 @@ function check_passhash($userid, $checksum)
 function generate_user_object($userid)
 {
   $gCms = cmsms();
-	$config = $gCms->GetConfig();
+  $config = $gCms->GetConfig();
 
-	$userops =& $gCms->GetUserOperations();
-	$oneuser =& $userops->LoadUserByID($userid);
+  $userops = $gCms->GetUserOperations();
+  $oneuser = $userops->LoadUserByID($userid);
 
-	if ($oneuser)
-	{
-		$_SESSION['cms_admin_user_id'] = $userid;
-		$_SESSION['cms_admin_username'] = $oneuser->username;
-		cms_cookies::set('cms_admin_user_id', $oneuser->id);
-		cms_cookies::set('cms_passhash', md5(md5($config['root_path'] . '--' . $oneuser->password)));
-	}
+  if ($oneuser) {
+    $_SESSION['cms_admin_user_id'] = $userid;
+    $_SESSION['cms_admin_username'] = $oneuser->username;
+    cms_cookies::set('cms_admin_user_id', $oneuser->id);
+    cms_cookies::set('cms_passhash', md5(md5($config['root_path'] . '--' . $oneuser->password)));
+  }
 }
 
 
@@ -223,22 +203,20 @@ function generate_user_object($userid)
 function load_all_permissions($userid)
 {
   $gCms = cmsms();
-	$db = $gCms->GetDb();
-	$variables =& $gCms->variables;
+  $db = $gCms->GetDb();
+  $variables =& $gCms->variables;
 
-	$perms = array();
-
-	$query = "SELECT DISTINCT permission_name FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = gp.permission_id INNER JOIN ".cms_db_prefix()."groups gr ON gr.group_id = ug.group_id WHERE ug.user_id = ? AND gr.active = 1";
-	$result = &$db->Execute($query, array($userid));
-	while ($result && !$result->EOF)
-	{
-		$perms[] =& $result->fields['permission_name'];
-		$result->MoveNext();
-	}
+  $perms = array();
+  $query = "SELECT DISTINCT permission_name FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = gp.permission_id INNER JOIN ".cms_db_prefix()."groups gr ON gr.group_id = ug.group_id WHERE ug.user_id = ? AND gr.active = 1";
+  $result = &$db->Execute($query, array($userid));
+  while ($result && !$result->EOF) {
+    $perms[] =& $result->fields['permission_name'];
+    $result->MoveNext();
+  }
 	
-	if ($result) $result->Close();
+  if ($result) $result->Close();
 
-	$variables['userperms'] = $perms;
+  $variables['userperms'] = $perms;
 }
 
 /**
@@ -252,27 +230,24 @@ function load_all_permissions($userid)
  */
 function check_permission($userid, $permname)
 {
-	$check = false;
+  $check = false;
 
-	$gCms = cmsms();
-	$userops = $gCms->GetUserOperations();
-	$adminuser = $userops->UserInGroup($userid,1);
+  $gCms = cmsms();
+  $userops = $gCms->GetUserOperations();
+  $adminuser = $userops->UserInGroup($userid,1);
 
-	if (!isset($gCms->variables['userperms']))
-	{
-		load_all_permissions($userid);
-	}
+  if (!isset($gCms->variables['userperms'])) {
+    load_all_permissions($userid);
+  }
 
-	if (isset($gCms->variables['userperms']))
-	{
-		if (in_array($permname, $gCms->variables['userperms']) || 
-		    $adminuser || ($userid == 1) )
-		{
-			$check = true;
-		}
-	}
+  if (isset($gCms->variables['userperms'])) {
+    if (in_array($permname, $gCms->variables['userperms']) || 
+	$adminuser || ($userid == 1) ) {
+      $check = true;
+    }
+  }
 
-	return $check;
+  return $check;
 }
 
 
@@ -289,42 +264,38 @@ function check_permission($userid, $permname)
  */
 function check_ownership($userid, $contentid = '', $strict = false)
 {
-	$check = false;
-	$gCms = cmsms();
+  $check = false;
+  $gCms = cmsms();
 
-	$userops = $gCms->GetUserOperations();
-	$adminuser = $userops->UserInGroup($userid,1);
-	if( $adminuser ) return true;
+  $userops = $gCms->GetUserOperations();
+  $adminuser = $userops->UserInGroup($userid,1);
+  if( $adminuser ) return true;
 
-	if (!isset($gCms->variables['ownerpages']))
-	{
-		$db = $gCms->GetDb();
+  if (!isset($gCms->variables['ownerpages'])) {
+    $db = $gCms->GetDb();
 
-		$variables = &$gCms->variables;
-		$tmpa = array();
+    $variables = &$gCms->variables;
+    $tmpa = array();
 
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
-		$result = &$db->Execute($query, array($userid));
+    $query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
+    $result = &$db->Execute($query, array($userid));
 
-		while ($result && !$result->EOF)
-		{
-			$tmpa[] = $result->fields['content_id'];
-			$result->MoveNext();
-		}
-		$gCms->variables['ownerpages'] = $tmpa;
+    while ($result && !$result->EOF) {
+      $tmpa[] = $result->fields['content_id'];
+      $result->MoveNext();
+    }
+    $gCms->variables['ownerpages'] = $tmpa;
 
-		if ($result) $result->Close();
-	}
+    if ($result) $result->Close();
+  }
 
-	if (isset($gCms->variables['ownerpages']))
-	{
-		if (in_array($contentid, $gCms->variables['ownerpages']))
-		{
-			$check = true;
-		}
-	}
+  if (isset($gCms->variables['ownerpages'])) {
+    if (in_array($contentid, $gCms->variables['ownerpages'])) {
+      $check = true;
+    }
+  }
 
-	return $check;
+  return $check;
 }
 
 /**
@@ -340,23 +311,20 @@ function check_ownership($userid, $contentid = '', $strict = false)
  */
 function check_authorship($userid, $contentid = '')
 {
-	$check = false;
-	$gCms = cmsms();
+  $check = false;
+  $gCms = cmsms();
 
-	if (!isset($gCms->variables['authorpages']))
-	{
-	  author_pages($userid);
-	}
+  if (!isset($gCms->variables['authorpages'])) {
+    author_pages($userid);
+  }
 
-	if (isset($gCms->variables['authorpages']))
-	{
-	  if (in_array($contentid, $gCms->variables['authorpages']))
-	    {
-	      $check = true;
-	    }
-	}
+  if (isset($gCms->variables['authorpages'])) {
+    if (in_array($contentid, $gCms->variables['authorpages'])) {
+      $check = true;
+    }
+  }
 
-	return $check;
+  return $check;
 }
 
 /**
@@ -372,38 +340,32 @@ function author_pages($userid)
   $gCms = cmsms();
   $db = $gCms->GetDb();
   $userops = $gCms->GetUserOperations();
-        $variables = &$gCms->variables;
-	if (!isset($variables['authorpages']))
-	{
-		// Get all of the pages this user owns
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
-		$data = $db->GetCol($query, array($userid));
+  $variables = &$gCms->variables;
+  if (!isset($variables['authorpages'])) {
+    // Get all of the pages this user owns
+    $query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
+    $data = $db->GetCol($query, array($userid));
 
-		// Get all of the pages this user has access to.
-		$query = "SELECT user_id,content_id FROM ".cms_db_prefix()."additional_users";
-		$result = $db->GetArray($query);
-		foreach( $result as $row )
-		{
-		  $uid = $row['user_id'];
-		  $content_id = $row['content_id'];
-		  if( $uid == $userid )
-		    {
-		      $data[] = $content_id;
-		    }
-		  else if( $uid < 0 )
-		    {
-		      $gid = $uid * -1;
-		      if( $userops->UserInGroup($userid,$gid) )
-			{
-			  $data[] = $content_id;
-			}
-		    }
-		}
-
-		$variables['authorpages'] = $data;
+    // Get all of the pages this user has access to.
+    $query = "SELECT user_id,content_id FROM ".cms_db_prefix()."additional_users";
+    $result = $db->GetArray($query);
+    foreach( $result as $row ) {
+      $uid = $row['user_id'];
+      $content_id = $row['content_id'];
+      if( $uid == $userid ) {
+	$data[] = $content_id;
+      }
+      else if( $uid < 0 ) {
+	$gid = $uid * -1;
+	if( $userops->UserInGroup($userid,$gid) ) {
+	  $data[] = $content_id;
 	}
+      }
+    }
+    $variables['authorpages'] = $data;
+  }
 
-	return $variables['authorpages'];
+  return $variables['authorpages'];
 }
 
 /**
@@ -419,14 +381,13 @@ function author_pages($userid)
  */
 function quick_check_authorship($contentid, $hispages)
 {
-	$check = false;
+  $check = false;
 
-	if (in_array($contentid, $hispages))
-	{
-		$check = true;
-	}
+  if (in_array($contentid, $hispages)) {
+    $check = true;
+  }
 
-	return $check;
+  return $check;
 }
 
 
@@ -450,24 +411,20 @@ function audit($itemid, $itemname, $action)
   $ip_addr = '';
   if( $itemid == '' ) $itemid = -1;
   
-  if (isset($_SESSION["cms_admin_user_id"]))
-    {
-      $userid = $_SESSION["cms_admin_user_id"];
-      $ip_addr = cms_utils::get_real_ip();
+  if (isset($_SESSION["cms_admin_user_id"])) {
+    $userid = $_SESSION["cms_admin_user_id"];
+    $ip_addr = cms_utils::get_real_ip();
+  }
+  else {
+    if (isset($_SESSION['login_user_id'])) {
+      $userid = $_SESSION['login_user_id'];
+      $username = $_SESSION['login_user_username'];
     }
-  else
-    {
-      if (isset($_SESSION['login_user_id']))
-	{
-	  $userid = $_SESSION['login_user_id'];
-	  $username = $_SESSION['login_user_username'];
-	}
-    }
+  }
   
-  if (isset($_SESSION["cms_admin_username"]))
-    {
-      $username = $_SESSION["cms_admin_username"];
-    }
+  if (isset($_SESSION["cms_admin_username"])) {
+    $username = $_SESSION["cms_admin_username"];
+  }
   
   if (!isset($userid) || $userid == "") {
     $userid = 0;
@@ -483,6 +440,7 @@ function audit($itemid, $itemname, $action)
 /**
  * Gets the given site prefernce
  *
+ * @deprecated
  * @since 0.6
  * @param string The preference name
  * @param mixed  The default value if the preference does not exist
@@ -497,6 +455,7 @@ function get_site_preference($prefname, $defaultvalue = '')
 /**
  * Removes the given site preference
  *
+ * @deprecated
  * @param string Preference name to remove
  * @param boolean Wether or not to remove all preferences that are LIKE the supplied name
  * @return void
@@ -510,6 +469,7 @@ function remove_site_preference($prefname,$uselike=false)
 /**
  * Sets the given site perference with the given value.
  *
+ * @deprecated
  * @since 0.6
  * @param string The preference name
  * @param mixed  The preference value (will be stored as a string)
@@ -524,6 +484,7 @@ function set_site_preference($prefname, $value)
 /**
  * Gets the given preference for the given userid.
  *
+ * @deprecated
  * @since 0.3
  * @param integer The user id
  * @param string  The preference name
@@ -538,6 +499,7 @@ function get_preference($userid, $prefname, $default='')
 /**
  * Sets the given perference for the given userid with the given value.
  *
+ * @deprecated
  * @since 0.3
  * @param integer The user id
  * @param string  The preference name
@@ -559,15 +521,13 @@ function set_preference($userid, $prefname, $value)
  */
 function & stripslashes_deep(&$value)
 { 
-        if (is_array($value)) 
-        { 
-                $value = array_map('stripslashes_deep', $value); 
-        } 
-        elseif (!empty($value) && is_string($value)) 
-        { 
-                $value = stripslashes($value); 
-        } 
-        return $value;
+  if (is_array($value)) {
+    $value = array_map('stripslashes_deep', $value); 
+  } 
+  elseif (!empty($value) && is_string($value)) {
+    $value = stripslashes($value); 
+  } 
+  return $value;
 }
 
 /**
@@ -596,47 +556,38 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
   $result = '';
   $uid = get_userid(false);
 
-  if ($enablewysiwyg == true || $forcewysiwyg)
-    {
-      $module = cms_utils::get_wysiwyg_module($forcewysiwyg);
-      if( $module )
-	{
-	  $result = $module->WYSIWYGTextArea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
-	}
+  if ($enablewysiwyg == true || $forcewysiwyg) {
+    $module = cms_utils::get_wysiwyg_module($forcewysiwyg);
+    if( $module ) {
+      $result = $module->WYSIWYGTextArea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
     }
+  }
 
-  if( !$result && $wantedsyntax )
-    {
-      // here we should get a list of installed/available modules.
-      $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($forcewysiwyg);
-      if( $module )
-	{
-	  $result = $module->SyntaxTextArea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
-	}
+  if( !$result && $wantedsyntax ) {
+    // here we should get a list of installed/available modules.
+    $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($forcewysiwyg);
+    if( $module ) {
+      $result = $module->SyntaxTextArea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
     }
+  }
 
-  if ($result == '')
-    {
-      $result = '<textarea name="'.$name.'" cols="'.$width.'" rows="'.$height.'"';
-      if ($classname != '')
-	{
-	  $result .= ' class="'.$classname.'"';
-	}
-      else
-	{
-	  $result .= ' class="cms_textarea"';
-	}
-      if ($id != '')
-	{
-	  $result .= ' id="'.$id.'"';
-	}
-      if( !empty( $addtext ) )
-	{
-	  $result .= ' '.$addtext;
-	}
+  if ($result == '') {
+    $result = '<textarea name="'.$name.'" cols="'.$width.'" rows="'.$height.'"';
+    if ($classname != '') {
+      $result .= ' class="'.$classname.'"';
+    }
+    else {
+      $result .= ' class="cms_textarea"';
+    }
+    if ($id != '') {
+      $result .= ' id="'.$id.'"';
+    }
+    if( !empty( $addtext ) ) {
+      $result .= ' '.$addtext;
+    }
       
-      $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
-    }
+    $result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
+  }
   
   return $result;
 }
@@ -651,42 +602,37 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
  * @param limit - the amount of items to list per page
  * @return a string containing links to all the pages (ex. next 1,2 prev)
  */
- function pagination($page, $totalrows, $limit)
- {
+function pagination($page, $totalrows, $limit)
+{
    $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-	$page_string = "";
-	$from = ($page * $limit) - $limit;
-	$numofpages = (int)($totalrows / $limit);
-	if( ($totalrows % $limit) != 0 ) ++$numofpages;
-	if ($numofpages > 1)
-	{
-		if($page != 1)
-		{
-			$pageprev = $page-1;
-			$page_string .= '<a href="'.$_SERVER['PHP_SELF'].$urlext.'&amp;page=1">'.lang('first').'</a>&nbsp;';
-			$page_string .= "<a href=\"".$_SERVER['PHP_SELF'].$urlext."&amp;page=$pageprev\">".lang('previous')."</a>&nbsp;";
-		}
-		else
-		{
-			$page_string .= lang('first')." ";
-			$page_string .= lang('previous')." ";
-		}
+   $page_string = "";
+   $from = ($page * $limit) - $limit;
+   $numofpages = (int)($totalrows / $limit);
+   if( ($totalrows % $limit) != 0 ) ++$numofpages;
+   if ($numofpages > 1) {
+     if($page != 1) {
+       $pageprev = $page-1;
+       $page_string .= '<a href="'.$_SERVER['PHP_SELF'].$urlext.'&amp;page=1">'.lang('first').'</a>&nbsp;';
+       $page_string .= "<a href=\"".$_SERVER['PHP_SELF'].$urlext."&amp;page=$pageprev\">".lang('previous')."</a>&nbsp;";
+     }
+     else {
+       $page_string .= lang('first')." ";
+       $page_string .= lang('previous')." ";
+     }
 
-		$page_string .= '&nbsp;'.lang('page')."&nbsp;$page&nbsp;".lang('of')."&nbsp;$numofpages&nbsp;";
+     $page_string .= '&nbsp;'.lang('page')."&nbsp;$page&nbsp;".lang('of')."&nbsp;$numofpages&nbsp;";
 
-		if(($totalrows - ($limit * $page)) > 0)
-		{
-			$pagenext = $page+1;
-			$page_string .= "<a href=\"".$_SERVER['PHP_SELF'].$urlext."&amp;page=$pagenext\">".lang('next')."</a>&nbsp;";
-			$page_string .= '<a href="'.$_SERVER['PHP_SELF'].$urlext.'&amp;page='.$numofpages.'">'.lang('last').'</a>';
-		}
-		else
-		{
-			$page_string .= lang('next')." ";
-			$page_string .= lang('last')." ";
-		}
-	}
-	return $page_string;
+     if(($totalrows - ($limit * $page)) > 0) {
+       $pagenext = $page+1;
+       $page_string .= "<a href=\"".$_SERVER['PHP_SELF'].$urlext."&amp;page=$pagenext\">".lang('next')."</a>&nbsp;";
+       $page_string .= '<a href="'.$_SERVER['PHP_SELF'].$urlext.'&amp;page='.$numofpages.'">'.lang('last').'</a>';
+     }
+     else {
+       $page_string .= lang('next')." ";
+       $page_string .= lang('last')." ";
+     }
+   }
+   return $page_string;
  }
 
 
@@ -726,34 +672,28 @@ function create_file_dropdown($name,$dir,$value,$allowed_extensions,$optprefix='
   $files = get_matching_files($dir,$allowed_extensions,true,true,$fileprefix,$excludefiles);
   if( $files === false ) return false;
   $out = "<select name=\"{$name}\" id=\"{$name}\" {$extratext}>\n";
-  if( $allownone )
-    {
-      $txt = '';
-      if( empty($value) )
-	{
-	  $txt = 'selected="selected"';
-	}
-      $out .= "  <option value=\"-1\" $txt>--- ".lang('none')." ---</option>\n";
+  if( $allownone ) {
+    $txt = '';
+    if( empty($value) ) {
+      $txt = 'selected="selected"';
     }
+    $out .= "  <option value=\"-1\" $txt>--- ".lang('none')." ---</option>\n";
+  }
 
-  if( $sortresults )
-    {
-      natcasesort($files);
+  if( $sortresults ) {
+    natcasesort($files);
+  }
+  foreach( $files as $file ) {
+    $txt = '';
+    $opt = $file;
+    if( !empty($optprefix) ) {
+      $opt = $optprefix.'/'.$file;
     }
-  foreach( $files as $file )
-    {
-      $txt = '';
-      $opt = $file;
-      if( !empty($optprefix) )
-	{
-	  $opt = $optprefix.'/'.$file;
-	}
-      if( $opt == $value )
-	{
-	  $txt = 'selected="selected"';
-	}
-      $out .= "  <option value=\"{$opt}\" {$txt}>{$file}</option>\n";
+    if( $opt == $value ) {
+      $txt = 'selected="selected"';
     }
+    $out .= "  <option value=\"{$opt}\" {$txt}>{$file}</option>\n";
+  }
   $out .= "</select>";
   return $out;
 }

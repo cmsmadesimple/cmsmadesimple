@@ -75,6 +75,15 @@ class CmsSingletonException extends CmsException {}
 class CmsInvalidDataException extends CmsException {}
 
 /**
+ * An exception indicating that the requested data could not be found.
+ * 
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.10
+ */
+class CmsDataNotFoundException extends CmsException {}
+
+/**
  * A special exception indicating that a 404 error should be supplied.
  *
  * @package CMS
@@ -84,12 +93,21 @@ class CmsInvalidDataException extends CmsException {}
 class CmsError404Exception extends CmsException {}
 
 /**
- * A special exception indicating that a 404 error should be supplied.
+ * A special exception indicating an error when editing content.
  *
  * @package CMS
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
  * @since 1.11
  */
 class CmsEditContentException extends CmsException {}
+
+/**
+ * A special exception indicating an SQL Error.
+ *
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.11
+ */
+class CmsSQLErrorException extends CmsException {}
 
 ?>

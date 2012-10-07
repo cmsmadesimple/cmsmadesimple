@@ -27,16 +27,16 @@
  * @return string converted
  */
 function code_to_utf8($num) {
-	if ($num <= 0x7F) {
-		return chr($num);
-	} elseif ($num <= 0x7FF) {
-		return chr(($num >> 0x06) + 0xC0).chr(($num & 0x3F) + 128);
-	} elseif ($num <= 0xFFFF) {
-		return chr(($num >> 0x0C) + 0xE0).chr((($num >> 0x06) & 0x3F) + 0x80).chr(($num & 0x3F) + 0x80);
-	} elseif ($num <= 0x1FFFFF) {
-		return chr(($num >> 0x12) + 0xF0).chr((($num >> 0x0C) & 0x3F) + 0x80).chr((($num >> 0x06) & 0x3F) + 0x80).chr(($num & 0x3F) + 0x80);
-	}
-	return ' '; // default value
+  if ($num <= 0x7F) {
+    return chr($num);
+  } elseif ($num <= 0x7FF) {
+    return chr(($num >> 0x06) + 0xC0).chr(($num & 0x3F) + 128);
+  } elseif ($num <= 0xFFFF) {
+    return chr(($num >> 0x0C) + 0xE0).chr((($num >> 0x06) & 0x3F) + 0x80).chr(($num & 0x3F) + 0x80);
+  } elseif ($num <= 0x1FFFFF) {
+    return chr(($num >> 0x12) + 0xF0).chr((($num >> 0x0C) & 0x3F) + 0x80).chr((($num >> 0x06) & 0x3F) + 0x80).chr(($num & 0x3F) + 0x80);
+  }
+  return ' '; // default value
 }
 
 /**

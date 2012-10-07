@@ -50,51 +50,41 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 		$idsuffix = $formcount;
 
 	$goto = 'moduleinterface.php';
-	if( $returnid != '' )
-	{
+	if( $returnid != '' ) {
 	  $hm = $gCms->GetHierarchyManager();
 	  $node = $hm->sureGetNodeById($returnid);
-	  if( $node )
-	    {
-	      $content_obj =& $node->getContent();
-	      if( $content_obj )
-		$goto = $content_obj->GetURL();
-	    }
-	}
-	if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" && strpos($goto,':') !== FALSE )
-	  {
-	    $goto = str_replace('http:','https:',$goto);
+	  if( $node ) {
+	      $content_obj = $node->getContent();
+	      if( $content_obj ) $goto = $content_obj->GetURL();
 	  }
+	}
+	if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" && strpos($goto,':') !== FALSE ) {
+	    $goto = str_replace('http:','https:',$goto);
+	}
 	$goto = ' action="'.$goto.'"';
 	
 	$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'"'.$goto;
 	$text .= ' class="cms_form"';
-	if ($enctype != '')
-	{
+	if ($enctype != '') {
 		$text .= ' enctype="'.$enctype.'"';
 	}
-	if ($extra != '')
-	{
+	if ($extra != '') {
 		$text .= ' '.$extra;
 	}
 	$text .= '>'."\n".'<div class="hidden">'."\n".'<input type="hidden" name="mact" value="'.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).'" />'."\n";
-	if ($returnid != '')
-	{
+	if ($returnid != '') {
 		$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />'."\n";
-		if ($inline)
-		{
+		if ($inline) {
 			$text .= '<input type="hidden" name="'.$modinstance->cms->config['query_var'].'" value="'.$returnid.'" />'."\n";
 		}
 	}
-	else
-	  {
+	else {
 	    $text .= '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'" />'."\n";
-	  }
-	foreach ($params as $key=>$value)
-	{
-	  $value = cms_htmlentities($value);
-	  if ($key != 'module' && $key != 'action' && $key != 'id')
-	    $text .= '<input type="hidden" name="'.$id.$key.'" value="'.$value.'" />'."\n";
+	}
+	foreach ($params as $key=>$value) {
+		$value = cms_htmlentities($value);
+		if ($key != 'module' && $key != 'action' && $key != 'id')
+			$text .= '<input type="hidden" name="'.$id.$key.'" value="'.$value.'" />'."\n";
 	}
 	$text .= "</div>\n";
 

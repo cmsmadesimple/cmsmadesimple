@@ -99,16 +99,14 @@ final class cms_siteprefs
   public static function set($key,$value)
   {
     $db = cmsms()->GetDb();
-    if( !self::exists($key) )
-      {
-		  $query = 'INSERT INTO '.cms_db_prefix().'siteprefs (sitepref_name, sitepref_value) VALUES (?,?)';
-		  $dbr = $db->Execute($query,array($key,$value));
-      }
-    else
-      {
-		  $query = 'UPDATE '.cms_db_prefix().'siteprefs SET sitepref_value = ? WHERE sitepref_name = ?';
-		  $dbr = $db->Execute($query,array($value,$key));
-      }
+    if( !self::exists($key) ) {
+		$query = 'INSERT INTO '.cms_db_prefix().'siteprefs (sitepref_name, sitepref_value) VALUES (?,?)';
+		$dbr = $db->Execute($query,array($key,$value));
+	}
+    else {
+		$query = 'UPDATE '.cms_db_prefix().'siteprefs SET sitepref_value = ? WHERE sitepref_name = ?';
+		$dbr = $db->Execute($query,array($value,$key));
+	}
     self::$_prefs[$key] = $value;
   }
 
@@ -123,11 +121,10 @@ final class cms_siteprefs
   public static function remove($key,$like = FALSE)
   {
     $query = 'DELETE FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name = ?';
-    if( $like )
-      {
-	  $query = 'DELETE FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name LIKE ?';
-	  $key .= '%';
-      }
+    if( $like ) {
+		$query = 'DELETE FROM '.cms_db_prefix().'siteprefs WHERE sitepref_name LIKE ?';
+		$key .= '%';
+	}
     $db = cmsms()->GetDb();
     $db->Execute($query,array($key));
     self::_reset();

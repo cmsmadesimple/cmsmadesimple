@@ -236,13 +236,13 @@ function cms_utf8entities($val)
     return "";
   }
   $val = str_replace( "&#032;", " ", $val );
-  $val = str_replace( "&"            , "\u0026"         , $val );
-  $val = str_replace( ">"            , "\u003E"          , $val );
-  $val = str_replace( "<"            , "\u003C"          , $val );
+  $val = str_replace( "&"  , "\u0026" , $val );
+  $val = str_replace( ">"  , "\u003E" , $val );
+  $val = str_replace( "<"  , "\u003C" , $val );
 
-  $val = str_replace( "\""           , "\u0022"        , $val );
-  $val = str_replace( "!"            , "\u0021"         , $val );
-  $val = str_replace( "'"            , "\u0027"         , $val );
+  $val = str_replace( "\"" , "\u0022" , $val );
+  $val = str_replace( "!"  , "\u0021" , $val );
+  $val = str_replace( "'"  , "\u0027" , $val );
 
   return $val;
 }
