@@ -3096,7 +3096,7 @@ abstract class CMSModule
 	 */
 	function SetCurrentTab($tab)
 	{
-	  $this->__current_tab = $tab;
+	  cms_admin_tabs::set_current_tab($tab);
 	}
 
 
@@ -3109,7 +3109,7 @@ abstract class CMSModule
 	 */ 
 	function StartTabHeaders()
 	{
-		return '<div id="page_tabs">';
+	  return cms_admin_tabs::start_tab_headers();
 	}
 
 	/**
@@ -3125,19 +3125,7 @@ abstract class CMSModule
 	 */ 
 	function SetTabHeader($tabid,$title,$active=false)
 	{
-	  if( $active == FALSE )
-	    {
-	      $active = ($tabid == $this->__current_tab);
-	    }
-
-	  $a="";
-	  if (TRUE == $active)
-	    {
-	      $a=" class='active'";
-	      $this->mActiveTab = $tabid;
-	    }
-	  $tabid = strtolower(str_replace(' ','_',$tabid));
-	  return '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
+	  return cms_admin_tabs::set_tab_header($tabid,$title,$active);
 	}
 
 	/**
@@ -3148,7 +3136,7 @@ abstract class CMSModule
 	 */
 	function EndTabHeaders()
 	{
-		return "</div><!-- EndTabHeaders -->";
+	  return cms_admin_tabs::end_tab_headers();
 	}
 
 	/**
@@ -3159,7 +3147,7 @@ abstract class CMSModule
 	 */
 	function StartTabContent()
 	{
-		return '<div class="clearb"></div><div id="page_content">';
+	  return cms_admin_tabs::start_tab_content();
 	}
 
 	/**
@@ -3170,7 +3158,7 @@ abstract class CMSModule
 	 */
 	function EndTabContent()
 	{
-		return '</div> <!-- EndTabContent -->';
+	  return cms_admin_tabs::end_tab_content();
 	}
 
 	/**
@@ -3183,12 +3171,7 @@ abstract class CMSModule
 	 */
 	function StartTab($tabid, $params = array())
 	{
-		if (FALSE == empty($this->mActiveTab) && $tabid == $this->mActiveTab && FALSE == empty($params['tab_message'])) {
-			$message = $this->ShowMessage($this->Lang($params['tab_message']));
-		} else {
-			$message = '';
-		}
-		return '<div id="' . strtolower(str_replace(' ', '_', $tabid)) . '_c">'.$message;
+	  return cms_admin_theme::start_tab($tabid,$params);
 	}
 
 	/**
@@ -3199,7 +3182,7 @@ abstract class CMSModule
 	 */
 	function EndTab()
 	{
-		return '</div> <!-- EndTab -->';
+	  return cms_admin_tabs::end_tab();
 	}
 
 	/**
