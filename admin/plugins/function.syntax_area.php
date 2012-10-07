@@ -1,6 +1,6 @@
 <?php
 
-function smarty_cms_function_syntax_area($params, &$template)
+function smarty_function_syntax_area($params, &$template)
 {
   $smarty   = $template->smarty;
 

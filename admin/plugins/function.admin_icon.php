@@ -21,6 +21,8 @@ function smarty_function_admin_icon($params,&$template)
     case 'alt':
     case 'class':
     case 'id':
+    case 'name':
+    case 'title':
       $tagparms[$key] = trim($value);
       break;
 
