@@ -1,5 +1,13 @@
-<div class="pagecontainer">
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  $('.helpicon').click(function(){
+    var x = $(this).attr('name');
+    $('#'+x).dialog();
+  });
+});
+</script>
 
+<div class="pagecontainer">
 {$tab_start}
 {$maintab_start}
 
@@ -8,7 +16,7 @@
 		<input type="hidden" name="active_tab" value="maintab" />
 	
 		<div class="pageoverflow">
-			<p class="pagetext">{lang('name')}:</p>
+			<p class="pagetext">*{lang('name')}:&nbsp;{admin_icon name='help_username' icon='info.gif' class='helpicon'}</p>
 			<p class="pageinput"><input type="text" name="user" maxlength="25" value="{$userobj->username}" class="standard" /></p>
 		</div>
 		
@@ -261,3 +269,7 @@
 		<a class="pageback" href="{$backurl}">&#171; {'back'|lang}</a>
 	</p>
 </div>
+
+<div style="display: none;">{strip}
+  <div id="help_username" title="{'help'|lang}">{'help_myaccount_username'|lang}</div>
+{/strip}</div>
