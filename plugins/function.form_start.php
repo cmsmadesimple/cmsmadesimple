@@ -5,6 +5,10 @@ function smarty_cms_function_form_start($params, &$template)
   $smarty   = $template->smarty;
   $tagparms = array();
   $mactparms = array();
+  $tmp = $smarty->get_template_vars('actionparams');
+  if( is_array($tmp) && isset($tmp['action']) ) {
+    $mactparms['action'] = $tmp['action'];
+  }
   $mactparms['module'] = $smarty->get_template_vars('actionmodule');
   $mactparms['mid'] = $smarty->get_template_vars('actionid');
   $mactparms['returnid'] = $smarty->get_template_vars('returnid');
@@ -13,15 +17,19 @@ function smarty_cms_function_form_start($params, &$template)
   $tagparms['enctype'] = 'multipart/form-data';
   $tagparms['action'] = 'moduleinterface.php';
   if( cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
-    $mactparms['action'] = 'defaultadmin';
+    if( !isset($mactparms['action']) ) {
+      $mactparms['action'] = 'defaultadmin';
+    }
     $mactparms['returnid'] = '';
   }
   else if( cmsms()->is_frontend_request() ) {
-    $mactparms['action'] = 'default';
+    if( !isset($mactparms['action']) ) {
+      $mactparms['action'] = 'default';
+    }
     $mactparms['mid'] = 'cntnt01';
   }
 
-  if( $returnid != '' ) {
+  if( $mactparms['returnid'] != '' ) {
     $hm = $gCms->GetHierarchyManager();
     $node = $hm->sureGetNodeById($returnid);
     if( $node ) {
