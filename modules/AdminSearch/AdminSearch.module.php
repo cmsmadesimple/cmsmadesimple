@@ -26,10 +26,9 @@ class AdminSearch extends CMSModule
   function GetVersion()  { return '1.0'; }
   function MinimumCMSVersion()  { return '1.12-alpha0';  }
   function LazyLoadAdmin() { return TRUE; }
-  function LazyLoadFrontend() { return TRUE; }
+  function IsPluginModule() { return false; }
   function GetAuthor() { return 'Calguy1000'; }
   function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
-  function IsPluginModule() { return false; }
   function HasAdmin() { return true; }
   function GetAdminSection() { return 'extensions'; }
 
