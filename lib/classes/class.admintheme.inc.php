@@ -896,19 +896,31 @@ EOT;
     {
       $image_done = $this->DisplayImage('icons/system/accept.gif', lang('success'), '','','systemicon');
       $output = '<div class="pagemcontainer"';
-      if (FALSE == empty($get_var))
-	{
-	  if (FALSE == empty($_GET[$get_var]))
-	    {
-	      $message = lang(cleanValue($_GET[$get_var]));
-	    }
-	  else
-	    {
-	      $message = '';
-	      $output .= ' style="display:none;"';
-	    }
-	}
-      $output .= '><p class="pagemessage">'.$image_done.' '.$message.'</p></div>';
+      if (FALSE == empty($get_var)) {
+		  if (FALSE == empty($_GET[$get_var])) {
+			  $message = lang(cleanValue($_GET[$get_var]));
+		  }
+		  else {
+			  $message = '';
+			  $output .= ' style="display:none;"';
+		  }
+	  }
+	  $out = $message;
+	  if( is_array($message) ) {
+		  if( count($message) == 1 ) {
+			  $out = $message[0];
+		  }
+		  else {
+			  $out = '<ul>';
+			  foreach( $message as $one ) {
+				  if( is_string($one) ) {
+					  $out .= '<li>'.$one.'</li>';
+				  }
+			  }
+			  $out .= '</ul>';
+		  }
+	  }
+      $output .= '><p class="pagemessage">'.$image_done.' '.$out.'</p></div>';
       return $output;
     }
     

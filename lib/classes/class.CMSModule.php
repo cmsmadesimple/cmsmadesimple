@@ -1793,7 +1793,7 @@ abstract class CMSModule
 	{
 	  if( $returnid == '' ) {
 	    if( isset($params['__activetab']) ) {
-	      $this->__current_tab = trim($params['__activetab']);
+	      $this->SetCurrentTab(trim($params['__activetab']));
 	    }
 	    if( isset($params['__errors']) ) {
 	      $this->__errors = explode('::err::',$params['__errors']);
@@ -1810,22 +1810,20 @@ abstract class CMSModule
 	    }
 	  }
 
-	  if ($name != '')
-	    {
-	      //Just in case DoAction is called directly and it's not overridden.
-	      //See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
-	      $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
+	  if ($name != '') {
+	    //Just in case DoAction is called directly and it's not overridden.
+	    //See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
+	    $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
 		
-	      $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
-	      if (@is_file($filename)) {
-		$gCms = cmsms();
-		$db = $gCms->GetDb();
-		$config = $gCms->GetConfig();
-		$smarty = $gCms->GetSmarty();
-		
-		include($filename);
-	      }
+	    $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
+	    if (@is_file($filename)) {
+	      $gCms = cmsms();
+	      $db = $gCms->GetDb();
+	      $config = $gCms->GetConfig();
+	      $smarty = $gCms->GetSmarty();
+	      include($filename);
 	    }
+	  }
 	}
 
 	/**
@@ -2692,10 +2690,9 @@ abstract class CMSModule
           if( $params == '' ) {
             $params = array();
           }
-	  if( $tab != '' )
-	    {
-	      $params['__activetab'] = $tab;
-	    }
+	  if( $tab != '' ) {
+	    $params['__activetab'] = $tab;
+	  }
 	  if( empty($action) ) $action = 'defaultadmin';
 	  $this->Redirect('m1_',$action,'',$params,TRUE);
 	}
@@ -3096,6 +3093,7 @@ abstract class CMSModule
 	 */
 	function SetCurrentTab($tab)
 	{
+	  $this->__current_tab = $tab;
 	  cms_admin_tabs::set_current_tab($tab);
 	}
 
@@ -3261,12 +3259,10 @@ abstract class CMSModule
 	 */
 	function ShowMessage($message)
 	{
-	  $gCms = cmsms();
-	  if (isset($gCms->variables['admintheme']))
-	    {
-	      $admintheme =& $gCms->variables['admintheme']; //php4 friendly
-	      return $admintheme->ShowMessage($message);
-	    }
+	  $theme = cms_utils::get_theme_object();
+	  if( is_object($theme) ) {
+	    return $theme->ShowMessage($message);
+	  }
 	  return '';
 	}
 
