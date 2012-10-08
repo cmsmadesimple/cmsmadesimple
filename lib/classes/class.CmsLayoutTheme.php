@@ -1,0 +1,378 @@
+<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
+#CMS - CMS Made Simple
+#(c)2004-2012 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id: class.global.inc.php 6939 2011-03-06 00:12:54Z calguy1000 $
+
+/**
+ * @package CMS
+ */
+
+/**
+ * A class to manage template types 
+ *
+ * @since 1.12
+ * @author Robert Campbell <calguy1000@gmail.com>
+ */
+class CmsLayoutTheme
+{
+  private $_dirty;
+  private $_data = array();
+  private $_css_assoc = array();
+  private static $_raw_cache;
+
+  public function get_id()
+  {
+    if( isset($this->_data['id']) ) return $this->_data['id'];
+  }
+
+  public function get_name()
+  {
+    if( isset($this->_data['name']) ) return $this->_data['name'];
+  }
+
+  public function set_name($str)
+  {
+    $str = trim($str);
+    if( !$str ) throw new CmsInvalidDataException('Name cannot be empty');
+    $this->_data['name'] = $str;
+    $this->_dirty = TRUE;
+  }
+
+  public function get_description()
+  {
+    if( isset($this->_data['description']) ) return $this->_data['description'];
+  }
+
+  public function set_description($str)
+  {
+    $str = trim($str);
+    $this->_data['description'] = $str;
+    $this->_dirty = TRUE;
+  }
+
+  public function get_created()
+  {
+    if( isset($this->_data['created']) ) return $this->_data['created'];
+  }
+
+  public function get_modified()
+  {
+    if( isset($this->_data['modified']) ) return $this->_data['modified'];
+  }
+
+  public function get_stylesheets()
+  {
+    return $this->_css_assoc;
+  }
+
+  public function set_stylesheets($id_array)
+  {
+    if( !is_array($id_array) ) {
+    }
+    
+    foreach( $id_array as $one ) {
+      if( (int)$one <= 0 ) {
+	throw new CmsInvalidDataException('CmsLayoutTheme::set_stylesheets expects an array of integers');
+      }
+    }
+
+    $this->_css_assoc = $id_array;
+    $this->_dirty = TRUE;
+  }
+
+  public function add_stylesheet($css)
+  {
+    if( is_object($css) && is_a($css,'Stylesheet') ) {
+      $css = $css->id;
+    }
+    $css = (int)$css;
+    if( $css <= 0 ) {
+      throw new CmsInvalidDataException('Invalid css id specified to CmsLayoutTheme::add_stylesheet');
+    }
+
+    if( !in_array($css,$this->_css_assoc) ) {
+      $this->_css_assoc[] = $css;
+      $this->_dirty = TRUE;
+    }
+  }
+
+  public function delete_stylesheet($css)
+  {
+    if( is_object($css) && is_a($css,'Stylesheet') ) {
+      $css = $css->id;
+    }
+    $css = (int)$css;
+    if( $css <= 0 ) {
+      throw new CmsInvalidDataException('Invalid css id specified to CmsLayoutTheme::add_stylesheet');
+    }
+
+    if( !in_array($css,$this->_css_assoc) ) return;
+    $t = array();
+    foreach( $this->_css_assoc as $one ) {
+      if( $css != $one ) $t[] = $one;
+    }
+    $this->_dirty = TRUE;
+  }
+
+  public function has_templates()
+  {
+    if( !$this->get_id() ) return FALSE;
+    $db = cmsms()->GetDb();
+    $query = 'SELECT count(id) FROM '.cms_db_prefix().'template_list
+              WHERE theme_id = ?';
+    $count = $db->GetOne($query,array($this->get_id()));
+    if( $count > 0 ) return TRUE;
+    return FALSE;
+  }
+
+  public function get_templates()
+  {
+    $out = null;
+    if( !$this->get_id() ) return $out;
+    
+    $db = cmsms()->GetDb();
+    $query = 'SELECT id FROM '.cms_db_prefix().'template_list
+              WHERE theme_id = ?';
+    $col = $db->GetCol($query,array($this->get_id()));
+    if( !is_array($col) || count($col) == 0 ) return $out;
+    return $col;
+  }
+
+  protected function validate()
+  {
+    if( $this->get_name() == '' )
+      throw new CmsInvalidDataException('A Theme must have a name');
+
+    if( count($this->_css_assoc) ) {
+      $t1 = array_unique($this->_css_assoc);
+      if( count($t1) != count($this->_css_assoc) ) {
+	throw new CmsInvalidDataException('Duplicate CSS Ids exist in theme.');
+      }
+    }
+
+    $db = cmsms()->GetDb();
+    $tmp = null;
+    if( $this->get_id() ) {
+      $query = 'SELECT id FROM '.cms_db_prefix().'template_themes
+                WHERE name = ? AND id != ?';
+      $tmp = $db->GetOne($query,array($this->get_name(),$this->get_id()));
+    }
+    else {
+      $query = 'SELECT id FROM '.cms_db_prefix().'template_themes
+                WHERE name = ?';
+      $tmp = $db->GetOne($query,array($this->get_name()));
+    }
+    if( $tmp ) {
+      throw new CmsInvalidDataException('Template with the same name already exists.');
+    }
+  }
+
+  private function _insert()
+  {
+    if( !$this->_dirty ) return;
+    $this->validate();
+
+    $db = cmsms()->GetDb();
+    $query = 'INSERT INtO '.cms_db_prefix().'template_themes 
+              (name,description,created,modified)
+              VALUES (?,?,?,?)';
+    $dbr = $db->Execute($query,array($this->get_name(),
+				     $this->get_description(),
+				     time(),time()));
+    if( !$dbr ) {
+      throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+    }
+
+    $this->_data['id'] = $db->Insert_ID();
+    if( count($this->_css_assoc) ) {
+      $query = 'INSERT INTO '.cms_db_prefix().'template_theme_cssassoc
+                (theme_id,css_id,item_order)';
+      for( $i = 0; $i < count($this->_css_assoc); $i++ ) {
+	$css_id = $this->_css_assoc[$i];
+	$dbr = $db->Execut($query,array($this->get_id(),$css_id,$i+1));
+      }
+    }
+  }
+
+  private function _update()
+  {
+    if( !$this->_dirty ) return;
+    $this->validate();
+
+    $db = cmsms()->GetDb();
+    $query = 'UPDATE '.cms_db_prefix().'template_theme_cssassoc
+              SET name = ?, description = ?, modified = ?
+              WHERE id = ?';
+    $dbr = $db->Execute($query,array($this->get_name(),
+				     $this->get_description(),
+				     time(),
+				     $this->get_id()));
+    if( !$dbr ) {
+      throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+    }
+
+    $query = 'DELETE FROM '.cms_db_prefix().'template_theme_cssassoc
+              WHERE theme_id = ?';
+    $db->Execute($query,array($this->get_id()));
+
+    if( count($this->_css_assoc) ) {
+      $query = 'INSERT INTO '.cms_db_prefix().'template_theme_cssassoc
+                (theme_id,css_id,item_order)';
+      for( $i = 0; $i < count($this->_css_assoc); $i++ ) {
+	$css_id = $this->_css_assoc[$i];
+	$dbr = $db->Execut($query,array($this->get_id(),$css_id,$i+1));
+      }
+    }
+  }
+
+  public function save()
+  {
+    if( $this->get_id() ) {
+      return $this->_update();
+    }
+    return $this->_insert();
+  }
+
+  public function delete()
+  {
+    if( !$this->get_id() ) return;
+    if( $this->has_templates() ) {
+      throw new CmsException('Cannot Delete a Theme that has Templats Attached');
+    }
+
+    if( count($this->_css_assoc) ) {
+      $db = cmsms()->GetDb();
+      $query = 'DELETE FROM '.cms_db_prefix().'template_themes_cssassoc
+                WHERE theme_id = ?';
+      $dbr = $db->Execute($query,array($this->get_id()));
+      $this->_css_assoc = array();
+      $this->_dirty = TRUE;
+    }
+
+    $query = 'DELETE FROM '.cms_db_prefix().'template_themes
+              WHERE id = ?';
+    $dbr = $db->Execute($query,array($this->get_id()));
+    unset($this->_data['id']);
+    $this->_dirty = TRUE;
+  }
+
+  protected static function &_load_from_data($row)
+  {
+    $ob = new CmsLayoutTheme;
+    $css = null;
+    if( isset($row['css']) ) {
+      $css = $row['css'];
+      unset($row['css']);
+    }
+    $ob->_data = $row;
+    if( is_array($css) && count($css) ) {
+      $ob->_css_assoc = $css;
+    }
+    
+    return $ob;
+  }
+
+  public static function &load($x)
+  {
+    $db = cmsms()->GetDb();
+    $row = null;
+    if( (int)$x > 0 ) {
+      if( is_array(self::$_raw_cache) && count(self::$_raw_cache) ) {
+	if( isset(self::$_raw_cache[$x]) ) {
+	  return self::_load_from_data(self::$_raw_cache[$x]);
+	}
+      }
+      $query = 'SELECT * FROM '.cms_db_prefix().'template_themes
+                WHERE id = ?';
+      $row = $db->Execute($query,array((int)$x));
+    }
+    else if( is_string($x) && strlen($x) > 0 ) {
+      if( is_array(self::$_raw_cache) && count(self::$_raw_cache) ) {
+	foreach( self::$_raw_cache as $row ) {
+	  if( $row['name'] == $x ) {
+	    return self::_load_from_data($row);
+	  }
+	}
+      }
+
+      $query = 'SELECT * FROM '.cms_db_prefix().'template_themes
+                WHERE name = ?';
+      $row = $db->Execute($query,array(trim($x)));
+    }
+
+    if( !is_array($row) || count($row) == 0 ) {
+      throw new CmsDataNotFoundException('Could not find row identified by '.$x);
+    }
+
+    $query = 'SELECT css_id FROM '.cms_db_prefix().'template_themes_cssassoc
+              WHERE theme_id = ? ORDER BY item_order';
+    $tmp = $db->GetArray($query,array($row['id']));
+    if( is_array($tmp) && count($tmp) ) {
+      $row['css'] = $tmp;
+    }
+    self::$_raw_cache[$row['id']] = $row;
+    return self::_load_from_data($row);
+  }
+
+  public function get_all()
+  {
+    $out = null;
+    $query = 'SELECT * FROM '.cms_db_prefix().'template_themes
+              ORDER BY name ASC';
+    $dbr = $db->GetArray($query);
+    if( is_array($dbr) && count($dbr) ) {
+      $ids = array();
+      $cache = array();
+      foreach( $dbr as $row ) {
+	$ids[] = $row['id'];
+        $cache[$row['id']] = $row;
+      }
+
+      $query = 'SELECT * FROM '.cms_db_prefix().'template_themes_cssassoc
+                WHERE theme_id IN ('.implode(',',$ids).')
+                ORDER BY theme_id,item_order';
+      $dbr2 = $db->GetArray($query);
+      if( is_array($dbr2) && count($dbr2) ) {
+	foreach( $dbr2 as $row ) {
+	  if( !isset($cache[$row['theme_id']]) ) continue; // orphaned entry, bad.
+	  $theme = &$cache[$row['theme_id']];
+	  if( !isset($theme['css']) ) {
+	    $theme['css'] = array();
+	  }
+	  if( !in_array($row['css_id'],$theme['css']) ) {
+	    $theme['css'][] = $row['css_id'];
+	  }
+	}
+      }
+
+      self::$_raw_cache = $cache;
+
+      $out = array();
+      foreach( $cache as $key => $row ) {
+	$out[] = self::_load_from_data($row);
+      }
+    }
+
+    return $out;
+  }
+} // end of class
+
+#
+# EOF
+#
+?>
