@@ -397,7 +397,7 @@ abstract class CmsAdminThemeBase
 								 'title'=>$this->_FixSpaces(lang('logout')),
 								 'description'=>'','show_in_menu'=>true);
 		// base content menu ---------------------------------------------------------
-		$itms['content'] = array('url'=>'index.php?section=content','parent'=>-1,
+		$items['content'] = array('url'=>'index.php?section=content','parent'=>-1,
 								 'title'=>$this->_FixSpaces(lang('content')),
 								 'description'=>lang('contentdescription'),
 								 'show_in_menu'=>$this->HasPerm('contentPerms'));
@@ -434,7 +434,7 @@ abstract class CmsAdminThemeBase
 								   'title'=>$this->_FixSpaces(lang('templates')),
 								   'description'=>lang('templatesdescription'),
 								   'show_in_menu'=>$this->HasPerm('templatePerms'));
-		$ites['addtemplate'] = array('url'=>'addtemplate.php','parent'=>'template',
+		$items['addtemplate'] = array('url'=>'addtemplate.php','parent'=>'template',
 									 'title'=>$this->_FixSpaces(lang('addtemplate')),
 									 'description'=>lang('addtemplate'),'show_in_menu'=>false);
 		$items['edittemplate'] = array('url'=>'edittemplate.php','parent'=>'template',
