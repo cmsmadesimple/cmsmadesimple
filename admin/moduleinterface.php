@@ -31,8 +31,7 @@ if( isset($_SESSION['cms_passthru']) ) {
   unset($_SESSION['cms_passthru']);
 }
 
-$gCms = cmsms();
-$smarty = $gCms->GetSmarty();
+$smarty = cmsms()->GetSmarty();
 $smarty->assign('date_format_string',get_preference($userid,'date_format_string','%x %X'));
 
 $id = 'm1_';
@@ -116,8 +115,8 @@ if( $USE_OUTPUT_BUFFERING ) {
 }
 if( !isset($USE_THEME) || $USE_THEME != false ) {
   if (!$suppressOutput) {
-    echo '</div>';
     echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+	echo '</div>';
     include_once("footer.php");
   }
  }
