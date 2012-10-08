@@ -21,7 +21,7 @@ class cms_admin_tabs
     return '<div id="page_tabs">';
   }
 
-  public function set_tab_header($tabid,$title,$active = FALSE)
+  public static function set_tab_header($tabid,$title,$active = FALSE)
   {
     if( $active == FALSE ) {
       if( (self::$_tab_idx == 0 && self::$_current_tab == '') 

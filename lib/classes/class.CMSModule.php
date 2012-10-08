@@ -3171,7 +3171,7 @@ abstract class CMSModule
 	 */
 	function StartTab($tabid, $params = array())
 	{
-	  return cms_admin_theme::start_tab($tabid,$params);
+	  return cms_admin_tabs::start_tab($tabid,$params);
 	}
 
 	/**

@@ -270,10 +270,18 @@ function debug_bt_to_log()
     foreach($bt as $trace) {
       if( $trace['function'] == 'debug_bt_to_log' ) continue;
 
-      $file = $trace['file'];
-      $line = $trace['line'];
+      $file = '';
+      $line = '';
+      if( isset($trace['file']) ) {
+	$file = $trace['file'];
+	$line = $trace['line'];
+      }
       $function = $trace['function'];
-      $out[] = "$function at $file:$line"; 
+      $str = "$function";
+      if( $file ) {
+	$str .= " at $file:$line";
+      }
+      $out[] = $str;
     }
 
     $filename = TMP_CACHE_LOCATION . '/debug.log';
