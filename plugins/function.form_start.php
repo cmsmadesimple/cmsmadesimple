@@ -56,6 +56,13 @@ function smarty_cms_function_form_start($params, &$template)
       $tagparms[$key] = trim($value);
       break;
 
+    case 'extraparms':
+      if( is_array($value) && count($value) ) {
+	foreach( $value as $key=>$value2 ) {
+	  $parms[$key] = $value2;
+	}
+      }
+      break;
     case 'assign':
       break;
 
@@ -80,7 +87,7 @@ function smarty_cms_function_form_start($params, &$template)
     $out .= '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'"/>';
   }
   foreach( $parms as $key => $value ) {
-    $out .= '<input type="hidden" name="'.$mactparams['mid'].$key.'" value="'.$value.'"/>';
+    $out .= '<input type="hidden" name="'.$mactparms['mid'].$key.'" value="'.$value.'"/>';
   }
   $out .= '</div>';
 

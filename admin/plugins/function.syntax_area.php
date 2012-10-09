@@ -41,7 +41,7 @@ function smarty_function_syntax_area($params, &$template)
     $rows = (int)$params['cols'];
   }
 
-  $out = create_textarea(FALSE,$value,$name,$class,$id,'','',$width,$height,'',$type);
+  $out = create_textarea(FALSE,$value,$name,$class,$id,'','',$rows,$cols,'',$type);
   if( isset($params['assign']) ) {
     $smarty->assign(trim($params['assign']),$out);
     return;

@@ -86,16 +86,19 @@ class CmsSmartyTemplate
 
   public function set_type($a)
   {
-    $n = null;
-    if( is_object($a) && is_a($a,'CmsTemplateType') ) {
-      $n = $a->get_id();
-    }
-    else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
-      $cat = CmsTemplateType::load($a);
-      $n = $cat->get_id();
-    }
-    $this->_data['type_id'] = (int) $n;
-    $this->_dirty = TRUE;
+	  $n = null;
+	  if( is_object($a) && is_a($a,'CmsTemplateType') ) {
+		  $n = $a->get_id();
+	  }
+	  else if( (int)$a > 0 ) {
+		  $n = (int)$a;
+	  }
+	  else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
+		  $type = CmsTemplateType::load($a);
+		  $n = $cat->get_id();
+	  }
+	  $this->_data['type_id'] = (int) $n;
+	  $this->_dirty = TRUE;
   }
 
   public function get_type_dflt()
@@ -148,6 +151,9 @@ class CmsSmartyTemplate
     if( is_object($a) && is_a($a,'CmsLayoutTheme') ) {
       $n = $a->get_id();
     }
+	else if( (int)$a > 0 ) {
+		$n = $a;
+	}
     else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
       $theme = CmsLayoutTheme::load($a);
       $n = $theme->get_id();
@@ -272,20 +278,20 @@ class CmsSmartyTemplate
     if( $this->get_type_id() <= 0 ) {
       throw new CmsInvalidDataException('Each template must be associated with a type');
     }
-	if( $this->get_theme_id() <= 0 ) {
-      throw new CmsInvalidDataException('Each template must be associated with a type');
-	}
+// 	if( $this->get_theme_id() <= 0 ) {
+//       throw new CmsInvalidDataException('Each template must be associated with a theme');
+// 	}
 
     $db = cmsms()->GetDb();
     $tmp = null;
     if( $this->get_id() ) {
       // double check the name.
-      $query = 'SELECT id FROM '.cms_db_prefix().'templates_list
+      $query = 'SELECT id FROM '.cms_db_prefix().'template_list
                 WHERE name = ? AND id != ?';
       $tmp = $db->GetOne($query,array($this->get_name(),$this->get_id()));
     } else {
       // double check the name.
-      $query = 'SELECT id FROM '.cms_db_prefix().'templates_list
+      $query = 'SELECT id FROM '.cms_db_prefix().'template_list
                 WHERE name = ?';
       $tmp = $db->GetOne($query,array($this->get_name()));
     }
@@ -296,51 +302,54 @@ class CmsSmartyTemplate
 
   protected function _update()
   {
-    if( !$this->_dirty ) return;
-    $this->validate();
+	  if( !$this->_dirty ) return;
+	  $this->validate();
 
-    $query = 'UPDATE '.cms_db_prefix().'template_list
-              SET name = ?, content = ?, description = ?, type_id = ?, type_dflt = ?,
-                  category_id = ?, theme_id = ?, owner_id = ?, modified = ?
-              WHERE id = ?';
-    $dbr = $db->Execute($query,
-			array($this->get_name(),$this->get_content(),$this->get_description(),
-			      $this->get_type_id(),$this->get_type_dflt(),$this->get_category_id(),
-			      $this->get_theme_id(),$this->get_owner_id(),time));
-    if( !$dbr ) {
-      throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-    }
-    if( $this->get_type_dflt() ) {
-      // if it's default for a type, unset default flag for all other records with this type
-      $query = 'UPDATE '.cms_db_prefix().'template_list SET type_dflt = 0
-                WHERE type_id = ? AND type_dflt = 1 AND id != ?';
-      $dbr = $db->Execute($query,array($this->get_type_id(),$this->get_id()));
-      if( !$dbr ) {
-	throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-      }
-    }
+	  $query = 'UPDATE '.cms_db_prefix().'template_list
+                SET name = ?, content = ?, description = ?, type_id = ?, type_dflt = ?,
+                    category_id = ?, theme_id = ?, owner_id = ?, modified = ?
+                WHERE id = ?';
+	  $db = cmsms()->GetDb();
+	  $dbr = $db->Execute($query,
+						  array($this->get_name(),$this->get_content(),$this->get_description(),
+								$this->get_type_id(),$this->get_type_dflt(),$this->get_category_id(),
+								$this->get_theme_id(),$this->get_owner_id(),time(),
+								$this->get_id()));
+	  if( !$dbr ) {
+		  throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+	  }
+	  if( $this->get_type_dflt() ) {
+		  // if it's default for a type, unset default flag for all other records with this type
+		  $query = 'UPDATE '.cms_db_prefix().'template_list SET type_dflt = 0
+                    WHERE type_id = ? AND type_dflt = 1 AND id != ?';
+		  $dbr = $db->Execute($query,array($this->get_type_id(),$this->get_id()));
+		  if( !$dbr ) {
+			  throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+		  }
+	  }
 
-    $query = 'DELETE FROM '.cms_db_prefix().'templates_addt_users WHERE tpl_id = ?';
-    $dbr = $db->Execute($query,array($tpl->get_id()));
-    if( !$dbr ) {
-      throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-    }
+	  $query = 'DELETE FROM '.cms_db_prefix().'template_addt_users WHERE tpl_id = ?';
+	  $dbr = $db->Execute($query,array($this->get_id()));
+	  if( !$dbr ) {
+		  throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+	  }
     
-    $t = $this->get_additional_editors();
-    if( is_array($t) && count($t) ) {
-      $query = 'INSERT INTO '.cms_db_prefix().'template_addt_users (tpl_id,user_id)
-                VALUES(?,?)';
-      foreach( $t as $one ) {
-	$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
-      }
-    }
-    $this->_dirty = FALSE;
+	  $t = $this->get_additional_editors();
+	  if( is_array($t) && count($t) ) {
+		  $query = 'INSERT INTO '.cms_db_prefix().'template_addt_users (tpl_id,user_id)
+                    VALUES(?,?)';
+		  foreach( $t as $one ) {
+			  $dbr = $db->Execute($query,array($this->get_id(),(int)$one));
+		  }
+	  }
+	  $this->_dirty = FALSE;
   }
 
   protected function _insert()
   {
     if( !$this->_dirty ) return;
     $this->validate();
+
 
     // insert the record
     $query = 'INSERT INTO '.cms_db_prefix().'template_list
@@ -354,7 +363,7 @@ class CmsSmartyTemplate
     if( !$dbr ) {
       throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
     }
-    $this->_data['id'] = $db>Insert_ID();
+    $this->_data['id'] = $db->Insert_ID();
     if( $this->get_type_dflt() ) {
       // if it's default for a type, unset default flag for all other records with this type
       $query = 'UPDATE '.cms_db_prefix().'template_list SET type_dflt = 0
@@ -384,7 +393,7 @@ class CmsSmartyTemplate
     }
   }
 
-  private static function _load_from_data($row)
+  private static function &_load_from_data($row)
   {
     $ob = new CmsSmartyTemplate();
     $ob->_data = $row;
@@ -397,35 +406,35 @@ class CmsSmartyTemplate
 
   protected static function _load_bulk($list)
   {
-    if( !is_array($list) || count($list) == 0 ) return;
+	  if( !is_array($list) || count($list) == 0 ) return;
 
-    $list2 = array();
-    foreach( $list as $one ) {
-      $one = (int)$one;
-      if( $one <= 0 ) continue;
-      if( isset(self::$_obj_cache[$one]) ) continue;
-      $list2[] = $one;
-    }
+	  $list2 = array();
+	  foreach( $list as $one ) {
+		  $one = (int)$one;
+		  if( $one <= 0 ) continue;
+		  if( isset(self::$_obj_cache[$one]) ) continue;
+		  $list2[] = $one;
+	  }
+	  
+	  // get the data and populate the cache.
+	  $query = 'SELECT * FROM '.cms_db_prefix().'template_list WHERE id IN ('.
+		  implode(',',$list2).')';
+	  $db = cmsms()->GetDb();
+	  $dbr = $db->GetArray($query);
+	  if( is_array($dbr) && count($dbr) ) {
+		  foreach( $dbr as $row ) {
+			  $ob = self::_load_from_data($row);
+		  }
+	  }
 
-    // get the data and populate the cache.
-    $query = 'SELECT * FROM '.cms_db_prefix().'template_list WHERE id IN ('.
-      implode(',',$list2).')';
-    $db = cmsms()->GetDb();
-    $dbr = $db->GetArray($query);
-    if( is_array($dbr) && count($dbr) ) {
-      foreach( $dbr as $row ) {
-	$ob = self::_load_from_data($row);
-      }
-    }
-
-    // pull what we can from the cache
-    $out = array();
-    foreach( $list as $one ) {
-      if( isset(self::$_cache[$one]) ) {
-	$out[] = self::$_cache[$one];
-      }
-    }
-    return $out;
+	  // pull what we can from the cache
+	  $out = array();
+	  foreach( $list as $one ) {
+		  if( isset(self::$_obj_cache[$one]) ) {
+			  $out[] = self::$_obj_cache[$one];
+		  }
+	  }
+	  return $out;
   }
 
   public static function &load($a)
@@ -473,34 +482,107 @@ class CmsSmartyTemplate
     return self::_load_bulk($tmp);
   }
 
+  public static function template_query($params)
+  {
+	  if( !is_array($params) && is_string($params) ) {
+		  $params = array($params);
+	  }
+
+	  $query = 'SELECT id FROM '.cms_db_prefix().'template_list';
+	  $where = array('type'=>array(),'category'=>array(),'user'=>array(),'theme'=>array());
+
+	  $limit = 1000;
+	  $offset = 0;
+	  $db = cmsms()->GetDb();
+	  foreach( $params as $key => $val ) {
+		  if( is_numeric($key) && $val[1] == ':' ) {
+			  list($key,$second) = explode(':',$val,2);
+		  }
+		  switch( strtolower($key) ) {
+		  case 't': // type
+			  $second = (int)$second;
+			  $where['type'][] = 'type_id = '.$db->qstr($second);
+			  break;
+		  case 'c': // category
+			  $second = (int)$second;
+			  $where['category'][] = 'category_id = '.$db->qstr($second);
+			  break;
+		  case 'h': // theme
+			  $second = (int)$second;
+			  $where['theme'][] = 'theme_id = '.$db->qstr($second);
+			  break;
+		  case 'u': // user
+			  $second = (int)$second;
+			  $where['user'][] = 'owner_id = '.$db->qstr($second);
+			  break;
+		  case 'e': // editable
+			  $second = (int)$second;
+			  $q2 = 'SELECT DISTINCT tpl_id FROM (
+                       SELECT tpl_id FROM '.cms_db_prefix().'template_addt_users 
+                        WHERE user_id = ? 
+                       UNION
+                       SELECT id AS tpl_id FROM '.cms_db_prefix().'template_list
+                        WHERE owner_id = ?)
+                     AS tmp1';
+			  $t2 = $db->GetCol($q2,array($second,$second));
+			  if( is_array($t2) && count($t2) ) {
+				  $where['user'][] = 'id IN ('.implode(',',$t2).')';
+			  }
+			  break;
+		  case 'limit':
+			  $limit = max(1,min(1000,$val));
+			  break;
+		  case 'offset':
+			  $offset = max(0,$val);
+			  break;
+		  }
+	  }
+
+	  $tmp = array();
+	  foreach( $where as $key => $exprs ) {
+		  if( count($exprs) ) {
+			  $tmp[] = '('.implode(' OR ',$exprs).')';
+		  }
+	  }
+	  if( count($tmp) ) {
+		  $query .= ' WHERE ' . implode(' AND ',$tmp);
+	  }
+	  $query .= ' ORDER BY name ASC';
+
+	  $tmp1 = $db->GetCol($query);
+	  if( !is_array($tmp1) || count($tmp1) == 0 ) return;
+
+	  return self::_load_bulk($tmp1);
+  }
+
   public static function get_editable_templates($a)
   {
-    $n = self::_resolve_user($a);
-    if( $n <= 0 ) {
-      throw new CmsInvalidDataException('Invalid user specified to get_owned_templates');
-    }
-    
-    $db = cmsms()->GetDb();
-    $query = 'SELECT id FROM '.cms_db_prefix().'template_list WHERE owner_id = ?';
-    $tmp1 = $db->GetCol($query,array($n));
+	  $n = self::_resolve_user($a);
+	  if( $n <= 0 ) {
+		  throw new CmsInvalidDataException('Invalid user specified to get_owned_templates');
+	  }
 
-    $query = 'SELECT tpl_id FROM '.cms_db_prefix().'template_addt_users WHERE user_id = ?';
-    $tmp2 = $db->GetCol($query,array($n));
+	  $db = cmsms()->GetDb();
+	  $query = 'SELECT id FROM '.cms_db_prefix().'template_list WHERE owner_id = ?';
+	  $tmp1 = $db->GetCol($query,array($n));
 
-    if( is_array($tmp1) && is_array($tmp2) ) {
-      $tmp = array_merge($tmp1,$tmp2);
-    } else if( is_array($tmp1) ) {
-      $tmp = $tmp1;
-    } else if( is_array($tmp2) ) {
-      $tmp = $tmp2;
-    }
+	  $query = 'SELECT tpl_id FROM '.cms_db_prefix().'template_addt_users WHERE user_id = ?';
+	  $tmp2 = $db->GetCol($query,array($n));
 
-    if( is_array($tmp) && count($tmp) ) {
-      $tmp = array_unique($tmp);
-      if( is_array($tmp) && count($tmp) ) {
-	return self::_load_bulk($tmp);
-      }
-    }
+	  if( is_array($tmp1) && is_array($tmp2) ) {
+		  $tmp = array_merge($tmp1,$tmp2);
+	  } else if( is_array($tmp1) ) {
+		  $tmp = $tmp1;
+	  } else if( is_array($tmp2) ) {
+		  $tmp = $tmp2;
+	  }
+
+	  if( is_array($tmp) && count($tmp) ) {
+		  $tmp = array_unique($tmp);
+		  if( is_array($tmp) && count($tmp) ) {
+			  return self::_load_bulk($tmp);
+		  }
+	  }
   }
 
   public static function &create_by_type($t)

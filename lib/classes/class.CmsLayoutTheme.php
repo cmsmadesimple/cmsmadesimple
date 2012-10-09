@@ -33,6 +33,7 @@ class CmsLayoutTheme
   private $_dirty;
   private $_data = array();
   private $_css_assoc = array();
+  private $_templates = array();
   private static $_raw_cache;
 
   public function get_id()
@@ -131,26 +132,17 @@ class CmsLayoutTheme
 
   public function has_templates()
   {
-    if( !$this->get_id() ) return FALSE;
-    $db = cmsms()->GetDb();
-    $query = 'SELECT count(id) FROM '.cms_db_prefix().'template_list
-              WHERE theme_id = ?';
-    $count = $db->GetOne($query,array($this->get_id()));
-    if( $count > 0 ) return TRUE;
-    return FALSE;
+    if( count($this->_templates) == 0 ) return FALSE;
+    return TRUE;
   }
 
   public function get_templates()
   {
     $out = null;
     if( !$this->get_id() ) return $out;
+    if( !$this->has_templates() ) return $out;
     
-    $db = cmsms()->GetDb();
-    $query = 'SELECT id FROM '.cms_db_prefix().'template_list
-              WHERE theme_id = ?';
-    $col = $db->GetCol($query,array($this->get_id()));
-    if( !is_array($col) || count($col) == 0 ) return $out;
-    return $col;
+    return $this->_templates;
   }
 
   protected function validate()
@@ -275,13 +267,21 @@ class CmsLayoutTheme
   {
     $ob = new CmsLayoutTheme;
     $css = null;
+    $tpls = null;
     if( isset($row['css']) ) {
       $css = $row['css'];
       unset($row['css']);
     }
+    if( isset($row['templates']) ) {
+      $tpls = $row['templates'];
+      unset($row['templates']);
+    }
     $ob->_data = $row;
     if( is_array($css) && count($css) ) {
       $ob->_css_assoc = $css;
+    }
+    if( is_array($tpls) && count($tpls) ) {
+      $ob->_templates = $tpls;
     }
     
     return $ob;
@@ -319,12 +319,22 @@ class CmsLayoutTheme
       throw new CmsDataNotFoundException('Could not find row identified by '.$x);
     }
 
+    // get attached css
     $query = 'SELECT css_id FROM '.cms_db_prefix().'template_themes_cssassoc
               WHERE theme_id = ? ORDER BY item_order';
     $tmp = $db->GetArray($query,array($row['id']));
     if( is_array($tmp) && count($tmp) ) {
       $row['css'] = $tmp;
     }
+
+    // get attached templates
+    $query = 'SELECT id FROM '.cms_db_prefix().'template_list
+              WHERE theme_id = ?';
+    $tmp = $db->GetArray($query,array($row['id']));
+    if( is_array($tmp) && count($tmp) ) {
+      $row['templates'] = $tmp;
+    }
+
     self::$_raw_cache[$row['id']] = $row;
     return self::_load_from_data($row);
   }
@@ -334,6 +344,7 @@ class CmsLayoutTheme
     $out = null;
     $query = 'SELECT * FROM '.cms_db_prefix().'template_themes
               ORDER BY name ASC';
+    $db = cmsms()->GetDb();
     $dbr = $db->GetArray($query);
     if( is_array($dbr) && count($dbr) ) {
       $ids = array();
@@ -357,6 +368,20 @@ class CmsLayoutTheme
 	  if( !in_array($row['css_id'],$theme['css']) ) {
 	    $theme['css'][] = $row['css_id'];
 	  }
+	}
+      }
+
+      $query = 'SELECT id,theme_id FROM '.cms_db_prefix().'template_list
+                WHERE theme_id IN ('.implode(',',$ids).') ORDER BY id';
+      $dbr2 = $db->GetArray($query);
+      if( is_array($dbr2) && count($dbr2) ) {
+	foreach( $dbr2 as $row ) {
+	  if( !isset($cache[$row['theme_id']]) ) continue; // orphaned entry, bad.
+	  $theme = &$cache[$row['theme_id']];
+	  if( !isset($theme['templates']) ) {
+	    $theme['templates'] = array();
+	  }
+	  $theme['templates'][] = $row['id'];
 	}
       }
 

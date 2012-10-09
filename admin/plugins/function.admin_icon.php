@@ -19,6 +19,7 @@ function smarty_function_admin_icon($params,&$template)
     case 'width':
     case 'height':
     case 'alt':
+    case 'rel':
     case 'class':
     case 'id':
     case 'name':
