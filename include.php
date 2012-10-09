@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#(c)2004-2012 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://www.cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -25,28 +25,25 @@ define('CMS_SECURE_PARAM_NAME','_sx_');
 define('CMS_USER_KEY','_userkey_');
 
 $session_key = substr(md5($dirname), 0, 8);
-if( !isset($CMS_INSTALL_PAGE) )
-  {
-    @session_name('CMSSESSID' . $session_key);
-    @ini_set('url_rewriter.tags', '');
-    @ini_set('session.use_trans_sid', 0);
-  }
+if( !isset($CMS_INSTALL_PAGE) ) {
+  @session_name('CMSSESSID' . $session_key);
+  @ini_set('url_rewriter.tags', '');
+  @ini_set('session.use_trans_sid', 0);
+}
 
 #Setup session with different id and start it
-if( isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) )
-  {
-    // admin pages can't be cached... period, at all.. never.
-    @session_cache_limiter('private');
-    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-    header("Cache-Control: no-store, no-cache, must-revalidate");
-    header("Cache-Control: post-check=0, pre-check=0", false);
-    header("Pragma: no-cache");
-  }
-else
-  {
-    @session_cache_limiter('public');
-  }
+if( isset($CMS_ADMIN_PAGE) || isset($CMS_INSTALL_PAGE) ) {
+  // admin pages can't be cached... period, at all.. never.
+  @session_cache_limiter('private');
+  header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+  header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+  header("Cache-Control: no-store, no-cache, must-revalidate");
+  header("Cache-Control: post-check=0, pre-check=0", false);
+  header("Pragma: no-cache");
+}
+else {
+  @session_cache_limiter('public');
+}
 
 if(!@session_id()) session_start();
 
@@ -88,44 +85,39 @@ if (isset($starttime))
 }
 
 
-if( isset($CMS_ADMIN_PAGE) )
-  {
-    function cms_admin_sendheaders($content_type = 'text/html',$charset = '')
-    {
-      if( !$charset ) $charset = get_encoding();
+if( isset($CMS_ADMIN_PAGE) ) {
+  function cms_admin_sendheaders($content_type = 'text/html',$charset = ''){
+    if( !$charset ) $charset = get_encoding();
 
-      // Date in the past
-      header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    // Date in the past
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
-      // always modified
-      header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+    // always modified
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
  
-      // HTTP/1.1
-      header("Cache-Control: no-store, no-cache, must-revalidate");
-      header("Cache-Control: post-check=0, pre-check=0", false);
+    // HTTP/1.1
+    header("Cache-Control: no-store, no-cache, must-revalidate");
+    header("Cache-Control: post-check=0, pre-check=0", false);
 
-      // HTTP/1.0
-      header("Pragma: no-cache");
+    // HTTP/1.0
+    header("Pragma: no-cache");
         
-      // Language shizzle
-      header("Content-Type: $content_type; charset=$charset");
-    }
-
-     if( !isset($_SESSION[CMS_USER_KEY]) )
-       {
-	 if( isset($_COOKIE[CMS_SECURE_PARAM_NAME]) )
-	   {
-	     $_SESSION[CMS_USER_KEY] = $_COOKIE[CMS_SECURE_PARAM_NAME];
-	   }
-	 else
-	   {
-	     // maybe change this algorithm.
-	     $key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
-	     $_SESSION[CMS_USER_KEY] = $key;
-	     cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);
-	   }
-       }
+    // Language shizzle
+    header("Content-Type: $content_type; charset=$charset");
   }
+
+  if( !isset($_SESSION[CMS_USER_KEY]) ) {
+    if( cms_cookies::exists(CMS_SECURE_PARAM_NAME) ) {
+      $_SESSION[CMS_USER_KEY] = cms_cookies::get(CMS_SECURE_PARAM_NAME);
+    }
+    else {
+      // maybe change this algorithm.
+      $key = substr(str_shuffle(md5($dirname.time().session_id())),-8);
+      $_SESSION[CMS_USER_KEY] = $key;
+      cms_cookies::set(CMS_SECURE_PARAM_NAME,$key);
+    }
+  }
+}
 
 
 # Create the global
@@ -134,34 +126,29 @@ $gCms = cmsms();
 $config = $gCms->GetConfig();
 
 #Set the timezone
-if( $config['timezone'] != '' )
-  {
-    @date_default_timezone_set(trim($config['timezone']));
-  }
+if( $config['timezone'] != '' ) {
+  @date_default_timezone_set(trim($config['timezone']));
+}
 
 #Attempt to override the php memory limit
-if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  )
-  {
-    ini_set('memory_limit',trim($config['php_memory_limit']));
-  }
+if( isset($config['php_memory_limit']) && !empty($config['php_memory_limit'])  ) {
+  ini_set('memory_limit',trim($config['php_memory_limit']));
+}
 
 #Add users if they exist in the session
 cmsms()->set_variable('user_id','');
 cmsms()->set_variable('username','');
-if (isset($_SESSION['cms_admin_user_id']))
-{
+if (isset($_SESSION['cms_admin_user_id'])) {
   cmsms()->set_variable('user_id',$_SESSION['cms_admin_user_id']);
 }
-if (isset($_SESSION['cms_admin_username']))
-{
+if (isset($_SESSION['cms_admin_username'])) {
   cmsms()->set_variable('username',$_SESSION['cms_admin_username']);
 }
 
-if ($config["debug"] == true)
-  {
-    @ini_set('display_errors',1);
-    @error_reporting(E_ALL);
-  }
+if ($config["debug"] == true) {
+  @ini_set('display_errors',1);
+  @error_reporting(E_ALL);
+}
 
 
 debug_buffer('loading adodb');
@@ -184,8 +171,7 @@ debug_buffer('done loading files');
 
 #Load them into the usual variables.  This'll go away a little later on.
 global $DONT_LOAD_DB;
-if (!isset($DONT_LOAD_DB))
-{
+if (!isset($DONT_LOAD_DB)) {
   debug_buffer('Initialize Database');
   cmsms()->GetDb();
   debug_buffer('Done Initializing Database');
@@ -203,70 +189,50 @@ if (!defined('SMARTY_DIR')) {
 */
 
 #Stupid magic quotes...
-if(get_magic_quotes_gpc())
-{
-    stripslashes_deep($_GET);
-    stripslashes_deep($_POST);
-    stripslashes_deep($_REQUEST);
-    stripslashes_deep($_COOKIE);
-    stripslashes_deep($_SESSION);
+if(get_magic_quotes_gpc()) {
+  stripslashes_deep($_GET);
+  stripslashes_deep($_POST);
+  stripslashes_deep($_REQUEST);
+  stripslashes_deep($_COOKIE);
+  stripslashes_deep($_SESSION);
 }
 
 #Fix for IIS (and others) to make sure REQUEST_URI is filled in
-if (!isset($_SERVER['REQUEST_URI']))
-{
-    $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
-    if(isset($_SERVER['QUERY_STRING']))
-    {
-        $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
-    }
+if (!isset($_SERVER['REQUEST_URI'])) {
+  $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+  if(isset($_SERVER['QUERY_STRING'])) {
+    $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
+  }
 }
 
 #Set a umask
 $global_umask = get_site_preference('global_umask','');
-if( $global_umask != '' )
-{
+if( $global_umask != '' ) {
   @umask( octdec($global_umask) );
 }
 
-if ($config['debug'] == true)
-{
+if ($config['debug'] == true) {
   $smarty->debugging = true;
   $smarty->error_reporting = 'E_ALL';
 }
 
-#Setup content routes
-/* not needed
-if( !isset($CMS_ADMIN_PAGE) && !isset($CMS_STYLESHEET) && !isset($CMS_INSTALL_PAGE) )
-{
-  debug_buffer('','Loading Routes');
-  cmsms()->set_variable('pageinfo',new PageInfo());
-  $contentops = cmsms()->GetContentOperations();
-  $contentops->register_routes();
-  debug_buffer('','End of Loading Routes');
-}
-*/
-
 #Load all installed module code
-if (! isset($CMS_INSTALL_PAGE))
-  {
-    debug_buffer('','Loading Modules');
-    $modops = cmsms()->GetModuleOperations();
-    $modops->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
-    debug_buffer('', 'End of Loading Modules');
-  }
+if (! isset($CMS_INSTALL_PAGE)) {
+  debug_buffer('','Loading Modules');
+  $modops = cmsms()->GetModuleOperations();
+  $modops->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
+  debug_buffer('', 'End of Loading Modules');
+ }
 
 #Setup language stuff.... will auto-detect languages (Launch only to admin at this point)
-if(isset($CMS_ADMIN_PAGE)) 
-	CmsNlsOperations::set_language();
+if(isset($CMS_ADMIN_PAGE)) CmsNlsOperations::set_language();
 
 $CMS_LAZYLOAD_MODULES = 1; // still used ??
 
 #Do auto task stuff.
-if (! isset($CMS_INSTALL_PAGE))
-  {
-    CmsRegularTaskHandler::handle_tasks();
-  }
+if (! isset($CMS_INSTALL_PAGE)) {
+  CmsRegularTaskHandler::handle_tasks();
+}
 
 $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 

@@ -8,6 +8,8 @@ function smarty_function_admin_icon($params,&$template)
   $theme = cms_utils::get_theme_object();
   if( !is_object($theme) ) return;
 
+  $module = $smarty->get_template_vars('actionmodule');
+
   $icon = null;
   $tagparms = array();
   foreach( $params as $key => $value ) {
@@ -24,6 +26,7 @@ function smarty_function_admin_icon($params,&$template)
     case 'id':
     case 'name':
     case 'title':
+    case 'accesskey':
       $tagparms[$key] = trim($value);
       break;
 
@@ -32,12 +35,33 @@ function smarty_function_admin_icon($params,&$template)
     }
   }
 
+  $dirs = array();
+  if( $module ) {
+    $obj = cms_utils::get_module($module);
+    if( is_object($obj) ) {
+      $img = basename($icon);
+      $dirs[] = array(cms_join_path($obj->GetModulePath(),'icons',"{$img}"),
+		      $obj->GetModuleURLPath()."/icons/{$img}");
+      $dirs[] = array(cms_join_path($obj->GetModulePath(),'images',"{$img}"),
+		      $obj->GetModuleURLPath()."/images/{$img}");
+    }
+  }
   if( basename($icon) == $icon ) {
     $icon = "icons/system/{$icon}";
   }
   $config = cmsms()->GetConfig();
-  $icon = "themes/{$theme->themeName}/images/{$icon}";
-  $out = "<img src=\"{$icon}\"";
+  $dirs[] = array(cms_join_path($config['root_path'],$config['admin_dir'],"themes/{$theme->themeName}/images/{$icon}"),
+		  $config['admin_url']."/themes/{$theme->themeName}/images/{$icon}");
+
+  $fnd = null;
+  foreach( $dirs as $one ) {
+    if( file_exists($one[0]) ) {
+      $fnd = $one[1];
+    }
+  }
+  if( !$fnd ) return;
+
+  $out = "<img src=\"{$fnd}\"";
   foreach( $tagparms as $key => $value ) {
     $out .= " $key=\"$value\"";
   }

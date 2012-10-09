@@ -28,8 +28,9 @@
  * @since 1.12
  * @author Robert Campbell <calguy1000@gmail.com>
  */
-class CmsTemplateType 
+class CmsLayoutTemplateType 
 {
+	const TABLENAME = 'layout_tpl_type';
   private $_dirty;
   private $_data = array();
 
@@ -288,7 +289,7 @@ class CmsTemplateType
 
 		  // check for item with the same name
 		  $db = cmsms()->GetDb();
-		  $query = 'SELECT id FROM '.cms_db_prefix().'template_types 
+		  $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.'
                 WHERE originator = ? AND name = ? AND id != ?';
 		  $dbr = $db->GetOne($query,array($this->get_originator(),$this->get_name(),$this->get_id()));
 		  if( $dbr ) {
@@ -298,7 +299,7 @@ class CmsTemplateType
 	  else {
 		  // check for item with the same name
 		  $db = cmsms()->GetDb();
-		  $query = 'SELECT id FROM '.cms_db_prefix().'template_types 
+		  $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.'
                 WHERE originator = ? AND name = ?';
 		  $dbr = $db->GetOne($query,array($this->get_originator(),$this->get_name()));
 		  if( $dbr ) {
@@ -319,7 +320,7 @@ class CmsTemplateType
 	  $this->validate();
 	  $db = cmsms()->GetDb();
 	  $now = time();
-	  $query = 'INSERT INTO '.cms_db_prefix().'template_types
+	  $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.'
                 (originator,name,has_dflt,dflt_contents,description,
                  lang_cb,dflt_content_cb,owner,created,modified)
                 VALUES (?,?,?,?,?,?,?,?,?,?)';
@@ -353,7 +354,7 @@ class CmsTemplateType
 	  $db = cmsms()->GetDb();
 	  $now = time();
 
-	  $query = 'UPDATE '.cms_db_prefix().'template_types
+	  $query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
                 SET originator = ?, name = ?, has_dflt = ?, 
                     dflt_contents = ?, description = ?,
                     lang_cb = ?, dflt_content_cb = ?, owner = ?, modified = ?
@@ -390,12 +391,12 @@ class CmsTemplateType
   /** 
    * Get a list of templates for the current template type.
    *
-   * @see CmsSmartyTemplate::list_by_type
-   * @return Array of CmsSmartyTemplate objects.  or null.
+   * @see CmsLayoutTemplate::list_by_type
+   * @return Array of CmsLayoutTemplate objects.  or null.
    */
   public function get_template_list()
   {
-	  return CmsSmartyTemplate::list_by_type($this);
+	  return CmsLayoutTemplate::list_by_type($this);
   }
 
   /**
@@ -411,7 +412,8 @@ class CmsTemplateType
 		  throw new CmsInvalidDataException('Cannot delete a template type with existing templates');
 	  }
 	  $db = cmsms()->GetDb();
-	  $query = 'DELETE FROM '.cms_db_prefix().'template_types WHERE id = ?';
+	  $query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.'
+              WHERE id = ?';
 	  $dbr = $db->Execute($query,array($this->_data['id']));
 	  if( !$dbr ) {
 		  throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
@@ -427,11 +429,11 @@ class CmsTemplateType
    * This method will throw an exception if the template cannot be created.
    *
    * @param string The template name
-   * @return CmsSmartyTemplate object, or null.
+   * @return CmsLayoutTemplate object, or null.
    */
   public function &create_new_template($name = '')
   {
-	  $ob = CmsTemplateType::create_by_type($this);
+	  $ob = self::create_by_type($this);
 	  if( $name ) $ob->set_name($ob);
 	  return $ob;
   }
@@ -441,12 +443,12 @@ class CmsTemplateType
    *
    * This method will throw an exception if the template cannot be created.
    *
-   * @see CmsSmartyTemplate::load_dflt_by_type()
-   * @return CmsSmartyTemplate object, or null.
+   * @see CmsLayoutTemplate::load_dflt_by_type()
+   * @return CmsLayoutTemplate object, or null.
    */
   public function &get_dflt_template()
   {
-	  return CmsSmartyTemplate::load_dflt_by_type($this);
+	  return CmsLayoutTemplate::load_dflt_by_type($this);
   }
 
   public function get_langified_display_value()
@@ -485,7 +487,7 @@ class CmsTemplateType
 	  $row['content_callback'] = unserialize($row['dflt_content_cb']);
 	  unset($row['dflt_content_cb']);
 
-	  $ob = new CmsTemplateType;
+	  $ob = new CmsLayoutTemplateType;
 	  $ob->_data = $row;
 	  $ob->_dirty = FALSE;
 	  return $ob;
@@ -493,25 +495,26 @@ class CmsTemplateType
 
 
   /**
-   * Load a CmsTemplateType object from the database.
+   * Load a CmsLayoutTemplateType object from the database.
    *
    * This method throws an exception when the requested object cannot be found.
    *  
    * @param mixed An integer template type id, or a string in the form of Originator::Name
-   * @return CmsTemplateType object.
+   * @return CmsLayoutTemplateType object.
   */
   public static function &load($val)
   {
 	  $db = cmsms()->GetDb();
 	  $row = null;
 	  if( (int)$val > 0 ) {
-		  $query = 'SELECT * FROM '.cms_db_prefix().'template_types WHERE id = ?';
+		  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
+                WHERE id = ?';
 		  $row = $db->GetRow($query,array($val));
 	  }
 	  elseif( strlen($val) > 0 ) {
 		  $tmp = explode('::',$val);
 		  if( count($tmp) == 2 ) {
-			  $query = 'SELECT * FROM '.cms_db_prefix().'template_types 
+			  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
                         WHERE originator = ? AND name = ?';
 			  $row = $db->GetRow($query,array(trim($tmp[0]),trim($tmp[1])));
 		  }
@@ -529,7 +532,7 @@ class CmsTemplateType
    * This method will throw exceptions if an error is encounted.
    *
    * @param string The origiator name
-   * @return An array of CmsTemplateType objects, or null if no matches are found.
+   * @return An array of CmsLayoutTemplateType objects, or null if no matches are found.
    */
   public static function load_all_by_originator($originator)
   {
@@ -538,7 +541,7 @@ class CmsTemplateType
 	  }
 
 	  $db = cmsms()->GetDb();
-	  $query = 'SELECT * FROM '.cms_db_prefix().'template_types
+	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
                 WHERE originator = ? ORDER BY modified DESC';
 	  $list = $db->GetArray($query,array($originator));
 	  if( !is_array($list) || count($list) == 0 ) {
@@ -556,7 +559,7 @@ class CmsTemplateType
   public static function get_all()
   {
 	  $db = cmsms()->GetDb();
-	  $query = 'SELECT * FROM '.cms_db_prefix().'template_types
+	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
                 ORDER BY modified DESC';
 	  $list = $db->GetArray($query);
 	  if( !is_array($list) || count($list) == 0 ) {

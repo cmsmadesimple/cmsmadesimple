@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php // -*- mode:php; tab-width:2; indent-tabs-mode:t; c-basic-offset:2; -*-
 #CMS - CMS Made Simple
 #(c)2004-2012 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
@@ -28,8 +28,9 @@
  * @since 1.12
  * @author Robert Campbell <calguy1000@gmail.com>
  */
-class CmsTemplateCategory
+class CmsLayoutTemplateCategory
 {
+	const TABLENAME = 'layot_tpl_categories';
   private $_dirty;
   private $_data = array();
 
@@ -88,12 +89,12 @@ class CmsTemplateCategory
     $db = cmsms()->GetDb();
     $tmp = null;
     if( !$this->get_id() ) {
-      $query = 'SELECT id FROM '.cms_db_prefix().'template_categories
+      $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.'
                 WHERE name = ?';
       $tmp = $db->GetOne($query,array($this->get_name()));
     }
     else {
-      $query = 'SELECT id FROM '.cms_db_prefix().'template_categories
+      $query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.'
                 WHERE name = ? AND id != ?';
       $tmp = $db->GetOne($query,array($this->get_name(),$this->get_id()));
     }
@@ -108,13 +109,13 @@ class CmsTemplateCategory
     $this->validate();
 
     $db = cmsms()->GetDb();
-	$query = 'SELECT max(item_order) FROM '.cms_db_prefix().'template_categories';
+		$query = 'SELECT max(item_order) FROM '.cms_db_prefix().self::TABLENAME;
     $item_order = $db->GetOne($query);
-	if( !$item_order ) $item_order=0;
-	$item_order++;
-	$this->_data['item_order'] = $item_order;
+		if( !$item_order ) $item_order=0;
+		$item_order++;
+		$this->_data['item_order'] = $item_order;
 
-    $query = 'INSERT INTO '.cms_db_prefix().'template_categories 
+    $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.'
               (name,description,item_order,modified) VALUES (?,?,?,?)';
     $dbr = $db->Execute($query,array($this->get_name(),$this->get_description(),
 									 $this->get_item_order(),time()));
@@ -131,7 +132,7 @@ class CmsTemplateCategory
     $this->validate();
 
     $db = cmsms()->GetDb();
-    $query = 'UPDATE '.cms_db_prefix().'template_categories
+    $query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
               SET name = ?, description = ?, modified = ? WHERE id = ?';
     $dbr = $db->Execute($query,array($this->get_name(),
 									 $this->get_description(),
@@ -155,24 +156,26 @@ class CmsTemplateCategory
     if( !$this->get_id() ) return;
 
     $db = cmsms()->GetDb();
-    $query = 'DELETE FROM '.cms_db_prefix().'template_categories WHERE id = ?';
+    $query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.'
+              WHERE id = ?';
     $dbr = $db->Execute($query,array($this->get_id()));
     if( !$dbr ) {
       throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
     }
 
-	$query = 'UPDATE '.cms_db_prefix().'template_categories SET item_order = item_order - 1
+		$query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
+              SET item_order = item_order - 1
               WHERE item_order > ?';
-	$dbr = $db->GetOne($query,array($this->_data['item_order']));
+		$dbr = $db->GetOne($query,array($this->_data['item_order']));
 
-	unset($this->_data['item_order']);
+		unset($this->_data['item_order']);
     unset($this->_data['id']);
     $this->_dirty = TRUE;
   }
 
   private static function &_load_from_data($row)
   {
-    $ob = new CmsTemplateCategory();
+    $ob = new CmsLayoutTemplateCategory();
     $ob->_data = $row;
     return $ob;
   }
@@ -182,11 +185,11 @@ class CmsTemplateCategory
     $db = cmsms()->GetDb();
     $row = null;
     if( (int)$val > 0 ) {
-      $query = 'SELECT * FROM '.cms_db_prefix().'template_categories WHERE id = ?';
+      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id = ?';
       $row = $db->GetRow($query,array((int)$val));
     }
     else {
-      $query = 'SELECT * FROM '.cms_db_prefix().'template_categories WHERE name = ?';
+      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE name = ?';
       $row = $db->GetRow($query,array($val));
     }
     if( !is_array($row) || count($row) == 0 ) {
@@ -201,13 +204,13 @@ class CmsTemplateCategory
   {
     $db = cmsms()->GetDb();
     if( $prefix ) {
-      $query = 'SELECT * FROM '.cms_db_prefix().'template_categories 
+      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
                 WHERE name LIKE ?
                 ORDER BY item_order ASC';
       $res = $db->GetArray($query,array($prefix.'%'));
     }
     else {
-      $query = 'SELECT * FROM '.cms_db_prefix().'template_categories ORDER BY modified DESC';
+      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' ORDER BY modified DESC';
       $res = $db->GetArray($query);
     }
     if( is_array($res) && count($res) ) {

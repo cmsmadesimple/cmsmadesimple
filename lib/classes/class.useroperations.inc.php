@@ -397,6 +397,15 @@ class UserOperations
 		}
 	  return self::$_user_in_group[$key];
 	}
+
+	function GetMemberGroups($uid)
+	{
+		$db = cmsms()->GetDb();
+		$query = 'SELECT group_id FROM '.cms_db_prefix().'user_groups
+                  WHERE user_id = ?';
+		$col = $db->GetCol($query,array((int)$uid));
+		return $col;
+	}
 }
 
 ?>
