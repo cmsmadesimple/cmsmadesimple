@@ -98,7 +98,7 @@ class CmsLayoutTheme
     
     foreach( $id_array as $one ) {
       if( (int)$one <= 0 ) {
-	throw new CmsInvalidDataException('CmsLayoutTheme::set_stylesheets expects an array of integers');
+				throw new CmsInvalidDataException('CmsLayoutTheme::set_stylesheets expects an array of integers');
       }
     }
 
@@ -135,7 +135,12 @@ class CmsLayoutTheme
     if( !in_array($css,$this->_css_assoc) ) return;
     $t = array();
     foreach( $this->_css_assoc as $one ) {
-      if( $css != $one ) $t[] = $one;
+      if( $css != $one ) {
+				$t[] = $one;
+			}
+			else {
+				// do we want to delete this css from the database?
+			}
     }
     $this->_dirty = TRUE;
   }
@@ -155,6 +160,22 @@ class CmsLayoutTheme
     return $this->_tpl_assoc;
   }
 
+  public function set_templates($id_array)
+  {
+    if( !is_array($id_array) ) {
+			return;
+    }
+    
+    foreach( $id_array as $one ) {
+      if( (int)$one <= 0 ) {
+				throw new CmsInvalidDataException('CmsLayoutTheme::set_templates expects an array of integers');
+      }
+    }
+
+    $this->_tpl_assoc = $id_array;
+    $this->_dirty = TRUE;
+  }
+
   protected function validate()
   {
     if( $this->get_name() == '' )
@@ -163,7 +184,7 @@ class CmsLayoutTheme
     if( count($this->_css_assoc) ) {
       $t1 = array_unique($this->_css_assoc);
       if( count($t1) != count($this->_css_assoc) ) {
-	throw new CmsInvalidDataException('Duplicate CSS Ids exist in theme.');
+				throw new CmsInvalidDataException('Duplicate CSS Ids exist in theme.');
       }
     }
 
@@ -209,7 +230,7 @@ class CmsLayoutTheme
 				$dbr = $db->ExecutE($query,array($this->get_id(),$css_id,$i+1));
       }
     }
-    if( count($this->_css_assoc) ) {
+    if( count($this->_tpl_assoc) ) {
       $query = 'INSERT INTO '.cms_db_prefix().self::TPLTABLE.'
                 (theme_id,tpl_id)';
       for( $i = 0; $i < count($this->_tpl_assoc); $i++ ) {
@@ -217,6 +238,8 @@ class CmsLayoutTheme
 				$dbr = $db->ExecutE($query,array($this->get_id(),$tpl_id));
       }
     }
+
+		audit($this->get_id(),'CMSMS','Theme created');
   }
 
   private function _update()
@@ -229,9 +252,9 @@ class CmsLayoutTheme
               SET name = ?, description = ?, modified = ?
               WHERE id = ?';
     $dbr = $db->Execute($query,array($this->get_name(),
-				     $this->get_description(),
-				     time(),
-				     $this->get_id()));
+																		 $this->get_description(),
+																		 time(),
+																		 $this->get_id()));
     if( !$dbr ) {
       throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
     }
@@ -242,7 +265,7 @@ class CmsLayoutTheme
 
     if( count($this->_css_assoc) ) {
       $query = 'INSERT INTO '.cms_db_prefix().self::CSSTABLE.'
-                (theme_id,css_id,item_order)';
+                (theme_id,css_id,item_order) VALUES (?,?,?)';
       for( $i = 0; $i < count($this->_css_assoc); $i++ ) {
 				$css_id = $this->_css_assoc[$i];
 				$dbr = $db->Execute($query,array($this->get_id(),$css_id,$i+1));
@@ -255,12 +278,14 @@ class CmsLayoutTheme
 
     if( count($this->_tpl_assoc) ) {
       $query = 'INSERT INTO '.cms_db_prefix().self::TPLTABLE.'
-                (theme_id,tpl_id)';
+                (theme_id,tpl_id) VALUES (?,?)';
       for( $i = 0; $i < count($this->_tpl_assoc); $i++ ) {
 				$tpl_id = $this->_tpl_assoc[$i];
-				$dbr = $db->Execute($query,array($this->get_id(),$css_id));
+				$dbr = $db->Execute($query,array($this->get_id(),$tpl_id));
       }
     }
+
+		audit($this->get_id(),'CMSMS','Theme updated');
   }
 
   public function save()
@@ -299,6 +324,9 @@ class CmsLayoutTheme
     $query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.'
               WHERE id = ?';
     $dbr = $db->Execute($query,array($this->get_id()));
+
+		audit($this->get_id(),'CMSMS','Theme record deleted');
+
     unset($this->_data['id']);
     $this->_dirty = TRUE;
   }
@@ -339,7 +367,7 @@ class CmsLayoutTheme
       }
       $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
                 WHERE id = ?';
-      $row = $db->Execute($query,array((int)$x));
+      $row = $db->GetRow($query,array((int)$x));
     }
     else if( is_string($x) && strlen($x) > 0 ) {
       if( is_array(self::$_raw_cache) && count(self::$_raw_cache) ) {
@@ -352,25 +380,25 @@ class CmsLayoutTheme
 
       $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
                 WHERE name = ?';
-      $row = $db->Execute($query,array(trim($x)));
+      $row = $db->GetRow($query,array(trim($x)));
     }
 
     if( !is_array($row) || count($row) == 0 ) {
-      throw new CmsDataNotFoundException('Could not find row identified by '.$x);
+      throw new CmsDataNotFoundException('Could not find theme row identified by '.$x);
     }
 
     // get attached css
     $query = 'SELECT css_id FROM '.cms_db_prefix().self::CSSTABLE.'
               WHERE theme_id = ? ORDER BY item_order';
-    $tmp = $db->GetArray($query,array($row['id']));
+    $tmp = $db->GetCol($query,array($row['id']));
     if( is_array($tmp) && count($tmp) ) {
       $row['css'] = $tmp;
     }
 
     // get attached templates
-    $query = 'SELECT id FROM '.cms_db_prefix().self::TPLTABLE.'
+    $query = 'SELECT tpl_id FROM '.cms_db_prefix().self::TPLTABLE.'
               WHERE theme_id = ?';
-    $tmp = $db->GetArray($query,array($row['id']));
+    $tmp = $db->GetCol($query,array($row['id']));
     if( is_array($tmp) && count($tmp) ) {
       $row['templates'] = $tmp;
     }

@@ -64,15 +64,23 @@ class CmsLayoutTemplateCategory
 
   public function set_description($str)
   {
-	// description is allowed to be empty.
-	$str = trim($str);
-	$this->_data['description'] = $str;
-	$this->_dirty = TRUE;
+		// description is allowed to be empty.
+		$str = trim($str);
+		$this->_data['description'] = $str;
+		$this->_dirty = TRUE;
   }
 
   public function get_item_order()
   {
     if( isset($this->_data['item_order']) ) return $this->_data['item_order'];
+  }
+
+  public function set_item_order($idx)
+  {
+		// description is allowed to be empty.
+		$idx = (int)$idx;
+		$this->_data['item_order'] = $idx;
+		$this->_dirty = TRUE;
   }
 
   public function get_modified()
@@ -124,6 +132,7 @@ class CmsLayoutTemplateCategory
     }
     $this->_data['id'] = $db->Insert_ID();
     $this->_dirty = FALSE;
+		audit($this->get_id(),'CMSMS','Template Category Created');
   }
 
   protected function _update()
@@ -133,14 +142,16 @@ class CmsLayoutTemplateCategory
 
     $db = cmsms()->GetDb();
     $query = 'UPDATE '.cms_db_prefix().self::TABLENAME.'
-              SET name = ?, description = ?, modified = ? WHERE id = ?';
+              SET name = ?, description = ?, item_order = ?, modified = ? WHERE id = ?';
     $dbr = $db->Execute($query,array($this->get_name(),
-									 $this->get_description(),
-									 time(),$this->get_id()));
+																		 $this->get_description(),
+																		 $this->get_item_order(),
+																		 time(),$this->get_id()));
     if( !$dbr ) {
       throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
     }
     $this->_dirty = FALSE;
+		audit($this->get_id(),'CMSMS','Template Category Updated');
   }
 
   public function save()
@@ -168,6 +179,7 @@ class CmsLayoutTemplateCategory
               WHERE item_order > ?';
 		$dbr = $db->GetOne($query,array($this->_data['item_order']));
 
+		audit($this->get_id(),'CMSMS','Template Category Deleted');
 		unset($this->_data['item_order']);
     unset($this->_data['id']);
     $this->_dirty = TRUE;
@@ -210,7 +222,8 @@ class CmsLayoutTemplateCategory
       $res = $db->GetArray($query,array($prefix.'%'));
     }
     else {
-      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' ORDER BY modified DESC';
+      $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' 
+                ORDER BY item_order ASC';
       $res = $db->GetArray($query);
     }
     if( is_array($res) && count($res) ) {

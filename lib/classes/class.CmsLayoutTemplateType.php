@@ -337,6 +337,7 @@ class CmsLayoutTemplateType
 		  throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 	  }
 	  $this->_data['id'] = $db->Insert_ID();
+		audit($this->get_id(),'CMSMS','Template Type Created');
 	  $this->_dirty = null;
   }
 
@@ -373,6 +374,7 @@ class CmsLayoutTemplateType
 		  throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 	  }
 	  $this->_dirty = null;
+		audit($this->get_id(),'CMSMS','Template Type Updated');
   }
 
 
@@ -420,6 +422,7 @@ class CmsLayoutTemplateType
 	  }
 
 	  $this->_dirty = TRUE;
+		audit($this->get_id(),'CMSMS','Template Type Deleted');
 	  unset($this->_data['id']);
   }
 

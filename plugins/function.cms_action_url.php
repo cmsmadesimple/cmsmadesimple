@@ -9,6 +9,7 @@ function smarty_cms_function_cms_action_url($params, &$template)
   $mid = $smarty->get_template_vars('actionid');
   $action = null;
   $assign = null;
+  $forjs  = 0;
 
   $actionparms = array();
   foreach( $params as $key => $value ) {
@@ -27,6 +28,9 @@ function smarty_cms_function_cms_action_url($params, &$template)
       break;
     case 'assign':
       $assign = trim($value);
+      break;
+    case 'forjs':
+      $forjs = 1;
       break;
     default:
       $actionparms[$key] = $value;
@@ -58,6 +62,9 @@ function smarty_cms_function_cms_action_url($params, &$template)
   $url = $obj->create_url($mid,$action,$returnid,$actionparms);
   if( !$url ) return;
 
+  if( $forjs ) {
+    $url = str_replace('&amp;','&',$url);
+  }
   if( $assign ) {
     $smarty->assign($assign,$url);
     return;

@@ -419,6 +419,7 @@ class CmsLayoutTemplate
 			}
 		}
 
+		audit($this->get_id(),'CMSMS','Template Updated');
 		$this->_dirty = FALSE;
 	}
 
@@ -469,6 +470,7 @@ class CmsLayoutTemplate
 			}
 		}
 		$this->_dirty = FALSE;
+		audit($this->get_id(),'CMSMS','Template Created');
 	}
 
 	public function save()
@@ -491,7 +493,7 @@ class CmsLayoutTemplate
 		return $ob;
 	}
 
-	protected static function _load_bulk($list)
+	protected static function load_bulk($list)
 	{
 		if( !is_array($list) || count($list) == 0 ) return;
 
@@ -594,10 +596,10 @@ class CmsLayoutTemplate
 				$second = (int)$second;
 				$where['category'][] = 'category_id = '.$db->qstr($second);
 				break;
-// 			case 'h': // theme
-// 				$second = (int)$second;
-// 				$where['theme'][] = 'theme_id = '.$db->qstr($second);
-// 				break;
+//  			case 'h': // theme
+//  				$second = (int)$second;
+//  				$where['theme'][] = 'theme_id = '.$db->qstr($second);
+//  				break;
 			case 'u': // user
 				$second = (int)$second;
 				$where['user'][] = 'owner_id = '.$db->qstr($second);
@@ -639,7 +641,7 @@ class CmsLayoutTemplate
 		$tmp1 = $db->GetCol($query);
 		if( !is_array($tmp1) || count($tmp1) == 0 ) return;
 
-		return self::_load_bulk($tmp1);
+		return self::load_bulk($tmp1);
 	}
 
 	public static function get_editable_templates($a)
@@ -667,7 +669,7 @@ class CmsLayoutTemplate
 		if( is_array($tmp) && count($tmp) ) {
 			$tmp = array_unique($tmp);
 			if( is_array($tmp) && count($tmp) ) {
-				return self::_load_bulk($tmp);
+				return self::load_bulk($tmp);
 			}
 		}
 	}
