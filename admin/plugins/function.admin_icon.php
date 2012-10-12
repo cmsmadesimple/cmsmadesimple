@@ -65,7 +65,7 @@ function smarty_function_admin_icon($params,&$template)
   foreach( $tagparms as $key => $value ) {
     $out .= " $key=\"$value\"";
   }
-  $out .= '>';
+  $out .= '/>';
 
   if( isset($params['assign']) ) {
     $smarty->assign(trim($params['assign']),$out);

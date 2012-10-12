@@ -607,12 +607,12 @@ class CmsLayoutTemplate
 			case 'e': // editable
 				$second = (int)$second;
 				$q2 = 'SELECT DISTINCT tpl_id FROM (
-                       SELECT tpl_id FROM '.cms_db_prefix().'template_addt_users 
-                        WHERE user_id = ? 
-                       UNION
-                       SELECT id AS tpl_id FROM '.cms_db_prefix().'template_list
-                        WHERE owner_id = ?)
-                     AS tmp1';
+                 SELECT tpl_id FROM '.cms_db_prefix().self::ADDUSERSTABLE.'
+                   WHERE user_id = ? 
+                 UNION
+                 SELECT id AS tpl_id FROM '.cms_db_prefix().self::TABLENAME.'
+                   WHERE owner_id = ?)
+                 AS tmp1';
 				$t2 = $db->GetCol($q2,array($second,$second));
 				if( is_array($t2) && count($t2) ) {
 					$where['user'][] = 'id IN ('.implode(',',$t2).')';
