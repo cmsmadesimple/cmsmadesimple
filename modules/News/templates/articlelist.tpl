@@ -39,7 +39,7 @@ function selectAll()
 
 {if $itemcount > 0}
 <div class="pageoptions">
-	<p class="pageoptions">{$addlink}</p>
+{if isset($addlink)}<p class="pageoptions">{$addlink}</p>{/if}
 </div>
 
 {if $pagecount > 1}
@@ -85,7 +85,7 @@ function selectAll()
                         </td>
 			<td>{$entry->category}</td>
 			<td>{if isset($entry->approve_link)}{$entry->approve_link}{/if}</td>
-			<td>{$entry->editlink}</td>
+			<td>{$entry->editlink|default:''}</td>
 			<td>{if isset($entry->deletelink)}{$entry->deletelink}{/if}</td>
 			<td>{$entry->select}</td>
 		</tr>
@@ -95,9 +95,11 @@ function selectAll()
 {/if}
 
 <div style="width: 97%;">
-<div class="pageoptions" style="float: left;">
-	<p class="pageoptions">{$addlink}</p>
-</div>
+{if isset($addlink)}
+  <div class="pageoptions" style="float: left;">
+    <p class="pageoptions">{$addlink}</p>
+  </div>
+{/if}
 {if $itemcount > 0}
   <div class="pageoptions" style="float: right;">
     {$reassigntext}:&nbsp;{$categoryinput}{$submit_reassign}{if isset($submit_massdelete)}<br/>{$submit_massdelete}{/if}

@@ -43,12 +43,12 @@ class News extends CMSModule
 
 	function GetVersion()
 	{
-		return '2.12.9';
+		return '2.12.11';
 	}
 
 	function MinimumCMSVersion()
 	{
-	  return '1.11';
+	  return '1.12-alpha0';
 	}
 
 	function GetAdminDescription()

@@ -246,7 +246,9 @@ while ($dbresult && $row = $dbresult->FetchRow())
 $smarty->assign_by_ref('items', $entryarray);
 $smarty->assign('itemcount', count($entryarray));
 
-$smarty->assign('addlink', $this->CreateLink($id, 'addarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newobject.gif', $this->Lang('addarticle'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle'), array(), '', false, false, 'class="pageoptions"'));
+if( $this->CheckPermission('Modify News') ) {
+  $smarty->assign('addlink', $this->CreateLink($id, 'addarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newobject.gif', $this->Lang('addarticle'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle'), array(), '', false, false, 'class="pageoptions"'));
+}
 
 $smarty->assign('form2start',$this->CreateFormStart($id,'defaultadmin',$returnid));
 $smarty->assign('form2end',$this->CreateFormEnd());
