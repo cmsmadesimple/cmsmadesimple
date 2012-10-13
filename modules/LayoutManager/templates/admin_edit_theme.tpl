@@ -1,0 +1,51 @@
+{if $theme->get_id()}
+<h3>{$mod->Lang('edit_theme')}: {$theme->get_name()} ({$theme->get_id()})</h3>
+{else}
+<h3>{$mod->Lang('create_theme')}</h3>
+{/if}
+
+{form_start}<input type="hidden" name="{$actionid}theme" value="{$theme->get_id()}"/>
+
+<div class="pageoverflow">
+  <p class="pagetext"></p>
+  <p class="pageinput">
+    <input id="submitme" type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+    <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+  </p>
+</div>
+
+<div class="pageoverflow">
+  <p class="pagetext"><label for="theme_name">{$mod->Lang('prompt_name')}</label>:&nbsp;{admin_icon name='help_theme_name' icon='info.gif' class='helpicon'}</p>
+  <p class="pageinput">
+    <input type="text" id="theme_name" name="{$actionid}name" value="{$theme->get_name()}" size="50" maxlength="50"/>
+  </p>
+</div>
+
+{tab_header name='templates' label=$mod->Lang('prompt_templates')}
+{tab_header name='stylesheets' label=$mod->Lang('prompt_stylesheets')}
+{tab_header name='description' label=$mod->Lang('prompt_description')}
+{tab_start name='templates'}
+{include file='module_file_tpl:LayoutManager;admin_edit_theme_templates.tpl' scope='root'}
+{tab_start name='stylesheets'}
+{include file='module_file_tpl:LayoutManager;admin_edit_theme_stylesheets.tpl' scope='root'}
+{tab_start name='description'}
+<textarea name="{$actionid}description">{$theme->get_description()}</textarea>&nbsp;
+{admin_icon icon='info.gif' class='helpicon' name='help_description'}
+{tab_end}
+{form_end}
+<div style="display: none;">{strip}
+  <div id="help_theme_name" title="{$mod->Lang('help')}">{$mod->Lang('help_theme_name')}</div>
+{/strip}</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#submitme').live('click',function(){
+    $('select.selall').attr('multiple','multiple');	
+    $('select.selall option').attr('selected','selected');
+  });
+  $('.helpicon').click(function(){
+    var x = $(this).attr('name');
+    $('#'+x).dialog();
+  });
+});
+</script>
