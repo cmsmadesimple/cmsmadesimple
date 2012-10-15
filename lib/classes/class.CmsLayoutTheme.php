@@ -222,9 +222,10 @@ class CmsLayoutTheme
     }
 
     $this->_data['id'] = $db->Insert_ID();
+
     if( count($this->_css_assoc) ) {
       $query = 'INSERT INTO '.cms_db_prefix().self::CSSTABLE.'
-                (theme_id,css_id,item_order)';
+                (theme_id,css_id,item_order) VALUES (?,?)';
       for( $i = 0; $i < count($this->_css_assoc); $i++ ) {
 				$css_id = $this->_css_assoc[$i];
 				$dbr = $db->ExecutE($query,array($this->get_id(),$css_id,$i+1));
@@ -232,10 +233,11 @@ class CmsLayoutTheme
     }
     if( count($this->_tpl_assoc) ) {
       $query = 'INSERT INTO '.cms_db_prefix().self::TPLTABLE.'
-                (theme_id,tpl_id)';
+                (theme_id,tpl_id) VALUES(?,?)';
       for( $i = 0; $i < count($this->_tpl_assoc); $i++ ) {
 				$tpl_id = $this->_tpl_assoc[$i];
-				$dbr = $db->ExecutE($query,array($this->get_id(),$tpl_id));
+				$dbr = $db->Execute($query,array($this->get_id(),$tpl_id));
+				debug_to_log($db->sql.' -- '.$db->ErrorMsg());
       }
     }
 
@@ -303,8 +305,8 @@ class CmsLayoutTheme
       throw new CmsException('Cannot Delete a Theme that has Templats Attached');
     }
 
+		$db = cmsms()->GetDb();
     if( count($this->_css_assoc) ) {
-      $db = cmsms()->GetDb();
       $query = 'DELETE FROM '.cms_db_prefix().self::CSSTABLE.'
                 WHERE theme_id = ?';
       $dbr = $db->Execute($query,array($this->get_id()));
@@ -313,7 +315,6 @@ class CmsLayoutTheme
     }
 
 		if( count($this->_tpl_assoc) ) {
-      $db = cmsms()->GetDb();
       $query = 'DELETE FROM '.cms_db_prefix().self::TPLTABLE.'
                 WHERE theme_id = ?';
       $dbr = $db->Execute($query,array($this->get_id()));
@@ -407,7 +408,7 @@ class CmsLayoutTheme
     return self::_load_from_data($row);
   }
 
-  public function get_all()
+  public static function get_all()
   {
     $out = null;
     $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
@@ -440,7 +441,7 @@ class CmsLayoutTheme
       }
 
       $query = 'SELECT * FROM '.cms_db_prefix().self::TPLTABLE.'
-                WHERE theme_id IN ('.implode(',',$ids).') ORDER BY id';
+                WHERE theme_id IN ('.implode(',',$ids).') ORDER BY theme_id';
       $dbr2 = $db->GetArray($query);
       if( is_array($dbr2) && count($dbr2) ) {
 				foreach( $dbr2 as $row ) {
@@ -459,10 +460,22 @@ class CmsLayoutTheme
       foreach( $cache as $key => $row ) {
 				$out[] = self::_load_from_data($row);
       }
+			return $out;
     }
 
-    return $out;
   }
+
+	public static function get_list()
+	{
+		$themes = self::get_all();
+		if( is_array($themes) && count($themes) ) {
+			$out = array();
+			foreach( $themes as $one ) {
+				$out[$one->get_id()] = $one->get_name();
+			}
+			return $out;
+		}
+	}
 } // end of class
 
 #

@@ -596,10 +596,13 @@ class CmsLayoutTemplate
 				$second = (int)$second;
 				$where['category'][] = 'category_id = '.$db->qstr($second);
 				break;
-//  			case 'h': // theme
-//  				$second = (int)$second;
-//  				$where['theme'][] = 'theme_id = '.$db->qstr($second);
-//  				break;
+			case 'h': // theme
+				// find all the templates in theme h
+				$q2 = 'SELECT tpl_id IN '.cms_db_prefix().CmsLayoutTheme::TPLTABLE.'
+               WHERE theme_id = ?';
+				$tpls = $db->GetCol($query,array((int)$second));
+				$where['theme'][] = 'id IN ('.implode(',',$tpls).')';
+				break;
 			case 'u': // user
 				$second = (int)$second;
 				$where['user'][] = 'owner_id = '.$db->qstr($second);
@@ -641,8 +644,17 @@ class CmsLayoutTemplate
 		$tmp1 = $db->GetCol($query);
 		if( !is_array($tmp1) || count($tmp1) == 0 ) return;
 
-		return self::load_bulk($tmp1);
+		$out = self::load_bulk($tmp1);
+		if( isset($params['as_list']) && count($out) ) {
+			$tmp2 = array();
+			foreach( $out as $one ) {
+				$tmp2[$one->get_id()] = $one->get_name();
+			}
+			return $tmp2;
+		}
+		return $out;
 	}
+
 
 	public static function get_editable_templates($a)
 	{
