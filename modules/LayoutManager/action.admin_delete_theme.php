@@ -45,31 +45,31 @@ try {
     if( isset($params['delete_templates']) && $can_delete_templates ) {
       $tpl_id_list = $theme->get_templates();
       if( is_array($tpl_id_list) && count($tpl_id_list) ) {
-	$templates = CmsLayoutTemplate::load_bulk($tpl_id_list);
-	if( is_array($templates) && count($templates) ) {
-	  foreach( $templates as &$tpl ) {
-	    $x = $tpl->get_themes();
-	    if( is_array($x) && count($x) == 1 && $x[0] == $theme->get_id() ) {
-	      // its orphaned
-	      $tpl->delete();
-	    }
-	  }
-	}
+				$templates = CmsLayoutTemplate::load_bulk($tpl_id_list);
+				if( is_array($templates) && count($templates) ) {
+					foreach( $templates as &$tpl ) {
+						$x = $tpl->get_themes();
+						if( is_array($x) && count($x) == 1 && $x[0] == $theme->get_id() ) {
+							// its orphaned
+							$tpl->delete();
+						}
+					}
+				}
       }
     }
 
     if( isset($params['delete_stylesheets']) && $can_delete_stylesheets ) {
       $css_id_list = $theme->get_stylesheets();
       if( is_array($css_id_list) && count($css_id_list) ) {
-	// get the themes that are attached to these stylesheets
-	$query = 'SELECT theme_id FROM '.cms_db_prefix().CmsLayoutTheme::CSSTABLE.'
-                   WHERE css_id != ?';
-	foreach( $css_id_list as $css_id ) {
-	  $dbr = $db->GetOne($query,array($css_id));
-	  if( $dbr ) continue; // not orphaned
-	  // here it's orphaned, we'll nuke it.
-	  $ops = StylesheetOperations::get_instance()->DeleteStylesheetByID($css_id);
-	}
+				// get the themes that are attached to these stylesheets
+				$query = 'SELECT theme_id FROM '.cms_db_prefix().CmsLayoutTheme::CSSTABLE.'
+                  WHERE css_id != ?';
+				foreach( $css_id_list as $css_id ) {
+					$dbr = $db->GetOne($query,array($css_id));
+					if( $dbr ) continue; // not orphaned
+					// here it's orphaned, we'll nuke it.
+					$ops = StylesheetOperations::get_instance()->DeleteStylesheetByID($css_id);
+				}
       }
     }
 

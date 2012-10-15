@@ -68,6 +68,7 @@ $lang['msg_cancelled'] = 'Operation Cancelled';
 $lang['msg_category_deleted'] = 'Category Deleted';
 $lang['msg_category_saved'] = 'Category Saved';
 $lang['msg_template_saved'] = 'Template Saved';
+$lang['msg_theme_deleted'] = 'Theme Deleted';
 $lang['msg_theme_saved'] = 'Theme Saved';
 $lang['msg_type_saved'] = 'Template Type Saved';
 
@@ -98,6 +99,7 @@ $lang['prompt_help'] = 'Help';
 $lang['prompt_group'] = 'Group';
 $lang['prompt_id'] = 'Id';
 $lang['prompt_modified'] = 'Modified Date';
+$lang['prompt_na'] = 'N/A';
 $lang['prompt_name'] = 'Name';
 $lang['prompt_none'] = 'None';
 $lang['prompt_notdflt'] = 'This is not a default template';

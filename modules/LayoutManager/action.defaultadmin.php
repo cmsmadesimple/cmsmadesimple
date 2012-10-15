@@ -44,13 +44,15 @@ $opts = array();
 $opts[''] = $this->Lang('prompt_none');
 $types = CmsLayoutTemplateType::get_all();
 if( count($types) ) {
-  $smarty->assign('list_all_types',$types);
   $tmp = array();
   $tmp2 = array();
+	$tmp3 = array();
   for( $i = 0; $i < count($types); $i++ ) {
     $tmp['t:'.$types[$i]->get_id()] = $types[$i]->get_langified_display_value();
     $tmp2[$types[$i]->get_id()] = $types[$i]->get_langified_display_value();
+    $tmp3[$types[$i]->get_id()] = $types[$i];
   }
+  $smarty->assign('list_all_types',$tmp3);
   $smarty->assign('list_types',$tmp2);
   $opts[$this->Lang('tpl_types')] = $tmp;
 }

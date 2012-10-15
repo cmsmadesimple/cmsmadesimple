@@ -43,7 +43,12 @@
           {else}<span title="{$mod->Lang('help_template_multiple_themes')}">({count($t1)})</span>{/if}
         </td>
         <td>
-         {if $template->get_type_dflt()}{admin_icon icon='true.gif' title=$mod->Lang('prompt_dflt')}{else}{admin_icon icon='false.gif' title=$mod->Lang('prompt_notdflt')}{/if}
+	 {assign var='the_type' value=$list_all_types.$n}
+         {if $the_type->get_dflt_flag()}
+           {if $template->get_type_dflt()}{admin_icon icon='true.gif' title=$mod->Lang('prompt_dflt')}{else}{admin_icon icon='false.gif' title=$mod->Lang('prompt_notdflt')}{/if}
+         {else}
+           {$mod->Lang('prompt_na')}
+         {/if}
         </td>
         <td><a href="{$edit_tpl}" title="{$mod->Lang('edit_template')}">{admin_icon icon='edit.gif' title=$mod->Lang('prompt_edit')}</a></td>
         <td>

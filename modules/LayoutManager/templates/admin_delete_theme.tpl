@@ -1,4 +1,4 @@
-{form_start}
+{form_start theme=$theme->get_id()}
 <h3>{$mod->Lang('delete_theme')}: {$theme->get_name()} ({$theme->get_id()})</h3>
 
 {if $theme->has_templates() && $tpl_permission}

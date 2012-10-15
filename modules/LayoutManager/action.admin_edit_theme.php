@@ -29,7 +29,7 @@ if( isset($params['cancel']) ) {
 
 $theme = null;
 try {
-  if( !isset($params['theme']) ) {
+  if( !isset($params['theme']) || $params['theme'] == '' ) {
     $theme= new CmsLayoutTheme;
     $theme->set_name('New Theme');
   }
