@@ -55,7 +55,7 @@ class CmsNls
     if( !is_array($aliases) ) $aliases = explode(',',$aliases);
     if( is_array($aliases) && count($aliases) ) {
       for( $i = 0; $i < count($aliases); $i++ ) {
-	if( $aliases[$i] == $str ) return TRUE;
+	if( strtolower($aliases[$i]) == strtolower($str) ) return TRUE;
       }
     }
     return FALSE;

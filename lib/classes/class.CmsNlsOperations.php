@@ -64,42 +64,43 @@ final class CmsNlsOperations
    * @ignore
    */
   private static $_fe_language_detector;
-  
+
+  /**
+   * @ignore
+   */
+  private static $_stored_dflt_language;
+
   /**
    * @ignore
    */
   private static function _load_nls()
   {
-    if( !is_array(self::$_nls) )
-      {
-	self::$_nls = array();
-	$config = cmsms()->GetConfig();
-	$nlsdir = cms_join_path($config['root_path'],'lib','nls');
-	$langdir = cms_join_path($config['root_path'],$config['admin_dir'],'lang');
-	$files = glob($nlsdir.'/*nls.php');
-	if( is_array($files) && count($files) )
-	  {
-	    for( $i = 0; $i < count($files); $i++ )
-	      {
-		if( !is_file($files[$i]) ) continue;
-		$fn = basename($files[$i]);
-		$tlang = substr($fn,0,strpos($fn,'.'));
-		if( $tlang != 'en_US' && !file_exists(cms_join_path($langdir,'ext',$tlang,'admin.inc.php')) )
-		  {
-		    continue;
-		  }
-
-		unset($nls);
-		include($files[$i]);
-		if( isset($nls) )
-		  {
-		    $obj = CmsNls::from_array($nls);
-		    unset($nls);
-		    self::$_nls[$obj->key()] = $obj;
-		  }
-	      }
+    if( !is_array(self::$_nls) ) {
+      self::$_nls = array();
+      $config = cmsms()->GetConfig();
+      $nlsdir = cms_join_path($config['root_path'],'lib','nls');
+      $langdir = cms_join_path($config['root_path'],$config['admin_dir'],'lang');
+      $files = glob($nlsdir.'/*nls.php');
+      if( is_array($files) && count($files) ) {
+	for( $i = 0; $i < count($files); $i++ ) {
+	  if( !is_file($files[$i]) ) continue;
+	  $fn = basename($files[$i]);
+	  $tlang = substr($fn,0,strpos($fn,'.'));
+	  if( $tlang != 'en_US' && 
+	      !file_exists(cms_join_path($langdir,'ext',$tlang,'admin.inc.php')) ) {
+	    continue;
 	  }
+
+	  unset($nls);
+	  include($files[$i]);
+	  if( isset($nls) ) {
+	    $obj = CmsNls::from_array($nls);
+	    unset($nls);
+	    self::$_nls[$obj->key()] = $obj;
+	  }
+	}
       }
+    }
   }
 
   /**
@@ -111,10 +112,9 @@ final class CmsNlsOperations
   public static function get_installed_languages()
   {
     self::_load_nls();
-    if( is_array(self::$_nls) )
-      {
-	return array_keys(self::$_nls);
-      }
+    if( is_array(self::$_nls) ) {
+      return array_keys(self::$_nls);
+    }
   }
 
   /**
@@ -126,10 +126,9 @@ final class CmsNlsOperations
   public static function get_language_info($lang)
   {
     self::_load_nls();
-    if( isset(self::$_nls[$lang]) )
-      {
-	return self::$_nls[$lang];
-      }
+    if( isset(self::$_nls[$lang]) ) {
+      return self::$_nls[$lang];
+    }
   }
 
   /**
@@ -165,14 +164,13 @@ final class CmsNlsOperations
     if( $curlang == $lang ) return TRUE; // nothing to do.
     
     self::_load_nls();
-    if( isset(self::$_nls[$lang]) )
-      {
-	// lang is okay... now we can set it.
-	self::$_cur_lang = $lang;
-	// and set the locale along with this language.
-	self::set_locale();
-	return TRUE;
-      }
+    if( isset(self::$_nls[$lang]) ) {
+      // lang is okay... now we can set it.
+      self::$_cur_lang = $lang;
+      // and set the locale along with this language.
+      self::set_locale();
+      return TRUE;
+    }
     return FALSE;
   }
 
@@ -212,17 +210,18 @@ final class CmsNlsOperations
     global $CMS_STYLESHEET;
     global $CMS_INSTALL_PAGE;
     
+    if( self::$_stored_dflt_language ) return self::$_stored_dflt_language;
+
     self::_load_nls();
     $lang = '';
-    if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE))
-      {
-	 $lang = self::get_admin_language();
-      }
-    else
-      {
-	$lang = self::get_frontend_language();
-      }
+    if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET) || isset($CMS_INSTALL_PAGE)) {
+      $lang = self::get_admin_language();
+    }
+    else {
+      $lang = self::get_frontend_language();
+    }
     if( !$lang ) $lang = 'en_US';
+    self::$_stored_dflt_language = $lang;
     return $lang;
   }
 
@@ -235,10 +234,9 @@ final class CmsNlsOperations
    */
   protected static function get_frontend_language()
   {
-    if( is_object(self::$_fe_language_detector) )
-      {
-	return self::$_fe_language_detector->find_language();
-      }
+    if( is_object(self::$_fe_language_detector) ) {
+      return self::$_fe_language_detector->find_language();
+    }
     $x = trim(get_site_preference('frontendlang'));
     if( !$x ) $x = 'en_US';
     return $x;
@@ -256,33 +254,28 @@ final class CmsNlsOperations
   {
     $uid = get_userid(false);
     $lang = '';
-    if( $uid )
-      {
-	$lang = get_preference($uid,'default_cms_language');
-	if( $lang )
-	  {
-	    self::_load_nls();
-	    if( !isset(self::$_nls[$lang]) ) $lang = '';
-	  }
-      }
-
-    if( !$lang )
-      {
-	$lang = self::detect_browser_language();
-      }
-
-    if( $uid && isset($_POST['default_cms_language']) )
-      {
-	// a hack to handle the editpref case of the user changing his language
-	// this is needed because the lang stuff is included before the preference may
-	// actually be set.
+    if( $uid ) {
+      $lang = get_preference($uid,'default_cms_language');
+      if( $lang ) {
 	self::_load_nls();
-	$a2 = basename(trim($_POST['default_cms_language']));
-	if( $a2 && isset(self::$_nls[$a2]) )
-	  {
-	    $lang = $a2;
-	  }
+	if( !isset(self::$_nls[$lang]) ) $lang = '';
       }
+    }
+
+    if( !$lang ) {
+      $lang = self::detect_browser_language();
+    }
+
+    if( $uid && isset($_POST['default_cms_language']) ) {
+      // a hack to handle the editpref case of the user changing his language
+      // this is needed because the lang stuff is included before the preference may
+      // actually be set.
+      self::_load_nls();
+      $a2 = basename(trim($_POST['default_cms_language']));
+      if( $a2 && isset(self::$_nls[$a2]) ) {
+	$lang = $a2;
+      }
+    }
 
     if( $lang == '' ) $lang = 'en_US';
     return $lang;
@@ -321,20 +314,22 @@ final class CmsNlsOperations
   {
     if( !isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ) return;
 
-    preg_match_all('/([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $lang_parse);
-    if (count($lang_parse[1])) 
-      {
-        // create a list like "en" => 0.8
-        $langs = array_combine($lang_parse[1], $lang_parse[4]);
-    	
-        // set default to 1 for any without q factor
-        foreach ($langs as $lang => $val) {
-            if ($val === '') $langs[$lang] = 1;
-        }
+    $in = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+    $in = 'en-us,en;q=0.5';
+    preg_match_all('/([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i', $in, $lang_parse);
 
-        // sort list based on value	
-        arsort($langs, SORT_NUMERIC);
+    if (count($lang_parse[1])) {
+      // create a list like "en" => 0.8
+      $langs = array_combine($lang_parse[1], $lang_parse[4]);
+    	
+      // set default to 1 for any without q factor
+      foreach ($langs as $lang => $val) {
+	if ($val === '') $langs[$lang] = 1;
       }
+
+      // sort list based on value	
+      arsort($langs, SORT_NUMERIC);
+    }
 
     return $langs;
   }
@@ -372,11 +367,10 @@ final class CmsNlsOperations
    */
   public static function set_encoding($str)
   {
-    if( !$str ) 
-      {
-	self::$_encoding = null;
-	return;
-      }
+    if( !$str ) {
+      self::$_encoding = null;
+      return;
+    }
     self::$_encoding = $str;
   }
 
@@ -408,10 +402,9 @@ final class CmsNlsOperations
     }
 
     if( $locale ) {
-      if( !is_array($locale) )
-	{
-	  $locale = explode(',',$locale);
-	}
+      if( !is_array($locale) ) {
+	$locale = explode(',',$locale);
+      }
       $res = setlocale(LC_ALL,$locale);
       $_locale_set = 1;
     }
@@ -428,10 +421,9 @@ final class CmsNlsOperations
    */
   public static function set_language_detector(CmsLanguageDetector& $obj)
   {
-    if( is_object(self::$_fe_language_detector) )
-      {
-	die('language detector already set');
-      }
+    if( is_object(self::$_fe_language_detector) ) {
+      die('language detector already set');
+    }
     self::$_fe_language_detector = $obj;
   }
 
