@@ -1,3 +1,8 @@
+Version 1.11.3 - NO NAME
+-----------------------------
+Core - General
+  - Aliases in NLS operations are now case insensitive
+
 Version 1.11.2 - Isabela 
 -----------------------------
 Core - General:

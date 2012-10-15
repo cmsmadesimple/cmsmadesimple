@@ -57,7 +57,7 @@ class CmsNls
       {
 	for( $i = 0; $i < count($aliases); $i++ )
 	  {
-	    if( $aliases[$i] == $str ) return TRUE;
+	    if( strtolower($aliases[$i]) == strtolower($str) ) return TRUE;
 	  }
       }
     return FALSE;
