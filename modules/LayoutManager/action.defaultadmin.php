@@ -79,7 +79,7 @@ if( count($themes) ) {
 if( $this->CheckPermission('Manage Themes') ) {
   $userops = cmsms()->GetUserOperations();
   $allusers = $userops->LoadUsers();
-  $users = array();
+  $users = array(-1=>$this->Lang('prompt_unknown'));
   $tmp = array();
   for( $i = 0; $i < count($allusers); $i++ ) {
     $tmp['u:'.$allusers[$i]->id] = $allusers[$i]->username;

@@ -134,7 +134,8 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 
   public static function page_type_lang_callback($key)
   {
-    die('incomplete');
+    if( $key == '__CORE__' ) return 'CMSMS';
+    return lang($key);
   }
 
   public static function reset_page_type_defaults()

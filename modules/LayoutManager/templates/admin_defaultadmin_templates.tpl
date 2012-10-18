@@ -64,6 +64,7 @@
 {else}
   {page_warning msg=$mod->Lang('warning_no_templates_available')}
 {/if}
+
 {if $has_add_right}
 {form_start action='admin_edit_template'}
 <fieldset class="pagecontainer">

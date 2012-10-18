@@ -222,6 +222,7 @@ class CmsLayoutTemplate
 	public function get_owner_id()
 	{
 		if( isset($this->_data['owner_id']) ) return $this->_data['owner_id'];
+		return -1;
 	}
 
 	public function set_owner($a)
@@ -664,8 +665,13 @@ class CmsLayoutTemplate
 		}
 
 		$db = cmsms()->GetDb();
-		$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE owner_id = ?';
-		$tmp1 = $db->GetCol($query,array($n));
+		$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME;
+		$parms = array();
+		if( !UserOperations::get_instance()->CheckPermission($n,'Modify Templates') ) {
+			$query .= ' WHERE owner_id = ?';
+			$parms[] = $n;
+		}
+		$tmp1 = $db->GetCol($query,$parms);
 
 		$query = 'SELECT tpl_id FROM '.cms_db_prefix().self::ADDUSERSTABLE.' WHERE user_id = ?';
 		$tmp2 = $db->GetCol($query,array($n));

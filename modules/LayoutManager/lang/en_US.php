@@ -115,6 +115,7 @@ $lang['prompt_templatetypes'] = 'Template Types';
 $lang['prompt_theme'] = 'Theme';
 $lang['prompt_themes'] = 'Themes';
 $lang['prompt_type'] = 'Type';
+$lang['prompt_unknown'] = 'Unknown';
 $lang['prompt_user'] = 'User';
 $lang['prompt_view'] = 'View';
 

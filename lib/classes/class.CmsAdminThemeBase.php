@@ -250,7 +250,7 @@ abstract class CmsAdminThemeBase
         if (count($thisUserPages) > 0) {
 			$this->_perms['pagePerms'] = true;
 		}
-        $this->_perms['contentPerms'] = $this->_perms['pagePerms'] | $this->_perms['htmlPerms'] | 
+        $this->_perms['contentPerms'] = $this->_perms['pagePerms'] | 
 			(isset($this->_sectionCount['content']) && $this->_sectionCount['content'] > 0);
 
 		// layout        

@@ -373,6 +373,16 @@ class UserOperations
 		return FALSE;
 	}
 
+	public function IsSuperuser($uid)
+	{
+		if( $uid == 1 ) return TRUE;
+		$groups = $this->GetMemberGroups();
+		if( is_array($groups) && count($groups) ) {
+			if( in_array($uid,$groups) ) return TRUE;
+		}
+		return FALSE;
+	}
+
 	function GetMemberGroups($uid)
 	{
 		if( !is_array(self::$_user_groups) || !isset(self::$_user_groups[$uid]) ) {
@@ -404,7 +414,6 @@ class UserOperations
 	public function CheckPermission($userid,$permname)
 	{
 		if( $userid <= 0 ) return FALSE;
-		if( $userid == 1 ) return TRUE; // god user.
 		$groups = $this->GetMemberGroups($userid);
 		if( !is_array($groups) ) return FALSE;
 		if( in_array(1,$groups) ) return TRUE; // member of admin group
