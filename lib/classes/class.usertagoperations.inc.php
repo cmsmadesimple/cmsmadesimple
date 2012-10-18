@@ -168,31 +168,34 @@ final class UserTagOperations
 	 *
 	 * @return mixed If successful, true.  If it fails, false.
 	 */
-	function SetUserTag( $name, $text )
+	function SetUserTag( $name, $text, $description )
 	{
 		$db = cmsms()->GetDb();
 
 		$existing = $this->GetUserTag($name);
-		if (!$existing)
-		{
+		if (!$existing) {
 			$this->_cache = array(); // reset the cache.
 			$new_usertag_id = $db->GenID(cms_db_prefix()."userplugins_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, create_date, modified_date) VALUES (?,?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
-			$result = $db->Execute($query, array($new_usertag_id, $name, $text));
+			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, description, create_date, modified_date) VALUES (?,?,?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+			$result = $db->Execute($query, array($new_usertag_id, $name, $text, $description));
 			if ($result)
 				return true;
 			else
 				return false;
 		}
-		else
-		{
+		else {
 			$this->_cache = array(); // reset the cache.
-			$query = 'UPDATE '.cms_db_prefix().'userplugins SET code = ?, modified_date = '.$db->DBTimeStamp(time()).' WHERE userplugin_name = ?';
-			$result = $db->Execute($query, array($text, $name));
-			if ($result)
-				return true;
-			else
-				return false;
+			$query = 'UPDATE '.cms_db_prefix().'userplugins SET code = ?';
+            $parms = array($text);
+			if( $description ) {
+				$query .= ', description = ?';
+				$parms[] = $description;
+			}
+			$query .= ', modified_date = '.$db->DBTimeStamp(time()).' WHERE userplugin_name = ?';
+			$parms[] = $name;
+			$result = $db->Execute($query, $parms);
+			if ($result) return true;
+			return false;
 		}
 	}
 

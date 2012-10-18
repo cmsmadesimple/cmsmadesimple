@@ -39,37 +39,30 @@ $fromobj->Properties();
 $parentobj = $contentops->LoadContentFromId($fromobj->ParentId());
 
 // handle form submission
-if( isset($_GET['cancel']) )
-{
-   redirect('listcontent.php'.$urlext);
+if( isset($_GET['cancel']) ) {
+  redirect('listcontent.php'.$urlext);
 }
-if( isset($_GET['submit']) )
-{
+if( isset($_GET['submit']) ) {
   $to_alias = '';
-  if( isset($_GET['to_alias']) ) 
-    {
-      $to_alias = trim($_GET['to_alias']);
-    }
+  if( isset($_GET['to_alias']) ) {
+    $to_alias = trim($_GET['to_alias']);
+  }
   $to_title = '';
-  if( isset($_GET['to_title']) ) 
-    {
-      $to_title = trim($_GET['to_title']);
-    }
+  if( isset($_GET['to_title']) ) {
+    $to_title = trim($_GET['to_title']);
+  }
   $to_menutext = '';
-  if( isset($_GET['to_menutext']) ) 
-    {
-      $to_menutext = trim($_GET['to_menutext']);
-    }
+  if( isset($_GET['to_menutext']) ) {
+    $to_menutext = trim($_GET['to_menutext']);
+  }
   $to_parentid = '';
-  if( isset($_GET['to_parentid']) ) 
-    {
-      $to_parentid = (int)$_GET['to_parentid'];
-    }
+  if( isset($_GET['to_parentid']) ) {
+    $to_parentid = (int)$_GET['to_parentid'];
+  }
   $to_accesskey = '';
-  if( isset($_GET['to_accesskey']) ) 
-    {
-      $to_accesskey = trim($_GET['to_accesskey']);
-    }
+  if( isset($_GET['to_accesskey']) ) {
+    $to_accesskey = trim($_GET['to_accesskey']);
+  }
 
   //
   // Now do the copy
@@ -97,35 +90,31 @@ if( isset($_GET['submit']) )
 
   // Now make sure everything is okay, and move forward.
   $res = $tmpobj->ValidateData();
-  if( $res === FALSE )
-    {
-      // everything is okay... save it
-      // and make sure the hierarchy stuff works.
-      $tmpobj->Save();
-      $contentops->SetAllHierarchyPositions();
+  if( $res === FALSE ) {
+    // everything is okay... save it
+    // and make sure the hierarchy stuff works.
+    $tmpobj->Save();
+    $contentops->SetAllHierarchyPositions();
 
-      // put mention into the admin log
-      audit($fromobj->Id(), 'Content Item: '.$fromobj->Alias(), 'Copied to: '.$tmpobj->Alias());
+    // put mention into the admin log
+    audit($fromobj->Id(), 'Content Item: '.$fromobj->Alias(), 'Copied to: '.$tmpobj->Alias());
 
-      // and redirect
-      redirect('listcontent.php'.$urlext);
-    }
-  else
-    {
-      echo $themeObject->ShowErrors($res);
-    }
+    // and redirect
+    redirect('listcontent.php'.$urlext);
+  }
+  else {
+    echo $themeObject->ShowErrors($res);
+  }
 }
 
 // and give it to smarty
 $smarty->assign('fromid',$fromid);
 $smarty->assign('fromobj',$fromobj);
-if( is_object($parentobj) )
-{
+if( is_object($parentobj) ) {
   $smarty->assign('parentinfo',
     sprintf("%s (%s - %d)",$parentobj->Name(),$parentobj->Alias(),$parentobj->Id()));
 }
-else
-{
+else {
   $smarty->assign('parentinfo',lang('none'));
 }
 
@@ -144,28 +133,24 @@ $smarty->assign('lang_pagemenutext',lang('menutext'));
 $smarty->assign('lang_submit',lang('submit'));
 $smarty->assign('lang_cancel',lang('cancel'));
 
-if( check_permission(get_userid(),'Manage All Content') )
-  {
-    $smarty->assign('lang_pageaccesskey',lang('accesskey'));
-  }
+if( check_permission(get_userid(),'Manage All Content') ) {
+  $smarty->assign('lang_pageaccesskey',lang('accesskey'));
+}
 
 $tmp = 	$contentops->CreateHierarchyDropdown(-100, $fromobj->ParentId(), 'to_parentid',1,1,1,true);
-if( empty($tmp) )
-  {
-    $tmp = '<input type="hidden" name="to_parentid" value="'.$fromobj->Id().'"/>'.$fromobj->Hierarchy().'&nbsp;'.$fromobj->Name();
-  }
+if( empty($tmp) ) {
+  $tmp = '<input type="hidden" name="to_parentid" value="'.$fromobj->Id().'"/>'.$fromobj->Hierarchy().'&nbsp;'.$fromobj->Name();
+}
 $smarty->assign('input_parentdropdown',$tmp);
 
 $basic_attributes = explode(',',get_site_preference('basic_attributes','template'));
 if( in_array('alias',$basic_attributes) || ($config['auto_alias_content'] != true) ||
-    check_permission($userid, 'Manage All Content'))
-  {
-    $smarty->assign('info_pagealias',lang('info_pagealias'));
-    if( $config['auto_alias_content'] == true )
-      {
-	$smarty->assign('info_alias',lang('info_autoalias'));
-      }
+    check_permission($userid, 'Manage All Content')) {
+  $smarty->assign('info_pagealias',lang('info_pagealias'));
+  if( $config['auto_alias_content'] == true ) {
+    $smarty->assign('info_alias',lang('info_autoalias'));
   }
+}
 
 echo $smarty->fetch('copycontent.tpl');
 

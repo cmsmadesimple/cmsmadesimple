@@ -85,16 +85,14 @@ final class StylesheetOperations
 		$db = $gCms->GetDb();
 
 		$query = 'SELECT max(assoc_order) FROM '.cms_db_prefix().'css_assoc 
-                           WHERE assoc_to_id = ?';
+                  WHERE assoc_to_id = ?';
 		$order = $db->GetOne($query,array($templateid));
-		if( $order )
-		  {
+		if( $order ) {
 		    $order++;
-		  }
-		else
-		  {
+		}
+		else {
 		    $order = 1;
-		  }
+		}
 
 		$time = $db->DBTimeStamp(time());
 		$query = 'INSERT INTO '.cms_db_prefix().'css_assoc VALUES (?,?,?,'.$time.','.$time.',?)';

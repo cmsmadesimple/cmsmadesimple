@@ -34,7 +34,7 @@ try {
   $theme = CmsLayoutTheme::load($params['theme']);
 
   $can_delete_stylesheets = $this->CheckPermission('Remove Stylesheets');
-  $can_delete_templates = $this->CheckPermission('Manage Templates');
+  $can_delete_templates = $this->CheckPermission('Modify Templates');
 
   if( isset($params['submit']) ) {
     if( !isset($params['confirm_delete']) || $params['confirm_delete'] != 'yes' ) {

@@ -631,22 +631,15 @@ function create_encoding_dropdown($name = 'encoding', $selected = '')
  * @internal
  * @access private
  * @param string The permission name
+ * @deprecated
  */
 function cms_mapi_remove_permission($permission_name)
 {
-  $db = cmsms()->GetDB();
-
-  $query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
-  $row = &$db->GetRow($query, array($permission_name));
-
-  if ($row) {
-    $id = $row["permission_id"];
-
-    $query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE permission_id = ?";
-    $db->Execute($query, array($id));
-
-    $query = "DELETE FROM ".cms_db_prefix()."permissions WHERE permission_id = ?";
-    $db->Execute($query, array($id));
+  try {
+    $perm = CmsPermission::load($permission_name);
+    $perm->delete();
+  }
+  catch( Exception $e ) {
   }
 }
 
@@ -660,25 +653,21 @@ function cms_mapi_remove_permission($permission_name)
  * @param unknown (ignored)
  * @param string  The permission name
  * @param string  The permission human readable text.
+ * @deprecated
  */
 function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 {
-  $db = cmsms()->GetDb();
-
-  $query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name =" . $db->qstr($permission_name);
-  $result = $db->Execute($query);
-
-  if ($result && $result->RecordCount() < 1) {
-    $new_id = $db->GenID(cms_db_prefix()."permissions_seq");
-    $query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id, ".$db->qstr($permission_name).",".$db->qstr($permission_text).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
-    $db->Execute($query);
-  }
-
-  if ($result) {
-    $result->Close();
+  try {
+    $perm = new CmsPermission();
+    $perm->originator = 'Other';
+    $perm->name = $permission_name;
+    $perm->text = $permission_text;
+    $perm->save();
     return true;
   }
-  return false;
+  catch( Exception $e ) {
+    return false;
+  }
 }
 
 

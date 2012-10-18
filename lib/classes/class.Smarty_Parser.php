@@ -49,7 +49,6 @@ class Smarty_Parser extends Smarty_CMS
 
 		$this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
 		$this->setConfigDir(cms_join_path($config['root_path'],'tmp','templates'));		
-		
 		$this->setCaching(false);
 		$this->force_compile = true;
 		$this->compile_id = 'parser' . time();

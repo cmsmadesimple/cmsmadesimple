@@ -34,7 +34,7 @@ function smarty_function_cms_stylesheet($params, &$template)
 	global $CMS_LOGIN_PAGE;
 	global $CMS_STYLESHEET;
 	$CMS_STYLESHEET = 1;
-	$template_id = -1;
+	$theme_id = -1;
 	$use_https = 0;
 	$cache_dir = $config['css_path'];
 	$stylesheet = '';
@@ -55,12 +55,12 @@ function smarty_function_cms_stylesheet($params, &$template)
 	# Read parameters
 	#---------------------------------------------	
 	
-	if (isset($params["templateid"]) && $params["templateid"]!="") {
-		$template_id = $params["templateid"];
+	if (isset($params['themeid']) && $params['themeid']!='') {
+		$theme_id = (int)$params['themeid'];
 	} else {
 		$content_obj = cmsms()->variables['content_obj'];
 		if( !is_object($content_obj) ) return;
-		$template_id = $content_obj->TemplateId();
+		$theme_id = $content_obj->GetPropertyValue('theme_id');
 		$use_https = (int)$content_obj->Secure();
 	}
 
@@ -118,11 +118,12 @@ function smarty_function_cms_stylesheet($params, &$template)
 	
 	} else {
 
-  	    $query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,A.media_type,A.media_query,B.assoc_order
+  	    $query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,
+                      A.media_type,A.media_query,B.item_order
    	                FROM '.cms_db_prefix().'css A 
-                    LEFT JOIN '.cms_db_prefix().'css_assoc B ON A.css_id = B.assoc_css_id';
-		$where[] = 'B.assoc_type = ? AND B.assoc_to_id = ?';
-		$qparms = array('template', $template_id);
+                    LEFT JOIN '.cms_db_prefix().'layout_theme_cssassoc B ON A.css_id = B.css_id';
+		$where[] = 'B.theme_id = ?';
+		$qparms = array($theme_id);
 
 		if( isset($params['media']) && strtolower($params['media']) != 'all' ) {
 		
@@ -130,17 +131,17 @@ function smarty_function_cms_stylesheet($params, &$template)
 			$expr = array();
 			foreach($types as $type)
 			{
-				$expr[] = 'media_type LIKE ?';
+				$expr[] = 'A.media_type LIKE ?';
 				$qparms[] = '%'.trim($type).'%';
 			}
 			
-			$expr[] = 'media_type LIKE ?';
+			$expr[] = 'A.media_type LIKE ?';
 			$qparms[] = '%all%';
 
 			$where[] = '('.implode(' OR ',$expr).')';
 		}
        	
-		$order = 'ORDER BY B.assoc_order';
+		$order = 'ORDER BY B.item_order';
 	}
 	
 	$query .= " WHERE ".implode(' AND ',$where).' '.$order;
@@ -149,6 +150,9 @@ function smarty_function_cms_stylesheet($params, &$template)
 	#---------------------------------------------		
 	
 	$res = $db->GetArray($query, $qparms);
+	debug_to_log($db->sql);
+	debug_to_log($db->ErrorMsg());
+	debug_to_log($res);
 	if($res) {
 	
 		// Combine stylesheets
@@ -215,7 +219,7 @@ function smarty_function_cms_stylesheet($params, &$template)
 				foreach($all_media as $hash=>$onemedia) {
 				
 					// combine all matches into one stylesheet.
-					$filename = 'stylesheet_combined_'.md5($template_id.$use_https.serialize($params).$all_timestamps[$hash].$fnsuffix).'.css';
+					$filename = 'stylesheet_combined_'.md5($theme_id.$use_https.serialize($params).$all_timestamps[$hash].$fnsuffix).'.css';
 					$fn = cms_join_path($cache_dir,$filename);
 					
 					// Get media_type and media_query
@@ -272,11 +276,7 @@ function smarty_function_cms_stylesheet($params, &$template)
 	# Cleanup & output
 	#---------------------------------------------		
 	
-	// Deprecate this
-	if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true)) {
-	
-		$stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
-	}
+	$stylesheet = preg_replace("/\{\/?php\}/", "", $stylesheet);
 
 	// Remove last comma at the end when $params['nolinks'] is set
 	if( isset($params['nolinks']) && endswith($stylesheet,',') ) {

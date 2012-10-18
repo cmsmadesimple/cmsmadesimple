@@ -82,7 +82,7 @@ final class cms_siteprefs
   public static function exists($key)
   {
     self::_read();
-    if( in_array($key,array_keys(self::$_prefs)) ) {
+    if( is_array(self::$_prefs) && in_array($key,array_keys(self::$_prefs)) ) {
 		return TRUE;
 	}
     return FALSE;

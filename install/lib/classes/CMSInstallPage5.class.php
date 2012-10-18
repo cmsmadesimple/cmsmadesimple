@@ -20,70 +20,62 @@
 
 class CMSInstallerPage5 extends CMSInstallerPage
 {
-	function assignVariables()
-	{
-		$values = array();
-		$values['sitename'] = isset($_POST['sitename'])? htmlentities($_POST['sitename'], ENT_QUOTES, 'UTF-8'):'CMS Made Simple Site';
- 		$values['db']['dbms'] = isset($_POST['dbms']) ? $_POST['dbms'] : 'mysqli';
- 		$values['db']['host'] = isset($_POST['host']) ? $_POST['host'] : 'localhost';
-		$values['db']['database'] = isset($_POST['database']) ? $_POST['database'] : 'cms';
-		$values['db']['username'] = isset($_POST['username']) ? $_POST['username'] : '';
-		$values['db']['password'] = isset($_POST['password']) ? $_POST['password'] : '';
-		$values['db']['prefix'] = isset($_POST['prefix']) ? $_POST['prefix'] : 'cms_';
-		$values['db']['db_port'] = isset($_POST['db_port']) ? $_POST['db_port'] : '';
-		// $values['db']['db_socket'] = isset($_POST['db_socket']) ? $_POST['db_socket'] : '';
+  function assignVariables()
+  {
+    $values = array();
+    $values['sitename'] = isset($_POST['sitename'])? htmlentities($_POST['sitename'], ENT_QUOTES, 'UTF-8'):'CMS Made Simple Site';
+    $values['db']['dbms'] = isset($_POST['dbms']) ? $_POST['dbms'] : 'mysqli';
+    $values['db']['host'] = isset($_POST['host']) ? $_POST['host'] : 'localhost';
+    $values['db']['database'] = isset($_POST['database']) ? $_POST['database'] : 'cms';
+    $values['db']['username'] = isset($_POST['username']) ? $_POST['username'] : '';
+    $values['db']['password'] = isset($_POST['password']) ? $_POST['password'] : '';
+    $values['db']['prefix'] = isset($_POST['prefix']) ? $_POST['prefix'] : 'cms_';
+    $values['db']['db_port'] = isset($_POST['db_port']) ? $_POST['db_port'] : '';
 
-		if( isset($_SESSION['cms_orig_tz']) && $_SESSION['cms_orig_tz'] != '' )
-		  {
-		    $values['timezone'] = $_SESSION['cms_orig_tz'];
-		    $this->smarty->assign('current_timezone',$_SESSION['cms_orig_tz']);
-		  }
-		if( isset($_POST['timezone']) )
-		  {
-		    $values['timezone'] = $_POST['timezone'];
-		  }
-		$values['umask'] = isset($_POST['umask']) ? $_POST['umask'] : '';
-		$values['admininfo']['username'] = $_POST['adminusername'];
-		$values['admininfo']['email'] = $_POST['adminemail'];
-		if( isset($_POST['adminsalt']) )
-		  {
-		    $values['admininfo']['salt'] = $_POST['adminsalt'];
-		  }
-		$values['admininfo']['password'] = $_POST['adminpassword'];
-		$values['email_accountinfo'] = empty($_POST['email_accountinfo']) ? 0 : 1;
-		$values['createtables'] = isset($_POST['createtables']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
-		$values['createextra'] = isset($_POST['createextra']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
-		$databases = array(
-			array('name' => 'mysqli', 'title' => 'MySQLi (4.1+)'),
-			array('name' => 'mysql', 'title' => 'MySQL (compatibility)')
-		);
-		$dbms_options = array();
-		foreach ($databases as $db)
-		{
-			$extension = isset($db['extension']) ? $db['extension'] : $db['name'];
-			if (extension_loaded($extension))
-			{
-				$dbms_options[] = $db;
-			}
-		}
+    if( isset($_SESSION['cms_orig_tz']) && $_SESSION['cms_orig_tz'] != '' ) {
+      $values['timezone'] = $_SESSION['cms_orig_tz'];
+      $this->smarty->assign('current_timezone',$_SESSION['cms_orig_tz']);
+    }
+    if( isset($_POST['timezone']) ) {
+      $values['timezone'] = $_POST['timezone'];
+    }
+    $values['umask'] = isset($_POST['umask']) ? $_POST['umask'] : '';
+    $values['admininfo']['username'] = $_POST['adminusername'];
+    $values['admininfo']['email'] = $_POST['adminemail'];
+    if( isset($_POST['adminsalt']) ) {
+      $values['admininfo']['salt'] = $_POST['adminsalt'];
+    }
+    $values['admininfo']['password'] = $_POST['adminpassword'];
+    $values['email_accountinfo'] = empty($_POST['email_accountinfo']) ? 0 : 1;
+    $values['createtables'] = isset($_POST['createtables']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
+    $values['createextra'] = isset($_POST['createextra']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
+    $databases = array(
+		       array('name' => 'mysqli', 'title' => 'MySQLi (4.1+)'),
+		       array('name' => 'mysql', 'title' => 'MySQL (compatibility)')
+		       );
+    $dbms_options = array();
+    foreach ($databases as $db) {
+      $extension = isset($db['extension']) ? $db['extension'] : $db['name'];
+      if (extension_loaded($extension)) {
+	$dbms_options[] = $db;
+      }
+    }
 
-		$tmp = timezone_identifiers_list();
-		if( is_array($tmp) )
-		  {
-		    $timezones = array();
-		    $timezones[''] = ilang('none');
-		    foreach( $tmp as $zone )
-		      {
-			$timezones[$zone] = $zone;
-		      }
-		    $this->smarty->assign('timezones',$timezones);
-		  }
+    $tmp = timezone_identifiers_list();
+    if( is_array($tmp) ) {
+      $timezones = array();
+      $timezones[''] = ilang('none');
+      foreach( $tmp as $zone ) {
+	$timezones[$zone] = $zone;
+      }
+      $this->smarty->assign('timezones',$timezones);
+    }
 
-		$this->smarty->assign('extra_sql', is_file(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'extra.sql')));
-		$this->smarty->assign('dbms_options', $dbms_options);
-		$this->smarty->assign('values', $values);
+    $this->smarty->assign('extra_sql', is_file(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'extra.sql')));
+    $this->smarty->assign('dbms_options', $dbms_options);
+    $this->smarty->assign('values', $values);
 
-		$this->smarty->assign('errors', $this->errors);
-	}
+    $this->smarty->assign('errors', $this->errors);
+  }
 }
 ?>

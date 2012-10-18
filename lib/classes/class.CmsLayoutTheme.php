@@ -228,7 +228,7 @@ class CmsLayoutTheme
                 (theme_id,css_id,item_order) VALUES (?,?)';
       for( $i = 0; $i < count($this->_css_assoc); $i++ ) {
 				$css_id = $this->_css_assoc[$i];
-				$dbr = $db->ExecutE($query,array($this->get_id(),$css_id,$i+1));
+				$dbr = $db->Execute($query,array($this->get_id(),$css_id,$i+1));
       }
     }
     if( count($this->_tpl_assoc) ) {

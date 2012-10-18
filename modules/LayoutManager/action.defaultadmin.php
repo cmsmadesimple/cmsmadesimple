@@ -31,7 +31,7 @@ if( $filter )
   $filter = unserialize($filter);
 else 
   $filter = array();
-if( !$this->CheckPermission('Manage Templates') ) {
+if( !$this->CheckPermission('Modify Templates') ) {
   $filter[] = 'e:'.get_userid();
 }
 $templates = CmsLayoutTemplate::template_query($filter);
@@ -90,11 +90,11 @@ if( $this->CheckPermission('Manage Themes') ) {
 }
 $smarty->assign('filter_options',$opts);
 
-$smarty->assign('manage_templates',$this->CheckPermission('Manage Templates'));
+$smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
 $smarty->assign('manage_themes',$this->CheckPermission('Manage Themes'));
 $smarty->assign('import_url',$this->create_url($id,'admin_import_template'));
 $smarty->assign('has_add_right',
-								$this->CheckPermission('Manage Templates') || 
+								$this->CheckPermission('Modify Templates') || 
 								$this->CheckPermission('Add Templates'));
 
 echo $this->ProcessTemplate('defaultadmin.tpl');

@@ -224,9 +224,22 @@ final class CmsApp {
 		global $DONT_LOAD_DB;
 		/* Check to see if we have a valid instance.
 		 * If not, build the connection */
-		if (!isset($this->db) && (!isset($DONT_LOAD_DB) || $DONT_LOAD_DB == 'force'))
-		{
-			$this->db = adodb_connect();
+		if (!isset($this->db)) {
+			global $CMS_INSTALL_PAGE;
+
+			if( isset($CMS_INSTALL_PAGE) && class_exists('CmsInstaller') &&
+				CmsInstaller::get_ext() ) {
+				$ob = CmsInstaller::get_db();
+
+				if( is_object($ob) ) {
+					$this->db = $ob;
+					return $this->db;
+				}
+			}
+
+			if (!isset($this->db) && (!isset($DONT_LOAD_DB) || $DONT_LOAD_DB == 'force')) {
+				$this->db = adodb_connect();
+			}
 		}
 		
 		return $this->db;
@@ -346,22 +359,6 @@ final class CmsApp {
 	}
 	
 	/**
-	* Get a handle to the CMS GlobalContentOperations object. If it does not yet
-	* exist, this method will instantiate it. To disambiguate, this object has methods
-	* for dealing with "Global Content Blocks," not to be confused with the ContentOperations
-	* object available on a global basis from this class.
-	*
-	* @final
-	* @see GlobalContentOperations
-	* @return GlobalContentOperations handle to the GlobalContentOperations object
-	*/
-	public function & GetGlobalContentOperations()
-	{
-		return GlobalContentOperations::get_instance();
-	}
-
-	
-	/**
 	* Get a handle to the CMS UserTagOperations object. If it does not yet
 	* exist, this method will instantiate it.
 	*
@@ -404,7 +401,7 @@ final class CmsApp {
         if (!isset($this->hrinstance))
 		{
 			debug_buffer('', 'Start Loading Hierarchy Manager');
-			$contentops =& $this->GetContentOperations();
+			$contentops = $this->GetContentOperations();
 			$this->hrinstance = $contentops->GetAllContentAsHierarchy(false);
 			debug_buffer('', 'End Loading Hierarchy Manager');
 		}

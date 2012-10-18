@@ -327,7 +327,7 @@ class CmsLayoutTemplate
 	public function process()
 	{
 		$smarty = cmsms()->GetSmarty();
-		return $smarty->fetch('cms_smarty_template:id='.$this->get_id());
+		return $smarty->fetch('cms_template:id='.$this->get_id());
 	}
 
 	protected function validate()
@@ -404,7 +404,6 @@ class CmsLayoutTemplate
 			}
 		}
 
-		
 		$query = 'DELETE FROM '.cms_db_prefix().CmsLayoutTheme::TPLTABLE.' WHERE tpl_id = ?';
 		$dbr = $db->Execute($query,array($this->get_id()));
 		if( !$dbr ) {
@@ -549,7 +548,8 @@ class CmsLayoutTemplate
 			$row = $db->GetRow($query,array($a));
 		}
 		if( !is_array($row) || count($row) == 0 ) {
-			throw new CmsDataNotFoundException('Could not find row identified by '.$val);
+			stack_trace();
+			throw new CmsDataNotFoundException('Could not find row identified by '.$a);
 		}
 
 		return self::_load_from_data($row);
@@ -760,13 +760,13 @@ class CmsLayoutTemplate
 	public static function process_by_name($name)
 	{
 		$smarty = cmsms()->GetSmarty();
-		return $smarty->fetch('cms_smarty_template:name='.$this->get_name());
+		return $smarty->fetch('cms_template:name='.$this->get_name());
 	}
 
 	public static function process_dflt($t)
 	{
 		$tpl = self::load_dflt_by_type($t);
-		return $smarty->fetch('cms_smarty_template:id='.$tpl->get_id());
+		return $smarty->fetch('cms_template:id='.$tpl->get_id());
 	}
 } // end of class
 

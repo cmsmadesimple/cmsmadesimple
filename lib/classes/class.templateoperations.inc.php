@@ -46,8 +46,7 @@ class TemplateOperations
 
 	public static function &get_instance()
 	{
-		if( !is_object(self::$_instance) )
-		{
+		if( !is_object(self::$_instance) ) {
 			self::$_instance = new TemplateOperations();
 		}
 		return self::$_instance;
@@ -64,8 +63,7 @@ class TemplateOperations
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates ORDER BY template_name";
 		$dbresult = $db->Execute($query);
 
-		while ($dbresult && !$dbresult->EOF)
-		{
+		while ($dbresult && !$dbresult->EOF) {
 			$onetemplate = new Template();
 			$onetemplate->id = $dbresult->fields['template_id'];
 			$onetemplate->name = $dbresult->fields['template_name'];
@@ -88,8 +86,7 @@ class TemplateOperations
 
 	protected function &_findCachedDefault()
 	{
-		foreach( $this->_templateCache as $key => &$object )
-		{
+		foreach( $this->_templateCache as $key => &$object ) {
 			if( $object->default ) return $object;
 		}
 		$res = null;
@@ -99,16 +96,12 @@ class TemplateOperations
 
 	protected function &_fromCache($id)
 	{
-		
-		if( is_numeric($id) )
-		{
+		if( is_numeric($id) ) {
 			if( isset($this->_templateCache[$id]) )
 				return $this->_templateCache[$id];
 		}
-		else if( is_string($id) )
-		{
-			foreach( $this->_templateCache as $key => &$object )
-			{
+		else if( is_string($id) ) {
+			foreach( $this->_templateCache as $key => &$object ) {
 				if( $object->name == $id ) return $this->_templateCache[$key];
 			}
 		}
@@ -124,35 +117,30 @@ class TemplateOperations
 	}
 
 
-	public function & LoadTemplateByID($id,$sparse = FALSE)
+	public function &LoadTemplateByID($id,$sparse = FALSE)
 	{
 		$onetemplate = null;
-		if( ($onetemplate = $this->_fromCache($id)) )
-		{
+		if( ($onetemplate = $this->_fromCache($id)) ) {
 			return $onetemplate;
 		}
 
 		$db = cmsms()->GetDb();
 		$query = '';
 		$where = ' WHERE template_id = ?';
-		if( !is_numeric($id) )
-		{
+		if( !is_numeric($id) ) {
 			$where = ' WHERE template_name = ?';
 		}
 
-		if( $sparse )
-		{
+		if( $sparse ) {
 			$query = "SELECT template_id, template_name, stylesheet, active, default_template, modified_date FROM ".cms_db_prefix().'templates';
 		}
-		else
-		{
+		else {
 			$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date 
                       FROM ".cms_db_prefix()."templates";
 		}
 		$row = $db->GetRow($query.$where, array($id));
 
-		if($row)
-		{
+		if($row) {
 			$onetemplate = new Template();
 			$onetemplate->id = $row['template_id'];
 			$onetemplate->name = $row['template_name'];
@@ -173,8 +161,7 @@ class TemplateOperations
 	function LoadTemplateByContentAlias($alias)
 	{
 		$result = null;
-		if( ($result = $this->_fromCache($alias)) )
-		{
+		if( ($result = $this->_fromCache($alias)) ) {
 			return $result;
 		}
 
@@ -184,8 +171,7 @@ class TemplateOperations
 		$query = "SELECT t.template_id, t.template_name, t.template_content, t.stylesheet, t.encoding, t.active, t.default_template, t.modified_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
 		$row = &$db->GetRow($query, array($alias, $alias));
 
-		if ($row)
-		{
+		if ($row) {
 			$result = new Template();
 			$result->id = $row['template_id'];
 			$result->name = $row['template_name'];
@@ -212,8 +198,7 @@ class TemplateOperations
 		$query = "SELECT c.modified_date AS c_date, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
 		$dbresult = &$db->Execute($query, array($alias, $alias));
 
-		while ($dbresult && !$dbresult->EOF)
-		{
+		while ($dbresult && !$dbresult->EOF) {
 			$result[] = $dbresult->fields['c_date'];
 			$result[] = $dbresult->fields['t_date'];
 			$dbresult->MoveNext();
@@ -228,8 +213,7 @@ class TemplateOperations
 	function LoadDefaultTemplate()
 	{
 		$result = null;
-		if( ($result = $this->_findCachedDefault()) )
-		{
+		if( ($result = $this->_findCachedDefault()) ) {
 			return $result;
 		}
 
@@ -237,8 +221,7 @@ class TemplateOperations
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, create_date, modified_date FROM ".cms_db_prefix()."templates WHERE default_template = 1";
 		$row = &$db->GetRow($query);
 
-		if($row)
-		{
+		if($row) {
 			$result = new Template();
 			$result->id = $row['template_id'];
 			$result->name = $row['template_name'];
@@ -265,8 +248,7 @@ class TemplateOperations
 		$query = "SELECT count(*) as the_count FROM ".cms_db_prefix()."content WHERE template_id = ?";
 		$row = &$db->GetRow($query, array($id));
 
-		if($row)
-		{
+		if($row) {
 			$result = $row['the_count'];
 		}
 	
@@ -284,8 +266,7 @@ class TemplateOperations
 		$new_template_id = $db->GenID(cms_db_prefix()."templates_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."templates (template_id, template_name, template_content, stylesheet, encoding, active, default_template, create_date, modified_date) VALUES (?,?,?,?,?,?,?,".$time.",".$time.")";
 		$dbresult = $db->Execute($query, array($new_template_id, $template->name, $template->content, $template->stylesheet, $template->encoding, $template->active, $template->default));
-		if ($dbresult !== false)
-		{
+		if ($dbresult !== false) {
 			$result = $new_template_id;
 		}
 
@@ -302,8 +283,7 @@ class TemplateOperations
 		$time = $db->DBTimeStamp(time());
 		$query = "UPDATE ".cms_db_prefix()."templates SET template_name = ?, template_content = ?, stylesheet = ?, encoding = ?, active = ?, default_template = ?, modified_date = ".$time." WHERE template_id = ?";
 		$dbresult = $db->Execute($query,array($template->name,$template->content,$template->stylesheet,$template->encoding,$template->active,$template->default,$template->id));
-		if ($dbresult !== false)
-		{
+		if ($dbresult !== false) {
 			$result = true;
 		}
 
@@ -323,8 +303,7 @@ class TemplateOperations
 		$query = "DELETE FROM ".cms_db_prefix()."templates where template_id = ?";
 		$dbresult = $db->Execute($query,array($id));
 
-		if ($dbresult !== false)
-		{
+		if ($dbresult !== false) {
 			$result = true;
 		}
 
@@ -341,10 +320,8 @@ class TemplateOperations
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE template_id = ?";
         $row = &$db->GetRow($query,array($id));
 
-		if ($row)
-		{
-			if (isset($row["count"]))
-			{
+		if ($row) {
+			if (isset($row["count"])) {
 				$result = $row["count"];
 			}
 		}
@@ -362,10 +339,8 @@ class TemplateOperations
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."templates WHERE stylesheet is not null and stylesheet != ''";
         $row = &$db->GetRow($query);
 
-		if ($row)
-		{
-			if (isset($row["count"]))
-			{
+		if ($row) {
+			if (isset($row["count"])) {
 				$result = $row["count"];
 			}
 		}
@@ -383,19 +358,16 @@ class TemplateOperations
 		$dbresult = false;
 
 		$time = $db->DBTimeStamp(time());
-		if ($blob_name != '')
-		{
+		if ($blob_name != '') {
 			$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$time." WHERE template_content like ?";
 			$dbresult = $db->Execute($query,array('%{html_blob name="'.$blob_name.'"}%'));
 		}
-		else
-		{
+		else {
 			$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$time;
 			$dbresult = $db->Execute($query);
 		}
 
-		if ($dbresult !== false)
-		{
+		if ($dbresult !== false) {
 			$result = true;
 		}
 
@@ -411,15 +383,13 @@ class TemplateOperations
 
 		$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = ?";
 		$attrs = array($name);
-		if ($id > -1)
-		{
+		if ($id > -1) {
 			$query .= ' AND template_id != ?';
 			$attrs[] = $id;
 		}
 		$row = &$db->GetRow($query,$attrs);
 
-		if ($row)
-		{
+		if ($row) {
 			$result = true; 
 		}
 
@@ -435,22 +405,18 @@ class TemplateOperations
 
 		$alltemplates = $templateops->LoadTemplates();
 		
-		if (count($alltemplates) > 0)
-		{
+		if (count($alltemplates) > 0) {
 			$result .= '<select name="'.$id.'"';
-			if ($othertext != '')
-			{
+			if ($othertext != '') {
 				$result .= ' ' . $othertext;
 			}
 			$result .= '>';
 			#$result .= '<option value="">Select Template</option>';
-			foreach ($alltemplates as $onetemplate)
-			{
-				if ($onetemplate->active == true || $show_hidden == true)
-				{
+			foreach ($alltemplates as $onetemplate) {
+				if ($onetemplate->active == true || $show_hidden == true) {
 					$result .= '<option value="'.$onetemplate->id.'"';
-					if ($onetemplate->id == $selected_id || ($selected_id == -1 && $onetemplate->default == true))
-					{
+					if ($onetemplate->id == $selected_id || 
+						($selected_id == -1 && $onetemplate->default == true)) {
 						$result .= ' selected="selected"';
 					}
 					$result .= '>'.$onetemplate->name.'</option>';
@@ -461,7 +427,6 @@ class TemplateOperations
 		
 		return $result;
 	}
-}
-
+} // end of class
 
 ?>

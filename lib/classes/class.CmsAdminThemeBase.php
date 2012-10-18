@@ -240,18 +240,6 @@ abstract class CmsAdminThemeBase
 		$this->_perms = array();
 		$this->_breadcrumbs = array();
 
-		// Content Permissions
-        $this->_perms['htmlPerms'] = check_permission($this->userid, 'Add Global Content Blocks') |
-			check_permission($this->userid, 'Modify Global Content Blocks') |
-			check_permission($this->userid, 'Delete Global Content Blocks');
-
-		$gCms = cmsms();
-		$gcbops = $gCms->GetGlobalContentOperations();
-
-        $thisUserBlobs = $gcbops->AuthorBlobs($this->userid);
-        if (count($thisUserBlobs) > 0) {
-			$this->_perms['htmlPerms'] = true;
-		}
         $this->_perms['pagePerms'] = (
 									 check_permission($this->userid, 'Modify Any Page') ||
 									 check_permission($this->userid, 'Add Pages') ||
@@ -405,9 +393,9 @@ abstract class CmsAdminThemeBase
 								'title'=>$this->_FixSpaces(lang('pages')),
 								'description'=>lang('pagesdescription'),
 								'show_in_menu'=>$this->HasPerm('pagePerms'));
-		$items['addcontent'] = array('url'=>'addcontent.php','parent'=>'pages',
-									 'title'=>$this->_FixSpaces(lang('addcontent')),
-									 'description'=>lang('addcontent'),'show_in_menu'=>false);
+// 		$items['addcontent'] = array('url'=>'addcontent.php','parent'=>'pages',
+// 									 'title'=>$this->_FixSpaces(lang('addcontent')),
+// 									 'description'=>lang('addcontent'),'show_in_menu'=>false);
 		$items['editpage'] = array('url'=>'editcontent.php','parent'=>'pages',
 								   'title'=>$this->_FixSpaces(lang('editpage')),
 								   'description'=>lang('editpage'),'show_in_menu'=>false);
@@ -415,35 +403,35 @@ abstract class CmsAdminThemeBase
 								 'title'=>$this->_FixSpaces(lang('imagemanager')),
 								 'description'=>lang('imagemanagerdescription'),
 								 'show_in_menu'=>$this->HasPerm('filePerms'));
-		$items['blobs'] = array('url'=>'listhtmlblobs.php','parent'=>'content',
-								'title'=>$this->_FixSpaces(lang('htmlblobs')),
-								'description'=>lang('htmlblobdescription'),
-								'show_in_menu'=>$this->HasPerm('htmlPerms'));
-		$items['addhtmlblob'] = array('url'=>'addhtmlblob.php','parent'=>'blobs',
-									  'title'=>$this->_FixSpaces(lang('addhtmlblob')),
-									  'description'=>lang('addhtmlblob'),'show_in_menu'=>false);
-		$items['edithmlblob'] = array('url'=>'edithtmlblob.php','parent'=>'blobs',
-									  'title'=>$this->_FixSpaces(lang('edithtmlblob')),
-									  'description'=>lang('edithtmlblob'),'show_in_menu'=>false);
+// 		$items['blobs'] = array('url'=>'listhtmlblobs.php','parent'=>'content',
+// 								'title'=>$this->_FixSpaces(lang('htmlblobs')),
+// 								'description'=>lang('htmlblobdescription'),
+// 								'show_in_menu'=>$this->HasPerm('htmlPerms'));
+// 		$items['addhtmlblob'] = array('url'=>'addhtmlblob.php','parent'=>'blobs',
+// 									  'title'=>$this->_FixSpaces(lang('addhtmlblob')),
+// 									  'description'=>lang('addhtmlblob'),'show_in_menu'=>false);
+// 		$items['edithmlblob'] = array('url'=>'edithtmlblob.php','parent'=>'blobs',
+// 									  'title'=>$this->_FixSpaces(lang('edithtmlblob')),
+// 									  'description'=>lang('edithtmlblob'),'show_in_menu'=>false);
 		// base layout menu ---------------------------------------------------------
 		$items['layout'] = array('url'=>'index.php?section=layout','parent'=>-1,
 								 'title'=>$this->_FixSpaces(lang('layout')),
 								 'description'=>lang('layoutdescription'),
 								 'show_in_menu'=>$this->HasPerm('layoutPerms'));
-		$items['template'] = array('url'=>'listtemplates.php','parent'=>'layout',
-								   'title'=>$this->_FixSpaces(lang('templates')),
-								   'description'=>lang('templatesdescription'),
-								   'show_in_menu'=>$this->HasPerm('templatePerms'));
-		$items['addtemplate'] = array('url'=>'addtemplate.php','parent'=>'template',
-									 'title'=>$this->_FixSpaces(lang('addtemplate')),
-									 'description'=>lang('addtemplate'),'show_in_menu'=>false);
-		$items['edittemplate'] = array('url'=>'edittemplate.php','parent'=>'template',
-									   'title'=>$this->_FixSpaces(lang('edittemplate')),
-									   'description'=>lang('edittemplate'),'show_in_menu'=>false);
-		$items['currentassociations'] = array('url'=>'listcssassoc.php','parent'=>'template',
-											  'title'=>$this->_FixSpaces(lang('currentassociations')),
-											  'description'=>lang('currentassociations'),
-											  'show_in_menu'=>false);
+// 		$items['template'] = array('url'=>'listtemplates.php','parent'=>'layout',
+// 								   'title'=>$this->_FixSpaces(lang('templates')),
+// 								   'description'=>lang('templatesdescription'),
+// 								   'show_in_menu'=>$this->HasPerm('templatePerms'));
+// 		$items['addtemplate'] = array('url'=>'addtemplate.php','parent'=>'template',
+// 									 'title'=>$this->_FixSpaces(lang('addtemplate')),
+// 									 'description'=>lang('addtemplate'),'show_in_menu'=>false);
+// 		$items['edittemplate'] = array('url'=>'edittemplate.php','parent'=>'template',
+// 									   'title'=>$this->_FixSpaces(lang('edittemplate')),
+// 									   'description'=>lang('edittemplate'),'show_in_menu'=>false);
+// 		$items['currentassociations'] = array('url'=>'listcssassoc.php','parent'=>'template',
+// 											  'title'=>$this->_FixSpaces(lang('currentassociations')),
+// 											  'description'=>lang('currentassociations'),
+// 											  'show_in_menu'=>false);
 		$items['copytemplate'] = array('url'=>'copyemplate.php','parent'=>'template',
 									   'title'=>$this->_FixSpaces(lang('copytemplate')),
 									   'description'=>lang('copytemplate'),'show_in_menu'=>false);

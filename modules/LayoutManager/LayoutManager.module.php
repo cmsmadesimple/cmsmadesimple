@@ -31,6 +31,7 @@ final class LayoutManager extends CMSModule
   function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
   function HasAdmin() { return true; }
   function GetAdminSection() { return 'layout'; }
+	function AllowAutoInstall() { return false; }
 
   function GetHelp()
   {
@@ -50,7 +51,7 @@ final class LayoutManager extends CMSModule
   function VisibleToAdminUser()
   {
     if( $this->CheckPermission('Add Templates') ||
-				$this->CheckPermission('Manage Templates') || 
+				$this->CheckPermission('Modify Templates') || 
 				count(CmsLayoutTemplate::get_editable_templates(get_userid())) ) return TRUE;
     return FALSE;
   }
@@ -72,12 +73,6 @@ final class LayoutManager extends CMSModule
     return parent::DoAction($name,$id,$params,$returnid);
   }
 
-  public static function reset_page_template()
-  {
-    $file = dirname(__FILE__).'/templates/orig_page_template.tpl';
-    $contents = @file_get_contents($file);
-    return $contents;
-  }
 } // class
 
 #

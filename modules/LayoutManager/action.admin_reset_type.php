@@ -19,7 +19,7 @@
 #
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission('Manage Templates') ) return;
+if( !$this->CheckPermission('Modify Templates') ) return;
 
 $this->SetCurrentTab('types');
 if( !isset($params['type']) ) {

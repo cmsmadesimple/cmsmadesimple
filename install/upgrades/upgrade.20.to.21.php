@@ -24,43 +24,6 @@ $db->Execute("CREATE INDEX ".cms_db_prefix()."index_parent_type_and_id ON ".cms_
 
 echo '[done]</p>';
 
-echo '<p>Setting up existing cross references...';
-
-//Do the templates first
-$query = 'SELECT template_id, template_content FROM '.cms_db_prefix().'templates';
-$result = &$db->Execute($query);
-
-while ($result && !$result->EOF)
-{
-	do_cross_reference($result->fields['template_id'], 'template', $result->fields['template_content']);
-	$result->MoveNext();
-}
-
-//Gather up all content
-$query = 'SELECT content_id, content FROM '.cms_db_prefix().'content_props ORDER BY content_id';
-$result = &$db->Execute($query);
-
-$contentary = array();
-while ($result && !$result->EOF)
-{
-	if (isset($contentary[$result->fields['content_id']]))
-		$contentary[$result->fields['content_id']] .= $result->fields['content'];
-	else
-		$contentary[$result->fields['content_id']] = $result->fields['content'];
-	$result->MoveNext();
-}
-
-//Now run it all through the cross reference routine to populate
-if (count($contentary) > 0)
-{
-	foreach ($contentary as $key=>$val)
-	{
-		do_cross_reference($key, 'content', $val);
-	}
-}
-
-echo '[done]</p>';
-
 echo '<p>Updating schema version... ';
 
 $query = "UPDATE ".cms_db_prefix()."version SET version = 21";

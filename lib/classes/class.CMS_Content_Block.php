@@ -23,13 +23,11 @@
  */
 
 /**
- * Generic content class.
+ * Helper class to deal with parsing or fetching content blocks.
  *
- * As for some treatment we don't need the extra properties of the content
- * we load them only when required. However, each function which makes use
- * of extra properties should first test if the properties object exist.
- *
+ * @author              Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since		1.11
+ * @ignore 
  * @internal
  * @package		CMS
  */
@@ -41,16 +39,14 @@ final class CMS_Content_Block
   private static function content_return($result, &$params, &$template)
   {
     $smarty = $template->smarty;
-    if ( empty($params['assign']) )
-      {
-	echo $result;
-	//return $result;
-      }
-    else
-      {
-	$smarty->assign(trim($params['assign']), $result);
-	return '';
-      }
+    if ( empty($params['assign']) ) {
+      echo $result;
+      //return $result;
+    }
+    else {
+      $smarty->assign(trim($params['assign']), $result);
+      return '';
+    }
   }
 
   public static function get_content_blocks()
@@ -58,49 +54,42 @@ final class CMS_Content_Block
     return self::$_contentBlocks;
   }
 
-
   public static function smarty_compiler_contentblock($params,$smarty)
   {
     // {content} tag encountered.
     $rec = array('type'=>'text','id'=>'','name'=>'','usewysiwyg'=>'true','oneline'=>'false','default'=>'','label'=>'',
 		 'size'=>'50','tab'=>'','maxlength'=>'255');
-    foreach( $params as $key => $value )
-      {
-	$value = trim($value,'"\'');
-	if( $key == 'type' ) continue;
-	if( $key == 'block' ) {
-	  $key = 'name';
-	}
-	if( $key == 'wysiwyg' ) {
-	  $key = 'usewysiwyg';
-	}
-
-	if( isset($rec[$key]) )
-	  {
-	    $rec[$key] = $value;
-	  }
+    foreach( $params as $key => $value ) {
+      $value = trim($value,'"\'');
+      if( $key == 'type' ) continue;
+      if( $key == 'block' ) {
+	$key = 'name';
+      }
+      if( $key == 'wysiwyg' ) {
+	$key = 'usewysiwyg';
       }
 
-    if( !$rec['name'] ) 
-      {
-	$rec['name'] = 'content_en';
-	$rec['id'] = 'content_en';
+      if( isset($rec[$key]) ) {
+	$rec[$key] = $value;
       }
-    if( !$rec['id'] )
-      {
-	$rec['id'] = str_replace(' ','_',$rec['name']);
-      }
+    }
+
+    if( !$rec['name'] ) {
+      $rec['name'] = 'content_en';
+      $rec['id'] = 'content_en';
+    }
+    if( !$rec['id'] ) {
+      $rec['id'] = str_replace(' ','_',$rec['name']);
+    }
 
     // check for duplicate.
-    if( isset(self::$_contentBlocks[$rec['name']]) )
-      {
-	throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
-      }
+    if( isset(self::$_contentBlocks[$rec['name']]) ) {
+      throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
+    }
 
     if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
     self::$_contentBlocks[$rec['name']] = $rec;
   }
-
 
   public static function smarty_compiler_imageblock($params,$smarty)
   {
@@ -112,29 +101,24 @@ final class CMS_Content_Block
     $rec = array('type'=>'image','id'=>'','name'=>'','label'=>'',
 		 'upload'=>true,'dir'=>'','default'=>'','tab'=>'',
 		 'exclude'=>'','sort'=>0);
-    foreach( $params as $key => $value )
-      {
-	if( $key == 'type' ) continue;
-	if( $key == 'block' )
-	  {	
-	    $key = 'name';
-	  }
-
-	if( isset($rec[$key]) )
-	  {
-	    $rec[$key] = trim($value,"'");
-	  }
+    foreach( $params as $key => $value ) {
+      if( $key == 'type' ) continue;
+      if( $key == 'block' ) {
+	$key = 'name';
       }
 
-    if( !$rec['name'] ) 
-      {
-	$n = count(self::$_contentBlocks)+1;
-	$rec['id'] = $rec['name'] = 'image_'+$n;
+      if( isset($rec[$key]) ) {
+	$rec[$key] = trim($value,"'");
       }
-    if( !$rec['id'] )
-      {	
-	$rec['id'] = str_replace(' ','_',$rec['name']);
-      }
+    }
+
+    if( !$rec['name'] ) {
+      $n = count(self::$_contentBlocks)+1;
+      $rec['id'] = $rec['name'] = 'image_'+$n;
+    }
+    if( !$rec['id'] ) {
+      $rec['id'] = str_replace(' ','_',$rec['name']);
+    }
 
     // check for duplicate.
     if( isset(self::$_contentBlocks[$rec['name']]) ) {
@@ -144,7 +128,6 @@ final class CMS_Content_Block
     if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
     self::$_contentBlocks[$rec['name']] = $rec;
   }
-
 
   public static function smarty_compiler_moduleblock($params,$smarty)
   {
@@ -156,44 +139,36 @@ final class CMS_Content_Block
     $rec = array('type'=>'module','id'=>'','name'=>'','module'=>'','label'=>'',
 		 'blocktype'=>'','tab'=>'');
     $parms = array();
-    foreach( $params as $key => $value )
-      {
-	if( $key == 'block' )
-	  {	
-	    $key = 'name';
-	  }
-
-	$value = trim(trim($value,'"\''));
-	if( isset($rec[$key]) )
-	  {
-	    $rec[$key] = $value;
-	  }
-	else
-	  {
-	    $parms[$key] = $value;
-	  }
+    foreach( $params as $key => $value ) {
+      if( $key == 'block' ) {
+	$key = 'name';
       }
 
-    if( !$rec['name'] )
-      {
-	$n = count(self::$_contentBlocks)+1;
-	$rec['id'] = $rec['name'] = 'module_'+$n;
+      $value = trim(trim($value,'"\''));
+      if( isset($rec[$key]) ) {
+	$rec[$key] = $value;
       }
-    if( !$rec['id'] )
-      {	
-	$rec['id'] = str_replace(' ','_',$rec['name']);
+      else {
+	$parms[$key] = $value;
       }
+    }
+
+    if( !$rec['name'] ) {
+      $n = count(self::$_contentBlocks)+1;
+      $rec['id'] = $rec['name'] = 'module_'+$n;
+    }
+    if( !$rec['id'] ) {
+      $rec['id'] = str_replace(' ','_',$rec['name']);
+    }
     $rec['params'] = $parms;
-    if( $rec['module'] == '' )
-      {
-	throw new CmsEditContentException('Missing module param for content_module tag');
-      }
+    if( $rec['module'] == '' ) {
+      throw new CmsEditContentException('Missing module param for content_module tag');
+    }
 
     // check for duplicate.
-    if( isset(self::$_contentBlocks[$rec['name']]) )
-      {
-	throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
-      }
+    if( isset(self::$_contentBlocks[$rec['name']]) ) {
+      throw new CmsEditContentException('Duplicate content block: '.$rec['name']);
+    }
 
     if( !is_array(self::$_contentBlocks) ) self::$_contentBlocks = array();
     self::$_contentBlocks[$rec['name']] = $rec;
@@ -331,20 +306,17 @@ final class CMS_Content_Block
     $gCms = cmsms();
 
     $contentobj = $gCms->variables['content_obj'];
-    if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' )
-      {
-	// it's a preview.
-	if( !isset($_SESSION['cms_preview_data']['content_obj']) )
-	  {
-	    $contentops =& $gCms->GetContentOperations();
-	    $_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
-	  }
-	$contentobj =& $_SESSION['cms_preview_data']['content_obj'];
+    if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' ) {
+      // it's a preview.
+      if( !isset($_SESSION['cms_preview_data']['content_obj']) ) {
+	$contentops = $gCms->GetContentOperations();
+	$_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
       }
-    if( !is_object($contentobj) || $contentobj->Id() <= 0 )
-      {
-	return self::content_return('', $params, $smarty);
-      }
+      $contentobj =& $_SESSION['cms_preview_data']['content_obj'];
+    }
+    if( !is_object($contentobj) || $contentobj->Id() <= 0 ) {
+      return self::content_return('', $params, $smarty);
+    }
 
     $result = $smarty->fetch('content:pagedata','',$contentobj->Id());
     if( isset($params['assign']) ){
@@ -464,17 +436,15 @@ final class CMS_Content_Block
 
     $gCms = cmsms();
     $content_obj = &$gCms->variables['content_obj'];
-    if( is_object($content_obj) )
-      {
-	$result = $content_obj->GetPropertyValue($block);
-	if( $result == -1 ) $result = '';
-      }
+    if( is_object($content_obj) ) {
+      $result = $content_obj->GetPropertyValue($block);
+      if( $result == -1 ) $result = '';
+    }
 
-    if( isset($params['assign']) )
-      {
-	$smarty->assign($params['assign'],$result);
-	return;
-      }
+    if( isset($params['assign']) ) {
+      $smarty->assign($params['assign'],$result);
+      return;
+    }
 
     return $result;
   }

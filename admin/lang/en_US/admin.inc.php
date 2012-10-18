@@ -1369,6 +1369,7 @@ $lang['admin']['test_remote_url'] = 'Test for remote URL';
 $lang['admin']['test_remote_url_failed'] = 'You will probably not be able to open a file on a remote web server.';
 $lang['admin']['text_changeowner'] = 'Set Selected Pages to a different User';
 $lang['admin']['text_settemplate'] = 'Set Selected Pages to a different Template';
+$lang['admin']['theme'] = 'Theme';
 $lang['admin']['thumbnail'] = 'Thumbnail';
 $lang['admin']['thumbnail_height'] = 'Thumbnail Height';
 $lang['admin']['thumbnail_width'] = 'Thumbnail Width';

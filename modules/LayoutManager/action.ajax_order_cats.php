@@ -19,7 +19,7 @@
 #
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission('Manage Templates') ) return;
+if( !$this->CheckPermission('Modify Templates') ) return;
 
 debug_to_log($params,'ajax_order_cats');
 

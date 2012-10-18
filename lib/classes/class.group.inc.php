@@ -32,7 +32,6 @@
  */
 class Group
 {
-	private static $_perm_cache = array();
 	var $id;
 	var $name;
 	var $active;
@@ -40,7 +39,7 @@ class Group
 	/**
 	 * Constructor
 	 */
-	function Group()
+	function __construct()
 	{
 		$this->SetInitialValues();
 	}
@@ -104,20 +103,6 @@ class Group
 		return $result;
 	}
 
-
-	private static function GetPermissionId($perm_name)
-	{
-		if( !isset(self::$_perm_cache[$perm_name]) ) {
-			$query = 'SELECT permission_id FROM '.cms_db_prefix().'permissions
-                      WHERE permission_name = ?';
-			$db = cmsms()->GetDb();
-			$perm = $db->GetOne($query,array($perm_name));
-			if( !$perm ) return;
-			self::$_perm_cache[$perm_name] = $perm;
-		}
-		return self::$_perm_cache[$perm_name];
-	}
-
 	/**
 	 * Check if the group has the specified permission.
 	 *
@@ -132,19 +117,8 @@ class Group
 	public function HasPermission($perm)
 	{
 		if( $this->id <= 0 ) return FALSE;
-		
-		$db = cmsms()->GetDb();
-		if( (int)$perm == 0 ) {
-			$perm = self::GetPermissionId($perm);
-		}
-
-		if( $perm > 0 ) {
-			$query = 'SELECT group_perm_id FROM '.cms_db_prefix().'group_perms
-                      WHERE group_id = ? AND permission_id = ?';
-			$tmp = $db->GetOne($query,array($this->id,$perm));
-			if( $tmp > 0 ) return TRUE;
-		}
-		return FALSE;
+		$groupops = cmsms()->GetGroupOperations();
+		return $groupops->CheckPermission($this->id,$perm);
 	}
 
 	/**
@@ -161,21 +135,8 @@ class Group
 	{
 		if( $this->id <= 0 ) return;
 		if( $this->HasPermission($perm) ) return;
-
-		$db = cmsms()->GetDb();
-		if( (int)$perm == 0 ) {
-			$perm = self::GetPermissionId($perm);
-		}
-
-		if( $perm <= 0 ) return;
-		$new_id = $db->GenId(cms_db_prefix().'group_perm');
-		if( !$new_id ) return;
-		$now = $db->DbTimeStamp(time());
-		$query = 'INSERT INTO '.cms_db_prefix()."group_perm
-                  (group_perm_id,group_id,permission_id,create_date,modified_date)
-                  VALUES (?,?,?,$now,$now)";
- 
-		$dbr = $db->Execute($query,array($new_id,$this->id,$perm));
+		$groupops = cmsms()->GetGroupOperations();
+		return $groupops->GrantPermission($this->id,$perm);
 	}
 
 	/**
@@ -191,17 +152,9 @@ class Group
 	public function RemovePermission($perm)
 	{
 		if( $this->id <= 0 ) return;
-
-		$db = cmsms()->GetDb();
-		if( (int)$perm == 0 ) {
-			$perm = self::GetPermissionId($perm);
-		}
-
-		if( $perm > 0 ) {
-			$query = 'DELETE FROM '.cms_db_prefix().'group_perm
-                      WHERE group_id =  ? AND permission_id = ?';
-			$db->Execute($query,array($this->id,$perm));
-		}
+		if( !$this->HasPermission($perm) ) return;
+		$groupops = cmsms()->GetGroupOperations();
+		return $groupops->RemovPermission($this->id,$perm);
 	}
 
 }

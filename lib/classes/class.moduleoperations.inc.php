@@ -1148,17 +1148,14 @@ final class ModuleOperations
   {
 	  global $CMS_ADMIN_PAGE;
 	  $obj = null;
-	  if( !$module_name )
-		  {
-			  if( !isset($CMS_ADMIN_PAGE) )
-				  {
-					  $module_name = get_site_preference('frontendwysiwyg');
-				  }
-			  else
-				  {
-					  $module_name = get_preference(get_userid(FALSE),'wysiwyg');
-				  }
+	  if( !$module_name ) {
+		  if( !isset($CMS_ADMIN_PAGE) ) {
+			  $module_name = get_site_preference('frontendwysiwyg');
 		  }
+		  else {
+			  $module_name = get_preference(get_userid(FALSE),'wysiwyg');
+		  }
+	  }
 
 	  if( !$module_name || $module_name == -1 ) return $obj;
 

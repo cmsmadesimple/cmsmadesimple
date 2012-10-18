@@ -48,6 +48,15 @@
 class CmsException extends Exception {}
 
 /**
+ * A base CMSMS Logic Exception
+ * 
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.10
+ */
+class CmsLogicException extends CmsException {}
+
+/**
  * A base CMSMS Privacy Exception
  * 
  * @package CMS

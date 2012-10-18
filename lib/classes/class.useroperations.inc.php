@@ -44,12 +44,11 @@ class UserOperations
 	protected function __construct() {}
 
 	private static $_instance;
-	private static $_user_in_group;
+	private static $_user_groups;
 
 	public static function &get_instance()
 	{
-		if( !is_object(self::$_instance) )
-		{
+		if( !is_object(self::$_instance) ) {
 			self::$_instance = new UserOperations();
 		}
 		return self::$_instance;
@@ -72,8 +71,7 @@ class UserOperations
 		$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access FROM ".cms_db_prefix()."users ORDER BY username";
 		$dbresult = $db->Execute($query);
 
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
+		while ($dbresult && $row = $dbresult->FetchRow()) {
 			$oneuser = new User();
 			$oneuser->id = $row['user_id'];
 			$oneuser->username = $row['username'];
@@ -105,8 +103,7 @@ class UserOperations
 		$query = "SELECT u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.active, u.admin_access FROM ".cms_db_prefix()."users u, ".cms_db_prefix()."groups g, ".cms_db_prefix()."user_groups cg where cg.user_id = u.user_id and cg.group_id = g.group_id and g.group_id =? ORDER BY username";
 		$dbresult = $db->Execute($query, array($groupid));
 
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
+		while ($dbresult && $row = $dbresult->FetchRow()) {
 			$oneuser = new User();
 			$oneuser->id = $row['user_id'];
 			$oneuser->username = $row['username'];
@@ -148,36 +145,30 @@ class UserOperations
 		$where[] = 'username = ?';
 		$params[] = $username;
 
-		if ($password != '')
-		{
-		  $where[] = 'password = ?';
-		  $params[] = md5(get_site_preference('sitemask','').$password);
+		if ($password != '') {
+			$where[] = 'password = ?';
+			$params[] = md5(get_site_preference('sitemask','').$password);
 		}
 
-		if ($activeonly == true)
-		{
-		  $joins[] = cms_db_prefix()."user_groups ug ON u.user_id = ug.user_id";
-		  $where[] = "u.active = 1";	
+		if ($activeonly == true) {
+			$joins[] = cms_db_prefix()."user_groups ug ON u.user_id = ug.user_id";
+			$where[] = "u.active = 1";	
 		}
 
-		if ($adminaccessonly == true)
-		{
-		  $where[] = "admin_access = 1";
+		if ($adminaccessonly == true) {
+			$where[] = "admin_access = 1";
 		}
 
-		if( !empty($joins) )
-		  {
+		if( !empty($joins) ) {
 		    $query .= ' LEFT JOIN '.implode(' LEFT JOIN ',$joins);
-		  }
-		if( !empty($where) )
-		  {
+		}
+		if( !empty($where) ) {
 		    $query .= ' WHERE '.implode(' AND ',$where);
-		  }
+		}
 
 		$id = $db->GetOne($query,$params);
-		if( $id )
-		{
-		  return self::LoadUserByID($id);
+		if( $id ) {
+			return self::LoadUserByID($id);
 		}
 
 		return $result;
@@ -201,8 +192,7 @@ class UserOperations
 		$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".cms_db_prefix()."users WHERE user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
+		while ($dbresult && $row = $dbresult->FetchRow()) {
 			$oneuser = new User();
 			$oneuser->id = $id;
 			$oneuser->username = $row['username'];
@@ -241,10 +231,8 @@ class UserOperations
 		$time = $db->DBTimeStamp(time());
 		$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,".$time.",".$time.")";
-		#$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess));
 		$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1)); //Force admin access on
-		if ($dbresult !== false)
-		{
+		if ($dbresult !== false) {
 			$result = $new_user_id;
 		}
 
@@ -275,8 +263,7 @@ class UserOperations
 		$query = "UPDATE ".cms_db_prefix()."users SET username = ?, password = ?, active = ?, modified_date = ".$time.", first_name = ?, last_name = ?, email = ?, admin_access = ? WHERE user_id = ?";
 		#$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $user->id));
 		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1, $user->id));
-		if ($dbresult !== false)
-		{
+		if ($dbresult !== false) {
 			$result = true;
 		}
 
@@ -313,8 +300,7 @@ class UserOperations
 		$query = "DELETE FROM ".cms_db_prefix()."userprefs where user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult !== false)
-		{
+		if ($dbresult !== false) {
 			$result = true;
 		}
 
@@ -339,11 +325,9 @@ class UserOperations
 		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE owner_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
-		{
+		if ($dbresult && $dbresult->RecordCount() > 0) {
 			$row = $dbresult->FetchRow();
-			if (isset($row["count"]))
-			{
+			if (isset($row["count"])) {
 				$result = $row["count"];
 			}
 		}
@@ -357,14 +341,11 @@ class UserOperations
 
 		$allusers = UserOperations::LoadUsers();
 
-		if (count($allusers) > 0)
-		{
+		if (count($allusers) > 0) {
 			$result .= '<select name="'.$name.'">';
-			foreach ($allusers as $oneuser)
-			{
+			foreach ($allusers as $oneuser) {
 				$result .= '<option value="'.$oneuser->id.'"';
-				if ($oneuser->id == $currentuserid)
-				{
+				if ($oneuser->id == $currentuserid) {
 					$result .= ' selected="selected"';
 				}
 				$result .= '>'.$oneuser->username.'</option>';
@@ -385,26 +366,60 @@ class UserOperations
 	 */
 	function UserInGroup($uid,$gid)
 	{
-		$key = $uid.'.'.$gid;
-		if( !is_array(self::$_user_in_group) || !isset(self::$_user_in_group[$key]) )
-		{
-			$db = cmsms()->GetDb();
-			$query = "SELECT ug.user_id FROM ".cms_db_prefix()."user_groups ug
-                      WHERE ug.user_id = ? AND ug.group_id = ?";
-			$flag = $db->GetOne( $query,array($uid,$gid));
-
-			self::$_user_in_group[$key] = $flag;
+		$groups = $this->GetMemberGroups($uid);
+		if( in_array($gid,$groups) ) {
+			return TRUE;
 		}
-	  return self::$_user_in_group[$key];
+		return FALSE;
 	}
 
 	function GetMemberGroups($uid)
 	{
-		$db = cmsms()->GetDb();
-		$query = 'SELECT group_id FROM '.cms_db_prefix().'user_groups
+		if( !is_array(self::$_user_groups) || !isset(self::$_user_groups[$uid]) ) {
+			$db = cmsms()->GetDb();
+			$query = 'SELECT group_id FROM '.cms_db_prefix().'user_groups
                   WHERE user_id = ?';
-		$col = $db->GetCol($query,array((int)$uid));
-		return $col;
+			$col = $db->GetCol($query,array((int)$uid));
+			if( !is_array(self::$_user_groups) ) self::$_user_groups = array();
+			self::$_user_groups[$uid] = $col;
+		}
+		return self::$_user_groups[$uid];
+	}
+
+	function AddMemberGroup($uid,$gid)
+	{
+		$uid = (int)$uid;
+		$gid = (int)$gid;
+		if( $uid < 1 || $gid < 1 ) return;
+
+		$db = cmsms()->GetDb();
+		$now = $db->DbTimeStamp(time());
+		$query = 'INSERT INTO '.cms_db_prefix()."user_groups
+                  (group_id,user_id,create_date,modified_date)
+                  VALUES (?,?,$now,$now)";
+		$dbr = $db->Execute($query,array($uid,$gid));
+		if( isset(self::$_user_groups[$uid]) ) unset(self::$_user_groups[$uid]);
+	}
+
+	public function CheckPermission($userid,$permname)
+	{
+		if( $userid <= 0 ) return FALSE;
+		if( $userid == 1 ) return TRUE; // god user.
+		$groups = $this->GetMemberGroups($userid);
+		if( !is_array($groups) ) return FALSE;
+		if( in_array(1,$groups) ) return TRUE; // member of admin group
+
+		try {
+			foreach( $groups as $gid ) {
+				if( GroupOperations::get_instance()->CheckPermission($groupid,$permname) ) {
+					return TRUE;
+				}
+			}
+		}
+		catch( CmsException $e ) {
+			// nothing here.
+		}
+		return FALSE;
 	}
 }
 

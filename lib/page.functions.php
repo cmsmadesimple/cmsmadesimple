@@ -192,34 +192,6 @@ function generate_user_object($userid)
 
 
 /**
- * Loads all permissions for a particular user into a global variable so we don't hit the db for every one.
- *
- * @internal
- * @access private
- * @since 0.8
- * @param int The user id
- * @return void
- */
-function load_all_permissions($userid)
-{
-  $gCms = cmsms();
-  $db = $gCms->GetDb();
-  $variables =& $gCms->variables;
-
-  $perms = array();
-  $query = "SELECT DISTINCT permission_name FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = gp.permission_id INNER JOIN ".cms_db_prefix()."groups gr ON gr.group_id = ug.group_id WHERE ug.user_id = ? AND gr.active = 1";
-  $result = &$db->Execute($query, array($userid));
-  while ($result && !$result->EOF) {
-    $perms[] =& $result->fields['permission_name'];
-    $result->MoveNext();
-  }
-	
-  if ($result) $result->Close();
-
-  $variables['userperms'] = $perms;
-}
-
-/**
  * Checks to see that the given userid has access to the given permission.
  * Members of the admin group have all permissions.
  *
@@ -230,24 +202,7 @@ function load_all_permissions($userid)
  */
 function check_permission($userid, $permname)
 {
-  $check = false;
-
-  $gCms = cmsms();
-  $userops = $gCms->GetUserOperations();
-  $adminuser = $userops->UserInGroup($userid,1);
-
-  if (!isset($gCms->variables['userperms'])) {
-    load_all_permissions($userid);
-  }
-
-  if (isset($gCms->variables['userperms'])) {
-    if (in_array($permname, $gCms->variables['userperms']) || 
-	$adminuser || ($userid == 1) ) {
-      $check = true;
-    }
-  }
-
-  return $check;
+  return UserOperations::get_instance()->CheckPermission($userid,$permname);
 }
 
 
@@ -644,8 +599,16 @@ function pagination($page, $totalrows, $limit)
  * @return string
  */
 function cms_db_prefix() {
+  global $CMS_INSTALL_PAGE;
+  global $DONT_LOAD_DB;
+
+  if( isset($CMS_INSTALL_PAGE) && class_exists('CMSInstaller') &&
+      CmsInstaller::get_ext() ) {
+    return CmsInstaller::get_db_prefix();
+  }
+
   $config = cmsms()->GetConfig();
-  return $config["db_prefix"];
+  return $config['db_prefix'];
 }
 
 

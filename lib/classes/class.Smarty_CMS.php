@@ -68,7 +68,7 @@ class Smarty_CMS extends SmartyBC
     // common resources.
     $this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
     $this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
-    $this->registerResource('template',new CMSPageTemplateResource()); // <- Should proably be global and removed from parser?		
+    $this->registerResource('cms_template',new CmsTemplateResource()); // <- Should proably be global and removed from parser?		
 
     // register default plugin handler
     $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
@@ -100,11 +100,10 @@ class Smarty_CMS extends SmartyBC
       }
 
       // Load resources
-      $this->registerResource('tpl_top',new CMSPageTemplateResource('top'));
-      $this->registerResource('tpl_head',new CMSPageTemplateResource('head'));
-      $this->registerResource('tpl_body',new CMSPageTemplateResource('body'));
+      $this->registerResource('tpl_top',new CmsTemplateResource('top'));
+      $this->registerResource('tpl_head',new CmsTemplateResource('head'));
+      $this->registerResource('tpl_body',new CmsTemplateResource('body'));
       $this->registerResource('content',new CMSContentTemplateResource());
-      //$this->registerResource('htmlblob',new CMSGlobalContentTemplateResource());
       $this->registerResource('globalcontent',new CMSGlobalContentTemplateResource());
 
       // just for frontend actions.

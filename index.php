@@ -79,33 +79,18 @@ while( $trycount < 2 ) {
   $trycount++;
   try 
   {
-    if( !is_object($contentobj) ) {
-      if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) {
-	$tpl_name = trim($_SESSION['cms_preview']);
-	$fname = '';
-	if (is_writable($config["previews_path"])) {
-	  $fname = cms_join_path($config["previews_path"] , $tpl_name);
-	}
-	else {
-	  $fname = cms_join_path(TMP_CACHE_LOCATION , $tpl_name);
-	}
-	$fname = $tpl_name;
-	if( !file_exists($fname) ) {
-	  throw new CmsException('preview selected, but temp file not found: '.$fname);
-	}
-
-	// build pageinfo
-	$fh = fopen($fname,'r');
-	$_SESSION['cms_preview_data'] = unserialize(fread($fh,filesize($fname)));
-	fclose($fh);
-	unset($_SESSION['cms_preview']);
-
-	$contentobj = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
-	$contentobj->setId('__CMS_PREVIEW_PAGE__');
+    if( $page == '__CMS_PREVIEW_PAGE__' ) {
+      if( !isset($_SESSION['__cms_preview__']) ) {
+	throw new CmsException('preview selected, but temp data not found: '.$fname);
       }
-      else {
-	$contentobj = $contentops->LoadContentFromAlias($page,true);
-      }
+      
+      // todo: get the content type, and load it.
+      $contentops->LoadContentType($_SESSION['__cms_preview_type__']);
+      $contentobj = unserialize($_SESSION['__cms_preview__']);
+      $contentobj->setId('__CMS_PREVIEW_PAGE__');
+    }
+    else {
+      $contentobj = $contentops->LoadContentFromAlias($page,true);
     }
 	
     if( !is_object($contentobj) ) {
@@ -203,7 +188,6 @@ while( $trycount < 2 ) {
       $html = $smarty->fetch('template:notemplate')."\n";
     }
     else {
-      //debug_display('display content '.$contentobj->Alias().' '.$page);
       debug_buffer('process template top');
       $top  = $smarty->fetch('tpl_top:'.$contentobj->TemplateId());
 		
@@ -303,8 +287,9 @@ if ( !is_sitedown() && $config["debug"] == true) {
   }
 }
 
-if( $page == '__CMS_PREVIEW_PAGE__' && isset($_SESSION['cms_preview']) ) { // temporary
-  unset($_SESSION['cms_preview']);
+if( $page == '__CMS_PREVIEW_PAGE__' ) {
+  unset($_SESSION['__cms_preview__']);
+  unset($_SESSION['__cms_preview_type__']);
 }
 
 # vim:ts=4 sw=4 noet

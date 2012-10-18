@@ -38,10 +38,7 @@ check_login();
 $userid = get_userid();
 $access = check_permission($userid, "Modify Stylesheets")
   || check_permission($userid, "Add Stylesheets")
-  || check_permission($userid, "Remove Stylesheets")
-  || check_permission($userid, "Modify Stylesheet Assoc")
-  || check_permission($userid, "Add Stylesheet Assoc")
-  || check_permission($userid, "Remove Stylesheet Assoc");
+  || check_permission($userid, "Remove Stylesheets");
 
 
 if (!$access) {
@@ -81,9 +78,6 @@ else if( isset($_GET['messagekey']) ) {
 	$modify       = check_permission($userid, 'Modify Stylesheets');
 	$addcss       = check_permission($userid, 'Add Stylesheets');
 	$delcss       = check_permission($userid, 'Remove Stylesheets');
-	$modifyAssoc  = check_permission($userid, 'Modify Stylesheet Assoc');
-	$addAssoc  = check_permission($userid, 'Add Stylesheet Assoc');
-	$delAssoc  = check_permission($userid, 'Remove Stylesheet Assoc');
 
 	$query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
 	$result = $db->Execute($query);
@@ -109,7 +103,6 @@ else if( isset($_GET['messagekey']) ) {
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
-		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
@@ -129,17 +122,6 @@ else if( isset($_GET['messagekey']) ) {
 		    else
 		      {
 			echo "<td>".$one["css_name"]."</td>\n";
-		      }
-
-		    if( $modifyAssoc || $delAssoc || $addAssoc )
-		      {
-			echo "<td class=\"icons_wide\"><a href=\"templatecss.php".$urlext."&amp;id=".$one["css_id"]."&amp;type=template\">";
-			echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachtotemplate'),'','','systemicon');
-			echo "</a></td>\n";
-		      }
-		    else
-		      {
-			echo "<td>&nbsp;</td>";
 		      }
 
                     // if user has right to add (copy)

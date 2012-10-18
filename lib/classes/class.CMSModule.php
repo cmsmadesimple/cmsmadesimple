@@ -3332,19 +3332,15 @@ abstract class CMSModule
 	 */
 	final public function CreatePermission($permission_name, $permission_text)
 	{
-	  $gCms = cmsms();
-		$db = $gCms->GetDB();
-
-		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
-		$count = $db->GetOne($query, array($permission_name));
-
-		if (intval($count) == 0)
-		{
-			$new_id = $db->GenID(cms_db_prefix()."permissions_seq");
-			$time = $db->DBTimeStamp(time());
-			$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
-			$db->Execute($query, array($new_id, $permission_name, $permission_text));
-		}
+	  try {
+	    $perm = new CmsPermission();
+	    $perm->originator = $this->GetName();
+	    $perm->name = $permission_name;
+	    $perm->text = $permission_text;
+	    $perm->save();
+	  }
+	  catch( Exception $e ) {
+	  }
 	}
 
 	/**
@@ -3356,8 +3352,8 @@ abstract class CMSModule
 	 */
 	final public function CheckPermission($permission_name)
 	{
-		$userid = get_userid(false);
-		return check_permission($userid, $permission_name);
+	  $userid = get_userid(false);
+	  return check_permission($userid, $permission_name);
 	}
 
 	/**
@@ -3370,6 +3366,13 @@ abstract class CMSModule
 	 */
 	final public function RemovePermission($permission_name)
 	{
+	  try {
+	    $perm = CmsPermission::load($permission_name);
+	    $perm->delete();
+	  }
+	  catch( Exception $e ) {
+	    // ignored.
+	  }
 	  cms_mapi_remove_permission($permission_name);
 	}
 
@@ -3389,7 +3392,8 @@ abstract class CMSModule
 	 */
 	final public function GetPreference($preference_name, $defaultvalue='')
 	{
-		return get_site_preference($this->GetName() . "_mapi_pref_" . $preference_name, $defaultvalue);
+	  return cms_siteprefs::get($this->GetName().'_mapi_pref_'.$preference_name,
+				    $defaultvalue);
 	}
 
 	/**
@@ -3402,7 +3406,8 @@ abstract class CMSModule
 	 */
 	final public function SetPreference($preference_name, $value)
 	{
-	  return set_site_preference($this->GetName() . "_mapi_pref_" . $preference_name, $value);
+	  return cms_siteprefs::set($this->GetName().'_mapi_pref_'.$preference_name,
+				    $value);
 	}
 
 	/**
@@ -3415,11 +3420,10 @@ abstract class CMSModule
 	 */
 	final public function RemovePreference($preference_name='')
 	{
-	  if( $preference_name == '' )
-	    {
-	      return remove_site_preference($this->GetName()."_mapi_pref_",true);
-	    }
-	  return remove_site_preference($this->GetName() . "_mapi_pref_" . $preference_name);
+	  if( $preference_name == '' ) {
+	    return cms_siteprefs::remove($this->GetName().'_mapi_pref_',true);
+	  }
+	  return cms_siteprefs::remove($this->GetName().'_mapi_pref_'.$preference_name);
 	}
 
 	/**

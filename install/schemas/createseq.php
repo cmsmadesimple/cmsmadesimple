@@ -13,10 +13,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
         'event_handlers'            => array('id' => 'handler_id', 'seq' => 'event_handler_seq'),
         'group_perms'               => array('id' => 'group_perm_id'),
         'groups'                    => array('id' => 'group_id'),
-        'htmlblobs'                 => array('id' => 'htmlblob_id'),
-        'additional_htmlblob_users' => array('id' => 'additional_htmlblob_users_id'),
-        'permissions'               => array('id' => 'permission_id'),
-        'templates'                 => array('id' => 'template_id'),
         'users'                     => array('id' => 'user_id'),
         'userplugins'               => array('id' => 'userplugin_id')
     );

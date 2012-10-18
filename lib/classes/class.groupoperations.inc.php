@@ -42,6 +42,7 @@ class GroupOperations
 	protected function __construct() {}
 
 	private static $_instance;
+	private static $_perm_cache;
 
 	public static function &get_instance()
 	{
@@ -79,7 +80,7 @@ class GroupOperations
 	 * @param integer $id The id of the group to load
 	 * @return mixed The group if found. If it's not found, then false
 	 */
-	public function & LoadGroupByID($id)
+	public function &LoadGroupByID($id)
 	{
 		$result = false;
 		$db = cmsms()->GetDb();
@@ -141,7 +142,7 @@ class GroupOperations
 		$tmp = $db->GetOne($query,array($group->name,$group->id));
 		if( $tmp ) {
 		    return $result;
-		  }
+		}
 
 		$time = $db->DBTimeStamp(time());
 		$query = "UPDATE ".cms_db_prefix()."groups SET group_name = ?, active = ?, modified_date = ".$time." WHERE group_id = ?";
@@ -177,7 +178,57 @@ class GroupOperations
 			$result = true;
 		}
 
+		unset($this->_perm_cache);
 		return $result;
+	}
+
+	public function CheckPermission($groupid,$perm)
+	{
+		$permid = CmsPermission::get_perm_id($perm);
+		if( $permid < 1 ) return FALSE;
+		if( $groupid == 1 ) return TRUE;
+
+		if( !is_array($this->_perm_cache) || !isset($this->_perm_cache[$groupid]) ) {
+			$db = cmsms()->GetDb();
+			$query = 'SELECT permission_id FROM '.cms_db_prefix().'group_perms 
+                      WHHERE group_id = ?';
+			$dbr = $db->GetCol($query,array($groupid));
+			$this->_perm_cache[$groupid] = $dbr;
+		}
+
+		return in_array($permid,$this->_perm_cache[$groupid]);
+	}
+
+	public function GrantPermission($groupid,$perm)
+	{
+		$permid = CmsPermission::get_perm_id($perm);
+		if( $permid < 1 ) return;
+		if( $groupid <= 1 ) return;
+
+		$db = cmsms()->GetDb();
+
+		if( $perm <= 0 ) return;
+		$new_id = $db->GenId(cms_db_prefix().'group_perm');
+		if( !$new_id ) return;
+
+		$now = $db->DbTimeStamp(time());
+		$query = 'INSERT INTO '.cms_db_prefix()."group_perms
+                  (group_perm_id,group_id,permission_id,create_date,modified_date)
+                  VALUES (?,?,?,$now,$now)";
+ 		$dbr = $db->Execute($query,array($new_id,$this->id,$perm));
+		unset(self::$_perm_cache);
+	}
+
+	public function RemovePermission($groupid,$perm)
+	{
+		$permid = CmsPermission::get_perm_id($perm);
+		if( $permid < 1 ) return;
+		if( $groupid <= 1 ) return;
+
+		$query = 'DELETE FROM '.cms_db_prefix().'group_perms
+                  WHERE group_id = ? AND perm_id = ?';
+		$dbr = $db->Execute($query,array($groupid,$permid));
+		unset(self::$_perm_cache);
 	}
 }
 

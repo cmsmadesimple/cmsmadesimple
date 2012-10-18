@@ -49,6 +49,8 @@ function smarty_cms_function_form_start($params, &$template)
       $mactparms[$key] = trim($value);
       break;
 
+    case 'url':
+      $key = 'action';
     case 'method':
     case 'enctype':
     case 'id':
@@ -79,11 +81,14 @@ function smarty_cms_function_form_start($params, &$template)
     }
   }
   $out .= '><div class="hidden">';
-  $mact = $mactparms['module'].','.$mactparms['mid'].','.$mactparms['action'].','.$mactparms['inline'];
-  $out .= '<input type="hidden" name="mact" value="'.$mact.'"/>';
-  if( $mactparms['returnid'] != '' ) {
-    $out .= '<input type="hidden" name="'.$mactparms['mid'].'returnid" value="'.$mactparms['returnid'].'"/>';
-  } else {
+  if( $mactparms['module'] && $mactparms['action'] ) {
+    $mact = $mactparms['module'].','.$mactparms['mid'].','.$mactparms['action'].','.$mactparms['inline'];
+    $out .= '<input type="hidden" name="mact" value="'.$mact.'"/>';
+    if( $mactparms['returnid'] != '' ) {
+      $out .= '<input type="hidden" name="'.$mactparms['mid'].'returnid" value="'.$mactparms['returnid'].'"/>';
+    }
+  }
+  if( !isset($mactparms['returnid']) || $mactparms['returnid'] == '' ) {
     $out .= '<input type="hidden" name="'.CMS_SECURE_PARAM_NAME.'" value="'.$_SESSION[CMS_USER_KEY].'"/>';
   }
   foreach( $parms as $key => $value ) {

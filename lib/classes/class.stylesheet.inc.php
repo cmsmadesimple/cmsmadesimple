@@ -62,7 +62,7 @@ class Stylesheet
 	/**
 	 * Sets some initial values
 	 */
-	function Stylesheet()
+	public function __construct()
 	{
 		$this->SetInitialValues();
 	}

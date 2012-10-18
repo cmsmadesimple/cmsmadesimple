@@ -427,6 +427,7 @@ class ImageManager
 	 */
 	function _processFiles($relative, $file)
 	{
+	  if( !$this->validRelativePath($relative) ) return false;
 		
 		if($file['error']!=0)
 		{
@@ -560,8 +561,8 @@ class ImageManager
 	 */
 	function deleteFiles() 
 	{
-		if(isset($_GET['delf']))
-			$this->_delFile(rawurldecode($_GET['delf']));
+	  if(isset($_GET['delf']))
+	    $this->_delFile(rawurldecode($_GET['delf']));
 	}
 
 	/**
@@ -570,10 +571,10 @@ class ImageManager
 	 */
 	function deleteDirs() 
 	{
-		 if(isset($_GET['deld']))
-			return $this->_delDir(rawurldecode($_GET['deld']));		
-		 else
-			 Return false;
+	  if(isset($_GET['deld']) ) {
+	    return $this->_delDir(rawurldecode($_GET['deld']));
+	  }
+	  return false;
 	}
 
 	/**
@@ -583,6 +584,7 @@ class ImageManager
 	 */
 	function _delFile($relative) 
 	{
+	  if( !$this->validRelativePath($relative) ) return false;
 		$fullpath = Files::makeFile($this->getBaseDir(),$relative);
 		
 		//check that the file is an image
@@ -607,6 +609,7 @@ class ImageManager
 	 */
 	function _delDir($relative) 
 	{
+	  if( !$this->validRelativePath($relative) ) return false;
 		$fullpath = Files::makePath($this->getBaseDir(),$relative);
 		if($this->countFiles($fullpath) <= 0)
 			return Files::delFolder($fullpath,true); //delete recursively.

@@ -89,6 +89,7 @@ class Content extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
+	  $this->AddBaseProperty('theme_id',3);
       $this->AddBaseProperty('template',4);
       $this->AddBaseProperty('pagemetadata',20);
       $this->AddContentProperty('searchable',8);
@@ -97,15 +98,6 @@ class Content extends ContentBase
 
       #Turn on preview
       $this->mPreview = true;
-    }
-
-    /**
-     * Use the ReadyForEdit callback to get the additional content blocks loaded.
-     * @return void
-     */
-    function ReadyForEdit()
-    {
-		//$this->get_content_blocks();
     }
 
 	/**
@@ -119,54 +111,44 @@ class Content extends ContentBase
 		$gCms = cmsms();
 		$config = $gCms->GetConfig();
 
-		if (isset($params))
-			{
-				$this->__fieldhash = null; // clear the field hash.
-				$parameters = array('pagedata','searchable','disable_wysiwyg');
+		if (isset($params)) {
+			$this->__fieldhash = null; // clear the field hash.
+			$parameters = array('pagedata','searchable','disable_wysiwyg');
 
-				//pick up the template id before we do parameters
-				if (isset($params['template_id']))
-					{
-						if ($this->mTemplateId != $params['template_id'])
-							{
-								$this->_contentBlocksLoaded = false;
-							}
-						$this->mTemplateId = $params['template_id'];
-					}
-	  
-				// add content blocks
-				$blocks = $this->get_content_blocks();
-				foreach($blocks as $blockName => $blockInfo)
-					{
-						$parameters[] = $blockInfo['id'];
-			
-						if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
-							{
-								$module = cms_utils::get_module($blockInfo['module']);
-								if( !is_object($module) ) continue;
-								if( !$module->HasCapability('contentblocks') ) continue;
-								$tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
-								if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
-							}
-					}
-	  
-				// do the content property parameters
-				foreach ($parameters as $oneparam)
-					{
-						if (isset($params[$oneparam]))
-							{
-								$this->SetPropertyValue($oneparam, $params[$oneparam]);
-							}
-					}
-
-				// metadata
-				if (isset($params['metadata']))
-					{
-						$this->mMetadata = $params['metadata'];
-					}
-
+			//pick up the template id before we do parameters
+			if (isset($params['template_id'])) {
+				if ($this->mTemplateId != $params['template_id']) {
+					$this->_contentBlocksLoaded = false;
+				}
+				$this->mTemplateId = $params['template_id'];
 			}
 
+			// add content blocks
+			$blocks = $this->get_content_blocks();
+			foreach($blocks as $blockName => $blockInfo) {
+				$parameters[] = $blockInfo['id'];
+
+				if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' ) {
+					$module = cms_utils::get_module($blockInfo['module']);
+					if( !is_object($module) ) continue;
+					if( !$module->HasCapability('contentblocks') ) continue;
+					$tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
+					if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
+				}
+			}
+
+			// do the content property parameters
+			foreach ($parameters as $oneparam) {
+				if (isset($params[$oneparam])) {
+					$this->SetPropertyValue($oneparam, $params[$oneparam]);
+				}
+			}
+
+			// metadata
+			if (isset($params['metadata'])) {
+				$this->mMetadata = $params['metadata'];
+			}
+		}
 		parent::FillParams($params,$editing);
     }
 
@@ -191,7 +173,6 @@ class Content extends ContentBase
     {
 		return TRUE;
     }
-
 
 	/**
 	 * Setup form elements for adding or editing.
@@ -221,22 +202,18 @@ class Content extends ContentBase
 		$hash[lang('main')] = array();
 		$ret = array();
 		$tmp = $this->display_attributes($adding);
-		if( !empty($tmp) )
-		{
-			foreach( $tmp as $one ) 
-			{
+		if( !empty($tmp) ) {
+			foreach( $tmp as $one ) {
 				$ret[] = $one;
 			}
 		}
 
-		if( is_array($blocks) && count($blocks) )
-		{
-			foreach($blocks as $blockName => $blockInfo)
-			{
-				if( !isset($blockInfo['tab']) || $blockInfo['tab'] == '' || $blockInfo['tab'] == 'main' )
-				{
+		if( is_array($blocks) && count($blocks) ) {
+			foreach($blocks as $blockName => $blockInfo) {
+				if( !isset($blockInfo['tab']) || $blockInfo['tab'] == '' || 
+					$blockInfo['tab'] == 'main' ) {
 					$parameters[] = $blockInfo['id'];
-				
+
 					$data = $this->GetPropertyValue($blockInfo['id']);
 					if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
 					$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
@@ -245,32 +222,29 @@ class Content extends ContentBase
 				}
 			}
 		}
-			
+
 		$hash[lang('main')] = $ret;
 
 		// 
 		// other tabs.
 		//
-		if( is_array($blocks) && count($blocks) )
-		{
-			foreach($blocks as $blockName => $blockInfo)
-				{
-					if( isset($blockInfo['tab']) && $blockInfo['tab'] != '' && $blockInfo['tab'] != 'options')
-					{
-						$parameters[] = $blockInfo['id'];
-						
-						$data = $this->GetPropertyValue($blockInfo['id']);
-						if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
-						$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
-						if( !$tmp ) continue;
-						
-						if( !isset($hash[$blockInfo['tab']]) )
-						{
-							$hash[$blockInfo['tab']] = array();
-						}
-						$hash[$blockInfo['tab']][] = $tmp;
+		if( is_array($blocks) && count($blocks) ) {
+			foreach($blocks as $blockName => $blockInfo) {
+				if( isset($blockInfo['tab']) && $blockInfo['tab'] != '' && 
+					$blockInfo['tab'] != 'options') {
+					$parameters[] = $blockInfo['id'];
+
+					$data = $this->GetPropertyValue($blockInfo['id']);
+					if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
+					$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
+					if( !$tmp ) continue;
+
+					if( !isset($hash[$blockInfo['tab']]) ) {
+						$hash[$blockInfo['tab']] = array();
 					}
+					$hash[$blockInfo['tab']][] = $tmp;
 				}
+			}
 		}
 
 		//
@@ -281,24 +255,21 @@ class Content extends ContentBase
 			// now do advanced attributes
 			$ret = array();
 			$tmp = $this->display_attributes($adding,1);
-			if( !empty($tmp) )
-			{
+			if( !empty($tmp) ) {
 				foreach( $tmp as $one ) {
 					$ret[] = $one;
 				}
 			}
 
-			if( is_array($blocks) && count($blocks) )
-			{
+			if( is_array($blocks) && count($blocks) ) {
 				// and the content blocks
-				foreach($blocks as $blockName => $blockInfo)
-				{
-					if( isset($blockInfo['tab']) && $blockInfo['tab'] == 'options' )
-					{
+				foreach($blocks as $blockName => $blockInfo) {
+					if( isset($blockInfo['tab']) && $blockInfo['tab'] == 'options' ) {
 						$parameters[] = $blockInfo['id'];
-						
+
 						$data = $this->GetPropertyValue($blockInfo['id']);
-						if( empty($data) && isset($blockInfo['default']) ) $data = $blockInfo['default'];
+						if( empty($data) && isset($blockInfo['default']) ) 
+							$data = $blockInfo['default'];
 						$tmp = $this->display_content_block($blockName,$blockInfo,$data,$adding);
 						if( !$tmp ) continue;
 						$ret[] = $tmp;
@@ -313,10 +284,9 @@ class Content extends ContentBase
 			$userops = cmsms()->GetUserOperations();
 			$modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);
 			if($modifiedbyuser) $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
-			
+
 			if( count($ret) ) $hash[lang('options')] = $ret;
 		}
-
 		return $hash;
 	}
 
@@ -354,17 +324,14 @@ class Content extends ContentBase
 		$templateops = cmsms()->GetTemplateOperations();
 		$ret = array();
 		$this->stylesheet = '';
-		if ($this->TemplateId() > 0)
-		{
+		if ($this->TemplateId() > 0) {
 			$this->stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
 		}
 
-		if( isset($tabnames[$tab]) )
-		{
+		if( isset($tabnames[$tab]) ) {
 			return $this->__fieldhash[$tabnames[$tab]];
 		}
     }
-
 
 	/**
 	 * Validate the user's entries in the content add/edit form
@@ -375,57 +342,48 @@ class Content extends ContentBase
 	{
 		$errors = parent::ValidateData();
 		$gCms = cmsms();
-		if( $errors === FALSE )
-		{
+		if( $errors === FALSE ) {
 			$errors = array();
 		}
 
-		if ($this->mTemplateId <= 0 )
-		{
+		if ($this->mTemplateId <= 0 ) {
 			$errors[] = lang('nofieldgiven',array(lang('template')));
 			$result = false;
 		}
 
-		if ($this->GetPropertyValue('content_en') == '')
-		{
+		if ($this->GetPropertyValue('content_en') == '') {
 			$errors[]= lang('nofieldgiven',array(lang('content')));
 			$result = false;
 		}
 
 		$blocks = $this->get_content_blocks();
-		if( !$blocks )
-		  {
+		if( !$blocks ) {
 		    $errors[] = lang('error_parsing_content_blocks');
 		    $result = false;
-		  }
+		}
 
 		$have_content_en = FALSE;
-		foreach($blocks as $blockName => $blockInfo)
-		{
-		  if( $blockInfo['id'] == 'content_en' )
-		    {
-		      $have_content_en = TRUE;
+		foreach($blocks as $blockName => $blockInfo) {
+			if( $blockInfo['id'] == 'content_en' ) {
+				$have_content_en = TRUE;
 		    }
-			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' )
-			{
+			if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' ) {
 				$module = cms_utils::get_module($blockInfo['module']);
 				if( !is_object($module) ) continue;
 				if( !$module->HasCapability('contentblocks') ) continue;
 				$value = $this->GetPropertyValue($blockInfo['id']);
 				$tmp = $module->ValidateContentBlockValue($blockName,$value,$blockInfo['params']);
-				if( !empty($tmp) )
-				{
+				if( !empty($tmp) ) {
 					$errors[] = $tmp;
 					$result = false;
 				}
 			}
 		}
 
-		if( !$have_content_en )
-		  {
+		if( !$have_content_en ) {
 		    $errors[] = lang('error_no_default_content_block');
 		    $result = false;
-		  }
+		}
 
 		return (count($errors) > 0?$errors:FALSE);
 	}
@@ -436,8 +394,7 @@ class Content extends ContentBase
      */
     public function get_content_blocks()
     {
-		if( $this->parse_content_blocks() )
-		{
+		if( $this->parse_content_blocks() ) {
 			return $this->_contentBlocks;
 		}
     }
@@ -451,9 +408,9 @@ class Content extends ContentBase
     private function parse_content_blocks()
     {
 		if ($this->_contentBlocksLoaded) return TRUE;
-		
+
 		$parser = cmsms()->get_template_parser();
-		$parser->fetch('template:'.$this->TemplateId()); // do the magic.
+		$parser->fetch('cms_template:'.$this->TemplateId()); // do the magic.
 
 		$this->_contentBlocks = CMS_Content_Block::get_content_blocks();
 
@@ -475,59 +432,98 @@ class Content extends ContentBase
     protected function display_single_element($one,$adding)
     {
 		$gCms = cmsms();
-
+		static $_themes;
+		static $_types;
+		static $_themetree;
+		static $_themelist;
+		static $_templates;
+		if( $_themes == null ) {
+			$_templates = CmsLayoutTemplate::template_query(array('as_list'=>1));
+			$_themes = CmsLayoutTheme::get_all();
+			$_themelist = array();
+			$_themetree = array();
+			foreach( $_themes as $one_theme ) {
+				$tmp1 = $one_theme->get_templates();
+				if( !is_array($tmp1) || count($tmp1) == 0 ) continue;
+				$_themelist[$one_theme->get_id()] = $one_theme->get_name();
+				$tmp2 = array();
+				foreach( $tmp1 as $one_tpl_id ) {
+					$tmp2[$one_tpl_id] = $_templates[$one_tpl_id];
+				}
+				$_themetree[$one_theme->get_id()] = $tmp2;
+			}
+		}
+		
 		switch($one) {
+		case 'theme_id':
+			$out = '';
+			if( is_array($_themelist) && count($_themelist) ) {
+				$out = CmsFormUtils::create_dropdown('theme_id',$_themelist,
+													 $this->GetPropertyValue('theme_id'),
+													 array('id'=>'theme_id'));
+				return array('<label for="theme_id">*'.lang('theme').':</label>', 
+							 $out.'<br/>'.lang('info_editcontent_theme'));
+			}
+			break;
+
 		case 'template':
-			{
-				$templateops = $gCms->GetTemplateOperations();
-				return array('<label for="template_id">'.lang('template').':</label>', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.Edit_Content.submit()"'));
-			}
-			break;
-			
+			$tmp = json_encode($_themetree);
+			$out = <<<TPLJS
+<script type="text/javascript">
+var _tree = '{$tmp}';
+var _seltpl  = '{$this->mTemplateId}';
+function _update_template_list(theme_id)
+{
+	var tree = $.parseJSON(_tree);
+    $.each(tree,function(k,v){
+     if( k == theme_id ) {
+ 	   // clear the template list
+	   $('#template_id').html('');
+  	   $.each(v,function(k,v2){
+	     // add items.
+	     $('#template_id').append('<option value="'+k+'">'+v2+'</option>');
+	   });
+       $('#template_id').val(_seltpl);
+     }
+    });
+}
+$(document).ready(function(){
+  _update_template_list($('#theme_id').val());
+  $('#theme_id').change(function(){
+    _update_template_list($(this).val());
+  });
+});
+</script>
+TPLJS;
+			$out .= '<select name="template_id" id="template_id">';
+			$out .= '</select><br/>'.lang('info_editcontent_template');
+			return array('<label for="template_id">*'.lang('template').':</label>',$out);
+
 		case 'pagemetadata':
-			{
-				return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
-			}
-			break;
-			
+			return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
+
 		case 'pagedata':
-			{
-				return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</label>',
-							 create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','id_pagedata','','','80','6'));
-			}
-			break;
-			
+			return array('<label for="id_pagedata">'.lang('pagedata_codeblock').':</label>',
+						 create_textarea(false,$this->GetPropertyValue('pagedata'),'pagedata','pagesmalltextarea','id_pagedata','','','80','6'));
+
 		case 'searchable':
-			{
-				$searchable = $this->GetPropertyValue('searchable');
-				if( $searchable == '' )
-					{
-						$searchable = 1;
-					}
-				return array('<label for="id_searchable">'.lang('searchable').':</label>',
-							 '<div class="hidden" ><input type="hidden" name="searchable" value="0" /></div>
-            <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' />',
-							 lang('help_page_searchable'));
-			}
-			break;
-			
+			$searchable = $this->GetPropertyValue('searchable');
+			if( $searchable == '' ) $searchable = 1;
+			return array('<label for="id_searchable">'.lang('searchable').':</label>',
+						 '<div class="hidden"><input type="hidden" name="searchable" value="0"/></div>
+                          <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' /><br/>'.lang('help_page_searchable'));
+
 		case 'disable_wysiwyg':
-			{
-				$disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
-				if( $disable_wysiwyg == '' )
-					{
-						$disable_wysiwyg = 0;
-					}
-				return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>',
-							 '<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
+			$disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
+			if( $disable_wysiwyg == '' ) $disable_wysiwyg = 0;
+			return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>',
+						 '<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
              <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
-			}
 			break;
-			
+
 		default:
 			return parent::display_single_element($one,$adding);
 		}
-		
     }
 
 	/*
@@ -538,23 +534,19 @@ class Content extends ContentBase
 	{
 		$ret = '';
 		$oneline = isset($blockInfo['oneline']) && cms_to_bool($blockInfo['oneline']);
-		if ($oneline)
-		{
+		if ($oneline) {
 			$size = (isset($blockInfo['size']))?$blockInfo['size']:50;
 			$maxlength = (isset($blockInfo['maxlength']))?$blockInfo['maxlength']:255;
 			$ret = '<input type="text" size="'.$size.'" maxlength="'.$maxlength.'" name="'.$blockInfo['id'].'" value="'.cms_htmlentities($value, ENT_NOQUOTES, get_encoding('')).'" />';
 		}
-		else
-		{ 
+		else {
 			$block_wysiwyg = true;
 			$hide_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
 
-			if ($hide_wysiwyg)
-			{
+			if ($hide_wysiwyg) {
 				$block_wysiwyg = false;
 			}
-			else
-			{
+			else {
 				$block_wysiwyg = $blockInfo['usewysiwyg'] == 'false'?false:true;
 			}
 
@@ -572,17 +564,13 @@ class Content extends ContentBase
 		$gCms = cmsms();
 		$config = $gCms->GetConfig();
 		$adddir = get_site_preference('contentimage_path');
-		if( $blockInfo['dir'] != '' )
-			{
-				$adddir = $blockInfo['dir'];
-			}
+		if( $blockInfo['dir'] != '' ) {
+			$adddir = $blockInfo['dir'];
+		}
 		$dir = cms_join_path($config['uploads_path'],$adddir);
 		$optprefix = '';
-		//$optprefix = 'uploads';
-		//if( !empty($blockInfo['dir']) ) $optprefix .= '/'.$blockInfo['dir'];
 		$inputname = $blockInfo['id'];
-		if( isset($blockInfo['inputname']) )
-		{
+		if( isset($blockInfo['inputname']) ) {
 			$inputname = $blockInfo['inputname'];
 		}
 		$prefix = '';
@@ -594,18 +582,16 @@ class Content extends ContentBase
 		}
 		$dropdown = create_file_dropdown($inputname,$dir,$value,'jpg,jpeg,png,gif',$optprefix,true,'',
 										 $prefix,1,$sort);
-		if( $dropdown === false )
-		{
+		if( $dropdown === false ) {
 			$dropdown = lang('error_retrieving_file_list');
 		}
 		return $dropdown;
 	}
 
-
-/*
+   /*
 	* return the HTML to create the text area in the admin console.
 	* may include a label.
-*/
+    */
 	private function _display_module_block($blockName,$blockInfo,$value,$adding)
 	{
 		$gCms = cmsms();
@@ -614,8 +600,7 @@ class Content extends ContentBase
 		$module = cms_utils::get_module($blockInfo['module']);
 		if( !is_object($module) ) return FALSE;
 		if( !$module->HasCapability('contentblocks') ) return FALSE;
-		if( isset($blockInfo['inputname']) && !empty($blockInfo['inputname']) )
-		{
+		if( isset($blockInfo['inputname']) && !empty($blockInfo['inputname']) ) {
 			// a hack to allow overriding the input field name.
 			$blockName = $blockInfo['inputname'];
 		}
@@ -623,63 +608,50 @@ class Content extends ContentBase
 		return $tmp;
 	}
 
-
 	/**
 	* Return an array of two elements
 	* the first is the string for the label for the field
 	* the second is the html for the input field
-*/
+	*/
 	private function display_content_block($blockName,$blockInfo,$value,$adding = false)
 	{
 		// it'd be nice if the content block was an object..
 		// but I don't have the time to do it at the moment.
 		$field = '';
 		$label = '';
-		if( isset($blockInfo['label']) && $blockInfo['label'] != '')
-		{
+		if( isset($blockInfo['label']) && $blockInfo['label'] != '') {
 			$label = '<label for="'.$blockInfo['id'].'">'.$blockInfo['label'].'</label>';
 		}
-		switch( $blockInfo['type'] )
-		{
-			case 'text':
-			{
-				if( $blockName == 'content_en' && $label == '' )
-				{
-					$label = '<label for="content_en">*'.lang('content').'</label>';
-				}
-				$field = $this->_display_text_block($blockInfo,$value,$adding);
+		switch( $blockInfo['type'] ) {
+		case 'text':
+			if( $blockName == 'content_en' && $label == '' ) {
+				$label = '<label for="content_en">*'.lang('content').'</label>';
 			}
+			$field = $this->_display_text_block($blockInfo,$value,$adding);
 			break;
 
-			case 'image':
+		case 'image':
 			$field = $this->_display_image_block($blockInfo,$value,$adding);
 			break;
 
-			case 'module':
-			{
-				$tmp = $this->_display_module_block($blockName,$blockInfo,$value,$adding);
-				if( is_array($tmp) )
-				{
-					if( count($tmp) == 2 )
-					{
-						$label = $tmp[0];
-						$field = $tmp[1];
-					}
-					else
-					{
-						$field = $tmp[0];
-					}
+		case 'module':
+			$tmp = $this->_display_module_block($blockName,$blockInfo,$value,$adding);
+			if( is_array($tmp) ) {
+				if( count($tmp) == 2 ) {
+					$label = $tmp[0];
+					$field = $tmp[1];
 				}
-				else
-				{
-					$field = $tmp;
+				else {
+					$field = $tmp[0];
 				}
+			}
+			else {
+				$field = $tmp;
 			}
 			break;
 		}
 		if( empty($field) ) return FALSE;
-		if( empty($label) )
-		{
+		if( empty($label) ) {
 			$label = $blockName;
 		}
 		return array($label.':',$field);

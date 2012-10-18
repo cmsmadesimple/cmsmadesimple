@@ -55,7 +55,7 @@ class cms_variables implements ArrayAccess
 {
   private $_allowed_variables = 
     array('content_obj','content_id','page','page_id','page_name','position','friendly_position','starttime','user_id','username','pageinfo',
-	  'user_in_group','content-type','modulenum','error','formcount','mid_cache','userperms','ownerpages','authorpages','bulkcontent','authorblobs',
+	  'user_in_group','content-type','modulenum','error','formcount','mid_cache','ownerpages','authorpages','bulkcontent',
 	  'template','last_content_modification');
 
   private static $_instance;

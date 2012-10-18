@@ -20,7 +20,7 @@
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
 
-class AdminSearch extends CMSModule
+final class AdminSearch extends CMSModule
 {
   function GetFriendlyName()  { return $this->Lang('friendlyname');  }
   function GetVersion()  { return '1.0'; }

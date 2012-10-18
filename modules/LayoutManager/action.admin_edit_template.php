@@ -19,7 +19,7 @@
 #
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission('Manage Templates') ) {
+if( !$this->CheckPermission('Modify Templates') ) {
   // no manage templates permission
   if( !$this->CheckPermission('Add Templates') ) {
     // no add templates permission
@@ -130,8 +130,8 @@ try {
     $smarty->assign('theme_list',$out);
   }
 
-  $smarty->assign('has_manage_right',$this->CheckPermission('Manage Templates'));
-  if( $this->CheckPermission('Manage Templates') || 
+  $smarty->assign('has_manage_right',$this->CheckPermission('Modify Templates'));
+  if( $this->CheckPermission('Modify Templates') || 
       $tpl_obj->get_owner_id() == get_userid()) {
 
     $userops = cmsms()->GetUserOperations();

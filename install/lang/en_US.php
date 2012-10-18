@@ -153,6 +153,7 @@ $lang['install_admin_querystring'] = 'Query string (leave this alone unless you 
 $lang['install_admin_setup'] = 'Now let\'s continue to setup your configuration file, we already have most of the stuff we need. Chances are you can leave all these values alone, so when you are ready, click Continue.';
 $lang['install_admin_set_account'] = 'Setting admin account information...';
 $lang['install_admin_set_core_event'] = 'Setting up core events...';
+$lang['install_admin_set_salt'] = 'Setting password salt...';
 $lang['install_admin_set_sitename'] = 'Setting sitename...';
 $lang['install_admin_sitedown'] = 'Error: Could not remove the tmp/cache/SITEDOWN file. Please remove manually.';
 $lang['install_admin_sitename'] = 'This is the name of your site. It will be used in various places of the default templates and can be used anywhere with the {sitename} tag.';
