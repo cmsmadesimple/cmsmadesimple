@@ -33,7 +33,7 @@ if( !$this->CheckPermission('Modify Templates') ) {
 $this->SetCurrentTab('templates');
 
 if( isset($params['cancel']) ) {
-  $this->SetMessage('msg_cancelled');
+  $this->SetMessage($this->Lang('msg_cancelled'));
   $this->RedirectToAdminTab($id);
 }
 
