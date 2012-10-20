@@ -588,6 +588,7 @@ class CmsLayoutTemplate
 		$offset = 0;
 		$db = cmsms()->GetDb();
 		foreach( $params as $key => $val ) {
+			if( empty($val) ) continue;
 			if( is_numeric($key) && $val[1] == ':' ) {
 				list($key,$second) = explode(':',$val,2);
 			}

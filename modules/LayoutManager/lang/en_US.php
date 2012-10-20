@@ -29,6 +29,7 @@ $lang['delete_theme'] = 'Delete Theme';
 $lang['edit_category'] = 'Edit Category';
 $lang['edit_template'] = 'Edit Template';
 $lang['edit_theme'] = 'Edit Theme';
+$lang['edit_type'] = 'Edit Template Type';
 $lang['error_missingparam'] = 'A required parameter is missing';
 $lang['error_notconfirmed'] = 'The action was not confirmed';
 $lang['error_notemplates'] = 'No Editable Templates Found';
@@ -108,6 +109,7 @@ $lang['prompt_owner'] = 'Owner';
 $lang['prompt_permissions'] = 'Permissions';
 $lang['prompt_resource'] = 'Resource';
 $lang['prompt_return'] = 'Return';
+$lang['prompt_select_all'] = 'Select all';
 $lang['prompt_stylesheets'] = 'Stylesheets';
 $lang['prompt_template'] = 'Template';
 $lang['prompt_templates'] = 'Templates';
@@ -118,6 +120,7 @@ $lang['prompt_type'] = 'Type';
 $lang['prompt_unknown'] = 'Unknown';
 $lang['prompt_user'] = 'User';
 $lang['prompt_view'] = 'View';
+$lang['prompt_with_selected'] = 'With Selected';
 
 #Q
 
@@ -135,7 +138,6 @@ $lang['tpl_types'] = 'Template Types';
 
 
 #V
-$lang['view_type'] = 'View Template Type';
 
 #W
 $lang['warning_category_dragdrop'] = 'To change the display order of categories you can drag the rows into their correct order';

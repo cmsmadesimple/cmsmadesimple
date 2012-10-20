@@ -6,20 +6,39 @@
 
 {form_start}<input type="hidden" name="{$actionid}theme" value="{$theme->get_id()}"/>
 
-<div class="pageoverflow">
-  <p class="pagetext"></p>
-  <p class="pageinput">
-    <input id="submitme" type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
-    <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
-  </p>
-</div>
+<fieldset>
+  <div style="width: 49%; float: left;">
+    <div class="pageoverflow">
+      <p class="pagetext"></p>
+      <p class="pageinput">
+        <input id="submitme" type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
+        <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+      </p>
+    </div>
 
-<div class="pageoverflow">
-  <p class="pagetext"><label for="theme_name">{$mod->Lang('prompt_name')}</label>:&nbsp;{admin_icon name='help_theme_name' icon='info.gif' class='helpicon'}</p>
-  <p class="pageinput">
-    <input type="text" id="theme_name" name="{$actionid}name" value="{$theme->get_name()}" size="50" maxlength="50"/>
-  </p>
-</div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="theme_name">{$mod->Lang('prompt_name')}</label>:&nbsp;{admin_icon name='help_theme_name' icon='info.gif' class='helpicon'}</p>
+      <p class="pageinput">
+        <input type="text" id="theme_name" name="{$actionid}name" value="{$theme->get_name()}" size="50" maxlength="50"/>
+      </p>
+    </div>
+  </div>
+  <div style="width: 49%; float: right;">
+    <div class="pageoverflow">
+      <p class="pagetext">{$mod->Lang('prompt_created')}:</p>
+      <p class="pageinput">
+        <input type="text" readonly="readonly" value="{$theme->get_created()|date_format:'%x %X'}"/>
+      </p>
+    </div>
+
+    <div class="pageoverflow">
+      <p class="pagetext">{$mod->Lang('prompt_modified')}:</p>
+      <p class="pageinput">
+        <input type="text" readonly="readonly" value="{$theme->get_modified()|date_format:'%x %X'}"/>
+      </p>
+    </div>
+  </div>
+</fieldset>
 
 {tab_header name='templates' label=$mod->Lang('prompt_templates')}
 {tab_header name='stylesheets' label=$mod->Lang('prompt_stylesheets')}

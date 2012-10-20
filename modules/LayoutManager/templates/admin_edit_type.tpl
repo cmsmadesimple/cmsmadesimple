@@ -6,9 +6,9 @@ $(document).ready(function(){
   });
 });
 </script>
-<h3>{$mod->Lang('view_type')}</h3>
+<h3>{$mod->Lang('edit_type')}</h3>
 
-<div>
+<fieldset>
   <div class="pagecontainer" style="width: 49%; float: left;">{* left container *}
     <div class="pageoverflow">
       <p class="pagetext">{$mod->Lang('prompt_originator')}:</p>
@@ -33,8 +33,7 @@ $(document).ready(function(){
   </div>{* left container *}
 
   {* right container *}
-  <div>
-    <div class="pagecontainer" style="width: 49%; float: right;">
+  <div style="width: 45%; float: right;">
     <div class="pageoverflow">
       <p class="pagetext">{$mod->Lang('prompt_has_dflt')}:&nbsp;{admin_icon icon='info.gif' class='helpicon' name=help_has_dflt}</p>
       <p class="pageinput">
@@ -55,7 +54,7 @@ $(document).ready(function(){
     </div>
   </div>{* right container *}
   <div style="clear: both;"></div>
-</div>{* container *}
+</fieldset>{* container *}
 
 {form_start}<input type="hidden" name="{$actionid}type" value="{$type->get_id()}"/>
 

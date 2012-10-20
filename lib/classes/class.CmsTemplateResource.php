@@ -141,10 +141,9 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
   public static function reset_page_type_defaults()
   {
     $config = cmsms()->GetConfig();
-    $file = cms_join_path($config['admin_path'],'templates','orig_page_template_contents.tpl');
+    $file = cms_join_path($config['admin_path'],'templates','orig_new_template.tpl');
     $contents = '';
     if( is_file($file) ) {
-      die('test');
       $contents = @file_get_contents($file);
     }
     return $contents;

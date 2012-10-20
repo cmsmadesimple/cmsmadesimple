@@ -50,7 +50,7 @@ try {
     $this->RedirectToAdminTab();
   }
   $smarty->assign('type',$type);
-  echo $this->ProcessTemplate('admin_view_type.tpl');
+  echo $this->ProcessTemplate('admin_edit_type.tpl');
 }
 catch( CmsException $e ) {
   $this->SetError($e->GetMessage());

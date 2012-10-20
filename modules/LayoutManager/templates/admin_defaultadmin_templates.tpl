@@ -12,11 +12,16 @@
         <th width="5%">{$mod->Lang('prompt_id')}</th>
         <th>{$mod->Lang('prompt_name')}</th>
         <th>{$mod->Lang('prompt_type')}</th>
+        <th>{$mod->Lang('prompt_theme')}</th>
         <th>{$mod->Lang('prompt_owner')}</th>
-        <th>{$mod->Lang('prompt_themes')}</th>
+        <th>{$mod->Lang('prompt_modified')}</th>
         <th class="pageicon">{$mod->Lang('prompt_dflt')}</th>{* dflt *}
         <th class="pageicon"></th>{* edit *}
+	{if $has_add_right}
+        <th class="pageicon"></th>{* copy *}
+        {/if}
         <th class="pageicon"></th>{* delete *}
+        <th class="pageicon"><input type="checkbox" id="tpl_selall" title="{$mod->Lang('prompt_select_all')}" class="tpl_select"/></th>{* checkbox *}
       </tr>
     </thead>
     <tbody>
@@ -24,11 +29,13 @@
      {cycle values="row1,row2" assign='rowclass'}
      <tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
         {cms_action_url action='admin_edit_template' tpl=$template->get_id() assign='edit_tpl'}
+	{if $has_add_right}
+          {cms_action_url action='admin_copy_template' tpl=$template->get_id() assign='copy_tpl'}
+        {/if}
         {cms_action_url action='admin_delete_template' tpl=$template->get_id() assign='delete_tpl'}
         <td><a href="{$edit_tpl}" title="{$mod->Lang('edit_template')}">{$template->get_id()}</a></td>
         <td><a href="{$edit_tpl}" title="{$mod->Lang('edit_template')}">{$template->get_name()}</a></td>
         <td>{assign var='n' value=$template->get_type_id()}{$list_types.$n}</td>
-        <td>{if isset($list_users)}{assign var='u' value=$template->get_owner_id()}{$list_users.$u}{else}n/a{/if}</td>
         <td>
           {assign var='t1' value=$template->get_themes()}
           {if count($t1) == 1}
@@ -42,6 +49,8 @@
             {/if}
           {else}<span title="{$mod->Lang('help_template_multiple_themes')}">({count($t1)})</span>{/if}
         </td>
+        <td>{if isset($list_users)}{assign var='u' value=$template->get_owner_id()}{$list_users.$u}{else}n/a{/if}</td>
+	<td>{$template->get_modified()|date_format:'%x %X'}</td>
         <td>
 	 {assign var='the_type' value=$list_all_types.$n}
          {if $the_type->get_dflt_flag()}
@@ -51,11 +60,15 @@
          {/if}
         </td>
         <td><a href="{$edit_tpl}" title="{$mod->Lang('edit_template')}">{admin_icon icon='edit.gif' title=$mod->Lang('prompt_edit')}</a></td>
+	{if $has_add_right}
+        <td><a href="{$copy_tpl}" title="{$mod->Lang('copy_template')}">{admin_icon icon='copy.gif' title=$mod->Lang('prompt_copy')}</a></td>
+        {/if}
         <td>
          {if $template->get_owner_id() == get_userid()}
            <a href="{$delete_tpl}" title="{$mod->Lang('delete_template')}">{admin_icon icon='delete.gif' title=$mod->Lang('delete_template')}</a>
          {/if}
         </td>
+        <td><input type="checkbox" class="tpl_select" name="tpl_select[]" value="{$template->get_id()}"/></td>
       </tr>
     {/foreach}
     </tbody>
@@ -65,14 +78,30 @@
   {page_warning msg=$mod->Lang('warning_no_templates_available')}
 {/if}
 
+<div style="width: 100%;">
 {if $has_add_right}
-{form_start action='admin_edit_template'}
-<fieldset class="pagecontainer">
-  <legend>{$mod->Lang('create_template')}&nbsp;{admin_icon name="help_create" class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}</legend>
-  <select name="{$actionid}import_type">
-  {html_options options=$list_types}
-  </select>
-  <input type="submit" name="{$actionid}submit" value="{$mod->Lang('create')}"/>
-</fieldset>
-{form_end}
+  {form_start action='admin_edit_template'}
+  <div style="float: left; width: 49%;>
+  <p>
+    <label for="tpl_import_type">{$mod->Lang('create_template')}:</label>&nbsp;
+    <select name="{$actionid}import_type" id="tpl_import_type">
+      {html_options options=$list_types}
+    </select>
+    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('create')}"/>&nbsp;{admin_icon name="help_create" class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}
+  </p>
+  </div>
+  {form_end}
 {/if}
+<div style="float: right; width: 48%; text-align: right;>
+  {form_start action='admin_bulk_template'}
+  <p class="pageinput" style="text-align: right;">
+    <label for="tpl_bulk_action">{$mod->Lang('prompt_with_selected')}:</label>&nbsp;
+    <select name="{$actionid}bulk_action" id="tpl_bulk_action" class="tpl_bulk_action">
+      {html_options options=$list_types}
+    </select>
+    <input class="tpl_bulk_action" type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>&nbsp;{admin_icon name="help_bulk" class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}
+  </p>
+  {form_end}
+</div>
+<div class="clearb"></div>
+</div>
