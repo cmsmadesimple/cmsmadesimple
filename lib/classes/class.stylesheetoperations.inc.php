@@ -133,16 +133,14 @@ final class StylesheetOperations
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
-		if (isset($this->_cache[$id]))
-		{
+		if (isset($this->_cache[$id])) {
 			return $this->_cache[$id];
 		}
 
 		$query = "SELECT css_id, css_name, css_text, media_type, media_query FROM ".cms_db_prefix()."css WHERE css_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
+		while ($dbresult && $row = $dbresult->FetchRow()) {
 			$onestylesheet = new Stylesheet();
 			$onestylesheet->id = $row['css_id'];
 			$onestylesheet->name = $row['css_name'];
@@ -151,8 +149,7 @@ final class StylesheetOperations
             $onestylesheet->media_query = $row['media_query'];
 			$result =& $onestylesheet;
 
-			if (!isset($this->_cache[$onestylesheet->id]))
-			{
+			if (!isset($this->_cache[$onestylesheet->id])) {
 				$this->_cache[$onestylesheet->id] =& $onestylesheet;
 			}
 		}
@@ -174,9 +171,7 @@ final class StylesheetOperations
 		$id = $db->GetOne($query, array($name));
 		
 		if($id) {
-		
 			if (isset($this->_cache[$id])) {
-			
 				return $this->_cache[$id];
 			}			
 		
@@ -188,8 +183,6 @@ final class StylesheetOperations
 
 	function InsertStylesheet($stylesheet)
 	{
-		$result = -1; 
-
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
@@ -197,30 +190,47 @@ final class StylesheetOperations
 		$time = $db->DBTimeStamp(time());
 		$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, media_type, media_query, create_date, modified_date) VALUES (?,?,?,?,?,".$time.",".$time.")";
 		$dbresult = $db->Execute($query, array($new_stylesheet_id, $stylesheet->name, $stylesheet->value, $stylesheet->media_type, $stylesheet->media_query));
-		if ($dbresult !== false)
-		{
-			$result = $new_stylesheet_id;
+		if (!$dbresult) return FALSE;
+
+		$stylesheet->id = $new_stylesheet_id;
+		$t = $stylesheet->get_themes();
+		if( is_array($t) && count($t) ) {
+			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutTheme::CSSTABLE.' (css_id,theme_id)
+                      VALUES(?,?)';
+			foreach( $t as $one ) {
+				$dbr = $db->Execute($query,array($new_stylesheet_id,(int)$one));
+			}
 		}
 
-		return $result;
+		$this->_cache[$new_stylesheet_id] = $stylesheet;
+		audit($stylesheet->id,'CMSMS','Stylesheet Updated');
 	}
 
 	function UpdateStylesheet($stylesheet)
 	{
-		$result = false; 
-
-		$gCms = cmsms();
-		$db = $gCms->GetDb();
+		$db = cmsms()->GetDb();
 
 		$time = $db->DBTimeStamp(time());
 		$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?,css_text = ?, media_type = ?, media_query = ?, modified_date = ".$time." WHERE css_id = ?";
 		$dbresult = $db->Execute($query, array($stylesheet->name, $stylesheet->value, $stylesheet->media_type, $stylesheet->media_query, $stylesheet->id));
-		if ($dbresult !== false)
-		{
-			$result = true;
+		if ($dbresult === false) return FALSE;
+
+		$query = 'DELETE FROM '.cms_db_prefix().CmsLayoutTheme::CSSTABLE.' WHERE css_id = ?';
+		$dbr = $db->Execute($query,array($stylesheet->id));
+		if( !$dbr ) {
+			throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+		}
+		$t = $stylesheet->get_themes();
+		if( is_array($t) && count($t) ) {
+			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutTheme::CSSTABLE.' (css_id,theme_id)
+                      VALUES(?,?)';
+			foreach( $t as $one ) {
+				$dbr = $db->Execute($query,array($stylesheet->id,(int)$one));
+			}
 		}
 
-		return $result;
+		$this->_cache[$stylesheet->id] = $stylesheet;
+		audit($stylesheet->id,'CMSMS','Stylesheet Updated');
 	}
 	
 	/**
@@ -228,22 +238,19 @@ final class StylesheetOperations
 	*/
 	function DeleteStylesheetByID($id)
 	{
-		$result = false;
-
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
-		$query = "DELETE FROM ".cms_db_prefix()."css_assoc where assoc_css_id = ?";
+		$query = "DELETE FROM ".cms_db_prefix().CmsLayoutTheme::CSSTABLE."
+                  WHERE css_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
 		$query = "DELETE FROM ".cms_db_prefix()."css where css_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult !== false)
-		{
-			$result = true;
+		if( isset($this->_cache[$id]) ) {
+			unset($this->_cache[$id]);
 		}
-
 		return $result;
 	}
 
@@ -261,7 +268,6 @@ final class StylesheetOperations
 		$id = $db->GetOne($query, array($name));
 
 		if($id) {
-		
 			$result = $this->DeleteStylesheetByID($id);
 		}
 		
@@ -271,26 +277,22 @@ final class StylesheetOperations
 	function CheckExistingStylesheetName($name, $id = -1)
 	{
 		$result = false;
-
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
 		$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = ?";
 		$attrs = array($name);
 		
-		if ($id > -1)
-		{
+		if ($id > -1) {
 			$query .= ' AND css_id != ?';
 			$attrs[] = $id;
 		}
 		
 		$dbresult = $db->Execute($query, $attrs);
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
-		{
+		if ($dbresult && $dbresult->RecordCount() > 0) {
 			$result = true; 
 		}
-
 		return $result;
 	}
 }

@@ -463,10 +463,12 @@ class CmsLayoutTemplate
 
 		$t = $this->get_themes();
 		if( is_array($t) && count($t) ) {
-			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutTheme::TPLTABLE.' (tpl_id,theme_id)
+			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutTheme::TPLTABLE.' 
+                (tpl_id,theme_id)
                 VALUES(?,?)';
 			foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
+				debug_display($db->sql.' -- '.$db->ErrorMsg());
 			}
 		}
 		$this->_dirty = FALSE;
@@ -538,7 +540,7 @@ class CmsLayoutTemplate
                 WHERE id = ?';
 			$row = $db->GetRow($query,array((int)$a));
 		}
-		else if( is_string($a) && strlen($a) == 0 ) {
+		else if( is_string($a) && strlen($a) > 0 ) {
 			if( isset(self::$_name_cache[$a]) ) {
 				$n = self::$_name_cache[$a];
 				return self::$_obj_cache[$n];
@@ -550,6 +552,7 @@ class CmsLayoutTemplate
 		}
 		if( !is_array($row) || count($row) == 0 ) {
 			stack_trace();
+			debug_display($db->sql); die();
 			throw new CmsDataNotFoundException('Could not find row identified by '.$a);
 		}
 
@@ -599,9 +602,9 @@ class CmsLayoutTemplate
 				break;
 			case 'h': // theme
 				// find all the templates in theme h
-				$q2 = 'SELECT tpl_id IN '.cms_db_prefix().CmsLayoutTheme::TPLTABLE.'
+				$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutTheme::TPLTABLE.'
                WHERE theme_id = ?';
-				$tpls = $db->GetCol($query,array((int)$second));
+				$tpls = $db->GetCol($q2,array((int)$second));
 				$where['theme'][] = 'id IN ('.implode(',',$tpls).')';
 				break;
 			case 'u': // user

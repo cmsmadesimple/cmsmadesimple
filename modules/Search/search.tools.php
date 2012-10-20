@@ -156,7 +156,9 @@ function search_Reindex(&$module)
 {
   @set_time_limit(999);
   $module->DeleteAllWords();
-		
+
+  debug_display('Search Reindex needs fixing for templates');
+  /*
   $gCms = cmsms();
   $templateops = $gCms->GetTemplateOperations();
   $alltemplates = $templateops->LoadTemplates();
@@ -180,6 +182,7 @@ function search_Reindex(&$module)
       $params = array('global_content' => &$oneblob);
       $module->DoEvent('Core', 'EditGlobalContentPost', $params);
     }
+  */
 
   $modules = ModuleOperations::get_instance()->GetInstalledModules();
   foreach( $modules as $name )
@@ -198,201 +201,166 @@ function search_Reindex(&$module)
 
 function search_DoEvent(&$module, $originator, $eventname, &$params )
 {
-  if ($originator == 'Core')
-    {
-      switch ($eventname)
-	{
-	case 'ContentEditPost':
-	  $content = $params['content'];					
-	  if (!isset($content)) return;
-	  if (!is_object($content)) return;
+  if ($originator == 'Core') {
+    switch ($eventname) {
+    case 'ContentEditPost':
+      $content = $params['content'];					
+      if (!isset($content)) return;
+      if (!is_object($content)) return;
 
-	  $db = $module->GetDb();
-	  $q = "SELECT id FROM ".cms_db_prefix()."module_search_items WHERE
-                  extra_attr = ? AND content_id = ?";
-	  $template_indexed = $db->GetOne( $q, array( 'template', $content->TemplateId() ));
-	  if( !$template_indexed )
-	    {
-	      $module->DeleteWords($module->GetName(), $content->Id(), 'content');
-	      break;
-	    }
+      $db = $module->GetDb();
+      $q = "SELECT id FROM ".cms_db_prefix()."module_search_items WHERE
+            extra_attr = ? AND content_id = ?";
+      $template_indexed = $db->GetOne( $q, array( 'template', $content->TemplateId() ));
+      if( !$template_indexed ) {
+	$module->DeleteWords($module->GetName(), $content->Id(), 'content');
+	break;
+      }
 
-	  //Only index content if it's active
-	  // and searchable.
-	  // assume by default that it is searchable
-	  $tmp = $content->GetPropertyValue('searchable');
-	  if( $tmp == '' ) $tmp = 1;
-	  if ($content->Active() && $tmp )
-	    {
+      //Only index content if it's active
+      // and searchable.
+      // assume by default that it is searchable
+      $tmp = $content->GetPropertyValue('searchable');
+      if( $tmp == '' ) $tmp = 1;
+      if ($content->Active() && $tmp ) {
+	//Weight the title and menu text higher
+	$text = str_repeat(' '.$content->Name(), 2) . ' ';
+	$text .= str_repeat(' '.$content->MenuText(), 2) . ' ';
 
-	      //Weight the title and menu text higher
-	      $text = str_repeat(' '.$content->Name(), 2) . ' ';
-	      $text .= str_repeat(' '.$content->MenuText(), 2) . ' ';
-
-	      $props = $content->Properties();
-	      if( is_object($props) && isset($props->mPropertyValues) )
-		{
-		  // old (pre 1.11 code)
-		  foreach ($props->mPropertyValues as $k=>$v)
-		    {
-		      $text .= $v.' ';
-		    }
-		}
-	      else if( is_array($props) && count($props) )
-		{
-		  foreach( $props as $k => $v )
-		    {
-		      $text .= $v.' ';
-		    }
-		}
-
-	      // here check for a string to see
-	      // if module content is indexable at all
-	      $non_indexable = strpos($text, NON_INDEXABLE_CONTENT);
-	      if (! $non_indexable)
-		{
-		  $module->AddWords($module->GetName(), $content->Id(), 'content', $text);
-		}
-	      else
-		{
-		  $module->DeleteWords($module->GetName(), $content->Id(), 'content');
-		}
-	    }
-	  else
-	    {
-	      //Just in case the active flag was turned off
-	      $module->DeleteWords($module->GetName(), $content->Id(), 'content');
-	    }
-					
-	  break;
-
-	case 'ContentDeletePost':
-	  $content =& $params['content'];
-
-	  if (!isset($content)) return;
-
-	  $module->DeleteWords($module->GetName(), $content->Id(), 'content');
-
-	  break;
-					
-	case 'AddTemplatePost':
-	  $template =& $params['template'];
-					
-	  if( $template->active != false )
-	    $module->AddWords($module->GetName(), $template->id, 'template', $template->content);
-	  else
-	    $module->DeleteWords($module->GetName(), $template->id, 'template');
-				
-	  break;
-					
-	case 'EditTemplatePost':
-	  $template =& $params['template'];
-
-	  if( $template->active != false )
-	    {
-	      // here check for a string to see
-	      // if this content is indexable at all
-	      $non_indexable = strpos($template->content, NON_INDEXABLE_CONTENT);
-		  
-	      $db = $module->GetDb();
-		  
-	      // check if the page was indexed already or not
-	      $q = "SELECT id FROM ".cms_db_prefix()."module_search_items WHERE content_id = ?
-			AND extra_attr = ?";
-	      $was_indexed = $db->GetOne( $q, array( $template->id, 'template' ) );
-		  
-	      // find all of the (active) pages tied to a template
-	      $q = "SELECT content_id FROM ".cms_db_prefix()."content WHERE active > 0 AND template_id = ?";
-	      $dbresult = $db->Execute( $q, array( $template->id ) );
-	      if( ! $non_indexable )
-		{
-		  $module->AddWords($module->GetName(), $template->id, 'template', $template->content);
-		}
-	      else
-		{
-		  $module->DeleteWords($module->GetName(), $template->id, 'template');
-		}
-		  
-	      if( ($non_indexable && $was_indexed) )
-		{
-		  // we can't index the template, and it was indexed
-		  // meaning we need to delete all indexes from
-		  // the children.
-		  $q2 = "DELETE FROM ".cms_db_prefix()."module_search_items WHERE
-				extra_attr = ? AND content_id  IN (";
-		  $parms = array( 'content' );
-		      
-		  // delete them all from the index
-		  while( $dbresult && !$dbresult->EOF )
-		    {
-		      $q2 .= "?,";
-		      $parms[] = $dbresult->fields['content_id'];
-		      $dbresult->MoveNext();
-		    }
-		  $q2 = substr($q2,0,strlen($q2)-1);
-		  $q2 .= ")";
-		      
-		  $db->Execute( $q2, $parms );
-		      
-		  $db->Execute('DELETE FROM '.cms_db_prefix().'module_search_index WHERE item_id NOT IN (SELECT id FROM '.cms_db_prefix().'module_search_items)');
-		}
-	      else 
-		{
-		  if (!$non_indexable && !$was_indexed)
-		    { 
-		      // The template is indexable, and was not indexed previously
-		      // so we have to index it's children.
-		      while( $dbresult && !$dbresult->EOF )
-			{
-			  $gCms = cmsms();
-			  $contentops = $gCms->GetContentOperations();
-			  $onecontent = $contentops->LoadContentFromId($dbresult->fields['content_id']);
-			  $parms = array('content'=>&$onecontent);
-			  $module->DoEvent('Core','ContentEditPost',$parms);
-			  $dbresult->MoveNext();
-			}
-		    }
-		}
-	    }
-	  else
-	    {
-	      // template is inactive
-	      $module->DeleteWords($module->GetName(), $template->id, 'template');
-	    }
-	  break;
-					
-	case 'DeleteTemplatePost':
-	  $template =& $params['template'];
-	  $module->DeleteWords($module->GetName(), $template->id, 'template');
-
-	  break;
-					
-	case 'AddGlobalContentPost':
-	  $global_content =& $params['global_content'];
-	  $module->AddWords($module->GetName(), $global_content->id, 'global_content', $global_content->content);
-
-	  break;
-					
-	case 'EditGlobalContentPost':
-	  $global_content =& $params['global_content'];
-	  $module->AddWords($module->GetName(), $global_content->id, 'global_content', $global_content->content);
-	  break;
-					
-	case 'DeleteGlobalContentPost':
-	  $global_content =& $params['global_content'];
-
-	  $module->DeleteWords($module->GetName(), $global_content->id, 'global_content');
-
-	  break;
-
-	case 'ModuleUninstalled':
-	  $module_name =& $params['name'];
-
-	  $module->DeleteWords($module_name);
-
-	  break;
+	$props = $content->Properties();
+	if( is_object($props) && isset($props->mPropertyValues) ) {
+	  // old (pre 1.11 code)
+	  foreach ($props->mPropertyValues as $k=>$v) {
+	    $text .= $v.' ';
+	  }
 	}
+	else if( is_array($props) && count($props) ) {
+	  foreach( $props as $k => $v ) {
+	    $text .= $v.' ';
+	  }
+	}
+
+	// here check for a string to see
+	// if module content is indexable at all
+	$non_indexable = strpos($text, NON_INDEXABLE_CONTENT);
+	if (! $non_indexable) {
+	  $module->AddWords($module->GetName(), $content->Id(), 'content', $text);
+	}
+	else {
+	  $module->DeleteWords($module->GetName(), $content->Id(), 'content');
+	}
+      }
+      else {
+	//Just in case the active flag was turned off
+	$module->DeleteWords($module->GetName(), $content->Id(), 'content');
+      }
+
+      break;
+
+    case 'ContentDeletePost':
+      $content =& $params['content'];
+      if (!isset($content)) return;
+      $module->DeleteWords($module->GetName(), $content->Id(), 'content');
+      break;
+					
+    case 'AddTemplatePost':
+      $template =& $params['template'];
+      if( $template->active != false )
+	$module->AddWords($module->GetName(), $template->id, 'template', $template->content);
+      else
+	$module->DeleteWords($module->GetName(), $template->id, 'template');
+      break;
+					
+    case 'EditTemplatePost':
+      $template =& $params['template'];
+      if( $template->active != false ) {
+	// here check for a string to see
+	// if this content is indexable at all
+	$non_indexable = strpos($template->content, NON_INDEXABLE_CONTENT);
+	$db = $module->GetDb();
+	// check if the page was indexed already or not
+	$q = "SELECT id FROM ".cms_db_prefix()."module_search_items 
+              WHERE content_id = ?
+	      AND extra_attr = ?";
+	$was_indexed = $db->GetOne( $q, array( $template->id, 'template' ) );
+
+	// find all of the (active) pages tied to a template
+	$q = "SELECT content_id FROM ".cms_db_prefix()."content WHERE active > 0 AND template_id = ?";
+	$dbresult = $db->Execute( $q, array( $template->id ) );
+	if( ! $non_indexable ) {
+	  $module->AddWords($module->GetName(), $template->id, 'template', $template->content);
+	}
+	else {
+	  $module->DeleteWords($module->GetName(), $template->id, 'template');
+	}
+		  
+	if( ($non_indexable && $was_indexed) ) {
+	  // we can't index the template, and it was indexed
+	  // meaning we need to delete all indexes from
+	  // the children.
+	  $q2 = "DELETE FROM ".cms_db_prefix()."module_search_items WHERE
+		 extra_attr = ? AND content_id  IN (";
+	  $parms = array( 'content' );
+
+	  // delete them all from the index
+	  while( $dbresult && !$dbresult->EOF ) {
+	    $q2 .= "?,";
+	    $parms[] = $dbresult->fields['content_id'];
+	    $dbresult->MoveNext();
+	  }
+	  $q2 = substr($q2,0,strlen($q2)-1);
+	  $q2 .= ")";
+
+	  $db->Execute( $q2, $parms );
+	  $db->Execute('DELETE FROM '.cms_db_prefix().'module_search_index WHERE item_id NOT IN (SELECT id FROM '.cms_db_prefix().'module_search_items)');
+	}
+	else {
+	  if (!$non_indexable && !$was_indexed) {
+	    // The template is indexable, and was not indexed previously
+	    // so we have to index it's children.
+	    while( $dbresult && !$dbresult->EOF ) {
+	      $gCms = cmsms();
+	      $contentops = $gCms->GetContentOperations();
+	      $onecontent = $contentops->LoadContentFromId($dbresult->fields['content_id']);
+	      $parms = array('content'=>&$onecontent);
+	      $module->DoEvent('Core','ContentEditPost',$parms);
+	      $dbresult->MoveNext();
+	    }
+	  }
+	}
+      }
+      else {
+	// template is inactive
+	$module->DeleteWords($module->GetName(), $template->id, 'template');
+      }
+      break;
+					
+    case 'DeleteTemplatePost':
+      $template =& $params['template'];
+      $module->DeleteWords($module->GetName(), $template->id, 'template');
+      break;
+					
+    case 'AddGlobalContentPost':
+      $global_content =& $params['global_content'];
+      $module->AddWords($module->GetName(), $global_content->id, 'global_content', $global_content->content);
+      break;
+
+    case 'EditGlobalContentPost':
+      $global_content =& $params['global_content'];
+      $module->AddWords($module->GetName(), $global_content->id, 'global_content', $global_content->content);
+      break;
+
+    case 'DeleteGlobalContentPost':
+      $global_content =& $params['global_content'];
+      $module->DeleteWords($module->GetName(), $global_content->id, 'global_content');
+      break;
+
+    case 'ModuleUninstalled':
+      $module_name =& $params['name'];
+      $module->DeleteWords($module_name);
+      break;
     }
+  }
 }
 
 

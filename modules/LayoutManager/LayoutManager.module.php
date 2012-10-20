@@ -31,7 +31,7 @@ final class LayoutManager extends CMSModule
   function GetAuthorEmail() { return 'calguy1000@cmsmadesimple.org'; }
   function HasAdmin() { return true; }
   function GetAdminSection() { return 'layout'; }
-	function AllowAutoInstall() { return false; }
+	function AllowAutoInstall() { return TRUE; }
 
   function GetHelp()
   {

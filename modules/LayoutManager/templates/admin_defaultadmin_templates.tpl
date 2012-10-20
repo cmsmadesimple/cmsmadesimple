@@ -3,7 +3,7 @@
   {assign var='ntemplates' value=count($templates)}
   <div class="pageoptions" style="text-align: right;">
     <label for="filter">{$mod->Lang('prompt_filter')}:</label>
-    &nbsp;<select id="filter" name="{$actionid}filter">{html_options options=$filter_options}</select>&nbsp;<input type="submit" name="{$actionid}dofilter" value="{$mod->Lang('submit')}"/>
+    &nbsp;<select id="filter" name="{$actionid}filter">{html_options options=$filter_options selected=$filter}</select>&nbsp;<input type="submit" name="{$actionid}dofilter" value="{$mod->Lang('submit')}"/>
   </div>
 
   <table class="pagetable" cellspacing="0">

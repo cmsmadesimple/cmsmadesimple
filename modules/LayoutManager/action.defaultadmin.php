@@ -22,7 +22,7 @@ if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) return;
 
 if( isset($params['dofilter']) ) {
-  $filter = array($params['dofilter']);
+  $filter = array($params['filter']);
   cms_userprefs::set($this->GetName().'template_filter',serialize($filter));
 }
 
@@ -31,10 +31,12 @@ if( $filter )
   $filter = unserialize($filter);
 else 
   $filter = array();
+
+$efilter = $filter;
 if( !$this->CheckPermission('Modify Templates') ) {
-  $filter[] = 'e:'.get_userid();
+  $efilter[] = 'e:'.get_userid();
 }
-$templates = CmsLayoutTemplate::template_query($filter);
+$templates = CmsLayoutTemplate::template_query($efilter);
 
 if( count($templates) ) $smarty->assign('templates',$templates);
 
@@ -89,6 +91,7 @@ if( $this->CheckPermission('Manage Themes') ) {
   $opts[$this->Lang('prompt_user')] = $tmp;
 }
 $smarty->assign('filter_options',$opts);
+$smarty->assign('filter',$filter);
 
 $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
 $smarty->assign('manage_themes',$this->CheckPermission('Manage Themes'));

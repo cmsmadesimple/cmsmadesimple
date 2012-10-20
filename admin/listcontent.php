@@ -578,12 +578,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	  $one->Type() != 'link' && 
 	  $one->Type() != 'sectionheader' && 
 	  $one->Type() != 'separator' ) {
-	$template = TemplateOperations::get_instance()->LoadTemplateById($one->TemplateId());
+	$template = CmsLayoutTemplate::load($one->TemplateId());
 	if( $template && check_permission($userid,'Modify Template') ) {
-	  $txt .= "<a title=\"".lang('edittemplate')."\" href=\"edittemplate.php".$urlext."&amp;template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($template->name, '', '', true)."</a>";
+	  // todo: change me.... module action link
+	  $txt .= "<a title=\"".lang('edittemplate')."\" href=\"edittemplate.php".$urlext."&amp;template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($template->get_name(), '', '', true)."</a>";
 	}
 	else if( $template ) {
-	  $txt .= $template->name;
+	  $txt .= $template->get_name();
 	}
       }
       if( !empty($txt) ) {
@@ -866,9 +867,6 @@ function display_content_list($themeObject = null)
   $copyImg = $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
   $deleteImg = $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 
-  // Setup array so we don't load more templates than we need to
-  $templateops = TemplateOperations::get_instance()->LoadTemplates();
-  
   // Ditto with users
   $users = array();
 

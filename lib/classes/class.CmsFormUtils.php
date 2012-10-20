@@ -35,6 +35,12 @@ class CmsFormUtils {
     }
 
     $elem_id = $name;
+
+    if( isset($params['multiple']) && !endswith($name,'[]') ) {
+      // auto adjust dropdown name if it allows multiple selections.
+      $name .= '[]';
+    }
+
     $out = "<select name=\"{$name}\"";
     foreach( $params as $key => $value ) {
       switch( $key ) {

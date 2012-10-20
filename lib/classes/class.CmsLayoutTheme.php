@@ -176,6 +176,23 @@ class CmsLayoutTheme
     $this->_dirty = TRUE;
   }
 
+	public function add_template($tpl)
+	{
+    if( is_object($tpl) && is_a($tpl,'CmsLayoutTemplate') ) {
+      $tpl = $tpl->get_id();
+    }
+    $tpl = (int)$tpl;
+    if( $tpl <= 0 ) {
+      throw new CmsInvalidDataException('Invalid template id specified to CmsLayoutTheme::add_template');
+    }
+
+		if( !is_array($this->_tpl_assoc) ) $this->_tpl_assoc = array();
+		if( !in_array($tpl,$this->_tpl_assoc) ) {
+			$this->_tpl_assoc[] = $tpl;
+		}
+    $this->_dirty = TRUE;
+	}
+
   protected function validate()
   {
     if( $this->get_name() == '' )

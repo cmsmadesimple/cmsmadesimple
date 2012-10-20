@@ -59,6 +59,8 @@ class Stylesheet
      */
     var $media_query;    
 
+	private $_theme_assoc;
+
 	/**
 	 * Sets some initial values
 	 */
@@ -112,15 +114,12 @@ class Stylesheet
 		
 		$styleops = cmsms()->GetStylesheetOperations();
 		
-		if ($this->id > -1)
-		{
+		if ($this->id > -1) {
 			$result = $styleops->UpdateStylesheet($this);
 		}
-		else
-		{
+		else {
 			$newid = $styleops->InsertStylesheet($this);
-			if ($newid > -1)
-			{
+			if ($newid > -1) {
 				$this->id = $newid;
 				$result = true;
 			}
@@ -139,17 +138,92 @@ class Stylesheet
 	{
 		$result = false;
 
-		if ($this->id > -1)
-		{
+		if ($this->id > -1) {
 			$styleops = cmsms()->GetStylesheetOperations();
 			$result = $styleops->DeleteStylesheetByID($this->id);
-			if ($result)
-			{
+			if ($result) {
 				$this->SetInitialValues();
 			}
 		}
 
 		return $result;
+	}
+
+	public function get_themes()
+	{
+		if( !$this->id ) return;
+		if( is_null($this->_theme_assoc) ) {
+			$this->_theme_assoc = null;
+			$db = cmsms()->GetDb();
+			$query = 'SELECt theme_id FROM '.cms_db_prefix().CmsLayoutTheme::CSSTABLE.'
+                WHERE css_id = ?';
+			$tmp = $db->GetCol($query,array($this->id));
+			if( is_array($tmp) && count($tmp) ) {
+				$this->_theme_assoc = $tmp;
+			}
+		}
+		return $this->_theme_assoc;
+	}
+
+	public function set_themes($x)
+	{
+		if( !is_array($x) ) return;
+
+		foreach( $x as $y ) {
+			if( !is_numeric($y) )
+				throw new CmsInvalidDatException('Invalid data in theme list.  Expect array of integers');
+		}
+
+		$this->_theme_assoc = $x;
+		$this->_dirty = TRUE;
+	}
+
+	public function add_theme($a) 
+	{
+		$n = null;
+		if( is_object($a) && is_a($a,'CmsLayoutTheme') ) {
+			$n = $a->get_id();
+		}
+		else if( (int)$a > 0 ) {
+			$n = $a;
+		}
+		else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
+			$theme = CmsLayoutTheme::load($a);
+			$n = $theme->get_id();
+		}
+
+		if( !is_array($this->_theme_assoc) ) {
+			$this->_theme_assoc = array();
+		}
+		$this->_theme_assoc[] = $n;
+		$this->_dirty = TRUE;
+	}
+
+	public function remove_theme($a)
+	{
+		if( !is_array($this->_theme_assoc) || count($this->_theme_assoc) == 0 ) return;
+
+		$n = null;
+		if( is_object($a) && is_a($a,'CmsLayoutTheme') ) {
+			$n = $a->get_id();
+		}
+		else if( (int)$a > 0 ) {
+			$n = $a;
+		}
+		else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
+			$theme = CmsLayoutTheme::load($a);
+			$n = $theme->get_id();
+		}
+
+		if( in_array($n,$this->_theme_assoc) ) {
+			$t = array();
+			foreach( $this->_theme_assoc as $one ) {
+				if( $n == $one ) continue;
+				$t[] = $one;
+			}
+			$this->_theme_assoc = $t;
+			$this->_dirty = TRUE;
+		}
 	}
 }
 

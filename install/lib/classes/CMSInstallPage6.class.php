@@ -72,12 +72,12 @@ class CMSInstallerPage6 extends CMSInstallerPage
       }
 
       echo "<p>" . ilang('install_admin_importing');
-      $handle = '';
+      $admin_user = null;
+      $_file = cms_join_path(CMS_INSTALL_BASE, 'schemas', 'base.php');
+      include_once($_file);
       if(isset($_POST["createextra"])) {
-	die('not implemeented');
-	$_file = cms_join_path(CMS_INSTALL_BASE, 'schemas', 'extra.sql');
-	if($this->debug) $handle = fopen($_file, 'r');
-	else             $handle = @fopen($_file, 'r');
+	$_file = cms_join_path(CMS_INSTALL_BASE, 'schemas', 'extra.php');
+	include_once($_file);
       }
       else {
 	$_file = cms_join_path(CMS_INSTALL_BASE, 'schemas', 'initial.php');

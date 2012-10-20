@@ -214,7 +214,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		param1 C(255),
 		param2 C(255),
 		param3 C(255),
-		content X,
+		content X2,
 		create_date DT,
 		modified_date DT
 	";
@@ -231,7 +231,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$flds = "
 		css_id I KEY,
 		css_name C(255),
-		css_text X,
+		css_text X2,
 		media_type C(255),
 		media_query X,
 		create_date DT,
