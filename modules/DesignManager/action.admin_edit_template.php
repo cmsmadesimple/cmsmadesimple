@@ -81,11 +81,11 @@ try {
       if( isset($params['category_id']) ) {
 				$tpl_obj->set_category($params['category_id']);
       }
-			$theme_list = array();
-			if( isset($params['theme_list']) ) {
-				$theme_list = $params['theme_list'];
+			$design_list = array();
+			if( isset($params['design_list']) ) {
+				$design_list = $params['design_list'];
 			}
-			$tpl_obj->set_themes($theme_list);
+			$tpl_obj->set_designs($design_list);
       $tpl_obj->save();
       $this->SetMessage($this->Lang('msg_template_saved'));
       $this->RedirectToAdminTab();
@@ -121,13 +121,13 @@ try {
     $smarty->assign('type_is_readonly',$type_is_readonly);
   }
 
-  $themes = CmsLayoutTheme::get_all();
-  if( is_array($themes) && count($themes) ) {
+  $designs = CmsLayoutCollection::get_all();
+  if( is_array($designs) && count($designs) ) {
     $out = array();
-    foreach( $themes as $one ) {
+    foreach( $designs as $one ) {
       $out[$one->get_id()] = $one->get_name();
     }
-    $smarty->assign('theme_list',$out);
+    $smarty->assign('design_list',$out);
   }
 
   $smarty->assign('has_manage_right',$this->CheckPermission('Modify Templates'));

@@ -4,7 +4,7 @@
 <fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted red">{$mod->Lang('warning_edittemplate_nostylesheets')}</fieldset>
 {/if}
 
-{assign var='cssl' value=$theme->get_stylesheets()}
+{assign var='cssl' value=$design->get_stylesheets()}
 <div>
   <table class="pagetable" cellspacing="0" style="border: none;">
   <tr valign="center">
@@ -30,7 +30,7 @@
       <fieldset>
         <legend>{$mod->Lang('attached_stylesheets')}:</legend>
         <select class="selall" id="assoc_css" name="{$actionid}assoc_css[]" multiple="multiple" size="10">
-          {foreach from=$theme->get_stylesheets() item='one'}
+          {foreach from=$design->get_stylesheets() item='one'}
           <pre>{$one|@print_r}</pre>
           <option value="{$one}">{$list_stylesheets.$one}</option>
           {/foreach}

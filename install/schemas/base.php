@@ -39,7 +39,7 @@ $perms = array('Add Pages','Add Groups','Add Templates','Add Users','Modify Any 
 	       'Modify Templates','Modify Users','Remove Pages','Remove Groups',
 	       'Remove Users','Modify Modules','Modify Files','Modify Site Preferences',
 	       'Modify Stylesheets','Add Stylesheets','Remove Stylesheets',
-	       'Modify User-defined Tags','Clear Admin Log',
+	       'Manage Designs','Modify User-defined Tags','Clear Admin Log',
 	       'Modify Events',
 	       'View Tag Help','Manage All Contnt','Reorder Content');
 foreach( $perms as $one_perm ) {

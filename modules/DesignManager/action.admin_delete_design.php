@@ -19,19 +19,19 @@
 #
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission('Manage Themes') ) return;
+if( !$this->CheckPermission('Manage Designs') ) return;
 
-$this->SetCurrentTab('themes');
+$this->SetCurrentTab('designs');
 if( isset($params['cancel']) ) {
   $this->SetMessage($this->Lang('msg_cancelled'));
   $this->RedirectToAdminTab();
 }
 
 try {
-  if( !isset($params['theme']) ) {
+  if( !isset($params['design']) ) {
     throw new CmsException($this->Lang('error_missingparam'));
   }
-  $theme = CmsLayoutTheme::load($params['theme']);
+  $design = CmsLayoutCollection::load($params['design']);
 
   $can_delete_stylesheets = $this->CheckPermission('Remove Stylesheets');
   $can_delete_templates = $this->CheckPermission('Modify Templates');
@@ -43,13 +43,13 @@ try {
     }
 
     if( isset($params['delete_templates']) && $can_delete_templates ) {
-      $tpl_id_list = $theme->get_templates();
+      $tpl_id_list = $design->get_templates();
       if( is_array($tpl_id_list) && count($tpl_id_list) ) {
 				$templates = CmsLayoutTemplate::load_bulk($tpl_id_list);
 				if( is_array($templates) && count($templates) ) {
 					foreach( $templates as &$tpl ) {
-						$x = $tpl->get_themes();
-						if( is_array($x) && count($x) == 1 && $x[0] == $theme->get_id() ) {
+						$x = $tpl->get_designs();
+						if( is_array($x) && count($x) == 1 && $x[0] == $design->get_id() ) {
 							// its orphaned
 							$tpl->delete();
 						}
@@ -59,10 +59,10 @@ try {
     }
 
     if( isset($params['delete_stylesheets']) && $can_delete_stylesheets ) {
-      $css_id_list = $theme->get_stylesheets();
+      $css_id_list = $design->get_stylesheets();
       if( is_array($css_id_list) && count($css_id_list) ) {
-				// get the themes that are attached to these stylesheets
-				$query = 'SELECT theme_id FROM '.cms_db_prefix().CmsLayoutTheme::CSSTABLE.'
+				// get the designs that are attached to these stylesheets
+				$query = 'SELECT design_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.'
                   WHERE css_id != ?';
 				foreach( $css_id_list as $css_id ) {
 					$dbr = $db->GetOne($query,array($css_id));
@@ -74,15 +74,15 @@ try {
     }
 
     // done.
-    $theme->delete();
-    $this->SetMessage($this->Lang('msg_theme_deleted'));
+    $design->delete();
+    $this->SetMessage($this->Lang('msg_design_deleted'));
     $this->RedirectToAdminTab();
   }
 
   $smarty->assign('tpl_permission',$can_delete_templates);
   $smarty->assign('css_permission',$can_delete_stylesheets);
-  $smarty->assign('theme',$theme);
-  echo $this->ProcessTemplate('admin_delete_theme.tpl');
+  $smarty->assign('design',$design);
+  echo $this->ProcessTemplate('admin_delete_design.tpl');
 }
 catch( CmsException $e ) {
   $this->SetError($e->GetMessage());

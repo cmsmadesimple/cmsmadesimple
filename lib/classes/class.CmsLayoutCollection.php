@@ -28,7 +28,7 @@
  * @since 1.12
  * @author Robert Campbell <calguy1000@gmail.com>
  */
-class CmsLayoutTheme
+class CmsLayoutCollection
 {
 	const TABLENAME = 'layout_themes';
 	const CSSTABLE  = 'layout_theme_cssassoc';
@@ -98,7 +98,7 @@ class CmsLayoutTheme
     
     foreach( $id_array as $one ) {
       if( (int)$one <= 0 ) {
-				throw new CmsInvalidDataException('CmsLayoutTheme::set_stylesheets expects an array of integers');
+				throw new CmsInvalidDataException('CmsLayoutCollection::set_stylesheets expects an array of integers');
       }
     }
 
@@ -113,7 +113,7 @@ class CmsLayoutTheme
     }
     $css = (int)$css;
     if( $css <= 0 ) {
-      throw new CmsInvalidDataException('Invalid css id specified to CmsLayoutTheme::add_stylesheet');
+      throw new CmsInvalidDataException('Invalid css id specified to CmsLayoutCollection::add_stylesheet');
     }
 
     if( !in_array($css,$this->_css_assoc) ) {
@@ -129,7 +129,7 @@ class CmsLayoutTheme
     }
     $css = (int)$css;
     if( $css <= 0 ) {
-      throw new CmsInvalidDataException('Invalid css id specified to CmsLayoutTheme::add_stylesheet');
+      throw new CmsInvalidDataException('Invalid css id specified to CmsLayoutCollection::add_stylesheet');
     }
 
     if( !in_array($css,$this->_css_assoc) ) return;
@@ -168,7 +168,7 @@ class CmsLayoutTheme
     
     foreach( $id_array as $one ) {
       if( (int)$one <= 0 ) {
-				throw new CmsInvalidDataException('CmsLayoutTheme::set_templates expects an array of integers');
+				throw new CmsInvalidDataException('CmsLayoutCollection::set_templates expects an array of integers');
       }
     }
 
@@ -183,7 +183,7 @@ class CmsLayoutTheme
     }
     $tpl = (int)$tpl;
     if( $tpl <= 0 ) {
-      throw new CmsInvalidDataException('Invalid template id specified to CmsLayoutTheme::add_template');
+      throw new CmsInvalidDataException('Invalid template id specified to CmsLayoutCollection::add_template');
     }
 
 		if( !is_array($this->_tpl_assoc) ) $this->_tpl_assoc = array();
@@ -351,7 +351,7 @@ class CmsLayoutTheme
 
   protected static function &_load_from_data($row)
   {
-    $ob = new CmsLayoutTheme;
+    $ob = new CmsLayoutCollection;
     $css = null;
     $tpls = null;
     if( isset($row['css']) ) {

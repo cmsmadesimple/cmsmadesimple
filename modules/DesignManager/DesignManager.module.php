@@ -20,7 +20,7 @@
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
 
-final class LayoutManager extends CMSModule
+final class DesignManager extends CMSModule
 {
   function GetFriendlyName()  { return $this->Lang('friendlyname');  }
   function GetVersion()  { return '1.0'; }

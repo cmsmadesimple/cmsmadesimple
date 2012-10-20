@@ -195,7 +195,7 @@ final class StylesheetOperations
 		$stylesheet->id = $new_stylesheet_id;
 		$t = $stylesheet->get_themes();
 		if( is_array($t) && count($t) ) {
-			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutTheme::CSSTABLE.' (css_id,theme_id)
+			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' (css_id,theme_id)
                       VALUES(?,?)';
 			foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($new_stylesheet_id,(int)$one));
@@ -215,14 +215,14 @@ final class StylesheetOperations
 		$dbresult = $db->Execute($query, array($stylesheet->name, $stylesheet->value, $stylesheet->media_type, $stylesheet->media_query, $stylesheet->id));
 		if ($dbresult === false) return FALSE;
 
-		$query = 'DELETE FROM '.cms_db_prefix().CmsLayoutTheme::CSSTABLE.' WHERE css_id = ?';
+		$query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' WHERE css_id = ?';
 		$dbr = $db->Execute($query,array($stylesheet->id));
 		if( !$dbr ) {
 			throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		}
 		$t = $stylesheet->get_themes();
 		if( is_array($t) && count($t) ) {
-			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutTheme::CSSTABLE.' (css_id,theme_id)
+			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.' (css_id,theme_id)
                       VALUES(?,?)';
 			foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($stylesheet->id,(int)$one));
@@ -241,7 +241,7 @@ final class StylesheetOperations
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
 
-		$query = "DELETE FROM ".cms_db_prefix().CmsLayoutTheme::CSSTABLE."
+		$query = "DELETE FROM ".cms_db_prefix().CmsLayoutCollection::CSSTABLE."
                   WHERE css_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 

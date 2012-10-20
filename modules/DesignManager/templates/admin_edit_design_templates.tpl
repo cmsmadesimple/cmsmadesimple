@@ -3,7 +3,7 @@
 <fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted red">{$mod->Lang('warning_edittemplate_notemplates')}</fieldset>
 {else}
 
-{assign var='tmpl' value=$theme->get_templates()}
+{assign var='tmpl' value=$design->get_templates()}
 <table class="pagetable" cellspacing="0" style="border: none;">
 <tr valign="center">
   <td valign="top">

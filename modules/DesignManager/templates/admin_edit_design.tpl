@@ -1,10 +1,10 @@
-{if $theme->get_id()}
-<h3>{$mod->Lang('edit_theme')}: {$theme->get_name()} ({$theme->get_id()})</h3>
+{if $design->get_id()}
+<h3>{$mod->Lang('edit_design')}: {$design->get_name()} ({$design->get_id()})</h3>
 {else}
-<h3>{$mod->Lang('create_theme')}</h3>
+<h3>{$mod->Lang('create_design')}</h3>
 {/if}
 
-{form_start}<input type="hidden" name="{$actionid}theme" value="{$theme->get_id()}"/>
+{form_start}<input type="hidden" name="{$actionid}design" value="{$design->get_id()}"/>
 
 <fieldset>
   <div style="width: 49%; float: left;">
@@ -17,9 +17,9 @@
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="theme_name">{$mod->Lang('prompt_name')}</label>:&nbsp;{admin_icon name='help_theme_name' icon='info.gif' class='helpicon'}</p>
+      <p class="pagetext"><label for="design_name">{$mod->Lang('prompt_name')}</label>:&nbsp;{admin_icon name='help_design_name' icon='info.gif' class='helpicon'}</p>
       <p class="pageinput">
-        <input type="text" id="theme_name" name="{$actionid}name" value="{$theme->get_name()}" size="50" maxlength="50"/>
+        <input type="text" id="design_name" name="{$actionid}name" value="{$design->get_name()}" size="50" maxlength="50"/>
       </p>
     </div>
   </div>
@@ -27,14 +27,14 @@
     <div class="pageoverflow">
       <p class="pagetext">{$mod->Lang('prompt_created')}:</p>
       <p class="pageinput">
-        <input type="text" readonly="readonly" value="{$theme->get_created()|date_format:'%x %X'}"/>
+        <input type="text" readonly="readonly" value="{$design->get_created()|date_format:'%x %X'}"/>
       </p>
     </div>
 
     <div class="pageoverflow">
       <p class="pagetext">{$mod->Lang('prompt_modified')}:</p>
       <p class="pageinput">
-        <input type="text" readonly="readonly" value="{$theme->get_modified()|date_format:'%x %X'}"/>
+        <input type="text" readonly="readonly" value="{$design->get_modified()|date_format:'%x %X'}"/>
       </p>
     </div>
   </div>
@@ -44,16 +44,16 @@
 {tab_header name='stylesheets' label=$mod->Lang('prompt_stylesheets')}
 {tab_header name='description' label=$mod->Lang('prompt_description')}
 {tab_start name='templates'}
-{include file='module_file_tpl:LayoutManager;admin_edit_theme_templates.tpl' scope='root'}
+{include file='module_file_tpl:LayoutManager;admin_edit_design_templates.tpl' scope='root'}
 {tab_start name='stylesheets'}
-{include file='module_file_tpl:LayoutManager;admin_edit_theme_stylesheets.tpl' scope='root'}
+{include file='module_file_tpl:LayoutManager;admin_edit_design_stylesheets.tpl' scope='root'}
 {tab_start name='description'}
-<textarea name="{$actionid}description">{$theme->get_description()}</textarea>&nbsp;
+<textarea name="{$actionid}description">{$design->get_description()}</textarea>&nbsp;
 {admin_icon icon='info.gif' class='helpicon' name='help_description'}
 {tab_end}
 {form_end}
 <div style="display: none;">{strip}
-  <div id="help_theme_name" title="{$mod->Lang('help')}">{$mod->Lang('help_theme_name')}</div>
+  <div id="help_design_name" title="{$mod->Lang('help')}">{$mod->Lang('help_design_name')}</div>
 {/strip}</div>
 
 <script type="text/javascript">

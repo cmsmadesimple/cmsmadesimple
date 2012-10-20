@@ -12,7 +12,7 @@
         <th width="5%">{$mod->Lang('prompt_id')}</th>
         <th>{$mod->Lang('prompt_name')}</th>
         <th>{$mod->Lang('prompt_type')}</th>
-        <th>{$mod->Lang('prompt_theme')}</th>
+        <th>{$mod->Lang('prompt_design')}</th>
         <th>{$mod->Lang('prompt_owner')}</th>
         <th>{$mod->Lang('prompt_modified')}</th>
         <th class="pageicon">{$mod->Lang('prompt_dflt')}</th>{* dflt *}
@@ -37,17 +37,17 @@
         <td><a href="{$edit_tpl}" title="{$mod->Lang('edit_template')}">{$template->get_name()}</a></td>
         <td>{assign var='n' value=$template->get_type_id()}{$list_types.$n}</td>
         <td>
-          {assign var='t1' value=$template->get_themes()}
+          {assign var='t1' value=$template->get_designs()}
           {if count($t1) == 1}
   	    {assign var='t1' value=$t1[0]}
-            {assign var='hn' value=$theme_names.$t1}
-            {if $manage_themes}
-              {cms_action_url action=admin_edit_theme theme=$t1 assign='edit_theme_url'}
-              <a href="{$edit_theme_url}" title="{$mod->Lang('edit_theme')}">{$hn}</a>
+            {assign var='hn' value=$design_names.$t1}
+            {if $manage_designs}
+              {cms_action_url action=admin_edit_design design=$t1 assign='edit_design_url'}
+              <a href="{$edit_design_url}" title="{$mod->Lang('edit_design')}">{$hn}</a>
             {else}
               {$hn}        
             {/if}
-          {else}<span title="{$mod->Lang('help_template_multiple_themes')}">({count($t1)})</span>{/if}
+          {else}<span title="{$mod->Lang('help_template_multiple_designs')}">({count($t1)})</span>{/if}
         </td>
         <td>{if isset($list_users)}{assign var='u' value=$template->get_owner_id()}{$list_users.$u}{else}n/a{/if}</td>
 	<td>{$template->get_modified()|date_format:'%x %X'}</td>

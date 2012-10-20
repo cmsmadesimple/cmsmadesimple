@@ -89,7 +89,7 @@ class Content extends ContentBase
     function SetProperties()
     {
       parent::SetProperties();
-	  $this->AddBaseProperty('theme_id',3);
+	  $this->AddBaseProperty('design_id',3);
       $this->AddBaseProperty('template',4);
       $this->AddBaseProperty('pagemetadata',20);
       $this->AddContentProperty('searchable',8);
@@ -432,51 +432,51 @@ class Content extends ContentBase
     protected function display_single_element($one,$adding)
     {
 		$gCms = cmsms();
-		static $_themes;
+		static $_designs;
 		static $_types;
-		static $_themetree;
-		static $_themelist;
+		static $_designtree;
+		static $_designlist;
 		static $_templates;
-		if( $_themes == null ) {
+		if( $_designs == null ) {
 			$_templates = CmsLayoutTemplate::template_query(array('as_list'=>1));
-			$_themes = CmsLayoutTheme::get_all();
-			$_themelist = array();
-			$_themetree = array();
-			foreach( $_themes as $one_theme ) {
-				$tmp1 = $one_theme->get_templates();
+			$_designs = CmsLayoutCollection::get_all();
+			$_designlist = array();
+			$_designtree = array();
+			foreach( $_designs as $one_design ) {
+				$tmp1 = $one_design->get_templates();
 				if( !is_array($tmp1) || count($tmp1) == 0 ) continue;
-				$_themelist[$one_theme->get_id()] = $one_theme->get_name();
+				$_designlist[$one_design->get_id()] = $one_design->get_name();
 				$tmp2 = array();
 				foreach( $tmp1 as $one_tpl_id ) {
 					$tmp2[$one_tpl_id] = $_templates[$one_tpl_id];
 				}
-				$_themetree[$one_theme->get_id()] = $tmp2;
+				$_designtree[$one_design->get_id()] = $tmp2;
 			}
 		}
 		
 		switch($one) {
-		case 'theme_id':
+		case 'design_id':
 			$out = '';
-			if( is_array($_themelist) && count($_themelist) ) {
-				$out = CmsFormUtils::create_dropdown('theme_id',$_themelist,
-													 $this->GetPropertyValue('theme_id'),
-													 array('id'=>'theme_id'));
-				return array('<label for="theme_id">*'.lang('theme').':</label>', 
-							 $out.'<br/>'.lang('info_editcontent_theme'));
+			if( is_array($_designlist) && count($_designlist) ) {
+				$out = CmsFormUtils::create_dropdown('design_id',$_designlist,
+													 $this->GetPropertyValue('design_id'),
+													 array('id'=>'design_id'));
+				return array('<label for="design_id">*'.lang('design').':</label>', 
+							 $out.'<br/>'.lang('info_editcontent_design'));
 			}
 			break;
 
 		case 'template':
-			$tmp = json_encode($_themetree);
+			$tmp = json_encode($_designtree);
 			$out = <<<TPLJS
 <script type="text/javascript">
 var _tree = '{$tmp}';
 var _seltpl  = '{$this->mTemplateId}';
-function _update_template_list(theme_id)
+function _update_template_list(design_id)
 {
 	var tree = $.parseJSON(_tree);
     $.each(tree,function(k,v){
-     if( k == theme_id ) {
+     if( k == design_id ) {
  	   // clear the template list
 	   $('#template_id').html('');
   	   $.each(v,function(k,v2){
@@ -488,8 +488,8 @@ function _update_template_list(theme_id)
     });
 }
 $(document).ready(function(){
-  _update_template_list($('#theme_id').val());
-  $('#theme_id').change(function(){
+  _update_template_list($('#design_id').val());
+  $('#design_id').change(function(){
     _update_template_list($(this).val());
   });
 });

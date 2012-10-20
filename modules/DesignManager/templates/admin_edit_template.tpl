@@ -57,7 +57,7 @@ $(document).ready(function(){
 {tab_header name='template' label=$mod->Lang('prompt_template')}
 {tab_header name='description' label=$mod->Lang('prompt_description')}
 {if $has_manage_right}
-{tab_header name='themes' label=$mod->Lang('prompt_themes')}
+{tab_header name='designs' label=$mod->Lang('prompt_designs')}
 {/if}
 {if $template->get_owner_id() == get_userid() or $has_manage_right}
 {tab_header name='permissions' label=$mod->Lang('prompt_permissions')}
@@ -72,10 +72,10 @@ $(document).ready(function(){
 {admin_icon name='help_template_description' icon='info.gif' class='helpicon'}
 
 {if $has_manage_right}
-{tab_start name='themes'}
-<select name="{$actionid}theme_list[]" multiple="multiple" size="5">
-  {html_options options=$theme_list selected=$template->get_themes()}
-</select>&nbsp;{admin_icon icon='info.gif' class='helpicon' name='help_template_themes'}
+{tab_start name='designs'}
+<select name="{$actionid}design_list[]" multiple="multiple" size="5">
+  {html_options options=$design_list selected=$template->get_designs()}
+</select>&nbsp;{admin_icon icon='info.gif' class='helpicon' name='help_template_designs'}
 {/if}
 
 {if $template->get_owner_id() == get_userid() or $has_manage_right}
@@ -114,11 +114,11 @@ $(document).ready(function(){
 
 <div style="display: none;">{strip}
   <div id="help_template_name" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_name')}</div>
-  <div id="help_template_theme" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_theme')}</div>
+  <div id="help_template_design" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_design')}</div>
   <div id="help_template_type" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_type')}</div>
   <div id="help_template_dflt" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_dflt')}</div>
   <div id="help_template_category" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_category')}</div>
   <div id="help_template_contents" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_contents')}</div>
   <div id="help_template_description" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_description')}</div>
-  <div id="help_template_themes" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_themes')}</div>
+  <div id="help_template_designs" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_designs')}</div>
 {/strip}</div>

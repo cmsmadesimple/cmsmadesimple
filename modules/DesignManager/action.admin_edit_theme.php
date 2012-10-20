@@ -19,41 +19,41 @@
 #
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission('Manage Themes') ) return;
+if( !$this->CheckPermission('Manage Designs') ) return;
 
-$this->SetCurrentTab('themes');
+$this->SetCurrentTab('designs');
 if( isset($params['cancel']) ) {
   $this->SetMessage($this->Lang('msg_cancelled'));
   $this->RedirectToAdminTab();
 }
 
-$theme = null;
+$design = null;
 try {
-  if( !isset($params['theme']) || $params['theme'] == '' ) {
-    $theme= new CmsLayoutTheme;
-    $theme->set_name('New Theme');
+  if( !isset($params['design']) || $params['design'] == '' ) {
+    $design= new CmsLayoutCollection;
+    $design->set_name('New Design');
   }
   else {
-    $theme = CmsLayoutTheme::load($params['theme']);
+    $design = CmsLayoutCollection::load($params['design']);
   }
 
 	try {
 		if( isset($params['submit']) ) {
-			$theme->set_name($params['name']);
-			$theme->set_description($params['description']);
+			$design->set_name($params['name']);
+			$design->set_description($params['description']);
 			$tpl_assoc = array();
 			if( isset($params['assoc_tpl']) ) {
 				$tpl_assoc = $params['assoc_tpl'];
 			}
-			$theme->set_templates($tpl_assoc);
+			$design->set_templates($tpl_assoc);
 
 			$css_assoc = array();
 			if( isset($params['assoc_css']) ) {
 				$css_assoc = $params['assoc_css'];
 			}
-			$theme->set_stylesheets($css_assoc);
-			$theme->save();
-			$this->SetMessage($this->Lang('msg_theme_saved'));
+			$design->set_stylesheets($css_assoc);
+			$design->save();
+			$this->SetMessage($this->Lang('msg_design_saved'));
 			$this->RedirectToAdminTab();
 		}
 	}
@@ -78,8 +78,8 @@ try {
 		$smarty->assign('all_stylesheets',$out2);
 	}
 
-  $smarty->assign('theme',$theme);
-  echo $this->ProcessTemplate('admin_edit_theme.tpl');
+  $smarty->assign('design',$design);
+  echo $this->ProcessTemplate('admin_edit_design.tpl');
 }
 catch( CmsException $e ) {
   $this->SetError($e->GetMessage());

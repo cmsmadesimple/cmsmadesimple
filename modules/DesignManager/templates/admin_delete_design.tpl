@@ -1,7 +1,7 @@
-{form_start theme=$theme->get_id()}
-<h3>{$mod->Lang('delete_theme')}: {$theme->get_name()} ({$theme->get_id()})</h3>
+{form_start design=$design->get_id()}
+<h3>{$mod->Lang('delete_design')}: {$design->get_name()} ({$design->get_id()})</h3>
 
-{if $theme->has_templates() && $tpl_permission}
+{if $design->has_templates() && $tpl_permission}
 <fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted red">{$mod->Lang('warning_deletetemplate_attachments')}</fieldset>
 <div class="pageoverflow">
   <p class="pagetext"><label for-"opt_rm_tpl">{$mod->Lang('delete_attached_templates')}:</label></p>
@@ -12,7 +12,7 @@
 </div>
 {/if}
 
-{if $theme->has_stylesheets() && $css_permission}
+{if $design->has_stylesheets() && $css_permission}
 <fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted red">{$mod->Lang('warning_deletestylesheet_attachments')}</fieldset>
 <div class="pageoverflow">
   <p class="pagetext"><label for-"opt_rm_css">{$mod->Lang('delete_attached_stylesheets')}:</label></p>

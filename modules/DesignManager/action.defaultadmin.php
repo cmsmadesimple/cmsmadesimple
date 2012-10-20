@@ -41,7 +41,7 @@ $templates = CmsLayoutTemplate::template_query($efilter);
 if( count($templates) ) $smarty->assign('templates',$templates);
 
 
-// build a list of the types, and categories, and later (themes).
+// build a list of the types, and categories, and later (designs).
 $opts = array();
 $opts[''] = $this->Lang('prompt_none');
 $types = CmsLayoutTemplateType::get_all();
@@ -67,18 +67,18 @@ if( count($cats) ) {
   }
   $opts[$this->Lang('prompt_categories')] = $tmp;
 }
-$themes = CmsLayoutTheme::get_all();
-if( count($themes) ) {
-  $smarty->assign('list_themes',$themes);
+$designs = CmsLayoutCollection::get_all();
+if( count($designs) ) {
+  $smarty->assign('list_designs',$designs);
   $tmp = array();
-  for( $i = 0; $i < count($themes); $i++ ) {
-    $tmp['h:'.$themes[$i]->get_id()] = $themes[$i]->get_name();
-    $tmp2[$themes[$i]->get_id()] = $themes[$i]->get_name();
+  for( $i = 0; $i < count($designs); $i++ ) {
+    $tmp['h:'.$designs[$i]->get_id()] = $designs[$i]->get_name();
+    $tmp2[$designs[$i]->get_id()] = $designs[$i]->get_name();
   }
-  $smarty->assign('theme_names',$tmp2);
-  $opts[$this->Lang('prompt_theme')] = $tmp;
+  $smarty->assign('design_names',$tmp2);
+  $opts[$this->Lang('prompt_design')] = $tmp;
 }
-if( $this->CheckPermission('Manage Themes') ) {
+if( $this->CheckPermission('Manage Designs') ) {
   $userops = cmsms()->GetUserOperations();
   $allusers = $userops->LoadUsers();
   $users = array(-1=>$this->Lang('prompt_unknown'));
@@ -94,7 +94,7 @@ $smarty->assign('filter_options',$opts);
 $smarty->assign('filter',$filter);
 
 $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
-$smarty->assign('manage_themes',$this->CheckPermission('Manage Themes'));
+$smarty->assign('manage_designs',$this->CheckPermission('Manage Designs'));
 $smarty->assign('import_url',$this->create_url($id,'admin_import_template'));
 $smarty->assign('has_add_right',
 								$this->CheckPermission('Modify Templates') || 

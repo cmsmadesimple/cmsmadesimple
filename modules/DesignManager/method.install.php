@@ -20,8 +20,6 @@
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
 
-$this->CheckPermission('Manage Themes','Manage Themes');
-
 #
 # EOF
 #

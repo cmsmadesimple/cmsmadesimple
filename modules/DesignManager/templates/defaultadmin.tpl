@@ -12,8 +12,8 @@ $(document).ready(function(){
 {tab_header name='categories' label=$mod->Lang('prompt_categories')}
 {tab_header name='types' label=$mod->Lang('prompt_templatetypes')}
 {/if}
-{if $manage_themes}
-{tab_header name='themes' label=$mod->Lang('prompt_themes')}
+{if $manage_designs}
+{tab_header name='designs' label=$mod->Lang('prompt_designs')}
 {/if}
 
 {tab_start name='templates'}
@@ -25,9 +25,9 @@ $(document).ready(function(){
 {include file='module_file_tpl:LayoutManager;admin_defaultadmin_types.tpl' scope='root'}
 {/if}
 
-{if $manage_themes}
-{tab_start name='themes'}
-{include file='module_file_tpl:LayoutManager;admin_defaultadmin_themes.tpl' scope='root'}
+{if $manage_designs}
+{tab_start name='designs'}
+{include file='module_file_tpl:LayoutManager;admin_defaultadmin_designs.tpl' scope='root'}
 {/if}
 
 {tab_end}

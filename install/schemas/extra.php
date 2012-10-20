@@ -15,47 +15,47 @@ UserTagOperations::get_instance()->SetUserTag('custom_copyright',$txt,
 //
 
 // minimal theme has the minimal template, and no styesheets.
-$minimal_theme = new CmsLayoutTheme();
+$minimal_theme = new CmsLayoutCollection();
 $minimal_theme->set_name('Minimal');  // id = 19
 $minimal_theme->set_description('Minimal templates and stylesheets');
 $minimal_theme->save();
 
-$simplex_theme = new CmsLayoutTheme();
+$simplex_theme = new CmsLayoutCollection();
 $simplex_theme->set_name('Simplex');
 $simplex_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
 $simplex_theme->save();
 
-$css_menuleft_1col_theme = new CmsLayoutTheme();
+$css_menuleft_1col_theme = new CmsLayoutCollection();
 $css_menuleft_1col_theme->set_name('CSSMenu left + 1 column');
 $css_menuleft_1col_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
 $css_menuleft_1col_theme->save();
 
-$css_menutop_2col_theme = new CmsLayoutTheme();
+$css_menutop_2col_theme = new CmsLayoutCollection();
 $css_menutop_2col_theme->set_name('CSSMenu top + 2 columns');
 $css_menutop_2col_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
 $css_menutop_2col_theme->save();
 
-$leftsimple_1col_theme = new CmsLayoutTheme();
+$leftsimple_1col_theme = new CmsLayoutCollection();
 $leftsimple_1col_theme->set_name('Left simple navigation + 1 column');
 $leftsimple_1col_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
 $leftsimple_1col_theme->save();
 
-$ncleanblue_theme = new CmsLayoutTheme();
+$ncleanblue_theme = new CmsLayoutCollection();
 $ncleanblue_theme->set_name('NCleanBlue');
 $ncleanblue_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
 $ncleanblue_theme->save();
 
-$shadowmenu_left_1col_theme = new CmsLayoutTheme();
+$shadowmenu_left_1col_theme = new CmsLayoutCollection();
 $shadowmenu_left_1col_theme->set_name('ShadowMenu left + 1 column');
 $shadowmenu_left_1col_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
 $shadowmenu_left_1col_theme->save();
 
-$shadowmenu_tab_2col_theme = new CmsLayoutTheme();
+$shadowmenu_tab_2col_theme = new CmsLayoutCollection();
 $shadowmenu_tab_2col_theme->set_name('ShadowMenu Tab + 2 columns');
 $shadowmenu_tab_2col_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
 $shadowmenu_tab_2col_theme->save();
 
-$topsimple_leftsubnav_1col_theme = new CmsLayoutTheme();
+$topsimple_leftsubnav_1col_theme = new CmsLayoutCollection();
 $topsimple_leftsubnav_1col_theme->set_name('Top simple navigation + left subnavigation + 1 column');
 $topsimple_leftsubnav_1col_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
 $topsimple_leftsubnav_1col_theme->save();

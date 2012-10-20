@@ -563,7 +563,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo ilang('install_creating_table', CmsLayoutTemplate::ADDUSERSTABLE, $ado_ret);
 
 
-
 	$flds = "
          id   I KEY AUTO,
          name C(50) NOT NULL,
@@ -571,9 +570,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
          created I,
          modified I
         ";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutTheme::TABLENAME, $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutCollection::TABLENAME, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	echo ilang('install_creating_table', CmsLayoutTheme::TABLENAME, $ado_ret);
+	echo ilang('install_creating_table', CmsLayoutCollection::TABLENAME, $ado_ret);
 
 
 
@@ -581,18 +580,18 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
          theme_id I KEY NOT NULL,
          tpl_id   I KEY NOT NULL
         ";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutTheme::TPLTABLE, $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutCollection::TPLTABLE, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	echo ilang('install_creating_table', CmsLayoutTheme::TPLTABLE, $ado_ret);
+	echo ilang('install_creating_table', CmsLayoutCollection::TPLTABLE, $ado_ret);
 
 	$flds = "
          theme_id I KEY NOT NULL,
          css_id   I KEY NOT NULL,
          item_order I NOT NULL
         ";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutTheme::CSSTABLE, $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutCollection::CSSTABLE, $flds, $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	echo ilang('install_creating_table', CmsLayoutTheme::CSSTABLE, $ado_ret);
+	echo ilang('install_creating_table', CmsLayoutCollection::CSSTABLE, $ado_ret);
 }
 
 # vim:ts=4 sw=4 noet

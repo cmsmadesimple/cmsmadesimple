@@ -155,7 +155,7 @@ class Stylesheet
 		if( is_null($this->_theme_assoc) ) {
 			$this->_theme_assoc = null;
 			$db = cmsms()->GetDb();
-			$query = 'SELECt theme_id FROM '.cms_db_prefix().CmsLayoutTheme::CSSTABLE.'
+			$query = 'SELECt theme_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.'
                 WHERE css_id = ?';
 			$tmp = $db->GetCol($query,array($this->id));
 			if( is_array($tmp) && count($tmp) ) {
@@ -181,14 +181,14 @@ class Stylesheet
 	public function add_theme($a) 
 	{
 		$n = null;
-		if( is_object($a) && is_a($a,'CmsLayoutTheme') ) {
+		if( is_object($a) && is_a($a,'CmsLayoutCollection') ) {
 			$n = $a->get_id();
 		}
 		else if( (int)$a > 0 ) {
 			$n = $a;
 		}
 		else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
-			$theme = CmsLayoutTheme::load($a);
+			$theme = CmsLayoutCollection::load($a);
 			$n = $theme->get_id();
 		}
 
@@ -204,14 +204,14 @@ class Stylesheet
 		if( !is_array($this->_theme_assoc) || count($this->_theme_assoc) == 0 ) return;
 
 		$n = null;
-		if( is_object($a) && is_a($a,'CmsLayoutTheme') ) {
+		if( is_object($a) && is_a($a,'CmsLayoutCollection') ) {
 			$n = $a->get_id();
 		}
 		else if( (int)$a > 0 ) {
 			$n = $a;
 		}
 		else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
-			$theme = CmsLayoutTheme::load($a);
+			$theme = CmsLayoutCollection::load($a);
 			$n = $theme->get_id();
 		}
 

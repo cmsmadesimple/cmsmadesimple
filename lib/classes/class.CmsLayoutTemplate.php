@@ -149,7 +149,7 @@ class CmsLayoutTemplate
 		if( is_null($this->_theme_assoc) ) {
 			$this->_theme_assoc = null;
 			$db = cmsms()->GetDb();
-			$query = 'SELECt theme_id FROM '.cms_db_prefix().CmsLayoutTheme::TPLTABLE.'
+			$query = 'SELECt theme_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
                 WHERE tpl_id = ?';
 			$tmp = $db->GetCol($query,array($this->get_id()));
 			if( is_array($tmp) && count($tmp) ) {
@@ -171,17 +171,17 @@ class CmsLayoutTemplate
 		$this->_theme_assoc = $x;
 	}
 
-	public function add_theme($a) 
+	public function add_design($a) 
 	{
 		$n = null;
-		if( is_object($a) && is_a($a,'CmsLayoutTheme') ) {
+		if( is_object($a) && is_a($a,'CmsLayoutCollection') ) {
 			$n = $a->get_id();
 		}
 		else if( (int)$a > 0 ) {
 			$n = $a;
 		}
 		else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
-			$theme = CmsLayoutTheme::load($a);
+			$theme = CmsLayoutCollection::load($a);
 			$n = $theme->get_id();
 		}
 
@@ -197,14 +197,14 @@ class CmsLayoutTemplate
 		if( !is_array($this->_theme_assoc) || count($this->_theme_assoc) == 0 ) return;
 
 		$n = null;
-		if( is_object($a) && is_a($a,'CmsLayoutTheme') ) {
+		if( is_object($a) && is_a($a,'CmsLayoutCollection') ) {
 			$n = $a->get_id();
 		}
 		else if( (int)$a > 0 ) {
 			$n = $a;
 		}
 		else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
-			$theme = CmsLayoutTheme::load($a);
+			$theme = CmsLayoutCollection::load($a);
 			$n = $theme->get_id();
 		}
 
@@ -405,14 +405,14 @@ class CmsLayoutTemplate
 			}
 		}
 
-		$query = 'DELETE FROM '.cms_db_prefix().CmsLayoutTheme::TPLTABLE.' WHERE tpl_id = ?';
+		$query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' WHERE tpl_id = ?';
 		$dbr = $db->Execute($query,array($this->get_id()));
 		if( !$dbr ) {
 			throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		}
 		$t = $this->get_themes();
 		if( is_array($t) && count($t) ) {
-			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutTheme::TPLTABLE.' (tpl_id,theme_id)
+			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' (tpl_id,theme_id)
                 VALUES(?,?)';
 			foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
@@ -463,7 +463,7 @@ class CmsLayoutTemplate
 
 		$t = $this->get_themes();
 		if( is_array($t) && count($t) ) {
-			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutTheme::TPLTABLE.' 
+			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' 
                 (tpl_id,theme_id)
                 VALUES(?,?)';
 			foreach( $t as $one ) {
@@ -603,7 +603,7 @@ class CmsLayoutTemplate
 				break;
 			case 'h': // theme
 				// find all the templates in theme h
-				$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutTheme::TPLTABLE.'
+				$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
                WHERE theme_id = ?';
 				$tpls = $db->GetCol($q2,array((int)$second));
 				$where['theme'][] = 'id IN ('.implode(',',$tpls).')';
