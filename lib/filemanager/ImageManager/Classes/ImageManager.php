@@ -142,47 +142,39 @@ class ImageManager
 		if($this->isValidBase() == false)
 			return array($files,$dirs);
 
-
 		$path = Files::fixPath($path);
 		$base = Files::fixPath($this->getBaseDir());
 		$fullpath = Files::makePath($base,$path);
 
-
-
 		$d = @dir($fullpath);
-		
-		while (false !== ($entry = $d->read())) 
-		{
+		if( $d ) {
+		  while (false !== ($entry = $d->read())) {
+		    //not a dot file or directory
+		    if(substr($entry,0,1) != '.') {
+		      if(is_dir($fullpath.$entry)
+			 && $this->isThumbDir($entry) == false) {
+			$relative = Files::fixPath($path.$entry);
+			$full = Files::fixPath($fullpath.$entry);
+			$count = $this->countFiles($full);
+			$dirs[$relative] = array('fullpath'=>$full,'entry'=>$entry,'count'=>$count);
+		      }
+		      else if(is_file($fullpath.$entry) && 
+			      $this->isThumb($entry)==false && $this->isTmpFile($entry) == false) {
+			$img = $this->getImageInfo($fullpath.$entry);
 
-			
-			//not a dot file or directory
-			if(substr($entry,0,1) != '.')
-			{
-				if(is_dir($fullpath.$entry)
-					&& $this->isThumbDir($entry) == false)
-				{
-					$relative = Files::fixPath($path.$entry);
-					$full = Files::fixPath($fullpath.$entry);
-					$count = $this->countFiles($full);
-					$dirs[$relative] = array('fullpath'=>$full,'entry'=>$entry,'count'=>$count);
-				}
-				else if(is_file($fullpath.$entry) && $this->isThumb($entry)==false && $this->isTmpFile($entry) == false) 
-				{
-					$img = $this->getImageInfo($fullpath.$entry);
-
-					if(!(!is_array($img)&&$this->config['validate_images']))
-					{
-						$file['url'] = Files::makePath($this->config['base_url'],$path).$entry;
-						$file['relative'] = $path.$entry;
-						$file['fullpath'] = $fullpath.$entry;
-						$file['image'] = $img;
-						$file['stat'] = stat($fullpath.$entry);
-						$files[$entry] = $file;
-					}
-				}
+			if(!(!is_array($img)&&$this->config['validate_images'])) {
+			  $file['url'] = Files::makePath($this->config['base_url'],$path).$entry;
+			  $file['relative'] = $path.$entry;
+			  $file['fullpath'] = $fullpath.$entry;
+			  $file['image'] = $img;
+			  $file['stat'] = stat($fullpath.$entry);
+			  $files[$entry] = $file;
 			}
+		      }
+		    }
+		  }
+		  $d->close();
 		}
-		$d->close();
 
 			//Add a back directory
 			
@@ -427,6 +419,7 @@ class ImageManager
 	 */
 	function _processFiles($relative, $file)
 	{
+	  if( !$this->validRelativePath($relative) ) return false;
 		
 		if($file['error']!=0)
 		{
@@ -560,8 +553,8 @@ class ImageManager
 	 */
 	function deleteFiles() 
 	{
-		if(isset($_GET['delf']))
-			$this->_delFile(rawurldecode($_GET['delf']));
+	  if(isset($_GET['delf']))
+	    $this->_delFile(rawurldecode($_GET['delf']));
 	}
 
 	/**
@@ -570,10 +563,10 @@ class ImageManager
 	 */
 	function deleteDirs() 
 	{
-		 if(isset($_GET['deld']))
-			return $this->_delDir(rawurldecode($_GET['deld']));		
-		 else
-			 Return false;
+	  if(isset($_GET['deld']) ) {
+	    return $this->_delDir(rawurldecode($_GET['deld']));
+	  }
+	  return false;
 	}
 
 	/**
@@ -582,7 +575,9 @@ class ImageManager
 	 * @return boolean true if deleted, false otherwise.
 	 */
 	function _delFile($relative) 
-	{
+	{ 
+          $r2 = dirname($relative);
+	  if( !$this->validRelativePath($r2) ) return false;
 		$fullpath = Files::makeFile($this->getBaseDir(),$relative);
 		
 		//check that the file is an image
@@ -607,6 +602,7 @@ class ImageManager
 	 */
 	function _delDir($relative) 
 	{
+	  if( !$this->validRelativePath($relative) ) return false;
 		$fullpath = Files::makePath($this->getBaseDir(),$relative);
 		if($this->countFiles($fullpath) <= 0)
 			return Files::delFolder($fullpath,true); //delete recursively.
