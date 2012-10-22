@@ -1725,118 +1725,99 @@ abstract class ContentBase
     {
       $errors = array();
 
-      if ($this->mParentId < -1) 
-	{
-	  $errors[] = lang('invalidparent');
+      if ($this->mParentId < -1) {
+	$errors[] = lang('invalidparent');
+	$result = false;
+      }
+	  
+      if ($this->mName == '') {
+	if ($this->mMenuText != '') {
+	  $this->mName = $this->mMenuText;
+	}
+	else {
+	  $errors[]= lang('nofieldgiven',array(lang('title')));
 	  $result = false;
 	}
+      }
 	  
-      if ($this->mName == '')
-	{
-	  if ($this->mMenuText != '')
-	    {
-	      $this->mName = $this->mMenuText;
-	    }
-	  else
-	    {
-	      $errors[]= lang('nofieldgiven',array(lang('title')));
-	      $result = false;
-	    }
+      if ($this->mMenuText == '') {
+	if ($this->mName != '') {
+	  $this->mMenuText = $this->mName;
 	}
-	  
-      if ($this->mMenuText == '')
-	{
-	  if ($this->mName != '')
-	    {
-	      $this->mMenuText = $this->mName;
-	    }
-	  else
-	    {
-	      $errors[]=lang('nofieldgiven',array(lang('menutext')));
-	      $result = false;
-	    }
+	else {
+	  $errors[]=lang('nofieldgiven',array(lang('menutext')));
+	  $result = false;
 	}
+      }
 		
-      if (!$this->HandlesAlias())
-	{
-	  if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) 
-	    {
-	      $gCms = cmsms();
-	      $contentops = $gCms->GetContentOperations();
-	      $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
-	      if ($error !== FALSE)
-		{
-		  $errors[]= $error;
-		  $result = false;
-		}
-	    }
+      if (!$this->HandlesAlias()) {
+	if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) {
+	  $gCms = cmsms();
+	  $contentops = $gCms->GetContentOperations();
+	  $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
+	  if ($error !== FALSE) {
+	    $errors[]= $error;
+	    $result = false;
+	  }
 	}
+      }
 
       $auto_type = content_assistant::auto_create_url();
-      if( $this->mURL == '' && get_site_preference('content_autocreate_urls') )
-	{
-	  // create a valid url.
-	  if( !$this->DefaultContent() )
-	    {
-	      if( get_site_preference('content_autocreate_flaturls',0) )
-		{
-		  // the default url is the alias... but not synced to the alias.
-		  $this->mURL = $this->mAlias;
+      if( $this->mURL == '' && get_site_preference('content_autocreate_urls') ) {
+	// create a valid url.
+	if( !$this->DefaultContent() ) {
+	  if( get_site_preference('content_autocreate_flaturls',0) ) {
+	    // the default url is the alias... but not synced to the alias.
+	    $this->mURL = $this->mAlias;
+	  }
+	  else {
+	    // if it don't explicitly say 'flat' we're creating a hierarchical url.
+	    $gCms = cmsms();
+	    $tree = $gCms->GetHierarchyManager();
+	    $node = $tree->find_by_tag('id',$this->ParentId());
+	    $stack = array($this->mAlias);
+	    $parent_url = '';
+	    $count = 0;
+	    while( $node ) {
+	      $tmp_content = $node->GetContent();
+	      if( $tmp_content ) {
+		$tmp = $tmp_content->URL();
+		if( $tmp != '' && $count == 0 ) {
+		  // try to build the url out of the parent url.
+		  $parent_url = $tmp;
+		  break;
 		}
-	      else
-		{
-		  // if it don't explicitly say 'flat' we're creating a hierarchical url.
-		  $gCms = cmsms();
-		  $tree = $gCms->GetHierarchyManager();
-		  $node = $tree->find_by_tag('id',$this->ParentId());
-		  $stack = array($this->mAlias);
-		  $parent_url = '';
-		  $count = 0;
-		  while( $node )
-		    {
-		      $tmp_content = $node->GetContent();
-		      if( $tmp_content )
-			{
-			  $tmp = $tmp_content->URL();
-			  if( $tmp != '' && $count == 0 )
-			    {
-			      // try to build the url out of the parent url.
-			      $parent_url = $tmp;
-			      break;
-			    }
-			  array_unshift($stack,$tmp_content->Alias());
-			}
-		      $node = $node->GetParent();
-		      $count++;
-		    }
+		array_unshift($stack,$tmp_content->Alias());
+	      }
+	      $node = $node->GetParent();
+	      $count++;
+	    }
 
-		  if( $parent_url != '' )
-		    {
-		      // woot, we got a prent url.
-		      $this->mURL = $parent_url.'/'.$this->mAlias;
-		    }
-		  else
-		    {
-		      $this->mURL = implode('/',$stack);
-		    }
-		}
+	    if( $parent_url != '' ) {
+	      // woot, we got a prent url.
+	      $this->mURL = $parent_url.'/'.$this->mAlias;
 	    }
-	}
-      if( $this->mURL == '' && get_site_preference('content_mandatory_urls') && !$this->mDefaultContent )
-	{
-	  // page url is empty and mandatory
-	  $errors[] = lang('content_mandatory_urls');
-	}
-      else if( $this->mURL != '' )
-	{
-	  // page url is not empty, check for validity.
-	  $this->mURL = strtolower(trim($this->mURL," /\t\r\n\0\x08")); // silently delete bad chars. and convert to lowercase.
-	  if( $this->mURL != '' && !content_assistant::is_valid_url($this->mURL,$this->mId) )
-	    {
-	      // and validate the URL.
-	      $errors[] = lang('invalid_url2');
+	    else {
+	      $this->mURL = implode('/',$stack);
 	    }
+	  }
 	}
+      }
+      if( $this->mURL == '' && 
+	  get_site_preference('content_mandatory_urls') && 
+	  !$this->mDefaultContent &&
+	  $this->HasUsableLink() ) {
+	// page url is empty and mandatory
+	$errors[] = lang('content_mandatory_urls');
+      }
+      else if( $this->mURL != '' ) {
+	// page url is not empty, check for validity.
+	$this->mURL = strtolower(trim($this->mURL," /\t\r\n\0\x08")); // silently delete bad chars. and convert to lowercase.
+	if( $this->mURL != '' && !content_assistant::is_valid_url($this->mURL,$this->mId) ) {
+	  // and validate the URL.
+	  $errors[] = lang('invalid_url2');
+	}
+      }
 
       return (count($errors) > 0?$errors:FALSE);
     }
