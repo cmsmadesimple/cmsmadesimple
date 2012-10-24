@@ -7,6 +7,7 @@ Core - General
   - Fixes problem with delete image in image manager after security fix.
   - Fixes to the smarty parsing for templates.
   - Fixes to loading of UDT's.... now load UDT's for all requests.
+  - Fix displaying of page title in NCleanGrey admin theme.
 
 Version 1.11.2.1
 -----------------------------
