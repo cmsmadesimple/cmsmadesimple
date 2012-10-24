@@ -1,7 +1,16 @@
-Version 1.11.3 - NO NAME
+Version 1.11.3 - Darwin
 -----------------------------
 Core - General
   - Aliases in NLS operations are now case insensitive
+  - Fixes problem with editing templates/content in sitedown mode
+  - Fixes problems with separators when page urls are required
+  - Fixes problem with delete image in image manager after security fix.
+  - Fixes to the smarty parsing for templates.
+  - Fixes to loading of UDT's.... now load UDT's for all requests.
+
+Version 1.11.2.1
+-----------------------------
+  - Fixes security vulnerability in image manager
 
 Version 1.11.2 - Isabela 
 -----------------------------

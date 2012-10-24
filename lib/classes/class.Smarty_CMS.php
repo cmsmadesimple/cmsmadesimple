@@ -70,12 +70,26 @@ class Smarty_CMS extends SmartyBC
 		$this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
 		$this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
 		$this->registerResource('template',new CMSPageTemplateResource()); // <- Should proably be global and removed from parser?		
+		// Load User Defined Tags
+		{
+		  $utops = cmsms()->GetUserTagOperations();
+		  $usertags = $utops->ListUserTags();
+		  $caching = false;
+		  if( get_site_preference('smarty_cacheudt','never') == 'always' && cmsms()->is_frontend_request() ) {
+		    $caching = true;
+		  }
+
+		  foreach( $usertags as $id => $udt_name ) {
+		    $function = $utops->CreateTagFunction($udt_name);
+		    $this->registerPlugin('function',$udt_name,$function,$caching);
+		  }
+		  $usertags_loaded = TRUE;
+		}
 
 		// register default plugin handler
 		$this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
 
 		if(cmsms()->is_frontend_request()) {
-		
 			$this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
 			$this->setConfigDir(cms_join_path($config['root_path'],'tmp','templates'));
 
@@ -83,23 +97,8 @@ class Smarty_CMS extends SmartyBC
 			if(isset($CMS_INSTALL_PAGE)) return;
 
 			if (is_sitedown()) {
-			
 				$this->setCaching(false);
 				$this->force_compile = true;
-			}
-
-			// Load User Defined Tags
-			$utops = cmsms()->GetUserTagOperations();
-			$usertags = $utops->ListUserTags();
-			$caching = false;
-			
-			if(get_site_preference('smarty_cacheudt','never') == 'always')
-				$caching = true;
-
-			foreach( $usertags as $id => $name ) {
-			
-				$function = $utops->CreateTagFunction($name);
-				$this->registerPlugin('function',$name,$function,$caching);
 			}
 
 			// Load resources
@@ -231,37 +230,35 @@ class Smarty_CMS extends SmartyBC
 	* @return boolean true on success, false on failure
 	*/	
     public function defaultPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
-	{
-	  debug_buffer('',"Start Load Smarty Plugin $name/$type");
+    {
+      debug_buffer('',"Start Load Smarty Plugin $name/$type");
 
-	  $cachable = TRUE;
-	  $config = cmsms()->GetConfig();
-	  $fn = cms_join_path($config['root_path'],'plugins',$type.'.'.$name.'.php');
-	  if( file_exists($fn) )
-	    {
-	      // plugins with the smarty_cms_function
-	      require_once($fn);
-	      $func = 'smarty_cms_'.$type.'_'.$name;
-	      $script = $fn;
-	      if( function_exists($func) )
-		{
-		  $callback = $func;
-		  $cachable = FALSE;
-		  debug_buffer('',"End Load Smarty Plugin $name/$type");
-		  return TRUE;
-		}
-	    }
-
-	  $row = cms_module_smarty_plugin_manager::load_plugin($name,$type);
-	  if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 && 
-	      is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {
-	      $cachable = $row['cachable'];
-	      $callback = $row['callback'][0].'::'.$row['callback'][1];
-	      return TRUE;
-	    }
-
-	  return FALSE;
+      $cachable = TRUE;
+      $config = cmsms()->GetConfig();
+      $fn = cms_join_path($config['root_path'],'plugins',$type.'.'.$name.'.php');
+      if( file_exists($fn) ) {
+	// plugins with the smarty_cms_function
+	require_once($fn);
+	$func = 'smarty_cms_'.$type.'_'.$name;
+	$script = $fn;
+	if( function_exists($func) ) {
+	  $callback = $func;
+	  $cachable = FALSE;
+	  debug_buffer('',"End Load Smarty Plugin $name/$type");
+	  return TRUE;
 	}
+      }
+
+      $row = cms_module_smarty_plugin_manager::load_plugin($name,$type);
+      if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 && 
+	  is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {
+	$cachable = $row['cachable'];
+	$callback = $row['callback'][0].'::'.$row['callback'][1];
+	return TRUE;
+      }
+
+      return FALSE;
+    }
 
 	/**
 	 * Test if a smarty plugin with the specified name already exists.
