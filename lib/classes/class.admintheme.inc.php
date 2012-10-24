@@ -35,11 +35,6 @@
  */
 class AdminTheme extends CmsAdminThemeBase
 {
-	/**
-	 * Title
-	 */
-	protected $title;
-
     /**
      * Subtitle, for use in breadcrumb trails
      */
@@ -531,6 +526,7 @@ class AdminTheme extends CmsAdminThemeBase
      */
     public function DisplayHTMLHeader($showielink = false, $addt = '')
     {
+		$x = $this->breadcrumbs; // dummy function to trigger the navigation being built early.
 		$config = cmsms()->GetConfig();
 		$urlext = CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 		$title = get_site_preference('sitename').' - '.$this->title;
@@ -706,89 +702,76 @@ EOT;
       $cms = cmsms();
       $config = $cms->GetConfig();             
       $header  = '<div class="pageheader">';
-      if (FALSE != $module_help_type)
-		  {
-			  $module = '';
-			  if( isset($_REQUEST['module']) )
-				  {
-					  $module = $_REQUEST['module'];
-				  }
-			  else if( isset($_REQUEST['mact']) )
-				  {
-					  $tmp = explode(',',$_REQUEST['mact']);
-					  $module = $tmp[0];
-				  }
-			  $icon = "modules/{$module}/images/icon.gif";
-			  $path = cms_join_path(cmsms()->config['root_path'],$icon);
-			  if( file_exists($path) )
-				  {
-					  $url = $config->smart_root_url().'/'.$icon;
-					  $header .= "<img src=\"{$url}\" class=\"itemicon\" alt=\"{$icon}\" />&nbsp;";
-				  }
-			  $header .= $title_name;
+      if (FALSE != $module_help_type) {
+		  $module = '';
+		  if( isset($_REQUEST['module']) ) {
+			  $module = $_REQUEST['module'];
 		  }
-      else
-		  {
-			  $header .= lang($title_name, $extra_lang_param);
+		  else if( isset($_REQUEST['mact']) ) {
+			  $tmp = explode(',',$_REQUEST['mact']);
+			  $module = $tmp[0];
 		  }
-      if (count($this->breadcrumbs))
-		  {
-			  $wikiUrl = $config['wiki_url'];
-			  foreach ($this->breadcrumbs AS $key => $value)
-				  {
-					  $title = $value['title'];
-					  // If this is a module and the last part of the breadcrumbs
-					  if (FALSE != $module_help_type && TRUE == empty($this->breadcrumbs[$key + 1]))
-						  {
-							  if (FALSE == empty($_GET['module']))
-								  {
-									  $module_name = $_GET['module'];
-								  }
-							  else
-								  {
-									  $module_name = substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
-								  }
-							  // Turn ModuleName into _Module_Name
-							  $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
-							  $moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
-							  if ($moduleName{0} == '_')
-								  {
-									  $moduleName = substr($moduleName, 1);
-								  }
-							  $wikiUrl .= '/'.$moduleName;
-						  } else {
-						  // Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
-						  $colonLocation = strrchr($title, ':');
-						  if ($colonLocation !== false)
-							  {
-								  $title = substr($title,0,strpos($title,':'));
-							  }
-						  // Get the key of the title so we can use the en_US version for the URL
-						  $title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
-						  $wikiUrl .= '/'.lang($title_key[0]);
-					  }
+		  $icon = "modules/{$module}/images/icon.gif";
+		  $path = cms_join_path(cmsms()->config['root_path'],$icon);
+		  if( file_exists($path) ) {
+			  $url = $config->smart_root_url().'/'.$icon;
+			  $header .= "<img src=\"{$url}\" class=\"itemicon\" alt=\"{$icon}\" />&nbsp;";
+		  }
+		  $header .= $title_name;
+	  }
+      else {
+		  $header .= lang($title_name, $extra_lang_param);
+	  }
+      if (count($this->breadcrumbs)) {
+		  $wikiUrl = $config['wiki_url'];
+		  foreach ($this->breadcrumbs AS $key => $value) {
+			  $title = $value['title'];
+			  // If this is a module and the last part of the breadcrumbs
+			  if (FALSE != $module_help_type && TRUE == empty($this->breadcrumbs[$key + 1])) {
+				  if (FALSE == empty($_GET['module'])) {
+					  $module_name = $_GET['module'];
 				  }
-
-			  if (FALSE == get_preference($this->userid, 'hide_help_links', 0)) {
-				  // Clean up URL
-				  $wikiUrl = str_replace(' ', '_', $wikiUrl);
-				  $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
-				  // Make link to go the translated version of page if lang is not en_US
-				  
-				  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-				  $image_help = $this->DisplayImage('icons/system/info.gif', lang('module_help'),'','','systemicon');
-				  //$image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('wikihelp'),'','','systemicon');		
-				  if ('both' == $module_help_type)
-					  {
-						  $module_help_link = $config['admin_url'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
-						  $header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a></span>';
-					  }
-				  // 	    else
-				  // 	      {
-				  // 			  //$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
-				  // 	      }
+				  else {
+					  $module_name = substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
+				  }
+				  // Turn ModuleName into _Module_Name
+				  $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
+				  $moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
+				  if ($moduleName{0} == '_') {
+					  $moduleName = substr($moduleName, 1);
+				  }
+				  $wikiUrl .= '/'.$moduleName;
+			  } else {
+				  // Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
+				  $colonLocation = strrchr($title, ':');
+				  if ($colonLocation !== false) {
+					  $title = substr($title,0,strpos($title,':'));
+				  }
+				  // Get the key of the title so we can use the en_US version for the URL
+				  $title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
+				  $wikiUrl .= '/'.lang($title_key[0]);
 			  }
 		  }
+
+		  if (FALSE == get_preference($this->userid, 'hide_help_links', 0)) {
+			  // Clean up URL
+			  $wikiUrl = str_replace(' ', '_', $wikiUrl);
+			  $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
+			  // Make link to go the translated version of page if lang is not en_US
+				  
+			  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+			  $image_help = $this->DisplayImage('icons/system/info.gif', lang('module_help'),'','','systemicon');
+			  //$image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('wikihelp'),'','','systemicon');		
+			  if ('both' == $module_help_type) {
+				  $module_help_link = $config['admin_url'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
+				  $header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a></span>';
+			  }
+			  // 	    else
+			  // 	      {
+			  // 			  //$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
+			  // 	      }
+		  }
+	  }
 	  $header .= '</div>';
       return $header;     
     }

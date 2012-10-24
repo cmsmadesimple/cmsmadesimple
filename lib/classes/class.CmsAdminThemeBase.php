@@ -784,6 +784,7 @@ abstract class CmsAdminThemeBase
 				if ($menuItem['selected'])
 					{
 						$this->_breadcrumbs[] = array('title'=>$menuItem['title'], 'url'=>$menuItem['url']);
+						$this->title = $menuItem['title'];
 						$count++;
 					}
 			}

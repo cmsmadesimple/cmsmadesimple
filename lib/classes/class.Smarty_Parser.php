@@ -60,8 +60,7 @@ class Smarty_Parser extends Smarty_CMS
 		// Register plugins
 		$this->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
 		$this->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
-		$this->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);			
-		
+		$this->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
 	}
 
 	/**
