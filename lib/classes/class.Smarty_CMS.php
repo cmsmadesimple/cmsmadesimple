@@ -73,6 +73,19 @@ class Smarty_CMS extends SmartyBC
     // register default plugin handler
     $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
 
+    // Load User Defined Tags
+    $utops = cmsms()->GetUserTagOperations();
+    $usertags = $utops->ListUserTags();
+    $caching = false;
+
+    if(get_site_preference('smarty_cacheudt','never') == 'always')
+      $caching = true;
+
+    foreach( $usertags as $id => $name ) {
+      $function = $utops->CreateTagFunction($name);
+      $this->registerPlugin('function',$name,$function,$caching);
+    }
+
     if(cmsms()->is_frontend_request()) {
 		
       $this->setTemplateDir(cms_join_path($config['root_path'],'tmp','templates'));
@@ -84,19 +97,6 @@ class Smarty_CMS extends SmartyBC
       if (is_sitedown()) {
 	$this->setCaching(false);
 	$this->force_compile = true;
-      }
-
-      // Load User Defined Tags
-      $utops = cmsms()->GetUserTagOperations();
-      $usertags = $utops->ListUserTags();
-      $caching = false;
-			
-      if(get_site_preference('smarty_cacheudt','never') == 'always')
-	$caching = true;
-
-      foreach( $usertags as $id => $name ) {
-	$function = $utops->CreateTagFunction($name);
-	$this->registerPlugin('function',$name,$function,$caching);
       }
 
       // Load resources
