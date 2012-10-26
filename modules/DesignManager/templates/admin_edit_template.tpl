@@ -36,7 +36,7 @@ $(document).ready(function(){
         <p class="pagetext"><label for="tpl_dflt">{$mod->Lang('prompt_default')}:</label></p>
         <p class="pageinput">
           <input type="hidden" name="{$actionid}default" value="0"/>
-          <input id="tpl_dflt" type="checkbox" name="{$actionid}default" value="1" {if $template->get_type_dflt()}checked="checked"{/if}/>&nbsp;{admin_icon name='help_template_dflt' icon='info.gif' class='helpicon'}
+          <input id="tpl_dflt" type="checkbox" name="{$actionid}default" value="1" {if $template->get_type_dflt()}checked="checked" disabled="disabled"{/if}/>&nbsp;{admin_icon name='help_template_dflt' icon='info.gif' class='helpicon'}
       </p>
       </div>
     {/if}

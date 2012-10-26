@@ -79,6 +79,7 @@ $template->set_content($txt);
 $template->set_type($page_template_type);
 $template->set_type_dflt(TRUE);
 $template->add_design($design);
+$template->set_owner($admin_user);
 $template->save();
 
 
@@ -87,6 +88,7 @@ $gcb->set_name('footer');
 $gcb->set_type($gcb_template_type);
 $gcb->add_design($design);
 $gcb->set_content('<p>&copy; Copyright {custom_copyright} - CMS Made Simple<br />\r\nThis site is powered by <a href="http://www.cmsmadesimple.org">CMS Made Simple</a> version {cms_version}</p>');
+$gcb->set_owner($admin_user);
 $gcb->save();
 
 

@@ -509,14 +509,14 @@ TPLJS;
 			$searchable = $this->GetPropertyValue('searchable');
 			if( $searchable == '' ) $searchable = 1;
 			return array('<label for="id_searchable">'.lang('searchable').':</label>',
-						 '<div class="hidden"><input type="hidden" name="searchable" value="0"/></div>
+						 '<input type="hidden" name="searchable" value="0"/>
                           <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' /><br/>'.lang('help_page_searchable'));
 
 		case 'disable_wysiwyg':
 			$disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');
 			if( $disable_wysiwyg == '' ) $disable_wysiwyg = 0;
 			return array('<label for="id_disablewysiwyg">'.lang('disable_wysiwyg').':</label>',
-						 '<div class="hidden" ><input type="hidden" name="disable_wysiwyg" value="0" /></div>
+						 '<input type="hidden" name="disable_wysiwyg" value="0" />
              <input id="id_disablewysiwyg" type="checkbox" name="disable_wysiwyg" value="1"  '.($disable_wysiwyg==1?'checked="checked"':'').' onclick="this.form.submit()" />');
 			break;
 

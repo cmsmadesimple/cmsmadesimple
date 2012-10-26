@@ -2,9 +2,38 @@
 {form_start}{strip}
   {assign var='ntemplates' value=count($templates)}
   <div class="pageoptions" style="text-align: right;">
-    <label for="filter">{$mod->Lang('prompt_filter')}:</label>
-    &nbsp;<select id="filter" name="{$actionid}filter">{html_options options=$filter_options selected=$filter}</select>&nbsp;<input type="submit" name="{$actionid}dofilter" value="{$mod->Lang('submit')}"/>
+    <label for="filter_tpl">{$mod->Lang('prompt_filter')}:</label>
+    &nbsp;<select id="filter_tpl" name="{$actionid}filter_tpl">{html_options options=$filter_options selected=$filter.tpl}</select>&nbsp;
+    <label for="filter_limit">{$mod->Lang('prompt_limit')}:</label>
+    &nbsp;<select id="filter_limit" name="{$actionid}filter_limit">
+      <option value="2"{if $filter.limit == 2} selected="selected"{/if}>2</option>
+      <option value="5"{if $filter.limit == 5} selected="selected"{/if}>5</option>
+      <option value="10"{if $filter.limit == 10} selected="selected"{/if}>10</option>
+      <option value="25"{if $filter.limit == 25} selected="selected"{/if}>25</option>
+      <option value="50"{if $filter.limit == 50} selected="selected"{/if}>50</option>
+      <option value="100"{if $filter.limit == 100} selected="selected"{/if}>100</option>
+    </select>
+    <input type="submit" name="{$actionid}dofilter" value="{$mod->Lang('submit')}"/>
   </div>
+  {if isset($tpl_nav)}
+  <div class="pageoptions" style="text-align: right;">
+  {if $tpl_nav.curpage > 1}
+    {cms_action_url action='defaultadmin' tpl_page=1 assign='fp_url'}
+    <a href="{$fp_url}" title="{$mod->Lang('prompt_firstpage')}">&lt;&lt;</a>&nbsp;
+    {cms_action_url action='defaultadmin' tpl_page=$tpl_nav.curpage-1 assign='pp_url'}
+    <a href="{$pp_url}" title="{$mod->Lang('prompt_prevpage')}">&lt;</a>&nbsp;
+    &nbsp;
+  {/if}
+  {$mod->Lang('prompt_page')}&nbsp;{$tpl_nav.curpage}&nbsp;{$mod->Lang('prompt_of')}&nbsp;{$tpl_nav.numpages}
+  {if $tpl_nav.curpage < $tpl_nav.numpages}
+    &nbsp;
+    {cms_action_url action='defaultadmin' tpl_page=$tpl_nav.curpage+1 assign='np_url'}
+    <a href="{$np_url}" title="{$mod->Lang('prompt_nextpage')}">&gt;</a>&nbsp;
+    {cms_action_url action='defaultadmin' tpl_page=$tpl_nav.numpages assign='lp_url'}
+    <a href="{$lp_url}" title="{$mod->Lang('prompt_lastpage')}">&gt;&gt;</a>
+  {/if}
+  </div>
+  {/if}
 
   <table class="pagetable" cellspacing="0">
     <thead>
@@ -97,7 +126,7 @@
   <p class="pageinput" style="text-align: right;">
     <label for="tpl_bulk_action">{$mod->Lang('prompt_with_selected')}:</label>&nbsp;
     <select name="{$actionid}bulk_action" id="tpl_bulk_action" class="tpl_bulk_action">
-      {html_options options=$list_types}
+      <option value="delete" title="{$mod->Lang('title_delete')}">{$mod->lang('prompt_delete')}</option>
     </select>
     <input class="tpl_bulk_action" type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>&nbsp;{admin_icon name="help_bulk" class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}
   </p>

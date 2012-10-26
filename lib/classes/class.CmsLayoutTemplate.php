@@ -495,7 +495,7 @@ class CmsLayoutTemplate
 		return $ob;
 	}
 
-	protected static function load_bulk($list)
+	public static function load_bulk($list)
 	{
 		if( !is_array($list) || count($list) == 0 ) return;
 
@@ -567,89 +567,16 @@ class CmsLayoutTemplate
 			throw new CmsInvalidDataException('Invalid user specified to get_owned_templates');
 		}
     
-		$db = cmsms()->GetDb();
-		$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME.' WHERE owner_id = ?';
-		$tmp = $db->GetCol($query,array($n));
-		if( !is_array($tmp) || count($tmp) == 0 ) return;
-
-		return self::_load_bulk($tmp);
+		$query = CmsLayoutTemplateQuery(array('u'=>$n));
+		$tmp = $query->GetMatchedTemplateIds();
+		return self::load_bulk($tmp);
 	}
 
 	public static function template_query($params)
 	{
-		if( !is_array($params) && is_string($params) ) {
-			$params = array($params);
-		}
+		$query = new CmsLayoutTemplateQuery($params);
+		$out = self::load_bulk($query->GetMatchedTemplateIds());
 
-		$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME;
-		$where = array('type'=>array(),'category'=>array(),'user'=>array(),'design'=>array());
-
-		$limit = 1000;
-		$offset = 0;
-		$db = cmsms()->GetDb();
-		foreach( $params as $key => $val ) {
-			if( empty($val) ) continue;
-			if( is_numeric($key) && $val[1] == ':' ) {
-				list($key,$second) = explode(':',$val,2);
-			}
-			switch( strtolower($key) ) {
-			case 't': // type
-				$second = (int)$second;
-				$where['type'][] = 'type_id = '.$db->qstr($second);
-				break;
-			case 'c': // category
-				$second = (int)$second;
-				$where['category'][] = 'category_id = '.$db->qstr($second);
-				break;
-			case 'd': // design
-				// find all the templates in design: d
-				$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
-               WHERE design_id = ?';
-				$tpls = $db->GetCol($q2,array((int)$second));
-				$where['design'][] = 'id IN ('.implode(',',$tpls).')';
-				break;
-			case 'u': // user
-				$second = (int)$second;
-				$where['user'][] = 'owner_id = '.$db->qstr($second);
-				break;
-			case 'e': // editable
-				$second = (int)$second;
-				$q2 = 'SELECT DISTINCT tpl_id FROM (
-                 SELECT tpl_id FROM '.cms_db_prefix().self::ADDUSERSTABLE.'
-                   WHERE user_id = ? 
-                 UNION
-                 SELECT id AS tpl_id FROM '.cms_db_prefix().self::TABLENAME.'
-                   WHERE owner_id = ?)
-                 AS tmp1';
-				$t2 = $db->GetCol($q2,array($second,$second));
-				if( is_array($t2) && count($t2) ) {
-					$where['user'][] = 'id IN ('.implode(',',$t2).')';
-				}
-				break;
-			case 'limit':
-				$limit = max(1,min(1000,$val));
-				break;
-			case 'offset':
-				$offset = max(0,$val);
-				break;
-			}
-		}
-
-		$tmp = array();
-		foreach( $where as $key => $exprs ) {
-			if( count($exprs) ) {
-				$tmp[] = '('.implode(' OR ',$exprs).')';
-			}
-		}
-		if( count($tmp) ) {
-			$query .= ' WHERE ' . implode(' AND ',$tmp);
-		}
-		$query .= ' ORDER BY name ASC';
-
-		$tmp1 = $db->GetCol($query);
-		if( !is_array($tmp1) || count($tmp1) == 0 ) return;
-
-		$out = self::load_bulk($tmp1);
 		if( isset($params['as_list']) && count($out) ) {
 			$tmp2 = array();
 			foreach( $out as $one ) {

@@ -93,6 +93,7 @@ $template_list = array();
 $gcb = new CmsLayoutTemplate();
 $gcb->set_name('footer');
 $gcb->set_type($gcb_template_type);
+$gcb->set_owner($admin_user);
 $gcb->set_content('<p>&copy; Copyright {custom_copyright} - CMS Made Simple<br />\r\nThis site is powered by <a href="http://www.cmsmadesimple.org">CMS Made Simple</a> version {cms_version}</p>');
 $gcb->save();
 $css_menuleft_1col_theme->add_template($gcb);
@@ -109,6 +110,7 @@ $txt = <<<EOT
 EOT;
 $template = new CmsLayoutTemplate();
 $template->set_name('Minimal');
+$template->set_owner($admin_user);
 $template->set_content($txt);
 $template->set_description('A Simple, minimal page template');
 $template->set_type($page_template_type);
@@ -121,6 +123,7 @@ $txt = <<<EOT
 EOT;
 $template = new CmsLayoutTemplate();
 $template->set_name('CSSMenu left + 1 column'); // id = 15
+$template->set_owner($admin_user);
 $template->set_content($txt);
 $template->set_description('todo: '.__FILE__.' : '.__LINE__);
 $template->set_type($page_template_type);
@@ -133,6 +136,7 @@ $txt = <<<EOT
 EOT;
 $template = new CmsLayoutTemplate();
 $template->set_name('CSSMenu top + 2 columns'); // id = 16
+$template->set_owner($admin_user);
 $template->set_content($txt);
 $template->set_description('todo: '.__FILE__.' : '.__LINE__);
 $template->set_type($page_template_type);
@@ -145,6 +149,7 @@ $txt = <<<EOT
 EOT;
 $template = new CmsLayoutTemplate();
 $template->set_name('Left simple navigation + 1 column'); // id = 17
+$template->set_owner($admin_user);
 $template->set_content($txt);
 $template->set_description('todo: '.__FILE__.' : '.__LINE__);
 $template->set_type($page_template_type);
@@ -157,6 +162,7 @@ $txt = <<<EOT
 EOT;
 $template = new CmsLayoutTemplate();
 $template->set_name('Top simple navigation + left subnavigation + 1 column'); // id = 18
+$template->set_owner($admin_user);
 $template->set_content($txt);
 $template->set_description('todo: '.__FILE__.' : '.__LINE__);
 $template->set_type($page_template_type);
@@ -169,6 +175,7 @@ $txt = <<<EOT
 EOT;
 $template = new CmsLayoutTemplate();
 $template->set_name('ShadowMenu Tab + 2 columns'); // id = 20
+$template->set_owner($admin_user);
 $template->set_content($txt);
 $template->set_description('todo: '.__FILE__.' : '.__LINE__);
 $template->set_type($page_template_type);
@@ -181,6 +188,7 @@ $txt = <<<EOT
 EOT;
 $template = new CmsLayoutTemplate();
 $template->set_name('ShadowMenu left + 1 column'); // id = 21
+$template->set_owner($admin_user);
 $template->set_content($txt);
 $template->set_description('todo: '.__FILE__.' : '.__LINE__);
 $template->set_type($page_template_type);
@@ -193,6 +201,7 @@ $txt = <<<EOT
 EOT;
 $template = new CmsLayoutTemplate();
 $template->set_name('NCleanBlue'); // id = 22
+$template->set_owner($admin_user);
 $template->set_content($txt);
 $template->set_description('todo: e'.__FILE__.' : '.__LINE__);
 $template->set_type($page_template_type);
@@ -206,6 +215,7 @@ $txt = <<<EOT
 EOT;
 $template = new CmsLayoutTemplate();
 $template->set_name('Simplex');
+$template->set_owner($admin_user);
 $template->set_content($txt);
 $template->set_description('todo: '.__FILE__.' : '.__LINE__);
 $template->set_type($page_template_type);
