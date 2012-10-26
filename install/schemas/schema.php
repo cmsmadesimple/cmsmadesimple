@@ -567,6 +567,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
          id   I KEY AUTO,
          name C(50) NOT NULL,
          description X,
+         dflt I1,
          created I,
          modified I
         ";
@@ -577,7 +578,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 
 	$flds = "
-         theme_id I KEY NOT NULL,
+         design_id I KEY NOT NULL,
          tpl_id   I KEY NOT NULL
         ";
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutCollection::TPLTABLE, $flds, $taboptarray);
@@ -585,7 +586,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo ilang('install_creating_table', CmsLayoutCollection::TPLTABLE, $ado_ret);
 
 	$flds = "
-         theme_id I KEY NOT NULL,
+         design_id I KEY NOT NULL,
          css_id   I KEY NOT NULL,
          item_order I NOT NULL
         ";

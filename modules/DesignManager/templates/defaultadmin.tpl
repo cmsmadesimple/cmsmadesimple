@@ -17,17 +17,17 @@ $(document).ready(function(){
 {/if}
 
 {tab_start name='templates'}
-{include file='module_file_tpl:LayoutManager;admin_defaultadmin_templates.tpl' scope='root'}
+{include file='module_file_tpl:DesignManager;admin_defaultadmin_templates.tpl' scope='root'}
 {if $manage_templates}
 {tab_start name='categories'}
-{include file='module_file_tpl:LayoutManager;admin_defaultadmin_categories.tpl' scope='root'}
+{include file='module_file_tpl:DesignManager;admin_defaultadmin_categories.tpl' scope='root'}
 {tab_start name='types'}
-{include file='module_file_tpl:LayoutManager;admin_defaultadmin_types.tpl' scope='root'}
+{include file='module_file_tpl:DesignManager;admin_defaultadmin_types.tpl' scope='root'}
 {/if}
 
 {if $manage_designs}
 {tab_start name='designs'}
-{include file='module_file_tpl:LayoutManager;admin_defaultadmin_designs.tpl' scope='root'}
+{include file='module_file_tpl:DesignManager;admin_defaultadmin_designs.tpl' scope='root'}
 {/if}
 
 {tab_end}

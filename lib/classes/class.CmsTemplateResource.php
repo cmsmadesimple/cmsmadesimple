@@ -67,7 +67,7 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 
   protected function fetch($name,&$source,&$mtime)
   {
-    if( is_sitedown() ) {
+    if( is_sitedown() && cmsms()->is_frontend_request() ) {
       $source = '';
       $mtime = time();
       if( $this->_section == 'body' ) {
@@ -78,7 +78,6 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
       }
       return;
     }
-
     
     if( $name == 'notemplate' ) {
       $source = '{content}';

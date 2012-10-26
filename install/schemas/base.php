@@ -94,7 +94,7 @@ UserOperations::get_instance()->AddMemberGroup($admin_user->id,$admin_group->id)
 //
 // user prefs.
 //
-cms_userprefs::set_for_user($admin_user->id,'use_wysiwyg','MicroTiny');
+cms_userprefs::set_for_user($admin_user->id,'wysiwyg','MicroTiny');
 
 //
 // User Tags

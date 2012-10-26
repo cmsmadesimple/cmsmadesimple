@@ -34,7 +34,7 @@ class Smarty_Parser extends Smarty_CMS
 	public $id; // <- triggers error without | do search why this is needed
 	public $params; // <- triggers error without | do search why this is needed
 	private static $_instance;
-	private static $_allowed_static_plugins = array('global_content');
+	private static $_allowed_static_plugins = array('global_content','cms_lang_info');
 
 	/**
 	* Constructor
@@ -54,13 +54,12 @@ class Smarty_Parser extends Smarty_CMS
 		$this->compile_id = 'parser' . time();
 
 		// register default plugin handler
-		$this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));		
+		//$this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));		
 		
 		// Register plugins
 		$this->registerPlugin('compiler','content',array('CMS_Content_Block','smarty_compiler_contentblock'),false);
 		$this->registerPlugin('compiler','content_image',array('CMS_Content_Block','smarty_compiler_imageblock'),false);
-		$this->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);			
-		
+		$this->registerPlugin('compiler','content_module',array('CMS_Content_Block','smarty_compiler_moduleblock'),false);
 	}
 
 	/**
@@ -98,7 +97,6 @@ class Smarty_Parser extends Smarty_CMS
     public function defaultPluginHandler($name, $type, $template, &$callback, &$script, &$cachable)
     {
 		if($type == 'compiler') {
-		
 			$callback = array(__CLASS__,'_dflt_plugin');
 			$cachable = false;
 			return TRUE;

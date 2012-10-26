@@ -69,17 +69,27 @@ $(document).ready(function(){
 </script>
 
 {function submit_buttons}
-<input type="submit" name="submitbutton" value="{lang('submit')}" class="pagebutton" title="{lang('submitdescription')}"/>
-<input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton" title="{lang('canceldescription')}"/>
-<input type="submit" name="apply" value="{lang('apply')}" class="pagebutton" title="{lang('applydescription')}"/>
-{if $content_obj->IsViewable() && $content_obj->Active()}
-  <a rel="external" href="{$content_obj->GetURL()}">{admin_icon icon='view.gif' alt='view_page'|lang}</a>
-{/if}
+<p class="pagetext"></p>
+<p class="pageinput">
+  <input type="submit" name="submitbutton" value="{lang('submit')}" class="pagebutton" title="{lang('submitdescription')}"/>
+  <input type="submit" name="cancel" value="{lang('cancel')}" class="pagebutton" title="{lang('canceldescription')}"/>
+  {if $content_id != ''}
+    <input type="submit" name="apply" value="{lang('apply')}" class="pagebutton" title="{lang('applydescription')}"/>
+  {/if}
+  {if $content_obj->IsViewable() && $content_obj->Active()}
+    <a rel="external" href="{$content_obj->GetURL()}">{admin_icon icon='view.gif' alt='view_page'|lang}</a>
+  {/if}
+</p>
 {/function}
 
 <div class="pagecontainer">
-<h3>{lang('editcontent')}</h3>
-<h4>{$content_obj->Name()}</h4>
+  <div class="pageheader">
+  {if $content_id != ''}
+    {lang('editcontent')}
+  {else}
+    {lang('addcontent')}
+  {/if}
+  </div>
 
 <div id="Edit_Content_Result"></div>
 <div id="Edit_Content">

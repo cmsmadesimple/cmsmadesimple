@@ -23,6 +23,7 @@ $minimal_theme->save();
 $simplex_theme = new CmsLayoutCollection();
 $simplex_theme->set_name('Simplex');
 $simplex_theme->set_description('todo: '.__FILE__.' : '.__LINE__);
+$simplex_theme->set_default(TRUE);
 $simplex_theme->save();
 
 $css_menuleft_1col_theme = new CmsLayoutCollection();
@@ -208,6 +209,7 @@ $template->set_name('Simplex');
 $template->set_content($txt);
 $template->set_description('todo: '.__FILE__.' : '.__LINE__);
 $template->set_type($page_template_type);
+$template->set_type_dflt(TRUE);
 $template->save();
 $simplex_theme->add_template($template);
 $template_list[$template->get_name()] = $template->get_id();

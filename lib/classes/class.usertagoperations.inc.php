@@ -63,16 +63,13 @@ final class UserTagOperations
 	 */
 	public function LoadUserTags()
 	{
-		if( count($this->_cache) == 0 )
-		{
+		if( count($this->_cache) == 0 ) {
 			$db = cmsms()->GetDb();
-				
+
 			$query = 'SELECT * FROM '.cms_db_prefix().'userplugins'.' ORDER BY userplugin_name';
 			$data = $db->GetArray($query);
-			if( is_array($data) )
-			{
-				foreach( $data as $row )
-				{
+			if( is_array($data) ) {
+				foreach( $data as $row ) {
 					$this->_cache[$row['userplugin_name']] = $row;
 				}
 			}

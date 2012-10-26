@@ -35,7 +35,7 @@ class CmsLayoutTemplate
 	private $_dirty;
 	private $_data = array();
 	private $_addt_editors;
-	private $_theme_assoc;
+	private $_design_assoc;
 	private static $_obj_cache;
 	private static $_name_cache;
 
@@ -143,32 +143,32 @@ class CmsLayoutTemplate
 		$this->_dirty = TRUE;
 	}
 
-	public function get_themes()
+	public function get_designs()
 	{
 		if( !$this->get_id() ) return;
-		if( is_null($this->_theme_assoc) ) {
-			$this->_theme_assoc = null;
+		if( is_null($this->_design_assoc) ) {
+			$this->_design_assoc = null;
 			$db = cmsms()->GetDb();
-			$query = 'SELECt theme_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
+			$query = 'SELECt design_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
                 WHERE tpl_id = ?';
 			$tmp = $db->GetCol($query,array($this->get_id()));
 			if( is_array($tmp) && count($tmp) ) {
-				$this->_theme_assoc = $tmp;
+				$this->_design_assoc = $tmp;
 			}
 		}
-		return $this->_theme_assoc;
+		return $this->_design_assoc;
 	}
 
-	public function set_themes($x)
+	public function set_designs($x)
 	{
 		if( !is_array($x) ) return;
 
 		foreach( $x as $y ) {
 			if( !is_numeric($y) )
-				throw new CmsInvalidDatException('Invalid data in theme list.  Expect array of integers');
+				throw new CmsInvalidDatException('Invalid data in design list.  Expect array of integers');
 		}
 
-		$this->_theme_assoc = $x;
+		$this->_design_assoc = $x;
 	}
 
 	public function add_design($a) 
@@ -181,20 +181,20 @@ class CmsLayoutTemplate
 			$n = $a;
 		}
 		else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
-			$theme = CmsLayoutCollection::load($a);
-			$n = $theme->get_id();
+			$design = CmsLayoutCollection::load($a);
+			$n = $design->get_id();
 		}
 
-		if( !is_array($this->_theme_assoc) ) {
-			$this->_theme_assoc = array();
+		if( !is_array($this->_design_assoc) ) {
+			$this->_design_assoc = array();
 		}
-		$this->_theme_assoc[] = $n;
+		$this->_design_assoc[] = $n;
 		$this->_dirty = TRUE;
 	}
 
-	public function remove_theme($a)
+	public function remove_design($a)
 	{
-		if( !is_array($this->_theme_assoc) || count($this->_theme_assoc) == 0 ) return;
+		if( !is_array($this->_design_assoc) || count($this->_design_assoc) == 0 ) return;
 
 		$n = null;
 		if( is_object($a) && is_a($a,'CmsLayoutCollection') ) {
@@ -204,17 +204,17 @@ class CmsLayoutTemplate
 			$n = $a;
 		}
 		else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
-			$theme = CmsLayoutCollection::load($a);
-			$n = $theme->get_id();
+			$design = CmsLayoutCollection::load($a);
+			$n = $design->get_id();
 		}
 
-		if( in_array($n,$this->_theme_assoc) ) {
+		if( in_array($n,$this->_design_assoc) ) {
 			$t = array();
-			foreach( $this->_theme_assoc as $one ) {
+			foreach( $this->_design_assoc as $one ) {
 				if( $n == $one ) continue;
 				$t[] = $one;
 			}
-			$this->_theme_assoc = $t;
+			$this->_design_assoc = $t;
 			$this->_dirty = TRUE;
 		}
 	}
@@ -410,9 +410,9 @@ class CmsLayoutTemplate
 		if( !$dbr ) {
 			throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 		}
-		$t = $this->get_themes();
+		$t = $this->get_designs();
 		if( is_array($t) && count($t) ) {
-			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' (tpl_id,theme_id)
+			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' (tpl_id,design_id)
                 VALUES(?,?)';
 			foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
@@ -461,10 +461,10 @@ class CmsLayoutTemplate
 			}
 		}
 
-		$t = $this->get_themes();
+		$t = $this->get_designs();
 		if( is_array($t) && count($t) ) {
 			$query = 'INSERT INTO '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.' 
-                (tpl_id,theme_id)
+                (tpl_id,design_id)
                 VALUES(?,?)';
 			foreach( $t as $one ) {
 				$dbr = $db->Execute($query,array($this->get_id(),(int)$one));
@@ -582,7 +582,7 @@ class CmsLayoutTemplate
 		}
 
 		$query = 'SELECT id FROM '.cms_db_prefix().self::TABLENAME;
-		$where = array('type'=>array(),'category'=>array(),'user'=>array(),'theme'=>array());
+		$where = array('type'=>array(),'category'=>array(),'user'=>array(),'design'=>array());
 
 		$limit = 1000;
 		$offset = 0;
@@ -601,12 +601,12 @@ class CmsLayoutTemplate
 				$second = (int)$second;
 				$where['category'][] = 'category_id = '.$db->qstr($second);
 				break;
-			case 'h': // theme
-				// find all the templates in theme h
+			case 'd': // design
+				// find all the templates in design: d
 				$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
-               WHERE theme_id = ?';
+               WHERE design_id = ?';
 				$tpls = $db->GetCol($q2,array((int)$second));
-				$where['theme'][] = 'id IN ('.implode(',',$tpls).')';
+				$where['design'][] = 'id IN ('.implode(',',$tpls).')';
 				break;
 			case 'u': // user
 				$second = (int)$second;
@@ -758,13 +758,13 @@ class CmsLayoutTemplate
 
 		$db = cmsms()->GetDb();
 		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
-                  WHERE type_id = ? AND type_dflt = ?';
+              WHERE type_id = ? AND type_dflt = ?';
 		$tmp = $db->GetRow($query,array($t2->get_id(),1));
-		if( !is_array($tmp) ) {
-			throw new CmsDataNotFoundException('Could not find row identified by '.$val);
+		if( !is_array($tmp) || count($tmp) == 0 ) {
+			throw new CmsDataNotFoundException('Could not find CmsLayoutTemplate row identified by '.$t);
 		}
 
-		return self::_load_from_data($row);
+		return self::_load_from_data($tmp);
 	}
 
 	public static function process_by_name($name)

@@ -38,6 +38,7 @@ $css_list[] = $css;
 $design = new CmsLayoutCollection();
 $design->set_name('NCleanBlue');
 $design->set_description('NCleanBlue design originally created by Nuno Costa');
+$design->set_default(TRUE);
 $design->save();
 foreach( $css_list as $one ) {
   $design->add_stylesheet($one);

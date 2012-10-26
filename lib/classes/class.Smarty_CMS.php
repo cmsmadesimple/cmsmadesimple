@@ -74,16 +74,18 @@ class Smarty_CMS extends SmartyBC
     $this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
 
     // Load User Defined Tags
-    $utops = cmsms()->GetUserTagOperations();
-    $usertags = $utops->ListUserTags();
-    $caching = false;
+    if( !cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
+      $utops = cmsms()->GetUserTagOperations();
+      $usertags = $utops->ListUserTags();
+      $caching = false;
 
-    if(get_site_preference('smarty_cacheudt','never') == 'always')
-      $caching = true;
+      if(get_site_preference('smarty_cacheudt','never') == 'always')
+	$caching = true;
 
-    foreach( $usertags as $id => $name ) {
-      $function = $utops->CreateTagFunction($name);
-      $this->registerPlugin('function',$name,$function,$caching);
+      foreach( $usertags as $id => $name ) {
+	$function = $utops->CreateTagFunction($name);
+	$this->registerPlugin('function',$name,$function,$caching);
+      }
     }
 
     if(cmsms()->is_frontend_request()) {

@@ -270,9 +270,9 @@ abstract class ContentBase
   private $_add_mode;
   private $_error;
 
-  /*************************/
-  /* Constructor related  */
-  /*************************/
+  /************************************************************************/
+  /* Constructor related													*/
+  /************************************************************************/
 
   /**
    * Generic constructor. Runs the SetInitialValues fuction.
@@ -993,32 +993,39 @@ abstract class ContentBase
       $config = $gCms->GetConfig();
 
       $tolower = false;
-      if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true) {
-	$alias = trim($this->mMenuText);
-	if ($alias == '') {
-	  $alias = trim($this->mName);
-	}
-			
-	$tolower = true;
-	$alias = munge_string_to_url($alias, $tolower);
-	// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
-	$contentops = $gCms->GetContentOperations();
-	$error = $contentops->CheckAliasError($alias, $this->Id());
-	if ($error !== FALSE) {
-	  if (FALSE == empty($alias)) {
-	    $alias_num_add = 2;
-	    // If a '-2' version of the alias already exists
-	    // Check the '-3' version etc.
-	    while ($contentops->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE) {
-	      $alias_num_add++;
+
+      if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true)
+	{
+	  $alias = trim($this->mMenuText);
+	  if ($alias == '')
+	    {
+	      $alias = trim($this->mName);
 	    }
-	    $alias .= '-'.$alias_num_add;
-	  }
-	  else {
-	    $alias = '';
-	  }
+			
+	  $tolower = true;
+	  $alias = munge_string_to_url($alias, $tolower);
+	  // Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
+	  $contentops = $gCms->GetContentOperations();
+	  $error = $contentops->CheckAliasError($alias, $this->Id());
+	  if ($error !== FALSE)
+	    {
+	      if (FALSE == empty($alias))
+		{
+		  $alias_num_add = 2;
+		  // If a '-2' version of the alias already exists
+		  // Check the '-3' version etc.
+		  while ($contentops->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE)
+		    {
+		      $alias_num_add++;
+		    }
+		  $alias .= '-'.$alias_num_add;
+		}
+	      else
+		{
+		  $alias = '';
+		}
+	    }
 	}
-      }
 
       $this->mAlias = munge_string_to_url($alias, $tolower);
     } 
@@ -1054,9 +1061,10 @@ abstract class ContentBase
     {
       $hm = cmsms()->GetHierarchyManager();
       $node = $hm->getNodeById($this->mId);
-      if( $node ) {
-	return $node->count_children();
-      }
+      if( $node )
+	{
+	  return $node->count_children();
+	}
     }
 
     /**
@@ -1109,11 +1117,12 @@ abstract class ContentBase
       $db = cmsms()->GetDb();
       $query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
       $dbr = $db->Execute($query,array($this->mId));
-      while( $dbr && !$dbr->EOF ) {
-	$row = $dbr->fields;
-	$this->_props[$row['prop_name']] = $row['content'];
-	$dbr->MoveNext();
-      }
+      while( $dbr && !$dbr->EOF )
+	{
+	  $row = $dbr->fields;
+	  $this->_props[$row['prop_name']] = $row['content'];
+	  $dbr->MoveNext();
+	}
       return TRUE;
     }
 
@@ -1121,27 +1130,30 @@ abstract class ContentBase
     {
       if( $this->mId <= 0 ) return FALSE;
       if( !is_array($this->_props) || count($this->_props) == 0 ) return FALSE;
-
+	    
       $db = cmsms()->GetDb();
       $query = 'SELECT prop_name FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
       $gotprops = $db->GetCol($query,array($this->mId));
 
       $now = $db->DbTimeStamp(time());
       $iquery = 'INSERT INTO '.cms_db_prefix()."content_props
-                 (content_id,type,prop_name,content,modified_date)
-                 VALUES (?,?,?,?,$now)";
+                    (content_id,type,prop_name,content,modified_date)
+                    VALUES (?,?,?,?,$now)";
       $uquery = 'UPDATE '.cms_db_prefix()."content_props SET content = ?, modified_date = $now WHERE content_id = ? AND prop_name = ?";
-
-      foreach( $this->_props as $key => $value ) {
-	if( in_array($key,$gotprops) ) {
-	  // update
-	  $dbr = $db->Execute($uquery,array($value,$this->mId,$key));
+	  
+      foreach( $this->_props as $key => $value )
+	{
+	  if( in_array($key,$gotprops) )
+	    {
+	      // update
+	      $dbr = $db->Execute($uquery,array($value,$this->mId,$key));
+	    }
+	  else
+	    {
+	      // insert
+	      $dbr = $db->Execute($iquery,array($this->mId,'string',$key,$value));
+	    }
 	}
-	else {
-	  // insert
-	  $dbr = $db->Execute($iquery,array($this->mId,'string',$key,$value));
-	}
-      }
       return TRUE;
     }
 
@@ -1221,9 +1233,9 @@ abstract class ContentBase
       return FALSE;
     }
 
-    /************/
-    /* The rest	*/
-    /************/
+    /************************************************************************/
+    /* The rest																*/
+    /************************************************************************/
 
     /**
      * This is a callback function to handle any things that might need to be done before the content page is edited.
@@ -1243,10 +1255,11 @@ abstract class ContentBase
      */
     protected function DoReadyForEdit()
     {
-      if ($this->mReadyForEdit == false) {
-	$this->ReadyForEdit();
-	$this->mReadyForEdit = true;
-      }
+      if ($this->mReadyForEdit == false)
+	{
+	  $this->ReadyForEdit();
+	  $this->mReadyForEdit = true;
+	}
     }
     
     /**
@@ -1262,61 +1275,96 @@ abstract class ContentBase
     public function LoadFromId($id, $loadProperties = false)
     {
       $gCms = cmsms();
+      global $debug_errors;
       $db = $gCms->GetDb();
       $config = $gCms->GetConfig();
+	  
       $result = false;
 
-      if (-1 < $id) {
-	$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	$row = $db->Execute($query, array($id));
+      if (-1 < $id)
+	{
+	  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+	  $row = $db->Execute($query, array($id));
 
-	if ($row && !$row->EOF) {
-	  $this->mId                         = $row->fields["content_id"];
-	  $this->mName                       = $row->fields["content_name"];
-	  $this->mAlias                      = $row->fields["content_alias"];
-	  $this->mOldAlias                   = $row->fields["content_alias"];
-	  $this->mType                       = strtolower($row->fields["type"]);
-	  $this->mOwner                      = $row->fields["owner_id"];
-	  $this->mParentId                   = $row->fields["parent_id"];
-	  $this->mOldParentId                = $row->fields["parent_id"];
-	  $this->mTemplateId                 = $row->fields["template_id"];
-	  $this->mItemOrder                  = $row->fields["item_order"];
-	  $this->mOldItemOrder               = $row->fields["item_order"];
-	  $this->mMetadata                   = $row->fields['metadata'];
-	  $this->mHierarchy                  = $row->fields["hierarchy"];
-	  $this->mIdHierarchy                = $row->fields["id_hierarchy"];
-	  $this->mHierarchyPath              = $row->fields["hierarchy_path"];
-	  $this->mMenuText                   = $row->fields['menu_text'];
-	  $this->mMarkup                     = $row->fields['markup'];
-	  $this->mTitleAttribute             = $row->fields['titleattribute'];
-	  $this->mAccessKey                  = $row->fields['accesskey'];
-	  $this->mTabIndex                   = $row->fields['tabindex'];
-	  $this->mActive                     = ($row->fields["active"] == 1          ? true : false);
-	  $this->mDefaultContent             = ($row->fields["default_content"] == 1 ? true : false);
-	  $this->mShowInMenu                 = ($row->fields["show_in_menu"] == 1    ? true : false);
-	  $this->mCachable                   = ($row->fields["cachable"] == 1        ? true : false);
-	  $this->mSecure                     = $row->fields['secure'];
-	  $this->mURL                        = $row->fields['page_url'];
-	  $this->mLastModifiedBy             = $row->fields["last_modified_by"];
-	  $this->mCreationDate               = $row->fields["create_date"];
-	  $this->mModifiedDate               = $row->fields["modified_date"];
+	  if ($row && !$row->EOF)
+	    {
+	      $this->mId                         = $row->fields["content_id"];
+	      $this->mName                       = $row->fields["content_name"];
+	      $this->mAlias                      = $row->fields["content_alias"];
+	      $this->mOldAlias                   = $row->fields["content_alias"];
+	      $this->mType                       = strtolower($row->fields["type"]);
+	      $this->mOwner                      = $row->fields["owner_id"];
+	      $this->mParentId                   = $row->fields["parent_id"];
+	      $this->mOldParentId                = $row->fields["parent_id"];
+	      $this->mTemplateId                 = $row->fields["template_id"];
+	      $this->mItemOrder                  = $row->fields["item_order"];
+	      $this->mOldItemOrder               = $row->fields["item_order"];
+	      $this->mMetadata                   = $row->fields['metadata'];
+	      $this->mHierarchy                  = $row->fields["hierarchy"];
+	      $this->mIdHierarchy                = $row->fields["id_hierarchy"];
+	      $this->mHierarchyPath              = $row->fields["hierarchy_path"];
+	      $this->mMenuText                   = $row->fields['menu_text'];
+	      $this->mMarkup                     = $row->fields['markup'];
+	      $this->mTitleAttribute             = $row->fields['titleattribute'];
+	      $this->mAccessKey                  = $row->fields['accesskey'];
+	      $this->mTabIndex                   = $row->fields['tabindex'];
+	      $this->mActive                     = ($row->fields["active"] == 1          ? true : false);
+	      $this->mDefaultContent             = ($row->fields["default_content"] == 1 ? true : false);
+	      $this->mShowInMenu                 = ($row->fields["show_in_menu"] == 1    ? true : false);
+	      $this->mCachable                   = ($row->fields["cachable"] == 1        ? true : false);
+	      $this->mSecure                     = $row->fields['secure'];
+	      $this->mURL                        = $row->fields['page_url'];
+	      $this->mLastModifiedBy             = $row->fields["last_modified_by"];
+	      $this->mCreationDate               = $row->fields["create_date"];
+	      $this->mModifiedDate               = $row->fields["modified_date"];
 
-	  $result = true;
+	      $result = true;
+	    }
+	  else
+	    {
+	      if (true == $config["debug"])
+		{
+		  # :TODO: Translate the error message
+		  $debug_errors .= "<p>Could not retrieve content from db</p>\n";
+		}
+	    }
+
+	  if ($row) $row->Close();
+
+	  if ($result && $loadProperties)
+	    {
+	      if( !is_array($this->_props) ) $this->_load_properties();
+
+	      if (!is_array($this->_props) )
+		{
+		  $result = false;
+			      
+		  // debug mode
+		  if (true == $config["debug"])
+		    {
+		      # :TODO: Translate the error message
+		      $debug_errors .= "<p>Could not load properties for content</p>\n";
+		    }
+		}
+	    }
+
+	  if (false == $result)
+	    {
+	      $this->SetInitialValues();
+	    }
 	}
-	if ($row) $row->Close();
-
-	if ($result && $loadProperties) {
-	  if( !is_array($this->_props) ) $this->_load_properties();
-	  if (!is_array($this->_props) ) {
-	    $result = false;
-	  }
+      else
+	{
+	  // debug mode
+	  if ($config["debug"] == true)
+	    {
+	      # :TODO: Translate the error message
+	      $debug_errors .= "<p>The id wasn't valid : $id</p>\n";
+	    }
 	}
 
-	if (false == $result) {
-	  $this->SetInitialValues();
-	}
-      }
       $this->Load();
+
       return $result;
     }
 
@@ -1365,19 +1413,33 @@ abstract class ContentBase
       $this->mCreationDate               = $data["create_date"];
       $this->mModifiedDate               = $data["modified_date"];
 
-      if ($loadProperties == true) {
-	$this->_load_properties();
+      if ($loadProperties == true)
+	{
+	  $this->_load_properties();
 
-	if (!is_array($this->_props) ) {
-	  $result = false;
+	  if (!is_array($this->_props) )
+	    {
+	      $result = false;
+		      
+	      global $debug_errors;
+	      $gCms = cmsms();
+	      $config = $gCms->GetConfig();
+	      // debug mode
+	      if (true == $config["debug"])
+		{
+		  # :TODO: Translate the error message
+		  $debug_errors .= "<p>Could not load properties for content</p>\n";
+		}
+	    }
 	}
-      }
 
-      if (false == $result) {
-	$this->SetInitialValues();
-      }
+      if (false == $result)
+	{
+	  $this->SetInitialValues();
+	}
 
       $this->Load();
+
       return $result;
     }
 
@@ -1399,28 +1461,22 @@ abstract class ContentBase
     {
       Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
 
-      global $CMS_INSTALL_PAGE;
-      if( !isset($CMS_INSTALL_PAGE) ) {
-	$res = $this->ValidateData();
-	if( is_array($res) && count($res) ) {
-	  die('todo: validation error on save');
+      if( !is_array($this->_props) )
+	{
+	  debug_buffer('save is loading properties');
+	  $this->_load_properties();
 	}
-      }
 
-      if( !is_array($this->_props) ) {
-	debug_buffer('save is loading properties');
-	$this->_load_properties();
-      }
-
-      if (-1 < $this->mId) {
-	$this->Update();
-      }
-      else {
-	$this->Insert();
-      }
+      if (-1 < $this->mId)
+	{
+	  $this->Update();
+	}
+      else
+	{
+	  $this->Insert();
+	}
 
       Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
-      return TRUE;
     }
 
     /**
@@ -1436,84 +1492,111 @@ abstract class ContentBase
     protected function Update()
     {
       $gCms = cmsms();
+      global $debug_errors;
       $db = $gCms->GetDb();
       $config = $gCms->GetConfig();
+
       $result = false;
 
-      // Figure out the item_order (if necessary)
-      if ($this->mItemOrder < 1) {
-	$query = "SELECT ".$db->IfNull('max(item_order)','0')." as new_order 
-                  FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-	$row = $db->GetRow($query,array($this->mParentId));
+#Figure out the item_order (if necessary)
+      if ($this->mItemOrder < 1)
+	{
+	  $query = "SELECT ".$db->IfNull('max(item_order)','0')." as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+	  $row = $db->GetRow($query,array($this->mParentId));
 
-	if ($row) {
-	  if ($row['new_order'] < 1) {
-	    $this->mItemOrder = 1;
-	  }
-	  else {
-	    $this->mItemOrder = $row['new_order'] + 1;
-	  }
+	  if ($row)
+	    {
+	      if ($row['new_order'] < 1)
+		{
+		  $this->mItemOrder = 1;
+		}
+	      else
+		{
+		  $this->mItemOrder = $row['new_order'] + 1;
+		}
+	    }
 	}
-      }
 
       $this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
 
       $query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, secure = ?, page_url = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
-      $dbresult = $db->Execute($query, 
-			       array($this->mName,
-				     $this->mOwner,
-				     strtolower($this->mType),
-				     $this->mTemplateId,
-				     $this->mParentId,
-				     ($this->mActive == true         ? 1 : 0),
-				     ($this->mDefaultContent == true ? 1 : 0),
-				     ($this->mShowInMenu == true     ? 1 : 0),
-				     ($this->mCachable == true       ? 1 : 0),
-				     $this->mSecure,
-				     $this->mURL,
-				     $this->mMenuText,
-				     $this->mAlias,
-				     $this->mMetadata,
-				     $this->mTitleAttribute,
-				     $this->mAccessKey,
-				     $this->mTabIndex,
-				     $this->mModifiedDate,
-				     $this->mItemOrder,
-				     $this->mMarkup,
-				     $this->mLastModifiedBy,
-				     $this->mId
-				     ));
+      $dbresult = $db->Execute($query, array(
+					     $this->mName,
+					     $this->mOwner,
+					     strtolower($this->mType),
+					     $this->mTemplateId,
+					     $this->mParentId,
+					     ($this->mActive == true         ? 1 : 0),
+					     ($this->mDefaultContent == true ? 1 : 0),
+					     ($this->mShowInMenu == true     ? 1 : 0),
+					     ($this->mCachable == true       ? 1 : 0),
+					     $this->mSecure,
+					     $this->mURL,
+					     $this->mMenuText,
+					     $this->mAlias,
+					     $this->mMetadata,
+					     $this->mTitleAttribute,
+					     $this->mAccessKey,
+					     $this->mTabIndex,
+					     $this->mModifiedDate,
+					     $this->mItemOrder,
+					     $this->mMarkup,
+					     $this->mLastModifiedBy,
+					     $this->mId
+					     ));
 
-      if ($this->mOldParentId != $this->mParentId) {
-	// Fix the item_order if necessary
-	$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-	$result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
-
-	$this->mOldParentId = $this->mParentId;
-	$this->mOldItemOrder = $this->mItemOrder;
-      }
-
-      if (isset($this->mAdditionalEditors)) {
-	$query = "DELETE FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
-	$db->Execute($query, array($this->Id()));
-
-	foreach ($this->mAdditionalEditors as $oneeditor) {
-	  $new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
-	  $query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
-	  $db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
+      if (!$dbresult)
+	{
+	  if (true == $config["debug"])
+	    {
+	      # :TODO: Translate the error message
+	      $debug_errors .= "<p>Error updating content</p>\n";
+	    }
 	}
-      }
 
-      if( is_array($this->_props) && count($this->_props) ) {
-	// :TODO: There might be some error checking there
-	$this->_save_properties();
-      }
+      if ($this->mOldParentId != $this->mParentId)
+	{
+#Fix the item_order if necessary
+	  $query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+	  $result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
+
+	  $this->mOldParentId = $this->mParentId;
+	  $this->mOldItemOrder = $this->mItemOrder;
+	}
+
+      if (isset($this->mAdditionalEditors))
+	{
+	  $query = "DELETE FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
+	  $db->Execute($query, array($this->Id()));
+
+	  foreach ($this->mAdditionalEditors as $oneeditor)
+	    {
+	      $new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
+	      $query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
+	      $db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
+	    }
+	}
+
+      if( is_array($this->_props) && count($this->_props) )
+	{
+	  // :TODO: There might be some error checking there
+	  $this->_save_properties();
+	}
+      else
+	{
+	  if (true == $config["debug"])
+	    {
+	      # :TODO: Translate the error message
+	      $debug_errors .= "<p>Error updating : the content has no properties</p>\n";
+	    }
+	}
 
       cms_route_manager::del_static('','__CONTENT__',$this->mId);
-      if( $this->mURL != '' ) {
-	$route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,null,TRUE);;
-	cms_route_manager::add_static($route);
-      }
+      if( $this->mURL != '' )
+	{
+	  $route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,null,TRUE);;
+	  cms_route_manager::add_static($route);
+	}
     }
 
     /**
@@ -1527,25 +1610,30 @@ abstract class ContentBase
     protected function Insert()
     {
       $gCms = cmsms();
+      global $debug_errors;
       $db = $gCms->GetDb();
       $config = $gCms->GetConfig();
+
       $result = false;
 
-      // Figure out the item_order
-      if ($this->mItemOrder < 1) {
-	$query = "SELECT max(item_order) as new_order
-                  FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-	$row = $db->Getrow($query, array($this->mParentId));
+#Figure out the item_order
+      if ($this->mItemOrder < 1)
+	{
+	  $query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+	  $row = $db->Getrow($query, array($this->mParentId));
 
-	if ($row) {
-	  if ($row['new_order'] < 1) {
-	    $this->mItemOrder = 1;
-	  }
-	  else {
-	    $this->mItemOrder = $row['new_order'] + 1;
-	  }
+	  if ($row)
+	    {
+	      if ($row['new_order'] < 1)
+		{
+		  $this->mItemOrder = 1;
+		}
+	      else
+		{
+		  $this->mItemOrder = $row['new_order'] + 1;
+		}
+	    }
 	}
-      }
 
       $newid = $db->GenID(cms_db_prefix()."content_seq");
       $this->mId = $newid;
@@ -1582,31 +1670,49 @@ abstract class ContentBase
 					     $this->mCreationDate
 					     ));
 
-      if (! $dbresult) {
-	die($db->sql.'<br/>'.$db->ErrorMsg());
-      }
-
-      if (is_array($this->_props) && count($this->_props)) {
-	// :TODO: There might be some error checking there
-	debug_buffer('save from ' . __LINE__);
-	$this->_save_properties();
-      }
-      if (isset($this->mAdditionalEditors)) {
-	foreach ($this->mAdditionalEditors as $oneeditor) {
-	  $new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
-	  $query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
-	  $db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
+      if (! $dbresult)
+	{
+	  die($db->sql.'<br/>'.$db->ErrorMsg());
+	  if ($config["debug"] == true)
+	    {
+	      # :TODO: Translate the error message
+	      $debug_errors .= "<p>Error inserting content</p>\n";
+	    }
 	}
-      }
 
-      if( $this->mURL != '' ) {
-	$route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,'',TRUE);
-	cms_route_manager::add_static($route);
-      }
+      if (is_array($this->_props) && count($this->_props))
+	{
+	  // :TODO: There might be some error checking there
+	  debug_buffer('save from ' . __LINE__);
+	  $this->_save_properties();
+	}
+      else
+	{
+	  if (true == $config["debug"])
+	    {
+	      # :TODO: Translate the error message
+	      $debug_errors .= "<p>Error inserting : the content has no properties</p>\n";
+	    }
+	}
+      if (isset($this->mAdditionalEditors))
+	{
+	  foreach ($this->mAdditionalEditors as $oneeditor)
+	    {
+	      $new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
+	      $query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
+	      $db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
+	    }
+	}
+
+      if( $this->mURL != '' )
+	{
+	  $route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,'',TRUE);
+	  cms_route_manager::add_static($route);
+	}
     }
 
     /**
-     * Test if the current state of the object is valid, and suitable for saving.
+     * Test if the array given contains valid data for the object
      * This function is used to check that no compulsory argument
      * has been forgotten by the user
      *
@@ -1643,10 +1749,9 @@ abstract class ContentBase
 	  $result = false;
 	}
       }
-
+		
       if (!$this->HandlesAlias()) {
-	if ($this->mAlias != $this->mOldAlias || 
-	    ($this->mAlias == '' && $this->RequiresAlias()) ) {
+	if ($this->mAlias != $this->mOldAlias || ($this->mAlias == '' && $this->RequiresAlias()) ) {
 	  $gCms = cmsms();
 	  $contentops = $gCms->GetContentOperations();
 	  $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
@@ -1698,8 +1803,10 @@ abstract class ContentBase
 	  }
 	}
       }
-      if( $this->mURL == '' && get_site_preference('content_mandatory_urls') && 
-	  !$this->mDefaultContent ) {
+      if( $this->mURL == '' && 
+	  get_site_preference('content_mandatory_urls') && 
+	  !$this->mDefaultContent &&
+	  $this->HasUsableLink() ) {
 	// page url is empty and mandatory
 	$errors[] = lang('content_mandatory_urls');
       }
@@ -1723,37 +1830,57 @@ abstract class ContentBase
     function Delete()
     {
       $gCms = cmsms();
+      global $debug_errors;
       $config = $gCms->GetConfig();
       Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
       $db = $gCms->GetDb();
       $result = false;
 
-      if( $this->mId > 0 ) {
-	$query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	$dbresult = $db->Execute($query, array($this->mId));
-
-	// Fix the item_order if necessary
-	$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-	$result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
-
-	$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-	@unlink($cachefilename);
-
-	// DELETE properties
-	$query = 'DELETE FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
-	$result = $db->Execute($query,array($this->mId));
-	$this->_props = null;
-
-	// Delete additional editors.
-	$query = 'DELETE FROM '.cms_db_prefix().'additional_users WHERE content_id = ?';
-	$result = $db->Execute($query,array($this->mId));
-	$this->mAdditionalEditors = null;
-
-	// Delete route
-	if( $this->mURL != '' ) {
-	  cms_route_manager::del_static($this->mURL);
+      if (-1 > $this->mId)
+	{
+	  if (true == $config["debug"])
+	    {
+	      # :TODO: Translate the error message
+	      $debug_errors .= "<p>Could not delete content : invalid Id</p>\n";
+	    }
 	}
-      }
+      else
+	{
+	  $query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
+	  $dbresult = $db->Execute($query, array($this->mId));
+
+	  if (! $dbresult)
+	    {
+	      if (true == $config["debug"])
+		{
+		  # :TODO: Translate the error message
+		  $debug_errors .= "<p>Error deleting content</p>\n";
+		}
+	    }
+
+	  // Fix the item_order if necessary
+	  $query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+	  $result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
+
+	  $cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
+	  @unlink($cachefilename);
+
+	  // DELETE properties
+	  $query = 'DELETE FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
+	  $result = $db->Execute($query,array($this->mId));
+	  $this->_props = null;
+
+	  // Delete additional editors.
+	  $query = 'DELETE FROM '.cms_db_prefix().'additional_users WHERE content_id = ?';
+	  $result = $db->Execute($query,array($this->mId));
+	  $this->mAdditionalEditors = null;
+
+	  // Delete route
+	  if( $this->mURL != '' )
+	    {
+	      cms_route_manager::del_static($this->mURL);
+	    }
+	}
 
       Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
     }
@@ -1770,122 +1897,148 @@ abstract class ContentBase
     {
       // content property parameters
       $parameters = array('extra1','extra2','extra3','image','thumbnail');
-      foreach ($parameters as $oneparam) {
-	if (isset($params[$oneparam])) {
-	  $this->SetPropertyValue($oneparam, $params[$oneparam]);
+      foreach ($parameters as $oneparam)
+	{
+	  if (isset($params[$oneparam]))
+	    {
+	      $this->SetPropertyValue($oneparam, $params[$oneparam]);
+	    }
 	}
-      }
 
       // go through the list of base parameters
       // setting them from params
-
+      
       // title
-      if (isset($params['title'])) {
-	$this->mName = $params['title'];
-      }
+      if (isset($params['title']))
+	{
+	  $this->mName = $params['title'];
+	}
 
       // menu text
-      if (isset($params['menutext'])) {
-	$this->mMenuText = $params['menutext'];
-      }
+      if (isset($params['menutext']))
+	{
+	  $this->mMenuText = $params['menutext'];
+	}
 
       // parent id
-      if( isset($params['parent_id']) ) {
-	if ($this->mParentId != $params['parent_id']) {
-	  $this->mHierarchy = '';
-	  $this->mItemOrder = -1;
+      if( isset($params['parent_id']) )
+	{
+	  if ($this->mParentId != $params['parent_id'])
+	    {
+	      $this->mHierarchy = '';
+	      $this->mItemOrder = -1;
+	    }
+	  $this->mParentId = $params['parent_id'];
 	}
-	$this->mParentId = $params['parent_id'];
-      }
 
       // active
-      if (isset($params['active'])) {
-	$this->mActive = $params['active'];
-	if( $this->DefaultContent() ) {
-	  $this->mActive = 1;
+      if (isset($params['active']))
+	{
+	  $this->mActive = $params['active'];
+	  if( $this->DefaultContent() )
+	    {
+	      $this->mActive = 1;
+	    }
 	}
-      }
-
+      
       // show in menu
-      if (isset($params['showinmenu'])) {
-	$this->mShowInMenu = $params['showinmenu'];
-      }
+      if (isset($params['showinmenu']))
+	{
+	  $this->mShowInMenu = $params['showinmenu'];
+	}
 
       // alias
       $tmp = '';
-      if( isset($params['alias']) ) {
-	$tmp = trim($params['alias']);
-      }
-      if( !$editing || isset($params['alias']) ) {
-	// the alias param may not exist (depending upon permissions)
-	// this method will set the alias to the supplied value if it is set
-	// or auto-generate one, when adding a new page.
-	$this->SetAlias($tmp);
-      }
+      if( isset($params['alias']) )
+	{
+	  $tmp = trim($params['alias']);
+	}
+      if( !$editing || isset($params['alias']) )
+	{
+	  // the alias param may not exist (depending upon permissions)
+	  // this method will set the alias to the supplied value if it is set
+	  // or auto-generate one, when adding a new page.
+	  $this->SetAlias($tmp);
+	}
 
       // target
-      if (isset($params['target'])) {
-	$val = $params['target'];
-	if( $val == '---' ) {
-	  $val = '';
-	}
-	$this->SetPropertyValue('target', $val);
-      } 
+      if (isset($params['target']))
+	{
+	  $val = $params['target'];
+	  if( $val == '---' )
+	    {
+	      $val = '';
+	    }
+	  $this->SetPropertyValue('target', $val);
+	} 
 
       // title attribute
-      if (isset($params['titleattribute'])) {
-	$this->mTitleAttribute = $params['titleattribute'];
-      }
+      if (isset($params['titleattribute']))
+	{
+	  $this->mTitleAttribute = $params['titleattribute'];
+	}
 
       // accesskey
-      if (isset($params['accesskey'])) {
-	$this->mAccessKey = $params['accesskey'];
-      }
+      if (isset($params['accesskey']))
+	{
+	  $this->mAccessKey = $params['accesskey'];
+	}
 
       // tab index
-      if (isset($params['tabindex'])) {
-	$this->mTabIndex = $params['tabindex'];
-      }
+      if (isset($params['tabindex']))
+	{
+	  $this->mTabIndex = $params['tabindex'];
+	}
 
       // cachable
-      if (isset($params['cachable'])) {
-	$this->mCachable = $params['cachable'];
-      }
-      else {
-	$this->_handleRemovedBaseProperty('cachable','mCachable');
-      }
+      if (isset($params['cachable']))
+	{
+	  $this->mCachable = $params['cachable'];
+	}
+      else
+	{
+	  $this->_handleRemovedBaseProperty('cachable','mCachable');
+	}
 
       // secure
-      if (isset($params['secure'])) {
-	$this->mSecure = $params['secure'];
-      }
-      else {
-	$this->_handleRemovedBaseProperty('secure','mSecure');
-      }
+      if (isset($params['secure']))
+	{
+	  $this->mSecure = $params['secure'];
+	}
+      else
+	{
+	  $this->_handleRemovedBaseProperty('secure','mSecure');
+	}
 
       // url
-      if (isset($params['page_url'])) {
-	$this->mURL = $params['page_url'];
-      }
-      else {
-	$this->_handleRemovedBaseProperty('page_url','mURL');
-      }
+      if (isset($params['page_url']))
+	{
+	  $this->mURL = $params['page_url'];
+	}
+      else
+	{
+	  $this->_handleRemovedBaseProperty('page_url','mURL');
+	}
 
       // owner
-      if (isset($params["ownerid"])) {
-	$this->SetOwner($params["ownerid"]);
-      }
-
-      // additional editors
-      if (isset($params["additional_editors"])) {
-	$addtarray = array();
-	if( is_array($params['additional_editors']) ) {
-	  foreach ($params["additional_editors"] as $addt_user_id) {
-	    $addtarray[] = $addt_user_id;
-	  }
+      if (isset($params["ownerid"]))
+	{
+	  $this->SetOwner($params["ownerid"]);
 	}
-	$this->SetAdditionalEditors($addtarray);
-      }
+	 
+      // additional editors
+      if (isset($params["additional_editors"]))
+	{
+	  $addtarray = array();
+	  if( is_array($params['additional_editors']) )
+	    {
+	      foreach ($params["additional_editors"] as $addt_user_id)
+		{
+		  $addtarray[] = $addt_user_id;
+		}
+	    }
+	  $this->SetAdditionalEditors($addtarray);
+	}
     }
 
     /**
@@ -1903,14 +2056,17 @@ abstract class ContentBase
       $alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 
       $base_url = $config['root_url'];
-      if( $this->Secure() ) {
-	if( isset($config['ssl_url']) ) {
-	  $base_url = $config['ssl_url'];
+      if( $this->Secure() )
+	{
+	  if( isset($config['ssl_url']) )
+	    {
+	      $base_url = $config['ssl_url'];
+	    }
+	  else
+	    {
+	      $base_url = str_replace('http://','https://',$base_url);
+	    }
 	}
-	else {
-	  $base_url = str_replace('http://','https://',$base_url);
-	}
-      }
 
       /* use root_url for default content */
       if($this->mDefaultContent) {
@@ -1918,28 +2074,33 @@ abstract class ContentBase
 	return $url;
       }
 
-      if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true) {
-	$str = $this->HierarchyPath();
-	if( $this->mURL != '') {
-	  // we have a url path
-	  $str = $this->mURL;
+      if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true)
+	{
+	  $str = $this->HierarchyPath();
+	  if( $this->mURL != '')
+	    {
+	      // we have a url path
+	      $str = $this->mURL;
+	    }
+	  $url = $base_url. '/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
 	}
-	$url = $base_url.'/'.$str.(isset($config['page_extension'])?$config['page_extension']:'.html');
-      }
-      else if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal' && 
-	       $rewrite == true) {
-	$str = $this->HierarchyPath();
-	if( $this->mURL != '') {
-	  // we have a url path
-	  $str = $this->mURL;
+      else if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal' && $rewrite == true)
+	{
+	  $str = $this->HierarchyPath();
+	  if( $this->mURL != '')
+	    {
+	      // we have a url path
+	      $str = $this->mURL;
+	    }
+	  $url = $base_url . '/index.php/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
 	}
-	$url = $base_url . '/index.php/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
-      }
-      else {
-	$url = $base_url . '/index.php?' . $config['query_var'] . '=' . $alias;
-      }
+      else
+	{
+	  $url = $base_url . '/index.php?' . $config['query_var'] . '=' . $alias;
+	}
       return $url;
     }
+
 
     /**
      * Show the content
@@ -1960,7 +2121,7 @@ abstract class ContentBase
      */
     public function TabNames()
     {
-      return array();
+        return array();
     }
 
     /** 
@@ -1974,10 +2135,20 @@ abstract class ContentBase
      */
     public function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-      # :TODO:
-      return array(array('Error','Edit Not Defined!'));
+	# :TODO:
+	return array(array('Error','Edit Not Defined!'));
     }
 
+
+    /**
+     * Show Help
+# disabled to see if its used.
+    public function Help()
+    {
+    	# :TODO:
+    	return "<tr><td>Help Not Defined</td></tr>";
+    }
+     */
 
     /**
      * Method to indicate wether the current page has children.
@@ -1993,12 +2164,14 @@ abstract class ContentBase
       if( $activeonly == false) return true;
 
       $children = $node->get_children();
-      if( $children ) {
-	for( $i = 0; $i < count($children); $i++ ) {
-	  $content = $children[$i]->getContent();
-	  if( $content->Active() ) return true;
+      if( $children )
+	{
+	  for( $i = 0; $i < count($children); $i++ )
+	    {
+	      $content = $children[$i]->getContent();
+	      if( $content->Active() ) return true;
+	    }
 	}
-      }
 
       return false;
     }
@@ -2011,21 +2184,24 @@ abstract class ContentBase
      */
     public function GetAdditionalEditors()
     {
-      if (!isset($this->mAdditionalEditors)) {
-	$gCms = cmsms();
-	$db = $gCms->GetDb();
-	$this->mAdditionalEditors = array();
+      if (!isset($this->mAdditionalEditors))
+	{
+	  $gCms = cmsms();
+	  $db = $gCms->GetDb();
 
-	$query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
-	$dbresult = $db->Execute($query,array($this->mId));
+	  $this->mAdditionalEditors = array();
 
-	while ($dbresult && !$dbresult->EOF) {
-	  $this->mAdditionalEditors[] = $dbresult->fields['user_id'];
-	  $dbresult->MoveNext();
+	  $query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
+	  $dbresult = $db->Execute($query,array($this->mId));
+
+	  while ($dbresult && !$dbresult->EOF)
+	    {
+	      $this->mAdditionalEditors[] = $dbresult->fields['user_id'];
+	      $dbresult->MoveNext();
+	    }
+
+	  if ($dbresult) $dbresult->Close();
 	}
-
-	if ($dbresult) $dbresult->Close();
-      }
       return $this->mAdditionalEditors;
     }
 
@@ -2051,25 +2227,31 @@ abstract class ContentBase
       $groupops = $gCms->GetGroupOperations();
       $allusers = $userops->LoadUsers();
       $allgroups = $groupops->LoadGroups();
-      foreach ($allgroups as $onegroup) {
-	if( $onegroup->id == 1 ) continue;
-	$val = $onegroup->id*-1;
-	$text .= '<option value="'.$val.'"';
-	if( in_array($val,$addteditors) ) {
-	  $text .= ' selected="selected"';
+      foreach ($allgroups as $onegroup)
+	{
+	  if( $onegroup->id == 1 ) continue;
+	  $val = $onegroup->id*-1;
+	  $text .= '<option value="'.$val.'"';
+	  if( in_array($val,$addteditors) )
+	    {
+	      $text .= ' selected="selected"';
+	    }
+	  $text .= '>'.lang('group').': '.$onegroup->name."</option>";
+		   
 	}
-	$text .= '>'.lang('group').': '.$onegroup->name."</option>";
-      }
 
-      foreach ($allusers as $oneuser) {
-	if ($oneuser->id != $owner_id && $oneuser->id != 1) {
-	  $text .= '<option value="'.$oneuser->id.'"';
-	  if (in_array($oneuser->id, $addteditors)) {
-	    $text .= ' selected="selected"';
-	  }
-	  $text .= '>'.$oneuser->username.'</option>';
+      foreach ($allusers as $oneuser)
+	{
+	  if ($oneuser->id != $owner_id && $oneuser->id != 1)
+	    {
+	      $text .= '<option value="'.$oneuser->id.'"';
+	      if (in_array($oneuser->id, $addteditors))
+		{
+		  $text .= ' selected="selected"';
+		}
+	      $text .= '>'.$oneuser->username.'</option>';
+	    }
 	}
-      }
 
       $text .= '</select>';
       $ret[] = $text;
@@ -2087,9 +2269,10 @@ abstract class ContentBase
     public function ShowAdditionalEditors($addteditors = '')
     {
       $ret = array();
-      if( $addteditors == '' ) {
-	$addteditors = $this->GetAdditionalEditors();
-      }
+      if( $addteditors == '' )
+	{
+	  $addteditors = $this->GetAdditionalEditors();
+	}
       return self::GetAdditionalEditorInput($addteditors,$this->Owner());
     }
 
@@ -2117,12 +2300,14 @@ abstract class ContentBase
     private function _handleRemovedBaseProperty($name,$member)
     {
       if( !is_array($this->_attributes) ) return FALSE;
-      if( !in_array($name,$this->_attributes) ) {
-	if( isset($this->_prop_defaults[$name]) ) {
-	  $this->$member = $this->_prop_defaults[$name];
-	  return TRUE;
+      if( !in_array($name,$this->_attributes) )
+	{
+	  if( isset($this->_prop_defaults[$name]) )
+	    {
+	      $this->$member = $this->_prop_defaults[$name];
+	      return TRUE;
+	    }
 	}
-      }
       return FALSE;
     }
 
@@ -2145,12 +2330,14 @@ abstract class ContentBase
     {
       if( !is_array($this->_attributes) ) return;
       $tmp = array();
-      for( $i = 0; $i < count($this->_attributes); $i++ ) {
-	if( is_array($this->_attributes[$i]) && $this->_attributes[$i][0] == $name ) {
-	  continue;
+      for( $i = 0; $i < count($this->_attributes); $i++ )
+	{
+	  if( is_array($this->_attributes[$i]) && $this->_attributes[$i][0] == $name )
+	    {
+	      continue;
+	    }
+	  $tmp[] = $this->_attributes[$i];
 	}
-	$tmp[] = $this->_attributes[$i];
-      }
       $this->_attributes = $tmp;
       $this->_prop_defaults[$name] = $dflt;
     }
@@ -2161,12 +2348,14 @@ abstract class ContentBase
      * @param string The property name
      * @param integer The priority
      * @param boolean Whether this field is required for this content type
+     * @param string  (optional) unused.
      */
-    protected function AddBaseProperty($name,$priority,$is_required = 0)
+    protected function AddBaseProperty($name,$priority,$is_required = 0,$type = 'string')
     {
-      if( !is_array($this->_attributes) ) {
-	$this->_attributes = array();
-      }
+      if( !is_array($this->_attributes) )
+	{
+	  $this->_attributes = array();
+	}
 
       $this->_attributes[] = array($name,$priority,$is_required);
     }
@@ -2174,9 +2363,9 @@ abstract class ContentBase
     /*
      * Alias for AddBaseProperty
      */
-    protected function AddContentProperty($name,$priority,$is_required = 0)
+    protected function AddContentProperty($name,$priority,$is_required = 0,$type = 'string')
     {
-      return $this->AddBaseProperty($name,$priority,$is_required);
+      return $this->AddBaseProperty($name,$priority,$is_required,$type);
     }
 
 
@@ -2189,9 +2378,10 @@ abstract class ContentBase
     protected function is_known_property($str)
     {
       $tmp = array();
-      foreach( $this->_attributes as $one ) {
-	$tmp[] = $one[0];
-      }
+      foreach( $this->_attributes as $one )
+	{
+	  $tmp[] = $one[0];
+	}
 	  
       return in_array($str,$tmp);
     }
@@ -2206,61 +2396,74 @@ abstract class ContentBase
     {
       // get our required attributes
       $basic_attributes = array();
-      foreach( $this->_attributes as $one ) {
-	if( $one[2] == 1 ) $basic_attributes[] = $one;
-      }
+      foreach( $this->_attributes as $one )
+	{
+	  if( $one[2] == 1 ) $basic_attributes[] = $one;
+	}
 
       // merge in preferred basic attributes
       $tmp = get_site_preference('basic_attributes');
-      if( !empty($tmp) ) {
-	$tmp = explode(',',$tmp);
-	foreach( $tmp as $basic ) {
-	  $found = NULL;
-	  foreach( $this->_attributes as $one ) {
-	    if( $one[0] == $basic ) {
-	      $found = $one;
-	      break;
+      if( !empty($tmp) )
+	{
+	  $tmp = explode(',',$tmp);
+	  foreach( $tmp as $basic )
+	    {
+	      $found = NULL;
+	      foreach( $this->_attributes as $one )
+		{
+		  if( $one[0] == $basic ) {
+		    $found = $one;
+		    break;
+		  }
+		}
+	      if( $found )
+		{
+		  $basic_attributes[] = $found;
+		}
 	    }
-	  }
-	  if( $found ) {
-	    $basic_attributes[] = $found;
-	  }
 	}
-      }
 
       $attrs = $basic_attributes;
-      if( $negative ) {
-	// build a new list of all properties... except those in the basic_attributes
-	$attrs = array();
-	foreach( $this->_attributes as $one ) {
-	  $found = 0;
-	  foreach( $basic_attributes as $basic ) {
-	    if( $basic[0] == $one[0] ) {
-	      $found = 1;
-	      break;
-	    }
-	  }
+      if( $negative )
+	{
+	  // build a new list of all properties... except those in the basic_attributes
+	  $attrs = array();
+	  foreach( $this->_attributes as $one )
+	    {
+	      $found = 0;
+	      foreach( $basic_attributes as $basic )
+		{
+		  if( $basic[0] == $one[0] )
+		    {
+		      $found = 1;
+		    }
+		}
 
-	  if( !$found ) {
-	    $attrs[] = $one;
-	  }
+	      if( !$found )
+		{
+		  $attrs[] = $one;
+		}
+	    }
 	}
-      }
 
       // remove any duplicates
       $tmp = array();
-      foreach( $attrs as $one ) {
-	$found = 0;
-	foreach( $tmp as $t1 ) {
-	  if( $one[0] == $t1[0] ) {
-	    $found = 1;
-	    break;
-	  }
+      foreach( $attrs as $one )
+	{
+	  $found = 0;
+	  foreach( $tmp as $t1 )
+	    {
+	      if( $one[0] == $t1[0] )
+		{
+		  $found = 1;
+		  break;
+		}
+	    }
+	  if( !$found )
+	    {
+	      $tmp[] = $one;
+	    }
 	}
-	if( !$found ) {
-	  $tmp[] = $one;
-	}
-      }
       $attrs = $tmp;
 
       // sort the attributes on the 2nd element...
@@ -2275,13 +2478,16 @@ abstract class ContentBase
     private function display_admin_attributes($attributelist,$adding)
     {
       // sort the attributes
+
       $ret = array();
-      foreach( $attributelist as $one ) {
-	$tmp = $this->display_single_element($one[0],$adding);
-	if( is_array($tmp) ) {
-	  $ret[] = $tmp;
+      foreach( $attributelist as $one )
+	{
+	  $tmp = $this->display_single_element($one[0],$adding);
+	  if( is_array($tmp) )
+	    {
+	      $ret[] = $tmp;
+	    }
 	}
-      }
       return $ret;
     }
 
@@ -2298,137 +2504,170 @@ abstract class ContentBase
       $gCms = cmsms();
       $config = $gCms->GetConfig();
 
-      switch( $one ) {
-      case 'cachable':
-	return array('<label for="in_cachable">'.lang('cachable').':</label>',
-		     '<input type="hidden" name="cachable" value="0"/><input id="in_cachable" class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />',lang('help_page_cachable'));
+      switch( $one )
+	{
+	case 'cachable':
+	  return array('<label for="in_cachable">'.lang('cachable').':</label>',
+		       '<input type="hidden" name="cachable" value="0"/><input id="in_cachable" class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />',lang('help_page_cachable'));
+	  break;
 	
-      case 'title':
-	return array('<label for="in_title">*'.lang('title').'</label>:','<input type="text" id="in_title" name="title" value="'.cms_htmlentities($this->mName).'" />');
-	      
-      case 'menutext':
-	return array('<label for="in_menutext">*'.lang('menutext').'</label>:','<input type="text" name="menutext" id="in_menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
-	      
-      case 'parent':
-	{
-	  $contentops = $gCms->GetContentOperations();
-	  $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('listcontent_showtitle',true) );
-	  if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
-	    return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
-	  if( !empty($tmp) ) return array('<label for="parent_id">'.lang('parent').'</label>:',$tmp);
-	}
-	break;
-
-      case 'active':
-	if( !$this->DefaultContent() ) {
-	  return array('<label for="id_active">'.lang('active').'</label>:','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" id="id_active" value="1"'.($this->mActive?' checked="checked"':'').' />');
-	}
-	break;
-	      
-      case 'showinmenu':
-	return array('<label for="showinmenu">'.lang('showinmenu').'</label>:','<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu" id="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
-	      
-      case 'target':
-	{
-	  $text = '<option value="---">'.lang('none').'</option>';
-	  $text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
-	  $text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
-	  $text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
-	  $text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
-	  return array('<label for="target">'.lang('target').'</label>:','<select name="target" id="target">'.$text.'</select>',
-		       lang('info_target'));
-	}
-	break;
-
-      case 'alias':
-	return array('<label for="alias">'.lang('pagealias').'</label>:','<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />',lang('help_page_alias'));
-
-      case 'secure':
-	{
-	  $opt = '';
-	  if( $this->mSecure ) {
-	    $opt = ' checked="checked"';
+	case 'title':
+	  {
+	    return array('<label for="in_title">*'.lang('title').'</label>:','<input type="text" id="in_title" name="title" value="'.cms_htmlentities($this->mName).'" />');
 	  }
-	  $str  = '<input type="hidden" name="secure" value="0"/>';
-	  $str .= '<input type="checkbox" name="secure" id="secure" value="1"'.$opt.'/>';
-	  return array('<label for="secure">'.lang('secure_page').'</label>:',$str);
-	}
-	break;
-
-      case 'page_url':
-	if( !$this->DefaultContent() ) {
-	  $str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
-	  $prompt = '<label for="page_url">'.lang('page_url').'</label>:';
-	  if( get_site_preference('content_mandatory_urls',0) ) {
-	    $prompt = '*'.$prompt;
+	  break;
+	      
+	case 'menutext':
+	  {
+	    return array('<label for="in_menutext">*'.lang('menutext').'</label>:','<input type="text" name="menutext" id="in_menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
 	  }
-	  return array($prompt,$str,lang('help_page_url'));
-	}
-	break;
-
-      case 'image':
-	{
-	  $dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_imagefield_path'));
-	  $data = $this->GetPropertyValue('image');
-	  $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
-	  if( !$dropdown ) return;
-	  return array('<label for="image">'.lang('image').'</label>:',$dropdown);
-	}
-	break;
-
-      case 'thumbnail':
-	{
-	  $dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_thumbnailfield_path'));
-	  $data = $this->GetPropertyValue('thumbnail');
-	  $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
-	  if( !$dropdown ) return FALSE;
-	  return array('<label for="thumbnail">'.lang('thumbnail').'</label>:',$dropdown);
-	}
-	break;
-
-      case 'titleattribute':
-	return array('<label for="titleattribute">'.lang('titleattribute').'</label>:','<input type="text" name="titleattribute" id="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
-
-      case 'accesskey':
-	return array('<label for="accesskey">'.lang('accesskey').'</label>:','<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
-
-      case 'tabindex':
-	return array('<label for="tabindex">'.lang('tabindex').'</label>:','<input type="text" name="tabindex" id="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
-
-      case 'extra1':
-	return array('<label for="extra1">'.lang('extra1').'</label>:','<input type="text" name="extra1" id="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
-
-      case 'extra2':
-	return array('<label for="extra2">'.lang('extra2').'</label>:','<input type="text" name="extra2" id="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
-
-      case 'extra3':
-	return array('<label for="extra3">'.lang('extra3').'</label>:','<input type="text" name="extra3" id="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
-
-      case 'owner':
-	{
-	  $showadmin = check_ownership(get_userid(), $this->Id());
-	  $userops = $gCms->GetUserOperations();
-	  if (!$adding && 
-	      ($showadmin || check_permission(get_userid(),'Manage All Content')) ) {
-	    return array('<label for="owner">'.lang('owner').'</label>:', $userops->GenerateDropdown($this->Owner()));
+	  break;
+	      
+	case 'parent':
+	  {
+	    $contentops = $gCms->GetContentOperations();
+	    $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('listcontent_showtitle',true) );
+	    if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
+	      return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
+	    if( !empty($tmp) ) return array('<label for="parent_id">'.lang('parent').'</label>:',$tmp);
 	  }
-	}
-	break;
+	  break;
 
-      case 'additionaleditors':
-	{
-	  // do owner/additional-editor stuff
-	  if( $adding || check_ownership(get_userid(),$this->Id()) || 
-	      check_permission(get_userid(),'Manage All Content')) {
-	    return $this->ShowAdditionalEditors();
+	case 'active':
+	  if( !$this->DefaultContent() )
+	    {
+	      return array('<label for="id_active">'.lang('active').'</label>:','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" id="id_active" value="1"'.($this->mActive?' checked="checked"':'').' />');
+	    }
+	  break;
+	      
+	case 'showinmenu':
+	  return array('<label for="showinmenu">'.lang('showinmenu').'</label>:','<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu" id="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+	  break;
+	      
+	case 'target':
+	  {
+	    $text = '<option value="---">'.lang('none').'</option>';
+	    $text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
+	    $text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
+	    $text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
+	    $text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
+	    return array('<label for="target">'.lang('target').'</label>:','<select name="target" id="target">'.$text.'</select>',
+			 lang('info_target'));
+		
 	  }
-	}
-	break;
+	  break;
+	      
+	case 'alias':
+	  return array('<label for="alias">'.lang('pagealias').'</label>:','<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />',lang('help_page_alias'));
+	  break;
+	      
+	case 'secure':
+	  {
+	    $opt = '';
+	    if( $this->mSecure )
+	      {
+		$opt = ' checked="checked"';
+	      }
+	    $str  = '<input type="hidden" name="secure" value="0"/>';
+	    $str .= '<input type="checkbox" name="secure" id="secure" value="1"'.$opt.'/>';
+	    return array('<label for="secure">'.lang('secure_page').'</label>:',$str);
+	  }
+	  break;
 
-      default:
-	stack_trace();
-	die('unknown property '.$one);
-      }
+	case 'page_url':
+	  if( !$this->DefaultContent() )
+	    {
+	      $str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
+	      $prompt = '<label for="page_url">'.lang('page_url').'</label>:';
+	      if( get_site_preference('content_mandatory_urls',0) )
+		{
+		  $prompt = '*'.$prompt;
+		}
+	      return array($prompt,$str,lang('help_page_url'));
+	    }
+	  break;
+
+	case 'image':
+	  {
+	    $dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_imagefield_path'));
+	    $data = $this->GetPropertyValue('image');
+	    $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
+	    if( !$dropdown ) return;
+	    return array('<label for="image">'.lang('image').'</label>:',$dropdown);
+	  }
+	  break;
+	      
+	case 'thumbnail':
+	  {
+	    $dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_thumbnailfield_path'));
+	    $data = $this->GetPropertyValue('thumbnail');
+	    $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
+	    if( !$dropdown ) return FALSE;
+	    return array('<label for="thumbnail">'.lang('thumbnail').'</label>:',$dropdown);
+	  }
+	  break;
+	      
+	case 'titleattribute':
+	  {
+	    return array('<label for="titleattribute">'.lang('titleattribute').'</label>:','<input type="text" name="titleattribute" id="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
+	  }
+	  break;
+	      
+	case 'accesskey':
+	  {
+	    return array('<label for="accesskey">'.lang('accesskey').'</label>:','<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+	  }
+	  break;
+
+	case 'tabindex':
+	  {
+	    return array('<label for="tabindex">'.lang('tabindex').'</label>:','<input type="text" name="tabindex" id="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
+	  }
+	  break;
+	      
+	case 'extra1':
+	  {
+	    return array('<label for="extra1">'.lang('extra1').'</label>:','<input type="text" name="extra1" id="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
+	  }
+	  break;
+	      
+	case 'extra2':
+	  {
+	    return array('<label for="extra2">'.lang('extra2').'</label>:','<input type="text" name="extra2" id="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
+	  }
+	  break;
+	      
+	case 'extra3':
+	  {
+	    return array('<label for="extra3">'.lang('extra3').'</label>:','<input type="text" name="extra3" id="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
+	  }
+	  break;
+
+	case 'owner':
+	  {
+	    $showadmin = check_ownership(get_userid(), $this->Id());
+	    $userops = $gCms->GetUserOperations();
+	    if (!$adding && ($showadmin || check_permission(get_userid(),'Manage All Content')) )
+	      {
+		return array('<label for="owner">'.lang('owner').'</label>:', $userops->GenerateDropdown($this->Owner()));
+	      }
+	  }
+	  break;
+
+	case 'additionaleditors':
+	  {
+	    // do owner/additional-editor stuff
+	    if( $adding || check_ownership(get_userid(),$this->Id()) || check_permission(get_userid(),'Manage All Content'))
+	      {
+		return $this->ShowAdditionalEditors();
+	      }
+	  }
+	  break;
+
+	default:
+	  stack_trace();
+	  die('unknown property '.$one);
+	}
     }
 
     protected function SetError($str)

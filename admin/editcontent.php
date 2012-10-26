@@ -80,6 +80,7 @@ if( $content_id < 1 ) {
   $active = ((get_site_preference('page_active',"1")=="1")?true:false);
   $showinmenu = ((get_site_preference('page_showinmenu',"1")=="1")?true:false);
   $metadata = get_site_preference('page_metadata');
+  $design_id = get_site_preference('page_design',-1);
   $parent_id = get_preference($userid, 'default_parent', -2);
 
   $contentobj = $contentops->CreateNewContent($content_type);
@@ -91,13 +92,14 @@ if( $content_id < 1 ) {
   $contentobj->SetLastModifiedBy($userid);
 
   {
-    $templateops = $gCms->GetTemplateOperations();
-    $dflt = $templateops->LoadDefaultTemplate();
-    debug_display($dflt,'die dflt'); die();
-    if( isset($dflt) )
-      {
-	$contentobj->SetTemplateId($dflt->id);
-      }
+    $design = CmsLayoutCollection::load_default();
+    if( $design ) {
+      $contentobj->SetPropertyValue('design_id',$design->get_id());
+    }
+    $tpl = CmsLayoutTemplate::load_dflt_by_type('__CORE__::page');
+    if( $tpl ) {
+      $contentobj->SetTemplateId($tpl->get_id());
+    }
   }
 
   // this stuff should be changed somehow.
@@ -115,10 +117,9 @@ if( $content_id < 1 ) {
 				get_site_preference('page_extra3',''));
   $tmp = get_site_preference('additional_editors');
   $tmp2 = array();
-  if( !empty($tmp) )
-    {
-      $tmp2 = explode(',',$tmp);
-    }
+  if( !empty($tmp) ) {
+    $tmp2 = explode(',',$tmp);
+  }
   $contentobj->SetAdditionalEditors($tmp2);
 }
 else {
@@ -191,7 +192,6 @@ if ($submit || $apply) {
     // todo: ajax results.
   }
 }
-
 
 //
 // BUILD THE DISPLAY

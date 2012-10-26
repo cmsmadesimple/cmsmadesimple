@@ -321,7 +321,6 @@ class Content extends ContentBase
 		$this->_get_form_data();
 		$tabnames = $this->TabNames(); 
 	
-		$templateops = cmsms()->GetTemplateOperations();
 		$ret = array();
 		$this->stylesheet = '';
 		if ($this->TemplateId() > 0) {

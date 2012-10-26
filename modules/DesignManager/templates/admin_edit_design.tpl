@@ -44,9 +44,9 @@
 {tab_header name='stylesheets' label=$mod->Lang('prompt_stylesheets')}
 {tab_header name='description' label=$mod->Lang('prompt_description')}
 {tab_start name='templates'}
-{include file='module_file_tpl:LayoutManager;admin_edit_design_templates.tpl' scope='root'}
+{include file='module_file_tpl:DesignManager;admin_edit_design_templates.tpl' scope='root'}
 {tab_start name='stylesheets'}
-{include file='module_file_tpl:LayoutManager;admin_edit_design_stylesheets.tpl' scope='root'}
+{include file='module_file_tpl:DesignManager;admin_edit_design_stylesheets.tpl' scope='root'}
 {tab_start name='description'}
 <textarea name="{$actionid}description">{$design->get_description()}</textarea>&nbsp;
 {admin_icon icon='info.gif' class='helpicon' name='help_description'}
