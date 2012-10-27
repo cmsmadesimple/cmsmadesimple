@@ -14,7 +14,8 @@ $(document).ready(function(){
 {/if}
 
 {form_start extraparms=$extraparms}
-<fieldset class="pagecontainer">
+<fieldset>
+  <div style="width: 49%; float: left;">
   <div class="pageoverflow">
     <p class="pagetext"><label for="tpl_name">*{$mod->Lang('prompt_name')}:</label></p>
     <p class="pageinput">
@@ -52,6 +53,23 @@ $(document).ready(function(){
     </p>
   </div>
   {/if}
+  </div>{* column *}
+
+  <div style="width: 49%; float: right;">
+  <div class="pageoverflow">
+    <p class="pagetext"><label for="tpl_created">{$mod->Lang('prompt_created')}:</label></p>
+    <p class="pageinput">
+      <input type="text" id="tpl_created" value="{$template->get_created()|date_format:'%x %X'}" readonly="readonly"/>
+    </p>
+  </div>
+  <div class="pageoverflow">
+    <p class="pagetext"><label for="tpl_modified">{$mod->Lang('prompt_modified')}:</label></p>
+    <p class="pageinput">
+      <input type="text" id="tpl_modified" value="{$template->get_modified()|date_format:'%x %X'}" readonly="readonly"/>
+    </p>
+  </div>
+  </div>{* column *}
+
 </fieldset>
 
 {tab_header name='template' label=$mod->Lang('prompt_template')}
@@ -86,7 +104,7 @@ $(document).ready(function(){
   <p class="pageinput">
     <select id="tpl_owner" name="{$actionid}owner_id">
     {html_options options=$user_list selected=$template->get_owner_id()}
-    </select>&nbsp;{admin_icon icon='info.gif' class='helpicon' name='help_template_addteditors'}
+    </select>&nbsp;{admin_icon icon='info.gif' class='helpicon' name='help_template_owner'}
   </p>
 </div>
 {/if}
@@ -121,4 +139,6 @@ $(document).ready(function(){
   <div id="help_template_contents" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_contents')}</div>
   <div id="help_template_description" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_description')}</div>
   <div id="help_template_designs" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_designs')}</div>
+  <div id="help_template_owner" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_owner')}</div>
+  <div id="help_template_addteditors" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_template_addteditors')}</div>
 {/strip}</div>

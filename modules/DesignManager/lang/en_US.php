@@ -50,7 +50,16 @@ $lang['help_dflt_template'] = 'The default template contains the contents that a
 $lang['help_has_dflt'] = 'If &quot;Yes&quot;, this template type has some default content that is used as a sample when creating a new template of this type.  Of course you are able to change the contents of hte template';
 $lang['help_rm_tpl'] = 'Enabling this option will delete all templates that are attached to this design, but not attached to another design.  Use extreme caution when enabling this option.';
 $lang['help_rm_css'] = 'Enabling this option will delete all stylesheets that are attached to this design, but not attached to another design.  Use extreme caution when enabling this option.';
+$lang['help_template_addteditors'] = 'Here you can specify additional users that have permission to edit this template';
 $lang['help_template_bulk'] = 'This option allows performing actions on multiple templates at once.  Use with caution';
+$lang['help_template_category'] = 'The template category is used for organizing and filtering templates.  A template may only belong to one category.  Selecting a category is optional';
+$lang['help_template_contents'] = 'Enter or edit the contents for the particular template.  This is a smarty template.  The data available to the smarty template depends on where in the applicaion this template is called.';
+$lang['help_template_description'] = 'You may provide a text description for this template to help with searching, organization, and to describe any special features or notes that are specific to this template';
+$lang['help_template_designs'] = 'A template can belong to zero or more designs.  If a template is attached to a design then that template can be chosen for a content page, or exported with the template to an XML file';
+$lang['help_template_dflt'] = 'Some templates (depending on their type) can be the &quot;default&quot; template for that type.  The &quot;default&quot; template for a type is typically used when a request is made for a specific template type, but without specifying a template name.';
+$lang['help_template_name'] = 'Specify a name for this template.  The name must contain only alphanumeric characters, and must be unique to the system';
+$lang['help_template_owner'] = 'You may change the authorized &quot;owner&quot; of this template.  The owner of a template is allowed to edit the template at any time (even without specific template editing permissions, and can change the additional editors.';
+$lang['help_template_type'] = 'The template type is used for organizational purposes, and for finding default contents when restoring the template to its default value (if any).  Templates belonging to a certain module type may be removed if the module is uninstalled.';
 
 #I
 $lang['import_design'] = 'Import Design';
