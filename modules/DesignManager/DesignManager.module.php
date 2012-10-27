@@ -52,6 +52,7 @@ final class DesignManager extends CMSModule
   {
     if( $this->CheckPermission('Add Templates') ||
 				$this->CheckPermission('Modify Templates') || 
+				$this->CheckPermission('Modify Stylesheets') || 
 				count(CmsLayoutTemplate::get_editable_templates(get_userid())) ) return TRUE;
     return FALSE;
   }

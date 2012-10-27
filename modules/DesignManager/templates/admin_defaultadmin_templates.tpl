@@ -90,7 +90,11 @@ $(document).ready(function(){
             {else}
               {$hn}        
             {/if}
-          {else}<span title="{$mod->Lang('help_template_multiple_designs')}">({count($t1)})</span>{/if}
+          {elseif count($t1) == 0}
+            <span title="{$mod->Lang('help_template_no_designs')}">{$mod->Lang('prompt_none')}</span>
+          {else}
+            <span title="{$mod->Lang('help_template_multiple_designs')}">{$mod->Lang('prompt_multiple')} ({count($t1)})</span>
+          {/if}
         </td>
         <td>{if isset($list_users)}{assign var='u' value=$template->get_owner_id()}{$list_users.$u}{else}n/a{/if}</td>
 	<td>{$template->get_modified()|date_format:'%x %X'}</td>

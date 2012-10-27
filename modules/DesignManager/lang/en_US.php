@@ -57,7 +57,9 @@ $lang['help_template_contents'] = 'Enter or edit the contents for the particular
 $lang['help_template_description'] = 'You may provide a text description for this template to help with searching, organization, and to describe any special features or notes that are specific to this template';
 $lang['help_template_designs'] = 'A template can belong to zero or more designs.  If a template is attached to a design then that template can be chosen for a content page, or exported with the template to an XML file';
 $lang['help_template_dflt'] = 'Some templates (depending on their type) can be the &quot;default&quot; template for that type.  The &quot;default&quot; template for a type is typically used when a request is made for a specific template type, but without specifying a template name.';
+$lang['help_template_multiple_designs'] = 'This template is attached to multiple designs';
 $lang['help_template_name'] = 'Specify a name for this template.  The name must contain only alphanumeric characters, and must be unique to the system';
+$lang['help_template_no_designs'] = 'This template is not attached to any designs';
 $lang['help_template_owner'] = 'You may change the authorized &quot;owner&quot; of this template.  The owner of a template is allowed to edit the template at any time (even without specific template editing permissions, and can change the additional editors.';
 $lang['help_template_type'] = 'The template type is used for organizational purposes, and for finding default contents when restoring the template to its default value (if any).  Templates belonging to a certain module type may be removed if the module is uninstalled.';
 
@@ -115,6 +117,7 @@ $lang['prompt_group'] = 'Group';
 $lang['prompt_id'] = 'Id';
 $lang['prompt_limit'] = 'Limit';
 $lang['prompt_modified'] = 'Modified Date';
+$lang['prompt_multiple'] = 'Multiple';
 $lang['prompt_na'] = 'N/A';
 $lang['prompt_name'] = 'Name';
 $lang['prompt_none'] = 'None';

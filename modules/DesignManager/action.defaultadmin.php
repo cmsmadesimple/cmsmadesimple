@@ -104,11 +104,15 @@ if( $this->CheckPermission('Manage Designs') ) {
   $smarty->assign('list_users',$users);
   $opts[$this->Lang('prompt_user')] = $tmp;
 }
-
+if( $this->CheckPermission('Modify Stylesheets') ) {
+}
 // give everything to smarty that we can.
 $smarty->assign('filter_options',$opts);
 $smarty->assign('filter',$filter_rec);
 
+$tmp = ($this->CheckPermission('Modify Templates') || count($templates))?1:0;
+$smarty->assign('has_templates',$tmp);
+$smarty->assign('manage_stylesheets',$this->CheckPermission('Modify Stylesheets'));
 $smarty->assign('manage_templates',$this->CheckPermission('Modify Templates'));
 $smarty->assign('manage_designs',$this->CheckPermission('Manage Designs'));
 $smarty->assign('import_url',$this->create_url($id,'admin_import_template'));
