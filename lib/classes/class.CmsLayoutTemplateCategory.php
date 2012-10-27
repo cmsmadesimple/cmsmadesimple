@@ -205,7 +205,7 @@ class CmsLayoutTemplateCategory
       $row = $db->GetRow($query,array($val));
     }
     if( !is_array($row) || count($row) == 0 ) {
-      throw new CmsDataNotFoundException('Could not find row identified by '.$val);
+      throw new CmsDataNotFoundException('Could not find template category identified by '.$val);
     }
 
     return self::_load_from_data($row);

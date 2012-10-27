@@ -23,7 +23,7 @@ if( !$this->VisibleToAdminUser() ) return;
 
 $filter_rec = array('tpl'=>'','limit'=>100,'offset'=>0);
 if( isset($params['dofilter']) ) {
-	$filter_rec['tpl'] = $params['filter_tpl'];
+	$filter_rec[] = $params['filter_tpl'];
 	$filter_rec['limit'] = (int)$params['filter_limit'];
 	$filter_rec['limit'] = max(2,min(100,$filter_rec['limit']));
 	$filter_rec['offset'] = 0;
@@ -34,7 +34,6 @@ if( $tmp ) $filter_rec = unserialize($tmp);
 if( isset($params['tpl_page']) ) {
 	$page = max(1,(int)$params['tpl_page']);
 	$filter_rec['offset'] = ($page - 1) * $filter_rec['limit'];
-	debug_display($filter_rec);
 }
 
 $efilter = $filter_rec;
@@ -51,9 +50,7 @@ if( count($templates) ) {
 	$tpl_nav['numpages'] = $tpl_query->numpages;
 	$tpl_nav['numrows'] = $tpl_query->totalrows;
 	$tpl_nav['curpage'] = (int)($tpl_query->offset / $tpl_query->limit) + 1;
-	if( $tpl_nav['numpages'] > 1 ) {
-		$smarty->assign('tpl_nav',$tpl_nav);
-	}
+	$smarty->assign('tpl_nav',$tpl_nav);
 }
 
 

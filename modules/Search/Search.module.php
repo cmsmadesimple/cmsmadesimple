@@ -90,8 +90,7 @@ class Search extends CMSModule
 
   function VisibleToAdminUser()
   {
-    return $this->CheckPermission('Modify Site Preferences') ||
-      $this->CheckPermission('Modify Templates');
+    return $this->CheckPermission('Modify Site Preferences');
   }
 
 
@@ -108,6 +107,8 @@ class Search extends CMSModule
     $this->CreateParameter('pageid','null',$this->Lang('param_pageid'));
     $this->CreateParameter('count','null',$this->Lang('param_count'));
     $this->CreateParameter('search_method','get',$this->Lang('search_method'));
+    $this->CreateParameter('formtemplate','',$this->Lang('param_formtemplate'));
+    $this->CreateParameter('resulttemplate','',$this->Lang('param_resulttemplate'));
   }
 
 
@@ -128,6 +129,8 @@ class Search extends CMSModule
     $this->SetParameterType('count',CLEAN_INT);
     $this->SetParameterType('use_or',CLEAN_INT);
     $this->SetParameterType('search_method',CLEAN_STRING);
+    $this->SetParameterType('formtemplate',CLEAN_STRING);
+    $this->SetParameterType('resulttemplate',CLEAN_STRING);
   }
 
   function GetSearchHtmlTemplate()
@@ -267,7 +270,29 @@ EOT;
   {
     if( strtolower($capability) == 'search' ) return TRUE;
     return FALSE;
-  }  
+  }
+
+  public static function page_type_lang_callback($str)
+  {
+    $mod = cms_utils::get_module('Search');
+    return $mod->Lang('type_'.$str);
+  }
+
+  public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
+  {
+    if( $type->get_originator() != 'Search' ) {
+      throw new CmsLogicException('Cannot reset contents for this template type');
+    }
+
+    $mod = cms_utils::get_module('Search');
+    switch( $type->get_name() ) {
+    case 'searchform':
+      return $mod->GetSearchHtmlTemplate();
+    case 'searchresults':
+      return $mod->GetResultsHtmlTemplate();
+    }
+  }
+
 }
 
 # vim:ts=4 sw=4 noet

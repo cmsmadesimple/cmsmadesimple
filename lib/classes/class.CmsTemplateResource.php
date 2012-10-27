@@ -34,7 +34,6 @@
  */
 class CmsTemplateResource extends CMS_Fixed_Resource_Custom
 {
-  static private $_templates;
   private $_section;
 
   public function __construct($section = '')
@@ -49,20 +48,9 @@ class CmsTemplateResource extends CMS_Fixed_Resource_Custom
     return parent::buildUniqueResourceName($smarty,$resource_name).'--'.$this->_section;
   }
 
-  private function get_template($name)
+  private function &get_template($name)
   {
-    if( !is_array(self::$_templates) || !isset(self::$_templates[$name]) ) {
-      if( !is_array(self::$_templates) ) self::$_templates = array();
-
-      $tpl = CmsLayoutTemplate::load($name);
-      if( is_object($tpl) && $tpl !== FALSE ) {
-	$name = $tpl->get_name();
-	self::$_templates[$name] = $tpl;
-      }
-    }
-    if( isset(self::$_templates[$name]) ) {
-      return self::$_templates[$name];
-    }
+    return CmsLayoutTemplate::load($name);
   }
 
   protected function fetch($name,&$source,&$mtime)

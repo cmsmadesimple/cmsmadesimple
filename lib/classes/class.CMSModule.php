@@ -2864,7 +2864,8 @@ abstract class CMSModule
 	 */
 	final public function GetDatabaseResource($template)
 	{
-	  return 'module_db_tpl:'.$this->GetName().';'.$template;
+	  return 'cms_template:'.$template;
+	  //return 'module_db_tpl:'.$this->GetName().';'.$template;
 	}
 
 

@@ -328,6 +328,11 @@ $lang['title_submission_settings'] = 'News Submission Settings';
 $lang['title_summary_sysdefault'] = 'Default Summary Template';
 $lang['title_summary_template'] = 'Summary Template Editor';
 $lang['type'] = 'Type';
+$lang['type_browsecat'] = 'Browse Category';
+$lang['type_form'] = 'Frontend Form';
+$lang['type_detail'] = 'Detail';
+$lang['type_News'] = 'News';
+$lang['type_summary'] = 'Summary';
 
 // U
 $lang['unknown'] = 'Unknown';

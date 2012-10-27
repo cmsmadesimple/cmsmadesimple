@@ -419,6 +419,7 @@ class CmsLayoutTemplate
 			}
 		}
 
+		CmsTemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template Updated');
 		$this->_dirty = FALSE;
 	}
@@ -471,7 +472,9 @@ class CmsLayoutTemplate
 				debug_display($db->sql.' -- '.$db->ErrorMsg());
 			}
 		}
+
 		$this->_dirty = FALSE;
+		CmsTemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template Created');
 	}
 
@@ -482,6 +485,25 @@ class CmsLayoutTemplate
 		} else {
 			return $this->_insert();
 		}
+	}
+
+	public function delete()
+	{
+	  if( !$this->get_id() ) return;
+
+		$db = cmsms()->GetDb();
+		$query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
+              WHERE tpl_id = ?';
+		$dbr = $db->Execute($query,array($this->get_id()));
+
+		$query = 'DELETE FROM '.cms_db_prefix().self::TABLENAME.'
+              WHERE id = ?';
+		$dbr = $db->Execute($query,array($this->get_id()));
+
+		CmsTemplateCache::clear_cache();
+		audit($this->get_id(),'CMSMS','Template deleted');
+		unset($this->_data['id']);
+		$this->_dirty = TRUE;
 	}
 
 	private static function &_load_from_data($row)
@@ -506,7 +528,7 @@ class CmsLayoutTemplate
 			if( isset(self::$_obj_cache[$one]) ) continue;
 			$list2[] = $one;
 		}
-	  
+
 		// get the data and populate the cache.
 		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.
 			implode(',',$list2).')';
@@ -521,6 +543,7 @@ class CmsLayoutTemplate
 		// pull what we can from the cache
 		$out = array();
 		foreach( $list as $one ) {
+			$one = (int)$one;
 			if( isset(self::$_obj_cache[$one]) ) {
 				$out[] = self::$_obj_cache[$one];
 			}
@@ -551,9 +574,7 @@ class CmsLayoutTemplate
 			$row = $db->GetRow($query,array($a));
 		}
 		if( !is_array($row) || count($row) == 0 ) {
-			stack_trace();
-			debug_display($db->sql); die();
-			throw new CmsDataNotFoundException('Could not find row identified by '.$a);
+			throw new CmsDataNotFoundException('Could not find template identified by '.$a);
 		}
 
 		return self::_load_from_data($row);
@@ -704,6 +725,11 @@ class CmsLayoutTemplate
 	{
 		$tpl = self::load_dflt_by_type($t);
 		return $smarty->fetch('cms_template:id='.$tpl->get_id());
+	}
+
+	public static function get_loaded_templates()
+	{
+		return array_keys(self::$_obj_cache);
 	}
 } // end of class
 

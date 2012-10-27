@@ -1,12 +1,11 @@
 <?php
 if (!isset($gCms)) exit;
 
-if( !class_exists('news_admin_ops') )
-  {
-    // this is required if called from the installer
-    $fn = dirname(__FILE__).'/lib/class.news_admin_ops.php';
-    require_once($fn);
-  }
+if( !class_exists('news_admin_ops') ) {
+  // this is required if called from the installer
+  $fn = dirname(__FILE__).'/lib/class.news_admin_ops.php';
+  require_once($fn);
+}
 
 $db = $this->GetDb();
 $dict = NewDataDictionary($db);
@@ -85,16 +84,28 @@ $this->CreatePermission('Approve News', 'Approve News For Frontend Display');
 $this->CreatePermission('Delete News', 'Delete News Articles');
 
 # Setup summary template
+$summary_template_type = new CmsLayoutTemplateType();
+$summary_template_type->set_originator($this->GetName());
+$summary_template_type->set_name('summary');
+$summary_template_type->set_dflt_flag(TRUE);
+$summary_template_type->set_lang_callback('News::page_type_lang_callback');
+$summary_template_type->set_content_callback('News::reset_page_type_defaults');
+$summary_template_type->reset_content_to_factory();
+$summary_template_type->save();
+
 $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
   'templates'.DIRECTORY_SEPARATOR.'orig_summary_template.tpl';
 if( file_exists( $fn ) )
   {
     $template = @file_get_contents($fn);
-    $this->SetPreference('default_summary_template_contents',$template);
-    $this->SetTemplate('summarySample',$template);
-    $this->SetPreference('current_summary_template','Sample');
+    $tpl = new CmsLayoutTemplate();
+    $tpl->set_name('News Summary Sample');
+    $tpl->set_owner(get_userid());
+    $tpl->set_content($template);
+    $tpl->set_type($summary_template_type);
+    $tpl->set_type_dflt(TRUE);
+    $tpl->save();
   }
-//$this->SetTemplate('displaysummary', $this->GetSummaryHtmlTemplate());
 
 # Setup Simplex Theme HTML5 sample summary template
 $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
@@ -102,57 +113,102 @@ $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
 if( file_exists( $fn ) )
   {
     $template = @file_get_contents($fn);
-    $this->SetTemplate('summarySummary_Simplex',$template);
+    $tpl = new CmsLayoutTemplate();
+    $tpl->set_name('News Summary Simplex');
+    $tpl->set_owner(get_userid());
+    $tpl->set_content($template);
+    $tpl->set_type($summary_template_type);
+    $tpl->save();
   }
   
 # Setup detail template
+$detail_template_type = new CmsLayoutTemplateType();
+$detail_template_type->set_originator($this->GetName());
+$detail_template_type->set_name('detail');
+$detail_template_type->set_dflt_flag(TRUE);
+$detail_template_type->set_lang_callback('News::page_type_lang_callback');
+$detail_template_type->set_content_callback('News::reset_page_type_defaults');
+$detail_template_type->reset_content_to_factory();
+$detail_template_type->save();
+
 $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
   'templates'.DIRECTORY_SEPARATOR.'orig_detail_template.tpl';
-if( file_exists( $fn ) )
-  {
-    $template = @file_get_contents($fn);
-    $this->SetPreference('default_detail_template_contents',$template);
-    $this->SetTemplate('detailSample',$template);
-    $this->SetPreference('current_detail_template','Sample');
-  }
-//$this->SetTemplate('displaydetail', $this->GetDetailHtmlTemplate());
+if( file_exists( $fn ) ) {
+  $template = @file_get_contents($fn);
+  $tpl = new CmsLayoutTemplate();
+  $tpl->set_name('News Detail Sample');
+  $tpl->set_owner(get_userid());
+  $tpl->set_content($template);
+  $tpl->set_type($detail_template_type);
+  $tpl->set_type_dflt(TRUE);
+  $tpl->save();
+}
 
 # Setup Simplex Theme HTML5 sample detail template
 $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
   'templates'.DIRECTORY_SEPARATOR.'Simplex_Detail_template.tpl';
-if( file_exists( $fn ) )
-  {
-    $template = @file_get_contents($fn);
-    $this->SetTemplate('detailSimplex_Detail',$template);
-  }
+if( file_exists( $fn ) ) {
+  $template = @file_get_contents($fn);
+  $tpl = new CmsLayoutTemplate();
+  $tpl->set_name('News Detail Simplex');
+  $tpl->set_owner(get_userid());
+  $tpl->set_content($template);
+  $tpl->set_type($detail_template_type);
+  $tpl->save();
+}
   
 # Setup form template
+$form_template_type = new CmsLayoutTemplateType();
+$form_template_type->set_originator($this->GetName());
+$form_template_type->set_name('form');
+$form_template_type->set_dflt_flag(TRUE);
+$form_template_type->set_lang_callback('News::page_type_lang_callback');
+$form_template_type->set_content_callback('News::reset_page_type_defaults');
+$form_template_type->reset_content_to_factory();
+$form_template_type->save();
+
 $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
   'templates'.DIRECTORY_SEPARATOR.'orig_form_template.tpl';
-if( file_exists( $fn ) )
-  {
-    $template = @file_get_contents($fn);
-    $this->SetPreference('default_form_template_contents',$template);
-    $this->SetTemplate('formSample',$template);
-    $this->SetPreference('current_form_template','Sample');
-  }
+if( file_exists( $fn ) ) {
+  $template = @file_get_contents($fn);
+  $template = @file_get_contents($fn);
+  $tpl = new CmsLayoutTemplate();
+  $tpl->set_name('News Fesubmit Form Sample');
+  $tpl->set_owner(get_userid());
+  $tpl->set_content($template);
+  $tpl->set_type($form_template_type);
+  $tpl->set_type_dflt(TRUE);
+  $tpl->save();
+}
+
 
 # Setup browsecat template
+$browsecat_template_type = new CmsLayoutTemplateType();
+$browsecat_template_type->set_originator($this->GetName());
+$browsecat_template_type->set_name('browsecat');
+$browsecat_template_type->set_dflt_flag(TRUE);
+$browsecat_template_type->set_lang_callback('News::page_type_lang_callback');
+$browsecat_template_type->set_content_callback('News::reset_page_type_defaults');
+$browsecat_template_type->reset_content_to_factory();
+$browsecat_template_type->save();
+
 $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.
   'templates'.DIRECTORY_SEPARATOR.'browsecat.tpl';
-if( file_exists( $fn ) )
-  {
-    $template = @file_get_contents($fn);
-    $this->SetPreference('default_browsecat_template_contents',$template);
-    $this->SetTemplate('browsecatSample',$template);
-    $this->SetPreference('current_browsecat_template','Sample');
-  }
+if( file_exists( $fn ) ) {
+  $template = @file_get_contents($fn);
+  $tpl = new CmsLayoutTemplate();
+  $tpl->set_name('News Browse Category Sample');
+  $tpl->set_owner(get_userid());
+  $tpl->set_content($template);
+  $tpl->set_type($browsecat_template_type);
+  $tpl->set_type_dflt(TRUE);
+  $tpl->save();
+}
 
 
 # Setup default email template and email preferences
 $this->SetPreference('email_subject',$this->Lang('subject_newnews'));
-$this->SetTemplate('email_template',
-		   $this->GetDfltEmailTemplate());
+$this->SetTemplate('email_template',$this->GetDfltEmailTemplate());
 
 # Other preferences
 $this->SetPreference('allowed_upload_types','gif,png,jpeg,jpg');
@@ -174,21 +230,19 @@ $perm_id = $db->GetOne("SELECT permission_id FROM ".cms_db_prefix()."permissions
 $group_id = $db->GetOne("SELECT group_id FROM ".cms_db_prefix()."groups WHERE group_name = 'Admin'");
 
 $count = $db->GetOne("SELECT count(*) FROM " . cms_db_prefix() . "group_perms WHERE group_id = ? AND permission_id = ?", array($group_id, $perm_id));
-if (isset($count) && intval($count) == 0)
-{
-	$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-	$query = "INSERT INTO " . cms_db_prefix() . "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".$new_id.", ".$group_id.", ".$perm_id.", ". $db->DBTimeStamp(time()) . ", " . $db->DBTimeStamp(time()) . ")";
-	$db->Execute($query);
+if (isset($count) && intval($count) == 0) {
+  $new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
+  $query = "INSERT INTO " . cms_db_prefix() . "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".$new_id.", ".$group_id.", ".$perm_id.", ". $db->DBTimeStamp(time()) . ", " . $db->DBTimeStamp(time()) . ")";
+  $db->Execute($query);
 }
 
 $group_id = $db->GetOne("SELECT group_id FROM ".cms_db_prefix()."groups WHERE group_name = 'Editor'");
 
 $count = $db->GetOne("SELECT count(*) FROM " . cms_db_prefix() . "group_perms WHERE group_id = ? AND permission_id = ?", array($group_id, $perm_id));
-if (isset($count) && intval($count) == 0)
-{
-	$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-	$query = "INSERT INTO " . cms_db_prefix() . "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".$new_id.", ".$group_id.", ".$perm_id.", ". $db->DBTimeStamp(time()) . ", " . $db->DBTimeStamp(time()) . ")";
-	$db->Execute($query);
+if (isset($count) && intval($count) == 0) {
+  $new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
+  $query = "INSERT INTO " . cms_db_prefix() . "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".$new_id.", ".$group_id.", ".$perm_id.", ". $db->DBTimeStamp(time()) . ", " . $db->DBTimeStamp(time()) . ")";
+  $db->Execute($query);
 }
 
 # Indexes

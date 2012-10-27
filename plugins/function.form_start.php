@@ -13,7 +13,7 @@ function smarty_cms_function_form_start($params, &$template)
   $mactparms['mid'] = $smarty->get_template_vars('actionid');
   $mactparms['returnid'] = $smarty->get_template_vars('returnid');
   $mactparms['inline'] = 0;
-  $tagparms['method'] = 'POST';
+  $tagparms['method'] = 'post';
   $tagparms['enctype'] = 'multipart/form-data';
   $tagparms['action'] = 'moduleinterface.php';
   if( cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE) ) {
@@ -49,9 +49,12 @@ function smarty_cms_function_form_start($params, &$template)
       $mactparms[$key] = trim($value);
       break;
 
+    case 'method':
+      $tagparms[$key] = strtolower(trim($value));
+      break;
+
     case 'url':
       $key = 'action';
-    case 'method':
     case 'enctype':
     case 'id':
     case 'class':

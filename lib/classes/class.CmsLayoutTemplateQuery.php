@@ -61,55 +61,55 @@ class CmsLayoutTemplateQuery
     foreach( $this->_args as $key => $val ) {
       if( empty($val) ) continue;
       if( is_numeric($key) && $val[1] == ':' ) {
-	list($key,$second) = explode(':',$val,2);
+				list($key,$second) = explode(':',$val,2);
       }
       switch( strtolower($key) ) {
       case 't': // type
-	$second = (int)$second;
-	$where['type'][] = 'type_id = '.$db->qstr($second);
-	break;
+				$second = (int)$second;
+				$where['type'][] = 'type_id = '.$db->qstr($second);
+				break;
       case 'c': // category
-	$second = (int)$second;
-	$where['category'][] = 'category_id = '.$db->qstr($second);
-	break;
+				$second = (int)$second;
+				$where['category'][] = 'category_id = '.$db->qstr($second);
+				break;
       case 'd': // design
-	// find all the templates in design: d
-	$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
+				// find all the templates in design: d
+				$q2 = 'SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
                WHERE design_id = ?';
-	$tpls = $db->GetCol($q2,array((int)$second));
-	$where['design'][] = 'id IN ('.implode(',',$tpls).')';
-	break;
+				$tpls = $db->GetCol($q2,array((int)$second));
+				$where['design'][] = 'id IN ('.implode(',',$tpls).')';
+				break;
       case 'u': // user
-	$second = (int)$second;
-	$where['user'][] = 'owner_id = '.$db->qstr($second);
-	break;
+				$second = (int)$second;
+				$where['user'][] = 'owner_id = '.$db->qstr($second);
+				break;
       case 'e': // editable
-	$second = (int)$second;
-	$q2 = 'SELECT DISTINCT tpl_id FROM (
+				$second = (int)$second;
+				$q2 = 'SELECT DISTINCT tpl_id FROM (
                  SELECT tpl_id FROM '.cms_db_prefix().CmsLayoutTemplate::ADDUSERSTABLE.'
                    WHERE user_id = ? 
                  UNION
                  SELECT id AS tpl_id FROM '.cms_db_prefix().CmsLayoutTemplate::TABLENAME.'
                    WHERE owner_id = ?)
                  AS tmp1';
-	$t2 = $db->GetCol($q2,array($second,$second));
-	if( is_array($t2) && count($t2) ) {
-	  $where['user'][] = 'id IN ('.implode(',',$t2).')';
-	}
-	break;
+				$t2 = $db->GetCol($q2,array($second,$second));
+				if( is_array($t2) && count($t2) ) {
+					$where['user'][] = 'id IN ('.implode(',',$t2).')';
+				}
+				break;
       case 'limit':
-	$this->_limit = max(1,min(1000,$val));
-	break;
+				$this->_limit = max(1,min(1000,$val));
+				break;
       case 'offset':
-	$this->_offset = max(0,$val);
-	break;
+				$this->_offset = max(0,$val);
+				break;
       }
     }
 
     $tmp = array();
     foreach( $where as $key => $exprs ) {
       if( count($exprs) ) {
-	$tmp[] = '('.implode(' OR ',$exprs).')';
+				$tmp[] = '('.implode(' OR ',$exprs).')';
       }
     }
     if( count($tmp) ) {

@@ -11,33 +11,37 @@ $preview = FALSE;
 $articleid = (isset($params['articleid']))?$params['articleid']:-1;
 $cache_id = 'nd'.md5(serialize($params));
 $compile_id = 'nd'.$articleid;
-$template = 'detail'.$this->GetPreference('current_detail_template');
-if (isset($params['detailtemplate']))
-  {
-    $template = 'detail'.$params['detailtemplate'];
-  }
 
-if( $id == '_preview_' && isset($_SESSION['news_preview']) && isset($params['preview']) )
-  {
-    // see if our data matches.
-    if( md5(serialize($_SESSION['news_preview'])) == $params['preview'] )
-      {
-	$fname = TMP_CACHE_LOCATION.'/'.$_SESSION['news_preview']['fname'];
-	if( file_exists($fname) && (md5_file($fname) == $_SESSION['news_preview']['checksum']) )
-	  {
-	    $data = unserialize(file_get_contents($fname));
-	    if( is_array($data) )
-	      {
-		// get passed data into a standard format.
-		$article = new news_article;
-		$article->set_linkdata($id,$params);
-		news_ops::fill_article_from_formparams($article,$data,FALSE,FALSE);
-		$compile_id = 'news_preview_'.time();
-		$preview = TRUE;
-	      }
-	  }
-      }
+$template = null;
+if (isset($params['summarytemplate'])) {
+  $template = trim($params['summarytemplate']);
+}
+else {
+  $tpl = CmsLayoutTemplate::load_dflt_by_type('News::detail');
+  if( !is_object($tpl) ) {
+    audit('',$this->GetName(),'No default summary template found');
+    return;
   }
+  $template = $tpl->get_name();
+}
+
+if( $id == '_preview_' && isset($_SESSION['news_preview']) && isset($params['preview']) ) {
+  // see if our data matches.
+  if( md5(serialize($_SESSION['news_preview'])) == $params['preview'] ) {
+    $fname = TMP_CACHE_LOCATION.'/'.$_SESSION['news_preview']['fname'];
+    if( file_exists($fname) && (md5_file($fname) == $_SESSION['news_preview']['checksum']) ) {
+      $data = unserialize(file_get_contents($fname));
+      if( is_array($data) ) {
+	// get passed data into a standard format.
+	$article = new news_article;
+	$article->set_linkdata($id,$params);
+	news_ops::fill_article_from_formparams($article,$data,FALSE,FALSE);
+	$compile_id = 'news_preview_'.time();
+	$preview = TRUE;
+      }
+    }
+  }
+}
 
 if( $preview || 
     !$smarty->isCached($this->GetDatabaseResource($template),$cache_id,$compile_id) ) {
@@ -71,7 +75,7 @@ if( $preview ||
   $smarty->assign('category_label', $this->Lang('category_label'));
   $smarty->assign('author_label', $this->Lang('author_label'));
   $smarty->assign('extra_label', $this->Lang('extra_label'));
- }
+}
 
 //Display template
 echo $smarty->fetch($this->GetDatabaseResource($template),$cache_id,$compile_id);

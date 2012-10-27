@@ -884,51 +884,63 @@ final class ModuleOperations
 	  $cleanup = $modinstance->AllowUninstallCleanup();
 	  $result = $modinstance->Uninstall();
 
-	  if (!isset($result) || $result === FALSE)
-		  {
-			  // now delete the record
-			  $query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ?";
-			  $db->Execute($query, array($module));
-			  
-			  // delete any dependencies
-			  $query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
-			  $db->Execute($query, array($module));
-			  
-			  // clean up, if permitted
-			  if ($cleanup)
-				  {
-					  $db->Execute('DELETE FROM '.cms_db_prefix().
-								   'module_templates where module_name=?',array($module));
-					  $db->Execute('DELETE FROM '.cms_db_prefix().
-								   'event_handlers where module_name=?',array($module));
-					  $db->Execute('DELETE FROM '.cms_db_prefix().
-								   'events where originator=?',array($module));
-					  $db->Execute('DELETE FROM '.cms_db_prefix().
-								   'module_smarty_plugins where module=?',array($module));
-					  $db->Execute('DELETE FROM '.cms_db_prefix().
-								   "siteprefs WHERE sitepref_name LIKE '".
-								   str_replace("'",'',$db->qstr($module)).
-								   "_mapi_pref%'");
-					  $db->Execute('DELETE FROM '.cms_db_prefix().
-								   'routes WHERE dest = ?',array($module));
-					  $db->Execute('DELETE FROM '.cms_db_prefix().
-                                   'module_smarty_plugins WHERE module = ?',array($module));
+	  if (!isset($result) || $result === FALSE) {
+		  // now delete the record
+		  $query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ?";
+		  $db->Execute($query, array($module));
+
+		  // delete any dependencies
+		  $query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
+		  $db->Execute($query, array($module));
+
+		  // clean up, if permitted
+		  if ($cleanup) {
+			  // deprecated
+			  $db->Execute('DELETE FROM '.cms_db_prefix().'module_templates where module_name=?',array($module));
+
+			  $db->Execute('DELETE FROM '.cms_db_prefix().
+						   'event_handlers where module_name=?',array($module));
+			  $db->Execute('DELETE FROM '.cms_db_prefix().
+						   'events where originator=?',array($module));
+
+			  $types = CmsLayoutTemplateType::load_all_by_originator($module);
+			  if( is_array($types) && count($types) ) {
+				  foreach( $types as $type ) {
+					  $tpls = CmsLayoutTemplate::template_query(array('t:'.$type->get_id()));
+					  if( is_array($tpls) && count($tpls) ) {
+						  foreach( $tpls as $tpl ) {
+							  $tpl->delete();
+						  }
+					  }
+					  $type->delete();
 				  }
+			  }
 
-			  // clear the cache.
-			  $gCms->clear_cached_files();
-			  
-			  // Removing module from info
-			  unset($this->_moduleinfo[$module]);
+			  $db->Execute('DELETE FROM '.cms_db_prefix().
+						   'module_smarty_plugins where module=?',array($module));
+			  $db->Execute('DELETE FROM '.cms_db_prefix().
+						   "siteprefs WHERE sitepref_name LIKE '".
+						   str_replace("'",'',$db->qstr($module)).
+						   "_mapi_pref%'");
+			  $db->Execute('DELETE FROM '.cms_db_prefix().
+						   'routes WHERE dest = ?',array($module));
+			  $db->Execute('DELETE FROM '.cms_db_prefix().
+						   'module_smarty_plugins WHERE module = ?',array($module));
+		  }
 
-			  Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
-			  audit('','Module','Uninstalled module '.$module);
-		  }
-	  else
-		  {
-			  $this->setError($result);
-			  return false;
-		  }
+		  // clear the cache.
+		  $gCms->clear_cached_files();
+
+		  // Removing module from info
+		  unset($this->_moduleinfo[$module]);
+
+		  Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
+		  audit('','Module','Uninstalled module '.$module);
+	  }
+	  else {
+		  $this->setError($result);
+		  return false;
+	  }
 	  return true;
   }
 

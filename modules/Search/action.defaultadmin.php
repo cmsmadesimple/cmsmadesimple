@@ -83,13 +83,6 @@ if ($this->CheckPermission('Modify Site Preferences'))
 			     ('statistics' == $tab)?true:false);
     echo $this->SetTabHeader('options',$this->Lang('options'), ('options' == $tab)?true:false);
   }
-
-if ($this->CheckPermission('Modify Templates'))
-  {
-    echo $this->SetTabHeader('search_template',$this->Lang('searchtemplate'), ('search_template' == $tab)?true:false);
-    echo $this->SetTabHeader('result_template',$this->Lang('resulttemplate'), ('result_template' == $tab)?true:false);
-  }
-
 echo $this->EndTabHeaders();
 
 
@@ -143,35 +136,6 @@ if ($this->CheckPermission('Modify Site Preferences'))
     $smarty->assign('submit',$this->CreateInputSubmit($id, 'submit', $this->Lang('submit')));
     $smarty->assign('formend',$this->CreateFormEnd());
     echo $this->ProcessTemplate('options_tab.tpl');
-    echo $this->EndTab();
-  }
-
-if( $this->CheckPermission( 'Modify Templates' ) )
-  {
-    echo $this->StartTab('search_template', $params);
-	
-    echo $this->CreateFormStart($id, 'updatesearchtemplate');
-	
-    echo '<p>'.$this->CreateTextArea(false, $id, $this->GetTemplate('displaysearch'), 'templatecontent', 'pagebigtextarea').'</p>';
-	
-    echo $this->CreateInputSubmit($id, 'submitbutton', $this->Lang('submit'));
-    echo $this->CreateInputSubmit($id, 'defaultsbutton', $this->Lang('sysdefaults'), '', '', $this->Lang('restoretodefaultsmsg'));
-	
-    echo $this->CreateFormEnd();
-	
-    echo $this->EndTab();
-	
-    echo $this->StartTab('result_template', $params);
-	
-    echo $this->CreateFormStart($id, 'updateresulttemplate');
-	
-    echo '<p>'.$this->CreateTextArea(false, $id, $this->GetTemplate('displayresult'), 'templatecontent2', 'pagebigtextarea').'</p>';
-	
-    echo $this->CreateInputSubmit($id, 'submitbutton', $this->Lang('submit'));
-    echo $this->CreateInputSubmit($id, 'defaultsbutton', $this->Lang('sysdefaults'), '', '', $this->Lang('restoretodefaultsmsg'));
-	
-    echo $this->CreateFormEnd();
-	
     echo $this->EndTab();
   }
 

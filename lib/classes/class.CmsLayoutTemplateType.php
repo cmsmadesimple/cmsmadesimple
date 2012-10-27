@@ -33,6 +33,8 @@ class CmsLayoutTemplateType
 	const TABLENAME = 'layout_tpl_type';
   private $_dirty;
   private $_data = array();
+	private static $_cache;
+	private static $_name_cache;
 
   /**
    * Get the template type id
@@ -336,7 +338,9 @@ class CmsLayoutTemplateType
 	  if( !$dbr ) {
 		  throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 	  }
+
 	  $this->_data['id'] = $db->Insert_ID();
+		CmsTemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template Type Created');
 	  $this->_dirty = null;
   }
@@ -373,6 +377,8 @@ class CmsLayoutTemplateType
 	  if( !$dbr ) {
 		  throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
 	  }
+
+		CmsTemplateCache::clear_cache();
 	  $this->_dirty = null;
 		audit($this->get_id(),'CMSMS','Template Type Updated');
   }
@@ -408,8 +414,9 @@ class CmsLayoutTemplateType
    */
   public function delete()
   {
-	  if( !$this->getid() ) return;
-    
+	  if( !$this->get_id() ) return;
+
+		$tmp = CmsLayoutTemplate::template_query(array('t:'.$this->get_id()));
 	  if( is_array($tmp) && count($tmp) ) {
 		  throw new CmsInvalidDataException('Cannot delete a template type with existing templates');
 	  }
@@ -422,6 +429,7 @@ class CmsLayoutTemplateType
 	  }
 
 	  $this->_dirty = TRUE;
+		CmsTemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template Type Deleted');
 	  unset($this->_data['id']);
   }
@@ -479,7 +487,7 @@ class CmsLayoutTemplateType
 	  if( !is_callable($cb) ) 
 		  throw new CmsDataNotFoundException('No callback information to reset content');
 	  
-	  $content = call_user_func($cb);
+	  $content = call_user_func($cb,$this);
 	  $this->set_dflt_contents($content);
   }
 
@@ -493,6 +501,9 @@ class CmsLayoutTemplateType
 	  $ob = new CmsLayoutTemplateType;
 	  $ob->_data = $row;
 	  $ob->_dirty = FALSE;
+
+		self::$_cache[$ob->get_id()] = $ob;
+		self::$_name_cache[$ob->get_originator().'::'.$ob->get_name()] = $ob->get_id();
 	  return $ob;
   }
 
@@ -510,11 +521,20 @@ class CmsLayoutTemplateType
 	  $db = cmsms()->GetDb();
 	  $row = null;
 	  if( (int)$val > 0 ) {
+			if( isset(self::$_cache[$val]) ) {
+				return self::$_cache[$val];
+			}
+
 		  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
                 WHERE id = ?';
 		  $row = $db->GetRow($query,array($val));
 	  }
 	  elseif( strlen($val) > 0 ) {
+			if( isset(self::$_name_cache[$val]) ) {
+				$id = self::$_name_cache[$val];
+				return self::$_cache[$id];
+			}
+
 		  $tmp = explode('::',$val);
 		  if( count($tmp) == 2 ) {
 			  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
@@ -523,7 +543,7 @@ class CmsLayoutTemplateType
 		  }
 	  }
 	  if( !is_array($row) || count($row) == 0 ) {
-		  throw new CmsDataNotFoundException('Could not find row identified by '.$val);
+		  throw new CmsDataNotFoundException('Could not find template type identified by '.$val);
 	  }
 
 	  return self::_load_from_data($row);
@@ -545,7 +565,11 @@ class CmsLayoutTemplateType
 
 	  $db = cmsms()->GetDb();
 	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
-                WHERE originator = ? ORDER BY modified DESC';
+              WHERE originator = ?';
+		if( count(self::$_cache) ) {
+			$query .= ' AND id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
+		}
+    $query .= ' ORDER BY modified DESC';
 	  $list = $db->GetArray($query,array($originator));
 	  if( !is_array($list) || count($list) == 0 ) {
 		  return;
@@ -562,8 +586,11 @@ class CmsLayoutTemplateType
   public static function get_all()
   {
 	  $db = cmsms()->GetDb();
-	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
-                ORDER BY modified DESC';
+	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME;
+		if( count(self::$_cache) ) {
+ 			$query .= ' WHERE id NOT IN ('.implode(',',array_keys(self::$_cache)).')';
+		}
+		$query .= '	ORDER BY modified DESC';
 	  $list = $db->GetArray($query);
 	  if( !is_array($list) || count($list) == 0 ) {
 		  return;
@@ -575,6 +602,38 @@ class CmsLayoutTemplateType
 	  }
 	  return $out;
   }
+
+	public static function load_bulk($list)
+	{
+		if( !is_array($list) || count($list) == 0 ) return;
+
+		$list2 = array();
+		foreach( $list as $one ) {
+			$one = (int)$one;
+			if( $one <= 0 ) continue;
+			if( isset(self::$_cache[$one]) ) continue;
+			$list2[] = $one;
+		}
+
+	  $db = cmsms()->GetDb();
+	  $query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
+              WHERE id IN ('.implode(',',$list).')';
+	  $list = $db->GetArray($query);
+	  if( !is_array($list) || count($list2) == 0 ) {
+		  return;
+	  }
+
+	  $out = array();
+	  foreach( $list as $row ) {
+		  $out[] = self::_load_from_data($row);
+	  }
+	  return $out;
+	}
+
+	public static function get_loaded_types()
+	{
+		return array_keys(self::$_cache);
+	}
 } // end of class
 
 #

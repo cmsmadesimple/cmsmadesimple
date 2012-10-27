@@ -31,10 +31,3 @@ $(document).ready(function(){
 {/if}
 
 {tab_end}
-
-{* begin help *}
-<div style="display: none;">{strip}
-  <div id="help_create" title="{$mod->Lang('prompt_help')}">
-  {$mod->Lang('help_create_template')}
-  </div>
-{/strip}</div>

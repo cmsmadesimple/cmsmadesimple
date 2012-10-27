@@ -10,6 +10,7 @@ $lang['available_templates'] = 'Available Templates';
 
 #C
 $lang['cancel'] = 'Cancel';
+$lang['confirm_bulk_tmplop'] = 'Are you sure you want to perform this action on multiple templates?';
 $lang['confirm_delete_1'] = 'Are you sure you want to delete this design?';
 $lang['confirm_delete_2'] = 'Yes, I am sure I want to delete this item';
 $lang['confirm_delete_category'] = 'Are you sure you want to delete this category?';
@@ -33,6 +34,7 @@ $lang['edit_type'] = 'Edit Template Type';
 $lang['error_missingparam'] = 'A required parameter is missing';
 $lang['error_notconfirmed'] = 'The action was not confirmed';
 $lang['error_notemplates'] = 'No Editable Templates Found';
+$lang['error_nothingselected'] = 'Nothing selected';
 
 #F
 $lang['friendlyname'] = 'Design Manager';
@@ -48,6 +50,7 @@ $lang['help_dflt_template'] = 'The default template contains the contents that a
 $lang['help_has_dflt'] = 'If &quot;Yes&quot;, this template type has some default content that is used as a sample when creating a new template of this type.  Of course you are able to change the contents of hte template';
 $lang['help_rm_tpl'] = 'Enabling this option will delete all templates that are attached to this design, but not attached to another design.  Use extreme caution when enabling this option.';
 $lang['help_rm_css'] = 'Enabling this option will delete all stylesheets that are attached to this design, but not attached to another design.  Use extreme caution when enabling this option.';
+$lang['help_template_bulk'] = 'This option allows performing actions on multiple templates at once.  Use with caution';
 
 #I
 $lang['import_design'] = 'Import Design';
@@ -86,6 +89,8 @@ $lang['prompt_add'] = 'Add';
 $lang['prompt_any'] = 'Any';
 $lang['prompt_category'] = 'Category';
 $lang['prompt_categories'] = 'Categories';
+$lang['prompt_copy'] = 'Copy';
+$lang['prompt_copy_template'] = 'Copy this Template';
 $lang['prompt_created'] = 'Create Date';
 $lang['prompt_default'] = 'Default';
 $lang['prompt_delete'] = 'Delete';
@@ -105,6 +110,7 @@ $lang['prompt_na'] = 'N/A';
 $lang['prompt_name'] = 'Name';
 $lang['prompt_none'] = 'None';
 $lang['prompt_notdflt'] = 'This is not a default template';
+$lang['prompt_notdflt_tpl'] = 'This is not a default template for this template type.';
 $lang['prompt_of'] = 'Of';
 $lang['prompt_originator'] = 'Originator';
 $lang['prompt_owner'] = 'Owner';
@@ -117,6 +123,7 @@ $lang['prompt_stylesheets'] = 'Stylesheets';
 $lang['prompt_template'] = 'Template';
 $lang['prompt_templates'] = 'Templates';
 $lang['prompt_templatetypes'] = 'Template Types';
+$lang['prompt_title_na'] = 'This template type does not have a default';
 $lang['prompt_design'] = 'Design';
 $lang['prompt_designs'] = 'Designs';
 $lang['prompt_type'] = 'Type';

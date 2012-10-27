@@ -156,6 +156,7 @@ while( $trycount < 2 ) {
     $smarty->assign('page_alias', $contentobj->Alias());
     $smarty->assign('position', $contentobj->Hierarchy());
     $smarty->assign('friendly_position', $gCms->variables['friendly_position']);
+    $tmp1 = new CmsTemplateCache();
 	
     CmsNlsOperations::set_language(); // <- NLS detection for frontend
     $smarty->assign('lang',CmsNlsOperations::get_current_language());
@@ -185,7 +186,7 @@ while( $trycount < 2 ) {
     if( !$showtemplate ) {
       $smarty->setCaching(false);
       // in smarty 3, we could use eval:{content} I think.
-      $html = $smarty->fetch('template:notemplate')."\n";
+      $html = $smarty->fetch('cms_template:notemplate')."\n";
     }
     else {
       debug_buffer('process template top');

@@ -109,6 +109,9 @@ $lang['sysdefaults'] = 'Restore To Defaults';
 
 // T
 $lang['timetaken'] = 'Time Taken';
+$lang['type_Search'] = 'Search';
+$lang['type_searchform'] = 'Search Form';
+$lang['type_searchresults'] = 'Search Results';
 
 // U
 $lang['usestemming'] = 'Use Word Stemming (English Only)';

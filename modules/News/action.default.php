@@ -1,9 +1,17 @@
 <?php
 if (!isset($gCms)) exit;
 
-$template = 'summary'.$this->GetPreference('current_summary_template');
+$template = null;
 if (isset($params['summarytemplate'])) {
-  $template = 'summary'.$params['summarytemplate'];
+  $template = trim($params['summarytemplate']);
+}
+else {
+  $tpl = CmsLayoutTemplate::load_dflt_by_type('News::summary');
+  if( !is_object($tpl) ) {
+    audit('',$this->GetName(),'No default summary template found');
+    return;
+  }
+  $template = $tpl->get_name();
 }
 
 $cache_id = '|ns'.md5(serialize($params));

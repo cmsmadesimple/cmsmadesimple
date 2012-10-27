@@ -34,7 +34,7 @@ function smarty_function_cms_stylesheet($params, &$template)
 	global $CMS_LOGIN_PAGE;
 	global $CMS_STYLESHEET;
 	$CMS_STYLESHEET = 1;
-	$theme_id = -1;
+	$design_id = -1;
 	$use_https = 0;
 	$cache_dir = $config['css_path'];
 	$stylesheet = '';
@@ -55,12 +55,12 @@ function smarty_function_cms_stylesheet($params, &$template)
 	# Read parameters
 	#---------------------------------------------	
 	
-	if (isset($params['themeid']) && $params['themeid']!='') {
-		$theme_id = (int)$params['themeid'];
+	if (isset($params['designid']) && $params['designid']!='') {
+		$design_id = (int)$params['designid'];
 	} else {
 		$content_obj = cmsms()->variables['content_obj'];
 		if( !is_object($content_obj) ) return;
-		$theme_id = $content_obj->GetPropertyValue('theme_id');
+		$design_id = $content_obj->GetPropertyValue('design_id');
 		$use_https = (int)$content_obj->Secure();
 	}
 
@@ -121,9 +121,9 @@ function smarty_function_cms_stylesheet($params, &$template)
   	    $query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,
                       A.media_type,A.media_query,B.item_order
    	                FROM '.cms_db_prefix().'css A 
-                    LEFT JOIN '.cms_db_prefix().'layout_theme_cssassoc B ON A.css_id = B.css_id';
-		$where[] = 'B.theme_id = ?';
-		$qparms = array($theme_id);
+                    LEFT JOIN '.cms_db_prefix().'layout_design_cssassoc B ON A.css_id = B.css_id';
+		$where[] = 'B.design_id = ?';
+		$qparms = array($design_id);
 
 		if( isset($params['media']) && strtolower($params['media']) != 'all' ) {
 		
@@ -150,9 +150,6 @@ function smarty_function_cms_stylesheet($params, &$template)
 	#---------------------------------------------		
 	
 	$res = $db->GetArray($query, $qparms);
-	debug_to_log($db->sql);
-	debug_to_log($db->ErrorMsg());
-	debug_to_log($res);
 	if($res) {
 	
 		// Combine stylesheets
@@ -219,7 +216,7 @@ function smarty_function_cms_stylesheet($params, &$template)
 				foreach($all_media as $hash=>$onemedia) {
 				
 					// combine all matches into one stylesheet.
-					$filename = 'stylesheet_combined_'.md5($theme_id.$use_https.serialize($params).$all_timestamps[$hash].$fnsuffix).'.css';
+					$filename = 'stylesheet_combined_'.md5($design_id.$use_https.serialize($params).$all_timestamps[$hash].$fnsuffix).'.css';
 					$fn = cms_join_path($cache_dir,$filename);
 					
 					// Get media_type and media_query

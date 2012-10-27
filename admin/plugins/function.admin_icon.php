@@ -61,6 +61,11 @@ function smarty_function_admin_icon($params,&$template)
   }
   if( !$fnd ) return;
 
+  if( !isset($tagparms['alt']) ) {
+    $tagparms['alt'] = basename($fnd);
+  }
+
+
   $out = "<img src=\"{$fnd}\"";
   foreach( $tagparms as $key => $value ) {
     $out .= " $key=\"$value\"";

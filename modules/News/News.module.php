@@ -167,7 +167,6 @@ class News extends CMSModule
 	{
 	  return $this->CheckPermission('Modify News') || 
 	    $this->CheckPermission('Modify Site Preferences') || 
-	    $this->CheckPermission('Modify Templates') || 
 	    $this->CheckPermission('Approve News');
 	}
 	
@@ -435,13 +434,47 @@ class News extends CMSModule
     $query .= ' ORDER BY news_date DESC';
     $tmp = $db->GetArray($query,array('published',''));
 
-    if( is_array($tmp) )
-      {
-	foreach( $tmp as $one )
-	  {
-	    news_admin_ops::register_static_route($one['news_url'],$one['news_id']);
-	  }
+    if( is_array($tmp) ) {
+      foreach( $tmp as $one ) {
+	news_admin_ops::register_static_route($one['news_url'],$one['news_id']);
       }
+    }
+  }
+
+  public static function page_type_lang_callback($str)
+  {
+    $mod = cms_utils::get_module('News');
+    return $mod->Lang('type_'.$str);
+  }
+
+  public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
+  {
+    if( $type->get_originator() != 'News' ) {
+      throw new CmsLogicException('Cannot reset contents for this template type');
+    }
+
+    $fn = null;
+    switch( $type->get_name() ) {
+    case 'summary':
+      $fn = 'orig_summary_template.tpl';
+      break;
+
+    case 'detail':
+      $fn = 'orig_detail_template.tpl';
+      break;
+
+    case 'form':
+      $fn = 'orig_form_template.tpl';
+      break;
+
+    case 'browsecat':
+      $fn = 'browsecat.tpl';
+    }
+
+    $fn = cms_join_path(dirname(__FILE__),'templates',$fn);
+    if( file_exists($fn) ) {
+      return @file_get_contents($fn);
+    }
   }
 }
 

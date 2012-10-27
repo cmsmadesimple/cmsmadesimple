@@ -1,9 +1,22 @@
+<script type="text/javascript">
+$(document).ready(function(){
+ $('#tpl_bulk_submit').click(function(e){
+   var n = $('input:checkbox:checked.tpl_select').length
+   if( n == 0 ) {
+     alert('{$mod->Lang('error_nothingselected')}');
+     return false;
+   }
+   return confirm('{$mod->Lang('confirm_bulk_tmplop')}');
+ });
+});
+</script>
+
 {if isset($templates)}
 {form_start}{strip}
   {assign var='ntemplates' value=count($templates)}
   <div class="pageoptions" style="text-align: right;">
     <label for="filter_tpl">{$mod->Lang('prompt_filter')}:</label>
-    &nbsp;<select id="filter_tpl" name="{$actionid}filter_tpl">{html_options options=$filter_options selected=$filter.tpl}</select>&nbsp;
+    &nbsp;<select id="filter_tpl" name="{$actionid}filter_tpl">{html_options options=$filter_options selected=$filter[0]}</select>&nbsp;
     <label for="filter_limit">{$mod->Lang('prompt_limit')}:</label>
     &nbsp;<select id="filter_limit" name="{$actionid}filter_limit">
       <option value="2"{if $filter.limit == 2} selected="selected"{/if}>2</option>
@@ -15,6 +28,7 @@
     </select>
     <input type="submit" name="{$actionid}dofilter" value="{$mod->Lang('submit')}"/>
   </div>
+
   {if isset($tpl_nav)}
   <div class="pageoptions" style="text-align: right;">
   {if $tpl_nav.curpage > 1}
@@ -83,14 +97,18 @@
         <td>
 	 {assign var='the_type' value=$list_all_types.$n}
          {if $the_type->get_dflt_flag()}
-           {if $template->get_type_dflt()}{admin_icon icon='true.gif' title=$mod->Lang('prompt_dflt')}{else}{admin_icon icon='false.gif' title=$mod->Lang('prompt_notdflt')}{/if}
+           {if $template->get_type_dflt()}
+             {admin_icon icon='true.gif' title=$mod->Lang('prompt_dflt')}
+           {else}
+             {admin_icon icon='false.gif' title=$mod->Lang('prompt_notdflt_tpl')}
+           {/if}
          {else}
-           {$mod->Lang('prompt_na')}
+           <span title="{$mod->Lang('prompt_title_na')}">{$mod->Lang('prompt_na')}</span>
          {/if}
         </td>
         <td><a href="{$edit_tpl}" title="{$mod->Lang('edit_template')}">{admin_icon icon='edit.gif' title=$mod->Lang('prompt_edit')}</a></td>
 	{if $has_add_right}
-        <td><a href="{$copy_tpl}" title="{$mod->Lang('copy_template')}">{admin_icon icon='copy.gif' title=$mod->Lang('prompt_copy')}</a></td>
+        <td><a href="{$copy_tpl}" title="{$mod->Lang('copy_template')}">{admin_icon icon='copy.gif' title=$mod->Lang('prompt_copy_template')}</a></td>
         {/if}
         <td>
          {if $template->get_owner_id() == get_userid()}
@@ -110,7 +128,7 @@
 <div style="width: 100%;">
 {if $has_add_right}
   {form_start action='admin_edit_template'}
-  <div style="float: left; width: 49%;>
+  <div style="float: left; width: 49%;">
   <p>
     <label for="tpl_import_type">{$mod->Lang('create_template')}:</label>&nbsp;
     <select name="{$actionid}import_type" id="tpl_import_type">
@@ -121,16 +139,26 @@
   </div>
   {form_end}
 {/if}
-<div style="float: right; width: 48%; text-align: right;>
+<div style="float: right; width: 48%; text-align: right;">
   {form_start action='admin_bulk_template'}
   <p class="pageinput" style="text-align: right;">
     <label for="tpl_bulk_action">{$mod->Lang('prompt_with_selected')}:</label>&nbsp;
     <select name="{$actionid}bulk_action" id="tpl_bulk_action" class="tpl_bulk_action">
       <option value="delete" title="{$mod->Lang('title_delete')}">{$mod->lang('prompt_delete')}</option>
     </select>
-    <input class="tpl_bulk_action" type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>&nbsp;{admin_icon name="help_bulk" class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}
+    <input id="tpl_bulk_submit" class="tpl_bulk_action" type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>&nbsp;{admin_icon name="help_bulk" class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}
   </p>
   {form_end}
 </div>
 <div class="clearb"></div>
 </div>
+
+{* begin help *}
+<div style="display: none;">{strip}
+  <div id="help_create" title="{$mod->Lang('prompt_help')}">
+  {$mod->Lang('help_create_template')}
+  </div>
+  <div id="help_bulk" title="{$mod->Lang('prompt_help')}">
+  {$mod->Lang('help_template_bulk')}
+  </div>
+{/strip}</div>
