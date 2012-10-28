@@ -230,7 +230,7 @@ class CmsLayoutCollection
       $tmp = $db->GetOne($query,array($this->get_name()));
     }
     if( $tmp ) {
-      throw new CmsInvalidDataException('Template with the same name already exists.');
+      throw new CmsInvalidDataException('Collection with the same name already exists.');
     }
   }
 
@@ -280,7 +280,7 @@ class CmsLayoutCollection
       }
     }
 
-		audit($this->get_id(),'CMSMS','Design created');
+		audit($this->get_id(),'CMSMS','Design '.$this->get_name().' created');
   }
 
   private function _update()
@@ -336,7 +336,7 @@ class CmsLayoutCollection
       }
     }
 
-		audit($this->get_id(),'CMSMS','Design updated');
+		audit($this->get_id(),'CMSMS','Design '.$this->get_name().' updated');
   }
 
   public function save()
@@ -375,7 +375,7 @@ class CmsLayoutCollection
               WHERE id = ?';
     $dbr = $db->Execute($query,array($this->get_id()));
 
-		audit($this->get_id(),'CMSMS','Design record deleted');
+		audit($this->get_id(),'CMSMS','Design '.$this->get_name().' deleted');
 
     unset($this->_data['id']);
     $this->_dirty = TRUE;

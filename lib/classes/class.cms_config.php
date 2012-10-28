@@ -92,6 +92,7 @@ class cms_config implements ArrayAccess
     $this->_types['image_uploads_path'] = self::TYPE_STRING;
     $this->_types['image_uploads_url'] = self::TYPE_STRING;
     $this->_types['debug'] = self::TYPE_BOOL;
+    $this->_types['debug_to_log'] = self::TYPE_BOOL;
     $this->_types['timezone'] = self::TYPE_STRING;
     $this->_types['persist_db_conn'] = self::TYPE_BOOL;
     $this->_types['previews_path'] = self::TYPE_STRING;
@@ -112,12 +113,11 @@ class cms_config implements ArrayAccess
     $this->_types['ignore_lazy_load'] = self::TYPE_BOOL;
 
     $config = array();
-    if (file_exists(CONFIG_FILE_LOCATION))
-      {
-		  include(CONFIG_FILE_LOCATION);
-		  unset($config['max_upload_size']);
-		  unset($config['upload_max_filesize']);
-      }
+    if (file_exists(CONFIG_FILE_LOCATION)) {
+		include(CONFIG_FILE_LOCATION);
+		unset($config['max_upload_size']);
+		unset($config['upload_max_filesize']);
+	}
 
     $this->_data = $config;
   }
@@ -134,10 +134,9 @@ class cms_config implements ArrayAccess
     $trace = debug_backtrace(FALSE);
     $class = '';
     if( isset($trace[1]['class']) ) $class = $trace[1]['class'];
-    if( $class && in_array($class,$this->_friends) )
-      {
-		  $this->_data = array_merge($this->_data,$newconfig);
-      }
+    if( $class && in_array($class,$this->_friends) ) {
+		$this->_data = array_merge($this->_data,$newconfig);
+	}
   }
 
 
@@ -171,48 +170,44 @@ class cms_config implements ArrayAccess
   {
 	  // hardcoded config vars
 	  // usually old values valid in past versions.
-	  switch( $key )
-		  {
-		  case 'use_adodb_lite':
-		  case 'use_hierarchy':
-			  // deprecated, backwards compat only
-			  return TRUE;
+	  switch( $key ) {
+	  case 'use_adodb_lite':
+	  case 'use_hierarchy':
+		  // deprecated, backwards compat only
+		  return TRUE;
 
-		  case 'use_smarty_php_tags':
-		  case 'output_compression':
-			  // deprecated, backwards compat only
-			  return FALSE;
+	  case 'use_smarty_php_tags':
+	  case 'output_compression':
+		  // deprecated, backwards compat only
+		  return FALSE;
 
-		  case 'default_upload_permission':
-			  // deprecated, backwards compat only
-			  return '664';
+	  case 'default_upload_permission':
+		  // deprecated, backwards compat only
+		  return '664';
 
-		  case 'assume_mod_rewrite':
-			  // deprecated, backwards compat only
-			  return ($this['url_rewriting'] == 'mod_rewrite')?true:false;
+	  case 'assume_mod_rewrite':
+		  // deprecated, backwards compat only
+		  return ($this['url_rewriting'] == 'mod_rewrite')?true:false;
 
-		  case 'internal_pretty_urls':
-			  // deprecated, backwards compat only
-			  return ($this['url_rewriting'] == 'internal')?true:false;
-		  }
+	  case 'internal_pretty_urls':
+		  // deprecated, backwards compat only
+		  return ($this['url_rewriting'] == 'internal')?true:false;
+	  }
 
 	  // from the config file.
-	  if( isset($this->_data[$key]) )
-	  {
+	  if( isset($this->_data[$key]) ) {
 		  return $this->_data[$key];
 	  }
 
 	  // cached, calculated values.
-	  if( isset($this->_cache[$key]) )
-	  {
+	  if( isset($this->_cache[$key]) ) {
 		  // this saves recursion and dynamic calculations all the time.
 		  return $this->_cache[$key];
 	  }
 
 	  // it's not explicitly specified in the config file.
 	  //$calculated_root_path = dirname(dirname(dirname(__FILE__)));
-	  switch( $key )
-	  {
+	  switch( $key ) {
 	  case 'dbms':
 	  case 'db_hostname':
 	  case 'db_username':
@@ -238,24 +233,23 @@ class cms_config implements ArrayAccess
 		  {
 			  $parts = parse_url($_SERVER['PHP_SELF']);
 			  $path = '';
-			  if( !empty($parts['path']) )
-				  {
-					  $path = dirname($parts['path']);
-                                          if( endswith($path,'install') ) {
-						  $path = substr($path,0,strlen($path)-strlen('install')-1);
-					  }
-					  else if( endswith($path,$this->offsetGet('admin_dir')) ) {
-						  $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
-					  }
-					  else if (strstr($path,'/lib') !== FALSE) {
-						  while( strstr($path,'/lib') !== FALSE ) {
-							  $path = dirname($path);
-						  }
-					  }
-					  while(endswith($path, DIRECTORY_SEPARATOR)) {
-						  $path = substr($path,0,strlen($path)-1);
+			  if( !empty($parts['path']) ) {
+				  $path = dirname($parts['path']);
+				  if( endswith($path,'install') ) {
+					  $path = substr($path,0,strlen($path)-strlen('install')-1);
+				  }
+				  else if( endswith($path,$this->offsetGet('admin_dir')) ) {
+					  $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
+				  }
+				  else if (strstr($path,'/lib') !== FALSE) {
+					  while( strstr($path,'/lib') !== FALSE ) {
+						  $path = dirname($path);
 					  }
 				  }
+				  while(endswith($path, DIRECTORY_SEPARATOR)) {
+					  $path = substr($path,0,strlen($path)-1);
+				  }
+			  }
 			  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
 			  $this->_cache[$key] = $str;
 			  return $str;
@@ -294,6 +288,11 @@ class cms_config implements ArrayAccess
 
 	  case 'debug':
 		  return false;
+
+	  // todo: removeme
+	  case 'debug_to_log':
+		  return TRUE; // temporary
+	  // todo: removeme.
 
 	  case 'timezone':
 		  return '';
@@ -361,16 +360,14 @@ class cms_config implements ArrayAccess
   {
     $tmp = debug_backtrace();
     $parent = '';
-    if( isset($tmp[1]) && isset($tmp[1]['class']) )
-      {
-	$class = $tmp[1]['class'];
-	$parent = get_parent_class($class);
-      }
-    if( $parent != 'CMSInstallerPage' )
-      {
-	trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
-	return;
-      }
+    if( isset($tmp[1]) && isset($tmp[1]['class']) ) {
+		$class = $tmp[1]['class'];
+		$parent = get_parent_class($class);
+	}
+    if( $parent != 'CMSInstallerPage' ) {
+		trigger_error('Modification of config variables is deprecated',E_USER_ERROR);
+		return;
+	}
     $this->_data[$key] = $value;
   }
 
@@ -385,26 +382,24 @@ class cms_config implements ArrayAccess
   {
 	  $type = self::TYPE_STRING;
 
-	  if( isset($this->_types[$key]) )
-		  {
-			  $type = $this->_types[$key];
-		  }
+	  if( isset($this->_types[$key]) ) {
+		  $type = $this->_types[$key];
+	  }
 
 	  $str = '';
-	  switch( $type )
-		  {
-		  case self::TYPE_STRING:
-			  $str = "'".$value."'";
-			  break;
+	  switch( $type ) {
+	  case self::TYPE_STRING:
+		  $str = "'".$value."'";
+		  break;
 
-		  case self::TYPE_BOOL:
-			  $str = ($value)?'true':'false';
-			  break;
+	  case self::TYPE_BOOL:
+		  $str = ($value)?'true':'false';
+		  break;
 
-		  case self::TYPE_INT:
-			  $str = (int)$value;
-			  break;
-		  }
+	  case self::TYPE_INT:
+		  $str = (int)$value;
+		  break;
+	  }
 	  return $str;
   }
 
@@ -419,32 +414,28 @@ class cms_config implements ArrayAccess
    */
   public function save($verbose = true,$filename = '')
   {
-    if( !$filename )
-      {
+	  if( !$filename ) {
 		  $filename = CONFIG_FILE_LOCATION;
       }
 
     // backup the original config.php file (just in case)
-    if( file_exists($filename) )
-      {
+	  if( file_exists($filename) ) {
 		  @copy($filename,cms_join_path(TMP_CACHE_LOCATION,basename($filename).time().'.bak'));
       }
 
-    $output = "<?php\n# CMS Made Simple Configuration File\n# Documentation: /doc/CMSMS_config_reference.pdf\n#\n";
-    // output header to the config file.
+	  $output = "<?php\n# CMS Made Simple Configuration File\n# Documentation: /doc/CMSMS_config_reference.pdf\n#\n";
+	  // output header to the config file.
+	  
+	  foreach( $this->_data as $key => $value ) {
+		  $outvalue = $this->_printable_value($key,$value);
+		  $output .= "\$config['{$key}'] = $outvalue;\n";
+	  }
 
-    foreach( $this->_data as $key => $value )
-    {
-      $outvalue = $this->_printable_value($key,$value);
-      $output .= "\$config['{$key}'] = $outvalue;\n";
-    }
+	  $output .= "?>\n";
 
-    $output .= "?>\n";
-
-    // and write it.
-    $fh = fopen($filename,'w');
-    if( $fh )
-      {
+	  // and write it.
+	  $fh = fopen($filename,'w');
+	  if( $fh ) {
 		  fwrite($fh,$output);
 		  fclose($fh);
       }
@@ -453,8 +444,7 @@ class cms_config implements ArrayAccess
 
   public function smart_root_url()
   {
-	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
-	  {
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
 		  return $this->offsetGet('ssl_url');
 	  }
 	  return $this->offsetGet('root_url');

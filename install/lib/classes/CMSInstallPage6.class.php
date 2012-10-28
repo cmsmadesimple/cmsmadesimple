@@ -72,18 +72,23 @@ class CMSInstallerPage6 extends CMSInstallerPage
       }
 
       echo "<p>" . ilang('install_admin_importing');
-      $admin_user = null;
-      $_file = cms_join_path(CMS_INSTALL_BASE, 'schemas', 'base.php');
-      include_once($_file);
-      if(isset($_POST["createextra"])) {
-	$_file = cms_join_path(CMS_INSTALL_BASE, 'schemas', 'extra.php');
+      try {
+	$admin_user = null;
+	$_file = cms_join_path(CMS_INSTALL_BASE, 'schemas', 'base.php');
 	include_once($_file);
+	if(isset($_POST["createextra"])) {
+	  $_file = cms_join_path(CMS_INSTALL_BASE, 'schemas', 'extra.php');
+	  include_once($_file);
+	}
+	else {
+	  $_file = cms_join_path(CMS_INSTALL_BASE, 'schemas', 'initial.php');
+	  include_once($_file);
+	}
+	echo " [" . ilang('done') . "]</p>";
       }
-      else {
-	$_file = cms_join_path(CMS_INSTALL_BASE, 'schemas', 'initial.php');
-	include_once($_file);
+      catch( CmsException $e ) {
+	echo ' [ERROR: '.$e->GetMessage().']</p>';
       }
-      echo " [" . ilang('done') . "]</p>";
 
       echo "<p>" . ilang('install_admin_set_sitename');
       cms_siteprefs::set('sitename',cms_htmlentities($_POST['sitename']));

@@ -444,7 +444,7 @@ class News extends CMSModule
   public static function page_type_lang_callback($str)
   {
     $mod = cms_utils::get_module('News');
-    return $mod->Lang('type_'.$str);
+    if( is_object($mod) ) return $mod->Lang('type_'.$str);
   }
 
   public static function reset_page_type_defaults(CmsLayoutTemplateType $type)

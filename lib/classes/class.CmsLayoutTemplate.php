@@ -420,7 +420,7 @@ class CmsLayoutTemplate
 		}
 
 		CmsTemplateCache::clear_cache();
-		audit($this->get_id(),'CMSMS','Template Updated');
+		audit($this->get_id(),'CMSMS','Template '.$this->get_name().' Updated');
 		$this->_dirty = FALSE;
 	}
 
@@ -475,7 +475,7 @@ class CmsLayoutTemplate
 
 		$this->_dirty = FALSE;
 		CmsTemplateCache::clear_cache();
-		audit($this->get_id(),'CMSMS','Template Created');
+		audit($this->get_id(),'CMSMS','Template '.$this->get_name().' Created');
 	}
 
 	public function save()
@@ -501,7 +501,7 @@ class CmsLayoutTemplate
 		$dbr = $db->Execute($query,array($this->get_id()));
 
 		CmsTemplateCache::clear_cache();
-		audit($this->get_id(),'CMSMS','Template deleted');
+		audit($this->get_id(),'CMSMS','Template '.$this->get_name().' Deleted');
 		unset($this->_data['id']);
 		$this->_dirty = TRUE;
 	}

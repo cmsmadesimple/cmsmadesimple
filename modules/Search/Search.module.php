@@ -275,7 +275,7 @@ EOT;
   public static function page_type_lang_callback($str)
   {
     $mod = cms_utils::get_module('Search');
-    return $mod->Lang('type_'.$str);
+    if( is_object($mod) ) return $mod->Lang('type_'.$str);
   }
 
   public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
@@ -285,6 +285,7 @@ EOT;
     }
 
     $mod = cms_utils::get_module('Search');
+    if( !is_object($mod) ) return;
     switch( $type->get_name() ) {
     case 'searchform':
       return $mod->GetSearchHtmlTemplate();

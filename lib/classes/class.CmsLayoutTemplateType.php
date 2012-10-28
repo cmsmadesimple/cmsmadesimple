@@ -341,7 +341,7 @@ class CmsLayoutTemplateType
 
 	  $this->_data['id'] = $db->Insert_ID();
 		CmsTemplateCache::clear_cache();
-		audit($this->get_id(),'CMSMS','Template Type Created');
+		audit($this->get_id(),'CMSMS','Template Type '.$this->get_name().' Created');
 	  $this->_dirty = null;
   }
 
@@ -380,7 +380,7 @@ class CmsLayoutTemplateType
 
 		CmsTemplateCache::clear_cache();
 	  $this->_dirty = null;
-		audit($this->get_id(),'CMSMS','Template Type Updated');
+		audit($this->get_id(),'CMSMS','Template Type '.$this->get_name().' Updated');
   }
 
 
@@ -430,7 +430,7 @@ class CmsLayoutTemplateType
 
 	  $this->_dirty = TRUE;
 		CmsTemplateCache::clear_cache();
-		audit($this->get_id(),'CMSMS','Template Type Deleted');
+		audit($this->get_id(),'CMSMS','Template Type '.$this->get_name().' Deleted');
 	  unset($this->_data['id']);
   }
 

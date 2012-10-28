@@ -79,6 +79,7 @@ final class StylesheetOperations
 	}
 
 
+	// todo: delete me
 	function AssociateStylesheetToTemplate( $stylesheetid, $templateid )
 	{
 		$gCms = cmsms();
@@ -103,6 +104,7 @@ final class StylesheetOperations
 	}
 
 
+	// todo: delete me
 	function GetTemplateAssociatedStylesheets($templateid)
 	{
 		$result = false;

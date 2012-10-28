@@ -3,6 +3,14 @@ if (!isset($gCms)) exit;
 
 $db = $this->GetDb();
 
+$uid = null;
+if( cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
+  $uid = 1; // hardcode to first user
+} else {
+  $uid = get_userid();
+}
+
+
 $db_prefix = cms_db_prefix();
 $dict = NewDataDictionary($db);
 $flds= "
@@ -59,40 +67,45 @@ $dict->ExecuteSQLArray($sqlarray);
 $this->SetPreference('stopwords', $this->DefaultStopWords());
 $this->SetPreference('usestemming', 'false');
 $this->SetPreference('searchtext','Enter Search...');
-	
-$searchform_type = new CmsLayoutTemplateType();
-$searchform_type->set_originator($this->GetName());
-$searchform_type->set_name('searchform');
-$searchform_type->set_dflt_flag(TRUE);
-$searchform_type->set_lang_callback('Search::page_type_lang_callback');
-$searchform_type->set_content_callback('Search::reset_page_type_defaults');
-$searchform_type->reset_content_to_factory();
-$searchform_type->save();
 
-$tpl = new CmsLayoutTemplate();
-$tpl->set_name('Search Form Sample');
-$tpl->set_owner(get_userid());
-$tpl->set_content($this->GetSearchHtmlTemplate());
-$tpl->set_type($searchform_type);
-$tpl->set_type_dflt(TRUE);
-$tpl->save();
+try {
+  $searchform_type = new CmsLayoutTemplateType();
+  $searchform_type->set_originator($this->GetName());
+  $searchform_type->set_name('searchform');
+  $searchform_type->set_dflt_flag(TRUE);
+  $searchform_type->set_lang_callback('Search::page_type_lang_callback');
+  $searchform_type->set_content_callback('Search::reset_page_type_defaults');
+  $searchform_type->reset_content_to_factory();
+  $searchform_type->save();
 
-$searchresults_type = new CmsLayoutTemplateType();
-$searchresults_type->set_originator($this->GetName());
-$searchresults_type->set_name('searchresults');
-$searchresults_type->set_dflt_flag(TRUE);
-$searchresults_type->set_lang_callback('Search::page_type_lang_callback');
-$searchresults_type->set_content_callback('Search::reset_page_type_defaults');
-$searchresults_type->reset_content_to_factory();
-$searchresults_type->save();
+  $tpl = new CmsLayoutTemplate();
+  $tpl->set_name('Search Form Sample');
+  $tpl->set_owner($uid);
+  $tpl->set_content($this->GetSearchHtmlTemplate());
+  $tpl->set_type($searchform_type);
+  $tpl->set_type_dflt(TRUE);
+  $tpl->save();
 
-$tpl = new CmsLayoutTemplate();
-$tpl->set_name('Search Results Sample');
-$tpl->set_owner(get_userid());
-$tpl->set_content($this->GetResultsHtmlTemplate());
-$tpl->set_type($searchresults_type);
-$tpl->set_type_dflt(TRUE);
-$tpl->save();
+  $searchresults_type = new CmsLayoutTemplateType();
+  $searchresults_type->set_originator($this->GetName());
+  $searchresults_type->set_name('searchresults');
+  $searchresults_type->set_dflt_flag(TRUE);
+  $searchresults_type->set_lang_callback('Search::page_type_lang_callback');
+  $searchresults_type->set_content_callback('Search::reset_page_type_defaults');
+  $searchresults_type->reset_content_to_factory();
+  $searchresults_type->save();
+
+  $tpl = new CmsLayoutTemplate();
+  $tpl->set_name('Search Results Sample');
+  $tpl->set_owner($uid);
+  $tpl->set_content($this->GetResultsHtmlTemplate());
+  $tpl->set_type($searchresults_type);
+  $tpl->set_type_dflt(TRUE);
+  $tpl->save();
+}
+catch( CmsException $e ) {
+  audit('',$this->GetName(),'Installation Error: '.$e->GetMessage());
+}
 
 $this->CreateEvent('SearchInitiated');
 $this->CreateEvent('SearchCompleted');
