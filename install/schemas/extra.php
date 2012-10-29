@@ -234,7 +234,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Handheld');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('handheld');
 $css->save();
@@ -245,7 +245,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Print');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('print');
 $css->save();
@@ -256,7 +256,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Accessibility and cross-browser tools');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -267,7 +267,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Layout: Left sidebar + 1 column');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -278,7 +278,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Navigation: CSSMenu - Vertical');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -289,7 +289,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Navigation: CSSMenu - Horizontal');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -300,7 +300,7 @@ div#news {\n/* margin for the entire div surrounding the news items */\n	margin:
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Module: News');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -311,7 +311,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Navigation: Simple - Horizontal');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -322,7 +322,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Layout: Top menu + 2 columns');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -333,7 +333,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Navigation: Simple - Vertical');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -354,7 +354,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Navigation: ShadowMenu - Vertical');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -365,7 +365,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Navigation: FatFootMenu');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -376,7 +376,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('ncleanbluecore');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -387,7 +387,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('ncleanblueutils');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -398,7 +398,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Layout: NCleanBlue'); // id = 49
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -409,7 +409,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Simplex: Core');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -420,7 +420,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Simplex: Layout');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('screen');
 $css->save();
@@ -431,7 +431,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Simplex: Print'); // id = 52
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_type('print');
 $css->save();
@@ -442,7 +442,7 @@ $txt = <<<EOT
 EOT;
 $css = new CmsLayoutStylesheet;
 $css->set_name('Simplex: Mobile');
-$css->set_description('todo: '.__FILE__.'::.'__LINE__);
+$css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
 $css->set_media_query('screen and (min-width: 300px) and (max-width: 1024px)');
 $css->save();
