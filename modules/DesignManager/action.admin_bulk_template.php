@@ -36,7 +36,17 @@ if( !isset($params['bulk_action']) || !isset($params['tpl_select']) ||
 switch( $params['bulk_action'] ) {
  case 'delete':
    // check if we have ownership/delete permission for these templates
-   
+   $my_templates = CmsLayoutTemplate::template_query(array(0=>'u:'.get_userid(),'as_list'=>1));
+   if( !is_array($my_templates) || count($my_templates) == 0 ) {
+     die('error');
+   }
+   $tpl_ids = array_keys($my_templates);
+   foreach( $params['tpl_select'] as $one ) {
+     if( !in_array($one,$tpl_ids) ) {
+       $this->SetError($this->Lang('error_permission_bulkoperation'));
+       $this->RedirectToAdminTab();
+     }
+   }
    break;
 
  default:
@@ -44,7 +54,13 @@ switch( $params['bulk_action'] ) {
    $this->RedirectToAdminTab();
    break;
 }
-debug_display($params); die();
+
+$templates = CmsLayoutTemplate::load_bulk($params['tpl_select']);
+$smarty->assign('bulk_op','bulk_action_delete');
+$smarty->assign('bulk_action',$params['bulk_action']);
+$smarty->assign('templates',$templates);
+
+echo $this->ProcessTemplate('admin_bulk_template.tpl');
 
 #
 # EOF

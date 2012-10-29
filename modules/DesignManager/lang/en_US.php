@@ -7,7 +7,7 @@ $lang['available_stylesheets'] = 'Available Stylesheets';
 $lang['available_templates'] = 'Available Templates';
 
 #B
-
+$lang['bulk_action_delete'] = 'Mass Deletion of Templates';
 
 #C
 $lang['cancel'] = 'Cancel';
@@ -44,6 +44,7 @@ $lang['error_notconfirmed'] = 'The action was not confirmed';
 $lang['error_notemplates'] = 'No Editable Templates Found';
 $lang['error_nothingselected'] = 'Nothing selected';
 $lang['error_permission'] = 'Permission Denied';
+$lang['error_permission_deletetemplate'] = 'You do not have permission to perform the bulk operation on one or more of the selectected items';
 
 #F
 $lang['friendlyname'] = 'Design Manager';
