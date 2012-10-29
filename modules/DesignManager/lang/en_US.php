@@ -14,7 +14,10 @@ $lang['confirm_bulk_tmplop'] = 'Are you sure you want to perform this action on 
 $lang['confirm_delete_1'] = 'Are you sure you want to delete this design?';
 $lang['confirm_delete_2'] = 'Yes, I am sure I want to delete this item';
 $lang['confirm_delete_category'] = 'Are you sure you want to delete this category?';
+$lang['confirm_delete_template_1'] = 'Yes, I am sure I want to delete this template';
+$lang['confirm_delete_template_2'] = 'Yes, I am <strong>really</strong> sure I want to delete this template';
 $lang['confirm_reset_type'] = 'Reset the default content of this type to the version distributed with the system (or module)?\n\nResetting this will only effect newly created templates of this type.  No existing templates will be adjusted.';
+$lang['copy_template'] = 'Copy Template';
 $lang['create'] = 'Create';
 $lang['create_category'] = 'Create a new Category';
 $lang['create_design'] = 'Create a new Design';
@@ -37,6 +40,7 @@ $lang['error_missingparam'] = 'A required parameter is missing';
 $lang['error_notconfirmed'] = 'The action was not confirmed';
 $lang['error_notemplates'] = 'No Editable Templates Found';
 $lang['error_nothingselected'] = 'Nothing selected';
+$lang['error_permission'] = 'Permission Denied';
 
 #F
 $lang['friendlyname'] = 'Design Manager';
@@ -73,6 +77,8 @@ $lang['info_editcss_mediatype_tab'] = '<strong>Warning:</strong> This functional
 $lang['info_editcss_mediaquery_tab'] = '<strong>Warning:</strong> If both the media type and media query are specified, then the media query will take preference when rendering stylesheets';
 $lang['info_edittemplate_templates_tab'] = 'Select the templates that should be attached to the design.  Attaching a template to a design is used only for organizational and export purposes.  Order is not important.';
 $lang['info_edittemplate_stylesheets_tab'] = 'Select the stylesheets that should be attached to the design.  Attaching a template to a design is used only for organizational and export purposes.  The order is used for determining the order in which stylesheets are output in the resulting html.';
+$lang['info_template_delete'] = 'This template may be used by a working system.  Deleting it may break an otherwise working website.  Use caution!';
+$lang['info_template_used'] = 'This template is in use by one or more pages, and/or designs.  It may also be included by other templates.  Deleting this template may break a working website. <strong>Use Extreme Caution!</strong>';
 
 #J
 
@@ -99,6 +105,9 @@ $lang['moddescription'] = 'A module for managing layout templates';
 $lang['msg_cancelled'] = 'Operation Cancelled';
 $lang['msg_category_deleted'] = 'Category Deleted';
 $lang['msg_category_saved'] = 'Category Saved';
+$lang['msg_template_copied_edit'] = 'Template has been copied, you are now editing the new version';
+$lang['msg_template_copied'] = 'Template Copied';
+$lang['msg_template_deleted'] = 'Template Deleted';
 $lang['msg_template_saved'] = 'Template Saved';
 $lang['msg_stylesheet_saved'] = 'Stylesheet Saved';
 $lang['msg_design_deleted'] = 'Design Deleted';
@@ -125,6 +134,7 @@ $lang['prompt_default'] = 'Default';
 $lang['prompt_delete'] = 'Delete';
 $lang['prompt_description'] = 'Description';
 $lang['prompt_descriptive_name'] = 'Descriptive Name';
+$lang['prompt_dest_template'] = 'Destination Template';
 $lang['prompt_dflt'] = 'Default';
 $lang['prompt_dflt_template'] = 'Default Template';
 $lang['prompt_edit'] = 'Edit';
@@ -150,6 +160,7 @@ $lang['prompt_page'] = 'Page';
 $lang['prompt_permissions'] = 'Permissions';
 $lang['prompt_resource'] = 'Resource';
 $lang['prompt_return'] = 'Return';
+$lang['prompt_source_template'] = 'Source Template';
 $lang['prompt_select_all'] = 'Select all';
 $lang['prompt_stylesheet'] = 'Stylesheet';
 $lang['prompt_stylesheets'] = 'Stylesheets';
@@ -173,6 +184,7 @@ $lang['reset_factory'] = 'Reset to Factory Defaults';
 
 #S
 $lang['submit'] = 'Submit';
+$lang['submitandedit'] = 'Submit And Edit';
 
 #T
 $lang['tpl_types'] = 'Template Types';

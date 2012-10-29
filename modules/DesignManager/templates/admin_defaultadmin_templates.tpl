@@ -115,11 +115,14 @@ $(document).ready(function(){
         <td><a href="{$copy_tpl}" title="{$mod->Lang('copy_template')}">{admin_icon icon='copy.gif' title=$mod->Lang('prompt_copy_template')}</a></td>
         {/if}
         <td>
-         {if $template->get_owner_id() == get_userid()}
+         {if $template->get_owner_id() == get_userid() || $manage_templates}
            <a href="{$delete_tpl}" title="{$mod->Lang('delete_template')}">{admin_icon icon='delete.gif' title=$mod->Lang('delete_template')}</a>
          {/if}
         </td>
-        <td><input type="checkbox" class="tpl_select" name="tpl_select[]" value="{$template->get_id()}"/></td>
+        <td>
+          {if $template->get_owner_id() == get_userid() || $manage_templates }
+            <input type="checkbox" class="tpl_select" name="tpl_select[]" value="{$template->get_id()}"/></td>
+          {/if}
       </tr>
     {/foreach}
     </tbody>
