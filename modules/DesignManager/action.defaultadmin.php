@@ -34,7 +34,8 @@ else if( isset($params['submit_create']) ) {
 	return;
 }
 else if( isset($params['submit_bulk']) ) {
-	debug_display($params); die('bulk');
+	$tmp = array('allparms'=>base64_encode(serialize($params)));
+	$this->Redirect($id,'admin_bulk_template',$returnid,$tmp);
 }
 
 $tmp = cms_userprefs::get($this->GetName().'template_filter');

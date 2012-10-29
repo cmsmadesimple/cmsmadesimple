@@ -23,7 +23,9 @@ if( !$this->CheckPermission('Modify Stylesheets') ) return;
 
 $this->SetCurrentTab('stylesheets');
 if( isset($params['cancel']) ) {
-  $this->SetMessage($this->Lang('msg_cancelled'));
+	if( $params['cancel'] == $this->Lang('cancel') ) {
+		$this->SetMessage($this->Lang('msg_cancelled'));
+	}
   $this->RedirectToAdminTab();
 }
 

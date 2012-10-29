@@ -1,6 +1,20 @@
 <script type="text/javascript">
 $(document).ready(function(){
- $('#tpl_bulk_submit').click(function(e){
+ $('#tpl_selall').live('click',function(e){
+   var x = $(this).attr('checked');
+   if( x == 'checked' ) {
+     $('.tpl_select').attr('checked','checked');
+   }
+   else {
+     $('.tpl_select').removeAttr('checked');
+   }
+ });
+
+ $('.tpl_select').live('click',function(e){
+   $('#tpl_selall').removeAttr('checked');
+ });
+
+ $('#tpl_bulk_submit').live('click',function(e){
    var n = $('input:checkbox:checked.tpl_select').length
    if( n == 0 ) {
      alert('{$mod->Lang('error_nothingselected')}');
@@ -63,7 +77,7 @@ $(document).ready(function(){
         <th class="pageicon"></th>{* copy *}
         {/if}
         <th class="pageicon"></th>{* delete *}
-        <th class="pageicon"><input type="checkbox" id="tpl_selall" title="{$mod->Lang('prompt_select_all')}" class="tpl_select"/></th>{* checkbox *}
+        <th class="pageicon"><input type="checkbox" value="1" id="tpl_selall" title="{$mod->Lang('prompt_select_all')}"/></th>{* checkbox *}
       </tr>
     </thead>
     <tbody>
@@ -120,7 +134,7 @@ $(document).ready(function(){
         </td>
         <td>
           {if $template->get_owner_id() == get_userid() || $manage_templates }
-            <input type="checkbox" class="tpl_select" name="tpl_select[]" value="{$template->get_id()}"/></td>
+            <input type="checkbox" class="tpl_select" name="{$actionid}tpl_select[]" value="{$template->get_id()}"/></td>
           {/if}
       </tr>
     {/foreach}
