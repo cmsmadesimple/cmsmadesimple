@@ -40,25 +40,31 @@ try {
   }
 
   try {
-    if( isset($params['submit']) && $params['submit'] == $this->Lang('submit') ) {
+    if( isset($params['submit']) || isset($params['apply']) ) {
       if( isset($params['name']) ) $css_ob->set_name($params['name']);
       if( isset($params['description']) ) $css_ob->set_description($params['description']);
       if( isset($params['content']) ) $css_ob->set_content($params['content']);
       $typ = array();
       if( isset($params['media_type']) ) {
-	$typ = $params['media_type'];
+				$typ = $params['media_type'];
       }
       $css_ob->set_media_types($typ);
       if( isset($params['media_query']) ) $css_ob->set_media_query($params['media_query']);
       if( $this->CheckPermission('Manage Designs') ) {
-	$design_list = array();
-	if( isset($params['design_list']) ) {
-	  $design_list = $params['design_list'];
-	}
-	$css_ob->set_designs($design_list);
+				$design_list = array();
+				if( isset($params['design_list']) ) {
+					$design_list = $params['design_list'];
+				}
+				$css_ob->set_designs($design_list);
       }
 
       $css_ob->save();
+			
+			if( isset($params['apply']) ) {
+				echo 'AJAX GOOD';
+				exit;
+			}
+
       $this->SetMessage($this->Lang('msg_stylesheet_saved'));
       $this->RedirectToAdminTab();
     }

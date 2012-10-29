@@ -15,7 +15,6 @@ $(document).ready(function(){
     var data = $('#form_edittemplate').serializeArray();
     $.post(url,data,function(data,textStatus,jqXHR){
       $('#cancelbtn').attr('value','{$mod->Lang('close')}');
-      alert(data);
     });
   });
 });
