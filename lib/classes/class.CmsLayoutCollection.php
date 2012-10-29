@@ -120,8 +120,8 @@ class CmsLayoutCollection
 
   public function add_stylesheet($css)
   {
-    if( is_object($css) && is_a($css,'Stylesheet') ) {
-      $css = $css->id;
+    if( is_object($css) && is_a($css,'CmsLayoutStylesheet') ) {
+      $css = $css->get_id();
     }
     $css = (int)$css;
     if( $css <= 0 ) {

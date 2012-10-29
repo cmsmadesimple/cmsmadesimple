@@ -36,7 +36,7 @@ try {
 }
 catch( CmsException $e ) {
   $this->SetError($e->GetMessage());
-  $this->RedirectToAdminTab($e);
+  $this->RedirectToAdminTab();
 }
 #
 # EOF

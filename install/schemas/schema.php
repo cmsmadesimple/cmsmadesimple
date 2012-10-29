@@ -8,7 +8,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$db->DropSequence($db_prefix."additional_users_seq");
 	$db->DropSequence($db_prefix."content_seq");
 	$db->DropSequence($db_prefix."content_props_seq");
-	$db->DropSequence($db_prefix."css_seq");
 	$db->DropSequence($db_prefix."events_seq");
 	$db->DropSequence($db_prefix."event_handler_seq");
 	$db->DropSequence($db_prefix."group_perms_seq");
@@ -37,8 +36,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."content");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."content_props");
-	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."css");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."events");
 	$dbdict->ExecuteSQLArray($sqlarray);
@@ -227,26 +224,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_index', 'content', $ado_ret);
-
-	$flds = "
-		css_id I KEY,
-		css_name C(255),
-		css_text X2,
-		media_type C(255),
-		media_query X,
-		create_date DT,
-		modified_date DT
-	";
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css", $flds, $taboptarray);
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_table', 'css', $ado_ret);
-
-	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_css_by_css_name', $db_prefix."css", 'css_name');
-	$return = $dbdict->ExecuteSQLArray($sqlarray);
-	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
-	echo ilang('install_creating_index', 'content', $ado_ret);
-
 
 	$flds = "
 		event_id I,
@@ -552,6 +529,20 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 					  $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	echo ilang('install_creating_table', CmsLayoutTemplate::TABLENAME, $ado_ret);
+
+	$flds = "
+         id I KEY AUTO,
+         name C(50) NOT NULL,
+         content X2,
+         description X,
+	 media_type C(255),
+	 media_query X,
+         created I,
+         modified I";
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutStylesheet::TABLENAME, $flds, 
+					  $taboptarray);
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	echo ilang('install_creating_table', CmsLayoutStylesheet::TABLENAME, $ado_ret);
 
 	$flds = "
          tpl_id I KEY,

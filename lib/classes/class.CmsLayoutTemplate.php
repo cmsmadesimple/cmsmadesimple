@@ -580,7 +580,6 @@ class CmsLayoutTemplate
 		return self::_load_from_data($row);
 	}
 
-
 	public static function get_owned_templates($a)
 	{
 		$n = self::_resolve_user($a);

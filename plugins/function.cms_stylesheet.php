@@ -111,17 +111,17 @@ function smarty_function_cms_stylesheet($params, &$template)
 
 	if (isset($params['name']) && $params['name'] != '') {
 	
-		$query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,A.media_type,A.media_query 
-					FROM '.cms_db_prefix().'css A';
-		$where[] = 'A.css_name = ?';
+		$query = 'SELECT DISTINCT A.id,A.name,A.content,A.modified,A.media_type,A.media_query 
+					FROM '.cms_db_prefix().'layout_stylesheets A';
+		$where[] = 'A.name = ?';
 		$qparms[] = trim($params['name']);
 	
 	} else {
 
-  	    $query = 'SELECT DISTINCT A.css_id,A.css_name,A.css_text,A.modified_date,
+  	    $query = 'SELECT DISTINCT A.id,A.name,A.content,A.modified,
                       A.media_type,A.media_query,B.item_order
-   	                FROM '.cms_db_prefix().'css A 
-                    LEFT JOIN '.cms_db_prefix().'layout_design_cssassoc B ON A.css_id = B.css_id';
+   	                FROM '.cms_db_prefix().'layout_stylesheets A 
+                    LEFT JOIN '.cms_db_prefix().'layout_design_cssassoc B ON A.id = B.css_id';
 		$where[] = 'B.design_id = ?';
 		$qparms = array($design_id);
 
@@ -165,21 +165,21 @@ function smarty_function_cms_stylesheet($params, &$template)
 				
 					$key = md5($one['media_query']);
 					$all_media[$key][] = $one;
-					$all_timestamps[$key][] = strtotime($one['modified_date']);
+					$all_timestamps[$key][] = $one['modified'];
 					
 				} elseif(!empty($one['media_type'])) {
 			
 					$key = md5($one['media_type']);
 					$all_media[$key][] = $one;
-					$all_timestamps[$key][] = strtotime($one['modified_date']);
+					$all_timestamps[$key][] = $one['modified'];
 					
 				} else {
 				
 					$all_media['all'][] = $one;
-					$all_timestamps['all'][] = strtotime($one['modified_date']);
+					$all_timestamps['all'][] = $one['modified'];
 				}
 
-				$all_timestamps_string .= strtotime($one['modified_date']); // <- This is for media param
+				$all_timestamps_string .= $one['modified']; // <- This is for media param
 			}			
 		
 			// Stupid media parameter...
@@ -194,9 +194,9 @@ function smarty_function_cms_stylesheet($params, &$template)
 					$text = '';
 					foreach ($res as $one) {
 					
-							$text .= $one['css_text'];
+							$text .= $one['content'];
 							// moved this to bottom, comments on top of stylesheets cause invalid css when using @charset
-							$text .= "\n/* End of Stylesheet: ".$one['css_name']." Modified On ".$one['modified_date']." */\n";
+							$text .= "\n/* End of Stylesheet: ".$one['name']." Modified On ".strftime('%x %X',$one['modified'])." */\n";
 							if( !endswith($text,"\n") ) $text .= "\n";
 					}
 
@@ -228,9 +228,9 @@ function smarty_function_cms_stylesheet($params, &$template)
 						$text = '';
 						foreach($onemedia as $one) {
 						
-							$text .= $one['css_text'];
+							$text .= $one['content'];
 							// moved this to bottom, comments on top of stylesheets cause invalid css when using @charset
-							$text .= "\n/* Stylesheet: ".$one['css_name']." Modified On ".$one['modified_date']." */\n";
+							$text .= "\n/* Stylesheet: ".$one['name']." Modified On ".strftime('%x %X',$one['modified'])." */\n";
 							if( !endswith($text,"\n") ) $text .= "\n";
 						}
 
@@ -256,12 +256,12 @@ function smarty_function_cms_stylesheet($params, &$template)
                     $media_type  = $one['media_type'];
                 }
 				
-				$filename = 'stylesheet_'.md5('single'.$one['css_id'].$use_https.strtotime($one['modified_date']).$fnsuffix).'.css';
+				$filename = 'stylesheet_'.md5('single'.$one['id'].$use_https.$one['modified'].$fnsuffix).'.css';
 				$fn = cms_join_path($cache_dir,$filename);
 				
 				if (!file_exists($fn)) {
 		
-					cms_stylesheet_writeCache($fn, $one['css_text'], $trimbackground, $smarty, $forceblackandwhite);					
+					cms_stylesheet_writeCache($fn, $one['content'], $trimbackground, $smarty, $forceblackandwhite);					
 				}
 
 				cms_stylesheet_toString($filename, $media_query, $media_type, $root_url, $stylesheet, $params);

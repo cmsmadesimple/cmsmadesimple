@@ -8,7 +8,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
         'admin_recent_pages'        => array('id' => 'id'),
         'content'                   => array('id' => 'content_id'),
         'content_props'             => array('id' => 'content_id'),
-        'css'                       => array('id' => 'css_id'),
         'events'                    => array('id' => 'event_id'),
         'event_handlers'            => array('id' => 'handler_id', 'seq' => 'event_handler_seq'),
         'group_perms'               => array('id' => 'group_perm_id'),

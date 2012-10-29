@@ -34,7 +34,7 @@ $this->SetCurrentTab('templates');
 
 if( isset($params['cancel']) ) {
   $this->SetMessage($this->Lang('msg_cancelled'));
-  $this->RedirectToAdminTab($id);
+  $this->RedirectToAdminTab();
 }
 
 try {
@@ -55,7 +55,7 @@ try {
   }
   else {
     $this->SetError($this->Lang('error_missingparam'));
-    $this->RedirectToAdminTab($id);
+    $this->RedirectToAdminTab();
   }
 
   try {
@@ -81,11 +81,13 @@ try {
       if( isset($params['category_id']) ) {
 				$tpl_obj->set_category($params['category_id']);
       }
-			$design_list = array();
-			if( isset($params['design_list']) ) {
-				$design_list = $params['design_list'];
+			if( $this->CheckPermission('Manage Designs') ) {
+				$design_list = array();
+				if( isset($params['design_list']) ) {
+					$design_list = $params['design_list'];
+				}
+				$tpl_obj->set_designs($design_list);
 			}
-			$tpl_obj->set_designs($design_list);
       $tpl_obj->save();
       $this->SetMessage($this->Lang('msg_template_saved'));
       $this->RedirectToAdminTab();
@@ -131,6 +133,7 @@ try {
   }
 
   $smarty->assign('has_manage_right',$this->CheckPermission('Modify Templates'));
+  $smarty->assign('has_themes_right',$this->CheckPermission('Manage Designs'));
   if( $this->CheckPermission('Modify Templates') || 
       $tpl_obj->get_owner_id() == get_userid()) {
 
@@ -158,7 +161,7 @@ try {
 }
 catch( CmsException $e ) {
   $this->SetError($e->GetMessage());
-  $this->RedirectToAdminTab($id);
+  $this->RedirectToAdminTab();
 }
 
 #

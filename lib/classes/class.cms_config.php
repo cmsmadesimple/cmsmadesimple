@@ -289,11 +289,6 @@ class cms_config implements ArrayAccess
 	  case 'debug':
 		  return false;
 
-	  // todo: removeme
-	  case 'debug_to_log':
-		  return TRUE; // temporary
-	  // todo: removeme.
-
 	  case 'timezone':
 		  return '';
 
@@ -418,7 +413,7 @@ class cms_config implements ArrayAccess
 		  $filename = CONFIG_FILE_LOCATION;
       }
 
-    // backup the original config.php file (just in case)
+	  // backup the original config.php file (just in case)
 	  if( file_exists($filename) ) {
 		  @copy($filename,cms_join_path(TMP_CACHE_LOCATION,basename($filename).time().'.bak'));
       }

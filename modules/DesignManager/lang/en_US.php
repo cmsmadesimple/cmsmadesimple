@@ -17,19 +17,21 @@ $lang['confirm_delete_category'] = 'Are you sure you want to delete this categor
 $lang['confirm_reset_type'] = 'Reset the default content of this type to the version distributed with the system (or module)?\n\nResetting this will only effect newly created templates of this type.  No existing templates will be adjusted.';
 $lang['create'] = 'Create';
 $lang['create_category'] = 'Create a new Category';
-$lang['create_template'] = 'Create a new Template';
 $lang['create_design'] = 'Create a new Design';
+$lang['create_stylesheet'] = 'Create a new Stylesheet';
+$lang['create_template'] = 'Create a new Template';
 
 #D
 $lang['delete_attached_stylesheets'] = 'Delete attached and orphaned stylesheets';
 $lang['delete_attached_templates'] = 'Delete attached and orphaned templates';
-$lang['delete_template'] = 'Delete Template';
 $lang['delete_design'] = 'Delete Design';
+$lang['delete_template'] = 'Delete Template';
 
 #E
 $lang['edit_category'] = 'Edit Category';
-$lang['edit_template'] = 'Edit Template';
 $lang['edit_design'] = 'Edit Design';
+$lang['edit_stylesheet'] = 'Edit Stylesheet';
+$lang['edit_template'] = 'Edit Template';
 $lang['edit_type'] = 'Edit Template Type';
 $lang['error_missingparam'] = 'A required parameter is missing';
 $lang['error_notconfirmed'] = 'The action was not confirmed';
@@ -62,9 +64,13 @@ $lang['help_template_name'] = 'Specify a name for this template.  The name must 
 $lang['help_template_no_designs'] = 'This template is not attached to any designs';
 $lang['help_template_owner'] = 'You may change the authorized &quot;owner&quot; of this template.  The owner of a template is allowed to edit the template at any time (even without specific template editing permissions, and can change the additional editors.';
 $lang['help_template_type'] = 'The template type is used for organizational purposes, and for finding default contents when restoring the template to its default value (if any).  Templates belonging to a certain module type may be removed if the module is uninstalled.';
+$lang['help_stylesheet_multiple_designs'] = 'This stylesheet is attached to multiple designs';
+$lang['help_stylesheet_no_designs'] = 'This stylesheet is not attached to any designs';
 
 #I
 $lang['import_design'] = 'Import Design';
+$lang['info_editcss_mediatype_tab'] = '<strong>Warning:</strong> This functionality is deprecated and will be removed at a later date.  If both the media type and media query are specified, then the media query will take preference when rendering stylesheets';
+$lang['info_editcss_mediaquery_tab'] = '<strong>Warning:</strong> If both the media type and media query are specified, then the media query will take preference when rendering stylesheets';
 $lang['info_edittemplate_templates_tab'] = 'Select the templates that should be attached to the design.  Attaching a template to a design is used only for organizational and export purposes.  Order is not important.';
 $lang['info_edittemplate_stylesheets_tab'] = 'Select the stylesheets that should be attached to the design.  Attaching a template to a design is used only for organizational and export purposes.  The order is used for determining the order in which stylesheets are output in the resulting html.';
 
@@ -78,11 +84,23 @@ $lang['info_edittemplate_stylesheets_tab'] = 'Select the stylesheets that should
 
 
 #M
+$lang['media_type_all'] = 'All';
+$lang['media_type_aural'] = 'Aurual';
+$lang['media_type_speech'] = 'Speech';
+$lang['media_type_braille'] = 'Braille';
+$lang['media_type_embossed'] = 'Embossed';
+$lang['media_type_handheld'] = 'Handheld';
+$lang['media_type_print'] = 'Print';
+$lang['media_type_projection'] = 'Projection';
+$lang['media_type_screen'] = 'Screen';
+$lang['media_type_tty'] = 'TTY';
+$lang['media_type_tv'] = 'TV';
 $lang['moddescription'] = 'A module for managing layout templates';
 $lang['msg_cancelled'] = 'Operation Cancelled';
 $lang['msg_category_deleted'] = 'Category Deleted';
 $lang['msg_category_saved'] = 'Category Saved';
 $lang['msg_template_saved'] = 'Template Saved';
+$lang['msg_stylesheet_saved'] = 'Stylesheet Saved';
 $lang['msg_design_deleted'] = 'Design Deleted';
 $lang['msg_design_saved'] = 'Design Saved';
 $lang['msg_type_saved'] = 'Template Type Saved';
@@ -116,6 +134,8 @@ $lang['prompt_help'] = 'Help';
 $lang['prompt_group'] = 'Group';
 $lang['prompt_id'] = 'Id';
 $lang['prompt_limit'] = 'Limit';
+$lang['prompt_media_type'] = 'Media Type';
+$lang['prompt_media_query'] = 'Media Query';
 $lang['prompt_modified'] = 'Modified Date';
 $lang['prompt_multiple'] = 'Multiple';
 $lang['prompt_na'] = 'N/A';
@@ -131,6 +151,7 @@ $lang['prompt_permissions'] = 'Permissions';
 $lang['prompt_resource'] = 'Resource';
 $lang['prompt_return'] = 'Return';
 $lang['prompt_select_all'] = 'Select all';
+$lang['prompt_stylesheet'] = 'Stylesheet';
 $lang['prompt_stylesheets'] = 'Stylesheets';
 $lang['prompt_template'] = 'Template';
 $lang['prompt_templates'] = 'Templates';

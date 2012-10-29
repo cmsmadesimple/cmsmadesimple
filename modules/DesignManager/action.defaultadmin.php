@@ -104,8 +104,12 @@ if( $this->CheckPermission('Manage Designs') ) {
   $smarty->assign('list_users',$users);
   $opts[$this->Lang('prompt_user')] = $tmp;
 }
+
 if( $this->CheckPermission('Modify Stylesheets') ) {
+	$csslist = CmsLayoutStylesheet::get_all(TRUE);
+	$smarty->assign('stylesheets',$csslist);
 }
+
 // give everything to smarty that we can.
 $smarty->assign('filter_options',$opts);
 $smarty->assign('filter',$filter_rec);

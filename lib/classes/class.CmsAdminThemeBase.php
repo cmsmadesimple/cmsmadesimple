@@ -254,17 +254,10 @@ abstract class CmsAdminThemeBase
 			(isset($this->_sectionCount['content']) && $this->_sectionCount['content'] > 0);
 
 		// layout        
-        $this->_perms['templatePerms'] = check_permission($this->userid, 'Add Templates') |
-			check_permission($this->userid, 'Modify Templates') |
-			check_permission($this->userid, 'Remove Templates');
-        $this->_perms['cssPerms'] = check_permission($this->userid, 'Add Stylesheets') |
-			check_permission($this->userid, 'Modify Stylesheets') |
-			check_permission($this->userid, 'Remove Stylesheets');
-        $this->_perms['cssAssocPerms'] = check_permission($this->userid, 'Add Stylesheet Assoc') |
-			check_permission($this->userid, 'Modify Stylesheet Assoc') |
-			check_permission($this->userid, 'Remove Stylesheet Assoc');
+        $this->_perms['templatePerms'] = check_permission($this->userid, 'Modify Templates');
+        $this->_perms['cssPerms'] = check_permission($this->userid, 'Modify Stylesheets');
         $this->_perms['layoutPerms'] = $this->_perms['templatePerms'] |
-			$this->_perms['cssPerms'] | $this->_perms['cssAssocPerms'] |
+			$this->_perms['cssPerms'] | 
 			(isset($this->_sectionCount['layout']) && $this->_sectionCount['layout'] > 0);
 
 		// file / image
@@ -418,36 +411,6 @@ abstract class CmsAdminThemeBase
 								 'title'=>$this->_FixSpaces(lang('layout')),
 								 'description'=>lang('layoutdescription'),
 								 'show_in_menu'=>$this->HasPerm('layoutPerms'));
-// 		$items['template'] = array('url'=>'listtemplates.php','parent'=>'layout',
-// 								   'title'=>$this->_FixSpaces(lang('templates')),
-// 								   'description'=>lang('templatesdescription'),
-// 								   'show_in_menu'=>$this->HasPerm('templatePerms'));
-// 		$items['addtemplate'] = array('url'=>'addtemplate.php','parent'=>'template',
-// 									 'title'=>$this->_FixSpaces(lang('addtemplate')),
-// 									 'description'=>lang('addtemplate'),'show_in_menu'=>false);
-// 		$items['edittemplate'] = array('url'=>'edittemplate.php','parent'=>'template',
-// 									   'title'=>$this->_FixSpaces(lang('edittemplate')),
-// 									   'description'=>lang('edittemplate'),'show_in_menu'=>false);
-// 		$items['currentassociations'] = array('url'=>'listcssassoc.php','parent'=>'template',
-// 											  'title'=>$this->_FixSpaces(lang('currentassociations')),
-// 											  'description'=>lang('currentassociations'),
-// 											  'show_in_menu'=>false);
-		$items['copytemplate'] = array('url'=>'copyemplate.php','parent'=>'template',
-									   'title'=>$this->_FixSpaces(lang('copytemplate')),
-									   'description'=>lang('copytemplate'),'show_in_menu'=>false);
-		$items['stylesheets'] = array('url'=>'listcss.php','parent'=>'layout',
-									  'title'=>$this->_FixSpaces(lang('stylesheets')),
-									  'description'=>lang('stylesheetsdescription'),
-									  'show_in_menu'=>($this->HasPerm('cssPerms') || $this->HasPerm('cssAssocPerms')));
-		$items['addcss'] = array('url'=>'addcss.php','parent'=>'stylesheets',
-								 'title'=>$this->_FixSpaces(lang('addstylesheet')),
-								 'description'=>lang('addstylesheet'),'show_in_menu'=>false);
-		$items['editcss'] = array('url'=>'editcss.php','parent'=>'stylesheets',
-								  'title'=>$this->_FixSpaces(lang('editcss')),
-								  'description'=>lang('editcss'),'show_in_menu'=>false);
-		$items['templatecss'] = array('url'=>'templatecss.php','parent'=>'stylesheets',
-									  'title'=>$this->_FixSpaces(lang('templatecss')),
-									  'description'=>lang('templatecss'),'show_in_menu'=>false);
 		// base user/groups menu ---------------------------------------------------------
 		$items['usersgroups'] = array('url'=>'index.php?section=usersgroups','parent'=>-1,
 									  'title'=>$this->_FixSpaces(lang('usersgroups')),

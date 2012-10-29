@@ -25,6 +25,8 @@
  * @license GPL
  */
 
+die('remove this file');
+
 /**
  * Generic stylesheet class. This can be used for any logged in stylesheet or stylesheet related function.
  *

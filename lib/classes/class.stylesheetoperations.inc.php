@@ -19,6 +19,8 @@
 #
 #$Id$
 
+die('remove this file');
+
 /**
  * Stylesheet related functions.
  *

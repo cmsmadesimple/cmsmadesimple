@@ -56,25 +56,27 @@ $(document).ready(function(){
   </div>{* column *}
 
   <div style="width: 49%; float: right;">
-  <div class="pageoverflow">
-    <p class="pagetext"><label for="tpl_created">{$mod->Lang('prompt_created')}:</label></p>
-    <p class="pageinput">
-      <input type="text" id="tpl_created" value="{$template->get_created()|date_format:'%x %X'}" readonly="readonly"/>
-    </p>
-  </div>
-  <div class="pageoverflow">
-    <p class="pagetext"><label for="tpl_modified">{$mod->Lang('prompt_modified')}:</label></p>
-    <p class="pageinput">
-      <input type="text" id="tpl_modified" value="{$template->get_modified()|date_format:'%x %X'}" readonly="readonly"/>
-    </p>
-  </div>
+  {if $template->get_id()}
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="tpl_created">{$mod->Lang('prompt_created')}:</label></p>
+      <p class="pageinput">
+        <input type="text" id="tpl_created" value="{$template->get_created()|date_format:'%x %X'}" readonly="readonly"/>
+      </p>
+    </div>
+    <div class="pageoverflow">
+      <p class="pagetext"><label for="tpl_modified">{$mod->Lang('prompt_modified')}:</label></p>
+      <p class="pageinput">
+        <input type="text" id="tpl_modified" value="{$template->get_modified()|date_format:'%x %X'}" readonly="readonly"/>
+      </p>
+    </div>
+  {/if}
   </div>{* column *}
 
 </fieldset>
 
 {tab_header name='template' label=$mod->Lang('prompt_template')}
 {tab_header name='description' label=$mod->Lang('prompt_description')}
-{if $has_manage_right}
+{if $has_themes_right}
 {tab_header name='designs' label=$mod->Lang('prompt_designs')}
 {/if}
 {if $template->get_owner_id() == get_userid() or $has_manage_right}
@@ -89,7 +91,7 @@ $(document).ready(function(){
 <textarea name="{$actionid}description" {if !$has_manage_right}readonly="readonly"{/if}>{$template->get_description()}</textarea>&nbsp;
 {admin_icon name='help_template_description' icon='info.gif' class='helpicon'}
 
-{if $has_manage_right}
+{if $has_themes_right}
 {tab_start name='designs'}
 <select name="{$actionid}design_list[]" multiple="multiple" size="5">
   {html_options options=$design_list selected=$template->get_designs()}
