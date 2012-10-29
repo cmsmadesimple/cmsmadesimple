@@ -66,13 +66,13 @@ try {
     $smarty->assign('all_templates',$templates);
 	}
 
-	$stylesheets = StylesheetOperations::get_instance()->LoadStylesheets();
+	$stylesheets = CmsLayoutStylesheet::get_all();
 	if( is_array($stylesheets) && count($stylesheets) ) {
 		$out = array();
 		$out2 = array();
 		for( $i = 0; $i < count($stylesheets); $i++ ) {
-			$out[$stylesheets[$i]->id] = $stylesheets[$i]->name;
-			$out2[$stylesheets[$i]->id] = $stylesheets[$i];
+			$out[$stylesheets[$i]->get_id()] = $stylesheets[$i]->get_name();
+			$out2[$stylesheets[$i]->get_id()] = $stylesheets[$i];
 		}
 		$smarty->assign('list_stylesheets',$out);
 		$smarty->assign('all_stylesheets',$out2);

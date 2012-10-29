@@ -13,8 +13,8 @@
         <legend>{$mod->Lang('available_stylesheets')}:</legend>
         <select id="avail_css" multiple="multiple" size="10">
         {foreach from=$all_stylesheets item='css'}
-          {if !$cssl or !in_array($css->id,$cssl)}
-          <option value="{$css->id}">{$css->name}</option>
+          {if !$cssl or !in_array($css->get_id(),$cssl)}
+          <option value="{$css->get_id()}">{$css->get_name()}</option>
           {/if}
         {/foreach}
         </select>
