@@ -519,6 +519,7 @@ ContentOperations::get_instance()->LoadContentType('content');
 // Home / -1 / NCleanBlue  DEFAULT
 $contentobj = new Content;
 $contentobj->SetName('Home');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Home');
 $contentobj->SetPropertyValue('design_id',$ncleanblue_theme->get_id());
 $contentobj->SetTemplateId($template_list['NCleanBlue']);
@@ -540,6 +541,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // How CMSMS Works / -1 / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('How CMSMS Works');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('How CMSMS Works');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -556,6 +558,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Templates and stylesheets / How CMSMS Works / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Templates and stylesheets');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Templates and stylesheets');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -572,6 +575,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Pages and navigation / How CMSMS Works / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Pages and navigation');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Pages and navigation');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -589,6 +593,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Pages and navigation / How CMSMS Works / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Content');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Content');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -605,6 +610,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Menu Manager / How CMSMS Works / Left simple navigation + 1 column17
 $contentobj = new Content;
 $contentobj->SetName('Menu Manager');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Menu Manager');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -621,6 +627,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Extensions / How CMSMS Works / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Extensions');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Extensions');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -637,6 +644,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Event Manager / How CMSMS Works / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Event Manager');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Event Manager');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -653,6 +661,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Workflow / How CMSMS Works / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Workflow');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Workflow');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -669,6 +678,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Where do I get Help / How CMSMS Works / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Where do I get help?');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Where do i get help?');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -689,6 +699,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Default Templates Explained / -1 / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Default Templates Explained');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Default Templates Explained');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -706,16 +717,16 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // CMSMS tags in the templates / Default Templates Exlplained / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('CMSMS tags in the templates');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('CMSMS tags in the templates');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
 $contentobj->SetOwner($admin_user->id);
-$contentobj->SetAlias('cmsms_tags');
+$contentobj->SetAlias('cms_tags');
 $contentobj->SetParentId($content_list['Default Templates Explained']);
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);
-$contentobj->SetAlias('cms_tags');
 $contentobj->SetPropertyValue('content_en',
 	'<p>Here we explain the tags that are used in the default templates that are specific to templates in CMS Made Simple. The rest of the templates are just pure HTML. You can read more about that in the {cms_selflink ext=\'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Getting_Started/Designer/Templates\' text=\'documentation wiki\'}.</p><div class="templatecode"><h3>Page title</h3><pre>&lt;title&gt;{ldelim}sitename} - {ldelim}title}&lt;/title&gt;</pre><p>For each page using these tags in a template the tags are replaced with the site name you specify in Site Admin &raquo; Global settings and the title you specify when you add/edit each page.</p><p><em>Read more</em> about the <code>{ldelim}sitename}</code> and <code>{ldelim}title}</code> tags in Extensions &raquo; Tags in the Admin Panel.</p></div><div class="templatecode"><h3>Metadata</h3><pre>{ldelim}metadata}</pre><p>This tag adds to your page any metadata that you have specified in Site Admin &raquo; Global settings and also page specific metadata that you can add under the Options tab when adding/editing a page.</p><p>It is also used for knowing the base folder for your site when using pretty URLs. So don\'t remove this if you use Pretty URLs!</p><p><em>Read more</em> about the <code>{ldelim}metadata}</code>tag in Extensions &raquo; Tags in the Admin Panel.</p></div><div class="templatecode"><h3>Stylesheets (deprecated)</h3><pre>{ldelim}stylesheet}</pre><p>This tag links to all style sheets (CSS) that you have attached to a template. It means that you only have to add this tag once and all attached style sheets will be linked automatically.</p><p><em>Read more</em> about the <code>{ldelim}stylesheet}</code> tag in Extensions &raquo; Tags in the Admin Panel.</p></div><div class="templatecode"><h3>Stylesheets</h3><pre>{ldelim}cms_stylesheet}</pre><p>This tag is the newer version of the tag above. The tag links to all style sheets (CSS) that you have attached to a template. It means that you only have to add this tag once and all attached style sheets will be linked automatically.</p><p>The new tag allows you to use smarty variables like [[$red]] to indicate a color, and one change will change it througout your layout. The new tag requires that [[root_url]]/ be put in front of images, as the stylesheets are cached.</p><p><em>Read more</em> about the <code>{ldelim}cms_stylesheet}</code> tag in Extensions &raquo; Tags in the Admin Panel.</p></div><div class="templatecode"><h3>Relational links</h3><pre>{ldelim}cms_selflink dir="start" rellink=1}{ldelim}cms_selflink dir="prev" rellink=1}{ldelim}cms_selflink dir="next" rellink=1}</pre><p>These are relational links for interconnections between pages, which is good for accessibility and Search Engine Optmization</p><p><em>Read more</em> about the <code>{ldelim}cms_selflink}</code> tag in Extensions &raquo; Tags in the Admin Panel.</p></div><div class="templatecode"><h3>Page width in Internet Explorer 6</h3><pre>{ldelim}literal}&lt;script type="text/JavaScript"&gt;&lt;!--//pass min and max -measured against window widthfunction P7_MinMaxW(a,b){ldelim}	var nw="auto",w=document.documentElement.clientWidth;	if(w&gt;=b){ldelim}nw=b+"px";}if(w&lt;=a){ldelim}nw=a+"px";}return nw;}//--&gt;&lt;/script&gt;&lt;!--[if lte IE 6]&gt;&lt;style type="text/css"&gt;#pagewrapper {ldelim}width:expression(P7_MinMaxW(720,950));}#container {ldelim}height: 1%;}&lt;/style&gt;&lt;![endif]--&gt;{ldelim}/literal}</pre><p>This isn\'t a tag really, but displays how to insert JavaScript in a CMSMS template.</p><p>The default templates use fluid page width. But Internet Explorer 6 doesn\'t understand min-width and max-width, so for that browser the min and max page width is set with this JavaScript. For other browsers the page width is set in the style sheets beginning with "Layout: ..."</p></div><div class="templatecode"><h3>Skip links for accessibility</h3><pre>{ldelim}anchor anchor=\'main\' title=\'Skip to content\' accesskey=\'s\' text=\'Skip to content\'}</pre><p>Anchor links (links to an anchor in the same page) are inserted with the <code>{ldelim}anchor}</code> tag. In the default templates this is used for skip links that are visible to screen readers, but hidden with CSS to visual browsers.</p><p><em>Read more</em> about the <code>{ldelim}anchor}</code> tag in Extensions &raquo; Tags in the Admin Panel.</p></div><div class="templatecode"><h3>Header with logo image that links to default page</h3><pre>{ldelim}cms_selflink dir="start" text="$sitename"}</pre><p>In the header the &lt;h1&gt; tag (hidden by CSS) is a link to the page that is selected as the default page. The <code>dir="start"</code> parameter in the {ldelim}cms_selflink} tag is used for this. To get the site name as the text for the link, the <code>$sitename</code> variable is used.</p><p><em>Read more</em> about the <code>{ldelim}cms_selflink}</code> tag in Extensions &raquo; Tags in the Admin Panel.</p></div><div class="templatecode"><h3>Search</h3><pre>{ldelim}search}</pre><p>To insert a search form on your site, simply use the {ldelim}search} tag. Search is actually a module and should therefore be called as a parameter in the {ldelim}cms_module} tag, like this: <code>{ldelim}cms_module module=\'search\'}</code>. But to simplify matters, we did a wrapper tag so that it\'s easier to remember.</p><p><em>Read more</em> about the Search module in Extensions &raquo; Modules in the Admin Panel.</p></div><div class="templatecode"><h3>Breadcrumbs</h3><pre>{ldelim}breadcrumbs starttext=\'You are here\' root=\'Home\' delimiter=\'&raquo;\'}</pre><p>Breadcrumbs is a path to the current page. In the default templates we have chosen to put the text \'You are here\' before the path and force \'Home\' to always be the root in the path, even if it isn\'t. With the delimiter parameter you can select the delimiter that separates entries in the path.</p><p><em>Read more</em> about the <code>{ldelim}breadcrumbs}</code> tag in Extensions &raquo; Tags in the Admin Panel.</p></div><div class="templatecode"><h3>Navigation</h3><pre>{ldelim}menu template=\'simple navigation.tpl\' collapse=\'1\'}</pre><p>This is how you insert a menu where you want it to appear. Like the <code>{ldelim}search}</code> tag, this is actually just a wrapper tag, as the Menu Manager is a module.</p><p>In the default templates the menu manager template that is used for the menus are stored in files. That\'s why you see the .tpl extension in the template parameter. But you can easily import menu templates to the database and edit them directly in the Admin Panel. Then you simply omit the .tpl extension in the template parameter.</p><p><em>Read more</em> about the Menu Manager module in Extensions &raquo; Modules in the Admin Panel.</p></div><div class="templatecode"><h3>News</h3><pre>{ldelim}news number=\'3\' detailpage=\'news\'}</pre><p>This tag will display the last three news articles. When clicking a news article to read the details, it is opened on the page with the page alias \'news\'. That\'s what the detailpage parameter is doing.</p><p>Like all core modules there is a wrapper tag for the News module, to make it easier to use.</p><p><em>Read more</em> about the News module tag in Extensions &raquo; News in the Admin Panel.</p></div><div class="templatecode"><h3>Print button</h3><pre>{ldelim}print showbutton=true script=true}</pre><p>The <code>{ldelim}print}</code> tag is used to insert a print link. With the showbutton parameter set to true we have told the tag to output a button instead of text. The script parameter set to true means the print dialog window opens when clicking the button, for immediate printing.</p><p>The <code>{ldelim}print}</code> tag prints everything that is in your <code>{ldelim}content}</code> tag, that is only the content for a page.</p><p><em>Read more</em> about the <code>{ldelim}print}</code> tag in Extensions &raquo; Tags in the Admin Panel.</p></div><div class="templatecode"><h3>Page content</h3><pre>&lt;h2&gt;{ldelim}title}&lt;/h2&gt;{ldelim}content}</pre><p>Maybe the most important tag in your template. Where you put the <code>{ldelim}content}</code> is where the content for your page will appear.</p><p>We have also chosen to put the page title on every page (the <code>{ldelim}title}</code> tag), so that you don\'t have to put that in the content for every page.</p><p>The default <code>{ldelim}content}</code> tag is <strong>required</strong> for all templates.</p><p><em>Read more</em> about the <code>{ldelim}content}</code> and <code>{ldelim}title}</code> tags in Extensions &raquo; Tags in the Admin Panel.</p></div><div class="templatecode"><h3>Previous/next links</h3><pre>{ldelim}anchor anchor=\'main\' text=\'^ Top\'}{ldelim}cms_selflink dir="previous" label="Previous page: "}{ldelim}cms_selflink dir="next"}</pre><p>Some more internal links. These are using the dir parameter to link to the previous and next pages in the page hierarchy (separators and section headers will be omitted as they are no pages).</p></div><div class="templatecode"><h3>Page footer</h3><pre>{ldelim}global_content name=\'footer\'}</pre><p>Instead of bloating your template with lots of code you can put some code in a Global Content Block. Then call that Global Content Block with the <code>{ldelim}global_content}</code> tag. It\'s also useful for content or HTML code that is reused on several pages or templates.</p><p>In the default templates we have put the footer text in a Global Content Block with the name \'footer\'. You find the Global Content Blocks in the Content menu in the Admin Panel.</p><p><em>Read more</em> about the <code>{ldelim}global_content}</code> tag in Extensions &raquo; Tags in the Admin Panel.</p></div>');
 $contentobj->Save();
@@ -724,6 +735,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Left simple navigation + 1 column / Default Templates Explained / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Left simple navigation + 1 column');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Left simple navigation + 1 column');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -733,7 +745,6 @@ $contentobj->SetParentId($content_list['Default Templates Explained']);
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);
-$contentobj->SetAlias('cms_tags');
 $contentobj->SetPropertyValue('content_en',
 	'<p>This template has the menu in left sidebar. The menu is using the <strong>Simple Navigation</strong> menu template. It is styled in the stylesheet called <strong>Navigation: Simple - Vertical</strong>.</p><p>You can easily float the sidebar with the menu to the right instead. Look in the <strong>Layout: Left sidebar + 1 column</strong> style sheet for the <code>float:left;</code> property in the <code>div#sidebar</code> element. Change that to <code>float:right;</code> and the sidebar with the menu will instead be on the right side of the content, of course you will also have to adjust the margins for the sidebar and the div#main, basically just swap the left and right margins.</p>');
 $contentobj->Save();
@@ -742,6 +753,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Top simple navigation + left subnavigation + 1 column / Default Templates Explained / Top simple navigation + left subnavigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Top simple navigation + left subnavigation + 1 column');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Top simple navigation + left subnavigation + 1 column');
 $contentobj->SetPropertyValue('design_id',$topsimple_leftsubnav_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Top simple navigation + left subnavigation + 1 column']);
@@ -751,7 +763,6 @@ $contentobj->SetParentId($content_list['Default Templates Explained']);
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);
-$contentobj->SetAlias('cms_tags');
 $contentobj->SetPropertyValue('content_en',
 	'<p>With the Menu Manager you can easily split the navigation in two parts. On this page the top level in the page hierarchy is displayed horizontally and depending on what page is displayed a localized sub-menu is displayed vertically to the left. In this case the sub-menu to the left displays the sub-levels (children) to <strong>Default Templates Explained</strong>.</p><h3>The {ldelim}menu} tag</h3><p>The <code>{ldelim}menu}</code> tag is inserted twice in the page template. First where the main navigation is, which should only show the top level. It looks like this: <code>{ldelim}menu template=\'simple_navigation.tpl\' number_of_levels=\'1\'}</code>.</p><p>The sub navigation should only contain the second level and down, depending on what is selected on the first level. Also, the third level links should only display when its parent on the second level is clicked, otherwise they are hidden. That is, the second level is collapsed unless the current page has sub pages.</p><p>The tag for the sub navigation looks like this: <code>{ldelim}menu template=\'simple_navigation.tpl\' start_level=\'2\' collapse=\'1\'}</code>.</p><h3>Attached style sheets for the menu</h3><p>As the main navigation and the sub navigation need to be styled differently (one horizontal, the other vertical), two navigation style sheets are attached to this page template. <strong>Navigation: Simple - Horizontal</strong> is for styling the horizontal main menu. <strong>Navigation: Simple - Vertical</strong> on the other hand, contains the style for the sub navigation to the left.</p><h3>Both using the same Menu Manager template</h3><p>However, as you could see, both parts of the navigation are using the same menu manager template. That is because the output code is the same. It is only through CSS that the two parts get styled differently.</p><h3>Floating the sidebar to the right</h3><p>You can easily float the sidebar with the sub navigation to the right instead. Look in the <strong>Layout: Top menu + 2 columns</strong> style sheet for the <code>float:left;</code> property in the <code>div#sidebar</code> element. Change that to <code>float:right;</code> and the sidebar with the menu will instead be on the right side of the content, of course you will also have to adjust the margins for the sidebar and the div#main, basically just swap the left and right margins.</p>');
 $contentobj->Save();
@@ -760,6 +771,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // CSSMenu top + 2 columns / Default Templates Explained / CSSMenu top + 2 columns
 $contentobj = new Content;
 $contentobj->SetName('CSSMenu top + 2 columns');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('CSSMenu top + 2 columns');
 $contentobj->SetPropertyValue('design_id',$css_menutop_2col_theme->get_id());
 $contentobj->SetTemplateId($template_list['CSSMenu top + 2 columns']);
@@ -769,7 +781,6 @@ $contentobj->SetParentId($content_list['Default Templates Explained']);
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);
-$contentobj->SetAlias('cms_tags');
 $contentobj->SetPropertyValue('content_en',
 	'<p>This is a drop-down menu that is using only CSS (although some Javascript is required for Internet Explorer 6, note: IE6 will not let you use 2 of these menu types in a template at the same time as the second one will fail to open). It can be either vertical or horizontal.</p><p>The code we have inserted in the template that this page is using is simply <code>{ldelim}menu template=\'cssmenu.tpl\'}</code>.  You style the menu in the stylesheet <strong>Navigation: CSSMenu - Horizontal</strong> or <strong>Navigation: CSSMenu - Vertical</strong> for the vertical CSSMenu.</p><p>But to be on the safe side, copy this style sheet and attach your new style sheet to the template instead (and make your changes in your new style sheet). Then you can always revert to the default style sheet if something goes wrong.</p>');
 $contentobj->SetPropertyValue('Sidebar',
@@ -780,6 +791,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // CSSMenu left + 1 column / Default Templates Explained / CSSMenu left + 1 column
 $contentobj = new Content;
 $contentobj->SetName('CSSMenu left + 1 column');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('CSSMenu left + 1 column');
 $contentobj->SetPropertyValue('design_id',$css_menuleft_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['CSSMenu left + 1 column']);
@@ -789,7 +801,6 @@ $contentobj->SetParentId($content_list['Default Templates Explained']);
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);
-$contentobj->SetAlias('cms_tags');
 $contentobj->SetPropertyValue('content_en',
 	'<p>This is basically the same as the last one, CSSMenu top + 2 column, with the menu on the left instead of across the top there isn\'t a whole lot to say about it.</p><h3>Filler Text</h3><p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut ac leo in lorem ultricies sollicitudin. Vivamus molestie elit nec nulla. Suspendisse potenti. Suspendisse at lorem. Donec pulvinar, magna eget molestie pretium, justo sem iaculis urna, eget condimentum nibh augue pellentesque arcu. Integer tristique tempor mauris. Sed justo orci, commodo volutpat, sagittis vitae, varius vitae, massa. Maecenas pede ligula, iaculis sit amet, pharetra eu, adipiscing consectetuer, eros. Duis ullamcorper nisl ac magna. Nunc neque dolor, posuere dapibus, convallis non, tristique sed, nibh. Suspendisse quis leo. Phasellus pretium erat ut purus. Duis facilisis consectetuer sapien. Nulla eget pede ut nisl faucibus consequat. Quisque erat lectus, luctus in, pellentesque ac, adipiscing eu, enim. Donec ultrices laoreet urna.</p><h3>Subheading</h3><p>Vestibulum vitae tellus. Fusce quis ligula. Cras mi. Mauris congue, lacus eget rhoncus venenatis, mi nunc volutpat nisl, ut ornare erat augue quis mauris. Nulla in sem. Donec semper odio ac ante. Cras a libero in risus mattis commodo. Phasellus pellentesque lectus. Donec a mi. Integer euismod neque at arcu. Morbi ligula nulla, dapibus nec, fermentum ut, tristique vel, pede. Morbi at diam. Vestibulum quam. Cras consectetuer wisi id neque. Etiam dictum vulputate ligula. Aliquam erat volutpat. Proin vitae lorem in justo imperdiet nonummy. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Suspendisse leo. Sed in eros ut lectus lacinia condimentum.</p>');
 $contentobj->Save();
@@ -798,6 +809,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Minimal template / Default Templates Explained / Minimal template
 $contentobj = new Content;
 $contentobj->SetName('Minimal template');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Minimal template');
 $contentobj->SetPropertyValue('design_id',$minimal_theme->get_id());
 $contentobj->SetTemplateId($template_list['Minimal']);
@@ -806,7 +818,6 @@ $contentobj->SetParentId($content_list['Default Templates Explained']);
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);
-$contentobj->SetAlias('cms_tags');
 $contentobj->SetPropertyValue('content_en',
 	'<p>This is an example of the very minimal that needs to be in a CMSMS template. No stylesheet is attached to the template, which is why it doesn\'t look very nice...</p><p>However, to make it slightly more appealing, some inline styling was used, for floating the content to the right of the menu.</p><p>The menu in this page template is using the <strong>Minimal Navigation</strong> template for Menu Manager. No accessibility stuff is in there, so it\'s recommended that the <strong>Simple Navigation</strong> menu template is rather used.</p>');
 $contentobj->Save();
@@ -815,6 +826,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Higher End / Default Templates Explained / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Higher End');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Higher End');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -823,7 +835,6 @@ $contentobj->SetParentId($content_list['Default Templates Explained']);
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);
-$contentobj->SetAlias('cms_tags');
 $contentobj->SetPropertyValue('content_en',
 	'<p>These are more complex then some of the other templates, especially the menus, they all 3 use the same menu template. Which shows you the power of CSS.</p><p>Be forewarned, if you use IE6 you won\'t see the best effects in any of the shadow menus that you see using a more standards compliant browser. I mean it\'s still nice grant you but... just upgrade your browser if you can.</p><h3>The Differences</h3><p>Starting with NCleanBlue you get a really nice, subtle Tabbed menu, then it goes on to have a real nice drop down effect.</p><p>You get a real nice 2.0 header and footer, great color scheme and the search is way cool, it\'s just a great theme, what can I say, thanks Nuno.</p><p>Then the next 2 submenus have another version of the shadowed drop, the first step will point up for the top sub menu and to the right for the left sub menus.</p><p>These 2 are the same layout as CSSMenu top + 2 columns and CSSMenu left + 1 column,  respectively, except for the menu template and some CSS.</p><p>We hope you enjoy these, for any changes you want to make it\'s always best to copy the original style sheet for safe keeping, you never know when you may need it.</p>');
 $contentobj->Save();
@@ -832,6 +843,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // NCleanBlue / Higher End / NCleanBlue
 $contentobj = new Content;
 $contentobj->SetName('NCleanBlue');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('NCleanBlue');
 $contentobj->SetPropertyValue('design_id',$ncleanblue_theme->get_id());
 $contentobj->SetTemplateId($template_list['NCleanBlue']);
@@ -840,7 +852,6 @@ $contentobj->SetParentId($content_list['Higher End']);
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);
-$contentobj->SetAlias('cms_tags');
 $contentobj->SetPropertyValue('content_en',
       '<p>Nuno has graciously supplied us with another of his great looking designs.</p><p>This one is using a new menu template so we can style the drop down for the children pages, using an image for the second ul going from the top down, it has an extra li at the bottom of the child pages ul &lt;li class="separator once" style="list-style-type: none;"&gt;&amp;nbsp; &lt;/li&gt; this is used to hold the bottom image.</p><h3>Filler Text</h3><p>Maecenas tristique, tortor nec eleifend luctus, nibh leo imperdiet wisi, et accumsan est lectus in orci. Proin facilisis, odio auctor feugiat accumsan, sapien purus iaculis dui, a volutpat augue pede ut sem. Nulla facilisi. Aliquam suscipit elementum ipsum. Morbi urna. Nam eros justo, varius sit amet, euismod eu, dictum nec, neque. Nullam id mi eu odio tempor adipiscing. Quisque hendrerit euismod nunc. Ut erat nulla, pellentesque nec, luctus eu, dictum nec, augue. Aliquam tincidunt sodales arcu. Nam porta sagittis quam. Vivamus eget purus egestas velit congue consectetuer.</p>');
 $contentobj->Save();
@@ -849,6 +860,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // ShadowMenu Tab + 2 columns / Higher End / ShadowMenu Tab + 2 columns
 $contentobj = new Content;
 $contentobj->SetName('ShadowMenu Tab + 2 columns');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('ShadowMenu Tab + 2 columns');
 $contentobj->SetPropertyValue('design_id',$shadowmenu_tab_2col_theme->get_id());
 $contentobj->SetTemplateId($template_list['ShadowMenu Tab + 2 columns']);
@@ -857,7 +869,6 @@ $contentobj->SetParentId($content_list['Higher End']);
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);
-$contentobj->SetAlias('cms_tags');
 $contentobj->SetPropertyValue('content_en',
 	'<p>Using the same menu template as the previous theme. We changed the child ul CSS to use a different top image. This involves changing some of the margin and padding as the images are a different shape. Note the difference in the second level and third level ul images, one has an arrow up and the other has an arrow left.</p><h3>Filler Text</h3><p>Curabitur ornare velit molestie nulla. Fusce fermentum facilisis mi. Maecenas volutpat, eros ac pellentesque mollis, urna elit rutrum turpis, congue convallis nibh erat nec purus. Sed malesuada consectetuer turpis. Nulla sollicitudin placerat augue. Vestibulum ut sem eget turpis laoreet cursus. Vestibulum ante urna, mollis eget, cursus eget, viverra non, lectus. Aliquam erat volutpat. Aenean gravida tempor nulla. Sed sem lorem, pulvinar non, placerat non, vestibulum sed, tellus. Phasellus fermentum velit id dui. Praesent vulputate. Nam in dui.</p><p>Maecenas tristique, tortor nec eleifend luctus, nibh leo imperdiet wisi, et accumsan est lectus in orci. Proin facilisis, odio auctor feugiat accumsan, sapien purus iaculis dui, a volutpat augue pede ut sem. Nulla facilisi. Aliquam suscipit elementum ipsum. Morbi urna. Nam eros justo, varius sit amet, euismod eu, dictum nec, neque. Nullam id mi eu odio tempor adipiscing. Quisque hendrerit euismod nunc. Ut erat nulla, pellentesque nec, luctus eu, dictum nec, augue. Aliquam tincidunt sodales arcu. Nam porta sagittis quam. Vivamus eget purus egestas velit congue consectetuer.</p>');
 $contentobj->SetPropertyValue('Sidebar',
@@ -868,6 +879,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // ShadowMenu left + 1 column / Higher End / ShadowMenu left + 1 column
 $contentobj = new Content;
 $contentobj->SetName('ShadowMenu Left + 1 column');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('ShadowMenu Left + 1 column');
 $contentobj->SetPropertyValue('design_id',$shadowmenu_left_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['ShadowMenu left + 1 column']);
@@ -876,7 +888,6 @@ $contentobj->SetParentId($content_list['Higher End']);
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);
-$contentobj->SetAlias('cms_tags');
 $contentobj->SetPropertyValue('content_en',
       '<p>Again using the same menu template as the two previous themes. We changed the child ul CSS to use a different top image. This involves changing some of the margin and padding as the images are a different shape. Note the second level and third level ul are now using the same image that has an arrow left.</p><h3>Filler Text</h3><p>Curabitur ornare velit molestie nulla. Fusce fermentum facilisis mi. Maecenas volutpat, eros ac pellentesque mollis, urna elit rutrum turpis, congue convallis nibh erat nec purus. Sed malesuada consectetuer turpis. Nulla sollicitudin placerat augue. Vestibulum ut sem eget turpis laoreet cursus. Vestibulum ante urna, mollis eget, cursus eget, viverra non, lectus. Aliquam erat volutpat. Aenean gravida tempor nulla. Sed sem lorem, pulvinar non, placerat non, vestibulum sed, tellus. Phasellus fermentum velit id dui. Praesent vulputate. Nam in dui.</p><p>Maecenas tristique, tortor nec eleifend luctus, nibh leo imperdiet wisi, et accumsan est lectus in orci. Proin facilisis, odio auctor feugiat accumsan, sapien purus iaculis dui, a volutpat augue pede ut sem. Nulla facilisi. Aliquam suscipit elementum ipsum. Morbi urna. Nam eros justo, varius sit amet, euismod eu, dictum nec, neque. Nullam id mi eu odio tempor adipiscing. Quisque hendrerit euismod nunc. Ut erat nulla, pellentesque nec, luctus eu, dictum nec, augue. Aliquam tincidunt sodales arcu. Nam porta sagittis quam. Vivamus eget purus egestas velit congue consectetuer.</p>');
 
@@ -884,6 +895,7 @@ $contentobj->SetPropertyValue('content_en',
 // Welcome to Simplex / Default Templates Explained / Simplex
 $contentobj = new Content;
 $contentobj->SetName('Welcome to Simplex');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Simplex Theme');
 $contentobj->SetPropertyValue('design_id',$simplex_theme->get_id());
 $contentobj->SetTemplateId($template_list['Simplex']);
@@ -892,7 +904,6 @@ $contentobj->SetParentId($content_list['Default Templates Explained']);
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);
-$contentobj->SetAlias('cms_tags');
 $contentobj->SetPropertyValue('content_en',
      '<p>Simplex Theme has been created to demonstrate HTML5 and CSS3 functionality within CMS Made Simple&trade;.<br />It is shipped with a CSS Framework making it possible for you to create Responsive and Mobile capabale layouts with ease.</p><h2>What is included?</h2><p>With this Template you will find four Stylesheets attached to it.</p><ul><li>Simplex: Core</li><li>Simplex: Layout</li><li>Simplex: Mobile</li><li>Simplex: Print</li></ul><p>Main Functionality of this Template is included in Core Stylesheet. It contains a simple Fluid Grid Framework based on {cms_selflink ext="http://960.gs/" title="960 Grid System" text="960 Grid System" target="_blank"}.<br />In this same Stylesheet CSS {cms_selflink ext="http://www.w3.org/TR/css3-mediaqueries/" title="W3C Media Queries" text="Media Queries" target="_blank"} are being used that make it possible for a flexible layout based on Screen width.<br /><br />With Simplex Theme it is very easy to quickly change appearance of complete Site at once. If you look at Page Template code you will find "boxed" id in the <code>&lt;body&gt;</code> tag.<br />When this id is removed the Layout of the Site is changed and you would face a simple layout with White background.<br />You can also quickly change allignement of the complete Site. If you change the class of "wrapper" div to leftaligned or rightaligned, whole Page will be aligned to left or right.</p><h2>Support for Mobile Devices</h2><p>As mentioned above this Theme is shipped with Stylesheet Framework that gives you a starting point for easy developement of Responsive Layout.<br />Mobile world is very versatile and Framework itself is by no means perfect, it is only a starting point but as a Developer you should decide which technique you should use for your current Project.<br />Responsive Template is only one small step towards Mobile support.</p><p>This Theme requires {cms_selflink ext="http://jquery.org/" title="jQuery" text="jQuery" target="_blank"} which is included with <code>{ldelim}cms_jquery{rdelim}</code> tag.</p><p><cite>Note: {ldelim}cms_jquery{rdelim} tag is included at the bottom of the Template. You should be carefull with it when you are using Modules that include jQuery in &lt;head&gt; section.</cite></p><p>In file functions.js a section is included that makes it possible of Navigating through site with some Mobile Devices. This part of the code, covers only few devices and it is only meant as an example and a starting point for Developer.</p><h2>This and that</h2><p>As an example of {cms_selflink ext="http://www.smarty.net/" title="Smarty" text="Smarty" target="_blank"}power within CMS Made Simple&trade; Templates a very simple Slider has been included, which demonstartes how easy it is to quickly create a Slideshow without a single Module.</p><pre><code>{ldelim}assign var=\'teaser\' value=\'uploads/simplex/teaser/*.jpg\'|glob{rdelim}<br />{ldelim}foreach from=$teaser item=\'one\'{rdelim}<br /> &lt;div&gt;&lt;img src=\'{ldelim}root_url{rdelim}/{ldelim}$one{rdelim}\' width=\'852\' height=\'275\' alt=\'\' /&gt;&lt;/div&gt;<br />{ldelim}/foreach{rdelim}<br /> {/strip}</code></pre><p><cite>If you would like to make this Slider responsive you should include a additional jQuery Plugin like for example {cms_selflink ext=\'http://swipejs.com/\' target=\'_blank\' text=\'SwipeJS\' title=\'SwipeJS\'}</cite></p><p>In included Stylesheets, Smarty has been used as well. This should make it possible for you, to quickly change Color scheme of the theme by simply changing HEX code within assign Tags.</p><pre><code>[[assign var=\'boxed_bg\' value="#d1d1d1 url(`$path`/boxed-bg.gif)"]][[assign var=\'light_grey\' value=\'#f1f1f1\']]<br />[[assign var=\'grey\' value=\'#e9e9e9\']]<br />[[assign var=\'dark_grey\' value=\'#555\']]<br />[[assign var=\'white\' value=\'#fff\']]<br />[[assign var=\'orange\' value=\'#f39c2c\']]<br />[[assign var=\'dark_orange\' value=\'#e6870e\']]<br />[[assign var=\'yellow\' value=\'#fdbd34\']]</code></pre><p>If you are using a modern Browser, you will notice that the Theme is using some of {cms_selflink ext=\'http://www.w3.org/TR/CSS/#css3\' title=\'CSS3\' text=\'CSS3\' target=\'_blank\'} techniques. There are no Internet Explorer fallbacks included but this doesn\'t mean that it does not work in Internet Explorer.<br />A Visitor that is using Internet Explorer will simply see a Layout with gracefull fallback, meaning animations will not animate, rounded corners will be edges...</p><p><em>Note from Theme Develper Goran Ilic (uniqu3e):</em></p><blockquote><cite>The Simplex Theme was kept simplistic which should make it possible for a Developer to easily read code used in Theme and either create a new Layout from it or editing this Theme.<br /><br />A full Internet Explorer or Mobile support was intentionally not included, as each Developer should decide how far a old Browser like Internet Explorer (7,8) or which Mobile devices he wants to support and which Technique he will use.<br />Each Project is different and with each Project there is a need for different techniques.</cite></blockquote>');
 $contentobj->Save();
@@ -905,6 +916,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Default Extensions / -1 / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Default Extensions');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Default Extensions');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -921,6 +933,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Modules / 24 / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Modules');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Modules');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -937,6 +950,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // News / Modules / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('News');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('News');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -953,6 +967,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Menu Manager / Modules / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Menu Manager');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Menu Manager');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -970,6 +985,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Theme Manager / Modules / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Theme Manager');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Theme Manager');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -986,6 +1002,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // MicroTiny / Modules / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('MicroTiny');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('MicroTiny');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -1003,6 +1020,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Search / Modules / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Search');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Search');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -1020,6 +1038,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Module Manager / Modules / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Module Manager');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Module Manager');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -1037,6 +1056,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Tags / Default Extensions / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Tags');
+$contentobj->SetAlias();
 $contentobj->SetMenuText('Tags');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -1053,6 +1073,7 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // Tags in the core / Tags / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('Tags in the core');
+$contentobj->SetAlias('cms_tags');
 $contentobj->SetMenuText('Tags in the core');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
@@ -1069,9 +1090,8 @@ $content_list[$contentobj->Name()] = $contentobj->Id();
 // User Defined Tags / Tags / Left simple navigation + 1 column
 $contentobj = new Content;
 $contentobj->SetName('User Defined Tags');
-$contentobj->SetMenuText('User Defined T
-
-ags');
+$contentobj->SetAlias();
+$contentobj->SetMenuText('User Defined Tags');
 $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
 $contentobj->SetOwner($admin_user->id);

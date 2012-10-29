@@ -986,7 +986,7 @@ abstract class ContentBase
      * @param string The alias
      * @param boolean Wether an alias should be calculated or not.
      */
-    public function SetAlias($alias, $doAutoAliasIfEnabled = true)
+    public function SetAlias($alias = '', $doAutoAliasIfEnabled = true)
     {
       $this->DoReadyForEdit();
       $gCms = cmsms();
@@ -994,38 +994,32 @@ abstract class ContentBase
 
       $tolower = false;
 
-      if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true)
-	{
-	  $alias = trim($this->mMenuText);
-	  if ($alias == '')
-	    {
-	      $alias = trim($this->mName);
-	    }
-			
-	  $tolower = true;
-	  $alias = munge_string_to_url($alias, $tolower);
-	  // Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
-	  $contentops = $gCms->GetContentOperations();
-	  $error = $contentops->CheckAliasError($alias, $this->Id());
-	  if ($error !== FALSE)
-	    {
-	      if (FALSE == empty($alias))
-		{
-		  $alias_num_add = 2;
-		  // If a '-2' version of the alias already exists
-		  // Check the '-3' version etc.
-		  while ($contentops->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE)
-		    {
-		      $alias_num_add++;
-		    }
-		  $alias .= '-'.$alias_num_add;
-		}
-	      else
-		{
-		  $alias = '';
-		}
-	    }
+      if ($alias == '' && $doAutoAliasIfEnabled && $config['auto_alias_content'] == true) {
+	$alias = trim($this->mMenuText);
+	if ($alias == '') {
+	  $alias = trim($this->mName);
 	}
+			
+	$tolower = true;
+	$alias = munge_string_to_url($alias, $tolower);
+	// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
+	$contentops = $gCms->GetContentOperations();
+	$error = $contentops->CheckAliasError($alias, $this->Id());
+	if ($error !== FALSE) {
+	  if (FALSE == empty($alias)) {
+	    $alias_num_add = 2;
+	    // If a '-2' version of the alias already exists
+	    // Check the '-3' version etc.
+	    while ($contentops->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE) {
+	      $alias_num_add++;
+	    }
+	    $alias .= '-'.$alias_num_add;
+	  }
+	  else {
+	    $alias = '';
+	  }
+	}
+      }
 
       $this->mAlias = munge_string_to_url($alias, $tolower);
     } 
