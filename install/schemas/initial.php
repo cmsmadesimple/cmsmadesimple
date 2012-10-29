@@ -102,6 +102,7 @@ $gcb->save();
 ContentOperations::get_instance()->LoadContentType('content');
 $content = new Content;
 $content->SetName('Home');
+$content->SetAlias();
 $content->SetOwner($admin_user->id);
 $content->SetMenuText('Home Page');
 $content->SetTemplateId($template->get_id());
