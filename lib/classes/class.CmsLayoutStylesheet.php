@@ -102,7 +102,15 @@ class CmsLayoutStylesheet
 
   public function set_media_types($arr)
   {
-		if( !is_array($arr) ) return;
+		if( !is_array($arr) ) {
+			if( (int)$arr == 0 && is_string($arr) ) {
+				$arr = array($arr);
+			}
+			else {
+				return;
+			}
+		}
+
     $this->_data['media_type'] = $arr;
     $this->_dirty = TRUE;
   }
