@@ -7,6 +7,17 @@ $(document).ready(function(){
   $('#tpl_setall').live('click',function(){
     return confirm('{$mod->Lang('confirm_template_setall')}');
   });
+
+  $('#applybtn').live('click',function(e){
+    // serialize the form
+    e.preventDefault();
+    var url = $('#form_edittemplate').attr('action')+'?showtemplate=false&m1_apply=1';
+    var data = $('#form_edittemplate').serializeArray();
+    $.post(url,data,function(data,textStatus,jqXHR){
+      $('#cancelbtn').attr('value','{$mod->Lang('close')}');
+      alert(data);
+    });
+  });
 });
 </script>
 
@@ -16,7 +27,7 @@ $(document).ready(function(){
 <h3>{$mod->Lang('edit_template')}: {$template->get_name()} ({$template->get_id()})</h3>
 {/if}
 
-{form_start extraparms=$extraparms}
+{form_start id="form_edittemplate" extraparms=$extraparms}
 <fieldset>
   <div style="width: 49%; float: left;">
   <div class="pageoverflow">
@@ -140,7 +151,10 @@ $(document).ready(function(){
   <p class="pagetext"></p>
   <p class="pageinput">
     <input type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>
-    <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
+    {if $template->get_id()}
+    <input type="submit" id="applybtn" name="{$actionid}apply" value="{$mod->Lang('apply')}"/>
+    {/if}
+    <input type="submit" id="cancelbtn" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
   </p>
 </div>
 {form_end}

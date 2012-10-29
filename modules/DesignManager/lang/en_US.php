@@ -1,8 +1,9 @@
 <?php
 #A
+$lang['apply'] = 'Apply';
 $lang['attached_stylesheets'] = 'Attached Stylesheets';
-$lang['available_stylesheets'] = 'Available Stylesheets';
 $lang['attached_templates'] = 'Attached Templates';
+$lang['available_stylesheets'] = 'Available Stylesheets';
 $lang['available_templates'] = 'Available Templates';
 
 #B
@@ -18,6 +19,7 @@ $lang['confirm_delete_template_1'] = 'Yes, I am sure I want to delete this templ
 $lang['confirm_delete_template_2'] = 'Yes, I am <strong>really</strong> sure I want to delete this template';
 $lang['confirm_reset_type'] = 'Reset the default content of this type to the version distributed with the system (or module)?\n\nResetting this will only effect newly created templates of this type.  No existing templates will be adjusted.';
 $lang['copy_template'] = 'Copy Template';
+$lang['close'] = 'Close';
 $lang['create'] = 'Create';
 $lang['create_category'] = 'Create a new Category';
 $lang['create_design'] = 'Create a new Design';

@@ -33,7 +33,9 @@ if( !$this->CheckPermission('Modify Templates') ) {
 $this->SetCurrentTab('templates');
 
 if( isset($params['cancel']) ) {
-  $this->SetMessage($this->Lang('msg_cancelled'));
+	if( $params['cancel'] == $this->Lang('cancel') ) {
+		$this->SetMessage($this->Lang('msg_cancelled'));
+	}
   $this->RedirectToAdminTab();
 }
 
@@ -77,7 +79,8 @@ try {
 			$this->RedirectToAdminTab();
 		}
 
-    if( isset($params['submit']) && $params['submit'] == $this->Lang('submit') ) {
+    if( isset($params['submit']) || isset($params['apply']) ) {
+
       $tpl_obj->set_name($params['name']);
       $tpl_obj->set_content($params['contents']);
 			if( isset($params['description']) ) {
@@ -107,8 +110,14 @@ try {
 				$tpl_obj->set_designs($design_list);
 			}
       $tpl_obj->save();
-      $this->SetMessage($this->Lang('msg_template_saved'));
-      $this->RedirectToAdminTab();
+
+			if( isset($params['apply']) ) {
+				echo 'AJAX GOOD';
+				exit;
+			}
+
+			$this->SetMessage($this->Lang('msg_template_saved'));
+			$this->RedirectToAdminTab();
     }
   }
   catch( CmsException $e ) {
