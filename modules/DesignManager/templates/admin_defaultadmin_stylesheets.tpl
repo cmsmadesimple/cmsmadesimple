@@ -13,6 +13,7 @@
   <tbody>
   {foreach from=$stylesheets item='css'}
    {cms_action_url action='admin_edit_css' css=$css->get_id() assign='edit_css'}
+   {cms_action_url action='admin_delete_css' css=$css->get_id() assign='delete_css'}
    {cycle values="row1,row2" assign='rowclass'}
    <tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
      <td><a href="{$edit_css}" title="{$mod->Lang('edit_stylesheet')}">{$css->get_id()}</a></td>
@@ -36,7 +37,7 @@
      </td>
      <td>{$css->get_modified()|date_format:'%x %X'}</td>
      <td><a href="{$edit_css}" title="{$mod->Lang('edit_stylesheet')}">{admin_icon icon='edit.gif' title=$mod->Lang('edit_stylesheet')}</a></td>
-     <td>DEL</td>
+     <td><a href="{$delete_css}" title="{$mod->Lang('delete_stylesheet')}">{admin_icon icon='delete.gif' title=$mod->Lang('delete_stylesheet')}</a></td>
    </tr>
   {/foreach}
   </tbody>

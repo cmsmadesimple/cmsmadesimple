@@ -17,6 +17,8 @@ $lang['confirm_bulk_tmplop'] = 'Are you sure you want to perform this action on 
 $lang['confirm_delete_1'] = 'Are you sure you want to delete this design?';
 $lang['confirm_delete_2'] = 'Yes, I am sure I want to delete this item';
 $lang['confirm_delete_category'] = 'Are you sure you want to delete this category?';
+$lang['confirm_delete_css_1'] = 'Yes, I am sure I want to delete this stylesheet';
+$lang['confirm_delete_css_2'] = 'Yes, I am <strong>really</strong> sure I want to delete this stylesheet';
 $lang['confirm_delete_template_1'] = 'Yes, I am sure I want to delete this template';
 $lang['confirm_delete_template_2'] = 'Yes, I am <strong>really</strong> sure I want to delete this template';
 $lang['confirm_reset_type'] = 'Reset the default content of this type to the version distributed with the system (or module)?\n\nResetting this will only effect newly created templates of this type.  No existing templates will be adjusted.';
@@ -33,6 +35,7 @@ $lang['confirm_template_setall'] = 'Setting all pages to use this template may c
 $lang['delete_attached_stylesheets'] = 'Delete attached and orphaned stylesheets';
 $lang['delete_attached_templates'] = 'Delete attached and orphaned templates';
 $lang['delete_design'] = 'Delete Design';
+$lang['delete_stylesheet'] = 'Delete Stylesheet';
 $lang['delete_template'] = 'Delete Template';
 
 #E
@@ -113,6 +116,7 @@ $lang['msg_bulkop_complete'] = 'Bulk operation completed';
 $lang['msg_cancelled'] = 'Operation Cancelled';
 $lang['msg_category_deleted'] = 'Category Deleted';
 $lang['msg_category_saved'] = 'Category Saved';
+$lang['msg_stylesheet_deleted'] = 'Stylesheet Deleted';
 $lang['msg_template_copied_edit'] = 'Template has been copied, you are now editing the new version';
 $lang['msg_template_copied'] = 'Template Copied';
 $lang['msg_template_deleted'] = 'Template Deleted';
