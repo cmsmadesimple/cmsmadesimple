@@ -236,7 +236,7 @@ $css = new CmsLayoutStylesheet;
 $css->set_name('Handheld');
 $css->set_description('todo: '.__FILE__.'::'.__LINE__);
 $css->set_content($txt);
-$css->set_media_typess('handheld');
+$css->set_media_types('handheld');
 $css->save();
 $css_list[$css->get_name()] = $css;
 

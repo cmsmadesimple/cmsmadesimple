@@ -249,7 +249,10 @@ class CmsLayoutStylesheet
               SET name = ?, content = ?, description = ?, media_type = ?, media_query = ?,
                   modified = ?
               WHERE id = ?';
-		$tmp = implode(',',$this->_data['media_type']);
+		$tmp = '';
+		if( isset($this->_data['media_type']) ) {
+			$tmp = implode(',',$this->_data['media_type']);
+		}
     $db = cmsms()->GetDb();
     $dbr = $db->Execute($query,
 												array($this->get_name(),$this->get_content(),$this->get_description(),
@@ -284,7 +287,10 @@ class CmsLayoutStylesheet
     $this->validate();
 
     // insert the record
-		$tmp = implode(',',$this->_data['media_type']);
+		$tmp = '';
+		if( isset($this->_data['media_type']) ) {
+			$tmp = implode(',',$this->_data['media_type']);
+		}
     $query = 'INSERT INTO '.cms_db_prefix().self::TABLENAME.'
               (name,content,description,media_type,media_query,
                created,modified) VALUES (?,?,?,?,?,?,?)';
