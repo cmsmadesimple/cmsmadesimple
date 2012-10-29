@@ -70,7 +70,7 @@ class CmsLayoutTemplate
 	public function set_content($str)
 	{
 		$str = trim($str);
-		if( !$str ) throw new CmsInvalidDataException('Template content cannot be empty');
+		if( !$str ) $str = '{* Empty Smarty Template *}';
 		$this->_data['content'] = $str;
 		$this->_dirty = TRUE;
 	}

@@ -575,11 +575,17 @@ class CmsLayoutTemplateType
 		  return;
 	  }
 
-	  $out = array();
 	  foreach( $list as $row ) {
-		  $out[] = self::_load_from_data($row);
+		  self::_load_from_data($row);
 	  }
-	  return $out;
+
+		$out = array();
+		foreach( self::$_cache as $id => $one ) {
+			if( $one->get_originator() == $originator ) {
+				$out[] = $one;
+			}
+		}
+		return $out;
   }
 
 
@@ -596,11 +602,11 @@ class CmsLayoutTemplateType
 		  return;
 	  }
 
-	  $out = array();
 	  foreach( $list as $row ) {
-		  $out[] = self::_load_from_data($row);
+		  self::_load_from_data($row);
 	  }
-	  return $out;
+
+	  return array_values(self::$_cache);
   }
 
 	public static function load_bulk($list)

@@ -11,9 +11,7 @@ $(document).ready(function(){
 });
 </script>
 
-{if isset($templates)}
 {form_start}{strip}
-  {assign var='ntemplates' value=count($templates)}
   <div class="pageoptions" style="text-align: right;">
     <label for="filter_tpl">{$mod->Lang('prompt_filter')}:</label>
     &nbsp;<select id="filter_tpl" name="{$actionid}filter_tpl">{html_options options=$filter_options selected=$filter[0]}</select>&nbsp;
@@ -26,9 +24,10 @@ $(document).ready(function(){
       <option value="50"{if $filter.limit == 50} selected="selected"{/if}>50</option>
       <option value="100"{if $filter.limit == 100} selected="selected"{/if}>100</option>
     </select>
-    <input type="submit" name="{$actionid}dofilter" value="{$mod->Lang('submit')}"/>
+    <input type="submit" name="{$actionid}submit_filter" value="{$mod->Lang('submit')}"/>
   </div>
 
+{if isset($templates)}
   {if isset($tpl_nav)}
   <div class="pageoptions" style="text-align: right;">
   {if $tpl_nav.curpage > 1}
@@ -127,38 +126,34 @@ $(document).ready(function(){
     {/foreach}
     </tbody>
   </table>
-{/strip}{form_end}
 {else}
   {page_warning msg=$mod->Lang('warning_no_templates_available')}
 {/if}
 
 <div style="width: 100%;">
 {if $has_add_right}
-  {form_start action='admin_edit_template'}
   <div style="float: left; width: 49%;">
   <p>
     <label for="tpl_import_type">{$mod->Lang('create_template')}:</label>&nbsp;
     <select name="{$actionid}import_type" id="tpl_import_type">
       {html_options options=$list_types}
     </select>
-    <input type="submit" name="{$actionid}submit" value="{$mod->Lang('create')}"/>&nbsp;{admin_icon name="help_create" class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}
+    <input type="submit" name="{$actionid}submit_create" value="{$mod->Lang('create')}"/>&nbsp;{admin_icon name="help_create" class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}
   </p>
   </div>
-  {form_end}
 {/if}
 <div style="float: right; width: 48%; text-align: right;">
-  {form_start action='admin_bulk_template'}
   <p class="pageinput" style="text-align: right;">
     <label for="tpl_bulk_action">{$mod->Lang('prompt_with_selected')}:</label>&nbsp;
     <select name="{$actionid}bulk_action" id="tpl_bulk_action" class="tpl_bulk_action">
       <option value="delete" title="{$mod->Lang('title_delete')}">{$mod->lang('prompt_delete')}</option>
     </select>
-    <input id="tpl_bulk_submit" class="tpl_bulk_action" type="submit" name="{$actionid}submit" value="{$mod->Lang('submit')}"/>&nbsp;{admin_icon name="help_bulk" class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}
+    <input id="tpl_bulk_submit" class="tpl_bulk_action" type="submit" name="{$actionid}submit_bulk" value="{$mod->Lang('submit')}"/>&nbsp;{admin_icon name="help_bulk" class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}
   </p>
-  {form_end}
 </div>
 <div class="clearb"></div>
 </div>
+{/strip}{form_end}
 
 {* begin help *}
 <div style="display: none;">{strip}

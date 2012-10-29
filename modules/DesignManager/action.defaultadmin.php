@@ -22,13 +22,21 @@ if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) return;
 
 $filter_rec = array('tpl'=>'','limit'=>100,'offset'=>0);
-if( isset($params['dofilter']) ) {
+if( isset($params['submit_filter']) ) {
 	$filter_rec[] = $params['filter_tpl'];
 	$filter_rec['limit'] = (int)$params['filter_limit'];
 	$filter_rec['limit'] = max(2,min(100,$filter_rec['limit']));
 	$filter_rec['offset'] = 0;
   cms_userprefs::set($this->GetName().'template_filter',serialize($filter_rec));
 }
+else if( isset($params['submit_create']) ) {
+	$this->Redirect($id,'admin_edit_template',$returnid,array('import_type'=>$params['import_type']));
+	return;
+}
+else if( isset($params['submit_bulk']) ) {
+	debug_display($params); die('bulk');
+}
+
 $tmp = cms_userprefs::get($this->GetName().'template_filter');
 if( $tmp ) $filter_rec = unserialize($tmp);
 if( isset($params['tpl_page']) ) {

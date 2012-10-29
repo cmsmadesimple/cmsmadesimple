@@ -134,7 +134,9 @@ try {
   $types = CmsLayoutTemplateType::get_all();
   if( is_array($types) && count($types) ) {
     $out = array();
+		$out2 = array();
     foreach( $types as $one ) {
+			$out2[] = $one->get_id();
       $out[$one->get_id()] = $one->get_langified_display_value();
     }
     $smarty->assign('type_list',$out);
