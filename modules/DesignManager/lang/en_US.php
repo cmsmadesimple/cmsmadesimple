@@ -11,6 +11,8 @@ $lang['bulk_action_delete'] = 'Mass Deletion of Templates';
 
 #C
 $lang['cancel'] = 'Cancel';
+$lang['confirm_bulk_template_1'] = 'Yes, I am sure I want to perform this operation on multiple templates.';
+$lang['confirm_bulk_template_2'] = 'Yes, I am <strong>really</strong> sure I want to act on multiple templates.';
 $lang['confirm_bulk_tmplop'] = 'Are you sure you want to perform this action on multiple templates?';
 $lang['confirm_delete_1'] = 'Are you sure you want to delete this design?';
 $lang['confirm_delete_2'] = 'Yes, I am sure I want to delete this item';
@@ -107,6 +109,7 @@ $lang['media_type_tty'] = 'TTY';
 $lang['media_type_tv'] = 'TV';
 $lang['moddescription'] = 'A module for managing layout templates';
 $lang['msg_allpagesupdated'] = 'All content pages were updated';
+$lang['msg_bulkop_complete'] = 'Bulk operation completed';
 $lang['msg_cancelled'] = 'Operation Cancelled';
 $lang['msg_category_deleted'] = 'Category Deleted';
 $lang['msg_category_saved'] = 'Category Saved';
@@ -202,6 +205,7 @@ $lang['title_template_setallpages'] = 'Set all pages to use this template';
 #V
 
 #W
+$lang['warn_bulk_delete_templates'] = '<strong>Warning:</strong> Deleting multiple templates at once is usually a bad idea.  No checks are performed to see if these templates are actually used in the system.  This operation may break a working website!';
 $lang['warning_category_dragdrop'] = 'To change the display order of categories you can drag the rows into their correct order';
 $lang['warning_deletetemplate_attachments'] = 'This design has templates attached to it.  These templates may be in use on some page or by a module. Deleting these templates, even if they are attached to no other design, may break an otherwise working site.   Please exercise extreme caution!';
 $lang['warning_deletestylesheet_attachments'] = 'This design has stylesheets attached to it.  Some of the templates in use by the system but not necessarily attached to this design may rely on these stylesheets.  Deleting these styleesheets, even if they are attached to no other design may break an otherwise working site.   Please exercise extreme caution!';

@@ -578,7 +578,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	  $one->Type() != 'link' && 
 	  $one->Type() != 'sectionheader' && 
 	  $one->Type() != 'separator' ) {
-	$template = CmsLayoutTemplate::load($one->TemplateId());
+	$template = null;
+	try {
+	  $template = CmsLayoutTemplate::load($one->TemplateId());
+	}
+	catch( CmsException $e ) {
+	  // nothing
+	}
 	if( $template && check_permission($userid,'Modify Template') ) {
 	  // todo: change me.... module action link
 	  $txt .= "<a title=\"".lang('edittemplate')."\" href=\"edittemplate.php".$urlext."&amp;template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($template->get_name(), '', '', true)."</a>";

@@ -191,7 +191,7 @@ class Content extends ContentBase
 		try {
 			$blocks = $this->get_content_blocks(); 
 		}
-		catch( CmsEditContentException $e ) 
+		catch( CmsException $e ) 
 		{
 			$this->SetError($e->getMessage());
 		}

@@ -22,14 +22,18 @@ if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) return;
 
 if( isset($params['allparms']) ) {
-  $params = unserialize(base64_decode($params['allparms']));
+  $params = array_merge($params,unserialize(base64_decode($params['allparms'])));
 }
 
 $this->SetCurrentTab('templates');
 
 if( !isset($params['bulk_action']) || !isset($params['tpl_select']) ||
-    !is_array($params['tpl_select']) || count($params['tpl_select']) == 0) {
+    !is_array($params['tpl_select']) || count($params['tpl_select']) == 0 ) {
   $this->SetError($this->Lang('error_missingparam'));
+  $this->RedirectToAdminTab();
+}
+if( isset($params['cancel']) ) {
+  $this->SetMessage($this->Lang('msg_cancelled'));
   $this->RedirectToAdminTab();
 }
 
@@ -47,6 +51,23 @@ switch( $params['bulk_action'] ) {
        $this->RedirectToAdminTab();
      }
    }
+
+   if( isset($params['submit']) ) {
+     if( !isset($params['check1']) || !isset($params['check2']) ) {
+       echo $this->ShowErrors($this->Lang('error_notconfirmed'));
+     }
+     else {
+       $templates = CmsLayoutTemplate::load_bulk($params['tpl_select']);
+       foreach( $templates as $one ) {
+	 if( in_array($one->get_id(),$params['tpl_select']) ) {
+	   $one->delete();
+	 }
+       }
+
+       $this->SetMessage($this->Lang('msg_bulkop_complete'));
+       $this->RedirectToAdminTab();
+     }
+   }
    break;
 
  default:
@@ -57,7 +78,9 @@ switch( $params['bulk_action'] ) {
 
 $templates = CmsLayoutTemplate::load_bulk($params['tpl_select']);
 $smarty->assign('bulk_op','bulk_action_delete');
-$smarty->assign('bulk_action',$params['bulk_action']);
+$allparms = base64_encode(serialize(array('tpl_select'=>$params['tpl_select'],
+					   'bulk_action'=>$params['bulk_action'])));
+$smarty->assign('allparms',$allparms);
 $smarty->assign('templates',$templates);
 
 echo $this->ProcessTemplate('admin_bulk_template.tpl');
