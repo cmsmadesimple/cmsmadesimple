@@ -23,6 +23,7 @@ $lang['create_category'] = 'Create a new Category';
 $lang['create_design'] = 'Create a new Design';
 $lang['create_stylesheet'] = 'Create a new Stylesheet';
 $lang['create_template'] = 'Create a new Template';
+$lang['confirm_template_setall'] = 'Setting all pages to use this template may cause problems with a working site.  Use extreme caution!';
 
 #D
 $lang['delete_attached_stylesheets'] = 'Delete attached and orphaned stylesheets';
@@ -102,6 +103,7 @@ $lang['media_type_screen'] = 'Screen';
 $lang['media_type_tty'] = 'TTY';
 $lang['media_type_tv'] = 'TV';
 $lang['moddescription'] = 'A module for managing layout templates';
+$lang['msg_allpagesupdated'] = 'All content pages were updated';
 $lang['msg_cancelled'] = 'Operation Cancelled';
 $lang['msg_category_deleted'] = 'Category Deleted';
 $lang['msg_category_saved'] = 'Category Saved';
@@ -166,6 +168,7 @@ $lang['prompt_stylesheet'] = 'Stylesheet';
 $lang['prompt_stylesheets'] = 'Stylesheets';
 $lang['prompt_template'] = 'Template';
 $lang['prompt_templates'] = 'Templates';
+$lang['prompt_template_setallpages'] = 'Set All Pages';
 $lang['prompt_templatetypes'] = 'Template Types';
 $lang['prompt_title_na'] = 'This template type does not have a default';
 $lang['prompt_design'] = 'Design';
@@ -188,6 +191,7 @@ $lang['submitandedit'] = 'Submit And Edit';
 
 #T
 $lang['tpl_types'] = 'Template Types';
+$lang['title_template_setallpages'] = 'Set all pages to use this template';
 
 #U
 

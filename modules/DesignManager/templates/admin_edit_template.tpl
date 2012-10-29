@@ -4,6 +4,9 @@ $(document).ready(function(){
     var x = $(this).attr('name');
     $('#'+x).dialog();
   });
+  $('#tpl_setall').live('click',function(){
+    return confirm('{$mod->Lang('confirm_template_setall')}');
+  });
 });
 </script>
 
@@ -69,7 +72,17 @@ $(document).ready(function(){
         <input type="text" id="tpl_modified" value="{$template->get_modified()|date_format:'%x %X'}" readonly="readonly"/>
       </p>
     </div>
+
+    {if $has_manage_right}
+    <div class="pageoverflow">
+      <p class="pagetext"></p>
+      <p class="pageinput">
+        <input type="submit" id="tpl_setall" name="{$actionid}tpl_setall" value="{$mod->Lang('prompt_template_setallpages')}" title="{$mod->Lang('title_template_setallpages')}"/>
+      </p>
+    </div>
+    {/if}
   {/if}
+
   </div>{* column *}
 
 </fieldset>

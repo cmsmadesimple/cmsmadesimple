@@ -39,6 +39,11 @@ class CmsLayoutTemplate
 	private static $_obj_cache;
 	private static $_name_cache;
 
+	public function __clone()
+	{
+		if( isset($this->_data['id']) ) unset($this->_data['id']);
+	}
+
 	public function get_id()
 	{
 		if( isset($this->_data['id']) ) return $this->_data['id'];
@@ -118,7 +123,7 @@ class CmsLayoutTemplate
 
 	public function get_category_id()
 	{
-		if( isset($this->_data['category_id']) ) return $this->_data['category_id'];
+		if( isset($this->_data['category_id']) ) return (int)$this->_data['category_id'];
 	}
 
 	public function &get_category()
@@ -295,10 +300,12 @@ class CmsLayoutTemplate
 	public function set_additional_editors($a)
 	{
 		if( !is_array($a) ) {
-			// maybe a single value...
-			$res = self::_resolve_user($a);
-			$this->_addt_editors = array($res);
-			$this->_dirty = TRUE;
+			if( is_string($a) || (int)$a > 0 ) {
+				// maybe a single value...
+				$res = self::_resolve_user($a);
+				$this->_addt_editors = array($res);
+				$this->_dirty = TRUE;
+			}
 		}
 		else {
 			$tmp = array();

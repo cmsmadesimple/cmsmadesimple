@@ -59,6 +59,24 @@ try {
   }
 
   try {
+		if( isset($params['tpl_setall']) ) {
+			if( !$this->CheckPermission('Modify Templates') ) {
+				throw new CmsException($this->Lang('error_permission'));
+			}
+			
+			$db = cmsms()->GetDb();
+			$time = $db->DbTimeStamp(time());
+			$query = 'UPDATE '.cms_db_prefix()."content 
+                SET template_id = ?, modified_date = $time";
+			$dbr = $db->Execute($query,array($tpl_obj->get_id()));
+			if( !$dbr ) {
+				throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
+			}
+
+			$this->SetMessage($this->Lang('msg_allpagesupdated'));
+			$this->RedirectToAdminTab();
+		}
+
     if( isset($params['submit']) && $params['submit'] == $this->Lang('submit') ) {
       $tpl_obj->set_name($params['name']);
       $tpl_obj->set_content($params['contents']);

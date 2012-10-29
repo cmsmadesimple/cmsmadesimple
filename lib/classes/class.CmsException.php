@@ -1,9 +1,9 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# Module: cms_tree (c) 2010 by Robert Campbell 
-#         (calguy1000@cmsmadesimple.org)
-#  A simple php tree class.
+# (c) 2010 by Robert Campbell 
+# (calguy1000@cmsmadesimple.org)
+# A collection of CMSMS Exception classes
 # 
 #-------------------------------------------------------------------------
 # CMS - CMS Made Simple is (c) 2005 by Ted Kulp (wishy@cmsmadesimple.org)
