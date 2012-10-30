@@ -9,11 +9,16 @@ function ajaxpreview($params)
 
 	$content_type = $params['content_type'];
 
-	$contentobj = UnserializeObject($params["serialized_content"]);
-	if (strtolower(get_class($contentobj)) != strtolower($content_type))
-	{
-		copycontentobj($contentobj, $content_type, $params);
+	global $contentobj;
+	if( !is_object($contentobj) ) {
+	  debug_to_log('no content object');
+	  return;
 	}
+// 	$contentobj = UnserializeObject($params["serialized_content"]);
+// 	if (strtolower(get_class($contentobj)) != strtolower($content_type))
+// 	{
+// 		copycontentobj($contentobj, $content_type, $params);
+// 	}
 	updatecontentobj($contentobj, true, $params);
 	$tmpfname = createtmpfname($contentobj);
 	// str_replace is because of stupid windows machines.... when will they die.

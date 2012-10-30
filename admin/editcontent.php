@@ -54,7 +54,6 @@ if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
 $xajax = new xajax();
 $xajax->configure('requestURI',$config['admin_url'].'/editcontent.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY].'&content_id='.$content_id);
 $xajax->register(XAJAX_FUNCTION,'ajaxpreview');
-$xajax->processRequest();
 $headtext = $xajax->getJavascript('../lib/xajax')."\n";
 
 if (isset($_POST["cancel"]))
@@ -71,7 +70,7 @@ if ($apply)
 
 #Get a list of content types and pick a default if necessary
 $gCms = cmsms();
-$contentops =& $gCms->GetContentOperations();
+$contentops = $gCms->GetContentOperations();
 $existingtypes = $contentops->ListContentTypes(false,true);
 
 #Get current userid and make sure they have permission to add something
@@ -101,6 +100,8 @@ if ($access)
     {
       $content_type = $_POST['content_type'];
     }
+
+  $xajax->processRequest();
 
   // validate the content type we want...
   if( isset($existingtypes) && count($existingtypes) > 0 && in_array($content_type,array_keys($existingtypes)) )
@@ -343,7 +344,6 @@ else
 	<form method="post" name="Edit_Content" id="Edit_Content" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" ##FORMSUBMITSTUFFGOESHERE##>
 <div>
   <input type="hidden" name="<?php echo CMS_SECURE_PARAM_NAME ?>" value="<?php echo $_SESSION[CMS_USER_KEY] ?>" />
-  <input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
   <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
   <input type="hidden" name="page" value="<?php echo $pagelist_id; ?>" />
   <input type="hidden" name="orig_content_type" value="<?php echo $cur_content_type ?>" />
