@@ -9,8 +9,6 @@ $(document).ready(function(){
     data.push({ 'name': 'preview', 'value': 1});
     data.push({ 'name': 'ajax', 'value': 1});
     $.post('{$smarty.server.REQUEST_URI}&showtemplate=false',data,function(resultdata,text){
-	alert('{$preview_url}');
-	alert(resultdata);
         $('#previewframe').attr('src','{$preview_url}');
     });
   });

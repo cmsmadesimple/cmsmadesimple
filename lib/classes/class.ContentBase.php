@@ -1082,6 +1082,7 @@ abstract class ContentBase
       if( !is_array($this->_props) ) {
 	$this->_load_properties();
       }
+
       if( !is_array($this->_props) ) {
 	return FALSE;
       }
@@ -1096,10 +1097,9 @@ abstract class ContentBase
      */
     public function GetPropertyValue($name)
     {
-      if( $this->HasProperty($name) )
-	{
-	  return $this->_props[$name];
-	}
+      if( $this->HasProperty($name) ) {
+	return $this->_props[$name];
+      }
     }
     
     
@@ -1110,13 +1110,11 @@ abstract class ContentBase
       $this->_props = array();
       $db = cmsms()->GetDb();
       $query = 'SELECT * FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
-      $dbr = $db->Execute($query,array($this->mId));
-      while( $dbr && !$dbr->EOF )
-	{
-	  $row = $dbr->fields;
-	  $this->_props[$row['prop_name']] = $row['content'];
-	  $dbr->MoveNext();
-	}
+      $dbr = $db->GetArray($query,array($this->mId));
+
+      foreach( $dbr as $row ) {
+	$this->_props[$row['prop_name']] = $row['content'];
+      }
       return TRUE;
     }
 
@@ -1135,19 +1133,16 @@ abstract class ContentBase
                     VALUES (?,?,?,?,$now)";
       $uquery = 'UPDATE '.cms_db_prefix()."content_props SET content = ?, modified_date = $now WHERE content_id = ? AND prop_name = ?";
 	  
-      foreach( $this->_props as $key => $value )
-	{
-	  if( in_array($key,$gotprops) )
-	    {
-	      // update
-	      $dbr = $db->Execute($uquery,array($value,$this->mId,$key));
-	    }
-	  else
-	    {
-	      // insert
-	      $dbr = $db->Execute($iquery,array($this->mId,'string',$key,$value));
-	    }
+      foreach( $this->_props as $key => $value ) {
+	if( in_array($key,$gotprops) ) {
+	  // update
+	  $dbr = $db->Execute($uquery,array($value,$this->mId,$key));
 	}
+	else {
+	  // insert
+	  $dbr = $db->Execute($iquery,array($this->mId,'string',$key,$value));
+	}
+      }
       return TRUE;
     }
 
@@ -1160,9 +1155,6 @@ abstract class ContentBase
      */
     public function SetPropertyValue($name, $value)
     {
-      if( !is_array($this->_props) ) $this->_props = array();
-	  
-      $this->_props[$name] = $value;
       if( !is_array($this->_props) ) $this->_load_properties();
       $this->_props[$name] = $value;
     }
@@ -1275,87 +1267,77 @@ abstract class ContentBase
 	  
       $result = false;
 
-      if (-1 < $id)
-	{
-	  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	  $row = $db->Execute($query, array($id));
+      if (-1 < $id) {
+	$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+	$row = $db->Execute($query, array($id));
 
-	  if ($row && !$row->EOF)
-	    {
-	      $this->mId                         = $row->fields["content_id"];
-	      $this->mName                       = $row->fields["content_name"];
-	      $this->mAlias                      = $row->fields["content_alias"];
-	      $this->mOldAlias                   = $row->fields["content_alias"];
-	      $this->mType                       = strtolower($row->fields["type"]);
-	      $this->mOwner                      = $row->fields["owner_id"];
-	      $this->mParentId                   = $row->fields["parent_id"];
-	      $this->mOldParentId                = $row->fields["parent_id"];
-	      $this->mTemplateId                 = $row->fields["template_id"];
-	      $this->mItemOrder                  = $row->fields["item_order"];
-	      $this->mOldItemOrder               = $row->fields["item_order"];
-	      $this->mMetadata                   = $row->fields['metadata'];
-	      $this->mHierarchy                  = $row->fields["hierarchy"];
-	      $this->mIdHierarchy                = $row->fields["id_hierarchy"];
-	      $this->mHierarchyPath              = $row->fields["hierarchy_path"];
-	      $this->mMenuText                   = $row->fields['menu_text'];
-	      $this->mMarkup                     = $row->fields['markup'];
-	      $this->mTitleAttribute             = $row->fields['titleattribute'];
-	      $this->mAccessKey                  = $row->fields['accesskey'];
-	      $this->mTabIndex                   = $row->fields['tabindex'];
-	      $this->mActive                     = ($row->fields["active"] == 1          ? true : false);
-	      $this->mDefaultContent             = ($row->fields["default_content"] == 1 ? true : false);
-	      $this->mShowInMenu                 = ($row->fields["show_in_menu"] == 1    ? true : false);
-	      $this->mCachable                   = ($row->fields["cachable"] == 1        ? true : false);
-	      $this->mSecure                     = $row->fields['secure'];
-	      $this->mURL                        = $row->fields['page_url'];
-	      $this->mLastModifiedBy             = $row->fields["last_modified_by"];
-	      $this->mCreationDate               = $row->fields["create_date"];
-	      $this->mModifiedDate               = $row->fields["modified_date"];
+	if ($row && !$row->EOF) {
+	  $this->mId                         = $row->fields["content_id"];
+	  $this->mName                       = $row->fields["content_name"];
+	  $this->mAlias                      = $row->fields["content_alias"];
+	  $this->mOldAlias                   = $row->fields["content_alias"];
+	  $this->mType                       = strtolower($row->fields["type"]);
+	  $this->mOwner                      = $row->fields["owner_id"];
+	  $this->mParentId                   = $row->fields["parent_id"];
+	  $this->mOldParentId                = $row->fields["parent_id"];
+	  $this->mTemplateId                 = $row->fields["template_id"];
+	  $this->mItemOrder                  = $row->fields["item_order"];
+	  $this->mOldItemOrder               = $row->fields["item_order"];
+	  $this->mMetadata                   = $row->fields['metadata'];
+	  $this->mHierarchy                  = $row->fields["hierarchy"];
+	  $this->mIdHierarchy                = $row->fields["id_hierarchy"];
+	  $this->mHierarchyPath              = $row->fields["hierarchy_path"];
+	  $this->mMenuText                   = $row->fields['menu_text'];
+	  $this->mMarkup                     = $row->fields['markup'];
+	  $this->mTitleAttribute             = $row->fields['titleattribute'];
+	  $this->mAccessKey                  = $row->fields['accesskey'];
+	  $this->mTabIndex                   = $row->fields['tabindex'];
+	  $this->mActive                     = ($row->fields["active"] == 1          ? true : false);
+	  $this->mDefaultContent             = ($row->fields["default_content"] == 1 ? true : false);
+	  $this->mShowInMenu                 = ($row->fields["show_in_menu"] == 1    ? true : false);
+	  $this->mCachable                   = ($row->fields["cachable"] == 1        ? true : false);
+	  $this->mSecure                     = $row->fields['secure'];
+	  $this->mURL                        = $row->fields['page_url'];
+	  $this->mLastModifiedBy             = $row->fields["last_modified_by"];
+	  $this->mCreationDate               = $row->fields["create_date"];
+	  $this->mModifiedDate               = $row->fields["modified_date"];
 
-	      $result = true;
-	    }
-	  else
-	    {
-	      if (true == $config["debug"])
-		{
-		  # :TODO: Translate the error message
-		  $debug_errors .= "<p>Could not retrieve content from db</p>\n";
-		}
-	    }
-
-	  if ($row) $row->Close();
-
-	  if ($result && $loadProperties)
-	    {
-	      if( !is_array($this->_props) ) $this->_load_properties();
-
-	      if (!is_array($this->_props) )
-		{
-		  $result = false;
-			      
-		  // debug mode
-		  if (true == $config["debug"])
-		    {
-		      # :TODO: Translate the error message
-		      $debug_errors .= "<p>Could not load properties for content</p>\n";
-		    }
-		}
-	    }
-
-	  if (false == $result)
-	    {
-	      $this->SetInitialValues();
-	    }
+	  $result = true;
 	}
-      else
-	{
-	  // debug mode
-	  if ($config["debug"] == true)
-	    {
+	else {
+	  if (true == $config["debug"]) {
+	    # :TODO: Translate the error message
+	    $debug_errors .= "<p>Could not retrieve content from db</p>\n";
+	  }
+	}
+
+	if ($row) $row->Close();
+
+	if ($result && $loadProperties) {
+	  if( !is_array($this->_props) ) $this->_load_properties();
+
+	  if (!is_array($this->_props) ) {
+	    $result = false;
+
+	    // debug mode
+	    if (true == $config["debug"]) {
 	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>The id wasn't valid : $id</p>\n";
+	      $debug_errors .= "<p>Could not load properties for content</p>\n";
 	    }
+	  }
 	}
+
+	if (false == $result) {
+	  $this->SetInitialValues();
+	}
+      }
+      else {
+	// debug mode
+	if ($config["debug"] == true) {
+	  # :TODO: Translate the error message
+	  $debug_errors .= "<p>The id wasn't valid : $id</p>\n";
+	}
+      }
 
       $this->Load();
 
@@ -1419,11 +1401,10 @@ abstract class ContentBase
 	      $gCms = cmsms();
 	      $config = $gCms->GetConfig();
 	      // debug mode
-	      if (true == $config["debug"])
-		{
-		  # :TODO: Translate the error message
-		  $debug_errors .= "<p>Could not load properties for content</p>\n";
-		}
+	      if (true == $config["debug"]) {
+		# :TODO: Translate the error message
+		$debug_errors .= "<p>Could not load properties for content</p>\n";
+	      }
 	    }
 	}
 

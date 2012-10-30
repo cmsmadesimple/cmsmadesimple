@@ -81,7 +81,7 @@ while( $trycount < 2 ) {
   {
     if( $page == '__CMS_PREVIEW_PAGE__' ) {
       if( !isset($_SESSION['__cms_preview__']) ) {
-	throw new CmsException('preview selected, but temp data not found: '.$fname);
+	throw new CmsException('preview selected, but temp data not found');
       }
       
       // todo: get the content type, and load it.
@@ -114,7 +114,7 @@ while( $trycount < 2 ) {
     $allow_cache = (int)get_site_preference('allow_browser_cache',0);
     $expiry = (int)max(0,get_site_preference('browser_cache_expiry',60));
     $expiry *= $allow_cache;
-    if( $_SERVER['REQUEST_METHOD'] == 'POST' || !$contentobj->Cachable() ||$page == '__CMS_PREVIEW_PAGE__' || $expiry == 0 ) {
+    if( $_SERVER['REQUEST_METHOD'] == 'POST' || !$contentobj->Cachable() || $page == '__CMS_PREVIEW_PAGE__' || $expiry == 0 ) {
       // Here we adjust headers for non cachable pages
       header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
       header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
@@ -288,10 +288,10 @@ if ( !is_sitedown() && $config["debug"] == true) {
   }
 }
 
-if( $page == '__CMS_PREVIEW_PAGE__' ) {
-  unset($_SESSION['__cms_preview__']);
-  unset($_SESSION['__cms_preview_type__']);
-}
+// if( $page == '__CMS_PREVIEW_PAGE__' ) {
+//   unset($_SESSION['__cms_preview__']);
+//   unset($_SESSION['__cms_preview_type__']);
+// }
 
 # vim:ts=4 sw=4 noet
 ?>

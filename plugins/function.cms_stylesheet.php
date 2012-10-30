@@ -54,7 +54,7 @@ function smarty_function_cms_stylesheet($params, &$template)
 	#---------------------------------------------
 	# Read parameters
 	#---------------------------------------------	
-	
+
 	if (isset($params['designid']) && $params['designid']!='') {
 		$design_id = (int)$params['designid'];
 	} else {
@@ -64,8 +64,7 @@ function smarty_function_cms_stylesheet($params, &$template)
 		$use_https = (int)$content_obj->Secure();
 	}
 
-	if( isset($params['auto_https']) && $params['auto_https'] == 0 )
-	{
+	if( isset($params['auto_https']) && $params['auto_https'] == 0 ) {
 		$auto_https = 0;
 	}
 

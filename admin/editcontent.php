@@ -162,7 +162,6 @@ if( $ajax && $preview ) {
   $contentobj->FillParams($_POST,TRUE);
   $_SESSION['__cms_preview__'] = serialize($contentobj);
   $_SESSION['__cms_preview_type__'] = get_class($contentobj);
-  echo 'FOO3';
   exit;
 }
 
@@ -190,7 +189,7 @@ if ($submit || $apply) {
 
   if ($ajax) {
     // todo: ajax results.
-    $tmp = array('response'=>'SUCCESS','details'=>lang('contentupdated'));
+    $tmp = array('response'=>'Success','details'=>lang('contentupdated'));
     echo json_encode($tmp);
     exit;
   }
