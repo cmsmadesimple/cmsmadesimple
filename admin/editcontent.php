@@ -190,6 +190,9 @@ if ($submit || $apply) {
 
   if ($ajax) {
     // todo: ajax results.
+    $tmp = array('response'=>'SUCCESS','details'=>lang('contentupdated'));
+    echo json_encode($tmp);
+    exit;
   }
 }
 

@@ -78,15 +78,14 @@ final class CmsApp {
 
 	public function __get($key)
 	{
-		switch($key)
-			{
-			case 'config':
-				return cms_config::get_instance();
-				break;
-			case 'variables':
-				return cms_variables::get_instance();
-				break;
-			}
+		switch($key) {
+		case 'config':
+			return cms_config::get_instance();
+			break;
+		case 'variables':
+			return cms_variables::get_instance();
+			break;
+		}
 	}
 
 
@@ -106,8 +105,7 @@ final class CmsApp {
 	 */
 	public static function &get_instance()
 	{
-		if( !self::$_instance  )
-		{
+		if( !self::$_instance  ) {
 			self::$_instance = new CmsApp();
 		}
 		return self::$_instance;
@@ -317,33 +315,7 @@ final class CmsApp {
 
 		return $this->bookmarkoperations;
 	}
-	
-	/**
-	* Get a handle to the CMS TemplateOperations object. If it does not yet
-	* exist, this method will instantiate it.
-	*
-	* @final
-	* @see TemplateOperations
-	* @return TemplateOperations handle to the TemplateOperations object
-	*/
-	public function & GetTemplateOperations()
-	{
-		return TemplateOperations::get_instance();
-	}
 
-
-	/**
-	* Get a handle to the CMS StylesheetOperations object. If it does not yet
-	* exist, this method will instantiate it.
-	*
-	* @final
-	* @see StylesheetOperations
-	* @return StylesheetOperations handle to the StylesheetOperations object
-	*/	
-	public function & GetStylesheetOperations()
-	{
-		return StylesheetOperations::get_instance();
-	}
 	
 	/**
 	* Get a handle to the CMS GroupOperations object. If it does not yet
@@ -398,8 +370,7 @@ final class CmsApp {
 	{
 		/* Check to see if a HierarchyManager has been instantiated yet,
 		  and, if not, go ahead an create the instance. */
-        if (!isset($this->hrinstance))
-		{
+        if (!isset($this->hrinstance)) {
 			debug_buffer('', 'Start Loading Hierarchy Manager');
 			$contentops = $this->GetContentOperations();
 			$this->hrinstance = $contentops->GetAllContentAsHierarchy(false);
@@ -418,8 +389,7 @@ final class CmsApp {
 	*/
 	public function dbshutdown()
 	{
-		if (isset($this->db))
-		{
+		if (isset($this->db)) {
 			$db = $this->db;
 			if ($db->IsConnected())
 				$db->Close();
@@ -441,21 +411,18 @@ final class CmsApp {
 	  $the_time = time() - $age_days * 24*60*60;
 
 	  $dirs = array(TMP_CACHE_LOCATION,TMP_TEMPLATES_C_LOCATION);
-	  foreach( $dirs as $start_dir )
-	    {
+	  foreach( $dirs as $start_dir ) {
 	      $dirIterator = new RecursiveDirectoryIterator($start_dir);
  	      $dirContents = new RecursiveIteratorIterator($dirIterator);
-	      foreach( $dirContents as $one )
-			  {
-				  if( $one->isFile() && $one->getMTime() <= $the_time )
-					  {
-						  @unlink($one->getPathname());
-					  }
+	      foreach( $dirContents as $one ) {
+			  if( $one->isFile() && $one->getMTime() <= $the_time ) {
+				  @unlink($one->getPathname());
 			  }
-	    }
+		  }
+	  }
 
-		@touch(cms_join_path(TMP_CACHE_LOCATION,'index.html'));
-		@touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
+	  @touch(cms_join_path(TMP_CACHE_LOCATION,'index.html'));
+	  @touch(cms_join_path(TMP_TEMPLATES_C_LOCATION,'index.html'));
 	}
 
 	/**

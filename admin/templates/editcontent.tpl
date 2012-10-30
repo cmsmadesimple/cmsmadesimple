@@ -8,7 +8,7 @@ $(document).ready(function(){
     var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'preview', 'value': 1});
     data.push({ 'name': 'ajax', 'value': 1});
-    $.post('{$smarty.server.REQUEST_URI}',data,function(resultdata,text){
+    $.post('{$smarty.server.REQUEST_URI}&showtemplate=false',data,function(resultdata,text){
 	alert('{$preview_url}');
 	alert(resultdata);
         $('#previewframe').attr('src','{$preview_url}');
@@ -18,7 +18,6 @@ $(document).ready(function(){
 
   $('#template_id').live('change',function(){
     alert($(this).closest('form').attr('action'));
-    alert('foo');
     $(this).closest('form').submit();
     return false;
   });
@@ -38,13 +37,13 @@ $(document).ready(function(){
     var data = $('#Edit_Content').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'ajax', 'value': 1});
     data.push({ 'name': 'apply', 'value': 1 });
-    $.post('{$smarty.server.REQUEST_URI}',data,function(resultdata,text){
+    $.post('{$smarty.server.REQUEST_URI}&showtemplate=false',data,function(data,text){
        var event = $.Event('cms_ajax_apply');
-       event.response = $(resultdata).find('Response').text();
-       event.details = $(resultdata).find('Details').text();
+       event.response = data.response;
+       event.details = data.details;
        event.close = 'close';
        $('body').trigger(event);
-    },'xml');
+    },'json');
     return false;
   });
 
