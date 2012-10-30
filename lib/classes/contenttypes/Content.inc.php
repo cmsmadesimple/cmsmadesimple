@@ -113,7 +113,7 @@ class Content extends ContentBase
 
 		if (isset($params)) {
 			$this->__fieldhash = null; // clear the field hash.
-			$parameters = array('pagedata','searchable','disable_wysiwyg');
+			$parameters = array('pagedata','searchable','disable_wysiwyg','design_id');
 
 			//pick up the template id before we do parameters
 			if (isset($params['template_id'])) {
@@ -125,21 +125,23 @@ class Content extends ContentBase
 
 			// add content blocks
 			$blocks = $this->get_content_blocks();
-			foreach($blocks as $blockName => $blockInfo) {
-				$parameters[] = $blockInfo['id'];
-
-				if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' ) {
-					$module = cms_utils::get_module($blockInfo['module']);
-					if( !is_object($module) ) continue;
-					if( !$module->HasCapability('contentblocks') ) continue;
-					$tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
-					if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
+			if( is_array($blocks) && count($blocks) ) {
+				foreach($blocks as $blockName => $blockInfo) {
+					$parameters[] = $blockInfo['id'];
+					if( isset($blockInfo['type']) && $blockInfo['type'] == 'module' ) {
+						$module = cms_utils::get_module($blockInfo['module']);
+						if( !is_object($module) ) continue;
+						if( !$module->HasCapability('contentblocks') ) continue;
+						$tmp = $module->GetContentBlockValue($blockName,$blockInfo['params'],$params);
+						if( $tmp != null ) $params[$blockInfo['id']] = $tmp;
+					}
 				}
 			}
 
 			// do the content property parameters
 			foreach ($parameters as $oneparam) {
 				if (isset($params[$oneparam])) {
+					debug_to_log('set property value '.$oneparam.' to '.$params[$oneparam]);
 					$this->SetPropertyValue($oneparam, $params[$oneparam]);
 				}
 			}
