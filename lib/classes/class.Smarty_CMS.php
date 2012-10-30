@@ -71,7 +71,7 @@ class Smarty_CMS extends SmartyBC
 		$this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
 		$this->registerResource('template',new CMSPageTemplateResource()); // <- Should proably be global and removed from parser?		
 		// Load User Defined Tags
-		{
+		if( cmsms()->is_frontend_request() ) {
 		  $utops = cmsms()->GetUserTagOperations();
 		  $usertags = $utops->ListUserTags();
 		  $caching = false;

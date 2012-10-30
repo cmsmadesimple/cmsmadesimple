@@ -493,7 +493,7 @@ final class CmsApp {
 		if( !isset($this->_states) ) {
 			// build the array.
 			global $CMS_ADMIN_PAGE;
-			global $CMS_INSTALL;
+			global $CMS_INSTALL_PAGE;
 			global $CMS_STYLESHEET;
 
 			$this->_states = array();
@@ -501,7 +501,7 @@ final class CmsApp {
 			if( isset($CMS_ADMIN_PAGE) ) 
 				$this->_states[] = self::STATE_ADMIN_PAGE;
 						
-			if( isset($CMS_INSTALL) ) 
+			if( isset($CMS_INSTALL_PAGE) ) 
 				$this->_states[] = self::STATE_INSTALL;
 			
 			if( isset($CMS_STYLESHEET) )

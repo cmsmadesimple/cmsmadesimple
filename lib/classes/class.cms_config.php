@@ -255,6 +255,9 @@ class cms_config implements ArrayAccess
 					  while(endswith($path, DIRECTORY_SEPARATOR)) {
 						  $path = substr($path,0,strlen($path)-1);
 					  }
+         				  if( endswith($path,'/index.php') ) {
+					    $path = dirname($path);
+                                          }
 				  }
 			  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
 			  $this->_cache[$key] = $str;

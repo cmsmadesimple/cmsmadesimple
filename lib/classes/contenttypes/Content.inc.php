@@ -55,11 +55,6 @@ class Content extends ContentBase
 	 * @var string
 	 */
     protected $stylesheet;
-	/**
-	 * @access private
-	 * @var array
-	 */
-	private $__fieldhash;
 
 	/**
 	 * Indicate whether or not this content type may be copied
@@ -121,7 +116,7 @@ class Content extends ContentBase
 
 		if (isset($params))
 			{
-				$this->__fieldhash = null; // clear the field hash.
+				//$this->__fieldhash = null; // clear the field hash.
 				$parameters = array('pagedata','searchable','disable_wysiwyg');
 
 				//pick up the template id before we do parameters
@@ -322,9 +317,11 @@ class Content extends ContentBase
 
 	private function _get_form_data()
 	{
-		if( isset($this->__fieldhash) && is_array($this->__fieldhash) ) return;
-		$tmp = $this->SetupForm();
-		if( is_array($tmp) && count($tmp) ) $this->__fieldhash = $tmp;
+		static $__fieldhash = null;
+		if( $__fieldhash == null ) {
+			$__fieldhash = $this->SetupForm();
+		}
+		return $__fieldhash;
 	}
 
 	/**
@@ -334,8 +331,8 @@ class Content extends ContentBase
 	 */
     function TabNames()
     {
-		$this->_get_form_data();
-		return array_keys($this->__fieldhash);
+		$tmp = $this->_get_form_data();
+		return array_keys($tmp);
     }
 
 	/**
@@ -348,7 +345,7 @@ class Content extends ContentBase
 	 */
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
-		$this->_get_form_data();
+		$fieldhash = $this->_get_form_data();
 		$tabnames = $this->TabNames(); 
 	
 		$templateops = cmsms()->GetTemplateOperations();
@@ -361,7 +358,7 @@ class Content extends ContentBase
 
 		if( isset($tabnames[$tab]) )
 		{
-			return $this->__fieldhash[$tabnames[$tab]];
+			return $fieldhash[$tabnames[$tab]];
 		}
     }
 
