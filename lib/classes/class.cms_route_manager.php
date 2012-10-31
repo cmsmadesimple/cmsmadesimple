@@ -314,7 +314,7 @@ final class cms_route_manager
 		if( is_array($data) && count($data) ) {
 			self::$_routes = array();
 			for( $i = 0; $i < count($data); $i++ ) {
-				self::$_routes[] = unserialize($data[$i]['data']);
+				self::$_routes[] = @unserialize($data[$i]['data']);
 			}
 			self::$_routes_loaded = TRUE;
 		}
