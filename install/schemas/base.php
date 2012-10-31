@@ -41,7 +41,7 @@ $perms = array('Add Pages','Add Groups','Add Templates','Add Users','Modify Any 
 	       'Modify Stylesheets',
 	       'Manage Designs','Modify User-defined Tags','Clear Admin Log',
 	       'Modify Events',
-	       'View Tag Help','Manage All Contnt','Reorder Content');
+	       'View Tag Help','Manage All Content','Reorder Content');
 foreach( $perms as $one_perm ) {
   $permission = new CmsPermission();
   $permission->source = 'Core';
