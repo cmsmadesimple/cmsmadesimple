@@ -51,7 +51,7 @@ if( isset($params['tpl_page']) ) {
 }
 
 $efilter = $filter_tpl_rec;
-if( isset($efilter['tpl']) ) {
+if( isset($efilter['tpl']) && $efilter['tpl'] != '' ) {
 	$efilter[] = $efilter['tpl'];
 	unset($efilter['tpl']);
 }
@@ -102,7 +102,7 @@ if( count($designs) ) {
   $smarty->assign('list_designs',$designs);
   $tmp = array();
   for( $i = 0; $i < count($designs); $i++ ) {
-    $tmp['h:'.$designs[$i]->get_id()] = $designs[$i]->get_name();
+    $tmp['d:'.$designs[$i]->get_id()] = $designs[$i]->get_name();
     $tmp2[$designs[$i]->get_id()] = $designs[$i]->get_name();
   }
   $smarty->assign('design_names',$tmp2);
@@ -142,7 +142,7 @@ if( $this->CheckPermission('Modify Stylesheets') ) {
 
 // give everything to smarty that we can.
 $smarty->assign('filter_tpl_options',$opts);
-$smarty->assign('filter_tpl',$filter_tpl_rec);
+$smarty->assign('tpl_filter',$filter_tpl_rec);
 
 $tmp = ($this->CheckPermission('Modify Templates') || count($templates))?1:0;
 $smarty->assign('has_templates',$tmp);
