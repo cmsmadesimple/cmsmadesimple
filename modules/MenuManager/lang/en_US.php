@@ -88,7 +88,6 @@ $lang['help_excludeprefix'] = 'Exclude all items (and their children) who\'s pag
 $lang['help_includeprefix'] = 'Include only those items who\'s page alias matches one of the specified (comma separated) prefixes.  This parameter cannot be combined with the excludeprefix parameter.';
 $lang['help_items'] = 'Use this item to select a list of pages that this menu should display.  The value should be a list of page aliases separated with commas.';
 $lang['help_loadprops'] = 'Use this parameter when NOT using advanced properties in your menu manager template. This parameter will disable the loading of all content properties for each node (such as extra1, image, thumbnail, etc). This will dramatically decrease the number of queries required to build a menu, and increase memory requirements, but will remove the possibility for much more advanced menus';
-$lang['help_nocache'] = 'Disable any caching of this call to the menu.  This parameter, if set to any positive value will override any settings in the content object and the menu template.';
 $lang['help_number_of_levels'] = 'This setting will only allow the menu to only display a certain number of levels deep. By default the value for this parameter is implied to be unlimited to show all levels of children. Except when using the items parameter, in which case number_of_levels is implied to be 1 unless overridden.';
 $lang['help_root'] = 'Applicable only to the breadcrumbs action, allows specifying a start level that is not the default page.';
 $lang['help_show_all'] = 'This option will cause the menu to show all nodes even if they are set to not show in the menu. It will still not display inactive pages however.';
@@ -123,6 +122,8 @@ $lang['templatecontent'] = 'Template Content';
 $lang['templatenameexists'] = 'A template with this name already exists';
 $lang['templates'] = 'Templates';
 $lang['this_is_default'] = 'Default menu template';
+$lang['type_MenuManager'] = 'MenuManager';
+$lang['type_navigation'] = 'Navigation';
 
 // U
 $lang['usage'] = 'Usage';

@@ -216,11 +216,14 @@ class CmsLayoutStylesheet
   protected function validate()
   {
     if( !$this->get_name() ) {
-      throw new CmsInvalidDataException('Each template must have a name');
+      throw new CmsInvalidDataException('Each stylesheet must have a name');
     }
     if( !$this->get_content() ) {
-      throw new CmsInvalidDataException('Each template must have some content');
+      throw new CmsInvalidDataException('Each stylesheet must have some content');
     }
+		if( endswith($this->get_name(),'.css') ) {
+			throw new CmsInvalidDataException('Invalid name for a database stylesheet');
+		}
 
     $db = cmsms()->GetDb();
     $tmp = null;

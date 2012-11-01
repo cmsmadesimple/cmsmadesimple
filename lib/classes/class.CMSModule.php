@@ -2855,7 +2855,7 @@ abstract class CMSModule
 	 */
 
 	/**
-	 * A function to return a resource identifier to a module specific database template
+	 * Alias for the GetTemplateResource method, for compatibility.
 	 *
 	 * @since 1.11
 	 * @author calguy1000
@@ -2864,8 +2864,27 @@ abstract class CMSModule
 	 */
 	final public function GetDatabaseResource($template)
 	{
+	  if( endswith($template,'.tpl') ) {
+	    return 'module_file_tpl:'.$this->GetName().';'.$template;
+	  }
 	  return 'cms_template:'.$template;
-	  //return 'module_db_tpl:'.$this->GetName().';'.$template;
+	}
+
+	/**
+	 * A function to return a resource identifier to a module specific template
+	 * if the template specified ends in .tpl then a file template is assumed.
+	 *
+	 * @since 1.12
+	 * @author calguy1000
+	 * @param string The template name.
+	 * @return string
+	 */
+	final public function GetTemplateResource($template)
+	{
+	  if( endswith($template,'.tpl') ) {
+	    return 'module_file_tpl:'.$this->GetName().';'.$template;
+	  }
+	  return 'cms_template:'.$template;
 	}
 
 

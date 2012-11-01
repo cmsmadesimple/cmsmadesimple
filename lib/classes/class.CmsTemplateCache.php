@@ -79,14 +79,16 @@ class CmsTemplateCache
     }
 
     $t1 = CmsLayoutTemplateType::get_loaded_types();
-    $t2 = array();
-    if( isset($this->_cache[$this->_key]['types']) ) {
-      $t2 = $this->_cache[$this->_key]['types'];
-    }
-    $x = array_diff($t1,$t2);
-    if( is_array($x) && count($x) ) {
-      $this->_cache[$this->_key]['types'] = $t1;
-      $dirty = TRUE;
+    if( is_array($t1) ) {
+      $t2 = array();
+      if( isset($this->_cache[$this->_key]['types']) ) {
+	$t2 = $this->_cache[$this->_key]['types'];
+      }
+      $x = array_diff($t1,$t2);
+      if( is_array($x) && count($x) ) {
+	$this->_cache[$this->_key]['types'] = $t1;
+	$dirty = TRUE;
+      }
     }
 
     if( $dirty ) {

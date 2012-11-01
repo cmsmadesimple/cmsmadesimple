@@ -638,7 +638,8 @@ class CmsLayoutTemplateType
 
 	public static function get_loaded_types()
 	{
-		return array_keys(self::$_cache);
+		if( is_array(self::$_cache) )
+			return array_keys(self::$_cache);
 	}
 } // end of class
 

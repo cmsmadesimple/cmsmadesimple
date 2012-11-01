@@ -343,6 +343,9 @@ class CmsLayoutTemplate
 		if( !$this->get_name() ) {
 			throw new CmsInvalidDataException('Each template must have a name');
 		}
+		if( endswith($this->get_name(),'.tpl') ) {
+			throw new CmsInvalidDataException('Invalid name for a database template');
+		}
 		if( !$this->get_content() ) {
 			throw new CmsInvalidDataException('Each template must have some content');
 		}
