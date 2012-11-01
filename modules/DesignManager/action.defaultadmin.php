@@ -27,11 +27,13 @@ if( isset($params['submit_filter_tpl']) ) {
 	$filter_tpl_rec['tpl'] = $params['filter_tpl'];
 	$filter_tpl_rec['limit'] = (int)$params['filter_limit_tpl'];
 	$filter_tpl_rec['limit'] = max(2,min(100,$filter_tpl_rec['limit']));
-	$filter_tpl_rec['offset'] = 0;
+	unset($_SESSION[$this->GetName().'tpl_page']);
   cms_userprefs::set($this->GetName().'template_filter',serialize($filter_tpl_rec));
 }
 else if( isset($params['submit_filter_css']) ) {
+	$this->SetCurrentTab('stylesheets');
 	$filter_css_rec['limit'] = max(2,min(100,(int)$params['filter_limit_css']));
+	unset($_SESSION[$this->GetName().'tpl_page']);
   cms_userprefs::set($this->GetName().'css_filter',serialize($filter_css_rec));
 }
 else if( isset($params['submit_create']) ) {
@@ -46,7 +48,12 @@ else if( isset($params['submit_bulk']) ) {
 $tmp = cms_userprefs::get($this->GetName().'template_filter');
 if( $tmp ) $filter_tpl_rec = unserialize($tmp);
 if( isset($params['tpl_page']) ) {
+	$this->SetCurrentTab('templates');
 	$page = max(1,(int)$params['tpl_page']);
+	$_SESSION[$this->GetName().'tpl_page'] = $page;
+	$filter_tpl_rec['offset'] = ($page - 1) * $filter_tpl_rec['limit'];
+} else if( isset($_SESSION[$this->GetName().'tpl_page']) ) {
+	$page = max(1,(int)$_SESSION[$this->GetName().'tpl_page']);
 	$filter_tpl_rec['offset'] = ($page - 1) * $filter_tpl_rec['limit'];
 }
 
@@ -125,7 +132,12 @@ if( $this->CheckPermission('Modify Stylesheets') ) {
 	$tmp = cms_userprefs::get($this->GetName().'css_filter');
 	if( $tmp ) $filter_css_rec = unserialize($tmp);
 	if( isset($params['css_page']) ) {
+		$this->SetCurrentTab('stylesheets');
 		$page = max(1,(int)$params['css_page']);
+		$_SESSION[$this->GetName().'css_page'] = $page;
+		$filter_css_rec['offset'] = ($page - 1) * $filter_css_rec['limit'];
+	} else if( isset($_SESSION[$this->GetName().'css_page']) ) {
+		$page = max(1,(int)$_SESSION[$this->GetName().'css_page']);
 		$filter_css_rec['offset'] = ($page - 1) * $filter_css_rec['limit'];
 	}
 
