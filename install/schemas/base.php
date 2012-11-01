@@ -14,7 +14,7 @@ cms_siteprefs::set('sitedownmessage','<p>Site is currently down for maintenance<
 cms_siteprefs::set('sitedownmessagetemplate',-1);
 cms_siteprefs::set('metadata',"<meta name=\"Generator\" content=\"CMS Made Simple - Copyright (C) 2004-11 Ted Kulp. All rights reserved.\" />\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n ");
 cms_siteprefs::set('xmlmodulerepository','');
-cms_siteprefs::set('logintheme','OneElevent');
+cms_siteprefs::set('logintheme','OneEleven');
 cms_siteprefs::set('global_umask','022');
 cms_siteprefs::set('backendwysiwyg','MicroTiny');
 cms_siteprefs::set('page_active',1);
