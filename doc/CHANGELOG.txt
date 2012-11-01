@@ -8,6 +8,7 @@ Core - General
   - Fixes to the smarty parsing for templates.
   - Fixes to loading of UDT's.... now load UDT's for all requests.
   - Fix displaying of page title in NCleanGrey admin theme.
+  - Fixes to preview and submit in editcontent with lots of content blocks (particularly content_image}
 
 Version 1.11.2.1
 -----------------------------
