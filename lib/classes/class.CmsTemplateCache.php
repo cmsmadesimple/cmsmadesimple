@@ -90,7 +90,6 @@ class CmsTemplateCache
     }
 
     if( $dirty ) {
-      debug_to_log($this->_cache);
       $fn = cms_join_path(TMP_CACHE_LOCATION,'template_cache');
       file_put_contents($fn,serialize($this->_cache));
     }

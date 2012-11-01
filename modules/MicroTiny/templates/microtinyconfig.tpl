@@ -4,7 +4,7 @@
   elements : "{$textareas}",
   body_class : "CMSMSBody",
   {if isset($templateid)}
-    content_css : "{cms_stylesheet templateid=$templateid nolinks=1 stripbackground=$strip_background forceblackonwhite=$force_blackonwhite}",
+    content_css : "{cms_stylesheet designid=$themeid nolinks=1 stripbackground=$strip_background forceblackonwhite=$force_blackonwhite}",
   {/if}
   {* //Performance *}
   entity_encoding : "raw",

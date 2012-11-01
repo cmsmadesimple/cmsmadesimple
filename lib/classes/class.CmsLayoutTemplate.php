@@ -535,6 +535,7 @@ class CmsLayoutTemplate
 			if( isset(self::$_obj_cache[$one]) ) continue;
 			$list2[] = $one;
 		}
+		$list2 = array_unique($list2);
 
 		// get the data and populate the cache.
 		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('.

@@ -21,13 +21,18 @@
 if( !isset($gCms) ) exit;
 if( !$this->VisibleToAdminUser() ) return;
 
-$filter_rec = array('tpl'=>'','limit'=>100,'offset'=>0);
-if( isset($params['submit_filter']) ) {
-	$filter_rec[] = $params['filter_tpl'];
-	$filter_rec['limit'] = (int)$params['filter_limit'];
-	$filter_rec['limit'] = max(2,min(100,$filter_rec['limit']));
-	$filter_rec['offset'] = 0;
-  cms_userprefs::set($this->GetName().'template_filter',serialize($filter_rec));
+$filter_tpl_rec = array('tpl'=>'','limit'=>100,'offset'=>0);
+$filter_css_rec = array('limit'=>100,'offset'=>0);
+if( isset($params['submit_filter_tpl']) ) {
+	$filter_tpl_rec['tpl'] = $params['filter_tpl'];
+	$filter_tpl_rec['limit'] = (int)$params['filter_limit_tpl'];
+	$filter_tpl_rec['limit'] = max(2,min(100,$filter_tpl_rec['limit']));
+	$filter_tpl_rec['offset'] = 0;
+  cms_userprefs::set($this->GetName().'template_filter',serialize($filter_tpl_rec));
+}
+else if( isset($params['submit_filter_css']) ) {
+	$filter_css_rec['limit'] = max(2,min(100,(int)$params['filter_limit_css']));
+  cms_userprefs::set($this->GetName().'css_filter',serialize($filter_css_rec));
 }
 else if( isset($params['submit_create']) ) {
 	$this->Redirect($id,'admin_edit_template',$returnid,array('import_type'=>$params['import_type']));
@@ -39,13 +44,17 @@ else if( isset($params['submit_bulk']) ) {
 }
 
 $tmp = cms_userprefs::get($this->GetName().'template_filter');
-if( $tmp ) $filter_rec = unserialize($tmp);
+if( $tmp ) $filter_tpl_rec = unserialize($tmp);
 if( isset($params['tpl_page']) ) {
 	$page = max(1,(int)$params['tpl_page']);
-	$filter_rec['offset'] = ($page - 1) * $filter_rec['limit'];
+	$filter_tpl_rec['offset'] = ($page - 1) * $filter_tpl_rec['limit'];
 }
 
-$efilter = $filter_rec;
+$efilter = $filter_tpl_rec;
+if( isset($efilter['tpl']) ) {
+	$efilter[] = $efilter['tpl'];
+	unset($efilter['tpl']);
+}
 if( !$this->CheckPermission('Modify Templates') ) {
   $efilter[] = 'e:'.get_userid();
 }
@@ -61,8 +70,6 @@ if( count($templates) ) {
 	$tpl_nav['curpage'] = (int)($tpl_query->offset / $tpl_query->limit) + 1;
 	$smarty->assign('tpl_nav',$tpl_nav);
 }
-
-
 
 // build a list of the types, and categories, and later (designs).
 $opts = array();
@@ -115,13 +122,27 @@ if( $this->CheckPermission('Manage Designs') ) {
 }
 
 if( $this->CheckPermission('Modify Stylesheets') ) {
-	$csslist = CmsLayoutStylesheet::get_all(TRUE);
+	$tmp = cms_userprefs::get($this->GetName().'css_filter');
+	if( $tmp ) $filter_css_rec = unserialize($tmp);
+	if( isset($params['css_page']) ) {
+		$page = max(1,(int)$params['css_page']);
+		$filter_css_rec['offset'] = ($page - 1) * $filter_css_rec['limit'];
+	}
+
+	$css_query = new CmsLayoutStylesheetQuery($filter_css_rec);
+	$csslist = $css_query->GetMatches();
 	$smarty->assign('stylesheets',$csslist);
+	$css_nav = array();
+	$css_nav['pagelimit'] = $css_query->limit;
+	$css_nav['numpages'] = $css_query->numpages;
+	$css_nav['numrows'] = $css_query->totalrows;
+	$css_nav['curpage'] = (int)($css_query->offset / $css_query->limit) + 1;
+	$smarty->assign('css_nav',$css_nav);
 }
 
 // give everything to smarty that we can.
-$smarty->assign('filter_options',$opts);
-$smarty->assign('filter',$filter_rec);
+$smarty->assign('filter_tpl_options',$opts);
+$smarty->assign('filter_tpl',$filter_tpl_rec);
 
 $tmp = ($this->CheckPermission('Modify Templates') || count($templates))?1:0;
 $smarty->assign('has_templates',$tmp);

@@ -75,12 +75,12 @@ class Search extends CMSModule
 
   function GetVersion()
   {
-    return '1.7.7';
+    return '1.8';
   }
 
   function MinimumCMSVersion()
   {
-    return '1.11-alpha0';
+    return '1.12-alpha0';
   }
 
   function GetAdminDescription()

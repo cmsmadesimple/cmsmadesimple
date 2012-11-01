@@ -24,237 +24,228 @@
 class microtiny_utils {
 
   static private $_textareas = array();
+  static private $_theme_id;
 
-	/**
-	* Constructor
-	*
-	* @since 1.0
-	*/	
-	public function __construct() { }
+  /**
+   * Constructor
+   *
+   * @since 1.0
+   */	
+  public function __construct() { }
+  
+  /**
+   * add textarea name
+   */
+  static private function add_textarea($name)
+  {
+    if( !in_array($name,self::$_textareas) ) {
+      self::$_textareas[] = $name;
+    }
+  }
 
-	/**
-	 * add textarea name
-	 */
-	static private function add_textarea($name)
-	{
-	  if( !in_array($name,self::$_textareas) )
-	    {
-	      self::$_textareas[] = $name;
-	    }
+  /**
+   * Module API wrapper function
+   *
+   * @since 1.0
+   * @return string
+   */	
+  static public function WYSIWYGTextarea($name='textarea',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='') 
+  {
+    $mod = cms_utils::get_module('MicroTiny');
+
+    // Check if we are in object instance
+    if(!is_object($mod)) return false; // TODO: some error message?
+
+    // Force WYSIWYG on
+    $mod->wysiwygactive = true; // Stikki: calling this before TODO cause whole thing failing, check this Silmarillion.
+
+    if ($stylesheet != '') {
+      $_SESSION["microtiny_live_templateid"]=substr($stylesheet, strpos($stylesheet,"=")+1);
+    } else {
+      $obj = cms_utils::get_app_data('editing_content');
+      if( is_object($obj) ) {
+	self::$_theme_id = $obj->GetPropertyValue('theme_id');
+      }
+      else {
+	$collection = CmsLayoutCollection::load_default();
+	if( is_object($collection) ) {
+	  self::$_theme_id = $collection->get_id();
 	}
+      }
+    }
 
-	/**
-	* Module API wrapper function
-	*
-	* @since 1.0
-	* @return string
-	*/	
-	static public function WYSIWYGTextarea($name='textarea',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='') {
+    $origname = $name;
+    if( !startswith($name,'mt_') ) $name = 'mt_'.$name;
+    self::add_textarea($name);
 
-	  $mod = cms_utils::get_module('MicroTiny');
+    $rows = max(5,min(50,$rows));
+    $output = '';
+    $output .= '<textarea id="'.$name.'" name="'.$origname.'" cols="'.$columns.'" rows="'.$rows.'" '.$addtext.'>'.cms_htmlentities($content,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
+    global $CMS_ADMIN_PAGE;
+    if( $CMS_ADMIN_PAGE && $mod->CheckPermission('MicroTiny View HTML Source') ) {
+      $output .= '<span style="display:block; margin-top:10px;"><input type="checkbox" id="toggle_'.$name.'" onclick="toggleMicroTiny(\''.$name.'\');"/><label for="toggle_'.$name.'">'.$mod->Lang('view_html').'</label></span>';
+    }
+    return $output;
+  }
 
-		// Check if we are in object instance
-		if(!is_object($mod)) return false; // TODO: some error message?
+  /**
+   * Module API wrapper function
+   *
+   * @since 1.0
+   * @return string
+   */		
+  static public function WYSIWYGGenerateHeader($htmlresult='', $junk=false) 
+  {
+    $mod = cms_utils::get_module('MicroTiny');
+    // Check if we are in object instance
+    if(!is_object($mod)) return false; // TODO: some error message?
+
+    // Init
+    $config = cms_utils::get_config();
+
+    $frontend = FALSE;
+    global $CMS_ADMIN_PAGE;
+    if( !isset($CMS_ADMIN_PAGE) ) $frontend = TRUE;
+
+    $languageid = self::GetLanguageId($frontend);
+
+    $fn = self::SaveStaticConfig($frontend,'',$languageid);
+
+    if ($mod->WYSIWYGactive()) {
+      $output='<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tiny_mce.js"></script>';
+      $configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
+      $output.='<script type="text/javascript" src="'.$configurl.'"></script>';			
+    } else {		  
+      $output="<!-- MicroTiny Session vars empty -->";
+    }
+
+    return $output;
+  }	
 	
-		// Force WYSIWYG on
-		$mod->wysiwygactive = true; // Stikki: calling this before TODO cause whole thing failing, check this Silmarillion.
+  /**
+   * Generate dynamic config file
+   *
+   * @since 1.0
+   * @param boolean Frontend true/false
+   * @param string Templateid
+   * @param string A2 Languageid
+   * @return string
+   */	
+  static public function GenerateConfig($frontend=false, $themeid="", $languageid="en") 
+  {
+    $mod = cms_utils::get_module('MicroTiny');
+    // Check if we are in object instance
+    if(!is_object($mod)) return false; // TODO: return static file if this fails, or something
 
-		if ($stylesheet != '') {
-			$_SESSION["microtiny_live_templateid"]=substr($stylesheet, strpos($stylesheet,"=")+1);
-		} else {
-		  $obj = cms_utils::get_app_data('editing_content');
-		  if( is_object($obj) ) {
-		    $mod->templateid = $obj->TemplateId();
-		  }
-		  else {
-		    $tplops = cmsms()->GetTemplateOperations();
-		    $templateid = $tplops->LoadDefaultTemplate();
-		    $mod->templateid = $templateid->id;
-		  }
-		}
-		
-		$origname = $name;
-		if( !startswith($name,'mt_') ) $name = 'mt_'.$name;
-		self::add_textarea($name);
-		
-		$rows = max(5,min(50,$rows));
-		$output = '';
-		$output .= '<textarea id="'.$name.'" name="'.$origname.'" cols="'.$columns.'" rows="'.$rows.'" '.$addtext.'>'.cms_htmlentities($content,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
-		global $CMS_ADMIN_PAGE;
-		if( $CMS_ADMIN_PAGE && $mod->CheckPermission('MicroTiny View HTML Source') )
-		  {
-		    $output .= '<span style="display:block; margin-top:10px;"><input type="checkbox" id="toggle_'.$name.'" onclick="toggleMicroTiny(\''.$name.'\');"/><label for="toggle_'.$name.'">'.$mod->Lang('view_html').'</label></span>';
-		  }
-		return $output;
-	}
+    // Init
+    $config = cms_utils::get_config();	
+    $result="";		
+    $linker="";		
 
-	/**
-	* Module API wrapper function
-	*
-	* @since 1.0
-	* @return string
-	*/		
-	static public function WYSIWYGGenerateHeader($htmlresult='', $junk=false) {
+    if ($frontend) {  
+      $mod->smarty->assign("isfrontend",true);
+    } else {
+      $mod->smarty->assign("isfrontend",false);
+      $result .= self::GetCMSLinker();
+      $linker="cmslinker,";
+    }
 
-	  $mod = cms_utils::get_module('MicroTiny');
-		// Check if we are in object instance
-		if(!is_object($mod)) return false; // TODO: some error message?
-		
-		// Init
-		$config = cms_utils::get_config();
+    if( count(self::$_textareas) ) {
+      $tmp = implode(',',self::$_textareas);
+      self::$_textareas = array();
+      $mod->smarty->assign('textareas',$tmp);		    
+    }
 
-		$frontend = FALSE;
-		global $CMS_ADMIN_PAGE;
-		if( !isset($CMS_ADMIN_PAGE) ) $frontend = TRUE;
+    if( $themeid <= 0 ) {
+      $themeid = self::$_theme_id;
+    }
+    if( $themeid <= 0 ) {
+      // for the frontend
+      $contentobj = null;
+      if( cmsms()->is_frontend_request() ) {
+	$contentobj = cmsms()->get_variable('content_obj');
+      }
+      else {
+	$contentobj = cms_utils::get_app_data('editing_content');
+      }
 
-		$languageid = self::GetLanguageId($frontend);
+      if( is_object($contentobj) ) {
+	$themeid = $contentobj->GetPropertyValue('theme_id');
+      }
+    }
+    if( $themeid <= 0 ) {
+      $collection = CmsLayoutCollection::load_default();
+      if( is_object($collection) ) {
+	$themeid = $collection->get_id();
+      }
+    }
+    if( $themeid > 0 ) {
+      $mod->smarty->assign('themeid',$themeid);
+    }
 
-		$fn = self::SaveStaticConfig($frontend,$mod->templateid,$languageid);
+    $urlext="";
+    if (isset($_SESSION[CMS_USER_KEY])) {
+      $urlext=CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+    }
+    $mod->smarty->assign("urlext",$urlext);
+    //,pasteword,,|,undo,redo
+    $image="";
+    if ($mod->GetPreference("allowimages",0) && !$frontend ) {
+      $image=",image,|";
+    }
+    $toolbar="undo,|,bold,italic,underline,|,cut,copy,paste,pastetext,removeformat,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,".$linker."link,unlink,|".$image.",formatselect"; //,separator,styleselect
 
-		if ($mod->WYSIWYGactive()) {
-		  $output='<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tiny_mce.js"></script>';
-		  $configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
-		  $output.='<script type="text/javascript" src="'.$configurl.'"></script>';			
-		} else {		  
-		  $output="<!-- MicroTiny Session vars empty -->";
-		}
-		
-		return $output;
-	}	
-	
-	/**
-	* Generate dynamic config file
-	*
-	* @since 1.0
-	* @param boolean Frontend true/false
-	* @param string Templateid
-	* @param string A2 Languageid
-	* @return string
-	*/	
-	static public function GenerateConfig($frontend=false, $templateid="", $languageid="en") 
-	  {
+    // handle css styles... newline OR comma separated (why, kinda dumb?)
+    $tmp = $mod->GetPreference('css_styles');
+    $tmp = str_replace("\r\n","\n",$tmp);
+    $tmp = explode("\n",$tmp);
+    $tmp2 = array();
+    foreach( $tmp as $one ) {
+      $one = trim($one);
+      if( empty($one) ) continue;
 
-	  $mod = cms_utils::get_module('MicroTiny');
-		// Check if we are in object instance
-		if(!is_object($mod)) return false; // TODO: return static file if this fails, or something
-		
-		// Init
-		$config = cms_utils::get_config();	
-		$result="";		
-		$linker="";		
-		
-		if ($frontend) {  
-			$mod->smarty->assign("isfrontend",true);
-		} else {
-			$mod->smarty->assign("isfrontend",false);
-			$result .= self::GetCMSLinker();
-			$linker="cmslinker,";
-		}
+      $tmp3 = explode(',',$one);
+      foreach( $tmp3 as $one2 ) {
+	$tmp2[] = trim($one2);
+      }
+    }
 
-		if( count(self::$_textareas) )
-		  {
-		    $tmp = implode(',',self::$_textareas);
-		    self::$_textareas = array();
-		    $mod->smarty->assign('textareas',$tmp);		    
-		  }
+    $tmp3 = array();
+    foreach( $tmp2 as $one ) {
+      $tmp4 = explode('=',trim($one),2);
+      if( count($tmp4) == 1 ) {
+	$tmp3[$tmp4[0]] = $tmp4[0];
+      }
+      else {
+	$tmp3[$tmp4[0]] = $tmp4[1];
+      }
+    }
 
-		if( $templateid <= 0 )
-		  {
-		    $pageinfo = cmsms()->get_variable('pageinfo');
-		    if( is_object($pageinfo) )
-		      {
-			$templateid = $pageinfo->template_id;
-		      }
-		    else
-		      {
-			$contentobj = cms_utils::get_app_data('editing_content');
-			if( is_object($contentobj) )
-			  {
-			    $templateid = $contentobj->TemplateId();
-			  }
-			else
-			  {
-			    $templateops = cmsms()->GetTemplateOperations();
-			    $dflt_template = $templateops->LoadDefaultTemplate();
-			    if( is_object($dflt_template) ) $templateid = $dflt_template->id;
-			  }
-		      }
-		  }
-		if( $templateid > 0 )
-		  {
-		    $mod->smarty->assign('templateid',$templateid);
-		  }
+    $css_styles = '';
+    foreach( $tmp3 as $key => $value ) {
+      $css_styles .= $key.'='.$value.';';
+    }
+    $css_styles = substr($css_styles,0,-1);
+    if ($css_styles!='') {
+      $toolbar.=",separator,styleselect";
+      $mod->smarty->assign("css_styles",$css_styles);
+    }
 
-		$urlext="";
-		if (isset($_SESSION[CMS_USER_KEY])) {
-		  $urlext=CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-		}
-		$mod->smarty->assign("urlext",$urlext);
-		//,pasteword,,|,undo,redo
-		$image="";
-		if ($mod->GetPreference("allowimages",0) && !$frontend ) {
-			$image=",image,|";
-		}
-		$toolbar="undo,|,bold,italic,underline,|,cut,copy,paste,pastetext,removeformat,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,".$linker."link,unlink,|".$image.",formatselect"; //,separator,styleselect
+    // give the rest to smarty.
+    $mod->smarty->assign('show_statusbar',$mod->GetPreference('show_statusbar',0));
+    $mod->smarty->assign('allow_resize',$mod->GetPreference('allow_resize',0));
+    $mod->smarty->assign('strip_background',$mod->GetPreference('strip_background',1));
+    $mod->smarty->assign('force_blackonwhite',$mod->GetPreference('force_blackonwhite',0));
+    $mod->smarty->assign("toolbar",$toolbar);				
+    $mod->smarty->assign("language",$languageid);			
+    $mod->smarty->assign("filepickertitle",$mod->Lang("filepickertitle"));
+    $fpurl=$mod->create_url("","filepicker");
+    $fpurl=str_replace("&amp;","&",$fpurl);
+    $mod->smarty->assign("filepickerurl", $fpurl);
 
-		// handle css styles... newline OR comma separated (why, kinda dumb?)
-		$tmp = $mod->GetPreference('css_styles');
-		$tmp = str_replace("\r\n","\n",$tmp);
-		$tmp = explode("\n",$tmp);
-		$tmp2 = array();
-		foreach( $tmp as $one )
-		  {
-		    $one = trim($one);
-		    if( empty($one) ) continue;
-
-		    $tmp3 = explode(',',$one);
-		    foreach( $tmp3 as $one2 )
-		      {
-			$tmp2[] = trim($one2);
-		      }
-		  }
-
-		$tmp3 = array();
-		foreach( $tmp2 as $one )
-		  {
-		    $tmp4 = explode('=',trim($one),2);
-		    if( count($tmp4) == 1 )
-		      {
-			$tmp3[$tmp4[0]] = $tmp4[0];
-		      }
-		    else
-		      {
-			$tmp3[$tmp4[0]] = $tmp4[1];
-		      }
-		  }
-
-		$css_styles = '';
-		foreach( $tmp3 as $key => $value )
-		  {
-		    $css_styles .= $key.'='.$value.';';
-		  }
-		$css_styles = substr($css_styles,0,-1);
-		if ($css_styles!='') {
-		  $toolbar.=",separator,styleselect";
-		  $mod->smarty->assign("css_styles",$css_styles);
-		}
-
-		// give the rest to smarty.
-		$mod->smarty->assign('show_statusbar',$mod->GetPreference('show_statusbar',0));
-		$mod->smarty->assign('allow_resize',$mod->GetPreference('allow_resize',0));
-		$mod->smarty->assign('strip_background',$mod->GetPreference('strip_background',1));
-		$mod->smarty->assign('force_blackonwhite',$mod->GetPreference('force_blackonwhite',0));
-		$mod->smarty->assign("toolbar",$toolbar);				
-		$mod->smarty->assign("language",$languageid);			
-		$mod->smarty->assign("filepickertitle",$mod->Lang("filepickertitle"));
-        $fpurl=$mod->create_url("","filepicker");
-        $fpurl=str_replace("&amp;","&",$fpurl);
-        $mod->smarty->assign("filepickerurl", $fpurl);
-		
-		$result .= $mod->ProcessTemplate('microtinyconfig.tpl');
-		return $result;
-
-	}	
+    $result .= $mod->ProcessTemplate('microtinyconfig.tpl');
+    return $result;
+  }	
 	
 	/**
 	* Generates TinyMCE Entry object
@@ -449,9 +440,9 @@ class microtiny_utils {
 	* @param string $languageid	
 	* @return string
 	*/		
-	public static function SaveStaticConfig($frontend=false, $templateid="", $languageid="") { 
-	
-	  $configcontent = self::GenerateConfig($frontend, $templateid, $languageid);
+	public static function SaveStaticConfig($frontend=false, $themeid='', $languageid='') 
+	{ 
+	  $configcontent = self::GenerateConfig($frontend, $themeid, $languageid);
 	  $fn = cms_join_path(TMP_CACHE_LOCATION,'mt_'.session_id().'.js');
 	  $res = file_put_contents($fn,$configcontent);
 	  if( !$res ) return;

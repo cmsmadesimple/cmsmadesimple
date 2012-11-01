@@ -23,31 +23,13 @@
  */
 
 /**
- * A class to represent a smarty template.
+ * A class to represent a template query, and its results.
  *
  * @since 1.12
  * @author Robert Campbell <calguy1000@gmail.com>
  */
-class CmsLayoutTemplateQuery
+class CmsLayoutTemplateQuery extends CmsDbQueryBase
 {
-  private $_totalmatchingrows = null;
-  private $_offset = 0;
-  private $_limit = 1000;
-  private $_rs = null;
-  private $_args = array();
-
-  public function __construct($args = '')
-  {
-    if( empty($args) ) return;
-    
-    if( is_array($args) ) {
-      $this->_args = $args;
-    }
-    else if( is_string($args) ) {
-      $this->_args = explode(',',$args);
-    }
-  }
-
   public function execute()
   {
     if( !is_null($this->_rs) ) return;
@@ -125,50 +107,6 @@ class CmsLayoutTemplateQuery
     $this->_totalmatchingrows = $db->GetOne('SELECT FOUND_ROWS()');
   }
 
-  public function RecordCount()
-  {
-    $this->execute();
-    if( $this->_rs ) return $this->_rs->RecordCount();
-  }
-
-  public function MoveNext()
-  {
-    $this->execute();
-    if( $this->_rs ) return $this->_rs->MoveNext();
-  }
-
-  public function MoveFirst()
-  {
-    $this->execute();
-    if( $this->_rs ) return $this->_rs->MoveFirst();
-  }
-
-  public function Rewind()
-  {
-    $this->execute();
-    if( $this->_rs ) return $this->_rs->MoveFirst();
-  }
-
-  public function MoveLast()
-  {
-    $this->execute();
-    if( $this->_rs ) return $this->_rs->MoveLast();
-  }
-
-  public function EOF()
-  {
-    $this->execute();
-    if( $this->_rs ) return $this->_rs->EOF();
-    return TRUE;
-  }
-
-  public function Close()
-  {
-    $this->execute();
-    if( $this->_rs ) return $this->_rs->Close();
-    return TRUE;
-  }
-
   public function &GetTemplate()
   {
     $this->execute();
@@ -198,29 +136,6 @@ class CmsLayoutTemplateQuery
   public function GetMatches()
   {
     return CmsLayoutTemplate::load_bulk($this->GetMatchedTemplateIds());
-  }
-
-  public function __get($key)
-  {
-    $this->execute();
-    if( $key == 'fields' && $this->_rs && !$this->_rs->EOF() ) {
-      return $this->_rs->fields;
-    }
-    if( $key == 'EOF' ) {
-      return $this->_rs->EOF();
-    }
-    if( $key == 'limit' ) {
-      return $this->_limit;
-    }
-    if( $key == 'offset' ) {
-      return $this->_offset;
-    }
-    if( $key == 'totalrows' ) {
-      return $this->_totalmatchingrows;
-    }
-    if( $key == 'numpages' ) {
-      return ceil($this->_totalmatchingrows / $this->_limit);
-    }
   }
 }
 

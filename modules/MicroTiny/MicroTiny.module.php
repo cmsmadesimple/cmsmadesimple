@@ -23,13 +23,9 @@
 
 class MicroTiny extends CMSModule {
 
-	//var $wysiwygactive; // Stikki: CMSModule variable, why this is here? It shouldn't be, must a remnant from before I put it into the module class
-	var $templateid;
-
-	public function __construct() {
-	  parent::__construct();
-	  $this->templateid = -1;
-	}
+  public function __construct() {
+    parent::__construct();
+  }
 	
 	public function GetName() {
 		return 'MicroTiny';
@@ -40,7 +36,7 @@ class MicroTiny extends CMSModule {
 	}
 
 	public function GetVersion()	{
-	  return '1.2.3';
+	  return '1.2.4';
 	}
 
 	public function HasAdmin() {
@@ -77,7 +73,7 @@ class MicroTiny extends CMSModule {
 	}
 
 	public function MinimumCMSVersion() {
-    return "1.11=alpha0";
+	  return "1.12=alpha0";
 	}
 
 	public function GetDependencies() {

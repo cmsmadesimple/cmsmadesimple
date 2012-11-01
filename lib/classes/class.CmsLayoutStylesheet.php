@@ -377,6 +377,30 @@ class CmsLayoutStylesheet
     return self::_load_from_data($row);
   }
 
+	public static function load_bulk($ids)
+	{
+		for( $i = 0; $i < count($ids); $i++ ) {
+			$ids[$i] = (int)$ids[$i];
+		}
+		$ids = array_unique($ids);
+
+		$db = cmsms()->GetDb();
+		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.' WHERE id IN ('
+			.implode(',',$ids).')';
+		$dbr = $db->GetArray($query);
+		$out = array();
+		if( is_array($dbr) && count($dbr) ) {
+			foreach( $dbr as $row ) {
+				$tmp = self::_load_from_data($row);
+				if( is_object($tmp) ) {
+					$out[] = self::_load_from_data($row);
+				}
+			}
+		}
+
+		if( count($out) ) return $out;
+	}
+
   public static function get_all($brief = TRUE)
   {
     $db = cmsms()->GetDb();

@@ -28,17 +28,17 @@ $(document).ready(function(){
 {form_start}{strip}
   <div class="pageoptions" style="text-align: right;">
     <label for="filter_tpl">{$mod->Lang('prompt_filter')}:</label>
-    &nbsp;<select id="filter_tpl" name="{$actionid}filter_tpl">{html_options options=$filter_options selected=$filter[0]}</select>&nbsp;
-    <label for="filter_limit">{$mod->Lang('prompt_limit')}:</label>
-    &nbsp;<select id="filter_limit" name="{$actionid}filter_limit">
-      <option value="2"{if $filter.limit == 2} selected="selected"{/if}>2</option>
-      <option value="5"{if $filter.limit == 5} selected="selected"{/if}>5</option>
-      <option value="10"{if $filter.limit == 10} selected="selected"{/if}>10</option>
-      <option value="25"{if $filter.limit == 25} selected="selected"{/if}>25</option>
-      <option value="50"{if $filter.limit == 50} selected="selected"{/if}>50</option>
-      <option value="100"{if $filter.limit == 100} selected="selected"{/if}>100</option>
+    &nbsp;<select id="filter_tpl" name="{$actionid}filter_tpl">{html_options options=$filter_tpl_options selected=$tpl_filter.tpl}</select>&nbsp;
+    <label for="filter_limit_tpl">{$mod->Lang('prompt_limit')}:</label>
+    &nbsp;<select id="filter_limit_tpl" name="{$actionid}filter_tpl_limit">
+      <option value="2"{if $tpl_filter.tpl_limit == 2} selected="selected"{/if}>2</option>
+      <option value="5"{if $tpl_filter.tpl_limit == 5} selected="selected"{/if}>5</option>
+      <option value="10"{if $tpl_filter.tpl_limit == 10} selected="selected"{/if}>10</option>
+      <option value="25"{if $tpl_filter.tpl_limit == 25} selected="selected"{/if}>25</option>
+      <option value="50"{if $tpl_filter.tpl_limit == 50} selected="selected"{/if}>50</option>
+      <option value="100"{if $tpl_filter.tpl_limit == 100} selected="selected"{/if}>100</option>
     </select>
-    <input type="submit" name="{$actionid}submit_filter" value="{$mod->Lang('submit')}"/>
+    <input type="submit" name="{$actionid}submit_filter_tpl" value="{$mod->Lang('submit')}"/>
   </div>
 
 {if isset($templates)}
