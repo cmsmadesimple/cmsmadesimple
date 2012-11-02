@@ -15,9 +15,7 @@ else {
 }
 
 $cache_id = '|ns'.md5(serialize($params));
-$compile_id = '';
-
-if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id,$compile_id) ) {
+if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id) ) {
   $detailpage = '';
   $tmp = $this->GetPreference('detail_returnid',-1);
   if( $tmp > 0 ) $detailpage = $tmp;
@@ -366,6 +364,6 @@ if( !$smarty->isCached($this->GetDatabaseResource($template),$cache_id,$compile_
 }
 
 // Display template
-echo $smarty->fetch($this->GetDatabaseResource($template),$cache_id,$compile_id);
+echo $smarty->fetch($this->GetDatabaseResource($template),$cache_id);
 # vim:ts=4 sw=4 noet
 ?>
