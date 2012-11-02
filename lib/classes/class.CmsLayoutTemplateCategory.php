@@ -30,7 +30,7 @@
  */
 class CmsLayoutTemplateCategory
 {
-	const TABLENAME = 'layot_tpl_categories';
+  const TABLENAME = 'layout_tpl_categories';
   private $_dirty;
   private $_data = array();
 
