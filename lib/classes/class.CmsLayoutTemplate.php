@@ -714,6 +714,13 @@ class CmsLayoutTemplate
 			throw new CmsInvalidDataException('Invalid data passed to CmsLayoutTemplate::;load_dflt_by_type()');
 		}
 
+		// search our preloaded template first
+		foreach( self::$_obj_cache as $tpl ) {
+			if( $tpl->get_type_id() == $t2->get_id() && $tpl->get_type_dflt() ) {
+				return $tpl;
+			}
+		}
+		
 		$db = cmsms()->GetDb();
 		$query = 'SELECT * FROM '.cms_db_prefix().self::TABLENAME.'
               WHERE type_id = ? AND type_dflt = ?';

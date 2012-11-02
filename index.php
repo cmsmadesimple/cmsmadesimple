@@ -75,6 +75,8 @@ $contentops = cmsms()->GetContentOperations();
 $contentobj = '';
 $trycount = 0;
 
+cms_content_cache::get_instance();
+
 while( $trycount < 2 ) {
   $trycount++;
   try 
@@ -134,14 +136,6 @@ while( $trycount < 2 ) {
     }
 
     cmsms()->set_variable('content_obj',$contentobj);
-    $smarty->assign('content_obj',$contentobj);
-
-    if( $contentobj->Secure() && (! isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ) {
-      // if this page is marked to be secure, make sure we redirect to the secure page.
-      redirect($contentobj->GetURL());
-    }
-
-    cmsms()->set_variable('content_obj',$contentobj);
     cmsms()->set_variable('content_id',$contentobj->Id());
     cmsms()->set_variable('page_id',$page);
     cmsms()->set_variable('page_name',$contentobj->Alias());
@@ -157,7 +151,12 @@ while( $trycount < 2 ) {
     $smarty->assign('position', $contentobj->Hierarchy());
     $smarty->assign('friendly_position', $gCms->variables['friendly_position']);
     $tmp1 = new CmsTemplateCache();
-	
+
+    if( $contentobj->Secure() && (! isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ) {
+      // if this page is marked to be secure, make sure we redirect to the secure page.
+      redirect($contentobj->GetURL());
+    }
+
     CmsNlsOperations::set_language(); // <- NLS detection for frontend
     $smarty->assign('lang',CmsNlsOperations::get_current_language());
     $smarty->assign('encoding',CmsNlsOperations::get_encoding());

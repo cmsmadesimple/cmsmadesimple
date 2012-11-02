@@ -46,26 +46,97 @@
  */
 final class cms_content_cache
 {
-  private static $_alias_map;
-  private static $_id_map;
-  private static $_content_cache;
+	private static $_instance;
+	private static $_alias_map;
+	private static $_id_map;
+	private static $_content_cache;
+	private $_preload_cache;
+	private $_key;
+
+	private function __construct() 
+	{
+		if( !cmsms()->is_frontend_request() ) return;
+
+		$this->_key = 'pc'.md5($_SERVER['REQUEST_URI'].serialize($_GET));
+		$fn = cms_join_path(TMP_CACHE_LOCATION,$this->_key);
+		if( file_exists($fn) && filemtime($fn) >= time() - 3600 ) {
+			$content_ids = null;
+			$tmp = file_get_contents($fn);
+			$deep = false;
+			if( $tmp ) {
+				list($deep,$content_ids) = unserialize($tmp);
+			}
+			if( is_array($content_ids) && count($content_ids) ) {
+				$this->_preload_cache = $content_ids;
+				$contentops = ContentOperations::get_instance();
+				$deep = false;
+				$tmp = $contentops->LoadChildren(null,$deep,false,$content_ids);
+			}
+		}
+	}
 
 
-  /**
-   * @ignore
-   */
-  private static function &get_content_obj($hash)
-  {
-    $res = null;
-    if( self::$_content_cache ) 
-      {
-	if( isset(self::$_content_cache[$hash]) )
-	  {
-	    $res = self::$_content_cache[$hash];
-	  }
-      }
-    return $res;
-  }
+	public function &get_instance() 
+	{
+		if( !is_object(self::$_instance) ) {
+			self::$_instance = new cms_content_cache();
+		}
+		return self::$_instance;
+	}
+
+	/**
+	 * @ignore
+	 */
+	public function __destruct()
+	{
+		if( !cmsms()->is_frontend_request() ) return;
+		if( !$this->_key ) return;
+
+		$list = self::get_instance()->get_loaded_page_ids();
+		if( is_array($list) && count($list) ) {
+			$dirty = false;
+			if( !is_array($this->_preload_cache) || count($this->_preload_cache) == 0 ) {
+				$dirty = true;
+			}
+			else {
+				$t2 = array_diff($list,$this->_preload_cache);
+				if( is_array($t2) && count($t2) ) {
+					$dirty = true;
+				}
+			}
+			
+			if( $dirty ) {
+				debug_to_log($list);
+				$deep = FALSE;
+				foreach( $list as $one ) {
+					$obj = self::get_content($one);
+					if( !is_object($obj) ) continue;
+					$tmp = $obj->Properties();
+					if( is_array($tmp) && count($tmp) ) {
+						$deep = TRUE;
+						break;
+					}
+				}
+				$tmp = array($deep,$list);
+				$fn = cms_join_path(TMP_CACHE_LOCATION,$this->_key);
+				file_put_contents($fn,serialize($tmp));
+			}
+		}
+	}
+
+	/**
+	 * @ignore
+	 */
+	private static function &get_content_obj($hash)
+	{
+		$res = null;
+		if( self::$_content_cache ) {
+			if( isset(self::$_content_cache[$hash]) ) {
+				$res = self::$_content_cache[$hash];
+			}
+		}
+		return $res;
+	}
 
 
   /**
@@ -79,20 +150,18 @@ final class cms_content_cache
    */
   public static function &get_content($identifier)
   {
-    $res = null;
-    $hash = self::content_exists($identifier);
-    if( $hash === FALSE )
-      {
+	  $res = null;
+	  $hash = self::content_exists($identifier);
+	  if( $hash === FALSE ) {
 		  // content doesn't exist...
-		  if( is_numeric($identifier) )
-		  {
+		  if( is_numeric($identifier) ) {
 			  // so add a null object, so we don't request it from the database again.
 			  self::_add_content($identifier,'',$res);
 			  return $res;
 		  }
-      }
+	  }
 
-    return self::get_content_obj($hash);
+	  return self::get_content_obj($hash);
   }
 
 
@@ -107,21 +176,19 @@ final class cms_content_cache
    */
   public static function content_exists($identifier)
   {
-    if( !self::$_content_cache ) return FALSE;
+	  if( !self::$_content_cache ) return FALSE;
 
-    if( is_numeric($identifier) )
-      {
-	if( !self::$_id_map ) return FALSE;
-	if( !isset(self::$_id_map[$identifier]) ) return FALSE;
-	return self::$_id_map[$identifier];
-      }
-    else if( is_string($identifier) )
-      {
-	if( !self::$_alias_map ) return FALSE;
-	if( !isset(self::$_alias_map[$identifier]) ) return FALSE;
-	return self::$_alias_map[$identifier];
-      }
-    return FALSE;
+	  if( is_numeric($identifier) ) {
+		  if( !self::$_id_map ) return FALSE;
+		  if( !isset(self::$_id_map[$identifier]) ) return FALSE;
+		  return self::$_id_map[$identifier];
+	  }
+	  else if( is_string($identifier) ) {
+		  if( !self::$_alias_map ) return FALSE;
+		  if( !isset(self::$_alias_map[$identifier]) ) return FALSE;
+		  return self::$_alias_map[$identifier];
+	  }
+	  return FALSE;
   }
 
 
@@ -145,10 +212,9 @@ final class cms_content_cache
     
     $hash = md5($id.$alias);
     self::$_content_cache[$hash] = $obj;
-	if( $alias )
-		{
-			self::$_alias_map[$alias] = $hash;
-		}
+	if( $alias ) {
+		self::$_alias_map[$alias] = $hash;
+	}
     self::$_id_map[$id] = $hash;
     return TRUE;
   }
@@ -172,9 +238,9 @@ final class cms_content_cache
    */
   public static function clear()
   {
-    self::$_content_cache = null;
-    self::$_alias_map = null;
-    self::$_id_map = null;
+	  self::$_content_cache = null;
+	  self::$_alias_map = null;
+	  self::$_id_map = null;
   }
 
 
@@ -185,7 +251,7 @@ final class cms_content_cache
    */
   public static function get_loaded_page_ids()
   {
-    return array_keys(self::$_id_map);
+	  return array_keys(self::$_id_map);
   }
 
 
@@ -197,10 +263,10 @@ final class cms_content_cache
    */
   public static function get_id_from_alias($alias)
   {
-    if( !isset(self::$_alias_map) ) return FALSE;
-    if( !isset(self::$_alias_map[$alias]) ) return FALSE;
-    $hash = self::$_alias_map[$alias];
-    return array_search($hash,self::$_id_map);
+	  if( !isset(self::$_alias_map) ) return FALSE;
+	  if( !isset(self::$_alias_map[$alias]) ) return FALSE;
+	  $hash = self::$_alias_map[$alias];
+	  return array_search($hash,self::$_id_map);
   }
 
 
@@ -212,10 +278,10 @@ final class cms_content_cache
    */
   public static function get_alias_from_id($id)
   {
-    if( !isset(self::$_id_map) ) return FALSE;
-    if( !isset(self::$_id_map[$id]) ) return FALSE;
-    $hash = self::$_id_map[$id];
-    return array_search($hash,self::$_alias_map);
+	  if( !isset(self::$_id_map) ) return FALSE;
+	  if( !isset(self::$_id_map[$id]) ) return FALSE;
+	  $hash = self::$_id_map[$id];
+	  return array_search($hash,self::$_alias_map);
   }
 }
 

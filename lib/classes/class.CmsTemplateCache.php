@@ -60,7 +60,6 @@ class CmsTemplateCache
 	CmsLayoutTemplateType::load_bulk($this->_cache[$this->_key]['types']);
       }
     }
-
   }
 
   public function __destruct()
