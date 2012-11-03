@@ -79,7 +79,7 @@ class cms_admin_tabs
     if( $tabid == self::$_current_tab && !empty($params['tab_message']) ) {
       $theme = cms_utils::get_theme_object();
       if( is_object($theme) ) {
-	$message = $theme->ShowMessage($this->Lang($params['tab_message']));
+	$message = $theme->ShowMessage($params['tab_message']);
       }
     }
     

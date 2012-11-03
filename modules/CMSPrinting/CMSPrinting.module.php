@@ -18,39 +18,38 @@
 #
 #$Id: News.module.php 2114 2005-11-04 21:51:13Z wishy $
 
-class CMSPrinting extends CMSModule {
+class CMSPrinting extends CMSModule 
+{
+  function GetName() {
+    return 'CMSPrinting';
+  }
 
-	function GetName() {
-		return 'CMSPrinting';
-	}
+  function GetFriendlyName() {
+    return $this->Lang("friendlyname");    
+  }
 
-	function GetFriendlyName() {
-	  return $this->Lang("friendlyname");    
-	}
+  function IsPluginModule() {
+    return true;
+  }
 
-	function IsPluginModule() {
-		return true;
-	}
+  function HasAdmin() {
+    return true;
+  }
 
-	function HasAdmin() {
-		return true;
-	}
+  function GetVersion() {
+    return '1.0.1';
+  }
 
-	function GetVersion() {
-		return '1.0.3';
-	}
+  function MinimumCMSVersion() {
+    return '1.12-alpha0';
+  }
 
-	function MinimumCMSVersion() {
-		return '1.10-beta0';
-	}
+  function GetAdminDescription() {
+    return $this->Lang('description');
+  }
 
-	function GetAdminDescription() {
- 		return $this->Lang('description');
-
-	}
-
-	function GetAdminSection() {
-		return 'extensions';
+  function GetAdminSection() {
+    return 'extensions';
   }
 
   function InstallPostMessage() {
@@ -58,13 +57,13 @@ class CMSPrinting extends CMSModule {
   }
 
   public function LazyLoadFrontend() {
-    return FALSE;
+    return TRUE;
   }  
 
   public function LazyLoadAdmin() {
     return TRUE;
   }  
-  
+
   function relativeToAbsolute($prefix, $text) {
     // search for single quotes and replace them by double quotes
     $search = '\'';
@@ -101,14 +100,8 @@ class CMSPrinting extends CMSModule {
     return $url;
   }
 
-  function GetURLContent($url) {
-    $content=file_get_contents($url);
-    return $content;
-  }
-	
   function InitializeAdmin() {	  
     $this->CreateParameter('text', $this->Lang("defaultlinktext"), $this->Lang('help_text'));
-    //$this->CreateParameter('pdf', "false", $this->Lang('help_pdf'));
     $this->CreateParameter('popup', "false", $this->Lang('help_popup'));
     $this->CreateParameter('script', "false", $this->Lang('help_script'));
     $this->CreateParameter('includetemplate', "false", $this->Lang('help_includetemplate'));
@@ -118,18 +111,16 @@ class CMSPrinting extends CMSModule {
     $this->CreateParameter('src_img', "false", $this->Lang('help_src_img'));
     $this->CreateParameter('more', "false", $this->Lang('help_more'));
     $this->CreateParameter('onlyurl', "false", $this->Lang('help_onlyurl'));
+    $this->CreateParameter('linktemplate','',$this->lang('help_linktemplate'));
+    $this->CreateParameter('printtemplate','',$this->lang('help_printtemplate'));
   }
-	
-  public function InitializeFrontend() {
-  
+
+  public function InitializeFrontend() {  
     $this->RestrictUnknownParams();
-    $this->RegisterModulePlugin();
-	cmsms()->GetSmarty()->registerPlugin('function', 'print', array($this,'_my_function_plugin')); // maintai old style, for backwards compability
     
     $this->SetParameterType('url',CLEAN_STRING);
     $this->SetParameterType('pageid',CLEAN_INT);
     $this->SetParameterType('text',CLEAN_STRING);
-    //$this->SetParameterType('pdf',CLEAN_STRING);
     $this->SetParameterType('popup',CLEAN_STRING);
     $this->SetParameterType('script',CLEAN_STRING);
     $this->SetParameterType('includetemplate',CLEAN_STRING);
@@ -139,78 +130,75 @@ class CMSPrinting extends CMSModule {
     $this->SetParameterType('src_img',CLEAN_STRING);
     $this->SetParameterType('more',CLEAN_STRING);
     $this->SetParameterType('onlyurl',CLEAN_STRING);
+    $this->SetParameterType('linktemplate',CLEAN_STRING);
+    $this->SetParameterType('printtemplate',CLEAN_STRING);
   }
 
-  public function _my_function_plugin($params,&$stemplate)
-  {
-    $class = get_class($this);
-    $params['module'] = $class;
-    return cms_module_plugin($params,$template);
-  }
-  
   function VisibleToAdminUser() {
     return $this->CheckPermission('modifyprintingsettings') || $this->CheckPermission('Modify Templates');
   }
-	
-  function UninstallPostMessage() {
-    return $this->Lang('postuninstall');		
-	}
-	
-	function SetLinkTemplate($template) {
-	  $this->SetTemplate('linktemplate',$template);	      
-	}
-	
-	function ResetLinkTemplate() {
-	  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'linktemplate.tpl';
-	  if( file_exists( $fn ) ) {
-	    $template = @file_get_contents($fn);
-	    $this->SetLinkTemplate($template);      
-	  }
-	}
-	
 
-	function SetOverrideStyle($stylesheet) {
-	  $this->SetPreference('overridestyle',$stylesheet);    
-	}
-	
+  function UninstallPostMessage() {
+    return $this->Lang('postuninstall');	
+  }
+
+  function SetOverrideStyle($stylesheet) {
+    $this->SetPreference('overridestyle',$stylesheet);    
+  }
+
   function ResetOverrideStyle() {
-	  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'override.css';
+    $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'override.css';
     if( file_exists( $fn ) ) {
       $template = @file_get_contents($fn);
       $this->SetOverrideStyle($template);      
     }
-	}
-	
-	function SetPrintTemplate($template) {
-	  $this->SetTemplate('printtemplate',$template);   
-	}
+  }
 
-	function ResetPrintTemplate() {
-	  $fn = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'printtemplate.tpl';
-    if( file_exists( $fn ) ) {
-      $template = @file_get_contents($fn);
-      $this->SetPrintTemplate($template);      
+  function GetHelp($lang='en_US') {
+    return $this->Lang('help');
+  }
+
+  function GetAuthor() {
+    return 'Morten Poulsen';
+  }
+
+  function GetAuthorEmail() {
+    return 'morten@poulsen.org';
+  }
+
+  function GetChangeLog() {
+    return $this->ProcessTemplate ('changelog.tpl'); 
+  }
+
+  public static function page_type_lang_callback($str)
+  {
+    $mod = cms_utils::get_module('CMSPrinting');
+    if( is_object($mod) ) return $mod->Lang('type_'.$str);
+  }
+
+  public static function reset_page_type_defaults(CmsLayoutTemplateType $type)
+  {
+    if( $type->get_originator() != 'CMSPrinting' ) {
+      throw new CmsLogicException('Cannot reset contents for this template type');
     }
-	}	
-	
-	function GetHelp($lang='en_US')
-	{
-		return $this->Lang('help');
-	}
 
-	function GetAuthor()
-	{
-		return 'Morten Poulsen';
-	}
+    $fn = null;
+    switch( $type->get_name() ) {
+    case 'link':
+      $fn = 'linktemplate.tpl';
+      break;
 
-	function GetAuthorEmail()
-	{
-		return 'morten@poulsen.org';
-	}
+    case 'print':
+      $fn = 'printtemplate.tpl';
+      break;
+    }
 
-	function GetChangeLog() {
-		return $this->ProcessTemplate ('changelog.tpl'); 
-	}
+    $fn = cms_join_path(dirname(__FILE__),'templates',$fn);
+    if( file_exists($fn) ) {
+      return @file_get_contents($fn);
+    }
+  }
+
 }
 
 ?>

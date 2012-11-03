@@ -89,7 +89,7 @@ try {
 			if( isset($params['type']) ) {
 				$tpl_obj->set_type($params['type']);
 			}
-			if( isset($params['dflt']) ) {
+			if( isset($params['default']) ) {
 				$tpl_obj->set_type_dflt($params['default']);
 			}
       if( isset($params['owner_id']) ) {

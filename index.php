@@ -76,6 +76,7 @@ $contentobj = '';
 $trycount = 0;
 
 cms_content_cache::get_instance();
+$tpl_cache = new CmsTemplateCache();
 
 while( $trycount < 2 ) {
   $trycount++;
@@ -150,7 +151,6 @@ while( $trycount < 2 ) {
     $smarty->assign('page_alias', $contentobj->Alias());
     $smarty->assign('position', $contentobj->Hierarchy());
     $smarty->assign('friendly_position', $gCms->variables['friendly_position']);
-    $tmp1 = new CmsTemplateCache();
 
     if( $contentobj->Secure() && (! isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ) {
       // if this page is marked to be secure, make sure we redirect to the secure page.

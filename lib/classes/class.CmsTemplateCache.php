@@ -48,7 +48,7 @@ class CmsTemplateCache
     }
     self::$_instance = TRUE;
 
-    $this->_key = md5(cmsms()->get_variable('content_id').$_SERVER['REQUEST_URI']);
+    $this->_key = md5($_SERVER['REQUEST_URI'].serialize($_GET));
     $fn = cms_join_path(TMP_CACHE_LOCATION,'template_cache');
     if( file_exists($fn) && filemtime($fn) >= time() - 3600 ) {
       $tmp = file_get_contents($fn);
@@ -67,14 +67,16 @@ class CmsTemplateCache
     // update the cache;
     $dirty = FALSE;
     $t1 = CmsLayoutTemplate::get_loaded_templates();
-    $t2 = array();
-    if( isset($this->_cache[$this->_key]['templates']) ) {
-      $t2 = $this->_cache[$this->_key]['templates'];
-    }
-    $x = array_diff($t1,$t2);
-    if( is_array($x) && count($x) ) {
-      $this->_cache[$this->_key]['templates'] = $t1;
-      $dirty = TRUE;
+    if( is_array($t1) ) {
+      $t2 = array();
+      if( isset($this->_cache[$this->_key]['templates']) ) {
+	$t2 = $this->_cache[$this->_key]['templates'];
+      }
+      $x = array_diff($t1,$t2);
+      if( is_array($x) && count($x) ) {
+	$this->_cache[$this->_key]['templates'] = $t1;
+	$dirty = TRUE;
+      }
     }
 
     $t1 = CmsLayoutTemplateType::get_loaded_types();

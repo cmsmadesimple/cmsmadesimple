@@ -715,9 +715,11 @@ class CmsLayoutTemplate
 		}
 
 		// search our preloaded template first
-		foreach( self::$_obj_cache as $tpl ) {
-			if( $tpl->get_type_id() == $t2->get_id() && $tpl->get_type_dflt() ) {
-				return $tpl;
+		if( is_array(self::$_obj_cache) && count(self::$_obj_cache) ) {
+			foreach( self::$_obj_cache as $tpl ) {
+				if( $tpl->get_type_id() == $t2->get_id() && $tpl->get_type_dflt() ) {
+					return $tpl;
+				}
 			}
 		}
 		
@@ -746,7 +748,8 @@ class CmsLayoutTemplate
 
 	public static function get_loaded_templates()
 	{
-		return array_keys(self::$_obj_cache);
+		if( count(self::$_obj_cache) )
+			return array_keys(self::$_obj_cache);
 	}
 } // end of class
 

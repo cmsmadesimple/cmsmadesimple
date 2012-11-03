@@ -72,6 +72,9 @@ $lang["stylesheet"] = "Stylesheet";
 $lang["template"] = "Template";
 $lang["templatereset"] = "The template was reset to its default value";
 $lang["templatesaved"] = "The template was saved";
+$lang['type_CMSPrinting'] = 'CMSPrinting';
+$lang['type_link'] = 'Link Template';
+$lang['type_print'] = 'Print Template';
 
 // U
 $lang["upgraded"] = "has been upgraded to version %s";

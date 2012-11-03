@@ -37,6 +37,9 @@
  */
 function cms_module_plugin($params,&$template)
 {
+  if( !is_object($template) ) {
+    stack_trace(); die();
+  }
   $smarty = $template->smarty;
   $mid_cache = cms_utils::get_app_data('mid_cache');
   if( empty($mid_cache) ) {

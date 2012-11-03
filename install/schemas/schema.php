@@ -108,7 +108,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo ilang('install_creating_index', 'admin_bookmarks', $ado_ret);
 
 
-
 	$flds = "
 		timestamp I,
 		user_id I,
@@ -200,6 +199,11 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo ilang('install_creating_index', 'content', $ado_ret);
 
 	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'index_content_by_idhier', $db_prefix."content", 'content_id, hierarchy');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'content', $ado_ret);
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_content_by_modified', $db_prefix."content", 'modified_date');
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_index', 'content', $ado_ret);
@@ -470,6 +474,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', 'module_smarty_plugins', $ado_ret);
 
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_smp_module', $db_prefix."module_smarty_plugins", 'module');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'idx_smp_module', $ado_ret);
 
 
 	$flds = "
@@ -501,7 +509,13 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
 	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', CmsLayoutTemplateType::TABLENAME, $ado_ret);
-	// todo: indexes here.
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_layout_tpl_type_1', $db_prefix.CmsLayoutTemplateType::TABLENAME, 
+					    'originator,name');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'idx_layout_tpl_type_1', $ado_ret);
+
 
 	$flds = "
          id I KEY AUTO,
@@ -528,7 +542,18 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix.CmsLayoutTemplate::TABLENAME, $flds, 
 					  $taboptarray);
 	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
 	echo ilang('install_creating_table', CmsLayoutTemplate::TABLENAME, $ado_ret);
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_layout_tpl_1', $db_prefix.CmsLayoutTemplate::TABLENAME, 'name');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'idx_layout_tpl_1', $ado_ret);
+
+	$sqlarray = $dbdict->CreateIndexSQL($db_prefix.'idx_layout_tpl_2', $db_prefix.CmsLayoutTemplate::TABLENAME, 'type_id,type_dflt');
+	$return = $dbdict->ExecuteSQLArray($sqlarray);
+	$ado_ret = ($return == 2) ? ilang('done') : ilang('failed');
+	echo ilang('install_creating_index', 'idx_layout_tpl_2', $ado_ret);
 
 	$flds = "
          id I KEY AUTO,

@@ -8,7 +8,7 @@
     <meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-12 Ted Kulp. All rights reserved." />
     <meta http-equiv="Content-Type" content="text/html; charset={$encoding}" />
 
-    {cms_stylesheet media='print' templateid=$templateid}
+    {cms_stylesheet media='print' designid=$designid}
 
     {if $overridestylesheet!=''}
     <style type="text/css">

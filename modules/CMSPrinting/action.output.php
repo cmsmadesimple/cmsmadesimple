@@ -3,6 +3,22 @@ if( !isset($gCms) ) exit;
 if( !isset($params['url']) ) exit;
 if( !isset($params['pageid']) ) exit;
 
+$template = null;
+if (isset($params['printtemplate'])) {
+  $template = trim($params['printtemplate']);
+}
+else {
+  $tpl = CmsLayoutTemplate::load_dflt_by_type('CMSPrinting::print');
+  if( !is_object($tpl) ) {
+    audit('',$this->GetName(),'No default link template found');
+    return;
+  }
+  $template = $tpl->get_name();
+}
+
+$orig_caching = $smarty->caching;
+$smarty->caching = FALSE;
+
 $url = '';
 $pdf = false;
 $script = false;
@@ -11,35 +27,32 @@ $title = '';
 $templateid='';
 $menutext='';
 $pageid;
-$config =& $gCms->GetConfig();
+$config = $gCms->GetConfig();
 
 $url             = base64_decode($params['url']);
 $pageid          = (int)$params['pageid'];
-$pdf             = (int)$params['pdf'];
-$pdf             = $pdf && $this->GetPreference('pdfenable');
 
-$script          = (int)$params['script'];
-$includetemplate = (int)$params['includetemplate'];
+$script          = (isset($params['script']))?(int)$params['script']:0;
+$includetemplate = (isset($params['includetemplate']))?(int)$params['includetemplate']:0;
 // get the output content.
 $showcontent = '';
 if( startswith($url,$config['root_url']) ) {
-  $showcontent = $this->GetURLContent($url);
+  $req = new cms_http_request();
+  $showcontent = $req->execute($url);
   if ((isset($_REQUEST["includetemplate"]) && $_REQUEST["includetemplate"]=="true") ||
-      (isset($params['includetemplate']) && $params['includetemplate']=='1') )
-    {
-      $showcontent=$this->GetBody($showcontent);
-    }
+      (isset($params['includetemplate']) && $params['includetemplate']=='1') ) {
+    $showcontent=$this->GetBody($showcontent);
+  }
 }
 
-$contentops =& $gCms->GetContentOperations();
-$content =& $contentops->LoadContentFromId($pageid);
+$contentops = $gCms->GetContentOperations();
+$content = $contentops->LoadContentFromId($pageid);
 $title = $content->Name();
-$templateid = $content->TemplateId();
 $menutext = $content->MenuText();
 
-$this->smarty->assign("title",$title);
-$this->smarty->assign("content", $showcontent);
-$this->smarty->assign("url", $url);
+$smarty->assign("title",$title);
+$smarty->assign("content", $showcontent);
+$smarty->assign("url", $url);
 $encoding=$config['default_encoding'];
 
 // kill any output that may have happened already.
@@ -47,7 +60,7 @@ $handlers = ob_list_handlers();
 for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
 
 //Printing-specific assignments
-$smarty->assign("templateid", $templateid);
+$smarty->assign("designid", $content->GetPropertyValue('design_id'));
 $smarty->assign("overridestylesheet", $this->GetPreference("overridestyle"));
 $smarty->assign("encoding", $encoding);
 $smarty->assign("rooturl", $config["root_url"]."/");
@@ -56,9 +69,11 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 header("Content-Type: " . cmsms()->get_variable('content-type') . "; charset=" .get_encoding());
 if ($script) {
   $smarty->assign("printscript", '<script type="text/javascript">window.print();</script>');
- } else {
+} else {
   $smarty->assign("printscript", '');
- }
-$str = $this->ProcessTemplateFromDatabase("printtemplate");
-echo $str;
+}
+
+echo $smarty->fetch($this->GetTemplateResource($template));
+$smarty->caching = $orig_caching;
 exit;
+?>
