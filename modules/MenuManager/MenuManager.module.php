@@ -19,62 +19,22 @@
 #$Id: News.module.php 2114 2005-11-04 21:51:13Z wishy $
 if( !isset($gCms) ) exit;
 
-class MenuManager extends CMSModule
+final class MenuManager extends CMSModule
 {
-  function GetName()
-  {
-    return 'MenuManager';
-  }
-
-  function GetFriendlyName()
-  {
-    return $this->Lang('menumanager');
-  }
-
-  function IsPluginModule()
-  {
-    return true;
-  }
-
-  function HasAdmin()
-  {
-    return false;
-  }
-
-  function VisibleToAdminUser()
-  {
-    return $this->CheckPermission('Manage Menu');
-  }
-
-  function GetVersion()
-  {
-    return '1.9';
-  }
-
-  function MinimumCMSVersion()
-  {
-    return '1.12-alpha0';
-  }
-
-  function GetAdminDescription()
-  {
-    return $this->Lang('description');
-  }
-
-  function GetAdminSection()
-  {
-    return 'layout';
-  }
-
-  function LazyLoadFrontend() 
-  { 
-    return TRUE; 
-  }
-
-  function LazyLoadAdmin()
-  {
-    return TRUE;
-  }
+  function GetName() { return 'MenuManager'; }
+  function GetFriendlyName() { return $this->Lang('menumanager'); }
+  function IsPluginModule() { return true; }
+  function HasAdmin() { return false; }
+  function GetVersion() { return '1.9'; }
+  function MinimumCMSVersion() { return '1.12-alpha0'; }
+  function GetAdminDescription() { return $this->Lang('description'); }
+  function GetAdminSection() { return 'layout'; }
+  function LazyLoadFrontend() { return TRUE; }
+  function LazyLoadAdmin() { return TRUE; }
+  function GetHelp($lang='en_US') { return $this->Lang('help'); }
+  function GetAuthor() { return 'Ted Kulp'; }
+  function GetAuthorEmail() { return 'ted@cmsmadesimple.org'; }
+  function GetChangeLog() { return file_get_contents(dirname(__FILE__).'/changelog.inc'); } 
 
   public function InitializeFrontend()
   {
@@ -117,7 +77,7 @@ class MenuManager extends CMSModule
   /**
    * Recursive function to go through all nodes and put them into a list
    */
-  function GetChildNodes(&$parentnode, &$nodelist, &$gCms, &$prevdepth, &$count, &$params, $origdepth, &$showparents, $deep = false)
+  protected function GetChildNodes(&$parentnode, &$nodelist, &$gCms, &$prevdepth, &$count, &$params, $origdepth, &$showparents, $deep = false)
   {
     $includeprefix = '';
     $excludeprefix = '';
@@ -215,7 +175,7 @@ class MenuManager extends CMSModule
     return $nadded;
   }
 
-  function & FillNode(&$content, &$node, &$nodelist, &$count, &$prevdepth, $origdepth, $deep = false, $params = array())
+  protected function & FillNode(&$content, &$node, &$nodelist, &$count, &$prevdepth, $origdepth, $deep = false, $params = array())
   {
     $onenode = new stdClass();
     $onenode->id = $content->Id();
@@ -300,7 +260,7 @@ class MenuManager extends CMSModule
     return $onenode;
   }
 
-  function nthPos($str, $needles, $n=1)
+  protected function nthPos($str, $needles, $n=1)
   {
     //  Found at: http://us2.php.net/manual/en/function.strpos.php
     //  csaba at alum dot mit dot edu
@@ -312,73 +272,16 @@ class MenuManager extends CMSModule
     $pos = -1;
     $size = strlen($str);
     if ($reverse=($n<0)) { $n=-$n; $str = strrev($str); }
-    while ($n--)
-      {
-	$bestNewPos = $size;
-	for ($i=strlen($needles)-1;$i>=0;$i--)
-	  {
-	    $newPos = strpos($str, $needles[$i], $pos+1);
-	    if ($newPos===false) $needles = substr($needles,0,$i) . substr($needles,$i+1);
-	    else $bestNewPos = min($bestNewPos,$newPos);
-	  }
-	if (($pos=$bestNewPos)==$size) return -1;
+    while ($n--) {
+      $bestNewPos = $size;
+      for ($i=strlen($needles)-1;$i>=0;$i--) {
+	$newPos = strpos($str, $needles[$i], $pos+1);
+	if ($newPos===false) $needles = substr($needles,0,$i) . substr($needles,$i+1);
+	else $bestNewPos = min($bestNewPos,$newPos);
       }
+      if (($pos=$bestNewPos)==$size) return -1;
+    }
     return $reverse ? $size-1-$pos : $pos;
-  }
-
-  function GetHelp($lang='en_US')
-  {
-    return $this->Lang('help');
-  }
-
-  function GetAuthor()
-  {
-    return 'Ted Kulp';
-  }
-
-  function GetAuthorEmail()
-  {
-    return 'ted@cmsmadesimple.org';
-  }
-
-  function GetChangeLog()
-  {
-    return file_get_contents(dirname(__FILE__).'/changelog.inc');
-  } 
-
-  function GetMenuTemplate($tpl_name)
-  {
-    $data = false;
-    if (endswith($tpl_name, '.tpl'))
-      {
-	$gCms = cmsms();
-	// template file, we're gonna have to get it from
-	// the filesystem, 
-	$fn = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
-	$fn .= $this->GetName().DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR;
-	$fn .= $tpl_name;
-	if( file_exists( $fn ) )
-	  {
-	    $data = file_get_contents($fn);
-	  }
-      }
-    else
-      {
-	$data = $this->GetTemplate($tpl_name);
-      }
-
-    return $data;
-  }
-
-  function SetMenuTemplate( $tpl_name, $content )
-  {
-    if (endswith($tpl_name, '.tpl'))
-      {
-	return false;
-      }
-
-    $this->SetTemplate( $tpl_name, $content );
-    return true;
   }
 
   final static public function smarty_cms_breadcrumbs($params,&$smarty)
@@ -388,7 +291,7 @@ class MenuManager extends CMSModule
     return cms_module_plugin($params,$smarty);
   }
 
-  public static function page_type_lang_callback($str)
+  final public static function page_type_lang_callback($str)
   {
     $mod = cms_utils::get_module('MenuManager');
     if( is_object($mod) ) return $mod->Lang('type_'.$str);
