@@ -33,7 +33,7 @@ final class Events
 { 
 	static private $_handlercache;
 
-	private static function __construct() {}
+	private function __construct() {}
 
 	/**
 	 * Inform the system about a new event that can be generated

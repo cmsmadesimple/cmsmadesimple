@@ -1,14 +1,6 @@
 <?php
 global $admin_user;
 
-//
-// User Tags
-//
-$txt = <<<EOT
-//set start to date your site was published\n\$startCopyRight='2004';\n\n// check if start year is this year\nif(date('Y') == \$startCopyRight){\n// it was, just print this year\n    echo \$startCopyRight;\n}else{\n// it wasnt, print startyear and this year delimited with a dash\n    echo \$startCopyRight.'-'. date('Y');\n}
-EOT;
-UserTagOperations::get_instance()->SetUserTag('custom_copyright',$txt,
-					      'Code to output copyright information');
 
 // 
 // Themes
