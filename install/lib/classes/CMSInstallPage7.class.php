@@ -98,8 +98,6 @@ class CMSInstallerPage7 extends CMSInstallerPage
       echo " [" . ilang('done') . "]</p>";
       echo '<p>' . ilang('install_admin_set_core_event');
 
-      Events::SetupCoreEvents();
-
       echo " [" . ilang('done') . "]</p>";
       echo '<p>' . ilang('install_admin_install_modules');
       $modops = $gCms->GetModuleOperations();

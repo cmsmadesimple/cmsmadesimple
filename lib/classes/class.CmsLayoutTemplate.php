@@ -491,16 +491,21 @@ class CmsLayoutTemplate
 	public function save()
 	{
 		if( $this->get_id() ) {
-			return $this->_update();
-		} else {
-			return $this->_insert();
+			Events::SendEvent('Core','EditTemplatePre',array(get_class($this)=>&$this));
+			$this->_update();
+			Events::SendEvent('Core','EditTemplatePost',array(get_class($this)=>&$this));
+			return;
 		}
+		Events::SendEvent('Core','AddTemplatePre',array(get_class($this)=>&$this));
+		$this->_insert();
+		Events::SendEvent('Core','AddTemplatePost',array(get_class($this)=>&$this));
 	}
 
 	public function delete()
 	{
 	  if( !$this->get_id() ) return;
 
+		Events::SendEvent('Core','DeleteTemplatePre',array(get_class($this)=>&$this));
 		$db = cmsms()->GetDb();
 		$query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::TPLTABLE.'
               WHERE tpl_id = ?';
@@ -512,6 +517,7 @@ class CmsLayoutTemplate
 
 		CmsTemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template '.$this->get_name().' Deleted');
+		Events::SendEvent('Core','DeleteTemplatePost',array(get_class($this)=>&$this));
 		unset($this->_data['id']);
 		$this->_dirty = TRUE;
 	}

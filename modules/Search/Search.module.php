@@ -24,75 +24,40 @@ define( "NON_INDEXABLE_CONTENT", "<!-- pageAttribute: NotSearchable -->" );
 
 class Search extends CMSModule
 {
-  var $_tools_loaded;
+  private $_tools_loaded;
 
-  function __construct()
+  public function __construct()
   {
     parent::__construct();
     $this->_tools_loaded = false;
   }
 
-  function load_tools()
+  private function load_tools()
   {
-    if( !$this->_tools_loaded )
-      {
-	$fn = dirname(__FILE__).'/search.tools.php';
-	include_once($fn);
-	$this->_tools_loaded = true;
-      }
+    if( !$this->_tools_loaded ) {
+      $fn = dirname(__FILE__).'/search.tools.php';
+      include_once($fn);
+      $this->_tools_loaded = true;
+    }
   }
 
-  function LazyLoadFrontend() { return TRUE; }
-  function LazyLoadAdmin() { return TRUE; }
-
-  function GetName()
-  {
-    return 'Search';
-  }
-
-  function GetFriendlyName()
-  {
-    return $this->Lang('search');
-  }
-
-  function IsPluginModule()
-  {
-    return true;
-  }
-
-  function HasAdmin()
-  {
-    return true;
-  }
-
-  /*---------------------------------------------------------
-   HandlesEvents()
-   ---------------------------------------------------------*/
-  function HandlesEvents ()
-  {
-    return true;
-  }
-
-  function GetVersion()
-  {
-    return '1.8';
-  }
-
-  function MinimumCMSVersion()
-  {
-    return '1.12-alpha0';
-  }
-
-  function GetAdminDescription()
-  {
-    return $this->Lang('description');
-  }
-
-  function VisibleToAdminUser()
-  {
-    return $this->CheckPermission('Modify Site Preferences');
-  }
-
+  public function LazyLoadFrontend() { return TRUE; }
+  public function LazyLoadAdmin() { return TRUE; }
+  public function GetName() { return 'Search'; }
+  public function GetFriendlyName() { return $this->Lang('search'); }
+  public function IsPluginModule() { return true; }
+  public function HasAdmin() { return true; }
+  public function HandlesEvents () { return true; }
+  public function GetVersion() { return '1.8'; }
+  public function MinimumCMSVersion() { return '1.12-alpha0'; }
+  public function GetAdminDescription() { return $this->Lang('description'); }
+  public function VisibleToAdminUser() { return $this->CheckPermission('Modify Site Preferences'); }
+  public function GetHelp($lang='en_US') { return $this->Lang('help'); }
+  public function GetAuthor() { return 'Ted Kulp'; }
+  public function GetAuthorEmail() { return 'ted@cmsmadesimple.org'; }
+  public function GetChangeLog() { return @file_get_contents(dirname(__FILE__).'/changelog.inc'); }
+  public function GetEventDescription( $eventname ) { return $this->lang('eventdesc-' . $eventname); }
+  public function GetEventHelp( $eventname ) { return $this->lang('eventhelp-' . $eventname); }
 
   public function InitializeAdmin()
   {
@@ -110,7 +75,6 @@ class Search extends CMSModule
     $this->CreateParameter('formtemplate','',$this->Lang('param_formtemplate'));
     $this->CreateParameter('resulttemplate','',$this->Lang('param_resulttemplate'));
   }
-
 
   public function InitializeFrontend()
   {
@@ -133,9 +97,10 @@ class Search extends CMSModule
     $this->SetParameterType('resulttemplate',CLEAN_STRING);
   }
 
-  function GetSearchHtmlTemplate()
+  protected function GetSearchHtmlTemplate()
   {
     return '
+<div id="search">
 {$startform}
 <label for="{$search_actionid}searchinput">{$searchprompt}:&nbsp;</label><input type="text" class="search-input" id="{$search_actionid}searchinput" name="{$search_actionid}searchinput" size="20" maxlength="50" value="{$searchtext}" {$hogan}/>
 {*
@@ -144,10 +109,10 @@ class Search extends CMSModule
 *}
 <input class="search-button" name="submit" value="{$submittext}" type="submit" />
 {if isset($hidden)}{$hidden}{/if}
-{$endform}';
+{$endform}</div>';
   }
 	
-  function GetResultsHtmlTemplate()
+  protected function GetResultsHtmlTemplate()
   {
     $text = <<<EOT
 <h3>{\$searchresultsfor} &quot;{\$phrase}&quot;</h3>
@@ -171,36 +136,36 @@ EOT;
     return $text;
   }
 	
-  function DefaultStopWords()
+  protected function DefaultStopWords()
   {
     return $this->Lang('default_stopwords');
   }
 
-  function RemoveStopWordsFromArray($words)
+  public function RemoveStopWordsFromArray($words)
   {
     $stop_words = preg_split("/[\s,]+/", $this->GetPreference('stopwords', $this->DefaultStopWords()));
     return array_diff($words, $stop_words);
   }
 
-  function StemPhrase($phrase)
+  public function StemPhrase($phrase)
   {
     $this->load_tools();
     return search_StemPhrase($this,$phrase);
   }
 
-  function AddWords($module = 'Search', $id = -1, $attr = '', $content = '', $expires = NULL)
+  public function AddWords($module = 'Search', $id = -1, $attr = '', $content = '', $expires = NULL)
   {
     $this->load_tools();
     return search_AddWords($this,$module,$id,$attr,$content,$expires);
   }
 
-  function DeleteWords($module = 'Search', $id = -1, $attr = '')
+  public function DeleteWords($module = 'Search', $id = -1, $attr = '')
   {
     $this->load_tools();
     return search_DeleteWords($this,$module,$id,$attr);
   }
 	
-  function DeleteAllWords($module = 'Search', $id = -1, $attr = '')
+  public function DeleteAllWords($module = 'Search', $id = -1, $attr = '')
   {
     $db = $this->GetDb();
     $db->Execute('DELETE FROM '.cms_db_prefix().'module_search_index');
@@ -209,55 +174,21 @@ EOT;
     @$this->SendEvent('SearchAllItemsDeleted',array($module, $id, $attr));
   }
 
-  function GetHelp($lang='en_US')
-  {
-    return $this->Lang('help');
-  }
-
-  function GetAuthor()
-  {
-    return 'Ted Kulp';
-  }
-
-  function GetAuthorEmail()
-  {
-    return 'ted@cmsmadesimple.org';
-  }
-
-  function GetChangeLog()
-  {
-    return @file_get_contents(dirname(__FILE__).'/changelog.inc');
-  }
-	
-  function RegisterEvents()
+  public function RegisterEvents()
   {
     $this->AddEventHandler( 'Core', 'ContentEditPost', false );
     $this->AddEventHandler( 'Core', 'ContentDeletePost', false );
     $this->AddEventHandler( 'Core', 'AddTemplatePost', false );
     $this->AddEventHandler( 'Core', 'EditTemplatePost', false );
     $this->AddEventHandler( 'Core', 'DeleteTemplatePost', false );
-    $this->AddEventHandler( 'Core', 'AddGlobalContentPost', false );
-    $this->AddEventHandler( 'Core', 'EditGlobalContentPost', false );
-    $this->AddEventHandler( 'Core', 'DeleteGlobalContentPost', false );
     $this->AddEventHandler( 'Core', 'ModuleUninstalled', false );
   }
 
-  function Reindex()
+  public function Reindex()
   {
     $this->load_tools();
     return search_Reindex($this);
   }
-
-  function GetEventDescription( $eventname )
-  {
-    return $this->lang('eventdesc-' . $eventname);
-  }
-
-  function GetEventHelp( $eventname )
-  {
-    return $this->lang('eventhelp-' . $eventname);
-  }
-	
 
   function DoEvent($originator,$eventname,&$params)
   {
@@ -265,8 +196,7 @@ EOT;
     return search_DoEvent($this, $originator, $eventname, $params);
   }
 
-
-  function HasCapability($capability,$params = array())
+  public function HasCapability($capability,$params = array())
   {
     if( strtolower($capability) == 'search' ) return TRUE;
     return FALSE;
@@ -293,7 +223,6 @@ EOT;
       return $mod->GetResultsHtmlTemplate();
     }
   }
-
 }
 
 # vim:ts=4 sw=4 noet

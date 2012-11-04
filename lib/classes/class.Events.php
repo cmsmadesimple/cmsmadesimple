@@ -33,6 +33,8 @@ final class Events
 { 
 	static private $_handlercache;
 
+	private static function __construct() {}
+
 	/**
 	 * Inform the system about a new event that can be generated
 	 *
@@ -44,14 +46,13 @@ final class Events
 	{
 		$db = cmsms()->GetDb();
 		$count = $db->GetOne('SELECT count(*) from '.cms_db_prefix().'events where originator = ? and event_name = ?', array($modulename, $eventname));
-		if ($count < 1)
-		{
+		if ($count < 1) {
 			$id = $db->GenID( cms_db_prefix()."events_seq" );
 			$q = "INSERT INTO ".cms_db_prefix()."events values (?,?,?)";
 			$db->Execute( $q, array( $modulename, $eventname, $id ));
 		}
 	}
-	
+
 
 	/**
 	 * Remove an event from the CMS system
@@ -73,8 +74,7 @@ final class Events
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RecordCount() == 0 )
-		{
+		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
 			// query failed, event not found
 			return false;
 		}
@@ -91,8 +91,8 @@ final class Events
 		event_id = ?";
 		$db->Execute( $q, array( $id ) );
 	}
-	
-	
+
+
 	/**
 	 * Trigger an event.
 	 * This function will call all registered event handlers for the event
@@ -110,30 +110,24 @@ final class Events
 		$gCms = cmsms();
 
 		$results = Events::ListEventHandlers($modulename, $eventname);
-		
-		if ($results != false)
-		{		
-			foreach( $results as $row )
-			{
-				if( isset( $row['tag_name'] ) && $row['tag_name'] != '' )
-				{
+
+		if ($results != false) {
+			foreach( $results as $row ) {
+				if( isset( $row['tag_name'] ) && $row['tag_name'] != '' ) {
 					debug_buffer('calling user tag ' . $row['tag_name'] . ' from event ' . $eventname);
 					$usertagops = $gCms->GetUserTagOperations();
 					$usertagops->CallUserTag( $row['tag_name'], $params );
 				}
-				else if( isset( $row['module_name'] ) && $row['module_name'] != '' )
-				{
+				else if( isset( $row['module_name'] ) && $row['module_name'] != '' ) {
 					// here's a quick check to make sure that we're not calling the module
 					// DoEvent function for an event originated by the same module.
-					if( $row['module_name'] == $modulename )
-					{
+					if( $row['module_name'] == $modulename ) {
 						continue;
 					}
 
 					// and call the module event handler.
 					$obj =& CMSModule::GetModuleInstance($row['module_name']);
-					if( $obj )
-					{
+					if( $obj ) {
 						debug_buffer('calling module ' . $row['module_name'] . ' from event ' . $eventname);
 						$obj->DoEvent( $modulename, $eventname, $params );
 					}
@@ -156,14 +150,13 @@ final class Events
 	{
 		$gCms = cmsms();
 		$db = $gCms->GetDb();
-		
+
 		$params['module'] = $modulename;
 		$params['event'] = $eventname;
-		
+
 		$handlers = array();
-		
-		if( !is_array(self::$_handlercache) )
-		{
+
+		if( !is_array(self::$_handlercache) ) {
 			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable FROM ".cms_db_prefix()."event_handlers eh
 				INNER JOIN ".cms_db_prefix()."events e ON e.event_id = eh.event_id
 				ORDER BY eh.handler_order ASC";
@@ -171,14 +164,12 @@ final class Events
 			self::$_handlercache = $db->GetArray( $q );
 		}
 
-		foreach (self::$_handlercache as $row)
-		{
-			if ($row['originator'] == $modulename && $row['event_name'] == $eventname)
-			{
+		foreach (self::$_handlercache as $row) {
+			if ($row['originator'] == $modulename && $row['event_name'] == $eventname) {
 				$handlers[] = $row;
 			}
 		}
-		
+
 		if (count($handlers) > 0)
 			return $handlers;
 		else
@@ -200,16 +191,14 @@ final class Events
 		$q = 'SELECT e.*, count(eh.event_id) as usage_count FROM '.cms_db_prefix().
 			'events e left outer join '.cms_db_prefix().
 			'event_handlers eh on e.event_id=eh.event_id GROUP BY e.event_id ORDER BY originator,event_name';
-		
+
 		$dbresult = $db->Execute( $q );
-		if( $dbresult == false )
-		{
+		if( $dbresult == false ) {
 			return false;
 		}
 
 		$result = array();
-		while( $row = $dbresult->FetchRow() )
-		{
+		while( $row = $dbresult->FetchRow() ) {
 			$result[] = $row;
 		}
 		return $result;
@@ -228,12 +217,10 @@ final class Events
 	 */
 	static public function AddEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false, $removable = true)
 	{
-		if( $tag_name == false && $module_handler == false )
-		{
+		if( $tag_name == false && $module_handler == false ) {
 			return false;
 		}
-		if( $tag_name != false && $module_handler != false )
-		{
+		if( $tag_name != false && $module_handler != false ) {
 			return false;
 		}
 
@@ -244,8 +231,7 @@ final class Events
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RecordCount() == 0 )
-		{
+		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
 			// query failed, event not found
 			return false;
 		}
@@ -258,19 +244,16 @@ final class Events
 		event_id = ? AND ";
 		$params = array();
 		$params[] = $id;
-		if( $tag_name != "" )
-		{
+		if( $tag_name != "" ) {
 			$q .= "tag_name = ?";
 			$params[] = $tag_name;
 		}
-		else
-		{
+		else {
 			$q .= "module_name = ?";
 			$params[] = $module_handler;
 		}
 		$dbresult = $db->Execute( $q, $params );
-		if( $dbresult != false && $dbresult->RecordCount() > 0 )
-		{
+		if( $dbresult != false && $dbresult->RecordCount() > 0 ) {
 			// hmmm, something matches already
 			return false;
 		}
@@ -280,8 +263,7 @@ final class Events
 		$q = "SELECT max(handler_order) AS newid FROM ".cms_db_prefix()."event_handlers
 		WHERE event_id = ?";
 		$dbresult = $db->Execute( $q, array( $id ) );
-		if( $dbresult != false && $dbresult->RecordCount() != 0)
-		{
+		if( $dbresult != false && $dbresult->RecordCount() != 0) {
 			$row = $dbresult->FetchRow();
 			$order = $row['newid'] + 1;
 		}
@@ -292,13 +274,11 @@ final class Events
 		$params = array();
 		$params[] = $id;
 		$q = "INSERT INTO ".cms_db_prefix()."event_handlers ";
-		if( $module_handler != false )
-		{
+		if( $module_handler != false ) {
 			$q .= '(event_id,module_name,removable,handler_order,handler_id)';
 			$params[] = $module_handler;
 		}
-		else
-		{
+		else {
 			$q .= '(event_id,tag_name,removable,handler_order,handler_id)';
 			$params[] = $tag_name;
 		}
@@ -307,8 +287,7 @@ final class Events
 		$params[] = $order;
 		$params[] = $handler_id;
 		$dbresult = $db->Execute( $q, $params );
-		if( $dbresult != false )
-		{
+		if( $dbresult != false ) {
 			return true;
 		}
 		return false;
@@ -326,13 +305,11 @@ final class Events
 	 */
 	static public function RemoveEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false )
 	{
-		if( $tag_name != false && $module_handler != false )
-		{
+		if( $tag_name != false && $module_handler != false ) {
 			return false;
 		}
 		$field = 'handler_name';
-		if( $module_handler != false )
-		{
+		if( $module_handler != false ) {
 			$field = 'module_handler';
 		}
 
@@ -343,8 +320,7 @@ final class Events
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RecordCount() == 0 )
-		{
+		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
 			// query failed, event not found
 			return false;
 		}
@@ -355,23 +331,21 @@ final class Events
 		$params = array( $id );
 		$query = "DELETE FROM ".cms_db_prefix()."event_handlers
  		          WHERE event_id = ? AND ";
-		if( $modulename != false )
-		{
+		if( $modulename != false ) {
 			$query .= 'module_name = ?';
 			$params[] = $module_handler;
 		}
-		else
-		{
+		else {
 			$query .= 'tag_name = ?';
 			$params[] = $tag_name;
 		}
 		$dbresult = $db->Execute( $query, $params );
-		if( $dbresult == false )
-		{
+		if( $dbresult == false ) {
 			return true;
 		}
 		return false;
 	}
+
 
 	/**
 	 * Clears all the event handlers for the given event.
@@ -389,8 +363,7 @@ final class Events
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RecordCount() == 0 )
-		{
+		if( $dbresult == false || $dbresult->RecordCount() == 0 ) {
 			// query failed, event not found
 			return false;
 		}
@@ -401,14 +374,13 @@ final class Events
 		$q = "DELETE FROM ".cms_db_prefix()."event_handlers 
 		WHERE event_id = ?";
 		$dbresult = $db->Execute( $q, array( $id ) );
-		if( $dbresult == false )
-		{
+		if( $dbresult == false ) {
 			return true;
 		}
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * Place to handle the help messages for core events.  Basically just going to
 	 * call out to the lang() function.
@@ -421,9 +393,8 @@ final class Events
 	{
 		return lang('event_help_'.strtolower($eventname));
 	}
-	
-	
-	
+
+
 	/**
 	 * Place to handle the description strings for core events.  Basically just going to
 	 * call out to the lang() function.
@@ -435,87 +406,7 @@ final class Events
 	static public function GetEventDescription($eventname)
 	{
 		return lang('event_desc_'.strtolower($eventname));
-	}
-	
-	/**
-	 * Used to setup all core event on system installation.
-	 *
-	 * @ignore
-	 * @return void
-	 */
-	static public function SetupCoreEvents()
-	{
-		$modulename = 'Core';
-
-		Events::CreateEvent( $modulename, 'LoginPost');
-		Events::CreateEvent( $modulename, 'LogoutPost');
-		
-		Events::CreateEvent( $modulename, 'AddUserPre');
-		Events::CreateEvent( $modulename, 'AddUserPost');
-		Events::CreateEvent( $modulename, 'EditUserPre');
-		Events::CreateEvent( $modulename, 'EditUserPost');
-		Events::CreateEvent( $modulename, 'DeleteUserPre');
-		Events::CreateEvent( $modulename, 'DeleteUserPost');
-		
-		Events::CreateEvent( $modulename, 'AddGroupPre');
-		Events::CreateEvent( $modulename, 'AddGroupPost');
-		Events::CreateEvent( $modulename, 'EditGroupPre');
-		Events::CreateEvent( $modulename, 'EditGroupPost');
-		Events::CreateEvent( $modulename, 'DeleteGroupPre');
-		Events::CreateEvent( $modulename, 'DeleteGroupPost');
-		
-		Events::CreateEvent( $modulename, 'AddStylesheetPre');
-		Events::CreateEvent( $modulename, 'AddStylesheetPost');
-		Events::CreateEvent( $modulename, 'EditStylesheetPre');
-		Events::CreateEvent( $modulename, 'EditStylesheetPost');
-		Events::CreateEvent( $modulename, 'DeleteStylesheetPre');
-		Events::CreateEvent( $modulename, 'DeleteStylesheetPost');
-		
-		Events::CreateEvent( $modulename, 'AddTemplatePre');
-		Events::CreateEvent( $modulename, 'AddTemplatePost');
-		Events::CreateEvent( $modulename, 'EditTemplatePre');
-		Events::CreateEvent( $modulename, 'EditTemplatePost');
-		Events::CreateEvent( $modulename, 'DeleteTemplatePre');
-		Events::CreateEvent( $modulename, 'DeleteTemplatePost');
-		Events::CreateEvent( $modulename, 'TemplatePreCompile');
-		Events::CreateEvent( $modulename, 'TemplatePostCompile');
-		
-		Events::CreateEvent( $modulename, 'AddGlobalContentPre');
-		Events::CreateEvent( $modulename, 'AddGlobalContentPost');
-		Events::CreateEvent( $modulename, 'EditGlobalContentPre');
-		Events::CreateEvent( $modulename, 'EditGlobalContentPost');
-		Events::CreateEvent( $modulename, 'DeleteGlobalContentPre');
-		Events::CreateEvent( $modulename, 'DeleteGlobalContentPost');
-		Events::CreateEvent( $modulename, 'GlobalContentPreCompile');
-		Events::CreateEvent( $modulename, 'GlobalContentPostCompile');
-		
-		Events::CreateEvent( $modulename, 'ContentEditPre');
-		Events::CreateEvent( $modulename, 'ContentEditPost');
-		Events::CreateEvent( $modulename, 'ContentDeletePre');
-		Events::CreateEvent( $modulename, 'ContentDeletePost');
-		
-		Events::CreateEvent( $modulename, 'AddUserDefinedTagPre');
-		Events::CreateEvent( $modulename, 'AddUserDefinedTagPost');
-		Events::CreateEvent( $modulename, 'EditUserDefinedTagPre');
-		Events::CreateEvent( $modulename, 'EditUserDefinedTagPost');
-		Events::CreateEvent( $modulename, 'DeleteUserDefinedTagPre');
-		Events::CreateEvent( $modulename, 'DeleteUserDefinedTagPost');
-		
-		Events::CreateEvent( $modulename, 'ModuleInstalled');
-		Events::CreateEvent( $modulename, 'ModuleUninstalled');
-		Events::CreateEvent( $modulename, 'ModuleUpgraded');
-		
-		Events::CreateEvent( $modulename, 'ContentStylesheet');
-		Events::CreateEvent( $modulename, 'ContentPreCompile');
-		Events::CreateEvent( $modulename, 'ContentPostCompile');
-		Events::CreateEvent( $modulename, 'ContentPostRender');
-		Events::CreateEvent( $modulename, 'SmartyPreCompile');
-		Events::CreateEvent( $modulename, 'SmartyPostCompile');
-		
-		Events::CreateEvent( $modulename, 'ChangeGroupAssignPre');
-		Events::CreateEvent( $modulename, 'ChangeGroupAssignPost');
-	}
-
+	}	
 } // class
 # vim:ts=4 sw=4 noet
 ?>

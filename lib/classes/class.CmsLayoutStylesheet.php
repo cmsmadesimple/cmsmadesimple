@@ -326,16 +326,21 @@ class CmsLayoutStylesheet
   public function save()
   {
     if( $this->get_id() ) {
-      return $this->_update();
-    } else {
-      return $this->_insert();
+			Events::SendEvent('Core','EditStylesheetPre',array(get_class($this)=>&$this));
+      $this->_update();
+			Events::SendEvent('Core','EditStylesheetPost',array(get_class($this)=>&$this));
+			return;
     }
+		Events::SendEvent('Core','AddStylesheetPre',array(get_class($this)=>&$this));
+		$this->_insert();
+		Events::SendEvent('Core','AddStylesheetPost',array(get_class($this)=>&$this));
   }
 
   public function delete()
   {
     if( !$this->get_id() ) return;
 
+		Events::SendEvent('Core','DeleteStylesheetPre',array(get_class($this)=>&$this));
     $db = cmsms()->GetDb();
     $query = 'DELETE FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.'
               WHERE css_id = ?';
@@ -347,6 +352,7 @@ class CmsLayoutStylesheet
 
     CmsTemplateCache::clear_cache();
     audit($this->get_id(),'CMSMS','Stylesheet '.$this->get_name().' Deleted');
+		Events::SendEvent('Core','DeleteStylesheetPost',array(get_class($this)=>&$this));
     unset($this->_data['id']);
     $this->_dirty = TRUE;
   }

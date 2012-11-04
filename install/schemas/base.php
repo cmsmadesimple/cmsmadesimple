@@ -108,6 +108,8 @@ UserTagOperations::get_instance()->SetUserTag('user_agent',
 //
 Events::CreateEvent('Core','LoginPost');
 Events::CreateEvent('Core','LogoutPost');
+Events::CreateEvent('Core','LoginFailed');
+
 Events::CreateEvent('Core','AddUserPre');
 Events::CreateEvent('Core','AddUserPost');
 Events::CreateEvent('Core','EditUserPre');
@@ -120,6 +122,7 @@ Events::CreateEvent('Core','EditGroupPre');
 Events::CreateEvent('Core','EditGroupPost');
 Events::CreateEvent('Core','DeleteGroupPre');
 Events::CreateEvent('Core','DeleteGroupPost');
+
 Events::CreateEvent('Core','AddStylesheetPre');
 Events::CreateEvent('Core','AddStylesheetPost');
 Events::CreateEvent('Core','EditStylesheetPre');
@@ -132,16 +135,22 @@ Events::CreateEvent('Core','EditTemplatePre');
 Events::CreateEvent('Core','EditTemplatePost');
 Events::CreateEvent('Core','DeleteTemplatePre');
 Events::CreateEvent('Core','DeleteTemplatePost');
+Events::CreateEvent('Core','AddTemplateTypePre');
+Events::CreateEvent('Core','AddTemplateTypePost');
+Events::CreateEvent('Core','EditTemplateTypePre');
+Events::CreateEvent('Core','EditTemplateTypePost');
+Events::CreateEvent('Core','DeleteTemplateTypePre');
+Events::CreateEvent('Core','DeleteTemplateTypePost');
+Events::CreateEvent('Core','AddDesignPre');
+Events::CreateEvent('Core','AddDesignPost');
+Events::CreateEvent('Core','EditDesignPre');
+Events::CreateEvent('Core','EditDesignPost');
+Events::CreateEvent('Core','DeleteDesignPre');
+Events::CreateEvent('Core','DeleteDesignPost');
+
 Events::CreateEvent('Core','TemplatePreCompile');
 Events::CreateEvent('Core','TemplatePostCompile');
-Events::CreateEvent('Core','AddGlobalContentPre');
-Events::CreateEvent('Core','AddGlobalContentPost');
-Events::CreateEvent('Core','EditGlobalContentPre');
-Events::CreateEvent('Core','EditGlobalContentPost');
-Events::CreateEvent('Core','DeleteGlobalContentPre');
-Events::CreateEvent('Core','DeleteGlobalContentPost');
-Events::CreateEvent('Core','GlobalContentPreCompile');
-Events::CreateEvent('Core','GlobalContentPostCompile');
+
 Events::CreateEvent('Core','ContentEditPre');
 Events::CreateEvent('Core','ContentEditPost');
 Events::CreateEvent('Core','ContentDeletePre');
@@ -157,7 +166,6 @@ Events::CreateEvent('Core','DeleteUserDefinedTagPost');
 Events::CreateEvent('Core','ModuleInstalled');
 Events::CreateEvent('Core','ModuleUninstalled');
 Events::CreateEvent('Core','ModuleUpgraded');
-Events::CreateEvent('Core','ContentStylesheet');
 Events::CreateEvent('Core','ContentPreCompile');
 Events::CreateEvent('Core','ContentPostCompile');
 Events::CreateEvent('Core','ContentPostRender');
@@ -167,6 +175,5 @@ Events::CreateEvent('Core','ChangeGroupAssignPre');
 Events::CreateEvent('Core','ChangeGroupAssignPost');
 Events::CreateEvent('Core','StylesheetPreCompile');
 Events::CreateEvent('Core','StylesheetPostCompile');
-Events::CreateEvent('Core','LoginFailed');
 
 ?>

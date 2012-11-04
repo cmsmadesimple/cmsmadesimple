@@ -390,9 +390,14 @@ class CmsLayoutTemplateType
   public function save()
   {
 	  if( !$this->get_id() ) {
-		  return $this->_insert();
+			Events::SendEvent('Core','AddTemplateTypePre',array(get_class($this)=>&$this));
+		  $this->_insert();
+			Events::SendEvent('Core','AddTemplateTypePost',array(get_class($this)=>&$this));
+			return;
 	  }
-	  return $this->_update();
+		Events::SendEvent('Core','EditTemplateTypePre',array(get_class($this)=>&$this));
+	  $this->_update();
+		Events::SendEvent('Core','EditTemplateTypePost',array(get_class($this)=>&$this));
   }
 
 
@@ -416,6 +421,7 @@ class CmsLayoutTemplateType
   {
 	  if( !$this->get_id() ) return;
 
+		Events::SendEvent('Core','DeleteTemplateTypePre',array(get_class($this)=>&$this));
 		$tmp = CmsLayoutTemplate::template_query(array('t:'.$this->get_id()));
 	  if( is_array($tmp) && count($tmp) ) {
 		  throw new CmsInvalidDataException('Cannot delete a template type with existing templates');
@@ -431,6 +437,7 @@ class CmsLayoutTemplateType
 	  $this->_dirty = TRUE;
 		CmsTemplateCache::clear_cache();
 		audit($this->get_id(),'CMSMS','Template Type '.$this->get_name().' Deleted');
+		Events::SendEvent('Core','DeleteTemplateTypePost',array(get_class($this)=>&$this));
 	  unset($this->_data['id']);
   }
 

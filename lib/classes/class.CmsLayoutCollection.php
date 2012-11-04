@@ -342,18 +342,25 @@ class CmsLayoutCollection
   public function save()
   {
     if( $this->get_id() ) {
-      return $this->_update();
+			Events::SendEvent('Core','EditDesignPre',array(get_class($this)=>&$this));
+      $this->_update();
+			Events::SendEvent('Core','EditDesignPost',array(get_class($this)=>&$this));
+			return;
     }
-    return $this->_insert();
+		Events::SendEvent('Core','AddDesignPre',array(get_class($this)=>&$this));
+    $this->_insert();
+		Events::SendEvent('Core','AddDesignPre',array(get_class($this)=>&$this));
   }
 
   public function delete()
   {
     if( !$this->get_id() ) return;
+
     if( $this->has_templates() ) {
       throw new CmsException('Cannot Delete a Design that has Templats Attached');
     }
 
+		Events::SendEvent('Core','DeleteDesignPre',array(get_class($this)=>&$this));
 		$db = cmsms()->GetDb();
     if( count($this->_css_assoc) ) {
       $query = 'DELETE FROM '.cms_db_prefix().self::CSSTABLE.'
@@ -376,7 +383,7 @@ class CmsLayoutCollection
     $dbr = $db->Execute($query,array($this->get_id()));
 
 		audit($this->get_id(),'CMSMS','Design '.$this->get_name().' deleted');
-
+		Events::SendEvent('Core','DeleteDesignPost',array(get_class($this)=>&$this));
     unset($this->_data['id']);
     $this->_dirty = TRUE;
   }

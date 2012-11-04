@@ -29,9 +29,6 @@ $this->RemoveEventHandler( 'Core', 'ContentDeletePost');
 $this->RemoveEventHandler( 'Core', 'AddTemplatePost');
 $this->RemoveEventHandler( 'Core', 'EditTemplatePost');
 $this->RemoveEventHandler( 'Core', 'DeleteTemplatePost');
-$this->RemoveEventHandler( 'Core', 'AddGlobalContentPost');
-$this->RemoveEventHandler( 'Core', 'EditGlobalContentPost');
-$this->RemoveEventHandler( 'Core', 'DeleteGlobalContentPost');
 $this->RemoveEventHandler( 'Core', 'ModuleUninstalled');
 
 $this->RemoveSmartyPlugin();
