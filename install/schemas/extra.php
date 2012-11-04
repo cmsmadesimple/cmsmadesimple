@@ -965,7 +965,7 @@ $contentobj->SetPropertyValue('design_id',$leftsimple_1col_theme->get_id());
 $contentobj->SetTemplateId($template_list['Left simple navigation + 1 column']);
 $contentobj->SetOwner($admin_user->id);
 $contentobj->SetParentId($content_list['Modules']);
-$contentobj->SetAlias('menu-anager-2');
+$contentobj->SetAlias('menu-manager-2');
 $contentobj->SetActive(TRUE);
 $contentobj->SetShowInMenu(TRUE);
 $contentobj->SetCachable(TRUE);

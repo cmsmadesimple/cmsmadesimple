@@ -109,6 +109,7 @@ try {
 				}
 				$tpl_obj->set_designs($design_list);
 			}
+
       $tpl_obj->save();
 
 			if( isset($params['apply']) ) {
