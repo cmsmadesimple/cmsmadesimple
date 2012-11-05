@@ -88,12 +88,12 @@ function cms_module_GetTemplateFromFile(&$modinstance, $template_name)
 	$config = $gCms->GetConfig();
 	$tpl_base  = $config['root_path'].DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
 	$tpl_base .= $modinstance->GetName().DIRECTORY_SEPARATOR.'templates';
-	$template = $tpl_base.DIRECTORY_SEPARATOR.$template_name.'.tpl';
+	$template = $tpl_base.DIRECTORY_SEPARATOR.$template_name;
+	if( !endswith($template,'.tpl') ) $template .= '.tpl';
 	if (is_file($template)) {
 		return file_get_contents($template);
 	}
-	else
-	{
+	else {
 		return null;
 	}
 }

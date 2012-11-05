@@ -15,12 +15,13 @@
     {cycle values="row1,row2" assign='rowclass'}
     {cms_action_url action=admin_edit_design design=$design->get_id() assign='edit_url'}
     {cms_action_url action=admin_delete_design design=$design->get_id() assign='delete_url'}
+    {cms_action_url action=admin_export_design design=$design->get_id() assign='export_url'}
     <tr class="{$rowclass}" onmouseover="this.className='{$rowclass}hover';" onmouseout="this.className='{$rowclass}';">
       <td><a href="{$edit_url}" title="{$mod->Lang('edit_design')}">{$design->get_id()}</a></td>
       <td><a href="{$edit_url}" title="{$mod->Lang('edit_design')}">{$design->get_name()}</a></td>
       <td>{if $design->get_default()}{admin_icon icon='true.gif' title=$mod->Lang('prompt_dflt')}{else}{admin_icon icon='false.gif' title=$mod->Lang('prompt_notdflt')}{/if}</td>
       <td><a href="{$edit_url}" title="{$mod->Lang('edit_design')}">{admin_icon icon='edit.gif'}</a></td>
-      <td>EXPORT</td>
+      <td><a href="{$export_url}" title="{$mod->Lang('export_design')}">{admin_icon icon='export.gif'}</a></td>
       <td><a href="{$delete_url}" title="{$mod->Lang('delete_design')}">{admin_icon icon='delete.gif'}</a></td>
     </tr>
   {/foreach}

@@ -42,6 +42,7 @@ class CmsLayoutTemplate
 	public function __clone()
 	{
 		if( isset($this->_data['id']) ) unset($this->_data['id']);
+		$this->_dirty = TRUE;
 	}
 
 	public function get_id()

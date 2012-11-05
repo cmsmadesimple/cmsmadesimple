@@ -34,6 +34,7 @@ class Smarty_Parser extends Smarty_CMS
 	public $id; // <- triggers error without | do search why this is needed
 	public $params; // <- triggers error without | do search why this is needed
 	private static $_instance;
+	private $_fetched_templates = array();
 	private static $_allowed_static_plugins = array('global_content','cms_lang_info');
 
 	/**
@@ -78,6 +79,41 @@ class Smarty_Parser extends Smarty_CMS
 		return self::$_instance;
 	}	
 	
+  /**
+   * fetch method
+   * NOTE: Overwrites parent
+   *
+   * @param mixed $template
+   * @param int $cache_id
+   * @param mixed $parent
+   * @param boolean $display
+   * @param boolean $merge_tpl_vars
+   * @param boolean $no_output_filter
+   * @return mixed
+   */	
+   public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
+   {
+     if( strpos($template,':') !== FALSE ) {
+       $parts = explode(':',$template,2);
+       if( $parts[0] == 'cms_template' ) {
+	 $name = $template[1];
+	 $this->_fetched_templates[] = $name;
+       }
+     }
+     return parent::fetch($template,$cache_id,$compile_id,$parent,$display,$merge_tpl_vars,$no_output_filter);
+   }
+
+   /**
+    * Retrieve the list of fetched templates from the last 'fetch' call.
+    * also resets the list of fetched templates.
+    */
+   public function get_fetched_templates()
+   {
+     $out = $this->_fetched_templates;
+     $this->_fetched_templates = array();
+     return $out;
+   }
+
     /**
      * _dflt_plugin
      *

@@ -1436,20 +1436,17 @@ abstract class ContentBase
     {
       Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
 
-      if( !is_array($this->_props) )
-	{
-	  debug_buffer('save is loading properties');
-	  $this->_load_properties();
-	}
+      if( !is_array($this->_props) ) {
+	debug_buffer('save is loading properties');
+	$this->_load_properties();
+      }
 
-      if (-1 < $this->mId)
-	{
-	  $this->Update();
-	}
-      else
-	{
-	  $this->Insert();
-	}
+      if (-1 < $this->mId) {
+	$this->Update();
+      }
+      else {
+	$this->Insert();
+      }
 
       Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
     }
@@ -1470,27 +1467,22 @@ abstract class ContentBase
       global $debug_errors;
       $db = $gCms->GetDb();
       $config = $gCms->GetConfig();
-
       $result = false;
 
-#Figure out the item_order (if necessary)
-      if ($this->mItemOrder < 1)
-	{
-	  $query = "SELECT ".$db->IfNull('max(item_order)','0')." as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-	  $row = $db->GetRow($query,array($this->mParentId));
+      // Figure out the item_order (if necessary)
+      if ($this->mItemOrder < 1) {
+	$query = "SELECT ".$db->IfNull('max(item_order)','0')." as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+	$row = $db->GetRow($query,array($this->mParentId));
 
-	  if ($row)
-	    {
-	      if ($row['new_order'] < 1)
-		{
-		  $this->mItemOrder = 1;
-		}
-	      else
-		{
-		  $this->mItemOrder = $row['new_order'] + 1;
-		}
-	    }
+	if ($row) {
+	  if ($row['new_order'] < 1) {
+	    $this->mItemOrder = 1;
+	  }
+	  else {
+	    $this->mItemOrder = $row['new_order'] + 1;
+	  }
 	}
+      }
 
       $this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
 
@@ -1520,58 +1512,49 @@ abstract class ContentBase
 					     $this->mId
 					     ));
 
-      if (!$dbresult)
-	{
-	  if (true == $config["debug"])
-	    {
-	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>Error updating content</p>\n";
-	    }
+      if (!$dbresult) {
+	if (true == $config["debug"]) {
+	  # :TODO: Translate the error message
+	  $debug_errors .= "<p>Error updating content</p>\n";
 	}
+      }
 
-      if ($this->mOldParentId != $this->mParentId)
-	{
-#Fix the item_order if necessary
-	  $query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-	  $result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
+      if ($this->mOldParentId != $this->mParentId) {
+	// Fix the item_order if necessary
+	$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+	$result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
 
-	  $this->mOldParentId = $this->mParentId;
-	  $this->mOldItemOrder = $this->mItemOrder;
+	$this->mOldParentId = $this->mParentId;
+	$this->mOldItemOrder = $this->mItemOrder;
+      }
+
+      if (isset($this->mAdditionalEditors)) {
+	$query = "DELETE FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
+	$db->Execute($query, array($this->Id()));
+
+	foreach ($this->mAdditionalEditors as $oneeditor) {
+	  $new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
+	  $query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
+	  $db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
 	}
+      }
 
-      if (isset($this->mAdditionalEditors))
-	{
-	  $query = "DELETE FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
-	  $db->Execute($query, array($this->Id()));
-
-	  foreach ($this->mAdditionalEditors as $oneeditor)
-	    {
-	      $new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
-	      $query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
-	      $db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
-	    }
+      if( is_array($this->_props) && count($this->_props) ) {
+	// :TODO: There might be some error checking there
+	$this->_save_properties();
+      }
+      else {
+	if (true == $config["debug"]) {
+	  // :TODO: Translate the error message
+	  $debug_errors .= "<p>Error updating : the content has no properties</p>\n";
 	}
-
-      if( is_array($this->_props) && count($this->_props) )
-	{
-	  // :TODO: There might be some error checking there
-	  $this->_save_properties();
-	}
-      else
-	{
-	  if (true == $config["debug"])
-	    {
-	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>Error updating : the content has no properties</p>\n";
-	    }
-	}
+      }
 
       cms_route_manager::del_static('','__CONTENT__',$this->mId);
-      if( $this->mURL != '' )
-	{
-	  $route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,null,TRUE);;
-	  cms_route_manager::add_static($route);
-	}
+      if( $this->mURL != '' ) {
+	$route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,null,TRUE);;
+	cms_route_manager::add_static($route);
+      }
     }
 
     /**
@@ -1591,24 +1574,20 @@ abstract class ContentBase
 
       $result = false;
 
-#Figure out the item_order
-      if ($this->mItemOrder < 1)
-	{
-	  $query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-	  $row = $db->Getrow($query, array($this->mParentId));
+      // Figure out the item_order
+      if ($this->mItemOrder < 1) {
+	$query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+	$row = $db->Getrow($query, array($this->mParentId));
 
-	  if ($row)
-	    {
-	      if ($row['new_order'] < 1)
-		{
-		  $this->mItemOrder = 1;
-		}
-	      else
-		{
-		  $this->mItemOrder = $row['new_order'] + 1;
-		}
-	    }
+	if ($row) {
+	  if ($row['new_order'] < 1) {
+	    $this->mItemOrder = 1;
+	  }
+	  else {
+	    $this->mItemOrder = $row['new_order'] + 1;
+	  }
 	}
+      }
 
       $newid = $db->GenID(cms_db_prefix()."content_seq");
       $this->mId = $newid;
@@ -1645,45 +1624,37 @@ abstract class ContentBase
 					     $this->mCreationDate
 					     ));
 
-      if (! $dbresult)
-	{
-	  die($db->sql.'<br/>'.$db->ErrorMsg());
-	  if ($config["debug"] == true)
-	    {
-	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>Error inserting content</p>\n";
-	    }
+      if (! $dbresult) {
+	die($db->sql.'<br/>'.$db->ErrorMsg());
+	if ($config["debug"] == true) {
+	  # :TODO: Translate the error message
+	  $debug_errors .= "<p>Error inserting content</p>\n";
 	}
+      }
 
-      if (is_array($this->_props) && count($this->_props))
-	{
-	  // :TODO: There might be some error checking there
-	  debug_buffer('save from ' . __LINE__);
-	  $this->_save_properties();
+      if (is_array($this->_props) && count($this->_props)) {
+	// :TODO: There might be some error checking there
+	debug_buffer('save from ' . __LINE__);
+	$this->_save_properties();
+      }
+      else {
+	if (true == $config["debug"]) {
+	  # :TODO: Translate the error message
+	  $debug_errors .= "<p>Error inserting : the content has no properties</p>\n";
 	}
-      else
-	{
-	  if (true == $config["debug"])
-	    {
-	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>Error inserting : the content has no properties</p>\n";
-	    }
+      }
+      if (isset($this->mAdditionalEditors)) {
+	foreach ($this->mAdditionalEditors as $oneeditor) {
+	  $new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
+	  $query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
+	  $db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
 	}
-      if (isset($this->mAdditionalEditors))
-	{
-	  foreach ($this->mAdditionalEditors as $oneeditor)
-	    {
-	      $new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
-	      $query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
-	      $db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
-	    }
-	}
+      }
 
-      if( $this->mURL != '' )
-	{
-	  $route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,'',TRUE);
-	  cms_route_manager::add_static($route);
-	}
+      if( $this->mURL != '' ) {
+	$route = CmsRoute::new_builder($this->mURL,'__CONTENT__',$this->mId,'',TRUE);
+	cms_route_manager::add_static($route);
+      }
     }
 
     /**
@@ -1811,51 +1782,45 @@ abstract class ContentBase
       $db = $gCms->GetDb();
       $result = false;
 
-      if (-1 > $this->mId)
-	{
-	  if (true == $config["debug"])
-	    {
-	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>Could not delete content : invalid Id</p>\n";
-	    }
+      if (-1 > $this->mId) {
+	if (true == $config["debug"]) {
+	  # :TODO: Translate the error message
+	  $debug_errors .= "<p>Could not delete content : invalid Id</p>\n";
 	}
-      else
-	{
-	  $query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	  $dbresult = $db->Execute($query, array($this->mId));
+      }
+      else {
+	$query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
+	$dbresult = $db->Execute($query, array($this->mId));
 
-	  if (! $dbresult)
-	    {
-	      if (true == $config["debug"])
-		{
-		  # :TODO: Translate the error message
-		  $debug_errors .= "<p>Error deleting content</p>\n";
-		}
-	    }
-
-	  // Fix the item_order if necessary
-	  $query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-	  $result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
-
-	  $cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-	  @unlink($cachefilename);
-
-	  // DELETE properties
-	  $query = 'DELETE FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
-	  $result = $db->Execute($query,array($this->mId));
-	  $this->_props = null;
-
-	  // Delete additional editors.
-	  $query = 'DELETE FROM '.cms_db_prefix().'additional_users WHERE content_id = ?';
-	  $result = $db->Execute($query,array($this->mId));
-	  $this->mAdditionalEditors = null;
-
-	  // Delete route
-	  if( $this->mURL != '' )
-	    {
-	      cms_route_manager::del_static($this->mURL);
-	    }
+	if (! $dbresult) {
+	  if (true == $config["debug"]) {
+	    # :TODO: Translate the error message
+	    $debug_errors .= "<p>Error deleting content</p>\n";
+	  }
 	}
+
+	// Fix the item_order if necessary
+	$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+	$result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
+
+	$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
+	@unlink($cachefilename);
+
+	// DELETE properties
+	$query = 'DELETE FROM '.cms_db_prefix().'content_props WHERE content_id = ?';
+	$result = $db->Execute($query,array($this->mId));
+	$this->_props = null;
+
+	// Delete additional editors.
+	$query = 'DELETE FROM '.cms_db_prefix().'additional_users WHERE content_id = ?';
+	$result = $db->Execute($query,array($this->mId));
+	$this->mAdditionalEditors = null;
+
+	// Delete route
+	if( $this->mURL != '' ) {
+	  cms_route_manager::del_static($this->mURL);
+	}
+      }
 
       Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
     }
@@ -1872,148 +1837,122 @@ abstract class ContentBase
     {
       // content property parameters
       $parameters = array('extra1','extra2','extra3','image','thumbnail');
-      foreach ($parameters as $oneparam)
-	{
-	  if (isset($params[$oneparam]))
-	    {
-	      $this->SetPropertyValue($oneparam, $params[$oneparam]);
-	    }
+      foreach ($parameters as $oneparam) {
+	if (isset($params[$oneparam])) {
+	  $this->SetPropertyValue($oneparam, $params[$oneparam]);
 	}
+      }
 
       // go through the list of base parameters
       // setting them from params
-      
+
       // title
-      if (isset($params['title']))
-	{
-	  $this->mName = $params['title'];
-	}
+      if (isset($params['title'])) {
+	$this->mName = $params['title'];
+      }
 
       // menu text
-      if (isset($params['menutext']))
-	{
-	  $this->mMenuText = $params['menutext'];
-	}
+      if (isset($params['menutext'])) {
+	$this->mMenuText = $params['menutext'];
+      }
 
       // parent id
-      if( isset($params['parent_id']) )
-	{
-	  if ($this->mParentId != $params['parent_id'])
-	    {
-	      $this->mHierarchy = '';
-	      $this->mItemOrder = -1;
-	    }
-	  $this->mParentId = $params['parent_id'];
+      if( isset($params['parent_id']) ) {
+	if ($this->mParentId != $params['parent_id']) {
+	  $this->mHierarchy = '';
+	  $this->mItemOrder = -1;
 	}
+	$this->mParentId = $params['parent_id'];
+      }
 
       // active
-      if (isset($params['active']))
-	{
-	  $this->mActive = $params['active'];
-	  if( $this->DefaultContent() )
-	    {
-	      $this->mActive = 1;
-	    }
+      if (isset($params['active'])) {
+	$this->mActive = $params['active'];
+	if( $this->DefaultContent() ) {
+	  $this->mActive = 1;
 	}
-      
+      }
+
       // show in menu
-      if (isset($params['showinmenu']))
-	{
-	  $this->mShowInMenu = $params['showinmenu'];
-	}
+      if (isset($params['showinmenu'])) {
+	$this->mShowInMenu = $params['showinmenu'];
+      }
 
       // alias
       $tmp = '';
-      if( isset($params['alias']) )
-	{
-	  $tmp = trim($params['alias']);
-	}
-      if( !$editing || isset($params['alias']) )
-	{
-	  // the alias param may not exist (depending upon permissions)
-	  // this method will set the alias to the supplied value if it is set
-	  // or auto-generate one, when adding a new page.
-	  $this->SetAlias($tmp);
-	}
+      if( isset($params['alias']) ) {
+	$tmp = trim($params['alias']);
+      }
+      if( !$editing || isset($params['alias']) ) {
+	// the alias param may not exist (depending upon permissions)
+	// this method will set the alias to the supplied value if it is set
+	// or auto-generate one, when adding a new page.
+	$this->SetAlias($tmp);
+      }
 
       // target
-      if (isset($params['target']))
-	{
-	  $val = $params['target'];
-	  if( $val == '---' )
-	    {
-	      $val = '';
-	    }
-	  $this->SetPropertyValue('target', $val);
-	} 
+      if (isset($params['target'])) {
+	$val = $params['target'];
+	if( $val == '---' ) {
+	  $val = '';
+	}
+	$this->SetPropertyValue('target', $val);
+      } 
 
       // title attribute
-      if (isset($params['titleattribute']))
-	{
-	  $this->mTitleAttribute = $params['titleattribute'];
-	}
+      if (isset($params['titleattribute'])) {
+	$this->mTitleAttribute = $params['titleattribute'];
+      }
 
       // accesskey
-      if (isset($params['accesskey']))
-	{
-	  $this->mAccessKey = $params['accesskey'];
-	}
+      if (isset($params['accesskey'])) {
+	$this->mAccessKey = $params['accesskey'];
+      }
 
       // tab index
-      if (isset($params['tabindex']))
-	{
-	  $this->mTabIndex = $params['tabindex'];
-	}
+      if (isset($params['tabindex'])) {
+	$this->mTabIndex = $params['tabindex'];
+      }
 
       // cachable
-      if (isset($params['cachable']))
-	{
-	  $this->mCachable = $params['cachable'];
-	}
-      else
-	{
-	  $this->_handleRemovedBaseProperty('cachable','mCachable');
-	}
+      if (isset($params['cachable'])) {
+	$this->mCachable = $params['cachable'];
+      }
+      else {
+	$this->_handleRemovedBaseProperty('cachable','mCachable');
+      }
 
       // secure
-      if (isset($params['secure']))
-	{
-	  $this->mSecure = $params['secure'];
-	}
-      else
-	{
-	  $this->_handleRemovedBaseProperty('secure','mSecure');
-	}
+      if (isset($params['secure'])) {
+	$this->mSecure = $params['secure'];
+      }
+      else {
+	$this->_handleRemovedBaseProperty('secure','mSecure');
+      }
 
       // url
-      if (isset($params['page_url']))
-	{
-	  $this->mURL = $params['page_url'];
-	}
-      else
-	{
-	  $this->_handleRemovedBaseProperty('page_url','mURL');
-	}
+      if (isset($params['page_url'])) {
+	$this->mURL = $params['page_url'];
+      }
+      else {
+	$this->_handleRemovedBaseProperty('page_url','mURL');
+      }
 
       // owner
-      if (isset($params["ownerid"]))
-	{
-	  $this->SetOwner($params["ownerid"]);
-	}
-	 
+      if (isset($params["ownerid"])) {
+	$this->SetOwner($params["ownerid"]);
+      }
+
       // additional editors
-      if (isset($params["additional_editors"]))
-	{
-	  $addtarray = array();
-	  if( is_array($params['additional_editors']) )
-	    {
-	      foreach ($params["additional_editors"] as $addt_user_id)
-		{
-		  $addtarray[] = $addt_user_id;
-		}
-	    }
-	  $this->SetAdditionalEditors($addtarray);
+      if (isset($params["additional_editors"])) {
+	$addtarray = array();
+	if( is_array($params['additional_editors']) ) {
+	  foreach ($params["additional_editors"] as $addt_user_id) {
+	    $addtarray[] = $addt_user_id;
+	  }
 	}
+	$this->SetAdditionalEditors($addtarray);
+      }
     }
 
     /**
@@ -2031,17 +1970,14 @@ abstract class ContentBase
       $alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 
       $base_url = $config['root_url'];
-      if( $this->Secure() )
-	{
-	  if( isset($config['ssl_url']) )
-	    {
-	      $base_url = $config['ssl_url'];
-	    }
-	  else
-	    {
-	      $base_url = str_replace('http://','https://',$base_url);
-	    }
+      if( $this->Secure() ) {
+	if( isset($config['ssl_url']) ) {
+	  $base_url = $config['ssl_url'];
 	}
+	else {
+	  $base_url = str_replace('http://','https://',$base_url);
+	}
+      }
 
       /* use root_url for default content */
       if($this->mDefaultContent) {
@@ -2049,30 +1985,25 @@ abstract class ContentBase
 	return $url;
       }
 
-      if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true)
-	{
-	  $str = $this->HierarchyPath();
-	  if( $this->mURL != '')
-	    {
-	      // we have a url path
-	      $str = $this->mURL;
-	    }
-	  $url = $base_url. '/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
+      if ($config["url_rewriting"] == 'mod_rewrite' && $rewrite == true) {
+	$str = $this->HierarchyPath();
+	if( $this->mURL != '') {
+	  // we have a url path
+	  $str = $this->mURL;
 	}
-      else if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal' && $rewrite == true)
-	{
-	  $str = $this->HierarchyPath();
-	  if( $this->mURL != '')
-	    {
-	      // we have a url path
-	      $str = $this->mURL;
-	    }
-	  $url = $base_url . '/index.php/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
+	$url = $base_url. '/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
+      }
+      else if (isset($_SERVER['PHP_SELF']) && $config['url_rewriting'] == 'internal' && $rewrite == true) {
+	$str = $this->HierarchyPath();
+	if( $this->mURL != '') {
+	  // we have a url path
+	  $str = $this->mURL;
 	}
-      else
-	{
-	  $url = $base_url . '/index.php?' . $config['query_var'] . '=' . $alias;
-	}
+	$url = $base_url . '/index.php/' . $str . (isset($config['page_extension'])?$config['page_extension']:'.html');
+      }
+      else {
+	$url = $base_url . '/index.php?' . $config['query_var'] . '=' . $alias;
+      }
       return $url;
     }
 
@@ -2139,14 +2070,12 @@ abstract class ContentBase
       if( $activeonly == false) return true;
 
       $children = $node->get_children();
-      if( $children )
-	{
-	  for( $i = 0; $i < count($children); $i++ )
-	    {
-	      $content = $children[$i]->getContent();
-	      if( $content->Active() ) return true;
-	    }
+      if( $children ) {
+	for( $i = 0; $i < count($children); $i++ ) {
+	  $content = $children[$i]->getContent();
+	  if( $content->Active() ) return true;
 	}
+      }
 
       return false;
     }
@@ -2159,24 +2088,22 @@ abstract class ContentBase
      */
     public function GetAdditionalEditors()
     {
-      if (!isset($this->mAdditionalEditors))
-	{
-	  $gCms = cmsms();
-	  $db = $gCms->GetDb();
+      if (!isset($this->mAdditionalEditors)) {
+	$gCms = cmsms();
+	$db = $gCms->GetDb();
 
-	  $this->mAdditionalEditors = array();
+	$this->mAdditionalEditors = array();
 
-	  $query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
-	  $dbresult = $db->Execute($query,array($this->mId));
+	$query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
+	$dbresult = $db->Execute($query,array($this->mId));
 
-	  while ($dbresult && !$dbresult->EOF)
-	    {
-	      $this->mAdditionalEditors[] = $dbresult->fields['user_id'];
-	      $dbresult->MoveNext();
-	    }
-
-	  if ($dbresult) $dbresult->Close();
+	while ($dbresult && !$dbresult->EOF) {
+	  $this->mAdditionalEditors[] = $dbresult->fields['user_id'];
+	  $dbresult->MoveNext();
 	}
+
+	if ($dbresult) $dbresult->Close();
+      }
       return $this->mAdditionalEditors;
     }
 
@@ -2202,31 +2129,25 @@ abstract class ContentBase
       $groupops = $gCms->GetGroupOperations();
       $allusers = $userops->LoadUsers();
       $allgroups = $groupops->LoadGroups();
-      foreach ($allgroups as $onegroup)
-	{
-	  if( $onegroup->id == 1 ) continue;
-	  $val = $onegroup->id*-1;
-	  $text .= '<option value="'.$val.'"';
-	  if( in_array($val,$addteditors) )
-	    {
-	      $text .= ' selected="selected"';
-	    }
-	  $text .= '>'.lang('group').': '.$onegroup->name."</option>";
-		   
+      foreach ($allgroups as $onegroup) {
+	if( $onegroup->id == 1 ) continue;
+	$val = $onegroup->id*-1;
+	$text .= '<option value="'.$val.'"';
+	if( in_array($val,$addteditors) ) {
+	  $text .= ' selected="selected"';
 	}
+	$text .= '>'.lang('group').': '.$onegroup->name."</option>";
+      }
 
-      foreach ($allusers as $oneuser)
-	{
-	  if ($oneuser->id != $owner_id && $oneuser->id != 1)
-	    {
-	      $text .= '<option value="'.$oneuser->id.'"';
-	      if (in_array($oneuser->id, $addteditors))
-		{
-		  $text .= ' selected="selected"';
-		}
-	      $text .= '>'.$oneuser->username.'</option>';
-	    }
+      foreach ($allusers as $oneuser) {
+	if ($oneuser->id != $owner_id && $oneuser->id != 1) {
+	  $text .= '<option value="'.$oneuser->id.'"';
+	  if (in_array($oneuser->id, $addteditors)) {
+	    $text .= ' selected="selected"';
+	  }
+	  $text .= '>'.$oneuser->username.'</option>';
 	}
+      }
 
       $text .= '</select>';
       $ret[] = $text;
@@ -2244,10 +2165,9 @@ abstract class ContentBase
     public function ShowAdditionalEditors($addteditors = '')
     {
       $ret = array();
-      if( $addteditors == '' )
-	{
-	  $addteditors = $this->GetAdditionalEditors();
-	}
+      if( $addteditors == '' ) {
+	$addteditors = $this->GetAdditionalEditors();
+      }
       return self::GetAdditionalEditorInput($addteditors,$this->Owner());
     }
 
@@ -2275,14 +2195,12 @@ abstract class ContentBase
     private function _handleRemovedBaseProperty($name,$member)
     {
       if( !is_array($this->_attributes) ) return FALSE;
-      if( !in_array($name,$this->_attributes) )
-	{
-	  if( isset($this->_prop_defaults[$name]) )
-	    {
-	      $this->$member = $this->_prop_defaults[$name];
-	      return TRUE;
-	    }
+      if( !in_array($name,$this->_attributes) ) {
+	if( isset($this->_prop_defaults[$name]) ) {
+	  $this->$member = $this->_prop_defaults[$name];
+	  return TRUE;
 	}
+      }
       return FALSE;
     }
 
@@ -2305,14 +2223,12 @@ abstract class ContentBase
     {
       if( !is_array($this->_attributes) ) return;
       $tmp = array();
-      for( $i = 0; $i < count($this->_attributes); $i++ )
-	{
-	  if( is_array($this->_attributes[$i]) && $this->_attributes[$i][0] == $name )
-	    {
-	      continue;
-	    }
-	  $tmp[] = $this->_attributes[$i];
+      for( $i = 0; $i < count($this->_attributes); $i++ ) {
+	if( is_array($this->_attributes[$i]) && $this->_attributes[$i][0] == $name ) {
+	  continue;
 	}
+	$tmp[] = $this->_attributes[$i];
+      }
       $this->_attributes = $tmp;
       $this->_prop_defaults[$name] = $dflt;
     }
@@ -2327,10 +2243,9 @@ abstract class ContentBase
      */
     protected function AddBaseProperty($name,$priority,$is_required = 0,$type = 'string')
     {
-      if( !is_array($this->_attributes) )
-	{
-	  $this->_attributes = array();
-	}
+      if( !is_array($this->_attributes) ) {
+	$this->_attributes = array();
+      }
 
       $this->_attributes[] = array($name,$priority,$is_required);
     }
@@ -2353,11 +2268,10 @@ abstract class ContentBase
     protected function is_known_property($str)
     {
       $tmp = array();
-      foreach( $this->_attributes as $one )
-	{
-	  $tmp[] = $one[0];
-	}
-	  
+      foreach( $this->_attributes as $one ) {
+	$tmp[] = $one[0];
+      }
+
       return in_array($str,$tmp);
     }
 
@@ -2371,79 +2285,68 @@ abstract class ContentBase
     {
       // get our required attributes
       $basic_attributes = array();
-      foreach( $this->_attributes as $one )
-	{
-	  if( $one[2] == 1 ) $basic_attributes[] = $one;
-	}
+      foreach( $this->_attributes as $one ) {
+	if( $one[2] == 1 ) $basic_attributes[] = $one;
+      }
 
       // merge in preferred basic attributes
       $tmp = get_site_preference('basic_attributes');
-      if( !empty($tmp) )
-	{
-	  $tmp = explode(',',$tmp);
-	  foreach( $tmp as $basic )
-	    {
-	      $found = NULL;
-	      foreach( $this->_attributes as $one )
-		{
-		  if( $one[0] == $basic ) {
-		    $found = $one;
-		    break;
-		  }
-		}
-	      if( $found )
-		{
-		  $basic_attributes[] = $found;
-		}
+      if( !empty($tmp) ) {
+	$tmp = explode(',',$tmp);
+	foreach( $tmp as $basic ) {
+	  $found = NULL;
+	  foreach( $this->_attributes as $one ) {
+	    if( $one[0] == $basic ) {
+	      $found = $one;
+	      break;
 	    }
+	  }
+	  if( $found ) {
+	    $basic_attributes[] = $found;
+	  }
 	}
+      }
 
       $attrs = $basic_attributes;
-      if( $negative )
-	{
-	  // build a new list of all properties... except those in the basic_attributes
-	  $attrs = array();
-	  foreach( $this->_attributes as $one )
-	    {
-	      $found = 0;
-	      foreach( $basic_attributes as $basic )
-		{
-		  if( $basic[0] == $one[0] )
-		    {
-		      $found = 1;
-		    }
-		}
-
-	      if( !$found )
-		{
-		  $attrs[] = $one;
-		}
+      if( $negative ) {
+	// build a new list of all properties... except those in the basic_attributes
+	$attrs = array();
+	foreach( $this->_attributes as $one ) {
+	  $found = 0;
+	  foreach( $basic_attributes as $basic ) {
+	    if( $basic[0] == $one[0] ) {
+	      $found = 1;
 	    }
+	  }
+
+	  if( !$found ) {
+	    $attrs[] = $one;
+	  }
 	}
+      }
 
       // remove any duplicates
       $tmp = array();
-      foreach( $attrs as $one )
-	{
-	  $found = 0;
-	  foreach( $tmp as $t1 )
-	    {
-	      if( $one[0] == $t1[0] )
-		{
-		  $found = 1;
-		  break;
-		}
-	    }
-	  if( !$found )
-	    {
-	      $tmp[] = $one;
-	    }
+      foreach( $attrs as $one ) {
+	$found = 0;
+	foreach( $tmp as $t1 ) {
+	  if( $one[0] == $t1[0] ) {
+	    $found = 1;
+	    break;
+	  }
 	}
+	if( !$found ) {
+	  $tmp[] = $one;
+	}
+      }
       $attrs = $tmp;
 
       // sort the attributes on the 2nd element...
-      $fn = create_function('$a,$b','if( $a[1] < $b[1] ) return -1; else if( $a[1] == $b[1] ) return 0; else return $b;');
-      usort($attrs,$fn);
+      usort($attrs,function($a,$b) {
+	      if( $a[1] < $b[1] ) return -1;
+	      else if( $a[1] == $b[1] ) return 0;
+	      else return 1;
+      });
 
       $tmp = $this->display_admin_attributes($attrs,$adding);
       return $tmp;
