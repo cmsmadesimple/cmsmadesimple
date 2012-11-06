@@ -9,6 +9,7 @@ Core - General
   - Fixes to loading of UDT's.... now load UDT's for all requests.
   - Fix displaying of page title in NCleanGrey admin theme.
   - Fixes to preview and submit in editcontent with lots of content blocks (particularly content_image}
+  - The cms_stylesheet plugin is no longer cachable by smarty.
 
 Version 1.11.2.1
 -----------------------------
