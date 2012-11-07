@@ -39,11 +39,13 @@
 <td width="50%">
 <div class="pageoverflow" id="filter_box">
   <p class="pagetext">{$mod->Lang('filter')}:</p>
-  <p class="pageinput" style="min-height: 3em; max-height: 7em; overflow: auto;">
+  <p class="pageinput" style="min-height: 3em; max-height: 10em; overflow: auto;">
     <input id="filter_all" type="checkbox" name="{$actionid}slaves[]" value="-1"/>&nbsp;<label for="filter_all" title="{$mod->Lang('desc_filter_all')}">{$mod->Lang('all')}</label><br/>
     {foreach from=$slaves item='slave' name='slaves'}
       <input class="filter_toggle" id="{$slave.class}" type="checkbox" name="{$actionid}slaves[]" value="{$slave.class}" {if isset($saved_search.slaves) && in_array($slave.class,$saved_search.slaves)}checked="checked"{/if}/>&nbsp;<label for="{$slave.class}" title="{$slave.description}">{$slave.name}</label>{if !$smarty.foreach.slaves.last}<br/>{/if}
     {/foreach}
+    <br/><br/>
+    <input type="checkbox" id="search_desc" name="{$actionid}search_descriptions" value="1">&nbsp;<label for="search_desc">{$mod->lang('lbl_search_desc')}</label>
   </p>
 </div>
 </td>

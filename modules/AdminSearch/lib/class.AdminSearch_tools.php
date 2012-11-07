@@ -15,7 +15,6 @@ final class AdminSearch_tools
       // get module results.
       $mod = cms_utils::get_module('AdminSearch');
       $modulelist = $mod->GetModulesWithCapability('AdminSearch');
-      debug_to_log($modulelist);
       if( is_array($modulelist) && count($modulelist) ) {
 	foreach( $modulelist as $module_name ) {
 	  $mod = cms_utils::get_module($module_name);

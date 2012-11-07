@@ -33,7 +33,8 @@ EOT;
 $lang['lbl_content_search'] = 'Search Content Pages';
 $lang['lbl_css_search'] = 'Search Stylesheets';
 $lang['lbl_gcb_search'] = 'Search Global Content Blocks';
-$lang['lbl_template_search'] = 'Search Page Templates';
+$lang['lbl_search_desc'] = 'Search Descriptions <em>(where applicable)</em>';
+$lang['lbl_template_search'] = 'Search Templates';
 
 // M
 $lang['moddescription'] = 'A utility to search the database tables for rows containing certain text. Useful for finding where certain styles, tags, or modules are used.';

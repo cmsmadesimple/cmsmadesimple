@@ -27,23 +27,29 @@ final class AdminSearch_css_slave extends AdminSearch_slave
 
     $db = cmsms()->GetDb();
     $query = 'SELECT *
-              FROM '.cms_db_prefix().'css
-              WHERE css_text LIKE ?';
+              FROM '.cms_db_prefix().CmsLayoutStylesheet::TABLENAME.'
+              WHERE content LIKE ?';
     $str = '%'.$this->get_text().'%';
-    $dbr = $db->GetCol($query,array($str));
+    $parms = array($str);
+    if( $this->search_descriptions() ) {
+      $query .= ' OR description LIKE ?';
+      $parms[] = $str;
+    }
+    $dbr = $db->GetArray($query,$parms);
     if( is_array($dbr) && count($dbr) ) {
       $output = array();
       $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 
-      $gcbops = cmsms()->GetGlobalContentOperations();
       foreach( $dbr as $row ) {
-	$one = $row['css_id'];
+	$one = $row['id'];
 
+	debug_to_log($row);
 	// here we could actually have a smarty template to build the description.
-	$tmp = array('title'=>$row['css_name'],
-		     'description'=>$row['css_name'],
-		     'edit_url'=>"editcss.php{$urlext}&amp;css_id=$one");
-
+	$mod = cms_utils::get_module('DesignManager');
+	$url = $mod->create_url('m1_','admin_edit_css','',array('css'=>$one));
+	$tmp = array('title'=>$row['name'],
+		     'description'=>$row['description'],
+		     'edit_url'=>$url);
 	$output[] = $tmp;
       }
 
