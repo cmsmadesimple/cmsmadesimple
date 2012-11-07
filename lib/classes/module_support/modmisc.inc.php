@@ -89,8 +89,6 @@ function cms_module_GetHelpPage(&$modinstance)
 			$help = '';
 			if( isset($oneparam['help']) ) {
 				$help = $oneparam['help'];
-			} else if( $oneparam['name'] == 'lang' ) {
-				$help = lang('module_param_lang');
 			}
 			$str .= $oneparam['name'].'="'.$oneparam['default'].'" - '.$help.'</li>';
 		}

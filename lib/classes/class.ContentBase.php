@@ -2453,16 +2453,14 @@ abstract class ContentBase
 	  break;
 
 	case 'page_url':
-	  if( !$this->DefaultContent() )
-	    {
-	      $str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
-	      $prompt = '<label for="page_url">'.lang('page_url').'</label>:';
-	      if( get_site_preference('content_mandatory_urls',0) )
-		{
-		  $prompt = '*'.$prompt;
-		}
-	      return array($prompt,$str,lang('help_page_url'));
+	  if( !$this->DefaultContent() ) {
+	    $str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
+	    $prompt = '<label for="page_url">'.lang('page_url').'</label>:';
+	    if( get_site_preference('content_mandatory_urls',0) ) {
+	      $prompt = '*'.$prompt;
 	    }
+	    return array($prompt,$str,lang('help_page_url'));
+	  }
 	  break;
 
 	case 'image':

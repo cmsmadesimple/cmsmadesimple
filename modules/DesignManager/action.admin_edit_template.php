@@ -81,6 +81,26 @@ try {
 
     if( isset($params['submit']) || isset($params['apply']) ) {
 
+			$parser = cmsms()->get_template_parser(); 
+			cms_utils::set_app_data('tmp_template',$params['contents']);
+
+			try {
+				$parser->fetch('cms_template:appdata;tmp_template'); // do the magic.
+			} 
+			catch ( SmartyCompilerException $e ) {
+				$error .= "<li>".$e->getMessage().'</li>';
+				$validinfo = false;
+			}
+
+			$contentBlocks = CMS_Content_Block::get_content_blocks();
+			if( !is_array($contentBlocks) || count($contentBlocks) == 0 ) {
+				throw new CmsEditContentException('No content blocks defined in template');
+			}
+			if( !isset($contentBlocks['content_en']) ) {
+				throw new CmsEditContentException('No default content block {content} or {content block=\'content_en\'} defined in template');
+			}
+			// if we got here, we're golden.
+
       $tpl_obj->set_name($params['name']);
       $tpl_obj->set_content($params['contents']);
 			if( isset($params['description']) ) {

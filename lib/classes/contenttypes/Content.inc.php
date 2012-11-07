@@ -439,66 +439,56 @@ class Content extends ContentBase
 		static $_designlist;
 		static $_templates;
 		if( $_designs == null ) {
-			$_templates = CmsLayoutTemplate::template_query(array('as_list'=>1));
+			$_tpl = CmsLayoutTemplate::template_query(array('as_list'=>1));
+			if( is_array($_tpl) && count($_tpl) > 0 ) {
+				$_templates = array();
+				foreach( $_tpl as $tpl_id => $tpl_name ) {
+					$_templates[] = array('key'=>$tpl_id,'value'=>$tpl_name,'title'=>'foo');
+				}
+			}
 			$_designs = CmsLayoutCollection::get_all();
 			$_designlist = array();
-			$_designtree = array();
 			foreach( $_designs as $one_design ) {
-				$tmp1 = $one_design->get_templates();
-				if( !is_array($tmp1) || count($tmp1) == 0 ) continue;
 				$_designlist[$one_design->get_id()] = $one_design->get_name();
-				$tmp2 = array();
-				foreach( $tmp1 as $one_tpl_id ) {
-					$tmp2[$one_tpl_id] = $_templates[$one_tpl_id];
-				}
-				$_designtree[$one_design->get_id()] = $tmp2;
 			}
 		}
 		
 		switch($one) {
 		case 'design_id':
-			$out = '';
-			if( is_array($_designlist) && count($_designlist) ) {
-				$out = CmsFormUtils::create_dropdown('design_id',$_designlist,
-													 $this->GetPropertyValue('design_id'),
-													 array('id'=>'design_id'));
-				return array('<label for="design_id">*'.lang('design').':</label>', 
-							 $out.'<br/>'.lang('info_editcontent_design'));
+			// get the dflt/current design id.
+			try {
+				$dflt_design = CmsLayoutCollection::load_default();
+				$dflt_design_id = $dflt_design->get_id();
+				$design_id = $this->GetPropertyValue('design_id');
+				if( $design_id < 1 ) $design_id = $dflt_design_id;
+
+				$out = '';
+				if( is_array($_designlist) && count($_designlist) ) {
+					$out = CmsFormUtils::create_dropdown('design_id',$_designlist,
+														 $this->GetPropertyValue('design_id'),
+														 array('id'=>'design_id'));
+					return array('<label for="design_id">*'.lang('design').':</label>', 
+								 $out,lang('info_editcontent_design'));
+				}
+			}
+			catch( CmsException $e ) {
+				// nothing here yet.
 			}
 			break;
 
 		case 'template':
-			$tmp = json_encode($_designtree);
-			$out = <<<TPLJS
-<script type="text/javascript">
-var _tree = '{$tmp}';
-var _seltpl  = '{$this->mTemplateId}';
-function _update_template_list(design_id)
-{
-	var tree = $.parseJSON(_tree);
-    $.each(tree,function(k,v){
-     if( k == design_id ) {
- 	   // clear the template list
-	   $('#template_id').html('');
-  	   $.each(v,function(k,v2){
-	     // add items.
-	     $('#template_id').append('<option value="'+k+'">'+v2+'</option>');
-	   });
-       $('#template_id').val(_seltpl);
-     }
-    });
-}
-$(document).ready(function(){
-  _update_template_list($('#design_id').val());
-  $('#design_id').change(function(){
-    _update_template_list($(this).val());
-  });
-});
-</script>
-TPLJS;
-			$out .= '<select name="template_id" id="template_id">';
-			$out .= '</select><br/>'.lang('info_editcontent_template');
-			return array('<label for="template_id">*'.lang('template').':</label>',$out);
+			try {
+				$dflt_tpl = CmsLayoutTemplate::load_dflt_by_type('__CORE__::page');
+				$template_id = $this->TemplateId();
+				if( $template_id < 1 ) $template_id = $dflt_tpl->get_id();
+				$out = CmsFormutils::create_dropdown('template_id',$_templates,$template_id);
+				return array('<label for="template_id">*'.lang('template').':</label>',
+							 $out,lang('info_editcontent_template'));
+			}
+			catch( CmsException $e ) {
+				// nothing here yet.
+			}
+			break;
 
 		case 'pagemetadata':
 			return array('<label for="id_pagemetadata">'.lang('page_metadata').':</label>',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
@@ -512,7 +502,8 @@ TPLJS;
 			if( $searchable == '' ) $searchable = 1;
 			return array('<label for="id_searchable">'.lang('searchable').':</label>',
 						 '<input type="hidden" name="searchable" value="0"/>
-                          <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').' /><br/>'.lang('help_page_searchable'));
+                          <input id="id_searchable" type="checkbox" name="searchable" value="1" '.($searchable==1?'checked="checked"':'').'/>',
+						 lang('help_page_searchable'));
 
 		case 'disable_wysiwyg':
 			$disable_wysiwyg = $this->GetPropertyValue('disable_wysiwyg');

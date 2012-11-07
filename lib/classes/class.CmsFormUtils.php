@@ -3,22 +3,33 @@
 class CmsFormUtils {
   private function __construct() {}
 
-  private static function create_option($key,$value,$selected = '') 
+  private static function create_option($key,$value,$selected = '',$title = '') 
   {
     $out = '';
     if( is_array($value) ) {
-      $out .= "<optgroup value=\"$value\">\n";
-      foreach( $value as $key => $value ) {
-	$out .= self::create_option($key,$value);
+      if( isset($value['key']) && isset($value['value']) ) {
+	// hash with key, value, and optional title.
+	$title2 = '';
+	if( isset($value['title']) ) $title2 = $value['title'];
+	return self::create_option($value['key'],$value['value'],$selected,$title2);
+      }
+      else {
+	// array of options
+	$out .= "<optgroup value=\"$value\">\n";
+	foreach( $value as $key => $value ) {
+	  $out .= self::create_option($key,$value,$selected);
+	}
       }
       $out .= "</optgroup>\n";
     }
     else {
+      $addtext = '';
+      if( $title != '' ) $addtext=" title=\"{$title}\"";
       if( $selected == $key ) {
-	$out .= "<option value=\"$key\" selected=\"selected\">$value</option>\n";
+	$out .= "<option value=\"$key\" selected=\"selected\"{$addtext}>$value</option>\n";
       }
       else {
-	$out .= "<option value=\"$key\">$value</option>\n";
+	$out .= "<option value=\"$key\"{$addtext}>$value</option>\n";
       }
     }
     return $out;

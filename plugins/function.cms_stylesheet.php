@@ -20,7 +20,7 @@
 	Main function
 **********************************************************/
 
-function smarty_function_cms_stylesheet($params, &$template)
+function smarty_cms_function_cms_stylesheet($params, &$template)
 {
 	#---------------------------------------------
 	# Initials
