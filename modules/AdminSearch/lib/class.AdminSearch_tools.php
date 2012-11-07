@@ -52,5 +52,11 @@ final class AdminSearch_tools
       return unserialize($data);
     }
   }
+
+  public function summarize($text,$len = 255)
+  {
+    $text = strip_tags($text);
+    return substr($text,0,$len);
+  }
 }
 ?>

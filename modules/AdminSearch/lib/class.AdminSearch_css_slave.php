@@ -48,7 +48,7 @@ final class AdminSearch_css_slave extends AdminSearch_slave
 	$mod = cms_utils::get_module('DesignManager');
 	$url = $mod->create_url('m1_','admin_edit_css','',array('css'=>$one));
 	$tmp = array('title'=>$row['name'],
-		     'description'=>$row['description'],
+		     'description'=>AdminSearch_tools::summarize($row['description']),
 		     'edit_url'=>$url);
 	$output[] = $tmp;
       }
