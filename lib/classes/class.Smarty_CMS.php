@@ -119,8 +119,11 @@ class Smarty_CMS extends SmartyBC
 			$this->autoloadFilters();
 
 			// compile check can only be enabled, if using smarty cache... just for safety.
-			if( get_site_preference('use_smartycache',0) )
-				$this->setCompileCheck(get_site_preference('use_smartycompilecheck',1));
+			if( get_site_preference('use_smartycache',0) ) {
+			  if( version_compare(phpversion(),'5.3') >= 0 ) {
+			    $this->setCompileCheck(get_site_preference('use_smartycompilecheck',1));
+			  }
+			}
 			
 		}
 		else if(cmsms()->test_state(CmsApp::STATE_ADMIN_PAGE)) {

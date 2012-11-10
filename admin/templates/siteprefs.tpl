@@ -410,7 +410,7 @@
 			  {html_options options=$yesno selected=$use_smartycache}
 			</select>
 			<br/>
-			{'info_smarty_caching'|lang}
+			{'info_smarty_caching2'|lang}
 		  </p>
 		</div>
 		<div class="pageoverflow">

@@ -210,15 +210,11 @@ try {
 
 	$smarty->set_global_cacheid('p'.$contentobj->Id());
 	$uid = get_userid(FALSE);
-	if( $contentobj->Cachable() && $showtemplate && !$uid && get_site_preference('use_smartycache',0) )
-	{
-		// this content is cachable...  so enable smarty caching of this page data, for this user.
-		$smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
-	}
-	else
-	{
-		// do not cache anything on this page... also means we have to get rid of any cached data for this page.
-		//$smarty->clearCache(null);
+	if( $contentobj->Cachable() && $showtemplate && !$uid && get_site_preference('use_smartycache',0) ) {
+	  if( version_compare(phpversion(),'5.3') >= 0 ) {
+	    // this content is cachable...  so enable smarty caching of this page data, for this user.
+	    $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
+	  }
 	}
 
 	if( !$showtemplate )
