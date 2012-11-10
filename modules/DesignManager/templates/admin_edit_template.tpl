@@ -4,9 +4,6 @@ $(document).ready(function(){
     var x = $(this).attr('name');
     $('#'+x).dialog();
   });
-  $('#tpl_setall').live('click',function(){
-    return confirm('{$mod->Lang('confirm_template_setall')}');
-  });
 
   $('#applybtn').live('click',function(e){
     // serialize the form

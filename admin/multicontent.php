@@ -393,8 +393,19 @@ else
 		$pages[] = array('name'=>$one->Name(),'hierarchy'=>$one->Hierarchy());
 		$idlist[] = $one->Id();
 	      }
-	    $templateops = $gCms->GetTemplateOperations();
-	    $smarty->assign('input_template',$templateops->TemplateDropdown());
+	    
+	    $_templates = null;
+	    {
+	      $tmp1 = CmsLayoutTemplate::template_query(array('as_list'=>1));
+	      if( is_array($tmp1) && count($tmp1) > 0 ) {
+		$_templates = array();
+		foreach( $tmp1 as $tpl_id => $tpl_name ) {
+		  $_templates[] = array('key'=>$tpl_id,'value'=>$tpl_name,'title'=>'foo');
+		}
+	      }
+	    }
+	    $out = CmsFormUtils::create_dropdown('template_id',$_templates,-1);
+	    $smarty->assign('input_template',$out);
 	    $smarty->assign('pages',$pages);
 	    $smarty->assign('idlist',$idlist);
 	    $smarty->assign('text_settemplate',lang('text_settemplate'));
@@ -405,24 +416,54 @@ else
 	    $smarty->assign('formurl',$thisurl);
 	    echo $smarty->fetch('multicontent_template.tpl');
 	  }
-        else if ($action == 'dosettemplate')
-	  {
-	    $template_id = (int)$_POST['template_id'];
-		$modifyall = check_permission($userid, 'Modify Any Page');
-	    foreach( $nodelist as $node )
-	      {
-		$permission = ($modifyall || check_ownership($userid, $node->Id()) || 
-			       check_authorship($userid, $node->Id()) || 
-			       check_permission($userid, 'Manage All Content'));
 
-		if( $permission )
-		  {
-		    $node->SetTemplateId($template_id);
-		    $node->Save();
-		  }
+        else if ($action == 'dosettemplate') {
+	  
+	  try {
+	    $template_id = (int)$_POST['template_id'];
+
+	    // first, check if there are any content blocks in this template...
+	    // if not, then we're not gonna let em do this.
+	    $parser = cmsms()->get_template_parser();
+	    $parser->fetch('cms_template:'.$template_id);
+	    $blocks = CMS_Content_Block::get_content_blocks();
+	    if( !is_array($blocks) || count($blocks) == 0 ) {
+	      throw new CmsException('error_no_content_blocks');
+	    }
+
+	    $fnd = 0;
+	    foreach( $blocks as $one ) {
+	      if( $one['id'] == 'content_en' ) {
+		$fnd = 1;
+		break;
 	      }
+	    }
+	    if( !$fnd ) {
+	      throw new CmsException('error_no_default_content_block');
+	    }
+
+	    if( !isset($_POST['check1']) || !isset($_POST['check2']) ) {
+	      throw new CmsException('error_notconfirmed');
+	    }
+
+	    // ready to go.
+	    $modifyall = check_permission($userid, 'Modify Any Page') || check_permission($userid,'Manage All Content');
+	    foreach( $nodelist as $node ) {
+	      $permission = ($modifyall || check_ownership($userid, $node->Id()) || 
+			     check_authorship($userid, $node->Id()));
+	      
+	      if( $permission ) {
+		$node->SetTemplateId($template_id);
+		$node->Save();
+	      }
+	    }
+	    audit($template_id,'Core','Multiple pages set to use template '.$template_id);
 	    redirect('listcontent.php'.$urlext.'&message=bulk_success');
 	  }
+	  catch( CmsException $e ) {
+	    redirect('listcontent.php'.$urlext.'&error='.$e->GetMessage());
+	  }
+	}
 	  
 	  else if ($action == 'changeowner')
 	  {

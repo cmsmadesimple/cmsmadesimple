@@ -62,29 +62,14 @@ try {
 
   try {
 		if( isset($params['tpl_setall']) ) {
-			if( !$this->CheckPermission('Modify Templates') ) {
-				throw new CmsException($this->Lang('error_permission'));
-			}
-			
-			$db = cmsms()->GetDb();
-			$time = $db->DbTimeStamp(time());
-			$query = 'UPDATE '.cms_db_prefix()."content 
-                SET template_id = ?, modified_date = $time";
-			$dbr = $db->Execute($query,array($tpl_obj->get_id()));
-			if( !$dbr ) {
-				throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
-			}
-
-			$this->SetMessage($this->Lang('msg_allpagesupdated'));
-			$this->RedirectToAdminTab();
+			$this->Redirect($id,'admin_set_all_pages',$returnid,array('tpl'=>$params['tpl']));
 		}
 
     if( isset($params['submit']) || isset($params['apply']) ) {
 
-			$parser = cmsms()->get_template_parser(); 
-			cms_utils::set_app_data('tmp_template',$params['contents']);
-
 			try {
+				$parser = cmsms()->get_template_parser(); 
+				cms_utils::set_app_data('tmp_template',$params['contents']);
 				$parser->fetch('cms_template:appdata;tmp_template'); // do the magic.
 			} 
 			catch ( SmartyCompilerException $e ) {

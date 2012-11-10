@@ -281,9 +281,10 @@ class CmsLayoutTemplateType
 	  if( !$this->get_name() ) {
 		  throw new CmsInvalidDataException('Invalid Type Name');
 	  }
-//     if( !$this->get_owner() || $this->get_owner() <= 0 ) {
-//       throw new CmsInvalidDataException('Invalid Owner');
-//     }
+		if( !preg_match('/[A-Za-z0-9_\,\.\ ]/',$this->get_name()) ) {
+			throw new CmsInvalidDataException('Name must contain only numbers letters, spaces and underscores.');
+		}
+
 	  if( !$is_insert ) {
 		  if( !isset($this->_data['id']) || (int)$this->_data['id'] <= 0 ) {
 			  throw new CmsInvalidDataException('id is not set');

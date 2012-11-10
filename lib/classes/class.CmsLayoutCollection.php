@@ -210,6 +210,10 @@ class CmsLayoutCollection
     if( $this->get_name() == '' )
       throw new CmsInvalidDataException('A Design must have a name');
 
+		if( !preg_match('/[A-Za-z0-9_\,\.\ ]/',$this->get_name()) ) {
+			throw new CmsInvalidDataException('Name must contain only numbers letters, spaces and underscores.');
+		}
+
     if( count($this->_css_assoc) ) {
       $t1 = array_unique($this->_css_assoc);
       if( count($t1) != count($this->_css_assoc) ) {

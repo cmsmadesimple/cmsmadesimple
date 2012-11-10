@@ -22,6 +22,9 @@ $lang['confirm_delete_css_2'] = 'Yes, I am <strong>really</strong> sure I want t
 $lang['confirm_delete_template_1'] = 'Yes, I am sure I want to delete this template';
 $lang['confirm_delete_template_2'] = 'Yes, I am <strong>really</strong> sure I want to delete this template';
 $lang['confirm_reset_type'] = 'Reset the default content of this type to the version distributed with the system (or module)?\n\nResetting this will only effect newly created templates of this type.  No existing templates will be adjusted.';
+$lang['confirm_setall_1'] = 'Please confirm that you wish to set all content pages to use this template';
+$lang['confirm_setall_2'] = 'Yes, I am sure';
+$lang['confirm_setall_3'] = 'Yes, I am <strong>really</strong> sure';
 $lang['copy_template'] = 'Copy Template';
 $lang['close'] = 'Close';
 $lang['create'] = 'Create';
@@ -88,7 +91,6 @@ $lang['info_editcss_mediaquery_tab'] = '<strong>Warning:</strong> If both the me
 $lang['info_edittemplate_templates_tab'] = 'Select the templates that should be attached to the design.  Attaching a template to a design is used only for organizational and export purposes.  Order is not important.';
 $lang['info_edittemplate_stylesheets_tab'] = 'Select the stylesheets that should be attached to the design.  Attaching a template to a design is used only for organizational and export purposes.  The order is used for determining the order in which stylesheets are output in the resulting html.';
 $lang['info_template_delete'] = 'This template may be used by a working system.  Deleting it may break an otherwise working website.  Use caution!';
-$lang['info_template_used'] = 'This template is in use by one or more pages, and/or designs.  It may also be included by other templates.  Deleting this template may break a working website. <strong>Use Extreme Caution!</strong>';
 
 #J
 
@@ -197,6 +199,7 @@ $lang['prompt_with_selected'] = 'With Selected';
 $lang['reset_factory'] = 'Reset to Factory Defaults';
 
 #S
+$lang['set_all_pages'] = 'Set All Pages To This Template';
 $lang['submit'] = 'Submit';
 $lang['submitandedit'] = 'Submit And Edit';
 
@@ -211,10 +214,13 @@ $lang['title_template_setallpages'] = 'Set all pages to use this template';
 
 #W
 $lang['warn_bulk_delete_templates'] = '<strong>Warning:</strong> Deleting multiple templates at once is usually a bad idea.  No checks are performed to see if these templates are actually used in the system.  This operation may break a working website!';
+$lang['warn_setall_nocontentblocks'] = '<strong>Warning:</strong> No content blocks were detected in the destination template.  This will prevent editing content in all current content pages.';
+$lang['warn_template_used'] = '<strong>Warning:</strong> This template is in use by one or more pages, and/or designs.  It may also be included by other templates.  Deleting this template may break a working website. <strong>Use Extreme Caution!</strong>';
 $lang['warning_category_dragdrop'] = 'To change the display order of categories you can drag the rows into their correct order';
 $lang['warning_deletetemplate_attachments'] = 'This design has templates attached to it.  These templates may be in use on some page or by a module. Deleting these templates, even if they are attached to no other design, may break an otherwise working site.   Please exercise extreme caution!';
 $lang['warning_deletestylesheet_attachments'] = 'This design has stylesheets attached to it.  Some of the templates in use by the system but not necessarily attached to this design may rely on these stylesheets.  Deleting these styleesheets, even if they are attached to no other design may break an otherwise working site.   Please exercise extreme caution!';
 $lang['warning_no_templates_available'] = 'We could find no templates that math the selected criteria or that you have permission to edit';
+$lang['warning_set_all_pages'] = '<strong>Warning:</strong> This is a potentially destructive operation!  You are asking that all content pages be set use this template.  Please confirm this action.';
 $lang['whats_this'] = 'What\'s this?';
 
 #X

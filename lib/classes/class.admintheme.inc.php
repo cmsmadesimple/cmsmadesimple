@@ -834,54 +834,31 @@ EOT;
     public function ShowErrors($errors, $get_var = '')
     {
 		$config = cmsms()->GetConfig();
-      $wikiUrl = $config['wiki_url'];
-      if ($wikiUrl !='none'){
-		      if (FALSE == empty($_REQUEST['module'])  || FALSE == empty($_REQUEST['mact']))
-			{
-			  if (FALSE == empty($_REQUEST['module']))
-			    {
-			      $wikiUrl .= '/'.$_REQUEST['module'];
-			    }
-			  else
-			    {
-			      $wikiUrl .= '/'.substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
-			    }
+		$image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
+		$output  = '<div class="pageerrorcontainer"';
+		if (FALSE == empty($get_var)) {
+			if (FALSE == empty($_GET[$get_var])) {
+				$errors = cleanValue(lang(cleanValue($_GET[$get_var])));
 			}
-      $wikiUrl .= '/Troubleshooting';
-      }//wiki check
-      $image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
-      $output  = '<div class="pageerrorcontainer"';
-      if (FALSE == empty($get_var))
-	{
-	  if (FALSE == empty($_GET[$get_var]))
-	    {
-	      $errors = cleanValue(lang(cleanValue($_GET[$get_var])));
+		}
+		else {
+			$errors = '';
+			$output .= ' style="display:none;"';
 	    }
-	  else
-	    {
-	      $errors = '';
-	      $output .= ' style="display:none;"';
-	    }
-	}
-      $output .= '><div class="pageoverflow">';
-      if (FALSE != is_array($errors))
-	{
-	  $output .= '<ul class="pageerror">';
-	  foreach ($errors as $oneerror)
-	    {
-	      $output .= '<li>'.$oneerror.'</li>';
-	    }
-	  $output .= '</ul>';
-	}
-      else
-	{
-	  $output  .= $image_error.' '.$errors;
-	}
-	 if ($wikiUrl !='none'){
-      $output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a>';
-      }//wiki check
-      $output .= '</div></div>';
-      return $output;
+
+		$output .= '><div class="pageoverflow">';
+		if (FALSE != is_array($errors)) {
+			$output .= '<ul class="pageerror">';
+			foreach ($errors as $oneerror) {
+				$output .= '<li>'.$oneerror.'</li>';
+			}
+			$output .= '</ul>';
+		}
+		else {
+			$output  .= $image_error.' '.$errors;
+		}
+		$output .= '</div></div>';
+		return $output;
     }
     
     /**

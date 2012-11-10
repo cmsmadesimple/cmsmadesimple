@@ -7,7 +7,7 @@
   <div class="pageoverflow">
     <p class="pagetext"><label for="tpl_name">*{$mod->Lang('prompt_name')}:</label></p>
     <p class="pageinput">
-      <input id="tpl_name" type="text" size="50" maxlength="50" value="{$tpl->get_name()}" readonly="readonly"/>&nbsp;{admin_icon name='help_copytemplate_name' icon='info.gif' class='helpicon'}
+      <input id="tpl_name" type="text" size="50" maxlength="50" value="{$tpl->get_name()}" readonly="readonly"/>
     </p>
   </div>
 

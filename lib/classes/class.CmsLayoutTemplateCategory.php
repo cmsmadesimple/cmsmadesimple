@@ -94,6 +94,10 @@ class CmsLayoutTemplateCategory
       throw new CmsInvalidDataException('A Template Categoy must have a name');
     }
 
+		if( !preg_match('/[A-Za-z0-9_\,\.\ ]/',$this->get_name()) ) {
+			throw new CmsInvalidDataException('Name must contain only numbers letters, spaces and underscores.');
+		}
+
     $db = cmsms()->GetDb();
     $tmp = null;
     if( !$this->get_id() ) {

@@ -19,39 +19,41 @@
 #
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
+if( !$this->CheckPermission('Modify Templates') ) return;
 
 $this->SetCurrentTab('templates');
-if( !isset($params['tpl']) ) {
-  $this->SetError($this->Lang('error_missingparam'));
-  $this->RedirectToAdminTab();
-}
-if( isset($params['cancel']) ) {
-  $this->SetMessage($this->Lang('msg_cancelled'));
-  $this->RedirectToAdminTab();
-}
 
 try {
-  $tpl_ob = CmsLayoutTemplate::load($params['tpl']);
-  if( $tpl_ob->get_owner_id() != get_userid() && !$this->CheckPermission('Modify Templates') ) {
-    throw new CmsException($this->Lang('error_permission'));
+  if( !isset($params['tpl']) ) {
+    throw new CmsException($this->Lang('error_missingparam'));
   }
+
+  if( isset($params['cancel']) ) {
+    $this->SetMessage($this->Lang('msg_cancelled'));
+    $this->Redirect($id,'admin_edit_template',$returnid,array('tpl'=>$params['tpl']));
+  }
+
+  $tpl_obj = CmsLayoutTemplate::load($params['tpl']);
 
   if( isset($params['submit']) ) {
     if( !isset($params['check1']) || !isset($params['check2']) ) {
-      echo $this->ShowErrors($this->Lang('error_notconfirmed'));
+      throw new CmsException($this->Lang('error_notconfirmed'));
     }
-    else {
-      $tpl_ob->delete();
-      $this->SetMessage($this->Lang('msg_template_deleted'));
-      $this->RedirectToAdminTab();
+
+    $db = cmsms()->GetDb();
+    $time = $db->DbTimeStamp(time());
+    $query = 'UPDATE '.cms_db_prefix()."content 
+              SET template_id = ?, last_modified_by = ?, modified_date = $time";
+    $dbr = $db->Execute($query,array($tpl_obj->get_id(),get_userid()));
+    if( !$dbr ) {
+      throw new CmsSQLErrorException($db->sql.' -- '.$db->ErrorMsg());
     }
+
+    $this->SetMessage($this->Lang('msg_allpagesupdated'));
+		$this->Redirect($id,'admin_edit_template',$returnid,array('tpl'=>$params['tpl']));
   }
 
-  // find the number of 'pages' that use this template.
-  $db = cmsms()->GetDb();
-  $query = 'SELECT * FROM '.cms_db_prefix().'content WHERE template_id = ?';
-  $n = $db->GetOne($query,array($tpl_ob->get_id()));
-  $smarty->assign('page_usage',$n);
+  // build a display
 
   $cats = CmsLayoutTemplateCategory::get_all();
   $out = array();
@@ -63,24 +65,6 @@ try {
   }
   $smarty->assign('category_list',$out);
 
-  $types = CmsLayoutTemplateType::get_all();
-  if( is_array($types) && count($types) ) {
-    $out = array();
-    foreach( $types as $one ) {
-      $out[$one->get_id()] = $one->get_langified_display_value();
-    }
-    $smarty->assign('type_list',$out);
-  }
-
-  $designs = CmsLayoutCollection::get_all();
-  if( is_array($designs) && count($designs) ) {
-    $out = array();
-    foreach( $designs as $one ) {
-      $out[$one->get_id()] = $one->get_name();
-    }
-    $smarty->assign('design_list',$out);
-  }
-
   $userops = cmsms()->GetUserOperations();
   $allusers = $userops->LoadUsers();
   $tmp = array();
@@ -91,15 +75,32 @@ try {
     $smarty->assign('user_list',$tmp);
   }
 
-  $smarty->assign('tpl',$tpl_ob);
-  echo $this->ProcessTemplate('admin_delete_template.tpl');
+  // lets see if we can find a content block in this template.
+  try {
+    $parser = cmsms()->get_template_parser(); 
+    cms_utils::set_app_data('tmp_template',$tpl_obj->get_content());
+    $parser->fetch('cms_template:appdata;tmp_template');
+
+    // get content blocks
+    $blocks = CMS_Content_Block::get_content_blocks();
+    if( !is_array($blocks) || !count($blocks) ) {
+      $smarty->assign('noblocks',1);
+    }
+  }
+  catch ( SmartyCompilerException $e ) {
+      $smarty->assign('template_error',$e->GetMessage());
+  }
+
+  $smarty->assign('extraparms',array('tpl'=>$params['tpl']));
+  $type = CmsLayoutTemplateType::load($tpl_obj->get_type_id());
+  $smarty->assign('template_type',$type);
+  $smarty->assign('template',$tpl_obj);
+  echo $this->ProcessTemplate('admin_set_all_pages.tpl');
 }
 catch( CmsException $e ) {
   $this->SetError($e->GetMessage());
-  $this->RedirectToAdminTab();
+  $this->Redirect($id,'admin_edit_template',$returnid,array('tpl'=>$params['tpl']));
 }
-
-
 #
 # EOF
 #

@@ -481,7 +481,7 @@ class Content extends ContentBase
 				$dflt_tpl = CmsLayoutTemplate::load_dflt_by_type('__CORE__::page');
 				$template_id = $this->TemplateId();
 				if( $template_id < 1 ) $template_id = $dflt_tpl->get_id();
-				$out = CmsFormutils::create_dropdown('template_id',$_templates,$template_id);
+				$out = CmsFormutils::create_dropdown('template_id',$_templates,$template_id,array('id'=>'template_id'));
 				return array('<label for="template_id">*'.lang('template').':</label>',
 							 $out,lang('info_editcontent_template'));
 			}

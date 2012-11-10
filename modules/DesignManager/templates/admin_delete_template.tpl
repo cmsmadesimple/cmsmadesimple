@@ -1,7 +1,7 @@
 <h3>{$mod->Lang('delete_template')}</h3>
 
 {if count($tpl->get_designs()) gt 0 || $page_usage gt 0 }
-<div class="pagewarning">{$mod->Lang('info_template_used')}</div>
+<div class="pagewarning">{$mod->Lang('warn_template_used')}</div>
 {/if}
 
 {form_start tpl=$actionparams.tpl}
