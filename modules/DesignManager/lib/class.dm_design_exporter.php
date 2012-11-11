@@ -8,6 +8,30 @@ class dm_design_exporter
   private $_image = null;
   private $_description;
 
+  private static $_dtdversion = 1;
+  private static $_dtd = <<<EOT
+<!DOCTYPE design [
+  <!ELEMENT design (name,description,dtdversion,template+,stylesheet+,file+)>
+  <!ELEMENT name (#PCDATA)>
+  <!ELEMENT description (#PCDATA)>
+  <!ELEMENT dtdversion (#PCDATA)>
+  <!ELEMENT template (tkey,tdesc,tdata)>
+  <!ELEMENT tkey (#PCDATA)>
+  <!ELEMENT tdesc (#PCDATA)>
+  <!ELEMENT tdata (#PCDATA)>
+  <!ELEMENT stylesheet (csskey,cssdesc,cssmediatype,cssmediaquery,cssdata)>
+  <!ELEMENT csskey (#PCDATA)>
+  <!ELEMENT cssdesc (#PCDATA)>
+  <!ELEMENT cssmediatype (#PCDATA)>
+  <!ELEMENT cssmediaquery (#PCDATA)>
+  <!ELEMENT cssdata (#PCDATA)>
+  <!ELEMENT file (fkey,fvalue,fdata)
+  <!ELEMENT fkey (#PCDATA)>
+  <!ELEMENT fvalue (#PCDATA)>
+  <!ELEMENT fdata (#PCDATA)>
+]>
+EOT;
+
   public function __construct(CmsLayoutCollection &$design)
   {
     $this->_design = $design;
@@ -64,6 +88,27 @@ class dm_design_exporter
     return $content;
   }
 
+  private function _parse_tpl_urls($content)
+  {
+    $ob = &$this;
+    $types = array("href", "src", "url");
+    while(list(,$type) = each($types)) {
+      $innerT = '[a-z0-9:?=&@/._-]+?';
+      $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i", 
+				       function($matches) use ($ob) {
+					 $config = cmsms()->GetConfig();
+					 $url = $matches[2];
+					 if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'{root_url}') ) {
+					   $sig = $ob->_get_signature($url);
+					   return $sig;
+					 }
+					 return $matches[0];
+				       },
+				       $content);
+    }
+    return $content;
+  }
+
   public function parse_stylesheets()
   {
     if( is_null($this->_css_list) ) {
@@ -111,7 +156,8 @@ class dm_design_exporter
 	$sig = $this->_get_signature($tpl_ob->get_name(),$type);
 
 	// recursion...
-	$new_content = $this->_get_sub_templates($tpl_ob->get_content());
+	$new_content = $this->_parse_tpl_urls($tpl_ob->get_content());
+	$new_content = $this->_get_sub_templates($new_content);
 	$new_tpl_ob = clone $tpl_ob;
 	$new_tpl_ob->set_content($new_content);
 
@@ -128,9 +174,12 @@ class dm_design_exporter
 	    // create a new CmsLayoutTemplate object for this template
 	    // and add it to the list.
 	    // notice we don't recurse.
+	    $tpl = $this->_parse_tpl_urls($tpl);
 	    $new_tpl_ob = new CmsLayoutTemplate;
 	    $new_tpl_ob->set_content($tpl);
-	    $new_tpl_ob->set_name(substr($name,0,-4));
+	    $name = substr($name,0,-4);
+	    $new_tpl_ob->set_name($name);
+	    $type = 'TPL';
 	    $sig = $this->_get_signature($name,$type);
 	    $this->_tpl_list[$sig] = $new_tpl_ob;
 	    return $sig;
@@ -217,6 +266,163 @@ class dm_design_exporter
       }
       return $out;
     }
+  }
+
+  public function list_files()
+  {
+    $this->parse_stylesheets();
+    $this->parse_templates();
+    if( is_array($this->_files) && count($this->_files) ) {
+      return $this->_files;
+    }
+  }
+
+  private function _open_tag($elem,$lvl = 1)
+  {
+    return str_repeat('  ',$lvl)."<{$elem}>\n";
+  }
+
+  private function _close_tag($elem,$lvl = 1)
+  {
+    return str_repeat('  ',$lvl)."</{$elem}>\n";
+  }
+
+  private function _output($elem,$txt,$lvl = 1)
+  {
+    return str_repeat('  ',$lvl).'<'.$elem.'>'.$txt.'</'.$elem.">\n";
+  }
+
+  private function _output_data($elem,$data,$lvl = 1)
+  {
+    $data = '<![CDATA['.base64_encode($data).']]>';
+    return $this->_output($elem,$data,$lvl);
+  }
+
+  private function _xml_output_template(CmsLayoutTemplate $tpl,$lvl = 0)
+  {
+    if( $tpl->get_content() == '' ) {
+      throw new CmsException('Cannot export empty template');
+    }
+    $output = $this->_open_tag('template',$lvl);
+    $output .= $this->_output('tkey',$tpl->get_name(),$lvl+1);
+    $output .= $this->_output_data('tdesc',$tpl->get_description(),$lvl+1);
+    $output .= $this->_output_data('tdata',$tpl->get_content(),$lvl+1);
+    $output .= $this->_close_tag('template',$lvl);
+    return $output;
+  }
+
+  private function _xml_output_stylesheet(CmsLayoutStylesheet $css,$lvl = 0)
+  {
+    if( $css->get_content() == '' ) {
+      throw new CmsException('Cannot export empty stylesheet');
+    }
+    $output = $this->_open_tag('stylesheet',$lvl);
+    $output .= $this->_output('csskey',$css->get_name(),$lvl+1);
+    $output .= $this->_output_data('cssdesc',$css->get_description(),$lvl+1);
+    $output .= $this->_output_data('cssmediatype',implode(',',$css->get_media_types()),$lvl+1);
+    $output .= $this->_output_data('cssmediaquery',$css->get_media_query(),$lvl+1);
+    $output .= $this->_output_data('cssdata',$css->get_content(),$lvl+1);
+    $output .= $this->_close_tag('stylesheet',$lvl);
+    return $output;
+  }
+
+  private function _xml_output_file($key,$value,$lvl = 0)
+  {
+    if( !startswith($key,'__') || !endswith($key,'__') ) return; // invalid
+    $p = strpos($key,':');
+    $nkey = substr($key,0,$p);
+    $nkey = substr($nkey,2);
+ 
+    $smarty = cmsms()->GetSmarty();
+    $output = $this->_open_tag('file',$lvl);
+    $output .= $this->_output('fkey',$key,$lvl+1);
+    switch($nkey) {
+    case 'URL':
+      // javascript file or image or something.
+      // could have smarty syntax.
+      $nvalue = $value;
+      if( strpos($value,'[[') !== FALSE ) {
+	// smarty syntax with [[ and ]] as delimiters
+	$smarty->left_delimiter = '[[';
+	$smarty->right_delimiter = ']]';
+	$nvalue = $smarty->fetch('string:'.$value);
+	$smarty->left_delimiter = '{';
+	$smarty->right_delimiter = '}';
+      }
+      else if( strpos('{',$value) !== FALSE ) {
+	// smarty syntax with { and } as delimiters
+	$nvalue = $smarty->fetch('string:'.$value);
+      }
+
+      // now, it should be a full URL, or start at /
+      // gotta convert it to a file.
+      $config = cmsms()->GetConfig();
+      $fn = '';
+      if( startswith($nvalue,'/') ) {
+	$fn = cms_join_path($config['root_path'],$nvalue);
+      } elseif( startswith($nvalue,$config['root_url']) ) {
+	$fn = str_replace($config['root_url'],$config['root_path'],$nvalue);
+      } else {
+	// assumes it's a filename relative to root.
+	$fn = cms_join_path($config['root_path'],$nvalue);
+      }
+      
+      if( !file_exists($fn) ) {
+	throw new CmsException('Could not find a physical file for '.$value);
+      }
+
+      $data = file_get_contents($fn);
+      if( strlen($data) == 0 ) {
+	throw new CmsException('No data found for '.$value);
+      }
+
+      $nvalue = basename($nvalue);
+      $output .= $this->_output('fvalue',$nvalue,$lvl+1);
+      $output .= $this->_output_data('fdata',$data,$lvl+1);
+      break;
+
+    case 'TPL':
+      // template signature...
+      // just need the key and value.
+      $output .= $this->_output('fvalue',$value,$lvl+1);
+      break;
+
+    case 'MM':
+      // menu manager file template
+      // just need the key and value.
+      $output .= $this->_output('fvalue',$value,$lvl+1);
+      break;
+
+    default:
+      return;
+    }
+    $output .= $this->_close_tag('file',$lvl);
+    return $output;
+  }
+
+  public function get_xml()
+  {
+    $this->parse_stylesheets();
+    $this->parse_templates();
+
+    $ver = self::$_dtdversion;
+    $output = '<?xml version="1.0" encoding="ISO-8859-1"?>';
+    $output .= self::$_dtd;
+    $output .= "<design>\n";
+    $output .= "  <name>{$this->_design->get_name()}</name>\n";
+    $output .= "  <description>{$this->_design->get_description()}</description>\n";
+    $output .= "  <dtdversion>{$ver}</dtdversion>\n";
+    foreach( $this->_tpl_list as $one ) {
+      $output .= $this->_xml_output_template($one,1);
+    }
+    foreach( $this->_css_list as $one ) {
+      $output .= $this->_xml_output_stylesheet($one,1);
+    }
+    foreach( $this->_files as $key => $value ) {
+      $output .= $this->_xml_output_file($key,$value,1);
+    }
+    $output .= "</design>\n";
+    return $output;
   }
 } // end of class
 

@@ -143,60 +143,23 @@ function _get_tpl_urls($tpl_content)
 }
 
 try {
+	// and the work...
   $the_design = CmsLayoutCollection::load($params['design']);
   $exporter = new dm_design_exporter($the_design);
-  $tmp = $exporter->list_stylesheets();
-  debug_display($tmp);
-  $tmp = $exporter->list_templates();
-  debug_display($tmp);
+	$xml = $exporter->get_xml();
+
+	// clear any output buffers.
+	$handlers = ob_list_handlers(); 
+	for ($cnt = 0; $cnt < sizeof($handlers); $cnt++) { ob_end_clean(); }
+	
+	// headers
+	header('Content-Description: File Transfer');
+	header('Content-Type: application/force-download');
+	header('Content-Disposition: attachment; filename='.$the_design->get_name().'.xml');
+
+	// output
+	echo $xml;
   exit();
-
-  $design_css_list = array();
-  $design_tpl_list = array();
-
-  // get the stylesheet list
-  $tmp = $the_design->get_stylesheets();
-  if( is_array($tmp) && count($tmp) ) {
-    foreach( $tmp as $css_id ) {
-      // load the stylesheet, add it to the list.
-      $css_ob = CmsLayoutStylesheet::load($css_id);
-
-      // get images from the stylesheets
-      $new_content = _get_css_urls($css_ob->get_content());
-      $new_css_ob = clone $css_ob;
-      $new_css_ob->set_content($new_content);
-      $design_css_list[] = $new_css_ob;
-    }
-  }
-
-  // find 'all' of the templates used by this template
-  $tmp = $the_design->get_templates();
-  $tmp_tpl_list = array();
-  $parser = new Smarty_Parser();
-  $orig_tpl_list = CmsLayoutTemplate::get_loaded_templates();
-  if( is_array($tmp) && count($tmp) ) {
-    foreach( $tmp as $tpl_id ) {
-      $junk = $parser->fetch('cms_template:'.$tpl_id);
-      $tmp_tpl_list = array_merge($tmp_tpl_list,CmsLayoutTemplate::get_loaded_templates());
-    }
-  }
-
-  $tmp_tpl_list = array_unique($tmp_tpl_list);
-  foreach( $tmp_tpl_list as $one_tpl ) {
-    $tpl_ob = CmsLayoutTemplate::load($one_tpl);
-    $tmp2 = _get_tpl_urls($tpl_ob->get_content());
-    $tmp2 = _get_sub_templates($tmp2);
-    $new_tpl_ob = clone $tpl_ob;
-    $new_tpl_ob->set_content($tmp2);
-    $design_tpl_list[] = $new_tpl_ob;
-  }
-
-  global $ref_map;
-  debug_display($ref_map); 
-  die();
-
-  // now we have templates and stylesheets, and a reference map... we have everything 'mapped'
-  // we're ready to export.
 }
 catch( CmsException $e ) {
   $this->SetError($e->GetMessage());
