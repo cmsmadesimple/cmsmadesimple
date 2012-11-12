@@ -19,7 +19,7 @@
 #
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
-if( !$this->VisibleToAdminUser() ) return;
+if( !$this->CheckPermission('Manage Designs') ) return;
 
 $this->SetCurrentTab('designs');
 

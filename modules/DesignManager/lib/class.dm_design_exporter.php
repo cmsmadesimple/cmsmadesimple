@@ -8,13 +8,13 @@ class dm_design_exporter
   private $_image = null;
   private $_description;
 
-  private static $_dtdversion = 1;
   private static $_dtd = <<<EOT
 <!DOCTYPE design [
-  <!ELEMENT design (name,description,dtdversion,template+,stylesheet+,file+)>
+  <!ELEMENT design (name,description,generated,cmsversion,template+,stylesheet+,file+)>
   <!ELEMENT name (#PCDATA)>
   <!ELEMENT description (#PCDATA)>
-  <!ELEMENT dtdversion (#PCDATA)>
+  <!ELEMENT generated (#PCDATA)>
+  <!ELEMENT cmsversion (#PCDATA)>
   <!ELEMENT template (tkey,tdesc,tdata)>
   <!ELEMENT tkey (#PCDATA)>
   <!ELEMENT tdesc (#PCDATA)>
@@ -25,11 +25,11 @@ class dm_design_exporter
   <!ELEMENT cssmediatype (#PCDATA)>
   <!ELEMENT cssmediaquery (#PCDATA)>
   <!ELEMENT cssdata (#PCDATA)>
-  <!ELEMENT file (fkey,fvalue,fdata)
+  <!ELEMENT file (fkey,fvalue,fdata?)>
   <!ELEMENT fkey (#PCDATA)>
   <!ELEMENT fvalue (#PCDATA)>
   <!ELEMENT fdata (#PCDATA)>
-]>
+]>\n
 EOT;
 
   public function __construct(CmsLayoutCollection &$design)
@@ -121,7 +121,9 @@ EOT;
 	    $css_ob = CmsLayoutStylesheet::load($css_id);
 
 	    $new_content = $this->_parse_css_for_urls($css_ob->get_content());
+	    $sig = $this->_get_signature($css_ob->get_name(),'CSS');
 	    $new_css_ob = clone $css_ob;
+	    $new_css_ob->set_name($sig);
 	    $new_css_ob->set_content($new_content);
 
 	    if( !is_array($this->_css_list) ) $this->_css_list = array();
@@ -158,7 +160,9 @@ EOT;
 	// recursion...
 	$new_content = $this->_parse_tpl_urls($tpl_ob->get_content());
 	$new_content = $this->_get_sub_templates($new_content);
+	$sig = $this->_get_signature($tpl_ob->get_name(),'TPL');
 	$new_tpl_ob = clone $tpl_ob;
+	$new_tpl_ob->set_name($sig);
 	$new_tpl_ob->set_content($new_content);
 
 	if( !is_array($this->_tpl_list) ) $this->_tpl_list = array();
@@ -178,9 +182,9 @@ EOT;
 	    $new_tpl_ob = new CmsLayoutTemplate;
 	    $new_tpl_ob->set_content($tpl);
 	    $name = substr($name,0,-4);
-	    $new_tpl_ob->set_name($name);
 	    $type = 'TPL';
 	    $sig = $this->_get_signature($name,$type);
+	    $new_tpl_ob->set_name($sig);
 	    $this->_tpl_list[$sig] = $new_tpl_ob;
 	    return $sig;
 	  }
@@ -387,6 +391,12 @@ EOT;
       $output .= $this->_output('fvalue',$value,$lvl+1);
       break;
 
+    case 'CSS':
+      // stylesheet signature
+      // just need the key and value.
+      $output .= $this->_output('fvalue',$value,$lvl+1);
+      break;
+
     case 'MM':
       // menu manager file template
       // just need the key and value.
@@ -405,13 +415,13 @@ EOT;
     $this->parse_stylesheets();
     $this->parse_templates();
 
-    $ver = self::$_dtdversion;
     $output = '<?xml version="1.0" encoding="ISO-8859-1"?>';
     $output .= self::$_dtd;
-    $output .= "<design>\n";
-    $output .= "  <name>{$this->_design->get_name()}</name>\n";
-    $output .= "  <description>{$this->_design->get_description()}</description>\n";
-    $output .= "  <dtdversion>{$ver}</dtdversion>\n";
+    $output .= $this->_open_tag('design',0);
+    $output .= $this->_output('name',$this->_design->get_name());
+    $output .= $this->_output('description',$this->_design->get_description());
+    $output .= $this->_output('generated',time());
+    $output .= $this->_output('cmsversion',CMS_VERSION);
     foreach( $this->_tpl_list as $one ) {
       $output .= $this->_xml_output_template($one,1);
     }
@@ -421,7 +431,7 @@ EOT;
     foreach( $this->_files as $key => $value ) {
       $output .= $this->_xml_output_file($key,$value,1);
     }
-    $output .= "</design>\n";
+    $output .= $this->_close_tag('design',0);
     return $output;
   }
 } // end of class
