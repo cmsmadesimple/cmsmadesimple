@@ -19,41 +19,21 @@
 #
 #-------------------------------------------------------------------------
 
-class dm_xml_reader extends XMLReader
+class dm_theme_reader 
 {
-  private $_setup;
-  private $_old_err_handler;
-  private $_old_internal_errors;
+  private $_xml;
 
-  public static function __errhandler($errno,$errstr,$errfile,$errline) 
+  public function __construct($fn)
   {
-    if( strpos($errstr,'XMLReader') !== FALSE ) {
-      audit('','DesignManager/dm_xml_reader',$errstr);
-      $mod = cms_utils::get_module('DesignManager');
-      throw new CmsXMLErrorException($mod->Lang('error_xmlstructure'));
-      return TRUE;
-    }
+    $this->_xml = new dm_xml_reader();
+    $this->_xml->open($fn);
+    //$this->_xml->SetParserProperty(XMLReader::VALIDATE,TRUE);
   }
 
-  public function __setup()
+  public function validate()
   {
-    if( !$this->_setup ) {
-      $this->_old_internal_errors = libxml_use_internal_errors(FALSE);
-      $this->_old_err_handler = set_error_handler(array($this,'__errhandler'));
-      $this->_setup = 1;
-    }
-  }
-
-  public function __destruct()
-  {
-    if( $this->_old_err_handler )
-      set_error_handler($this->_old_err_handler);
-  }
-
-  public function read()
-  {
-    $this->__setup();
-    return parent::read();
+    // have to use a different validaion method, can't trust the DTD :)
+    die(__CLASS__.'::'.__FUNCTION__.'() method not implemented');
   }
 } // end of class
 

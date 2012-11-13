@@ -7,10 +7,10 @@ $(document).ready(function(){
 });
 </script>
 
-<h3>{$mod->Lang('import_design_step1')}</h3>
+<h3>{$mod->Lang('import_design_step2')}</h3>
 
 {form_start}
-<div class="pageinfo">{$mod->Lang('info_import_xml_step1')}</div>
+<div class="pageinfo">{$mod->Lang('info_import_xml_step2')}</div>
 
 <div class="pageoverflow">
   <p class="pagetext"><label for="import_xml_file">{$mod->Lang('prompt_import_xml_file')}:</label></p>
@@ -23,7 +23,7 @@ $(document).ready(function(){
 <div class="pageoverflow">
   <p class="pagetext"></p>
   <p class="pageinput">
-    <input type="submit" name="{$actionid}next1" value="{$mod->Lang('next')}"/>
+    <input type="submit" name="{$actionid}next2" value="{$mod->Lang('next')}"/>
     <input type="submit" name="{$actionid}cancel" value="{$mod->Lang('cancel')}"/>
   </p>
 </div>

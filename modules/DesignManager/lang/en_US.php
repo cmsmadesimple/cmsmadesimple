@@ -48,6 +48,7 @@ $lang['edit_stylesheet'] = 'Edit Stylesheet';
 $lang['edit_template'] = 'Edit Template';
 $lang['edit_type'] = 'Edit Template Type';
 $lang['error_create_tempfile'] = 'Error creating temporary file';
+$lang['error_filenotfound'] = 'Could not find a file we were expecting: %s';
 $lang['error_missingparam'] = 'A required parameter is missing or invalid';
 $lang['error_nofileuploaded'] = 'No file was uploaded';
 $lang['error_notconfirmed'] = 'The action was not confirmed';
@@ -58,6 +59,7 @@ $lang['error_permission_deletetemplate'] = 'You do not have permission to perfor
 $lang['error_readxml'] = 'A problem occurred reading the XML file (possible syntax error)';
 $lang['error_uploading'] = 'Problem uploading file (perhaps it is too large)';
 $lang['error_upload_filetype'] = 'The file uploaded is not of the proper type (%s)';
+$lang['error_xmlstructure'] = 'Error in the structure of the XML File';
 $lang['export_design'] = 'Export Design to XML';
 
 #F

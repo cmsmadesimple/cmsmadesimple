@@ -40,47 +40,70 @@ try {
   case 1:
     try {
       if( isset($params['next1']) ) {
-	// check for uploaded file
-	$key = $id.'import_xml_file';
-	if( !isset($_FILES[$key]) || $_FILES[$key]['name'] == '' ) {
-	  throw new CmsException($this->Lang('error_nofileuploaded'));
-	}
-	if( $_FILES[$key]['error'] != 0 || $_FILES[$key]['tmp_name'] == '' || $_FILES[$key]['type'] == '') {
-	  throw new CmsException($this->Lang('error_uploading','xml'));
-	}
-	if( $_FILES[$key]['type'] != 'text/xml' ) {
-	  throw new CmsException($this->Lang('error_upload_filetype'));
-	}
+				// check for uploaded file
+				$key = $id.'import_xml_file';
+				if( !isset($_FILES[$key]) || $_FILES[$key]['name'] == '' ) {
+					throw new CmsException($this->Lang('error_nofileuploaded'));
+				}
+				if( $_FILES[$key]['error'] != 0 || $_FILES[$key]['tmp_name'] == '' || $_FILES[$key]['type'] == '') {
+					throw new CmsException($this->Lang('error_uploading','xml'));
+				}
+				if( $_FILES[$key]['type'] != 'text/xml' ) {
+					throw new CmsException($this->Lang('error_upload_filetype'));
+				}
 
-	try {
-	  // check uploaded file for compatibility / validity
-	  $xml = new dm_xml_reader();
-	  $xml->open($_FILES[$key]['tmp_name']);
-	  $xml->setParserProperty(XMLReader::VALIDATE, true);
-	  debug_display('foo');
-	  @$xml->next('template');
-	  if( $xml->isValid() ) die('valid');
-	  debug_display('foo2');
-// 	  $nn = 0;
-// 	  while( $xml->read() ) {
-// 	    if( $nn++ >= 150 ) break;
-// 	    echo "DEBUG: ".$xml->nodeType." == ".$xml->localName." -- ".$xml->value."<br/>";
-// 	    if( !$xml->isValid() ) echo "NOT VALID<br/>";
-// 	  }
-	}
-	catch( CmsXMLErrorException $e ) {
-	  throw new CmsException($this->Lang('error_readxml'));
-	}
-	die('foo');
+				// basic check or validity
+				// if there's no DOCTYPE within 100 bytes, there's a problem.
+				$fh = fopen($_FILES[$key]['tmp_name'],'r');
+				if( !$fh ) {
+					throw new CmsException($this->Lang('error_uploading'));
+				}
+				$str = fread($fh,200);
+				if( strpos($str,'<!DOCTYPE') === FALSE ) {
+					throw new CmsException($this->Lang('error_readxml'));
+				}
+				fclose($fh);
 
-	// copy uploaded file to temporary location
-	$tmpfile = tempname(TMP_CACHE_LOCATION,'dm_');
-	if( $tmpfile === FALSE ) {
-	  throw new CmsException($this->Lang('error_create_tempfile'));
-	}
-	@copy($_FILES[$key]['tmp_name'],$tmpfile);
+				// get the first element
+				$x = '<!ELEMENT ';
+				$p = strpos($str,'<!ELEMENT ');
+				if( $p === FALSE ) {
+					throw new CmsException($this->Lang('error_readxml'));
+				}
+				$str = substr($str,$p+strlen($x));
+				$p = strpos($str,' ');
+				if( $p === FALSE ) {
+					// highly unlikely.
+					throw new CmsException($this->Lang('error_readxml'));
+				}
+				$word = substr($str,0,$p);
+				switch( $word ) {
+				case 'theme':
+					$reader = new dm_theme_reader($_FILES[$key]['tmp_name']);
+					$reader->validate();
+					// old ThemeManger theme
+					break;
 
-	// redirect to this action, with step2.
+				case 'design':
+					// new DesignManager design
+					$reader = new dm_design_reader($_FILES[$key]['tmp_name']);
+					$reader->validate();
+					break;
+					
+				default:
+					throw new CmsException($this->Lang('error_readxml'));
+				}
+
+				// copy uploaded file to temporary location
+				$tmpfile = tempnam(TMP_CACHE_LOCATION,'dm_');
+				if( $tmpfile === FALSE ) {
+					throw new CmsException($this->Lang('error_create_tempfile'));
+				}
+				@copy($_FILES[$key]['tmp_name'],$tmpfile);
+
+				// redirect to this action, with step2.
+				$this->Redirect($id,'admin_import_design',$returnid,
+												array('step'=>2,'tmpfile'=>$tmpfile));
       }
     }
     catch( CmsException $e ) {
@@ -92,6 +115,30 @@ try {
 
   case 2:
     // preview what's going to be imported
+		try {
+			if( !isset($params['tmpfile']) ) {
+				// bad error, redirect to admin tab.
+				$this->SetError($this->Lang('error_missingparam'));
+				$this->RedirectToAdminTab();
+			}
+			$tmpfile = trim($params['tmpfile']);
+			if( !file_exists($tmpfile) ) {
+				// bad error, redirect to admin tab.
+				$this->SetError($this->Lang('error_filenotfound',$tmpfile));
+				$this->RedirectToAdminTab();
+			}
+
+			$reader = new dm_design_reader($tmpfile);
+			$smarty = cmsms()->GetSmarty();
+			$tmp = $reader->get_design_info();
+			$smarty->assign('design_info',$reader->get_design_info());
+			//$smarty->assign('templates',$reader->get_template_list
+		}
+    catch( CmsException $e ) {
+      echo $this->ShowErrors($e->GetMessage());
+    }
+    echo $this->ProcessTemplate('admin_import_design2.tpl');
+    break;
 
   case 3:
     // do the importing.
