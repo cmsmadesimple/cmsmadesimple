@@ -116,7 +116,6 @@ $tmp[0]['query_var'] = testConfig('query_var', 'query_var');
 $tmp[1]['root_url'] = testConfig('root_url', 'root_url');
 $tmp[1]['ssl_url'] = testConfig('ssl_url', 'ssl_url');
 $tmp[1]['root_path'] = testConfig('root_path', 'root_path', 'testDirWrite');
-$tmp[1]['previews_path'] = testConfig('previews_path', 'previews_path', 'testDirWrite');
 $tmp[1]['uploads_path'] = testConfig('uploads_path', 'uploads_path', 'testDirWrite');
 $tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
 $tmp[1]['image_uploads_path'] = testConfig('image_uploads_path', 'image_uploads_path', 'testDirWrite');

@@ -25,9 +25,12 @@ $(document).ready(function(){
 <fieldset>
   <div style="width: 49%; float: left;">
     <div class="pageoverflow">
-      <p class="pagetext">{$mod->Lang('prompt_name')}:</p>
+      <p class="pagetext"><label for="import_newname">{$mod->Lang('prompt_name')}:</label></p>
       <p class="pageinput">
-        {$design_info.name}
+        <input id="import_newname" type="text" name="{$actionid}newname" value="{$new_name}" size="50" maxlength="50"/>
+        &nbsp;{admin_icon name='help_import_newname' icon='info.gif' class='helpicon'}
+        <br/>
+        {$mod->Lang('prompt_orig_name')}: {$design_info.name}
       </p>
     </div>
 
@@ -98,5 +101,6 @@ TODO
 
 <div style="display: none;">{strip}
   <div id="help_import_xml_file" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_import_xml_file')}</div>
+  <div id="help_import_newname" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_import_newname')}</div>
   <div id="help_import_cmsversion" title="{$mod->Lang('prompt_help')}">{$mod->Lang('help_import_cmsversion')}</div>
 {/strip}</div>

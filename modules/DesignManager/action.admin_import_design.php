@@ -129,23 +129,34 @@ try {
 			}
 
 			if( isset($params['next2']) ) {
+				$error = null;
 				if( !isset($params['check1']) ) {
+					$error = 1;
 					echo $this->ShowErrors($this->Lang('error_notconfirmed'));
 				}
+				else if( !isset($params['newname']) || $params['newname'] == '' ) {
+					$error = 1;
+					echo $this->ShowErrors($this->Lang('error_missingparam'));
+				}
 				else {
-					// redirect to this action, with step2.
+					// redirect to this action, with step3.
 					$this->Redirect($id,'admin_import_design',$returnid,
-													array('step'=>3,'tmpfile'=>$tmpfile));
+													array('step'=>3,'tmpfile'=>$tmpfile,
+																'newname'=>$params['newname']));
 				}
 			}
 
+			// suggest a new name for the 'theme'.
 			$reader = new dm_design_reader($tmpfile);
 			$smarty = cmsms()->GetSmarty();
 			$smarty->assign('tmpfile',$tmpfile);
 			$smarty->assign('cms_version',CMS_VERSION);
-			$smarty->assign('design_info',$reader->get_design_info());
+			$design_info = $reader->get_design_info();
+			$smarty->assign('design_info',$design_info);
 			$smarty->assign('templates',$reader->get_template_list());
 			$smarty->assign('stylesheets',$reader->get_stylesheet_list());
+			$newname = CmsLayoutCollection::suggest_name($design_info['name']);
+			$smarty->assign('new_name',$newname);
 		}
     catch( CmsException $e ) {
       echo $this->ShowErrors($e->GetMessage());
@@ -154,8 +165,51 @@ try {
     break;
 
   case 3:
-    // do the importing.
-		debug_display($params); die();
+		if( !isset($params['tmpfile']) || !isset($params['newname']) ||
+				$params['newname'] == '') {
+			// bad error, redirect to admin tab.
+			throw new CmsException($this->Lang('error_missingparam'));
+		}
+		$tmpfile = trim($params['tmpfile']);
+		$newname = trim($params['newname']);
+		if( !file_exists($tmpfile) ) {
+			// bad error, redirect to admin tab.
+			throw new CmsException($this->Lang('error_filenotfound',$tmpfile));
+		}
+
+		$config = cmsms()->GetConfig();
+		$dirname = munge_string_to_url($newname);
+		$destdir = $config['uploads_path'].'/designmanager_import';
+		if( !is_dir($destdir) ) @mkdir($destdir);
+		if( !is_writable($destdir) ) {
+			throw new CmsException($this->Lang('error_notwritable',$destdir));
+		}
+		$destdir = "$destdir/$dirname";
+		if( is_dir($destdir) ) {
+			throw new CmsException($this->Lang('error_direxists',$destdir));
+		}
+		//@mkdir($destdir);
+		// create URL's ... 
+    //  foreach FILE
+    //    if URL
+    //      build dest path
+    //      decode file
+    //    if TPL
+    //      build a new name
+    //    if CSS
+    //      build a new name
+		// create stylesheets
+    //  foreach stylesheet
+		//    foreach FILE
+		//      if URL
+ 		//        replace <KEY> with '[[uploads_url]]/designmanager_import/$dirname/$filename';
+    //    save stylesheet
+		// create templates
+    //  foreach template
+		//    foreach FILE
+    //      if NOT CSS
+    //        replace <KEY> with new name
+		//  save template
 		break;
 
   default:

@@ -549,6 +549,23 @@ class CmsLayoutCollection
 		
     throw new CmsInvalidDataException('There is no default design selected');
 	}
+
+	public static function suggest_name($newname = '')
+	{
+		if( $newname == '' ) $newname = 'New Design';
+		$list = self::get_list();
+		$names = array_values($list);
+
+		$origname = $newname;
+		$n = 1;
+		while( $n < 100 && in_array($newname,$names) ) {
+			$n++;
+			$newname = $origname.' '.$n;
+		}
+
+		if( $n == 100 ) return;
+		return $newname;
+	}
 } // end of class
 
 #

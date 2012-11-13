@@ -115,8 +115,18 @@ class CmsEditContentException extends CmsException {}
  *
  * @package CMS
  * @author Robert Campbell (calguy1000@cmsmadesimple.org)
- * @since 1.11
+ * @since 1.12
  */
 class CmsSQLErrorException extends CmsException {}
+
+
+/**
+ * A special exception indicating an XML Error.
+ *
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.12
+ */
+class CmsXMLErrorException extends CmsException {}
 
 ?>

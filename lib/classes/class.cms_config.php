@@ -95,7 +95,6 @@ class cms_config implements ArrayAccess
     $this->_types['debug_to_log'] = self::TYPE_BOOL;
     $this->_types['timezone'] = self::TYPE_STRING;
     $this->_types['persist_db_conn'] = self::TYPE_BOOL;
-    $this->_types['previews_path'] = self::TYPE_STRING;
     $this->_types['max_upload_size'] = self::TYPE_INT;
     $this->_types['default_upload_permission'] = self::TYPE_STRING;
     $this->_types['auto_alias_content'] = self::TYPE_BOOL;
@@ -279,9 +278,6 @@ class cms_config implements ArrayAccess
 	  case 'image_uploads_url':
 		  $this->_cache[$key] = $this->offsetGet('uploads_url').'/images';
 		  return $this->_cache[$key];
-
-	  case 'previews_path':
-		  return TMP_CACHE_LOCATION;
 
 	  case 'admin_dir':
 		  return 'admin';

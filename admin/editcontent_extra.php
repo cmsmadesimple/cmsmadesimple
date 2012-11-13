@@ -148,15 +148,7 @@ function createtmpfname(&$contentobj)
 	$data['encoding'] = get_encoding();
 	$data['serialized_content'] = serialize($contentobj);
 
-	$tmpfname = '';
-	if (is_writable($config["previews_path"]))
-	{
-		$tmpfname = tempnam($config["previews_path"], "cmspreview");
-	}
-	else
-	{
-		$tmpfname = tempnam(TMP_CACHE_LOCATION, "cmspreview");
-	}
+	$tmpfname = tempnam(TMP_CACHE_LOCATION, "cmspreview");
 	$handle = fopen($tmpfname, "w");
 	fwrite($handle, serialize($data));
 	fclose($handle);
