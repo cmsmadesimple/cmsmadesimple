@@ -128,11 +128,24 @@ try {
 				$this->RedirectToAdminTab();
 			}
 
+			if( isset($params['next2']) ) {
+				if( !isset($params['check1']) ) {
+					echo $this->ShowErrors($this->Lang('error_notconfirmed'));
+				}
+				else {
+					// redirect to this action, with step2.
+					$this->Redirect($id,'admin_import_design',$returnid,
+													array('step'=>3,'tmpfile'=>$tmpfile));
+				}
+			}
+
 			$reader = new dm_design_reader($tmpfile);
 			$smarty = cmsms()->GetSmarty();
-			$tmp = $reader->get_design_info();
+			$smarty->assign('tmpfile',$tmpfile);
+			$smarty->assign('cms_version',CMS_VERSION);
 			$smarty->assign('design_info',$reader->get_design_info());
-			//$smarty->assign('templates',$reader->get_template_list
+			$smarty->assign('templates',$reader->get_template_list());
+			$smarty->assign('stylesheets',$reader->get_stylesheet_list());
 		}
     catch( CmsException $e ) {
       echo $this->ShowErrors($e->GetMessage());
@@ -142,6 +155,8 @@ try {
 
   case 3:
     // do the importing.
+		debug_display($params); die();
+		break;
 
   default:
   }

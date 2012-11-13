@@ -50,13 +50,12 @@ class dm_design_reader
     $in = array();
     $cur_key = null;
 
-    function __get_in()
-    {
+    $__get_in = function() use ($in) {
       global $in;
       if( ($n = count($in)) ) {
 	return $in[$n-1];
       }
-    }
+    };
 
     if( !$this->_scanned ) {
       $this->_scanned = TRUE;
@@ -75,7 +74,7 @@ class dm_design_reader
 	  case 'description':
 	  case 'generated':
 	  case 'cmsversion':
-	    if( __get_in() != 'design' ) {
+	    if( $__get_in() != 'design' ) {
 	      // validity error.
 	    }
 	    $name = $this->_xml->localName;
@@ -84,7 +83,7 @@ class dm_design_reader
 	    break;
 
 	  case 'tkey':
-	    if( __get_in() != 'template' ) {
+	    if( $__get_in() != 'template' ) {
 	      // validity error.
 	    }
 	    $this->_xml->read();
@@ -93,7 +92,7 @@ class dm_design_reader
 	    break;
 
 	  case 'tdesc':
-	    if( __get_in() != 'template' || !$cur_key ) {
+	    if( $__get_in() != 'template' || !$cur_key ) {
 	      // validity error.
 	    }
 	    $this->_xml->read();
@@ -101,7 +100,7 @@ class dm_design_reader
 	    break;
 
 	  case 'tdata':
-	    if( __get_in() != 'template' || !$cur_key ) {
+	    if( $__get_in() != 'template' || !$cur_key ) {
 	      // validity error.
 	    }
 	    $this->_xml->read();
@@ -109,7 +108,7 @@ class dm_design_reader
 	    break;
 
 	  case 'csskey':
-	    if( __get_in() != 'stylesheet' ) {
+	    if( $__get_in() != 'stylesheet' ) {
 	      // validity error.
 	    }
 	    $this->_xml->read();
@@ -118,7 +117,7 @@ class dm_design_reader
 	    break;
 
 	  case 'cssdesc':
-	    if( __get_in() != 'stylesheet' || !$cur_key ) {
+	    if( $__get_in() != 'stylesheet' || !$cur_key ) {
 	      // validity error.
 	    }
 	    $this->_xml->read();
@@ -126,7 +125,7 @@ class dm_design_reader
 	    break;
 
 	  case 'cssdata':
-	    if( __get_in() != 'stylesheet' || !$cur_key ) {
+	    if( $__get_in() != 'stylesheet' || !$cur_key ) {
 	      // validity error.
 	    }
 	    $this->_xml->read();
@@ -134,7 +133,7 @@ class dm_design_reader
 	    break;
 
 	  case 'cssmediatype':
-	    if( __get_in() != 'stylesheet' || !$cur_key ) {
+	    if( $__get_in() != 'stylesheet' || !$cur_key ) {
 	      // validity error.
 	    }
 	    $this->_xml->read();
@@ -142,7 +141,7 @@ class dm_design_reader
 	    break;
 
 	  case 'cssmediaquery':
-	    if( __get_in() != 'stylesheet' || !$cur_key ) {
+	    if( $__get_in() != 'stylesheet' || !$cur_key ) {
 	      // validity error.
 	    }
 	    $this->_xml->read();
@@ -150,7 +149,7 @@ class dm_design_reader
 	    break;
 
 	  case 'fkey':
-	    if( __get_in() != 'file' ) {
+	    if( $__get_in() != 'file' ) {
 	      // validity error.
 	    }
 	    $this->_xml->read();
@@ -159,7 +158,7 @@ class dm_design_reader
 	    break;
 
 	  case 'fvalue':
-	    if( __get_in() != 'file' || !$cur_key ) {
+	    if( $__get_in() != 'file' || !$cur_key ) {
 	      // validity error.
 	    }
 	    $this->_xml->read();
@@ -167,7 +166,7 @@ class dm_design_reader
 	    break;
 
 	  case 'fdata':
-	    if( __get_in() != 'file' || !$cur_key ) {
+	    if( $__get_in() != 'file' || !$cur_key ) {
 	      // validity error.
 	    }
 	    $this->_xml->read();
@@ -193,10 +192,51 @@ class dm_design_reader
     }
   }
 
+  private function _get_name($key)
+  {
+    if( isset($this->_file_map[$key]) ) {
+      return $this->_file_map[$key]['value'];
+    }
+  }
+
   public function get_design_info()
   {
     $this->_scan();
-    debug_display($this); die();
+    return $this->_design_info;
+  }
+
+  public function get_template_list()
+  {
+    $this->_scan();
+    $out = array();
+    foreach( $this->_tpl_info as $key => $one ) {
+      $name = $this->_get_name($key);
+      $rec = array();
+      $rec['name'] = $name;
+      $rec['key'] = $key;
+      $rec['desc'] = base64_decode($one['desc']);
+      $rec['data'] = base64_decode($one['data']);
+      $out[] = $rec;
+    }
+    return $out;
+  }
+
+  public function get_stylesheet_list()
+  {
+    $this->_scan();
+    $out = array();
+    foreach( $this->_css_info as $key => $one ) {
+      $name = $this->_get_name($key);
+      $rec = array();
+      $rec['name'] = $name;
+      $rec['key'] = $key;
+      $rec['desc'] = base64_decode($one['desc']);
+      $rec['data'] = base64_decode($one['data']);
+      $rec['mediatype'] = base64_decode($one['mediatype']);
+      $rec['medisaquery'] = base64_decode($one['mediaquery']);
+      $out[] = $rec;
+    }
+    return $out;
   }
 } // end of class
 
