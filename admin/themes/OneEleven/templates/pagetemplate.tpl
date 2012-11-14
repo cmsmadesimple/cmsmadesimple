@@ -9,6 +9,12 @@
 		<meta name="viewport" content="initial-scale=1.0 maximum-scale=1.0 user-scalable=no" />
 		<meta name="HandheldFriendly" content="True"/>
 		<link rel="shortcut icon" href="{$config.admin_url}/themes/OneEleven/images/favicon/cmsms-favicon.ico"/>
+		<link rel='apple-touch-icon' href='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-iphone.png' /> 
+		<link rel='apple-touch-icon' sizes='72x72' href='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-ipad.png' /> 
+		<link rel='apple-touch-icon' sizes='114x114' href='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-iphone4.png' />
+		<link rel='apple-touch-icon' sizes='144x144' href='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-ipad3.png' />		
+		<meta name='msapplication-TileImage' content='{$config.admin_url}/themes/OneEleven/images/favicon/apple-touch-icon-ipad3.png' />
+		<meta name='msapplication-TileColor' content='#e5e5e5'>
 		<link rel="stylesheet" href="style.php?{$secureparam}" />
 		<!-- learn IE html5 -->
 		<!--[if lt IE 9]>
