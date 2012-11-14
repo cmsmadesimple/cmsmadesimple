@@ -16,6 +16,9 @@ Core - General
   - Removes wiki links from admin interface.
   - Minor fix to ShowMessages.
   - Fixes so that simplex theme does not cause crash when editing content using that template, or editing the template itself.
+  - Ads @viewport rule to OneEleven stylesheets, improving media query behaviour on Windows 8 within Metro UI (snap mode)
+  - Ads icons for apple touch link and msapplication metatag
+  - OneEleven login, autofocus first input field
 
 Version 1.11.2.1
 -----------------------------
