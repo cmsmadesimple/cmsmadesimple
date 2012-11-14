@@ -51,59 +51,30 @@ $smarty = cmsms()->GetSmarty();
 $smarty->assign('header',$themeObject->ShowHeader('tags'));
 $smarty->assign('back_url'.$themeObject->BackURL());
 
-if ($action == "showpluginhelp")
-{
+if ($action == "showpluginhelp") {
   $content = '';
   $file = $config['root_path']."/plugins/$type.$plugin.php";
-  if( file_exists($file) )
-    {
-      require_once($file);
-    }
-  if( function_exists('smarty_cms_help_'.$type.'_'.$plugin) )
-    {
-      // Get and display the plugin's help
-      @ob_start();
-      call_user_func_array('smarty_cms_help_'.$type.'_'.$plugin, array());
-      $content = @ob_get_contents();
-      @ob_end_clean();
-    }
-  else if( CmsLangOperations::key_exists("help_{$type}_{$plugin}") )
-    {
-      $content = lang("help_{$type}_{$plugin}");
-    }
+  if( file_exists($file) ) {
+    require_once($file);
+  }
+  if( function_exists('smarty_cms_help_'.$type.'_'.$plugin) ) {
+    // Get and display the plugin's help
+    @ob_start();
+    call_user_func_array('smarty_cms_help_'.$type.'_'.$plugin, array());
+    $content = @ob_get_contents();
+    @ob_end_clean();
+  }
+  else if( CmsLangOperations::key_exists("help_{$type}_{$plugin}") ) {
+    $content = lang("help_{$type}_{$plugin}");
+  }
 
-  if( $content )
-    {
-      $smarty->assign('subheader',lang('pluginhelp',array($plugin)));
-      
-      $wikiUrl = $config['wiki_url'];
-      $module_name = $plugin;
-      // Turn ModuleName into _Module_Name
-      $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
-      $moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
-      if ($moduleName{0} == '_')
-	{
-	  $moduleName = substr($moduleName, 1);
-	}
-      $wikiUrl .= '/Tags/'.$moduleName;
-      if (FALSE == get_preference($userid, 'hide_help_links'))
-	{
-	  // Clean up URL
-	  $wikiUrl = str_replace(' ', '_', $wikiUrl);
-	  $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
-	  
-	  //$image_help = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
-	  $image_help_external = $themeObject->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
-	  $smarty->assign('wiki_url',$wikiUrl);
-	  $smarty->assign('image_help_external',$image_help_external);
-	}
-      
-      $smarty->assign('content',$content);
-    }
-  else
-    {
-      $smarty->assign('error',lang('nopluginhelp'));
-    }
+  if( $content ) {
+    $smarty->assign('subheader',lang('pluginhelp',array($plugin)));
+    $smarty->assign('content',$content);
+  }
+  else {
+    $smarty->assign('error',lang('nopluginhelp'));
+  }
 }
 else if ($action == "showpluginabout")
 {

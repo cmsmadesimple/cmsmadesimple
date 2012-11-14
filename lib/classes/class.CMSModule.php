@@ -1712,26 +1712,25 @@ abstract class CMSModule
 	      echo $this->ShowErrors($this->__errors);
 	    }
 	    if( is_array($this->__messages) && count($this->__messages) ) {
-	      echo $this->ShowMessage($this->__messages);
+	      echo $this->ShowMessage($this->__messages[0]);
 	    }
 	  }
 
-	  if ($name != '')
-	    {
-	      //Just in case DoAction is called directly and it's not overridden.
-	      //See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
-	      $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
-		
-	      $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
-	      if (@is_file($filename)) {
-		$gCms = cmsms();
-		$db = $gCms->GetDb();
-		$config = $gCms->GetConfig();
-		$smarty = $gCms->GetSmarty();
-		
-		include($filename);
-	      }
+	  if ($name != '') {
+	    //Just in case DoAction is called directly and it's not overridden.
+	    //See: http://0x6a616d6573.blogspot.com/2010/02/cms-made-simple-166-file-inclusion.html
+	    $name = preg_replace('/[^A-Za-z0-9\-_+]/', '', $name);
+
+	    $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
+	    if (@is_file($filename)) {
+	      $gCms = cmsms();
+	      $db = $gCms->GetDb();
+	      $config = $gCms->GetConfig();
+	      $smarty = $gCms->GetSmarty();
+	      
+	      include($filename);
 	    }
+	  }
 	}
 
 	/**
@@ -3197,11 +3196,10 @@ abstract class CMSModule
 	function ShowMessage($message)
 	{
 	  $gCms = cmsms();
-	  if (isset($gCms->variables['admintheme']))
-	    {
-	      $admintheme =& $gCms->variables['admintheme']; //php4 friendly
-	      return $admintheme->ShowMessage($message);
-	    }
+	  if (isset($gCms->variables['admintheme'])) {
+	    $admintheme =& $gCms->variables['admintheme']; //php4 friendly
+	    return $admintheme->ShowMessage($message);
+	  }
 	  return '';
 	}
 

@@ -341,7 +341,6 @@ else if ($action == "showmodulehelp")
       
       $header  = '<div class="pageheader">';
       $header .= lang('modulehelp', array($module));
-      $wikiUrl = $config['wiki_url'];
       $module_name = $modinstance->GetName();
       // Turn ModuleName into _Module_Name
       $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
@@ -355,7 +354,6 @@ else if ($action == "showmodulehelp")
       // 		$dirname = dirname(__FILE__);
       // 		include($dirname.'/lang/en_US/admin.inc.php');
       $section = lang($modinstance->GetAdminSection());
-      $wikiUrl .= '/'.$section.'/'.$moduleName;
 
       if( $orig_lang != 'en_US' )
 	{
@@ -370,20 +368,6 @@ else if ($action == "showmodulehelp")
 	    }
 	}
 
-      //		if (FALSE == get_preference($userid, 'hide_help_links'))
-      if (FALSE)
-	{
-	  // Clean up URL
-	  $wikiUrl = str_replace(' ', '_', $wikiUrl);
-	  $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
-	  
-	  $help_title = lang('help_external');
-	  
-	  $image_help = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
-	  $image_help_external = $themeObject->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
-	  $header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
-	}
-      
       $header .= '</div>';
       echo $header;     
 

@@ -723,7 +723,6 @@ EOT;
 		  $header .= lang($title_name, $extra_lang_param);
 	  }
       if (count($this->breadcrumbs)) {
-		  $wikiUrl = $config['wiki_url'];
 		  foreach ($this->breadcrumbs AS $key => $value) {
 			  $title = $value['title'];
 			  // If this is a module and the last part of the breadcrumbs
@@ -740,7 +739,6 @@ EOT;
 				  if ($moduleName{0} == '_') {
 					  $moduleName = substr($moduleName, 1);
 				  }
-				  $wikiUrl .= '/'.$moduleName;
 			  } else {
 				  // Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
 				  $colonLocation = strrchr($title, ':');
@@ -749,15 +747,10 @@ EOT;
 				  }
 				  // Get the key of the title so we can use the en_US version for the URL
 				  $title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
-				  $wikiUrl .= '/'.lang($title_key[0]);
 			  }
 		  }
 
 		  if (FALSE == get_preference($this->userid, 'hide_help_links', 0)) {
-			  // Clean up URL
-			  $wikiUrl = str_replace(' ', '_', $wikiUrl);
-			  $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
-			  // Make link to go the translated version of page if lang is not en_US
 				  
 			  $urlext='?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
 			  $image_help = $this->DisplayImage('icons/system/info.gif', lang('module_help'),'','','systemicon');
@@ -766,10 +759,6 @@ EOT;
 				  $module_help_link = $config['admin_url'].'/listmodules.php'.$urlext.'&amp;action=showmodulehelp&amp;module='.$module_name;
 				  $header .= '<span class="helptext"><a href="'.$module_help_link.'" title="'.lang('module_help').'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('module_help').'</a></span>';
 			  }
-			  // 	    else
-			  // 	      {
-			  // 			  //$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
-			  // 	      }
 		  }
 	  }
 	  $header .= '</div>';
@@ -817,21 +806,6 @@ EOT;
     public function ShowErrors($errors, $get_var = '')
     {
 		$config = cmsms()->GetConfig();
-      $wikiUrl = $config['wiki_url'];
-      if ($wikiUrl !='none'){
-		      if (FALSE == empty($_REQUEST['module'])  || FALSE == empty($_REQUEST['mact']))
-			{
-			  if (FALSE == empty($_REQUEST['module']))
-			    {
-			      $wikiUrl .= '/'.$_REQUEST['module'];
-			    }
-			  else
-			    {
-			      $wikiUrl .= '/'.substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
-			    }
-			}
-      $wikiUrl .= '/Troubleshooting';
-      }//wiki check
       $image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
       $output  = '<div class="pageerrorcontainer"';
       if (FALSE == empty($get_var))
@@ -860,9 +834,6 @@ EOT;
 	{
 	  $output  .= $image_error.' '.$errors;
 	}
-	 if ($wikiUrl !='none'){
-      $output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a>';
-      }//wiki check
       $output .= '</div></div>';
       return $output;
     }
