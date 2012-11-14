@@ -15,6 +15,7 @@ Core - General
   - Numerous fixes to FileManager and MicroTiny wrt. advanced mode.
   - Removes wiki links from admin interface.
   - Minor fix to ShowMessages.
+  - Fixes so that simplex theme does not cause crash when editing content using that template, or editing the template itself.
 
 Version 1.11.2.1
 -----------------------------
