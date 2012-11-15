@@ -11,9 +11,6 @@
 				<a href="http://docs.cmsmadesimple.org/" rel="external" title="{'documentation'|lang}">{'documentation'|lang}</a>
 			</li>			
 			<li>
-				<a href="http://wiki.cmsmadesimple.org/index.php/Main_Page" rel="external" title="{'wiki'|lang}">{'wiki'|lang}</a>
-			</li>
-			<li>
 				<a href="http://forum.cmsmadesimple.org/" rel="external" title="{'forums'|lang}">{'forums'|lang}</a>
 			</li>
 			<li>
