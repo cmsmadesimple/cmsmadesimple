@@ -403,7 +403,7 @@ class Smarty_CMS extends SmartyBC
 		$this->assign('e_line', $e->getLine());
 		$this->assign('e_file', $e->getFile());
 		$this->assign('e_message', $e->getMessage());
-		$this->assign('e_trace', $e->getTraceAsString());	
+		$this->assign('e_trace', htmlentities($e->getTraceAsString()));	
 
 		$output = $this->fetch('error-console.tpl');
 

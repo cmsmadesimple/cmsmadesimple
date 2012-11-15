@@ -81,12 +81,10 @@
 					<strong>Message:</strong>
 				</p>
 				<pre>{$e_message}</pre>
-				{if isset($e_trace)}
 				<p class="message">
 					<a id="open" href="javascript:toggle();">View Full Trace &darr;</a>
 				</p>
 				<pre id="show" style="display: none;">{$e_trace}</pre>
-				{/if}
 			</div>
 		</div>
 	</body>
