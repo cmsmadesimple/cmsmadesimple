@@ -12,6 +12,11 @@
 				font-size: 12px;
 				background: #f6f6f6
 			}
+			a {
+				color: #232323;
+				text-decoration: none;
+				font-weight: bold;
+			}
 			#wrapper{
 				border-radius: 6px;
 				width: 75%;
@@ -53,6 +58,19 @@
 				text-transform: uppercase
 			}
 		</style>
+		<script language="javascript">
+		function toggle() {
+			var el = document.getElementById("show");
+			var trace = document.getElementById("open");
+				if(el.style.display == "block") {
+					el.style.display = "none";
+					trace.innerHTML = "View Full Trace &darr;";
+				} else {
+					el.style.display = "block";
+					trace.innerHTML = "Close Full Trace &uarr;";
+				}
+			}
+			</script>
 	</head>
 	<body>
 		<div id="wrapper">
@@ -65,9 +83,9 @@
 				<pre>{$e_message}</pre>
 				{if isset($e_trace)}
 				<p class="message">
-					<strong>Full trace:</strong>
+					<a id="open" href="javascript:toggle();">View Full Trace &darr;</a>
 				</p>
-				<pre>{$e_trace}</pre>
+				<pre id="show" style="display: none;">{$e_trace}</pre>
 				{/if}
 			</div>
 		</div>
