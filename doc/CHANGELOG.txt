@@ -19,6 +19,8 @@ Core - General
   - Ads @viewport rule to OneEleven stylesheets, improving media query behaviour on Windows 8 within Metro UI (snap mode)
   - Ads icons for apple touch link and msapplication metatag
   - OneEleven login, autofocus first input field
+  - Smarty engine upgraded to 3.1.12-Stable.
+  - Fixes problem with smarty variables in template parser object. Edit template and edit page won't be crashing system anymore.
 
 Version 1.11.2.1
 -----------------------------
