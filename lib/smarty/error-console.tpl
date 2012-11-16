@@ -38,7 +38,7 @@
 			}
 			#wrapper h1 {
 				margin: 0;
-				color: #f3f3f3;
+				color: #ddd;
 				font-size: 112px;
 				font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", sans serif;
 			}
