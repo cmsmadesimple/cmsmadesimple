@@ -1,10 +1,11 @@
 {strip}
-
 <div class="shortcuts">
 	<ul class="cf">
 		<li class="help">
 		{if isset($module_help_url)}
 			<a href="{$module_help_url}" title="{'module_help'|lang}">{'module_help'|lang}</a>
+		{else}
+			<a href="http://docs.cmsmadesimple.org/" rel="external" title="{'documentation'|lang}">{'documentation'|lang}</a>	
 		{/if}
 		</li>
 		<li class="settings">

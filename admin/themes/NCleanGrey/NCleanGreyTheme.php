@@ -193,7 +193,7 @@ class NCleanGreyTheme extends AdminTheme
 		  }
 
 		echo '</p></div>';
-		//LINE AFETER breadcrumbs 
+		//LINE AFTER breadcrumbs 
 		echo '<div class="hstippled">&nbsp;</div>';
     }
 
@@ -204,7 +204,6 @@ class NCleanGreyTheme extends AdminTheme
 		//FOOTER
 		echo '<div id="footer">
 		<a rel="external" href="http://www.cmsmadesimple.org"><b>CMS Made Simple</b></a><b>&trade;</b> &nbsp;&nbsp;&nbsp; '.$CMS_VERSION.' &nbsp;"' . $CMS_VERSION_NAME . '"</div><!--end footer-->';
-		//<br /><span class="icons-license">Icons by <a rel="external" href="http://dryicons.com">DryIcons</a></span>
 		//END
 	}
 	
@@ -240,10 +239,9 @@ class NCleanGreyTheme extends AdminTheme
 	echo '<h3 style="margin:0;">'.lang('help').'</h3>';
 	echo '<ul style="margin:0;">';
 	echo '<li><a rel="external" href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
-	echo '<li><a rel="external" href="http://wiki.cmsmadesimple.org/">'.lang('wiki').'</a></li>';
+	echo '<li><a rel="external" href="http://docs.cmsmadesimple.org/">'.lang('documentation').'</a></li>';
 	echo '<li><a rel="external" href="http://dev.cmsmadesimple.org/">'.lang('forge').'</a></li>';
 	echo '<li><a rel="external" href="http://cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
-	echo '<li><a rel="external" href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Extensions/Modules">'.lang('module_help').'</a></li>';
 	echo '</ul>';
 	echo '</div>';
 	echo '</div>';
@@ -548,7 +546,7 @@ class NCleanGreyTheme extends AdminTheme
 	}
     }
    
-	/* Functions that we want dont want the standard output from */
+	/* Functions that we want don't want the standard output from */
 	function OutputFooterJavascript() {}	
 }
 ?>
