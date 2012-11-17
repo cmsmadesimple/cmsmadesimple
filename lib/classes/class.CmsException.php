@@ -129,4 +129,13 @@ class CmsSQLErrorException extends CmsException {}
  */
 class CmsXMLErrorException extends CmsException {}
 
+/**
+ * A special exception indicating a problem with a file, directory, or filesystem
+ *
+ * @package CMS
+ * @author Robert Campbell (calguy1000@cmsmadesimple.org)
+ * @since 1.12
+ */
+class CmsFileSystemException extends CmsException {}
+
 ?>

@@ -52,47 +52,8 @@ try {
 					throw new CmsException($this->Lang('error_upload_filetype'));
 				}
 
-				// basic check or validity
-				// if there's no DOCTYPE within 100 bytes, there's a problem.
-				$fh = fopen($_FILES[$key]['tmp_name'],'r');
-				if( !$fh ) {
-					throw new CmsException($this->Lang('error_uploading'));
-				}
-				$str = fread($fh,200);
-				if( strpos($str,'<!DOCTYPE') === FALSE ) {
-					throw new CmsException($this->Lang('error_readxml'));
-				}
-				fclose($fh);
-
-				// get the first element
-				$x = '<!ELEMENT ';
-				$p = strpos($str,'<!ELEMENT ');
-				if( $p === FALSE ) {
-					throw new CmsException($this->Lang('error_readxml'));
-				}
-				$str = substr($str,$p+strlen($x));
-				$p = strpos($str,' ');
-				if( $p === FALSE ) {
-					// highly unlikely.
-					throw new CmsException($this->Lang('error_readxml'));
-				}
-				$word = substr($str,0,$p);
-				switch( $word ) {
-				case 'theme':
-					$reader = new dm_theme_reader($_FILES[$key]['tmp_name']);
-					$reader->validate();
-					// old ThemeManger theme
-					break;
-
-				case 'design':
-					// new DesignManager design
-					$reader = new dm_design_reader($_FILES[$key]['tmp_name']);
-					$reader->validate();
-					break;
-					
-				default:
-					throw new CmsException($this->Lang('error_readxml'));
-				}
+				$reader = dm_reader_factory::get_reader($_FILES[$key]['tmp_name']);
+				$reader->validate();
 
 				// copy uploaded file to temporary location
 				$tmpfile = tempnam(TMP_CACHE_LOCATION,'dm_');
@@ -128,6 +89,8 @@ try {
 				$this->RedirectToAdminTab();
 			}
 
+			$reader = dm_reader_factory::get_reader($tmpfile);
+
 			if( isset($params['next2']) ) {
 				$error = null;
 				if( !isset($params['check1']) ) {
@@ -147,7 +110,6 @@ try {
 			}
 
 			// suggest a new name for the 'theme'.
-			$reader = new dm_design_reader($tmpfile);
 			$smarty = cmsms()->GetSmarty();
 			$smarty->assign('tmpfile',$tmpfile);
 			$smarty->assign('cms_version',CMS_VERSION);
@@ -177,9 +139,11 @@ try {
 			throw new CmsException($this->Lang('error_filenotfound',$tmpfile));
 		}
 
+		$destdir = $config['uploads_path'].'/designmanager_import';
+		$reader = dm_reader_factory::get_reader($tmpfile);
+
 		$config = cmsms()->GetConfig();
 		$dirname = munge_string_to_url($newname);
-		$destdir = $config['uploads_path'].'/designmanager_import';
 		if( !is_dir($destdir) ) @mkdir($destdir);
 		if( !is_writable($destdir) ) {
 			throw new CmsException($this->Lang('error_notwritable',$destdir));
@@ -188,6 +152,7 @@ try {
 		if( is_dir($destdir) ) {
 			throw new CmsException($this->Lang('error_direxists',$destdir));
 		}
+
 		//@mkdir($destdir);
 		// create URL's ... 
     //  foreach FILE

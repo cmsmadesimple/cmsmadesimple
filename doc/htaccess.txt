@@ -55,6 +55,11 @@ FileEtag None
 AddOutputFilterByType DEFLATE text/css text/plain text/xml image/gif image/jpeg image/png
 </IfModule>
 
+<FilesMatch "fileloc.php|version.php|include.php">
+Limit Deny Allow
+Deny From All
+<FilesMatch>
+
 <IfModule mod_expires.c>
 <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
 # Set expires tags on various files... so that the browser wont attempt to reload them.

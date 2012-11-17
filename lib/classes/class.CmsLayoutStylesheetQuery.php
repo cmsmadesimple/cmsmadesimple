@@ -43,25 +43,25 @@ class CmsLayoutStylesheetQuery extends CmsDbQueryBase
     foreach( $this->_args as $key => $val ) {
       if( empty($val) ) continue;
       if( is_numeric($key) && $val[1] == ':' ) {
-	list($key,$second) = explode(':',$val,2);
+				list($key,$second) = explode(':',$val,2);
       }
       switch( strtolower($key) ) {
       case 'n': // name (prefix)
-	$second = trim($second);
-	$where[] = 'name LIKE '.$db->qstr($second.'%');
-	break;
+				$second = trim($second);
+				$where[] = 'name LIKE '.$db->qstr($second.'%');
+				break;
       case 'd': // design
-	$q2 = 'SELECT css_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.'
+				$q2 = 'SELECT css_id FROM '.cms_db_prefix().CmsLayoutCollection::CSSTABLE.'
                WHERE design_id = ?';
-	$tpls = $db->GetCol($q2,array((int)$second));
-	$where[] = 'id IN ('.implode(',',$tpls).')';
-	break;
+				$tpls = $db->GetCol($q2,array((int)$second));
+				$where[] = 'id IN ('.implode(',',$tpls).')';
+				break;
       case 'limit':
-	$this->_limit = max(1,min(1000,$val));
-	break;
+				$this->_limit = max(1,min(1000,$val));
+				break;
       case 'offset':
-	$this->_offset = max(0,$val);
-	break;
+				$this->_offset = max(0,$val);
+				break;
       }
     }
     

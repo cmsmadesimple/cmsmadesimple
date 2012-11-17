@@ -416,18 +416,29 @@ class CmsLayoutStylesheet
 		if( count($out) ) return $out;
 	}
 
-  public static function get_all($brief = TRUE)
+  public static function get_all($as_list = FALSE)
   {
     $db = cmsms()->GetDb();
 
-    $query = 'SELECT id,name,media_type,media_query,media_type,created,modified FROM '.cms_db_prefix().self::TABLENAME.
-             ' ORDER BY modified DESC';
-    $dbr = $db->GetArray($query);
+		$query = null;
+		if( $as_list ) {
+			$query = 'SELECT id,name FROM '.cms_db_prefix().self::TABLENAME.' ORDER BY modified DESC';
+		}
+		else {
+			$query = 'SELECT id,name,media_type,media_query,media_type,created,modified FROM '.cms_db_prefix().self::TABLENAME.
+				       ' ORDER BY modified DESC';
+		}
+		$dbr = $db->GetArray($query);
 
     if( is_array($dbr) && count($dbr) ) {
       $out = array();
       foreach( $dbr as $row ) {
-				$out[] = self::_load_from_data($row);
+				if( $as_list ) {
+					$out[$row['id']] = $row['name'];
+				}
+				else {
+					$out[] = self::_load_from_data($row);
+				}
       }
       return $out;
     }

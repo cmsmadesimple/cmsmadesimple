@@ -454,6 +454,7 @@ $css_menutop_2col_theme->add_stylesheet($css_list['Navigation: CSSMenu - Horizon
 $css_menutop_2col_theme->add_stylesheet($css_list['Module: News']->get_id());
 $css_menutop_2col_theme->add_stylesheet($css_list['Print']->get_id());
 $css_menutop_2col_theme->add_stylesheet($css_list['Navigation: FatFootMenu']->get_id());
+$css_menutop_2col_theme->add_stylesheet($css_list['Accessibility and cross-browser tools']->get_id());
 $css_menutop_2col_theme->save();
 
 $leftsimple_1col_theme->add_stylesheet($css_list['Layout: Left sidebar + 1 column']->get_id());
