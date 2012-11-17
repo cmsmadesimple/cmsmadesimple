@@ -28,13 +28,11 @@ if( !count($dirlist) ) {
   $this->Redirect($id,"defaultadmin",$returnid,$params);
 }
 
-
 $errors = array();
 $destloc = '';
 if( isset($params['submit']) ) {
   $advancedmode = filemanager_utils::check_advanced_mode();
   $basedir = $config['root_path'];
-  if( $advancedmode ) $basedir = dirname($basedir);
 
   $destname = '';
   $destdir = trim($params['destdir']);
@@ -136,7 +134,7 @@ if( is_array($params['selall']) ) {
 }
 $smarty->assign('startform', $this->CreateFormStart($id, 'fileaction', $returnid,"post","",false,"",$params));
 $smarty->assign('endform', $this->CreateFormEnd());
-$smarty->assign('cwd',$cwd);
+$smarty->assign('cwd','/'.$cwd);
 $smarty->assign('dirlist',$dirlist);
 $smarty->assign('selall',$selall);
 $smarty->assign('mod',$this);

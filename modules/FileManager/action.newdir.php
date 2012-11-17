@@ -21,9 +21,6 @@ if (isset($params["newdirname"])) {
 
     $config = cmsms()->GetConfig();
     $base = $config['root_path'];
-    if( filemanager_utils::check_advanced_mode() ) {
-      $base = dirname($base);
-    }
     $newdir = $this->Slash($params["path"], $params["newdirname"]);
     $newdir = $this->Slash($base, $newdir);
 

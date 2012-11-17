@@ -77,7 +77,7 @@ class MicroTiny extends CMSModule {
 	}
 
 	public function GetDependencies() {
-     return array('FileManager'=>'1.4.0');
+     return array('FileManager'=>'1.4.2');
   }
 
 	public function GetHelp($lang='en_US') {

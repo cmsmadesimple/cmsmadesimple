@@ -104,7 +104,6 @@ class OneElevenTheme extends CmsAdminThemeBase {
 		// get the wiki URL and a title for that link.
 		$bc = $this->get_breadcrumbs();
 		if ($bc) {
-			$wikiUrl = $config['wiki_url'];
 			for ($i = 0; $i < count($bc); $i++) {
 				$rec = $bc[$i];
 				$title = $rec['title'];
@@ -121,28 +120,14 @@ class OneElevenTheme extends CmsAdminThemeBase {
 					$module_name = preg_replace('/_([A-Z])_/', "$1", $module_name);
 					if ($module_name[0] == '_')
 						$module_name = substr($module_name, 1);
-					$wikiUrl .= '/' . $module_name;
 				} else {
 					if (($p = strrchr($title, ':')) !== FALSE) {
 						$title = substr($title, 0, $p);
 					}
 					// find the key of the item with this title.
 					$title_key = $this->find_menuitem_by_title($title);
-					$wikiUrl .= '/' . lang($title_key[0]);
 				}
 			}// for loop.
-
-			// set the wiki url and wiki help text.
-			if (get_preference(get_userid(), 'hide_help_links')) {
-				$wikiUrl = str_replace(' ', '_', $wikiUrl);
-				$wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
-				$this->set_value('wiki_url', $wikiUrl);
-				if (!empty($link_text)) {
-					$this->set_value('wiki_link_text', $link_text);
-				} else {
-					$this->set_value('wiki_link_text', lang('help_external'));
-				}
-			}
 
 			// set the module help url (this should be supplied TO the theme)
 			if ($module_help_type == 'both') {
@@ -238,11 +223,6 @@ class OneElevenTheme extends CmsAdminThemeBase {
 			$smarty->assign('module_help_url', $module_help_url);
 		}
 
-		// wiki help url?
-		if (($wiki_url = $this->get_value('wiki_url'))) {
-			$smarty->assign('wiki_url', $wiki_url);
-			$smarty->assign('wiki_link_test', $this->get_value('wiki_link_text'));
-		}
 		// if bookmarks
 		if (get_preference(get_userid(), 'bookmarks')) {
 			$marks = $this->get_bookmarks();

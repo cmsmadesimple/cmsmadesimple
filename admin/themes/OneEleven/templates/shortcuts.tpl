@@ -1,12 +1,11 @@
 {strip}
-
 <div class="shortcuts">
 	<ul class="cf">
 		<li class="help">
 		{if isset($module_help_url)}
 			<a href="{$module_help_url}" title="{'module_help'|lang}">{'module_help'|lang}</a>
 		{else}
-			<a href="http://wiki.cmsmadesimple.org/index.php/Main_Page" rel="external" title="{'module_help'|lang}">{'module_help'|lang}</a>	
+			<a href="http://docs.cmsmadesimple.org/" rel="external" title="{'documentation'|lang}">{'documentation'|lang}</a>	
 		{/if}
 		</li>
 		<li class="settings">
@@ -37,10 +36,9 @@
     {/if}
     <h3>{'help'|lang}</h3>
     <ul>
+      <li><a rel="external" class="external" href="http://docs.cmsmadesimple.org" title="{'documentation'|lang}">{'documentation'|lang}</a></li>
       <li><a rel="external" class="external" href="http://forum.cmsmadesimple.org" title="{'forums'|lang}">{'forums'|lang}</a></li>
-      <li><a rel="external" class="external" href="http://wiki.cmsmadesimple.org" title="{'wiki'|lang}">{'wiki'|lang}</a></li>
-      <li><a rel="external" class="external" href="http://cmsmadesimple.org/main/support/IRC">{'irc'|lang}</a></li>
-      <li><a rel="external" class="external" href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Extensions/Modules">{'module_help'|lang}</a></li>
+	  <li><a rel="external" class="external" href="http://cmsmadesimple.org/main/support/IRC">{'irc'|lang}</a></li>
     </ul>
 </div> 
 {/if}

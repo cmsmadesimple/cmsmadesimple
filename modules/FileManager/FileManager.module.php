@@ -51,7 +51,7 @@ class FileManager extends CMSModule {
   }
   
   function GetVersion() {
-    return '1.4.1';
+    return '1.4.2';
   }
 
   function GetHeaderHTML()
@@ -401,10 +401,6 @@ class FileManager extends CMSModule {
 	  $advancedmode = filemanager_utils::check_advanced_mode();
 	  $basedir = $config['root_path'];
 	  $baseurl = $config['root_url'];
-	  if( $advancedmode ) {
-	    $basedir = dirname($basedir);
-	    $baseurl = dirname($baseurl);
-	  }
 
 	  $filepath=$basedir.'/'.$path;
 	  $url=$baseurl.'/'.$path;

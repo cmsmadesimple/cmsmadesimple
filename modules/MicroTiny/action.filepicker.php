@@ -63,14 +63,8 @@ if ($type=="image") {
 } else {
     $smarty->assign("isimage","0");
 }
-if( filemanager_utils::check_advanced_mode() ) {
-  $starturl = dirname($config['root_url']).'/'.$startpath;
-  $startdir = filemanager_utils::join_path(dirname($config['root_path']),$startpath);
-}
-else {
-  $starturl = $config['root_url'].'/'.$startpath;
-  $startdir = filemanager_utils::join_path($config['root_path'],$startpath);
-}
+$starturl = $config['root_url'].'/'.$startpath;
+$startdir = filemanager_utils::join_path($config['root_path'],$startpath);
 
 function sortfiles($file1,$file2) {
     if ($file1["isdir"] && !$file2["isdir"]) return -1;

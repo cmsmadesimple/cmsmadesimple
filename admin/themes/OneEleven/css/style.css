@@ -2006,6 +2006,21 @@ a.toggle-dropzone:focus {
 }
 /* --- SCREEN UP TO 1024px --- */
 @media screen and (max-width: 1024px) {
+	@-ms-viewport {
+		width: device-width;
+	}
+	@-o-viewport {
+		width: device-width;
+	}
+	@-moz-viewport {
+		width: device-width;
+	}
+	@-webkit-viewport {
+		width: device-width;
+	}
+	@viewport {
+		width: device-width;
+	}	
 	/* change tabs to full width on smaller screen size */
 	.sidebar-on #page_tabs div {
 		text-align: left;
@@ -2079,6 +2094,21 @@ a.toggle-dropzone:focus {
 }
 /* --- SCREEN UP TO 768px --- */
 @media screen and (max-width: 768px) {	
+	@-ms-viewport {
+		width: device-width;
+	}
+	@-o-viewport {
+		width: device-width;
+	}
+	@-moz-viewport {
+		width: device-width;
+	}
+	@-webkit-viewport {
+		width: device-width;
+	}
+	@viewport {
+		width: device-width;
+	}
 	/* override our predefined min-with for smaller screens and full height stuff */
 	body {
 		margin: 0;
@@ -2236,6 +2266,21 @@ a.toggle-dropzone:focus {
 	}	
 }
 @media screen and (max-width: 480px) {
+	@-ms-viewport {
+		width: device-width;
+	}
+	@-o-viewport {
+		width: device-width;
+	}
+	@-moz-viewport {
+		width: device-width;
+	}
+	@-webkit-viewport {
+		width: device-width;
+	}
+	@viewport {
+		width: device-width;
+	}
 	aside.message,
 	.pagemcontainer,
 	.pageerrorcontainer,

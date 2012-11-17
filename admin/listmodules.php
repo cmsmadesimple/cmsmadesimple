@@ -304,7 +304,6 @@ else if ($action == "showmodulehelp") {
     // 		$dirname = dirname(__FILE__);
     // 		include($dirname.'/lang/en_US/admin.inc.php');
     $section = lang($modinstance->GetAdminSection());
-    $wikiUrl .= '/'.$section.'/'.$moduleName;
 
     if( $orig_lang != 'en_US' ) {
       $cur_lang = CmsNlsOperations::get_current_language();

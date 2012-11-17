@@ -77,12 +77,11 @@ final class filemanager_utils
     }
     if( $advancedmode ) {
       $dir = $config['root_path'];
-      return basename($dir);
     }
-    else {
-      $dir = substr($dir,strlen($config['root_path'])+1);
-      return $dir;
-    }
+
+    $dir = substr($dir,strlen($config['root_path'])+1);
+    if( $dir == '' ) $dir = '/';
+    return $dir;
   }
 
   public static function test_invalid_path($path)
@@ -91,11 +90,7 @@ final class filemanager_utils
     $config = $gCms->GetConfig();
     $advancedmode=filemanager_utils::check_advanced_mode();
     
-    if( $advancedmode ) {
-      $prefix = dirname($config['root_path']);
-    } else {
-      $prefix = $config['root_path'];
-    }
+    $prefix = $config['root_path'];
     $path = self::join_path($prefix,$path);
     $path=realpath($path);
     if( $path === FALSE ) {
@@ -118,10 +113,10 @@ final class filemanager_utils
   {
     // check the path
     $path = cms_userprefs::get('filemanager_cwd',self::get_default_cwd());
-    if( self::test_invalid_path($path) )
-      {
-	$path = self::get_default_cwd();
-      }
+    if( self::test_invalid_path($path) ) {
+      $path = self::get_default_cwd();
+    }
+    if( $path == '' ) $path = '/';
     return $path;
   }
 
@@ -134,17 +129,13 @@ final class filemanager_utils
     $advancedmode = self::check_advanced_mode();      
 
     // validate the path.
-    if( $advancedmode ) {
-      $prefix = dirname($config['root_path']);
-    } else {
-      $prefix = $config['root_path'];
-    }
+    $prefix = $config['root_path'];
     $tmp = self::join_path($prefix,$path);
     $tmp = realpath($tmp);
     if( !is_dir($tmp) ) {
       throw new Exception('Cannot set current working directory to an invalid path');
     }
-    if( !startswith($tmp,$config['root_path']) ) {
+    if( !self::test_invalid_path($tmp) ) {
       throw new Exception('Cannot set current working directory to an invalid path');
     }
 
@@ -159,12 +150,15 @@ final class filemanager_utils
     if( count($args) < 1 ) return;
     if( count($args) < 2 ) return $args[0];
 
+    $args2 = array();
     for( $i = 0; $i < count($args); $i++ ) {
+      if( $args[$i] == '' ) continue;
       if( $i != 0 && (startswith($args[$i],'/') || startswith($args[$i],'\\')) ) $args[$i] = substr($args[$i],1);
       if( endswith($args[$i],'/') || endswith($args[$i],'\\') ) $args[$i] = substr($args[$i],0,-1);
+      $args2[] = $args[$i];
     }
 
-    return implode(DIRECTORY_SEPARATOR,$args);
+    return implode(DIRECTORY_SEPARATOR,$args2);
   }
 
   public static function get_full_cwd()
@@ -174,11 +168,7 @@ final class filemanager_utils
     if( self::test_invalid_path($path) ) {
       $path = self::get_default_cwd();
     }
-    $advancedmode = self::check_advanced_mode();
     $base = $config['root_path'];
-    if( $advancedmode ) {
-      $base = dirname($base);
-    }
     $realpath = self::join_path($base,$path);
     return $realpath;
   }
@@ -227,12 +217,8 @@ final class filemanager_utils
     $config = $gCms->GetConfig();
 
     // convert the cwd into a real path... slightly different for advanced mode.
-    if( !$advancedmode ) {
-      $realpath = self::join_path($config['root_path'],$path);
-    }
-    else {
-      $realpath = self::join_path(dirname($config['root_path']),$path);
-    }
+    $realpath = self::join_path($config['root_path'],$path);
+
     $dir=@opendir($realpath);
     if (!$dir) return false;
     while ($file=readdir($dir)) {
@@ -267,13 +253,7 @@ final class filemanager_utils
       } else {
 	$info['size']=$statinfo['size'];
 	$info['date']=$statinfo['mtime'];
-	if( !$advancedmode ) {
-	  $info['url']=self::join_path($config['root_url'], $path, $file);
-	} else {
-	  $tmp = explode('/',substr($path,1));
-	  $newpath = implode('/',array_slice($tmp,1));
-	  $info['url']=self::join_path($config['root_url'], $newpath, $file);
-	}
+	$info['url']=self::join_path($config['root_url'], $path, $file);
 	$info['url'] = str_replace('\\','/',$info['url']); // windoze both sucks, and blows.
 	$explodedfile=explode('.', $file); $info['ext']=array_pop($explodedfile);
 	$info['fileinfo']=GetFileInfo(self::join_path($realpath,$file),$info['ext'],false);
@@ -307,7 +287,6 @@ final class filemanager_utils
     }
     
     $tmp = usort($result,'filemanager_utils::_FileManagerCompareFiles');
-    //$result=$filemod->columnSort($result);
     return $result;
   }
 
@@ -401,7 +380,7 @@ final class filemanager_utils
       return $res;
     }
 
-    $output = fmutils_get_dirs($startdir,'/'.basename($startdir).'/');
+    $output = fmutils_get_dirs($startdir,'/');
     if( is_array($output) && count($output) ) {
       $output['/'.basename($startdir)] = '/'.basename($startdir);
       ksort($output);

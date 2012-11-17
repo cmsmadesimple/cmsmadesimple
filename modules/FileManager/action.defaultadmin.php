@@ -1,10 +1,10 @@
 <?php
-
 if (!function_exists("cmsms")) exit;
 
 if (!$this->AccessAllowed() && !$this->AdvancedAccessAllowed()) exit;
 
 if (isset($params["fmmessage"]) && $params["fmmessage"]!="") {
+  // gotta get rid of this stuff.
   $count="";
   if (isset($params["fmmessagecount"]) && $params["fmmessagecount"]!="") {
     $count=$params["fmmessagecount"];
@@ -14,6 +14,7 @@ if (isset($params["fmmessage"]) && $params["fmmessage"]!="") {
 }
 
 if (isset($params["fmerror"]) && $params["fmerror"]!="") {
+  // gotta get rid of this stuff
   $count="";
   if (isset($params["fmerrorcount"]) && $params["fmerrorcount"]!="") {
     $count=$params["fmerrorcount"];

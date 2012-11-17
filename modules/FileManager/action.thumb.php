@@ -42,7 +42,6 @@ if (count($selall)>1) {
 
 $advancedmode = filemanager_utils::check_advanced_mode();
 $basedir = $config['root_path'];
-if( $advancedmode ) $basedir = dirname($basedir);
 
 $config=cmsms()->GetConfig();
 $filename=$this->decodefilename($selall[0]);
@@ -55,7 +54,6 @@ $thumb = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),'thu
 
 if( isset($params['submit']) ) {
   $thumb = filemanager_utils::join_path($basedir,filemanager_utils::get_cwd(),'thumb_'.$filename);
-  @unlink($thumb);
   $thumb = cms_utils::generate_thumbnail($src);
   
   if( !$thumb ) {

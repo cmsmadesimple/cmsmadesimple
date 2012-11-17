@@ -29,7 +29,6 @@ $errors = array();
 if( isset($params['submit']) ) {
   $advancedmode = filemanager_utils::check_advanced_mode();
   $basedir = $config['root_path'];
-  if( $advancedmode ) $basedir = dirname($basedir);
   $config = cmsms()->GetConfig();
 
   foreach( $selall as $file ) {

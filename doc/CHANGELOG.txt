@@ -4,6 +4,15 @@ Core - General:
   - Remove old code that handles the 'id' REQUEST parameter
   - Remove all functionality for the module 'lang' parameter... silently ignore this parameter, for now
   - Adds three new methods to the group class (for internal use only).
+  - Numerous fixes to FileManager and MicroTiny wrt. advanced mode.
+  - Removes wiki links from admin interface.
+  - Minor fix to ShowMessages.
+  - Fixes so that simplex theme does not cause crash when editing content using that template, or editing the template itself.
+  - Ads @viewport rule to OneEleven stylesheets, improving media query behaviour on Windows 8 within Metro UI (snap mode)
+  - Ads icons for apple touch link and msapplication metatag
+  - OneEleven login, autofocus first input field
+  - Smarty engine upgraded to 3.1.12-Stable.
+  - Fixes problem with smarty variables in template parser object. Edit template and edit page won't be crashing system anymore.
 
 Core - Bug Reports:
 

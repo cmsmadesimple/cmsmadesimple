@@ -26,7 +26,7 @@ $process = 'install';
 $max_pages = 7;
 
 
-define('CMS_INSTALL_HELP_URL', 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Installation/Install_Process');
+define('CMS_INSTALL_HELP_URL', 'http://docs.cmsmadesimple.org/installation/requirements');
 define('CMS_INSTALL_BASE', dirname(__FILE__));
 define('CMS_BASE', dirname(CMS_INSTALL_BASE));
 
