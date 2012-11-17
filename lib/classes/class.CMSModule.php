@@ -1806,7 +1806,7 @@ abstract class CMSModule
 	      echo $this->ShowErrors($this->__errors);
 	    }
 	    if( is_array($this->__messages) && count($this->__messages) ) {
-	      echo $this->ShowMessage($this->__messages);
+	      echo $this->ShowMessage($this->__messages[0]);
 	    }
 	  }
 

@@ -1,7 +1,7 @@
 <?php
 #BEGIN_LICENSE
 #-------------------------------------------------------------------------
-# (c) 2010 by Robert Campbell 
+# CmsException (c) 2012 by Robert Campbell 
 # (calguy1000@cmsmadesimple.org)
 # A collection of CMSMS Exception classes
 # 
