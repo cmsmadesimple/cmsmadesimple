@@ -127,6 +127,7 @@ try {
     break;
 
   case 3:
+		// do the importing.
 		if( !isset($params['tmpfile']) || !isset($params['newname']) ||
 				$params['newname'] == '') {
 			// bad error, redirect to admin tab.
@@ -141,6 +142,7 @@ try {
 
 		$destdir = $config['uploads_path'].'/designmanager_import';
 		$reader = dm_reader_factory::get_reader($tmpfile);
+		$reader->set_suggested_name($newname);
 
 		$config = cmsms()->GetConfig();
 		$dirname = munge_string_to_url($newname);
@@ -152,6 +154,7 @@ try {
 		if( is_dir($destdir) ) {
 			throw new CmsException($this->Lang('error_direxists',$destdir));
 		}
+
 
 		//@mkdir($destdir);
 		// create URL's ... 

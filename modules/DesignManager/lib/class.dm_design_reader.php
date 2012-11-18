@@ -239,7 +239,7 @@ class dm_design_reader
     return $out;
   }
 
-	public function validate_template_names()
+	protected function validate_template_names()
 	{
 		$this->_scan();
 
@@ -266,7 +266,7 @@ class dm_design_reader
 	}
 
 
-	public function validate_stylesheet_names()
+	protected function validate_stylesheet_names()
 	{
 		$this->_scan();
 
@@ -292,6 +292,54 @@ class dm_design_reader
 		}
 	}
 
+	public function get_new_name()
+	{
+		$name = $this->get_suggested_name();
+		if( !$name ) {
+			// no suggested name... get one from the design.
+			$info = $this->get_design_info();
+			$name = $info['name'];
+		}
+		if( !$name ) {
+			// still no name... try to use the filename.
+			$t = $this->get_filename();
+			$x = strpos($t,'.');
+			$name = substr($t,$x);
+		}
+		
+		// now see if it's a duplicate name
+		$list = CmsLayoutCollection::get_list();
+		$orig_name = $name;
+		if( is_array($list) && count($list) ) {
+			$name_list = array_values($list);
+			$n = 1;
+			while( $n < 100 ) {
+				if( !in_array($name,$name_list) ) {
+					break;
+				}
+				$n++;
+				$name = "$orig_name $n";
+			}
+			if( $n >= 100 ) {
+				throw new CmsException('Could not determine a new name for this design');
+			}
+		}
+		
+		return $name;
+	}
+
+	public function get_destination_dir()
+	{
+		$name = $this->get_new_name();
+		$config = cmsms()->GetConfig();
+		$dirname = munge_string_to_url($name);
+		$dir = cms_join_path($config['uploads_dir'],'designs',$dirname);
+		@mkdir($dir,0777,TRUE);
+		if( !is_dir($dir) || !is_writable($dir) ) {
+			dadfadfa
+		}
+	}
+
 	public function import()
 	{
 		$this->validate_template_name();
@@ -299,6 +347,24 @@ class dm_design_reader
 
 		$destdir = $this->get_destination_dir();
 		$newname = $this->get_new_name();
+
+		/*
+		// 1.  create design object
+		// 2.  expand files (__URL)
+    // 3.  create stylesheets
+		//     foreach FILE
+    //        if url
+                replace <key> with [[uploads_url]]/designs/$dirname/$filename
+           save stylesheet
+           add to design
+       4.  create templates
+           foreach FILE
+              if not CSS
+                replace <KEY> with new name
+           save template
+           add to design
+       5.  save design
+		*/
 	}
 } // end of class
 
