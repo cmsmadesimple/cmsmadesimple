@@ -531,7 +531,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_permission($userid, 'Manage All Content'));
 
 			if ($permission)
 			{
@@ -556,7 +556,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_permission($userid, 'Manage All Content'));
 
 			if ($permission)
 			{
@@ -583,7 +583,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_permission($userid, 'Manage All Content'));
 
 			if ($permission)
 			{
@@ -602,7 +602,7 @@ else
 
 	  foreach ($nodelist as $node)
 	    {
-	      $permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
+	      $permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_permission($userid, 'Manage All Content'));
 
 	      if ($permission)
 		{
@@ -621,7 +621,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_permission($userid, 'Manage All Content'));
 
 			if ($permission)
 			{
