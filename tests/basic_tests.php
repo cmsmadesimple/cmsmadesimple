@@ -1,7 +1,8 @@
 <?php
 
 // we should have some config variable to get this
-define('SIMPLETEST','/tmp/simpletest');
+require_once('test_settings.php');
+define('SIMPLETEST',$test_settings['simpletest']);
 define('CMSMS',dirname(dirname(__FILE__)));
 
 require_once(SIMPLETEST.'/autorun.php');
