@@ -19,7 +19,7 @@
 #
 #-------------------------------------------------------------------------
 
-class dm_design_reader 
+class dm_design_reader extends dm_reader_base
 {
   private $_xml;
   private $_scanned;
@@ -336,8 +336,10 @@ class dm_design_reader
 		$dir = cms_join_path($config['uploads_dir'],'designs',$dirname);
 		@mkdir($dir,0777,TRUE);
 		if( !is_dir($dir) || !is_writable($dir) ) {
-			dadfadfa
+			throw new CmsException('Could not create directory, or could not write in directory '.$dir);
 		}
+
+		return $dirname;
 	}
 
 	public function import()
@@ -345,12 +347,28 @@ class dm_design_reader
 		$this->validate_template_name();
 		$this->validate_stylesheet_name();
 
-		$destdir = $this->get_destination_dir();
+		$config = cmsms()->GetConfig();
 		$newname = $this->get_new_name();
+		$destdir = $this->get_destination_dir();
+		$info    = $this->get_design_info();
 
-		/*
-		// 1.  create design object
-		// 2.  expand files (__URL)
+		// create new design... fill it with info
+		$design = new CmsLayoutCollection();
+		$design->set_name($newname);
+		// todo
+		
+		// expand URL FILES to become real files
+		foreach( $this->_file_map as $key => &$rec ) {
+			if( !startswith($key,'__URL::') ) continue;
+			if( !isset($rec['data']) || $rec['data'] == '' ) continue;
+
+			$destfile = cms_join_path($config['uploads_url'],'designts',$destdir,$rec['value']);
+			file_put_contents($destfile,base64_decode($rec['data']));
+			$rec['tpl_url'] = "{uploads_url}/designs/$destdir/{$rec['value']}";
+			$rec['css_url'] = "[[uploads_url]]/designs/$destdir/{$rec['value']}";			
+		}
+
+		foreach( $this->list_stylesheets() as $one )
     // 3.  create stylesheets
 		//     foreach FILE
     //        if url

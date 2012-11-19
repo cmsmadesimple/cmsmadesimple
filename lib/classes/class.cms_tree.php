@@ -78,19 +78,15 @@ class cms_tree
    */
   public function __construct($key = '',$value = '')
   {
-    if( $key )
-      {
-	if( is_string($key) )
-	  {
-	    $this->setTag($key,$value);
-	  }
-	else if( is_array($key) )
-	  {
-	    foreach( $key as $k => $v )
-	      {
-		$this->set_tag($k,$v);
-	      }
-	  }
+	  if( $key ) {
+		  if( is_string($key) ) {
+			  $this->set_tag($key,$value);
+		  }
+		  else if( is_array($key) ) {
+			  foreach( $key as $k => $v ) {
+				  $this->set_tag($k,$v);
+			  }
+		  }
       }
   }
 
@@ -100,43 +96,40 @@ class cms_tree
    *
    * @param string The tag name to search for
    * @param mixed  The tag value to search for
+   * @param boolean Wether the value should be treated as case insensitive.
    * @return cms_tree or null on failure.
    */
-  public function find_by_tag($tag_name,$value,$case_insensitive = false)
+  public function &find_by_tag($tag_name,$value,$case_insensitive = FALSE)
   {
-    if( $this->_tags )
-      {
-		  if( $case_insensitive )
-			  {
-				  if( isset($this->_tags[$tag_name]) && $this->_tags[$tag_name] == $value )
-					  {
-						  return $this;
-					  }
+	  $res = null;
+	  if( !is_string($tag_name) ) return $res;
+	  if( !is_string($value) ) $case_insensitive = FALSE;
+
+	  if( $this->_tags ) {
+		  if( isset($this->_tags[$tag_name]) ) {
+			  if( $case_insensitive ) {
+				  if( isset($this->_tags[$tag_name]) && strtolower($this->_tags[$tag_name]) == strtolower($value) ) {
+					  return $this;
+				  }
 			  }
-		  else
-			  {
-				  if( is_object($this->_tags[$tag_name]) ) { stack_trace(); die(); }
-				  if( isset($this->_tags[$tag_name]) && strtolower($this->_tags[$tag_name]) == strtolower($value) )
-					  {
-						  return $this;
-					  }
+			  else {
+				  if( isset($this->_tags[$tag_name]) && $this->_tags[$tag_name] == $value ) {
+					  return $this;
+				  }
 			  }
+		  }
       }
     
-    if( $this->has_children() )
-		{
-			for( $i = 0; $i < count($this->_children); $i++ )
-				{
-					$tmp = $this->_children[$i]->find_by_tag($tag_name,$value);
-					if( $tmp ) 
-						{
-							return $tmp;
-						}
-				}
-		}
+	  if( $this->has_children() ) {
+		  for( $i = 0; $i < count($this->_children); $i++ ) {
+			  $tmp = $this->_children[$i]->find_by_tag($tag_name,$value);
+			  if( $tmp ) {
+				  return $tmp;
+			  }
+		  }
+	  }
 
-	$res = null;
-	return $res;
+	  return $res;
   }
 
 
@@ -147,11 +140,10 @@ class cms_tree
    */
   public function has_children()
   {
-    if( !is_array($this->_children) )
-      {
-	return FALSE;
+	  if( !is_array($this->_children) ) {
+		  return FALSE;
       }
-    return TRUE;
+	  return TRUE;
   }
 
 
@@ -163,11 +155,10 @@ class cms_tree
    */
   public function set_tag($key,$value)
   {
-    if( !$this->_tags )
-      {
-	$this->_tags = array();
+	  if( !$this->_tags ) {
+		  $this->_tags = array();
       }
-    $this->_tags[$key] = $value;
+	  $this->_tags[$key] = $value;
   }
 
 
@@ -179,11 +170,11 @@ class cms_tree
    */
   public function &get_tag($key)
   {
-    $res = null;
-    if( !$this->_tags ) return $res;
-    if( !isset($this->_tags[$key]) ) return $res;
-    $res = $this->_tags[$key];
-    return $res;
+	  $res = null;
+	  if( !$this->_tags ) return $res;
+	  if( !isset($this->_tags[$key]) ) return $res;
+	  $res = $this->_tags[$key];
+	  return $res;
   }
 
 
@@ -202,28 +193,22 @@ class cms_tree
    */
   protected function remove_node(cms_tree &$node, $search_children = false)
   {
-    if( !$this->has_children() ) return FALSE;
+	  if( !$this->has_children() ) return FALSE;
 
-    for( $i = 0; $i < count($this->_children); $i++ )
-      {
-	if( $this->_children[$i] == $node )
-	  {
-	    // item found.
-	    unset($this->_children[$i]);
-	    $this->_children = @array_values($this->_children);
-	    return TRUE;
+	  for( $i = 0; $i < count($this->_children); $i++ ) {
+		  if( $this->_children[$i] == $node ) {
+			  // item found.
+			  unset($this->_children[$i]);
+			  $this->_children = @array_values($this->_children);
+			  return TRUE;
+		  }
+		  elseif ($search_children && $this->_children[$i]->has_children()) {
+			  $res = $this->_children[$i]->remove_node($node,$search_children);
+			  if( $res ) return TRUE;
+		  }
 	  }
-	elseif ($search_children && $this->_children[$i]->has_children())
-	  {
-	    $res = $this->_children[$i]->removeNode($node,$search_children);
-	    if( $res )
-	      {
-		return TRUE;
-	      }
-	  }
-      }
 
-    return FALSE;
+	  return FALSE;
   }
 
 
@@ -236,9 +221,9 @@ class cms_tree
    */
   public function remove()
   {
-    if( is_null($this->_parent) ) return FALSE;
+	  if( is_null($this->_parent) ) return FALSE;
 
-    return $this->_parent->remove_node($this);
+	  return $this->_parent->remove_node($this);
   }
 
   
@@ -249,7 +234,7 @@ class cms_tree
    */
   public function &getParent()
   {
-    return $this->_parent;
+	  return $this->_parent;
   }
 
 
@@ -257,20 +242,19 @@ class cms_tree
    * Add the specified node as a child to this node.
    *
    * @param cms_tree The node to add
+   * @return void
    */
   public function add_node(cms_tree &$node)
   {
-    if( !is_array($this->_children) )
-      {
-	$this->_children = array();
+	  if( !is_array($this->_children) ) {
+		  $this->_children = array();
       }
 
-    for( $i = 0; $i < count($this->_children); $i++ )
-      {
-	if( $this->_children[$i] == $node ) return FALSE;
+	  for( $i = 0; $i < count($this->_children); $i++ ) {
+		  if( $this->_children[$i] == $node ) return FALSE;
       }
-    $node->_parent = $this;
-    $this->_children[] = $node;
+	  $node->_parent = $this;
+	  $this->_children[] = $node;
   }
 
 
@@ -281,11 +265,10 @@ class cms_tree
    */
   public function count_children()
   {
-    if( $this->has_children() )
-      {
-	return count($this->_children);
+	  if( $this->has_children() ) {
+		  return count($this->_children);
       }
-    return 0;
+	  return 0;
   }
 
 
@@ -296,13 +279,28 @@ class cms_tree
    */
   public function count_siblings()
   {
-    if( $this->_parent )
-      {
-	return $this->_parent->count_children();
+	  if( $this->_parent ) {
+		  return $this->_parent->count_children();
       }
-    return 0;
+	  return 1;
   }
 
+
+  /**
+   * Count the total number of all nodes, including myself.
+   *
+   * @return integer
+   */
+  public function count_nodes()
+  {
+	  $n = 1;
+	  if( $this->has_children() ) {
+		  foreach( $this->_children as &$one ) {
+			  $n += $one->count_nodes();
+		  }
+	  }
+	  return $n;
+  }
 
   /**
    * Find the depth of the current node.
@@ -313,14 +311,13 @@ class cms_tree
    */
   public function get_level()
   {
-    $n = -1;
-    $node = $this;
-    while( $node->_parent )
-      {
+	  $n = 1;
+	  $node = $this;
+	  while( $node->_parent ) {
 		  $n++;
 		  $node = $node->_parent;
-      }
-    return $n;
+	  }
+	  return $n;
   }
 
 
@@ -331,9 +328,9 @@ class cms_tree
    */
   public function &get_children()
   {
-    $res = null;
-    if( !$this->has_children() ) return $res;
-    return $this->_children;
+	  $res = null;
+	  if( !$this->has_children() ) return $res;
+	  return $this->_children;
   }
 
 } // end of class
