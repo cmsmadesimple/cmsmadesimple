@@ -113,7 +113,7 @@ class CmsRoute implements ArrayAccess
   public function OffsetUnset($key)
   {
 	  if( in_array($key,self::$_keys) && isset($this->_data[$key]) ) {
-		  unset($this->_data[$keys]);
+		  unset($this->_data[$key]);
 	  }
   }
 
