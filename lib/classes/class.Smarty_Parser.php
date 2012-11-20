@@ -604,7 +604,7 @@ class CMSMS_Dummy_Smarty_Variable {
      */
     public function __toString()
     {
-        return (string) $this->value;
+        return "";
     }
 
 } // end of class
@@ -616,16 +616,26 @@ class CMSMS_Dummy_Smarty_Variable {
  * @author Tapio Löytty
  * @since 1.11.3
  */
-class CMSMS_Dummy_Variable_Value {
+class CMSMS_Dummy_Variable_Value extends ArrayObject {
 
-    public function __toString()
+    public function offsetGet($name) 
+	{
+        return new CMSMS_Dummy_Variable_Value;
+    }
+
+    public function __get($name)
     {
-        return '';
+        return new CMSMS_Dummy_Variable_Value;
     }
 	
     public function __call($name, $arguments)
     {
-        return '';
+        return new CMSMS_Dummy_Variable_Value;
+    }	
+
+    public function __toString()
+    {
+        return "";
     }	
 
 } // end of class
