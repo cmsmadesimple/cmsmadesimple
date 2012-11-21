@@ -596,7 +596,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
   $result = '';
   $uid = get_userid(false);
 
-  if ($enablewysiwyg == true || $forcewysiwyg)
+  if ($enablewysiwyg == true && $forcewysiwyg)
     {
       $module = cms_utils::get_wysiwyg_module($forcewysiwyg);
       if( $module )
@@ -611,6 +611,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
       $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($forcewysiwyg);
       if( $module )
 	{
+
 	  $result = $module->SyntaxTextArea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
 	}
     }
