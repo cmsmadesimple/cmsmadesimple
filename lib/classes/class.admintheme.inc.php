@@ -153,10 +153,9 @@ class AdminTheme extends CmsAdminThemeBase
 	echo '<h3 style="margin:0;">'.lang('help').'</h3>';
 	echo '<ul style="margin:0;">';
 	echo '<li><a rel="external" href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
-	echo '<li><a rel="external" href="http://wiki.cmsmadesimple.org/">'.lang('wiki').'</a></li>';
-	echo '<li><a rel="external" href="http://cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
-	echo '<li><a rel="external" href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Extensions/Modules">'.lang('module_help').'</a></li>';
-	echo '</ul>';
+	echo '<li><a rel="external" href="http://docs.cmsmadesimple.org/">'.lang('documentation').'</a></li>';
+	echo '<li><a rel="external" href="http://www.cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
+		echo '</ul>';
 	echo '</div>';
 	echo '</div>';
       }
