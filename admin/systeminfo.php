@@ -77,18 +77,8 @@ $smarty->assign('showheader', $themeObject->ShowHeader('systeminfo'));
 $smarty->assign('backurl', $themeObject->BackUrl());
 $smarty->assign('systeminfo_cleanreport', 'systeminfo.php'.$urlext.'&amp;cleanreport=1');
 
-$help_lang = get_preference($userid, 'default_cms_language');
-if(empty($help_lang))
-{
-	if(! empty($_COOKIE['cms_language'])) $help_lang = installerHelpLanguage($_COOKIE['cms_language'], 'en_US');
-}
-else
-{
-	$help_lang = installerHelpLanguage($help_lang, 'en_US');
-}
-$help_lang = (empty($help_lang)) ? '' : '/'.$help_lang;
-$smarty->assign('cms_install_help_url', 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Installation/Install_Process'. $help_lang);
-
+/* Default help url */
+$smarty->assign('cms_install_help_url', 'http://docs.cmsmadesimple.org/installation/installing/permissions-and-php-settings');
 
 
 /* CMS Install Information */
@@ -266,7 +256,7 @@ $tmp[1]['server_software'] = testDummy('', $_SERVER['SERVER_SOFTWARE'], '');
 $tmp[0]['server_api'] = testDummy('', PHP_SAPI, '');
 $tmp[1]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('on') .' '. php_uname('m'), '');
 
-switch($config['dbms']) //workaroud: ServerInfo() is unsupported in adodblite
+switch($config['dbms']) //workaround: ServerInfo() is unsupported in adodblite
 {
         case 'mysqli':	
 	case 'mysql':
