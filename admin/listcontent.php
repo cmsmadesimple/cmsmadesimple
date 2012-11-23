@@ -45,7 +45,7 @@ $xajax->register(XAJAX_FUNCTION,'content_delete');
 // $xajax->register(XAJAX_FUNCTION,'reorder_display_list');
 // $xajax->register(XAJAX_FUNCTION,'reorder_process');
 $xajax->processRequest();
-$headtext = $xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n";
+$headtext = $xajax->getJavascript('../lib/xajax')."\n";
 include_once("header.php");
 
 function prettyurls_ok()
