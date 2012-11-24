@@ -104,7 +104,7 @@ class Smarty_Parser extends Smarty_CMS
 			return TRUE;
 		}
 
-		parent::defaultPluginHandler($name, $type, $template, $callback, $script, $cachable);	
+		return parent::defaultPluginHandler($name, $type, $template, $callback, $script, $cachable);	
     }
 	
 	/**
