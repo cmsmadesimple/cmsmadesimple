@@ -596,9 +596,10 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
   $result = '';
   $uid = get_userid(false);
 
-  if ($enablewysiwyg == true && $forcewysiwyg)
-    {
+  if ($enablewysiwyg == true)
+  {
       $module = cms_utils::get_wysiwyg_module($forcewysiwyg);
+      
       if( $module )
 	{
 	  $result = $module->WYSIWYGTextArea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);
@@ -607,6 +608,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
 
   if( !$result && $wantedsyntax )
     {
+
       // here we should get a list of installed/available modules.
       $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($forcewysiwyg);
       if( $module )
