@@ -107,7 +107,6 @@ class cms_config implements ArrayAccess
     $this->_types['default_encoding'] = self::TYPE_STRING;
     $this->_types['admin_encoding'] = self::TYPE_STRING;
     $this->_types['set_names'] = self::TYPE_BOOL;
-    $this->_types['wiki_url'] = self::TYPE_STRING;
     $this->_types['admin_url'] = self::TYPE_STRING;
     $this->_types['ignore_lazy_load'] = self::TYPE_BOOL;
 
@@ -332,9 +331,6 @@ class cms_config implements ArrayAccess
 	  case 'default_encoding':
 	  case 'admin_encoding':
 		  return 'utf-8';
-
-	  case 'wiki_url':
-		  return 'http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel';
 
 	  case 'admin_path':
 		  return cms_join_path($this->offsetGet('root_path'),$this->offsetGet('admin_dir'));

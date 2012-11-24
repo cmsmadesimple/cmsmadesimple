@@ -3,6 +3,8 @@ Version 1.11.4 - Fernandina
 Core - General
   - Fixes problem with cms_plugins not being found in the parser
   - cms_date_format plugin is no longer cachable.
+  - removes more wiki url stuff.
+  - debug.log never allowed to live more than 24 hours.
 
 Version 1.11.3 - Darwin
 -----------------------------
