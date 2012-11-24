@@ -31,7 +31,6 @@ require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax_core/xajax.inc.php')
 require_once(dirname(__FILE__).'/editcontent_extra.php');
 $xajax = new xajax();
 $xajax->register(XAJAX_FUNCTION,'ajaxpreview');
-$xajax->processRequest();
 $headtext = $xajax->getJavascript('../lib/xajax')."\n";
 
 if (isset($_POST["cancel"]))
@@ -51,7 +50,7 @@ if (isset($_POST["submitbutton"])) $submit = true;
 $apply = false;
 if (isset($_POST["applybutton"])) $apply = true;
 
-$contentobj = '';
+$contentobj = null;
 
 #Get current userid and make sure they have permission to add something
 $access = (check_permission($userid, 'Add Pages') || check_permission($userid, 'Manage All Content'));
@@ -77,28 +76,7 @@ else
 	}
 }
 
-$contentobj = "";
-if (isset($_POST["serialized_content"]))
-{
-	$contentobj = unserialize(base64_decode($_POST["serialized_content"]));
-	$contentobj->SetAddMode();
-	if (strtolower(get_class($contentobj)) != $content_type)
-	{
-	  try
-	    {
-		#Fill up the existing object with values in form
-		#Create new object
-		#Copy important fields to new object
-		#Put new object on top of old on
-		copycontentobj($contentobj, $content_type);
-	    }
-	  catch( CmsEditContentException $e )
-	    {
-	      $error = $e->getMessage();
-	    }
-	}
-}
-else
+$contentobj = null;
 {
   $page_secure = get_site_preference('page_secure',0);
   $page_cachable = ((get_site_preference('page_cachable',"1")=="1")?true:false);
@@ -117,13 +95,10 @@ else
   $contentobj->SetShowInMenu($showinmenu);
   $contentobj->SetLastModifiedBy($userid);
 
-  {
-    $templateops = $gCms->GetTemplateOperations();
-    $dflt = $templateops->LoadDefaultTemplate();
-    if( isset($dflt) )
-      {
-	$contentobj->SetTemplateId($dflt->id);
-      }
+  $templateops = $gCms->GetTemplateOperations();
+  $dflt = $templateops->LoadDefaultTemplate();
+  if( isset($dflt) ) {
+    $contentobj->SetTemplateId($dflt->id);
   }
 
   // this stuff should be changed somehow.
@@ -131,22 +106,19 @@ else
   $contentobj->SetPropertyValue('content_en', get_site_preference('defaultpagecontent')); // why?
 
   if ($parent_id!=-1) $contentobj->SetParentId($parent_id);
-  $contentobj->SetPropertyValue('searchable',
-				get_site_preference('page_searchable',1));
-  $contentobj->SetPropertyValue('extra1',
-				get_site_preference('page_extra1',''));
-  $contentobj->SetPropertyValue('extra2',
-				get_site_preference('page_extra2',''));
-  $contentobj->SetPropertyValue('extra3',
-				get_site_preference('page_extra3',''));
+  $contentobj->SetPropertyValue('searchable',get_site_preference('page_searchable',1));
+  $contentobj->SetPropertyValue('extra1',get_site_preference('page_extra1',''));
+  $contentobj->SetPropertyValue('extra2',get_site_preference('page_extra2',''));
+  $contentobj->SetPropertyValue('extra3',get_site_preference('page_extra3',''));
   $tmp = get_site_preference('additional_editors');
   $tmp2 = array();
-  if( !empty($tmp) )
-    {
-      $tmp2 = explode(',',$tmp);
-    }
+  if( !empty($tmp) ) {
+    $tmp2 = explode(',',$tmp);
+  }
   $contentobj->SetAdditionalEditors($tmp2);
 }
+
+$xajax->processRequest();
 
 if ($access && strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' )
   {

@@ -5,6 +5,7 @@ Core - General
   - cms_date_format plugin is no longer cachable.
   - removes more wiki url stuff.
   - debug.log never allowed to live more than 24 hours.
+  - Fixes preview in addcontent.
 
 Version 1.11.3 - Darwin
 -----------------------------

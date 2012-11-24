@@ -11,7 +11,6 @@ function ajaxpreview($params)
 
 	global $contentobj;
 	if( !is_object($contentobj) ) {
-	  debug_to_log('no content object');
 	  return;
 	}
 // 	$contentobj = UnserializeObject($params["serialized_content"]);
