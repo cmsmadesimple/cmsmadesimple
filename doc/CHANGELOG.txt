@@ -7,6 +7,8 @@ Core - General
   - debug.log never allowed to live more than 24 hours.
   - Fixes preview in addcontent.
   - Fixes problem with modifiers not existing in parser stage. Now loading all modifiers.
+  - Fixes to FileManager copy and move in regular mode
+  - Fixes to ImageManager when deleting files in a dir below the uploads/images path
 
 Version 1.11.3 - Darwin
 -----------------------------
