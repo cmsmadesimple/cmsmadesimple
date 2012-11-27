@@ -6,6 +6,7 @@ Core - General
   - removes more wiki url stuff.
   - debug.log never allowed to live more than 24 hours.
   - Fixes preview in addcontent.
+  - Fixes problem with modifiers not existing in parser stage. Now loading all modifiers.
 
 Version 1.11.3 - Darwin
 -----------------------------
