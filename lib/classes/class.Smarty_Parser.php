@@ -521,7 +521,10 @@ class Smarty_Parser extends Smarty_CMS
 			foreach ($names as $file) {
 			
 				if (file_exists($file) && 
-					(in_array($_name_parts[2], self::$_allowed_static_plugins) || startswith($file, SMARTY_PLUGINS_DIR))) {
+					(in_array($_name_parts[2], self::$_allowed_static_plugins) || 
+						startswith($file, SMARTY_PLUGINS_DIR) || 
+						$_name_parts[1] == 'modifier')
+					) {
 				
 					require_once($file);
 					if( is_callable($plugin_name) || class_exists($plugin_name, false) )
