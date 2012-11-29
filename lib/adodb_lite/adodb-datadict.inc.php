@@ -474,7 +474,21 @@ class ADODB_DataDict {
 
 	function CreateTableSQL($tabname, $flds, $tableoptions=false)
 	{
-		if (!$tableoptions) $tableoptions = array();
+	  // if no table options specified, force MyISAM table type for mysql and mysqli
+	  $str = 'ENGINE MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci';
+	  $stdtableoptions = array('mysql' => $str, 'mysqli' => $str);
+	  if( !$tableoptions ) {
+	    $tableoptions = $stdtableoptions;
+	  }
+	  else {
+	    $tableoptions = array_merge($stdtableoptions,$tableoptions);
+	  }
+	  $str = substr($this->dbtype,0,5);
+	  if( isset($tableoptions[$str]) && strpos($tableoptions[$str],'CHARACTER') === FALSE &&
+	      strpos($tableoptions[$str],'COLLATE') === FALSE ) {
+	    // if no character set and collate options specified, force UTF8
+	    $tableoptions[$str] .= "  CHARACTER SET utf8 COLLATE utf8_general_ci";
+	  }
 
 		list($lines,$pkey) = $this->_GenFields($flds, true);
 
