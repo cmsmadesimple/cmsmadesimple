@@ -29,7 +29,7 @@ $IMConfig['base_dir'] = $config["image_uploads_path"];
  for this directory (i.e. disable PHP, Perl, CGI). We only want to store assets
  in this directory and its subdirectories.
 */
-$IMConfig['base_url'] = $config["image_uploads_url"];
+$IMConfig['base_url'] = $config->smart_image_uploads_url();
 
 /*
   Possible values: true, false

@@ -91,6 +91,7 @@ class cms_config implements ArrayAccess
     $this->_types['ssl_uploads_url'] = self::TYPE_STRING;
     $this->_types['image_uploads_path'] = self::TYPE_STRING;
     $this->_types['image_uploads_url'] = self::TYPE_STRING;
+    $this->_types['ssl_image_uploads_url'] = self::TYPE_STRING;
     $this->_types['debug'] = self::TYPE_BOOL;
     $this->_types['timezone'] = self::TYPE_STRING;
     $this->_types['persist_db_conn'] = self::TYPE_BOOL;
@@ -288,6 +289,10 @@ class cms_config implements ArrayAccess
 		  $this->_cache[$key] = $this->offsetGet('uploads_url').'/images';
 		  return $this->_cache[$key];
 
+	  case 'ssl_image_uploads_url':
+		  $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('image_uploads_url'));
+		  return $this->_cache[$key];
+		  
 	  case 'previews_path':
 		  return TMP_CACHE_LOCATION;
 
@@ -463,6 +468,14 @@ class cms_config implements ArrayAccess
 		  return $this->offsetGet('ssl_uploads_url');
 	  }
 	  return $this->offsetGet('uploads_url');
+  }
+
+  public function smart_image_uploads_url()
+  {
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
+		  return $this->offsetGet('ssl_image_uploads_url');
+	  }
+	  return $this->offsetGet('image_uploads_url');
   }
 } // end of class
 
