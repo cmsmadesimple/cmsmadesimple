@@ -33,6 +33,7 @@ define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
 
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax_core/xajax.inc.php');
 $xajax = new xajax();
+//$xajax->configure('requestURI',$config['admin_url'].'/listcontent.php?'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY]);
 $xajax->register(XAJAX_FUNCTION,'content_list_ajax');
 $xajax->register(XAJAX_FUNCTION,'content_setactive');
 $xajax->register(XAJAX_FUNCTION,'content_setinactive');
@@ -45,7 +46,7 @@ $xajax->register(XAJAX_FUNCTION,'content_delete');
 // $xajax->register(XAJAX_FUNCTION,'reorder_display_list');
 // $xajax->register(XAJAX_FUNCTION,'reorder_process');
 $xajax->processRequest();
-$headtext = $xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n";
+$headtext = $xajax->getJavascript('../lib/xajax')."\n";
 include_once("header.php");
 
 function prettyurls_ok()
