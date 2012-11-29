@@ -501,7 +501,7 @@ abstract class CMSModule
 	 */
 	final public function GetModuleURLPath($use_ssl=false)
 	{
-		return ($use_ssl?$this->config['ssl_url']:$this->config['root_url']) . '/modules/' . $this->GetName();
+	  return ($use_ssl?$this->config['ssl_url']:$this->config->smart_root_url()) . '/modules/' . $this->GetName();
 	}
 
 

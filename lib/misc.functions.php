@@ -36,10 +36,12 @@
  */
 function redirect($to, $noappend=false)
 {
-     $_SERVER['PHP_SELF'] = null;
+  $_SERVER['PHP_SELF'] = null;
 
-    $schema = $_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http';
-    $host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
+  $schema = 'http';
+  if( !isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off' )
+    $schema = 'https';
+  $host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
 
     $components = parse_url($to);
     if(count($components) > 0)
@@ -2179,11 +2181,18 @@ function cms_to_bool($str)
 /**
  *
  */
-function cms_get_jquery($exclude = '',$ssl = false,$cdn = false,$append = '',$custom_root='')
+function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$custom_root='')
 {
   $config = cms_config::get_instance();
   $scripts = array();
-  $basePath=$custom_root!=''?trim($custom_root,'/'):($ssl?$config['ssl_url']:$config['root_url']);
+  $base_url = $config['root_url'];
+  if( is_null($ssl) ) {
+    $base_url = $config->smart_root_url();
+  }
+  else if( $ssl === true || $ssl === TRUE ) {
+    $base_url = $config['ssl_url'];
+  }
+  $basePath=$custom_root!=''?trim($custom_root,'/'):$base_url;
   
   // Scripts to include
   $scripts['jquery.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js':$basePath.'/lib/jquery/js/jquery-1.7.2.min.js').'"></script>'."\n";

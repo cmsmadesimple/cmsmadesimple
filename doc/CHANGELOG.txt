@@ -11,6 +11,7 @@ Core - General
   - Fixes to FileManager copy and move in regular mode
   - Fixes to ImageManager when deleting files in a dir below the uploads/images path
   - Fixes to cleaning of values in edit_user and add_user wrt email fields (now consistent).
+  - Numerous SSL fixes.
 
 Version 1.11.3 - Darwin
 -----------------------------
