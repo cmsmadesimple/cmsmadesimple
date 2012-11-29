@@ -30,7 +30,7 @@ class mysql_extend_ADOConnection extends mysql_extend_EXTENDER
 
 	var $genID = 0;
  	var $_genIDSQL = "update %s set id=LAST_INSERT_ID(id+1);";
-	var $_genSeqSQL = "create table %s (id int not null)";
+	var $_genSeqSQL = "create table %s (id int not null) ENGINE MyISAM";
 	var $_genSeq2SQL = "insert into %s values (%s)";
 	var $_dropSeqSQL = "drop table %s";
 
