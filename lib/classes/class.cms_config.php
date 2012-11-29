@@ -449,14 +449,28 @@ class cms_config implements ArrayAccess
       }
   }
 
-
   public function smart_root_url()
   {
-	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' )
-	  {
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
 		  return $this->offsetGet('ssl_url');
 	  }
 	  return $this->offsetGet('root_url');
+  }
+
+  public function smart_root_url()
+  {
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
+		  return $this->offsetGet('ssl_url');
+	  }
+	  return $this->offsetGet('root_url');
+  }
+
+  public function smart_uploads_url()
+  {
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
+		  return $this->offsetGet('ssl_uploads_url');
+	  }
+	  return $this->offsetGet('uploads_url');
   }
 } // end of class
 

@@ -12,6 +12,7 @@ Core - General
   - Fixes to ImageManager when deleting files in a dir below the uploads/images path
   - Fixes to cleaning of values in edit_user and add_user wrt email fields (now consistent).
   - Numerous SSL fixes.
+  - {uploads_url} tag now uses cms_config->smart_uploads_url() (new function).
 
 Version 1.11.3 - Darwin
 -----------------------------

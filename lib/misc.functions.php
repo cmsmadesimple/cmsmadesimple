@@ -39,8 +39,8 @@ function redirect($to, $noappend=false)
   $_SERVER['PHP_SELF'] = null;
 
   $schema = 'http';
-  if( !isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off' )
-    $schema = 'https';
+  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) $schema = 'https';
+
   $host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
 
     $components = parse_url($to);
