@@ -457,14 +457,6 @@ class cms_config implements ArrayAccess
 	  return $this->offsetGet('root_url');
   }
 
-  public function smart_root_url()
-  {
-	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
-		  return $this->offsetGet('ssl_url');
-	  }
-	  return $this->offsetGet('root_url');
-  }
-
   public function smart_uploads_url()
   {
 	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
