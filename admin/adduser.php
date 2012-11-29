@@ -52,7 +52,7 @@ $passwordagain= "";
 if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
 
 $email = "";
-if (isset($_POST["email"])) $email = trim($_POST["email"]);
+if (isset($_POST["email"])) $email = trim(strip_tags($_POST["email"]));
 
 $wysiwyg = '';
 if (isset($_POST["wysiwyg"])) $wysiwyg = $_POST["wysiwyg"];

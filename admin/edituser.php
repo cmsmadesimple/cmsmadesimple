@@ -46,7 +46,7 @@ $lastname = "";
 if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
 
 $email = "";
-if (isset($_POST["email"])) $email = cleanValue(strip_tags($_POST["email"]));
+if (isset($_POST["email"])) $email = trim(strip_tags($_POST["email"]));
 
 $adminaccess = 1;
 if (!isset($_POST["adminaccess"]) && isset($_POST["edituser"])) $adminaccess = 0;
