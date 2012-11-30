@@ -2,18 +2,33 @@ Version 1.11.4 - Fernandina
 -----------------------------
 Core - General
   - Fixes problem with cms_plugins not being found in the parser
-  - cms_date_format plugin is no longer cachable.
-  - removes more wiki url stuff.
-  - debug.log never allowed to live more than 24 hours.
-  - Fixes preview in addcontent.
+  - cms_date_format plugin is no longer cachable
+  - Removes more wiki url stuff
+  - debug.log never allowed to live more than 24 hours
+  - Fixes preview in addcontent
   - Fixes problem with CreateTable in mysqli mode. (ENGINE and CHARSET issues)
-  - Fixes problem with modifiers not existing in parser stage. Now loading all modifiers.
+  - Fixes problem with modifiers not existing in parser stage. Now loading all modifiers
   - Fixes to FileManager copy and move in regular mode
   - Fixes to ImageManager when deleting files in a dir below the uploads/images path
-  - Fixes to cleaning of values in edit_user and add_user wrt email fields (now consistent).
-  - Numerous SSL fixes.
-  - {uploads_url} tag now uses cms_config->smart_uploads_url() (new function).
+  - Fixes to cleaning of values in edit_user and add_user wrt email fields (now consistent)
+  - Numerous SSL fixes
+  - {uploads_url} tag now uses cms_config->smart_uploads_url() (new function)
 
+Core - Bug Reports:
+  - #8238 Assets loaded as http instead of https when ssl is enabled for /admin area
+  - #8315 Crash in Content Page Edit: exit / die without error message
+  - #8386 Function redirect();
+  - #8409 Content block does not appear in Pages if sitedown
+  - #8419 E-mail address for user not accepted if having '-' character on it
+  - #8563 Cannot add 'separator' if 'Page URL's are required'
+  - #8564 Images cannot be deleted in Image Manager
+  - #8571 NCleanGrey admin theme on 1.11.2.1
+  - #8672 Dropzone don't remember the selected directory
+  - #8684 Type MyIsam 
+  - #8686 cms_date_format and cms_escape Smarty modifiers in templates no longer found by Smarty
+  - #8695 Update routes and mod_rewrite
+
+  
 Version 1.11.3 - Darwin
 -----------------------------
 Core - General
@@ -39,10 +54,12 @@ Core - General
   - Fixes problem with smarty variables in template parser object. Edit template and edit page won't be crashing system anymore
   - #8656 - ERROR DETECTED: Call to undefined function check_persmission() multicontent.php
 
+  
 Version 1.11.2.1
 -----------------------------
   - Fixes security vulnerability in image manager
 
+  
 Version 1.11.2 - Isabela 
 -----------------------------
 Core - General:
