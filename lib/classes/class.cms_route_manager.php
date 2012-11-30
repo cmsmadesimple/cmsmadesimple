@@ -273,7 +273,8 @@ final class cms_route_manager
 	 */
 	public static function rebuild_static_routes()
 	{
-		// clear the route table.
+		// clear the route table and cache
+		self::_clear_cache();
 		$db = cmsms()->GetDb();
 		$query = 'TRUNCATE TABLE '.cms_db_prefix().'routes';
 		$db->Execute($query);
