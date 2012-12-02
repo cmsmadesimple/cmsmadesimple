@@ -371,8 +371,9 @@ function debug_bt_to_log()
       foreach($bt as $trace) {
 	if( $trace['function'] == 'debug_bt_to_log' ) continue;
 
-	$file = $trace['file'];
-	$line = $trace['line'];
+	$file = $line = '';
+	if( isset($trace['file']) ) $file = $trace['file'];
+	if( isset($trace['line']) ) $line = $trace['line'];
 	$function = $trace['function'];
 	$out[] = "$function at $file:$line"; 
       }
@@ -548,7 +549,8 @@ function debug_to_log($var, $title='',$filename = '')
   if( cmsms()->config['debug_to_log'] || check_login(TRUE) ) {
     if( $filename == '' ) {
       $filename = TMP_CACHE_LOCATION . '/debug.log';
-      if( filemtime($filename) < (time() - 24 * 3600) ) @unlink($filename);
+      $x = @filemtime($filename);
+      if( $x !== FALSE && $x < (time() - 24 * 3600) ) @unlink($filename);
     }
     $errlines = explode("\n",debug_display($var, $title, false, false));
     foreach ($errlines as $txt) {
