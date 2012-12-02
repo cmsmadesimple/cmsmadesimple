@@ -429,6 +429,7 @@ function debug_to_log($var, $title='',$filename = '')
   if( cmsms()->config['debug_to_log'] || check_login(TRUE) ) {
     if( $filename == '' ) {
       $filename = TMP_CACHE_LOCATION . '/debug.log';
+      if( filemtime($filename) < (time() - 24 * 3600) ) @unlink($filename);
     }
     $errlines = explode("\n",debug_display($var, $title, false, false));
     foreach ($errlines as $txt) {

@@ -56,7 +56,7 @@ class CmsLayoutTemplateType
   {
 	  $out = '';
 	  if( isset($this->_data['originator']) ) $out = $this->_data['originator'];
-	  if( $out == '__CORE__' && $viewable ) $out = 'CMSMS';
+	  if( $out == '__CORE__' && $viewable ) $out = 'Core';
 	  return $out;
   }
 
@@ -479,7 +479,7 @@ class CmsLayoutTemplateType
 		  $tn = call_user_func($t,$this->get_name());
 	  }
 	  if( !$to ) $to = $this->get_originator();
-	  if( $to == '__CORE__' ) $to = 'CMSMS';
+	  if( $to == '__CORE__' ) $to = 'Core';
 	  if( !$tn ) $tn = $this->get_name();
 	  return $to.'::'.$tn;
   }

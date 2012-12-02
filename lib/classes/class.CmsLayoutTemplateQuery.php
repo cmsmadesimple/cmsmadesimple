@@ -46,6 +46,8 @@ class CmsLayoutTemplateQuery extends CmsDbQueryBase
 				list($key,$second) = explode(':',$val,2);
       }
       switch( strtolower($key) ) {
+			case 'o': // orginator
+				break;
       case 't': // type
 				$second = (int)$second;
 				$where['type'][] = 'type_id = '.$db->qstr($second);

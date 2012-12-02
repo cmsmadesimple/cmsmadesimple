@@ -280,7 +280,6 @@ class CmsLayoutCollection
       for( $i = 0; $i < count($this->_tpl_assoc); $i++ ) {
 				$tpl_id = $this->_tpl_assoc[$i];
 				$dbr = $db->Execute($query,array($this->get_id(),$tpl_id));
-				debug_to_log($db->sql.' -- '.$db->ErrorMsg());
       }
     }
 

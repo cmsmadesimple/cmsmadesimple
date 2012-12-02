@@ -434,7 +434,11 @@ class ADODB_DataDict {
 	*/
 	function CreateTableSQL($tabname, $flds, $tableoptions=false)
 	{
-		if (!$tableoptions) $tableoptions = array();
+	  if (!$tableoptions) {
+	    // if no table options specified, force MyISAM table type for mysql.
+	    $tableoptions = array('mysql' => 'TYPE=MyISAM',
+				  'mysqli' => 'TYPE=MyISAM');
+	  }
 		
 		list($lines,$pkey) = $this->_GenFields($flds, true);
 		

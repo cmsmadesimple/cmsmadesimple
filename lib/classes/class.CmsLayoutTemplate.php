@@ -315,7 +315,6 @@ class CmsLayoutTemplate
 					$tmp[] = (int)$a[$i];
 				}
 				else if( is_string($a[$i]) ) {
-					die('abc');
 					$tmp[] = self::_resolve_user($a[$i]);
 				}
 			}
