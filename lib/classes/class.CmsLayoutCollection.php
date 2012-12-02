@@ -268,7 +268,7 @@ class CmsLayoutCollection
 		
     if( count($this->_css_assoc) ) {
       $query = 'INSERT INTO '.cms_db_prefix().self::CSSTABLE.'
-                (design_id,css_id,item_order) VALUES (?,?)';
+                (design_id,css_id,item_order) VALUES (?,?,?)';
       for( $i = 0; $i < count($this->_css_assoc); $i++ ) {
 				$css_id = $this->_css_assoc[$i];
 				$dbr = $db->Execute($query,array($this->get_id(),$css_id,$i+1));
