@@ -415,14 +415,29 @@ class dm_design_reader extends dm_reader_base
 			if( isset($tpl['desc']) && $tpl['desc'] != '' ) {
 				$template->set_description($tpl['desc']);
 			}
-
 			$content = $tpl['data'];
+
+			// substitute URL keys for the values.
 			foreach( $this->_file_map as $key => &$rec ) {
-				if( !startswith($key,'__URL::') ) continue;
-				if( !isset($rec['tpl_url']) ) continue;
-				$content = str_replace($key,$rec['tpl_url'],$content);
+				if( startswith($key,'__URL::') ) {
+					// handle URL keys... handles image links etc.
+					if( !isset($rec['tpl_url']) ) continue;
+					$content = str_replace($key,$rec['tpl_url'],$content);
+				}
+				else if( startswith($key,'__CSS::') ) {
+					// handle CSS keys... for things like {cms_stylesheet name='xxxx'}
+					if( !isset($rec['value']) ) continue;
+					$content = str_replace($key,$rec['value'],$content);
+				}
+				else if( startswith($key,'__TPL::') ) {
+					// handle TPL keys... for things like {include file='xxxx'}
+					// or calling a module with a specific template.
+					if( !isset($rec['value']) ) continue;
+					$content = str_replace($key,$rec['value'],$content);
+				}
 			}
 
+			// substitute CSS keys for their values.  This should handle 
 			$template->set_content($content);
 
 			// template type:
