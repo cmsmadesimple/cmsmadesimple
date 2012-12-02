@@ -19,7 +19,7 @@
 #
 #-------------------------------------------------------------------------
 
-class dm_theme_reader 
+class dm_theme_reader extends dm_reader_base
 {
   private $_xml;
 
@@ -35,6 +35,30 @@ class dm_theme_reader
     // have to use a different validaion method, can't trust the DTD :)
     die(__CLASS__.'::'.__FUNCTION__.'() method not implemented');
   }
+
+	public function get_design_info()
+	{
+	}
+
+	public function get_template_list()
+	{
+	}
+
+	public function get_stylesheet_list()
+	{
+	}
+
+	public function import()
+	{
+	}
+
+  protected function get_destination_dir()
+	{
+	}
+
+	protected function get_new_name()
+	{
+	}
 } // end of class
 
 #
