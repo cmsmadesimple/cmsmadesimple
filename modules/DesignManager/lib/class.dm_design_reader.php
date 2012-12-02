@@ -442,6 +442,7 @@ class dm_design_reader extends dm_reader_base
 			$template->save();
 			$design->add_template($template);
 		}
+
 		$design->save();
 	} // end of import
 } // end of class

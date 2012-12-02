@@ -37,7 +37,8 @@ try {
   $can_delete_templates = $this->CheckPermission('Modify Templates');
 
   if( isset($params['submit']) ) {
-    if( !isset($params['confirm_delete']) || $params['confirm_delete'] != 'yes' ) {
+    if( !isset($params['confirm_delete1']) || $params['confirm_delete1'] != 'yes' ||
+				!isset($params['confirm_delete2']) || $params['confirm_delete2'] != 'yes') {
       $this->SetError($this->Lang('error_notconfirmed'));
       $this->RedirectToAdminTab();
     }

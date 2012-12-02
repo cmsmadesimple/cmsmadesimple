@@ -19,7 +19,7 @@
 #
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission('Modify Templates') ) return;
+if( !$this->VisibleToAdminUser() ) return;
 
 if( isset($params['allparms']) ) {
   $params = array_merge($params,unserialize(base64_decode($params['allparms'])));
@@ -39,18 +39,24 @@ if( isset($params['cancel']) ) {
 
 switch( $params['bulk_action'] ) {
  case 'delete':
-   // check if we have ownership/delete permission for these templates
-   $my_templates = CmsLayoutTemplate::template_query(array(0=>'u:'.get_userid(),'as_list'=>1));
-   if( !is_array($my_templates) || count($my_templates) == 0 ) {
-     die('error');
-   }
-   $tpl_ids = array_keys($my_templates);
-   foreach( $params['tpl_select'] as $one ) {
-     if( !in_array($one,$tpl_ids) ) {
-       $this->SetError($this->Lang('error_permission_bulkoperation'));
-       $this->RedirectToAdminTab();
-     }
-   }
+	 if( !$this->CheckPermission('Modify Templates') ) {
+		 // check if we have ownership/delete permission for these templates
+		 $my_templates = CmsLayoutTemplate::template_query(array(0=>'u:'.get_userid(),'as_list'=>1));
+		 if( !is_array($my_templates) || count($my_templates) == 0 ) {
+			 $this->SetError($this->Lang('error_retrieving_mytemplatelist'));
+			 $this->RedirectToAdminTab();
+		 }
+		 $tpl_ids = array_keys($my_templates);
+
+		 foreach( $params['tpl_select'] as $one ) {
+			 if( !$this->CheckPermission('Modify Templates') ) {
+				 if( !in_array($one,$tpl_ids) ) {
+					 $this->SetError($this->Lang('error_permission_bulkoperation'));
+					 $this->RedirectToAdminTab();
+				 }
+			 }
+		 }
+	 }
 
    if( isset($params['submit']) ) {
      if( !isset($params['check1']) || !isset($params['check2']) ) {
@@ -59,9 +65,9 @@ switch( $params['bulk_action'] ) {
      else {
        $templates = CmsLayoutTemplate::load_bulk($params['tpl_select']);
        foreach( $templates as $one ) {
-	 if( in_array($one->get_id(),$params['tpl_select']) ) {
-	   $one->delete();
-	 }
+				 if( in_array($one->get_id(),$params['tpl_select']) ) {
+					 $one->delete();
+				 }
        }
 
        $this->SetMessage($this->Lang('msg_bulkop_complete'));

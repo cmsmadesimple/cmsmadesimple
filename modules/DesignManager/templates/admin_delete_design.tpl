@@ -2,7 +2,7 @@
 <h3>{$mod->Lang('delete_design')}: {$design->get_name()} ({$design->get_id()})</h3>
 
 {if $design->has_templates() && $tpl_permission}
-<fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted red">{$mod->Lang('warning_deletetemplate_attachments')}</fieldset>
+<div class="pagewarning">{$mod->Lang('warning_deletetemplate_attachments')}</div>
 <div class="pageoverflow">
   <p class="pagetext"><label for-"opt_rm_tpl">{$mod->Lang('delete_attached_templates')}:</label></p>
   <p class="pageinput">
@@ -13,7 +13,7 @@
 {/if}
 
 {if $design->has_stylesheets() && $css_permission}
-<fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted red">{$mod->Lang('warning_deletestylesheet_attachments')}</fieldset>
+<div class="pagewarning">{$mod->Lang('warning_deletestylesheet_attachments')}</div>
 <div class="pageoverflow">
   <p class="pagetext"><label for-"opt_rm_css">{$mod->Lang('delete_attached_stylesheets')}:</label></p>
   <p class="pageinput">
@@ -26,8 +26,10 @@
 <div class="pageoverflow">
   <p class="pagetext">{$mod->Lang('confirm_delete_1')}:</p>
   <p class="pageinput">
-    <input type="checkbox" id="opt_delete" value="yes" name="{$actionid}confirm_delete"/>&nbsp;
-<label for="opt_delete">{$mod->Lang('confirm_delete_2')}:</label>
+    <input type="checkbox" id="opt_delete1" value="yes" name="{$actionid}confirm_delete1"/>&nbsp;
+<label for="opt_delete1">{$mod->Lang('confirm_delete_2a')}:</label><br/>
+    <input type="checkbox" id="opt_delete2" value="yes" name="{$actionid}confirm_delete2"/>&nbsp;
+<label for="opt_delete2">{$mod->Lang('confirm_delete_2b')}:</label>
   </p>
 </div>
 
