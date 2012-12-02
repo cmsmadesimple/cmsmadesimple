@@ -1,3 +1,21 @@
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#css_selectall').live('click',function(){
+    var v = $(this).attr('checked');
+    if( v == 'checked' ) {
+      $('.css_select').attr('checked','checked');
+    }
+    else {
+      $('.tpl_select').removeAttr('checked');
+    }
+  });
+
+  $('.tpl_select').live('clicked',function(){
+    $('#css_selectall').removeAttr('checked');
+  });
+});
+</script>
+
 {if isset($stylesheets)}
   {form_start}{strip}
   <div class="pageoptions" style="text-align: right;">
@@ -12,7 +30,6 @@
     </select>
     <input type="submit" name="{$actionid}submit_filter_css" value="{$mod->Lang('submit')}"/>
   </div>
-  {/strip}{form_end}
 
   {if isset($css_nav)}
   <div class="pageoptions" style="text-align: right;">
@@ -43,6 +60,7 @@
     <th>{$mod->Lang('prompt_modified')}</th>
     <th class="pageicon"></th>{* edit *}
     <th class="pageicon"></th>{* delete *}
+    <th class="pageicon"><input id="css_selectall" type="checkbox" value="1"/></th>{* multiple *}
     </tr>
   </thead>
   <tbody>
@@ -73,10 +91,22 @@
      <td>{$css->get_modified()|date_format:'%x %X'}</td>
      <td><a href="{$edit_css}" title="{$mod->Lang('edit_stylesheet')}">{admin_icon icon='edit.gif' title=$mod->Lang('edit_stylesheet')}</a></td>
      <td><a href="{$delete_css}" title="{$mod->Lang('delete_stylesheet')}">{admin_icon icon='delete.gif' title=$mod->Lang('delete_stylesheet')}</a></td>
+     <td><input type="checkbox" class="css_select" name="{$actionid}css_select[]" value="{$css->get_id()}"/></td>
    </tr>
   {/foreach}
   </tbody>
 </table>
+<div style="float: right; width: 48%; text-align: right;">
+  <p class="pageinput" style="text-align: right;">
+    <label for="css_bulk_action">{$mod->Lang('prompt_with_selected')}:</label>&nbsp;
+    <select name="{$actionid}css_bulk_action" id="css_bulk_action" class="cssx_bulk_action">
+      <option value="delete" title="{$mod->Lang('title_delete')}">{$mod->lang('prompt_delete')}</option>
+    </select>
+    <input id="css_bulk_submit" class="css_bulk_action" type="submit" name="{$actionid}submit_bulk_css" value="{$mod->Lang('submit')}"/>&nbsp;{admin_icon name="help_css_bulk" class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}
+  </p>
+</div>
+<div class="clearb"></div>
+{/strip}{form_end}
 {/if}
 
 <div class="pagecontainer">

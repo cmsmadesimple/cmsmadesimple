@@ -44,6 +44,10 @@ else if( isset($params['submit_bulk']) ) {
 	$tmp = array('allparms'=>base64_encode(serialize($params)));
 	$this->Redirect($id,'admin_bulk_template',$returnid,$tmp);
 }
+else if( isset($params['submit_bulk_css']) ) {
+	$tmp = array('allparms'=>base64_encode(serialize($params)));
+	$this->Redirect($id,'admin_bulk_css',$returnid,$tmp);
+}
 
 $tmp = cms_userprefs::get($this->GetName().'template_filter');
 if( $tmp ) $filter_tpl_rec = unserialize($tmp);
@@ -82,6 +86,7 @@ if( count($templates) ) {
 $opts = array();
 $opts[''] = $this->Lang('prompt_none');
 $types = CmsLayoutTemplateType::get_all();
+$originators = array();
 if( count($types) ) {
   $tmp = array();
   $tmp2 = array();
@@ -90,10 +95,14 @@ if( count($types) ) {
     $tmp['t:'.$types[$i]->get_id()] = $types[$i]->get_langified_display_value();
     $tmp2[$types[$i]->get_id()] = $types[$i]->get_langified_display_value();
     $tmp3[$types[$i]->get_id()] = $types[$i];
+		if( !isset($originators[$types[$i]->get_originator()]) ) {
+			$originators[$types[$i]->get_originator()] = $types[$i]->get_originator(TRUE);
+		}
   }
   $smarty->assign('list_all_types',$tmp3);
   $smarty->assign('list_types',$tmp2);
   $opts[$this->Lang('tpl_types')] = $tmp;
+	$opts[$this->Lang('tpl_originators')] = $originators;
 }
 $cats = CmsLayoutTemplateCategory::get_all();
 if( count($cats) ) {

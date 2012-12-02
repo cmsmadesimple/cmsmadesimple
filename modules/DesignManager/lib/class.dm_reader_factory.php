@@ -21,7 +21,7 @@
 
 final class dm_reader_factory 
 {
-  private static function __construct() {}
+  private function __construct() {}
 
   public static function &get_reader($xmlfile)
   {
@@ -29,7 +29,7 @@ final class dm_reader_factory
     if( !is_readable($xmlfile) ) {
       throw new CmsFileSystemException($mod->Lang('error_filenotfound',$xmlfile));
     }
-    $fh = fopen($xmlfile);
+    $fh = fopen($xmlfile,'r');
     if( !$fh ) {
       throw new CmsException($this->Lang('error_fileopen',$xmlfile));
     }
@@ -53,13 +53,15 @@ final class dm_reader_factory
     }
     $word = substr($str,0,$p);
     
+		$ob = null;
     switch( $word ) {
     case 'theme':
-      return new dm_theme_reader($xmlfile);
+      $ob = new dm_theme_reader($xmlfile);
 
     case 'design':
-      return new dm_design_reader($xmlfile);
+      $ob = new dm_design_reader($xmlfile);
     }
+		return $ob;
   }
 } // end of class
 

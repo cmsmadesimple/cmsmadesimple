@@ -143,7 +143,8 @@ try {
 		$destdir = $config['uploads_path'].'/designmanager_import';
 		$reader = dm_reader_factory::get_reader($tmpfile);
 		$reader->set_suggested_name($newname);
-
+		$reader->import();
+		/*
 		$config = cmsms()->GetConfig();
 		$dirname = munge_string_to_url($newname);
 		if( !is_dir($destdir) ) @mkdir($destdir);
@@ -154,6 +155,7 @@ try {
 		if( is_dir($destdir) ) {
 			throw new CmsException($this->Lang('error_direxists',$destdir));
 		}
+		*/
 
 
 		//@mkdir($destdir);

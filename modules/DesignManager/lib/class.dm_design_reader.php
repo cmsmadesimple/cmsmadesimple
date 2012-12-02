@@ -107,6 +107,16 @@ class dm_design_reader extends dm_reader_base
 						$this->_tpl_info[$cur_key]['data'] = $this->_xml->value;
 						break;
 
+					case 'ttype_originator':
+					case 'ttype_name':
+						if( $__get_in() != 'template' || !$cur_key ) {
+							// validity error.
+						}
+						$key = $this->_xml->localName;
+						$this->_xml->read();
+						$this->_tpl_info[$cur_key][$key] = $this->_xml->value;
+						break;
+
 					case 'csskey':
 						if( $__get_in() != 'stylesheet' ) {
 							// validity error.
@@ -216,6 +226,8 @@ class dm_design_reader extends dm_reader_base
       $rec['key'] = $key;
       $rec['desc'] = base64_decode($one['desc']);
       $rec['data'] = base64_decode($one['data']);
+			$rec['type_originator'] = base64_decode($one['ttype_originator']);
+			$rec['type_name'] = base64_decode($one['ttype_name']);
       $out[] = $rec;
     }
     return $out;
@@ -246,7 +258,7 @@ class dm_design_reader extends dm_reader_base
 		$templates = CmsLayoutTemplate::template_query(array('as_list'=>1));
 		$tpl_names = array_values($templates);
 
-		foreach( $this->_file_map as $key => $rec ) {
+		foreach( $this->_file_map as $key => &$rec ) {
 			if( !startswith($key,'__TPL::') ) continue;
 
 			if( in_array($rec['value'],$tpl_names) ) {
@@ -259,12 +271,12 @@ class dm_design_reader extends dm_reader_base
 					if( !in_array($new_name,$tpl_names) ) {
 						$rec['old_value'] = $rec['value'];
 						$rec['value'] = $new_name;
+						break;
 					}
 				}
 			}
 		}
 	}
-
 
 	protected function validate_stylesheet_names()
 	{
@@ -273,7 +285,7 @@ class dm_design_reader extends dm_reader_base
 		$stylesheets = CmsLayoutStylesheet::get_all(TRUE);
 		$css_names = array_values($stylesheets);
 
-		foreach( $this->_file_map as $key => $rec ) {
+		foreach( $this->_file_map as $key => &$rec ) {
 			if( !startswith($key,'__CSS::') ) continue;
 
 			if( in_array($rec['value'],$css_names) ) {
@@ -286,6 +298,7 @@ class dm_design_reader extends dm_reader_base
 					if( !in_array($new_name,$css_names) ) {
 						$rec['old_value'] = $rec['value'];
 						$rec['value'] = $new_name;
+						break;
 					}
 				}
 			}
@@ -333,7 +346,7 @@ class dm_design_reader extends dm_reader_base
 		$name = $this->get_new_name();
 		$config = cmsms()->GetConfig();
 		$dirname = munge_string_to_url($name);
-		$dir = cms_join_path($config['uploads_dir'],'designs',$dirname);
+		$dir = cms_join_path($config['uploads_path'],'designs',$dirname);
 		@mkdir($dir,0777,TRUE);
 		if( !is_dir($dir) || !is_writable($dir) ) {
 			throw new CmsException('Could not create directory, or could not write in directory '.$dir);
@@ -344,8 +357,8 @@ class dm_design_reader extends dm_reader_base
 
 	public function import()
 	{
-		$this->validate_template_name();
-		$this->validate_stylesheet_name();
+		$this->validate_template_names();
+		$this->validate_stylesheet_names();
 
 		$config = cmsms()->GetConfig();
 		$newname = $this->get_new_name();
@@ -355,35 +368,82 @@ class dm_design_reader extends dm_reader_base
 		// create new design... fill it with info
 		$design = new CmsLayoutCollection();
 		$design->set_name($newname);
-		// todo
+		$description = $info['description'];
+		if( $description ) $description .= "\n\n";
+		$description .= $info['generated']."\n\n";
+		$description .= $info['cmsversion'];
+		$design->set_description($description);
 		
 		// expand URL FILES to become real files
+		// don't have to worry about duplicated filenames (hopefully)
+		// because the destinaton directory is unique.
 		foreach( $this->_file_map as $key => &$rec ) {
 			if( !startswith($key,'__URL::') ) continue;
 			if( !isset($rec['data']) || $rec['data'] == '' ) continue;
 
-			$destfile = cms_join_path($config['uploads_url'],'designts',$destdir,$rec['value']);
+			$destfile = cms_join_path($config['uploads_path'],'designs',$destdir,$rec['value']);
 			file_put_contents($destfile,base64_decode($rec['data']));
 			$rec['tpl_url'] = "{uploads_url}/designs/$destdir/{$rec['value']}";
 			$rec['css_url'] = "[[uploads_url]]/designs/$destdir/{$rec['value']}";			
 		}
+		
+		// expand stylesheets
+		foreach( $this->get_stylesheet_list() as $css ) {
+			$stylesheet = new CmsLayoutStylesheet();
+			$stylesheet->set_name($css['name']);
+			if( isset($css['desc']) && $css['desc'] != '' ) {
+				$stylesheet->set_description($css['desc']);
+			}
+			
+			$content = $css['data'];
+			foreach( $this->_file_map as $key => &$rec ) {
+				if( !startswith($key,'__URL::') ) continue;
+				if( !isset($rec['css_url']) ) continue;
+				$content = str_replace($key,$rec['css_url'],$content);
+			}
 
-		foreach( $this->list_stylesheets() as $one )
-    // 3.  create stylesheets
-		//     foreach FILE
-    //        if url
-                replace <key> with [[uploads_url]]/designs/$dirname/$filename
-           save stylesheet
-           add to design
-       4.  create templates
-           foreach FILE
-              if not CSS
-                replace <KEY> with new name
-           save template
-           add to design
-       5.  save design
-		*/
-	}
+			// save the stylesheet and add it to the design.
+			$stylesheet->set_content($content);
+			$stylesheet->save();
+			$design->add_stylesheet($stylesheet);
+		}
+
+		// expand templates
+		foreach( $this->get_template_list() as $key => $tpl ) {
+			$template = new CmsLayoutTemplate();
+			$template->set_name($tpl['name']);
+			if( isset($tpl['desc']) && $tpl['desc'] != '' ) {
+				$template->set_description($tpl['desc']);
+			}
+
+			$content = $tpl['data'];
+			foreach( $this->_file_map as $key => &$rec ) {
+				if( !startswith($key,'__URL::') ) continue;
+				if( !isset($rec['tpl_url']) ) continue;
+				$content = str_replace($key,$rec['tpl_url'],$content);
+			}
+
+			$template->set_content($content);
+
+			// template type:
+			// - try to find the template type
+      // - if not, set the type to 'generic'.
+			try {
+				$typename = $rec['ttype_originator'].'::'.$rec['ttype_name'];
+				$type_obj = CmsLayoutTemplateType::load($typename);
+				$template->set_type($type_obj);
+			}
+			catch( CmsException $e ) {
+				// should log something here.
+				$type_obj = CmsLayoutTemplateType::load('__CORE__::generic');
+				$template->set_type($type_obj);
+			}
+
+			$template->save();
+			$design->add_template($template);
+		}
+		$design->save();
+	} // end of import
 } // end of class
 
 #

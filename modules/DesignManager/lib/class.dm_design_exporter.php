@@ -7,6 +7,7 @@ class dm_design_exporter
   private $_files;
   private $_image = null;
   private $_description;
+  static  $_mm_types;
 
   private static $_dtd = <<<EOT
 <!DOCTYPE design [
@@ -15,10 +16,12 @@ class dm_design_exporter
   <!ELEMENT description (#PCDATA)>
   <!ELEMENT generated (#PCDATA)>
   <!ELEMENT cmsversion (#PCDATA)>
-  <!ELEMENT template (tkey,tdesc,tdata)>
+  <!ELEMENT template (tkey,tdesc,tdata,ttype_originator,ttype_name)>
   <!ELEMENT tkey (#PCDATA)>
   <!ELEMENT tdesc (#PCDATA)>
   <!ELEMENT tdata (#PCDATA)>
+  <!ELEMENT ttype_originator (#PCDATA)>
+  <!ELEMENT ttype_name (#PCDATA)>
   <!ELEMENT stylesheet (csskey,cssdesc,cssmediatype,cssmediaquery,cssdata)>
   <!ELEMENT csskey (#PCDATA)>
   <!ELEMENT cssdesc (#PCDATA)>
@@ -35,6 +38,12 @@ EOT;
   public function __construct(CmsLayoutCollection &$design)
   {
     $this->_design = $design;
+    if( !is_array(self::$_mm_types ) ) {
+      self::$_mm_types = CmsLayoutTemplateType::load_all_by_originator('MenuManager');
+      if( !is_array(self::$_mm_types) || count(self::$_mm_types) == 0 ) {
+	throw new CmsException('Cannot find any MenuManager template types (is MenuManager installed and enabled?');
+      }
+    }
   }
 
   public function get_description()
@@ -92,15 +101,17 @@ EOT;
   {
     $ob = &$this;
     $types = array("href", "src", "url");
-    while(list(,$type) = each($types)) {
+    foreach( $types as $type ) {
       $innerT = '[a-z0-9:?=&@/._-]+?';
       $content = preg_replace_callback("|$type\=([\"'`])(".$innerT.")\\1|i", 
-				       function($matches) use ($ob) {
+				       function($matches) use ($ob,$type) {
 					 $config = cmsms()->GetConfig();
 					 $url = $matches[2];
-					 if( !startswith($url,'http') || startswith($url,$config['root_url']) || startswith($url,'{root_url}') ) {
+					 if( !startswith($url,'http') || startswith($url,$config['root_url']) || 
+					     startswith($url,'{root_url}') ) {
 					   $sig = $ob->_get_signature($url);
-					   return $sig;
+					   //return $sig;
+					   return " $type=\"$sig\"";
 					 }
 					 return $matches[0];
 				       },
@@ -185,6 +196,9 @@ EOT;
 	    $type = 'TPL';
 	    $sig = $this->_get_signature($name,$type);
 	    $new_tpl_ob->set_name($sig);
+	    // it's a menu manager template
+	    // we need to get a 'type' for this.
+	    $new_tpl_ob->set_type(self::$_mm_types[0]);
 	    $this->_tpl_list[$sig] = $new_tpl_ob;
 	    return $sig;
 	  }
@@ -311,6 +325,12 @@ EOT;
     $output .= $this->_output('tkey',$tpl->get_name(),$lvl+1);
     $output .= $this->_output_data('tdesc',$tpl->get_description(),$lvl+1);
     $output .= $this->_output_data('tdata',$tpl->get_content(),$lvl+1);
+    if( !$tpl->get_type_id() ) {
+      die('test123');
+    }
+    $type = CmsLayoutTemplateType::load($tpl->get_type_id());
+    $output .= $this->_output_data('ttype_originator',$type->get_originator(),$lvl+1);
+    $output .= $this->_output_data('ttype_name',$type->get_name(),$lvl+1);
     $output .= $this->_close_tag('template',$lvl);
     return $output;
   }

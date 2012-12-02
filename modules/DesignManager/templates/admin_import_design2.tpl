@@ -67,8 +67,20 @@ TODO
 {tab_start name='templates'}
 <div id="template_list">
   {foreach from=$templates item='one' name='tpl'}
+   {assign var='typename' value=$one.type_originator|cat:'::'|cat:$one.type_name}
+   {assign var='type_obj' value=CmsLayoutTemplateType::load($typename)}
   <h3><a href="#" rel="tpl_{$smarty.foreach.tpl.index}" class="template_view">{$one.name}</a></h3>
-  <div><p>{$one.desc|default:$mod->Lang('info_nodescription')}}</p>
+  <div>
+    <table class="pagetable">
+      <tr>
+         <th>{$mod->Lang('prompt_templatetype')}:</th>
+         <td>{$type_obj->get_langified_display_value()}</td>
+      </tr>
+      <tr>
+         <th>{$mod->Lang('prompt_description')}:</th>
+         <td>{$one.desc|default:$mod->Lang('info_nodescription')}}</td>
+      </tr>
+    </table>
     <div id="tpl_{$smarty.foreach.tpl.index}" title="{$one.name}" style="display: none;"><textarea>{$one.data}</textarea></div>
   </div>
   {/foreach}

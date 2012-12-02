@@ -19,16 +19,16 @@
 #
 #-------------------------------------------------------------------------
 if( !isset($gCms) ) exit;
-if( !$this->CheckPermission('Modify Templates') ) return;
+if( !$this->CheckPermission('Modify Stylesheets') ) return;
 
 if( isset($params['allparms']) ) {
   $params = array_merge($params,unserialize(base64_decode($params['allparms'])));
 }
 
-$this->SetCurrentTab('templates');
+$this->SetCurrentTab('stylesheets');
 
-if( !isset($params['bulk_action']) || !isset($params['tpl_select']) ||
-    !is_array($params['tpl_select']) || count($params['tpl_select']) == 0 ) {
+if( !isset($params['css_bulk_action']) || !isset($params['css_select']) ||
+    !is_array($params['css_select']) || count($params['css_select']) == 0 ) {
   $this->SetError($this->Lang('error_missingparam'));
   $this->RedirectToAdminTab();
 }
@@ -37,29 +37,16 @@ if( isset($params['cancel']) ) {
   $this->RedirectToAdminTab();
 }
 
-switch( $params['bulk_action'] ) {
+switch( $params['css_bulk_action'] ) {
  case 'delete':
-   // check if we have ownership/delete permission for these templates
-   $my_templates = CmsLayoutTemplate::template_query(array(0=>'u:'.get_userid(),'as_list'=>1));
-   if( !is_array($my_templates) || count($my_templates) == 0 ) {
-     die('error');
-   }
-   $tpl_ids = array_keys($my_templates);
-   foreach( $params['tpl_select'] as $one ) {
-     if( !in_array($one,$tpl_ids) ) {
-       $this->SetError($this->Lang('error_permission_bulkoperation'));
-       $this->RedirectToAdminTab();
-     }
-   }
-
    if( isset($params['submit']) ) {
      if( !isset($params['check1']) || !isset($params['check2']) ) {
        echo $this->ShowErrors($this->Lang('error_notconfirmed'));
      }
      else {
-       $templates = CmsLayoutTemplate::load_bulk($params['tpl_select']);
-       foreach( $templates as $one ) {
-	 if( in_array($one->get_id(),$params['tpl_select']) ) {
+       $stylesheets = CmsLayoutStylesheet::load_bulk($params['css_select']);
+       foreach( $stylesheets as $one ) {
+	 if( in_array($one->get_id(),$params['css_select']) ) {
 	   $one->delete();
 	 }
        }
@@ -76,14 +63,14 @@ switch( $params['bulk_action'] ) {
    break;
 }
 
-$templates = CmsLayoutTemplate::load_bulk($params['tpl_select']);
-$smarty->assign('bulk_op','bulk_action_delete');
-$allparms = base64_encode(serialize(array('tpl_select'=>$params['tpl_select'],
-					   'bulk_action'=>$params['bulk_action'])));
+$templates = CmsLayoutStylesheet::load_bulk($params['css_select']);
+$smarty->assign('bulk_op','bulk_action_delete_css');
+$allparms = base64_encode(serialize(array('css_select'=>$params['css_select'],
+					  'css_bulk_action'=>$params['css_bulk_action'])));
 $smarty->assign('allparms',$allparms);
 $smarty->assign('templates',$templates);
 
-echo $this->ProcessTemplate('admin_bulk_template.tpl');
+echo $this->ProcessTemplate('admin_bulk_css.tpl');
 
 #
 # EOF

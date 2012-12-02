@@ -7,10 +7,13 @@ $lang['available_stylesheets'] = 'Available Stylesheets';
 $lang['available_templates'] = 'Available Templates';
 
 #B
-$lang['bulk_action_delete'] = 'Mass Deletion of Templates';
+$lang['bulk_action_delete'] = 'Bulk Deletion of Templates';
+$lang['bulk_action_delete_css'] = 'Bulk Deletion of Stylesheets';
 
 #C
 $lang['cancel'] = 'Cancel';
+$lang['confirm_bulk_css_1'] = 'Yes, I am sure I want to perform this operation on multiple stylesheets.';
+$lang['confirm_bulk_css_2'] = 'Yes, I am <strong>really</strong> sure I want to act on multiple stylesheets.';
 $lang['confirm_bulk_template_1'] = 'Yes, I am sure I want to perform this operation on multiple templates.';
 $lang['confirm_bulk_template_2'] = 'Yes, I am <strong>really</strong> sure I want to act on multiple templates.';
 $lang['confirm_bulk_tmplop'] = 'Are you sure you want to perform this action on multiple templates?';
@@ -206,6 +209,7 @@ $lang['prompt_stylesheets'] = 'Stylesheets';
 $lang['prompt_template'] = 'Template';
 $lang['prompt_templates'] = 'Templates';
 $lang['prompt_template_setallpages'] = 'Set All Pages';
+$lang['prompt_templatetype'] = 'Template Type';
 $lang['prompt_templatetypes'] = 'Template Types';
 $lang['prompt_title_na'] = 'This template type does not have a default';
 $lang['prompt_design'] = 'Design';
@@ -228,6 +232,7 @@ $lang['submit'] = 'Submit';
 $lang['submitandedit'] = 'Submit And Edit';
 
 #T
+$lang['tpl_originators'] = 'Originators';
 $lang['tpl_types'] = 'Template Types';
 $lang['title_template_setallpages'] = 'Set all pages to use this template';
 
