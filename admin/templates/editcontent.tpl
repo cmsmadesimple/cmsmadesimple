@@ -79,8 +79,8 @@ $(document).ready(function(){
 
 <div class="pagecontainer">
   <div class="pageheader">
-  {if $content_id != ''}
-    {lang('editcontent')}
+  {if $content_id > 0}
+    {lang('editcontent')} :: {$content_id}
   {else}
     {lang('addcontent')}
   {/if}

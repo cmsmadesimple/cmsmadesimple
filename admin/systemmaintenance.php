@@ -243,15 +243,17 @@ $allcontent = $db->Execute($query);
 $pages = array();
 $withoutalias = array();
 $invalidtypes = array();
-while ($contentpiece = $allcontent->FetchRow()) {
-  $pages[] = $contentpiece["content_name"];
-  if (trim($contentpiece["content_alias"]) == "" && $contentpiece['type'] != 'separator') {
-    $withoutalias[] = $contentpiece;
+if( is_object($allcontent) ) {
+  while ($contentpiece = $allcontent->FetchRow()) {
+    $pages[] = $contentpiece["content_name"];
+    if (trim($contentpiece["content_alias"]) == "" && $contentpiece['type'] != 'separator') {
+      $withoutalias[] = $contentpiece;
+    }
+    if (!in_array($contentpiece["type"], $simpletypes)) {
+      $invalidtypes[] = $contentpiece;
+    }
+    //print_r($contentpiece);
   }
-  if (!in_array($contentpiece["type"], $simpletypes)) {
-    $invalidtypes[] = $contentpiece;
-  }
-  //print_r($contentpiece);
 }
 $smarty->assign_by_ref("pagesmissingalias", $withoutalias);
 $smarty->assign_by_ref("pageswithinvalidtype", $invalidtypes);
