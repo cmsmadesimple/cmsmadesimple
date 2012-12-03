@@ -41,7 +41,7 @@ final class dm_reader_factory
 
     // get the first element
     $x = '<!ELEMENT ';
-    $p = strpos($str,'<!ELEMENT ');
+    $p = strpos($str,$x);
     if( $p === FALSE ) {
       throw new CmsException($this->Lang('error_readxml'));
     }
@@ -57,9 +57,11 @@ final class dm_reader_factory
     switch( $word ) {
     case 'theme':
       $ob = new dm_theme_reader($xmlfile);
+			break;
 
     case 'design':
       $ob = new dm_design_reader($xmlfile);
+			break;
     }
 		return $ob;
   }

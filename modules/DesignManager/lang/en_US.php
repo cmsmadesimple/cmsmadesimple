@@ -169,6 +169,7 @@ $lang['prompt_category'] = 'Category';
 $lang['prompt_categories'] = 'Categories';
 $lang['prompt_cmsversion'] = 'CMS Version';
 $lang['prompt_copy'] = 'Copy';
+$lang['prompt_copyrightlicense'] = 'Copyright and License';
 $lang['prompt_copy_template'] = 'Copy this Template';
 $lang['prompt_created'] = 'Create Date';
 $lang['prompt_default'] = 'Default';
@@ -238,7 +239,7 @@ $lang['tpl_types'] = 'Template Types';
 $lang['title_template_setallpages'] = 'Set all pages to use this template';
 
 #U
-
+$lang['unknown'] = 'Unknown';
 
 #V
 

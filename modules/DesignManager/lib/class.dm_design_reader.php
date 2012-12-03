@@ -305,42 +305,6 @@ class dm_design_reader extends dm_reader_base
 		}
 	}
 
-	public function get_new_name()
-	{
-		$name = $this->get_suggested_name();
-		if( !$name ) {
-			// no suggested name... get one from the design.
-			$info = $this->get_design_info();
-			$name = $info['name'];
-		}
-		if( !$name ) {
-			// still no name... try to use the filename.
-			$t = $this->get_filename();
-			$x = strpos($t,'.');
-			$name = substr($t,$x);
-		}
-		
-		// now see if it's a duplicate name
-		$list = CmsLayoutCollection::get_list();
-		$orig_name = $name;
-		if( is_array($list) && count($list) ) {
-			$name_list = array_values($list);
-			$n = 1;
-			while( $n < 100 ) {
-				if( !in_array($name,$name_list) ) {
-					break;
-				}
-				$n++;
-				$name = "$orig_name $n";
-			}
-			if( $n >= 100 ) {
-				throw new CmsException('Could not determine a new name for this design');
-			}
-		}
-		
-		return $name;
-	}
-
 	public function get_destination_dir()
 	{
 		$name = $this->get_new_name();
@@ -369,9 +333,10 @@ class dm_design_reader extends dm_reader_base
 		$design = new CmsLayoutCollection();
 		$design->set_name($newname);
 		$description = $info['description'];
-		if( $description ) $description .= "\n\n";
-		$description .= $info['generated']."\n\n";
-		$description .= $info['cmsversion'];
+		if( $description ) $description .= "\n----------------------------------------\n";
+		$description .= 'Generated '.strftime('%x %X',$info['generated'])."\n";
+		$description .= 'By CMSMS version: '.$info['cmsversion']."\n";
+		$description .= 'Imported '.strftime('%x %X');
 		$design->set_description($description);
 		
 		// expand URL FILES to become real files

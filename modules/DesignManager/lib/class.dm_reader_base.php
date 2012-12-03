@@ -22,7 +22,6 @@
 abstract class dm_reader_base 
 {
   private $_suggested_name;
-  private $_filename;
 
   public function __construct($filename)
   {
@@ -46,10 +45,25 @@ abstract class dm_reader_base
 
   abstract public function validate();
 
+	/** 
+	 * Retrieve information about the design
+	 *
+	 * @return a hash containing design name, description, generated, and cmsversion
+	 */
   abstract public function get_design_info();
 
+	/** 
+	 * Retrieve an array of hashes representing template information.
+	 * each hash will have a name,key,desc,data,type_originator,type_name fields.
+	 * all data should be base64 decoded.
+	 */
   abstract public function get_template_list();
 
+	/**
+	 * Return information about stylesheets in the xml file
+	 * returns an array of hashes.  each hash should contain name, key, desc, data, mediatype,
+	 * and mediaquery values.  All data should be base64 decoded.
+	 */
   abstract public function get_stylesheet_list();
 
   /**
@@ -72,8 +86,44 @@ abstract class dm_reader_base
    * Use the suggested name if possible, check for duplicate names
    * throw exception on failure.
    */
-  abstract protected function get_new_name();
-}
+	public function get_new_name()
+	{
+		$name = $this->get_suggested_name();
+		if( !$name ) {
+			// no suggested name... get one from the design.
+			$info = $this->get_design_info();
+			$name = $info['name'];
+		}
+		if( !$name ) {
+			// still no name... try to use the filename.
+			$t = $this->get_filename();
+			$x = strpos($t,'.');
+			$name = substr($t,$x);
+		}
+		
+		// now see if it's a duplicate name
+		$list = CmsLayoutCollection::get_list();
+		$orig_name = $name;
+		if( is_array($list) && count($list) ) {
+			$name_list = array_values($list);
+			$n = 1;
+			while( $n < 100 ) {
+				if( !in_array($name,$name_list) ) {
+					break;
+				}
+				$n++;
+				$name = "$orig_name $n";
+			}
+			if( $n >= 100 ) {
+				throw new CmsException('Could not determine a new name for this design');
+			}
+		}
+		
+		return $name;
+	}
+
+} // end of class
+
 #
 # EOF
 #
