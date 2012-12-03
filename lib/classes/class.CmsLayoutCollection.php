@@ -355,11 +355,11 @@ class CmsLayoutCollection
 		Events::SendEvent('Core','AddDesignPre',array(get_class($this)=>&$this));
   }
 
-  public function delete()
+  public function delete($force = FALSE)
   {
     if( !$this->get_id() ) return;
 
-    if( $this->has_templates() ) {
+    if( !$force && $this->has_templates() ) {
       throw new CmsException('Cannot Delete a Design that has Templats Attached');
     }
 

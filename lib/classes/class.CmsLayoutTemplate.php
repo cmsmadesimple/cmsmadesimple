@@ -104,7 +104,7 @@ class CmsLayoutTemplate
 		}
 		else if( (is_string($a) && strlen($a)) || (int)$a > 0 ) {
 			$type = CmsLayoutTemplateType::load($a);
-			$n = $cat->get_id();
+			$n = $type->get_id();
 		}
 		$this->_data['type_id'] = (int) $n;
 		$this->_dirty = TRUE;

@@ -347,7 +347,7 @@ class dm_theme_reader extends dm_reader_base
 		$config = cmsms()->GetConfig();
 		$newname = $this->get_new_name();
 		$destdir = $this->get_destination_dir();
-		$ref_map = $this->_ref_map;
+		$ref_map =& $this->_ref_map;
 
 		// part1 .. start creating design..
 		$design = new CmsLayoutCollection();
@@ -365,8 +365,8 @@ class dm_theme_reader extends dm_reader_base
 
 			$destfile = cms_join_path($config['uploads_path'],'themes',$destdir,$rec['name']);
 			file_put_contents($destfile,base64_decode($rec['data']));
-			$rec['tpl_url'] = "{uploads_url}/themes/$destdir/{$rec['value']}";
-			$rec['css_url'] = "[[uploads_url]]/themes/$destdir/{$rec['value']}";			
+			$rec['tpl_url'] = "{uploads_url}/themes/$destdir/{$rec['name']}";
+			$rec['css_url'] = "[[uploads_url]]/themes/$destdir/{$rec['name']}";			
 		}
 
 		// part3 .. process stylesheets
@@ -421,7 +421,7 @@ class dm_theme_reader extends dm_reader_base
 					startswith($url,'{root_url}') ) {
 				$bn = basename($url);
 				if( isset($ref_map[$bn]) ) {
-					$out = $ref_map[$bc]['tpl_url'];
+					$out = $ref_map[$bn]['tpl_url'];
 					$out = " $type=\"$out\"";
 					return $out;
 				}
@@ -443,6 +443,8 @@ class dm_theme_reader extends dm_reader_base
 																					$fn2,$content);
 			}
 			
+			$content = preg_replace('/\{stylesheet/','{cms_stylesheet',$content);
+
 			$regex='/\{menu.*\}/';
 			$content = preg_replace_callback( $regex, $fn1, $content );
 
@@ -452,8 +454,8 @@ class dm_theme_reader extends dm_reader_base
 			$tpl_rec['data'] = $content;
 			$template->set_content($content);
 			$template->set_type('__CORE__::page');
-			$template->save();
-			$design->add_template($template);
+ 			$template->save();
+ 			$design->add_template($template);
 		}
 
 		// part5 .. save design

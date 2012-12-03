@@ -74,8 +74,9 @@ try {
       }
     }
 
-    // done.
-    $design->delete();
+    // done... we 'force' the delete because we loaded the design object
+		// before deleting the templates and stylesheets.
+    $design->delete(TRUE);
     $this->SetMessage($this->Lang('msg_design_deleted'));
     $this->RedirectToAdminTab();
   }
