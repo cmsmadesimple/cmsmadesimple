@@ -799,7 +799,7 @@ function get_pageid_or_alias_from_url()
   else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]]))
     {
       // using non friendly urls... get the page alias/id from the query var.
-      $page = $_GET[$config["query_var"]];    
+      $page = trim(cms_htmlentities($_GET[$config["query_var"]])); 
     }
   else
     {
@@ -811,11 +811,12 @@ function get_pageid_or_alias_from_url()
 	  if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['REQUEST_URI'], $matches))
 	    {
 	      // pretty urls... grab all the stuff after the index.php
-	      $page = $matches[1];
+	      $page = cms_htmlentities($matches[1]);
 	    }
 	}
     }
 
+  unset($_GET['query_var']);
 
   // by here, if page is empty, use the default page id
   if ($page == '')
