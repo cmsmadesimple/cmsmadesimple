@@ -106,7 +106,6 @@ final class UserTagOperations
 		return $row;
 	}
 
-
 	/**
 	 * Test if a user defined tag with a specific name exists
 	 *
@@ -155,7 +154,6 @@ final class UserTagOperations
 
 		return FALSE;
 	}
-
 
 	/**
 	 * Add or update a named user defined tag into the database

@@ -470,10 +470,7 @@ abstract class CmsAdminThemeBase
 										   'title'=>$this->_FixSpaces(lang('editeventhandler')),
 										   'description'=>lang('editeventshandler'),
 										   'show_in_menu'=>false);
-		$items['addusertag'] = array('url'=>'adduserplugin.php','parent'=>'usertags',
-									 'title'=>$this->_FixSpaces(lang('addusertag')),
-									 'description'=>lang('addusertag'),'show_in_menu'=>false);
-		$items['editusertag'] = array('url'=>'edituserplugin.php','parent'=>'usertags',
+		$items['editusertag'] = array('url'=>'editusertag.php','parent'=>'usertags',
 									  'title'=>$this->_FixSpaces(lang('editusertag')),
 									  'description'=>lang('editusertag'),'show_in_menu'=>false);
 		// base admin menu ---------------------------------------------------------

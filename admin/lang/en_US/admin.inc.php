@@ -183,6 +183,7 @@ $lang['admin']['copy_paste_forum'] = 'View Text Report <em>(suitable for copying
 $lang['admin']['copy_to'] = 'Copy To';
 $lang['admin']['core'] = 'Core';
 $lang['admin']['create'] = 'Create';
+$lang['admin']['created_at'] = 'Created at';
 $lang['admin']['created_directory'] = 'Created Directory';
 $lang['admin']['createnewfolder'] = 'Create New Folder';
 $lang['admin']['create_dir_and_file'] = 'Checking if the httpd process can create a file inside of a directory it created';
@@ -1119,6 +1120,7 @@ $lang['admin']['notifications'] = 'Notifications';
 $lang['admin']['notifications_to_handle'] = 'You have <b>%d</b> unhandled notifications';
 $lang['admin']['notification_to_handle'] = 'You have <b>%d</b> unhandled notification';
 $lang['admin']['notinstalled'] = 'Not Installed';
+$lang['admin']['noudtcode'] = 'No code specified for user defined tag';
 $lang['admin']['noxmlfileuploaded'] = 'No file was uploaded. To install a module via XML you must choose and upload an module .xml file from your computer.';
 $lang['admin']['no_bulk_performed'] = 'No bulk operation performed.';
 $lang['admin']['no_files_scanned'] = 'No files were scanned during the verification process (maybe the file is invalid)';
@@ -1235,7 +1237,7 @@ $lang['admin']['revert'] = 'Revert all changes';
 $lang['admin']['root'] = 'Root';
 $lang['admin']['routesrebuilt'] = 'The database routes are rebuilt';
 $lang['admin']['run'] = 'Run';
-$lang['admin']['runuserplugin'] = 'Run User Plugin';
+$lang['admin']['runuserplugin'] = 'Save, and execute this user defined tag';
 $lang['admin']['run_udt'] = 'Run this User Defined Tag';
 
 

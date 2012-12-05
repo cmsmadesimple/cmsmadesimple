@@ -76,10 +76,9 @@ class OneElevenTheme extends CmsAdminThemeBase {
 	}
 
 	public function ShowHeader($title_name, $extra_lang_params = array(), $link_text = '', $module_help_type = FALSE) {
-		if ($title_name)
-			$this->set_value('pagetitle', $title_name);
+		if ($title_name) $this->set_value('pagetitle', $title_name);
 		if (is_array($extra_lang_params) && count($extra_lang_params))
-			$this->set_value('extra_lang_params', $extra_lang_params);
+		  $this->set_value('extra_lang_params', $extra_lang_params);
 		$this->set_value('module_help_type', $module_help_type);
 
 		// get the image url.
@@ -101,7 +100,6 @@ class OneElevenTheme extends CmsAdminThemeBase {
 			}
 		}
 
-		// get the wiki URL and a title for that link.
 		$bc = $this->get_breadcrumbs();
 		if ($bc) {
 			for ($i = 0; $i < count($bc); $i++) {

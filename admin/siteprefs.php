@@ -686,7 +686,7 @@ $smarty->assign('titlemenu',$titlemenu);
 $smarty->assign('backurl', $themeObject->backUrl());
 $smarty->assign('formurl', $thisurl);
 
-# begin output
+# begin outputg
 //echo '<div class="pagecontainer">'.$themeObject->ShowHeader('siteprefs')."\n";
 $smarty->display('siteprefs.tpl');
 //echo '</div>'."\n";
