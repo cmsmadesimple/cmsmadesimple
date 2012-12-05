@@ -13,6 +13,7 @@ Core - General
   - Fixes to cleaning of values in edit_user and add_user wrt email fields (now consistent)
   - Numerous SSL fixes
   - {uploads_url} tag now uses cms_config->smart_uploads_url() (new function)
+  - fixes a minor issue with cleaning of the incoming page variable
 
 Core - Bug Reports:
   - #8238 Assets loaded as http instead of https when ssl is enabled for /admin area
