@@ -197,7 +197,6 @@ if( $syntaxmodule && ($module = ModuleOperations::get_instance()->get_module_ins
   {
     if( $module->IsSyntaxHighlighter() && $module->SyntaxActive() )
       {
-	die($module->GetName());
 	$addlScriptSubmit .= $module->SyntaxPageFormSubmit();
       }
   }
