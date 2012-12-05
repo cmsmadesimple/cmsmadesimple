@@ -19,7 +19,8 @@ $(document).ready(function(){
       var r = x.response;
       var d = x.details;
 
-      $('#edit_userplugin_runout').html(d);
+      var e = $('<div />').text(d).html(); // quick tip for entity encoding.
+      $('#edit_userplugin_runout').html(e);
       $('#edit_userplugin_runout').dialog();
     });
     return false;
