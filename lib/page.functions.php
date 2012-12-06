@@ -503,6 +503,7 @@ function & stripslashes_deep(&$value)
  * @param string  Optional name of the language used.  If non empty it indicates that a syntax highlihter will be used.
  * @param string  Optional additional text to include in the textarea tag
  * @return string
+ * @deprecated
  */
 function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = '', $encoding = '', $stylesheet = '', $width = '80', $height = '15', $forcewysiwyg = '', $wantedsyntax = '', $addtext = '')
 {
@@ -520,7 +521,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
 
   if( !$result && $wantedsyntax ) {
     // here we should get a list of installed/available modules.
-    $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($forcewysiwyg);
+    $module = cmsms()->GetModuleOperations()->GetSyntaxHighlighter($wantedsyntax);
     if( $module ) {
       $result = $module->SyntaxTextArea($name,$wantedsyntax,$width,$height,$encoding,$text,$addtext);
     }
