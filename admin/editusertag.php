@@ -128,7 +128,6 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
     }
     // got here via ajax.
     $out = array('response'=>'Success','details'=>$details);
-    debug_to_log($out,'success');
     echo json_encode($out);
     exit;
   }
@@ -137,7 +136,6 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
       echo $themeObject->ShowErrors($error);
     }
     $out = array('response'=>'Error','details'=>$error);
-    debug_to_log($out,'error');
     echo json_encode($out);
     exit;
   }
@@ -146,6 +144,14 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
 //
 // give everything to smarty.
 //
+$syntaxmodule = get_preference(get_userid(FALSE),'syntaxhighlighter');
+if( $syntaxmodule && 
+    ($module = ModuleOperations::get_instance()->get_module_instance($syntaxmodule)) ) {
+  if( $module->IsSyntaxHighlighter() && $module->SyntaxActive() ) {
+    $smarty->assign('syntax_module_submit_js',$module->SyntaxPageFormSubmit());
+  }
+}
+
 $smarty = cmsms()->GetSmarty();
 $smarty->assign('record',$record);
 echo $smarty->display('editusertag.tpl');

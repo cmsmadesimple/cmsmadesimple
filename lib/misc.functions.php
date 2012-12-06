@@ -426,6 +426,7 @@ function debug_output($var, $title="")
  */
 function debug_to_log($var, $title='',$filename = '')
 {
+  // only output to the debug log if the config entry says to, or we're logged in to the admin.
   if( cmsms()->config['debug_to_log'] || check_login(TRUE) ) {
     if( $filename == '' ) {
       $filename = TMP_CACHE_LOCATION . '/debug.log';

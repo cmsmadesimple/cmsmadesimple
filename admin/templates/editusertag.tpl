@@ -3,6 +3,9 @@
 $(document).ready(function(){  
   $('#runbtn').live('click',function(){
     // get the data
+    if( !confirm('{lang('confirm_runusertag')}') ) return false;
+    {$syntax_module_submit_js|default:''}
+
     var code = $('#udtcode').val();
     if( code.length == 0 ) {
       var d = '{lang('noudtcode')}';
@@ -21,12 +24,14 @@ $(document).ready(function(){
 
       var e = $('<div />').text(d).html(); // quick tip for entity encoding.
       $('#edit_userplugin_runout').html(e);
-      $('#edit_userplugin_runout').dialog();
+      $('#edit_userplugin_runout').dialog({ modal: true });
     });
     return false;
   });
 
   $('#applybtn').live('click',function(){
+    {$syntax_module_submit_js|default:''}
+
     var data = $('#edit_userplugin').find('input:not([type=submit]), select, textarea').serializeArray();
     data.push({ 'name': 'ajax', 'value': 1 });
     data.push({ 'name': 'apply', 'value': 1 });
@@ -72,7 +77,7 @@ $(document).ready(function(){
       <p class="pageinput">
         <input id="submitme" type="submit" name="submit" value="{lang('submit')}"/>
         {if $record.userplugin_id != ''}
-        <input id="applybtn" type="submit" name="apply" value="{lang('apply')}"/>
+        <input id="applybtn" type="submit" name="apply" value="{lang('apply')}" title="{lang('title_applyusertag')}"/>
         <input id="runbtn" type="submit" name="run" value="{lang('run')}" title="{lang('runuserplugin')}"/>
         {/if}
         <input type="submit" name="cancel" value="{lang('cancel')}"/>
@@ -109,7 +114,7 @@ $(document).ready(function(){
 
 {tab_start name='code'}
 <label for="code">{lang('code')}:</label>&nbsp;{admin_icon name='help_udt_code' icon='info.gif' class='helpicon'}<br/>
-<textarea id="udtcode" name="code">{$record.code}</textarea>
+{cms_textarea id='udtcode' name='udtcode' content=$record.code syntax=1}
 
 {tab_start name='description'}
 <label for="description">{lang('description')}:</label>&nbsp;{admin_icon name='help_udt_code' icon='info.gif' class='helpicon'}
