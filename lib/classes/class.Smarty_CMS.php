@@ -70,22 +70,21 @@ class Smarty_CMS extends SmartyBC
 		$this->registerResource('module_db_tpl',new CMSModuleDbTemplateResource());
 		$this->registerResource('module_file_tpl',new CMSModuleFileTemplateResource());
 		$this->registerResource('template',new CMSPageTemplateResource()); // <- Should proably be global and removed from parser?		
-		// Load User Defined Tags
-		if( cmsms()->is_frontend_request() ) {
-		  $utops = cmsms()->GetUserTagOperations();
-		  $usertags = $utops->ListUserTags();
-		  $caching = false;
-		  if( get_site_preference('smarty_cacheudt','never') == 'always' && cmsms()->is_frontend_request() ) {
-		    $caching = true;
-		  }
 
-		  foreach( $usertags as $id => $udt_name ) {
-		    $function = $utops->CreateTagFunction($udt_name);
-		    $this->registerPlugin('function',$udt_name,$function,$caching);
-		  }
-		  $usertags_loaded = TRUE;
+		// Load User Defined Tags
+		$utops = cmsms()->GetUserTagOperations();
+		$usertags = $utops->ListUserTags();
+		$caching = false;
+		if( get_site_preference('smarty_cacheudt','never') == 'always' && cmsms()->is_frontend_request() ) {
+		  $caching = true;
 		}
 
+		foreach( $usertags as $id => $udt_name ) {
+		  $function = $utops->CreateTagFunction($udt_name);
+		  $this->registerPlugin('function',$udt_name,$function,$caching);
+		}
+		$usertags_loaded = TRUE;
+	
 		// register default plugin handler
 		$this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
 
