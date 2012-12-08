@@ -902,6 +902,8 @@ header .cms-logo {
 header .admin-title {
 	text-align: right;
 	display: inline-block;
+	max-width: 70%;
+	overflow: hidden;	
 	height: 70px;
 	font: bold 14px/70px sans-serif;
 	margin-left: 20px;
