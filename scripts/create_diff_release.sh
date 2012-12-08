@@ -72,8 +72,8 @@ fi
 # Look for versions
 #
 cd $basedir;
-_newest=`ls -1dt cmsmadesimple* | head -1`
-_all=`ls -1dt cmsmadesimple* | head -10`
+_newest=`ls -1dt cmsmadesimple* | grep -vi beta | grep -vi alpha | head -1`
+_all=`ls -1dt cmsmadesimple* | grep -vi beta | grep -vi alpha | head -10`
 
 
 #
