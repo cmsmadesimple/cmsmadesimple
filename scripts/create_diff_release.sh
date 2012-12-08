@@ -73,7 +73,7 @@ fi
 #
 cd $basedir;
 _newest=`ls -1dt cmsmadesimple* | head -1`
-_all=`ls -1dt cmsmadesimple*`
+_all=`ls -1dt cmsmadesimple* | head -10`
 
 
 #
@@ -167,7 +167,7 @@ cd $_workdir
 _changedfiles=''
 _newfiles=''
 _delfiles=''
-diff -q -r from_base to_base > $_workdir/diffout_base.tmp 2>/dev/null
+diff -nqr from_base to_base > $_workdir/diffout_base.tmp 2>/dev/null
 while read line ; do
   _c=`echo $line | grep -c '^Files'`
   _n=`echo $line | grep -c '^Only in to_base'`
@@ -179,6 +179,8 @@ while read line ; do
   if [ $_c = 1 -a $_ci = 0 ]; then
     _changedfiles="$_f $_changedfiles"
   elif [ $_n = 1 -a $_ci = 0 ]; then
+    _p=`echo $line | cut -d' ' -f3 | cut -d: -f1 | cut -d/ -f2-`
+    _f=$_p/$_f
     _newfiles="$_f $_newfiles"
   elif [ $_d = 1 ]; then
     _p=`echo $line | cut -d' ' -f3 | cut -d: -f1 | cut -d/ -f2-`
@@ -229,7 +231,7 @@ cd $_workdir
 _changedfiles=''
 _newfiles=''
 _delfiles=''
-diff -q -r from_full to_full > $_workdir/diffout_full.tmp 2>/dev/null
+diff -nqr from_full to_full > $_workdir/diffout_full.tmp 2>/dev/null
 while read line ; do
   _c=`echo $line | grep -c '^Files'`
   _n=`echo $line | grep -c '^Only in to_full'`
