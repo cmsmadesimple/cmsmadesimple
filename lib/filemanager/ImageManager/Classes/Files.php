@@ -160,9 +160,9 @@ class Files
 	static function fixPath($path) 
 	{
 		//append a slash to the path if it doesn't exists.
-		if(substr($path,-1) != DIRECTORY_SEPARATOR)
-		  $path .= '/';
-		return $path;
+		if(!(substr($path,-1) == '/'))
+			$path .= '/';
+		Return $path;
 	}
 
 	/**
