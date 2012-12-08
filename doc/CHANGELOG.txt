@@ -15,6 +15,7 @@ Core - General
   - {uploads_url} tag now uses cms_config->smart_uploads_url() (new function)
   - fixes a minor issue with cleaning of the incoming page variable
   - Fixes an error with UDT's and syntax hilighters.
+  - Minor fix to cms_stylesheet
 
 Core - Bug Reports:
   - #8238 Assets loaded as http instead of https when ssl is enabled for /admin area

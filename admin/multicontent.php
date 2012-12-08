@@ -482,7 +482,7 @@ else
 
 				#Hack alert...  hierarchy manager doesn't take into account for deleted nodes
 				$query = 'SELECT parent_id FROM '.cms_db_prefix().'content WHERE content_id = '.$db->qstr($id);
-				$result = &$db->Execute($query);
+				$result = $db->Execute($query);
 
 				while ($result && !$result->EOF)
 				{
@@ -491,7 +491,7 @@ else
 				}
 				
 				$query = 'SELECT count(*) as thecount FROM '.cms_db_prefix().'content WHERE parent_id = '.$db->qstr($parentid);
-				$result = &$db->Execute($query);
+				$result = $db->Execute($query);
 
 				while ($result && !$result->EOF)
 				{
