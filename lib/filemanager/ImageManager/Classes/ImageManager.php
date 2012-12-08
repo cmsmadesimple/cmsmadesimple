@@ -362,7 +362,7 @@ class ImageManager
 	function validRelativePath($path) 
 	{
 		$dirs = $this->getDirs();
-		if($path == '/') return true;
+		if($path == DIRECTORY_SEPARATOR) return true;
 		//check the path given in the url against the 
 		//list of paths in the system.
 		for($i = 0; $i < count($dirs); $i++)
