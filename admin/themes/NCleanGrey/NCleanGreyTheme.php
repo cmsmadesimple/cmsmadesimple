@@ -104,7 +104,7 @@ class NCleanGreyTheme extends AdminTheme
      */
 	function ThemeHeader(){
 		
-        echo '<link rel="stylesheet" href="themes/NCleanGrey/css/default-cmsms/jquery-ui-1.8.21.custom.css" />'."\n";
+        echo '<link rel="stylesheet" type="text/css" href="themes/NCleanGrey/css/default-cmsms/jquery-ui-1.8.21.custom.css" />'."\n";
 		echo '<script type="text/javascript" src="themes/NCleanGrey/includes/standard.js"></script>'."\n";
 		echo '<link rel="shortcut icon" href="themes/NCleanGrey/images/layout/ncleangrey-favicon.ico" />'."\n";
 		echo '<link rel="Bookmark" href="themes/NCleanGrey/images/layout/ncleangrey-favicon.ico" />';
