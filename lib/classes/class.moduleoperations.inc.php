@@ -597,6 +597,7 @@ final class ModuleOperations
 	  if( !is_object($obj) ) 
 	  {
 		  // oops, some problem loading.
+		  audit('','Core',"Cannot load module $module_name ... some problem instantiating the class");
 		  debug_buffer("Cannot load $module_name ... some problem instantiating the class");
 		  return FALSE;
 	  }
@@ -604,6 +605,7 @@ final class ModuleOperations
 	  if (version_compare($obj->MinimumCMSVersion(),$CMS_VERSION) == 1 )
 	  {
 		  // oops, not compatible.... can't load.
+		  audit('','Core','Cannot load module '.$module_name.' it is not compatible wth this version of CMSMS');
 		  debug_buffer("Cannot load $module_name... It is not compatible with this version of CMSMS");
 		  unset($obj);
 		  return FALSE;
@@ -627,6 +629,7 @@ final class ModuleOperations
 			  }
 			  if( !$res && !isset($CMS_FORCE_MODULE_LOAD))
 			  {		  
+				  audit('','Core',"Cannot load module $module_name ... problem loadind dependent module $name");
 				  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
 				  unset($obj);
 				  return FALSE;
@@ -704,7 +707,8 @@ final class ModuleOperations
 
 	  }
 
-	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || $force_load )
+	  if( (isset($info[$module_name]) && $info[$module_name]['status'] == 'installed') || 
+		  $force_load )
 	  {
 		  if( is_object($obj) ) $this->_modules[$module_name] = $obj;
 		  return TRUE;
@@ -1030,7 +1034,7 @@ final class ModuleOperations
    */
   public static function get_modules_with_capability($capability, $args= '')
   {
-	  if( !is_array($args) )
+	  if( !is_array($arggs) )
 	  {
 		  if( !empty($args) )
 		  {
