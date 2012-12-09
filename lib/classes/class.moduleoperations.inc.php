@@ -1034,7 +1034,7 @@ final class ModuleOperations
    */
   public static function get_modules_with_capability($capability, $args= '')
   {
-	  if( !is_array($arggs) )
+	  if( !is_array($args) )
 	  {
 		  if( !empty($args) )
 		  {
