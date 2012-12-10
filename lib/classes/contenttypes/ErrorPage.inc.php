@@ -167,7 +167,7 @@ class ErrorPage extends Content
 	  else if ($this->mAlias != $this->mOldAlias)
 		  {
 			  $gCms = cmsms();
-			  $contentops =& $gCms->GetContentOperations();
+			  $contentops = $gCms->GetContentOperations();
 			  $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
 			  if ($error !== FALSE)
 				  {

@@ -60,8 +60,12 @@ abstract class CmsAdminThemeBase
 	/**
 	 * Constructor
 	 */
-	public function __construct()
+	protected function __construct()
 	{
+		if( is_object(self::$_instance) ) {
+			throw new CmsLogicExceptin('Only one instance of a theme object is permitted');
+		}
+
 		$this->_url = $_SERVER['SCRIPT_NAME'];
 		$this->_query = (isset($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:'');
 		if( $this->_query == '' && isset($_POST['mact']) ) {
@@ -386,9 +390,6 @@ abstract class CmsAdminThemeBase
 								'title'=>$this->_FixSpaces(lang('pages')),
 								'description'=>lang('pagesdescription'),
 								'show_in_menu'=>$this->HasPerm('pagePerms'));
-// 		$items['addcontent'] = array('url'=>'addcontent.php','parent'=>'pages',
-// 									 'title'=>$this->_FixSpaces(lang('addcontent')),
-// 									 'description'=>lang('addcontent'),'show_in_menu'=>false);
 		$items['editpage'] = array('url'=>'editcontent.php','parent'=>'pages',
 								   'title'=>$this->_FixSpaces(lang('editpage')),
 								   'description'=>lang('editpage'),'show_in_menu'=>false);
@@ -396,16 +397,6 @@ abstract class CmsAdminThemeBase
 								 'title'=>$this->_FixSpaces(lang('imagemanager')),
 								 'description'=>lang('imagemanagerdescription'),
 								 'show_in_menu'=>$this->HasPerm('filePerms'));
-// 		$items['blobs'] = array('url'=>'listhtmlblobs.php','parent'=>'content',
-// 								'title'=>$this->_FixSpaces(lang('htmlblobs')),
-// 								'description'=>lang('htmlblobdescription'),
-// 								'show_in_menu'=>$this->HasPerm('htmlPerms'));
-// 		$items['addhtmlblob'] = array('url'=>'addhtmlblob.php','parent'=>'blobs',
-// 									  'title'=>$this->_FixSpaces(lang('addhtmlblob')),
-// 									  'description'=>lang('addhtmlblob'),'show_in_menu'=>false);
-// 		$items['edithmlblob'] = array('url'=>'edithtmlblob.php','parent'=>'blobs',
-// 									  'title'=>$this->_FixSpaces(lang('edithtmlblob')),
-// 									  'description'=>lang('edithtmlblob'),'show_in_menu'=>false);
 		// base layout menu ---------------------------------------------------------
 		$items['layout'] = array('url'=>'index.php?section=layout','parent'=>-1,
 								 'title'=>$this->_FixSpaces(lang('layout')),

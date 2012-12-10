@@ -19,82 +19,73 @@
 function smarty_function_recently_updated($params, &$template)
 {
   $smarty = $template->smarty;
-  if(empty($params['number']))
-    {
-      $number = 10;
-    }
-  else
-    {
-      $number = $params['number'];
-    }
+  if(empty($params['number'])) {
+    $number = 10;
+  }
+  else {
+    $number = $params['number'];
+  }
     
-  if(empty($params['leadin']))
-    {
-      $leadin = "Modified: ";
-    }
-  else
-    {
-      $leadin = $params['leadin'];
-    }
+  if(empty($params['leadin'])) {
+    $leadin = "Modified: ";
+  }
+  else {
+    $leadin = $params['leadin'];
+  }
     
-  if(empty($params['showtitle']))
-    {
-      $showtitle='true';
-    }
-  else
-    {
-      $showtitle = $params['showtitle'];
-    }    
+  if(empty($params['showtitle'])) {
+    $showtitle='true';
+  }
+  else {
+    $showtitle = $params['showtitle'];
+  }    
     
-	$dateformat = isset($params['dateformat']) ? $params['dateformat'] : "d.m.y h:m" ;    
-	$css_class = isset($params['css_class']) ? $params['css_class'] : "" ;    
+  $dateformat = isset($params['dateformat']) ? $params['dateformat'] : "d.m.y h:m" ;    
+  $css_class = isset($params['css_class']) ? $params['css_class'] : "" ;    
     
-if (isset($params['css_class'])){
-	$output = '<div class="'.$css_class.'"><ul>';
-	}
-else {
-	$output = '<ul>';
-}
+  if (isset($params['css_class'])) {
+    $output = '<div class="'.$css_class.'"><ul>';
+  }
+  else {
+    $output = '<ul>';
+  }
 
-$gCms = cmsms();
-$hm = $gCms->GetHierarchyManager();
-$db = $gCms->GetDb();
-// Get list of most recently updated pages excluding the home page
-$q = "SELECT * FROM ".cms_db_prefix()."content WHERE (type='content' OR type='link')
-AND default_content != 1 AND active = 1 AND show_in_menu = 1 
-ORDER BY modified_date DESC LIMIT ".((int)$number);
-$dbresult = $db->Execute( $q );
-if( !$dbresult )
-{
+  $gCms = cmsms();
+  $hm = $gCms->GetHierarchyManager();
+  $db = $gCms->GetDb();
+  // Get list of most recently updated pages excluding the home page
+  $q = "SELECT * FROM ".cms_db_prefix()."content WHERE (type='content' OR type='link')
+        AND default_content != 1 AND active = 1 AND show_in_menu = 1 
+        ORDER BY modified_date DESC LIMIT ".((int)$number);
+  $dbresult = $db->Execute( $q );
+  if( !$dbresult ) {
     echo 'DB error: '. $db->ErrorMsg()."<br/>";
-}
-while ($dbresult && $updated_page = $dbresult->FetchRow())
-{
+  }
+  while ($dbresult && $updated_page = $dbresult->FetchRow()) {
     $curnode = $hm->getNodeById($updated_page['content_id']);
-    $curcontent =& $curnode->GetContent();
+    $curcontent = $curnode->GetContent();
     $output .= '<li>';
     $output .= '<a href="'.$curcontent->GetURL().'">'.$updated_page['content_name'].'</a>';
-    if ((FALSE == empty($updated_page['titleattribute'])) && ($showtitle=='true'))
-      {
-	$output .= '<br />';
-	$output .= $updated_page['titleattribute'];
-      }
+    if ((FALSE == empty($updated_page['titleattribute'])) && ($showtitle=='true')) {
+      $output .= '<br />';
+      $output .= $updated_page['titleattribute'];
+    }
     $output .= '<br />';
     
     $output .= $leadin;
     $output .= date($dateformat,strtotime($updated_page['modified_date']));
     $output .= '</li>';
-}
+  }
 
-$output .= '</ul>';
-if (isset($params['css_class'])){
-		$output .= '</div>';
-		}
-	if( isset($params['assign']) ){
-		$smarty->assign(trim($params['assign']),$output);
-		return;
-	}
-return $output;
+  $output .= '</ul>';
+  if (isset($params['css_class'])) {
+    $output .= '</div>';
+  }
+  if( isset($params['assign']) ){
+    $smarty->assign(trim($params['assign']),$output);
+    return;
+  }
+  return $output;
 }
 
 function smarty_cms_help_function_recently_updated() {

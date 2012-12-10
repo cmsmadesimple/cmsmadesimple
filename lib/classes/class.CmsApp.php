@@ -152,8 +152,7 @@ final class CmsApp {
 	 */
 	public function get_variable($key)
 	{
-		if( $key != '' && isset($this->variables[$key]) )
-		{
+		if( $key != '' && isset($this->variables[$key]) ) {
 			return $this->variables[$key];
 		}
 	}
@@ -308,8 +307,7 @@ final class CmsApp {
 	*/	
 	public function & GetBookmarkOperations()
 	{
-        if (!isset($this->bookmarkoperations))
-		{
+        if (!isset($this->bookmarkoperations)) {
 			$this->bookmarkoperations = new BookmarkOperations();
 		}
 

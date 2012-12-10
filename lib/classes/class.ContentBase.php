@@ -1261,7 +1261,6 @@ abstract class ContentBase
     public function LoadFromId($id, $loadProperties = false)
     {
       $gCms = cmsms();
-      global $debug_errors;
       $db = $gCms->GetDb();
       $config = $gCms->GetConfig();
 	  
@@ -1304,12 +1303,6 @@ abstract class ContentBase
 
 	  $result = true;
 	}
-	else {
-	  if (true == $config["debug"]) {
-	    # :TODO: Translate the error message
-	    $debug_errors .= "<p>Could not retrieve content from db</p>\n";
-	  }
-	}
 
 	if ($row) $row->Close();
 
@@ -1318,24 +1311,11 @@ abstract class ContentBase
 
 	  if (!is_array($this->_props) ) {
 	    $result = false;
-
-	    // debug mode
-	    if (true == $config["debug"]) {
-	      # :TODO: Translate the error message
-	      $debug_errors .= "<p>Could not load properties for content</p>\n";
-	    }
 	  }
 	}
 
 	if (false == $result) {
 	  $this->SetInitialValues();
-	}
-      }
-      else {
-	// debug mode
-	if ($config["debug"] == true) {
-	  # :TODO: Translate the error message
-	  $debug_errors .= "<p>The id wasn't valid : $id</p>\n";
 	}
       }
 
@@ -1396,15 +1376,6 @@ abstract class ContentBase
 	  if (!is_array($this->_props) )
 	    {
 	      $result = false;
-		      
-	      global $debug_errors;
-	      $gCms = cmsms();
-	      $config = $gCms->GetConfig();
-	      // debug mode
-	      if (true == $config["debug"]) {
-		# :TODO: Translate the error message
-		$debug_errors .= "<p>Could not load properties for content</p>\n";
-	      }
 	    }
 	}
 
@@ -1464,7 +1435,6 @@ abstract class ContentBase
     protected function Update()
     {
       $gCms = cmsms();
-      global $debug_errors;
       $db = $gCms->GetDb();
       $config = $gCms->GetConfig();
       $result = false;
@@ -1512,13 +1482,6 @@ abstract class ContentBase
 					     $this->mId
 					     ));
 
-      if (!$dbresult) {
-	if (true == $config["debug"]) {
-	  # :TODO: Translate the error message
-	  $debug_errors .= "<p>Error updating content</p>\n";
-	}
-      }
-
       if ($this->mOldParentId != $this->mParentId) {
 	// Fix the item_order if necessary
 	$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
@@ -1543,12 +1506,6 @@ abstract class ContentBase
 	// :TODO: There might be some error checking there
 	$this->_save_properties();
       }
-      else {
-	if (true == $config["debug"]) {
-	  // :TODO: Translate the error message
-	  $debug_errors .= "<p>Error updating : the content has no properties</p>\n";
-	}
-      }
 
       cms_route_manager::del_static('','__CONTENT__',$this->mId);
       if( $this->mURL != '' ) {
@@ -1568,7 +1525,6 @@ abstract class ContentBase
     protected function Insert()
     {
       $gCms = cmsms();
-      global $debug_errors;
       $db = $gCms->GetDb();
       $config = $gCms->GetConfig();
 
@@ -1626,22 +1582,12 @@ abstract class ContentBase
 
       if (! $dbresult) {
 	die($db->sql.'<br/>'.$db->ErrorMsg());
-	if ($config["debug"] == true) {
-	  # :TODO: Translate the error message
-	  $debug_errors .= "<p>Error inserting content</p>\n";
-	}
       }
 
       if (is_array($this->_props) && count($this->_props)) {
 	// :TODO: There might be some error checking there
 	debug_buffer('save from ' . __LINE__);
 	$this->_save_properties();
-      }
-      else {
-	if (true == $config["debug"]) {
-	  # :TODO: Translate the error message
-	  $debug_errors .= "<p>Error inserting : the content has no properties</p>\n";
-	}
       }
       if (isset($this->mAdditionalEditors)) {
 	foreach ($this->mAdditionalEditors as $oneeditor) {
@@ -1776,28 +1722,17 @@ abstract class ContentBase
     function Delete()
     {
       $gCms = cmsms();
-      global $debug_errors;
       $config = $gCms->GetConfig();
       Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
       $db = $gCms->GetDb();
       $result = false;
 
       if (-1 > $this->mId) {
-	if (true == $config["debug"]) {
-	  # :TODO: Translate the error message
-	  $debug_errors .= "<p>Could not delete content : invalid Id</p>\n";
-	}
+	// invalid content id.
       }
       else {
 	$query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
 	$dbresult = $db->Execute($query, array($this->mId));
-
-	if (! $dbresult) {
-	  if (true == $config["debug"]) {
-	    # :TODO: Translate the error message
-	    $debug_errors .= "<p>Error deleting content</p>\n";
-	  }
-	}
 
 	// Fix the item_order if necessary
 	$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
@@ -2045,16 +1980,6 @@ abstract class ContentBase
 	return array(array('Error','Edit Not Defined!'));
     }
 
-
-    /**
-     * Show Help
-# disabled to see if its used.
-    public function Help()
-    {
-    	# :TODO:
-    	return "<tr><td>Help Not Defined</td></tr>";
-    }
-     */
 
     /**
      * Method to indicate wether the current page has children.

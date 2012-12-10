@@ -99,16 +99,17 @@ class CMSInstallerPage7 extends CMSInstallerPage
       echo '<p>' . ilang('install_admin_set_core_event');
 
       echo " [" . ilang('done') . "]</p>";
-      echo '<p>' . ilang('install_admin_install_modules');
+      echo '<p>' . ilang('install_admin_install_modules').'<ul>';;
       $modops = $gCms->GetModuleOperations();
       $modops->LoadModules(TRUE);
       $allmodules = $modops->GetAllModuleNames();
       if( is_array($allmodules) && count($allmodules) ) {
 	foreach( $allmodules as $module_name ) {
+          echo '<li>'.$module_name.'</li>';
 	  $obj = $modops->get_module_instance($module_name,'',TRUE);
 	}
       }
-      echo " [" . ilang('done') . "]</p>";
+      echo "</ul>[" . ilang('done') . "]</p>";
 
       echo '<p>' . ilang('install_admin_clear_cache');
       $contentops->ClearCache();

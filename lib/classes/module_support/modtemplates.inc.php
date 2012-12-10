@@ -32,17 +32,13 @@
 function cms_module_ListTemplates(&$modinstance, $modulename = '')
 {
 	$gCms = cmsms();
-
 	$db = $gCms->GetDb();
-	$config = $gCms->GetConfig();
-
 	$retresult = array();
 
 	$query = 'SELECT * from '.cms_db_prefix().'module_templates WHERE module_name = ? ORDER BY template_name ASC';
-	$result =& $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName()));
+	$result = $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName()));
 
-	while (isset($result) && !$result->EOF)
-	{
+	while (isset($result) && !$result->EOF) {
 		$retresult[] = $result->fields['template_name'];
 		$result->MoveNext();
 	}
@@ -58,15 +54,12 @@ function cms_module_ListTemplates(&$modinstance, $modulename = '')
 function cms_module_GetTemplate(&$modinstance, $tpl_name, $modulename = '')
 {
 	$gCms = cmsms();
-
 	$db = $gCms->GetDb();
-	$config = $gCms->GetConfig();
 
 	$query = 'SELECT * from '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?';
 	$result = $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName(), $tpl_name));
 
-	if ($result && $result->RecordCount() > 0)
-	{
+	if ($result && $result->RecordCount() > 0) {
 		$row = $result->FetchRow();
 		return $row['content'];
 	}
@@ -110,13 +103,11 @@ function cms_module_SetTemplate(&$modinstance, $tpl_name, $content, $modulename 
 	$result = $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName(), $tpl_name));
 
 	$time = $db->DBTimeStamp(time());
-	if ($result && $result->RecordCount() < 1)
-	{
+	if ($result && $result->RecordCount() < 1) {
 		$query = 'INSERT INTO '.cms_db_prefix().'module_templates (module_name, template_name, content, create_date, modified_date) VALUES (?,?,?,'.$time.','.$time.')';
 		$db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName(), $tpl_name, $content));
 	}
-	else
-	{
+	else {
 		$query = 'UPDATE '.cms_db_prefix().'module_templates SET content = ?, modified_date = '.$time.' WHERE module_name = ? AND template_name = ?';
 		$db->Execute($query, array($content, $modulename != ''?$modulename:$modinstance->GetName(), $tpl_name));
 	}
@@ -132,37 +123,12 @@ function cms_module_DeleteTemplate(&$modinstance, $tpl_name = '', $modulename = 
 
 	$parms = array($modulename != ''?$modulename:$modinstance->GetName());
 	$query = "DELETE FROM ".cms_db_prefix()."module_templates WHERE module_name = ?";
-	if( $tpl_name != '' )
-	  {
-	    $query .= 'AND template_name = ?';
+	if( $tpl_name != '' ) {
+		$query .= 'AND template_name = ?';
 	    $parms[] = $tpl_name;
-	  }
+	}
 	$result = $db->Execute($query, $parms);
 	return ($result == false)?false:true;
-}
-
-/**
- * @access private
- */
-function cms_module_IsFileTemplateCached(&$modinstance, $tpl_name, $designation = '', $timestamp = '', $cacheid = '')
-{
-	$ok = (strpos($tpl_name, '..') === false);
-	if (!$ok) return;
-
-	$gCms = cmsms();
-	$smarty = $gCms->GetSmarty();
-	$oldcache = $smarty->caching;
-	$smarty->caching = false;
-	$result = $smarty->isCached('module_file_tpl:'.$modinstance->GetName().';'.$tpl_name, $cacheid, ($designation != ''?$designation:$modinstance->GetName()));
-
-	if ($result == true && $timestamp != '' && intval($smarty->_cache_info['timestamp']) < intval($timestamp))
-	{
-		$smarty->clear_cache('module_file_tpl:'.$modinstance->GetName().';'.$tpl_name, $cacheid, ($designation != ''?$designation:$modinstance->GetName()));
-		$result = false;
-	}
-
-	$smarty->caching = $oldcache;
-	return $result;
 }
 
 /**
@@ -181,30 +147,6 @@ function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '',
 	$result = $smarty->fetch('module_file_tpl:'.$modinstance->GetName().';'.$tpl_name, $cacheid, ($designation != ''?$designation:$modinstance->GetName()));
 	$smarty->caching = $oldcache;
 
-	return $result;
-}
-
-/**
- * @access private
- */
-function cms_module_IsDatabaseTemplateCached(&$modinstance, $tpl_name, $designation = '', $timestamp = '')
-{
-	$ok = (strpos($tpl_name, '..') === false);
-	if (!$ok) return;
-
-	$gCms = cmsms();
-	$smarty = $gCms->GetSmarty();
-	$oldcache = $smarty->caching;
-	$smarty->caching = false;
-	$result = $smarty->isCached('module_db_tpl:'.$modinstance->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$modinstance->GetName()));
-
-	if ($result == true && $timestamp != '' && intval($smarty->_cache_info['timestamp']) < intval($timestamp))
-	{
-		$smarty->clear_cache('module_file_tpl:'.$modinstance->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$modinstance->GetName()));
-		$result = false;
-	}
-
-	$smarty->caching = $oldcache;
 	return $result;
 }
 

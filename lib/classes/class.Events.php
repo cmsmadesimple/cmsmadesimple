@@ -126,7 +126,7 @@ final class Events
 					}
 
 					// and call the module event handler.
-					$obj =& CMSModule::GetModuleInstance($row['module_name']);
+					$obj = CMSModule::GetModuleInstance($row['module_name']);
 					if( $obj ) {
 						debug_buffer('calling module ' . $row['module_name'] . ' from event ' . $eventname);
 						$obj->DoEvent( $modulename, $eventname, $params );

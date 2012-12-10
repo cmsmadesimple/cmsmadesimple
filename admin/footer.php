@@ -1,41 +1,30 @@
 <?php
-if (isset($USE_THEME) && $USE_THEME == false)
-  {
-    echo '<!-- admin theme disabled -->';
-  }
-else
-  {
-    $themeObject->do_footer();
-  }
-
-$gCms = cmsms();
-if ($gCms->config["debug"] == true)
-{
-	echo '<div id="DebugFooter">';
-	global $sql_queries;
-	if (FALSE == empty($sql_queries))
-	  {
-	    echo "<div>".$sql_queries."</div>\n";
-	  }
-	foreach ($gCms->errors as $error)
-	{
-		echo $error;
-	}
-	echo '</div> <!-- end DebugFooter -->';
+if (isset($USE_THEME) && $USE_THEME == false) {
+  echo '<!-- admin theme disabled -->';
+}
+else {
+  $themeObject->do_footer();
 }
 
-if (!isset($USE_THEME) || $USE_THEME != false)
-  {
-    echo '</body>';
-    echo '</html>';
+$gCms = cmsms();
+if ($gCms->config["debug"] == true) {
+  echo '<div id="DebugFooter">';
+  foreach ($gCms->errors as $error) {
+    echo $error;
   }
+  echo '</div> <!-- end DebugFooter -->';
+}
+
+if (!isset($USE_THEME) || $USE_THEME != false) {
+  echo '</body>';
+  echo '</html>';
+}
 
 #Pull the stuff out of the buffer...
 $htmlresult = '';
-if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
-{
-	$htmlresult = @ob_get_contents();
-	@ob_end_clean();
+if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false)) {
+  $htmlresult = @ob_get_contents();
+  @ob_end_clean();
 }
 
 #Do any header replacements (this is for WYSIWYG stuff)
@@ -45,33 +34,28 @@ $formsubmittext = '';
 $bodytext = '';
 
 $userid = get_userid();
-//$wysiwyg = get_preference($userid, 'wysiwyg');
 
 // get the active wysiwyg
 $loaded = ModuleOperations::get_instance()->GetLoadedModules();
-if( is_array($loaded) && count($loaded) )
-  {
-    foreach( $loaded as $name => &$object )
-      {
-	if( !is_object($object) ) continue;
-	if( $object->IsWYSIWYG() && $object->WYSIWYGActive() )
-	  {
-	    $bodytext       .= $object->WYSIWYGGenerateBody();
-	    $headertext     .= $object->WYSIWYGGenerateHeader($htmlresult);
-	    $formtext       .= $object->WYSIWYGPageForm();
-	    $formsubmittext .= $object->WYSIWYGPageFormSubmit();
-	    //break;
-	  }
-	else if( $object->IsSyntaxHighlighter() && $object->SyntaxActive() )
-	  {
-	    $bodytext.=$object->SyntaxGenerateBody();
-	    $headertext.=$object->SyntaxGenerateHeader($htmlresult);
-	    $formtext.=$object->SyntaxPageForm();
-	    $formsubmittext.=$object->SyntaxPageFormSubmit();
-	   // break;
-	  }
-      }
+if( is_array($loaded) && count($loaded) ) {
+  foreach( $loaded as $name => &$object ) {
+    if( !is_object($object) ) continue;
+    if( $object->IsWYSIWYG() && $object->WYSIWYGActive() ) {
+      $bodytext       .= $object->WYSIWYGGenerateBody();
+      $headertext     .= $object->WYSIWYGGenerateHeader($htmlresult);
+      $formtext       .= $object->WYSIWYGPageForm();
+      $formsubmittext .= $object->WYSIWYGPageFormSubmit();
+      //break;
+    }
+    else if( $object->IsSyntaxHighlighter() && $object->SyntaxActive() ) {
+      $bodytext.=$object->SyntaxGenerateBody();
+      $headertext.=$object->SyntaxGenerateHeader($htmlresult);
+      $formtext.=$object->SyntaxPageForm();
+      $formsubmittext.=$object->SyntaxPageFormSubmit();
+      // break;
+    }
   }
+}
 
 $htmlresult = $themeObject->postprocess($htmlresult);
 $htmlresult = str_replace('<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->', $headertext, $htmlresult);

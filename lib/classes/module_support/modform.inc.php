@@ -429,17 +429,15 @@ function cms_module_CreateInputFile(&$modinstance, $id, $name, $accept='', $size
   $accept = cms_htmlentities($accept);
   $size = cms_htmlentities($size);
 
-	$text='<input type="file" class="cms_browse" name="'.$id.$name.'" size="'.$size.'"';
-	if ($accept != '')
-	{
-		$text .= ' accept="' . $accept.'"';
-	}
-	if ($addttext != '')
-	{
-		$text .= ' ' . $addttext;
-	}
-	$text .= " />\n";
-	return $text;
+  $text='<input type="file" class="cms_browse" name="'.$id.$name.'" size="'.$size.'"';
+  if ($accept != '') {
+	  $text .= ' accept="' . $accept.'"';
+  }
+  if ($addttext != '') {
+	  $text .= ' ' . $addttext;
+  }
+  $text .= " />\n";
+  return $text;
 }
 
 /**
@@ -453,14 +451,13 @@ function cms_module_CreateInputPassword(&$modinstance, $id, $name, $value='', $s
   $size = cms_htmlentities($size);
   $maxlength = cms_htmlentities($maxlength);
 
-	$value = str_replace('"', '&quot;', $value);
-	$text = '<input type="password" class="cms_password" id="'.$id.$name.'" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
-	if ($addttext != '')
-	{
-		$text .= ' ' . $addttext;
-	}
-	$text .= " />\n";
-	return $text;
+  $value = str_replace('"', '&quot;', $value);
+  $text = '<input type="password" class="cms_password" id="'.$id.$name.'" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+  if ($addttext != '') {
+	  $text .= ' ' . $addttext;
+  }
+  $text .= " />\n";
+  return $text;
 }
 
 /**
@@ -472,14 +469,13 @@ function cms_module_CreateInputHidden(&$modinstance, $id, $name, $value='', $add
   $name = cms_htmlentities($name);
   $value = cms_htmlentities($value);
 
-	$value = str_replace('"', '&quot;', $value);
-	$text = '<input type="hidden" id="'.$id.$name.'" name="'.$id.$name.'" value="'.$value.'"';
-	if ($addttext != '')
-	{
-		$text .= ' '.$addttext;
-	}
-	$text .= " />\n";
-	return $text;
+  $value = str_replace('"', '&quot;', $value);
+  $text = '<input type="hidden" id="'.$id.$name.'" name="'.$id.$name.'" value="'.$value.'"';
+  if ($addttext != '') {
+	  $text .= ' '.$addttext;
+  }
+  $text .= " />\n";
+  return $text;
 }
 
 /**
@@ -492,17 +488,15 @@ function cms_module_CreateInputCheckbox(&$modinstance, $id, $name, $value='', $s
   $value = cms_htmlentities($value);
   $selectedvalue = cms_htmlentities($selectedvalue);
 
-	$text = '<input type="checkbox" class="cms_checkbox" name="'.$id.$name.'" value="'.$value.'"';
-	if ($selectedvalue == $value)
-	{
-		$text .= ' ' . 'checked="checked"';
-	}
-	if ($addttext != '')
-	{
-		$text .= ' '.$addttext;
-	}
-	$text .= " />\n";
-	return $text;
+  $text = '<input type="checkbox" class="cms_checkbox" name="'.$id.$name.'" value="'.$value.'"';
+  if ($selectedvalue == $value) {
+	  $text .= ' ' . 'checked="checked"';
+  }
+  if ($addttext != '') {
+	  $text .= ' '.$addttext;
+  }
+  $text .= " />\n";
+  return $text;
 }
 
 /**
@@ -515,32 +509,27 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
   $image = cms_htmlentities($image);
 
   $gCms = cmsms();
-	$config = $gCms->GetConfig();
+  $config = $gCms->GetConfig();
 
-	$text = '<input class="cms_submit" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" type=';
+  $text = '<input class="cms_submit" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" type=';
 
-	if ($image != '')
-	{
-		$text .= '"image"';
-		$img = $config['root_url'] . '/' . $image;
-		$text .= ' src="'.$img.'"';
-	}
-	else
-	{
-		$text .= '"submit"';
-	}
-	if ($confirmtext != '' )
-	  {
-		$text .= ' onclick="return confirm(\''.$confirmtext.'\');"';
-	  }
-	if ($addttext != '')
-	{
-		$text .= ' '.$addttext;
-	}
+  if ($image != '') {
+	  $text .= '"image"';
+	  $img = $config['root_url'] . '/' . $image;
+	  $text .= ' src="'.$img.'"';
+  }
+  else {
+	  $text .= '"submit"';
+  }
+  if ($confirmtext != '' ) {
+	  $text .= ' onclick="return confirm(\''.$confirmtext.'\');"';
+  }
+  if ($addttext != '') {
+	  $text .= ' '.$addttext;
+  }
 
-	$text .= ' />';
-
-	return $text . "\n";
+  $text .= ' />';
+  return $text . "\n";
 }
 
 /**
@@ -552,10 +541,9 @@ function cms_module_CreateInputReset(&$modinstance, $id, $name, $value='Reset', 
   $name = cms_htmlentities($name);
 
   $text = '<input type="reset" class="cms_reset" name="'.$id.$name.'" value="'.$value.'"';
-  if ($addttext != '')
-    {
+  if ($addttext != '') {
       $text .= ' '.$addttext;
-    }
+  }
   $text .= ' />';
   return $text . "\n";
 }
@@ -569,13 +557,12 @@ function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
 
-	$text = '<input type="file" class="cms_browse" name="'.$id.$name.'" size="'.$size.'" maxlength="'.$maxlength.'"';
-	if ($addttext != '')
-	{
-		$text .= ' '.$addttext;
-	}
-	$text .= ' />';
-	return $text . "\n";
+  $text = '<input type="file" class="cms_browse" name="'.$id.$name.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+  if ($addttext != '') {
+	  $text .= ' '.$addttext;
+  }
+  $text .= ' />';
+  return $text . "\n";
 }
 
 /**
@@ -588,32 +575,27 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
   $selectedindex = cms_htmlentities($selectedindex);
   $selectedvalue = cms_htmlentities($selectedvalue);
 
-	$text = '<select class="cms_dropdown" name="'.$id.$name.'"';
-	if ($addttext != '')
-	{
-		$text .= ' ' . $addttext;
-	}
-	$text .= '>';
-	$count = 0;
-	if (is_array($items) && count($items) > 0)
-	{
-		foreach ($items as $key=>$value)
-		{
-		  //		  $value = cms_htmlentities($value);
-		$text .= '<option value="'.$value.'"';
-			if ($selectedindex == $count || $selectedvalue == $value)
-			{
-				$text .= ' ' . 'selected="selected"';
-			}
-			$text .= '>';
-			$text .= $key;
-			$text .= '</option>';
-			$count++;
-		}
-	}
-	$text .= '</select>'."\n";
+  $text = '<select class="cms_dropdown" name="'.$id.$name.'"';
+  if ($addttext != '') {
+	  $text .= ' ' . $addttext;
+  }
+  $text .= '>';
+  $count = 0;
+  if (is_array($items) && count($items) > 0) {
+	  foreach ($items as $key=>$value) {
+		  $text .= '<option value="'.$value.'"';
+		  if ($selectedindex == $count || $selectedvalue == $value) {
+			  $text .= ' ' . 'selected="selected"';
+		  }
+		  $text .= '>';
+		  $text .= $key;
+		  $text .= '</option>';
+		  $count++;
+	  }
+  }
+  $text .= '</select>'."\n";
 
-	return $text;
+  return $text;
 }
 
 /**
@@ -630,32 +612,27 @@ function cms_module_CreateInputDataList(&$modinstance, $id, $name, $value='', $i
   $value = str_replace('"', '&quot;', $value);
   
   $text = '<input type="text" class="cms_datalistfield" name="'.$id.$name.'" list="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
-  if ($addttext != '')
-    {
+  if ($addttext != '') {
       $text .= ' ' . $addttext;
-    }
+  }
   $text .= " />\n";
   
-  	$text .= '<datalist class="cms_datalist" id="'.$id.$name.'"';
-	if ($addttext != '')
-	{
-		$text .= ' ' . $addttext;
-	}
-	$text .= '>';
-	$count = 0;
-	if (is_array($items) && count($items) > 0)
-	{
-		foreach ($items as $key=>$value)
-		{
-		  //		  $value = cms_htmlentities($value);
-		$text .= '<option value="'.$value.'"';
-			$text .= '>';
-			$text .= $key;
-			$text .= '</option>';
-			$count++;
-		}
-	}
-	$text .= '</datalist>'."\n";
+  $text .= '<datalist class="cms_datalist" id="'.$id.$name.'"';
+  if ($addttext != '') {
+	  $text .= ' ' . $addttext;
+  }
+  $text .= '>';
+  $count = 0;
+  if (is_array($items) && count($items) > 0) {
+	  foreach ($items as $key=>$value) {
+		  $text .= '<option value="'.$value.'"';
+		  $text .= '>';
+		  $text .= $key;
+		  $text .= '</option>';
+		  $count++;
+	  }
+  }
+  $text .= '</datalist>'."\n";
   return $text;
 }
 
@@ -669,38 +646,33 @@ function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $se
   $size = cms_htmlentities($size);
   $multiple = cms_htmlentities($multiple);
 
-  if( strstr($name,'[]') === FALSE && $multiple === true )
-    {
+  if( strstr($name,'[]') === FALSE && $multiple === true ) {
       $name.='[]';
-    }
+  }
   $text = '<select class="cms_select" name="'.$id.$name.'"';
-	if ($addttext != '')
-	{
-		$text .= ' ' . $addttext;
-	}
-	if( $multiple )
-	  {
-		$text .= ' multiple="multiple" ';
-	  }
-	$text .= 'size="'.$size.'">';
-	$count = 0;
-	foreach ($items as $key=>$value)
-	{
+  if ($addttext != '') {
+	  $text .= ' ' . $addttext;
+  }
+  if( $multiple ) {
+	  $text .= ' multiple="multiple" ';
+  }
+  $text .= 'size="'.$size.'">';
+  $count = 0;
+  foreach ($items as $key=>$value) {
 	  $value = cms_htmlentities($value);
 
-		$text .= '<option value="'.$value.'"';
-		if (in_array($value, $selecteditems))
-		{
-			$text .= ' ' . 'selected="selected"';
-		}
-		$text .= '>';
-		$text .= $key;
-		$text .= '</option>';
-		$count++;
-	}
-	$text .= '</select>'."\n";
+	  $text .= '<option value="'.$value.'"';
+	  if (in_array($value, $selecteditems)) {
+		  $text .= ' ' . 'selected="selected"';
+	  }
+	  $text .= '>';
+	  $text .= $key;
+	  $text .= '</option>';
+	  $count++;
+  }
+  $text .= '</select>'."\n";
 
-	return $text;
+  return $text;
 }
 
 /**
@@ -712,29 +684,24 @@ function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $se
   $name = cms_htmlentities($name);
   $selectedvalue = cms_htmlentities($selectedvalue);
   
-  //$delimiter = cms_htmlentities($delimiter); //Doesn't work with stuff like <br/>!
-
-	$text = '';
-	$counter = 0;
-	foreach ($items as $key=>$value)
-	{
+  $text = '';
+  $counter = 0;
+  foreach ($items as $key=>$value) {
 	  $value = cms_htmlentities($value);
 
-		$counter = $counter + 1;
-		$text .= '<input class="cms_radio" type="radio" name="'.$id.$name.'" id="'.$id.$name.$counter.'" value="'.$value.'"';
-		if ($addttext != '')
-		{
-			$text .= ' ' . $addttext;
-		}
-		if ($selectedvalue == $value)
-		{
-			$text .= ' ' . 'checked="checked"';
-		}
-		$text .= ' />';
-		$text .= '<label class="cms_label" for="'.$id.$name.$counter.'">'.$key .'</label>' . $delimiter;
-	}
+	  $counter = $counter + 1;
+	  $text .= '<input class="cms_radio" type="radio" name="'.$id.$name.'" id="'.$id.$name.$counter.'" value="'.$value.'"';
+	  if ($addttext != '') {
+		  $text .= ' ' . $addttext;
+	  }
+	  if ($selectedvalue == $value) {
+		  $text .= ' ' . 'checked="checked"';
+	  }
+	  $text .= ' />';
+	  $text .= '<label class="cms_label" for="'.$id.$name.$counter.'">'.$key .'</label>' . $delimiter;
+  }
 
-	return $text;
+  return $text;
 }
 
 /**
@@ -749,36 +716,32 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
   $prettyurl = cms_htmlentities($prettyurl);
 
   $gCms = cmsms();
-	$config = $gCms->GetConfig();
+  $config = $gCms->GetConfig();
 
-	$class = (isset($params['class'])?cms_htmlentities($params['class']):'');
+  $class = (isset($params['class'])?cms_htmlentities($params['class']):'');
 
-	// create url....
-	$text = cms_module_create_url($modinstance,$id,$action,$returnid,$params,
-								  $inline,$targetcontentonly,$prettyurl);
+  // create url....
+  $text = cms_module_create_url($modinstance,$id,$action,$returnid,$params,
+								$inline,$targetcontentonly,$prettyurl);
 
-	if (!$onlyhref)
-	{
-		$beginning = '<a';
-		if ($class != '')
-		{
-			$beginning .= ' class="'.$class.'"';
-		}
-		$beginning .= ' href="';
-		$text = $beginning . $text . "\"";
-		if ($warn_message != '')
-		{
-			$text .= ' onclick="return confirm(\''.$warn_message.'\');"';
-		}
+  if (!$onlyhref) {
+	  $beginning = '<a';
+	  if ($class != '') {
+		  $beginning .= ' class="'.$class.'"';
+	  }
+	  $beginning .= ' href="';
+	  $text = $beginning . $text . "\"";
+	  if ($warn_message != '') {
+		  $text .= ' onclick="return confirm(\''.$warn_message.'\');"';
+	  }
 
-		if ($addttext != '')
-		{
-			$text .= ' ' . $addttext;
-		}
+	  if ($addttext != '') {
+		  $text .= ' ' . $addttext;
+	  }
 
-		$text .= '>'.$contents.'</a>';
-	}
-	return $text;
+	  $text .= '>'.$contents.'</a>';
+  }
+  return $text;
 }
 
 
@@ -791,8 +754,7 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 	$config = cmsms()->GetConfig();
 
 	$text = '';
-	if( empty($prettyurl) && $config['url_rewriting'] != 'none' )
-	{
+	if( empty($prettyurl) && $config['url_rewriting'] != 'none' ) {
 		// attempt to get a pretty url from the module... this is useful
 		// incase this method is being called from outside the source module.
 		// i.e: comments module wants a link to the article the comments are about
@@ -803,64 +765,52 @@ function cms_module_create_url(&$modinstance,$id,$action,$returnid='',$params=ar
 	$base_url = $config['root_url'];
 	
 	// get the destination content object
-	if( $returnid != '' )
-	{
+	if( $returnid != '' ) {
 		$content_obj = cmsms()->GetContentOperations()->LoadContentFromId($returnid);
-		if( is_object($content_obj) && $content_obj->Secure() )
-		{
+		if( is_object($content_obj) && $content_obj->Secure() ) {
 			$base_url = $config['ssl_url'];
 		}
 	}
 	   
-	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite')
-	{
+	if ($prettyurl != '' && $config['url_rewriting'] == 'mod_rewrite') {
 		$text = $base_url . '/' . $prettyurl . $config['page_extension'];
 	}
-	else if ($prettyurl != '' && $config['url_rewriting'] == 'internal')
-	{
+	else if ($prettyurl != '' && $config['url_rewriting'] == 'internal') {
 		$text = $base_url . '/index.php/' . $prettyurl . $config['page_extension'];
 	}
-	else
-	{
+	else {
 		$text = '';
-		if ($targetcontentonly || ($returnid != '' && !$inline))
-		{
+		if ($targetcontentonly || ($returnid != '' && !$inline)) {
 			$id = 'cntnt01';
 		}
 		$goto = 'index.php';
-		if ($returnid == '')
-		{
+		if ($returnid == '') {
 			$goto = 'moduleinterface.php';
 		}
 
 		$text = $base_url;
-		if( $returnid <= 0 )
-			{
-				$text = $config['admin_url'];
-			}
+		if( $returnid <= 0 ) {
+			$text = $config['admin_url'];
+		}
 		
 		$secureparam = '';
-		if( $returnid == '' )
-			{
-				$secureparam='&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
-			}
+		if( $returnid == '' ) {
+			$secureparam='&amp;'.CMS_SECURE_PARAM_NAME.'='.$_SESSION[CMS_USER_KEY];
+		}
 		$text .= '/'.$goto.'?mact='.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).$secureparam;
-		foreach ($params as $key=>$value)
-			{
-				if( $key == 'assign' ) continue;
-				$key = cms_htmlentities($key);
-				$value = cms_htmlentities($value);
-				if ($key != 'module' && $key != 'action' && $key != 'id')
-					$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
+		foreach ($params as $key=>$value) {
+			if( $key == 'assign' ) continue;
+			$key = cms_htmlentities($key);
+			$value = cms_htmlentities($value);
+			if ($key != 'module' && $key != 'action' && $key != 'id')
+				$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
+		}
+		if ($returnid != '') {
+			$text .= '&amp;'.$id.'returnid='.$returnid;
+			if ($inline) {
+				$text .= '&amp;'.$config['query_var'].'='.$returnid;
 			}
-		if ($returnid != '')
-			{
-				$text .= '&amp;'.$id.'returnid='.$returnid;
-				if ($inline)
-					{
-						$text .= '&amp;'.$config['query_var'].'='.$returnid;
-					}
-			}
+		}
 	}
 
 	return $text;
@@ -875,30 +825,26 @@ function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
   $contents = cms_htmlentities($contents);
 
   $gCms = cmsms();
-	$config = $gCms->GetConfig();
-	$text = '<a href="';
-	if ($config["url_rewriting"] == 'mod_rewrite')
-	{
-		# mod_rewrite
-		$contentops =& $gCms->GetContentOperations();
-		$alias = $contentops->GetPageAliasFromID( $pageid );
-		if( $alias == false )
-		{
-			return '<!-- ERROR: could not get an alias for pageid='.$pageid.'-->';
-		}
-		else
-		{
-			$text .= $config["root_url"]."/".$alias.
-			(isset($config['page_extension'])?$config['page_extension']:'.shtml');
-		}
-	}
-	else
-	{
-		# not mod rewrite
-		$text .= $config["root_url"]."/index.php?".$config["query_var"]."=".$pageid;
-	}
-	$text .= '">'.$contents.'</a>';
-	return $text;
+  $config = $gCms->GetConfig();
+  $text = '<a href="';
+  if ($config["url_rewriting"] == 'mod_rewrite') {
+	  // mod_rewrite
+	  $contentops = $gCms->GetContentOperations();
+	  $alias = $contentops->GetPageAliasFromID( $pageid );
+	  if( $alias == false ) {
+		  return '<!-- ERROR: could not get an alias for pageid='.$pageid.'-->';
+	  }
+	  else {
+		  $text .= $config["root_url"]."/".$alias.
+			  (isset($config['page_extension'])?$config['page_extension']:'.shtml');
+	  }
+  }
+  else {
+	  // not mod rewrite
+	  $text .= $config["root_url"]."/index.php?".$config["query_var"]."=".$pageid;
+  }
+  $text .= '">'.$contents.'</a>';
+  return $text;
 }
 
 /**
@@ -910,54 +856,45 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
   $returnid = cms_htmlentities($returnid);
   $contents = $contents;
 
-	$text = '';
-	$gCms = cmsms();
-	$config = $gCms->GetConfig();
-	$manager =& $gCms->GetHierarchyManager();
-	$node = $manager->sureGetNodeById($returnid);
-	if (isset($node))
-	{
-		$content =& $node->GetContent();
+  $text = '';
+  $gCms = cmsms();
+  $config = $gCms->GetConfig();
+  $manager = $gCms->GetHierarchyManager();
+  $node = $manager->sureGetNodeById($returnid);
+  if (isset($node)) {
+	  $content = $node->GetContent();
 
-		if (isset($content))
-		{
-			if ($content->GetURL() != '')
-			{
-				if (!$onlyhref)
-				{
-					$text .= '<a href="';
-				}
-				$text .= $content->GetURL();
-
-				$count = 0;
-				foreach ($params as $key=>$value)
-				{
+	  if (isset($content)) {
+		  if ($content->GetURL() != '') {
+			  if (!$onlyhref) {
+				  $text .= '<a href="';
+			  }
+			  $text .= $content->GetURL();
+			  $count = 0;
+			  foreach ($params as $key=>$value) {
 				  $key = cms_htmlentities($key);
 				  $value = cms_htmlentities($value);
-				  if ($count == 0)
-					  {
-						  if ($config["url_rewriting"] != 'none')
-							  $text .= '?';
-						  else
-							  $text .= '&amp;';
-					  }
-				  else
-					  {
+				  if ($count == 0) {
+					  if ($config["url_rewriting"] != 'none')
+						  $text .= '?';
+					  else
 						  $text .= '&amp;';
-					  }
+				  }
+				  else {
+					  $text .= '&amp;';
+				  }
 				  $text .= $id.$key.'='.$value;
 				  $count++;
-				}
-				if (!$onlyhref)
-				{
-					$text .= "\"";
-					$text .= '>'.$contents.'</a>';
-				}
-			}
-		}
-	}
+			  }
+			  if (!$onlyhref) {
+				  $text .= "\"";
+				  $text .= '>'.$contents.'</a>';
+			  }
+		  }
+	  }
+  }
 
-	return $text;
+  return $text;
 }
 
 /**

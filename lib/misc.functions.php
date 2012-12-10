@@ -92,10 +92,6 @@ function redirect($to, $noappend=false)
       echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
       echo "<a href=\"".$to."\">".$to."</a><br />";
       echo '<div id="DebugFooter">';
-      global $sql_queries;
-      if (FALSE == empty($sql_queries)) {
-	echo "<div>".$sql_queries."</div>\n";
-      }
       foreach (cmsms()->get_errors() as $error) {
 	echo $error;
       }
@@ -645,33 +641,6 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 
 
 /**
- * A function to test if a file specification matches an array of
- * file specifications that indicate it should be excluded
- *
- * @ignore
- * @internal
- * @deprecated
- * @access private
- * @param string Flle specification
- * @param array  Array of regular expressions.
- * @return boolean
- * Rolf: only used in this file
- */
-function _filespec_is_excluded( $file, $excludes )
-{
-  // strip the path from the file
-  if( empty($excludes) ) return false;
-  foreach( $excludes as $excl ) {
-    if( @preg_match( "/".$excl."/i", basename($file) ) ) {
-      return true;
-    }
-  }
-  return false;
-}
-
-
-
-/**
  * Check the permissions of a directory recursively to make sure that
  * we have write permission to all files
  *
@@ -717,46 +686,6 @@ function is_directory_writable( $path )
 
 /**
  * Return an array containing a list of files in a directory
- * performs a non recursive search
- *
- * @internal
- * @param path - path to search
- * @param extensions - include only files matching these extensions
- *                     case insensitive, comma delimited
- * Rolf: only used in this file
- */
-function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true, $fileprefix='',$excludefiles=1)
-{
-  $dh = @opendir($dir);
-  if( !$dh ) return false;
-
-  if( !empty($extensions) ) {
-    $extensions = explode(',',strtolower($extensions));
-  }
-  $results = array();
-  while( false !== ($file = readdir($dh)) ) {
-    if( $file == '.' || $file == '..' ) continue;
-    if( startswith($file,'.') && $excludedot ) continue;
-    if( is_dir(cms_join_path($dir,$file)) && $excludedir ) continue;
-    if( !empty($fileprefix) ) {
-      if( $excludefiles == 1 && startswith($file,$fileprefix) ) continue;
-      if( $excludefiles == 0 && !startswith($file,$fileprefix) ) continue;
-    }
-
-    $ext = strtolower(substr($file,strrpos($file,'.')+1));
-    if( is_array($extensions) && count($extensions) && !in_array($ext,$extensions) ) continue;
-
-    $results[] = $file;
-  }
-  closedir($dh);
-  if( !count($results) ) return false;
-  return $results;
-}
-
-
-
-/**
- * Return an array containing a list of files in a directory
  * performs a recursive search
  *
  * @internal
@@ -769,27 +698,37 @@ function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir
 **/
 function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "FULL" , $d = 0 )
 {
-   if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }
-   $dirlist = array () ;
-   if ( $mode != "FILES" ) { $dirlist[] = $path ; }
-   if ( $handle = opendir ( $path ) ) {
-     while ( false !== ( $file = readdir ( $handle ) ) ) {
-       if( $file == '.' || $file == '..' ) continue;
-       if( _filespec_is_excluded( $file, $excludes ) ) continue;
+  $fn = function( $file, $excludes ) {
+    // strip the path from the file
+    if( empty($excludes) ) return false;
+    foreach( $excludes as $excl ) {
+      if( @preg_match( "/".$excl."/i", basename($file) ) ) {
+	return true;
+      }
+    }
+    return false;
+  };
 
-       $file = $path . $file ;
-       if ( ! @is_dir ( $file ) ) { if ( $mode != "DIRS" ) { $dirlist[] = $file ; } }
-       elseif ( $d >=0 && ($d < $maxdepth || $maxdepth < 0) ) {
-	 $result = get_recursive_file_list ( $file . '/' , $excludes, $maxdepth , $mode , $d + 1 ) ;
-	 $dirlist = array_merge ( $dirlist , $result ) ;
-       }
-     }
-     closedir ( $handle ) ;
-   }
-   if ( $d == 0 ) { natcasesort ( $dirlist ) ; }
-   return ( $dirlist ) ;
+  if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }
+  $dirlist = array () ;
+  if ( $mode != "FILES" ) { $dirlist[] = $path ; }
+  if ( $handle = opendir ( $path ) ) {
+    while ( false !== ( $file = readdir ( $handle ) ) ) {
+      if( $file == '.' || $file == '..' ) continue;
+      if( $fn( $file, $excludes ) ) continue;
+
+      $file = $path . $file ;
+      if ( ! @is_dir ( $file ) ) { if ( $mode != "DIRS" ) { $dirlist[] = $file ; } }
+      elseif ( $d >=0 && ($d < $maxdepth || $maxdepth < 0) ) {
+	$result = get_recursive_file_list ( $file . '/' , $excludes, $maxdepth , $mode , $d + 1 ) ;
+	$dirlist = array_merge ( $dirlist , $result ) ;
+      }
+    }
+    closedir ( $handle ) ;
+  }
+  if ( $d == 0 ) { natcasesort ( $dirlist ) ; }
+  return ( $dirlist ) ;
 }
-
 
 
 /**
@@ -1002,35 +941,6 @@ define('CLEANED_FILENAME','BAD_FILE');
 
 
 /**
- * Returns all parameters sent that are destined for the module with
- * the given $id.  This method reads the parameters directly from the $_REQUEST
- *
- * @internal
- * @param string ID (the module instance ID to use for extracting parameters)
- * @return array
- */
-function GetModuleParameters($id)
-{
-  $params = array();
-
-  if ($id != '') {
-    foreach ($_REQUEST as $key=>$value) {
-      if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0) {
-	$key = str_replace($id, '', $key);
-	if( $key == 'id' || $key == 'returnid' ) {
-	  $value = (int)$value;
-	}
-	$params[$key] = $value;
-      }
-    }
-  }
-
-  return $params;
-}
-
-
-
-/**
  * A function to test if permissions, and php configuration is setup correctly
  * to allow an administrator to upload files to CMSMS
  *
@@ -1237,6 +1147,7 @@ function cms_ipmatches($ip,$checklist)
   }
   return FALSE;
 }
+
 
 /**
  * @author	Dominic Sayers <dominic_sayers@hotmail.com>
@@ -1613,17 +1524,20 @@ function get_secure_param()
 
 
 /**
+ * A simple function to convert a string to a boolean
+ * accepts, 'y','yes','true',1 as TRUE (case insensitive) all other values represent FALSE.
+ *
+ * @param string
  * Rolf: only used in lib/classes/contenttypes/Content.inc.php
  */
 function cms_to_bool($str)
 {
-  if( is_numeric($str) )
-  {
+  if( is_numeric($str) ) {
     return ((int)$str != 0)?TRUE:FALSE;
   }
 
   $str = strtolower($str);
-  if( $str == 'y' || $str == 'yes' || $str == 'true' ) return TRUE;
+  if( $str == '1' || $str == 'y' || $str == 'yes' || $str == 'true' ) return TRUE;
   return FALSE;
 }
 

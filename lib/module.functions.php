@@ -96,7 +96,7 @@ function cms_module_plugin($params,&$template)
 	// and we're inline (the results are supposed to replace
 	// the tag, not {content}
 	$action = $mactaction;
-	$params = array_merge($params, GetModuleParameters($id));
+	$params = array_merge($params, ModuleOperations::get_instance()->GetModuleParameters($id));
       }
     }
   }

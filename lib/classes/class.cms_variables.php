@@ -54,8 +54,9 @@
 class cms_variables implements ArrayAccess
 {
   private $_allowed_variables = 
-    array('content_obj','content_id','page','page_id','page_name','position','friendly_position','starttime','user_id','username','pageinfo',
-	  'user_in_group','content-type','modulenum','error','formcount','mid_cache','ownerpages','authorpages','bulkcontent',
+    array('content_obj','content_id','page','page_id','page_name','position','friendly_position',
+	  'starttime','user_id','username','user_in_group','content-type','modulenum','error',
+	  'formcount','mid_cache','ownerpages','authorpages','bulkcontent',
 	  'template','last_content_modification');
 
   private static $_instance;
@@ -85,55 +86,42 @@ class cms_variables implements ArrayAccess
 
   public function offsetExists($key)
   {
-    if( $key == 'admintheme' ) return TRUE; // special case
     return isset($this->_data[$key]);
   }
 
   public function offsetGet($key)
   {
-    if( $key == 'admintheme' )
-      {
-	// special case, for compatibility.
-	return cms_utils::get_theme_object();
-      }
-
-    if( !in_array($key,$this->_allowed_variables) )
-      {
-	trigger_error('Retrival of unauthorized internal variables is deprecated: '.$key,E_USER_NOTICE);
-	return;
-      }
-    if( isset($this->_data[$key]) )
-      {
-	return $this->_data[$key];
-      }
-    switch( $key )
-      {
-      case 'convertclass':
-	$this->_data[$key] = new ConvertClass();
-	return $this->_data[$key];
-      }
+    if( !in_array($key,$this->_allowed_variables) ) {
+      trigger_error('Retrival of unauthorized internal variables is deprecated: '.$key,E_USER_NOTICE);
+      return;
+    }
+    if( isset($this->_data[$key]) ) {
+      return $this->_data[$key];
+    }
+    switch( $key ) {
+    case 'convertclass':
+      $this->_data[$key] = new ConvertClass();
+      return $this->_data[$key];
+    }
   }
 
   public function offsetSet($key,$value)
   {
     // could do a friend thing here... or other limiting things.
-    if( !in_array($key,$this->_allowed_variables) )
-      {
-	trigger_error('Modification of internal data is deprecated: '.$key,E_USER_NOTICE);
-      }
+    if( !in_array($key,$this->_allowed_variables) ) {
+      trigger_error('Modification of internal data is deprecated: '.$key,E_USER_NOTICE);
+    }
     $this->_data[$key] = $value;
   }
 
   public function offsetUnset($key)
   {
-    if( !in_array($key,$this->_allowed_variables) )
-      {
-	trigger_error('Unsetting internal variable '.$key.' is invalid',E_USER_ERROR);
-      }
-    if( isset($this->_data[$key]) )
-      {
-	unset($this->_data[$key]);
-      }
+    if( !in_array($key,$this->_allowed_variables) ) {
+      trigger_error('Unsetting internal variable '.$key.' is invalid',E_USER_ERROR);
+    }
+    if( isset($this->_data[$key]) ) {
+      unset($this->_data[$key]);
+    }
   }
 
 } // end of class

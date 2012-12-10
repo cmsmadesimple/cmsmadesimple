@@ -26,6 +26,7 @@ try {
   $template = @file_get_contents($fn);
   $tpl = new CmsLayoutTemplate();
   $tpl->set_name('CMSPrinting Sample Link Template');
+  $uid = get_userid(FALSE);
   $tpl->set_owner($uid);
   $tpl->set_content($template);
   $tpl->set_type($linktpl_type);

@@ -251,7 +251,7 @@ final class CMS_Content_Block
 	    unset($params['default']);
 	    unset($params['size']);
 	    unset($params['tab']);
-	    $params = array_merge($params, GetModuleParameters($id));
+	    $params = array_merge($params, ModuleOperations::get_instance()->GetModuleParameters($id));
 	    $returnid = '';
 	    if (isset($params['returnid'])) {
 	      $returnid = $params['returnid'];
@@ -336,7 +336,7 @@ final class CMS_Content_Block
     if( isset($_SESSION['cms_preview_data']) && $contentobj->Id() == '__CMS_PREVIEW_PAGE__' ) {
       // it's a preview.
       if( !isset($_SESSION['cms_preview_data']['content_obj']) ) {
-	$contentops =& $gCms->GetContentOperations();
+	$contentops = $gCms->GetContentOperations();
 	$_SESSION['cms_preview_data']['content_obj'] = $contentops->LoadContentFromSerializedData($_SESSION['cms_preview_data']);
       }
       $contentobj =& $_SESSION['cms_preview_data']['content_obj'];

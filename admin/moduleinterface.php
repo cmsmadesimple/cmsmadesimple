@@ -87,8 +87,8 @@ else {
   include_once("header.php");
 }
 
+$params = ModuleOperations::get_instance()->GetModuleParameters($id);
 if( !isset($USE_THEME) || $USE_THEME != false ) {
-  $params = GetModuleParameters($id);
   if (FALSE == empty($params['module_message'])) {
     echo $themeObject->ShowMessage($params['module_message']);
   }
@@ -105,7 +105,6 @@ if( $USE_OUTPUT_BUFFERING ) {
   @ob_start();
 }
 
-$params = GetModuleParameters($id);
 echo $modinst->DoActionBase($action, $id, $params);
 
 if( $USE_OUTPUT_BUFFERING ) {

@@ -274,6 +274,8 @@ if( $config['debug'] == TRUE || (isset($config['show_performance_info']) &&
     $txt = microtime_diff($starttime,$endtime)." / ".(isset($db->query_count)?$db->query_count:'')." / {$memory} / {$memory_peak}";
     debug_display($txt);
     echo '<!-- '.$txt." -->\n";
+    $txt = strftime('%x %X').'/'.$txt;
+    debug_to_log($txt);
   }
 }
 

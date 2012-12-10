@@ -47,28 +47,24 @@ class cms_config implements ArrayAccess
   private function get_upload_size()
   {
     $maxFileSize = ini_get('upload_max_filesize');
-    if (!is_numeric($maxFileSize))
-      {
-		  $l=strlen($maxFileSize);
-		  $i=0;$ss='';$x=0;
-		  while ($i < $l)
-			  {
-				  if (is_numeric($maxFileSize[$i]))
-					  {$ss .= $maxFileSize[$i];}
-				  else
-					  {
-						  if (strtolower($maxFileSize[$i]) == 'm') $x=1000000;
-						  if (strtolower($maxFileSize[$i]) == 'k') $x=1000;
-					  }
-				  $i ++;
-			  }
-		  $maxFileSize=$ss;
-		  if ($x >0) $maxFileSize = $ss * $x;
-      }
-    else
-      {
-		  $maxFileSize = 1000000;
-      }
+    if (!is_numeric($maxFileSize)) {
+		$l=strlen($maxFileSize);
+		$i=0;$ss='';$x=0;
+		while ($i < $l) {
+			if (is_numeric($maxFileSize[$i]))
+				{$ss .= $maxFileSize[$i];}
+			else {
+				if (strtolower($maxFileSize[$i]) == 'm') $x=1000000;
+				if (strtolower($maxFileSize[$i]) == 'k') $x=1000;
+			}
+			$i ++;
+		}
+		$maxFileSize=$ss;
+		if ($x >0) $maxFileSize = $ss * $x;
+	}
+    else {
+		$maxFileSize = 1000000;
+	}
     return $maxFileSize;
   }
 
@@ -113,6 +109,23 @@ class cms_config implements ArrayAccess
     $config = array();
     if (file_exists(CONFIG_FILE_LOCATION)) {
 		include(CONFIG_FILE_LOCATION);
+		foreach( $config as $key => &$value ) {
+			if( isset($this->_types[$key]) ) {
+				switch( $this->_types[$key] ) {
+				case self::TYPE_BOOL:
+					$value = cms_to_bool($value);
+					break;
+
+				case self::TYPE_STRING:
+					$value = trim($value);
+					break;
+
+				case self::TYPE_INT:
+					$value = (int)$value;
+					break;
+				}
+			}
+		}
 		unset($config['max_upload_size']);
 		unset($config['upload_max_filesize']);
 	}

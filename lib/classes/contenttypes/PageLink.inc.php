@@ -96,7 +96,7 @@ class PageLink extends ContentBase
 	}
 
       $gCms = cmsms();
-      $contentops =& $gCms->GetContentOperations();		
+      $contentops = $gCms->GetContentOperations();		
 		
       $page = $this->GetPropertyValue('page');
       if ($page == '-1')
@@ -108,7 +108,7 @@ class PageLink extends ContentBase
       // get the content type of page.
       else
 	{
-	  $destobj =& $contentops->LoadContentFromID($page);
+	  $destobj = $contentops->LoadContentFromID($page);
 	  if( !is_object($destobj) )
 	    {
 	      $errors[] = lang('destinationnotfound');
@@ -145,7 +145,7 @@ class PageLink extends ContentBase
       case 'page':
 	{
 	  $gCms = cmsms();
-	  $contentops =& $gCms->GetContentOperations();
+	  $contentops = $gCms->GetContentOperations();
 	  
 	  $tmp = $contentops->CreateHierarchyDropdown($this->mId, 
 						      $this->GetPropertyValue('page'), 'page', 1, 0, 0, 0);
@@ -184,8 +184,8 @@ class PageLink extends ContentBase
       $params = $this->GetPropertyValue('params');
       
       $gCms = cmsms();
-      $contentops =& $gCms->GetContentOperations();
-      $destcontent =& $contentops->LoadContentFromId($page);
+      $contentops = $gCms->GetContentOperations();
+      $destcontent = $contentops->LoadContentFromId($page);
       if( is_object( $destcontent ) ) 
 	{
 	  $url = $destcontent->GetURL();

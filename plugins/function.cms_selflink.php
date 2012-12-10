@@ -88,7 +88,7 @@ function smarty_function_cms_selflink($params, &$template)
 	{
 	  return;
 	}
-      $content =& $node->GetContent();
+      $content = $node->GetContent();
       if ($content !== FALSE && is_object($content) && $content->Active() && $content->HasUsableLink() )
 	{
 	  $pageid = $content->Id();
@@ -146,8 +146,8 @@ function smarty_function_cms_selflink($params, &$template)
 	  $flatcontent = array();
 	  if ($condition != '|') // uplink (we don't need the flatcontent for an uplink)
 	    {
-	      $flatcontent =& $hm->getFlatList();
-	      $contentops =& $gCms->GetContentOperations();
+	      $flatcontent = $hm->getFlatList();
+	      $contentops = $gCms->GetContentOperations();
 	      $defaultid = $contentops->GetDefaultPageID();
 	      $number = 0;
 	      for ($i = 0; $i < count($flatcontent); $i++)
@@ -176,7 +176,7 @@ function smarty_function_cms_selflink($params, &$template)
 		{
 		  for ($i = $number - 1; $i >= 0; $i--)
 		    {
-		      $content =& $flatcontent[$i]->getContent();
+		      $content = $flatcontent[$i]->getContent();
 		      if (isset($content) && $content != NULL)
 			{
 			  if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())

@@ -46,7 +46,7 @@
  * @copyright Copyright (c) 2010, Robert Campbell <calguy1000@cmsmadesimple.org>
  * @since 1.9
  */
-class cms_utils
+final class cms_utils
 {
   /**
    * @ignore 
@@ -68,8 +68,7 @@ class cms_utils
    */
   public static function get_app_data($key)
   {
-	  if( is_array( self::$_vars ) && isset(self::$_vars[$key]) )
-      {
+	  if( is_array( self::$_vars ) && isset(self::$_vars[$key]) ) {
 		  return self::$_vars[$key];
       }
   }
@@ -88,10 +87,9 @@ class cms_utils
   public static function set_app_data($key,$value)
   {
     if( $key == '' ) return;
-    if( !is_array(self::$_vars) )
-      {
-		  self::$_vars = array();
-      }
+    if( !is_array(self::$_vars) ) {
+		self::$_vars = array();
+	}
     self::$_vars[$key] = $value;
   }
 
@@ -287,17 +285,14 @@ class cms_utils
   public static function get_real_ip()
   {
     $ip = null;
-    if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
-    {
-      $ip=$_SERVER['HTTP_CLIENT_IP'];
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
+		$ip=$_SERVER['HTTP_CLIENT_IP'];
     }
-    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
-    {
-      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
+		$ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
     }
-    else
-    {
-      $ip=$_SERVER['REMOTE_ADDR'];
+    else {
+		$ip=$_SERVER['REMOTE_ADDR'];
     }
     return $ip;
   }
@@ -328,13 +323,13 @@ class cms_utils
   public static function generate_thumbnail($srcfile)
   {
 	  if( !file_exists($srcfile) ) return;
-          $ext =  strtolower(strrchr($srcfile,'.'));
-          while( startswith($ext,'.') ) {
-            $ext = substr($ext,1);
-          }
-          if( !in_array($ext,array('jpg','jpeg','png','bmp','gif')) ) {
-             return; // not gonna create a thumb on anything but an image.
-          } 
+	  $ext =  strtolower(strrchr($srcfile,'.'));
+	  while( startswith($ext,'.') ) {
+		  $ext = substr($ext,1);
+	  }
+	  if( !in_array($ext,array('jpg','jpeg','png','bmp','gif')) ) {
+		  return; // not gonna create a thumb on anything but an image.
+	  } 
 	  $dn = dirname($srcfile);
 	  $bn = basename($srcfile);
 	  if( startswith($bn,'thumb_') ) {

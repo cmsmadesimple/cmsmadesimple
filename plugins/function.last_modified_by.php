@@ -19,30 +19,26 @@
 function smarty_function_last_modified_by($params, &$template) 
 {
   $smarty = $template->smarty;
-        $gCms = cmsms();
-	$content_obj = $gCms->variables['content_obj'];
+  $gCms = cmsms();
+  $content_obj = $gCms->variables['content_obj'];
 
-        $id = "";
+  $id = "";
  
-	if (isset($content_obj) && $content_obj->LastModifiedBy() > -1)
-	{
-	  $id = $content_obj->LastModifiedBy();
-	} else {
-	  return "";
-        }
+  if (isset($content_obj) && 
+      $content_obj->LastModifiedBy() > -1) {
+    $id = $content_obj->LastModifiedBy();
+  } else {
+    return "";
+  }
 
-	if(empty($params['format']))
-	{
-		$format = "id";
-	}
-	else
-	{
-		$format = $params['format'];
-		$userops =& $gCms->GetUserOperations();
-		$thisuser =& $userops->LoadUserByID($id);
-	}
-
-
+  if(empty($params['format'])) {
+    $format = "id";
+  }
+  else {
+    $format = $params['format'];
+    $userops = $gCms->GetUserOperations();
+    $thisuser = $userops->LoadUserByID($id);
+  }
 
   $output = '';
   if($format==="id") {
@@ -58,7 +54,6 @@ function smarty_function_last_modified_by($params, &$template)
     return;
   }
   return $output;
-
 }
 
 function smarty_cms_help_function_last_modified_by()
