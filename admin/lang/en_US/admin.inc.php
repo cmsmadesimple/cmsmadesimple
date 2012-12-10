@@ -853,6 +853,7 @@ $lang['admin']['hour'] = 'hour';
 $lang['admin']['hours'] = 'hours';
 $lang['admin']['htmlblobdescription'] = 'Global Content Blocks are chunks of content you can place in your pages or templates.';
 $lang['admin']['htmlblobs'] = 'Global Content Blocks';
+$lang['admin']['h_udtname'] = 'Enter a name for the user defined tag.  Name should contain ASCII alphanumeric characters and digits and underscores.  The name must not start with a digit';
 
 
 //    I

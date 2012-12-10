@@ -106,7 +106,9 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
 
   $details = lang('usertagupdated');
 
+  debug_to_log($error,'foo');
   if( !$error ) {
+    debug_to_log('foo');
     if( isset($_POST['run']) ) {
       @ob_start();
       $params = array();
@@ -136,6 +138,7 @@ if( isset($_POST['submit']) || isset($_POST['apply']) ) {
       echo $themeObject->ShowErrors($error);
     }
     $out = array('response'=>'Error','details'=>$error);
+    debug_to_log($out);
     echo json_encode($out);
     exit;
   }

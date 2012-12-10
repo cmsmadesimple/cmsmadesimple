@@ -71,7 +71,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
       $this->smarty->assign('timezones',$timezones);
     }
 
-    $this->smarty->assign('extra_sql', is_file(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'extra.sql')));
+    $this->smarty->assign('extra_sql', is_file(cms_join_path(CMS_INSTALL_BASE, 'schemas', 'extra.php')));
     $this->smarty->assign('dbms_options', $dbms_options);
     $this->smarty->assign('values', $values);
 

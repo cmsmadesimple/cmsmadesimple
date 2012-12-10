@@ -14,6 +14,7 @@ $(document).ready(function(){
       return false;
     }
     var data = $('#edit_userplugin').find('input:not([type=submit]), select, textarea').serializeArray();
+    data.push({ 'name': 'code', 'value': code });
     data.push({ 'name': 'run', 'value': 1 });
     data.push({ 'name': 'apply', 'value': 1 });
     data.push({ 'name': 'ajax', 'value': 1 });
@@ -85,7 +86,7 @@ $(document).ready(function(){
     </div>
 
     <div class="pageoverflow">
-      <p class="pagetext"><label for="name">{lang('name')}</label>:&nbsp;{admin_icon name='help_udt_name' icon='info.gif' class='helpicon'}</p>
+      <p class="pagetext"><label for="name">{lang('name')}</label>:&nbsp;{cms_help key1=h_udtname}</p>
       <p class="pageinput">
         <input type="text" id="name" name="userplugin_name" value="{$record.userplugin_name}" size="50" maxlength="50"/>
       </p>
@@ -113,11 +114,11 @@ $(document).ready(function(){
 {tab_header name='description' label=lang('description')}
 
 {tab_start name='code'}
-<label for="code">{lang('code')}:</label>&nbsp;{admin_icon name='help_udt_code' icon='info.gif' class='helpicon'}<br/>
-{cms_textarea id='udtcode' name='udtcode' content=$record.code syntax=1}
+<label for="code">{lang('code')}:</label>&nbsp;{cms_help key1=h_udtcode}<br/>
+{cms_textarea id='udtcode' name='code' content=$record.code syntax=1}
 
 {tab_start name='description'}
-<label for="description">{lang('description')}:</label>&nbsp;{admin_icon name='help_udt_code' icon='info.gif' class='helpicon'}
+<label for="description">{lang('description')}:</label>&nbsp;{cms_help key1=h_udtdesc}
 <br/>
 <textarea id="description" name="description">{$record.description}</textarea>
 {tab_end}
