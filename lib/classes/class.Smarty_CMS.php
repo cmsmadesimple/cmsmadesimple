@@ -72,18 +72,19 @@ class Smarty_CMS extends SmartyBC
 		$this->registerResource('template',new CMSPageTemplateResource()); // <- Should proably be global and removed from parser?		
 
 		// Load User Defined Tags
-		$utops = cmsms()->GetUserTagOperations();
-		$usertags = $utops->ListUserTags();
-		$caching = false;
-		if( get_site_preference('smarty_cacheudt','never') == 'always' && cmsms()->is_frontend_request() ) {
-		  $caching = true;
-		}
+		if( !cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
+		  $utops = cmsms()->GetUserTagOperations();
+		  $usertags = $utops->ListUserTags();
+		  $caching = false;
+		  if( get_site_preference('smarty_cacheudt','never') == 'always' && cmsms()->is_frontend_request() ) {
+		    $caching = true;
+		  }
 
-		foreach( $usertags as $id => $udt_name ) {
-		  $function = $utops->CreateTagFunction($udt_name);
-		  $this->registerPlugin('function',$udt_name,$function,$caching);
-		}
-		$usertags_loaded = TRUE;
+		  foreach( $usertags as $id => $udt_name ) {
+		    $function = $utops->CreateTagFunction($udt_name);
+		    $this->registerPlugin('function',$udt_name,$function,$caching);
+		  }
+                }
 	
 		// register default plugin handler
 		$this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
