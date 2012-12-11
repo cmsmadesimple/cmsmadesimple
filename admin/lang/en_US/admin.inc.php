@@ -1787,6 +1787,7 @@ $lang['admin']['event_desc_edittemplatepost'] = 'Sent after edits to a template 
 $lang['admin']['event_desc_deletetemplatepre'] = 'Sent before a template is deleted from the system';
 $lang['admin']['event_desc_deletetemplatepost'] = 'Sent after a template is deleted from the system';
 $lang['admin']['event_desc_templateprecompile'] = 'Sent before a template is sent to smarty for processing';
+$lang['admin']['event_desc_templateprefetch'] = 'Sent before a template is fetched from smarty';
 $lang['admin']['event_desc_templatepostcompile'] = 'Sent after a template has been processed by smarty';
 $lang['admin']['event_desc_addglobalcontentpre'] = 'Sent before a new global content block is created';
 $lang['admin']['event_desc_addglobalcontentpost'] = 'Sent after a new global content block is created';

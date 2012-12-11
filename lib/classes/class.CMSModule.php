@@ -1173,7 +1173,7 @@ abstract class CMSModule
 			  $gCms = cmsms();
 				$db = $gCms->GetDb();
 				$config = $gCms->GetConfig();
-				$smarty =& $gCms->GetSmarty();
+				$smarty = $gCms->GetSmarty();
 
 				$res = include($filename);
 				if( $res == 1 || $res == '' ) return TRUE;

@@ -72,18 +72,19 @@ class Smarty_CMS extends SmartyBC
 		$this->registerResource('template',new CMSPageTemplateResource()); // <- Should proably be global and removed from parser?		
 
 		// Load User Defined Tags
-		$utops = cmsms()->GetUserTagOperations();
-		$usertags = $utops->ListUserTags();
-		$caching = false;
-		if( get_site_preference('smarty_cacheudt','never') == 'always' && cmsms()->is_frontend_request() ) {
-		  $caching = true;
-		}
+		if( !cmsms()->test_state(CmsApp::STATE_INSTALL) ) {
+		  $utops = cmsms()->GetUserTagOperations();
+		  $usertags = $utops->ListUserTags();
+		  $caching = false;
+		  if( get_site_preference('smarty_cacheudt','never') == 'always' && cmsms()->is_frontend_request() ) {
+		    $caching = true;
+		  }
 
-		foreach( $usertags as $id => $udt_name ) {
-		  $function = $utops->CreateTagFunction($udt_name);
-		  $this->registerPlugin('function',$udt_name,$function,$caching);
-		}
-		$usertags_loaded = TRUE;
+		  foreach( $usertags as $id => $udt_name ) {
+		    $function = $utops->CreateTagFunction($udt_name);
+		    $this->registerPlugin('function',$udt_name,$function,$caching);
+		  }
+                }
 	
 		// register default plugin handler
 		$this->registerDefaultPluginHandler(array(&$this, 'defaultPluginHandler'));
@@ -307,14 +308,20 @@ class Smarty_CMS extends SmartyBC
 	{
 	  $name = $template; if( startswith($name,'string:') ) $name = 'string:';
 	  debug_buffer('','Fetch '.$name.' start');
-	  if( is_null($cache_id) || $cache_id === '' )
-	    {
-	      $cache_id = $this->_global_cache_id;
-	    }
-	  else if( $cache_id[0] == '|' )
-	    {
-	      $cache_id = $this->_global_cache_id . $cache_id;
-	    }
+	  if( is_null($cache_id) || $cache_id === '' ) {
+	    $cache_id = $this->_global_cache_id;
+	  }
+	  else if( $cache_id[0] == '|' ) {
+	    $cache_id = $this->_global_cache_id . $cache_id;
+	  }
+
+	  // send an event before fetching...this allows us to change template stuff.
+	  if( cmsms()->is_frontend_request() ) {
+	    $parms = array('template'=>&$template,'cache_id'=>&$cache_id,'compile_id'=>&$compile_id,
+			   'display'=>&$display);
+	    Events::SendEvent('Core','TemplatePreFetch',$parms);
+	  }
+
 	  $tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,false,$no_output_filter);
 	  debug_buffer('','Fetch '.$name.' end');
 	  return $tmp;

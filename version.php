@@ -18,9 +18,9 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.11.4";
-$CMS_VERSION_NAME = "Fernandina";
-$CMS_SCHEMA_VERSION = "36";
+$CMS_VERSION = "1.11.4a-custom";
+$CMS_VERSION_NAME = "cg custom";
+$CMS_SCHEMA_VERSION = "37";
 
 define('CMS_VERSION', $CMS_VERSION);
 define('CMS_VERSION_NAME', $CMS_VERSION_NAME);
