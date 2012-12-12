@@ -14,7 +14,7 @@ Core - General
   - Numerous SSL fixes
   - {uploads_url} tag now uses cms_config->smart_uploads_url() (new function)
   - fixes a minor issue with cleaning of the incoming page variable
-  - Fixes an error with UDT's and syntax hilighters.
+  - Fixes an error with UDT's and syntax hilighters
   - Minor fix to cms_stylesheet
 
 Core - Bug Reports:
@@ -27,6 +27,7 @@ Core - Bug Reports:
   - #8564 Images cannot be deleted in Image Manager
   - #8571 NCleanGrey admin theme on 1.11.2.1
   - #8672 Dropzone don't remember the selected directory
+  - #8673 Images can't be deleted in Image Manager within created folders
   - #8684 Type MyIsam 
   - #8686 cms_date_format and cms_escape Smarty modifiers in templates no longer found by Smarty
   - #8695 Update routes and mod_rewrite
