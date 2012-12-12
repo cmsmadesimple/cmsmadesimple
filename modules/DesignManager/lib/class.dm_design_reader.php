@@ -407,7 +407,7 @@ class dm_design_reader extends dm_reader_base
 
 			// template type:
 			// - try to find the template type
-      // - if not, set the type to 'generic'.
+		        // - if not, set the type to 'generic'.
 			try {
 				$typename = $rec['ttype_originator'].'::'.$rec['ttype_name'];
 				$type_obj = CmsLayoutTemplateType::load($typename);

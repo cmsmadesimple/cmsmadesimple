@@ -57,11 +57,11 @@ final class dm_reader_factory
     switch( $word ) {
     case 'theme':
       $ob = new dm_theme_reader($xmlfile);
-			break;
+      break;
 
     case 'design':
       $ob = new dm_design_reader($xmlfile);
-			break;
+      break;
     }
 		return $ob;
   }

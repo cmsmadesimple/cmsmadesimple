@@ -683,6 +683,47 @@ function is_directory_writable( $path )
 }
 
 
+/**
+ * Return an array containing a list of files in a directory
+ * performs a non recursive search
+ *
+ * @internal
+ * @param path - path to search
+ * @param extensions - include only files matching these extensions
+ *                     case insensitive, comma delimited
+ * Rolf: only used in this file
+ */
+function get_matching_files($dir,$extensions = '',$excludedot = true,$excludedir = true, $fileprefix='',$excludefiles=1)
+{
+  $dh = @opendir($dir);
+  if( !$dh ) return false;
+
+  if( !empty($extensions) )
+    {
+      $extensions = explode(',',strtolower($extensions));
+    }
+  $results = array();
+  while( false !== ($file = readdir($dh)) )
+    {
+      if( $file == '.' || $file == '..' ) continue;
+      if( startswith($file,'.') && $excludedot ) continue;
+      if( is_dir(cms_join_path($dir,$file)) && $excludedir ) continue;
+      if( !empty($fileprefix) )
+	{
+	  if( $excludefiles == 1 && startswith($file,$fileprefix) ) continue;
+	  if( $excludefiles == 0 && !startswith($file,$fileprefix) ) continue;
+	}
+
+      $ext = strtolower(substr($file,strrpos($file,'.')+1));
+      if( is_array($extensions) && count($extensions) && !in_array($ext,$extensions) ) continue;
+
+      $results[] = $file;
+    }
+  closedir($dh);
+  if( !count($results) ) return false;
+  return $results;
+}
+
 
 /**
  * Return an array containing a list of files in a directory
