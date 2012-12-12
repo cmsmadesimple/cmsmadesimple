@@ -111,7 +111,6 @@ $tmp[1]['uploads_url'] = testConfig('uploads_url', 'uploads_url');
 $tmp[1]['image_uploads_path'] = testConfig('image_uploads_path', 'image_uploads_path', 'testDirWrite');
 $tmp[1]['image_uploads_url'] = testConfig('image_uploads_url', 'image_uploads_url');
 $tmp[1]['ssl_uploads_url'] = testConfig('ssl_uploads_url', 'ssl_uploads_url');
-$tmp[1]['use_smarty_php_tags'] = testConfig('use_smarty_php_tags', 'use_smarty_php_tags');
 $tmp[0]['image_manipulation_prog'] = testConfig('image_manipulation_prog', 'image_manipulation_prog');
 $tmp[0]['auto_alias_content'] = testConfig('auto_alias_content', 'auto_alias_content');
 $tmp[0]['locale'] = testConfig('locale', 'locale');
@@ -122,7 +121,24 @@ $tmp[0]['set_names'] = testConfig('set_names', 'set_names');
 $smarty->assign('count_config_info', count($tmp[0]));
 $smarty->assign('config_info', $tmp);
 
+/* Performance Information */
+$tmp = array(0=>array(), 1=>array());
 
+$res = get_site_preference('allow_browser_cache',60);
+$tmp[0]['allow_browser_cache'] = testBoolean(0, lang('allow_browser_cache'),$res,lang('test_allow_browser_cache'));
+$res = get_site_preference('browser_cache_expiry',60);
+$tmp[0]['browser_cache_expiry'] = testRange(0, lang('browser_cache_expiry'),$res,lang('test_browser_cache_expiry'),1,60,FALSE);
+
+$res = get_site_preference('use_smartycache', FALSE);
+$tmp[0]['smarty_cache'] = testBoolean(0, lang('prompt_use_smartycaching'),$res,lang('test_smarty_caching'));
+$res = get_site_preference('use_smarty_compilecheck', FALSE);
+$tmp[0]['smarty_compilecheck'] = testBoolean(0, lang('prompt_smarty_compilecheck'),$res,lang('test_smarty_caching'),FALSE,TRUE);
+$res = get_site_preference('use_smartycache', FALSE);
+$tmp[0]['smarty_cache_udt'] = testBoolean(0, lang('prompt_smarty_cacheudt'),$res,lang('test_smarty_cacheudt'));
+$res = get_site_preference('auto_clear_cache_age', 0);
+$tmp[0]['auto_clear_cache_age'] = testBoolean(0, lang('autoclearcache2'),$res,lang('test_auto_clear_cache_age'));
+
+$smarty->assign('performance_info', $tmp);
 
 
 /* PHP Information */

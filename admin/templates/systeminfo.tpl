@@ -65,6 +65,33 @@
 	</tbody>
 </table>
 <br /><br />
+
+
+<table class="pagetable" cellspacing="0" summary="{lang('performance_information')}">
+    <thead> 
+       <tr>
+         <th colspan="3">{lang('performance_information')}</th>
+       </tr>
+    </thead> 
+	<tbody>
+  	{foreach from=$performance_info key='view' item='tmp'}
+  		{foreach from=$tmp key='key' item='test'}
+		<tr class="{cycle values='row1,row2'}">
+    		<td width="45%">{$test->title}</td>
+			<td width="5%">{if isset($test->res)}<img class="systemicon" src="themes/{$themename}/images/icons/extra/{$test->res}.gif" title="{$test->res_text}" alt="{$test->res_text}" />{/if}</td>
+			<td width="50%">
+	{if isset($test->value)}{$test->value|default:"&nbsp;"}{/if}
+	{if isset($test->secondvalue)}({$test->secondvalue|default:"&nbsp;"}){/if}
+	{if isset($test->error_fragment)}<a class="external" rel="external" href="{$cms_install_help_url}#{$test->error_fragment}"><img src="themes/{$themename}/images/icons/system/info-external.gif" title="?" alt="?" /></a>{/if}
+	{if isset($test->message)}<br />{$test->message}{/if}
+			</td>
+		</tr>
+  		{/foreach}
+	{/foreach}
+	</tbody>
+</table>
+<br /><br />
+
 <table class="pagetable" cellspacing="0" summary="{si_lang a=php_information}">
     <thead> 
        <tr>
