@@ -32,7 +32,7 @@
     {$submit} {$cancel}
   </p>
 </div>
-<table cellspacing="0" class="pagetable" id="permtable">
+<table cellspacing="0" class="pagetable scrollable" id="permtable">
   <thead>
   <tr>
     <th>{$title_permission}</th>

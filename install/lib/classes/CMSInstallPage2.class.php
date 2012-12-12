@@ -84,6 +84,8 @@ class CMSInstallerPage2 extends CMSInstallerPage
 			$settings['required'][] = testCreateDirAndFile(1, ilang('test_create_dir_and_file'), ilang('info_create_dir_and_file'), $this->debug);
 		}
 
+		$settings['required'][] = _testTimeSettings1();
+		//$settings['required'][] = _testTimeSettings2();
 
 		/*
 		 * Recommended Settings

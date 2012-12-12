@@ -402,7 +402,7 @@ else {
       ?>
 	   
       <?php echo $themeObject->ShowHeader('modules').'</div>'; ?>
-      <table cellspacing="0" class="pagetable">
+      <table cellspacing="0" class="pagetable scrollable">
 	 <thead>
 	 <tr>
 	 <th class="modname"><?php echo lang('name')?></th>

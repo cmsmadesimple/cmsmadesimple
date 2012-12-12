@@ -150,6 +150,9 @@ if( defined('E_DEPRECATED') )
     $tmp[0]['E_DEPRECATED'] =  testIntegerMask(0,lang('test_error_edeprecated'), 'error_reporting',E_DEPRECATED,lang('test_edeprecated_failed'),true,true,false);
   }
 
+$tmp[0]['test_file_timedifference'] = _testTimeSettings1();
+$tmp[0]['test_db_timedifference'] = _testTimeSettings2();
+
 $tmp[1]['create_dir_and_file'] = testCreateDirAndFile(0, '', '');
 
 list($minimum, $recommended) = getTestValues('memory_limit');
@@ -255,6 +258,7 @@ $tmp = array(0=>array(), 1=>array());
 $tmp[1]['server_software'] = testDummy('', $_SERVER['SERVER_SOFTWARE'], '');
 $tmp[0]['server_api'] = testDummy('', PHP_SAPI, '');
 $tmp[1]['server_os'] = testDummy('', PHP_OS . ' ' . php_uname('r') .' '. lang('on') .' '. php_uname('m'), '');
+
 
 switch($config['dbms']) //workaround: ServerInfo() is unsupported in adodblite
 {

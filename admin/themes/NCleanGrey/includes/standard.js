@@ -130,3 +130,8 @@ function togglecollapse(cid)
   document.getElementById(cid).style.display=(document.getElementById(cid).style.display!="block")? "block" : "none";
 }
 
+$(document).ready(function(){
+  if(!navigator.userAgent.match(/(Android|iPhone|iPad|iPod|Blackberry|Dolphin|IEMobile|Kindle|Mobile|MMP|MIDP|Pocket|PSP|Symbian|Smartphone|Sreo|Up.Browser|Up.Link|Vodafone|WAP|Opera Mini|Opera Tablet|Mobile|Fennec)/)) {
+    $('table.scrollable').tableScroll({ height: $(window).height() * 60/100 });
+  }
+});

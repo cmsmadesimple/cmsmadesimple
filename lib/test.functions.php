@@ -27,10 +27,9 @@
 
 $lang_fn = 'lang';
 global $CMS_INSTALL_PAGE;
-if( isset($CMS_INSTALL_PAGE) )
-	{
-		$lang_fn = 'ilang';
-	}
+if( isset($CMS_INSTALL_PAGE) ) {
+	$lang_fn = 'ilang';
+}
 
 /**
  * A class for working with tests
@@ -1591,61 +1590,51 @@ function & testFileUploads( $inputname )
 		UPLOAD_ERR_EXTENSION => $lang_fn('upload_err_extension'), //at least PHP 5.2.0
 	);
 
-	function orderFiles(&$file_upl)
-	{
+	$fn = function(&$file_upl) {
 		$_ary = array();
 		$_count = count($file_upl['name']);
 		$_keys = array_keys($file_upl);
-		for($i=0; $i<$_count; $i++)
-		{
+		for($i=0; $i<$_count; $i++) {
 			foreach($_keys as $key) $_ary[$i][$key] = $file_upl[$key][$i];
 		}
 
 		return $_ary;
-	}
+	};
 
 	$test = new CmsInstallTest();
 	$test->files = array();
 
 	$result = testBoolean('', '', 'file_uploads', '', true, false);
-	if($result->res != 'green')
-	{
+	if($result->res != 'green') {
 		$test->res = 'red';
 		getTestReturn($test, '', '', 'Function_file_uploads_disabled', $lang_fn('function_file_uploads_off'));
 		return $test;
 	}
 
-	if(! isset($_FILES["$inputname"]))
-	{
+	if(! isset($_FILES["$inputname"])) {
 		$test->res = 'red';
 		getTestReturn($test, '', '', '', $lang_fn('error_nofileuploaded'));
 		return $test;
 	}
 
 	$_files = array();
-	if(is_array($_FILES["$inputname"]['name'])) $_files = orderFiles($_FILES["$inputname"]);
+	if(is_array($_FILES["$inputname"]['name'])) $_files = $sortfn($_FILES["$inputname"]);
 	else $_files[] = $_FILES["$inputname"];
 
-	foreach($_files as $i=>$_file)
-	{
+	foreach($_files as $i=>$_file) {
 		$_data = $_file;
 
-		if( (! is_uploaded_file($_file['tmp_name'])) || ($_file['error'] !== UPLOAD_ERR_OK) )
-		{
-			if(isset($_errors[$_file['error']]))
-			{
+		if( (! is_uploaded_file($_file['tmp_name'])) || ($_file['error'] !== UPLOAD_ERR_OK) ) {
+			if(isset($_errors[$_file['error']])) {
 				$_data['error_string'] = $_errors[$_file['error']];
 			}
-			elseif($_file['size'] == 0)
-			{
+			elseif($_file['size'] == 0) {
 				$_data['error_string'] = $lang_fn('upload_err_empty');
 			}
-			elseif(! is_readable($_file['tmp_name']))
-			{
+			elseif(! is_readable($_file['tmp_name'])) {
 				$_data['error_string'] = $lang_fn('upload_file_no_readable');
             }
-			else
-			{
+			else {
 				$_data['error_string'] = $lang_fn('upload_err_unknown');
 			}
 		}
@@ -1655,6 +1644,56 @@ function & testFileUploads( $inputname )
 
 	return $test;
 }
+
+/**
+ * @return object
+ *
+ */
+function &_testTimeSettings1()
+{
+	global $lang_fn;
+	$test = new CmsInstallTest();
+	$test->title = $lang_fn('test_file_timedifference');
+	
+	$fn = tempnam(TMP_CACHE_LOCATION,'tst');
+	@touch($fn);
+	$mtime = filemtime($fn);
+	$test->res = 'green';
+	if( $mtime === FALSE ) {
+		$test->res = 'red';
+	}
+	else {
+		$val = time() - $mtime;
+		if( abs($val) > 3 ) {
+			$test->res = 'red';
+			$test->message = $lang_fn('test_file_timedifference_msg',$val);
+		}
+	}
+	@unlink($fn);
+	return $test;
+}
+
+/**
+ * @return object
+ *
+ */
+function &_testTimeSettings2()
+{
+	global $lang_fn;
+	$test = new CmsInstallTest();
+	$test->title = $lang_fn('test_db_timedifference');
+
+	$query = 'SELECT UNIX_TIMESTAMP()';  // mysql only.
+	$test->res = 'green';
+	$tmp = cmsms()->GetDb()->GetOne($query);
+	$val = time() - $tmp;
+	if( abs( time() - $tmp ) > 3 ) {
+		$test->res = 'red';
+		$test->msg = $lang_fn('test_db_timedifference_msg',$val);
+	}
+	return $test;
+}
+
 
 /**
  * @return object

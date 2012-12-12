@@ -133,7 +133,7 @@ refresh_url = refresh_url.replace(/amp;/g,'');
 {/if}
 
   <div id="filesarea">  
-  <table width="100%" class="pagetable" cellspacing="0">
+  <table width="100%" class="pagetable scrollable" cellspacing="0">
   <thead>
   <tr>
     <th class="pageicon">&nbsp;</th>
