@@ -42,8 +42,6 @@ $xajax->register(XAJAX_FUNCTION,'content_collapseall');
 $xajax->register(XAJAX_FUNCTION,'content_toggleexpand');
 $xajax->register(XAJAX_FUNCTION,'content_move');
 $xajax->register(XAJAX_FUNCTION,'content_delete');
-// $xajax->register(XAJAX_FUNCTION,'reorder_display_list');
-// $xajax->register(XAJAX_FUNCTION,'reorder_process');
 $xajax->processRequest();
 $headtext = $xajax->getJavascript('../lib/xajax')."\n";
 include_once("header.php");
@@ -517,7 +515,6 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
       $columns['hier'] = $one->Hierarchy();
     }
 
-
     /* page column */
     if( $columnstodisplay['page'] ) {
       $columns['page'] = '&nbsp;';
@@ -598,12 +595,10 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
       }
     }
 
-
     /* friendly name column */
     if( $columnstodisplay['friendlyname'] ) {
       $columns['friendlyname'] = $one->FriendlyName();
     }
-
 
     /* owner column */
     if( $columnstodisplay['owner'] ) {
@@ -612,7 +607,6 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	$columns['owner'] = $users[$one->Owner()]->username;
       }
     }
-
 
     /* active column */
     if( $columnstodisplay['active'] ) {
@@ -631,7 +625,6 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
       }
     }
 
-
     /* default content */
     if( $columnstodisplay['default'] ) {
       $columns['default'] = '&nbsp;';
@@ -645,7 +638,6 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	$columns['default'] = $txt;
       }
     }
-
 
     /* move column */
     if( $columnstodisplay['move'] ) {
@@ -682,18 +674,17 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
       // end of move code
     }
 
-
     /* view column */
     if( $columnstodisplay['view'] ) {
       $columns['view'] = '&nbsp;';
       $txt = '';
-      {
-	$url = $one->GetURL();
-	if ($url != '' && $url != '#' && $one->IsViewable() && $one->Active()) {
-	  $txt .= "<a href=\"".$url."\" rel=\"external\" target=\"_blank\">";
-	  $txt .= $viewImg."</a>";
-	}
+
+      $url = $one->GetURL();
+      if ($url != '' && $url != '#' && $one->IsViewable() && $one->Active()) {
+	$txt .= "<a href=\"".$url."\" rel=\"external\" target=\"_blank\">";
+	$txt .= $viewImg."</a>";
       }
+
       if( !empty($txt) ) {
 	$columns['view'] = $txt;
       }
@@ -705,8 +696,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
       $columns['copy'] = '&nbsp;';
       $txt = '';
       if( $one->IsCopyable() && 
-	  ((check_permission($userid,'Add Pages') &&
-	    (check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages)))
+	  ((check_permission($userid,'Add Pages') && (check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages)))
 	   || check_permission($userid,'Manage All Content')) ) {
 	$txt .= '<a href="copycontent.php'.$urlext.'&amp;content_id='.$one->Id().'">';
 	$txt .= $copyImg."</a>";
@@ -715,7 +705,6 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	$columns['copy'] = $txt;
       }
     }
-
 
     /* edit column */
     if( $columnstodisplay['edit'] ) {
@@ -734,7 +723,6 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	$columns['edit'] = $txt;
       }
     }
-
 
     /* delete column */
     if( $columnstodisplay['delete'] ) {
@@ -908,7 +896,6 @@ function display_content_list($themeObject = null)
     $thelist .= '</tbody>';
     $thelist .= "</table>\n";
   }
-
 
   $headoflist = '';
 

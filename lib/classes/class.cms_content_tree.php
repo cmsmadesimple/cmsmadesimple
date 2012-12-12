@@ -88,8 +88,8 @@ class cms_content_tree extends cms_tree
    */
   public function sureGetNodeByAlias($alias)
   {
-	  if( is_numeric($alias) )
-	  {
+	  if( $alias == '' ) return;
+	  if( (int)$alias > 0 ) {
 		  return $this->find_by_tag('id',$alias,true);
 	  }
 	  return $this->find_by_tag('alias',$alias,true);
@@ -121,8 +121,7 @@ class cms_content_tree extends cms_tree
 	$gCms = cmsms();
     $contentops = $gCms->GetContentOperations();
     $id = $contentops->GetPageIDFromHierarchy($position);
-    if ($id)
-    {
+    if ($id) {
       $result = $this->find_by_tag('id',$id);
     }
     return $result;
@@ -234,29 +233,25 @@ class cms_content_tree extends cms_tree
    */
   public function &getContent($deep = false,$loadsiblings = true,$loadall = false) // loadall used to be true: calguy1000, June 25 2011
   {
-    if( !cms_content_cache::content_exists($this->get_tag('id')) )
-      {
+	  if( !cms_content_cache::content_exists($this->get_tag('id')) ) {
 		  // not in cache
 		  $parent = $this->getParent();
-		  if( !$loadsiblings || !$parent )
-			  {
-				  // only load this content object
-				  $gCms = cmsms();
-				  $contentops = $gCms->GetContentOperations();
-				  // todo: LoadContentFromId should use content cache.
-				  $content = $contentops->LoadContentFromId($this->get_tag('id'), $deep);
-				  return $content;
+		  if( !$loadsiblings || !$parent ) {
+			  // only load this content object
+			  $gCms = cmsms();
+			  $contentops = $gCms->GetContentOperations();
+			  // todo: LoadContentFromId should use content cache.
+			  $content = $contentops->LoadContentFromId($this->get_tag('id'), $deep);
+			  return $content;
+		  }
+		  else {
+			  $parent->getChildren($deep,$loadall);
+			  if( cms_content_cache::content_exists($this->get_tag('id')) ) {
+				  return cms_content_cache::get_content($this->get_tag('id'));
 			  }
-		  else
-			  {
-				  $parent->getChildren($deep,$loadall);
-				  if( cms_content_cache::content_exists($this->get_tag('id')) )
-					  {
-						  return cms_content_cache::get_content($this->get_tag('id'));
-					  }
-			  }
+		  }
       }
-    return cms_content_cache::get_content($this->get_tag('id'));
+	  return cms_content_cache::get_content($this->get_tag('id'));
   }
 
  
@@ -321,29 +316,23 @@ class cms_content_tree extends cms_tree
   public function &getChildren($deep = false,$all = false,$loadcontent = true)
   {
     $children = $this->get_children();
-    if( is_array($children) && count($children) && $loadcontent )
-      {
-		  // check to see if we need to load anything.
-		  $ids = array();
-		  for( $i = 0; $i < count($children); $i++ )
-			  {
-				  if( !$children[$i]->isContentCached() )
-					  {
-						  $ids[] = $children[$i]->get_tag('id');
-					  }
-			  }
+    if( is_array($children) && count($children) && $loadcontent ) {
+		// check to see if we need to load anything.
+		$ids = array();
+		for( $i = 0; $i < count($children); $i++ ) {
+			if( !$children[$i]->isContentCached() ) {
+				$ids[] = $children[$i]->get_tag('id');
+			}
+		}
 		  
-		  if( count($ids) )
-			  {
-				  // load the children that aren't loaded yet.
-				  $gCms = cmsms();
-				  $contentops = $gCms->GetContentOperations();
-				  $contentops->LoadChildren($this->get_tag('id'),$deep,$all,$ids);
-			  }
+		if( count($ids) ) {
+			// load the children that aren't loaded yet.
+			$gCms = cmsms();
+			$contentops = $gCms->GetContentOperations();
+			$contentops->LoadChildren($this->get_tag('id'),$deep,$all,$ids);
+		}
+	}
 
-      }
-	
-	
     return $children;
   }
 
@@ -358,14 +347,11 @@ class cms_content_tree extends cms_tree
   {
     $result = array();
 
-    if( $this->has_children() )
-    {
+    if( $this->has_children() ) {
 		$children = $this->get_children();
-		for( $i = 0; $i < count($children); $i++ )
-		{
+		for( $i = 0; $i < count($children); $i++ ) {
 			$result[] =& $children[$i];
-			if( $children[$i]->has_children() )
-			{
+			if( $children[$i]->has_children() ) {
 				$result = array_merge($result,$children[$i]->getFlatList());
 			}
 		}
@@ -382,12 +368,11 @@ class cms_content_tree extends cms_tree
    */
   public function isContentCached()
   {
-    if( cms_content_cache::content_exists($this->get_tag('id')) )
-      {
-	return TRUE;
+	  if( cms_content_cache::content_exists($this->get_tag('id')) ) {
+		  return TRUE;
       }
 
-    return FALSE;
+	  return FALSE;
   }
 } // end of class.
 

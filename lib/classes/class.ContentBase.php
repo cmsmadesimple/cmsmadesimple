@@ -367,10 +367,7 @@ abstract class ContentBase
    * @abstract
    * @return string
    */
-  public function FriendlyName()
-  {
-    return '';
-  }
+  abstract public function FriendlyName();
 
   /**
    * Returns the Name
@@ -417,7 +414,6 @@ abstract class ContentBase
    * Set the page type
    *
    * @param string type
-   * @abstract
    * @internal
    */
   protected function SetType($type)
@@ -530,7 +526,6 @@ abstract class ContentBase
   {
     return strtotime($this->mModifiedDate);
   }
-
 
   /**
    * Set the title attribute of the page
@@ -740,7 +735,6 @@ abstract class ContentBase
      return $this->mHierarchyPath;
    }
 
-
    /**
     * Sets the Hierarchy Path
     *
@@ -752,7 +746,6 @@ abstract class ContentBase
      $this->DoReadyForEdit();
      $this->mHierarchyPath = $hierarchypath;
    }
-   
 
    /**
     * Returns the Active state
@@ -763,7 +756,6 @@ abstract class ContentBase
    {
      return $this->mActive;
    }
-
 
    /**
     * Sets this page as active
@@ -776,7 +768,6 @@ abstract class ContentBase
      $this->mActive = $active;
    }
 
-
    /**
     * Returns whether preview should be available for this content type
     *
@@ -788,7 +779,6 @@ abstract class ContentBase
      return (bool) $this->mPreview;
    }
 
-
    /**
     * Returns whether it should show in the menu
     *
@@ -798,7 +788,6 @@ abstract class ContentBase
    {
      return $this->mShowInMenu;
    }
-
 
    /**
     * Sets whether this page should be shown in menus
@@ -810,7 +799,6 @@ abstract class ContentBase
      $this->DoReadyForEdit();
      $this->mShowInMenu = $showinmenu;
    }
-
 
    /**
     * Returns if the page is the default
@@ -834,7 +822,6 @@ abstract class ContentBase
      $this->mDefaultContent = $defaultcontent;
    }
 
-
    /**
     * Return wether this page is cachable
     *
@@ -844,7 +831,6 @@ abstract class ContentBase
    {
      return $this->mCachable;
    }
-
 
    /**
     * Set wether this page is cachable
@@ -857,7 +843,6 @@ abstract class ContentBase
 	$this->mCachable = $cachable;
     }
 
-
    /**
     * Return wether this page should be accessed via a secure protocol.
     * The secure flag effectsw wether the ssl protocol and appropriate config entries are used when generating urls to this page.
@@ -868,7 +853,6 @@ abstract class ContentBase
     {
       return $this->mSecure;
     }
-
 
    /**
     * Set wether this page should be accessed via a secure protocol.
@@ -881,8 +865,7 @@ abstract class ContentBase
 	$this->DoReadyForEdit();
 	$this->mSecure = $secure;
     }
-	
-    
+
     /**
      * Return the page url (if any) associated with this content page.
      * Note: some content types do not support page urls.
@@ -976,7 +959,6 @@ abstract class ContentBase
       return TRUE;
     }
 
-
     /**
      * Set the page alias for this content page.  
      * If an empty alias is supplied, and depending upon the doAutoAliasIfEnabled flag, and config entries
@@ -1023,7 +1005,6 @@ abstract class ContentBase
 
       $this->mAlias = munge_string_to_url($alias, $tolower);
     } 
-
 	
     /**
      * Returns the menu text for this content page
@@ -1088,7 +1069,6 @@ abstract class ContentBase
       }
       return in_array($name,array_keys($this->_props));
     }
-
     
     /**
      * Get the value for the named property
@@ -1101,8 +1081,7 @@ abstract class ContentBase
 	return $this->_props[$name];
       }
     }
-    
-    
+
     private function _load_properties()
     {
       if( $this->mId <= 0 ) return FALSE;
@@ -1369,23 +1348,19 @@ abstract class ContentBase
       $this->mCreationDate               = $data["create_date"];
       $this->mModifiedDate               = $data["modified_date"];
 
-      if ($loadProperties == true)
-	{
-	  $this->_load_properties();
+      if ($loadProperties == true) {
+	$this->_load_properties();
 
-	  if (!is_array($this->_props) )
-	    {
-	      $result = false;
-	    }
+	if (!is_array($this->_props) ) {
+	  $result = false;
 	}
+      }
 
-      if (false == $result)
-	{
-	  $this->SetInitialValues();
-	}
+      if (false == $result) {
+	$this->SetInitialValues();
+      }
 
       $this->Load();
-
       return $result;
     }
 
@@ -1980,7 +1955,6 @@ abstract class ContentBase
 	return array(array('Error','Edit Not Defined!'));
     }
 
-
     /**
      * Method to indicate wether the current page has children.
      *
@@ -2183,23 +2157,6 @@ abstract class ContentBase
       return $this->AddBaseProperty($name,$priority,$is_required,$type);
     }
 
-
-    /*
-     * Given a string, see if it's a known property name.
-     *
-     * @param string The property name
-     * @return boolean
-     */
-    protected function is_known_property($str)
-    {
-      $tmp = array();
-      foreach( $this->_attributes as $one ) {
-	$tmp[] = $one[0];
-      }
-
-      return in_array($str,$tmp);
-    }
-
     /*
      * Given the list of registered properties, cross reference with our
      * basic attributes list, and figure out which ones should be displayed
@@ -2283,14 +2240,12 @@ abstract class ContentBase
       // sort the attributes
 
       $ret = array();
-      foreach( $attributelist as $one )
-	{
-	  $tmp = $this->display_single_element($one[0],$adding);
-	  if( is_array($tmp) )
-	    {
-	      $ret[] = $tmp;
-	    }
+      foreach( $attributelist as $one ) {
+	$tmp = $this->display_single_element($one[0],$adding);
+	if( is_array($tmp) ) {
+	  $ret[] = $tmp;
 	}
+      }
       return $ret;
     }
 
@@ -2307,168 +2262,118 @@ abstract class ContentBase
       $gCms = cmsms();
       $config = $gCms->GetConfig();
 
-      switch( $one )
-	{
-	case 'cachable':
-	  return array('<label for="in_cachable">'.lang('cachable').':</label>',
-		       '<input type="hidden" name="cachable" value="0"/><input id="in_cachable" class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />',lang('help_page_cachable'));
-	  break;
-	
-	case 'title':
-	  {
-	    return array('<label for="in_title">*'.lang('title').'</label>:','<input type="text" id="in_title" name="title" value="'.cms_htmlentities($this->mName).'" />');
-	  }
-	  break;
-	      
-	case 'menutext':
-	  {
-	    return array('<label for="in_menutext">*'.lang('menutext').'</label>:','<input type="text" name="menutext" id="in_menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
-	  }
-	  break;
-	      
-	case 'parent':
-	  {
-	    $contentops = $gCms->GetContentOperations();
-	    $tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('listcontent_showtitle',true) );
-	    if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
-	      return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
-	    if( !empty($tmp) ) return array('<label for="parent_id">'.lang('parent').'</label>:',$tmp);
-	  }
-	  break;
+      switch( $one ) {
+      case 'cachable':
+	return array('<label for="in_cachable">'.lang('cachable').':</label>',
+		     '<input type="hidden" name="cachable" value="0"/><input id="in_cachable" class="pagecheckbox" type="checkbox" value="1" name="cachable"'.($this->mCachable?' checked="checked"':'').' />',lang('help_page_cachable'));
 
-	case 'active':
-	  if( !$this->DefaultContent() )
-	    {
-	      return array('<label for="id_active">'.lang('active').'</label>:','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" id="id_active" value="1"'.($this->mActive?' checked="checked"':'').' />');
-	    }
-	  break;
+      case 'title':
+	return array('<label for="in_title">*'.lang('title').'</label>:','<input type="text" id="in_title" name="title" value="'.cms_htmlentities($this->mName).'" />');
 	      
-	case 'showinmenu':
-	  return array('<label for="showinmenu">'.lang('showinmenu').'</label>:','<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu" id="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
-	  break;
-	      
-	case 'target':
-	  {
-	    $text = '<option value="---">'.lang('none').'</option>';
-	    $text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
-	    $text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
-	    $text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
-	    $text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
-	    return array('<label for="target">'.lang('target').'</label>:','<select name="target" id="target">'.$text.'</select>',
-			 lang('info_target'));
-		
-	  }
-	  break;
-	      
-	case 'alias':
-	  return array('<label for="alias">'.lang('pagealias').'</label>:','<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />',lang('help_page_alias'));
-	  break;
-	      
-	case 'secure':
-	  {
-	    $opt = '';
-	    if( $this->mSecure )
-	      {
-		$opt = ' checked="checked"';
-	      }
-	    $str  = '<input type="hidden" name="secure" value="0"/>';
-	    $str .= '<input type="checkbox" name="secure" id="secure" value="1"'.$opt.'/>';
-	    return array('<label for="secure">'.lang('secure_page').'</label>:',$str);
-	  }
-	  break;
+      case 'menutext':
+	return array('<label for="in_menutext">*'.lang('menutext').'</label>:','<input type="text" name="menutext" id="in_menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
 
-	case 'page_url':
-	  if( !$this->DefaultContent() ) {
-	    $str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
-	    $prompt = '<label for="page_url">'.lang('page_url').'</label>:';
-	    if( get_site_preference('content_mandatory_urls',0) ) {
-	      $prompt = '*'.$prompt;
-	    }
-	    return array($prompt,$str,lang('help_page_url'));
-	  }
-	  break;
+      case 'parent':
+	$contentops = $gCms->GetContentOperations();
+	$tmp = $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId, 'parent_id', 0, 1, 0, 1,get_site_preference('listcontent_showtitle',true) );
+	if( empty($tmp) && !check_permission(get_userid(),'Manage All Content') )
+	  return array('','<input type="hidden" name="parent_id" value="'.$this->mParentId.'" />');
+	if( !empty($tmp) ) return array('<label for="parent_id">'.lang('parent').'</label>:',$tmp);
+	break;
 
-	case 'image':
-	  {
-	    $dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_imagefield_path'));
-	    $data = $this->GetPropertyValue('image');
-	    $dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
-	    if( !$dropdown ) return;
-	    return array('<label for="image">'.lang('image').'</label>:',$dropdown);
-	  }
-	  break;
-	      
-	case 'thumbnail':
-	  {
-	    $dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_thumbnailfield_path'));
-	    $data = $this->GetPropertyValue('thumbnail');
-	    $dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
-	    if( !$dropdown ) return FALSE;
-	    return array('<label for="thumbnail">'.lang('thumbnail').'</label>:',$dropdown);
-	  }
-	  break;
-	      
-	case 'titleattribute':
-	  {
-	    return array('<label for="titleattribute">'.lang('titleattribute').'</label>:','<input type="text" name="titleattribute" id="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
-	  }
-	  break;
-	      
-	case 'accesskey':
-	  {
-	    return array('<label for="accesskey">'.lang('accesskey').'</label>:','<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
-	  }
-	  break;
-
-	case 'tabindex':
-	  {
-	    return array('<label for="tabindex">'.lang('tabindex').'</label>:','<input type="text" name="tabindex" id="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
-	  }
-	  break;
-	      
-	case 'extra1':
-	  {
-	    return array('<label for="extra1">'.lang('extra1').'</label>:','<input type="text" name="extra1" id="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
-	  }
-	  break;
-	      
-	case 'extra2':
-	  {
-	    return array('<label for="extra2">'.lang('extra2').'</label>:','<input type="text" name="extra2" id="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
-	  }
-	  break;
-	      
-	case 'extra3':
-	  {
-	    return array('<label for="extra3">'.lang('extra3').'</label>:','<input type="text" name="extra3" id="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
-	  }
-	  break;
-
-	case 'owner':
-	  {
-	    $showadmin = check_ownership(get_userid(), $this->Id());
-	    $userops = $gCms->GetUserOperations();
-	    if (!$adding && ($showadmin || check_permission(get_userid(),'Manage All Content')) )
-	      {
-		return array('<label for="owner">'.lang('owner').'</label>:', $userops->GenerateDropdown($this->Owner()));
-	      }
-	  }
-	  break;
-
-	case 'additionaleditors':
-	  {
-	    // do owner/additional-editor stuff
-	    if( $adding || check_ownership(get_userid(),$this->Id()) || check_permission(get_userid(),'Manage All Content'))
-	      {
-		return $this->ShowAdditionalEditors();
-	      }
-	  }
-	  break;
-
-	default:
-	  stack_trace();
-	  die('unknown property '.$one);
+      case 'active':
+	if( !$this->DefaultContent() ) {
+	  return array('<label for="id_active">'.lang('active').'</label>:','<input type="hidden" name="active" value="0"/><input class="pagecheckbox" type="checkbox" name="active" id="id_active" value="1"'.($this->mActive?' checked="checked"':'').' />');
 	}
+	break;
+
+      case 'showinmenu':
+	return array('<label for="showinmenu">'.lang('showinmenu').'</label>:','<input type="hidden" name="showinmenu" value="0"/><input class="pagecheckbox" type="checkbox" value="1" name="showinmenu" id="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+
+      case 'target':
+	$text = '<option value="---">'.lang('none').'</option>';
+	$text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
+	$text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
+	$text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
+	$text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
+	return array('<label for="target">'.lang('target').'</label>:','<select name="target" id="target">'.$text.'</select>',
+		     lang('info_target'));
+
+      case 'alias':
+	return array('<label for="alias">'.lang('pagealias').'</label>:','<input type="text" name="alias" id="alias" value="'.$this->mAlias.'" />',lang('help_page_alias'));
+
+      case 'secure':
+	$opt = '';
+	if( $this->mSecure ) {
+	  $opt = ' checked="checked"';
+	}
+	$str  = '<input type="hidden" name="secure" value="0"/>';
+	$str .= '<input type="checkbox" name="secure" id="secure" value="1"'.$opt.'/>';
+	return array('<label for="secure">'.lang('secure_page').'</label>:',$str);
+
+      case 'page_url':
+	if( !$this->DefaultContent() ) {
+	  $str = '<input type="text" name="page_url" id="page_url" value="'.$this->mURL.'" size="50" maxlength="255"/>';
+	  $prompt = '<label for="page_url">'.lang('page_url').'</label>:';
+	  if( get_site_preference('content_mandatory_urls',0) ) {
+	    $prompt = '*'.$prompt;
+	  }
+	  return array($prompt,$str,lang('help_page_url'));
+	}
+	break;
+
+      case 'image':
+	$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_imagefield_path'));
+ 	$data = $this->GetPropertyValue('image');
+	$dropdown = create_file_dropdown('image',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',1,1);
+	if( !$dropdown ) return;
+	return array('<label for="image">'.lang('image').'</label>:',$dropdown);
+
+      case 'thumbnail':
+	$dir = cms_join_path($config['image_uploads_path'],get_site_preference('content_thumbnailfield_path'));
+	$data = $this->GetPropertyValue('thumbnail');
+	$dropdown = create_file_dropdown('thumbnail',$dir,$data,'jpg,jpeg,png,gif','',true,'','thumb_',0,1);
+	if( !$dropdown ) return FALSE;
+	return array('<label for="thumbnail">'.lang('thumbnail').'</label>:',$dropdown);
+
+      case 'titleattribute':
+	return array('<label for="titleattribute">'.lang('titleattribute').'</label>:','<input type="text" name="titleattribute" id="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
+
+      case 'accesskey':
+	return array('<label for="accesskey">'.lang('accesskey').'</label>:','<input type="text" name="accesskey" id="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
+
+      case 'tabindex':
+	return array('<label for="tabindex">'.lang('tabindex').'</label>:','<input type="text" name="tabindex" id="tabindex" maxlength="5" value="'.cms_htmlentities($this->mTabIndex).'" />');
+
+      case 'extra1':
+	return array('<label for="extra1">'.lang('extra1').'</label>:','<input type="text" name="extra1" id="extra1" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra1')).'" />');
+
+      case 'extra2':
+	return array('<label for="extra2">'.lang('extra2').'</label>:','<input type="text" name="extra2" id="extra2" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra2')).'" />');
+	      
+      case 'extra3':
+	return array('<label for="extra3">'.lang('extra3').'</label>:','<input type="text" name="extra3" id="extra3" maxlength="255" size="80" value="'.cms_htmlentities($this->GetPropertyValue('extra3')).'" />');
+
+      case 'owner':
+	$showadmin = check_ownership(get_userid(), $this->Id());
+	$userops = $gCms->GetUserOperations();
+	if (!$adding && ($showadmin || check_permission(get_userid(),'Manage All Content')) ) {
+	  return array('<label for="owner">'.lang('owner').'</label>:', $userops->GenerateDropdown($this->Owner()));
+	}
+	break;
+
+      case 'additionaleditors':
+	// do owner/additional-editor stuff
+	if( $adding || check_ownership(get_userid(),$this->Id()) || 
+	    check_permission(get_userid(),'Manage All Content')) {
+	  return $this->ShowAdditionalEditors();
+	}
+	break;
+
+      default:
+	stack_trace();
+	die('unknown property '.$one);
+      }
     }
 
     protected function SetError($str)
