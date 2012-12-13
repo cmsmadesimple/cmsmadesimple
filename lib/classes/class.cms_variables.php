@@ -92,6 +92,7 @@ class cms_variables implements ArrayAccess
   public function offsetGet($key)
   {
     if( !in_array($key,$this->_allowed_variables) ) {
+      stack_trace(); die();
       trigger_error('Retrival of unauthorized internal variables is deprecated: '.$key,E_USER_NOTICE);
       return;
     }

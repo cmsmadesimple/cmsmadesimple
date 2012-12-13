@@ -188,7 +188,8 @@ $smarty->assign('oftext',$this->Lang('prompt_of'));
 
 $rowclass = 'row1';
 
-$admintheme =& $gCms->variables['admintheme'];
+$admintheme = cms_utils::get_theme_object();
+
 while ($dbresult && $row = $dbresult->FetchRow())
   {
     $onerow = new stdClass();
@@ -231,11 +232,11 @@ while ($dbresult && $row = $dbresult->FetchRow())
     $onerow->select = $this->CreateInputCheckbox($id,'sel[]',$row['news_id']);
     if( $this->CheckPermission('Modify News') )
       {
-	$onerow->editlink = $this->CreateLink($id, 'editarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/edit.gif', $this->Lang('edit'),'','','systemicon'), array('articleid'=>$row['news_id']));
+	$onerow->editlink = $this->CreateLink($id, 'editarticle', $returnid, $admintheme->DisplayImage('icons/system/edit.gif', $this->Lang('edit'),'','','systemicon'), array('articleid'=>$row['news_id']));
       }
     if( $this->CheckPermission('Delete News') )
       {
-	$onerow->deletelink = $this->CreateLink($id, 'deletearticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/delete.gif', $this->Lang('delete'),'','','systemicon'), array('articleid'=>$row['news_id']), $this->Lang('areyousure'));
+	$onerow->deletelink = $this->CreateLink($id, 'deletearticle', $returnid, $admintheme->DisplayImage('icons/system/delete.gif', $this->Lang('delete'),'','','systemicon'), array('articleid'=>$row['news_id']), $this->Lang('areyousure'));
       }
     
     $entryarray[] = $onerow;
@@ -247,7 +248,7 @@ $smarty->assign_by_ref('items', $entryarray);
 $smarty->assign('itemcount', count($entryarray));
 
 if( $this->CheckPermission('Modify News') ) {
-  $smarty->assign('addlink', $this->CreateLink($id, 'addarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newobject.gif', $this->Lang('addarticle'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle'), array(), '', false, false, 'class="pageoptions"'));
+  $smarty->assign('addlink', $this->CreateLink($id, 'addarticle', $returnid, $admintheme->DisplayImage('icons/system/newobject.gif', $this->Lang('addarticle'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle'), array(), '', false, false, 'class="pageoptions"'));
 }
 
 $smarty->assign('form2start',$this->CreateFormStart($id,'defaultadmin',$returnid));
@@ -273,10 +274,8 @@ $smarty->assign('titletext', $this->Lang('title'));
 $smarty->assign('postdatetext', $this->Lang('postdate'));
 $smarty->assign('categorytext', $this->Lang('category'));
 
-$gCms = cmsms();
-$theme =& $gCms->variables['admintheme'];
 $config = $this->GetConfig();
-$themedir = $config['admin_url'].'/themes/'.$theme->themeName.'/images/icons/system';
+$themedir = $config['admin_url'].'/themes/'.$admintheme->themeName.'/images/icons/system';
 
 $smarty->assign('iconurl',$themedir);
 

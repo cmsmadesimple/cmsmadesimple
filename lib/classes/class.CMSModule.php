@@ -40,14 +40,6 @@ abstract class CMSModule
    */
 
   /**
-   * An array of loaded lang strings
-   *
-   * @access private
-   * @ignore
-   */
-  var $langhash = array();
-
-  /**
    * A hash of the parameters passed in to the module action
    *
    * @access private
@@ -66,12 +58,6 @@ abstract class CMSModule
    * @ignore
    */
   private $modtemplates = false;
-
-  /**
-   * @access private
-   * @ignore
-   */
-  private $modlang = false;
 
   /**
    * @access private
@@ -190,19 +176,6 @@ abstract class CMSModule
     }
   }
 
-	
-  /**
-   * Private
-   *
-   * @ignore
-   */
-  function LoadLangMethods()
-  {
-    if (!$this->modlang) {
-      require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modlang.inc.php'));
-      $this->modlang = true;
-    }
-  }
 	
   /**
    * Private
@@ -2715,14 +2688,12 @@ abstract class CMSModule
    */
   final public function Lang()
   {
-    $this->LoadLangMethods();
-
-    //Push $this onto front of array
+    //Push module name onto front of array
     $args = func_get_args();
     array_unshift($args,'');
-    $args[0] = &$this;
+    $args[0] = $this->GetName();
 
-    return call_user_func_array('cms_module_Lang', $args);
+    return CmsLangOperations::lang_from_realm($args);
   }
 
   /**
