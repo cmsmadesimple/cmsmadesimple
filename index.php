@@ -210,7 +210,8 @@ try {
 
 	$smarty->set_global_cacheid('p'.$contentobj->Id());
 	$uid = get_userid(FALSE);
-	if( $contentobj->Cachable() && $showtemplate && !$uid && get_site_preference('use_smartycache',0) ) {
+	if( $contentobj->Cachable() && $showtemplate && !$uid && get_site_preference('use_smartycache',0) &&
+	    $_SERVER['REQUEST_METHOD'] != 'POST' ) {
 	  if( version_compare(phpversion(),'5.3') >= 0 ) {
 	    // this content is cachable...  so enable smarty caching of this page data, for this user.
 	    $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT);
@@ -239,8 +240,6 @@ try {
 		
 		$html = $top.$head.$body;		
 		$trycount = 99; // no more iterations.
-		//debug_display('display content2 '.$contentobj->Alias().' '.$page);
-		//if( $page == 'error404' ) debug_display('html is '.$html);
 	}
 } 
 catch (SmartyCompilerException $e) // <- Catch Smarty compile errors 
