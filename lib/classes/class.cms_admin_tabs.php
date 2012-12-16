@@ -48,8 +48,8 @@ class cms_admin_tabs
 
   public static function end_tab_headers()
   {
-    return "</div><!-- EndTabHeaders -->";
     self::$_end_headers_sent = 1;
+    return "</div><!-- EndTabHeaders -->";
   }
 
   public static function start_tab_content()
