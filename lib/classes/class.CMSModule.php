@@ -1826,6 +1826,7 @@ abstract class CMSModule
    * @param string The legend_text for this fieldset, if applicaple
    * @param string Any additional text that should be added into the tag when rendered
    * @param string Any additional text that should be added into the legend tag when rendered
+   * @deprecated
    * @return string
    */
   final function CreateFieldsetStart( $id, $name, $legend_text='', $addtext='', $addtext_legend='' )
@@ -1839,6 +1840,7 @@ abstract class CMSModule
    * could be extended later on down the road.  It's here mainly for consistency.
    * 
    * @final
+   * @deprecated
    * @return string
    */
   final function CreateFieldsetEnd()
@@ -1857,6 +1859,7 @@ abstract class CMSModule
    * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
    * @param string Text to append to the end of the id and name of the form
    * @param array Extra parameters to pass along when the form is submitted
+   * @deprecated
    * @return string
    */
   function CreateFrontendFormStart($id,$returnid,$action='default',$method='post',
@@ -1906,6 +1909,7 @@ abstract class CMSModule
    * @param string The number of columns wide the textbox should be displayed
    * @param string The maximum number of characters that should be allowed to be entered
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
@@ -1922,6 +1926,7 @@ abstract class CMSModule
    * @param string The html name of the input field this label is associated to
    * @param string The text in the label
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateLabelForInput($id, $name, $labeltext='', $addttext='')
@@ -1942,6 +1947,7 @@ abstract class CMSModule
    * @param string Any additional text that should be added into the tag when rendered
    * @param string The text for label 
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputTextWithLabel($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
@@ -1974,6 +1980,7 @@ abstract class CMSModule
    * @param string The html name of the input field
    * @param string The predefined value of the textbox, if any
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputDate($id, $name, $value='', $addttext='')
@@ -1990,6 +1997,7 @@ abstract class CMSModule
    * @param string The html name of the input field
    * @param string The predefined value of the textbox, if any
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */	
   function CreateInputDatetime($id, $name, $value='', $addttext='')
@@ -2006,6 +2014,7 @@ abstract class CMSModule
    * @param string The html name of the input field
    * @param string The predefined value of the textbox, if any
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputDatetimeLocal($id, $name, $value='', $addttext='')
@@ -2022,6 +2031,7 @@ abstract class CMSModule
    * @param string The html name of the input field
    * @param string The predefined value of the textbox, if any
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputMonth($id, $name, $value='', $addttext='')
@@ -2038,6 +2048,7 @@ abstract class CMSModule
    * @param string The html name of the input field
    * @param string The predefined value of the textbox, if any
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputWeek($id, $name, $value='', $addttext='')
@@ -2054,6 +2065,7 @@ abstract class CMSModule
    * @param string The html name of the input field
    * @param string The predefined value of the textbox, if any
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputTime($id, $name, $value='', $addttext='')
@@ -2086,6 +2098,7 @@ abstract class CMSModule
    * @param string The html name of the input field
    * @param string The predefined value of the textbox, if any
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputRange($id, $name, $value='', $addttext='')
@@ -2104,6 +2117,7 @@ abstract class CMSModule
    * @param string The number of columns wide the textbox should be displayed
    * @param string The maximum number of characters that should be allowed to be entered
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */	
   function CreateInputEmail($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
@@ -2122,6 +2136,7 @@ abstract class CMSModule
    * @param string The number of columns wide the textbox should be displayed
    * @param string The maximum number of characters that should be allowed to be entered
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */	
   function CreateInputTel($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
@@ -2140,6 +2155,7 @@ abstract class CMSModule
    * @param string The number of columns wide the textbox should be displayed
    * @param string The maximum number of characters that should be allowed to be entered
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputSearch($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
@@ -2158,6 +2174,7 @@ abstract class CMSModule
    * @param string The number of columns wide the textbox should be displayed
    * @param string The maximum number of characters that should be allowed to be entered
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputUrl($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
@@ -2176,6 +2193,7 @@ abstract class CMSModule
    * @param string The MIME-type to be accepted, default is all
    * @param string The number of columns wide the textbox should be displayed
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputFile($id, $name, $accept='', $size='10',$addttext='')
@@ -2194,6 +2212,7 @@ abstract class CMSModule
    * @param string The number of columns wide the textbox should be displayed
    * @param string The maximum number of characters that should be allowed to be entered
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputPassword($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
@@ -2210,6 +2229,7 @@ abstract class CMSModule
    * @param string The html name of the hidden field
    * @param string The predefined value of the field, if any
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputHidden($id, $name, $value='', $addttext='')
@@ -2227,6 +2247,7 @@ abstract class CMSModule
    * @param string The value returned from the input if selected
    * @param string The current value. If equal to $value the checkbox is selected 
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputCheckbox($id, $name, $value='', $selectedvalue='', $addttext='')
@@ -2245,6 +2266,7 @@ abstract class CMSModule
    * @param string Any additional text that should be added into the tag when rendered
    * @param string Use an image instead of a regular button
    * @param string Optional text to display in a confirmation message.
+   * @deprecated
    * @return string
    */
   function CreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
@@ -2261,6 +2283,7 @@ abstract class CMSModule
    * @param string The html name of the button
    * @param string The predefined value of the button, if any
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputReset($id, $name, $value='Reset', $addttext='')
@@ -2278,6 +2301,7 @@ abstract class CMSModule
    * @param string Any additional text that should be added into the tag when rendered
    * @param integer The size of the text field associated with the file upload field.  Some browsers may not respect this value.
    * @param integer The maximim length of the content of the text field associated with the file upload field.  Some browsers may not respect this value.
+   * @deprecated
    * @return string
    */
   function CreateFileUploadInput($id, $name, $addttext='',$size='10', $maxlength='255')
@@ -2296,6 +2320,7 @@ abstract class CMSModule
    * @param string The default selected index of the dropdown list.  Setting to -1 will result in the first choice being selected
    * @param string The default selected value of the dropdown list.  Setting to '' will result in the first choice being selected
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='')
@@ -2315,6 +2340,7 @@ abstract class CMSModule
    * @param string The number of columns wide the textbox should be displayed
    * @param string The maximum number of characters that should be allowed to be entered
    * @param string Any additional text that should be added into the tag when rendered
+   * @deprecated
    * @return string
    */
   function CreateInputDataList($id, $name, $value='', $items, $size='10', $maxlength='255', $addttext='')
@@ -2335,6 +2361,7 @@ abstract class CMSModule
    * @param string Any additional text that should be added into the tag when rendered
    * @param boolean indicates wether multiple selections are allowed (defaults to true)
    * @return string
+   * @deprecated
    */
   function CreateInputSelectList($id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true)
   {

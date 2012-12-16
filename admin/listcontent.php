@@ -530,8 +530,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	  $str = $one->Name();
 	}
 	if ($display == 'edit')
-	  $txt .= '<a class="tooltip" href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'&amp;page='.$page.'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true). '" onmouseover="document.getElementById(\'' .$one->Id().'_info\').style.display = \'inline-block\';" onmouseout="document.getElementById(\''.$one->Id().'_info\').style.display = \'none\';">
-			' . cms_htmlentities($str, '', '', true) . '<span id="'.$one->Id().'_info"><strong>'.lang('content_id').':</strong> '.$one->Id().'<br /> <strong>'.lang('title').':</strong> '. cms_htmlentities($one->Name()).'<br /> <strong>'.lang('pagealias').':</strong> '.$one->Alias().'</span></a>';
+	  $txt .= '<a class="tooltip" href="editcontent.php'.$urlext.'&amp;content_id='.$one->Id().'&amp;page='.$page.'" title="'. cms_htmlentities($one->Name().' ('.$one->Alias().')', '', '', true).'">
+			' . cms_htmlentities($str, '', '', true) . '<span style="display: none;"><strong>'.lang('content_id').':</strong> '.$one->Id().'<br /> <strong>'.lang('title').':</strong> '. cms_htmlentities($one->Name()).'<br /> <strong>'.lang('pagealias').':</strong> '.$one->Alias().'</span></a>';
 	else
 	  $txt .= cms_htmlentities($str, '', '', true);
       }
@@ -561,7 +561,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
       }
       if( !empty($txt) ) {
 	if( !prettyurls_ok() ) {
-	  $txt = '<span style="color: red;" title="'.lang('prettyurls_noeffect').'">'.$txt.'<span>';
+	  $txt = '<span style="color: red;" title="'.lang('prettyurls_noeffect').'">'.$txt.'</span>';
 	}
       }
       if( !empty($txt) ) $columns['url'] = $txt;
@@ -578,16 +578,16 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 	$template = null;
 	try {
 	  $template = CmsLayoutTemplate::load($one->TemplateId());
+	  $txt = $template->get_name();
+	  if( check_permission($userid,'Modify Templates') ) {
+	    $obj = cms_utils::get_module('DesignManager');
+	    if( $obj ) {
+	      $url = $obj->create_url('m1_','admin_edit_template','',array('tpl'=>(int)$one->TemplateId()));
+	      $txt = "<a title=\"".lang('edittemplate')."\" href=\"$url\">".cms_htmlentities($template->get_name(), '', '', true)."</a>";
+	    }
+	  }
 	}
 	catch( CmsException $e ) {
-	  // nothing
-	}
-	if( $template && check_permission($userid,'Modify Template') ) {
-	  // todo: change me.... module action link
-	  $txt .= "<a title=\"".lang('edittemplate')."\" href=\"edittemplate.php".$urlext."&amp;template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($template->get_name(), '', '', true)."</a>";
-	}
-	else if( $template ) {
-	  $txt .= $template->get_name();
 	}
       }
       if( !empty($txt) ) {
@@ -756,7 +756,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$users, &$menupos, &$o
 		    check_ownership($userid,$one->Id()))?1:0;
       if ( (($structure == 1) || (($remove == 1) && ($editperms == 1))) &&
 	   ($one->Type() != 'errorpage' )) {
-	$txt .= '<label class="invisible" for="multicontent-'.$one->Id().'">'.lang('toggle').'</label><input type="checkbox" id="multicontent-'.$one->Id().'" name="multicontent-'.$one->Id().'" title="'.lang('toggle').'"/>';
+	$txt .= '<label class="invisible" for="multicontent-'.$one->Id().'">'.lang('toggle').'</label><input type="checkbox" class="multicontent" id="multicontent-'.$one->Id().'" name="multicontent-'.$one->Id().'" title="'.lang('toggle').'"/>';
       }
       if( !empty($txt) ) {
 	$columns['multiselect'] = $txt;
@@ -978,7 +978,7 @@ function display_content_list($themeObject = null)
     $headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
   }
   if( $columnstodisplay['multiselect'] ) {
-    $headoflist .= '<th scope="col" title="'.lang('lctitle_multiselect').'" class="checkbox"><input id="selectall" type="checkbox" onclick="select_all();" /><label for="selectall" class="invisible">'.lang('toggle').'</label></th>'."\n"; // checkbox column
+    $headoflist .= '<th scope="col" title="'.lang('lctitle_multiselect').'" class="checkbox"><input id="selectall" type="checkbox"/><label for="selectall" class="invisible">'.lang('toggle').'</label></th>'."\n"; // checkbox column
   }
   $headoflist .= "</tr>\n";
   $headoflist .= '</thead>';
@@ -1012,7 +1012,7 @@ function display_content_list($themeObject = null)
       echo '<option value="'.$key.'">'.$value.'</option>';
     }
     echo '</select>'."\n";
-    echo '<input type="submit" accesskey="s" value="'.lang('submit').'"/></div></div>'."\n";
+    echo '<input id="multisubmit" type="submit" accesskey="s" value="'.lang('submit').'"/></div></div>'."\n";
   }
 ?>
   <div style="float: left;">
@@ -1103,26 +1103,49 @@ echo $themeObject->ShowHeader('currentpages').'</div>';
 echo '<div id="contentlist">'.display_content_list($themeObject).'</div>';
 
 ?>
+  <p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
+  <script type="text/javascript">
+  //<![CDATA[
+  $(document).ready(function(){
+    $('#multiaction').attr('disabled','disabled');
+    $('#multisubmit').attr('disabled','disabled');
 
-		<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
-		<script type="text/javascript">
-		//<![CDATA[
-		function select_all()
-		{
-	        checkboxes = document.getElementsByTagName("input");
-                elem = document.getElementById('selectall');
-		state = elem.checked;
-	        for (i=0; i<checkboxes.length ; i++)
-	        {
-	                if (checkboxes[i].type == "checkbox") 
-			  {
-			    checkboxes[i].checked=state;
-			  }
-	        }
-		}
-		//]]>
-		</script>
-		<?php
+    $('a.tooltip').mouseover(function(){
+       $('span',this).css('width', '250px');
+       $('span',this).css('display', 'inline-block');
+    });
+    $('a.tooltip').mouseout(function(){
+     $('span',this).hide();
+    });
+    $('.multicontent').click(function(){
+      $('#selectall').removeAttr('checked');
+      if( $('.multicontent:checked').length > 0 ) {
+        $('#multiaction').removeAttr('disabled');
+        $('#multisubmit').removeAttr('disabled');
+      }
+      else {
+        $('#multiaction').attr('disabled','disabled');
+        $('#multisubmit').attr('disabled','disabled');
+      }
+    });
+    $('#selectall').click(function(){
+      if( $(this).is(':checked') ) {
+        $('.multicontent').attr('checked','checked');
+      } else {
+        $('.multicontent').removeAttr('checked');
+      }
+      if( $('.multicontent:checked').length > 0 ) {
+        $('#multiaction').removeAttr('disabled');
+        $('#multisubmit').removeAttr('disabled');
+      }
+      else {
+        $('#multiaction').attr('disabled','disabled');
+        $('#multisubmit').attr('disabled','disabled');
+      }
+    });
+  });
+  </script>
+<?php
 
 include_once("footer.php");
 
