@@ -513,6 +513,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname = '', $id = ''
   $uid = get_userid(false);
 
   if ($enablewysiwyg == true || $forcewysiwyg) {
+    $module = null;
     $module = cms_utils::get_wysiwyg_module($forcewysiwyg);
     if( $module ) {
       $result = $module->WYSIWYGTextArea($name,$width,$height,$encoding,$text,$stylesheet,$addtext);

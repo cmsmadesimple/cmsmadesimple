@@ -21,99 +21,110 @@
  #
 */
 
-class MicroTiny extends CMSModule {
+class MicroTiny extends CMSModule 
+{
+  private $wysiwygactive;
 
   public function __construct() {
     parent::__construct();
   }
-	
-	public function GetName() {
-		return 'MicroTiny';
-	}
-
-	public function GetFriendlyName() {
-		return $this->Lang("friendlyname");
-	}
-
-	public function GetVersion()	{
-	  return '1.2.4';
-	}
-
-	public function HasAdmin() {
-		return true;
-	}
-
-	public function IsWYSIWYG() {
-		return true;
-	}
-
-	public function InitializeFrontend() {
-	  //$this->RegisterModulePlugin();
-	}
-
-    public function InitializeAdmin() {
-
-    }
-
-	public function IsPluginModule() {
-	  return true;
-	}
-
-	public function LazyLoadFrontend() {
-		return true;
-	}
-
-	public function LazyLoadAdmin() {
-		return true;
-        }
-
-	public function HasCapability($capability, $params=array()) {
-		if ($capability=="wysiwyg") return true;
-		return false;
-	}
-
-	public function MinimumCMSVersion() {
-	  return "1.12=alpha0";
-	}
-
-	public function GetDependencies() {
-     return array('FileManager'=>'1.4.2');
+  public function GetName() {
+    return 'MicroTiny';
   }
 
-	public function GetHelp($lang='en_US') {
-		return $this->Lang('help');
-	}
+  public function GetFriendlyName() {
+    return $this->Lang("friendlyname");
+  }
 
-	public function GetAuthor() {
-		return 'Morten Poulsen';
-	}
+  public function GetVersion()	{
+    return '1.2.4';
+  }
 
-	public function GetAuthorEmail()	{
-		return '&lt;morten@poulsen.org&gt;';
-	}
+  public function HasAdmin() {
+    return true;
+  }
 
-	public function GetChangeLog()	{
-		return $this->ProcessTemplate('changelog.tpl');
-	}
+  public function IsWYSIWYG() {
+    return true;
+  }
+
+  public function InitializeFrontend() {
+    //$this->RegisterModulePlugin();
+  }
+
+  public function InitializeAdmin() {
+
+  }
+
+  public function IsPluginModule() {
+    return true;
+  }
+
+  public function LazyLoadFrontend() {
+    return true;
+  }
+
+  public function LazyLoadAdmin() {
+    return true;
+  }
+
+  public function HasCapability($capability, $params=array()) {
+    if ($capability=="wysiwyg") return true;
+    return false;
+  }
+
+  public function MinimumCMSVersion() {
+    return "1.12=alpha0";
+  }
+
+  public function GetDependencies() {
+    return array('FileManager'=>'1.4.2');
+  }
+
+  public function GetHelp($lang='en_US') {
+    return $this->Lang('help');
+  }
+
+  public function GetAuthor() {
+    return 'Morten Poulsen';
+  }
+
+  public function GetAuthorEmail()	{
+    return '&lt;morten@poulsen.org&gt;';
+  }
+
+  public function GetChangeLog()	{
+    return $this->ProcessTemplate('changelog.tpl');
+  }
 	
-	public function VisibleToAdminUser() {
-		return $this->CheckPermission('Modify Site Preferences');
-	}	
+  public function VisibleToAdminUser() {
+    return $this->CheckPermission('Modify Site Preferences');
+  }	
 
-	public function WYSIWYGGenerateHeader($htmlresult='', $frontend=false) {	
-		return microtiny_utils::WYSIWYGGenerateHeader($htmlresult, $frontend);
-	}	
+  public function WYSIWYGGenerateHeader($htmlresult='', $frontend=false) {	
+    return microtiny_utils::WYSIWYGGenerateHeader($htmlresult, $frontend);
+  }	
 	
-	public function WYSIWYGTextarea($name='textarea',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='') {	
-		return microtiny_utils::WYSIWYGTextarea($name,$columns,$rows,$encoding,$content,$stylesheet,$addtext);
-	}
+  public function WYSIWYGTextarea($name='textarea',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='',$addtext='') {	
+    return microtiny_utils::WYSIWYGTextarea($name,$columns,$rows,$encoding,$content,$stylesheet,$addtext);
+  }
 
-	public function WYSIWYGPageFormSubmit() {
-		return 'tinyMCE.triggerSave();';
-	}
+  public function WYSIWYGPageFormSubmit() {
+    return 'tinyMCE.triggerSave();';
+  }
 	
-	public function GetAdminDescription() {
-	  return $this->Lang('admindescription');
-	}
+  public function GetAdminDescription() {
+    return $this->Lang('admindescription');
+  }
+
+  public function WYSIWYGActive()
+  {
+    return $this->wysiwygactive;
+  }
+
+  public function SetWysiwygActive($flag = true)
+  {
+    $this->wysiwygactive = (bool)$flag;
+  }
 } // end of module class
 ?>

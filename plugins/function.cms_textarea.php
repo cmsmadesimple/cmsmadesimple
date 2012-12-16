@@ -35,18 +35,27 @@ function smarty_function_cms_textarea($params, &$smarty)
     }
   }
 
-  $syntaxhighlighter = '';
-  if( $syntax ) {
-    $userid = get_userid(FALSE);
-    $syntaxhighlighter = get_preference($userid, 'syntaxhighlighter');
-  }
-
   $addtext = '';
   if( $class ) $addtext = 'class="'.$class.'"';
 
-  $res = create_textarea($wysiwyg,$content,$name,'',$id,'','',$cols,$rows,'',
-			 $syntaxhighlighter,$addtext);
-  debug_to_log($res);
+  $res = null;
+  if( $syntax ) {
+    $userid = get_userid(FALSE);
+    $syntaxhighlighter = get_preference($userid, 'syntaxhighlighter');
+    if( $syntaxhighlighter ) {
+      $mod = cms_utils::get_module($syntaxhighlighter);
+      if( $mod ) {
+	// we want a syntax highlighter, we have a preferred one, and could find the module
+	$res = $mod->SyntaxTextArea($name,'php',$cols,$rows,'',$content,'',$addtext);
+      }
+    }
+  }
+
+  if( !$res ) {
+    $res = create_textarea($wysiwyg,$content,$name,'',$id,'','',$cols,$rows,'',
+			   $syntaxhighlighter,$addtext);
+  }
+
   if( isset($params['assign']) ) {
     $smarty->assign(trim($params['assign']),$res);
     return;

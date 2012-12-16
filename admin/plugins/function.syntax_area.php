@@ -41,7 +41,25 @@ function smarty_function_syntax_area($params, &$template)
     $rows = (int)$params['cols'];
   }
 
-  $out = create_textarea(FALSE,$value,$name,$class,$id,'','',$rows,$cols,'',$type);
+  $userid = get_userid(FALSE);
+  $syntaxhighlighter = get_preference($userid, 'syntaxhighlighter');
+  if( $syntaxhighlighter ) {
+    $mod = cms_utils::get_module($syntaxhighlighter);
+    if( $mod ) {
+      // we want a syntax highlighter, we have a preferred one, and could find the module
+      $out = $mod->SyntaxTextArea($name,$type,$cols,$rows,'',$value);
+    }
+  }
+
+  if( !$out ) {
+    $out = '<textarea name="'.$name.'"';
+    if( $id ) $out .= ' id="'.$id.'"';
+    if( $class ) $out .= ' class="'.$class.'"';
+    if( $rows ) $out .= ' rows="'.$rows.'"';
+    if( $cols ) $out .= ' cols="'.$cols.'"';
+    $out .= '>'.$value.'</textarea>';
+  }
+
   if( isset($params['assign']) ) {
     $smarty->assign(trim($params['assign']),$out);
     return;

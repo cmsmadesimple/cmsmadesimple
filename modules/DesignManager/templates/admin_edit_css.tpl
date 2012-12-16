@@ -62,7 +62,7 @@ $(document).ready(function(){
 {/if}
 
 {tab_start name='content'}
-{syntax_area prefix=$actionid name=content value=$css->get_content()}&nbsp;
+{syntax_area prefix=$actionid name=content value=$css->get_content() type=css}&nbsp;
 {admin_icon name='help_css_content' icon='info.gif' class='helpicon'}
 
 {tab_start name='media_type'}

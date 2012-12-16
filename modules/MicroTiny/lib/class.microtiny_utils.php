@@ -57,7 +57,7 @@ class microtiny_utils {
     if(!is_object($mod)) return false; // TODO: some error message?
 
     // Force WYSIWYG on
-    $mod->wysiwygactive = true; // Stikki: calling this before TODO cause whole thing failing, check this Silmarillion.
+    $mod->SetWysiwygActive();
 
     if ($stylesheet != '') {
       $_SESSION["microtiny_live_templateid"]=substr($stylesheet, strpos($stylesheet,"=")+1);
@@ -111,13 +111,13 @@ class microtiny_utils {
 
     $fn = self::SaveStaticConfig($frontend,'',$languageid);
 
-    if ($mod->WYSIWYGactive()) {
+//     if ($mod->WYSIWYGactive()) {
       $output='<script type="text/javascript" src="'.$config->smart_root_url().'/modules/MicroTiny/tinymce/tiny_mce.js"></script>';
       $configurl = $config->smart_root_url().'/tmp/cache/'.$fn.'?t='.time();
       $output.='<script type="text/javascript" src="'.$configurl.'"></script>';			
-    } else {		  
-      $output="<!-- MicroTiny Session vars empty -->";
-    }
+//     } else {		  
+//       $output="<!-- MicroTiny Session vars empty -->";
+//     }
 
     return $output;
   }	

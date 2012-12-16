@@ -12,6 +12,7 @@ $lang['bulk_action_delete_css'] = 'Bulk Deletion of Stylesheets';
 
 #C
 $lang['cancel'] = 'Cancel';
+$lang['category_saved'] = 'Category Saved';
 $lang['confirm_bulk_css_1'] = 'Yes, I am sure I want to perform this operation on multiple stylesheets.';
 $lang['confirm_bulk_css_2'] = 'Yes, I am <strong>really</strong> sure I want to act on multiple stylesheets.';
 $lang['confirm_bulk_template_1'] = 'Yes, I am sure I want to perform this operation on multiple templates.';

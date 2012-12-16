@@ -115,7 +115,7 @@ $(document).ready(function(){
 
 {tab_start name='code'}
 <label for="code">{lang('code')}:</label>&nbsp;{cms_help key1=h_udtcode}<br/>
-{cms_textarea id='udtcode' name='code' content=$record.code syntax=1}
+{syntax_area id='udtcode' name='code' value=$record.code type=php}
 
 {tab_start name='description'}
 <label for="description">{lang('description')}:</label>&nbsp;{cms_help key1=h_udtdesc}
