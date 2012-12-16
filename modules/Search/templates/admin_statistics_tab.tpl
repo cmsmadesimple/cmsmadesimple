@@ -1,7 +1,7 @@
 {* admin statistics tab *}
 
-{$formstart}
 {if isset($topwords)}
+{$formstart}
 <div class="pageoverflow">
   <table class="pagetable" cellspacing="0">
     <thead>
@@ -21,9 +21,11 @@
     </tbody>
   </table>
 </div>
-{/if}
 <div class="pageoverflow">
   <p class="pagetext">&nbsp;</p>
   <p class="pageinput">{$clearwordcount}&nbsp;{$exportcsv}</p>
 </div>
 {$formend}
+{else}
+<div class="pagewarning">{lang_by_realm('Search','nostatistics')}</div>
+{/if}

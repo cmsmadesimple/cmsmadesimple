@@ -66,7 +66,7 @@ $(document).ready(function(){
 {admin_icon name='help_css_content' icon='info.gif' class='helpicon'}
 
 {tab_start name='media_type'}
-<fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted orange">{$mod->Lang('info_editcss_mediatype_tab')}</fieldset>
+<div class="pagewarning">{$mod->Lang('info_editcss_mediatype_tab')}</div>
 <div class="pageoverflow">
 
   {assign var='tmp' value='all,aural,speech,braille,embossed,handheld,print,projection,screen,tty,tv'}
@@ -83,7 +83,7 @@ $(document).ready(function(){
 </div>
 
 {tab_start name='media_query'}
-<fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted orange">{$mod->Lang('info_editcss_mediaquery_tab')}</fieldset>
+<div class="pagewarning">{$mod->Lang('info_editcss_mediaquery_tab')}</div>
 <textarea name="{$actionid}media_query" rows="10" columns="80">{$css->get_media_query()}</textarea>&nbsp;
 {admin_icon name='help_css_mediaquery' icon='info.gif' class='helpicon'}
 

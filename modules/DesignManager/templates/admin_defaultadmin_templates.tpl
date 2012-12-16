@@ -154,7 +154,7 @@ $(document).ready(function(){
     <select name="{$actionid}import_type" id="tpl_import_type">
       {html_options options=$list_types}
     </select>
-    <input type="submit" name="{$actionid}submit_create" value="{$mod->Lang('create')}"/>&nbsp;{admin_icon name="help_create" class="viewhelp" icon='info.gif' title=$mod->Lang('prompt_help')}
+    <input type="submit" name="{$actionid}submit_create" value="{$mod->Lang('create')}"/>&nbsp;{cms_help key1=DesignManager key2=help_create}
   </p>
   </div>
 {/if}
@@ -170,13 +170,3 @@ $(document).ready(function(){
 <div class="clearb"></div>
 </div>
 {/strip}{form_end}
-
-{* begin help *}
-<div style="display: none;">{strip}
-  <div id="help_create" title="{$mod->Lang('prompt_help')}">
-  {$mod->Lang('help_create_template')}
-  </div>
-  <div id="help_bulk" title="{$mod->Lang('prompt_help')}">
-  {$mod->Lang('help_template_bulk')}
-  </div>
-{/strip}</div>

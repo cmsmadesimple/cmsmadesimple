@@ -1,6 +1,6 @@
-<fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted orange">{$mod->Lang('info_edittemplate_templates_tab')}</fieldset>
+<div class="pagewarning">{$mod->Lang('info_edittemplate_templates_tab')}</div>
 {if !isset($all_templates)}
-<fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted red">{$mod->Lang('warning_edittemplate_notemplates')}</fieldset>
+<div class="pagewarning">{$mod->Lang('warning_edittemplate_notemplates')}</div>
 {else}
 
 {assign var='tmpl' value=$design->get_templates()}

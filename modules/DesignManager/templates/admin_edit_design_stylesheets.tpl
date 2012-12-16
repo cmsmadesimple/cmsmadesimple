@@ -1,7 +1,7 @@
 {* stylesheets tab for edit template *}
-<fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted orange">{$mod->Lang('info_edittemplate_stylesheets_tab')}</fieldset>
+<div class="pagewarning">{$mod->Lang('info_edittemplate_stylesheets_tab')}</div>
 {if !isset($all_stylesheets)}
-<fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted red">{$mod->Lang('warning_edittemplate_nostylesheets')}</fieldset>
+<div class="pagewarning">{$mod->Lang('warning_edittemplate_nostylesheets')}</div>
 {/if}
 
 {assign var='cssl' value=$design->get_stylesheets()}

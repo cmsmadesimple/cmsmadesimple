@@ -17,7 +17,7 @@ $(document).ready(function(){
 });
 </script>
 
-<fieldset class="pageoverflow" style="color:black;padding:5px;background-color:white;border:2px dotted orange">{$mod->Lang('warning_category_dragdrop')}</fieldset>
+<div class="pagewarning">{$mod->Lang('warning_category_dragdrop')}</div>
 
 <table id="categorylist" class="pagetable" cellspacing="0"/>
   <thead>

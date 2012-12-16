@@ -81,6 +81,7 @@ $lang['friendlyname'] = 'Design Manager';
 #H
 $lang['help_category_desc'] = 'A description for a template category is optional, but may help when organizing templates';
 $lang['help_category_name'] = 'A category name is required, and must be unique';
+$lang['help_create'] = 'This option will allow you to create a new template of the selected type';
 $lang['help_create_template'] = 'This function allows creating a new template of the selected template type.  The default contents from the template type will be used';
 $lang['help_dflt_template'] = 'The default template contains the contents that are used when you create a new template of this type.  It is not used during frontend processing';
 $lang['help_has_dflt'] = 'If &quot;Yes&quot;, this template type has some default content that is used as a sample when creating a new template of this type.  Of course you are able to change the contents of hte template';

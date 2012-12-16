@@ -4,7 +4,6 @@
   <p class="pageinput">{$input_stopwords|html_entity_decode}</p>
   <p class="pagetext">{$prompt_resetstopwords}:</p>
   <p class="pageinput">{$input_resetstopwords}</p>
-
 </div>
 <div class="pageoverflow">
   <p class="pagetext">{$prompt_stemming}:</p>
