@@ -41,6 +41,7 @@ function smarty_function_syntax_area($params, &$template)
     $rows = (int)$params['cols'];
   }
 
+  $out = null;
   $userid = get_userid(FALSE);
   $syntaxhighlighter = get_preference($userid, 'syntaxhighlighter');
   if( $syntaxhighlighter ) {
