@@ -104,7 +104,7 @@ class Smarty_Parser extends Smarty_CMS
 			return TRUE;
 		}
 
-		parent::defaultPluginHandler($name, $type, $template, $callback, $script, $cachable);	
+		return parent::defaultPluginHandler($name, $type, $template, $callback, $script, $cachable);	
     }
 	
 	/**
@@ -521,7 +521,10 @@ class Smarty_Parser extends Smarty_CMS
 			foreach ($names as $file) {
 			
 				if (file_exists($file) && 
-					(in_array($_name_parts[2], self::$_allowed_static_plugins) || startswith($file, SMARTY_PLUGINS_DIR))) {
+					(in_array($_name_parts[2], self::$_allowed_static_plugins) || 
+						startswith($file, SMARTY_PLUGINS_DIR) || 
+						$_name_parts[1] == 'modifier')
+					) {
 				
 					require_once($file);
 					if( is_callable($plugin_name) || class_exists($plugin_name, false) )
@@ -604,7 +607,7 @@ class CMSMS_Dummy_Smarty_Variable {
      */
     public function __toString()
     {
-        return (string) $this->value;
+        return "";
     }
 
 } // end of class
@@ -616,16 +619,26 @@ class CMSMS_Dummy_Smarty_Variable {
  * @author Tapio Löytty
  * @since 1.11.3
  */
-class CMSMS_Dummy_Variable_Value {
+class CMSMS_Dummy_Variable_Value extends ArrayObject {
 
-    public function __toString()
+    public function offsetGet($name) 
+	{
+        return new CMSMS_Dummy_Variable_Value;
+    }
+
+    public function __get($name)
     {
-        return '';
+        return new CMSMS_Dummy_Variable_Value;
     }
 	
     public function __call($name, $arguments)
     {
-        return '';
+        return new CMSMS_Dummy_Variable_Value;
+    }	
+
+    public function __toString()
+    {
+        return "";
     }	
 
 } // end of class

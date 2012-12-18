@@ -87,6 +87,7 @@ class cms_config implements ArrayAccess
     $this->_types['ssl_uploads_url'] = self::TYPE_STRING;
     $this->_types['image_uploads_path'] = self::TYPE_STRING;
     $this->_types['image_uploads_url'] = self::TYPE_STRING;
+    $this->_types['ssl_image_uploads_url'] = self::TYPE_STRING;
     $this->_types['debug'] = self::TYPE_BOOL;
     $this->_types['debug_to_log'] = self::TYPE_BOOL;
     $this->_types['timezone'] = self::TYPE_STRING;
@@ -237,30 +238,34 @@ class cms_config implements ArrayAccess
 
 	  case 'root_path':
 		  $out = dirname(dirname(dirname(__FILE__)));
-                  $this->_cache[$key] = $out;
+		  $this->_cache[$key] = $out;
 		  return $out;
 
 	  case 'root_url':
 		  {
 			  $parts = parse_url($_SERVER['PHP_SELF']);
 			  $path = '';
-			  if( !empty($parts['path']) ) {
-				  $path = dirname($parts['path']);
-				  if( endswith($path,'install') ) {
-					  $path = substr($path,0,strlen($path)-strlen('install')-1);
-				  }
-				  else if( endswith($path,$this->offsetGet('admin_dir')) ) {
-					  $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
-				  }
-				  else if (strstr($path,'/lib') !== FALSE) {
-					  while( strstr($path,'/lib') !== FALSE ) {
-						  $path = dirname($path);
+			  if( !empty($parts['path']) )
+				  {
+					  $path = dirname($parts['path']);
+                                          if( endswith($path,'install') ) {
+						  $path = substr($path,0,strlen($path)-strlen('install')-1);
 					  }
+					  else if( endswith($path,$this->offsetGet('admin_dir')) ) {
+						  $path = substr($path,0,strlen($path)-strlen($this->offsetGet('admin_dir'))-1);
+					  }
+					  else if (strstr($path,'/lib') !== FALSE) {
+						  while( strstr($path,'/lib') !== FALSE ) {
+							  $path = dirname($path);
+						  }
+					  }
+					  while(endswith($path, DIRECTORY_SEPARATOR)) {
+						  $path = substr($path,0,strlen($path)-1);
+					  }
+         				  if( endswith($path,'/index.php') ) {
+					    $path = dirname($path);
+                                          }
 				  }
-				  while(endswith($path, DIRECTORY_SEPARATOR)) {
-					  $path = substr($path,0,strlen($path)-1);
-				  }
-			  }
 			  $str = 'http://'.$_SERVER['HTTP_HOST'].$path;
 			  $this->_cache[$key] = $str;
 			  return $str;
@@ -290,6 +295,13 @@ class cms_config implements ArrayAccess
 	  case 'image_uploads_url':
 		  $this->_cache[$key] = $this->offsetGet('uploads_url').'/images';
 		  return $this->_cache[$key];
+
+	  case 'ssl_image_uploads_url':
+		  $this->_cache[$key] = str_replace('http://','https://',$this->offsetGet('image_uploads_url'));
+		  return $this->_cache[$key];
+		  
+	  case 'previews_path':
+		  return TMP_CACHE_LOCATION;
 
 	  case 'admin_dir':
 		  return 'admin';
@@ -441,13 +453,28 @@ class cms_config implements ArrayAccess
       }
   }
 
-
   public function smart_root_url()
   {
 	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
 		  return $this->offsetGet('ssl_url');
 	  }
 	  return $this->offsetGet('root_url');
+  }
+
+  public function smart_uploads_url()
+  {
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
+		  return $this->offsetGet('ssl_uploads_url');
+	  }
+	  return $this->offsetGet('uploads_url');
+  }
+
+  public function smart_image_uploads_url()
+  {
+	  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) {
+		  return $this->offsetGet('ssl_image_uploads_url');
+	  }
+	  return $this->offsetGet('image_uploads_url');
   }
 } // end of class
 

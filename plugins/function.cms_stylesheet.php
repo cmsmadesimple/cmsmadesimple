@@ -332,6 +332,7 @@ function cms_stylesheet_writeCache($filename, $string, $trimbackground, &$smarty
 
 function cms_stylesheet_toString($filename, $media_query = '', $media_type = '', $root_url, &$stylesheet, &$params)
 {
+	if( !endswith($root_url,'/') ) $root_url .= '/';
 	if( isset($params['nolinks']) )
 	{
 		$stylesheet .= $root_url.$filename.',';

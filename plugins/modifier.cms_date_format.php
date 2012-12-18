@@ -1,6 +1,6 @@
 <?php
 
-function smarty_modifier_cms_date_format($string, $format = '',
+function smarty_cms_modifier_cms_date_format($string, $format = '',
 					 $default_date = '')
 {
   $gCms = cmsms();

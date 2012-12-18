@@ -583,12 +583,14 @@ final class ModuleOperations
 	  $obj = new $module_name;
 	  if( !is_object($obj) ) {
 		  // oops, some problem loading.
+		  audit('','Core',"Cannot load module $module_name ... some problem instantiating the class");
 		  debug_buffer("Cannot load $module_name ... some problem instantiating the class");
 		  return FALSE;
 	  }
 
 	  if (version_compare($obj->MinimumCMSVersion(),$CMS_VERSION) == 1 ) {
 		  // oops, not compatible.... can't load.
+		  audit('','Core','Cannot load module '.$module_name.' it is not compatible wth this version of CMSMS');
 		  debug_buffer("Cannot load $module_name... It is not compatible with this version of CMSMS");
 		  unset($obj);
 		  return FALSE;
@@ -607,6 +609,7 @@ final class ModuleOperations
 				  }
 			  }
 			  if( !$res && !isset($CMS_FORCE_MODULE_LOAD)) {
+				  audit('','Core',"Cannot load module $module_name ... problem loadind dependent module $name");
 				  debug_buffer("Cannot load $module_name... cannot load it's dependants.");
 				  unset($obj);
 				  return FALSE;

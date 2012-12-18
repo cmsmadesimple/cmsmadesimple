@@ -244,12 +244,14 @@ class Smarty_CMS extends SmartyBC
       }
     }
 
-    $row = cms_module_smarty_plugin_manager::load_plugin($name,$type);
-    if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 && 
-	is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {
-      $cachable = $row['cachable'];
-      $callback = $row['callback'][0].'::'.$row['callback'][1];
-      return TRUE;
+    if( cmsms()->is_frontend_request() ) {
+      $row = cms_module_smarty_plugin_manager::load_plugin($name,$type);
+      if( is_array($row) && is_array($row['callback']) && count($row['callback']) == 2 && 
+	  is_string($row['callback'][0]) && is_string($row['callback'][1]) ) {
+	$cachable = $row['cachable'];
+	$callback = $row['callback'][0].'::'.$row['callback'][1];
+	return TRUE;
+      }
     }
 
     return FALSE;

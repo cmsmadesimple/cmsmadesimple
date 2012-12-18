@@ -362,20 +362,20 @@ class ImageManager
 	function validRelativePath($path) 
 	{
 		$dirs = $this->getDirs();
-		if($path == '/')
-			Return true;
+		if($path == '/' || $path == '\/') return true; // stupid windoze.
 		//check the path given in the url against the 
 		//list of paths in the system.
 		for($i = 0; $i < count($dirs); $i++)
 		{
 			$key = key($dirs);
 			//we found the path
-			if($key == $path)
-				Return true;
+			if($key == $path) {
+			  return true;
+			}
 		
 			next($dirs);
-		}		
-		Return false;
+		}
+		return false;
 	}
 
 	/**
@@ -576,9 +576,10 @@ class ImageManager
 	 */
 	function _delFile($relative) 
 	{ 
-          $r2 = dirname($relative);
+          $r2 = Files::fixPath(dirname($relative));
 	  if( !$this->validRelativePath($r2) ) return false;
-		$fullpath = Files::makeFile($this->getBaseDir(),$relative);
+	  
+	  $fullpath = Files::makeFile($this->getBaseDir(),$relative);
 		
 		//check that the file is an image
 		if($this->config['validate_images'] == true)

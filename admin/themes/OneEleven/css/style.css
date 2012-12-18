@@ -747,6 +747,8 @@ header .cms-logo {
 }
 header .admin-title {
 	text-align: right;
+	max-width: 70%;
+	overflow: hidden;
 	display: inline-block;
 	height: 70px;
 	font: bold 14px/70px sans-serif;

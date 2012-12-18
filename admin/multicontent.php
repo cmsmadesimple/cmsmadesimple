@@ -523,7 +523,7 @@ else
 
 				#Hack alert...  hierarchy manager doesn't take into account for deleted nodes
 				$query = 'SELECT parent_id FROM '.cms_db_prefix().'content WHERE content_id = '.$db->qstr($id);
-				$result = &$db->Execute($query);
+				$result = $db->Execute($query);
 
 				while ($result && !$result->EOF)
 				{
@@ -532,7 +532,7 @@ else
 				}
 				
 				$query = 'SELECT count(*) as thecount FROM '.cms_db_prefix().'content WHERE parent_id = '.$db->qstr($parentid);
-				$result = &$db->Execute($query);
+				$result = $db->Execute($query);
 
 				while ($result && !$result->EOF)
 				{
@@ -572,7 +572,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_permission($userid, 'Manage All Content'));
 
 			if ($permission)
 			{
@@ -597,7 +597,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_permission($userid, 'Manage All Content'));
 
 			if ($permission)
 			{
@@ -624,7 +624,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_permission($userid, 'Manage All Content'));
 
 			if ($permission)
 			{
@@ -643,7 +643,7 @@ else
 
 	  foreach ($nodelist as $node)
 	    {
-	      $permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
+	      $permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_permission($userid, 'Manage All Content'));
 
 	      if ($permission)
 		{
@@ -662,7 +662,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Manage All Content'));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_permission($userid, 'Manage All Content'));
 
 			if ($permission)
 			{

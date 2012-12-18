@@ -38,8 +38,8 @@ function redirect($to, $noappend=false)
 {
   $_SERVER['PHP_SELF'] = null;
 
-  $schema = $_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http';
-  $host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
+  $schema = 'http';
+  if( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ) $schema = 'https';
 
   $components = parse_url($to);
   if(count($components) > 0) {
@@ -255,9 +255,9 @@ function cms_utf8entities($val)
 function debug_bt_to_log()
 {
   if( cmsms()->config['debug_to_log'] || check_login(TRUE) ) {
-    $bt=debug_backtrace();
-    $file = $bt[0]['file'];
-    $line = $bt[0]['line'];
+      $bt=debug_backtrace();
+      $file = $bt[0]['file'];
+      $line = $bt[0]['line'];
 
     $out = array();
     $out[] = "Backtrace in $file on line $line";
@@ -422,11 +422,11 @@ function debug_output($var, $title="")
  */
 function debug_to_log($var, $title='',$filename = '')
 {
-  // only output to the debug log if the config entry says to, or we're logged in to the admin.
   if( cmsms()->config['debug_to_log'] || check_login(TRUE) ) {
     if( $filename == '' ) {
       $filename = TMP_CACHE_LOCATION . '/debug.log';
-      if( filemtime($filename) < (time() - 24 * 3600) ) @unlink($filename);
+      $x = @filemtime($filename);
+      if( $x !== FALSE && $x < (time() - 24 * 3600) ) @unlink($filename);
     }
     $errlines = explode("\n",debug_display($var, $title, false, false));
     foreach ($errlines as $txt) {
@@ -1587,11 +1587,18 @@ function cms_to_bool($str)
 /**
  *
  */
-function cms_get_jquery($exclude = '',$ssl = false,$cdn = false,$append = '',$custom_root='')
+function cms_get_jquery($exclude = '',$ssl = null,$cdn = false,$append = '',$custom_root='')
 {
   $config = cms_config::get_instance();
   $scripts = array();
-  $basePath=$custom_root!=''?trim($custom_root,'/'):($ssl?$config['ssl_url']:$config['root_url']);
+  $base_url = $config['root_url'];
+  if( is_null($ssl) ) {
+    $base_url = $config->smart_root_url();
+  }
+  else if( $ssl === true || $ssl === TRUE ) {
+    $base_url = $config['ssl_url'];
+  }
+  $basePath=$custom_root!=''?trim($custom_root,'/'):$base_url;
   
   // Scripts to include
   $scripts['jquery.min.js'] = '<script type="text/javascript" src="'.($cdn?'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js':$basePath.'/lib/jquery/js/jquery-1.7.2.min.js').'"></script>'."\n";

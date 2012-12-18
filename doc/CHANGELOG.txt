@@ -1,57 +1,71 @@
 Version 1.12 - NO NAME SET
 -----------------------------
-Core - General:
-  - Remove old code that handles the 'id' REQUEST parameter
-  - Remove all functionality for the module 'lang' parameter... silently ignore this parameter, for now
-  - Adds three new methods to the group class (for internal use only).
-  - Numerous fixes to FileManager and MicroTiny wrt. advanced mode.
-  - Removes wiki links from admin interface.
-  - Minor fix to ShowMessages.
-  - Fixes so that simplex theme does not cause crash when editing content using that template, or editing the template itself.
+
+Version 1.11.4 - Fernandina
+-----------------------------
+Core - General
+  - Fixes problem with cms_plugins not being found in the parser
+  - cms_date_format plugin is no longer cachable
+  - Removes more wiki url stuff
+  - debug.log never allowed to live more than 24 hours
+  - Fixes preview in addcontent
+  - Fixes problem with CreateTable in mysqli mode. (ENGINE and CHARSET issues)
+  - Fixes problem with modifiers not existing in parser stage. Now loading all modifiers
+  - Fixes to FileManager copy and move in regular mode
+  - Fixes to ImageManager when deleting files in a dir below the uploads/images path
+  - Fixes to cleaning of values in edit_user and add_user wrt email fields (now consistent)
+  - Numerous SSL fixes
+  - {uploads_url} tag now uses cms_config->smart_uploads_url() (new function)
+  - fixes a minor issue with cleaning of the incoming page variable
+  - Fixes an error with UDT's and syntax hilighters
+  - Minor fix to cms_stylesheet
+  - Fixes problem with Events listing none active modules.
+
+Core - Bug Reports:
+  - #8238 Assets loaded as http instead of https when ssl is enabled for /admin area
+  - #8315 Crash in Content Page Edit: exit / die without error message
+  - #8386 Function redirect();
+  - #8409 Content block does not appear in Pages if sitedown
+  - #8419 E-mail address for user not accepted if having '-' character on it
+  - #8563 Cannot add 'separator' if 'Page URL's are required'
+  - #8564 Images cannot be deleted in Image Manager
+  - #8571 NCleanGrey admin theme on 1.11.2.1
+  - #8672 Dropzone don't remember the selected directory
+  - #8673 Images can't be deleted in Image Manager within created folders
+  - #8684 Type MyIsam 
+  - #8686 cms_date_format and cms_escape Smarty modifiers in templates no longer found by Smarty
+  - #8695 Update routes and mod_rewrite
+
+  
+Version 1.11.3 - Darwin
+-----------------------------
+Core - General
+  - Aliases in NLS operations are now case insensitive
+  - Fixes problem with editing templates/content in sitedown mode
+  - Fixes problems with separators when page urls are required
+  - Fixes problem with delete image in image manager after security fix
+  - Fixes to the smarty parsing for templates
+  - Fixes to loading of UDT's.... now load UDT's for all requests
+  - Fix displaying of page title in NCleanGrey admin theme
+  - Fixes to preview and submit in editcontent with lots of content blocks (particularly content_image}
+  - The cms_stylesheet plugin is no longer cachable by smarty
+  - Recommend PHP 5.3.2 or greater
+  - Smarty caching now disabled for PHP 5.2.x
+  - Numerous fixes to FileManager and MicroTiny wrt. advanced mode
+  - Removes wiki links from admin interface
+  - Minor fix to ShowMessages
+  - Fixes so that simplex theme does not cause crash when editing content using that template, or editing the template itself
   - Ads @viewport rule to OneEleven stylesheets, improving media query behaviour on Windows 8 within Metro UI (snap mode)
   - Ads icons for apple touch link and msapplication metatag
   - OneEleven login, autofocus first input field
-  - Smarty engine upgraded to 3.1.12-Stable.
-  - Fixes problem with smarty variables in template parser object. Edit template and edit page won't be crashing system anymore.
+  - Smarty engine upgraded to 3.1.12-Stable
+  - Fixes problem with smarty variables in template parser object. Edit template and edit page won't be crashing system anymore
+  - #8656 - ERROR DETECTED: Call to undefined function check_persmission() multicontent.php
 
-Core - Bug Reports:
-
-
-Core - Installer:
-
-
-AdminSearch:
-  - New core module provides searching directly within tables to find items to remove or edit.
-
-CMSMailer:
-
-
-CMSPrinting:
-
-
-FileManager:
-
-
-ImageManager:
-
-
-MenuManager:
-
-
-MicroTiny:
-
-
-ModuleManager:
-
-
-News:
-
-
-Search:
-
-
-ThemeManager:
-
+  
+Version 1.11.2.1
+-----------------------------
+  - Fixes security vulnerability in image manager
 
 Version 1.11.2 - Isabela 
 -----------------------------

@@ -22,10 +22,10 @@ function smarty_function_uploads_url($params, &$template)
 	$gCms = cmsms();
 	$config = $gCms->GetConfig();
 	if( isset($params['assign']) ){
-		$smarty->assign(trim($params['assign']),$config['uploads_url']);
-		return;
+	  $smarty->assign(trim($params['assign']),$config->smart_uploads_url());
+	  return;
 	}
-	return $config['uploads_url'];
+	return $config->smart_uploads_url();
 }
 
 function smarty_cms_help_function_uploads_url() {
