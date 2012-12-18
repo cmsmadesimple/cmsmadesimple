@@ -306,6 +306,14 @@ class Smarty_CMS extends SmartyBC
     else if( $cache_id[0] == '|' ) {
       $cache_id = $this->_global_cache_id . $cache_id;
     }
+
+    // send an event before fetching...this allows us to change template stuff.
+    if( cmsms()->is_frontend_request() ) {
+      $parms = array('template'=>&$template,'cache_id'=>&$cache_id,'compile_id'=>&$compile_id,
+		     'display'=>&$display);
+      Events::SendEvent('Core','TemplatePreFetch',$parms);
+    }
+
     $tmp = parent::fetch($template,$cache_id,$compile_id,$parent,$display,false,$no_output_filter);
     debug_buffer('','Fetch '.$name.' end');
     return $tmp;

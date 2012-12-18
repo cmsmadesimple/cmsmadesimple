@@ -433,6 +433,7 @@ $lang['admin']['event_desc_stylesheetpostcompile'] = 'Sent after a stylesheet is
 $lang['admin']['event_desc_stylesheetprecompile'] = 'Sent before a stylesheet is compiled through smarty';
 $lang['admin']['event_desc_templatepostcompile'] = 'Sent after a template has been processed by smarty';
 $lang['admin']['event_desc_templateprecompile'] = 'Sent before a template is sent to smarty for processing';
+$lang['admin']['event_desc_templateprefetch'] = 'Sent before a template is fetched from smarty';
 $lang['admin']['event_help_addglobalcontentpost'] = '<p>Sent after a new global content block is created.</p>
 <h4>Parameters</h4>
 <ul>

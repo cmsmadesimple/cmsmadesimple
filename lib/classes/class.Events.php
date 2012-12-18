@@ -202,6 +202,9 @@ final class Events
 			if(!cms_utils::module_available($row['originator']) && $row['originator'] !== 'Core')
 				continue;
 				
+			if(!cms_utils::module_available($row['originator']) && $row['originator'] !== 'Core')
+				continue;
+				
 			$result[] = $row;
 		}
 		return $result;

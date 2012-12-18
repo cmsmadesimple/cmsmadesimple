@@ -4,7 +4,7 @@ global $admin_user;
 $db = CmsInstaller::get_db();
 $dir = dirname(dirname(__FILE__)).time();
 
-$query = 'INSERT INTO '.$db_prefix.'version VALUES (36)';
+$query = 'INSERT INTO '.$db_prefix.'version VALUES (37)';
 $db->Execute($query);
 
 //
@@ -155,6 +155,7 @@ Events::CreateEvent('Core','DeleteDesignPre');
 Events::CreateEvent('Core','DeleteDesignPost');
 
 Events::CreateEvent('Core','TemplatePreCompile');
+Events::CreateEvent('Core','TemplatePreFetch');
 Events::CreateEvent('Core','TemplatePostCompile');
 
 Events::CreateEvent('Core','ContentEditPre');
